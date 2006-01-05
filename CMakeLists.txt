@@ -1,0 +1,357 @@
+# This is the root OTB CMakeLists file.
+
+PROJECT(OTB)
+
+INCLUDE_REGULAR_EXPRESSION("^(otb|itk|vtk|vnl|vcl|vxl|f2c|netlib|ce|itpack|DICOM|meta|png|dbh|tif|jpeg|zlib).*$")
+SOURCE_GROUP("XML Files" REGULAR_EXPRESSION "[.]xml$")
+
+#-----------------------------------------------------------------------------
+# OTB version number.  An even minor number corresponds to releases.
+SET(OTB_VERSION_MAJOR "2")
+SET(OTB_VERSION_MINOR "0")
+SET(OTB_VERSION_PATCH "0")
+
+# Version string should not include patch level.  The major.minor is
+# enough to distinguish available features of the toolkit.
+SET(OTB_VERSION_STRING "${OTB_VERSION_MAJOR}.${OTB_VERSION_MINOR}")
+
+
+#-----------------------------------------------------------------------------
+# RECHERCHE DES LIBRAIRIES EXTERNES UTILISEES
+
+#FIND_PACKAGE(VTK)
+#IF(VTK_FOUND)
+#  INCLUDE(${VTK_USE_FILE})
+#ELSE(VTK_FOUND)
+#  MESSAGE(FATAL_ERROR
+#          "Cannot build OTB project without VTK.  Please set VTK_DIR.")
+#ENDIF(VTK_FOUND)
+
+FIND_PACKAGE(ITK)
+IF(ITK_FOUND)
+  INCLUDE(${ITK_USE_FILE})
+ELSE(ITK_FOUND)
+  MESSAGE(FATAL_ERROR
+          "Cannot build OTB project without ITK.  Please set ITK_DIR.")
+ENDIF(ITK_FOUND)
+
+FIND_PACKAGE(OpenGL)
+
+IF(OPENGL_INCLUDE_PATH)
+  INCLUDE_DIRECTORIES(${OPENGL_INCLUDE_PATH})
+ENDIF(OPENGL_INCLUDE_PATH)
+
+# Add an option to use or not use FLTK (http://www.fltk.org)
+#FIND_PACKAGE(FLTK)
+#IF(FLTK_FOUND)
+#  INCLUDE_DIRECTORIES(${FLTK_INCLUDE_DIR})
+#ELSE(FLTK_FOUND)
+#  MESSAGE(FATAL_ERROR
+#          "Cannot build OTB project without FLTK.  Please set FLTK_DIR.")
+#ENDIF(FLTK_FOUND)
+
+INCLUDE_DIRECTORIES (
+  ${OTB_BINARY_DIR} 
+  ${OTB_SOURCE_DIR}
+)
+
+INCLUDE_DIRECTORIES( ${OTB_INCLUDE_DIRS} )
+#INCLUDE_DIRECTORIES( ${OTB_SOURCE_DIR}/library )
+#INCLUDE_DIRECTORIES( ${OTB_SOURCE_DIR}/tools )
+#LINK_DIRECTORIES( ${OTB_LIBRARY_DIRS} )
+
+#-----------------------------------------------------------------------------
+# Test for some required system information.
+INCLUDE (${CMAKE_ROOT}/Modules/CMakeBackwardCompatibilityC.cmake)
+INCLUDE (${CMAKE_ROOT}/Modules/CMakeBackwardCompatibilityCXX.cmake)
+
+
+#-----------------------------------------------------------------------------
+# Configure Dart testing support.  This should be done before any
+# MESSAGE(FATAL_ERROR ...) commands are invoked.
+INCLUDE(${CMAKE_ROOT}/Modules/Dart.cmake)
+MARK_AS_ADVANCED(TCL_TCLSH DART_ROOT)
+IF(BUILD_TESTING)
+  ENABLE_TESTING()
+  SET(BUILDNAME "${BUILDNAME}" CACHE STRING "Name of build on the dashboard")
+  MARK_AS_ADVANCED(BUILDNAME)
+ENDIF(BUILD_TESTING)
+
+
+
+#-----------------------------------------------------------------------------
+# Output directories.
+SET (LIBRARY_OUTPUT_PATH ${OTB_BINARY_DIR}/bin CACHE INTERNAL "Les librairies sont generees dans le même repertoire.")
+SET (EXECUTABLE_OUTPUT_PATH ${OTB_BINARY_DIR}/bin CACHE INTERNAL "Les executables sont generes dans le même repertoire.")
+MARK_AS_ADVANCED(LIBRARY_OUTPUT_PATH EXECUTABLE_OUTPUT_PATH)
+SET(OTB_LIBRARY_PATH "${LIBRARY_OUTPUT_PATH}")
+SET(OTB_EXECUTABLE_PATH "${EXECUTABLE_OUTPUT_PATH}")
+SET(CXX_TEST_PATH ${EXECUTABLE_OUTPUT_PATH})
+
+INCLUDE_DIRECTORIES( ${OTB_LIBRARY_PATH} )
+
+# Put "." in the rpath of all OTB shared libraries.
+LINK_DIRECTORIES(.)
+
+#-----------------------------------------------------------------------------
+# OTB build configuration options.
+OPTION(BUILD_SHARED_LIBS "Generer les libraires de l'OTB en dynamique." OFF)
+SET(OTB_BUILD_SHARED_LIBS ${BUILD_SHARED_LIBS})
+
+# Options for building some of the most common core templates explicitly only
+# once.  This has only been tested on gcc compilers.
+OPTION(OTB_EXPLICIT_INSTANTIATION "BETA-Try to explicitly build some of the core templates explictitly rather than over and over again." OFF)
+MARK_AS_ADVANCED(OTB_EXPLICIT_INSTANTIATION)
+IF( OTB_EXPLICIT_INSTANTIATION )
+ ADD_DEFINITIONS(-DOTB_EXPLICIT_INSTANTIATION)
+ENDIF( OTB_EXPLICIT_INSTANTIATION )
+
+
+IF(WIN32)
+   IF(BUILD_SHARED_LIBS)
+     SET(OTB_COMMON_BUILD_TYPE "SHARED")
+   ELSE(BUILD_SHARED_LIBS)
+     SET(OTB_COMMON_BUILD_TYPE "STATIC")
+   ENDIF(BUILD_SHARED_LIBS)
+   SET(BUILD_SHARED_LIBS OFF)
+ENDIF(WIN32)
+
+OPTION(BUILD_EXAMPLES "Generer les exemples." ON)
+OPTION(BUILD_TESTING "Generer les tests." ON)
+
+
+#-----------------------------------------------------------------------------
+# Dispatch the build into the proper subdirectories.
+SUBDIRS(Code)
+
+IF (BUILD_EXAMPLES)
+  SUBDIRS(Examples)
+ENDIF (BUILD_EXAMPLES)
+
+IF (BUILD_TESTING)
+  SUBDIRS(Testing)
+ENDIF (BUILD_TESTING)
+
+#-----------------------------------------------------------------------------
+# OTB requires special compiler flags on some platforms.
+IF(CMAKE_COMPILER_IS_GNUCXX)
+  SET(OTB_REQUIRED_CXX_FLAGS "${OTB_REQUIRED_CXX_FLAGS} -ftemplate-depth-50")
+  IF(APPLE)
+    SET(OTB_REQUIRED_C_FLAGS "${OTB_REQUIRED_C_FLAGS} -no-cpp-precomp")
+    SET(OTB_REQUIRED_CXX_FLAGS "${OTB_REQUIRED_CXX_FLAGS} -no-cpp-precomp")
+    SET(OTB_REQUIRED_CXX_FLAGS "${OTB_REQUIRED_CXX_FLAGS} -Wno-long-double")
+  ENDIF(APPLE)
+ENDIF(CMAKE_COMPILER_IS_GNUCXX)
+
+IF(UNIX)
+  IF(NOT CMAKE_COMPILER_IS_GNUCXX)
+    INCLUDE(${OTB_SOURCE_DIR}/CMake/TestNO_ICC_IDYNAMIC_NEEDED.cmake)
+    TESTNO_ICC_IDYNAMIC_NEEDED(NO_ICC_IDYNAMIC_NEEDED ${OTB_SOURCE_DIR}/CMake )
+    IF(NO_ICC_IDYNAMIC_NEEDED)
+      SET(OTB_REQUIRED_CXX_FLAGS "${OTB_REQUIRED_CXX_FLAGS}")
+    ELSE(NO_ICC_IDYNAMIC_NEEDED)
+      SET(OTB_REQUIRED_CXX_FLAGS "${OTB_REQUIRED_CXX_FLAGS} -i_dynamic")
+    ENDIF(NO_ICC_IDYNAMIC_NEEDED)
+  ENDIF(NOT CMAKE_COMPILER_IS_GNUCXX)
+ENDIF(UNIX)
+
+# Force the use of ansi cxx flags (i.e. -LANG:std on sgi )
+IF("x${CMAKE_ANSI_CXXFLAGS}" MATCHES "^x.*[^ ]")
+  SET(OTB_REQUIRED_CXX_FLAGS "${OTB_REQUIRED_CXX_FLAGS} ${CMAKE_ANSI_CXXFLAGS}")
+ENDIF("x${CMAKE_ANSI_CXXFLAGS}" MATCHES "^x.*[^ ]")
+IF("x${CMAKE_ANSI_CFLAGS}" MATCHES "^x.*[^ ]")
+  SET(OTB_REQUIRED_C_FLAGS "${OTB_REQUIRED_C_FLAGS} ${CMAKE_ANSI_CFLAGS}")
+ENDIF("x${CMAKE_ANSI_CFLAGS}" MATCHES "^x.*[^ ]")
+
+IF(CMAKE_SYSTEM MATCHES "IRIX.*")
+  IF(NOT CMAKE_COMPILER_IS_GNUCXX)
+    SET(OTB_REQUIRED_CXX_FLAGS "${OTB_REQUIRED_CXX_FLAGS} -woff 15,84,1110,1209,1424,1468,3102,3210,3439  -no_auto_include -ptused -no_prelink")
+    SET(OTB_REQUIRED_LINK_FLAGS "${OTB_REQUIRED_LINK_FLAGS}  -Wl,-woff15")
+  ENDIF(NOT CMAKE_COMPILER_IS_GNUCXX)
+ENDIF(CMAKE_SYSTEM MATCHES "IRIX.*")
+
+IF(MINGW)
+  LINK_LIBRARIES(gdi32)
+ENDIF(MINGW)
+
+# for the gnu compiler a -D_PTHREADS is needed on sun
+# for the native compiler a -mt flag is needed on the sun
+IF(CMAKE_USE_PTHREADS)
+  IF(CMAKE_SYSTEM MATCHES "SunOS.*")
+    IF(CMAKE_COMPILER_IS_GNUCXX)
+      SET(OTB_REQUIRED_CXX_FLAGS "${OTB_REQUIRED_CXX_FLAGS} -D_PTHREADS")
+    ELSE(CMAKE_COMPILER_IS_GNUCXX)
+      SET(OTB_REQUIRED_CXX_FLAGS "${OTB_REQUIRED_CXX_FLAGS} -mt")
+      SET(OTB_REQUIRED_C_FLAGS "${OTB_REQUIRED_C_FLAGS} -mt")
+    ENDIF(CMAKE_COMPILER_IS_GNUCXX)
+  ENDIF(CMAKE_SYSTEM MATCHES "SunOS.*")
+ENDIF(CMAKE_USE_PTHREADS)
+
+IF(WIN32)
+  SET(OTB_REQUIRED_CXX_FLAGS "${OTB_REQUIRED_CXX_FLAGS} -DNOMINMAX")
+ENDIF(WIN32)
+
+#-----------------------------------------------------------------------------
+# Find platform-specific differences in the handling of IEEE floating point 
+# special values.
+INCLUDE(${OTB_SOURCE_DIR}/CMake/CheckBigBitfield.cmake)
+CHECK_BIG_BITFIELD(BIGBITFIELD_VALUE ${OTB_SOURCE_DIR}/CMake)
+IF(BIGBITFIELD_VALUE)
+   SET(BIGBITFIELD 1 CACHE INTERNAL "System handles bit-fields larger than 32 bits.")
+ELSE(BIGBITFIELD_VALUE)
+   SET(BIGBITFIELD 0 CACHE INTERNAL "System handles bit-fields larger than 32 bits.")
+ENDIF(BIGBITFIELD_VALUE)
+
+INCLUDE(${OTB_SOURCE_DIR}/CMake/TestQnanhibit.cmake)
+TEST_QNANHIBIT(QNANHIBIT_VALUE ${OTB_SOURCE_DIR}/CMake)
+IF(QNANHIBIT_VALUE)
+   SET(QNANHIBIT 1 CACHE INTERNAL "The 22nd bit of 32-bit floating-point quiet NaN.")
+ELSE(QNANHIBIT_VALUE)
+   SET(QNANHIBIT 0 CACHE INTERNAL "The 22nd bit of 32-bit floating-point quiet NaN.")
+ENDIF(QNANHIBIT_VALUE)
+
+IF("${CMAKE_MAJOR_VERSION}.${CMAKE_MINOR_VERSION}" LESS 2.0)
+ELSE("${CMAKE_MAJOR_VERSION}.${CMAKE_MINOR_VERSION}" LESS 2.0)
+INCLUDE(CheckTypeSize)
+ENDIF("${CMAKE_MAJOR_VERSION}.${CMAKE_MINOR_VERSION}" LESS 2.0)
+
+CHECK_TYPE_SIZE("long long" OTB_SIZEOF_LONG_LONG)
+CHECK_TYPE_SIZE("__int64"   OTB_SIZEOF___INT64)
+
+IF(OTB_SIZEOF___INT64)
+  IF("OTB_TYPE_SAME_LONG_AND___INT64" MATCHES "^OTB_TYPE_SAME_LONG_AND___INT64$")
+    MESSAGE(STATUS "Checking whether long and __int64 are the same type")
+    TRY_COMPILE(OTB_TYPE_SAME_LONG_AND___INT64
+      ${OTB_BINARY_DIR}/CMakeTmp
+      ${OTB_SOURCE_DIR}/CMake/otbTestCompareTypes.cxx
+      COMPILE_DEFINITIONS
+      -DOTB_TEST_COMPARE_TYPE_1=long
+      -DOTB_TEST_COMPARE_TYPE_2=__int64
+      OUTPUT_VARIABLE OUTPUT)
+    IF(OTB_TYPE_SAME_LONG_AND___INT64)
+      MESSAGE(STATUS "Checking whether long and __int64 are the same type -- yes")
+      SET(OTB_TYPE_SAME_LONG_AND___INT64 1 CACHE INTERNAL "Whether long and __int64 are the same type")
+    ELSE(OTB_TYPE_SAME_LONG_AND___INT64)
+      MESSAGE(STATUS "Checking whether long and __int64 are the same type -- no")
+      SET(OTB_TYPE_SAME_LONG_AND___INT64 0 CACHE INTERNAL "Whether long and __int64 are the same type")
+      WRITE_FILE(${CMAKE_BINARY_DIR}/CMakeError.log
+        "Determining whether long and __int64 are the same type "
+        "failed with the following output:\n"
+        "${OUTPUT}\n" APPEND)
+    ENDIF(OTB_TYPE_SAME_LONG_AND___INT64)
+  ENDIF("OTB_TYPE_SAME_LONG_AND___INT64" MATCHES "^OTB_TYPE_SAME_LONG_AND___INT64$")
+ENDIF(OTB_SIZEOF___INT64)
+
+IF(OTB_SIZEOF_LONG_LONG)
+  CONFIGURE_FILE(${OTB_SOURCE_DIR}/CMake/otbTestStreamLongLong.cxx.in
+    ${OTB_BINARY_DIR}/otbTestStreamLongLong.cxx @ONLY IMMEDIATE)
+  IF("OTB_OSTREAM_SUPPORTS_LONG_LONG" MATCHES "^OTB_OSTREAM_SUPPORTS_LONG_LONG$")
+    MESSAGE(STATUS "Checking if ostream supports long long")
+    TRY_COMPILE(OTB_OSTREAM_SUPPORTS_LONG_LONG
+      ${OTB_BINARY_DIR}
+      ${OTB_BINARY_DIR}/otbTestStreamLongLong.cxx
+      COMPILE_DEFINITIONS -DOTB_TEST_OSTREAM_LONG_LONG
+      OUTPUT_VARIABLE OUTPUT)
+    IF(OTB_OSTREAM_SUPPORTS_LONG_LONG)
+      MESSAGE(STATUS "Checking if ostream supports long long -- yes")
+      SET(OTB_OSTREAM_SUPPORTS_LONG_LONG 1 CACHE INTERNAL "Whether ostream supports long long")
+    ELSE(OTB_OSTREAM_SUPPORTS_LONG_LONG)
+      MESSAGE(STATUS "Checking if ostream supports long long -- no")
+      SET(OTB_OSTREAM_SUPPORTS_LONG_LONG 0 CACHE INTERNAL "Whether ostream supports long long")
+      WRITE_FILE(${CMAKE_BINARY_DIR}/CMakeError.log
+        "Determining if ostream supports long long "
+        "failed with the following output:\n"
+        "${OUTPUT}\n" APPEND)
+    ENDIF(OTB_OSTREAM_SUPPORTS_LONG_LONG)
+  ENDIF("OTB_OSTREAM_SUPPORTS_LONG_LONG" MATCHES "^OTB_OSTREAM_SUPPORTS_LONG_LONG$")
+  IF("OTB_ISTREAM_SUPPORTS_LONG_LONG" MATCHES "^OTB_ISTREAM_SUPPORTS_LONG_LONG$")
+    MESSAGE(STATUS "Checking if istream supports long long")
+    TRY_COMPILE(OTB_ISTREAM_SUPPORTS_LONG_LONG
+      ${OTB_BINARY_DIR}
+      ${OTB_BINARY_DIR}/otbTestStreamLongLong.cxx
+      COMPILE_DEFINITIONS -DOTB_TEST_ISTREAM_LONG_LONG
+      OUTPUT_VARIABLE OUTPUT)
+    IF(OTB_ISTREAM_SUPPORTS_LONG_LONG)
+      MESSAGE(STATUS "Checking if istream supports long long -- yes")
+      SET(OTB_ISTREAM_SUPPORTS_LONG_LONG 1 CACHE INTERNAL "Whether istream supports long long")
+    ELSE(OTB_ISTREAM_SUPPORTS_LONG_LONG)
+      MESSAGE(STATUS "Checking if istream supports long long -- no")
+      SET(OTB_ISTREAM_SUPPORTS_LONG_LONG 0 CACHE INTERNAL "Whether istream supports long long")
+      WRITE_FILE(${CMAKE_BINARY_DIR}/CMakeError.log
+        "Determining if istream supports long long "
+        "failed with the following output:\n"
+        "${OUTPUT}\n" APPEND)
+    ENDIF(OTB_ISTREAM_SUPPORTS_LONG_LONG)
+  ENDIF("OTB_ISTREAM_SUPPORTS_LONG_LONG" MATCHES "^OTB_ISTREAM_SUPPORTS_LONG_LONG$")
+ENDIF(OTB_SIZEOF_LONG_LONG)
+
+
+#-----------------------------------------------------------------------------
+# Configure the default OTB_DATA_ROOT for the location of OTB Data.
+FIND_PATH(OTB_DATA_ROOT OTBData.readme ${OTB_SOURCE_DIR}/Tester/Data $ENV{OTB_DATA_ROOT})
+MARK_AS_ADVANCED(OTB_DATA_ROOT)
+
+
+#-----------------------------------------------------------------------------
+# Configure files with settings for use by the build.
+CONFIGURE_FILE(${OTB_SOURCE_DIR}/otbConfigure.h.in 
+               ${OTB_BINARY_DIR}/otbConfigure.h)
+
+#-----------------------------------------------------------------------------
+# The entire OTB tree should use the same include path, except for the
+# Wrapping directory.
+
+# Create the list of include directories needed for OTB header files.
+INCLUDE(${OTB_SOURCE_DIR}/otbIncludeDirectories.cmake)
+
+# This should be the only INCLUDE_DIRECTORIES command in the entire
+# tree, except for the Utilities and Wrapping directories.  We need to
+# do this in one place to make sure the order is correct.
+INCLUDE_DIRECTORIES(
+  ${OTB_INCLUDE_DIRS_BUILD_TREE}
+  ${OTB_INCLUDE_DIRS_BUILD_TREE_CXX}
+  ${OTB_INCLUDE_DIRS_SYSTEM}
+)
+
+#-----------------------------------------------------------------------------
+# Uninstall cmake use to uninstall OTB.
+CONFIGURE_FILE(
+  "${CMAKE_CURRENT_SOURCE_DIR}/CMake/cmake_uninstall.cmake.in"
+  "${CMAKE_CURRENT_BINARY_DIR}/cmake_uninstall.cmake"
+  IMMEDIATE @ONLY)
+
+ADD_CUSTOM_TARGET(uninstall
+  "${CMAKE_COMMAND}" -P "${CMAKE_CURRENT_BINARY_DIR}/cmake_uninstall.cmake")
+
+#-----------------------------------------------------------------------------
+# Help other projects use OTB.
+
+# Copy the UseOTB.cmake file to the binary tree for backward compatability.
+CONFIGURE_FILE(${OTB_SOURCE_DIR}/UseOTB.cmake.in
+               ${OTB_BINARY_DIR}/UseOTB.cmake COPYONLY IMMEDIATE)
+
+# Save the compiler settings so another project can import them.
+INCLUDE(${CMAKE_ROOT}/Modules/CMakeExportBuildSettings.cmake)
+CMAKE_EXPORT_BUILD_SETTINGS(${OTB_BINARY_DIR}/OTBBuildSettings.cmake)
+INSTALL_FILES(/lib/otb .cmake OTBBuildSettings)
+
+# Save library dependencies.
+EXPORT_LIBRARY_DEPENDENCIES(${OTB_BINARY_DIR}/OTBLibraryDepends.cmake)
+
+# Create the OTBConfig.cmake file containing the OTB configuration.
+INCLUDE (${OTB_SOURCE_DIR}/otbGenerateOTBConfig.cmake)
+
+# Install some files.
+INSTALL_FILES(/include/otb .h otbConfigure)
+INSTALL_FILES(/lib/otb .cmake UseOTB OTBLibraryDepends OTBConfig )
+
+#-----------------------------------------------------------------------------
+# Add compiler flags OTB needs to work on this platform.  This must be
+# done AFTER the call to CMAKE_EXPORT_BUILD_SETTINGS.
+
+SET(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${OTB_REQUIRED_C_FLAGS}")
+SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${OTB_REQUIRED_CXX_FLAGS}")
+SET(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} ${OTB_REQUIRED_LINK_FLAGS}")
+SET(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} ${OTB_REQUIRED_LINK_FLAGS}")
+SET(CMAKE_MODULE_LINKER_FLAGS "${CMAKE_MODULE_LINKER_FLAGS} ${OTB_REQUIRED_LINK_FLAGS}")
+

@@ -1,0 +1,68 @@
+#
+# This file sets up include directories, link directories, and
+# compiler settings for a project to use OTB.  It should not be
+# included directly, but rather through the OTB_USE_FILE setting
+# obtained from OTBConfig.cmake.
+#
+
+IF(OTB_BUILD_SETTINGS_FILE)
+  INCLUDE(${CMAKE_ROOT}/Modules/CMakeImportBuildSettings.cmake)
+  CMAKE_IMPORT_BUILD_SETTINGS(${OTB_BUILD_SETTINGS_FILE})
+ENDIF(OTB_BUILD_SETTINGS_FILE)
+
+# Add compiler flags needed to use OTB.
+SET(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${OTB_REQUIRED_C_FLAGS}")
+SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${OTB_REQUIRED_CXX_FLAGS}")
+SET(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} ${OTB_REQUIRED_LINK_FLAGS}")
+SET(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} ${OTB_REQUIRED_LINK_FLAGS}")
+SET(CMAKE_MODULE_LINKER_FLAGS "${CMAKE_MODULE_LINKER_FLAGS} ${OTB_REQUIRED_LINK_FLAGS}")
+
+# Add include directories needed to use OTB.
+INCLUDE_DIRECTORIES(BEFORE ${OTB_INCLUDE_DIRS})
+
+# Add link directories needed to use OTB.
+LINK_DIRECTORIES(${OTB_LIBRARY_DIRS})
+
+# Load settings fro the system VXL with which OTB was built, if any.
+IF(OTB_USE_SYSTEM_VXL)
+  # If VXL has already been found, make sure it is the one used to
+  # build OTB.
+  IF(WIN32 OR APPLE)
+    STRING(TOLOWER "${VXL_DIR}" OTB_CHECK_VXL_DIR)
+    STRING(TOLOWER "${OTB_VXL_DIR}" OTB_CHECK_OTB_VXL_DIR)
+  ELSE(WIN32 OR APPLE)
+    SET(OTB_CHECK_VXL_DIR "${VXL_DIR}")
+    SET(OTB_CHECK_OTB_VXL_DIR "${OTB_VXL_DIR}")
+  ENDIF(WIN32 OR APPLE)
+  STRING(COMPARE EQUAL "${OTB_CHECK_VXL_DIR}" "${OTB_CHECK_OTB_VXL_DIR}"
+         OTB_VXL_DIR_MATCH)
+  IF(VXL_FOUND)
+    IF(NOT OTB_VXL_DIR_MATCH)
+      MESSAGE(FATAL_ERROR
+        "OTB was built with VXL from \"${OTB_VXL_DIR}\", "
+        "but this project is using VXL from \"${VXL_DIR}\".  "
+        "Please set VXL_DIR to match the one used to build OTB."
+        )
+    ENDIF(NOT OTB_VXL_DIR_MATCH)
+  ELSE(VXL_FOUND)
+    IF(VXL_DIR)
+      IF(NOT OTB_VXL_DIR_MATCH)
+        MESSAGE(
+          "Warning: OTB was built with VXL from \"${OTB_VXL_DIR}\", "
+          "but this project has set VXL_DIR to \"${VXL_DIR}\".  "
+          "OTB is changing VXL_DIR to match the VXL with which it was built."
+          )
+      ENDIF(NOT OTB_VXL_DIR_MATCH)
+    ENDIF(VXL_DIR)
+    SET(VXL_DIR ${OTB_VXL_DIR})
+    FIND_PACKAGE(VXL)
+    IF(VXL_FOUND)
+      INCLUDE(${VXL_CMAKE_DIR}/UseVXL.cmake)
+    ELSE(VXL_FOUND)
+      MESSAGE(FATAL_ERROR
+        "UseOTB could not load VXL settings from \"${VXL_DIR}\" even through "
+        "OTB was built using VXL from this location."
+        )
+    ENDIF(VXL_FOUND)
+  ENDIF(VXL_FOUND)
+ENDIF(OTB_USE_SYSTEM_VXL)

@@ -1,0 +1,1 @@
+SET(OTBCommon_LIB_DEPENDS "ITKCommon;")
