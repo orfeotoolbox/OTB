@@ -1,0 +1,46 @@
+\chapter*{R\'{e}sum\'{e}}
+\noindent
+
+Parall\`{e}lement aux d\'{e}veloppements des syst\`{e}mes \emph{Pl\'{e}iades}\footnote{http://smsc.cnes.fr/PLEIADES/Fr} (PHR) et \emph{Cosmo-Shymed} constituant le syst\`{e}me 
+dual et bilat\'{e}ral (France-Italie) d'observation de la Terre \emph{ORFEO}, le 
+programme d'accompagnement d'ORFEO a \'{e}t\'{e} mis en place par le \href{http://www.cnes.fr}{CNES} 
+afin de pr\'{e}parer, accompagner et promouvoir l'utilisation  et l'exploitation des images issues de ces capteurs. 
+
+Le volet m\'{e}thodologique de ce programme d'accompagnement\footnote{http://smsc.cnes.fr/PLEIADES/Fr/A\_prog\_accomp.htm} a pour objectif la d\'{e}finition et le d\'{e}veloppement des outils n\'{e}cessaires \`{a} l'exploitation 
+op\'{e}rationnelle des futurs images sub-m\'{e}triques, optique et radar (aspects tridimensionnels, d\'{e}tection de changements, analyse de texture, 
+reconnaissance de formes, compl\'{e}mentarit\'{e} optique-radar). Il s'appuie essentiellement sur les \'{e}tudes de R\&D et des 
+travaux de recherche doctorale et post-doctorale.
+
+Dans ce contexte, le CNES\footnote{http://www.cnes.fr} a d\'{e}cid\'{e} de d\'{e}velopper l'\emph{ORFEO ToolBox} (OTB), un ensemble de briques algorithmiques qui 
+permettront de capitaliser le savoir m\'{e}thodologique et de se placer dans une d\'{e}marche de d\'{e}veloppement incr\'{e}mental visant 
+\`{a} rentabiliser au maximum les r\'{e}sultats obtenus dans ces \'{e}tudes m\'{e}thodologiques.
+
+
+Tous les d\'{e}veloppements de l'OTB sont bas\'{e}s sur des biblioth\`{e}ques de type libres (licences GNU/GPL, etc..) 
+ou des biblioth\`{e}ques existantes d\'{e}velopp\'{e}es par le CNES.
+
+
+OTB est impl\'{e}ment\'{e}e en C++, dont le d\'{e}veloppement s'appuie principalement sur la biblioth\`{e}que
+ ITK\footnote{http://www.itk.org} (Insight Toolkit) et sur les biblioth\`{e}ques VTK\footnote{http://www.vtk.org} (Visualization ToolKit) 
+ FLTK\footnote{http://www.fltk.org} (Fast Light Toolkit).
+
+Les biblioth\`{e}ques GDAL\footnote{http://www.remotesensing.org/gdal/} (Geospatial Data Abstraction Library) et 
+CAI (Couche d'Acc\`{e}s Images d\'{e}velopp\'{e}e par le CNES) sont utilis\'{e}es comme progiciels pour la lecture et l'\'{e}criture des images de t\'{e}l\'{e}d\'{e}tection.
+
+
+L'environnement de l'OTB est mis en place par l'outil CMake\footnote{http://www.cmake.org}, 
+permettant ainsi de g\'{e}rer les proc\'{e}dures de compilation, g\'{e}n\'{e}ration et d'installation et ce quelque sois la plate forme cible.
+
+Dans un souci d'homog\'{e}n\'{e}isation, l'OTB est con\c{c}ue et d\'{e}velopp\'{e}e suivant la philosophie et les principes \'{e}dict\'{e}s 
+par la biblioth\`{e}que ITK (programmation g\'{e}n\'{e}rique, m\'{e}canisme des \emph{Object Factories}, \emph{Smart pointers}, exceptions, \emph{Multi-Threading}, etc...). 
+Ces principes sont pr\'{e}sent\'{e}s dans le paragraphe \emph{3.2 Essential System Concepts} du guide ITK \url{http://www.itk.org/ItkSoftwareGuide.pdf}
+
+Enfin, la m\'{e}thodologie de d\'{e}veloppement appliqu\'{e}e s'appuie sur une approche it\'{e}rative bas\'{e}e sur la programmation agile : 
+le sch\'{e}ma de d\'{e}veloppement suit le cycle \'{e}dict\'{e}e par la m\'{e}thodolgie de l'eXtreme Programming (XP)\footnote{http://www.xprogramming.com}.
+
+ 
+ 
+Ce document constitue le guide d'utilisation et de d\'{e}veloppement de l'OTB. La version la plus r\'{e}cente de ce document est accessible \`{a} 
+\url{http://smsc.cnes.fr/PLEIADES/Fr/A_prog_accomp.htm/OTB/otbSoftwareGuide.pdf}. 
+
+

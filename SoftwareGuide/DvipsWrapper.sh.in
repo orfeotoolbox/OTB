@@ -1,0 +1,8 @@
+#!/bin/sh
+
+TEXINPUTS=$TEXINPUTS:${ITK_TEXINPUTS}
+
+export TEXINPUTS
+
+${DVIPS_CONVERTER} "$@"
+

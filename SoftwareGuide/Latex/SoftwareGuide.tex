@@ -1,0 +1,242 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% Complete documentation on the extended LaTeX markup used for Insight
+% documentation is available in ``Documenting Insight'', that is part
+% of the standard documentation for Insight.  It may be found online
+% at:
+%
+%                    http://www.itk.org
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\documentclass{InsightSoftwareGuide}
+
+\usepackage[dvips]{graphicx}
+\usepackage{times}
+% Configuration pour les accens francais pour l'OTB
+%%% \usepackage[latin1]{inputenc}
+
+%%% \selectlanguage{french}
+
+\newif\ifitkFullVersion
+\itkFullVersiontrue
+%\itkFullVersionfalse
+
+\newif\ifitkPrintedVersion
+\itkPrintedVersiontrue
+%\itkPrintedVersionfalse
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%  hyperref should be the last package to be loaded.
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\ifitkPrintedVersion
+\usepackage[dvips,
+pdftitle={Guide logiciel de l'OTB},
+pdfauthor={Guide logiciel de l'OTB},
+pdfsubject={Observation de la Terre - Syst\`{e}mes Pl\'{e}iades et Cosmo-Shymed},
+pdfkeywords={Traitement d'images, T\'{e}l\'{e}d\'{e}tection, Guide},
+pdfpagemode={UseOutlines},
+bookmarks,bookmarksopen,
+pdfstartview={FitH},
+backref,
+colorlinks,linkcolor={black},citecolor={black},urlcolor={black},
+]{hyperref}
+\else
+\usepackage[dvips,
+pdftitle={Guide logiciel de l'OTB},
+pdfauthor={Guide logiciel de l'OTB},
+pdfsubject={Observation de la Terre - Syst\`{e}mes Pl\'{e}iades et Cosmo-Shymed},
+pdfkeywords={Traitement d'images, T\'{e}l\'{e}d\'{e}tection, Guide},
+pdfpagemode={UseOutlines},
+bookmarks,bookmarksopen,
+pdfstartview={FitH},
+backref,
+colorlinks,linkcolor={blue},citecolor={blue},urlcolor={blue},
+]{hyperref}
+\fi
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%
+%   Load configuration parameters prepared by CMake
+%
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\input{SoftwareGuideConfiguration.tex}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%
+%           The Insight Toolkit Software Guide
+%
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\title{Guide logiciel de l'OTB\\Premi\`{e}re \'{e}dition\\ \emph{Version DRAFT}}
+
+\author{J. Inglada (\emph{CNES})\\T. Feuvrier (\emph{CS})}
+
+\authoraddress{
+  \url{http://www.cnes.fr}\\
+  Email: \email{jordi.inglada@cnes.fr} \\\email{thomas.feuvrier@c-s.fr}
+}
+
+\date{\today}
+
+
+% actually write the .idx file
+\makeindex
+
+\setcounter{tocdepth}{3}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%           Begin Document
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{document}
+
+\ifitkPrintedVersion
+%% \input{PrintedPreamble.tex}
+\fi
+
+\maketitle
+
+\frontmatter
+
+\hyperbaseurl{http://www.cnes.fr}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%  Page with Quote and ITK Logo
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\cleardoublepage
+
+%\begin{minipage}[t][10cm][b]{\textwidth}
+%\center
+%\includegraphics[width=0.5\textwidth]{otbLogo.eps}
+%\large
+%\begin{center}
+%\emph{The purpose of computing is Insight, not numbers.}\\
+%\end{center}
+%\hspace{8cm} Richard Hamming
+%\normalsize
+%\end{minipage}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% remove headings from the following material
+\pagestyle{plain}
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+
+\ifitkPrintedVersion 
+%% \input{Cover.tex}
+\fi
+
+\ifitkFullVersion 
+\input{Abstract.tex}
+\input{Contributors.tex}
+\fi
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% Insert Table of Contents; List of Figures and Tables
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% enable headings from the following material
+\pagestyle{normal}
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\small
+\tableofcontents
+\listoffigures
+\listoftables
+\normalsize
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% 
+% Begin technical content
+% 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\mainmatter
+
+\part{Introduction}
+
+\ifitkFullVersion
+\input{Introduction.tex}
+\input{Installation.tex}
+% \input{SystemOverview.tex}
+\fi
+
+
+\part{Guide pour l'utilisateur}
+
+\ifitkFullVersion
+\input{Filtering.tex}
+\fi
+
+
+%%% \input{Applications.tex}
+
+
+\part{Guide pour le d\'eveloppeur}
+
+\backmatter
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%  Insert the bibliography using BibTeX
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\bibliographystyle{plain}
+\bibliography{\bibtexdatabasepath}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%  Insert the Index file
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\InputIfFileExists{SoftwareGuide.ind}
+
+
+\ifitkPrintedVersion
+\cleardoublepage
+%%% \input{MarketingMaterial.tex}
+\fi
+
+
+
+\end{document}
+
+
+

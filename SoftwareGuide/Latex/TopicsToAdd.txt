@@ -1,0 +1,833 @@
+
+
+This is a list of topics to be added to the Software Guide.
+
+
+
+
+Chapter 1
+
+
+
+Add more on the "Data" section: expand it in order to mention
+
+
+  - IBSR repository: add a paragraph, how to get their data,
+      how to read it with ITK. And add a \ref{} to ImageIO 
+      chapter and MetaImages.
+
+
+
+  - BrainWeb repository: add a paragraph, how the get their data.
+      how to read it  using MetaImage.
+
+
+
+  - MIRC (RSNA).  www.rsna.org/mirc  add a paragraph about it.
+
+
+
+ Mention that the reader has to go to the ImageIO chapter in order 
+ to learn about all the fileformats in ITK.
+
+
+
+
+
+
+Chapter 2
+
+
+- Update list of compilers
+
+     
+      Intel (Linux, Windows),  7.1, 8.0
+      Sun native CC 5.6 
+      SGI 7.4 (??) check with Bill Lorensen
+      Mac GCC 3.3
+      Free VC++
+      Visual Studio  6.0 ,  7.0,   7.1
+      Borland 5.5
+      MinGW  gcc
+      Cygwin gcc 
+
+
+
+ - Configuration:
+
+     Add CMake screen shots for the Mac (from Jon).
+
+
+
+
+
+
+
+
+Chapter 3
+
+
+    Check with Will...
+
+
+
+
+
+
+Chapter 4    Data Representation
+
+
+
+
+(1) Luis
+   - 4.1.4 Update it to mention OriginType and SpacingType instead of
+     arrays of doubles and/or floats.
+
+
+
+
+(1) Luis
+  - 4.1.7  Import Data to image
+
+     Take from the tutorial and build up this section
+
+     http://www.itk.org/CourseWare/Training/GettingStarted-V.pdf
+
+
+     Explain how to put an ITK pipeline inside a C function and
+     prevent the output image from being destroyed.
+
+     Add... source code examples to the CVS Examples directory.
+
+
+
+     
+
+
+
+  Mesh  (Karthik)
+
+     
+(1) 
+     - Double check that the AutomaticMesh example works as advertised... 
+        [Status: done. 
+          It works
+        ]
+
+
+(1)
+    -  Double check that all the examples are still working... 
+      [Status: done 
+        Checked.. work
+      ]
+
+(3)
+    - Check with Will about the AutoPointer...  maybe remove the 
+      notation of TakeOwnership,... check with vtkAbstracCell.
+
+
+(2)
+   - Add example on how to use the Neighborhood links 
+
+     
+           BuildCellLinks()
+
+      [Status: Pending
+        Approporiate Example ?
+      ]
+
+(1)
+   - Add section on the Simplex 
+     (check Leila Baghdadi, and Thomas Boettger).
+
+(5)
+   - Graph cuts (liver segmentation).
+     check mailing list archives, check the Voronoi.
+
+
+
+
+
+Chapter 5  Spatial Objects
+(Julien+Stephen outsourcing) + a few pages in 1 month.
+
+
+    Coordinate with Julien Jomier at UNC. 
+    They plan to update this section.
+
+    e.g. add the ImageMaskSpatialObject.
+
+    PolygonSpatialObject ??
+
+
+
+    
+
+      
+    
+
+Chapter 6 Filtering
+
+
+
+(1) Karthik
+   - in Thresholding add examples:
+
+       OtsuThresholdImageCalculator (using it alone)    [Status: Done]
+       OtsuThresholdImageFilter (already there, but needs refinement).  [Status: Done]
+
+       OtsuMultipleThreshold Calculator (using it alone).          
+       OtsuMultipeleThreshodl Filter (add example + filter).       
+        
+        [Status: Done]
+        [ToDo: Maybe update Otsu Multiple Threshold filter example to the new itkOtsuThresholdFilter]
+        added by Padfiled. The earlier one used the ThresholdCalculator class
+          cvs add Art/OtsuThresholdImageFilterOutput.png
+          cvs commit Insight/Examples/Filtering/OtsuMultipeleThresholdImageFilter.cxx
+        ]
+
+
+
+
+(5) 
+ - 6.2.1 Casting filters (low priority)
+
+     spliting CastImageFilter into 4 separate .cxx
+     
+     and check if we have other casting filters...
+
+
+ (1)     
+ - Double check equation pdf-page 147. Equations were correctd.
+
+
+
+
+(2) [Add 1 and ask Jim what to choose]
+ - Mathematical morphology, 
+
+     add Examples for the new filters that Jim Miller (GE)
+     added recently
+
+
+         GrayScaleFillHoleImageFilter
+         GrayScaleGrindPeakImageFilter
+         GrayScaleConnecteOpeningImageFilter
+         GrayScaleConnecteCloseningImageFilter
+         GrayScaleGeodesicDilateImageFilter
+         GrayScaleGeodesicErodeImageFilter
+
+
+(1) Karthik
+- FFT examples. (Fourier)
+
+        Maybe add a couple more examples...
+        
+        at least comment the existing ones
+        and generate output example images.
+        [Status: Postponed. Necessary ??
+          One example exists and works. Maybe add some figures. 
+          Rescale FFT outputs to log and display, Change example, add logMappingFuctor ?]
+
+
+(1) Luis
+- RecursiveGaussianImage filter DC component bug, keep track
+  of it during the example. check BUG in the bug tracker.
+
+
+
+
+
+- Voting filters
+
+(2) Luis 
+    Add examples for Voting filters
+    HoleFilling
+
+
+(2) Luis
+- Add example for BinaryMedianImageFilter, take a noisy
+  segmentation (e.g. plain thresholding) and then post-
+  process it with this filter.
+    [Status: done.]
+    [ToDo: Add Examples/Filtering/BinaryMedianImageFilter.cxx to CVS]
+    [Add BinaryMedianImageFilterOutput.jpg to SoftwareGuide/Art/]
+    [Add BinaryThresholdImageFilterOutput.jpg to SoftwareGuide/Art/]
+
+
+
+(3)
+- Discrete Gaussian needs to fix the graphic according
+  to the original. Check with Jim Miller, to get the
+  paper.
+
+
+
+  
+
+- Check with Andy : capture the command line used for running
+  the regression testing and paste it on Latex.
+
+
+(1) Karthik
+- Edge preserving filtering: move the Median filter here,
+  and show the effect of running many iterations of a median.
+  Explain its relationship to Voting filters.
+  
+  [Ask Luis about Recursive Filter discrepancy ?? What's going on ?]
+  
+  [Status Done: 
+    cvs commit SoftwareGuide/Latex/Filtering.tex]
+
+
+
+(3) Luis
+- MinMaxCurvatureFlowImage check this example,
+  Ask Lydia what was wrong with the example.
+
+
+
+(1) Karthik 
+- Signed distance based on running Danielsson twice,
+
+  Mention that the same can be done with ReinitializeLevelSetImageFilter
+  ...maybe add an example...
+  http://www.itk.org/Insight/Doxygen/html/classitk_1_1ReinitializeLevelSetImageFilter.html
+
+  Check with Lydia (Brain Allen Institue) and/or Josh Cates (Utah)
+
+  [Status: Done]
+  [Added Insight/Code/BasicFilters/itkSignedDanielssonDistanceMapImageFilter.txx, 
+         Insight/Code/BasicFilters/itkSignedDanielssonDistanceMapImageFilter.h
+         Testing/BasicFilters/SignedDanielssonDistanceMapImageFilterTest.cxx
+          to repository]
+  [ToDo: Commit 
+      cvs add Insight/Examples/Filtering/SignedDanielssonDistanceMapImageFilter.cxx 
+      cvs add SoftwareGuide/Art/SignedDanielssonDistanceMapImageFilterOutput.png
+      cvs add SoftwareGuide/Art/Circle.png
+      cvs commit /InsightDocuments/SoftwareGuide/Examples/CMakeLists.txt
+  ]
+
+
+(1) Luis
+- Geometric Transform Filters
+
+  Double check that the changes in CenteredTransforms are not breaking
+  any code, and that the comments are appropriate.
+
+
+(2) Will
+- MRI Bias correction from InsightApplications (Martin Styner).
+
+
+
+Chapter 7 IO
+
+
+(1) Karthik
+- Update Figure 7.3 to add all the known fileformats
+
+- Add a table withh all  the fileformat from the FAQ in Wiki.
+
+    [Status: Done]
+    [ToDo: Update figure InsightDocuments/Art/SoftwareGuideImageIOFactoriesClassDiagram.fig in CVS]
+
+
+- Add the examples for Series Read Write:
+
+  The .cxx are there, they need to:
+
+    1. Revision of their comments
+    2. Make sure they have regression testing.
+    3. Make sure they are input in Latex
+    
+    
+  - ImageReadImageSeriesWrite.cxx
+  - ImageSeriesReadWrite.cxx      [unnecessary if there is a series write and a series read anyway ?]
+  - RGBImageSeriesReadWrite.cxx
+  
+  [Status: Done]
+
+
+(1) Mathieu
+- Add a section on DICOM
+
+  - Maybe introduction by Mathieu 
+    - short history, web site, standards.
+      JPEG compression... etc.
+
+  - How to read single DICOM slice
+  - How to write single DICOM slice
+  - How to read a DICOM series 
+  - How to write a DICOM series 
+  - How to printout an entire DICOM header
+  - How to get specific entries.
+
+    DicomSeriesReadImageWrite.cxx
+    DicomSeriesReadImageWrite2.cxx
+    DicomSeriesReadPrintTags.cxx
+    DicomSeriesReadSeriesWrite.cxx
+
+  [Status: Added little bit, Ask Mathieu to finish the rest]
+  [Added SWGuide comments to file /Insight/Examples/IO/DicomSeriesReadImageWrite2.cxx]
+  [Changed IO.tex to include GDCMDicom instead of older DICOM]
+  [ToDo: cvs Update files: 
+          /Insight/Examples/IO/DicomSeriesReadImageWrite2.cxx
+          /InsightDocuments/SoftwareGuide/IO/IO.tex
+          /InsightDocuments/Latex/Insight.bib  
+          /InsightDocuments/SoftwareGuide/Examples/CMakeLists.txt
+  ]
+
+
+
+
+- Chapter 8  Registration
+
+ (1) Luis 
+  - Add a diagram from the PPT tutorial
+    regarding pixel spacing.
+
+(3) 
+  - Add time performance for the examples & 
+    describe Zion. (check about multithreading).
+
+(1) Karthik (add them to the list, not making new examples).
+  - Secion 8.4  Add the other MI metrics
+
+
+    - Kullback Leibler MI
+    - Normalized Mutual Information Histogram
+
+    Add other Metrics: (find a section for them...)
+    
+    - MatchCardinality metric
+    - GradientDifferenceImageMetric      
+    - KappaStatistics
+    - MeanReciprocalSquares
+
+  [Status: Done]
+  [ToDo: Update
+      /SoftwareGuide/Latex/ImageMetrics.tex
+      /InsightDocuments/Latex/Insight.bib
+  ]
+
+
+(1) Luis
+  - ImageRegistration8 --> 3D example
+    
+
+(2) Luis
+  - Add ImageRegistration7 & the Similarity transform.
+
+
+(1) Luis
+  - In Multi-Resolution add comment regarding the approach
+    of fine-tunning the parameters for each level.
+
+(3) Luis
+  -  ImageRegistration11.cxx  use of the OnePlusOne optimizer + MI metric.
+    
+  
+(2) Luis
+   - Move Section 8.11 Multires pyramid filter to the Section on 
+     Multiresolution and link it with the .cxx example on the 
+     use of this filter.
+     Commit the example for StarsEnd on MultiresolutionPyramidFilter.cxx
+     polish the comments and add the Latex section.
+
+
+(5) Leave it alone !
+  -  What to do with METRIC & Parameters Plots ?
+     they are probably not valid anymore
+     but it will take a long time to regenerate them.
+  
+
+
+(1) Luis --> coordinate with Lydia and Stephen
+  - Transforms Section:
+
+      Full revision: discuss with Stephen & Lydia, regarding
+      parameters & center of rotation.
+
+
+(1) Karthik
+  - Metrics:
+
+      Add new metrics
+
+       - Kullbak Leibler
+       - MutualInformationHistogramBased 
+       - MatchCardinality metric
+       - GradientDifferenceImageMetric      
+       - KappaStatistics
+       - MeanReciprocalSquares
+       - MeanSquaresHistogram
+       - CorrelationCoefficientHistogramMetric
+       - CompareHistogramImageToImageMetric
+    [Status: Done. 
+      2 of the above metrics not added
+      Not sure if it is necessary to add "CorrelationCoefficientHistogramMetric".. 
+      Pretty much the same as NormalizedCorrelationMetric... 
+      "CompareHistogramImageToImageMetric" will be used by KullbackLiebler
+    ]
+      
+  
+
+
+(1) Luis
+  - Add Section on PointSet-To-Image registration
+    describe the method of the Narrowband to Image
+    registration.
+
+
+
+(2) Karthik
+  - Warping Image 
+  
+     1) A way of creating ground truth for
+        evaluating deformable registration. 
+        like morphing.
+
+        [Status: ToDo
+          Maybe ask Luis for some fMRI datasets...
+        ]  
+      
+
+     2) A mechanism for initializing displacement
+          fields for deformable registration methods
+          like Demons.
+
+      - BSplineWarping
+      - LandmarWarping
+        [Status: Done
+          ToDo: cvs add ThinPlateSplineWarp.cxx
+        ]
+
+      [Status: Clarify with Luis
+        Not sure what's necessary. The deformation field may be computed with
+        BSplineWarping etc and Demons can be initialized via SetInitialDeformationField.
+                
+       Illustrate how to use Paraview for visualizing
+       the deformation field
+
+      [Status: Done
+        Added section on viewing 2D deformation fields
+        Adding section on viewing 3D deformation fields
+
+      ToDo:
+        cvs add /InsightDocuments/SoftwareGuide/Latex/VisualizingDeformationFieldsUsingParaview.tex
+        cvs add /InsightDocuments/SoftwareGuide/Art/ParaviewScreenshot1.jpg
+        cvs add /InsightDocuments/SoftwareGuide/Art/ParaviewScreenshot2.jpg
+        cvs add /InsightDocuments/SoftwareGuide/Art/ParaviewScreenshot3.jpg
+        cvs add /InsightDocuments/SoftwareGuide/Art/ParaviewScreenshot1.eps
+        cvs add /InsightDocuments/SoftwareGuide/Art/ParaviewScreenshot2.eps
+        cvs add /InsightDocuments/SoftwareGuide/Art/ParaviewScreenshot3.eps
+        cvs add /InsightDocuments/SoftwareGuide/Art/ParaviewScreenshot4.eps
+        cvs commit /InsightDocuments/SoftwareGuide/Latex/Registration.tex
+      ]
+
+     - Show an example on the deformation of the grid.
+        [Status: ToDo]
+
+
+
+     
+
+
+(1) Will 
+    Luis-->Checking FEM PPT from RPI course.
+
+     - Add two examples more for FEM
+       using the exact same code but changing the parameter
+       file.
+
+(2) Luis help for examples:
+       Illustrate how to select the "Elasticity" and "Roc"
+
+       Illustrate the use of Landmarks in the FEM framework.
+       FiniteElementRegistrationLandmarks.txt
+
+     - Add a 3D example.... do rendering with Volview ? Paraview ?
+    
+
+(3) Luis
+       Specially show the modifications needed in the input
+       parameter file in order to do 3D.
+
+       
+
+(1) Karthik
+   - DEMONS
+
+      - Add example for Symmetric forces demons, explain
+        why... from Thirion's paper.
+        DeformableRegistration3.cxx example...
+
+        [Status: Done
+          Was already there..
+        Other changes:
+          Removed DeformableRegistration2.cxx and DeformableRegistration3.cxx 
+          from Latex/DeformableRegistration.tex, cause its present in 
+          Latex/DemonsRegistration.tex
+        
+        ToDo: 
+          cvs commit InsightDocuments/SoftwareGuide/Latex/DemonsRegistration.tex
+                     InsightDocuments/SoftwareGuide/Latex/DeformableRegistration.tex
+        ]
+
+(2) Karthik
+      - Add a 3D example ( on the same image of the 3D FEM)  
+    
+      - Results visualized in ParaView...
+        [Status: Doing]
+
+(1) Karthik (Luis help)
+      - FIX equations in section 8.13 for the K factor for
+        pixel spacing, and mention the lack of unit-balance
+        on Thirion's paper.
+
+      - Run this for the extra examples to be added for FEM.
+
+    [Status: Pending
+    ]
+
+
+(1) Luis
+   -  Add example on LevelSet MotionRegistration (Jim filter)
+      DeformableRegistration5.cxx:
+
+
+(2) Karthik
+   -  Examples on BSplines 
+      2D & 3D and both optimizers LBFGS LBSFGSB.
+      DeformableRegistration7 & 8
+      (give credit to filter contributor).
+
+    [Status: Working on it
+      Will add that to vis using Paraview section
+    ]
+
+
+(2) (Luis) Delegate to Stephen & Julien
+   - Model to Image registration (Check with Stephen & Julien)
+
+       - Show the image of the real SpatialObject (e.g. draw
+         the Ellipsoid using VTK.
+
+       - Add example of 3D vasculature tree & CT, or Ultrasound.
+
+
+    
+
+   
+Chapter 9 Segmentation
+
+
+(3) Karthik
+    - For all the Region Growing examples add a 3D example,
+      and surface render the result with VolView or Paraview.
+      run the Plugins in VolView.
+      [Status: Done
+        Added a 3D example for ConfidenceConnected filter
+        Some images and segemented white matter with Volview.
+      ToDo:
+        cvs add 3DregionGrowingScreenshot1.eps
+        cvs add SlicesBrainWebConfidenceConnected.eps
+        cvs add ConfidenceConnectedOnBrainWeb.tex        
+      ]
+      
+
+(1) Karthik
+    - Clarify that many seed points can be provided.
+      e.g. illustrate the use on the figure 9.1 page 319.
+      [Status: Done
+        The previous 3D segmentation used 5 seed points. Hopefully that
+        clarifies the point.
+      ]
+
+(1) Karthik
+    - 9.1.4 Add example showing that the seed can be both in
+            bright or dark places. 
+
+      [ ?? Not sure if needed ?? The book has segmentations of gray matter!]
+    
+
+(2) (Luis) Outsource to Sayan            
+    - Add example for KLMRegionGrowing (Ceck with Sayan).
+      & fix Doxygen documentation.
+      From the Doxygen page on Groups, remove the helper
+      classes used in the KLM filter (e.g. border & region).
+      
+
+
+(2) (Luis) Outsource to Josh 
+    - Watersheds :   Add screenshot of the Segmentation Editor ?
+                     and a 3D example ?
+                    
+
+        -Add example for the new filter
+        IsolatedWatershed.
+
+
+(1) Karthik
+    - Level Sets:  Verify that all of them run & eventually
+      fine tune the  parameters from the Regression testing.
+    [Status: Working on it
+    ]
+    
+
+(2) Luis
+      - Add 3D examples from VolView ?
+
+          - FastMarching
+          - ShapeDetection
+        X - GeodesicActiveContours
+          - Threshold Segmentation
+
+
+(3) 
+    - LevelSet in MultiResolution (Jim Miller GE example).
+
+
+(1) Will
+    - Talk about iso-surface extraction in order to visualize
+      the level set.
+
+        - Plug it to VTK
+        - monitor the iterations >>> ADD example ITK+VTK ***
+          (Look at SNAP) 
+
+(3) 
+    - CURVES LevelSet for tubular objects
+      Add a .cxx example
+
+
+(1) Karthik
+    - Active Shape Models (Leventon paper by Lydia).
+      GeodesicActiveContourShapePriorLevelSetImageFilter.cxx
+      [ ?? ]
+    
+
+
+(2) Will (preprocessing for visualization)
+    - Use of LevelSets for AntiAliasing & Fourth Order level set.
+
+
+
+(2) Luis
+    - Voting Filters 
+         - General voting filter
+         - Majority filter
+         - HoleFilling
+       X - HoleFillingIterative
+
+
+(4)
+   - Cellular segmentation
+        - 2D example
+        - Run 3D example
+
+
+
+(1) Karthik
+   - Hybrid Methods
+
+       Remove Fuzzy : It is patented
+
+       Deformable model : fix an example in 3D and show the output
+
+(3) (Luis) Delegate to Leila & Thomas
+       Deformable model Simplex Mesh: InsightApplications (put screenshot).
+ 
+  
+(1) Karthik - (eg. Run in microscopy)
+  - Relabel Filter & Connected components. (put it in Filtering ???).
+
+
+(1) Delegate - Stephen
+  -  KMeans segmentation (or in Statistics chapter).
+  -  MarkovRandomFields (or in Statistics chapter).
+       
+
+(1) Outsource - Julien
+  - Feature extraction: (check with Julien)
+
+         eventually add figures  ???
+
+  
+
+(2) Will
+New Chapter : Visualization
+
+
+   - Paraview 
+
+       display vector fields
+       scalar image
+
+
+   - VolView 
+
+       a bit of volume rendering
+       a bit about ITK Plugins
+
+
+   - Slicer
+
+       mention ITK filters 
+
+
+   - Analyze
+
+       mention ITK filters
+       
+       
+   - ImageViewer in InsightApplications
+
+
+   - ImageMagick
+
+
+   - MRICro
+
+   - MRIConvert (DICOM)
+
+   - Valmet (segmentation validation)
+
+   - SNAP (Insight Applications).
+
+
+   
+   connecting ITK with VTK
+
+   Take from the Tutorial
+
+
+
+   http://www.itk.org/CourseWare/Training/GettingStarted-II.pdf
+
+
+   Show the example in InsightApplications
+
+
+   itkReadITKImageShowVTK.cxx
+   itkReadITKImageSegmentShowVTK.cxx
+   itkReadITKImage3DSegmentShowVTK.cxx
+
+
+Automation process:
+
+- Added tags to most examples in Filtering/, Segmentation/, Iterators/
+- Option to Build Figures
+- Option to Flip specified list of input figures (and their output figure dependencies)
+
+
+Other fixes: (Karthik)
+-Fixed Examples Registration/ImageRegistration10.cxx and added outputs
+-Fixed Examples Registration/ImageRegistration11.cxx and added outputs
+-Fixed Examples Registration/ImageRegistration13.cxx and added outputs
+
+
+
+
+

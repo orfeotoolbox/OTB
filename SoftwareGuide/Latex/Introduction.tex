@@ -1,0 +1,171 @@
+\chapter{Bienvenue}
+\label{chapter:Bienvenue}
+
+Bienvenue dans le l'\emph{guide de l'ORFEO ToolBox (OTB)}.
+
+Ce document vous pr\'{e}sente les concepts importants utilis\'{e}s dans l'OTB et 
+vous guide efficacement dans son apprentissage et son utilisation. 
+De plus, la documentation au format Doxygen du code source de l'OTB est \'{e}galement accessible.
+
+
+\section{Organisation}
+\label{sec:Organisation}
+
+Ce guide logiciel est divis\'{e} en trois parties, chacune \'{e}tant divis\'{e}e en chapitres.
+
+La premi\`{e}re partie pr\'{e}sente l'OTB de fa\c{c}on g\'{e}n\'{e}rale, comment proc\'{e}der \`{a} son installation et sa g\'{e}n\'{e}ration sur votre machine. 
+Cette partie pr\'{e}sente donc les principes de bases d'architecture et de compilation sur un syt\`{e}me, et comment compiler une application en C++.
+
+La deuxi\`{e}me partie pr\'{e}sente l'OTB d'un point de vue \emph{utilisateur}. Elle se pr\'{e}sente sous forme d'exemples illutr\'{e}s.
+
+La troisi\`{e}me partie pr\'{e}sente l'OTB d'un point de vue \emph{d\'{e}veloppeur}.
+Cette partie explique comment cr\'{e}er vos propres classes, comment faire \'{e}voluer le produit.
+
+\section{Se familiariser avec l'OTB}
+\label{sec:CommentApprendreOTB}
+
+Il y \`{a} deux cat\'{e}gories d'utilisateurs de l'OTB :
+\begin{itemize}
+        \item Les d\'{e}veloppeurs de classes, qui cr\'{e}ent des classes C++. 
+        \item Les utilisateurs des classes existantes pour d\'{e}velopper et g\'{e}n\'{e}rer leurs propres applications.
+\end{itemize}
+
+Nous vous recommendons d'\'{e}tudier les exemples. Vous pourrez ainsi compiler et ex\'{e}cuter les exemples distribu\'{e}s 
+avec le code source diponible dans le r\'{e}pertoire \code{OTB/Examples}. Lire le fichier \code{OTB/Examples/README.txt} 
+d\'{e}crivant les diff\'{e}rents exemples founis dans les sous-r\'{e}pertoires.
+
+Il y \`{a} de plus, un ensemble de tests suffisamment document\'{e}s et disponibles dans le r\'{e}pertoire \code{OTB/Testing/Code} qui vous 
+montrent comment peuvent \^{e}tre utilis\'{e}es les classes dans l'OTB.
+
+\section{Organisation du logiciel}
+\label{sec:OrganisationLogiciel}
+
+En cours ....
+
+\section{T\'{e}l\'{e}charger l'OTB}
+\label{sec:DownloadOTB}
+ 
+\index{Downloading}
+
+L'OTB peut \^{e}tre t\'{e}l\'{e}charg\'{e}e \`{a} l'adresse Internet 
+\begin{center} 
+  \url{http://www.cnes.fr/HTML/Download.php}
+\end{center}
+
+\subsection{T\'{e}l\'{e}charger le 'Package'}
+\label{sec:DownloadingReleases}
+
+\index{OTB!downloading release}
+
+Avant de d\'{e}marrer, vous pouvez consulter le document \code{GettingStarted.txt}\footnote{http://www.cnes.fr/HTML/GettingStarted.txt}. 
+Il vous donne un aper\c{c}u sur la proc\'{e}dure \`{a} suivre pour le t\'{e}l\'{e}chargement et l'installation.
+
+Choisir le fichier compress\'{e} \code{.zip} ou \code{.tgz}. Le premier est plut\^{o}t destin\'{e} pour l'environnement \emph{Microsoft Windows}, 
+le second pour les environnements \emph{unix} ou \emph{linux}.
+
+Extraire le contenu du fichier compress\'{e} (avec \emph{unzip} ou \emph{gunzip}) dans le r\'{e}pertoire \code{OTB} 
+pr\'{e}alablement cr\'{e}\'{e} sur votre syt\`{e}me.
+Vous \^{e}tes alors pr\^{e}t \`{a} proc\'{e}der \`{a} la configuration et l'installation du produit, 
+d\'{e}crite au chapitre \ref{sec:CMakeforOTB} \`{a} la page \pageref{sec:CMakeforOTB}.
+
+\subsection{T\'{e}l\'{e}charger depuis SVN}
+\label{sec:DownloadingFromSVN}
+
+\index{OTB!SVN repository}
+
+
+
+Le code source de l'OTB est accessible via un serveur \href{http://subversion.tigris.org/}{Subversion SVN} (rempla\c{c}ant du c\'{e}l\`{e}bre CVS)
+ 
+
+Pour acc\'{e}der \`{a} l'OTB via SVN (sous UNIX et Cygwin), utilisez la commande suivante :
+\begin{verbatim}
+svn ......
+\end{verbatim}
+
+Ceci permet de t\'{e}l\'{e}charger le r\'{e}pertoire \code{OTB} contenant l'ensemble du code source de la biblioth\`{e}que \emph{OTB}.
+
+Vous pouvez ensuite configurer et installer l'OTB sur votre syst\`{e}me en suivant les instructions d\'{e}crites 
+au chapitre \ref{sec:CMakeforOTB} \`{a} la page \pageref{sec:CMakeforOTB})
+
+
+\subsection{Arborescence du produit}
+\label{sec:DirectoryStructure}
+
+L'OTB est organis\'{e} en trois principaux composants : la biblioth\`{e}que OTB (r\'{e}pertoire \code{OTB}), 
+les applications de l'OTB (r\'{e}pertoire \code{OTB-Applications}) et la documentation associ\'{e}e (r\'{e}pertoire \code{OTB-Documents}).
+
+Le code source ainsi que les exemples se trouvent dans le r\'{e}pertoire \code{OTB}; la documentation, 
+le tutorial et les proc\'{e}dures d'installation se trouvent dans le r\'{e}pertoire \code{OTB-Documents} ; 
+les applications plus complexes (de plus haut niveau) se trouvent dans le r\'{e}pertoire \code{OTB-Applications}.
+
+
+L'\code{OTB} contient les r\'{e}pertoires suivants :
+\begin{itemize}
+        \item \code{OTB/Code} --- contient globalement l'ensemble du code source de la biblioth\`{e}que OTB
+        \item \code{OTB/Documentation} --- contient la documentation de la biblioth\`{e}que OTB, produite par Doxygen
+        \item \code{OTB/Examples} --- contient un ensemble d'exemples, utilis\'{e}s notamment pour pr\'{e}senter le concept de l'OTB et 
+        \'{e}galement utilis\'{e} pour illustrer le guide de l'OTB
+        \item \code{OTB/Testing} --- contient un certain nombre de programmes, utilis\'{e}s pour tester et valider la biblioth\`{e}que OTB. 
+        Ces tests sont lanc\'{e}s via le moniteur de test de CMake \emph{ctest}.
+        \item \code{OTB/Utils} --- contient les codes sources des biblioth\`{e}ques utilis\'{e}es par l'OTB
+\end{itemize}
+
+Le r\'{e}pertoire \code{OTB/Code} (le coeur du logiciel) est structur\'{e} de la fa\c{c}on suivante :
+\begin{itemize}
+        \item \code{OTB/Code/Common} --- d\'{e}finitions de macro, typedefs, et toutes autres classes "factoris\'{e}es" utilis\'{e}es par les autres composants de l'OTB.
+        \item \code{OTB/Code/IO} --- classes d'entr\'{e}es/sorties pour l'acc\`{e}s aux images (encapsulation de GDAL et de CAI)
+        \item \code{OTB/Code/ChangeDetection} --- les classes de d\'{e}tections de changements
+        \item \code{OTB/Code/FiterExtraction} --- les classes contenant les primitives et descripteurs impl\'{e}ment\'{e}s
+        \item \code{OTB/Code/Learning} --- les classes d'apprentissage supervis\'{e} (utilisant SVM)
+        \item \code{OTB/Code/Visu} --- les classes de visualisation et des IHM graphiques (utilisant VTK et FLTK)
+\end{itemize}
+
+Le r\'{e}pertoire \code{OTB-Documents} contient les r\'{e}pertoires suivants :
+\begin{itemize}
+        \item \code{OTB-Documents/Latex} --- fichiers \LaTeX{} utilis\'{e}s pour la production de documents.
+        \item \code{OTB-Documents/SoftwareGuide} --- fichiers \LaTeX{} utilis\'{e}s pour g\'{e}n\'{e}rer ce guide. 
+        Les exemples illustr\'{e}s dans ce guide sont g\'{e}n\'{e}r\'{e}s \`{a} partir des codes sources, contenus 
+        dans le répertoire \code{OTB/Examples}, traduits en \LaTeX{}
+\end{itemize}
+
+La documentation \code{OTB-Documents} est disponible via SVN en utilisant la commande :
+\begin{verbatim}
+svn ....
+\end{verbatim}
+
+
+Le répertoire \code{OTB-Applications} contient les r\'{e}pertoires suivants :
+\begin{itemize}
+        \item \code{OTB-Applications/Chgts} --- application int\'{e}ractive de d\'{e}tection de changements, utilisant l'\code{OTB}
+        \item \code{OTB-Applications/Viewer} --- outil de visualisation d'images
+        \item \code{OTB-Applications/Utils} --- contient divers utilitaires comme par exemple un g\'{e}n\'{e}rateur de quick-looks, 
+        un outil d'extraction de r\'{e}gions d'int\'{e}r\^{e}t, un outil d'affichage des m\'{e}ta-donn\'{e}es des images et 
+        un outil de pseudo-ortho-rectification automatique d'images
+\end{itemize}
+
+Pour acc\'{e}der aux applications de l'OTB via SVN (sous UNIX et Cygwin), utilisez la commande suivante :
+\begin{verbatim}
+svn ......
+\end{verbatim}
+
+
+\subsection{Documentation}
+\label{sec:Documentation}
+
+Associ\'{e}e \`{a} ce document, il existe deux autres documentations :
+\begin{description}
+        \item[La Documentation Doxygen .] La documentation Doxygen est une documentation essentielle pour d\'{e}velopper avec l'OTB. 
+        Sous format HTML, elle d\'{e}crit en d\'{e}tail chaque classes et m\'{e}thodes impl\'{e}ment\'{e}es dans l'OTB. 
+        Elle est illustr\'{e}e par des diagrammes de collaboration et des diagrammes d'h\'{e}ritage. 
+        Cette documentation tr\`{e}s dynamique poss\`{e}de des hyper-liens sur les autres classes et sur le code source.
+        Cette docmentation est disponible \`{a} l'adresse \url{http://smsc.cnes.fr/PLEIADES/Fr/A_prog_accomp.htm/}.
+	\item[Les fichiers \emph{Header}.] Chaque classe de l'OTB est impl\'{e}ment\'{e}e dans un fichier .h et dans un fichier 
+	.cxx/.txx (.txx pour les classes génériques (\emph{template}) )
+\end{description}
+
+\subsection{Data}
+\label{sec:Data}
+
+Les images utilis\'{e}es dans ce guide proviennent de ............. 
+
