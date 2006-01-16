@@ -9,7 +9,8 @@
 void RegisterTests()
 {
 REGISTER_TEST(otbExceptionTest);
-//REGISTER_TEST(itkModifiedTimeTest );
-//REGISTER_TEST(itkAdaptorComparisonTest );
+REGISTER_TEST(otbExtractROIImage);
+REGISTER_TEST(otbExtractROIImageRGB);
+REGISTER_TEST(otbConvertFormatImage );
 //REGISTER_TEST(itkAffineTransformTest );
 }
