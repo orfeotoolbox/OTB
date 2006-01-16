@@ -1,4 +1,5 @@
 # This is the root OTB CMakeLists file.
+# $Id$
 
 PROJECT(OTB)
 
@@ -19,14 +20,20 @@ SET(OTB_VERSION_STRING "${OTB_VERSION_MAJOR}.${OTB_VERSION_MINOR}")
 #-----------------------------------------------------------------------------
 # RECHERCHE DES LIBRAIRIES EXTERNES UTILISEES
 
-#FIND_PACKAGE(VTK)
-#IF(VTK_FOUND)
-#  INCLUDE(${VTK_USE_FILE})
-#ELSE(VTK_FOUND)
-#  MESSAGE(FATAL_ERROR
-#          "Cannot build OTB project without VTK.  Please set VTK_DIR.")
-#ENDIF(VTK_FOUND)
+#-------------------------------
+# Librairie VTK
+#-------------------------------
+FIND_PACKAGE(VTK)
+IF(VTK_FOUND)
+  INCLUDE(${VTK_USE_FILE})
+ELSE(VTK_FOUND)
+  MESSAGE(FATAL_ERROR
+          "Cannot build OTB project without VTK.  Please set VTK_DIR.")
+ENDIF(VTK_FOUND)
 
+#-------------------------------
+# Librairie ITK
+#-------------------------------
 FIND_PACKAGE(ITK)
 IF(ITK_FOUND)
   INCLUDE(${ITK_USE_FILE})
@@ -35,12 +42,32 @@ ELSE(ITK_FOUND)
           "Cannot build OTB project without ITK.  Please set ITK_DIR.")
 ENDIF(ITK_FOUND)
 
+#-------------------------------
+# Librairie OpenGL
+#-------------------------------
 FIND_PACKAGE(OpenGL)
-
 IF(OPENGL_INCLUDE_PATH)
   INCLUDE_DIRECTORIES(${OPENGL_INCLUDE_PATH})
 ENDIF(OPENGL_INCLUDE_PATH)
 
+#-------------------------------
+# Librairie CAI
+#-------------------------------
+FIND_LIBRARY(CAI_LIBRARY NAMES cai PATHS $ENV{CAI_DIR_LIB} )
+FIND_LIBRARY(TIFF_LIBRARY NAMES tiff PATHS $ENV{CAI_DIR_LIB} )
+FIND_PATH(CAI_INCLUDES cai_image.h $ENV{CAI_DIR_INCLUDES} )
+IF (NOT CAI_LIBRARY)
+  MESSAGE(FATAL_ERROR
+          "Cannot find CAI library. Please set CAI_DIR_LIB.")
+ENDIF (NOT CAI_LIBRARY)
+
+INCLUDE_DIRECTORIES(${CAI_INCLUDES})
+#LINK_DIRECTORIES( $ENV{CAI_DIR_LIB} )
+
+
+#-------------------------------
+# Librairie FLTK
+#-------------------------------
 # Add an option to use or not use FLTK (http://www.fltk.org)
 #FIND_PACKAGE(FLTK)
 #IF(FLTK_FOUND)
@@ -49,6 +76,19 @@ ENDIF(OPENGL_INCLUDE_PATH)
 #  MESSAGE(FATAL_ERROR
 #          "Cannot build OTB project without FLTK.  Please set FLTK_DIR.")
 #ENDIF(FLTK_FOUND)
+
+#FIND_LIBRARY(FLTK_LIBRARY NAMES fltk PATHS /ORFEO/outils/libs-externes-install/lib/fltk )
+#FIND_PATH(FLTK_INCLUDES Fl.H /ORFEO/outils/libs-externes-install/include/FL )
+#FIND_LIBRARY(CAI_LIBRARY NAMES cai PATHS ${CAI_DIR_LIB} )
+#FIND_PATH(CAI_INCLUDES cai_image.h ${CAI_DIR_INCLUDES} )
+#IF (NOT FLTK_LIBRARY)
+#  MESSAGE(FATAL_ERROR
+#          "Cannot find FLTK library. Please set FLTK_DIR_LIB.")
+#ENDIF (NOT FLTK_LIBRARY)
+
+#INCLUDE_DIRECTORIES(${FLTK_INCLUDES})
+#LINK_DIRECTORIES( $ENV{FLTK_DIR_LIB} )
+
 
 INCLUDE_DIRECTORIES (
   ${OTB_BINARY_DIR} 
@@ -81,8 +121,8 @@ ENDIF(BUILD_TESTING)
 
 #-----------------------------------------------------------------------------
 # Output directories.
-SET (LIBRARY_OUTPUT_PATH ${OTB_BINARY_DIR}/bin CACHE INTERNAL "Les librairies sont generees dans le même repertoire.")
-SET (EXECUTABLE_OUTPUT_PATH ${OTB_BINARY_DIR}/bin CACHE INTERNAL "Les executables sont generes dans le même repertoire.")
+SET (LIBRARY_OUTPUT_PATH ${OTB_BINARY_DIR}/bin CACHE INTERNAL "Les librairies sont generees dans le mï¿½e repertoire.")
+SET (EXECUTABLE_OUTPUT_PATH ${OTB_BINARY_DIR}/bin CACHE INTERNAL "Les executables sont generes dans le mï¿½e repertoire.")
 MARK_AS_ADVANCED(LIBRARY_OUTPUT_PATH EXECUTABLE_OUTPUT_PATH)
 SET(OTB_LIBRARY_PATH "${LIBRARY_OUTPUT_PATH}")
 SET(OTB_EXECUTABLE_PATH "${EXECUTABLE_OUTPUT_PATH}")
@@ -288,7 +328,7 @@ ENDIF(OTB_SIZEOF_LONG_LONG)
 
 #-----------------------------------------------------------------------------
 # Configure the default OTB_DATA_ROOT for the location of OTB Data.
-FIND_PATH(OTB_DATA_ROOT OTBData.readme ${OTB_SOURCE_DIR}/Tester/Data $ENV{OTB_DATA_ROOT})
+FIND_PATH(OTB_DATA_ROOT OTBData.readme ${OTB_SOURCE_DIR}/Testing/Data $ENV{OTB_DATA_ROOT})
 MARK_AS_ADVANCED(OTB_DATA_ROOT)
 
 
