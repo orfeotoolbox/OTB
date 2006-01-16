@@ -1,0 +1,29 @@
+# $Id$
+
+IF( NOT OTB_DISABLE_CXX_TESTING )
+
+SET(BASELINE ${OTB_DATA_ROOT}/Baseline/Images)
+SET(INPUTDATA ${OTB_DATA_ROOT}/Input)
+SET(TEMP ${OTBTesting_BINARY_DIR}/Temporary)
+
+SET(IO_TESTS ${CXX_TEST_PATH}/otbIOTests)
+
+ADD_TEST(otbImageIOFactoryTest ${IO_TESTS} otbImageIOFactoryTest)
+
+
+SET(BasicIO_SRCS
+otbImageIOFactoryTest.cxx
+)
+
+INCLUDE_DIRECTORIES("${OTBTesting_BINARY_DIR}")
+
+
+ADD_EXECUTABLE(otbIOTests otbIOTests.cxx ${BasicIO_SRCS})
+TARGET_LINK_LIBRARIES(otbIOTests OTBIO OTBCommon ITKIO ITKCommon)
+
+
+ENDIF( NOT OTB_DISABLE_CXX_TESTING )
+
+
+
+
