@@ -1,3 +1,5 @@
+# $Id$
+
 PROJECT(OTBTesting)
 
 # The Testing directory is setup so it can build either as part of the

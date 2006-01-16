@@ -376,7 +376,7 @@ int RegressionTestImage (const char *testImageFilename, const char *baselineImag
   DiffType::Pointer diff = DiffType::New();
     diff->SetValidInput(baselineReader->GetOutput());
     diff->SetTestInput(testReader->GetOutput());
-    diff->SetDifferenceThreshold(2.0);
+    diff->SetDifferenceThreshold(1.0);
     diff->UpdateLargestPossibleRegion();
 
   double status = diff->GetTotalDifference();

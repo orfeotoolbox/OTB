@@ -1,3 +1,4 @@
+# $Id$
 #-----------------------------------------------------------------------------
 # Include directories for other projects installed on the system.
 SET(OTB_INCLUDE_DIRS_SYSTEM "")
@@ -9,6 +10,11 @@ SET(OTB_INCLUDE_DIRS_BUILD_TREE ${OTB_BINARY_DIR})
 # These directories are always needed.
 SET(OTB_INCLUDE_DIRS_BUILD_TREE ${OTB_INCLUDE_DIRS_BUILD_TREE}
   ${OTB_SOURCE_DIR}/Code/Common
+  ${OTB_SOURCE_DIR}/Code/IO
+  ${OTB_SOURCE_DIR}/Code/ChangeDetection
+  ${OTB_SOURCE_DIR}/Code/FeatureExtraction
+  ${OTB_SOURCE_DIR}/Code/Learning
+  ${OTB_SOURCE_DIR}/Code/Visu
 )
 
 #-----------------------------------------------------------------------------

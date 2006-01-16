@@ -6,6 +6,8 @@
   Language  :   C++
   Date      :   21 decembre 2005
   Version   :   
+  Role      :  
+  $Id$ 
 
 =========================================================================*/
 #ifndef __otbBonjour_h

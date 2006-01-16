@@ -1,3 +1,5 @@
+$Id$
+
 OTB : répertoire des exemples
 ----------------------
 
