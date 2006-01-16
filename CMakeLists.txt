@@ -1,5 +1,6 @@
 # This is the root OTB CMakeLists file.
 # $Id$
+#
 
 PROJECT(OTB)
 
