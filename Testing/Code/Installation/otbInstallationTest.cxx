@@ -23,12 +23,10 @@ extern "C"
 #include "vtkRenderer.h"
 
 
-
-#include <iostream>
 #include <iostream>
 #include <string>
 
-int main()
+int main(int argc, char * argv[])
 {
 	//OTB
 	otb::Bonjour lBonjour;
@@ -36,9 +34,15 @@ int main()
 	//CAI
 	CAI_IMAGE * lCai=NULL;
 	int lNbCanaux,lNbOctPix,lNbLignes,lNbColonnes;
-	char lImage[1024]="image.lum";
+	char lImage[1024];
+        strcpy(lImage,argv[1]);
 	char lFormatImage[1024]="AUTO";
 	lCai = cai_ouvre_lecture_image(lImage,lFormatImage,&lNbCanaux,&lNbOctPix,&lNbColonnes,&lNbLignes);
+        if ( lCai == NULL )
+        {
+                std::cerr << "Erreur CAI : "<<CAI_ERREUR << std::endl;
+                return EXIT_FAILURE;
+        }
 
 	//FLTK
 //	Fl_Window lWindow(400, 400);
@@ -48,7 +52,7 @@ int main()
   	cone->Delete();
 
 	
-	return 0;
+        return EXIT_SUCCESS;
 }
 
 

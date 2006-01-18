@@ -17,6 +17,11 @@ ADD_TEST(otbConvertFormatImage ${COMMON_TESTS}
         ${INPUTDATA}/cthead1.png 
         ${TEMP}/otbConvertFormatImage.jpg )
 
+ADD_TEST(otbConvertFormatImage2 ${COMMON_TESTS}  
+        otbConvertFormatImage
+        ${INPUTDATA}/poupees.jpg 
+        ${TEMP}/poupees.tiff )
+
 
 ADD_TEST(otbExtractROIImage ${COMMON_TESTS}  
   --compare-image   ${BASELINE}/../../Input/cthead1_26_97_209_100.png
@@ -27,12 +32,20 @@ ADD_TEST(otbExtractROIImage ${COMMON_TESTS}
         26 97 209 100 )
 
 ADD_TEST(otbExtractROIImageRGB ${COMMON_TESTS}  
-  --compare-image   ${BASELINE}/../../Input/poupees_302_1_134_330.jpg
-                    ${TEMP}/otbExtractROIImageRGB.jpg
+  --compare-image   ${BASELINE}/sbuv_extrait_700_60_77_489.png
+                    ${TEMP}/sbuv_extrait_700_60_77_489.png
         otbExtractROIImageRGB
-        ${INPUTDATA}/poupees.jpg 
-        ${TEMP}/otbExtractROIImageRGB.jpg 
-        303 2 134 330 )
+        ${INPUTDATA}/sbuv.png 
+        ${TEMP}/sbuv_extrait_700_60_77_489.png 
+        700 60 77 489 )
+
+#ADD_TEST(otbExtractROIImageRGB ${COMMON_TESTS}  
+#  --compare-image   ${BASELINE}/../../Input/poupees_302_1_134_330.jpg
+#                    ${TEMP}/otbExtractROIImageRGB.jpg
+#        otbExtractROIImageRGB
+#        ${INPUTDATA}/poupees.jpg 
+#        ${TEMP}/otbExtractROIImageRGB.jpg 
+#        303 2 134 330 )
 
 
 SET(BasicCommon_SRCS
