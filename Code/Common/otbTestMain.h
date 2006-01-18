@@ -1,3 +1,5 @@
+// Pour CAI : MAIN
+#define MAIN
 
 
 #include "itkWin32Header.h"
@@ -18,8 +20,6 @@
 #include "itkExtractImageFilter.h"
 #include "itkDifferenceImageFilter.h"
 #include "itkImageRegion.h"
-
-#include "otbExceptionObject.h"
 
 #define ITK_TEST_DIMENSION_MAX 6
 
@@ -206,13 +206,6 @@ int main(int ac, char* av[] )
         result += baseline->second;
         }
 
-      }
-    catch(const otb::ExceptionObject& e)
-      {
-      std::cerr << "OTB outil de tests a leve une exception de type OTB:\n";
-      std::cerr << e.GetFile() << ":" << e.GetLine() << ":\n"
-                << e.GetDescription() << "\n";
-      result = -1;
       }
     catch(const itk::ExceptionObject& e)
       {
