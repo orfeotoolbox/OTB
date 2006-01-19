@@ -6,6 +6,7 @@
   Date      :   11 janvier 2005
   Version   :   
   Role      :   Test l'extraction d'une ROI dans une image RGB
+  $Id$
 
 =========================================================================*/
 
@@ -14,7 +15,7 @@
 
 #include "itkImageFileReader.h"
 #include "itkImageFileWriter.h"
-#include "itkExtractImageFilter.h"
+#include "otbExtractROI.h"
 #include "itkImage.h"
 #include "itkRGBPixel.h"
 
@@ -23,10 +24,11 @@ int otbExtractROIImageRGB( int argc, char ** argv )
 {
         const char * inputFilename  = argv[1];
         const char * outputFilename = argv[2];
-        int  startX(::atoi(argv[3]));
-        int  startY(::atoi(argv[4]));
-        int  sizeX(::atoi(argv[5]));
-        int  sizeY(::atoi(argv[6]));
+        
+        unsigned int  startX((unsigned int)::atoi(argv[3]));
+        unsigned int  startY((unsigned int)::atoi(argv[4]));
+        unsigned int  sizeX((unsigned int)::atoi(argv[5]));
+        unsigned int  sizeY((unsigned int)::atoi(argv[6]));
 
         typedef itk::RGBPixel<unsigned char>                    InputPixelType;
         typedef itk::RGBPixel<unsigned char>                    OutputPixelType;
@@ -37,22 +39,14 @@ int otbExtractROIImageRGB( int argc, char ** argv )
 
         typedef itk::ImageFileReader< InputImageType  >         ReaderType;
         typedef itk::ImageFileWriter< OutputImageType >         WriterType;
-        typedef itk::ExtractImageFilter< InputImageType, 
+        typedef otb::ExtractROI< InputImageType, 
                                             OutputImageType >   FilterType;
         FilterType::Pointer filter = FilterType::New();
-
-
-        OutputImageType::IndexType start;
-        start[0] = startX;
-        start[1] = startY;
-        OutputImageType::SizeType size;
-        size[0] = sizeX;
-        size[1] = sizeY;
-        OutputImageType::RegionType desiredRegion;
-        desiredRegion.SetSize(  size  );
-        desiredRegion.SetIndex( start );
         
-        filter->SetExtractionRegion( desiredRegion );
+        filter->SetStartX( startX );
+        filter->SetStartY( startY );
+        filter->SetSizeX( sizeX );
+        filter->SetSizeY( sizeY );
 
         ReaderType::Pointer reader = ReaderType::New();
         WriterType::Pointer writer = WriterType::New();
