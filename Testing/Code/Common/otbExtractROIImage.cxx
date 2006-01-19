@@ -6,6 +6,7 @@
   Date      :   11 janvier 2005
   Version   :   
   Role      :   Test l'extraction d'une ROI dans une image mono canal
+  $Id$
 
 =========================================================================*/
 
@@ -14,26 +15,19 @@
 
 #include "itkImageFileReader.h"
 #include "itkImageFileWriter.h"
-//#include "itkRegionOfInterestImageFilter.h"
-#include "itkExtractImageFilter.h"
+#include "otbExtractImageFilter.h"
 #include "itkImage.h"
 
 
 int otbExtractROIImage( int argc, char ** argv )
 {
-        // Verify the number of parameters in the command line
-/*        if( argc != 7 )
-        {
-                std::cerr << "Usage: " << argv[0] << " inputImageFile  outputImageFile " << std::endl;
-                std::cerr << " startX startY sizeX sizeY" << std::endl;
-                return -1;
-        }*/
         const char * inputFilename  = argv[1];
         const char * outputFilename = argv[2];
-        int  startX(::atoi(argv[3]));
-        int  startY(::atoi(argv[4]));
-        int  sizeX(::atoi(argv[5]));
-        int  sizeY(::atoi(argv[6]));
+        
+        unsigned int  startX((unsigned int)::atoi(argv[3]));
+        unsigned int  startY((unsigned int)::atoi(argv[4]));
+        unsigned int  sizeX((unsigned int)::atoi(argv[5]));
+        unsigned int  sizeY((unsigned int)::atoi(argv[6]));
 
         typedef unsigned char  	                                InputPixelType;
         typedef unsigned char  	                                OutputPixelType;
@@ -44,29 +38,17 @@ int otbExtractROIImage( int argc, char ** argv )
 
         typedef itk::ImageFileReader< InputImageType  >         ReaderType;
         typedef itk::ImageFileWriter< OutputImageType >         WriterType;
-/*  typedef itk::RegionOfInterestImageFilter< InputImageType, 
-                                            OutputImageType > FilterType;*/
-        typedef itk::ExtractImageFilter< InputImageType, 
+        typedef otb::ExtractImageFilter< InputImageType, 
                                             OutputImageType >   FilterType;
-        /* typename */FilterType::Pointer filter = FilterType::New();
-
-
-        /* typename */ OutputImageType::IndexType start;
-        start[0] = startX;
-        start[1] = startY;
-        /* typename */ OutputImageType::SizeType size;
-        size[0] = sizeX;
-        size[1] = sizeY;
-        /* typename */ OutputImageType::RegionType desiredRegion;
-        desiredRegion.SetSize(  size  );
-        desiredRegion.SetIndex( start );
+        FilterType::Pointer filter = FilterType::New();
         
-        filter->SetExtractionRegion( desiredRegion );
+        filter->SetStartX( startX );
+        filter->SetStartY( startY );
+        filter->SetSizeX( sizeX );
+        filter->SetSizeY( sizeY );
 
-        /* typename */ ReaderType::Pointer reader = ReaderType::New();
-        /* typename */ WriterType::Pointer writer = WriterType::New();
-        
-
+        ReaderType::Pointer reader = ReaderType::New();
+        WriterType::Pointer writer = WriterType::New();
 
         reader->SetFileName( inputFilename  );
         writer->SetFileName( outputFilename );
