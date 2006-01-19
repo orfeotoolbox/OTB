@@ -5,7 +5,7 @@
   Language  :   C++
   Date      :   11 janvier 2005
   Version   :   
-  Role      :   Test l'extraction d'une ROI dans une image mono canal
+  Role      :   Test l'extraction d'une ROI dans une image mono canal, dont les valeurs sont codées en "unsigned char"
   $Id$
 
 =========================================================================*/
@@ -15,11 +15,11 @@
 
 #include "itkImageFileReader.h"
 #include "itkImageFileWriter.h"
-#include "otbExtractImageFilter.h"
+#include "otbExtractROI.h"
 #include "itkImage.h"
 
 
-int otbExtractROIImage( int argc, char ** argv )
+int otbExtractROI( int argc, char ** argv )
 {
         const char * inputFilename  = argv[1];
         const char * outputFilename = argv[2];
@@ -38,7 +38,7 @@ int otbExtractROIImage( int argc, char ** argv )
 
         typedef itk::ImageFileReader< InputImageType  >         ReaderType;
         typedef itk::ImageFileWriter< OutputImageType >         WriterType;
-        typedef otb::ExtractImageFilter< InputImageType, 
+        typedef otb::ExtractROI< InputImageType, 
                                             OutputImageType >   FilterType;
         FilterType::Pointer filter = FilterType::New();
         
