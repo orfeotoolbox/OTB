@@ -53,11 +53,11 @@ public:
 
   /** Accessor type that convert data between internal and external
    *  representations.  */
-  typedef DefaultPixelAccessor< PixelType > AccessorType;
-  typedef DefaultPixelAccessorFunctor< Self > AccessorFunctorType;
+  typedef itk::DefaultPixelAccessor< PixelType > AccessorType;
+  typedef itk::DefaultPixelAccessorFunctor< Self > AccessorFunctorType;
 
   /** Tyepdef for the functor used to access a neighborhood of pixel pointers.*/
-  typedef NeighborhoodAccessorFunctor< Self > 
+  typedef itk::NeighborhoodAccessorFunctor< Self > 
                                             NeighborhoodAccessorFunctorType;
 
   /** Dimension of the image.  This constant is used by functions that are
@@ -67,7 +67,7 @@ public:
   itkStaticConstMacro(ImageDimension, unsigned int, VImageDimension);
 
   /** Container used to store pixels in the image. */
-  typedef ImportImageContainer<unsigned long, PixelType> PixelContainer;
+  typedef itk::ImportImageContainer<unsigned long, PixelType> PixelContainer;
 
   /** Index typedef support. An index is used to access pixel values. */
   typedef typename Superclass::IndexType  IndexType;

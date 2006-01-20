@@ -1,9 +1,6 @@
 # Sources of non-templated classes.
 
 FILE(GLOB OTBCommon_SRCS "*.cxx" )
-#SET(OTBCommon_SRCS
-#  otbExceptionObject.cxx
-#)
 
 ADD_LIBRARY(OTBCommon ${OTBCommon_SRCS})
 TARGET_LINK_LIBRARIES (OTBCommon ITKCommon)
