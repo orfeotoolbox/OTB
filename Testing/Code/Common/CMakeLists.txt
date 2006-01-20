@@ -7,65 +7,69 @@ SET(TEMP ${OTBTesting_BINARY_DIR}/Temporary)
 
 SET(COMMON_TESTS ${CXX_TEST_PATH}/otbCommonTests)
 
-ADD_TEST(otbExceptionTest ${COMMON_TESTS} otbExceptionTest)
-
-
-ADD_TEST(otbConvertFormatImage ${COMMON_TESTS}  
-#  --compare-image   ${BASELINE}/../../cthead1.png
-#                    ${TEMP}/otbConvertFormatImage.png
-        otbConvertFormatImage
+ADD_TEST(tvCoExtractROI ${COMMON_TESTS}  
+  --compare-image   ${BASELINE}/otbExtractROI_cthead1_26_97_209_100.png
+                    ${TEMP}/otbExtractROI_cthead1_26_97_209_100.png
+        otbExtractROI
         ${INPUTDATA}/cthead1.png 
-        ${TEMP}/otbConvertFormatImage.jpg )
-
-ADD_TEST(otbConvertFormatImage2 ${COMMON_TESTS}  
-        otbConvertFormatImage
-        ${INPUTDATA}/poupees.jpg 
-        ${TEMP}/poupees.tiff )
-
-
-ADD_TEST(otbExtractROIImage ${COMMON_TESTS}  
-  --compare-image   ${BASELINE}/../../Input/cthead1_26_97_209_100.png
-                    ${TEMP}/otbExtractROIImage.png
-        otbExtractROIImage
-        ${INPUTDATA}/cthead1.png 
-        ${TEMP}/otbExtractROIImage.png 
+        ${TEMP}/otbExtractROI_cthead1_26_97_209_100.png 
         26 97 209 100 )
 
-ADD_TEST(otbExtractROIImageRGB ${COMMON_TESTS}  
-  --compare-image   ${BASELINE}/sbuv_extrait_700_60_77_489.png
-                    ${TEMP}/sbuv_extrait_700_60_77_489.png
-        otbExtractROIImageRGB
+ADD_TEST(tvCoExtractROI_RGB ${COMMON_TESTS}  
+  --compare-image   ${BASELINE}/otbExtractROI_RGB_sbuv_700_60_77_489.png
+                    ${TEMP}/otbExtractROI_RGB_sbuv_700_60_77_489.png
+        otbExtractROI_RGB
         ${INPUTDATA}/sbuv.png 
-        ${TEMP}/sbuv_extrait_700_60_77_489.png 
+        ${TEMP}/otbExtractROI_RGB_sbuv_700_60_77_489.png 
         700 60 77 489 )
 
-#ADD_TEST(otbExtractROIImageRGB ${COMMON_TESTS}  
-#  --compare-image   ${BASELINE}/../../Input/poupees_302_1_134_330.jpg
-#                    ${TEMP}/otbExtractROIImageRGB.jpg
-#        otbExtractROIImageRGB
+ADD_TEST(tvCoExtractROI_RGB2 ${COMMON_TESTS}  
+  --compare-image   ${BASELINE}/otbExtractROI_RGB_poupees_302_1_134_330.jpg
+                    ${TEMP}/otbExtractROI_RGB_poupees_302_1_134_330.jpg
+        otbExtractROI_RGB
+        ${INPUTDATA}/poupees.jpg 
+        ${TEMP}/otbExtractROI_RGB_poupees_302_1_134_330.jpg 
+        303 2 134 330 )
+
+ADD_TEST(tuCoMultiChannelImage ${COMMON_TESTS}  
+        otbMultiChannelImage )
+
+ADD_TEST(tuCoMultiChannelExtractROI ${COMMON_TESTS}  
+        otbMultiChannelExtractROI )
+
+#ADD_TEST(otbConvertFormatImage ${COMMON_TESTS}  
+#  --compare-image   ${BASELINE}/../../cthead1.png
+#                    ${TEMP}/otbConvertFormatImage.png
+#        otbConvertFormatImage
+#        ${INPUTDATA}/cthead1.png 
+#        ${TEMP}/otbConvertFormatImage.jpg )
+
+#ADD_TEST(otbConvertFormatImage2 ${COMMON_TESTS}  
+#        otbConvertFormatImage
 #        ${INPUTDATA}/poupees.jpg 
-#        ${TEMP}/otbExtractROIImageRGB.jpg 
-#        303 2 134 330 )
+#        ${TEMP}/poupees.tiff )
 
 
 SET(BasicCommon_SRCS
-otbExceptionTest.cxx
-otbExtractROIImage.cxx
-otbExtractROIImageRGB.cxx
-otbConvertFormatImage.cxx
+otbExtractROI.cxx
+otbExtractROI_RGB.cxx
+otbMultiChannelImage.cxx
+otbMultiChannelExtractROI.cxx
+#otbConvertFormatImage.cxx
 )
 
-ADD_EXECUTABLE(ImageReadWrite ImageReadWrite.cxx)
-TARGET_LINK_LIBRARIES(ImageReadWrite ITKCommon ITKIO )
-ADD_TEST(ImageReadWrite ${CXX_TEST_PATH}/ImageReadWrite 
-        ${INPUTDATA}/cthead1.png 
-        ${TEMP}/ImageReadWrite.png )
 
-ADD_EXECUTABLE(ImageReadWriteRGB ImageReadWriteRGB.cxx)
-TARGET_LINK_LIBRARIES(ImageReadWriteRGB ITKCommon ITKIO )
-ADD_TEST(ImageReadWriteRGB ${CXX_TEST_PATH}/ImageReadWriteRGB 
-        ${INPUTDATA}/poupees.jpg 
-        ${TEMP}/ImageReadWriteRGB.jpg )
+#ADD_EXECUTABLE(ImageReadWrite ImageReadWrite.cxx)
+#TARGET_LINK_LIBRARIES(ImageReadWrite ITKCommon ITKIO )
+#ADD_TEST(ImageReadWrite ${CXX_TEST_PATH}/ImageReadWrite 
+#        ${INPUTDATA}/cthead1.png 
+#        ${TEMP}/ImageReadWrite.png )
+
+#ADD_EXECUTABLE(ImageReadWriteRGB ImageReadWriteRGB.cxx)
+#TARGET_LINK_LIBRARIES(ImageReadWriteRGB ITKCommon ITKIO )
+#ADD_TEST(ImageReadWriteRGB ${CXX_TEST_PATH}/ImageReadWriteRGB 
+#        ${INPUTDATA}/poupees.jpg 
+#        ${TEMP}/ImageReadWriteRGB.jpg )
 
 # Exemple test simple avec un "main"
 # 
@@ -83,7 +87,7 @@ INCLUDE_DIRECTORIES("${OTBTesting_BINARY_DIR}")
 
 
 ADD_EXECUTABLE(otbCommonTests otbCommonTests.cxx ${BasicCommon_SRCS})
-TARGET_LINK_LIBRARIES(otbCommonTests OTBCommon ITKIO ITKCommon)
+TARGET_LINK_LIBRARIES(otbCommonTests OTBIO OTBCommon ITKIO ITKCommon)
 
 
 ENDIF( NOT OTB_DISABLE_CXX_TESTING )

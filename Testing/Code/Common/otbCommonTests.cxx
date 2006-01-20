@@ -8,9 +8,12 @@
 
 void RegisterTests()
 {
-REGISTER_TEST(otbExceptionTest);
-REGISTER_TEST(otbExtractROIImage);
-REGISTER_TEST(otbExtractROIImageRGB);
-REGISTER_TEST(otbConvertFormatImage );
+REGISTER_TEST(otbExtractROI);
+REGISTER_TEST(otbExtractROI_RGB);
+REGISTER_TEST(otbMultiChannelImage );
+REGISTER_TEST(otbMultiChannelExtractROItoto );
+
+
+//REGISTER_TEST(otbConvertFormatImage );
 //REGISTER_TEST(itkAffineTransformTest );
 }
