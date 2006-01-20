@@ -4,7 +4,7 @@ SET(BASELINE ${OTB_DATA_ROOT}/Baseline/Images)
 SET(INPUTDATA ${OTB_DATA_ROOT}/Input)
 SET(TEMP ${OTBTesting_BINARY_DIR}/Temporary)
 
-ADD_TEST(otbInstallationTest ${CXX_TEST_PATH}/otbInstallationTest      
+ADD_TEST(tuInInstallationTest ${CXX_TEST_PATH}/otbInstallationTest      
   ${INPUTDATA}/poupees.jpg )
 
 ADD_EXECUTABLE(otbInstallationTest otbInstallationTest.cxx )
