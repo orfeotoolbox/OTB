@@ -1,3 +1,0 @@
-SET(OTBCommon_LIB_DEPENDS "ITKCommon;")
-SET(OTBIO_LIB_DEPENDS "ITKIO;")
-SET(OTBFeatureExtraction_LIB_DEPENDS "ITKCommon;")
