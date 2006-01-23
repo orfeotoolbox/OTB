@@ -10,10 +10,5 @@ void RegisterTests()
 {
 REGISTER_TEST(otbExtractROI);
 REGISTER_TEST(otbExtractROI_RGB);
-REGISTER_TEST(otbMultiChannelImage );
 REGISTER_TEST(otbMultiChannelExtractROItoto );
-
-
-//REGISTER_TEST(otbConvertFormatImage );
-//REGISTER_TEST(itkAffineTransformTest );
 }

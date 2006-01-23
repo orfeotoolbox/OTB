@@ -53,7 +53,7 @@ ADD_TEST(tuCoMultiChannelExtractROI ${COMMON_TESTS}
 SET(BasicCommon_SRCS
 otbExtractROI.cxx
 otbExtractROI_RGB.cxx
-otbMultiChannelImage.cxx
+#otbMultiChannelImage.cxx
 otbMultiChannelExtractROI.cxx
 #otbConvertFormatImage.cxx
 )
