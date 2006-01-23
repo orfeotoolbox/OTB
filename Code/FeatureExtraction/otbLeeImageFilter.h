@@ -14,7 +14,6 @@
 #include "itkImageToImageFilter.h"
 #include "itkImage.h"
 #include "itkNumericTraits.h"
-#include "otbLeeImageFilter.txx"
 
 namespace otb
 {
@@ -70,13 +69,13 @@ public:
   typedef typename OutputImageType::RegionType OutputImageRegionType;
 
   /** "typedef" définissant la taille d'une image. */
-  typedef typename InputImageType::SizeType InputSizeType;
+  typedef typename InputImageType::SizeType SizeType;
 
   /** Positionne le rayon définissant le voisinage utilisé pour le calcul du filtre. */
-  itkSetMacro(Radius, InputSizeType);
+  itkSetMacro(Radius, SizeType);
 
   /** Récupère le rayon définissant le voisinage utilisé pour le calcul du filtre. */
-  itkGetConstReferenceMacro(Radius, InputSizeType);
+  itkGetConstReferenceMacro(Radius, SizeType);
   
   /** Positionne le nombre de vues utilisé pour le calcul du filtre. */
   itkSetMacro(NbVues, double);
@@ -93,7 +92,7 @@ public:
 
 protected:
   LeeImageFilter();
-  virtual ~LeeImageFilter() {}
+  virtual ~LeeImageFilter() {};
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
   /** LeeImageFilter peut etre implémentée pour un traitement de filtre multithreaded.
@@ -117,10 +116,15 @@ private:
   void operator=(const Self&); //purposely not implemented
 
   /** Déclaration du rayon */
-  InputSizeType m_Radius;
+  SizeType m_Radius;
   /** Déclaration du nombre de vues du filtre */
   double m_NbVues;
 };
 } // end namespace otb
+
+#ifndef OTB_MANUAL_INSTANTIATION
+#include "otbLeeImageFilter.txx"
+#endif
+
   
 #endif

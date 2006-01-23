@@ -23,7 +23,12 @@
 #include "itkOffset.h"
 #include "itkProgressReporter.h"
 
+namespace otb
+{
 
+/**
+ *
+ */
 template <class TInputImage, class TOutputImage>
 LeeImageFilter<TInputImage, TOutputImage>::LeeImageFilter()
 {
@@ -162,11 +167,15 @@ void LeeImageFilter< TInputImage, TOutputImage>::ThreadedGenerateData(
  * Standard "PrintSelf" method
  */
 template <class TInputImage, class TOutput>
-voidLeeImageFilter<TInputImage, TOutput>::PrintSelf(std::ostream& os, itk::Indent indent) const
+void 
+LeeImageFilter<TInputImage, TOutput>::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   Superclass::PrintSelf( os, indent );
   os << indent << "Radius: " << m_Radius << std::endl;
-
 }
+
+
+} // end namespace otb
+
 
 #endif

@@ -14,20 +14,19 @@
 #include "itkExceptionObject.h"
 #include "itkImageFileReader.h"
 #include "itkImageFileWriter.h"
-//#include "otbLeeImageFilter.h"
+#include "otbLeeImageFilter.h"
 
 
 int otbLeeFilter( int argc, char ** argv )
 {
-#if 0
   try 
     { 
         const char * inputFilename  = argv[1];
         const char * outputFilename = argv[2];
-        
-        unsigned int  RadiusX(unsigned int)::atoi(argv[3]));
+       
+        unsigned int  RadiusX((unsigned int)::atoi(argv[3]));
         unsigned int  RadiusY((unsigned int)::atoi(argv[4]));
-        double        NbVues((double)::atoi(argv[5]));
+        double        NbVues ((double)::atoi(argv[5]));
 
         typedef float  	                                        InputPixelType;
         typedef float     	                                OutputPixelType;
@@ -36,8 +35,8 @@ int otbLeeFilter( int argc, char ** argv )
         typedef itk::Image< InputPixelType,  Dimension >        InputImageType;
         typedef itk::Image< OutputPixelType, Dimension >        OutputImageType;
 
-        typedef otb::ImageFileReader< InputImageType  >         ReaderType;
-        typedef otb::ImageFileWriter< OutputImageType >         WriterType;
+        typedef itk::ImageFileReader< InputImageType  >         ReaderType;
+        typedef itk::ImageFileWriter< OutputImageType >         WriterType;
 
         typedef otb::LeeImageFilter< InputImageType,OutputImageType >   FilterType;
 	
@@ -45,10 +44,10 @@ int otbLeeFilter( int argc, char ** argv )
 	Radius[0]= RadiusX;
 	Radius[1]= RadiusY;
 
-        FilterType::Pointer FiltreLee = FilterType::New();
+        FilterType::Pointer filtreLee = FilterType::New();
         
-        FiltreLee->SetRadius( Radius );
-	FiltreLee->SetNbVues(NbVues);
+	filtreLee->SetRadius( Radius );
+	filtreLee->SetNbVues(NbVues);
 
         ReaderType::Pointer reader = ReaderType::New();
         WriterType::Pointer writer = WriterType::New();
@@ -75,7 +74,7 @@ int otbLeeFilter( int argc, char ** argv )
     } 
   // Software Guide : EndCodeSnippet
 
-#endif
+//#endif
   return EXIT_SUCCESS;
 }
 
