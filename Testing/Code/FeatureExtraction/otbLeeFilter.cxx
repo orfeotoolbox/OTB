@@ -10,15 +10,16 @@
 
 =========================================================================*/
 
+
 #include "itkExceptionObject.h"
 #include "itkImageFileReader.h"
 #include "itkImageFileWriter.h"
 #include "otbLeeImageFilter.h"
-#include "otbImage.h"
 
 
 int otbLeeFilter( int argc, char ** argv )
 {
+#if 0
   try 
     { 
         const char * inputFilename  = argv[1];
@@ -74,7 +75,7 @@ int otbLeeFilter( int argc, char ** argv )
     } 
   // Software Guide : EndCodeSnippet
 
-
+#endif
   return EXIT_SUCCESS;
 }
 
