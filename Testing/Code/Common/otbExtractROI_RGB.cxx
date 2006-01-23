@@ -22,6 +22,7 @@
 
 int otbExtractROI_RGB( int argc, char ** argv )
 {
+#if 0
         const char * inputFilename  = argv[1];
         const char * outputFilename = argv[2];
         
@@ -73,8 +74,10 @@ int otbExtractROI_RGB( int argc, char ** argv )
     } 
   // Software Guide : EndCodeSnippet
 
+#endif
 
   return EXIT_SUCCESS;
 }
+
 
 

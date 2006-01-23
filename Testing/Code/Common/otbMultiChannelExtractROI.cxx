@@ -21,6 +21,8 @@
 
 int otbMultiChannelExtractROItoto( int argc, char ** argv )
 {
+#if 0
+
   try 
     { 
         unsigned int  startX(1);
@@ -122,8 +124,8 @@ int otbMultiChannelExtractROItoto( int argc, char ** argv )
     } 
   // Software Guide : EndCodeSnippet
 
+#endif
 
   return EXIT_SUCCESS;
 }
-
 
