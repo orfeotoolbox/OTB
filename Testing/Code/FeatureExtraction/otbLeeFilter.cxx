@@ -1,21 +1,19 @@
 /*=========================================================================
 
   Programme :   OTB (ORFEO ToolBox)
-  Auteurs   :   CS - T.Feuvrier
+  Auteurs   :   CS - P.Imbo
   Language  :   C++
-  Date      :   11 janvier 2005
+  Date      :   23 janvier 2005
   Version   :   
-  Role      :   Test l'extraction d'une ROI dans une image mono canal, dont les valeurs sont codées en "unsigned char"
+  Role      :   Test la classe qui filtre un image a partir de l'algorithme de J.S. LEE
   $Id$
 
 =========================================================================*/
 
 #include "itkExceptionObject.h"
-
-
 #include "itkImageFileReader.h"
 #include "itkImageFileWriter.h"
-#include "otbExtractROI.h"
+#include "otbLeeImageFilter.h"
 #include "otbImage.h"
 
 
@@ -26,10 +24,9 @@ int otbLeeFilter( int argc, char ** argv )
         const char * inputFilename  = argv[1];
         const char * outputFilename = argv[2];
         
-        unsigned int  startX((unsigned int)::atoi(argv[3]));
-        unsigned int  startY((unsigned int)::atoi(argv[4]));
-        unsigned int  sizeX((unsigned int)::atoi(argv[5]));
-        unsigned int  sizeY((unsigned int)::atoi(argv[6]));
+        unsigned int  RadiusX(unsigned int)::atoi(argv[3]));
+        unsigned int  RadiusY((unsigned int)::atoi(argv[4]));
+        double        NbVues((double)::atoi(argv[5]));
 
         typedef float  	                                        InputPixelType;
         typedef float     	                                OutputPixelType;
@@ -41,13 +38,16 @@ int otbLeeFilter( int argc, char ** argv )
         typedef otb::ImageFileReader< InputImageType  >         ReaderType;
         typedef otb::ImageFileWriter< OutputImageType >         WriterType;
 
-        typedef otb::TOTO< InputImageType, 
-                                            OutputImageType >   FilterType;
+        typedef otb::LeeImageFilter< InputImageType,OutputImageType >   FilterType;
+	
+	FilterType::SizeType Radius;
+	Radius[0]= RadiusX;
+	Radius[1]= RadiusY;
 
-
-        FilterType::Pointer filter = FilterType::New();
+        FilterType::Pointer FiltreLee = FilterType::New();
         
-        filter->Settototo( startX );
+        FiltreLee->SetRadius( Radius );
+	FiltreLee->SetNbVues(NbVues);
 
         ReaderType::Pointer reader = ReaderType::New();
         WriterType::Pointer writer = WriterType::New();
@@ -55,11 +55,8 @@ int otbLeeFilter( int argc, char ** argv )
         reader->SetFileName( inputFilename  );
         writer->SetFileName( outputFilename );
         
-
-
-
-        filter->SetInput( reader->GetOutput() );
-        writer->SetInput( filter->GetOutput() );
+        filtreLee->SetInput( reader->GetOutput() );
+        writer->SetInput( filtreLee->GetOutput() );
         
         writer->Update(); 
 
