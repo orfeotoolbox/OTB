@@ -9,7 +9,7 @@ SET(FEATUREEXTRACTION_TESTS ${CXX_TEST_PATH}/otbFeatureExtractionTests)
 
 
 
-ADD_TEST(tuFEPatrick ${FEATUREEXTRACTION_TESTS}  
+ADD_TEST(tuFEFiltreLee ${FEATUREEXTRACTION_TESTS}  
         otbLeeFilter )
         
 
