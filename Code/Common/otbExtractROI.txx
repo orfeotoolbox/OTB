@@ -9,22 +9,18 @@ namespace otb
 /**
  *
  */
-template <class TInputImage, class TOutputImage>
-ExtractROI<TInputImage,TOutputImage>
-::ExtractROI() :        itk::ExtractImageFilter<TInputImage,TOutputImage>(),
-                                m_StartX(0),
-                                m_StartY(0),
-                                m_SizeX(0),
-                                m_SizeY(0)
+template <class TInputPixel, class TOutputPixel,unsigned int VImageDimension>
+ExtractROI<TInputPixel, TOutputPixel, VImageDimension>
+::ExtractROI() : ExtractROIBase< itk::Image<TInputPixel,VImageDimension> , itk::Image<TOutputPixel,VImageDimension> >()
 {
 }
 
 /**
  *
  */
-template <class TInputImage, class TOutputImage>
+template <class TInputPixel, class TOutputPixel,unsigned int VImageDimension>
 void 
-ExtractROI<TInputImage,TOutputImage>
+ExtractROI<TInputPixel, TOutputPixel, VImageDimension>
 ::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   Superclass::PrintSelf(os,indent);
@@ -40,41 +36,13 @@ ExtractROI<TInputImage,TOutputImage>
  *
  * \sa ProcessObject::GenerateOutputInformaton() 
  */
-template <class TInputImage, class TOutputImage>
+template <class TInputPixel, class TOutputPixel,unsigned int VImageDimension>
 void 
-ExtractROI<TInputImage,TOutputImage>
+ExtractROI<TInputPixel, TOutputPixel, VImageDimension>
 ::GenerateOutputInformation()
 {
-        
-        // Determine la zone a extraire
-        // Si SizeX(Y) est nulle, alors SizeX(Y) est egale à la SizeX(Y) de l'image
-        typename Superclass::InputImageConstPointer  inputPtr  = this->GetInput();
-        // Recupere Region de l'image d'entree
-        const InputImageRegionType& inputRegion = inputPtr->GetRequestedRegion();
-        if ( m_SizeX == 0 )
-        {
-                m_SizeX = inputRegion.GetSize()[1] - m_StartX;
-        }
-        if ( m_SizeY == 0 )
-        {       
-                m_SizeY = inputRegion.GetSize()[0] - m_StartY;
-        }
-  
-        InputImageIndexType start;
-        start[0] = m_StartX;
-        start[1] = m_StartY;
-        InputImageSizeType size;
-        size[0] = m_SizeX;
-        size[1] = m_SizeY;
-        InputImageRegionType desiredRegion;
-        desiredRegion.SetSize(  size  );
-        desiredRegion.SetIndex( start );
-        // Appel à la methode de base d'initialisation de la region
-        this->SetExtractionRegion( desiredRegion );
-
         // Appel à la methode de la classe de base
         Superclass::GenerateOutputInformation();
-
 }
 
 

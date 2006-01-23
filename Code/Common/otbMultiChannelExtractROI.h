@@ -5,15 +5,15 @@
   Language  :   C++
   Date      :   18 janvier 2005
   Version   :   
-  Role      :   Classe d'extraction d'une ROI d'une image multi-canal en précisant le numéro de canal
+  Role      :   Classe d'extraction d'une ROI d'une image multi-canal en précisant le(s) numéro(s) de canal a traiter
   $Id$
 
 =========================================================================*/
 #ifndef __otbMultiChannelExtractROI_h
 #define __otbMultiChannelExtractROI_h
 
-#include "otbExtractROI.h"
-#include "otbMultiChannelImage.h"
+#include "otbExtractROIBase.h"
+#include "itkVectorImage.h"
 
 #include "itkMacro.h"
 #include <vector>
@@ -24,17 +24,17 @@ namespace otb
 /** \class MultiChannelExtractROI
  * \brief Extrait une partie d'une image. Il est possible d'extraire tous les canaux de l'image ou 
  * seulement ceux précisés par l'utilisateur.
- * Cette classe s'appuie sur la classe d'ITK "ExtractImageFilter"
+ * Cette classe s'appuie sur la classe "otb::ExtractROIBase"
  *
  */
 template <class TInputPixelType, class TOutputPixelType, unsigned int VImageDimension=2>
 class ITK_EXPORT MultiChannelExtractROI:
-    public ExtractROI< MultiChannelImage<TInputPixelType,VImageDimension> , MultiChannelImage<TOutputPixelType,VImageDimension> >
+    public ExtractROIBase< itk::VectorImage<TInputPixelType,VImageDimension> , itk::VectorImage<TOutputPixelType,VImageDimension> >
 {
 public:
   /** Standard class typedefs. */
   typedef MultiChannelExtractROI                Self;
-  typedef ExtractROI< MultiChannelImage<TInputPixelType,VImageDimension> , MultiChannelImage<TOutputPixelType,VImageDimension> > Superclass;
+  typedef ExtractROIBase< itk::VectorImage<TInputPixelType,VImageDimension> , itk::VectorImage<TOutputPixelType,VImageDimension> > Superclass;
   typedef itk::SmartPointer<Self>               Pointer;
   typedef itk::SmartPointer<const Self>         ConstPointer;
 
@@ -42,11 +42,11 @@ public:
   itkNewMacro(Self);  
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(MultiChannelExtractROI, ExtractROI);
+  itkTypeMacro(MultiChannelExtractROI, ExtractROIBase);
 
   /** Image type information. */
-  typedef MultiChannelImage<TInputPixelType,VImageDimension>      InputImageType;
-  typedef MultiChannelImage<TOutputPixelType,VImageDimension>     OutputImageType;
+  typedef itk::VectorImage<TInputPixelType,VImageDimension>      InputImageType;
+  typedef itk::VectorImage<TOutputPixelType,VImageDimension>     OutputImageType;
 
   /** Typedef to describe the output and input image region types. */
   typedef typename OutputImageType::RegionType OutputImageRegionType;
@@ -109,7 +109,7 @@ private:
   unsigned int  m_FirstChannel;
   unsigned int  m_LastChannel;
   /** Liste des canaux à traiter  [1...] */
-  ChannelsType  m_Channels;
+  ChannelsType  m_Channels; 
   /** Liste des canaux qui seront réellement traités [1...] */
   ChannelsType  m_ChannelsWorks;
   /** */
