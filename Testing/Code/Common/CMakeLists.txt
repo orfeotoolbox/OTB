@@ -81,8 +81,6 @@ otbMultiChannelExtractROI.cxx
 #         20 30 45 88 )
 
 
-
-
 INCLUDE_DIRECTORIES("${OTBTesting_BINARY_DIR}")
 
 
