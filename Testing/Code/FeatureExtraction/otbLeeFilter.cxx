@@ -14,7 +14,7 @@
 #include "itkExceptionObject.h"
 #include "itkImageFileReader.h"
 #include "itkImageFileWriter.h"
-#include "otbLeeImageFilter.h"
+//#include "otbLeeImageFilter.h"
 
 
 int otbLeeFilter( int argc, char ** argv )
