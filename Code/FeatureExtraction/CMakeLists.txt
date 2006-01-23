@@ -1,5 +1,6 @@
 # Sources of non-templated classes.
 
+
 FILE(GLOB OTBFeatureExtraction_SRCS "*.cxx" )
 
 ADD_LIBRARY(OTBFeatureExtraction ${OTBFeatureExtraction_SRCS})
