@@ -1,14 +1,18 @@
 #include "otbCAIImageIO.h"
 #include "itkExceptionObject.h"
 
-/*
-#include "itkRGBPixel.h"
-#include "itkRGBAPixel.h"
-*/
 #include <iostream>
 #include <list>
 #include <string>
 #include <math.h>
+
+/*
+#define CAI_NB_EXTENSIONS
+extern char CAI_ERREUR[];
+extern char *CAI_SUFFIXES[];
+extern char *CAI_NOM_FORMAT[];
+extern long int CAI_NUMEROS[];
+*/
 
 namespace otb
 {

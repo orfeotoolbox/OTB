@@ -20,6 +20,7 @@
 #include <fstream>
 #include "itkImageIOBase.h"
 #include <stdio.h>
+
 // Pour CAI
 extern "C"
 {
