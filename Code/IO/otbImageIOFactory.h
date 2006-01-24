@@ -16,6 +16,9 @@
 #include "itkImageIOBase.h"
 #include "itkImageIOFactory.h"
 
+#include "otbCAIImageIOFactory.h"
+//#include "otbGDALImageIOFactory.h"
+
 namespace otb
 {
 /** \class ImageIOFactory

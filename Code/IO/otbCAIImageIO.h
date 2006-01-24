@@ -24,7 +24,7 @@
 extern "C"
 {
 #define _CAI_IMAGE
-#define _HDF16
+#define _NOHDF16
 #include "cai_image.h"
 }
 

@@ -6,9 +6,6 @@
 #include "itkMutexLock.h"
 #include "itkMutexLockHolder.h"
 
-#include "otbCAIImageIOFactory.h"
-//#include "otbGDALImageIOFactory.h"
-
 namespace otb
 {
 
