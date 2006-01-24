@@ -82,7 +82,8 @@ public:
   /** Récupère le nombre de vues (référencé constant) utilisé pour le calcul du filtre. */
   itkGetConstReferenceMacro(NbVues, double);
 
-  /** LeeImageFilter needs a larger input requested region than
+  /** LeeImageFilter a besoin d'une zone de traitement plus large en entrée qu'en sortie 
+   * pemettant une utilisation needs a larger input requested region than
    * the output requested region.  As such, LeeImageFilter needs
    * to provide an implementation for GenerateInputRequestedRegion()
    * in order to inform the pipeline execution model.
