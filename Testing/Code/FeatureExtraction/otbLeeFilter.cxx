@@ -10,9 +10,11 @@
 
 =========================================================================*/
 
+#define MAIN
 
 #include "itkExceptionObject.h"
-#include "itkImageFileReader.h"
+#include "itkImage.h"
+#include "otbImageFileReader.h"
 #include "itkImageFileWriter.h"
 #include "otbLeeImageFilter.h"
 
@@ -35,7 +37,7 @@ int otbLeeFilter( int argc, char ** argv )
         typedef itk::Image< InputPixelType,  Dimension >        InputImageType;
         typedef itk::Image< OutputPixelType, Dimension >        OutputImageType;
 
-        typedef itk::ImageFileReader< InputImageType  >         ReaderType;
+        typedef otb::ImageFileReader< InputImageType  >         ReaderType;
         typedef itk::ImageFileWriter< OutputImageType >         WriterType;
 
         typedef otb::LeeImageFilter< InputImageType,OutputImageType >   FilterType;

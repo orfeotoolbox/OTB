@@ -9,8 +9,11 @@ SET(FEATUREEXTRACTION_TESTS ${CXX_TEST_PATH}/otbFeatureExtractionTests)
 
 
 
-ADD_TEST(tuFEFiltreLee ${FEATUREEXTRACTION_TESTS}  
-        otbLeeFilter )
+ADD_TEST(tuFeFiltreLee ${FEATUREEXTRACTION_TESTS}  
+        otbLeeFilter
+	${INPUTDATA}/poupees.hd
+	${TEMP}/otbFiltreLee_05_05_03.png
+	05 05 12.0)
         
 
         
@@ -35,7 +38,7 @@ otbLeeFilter.cxx
 INCLUDE_DIRECTORIES("${OTBTesting_BINARY_DIR}")
 
 ADD_EXECUTABLE(otbFeatureExtractionTests otbFeatureExtractionTests.cxx ${BasicFeatureExtraction_SRCS})
-TARGET_LINK_LIBRARIES(otbFeatureExtractionTests OTBIO OTBCommon OTBFeatureExtraction ITKIO ITKCommon)
+TARGET_LINK_LIBRARIES(otbFeatureExtractionTests ${CAI_LIBRARY}  OTBFeatureExtraction OTBIO OTBCommon  ${CAI_LIBRARY}  ITKIO ITKCommon)
 
 
 ENDIF( NOT OTB_DISABLE_CXX_TESTING )
