@@ -15,8 +15,6 @@ ADD_TEST(tuFeFiltreLee ${FEATUREEXTRACTION_TESTS}
 	${TEMP}/otbFiltreLee_05_05_03.png
 	05 05 12.0)
         
-
-        
 #ADD_TEST(tvFEPatrick2 ${FEATUREEXTRACTION_TESTS}  
 #  --compare-image   ${BASELINE}/otbExtractROI_cthead1_26_97_209_100.png
 #                    ${TEMP}/otbExtractROI_cthead1_26_97_209_100.png
@@ -32,13 +30,10 @@ otbLeeFilter.cxx
 )
 
 
-
-
-
 INCLUDE_DIRECTORIES("${OTBTesting_BINARY_DIR}")
 
 ADD_EXECUTABLE(otbFeatureExtractionTests otbFeatureExtractionTests.cxx ${BasicFeatureExtraction_SRCS})
-TARGET_LINK_LIBRARIES(otbFeatureExtractionTests ${CAI_LIBRARY}  OTBFeatureExtraction OTBIO OTBCommon  ${CAI_LIBRARY}  ITKIO ITKCommon)
+TARGET_LINK_LIBRARIES(otbFeatureExtractionTests ${CAI_LIBRARY} ${GDAL_LIBRARY} OTBFeatureExtraction OTBCommon OTBIO ${CAI_LIBRARY} ITKIO ITKCommon)
 
 
 ENDIF( NOT OTB_DISABLE_CXX_TESTING )

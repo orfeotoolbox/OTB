@@ -9,13 +9,21 @@
   $Id$
 
 =========================================================================*/
+#if defined(_MSC_VER)
+#pragma warning ( disable : 4786 )
+#endif
 
 #define MAIN
 
 #include "itkExceptionObject.h"
 #include "itkImage.h"
-#include "otbImageFileReader.h"
 #include "itkImageFileWriter.h"
+#include <iostream>
+
+// A supprimer
+#include "otbCAIImageIO.h"
+
+#include "otbImageFileReader.h"
 #include "otbLeeImageFilter.h"
 
 
