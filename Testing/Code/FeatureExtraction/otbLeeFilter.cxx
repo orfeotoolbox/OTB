@@ -39,7 +39,7 @@ int otbLeeFilter( int argc, char ** argv )
         double        NbVues ((double)::atoi(argv[5]));
 
         typedef float  	                                        InputPixelType;
-        typedef float     	                                OutputPixelType;
+        typedef unsigned char   	                                OutputPixelType;
         const   unsigned int        	                        Dimension = 2;
 
         typedef itk::Image< InputPixelType,  Dimension >        InputImageType;
