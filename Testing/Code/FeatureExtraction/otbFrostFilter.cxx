@@ -3,9 +3,9 @@
   Programme :   OTB (ORFEO ToolBox)
   Auteurs   :   CS - P.Imbo
   Language  :   C++
-  Date      :   23 janvier 2005
+  Date      :   26 janvier 2005
   Version   :   
-  Role      :   Test la classe qui filtre un image a partir de l'algorithme de J.S. LEE
+  Role      :   Test la classe qui filtre un image a partir de l'algorithme de FROST
   $Id$
 
 =========================================================================*/
@@ -21,17 +21,16 @@
 #include <iostream>
 
 // A supprimer
-#include "otbCAIImageIO.h"
-
 //#ifndef __otbCAIImageIO_h
 //#define __otbCAIImageIO_h
 //#endif
+//#include "otbCAIImageIO.h"
 
 #include "otbImageFileReader.h"
-#include "otbLeeImageFilter.h"
+#include "otbFrostImageFilter.h"
 
 
-int otbLeeFilter( int argc, char ** argv )
+int otbFrostFilter( int argc, char ** argv )
 {
   try 
     { 
@@ -40,9 +39,9 @@ int otbLeeFilter( int argc, char ** argv )
        
         unsigned int  RadiusX((unsigned int)::atoi(argv[3]));
         unsigned int  RadiusY((unsigned int)::atoi(argv[4]));
-        double        NbVues ((double)::atof(argv[5]));
+        double        Deramp ((double)::atof(argv[5]));
 
-        typedef float  	                                        InputPixelType;
+        typedef unsigned char                                   InputPixelType;
         typedef unsigned char   	                        OutputPixelType;
         const   unsigned int        	                        Dimension = 2;
 
@@ -52,16 +51,16 @@ int otbLeeFilter( int argc, char ** argv )
         typedef otb::ImageFileReader< InputImageType  >         ReaderType;
         typedef itk::ImageFileWriter< OutputImageType >         WriterType;
 
-        typedef otb::LeeImageFilter< InputImageType,OutputImageType >   FilterType;
+        typedef otb::FrostImageFilter< InputImageType,OutputImageType >   FilterType;
 	
 	FilterType::SizeType Radius;
 	Radius[0]= RadiusX;
 	Radius[1]= RadiusY;
 
-        FilterType::Pointer filtreLee = FilterType::New();
+        FilterType::Pointer filtreFrost = FilterType::New();
         
-	filtreLee->SetRadius( Radius );
-	filtreLee->SetNbVues(NbVues);
+	filtreFrost->SetRadius( Radius );
+	filtreFrost->SetDeramp( Deramp );
 
         ReaderType::Pointer reader = ReaderType::New();
         WriterType::Pointer writer = WriterType::New();
@@ -69,8 +68,8 @@ int otbLeeFilter( int argc, char ** argv )
         reader->SetFileName( inputFilename  );
         writer->SetFileName( outputFilename );
         
-        filtreLee->SetInput( reader->GetOutput() );
-        writer->SetInput( filtreLee->GetOutput() );
+        filtreFrost->SetInput( reader->GetOutput() );
+        writer->SetInput( filtreFrost->GetOutput() );
         
         writer->Update(); 
 

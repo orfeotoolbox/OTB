@@ -9,12 +9,24 @@ SET(FEATUREEXTRACTION_TESTS ${CXX_TEST_PATH}/otbFeatureExtractionTests)
 
 
 
+ADD_TEST(tuFeFiltreLee1CanalPoupees ${FEATUREEXTRACTION_TESTS}  
+        otbLeeFilter
+	${INPUTDATA}/poupees_1canal.hd
+	${TEMP}/otbFiltreLee_05_05_04.png
+	05 05 4.0)
+
 ADD_TEST(tuFeFiltreLee ${FEATUREEXTRACTION_TESTS}  
         otbLeeFilter
 	${INPUTDATA}/poupees.hd
-	${TEMP}/otbFiltreLee_05_05_03.png
+	${TEMP}/otbFiltreLee_05_05_12.png
 	05 05 12.0)
-        
+	
+ADD_TEST(tuFeFiltreFrost ${FEATUREEXTRACTION_TESTS}  
+        otbFrostFilter
+	${INPUTDATA}/poupees.hd
+	${TEMP}/otbFiltreFrost_poupees_05_05_01.png
+	05 05 0.1)
+	        
 #ADD_TEST(tvFEPatrick2 ${FEATUREEXTRACTION_TESTS}  
 #  --compare-image   ${BASELINE}/otbExtractROI_cthead1_26_97_209_100.png
 #                    ${TEMP}/otbExtractROI_cthead1_26_97_209_100.png
@@ -27,6 +39,7 @@ ADD_TEST(tuFeFiltreLee ${FEATUREEXTRACTION_TESTS}
 # A enrichir
 SET(BasicFeatureExtraction_SRCS
 otbLeeFilter.cxx
+otbFrostFilter.cxx
 )
 
 
