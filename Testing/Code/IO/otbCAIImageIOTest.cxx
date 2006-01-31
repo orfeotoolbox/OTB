@@ -8,7 +8,7 @@
 #include "itkExceptionObject.h"
 #include <iostream>
 
-int otbCAIImageIOTest(int argc, char* argv[])
+int otbCAIImageIOTestCanRead(int argc, char* argv[])
 {
   try
   {
