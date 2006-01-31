@@ -42,7 +42,7 @@ int otbLeeFilter( int argc, char ** argv )
         unsigned int  RadiusY((unsigned int)::atoi(argv[4]));
         double        NbVues ((double)::atof(argv[5]));
 
-        typedef float  	                                        InputPixelType;
+        typedef unsigned char                                   InputPixelType;
         typedef unsigned char   	                        OutputPixelType;
         const   unsigned int        	                        Dimension = 2;
 
