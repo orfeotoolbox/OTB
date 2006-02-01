@@ -20,6 +20,7 @@
 
 int otbExtractROI_VectorToScalar ( int argc, char ** argv )
 {
+
   try 
     { 
         const char * inputFilename  = argv[1];

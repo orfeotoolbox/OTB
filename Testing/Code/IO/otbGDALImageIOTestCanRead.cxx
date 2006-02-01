@@ -3,12 +3,11 @@
 #pragma warning ( disable : 4786 )
 #endif
 
-//#define MAIN
 #include "otbGDALImageIO.h"
 #include "itkExceptionObject.h"
 #include <iostream>
 
-int otbGDALImageIOTest(int argc, char* argv[])
+int otbGDALImageIOTestCanRead(int argc, char* argv[])
 {
   try
   {
