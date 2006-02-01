@@ -3,7 +3,7 @@
 #pragma warning ( disable : 4786 )
 #endif
 
-#define MAIN
+//#define MAIN
 #include "otbGDALImageIO.h"
 #include "itkExceptionObject.h"
 #include <iostream>

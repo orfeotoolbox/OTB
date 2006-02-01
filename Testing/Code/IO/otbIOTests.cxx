@@ -5,7 +5,7 @@
 #pragma warning ( disable : 4786 )
 #endif
 
-#define MAIN
+//#define MAIN
 
 #include <iostream>
 #include "otbTestMain.h" 
@@ -13,11 +13,13 @@
 
 void RegisterTests()
 {
-REGISTER_TEST(otbCAIImageIOTest);
+REGISTER_TEST(otbCAIImageIOTestCanRead);
+REGISTER_TEST(otbCAIImageIOTestCanWrite); // PB compilation multi definition CAI_ERREUR
 REGISTER_TEST(otbGDALImageIOTest);
-//REGISTER_TEST(otbImageIOFactoryTest);
 REGISTER_TEST(otbImageFileReaderTest);
 REGISTER_TEST(otbImageFileWriterTest);
 REGISTER_TEST(otbImageFileReaderRGBTest);
 REGISTER_TEST(otbImageFileWriterRGBTest);
+REGISTER_TEST(otbExtractROI_VectorToRGB);
+REGISTER_TEST(otbExtractROI_VectorToScalar);
 }

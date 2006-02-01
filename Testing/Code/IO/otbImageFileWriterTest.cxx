@@ -3,7 +3,7 @@
 #pragma warning ( disable : 4786 )
 #endif
 
-#define MAIN
+//#define MAIN
 
 #include "itkImageFileReader.h"
 #include "itkImage.h"

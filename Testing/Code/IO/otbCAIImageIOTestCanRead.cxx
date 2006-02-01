@@ -3,7 +3,7 @@
 #pragma warning ( disable : 4786 )
 #endif
 
-#define MAIN
+//#define MAIN
 #include "otbCAIImageIO.h"
 #include "itkExceptionObject.h"
 #include <iostream>
@@ -16,7 +16,7 @@ int otbCAIImageIOTestCanRead(int argc, char* argv[])
         bool lCanRead = lCAIImageIO->CanReadFile(argv[1]);
         if ( lCanRead == false)
         {
-                std::cerr << "Erreur otb::CAIImageIO : impossible d'ouvrir l'image "<<argv[1]<<" ("<<CAI_ERREUR<<")."<<std::endl;
+                std::cerr << "Erreur otb::CAIImageIO : impossible d'ouvrir l'image "<<argv[1]<<"."<<std::endl;
                 return EXIT_FAILURE;
         }
   }
