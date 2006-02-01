@@ -563,47 +563,47 @@ void CAIImageIO::WriteImageInformation(void)
         if ( this->GetComponentType() == CHAR )
         {
 //                strncpy(m_Cai->COD_PIX,"OCT",3);
-                m_NbOctetPixel = 8;
+                m_NbOctetPixel = 1;
         }
         else if ( this->GetComponentType() == UCHAR )
         {
 //                strncpy(m_Cai->COD_PIX,"UOCT",4);
-                m_NbOctetPixel = 8;
+                m_NbOctetPixel = 1;
         }
         else if ( this->GetComponentType() == USHORT )
         {
 //                strncpy(m_Cai->COD_PIX,"UI2",3);
-                m_NbOctetPixel = 16;
+                m_NbOctetPixel = 2;
         }
         else if ( this->GetComponentType() == SHORT )
         {
 //                strncpy(m_Cai->COD_PIX,"I2",2);
-                m_NbOctetPixel = 16;
+                m_NbOctetPixel = 2;
         }
         else if ( this->GetComponentType() == INT )
         {
 //                strncpy(m_Cai->COD_PIX,"I4",2);
-                m_NbOctetPixel = 32;
+                m_NbOctetPixel = 4;
         }
         else if ( this->GetComponentType() == UINT )
         {
 //                strncpy(m_Cai->COD_PIX,"UI4",3);
-                m_NbOctetPixel = 32;
+                m_NbOctetPixel = 4;
         }
         else if ( this->GetComponentType() == FLOAT )
         {
 //                strncpy(m_Cai->COD_PIX,"R4",2);
-                m_NbOctetPixel = 32;
+                m_NbOctetPixel = 4;
         }
         else if ( this->GetComponentType() == DOUBLE )
         {
 //                strncpy(m_Cai->COD_PIX,"R8",2);
-                m_NbOctetPixel = 64;
+                m_NbOctetPixel = 8;
         }
         else 
         {
 //                strncpy(m_Cai->COD_PIX,"UND",3);
-                m_NbOctetPixel = 8;
+                m_NbOctetPixel = 1;
         }
 
         
