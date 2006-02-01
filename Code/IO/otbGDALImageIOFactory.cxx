@@ -1,0 +1,37 @@
+#include "otbGDALImageIOFactory.h"
+
+#include "itkCreateObjectFunction.h"
+#include "otbGDALImageIO.h"
+#include "itkVersion.h"
+
+  
+namespace otb
+{
+
+GDALImageIOFactory::GDALImageIOFactory()
+{
+  this->RegisterOverride("itkImageIOBase",
+                         "otbGDALImageIO",
+                         "GDAL Image IO",
+                         1,
+                         itk::CreateObjectFunction<GDALImageIO>::New());
+}
+  
+GDALImageIOFactory::~GDALImageIOFactory()
+{
+}
+
+const char* 
+GDALImageIOFactory::GetITKSourceVersion(void) const
+{
+  return ITK_SOURCE_VERSION;
+}
+
+const char* 
+GDALImageIOFactory::GetDescription() const
+{
+  return "GDAL ImageIO Factory, permettant le chargement d'image GDAL dans l'OTB";
+}
+
+} // end namespace otb
+
