@@ -1,7 +1,3 @@
-// Pour CAI : MAIN
-#define MAIN
-
-
 #include "itkWin32Header.h"
 #include <map>
 #include <string>

@@ -2,6 +2,9 @@
 #define _otbExtractROI_txx
 
 #include "otbExtractROI.h"
+#include "itkImageRegionIterator.h"
+#include "itkImageRegionConstIterator.h"
+#include "itkProgressReporter.h"
 
 namespace otb
 {
@@ -11,7 +14,7 @@ namespace otb
  */
 template <class TInputPixel, class TOutputPixel,unsigned int VImageDimension>
 ExtractROI<TInputPixel, TOutputPixel, VImageDimension>
-::ExtractROI() : ExtractROIBase< itk::Image<TInputPixel,VImageDimension> , itk::Image<TOutputPixel,VImageDimension> >()
+::ExtractROI() //: ExtractROIBase< itk::Image<TInputPixel,VImageDimension> , itk::Image<TOutputPixel,VImageDimension> >()
 {
 }
 
@@ -43,6 +46,43 @@ ExtractROI<TInputPixel, TOutputPixel, VImageDimension>
 {
         // Appel à la methode de la classe de base
         Superclass::GenerateOutputInformation();
+}
+
+template <class TInputPixel, class TOutputPixel,unsigned int VImageDimension>
+void 
+ExtractROI<TInputPixel, TOutputPixel, VImageDimension>
+::ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread,
+                       int threadId)
+{
+  itkDebugMacro(<<"Actually executing");
+
+  // Get the input and output pointers
+  typename Superclass::InputImageConstPointer  inputPtr = this->GetInput();
+  typename Superclass::OutputImagePointer outputPtr = this->GetOutput();
+
+  // support progress methods/callbacks
+  itk::ProgressReporter progress(this, threadId, outputRegionForThread.GetNumberOfPixels());
+  
+  // Define the portion of the input to walk for this thread
+  InputImageRegionType inputRegionForThread;
+  this->CallCopyOutputRegionToInputRegion(inputRegionForThread, outputRegionForThread);
+  
+  // Define the iterators.
+  typedef itk::ImageRegionIterator<OutputImageType> OutputIterator;
+  typedef itk::ImageRegionConstIterator<InputImageType> InputIterator;
+
+  OutputIterator outIt(outputPtr, outputRegionForThread);
+  InputIterator inIt(inputPtr, inputRegionForThread);
+
+  // walk the output region, and sample the input image
+  while( !outIt.IsAtEnd() )
+    {
+    // copy the input pixel to the output
+    outIt.Set( inIt.Get());
+    ++outIt; 
+    ++inIt; 
+    progress.CompletedPixel();
+    }
 }
 
 

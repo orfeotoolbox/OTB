@@ -31,7 +31,7 @@ class ITK_EXPORT ExtractROI:
 public:
   /** Standard class typedefs. */
   typedef ExtractROI         Self;
-  typedef ExtractROIBase<TInputPixel,TOutputPixel>  Superclass;
+  typedef ExtractROIBase<itk::Image<TInputPixel,VImageDimension> , itk::Image<TOutputPixel,VImageDimension> >  Superclass;
   typedef itk::SmartPointer<Self>  Pointer;
   typedef itk::SmartPointer<const Self>  ConstPointer;
 
@@ -64,6 +64,10 @@ public:
                       InputImageType::ImageDimension);
   itkStaticConstMacro(OutputImageDimension, unsigned int,
                       OutputImageType::ImageDimension);
+
+  void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread,
+                            int threadId );
+
 
 protected:
   ExtractROI();

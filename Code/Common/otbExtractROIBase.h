@@ -5,33 +5,55 @@
   Language  :   C++
   Date      :   18 janvier 2005
   Version   :   
-  Role      :   Classe d'extraction d'une ROI d'une image 
+  Role      :   Classe de base d'extraction d'une ROI d'une image 
   $Id$
 
 =========================================================================*/
 #ifndef __otbExtractROIBase_h
 #define __otbExtractROIBase_h
 
-#include "itkExtractImageFilter.h"
-#include "itkMacro.h"
+#include "itkImageToImageFilter.h"
+#include "itkSmartPointer.h"
+#include "itkExtractImageFilterRegionCopier.h"
 
 namespace otb
 {
 
 /** \class ExtractROIBase
- * \brief Extrait une partie d'une image. Il est possible d'extraire tous les canaux de l'image ou 
- * seulement ceux précisés par l'utilisateur.
- * Cette classe s'appuie sur la classe d'ITK "ExtractImageFilter"
+ * \brief Decrease the image size by cropping the image to the selected 
+ * region bounds.
  *
+ * ExtractROIBase changes the image boundary of an image by removing  
+ * pixels outside the target region.  The target region must be specified.
+ *
+ * ExtractROIBase also collapses dimensions so that the input image 
+ * may have more dimensions than the output image (i.e. 4-D input image
+ * to a 3-D output image).  To specify what dimensions to collapse,
+ * the ExtractionRegion must be specified.  For any dimension dim where
+ * ExtractionRegion.Size[dim] = 0, that dimension is collapsed.  The 
+ * index to collapse on is specified by ExtractionRegion.Index[dim].
+ * For example, we have a image 4D = a 4x4x4x4 image, and we want 
+ * to get a 3D image, 3D = a 4x4x4 image, specified as [x,y,z,2] from 4D 
+ * (i.e. the 3rd "time" slice from 4D).  The ExtractionRegion.Size = 
+ * [4,4,4,0] and ExtractionRegion.Index = [0,0,0,2].  
+ *
+ * The number of dimension in ExtractionRegion.Size and Index must = 
+ * InputImageDimension.  The number of non-zero dimensions in 
+ * ExtractionRegion.Size must = OutputImageDimension.
+ *
+ * This filter is implemented as a multithreaded filter.  It provides a 
+ * ThreadedGenerateData() method for its implementation.
+ * 
+ * \ingroup GeometricTransforms
  */
 template <class TInputImage, class TOutputImage>
 class ITK_EXPORT ExtractROIBase:
-    public itk::ExtractImageFilter<TInputImage,TOutputImage>
+    public itk::ImageToImageFilter<TInputImage,TOutputImage>
 {
 public:
   /** Standard class typedefs. */
   typedef ExtractROIBase         Self;
-  typedef itk::ExtractImageFilter<TInputImage,TOutputImage>  Superclass;
+  typedef itk::ImageToImageFilter<TInputImage,TOutputImage>  Superclass;
   typedef itk::SmartPointer<Self>  Pointer;
   typedef itk::SmartPointer<const Self>  ConstPointer;
 
@@ -39,7 +61,7 @@ public:
   itkNewMacro(Self);  
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(ExtractROIBase, itk::ExtractImageFilter);
+  itkTypeMacro(ExtractROIBase, itk::ImageToImageFilter);
 
   /** Image type information. */
   typedef TInputImage  InputImageType;
@@ -59,6 +81,23 @@ public:
   typedef typename TOutputImage::SizeType OutputImageSizeType;
   typedef typename TInputImage::SizeType InputImageSizeType;
 
+  /** ImageDimension enumeration */
+  itkStaticConstMacro(InputImageDimension, unsigned int,
+                      TInputImage::ImageDimension);
+  itkStaticConstMacro(OutputImageDimension, unsigned int,
+                      TOutputImage::ImageDimension);
+
+  typedef 
+  itk::ImageToImageFilterDetail::ExtractImageFilterRegionCopier<itkGetStaticConstMacro(InputImageDimension), 
+                                                           itkGetStaticConstMacro(OutputImageDimension)> ExtractROIBaseRegionCopierType;
+
+  /** Set/Get the output image region. 
+   *  If any of the ExtractionRegion.Size = 0 for any particular dimension dim,
+   *  we have to collapse dimension dim.  This means the output image will have
+   *  'c' dimensions less than the input image, where c = # of 
+   *  ExtractionRegion.Size = 0. */
+  void SetExtractionRegion(InputImageRegionType extractRegion);
+  itkGetMacro(ExtractionRegion, InputImageRegionType);
 
   
   /** Set/Get Start methode */
@@ -71,33 +110,68 @@ public:
   itkSetMacro(SizeY,unsigned long);
   itkGetConstMacro(SizeY,unsigned long);
 
-  /** ImageDimension enumeration */
-  itkStaticConstMacro(InputImageDimension, unsigned int,
-                      TInputImage::ImageDimension);
-  itkStaticConstMacro(OutputImageDimension, unsigned int,
-                      TOutputImage::ImageDimension);
+
 
 protected:
   ExtractROIBase();
   ~ExtractROIBase() {};
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
-  /** ExtractROIBase 
+  /** ExtractROIBase can produce an image which is a different
+   * resolution than its input image.  As such, ExtractROIBase
+   * needs to provide an implementation for
+   * GenerateOutputInformation() in order to inform the pipeline
+   * execution model.  The original documentation of this method is
+   * below.
    *
-   * \sa itk::ExtractImageFilter::GenerateOutputInformaton()  */
+   * \sa ProcessObject::GenerateOutputInformaton()  */
   virtual void GenerateOutputInformation();
+
+  /** This function calls the actual region copier to do the mapping from
+   * output image space to input image space.  It uses a 
+   * Function object used for dispatching to various routines to
+   * copy an output region (start index and size) to an input region.
+   * For most filters, this is a trivial copy because most filters
+   * require the input dimension to match the output dimension.
+   * However, some filters like itk::ExtractROIBase can
+   * support output images of a lower dimension that the input.
+   *
+   * \sa ImageToImageFilter::CallCopyRegion() */
+  virtual void CallCopyOutputRegionToInputRegion(InputImageRegionType &destRegion,
+                                                 const OutputImageRegionType &srcRegion);
+
+  /** ExtractROIBase can be implemented as a multithreaded filter.
+   * Therefore, this implementation provides a ThreadedGenerateData()
+   * routine which is called for each processing thread. The output
+   * image data is allocated automatically by the superclass prior to
+   * calling ThreadedGenerateData().  ThreadedGenerateData can only
+   * write to the portion of the output image specified by the
+   * parameter "outputRegionForThread"
+   * \sa ImageToImageFilter::ThreadedGenerateData(),
+   *     ImageToImageFilter::GenerateData()  */
+
+//  ATTENTION bizarre
+
+  void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread,
+                            int threadId )
+                            
+      {
+      
+      };
+  InputImageRegionType m_ExtractionRegion;
+  OutputImageRegionType m_OutputImageRegion;
 
 private:
   ExtractROIBase(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
-  
-  
+
   /** Coordonnees X/Y du premier point de la région à extraire  */
   unsigned long m_StartX;
   unsigned long m_StartY;
   /** Nombre de pixels en X/Y de la région à extraire  */
   unsigned long m_SizeX;
   unsigned long m_SizeY;
+
   
 };
 
