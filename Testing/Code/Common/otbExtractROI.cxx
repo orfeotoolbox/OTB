@@ -11,19 +11,16 @@
 =========================================================================*/
 
 #include "itkExceptionObject.h"
-
-
-
 #include "itkImageFileReader.h"
 #include "itkImageFileWriter.h"
-#include "otbExtractROI.h"
 #include "itkImage.h"
 
+#include "otbExtractROI.h"
 
 int otbExtractROI( int argc, char ** argv )
 {
-#if 0
-
+  try 
+    { 
         const char * inputFilename  = argv[1];
         const char * outputFilename = argv[2];
         
@@ -36,13 +33,14 @@ int otbExtractROI( int argc, char ** argv )
         typedef unsigned char  	                                OutputPixelType;
         const   unsigned int        	                        Dimension = 2;
 
-        typedef itk::Image< InputPixelType,  Dimension >        InputImageType;
-        typedef itk::Image< OutputPixelType, Dimension >        OutputImageType;
+        typedef otb::ExtractROI< InputPixelType, 
+                                            OutputPixelType >   FilterType;
+
+        typedef FilterType::InputImageType        InputImageType;
+        typedef FilterType::OutputImageType       OutputImageType;
 
         typedef itk::ImageFileReader< InputImageType  >         ReaderType;
         typedef itk::ImageFileWriter< OutputImageType >         WriterType;
-        typedef otb::ExtractROI< InputPixelType, 
-                                            OutputPixelType >   FilterType;
         FilterType::Pointer filter = FilterType::New();
         
         filter->SetStartX( startX );
@@ -58,8 +56,6 @@ int otbExtractROI( int argc, char ** argv )
         
         filter->SetInput( reader->GetOutput() );
         writer->SetInput( filter->GetOutput() );
-  try 
-    { 
         writer->Update(); 
     } 
 
@@ -74,9 +70,7 @@ int otbExtractROI( int argc, char ** argv )
     std::cout << "Exception levee inconnue !" << std::endl; 
     return EXIT_FAILURE;
     } 
-  // Software Guide : EndCodeSnippet
 
-#endif
 
   return EXIT_SUCCESS;
 }

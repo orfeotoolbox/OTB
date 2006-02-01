@@ -10,5 +10,8 @@ void RegisterTests()
 {
 REGISTER_TEST(otbExtractROI);
 REGISTER_TEST(otbExtractROI_RGB);
-REGISTER_TEST(otbMultiChannelExtractROItoto );
+REGISTER_TEST(otbVectorToRGBImageFilter );
+REGISTER_TEST(otbVectorToScalarImageFilter );
+REGISTER_TEST(otbExtractROI_VectorToScalar );
+REGISTER_TEST(otbExtractROI_VectorToRGB );
 }

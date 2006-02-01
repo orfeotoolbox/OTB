@@ -22,7 +22,8 @@
 
 int otbExtractROI_RGB( int argc, char ** argv )
 {
-#if 0
+  try 
+    { 
         const char * inputFilename  = argv[1];
         const char * outputFilename = argv[2];
         
@@ -35,13 +36,14 @@ int otbExtractROI_RGB( int argc, char ** argv )
         typedef itk::RGBPixel<unsigned char>                    OutputPixelType;
         const   unsigned int        	                        Dimension = 2;
 
-        typedef itk::Image< InputPixelType,  Dimension >        InputImageType;
-        typedef itk::Image< OutputPixelType, Dimension >        OutputImageType;
+        typedef otb::ExtractROI< InputPixelType, 
+                                            OutputPixelType >   FilterType;
+
+        typedef FilterType::InputImageType        InputImageType;
+        typedef FilterType::OutputImageType       OutputImageType;
 
         typedef itk::ImageFileReader< InputImageType  >         ReaderType;
         typedef itk::ImageFileWriter< OutputImageType >         WriterType;
-        typedef otb::ExtractROI< InputImageType, 
-                                            OutputImageType >   FilterType;
         FilterType::Pointer filter = FilterType::New();
         
         filter->SetStartX( startX );
@@ -57,8 +59,6 @@ int otbExtractROI_RGB( int argc, char ** argv )
         
         filter->SetInput( reader->GetOutput() );
         writer->SetInput( filter->GetOutput() );
-  try 
-    { 
         writer->Update(); 
     } 
   catch( itk::ExceptionObject & err ) 
@@ -72,9 +72,7 @@ int otbExtractROI_RGB( int argc, char ** argv )
     std::cout << "Exception levee inconnue !" << std::endl; 
     return EXIT_FAILURE;
     } 
-  // Software Guide : EndCodeSnippet
 
-#endif
 
   return EXIT_SUCCESS;
 }
