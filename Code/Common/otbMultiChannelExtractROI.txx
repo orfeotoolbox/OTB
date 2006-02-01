@@ -3,12 +3,12 @@
 
 #include "otbMultiChannelExtractROI.h"
 
-/*#include "itkImageRegionIterator.h"
+#include "itkImageRegionIterator.h"
 #include "itkImageRegionConstIterator.h"
 #include "itkObjectFactory.h"
 #include "itkExtractImageFilterRegionCopier.h"
 #include "itkProgressReporter.h"
-*/
+
 
 namespace otb
 {
@@ -104,26 +104,24 @@ MultiChannelExtractROI<TInputPixelType,TOutputPixelType,VImageDimension>
         // Si aucun canal n'a ete precise, alors tous les canaux sont traites
         if( m_ChannelsWorks.empty() == true )
         {
-                //Controle que les dimensions des images Input/Output coincides
-/*                if( InputImageDimension != OutputImageDimension )
-                {
-                        itkExceptionMacro(<< "otb::ExtractImageFilter::GenerateOutputInformation "
-                        << "les dimensions des images Input ("<<InputImageDimension<<") et Output ("<<OutputImageDimension<<") ne coincident pas.");
-                }*/
                 m_ChannelsWorksBool = false;
         }
         else
         {
-/*                OutputImagePixelType pixelOutput;
-                
-                if( m_ChannelsWorks.size() != OutputImageDimension )
-                {
-                        itkExceptionMacro(<< "otb::ExtractImageFilter::GenerateOutputInformation "
-                        << "le PixelType de l'image Output ("<<OutputImageDimension<<") ne coincident pas "
-                        << "avec le nombre de canaux a traiter ("<<m_ChannelsWorks.size()<<").");
-                
-                }*/
                 m_ChannelsWorksBool = true;
+        }
+
+        typename Superclass::InputImageConstPointer  inputPtr = this->GetInput();
+        typename Superclass::OutputImagePointer outputPtr = this->GetOutput();
+
+        // initialise le nombre de canaux de l'image output (lié aux "channel" sélectionnés)
+        if( m_ChannelsWorksBool == false )
+        {
+                outputPtr->SetVectorLength(inputPtr->GetVectorLength() );
+        }
+        else
+        {
+                outputPtr->SetVectorLength( m_ChannelsWorks.size() );
         }
 
         // Appel à la methode de la classe de base
@@ -158,14 +156,14 @@ MultiChannelExtractROI<TInputPixelType,TOutputPixelType,VImageDimension>
   OutputIterator outIt(outputPtr, outputRegionForThread);
   InputIterator inIt(inputPtr, inputRegionForThread);
 
+
   // Si traitement classique
   if ( m_ChannelsWorksBool == false )
   {
         // walk the output region, and sample the input image
         while( !outIt.IsAtEnd() )
         {
-                // copy the input pixel to the output
-                outIt.Set( inIt.Get());
+                outIt.Set( inIt.Get() );
                 ++outIt; 
                 ++inIt; 
                 progress.CompletedPixel();
@@ -179,15 +177,16 @@ MultiChannelExtractROI<TInputPixelType,TOutputPixelType,VImageDimension>
         unsigned int channelOut(0);
         unsigned int nbChannels(0);
 
-        OutputImagePixelType pixelOutput;
         InputImagePixelType  pixelInput;
         while( !outIt.IsAtEnd() )
         {
+                OutputImagePixelType pixelOutput;
+                pixelOutput.Reserve( outputPtr->GetVectorLength() );
                 pixelInput = inIt.Get();
+                channelOut = 0;
                 for ( nbChannels = 0 ; nbChannels < m_ChannelsWorks.size() ; nbChannels++)
                 {
                         channelIn = m_ChannelsWorks[nbChannels] - 1;
-//                        double toto = (double)( pixelInput[channelIn]);
                         pixelOutput[channelOut] = pixelInput[channelIn];
                         channelOut++;
                 }
