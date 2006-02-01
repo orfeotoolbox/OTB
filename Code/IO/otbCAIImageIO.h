@@ -21,14 +21,6 @@
 #include "itkImageIOBase.h"
 #include <stdio.h>
 
-// Pour CAI
-extern "C"
-{
-#define _CAI_IMAGE
-#define _NOHDF16
-#include "cai_image.h"
-}
-
 namespace otb
 {
 
@@ -90,9 +82,13 @@ private:
   /** Methode permettant de recuperer le format et le nom de l'image a partir du
   nom d'un fichier image. */
   bool GetInfosCAI( const char * filename, std::string & CaiFileName, std::string & CaiFormat  );
+  /** Determine si l'image est au format SPOT */
+  bool DetermineFormatSpot (char typspot, const char * str_repertoire ,
+				char * str_debut );
 
   /** Pointer sur la structure CAI */
-  CAI_IMAGE *   m_Cai;
+//  CAI_IMAGE *   m_Cai;
+  char *   m_ptrCai;
   /** Nombre d'octets par pixel */
   int           m_NbOctetPixel;
 };
