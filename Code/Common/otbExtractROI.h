@@ -20,7 +20,8 @@ namespace otb
 {
 
 /** \class ExtractROI
- * \brief Extrait une partie d'une image mono-canal.
+ * \brief Extrait une partie d'une image (mono-canal ou multi-canal).
+ * Le Pixel peut etre de type simple ou alors un itk::RGBPixel, etc.
  * Cette classe s'appuie sur la classe "otb::ExtractROIBase"
  *
  */

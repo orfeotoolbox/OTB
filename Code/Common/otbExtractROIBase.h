@@ -20,31 +20,8 @@ namespace otb
 {
 
 /** \class ExtractROIBase
- * \brief Decrease the image size by cropping the image to the selected 
- * region bounds.
- *
- * ExtractROIBase changes the image boundary of an image by removing  
- * pixels outside the target region.  The target region must be specified.
- *
- * ExtractROIBase also collapses dimensions so that the input image 
- * may have more dimensions than the output image (i.e. 4-D input image
- * to a 3-D output image).  To specify what dimensions to collapse,
- * the ExtractionRegion must be specified.  For any dimension dim where
- * ExtractionRegion.Size[dim] = 0, that dimension is collapsed.  The 
- * index to collapse on is specified by ExtractionRegion.Index[dim].
- * For example, we have a image 4D = a 4x4x4x4 image, and we want 
- * to get a 3D image, 3D = a 4x4x4 image, specified as [x,y,z,2] from 4D 
- * (i.e. the 3rd "time" slice from 4D).  The ExtractionRegion.Size = 
- * [4,4,4,0] and ExtractionRegion.Index = [0,0,0,2].  
- *
- * The number of dimension in ExtractionRegion.Size and Index must = 
- * InputImageDimension.  The number of non-zero dimensions in 
- * ExtractionRegion.Size must = OutputImageDimension.
- *
- * This filter is implemented as a multithreaded filter.  It provides a 
- * ThreadedGenerateData() method for its implementation.
+ * \brief Classe de base, permettant d'extraire une partie d'une image (mono-canal ou multi-canal).
  * 
- * \ingroup GeometricTransforms
  */
 template <class TInputImage, class TOutputImage>
 class ITK_EXPORT ExtractROIBase:
