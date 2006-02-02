@@ -87,7 +87,6 @@ private:
 				char * str_debut );
 
   /** Pointer sur la structure CAI */
-//  CAI_IMAGE *   m_Cai;
   char *   m_ptrCai;
   /** Nombre d'octets par pixel */
   int           m_NbOctetPixel;
