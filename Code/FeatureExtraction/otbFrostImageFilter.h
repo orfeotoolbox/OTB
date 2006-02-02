@@ -26,7 +26,7 @@ namespace otb
  * La sortie du filtre pour le pixel p est de la forme:
  *      \f$ \hat I_{s}=\sum_{p\in\eta_{p}} m_{p}I_{p} \f$ 
  *
- * où :   \f$ m_{p}=\frac{\exp(-KC_{s}^{2}d_{s,p})}{\sum_{p\in\eta_{p}} \exp(-KC_{s}^{2}d_{s,p})} \f$
+ * où :   \f$ m_{p}=\frac{KC_{s}^{2}\exp(-KC_{s}^{2}d_{s,p})}{\sum_{p\in\eta_{p}} KC_{s}^{2}\exp(-KC_{s}^{2}d_{s,p})} \f$
  *    et  \f$ d_{s,p}=\sqrt{(i-i_{p})^2+(j-j_{p})^2} \f$
  *
  * \f$ K \f$     : le facteur de décroissance du filtre

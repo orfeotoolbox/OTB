@@ -9,22 +9,22 @@ SET(FEATUREEXTRACTION_TESTS ${CXX_TEST_PATH}/otbFeatureExtractionTests)
 
 
 
-ADD_TEST(tuFeFiltreLee1CanalPoupees ${FEATUREEXTRACTION_TESTS}  
+ADD_TEST(feTuFiltreLee1CanalPoupees ${FEATUREEXTRACTION_TESTS}  
         otbLeeFilter
 	${INPUTDATA}/poupees_1canal.hd
-	${TEMP}/otbFiltreLee_05_05_04.png
+	${TEMP}/feFiltreLee_05_05_04.png
 	05 05 4.0)
 
-ADD_TEST(tuFeFiltreLee ${FEATUREEXTRACTION_TESTS}  
+ADD_TEST(feTuFiltreLee ${FEATUREEXTRACTION_TESTS}  
         otbLeeFilter
 	${INPUTDATA}/poupees.hd
-	${TEMP}/otbFiltreLee_05_05_12.png
+	${TEMP}/feFiltreLee_05_05_12.png
 	05 05 12.0)
 	
-ADD_TEST(tuFeFiltreFrost ${FEATUREEXTRACTION_TESTS}  
+ADD_TEST(feTuFiltreFrost ${FEATUREEXTRACTION_TESTS}  
         otbFrostFilter
 	${INPUTDATA}/poupees.hd
-	${TEMP}/otbFiltreFrost_poupees_05_05_01.png
+	${TEMP}/feFiltreFrost_poupees_05_05_01.png
 	05 05 0.1)
 	        
 #ADD_TEST(tvFEPatrick2 ${FEATUREEXTRACTION_TESTS}  
