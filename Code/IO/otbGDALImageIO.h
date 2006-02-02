@@ -34,28 +34,13 @@ namespace otb
 {
 
 /** Classe otbGDALImageIO
-    Based on itkImageIO, this class is add to all the IO image type
-    ITK already contains (PNG, GIF, ...).
-    Basically, to add and itkImageIO type, we need to set the methods:
-    - CanReadFile(): that says if the file loaded can be read or not.
-    - Read(): that read image put it into a buffer.
-    - ReadImageInformation(): that should read spacing, origin,
-    dimensions, pixel type...
-    If we also need to write images of this new type, we need to set
-    the methods:
-    - CanWriteFile(): that says if this type of file can be write.
-    - WriteImageInformation(): that write all image informations.
-    - Write(): that writes the image.
-*/
+ *
+ */
 class ITK_EXPORT GDALImageIO : public itk::ImageIOBase
 {
 public:
 
   typedef unsigned char InputPixelType;
-  /** GDAL parameters. */
-  GDALDataset* poDataset;
-  GDALRasterBand** poBands;
-  GDALDataType PxType;
   
   /** Standard class typedefs. */
   typedef GDALImageIO            Self;
@@ -130,6 +115,11 @@ protected:
 private:
   GDALImageIO(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
+
+  /** GDAL parameters. */
+  GDALDataset* poDataset;
+  GDALRasterBand** poBands;
+  GDALDataType PxType;
 
 
 };

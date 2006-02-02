@@ -8,6 +8,32 @@ SET(TEMP ${OTBTesting_BINARY_DIR}/Temporary)
 
 
 
+ADD_EXECUTABLE(otbGDALImageIOTestCanRead otbGDALImageIOTestCanRead.cxx )
+TARGET_LINK_LIBRARIES(otbGDALImageIOTestCanRead OTBIO OTBCommon ${CAI_LIBRARY} ${GDAL_LIBRARY} ITKIO ITKCommon)
+ADD_TEST(ioTuGDALImageIOCanReadPNG ${CXX_TEST_PATH}/otbGDALImageIOTestCanRead 
+        ${INPUTDATA}/sbuv.png )
+
+ADD_TEST(ioTuGDALImageIOCanRead_JPG ${CXX_TEST_PATH}/otbGDALImageIOTestCanRead 
+        ${INPUTDATA}/poupees.jpg )
+
+ADD_TEST(ioTuGDALImageIOCanRead_ENVI ${CXX_TEST_PATH}/otbGDALImageIOTestCanRead 
+        ${INPUTDATA}/poupees_1canal.c1 )
+
+ADD_TEST(ioTuGDALImageIOCanRead_RADARSAT ${CXX_TEST_PATH}/otbGDALImageIOTestCanRead 
+        ${INPUTDATA}/RADARSAT1/SCENE01/DAT_01.001 )
+
+ADD_TEST(ioTuGDALImageIOCanRead_SAR_ERS2 ${CXX_TEST_PATH}/otbGDALImageIOTestCanRead 
+        ${INPUTDATA}/SAR_ERS2_SLCI_SCENE1/DAT_01.001 )
+
+ADD_TEST(ioTuGDALImageIOCanRead_PALSAR ${CXX_TEST_PATH}/otbGDALImageIOTestCanRead 
+        ${INPUTDATA}/PALSAR_L41/PASL4100212160127170308070002/PASL4100212160127170308070002_ortho.dat )
+
+
+
+
+
+
+# ------- TEST IO COMMON   ------------------------------
 
 SET(IO_TESTS ${CXX_TEST_PATH}/otbIOTests)
 
@@ -27,8 +53,6 @@ ADD_TEST(ioTvCreationBSQ_2_RGB ${IO_TESTS}
          ${TEMP}/sbuv_2.png
          0 0 800 600
          1 2 3 )
-
-
 
 
 # -------            otb::CAIImageIO   ------------------------------
@@ -184,7 +208,7 @@ ADD_TEST(ioTvExtractROI_RGB_SPOT52PNG ${IO_TESTS}
   --compare-image   ${BASELINE}/IoExtractROI_RGB_SPOT52PNG_700_700_1000_1000_channels_1_2_3.png
                     ${TEMP}/IoExtractROI_RGB_SPOT52PNG_700_700_1000_1000_channels_1_2_3.png
          otbExtractROI_VectorToRGB
-         ${INPUTDATA}/SPOT5
+         ${INPUTDATA}/SPOT5_SCENE01
          ${TEMP}/IoExtractROI_RGB_SPOT52PNG_700_700_1000_1000_channels_1_2_3.png
          700 700 1000 1000
          1 2 3 )
@@ -193,7 +217,7 @@ ADD_TEST(ioTvExtractROI_Scalar_SPOT52PNG1 ${IO_TESTS}
   --compare-image   ${BASELINE}/IoExtractROI_Scalar_SPOT52PNG_700_700_1000_1000_channel_1.png
                     ${TEMP}/IoExtractROI_Scalar_SPOT52PNG_700_700_1000_1000_channel_1.png
          otbExtractROI_VectorToScalar
-         ${INPUTDATA}/SPOT5
+         ${INPUTDATA}/SPOT5_SCENE01
          ${TEMP}/IoExtractROI_Scalar_SPOT52PNG_700_700_1000_1000_channel_1.png
          700 700 1000 1000
          1 )
@@ -201,7 +225,7 @@ ADD_TEST(ioTvExtractROI_Scalar_SPOT52PNG2 ${IO_TESTS}
   --compare-image   ${BASELINE}/IoExtractROI_Scalar_SPOT52PNG_700_700_1000_1000_channel_2.png
                     ${TEMP}/IoExtractROI_Scalar_SPOT52PNG_700_700_1000_1000_channel_2.png
          otbExtractROI_VectorToScalar
-         ${INPUTDATA}/SPOT5
+         ${INPUTDATA}/SPOT5_SCENE01
          ${TEMP}/IoExtractROI_Scalar_SPOT52PNG_700_700_1000_1000_channel_2.png
          700 700 1000 1000
          2 )
@@ -209,7 +233,7 @@ ADD_TEST(ioTvExtractROI_Scalar_SPOT52PNG3 ${IO_TESTS}
   --compare-image   ${BASELINE}/IoExtractROI_Scalar_SPOT52PNG_700_700_1000_1000_channel_3.png
                     ${TEMP}/IoExtractROI_Scalar_SPOT52PNG_700_700_1000_1000_channel_3.png
          otbExtractROI_VectorToScalar
-         ${INPUTDATA}/SPOT5
+         ${INPUTDATA}/SPOT5_SCENE01
          ${TEMP}/IoExtractROI_Scalar_SPOT52PNG_700_700_1000_1000_channel_3.png
          700 700 1000 1000
          3 )
@@ -217,11 +241,19 @@ ADD_TEST(ioTvExtractROI_Scalar_SPOT52PNG4 ${IO_TESTS}
   --compare-image   ${BASELINE}/IoExtractROI_Scalar_SPOT52PNG_700_700_1000_1000_channel_4.png
                     ${TEMP}/IoExtractROI_Scalar_SPOT52PNG_700_700_1000_1000_channel_4.png
          otbExtractROI_VectorToScalar
-         ${INPUTDATA}/SPOT5
+         ${INPUTDATA}/SPOT5_SCENE01
          ${TEMP}/IoExtractROI_Scalar_SPOT52PNG_700_700_1000_1000_channel_4.png
          700 700 1000 1000
          4 )
 
+#ADD_TEST(ioTvExtractROI_Scalar_RADARSAT2PNG ${IO_TESTS} 
+#  --compare-image   ${BASELINE}/IoExtractROI_Scalar_SPOT52PNG_700_700_1000_1000_channel_4.png
+#                    ${TEMP}/IoExtractROI_Scalar_SPOT52PNG_700_700_1000_1000_channel_4.png
+#         otbExtractROI_VectorToScalar
+#         ${INPUTDATA}/RADARSAT1/SCENE01/DAT_01.001
+#         ${TEMP}/ioTvExtractROI_Scalar_RADARSAT2PNG_700_700_1000_1000_channel_1.png
+#         700 700 1000 1000
+#         1 )
 
 
 
@@ -279,12 +311,13 @@ otbExtractROI_VectorToRGB.cxx
 otbExtractROI_VectorToScalar.cxx
 otbCAIImageIOTestCanRead.cxx
 otbCAIImageIOTestCanWrite.cxx
-#otbGDALImageIOTestCanRead.cxx
 otbImageFileReaderTest.cxx
 otbImageFileWriterTest.cxx
 otbImageFileReaderRGBTest.cxx
 otbImageFileWriterRGBTest.cxx
 )
+
+
 
 
 INCLUDE_DIRECTORIES("${OTBTesting_BINARY_DIR}")
