@@ -1,7 +1,7 @@
 #include <iostream>
 #include "itkVectorImage.h"
 #include "itkImage.h"
-#include "itkImageFileReader.h"
+#include "otbImageFileReader.h"
 #include "itkImageFileWriter.h"
 #include "itkRGBPixel.h"
 
@@ -25,7 +25,8 @@ int otbVectorToRGBImageFilter(int argc, char * argv [])
   
   typedef itk::Image<RGBPixelType, Dimension> RGBImageType;
 
-  typedef itk::ImageFileReader< ImageType, itk::DefaultConvertPixelTraits< PixelType > > ReaderType;
+  //typedef itk::ImageFileReader< ImageType, itk::DefaultConvertPixelTraits< PixelType > > ReaderType;
+  typedef otb::ImageFileReader< ImageType, itk::DefaultConvertPixelTraits< PixelType > > ReaderType;
   typedef itk::ImageFileWriter< RGBImageType > WriterType;
 
 
