@@ -7,7 +7,7 @@ SET(TEMP ${OTBTesting_BINARY_DIR}/Temporary)
 
 
 #Tolerance sur diff pixel image
-SET(TOL 1.0)
+SET(TOL 0.0)
 
 SET(FEATUREEXTRACTION_TESTS ${CXX_TEST_PATH}/otbFeatureExtractionTests)
 
