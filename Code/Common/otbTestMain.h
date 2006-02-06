@@ -10,7 +10,8 @@
 #include "itkNumericTraits.h"
 #include "itkMultiThreader.h"
 #include "itkImage.h"
-#include "itkImageFileReader.h"
+//#include "itkImageFileReader.h"
+#include "otbImageFileReader.h"
 #include "itkImageFileWriter.h"
 #include "itkImageRegionConstIterator.h"
 #include "itkSubtractImageFilter.h"
@@ -29,7 +30,7 @@ extern int test(int, char* [] ); \
 StringToTestFunctionMap[#test] = test
 
 int RegressionTestAsciiFile(const char * , const char * , int );
-int RegressionTestImage (const char *, const char *, int);
+int RegressionTestImage (const char *, const char *, int, const double);
 std::map<std::string,int> RegressionTestBaselines (char *);
 
 int RegressionTestBinaryFile(const char *, const char *, int);
@@ -51,6 +52,7 @@ void PrintAvailableTests()
 
 int main(int ac, char* av[] )
 {
+  double lToleranceDiffPixelImage(0);
   char *baselineFilenameImage = NULL;
   char *testFilenameImage = NULL;
   char *baselineFilenameBinary = NULL;
@@ -102,10 +104,11 @@ int main(int ac, char* av[] )
       }
     else if (strcmp(av[1], "--compare-image") == 0)
       {
-      baselineFilenameImage = av[2];
-      testFilenameImage = av[3];
-      av += 3;
-      ac -= 3;
+      lToleranceDiffPixelImage = (double)(::atof(av[2]));
+      baselineFilenameImage = av[3];
+      testFilenameImage = av[4];
+      av += 4;
+      ac -= 4;
       }
     else if (strcmp(av[1], "--compare-binary") == 0)
       {
@@ -145,7 +148,8 @@ int main(int ac, char* av[] )
           {
           baseline->second = RegressionTestImage(testFilenameImage,
                                                  (baseline->first).c_str(),
-                                                 0);
+                                                 0,
+                                                 lToleranceDiffPixelImage);
           if (baseline->second < bestBaselineStatus)
             {
             bestBaseline = baseline->first;
@@ -162,7 +166,8 @@ int main(int ac, char* av[] )
           {
           baseline->second = RegressionTestImage(testFilenameImage,
                                                  bestBaseline.c_str(),
-                                                 1);
+                                                 1,
+                                                 lToleranceDiffPixelImage);
           }
         result += bestBaselineStatus;
         }
@@ -312,13 +317,14 @@ int RegressionTestBinaryFile(const char * testBinaryFileName, const char * basel
 }
 
 
-int RegressionTestImage (const char *testImageFilename, const char *baselineImageFilename, int reportErrors)
+int RegressionTestImage (const char *testImageFilename, const char *baselineImageFilename, int reportErrors, const double toleranceDiffPixelImage)
 {
   // Use the factory mechanism to read the test and baseline files and convert them to double
   typedef itk::Image<double,ITK_TEST_DIMENSION_MAX> ImageType;
   typedef itk::Image<unsigned char,ITK_TEST_DIMENSION_MAX> OutputType;
   typedef itk::Image<unsigned char,2> DiffOutputType;
-  typedef itk::ImageFileReader<ImageType> ReaderType;
+//  typedef itk::ImageFileReader<ImageType> ReaderType;
+  typedef otb::ImageFileReader<ImageType> ReaderType;
 
   // Read the baseline file
   ReaderType::Pointer baselineReader = ReaderType::New();
@@ -362,12 +368,14 @@ int RegressionTestImage (const char *testImageFilename, const char *baselineImag
     return 1;
     }
 
+
+    std::cout << " (RegressionTestImage DifferenceThreshold : "<<toleranceDiffPixelImage<<")"<<std::endl;
   // Now compare the two images
   typedef itk::DifferenceImageFilter<ImageType,ImageType> DiffType;
   DiffType::Pointer diff = DiffType::New();
     diff->SetValidInput(baselineReader->GetOutput());
     diff->SetTestInput(testReader->GetOutput());
-    diff->SetDifferenceThreshold(1.0);
+    diff->SetDifferenceThreshold(toleranceDiffPixelImage);
     diff->UpdateLargestPossibleRegion();
 
   double status = diff->GetTotalDifference();

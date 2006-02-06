@@ -15,7 +15,10 @@ namespace otb
 //---------------------------------------------------------
 template <class TInputImage>
 ImageFileWriter<TInputImage>
-::ImageFileWriter() : itk::ImageFileWriter<TInputImage>()
+::ImageFileWriter() : itk::ImageFileWriter<TInputImage>(),
+                                m_UserSpecifiedIORegion(false),
+                                m_FactorySpecifiedImageIO(false)
+
 {
 }
 
