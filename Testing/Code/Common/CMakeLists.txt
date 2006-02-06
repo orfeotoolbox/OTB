@@ -1,114 +1,109 @@
 
 IF( NOT OTB_DISABLE_CXX_TESTING )
 
-SET(BASELINE_IMAGE ${OTB_DATA_ROOT}/Baseline/Images)
-SET(BASELINE ${OTB_DATA_ROOT}/Baseline)
+SET(BASELINE ${OTB_DATA_ROOT}/Baseline/Images)
 SET(INPUTDATA ${OTB_DATA_ROOT}/Input)
 SET(TEMP ${OTBTesting_BINARY_DIR}/Temporary)
 
+#Tolerance sur diff pixel image
+SET(TOL 1.0)
+
 SET(COMMON_TESTS ${CXX_TEST_PATH}/otbCommonTests)
 
-# -------            otb::VectorToRGBImageFilter   ------------------------------
-ADD_TEST(coTvVectorToRGBImageFilter ${COMMON_TESTS}   
-  --compare-image   ${BASELINE_IMAGE}/CoVectorToRGBImageFilter_sbuv.png
-                    ${TEMP}/CoVectorToRGBImageFilter_sbuv.png
-         otbVectorToRGBImageFilter 
+ADD_TEST(coTvMultiChannelROI_RGB2RGB_PNG ${COMMON_TESTS}   
+  --compare-image ${TOL}   ${INPUTDATA}/sbuv.png
+                           ${TEMP}/coMultiChannelExtractROI_RGB2RGB_PNG_sbuv.png
+         otbMultiChannelExtractROI 
          ${INPUTDATA}/sbuv.png 
-         ${TEMP}/CoVectorToRGBImageFilter_sbuv.png
-         1 2 3 )
+         ${TEMP}/coMultiChannelExtractROI_RGB2RGB_PNG_sbuv.png
+         )
 
-ADD_TEST(coTvVectorToRGBImageFilter2 ${COMMON_TESTS}   
-  --compare-image   ${BASELINE_IMAGE}/CoVectorToRGBImageFilter2_sbuv.png
-                    ${TEMP}/CoVectorToRGBImageFilter2_sbuv.png
-         otbVectorToRGBImageFilter 
-         ${INPUTDATA}/sbuv.png 
-         ${TEMP}/CoVectorToRGBImageFilter2_sbuv.png
-         3 2 1 )
 
-# -------            otb::VectorToScalarImageFilter   ------------------------------
-ADD_TEST(coTvVectorToScalarImageFilter ${COMMON_TESTS}  
-  --compare-image   ${BASELINE_IMAGE}/CoVectorToScalarImageFilter1_sbuv.png
-                    ${TEMP}/CoVectorToScalarImageFilter1_sbuv.png
-         otbVectorToScalarImageFilter
+ADD_TEST(coTvMultiChannelROI_RGB2RGB_PNG2 ${COMMON_TESTS}   
+  --compare-image ${TOL}   ${BASELINE}/coMultiChannelExtractROI_RGB2RGB_PNG_sbuv_700_60_77_489_channels_123.png
+                           ${TEMP}/coMultiChannelExtractROI_RGB2RGB_PNG_sbuv_700_60_77_489_channels_123.png
+         otbMultiChannelExtractROI 
          ${INPUTDATA}/sbuv.png 
-         ${TEMP}/CoVectorToScalarImageFilter1_sbuv.png
-         1 )
-ADD_TEST(coTvVectorToScalarImageFilter2 ${COMMON_TESTS}  
-  --compare-image   ${BASELINE_IMAGE}/CoVectorToScalarImageFilter2_sbuv.png
-                    ${TEMP}/CoVectorToScalarImageFilter2_sbuv.png
-         otbVectorToScalarImageFilter
+         ${TEMP}/coMultiChannelExtractROI_RGB2RGB_PNG_sbuv_700_60_77_489_channels_123.png
+         -startX 700 -startY 60 -sizeX 77 -sizeY 489 -channels 1 2 3  )
+         
+ADD_TEST(coTvMultiChannelROI_RGB2RGB_PNG3 ${COMMON_TESTS}   
+  --compare-image ${TOL}  ${BASELINE}/coMultiChannelExtractROI_RGB2RGB_PNG_sbuv_700_60_77_489_channels_321.png
+                    ${TEMP}/coMultiChannelExtractROI_RGB2RGB_PNG_sbuv_700_60_77_489_channels_321.png
+         otbMultiChannelExtractROI 
          ${INPUTDATA}/sbuv.png 
-         ${TEMP}/CoVectorToScalarImageFilter2_sbuv.png
-         2 )
-ADD_TEST(coTvVectorToScalarImageFilter3 ${COMMON_TESTS}  
-  --compare-image   ${BASELINE_IMAGE}/CoVectorToScalarImageFilter3_sbuv.png
-                    ${TEMP}/CoVectorToScalarImageFilter3_sbuv.png
-         otbVectorToScalarImageFilter
+         ${TEMP}/coMultiChannelExtractROI_RGB2RGB_PNG_sbuv_700_60_77_489_channels_321.png
+         -startX 700 -startY 60 -sizeX 77 -sizeY 489 -channels 3 2 1  )
+ADD_TEST(coTvMultiChannelROI_RGB2NG_PNG1 ${COMMON_TESTS}   
+  --compare-image ${TOL}  ${BASELINE}/coMultiChannelExtractROI_RGB2NG_PNG_sbuv_700_60_77_489_channel_1.png
+                    ${TEMP}/coMultiChannelExtractROI_RGB2NG_PNG_sbuv_700_60_77_489_channel_1.png
+         otbMultiChannelExtractROI 
          ${INPUTDATA}/sbuv.png 
-         ${TEMP}/CoVectorToScalarImageFilter3_sbuv.png
-         3 )
+         ${TEMP}/coMultiChannelExtractROI_RGB2NG_PNG_sbuv_700_60_77_489_channel_1.png
+         -startX 700 -startY 60 -sizeX 77 -sizeY 489 -channels 1 )
+ADD_TEST(coTvMultiChannelROI_RGB2NG_PNG2 ${COMMON_TESTS}   
+  --compare-image ${TOL}  ${BASELINE}/coMultiChannelExtractROI_RGB2NG_PNG_sbuv_700_60_77_489_channel_2.png
+                    ${TEMP}/coMultiChannelExtractROI_RGB2NG_PNG_sbuv_700_60_77_489_channel_2.png
+         otbMultiChannelExtractROI 
+         ${INPUTDATA}/sbuv.png 
+         ${TEMP}/coMultiChannelExtractROI_RGB2NG_PNG_sbuv_700_60_77_489_channel_2.png
+         -startX 700 -startY 60 -sizeX 77 -sizeY 489 -channels 2 )
+ADD_TEST(coTvMultiChannelROI_RGB2NG_PNG3 ${COMMON_TESTS}   
+  --compare-image ${TOL}  ${BASELINE}/coMultiChannelExtractROI_RGB2NG_PNG_sbuv_700_60_77_489_channel_3.png
+                    ${TEMP}/coMultiChannelExtractROI_RGB2NG_PNG_sbuv_700_60_77_489_channel_3.png
+         otbMultiChannelExtractROI 
+         ${INPUTDATA}/sbuv.png 
+         ${TEMP}/coMultiChannelExtractROI_RGB2NG_PNG_sbuv_700_60_77_489_channel_3.png
+         -startX 700 -startY 60 -sizeX 77 -sizeY 489 -channels 3 )
+
+ADD_TEST(coTvMultiChannelROI_5c_BSQ ${COMMON_TESTS}   
+  --compare-image ${TOL}  ${BASELINE}/coMultiChannelExtractROI_RGB2NG_PNG_poupees_303_2_134_330_channels_1232.hd
+                    ${TEMP}/coMultiChannelExtractROI_RGB2NG_PNG_poupees_303_2_134_330_channels_1232.hd
+         otbMultiChannelExtractROI 
+         ${INPUTDATA}/poupees.hd 
+         ${TEMP}/coMultiChannelExtractROI_RGB2NG_PNG_poupees_303_2_134_330_channels_1232.hd
+         -startX 303 -startY 2 -sizeX 134  -sizeY 330 -channels 1 2 3 2 )
+
+ADD_TEST(coTvMultiChannelROI_3c_BSQ ${COMMON_TESTS}   
+  --compare-binary  ${BASELINE}/coMultiChannelExtractROI_RGB2NG_PNG_poupees_303_2_134_330_channels_1232.c3
+                    ${TEMP}/coMultiChannelExtractROI_RGB2NG_PNG_poupees_303_2_134_330_channels_345.c1
+         otbMultiChannelExtractROI 
+         ${TEMP}/coMultiChannelExtractROI_RGB2NG_PNG_poupees_303_2_134_330_channels_1232.hd
+         ${TEMP}/coMultiChannelExtractROI_RGB2NG_PNG_poupees_303_2_134_330_channels_345.hd
+         -startX 0 -startY 0 -sizeX 134  -sizeY 330 -channels 3 4 5 )
+
+
+ADD_TEST(coTvMultiChannelROI_SizeAuto_PNG ${COMMON_TESTS}   
+         otbMultiChannelExtractROI
+         ${INPUTDATA}/sbuv.png 
+         ${TEMP}/coMultiChannelExtractROI_SizeAuto_PNG_sbuv_200_60_channels_123.png
+         )
+
+
+
 
 # -------            otb::ExtractROI   ------------------------------
 ADD_TEST(coTvExtractROI ${COMMON_TESTS}  
-  --compare-image   ${BASELINE_IMAGE}/CoExtractROI_cthead1_26_97_209_100.png
-                    ${TEMP}/CoExtractROI_cthead1_26_97_209_100.png
+  --compare-image ${TOL}   ${BASELINE}/coExtractROI_cthead1_26_97_209_100.png
+                    ${TEMP}/coExtractROI_cthead1_26_97_209_100.png
         otbExtractROI
         ${INPUTDATA}/cthead1.png 
-        ${TEMP}/CoExtractROI_cthead1_26_97_209_100.png 
+        ${TEMP}/coExtractROI_cthead1_26_97_209_100.png 
         26 97 209 100 )
 ADD_TEST(coTvExtractROI_RGB ${COMMON_TESTS}  
-  --compare-image   ${BASELINE_IMAGE}/CoExtractROI_RGB_sbuv_700_60_77_489.png
-                    ${TEMP}/CoExtractROI_RGB_sbuv_700_60_77_489.png
+  --compare-image ${TOL}   ${BASELINE}/coExtractROI_RGB_sbuv_700_60_77_489.png
+                    ${TEMP}/coExtractROI_RGB_sbuv_700_60_77_489.png
         otbExtractROI_RGB
         ${INPUTDATA}/sbuv.png 
-        ${TEMP}/CoExtractROI_RGB_sbuv_700_60_77_489.png 
-        700 60 77 489 )
+        ${TEMP}/coExtractROI_RGB_sbuv_700_60_77_489.png 
+        -startX 700 -startY 60 -sizeX 77 -sizeY 489 )
 ADD_TEST(coTvExtractROI_RGB2 ${COMMON_TESTS}  
-  --compare-image   ${BASELINE_IMAGE}/CoExtractROI_RGB_poupees_302_1_134_330.jpg
-                    ${TEMP}/CoExtractROI_RGB_poupees_302_1_134_330.jpg
+  --compare-image ${TOL}   ${BASELINE}/coExtractROI_RGB_poupees_302_1_134_330.jpg
+                    ${TEMP}/coExtractROI_RGB_poupees_302_1_134_330.jpg
         otbExtractROI_RGB
         ${INPUTDATA}/poupees.jpg 
-        ${TEMP}/CoExtractROI_RGB_poupees_302_1_134_330.jpg 
-        303 2 134 330 )
-
-# -------            otb::ExtractROI   ------------------------------
-# -------            otb::VectorToScalarImageFilter   ------------------------------
-ADD_TEST(coTvExtractROI_VectorToScalar1 ${COMMON_TESTS} 
-  --compare-image   ${BASELINE_IMAGE}/CoExtractROI_VectorToScalar_sbuv_700_60_77_489_channel_1.png
-                    ${TEMP}/CoExtractROI_VectorToScalar_sbuv_700_60_77_489_channel_1.png
-         otbExtractROI_VectorToScalar
-         ${INPUTDATA}/sbuv.png 
-         ${TEMP}/CoExtractROI_VectorToScalar_sbuv_700_60_77_489_channel_1.png
-         700 60 77 489
-         1 )
-ADD_TEST(coTvExtractROI_VectorToScalar2 ${COMMON_TESTS} 
-  --compare-image   ${BASELINE_IMAGE}/CoExtractROI_VectorToScalar_sbuv_700_60_77_489_channel_2.png
-                    ${TEMP}/CoExtractROI_VectorToScalar_sbuv_700_60_77_489_channel_2.png
-         otbExtractROI_VectorToScalar
-         ${INPUTDATA}/sbuv.png 
-         ${TEMP}/CoExtractROI_VectorToScalar_sbuv_700_60_77_489_channel_2.png
-         700 60 77 489
-         2 )
-ADD_TEST(coTvExtractROI_VectorToScalar3 ${COMMON_TESTS} 
-  --compare-image   ${BASELINE_IMAGE}/CoExtractROI_VectorToScalar_sbuv_700_60_77_489_channel_3.png
-                    ${TEMP}/CoExtractROI_VectorToScalar_sbuv_700_60_77_489_channel_3.png
-         otbExtractROI_VectorToScalar
-         ${INPUTDATA}/sbuv.png 
-         ${TEMP}/CoExtractROI_VectorToScalar_sbuv_700_60_77_489_channel_3.png
-         700 60 77 489
-         3 )
-
-# -------            otb::ExtractROI   ------------------------------
-# -------            otb::VectorToRGBImageFilter   ------------------------------
-ADD_TEST(coTvExtractROI_VectorToRGB ${COMMON_TESTS} 
-  --compare-image   ${BASELINE_IMAGE}/CoExtractROI_VectorToRGB_sbuv_700_60_77_489_channels_1_2_3.png
-                    ${TEMP}/CoExtractROI_VectorToRGB_sbuv_700_60_77_489_channels_1_2_3.png
-         otbExtractROI_VectorToRGB
-         ${INPUTDATA}/sbuv.png 
-         ${TEMP}/CoExtractROI_VectorToRGB_sbuv_700_60_77_489_channels_1_2_3.png
-         700 60 77 489
-         1 2 3 )
-
+        ${TEMP}/coExtractROI_RGB_poupees_302_1_134_330.jpg 
+         -startX 303 -startY 2 -sizeX 134 -sizeY 330 )
 
 
 
@@ -120,10 +115,7 @@ ADD_TEST(coTvExtractROI_VectorToRGB ${COMMON_TESTS}
 SET(BasicCommon_SRCS
 otbExtractROI.cxx
 otbExtractROI_RGB.cxx
-otbVectorToRGBImageFilter.cxx
-otbVectorToScalarImageFilter.cxx
-otbExtractROI_VectorToScalar.cxx
-otbExtractROI_VectorToRGB.cxx
+otbMultiChannelExtractROI.cxx
 )
 
 
@@ -144,43 +136,10 @@ ENDIF( NOT OTB_DISABLE_CXX_TESTING )
 # -----------------------------------------------------------------------
 # Exemple test simple avec un "main"
 # 
-# ADD_EXECUTABLE(otbExtractROIImage otbExtractROIImage.cxx)
-# TARGET_LINK_LIBRARIES(otbExtractROIImage ITKIO ITKCommon)
-# ADD_TEST(otbExtractROIImage1 ${CXX_TEST_PATH}/CoExtractROIImage 
+# ADD_EXECUTABLE(toto toto.cxx)
+# TARGET_LINK_LIBRARIES(toto ITKIO ITKCommon)
+# ADD_TEST(toto1 ${CXX_TEST_PATH}/toto 
 #         ${INPUTDATA}/cthead1.png 
 #         ${TEMP}/CoExtractROIImage.png 
-#         20 30 45 88 )
-
-# ---------    TESTS A VALIDER OU SUPPRIMER -------------
-#otbMultiChannelExtractROI.cxx
-#otbMultiChannelExtractROI2.cxx
-#otbMultiChannelExtractROI3.cxx
-#otbMultiToMonoChannelExtractROI.cxx
-
-
-#ADD_TEST(coTvMultiChannelExtractROI ${COMMON_TESTS}  
-#  --compare-ascii   ${BASELINE}/CoMultiChannelExtractROI.txt
-#                    ${TEMP}/CoMultiChannelExtractROI.txt
-#        otbMultiChannelExtractROI
-#        ${TEMP}/CoMultiChannelExtractROI.txt )
-
-#ADD_TEST(coTvMultiChannelExtractROI2 ${COMMON_TESTS}  
-#  --compare-ascii   ${BASELINE}/CoMultiChannelExtractROI2.txt
-#                    ${TEMP}/CoMultiChannelExtractROI2.txt
-#        otbMultiChannelExtractROI2
-#        ${TEMP}/CoMultiChannelExtractROI2.txt )
-
-#ADD_TEST(coTvMultiToMonoChannelExtractROI ${COMMON_TESTS}  
-#  --compare-ascii   ${BASELINE}/CoMultiToMonoChannelExtractROI.txt
-#                    ${TEMP}/CoMultiToMonoChannelExtractROI.txt
-#        otbMultiToMonoChannelExtractROI
-#        ${TEMP}/CoMultiToMonoChannelExtractROI.txt )
-
-#ADD_TEST(coTvMultiChannelExtractROI3 ${COMMON_TESTS}  
-#  --compare-image   ${BASELINE_IMAGE}/CoExtractROI_RGB_sbuv_700_60_77_489.png
-#                    ${TEMP}/CoMultiChannelExtractROI_RGB_sbuv_700_60_77_489.png
-#        otbMultiChannelExtractROI3
-#        ${INPUTDATA}/sbuv.png 
-#        ${TEMP}/CoMultiChannelExtractROI_RGB_sbuv_700_60_77_489.png 
-#        700 60 77 489 )
+#         ...... )
 
