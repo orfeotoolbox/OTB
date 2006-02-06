@@ -5,8 +5,11 @@ SET(BASELINE ${OTB_DATA_ROOT}/Baseline/Images)
 SET(INPUTDATA ${OTB_DATA_ROOT}/Input)
 SET(TEMP ${OTBTesting_BINARY_DIR}/Temporary)
 
-SET(FEATUREEXTRACTION_TESTS ${CXX_TEST_PATH}/otbFeatureExtractionTests)
 
+#Tolerance sur diff pixel image
+SET(TOL 1.0)
+
+SET(FEATUREEXTRACTION_TESTS ${CXX_TEST_PATH}/otbFeatureExtractionTests)
 
 
 ADD_TEST(feTuFiltreLee1CanalPoupees ${FEATUREEXTRACTION_TESTS}  
@@ -28,8 +31,8 @@ ADD_TEST(feTuFiltreFrost ${FEATUREEXTRACTION_TESTS}
 	05 05 0.1)
 	        
 #ADD_TEST(tvFEPatrick2 ${FEATUREEXTRACTION_TESTS}  
-#  --compare-image   ${BASELINE}/otbExtractROI_cthead1_26_97_209_100.png
-#                    ${TEMP}/otbExtractROI_cthead1_26_97_209_100.png
+#  --compare-image ${TOL}  ${BASELINE}/otbExtractROI_cthead1_26_97_209_100.png
+#                          ${TEMP}/otbExtractROI_cthead1_26_97_209_100.png
 #        otbFeatureExtraction
 #        ${INPUTDATA}/cthead1.png 
 #        ${TEMP}/otbExtractROI_cthead1_26_97_209_100.png 
