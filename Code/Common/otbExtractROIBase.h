@@ -20,7 +20,12 @@ namespace otb
 {
 
 /** \class ExtractROIBase
- * \brief Classe de base, permettant d'extraire une partie d'une image (mono-canal ou multi-canal).
+ * \brief Classe de base, permettant d'extraire une partie d'une image.
+
+ * La région a extraire peut se définir via les méthodes SetStartX/Y (positionne le début) et SetSizeX/Y précisant 
+ * la taille de la région. Si la position de la région n'est pas précisée, alors le premier en haut à gauche est 
+ * sélectionné. Si la taille de la région n'est pas positionnée, alors la taille de la région s'étend jusqu'aux bords extrêmes de l'image.
+ * \note Si aucun paramètre n'est précisé, alors toute l'image est extraite.
  * 
  */
 template <class TInputImage, class TOutputImage>

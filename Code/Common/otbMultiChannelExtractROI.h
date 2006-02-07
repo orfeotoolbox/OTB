@@ -22,9 +22,14 @@ namespace otb
 {
 
 /** \class MultiChannelExtractROI
- * \brief Extrait une partie d'une image. Il est possible d'extraire tous les canaux de l'image ou 
- * seulement ceux précisés par l'utilisateur.
- * Cette classe s'appuie sur la classe "otb::ExtractROIBase"
+ * \brief Extrait une partie d'une image d'une image multi-canal.
+ *
+ * Il est possible d'extraire tous les canaux de l'image ou seulement ceux précisés par l'utilisateur.
+ * La méthode SetChannel permet de sélectionner un canal (une liste est incrémentée).
+ * Les méthodes SetFirstChannel/SetLastChannel permettent de définir une liste de canaux, définit par cet intervalle.
+ * \note Si aucun canal n'est spécifié par l'utilisateur, alors tous les canaux de l'image d'entrée sont traités
+ * \note Ces classe est paramétrée par le type de pixel des images d'entrée et de sortie. Les images manipulées dans cette classe 
+ * sont de type "itk::VectorImage".
  *
  */
 template <class TInputPixelType, class TOutputPixelType, unsigned int VImageDimension=2>
