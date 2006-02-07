@@ -10,16 +10,43 @@ SET(TOL 1.0)
 
 SET(COMMON_TESTS ${CXX_TEST_PATH}/otbCommonTests)
 
+
+# -------            otb::ExtractROI   ------------------------------
+
+ADD_TEST(coTvExtractROI ${COMMON_TESTS}  
+  --compare-image ${TOL}   ${BASELINE}/coExtractROI_cthead1_26_97_209_100.png
+                    ${TEMP}/coExtractROI_cthead1_26_97_209_100.png
+        otbExtractROI
+        ${INPUTDATA}/cthead1.png 
+        ${TEMP}/coExtractROI_cthead1_26_97_209_100.png 
+        26 97 209 100 )
+ADD_TEST(coTvExtractROI_RGB ${COMMON_TESTS}  
+  --compare-image ${TOL}   ${BASELINE}/coExtractROI_RGB_sbuv_700_60_77_489.png
+                    ${TEMP}/coExtractROI_RGB_sbuv_700_60_77_489.png
+        otbExtractROI_RGB
+        ${INPUTDATA}/sbuv.png 
+        ${TEMP}/coExtractROI_RGB_sbuv_700_60_77_489.png 
+        700 60 77 489 )
+ADD_TEST(coTvExtractROI_RGB2 ${COMMON_TESTS}  
+  --compare-image ${TOL}   ${BASELINE}/coExtractROI_RGB_poupees_302_1_134_330.jpg
+                    ${TEMP}/coExtractROI_RGB_poupees_302_1_134_330.jpg
+        otbExtractROI_RGB
+        ${INPUTDATA}/poupees.jpg 
+        ${TEMP}/coExtractROI_RGB_poupees_302_1_134_330.jpg 
+        303 2 134 330 )
+
+
+# -------            otb::MultiChannelExtractROI   ------------------------------
+
 ADD_TEST(coTvMultiChannelROI_RGB2RGB_PNG ${COMMON_TESTS}   
   --compare-image ${TOL}   ${INPUTDATA}/sbuv.png
                            ${TEMP}/coMultiChannelExtractROI_RGB2RGB_PNG_sbuv.png
          otbMultiChannelExtractROI 
          ${INPUTDATA}/sbuv.png 
          ${TEMP}/coMultiChannelExtractROI_RGB2RGB_PNG_sbuv.png
-         )
+         -sizeX 800 -sizeY 600 )
 
-
-ADD_TEST(coTvMultiChannelROI_RGB2RGB_PNG2 ${COMMON_TESTS}   
+ADD_TEST(coTvMultiChannelROI_RGB2RGB_PNG ${COMMON_TESTS}   
   --compare-image ${TOL}   ${BASELINE}/coMultiChannelExtractROI_RGB2RGB_PNG_sbuv_700_60_77_489_channels_123.png
                            ${TEMP}/coMultiChannelExtractROI_RGB2RGB_PNG_sbuv_700_60_77_489_channels_123.png
          otbMultiChannelExtractROI 
@@ -73,39 +100,15 @@ ADD_TEST(coTvMultiChannelROI_3c_BSQ ${COMMON_TESTS}
          -startX 0 -startY 0 -sizeX 134  -sizeY 330 -channels 3 4 5 )
 
 
-ADD_TEST(coTvMultiChannelROI_SizeAuto_PNG ${COMMON_TESTS}   
-         otbMultiChannelExtractROI
+# -------            otb::MultiToMonoChannelExtractROI   ------------------------------
+
+ADD_TEST(coTvMultiToMonoROI_RGB2NG_PNG ${COMMON_TESTS}   
+  --compare-image ${TOL}   ${BASELINE}/coMultiToMonoChannelExtractROI_RGB2NG_PNG_sbuv_700_60_77_489_channel_1.png
+                           ${TEMP}/coMultiToMonoChannelExtractROI_RGB2NG_PNG_sbuv_700_60_77_489_channel_1.png
+         otbMultiToMonoChannelExtractROI 
          ${INPUTDATA}/sbuv.png 
-         ${TEMP}/coMultiChannelExtractROI_SizeAuto_PNG_sbuv_200_60_channels_123.png
-         )
-
-
-
-
-# -------            otb::ExtractROI   ------------------------------
-ADD_TEST(coTvExtractROI ${COMMON_TESTS}  
-  --compare-image ${TOL}   ${BASELINE}/coExtractROI_cthead1_26_97_209_100.png
-                    ${TEMP}/coExtractROI_cthead1_26_97_209_100.png
-        otbExtractROI
-        ${INPUTDATA}/cthead1.png 
-        ${TEMP}/coExtractROI_cthead1_26_97_209_100.png 
-        26 97 209 100 )
-ADD_TEST(coTvExtractROI_RGB ${COMMON_TESTS}  
-  --compare-image ${TOL}   ${BASELINE}/coExtractROI_RGB_sbuv_700_60_77_489.png
-                    ${TEMP}/coExtractROI_RGB_sbuv_700_60_77_489.png
-        otbExtractROI_RGB
-        ${INPUTDATA}/sbuv.png 
-        ${TEMP}/coExtractROI_RGB_sbuv_700_60_77_489.png 
-        -startX 700 -startY 60 -sizeX 77 -sizeY 489 )
-ADD_TEST(coTvExtractROI_RGB2 ${COMMON_TESTS}  
-  --compare-image ${TOL}   ${BASELINE}/coExtractROI_RGB_poupees_302_1_134_330.jpg
-                    ${TEMP}/coExtractROI_RGB_poupees_302_1_134_330.jpg
-        otbExtractROI_RGB
-        ${INPUTDATA}/poupees.jpg 
-        ${TEMP}/coExtractROI_RGB_poupees_302_1_134_330.jpg 
-         -startX 303 -startY 2 -sizeX 134 -sizeY 330 )
-
-
+         ${TEMP}/coMultiToMonoChannelExtractROI_RGB2NG_PNG_sbuv_700_60_77_489_channel_1.png
+         -startX 700 -startY 60 -sizeX 77 -sizeY 489 -channel 1 )
 
 
 
@@ -116,11 +119,11 @@ SET(BasicCommon_SRCS
 otbExtractROI.cxx
 otbExtractROI_RGB.cxx
 otbMultiChannelExtractROI.cxx
+otbMultiToMonoChannelExtractROI.cxx
 )
 
 
 INCLUDE_DIRECTORIES("${OTBTesting_BINARY_DIR}")
-
 
 # ${TIFF_LIBRARY}
 

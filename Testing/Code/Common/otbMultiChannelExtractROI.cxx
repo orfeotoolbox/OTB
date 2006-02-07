@@ -15,8 +15,6 @@
 
 #include "itkExceptionObject.h"
 
-//#include "itkImage.h"
-
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
 #include "otbMultiChannelExtractROI.h"

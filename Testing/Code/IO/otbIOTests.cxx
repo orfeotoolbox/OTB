@@ -11,8 +11,6 @@
 
 void RegisterTests()
 {
-REGISTER_TEST(otbExtractROI_VectorToRGB);
-REGISTER_TEST(otbExtractROI_VectorToScalar);
 REGISTER_TEST(otbCAIImageIOTestCanRead);
 REGISTER_TEST(otbCAIImageIOTestCanWrite);
 //REGISTER_TEST(otbGDALImageIOTestCanRead);

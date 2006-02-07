@@ -11,4 +11,5 @@ void RegisterTests()
 REGISTER_TEST(otbExtractROI);
 REGISTER_TEST(otbExtractROI_RGB);
 REGISTER_TEST(otbMultiChannelExtractROI );
+REGISTER_TEST(otbMultiToMonoChannelExtractROI );
 }
