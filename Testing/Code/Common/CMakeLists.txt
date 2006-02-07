@@ -6,7 +6,7 @@ SET(INPUTDATA ${OTB_DATA_ROOT}/Input)
 SET(TEMP ${OTBTesting_BINARY_DIR}/Temporary)
 
 #Tolerance sur diff pixel image
-SET(TOL 1.0)
+SET(TOL 0.0)
 
 SET(COMMON_TESTS ${CXX_TEST_PATH}/otbCommonTests)
 
@@ -44,7 +44,8 @@ ADD_TEST(coTvMultiChannelROI_RGB2RGB_PNG ${COMMON_TESTS}
          otbMultiChannelExtractROI 
          ${INPUTDATA}/sbuv.png 
          ${TEMP}/coMultiChannelExtractROI_RGB2RGB_PNG_sbuv.png
-         -sizeX 800 -sizeY 600 )
+         )
+#         -sizeX 800 -sizeY 600 )
 
 ADD_TEST(coTvMultiChannelROI_RGB2RGB_PNG ${COMMON_TESTS}   
   --compare-image ${TOL}   ${BASELINE}/coMultiChannelExtractROI_RGB2RGB_PNG_sbuv_700_60_77_489_channels_123.png
