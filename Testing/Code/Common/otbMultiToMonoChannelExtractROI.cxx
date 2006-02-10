@@ -19,21 +19,16 @@
 #include "otbImageFileWriter.h"
 #include "otbMultiToMonoChannelExtractROI.h"
 
-int otbMultiToMonoChannelExtractROI ( int argc, char ** argv )
+template < typename  InputPixelType, typename OutputPixelType  >
+int generic_otbMultiToMonoChannelExtractROI ( int argc, char ** argv, const char * inputFilename,const char * outputFilename)
 {
   try 
     { 
-        const char * inputFilename  = argv[1];
-        const char * outputFilename = argv[2];
-        
-        typedef unsigned char  	                                InputPixelType;
-        typedef unsigned char  	                                OutputPixelType;
-
         typedef otb::MultiToMonoChannelExtractROI< InputPixelType, 
                                              OutputPixelType >  ExtractROIFilterType;
 
-        ExtractROIFilterType::Pointer extractROIFilter = ExtractROIFilterType::New();
-        int cpt(3),nbcanaux(0);
+        typename ExtractROIFilterType::Pointer extractROIFilter = ExtractROIFilterType::New();
+        int cpt(0),nbcanaux(0);
 
 	while ( argv[cpt] != NULL )
 	{
@@ -52,10 +47,10 @@ int otbMultiToMonoChannelExtractROI ( int argc, char ** argv )
 	std::cout << "                    sizeY  "<<extractROIFilter->GetSizeY()<<std::endl;
 	std::cout << " Canal selectionne : ("<<extractROIFilter->GetChannel()<<") : ";
 
-        typedef otb::ImageFileReader< ExtractROIFilterType::InputImageType, itk::DefaultConvertPixelTraits< InputPixelType >  >       ReaderType;
-        typedef otb::ImageFileWriter< ExtractROIFilterType::OutputImageType >           WriterType;
-        ReaderType::Pointer reader = ReaderType::New();
-        WriterType::Pointer writer = WriterType::New();
+        typedef otb::ImageFileReader< typename ExtractROIFilterType::InputImageType, itk::DefaultConvertPixelTraits< InputPixelType >  >       ReaderType;
+        typedef otb::ImageFileWriter< typename ExtractROIFilterType::OutputImageType >           WriterType;
+        typename ReaderType::Pointer reader = ReaderType::New();
+        typename WriterType::Pointer writer = WriterType::New();
 
         reader->SetFileName( inputFilename  );
         reader->Update(); //Necessaire pour connaitre le nombre de canaux dans l'image
@@ -84,6 +79,60 @@ int otbMultiToMonoChannelExtractROI ( int argc, char ** argv )
   return EXIT_SUCCESS;
 }
 
+int otbMultiToMonoChannelExtractROI ( int argc, char ** argv )
+{
+        std::string linputPixelType;
+        std::string loutputPixelType;
+        const char * inputFilename;
+        const char * outputFilename;
+        int cpt(1);
+        //Si le format n'est pas spécifé, alors celui par defaut
+        if( argv[cpt][0] == '-' )
+        {
+                linputPixelType = std::string(argv[cpt]);cpt++;
+                inputFilename  = argv[cpt];cpt++;
+        }
+        else
+        {
+                linputPixelType = std::string("-uchar");
+                inputFilename  = argv[cpt];cpt++;
+        }
+        if( argv[cpt][0] == '-' )
+        {
+                loutputPixelType = std::string(argv[cpt]);cpt++;
+                outputFilename  = argv[cpt];cpt++;
+        }
+        else
+        {
+                loutputPixelType = std::string("-uchar");
+                outputFilename  = argv[cpt];cpt++;
+        }
 
+        argc -= cpt;
+        argv += cpt;
+        std::cout << " -> "<<linputPixelType<<" pour "<<inputFilename<<std::endl;
+        std::cout << " -> "<<loutputPixelType<<" pour "<<outputFilename<<std::endl;
+        std::string pixelType;
+        if (  (linputPixelType=="-uchar")&&(loutputPixelType=="-uchar") )               return (generic_otbMultiToMonoChannelExtractROI< unsigned char, unsigned char >( argc,argv,inputFilename,outputFilename) );
+        else if (  (linputPixelType=="-ushort")&&(loutputPixelType=="-ushort") )        return (generic_otbMultiToMonoChannelExtractROI< unsigned short, unsigned short >( argc,argv,inputFilename,outputFilename) );
+        else if (  (linputPixelType=="-uint")&&(loutputPixelType=="-uint") )            return (generic_otbMultiToMonoChannelExtractROI< unsigned int, unsigned int >( argc,argv,inputFilename,outputFilename) );
+        else if (  (linputPixelType=="-float")&&(loutputPixelType=="-float") )          return (generic_otbMultiToMonoChannelExtractROI<float, float >( argc,argv,inputFilename,outputFilename) );
+        else if (  (linputPixelType=="-double")&&(loutputPixelType=="-double") )        return (generic_otbMultiToMonoChannelExtractROI<double, double >( argc,argv,inputFilename,outputFilename) );
+        // Type -> uchar
+        else if (  (linputPixelType=="-ushort")&&(loutputPixelType=="-uchar") )         return (generic_otbMultiToMonoChannelExtractROI< unsigned short, unsigned char >( argc,argv,inputFilename,outputFilename) );
+        else if (  (linputPixelType=="-uint")&&(loutputPixelType=="-uchar") )           return (generic_otbMultiToMonoChannelExtractROI< unsigned int, unsigned char >( argc,argv,inputFilename,outputFilename) );
+        else if (  (linputPixelType=="-float")&&(loutputPixelType=="-uchar") )          return (generic_otbMultiToMonoChannelExtractROI< float, unsigned char >( argc,argv,inputFilename,outputFilename) );
+        else if (  (linputPixelType=="-double")&&(loutputPixelType=="-uchar") )         return (generic_otbMultiToMonoChannelExtractROI< double, unsigned char >( argc,argv,inputFilename,outputFilename) );
+        else 
+        {       
+                std::cout << " Erreur : le format des images en entrée est mal précisé dans la ligne de commande !!!"<<std::endl;
+                std::cout << "          valeurs autorisées : -uchar, -ushort, -uint, -float, -double"<<std::endl;
+                std::cout << "          valeurs par defaut : -uchar"<<std::endl;
+                return EXIT_FAILURE;
+        }
+
+return EXIT_FAILURE;
+     
+}
 
 

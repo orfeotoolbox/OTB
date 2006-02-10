@@ -5,6 +5,7 @@ SET(BASELINE ${OTB_DATA_ROOT}/Baseline/Images)
 SET(INPUTDATA ${OTB_DATA_ROOT}/Input)
 SET(TEMP ${OTBTesting_BINARY_DIR}/Temporary)
 
+
 #Tolerance sur diff pixel image
 SET(TOL 0.0)
 
@@ -51,8 +52,8 @@ ADD_TEST(coTvMultiChannelROI_RGB2RGB_PNG2 ${COMMON_TESTS}
   --compare-image ${TOL}   ${BASELINE}/coMultiChannelExtractROI_RGB2RGB_PNG_sbuv_700_60_77_489_channels_123.png
                            ${TEMP}/coMultiChannelExtractROI_RGB2RGB_PNG_sbuv_700_60_77_489_channels_123.png
          otbMultiChannelExtractROI 
-         ${INPUTDATA}/sbuv.png 
-         ${TEMP}/coMultiChannelExtractROI_RGB2RGB_PNG_sbuv_700_60_77_489_channels_123.png
+         -uchar ${INPUTDATA}/sbuv.png 
+         -uchar ${TEMP}/coMultiChannelExtractROI_RGB2RGB_PNG_sbuv_700_60_77_489_channels_123.png
          -startX 700 -startY 60 -sizeX 77 -sizeY 489 -channels 1 2 3  )
          
 ADD_TEST(coTvMultiChannelROI_RGB2RGB_PNG3 ${COMMON_TESTS}   
@@ -129,8 +130,10 @@ INCLUDE_DIRECTORIES("${OTBTesting_BINARY_DIR}")
 # ${TIFF_LIBRARY}
 
 ADD_EXECUTABLE(otbCommonTests otbCommonTests.cxx ${BasicCommon_SRCS})
-TARGET_LINK_LIBRARIES(otbCommonTests OTBIO OTBCommon ${CAI_LIBRARY}   ITKIO ITKCommon)
+TARGET_LINK_LIBRARIES(otbCommonTests OTBIO OTBCommon ${CAI_LIBRARY}  ${GDAL_LIBRARY} ITKIO ITKCommon)
 
+#ADD_EXECUTABLE(otbRescaleImage otbRescaleImage.cxx)
+#TARGET_LINK_LIBRARIES(otbRescaleImage OTBIO OTBCommon ${CAI_LIBRARY}  ${GDAL_LIBRARY} ITKIO ITKCommon)
 
 
 
