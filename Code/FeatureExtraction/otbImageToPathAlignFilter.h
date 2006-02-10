@@ -14,11 +14,12 @@
 
 #include "itkImageSource.h"
 #include "itkConceptChecking.h"
+#include "itkImage.h"
 
 namespace otb
 {
   
-/** \class PathToImageAlignFilter
+/** \class ImageToPathAlignFilter
  * \brief Base class for filters that take a Path as input and produce an image as output.
  * Base class for filters that take a Path as input and produce an image as
  * output. By default, if the user does not specify the size of the output
@@ -27,11 +28,11 @@ namespace otb
  * assumed internally to be 1.0).
  */
 template <class TInputImage, class TOutputPath>
-class PathToImageAlignFilter : public itk::ImageSource<TInputImage>
+class ImageToPathAlignFilter : public itk::ImageSource<TInputImage>
 {
 public:
   /** Standard class typedefs. */
-  typedef PathToImageAlignFilter  Self;
+  typedef ImageToPathAlignFilter  Self;
   typedef itk::ImageSource<TInputImage>  Superclass;
   typedef itk::SmartPointer<Self>  Pointer;
   typedef itk::SmartPointer<const Self>  ConstPointer;
@@ -40,22 +41,30 @@ public:
   itkNewMacro(Self);
   
   /** Run-time type information (and related methods). */
-  itkTypeMacro(PathToImageAlignFilter,ImageSource);
+  itkTypeMacro(ImageToPathAlignFilter,ImageSource);
   
+  /** ImageDimension constants */
+  itkStaticConstMacro(InputImageDimension, unsigned int,
+                      TInputImage::ImageDimension);
+ 
   /** Some convenient typedefs. */
-  typedef typename Superclass::InputImageRegionType   InputImageRegionType;    
   typedef          TOutputPath                        OutputPathType;
   typedef typename OutputPathType::Pointer            OutputPathPointer;
   typedef typename OutputPathType::ConstPointer       OutputPathConstPointer;
   typedef          TInputImage                        InputImageType;          
+  typedef typename Superclass::InputImageRegionType   InputImageRegionType;    
   typedef typename InputImageType::Pointer            InputImagePointer;       
   typedef typename InputImageType::SizeType           SizeType;                 
-  typedef typename InputImageType::ValueType          ValueType;                
+  typedef typename InputImageType::ValueType          ValueType;  
+  typedef typename InputImageType::PixelType          PixelType;
+  typedef          double                             RealType;
+  typedef typename itk::Image<RealType,InputImageDimension>             RealImageType; 
+  typedef typename InputImageType::Pointer            RealImagePointer;       
+  
+  typedef typename itk::NumericTraits<PixelType>::RealType RealType;
+       
 
-  /** ImageDimension constants */
-  itkStaticConstMacro(InputImageDimension, unsigned int,
-                      TInputImage::ImageDimension);
-
+ 
   /** Spacing (size of a pixel) of the output image. The
    * spacing is the geometric distance between image samples.
    * It is stored internally as double, but may be set from
@@ -84,8 +93,8 @@ public:
   itkGetMacro(Size,SizeType);
 
 protected:
-  PathToImageAlignFilter();
-  ~PathToImageAlignFilter();
+  ImageToPathAlignFilter();
+  ~ImageToPathAlignFilter();
 
   virtual void GenerateOutputInformation(){}; // do nothing
   virtual void GenerateData();
@@ -100,8 +109,13 @@ protected:
   virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
 private:
-  PathToImageAlignFilter(const Self&); //purposely not implemented
+  ImageToPathAlignFilter(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
+  bool		m_isMeaningfulSegment;	/// to get all meaningful segments (maximal or not
+  int		m_NbGradDirection; 	/// Number of allowed gradient direction, default 16
+  int		m_NbLineDirection; 	/// Number of line directions to scan, default 96)
+  double	m_MinGradNorm;		/// Minimum gradient norm to define a direction, default 2.
+  double	m_Eps;			/// -log10(max. number of false alarms), default 0
 
 };
 
