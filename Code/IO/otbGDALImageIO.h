@@ -99,11 +99,11 @@ protected:
   /** Read all information on the image*/
   void InternalReadImageInformation();
   /** Dimension along Ox of the image*/
-  int width;
+  int m_width;
   /** Dimension along Oy of the image*/
-  int height;
+  int m_height;
   /** Number of bands of the image*/
-  int NbBands;
+  int m_NbBands;
   /** Buffer*/
   //float **pafimas;
   
@@ -116,10 +116,19 @@ private:
   GDALImageIO(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
 
+  /** Méthode analyse le nom du fichier a ouvrir. S'il s'agit d'un répertoire, 
+    * on regarde s'il contient un produit CEOS (fichier "DAT...")
+    * Dans ce cas, GdalFileName contient le nom du fichier a ouvrir. Sinon GdalFileName contient filename
+    */
+  void GetGdalImageFileName( const char * filename, std::string & GdalFileName );
+
+
   /** GDAL parameters. */
-  GDALDataset* poDataset;
-  GDALRasterBand** poBands;
-  GDALDataType PxType;
+  GDALDataset* m_poDataset;
+  GDALRasterBand** m_poBands;
+  GDALDataType m_PxType;
+  /** Nombre d'octets par pixel */
+  int           m_NbOctetPixel;
 
 
 };

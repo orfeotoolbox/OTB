@@ -409,15 +409,18 @@ bool CAIImageIO::CanWriteFile( const char * filename )
  
 void CAIImageIO::Read(void* buffer)
 {
-        unsigned long l=0;
         unsigned long step = this->GetNumberOfComponents();
         unsigned char * p = static_cast<unsigned char *>(buffer);
         CAI_OK_KO lCrCai=CAI_KO;
         int lNbLignes   = m_Dimensions[1];
         int lNbColonnes = m_Dimensions[0];
         unsigned long lNbPixels = (unsigned long)(lNbColonnes*lNbLignes);
+        unsigned long lTailleBuffer = (unsigned long)(m_NbOctetPixel)*lNbPixels;
         
-        unsigned char* value = new unsigned char[m_NbOctetPixel*lNbPixels];
+        unsigned char* value = new unsigned char[lTailleBuffer];
+        
+        // Mise a jour du step
+        step = step * (unsigned long)(m_NbOctetPixel);
 
         CAI_IMAGE * lCai(NULL);
 
@@ -436,30 +439,22 @@ void CAIImageIO::Read(void* buffer)
                                                 1,                      // Pas en X
                                                 1,                      // Pas en Y
                                                 value );
-        
                 if (lCrCai != CAI_OK)
                 {
-    	        	itk::ExceptionObject ex(__FILE__, __LINE__);
-    		        itk::OStringStream Message;
-            		Message << "Erreur lors de la lecture de l'image (format CAI) " << m_FileName.c_str() <<" ("<<CAI_ERREUR<<") .";
-    	        	ex.SetDescription(Message.str().c_str());
-    		        throw ex;
+    	        	itkExceptionMacro(<< "Erreur lors de la lecture de l'image (format CAI) " << m_FileName.c_str() <<" ("<<CAI_ERREUR<<") .");
                 }
                 // Recopie dans le buffer 
                 
                 unsigned long cpt(0);
-                cpt = (unsigned long )(nbComponents);
-                for ( unsigned long  i=0 ; i < lNbPixels ; i++ )
+                cpt = (unsigned long )(nbComponents)* (unsigned long)(m_NbOctetPixel);
+                for ( unsigned long  i=0 ; i < lTailleBuffer ; i = i+m_NbOctetPixel )
                 {
-                        p[cpt] = value[i];
+                        memcpy((void*)(&(p[cpt])),(const void*)(&(value[i])),(size_t)(m_NbOctetPixel));
                         cpt += step;
                 }
           }
 
         delete [] value;
-        //Ferme l'image CAI
-//        cai_ferme_image(m_Cai);
-//        m_Cai = NULL;
 }
 
 void CAIImageIO::ReadImageInformation()
@@ -482,11 +477,7 @@ void CAIImageIO::ReadImageInformation()
 						&NbLignes);
         if (lCai == NULL)
         {
-    		itk::ExceptionObject ex(__FILE__, __LINE__);
-    		itk::OStringStream Message;
-    		Message << "Impossible de lire les informations sur l'image " << m_FileName.c_str() <<" ("<<CaiFileName.c_str()<<";"<<CaiFormat.c_str()<<") : ("<<CAI_ERREUR<<").";
-    		ex.SetDescription(Message.str().c_str());
-    		throw ex;
+    		itkExceptionMacro(<< "Impossible de lire les informations sur l'image " << m_FileName.c_str() <<" ("<<CaiFileName.c_str()<<";"<<CaiFormat.c_str()<<") : ("<<CAI_ERREUR<<").");
         }
         
         this->SetNumberOfDimensions(2);
@@ -597,6 +588,8 @@ void CAIImageIO::WriteImageInformation(void)
                 m_NbOctetPixel = 1;
         }
 
+    std::cout<<"Component Type : "<<m_ComponentType<<std::endl;
+    std::cout<<"NbOctetPixel   : "<<m_NbOctetPixel<<std::endl;
         
         NbColonnes = m_Dimensions[0];
         NbLignes = m_Dimensions[1];
@@ -610,19 +603,14 @@ void CAIImageIO::WriteImageInformation(void)
 			        		NbOctetPixel,
 				        	NbColonnes,
 					        NbLignes,
-                                                "LABEL");
+                                                "Image creee par l'OTB");
         if (lCai == NULL)
         {
-    		itk::ExceptionObject ex(__FILE__, __LINE__);
-    		itk::OStringStream Message;
-    		Message << "Impossible d'ecrire les informations sur l'image (cai_ouvre_creation_image) " << m_FileName.c_str() <<" ("<<CaiFileName.c_str()<<";"<<CaiFormat.c_str()<<") : ("<<CAI_ERREUR<<").";
-    		ex.SetDescription(Message.str().c_str());
-    		throw ex;
+    		itkExceptionMacro(<< "Impossible d'ecrire les informations sur l'image (cai_ouvre_creation_image) " << m_FileName.c_str() <<" ("<<CaiFileName.c_str()<<";"<<CaiFormat.c_str()<<") : ("<<CAI_ERREUR<<").");
         }
         //Stock le pointer CAI
         m_ptrCai = (char*)lCai;
 }
-
 
 /** The write function is not implemented */
 void CAIImageIO::Write( const void* buffer) 
@@ -638,10 +626,14 @@ void CAIImageIO::Write( const void* buffer)
         int lNbLignes   = m_Dimensions[1];
         int lNbColonnes = m_Dimensions[0];
         unsigned long lNbPixels = (unsigned long)(lNbColonnes*lNbLignes);
+        unsigned long lTailleBuffer = (unsigned long)(m_NbOctetPixel)*lNbPixels;
         
-        unsigned char* value = new unsigned char[m_NbOctetPixel*lNbPixels];
+        unsigned char* value = new unsigned char[lTailleBuffer];
         CAI_IMAGE * lCai(NULL);
 
+        // Mise a jour du step
+        step = step * (unsigned long)(m_NbOctetPixel);
+        
         //Recupere pointeur sur structure CAI_IMAGE
         lCai = (CAI_IMAGE *)m_ptrCai;
         
@@ -649,13 +641,12 @@ void CAIImageIO::Write( const void* buffer)
         {
                 // Recopie dans le buffer 
                 unsigned long cpt(0);
-                cpt = (unsigned long )(nbComponents);
-                for ( unsigned long  i=0 ; i < lNbPixels ; i++ )
+                cpt = (unsigned long )(nbComponents)* (unsigned long)(m_NbOctetPixel);
+                for ( unsigned long  i=0 ; i < lTailleBuffer ; i = i+m_NbOctetPixel )
                 {
-                        value[i] = p[cpt];
+                        memcpy((void*)(&(value[i])),(const void*)(&(p[cpt])),(size_t)(m_NbOctetPixel));
                         cpt += step;
                 }
-        
                 lCrCai = cai_ecriture_canal(    lCai,
                                                 nbComponents+1,         // Numero canal
                                                 1,                      // Premiere ligne [1... ]
@@ -665,19 +656,12 @@ void CAIImageIO::Write( const void* buffer)
         
                 if (lCrCai != CAI_OK)
                 {
-    	        	itk::ExceptionObject ex(__FILE__, __LINE__);
-    		        itk::OStringStream Message;
-    		        Message << "Erreur lors de l'ecriture dans l'image (format CAI) " << m_FileName.c_str() <<" ("<<CAI_ERREUR<<") .";
-    	        	ex.SetDescription(Message.str().c_str());
-    		        throw ex;
+    	        	itkExceptionMacro(<< "Erreur lors de l'ecriture dans l'image (format CAI) " << m_FileName.c_str() <<" ("<<CAI_ERREUR<<") .");
                 }
                 
           }
 
         delete [] value;
-        //Ferme l'image CAI
-//        cai_ferme_image(lCai);
-//        m_ptrCai = NULL;
 }
 
 /** Print Self Method */

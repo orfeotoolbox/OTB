@@ -1,7 +1,9 @@
 #include "itkExceptionObject.h"
+#include "itkMacro.h"
 #include "itkByteSwapper.h"
 #include "itkRGBPixel.h"
 #include "itkRGBAPixel.h"
+
 #include <gdal.h>
 #include <gdal_priv.h>
 #include <iostream.h>
@@ -11,6 +13,11 @@
 #include <zlib.h>
 
 #include "otbGDALImageIO.h"
+//#include "otbCAIImageIO.h"
+#include "itkPNGImageIO.h"
+
+#include <sys/types.h>
+#include <dirent.h>
 
 namespace otb
 {
@@ -40,25 +47,84 @@ GDALImageIO::~GDALImageIO()
 {
 }
 
+
+void GDALImageIO::GetGdalImageFileName( const char * filename, std::string & GdalFileName )
+{
+        DIR *ptr_repertoire;
+        struct dirent *cr_readdir;
+        std::string str_debut("DAT");
+        char str_comp[20];
+        bool fic_trouve(false);
+
+        // Si c'est un répertoire, on regarde le contenu pour voir si c'est pas du RADARSAT, ERS
+        ptr_repertoire = opendir(filename);
+        if (ptr_repertoire != NULL)
+        {
+                while ((cr_readdir=readdir(ptr_repertoire))!=NULL && (fic_trouve==false) )
+                {
+                        strncpy(str_comp,cr_readdir->d_name,str_debut.size());
+                        str_comp[str_debut.size()]='\0';  
+                        if (strcasecmp(str_comp,str_debut.c_str())==0)
+                        {
+                                 GdalFileName = std::string(filename)+std::string(cr_readdir->d_name);
+                                 fic_trouve=true;
+                        }
+                }
+	}
+        else 
+        {
+                // Sinon le filename est le nom du fichier a ouvrir
+                GdalFileName = std::string(filename);
+        }
+	closedir(ptr_repertoire);
+}
+
 // Tell only if the file can be read with GDAL.
 bool GDALImageIO::CanReadFile(const char* file) 
 {
   // First check the extension
   m_currentfile = file;
-//  std::cout<<"Filename : "<<m_currentfile<<endl;
+  std::cout<<"Filename : "<<m_currentfile<<endl;
   
   if(  file == NULL )
     {
       itkDebugMacro(<<"No filename specified.");
       return false;
     }
+        bool lCanRead(false);
+
+        // Avant toutes choses, on regarde si cette image ne peut pas être lue par CAI
+/* 
+en commentaire car CAI est mis dasn les Factory avant GDAL
+  	otb::CAIImageIO::Pointer lCAIImageIO = otb::CAIImageIO::New();
+        lCanRead = lCAIImageIO->CanReadFile(file);
+        if ( lCanRead == true)
+        {
+                //Si oui, alors la priorité est donnée à CAI ; on dit que cette image ne doit pas être lue avec GDAL
+                //La priorité est donnée à CAI
+                return false;
+        }
+*/
+        //Traitement particulier sur certain format où l'on préfère utiliser 
+        // Format PNG -> lecture avec ITK (pas GDAL)
+  	itk::PNGImageIO::Pointer lPNGImageIO = itk::PNGImageIO::New();
+        lCanRead = lPNGImageIO->CanReadFile(file);
+        if ( lCanRead == true)
+        {
+                return false;
+        }
+
+        // Regarde si c'est un répertoire
+        std::string lFileNameGdal;
+        GetGdalImageFileName(file,lFileNameGdal);
+
 
   // Init GDAL parameters 
   GDALAllRegister();
   
   // Open file with GDAL 
-  poDataset = (GDALDataset *) GDALOpen(file, GA_ReadOnly );
-  if(poDataset==NULL)
+  m_poDataset = (GDALDataset *) GDALOpen(lFileNameGdal.c_str(), GA_ReadOnly );
+  if(m_poDataset==NULL)
     {
       itkDebugMacro(<<"No dataset ");
       return false;
@@ -86,7 +152,7 @@ void GDALImageIO::ReadVolume(void*)
 /*void GDALImageIO::SampleImage(void* buffer,int XBegin, int YBegin, int SizeXRead, int SizeYRead, int XSample, int YSample)
 {
   InputPixelType * p = static_cast<InputPixelType *>(buffer);
-  // pafimas = new float*[NbBands];
+  // pafimas = new float*[m_NbBands];
   //p= new unsigned short*;
   
   if(p==NULL)
@@ -95,25 +161,63 @@ void GDALImageIO::ReadVolume(void*)
    return;
    }
 
-  if((poBands[0]->RasterIO( GF_Read,XBegin, YBegin,SizeXRead,SizeYRead , p , XSample, YSample, GDT_Byte,0, 0 ))==CE_Failure)
+  if((m_poBands[0]->RasterIO( GF_Read,XBegin, YBegin,SizeXRead,SizeYRead , p , XSample, YSample, GDT_Byte,0, 0 ))==CE_Failure)
     std::cout<<"[GDALImageIO::Read] Failed in reading image "<<std::endl;
 }*/
 
 // Read image with GDAL
 void GDALImageIO::Read(void* buffer)
 {
-  // For the moment, we only deals with USHORT..... See after how to
-  // enable different types!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-  InputPixelType * p = static_cast<InputPixelType *>(buffer);
-  
-  if(p==NULL)
-   {
-   std::cout<<"Error in allocating memory"<<endl;
-   return;
-   }
+        unsigned long step = this->GetNumberOfComponents();
+        unsigned char * p = static_cast<unsigned char *>(buffer);
+        if(p==NULL)
+        {
+                itkExceptionMacro(<<"Erreur allocation mémoire");
+                return;
+        }
+        int lNbLignes   = m_Dimensions[1];
+        int lNbColonnes = m_Dimensions[0];
+        unsigned long lNbPixels = (unsigned long)(lNbColonnes*lNbLignes);
+        unsigned long lTailleBuffer = (unsigned long)(m_NbOctetPixel)*lNbPixels;
+        
+        unsigned char* value = new unsigned char[lTailleBuffer];
+        if(value==NULL)
+        {
+                itkExceptionMacro(<<"Erreur allocation mémoire");
+                return;
+        }
 
-  if((poBands[0]->RasterIO( GF_Read,0,0,m_Dimensions[0],m_Dimensions[1] , p , m_Dimensions[0], m_Dimensions[1], GDT_Byte,0, 0 ))==CE_Failure)
-    std::cout<<"[GDALImageIO::Read] Failed in reading image "<<std::endl;
+        // Mise a jour du step
+        step = step * (unsigned long)(m_NbOctetPixel);
+
+        CPLErr lCrGdal;
+        for ( int nbComponents = 0 ; nbComponents < this->GetNumberOfComponents() ; nbComponents++)
+        {
+                lCrGdal = m_poBands[nbComponents]->RasterIO( GF_Read,0,0,m_Dimensions[0],m_Dimensions[1] , value , lNbColonnes, lNbLignes, m_PxType,0, 0 ) ;
+                if (lCrGdal == CE_Failure)
+                {
+    	        	itkExceptionMacro(<< "Erreur lors de la lecture de l'image (format GDAL) " << m_FileName.c_str()<<".");
+                }
+                // Recopie dans le buffer 
+                
+                unsigned long cpt(0);
+/*                cpt = (unsigned long )(nbComponents);
+                for ( unsigned long  i=0 ; i < lNbPixels ; i++ )
+                {
+                        p[cpt] = value[i];
+                        cpt += step;
+                }*/
+                cpt = (unsigned long )(nbComponents)* (unsigned long)(m_NbOctetPixel);
+                for ( unsigned long  i=0 ; i < lTailleBuffer ; i = i+m_NbOctetPixel )
+                {
+                        memcpy((void*)(&(p[cpt])),(const void*)(&(value[i])),(size_t)(m_NbOctetPixel));
+                        cpt += step;
+                }
+
+
+          }
+
+        delete [] value;
 
 }
 
@@ -127,120 +231,170 @@ void GDALImageIO::InternalReadImageInformation()
 {
   int i;
 
-  m_FileName = (std::string) m_currentfile;
   if(  m_currentfile == NULL )
     {
-    itkDebugMacro(<<"No filename specified.");
+        itkExceptionMacro(<<"Le fichier n'est pas précisé.");
     }
   
+        // Recupre le nom réel du fichier a ouvrir
+        std::string lFileNameGdal;
+        GetGdalImageFileName(m_currentfile,lFileNameGdal);
+
   // Init GDAL parameters 
   GDALAllRegister();
   
   // Get Dataset 
-  poDataset = (GDALDataset *) GDALOpen(m_currentfile, GA_ReadOnly );
-  if(poDataset==NULL)
+  m_poDataset = (GDALDataset *) GDALOpen(lFileNameGdal.c_str(), GA_ReadOnly );
+  if(m_poDataset==NULL)
     {
-    itkExceptionMacro(<<"No dataset in GDAL file.");
+    itkExceptionMacro(<<"Le dataset du fichier GDAL est null.");
     return;
     }
   
   else
     {
     // Get image dimensions
-    width = poDataset->GetRasterXSize();
-    height = poDataset->GetRasterYSize();
+    m_width = m_poDataset->GetRasterXSize();
+    m_height = m_poDataset->GetRasterYSize();
        
-    if( width==0 & height==0)
+    if( m_width==0 & m_height==0)
       {
-      itkExceptionMacro(<<"No dimension defined.");
+      itkExceptionMacro(<<"La dimension n'est pas définie.");
       }
     else
       {
       // Set image dimensions into IO
-      m_Dimensions[0] = width;
-      m_Dimensions[1] = height;
-//      std::cout<<"Get Dimensions : x="<<m_Dimensions[0]<<" & y="<<m_Dimensions[1]<<endl;
+      m_Dimensions[0] = m_width;
+      m_Dimensions[1] = m_height;
+      std::cout<<"Get Dimensions : x="<<m_Dimensions[0]<<" & y="<<m_Dimensions[1]<<endl;
       }
 
     // Set Number of components
     // Get Number of Bands
-    NbBands = poDataset->GetRasterCount();
-    m_NumberOfComponents = NbBands;
-//    std::cout<<"Nb of Components : "<<m_NumberOfComponents<<endl;
+    m_NbBands = m_poDataset->GetRasterCount();
+//    m_NumberOfComponents = m_NbBands;
+    this->SetNumberOfComponents(m_NbBands);
+    std::cout<<"NbBands : "<<m_NbBands<<endl;
+
+    std::cout<<"Nb of Components : "<<this->GetNumberOfComponents()<<endl;
+
     
     // Set the number of dimensions (verify for the dim )
-    if( NbBands > 1 )
+// Modif OTB
+/*    if( m_NbBands > 1 )
       {
       this->SetNumberOfDimensions(3);
-      m_Dimensions[2] = NbBands;
+      m_Dimensions[2] = m_NbBands;
       }
     else
+      this->SetNumberOfDimensions(2);*/
       this->SetNumberOfDimensions(2);
+// Fin Modif OTB
 
-//    std::cout<<"Nb of Dimensions : "<<m_NumberOfDimensions<<endl;
+    std::cout<<"Nb of Dimensions : "<<m_NumberOfDimensions<<endl;
 
     // Automatically set the Type to Binary for GDAL data
     this->SetFileTypeToBinary();
     
    // Get all the Bands
-    poBands = new GDALRasterBand* [NbBands];
-    if(poBands==NULL)
+    m_poBands = new GDALRasterBand* [m_NbBands];
+    if(m_poBands==NULL)
       {
-      itkExceptionMacro(<<"No dataset in GDAL file.");
+      itkExceptionMacro(<<"Erreur d'allocation memoire du 'rasterBands'");
       return;
       }
-    for(i=0 ; i<NbBands ; i++)
-      poBands[i] = poDataset->GetRasterBand(i+1);
+    for(i=0 ; i<m_NbBands ; i++)
+      m_poBands[i] = m_poDataset->GetRasterBand(i+1);
 
     // Get Data Type
     // Consider only the data type given by the first band!!!!!
     // Maybe be could changed (to check)
-    PxType = poBands[0]->GetRasterDataType();
+    m_PxType = m_poBands[0]->GetRasterDataType();
 
     // Following the data type given by GDAL we set it for ImageIO
     // BE CAREFUL !!!! At this time the complex data type are regarded
     // as integer data type in hope that ITK uses that kind of system
     // (take time to check !!)
-    if(PxType == GDT_Byte)
+    if(m_PxType == GDT_Byte)
       {
       SetComponentType(CHAR);
       }
-    else if(PxType == GDT_UInt16)
+    else if(m_PxType == GDT_UInt16)
       {
       SetComponentType(USHORT);
       }
-    else if((PxType == GDT_Int16) || (PxType == GDT_CInt16) )
+    else if((m_PxType == GDT_Int16) || (m_PxType == GDT_CInt16) )
       {
       SetComponentType(SHORT);
       }
-    else if(PxType == GDT_UInt32)
+    else if(m_PxType == GDT_UInt32)
       {
-      SetComponentType(ULONG);
+      SetComponentType(UINT);
       }
-    else if((PxType == GDT_Int32) || (PxType == GDT_CInt32) )
+    else if((m_PxType == GDT_Int32) || (m_PxType == GDT_CInt32) )
       {
-      SetComponentType(LONG);
+      SetComponentType(INT);
       }
-    else if((PxType == GDT_Float32) || (PxType = GDT_CFloat32) )
+    else if((m_PxType == GDT_Float32) || (m_PxType = GDT_CFloat32) )
       {
       SetComponentType(FLOAT);
       }
-    else if((PxType == GDT_Float64) || (PxType == GDT_CFloat64) )
+    else if((m_PxType == GDT_Float64) || (m_PxType == GDT_CFloat64) )
       {
       SetComponentType(DOUBLE);
       }
     else
       {
-      itkExceptionMacro(<<"Unrecognized type");
+      itkExceptionMacro(<<"Type de codage des pixels non reconu");
       }
 
-//    std::cout<<"Component Type : "<<m_ComponentType<<endl;
+
+        if ( this->GetComponentType() == CHAR )
+        {
+                m_NbOctetPixel = 1;
+        }
+        else if ( this->GetComponentType() == UCHAR )
+        {
+                m_NbOctetPixel = 1;
+        }
+        else if ( this->GetComponentType() == USHORT )
+        {
+                m_NbOctetPixel = 2;
+        }
+        else if ( this->GetComponentType() == SHORT )
+        {
+                m_NbOctetPixel = 2;
+        }
+        else if ( this->GetComponentType() == INT )
+        {
+                m_NbOctetPixel = 4;
+        }
+        else if ( this->GetComponentType() == UINT )
+        {
+                m_NbOctetPixel = 4;
+        }
+        else if ( this->GetComponentType() == FLOAT )
+        {
+                m_NbOctetPixel = 4;
+        }
+        else if ( this->GetComponentType() == DOUBLE )
+        {
+                m_NbOctetPixel = 8;
+        }
+        else 
+        {
+                m_NbOctetPixel = 1;
+        }
     
+    std::cout<<"Component Type : "<<m_ComponentType<<std::endl;
+    std::cout<<"NbOctetPixel   : "<<m_NbOctetPixel<<std::endl;
+
+
     // See to take the spacing with GDAL
     // Find a way to get the good indice for papszMetadata for all the
     // dataset (the one set is working for dat_01.001!!)
     /**********************************/ 
-    /*char** papszMetadata = GDALGetMetadata(poDataset,NULL);
+    /*char** papszMetadata = GDALGetMetadata(m_poDataset,NULL);
     if(CSLCount(papszMetadata) > 0)
       {
       m_Spacing[0] = (double)papszMetadata[18];
@@ -268,9 +422,9 @@ void GDALImageIO::InternalReadImageInformation()
     char * cpS;
     char * cpSpacx;
     char * cpSpacy;
-    papszMetadata = GDALGetMetadata( poDataset, NULL );
+    papszMetadata = GDALGetMetadata( m_poDataset, NULL );
     
-    GDALDriverH hDriver = GDALGetDatasetDriver( poDataset );
+    GDALDriverH hDriver = GDALGetDatasetDriver( m_poDataset );
     printf( "Driver: %s/%s\n",
 	    GDALGetDriverShortName( hDriver ),
 	    GDALGetDriverLongName( hDriver ) );
@@ -293,14 +447,14 @@ void GDALImageIO::InternalReadImageInformation()
 	   }
 	 }
        // use the number of bands to know which spot
-       if(spot=true)
+       if(spot==true)
 	 {
-	 if(NbBands == 3)
+	 if(m_NbBands == 3)
 	   {
 	   m_Spacing[0] = 20;
 	   m_Spacing[1] = 20;
 	   }
-	 else if(NbBands == 4)
+	 else if(m_NbBands == 4)
 	   {
 	   if(m_Dimensions[0] == 6000 && m_Dimensions[1] == 6000 )
 	     {
@@ -313,7 +467,7 @@ void GDALImageIO::InternalReadImageInformation()
 	     m_Spacing[1] = 20;
 	     }
 	   }
-	 else if(NbBands == 1)
+	 else if(m_NbBands == 1)
 	   {
 	   if(m_Dimensions[0] == 12000 && m_Dimensions[1] == 12000)
 	     {
@@ -367,15 +521,27 @@ void GDALImageIO::InternalReadImageInformation()
     /******************************************************************/
     // Pixel Type always set to Scalar for GDAL ? maybe also to vector ?
     int numComp = 1;
-    this->SetPixelType(SCALAR);
-    this-> SetNumberOfComponents(numComp);
+
+// Modif OTB : 
+//    this->SetPixelType(SCALAR);
+//        this-> SetNumberOfComponents(numComp);
+        this-> SetNumberOfComponents(m_NbBands);
+        if( this->GetNumberOfComponents() == 1 )
+        {
+                this->SetPixelType(SCALAR);
+        }
+        else
+        {
+                this->SetPixelType(VECTOR);
+        }
     }
 
 }
 
-/** TODO : Methode CanWriteFile non implementee */
+/** On décide que l'on n epeut pas créer des images dans les formats GDAL */
 bool GDALImageIO::CanWriteFile( const char* name )
 {
+        return false;
 }
 
 /** TODO : Methode Write non implementee */

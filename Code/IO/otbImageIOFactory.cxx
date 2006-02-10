@@ -36,7 +36,7 @@ ImageIOFactory::RegisterBuiltInFactories()
                         // CAI : Nouveau format de l'OTB
                         itk::ObjectFactoryBase::RegisterFactory( CAIImageIOFactory::New() );
                         // GDAL : Nouveau format de l'OTB
-//                        itk::ObjectFactoryBase::RegisterFactory( GDALImageIOFactory::New() );
+                        itk::ObjectFactoryBase::RegisterFactory( GDALImageIOFactory::New() );
                         firstTime = false;
                 }
         }
