@@ -12,7 +12,7 @@
 #ifndef __otbImageToPathAlignFilter_txx
 #define __otbImageToPathAlignFilter_txx
 
-#include "otbImageToPathFilter.h"
+#include "otbImageToPathAlignFilter.h"
 #include "itkImageRegionIteratorWithIndex.h"
 #include "itkPathIterator.h"
 #include "itkNumericTraits.h"
