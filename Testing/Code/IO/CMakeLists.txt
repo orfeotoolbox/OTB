@@ -8,34 +8,45 @@ SET(TEMP ${OTBTesting_BINARY_DIR}/Temporary)
 #Tolerance sur diff pixel image
 SET(TOL 0.0)
 
-# !!!!!  Pointe sur un exe généré dan sle repertoire Common
+# !!!!!  Pointe sur un exe généré dans le repertoire Common
 SET(COMMON_TESTS ${CXX_TEST_PATH}/otbCommonTests)
 
 
+# ---  RADARSAT (GDAL)  ---
+ADD_TEST(ioTvMultiMonoChannelROI_RADARSAT2BSQ ${COMMON_TESTS} 
+         otbMultiToMonoChannelExtractROI
+         -ushort ${INPUTDATA}/RADARSAT1/SCENE01/
+         -ushort ${TEMP}/ioMultiMonoChannelROI_RADARSAT2PNG_2559_3591_337_280.hd
+         -startX 2559 -startY 3591 -sizeX 337 -sizeY 280 )
 
-ADD_EXECUTABLE(otbGDALImageIOTestCanRead otbGDALImageIOTestCanRead.cxx )
-TARGET_LINK_LIBRARIES(otbGDALImageIOTestCanRead OTBIO OTBCommon ${CAI_LIBRARY} ${GDAL_LIBRARY} ITKIO ITKCommon)
-ADD_TEST(ioTuGDALImageIOCanReadPNG ${CXX_TEST_PATH}/otbGDALImageIOTestCanRead 
-        ${INPUTDATA}/sbuv.png )
+# ---  RADARSAT (GDAL)  Nom répertoire ---
+ADD_TEST(ioTvMultiMonoChannelROI_RADARSAT_BSQ2BSQ2 ${COMMON_TESTS} 
+   --compare-image ${TOL} ${TEMP}/ioMultiMonoChannelROI_RADARSAT2PNG_2559_3591_337_280.hd
+                      ${TEMP}/ioMultiMonoChannelROI_RADARSAT2PNG_2559_3591_337_280_2.hd
+         otbMultiToMonoChannelExtractROI
+         -ushort ${TEMP}/ioMultiMonoChannelROI_RADARSAT2PNG_2559_3591_337_280.hd
+         -ushort ${TEMP}/ioMultiMonoChannelROI_RADARSAT2PNG_2559_3591_337_280_2.hd
+         -startX 0 -startY 0 -sizeX 337 -sizeY 280 )
 
-ADD_TEST(ioTuGDALImageIOCanRead_JPG ${CXX_TEST_PATH}/otbGDALImageIOTestCanRead 
-        ${INPUTDATA}/poupees.jpg )
+# ---  SAR_ERS2_SLCI (GDAL)  ---
+ADD_TEST(ioTvMultiMonoChannelROI_SAR_ERS2_SLCI2BSQ ${COMMON_TESTS} 
+#   --compare-image ${TOL}   ${BASELINE}/ioExtractROI_BSQ2PNG_poupees_100_100_77_300_channels_1_2_3.png
+#                     ${TEMP}/ioExtractROI_BSQ2PNG_poupees_100_100_77_300_channels_1_2_3.png
+         otbMultiToMonoChannelExtractROI
+         -ushort ${INPUTDATA}/SAR_ERS2_SLCI_SCENE1/DAT_01.001 
+         -ushort ${TEMP}/ioMultiMonoChannelROI_SAR_ERS2_SLCI2PNG_channel_1.hd
+         -startX 200 -startY 100 -sizeX 1000 -sizeY 1000
+         -channel 1)
 
-ADD_TEST(ioTuGDALImageIOCanRead_ENVI ${CXX_TEST_PATH}/otbGDALImageIOTestCanRead 
-        ${INPUTDATA}/poupees_1canal.c1 )
-
-ADD_TEST(ioTuGDALImageIOCanRead_RADARSAT ${CXX_TEST_PATH}/otbGDALImageIOTestCanRead 
-        ${INPUTDATA}/RADARSAT1/SCENE01/DAT_01.001 )
-
-ADD_TEST(ioTuGDALImageIOCanRead_SAR_ERS2 ${CXX_TEST_PATH}/otbGDALImageIOTestCanRead 
-        ${INPUTDATA}/SAR_ERS2_SLCI_SCENE1/DAT_01.001 )
-
-ADD_TEST(ioTuGDALImageIOCanRead_PALSAR ${CXX_TEST_PATH}/otbGDALImageIOTestCanRead 
-        ${INPUTDATA}/PALSAR_L41/PASL4100212160127170308070002/PASL4100212160127170308070002_ortho.dat )
-
-
-
-
+# ---  ENVI (GDAL) ---
+ADD_TEST(ioTvMultiMonoChannelROI_ENVI2PNG ${COMMON_TESTS} 
+   --compare-image ${TOL}   ${BASELINE}/ioMultiMonoChannelROI_ENVI2PNG_poupees_1canal_302_2_134_330.png
+                     ${TEMP}/ioMultiMonoChannelROI_ENVI2PNG_poupees_1canal_302_2_134_330.png
+         otbMultiToMonoChannelExtractROI
+         ${INPUTDATA}/poupees_1canal.c1
+         ${TEMP}/ioMultiMonoChannelROI_ENVI2PNG_poupees_1canal_302_2_134_330.png
+         -startX 302 -startY 2 -sizeX 134 -sizeY 330
+         -channel 1)
 
 
 # ------- TEST IO COMMON   ------------------------------
@@ -59,6 +70,20 @@ ADD_TEST(ioTuCAIImageIOCanReadSPOT5TIF ${IO_TESTS} otbCAIImageIOTestCanRead
 
 ADD_TEST(ioTuCAIImageIOCanReadSPOT5BIL ${IO_TESTS} otbCAIImageIOTestCanRead
         ${INPUTDATA}/poupeesBIL )
+
+# -------            otb::GDALImageIO   ------------------------------
+
+ADD_TEST(ioTuGDALImageIOCanRead_JPG ${IO_TESTS} otbGDALImageIOTestCanRead 
+        ${INPUTDATA}/poupees.jpg )
+
+ADD_TEST(ioTuGDALImageIOCanRead_ENVI ${IO_TESTS} otbGDALImageIOTestCanRead 
+        ${INPUTDATA}/poupees_1canal.c1 )
+
+ADD_TEST(ioTuGDALImageIOCanRead_RADARSAT ${IO_TESTS} otbGDALImageIOTestCanRead 
+        ${INPUTDATA}/RADARSAT1/SCENE01/DAT_01.001 )
+
+ADD_TEST(ioTuGDALImageIOCanRead_SAR_ERS2 ${IO_TESTS} otbGDALImageIOTestCanRead 
+        ${INPUTDATA}/SAR_ERS2_SLCI_SCENE1/DAT_01.001 )
 
 # CanWrite()
 ADD_TEST(ioTuCAIImageIOCanWriteBSQ ${IO_TESTS} otbCAIImageIOTestCanWrite ${TEMP}/ioCAIImageIOCanWriteBSQ.hd )
@@ -125,6 +150,8 @@ ADD_TEST(ioTvImageFileWriterPNG2PNG ${IO_TESTS}
         ${TEMP}/ioImageFileWriterPNG2PNG_cthead1.png )
 
 ADD_TEST(ioTvImageFileWriterPNG2BSQ ${IO_TESTS} 
+  --compare-image ${TOL}   ${INPUTDATA}/cthead1.png
+                    ${TEMP}/ioImageFileWriterPNG2BSQ_cthead1.hd
         otbImageFileWriterTest
         ${INPUTDATA}/cthead1.png 
         ${TEMP}/ioImageFileWriterPNG2BSQ_cthead1.hd )
@@ -198,8 +225,8 @@ ADD_TEST(ioTvMultiChannelROI_BSQ2PNG_2 ${COMMON_TESTS}
    --compare-image ${TOL}   ${BASELINE}/ioExtractROI_BSQ2PNG_poupees_100_100_77_300_channels_1_2_3.png
                      ${TEMP}/ioExtractROI_BSQ2PNG_poupees_100_100_77_300_channels_1_2_3.png
          otbMultiChannelExtractROI
-         ${INPUTDATA}/poupees.hd
-         ${TEMP}/ioExtractROI_BSQ2PNG_poupees_100_100_77_300_channels_1_2_3.png
+         -uchar ${INPUTDATA}/poupees.hd
+         -uchar ${TEMP}/ioExtractROI_BSQ2PNG_poupees_100_100_77_300_channels_1_2_3.png
          -startX 100 -startY 100 -sizeX 77 -sizeY 300
          -channels 1 2 3 )
 
@@ -257,20 +284,15 @@ ADD_TEST(ioTvMultiChannelROI_SPOT52PNG_5 ${COMMON_TESTS}
          -startX 700 -startY 700 -sizeX 1000 -sizeY 1000
          -channels 4 )
 
-# ---  BSQ (CAI)  ---
-#ADD_TEST(ioTvMultiChannelROI_BSQ2PNG_2 ${COMMON_TESTS} 
-#   --compare-image ${TOL}   ${BASELINE}/ioExtractROI_BSQ2PNG_poupees_100_100_77_300_channels_1_2_3.png
-#                     ${TEMP}/ioExtractROI_BSQ2PNG_poupees_100_100_77_300_channels_1_2_3.png
-#         otbMultiChannelExtractROI
-#         ${INPUTDATA}/poupees.hd
-#         ${TEMP}/ioExtractROI_BSQ2PNG_poupees_100_100_77_300_channels_1_2_3.png
-#         -startX 100 -startY 100 -sizeX 77 -sizeY 300
-#         -channels 1 2 3 )
+
+
+
 
 
 
 
 SET(BasicIO_SRCS
+otbGDALImageIOTestCanRead.cxx
 otbCAIImageIOTestCanRead.cxx
 otbCAIImageIOTestCanWrite.cxx
 otbImageFileReaderTest.cxx

@@ -7,7 +7,7 @@
 #include "itkExceptionObject.h"
 #include <iostream>
 
-int main(int argc, char* argv[])
+int otbGDALImageIOTestCanRead(int argc, char* argv[])
 {
   try
   {
