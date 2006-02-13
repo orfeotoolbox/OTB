@@ -121,8 +121,8 @@ int otbMultiToMonoChannelExtractROI ( int argc, char ** argv )
         // Type -> uchar
         else if (  (linputPixelType=="-ushort")&&(loutputPixelType=="-uchar") )         return (generic_otbMultiToMonoChannelExtractROI< unsigned short, unsigned char >( argc,argv,inputFilename,outputFilename) );
         else if (  (linputPixelType=="-uint")&&(loutputPixelType=="-uchar") )           return (generic_otbMultiToMonoChannelExtractROI< unsigned int, unsigned char >( argc,argv,inputFilename,outputFilename) );
-        else if (  (linputPixelType=="-float")&&(loutputPixelType=="-uchar") )          return (generic_otbMultiToMonoChannelExtractROI< float, unsigned char >( argc,argv,inputFilename,outputFilename) );
-        else if (  (linputPixelType=="-double")&&(loutputPixelType=="-uchar") )         return (generic_otbMultiToMonoChannelExtractROI< double, unsigned char >( argc,argv,inputFilename,outputFilename) );
+//        else if (  (linputPixelType=="-float")&&(loutputPixelType=="-uchar") )          return (generic_otbMultiToMonoChannelExtractROI< float, unsigned char >( argc,argv,inputFilename,outputFilename) );
+//        else if (  (linputPixelType=="-double")&&(loutputPixelType=="-uchar") )         return (generic_otbMultiToMonoChannelExtractROI< double, unsigned char >( argc,argv,inputFilename,outputFilename) );
         else 
         {       
                 std::cout << " Erreur : le format des images en entrée est mal précisé dans la ligne de commande !!!"<<std::endl;

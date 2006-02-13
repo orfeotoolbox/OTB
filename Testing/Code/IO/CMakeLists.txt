@@ -73,9 +73,6 @@ ADD_TEST(ioTuCAIImageIOCanReadSPOT5BIL ${IO_TESTS} otbCAIImageIOTestCanRead
 
 # -------            otb::GDALImageIO   ------------------------------
 
-ADD_TEST(ioTuGDALImageIOCanRead_JPG ${IO_TESTS} otbGDALImageIOTestCanRead 
-        ${INPUTDATA}/poupees.jpg )
-
 ADD_TEST(ioTuGDALImageIOCanRead_ENVI ${IO_TESTS} otbGDALImageIOTestCanRead 
         ${INPUTDATA}/poupees_1canal.c1 )
 
@@ -86,7 +83,8 @@ ADD_TEST(ioTuGDALImageIOCanRead_SAR_ERS2 ${IO_TESTS} otbGDALImageIOTestCanRead
         ${INPUTDATA}/SAR_ERS2_SLCI_SCENE1/DAT_01.001 )
 
 # CanWrite()
-ADD_TEST(ioTuCAIImageIOCanWriteBSQ ${IO_TESTS} otbCAIImageIOTestCanWrite ${TEMP}/ioCAIImageIOCanWriteBSQ.hd )
+ADD_TEST(ioTuCAIImageIOCanWriteBSQ ${IO_TESTS} otbCAIImageIOTestCanWrite 
+        ${TEMP}/ioCAIImageIOCanWriteBSQ.hd )
 
 
 
@@ -150,12 +148,9 @@ ADD_TEST(ioTvImageFileWriterPNG2PNG ${IO_TESTS}
         ${TEMP}/ioImageFileWriterPNG2PNG_cthead1.png )
 
 ADD_TEST(ioTvImageFileWriterPNG2BSQ ${IO_TESTS} 
-  --compare-image ${TOL}   ${INPUTDATA}/cthead1.png
-                    ${TEMP}/ioImageFileWriterPNG2BSQ_cthead1.hd
         otbImageFileWriterTest
         ${INPUTDATA}/cthead1.png 
         ${TEMP}/ioImageFileWriterPNG2BSQ_cthead1.hd )
-
 ADD_TEST(ioTvImageFileReaderBSQ2PNG ${IO_TESTS} 
   --compare-image ${TOL}   ${INPUTDATA}/cthead1.png
                     ${TEMP}/ioImageFileWriterPNG2BSQ_cthead1_2.png
@@ -182,23 +177,6 @@ ADD_TEST(ioTvImageFileReaderRGB_BSQ2PNG_2 ${IO_TESTS}
         otbImageFileReaderRGBTest
         ${TEMP}/ioImageFileWriterRGB_PNG2BSQ_sbuv.hd
         ${TEMP}/ioImageFileWriterRGB_PNG2BSQ_sbuv_2.png )
-
-
-
-
-#ADD_TEST(ioTvImageFileWriterPNG2PNG ${IO_TESTS} otbImageFileWriterTest
-#        ${INPUTDATA}/cthead1.png 
-#        ${TEMP}/otb_writer_cthead1.png )
-
-#ADD_TEST(ioTvImageFileWriterPNG2BSQ ${IO_TESTS} otbImageFileWriterTest
-#        ${INPUTDATA}/cthead1.png 
-#        ${TEMP}/otb_writer_cthead1.hd )
-
-
-#ADD_TEST(ioTvImageFileWriterRGBPNG2BSQ ${IO_TESTS} otbImageFileWriterRGBTest
-#        ${INPUTDATA}/sbuv.png 
-#        ${TEMP}/otb_writer_RGB_poupees.hd )
-
 
 
 # -------            otb::MultiChannelExtractROI   ------------------------------

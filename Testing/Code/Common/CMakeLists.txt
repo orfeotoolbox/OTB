@@ -11,6 +11,10 @@ SET(TOL 0.0)
 
 SET(COMMON_TESTS ${CXX_TEST_PATH}/otbCommonTests)
 
+ADD_TEST(coTuCommandLineArgumentParser ${COMMON_TESTS}  
+        otbTestCommandLineArgumentParser
+        -image image.png -entier 150 -e 200 -double 12.25 -float 45.36 -deuxentiers 78 56 )
+
 
 # -------            otb::ExtractROI   ------------------------------
 
@@ -45,7 +49,7 @@ ADD_TEST(coTvMultiChannelROI_RGB2RGB_PNG ${COMMON_TESTS}
          otbMultiChannelExtractROI 
          ${INPUTDATA}/sbuv.png 
          ${TEMP}/coMultiChannelExtractROI_RGB2RGB_PNG_sbuv.png
-         )
+         -channels 1 2 3 )
 #         -sizeX 800 -sizeY 600 )
 
 ADD_TEST(coTvMultiChannelROI_RGB2RGB_PNG2 ${COMMON_TESTS}   
@@ -118,6 +122,7 @@ ADD_TEST(coTvMultiToMonoROI_RGB2NG_PNG ${COMMON_TESTS}
 
 # -------       Fichiers sources CXX -----------------------------------
 SET(BasicCommon_SRCS
+otbTestCommandLineArgumentParser.cxx
 otbExtractROI.cxx
 otbExtractROI_RGB.cxx
 otbMultiChannelExtractROI.cxx

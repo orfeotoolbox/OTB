@@ -168,8 +168,8 @@ int otbMultiChannelExtractROI ( int argc, char ** argv )
         // Type -> uchar
         else if (  (linputPixelType=="-ushort")&&(loutputPixelType=="-uchar") )         return (generic_otbMultiChannelExtractROI< unsigned short, unsigned char >( argc,argv,inputFilename,outputFilename) );
         else if (  (linputPixelType=="-uint")&&(loutputPixelType=="-uchar") )           return (generic_otbMultiChannelExtractROI< unsigned int, unsigned char >( argc,argv,inputFilename,outputFilename) );
-        else if (  (linputPixelType=="-float")&&(loutputPixelType=="-uchar") )          return (generic_otbMultiChannelExtractROI< float, unsigned char >( argc,argv,inputFilename,outputFilename) );
-        else if (  (linputPixelType=="-double")&&(loutputPixelType=="-uchar") )         return (generic_otbMultiChannelExtractROI< double, unsigned char >( argc,argv,inputFilename,outputFilename) );
+//        else if (  (linputPixelType=="-float")&&(loutputPixelType=="-uchar") )          return (generic_otbMultiChannelExtractROI< float, unsigned char >( argc,argv,inputFilename,outputFilename) );
+//        else if (  (linputPixelType=="-double")&&(loutputPixelType=="-uchar") )         return (generic_otbMultiChannelExtractROI< double, unsigned char >( argc,argv,inputFilename,outputFilename) );
         else 
         {       
                 std::cout << " Erreur : le format des images en entrée est mal précisé dans la ligne de commande !!!"<<std::endl;

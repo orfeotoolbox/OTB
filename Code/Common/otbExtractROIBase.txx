@@ -130,12 +130,14 @@ ExtractROIBase<TInputImage,TOutputImage>
         const InputImageRegionType& inputRegion = inputPtr->GetRequestedRegion();
         if ( m_SizeX == 0 )
         {
-                m_SizeX = inputRegion.GetSize()[1] - m_StartX;
+                m_SizeX = inputRegion.GetSize()[0] - m_StartX;
         }
         if ( m_SizeY == 0 )
         {       
-                m_SizeY = inputRegion.GetSize()[0] - m_StartY;
+                m_SizeY = inputRegion.GetSize()[1] - m_StartY;
         }
+        
+        
 //std::cout <<"m_Start "<<m_StartX<<"  "<<m_StartY<<" m_Size "<<m_SizeX  <<"  "<<m_SizeY<<" "<<inputRegion.GetSize()[1] <<"  "<<inputRegion.GetSize()[0]<<std::endl;
 
         InputImageIndexType start;
