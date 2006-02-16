@@ -104,7 +104,9 @@ ImageFileReader<TOutputImage, ConvertPixelTraits>
   //
   this->m_ImageIO->SetFileName(this->m_FileName.c_str());
   this->m_ImageIO->ReadImageInformation();
-
+  // Initialisation du nombre de Composante par pixel
+  output->SetNumberOfComponentsPerPixel(this->m_ImageIO->GetNumberOfComponents()); 
+  
   SizeType dimSize;
   double spacing[ TOutputImage::ImageDimension ];
   double origin[ TOutputImage::ImageDimension ];
