@@ -33,7 +33,7 @@ ADD_TEST(feTuFiltreFrost ${FEATUREEXTRACTION_TESTS}
 ADD_TEST(feTuAlignMV2ITK ${FEATUREEXTRACTION_TESTS}  
         otbAlignImageToPath
 	${INPUTDATA}/poupees.hd
-	${TEMP}/feAlign.png)
+	${TEMP}/feAlign.txt)
 	
 		        
 #ADD_TEST(tvFEPatrick2 ${FEATUREEXTRACTION_TESTS}  
