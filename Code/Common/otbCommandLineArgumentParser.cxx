@@ -6,107 +6,6 @@
 namespace otb
 {
 
-void 
-CommandLineArgumentParser
-::AddOption(const char *name, const int nParameters, const char * comment)
-{
-  // Create a structure for the command
-  OptionType option;
-  option.CommonName = std::string(name);
-  option.CommentName = std::string(comment);
-  option.NumberOfParameters = nParameters;
-
-  // Add the option to the map
-  m_OptionMap[std::string(name)] = option;
-}
-
-void 
-CommandLineArgumentParser
-::AddSynonim(const char *option, const char *synonim)
-{
-  std::string strOption(option);
-  std::string strSynonim(synonim);
-
-  // The option should exist!
-  assert(m_OptionMap.find(strOption) != m_OptionMap.end());
-
-  // Create a new option object
-  OptionType o;
-  o.NumberOfParameters = m_OptionMap[strOption].NumberOfParameters;
-  o.CommentName = m_OptionMap[strOption].CommentName;
-  o.CommonName = strOption;
-
-  // Insert the option into the map
-  m_OptionMap[strSynonim] = o;
-}
-
-bool 
-CommandLineArgumentParser
-::TryParseCommandLine(int argc, char *argv[], 
-                      CommandLineArgumentParseResult &outResult,
-                      bool failOnUnknownTrailingParameters)
-{
-  // Clear the result
-  outResult.Clear();
-
-  m_ProgramName = std::string(argv[0]);
-
-  // Go through the arguments
-  for(int i=1; i < argc; i++)
-    {
-    // Get the next argument
-    std::string arg(argv[i]);
-
-    // Check if the argument is known
-    if(m_OptionMap.find(arg) == m_OptionMap.end())
-      {
-      if(failOnUnknownTrailingParameters)
-        {
-        // Unknown argument found
-        std::cerr << "Unrecognized command line option '" << arg << "'" << std::endl;
-        return false;
-        }
-      else return true;
-      }
-
-    // Check if the number of parameters is correct
-    int nParameters = m_OptionMap[arg].NumberOfParameters;
-    if(i+nParameters >= argc) 
-      {
-      // Too few parameters
-      std::cerr << "Too few parameters to command line option '" << arg << "'" << std::endl;
-      return false;
-      }
-
-    // Tell the result that the option has been encountered
-    outResult.AddOption(m_OptionMap[arg].CommonName,nParameters);
-
-    // Pass in the parameters
-    for(int j=0;j<nParameters;j++,i++)
-      outResult.AddParameter(m_OptionMap[arg].CommonName,std::string(argv[i+1]));
-    
-    }
-
-  // Everything is good
-  return true;
-}
-
-void
-CommandLineArgumentParser
-::PrintUsage(std::ostream& os/*, itk::Indent indent*/)const
-{
-        os << " Usage : "<<m_ProgramName<<std::endl;
-        OptionMapType::const_iterator iterMap = m_OptionMap.begin();
-        
-//        iterMap.first
-/*        while ( ! iterMap.end() )
-        {
-                os << iterMap<<std::endl;
-                ++iterMap;
-        }*/
-
-}
-
 
 // --------- CommandLineArgumentParseResult  ----------------------------------------
 void
@@ -120,26 +19,41 @@ CommandLineArgumentParseResult
 
 
 
-
-
-
-
 bool 
 CommandLineArgumentParseResult
-::IsOptionPresent(const char *option)
+::IsOptionPresent(const char *option)const
 {
   return (m_OptionMap.find(std::string(option)) != m_OptionMap.end());
 }
 
-const char * 
+
+
+
+std::string 
 CommandLineArgumentParseResult
-::GetOptionParameter(const char *option, unsigned int number)
+::GetStringParameter(const char *option, unsigned int number)const
+{
+  assert(this->IsOptionPresent(option));
+  
+  OptionMapType::const_iterator it = m_OptionMap.begin();
+  it = m_OptionMap.find(std::string(option));
+  
+//  assert(number < m_OptionMap[std::string(option)].size());
+ParameterArrayType pat = (*it).second;
+
+std::string lString = pat[number];
+
+  return ( lString );
+}
+int  
+CommandLineArgumentParseResult
+::GetNumberOfParameters(const char *option)
 {
   assert(IsOptionPresent(option));
-  assert(number < m_OptionMap[std::string(option)].size());
-
-  return m_OptionMap[std::string(option)][number].c_str();
+  return (m_OptionMap[std::string(option)].size());
 }
+
+
 
 
 void  
@@ -151,10 +65,10 @@ CommandLineArgumentParseResult
 
 void  
 CommandLineArgumentParseResult
-::AddOption(const std::string &option, int nParms)
+::AddOption(const std::string &option)
 {
   ParameterArrayType pat;
-  pat.reserve(nParms);
+//  pat.reserve(nParms);
   m_OptionMap[option] = pat;
 }
 
@@ -164,6 +78,229 @@ CommandLineArgumentParseResult
 {
   m_OptionMap[option].push_back(parameter);  
 }
+
+
+// --------- CommandLineArgumentParser  ----------------------------------------
+void 
+CommandLineArgumentParser
+::AddOption(const char *name, const  char * comment, char *synonim, int nParameters, bool obligatory )
+{
+  // Create a structure for the command
+  OptionType option;
+  option.CommonName  = std::string(name);
+  option.Description = std::string(comment);
+  option.Synonim     = std::string(synonim);
+  option.NumberOfParameters = nParameters;
+  option.NumberOfParametersFixed = true;
+  option.Obligatory = obligatory;
+  option.Finded = false;
+
+  // Add the option to the map
+  m_OptionList.push_back(option);
+  
+}
+
+void 
+CommandLineArgumentParser
+::AddOptionNParams(const char *name, const char * comment, char *synonim, bool obligatory )
+{
+  // Create a structure for the command
+  OptionType option;
+  option.CommonName  = std::string(name);
+  option.Description = std::string(comment);
+  option.Synonim     = std::string(synonim);
+  option.NumberOfParameters = -1;
+  option.NumberOfParametersFixed = false;
+  option.Obligatory = obligatory;
+  option.Finded = false;
+
+  // Add the option to the map
+  m_OptionList.push_back(option);
+
+	
+}
+
+void 
+CommandLineArgumentParser
+::ParseCommandLine(int argc, char *argv[], 
+                           CommandLineArgumentParseResult &outResult,
+                           bool failOnUnknownTrailingParameters )
+{
+	
+	bool tryParse = TryParseCommandLine(argc, argv, outResult, failOnUnknownTrailingParameters);
+	if ( tryParse == false )
+	{
+		PrintUsage(std::cerr);
+		//Exit du programme (cette méthode doit etre appelée dans un main)
+		// ou itkException ???
+		exit(EXIT_FAILURE);
+	}
+}
+
+
+bool 
+CommandLineArgumentParser
+::TryParseCommandLine(int argc, char *argv[], 
+                      CommandLineArgumentParseResult &outResult,
+                      bool failOnUnknownTrailingParameters)
+{
+  // Clear the result
+  outResult.Clear();
+
+  m_ProgramName = std::string(argv[0]);
+  int index(0);
+  
+  // Go through the arguments
+  for(int i=1; i < argc; i++)
+    {
+    // Get the next argument
+    std::string arg(argv[i]);
+
+    // Check if the argument is known
+    bool findOption = FindOption( arg, index );
+      if (findOption == false)
+      {
+      if(failOnUnknownTrailingParameters)
+        {
+        // Unknown argument found
+        std::cerr << "Option '" << arg << "' non reconnue !!!" << std::endl;
+        return false;
+        }
+      else return true;
+      }
+    //Check the option
+    m_OptionList[index].Finded = true;
+    // Si le nombre de parametres est prédéfini : 
+    if (m_OptionList[index].NumberOfParametersFixed == true)
+    {
+    	// Check if the number of parameters is correct
+    	int nParameters = m_OptionList[index].NumberOfParameters;
+    	if(i+nParameters >= argc) 
+      	{
+      		// Too few parameters
+      		std::cerr << "Il manque un (ou plusieurs) parametre(s) pour l'option '" << arg << "'" << std::endl;
+      		return false;
+      	}
+        // Tell the result that the option has been encountered
+        outResult.AddOption(m_OptionList[index].CommonName);
+
+        // Pass in the parameters
+        for(int j=0;j<nParameters;j++,i++)
+        {
+      		outResult.AddParameter(m_OptionList[index].CommonName,std::string(argv[i+1]));
+      	}
+     }
+     // Si le nombre de parametres n'est pas prédéfini, lecture jusqu'a la prochaine option ou fin argv  : 
+     else
+     {
+         // Tell the result that the option has been encountered
+        outResult.AddOption(m_OptionList[index].CommonName);
+    	bool continuer(true);
+     	while (continuer == true )
+     	{
+     		if ( argv[i+1] != NULL )
+     		{
+     			std::string strArgv = std::string(argv[i+1]);
+     			if ( strArgv[0] == '-' )
+     			{
+     				continuer = false;
+     			}
+     			else
+     			{
+      				outResult.AddParameter(m_OptionList[index].CommonName,strArgv);
+     			}
+     		}
+     		else continuer = false;
+     		i++;
+     	}
+     }
+
+    
+    
+    
+    }
+
+  // Controle que toutes les options obligatoire sont présentes dans la ligne d'argument
+  for(int i=0 ; i < m_OptionList.size() ; i++ )
+  {
+  	if ( (m_OptionList[i].Obligatory == true) && (m_OptionList[i].Finded == false) )
+  	{
+      		// Too few parameters
+      		std::cerr << "L'option '" << m_OptionList[i].CommonName << "' est obligatoire !!!" << std::endl;
+      		return false;
+	}	
+  }
+  
+  // Everything is good
+  return true;
+}
+
+bool 
+CommandLineArgumentParser
+::FindOption(const std::string & option, int & index)
+{
+	//Cherche dans la liste des options installées
+	bool trouve(false);
+	bool continuer(true);
+	int cpt(0);
+	std::string strOption(option);
+	while ( continuer == true )
+	{
+		if (  (m_OptionList[cpt].CommonName == strOption) || (m_OptionList[cpt].Synonim == strOption) )
+		{
+			index = cpt;
+			continuer = false;
+			trouve = true;	
+		}
+		cpt++;
+		if( cpt >= m_OptionList.size() )
+		{
+			continuer = false;	
+		}
+	}
+        return (trouve);
+}
+
+void
+CommandLineArgumentParser
+::PrintUsage(std::ostream& os/*, itk::Indent indent*/)const
+{
+	os << std::endl;
+        os << " Usage : "<<m_ProgramName<<std::endl;
+  	// Calcul de la largeur max en caractere de l'affichage des options (pour mise en page)
+  	int largeurmax(-1);
+  	for(int i=0 ; i < m_OptionList.size() ; i++ )
+  	{
+  		int largeur = m_OptionList[i].CommonName.size() + m_OptionList[i].Synonim.size();
+  		if ( largeur > largeurmax ) largeurmax = largeur;
+	}
+  	
+  	// Controle que toutes les options obligatoire sont présentes dans la ligne d'argument
+  	for(int i=0 ; i < m_OptionList.size() ; i++ )
+  	{
+  		int largeur = m_OptionList[i].CommonName.size() + m_OptionList[i].Synonim.size();
+  		os << "      ";
+  		if ( m_OptionList[i].Obligatory == false ) os <<"[";
+  		else os << " ";
+  		os << m_OptionList[i].CommonName ;
+  		if (m_OptionList[i].Synonim.empty() == false )
+  		{
+  			os << "|"<<m_OptionList[i].Synonim;	
+  		}
+  		if ( m_OptionList[i].Obligatory == false ) os <<"]";
+  		else os << " ";
+  		//Aligne le texte avec la différence en blanc
+  		for (int b=largeur ; b< largeurmax ; b++) os <<" ";
+  		os <<   "  :  "<<m_OptionList[i].Description;
+  		if (m_OptionList[i].NumberOfParametersFixed == true ) os << "  ("<<m_OptionList[i].NumberOfParameters<<" parametres)";
+  		else os << "  (N parametres)";
+  		os << std::endl;
+	}
+	os << std::endl;
+}
+
+
+
 
 }
 

@@ -17,15 +17,18 @@
 #pragma warning ( disable : 4503 )
 #endif
 
+#include <iostream>
 #include <vector>
 #include <string>
-#include <list>
 #include <map>
 
-#include "itkIndent.h"
+//#include "itkIndent.h"
 
 namespace otb
 {
+
+
+//class CommandLineArgumentParser;
 
 /**
  * \class CommandLineArgumentParseResult
@@ -36,23 +39,28 @@ class CommandLineArgumentParseResult
 {
 public:
   /** Check whether the option was passed in or not */
-  bool IsOptionPresent(const char *option);
+  bool IsOptionPresent(const char *option) const;
 
   /** Get one of the parameters to the option */
-  const char *GetOptionParameter(const char *option, unsigned int number = 0);
-  
+//  const char *GetOptionParameter(const char *option, unsigned int number = 0);
+  int GetNumberOfParameters(const char *option);
+
   void PrintSelf(std::ostream& os/*, itk::Indent indent*/) const;
 
-  template< typename TypeValeur >
-  TypeValeur GetOptionParameterNumericValue(const char *option, unsigned int number)const;
 
+  template< typename TypeValeur >
+  TypeValeur GetParameter(const char *option, unsigned int number=0)const;
+
+  std::string GetStringParameter(const char *option, unsigned int number=0) const;
 
 private:
+
+
   typedef std::vector< std::string > ParameterArrayType;
-  typedef std::map< std::string, ParameterArrayType> OptionMapType;
+  typedef std::map< std::string, ParameterArrayType > OptionMapType;
 
   void Clear();
-  void AddOption(const std::string &option, int nParms);
+  void AddOption(const std::string &option/*, int nParms*/);
   void AddParameter(const std::string &option, const std::string &parameter);
 
   OptionMapType m_OptionMap;
@@ -85,40 +93,56 @@ class CommandLineArgumentParser
 {
 public:
   /** Add an option with 0 or more parameters (words that follow it) */
-  void AddOption(const char *name, const int nParameters, const char * comment);
+//  void AddOption(const char *name, const int nParameters, const char * comment);
+  // Au moins une valeur
+
+  void AddOption(const char *name, const  char * comment, char *synonim = NULL, int nParameters = 1, bool obligatory =true);
+  // Si -1, alors on ne connait pas le nombre de parametres à l'avance.
+  void AddOptionNParams(const char *name, const char * comment, char *synonim = NULL, bool obligatory =true);
   
   /** Add a different string that envokes the same option (--file and -f) */  
-  void AddSynonim(const char *option, const char *synonim);
+//  void AddSynonim(const char *option, const char *synonim);
+
+  void ParseCommandLine(int argc, char *argv[], 
+                           CommandLineArgumentParseResult &outResult,
+                           bool failOnUnknownTrailingParameters = true);
+
+private:
+
+  void PrintUsage(std::ostream& os/*, itk::Indent indent*/) const;
+  bool FindOption(const std::string & , int & index);
 
   /** Try processing a command line.  Returns false if something breaks */
   bool TryParseCommandLine(int argc, char *argv[], 
                            CommandLineArgumentParseResult &outResult,
-                           bool failOnUnknownTrailingParameters = true);
+                           bool failOnUnknownTrailingParameters );
 
-  void PrintUsage(std::ostream& os/*, itk::Indent indent*/) const;
-
-private:
-  // Synonim list type
-  typedef std::list< std::string > NameListType;
   typedef struct 
     {
-    std::string CommonName;
-    std::string CommentName;
-    unsigned int NumberOfParameters;
+    std::string CommonName;             //Nom identifiant cette option
+    std::string Description;            //Description de l'option
+    std::string Synonim;                //Chaine synonim = raccourci
+    bool NumberOfParametersFixed;       //Precise si le nombre de valeurs attendues est connu
+    int NumberOfParameters;	        //Nombre de valeurs pour cette option
+    bool Obligatory;                    //Precise si l'option est obligatoire
+    bool Finded;                        //Precise si l'option a été trouvée dans la ligne de commande
     } OptionType;
-  typedef std::map< std::string, OptionType> OptionMapType;
+//  typedef std::map< std::string, OptionType> OptionMapType;
+  typedef std::vector< OptionType> ListOptionType;
   
-  OptionMapType m_OptionMap;
+  ListOptionType m_OptionList;
 
 
   std::string m_ProgramName;
 };
 
 
+
+}
+
 #ifndef OTB_MANUAL_INSTANTIATION
 #include "otbCommandLineArgumentParser.txx"
 #endif
 
-}
 
 #endif // __otbCommandLineArgumentParser_h_

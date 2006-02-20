@@ -12,13 +12,13 @@ namespace otb
 template< typename TypeValeur >
 TypeValeur
 CommandLineArgumentParseResult
-::GetOptionParameterNumericValue(const char *option, unsigned int number)const
+::GetParameter(const char *option, unsigned int number)const
 {
-  const char * parametre = this->GetOptionParameter(option, number);
+  std::string parametre = this->GetStringParameter(option, number);
   TypeValeur lValeur;
   ::itk::OStringStream flux;
-  flux << parametre;
-  flux >> lValeur;
+//  flux << parametre;
+//  flux >> lValeur;
   return lValeur;
 }
 

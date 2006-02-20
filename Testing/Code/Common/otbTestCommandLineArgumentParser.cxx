@@ -21,28 +21,35 @@ int otbTestCommandLineArgumentParser( int argc, char ** argv )
     { 
         // Parse command line parameters
         otb::CommandLineArgumentParser parser;
+  void AddOption(const char *name, const  char * comment, char *synonim = NULL, int nParameters = 1, bool obligatory =true);
+  // Si -1, alors on ne connait pas le nombre de parametres à l'avance.
+  void AddOptionNParams(const char *name, const char * comment, char *synonim = NULL, bool obligatory =true);
   
-        parser.AddOption("-image",1,"Nom d'une image");
-        parser.AddOption("-entier",1,"Valeur entiere");
-        parser.AddSynonim("-entier","-e");
-        parser.AddOption("-deuxentiers", 2,"Liste de deux entiers");
-        parser.AddOption("-double", 1,"Valeur réelle double");
-        parser.AddSynonim("-double", "-d");
-        parser.AddOption("-float",1,"Valeur réelle double");
-        parser.AddSynonim("-float","-f");
-        parser.AddOption("-help",0,"");
-        parser.AddSynonim("-help","-h");
+        parser.AddOption("-image","Nom d'une image","-i",1,true);
+        parser.AddOption("-entier","Une Valeur entiere (obligatoire)","-e");
+        parser.AddOption("-deuxentiers","Deux Valeurs entieres non obligatoire","",2,false);
+        parser.AddOption("-double", "Valeur réelle double");
+        parser.AddOptionNParams("-doubles", "Liste de Valeurs réelles","-ld");
   
         otb::CommandLineArgumentParseResult parseResult;
   
-        if(!parser.TryParseCommandLine(argc,argv,parseResult) || parseResult.IsOptionPresent("-help"))
+        parser.ParseCommandLine(argc,argv,parseResult) ;//|| parseResult.IsOptionPresent("-help"))
+
+
+        std::cout << "Image : "<<parseResult.GetStringParameter("-image")<<std::endl;
+        unsigned int lEntier = parseResult.GetParameter<unsigned int>("-entier");
+        std::cout << "Entier : "<<lEntier<<std::endl;
+        unsigned int lEntierDeux = parseResult.GetParameter<unsigned int>("-deuxentiers",1);
+        std::cout << "Entier : "<<lEntier<<std::endl;
+        double lDouble = parseResult.GetParameter<double>("-double");
+        std::cout << "Double : "<<lDouble<<std::endl;
+        std::cout << "List de Double : "<<parseResult.GetNumberOfParameters("-double")<<std::endl;
+        for (int i =0 ; i<parseResult.GetNumberOfParameters("-double") ; i++)
         {
-                parser.PrintUsage(std::cout);
-                return EXIT_FAILURE;
+                double value = parseResult.GetParameter<double>("-double",i);
+                std::cout << "  "<<value;
         }
-        
-        parseResult.PrintSelf(std::cout);
-        
+        std::cout << std::endl;
     } 
 
   catch( itk::ExceptionObject & err ) 
