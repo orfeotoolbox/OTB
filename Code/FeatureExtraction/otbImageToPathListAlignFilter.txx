@@ -215,7 +215,6 @@ ImageToPathListAlignFilter<TInputImage,TOutputPath>
 template <class TInputImage, class TOutputPath>
 void 
 ImageToPathListAlignFilter<TInputImage,TOutputPath>
-//::AngleCalculate(InputImageConstPointer ImageIn,RealImagePointer ImageOut)
 ::AngleCalculate(const InputImageType* InputImage, RealImageTypePointer AngleImage)
 {
   float threshold;
@@ -223,7 +222,6 @@ ImageToPathListAlignFilter<TInputImage,TOutputPath>
     
   typename InputImageType::SizeType Taille;
   typename RealImageType::IndexType IndexOut;
-//  typename RealImageType::PixelType PixelOut;
   
   Taille = InputImage->GetLargestPossibleRegion().GetSize();
 
@@ -240,12 +238,6 @@ ImageToPathListAlignFilter<TInputImage,TOutputPath>
 
   threshold = m_MinGradNorm;
   threshold *= threshold;
-
-  typedef itk::ImageConstIteratorWithIndex< InputImageType > InputIteratorType; 
-  typedef itk::ImageIteratorWithIndex< RealImageType >  RealIteratorType; 
-  
-  InputIteratorType InputIt( InputImage, InputImage->GetRequestedRegion() );
-  RealIteratorType  AngleIt( AngleImage, AngleImage->GetRequestedRegion() );
   
   typename InputImageType::IndexType idx; 
 
@@ -253,15 +245,13 @@ ImageToPathListAlignFilter<TInputImage,TOutputPath>
      idx[0] = (n-1) ;
      idx[1] = x ;
 //     indice = (n-1)*p +x
-     AngleIt.SetIndex(idx);
-     AngleIt.Set(static_cast<RealType>(-1000.0));
+     AngleImage->SetPixel(idx,static_cast<RealType>(-1000.0));
   } 
   for (y=0;y<n;y++){
      idx[0] = y;
      idx[1] = p-1;
 //     indice = p*y+p-1     
-     AngleIt.SetIndex(idx);
-     AngleIt.Set(static_cast<RealType>(-1000.0));
+     AngleImage->SetPixel(idx,static_cast<RealType>(-1000.0));
   }
   
   typename InputImageType::IndexType adr;
@@ -274,28 +264,38 @@ ImageToPathListAlignFilter<TInputImage,TOutputPath>
       adr[0] = y;
       adr[1] = x;
       idx[0] = adr[0] +1;
-      idx[1] = adr[1] +1;
-      InputIt.SetIndex(idx);
-//      PixelA = static_cast<RealType>(InputImage->GetPixel(idx)   );
+      idx[1] = adr[1] +1;      
       PixelA = static_cast<RealType>(InputImage->GetPixel(idx)  );
       idx[0] = adr[0];
       idx[1] = adr[1];
+      assert( idx[0] < n );
+      assert( idx[1] < p );
+      assert( idx[0] >= 0 );
+      assert( idx[1] >= 0 );
       PixelB = static_cast<RealType>(InputImage->GetPixel(idx)   );
       idx[0] = adr[0]+1;
       idx[1] = adr[1];
+      assert( idx[0] < n );
+      assert( idx[1] < p );
+      assert( idx[0] >= 0 );
+      assert( idx[1] >= 0 );      
       PixelC = static_cast<RealType>(InputImage->GetPixel(idx)   );
       idx[0] = adr[0];
       idx[1] = adr[1]+1;
+      assert( idx[0] < n );
+      assert( idx[1] < p );
+      assert( idx[0] >= 0 );
+      assert( idx[1] >= 0 );      
       PixelD = static_cast<RealType>(InputImage->GetPixel(idx)   );
       com1 = PixelA-PixelB;
       com2 = PixelC-PixelD;
       gx = 0.5 * (com1+com2);
       gy = 0.5 * (com1-com2);
       norm = gx*gx + gy*gy;
-      AngleIt.SetIndex(idx);	   
-      if (norm <=m_MinGradNorm)
-         AngleIt.Set(static_cast<RealType>(-1000.0));
-	 else AngleIt.Set( static_cast<RealType>( atan2(gx,-gy)) );
+      
+      if (norm <=threshold)
+         AngleImage->SetPixel(adr,static_cast<RealType>(-1000.0));
+         else AngleImage->SetPixel(adr,static_cast<RealType>(atan2(gx,-gy)));
     }
 }
 
@@ -339,18 +339,8 @@ ImageToPathListAlignFilter<TInputImage,TOutputPath>
   max_nfa = pow(10.0,-(m_Eps));
     
   typename InputImageType::IndexType adr;
-#if 0
-  for(i=0;i<ny;i++)
-  for(j=0;j<nx;j++){
-     adr[0] = i+j*nx;
-     adr[1] = 0;
-     RealType toto= static_cast<RealType>(InputImage->GetPixel(adr)   );
-     if(toto >0)
-      printf("Val non nulle %f \n",toto);
-  }
-#endif  
 
-  /* 1/ maximal length for a line */
+  /*** maximal length for a line */
   n = (int)ceil(hypot((double)nx,(double)ny))+1;
 
   /*** compute angle map of u ***/
@@ -428,17 +418,8 @@ ImageToPathListAlignFilter<TInputImage,TOutputPath>
 	    assert( indexAngle[1] < ny );
 	    assert( indexAngle[0] >= 0 );
 	    assert( indexAngle[1] >= 0 );
-/* une erreur percise avec valgrind:
-==7114== Use of uninitialised value of size 8
-==7114==    at 0x818847A: otb::ImageToPathListAlignFilter<itk::Image<unsigned char, 2>, itk::PolyLineParametricPath<2> >::GenerateData()(otbImageToPathListAlignFilter.txx:430)
-==7114==    by 0x8264357: itk::ProcessObject::UpdateOutputData(itk::DataObject*) (in /home/ORFEO/patrick/ORFEO-TOOLBOX/otb/OTB/bin/otbFeatureExtractionTests)
-==7114==    by 0x8253EBD: itk::DataObject::UpdateOutputData() (in /home/ORFEO/patrick/ORFEO-TOOLBOX/otb/OTB/bin/otbFeatureExtractionTests)
-==7114==    by 0x8253B9F: itk::DataObject::Update() (in /home/ORFEO/patrick/ORFEO-TOOLBOX/otb/OTB/bin/otbFeatureExtractionTests)
-
-*/
-//	    double tagadagada = AngleImage->GetPixel(indexAngle);
+	    
 	    error = static_cast<float>( AngleImage->GetPixel(indexAngle) );
-//	    error = static_cast<float>( tagadagada);
 	    if (error>-100.0) {
 	      error -= theta;
 	      while (error<=-M_PI) error += 2.0*M_PI;
@@ -547,19 +528,14 @@ ImageToPathListAlignFilter<TInputImage,TOutputPath>
 
     OutputPathPointerType path = OutputPathType::New();
     
-//    assert( path );
-
     path->Initialize();
     point[0]=seglist[i*5  ];
-    point[1]=seglist[i*5+2];
+    point[1]=seglist[i*5+1];
     InputImage->TransformPhysicalPointToContinuousIndex( point, cindex );
-    // c'est du float  !!! Retourner le type de cindex
-//    printf("%d --> x1=%f y1=%f\n",i,seglist[i*5  ],seglist[i*5+2]);
     path->AddVertex(cindex);
-    cindex[0] = seglist[i*5+1];
+    cindex[0] = seglist[i*5+2];
     cindex[1] = seglist[i*5+3];
     path->AddVertex(cindex);
-//    printf("%d --> x2=%f y2=%f\n",i,seglist[i*5+1],seglist[i*5+3]);
     
     OutputPath->push_back(path);
   }

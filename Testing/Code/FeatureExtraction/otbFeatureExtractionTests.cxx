@@ -14,4 +14,5 @@ void RegisterTests()
 REGISTER_TEST(otbLeeFilter);
 REGISTER_TEST(otbFrostFilter);
 REGISTER_TEST(otbAlignImageToPath);
+REGISTER_TEST(otbFlstTest);
 }

@@ -35,6 +35,10 @@ ADD_TEST(feTuAlignMV2ITK ${FEATUREEXTRACTION_TESTS}
 	${INPUTDATA}/poupees.hd
 	${TEMP}/feAlign.txt)
 	
+ADD_TEST(feTuTestFLST ${FEATUREEXTRACTION_TESTS}  
+        otbFlstTest
+	${INPUTDATA}/poupees.hd
+	${TEMP}/feoFlstListTree.txt)
 		        
 #ADD_TEST(tvFEPatrick2 ${FEATUREEXTRACTION_TESTS}  
 #  --compare-image ${TOL}  ${BASELINE}/otbExtractROI_cthead1_26_97_209_100.png
@@ -50,6 +54,7 @@ SET(BasicFeatureExtraction_SRCS
 otbLeeFilter.cxx
 otbFrostFilter.cxx
 otbAlignImageToPath.cxx
+otbFlstTest.cxx
 )
 
 

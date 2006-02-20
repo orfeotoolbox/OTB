@@ -122,7 +122,7 @@ int otbAlignImageToPath( int argc, char ** argv )
 	   x2 = cindex[0];
 	   y2 = cindex[1];
 	   
-	   int size = fprintf(file,"%8.4f %8.3f\n",x1,x2);
+	   int size = fprintf(file,"%8.4f %8.3f\n",x1,y1);
 	}
   	fclose(file);
         
