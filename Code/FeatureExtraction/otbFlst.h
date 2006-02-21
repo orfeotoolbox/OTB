@@ -21,23 +21,6 @@ namespace otb
  * \brief Algorithme de Fast Level Sets Transform of an image
  *
  */
-
-/** Définition des paramètres d'optimisation. 
- * Ils sont dépendant de la taille des images mais ces valeurs semblent 
- * convenir à la majoritée des images. */
-#define INIT_MAX_AREA 10
-#define STEP_MAX_AREA 8
-
-/* A 'local configuration' of the pixel is the logical 'or' of these values,
-stored in one byte. Corresponding bit is set if the neighbor is in region */
-#define EAST         1
-#define NORTH_EAST   2
-#define NORTH        4
-#define NORTH_WEST   8
-#define WEST        16
-#define SOUTH_WEST  32
-#define SOUTH       64
-#define SOUTH_EAST 128
  
  
 template <class TInputImage, class TOutputTree>
@@ -62,6 +45,7 @@ public:
 
   /** "typedef" pour simplifier la définition et la déclaration de variables. */
   
+  typedef typename Superclass::InputImageType        InputImageType;
   typedef typename Superclass::InputImagePointer     InputImagePointer;
   typedef typename Superclass::InputImageRegionType  InputImageRegionType; 
   typedef typename Superclass::InputImagePixelType   InputImagePixelType; 
@@ -78,17 +62,43 @@ protected:
   virtual ~FLST() {};
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
+ /** Définition des paramètres d'optimisation. 
+ * Ils sont dépendant de la taille des images mais ces valeurs semblent 
+ * convenir à la majoritée des images. */
+  static const int INIT_MAX_AREA; 
+  static const int STEP_MAX_AREA;
+  
+  /** configuration locale des pixels */
+  static const int EAST; 
+  static const int NORTH_EAST;
+  static const int NORTH;
+  static const int NORTH_WEST;
+  static const int WEST;
+  static const int SOUTH_WEST;
+  static const int SOUTH;
+  static const int SOUTH_EAST;    
+  
+  static const char tabPatterns[2][256];
+  
+  itkSetMacro(MinArea, int);
+  itkGetConstReferenceMacro(MinArea, int);
+  
+  void CalculateArea(int Width, int Height);
   void GenerateData(void);
-
+  
 private:
   FLST(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
 
+  int m_MinArea;
+  int m_AreaImage;
+  int m_HalfAreaImage;
+  int m_PerimeterImage;
 };
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbFLST.txx"
+#include "otbFlst.txx"
 #endif
 
   

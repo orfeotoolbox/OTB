@@ -19,6 +19,8 @@
 #include "otbImageFileReader.h"
 #include "otbTreeSource.h"
 #include "otbImageToTreeFilter.h"
+#include "otbTreeNeighborhood.h"
+#include "otbFlst.h"
 
 int otbFlstTest( int argc, char ** argv )
 {
@@ -37,9 +39,13 @@ int otbFlstTest( int argc, char ** argv )
         typedef itk::Image< InputPixelType,  Dimension >	InputImageType;
         typedef itk::Image< RealPixelType,  Dimension >		RealImageType;
         typedef otb::ImageFileReader< InputImageType  >         ReaderType;
-
+	typedef otb::TreeNeighborhood                           TreeType;
+	typedef otb::FLST<InputImageType,TreeType>              FlstType;
+	
         ReaderType::Pointer reader = ReaderType::New();	
         reader->SetFileName( inputFilename  );
+	
+	FlstType::Pointer tree;
     
     } 
   catch( itk::ExceptionObject & err ) 

@@ -17,6 +17,7 @@
 #endif
 
 #include "itkProcessObject.h"
+#include "otbTreeNeighborhood.h"
 
 namespace otb
 {
@@ -45,10 +46,10 @@ public:
   /** Run-time type information (and related methods). */
   itkTypeMacro(TreeSource,itk::ProcessObject);
   
-  typedef TOutputTree                             OutputTreeType;
+  typedef TreeNeighborhood                        OutputTreeType;
   typedef typename OutputTreeType::Pointer        OutputTreePointerType;
   typedef typename OutputTreeType::ConstPointer   OutputTreeConstPointerType;
-  typedef std::vector< OutputTreePointerType >    OutputTreeListType;
+  typedef OutputTreeType                          OutputTreeListType;
   
   /** Get the tree output of this process object.  */
   OutputTreeListType * GetOutput(void)
@@ -62,25 +63,6 @@ protected:
   TreeSource();
   virtual ~TreeSource() {}
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
-
-  enum TypeOfTree {AMBIGUOUS, MIN, MAX, INVALID};
-  
-  class point_plane {
-  short x,y;                /*** Coordinates of the point */
-  };
-
-  class Neighbor {
-  point_plane point;        /*** Neighbor pixel */
-  float value;              /*** Its gray level */
-  }; 
-  
-  class Neighborhood {
-  Neighbor* tabPoints;   /*** The array of neighbors, organized as a binary tree */
-  int iNbPoints;         /*** The size of the previous arrays */
-  enum TypeOfTree type;  /*** max- or min- oriented heap? */
-  float otherBound;      /*** Min gray level if max-oriented, max if min-oriented */
-  };
- 
       
 private:
   TreeSource(const Self&); //purposely not implemented

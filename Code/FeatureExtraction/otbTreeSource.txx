@@ -24,7 +24,6 @@ template<class TOutputTree>
 TreeSource<TOutputTree>
 ::TreeSource()
 {
-  m_TreeList.clear();
   
   this->ProcessObject::SetNumberOfRequiredOutputs(1);
 

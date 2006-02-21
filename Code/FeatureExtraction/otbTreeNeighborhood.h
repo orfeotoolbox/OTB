@@ -4,7 +4,7 @@
   Auteurs   :   CS - P.Imbo
   Language  :   C++
   Date      :   20 fevrier 2006
-  Role      :  Definition de la classe TreeSource 
+  Role      :  Definition de la classe TreeNeighborhood
   $Id$ 
 
 =========================================================================*/
@@ -31,7 +31,7 @@ namespace otb
  * \ingroup TreeNeighborhoodObjects
  */
  
-class otbTreeNeighborhood : public itk::DataObject
+class TreeNeighborhood : public itk::DataObject
 {
 public:
   /** Standard class typedefs. */
@@ -46,17 +46,32 @@ public:
   /** Run-time type information (and related methods). */
   itkTypeMacro(TreeSource,itk::FunctionBase);
     
-  enum TypeOfTree {AMBIGUOUS, MIN, MAX, INVALID};
+  typedef enum  {AMBIGUOUS, MIN, MAX, INVALID} TypeOfTree;
   
-  itk::Point<float,2>        PointType;
-  std::vector<PointType>     PointListType;      
+  typedef struct {
+  	itk::Point<float,2>        Point;
+	int                        x;
+	int                        y;
+	float                      Value;
+  } PointType;
+  
+  typedef std::vector<PointType>     PointListType;      
 protected:
   TreeNeighborhood();
-  virtual ~TreeNeighborhood() {m_tabPoints.clear();}
+  virtual ~TreeNeighborhood() {}
+  
   void SetSize(int Taille);
+  const int ORDER_MAX(int k,int l);
+  const int ORDER_MIN(int k,int l);
+  const void SWAP(int k,int l);
+  const int ORDER_MAX2(int k,int l);
+  const int ORDER_MIN2(int k,int l); 
+  void FixUp();
+  void FixDown();
+  void Add(int x, int y,float value);
+  void Remove();
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
-  enum TypeOfTree {AMBIGUOUS, MIN, MAX, INVALID};
       
 private:
   TreeNeighborhood(const Self&); //purposely not implemented
