@@ -47,7 +47,9 @@ int generic_otbMultiToMonoChannelExtractROI ( int argc, char ** argv, const char
 	std::cout << "                    sizeY  "<<extractROIFilter->GetSizeY()<<std::endl;
 	std::cout << " Canal selectionne : ("<<extractROIFilter->GetChannel()<<") : ";
 
-        typedef otb::ImageFileReader< typename ExtractROIFilterType::InputImageType, itk::DefaultConvertPixelTraits< InputPixelType >  >       ReaderType;
+// OTB-FA-00008-CS
+//        typedef otb::ImageFileReader< typename ExtractROIFilterType::InputImageType, itk::DefaultConvertPixelTraits< InputPixelType >  >       ReaderType;
+        typedef otb::ImageFileReader< typename ExtractROIFilterType::InputImageType >       ReaderType;
         typedef otb::ImageFileWriter< typename ExtractROIFilterType::OutputImageType >           WriterType;
         typename ReaderType::Pointer reader = ReaderType::New();
         typename WriterType::Pointer writer = WriterType::New();

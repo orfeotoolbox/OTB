@@ -30,9 +30,11 @@ namespace otb
  * \ingroup IOFilters
  *
  */
+// OTB-FA-00008-CS
 template <class TOutputImage,
           class ConvertPixelTraits = 
-          itk::DefaultConvertPixelTraits< ITK_TYPENAME TOutputImage::PixelType> >
+//          itk::DefaultConvertPixelTraits< ITK_TYPENAME TOutputImage::PixelType> >
+          itk::DefaultConvertPixelTraits< ITK_TYPENAME TOutputImage::IOPixelType> >
 class ITK_EXPORT ImageFileReader : public itk::ImageFileReader<TOutputImage, ConvertPixelTraits >
 {
 public:
@@ -46,6 +48,9 @@ public:
 
   /** Run-time type information (and related methods). */
   itkTypeMacro(ImageFileReader, itk::ImageFileReader);
+
+  /** The pixel type of the output image. */
+  typedef typename TOutputImage::InternalPixelType OutputImagePixelType;
 
   /** The size of the output image. */
   typedef typename TOutputImage::SizeType  SizeType;

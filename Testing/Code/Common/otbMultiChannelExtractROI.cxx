@@ -91,10 +91,9 @@ int generic_otbMultiChannelExtractROI( int argc, char ** argv, const char * inpu
 
         std::cout << " Extraction de "<<nbcanaux<<" de l'image source."<<std::endl;
 
-        typedef otb::ImageFileReader< typename ExtractROIFilterType::InputImageType, itk::DefaultConvertPixelTraits< InputPixelType >  >       ReaderType;
-//        typedef otb::ImageFileReader< typename ExtractROIFilterType::InputImageType, 
-//                                        itk::DefaultConvertPixelTraits< typename _InputPixelType/*ExtractROIFilterType::InputImagePixelType*/ >  >       ReaderType;
-        typedef otb::ImageFileWriter< typename ExtractROIFilterType::OutputImageType >           WriterType;
+// OTB-FA-00008-CS
+        typedef otb::ImageFileReader< ITK_TYPENAME ExtractROIFilterType::InputImageType >       ReaderType;
+        typedef otb::ImageFileWriter< ITK_TYPENAME ExtractROIFilterType::OutputImageType >           WriterType;
         typename ReaderType::Pointer reader = ReaderType::New();
         typename WriterType::Pointer writer = WriterType::New();
 
