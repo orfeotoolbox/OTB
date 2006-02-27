@@ -1,8 +1,0 @@
-#Add a dependency of "CircleMeanOutput.png" on "Circle.png".
-ADD_GENERATED_FIG_DEPS( "CircleMeanOutput.png" "Circle.png" )
-# Cmake macro to invoke: /ORFEO/thomas/ORFEO-TOOLBOX/otb/OTB/Examples/Data/MeanImageFilter  /Circle.png /CircleMeanOutput.png 10 10
-RUN_EXAMPLE( "MeanImageFilter" "CircleMeanOutput.png" "/ORFEO/thomas/ORFEO-TOOLBOX/otb/OTB/Examples/StartExamples/MeanImageFilter.cxx"  /Circle.png /CircleMeanOutput.png 10 10 )
-CONVERT_IMG( "Circle.png" "Circle.eps" "" )
-ADD_DEP_TEX_ON_EPS_FIGS( "/ORFEO/thomas/ORFEO-TOOLBOX/otb/OTB-Documents/SoftwareGuide/Art/Generated" "Circle.eps" )
-CONVERT_IMG( "CircleMeanOutput.png" "CircleMeanOutput.eps" "" )
-ADD_DEP_TEX_ON_EPS_FIGS( "/ORFEO/thomas/ORFEO-TOOLBOX/otb/OTB-Documents/SoftwareGuide/Art/Generated" "CircleMeanOutput.eps" )
