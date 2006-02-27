@@ -38,8 +38,23 @@ ADD_TEST(feTuAlignMV2ITK ${FEATUREEXTRACTION_TESTS}
 ADD_TEST(feTuTestFLST ${FEATUREEXTRACTION_TESTS}  
         otbFlstTest
 	${INPUTDATA}/poupees.hd
-	${TEMP}/feoFlstListTree.txt)
-		        
+	${TEMP}/feoFlstListTree.txt)	
+		
+ADD_TEST(feTuDrawSegmentIntoImage ${FEATUREEXTRACTION_TESTS}  
+        otbDrawPathList
+	${INPUTDATA}/poupees.hd
+	${TEMP}/feDrawPathIntoPoupees.png)
+
+ADD_TEST(feTuDrawSegmentIntoImageLine ${FEATUREEXTRACTION_TESTS}  
+        otbDrawPathListTracerLignes
+	${INPUTDATA}/DeuxTraits.png
+	${TEMP}/feDrawDeuxLignes.png)
+
+ADD_TEST(feTuDrawSegmentIntoImage ${FEATUREEXTRACTION_TESTS}  
+        otbDrawPathList
+	${INPUTDATA}/DeuxTraits.png
+	${TEMP}/feDrawPathIntoDeuxTraits.png)
+	        
 #ADD_TEST(tvFEPatrick2 ${FEATUREEXTRACTION_TESTS}  
 #  --compare-image ${TOL}  ${BASELINE}/otbExtractROI_cthead1_26_97_209_100.png
 #                          ${TEMP}/otbExtractROI_cthead1_26_97_209_100.png
@@ -55,6 +70,7 @@ otbLeeFilter.cxx
 otbFrostFilter.cxx
 otbAlignImageToPath.cxx
 otbFlstTest.cxx
+otbDrawPathList.cxx
 )
 
 

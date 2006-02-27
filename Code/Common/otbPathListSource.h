@@ -55,8 +55,8 @@ public:
   typedef typename OutputPathType::Pointer                      OutputPathPointerType;
   typedef std::vector< OutputPathPointerType >   		OutputPathListType;
 
-//  typedef typename OutputPathListType::Pointer          OutputPathListPointer;
-//  typedef typename OutputPathListType::ConstPointer     OutputPathListConstPointer;
+  typedef OutputPathListType *                         OutputPathListPointerType;
+  typedef const OutputPathListType *                   OutputPathListConstPointerType;
   
   OutputPathListType * GetOutput(void)
   {

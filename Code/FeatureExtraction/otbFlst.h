@@ -94,6 +94,8 @@ private:
   int m_AreaImage;
   int m_HalfAreaImage;
   int m_PerimeterImage;
+  int m_AtBorder;
+  int m_Exploration;
 };
 } // end namespace otb
 
