@@ -1,5 +1,5 @@
 # This is the CMakeCache file.
-# For build in directory: /home/ORFEO/thomas/ORFEO-TOOLBOX/OTB-Documents/SoftwareGuide
+# For build in directory: /ORFEO/thomas/ORFEO-TOOLBOX/otb/OTB-Documents/SoftwareGuide
 # You can edit this file to change values found and used by cmake.
 # If you do not want to change any of the values, simply exit the editor.
 # If you do want to change a value, simply edit, save, and exit the editor.
@@ -29,13 +29,13 @@ CMAKE_BACKWARDS_COMPATIBILITY:STRING=2.2
 //Choose the type of build, options are: None(CMAKE_CXX_FLAGS or
 // CMAKE_C_FLAGS used) Debug Release RelWithDebInfo MinSizeRel.
 //
-CMAKE_BUILD_TYPE:STRING=Release
+CMAKE_BUILD_TYPE:STRING=
 
 //C compiler
 CMAKE_C_COMPILER:STRING=gcc
 
 //Flags for C compiler.
-CMAKE_C_FLAGS:STRING=' '
+CMAKE_C_FLAGS:STRING=
 
 //Flags used by the compiler during debug builds.
 CMAKE_C_FLAGS_DEBUG:STRING=-g
@@ -111,7 +111,7 @@ CMAKE_SHARED_LINKER_FLAGS_RELWITHDEBINFO:STRING=
 
 //If set, runtime paths are not added when using shared libraries.
 //
-CMAKE_SKIP_RPATH:BOOL=NO
+CMAKE_SKIP_RPATH:BOOL=OFF
 
 //If true, cmake will use relative paths in makefiles and projects.
 //
@@ -121,7 +121,7 @@ CMAKE_USE_RELATIVE_PATHS:BOOL=OFF
 // .SILENT directive, and all commands will be echoed to the console
 // during the make.  This is useful for debugging only. With Visual
 // Studio IDE projects all commands are done without /nologo.
-CMAKE_VERBOSE_MAKEFILE:BOOL=FALSE
+CMAKE_VERBOSE_MAKEFILE:BOOL=OFF
 
 //Path to a program.
 DVIPDF_CONVERTER:FILEPATH=/usr/bin/dvipdfm
@@ -133,10 +133,10 @@ DVIPS_CONVERTER:FILEPATH=/usr/bin/dvips
 EXECUTABLE_OUTPUT_PATH:PATH=
 
 //Value Computed by CMake
-Examples_BINARY_DIR:STATIC=/home/ORFEO/thomas/ORFEO-TOOLBOX/OTB-Documents/SoftwareGuide/Examples
+Examples_BINARY_DIR:STATIC=/ORFEO/thomas/ORFEO-TOOLBOX/otb/OTB-Documents/SoftwareGuide/Examples
 
 //Value Computed by CMake
-Examples_SOURCE_DIR:STATIC=/home/ORFEO/thomas/ORFEO-TOOLBOX/OTB-Documents/SoftwareGuide/Examples
+Examples_SOURCE_DIR:STATIC=/ORFEO/thomas/ORFEO-TOOLBOX/otb/OTB-Documents/SoftwareGuide/Examples
 
 //Path to a program.
 FIG2DEV_EXECUTABLE:FILEPATH=/ORFEO/outils/libs-externes-install/bin/transfig/fig2dev
@@ -169,23 +169,23 @@ LIBRARY_OUTPUT_PATH:PATH=
 MAKEINDEX_COMPILER:FILEPATH=/usr/bin/makeindex
 
 //Where the OTB data is. Enter a colon seperated list.
-OTB_DATA_PATHS:STRING=/ORFEO/thomas/ORFEO-TOOLBOX/OTB/Examples/Data
+OTB_DATA_PATHS:STRING=/ORFEO/thomas/ORFEO-TOOLBOX/otb/OTB/Examples/Data
 
 //Where the OTB examples executables are
-OTB_EXECUTABLES_DIR:PATH=/ORFEO/thomas/ORFEO-TOOLBOX/OTB/bin
+OTB_EXECUTABLES_DIR:PATH=
 
 //Flip the input images specified in CMakeLists and their corresponding
 // outputs
 OTB_FLIP_INPUTS_AND_THEIR_OUTPUTS:BOOL=ON
 
 //What is the path where the file UseOTB.cmake.in can be found
-OTB_SOURCE_DIR:PATH=/ORFEO/thomas/ORFEO-TOOLBOX/OTB
+OTB_SOURCE_DIR:PATH=/ORFEO/thomas/ORFEO-TOOLBOX/otb/OTB
 
 //Path to a program.
 PDFLATEX_COMPILER:FILEPATH=/usr/bin/pdflatex
 
 //Path to a program.
-PERLCXXPARSER:FILEPATH=/home/ORFEO/thomas/ORFEO-TOOLBOX/OTB-Documents/SoftwareGuide/ParseCxxExamples.pl
+PERLCXXPARSER:FILEPATH=/ORFEO/thomas/ORFEO-TOOLBOX/otb/OTB-Documents/SoftwareGuide/ParseCxxExamples.pl
 
 //Path to a program.
 PERL_EXECUTABLE:FILEPATH=/usr/bin/perl
@@ -194,13 +194,13 @@ PERL_EXECUTABLE:FILEPATH=/usr/bin/perl
 PS2PDF_CONVERTER:FILEPATH=/usr/bin/ps2pdf14
 
 //Where the RunExamples Script is
-RUN_EXAMPLES_SCRIPT:FILEPATH=/home/ORFEO/thomas/ORFEO-TOOLBOX/OTB-Documents/SoftwareGuide/Examples/RunExamples.pl
+RUN_EXAMPLES_SCRIPT:FILEPATH=/ORFEO/thomas/ORFEO-TOOLBOX/otb/OTB-Documents/SoftwareGuide/Examples/RunExamples.pl
 
 //Value Computed by CMake
-SoftwareGuide_BINARY_DIR:STATIC=/home/ORFEO/thomas/ORFEO-TOOLBOX/OTB-Documents/SoftwareGuide
+SoftwareGuide_BINARY_DIR:STATIC=/ORFEO/thomas/ORFEO-TOOLBOX/otb/OTB-Documents/SoftwareGuide
 
 //Value Computed by CMake
-SoftwareGuide_SOURCE_DIR:STATIC=/home/ORFEO/thomas/ORFEO-TOOLBOX/OTB-Documents/SoftwareGuide
+SoftwareGuide_SOURCE_DIR:STATIC=/ORFEO/thomas/ORFEO-TOOLBOX/otb/OTB-Documents/SoftwareGuide
 
 
 ########################
@@ -211,10 +211,12 @@ SoftwareGuide_SOURCE_DIR:STATIC=/home/ORFEO/thomas/ORFEO-TOOLBOX/OTB-Documents/S
 BIBTEX_COMPILER-ADVANCED:INTERNAL=1
 //Advanced flag for variable: CMAKE_AR
 CMAKE_AR-ADVANCED:INTERNAL=1
+//Advanced flag for variable: CMAKE_BUILD_TOOL
+CMAKE_BUILD_TOOL-ADVANCED:INTERNAL=1
 //What is the target build tool cmake is generating for.
 CMAKE_BUILD_TOOL:INTERNAL=/usr/bin/gmake
 //This is the directory where this CMakeCahe.txt was created
-CMAKE_CACHEFILE_DIR:INTERNAL=/home/ORFEO/thomas/ORFEO-TOOLBOX/OTB-Documents/SoftwareGuide
+CMAKE_CACHEFILE_DIR:INTERNAL=/ORFEO/thomas/ORFEO-TOOLBOX/otb/OTB-Documents/SoftwareGuide
 //Major version of cmake used to create the current loaded cache
 //
 CMAKE_CACHE_MAJOR_VERSION:INTERNAL=2
@@ -261,7 +263,7 @@ CMAKE_EXE_LINKER_FLAGS_RELWITHDEBINFO-ADVANCED:INTERNAL=1
 CMAKE_GENERATOR:INTERNAL=Unix Makefiles
 //Start directory with the top level CMakeLists.txt file for this
 // project
-CMAKE_HOME_DIRECTORY:INTERNAL=/home/ORFEO/thomas/ORFEO-TOOLBOX/OTB-Documents/SoftwareGuide
+CMAKE_HOME_DIRECTORY:INTERNAL=/ORFEO/thomas/ORFEO-TOOLBOX/otb/OTB-Documents/SoftwareGuide
 //Advanced flag for variable: CMAKE_MAKE_PROGRAM
 CMAKE_MAKE_PROGRAM-ADVANCED:INTERNAL=1
 //Advanced flag for variable: CMAKE_MODULE_LINKER_FLAGS
@@ -311,7 +313,7 @@ DVIPDF_CONVERTER-ADVANCED:INTERNAL=1
 //Advanced flag for variable: DVIPS_CONVERTER
 DVIPS_CONVERTER-ADVANCED:INTERNAL=1
 //These files were generated
-GENERATED_FILES:INTERNAL=/home/ORFEO/thomas/ORFEO-TOOLBOX/OTB-Documents/SoftwareGuide/Art/Generated/GeneratedFiles.txt
+GENERATED_FILES:INTERNAL=/ORFEO/thomas/ORFEO-TOOLBOX/otb/OTB-Documents/SoftwareGuide/Art/Generated/GeneratedFiles.txt
 //Result of TRY_COMPILE
 HAVE_CMAKE_SIZEOF_VOID_P:INTERNAL=TRUE
 //Advanced flag for variable: IMAGEMAGICK_COMPOSITE_EXECUTABLE
