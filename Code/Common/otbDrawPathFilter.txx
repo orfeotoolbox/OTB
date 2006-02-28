@@ -30,7 +30,7 @@ template <class TInputImage, class TInputPath,class TOutputImage>
 DrawPathFilter<TInputImage,TInputPath,TOutputImage>
 ::DrawPathFilter()
 {
-  m_PathValue = static_cast<OutputImagePixelType>(15.0);
+  m_PathValue = static_cast<OutputImagePixelType>(250.0);
 }
 
 

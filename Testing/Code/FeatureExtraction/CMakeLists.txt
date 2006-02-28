@@ -59,8 +59,11 @@ ADD_TEST(feTuDrawPathTestCarre ${FEATUREEXTRACTION_TESTS}
         otbDrawPathDessinCarre
 	${INPUTDATA}/DeuxTraits.png
 	${TEMP}/feDrawPathDessinCarre.png)
-	
-	
+
+ADD_TEST(feTuDrawPathTestAlign ${FEATUREEXTRACTION_TESTS}  
+        otbDrawPathAlign
+	${INPUTDATA}/DeuxTraits.png
+	${TEMP}/feDrawPathAlignDeuxTraits.png)
 	
 ADD_TEST(feTuTestFLST ${FEATUREEXTRACTION_TESTS}  
         otbTestFLST
@@ -84,6 +87,7 @@ otbAlignImageToPath.cxx
 otbFlstTest.cxx
 otbDrawPathList.cxx
 otbDrawPath.cxx
+otbDrawPathAlign.cxx
 )
 
 
