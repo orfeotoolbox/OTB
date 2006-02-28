@@ -54,7 +54,19 @@ ADD_TEST(feTuDrawSegmentIntoImage ${FEATUREEXTRACTION_TESTS}
         otbDrawPathList
 	${INPUTDATA}/DeuxTraits.png
 	${TEMP}/feDrawPathIntoDeuxTraits.png)
-	        
+
+ADD_TEST(feTuDrawPathTestCarre ${FEATUREEXTRACTION_TESTS}  
+        otbDrawPathDessinCarre
+	${INPUTDATA}/DeuxTraits.png
+	${TEMP}/feDrawPathDessinCarre.png)
+	
+	
+	
+ADD_TEST(feTuTestFLST ${FEATUREEXTRACTION_TESTS}  
+        otbTestFLST
+	${INPUTDATA}/TeteAToto.png
+	${TEMP}/feFLST.png)
+		        
 #ADD_TEST(tvFEPatrick2 ${FEATUREEXTRACTION_TESTS}  
 #  --compare-image ${TOL}  ${BASELINE}/otbExtractROI_cthead1_26_97_209_100.png
 #                          ${TEMP}/otbExtractROI_cthead1_26_97_209_100.png
@@ -71,6 +83,7 @@ otbFrostFilter.cxx
 otbAlignImageToPath.cxx
 otbFlstTest.cxx
 otbDrawPathList.cxx
+otbDrawPath.cxx
 )
 
 

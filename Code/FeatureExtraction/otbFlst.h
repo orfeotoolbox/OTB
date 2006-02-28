@@ -13,7 +13,7 @@
  
 #include "otbImageToTreeFilter.h"
 #include "otbTreeNeighborhood.h"
-
+#include "itkImage.h"
 namespace otb
 {
 
@@ -56,7 +56,8 @@ public:
   typedef typename Superclass::OutputTreeListType     OutputTreeListType;
   typedef typename Superclass::OutputTreePointerType  OutputTreePointerType;
   
-
+  typedef itk::Image<int,2>               IntImageType;
+  typedef typename IntImageType::Pointer  IntImagePointerType;
 protected:
   FLST();
   virtual ~FLST() {};
@@ -90,12 +91,17 @@ private:
   FLST(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
 
-  int m_MinArea;
-  int m_AreaImage;
-  int m_HalfAreaImage;
-  int m_PerimeterImage;
-  int m_AtBorder;
-  int m_Exploration;
+  int                 m_Width;
+  int                 m_Height;
+  int                 m_MinArea;
+  int                 m_MaxArea;
+  int                 m_AreaImage;
+  int                 m_HalfAreaImage;
+  int                 m_PerimeterImage;
+  int                 m_AtBorder;
+  int                 m_Exploration;
+  IntImagePointerType m_VisitedNeighbors;
+  
 };
 } // end namespace otb
 

@@ -86,6 +86,7 @@ template< class TInputImage, class TOutputTree>
 FLST<TInputImage,TOutputTree>::FLST()
 {
   m_MinArea = 1;
+  m_VisitedNeighbors = IntImageType::New();
 }
 
 template< class TInputImage, class TOutputTree>
