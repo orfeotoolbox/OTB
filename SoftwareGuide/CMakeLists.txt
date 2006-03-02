@@ -71,7 +71,7 @@ SET(OTB_DATA_PATHS "${OTB_SOURCE_DIR}/Examples/Data" CACHE STRING "Where the OTB
 SET(BUILD_FIGURES ON CACHE BOOL "Build Software Guide figures")
 
 IF( BUILD_FIGURES )
-  SET(OTB_EXECUTABLES_DIR "" CACHE PATH "Where the OTB examples executables are")
+  SET(OTB_EXECUTABLES_DIR "${OTB_LIBRARY_DIRS}" CACHE PATH "Where the OTB examples executables are")
   SET(RUN_EXAMPLES_SCRIPT "${SoftwareGuide_SOURCE_DIR}/Examples/RunExamples.pl" CACHE FILEPATH "Where the RunExamples Script is")
 ENDIF( BUILD_FIGURES )
 
