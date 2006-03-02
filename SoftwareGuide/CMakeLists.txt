@@ -46,9 +46,18 @@ IMMEDIATE
 )
 
 # Find OTB Sources
-FIND_PATH(OTB_SOURCE_DIR UseOTB.cmake.in
-   /ORFEO/thomas/ORFEO-TOOLBOX/OTB
-  )
+#FIND_PATH(OTB_SOURCE_DIR UseOTB.cmake.in
+#   /ORFEO/thomas/ORFEO-TOOLBOX/otb/OTB
+#  )
+
+FIND_PACKAGE(OTB)
+IF(OTB_FOUND)
+  INCLUDE(${OTB_USE_FILE})
+ELSE(OTB_FOUND)
+  MESSAGE(FATAL_ERROR
+          "Cannot build OTB-Documents without OTB.  Please set OTB_DIR.")
+ENDIF(OTB_FOUND)
+
 
 IF( NOT OTB_SOURCE_DIR )
   MESSAGE(FATAL_ERROR "OTB source directory is not set")
@@ -60,6 +69,7 @@ SET(OTB_DATA_PATHS "${OTB_SOURCE_DIR}/Examples/Data" CACHE STRING "Where the OTB
 #
 # Rebuild the Software Guide figures or not ?
 SET(BUILD_FIGURES ON CACHE BOOL "Build Software Guide figures")
+
 IF( BUILD_FIGURES )
   SET(OTB_EXECUTABLES_DIR "" CACHE PATH "Where the OTB examples executables are")
   SET(RUN_EXAMPLES_SCRIPT "${SoftwareGuide_SOURCE_DIR}/Examples/RunExamples.pl" CACHE FILEPATH "Where the RunExamples Script is")
@@ -95,9 +105,11 @@ IF (BUILD_FIGURES)
   )
   # END FLIP_INPUTS LIST
 
+
   SUBDIRS(Examples)
   SUBDIRS(Art)
   SUBDIRS(Latex)
+
 ELSE( BUILD_FIGURES )
   SUBDIRS(Art)
   SUBDIRS(Examples)

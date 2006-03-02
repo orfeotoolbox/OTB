@@ -1,7 +1,7 @@
 % Define where in the disk is the Insight source tree 
 \def\ITKSOURCEDIR{@ITK_SOURCE_DIR@}
 \graphicspath{{@SoftwareGuide_SOURCE_DIR@/Art/}{@SoftwareGuide_BINARY_DIR@/Art/}}
-\def\bibtexdatabasepath{@SoftwareGuide_SOURCE_DIR@/../Latex/Insight}
+\def\bibtexdatabasepath{@SoftwareGuide_SOURCE_DIR@/../Latex}
 
 
 % Define command to make reference to on-line Doxygen documentation

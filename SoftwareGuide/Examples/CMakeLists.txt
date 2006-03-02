@@ -204,7 +204,9 @@ IF( BUILD_FIGURES )
       SET(TEX_FILE ${SoftwareGuide_BINARY_DIR}/Examples/${TEX_FILE}.tex)    
       EXEC_PROGRAM(${PERL_EXECUTABLE} "${SoftwareGuide_BINARY_DIR}/Art/Generated"
         ${Examples_BINARY_DIR}
+#THOMAS
         ARGS      ${RUN_EXAMPLES_SCRIPT} ${example} ${OTB_EXECUTABLES_DIR} "${OTB_DATA_PATHS}" ${ExampleCmakeFile} ${TEX_FILE} ${GeneratedFolder}
+#        ARGS      ${RUN_EXAMPLES_SCRIPT} ${example} ${OTB_EXECUTABLES_DIR} "${OTB_DATA_PATHS}" ${ExampleCmakeFile} ${TEX_FILE} ${GeneratedFolder} ${OTB_DATA_PATHS}
       ) 
       # Include each of the generated .cmake files in dependencies list
       # only if the file is generated (if it has command line tags)

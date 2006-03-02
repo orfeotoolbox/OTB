@@ -286,7 +286,9 @@ sub GetArgsAndFilenames {
                 File::Find::find (
                 sub 
                   { 
-                  if ($File::Find::name =~ /$inputfileInThisLine/) 
+#                  if ($File::Find::name =~ /$inputfileInThisLine/) 
+#                  if ($File::Find::name =~ /$inputfileInThisLine$/) 
+                  if ($_ =~ /^$inputfileInThisLine$/) 
                     { 
                     # We found the file in the directory.
                     # Check to see if it is a plain file - not a directory
