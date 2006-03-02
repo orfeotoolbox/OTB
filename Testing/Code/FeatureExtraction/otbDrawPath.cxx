@@ -29,7 +29,7 @@ int otbDrawPathDessinCarre( int argc, char ** argv )
     { 
         const char * inputFilename  = argv[1];
         const char * outputFilename = argv[2];
-       
+        
         typedef unsigned char                                   InputPixelType;
         typedef unsigned char   	                        OutputPixelType;
         const   unsigned int        	                        Dimension = 2;

@@ -46,18 +46,32 @@ public:
   typedef typename InputImageType::PixelType      InputImagePixelType; 
   typedef typename InputImageType::SizeType       InputImageSizeType;                 
   typedef typename InputImageType::ValueType      InputImageValueType;  
+  typedef typename InputImageType::IndexType      InputImageIndexType;  
 
-  typedef typename Superclass::OutputTreeType         OutputTreeType;
-  typedef typename Superclass::OutputTreeListType     OutputTreeListType;
-  typedef typename Superclass::OutputTreePointerType  OutputTreePointerType;
+  typedef typename Superclass::OutputTreeType              OutputTreeType;
+  typedef typename Superclass::OutputTreePointerType       OutputTreePointerType;
+  typedef typename Superclass::OutputTreeConstPointerType  OutputTreeConstPointerType;
+
+  typedef typename Superclass::PathType  	        PathType;
+  typedef typename Superclass::PathPointerType  	PathPointerType;
+
+  typedef typename Superclass::ShapeType     	        ShapeType;
+  typedef typename Superclass::ShapePointerType     	ShapePointerType;
+  typedef typename Superclass::ShapeConstPointerType   	ShapeConstPointerType;
+  
+  typedef typename Superclass::ShapeTreeType 	          ShapeTreeType;  
+  typedef typename Superclass::ShapeTreePointerType       ShapePointerType;
+  typedef typename Superclass::ShapeTreeConstPointerType  ShapeConstPointerType;
+
+  typedef typename Superclass::PointPlaneType              PointPlaneType;
 
   /** ImageDimension constants */
   itkStaticConstMacro(InputImageDimension, unsigned int,
                       TInputImage::ImageDimension);
   
   /** Set/Get the image input of this process object. */
-  virtual void SetImageInput( const InputImageType * image);
-  const InputImageType * GetImageInput(void);
+  virtual void SetInput( const InputImageType * image);
+  const InputImageType * GetInput(void);
 
 protected:
   ImageToTreeFilter();

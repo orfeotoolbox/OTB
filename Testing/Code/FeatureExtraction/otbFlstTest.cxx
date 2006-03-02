@@ -13,13 +13,13 @@
 #pragma warning ( disable : 4786 )
 #endif
  
-#include "itkImage.h"
-#include "itkImageFileWriter.h"
 #include "itkExceptionObject.h"
 #include "otbImageFileReader.h"
+#include "itkImageFileWriter.h"
+#include "itkPolyLineParametricPath.h"
+#include "itkTreeNode.h"
 #include "otbTreeSource.h"
 #include "otbImageToTreeFilter.h"
-#include "otbTreeNeighborhood.h"
 #include "otbFlst.h"
 
 int otbFlstTest( int argc, char ** argv )
@@ -32,20 +32,43 @@ int otbFlstTest( int argc, char ** argv )
 
         typedef unsigned char                                   InputPixelType;
         typedef unsigned char   	                        OutputPixelType;
-//	typedef float						PathType;
 	typedef float						RealPixelType;
         const   unsigned int        	                        Dimension = 2;
 
         typedef itk::Image< InputPixelType,  Dimension >	InputImageType;
         typedef itk::Image< RealPixelType,  Dimension >		RealImageType;
         typedef otb::ImageFileReader< InputImageType  >         ReaderType;
-	typedef otb::TreeNeighborhood                           TreeType;
-	typedef otb::FLST<InputImageType,TreeType>              FlstType;
+	typedef itk::PolyLineParametricPath<Dimension>          PathType;
+//	typedef itk::TreeNode<PathType>                         TreeType;
+
 	
+        typedef otb::TreeSource<PathType>                       TreeSourceType;	
+        typedef otb::ImageToTreeFilter<InputImageType,PathType> TreeFilterType;
+	typedef otb::Flst<InputImageType,PathType>              FlstType;
+	
+
         ReaderType::Pointer reader = ReaderType::New();	
         reader->SetFileName( inputFilename  );
+
+	// Tester les constructeurs des différentes classes mises en oeuvre: 
+        TreeSourceType:: Pointer TreeSourceTest;
+	TreeSourceTest = TreeSourceType::New();
 	
-	FlstType::Pointer tree;
+	TreeSourceTest->AllocateShapeTree(100,1000,5.0);
+	TreeSourceTest->DeAllocateShapeTree();
+    
+        TreeFilterType::Pointer TreeFilterTest;
+        TreeFilterTest = TreeFilterType::New();
+	
+	FlstType::Pointer FlstTest;
+	FlstTest = FlstType::New();	
+ 
+        // Test 2:  Pipeline de la Flst:
+	
+	reader->SetFileName( inputFilename  );
+	TreeFilterTest->SetInput( reader->GetOutput() );
+	TreeFilterTest->Update(); 
+
     
     } 
   catch( itk::ExceptionObject & err ) 

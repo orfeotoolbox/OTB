@@ -36,7 +36,7 @@ ImageToTreeFilter<TInputImage,TOutputTree>
 template <class TInputImage, class TOutputTree>
 void
 ImageToTreeFilter<TInputImage,TOutputTree>
-::SetImageInput(const InputImageType *image)
+::SetInput(const InputImageType *image)
 {
   // We have 1 input:  an image
 
@@ -48,7 +48,7 @@ ImageToTreeFilter<TInputImage,TOutputTree>
 template <class TInputImage, class TOutputTree>
 const typename ImageToTreeFilter<TInputImage,TOutputTree>::InputImageType *
 ImageToTreeFilter<TInputImage,TOutputTree>
-::GetImageInput(void) 
+::GetInput(void) 
 {
   if (this->GetNumberOfInputs() < 1)
     {

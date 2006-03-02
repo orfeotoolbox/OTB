@@ -48,17 +48,30 @@ public:
     
   typedef enum  {AMBIGUOUS, MIN, MAX, INVALID} TypeOfTree;
   
+  
   typedef struct {
-  	itk::Point<float,2>        Point;
 	int                        x;
 	int                        y;
-	float                      Value;
+	float                      value;
   } PointType;
   
-  typedef std::vector<PointType>     PointListType;      
+  typedef std::vector<PointType>     NeighborType;
+  
+  typedef struct {
+        NeighborType  tabPoints;
+        int           iNbPoints;
+	TypeOfTree    type;
+	float         otherBound;
+   } NeighborhoodType;
+       
 protected:
   TreeNeighborhood();
   virtual ~TreeNeighborhood() {}
+  void ReInit(TypeOfTree type);
+  void Init(int iMaxArea);
+  void Init(int iMaxArea,int iWidth,int iHeight);
+  void Free();
+  
   
   void SetSize(int Taille);
   const int ORDER_MAX(int k,int l);
@@ -77,10 +90,7 @@ private:
   TreeNeighborhood(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
 
-  PointListType m_tabPoints;      /*** The array of neighbors, organized as a binary tree  */
-  int           m_iNbPoints;      /*** The size of the previous arrays                     */
-  TypeOfTree    m_type;           /*** max- or min- oriented heap?                         */
-  float         m_otherBound;     /*** Min gray level if max-oriented, max if min-oriented */
+  NeighborhoodType *m_Neighborhood;
   };
 
 } // end namespace otb

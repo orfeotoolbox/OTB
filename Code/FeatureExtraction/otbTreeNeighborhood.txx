@@ -24,76 +24,83 @@ namespace otb
 
 TreeNeighborhood::TreeNeighborhood()
 {
-  m_tabPoints.clear();
-  m_iNbPoints = 0;
-  m_type = AMBIGUOUS;
-  m_otherBound = 0.0;
+  m_Neighborhood->iNbPoints = 0; 
 }
 
-void TreeNeighborhood::SetSize(int Taille)
+void TreeNeighborhood::ReInit(TypeOfTree type)
 {
-  assert( Taille > 0 );
-  m_tabPoints.resize(Taille); 
+  m_Neighborhood->iNbPoints = 0;
+  m_Neighborhood->type      = type;
 }
+
+void TreeNeighborhood::Init(int iMaxArea)
+{
+#if 0
+  iMaxArea = 4*(iMaxArea+1); 
+  if(iMaxArea > iWidth*iHeight)
+    iMaxArea = iWidth*iHeight;
+  m_Neighborhood->tabPoints.resize((iMaxArea+1));
   
+  if(m_Neighborhood->tabPoints == NULL)
+    std::cerr <<"init_neighborhood --> neighbors allocation error" <<std::endl;
+  
+  this->ReInit(AMBIGUOUS);
+#endif
+}
+
+void TreeNeighborhood::Init(int iMaxArea,int iWidth,int iHeight)
+{
+#if 0
+  iMaxArea = 4*(iMaxArea+1);
+ 
+  m_Neighborhood->tabPoints.resize((iMaxArea+1));
+  
+  if(m_Neighborhood->tabPoints == NULL)
+    std::cerr <<"init_neighborhood --> neighbors allocation error" <<std::endl;
+  
+  this->ReInit(AMBIGUOUS);
+#endif
+}
+
+void TreeNeighborhood::Free()
+{
+  m_Neighborhood->tabPoints.clear();
+}
+
+ 
 const int TreeNeighborhood::ORDER_MAX(int k,int l)
 {
-  int Taille = m_tabPoints.size();
-  assert( k > 0);
-  assert( l > 0);
-  assert( k<= Taille);
-  assert( l>= Taille);
-  return (m_tabPoints[k].Value > m_tabPoints[l].Value);
+  return (m_Neighborhood->tabPoints[k].value > m_Neighborhood->tabPoints[l].value);
 }
 
 const int TreeNeighborhood::ORDER_MIN(int k,int l)
 {
-  int Taille = m_tabPoints.size();
-  assert( k > 0);
-  assert( l > 0);
-  assert( k<= Taille);
-  assert( l>= Taille);
-  return (m_tabPoints[k].Value < m_tabPoints[l].Value);
+  return (m_Neighborhood->tabPoints[k].value < m_Neighborhood->tabPoints[l].value);
 }
 
 const void TreeNeighborhood::SWAP(int k,int l)
 {
-  int Taille = m_tabPoints.size();
-  assert( k > 0);
-  assert( l > 0);
-  assert( k<= Taille);
-  assert( l>= Taille);
-  m_tabPoints[0] = m_tabPoints[k];
-  m_tabPoints[k] = m_tabPoints[l];
-  m_tabPoints[l] = m_tabPoints[0];
+  m_Neighborhood->tabPoints[0] = m_Neighborhood->tabPoints[k];
+  m_Neighborhood->tabPoints[k] = m_Neighborhood->tabPoints[l];
+  m_Neighborhood->tabPoints[l] = m_Neighborhood->tabPoints[0];
 }
 
 const int TreeNeighborhood::ORDER_MAX2(int k,int l)
 {
-  int Taille = m_tabPoints.size();
-  assert( k > 0);
-  assert( l > 0);
-  assert( k<= Taille);
-  assert( l>= Taille);
-  return (m_tabPoints[k].Value >= m_tabPoints[l].Value);
-
+  return (m_Neighborhood->tabPoints[k].value >= m_Neighborhood->tabPoints[l].value);
 }
 
 const int TreeNeighborhood::ORDER_MIN2(int k,int l)
 {
-  int Taille = m_tabPoints.size();
-  assert( k > 0);
-  assert( l > 0);
-  assert( k<= Taille);
-  assert( l>= Taille);
-  return (m_tabPoints[k].Value <= m_tabPoints[l].Value);
+ return (m_Neighborhood->tabPoints[k].value <= m_Neighborhood->tabPoints[l].value);
 } 
 
 void TreeNeighborhood::FixUp()
 {
+#if 0
   int k,l;
-  k = m_iNbPoints;
-  if (m_type == MAX)
+  k = m_Neighborhood->iNbPoints;
+  if (m_Neighborhood->type == MAX)
     while(k>1 && this->ORDER_MAX(k,l=k>>1))
     {
     this->SWAP(k,l);
@@ -105,14 +112,16 @@ void TreeNeighborhood::FixUp()
     this->SWAP(k,l);
     k=l;
     }
+#endif
 }
 
 void TreeNeighborhood::FixDown()
 {
+#if 0
   int k,l,N;
-  N = m_iNbPoints;
+  N = m_Neighborhood->iNbPoints;
   k = 1;
-  if (m_type == MAX)
+  if (m_Neighborhood->type == MAX)
      while( (l = k << 1) <= N)
       {
 	if(l < N && this->ORDER_MAX(l+1,l)) ++l;
@@ -130,61 +139,63 @@ void TreeNeighborhood::FixDown()
 	this->SWAP(k, l);
 	k = l;
       }
+#endif
 }
 
 void TreeNeighborhood::Add(int x, int y,float value)
 {
-  if(m_iNbPoints == 0)
-    m_otherBound = value;
+#if 0
+  if(m_Neighborhood->iNbPoints == 0)
+    m_Neighborhood->otherBound = value;
   else
-    switch(m_type)
+    switch(m_Neighborhood->type)
       {
       case MIN:
-	if(value > m_otherBound)
-	  m_otherBound = value;
-	else if(value < m_tabPoints[1].Value)
-	  m_type = INVALID;
+	if(value > m_Neighborhood->otherBound)
+	  m_Neighborhood->otherBound = value;
+	else if(value < m_Neighborhood->tabPoints[1].value)
+	  m_Neighborhood->type = INVALID;
 	break;
       case MAX:
-	if(value < m_otherBound)
-	  m_otherBound = value;
-	else if(value > m_tabPoints[1].Value)
-	  m_type = INVALID;
+	if(value < m_Neighborhood->otherBound)
+	  m_Neighborhood->otherBound = value;
+	else if(value > m_Neighborhood->tabPoints[1].value)
+	  m_Neighborhood->type = INVALID;
 	break;
       case AMBIGUOUS:
-	if(value != m_tabPoints[1].Value) {
-	  m_type = (value < m_tabPoints[1].Value)? MAX: MIN;
-	  m_otherBound = value;
+	if(value != m_Neighborhood->tabPoints[1].value) {
+	  m_Neighborhood->type = (value < m_Neighborhood->tabPoints[1].value)? MAX: MIN;
+	  m_Neighborhood->otherBound = value;
 	}
 	break;
       }
-  if(m_type == INVALID)
+  if(m_Neighborhood->type == INVALID)
     return;
   /* 2) Add the point in the heap and update it */
-  ++m_iNbPoints;
-  m_tabPoints[m_iNbPoints].x = x;
-  m_tabPoints[m_iNbPoints].x = y;
-  m_tabPoints[m_iNbPoints].Value = value;
+  m_Neighborhood->iNbPoints++;
+  m_Neighborhood->tabPoints[m_Neighborhood->iNbPoints].x = x;
+  m_Neighborhood->tabPoints[m_Neighborhood->iNbPoints].x = y;
+  m_Neighborhood->tabPoints[m_Neighborhood->iNbPoints].value = value;
   
   this->FixUp(); /* Update the heap of neighbors */
+#endif
 }
 
 void TreeNeighborhood::Remove()
 {
-  int Taille = m_tabPoints.size();
-  assert(Taille >0);
-  assert(Taille = m_iNbPoints);
+#if 0
   float value,valueTop;
-  value = m_tabPoints[1].Value;
+  value = m_Neighborhood->tabPoints[1].value;
   
-  if(m_type == INVALID)
+  if(m_Neighborhood->type == INVALID)
     return;
-  valueTop = m_tabPoints[m_iNbPoints--].Value;
-  if(m_iNbPoints == 0)
+  valueTop = m_Neighborhood->tabPoints[m_Neighborhood->iNbPoints--].value;
+  if(m_Neighborhood->iNbPoints == 0)
     return;
   this->FixDown();
-  if(value != valueTop && valueTop == m_otherBound)
-    m_type = AMBIGUOUS;
+  if(value != valueTop && valueTop == m_Neighborhood->otherBound)
+    m_Neighborhood->type = AMBIGUOUS;
+#endif
 }
 
 
