@@ -1,3 +1,3 @@
 # $Id$
 
-SUBDIRS(Common IO Installation FeatureExtraction)
+SUBDIRS(Common IO Installation FeatureExtraction Visu)

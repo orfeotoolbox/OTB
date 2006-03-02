@@ -84,13 +84,60 @@ LINK_DIRECTORIES( $ENV{GDAL_DIR_LIB} )
 # Librairie FLTK
 #-------------------------------
 # Add an option to use or not use FLTK (http://www.fltk.org)
-#FIND_PACKAGE(FLTK)
-#IF(FLTK_FOUND)
-#  INCLUDE_DIRECTORIES(${FLTK_INCLUDE_DIR})
-#ELSE(FLTK_FOUND)
-#  MESSAGE(FATAL_ERROR
-#          "Cannot build OTB project without FLTK.  Please set FLTK_DIR.")
-#ENDIF(FLTK_FOUND)
+FIND_PACKAGE(FLTK)
+IF(FLTK_FOUND)
+#  INCLUDE(${FLTK_USE_FILE})
+  INCLUDE_DIRECTORIES(${FLTK_INCLUDE_DIR})
+ELSE(FLTK_FOUND)
+  MESSAGE(FATAL_ERROR
+          "Cannot build OTB project without FLTK.  Please set FLTK_DIR.")
+ENDIF(FLTK_FOUND)
+
+# The fluid-generated fltk sources have many warnings.  This macro
+# will disable warnings for the generated files on some compilers.
+MACRO(OTB_DISABLE_FLTK_GENERATED_WARNINGS files)
+  IF(${CMAKE_MAJOR_VERSION}.${CMAKE_MINOR_VERSION} GREATER 1.6)
+    IF(CMAKE_COMPILER_IS_GNUCXX)
+      FOREACH(f ${files})
+        STRING(REGEX REPLACE "\\.fl$" ".cxx" SRC "${f}")
+        STRING(REGEX REPLACE ".*/([^/]*)$" "\\1" SRC "${SRC}")
+        SET_SOURCE_FILES_PROPERTIES(${SRC} PROPERTIES COMPILE_FLAGS -w)
+      ENDFOREACH(f)
+    ENDIF(CMAKE_COMPILER_IS_GNUCXX)
+  ENDIF(${CMAKE_MAJOR_VERSION}.${CMAKE_MINOR_VERSION} GREATER 1.6)
+ENDMACRO(OTB_DISABLE_FLTK_GENERATED_WARNINGS)
+
+# Macro for adding resources to GUI application on the Mac
+#
+IF(APPLE AND NOT FLTK_USE_X)
+    FIND_PROGRAM(ITK_APPLE_RESOURCE Rez /Developer/Tools)
+    FIND_FILE(ITK_FLTK_RESOURCE mac.r /usr/local/include/FL)
+    IF(NOT ITK_FLTK_RESOURCE)
+      MESSAGE("Fltk resources not found, GUI application will not respond to mouse events")
+    ENDIF(NOT ITK_FLTK_RESOURCE)
+
+    MACRO(ADD_GUI_EXECUTABLE name sources)
+      ADD_EXECUTABLE(${name} ${sources})
+      INSTALL_TARGETS(/bin ${name})
+      SET(EXEC_PATH ${EXECUTABLE_OUTPUT_PATH})
+      IF(NOT EXEC_PATH)
+        SET(EXEC_PATH ${CMAKE_CURRENT_BINARY_DIR})
+      ENDIF(NOT EXEC_PATH)
+        IF(ITK_APPLE_RESOURCE)
+          ADD_CUSTOM_COMMAND(SOURCE ${name}
+                             COMMAND ${ITK_APPLE_RESOURCE}
+                             ARGS -t APPL ${ITK_FLTK_RESOURCE} -o
+                             ${EXEC_PATH}/${name}
+                             TARGET ${name})
+        ENDIF(ITK_APPLE_RESOURCE)
+    ENDMACRO(ADD_GUI_EXECUTABLE)
+ELSE(APPLE AND NOT FLTK_USE_X)
+  MACRO(ADD_GUI_EXECUTABLE name sources)
+    ADD_EXECUTABLE(${name} ${sources})
+    INSTALL_TARGETS(/bin ${name})
+  ENDMACRO(ADD_GUI_EXECUTABLE)
+ENDIF(APPLE AND NOT FLTK_USE_X)
+
 
 #FIND_LIBRARY(FLTK_LIBRARY NAMES fltk PATHS /ORFEO/outils/libs-externes-install/lib/fltk )
 #FIND_PATH(FLTK_INCLUDES Fl.H /ORFEO/outils/libs-externes-install/include/FL )
@@ -114,6 +161,12 @@ INCLUDE_DIRECTORIES( ${OTB_INCLUDE_DIRS} )
 #INCLUDE_DIRECTORIES( ${OTB_SOURCE_DIR}/library )
 #INCLUDE_DIRECTORIES( ${OTB_SOURCE_DIR}/tools )
 #LINK_DIRECTORIES( ${OTB_LIBRARY_DIRS} )
+
+#Includes pour les Utils (/Utils)
+INCLUDE_DIRECTORIES (
+  ${OTB_SOURCE_DIR}/Utils/FltkImageViewer
+)
+
 
 #-----------------------------------------------------------------------------
 # Test for some required system information.
@@ -177,7 +230,7 @@ OPTION(BUILD_TESTING "Generer les tests." ON)
 
 #-----------------------------------------------------------------------------
 # Dispatch the build into the proper subdirectories.
-SUBDIRS(Code)
+SUBDIRS(Code Utils)
 
 IF (BUILD_EXAMPLES)
   SUBDIRS(Examples)

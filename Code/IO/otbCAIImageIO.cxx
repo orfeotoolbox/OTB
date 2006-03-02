@@ -9,7 +9,9 @@ extern "C"
 #include "cai_image.h"
 }
 
+
 #include "itkExceptionObject.h"
+#include "itkJPEGImageIO.h"
 
 #include <iostream>
 #include <list>
@@ -314,6 +316,15 @@ bool CAIImageIO::CanReadFile( const char* filename )
         int NbOctetPixel;            /* Nombre octets/pixel l'image */
         CAI_IMAGE* lCai(NULL);
  
+        //Traitement particulier sur certain format où l'on préfère utiliser 
+        // Format JPEG -> lecture avec ITK (pas CAI)
+  	itk::JPEGImageIO::Pointer lJPEGImageIO = itk::JPEGImageIO::New();
+        bool lCanRead = lJPEGImageIO->CanReadFile(filename);
+        if ( lCanRead == true)
+        {
+                return false;
+        }
+
         std::string CaiFileName("");
         std::string CaiFormat("");
 //        std::string CaiFileNameOrigin(filename);
