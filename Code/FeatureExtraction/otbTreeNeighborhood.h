@@ -63,14 +63,15 @@ public:
 	TypeOfTree    type;
 	float         otherBound;
    } NeighborhoodType;
+
+  void Init(int iMaxArea);
+  void Free();
        
 protected:
   TreeNeighborhood();
   virtual ~TreeNeighborhood() {}
   void ReInit(TypeOfTree type);
-  void Init(int iMaxArea);
   void Init(int iMaxArea,int iWidth,int iHeight);
-  void Free();
   
   
   void SetSize(int Taille);

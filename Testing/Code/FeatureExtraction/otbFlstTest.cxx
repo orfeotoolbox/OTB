@@ -69,7 +69,7 @@ int otbFlstTest( int argc, char ** argv )
 	TreeFilterTest->SetInput( reader->GetOutput() );
 	TreeFilterTest->Update(); 
 
-    
+   
     } 
   catch( itk::ExceptionObject & err ) 
     { 

@@ -57,8 +57,9 @@ public:
     {
     int x;
     int y;
-    } *PointPlaneType;
+    } PointPlaneType;
     
+  typedef typename std::vector<PointPlaneType>   PointPlaneListType;
     
   typedef struct shape
     {
@@ -67,7 +68,7 @@ public:
     char                   open;
     int                    area;
     char                   removed;
-    PointPlaneType         pixels;
+    PointPlaneListType     pixels;
     PathPointerType        boundary;
     shape                  *parent;
     shape                  *child;
@@ -91,7 +92,7 @@ public:
   typedef const ShapeTreeType* ShapeTreeConstPointerType;    
 
   /** Get the tree output of this process object.  */
-  OutputTreePointerType GetOutput(void);
+  OutputTreePointerType GetOutput(){ };
 
   void AllocateShapeTree(int nrow,int ncol,float value);
   void DeAllocateShapeTree();

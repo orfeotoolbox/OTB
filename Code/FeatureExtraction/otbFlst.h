@@ -80,15 +80,18 @@ public:
   typedef typename Superclass::ShapeTreeConstPointerType  ShapeConstPointerType;
 
   typedef typename Superclass::PointPlaneType              PointPlaneType;
+  typedef typename Superclass::PointPlaneListType          PointPlaneListType;
 
   typedef typename otb::TreeNeighborhood::NeighborhoodType   NeighborhoodType;
 
   typedef struct
      {
-       ShapeType shape;
+       ShapeType *shape; //Pointeur ou pas ?
        float     level;
      } ConnectionType;
-  
+
+  typedef typename std::vector<ConnectionType>   ConnectionListType;
+
 protected:
   Flst();
   virtual ~Flst() {}
@@ -118,23 +121,22 @@ protected:
 //  inline int NEIGHBOR_NOT_STORED(int x,int y)
 //      {m_VisitedPixels[y][x]<m_Exploration;}
       
-#if 0
   char is_local_min(RealImagePointerType ou, int x, int y, char b8Connected);
   char is_local_max(RealImagePointerType ou, int x, int y, char b8Connected);
 
   void UpdateSmallestShapes(PointPlaneType tabPoints, int NbPoints);  
   void Connect(PointPlaneType tabPoints,int iNbPoints,
-               ConnectionType *tabConnections,ShapeType pSmallestShape);
+               ConnectionType *tabConnections,ShapeType* pSmallestShape);
   void NewConnection(PointPlaneType tabPoints,float level,
                      ConnectionType *tabConnections); 
   
   unsigned char configuration(IntImagePointerType VisitedPixels, int x, int y);
 
   ShapeType NewShape(int iCurrentArea, float currentGrayLevel, 
-                     char bOfInferiorType, ShapeType pChild);
+                     char bOfInferiorType, ShapeType *pChild);
 
-  void Store4Neighbors(RealImagePointerType ou,int x,int y,NeighborhoodType pNeighborhood);
-  void Store8Neighbors(RealImagePointerType ou,int x,int y,NeighborhoodType pNeighborhood);
+  void Store4Neighbors(RealImagePointerType ou,int x,int y,NeighborhoodType *pNeighborhood);
+  void Store8Neighbors(RealImagePointerType ou,int x,int y,NeighborhoodType *pNeighborhood);
   void AddIsoLevel(PointPlaneType   tabPointsInShape, 
                    int              *pCurrentArea,
 		   float            currentGrayLevel, 
@@ -144,13 +146,12 @@ protected:
   void FindTerminalBranch(RealImagePointerType ou,int x,int y,
                           char b8Connected,
                           NeighborhoodType *pNeighborhood, 
-			  ConnectionType *tabConnections);
+			  ConnectionType   *tabConnections);
   void Scan(RealImagePointerType ou,NeighborhoodType *pNeighborhood,
             ConnectionType *tabConnections);
   void CalculateArea(int Width, int Height);
-#endif 
   void GenerateData(void);
- 
+  
 private:
   Flst(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
@@ -167,9 +168,9 @@ private:
   IntImagePointerType   m_VisitedPixels;
   RealImagePointerType  m_PixelOutput;
   NeighborhoodType      m_Neighborhood;
-  ConnectionType*       m_Connections;
-
-  PointPlaneType m_PointsInShape;
+  ConnectionListType*   m_Connections;
+  ShapeTreeType*        m_GlobalTree;
+  PointPlaneListType    m_PointsInShape;
         
 };
 } // end namespace otb
@@ -177,6 +178,5 @@ private:
 #ifndef OTB_MANUAL_INSTANTIATION
 #include "otbFlst.txx"
 #endif
-
   
 #endif

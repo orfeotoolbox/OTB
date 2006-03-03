@@ -29,6 +29,17 @@ TreeSource<TOutputTree>
 
 }
 
+#if 0
+template<class TOutputTree>
+OutputTreePointerType
+TreeSource<TOutputTree>
+::GetOutput()
+{
+  // A définir
+}				  
+
+#endif
+
 template<class TOutputTree>
 void
 TreeSource<TOutputTree>
@@ -59,9 +70,7 @@ TreeSource<TOutputTree>
   
   return pNewShape;
 }
-#endif
 
-#if 0
 template<class TOutputTree>
 void
 TreeSource<TOutputTree>
@@ -88,8 +97,8 @@ TreeSource<TOutputTree>
 //   }
 
 }
-#endif
 
+#endif
 /**
  *
  */
@@ -126,7 +135,7 @@ TreeSource<TOutputTree>
   root->open          = 1;
   root->area          = size;
   root->removed       = 0;
-  root->pixels        = NULL;
+  root->pixels.clear();
   root->boundary      = PathType::New();
   root->parent        = NULL;
   root->next_sibling  = NULL;
@@ -158,10 +167,6 @@ TreeSource<TOutputTree>
       std::cerr << "cannot delete: shapes structure is NULL" 
                 << std::endl;
     }
-
-  if( (m_GlobalTree->the_shapes != NULL) && 
-        (m_GlobalTree->nb_shapes > 0)           )
-     delete [](m_GlobalTree->the_shapes[0].pixels);
      
   if (m_GlobalTree->the_shapes != NULL) delete [](m_GlobalTree->the_shapes);
   if (m_GlobalTree->smallest_shape != NULL) delete [](m_GlobalTree->smallest_shape);

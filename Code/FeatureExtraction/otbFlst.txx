@@ -12,6 +12,8 @@
 #define __otbFlst_txx
 
 #include "otbFlst.h"
+#include "itkImageRegionIteratorWithIndex.h"
+#include "itkImageRegionConstIteratorWithIndex.h"
 
 namespace otb
 {
@@ -87,31 +89,11 @@ template<class TInputImage, class TOutputTree>
 Flst<TInputImage,TOutputTree>
 ::Flst()
 {
-  std::cout << "Constructeur" << std::endl;
-//  m_MinArea = 1;
-//  m_VisitedNeighbors = IntImageType::New();
+  m_MinArea = 1;                            // Valeur par défaut
+  m_VisitedPixels = IntImageType::New();
+  m_PixelOutput   = RealImageType::New();
 }
 
-
-#if 0
-
-template< class TInputImage, class TOutputTree>
-void 
-Flst<TInputImage,TOutputTree>
-::CalculateArea(int Width, int Height)
-{
-#if 0
-  int iAreaImage;
-  
-  m_AreaImage = Width * Height; 
-  m_HalfAreaImage = (m_AreaImage+1) / 2;
-  if(Width == 1) m_PerimeterImage = Height;
-  else if(Height == 1) m_PerimeterImage = Width;
-  else m_PerimeterImage = (Width+Height-2)*2;
-  
-  if(m_MinArea > m_AreaImage) std::cerr << "CalculateArea: min area > image"<< std::endl;
-#endif
-}
 
 template< class TInputImage, class TOutputTree>
 char 
@@ -207,7 +189,7 @@ Flst<TInputImage,TOutputTree>
 template< class TInputImage, class TOutputTree>
 void  
 Flst<TInputImage,TOutputTree>
-::Store4Neighbors(RealImagePointerType ou, int x,int y,NeighborhoodType pNeighborhood)
+::Store4Neighbors(RealImagePointerType ou, int x,int y,NeighborhoodType *pNeighborhood)
 {
 #if 0
    if(x > 0         && NEIGHBOR_NOT_STORED(x-1,y))
@@ -224,7 +206,7 @@ Flst<TInputImage,TOutputTree>
 template< class TInputImage, class TOutputTree>
 void  
 Flst<TInputImage,TOutputTree>
-::Store8Neighbors(RealImagePointerType ou,int x,int y,NeighborhoodType pNeighborhood)
+::Store8Neighbors(RealImagePointerType ou,int x,int y,NeighborhoodType *pNeighborhood)
 {
 #if 0
   if(x > 0) {
@@ -383,42 +365,104 @@ Flst<TInputImage,TOutputTree>
 #endif
 }	    
 
-#endif
 
 template< class TInputImage, class TOutputTree>
 void 
 Flst<TInputImage,TOutputTree>
 ::GenerateData(void)
 {
+  typedef itk::ImageRegionIteratorWithIndex< RealImageType >        OutputIteratorType; 
+  typedef itk::ImageRegionConstIteratorWithIndex< InputImageType >  InputIteratorType; 
   std::cout << "Generate data FLST" <<std::endl;
   const InputImageType  *InputImage   = this->GetInput();
-  
-#if 0
-  int iWidth, iHeight;
-  int iMinArea, iMaxArea, iAreaImage, iHalfAreaImage, iPerimeterImage;
-  int iExploration;  /* Used to avoid reinitializing images */
-//  static Point_plane tabPointsInShape;
-  static int** tabtabVisitedNeighbors; /* Exterior boundary */
-//  static Shapes pGlobalTree;
-  static int iAtBorder; /* #points meeting at border of image */
-  typename InputImageType::SizeType Taille;
-
+//  OutputTreePointerType  OutputTree   = this->GetOutput();
+//  OutputTreeType        *OutputTree   = this->GetOutput();
   itkDebugMacro(<< "FLST::GenerateData() called");
-  // Get the input and output pointers 
-  const InputImageType  *InputImage   = this->GetImageInput();
-  OutputTreeListType    *OutputTree   = this->GetOutput();
-  
+
+  typename InputImageType::RegionType region;
+    
+  InputImageSizeType Taille;
+  int i;
   Taille = InputImage->GetLargestPossibleRegion().GetSize();
-  iWidth  = Taille[0];
-  iHeight = Taille[1];
+  m_Width  = Taille[0];
+  m_Height = Taille[1];
+
+  m_AreaImage = m_Width * m_Height; 
+  m_HalfAreaImage = (m_AreaImage+1) / 2;
+  if(m_Width == 1) m_PerimeterImage = m_Height;
+  else if(m_Height == 1) m_PerimeterImage = m_Width;
+  else m_PerimeterImage = (m_Width+m_Height-2)*2;
+
+  if(m_MinArea > m_AreaImage) std::cerr << "CalculateArea: min area > image"<< std::endl;
   
-  this->CalculateArea(iWidth, iHeight);
+  m_GlobalTree->interpolation = 0 ;
+  m_Connections->resize(m_AreaImage);
   
-  itkDebugMacro(<< "FLST::GenerateData() finished");
-#endif
+  for(i = m_AreaImage-1; i >= 0; i--)
+    (*m_Connections)[i].shape = NULL;
+  
+  // Initialise la variable de travail m_PixelOutput
+      
+  region.SetSize(InputImage->GetLargestPossibleRegion().GetSize());
+  region.SetIndex(InputImage->GetLargestPossibleRegion().GetIndex());
+  m_PixelOutput->SetRegions( region );
+  m_PixelOutput->SetOrigin(InputImage->GetOrigin());
+  m_PixelOutput->SetSpacing(InputImage->GetSpacing());
+  m_PixelOutput->Allocate();
+  
+  OutputIteratorType    outputIt( m_PixelOutput, m_PixelOutput->GetRequestedRegion() );
+  InputIteratorType     inputIt(  InputImage,    m_PixelOutput->GetRequestedRegion() );
+
+  outputIt.GoToBegin();
+  inputIt.GoToBegin();
+
+  for ( outputIt.GoToBegin(); !outputIt.IsAtEnd(); ++outputIt,++inputIt)
+    {
+     outputIt.Set( inputIt.Get() );
+    }
+
+  // Initialise l'attribut : m_VisitedPixels:
+  
+  m_VisitedPixels->SetRegions( region );
+  m_VisitedPixels->SetOrigin(InputImage->GetOrigin());
+  m_VisitedPixels->SetSpacing(InputImage->GetSpacing());
+  m_VisitedPixels->Allocate();
+  
+  // Initialisation de l'attribut : m_Neighborhood
+   
+//  m_Neighborhood->Init(m_AreaImage);
+
+  // Initialisation de l'attribut : m_PointsInShape
+  m_PointsInShape.resize(m_AreaImage); 
+  
+  // Initialisation de l'attribut : m_PointsInShape
+  m_Exploration = 0;
+  m_MaxArea     = 0;
+
+  do {
+    if(m_MaxArea == 0)
+      m_MaxArea = INIT_MAX_AREA;
+    else
+      m_MaxArea <<= STEP_MAX_AREA;
+    if(m_MaxArea == 0 || m_MaxArea >= m_HalfAreaImage) /* iMaxArea==0: overflow */
+       m_MaxArea = m_AreaImage-1;
+//    scan(tabtabPixelsOutput, tabtabVisitedPixels,&neighborhood,tabConnections);
+  } while(m_MaxArea+1 < m_AreaImage);
+
+  /* Make connections with root */
+//  pTree->the_shapes[0].value = tabtabPixelsOutput[0][0];
+  for(i = m_AreaImage-1; i >= 0; i--)
+      {
+//    if(tabConnections[i].shape != NULL) {
+//      assert(tabConnections[i].level == pTree->the_shapes[0].value);
+//      insert_children(pTree->the_shapes, tabConnections[i].shape);
+//    }
+     }  
+  
+
 }
 
-#endif
+
 /**
  * Standard "PrintSelf" method
  */
@@ -437,3 +481,4 @@ Flst<TInputImage,TOutputTree>
 
 
  
+#endif

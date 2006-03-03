@@ -64,6 +64,7 @@ public:
   typedef typename Superclass::ShapeTreeConstPointerType  ShapeConstPointerType;
 
   typedef typename Superclass::PointPlaneType              PointPlaneType;
+  typedef typename Superclass::PointPlaneListType          PointPlaneListType;
 
   /** ImageDimension constants */
   itkStaticConstMacro(InputImageDimension, unsigned int,
