@@ -5,6 +5,9 @@ IF( NOT OTB_DISABLE_CXX_TESTING )
 SET(BASELINE ${OTB_DATA_ROOT}/Baseline/Images)
 SET(INPUTDATA ${OTB_DATA_ROOT}/Input)
 SET(TEMP ${OTBTesting_BINARY_DIR}/Temporary)
+#Images de teledetection (grosses images )
+SET(IMAGEDATA ${OTB_DATA_DIR} )
+
 #Tolerance sur diff pixel image
 SET(TOL 0.0)
 
@@ -15,7 +18,7 @@ SET(COMMON_TESTS ${CXX_TEST_PATH}/otbCommonTests)
 # ---  RADARSAT (GDAL)  ---
 ADD_TEST(ioTvMultiMonoChannelROI_RADARSAT2BSQ ${COMMON_TESTS} 
          otbMultiToMonoChannelExtractROI
-         -ushort ${INPUTDATA}/RADARSAT1/SCENE01/
+         -ushort ${IMAGEDATA}/RADARSAT1/SCENE01/
          -ushort ${TEMP}/ioMultiMonoChannelROI_RADARSAT2PNG_2559_3591_337_280.hd
          -startX 2559 -startY 3591 -sizeX 337 -sizeY 280 )
 
@@ -33,7 +36,7 @@ ADD_TEST(ioTvMultiMonoChannelROI_SAR_ERS2_SLCI2BSQ ${COMMON_TESTS}
 #   --compare-image ${TOL}   ${BASELINE}/ioExtractROI_BSQ2PNG_poupees_100_100_77_300_channels_1_2_3.png
 #                     ${TEMP}/ioExtractROI_BSQ2PNG_poupees_100_100_77_300_channels_1_2_3.png
          otbMultiToMonoChannelExtractROI
-         -ushort ${INPUTDATA}/SAR_ERS2_SLCI_SCENE1/DAT_01.001 
+         -ushort ${IMAGEDATA}/SAR_ERS2_SLCI_SCENE1/DAT_01.001 
          -ushort ${TEMP}/ioMultiMonoChannelROI_SAR_ERS2_SLCI2PNG_channel_1.hd
          -startX 200 -startY 100 -sizeX 1000 -sizeY 1000
          -channel 1)
@@ -63,7 +66,7 @@ ADD_TEST(ioTuCAIImageIOCanReadBSQ ${IO_TESTS} otbCAIImageIOTestCanRead
         ${INPUTDATA}/poupees.hd )
 
 ADD_TEST(ioTuCAIImageIOCanReadSPOT4 ${IO_TESTS} otbCAIImageIOTestCanRead
-        ${INPUTDATA}/SPOT4_SCENE01 )
+        ${IMAGEDATA}/SPOT4_SCENE01 )
 
 ADD_TEST(ioTuCAIImageIOCanReadSPOT5TIF ${IO_TESTS} otbCAIImageIOTestCanRead
         ${INPUTDATA}/poupeesTIF )
@@ -77,10 +80,10 @@ ADD_TEST(ioTuGDALImageIOCanRead_ENVI ${IO_TESTS} otbGDALImageIOTestCanRead
         ${INPUTDATA}/poupees_1canal.c1 )
 
 ADD_TEST(ioTuGDALImageIOCanRead_RADARSAT ${IO_TESTS} otbGDALImageIOTestCanRead 
-        ${INPUTDATA}/RADARSAT1/SCENE01/DAT_01.001 )
+        ${IMAGEDATA}/RADARSAT1/SCENE01/DAT_01.001 )
 
 ADD_TEST(ioTuGDALImageIOCanRead_SAR_ERS2 ${IO_TESTS} otbGDALImageIOTestCanRead 
-        ${INPUTDATA}/SAR_ERS2_SLCI_SCENE1/DAT_01.001 )
+        ${IMAGEDATA}/SAR_ERS2_SLCI_SCENE1/DAT_01.001 )
 
 # CanWrite()
 ADD_TEST(ioTuCAIImageIOCanWriteBSQ ${IO_TESTS} otbCAIImageIOTestCanWrite 
@@ -185,7 +188,7 @@ ADD_TEST(ioTvMultiChannelROI_SPOT42PNG ${COMMON_TESTS}
    --compare-image ${TOL}   ${BASELINE}/ioExtractROI_SPOT42PNG_spot4_700_60_77_489_channels_1_2_3.png
                      ${TEMP}/ioExtractROI_SPOT42PNG_spot4_700_60_77_489_channels_1_2_3.png
          otbMultiChannelExtractROI
-         ${INPUTDATA}/SPOT4_SCENE01
+         ${IMAGEDATA}/SPOT4_SCENE01
          ${TEMP}/ioExtractROI_SPOT42PNG_spot4_700_60_77_489_channels_1_2_3.png
          -startX 700 -startY 60 -sizeX 77 -sizeY 489
          -channels 1 2 3 )
@@ -193,7 +196,7 @@ ADD_TEST(ioTvMultiChannelROI_SPOT42PNG_2 ${COMMON_TESTS}
    --compare-image ${TOL}   ${BASELINE}/ioExtractROI_SPOT42PNG_spot4_700_60_77_489_channels_3_2_1.png
                      ${TEMP}/ioExtractROI_SPOT42PNG_spot4_700_60_77_489_channels_3_2_1.png
          otbMultiChannelExtractROI
-         ${INPUTDATA}/SPOT4_SCENE01
+         ${IMAGEDATA}/SPOT4_SCENE01
          ${TEMP}/ioExtractROI_SPOT42PNG_spot4_700_60_77_489_channels_3_2_1.png
          -startX 700 -startY 60 -sizeX 77 -sizeY 489
          -channels 3 2 1 )
@@ -224,7 +227,7 @@ ADD_TEST(ioTvMultiChannelROI_SPOT52PNG ${COMMON_TESTS}
    --compare-image ${TOL}   ${BASELINE}/ioExtractROI_SPOT52PNG_spot5_700_700_1000_1000_channels_1_2_3.png
                      ${TEMP}/ioExtractROI_SPOT52PNG_spot5_700_700_1000_1000_channels_1_2_3.png
          otbMultiChannelExtractROI
-         ${INPUTDATA}/SPOT5_SCENE01
+         ${IMAGEDATA}/SPOT5_SCENE01
          ${TEMP}/ioExtractROI_SPOT52PNG_spot5_700_700_1000_1000_channels_1_2_3.png
          -startX 700 -startY 700 -sizeX 1000 -sizeY 1000
          -channels 1 2 3 )
@@ -233,7 +236,7 @@ ADD_TEST(ioTvMultiChannelROI_SPOT52PNG_2 ${COMMON_TESTS}
    --compare-image ${TOL}   ${BASELINE}/ioExtractROI_SPOT52PNG_spot5_700_700_1000_1000_channel_1.png
                      ${TEMP}/ioExtractROI_SPOT52PNG_spot5_700_700_1000_1000_channel_1.png
          otbMultiChannelExtractROI
-         ${INPUTDATA}/SPOT5_SCENE01
+         ${IMAGEDATA}/SPOT5_SCENE01
          ${TEMP}/ioExtractROI_SPOT52PNG_spot5_700_700_1000_1000_channel_1.png
          -startX 700 -startY 700 -sizeX 1000 -sizeY 1000
          -channels 1 )
@@ -241,7 +244,7 @@ ADD_TEST(ioTvMultiChannelROI_SPOT52PNG_3 ${COMMON_TESTS}
    --compare-image ${TOL}   ${BASELINE}/ioExtractROI_SPOT52PNG_spot5_700_700_1000_1000_channel_2.png
                      ${TEMP}/ioExtractROI_SPOT52PNG_spot5_700_700_1000_1000_channel_2.png
          otbMultiChannelExtractROI
-         ${INPUTDATA}/SPOT5_SCENE01
+         ${IMAGEDATA}/SPOT5_SCENE01
          ${TEMP}/ioExtractROI_SPOT52PNG_spot5_700_700_1000_1000_channel_2.png
          -startX 700 -startY 700 -sizeX 1000 -sizeY 1000
          -channels 2 )
@@ -249,7 +252,7 @@ ADD_TEST(ioTvMultiChannelROI_SPOT52PNG_4 ${COMMON_TESTS}
    --compare-image ${TOL}   ${BASELINE}/ioExtractROI_SPOT52PNG_spot5_700_700_1000_1000_channel_3.png
                      ${TEMP}/ioExtractROI_SPOT52PNG_spot5_700_700_1000_1000_channel_3.png
          otbMultiChannelExtractROI
-         ${INPUTDATA}/SPOT5_SCENE01
+         ${IMAGEDATA}/SPOT5_SCENE01
          ${TEMP}/ioExtractROI_SPOT52PNG_spot5_700_700_1000_1000_channel_3.png
          -startX 700 -startY 700 -sizeX 1000 -sizeY 1000
          -channels 3 )
@@ -257,7 +260,7 @@ ADD_TEST(ioTvMultiChannelROI_SPOT52PNG_5 ${COMMON_TESTS}
    --compare-image ${TOL}   ${BASELINE}/ioExtractROI_SPOT52PNG_spot5_700_700_1000_1000_channel_4.png
                      ${TEMP}/ioExtractROI_SPOT52PNG_spot5_700_700_1000_1000_channel_4.png
          otbMultiChannelExtractROI
-         ${INPUTDATA}/SPOT5_SCENE01
+         ${IMAGEDATA}/SPOT5_SCENE01
          ${TEMP}/ioExtractROI_SPOT52PNG_spot5_700_700_1000_1000_channel_4.png
          -startX 700 -startY 700 -sizeX 1000 -sizeY 1000
          -channels 4 )
