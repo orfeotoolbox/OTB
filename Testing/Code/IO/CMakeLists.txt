@@ -59,9 +59,6 @@ SET(IO_TESTS ${CXX_TEST_PATH}/otbIOTests)
 
 # -------            otb::CAIImageIO   ------------------------------
 # CanRead()
-ADD_TEST(ioTuCAIImageIOCanReadJPG ${IO_TESTS} otbCAIImageIOTestCanRead
-        ${INPUTDATA}/poupees.jpg )
-
 ADD_TEST(ioTuCAIImageIOCanReadBSQ ${IO_TESTS} otbCAIImageIOTestCanRead
         ${INPUTDATA}/poupees.hd )
 
