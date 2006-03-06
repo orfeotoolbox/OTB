@@ -17,7 +17,6 @@ SET(OTB_VERSION_PATCH "0")
 # enough to distinguish available features of the toolkit.
 SET(OTB_VERSION_STRING "${OTB_VERSION_MAJOR}.${OTB_VERSION_MINOR}")
 
-
 #-----------------------------------------------------------------------------
 # RECHERCHE DES LIBRAIRIES EXTERNES UTILISEES
 
@@ -173,6 +172,10 @@ INCLUDE_DIRECTORIES (
 INCLUDE (${CMAKE_ROOT}/Modules/CMakeBackwardCompatibilityC.cmake)
 INCLUDE (${CMAKE_ROOT}/Modules/CMakeBackwardCompatibilityCXX.cmake)
 
+
+#-----------------------------------------------------------------------------
+# Repertoire des images de télédetection.
+SET( OTB_DATA_DIR "$ENV{OTB_DATA_DIR}" CACHE STRING "Image directory")
 
 #-----------------------------------------------------------------------------
 # Configure Dart testing support.  This should be done before any
