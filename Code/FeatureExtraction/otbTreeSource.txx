@@ -8,7 +8,6 @@
   $Id$ 
 
 =========================================================================*/
- 
 #ifndef _otbTreeSource_txx
 #define _otbTreeSource_txx
 
@@ -24,159 +23,128 @@ template<class TOutputTree>
 TreeSource<TOutputTree>
 ::TreeSource()
 {
+  // Create the output. We use static_cast<> here because we know the default
+  // output must be of type TOutputMesh
+  OutputTreePointer output
+    = static_cast<TOutputTree*>(this->MakeOutput(0).GetPointer()); 
+
   this->itk::ProcessObject::SetNumberOfRequiredOutputs(1);
-  m_GlobalTree = new ShapeTreeType;
+  this->itk::ProcessObject::SetNthOutput( 0, output.GetPointer() );
 
+  m_GenerateDataRegion = 0;
+  m_GenerateDataNumberOfRegions = 0;
 }
 
-#if 0
+/**
+ *
+ */
 template<class TOutputTree>
-OutputTreePointerType
+typename TreeSource<TOutputTree>::DataObjectPointer
 TreeSource<TOutputTree>
-::GetOutput()
+::MakeOutput(unsigned int)
 {
-  // A définir
-}				  
-
-#endif
-
-template<class TOutputTree>
-void
-TreeSource<TOutputTree>
-::TranslateTreeShapeToOutputTree( ShapeTreeConstPointerType  Shapes, 
-		                  OutputTreePointerType      TreeContainer )
-{
-  // A définir
-}				  
-				  
-
-#if 0
-template<class TOutputTree>
-typename ShapeType
-TreeSource<TOutputTree>
-::NewShape(	int iCurrentArea, float currentGrayLevel, char bOfInferiorType, 
-		ShapeType *pChild)
-{
-
-  ShapePointerType pNewShape;
-  pNewShape = &(m_GlobalTree->the_shapes[m_GlobalTree->nb_shapes++]);
-  pNewShape->inferior_type = bOfInferiorType;
-  pNewShape->value = currentGrayLevel;
-  pNewShape->open = (char)(m_AtBorder != 0);
-  pNewShape->area = m_CurrentArea;
-  pNewShape->removed = 0;
-  pNewShape->pixels = PointListType::New();
-  pNewShape->parent = NULL;
-  
-  return pNewShape;
+  return static_cast<DataObject*>(TOutputTree::New().GetPointer());
 }
 
+/**
+ *
+ */
 template<class TOutputTree>
-void
+typename TreeSource<TOutputTree>::OutputTreeType *
 TreeSource<TOutputTree>
-::UpdateSmallestShapes(PointListPointerType tabPoints, int NbPoints)
+::GetOutput(void)
 {
-
-  int i, iIndex;
-  ShapeType::Pointer pNewShape, pRoot;
-   
-  pRoot     = &m_GlobalTree->the_shapes[0];
-  pNewShape = &m_GlobalTree->the_shapes[m_GlobalTree->nb_shapes-1];
-  for(i = iNbPoints - 1; i >= 0; i--)
+  if (this->GetNumberOfOutputs() < 1)
     {
-      iIndex = tabPoints[i].y * iWidth + tabPoints[i].x;
-      if(pGlobalTree->smallest_shape[iIndex] == pRoot)
-	pGlobalTree->smallest_shape[iIndex] = pNewShape;
+    return 0;
     }
-//   itk::LevelOrderTreeIterator<TreeType> levelIt(tree,10,tree->GetNode(2));
-//   levelIt.GoToBegin();
-//   while(!levelIt.IsAtEnd())
-//   {
-//   std::cout << levelIt.Get() << " ("<< levelIt.GetLevel() << ")" << std::endl;;
-//   ++levelIt;
-//   }
-
+  
+  return static_cast<TOutputTree*>
+    (this->itk::ProcessObject::GetOutput(0));
 }
 
-#endif
+  
+/**
+ *
+ */
+template<class TOutputTree>
+typename TreeSource<TOutputTree>::OutputTreeType *
+TreeSource<TOutputTree>
+::GetOutput(unsigned int idx)
+{
+  return static_cast<TOutputTree*>
+    (this->itk::ProcessObject::GetOutput(idx));
+}
+
+
 /**
  *
  */
 template<class TOutputTree>
 void 
 TreeSource<TOutputTree>
-::AllocateShapeTree(int nrow,int ncol,float value)     
+::SetOutput(OutputTreeType *output)
 {
-
-  int       size;
-  int       i;
-  ShapePointerType root;
-
-  if (m_GlobalTree == NULL) 
-    {
-      std::cerr << "cannot alloc root : shapes structure is NULL" 
-                << std::endl;
-    }
-  
-  size = nrow*ncol;
-  if (size <= 0)
-    {
-      std::cerr << "Attempts to alloc shapes with null size"
-                << std::endl;
-    }
-
-  root = m_GlobalTree->the_shapes = new ShapeType[size+1];
-  if (root==NULL)
-    {
-      std::cerr << " Not enough memory "<< std::endl;
-    }
-  root->inferior_type = 1;
-  root->value         = value;
-  root->open          = 1;
-  root->area          = size;
-  root->removed       = 0;
-  root->pixels.clear();
-  root->boundary      = PathType::New();
-  root->parent        = NULL;
-  root->next_sibling  = NULL;
-  root->child         = NULL;
-
-  m_GlobalTree->nb_shapes = 1;
-  m_GlobalTree->nrow      = nrow;
-  m_GlobalTree->ncol      = ncol;  
-
-  m_GlobalTree->smallest_shape = new ShapePointerType[size];
-  if (m_GlobalTree->smallest_shape==NULL)
-    {
-      std::cerr << " Not enough memory"<< std::endl;
-      delete root;
-    }
-  for (i=size-1; i>=0; i--) m_GlobalTree->smallest_shape[i] = root;
-
-
+  itkWarningMacro(<< "SetOutput(): This method is slated to be removed from ITK.  Please use GraftOutput() in possible combination with DisconnectPipeline() instead." );
+  this->itk::ProcessObject::SetNthOutput(0, output);
 }
- 
- 
+
+
+/**
+ *
+ */
 template<class TOutputTree>
 void 
 TreeSource<TOutputTree>
-::DeAllocateShapeTree()
+::GenerateInputRequestedRegion()
 {
-  if (m_GlobalTree == NULL) 
-    {
-      std::cerr << "cannot delete: shapes structure is NULL" 
-                << std::endl;
-    }
-     
-  if (m_GlobalTree->the_shapes != NULL) delete [](m_GlobalTree->the_shapes);
-  if (m_GlobalTree->smallest_shape != NULL) delete [](m_GlobalTree->smallest_shape);
-
-  delete m_GlobalTree;
-
+  Superclass::GenerateInputRequestedRegion();
 }
 
+
+/**
+ * 
+ */
 template<class TOutputTree>
 void
+TreeSource<TOutputTree>
+::GraftOutput(DataObject *graft)
+{
+  this->GraftNthOutput(0, graft);
+}
+
+
+/**
+ * 
+ */
+template<class TOutputTree>
+void
+TreeSource<TOutputTree>
+::GraftNthOutput(unsigned int idx, DataObject *graft)
+{
+  if ( idx >= this->GetNumberOfOutputs() )
+    {
+    itkExceptionMacro(<<"Requested to graft output " << idx << 
+        " but this filter only has " << this->GetNumberOfOutputs() << " Outputs.");
+    }  
+
+  if ( !graft )
+    {
+    itkExceptionMacro(<<"Requested to graft output that is a NULL pointer" );
+    }
+
+  DataObject * output = this->GetOutput( idx );
+
+  // Call Graft on the Mesh in order to copy meta-information, and containers.
+  output->Graft( graft );
+}
+
+
+/**
+ *
+ */
+template<class TOutputTree>
+void 
 TreeSource<TOutputTree>
 ::PrintSelf(std::ostream& os, itk::Indent indent) const
 {

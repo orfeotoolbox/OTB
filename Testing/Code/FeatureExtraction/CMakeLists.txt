@@ -66,7 +66,7 @@ ADD_TEST(feTuDrawPathTestAlign ${FEATUREEXTRACTION_TESTS}
 	${TEMP}/feDrawPathAlignDeuxTraits.png)
 	
 ADD_TEST(feTuTestFLST ${FEATUREEXTRACTION_TESTS}  
-        otbTestFLST
+        otbTestFlst
 	${INPUTDATA}/TeteAToto.png
 	${TEMP}/feFLST.png)
 		        

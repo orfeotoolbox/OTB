@@ -8,36 +8,37 @@
   $Id$ 
 
 =========================================================================*/
- 
 #ifndef __otbTreeSource_h
 #define __otbTreeSource_h
 
 #if defined(_MSC_VER)
 #pragma warning ( disable : 4786 )
 #endif
-
 #include "itkProcessObject.h"
-#include "itkTreeContainer.h"
+
 namespace otb
 {
 
-/** \class TreeSource
- *  \brief Classe de base pour tous les objets ayant en sortie des données du type "Tree".
+/** \class MeshSource
+ *  \brief Base class for all process objects that output mesh data.
  *
- * Cette classe définit la méthode du GetOutput qui retourne un pointeur des données en sortie de Tree.
- * Elle définit aussi des membres privées de la classe afin de gérer les données.
+ * MeshSource is the base class for all process objects that output
+ * mesh data. Specifically, this class defines the GetOutput() method
+ * that returns a pointer to the output mesh. The class also defines
+ * some internal private data members that are used to manage streaming
+ * of data.
  *
- * \ingroup TreeSources
+ * \ingroup DataSources
  */
 template <class TOutputTree>
-class TreeSource : public itk::ProcessObject
+class ITK_EXPORT TreeSource : public itk::ProcessObject
 {
 public:
   /** Standard class typedefs. */
-  typedef TreeSource                             Self;
-  typedef itk::ProcessObject                     Superclass;
-  typedef itk::SmartPointer<Self>                Pointer;
-  typedef itk::SmartPointer<const Self>          ConstPointer;
+  typedef TreeSource                     Self;
+  typedef itk::ProcessObject             Superclass;
+  typedef itk::SmartPointer<Self>        Pointer;
+  typedef itk::SmartPointer<const Self>  ConstPointer;
   
   /** Method for creation through the object factory. */
   itkNewMacro(Self);  
@@ -45,76 +46,39 @@ public:
   /** Run-time type information (and related methods). */
   itkTypeMacro(TreeSource,itk::ProcessObject);
 
-  typedef TOutputTree				  PathType; 
-  typedef typename PathType::IndexType            PathIndexType;
-  typedef typename PathType::Pointer              PathPointerType;    
+  /** Some convenient typedefs. */
+  typedef itk::DataObject                       DataObject;
+  typedef itk::DataObject::Pointer              DataObjectPointer;
+  typedef TOutputTree                           OutputTreeType;
+  typedef typename OutputTreeType::Pointer      OutputTreePointer;
+  typedef typename OutputTreeType::ConstPointer OutputTreeConstPointer;
+  
+  /** Get the mesh output of this process object.  */
+  OutputTreeType * GetOutput(void);
+  OutputTreeType * GetOutput(unsigned int idx);
+  
+  void SetOutput(TOutputTree *output);
 
-  typedef itk::TreeContainer< PathType >          OutputTreeType;
-  typedef typename OutputTreeType::Pointer        OutputTreePointerType;
-  typedef typename OutputTreeType::ConstPointer   OutputTreeConstPointerType;
+  virtual void GraftOutput(DataObject *output);
+  virtual void GraftNthOutput(unsigned int idx, DataObject *output);
 
-  typedef struct 
-    {
-    int x;
-    int y;
-    } PointPlaneType;
-    
-  typedef typename std::vector<PointPlaneType>   PointPlaneListType;
-    
-  typedef struct shape
-    {
-    char                   inferior_type;
-    float                  value;
-    char                   open;
-    int                    area;
-    char                   removed;
-    PointPlaneListType     pixels;
-    PathPointerType        boundary;
-    shape                  *parent;
-    shape                  *child;
-    shape                  *next_sibling;
-    } ShapeType;
+  virtual DataObjectPointer MakeOutput(unsigned int idx);
 
-  typedef ShapeType*      	ShapePointerType;
-  typedef const ShapeType*      ShapeConstPointerType;
-
-  typedef struct 
-    {
-    int              nrow;
-    int              ncol;
-    int              interpolation;
-    int              nb_shapes;
-    ShapeType        *the_shapes;
-    ShapeType        **smallest_shape;
-    } ShapeTreeType;
-   
-  typedef ShapeTreeType*       ShapeTreePointerType;    
-  typedef const ShapeTreeType* ShapeTreeConstPointerType;    
-
-  /** Get the tree output of this process object.  */
-  OutputTreePointerType GetOutput(){ };
-
-  void AllocateShapeTree(int nrow,int ncol,float value);
-  void DeAllocateShapeTree();
-    
 protected:
   TreeSource();
   virtual ~TreeSource() {}
-    
-
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
   
-// ATTENTION : g�rer ce ouptut comme un Output ITK (SetNthOuput(0...) pour b�n�ficier du pipeline, etc...
-  ShapeTreePointerType      m_GlobalTree;
-      
+  void GenerateInputRequestedRegion();
+  
 private:
   TreeSource(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
-  
-  virtual void TranslateTreeShapeToOutputTree( ShapeTreeConstPointerType  Shapes, 
-		   			       OutputTreePointerType      TreeContainer );
 
-  
+  /** Used by streaming: The requested region of the output being processed
+   * by the execute method. Set in the GenerateInputRequestedRegion method. */
+  int m_GenerateDataRegion;
+  int m_GenerateDataNumberOfRegions;
   };
 
 } // end namespace otb
@@ -124,4 +88,3 @@ private:
 #endif
 
 #endif
-  

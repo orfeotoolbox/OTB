@@ -18,7 +18,6 @@
 
 namespace otb
 {
-
 /**
  *
  */
@@ -26,49 +25,108 @@ template <class TInputImage, class TOutputTree>
 ImageToTreeFilter<TInputImage,TOutputTree>
 ::ImageToTreeFilter()
 {
-  // Modify superclass default values, can be overridden by subclasses
-  this->SetNumberOfRequiredInputs(1);
+  this->itk::ProcessObject::SetNumberOfRequiredInputs(1);
+
+  OutputTreePointer output
+    = dynamic_cast<OutputTreeType*>(this->MakeOutput(0).GetPointer()); 
+
+  this->itk::ProcessObject::SetNumberOfRequiredOutputs(1);
+  this->itk::ProcessObject::SetNthOutput(0, output.GetPointer());
+
 }
 
 /**
  *
  */
 template <class TInputImage, class TOutputTree>
-void
 ImageToTreeFilter<TInputImage,TOutputTree>
-::SetInput(const InputImageType *image)
+::~ImageToTreeFilter()
 {
-  // We have 1 input:  an image
+}
+  
 
-  // Process object is not const-correct so the const_cast is required here
-  this->itk::ProcessObject::SetNthInput(0, 
-                                   const_cast< InputImageType * >( image ) );
+/**
+ *   Make Ouput
+ */
+template <class TInputImage, class TOutputTree>
+itk::DataObject::Pointer
+ImageToTreeFilter<TInputImage,TOutputTree>
+::MakeOutput(unsigned int)
+{
+  OutputTreePointer  outputTree = OutputTreeType::New();
+  return dynamic_cast< DataObject *>( outputTree.GetPointer() );
 }
 
+
+
+
+/**
+ *
+ */
+template <class TInputImage, class TOutputTree>
+void 
+ImageToTreeFilter<TInputImage,TOutputTree>
+::SetInput(unsigned int idx,const InputImageType *input)
+{
+  // process object is not const-correct, the const_cast
+  // is required here.
+  this->itk::ProcessObject::SetNthInput(idx, 
+                                   const_cast< InputImageType * >(input) );
+}
+
+
+  
+/**
+ *
+ */
 template <class TInputImage, class TOutputTree>
 const typename ImageToTreeFilter<TInputImage,TOutputTree>::InputImageType *
 ImageToTreeFilter<TInputImage,TOutputTree>
-::GetInput(void) 
+::GetInput(unsigned int idx) 
 {
-  if (this->GetNumberOfInputs() < 1)
-    {
-    return 0;
-    }
-  
-  return static_cast<const TInputImage * >
-    (this->itk::ProcessObject::GetInput(0) );
+  return dynamic_cast<const InputImageType*>
+    (this->itk::ProcessObject::GetInput(idx));
 }
-  
+
+ 
 /**
  *
  */
 template <class TInputImage, class TOutputTree>
-void
+typename ImageToTreeFilter<TInputImage,TOutputTree>::OutputTreeType *
+ImageToTreeFilter<TInputImage,TOutputTree>
+::GetOutput(void) 
+{
+  return dynamic_cast<OutputTreeType*>
+    (this->itk::ProcessObject::GetOutput(0));
+}
+
+
+/**
+ *
+ */
+template <class TInputImage, class TOutputTree>
+void 
 ImageToTreeFilter<TInputImage,TOutputTree>
 ::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
-  Superclass::PrintSelf(os, indent);
+  Superclass::PrintSelf(os,indent);
 }
+
+
+
+/**
+ * copy information from first input to all outputs
+ * This is a void implementation to prevent the 
+ * ProcessObject version to be called
+ */
+template <class TInputImage, class TOutputTree>
+void 
+ImageToTreeFilter<TInputImage,TOutputTree>
+::GenerateOutputInformation()
+{
+}
+
 
 
 } // end namespace otb

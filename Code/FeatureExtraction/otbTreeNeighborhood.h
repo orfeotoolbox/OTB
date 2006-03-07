@@ -16,10 +16,6 @@
 #pragma warning ( disable : 4786 )
 #endif
 
-#include "itkDataObject.h"
-#include "itkPoint.h"
-#include <vector>
-
 namespace otb
 {
 
@@ -31,20 +27,9 @@ namespace otb
  * \ingroup TreeNeighborhoodObjects
  */
  
-class TreeNeighborhood : public itk::DataObject
+class TreeNeighborhood 
 {
 public:
-  /** Standard class typedefs. */
-  typedef TreeNeighborhood                       Self;
-  typedef itk::DataObject                        Superclass;
-  typedef itk::SmartPointer<Self>                Pointer;
-  typedef itk::SmartPointer<const Self>          ConstPointer;
-  
-  /** Method for creation through the object factory. */
-  itkNewMacro(Self);  
-
-  /** Run-time type information (and related methods). */
-  itkTypeMacro(TreeSource,itk::FunctionBase);
     
   typedef enum  {AMBIGUOUS, MIN, MAX, INVALID} TypeOfTree;
   
@@ -56,22 +41,16 @@ public:
   } PointType;
   
   typedef std::vector<PointType>     NeighborType;
-  
-  typedef struct {
-        NeighborType  tabPoints;
-        int           iNbPoints;
-	TypeOfTree    type;
-	float         otherBound;
-   } NeighborhoodType;
-
+  typedef TreeNeighborhood           TreeNeighborhoodType;
   void Init(int iMaxArea);
-  void Free();
-       
-protected:
-  TreeNeighborhood();
-  virtual ~TreeNeighborhood() {}
-  void ReInit(TypeOfTree type);
   void Init(int iMaxArea,int iWidth,int iHeight);
+  void ReInit(TypeOfTree type);
+  void Add(int x, int y,float value);
+  void Remove();
+
+  TreeNeighborhood();
+  virtual ~TreeNeighborhood() {m_tabPoints.clear();}
+  void Free();
   
   
   void SetSize(int Taille);
@@ -82,17 +61,13 @@ protected:
   const int ORDER_MIN2(int k,int l); 
   void FixUp();
   void FixDown();
-  void Add(int x, int y,float value);
-  void Remove();
-  void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
-      
-private:
-  TreeNeighborhood(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+  NeighborType  m_tabPoints;
+  int           m_NbPoints;
+  TypeOfTree    m_type;
+  float         m_otherBound;
 
-  NeighborhoodType *m_Neighborhood;
-  };
+};
 
 } // end namespace otb
 

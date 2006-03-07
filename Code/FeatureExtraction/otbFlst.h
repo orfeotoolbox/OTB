@@ -20,12 +20,64 @@
 namespace otb
 {
 
+
+typedef struct 
+    {
+    int x;
+    int y;
+    } PointPlaneType;
+
+class ShapeType
+{
+public:
+    char                   inferior_type;
+    float                  value;
+    char                   open;
+    int                    area;
+    char                   removed;
+    std::vector<PointPlaneType>     pixels;
+    std::vector<PointPlaneType>     boundary;
+    ShapeType                  *parent;
+    ShapeType                  *child;
+    ShapeType                  *next_sibling;
+       
+    ShapeType();
+    ~ShapeType(); 
+    static void InsertChildren(ShapeType *pParent, ShapeType *pNewChildToInsert);
+ 
+};
+
+
+class ShapeList
+{
+public:
+
+  int              nrow;
+  int              ncol;
+  int              interpolation;
+  int              nb_shapes;
+  ShapeType        *the_shapes;
+  ShapeType        **smallest_shape;
+
+  ShapeList();
+  ~ShapeList();
+  void Allocate(int nrow,int ncol,float value);
+  void Delete();
+  void Change(int nrow,int ncol,float value);
+};
+
+
+
+typedef struct
+     {
+       ShapeType *shape; //Pointeur ou pas ?
+       float     level;
+     } ConnectionType;
+
 /** \class Flst
  * \brief Algorithme de Fast Level Sets Transform of an image
  *
  */
- 
- 
 template < class TInputImage, class TOutputTree /*= itk::PolyLineParametricPath<2>*/ >
 class ITK_EXPORT Flst :  public ImageToTreeFilter< TInputImage, TOutputTree >
 {
@@ -56,46 +108,37 @@ public:
   typedef typename Superclass::InputImageValueType   InputImageValueType;
   typedef typename Superclass::InputImageIndexType   InputImageIndexType;
 
-  typedef typename Superclass::OutputTreeType             OutputTreeType;
-  typedef typename Superclass::OutputTreePointerType      OutputTreePointerType;
-  typedef typename Superclass::OutputTreeConstPointerType OutputTreeConstPointerType;
+  typedef typename Superclass::OutputTreeType         OutputTreeType;
+  typedef typename Superclass::OutputTreePointer      OutputTreePointer;
+  typedef typename Superclass::OutputTreeConstPointer OutputTreeConstPointer;
   
   typedef itk::Image<int,2>                     IntImageType;
-  typedef typename IntImageType::Pointer        IntImagePointerType;
-  typedef typename IntImageType::ConstPointer   IntImageConstPointerType;
+  typedef typename IntImageType::Pointer        IntImagePointer;
+  typedef typename IntImageType::ConstPointer   IntImageConstPointer;
+  typedef typename IntImageType::IndexType      IntImageIndexType;
+  
   
   typedef itk::Image<float,2>                   RealImageType;
-  typedef typename RealImageType::Pointer       RealImagePointerType;
-  typedef typename RealImageType::ConstPointer  RealImageConstPointerType;
-  
-  typedef typename Superclass::PathType  	        PathType;
-  typedef typename Superclass::PathPointerType  	PathPointerType;
+  typedef typename RealImageType::Pointer       RealImagePointer;
+  typedef typename RealImageType::ConstPointer  RealImageConstPointer;
+  typedef typename RealImageType::IndexType     RealImageIndexType;
+    
+  typedef ShapeList 	          ShapeTreeType;
+  typedef ShapeTreeType*          ShapeTreePointer;
+  typedef const ShapeTreeType*    ShapeTreeConstPointer;
+   
+  typedef TreeNeighborhood               NeighborhoodType;
+  typedef TreeNeighborhood::NeighborType NeighborType;
+  typedef TreeNeighborhood::PointType    NeighborPointType;
+  typedef std::vector<PointPlaneType>   PointPlaneListType;
 
-  typedef typename Superclass::ShapeType     	        ShapeType;
-  typedef typename Superclass::ShapePointerType     	ShapePointerType;
-  typedef typename Superclass::ShapeConstPointerType   	ShapeConstPointerType;
-  
-  typedef typename Superclass::ShapeTreeType 	          ShapeTreeType;  
-  typedef typename Superclass::ShapeTreePointerType       ShapePointerType;
-  typedef typename Superclass::ShapeTreeConstPointerType  ShapeConstPointerType;
-
-  typedef typename Superclass::PointPlaneType              PointPlaneType;
-  typedef typename Superclass::PointPlaneListType          PointPlaneListType;
-
-  typedef typename otb::TreeNeighborhood::NeighborhoodType   NeighborhoodType;
-
-  typedef struct
-     {
-       ShapeType *shape; //Pointeur ou pas ?
-       float     level;
-     } ConnectionType;
-
-  typedef typename std::vector<ConnectionType>   ConnectionListType;
+  typedef std::vector<ConnectionType>   ConnectionListType;
 
 protected:
   Flst();
-  virtual ~Flst() {}
+  virtual ~Flst();
   
+  virtual void GenerateData();
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
  /** Définition des paramètres d'optimisation. 
@@ -118,40 +161,28 @@ protected:
   
   itkSetMacro(MinArea, int);
   itkGetConstReferenceMacro(MinArea, int);
-//  inline int NEIGHBOR_NOT_STORED(int x,int y)
-//      {m_VisitedPixels[y][x]<m_Exploration;}
       
-  char is_local_min(RealImagePointerType ou, int x, int y, char b8Connected);
-  char is_local_max(RealImagePointerType ou, int x, int y, char b8Connected);
+  char Is_local_min(RealImagePointer ou, int x, int y, char b8Connected);
+  char Is_local_max(RealImagePointer ou, int x, int y, char b8Connected);
+  void Levelize(PointPlaneListType tabPoints,int iNbPoints, float newGray);
+  unsigned char Configuration(int x,int y);  
+  ShapeType* NewShape(int iCurrentArea, float currentGrayLevel, char bOfInferiorType,ShapeType* pChild);
+  void UpdateSmallestShapes(PointPlaneListType* tabPoints,int iLastShapeArea, int iArea);
+  void Connect(PointPlaneListType* tabPoints,int iNbPoints,
+               ConnectionListType* tabConnections,ShapeType* pSmallestShape);
+  void NewConnection(PointPlaneType* pPoint,float level,ConnectionListType* tabConnections);	       
+  int NEIGHBOR_NOT_STORED(int x,int y);	   
+  void Store_4neighbors(int x,int y,NeighborhoodType* pNeighborhood);
+  void Store_8neighbors(int x,int y,NeighborhoodType* pNeighborhood);
+  char AddIsoLevel(PointPlaneListType tabPointsInShape,int* pCurrentArea,
+	          float currentGrayLevel,NeighborhoodType* pNeighborhood,
+	          char* p8Connected,char* pIgnoreHoles);
+  void FindTerminalBranch(int x,int y, char b8Connected, 
+                          NeighborhoodType*   pNeighborhood, 
+		          ConnectionListType* tabConnections);		  
+  void Scan(NeighborhoodType* pNeighborhood,ConnectionListType* tabConnections);
 
-  void UpdateSmallestShapes(PointPlaneType tabPoints, int NbPoints);  
-  void Connect(PointPlaneType tabPoints,int iNbPoints,
-               ConnectionType *tabConnections,ShapeType* pSmallestShape);
-  void NewConnection(PointPlaneType tabPoints,float level,
-                     ConnectionType *tabConnections); 
-  
-  unsigned char configuration(IntImagePointerType VisitedPixels, int x, int y);
-
-  ShapeType NewShape(int iCurrentArea, float currentGrayLevel, 
-                     char bOfInferiorType, ShapeType *pChild);
-
-  void Store4Neighbors(RealImagePointerType ou,int x,int y,NeighborhoodType *pNeighborhood);
-  void Store8Neighbors(RealImagePointerType ou,int x,int y,NeighborhoodType *pNeighborhood);
-  void AddIsoLevel(PointPlaneType   tabPointsInShape, 
-                   int              *pCurrentArea,
-		   float            currentGrayLevel, 
-		   NeighborhoodType *pNeighborhood, 
-		   char             *p8Connected, 
-		   char             *pIgnoreHoles);  
-  void FindTerminalBranch(RealImagePointerType ou,int x,int y,
-                          char b8Connected,
-                          NeighborhoodType *pNeighborhood, 
-			  ConnectionType   *tabConnections);
-  void Scan(RealImagePointerType ou,NeighborhoodType *pNeighborhood,
-            ConnectionType *tabConnections);
-  void CalculateArea(int Width, int Height);
-  void GenerateData(void);
-  
+ 
 private:
   Flst(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
@@ -165,11 +196,11 @@ private:
   int                   m_PerimeterImage;
   int                   m_AtBorder;
   int                   m_Exploration;
-  IntImagePointerType   m_VisitedPixels;
-  RealImagePointerType  m_PixelOutput;
-  NeighborhoodType      m_Neighborhood;
+  IntImagePointer       m_VisitedPixels;
+  RealImagePointer      m_PixelOutput;
+  NeighborhoodType*     m_Neighborhood;
   ConnectionListType*   m_Connections;
-  ShapeTreeType*        m_GlobalTree;
+  ShapeTreePointer      m_GlobalTree;
   PointPlaneListType    m_PointsInShape;
         
 };

@@ -18,10 +18,8 @@
 #include "itkPathIterator.h"
 #include "itkImage.h"
 #include "itkNumericTraits.h"
-#include "itkImageRegionIteratorWithIndex.h"
 #include "itkImageLinearConstIteratorWithIndex.h"
 #include "itkImageLinearIteratorWithIndex.h"
-#include <vector>
 
 
 

@@ -41,48 +41,48 @@ public:
 
   /** Some convenient typedefs. */
   typedef          TInputImage                    InputImageType;
-  typedef typename InputImageType::ConstPointer   InputImagePointer;
+  typedef typename InputImageType::Pointer        InputImagePointer;
+  typedef typename InputImageType::ConstPointer   InputImageConstPointer;
   typedef typename InputImageType::RegionType     InputImageRegionType; 
   typedef typename InputImageType::PixelType      InputImagePixelType; 
   typedef typename InputImageType::SizeType       InputImageSizeType;                 
   typedef typename InputImageType::ValueType      InputImageValueType;  
   typedef typename InputImageType::IndexType      InputImageIndexType;  
 
-  typedef typename Superclass::OutputTreeType              OutputTreeType;
-  typedef typename Superclass::OutputTreePointerType       OutputTreePointerType;
-  typedef typename Superclass::OutputTreeConstPointerType  OutputTreeConstPointerType;
+  typedef typename Superclass::OutputTreeType          OutputTreeType;
+  typedef typename Superclass::OutputTreePointer       OutputTreePointer;
+  typedef typename Superclass::OutputTreeConstPointer  OutputTreeConstPointer;
 
-  typedef typename Superclass::PathType  	        PathType;
-  typedef typename Superclass::PathPointerType  	PathPointerType;
-
-  typedef typename Superclass::ShapeType     	        ShapeType;
-  typedef typename Superclass::ShapePointerType     	ShapePointerType;
-  typedef typename Superclass::ShapeConstPointerType   	ShapeConstPointerType;
-  
-  typedef typename Superclass::ShapeTreeType 	          ShapeTreeType;  
-  typedef typename Superclass::ShapeTreePointerType       ShapePointerType;
-  typedef typename Superclass::ShapeTreeConstPointerType  ShapeConstPointerType;
-
-  typedef typename Superclass::PointPlaneType              PointPlaneType;
-  typedef typename Superclass::PointPlaneListType          PointPlaneListType;
+  typedef itk::DataObject                       DataObject;
+  typedef itk::DataObject::Pointer              DataObjectPointer;
 
   /** ImageDimension constants */
   itkStaticConstMacro(InputImageDimension, unsigned int,
                       TInputImage::ImageDimension);
   
-  /** Set/Get the image input of this process object. */
-  virtual void SetInput( const InputImageType * image);
-  const InputImageType * GetInput(void);
+  DataObjectPointer  MakeOutput(unsigned int idx);
+
+  /** Set the input image of this process object.  */
+  void SetInput(unsigned int idx, const InputImageType *input);
+
+  /** Get the input image of this process object.  */
+  const InputImageType * GetInput(unsigned int idx);
+
+  /** Get the output Mesh of this process object.  */
+  OutputTreeType * GetOutput(void);
+
+  /** Prepare the output */
+  void GenerateOutputInformation(void);
 
 protected:
   ImageToTreeFilter();
-  virtual ~ImageToTreeFilter() {};
+  ~ImageToTreeFilter();
 
   virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;  
 
 private:
-  ImageToTreeFilter(const Self&); //purposely not implemented
-  void operator=(const Self&);    //purposely not implemented
+  ImageToTreeFilter(const ImageToTreeFilter&); //purposely not implemented
+  void operator=(const ImageToTreeFilter&);    //purposely not implemented
 };
 
 } // end namespace otb
