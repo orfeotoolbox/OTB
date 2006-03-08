@@ -1,0 +1,83 @@
+# data file for the Fltk User Interface Designer (fluid)
+version 1.0011 
+header_name {.h} 
+code_name {.cxx} 
+gridx 5 
+gridy 5 
+snap 3
+class fltkSphereFunctionControlGUI {open
+} {
+  Function {fltkSphereFunctionControlGUI()} {} {
+    Fl_Window controlWindow {
+      label {Sphere Function Controls} open
+      xywh {691 197 235 144} visible
+    } {
+      Fl_Adjuster radiusAdjuster {
+        label {Radius  }
+        callback {SetRadius( o->value() );}
+        xywh {30 20 130 20} labelsize 12 align 1 minimum 1 maximum 100 step 0.001 value 10
+      }
+      Fl_Value_Output radiusValueOutput {
+        xywh {160 20 55 20} value 10
+      }
+      Fl_Adjuster xAdjuster {
+        label {X  }
+        callback {SetCenterX( o->value() );}
+        xywh {32 66 130 20} labelsize 12 align 4 minimum -500 maximum 500 step 0.001
+      }
+      Fl_Value_Output xValueOutput {
+        xywh {162 66 55 20}
+      }
+      Fl_Adjuster yAdjuster {
+        label {Y  }
+        callback {SetCenterY( o->value() );}
+        xywh {32 86 130 20} labelsize 12 align 4 minimum -500 maximum 500 step 0.001
+      }
+      Fl_Value_Output yValueOutput {
+        xywh {162 86 55 20}
+      }
+      Fl_Adjuster zAdjuster {
+        label {Z  }
+        callback {SetCenterZ( o->value() );} selected
+        xywh {32 106 130 20} labelsize 12 align 4 minimum -500 maximum 500 step 0.001
+      }
+      Fl_Value_Output zValueOutput {
+        xywh {162 106 55 20}
+      }
+      Fl_Box {} {
+        label Center
+        xywh {65 45 60 25}
+      }
+    }
+  }
+  Function {~fltkSphereFunctionControlGUI()} {return_type virtual
+  } {}
+  Function {SetRadius( double radius )} {return_type {virtual void}
+  } {
+    code {radiusAdjuster->value( radius );
+radiusValueOutput->value( radius );} {}
+  }
+  Function {SetCenterX( double x )} {return_type {virtual void}
+  } {
+    code {xAdjuster->value( x );
+xValueOutput->value( x );} {}
+  }
+  Function {SetCenterY( double y )} {return_type {virtual void}
+  } {
+    code {yAdjuster->value( y );
+yValueOutput->value( y );} {}
+  }
+  Function {SetCenterZ( double z )} {return_type {virtual void}
+  } {
+    code {zAdjuster->value( z );
+zValueOutput->value( z );} {}
+  }
+  Function {Show(void)} {return_type {virtual void}
+  } {
+    code {controlWindow->show();} {}
+  }
+  Function {Hide(void)} {return_type {virtual void}
+  } {
+    code {controlWindow->hide();} {}
+  }
+} 

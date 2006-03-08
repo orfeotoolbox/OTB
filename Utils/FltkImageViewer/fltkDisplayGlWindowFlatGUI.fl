@@ -1,0 +1,78 @@
+# data file for the Fltk User Interface Designer (fluid)
+version 1.0011 
+header_name {.h} 
+code_name {.cxx} 
+gridx 5 
+gridy 5 
+snap 3
+class fltkDisplayGlWindowFlatGUI {open private
+} {
+  Function {fltkDisplayGlWindowFlatGUI()} {} {
+    Fl_Window parentWindow {open
+      private xywh {289 120 640 480} resizable visible
+    } {
+      Fl_Box drawWindow {
+        private xywh {0 0 640 480} resizable
+        code0 {\#include <fltkGlWindowInteractiveFlat.h>}
+        code1 {\#include <fltkDrawer.h>}
+        class {fltk::GlWindowInteractiveFlat}
+      }
+    }
+  }
+  Function {Show(void)} {return_type void
+  } {
+    code {parentWindow->show();
+drawWindow->show();} {}
+  }
+  Function {SetLabel(const char *newlabel)} {return_type void
+  } {
+    code {parentWindow->label(newlabel);} {}
+  }
+  Function {Redraw(void)} {return_type void
+  } {
+    code {parentWindow->redraw();
+drawWindow->redraw();} {}
+  }
+  Function {Size(unsigned int nx, unsigned int ny)} {return_type void
+  } {
+    code {parentWindow->size(nx,ny);
+drawWindow->size(nx,ny);} {}
+  }
+  Function {Hide(void)} {return_type void
+  } {
+    code {parentWindow->hide();} {}
+  }
+  Function {Update(void)} {return_type void
+  } {
+    code {Redraw();} {}
+  }
+  Function {GetWidth(void)} {return_type int
+  } {
+    code {return drawWindow->w();} {}
+  }
+  Function {GetHeight(void)} {return_type int
+  } {
+    code {return drawWindow->h();} {}
+  }
+  Function {MakeCurrent(void)} {return_type void
+  } {
+    code {drawWindow->make_current();} {}
+  }
+  Function {IsVisible(void)} {return_type int
+  } {
+    code {return drawWindow->visible_r();} {}
+  }
+  Function {GetRedrawCommand(void)} {return_type {itk::Command *}
+  } {
+    code {return drawWindow->GetRedrawCommand();} {selected
+    }
+  }
+  Function {GetNotifier(void)} {return_type {itk::Object *}
+  } {
+    code {return drawWindow->GetNotifier();} {}
+  }
+  Function {GetGlWindow(void)} {return_type {virtual fltk::GlWindowInteractiveFlat *}
+  } {
+    code {return drawWindow;} {}
+  }
+} 

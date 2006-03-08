@@ -1,0 +1,79 @@
+# data file for the Fltk User Interface Designer (fluid)
+version 1.0100 
+header_name {.h} 
+code_name {.cxx}
+class fltkDisplayGlWindowGUI {open private
+} {
+  Function {fltkDisplayGlWindowGUI()} {} {
+    Fl_Window parentWindow {open
+      private xywh {230 114 640 480} resizable visible
+    } {
+      Fl_Box drawWindow {
+        private xywh {0 0 640 480} resizable
+        code0 {\#include <fltkGlWindowInteractive.h>}
+        code1 {\#include <fltkDrawer.h>}
+        class {fltk::GlWindowInteractive}
+      }
+    }
+  }
+  Function {Show(void)} {return_type void
+  } {
+    code {parentWindow->show();
+drawWindow->show();} {}
+  }
+  Function {SetLabel(const char *newlabel)} {return_type void
+  } {
+    code {parentWindow->label(newlabel);} {}
+  }
+  Function {Redraw(void)} {return_type void
+  } {
+    code {parentWindow->redraw();
+drawWindow->redraw();} {}
+  }
+  Function {Size(unsigned int nx, unsigned int ny)} {return_type void
+  } {
+    code {parentWindow->size(nx,ny);
+drawWindow->size(nx,ny);} {}
+  }
+  Function {Hide(void)} {return_type void
+  } {
+    code {parentWindow->hide();} {}
+  }
+  Function {Update(void)} {return_type void
+  } {
+    code {Redraw();} {}
+  }
+  Function {GetWidth(void)} {return_type int
+  } {
+    code {return drawWindow->w();} {}
+  }
+  Function {GetHeight(void)} {return_type int
+  } {
+    code {return drawWindow->h();} {}
+  }
+  Function {MakeCurrent(void)} {return_type void
+  } {
+    code {drawWindow->make_current();} {}
+  }
+  Function {IsVisible(void)} {return_type int
+  } {
+    code {return drawWindow->visible_r();} {}
+  }
+  Function {GetRedrawCommand(void)} {return_type {fltk::GlWindow::RedrawCommandType *}
+  } {
+    code {return drawWindow->GetRedrawCommand();} {}
+  }
+  Function {GetNotifier(void)} {return_type {itk::Object *}
+  } {
+    code {return drawWindow->GetNotifier();} {}
+  }
+  Function {GetGlWindow(void)} {return_type {fltk::GlWindowInteractive *}
+  } {
+    code {return drawWindow;} {}
+  }
+  Function {SaveImage(const char * filename)} {open return_type {virtual void}
+  } {
+    code {drawWindow->SaveImage( filename );} {selected
+    }
+  }
+} 

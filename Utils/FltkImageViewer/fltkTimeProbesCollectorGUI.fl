@@ -1,0 +1,79 @@
+# data file for the Fltk User Interface Designer (fluid)
+version 1.0011 
+header_name {.h} 
+code_name {.cxx} 
+gridx 5 
+gridy 5 
+snap 3
+class TimeProbesCollectorGUI {open : {public ::itk::TimeProbesCollectorBase}
+} {
+  Function {TimeProbesCollectorGUI()} {open
+  } {
+    Fl_Window controlPanel {
+      label {Time Probes} open selected
+      xywh {524 217 378 307} box UP_BOX resizable
+      code0 {\#include "itkTimeProbesCollectorBase.h"} visible
+    } {
+      Fl_Button {} {
+        label Close
+        callback {this->Hide();}
+        xywh {295 264 75 25}
+      }
+      Fl_Button {} {
+        label Clear
+        callback {Clear();}
+        xywh {15 265 73 24}
+      }
+      Fl_Button {} {
+        label Report
+        callback {Report();}
+        xywh {100 265 73 24}
+      }
+      Fl_Check_Button continuousCheckButton {
+        label Continuous
+        xywh {185 264 105 25} box ENGRAVED_FRAME down_box DIAMOND_DOWN_BOX selection_color 2
+      }
+      Fl_Scroll {} {open
+        xywh {10 35 360 185} box DOWN_FRAME resizable
+      } {
+        Fl_Pack probesPack {open
+          xywh {15 40 350 180} resizable
+        } {}
+      }
+      Fl_Box {} {
+        label {Probe Tag}
+        xywh {20 10 95 25} align 16
+      }
+      Fl_Box {} {
+        label Starts
+        xywh {160 10 60 25} align 16
+      }
+      Fl_Box {} {
+        label Stops
+        xywh {215 10 50 25} align 16
+      }
+      Fl_Box {} {
+        label Time
+        xywh {270 10 90 25} align 16
+      }
+      Fl_Value_Output timeResolution {
+        label {Time Resolution in this System :}
+        xywh {223 230 76 25}
+      }
+      Fl_Box {} {
+        label seconds
+        xywh {300 230 65 25}
+      }
+    }
+  }
+  Function {~TimeProbesCollectorGUI()} {return_type virtual
+  } {}
+  Function {Show(void)} {return_type {virtual void}
+  } {
+    code {controlPanel->show();} {}
+  }
+  Function {Hide(void)} {return_type {virtual void}
+  } {
+    code {controlPanel->hide();} {}
+  }
+} 

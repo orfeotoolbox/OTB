@@ -1,0 +1,72 @@
+# data file for the Fltk User Interface Designer (fluid)
+version 1.0011 
+header_name {.h} 
+code_name {.cxx} 
+gridx 5 
+gridy 5 
+snap 3
+class fltkSlice3DDrawerGUI {open : {public itk::Object}
+} {
+  Function {fltkSlice3DDrawerGUI()} {} {
+    Fl_Window VolumeWindow {
+      label {Data Volume} selected
+      xywh {524 171 452 100}
+      code0 {\#include <itkObject.h>} visible
+    } {
+      Fl_Scrollbar xScrollBar {
+        label {X : }
+        callback {SelectSliceX();}
+        xywh {33 22 345 17} type Horizontal box DOWN_BOX labelsize 10 align 4 when 4
+      }
+      Fl_Scrollbar yScrollBar {
+        label {Y : }
+        callback {SelectSliceY();}
+        xywh {33 39 345 17} type Horizontal box DOWN_BOX labelsize 12 align 4 when 4
+      }
+      Fl_Scrollbar zScrollBar {
+        label {Z : }
+        callback {SelectSliceZ();}
+        xywh {33 56 345 17} type Horizontal box DOWN_BOX labelsize 10 align 4 when 4
+      }
+      Fl_Value_Output xValueOutput {
+        xywh {379 22 34 16} labelsize 10 textsize 10
+      }
+      Fl_Check_Button xCheckButton {
+        callback {SelectSliceX();
+SelectSliceX();}
+        xywh {412 17 30 25} down_box DIAMOND_DOWN_BOX selection_color 2 align 0
+      }
+      Fl_Check_Button yCheckButton {
+        callback {SelectSliceY();
+SelectSliceY();}
+        xywh {412 34 26 25} down_box DIAMOND_DOWN_BOX selection_color 2 align 0
+      }
+      Fl_Check_Button zCheckButton {
+        callback {SelectSliceZ();
+SelectSliceZ();}
+        xywh {412 52 24 24} down_box DIAMOND_DOWN_BOX selection_color 2 align 0
+      }
+      Fl_Value_Output yValueOutput {
+        xywh {379 39 34 16} labelsize 10 textsize 10
+      }
+      Fl_Value_Output zValueOutput {
+        xywh {379 56 34 17} labelsize 10 textsize 10
+      }
+    }
+  }
+  Function {~fltkSlice3DDrawerGUI()} {} {}
+  Function {Show(void)} {return_type {virtual void}
+  } {}
+  Function {Hide(void)} {return_type {virtual void}
+  } {}
+  Function {SelectSliceX(void)} {return_type {virtual void}
+  } {}
+  Function {SelectSliceY(void)} {return_type {virtual void}
+  } {}
+  Function {SelectSliceZ(void)} {return_type {virtual void}
+  } {}
+  Function {SetLabel( const char * label )} {return_type {virtual void}
+  } {
+    code {VolumeWindow->label( label );} {}
+  }
+} 
