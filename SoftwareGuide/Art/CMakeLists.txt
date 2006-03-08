@@ -42,6 +42,7 @@ ADD_CUSTOM_TARGET(SoftwareGuideArt  ALL echo)
 FILE(GLOB XFIG_FIGURES *.fig)
 FILE(GLOB PNG_IMAGES *.png)
 FILE(GLOB JPEG_IMAGES *.jpg)
+FILE(GLOB TIFF_IMAGES *.tif)
 FILE(GLOB EPS_IMAGES *.eps)
 
 #
@@ -64,6 +65,20 @@ ENDIF(BUILD_FIGURES)
 
 
 
+
+FOREACH(image ${TIFF_IMAGES})
+  GET_FILENAME_COMPONENT(Imagebase ${image} NAME)
+  GET_FILENAME_COMPONENT(ImageBase ${Imagebase} NAME_WE)
+  ADD_CUSTOM_COMMAND( 
+  SOURCE    ${SoftwareGuide_SOURCE_DIR}/Art/${ImageBase}.tif
+  COMMAND   ${IMAGEMAGICK_CONVERT_EXECUTABLE}
+  ARGS      ${SoftwareGuide_SOURCE_DIR}/Art/${ImageBase}.tif
+            ${ImageBase}.eps
+  TARGET    SoftwareGuideArt
+  OUTPUTS   ${SoftwareGuide_BINARY_DIR}/Art/${ImageBase}.eps
+  )
+  SET(EPS_DEPS ${EPS_DEPS} ${SoftwareGuide_BINARY_DIR}/Art/${ImageBase}.eps)
+ENDFOREACH(image)
 
 FOREACH(image ${JPEG_IMAGES})
   GET_FILENAME_COMPONENT(Imagebase ${image} NAME)
