@@ -1,1 +1,1 @@
-SUBDIRS(Common IO ChangeDetection FeatureExtraction Learning )
+SUBDIRS(Common IO ChangeDetection FeatureExtraction Learning Visu)
