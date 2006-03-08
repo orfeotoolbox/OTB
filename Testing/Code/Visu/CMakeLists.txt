@@ -33,14 +33,19 @@ INCLUDE_DIRECTORIES("${OTBTesting_BINARY_DIR}")
 
 
 
-#ADD_EXECUTABLE(otbFLTKImageViewer otbFLTKImageViewer.cxx)
-#TARGET_LINK_LIBRARIES(otbFLTKImageViewer ITKFltkImageViewer OTBIO OTBCommon ITKIO ITKCommon)
+
+ADD_EXECUTABLE(otbImageView otbImageView.cxx)
+TARGET_LINK_LIBRARIES(otbImageView ITKFltkImageViewer OTBVisu OTBIO OTBCommon ITKIO ITKCommon)
 
 ADD_EXECUTABLE(otbImageViewer otbImageViewer.cxx)
 TARGET_LINK_LIBRARIES(otbImageViewer ITKFltkImageViewer OTBVisu OTBIO OTBCommon ITKIO ITKCommon)
 
 ADD_EXECUTABLE(otbColorImageViewer otbColorImageViewer.cxx)
 TARGET_LINK_LIBRARIES(otbColorImageViewer ITKFltkImageViewer OTBVisu OTBIO OTBCommon ITKIO ITKCommon)
+
+
+#ADD_EXECUTABLE(otbFLTKImageViewer otbFLTKImageViewer.cxx)
+#TARGET_LINK_LIBRARIES(otbFLTKImageViewer ITKFltkImageViewer OTBIO OTBCommon ITKIO ITKCommon)
 
 
 

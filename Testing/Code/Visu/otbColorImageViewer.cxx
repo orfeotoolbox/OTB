@@ -25,17 +25,18 @@ int main( int argc, char ** argv )
         const char * inputFilename  = argv[1];
 
         typedef otb::ColorImageViewer<unsigned char,double>    ViewerType;
+        ViewerType                      lViewer;
+
         typedef itk::Image< itk::RGBPixel<unsigned char>, 3 > ImageType;
         typedef otb::ImageFileReader< ImageType > VolumeReaderType;
         VolumeReaderType::Pointer       lReader = VolumeReaderType::New();
-        ViewerType                      lViewer;
         
 
         lReader->SetFileName(inputFilename);
         lReader->Update();
         lViewer.SetLabel( "Input Image" );
         lViewer.SetImage( lReader->GetOutput() );  
-        lViewer.Update();
+//        lViewer.Update();
         lViewer.Show();
         Fl::run();
 

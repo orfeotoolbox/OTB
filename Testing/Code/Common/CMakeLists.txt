@@ -4,7 +4,7 @@ IF( NOT OTB_DISABLE_CXX_TESTING )
 SET(BASELINE ${OTB_DATA_ROOT}/Baseline/Images)
 SET(INPUTDATA ${OTB_DATA_ROOT}/Input)
 SET(TEMP ${OTBTesting_BINARY_DIR}/Temporary)
-
+SET(IMAGEDATA ${OTB_DATA_DIR} )
 
 #Tolerance sur diff pixel image
 SET(TOL 0.0)

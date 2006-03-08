@@ -25,10 +25,13 @@ int main( int argc, char ** argv )
         const char * inputFilename  = argv[1];
 
         typedef otb::ImageViewer<unsigned char,double>    ViewerType;
-        typedef itk::Image< unsigned char, 3 > ImageType;
+        ViewerType                      lViewer;
+
+
+
+        typedef ViewerType::ImageType ImageType;
         typedef itk::ImageFileReader< ImageType > VolumeReaderType;
         VolumeReaderType::Pointer       lReader = VolumeReaderType::New();
-        ViewerType                      lViewer;
         
 
         lReader->SetFileName(inputFilename);
