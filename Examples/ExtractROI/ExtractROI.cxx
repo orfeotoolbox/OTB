@@ -114,7 +114,7 @@ int main( int argc, char * argv[] )
    
   //  Software Guide : BeginLatex
   //
-  //  Reste \`a d\'efinir les canaux utilis\'e pour g\'en\'erer l'image de sortie. 
+  //  Reste \`a d\'efinir les canaux utilis\'es pour g\'en\'erer l'image de sortie. 
   //  Dans le cadre de notre exemple, les canaux 1 \`a 3 de l'image initiale quatre 
   //  canaux sont utilis\'es pour g\'en\'erer l'image finale trois canaux RGB. 
   //
