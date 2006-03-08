@@ -5,12 +5,14 @@
 #include "otbImageViewerGUI.h"
 #include "itkImage.h"
 #include "itkRGBPixel.h"
+#include "itkProcessObject.h"
 
 namespace otb
 {
 
 template <class ImagePixelType, class OverlayPixelType>
-class ColorImageViewer : public otbImageViewerGUI
+class ITK_EXPORT ColorImageViewer :     public otbImageViewerGUI
+//                                        public itk::ProcessObject
 {
 public:
 
@@ -29,6 +31,7 @@ public:
   typedef itk::Image< itk::RGBPixel<ImagePixelType>, 3 >   ImageType;
   typedef itk::Image< OverlayPixelType, 3 > OverlayType;
   typedef GLColorImageView< ImagePixelType, OverlayPixelType > GLColorImageViewType;
+  typedef typename GLColorImageViewType::Pointer GLColorImageViewPointer;
   typedef typename GLColorImageViewType::ColorTablePointer ColorTablePointer;
 
 
@@ -91,17 +94,15 @@ public:
 
 
 private:
-  GLColorImageViewType * glSliceView;
-};
+//  GLColorImageViewType * glSliceView;
+  GLColorImageViewPointer glSliceView;
 
+};
 
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include <otbColorImageViewer.txx>
+#include "otbColorImageViewer.txx"
 #endif
-
-
-
 
 #endif

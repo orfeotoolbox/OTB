@@ -9,7 +9,7 @@ template <class ImagePixelType, class OverlayPixelType>
 ImageViewer<ImagePixelType,OverlayPixelType>
 ::ImageViewer()
 {
-  glSliceView = 0;
+//  glSliceView = 0;
   CreateGUI();
 }
 
@@ -374,7 +374,9 @@ ImageViewer<ImagePixelType,OverlayPixelType>
   const char * label = original->label();
 
 
-  this->glSliceView = new GLImageViewType(x,y,w,h,label);
+//  this->glSliceView = new GLImageViewType(x,y,w,h,label);
+  this->glSliceView = GLImageViewType::New();
+  this->glSliceView->Init(x,y,w,h,label);
 
   glSliceView->box( FL_EMBOSSED_BOX );
 

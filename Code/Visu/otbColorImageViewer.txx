@@ -9,7 +9,11 @@ template <class ImagePixelType, class OverlayPixelType>
 ColorImageViewer<ImagePixelType,OverlayPixelType>
 ::ColorImageViewer()
 {
-  glSliceView = 0;
+
+//        this->SetNumberOfRequiredInputs(1);
+//        this->SetNumberOfRequiredOutputs(0);
+        
+//  glSliceView = 0;
   CreateGUI();
 }
 
@@ -21,8 +25,6 @@ ColorImageViewer<ImagePixelType,OverlayPixelType>
 {
 
 }
-
-
 
 
 template <class ImagePixelType, class OverlayPixelType>
@@ -92,6 +94,8 @@ void
 ColorImageViewer<ImagePixelType,OverlayPixelType>
 ::Show(void)
 {
+  this->Update();
+
   static bool firstTime = true;
   iviewWindow->show();
   glSliceView->show();
@@ -374,7 +378,9 @@ ColorImageViewer<ImagePixelType,OverlayPixelType>
   const char * label = original->label();
 
 
-  this->glSliceView = new GLColorImageViewType(x,y,w,h,label);
+//  this->glSliceView = new GLColorImageViewType(x,y,w,h,label);
+  this->glSliceView = GLColorImageViewType::New();
+  this->glSliceView->Init(x,y,w,h,label);
 
   glSliceView->box( FL_EMBOSSED_BOX );
 

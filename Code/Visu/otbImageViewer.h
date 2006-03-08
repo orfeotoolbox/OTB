@@ -27,6 +27,7 @@ public:
   typedef itk::Image< ImagePixelType, 3 >   ImageType;
   typedef itk::Image< OverlayPixelType, 3 > OverlayType;
   typedef GLImageView< ImagePixelType, OverlayPixelType > GLImageViewType;
+  typedef typename GLImageViewType::Pointer GLImageViewPointer;
   typedef typename GLImageViewType::ColorTablePointer ColorTablePointer;
 
 
@@ -87,16 +88,17 @@ public:
     glSliceView->SetOverlayColorIndex( c );
     }
 
-
 private:
-  GLImageViewType * glSliceView;
+//  GLImageViewType * glSliceView;
+ GLImageViewPointer glSliceView;
+
 };
 
 
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include <otbImageViewer.txx>
+#include "otbImageViewer.txx"
 #endif
 
 
