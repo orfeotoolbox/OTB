@@ -172,16 +172,16 @@ protected:
   ShapeType* NewShape(int iCurrentArea, float currentGrayLevel, char bOfInferiorType,ShapeType* pChild);
   void UpdateSmallestShapes(PointPlaneListType* tabPoints,int iLastShapeArea, int iArea);
   void Connect(PointPlaneListType* tabPoints,int iNbPoints,
-               ConnectionListType* tabConnections,ShapeType* pSmallestShape);
-  void NewConnection(PointPlaneType* pPoint,float level,ConnectionListType* tabConnections);	       
+               ConnectionListType & tabConnections,ShapeType* pSmallestShape);
+  void NewConnection(PointPlaneType* pPoint,float level,ConnectionListType & tabConnections);	       
   int NEIGHBOR_NOT_STORED(int x,int y);	   
   void Store_4neighbors(int x,int y);
   void Store_8neighbors(int x,int y);
   char AddIsoLevel(int* pCurrentArea, float currentGrayLevel,
 	          char* p8Connected,char* pIgnoreHoles);
   void FindTerminalBranch(int x,int y, char b8Connected, 
-                          ConnectionListType* tabConnections);		  
-  virtual void Scan(ConnectionListType* tabConnections);
+                          ConnectionListType & tabConnections);		  
+  virtual void Scan(ConnectionListType & tabConnections);
 
  
 private:
@@ -198,9 +198,10 @@ private:
   int                   m_AtBorder;
   int                   m_Exploration;
   IntImagePointer       m_VisitedPixels;
+  IntImagePointer       m_VisitedNeighborhood;
   RealImagePointer      m_PixelOutput;
   NeighborhoodType      m_Neighborhood;
-  ConnectionListType*   m_Connections;
+  ConnectionListType    m_Connections;
   ShapeTreePointer      m_GlobalTree;
   PointPlaneListType    m_PointsInShape;
         

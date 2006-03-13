@@ -184,8 +184,9 @@ void TreeNeighborhood::Add(int x, int y,float value)
 //  PointToInsert.value = value ;
 //  m_tabPoints.push_back(PointToInsert);
 
-//  std::cout<< "m_NbPoints" << m_NbPoints << std::endl;
+  std::cout<< "TreeNeighborhood::Add : m_NbPoints" << m_NbPoints <<  "  m_tabPoints.size() = "<<m_tabPoints.size()<<std::endl;
 //  assert(m_NbPoints <=m_Width*m_Height);   
+  assert(m_NbPoints < m_tabPoints.size());
   m_tabPoints[m_NbPoints].x     = x;
   m_tabPoints[m_NbPoints].y     = y;
   m_tabPoints[m_NbPoints].value = value;
@@ -204,7 +205,10 @@ void TreeNeighborhood::Remove()
   
   if(m_type == INVALID)
     return;
-  m_NbPoints--; 
+//  m_NbPoints--; 
+  std::cout<< "TreeNeighborhood::Remove : m_NbPoints" << m_NbPoints << "  m_tabPoints.size() = "<<m_tabPoints.size()<<std::endl;
+  assert(m_NbPoints < (int)m_tabPoints.size());
+//  assert(m_NbPoints >= (int)0);
   valueTop = m_tabPoints[m_NbPoints--].value;
   if(m_NbPoints == 0)
     return;
