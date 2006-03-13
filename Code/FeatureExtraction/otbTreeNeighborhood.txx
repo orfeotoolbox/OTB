@@ -84,6 +84,7 @@ const void TreeNeighborhood::SWAP(int k,int l)
   m_tabPoints[0] = m_tabPoints[k];
   m_tabPoints[k] = m_tabPoints[l];
   m_tabPoints[l] = m_tabPoints[0];
+//  m_tabPoints[k].swap(m_tabPoints[l]); 
 }
 
 const int TreeNeighborhood::ORDER_MAX2(int k,int l)
@@ -174,8 +175,19 @@ void TreeNeighborhood::Add(int x, int y,float value)
     return;
   /* 2) Add the point in the heap and update it */
   m_NbPoints++;
-  m_tabPoints[m_NbPoints].x = x;
-  m_tabPoints[m_NbPoints].x = y;
+
+//  m_tabPoints.resize(m_NbPoints+1);
+
+//  PointType PointToInsert;
+//  PointToInsert.x     = x;
+//  PointToInsert.y     = y;
+//  PointToInsert.value = value ;
+//  m_tabPoints.push_back(PointToInsert);
+
+//  std::cout<< "m_NbPoints" << m_NbPoints << std::endl;
+//  assert(m_NbPoints <=m_Width*m_Height);   
+  m_tabPoints[m_NbPoints].x     = x;
+  m_tabPoints[m_NbPoints].y     = y;
   m_tabPoints[m_NbPoints].value = value;
   
   this->FixUp(); /* Update the heap of neighbors */
@@ -192,6 +204,7 @@ void TreeNeighborhood::Remove()
   
   if(m_type == INVALID)
     return;
+  m_NbPoints--; 
   valueTop = m_tabPoints[m_NbPoints--].value;
   if(m_NbPoints == 0)
     return;

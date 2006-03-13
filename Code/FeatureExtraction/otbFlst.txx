@@ -21,23 +21,20 @@ namespace otb
 
 ShapeType::ShapeType()
 {
-   this->parent = NULL;
-   this->child  = NULL;
-   this->next_sibling = NULL;
-//   this->parent = new ShapeType;
-//   this->child  = new ShapeType;
-//   this->next_sibling = new ShapeType;
-   this->inferior_type = 0;
-   this->value = 0.0;
-   this->area = 0;
-   this->removed = 0;
+   parent = NULL;
+   child  = NULL;
+   next_sibling = NULL;
+   inferior_type = 0;
+   value = 0.0;
+   area = 0;
+   removed = 0;
 }
  
 ShapeType::~ShapeType()
 {
-    delete this->parent;
-    delete this->child;
-    delete this->next_sibling;
+    delete parent;
+    delete child;
+    delete next_sibling;
 }
 
 /* Insert a new shape and its siblings in the tree, with parent pParent */
@@ -56,24 +53,18 @@ void ShapeType::InsertChildren(ShapeType *pParent, ShapeType *pNewChildToInsert)
 
 ShapeList::ShapeList()
 {
-   this->the_shapes     = NULL;
-   this->smallest_shape = NULL;
-//   this->the_shapes     = new ShapeType;
-//   this->smallest_shape = new (ShapeType*);
-   this->nrow           = 0;
-   this->ncol           = 0;
-   this->interpolation  = 0;
-   this->nb_shapes      = 0;
+   the_shapes     = NULL;
+   smallest_shape = NULL;
+   nrow           = 0;
+   ncol           = 0;
+   interpolation  = 0;
+   nb_shapes      = 0;
 }
 
 ShapeList::~ShapeList()
 {
-/*   this->nrow           = 0;
-   this->ncol           = 0;
-   this->interpolation  = 0;
-   this->nb_shapes      = 0;*/
-   delete this->the_shapes;
-   delete this->smallest_shape;    
+   delete the_shapes;
+   delete smallest_shape;    
 }
 
 void ShapeList::Allocate(int nrow,int ncol,float value)
@@ -218,22 +209,30 @@ const char Flst<TInputImage,TOutputTree>::tabPatterns[2][256] =
 /* Is pixel (x, y) a local minimum? */
 template< class TInputImage, class TOutputTree>
 char Flst<TInputImage,TOutputTree>
-::Is_local_min(RealImagePointer ou, int x, int y, char b8Connected)
+::Is_local_min( int x, int y, char b8Connected)
 {
   float v[9];
   char n = 0;
-  IntImageIndexType Index;
+  RealImageIndexType Index;
   
-  
-  Index[1] = y-1 ;   Index[0] = x-1;  v[0] = static_cast<float>( ou->GetPixel(Index) );
-  Index[1] = y-1 ;   Index[0] = x  ;  v[1] = static_cast<float>( ou->GetPixel(Index) );
-  Index[1] = y-1 ;   Index[0] = x+1;  v[2] = static_cast<float>( ou->GetPixel(Index) );
-  Index[1] = y   ;   Index[0] = x-1;  v[3] = static_cast<float>( ou->GetPixel(Index) );
-  Index[1] = y   ;   Index[0] = x;    v[4] = static_cast<float>( ou->GetPixel(Index) );
-  Index[1] = y   ;   Index[0] = x+1;  v[5] = static_cast<float>( ou->GetPixel(Index) );
-  Index[1] = y+1 ;   Index[0] = x-1;  v[6] = static_cast<float>( ou->GetPixel(Index) );
-  Index[1] = y+1 ;   Index[0] = x;    v[7] = static_cast<float>( ou->GetPixel(Index) );
-  Index[1] = y+1 ;   Index[0] = x+1;  v[8] = static_cast<float>( ou->GetPixel(Index) );
+  Index[1] = ( (y == 0) ? 0 : y-1 ) ;   Index[0] =( (x == 0) ? 0 : x-1 ); 
+  v[0] = static_cast<float>( m_PixelOutput->GetPixel(Index) );
+  Index[1] = ( (y == 0) ? 0 : y-1 ) ;   Index[0] = x ; 
+  v[1] = static_cast<float>( m_PixelOutput->GetPixel(Index) );
+  Index[1] = ( (y == 0) ? 0 : y-1 ) ;   Index[0] =( (x == (m_Width-1) ) ? x : x+1   );  
+  v[2] = static_cast<float>( m_PixelOutput->GetPixel(Index) );
+  Index[1] = y   ;   Index[0] = ( (x == 0) ? 0 : x-1 );  
+  v[3] = static_cast<float>( m_PixelOutput->GetPixel(Index) );
+  Index[1] = y   ;   Index[0] = x;    
+  v[4] = static_cast<float>( m_PixelOutput->GetPixel(Index) );
+  Index[1] = y   ;   Index[0] = ( (x == (m_Width-1) ) ? x : x+1   ); 
+  v[5] = static_cast<float>( m_PixelOutput->GetPixel(Index) );
+  Index[1] = ( (y == (m_Height-1) ) ? y : y+1 ) ;   Index[0] =( (x == 0) ? 0 : x-1 ); 
+  v[6] = static_cast<float>( m_PixelOutput->GetPixel(Index) );
+  Index[1] = ( (y == (m_Height-1) ) ? y : y+1 ) ;   Index[0] = x ; 
+  v[7] = static_cast<float>( m_PixelOutput->GetPixel(Index) );
+  Index[1] = ( (y == (m_Height-1) ) ? y : y+1 ) ;   Index[0] =( (x == (m_Width-1) ) ? x : x+1   ) ; 
+  v[8] = static_cast<float>( m_PixelOutput->GetPixel(Index) );
    
   return (x==m_Width-1 || (v[2]>v[4] && ++n) || v[5]==v[4]) &&
          (x==0 || (v[3]>v[4] && ++n) || v[3]==v[4]) &&
@@ -243,30 +242,40 @@ char Flst<TInputImage,TOutputTree>
          ( (x==m_Width-1 || y==0 || (v[2]>v[4]  && ++n) || v[2]==v[4]) &&
          (x==m_Width-1||y==m_Height-1||(v[8]>v[4] && ++n)|| v[8]==v[4]) &&
          (x==0 || y==m_Height-1 || (v[6]>v[4] && ++n) || v[6]==v[4]) &&
-         (x==0 || y==0 || (v[0]>v[4] && ++n) || v[0]==v[4])))	&&
-    n != 0;
+         (x==0 || y==0 || (v[0]>v[4] && ++n) || v[0]==v[4]))
+	 )	&&
+    	 n != 0;
 }
 
 
 /* Is pixel (x,y) a local maximum? */
 template< class TInputImage, class TOutputTree>
 char Flst<TInputImage,TOutputTree>
-::Is_local_max(RealImagePointer ou, int x, int y, char b8Connected)
+::Is_local_max(int x, int y, char b8Connected)
 {
   float v[9];
   char n = 0;
   RealImageIndexType Index;
   
   
-  Index[1] = y-1 ;   Index[0] = x-1;  v[0] = static_cast<float>( ou->GetPixel(Index) );
-  Index[1] = y-1 ;   Index[0] = x  ;  v[1] = static_cast<float>( ou->GetPixel(Index) );
-  Index[1] = y-1 ;   Index[0] = x+1;  v[2] = static_cast<float>( ou->GetPixel(Index) );
-  Index[1] = y   ;   Index[0] = x-1;  v[3] = static_cast<float>( ou->GetPixel(Index) );
-  Index[1] = y   ;   Index[0] = x;    v[4] = static_cast<float>( ou->GetPixel(Index) );
-  Index[1] = y   ;   Index[0] = x+1;  v[5] = static_cast<float>( ou->GetPixel(Index) );
-  Index[1] = y+1 ;   Index[0] = x-1;  v[6] = static_cast<float>( ou->GetPixel(Index) );
-  Index[1] = y+1 ;   Index[0] = x;    v[7] = static_cast<float>( ou->GetPixel(Index) );
-  Index[1] = y+1 ;   Index[0] = x+1;  v[8] = static_cast<float>( ou->GetPixel(Index) );
+  Index[1] = ( (y == 0) ? 0 : y-1 ) ;   Index[0] =( (x == 0) ? 0 : x-1 ); 
+  v[0] = static_cast<float>( m_PixelOutput->GetPixel(Index) );
+  Index[1] = ( (y == 0) ? 0 : y-1 ) ;   Index[0] = x ; 
+  v[1] = static_cast<float>( m_PixelOutput->GetPixel(Index) );
+  Index[1] = ( (y == 0) ? 0 : y-1 ) ;   Index[0] =( (x == (m_Width-1) ) ? x : x+1   );  
+  v[2] = static_cast<float>( m_PixelOutput->GetPixel(Index) );
+  Index[1] = y   ;   Index[0] = ( (x == 0) ? 0 : x-1 ); 
+  v[3] = static_cast<float>( m_PixelOutput->GetPixel(Index) );
+  Index[1] = y   ;   Index[0] = x;    
+  v[4] = static_cast<float>( m_PixelOutput->GetPixel(Index) );
+  Index[1] = y   ;   Index[0] = ( (x == (m_Width-1) ) ? x : x+1   );  
+  v[5] = static_cast<float>( m_PixelOutput->GetPixel(Index) );
+  Index[1] = ( (y == (m_Height-1) ) ? y : y+1 ) ;   Index[0] =( (x == 0) ? 0 : x-1 ); 
+  v[6] = static_cast<float>( m_PixelOutput->GetPixel(Index) );
+  Index[1] = ( (y == (m_Height-1) ) ? y : y+1 ) ;   Index[0] = x ; 
+  v[7] = static_cast<float>( m_PixelOutput->GetPixel(Index) );
+  Index[1] = ( (y == (m_Height-1) ) ? y : y+1 ) ;   Index[0] =( (x == (m_Width-1) ) ? x : x+1   ) ; 
+  v[8] = static_cast<float>( m_PixelOutput->GetPixel(Index) );
 
   return (x==m_Width-1 || (v[5]<v[4] && ++n) || v[5]==v[4]) &&
          (x==0 || (v[3]<v[4] && ++n) || v[3]==v[4]) &&
@@ -395,7 +404,7 @@ Flst<TInputImage,TOutputTree>
   iNbPoints = iArea - iLastShapeArea;
   
   pNewShape = &m_GlobalTree->the_shapes[m_GlobalTree->nb_shapes-1];
-  for(i = iNbPoints - 1; i >= iLastShapeArea; i--)
+  for(i = iArea - 1; i >= iLastShapeArea; i--)
     {
       iIndex = (*tabPoints)[i].y * m_Width + (*tabPoints)[i].x;
       if(m_GlobalTree->smallest_shape[iIndex] == pRoot)
@@ -409,7 +418,7 @@ find shapes in other monotone sections whose parent is inside this interval */
 template< class TInputImage, class TOutputTree>
 void 
 Flst<TInputImage,TOutputTree>
-::Connect(PointPlaneListType* tabPoints,int iNbPoints,
+::Connect(PointPlaneListType *tabPoints,int iNbPoints,
           ConnectionListType* tabConnections,ShapeType* pSmallestShape)
 {
   int i, iIndex;
@@ -462,16 +471,16 @@ int
 Flst<TInputImage,TOutputTree>
 ::NEIGHBOR_NOT_STORED(int x,int y)
 { 
-  IntImageIndexType Index;
+  IntImageIndexType IndexNeighbor;
 
-  Index[1] = y;
-  Index[0] = x;
+  IndexNeighbor[1] = y;
+  IndexNeighbor[0] = x;
   assert( x >= 0 );
   assert( y >= 0 );
   assert( x < m_Width  );
   assert (y < m_Height );
   
-  return (m_VisitedPixels->GetPixel(Index) < m_Exploration);   
+  return (m_VisitedPixels->GetPixel(IndexNeighbor) < m_Exploration);   
 }
 
 
@@ -479,43 +488,44 @@ Flst<TInputImage,TOutputTree>
 template< class TInputImage, class TOutputTree>
 void 
 Flst<TInputImage,TOutputTree>
-::Store_4neighbors(int x,int y,NeighborhoodType* pNeighborhood)
+::Store_4neighbors(int x,int y)
 {
-  RealImageIndexType Index;
+  RealImageIndexType IndexStore;
   float             value;
   
   if(x > 0 )
    if(NEIGHBOR_NOT_STORED(x-1,y))
     {
-    Index[1] = y  ;
-    Index[0] = x-1;
-    value =  m_PixelOutput->GetPixel(Index); 
-    pNeighborhood->Add( x-1, y, value);
+    IndexStore[1] = y  ;
+    IndexStore[0] = x-1;
+    value =  static_cast<float>(m_PixelOutput->GetPixel(IndexStore) ); 
+    m_Neighborhood.Add( x-1, y, value);
     }
     
   if(x < m_Width-1)
     if(NEIGHBOR_NOT_STORED(x+1,y))
     {
-    Index[1] = y  ;
-    Index[0] = x+1;
-    value =  m_PixelOutput->GetPixel(Index); 
-    pNeighborhood->Add( x+1, y, value);
+    IndexStore[1] = y  ;
+    IndexStore[0] = x+1;
+    value =  static_cast<float>( m_PixelOutput->GetPixel(IndexStore) ); 
+    m_Neighborhood.Add( x+1, y, value);
     }
   if(y > 0 )
    if(NEIGHBOR_NOT_STORED(x,y-1))
     {
-    Index[1] = y-1;
-    Index[0] = x  ;
-    value =  m_PixelOutput->GetPixel(Index); 
-    pNeighborhood->Add( x, y-1, value);
+    IndexStore[1] = y-1;
+    IndexStore[0] = x  ;
+    value =  static_cast<float>( m_PixelOutput->GetPixel(IndexStore) ); 
+//    std::cout <<"Store_4neighbors A: " << x<<" , "<<y<<" : " <<pNeighborhood->m_NbPoints <<std::endl;
+    m_Neighborhood.Add( x, y-1, value);
     }
   if(y < m_Height-1)
    if(NEIGHBOR_NOT_STORED(x,y+1))
     {
-    Index[1] = y+1;
-    Index[0] = x;
-    value =  m_PixelOutput->GetPixel(Index); 
-    pNeighborhood->Add( x, y+1, value);
+    IndexStore[1] = y+1;
+    IndexStore[0] = x;
+    value =  static_cast<float>( m_PixelOutput->GetPixel(IndexStore) ); 
+    m_Neighborhood.Add( x, y+1, value);
     }
 }
 
@@ -523,45 +533,45 @@ Flst<TInputImage,TOutputTree>
 template< class TInputImage, class TOutputTree>
 void 
 Flst<TInputImage,TOutputTree>
-::Store_8neighbors(int x,int y,NeighborhoodType* pNeighborhood)
+::Store_8neighbors(int x,int y)
 {
-  RealImageIndexType Index;
+  RealImageIndexType IndexStore;
   float             value;
 
   if(x > 0) {
     if(y > 0)
      if(NEIGHBOR_NOT_STORED(x-1,y-1))
       {
-      Index[1] = y-1;
-      Index[0] = x-1;
-      value =  m_PixelOutput->GetPixel(Index); 
-      pNeighborhood->Add( x-1,y-1, value);      
+      IndexStore[1] = y-1;
+      IndexStore[0] = x-1;
+      value =  static_cast<float>( m_PixelOutput->GetPixel(IndexStore) ); 
+      m_Neighborhood.Add( x-1,y-1, value);      
       }
     if(y < m_Height-1)
      if(NEIGHBOR_NOT_STORED(x-1,y+1))
       {
-      Index[1] = y+1;
-      Index[0] = x-1;
-      value =  m_PixelOutput->GetPixel(Index); 
-      pNeighborhood->Add( x-1,y+1, value);      
+      IndexStore[1] = y+1;
+      IndexStore[0] = x-1;
+      value =  static_cast<float>( m_PixelOutput->GetPixel(IndexStore) ); 
+      m_Neighborhood.Add( x-1,y+1, value);      
       }
   }
   if(++x < m_Width) {
     if(y > 0 )
      if(NEIGHBOR_NOT_STORED(x,y-1))
       {
-      Index[1] = y-1;
-      Index[0] = x;
-      value =  m_PixelOutput->GetPixel(Index); 
-      pNeighborhood->Add( x,y-1, value);      
+      IndexStore[1] = y-1;
+      IndexStore[0] = x;
+      value =  static_cast<float>( m_PixelOutput->GetPixel(IndexStore) ); 
+      m_Neighborhood.Add( x,y-1, value);      
       }
     if(y < m_Height-1)
      if(NEIGHBOR_NOT_STORED(x,y+1))
       {
-      Index[1] = y+1;
-      Index[0] = x;
-      value =  m_PixelOutput->GetPixel(Index); 
-      pNeighborhood->Add( x,y+1, value);      
+      IndexStore[1] = y+1;
+      IndexStore[0] = x;
+      value =  static_cast<float>( m_PixelOutput->GetPixel(IndexStore) ); 
+      m_Neighborhood.Add( x,y+1, value);      
       }
   }
 }
@@ -575,8 +585,8 @@ This value is changed at exit in case of success. */
 template< class TInputImage, class TOutputTree>
 char 
 Flst<TInputImage,TOutputTree>
-::AddIsoLevel(PointPlaneListType tabPointsInShape,int* pCurrentArea,
-	      float currentGrayLevel,NeighborhoodType* pNeighborhood,
+::AddIsoLevel(int* pCurrentArea,
+	      float currentGrayLevel,
 	      char* p8Connected,char* pIgnoreHoles)
 {
   int                x;
@@ -588,12 +598,12 @@ Flst<TInputImage,TOutputTree>
 
   iNbHoles = 0;
   iCurrentArea = *pCurrentArea;
-  pNeighbor = &pNeighborhood->m_tabPoints[1];
+  pNeighbor = &m_Neighborhood.m_tabPoints[1];
   do { /* 1) Neighbor is added to the region */
     x = pNeighbor->x; 
     y = pNeighbor->y; 
-    tabPointsInShape[iCurrentArea].x = x;
-    tabPointsInShape[iCurrentArea++].y = y;
+    m_PointsInShape[iCurrentArea].x = x;
+    m_PointsInShape[iCurrentArea++].y = y;
     if(! *pIgnoreHoles) {
       cPattern = this->Configuration( x, y);
       iNbHoles += tabPatterns[*p8Connected][cPattern];
@@ -605,21 +615,21 @@ Flst<TInputImage,TOutputTree>
     Index[0] = x;  
     m_VisitedPixels->SetPixel( Index, m_Exploration);
     /* 2) Store new neighbors */
-    this->Store_4neighbors(x, y, pNeighborhood);
-    if(pNeighborhood->m_type == TreeNeighborhood::MAX) {
+    this->Store_4neighbors(x, y);
+    if(m_Neighborhood.m_type == TreeNeighborhood::MAX) {
       if(! *p8Connected)
 	*pIgnoreHoles = *p8Connected = (char)1;
-      this->Store_8neighbors(x, y, pNeighborhood);
+      this->Store_8neighbors(x, y);
     }
-    pNeighborhood->Free();   // A vérifier
+    m_Neighborhood.Remove();   
   } while(iCurrentArea <= m_MaxArea &&
 	  pNeighbor->value == currentGrayLevel &&  
-	  pNeighborhood->m_type != TreeNeighborhood::INVALID);
+	  m_Neighborhood.m_type != TreeNeighborhood::INVALID);
 
   if(iCurrentArea <= m_MaxArea &&
      m_AtBorder != m_PerimeterImage &&
      (! m_AtBorder || iCurrentArea <= m_HalfAreaImage) &&
-     pNeighborhood->m_type != TreeNeighborhood::INVALID &&
+     m_Neighborhood.m_type != TreeNeighborhood::INVALID &&
      (*pIgnoreHoles || iNbHoles == 0)) {
     *pCurrentArea = iCurrentArea;
     return (char)1;
@@ -634,7 +644,6 @@ template< class TInputImage, class TOutputTree>
 void 
 Flst<TInputImage,TOutputTree>
 ::FindTerminalBranch(int x,int y, char b8Connected, 
-                     NeighborhoodType*   pNeighborhood, 
 		     ConnectionListType* tabConnections)
 {
   float     level;
@@ -653,11 +662,10 @@ Flst<TInputImage,TOutputTree>
   Index[1] = y;
   Index[0] = x;
   level = m_PixelOutput->GetPixel(Index);
-  pNeighborhood->ReInit(b8Connected ? TreeNeighborhood::MAX: TreeNeighborhood::MIN);
-  pNeighborhood->Add( x, y, level);
-  while( this->AddIsoLevel(m_PointsInShape, &iArea,
-		      level, pNeighborhood,
-		      &b8Connected, &bUnknownHoles) != 0) {
+  m_Neighborhood.ReInit(b8Connected ? TreeNeighborhood::MAX: TreeNeighborhood::MIN);
+  m_Neighborhood.Add( x, y, level);
+  while( this->AddIsoLevel( &iArea,
+		      level,&b8Connected, &bUnknownHoles) != 0) {
     if(bUnknownHoles) {
       assert(iArea != 0);
       if(pLastShape != NULL) {
@@ -672,19 +680,17 @@ Flst<TInputImage,TOutputTree>
       iLastShapeArea = (pLastShape == NULL) ? 0 : pLastShape->area;
       pLastShape = this->NewShape(iArea, level, !b8Connected, pLastShape);
       if(pSmallestShape == NULL) pSmallestShape = pLastShape;
-//      this->UpdateSmallestShapes(m_PointsInShape+iLastShapeArea,
-//			     iArea-iLastShapeArea);
       this->UpdateSmallestShapes(&m_PointsInShape,iLastShapeArea,
 			     iArea);
     }
     if(m_AtBorder && iArea == m_HalfAreaImage)
       break;
-    bUnknownHoles = (char)(b8Connected && pNeighborhood->m_type == TreeNeighborhood::AMBIGUOUS);
+    bUnknownHoles = (char)(b8Connected && m_Neighborhood.m_type == TreeNeighborhood::AMBIGUOUS);
     if(bUnknownHoles) b8Connected = 0;
-    level = pNeighborhood->m_tabPoints[1].value;
+    level = m_Neighborhood.m_tabPoints[1].value;
   }
   if(pLastShape != NULL) {
-    this->Connect( & m_PointsInShape, iArea, tabConnections, pSmallestShape);
+    this->Connect( &m_PointsInShape, iArea, tabConnections, pSmallestShape);
     if(m_AtBorder && iArea == m_HalfAreaImage)
       ShapeType::InsertChildren(m_GlobalTree->the_shapes, pLastShape);
     else if(iArea != 0)
@@ -698,7 +704,7 @@ Flst<TInputImage,TOutputTree>
 template< class TInputImage, class TOutputTree>
 void 
 Flst<TInputImage,TOutputTree>
-::Scan(NeighborhoodType* pNeighborhood,ConnectionListType* tabConnections)
+::Scan(ConnectionListType* tabConnections)
 {
   int i, j;
   char b8Connected = 0;
@@ -714,10 +720,10 @@ Flst<TInputImage,TOutputTree>
       Index[0] = j;
       iValue = static_cast<int>( m_VisitedPixels->GetPixel(Index) );
       if(iValue <= iExplorationInit &&
-	 ( this->Is_local_min(m_PixelOutput, j, i, (char)0) ||
-	  (this->Is_local_max(m_PixelOutput, j, i, (char)1) &&(b8Connected=1)==1)))
+	 ( this->Is_local_min( j, i, (char)0) ||
+	  (this->Is_local_max( j, i, (char)1) &&(b8Connected=1)==1)))
 	{
-//	  this->FindTerminalBranch( j, i, b8Connected, pNeighborhood, tabConnections);
+	  this->FindTerminalBranch( j, i, b8Connected, tabConnections);
 	  b8Connected = 0;
 	}
       }
@@ -732,9 +738,7 @@ Flst<TInputImage,TOutputTree>
   m_VisitedPixels = IntImageType::New();
   m_PixelOutput   = RealImageType::New();
   m_GlobalTree    = new ShapeTreeType();
-  m_Connections   = new ConnectionListType();
-  m_Neighborhood  = new NeighborhoodType();
-  
+  m_Connections   = new ConnectionListType();  
 }
 
 template<class TInputImage, class TOutputTree>
@@ -743,7 +747,8 @@ Flst<TInputImage,TOutputTree>
 {
   delete m_GlobalTree;
   delete m_Connections;
-  delete m_Neighborhood;
+  m_PointsInShape.clear();
+  
 }  
 
 /* The "Fast Level Set Transform" gives the tree of interiors of level lines
@@ -758,6 +763,7 @@ Flst<TInputImage,TOutputTree>
 {
   typedef itk::ImageRegionIteratorWithIndex< RealImageType >        OutputIteratorType; 
   typedef itk::ImageRegionConstIteratorWithIndex< InputImageType >  InputIteratorType; 
+  typedef itk::ImageRegionIteratorWithIndex< IntImageType >    IntIteratorType; 
 
   std::cout << "Generate data FLST" <<std::endl;
 
@@ -798,36 +804,44 @@ Flst<TInputImage,TOutputTree>
       
   region.SetSize(InputImage->GetLargestPossibleRegion().GetSize());
   region.SetIndex(InputImage->GetLargestPossibleRegion().GetIndex());
+
   m_PixelOutput->SetRegions( region );
   m_PixelOutput->SetOrigin(InputImage->GetOrigin());
   m_PixelOutput->SetSpacing(InputImage->GetSpacing());
   m_PixelOutput->Allocate();
+ 
   
-  OutputIteratorType    outputIt( m_PixelOutput, m_PixelOutput->GetRequestedRegion() );
-  InputIteratorType     inputIt(  InputImage,    m_PixelOutput->GetRequestedRegion() );
-
-  outputIt.GoToBegin();
-  inputIt.GoToBegin();
-
-  for ( outputIt.GoToBegin(); !outputIt.IsAtEnd(); ++outputIt,++inputIt)
-    {
-     outputIt.Set( inputIt.Get() );
-    }
-
-
   // Initialise l'attribut : m_VisitedPixels:
   
   m_VisitedPixels->SetRegions( region );
   m_VisitedPixels->SetOrigin(InputImage->GetOrigin());
   m_VisitedPixels->SetSpacing(InputImage->GetSpacing());
   m_VisitedPixels->Allocate();
+
+  OutputIteratorType    outputIt( m_PixelOutput, m_PixelOutput->GetRequestedRegion() );
+  InputIteratorType     inputIt(  InputImage,    m_PixelOutput->GetRequestedRegion() );
+  IntIteratorType       visitedIt(m_VisitedPixels, m_PixelOutput->GetRequestedRegion() );
+
+  outputIt.GoToBegin();
+  inputIt.GoToBegin();
+  
+  IntImagePixelType  initValueVisited;
+  initValueVisited = static_cast<IntImagePixelType> (0.0);
+
+  for ( outputIt.GoToBegin(),visitedIt.GoToBegin(); !outputIt.IsAtEnd(); ++outputIt,++inputIt,++visitedIt)
+    {
+     outputIt.Set( inputIt.Get() );
+     visitedIt.Set( initValueVisited );
+    }
   
   // Initialisation de l'attribut : m_Neighborhood
    
-  m_Neighborhood->Init(m_AreaImage);
+  m_Neighborhood.Init(m_AreaImage,m_Width,m_Height);
+  std::cout<<"Neighborhood Size:"<<m_Neighborhood.m_tabPoints.size() <<std::endl;
 
   // Initialisation de l'attribut : m_PointsInShape
   m_PointsInShape.resize(m_AreaImage); 
+  std::cout<<"m_AreaImage:"<<m_AreaImage <<std::endl;
   
   // Initialisation de l'attribut : m_PointsInShape
   m_Exploration = 0;
@@ -842,7 +856,9 @@ Flst<TInputImage,TOutputTree>
       m_MaxArea <<= STEP_MAX_AREA;
     if(m_MaxArea == 0 || m_MaxArea >= m_HalfAreaImage) /* iMaxArea==0: overflow */
        m_MaxArea = m_AreaImage-1;
-    this->Scan(m_Neighborhood,m_Connections);
+    this->Scan(m_Connections);
+    std::cout<<"Scan --> Neighborhood Size:"<<m_Neighborhood.m_tabPoints.size() <<std::endl;
+
   } while(m_MaxArea+1 < m_AreaImage);
 
   std::cout << "Make connection with root" <<std::endl;
@@ -851,6 +867,9 @@ Flst<TInputImage,TOutputTree>
   Index[0] = 0;
   Index[1] = 0;
   m_GlobalTree->the_shapes[0].value = static_cast<float>(m_PixelOutput->GetPixel(Index));
+
+  std::cout<<"GlobalTree:" << m_GlobalTree <<std::endl;
+  
   for(i = m_AreaImage-1; i >= 0; i--)
       {
       if( (*m_Connections)[i].shape != NULL) 

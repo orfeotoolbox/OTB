@@ -116,6 +116,8 @@ public:
   typedef typename IntImageType::Pointer        IntImagePointer;
   typedef typename IntImageType::ConstPointer   IntImageConstPointer;
   typedef typename IntImageType::IndexType      IntImageIndexType;
+  typedef typename IntImageType::PixelType      IntImagePixelType;
+  
   
   
   typedef itk::Image<float,2>                   RealImageType;
@@ -162,8 +164,8 @@ protected:
   itkSetMacro(MinArea, int);
   itkGetConstReferenceMacro(MinArea, int);
       
-  char Is_local_min(RealImagePointer ou, int x, int y, char b8Connected);
-  char Is_local_max(RealImagePointer ou, int x, int y, char b8Connected);
+  char Is_local_min(int x, int y, char b8Connected);
+  char Is_local_max(int x, int y, char b8Connected);
   void Levelize(PointPlaneListType tabPoints,int iNbPoints, float newGray);
   unsigned char Configuration(int x,int y);  
   ShapeType* NewShape(int iCurrentArea, float currentGrayLevel, char bOfInferiorType,ShapeType* pChild);
@@ -172,15 +174,13 @@ protected:
                ConnectionListType* tabConnections,ShapeType* pSmallestShape);
   void NewConnection(PointPlaneType* pPoint,float level,ConnectionListType* tabConnections);	       
   int NEIGHBOR_NOT_STORED(int x,int y);	   
-  void Store_4neighbors(int x,int y,NeighborhoodType* pNeighborhood);
-  void Store_8neighbors(int x,int y,NeighborhoodType* pNeighborhood);
-  char AddIsoLevel(PointPlaneListType tabPointsInShape,int* pCurrentArea,
-	          float currentGrayLevel,NeighborhoodType* pNeighborhood,
+  void Store_4neighbors(int x,int y);
+  void Store_8neighbors(int x,int y);
+  char AddIsoLevel(int* pCurrentArea, float currentGrayLevel,
 	          char* p8Connected,char* pIgnoreHoles);
   void FindTerminalBranch(int x,int y, char b8Connected, 
-                          NeighborhoodType*   pNeighborhood, 
-		          ConnectionListType* tabConnections);		  
-  void Scan(NeighborhoodType* pNeighborhood,ConnectionListType* tabConnections);
+                          ConnectionListType* tabConnections);		  
+  virtual void Scan(ConnectionListType* tabConnections);
 
  
 private:
@@ -198,7 +198,7 @@ private:
   int                   m_Exploration;
   IntImagePointer       m_VisitedPixels;
   RealImagePointer      m_PixelOutput;
-  NeighborhoodType*     m_Neighborhood;
+  NeighborhoodType      m_Neighborhood;
   ConnectionListType*   m_Connections;
   ShapeTreePointer      m_GlobalTree;
   PointPlaneListType    m_PointsInShape;

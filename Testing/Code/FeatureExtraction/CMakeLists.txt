@@ -69,6 +69,10 @@ ADD_TEST(feTuTestFLST ${FEATUREEXTRACTION_TESTS}
         otbTestFlst
 	${INPUTDATA}/TeteAToto.png
 	${TEMP}/feFLST.png)
+
+ADD_TEST(feTuComplexMomentImage ${FEATUREEXTRACTION_TESTS}  
+        otbComplexMomentImage
+	${INPUTDATA}/TeteAToto.png 1 1)
 		        
 #ADD_TEST(tvFEPatrick2 ${FEATUREEXTRACTION_TESTS}  
 #  --compare-image ${TOL}  ${BASELINE}/otbExtractROI_cthead1_26_97_209_100.png
@@ -88,6 +92,7 @@ otbFlstTest.cxx
 otbDrawPathList.cxx
 otbDrawPath.cxx
 otbDrawPathAlign.cxx
+otbComplexMomentImage.cxx
 )
 
 
