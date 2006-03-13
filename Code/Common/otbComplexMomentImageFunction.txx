@@ -27,15 +27,15 @@ namespace otb
 /**
    * Constructor
    */
-template <class TInputImage, class TCoordRep = float >
-ComplexMomentImageFunction<TInputImage>
+template <class TInputImage, class TCoordRep>
+ComplexMomentImageFunction<TInputImage,TCoordRep>
 ::ComplexMomentImageFunction()
 {
   m_p = 0;
   m_q = 0;
 }
 
-
+#if 0
 /**
    *
    */
@@ -88,6 +88,7 @@ ComplexMomentImageFunction<TInputImage,TCoordRep>
   return ( sum );
 }
 
+#endif
 
 } // namespace otb
 

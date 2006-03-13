@@ -36,10 +36,12 @@ int otbComplexMomentImage( int argc, char ** argv )
 	typedef otb::ComplexMomentImageFunction<InputImageType>   CMType;
 
         ReaderType::Pointer reader         = ReaderType::New();
+//	CMType::Pointer ComplexMoment =CMType::New();
 	
         reader->SetFileName( inputFilename  );
 	
 	InputImageType::ConstPointer image = reader->GetOutput();
+	
 		
     } 
   catch( itk::ExceptionObject & err ) 

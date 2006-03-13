@@ -20,7 +20,7 @@
 #include "itkImageFunction.h"
 #include "itkNumericTraits.h"
 #include <complex>
-#include <cmath>
+
 
 namespace otb
 {
@@ -47,7 +47,7 @@ namespace otb
 template <class TInputImage, class TCoordRep = float >
 class ITK_EXPORT ComplexMomentImageFunction :
   public itk::ImageFunction< TInputImage, 
-                        std::complex<float>, 
+                        ITK_TYPENAME itk::NumericTraits< std::complex<float> >, 
 			TCoordRep >
 {
 public:
