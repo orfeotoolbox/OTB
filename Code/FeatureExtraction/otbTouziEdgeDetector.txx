@@ -97,7 +97,7 @@ void
 TouziEdgeDetector<TInputImage,TOutputImage>
 ::BeforeThreadedGenerateData()
 {
-  std::cout << " BeforeThreadedGenerateData"<<std::endl;
+//  std::cout << " BeforeThreadedGenerateData"<<std::endl;
 
   typename OutputImageType::RegionType region;    
   typename OutputImageType::Pointer     output = this->GetOutput();
