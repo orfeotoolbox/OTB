@@ -20,7 +20,7 @@ ADD_TEST(cdTvCBAMI ${CHANGEDETECTION_TESTS}
 	 ${INPUTDATA}/GomaAvant.png 
 	 ${INPUTDATA}/GomaApres.png
 	 2 
-	 ${TEMP}/CdCBAMIImage.png 
+	 ${TEMP}/cdCBAMIImage.png 
 	 )
 	 
 ADD_TEST(cdTvCorrel ${CHANGEDETECTION_TESTS}
@@ -30,7 +30,7 @@ ADD_TEST(cdTvCorrel ${CHANGEDETECTION_TESTS}
 	 ${INPUTDATA}/GomaAvant.png 
 	 ${INPUTDATA}/GomaApres.png 
 	 2 
-	 ${TEMP}/CdCorrelImage.png 
+	 ${TEMP}/cdCorrelImage.png 
 	 )
 
 ADD_TEST(cdTvMeanDiff ${CHANGEDETECTION_TESTS}
@@ -40,7 +40,7 @@ ADD_TEST(cdTvMeanDiff ${CHANGEDETECTION_TESTS}
 	 ${INPUTDATA}/GomaAvant.png 
 	 ${INPUTDATA}/GomaApres.png
 	 2 
-	 ${TEMP}/CdMeanDiffImage.png 
+	 ${TEMP}/cdMeanDiffImage.png 
 	 )
 
 ADD_TEST(cdTvMeanRatio ${CHANGEDETECTION_TESTS}
@@ -50,7 +50,7 @@ ADD_TEST(cdTvMeanRatio ${CHANGEDETECTION_TESTS}
 	 ${INPUTDATA}/GomaAvant.png 
 	 ${INPUTDATA}/GomaApres.png
 	 2 
-	 ${TEMP}/CdMeanRatioImage.png 
+	 ${TEMP}/cdMeanRatioImage.png 
 	 )
 	 
 ADD_TEST(cdTvLHMI ${CHANGEDETECTION_TESTS}
@@ -60,7 +60,7 @@ ADD_TEST(cdTvLHMI ${CHANGEDETECTION_TESTS}
 	 ${INPUTDATA}/GomaAvant.png 
 	 ${INPUTDATA}/GomaApres.png
 	 2 
-	 ${TEMP}/CdLHMIImage.png 
+	 ${TEMP}/cdLHMIImage.png 
 	 )
 
 ADD_TEST(cdTvJHMI ${CHANGEDETECTION_TESTS}
@@ -70,7 +70,7 @@ ADD_TEST(cdTvJHMI ${CHANGEDETECTION_TESTS}
 	 ${INPUTDATA}/GomaAvant.png 
 	 ${INPUTDATA}/GomaApres.png
 	 2 
-	 ${TEMP}/CdJHMIImage.png 
+	 ${TEMP}/cdJHMIImage.png 
 	 )
 
 
