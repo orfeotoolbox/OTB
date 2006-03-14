@@ -16,79 +16,119 @@
   =========================================================================*/
 #ifndef _otbComplexMomentImageFunction_txx
 #define _otbComplexMomentImageFunction_txx
-#include "otbComplexMomentImageFunction.h"
 
-#include "itkNumericTraits.h"
+#include "otbComplexMomentImageFunction.h"
+#include "itkImageRegionIterator.h"
+#include "itkImage.h"
 #include "itkConstNeighborhoodIterator.h"
 
+#include <complex>
 namespace otb
 {
 
 /**
    * Constructor
    */
-template <class TInputImage, class TCoordRep>
-ComplexMomentImageFunction<TInputImage,TCoordRep>
+template < class TInput, class TOutput, class TCoordRep>
+ComplexMomentImageFunction<TInput,TOutput,TCoordRep>
 ::ComplexMomentImageFunction()
 {
-  m_p = 0;
-  m_q = 0;
+  m_P = 0;
+  m_Q = 0;
+  m_NeighborhoodRadius = -1;
 }
 
-#if 0
 /**
    *
    */
-template <class TInputImage, class TCoordRep = float >
+template < class TInput, class TOutput, class TCoordRep>
 void
-ComplexMomentImageFunction<TInputImage,TCoordRep>
+ComplexMomentImageFunction<TInput,TOutput,TCoordRep>
 ::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   this->Superclass::PrintSelf(os,indent);
-  os << indent << " p indice value: "  << m_p << std::endl;
-  os << indent << " q indice value: "  << m_q << std::endl;
+  os << indent << " p indice value      : "  << m_P << std::endl;
+  os << indent << " q indice value      : "  << m_Q << std::endl;
+  os << indent << " m_NeighborhoodRadius: "  << m_NeighborhoodRadius << std::endl;
 }
 
 
-/**
- *
- */
-template <class TInputImage, class TCoordRep = float >
-typename ComplexMomentImageFunction<TInputImage,TCoordRep>
-::RealType
-ComplexMomentImageFunction<TInputImage,TCoordRep>
-::Evaluate()
+template < class TInput, class TOutput, class TCoordRep>
+typename ComplexMomentImageFunction<TInput,TOutput,TCoordRep>::ComplexType
+ComplexMomentImageFunction<TInput,TOutput,TCoordRep>
+::EvaluateAtIndex(const IndexType& index) const
 {
-
+  typename InputType::SizeType        ImageSize;
   ComplexType                         Sum;
-  ComplexType                         valA;
-  ComplexType                         valB;
-  
-  typename InputImageType::IndexType   IndexValue;
-  
-  Sum = NumericTraits<ComplexType>::Zero;
-  
+  ComplexType                         ValP;
+  ComplexType                         ValQ;
+  IndexType                           IndexValue;
+  IndexType                           indexPos = index;
+  typename InputType::SizeType        kernelSize;
+
   if( !this->GetInputImage() )
     {
-    return ( NumericTraits<ComplexType>::max() );
+      return std::complex<float>(0.,0.);  // A modifier
+//    return ( NumericTraits<RealType>::max() );
     }
-   
-  ConstNeighborhoodIterator<InputImageType>
-    it(this->GetInputImage(), this->GetInputImage(), this->GetInputImage()->GetBufferedRegion());
+  
+  if ( !this->IsInsideBuffer( index ) )
+    {
+      return std::complex<float>(0.,0.); // A modifier
+//    return ( NumericTraits<RealType>::max() );
+    }
 
-  it.GoToBegin();
-  while (!it.IsAtEnd())
+   if(m_NeighborhoodRadius<0)
+     {
+     ImageSize = this->GetInputImage()->GetBufferedRegion().GetSize();
+     indexPos[0] = ImageSize[0] / 2 ;
+     indexPos[1] = ImageSize[1] / 2;
+     
+       kernelSize[0] = indexPos[0];
+       kernelSize[1] = indexPos[1];          
+     }
+     else
+     {
+       kernelSize.Fill( m_NeighborhoodRadius );
+     }  
+ 
+  itk::ConstNeighborhoodIterator<InputType>
+    it(kernelSize, this->GetInputImage(), this->GetInputImage()->GetBufferedRegion());
+
+  // Set the iterator at the desired location
+  it.SetLocation(indexPos);
+  Sum = std::complex<float>(0.0,0.0); 
+
+  const unsigned int size = it.Size();
+  for (unsigned int i = 0; i < size; ++i)
   {
-    IndexValue = is.GetIndex();
-    valA = ( complex(IndexValue[0], IndexValue[1]) ) ^ (m_p) ;
-    valB = ( complex(IndexValue[0],-IndexValue[1]) ) ^ (m_q) ;
-    sum += valA * valB * static_cast<complex>( it.Get() );
+    IndexValue = it.GetIndex(i);
+    ValP = std::complex<float>(1.0,0.0);
+    ValQ = std::complex<float>(1.0,0.0);
+    unsigned int p  = m_P;
+    while(p>0)
+     {
+      ValP *= std::complex<float>(IndexValue[0], IndexValue[1]);
+      --p; 
+     }
+    unsigned int q  = m_Q;
+    while(q>0)
+     {
+      ValQ *= std::complex<float>(IndexValue[0], IndexValue[1]);
+      --q; 
+     }
+//    std::cout<< i <<"--> "<< IndexValue << " p:"<<ValP <<" Q: "<<ValQ;  
+          
+    Sum += ( ValP * ValQ * std::complex<float>(static_cast<float>(it.GetPixel(i)),0.0) ); 
+//    std::cout<< "Val Pixel: " << static_cast<float>(it.GetPixel(i)) <<" Result :" << Sum<<std::endl;
   }
-             
-  return ( sum );
+
+//   std::cout<<"Result dans la procedure: " <<Sum <<std::endl;
+           
+  return (static_cast<ComplexType>(Sum) );
+
 }
 
-#endif
 
 } // namespace otb
 

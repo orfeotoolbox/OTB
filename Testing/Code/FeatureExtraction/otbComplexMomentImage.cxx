@@ -30,19 +30,45 @@ int otbComplexMomentImage( int argc, char ** argv )
         typedef unsigned char                                   InputPixelType;
         const   unsigned int        	                        Dimension = 2;
 
-        typedef itk::Image< InputPixelType,  Dimension >	InputImageType;
-        typedef otb::ImageFileReader< InputImageType  >         ReaderType;  
+        typedef itk::Image< InputPixelType,  Dimension >	              InputImageType;
+        typedef otb::ImageFileReader< InputImageType  >                       ReaderType;  
+        typedef std::complex<float>                                           ComplexType;
+	typedef otb::ComplexMomentImageFunction<InputImageType,ComplexType>   CMType;
+  
+        InputImageType::RegionType   region;
+        InputImageType::SizeType     size;
+        InputImageType::IndexType    start;
 
-	typedef otb::ComplexMomentImageFunction<InputImageType>   CMType;
+        start.Fill( 0 );
+        size[0] = 50;
+        size[1] = 50;
 
         ReaderType::Pointer reader         = ReaderType::New();
-//	CMType::Pointer ComplexMoment =CMType::New();
+	CMType::Pointer function =CMType::New();
 	
         reader->SetFileName( inputFilename  );
 	
-	InputImageType::ConstPointer image = reader->GetOutput();
+	InputImageType::Pointer image = reader->GetOutput();
+
+        region.SetIndex( start );
+        region.SetSize( size );
 	
-		
+	image->SetRegions(region);
+	image->Update();
+	
+	function->SetInputImage( image );
+	function->SetQ(q);
+	function->SetP(p);
+	
+	InputImageType::IndexType index;
+	index[0]=10;
+	index[1]=10;
+	
+	ComplexType Result;
+	
+        Result = function->EvaluateAtIndex( index );
+        std::cout << "function->EvaluateAtIndex( index ): " << Result << std::endl;
+	
     } 
   catch( itk::ExceptionObject & err ) 
     { 
