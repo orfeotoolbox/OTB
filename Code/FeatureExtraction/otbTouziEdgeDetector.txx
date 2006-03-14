@@ -4,7 +4,7 @@
   Auteurs   :   CS - C.Ruffel
   Language  :   C++
   Date      :   09 mars 2006
-  Role      :   Filtre de detection de contours 
+  Role      :   Filter detection of contours 
   $Id$ 
 
 =========================================================================*/
