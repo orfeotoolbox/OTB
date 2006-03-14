@@ -245,7 +245,7 @@ void TouziEdgeDetector< TInputImage, TOutputImage>
  
 //std::cout << "---"<< i <<" "<< static_cast<double>(bit.GetPixel(i))<< std::endl;     
       
-        // We determine for each 4 direction with which half window the pixel belongs. 
+        // We determine for each direction with which half window the pixel belongs. 
          
         // Vertical direction 
         if ( x < xc )
