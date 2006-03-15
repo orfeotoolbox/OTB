@@ -187,10 +187,10 @@ void TouziEdgeDetector< TInputImage, TOutputImage>
   // sign of the contour
   int sign;
 
-  // position of the pixel of the window
+  // Pixel location in the input image
   int x;
   int y;
-  // position of the central pixel of the window
+  // Location of the central pixel in the input image
   int xc;
   int yc;
 
@@ -216,7 +216,7 @@ void TouziEdgeDetector< TInputImage, TOutputImage>
       {
 //std::cout << bit.GetIndex() << std::endl;
 
-      // Position of the central pixel
+      // Location of the central pixel
       bitIndex = bit.GetIndex();
       
       xc = bitIndex[0];
@@ -273,14 +273,14 @@ void TouziEdgeDetector< TInputImage, TOutputImage>
           
         } // end of the loop on the pixels of the window           
 
-//std::cout << static_cast<double>(Sum[0][0])/ double(neighborhoodSize) << std::endl;    
+//std::cout << static_cast<double>(Sum[0][0])/ double(m_Radius[0]*(2*m_Radius[0]+1)) << std::endl;    
            
       // Loop on the 4 directions
       for ( int dir=0; dir<NB_DIR; dir++ )
         {
         // Calculation of the averages of the 2 half windows	
-        M1 = Sum[dir][0] / double(neighborhoodSize);
-        M2 = Sum[dir][1] / double(neighborhoodSize);
+        M1 = Sum[dir][0] / double(m_Radius[0]*(2*m_Radius[0]+1));
+        M2 = Sum[dir][1] / double(m_Radius[0]*(2*m_Radius[0]+1));
      	
         // Calculation of the intensity of the contour
         if (( M1 != 0 ) && (M2 != 0)) 

@@ -33,7 +33,7 @@ namespace otb
  *	\[R(\theta_{i}) = 1 - min(\fract{\mu_{1}/\mu_{2}};\fract{\mu_{2}/\mu_{1}}) \]
  *
  * The exit is an image of intensity of the detection of contour:
- *	\[I = max ( (\theta_{i}), (\theta_{i}), (\theta_{i}), (\theta_{i})) \[
+ *	\[R = max ( (\theta_{i}), (\theta_{i}), (\theta_{i}), (\theta_{i})) \[
  *
  * An image of the direction of contours can also be determined by this filter:
  * 	\[D = \fract{\sum_{i=1}^{4} s_{i}\theta_{i}R(\theta_{i})}{\sum_{i=1}^{4} R(\theta_{i}}  \[
@@ -89,7 +89,7 @@ public:
   itkGetConstReferenceMacro(Radius, SizeType);
  
 
-  /** TouzyEdgeDetector a besoin d'une zone de traitement plus large en entrée qu'en sortie 
+  /** TouziEdgeDetector a besoin d'une zone de traitement plus large en entrée qu'en sortie 
    * afin de permettre une utilisation du filtre par la méthode dite pipeline
    *
    * \sa ImageToImageFilter::GenerateInputRequestedRegion() */
