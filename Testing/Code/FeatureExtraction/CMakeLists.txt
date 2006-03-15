@@ -73,6 +73,20 @@ ADD_TEST(feTuTestFLST ${FEATUREEXTRACTION_TESTS}
 ADD_TEST(feTuComplexMomentImage ${FEATUREEXTRACTION_TESTS}  
         otbComplexMomentImage
 	${INPUTDATA}/TeteAToto.png 1 1)
+	
+ADD_TEST(feTuTouzi ${FEATUREEXTRACTION_TESTS}  
+        otbTouziEdgeDetector
+	${INPUTDATA}/cthead1.png
+	${TEMP}/feFiltreTouzi_cthead1_5.hd
+	5
+	${TEMP}/feFiltreTouzi_cthead1_dir_5.hd)
+	
+ADD_TEST(feTuTupin ${FEATUREEXTRACTION_TESTS}  
+        otbTupinEdgeDetector
+	${INPUTDATA}/cthead1.png
+	${TEMP}/feFiltreTupin_cthead1_5.hd
+	3 5 
+	${TEMP}/feFiltreTupin_cthead1_dir_5.hd)
 		        
 #ADD_TEST(tvFEPatrick2 ${FEATUREEXTRACTION_TESTS}  
 #  --compare-image ${TOL}  ${BASELINE}/otbExtractROI_cthead1_26_97_209_100.png
@@ -93,6 +107,8 @@ otbDrawPathList.cxx
 otbDrawPath.cxx
 otbDrawPathAlign.cxx
 otbComplexMomentImage.cxx
+otbTouziEdgeDetector.cxx
+otbTupinEdgeDetector.cxx
 )
 
 
