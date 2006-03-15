@@ -4,7 +4,7 @@
   Auteurs   :   CS - C.Ruffel
   Language  :   C++
   Date      :   09 mars 2006
-  Role      :   Filtre de detection de contours 
+  Role      :   Filter of detection of contours 
   $Id$ 
 
 =========================================================================*/
@@ -23,22 +23,23 @@ namespace otb
 {
 
 /** \class TouziEdgeDetector
- * \brief Applique un filtre de d\'etection de contours.
+ * \brief Application of a filter of detection of contours.
  *
- * On d\'efinit une fen\^etre carr\'ee de taille 2n+1.  
- * On calcule la moyenne pour chaque demi fen\^etre situ\ée de part
- * et d'autre du contour dans une direction donn\'ee (\mu_{1} et \mu_{2})
- * L'intensit\'e du contour est alors calcul\'e dans les quatre
- * directions verticale (\theta_{i}), horizontale (\theta_{i}), diagonale1 (\theta_{i}) 
- * et diagonale2 (\theta_{i}):
- *	R(\theta_{i}) = 1 - min(\fract{\mu_{1}/\mu_{2}};\fract{\mu_{2}/\mu_{1}})
+ * We define a square window of size 2n+1.
+ * Then, we calculate the average for each half window located on both sides contour 
+ * in a given direction. The intensity of contour is then calculated in the four 
+ * directions vertical (\theta_{i}), horizontal (\theta_{i}), diagonal 1 (\theta_{i}) 
+ * and diagonal 2 (\theta_{i}):
+ *	\[R(\theta_{i}) = 1 - min(\fract{\mu_{1}/\mu_{2}};\fract{\mu_{2}/\mu_{1}}) \]
  *
- * On obtient une image de l'intensité des contours en prenant :
- *	R = max ( (\theta_{i}), (\theta_{i}), (\theta_{i}), (\theta_{i}))
+ * The exit is an image of intensity of the detection of contour:
+ *	\[I = max ( (\theta_{i}), (\theta_{i}), (\theta_{i}), (\theta_{i})) \[
  *
- * Une m\'ethode permet \'egalement de calculer une image des directions:
- * 	D =  
- * 
+ * An image of the direction of contours can also be determined by this filter:
+ * 	\[D = \fract{\sum_{i=1}^{4} s_{i}\theta_{i}R(\theta_{i})}{\sum_{i=1}^{4} R(\theta_{i}}  \[
+ * where  \[si \mu_{1}>\mu_{2} s_{i}=+1 \]
+ * \[si \mu_{1}<\mu_{2} s_{i}=-1 \]
+ *  
  */
 
 template <class TInputImage, class TOutputImage>
