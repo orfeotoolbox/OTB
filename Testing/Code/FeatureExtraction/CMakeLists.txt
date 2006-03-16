@@ -84,9 +84,8 @@ ADD_TEST(feTuTouzi ${FEATUREEXTRACTION_TESTS}
 ADD_TEST(feTuTupin ${FEATUREEXTRACTION_TESTS}  
         otbTupinEdgeDetector
 	${INPUTDATA}/cthead1.png
-	${TEMP}/feFiltreTupin_cthead1_5.hd
-	3 5 
-	${TEMP}/feFiltreTupin_cthead1_dir_5.hd)
+	${TEMP}/feFiltreTupin_cthead1_3_5.hd
+	3 5)
 		        
 #ADD_TEST(tvFEPatrick2 ${FEATUREEXTRACTION_TESTS}  
 #  --compare-image ${TOL}  ${BASELINE}/otbExtractROI_cthead1_26_97_209_100.png
