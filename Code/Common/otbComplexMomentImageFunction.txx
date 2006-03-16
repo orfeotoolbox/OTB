@@ -114,7 +114,7 @@ ComplexMomentImageFunction<TInput,TOutput,TCoordRep>
     unsigned int q  = m_Q;
     while(q>0)
      {
-      ValQ *= std::complex<float>(IndexValue[0], IndexValue[1]);
+      ValQ *= std::complex<float>(IndexValue[0], -IndexValue[1]);
       --q; 
      }
 //    std::cout<< i <<"--> "<< IndexValue << " p:"<<ValP <<" Q: "<<ValQ;  

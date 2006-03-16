@@ -54,18 +54,20 @@ int otbHuImage( int argc, char ** argv )
 	
 	image->SetRegions(region);
 	image->Update();
-	
 	function->SetInputImage( image );
-	function->SetQ(Number);
-	
+
 	InputImageType::IndexType index;
 	index[0]=10;
 	index[1]=10;
 	
 	ComplexType Result;
 	
-        Result = function->EvaluateAtIndex( index );
-	std::cout << "Hu("<<Number<<") = "<< Result <<std::endl;
+	for (Number = 1 ;Number<10;Number++)
+	  {
+	   function->SetNumber(Number);
+           Result = function->EvaluateAtIndex( index );
+	   std::cout << "Hu("<<Number<<") = "<< Result <<std::endl;
+	  }
 	
     } 
   catch( itk::ExceptionObject & err ) 

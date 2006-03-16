@@ -70,7 +70,6 @@ public:
  
   typedef TOutput                                   ComplexType;
 
-
   /** Dimension of the underlying image. */
   itkStaticConstMacro(ImageDimension, unsigned int,
                       InputType::ImageDimension);

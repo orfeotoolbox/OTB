@@ -48,7 +48,7 @@ namespace otb
  * \ingroup ImageFunctions
  */
 template < class TInput, 
-           class TOutput = std::complex<float >,
+           class TOutput = std::complex<double >,
 	   class TCoordRep = float >
 class ITK_EXPORT HuImageFunction :
   public ComplexMomentImageFunction< TInput, TOutput,TCoordRep >
@@ -67,32 +67,29 @@ public:
   itkNewMacro(Self);
 
   /** InputImageType typedef support. */
-  typedef TInput                                    InputType;
+  typedef typename Superclass::InputType            InputType;
+  typedef typename Superclass::ComplexType          ComplexType;
   typedef typename Superclass::IndexType            IndexType;
   typedef typename Superclass::ContinuousIndexType  ContinuousIndexType;
   typedef typename Superclass::PointType            PointType;
  
-  typedef TOutput                                   ComplexType;
-
-  typedef ComplexMomentImageFunction<InputType,ComplexType>   CMType;
-
   /** Dimension of the underlying image. */
   itkStaticConstMacro(ImageDimension, unsigned int,
                       InputType::ImageDimension);
   			 
 
   /** Evalulate the function at specified index */
-  virtual ComplexType EvaluateAtIndex( const IndexType& index ) const;
+  virtual ComplexType EvaluateAtIndex( const IndexType& index ) ;
   
   /** Evaluate the function at non-integer positions */
-  virtual ComplexType Evaluate( const PointType& point ) const
+  virtual ComplexType Evaluate( const PointType& point )
     { 
       IndexType index;
       this->ConvertPointToNearestIndex( point, index );
       return this->EvaluateAtIndex( index ); 
     }
   virtual ComplexType EvaluateAtContinuousIndex( 
-    const ContinuousIndexType& cindex ) const
+    const ContinuousIndexType& cindex )
     { 
       IndexType index;
       this->ConvertContinuousIndexToNearestIndex( cindex, index );
