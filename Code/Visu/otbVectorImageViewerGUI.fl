@@ -1,0 +1,40 @@
+# data file for the Fltk User Interface Designer (fluid)
+version 1.0107 
+header_name {.h} 
+code_name {.cxx}
+class otbVectorImageViewerGUI {open
+} {
+  Function {otbVectorImageViewerGUI()} {} {}
+  Function {~otbVectorImageViewerGUI()} {selected return_type virtual
+  } {}
+  Function {CreateGUI()} {open
+  } {
+    Fl_Window iviewWindow {open
+      xywh {560 53 420 490} type Double labelsize 10 resizable visible
+    } {
+      Fl_Group glWindowGroup {open
+        xywh {5 5 410 480}
+      } {
+        Fl_Box {} {
+          label {3D Win}
+          xywh {5 5 410 480} box EMBOSSED_BOX
+          code0 {\#include <otbGLVectorImageView.h>}
+          code1 {CreateGLSliceView( glWindowGroup, o );}
+          class Fl_Gl_Window
+        }
+      }
+    }
+  }
+  Function {CreateGLSliceView( Fl_Group *,Fl_Gl_Window * w )} {open return_type {virtual void}
+  } {}
+  Function {SetImage( itk::ImageBase<3> * img )} {return_type {virtual void}
+  } {}
+  Function {Show(void)} {return_type {virtual void}
+  } {}
+  Function {Hide(void)} {return_type {virtual void}
+  } {}
+  Function {Update(void)} {return_type {virtual void}
+  } {}
+  Function {Synchronize(void)} {return_type {virtual void}
+  } {}
+} 
