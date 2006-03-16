@@ -7,6 +7,9 @@ SET ( OTBVisu_SRCS
 
 SET ( OTBVisu_GUI_SRCS 
         otbImageViewerGUI.fl
+        otbImageViewerSimpleGUI.fl
+        otbVectorImageViewerGUI.fl
+        otbTwoImagesViewerGUI.fl
 )
 
 

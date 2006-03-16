@@ -8,60 +8,94 @@
 namespace otb
 {
 
-template <class ImagePixelType, class OverlayPixelType>
-GLImageView<ImagePixelType, OverlayPixelType>::
+template <class TInputImage, class OverlayPixelType>
+GLImageView<TInputImage, OverlayPixelType>::
 //GLImageView(int x, int y, int w, int h, const char *l):
-//ImageView<ImagePixelType>(x, y, w, h, l), Fl_Gl_Window(x, y, w, h, l)
-GLImageView() : ImageView<ImagePixelType>(), Fl_Gl_Window(0,0,0,0,0)
+//ImageView<TInputImage>(x, y, w, h, l), Fl_Gl_Window(x, y, w, h, l)
+GLImageView() : GLImageViewBase<TInputImage, OverlayPixelType>()
   {
-  when(FL_WHEN_NOT_CHANGED | FL_WHEN_ENTER_KEY);
-  cValidOverlayData     = false;
-  this->cViewOverlayData      = false;
-  cViewOverlayCallBack  = NULL;
-  cOverlayOpacity       = 0.0;
-  cWinOverlayData       = NULL;
-  cColorTable = ColorTableType::New();
-  //cColorTable.useGray();
-  cColorTable->useDiscrete();
-  cOverlayColorIndex = 7;  //default white
   }
 
-template <class ImagePixelType, class OverlayPixelType>
-GLImageView<ImagePixelType, OverlayPixelType>::
+template <class TInputImage, class OverlayPixelType>
+GLImageView<TInputImage, OverlayPixelType>::
 ~GLImageView()
 {
 
 }
  
-template <class ImagePixelType, class OverlayPixelType>
+template <class TInputImage, class OverlayPixelType>
 void
-GLImageView<ImagePixelType, OverlayPixelType>::
+GLImageView<TInputImage, OverlayPixelType>::
 Init(int x, int y, int w, int h, const char * l)
 {
         //Methode sur Fl_Gl_Window
         this->resize(x,y,w,h);
         //Et le "l" !!! (THOMAS)
 }
-  
-template <class ImagePixelType, class OverlayPixelType>
-void
-GLImageView<ImagePixelType, OverlayPixelType>::
-SetInput( const ImageType * image )
+template <class TInputImage, class OverlayPixelType>
+void 
+GLImageView<TInputImage, OverlayPixelType>::
+CalculeDataMaxMin(double & pMin, double & pMax)
 {
-  // Process object is not const-correct so the const_cast is required here
-  this->itk::ProcessObject::SetNthInput(0, 
-                                   const_cast< ImageType *>( image ) );
-}
+//  TInputImage tf;
+  
+  if( strcmp( this->GetInput()->GetNameOfClass(), "VectorImage" ) == 0 ) 
+  {
+  
+  }
+  else
+  {
+  
+  //calculating cDataMax and cDataMin    
+  IndexType ind;
+  ind[0] = 0; 
+  ind[1] = 0; 
+  ind[2] = 0;
+        PixelType lPixel;
 
+        pMin = this->GetInput()->GetPixel(ind);
+        pMax = pMin;
+        
+  for( unsigned int i=0; i<this->cDimSize[0]; i++ )
+    {
+    ind[0] = i;
+    for(unsigned int j=0; j<this->cDimSize[1]; j++ )
+      {
+      ind[1] = j;
+      for( unsigned int k=0; k<this->cDimSize[2]; k++ )
+        {
+        ind[2] = k;
+        lPixel = this->GetInput()->GetPixel(ind);
+        
+        if(lPixel > pMax) 
+          {
+          pMax = lPixel;
+          }
+        else 
+          {
+          if(lPixel < pMin)
+            {
+            pMin = lPixel;
+            }
+          }
+        }
+      }
+    }
+
+        }
+
+
+}
+  
 
 //
 // Set the input image to be displayed
 // Warning: the current overlay is destroyed if the size of the image
 // is different from the size of the overlay.
 //
-template <class ImagePixelType, class OverlayPixelType>
+template <class TInputImage, class OverlayPixelType>
 void 
-GLImageView<ImagePixelType, OverlayPixelType>::
+GLImageView<TInputImage, OverlayPixelType>::
 SetInputImage(ImageType * newImData)
   {
   RegionType region = newImData->GetLargestPossibleRegion();
@@ -74,20 +108,20 @@ SetInputImage(ImageType * newImData)
 
   // If the overlay has been set and the size is different from the new image,
   // it is removed.
-  if( cValidOverlayData)
+  if( this->cValidOverlayData)
     {  
-    SizeType overlay_size = cOverlayData->GetLargestPossibleRegion().GetSize();
+    SizeType overlay_size = this->cOverlayData->GetLargestPossibleRegion().GetSize();
     
     if((overlay_size[0] != imSize[0])
       ||  (overlay_size[1] != imSize[1])
       ||  (overlay_size[2] != imSize[2]))
       {
-       if(cWinOverlayData != NULL)
+       if(this->cWinOverlayData != NULL)
          {
-         delete [] cWinOverlayData;
+         delete [] this->cWinOverlayData;
          }
-       cWinOverlayData       = NULL;
-       cValidOverlayData     = false;
+       this->cWinOverlayData       = NULL;
+       this->cValidOverlayData     = false;
       }       
     }
 
@@ -103,15 +137,13 @@ SetInputImage(ImageType * newImData)
   this->cOrigin[1]=this->GetInput()->GetOrigin()[1];
   this->cOrigin[2]=this->GetInput()->GetOrigin()[2];
     
-  //calculating cDataMax and cDataMin    
-  IndexType ind;
-  ind[0] = 0; 
-  ind[1] = 0; 
-  ind[2] = 0;
-  
+
+  this->CalculeDataMaxMin( this->cDataMin, this->cDataMax );
+
+/*  
   this->cDataMax = this->GetInput()->GetPixel(ind);
   this->cDataMin = this->cDataMax;
-  ImagePixelType tf;
+  TInputImage tf;
   
   
   for( unsigned int i=0; i<this->cDimSize[0]; i++ )
@@ -138,7 +170,7 @@ SetInputImage(ImageType * newImData)
         }
       }
     }
-  
+*/
   this->cIWMin      = this->cDataMin;
   this->cIWMax      = this->cDataMax;
   this->cIWModeMin  = IW_MIN;
@@ -196,9 +228,9 @@ SetInputImage(ImageType * newImData)
 
 
 
-template <class ImagePixelType, class OverlayPixelType>
-typename GLImageView<ImagePixelType, OverlayPixelType>::ImageType * 
-GLImageView<ImagePixelType, OverlayPixelType>::
+template <class TInputImage, class OverlayPixelType>
+typename GLImageView<TInputImage, OverlayPixelType>::ImageType * 
+GLImageView<TInputImage, OverlayPixelType>::
 GetInput(void)
   {
   if (this->GetNumberOfInputs() < 1)
@@ -215,9 +247,9 @@ GetInput(void)
 /*
 //
 //
-template <class ImagePixelType, class OverlayPixelType>
-const typename itk::Image<ImagePixelType,3>::Pointer &
-GLImageView<ImagePixelType, OverlayPixelType>
+template <class TInputImage, class OverlayPixelType>
+const typename itk::Image<TInputImage,3>::Pointer &
+GLImageView<TInputImage, OverlayPixelType>
 ::GetInputImage(void) const
   {
   return (*this->GetInput());
@@ -227,9 +259,9 @@ GLImageView<ImagePixelType, OverlayPixelType>
 
 //
 //
-template <class ImagePixelType, class OverlayPixelType>
+template <class TInputImage, class OverlayPixelType>
 void 
-GLImageView<ImagePixelType, OverlayPixelType>
+GLImageView<TInputImage, OverlayPixelType>
 ::SetInputOverlay( OverlayType * newOverlayData )
   {
   RegionType newoverlay_region = 
@@ -283,10 +315,10 @@ GLImageView<ImagePixelType, OverlayPixelType>
 
 
 
-template <class ImagePixelType, class OverlayPixelType>
-const typename GLImageView<ImagePixelType, 
+template <class TInputImage, class OverlayPixelType>
+const typename GLImageView<TInputImage, 
 OverlayPixelType>::OverlayPointer &
-GLImageView<ImagePixelType, OverlayPixelType>::GetInputOverlay( void ) 
+GLImageView<TInputImage, OverlayPixelType>::GetInputOverlay( void ) 
 const
   {
   return this->cOverlayData;
@@ -297,9 +329,9 @@ const
 
 //
 //
-template <class ImagePixelType, class OverlayPixelType>
+template <class TInputImage, class OverlayPixelType>
 void 
-GLImageView<ImagePixelType, OverlayPixelType>::
+GLImageView<TInputImage, OverlayPixelType>::
 ViewOverlayData( bool newViewOverlayData)
   {
   
@@ -307,16 +339,16 @@ ViewOverlayData( bool newViewOverlayData)
   
   if( this->cViewOverlayCallBack != NULL )
     {
-    cViewOverlayCallBack();
+    this->cViewOverlayCallBack();
     }
   
   this->redraw();
   
   }
 
-template <class ImagePixelType, class OverlayPixelType>
+template <class TInputImage, class OverlayPixelType>
 bool 
-GLImageView<ImagePixelType, OverlayPixelType>::
+GLImageView<TInputImage, OverlayPixelType>::
 ViewOverlayData(void)
   {
   
@@ -325,18 +357,18 @@ ViewOverlayData(void)
   }
 
 
-template <class ImagePixelType, class OverlayPixelType>
+template <class TInputImage, class OverlayPixelType>
 void 
-GLImageView<ImagePixelType, OverlayPixelType>::
+GLImageView<TInputImage, OverlayPixelType>::
 ViewOverlayCallBack( void (* newViewOverlayCallBack)(void) )
   {
   this->cViewOverlayCallBack = newViewOverlayCallBack;
   }
 
 
-template <class ImagePixelType, class OverlayPixelType>
+template <class TInputImage, class OverlayPixelType>
 void 
-GLImageView<ImagePixelType, OverlayPixelType>::
+GLImageView<TInputImage, OverlayPixelType>::
 ViewClickedPoints( bool newViewClickedPoints )
 {
     this->cViewClickedPoints = newViewClickedPoints;
@@ -344,9 +376,9 @@ ViewClickedPoints( bool newViewClickedPoints )
     this->redraw();
 }
 
-template <class ImagePixelType, class OverlayPixelType>
+template <class TInputImage, class OverlayPixelType>
 bool
-GLImageView<ImagePixelType, OverlayPixelType>::
+GLImageView<TInputImage, OverlayPixelType>::
 ViewClickedPoints()
 {
     return this->cViewClickedPoints;
@@ -355,9 +387,9 @@ ViewClickedPoints()
 
 //
 //
-template <class ImagePixelType, class OverlayPixelType>
+template <class TInputImage, class OverlayPixelType>
 void 
-GLImageView<ImagePixelType, OverlayPixelType>::
+GLImageView<TInputImage, OverlayPixelType>::
 OverlayOpacity( float newOverlayOpacity )
   {
   this->cOverlayOpacity = newOverlayOpacity;
@@ -371,9 +403,9 @@ OverlayOpacity( float newOverlayOpacity )
 
 
 
-template <class ImagePixelType, class OverlayPixelType>
+template <class TInputImage, class OverlayPixelType>
 float 
-GLImageView<ImagePixelType, OverlayPixelType>::
+GLImageView<TInputImage, OverlayPixelType>::
 OverlayOpacity(void)
   {
   return this->cOverlayOpacity;
@@ -385,9 +417,9 @@ OverlayOpacity(void)
 //
 //
 //
-template <class ImagePixelType, class OverlayPixelType>
-typename GLImageView<ImagePixelType, OverlayPixelType>::ColorTablePointer 
-GLImageView<ImagePixelType, OverlayPixelType>::
+template <class TInputImage, class OverlayPixelType>
+typename GLImageView<TInputImage, OverlayPixelType>::ColorTablePointer 
+GLImageView<TInputImage, OverlayPixelType>::
 GetColorTable(void)
   {
   return this->cColorTable;
@@ -398,14 +430,14 @@ GetColorTable(void)
 //
 //
 //
-template <class ImagePixelType, class OverlayPixelType>
+template <class TInputImage, class OverlayPixelType>
 void
-GLImageView<ImagePixelType, OverlayPixelType>::
+GLImageView<TInputImage, OverlayPixelType>::
 SetColorTable(typename 
-              GLImageView<ImagePixelType, OverlayPixelType>::ColorTablePointer 
+              GLImageView<TInputImage, OverlayPixelType>::ColorTablePointer 
               newColorTable)
   {
-  cColorTable = newColorTable;
+  this->cColorTable = newColorTable;
   }
 
 
@@ -413,11 +445,13 @@ SetColorTable(typename
 
 //
 //
-template <class ImagePixelType, class OverlayPixelType>
+template <class TInputImage, class OverlayPixelType>
 void 
-GLImageView<ImagePixelType, OverlayPixelType>::
+GLImageView<TInputImage, OverlayPixelType>::
 update()
   {
+  //Update d'ITK
+  this->Update();
   
   if( !this->cValidImData ) 
     {
@@ -696,65 +730,65 @@ update()
           {
           if (sizeof( OverlayPixelType ) == 1)
             {
-            m = (int)*((unsigned char *)&(cOverlayData->GetPixel(ind)));
+            m = (int)*((unsigned char *)&(this->cOverlayData->GetPixel(ind)));
             }
           else
             {
-            m = (int)*((unsigned short *)&(cOverlayData->GetPixel(ind)));
+            m = (int)*((unsigned short *)&(this->cOverlayData->GetPixel(ind)));
             }
-          if( m >= (int)cColorTable->GetNumberOfColors() ) 
+          if( m >= (int)this->cColorTable->GetNumberOfColors() ) 
             { 
-            m = cColorTable->GetNumberOfColors() - 1;
+            m = this->cColorTable->GetNumberOfColors() - 1;
             }
           if( m > 0 ) {
             overlayColorIndex = m-1;
-            if( static_cast<unsigned int>(m) > cOverlayColorIndex )
+            if( static_cast<unsigned int>(m) > this->cOverlayColorIndex )
               {
-              overlayColorIndex = cOverlayColorIndex;
+              overlayColorIndex = this->cOverlayColorIndex;
               }
-            cWinOverlayData[l+0] = 
-              (unsigned char)(cColorTable->GetColorComponent(overlayColorIndex,
+            this->cWinOverlayData[l+0] = 
+              (unsigned char)(this->cColorTable->GetColorComponent(overlayColorIndex,
                                                              'r') * 255);
-            cWinOverlayData[l+1] = 
-              (unsigned char)(cColorTable->GetColorComponent(overlayColorIndex,
+            this->cWinOverlayData[l+1] = 
+              (unsigned char)(this->cColorTable->GetColorComponent(overlayColorIndex,
                                                              'g') * 255);
-            cWinOverlayData[l+2] = 
-              (unsigned char)(cColorTable->GetColorComponent(overlayColorIndex,
+            this->cWinOverlayData[l+2] = 
+              (unsigned char)(this->cColorTable->GetColorComponent(overlayColorIndex,
                                                              'b') * 255);
-            cWinOverlayData[l+3] = 
-              (unsigned char)(cOverlayOpacity*255);
+            this->cWinOverlayData[l+3] = 
+              (unsigned char)(this->cOverlayOpacity*255);
             }
           }
         else 
           {
-          if(((unsigned char *)&(cOverlayData->GetPixel(ind)))[0]
-            + ((unsigned char *)&(cOverlayData->GetPixel(ind)))[1]
-            + ((unsigned char *)&(cOverlayData->GetPixel(ind)))[2] > 0)
+          if(((unsigned char *)&(this->cOverlayData->GetPixel(ind)))[0]
+            + ((unsigned char *)&(this->cOverlayData->GetPixel(ind)))[1]
+            + ((unsigned char *)&(this->cOverlayData->GetPixel(ind)))[2] > 0)
             {
             if( sizeof( OverlayPixelType ) == 3 )
               {
-              cWinOverlayData[l+0] = 
-                ((unsigned char *)&(cOverlayData->GetPixel(ind)))[0];
-              cWinOverlayData[l+1] = 
-                ((unsigned char *)&(cOverlayData->GetPixel(ind)))[1];
-              cWinOverlayData[l+2] = 
-                ((unsigned char *)&(cOverlayData->GetPixel(ind)))[2];
-              cWinOverlayData[l+3] = 
-                (unsigned char)(cOverlayOpacity*255);
+              this->cWinOverlayData[l+0] = 
+                ((unsigned char *)&(this->cOverlayData->GetPixel(ind)))[0];
+              this->cWinOverlayData[l+1] = 
+                ((unsigned char *)&(this->cOverlayData->GetPixel(ind)))[1];
+              this->cWinOverlayData[l+2] = 
+                ((unsigned char *)&(this->cOverlayData->GetPixel(ind)))[2];
+              this->cWinOverlayData[l+3] = 
+                (unsigned char)(this->cOverlayOpacity*255);
               }
             else 
               {
               if( sizeof( OverlayPixelType ) == 4 ) 
                 {
-                cWinOverlayData[l+0] = 
-                  ((unsigned char *)&(cOverlayData->GetPixel(ind)))[0];
-                cWinOverlayData[l+1] = 
-                  ((unsigned char *)&(cOverlayData->GetPixel(ind)))[1];
-                cWinOverlayData[l+2] = 
-                  ((unsigned char *)&(cOverlayData->GetPixel(ind)))[2];
-                cWinOverlayData[l+3] = 
+                this->cWinOverlayData[l+0] = 
+                  ((unsigned char *)&(this->cOverlayData->GetPixel(ind)))[0];
+                this->cWinOverlayData[l+1] = 
+                  ((unsigned char *)&(this->cOverlayData->GetPixel(ind)))[1];
+                this->cWinOverlayData[l+2] = 
+                  ((unsigned char *)&(this->cOverlayData->GetPixel(ind)))[2];
+                this->cWinOverlayData[l+3] = 
                   (unsigned char)(((unsigned char *)
-                  &(cOverlayData->GetPixel(ind)))[3]*cOverlayOpacity);
+                  &(this->cOverlayData->GetPixel(ind)))[3]*this->cOverlayOpacity);
                 }
               }
             }
@@ -771,21 +805,21 @@ update()
 
 
 
-template <class ImagePixelType, class OverlayPixelType>
-void GLImageView<ImagePixelType, OverlayPixelType>::
+template <class TInputImage, class OverlayPixelType>
+void GLImageView<TInputImage, OverlayPixelType>::
 clickSelect(float x, float y, float z)
   {
-  ImageView<ImagePixelType>::clickSelect(x, y, z);
+  ImageView<TInputImage>::clickSelect(x, y, z);
   if(this->cViewValue || this->cViewCrosshairs)
     {
     this->redraw();
     }
   }
 
-template <class ImagePixelType, class OverlayPixelType>
-void GLImageView<ImagePixelType, OverlayPixelType>::size(int w, int h)
+template <class TInputImage, class OverlayPixelType>
+void GLImageView<TInputImage, OverlayPixelType>::size(int w, int h)
   {
-  ImageView<ImagePixelType>::size(w, h);
+  ImageView<TInputImage>::size(w, h);
   Fl_Gl_Window::size(w, h);
   this->update();
   this->redraw();
@@ -794,12 +828,12 @@ void GLImageView<ImagePixelType, OverlayPixelType>::size(int w, int h)
 
 
 
-template <class ImagePixelType, class OverlayPixelType>
+template <class TInputImage, class OverlayPixelType>
 void 
-GLImageView<ImagePixelType, OverlayPixelType>::
+GLImageView<TInputImage, OverlayPixelType>::
 resize(int x, int y, int w, int h)
   {
-  ImageView<ImagePixelType>::resize(x, y, w, h);
+  ImageView<TInputImage>::resize(x, y, w, h);
   Fl_Gl_Window::resize(x, y, w, h);
   this->update();
   this->redraw();
@@ -810,10 +844,10 @@ resize(int x, int y, int w, int h)
 
 //
 //
-template <class ImagePixelType, class OverlayPixelType>
-void GLImageView<ImagePixelType, OverlayPixelType>::draw(void)
+template <class TInputImage, class OverlayPixelType>
+void GLImageView<TInputImage, OverlayPixelType>::draw(void)
   {
-  if( !valid() )
+  if( !this->valid() )
     {
     glClearColor((float)0.0, (float)0.0, (float)0.0, (float)0.0);          
     glShadeModel(GL_FLAT);
@@ -830,7 +864,7 @@ void GLImageView<ImagePixelType, OverlayPixelType>::draw(void)
     glLoadIdentity();
     
     glMatrixMode(GL_PROJECTION);
-    ortho();
+    this->ortho();
     
     if( !this->GetInput() ) 
       {
@@ -998,7 +1032,7 @@ void GLImageView<ImagePixelType, OverlayPixelType>::draw(void)
         py = this->cClickSelect[1];
         pz = this->cClickSelect[2];
         }
-      if((ImagePixelType)1.5==1.5)
+      if((PixelType)1.5==1.5)
         {
         sprintf(s, "(%0.1f%s,  %0.1f%s,  %0.1f%s) = %0.3f", 
                 px, suffix,
@@ -1100,8 +1134,8 @@ void GLImageView<ImagePixelType, OverlayPixelType>::draw(void)
 
 //
 //
-template <class ImagePixelType, class OverlayPixelType>
-int GLImageView<ImagePixelType, OverlayPixelType>::handle(int event)
+template <class TInputImage, class OverlayPixelType>
+int GLImageView<TInputImage, OverlayPixelType>::handle(int event)
   {
   int x = Fl::event_x();
   int y = Fl::event_y();
@@ -1128,13 +1162,13 @@ int GLImageView<ImagePixelType, OverlayPixelType>::handle(int event)
             {
             if(event == FL_DRAG)
               {
-              make_current();
+              this->make_current();
               fl_overlay_clear();
               fl_overlay_rect(boxX, boxY, x-boxY, y-boxY);
               }
             else
               {
-              make_current();
+              this->make_current();
               fl_overlay_clear();
               }
             }
@@ -1145,7 +1179,7 @@ int GLImageView<ImagePixelType, OverlayPixelType>::handle(int event)
       break;
     }
   
-  return ImageView<ImagePixelType>::handle(event);
+  return ImageView<TInputImage>::handle(event);
   }
 
 }; //namespace

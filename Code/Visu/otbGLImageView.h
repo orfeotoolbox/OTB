@@ -9,7 +9,7 @@
 #include "itkColorTable.h"
 #include "itkImage.h"
 
-#include "otbImageView.h"
+#include "otbGLImageViewBase.h"
 
 namespace otb
 {
@@ -18,13 +18,13 @@ namespace otb
 * GLImageView : Derived from abstract class ImageView and Fl_Gl_Window
 * See ImageView.h for details...
   **/
-template <class ImagePixelType, class OverlayPixelType>
-class ITK_EXPORT GLImageView :  public ImageView<ImagePixelType>, 
-                                public Fl_Gl_Window
+template <class TInputImage, class OverlayPixelType>
+class ITK_EXPORT GLImageView :  public GLImageViewBase<TInputImage,OverlayPixelType>
+                                
 {
 public:
-    typedef GLImageView                         Self;
-    typedef ImageView<ImagePixelType>           Superclass;
+    typedef GLImageView                                         Self;
+    typedef GLImageViewBase<TInputImage,OverlayPixelType>       Superclass;
     typedef itk::SmartPointer<Self>             Pointer;
     typedef itk::SmartPointer<const Self>       ConstPointer;
 
@@ -32,37 +32,24 @@ public:
     itkNewMacro(Self);
 
     /** Run-time type information (and related methods). */
-    itkTypeMacro(GLImageView,ImageView);
+    itkTypeMacro(GLImageView,GLImageViewBase);
 
   
-  typedef itk::Image<ImagePixelType,3>     ImageType;
-  typedef itk::Image<OverlayPixelType,3>   OverlayType;
-  typedef typename ImageType::Pointer      ImagePointer;
-  typedef typename OverlayType::Pointer    OverlayPointer;
-  typedef typename ImageType::RegionType   RegionType;
-  typedef typename ImageType::SizeType     SizeType;
-  typedef typename ImageType::IndexType    IndexType;
+  typedef typename Superclass::ImageType        ImageType;
+  typedef typename ImageType::Pointer           ImagePointer;
+  typedef typename Superclass::OverlayType      OverlayType;
+  typedef typename OverlayType::Pointer         OverlayPointer;
+  typedef typename ImageType::RegionType        RegionType;
+  typedef typename ImageType::SizeType          SizeType;
+  typedef typename ImageType::IndexType         IndexType;
+  typedef typename ImageType::PixelType         PixelType;
   
-  virtual void SetInput( const ImageType *image);
+  typedef typename Superclass::ColorTableType       ColorTableType;
+  typedef typename Superclass::ColorTablePointer    ColorTablePointer;
 
-
-  typedef itk::ColorTable<float>                ColorTableType;
-  typedef typename ColorTableType::Pointer      ColorTablePointer;
-  
-  
+  virtual void CalculeDataMaxMin(double & pMin, double & pMax);
+ 
 protected:
-  bool        cValidOverlayData;
-  float       cOverlayOpacity;
-  
-  OverlayPointer cOverlayData;
-  void     (* cViewOverlayCallBack)(void);
-  
-  unsigned char * cWinOverlayData;
-  
-
-  ColorTablePointer      cColorTable;
-
-  unsigned int           cOverlayColorIndex;
   
 /*! FLTK required constructor - must use imData() to complete 
   definition */
@@ -120,14 +107,6 @@ public:
   
   virtual int  handle(int event);
   
-  /*! Display Overlay in Color 'c'. You must ensure that the color-table specified
-   * contains color 'c'. For example with the default useDiscrete() color table,
-   * SetOverlayColorIndex( 0 ) will display the overlay in red. 
-   * SetOverlayColorIndex( 1 ) purple etc.... */
-  void SetOverlayColorIndex( unsigned int c)
-    {
-    cOverlayColorIndex = c;
-    }
 };
 
 } //namespace

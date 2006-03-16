@@ -1,4 +1,5 @@
-
+#ifndef _otbColorImageViewer_txx
+#define _otbColorImageViewer_txx
 #include "otbColorImageViewer.h"
 
 
@@ -133,6 +134,7 @@ void
 ColorImageViewer<ImagePixelType,OverlayPixelType>
 ::Update(void)
 {
+  this->Superclass::Update();
   glSliceView->update();
 }
 
@@ -502,3 +504,5 @@ ColorImageViewer<ImagePixelType,OverlayPixelType>
 
 
 } // end namespace otb
+
+#endif

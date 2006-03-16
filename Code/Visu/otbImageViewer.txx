@@ -1,6 +1,7 @@
+#ifndef _otbImageViewer_txx
+#define _otbImageViewer_txx
 
 #include "otbImageViewer.h"
-
 
 namespace otb
 {
@@ -92,6 +93,7 @@ void
 ImageViewer<ImagePixelType,OverlayPixelType>
 ::Show(void)
 {
+  this->Update();
   static bool firstTime = true;
   iviewWindow->show();
   glSliceView->show();
@@ -129,6 +131,7 @@ void
 ImageViewer<ImagePixelType,OverlayPixelType>
 ::Update(void)
 {
+  this->Superclass::Update();
   glSliceView->update();
 }
 
@@ -498,3 +501,5 @@ ImageViewer<ImagePixelType,OverlayPixelType>
 
 
 } // end namespace otb
+#endif
+

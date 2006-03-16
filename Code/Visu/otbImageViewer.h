@@ -8,20 +8,29 @@ namespace otb
 {
 
 template <class ImagePixelType, class OverlayPixelType>
-class ImageViewer : public otbImageViewerGUI
+class ImageViewer :             public itk::ProcessObject,
+                                public otbImageViewerGUI
+                                
 {
 public:
 
    /**
    * Standard "Self" typedef.
    */
-  typedef ImageViewer         Self;
+    typedef ImageViewer         Self;
+    typedef itk::ProcessObject       Superclass;
 
   /** 
    * Smart pointer typedef support.
    */
   typedef itk::SmartPointer<Self>        Pointer;
   typedef itk::SmartPointer<const Self>  ConstPointer;
+
+    /** Method for creation through the object factory. */
+    itkNewMacro(Self);
+
+    /** Run-time type information (and related methods). */
+    itkTypeMacro(ImageViewer,itk::ProcessObject);
 
  
   typedef itk::Image< ImagePixelType, 3 >   ImageType;
@@ -100,8 +109,6 @@ private:
 #ifndef OTB_MANUAL_INSTANTIATION
 #include "otbImageViewer.txx"
 #endif
-
-
 
 
 #endif

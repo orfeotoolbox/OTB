@@ -89,7 +89,7 @@ class ClickPoint
 *
 *  /date 11/22/99
 */
-template <class imType>
+template <class TInputImage>
 class ITK_EXPORT ImageView : public itk::ProcessObject
 {
   public:
@@ -105,7 +105,8 @@ class ITK_EXPORT ImageView : public itk::ProcessObject
     itkTypeMacro(ImageView,itk::ProcessObject);
 
     // some typedefs
-    typedef itk::Image<imType,3>                ImageType;
+    typedef TInputImage                ImageType;
+//    typedef itk::Image<imType,3>                ImageType;
     typedef typename ImageType::Pointer         ImagePointer;
     typedef typename ImageType::ConstPointer    ImageConstPointer;
 
@@ -221,6 +222,8 @@ class ITK_EXPORT ImageView : public itk::ProcessObject
     
     /*! Return a pointer to the image data */
     
+  virtual void SetInput( const ImageType *image);
+
 //    const ImageConstPointer & GetInputImage(void) const;
     const ImageType * GetInput(void) const;
     

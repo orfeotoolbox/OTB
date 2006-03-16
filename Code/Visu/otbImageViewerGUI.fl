@@ -5,14 +5,14 @@ code_name {.cxx}
 class otbImageViewerGUI {open
 } {
   Function {otbImageViewerGUI()} {} {}
-  Function {~otbImageViewerGUI()} {selected return_type virtual
+  Function {~otbImageViewerGUI()} {return_type virtual
   } {}
   Function {CreateGUI()} {open
   } {
-    Fl_Window iviewWindow {
+    Fl_Window iviewWindow {open
       xywh {855 29 295 400} type Double labelsize 10 resizable visible
     } {
-      Fl_Group glWindowGroup {
+      Fl_Group glWindowGroup {open
         xywh {0 25 260 320}
       } {
         Fl_Choice orientationChoice {
@@ -35,12 +35,12 @@ class otbImageViewerGUI {open
         Fl_Box {} {
           label {3D Win}
           xywh {0 25 260 250} box EMBOSSED_BOX
-          code0 {\#include <GLSliceView.h>}
+          code0 {\#include <otbGLImageView.h>}
           code1 {CreateGLSliceView( glWindowGroup, o );}
           class Fl_Gl_Window
         }
       }
-      Fl_Menu_Bar {} {
+      Fl_Menu_Bar {} {open
         xywh {0 0 260 25}
         code0 {AddMenuBarOptions();}
       } {
@@ -51,12 +51,12 @@ class otbImageViewerGUI {open
         } {
           MenuItem {} {
             label Value
-            callback {ImageMode(itk::IMG_VAL);}
+            callback {ImageMode(otb::IMG_VAL);}
             xywh {0 0 100 20}
           }
           MenuItem {} {
             label Log
-            callback {ImageMode(itk::IMG_LOG);}
+            callback {ImageMode(otb::IMG_LOG);}
             xywh {10 10 100 20}
           }
         }
@@ -87,7 +87,7 @@ class otbImageViewerGUI {open
       }
       Fl_Button {} {
         label {Zoom In}
-        callback {ZoomIn();}
+        callback {ZoomIn();} selected
         xywh {170 280 55 20} labelsize 10
       }
       Fl_Button {} {
@@ -127,7 +127,7 @@ class otbImageViewerGUI {open
       }
     }
     Fl_Window clickedPointsWindow {
-      label {Clicked Points}
+      label {Clicked Points} open
       xywh {548 29 290 405} type Double visible
     } {
       Fl_Browser clickedPointsBrowser {
@@ -165,7 +165,7 @@ class otbImageViewerGUI {open
       }
     }
   }
-  Function {CreateGLSliceView( Fl_Group *,Fl_Gl_Window * w )} {return_type {virtual void}
+  Function {CreateGLSliceView( Fl_Group *,Fl_Gl_Window * w )} {open return_type {virtual void}
   } {}
   Function {AddMenuBarOptions(void)} {return_type {virtual void}
   } {}
@@ -183,7 +183,7 @@ class otbImageViewerGUI {open
   } {}
   Function {Synchronize(void)} {return_type {virtual void}
   } {}
-  Function {ImageMode(itk::ImageModeType mode)} {return_type {virtual void}
+  Function {ImageMode(otb::ImageModeType mode)} {return_type {virtual void}
   } {}
   Function {SelectSlice(unsigned int)} {return_type {virtual void}
   } {}

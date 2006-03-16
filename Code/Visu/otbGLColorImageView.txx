@@ -117,7 +117,8 @@ SetInputImage(ImageType * newImData)
     
 //  this->cImData = newImData;
   this->SetInput( newImData );
-  ImageType * lImage = dynamic_cast<ImageType * >(this->GetInput());
+//  ImageType * lImage = dynamic_cast<ImageType * >(this->GetInput());
+  ImageType * lImage = dynamic_cast<ImageType * >(this->itk::ProcessObject::GetInput(0));
   
   this->cDimSize[0] = size[0];
   this->cDimSize[1] = size[1];
@@ -266,7 +267,8 @@ clickSelect(float newX, float newY, float newZ)
   ind[0] = (unsigned long)this->cClickSelect[0];
   ind[1] = (unsigned long)this->cClickSelect[1];
   ind[2] = (unsigned long)this->cClickSelect[2];
-  ImageType * lImage = dynamic_cast<ImageType * >(this->GetInput());
+//  ImageType * lImage = dynamic_cast<ImageType * >(this->GetInput());
+  ImageType * lImage = dynamic_cast<ImageType * >(this->itk::ProcessObject::GetInput(0));
   this->cClickSelectV = lImage->GetPixel(ind)[0];
   cClickSelectR = lImage->GetPixel(ind)[0];
   cClickSelectG = lImage->GetPixel(ind)[1];
@@ -323,6 +325,10 @@ template <class ImagePixelType, class OverlayPixelType>
 void GLColorImageView<ImagePixelType, OverlayPixelType>::
 update()
   {
+  
+  //Update d'ITK
+  this->Update();
+  
   if( !this->cValidImData ) 
     {
     return;
@@ -378,7 +384,8 @@ update()
   itk::RGBPixel<ImagePixelType> tfv;
   float tf[3];
 
-  ImageType * lImage = dynamic_cast<ImageType * >(this->GetInput());
+//  ImageType * lImage = dynamic_cast<ImageType * >(this->GetInput());
+  ImageType * lImage = dynamic_cast<ImageType * >(this->itk::ProcessObject::GetInput(0));
   
   ind[ this->cWinOrder[ 2 ] ] = this->cWinCenter[ this->cWinOrder[ 2 ] ];
   int startK = this->cWinMinY;
@@ -678,7 +685,8 @@ template <class ImagePixelType, class OverlayPixelType>
 void GLColorImageView<ImagePixelType, OverlayPixelType>::
 draw()
   {
-  ImageType * lImage = dynamic_cast<ImageType * >(this->GetInput());
+//  ImageType * lImage = dynamic_cast<ImageType * >(this->GetInput());
+  ImageType * lImage = dynamic_cast<ImageType * >(this->itk::ProcessObject::GetInput(0));
 
   if( !this->valid() )
     {
