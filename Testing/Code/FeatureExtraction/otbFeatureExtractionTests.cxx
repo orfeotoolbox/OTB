@@ -18,6 +18,7 @@ REGISTER_TEST(otbDrawPathListTracerLignes);
 REGISTER_TEST(otbDrawPathDessinCarre);
 REGISTER_TEST(otbDrawPathAlign);
 REGISTER_TEST(otbComplexMomentImage);
+REGISTER_TEST(otbHuImage);
 REGISTER_TEST(otbTouziEdgeDetector);
 REGISTER_TEST(otbTupinEdgeDetector);
 }

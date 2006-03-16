@@ -73,6 +73,10 @@ ADD_TEST(feTuTestFLST ${FEATUREEXTRACTION_TESTS}
 ADD_TEST(feTuComplexMomentImage ${FEATUREEXTRACTION_TESTS}  
         otbComplexMomentImage
 	${INPUTDATA}/TeteAToto.png 1 1)
+
+ADD_TEST(feTuHuImage ${FEATUREEXTRACTION_TESTS}  
+        otbHuImage
+	${INPUTDATA}/TeteAToto.png)
 	
 ADD_TEST(feTuTouzi ${FEATUREEXTRACTION_TESTS}  
         otbTouziEdgeDetector
@@ -106,6 +110,7 @@ otbDrawPathList.cxx
 otbDrawPath.cxx
 otbDrawPathAlign.cxx
 otbComplexMomentImage.cxx
+otbHuImage.cxx
 otbTouziEdgeDetector.cxx
 otbTupinEdgeDetector.cxx
 )
