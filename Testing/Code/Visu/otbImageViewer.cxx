@@ -25,7 +25,8 @@ int main( int argc, char ** argv )
         const char * inputFilename  = argv[1];
 
         typedef otb::ImageViewer<unsigned char,double>    ViewerType;
-        ViewerType                      lViewer;
+//        ViewerType                      lViewer;
+        ViewerType::Pointer  lViewer = ViewerType::New();
 
 
 
@@ -36,10 +37,10 @@ int main( int argc, char ** argv )
 
         lReader->SetFileName(inputFilename);
         lReader->Update();
-        lViewer.SetLabel( "Input Image" );
-        lViewer.SetImage( lReader->GetOutput() );  
-        lViewer.Update();
-        lViewer.Show();
+        lViewer->SetLabel( "Input Image" );
+        lViewer->SetImage( lReader->GetOutput() );  
+        lViewer->Update();
+        lViewer->Show();
         
         Fl::run();
     } 

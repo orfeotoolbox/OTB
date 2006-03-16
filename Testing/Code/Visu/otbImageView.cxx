@@ -12,9 +12,12 @@
 #include <stdlib.h>
 #include "itkExceptionObject.h"
 
-#include "otbImageView.h"
-#include "otbGLImageView.h"
-#include "otbGLColorImageView.h"
+//#include "otbImageView.h"
+//#include "otbGLImageView.h"
+//#include "otbGLColorImageView.h"
+//#include "otbGLVectorImageViewBase.h"
+#include "otbGLVectorImageView.h"
+
 #include "itkImage.h"
 #include "itkRGBPixel.h"
 
@@ -26,7 +29,9 @@ int main( int argc, char ** argv )
 
 //        typedef otb::ImageView<unsigned char>    ViewType;
 //        typedef otb::GLImageView<unsigned char,double>    ViewType;
-        typedef otb::GLColorImageView<unsigned char,double>    ViewType;
+//        typedef otb::VectorImageView<unsigned char>    ViewType;
+//        typedef otb::GLVectorImageViewBase<unsigned char,double>    ViewType;
+        typedef otb::GLVectorImageView<unsigned char,double>    ViewType;
         ViewType::Pointer lView = ViewType::New();
     } 
 
