@@ -35,9 +35,10 @@ int main( int argc, char ** argv )
         lViewer->SetLabel( "Input Image" );
         lViewer->SetImage( lReader->GetOutput() );  
 //        lViewer->SetGrayLevelChannel(1);
-        lViewer->SetRedChannel(3);
-        lViewer->SetGreenChannel(2);
-        lViewer->SetBlueChannel(1);
+        lViewer->SetRGBChannels(1,2,3);
+//        lViewer->SetRedChannel(3);
+//        lViewer->SetGreenChannel(2);
+//        lViewer->SetBlueChannel(1);
 //        lViewer->Update();
         lViewer->Show();
         
