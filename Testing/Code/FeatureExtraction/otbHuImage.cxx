@@ -32,7 +32,8 @@ int otbHuImage( int argc, char ** argv )
         typedef itk::Image< InputPixelType,  Dimension >	              InputImageType;
         typedef otb::ImageFileReader< InputImageType  >                       ReaderType;  
         typedef std::complex<float>                                           ComplexType;
-	typedef otb::HuImageFunction<InputImageType,ComplexType>   FunctionType;
+        typedef float                                                        RealType;
+	typedef otb::HuImageFunction<InputImageType,float,float>                 FunctionType;
   
         InputImageType::RegionType   region;
         InputImageType::SizeType     size;
@@ -60,7 +61,7 @@ int otbHuImage( int argc, char ** argv )
 	index[0]=10;
 	index[1]=10;
 	
-	ComplexType Result;
+	RealType Result;
 	
 	for (Number = 1 ;Number<10;Number++)
 	  {

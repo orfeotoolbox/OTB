@@ -17,7 +17,7 @@
 #ifndef _otbHuImageFunction_h
 #define _otbHuImageFunction_h
 
-#include "otbComplexMomentImageFunction.h"
+#include "itkImageFunction.h"
 #include <complex>
 
 
@@ -31,7 +31,12 @@ namespace otb
  * Calculate the Hu's invariant over an image defined as:
  *
  * \f$ \phi_{1} = c_{11} \f$
- * \f$ \phi_{2} = c_{20} c\{02} \f$
+ * \f$ \phi_{2} = c_{20} c_{02} \f$
+ * \f$ \phi_{3} = c_{30} c_{03} \f$
+ * \f$ \phi_{4} = c_{21} c_{12} \f$
+ * \f$ \phi_{5} = \Re (c_{30} c_{12}^{3}) \f$
+ * \f$ \phi_{6} = \Re (c_{20} c_{12}^{2}) \f$
+ * \f$ \phi_{7} = \Im (c_{30} c_{12}^{3}) \f$
  *  
  * With :
  *
@@ -48,48 +53,50 @@ namespace otb
  * \ingroup ImageFunctions
  */
 template < class TInput, 
-           class TOutput = std::complex<double >,
+           class TOutput   = double,
 	   class TCoordRep = float >
 class ITK_EXPORT HuImageFunction :
-  public ComplexMomentImageFunction< TInput, TOutput,TCoordRep >
+  public itk::ImageFunction< TInput, TOutput,TCoordRep >
 {
 public:
   /** Standard class typedefs. */
   typedef HuImageFunction                                           Self;
-  typedef ComplexMomentImageFunction< TInput, TOutput,TCoordRep >   Superclass;
+  typedef itk::ImageFunction< TInput, TOutput,TCoordRep >           Superclass;
   typedef itk::SmartPointer<Self>                                   Pointer;
-  typedef itk::SmartPointer<const Self>                              ConstPointer;
+  typedef itk::SmartPointer<const Self>                             ConstPointer;
   
   /** Run-time type information (and related methods). */
-  itkTypeMacro(HuImageFunction, ComplexMomentImageFunction);
+  itkTypeMacro(HuImageFunction, itk::ImageFunction);
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
 
   /** InputImageType typedef support. */
-  typedef typename Superclass::InputType            InputType;
-  typedef typename Superclass::ComplexType          ComplexType;
+  typedef TInput                                    InputType;
   typedef typename Superclass::IndexType            IndexType;
   typedef typename Superclass::ContinuousIndexType  ContinuousIndexType;
   typedef typename Superclass::PointType            PointType;
- 
+
+  typedef TOutput                                   RealType;
+  typedef typename std::complex<RealType>           ComplexType;
+   
   /** Dimension of the underlying image. */
   itkStaticConstMacro(ImageDimension, unsigned int,
                       InputType::ImageDimension);
   			 
 
   /** Evalulate the function at specified index */
-  virtual ComplexType EvaluateAtIndex( const IndexType& index ) ;
+  virtual RealType EvaluateAtIndex( const IndexType& index ) const;
   
   /** Evaluate the function at non-integer positions */
-  virtual ComplexType Evaluate( const PointType& point )
+  virtual RealType Evaluate( const PointType& point ) const
     { 
       IndexType index;
       this->ConvertPointToNearestIndex( point, index );
       return this->EvaluateAtIndex( index ); 
     }
-  virtual ComplexType EvaluateAtContinuousIndex( 
-    const ContinuousIndexType& cindex )
+  virtual RealType EvaluateAtContinuousIndex( 
+    const ContinuousIndexType& cindex ) const
     { 
       IndexType index;
       this->ConvertContinuousIndexToNearestIndex( cindex, index );

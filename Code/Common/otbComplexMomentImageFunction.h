@@ -52,7 +52,7 @@ class ITK_EXPORT ComplexMomentImageFunction :
 public:
   /** Standard class typedefs. */
   typedef ComplexMomentImageFunction                                 Self;
-  typedef itk::ImageFunction< TInput, TOutput,TCoordRep >             Superclass;
+  typedef itk::ImageFunction< TInput, TOutput,TCoordRep >            Superclass;
   typedef itk::SmartPointer<Self>                                    Pointer;
   typedef itk::SmartPointer<const Self>                              ConstPointer;
   
