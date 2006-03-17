@@ -110,17 +110,30 @@ void TupinEdgeDetector< TInputImage, TOutputImage, InterpolatorType>
   typename itk::NeighborhoodAlgorithm::ImageBoundaryFacesCalculator<InputImageType>::FaceListType 		faceList;
   typename itk::NeighborhoodAlgorithm::ImageBoundaryFacesCalculator<InputImageType>::FaceListType::iterator 	fit;
 
+ // Define the size of the region by the radius
+  m_Radius[0] = static_cast<unsigned int>(0.5*( (3*m_WidthLine + 2) - 1 )); 
+  m_Radius[1] = static_cast<unsigned int>(0.5*(m_LengthLine-1));
+  
+//std::cout <<"Radius " << m_Radius[0] << " " << m_Radius[1] << std::endl; 
+  
+  
+  // Define the size of the facelist by taking into account the rotation of the region
+  m_FaceList[0] = sqrt((m_Radius[0]*m_Radius[0])+ (m_Radius[1]*m_Radius[1]));
+  m_FaceList[1] = m_FaceList[0];
+
   itk::NeighborhoodAlgorithm::ImageBoundaryFacesCalculator<InputImageType> bC;
-  faceList = bC(input, outputRegionForThread, m_Radius);
+  faceList = bC(input, outputRegionForThread, m_FaceList);
 
 
   // support progress methods/callbacks
   itk::ProgressReporter progress(this, threadId, outputRegionForThread.GetNumberOfPixels());
   
   typename TInputImage::IndexType     bitIndex;
+  typename InterpolatorType::ContinuousIndexType Index;
 
-  // Initialisations
-  // ---------------
+
+  // --------------------------------------------------------------------------
+  
   // Number of direction
   const int NB_DIR = 4;
   // Number of zone	  
@@ -136,12 +149,6 @@ void TupinEdgeDetector< TInputImage, TOutputImage, InterpolatorType>
   // Number of the zone 
   int zone;
    
- // Size of the region defined by the radius
-  m_Radius[0] = static_cast<unsigned int>(0.5*( (3*m_WidthLine + 2) - 1 )); 
-  m_Radius[1] = static_cast<unsigned int>(0.5*m_LengthLine);
-  
-std::cout <<"Radius " << m_Radius[0] << " " << m_Radius[1] << std::endl; 
-  
   // Contains for the 4 directions the sum of the pixels belonging to each zone
   double Sum[NB_DIR][NB_ZONE];
   // Mean of zone 1, 2 and 3
@@ -169,6 +176,8 @@ std::cout <<"Radius " << m_Radius[0] << " " << m_Radius[1] << std::endl;
 
   // location of the pixel central between zone 1 and 2 and between zone 1 and 3
   int Xc12, Xc13;
+  
+  //---------------------------------------------------------------------------
  
   // Process each of the boundary faces.  These are N-d regions which border
   // the edge of the buffer.
@@ -187,7 +196,7 @@ std::cout <<"Radius " << m_Radius[0] << " " << m_Radius[1] << std::endl;
 
     while ( ! bit.IsAtEnd() )
       {
-std::cout << bit.GetIndex() << std::endl;
+std::cout << "Xc,Yc " << bit.GetIndex() << std::endl;
 
       // Initialisations
       for (int dir=0; dir<NB_DIR; dir++)
@@ -195,6 +204,7 @@ std::cout << bit.GetIndex() << std::endl;
         for (int z=0; z<NB_ZONE; z++) 
           Sum[dir][z] = 0.;
         }
+        
      
       // Location of the central pixel of the region
       bitIndex = bit.GetIndex();
@@ -211,7 +221,8 @@ std::cout << bit.GetIndex() << std::endl;
       // Loop on the region 
       for (i = 0; i < neighborhoodSize; ++i)
         {
-//std::cout << "---"<< i <<" "<< bit.GetIndex(i)<< std::endl;
+std::cout << "---"<< i <<" "<< bit.GetIndex(i)<< std::endl;
+std::cout << "val(X,Y) "<< static_cast<double>(bit.GetPixel(i)) << " " << std::endl;
 
         bitIndex = bit.GetIndex(i);
         X = bitIndex[0];
@@ -235,10 +246,19 @@ std::cout << bit.GetIndex() << std::endl;
           {      
             ROTATION( (X-Xc), (Y-Yc), Theta[dir], xout, yout);
             
-            point[0] = double(xout + Xc);
-            point[1] = double(yout + Yc);
-      
-            Sum[dir][zone] += static_cast<double>(m_Interpolator->Evaluate( point ));  	
+           // point[0] = double(xout + Xc);
+           // point[1] = double(yout + Yc);
+            
+            Index[0] = static_cast<float>(xout + Xc);
+            Index[1] = static_cast<float>(yout + Yc);
+                        
+std::cout << "X' Y' "<< (xout + Xc) << " " << (yout + Yc) << std::endl;
+std::cout << "val(X',Y') "<< static_cast<double>(m_Interpolator->Evaluate( point )) << std::endl;
+           
+            // Sum[dir][zone] += static_cast<double>(m_Interpolator->Evaluate( point ));
+            Sum[dir][zone] += static_cast<double>(m_Interpolator->EvaluateAtContinuousIndex( Index ));
+
+             
           }      
 
         } // end of the loop on the pixels of the region           

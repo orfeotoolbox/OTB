@@ -150,6 +150,9 @@ private:
   /** Radius of the region*/
   SizeType m_Radius;
   
+  /** Size of the facelist*/
+  SizeType m_FaceList;
+  
   InterpolatorPointer      m_Interpolator;
 
 };
