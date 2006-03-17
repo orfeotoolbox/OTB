@@ -25,6 +25,7 @@
 #include "otbImageFileWriter.h"
 #include "otbTupinEdgeDetector.h"
 
+#include "itkLinearInterpolateImageFunction.h"
 
 int otbTupinEdgeDetector( int argc, char* argv[] )
 {
@@ -46,7 +47,8 @@ int otbTupinEdgeDetector( int argc, char* argv[] )
         typedef otb::ImageFileReader< InputImageType  >         ReaderType;
         typedef otb::ImageFileWriter< OutputImageType >         WriterType;
 
-        typedef otb::TupinEdgeDetector< InputImageType,OutputImageType >   FilterType;
+        typedef itk::LinearInterpolateImageFunction< InputImageType, double >	InterpolatorType;
+        typedef otb::TupinEdgeDetector< InputImageType, OutputImageType, InterpolatorType >   FilterType;
 	
         FilterType::Pointer filtreTupin = FilterType::New();
         
