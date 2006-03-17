@@ -3,3 +3,6 @@
 SUBDIRS( 
   StartExamples
 )
+SUBDIRS( 
+  ExtractROI
+)
