@@ -6,10 +6,7 @@ SET ( OTBVisu_SRCS
 #FILE(GLOB OTBVisu_GUI_SRCS "*.fl" )
 
 SET ( OTBVisu_GUI_SRCS 
-        otbImageViewerGUI.fl
-        otbImageViewerSimpleGUI.fl
         otbVectorImageViewerGUI.fl
-        otbTwoImagesViewerGUI.fl
 )
 
 
