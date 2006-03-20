@@ -20,5 +20,6 @@ REGISTER_TEST(otbDrawPathAlign);
 REGISTER_TEST(otbComplexMomentImage);
 REGISTER_TEST(otbHuImage);
 REGISTER_TEST(otbTouziEdgeDetector);
+REGISTER_TEST(otbTouziEdgeDetectorDirection);
 REGISTER_TEST(otbTupinEdgeDetector);
 }
