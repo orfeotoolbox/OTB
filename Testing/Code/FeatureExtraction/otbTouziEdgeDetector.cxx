@@ -5,7 +5,7 @@
   Language  :   C++
   Date      :   09 mars 2006
   Version   :   
-  Role      :   Test la classe du filtre de detection de contours 
+  Role      :   Test du filtre de detection de contours (image intensite) 
   $Id$
 
 =========================================================================*/
@@ -32,7 +32,6 @@ int otbTouziEdgeDetector( int argc, char* argv[] )
     { 
         const char * inputFilename  = argv[1];
         const char * outputFilename = argv[2];
-        const char * outputFilenameDir = argv[4];
 
         unsigned int  RadiusX((unsigned int)::atoi(argv[3]));
         
@@ -58,7 +57,6 @@ int otbTouziEdgeDetector( int argc, char* argv[] )
 	
         ReaderType::Pointer reader = ReaderType::New();
         WriterType::Pointer writer = WriterType::New();
-        WriterType::Pointer writer_dir = WriterType::New();
 
         reader->SetFileName( inputFilename  );
         writer->SetFileName( outputFilename );
@@ -67,10 +65,6 @@ int otbTouziEdgeDetector( int argc, char* argv[] )
         writer->SetInput( filtreTouzi->GetOutput() );
         
         writer->Update();
-        
-        writer_dir->SetFileName( outputFilenameDir );
-        writer_dir->SetInput( filtreTouzi->GetOutputDirection() );
-        writer_dir->Update(); 
 
     } 
   catch( itk::ExceptionObject & err ) 
