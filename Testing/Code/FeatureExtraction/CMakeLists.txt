@@ -78,12 +78,21 @@ ADD_TEST(feTuHuImage ${FEATUREEXTRACTION_TESTS}
         otbHuImage
 	${INPUTDATA}/TeteAToto.png)
 	
-ADD_TEST(feTuTouzi ${FEATUREEXTRACTION_TESTS}  
+ADD_TEST(feTvTouzi ${FEATUREEXTRACTION_TESTS}
+  --compare-image ${TOL}  ${BASELINE}/feFiltreTouzi_poupees_3.hd
+                          ${TEMP}/feFiltreTouzi_poupees_3.hd  
         otbTouziEdgeDetector
-	${INPUTDATA}/cthead1.png
-	${TEMP}/feFiltreTouzi_cthead1_5.hd
-	5
-	${TEMP}/feFiltreTouzi_cthead1_dir_5.hd)
+	${INPUTDATA}/poupees_1canal.c1
+	${TEMP}/feFiltreTouzi_poupees_3.hd
+	3)
+	
+ADD_TEST(feTvTouziDir ${FEATUREEXTRACTION_TESTS}
+  --compare-image ${TOL}  ${BASELINE}/feFiltreTouzi_poupees_dir_3.hd
+                          ${TEMP}/feFiltreTouzi_poupees_dir_3.hd  
+        otbTouziEdgeDetectorDirection
+	${INPUTDATA}/poupees_1canal.c1
+	${TEMP}/feFiltreTouzi_poupees_dir_3.hd
+	3)	
 	
 ADD_TEST(feTuTupin ${FEATUREEXTRACTION_TESTS}  
         otbTupinEdgeDetector
@@ -112,6 +121,7 @@ otbDrawPathAlign.cxx
 otbComplexMomentImage.cxx
 otbHuImage.cxx
 otbTouziEdgeDetector.cxx
+otbTouziEdgeDetectorDirection.cxx
 otbTupinEdgeDetector.cxx
 )
 
