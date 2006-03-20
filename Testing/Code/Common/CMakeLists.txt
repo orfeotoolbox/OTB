@@ -11,9 +11,9 @@ SET(TOL 0.0)
 
 SET(COMMON_TESTS ${CXX_TEST_PATH}/otbCommonTests)
 
-ADD_TEST(coTuCommandLineArgumentParser ${COMMON_TESTS}  
-        otbTestCommandLineArgumentParser
-        -image image.png -entier 150 -e 200 -double 12.25 -float 45.36 -deuxentiers 78 56 )
+#ADD_TEST(coTuCommandLineArgumentParser ${COMMON_TESTS}  
+#        otbTestCommandLineArgumentParser
+#        -image image.png -entier 150 -e 200 -double 12.25 -float 45.36 -deuxentiers 78 56 )
 
 
 # -------            otb::ExtractROI   ------------------------------
