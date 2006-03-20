@@ -5,7 +5,7 @@
   Language  :   C++
   Date      :   14 mars 2006
   Version   :   
-  Role      :   Test la classe du filtre de detection de lignes 
+  Role      :   Test du filtre de detection de lignes 
   $Id$
 
 =========================================================================*/
@@ -34,7 +34,9 @@ int otbTupinEdgeDetector( int argc, char* argv[] )
         const char * inputFilename  = argv[1];
         const char * outputFilename = argv[2];
 
+	// Width of the linear feature = 2*WidthLine+1
         unsigned int  WidthLine((unsigned int)::atoi(argv[3]));
+        // Length of the linear feature = 2*LengthLine+1
         unsigned int  LengthLine((unsigned int)::atoi(argv[4]));
         
         typedef unsigned char                                   InputPixelType;
