@@ -166,8 +166,8 @@ void TouziEdgeDetector< TInputImage, TOutputImage>
   double Theta[NB_DIR];
   
   Theta[0] = 0.;
-  Theta[1] = M_PI / 2. ;
-  Theta[2] = M_PI / 4. ;
+  Theta[1] = M_PI / 4. ;
+  Theta[2] = M_PI / 2. ;
   Theta[3] = 3*M_PI / 4. ;
   
 
@@ -179,11 +179,11 @@ void TouziEdgeDetector< TInputImage, TOutputImage>
   double M2;
   // Result of the filter for each direction
   double R_theta[NB_DIR];
-  double Sum_R_theta = 0;
+  double Sum_R_theta = 0.;
   // Intensity of the contour
-  double I_contour; 
+  double R_contour; 
   // Direction of the contour
-  double Dir_contour = 0; 
+  double Dir_contour = 0.; 
   // sign of the contour
   int sign;
 
@@ -208,15 +208,12 @@ void TouziEdgeDetector< TInputImage, TOutputImage>
     
     bit.OverrideBoundaryCondition(&nbc);
     bit.GoToBegin();
-    
-//std::cout <<"***" << neighborhoodSize << std::endl; 
 
 
     while ( ! bit.IsAtEnd() )
       {
-//std::cout << bit.GetIndex() << std::endl;
 
-      // Location of the central pixel
+      // Location of the pixel central
       bitIndex = bit.GetIndex();
       
       xc = bitIndex[0];
@@ -228,7 +225,8 @@ void TouziEdgeDetector< TInputImage, TOutputImage>
         for (int m=0; m<NB_WIN; m++) 
           Sum[dir][m] = 0.;
         }
-        
+      
+      R_contour = -1;  
       Dir_contour = 0.;
       Sum_R_theta = 0.;
       
@@ -237,13 +235,9 @@ void TouziEdgeDetector< TInputImage, TOutputImage>
       for (i = 0; i < neighborhoodSize; ++i)
         {
 
-//std::cout << "---"<< i <<" "<< bit.GetIndex(i)<< std::endl;
-
         bitIndex = bit.GetIndex(i);
         x = bitIndex[0];
         y = bitIndex[1];
- 
-//std::cout << "---"<< i <<" "<< static_cast<double>(bit.GetPixel(i))<< std::endl;     
       
         // We determine for each direction with which half window the pixel belongs. 
          
@@ -252,41 +246,43 @@ void TouziEdgeDetector< TInputImage, TOutputImage>
       	  Sum[0][0] += static_cast<double>(bit.GetPixel(i));
         else if ( x > xc )
           Sum[0][1] += static_cast<double>(bit.GetPixel(i));
-          
-        // Horizontal direction
-        if ( y < yc )
-      	  Sum[1][0] += static_cast<double>(bit.GetPixel(i));
-        else if ( y > yc )
-          Sum[1][1] += static_cast<double>(bit.GetPixel(i));
       
         // Diagonal direction 1
         if ( (y-yc) < -(x-xc) )
-      	  Sum[2][0] += static_cast<double>(bit.GetPixel(i));
+      	  Sum[1][0] += static_cast<double>(bit.GetPixel(i));
         else if ( (y-yc) > -(x-xc) )
+          Sum[1][1] += static_cast<double>(bit.GetPixel(i));
+           
+         // Horizontal direction
+        if ( y < yc )
+      	  Sum[2][0] += static_cast<double>(bit.GetPixel(i));
+        else if ( y > yc )
           Sum[2][1] += static_cast<double>(bit.GetPixel(i));
-      
+               
         // Diagonal direction 2
-        if ( (y-yc) > (x-xc) )
+        if ( (y-yc) < (x-xc) )
       	  Sum[3][0] += static_cast<double>(bit.GetPixel(i));
-        else if ( (y-yc) < (x-xc) )
+        else if ( (y-yc) > (x-xc) )
           Sum[3][1] += static_cast<double>(bit.GetPixel(i));
           
         } // end of the loop on the pixels of the window           
+        
 
-//std::cout << static_cast<double>(Sum[0][0])/ double(m_Radius[0]*(2*m_Radius[0]+1)) << std::endl;    
-           
       // Loop on the 4 directions
       for ( int dir=0; dir<NB_DIR; dir++ )
         {
         // Calculation of the averages of the 2 half windows	
-        M1 = Sum[dir][0] / double(m_Radius[0]*(2*m_Radius[0]+1));
-        M2 = Sum[dir][1] / double(m_Radius[0]*(2*m_Radius[0]+1));
+        M1 = Sum[dir][0] / static_cast<double>(m_Radius[0]*(2*m_Radius[0]+1));
+        M2 = Sum[dir][1] / static_cast<double>(m_Radius[0]*(2*m_Radius[0]+1));
      	
         // Calculation of the intensity of the contour
         if (( M1 != 0 ) && (M2 != 0)) 
           R_theta[dir] = static_cast<double>( 1 - MIN( (M1/M2), (M2/M1) ) );
         else
 	  R_theta[dir] = 0.;
+	  
+	// Determination of the maximum intensity of the contour
+        R_contour = static_cast<double>( MAX( R_contour, R_theta[dir] ) );
 	 
         // Determination of the sign of contour
         if ( M1 > M2 ) 
@@ -297,27 +293,17 @@ void TouziEdgeDetector< TInputImage, TOutputImage>
         Dir_contour += sign * Theta[dir] * R_theta[dir];        
         Sum_R_theta += R_theta[dir];
 	 
-//std::cout << "dir " << dir << " " << Sum[dir][0] <<" "<< Sum[dir][1] <<" "<< R_theta[dir] << std::endl; 
-//std::cout << "dir " << dir << " " << sign*Theta[dir] <<" "<< R_theta[dir]<<" "<< Dir_contour << std::endl; 
       		
         } // end of the loop on the directions
-      
-      // Determination of the maximum intensity of the contour
-      I_contour = R_theta[0];
-      
-      for (int dir=1; dir<NB_DIR; dir++)
-        I_contour = static_cast<double>( MAX( I_contour, R_theta[dir] ) );
- 
-//std::cout << "IC = " << I_contour << std::endl; 
-
-      // Assignment of this value to the output pixel
-      it.Set( static_cast<OutputPixelType>(I_contour) );  
+    
+        
+       // Assignment of this value to the output pixel
+      it.Set( static_cast<OutputPixelType>(R_contour) );  
 
       // Determination of the direction of the contour
       if ( Sum_R_theta != 0. )	
         Dir_contour = Dir_contour / Sum_R_theta;
 
-//std::cout << Dir_contour <<" "<< Sum_R_theta << std::endl;
       
       // Assignment of this value to the "outputdir" pixel
       it_dir.Set( static_cast<OutputPixelType>(Dir_contour) );
