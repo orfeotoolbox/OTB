@@ -5,22 +5,22 @@
   Language  :   C++
   Date      :   17 mars 2006
   Version   :   
-  Role      :   Geometric Moments Class of iamges 
-  $Id$
+  Role      :   Real Geometric Moments Class of iamges 
+  $Id:$
 
 =========================================================================*/
-#ifndef _otbGeometricMomentImageFunction_h
-#define _otbGeometricMomentImageFunction_h
+#ifndef _otbRealMomentImageFunction_h
+#define _otbRealMomentImageFunction_h
 
-#include "itkImageFunction.h"
+#include "otbGeometricMomentImageFunction.h"
 
 
 namespace otb
 {
 
 /**
- * \class GeometricMomentImageFunction
- * \brief Virtual class for the Geometric moments for an image function
+ * \class RealMomentImageFunction
+ * \brief Virtual class for the Real moments for an image function
  *
  * \ingroup ImageFunctions
  */
@@ -28,18 +28,18 @@ namespace otb
 template < class TInput, 
            class TOutput = float,
 	   class TCoordRep = float >
-class ITK_EXPORT GeometricMomentImageFunction :
-  public itk::ImageFunction<TInput, TOutput,TCoordRep >
+class ITK_EXPORT RealMomentImageFunction :
+  public GeometricMomentImageFunction<TInput, TOutput,TCoordRep >
 {
 public:
   /** Standard class typedefs. */
-  typedef GeometricMomentImageFunction                            Self;
-  typedef itk::ImageFunction< TInput, TOutput,TCoordRep >         Superclass;
-  typedef itk::SmartPointer<Self>                                 Pointer;
-  typedef itk::SmartPointer<const Self>                           ConstPointer;
+  typedef RealMomentImageFunction                                     Self;
+  typedef GeometricMomentImageFunction< TInput, TOutput,TCoordRep >   Superclass;
+  typedef itk::SmartPointer<Self>                                     Pointer;
+  typedef itk::SmartPointer<const Self>                               ConstPointer;
   
   /** Run-time type information (and related methods). */
-  itkTypeMacro(GeometricMomentImageFunction, itk::ImageFunction);
+  itkTypeMacro(RealMomentImageFunction, GeometricMomentImageFunction);
 
 
   /** InputImageType typedef support. */
@@ -52,15 +52,15 @@ public:
 
 
 protected:
-  GeometricMomentImageFunction() {};
-  ~GeometricMomentImageFunction(){};
+  RealMomentImageFunction() {};
+  ~RealMomentImageFunction(){};
   void PrintSelf(std::ostream& os, itk::Indent indent) const 
      {
       Superclass::PrintSelf( os, indent );
      }
      
 private:
-  GeometricMomentImageFunction( const Self& ); //purposely not implemented
+  RealMomentImageFunction( const Self& ); //purposely not implemented
   void operator=( const Self& );               //purposely not implemented
 };
 

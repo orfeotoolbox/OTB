@@ -5,14 +5,13 @@
   Language  :   C++
   Date      :   20 mars 2006
   Version   :   
-  Role      :   Hu's invariant Class of iamges 
+  Role      :   Flusser's invariant Class of iamges 
   $Id:$
 
 =========================================================================*/
-#ifndef _otbHuImageFunction_h
-#define _otbHuImageFunction_h
+#ifndef _otbFlusserImageFunction_h
+#define _otbFlusserImageFunction_h
 
-//#include "itkImageFunction.h"
 #include "otbRealMomentImageFunction.h"
 
 #include <complex>
@@ -22,18 +21,22 @@ namespace otb
 {
 
 /**
- * \class HuImageFunction
- * \brief Calculate the Hu's invariant paramete.
+ * \class FlusserImageFunction
+ * \brief Calculate the Flusser's invariant parameters.
  *
- * Calculate the Hu's invariant over an image defined as:
+ * Calculate the Flusser's invariant over an image defined as:
  *
- * - \f$ \phi_{1} = c_{11} \f$
- * - \f$ \phi_{2} = c_{20} c_{02} \f$
- * - \f$ \phi_{3} = c_{30} c_{03} \f$
- * - \f$ \phi_{4} = c_{21} c_{12} \f$
- * - \f$ \phi_{5} = Re (c_{30} c_{12}^{3}) \f$
- * - \f$ \phi_{6} = Re (c_{20} c_{12}^{2}) \f$
- * - \f$ \phi_{7} = Im (c_{30} c_{12}^{3}) \f$
+ * - \f$ \psi_{1} = c_{11} \f$
+ * - \f$ \psi_{2} = c_{21} c_{12} \f$
+ * - \f$ \psi_{3} = Re (c_{20} c_{12}^{2} )\f$
+ * - \f$ \psi_{4} = Im (c_{20} c_{12}^{2} )\f$
+ * - \f$ \psi_{5} = Re (c_{30} c_{12}^{3} )\f$
+ * - \f$ \psi_{6} = Im (c_{30} c_{12}^{3} )\f$
+ * - \f$ \psi_{7} = c_{22} \f$
+ * - \f$ \psi_{8} = Re (c_{31} c_{12}^{2} )\f$
+ * - \f$ \psi_{9} = Im (c_{31} c_{12}^{2} )\f$
+ * - \f$ \psi_{10} = Re (c_{40} c_{12}^{4} )\f$
+ * - \f$ \psi_{11} = Im (c_{40} c_{12}^{4} )\f$
  *  
  * With :
  *
@@ -42,31 +45,29 @@ namespace otb
  *
  * And:
  *  - \f$(x,y)\f$ pixel localization;
- *  - \f$ f(x,y)\f$  the pixel value over the \f$(x,y)\f$ coordinate.
+ *  - \f$ f(x,y)\f$ the pixel value over the \f$(x,y)\f$ coordinate.
  *
  * This class is templated over the input image type and the
  * coordinate representation type (e.g. float or double).
  * 
  * \ingroup ImageFunctions
  */
-//  public itk::ImageFunction< TInput, TOutput,TCoordRep >
 
 template < class TInput, 
            class TOutput   = double,
 	   class TCoordRep = float >
-class ITK_EXPORT HuImageFunction :
+class ITK_EXPORT FlusserImageFunction :
   public RealMomentImageFunction< TInput, TOutput,TCoordRep >
 {
 public:
   /** Standard class typedefs. */
-  typedef HuImageFunction                                           Self;
+  typedef FlusserImageFunction                                      Self;
   typedef RealMomentImageFunction< TInput, TOutput,TCoordRep >      Superclass;
   typedef itk::SmartPointer<Self>                                   Pointer;
   typedef itk::SmartPointer<const Self>                             ConstPointer;
   
   /** Run-time type information (and related methods). */
-//  itkTypeMacro(HuImageFunction, itk::ImageFunction);
-  itkTypeMacro(HuImageFunction, RealMomentImageFunction);
+  itkTypeMacro(FlusserImageFunction, RealMomentImageFunction);
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
@@ -105,16 +106,16 @@ public:
 
   /** Get/Set the radius of the neighborhood over which the
       statistics are evaluated */  
-  itkSetClampMacro(Number,short,1,7);
+  itkSetClampMacro(Number,short,1,11);
   itkGetConstReferenceMacro( Number, short );
 
 protected:
-  HuImageFunction();
-  ~HuImageFunction(){};
+  FlusserImageFunction();
+  ~FlusserImageFunction(){};
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
 private:
-  HuImageFunction( const Self& ); //purposely not implemented
+  FlusserImageFunction( const Self& ); //purposely not implemented
   void operator=( const Self& ); //purposely not implemented
 
   short m_Number;  
@@ -123,8 +124,7 @@ private:
 } // namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbHuImageFunction.txx"
+#include "otbFlusserImageFunction.txx"
 #endif
 
 #endif
-

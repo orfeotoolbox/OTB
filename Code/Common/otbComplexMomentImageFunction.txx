@@ -77,7 +77,7 @@ ComplexMomentImageFunction<TInput,TOutput,TCoordRep>
       return std::complex<float>(0.,0.); // A modifier
 //    return ( NumericTraits<RealType>::max() );
     }
-
+#if 0
    if(m_NeighborhoodRadius<0)
      {
      ImageSize = this->GetInputImage()->GetBufferedRegion().GetSize();
@@ -126,6 +126,8 @@ ComplexMomentImageFunction<TInput,TOutput,TCoordRep>
 //   std::cout<<"Result dans la procedure: " <<Sum <<std::endl;
            
   return (static_cast<ComplexType>(Sum) );
+
+#endif
 
 }
 

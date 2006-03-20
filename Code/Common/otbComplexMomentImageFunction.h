@@ -1,25 +1,20 @@
 /*=========================================================================
 
-  Program:   Insight Segmentation & Registration Toolkit
-  Module:    $RCSfile: itkMeanImageFunction.h,v $
-  Language:  C++
-  Date:      $Date: 2003/09/10 14:29:15 $
-  Version:   $Revision: 1.7 $
-
-  Copyright (c) Insight Software Consortium. All rights reserved.
-  See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
-
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
-     PURPOSE.  See the above copyright notices for more information.
+  Programme :   OTB (ORFEO ToolBox)
+  Auteurs   :   CS - P. Imbo
+  Language  :   C++
+  Date      :   20 mars 2006
+  Version   :   
+  Role      :   Complex Geometric Moments Class of iamges 
+  $Id:$
 
 =========================================================================*/
 #ifndef _otbComplexMomentImageFunction_h
 #define _otbComplexMomentImageFunction_h
 
-#include "itkImageFunction.h"
-#include <complex>
+#include "otbGeometricMomentImageFunction.h"
 
+#include <complex>
 
 namespace otb
 {
@@ -31,12 +26,13 @@ namespace otb
  * Calculate the complex moment value over an image. 
  * The implemented equation is:
  *
- *  \f$ C_{p,q}=\int\int_{} (x+iy)^{p} \cdot (x-iy)^{q} \cdot f(x,y) \cdot
- dx \cdot dy \f$
+ *  \f[  c_{p,q}=\int_{-\infty}^{\infty} \int_{-\infty}^{\infty} (x+iy)^{p} \cdot (x-iy)^{q} \cdot f(x,y) \cdot
+ dx \cdot dy \f]
  *
  * With:
- *  + \f$(x,y)$f\ pixel localization;
- *  + \f$ f(x,y) $f\  the pixel value over the \f$(x,y)$f\ coordinate.
+ *
+ *   - \f$ (x,y) \f$ pixel localization;
+ *   - \f$ f(x,y) \f$  the pixel value over the \f$(x,y) \f$ coordinate.
  *
  * This class is templated over the input image type and the
  * coordinate representation type (e.g. float or double).
@@ -44,26 +40,26 @@ namespace otb
  * \ingroup ImageFunctions
  */
 template < class TInput, 
-           class TOutput = std::complex<float >,
+           class TOutput = std::complex<double >,
 	   class TCoordRep = float >
 class ITK_EXPORT ComplexMomentImageFunction :
-  public itk::ImageFunction< TInput, TOutput,TCoordRep >
+    public GeometricMomentImageFunction<TInput, TOutput,TCoordRep>
 {
 public:
   /** Standard class typedefs. */
   typedef ComplexMomentImageFunction                                 Self;
-  typedef itk::ImageFunction< TInput, TOutput,TCoordRep >            Superclass;
+  typedef GeometricMomentImageFunction<TInput, TOutput,TCoordRep>    Superclass;
   typedef itk::SmartPointer<Self>                                    Pointer;
   typedef itk::SmartPointer<const Self>                              ConstPointer;
   
   /** Run-time type information (and related methods). */
-  itkTypeMacro(ComplexMomentImageFunction, itk::ImageFunction);
+  itkTypeMacro(ComplexMomentImageFunction, GeometricMomentImageFunction);
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
 
   /** InputImageType typedef support. */
-  typedef TInput                                    InputType;
+  typedef typename Superclass::InputType            InputType;
   typedef typename Superclass::IndexType            IndexType;
   typedef typename Superclass::ContinuousIndexType  ContinuousIndexType;
   typedef typename Superclass::PointType            PointType;
@@ -71,12 +67,9 @@ public:
   typedef TOutput                                   ComplexType;
 
   /** Dimension of the underlying image. */
-  itkStaticConstMacro(ImageDimension, unsigned int,
-                      InputType::ImageDimension);
+//  itkStaticConstMacro(ImageDimension, unsigned int,
+//                      InputType::ImageDimension);
   			 
-  /** Evaluate at the specified input position */
-//  virtual ComplexType Evaluate(const InputType& input) const;
-
   /** Evalulate the function at specified index */
   virtual ComplexType EvaluateAtIndex( const IndexType& index ) const;
   
@@ -116,8 +109,6 @@ private:
   unsigned int m_P;
   unsigned int m_Q;
   int m_NeighborhoodRadius;
-  int m_NeighborhoodRadiusX;
-  int m_NeighborhoodRadiusY;
   
 };
 
