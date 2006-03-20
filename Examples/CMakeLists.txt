@@ -2,7 +2,5 @@
 
 SUBDIRS( 
   StartExamples
-)
-SUBDIRS( 
   ExtractROI
 )
