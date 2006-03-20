@@ -35,6 +35,9 @@ template <class TInputImage, class TOutputImage, class InterpolatorType >
 TupinEdgeDetector<TInputImage, TOutputImage, InterpolatorType>::TupinEdgeDetector()
 {
   m_Radius.Fill(1);
+  m_LengthLine = 1;
+  m_WidthLine = 0;
+  m_FaceList.Fill(0);
   m_Interpolator = InterpolatorType::New(); 
 }
 
@@ -111,14 +114,14 @@ void TupinEdgeDetector< TInputImage, TOutputImage, InterpolatorType>
   typename itk::NeighborhoodAlgorithm::ImageBoundaryFacesCalculator<InputImageType>::FaceListType::iterator 	fit;
 
  // Define the size of the region by the radius
-  m_Radius[0] = static_cast<unsigned int>(0.5*( (3*m_WidthLine + 2) - 1 )); 
-  m_Radius[1] = static_cast<unsigned int>(0.5*(m_LengthLine-1));
+  m_Radius[0] = static_cast<unsigned int>(3*m_WidthLine + 2); 
+  m_Radius[1] = m_LengthLine ;
   
 //std::cout <<"Radius " << m_Radius[0] << " " << m_Radius[1] << std::endl; 
   
   
   // Define the size of the facelist by taking into account the rotation of the region
-  m_FaceList[0] = sqrt((m_Radius[0]*m_Radius[0])+ (m_Radius[1]*m_Radius[1]));
+  m_FaceList[0] = static_cast<unsigned int>( sqrt((m_Radius[0]*m_Radius[0])+ (m_Radius[1]*m_Radius[1]))+1 );
   m_FaceList[1] = m_FaceList[0];
 
   itk::NeighborhoodAlgorithm::ImageBoundaryFacesCalculator<InputImageType> bC;
@@ -147,7 +150,10 @@ void TupinEdgeDetector< TInputImage, TOutputImage, InterpolatorType>
   Theta[3] = 3*M_PI / 4. ;
 
   // Number of the zone 
-  int zone;
+  unsigned int zone;
+  
+  // Pixel numbers in each zone
+  const int NbPixelZone = (2*m_WidthLine+1)*(2*m_LengthLine+1);
    
   // Contains for the 4 directions the sum of the pixels belonging to each zone
   double Sum[NB_DIR][NB_ZONE];
@@ -165,7 +171,7 @@ void TupinEdgeDetector< TInputImage, TOutputImage, InterpolatorType>
   // Pixel location in the input image
   int X, Y;
   
-  // Pixel location in the system axis of the region after rotation 
+  // Pixel location after rotation in the system axis of the region  
   double xout, yout;
   
    // Pixel location in the input image after rotation
@@ -190,13 +196,11 @@ void TupinEdgeDetector< TInputImage, TOutputImage, InterpolatorType>
     
     bit.OverrideBoundaryCondition(&nbc);
     bit.GoToBegin();
-    
-//std::cout <<"***"<< neighborhoodSize << std::endl; 
 
 
     while ( ! bit.IsAtEnd() )
       {
-std::cout << "Xc,Yc " << bit.GetIndex() << std::endl;
+//std::cout << "Xc,Yc " << bit.GetIndex() << std::endl;
 
       // Initialisations
       for (int dir=0; dir<NB_DIR; dir++)
@@ -213,22 +217,21 @@ std::cout << "Xc,Yc " << bit.GetIndex() << std::endl;
       Yc = bitIndex[1];
       
       // Location of the central pixel between zone 1 and zone 2
-      Xc12 = ( Xc - (m_WidthLine-1)/2 ) - 1 ;
+      Xc12 = Xc - m_WidthLine - 1;
       
       // Location of the central pixel between zone 1 and zone 3
-      Xc13 = ( Xc + (m_WidthLine-1)/2 ) + 1 ;
+      Xc13 = Xc + m_WidthLine + 1;
           
       // Loop on the region 
       for (i = 0; i < neighborhoodSize; ++i)
         {
-std::cout << "---"<< i <<" "<< bit.GetIndex(i)<< std::endl;
-std::cout << "val(X,Y) "<< static_cast<double>(bit.GetPixel(i)) << " " << std::endl;
+//std::cout << "---"<< i <<" "<< bit.GetIndex(i)<< std::endl;
+//std::cout << "val(X,Y) "<< static_cast<double>(bit.GetPixel(i)) << " " << std::endl;
 
         bitIndex = bit.GetIndex(i);
         X = bitIndex[0];
         Y = bitIndex[1];
- 
-//std::cout << "---"<< i <<" "<< static_cast<double>(bit.GetPixel(i))<< std::endl;     
+
       
         // We determine in the vertical direction with which zone the pixel belongs. 
          
@@ -246,33 +249,29 @@ std::cout << "val(X,Y) "<< static_cast<double>(bit.GetPixel(i)) << " " << std::e
           {      
             ROTATION( (X-Xc), (Y-Yc), Theta[dir], xout, yout);
             
-           // point[0] = double(xout + Xc);
-           // point[1] = double(yout + Yc);
-            
             Index[0] = static_cast<float>(xout + Xc);
             Index[1] = static_cast<float>(yout + Yc);
                         
-std::cout << "X' Y' "<< (xout + Xc) << " " << (yout + Yc) << std::endl;
-std::cout << "val(X',Y') "<< static_cast<double>(m_Interpolator->Evaluate( point )) << std::endl;
+//std::cout << "X' Y' "<< (xout + Xc) << " " << (yout + Yc) << std::endl;
+//std::cout << "val(X',Y') "<< static_cast<double>(m_Interpolator->EvaluateAtContinuousIndex( Index )) << std::endl;
            
-            // Sum[dir][zone] += static_cast<double>(m_Interpolator->Evaluate( point ));
             Sum[dir][zone] += static_cast<double>(m_Interpolator->EvaluateAtContinuousIndex( Index ));
-
-             
+          
           }      
 
-        } // end of the loop on the pixels of the region           
-
-//std::cout << static_cast<double>(Sum[0][0])/ double(WidthZone*HeightZone) << std::endl;    
+        } // end of the loop on the pixels of the region 
+        
+      R12 = -1.;
+      R13 = -1.;           
            
       // Loop on the 4 directions
       for ( int dir=0; dir<NB_DIR; dir++ )
         {
-        	
+        		
         // Calculation of the averages of the 3 zones	
-        M1 = Sum[dir][0] / double(m_WidthLine*m_LengthLine);
-        M2 = Sum[dir][1] / double(m_WidthLine*m_LengthLine);
-        M3 = Sum[dir][2] / double(m_WidthLine*m_LengthLine);
+        M1 = Sum[dir][0] / static_cast<double>(NbPixelZone);
+        M2 = Sum[dir][1] / static_cast<double>(NbPixelZone);
+        M3 = Sum[dir][2] / static_cast<double>(NbPixelZone);
      	
         // Calculation of the intensity of the linear feature
         if (( M1 != 0 ) && (M2 != 0)) 
@@ -284,23 +283,15 @@ std::cout << "val(X',Y') "<< static_cast<double>(m_Interpolator->Evaluate( point
           R13_theta[dir] = static_cast<double>( 1 - MIN( (M1/M3), (M3/M1) ) );
         else
 	  R13_theta[dir] = 0.;
+	  
+	// Determination of the maximum intensity of the linear feature
+	R12 = static_cast<double>( MAX( R12, R12_theta[dir] ) );
+        R13 = static_cast<double>( MAX( R13, R13_theta[dir] ) );  
       		
         } // end of the loop on the directions
       
-      // Determination of the maximum intensity of the linear feature
-      R12 = R12_theta[0];
-      R13 = R13_theta[0];
-      
-      for (int dir=1; dir<NB_DIR; dir++)
-        {
-        R12 = static_cast<double>( MAX( R12, R12_theta[dir] ) );
-        R13 = static_cast<double>( MAX( R13, R13_theta[dir] ) );
-	}
-	
       // Intensity of the linear feature
       R = MIN ( R12, R13 );	
- 
-//std::cout << "R = " << R << std::endl; 
 
       // Assignment of this value to the output pixel
       it.Set( static_cast<OutputPixelType>(R) );  

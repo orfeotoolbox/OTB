@@ -22,6 +22,7 @@
     (_xout) = (_x)*cos(_theta) - (_y)*sin(_theta); \
     (_yout) = (_x)*sin(_theta) + (_y)*cos(_theta)
 
+
 namespace otb
 {
 
@@ -141,10 +142,10 @@ private:
   TupinEdgeDetector(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
  
-  /** Length of the linear feature*/ 
+  /** Length of the linear feature = 2*m_LengthLine+1 */ 
   unsigned int m_LengthLine;
  
-  /** Width of the linear feature*/ 
+  /** Width of the linear feature = 2*m_WidthLine+1 */ 
   unsigned int m_WidthLine;
      
   /** Radius of the region*/
