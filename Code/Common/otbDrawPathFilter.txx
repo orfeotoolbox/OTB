@@ -30,7 +30,8 @@ template <class TInputImage, class TInputPath,class TOutputImage>
 DrawPathFilter<TInputImage,TInputPath,TOutputImage>
 ::DrawPathFilter()
 {
-  m_PathValue = static_cast<OutputImagePixelType>(250.0);
+//OTB-FA-00011-CS
+  m_Value = static_cast<OutputImagePixelType>(250.0);
 }
 
 
@@ -110,7 +111,8 @@ DrawPathFilter<TInputImage,TInputPath,TOutputImage>
 	    IndexOut[1] = static_cast<int>(Alpha * (j-x1) + y1) ;
 	    if(IndexOut[0]>=0 && IndexOut[0]<Taille[0] && 
 	       IndexOut[1]>=0 && IndexOut[1]<Taille[1])
-	          OutputImage->SetPixel(IndexOut,m_PathValue);
+//OTB-FA-00010-CS
+	          OutputImage->SetPixel(IndexOut,m_Value);
 	    }
 	 }
          else
@@ -122,7 +124,8 @@ DrawPathFilter<TInputImage,TInputPath,TOutputImage>
 	    IndexOut[1] = static_cast<int>(j);
 	    if(IndexOut[0]>=0 && IndexOut[0]<Taille[0] && 
 	       IndexOut[1]>=0 && IndexOut[1]<Taille[1])
-	          OutputImage->SetPixel(IndexOut,m_PathValue);
+//OTB-FA-00010-CS
+	          OutputImage->SetPixel(IndexOut,m_Value);
 	    }
 	 
 	 }
@@ -137,7 +140,8 @@ DrawPathFilter<TInputImage,TInputPath,TOutputImage>
 	   IndexOut[0]=static_cast<int>(j);
 	   if(IndexOut[0]>=0 && IndexOut[0]<Taille[0] && 
 	      IndexOut[1]>=0 && IndexOut[1]<Taille[1])
-	          OutputImage->SetPixel(IndexOut,m_PathValue);
+//OTB-FA-00010-CS
+	          OutputImage->SetPixel(IndexOut,m_Value);
 	  
 	   }
 	 }
@@ -150,7 +154,8 @@ DrawPathFilter<TInputImage,TInputPath,TOutputImage>
 	   IndexOut[1]=static_cast<int>(j);
 	   if( (IndexOut[0]>=0) && (IndexOut[0]<Taille[0]) && 
 	      (IndexOut[1]>=0) && (IndexOut[1]<Taille[1]))
-	          OutputImage->SetPixel(IndexOut,m_PathValue);
+//OTB-FA-00010-CS
+	          OutputImage->SetPixel(IndexOut,m_Value);
 	   }
 	 }
        }         
@@ -168,7 +173,8 @@ DrawPathFilter<TInputImage,TInputPath,TOutputImage>
 ::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   Superclass::PrintSelf(os, indent);
-  os << indent << "Path Value: " << m_PathValue << std::endl;
+//OTB-FA-00010-CS
+  os << indent << "Path Value: " << m_Value << std::endl;
 }
 
 

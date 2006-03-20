@@ -229,12 +229,12 @@ int otbDrawPathList( int argc, char ** argv )
         reader->SetFileName( inputFilename  );
 	writer->SetFileName( outputFilename );
 	
-	testList->SetImageInput( reader->GetOutput() );
+//OTB-FA-00010-CS
+	testList->SetInput( reader->GetOutput() );
 	testList->Update();
 	
 	DrawPath->SetImageInput(reader->GetOutput()  );
 	DrawPath->SetPathInput( testList->GetOutput());
-//	DrawPath->SetImageOutput();
 	DrawPath->Update();
 	
 	writer->SetInput(DrawPath->GetImageOutput());

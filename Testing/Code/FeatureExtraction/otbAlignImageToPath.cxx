@@ -42,27 +42,16 @@ int otbAlignImageToPath( int argc, char ** argv )
 
         typedef unsigned char                                   InputPixelType;
         typedef unsigned char   	                        OutputPixelType;
-//	typedef float						PathType;
 	typedef float						RealPixelType;
         const   unsigned int        	                        Dimension = 2;
 
         typedef itk::Image< InputPixelType,  Dimension >	InputImageType;
         typedef itk::Image< RealPixelType,  Dimension >		RealImageType;
 
-//	typedef itk::Path< double, itk::ContinuousIndex< double , Dimension > , Dimension >			PathType;
-	typedef itk::PolyLineParametricPath< Dimension >			PathType;
-//	typedef itk::ParametricPath< Dimension >			PathType;
+	typedef itk::PolyLineParametricPath< Dimension >	PathType;
+	
 	typedef PathType::Pointer PathTypePointer;
-//	PathType ltoto;
 	PathType::Pointer ltoto = PathType::New();
-	
-/*	typedef otb::ImageToPathAlignExtract<itk::Image< InputPixelType,  Dimension > ,PathType>  OutputPathType;
-        typedef  OutputPathType::InputImageType  InputImageType;
-*/
-//	typedef otb::PathListSource<PathType>			PathListSourceType;
-//	PathListSourceType::Pointer PathSourceList = PathListSourceType::New();
-	
-	
 
         typedef itk::Image< OutputPixelType, Dimension >        OutputImageType;
 
@@ -74,17 +63,14 @@ int otbAlignImageToPath( int argc, char ** argv )
         ReaderType::Pointer reader = ReaderType::New();
         WriterType::Pointer writer = WriterType::New();
 	InputImageType::Pointer ImageIn = InputImageType::New();
-//	ListAlignFilterType::Pointer Align = ListAlignFilterType::New();
-
-//        typedef itk::PathSource<PathType>  TestType;
-//	TestType::Pointer test = TestType::New();
 	
         typedef otb::ImageToPathListAlignFilter<InputImageType,PathType>  TestType;
 	TestType::Pointer testList = TestType::New();
 	
         reader->SetFileName( inputFilename  );
 
-        testList->SetImageInput( reader->GetOutput() );
+//OTB-FA-00010-CS
+        testList->SetInput( reader->GetOutput() );
 	
 	typedef ListAlignFilterType::OutputPathListType   ListAlignFilterOutputPathListType;
 	
@@ -101,13 +87,11 @@ int otbAlignImageToPath( int argc, char ** argv )
     		fprintf(stderr,"Erreur dans l'ouverture du fichier");
     		exit(-1);
   	}
-//	typename InputImageType::PointType                   PointType;
 	typedef itk::ContinuousIndex< double,2>              VertexType; 
 	typedef itk::VectorContainer< unsigned,VertexType >  VertexListType;
 	typedef VertexListType::ConstPointer                 VertexListTypePointer;
 	VertexListTypePointer vertexList;
 	VertexType cindex;
-//	PointType::Pointer  point;
 	double x1,y1,x2,y2;
 	  
 	int nbPath = sortiePath->size();
@@ -140,9 +124,6 @@ int otbAlignImageToPath( int argc, char ** argv )
     std::cout << "Exception levee inconnue !" << std::endl; 
     return EXIT_FAILURE;
     } 
-  // Software Guide : EndCodeSnippet
-
-//#endif
   return EXIT_SUCCESS;
 }
 

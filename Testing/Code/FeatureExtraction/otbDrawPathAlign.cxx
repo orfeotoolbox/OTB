@@ -64,7 +64,9 @@ int otbDrawPathAlign( int argc, char ** argv )
 	
         typedef otb::ImageToPathListAlignFilter<InputImageType,PathType>  PathListAlignType;
 	PathListAlignType::Pointer testList = PathListAlignType::New();
-	testList->SetImageInput( reader->GetOutput() );
+
+//OTB-FA-00010-CS
+	testList->SetInput( reader->GetOutput() );
 	testList->Update(); 
 	
 	OutputPathListType * sortiePath = testList->GetOutput();

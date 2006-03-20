@@ -117,7 +117,6 @@ protected:
   virtual void GenerateOutputInformation(){}; // do nothing
   virtual void GenerateData();
   virtual std::vector<double> tab(int n,double p,double m);
-//  virtual void AngleCalculate(InputImageConstPointer ImageIn,RealImagePointer ImageOut);
   virtual void AngleCalculate( const InputImageType*  InputImageIn,RealImageTypePointer AngleImage);
   
   SizeType     m_Size;

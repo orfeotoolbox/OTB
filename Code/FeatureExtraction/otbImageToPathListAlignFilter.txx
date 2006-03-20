@@ -325,7 +325,8 @@ ImageToPathListAlignFilter<TInputImage,TOutputPath>
 
 
   // Get the input and output pointers 
-  const InputImageType  * InputImage   = this->GetImageInput();
+//OTB-FA-00010-CS  
+  const InputImageType  * InputImage   = this->GetInput();
   OutputPathListType *   OutputPath   = this->GetOutput();
   // Generate the image
 

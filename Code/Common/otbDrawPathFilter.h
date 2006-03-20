@@ -62,8 +62,9 @@ public:
   typedef typename OutputImageType::ValueType     OutputImageValueType; 
   
 
-//  itkSetMacro(PathValue, OutputImagePixelType);
-//  itkGetConstReferenceMacro(PathValue, OutputImagePixelType);
+//OTB-FA-00011-CS
+  itkSetMacro(Value, OutputImagePixelType);
+  itkGetConstReferenceMacro(Value, OutputImagePixelType);
   
 protected:
   DrawPathFilter();
@@ -76,7 +77,7 @@ private:
   DrawPathFilter(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
 
-  OutputImagePixelType m_PathValue;
+  OutputImagePixelType m_Value;
 
   
   
