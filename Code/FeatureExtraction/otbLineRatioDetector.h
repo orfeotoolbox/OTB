@@ -26,7 +26,7 @@
 namespace otb
 {
 
-/** \class TupinEdgeDetector
+/** \class LineRatioDetector
  * \brief Application of the filter of detection of linear features 
  *
  * This class implements the detector D1 of Tupin which 
@@ -57,7 +57,7 @@ namespace otb
 template <class TInputImage, 
 	  class TOutputImage,
 	  class InterpolatorType = itk::BSplineInterpolateImageFunction<TInputImage> >
-class TupinEdgeDetector :  public itk::ImageToImageFilter< TInputImage, TOutputImage >
+class LineRatioDetector :  public itk::ImageToImageFilter< TInputImage, TOutputImage >
 {
 public:
   /** 	Extract dimensions as well of the images of entry of exit. */
@@ -72,7 +72,7 @@ public:
   typedef TOutputImage OutputImageType;
 
   /** typedef for the classes standards. */
-  typedef TupinEdgeDetector Self;
+  typedef LineRatioDetector Self;
   typedef itk::ImageToImageFilter< InputImageType, OutputImageType> Superclass;
   typedef itk::SmartPointer<Self> Pointer;
   typedef itk::SmartPointer<const Self>  ConstPointer;
@@ -81,7 +81,7 @@ public:
   itkNewMacro(Self);
 
   /** Return the nale of the class. */
-  itkTypeMacro(TupinEdgeDetector, ImageToImageFilter);
+  itkTypeMacro(LineRatioDetector, ImageToImageFilter);
 
   /** Typedefs to describe and access Interpolator */
   typedef typename InterpolatorType::Pointer InterpolatorPointer;
@@ -123,12 +123,12 @@ public:
   virtual void GenerateInputRequestedRegion() throw(itk::InvalidRequestedRegionError);
 
 protected:
-  TupinEdgeDetector();
-  virtual ~TupinEdgeDetector() {};
+  LineRatioDetector();
+  virtual ~LineRatioDetector() {};
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
 
-  /** TupinEdgeDetector can be implemented for a treatment of filter multithreaded. 
+  /** LineRatioDetector can be implemented for a treatment of filter multithreaded. 
    * Thus, the ThreadedGenerateData() method is called for each thread process. 
    * The data image are allocated automatically by the mother class by calling the 
    * ThreadedGenerateData() method. ThreadedGenerateData can only write the portion 
@@ -140,7 +140,7 @@ protected:
                             int threadId );
 
 private:
-  TupinEdgeDetector(const Self&); //purposely not implemented
+  LineRatioDetector(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
  
   /** Length of the linear feature = 2*m_LengthLine+1 */ 

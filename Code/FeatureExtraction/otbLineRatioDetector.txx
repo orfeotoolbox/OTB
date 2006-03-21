@@ -32,7 +32,7 @@ namespace otb
  *
  */
 template <class TInputImage, class TOutputImage, class InterpolatorType >
-TupinEdgeDetector<TInputImage, TOutputImage, InterpolatorType>::TupinEdgeDetector()
+LineRatioDetector<TInputImage, TOutputImage, InterpolatorType>::LineRatioDetector()
 {
   m_Radius.Fill(1);
   m_LengthLine = 1;
@@ -42,7 +42,7 @@ TupinEdgeDetector<TInputImage, TOutputImage, InterpolatorType>::TupinEdgeDetecto
 }
 
 template <class TInputImage, class TOutputImage, class InterpolatorType>
-void TupinEdgeDetector<TInputImage, TOutputImage, InterpolatorType>::GenerateInputRequestedRegion() throw (itk::InvalidRequestedRegionError)
+void LineRatioDetector<TInputImage, TOutputImage, InterpolatorType>::GenerateInputRequestedRegion() throw (itk::InvalidRequestedRegionError)
 {
   // call the superclass' implementation of this method
   Superclass::GenerateInputRequestedRegion();
@@ -91,7 +91,7 @@ void TupinEdgeDetector<TInputImage, TOutputImage, InterpolatorType>::GenerateInp
 }
 
 template< class TInputImage, class TOutputImage, class InterpolatorType>
-void TupinEdgeDetector< TInputImage, TOutputImage, InterpolatorType>
+void LineRatioDetector< TInputImage, TOutputImage, InterpolatorType>
 ::ThreadedGenerateData(	
 			const 	OutputImageRegionType& 		outputRegionForThread,
                        	int 	threadId
@@ -310,7 +310,7 @@ void TupinEdgeDetector< TInputImage, TOutputImage, InterpolatorType>
  */
 template <class TInputImage, class TOutput, class InterpolatorType>
 void 
-TupinEdgeDetector<TInputImage, TOutput, InterpolatorType>::PrintSelf(std::ostream& os, itk::Indent indent) const
+LineRatioDetector<TInputImage, TOutput, InterpolatorType>::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   Superclass::PrintSelf( os, indent );
   os << indent << "Radius: " << m_Radius << std::endl;
