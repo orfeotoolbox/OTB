@@ -1,0 +1,201 @@
+#if defined(_MSC_VER)
+#pragma warning ( disable : 4786 )
+#endif
+
+#ifdef __BORLANDC__
+#define ITK_LEAN_AND_MEAN
+#endif
+
+//  Software Guide : BeginCommandLineArgs
+//    INPUTS: {GomaSmall.png}
+//    OUTPUTS: {GomaSmallLeeFiltered.png} 
+//    3 1
+//  Software Guide : EndCommandLineArgs
+
+// Software Guide : BeginLatex
+//
+// This example illustrates the use of the \doxygen{LeeImageFilter}.
+// This filter belongs to the family of the edge-preserving smoothing
+// filters which are usually used for speckle reduction in radar
+// images. The Lee filter \cite{LeeFilter} aplies a linear regression
+// which minimizes the mean-square error in the frame of a
+// multiplicative speckle model.
+//
+//
+// The first step required to use this filter is to include its header file. 
+//
+// Software Guide : EndLatex 
+
+// Software Guide : BeginCodeSnippet
+#include "otbLeeImageFilter.h"
+// Software Guide : EndCodeSnippet
+
+#include "itkImage.h"
+#include "otbImageFileReader.h"
+#include "otbImageFileWriter.h"
+
+int main( int argc, char * argv[] )
+{
+
+  if( argc < 5 )
+    {
+    std::cerr << "Usage: " << argv[0] << " inputImageFile ";
+    std::cerr << " outputImageFile radius NbLooks" << std::endl;  
+    return EXIT_FAILURE;
+    }
+  
+  //  Software Guide : BeginLatex
+  //
+  //  Then we must decide what pixel type to use for the image. 
+  //
+  //  Software Guide : EndLatex 
+
+  // Software Guide : BeginCodeSnippet
+  typedef  unsigned char  PixelType;
+  // Software Guide : EndCodeSnippet
+
+  //  Software Guide : BeginLatex
+  //
+  //  The images are defined using the pixel type and the dimension.
+  //
+  //  Software Guide : EndLatex 
+
+  // Software Guide : BeginCodeSnippet
+  typedef itk::Image< PixelType,  2 >   InputImageType;
+  typedef itk::Image< PixelType,  2 >   OutputImageType;
+  // Software Guide : EndCodeSnippet
+
+
+  //  Software Guide : BeginLatex
+  //
+  //  The filter can be instantiated using the image types defined above.
+  //
+  //  Software Guide : EndLatex 
+
+  // Software Guide : BeginCodeSnippet
+  typedef otb::LeeImageFilter< InputImageType, OutputImageType >  FilterType;
+  // Software Guide : EndCodeSnippet
+
+
+  //  Software Guide : BeginLatex
+  //
+  //  An \doxygen{ImageFileReader} class is also instantiated in order to read
+  //  image data from a file. 
+  //
+  //  Software Guide : EndLatex 
+
+  // Software Guide : BeginCodeSnippet
+  typedef otb::ImageFileReader< InputImageType >  ReaderType;
+  // Software Guide : EndCodeSnippet
+
+  //  Software Guide : BeginLatex
+  //  
+  // An \doxygen{ImageFileWriter} is instantiated in order to write the
+  // output image to a file.
+  //
+  //  Software Guide : EndLatex 
+
+  // Software Guide : BeginCodeSnippet
+  typedef otb::ImageFileWriter< OutputImageType >  WriterType;
+  // Software Guide : EndCodeSnippet
+
+
+
+  //  Software Guide : BeginLatex
+  //
+  //  Both the filter and the reader are created by invoking their \code{New()}
+  //  methods and assigning the result to SmartPointers.
+  //
+  //  Software Guide : EndLatex 
+
+  // Software Guide : BeginCodeSnippet
+  ReaderType::Pointer reader = ReaderType::New();
+  FilterType::Pointer filter = FilterType::New();
+  // Software Guide : EndCodeSnippet
+
+  WriterType::Pointer writer = WriterType::New();
+  writer->SetInput( filter->GetOutput() );
+  reader->SetFileName( argv[1] );
+
+
+  //  Software Guide : BeginLatex
+  //  
+  //  The image obtained with the reader is passed as input to the
+  //  \doxygen{LeeImageFilter}.
+  //
+  //  \index{otb::LeeImageFilter!SetInput()}
+  //  \index{otb::FileImageReader!GetOutput()}
+  //
+  //  Software Guide : EndLatex 
+
+  // Software Guide : BeginCodeSnippet
+  filter->SetInput( reader->GetOutput() );
+  // Software Guide : EndCodeSnippet
+
+
+  //  Software Guide : BeginLatex
+  //  
+  //  The method \code{SetRadius()} defines the size of the window to
+  //  be used for the computation of the local statistics. The method
+  //  \code{SetNbVues()} sets the number of looks of the input
+  //  image.
+  //
+  //  \index{otb::LeeImageFilter!SetRadius()}
+  //  \index{otb::LeeImageFilter!NbVues()}
+  //  \index{SetNbVues()!otb::LeeImageFilter}  
+  //
+  //  Software Guide : EndLatex 
+
+  // Software Guide : BeginCodeSnippet
+  FilterType::SizeType Radius;
+  Radius[0]= atoi(argv[3]);
+  Radius[1]= atoi(argv[3]);
+
+  filter->SetRadius( Radius );
+  filter->SetNbVues( atoi(argv[4]) );
+  // Software Guide : EndCodeSnippet
+
+
+  //  Software Guide : BeginLatex
+  //  
+  //  The filter is executed by invoking the \code{Update()} method. If the
+  //  filter is part of a larger image processing pipeline, calling
+  //  \code{Update()} on a downstream filter will also trigger update of this
+  //  filter.
+  //
+  //  Software Guide : EndLatex 
+
+  // Software Guide : BeginCodeSnippet
+  filter->Update();
+  // Software Guide : EndCodeSnippet
+
+
+  writer->SetFileName( argv[2] );
+  writer->Update();
+
+
+  //  Software Guide : BeginLatex
+  // Figure~\ref{LEE_FILTER} shows the result of applying the Lee
+  // filter to a SAR image.
+  // \begin{figure}
+  // \center
+  // \includegraphics[width=0.44\textwidth]{GomaSmall.eps}
+  // \includegraphics[width=0.44\textwidth]{GomaSmallLeeFiltered.eps}
+  // \itkcaption[Lee Filter Application]{Result of applying the
+  // \doxygen{LeeImageFilter} to a SAR image.} 
+  // \label{fig:LEE_FILTER}
+  // \end{figure}
+  //
+  //  Software Guide : EndLatex 
+
+  //  \relatedClasses
+  //  \begin{itemize}
+  //  \item \doxygen{FrostImageFilter}
+  //  \end{itemize}
+  //
+  //  Software Guide : EndLatex 
+
+
+  return EXIT_SUCCESS;
+}
+

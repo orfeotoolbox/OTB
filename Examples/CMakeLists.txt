@@ -3,4 +3,5 @@
 SUBDIRS( 
   StartExamples
   ExtractROI
+  BasicFilters
 )
