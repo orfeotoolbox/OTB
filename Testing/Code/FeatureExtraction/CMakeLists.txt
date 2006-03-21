@@ -11,25 +11,6 @@ SET(TOL 0.0)
 
 SET(FEATUREEXTRACTION_TESTS ${CXX_TEST_PATH}/otbFeatureExtractionTests)
 
-
-ADD_TEST(feTuFiltreLee1CanalPoupees ${FEATUREEXTRACTION_TESTS}  
-        otbLeeFilter
-	${INPUTDATA}/poupees_1canal.hd
-	${TEMP}/feFiltreLee_05_05_04.png
-	05 05 4.0)
-
-ADD_TEST(feTuFiltreLee ${FEATUREEXTRACTION_TESTS}  
-        otbLeeFilter
-	${INPUTDATA}/poupees.hd
-	${TEMP}/feFiltreLee_05_05_12.png
-	05 05 12.0)
-	
-ADD_TEST(feTuFiltreFrost ${FEATUREEXTRACTION_TESTS}  
-        otbFrostFilter
-	${INPUTDATA}/poupees.hd
-	${TEMP}/feFiltreFrost_poupees_05_05_01.png
-	05 05 0.1)
-
 ADD_TEST(feTuAlignMV2ITK ${FEATUREEXTRACTION_TESTS}  
         otbAlignImageToPath
 	${INPUTDATA}/poupees.hd
@@ -115,8 +96,6 @@ ADD_TEST(feTuTupin ${FEATUREEXTRACTION_TESTS}
 
 # A enrichir
 SET(BasicFeatureExtraction_SRCS
-otbLeeFilter.cxx
-otbFrostFilter.cxx
 otbAlignImageToPath.cxx
 otbFlstTest.cxx
 otbDrawPathList.cxx
