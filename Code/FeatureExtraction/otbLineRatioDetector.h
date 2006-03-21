@@ -39,7 +39,7 @@ namespace otb
  *
  * For each vertical edge, we calculate the intensity of linear feature 
  * R_{12}(\theta_{0}) between zone 1 and 2 and R_{13}(\theta_{0}) between  
- * zone 1 and 3 according to the principle of the filter of Touzi.
+ * zone 1 and 3 according to the principle of the Touzi's filter.
  *
  * The intensity of detection in the three other directions R(\theta_{i})
  * is obtained by rotation of the pixels of each zone around the 
