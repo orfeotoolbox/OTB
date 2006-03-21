@@ -82,13 +82,13 @@ ADD_TEST(feTvTouziDir ${FEATUREEXTRACTION_TESTS}
 	${TEMP}/feFiltreTouzi_poupees_dir_3.hd
 	3)	
 
-ADD_TEST(feTuTupinNew ${FEATUREEXTRACTION_TESTS}  
-        otbTupinEdgeDetectorNew)
+ADD_TEST(feTuLineRatioNew ${FEATUREEXTRACTION_TESTS}  
+        otbLineRatioDetectorNew)
 		
-ADD_TEST(feTuTupin ${FEATUREEXTRACTION_TESTS}  
-        otbTupinEdgeDetector
+ADD_TEST(feTuLineRatio ${FEATUREEXTRACTION_TESTS}  
+        otbLineRatioDetector
 	${INPUTDATA}/cthead1.png
-	${TEMP}/feFiltreTupin_cthead1_3_5.hd
+	${TEMP}/feFiltreLineRatio_cthead1_3_5.hd
 	3 5)
 		        
 #ADD_TEST(tvFEPatrick2 ${FEATUREEXTRACTION_TESTS}  
@@ -113,8 +113,8 @@ otbFlusserImage.cxx
 otbTouziEdgeDetectorNew.cxx
 otbTouziEdgeDetector.cxx
 otbTouziEdgeDetectorDirection.cxx
-otbTupinEdgeDetectorNew.cxx
-otbTupinEdgeDetector.cxx
+otbLineRatioDetectorNew.cxx
+otbLineRatioDetector.cxx
 )
 
 

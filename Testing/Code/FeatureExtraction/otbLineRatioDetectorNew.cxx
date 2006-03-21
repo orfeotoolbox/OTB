@@ -20,10 +20,10 @@
 #include "itkImage.h"
 #include <iostream>
 
-#include "otbTupinEdgeDetector.h"
+#include "otbLineRatioDetector.h"
 
 
-int otbTupinEdgeDetectorNew( int argc, char* argv[] )
+int otbLineRatioDetectorNew( int argc, char* argv[] )
 {
   try 
     {        

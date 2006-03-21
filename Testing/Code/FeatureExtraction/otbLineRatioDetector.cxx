@@ -23,11 +23,11 @@
 
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
-#include "otbTupinEdgeDetector.h"
+#include "otbLineRatioDetector.h"
 
 #include "itkLinearInterpolateImageFunction.h"
 
-int otbTupinEdgeDetector( int argc, char* argv[] )
+int otbLineRatioDetector( int argc, char* argv[] )
 {
   try 
     { 

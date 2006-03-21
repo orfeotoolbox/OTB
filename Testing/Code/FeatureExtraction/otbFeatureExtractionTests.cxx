@@ -21,6 +21,6 @@ REGISTER_TEST(otbFlusserImage);
 REGISTER_TEST(otbTouziEdgeDetectorNew);
 REGISTER_TEST(otbTouziEdgeDetector);
 REGISTER_TEST(otbTouziEdgeDetectorDirection);
-REGISTER_TEST(otbTupinEdgeDetectorNew);
-REGISTER_TEST(otbTupinEdgeDetector);
+REGISTER_TEST(otbLineRatioDetectorNew);
+REGISTER_TEST(otbLineRatioDetector);
 }
