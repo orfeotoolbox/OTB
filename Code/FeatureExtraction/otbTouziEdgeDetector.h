@@ -26,10 +26,10 @@ namespace otb
  * \brief Application of a filter of detection of contours.
  *
  * We define a square window of size 2n+1.
- * Then, we calculate the average for each half window located on both sides contour 
+ * Then, we calculate the mean of each half window located on both sides of the contour 
  * in a given direction. The intensity of contour is then calculated in the four 
- * directions vertical (\theta_{i}), horizontal (\theta_{i}), diagonal 1 (\theta_{i}) 
- * and diagonal 2 (\theta_{i}):
+ * directions (\theta_{i}) vertical , diagonal 1, horizontal  
+ * and diagonal 2 :
  *	\[R(\theta_{i}) = 1 - min(\fract{\mu_{1}/\mu_{2}};\fract{\mu_{2}/\mu_{1}}) \]
  *
  * The exit is an image of intensity of the detection of contour:
@@ -37,8 +37,8 @@ namespace otb
  *
  * An image of the direction of contours can also be determined by this filter:
  * 	\[D = \fract{\sum_{i=1}^{4} s_{i}\theta_{i}R(\theta_{i})}{\sum_{i=1}^{4} R(\theta_{i}}  \[
- * where  \[si \mu_{1}>\mu_{2} s_{i}=+1 \]
- * \[si \mu_{1}<\mu_{2} s_{i}=-1 \]
+ * where  \[if \mu_{1}>\mu_{2} s_{i}=+1 \]
+ * \[else if \mu_{1}<\mu_{2} s_{i}=-1 \]
  *  
  */
 
