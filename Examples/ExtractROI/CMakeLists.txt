@@ -1,4 +1,4 @@
-PROJECT(StartExamples)
+PROJECT(ExtractROI)
 INCLUDE_REGULAR_EXPRESSION("^.*$")
 
 ADD_EXECUTABLE(ExtractROI ExtractROI.cxx )
