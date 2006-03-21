@@ -8,8 +8,8 @@
   $Id$ 
 
 =========================================================================*/
-#ifndef __otbTupinEdgeDetector_h
-#define __otbTupinEdgeDetector_h
+#ifndef __otbLineRatioDetector_h
+#define __otbLineRatioDetector_h
 
 #include "itkBSplineInterpolateImageFunction.h"
 #include "itkImageToImageFilter.h"
@@ -85,6 +85,7 @@ public:
 
   /** Typedefs to describe and access Interpolator */
   typedef typename InterpolatorType::Pointer InterpolatorPointer;
+  typedef typename InterpolatorType::CoordRepType CoordRepType;
   
   typedef typename InputImageType::PointType TPoint;
 
@@ -160,7 +161,7 @@ private:
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbTupinEdgeDetector.txx"
+#include "otbLineRatioDetector.txx"
 #endif
 
   

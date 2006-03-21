@@ -8,10 +8,10 @@
   $Id$ 
 
 =========================================================================*/
-#ifndef __otbTupinEdgeDetector_txx
-#define __otbTupinEdgeDetector_txx
+#ifndef __otbLineRatioDetector_txx
+#define __otbLineRatioDetector_txx
 
-#include "otbTupinEdgeDetector.h"
+#include "otbLineRatioDetector.h"
 
 #include "itkDataObject.h"
 #include "itkExceptionObject.h"
@@ -249,8 +249,8 @@ void TupinEdgeDetector< TInputImage, TOutputImage, InterpolatorType>
           {      
             ROTATION( (X-Xc), (Y-Yc), Theta[dir], xout, yout);
             
-            Index[0] = static_cast<float>(xout + Xc);
-            Index[1] = static_cast<float>(yout + Yc);
+            Index[0] = static_cast<CoordRepType>(xout + Xc);
+            Index[1] = static_cast<CoordRepType>(yout + Yc);
                         
 //std::cout << "X' Y' "<< (xout + Xc) << " " << (yout + Yc) << std::endl;
 //std::cout << "val(X',Y') "<< static_cast<double>(m_Interpolator->EvaluateAtContinuousIndex( Index )) << std::endl;
