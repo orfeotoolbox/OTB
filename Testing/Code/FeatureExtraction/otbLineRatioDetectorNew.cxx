@@ -34,9 +34,9 @@ int otbLineRatioDetectorNew( int argc, char* argv[] )
         typedef itk::Image< InputPixelType,  Dimension >        InputImageType;
         typedef itk::Image< OutputPixelType, Dimension >        OutputImageType;
 
-        typedef otb::TupinEdgeDetector< InputImageType, OutputImageType>   FilterType;
+        typedef otb::LineRatioEdgeDetector< InputImageType, OutputImageType>   FilterType;
 	
-        FilterType::Pointer filtreTupin = FilterType::New();
+        FilterType::Pointer FilterLineRatio = FilterType::New();
         
 
     } 

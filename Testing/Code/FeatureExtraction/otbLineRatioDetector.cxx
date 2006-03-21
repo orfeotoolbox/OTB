@@ -50,12 +50,12 @@ int otbLineRatioDetector( int argc, char* argv[] )
         typedef otb::ImageFileWriter< OutputImageType >         WriterType;
 
         typedef itk::LinearInterpolateImageFunction< InputImageType, double >	InterpolatorType;
-        typedef otb::TupinEdgeDetector< InputImageType, OutputImageType, InterpolatorType >   FilterType;
+        typedef otb::LineRatioDetector< InputImageType, OutputImageType, InterpolatorType >   FilterType;
 	
-        FilterType::Pointer filtreTupin = FilterType::New();
+        FilterType::Pointer FilterLineRatio = FilterType::New();
         
-	filtreTupin->SetWidthLine( WidthLine );
-	filtreTupin->SetLengthLine( LengthLine );
+	FilterLineRatio->SetWidthLine( WidthLine );
+	FilterLineRatio->SetLengthLine( LengthLine );
 	
         ReaderType::Pointer reader = ReaderType::New();
         WriterType::Pointer writer = WriterType::New();
@@ -63,8 +63,8 @@ int otbLineRatioDetector( int argc, char* argv[] )
         reader->SetFileName( inputFilename  );
         writer->SetFileName( outputFilename );
         
-        filtreTupin->SetInput( reader->GetOutput() );
-        writer->SetInput( filtreTupin->GetOutput() );
+        FilterLineRatio->SetInput( reader->GetOutput() );
+        writer->SetInput( FilterLineRatio->GetOutput() );
         
         writer->Update();
 
