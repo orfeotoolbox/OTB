@@ -8,8 +8,413 @@ guide you through the road of learning and using OTB. The Doxygen
 documentation for the OTB application programming interface is
 available on line.
 
-\section{Organisation}
-\label{sec:Organisation}
+\section{Organization}
+\label{sec:Organization}
+
+This software guide is divided into three parts, each of which is further
+divided into several chapters. Part I is a general introduction to OTB,
+with---in the next chapter---a description of how to install the Insight
+Toolkit on your computer. This includes installing pre-compiled libraries and
+executables, and compiling the software from the source code. Part I also
+introduces basic system concepts such as an overview of the system
+architecture, and how to build applications in the C++ programming
+language. Part II describes the system from the user point of view. Dozens
+of examples are used to illustrate important system features. Part III is for
+the OTB developer. Part III explains how to create your own classes, extend
+the system, and interface to various windowing and GUI systems.
+
+\section{How to Learn OTB}
+\label{sec:HowToLearnOTB}
+
+There are two broad categories of users of OTB. First are class
+developers, those who create classes in C++. The second, users, employ
+existing C++ classes to build applications. Class developers must be
+proficient in C++, and if they are extending or modifying OTB, they
+must also be familiar with OTB's internal structures and design
+(material covered in Part III). 
+
+The key to learning how to use OTB is to become familiar with its palette of
+objects and the ways of combining them. If you are a new ORFEO Toolbox user, begin by installing the software. If you are a class
+developer, you'll want to install the source code and then compile it. Users
+may only need the precompiled binaries and executables. We recommend that you
+learn the system by studying the examples and then, if you are a class
+developer, study
+the source code. Start by reading Chapter 3,
+which provides an overview of some of the key concepts in the system, and
+then review the examples in Part II. You may also wish to compile and run the
+dozens of examples distributed with the source code found in the directory
+\code{Insight/Examples}. (Please see the file 
+\code{Insight/Examples/README.txt} for
+a description of the examples contained in the various subdirectories.) There
+are also several hundred tests found in the source distribution in 
+\code{Insight/Testing/Code}, most of which are minimally documented
+testing code. However, they may be useful to see how classes are used
+together in OTB, especially since they are designed to exercise as
+much of the functionality of each class as possible.  
+
+\section{Software Organization}
+\label{sec:SoftwareOrganization}
+
+The following sections describe the directory contents, summarize the
+software functionality in each directory, and locate the documentation and
+data.
+
+\subsection{Obtaining the Software}
+\label{sec:ObtainingTheSoftware}
+
+There are three different ways to access the OTB source code
+(see Section \ref{sec:DownloadingOTB} on page \pageref{sec:DownloadingOTB}).
+\begin{enumerate}
+	\item	from periodic releases available on the OTB Web site,
+	\item	from CD-ROM, and
+	\item	from direct access to the CVS source code repository.
+\end{enumerate}
+Official releases are available a few times a year and announced on the OTB
+Web pages and mailing lists. However, they may not provide the latest and
+greatest features of the toolkit. In general, the periodic releases and
+CD-ROM releases are the same, except that the CD release typically contains
+additional resources and data. CVS access provides immediate access to the
+latest toolkit additions, but on any given day the source code may not be
+stable as compared to the official releases---i.e., the code may not compile,
+it may crash, or it might even produce incorrect results.
+
+This software guide assumes that you are working with the official OTB
+version 2.4 release (available on the OTB Web site). If you are a new user,
+we highly recommend that you use the released version of the software. It is
+stable, consistent, and better tested than the code available from the CVS
+repository. Later, as you gain experience with OTB, you may wish to work from
+the CVS repository. However, if you do so, please be aware of the OTB quality
+testing dashboard. The Insight Toolkit is heavily tested using the
+open-source DART regression testing system
+(\url{http://public.kitware.com/dashboard.php}). Before updating the CVS
+repository, make sure that the dashboard is \emph{green} indicating stable
+code. If not green it is likely that your software update is unstable. (Learn
+more about the OTB quality dashboard in Section
+\ref{sec:DART} on page \pageref{sec:DART}.)
+
+\section{Downloading OTB}
+\label{sec:DownloadingOTB}
+ 
+\index{Downloading}
+
+OTB can be downloaded without cost from the following web site:
+\begin{center} 
+  \url{http://www.itk.org/HTML/Download.php}
+\end{center}
+In order to track the kind of applications for which OTB is being used, you
+will be asked to complete a form prior to downloading the software.
+The information you provide in this form will help developers to get a better
+idea of the interests and skills of the toolkit users. It also assists in 
+future funding requests to sponsoring agencies.
+
+Once you fill out this form you will have access to the download page where two
+options for obtaining the software will be found. (This page can be
+book marked to facilitate subsequent visits to the download site without
+having to complete any form again.) You can get the tarball of a stable
+release or you can get the development version through CVS.  The release
+version is stable and dependable but may lack the latest features of the
+toolkit. The CVS version will have the latest additions but is inherently
+unstable and may contain components with work in progress.  The following
+sections describe the details of each one of these two alternatives.
+
+\subsection{Downloading Packaged Releases}
+\label{sec:DownloadingReleases}
+
+\index{OTB!downloading release}
+
+Please read the
+\code{GettingStarted.txt}\footnote{http://www.itk.org/HTML/GettingStarted.txt}
+document first. It will give you an overview of the download and installation
+processes. Then choose the tarball that better fits your system. The options
+are \code{.zip} and \code{.tgz} files.  The first type is better suited for
+MS-Windows while the second one is the preferred format for UNIX systems.
+
+Once you unzip or untar the file a directory called \code{Insight} will be
+created in your disk and you will be ready for starting the configuration
+process described in Section \ref{sec:CMakeforOTB} on page 
+\pageref{sec:CMakeforOTB}.
+
+\subsection{Downloading from CVS}
+\label{sec:DownloadingFromCVS}
+
+\index{OTB!CVS repository}
+
+The Concurrent Versions System (CVS) is a tool for software version control
+\cite{Fogel1999}. Generally only developers should be using CVS, so here we 
+assume that you know what CVS is and how to use it.  For more information
+about CVS please see Section \ref{sec:CVSRepository} on page 
+\pageref{sec:CVSRepository}. (Note: please make sure that you access the 
+software via CVS only when the OTB Quality Dashboard indicates that the 
+code is stable. Learn more about the Quality Dashboard at
+\ref{sec:QualityDashboard} on page \pageref{sec:QualityDashboard}.)
+
+Access OTB via CVS using the following commands (under UNIX and Cygwin): 
+\begin{verbatim}
+cvs -d :pserver:anonymous@www.itk.org:/cvsroot/Insight login
+(respond with password "insight")
+
+cvs -d :pserver:anonymous@www.itk.org:/cvsroot/Insight co Insight
+\end{verbatim}
+
+This will trigger the download of the software into a directory named
+\code{Insight}.  Any time you want to update your version, it will be enough to
+change into this directory \code{Insight} and type:
+\begin{verbatim}
+cvs update -d -P
+\end{verbatim}
+
+Once you obtain the software you are ready to configure and compile it (see
+Section \ref{sec:CMakeforOTB} on page \pageref{sec:CMakeforOTB}). First,
+however, we recommend that you join the mailing list and read the following
+sections describing the organization of the software. 
+
+\subsection{Join the Mailing List}
+\label{sec:JoinMailList}
+
+\index{OTB!mailing list}
+\index{mailing list}
+
+It is strongly recommended that you join the users mailing list. This is one
+of the primary resources for guidance and help regarding the use of the 
+toolkit. You can subscribe to the users list online at
+
+\begin{center}
+\url{http://www.itk.org/HTML/MailingLists.htm}
+\end{center} 
+
+The insight-users mailing list is also the best mechanism for expressing your
+opinions about the toolkit and to let developers know about features that you
+find useful, desirable or even unnecessary. OTB developers are committed to
+creating a self-sustaining open-source OTB community. Feedback from users is
+fundamental to achieving this goal.
+
+\subsection{Directory Structure}
+\label{sec:DirectoryStructure}
+
+To begin your OTB odyssey, you will first need to know something about OTB's
+software organization and directory structure. Even if you are installing
+pre-compiled binaries, it is helpful to know enough to navigate through the
+code base to find examples, code, and documentation.
+
+OTB is organized into several different modules, or CVS checkouts. If you are
+using an official release or CD release, you will see three important modules:
+the \code{Insight}, \code{InsightDocuments} and \code{InsightApplications}
+modules. The source code, examples and applications are found in the
+\code{Insight} module; documentation, tutorials, and material related to the
+design and marketing of OTB are found in \code{InsightDocuments}; and fairly
+complex applications using OTB (and other systems such as VTK, Qt, and FLTK)
+are available from \code{InsightApplications}. Usually you will work with the
+\code{Insight} module unless you are a developer, are teaching a course, or
+are looking at the details of various design documents. The
+\code{InsightApplications} module should only be downloaded and
+compiled once
+the \code{Insight} module is functioning properly.
+
+The \code{Insight} module contains the following subdirectories:
+\begin{itemize}
+        \item \code{Insight/Auxiliary}---code that interfaces packages
+        to OTB.
+        \item \code{Insight/Code}---the heart of the software; the location
+        of the majority of the source code.
+        \item \code{Insight/Documentation}---a compact subset of documentation
+        to get users started with OTB.
+        \item \code{Insight/Examples}---a suite of simple, well-documented
+        examples used by this guide and to illustrate important
+        OTB concepts.
+        \item \code{Insight/Testing}---a large number of small programs used
+        to test OTB. These examples tend to be minimally documented but may
+        be useful to demonstrate various system concepts. These tests are 
+        used by DART to produce the OTB Quality Dashboard 
+        (see Section \ref{sec:DART} on 
+        page \pageref{sec:DART}.)
+        \item \code{Insight/Utilities}---supporting software for the OTB
+        source code. For example, DART and Doxygen support, as well as 
+        libraries such as \code{png} and \code{zlib}.
+        \item \code{Insight/Validation}---a series of validation case studies
+        including the source code used to produce the results.
+        \item \code{Insight/Wrapping}---support for the CABLE wrapping tool.
+        CABLE is used by OTB to build interfaces between the C++ library and
+        various interpreted languages (currently Tcl and Python are supported).
+\end{itemize}
+
+The source code directory structure---found in \code{Insight/Code}---is 
+important to understand since other directory structures (such as the
+\code{Testing} and \code{Wrapping} directories) shadow the structure of the
+\code{Insight/Code} directory.
+\begin{itemize}
+        \item \code{Insight/Code/Common}---core classes, macro definitions,
+        typedefs, and other software constructs central to OTB.
+        \item \code{Insight/Code/Numerics}---mathematical library and
+        supporting classes. (Note: OTB's mathematical library is based
+        on the VXL/VNL software package \url{http://vxl.sourceforge.net}.)
+        \item \code{Insight/Code/BasicFilters}---basic image processing
+        filters.
+        \item \code{Insight/Code/IO}---classes that support the reading
+        and writing of data.
+        \item \code{Insight/Code/Algorithms}---the location of most 
+        segmentation and registration algorithms.
+        \item \code{Insight/Code/SpatialObject}---classes that represent
+        and organize data using spatial relationships (e.g., the leg bone
+        is connected to the hip bone, etc.)
+        \item \code{Insight/Code/Patented}---any patented algorithms are
+        placed here. Using this code in commercial application requires
+        a patent license.
+        \item \code{Insight/Code/Local}---an empty directory used by developers
+        and users to experiment with new code.
+\end{itemize}
+
+The \code{InsightDocuments} module contains the following subdirectories:
+\begin{itemize}
+        \item \code{InsightDocuments/CourseWare}---material related to
+        teaching OTB.
+        \item \code{InsightDocuments/Developer}---historical documents covering
+        the design and creation of OTB including progress reports and 
+        design documents.
+        \item \code{InsightDocuments/Latex}---\LaTeX{} styles to produce this
+        work as well as other documents.
+        \item \code{InsightDocuments/Marketing}---marketing flyers and 
+        literature used to succinctly describe OTB.
+        \item \code{InsightDocuments/Papers}---papers related to the many
+        algorithms, data representations, and software tools used in OTB.
+        \item \code{InsightDocuments/SoftwareGuide}---\LaTeX{} files used to
+        create this guide. (Note that the code found in
+        \code{Insight/Examples} is used in conjunction with these \LaTeX{}
+        files.)
+        \item \code{InsightDocuments/Validation}---validation case studies
+        using OTB.
+        \item \code{InsightDocuments/Web}---the source HTML and other material
+        used to produce the Web pages found at \url{http://www.itk.org}.
+\end{itemize}
+
+Similar to the \code{Insight} module, access to the \code{InsightDocuments}
+module is also available via CVS using the following commands (under UNIX and
+Cygwin):
+\begin{verbatim}
+cvs -d :pserver:anonymous@www.itk.org:/cvsroot/Insight co InsightDocuments
+\end{verbatim}
+
+The \code{InsightApplications} module contains large, relatively complex
+examples of OTB usage. See the web pages at 
+\url{http://www.itk.org/HTML/Applications.htm} for a description. Some of 
+these applications require GUI toolkits such as Qt and FLTK or other packages
+such as VTK (\emph{The Visualization Toolkit}
+\url{http://www.vtk.org}). Do not attempt to compile and build this module
+until you have successfully built the core \code{Insight} module.
+
+Similar to the \code{Insight} and \code{InsightDocuments} module, access to 
+the \code{InsightApplications} module is also available via CVS using the 
+following commands (under UNIX and Cygwin):
+\begin{verbatim}
+cvs -d:pserver:anonymous@www.itk.org:/cvsroot/Insight \ 
+  co InsightApplications
+\end{verbatim}
+
+\subsection{Documentation}
+\label{sec:Documentation}
+
+Besides this text, there are other documentation resources that you should be
+aware of.
+\begin{description}
+        \item[Doxygen Documentation.] The Doxygen documentation is an
+        essential resource when working with OTB. These extensive Web pages
+        describe in detail every class and method in the system. The
+        documentation also contains inheritance and collaboration diagrams,
+        listing of event invocations, and data members. The documentation is
+        heavily hyper-linked to other classes and to the source code. The
+        Doxygen documentation is available on the companion CD, or on-line at
+        \url{http://www.itk.org}. Make sure that you have the right documentation
+        for your version of the source code.
+
+	\item[Header Files.] Each OTB class is implemented with a .h and
+        .cxx/.txx file (.txx file for templated classes). All methods
+        found in the .h header files are documented and provide a quick way
+        to find documentation for a particular method. (Indeed, Doxygen uses
+        the header documentation to produces its output.)
+\end{description}
+
+\subsection{Data}
+\label{sec:Data}
+
+The Insight Toolkit was designed to support the Visible Human Project 
+and its associated data. This data is available from the National Library of
+Medicine at \url{http://www.nlm.nih.gov/research/visible/visible_human.html}.
+
+Another source of data can be obtained from the OTB Web site at either
+of the following:
+\begin{quote}
+\url{http://www.itk.org/HTML/Data.htm} \\
+\url{ftp://public.kitware.com/pub/itk/Data/}.
+\end{quote}
+
+\section{The Insight Community and Support}
+\label{sec:AdditionalResources}
+
+OTB was created from its inception as a collaborative, community
+effort. Research, teaching, and commercial uses of the toolkit are
+expected. If you would like to participate in the community, there are a
+number of possibilities.
+
+\begin{itemize}
+       \item Users may actively report bugs, defects in the system API,
+       and/or submit feature requests. Currently the best way to do this is
+       through the OTB users mailing list.
+
+       \item Developers may contribute classes or improve existing
+       classes. If you are a developer, you may request permission to join
+       the OTB developers mailing list. Please do so by sending email to
+       will.schroeder ``at'' kitware.com. To become a developer you need to
+       demonstrate both a level of competence as well as
+       trustworthiness. You may wish to begin by submitting fixes to the OTB
+       users mailing list.
+
+       \item Research partnerships with members of the Insight Software
+       Consortium are encouraged. Both NIH and NLM will likely provide
+       limited funding over the next few years, and will encourage the use of
+       OTB in proposed work.
+
+       \item For those developing commercial applications with OTB,
+       support and consulting are available from Kitware at
+       \url{http://www.kitware.com}. Kitware also offers short OTB courses
+       either at a site of your choice or periodically at Kitware.
+
+       \item Educators may wish to use OTB in courses. Materials are being
+       developed for this purpose, e.g., a one-day, conference course and
+       semester-long graduate courses. Watch the OTB web pages or check in
+       the \code{InsightDocuments/CourseWare} directory for more information.
+\end{itemize}
+
+\section{A Brief History of OTB}
+\label{sec:History}
+
+\index{OTB!history}
+
+In 1999 the US National Library of Medicine of the National Institutes of
+Health awarded six three-year contracts to develop an open-source
+registration and segmentation toolkit, that eventually came to be known as
+the Insight Toolkit (OTB) and formed the basis of the Insight Software
+Consortium. OTB's NIH/NLM Project Manager was Dr. Terry Yoo, who coordinated the
+six prime contractors composing the Insight consortium. These consortium
+members included three commercial partners---GE Corporate R\&D, Kitware,
+Inc., and MathSoft (the company name is now Insightful)---and three academic
+partners---University of North Carolina (UNC), University of Tennessee (UT)
+(Ross Whitaker subsequently moved to University of Utah), and University of
+Pennsylvania (UPenn). The Principle Investigators for these partners were,
+respectively, Bill Lorensen at GE CRD, Will Schroeder at Kitware, Vikram
+Chalana at Insightful, Stephen Aylward with Luis Ibanez at UNC (Luis is now
+at Kitware), Ross Whitaker with Josh Cates at UT (both now at Utah), and
+Dimitri Metaxas at UPenn (now at Rutgers). In addition, several
+subcontractors rounded out the consortium including Peter Raitu at Brigham \&
+Women's Hospital, Celina Imielinska and Pat Molholt at Columbia University,
+Jim Gee at UPenn's Grasp Lab, and George Stetten at the University of
+Pittsburgh.
+
+In 2002 the first official public release of OTB was made available. In
+addition, the National Library of Medicine awarded thirteen contracts to
+several organizations to extend OTB's capabilities. NLM funding of 
+Insight Toolkit development is continuing through 2003, with additional
+application and maintenance support anticipated beyond 2003. If you are 
+interested in potential funding opportunities, we suggest that you contact
+Dr. Terry Yoo at the National Library of Medicine for more information.
 
 This guide is divided in three parts, each of which is further divided
 into chapters.

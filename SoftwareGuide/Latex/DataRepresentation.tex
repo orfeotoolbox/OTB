@@ -1,4 +1,271 @@
 \chapter{Data Representation}
+\label{sec:DataRepresentation}
+
+
+This chapter introduces the basic classes responsible
+for representing data in ITK. The most common classes are the
+\doxygen{Image}, the \doxygen{Mesh} and the \doxygen{PointSet}.
+
+\section{Image}
+\label{sec:ImageSection}
+
+The \doxygen{Image} class follows the spirit of 
+\href{http://www.boost.org/more/generic_programming.html}{Generic Programming}, 
+where types are separated from the algorithmic behavior of the class.  ITK supports images
+with any pixel type and any spatial dimension.
+
+\subsection{Creating an Image}\label{sec:CreatingAnImageSection}
+
+
+%\input{Image1.tex}
+
+In practice it is rare to allocate and initialize an image directly.
+Images are typically read from a source, such a file or data acquisition
+hardware. The following example illustrates how an image can be read from
+a file.
+
+
+
+
+\subsection{Reading an Image from a File}
+\label{sec:ReadingImageFromFile}
+
+%\input{Image2.tex}
+
+
+
+
+
+\subsection{Accessing Pixel Data}
+\label{sec:AccessingImagePixelData}
+
+%\input{Image3.tex}
+
+
+
+
+\subsection{Defining Origin and Spacing}
+\label{sec:DefiningImageOriginAndSpacing}
+
+%\input{Image4.tex}
+
+
+\subsection{RGB Images}
+
+The term RGB (Red, Green, Blue) stands for a color representation commonly used
+in digital imaging. RGB is a representation of the human physiological
+capability to analyze visual light using three spectral-selective
+sensors~\cite{Malacara2002,Wyszecki2000}. The human retina possess different
+types of light sensitive cells. Three of them, known as \emph{cones}, are
+sensitive to color~\cite{Gray2003} and their regions of sensitivity loosely
+match regions of the spectrum that will be perceived as red, green and blue
+respectively. The \emph{rods} on the other hand provide no color discrimination
+and favor high resolution and high sensitivity\footnote{The human eye is
+capable of perceiving a single isolated photon.}.  A fifth type of receptors,
+the \emph{ganglion cells}, also known as circadian\footnote{The term
+\emph{Circadian} refers to the cycle of day and night, that is, events that are
+repeated with 24 hours intervals.} receptors are sensitive to the lighting
+conditions that differentiate day from night.  These receptors evolved as a
+mechanism for synchronizing the physiology with the time of the day. Cellular
+controls for circadian rythms are present in every cell of an organism and are
+known to be exquisitively precise~\cite{Lodish2000}.
+
+The RGB space has been constructed as a representation of a physiological
+response to light by the three types of \emph{cones} in the human eye. RGB is
+not a Vector space. For example, negative numbers are not appropriate in a
+color space because they will be the equivalent of ``negative stimulation'' on
+the human eye.  In the context of colorimetry, negative color values are used
+as an artificial construct for color comparison in the sense that
+
+\begin{equation}
+\label{eqn:ColorSubtraction}
+         ColorA = ColorB - ColorC
+\end{equation}
+
+just as a way of saying that we can produce $ColorB$ by combining $ColorA$ and
+$ColorC$.  However, we must be aware that (at least in emitted light) it is not
+possible to \emph{substract light}. So when we mention
+Equation~\ref{eqn:ColorSubtraction} we actually mean
+
+\begin{equation}
+\label{eqn:ColorAddition}
+         ColorB = ColorA + ColorC
+\end{equation}
+
+On the other hand, when dealing with printed color and with paint, as opposed
+to emitted light like in computer screens, the physical behavior of color
+allows for subtraction. This is because strictly speaking the objects that we
+see as red are those that absorb all light frequencies except those in the red
+section of the spectrum~\cite{Wyszecki2000}.
+
+The concept of addition and subtraction of colors has to be carefully
+interpreted. In fact, RGB has a different definition regarding whether we are
+talking about the channels associated to the three color sensors of the human
+eye, or to the three phosphors found in most computer monitors or to the color
+inks that are used for printing reproduction.  Color spaces are usually non
+linear and do not even from a Group. For example, not all visible colors can be
+represented in RGB space~\cite{Wyszecki2000}.
+
+ITK introduces the \doxygen{RGBPixel} type as a support for representing the
+values of an RGB color space. As such, the RGBPixel class embodies a different
+concept from the one of an \doxygen{Vector} in space. For this reason, the
+RGBPixel lack many of the operators that may be naively expected from it. In
+particular, there are no defined operations for subtraction or addition.
+
+When you anticipate to perform the operation of ``Mean'' on a RGB type you are
+assuming that in the color space provides the action of finding a color in the
+middle of two colors, can be found by using a linear operation between their
+numerical representation. This is unfortunately not the case in  color spaces
+due to the fact that they are based on a human physiological
+response~\cite{Malacara2002}.
+
+If you decide to interpret RGB images as simply three independent channels then
+you should rather use the \doxygen{Vector} type as pixel type. In this way, you
+will have access to the set of operations that are defined in Vector spaces.
+The current implementation of the RGBPixel in ITK presumes that RGB color
+images are intended to be used in applications where a formal interpretation of
+color is desired, therefore only the operations that are valid in a color space
+are available in the RGBPixel class.
+
+The following example illustrates how RGB images can be represented in ITK.
+
+\label{sec:DefiningRGBImages}
+%\input{RGBImage.tex}
+
+
+\subsection{Vector Images}
+%\label{sec:DefiningVectorImages}
+
+%\input{VectorImage.tex}
+
+
+\subsection{Importing Image Data from a Buffer}
+\label{sec:ImportingImageDataFromABuffer}
+%\input{Image5.tex}
+
+
+
+\section{PointSet}
+\label{PointSetSection}
+
+\subsection{Creating a PointSet}
+\label{sec:CreatingAPointSet}
+
+%\input{PointSet1.tex}
+
+
+
+\subsection{Getting Access to Points}
+\label{sec:GettingAccessToPointsInThePointSet}
+
+%\input{PointSet2.tex}
+
+
+
+\subsection{Getting Access to Data in Points}
+\label{sec:GettingAccessToDataInThePointSet}
+
+%\input{PointSet3.tex}
+
+
+
+\subsection{RGB as Pixel Type}
+\label{sec:PointSetWithRGBAsPixelType}
+
+%\input{RGBPointSet.tex}
+
+
+
+
+\subsection{Vectors as Pixel Type}
+\label{sec:PointSetWithVectorsAsPixelType}
+
+%\input{PointSetWithVectors.tex}
+
+
+
+\subsection{Normals as Pixel Type}
+\label{sec:PointSetWithCovariantVectorsAsPixelType}
+
+%\input{PointSetWithCovariantVectors.tex}
+
+
+
+
+\section{Mesh}\label{MeshSection}
+
+\subsection{Creating a Mesh}
+\label{sec:CreatingAMesh}
+
+%\input{Mesh1.tex}
+
+
+\subsection{Inserting Cells}
+\label{sec:InsertingCellsInMesh}
+
+%\input{Mesh2.tex}
+
+
+\subsection{Managing Data in Cells}
+\label{sec:ManagingCellDataInMesh}
+
+%\input{Mesh3.tex}
+
+
+\subsection{Customizing the Mesh}
+\label{sec:CustomizingTheMesh}
+
+%\input{MeshTraits.tex}
+
+
+\subsection{Topology and the K-Complex}
+\label{sec:MeshKComplex}
+
+%\input{MeshKComplex.tex}
+
+
+\subsection{Representing a PolyLine}
+\label{sec:MeshPolyLine}
+
+%\input{MeshPolyLine.tex}
+
+
+\subsection{Simplifying Mesh Creation}
+\label{sec:AutomaticMesh}
+
+%\input{AutomaticMesh.tex}
+
+
+\subsection{Iterating Through Cells}
+\label{sec:MeshCellsIteration}
+
+%\input{MeshCellsIteration.tex}
+
+
+\subsection{Visiting Cells}
+\label{sec:MeshCellVisitor}
+
+%\input{MeshCellVisitor.tex}
+
+
+\subsection{More on Visiting Cells}
+\label{sec:MeshCellVisitorMultipleType}
+
+%\input{MeshCellVisitor2.tex}
+
+
+
+
+\section{Path}\label{PathSection}
+
+\subsection{Creating a PolyLineParametricPath}
+\label{sec:CreatingAPolyLineParametricPath}
+
+%\input{PolyLineParametricPath1.tex}
+
+\section{Containers}\label{ContainersSection}
+\label{sec:TreeContainer}
+%\input{TreeContainer.tex}
 
 
 
