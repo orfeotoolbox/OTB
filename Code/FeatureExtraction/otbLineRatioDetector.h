@@ -29,27 +29,28 @@ namespace otb
 /** \class LineRatioDetector
  * \brief Application of the filter of detection of linear features 
  *
- * This class implements the detector D1 of Tupin which 
- * calculate the ratio of the averages on 3 zones to detect 
- * two parallel lines.
+ * This class implements the detector D1 of Tupin used to detect 
+ * two parallel lines. This detector is derived from the coupling of two
+ * ratio edge detectors (Touzi detector) on both side of a region.
  *
- * The size of the zone is defined by the product of the width 
+ * The region is devided in three zones. 
+ * The size of one zone is defined by the product of the width 
  * of the linear feature by its length.
  *
- * For each vertical line, we calculate the intensity of linear feature 
- * R_{12}(\theta_{0}) between the zone 1 and 2 and R_{13}(\theta_{0}) between  
+ * For each vertical edge, we calculate the intensity of linear feature 
+ * R_{12}(\theta_{0}) between zone 1 and 2 and R_{13}(\theta_{0}) between  
  * zone 1 and 3 according to the principle of the filter of Touzi.
  *
- * The intensity of linear feature in the three other directions R(\theta_{i})
+ * The intensity of detection in the three other directions R(\theta_{i})
  * is obtained by rotation of the pixels of each zone around the 
- * pixel central of the region considered. The pixel location after
+ * pixel central of the region considered. By default, the pixel location after
  * rotation is determined by the Spline interpolator.
  * 
- * Finally, the intensity of the linear feature formed by the two parallel lines 
+ * Finally, the intensity of detection formed by the two parallel lines 
  * is determined by:
  *	\[R = min(R_{12};R_{13}) \]
  * 
- * The exit is an image of intensity of linear features.
+ * The exit is an image of intensity of detection.
  *
  * 
  */
