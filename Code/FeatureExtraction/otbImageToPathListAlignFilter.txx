@@ -225,7 +225,11 @@ ImageToPathListAlignFilter<TInputImage,TOutputPath>
 
   typename RealImageType::RegionType region;
   region.SetSize(InputImage->GetLargestPossibleRegion().GetSize());
-  region.SetIndex(InputImage->GetLargestPossibleRegion().GetIndex());
+// OTB-FA-00012-CS  
+  IndexOut[0] = 0;
+  IndexOut[1] = 0;
+//  region.SetIndex(InputImage->GetLargestPossibleRegion().GetIndex());
+  region.SetIndex(IndexOut);
   AngleImage->SetRegions( region );
   AngleImage->SetOrigin(InputImage->GetOrigin());
   AngleImage->SetSpacing(InputImage->GetSpacing());
@@ -325,7 +329,7 @@ ImageToPathListAlignFilter<TInputImage,TOutputPath>
 
 
   // Get the input and output pointers 
-//OTB-FA-00010-CS  
+// OTB-FA-00010-CS  
   const InputImageType  * InputImage   = this->GetInput();
   OutputPathListType *   OutputPath   = this->GetOutput();
   // Generate the image
