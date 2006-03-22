@@ -20,6 +20,12 @@ SET(IO_TESTS     ${CXX_TEST_PATH}/otbIOTests)
 
 
 # ---  FA 00005 ENVI (GDAL) image multi-canal ---
+ADD_TEST(FA-00005-io_EnviMultiBande_RW ${IO_TESTS} 
+         otbVectorImageFileReaderWriterTest
+         ${INPUTDATA}/GomaBestScale_w15_50.raw
+         ${TEMP}/FA-00005-io_EnviMultiBande_GomaBestScale_w15.hd
+         )
+
 ADD_TEST(FA-00005-io_EnviMultiBande ${COMMON_TESTS} 
    --compare-binary  ${BASELINE}/FA-00005-io_EnviMultiBande_GomaBestScale_w15_50_100_120_150_200.c1
                      ${TEMP}/FA-00005-io_EnviMultiBande_GomaBestScale_w15_50_100_120_150_200.c1
@@ -28,14 +34,6 @@ ADD_TEST(FA-00005-io_EnviMultiBande ${COMMON_TESTS}
          -double ${TEMP}/FA-00005-io_EnviMultiBande_GomaBestScale_w15_50_100_120_150_200.hd
          -startX 100 -startY 150 -sizeX 150 -sizeY 200
          -channels 1 2 3)
-
-ADD_TEST(FA-00005-io_EnviMultiBande_RW ${IO_TESTS} 
-         otbVectorImageFileReaderWriterTest
-         ${INPUTDATA}/GomaBestScale_w15_50.raw
-         ${TEMP}/FA-00005-io_EnviMultiBande_GomaBestScale_w15.hd
-         )
-
-
 
 # ---  FA 00006 ENVI (GDAL) Conversion Type de pixel ---
 ADD_TEST(FA-00006-io_Poupees_OCT_UChar2Double ${COMMON_TESTS} 
