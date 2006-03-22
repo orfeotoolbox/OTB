@@ -274,12 +274,12 @@ void LineRatioDetector< TInputImage, TOutputImage, InterpolatorType>
         M3 = Sum[dir][2] * InvNbPixelZone;
      	
         // Calculation of the intensity of detection
-        if (( M1 != 0 ) && (M2 != 0)) 
+        if (( M1 != 0. ) && (M2 != 0. )) 
           R12_theta[dir] = static_cast<double>( 1 - MIN( (M1/M2), (M2/M1) ) );
         else
 	  R12_theta[dir] = 0.;
 	  
-	if (( M1 != 0 ) && (M3 != 0)) 
+	if (( M1 != 0. ) && (M3 != 0. )) 
           R13_theta[dir] = static_cast<double>( 1 - MIN( (M1/M3), (M3/M1) ) );
         else
 	  R13_theta[dir] = 0.;
