@@ -160,8 +160,8 @@ void TouziEdgeDetector< TInputImage, TOutputImage>
   // ---------------
   // Number of direction
   const int NB_DIR = 4;
-  // Number of half window of the filter	  
-  const int NB_WIN = 2;  
+  // Number of region of the filter	  
+  const int NB_REGION = 2;  
   // Definition of the 4 directions
   double Theta[NB_DIR];
   
@@ -171,11 +171,11 @@ void TouziEdgeDetector< TInputImage, TOutputImage>
   Theta[3] = 3*M_PI / 4. ;
   
 
-  // contains for the 4 directions the sum of the pixels belonging to each half window
-  double Sum[NB_DIR][NB_WIN];
-  // Mean of half window 1
+  // contains for the 4 directions the sum of the pixels belonging to each region
+  double Sum[NB_DIR][NB_REGION];
+  // Mean of region 1
   double M1;
-  // Mean of half window 2
+  // Mean of region 2
   double M2;
   // Result of the filter for each direction
   double R_theta[NB_DIR];
@@ -222,7 +222,7 @@ void TouziEdgeDetector< TInputImage, TOutputImage>
       // Initialisations
       for (int dir=0; dir<NB_DIR; dir++)
         {
-        for (int m=0; m<NB_WIN; m++) 
+        for (int m=0; m<NB_REGION; m++) 
           Sum[dir][m] = 0.;
         }
       
@@ -231,7 +231,7 @@ void TouziEdgeDetector< TInputImage, TOutputImage>
       Sum_R_theta = 0.;
       
       
-      // Loop on the window of the filter  
+      // Loop on pixels of the filter  
       for (i = 0; i < neighborhoodSize; ++i)
         {
 
@@ -239,7 +239,7 @@ void TouziEdgeDetector< TInputImage, TOutputImage>
         x = bitIndex[0];
         y = bitIndex[1];
       
-        // We determine for each direction with which half window the pixel belongs. 
+        // We determine for each direction with which region the pixel belongs. 
          
         // Vertical direction 
         if ( x < xc )
@@ -265,13 +265,13 @@ void TouziEdgeDetector< TInputImage, TOutputImage>
         else if ( (y-yc) > (x-xc) )
           Sum[3][1] += static_cast<double>(bit.GetPixel(i));
           
-        } // end of the loop on the pixels of the window           
+        } // end of the loop on pixels of the filter           
         
 
       // Loop on the 4 directions
       for ( int dir=0; dir<NB_DIR; dir++ )
         {
-        // Calculation of the averages of the 2 half windows	
+        // Calculation of the mean of the 2 regions	
         M1 = Sum[dir][0] / static_cast<double>(m_Radius[0]*(2*m_Radius[0]+1));
         M2 = Sum[dir][1] / static_cast<double>(m_Radius[0]*(2*m_Radius[0]+1));
      	

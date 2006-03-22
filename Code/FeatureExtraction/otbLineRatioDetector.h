@@ -29,26 +29,32 @@ namespace otb
 /** \class LineRatioDetector
  * \brief Application of the filter of detection of linear features 
  *
- * This class implements the detector D1 of Tupin used to detect 
+ * This class implements the Tupin's detector D1 used to detect 
  * two parallel lines. This detector is derived from the coupling of two
  * ratio edge detectors (Touzi detector) on both side of a region.
  *
- * The region is devided in three zones. 
+ * The region is devided in three zones to delimite two parallel lines. 
  * The size of one zone is defined by the product of the width 
  * of the linear feature by its length.
  *
- * For each vertical edge, we calculate the intensity of linear feature 
- * R_{12}(\theta_{0}) between zone 1 and 2 and R_{13}(\theta_{0}) between  
- * zone 1 and 3 according to the principle of the Touzi's filter.
+ * For each vertical line, we calculate the intensity of detection 
+ * R_{12}(\theta_{0}) between zones 1 and 2 and R_{13}(\theta_{0}) between  
+ * zones 1 and 3 according to the principle of the Touzi's filter.
+ *
+ * The response of the edge detector between two zones i and j is:
+ *	\[R_{ij}=1-\min (\fract{\mu_{i}}{\mu_{j}};\fract{\mu_{j}}{\mu_{i}}) \]
  *
  * The intensity of detection in the three other directions R(\theta_{i})
- * is obtained by rotation of the pixels of each zone around the 
+ * is determined by rotation of the pixels of each zone around the 
  * pixel central of the region considered. By default, the pixel location after
  * rotation is determined by the Spline interpolator.
  * 
  * Finally, the intensity of detection formed by the two parallel lines 
- * is determined by:
- *	\[R = min(R_{12};R_{13}) \]
+ * is determined by the minimum response of a ration edge detector on both sides
+ * of the linear structure:
+ *	\[R = \min (R_{12};R_{13}) \]
+ * where R_{12} and R_{13} are the maximum response of the ratio edge 
+ * detector of R(\theta_{i}).
  * 
  * The exit is an image of intensity of detection.
  *

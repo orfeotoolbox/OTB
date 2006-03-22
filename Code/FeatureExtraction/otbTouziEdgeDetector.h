@@ -25,18 +25,25 @@ namespace otb
 /** \class TouziEdgeDetector
  * \brief Application of a filter of detection of contours.
  *
- * We define a square window of size 2n+1.
- * Then, we calculate the mean of each half window located on both sides of the contour 
- * in a given direction. The intensity of contour is then calculated in the four 
- * directions (\theta_{i}) vertical , diagonal 1, horizontal  
- * and diagonal 2 :
- *	\[R(\theta_{i}) = 1 - min(\fract{\mu_{1}/\mu_{2}};\fract{\mu_{2}/\mu_{1}}) \]
+ * This class implements the Touzi's ratio edge detector used to detect 
+ * contours. 
+ * 
+ * We define a square region of size 2n+1 that we devided in two regions.
  *
- * The exit is an image of intensity of the detection of contour:
- *	\[R = max ( (\theta_{i}), (\theta_{i}), (\theta_{i}), (\theta_{i})) \[
+ * The response of the edge detector between two regions 1 and 2 in
+ * one direction \theta_{i} is:
+ *	\[R(\theta_{i}) = 1 - \min (\fract{\mu_{1}}{\mu_{2}};\fract{\mu_{2}}{\mu_{1}}) \]
+ * where \mu_{1} and  \mu_{2} are the mean of regions 1 and 2.
+ *
+ * The intensity of contour is calculated in four directions 
+ * vertical , diagonal 1, horizontal and diagonal 2.   
+ * 
+ * The exit is an image of intensity of the detection of contour R, the
+ * maximum response of the ratio edge detector of R(\theta_{i}:
+ *	\[R = \max ( R(\theta_{i}) ) \]
  *
  * An image of the direction of contours can also be determined by this filter:
- * 	\[D = \fract{\sum_{i=1}^{4} s_{i}\theta_{i}R(\theta_{i})}{\sum_{i=1}^{4} R(\theta_{i}}  \[
+ * 	\[D = \fract{\sum_{i=1}^{4} s_{i}\theta_{i}R(\theta_{i})}{\sum_{i=1}^{4} R(\theta_{i}}  \]
  * where  \[if \mu_{1}>\mu_{2} s_{i}=+1 \]
  * \[else if \mu_{1}<\mu_{2} s_{i}=-1 \]
  *  

@@ -152,7 +152,7 @@ void LineRatioDetector< TInputImage, TOutputImage, InterpolatorType>
   // Number of the zone 
   unsigned int zone;
   
-  // Pixel numbers in each zone
+  // Pixel number in each zone
   const int NbPixelZone = (2*m_WidthLine+1)*(2*m_LengthLine+1);
    
   // Contains for the 4 directions the sum of the pixels belonging to each zone
@@ -210,16 +210,16 @@ void LineRatioDetector< TInputImage, TOutputImage, InterpolatorType>
         }
         
      
-      // Location of the central pixel of the region
+      // Location of the pixel central of the region
       bitIndex = bit.GetIndex();
       
       Xc = bitIndex[0];
       Yc = bitIndex[1];
       
-      // Location of the central pixel between zone 1 and zone 2
+      // Location of the pixel central between zone 1 and zone 2
       Xc12 = Xc - m_WidthLine - 1;
       
-      // Location of the central pixel between zone 1 and zone 3
+      // Location of the pixel central between zone 1 and zone 3
       Xc13 = Xc + m_WidthLine + 1;
           
       // Loop on the region 
@@ -268,12 +268,12 @@ void LineRatioDetector< TInputImage, TOutputImage, InterpolatorType>
       for ( int dir=0; dir<NB_DIR; dir++ )
         {
         		
-        // Calculation of the averages of the 3 zones	
+        // Calculation of the mean for the 3 zones	
         M1 = Sum[dir][0] / static_cast<double>(NbPixelZone);
         M2 = Sum[dir][1] / static_cast<double>(NbPixelZone);
         M3 = Sum[dir][2] / static_cast<double>(NbPixelZone);
      	
-        // Calculation of the intensity of the linear feature
+        // Calculation of the intensity of detection
         if (( M1 != 0 ) && (M2 != 0)) 
           R12_theta[dir] = static_cast<double>( 1 - MIN( (M1/M2), (M2/M1) ) );
         else
@@ -284,13 +284,13 @@ void LineRatioDetector< TInputImage, TOutputImage, InterpolatorType>
         else
 	  R13_theta[dir] = 0.;
 	  
-	// Determination of the maximum intensity of the linear feature
+	// Determination of the maximum intensity of detection
 	R12 = static_cast<double>( MAX( R12, R12_theta[dir] ) );
         R13 = static_cast<double>( MAX( R13, R13_theta[dir] ) );  
       		
         } // end of the loop on the directions
       
-      // Intensity of the linear feature
+      // Intensity of detection
       R = MIN ( R12, R13 );	
 
       // Assignment of this value to the output pixel
