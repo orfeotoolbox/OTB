@@ -137,12 +137,12 @@ int main( int argc, char * argv[] )
   //  
   //  The method \code{SetRadius()} defines the size of the window to
   //  be used for the computation of the local statistics. The method
-  //  \code{SetNbVues()} sets the number of looks of the input
+  //  \code{SetNbLooks()} sets the number of looks of the input
   //  image.
   //
   //  \index{otb::LeeImageFilter!SetRadius()}
-  //  \index{otb::LeeImageFilter!NbVues()}
-  //  \index{SetNbVues()!otb::LeeImageFilter}  
+  //  \index{otb::LeeImageFilter!NbLooks()}
+  //  \index{SetNbLooks()!otb::LeeImageFilter}  
   //
   //  Software Guide : EndLatex 
 
@@ -152,7 +152,7 @@ int main( int argc, char * argv[] )
   Radius[1]= atoi(argv[3]);
 
   filter->SetRadius( Radius );
-  filter->SetNbVues( atoi(argv[4]) );
+  filter->SetNbLooks( atoi(argv[4]) );
   // Software Guide : EndCodeSnippet
 
 
