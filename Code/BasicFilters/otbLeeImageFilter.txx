@@ -120,7 +120,8 @@ void LeeImageFilter< TInputImage, TOutputImage>::ThreadedGenerateData(
   
   
 //  dPixel = this->getNbVues();
-  dPixel = m_NbVues;
+// OTB-FA-00018-CS
+  dPixel = m_NbLooks;
   //Calcul du rapport
   Cv2 = 1./(sqrt(dPixel));
   Cv2 = Cv2*Cv2;

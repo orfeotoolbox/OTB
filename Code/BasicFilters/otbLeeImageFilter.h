@@ -4,7 +4,7 @@
   Auteurs   :   CS - P.Imbo
   Language  :   C++
   Date      :   23 janvier 2006
-  Role      :  Filtre de dÃ©bruitage de LEE sur une image 
+  Role      :  Filtre de débruitage de LEE sur une image 
   $Id$ 
 
 =========================================================================*/
@@ -19,7 +19,7 @@ namespace otb
 {
 
 /** \class LeeImageFilter
- * \brief Applique un filtre de dÃ©bruitage sur une image.
+ * \brief Applique un filtre de débruitage sur une image.
  *
  * Ce filtre correspond au filtre Anti-Speckle de LEE :
  *
@@ -34,7 +34,7 @@ class LeeImageFilter :  public itk::ImageToImageFilter< TInputImage, TOutputImag
 {
 public:
   /** 	Extrait les dimensions aussi bien des images 
-  	d'entrÃ©e (Input) que de sortie (Output). */
+  	d'entrée (Input) que de sortie (Output). */
   itkStaticConstMacro(		InputImageDimension,
   				unsigned int,
                       		TInputImage::ImageDimension);
@@ -42,9 +42,9 @@ public:
   				unsigned int,
                       		TOutputImage::ImageDimension);
 
-  /** "typedef" pour simplifier la dÃ©finition et la dÃ©claration de variables. */
+  /** "typedef" pour simplifier la définition et la déclaration de variables. */
   typedef TInputImage InputImageType;
-  /** "typedef" pour simplifier la dÃ©finition et la dÃ©claration de variables. */
+  /** "typedef" pour simplifier la définition et la déclaration de variables. */
   typedef TOutputImage OutputImageType;
 
   /** "typedef" pour les classes standards. */
@@ -59,30 +59,30 @@ public:
   /** Retourne le nom de la classe. */
   itkTypeMacro(LeeImageFilter, ImageToImageFilter);
   
-  /** DÃ©finition des images supportÃ©es. */
+  /** Définition des images supportées. */
   typedef typename InputImageType::PixelType InputPixelType;
   typedef typename OutputImageType::PixelType OutputPixelType;
-  /** "typedef" dÃ©finissant un rÃ©el dans cette classe. */
+  /** "typedef" définissant un réel dans cette classe. */
   typedef typename itk::NumericTraits<InputPixelType>::RealType InputRealType;
   
   typedef typename InputImageType::RegionType InputImageRegionType;
   typedef typename OutputImageType::RegionType OutputImageRegionType;
 
-  /** "typedef" dÃ©finissant la taille d'une image. */
+  /** "typedef" définissant la taille d'une image. */
   typedef typename InputImageType::SizeType SizeType;
 
-  /** Positionne le rayon dÃ©finissant le voisinage utilisÃ© pour le calcul du filtre. */
+  /** Positionne le rayon définissant le voisinage utilisé pour le calcul du filtre. */
   itkSetMacro(Radius, SizeType);
 
-  /** RÃ©cupÃ¨re le rayon dÃ©finissant le voisinage utilisÃ© pour le calcul du filtre. */
+  /** Récupère le rayon définissant le voisinage utilisé pour le calcul du filtre. */
   itkGetConstReferenceMacro(Radius, SizeType);
   
-  /** Positionne le nombre de vues utilisÃ© pour le calcul du filtre. */
-  itkSetMacro(NbVues, double);
-  /** RÃ©cupÃ¨re le nombre de vues (rÃ©fÃ©rencÃ© constant) utilisÃ© pour le calcul du filtre. */
-  itkGetConstReferenceMacro(NbVues, double);
+  /** Positionne le nombre de vues utilisé pour le calcul du filtre. */
+  itkSetMacro(NbLooks, double);
+  /** Récupère le nombre de vues (référencé constant) utilisé pour le calcul du filtre. */
+  itkGetConstReferenceMacro(NbLooks, double);
 
-  /** LeeImageFilter a besoin d'une zone de traitement plus large en entrÃ©e qu'en sortie 
+  /** LeeImageFilter a besoin d'une zone de traitement plus large en entrée qu'en sortie 
    * pemettant une utilisation needs a larger input requested region than
    * the output requested region.  As such, LeeImageFilter needs
    * to provide an implementation for GenerateInputRequestedRegion()
@@ -96,11 +96,11 @@ protected:
   virtual ~LeeImageFilter() {};
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
-  /** LeeImageFilter peut etre implÃ©mentÃ©e pour un traitement de filtre multithreaded.
-   * Ainsi, cette implÃ©mentation fournit la mÃ©thode ThreadedGenerateData()
-   * qui est appelÃ©e pour chaque thread du process. Les donnÃ©es image sont allouÃ©es automatiquement 
-   * par la classe "mÃ¨re" en appelant la mÃ©thode ThreadedGenerateData(). ThreadedGenerateData peut seulement 
-   * Ã©crire la portion de l'image spÃ©cifiÃ©e par le paramÃ¨tre "outputRegionForThread"
+  /** LeeImageFilter peut etre implémentée pour un traitement de filtre multithreaded.
+   * Ainsi, cette implémentation fournit la méthode ThreadedGenerateData()
+   * qui est appelée pour chaque thread du process. Les données image sont allouées automatiquement 
+   * par la classe "mère" en appelant la méthode ThreadedGenerateData(). ThreadedGenerateData peut seulement 
+   * écrire la portion de l'image spécifiée par le paramètre "outputRegionForThread"
    *
    *	Filtre de LEE : 
    *	R = E[I] + b(I-E[I]) avec 	b  = CÂ²r / ( CÂ²r + CÂ²v )
@@ -116,10 +116,11 @@ private:
   LeeImageFilter(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
 
-  /** DÃ©claration du rayon */
+  /** Déclaration du rayon */
   SizeType m_Radius;
-  /** DÃ©claration du nombre de vues du filtre */
-  double m_NbVues;
+  /** Déclaration du nombre de vues du filtre */
+// OTB-FA-00018-CS
+  double m_NbLooks;
 };
 } // end namespace otb
 
