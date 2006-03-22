@@ -16,9 +16,9 @@ namespace otb
 /**
  *
  */
-template<class TInputPixelType, class TOutputPixelType, unsigned int VImageDimension>
-MultiChannelExtractROI<TInputPixelType,TOutputPixelType,VImageDimension>
-::MultiChannelExtractROI() :    ExtractROIBase< itk::VectorImage<TInputPixelType,VImageDimension> , itk::VectorImage<TOutputPixelType,VImageDimension> >(),
+template<class TInputPixelType, class TOutputPixelType>
+MultiChannelExtractROI<TInputPixelType,TOutputPixelType>
+::MultiChannelExtractROI() :    ExtractROIBase< itk::VectorImage<TInputPixelType,2> , itk::VectorImage<TOutputPixelType,2> >(),
                                 m_FirstChannel(0),
                                 m_LastChannel(0),
                                 m_ChannelsWorksBool(false)
@@ -30,9 +30,9 @@ MultiChannelExtractROI<TInputPixelType,TOutputPixelType,VImageDimension>
 /**
  *
  */
-template<class TInputPixelType, class TOutputPixelType, unsigned int VImageDimension>
+template<class TInputPixelType, class TOutputPixelType>
 void
-MultiChannelExtractROI<TInputPixelType,TOutputPixelType,VImageDimension>
+MultiChannelExtractROI<TInputPixelType,TOutputPixelType>
 ::SetChannel(unsigned int channel)
 {
         m_Channels.push_back( channel );
@@ -40,9 +40,9 @@ MultiChannelExtractROI<TInputPixelType,TOutputPixelType,VImageDimension>
 /**
  *
  */
-template<class TInputPixelType, class TOutputPixelType, unsigned int VImageDimension>
+template<class TInputPixelType, class TOutputPixelType>
 void
-MultiChannelExtractROI<TInputPixelType,TOutputPixelType,VImageDimension>
+MultiChannelExtractROI<TInputPixelType,TOutputPixelType>
 ::ClearChannels(void)
 {
         m_FirstChannel = 0;
@@ -56,9 +56,9 @@ MultiChannelExtractROI<TInputPixelType,TOutputPixelType,VImageDimension>
 /**
  *
  */
-template<class TInputPixelType, class TOutputPixelType, unsigned int VImageDimension>
+template<class TInputPixelType, class TOutputPixelType>
 void 
-MultiChannelExtractROI<TInputPixelType,TOutputPixelType,VImageDimension>
+MultiChannelExtractROI<TInputPixelType,TOutputPixelType>
 ::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   Superclass::PrintSelf(os,indent);
@@ -74,9 +74,9 @@ MultiChannelExtractROI<TInputPixelType,TOutputPixelType,VImageDimension>
  *
  * \sa ProcessObject::GenerateOutputInformaton() 
  */
-template<class TInputPixelType, class TOutputPixelType, unsigned int VImageDimension>
+template<class TInputPixelType, class TOutputPixelType>
 void 
-MultiChannelExtractROI<TInputPixelType,TOutputPixelType,VImageDimension>
+MultiChannelExtractROI<TInputPixelType,TOutputPixelType>
 ::GenerateOutputInformation()
 {
         // Analyse des canuax a traiter
@@ -138,9 +138,9 @@ MultiChannelExtractROI<TInputPixelType,TOutputPixelType,VImageDimension>
 }
 
 
-template<class TInputPixelType, class TOutputPixelType, unsigned int VImageDimension>
+template<class TInputPixelType, class TOutputPixelType>
 void 
-MultiChannelExtractROI<TInputPixelType,TOutputPixelType,VImageDimension>
+MultiChannelExtractROI<TInputPixelType,TOutputPixelType>
 ::ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread,
                        int threadId)
 {

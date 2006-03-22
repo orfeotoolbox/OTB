@@ -31,16 +31,13 @@ namespace otb
  *
  */
 // OTB-FA-00008-CS
-template <class TOutputImage,
-          class ConvertPixelTraits = 
-//          itk::DefaultConvertPixelTraits< ITK_TYPENAME TOutputImage::PixelType> >
-          itk::DefaultConvertPixelTraits< ITK_TYPENAME TOutputImage::IOPixelType> >
-class ITK_EXPORT ImageFileReader : public itk::ImageFileReader<TOutputImage, ConvertPixelTraits >
+template <class TOutputImage>
+class ITK_EXPORT ImageFileReader : public itk::ImageFileReader<TOutputImage>
 {
 public:
   /** Standard class typedefs. */
   typedef ImageFileReader         Self;
-  typedef itk::ImageFileReader<TOutputImage,ConvertPixelTraits>  Superclass;
+  typedef itk::ImageFileReader<TOutputImage>  Superclass;
   typedef itk::SmartPointer<Self>  Pointer;
   
   /** Method for creation through the object factory. */

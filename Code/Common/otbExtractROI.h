@@ -27,14 +27,14 @@ namespace otb
  * sont de type "itk::Image".
  *
  */
-template <class TInputPixel, class TOutputPixel,unsigned int VImageDimension=2>
+template <class TInputPixel, class TOutputPixel>
 class ITK_EXPORT ExtractROI:
-    public ExtractROIBase<itk::Image<TInputPixel,VImageDimension> , itk::Image<TOutputPixel,VImageDimension> >
+    public ExtractROIBase<itk::Image<TInputPixel,2> , itk::Image<TOutputPixel,2> >
 {
 public:
   /** Standard class typedefs. */
   typedef ExtractROI         Self;
-  typedef ExtractROIBase<itk::Image<TInputPixel,VImageDimension> , itk::Image<TOutputPixel,VImageDimension> >  Superclass;
+  typedef ExtractROIBase<itk::Image<TInputPixel,2> , itk::Image<TOutputPixel,2> >  Superclass;
   typedef itk::SmartPointer<Self>  Pointer;
   typedef itk::SmartPointer<const Self>  ConstPointer;
 
@@ -45,8 +45,8 @@ public:
   itkTypeMacro(ExtractROI,ExtractROIBase);
 
   /** Image type information. */
-  typedef itk::Image<TInputPixel,VImageDimension>  InputImageType;
-  typedef itk::Image<TOutputPixel,VImageDimension> OutputImageType;
+  typedef itk::Image<TInputPixel,2>  InputImageType;
+  typedef itk::Image<TOutputPixel,2> OutputImageType;
 
   /** Typedef to describe the output and input image region types. */
   typedef typename OutputImageType::RegionType OutputImageRegionType;

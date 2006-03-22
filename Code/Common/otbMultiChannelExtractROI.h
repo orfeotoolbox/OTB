@@ -32,14 +32,14 @@ namespace otb
  * sont de type "itk::VectorImage".
  *
  */
-template <class TInputPixelType, class TOutputPixelType, unsigned int VImageDimension=2>
+template <class TInputPixelType, class TOutputPixelType>
 class ITK_EXPORT MultiChannelExtractROI:
-    public ExtractROIBase< itk::VectorImage<TInputPixelType,VImageDimension> , itk::VectorImage<TOutputPixelType,VImageDimension> >
+    public ExtractROIBase< itk::VectorImage<TInputPixelType,2> , itk::VectorImage<TOutputPixelType,2> >
 {
 public:
   /** Standard class typedefs. */
   typedef MultiChannelExtractROI                Self;
-  typedef ExtractROIBase< itk::VectorImage<TInputPixelType,VImageDimension> , itk::VectorImage<TOutputPixelType,VImageDimension> > Superclass;
+  typedef ExtractROIBase< itk::VectorImage<TInputPixelType,2> , itk::VectorImage<TOutputPixelType,2> > Superclass;
   typedef itk::SmartPointer<Self>               Pointer;
   typedef itk::SmartPointer<const Self>         ConstPointer;
 
@@ -50,8 +50,8 @@ public:
   itkTypeMacro(MultiChannelExtractROI, ExtractROIBase);
 
   /** Image type information. */
-  typedef itk::VectorImage<TInputPixelType,VImageDimension>      InputImageType;
-  typedef itk::VectorImage<TOutputPixelType,VImageDimension>     OutputImageType;
+  typedef itk::VectorImage<TInputPixelType,2>      InputImageType;
+  typedef itk::VectorImage<TOutputPixelType,2>     OutputImageType;
 
   /** Typedef to describe the output and input image region types. */
   typedef typename OutputImageType::RegionType OutputImageRegionType;

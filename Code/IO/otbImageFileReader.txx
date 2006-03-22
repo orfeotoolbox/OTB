@@ -16,21 +16,21 @@
 namespace otb
 {
 
-template <class TOutputImage, class ConvertPixelTraits>
-ImageFileReader<TOutputImage, ConvertPixelTraits>
-::ImageFileReader() : itk::ImageFileReader<TOutputImage, ConvertPixelTraits>()
+template <class TOutputImage>
+ImageFileReader<TOutputImage>
+::ImageFileReader() : itk::ImageFileReader<TOutputImage>()
 {
 }
 
 
-template <class TOutputImage, class ConvertPixelTraits>
-ImageFileReader<TOutputImage, ConvertPixelTraits>
+template <class TOutputImage>
+ImageFileReader<TOutputImage>
 ::~ImageFileReader()
 {
 }
 
-template <class TOutputImage, class ConvertPixelTraits>
-void ImageFileReader<TOutputImage, ConvertPixelTraits>
+template <class TOutputImage>
+void ImageFileReader<TOutputImage>
 ::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   Superclass::PrintSelf(os, indent);
@@ -50,9 +50,9 @@ void ImageFileReader<TOutputImage, ConvertPixelTraits>
 }
 
 
-template <class TOutputImage, class ConvertPixelTraits>
+template <class TOutputImage>
 void 
-ImageFileReader<TOutputImage, ConvertPixelTraits>
+ImageFileReader<TOutputImage>
 ::GenerateOutputInformation(void)
 {
 
@@ -105,7 +105,8 @@ ImageFileReader<TOutputImage, ConvertPixelTraits>
   this->m_ImageIO->SetFileName(this->m_FileName.c_str());
   this->m_ImageIO->ReadImageInformation();
   // Initialisation du nombre de Composante par pixel
-  output->SetNumberOfComponentsPerPixel(this->m_ImageIO->GetNumberOfComponents()); 
+// THOMAS ceci n'est pas dans ITK !!
+//  output->SetNumberOfComponentsPerPixel(this->m_ImageIO->GetNumberOfComponents()); 
   
   SizeType dimSize;
   double spacing[ TOutputImage::ImageDimension ];
@@ -173,10 +174,19 @@ ImageFileReader<TOutputImage, ConvertPixelTraits>
   ImageRegionType region;
   region.SetSize(dimSize);
   region.SetIndex(start);
+
+// THOMAS : ajout 
+  // If a VectorImage, this requires us to set the 
+  // VectorLength before allocate
+  if( strcmp( output->GetNameOfClass(), "VectorImage" ) == 0 ) 
+    {
+    typedef typename TOutputImage::AccessorFunctorType AccessorFunctorType;
+    AccessorFunctorType::SetVectorLength( output, this->m_ImageIO->GetNumberOfComponents() );
+    }
  
   output->SetLargestPossibleRegion(region);
-}
 
+}
 
 } //namespace otb
 

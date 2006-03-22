@@ -12,8 +12,8 @@ namespace otb
 /**
  *
  */
-template <class TInputPixel, class TOutputPixel,unsigned int VImageDimension>
-ExtractROI<TInputPixel, TOutputPixel, VImageDimension>
+template <class TInputPixel, class TOutputPixel>
+ExtractROI<TInputPixel, TOutputPixel>
 ::ExtractROI() //: ExtractROIBase< itk::Image<TInputPixel,VImageDimension> , itk::Image<TOutputPixel,VImageDimension> >()
 {
 }
@@ -21,9 +21,9 @@ ExtractROI<TInputPixel, TOutputPixel, VImageDimension>
 /**
  *
  */
-template <class TInputPixel, class TOutputPixel,unsigned int VImageDimension>
+template <class TInputPixel, class TOutputPixel>
 void 
-ExtractROI<TInputPixel, TOutputPixel, VImageDimension>
+ExtractROI<TInputPixel, TOutputPixel>
 ::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   Superclass::PrintSelf(os,indent);
@@ -39,18 +39,18 @@ ExtractROI<TInputPixel, TOutputPixel, VImageDimension>
  *
  * \sa ProcessObject::GenerateOutputInformaton() 
  */
-template <class TInputPixel, class TOutputPixel,unsigned int VImageDimension>
+template <class TInputPixel, class TOutputPixel>
 void 
-ExtractROI<TInputPixel, TOutputPixel, VImageDimension>
+ExtractROI<TInputPixel, TOutputPixel>
 ::GenerateOutputInformation()
 {
         // Appel à la methode de la classe de base
         Superclass::GenerateOutputInformation();
 }
 
-template <class TInputPixel, class TOutputPixel,unsigned int VImageDimension>
+template <class TInputPixel, class TOutputPixel>
 void 
-ExtractROI<TInputPixel, TOutputPixel, VImageDimension>
+ExtractROI<TInputPixel, TOutputPixel>
 ::ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread,
                        int threadId)
 {

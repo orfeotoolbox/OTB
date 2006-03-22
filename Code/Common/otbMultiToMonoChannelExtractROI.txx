@@ -9,9 +9,9 @@ namespace otb
 /**
  *
  */
-template<class TInputPixelType, class TOutputPixelType, unsigned int VImageDimension>
-MultiToMonoChannelExtractROI<TInputPixelType,TOutputPixelType,VImageDimension>
-::MultiToMonoChannelExtractROI() :    ExtractROIBase< itk::VectorImage<TInputPixelType,VImageDimension> , itk::Image<TOutputPixelType,VImageDimension> >(),
+template<class TInputPixelType, class TOutputPixelType>
+MultiToMonoChannelExtractROI<TInputPixelType,TOutputPixelType>
+::MultiToMonoChannelExtractROI() :    ExtractROIBase< itk::VectorImage<TInputPixelType,2> , itk::Image<TOutputPixelType,2> >(),
                                 m_Channel(1)
 {
 
@@ -20,9 +20,9 @@ MultiToMonoChannelExtractROI<TInputPixelType,TOutputPixelType,VImageDimension>
 /**
  *
  */
-template<class TInputPixelType, class TOutputPixelType, unsigned int VImageDimension>
+template<class TInputPixelType, class TOutputPixelType>
 void 
-MultiToMonoChannelExtractROI<TInputPixelType,TOutputPixelType,VImageDimension>
+MultiToMonoChannelExtractROI<TInputPixelType,TOutputPixelType>
 ::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   Superclass::PrintSelf(os,indent);
@@ -38,9 +38,9 @@ MultiToMonoChannelExtractROI<TInputPixelType,TOutputPixelType,VImageDimension>
  *
  * \sa ProcessObject::GenerateOutputInformaton() 
  */
-template<class TInputPixelType, class TOutputPixelType, unsigned int VImageDimension>
+template<class TInputPixelType, class TOutputPixelType>
 void 
-MultiToMonoChannelExtractROI<TInputPixelType,TOutputPixelType,VImageDimension>
+MultiToMonoChannelExtractROI<TInputPixelType,TOutputPixelType>
 ::GenerateOutputInformation()
 {
         typename Superclass::InputImageConstPointer  inputPtr = this->GetInput();
@@ -57,9 +57,9 @@ MultiToMonoChannelExtractROI<TInputPixelType,TOutputPixelType,VImageDimension>
 }
 
 
-template<class TInputPixelType, class TOutputPixelType, unsigned int VImageDimension>
+template<class TInputPixelType, class TOutputPixelType>
 void 
-MultiToMonoChannelExtractROI<TInputPixelType,TOutputPixelType,VImageDimension>
+MultiToMonoChannelExtractROI<TInputPixelType,TOutputPixelType>
 ::ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread,
                        int threadId)
 {

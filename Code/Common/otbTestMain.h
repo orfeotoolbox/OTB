@@ -29,10 +29,9 @@ std::map<std::string, MainFuncPointer> StringToTestFunctionMap;
 extern int test(int, char* [] ); \
 StringToTestFunctionMap[#test] = test
 
-int RegressionTestAsciiFile(const char * , const char * , int );
-int RegressionTestImage (const char *, const char *, int, const double);
 std::map<std::string,int> RegressionTestBaselines (char *);
 
+int RegressionTestImage (const char *, const char *, int, const double);
 int RegressionTestBinaryFile(const char *, const char *, int);
 int RegressionTestAsciiFile(const char *, const char *, int);
 
