@@ -335,7 +335,8 @@ void GDALImageIO::InternalReadImageInformation()
       {
       SetComponentType(INT);
       }
-    else if((m_PxType == GDT_Float32) || (m_PxType = GDT_CFloat32) )
+// OTB-FA-00005-CS
+    else if((m_PxType == GDT_Float32) || (m_PxType == GDT_CFloat32) )
       {
       SetComponentType(FLOAT);
       }
