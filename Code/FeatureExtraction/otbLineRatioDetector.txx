@@ -61,6 +61,14 @@ void LineRatioDetector<TInputImage, TOutputImage, InterpolatorType>::GenerateInp
   typename TInputImage::RegionType inputRequestedRegion;
   inputRequestedRegion = inputPtr->GetRequestedRegion();
 
+  // Define the size of the region by the radius
+  m_Radius[0] = static_cast<unsigned int>(3*m_WidthLine + 2); 
+  m_Radius[1] = m_LengthLine ;
+  
+  // Define the size of the facelist by taking into account the rotation of the region
+  m_FaceList[0] = static_cast<unsigned int>( sqrt((m_Radius[0]*m_Radius[0])+ (m_Radius[1]*m_Radius[1]))+1 );
+  m_FaceList[1] = m_FaceList[0];
+
   // pad the input requested region by the operator radius
   inputRequestedRegion.PadByRadius( m_Radius );
 
@@ -113,16 +121,6 @@ void LineRatioDetector< TInputImage, TOutputImage, InterpolatorType>
   typename itk::NeighborhoodAlgorithm::ImageBoundaryFacesCalculator<InputImageType>::FaceListType 		faceList;
   typename itk::NeighborhoodAlgorithm::ImageBoundaryFacesCalculator<InputImageType>::FaceListType::iterator 	fit;
 
- // Define the size of the region by the radius
-  m_Radius[0] = static_cast<unsigned int>(3*m_WidthLine + 2); 
-  m_Radius[1] = m_LengthLine ;
-  
-//std::cout <<"Radius " << m_Radius[0] << " " << m_Radius[1] << std::endl; 
-  
-  
-  // Define the size of the facelist by taking into account the rotation of the region
-  m_FaceList[0] = static_cast<unsigned int>( sqrt((m_Radius[0]*m_Radius[0])+ (m_Radius[1]*m_Radius[1]))+1 );
-  m_FaceList[1] = m_FaceList[0];
 
   itk::NeighborhoodAlgorithm::ImageBoundaryFacesCalculator<InputImageType> bC;
   faceList = bC(input, outputRegionForThread, m_FaceList);
@@ -154,6 +152,8 @@ void LineRatioDetector< TInputImage, TOutputImage, InterpolatorType>
   
   // Pixel number in each zone
   const int NbPixelZone = (2*m_WidthLine+1)*(2*m_LengthLine+1);
+  
+  double InvNbPixelZone = static_cast<double>(1. / NbPixelZone); 
    
   // Contains for the 4 directions the sum of the pixels belonging to each zone
   double Sum[NB_DIR][NB_ZONE];
@@ -269,9 +269,9 @@ void LineRatioDetector< TInputImage, TOutputImage, InterpolatorType>
         {
         		
         // Calculation of the mean for the 3 zones	
-        M1 = Sum[dir][0] / static_cast<double>(NbPixelZone);
-        M2 = Sum[dir][1] / static_cast<double>(NbPixelZone);
-        M3 = Sum[dir][2] / static_cast<double>(NbPixelZone);
+        M1 = Sum[dir][0] * InvNbPixelZone;
+        M2 = Sum[dir][1] * InvNbPixelZone;
+        M3 = Sum[dir][2] * InvNbPixelZone;
      	
         // Calculation of the intensity of detection
         if (( M1 != 0 ) && (M2 != 0)) 
