@@ -20,13 +20,6 @@
 #include "itkImageFileWriter.h"
 #include <iostream>
 
-// A supprimer
-#include "otbCAIImageIO.h"
-
-//#ifndef __otbCAIImageIO_h
-//#define __otbCAIImageIO_h
-//#endif
-
 #include "otbImageFileReader.h"
 #include "otbLeeImageFilter.h"
 
@@ -40,7 +33,7 @@ int otbLeeFilter( int argc, char ** argv )
        
         unsigned int  RadiusX((unsigned int)::atoi(argv[3]));
         unsigned int  RadiusY((unsigned int)::atoi(argv[4]));
-        double        NbVues ((double)::atof(argv[5]));
+        double        NbLooks((double)::atof(argv[5]));
 
         typedef unsigned char                                   InputPixelType;
         typedef unsigned char   	                        OutputPixelType;
@@ -61,7 +54,8 @@ int otbLeeFilter( int argc, char ** argv )
         FilterType::Pointer filtreLee = FilterType::New();
         
 	filtreLee->SetRadius( Radius );
-	filtreLee->SetNbVues(NbVues);
+// OTB-FA-00018-CS
+	filtreLee->SetNbLooks(NbLooks);
 
         ReaderType::Pointer reader = ReaderType::New();
         WriterType::Pointer writer = WriterType::New();
