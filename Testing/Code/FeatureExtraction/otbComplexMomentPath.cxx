@@ -35,9 +35,9 @@ int otbComplexMomentPath( int argc, char ** argv )
 	typedef InputImageType::PointType                 ImagePointType;
         typedef otb::ImageFileReader< InputImageType  >   ReaderType;
 	  
-	typedef itk::PolyLineParametricPath< Dimension >	          PathType;
-	typedef std::complex<double>                                      ComplexType
-	typedef otb::ComplexMomentPathFunction<InputImageType,PathType>   CMType;
+	typedef itk::PolyLineParametricPath< Dimension >	                    PathType;
+	typedef std::complex<double>                                                ComplexType
+	typedef otb::ComplexMomentPathFunction<InputImageType,PathType,ComplexType> CMType;
   
         ReaderType::Pointer reader         = ReaderType::New();	
         reader->SetFileName( inputFilename  );

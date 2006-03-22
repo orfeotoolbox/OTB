@@ -5,8 +5,8 @@
   Language  :   C++
   Date      :   17 mars 2006
   Version   :   
-  Role      :   Geometric Moments Class of iamges 
-  $Id$
+  Role      :   Geometric Moments Class of images
+  $Id:$
 
 =========================================================================*/
 #ifndef _otbGeometricMomentImageFunction_h
@@ -67,4 +67,3 @@ private:
 } // namespace otb
 
 #endif
-
