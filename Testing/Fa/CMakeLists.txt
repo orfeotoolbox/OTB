@@ -2,7 +2,7 @@
 
 IF( NOT OTB_DISABLE_CXX_TESTING )
 
-SET(BASELINE ${OTB_DATA_ROOT}/Baseline/Images)
+SET(BASELINE ${OTB_DATA_ROOT}/Baseline/Fa)
 SET(INPUTDATA ${OTB_DATA_ROOT}/Input)
 SET(TEMP ${OTBTesting_BINARY_DIR}/Temporary)
 #Images de teledetection (grosses images )
@@ -21,11 +21,21 @@ SET(IO_TESTS     ${CXX_TEST_PATH}/otbIOTests)
 
 # ---  FA 00005 ENVI (GDAL) image multi-canal ---
 ADD_TEST(FA-00005-io_EnviMultiBande ${COMMON_TESTS} 
+   --compare-binary  ${BASELINE}/FA-00005-io_EnviMultiBande_GomaBestScale_w15_50_100_120_150_200.c1
+                     ${TEMP}/FA-00005-io_EnviMultiBande_GomaBestScale_w15_50_100_120_150_200.c1
          otbMultiChannelExtractROI
          -double ${INPUTDATA}/GomaBestScale_w15_50.raw
          -double ${TEMP}/FA-00005-io_EnviMultiBande_GomaBestScale_w15_50_100_120_150_200.hd
          -startX 100 -startY 150 -sizeX 150 -sizeY 200
          -channels 1 2 3)
+
+ADD_TEST(FA-00005-io_EnviMultiBande_RW ${IO_TESTS} 
+         otbVectorImageFileReaderWriterTest
+         ${INPUTDATA}/GomaBestScale_w15_50.raw
+         ${TEMP}/FA-00005-io_EnviMultiBande_GomaBestScale_w15.hd
+         )
+
+
 
 # ---  FA 00006 ENVI (GDAL) Conversion Type de pixel ---
 ADD_TEST(FA-00006-io_Poupees_OCT_UChar2Double ${COMMON_TESTS} 
