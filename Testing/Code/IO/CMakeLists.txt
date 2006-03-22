@@ -274,6 +274,7 @@ otbCAIImageIOTestCanRead.cxx
 otbCAIImageIOTestCanWrite.cxx
 otbImageFileReaderTest.cxx
 otbImageFileWriterTest.cxx
+otbVectorImageFileReaderWriterTest.cxx
 otbImageFileReaderRGBTest.cxx
 otbImageFileWriterRGBTest.cxx
 )
