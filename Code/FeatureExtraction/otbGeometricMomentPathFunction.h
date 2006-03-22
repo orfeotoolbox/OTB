@@ -6,7 +6,7 @@
   Date      :   22 mars 2006
   Version   :   
   Role      :   Geometric Moments Class of path 
-  $Id:$
+  $Id$
 
 =========================================================================*/
 #ifndef _otbGeometricMomentPathFunction_h
@@ -30,7 +30,7 @@ template < class TInputImage,
            class TOutput   = float,
 	   class TCoordRep = float >
 class ITK_EXPORT GeometricMomentPathFunction :
-  public itk::ImageFunction<TInputImage , TInputPath, TOutput, TCoordRep >
+  public PathFunction<TInputImage , TInputPath, TOutput, TCoordRep >
 {
 public:
   /** Standard class typedefs. */
