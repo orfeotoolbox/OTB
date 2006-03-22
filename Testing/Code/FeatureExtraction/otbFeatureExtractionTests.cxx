@@ -23,4 +23,7 @@ REGISTER_TEST(otbTouziEdgeDetector);
 REGISTER_TEST(otbTouziEdgeDetectorDirection);
 REGISTER_TEST(otbLineRatioDetectorNew);
 REGISTER_TEST(otbLineRatioDetector);
+REGISTER_TEST(otbLineRatioDetectorLinear);
+REGISTER_TEST(otbLineCorrelationDetectorNew);
+REGISTER_TEST(otbLineCorrelationDetectorLinear);
 }

@@ -84,13 +84,28 @@ ADD_TEST(feTvTouziDir ${FEATUREEXTRACTION_TESTS}
 
 ADD_TEST(feTuLineRatioNew ${FEATUREEXTRACTION_TESTS}  
         otbLineRatioDetectorNew)
+        
+ADD_TEST(feTuLineRatioLinear ${FEATUREEXTRACTION_TESTS}  
+        otbLineRatioDetectorLinear
+	${INPUTDATA}/poupees_1canal.hd
+	${TEMP}/feFiltreLineRatioLinear_poupees_2_3.hd
+	2 3)
 		
 ADD_TEST(feTuLineRatio ${FEATUREEXTRACTION_TESTS}  
         otbLineRatioDetector
-	${INPUTDATA}/cthead1.png
-	${TEMP}/feFiltreLineRatio_cthead1_3_5.hd
-	3 5)
-		        
+	${INPUTDATA}/poupees_1canal.hd
+	${TEMP}/feFiltreLineRatio_poupees_2_3.hd
+	2 3)
+	
+ADD_TEST(feTuLineCorrelationNew ${FEATUREEXTRACTION_TESTS}  
+        otbLineCorrelationDetectorNew)
+        
+ADD_TEST(feTuLineCorrelationLinear ${FEATUREEXTRACTION_TESTS}  
+        otbLineCorrelationDetectorLinear
+	${INPUTDATA}/poupees_1canal.hd
+	${TEMP}/feFiltreLineCorrelationLinear_poupees_2_3.hd
+	2 3)
+        		        
 #ADD_TEST(tvFEPatrick2 ${FEATUREEXTRACTION_TESTS}  
 #  --compare-image ${TOL}  ${BASELINE}/otbExtractROI_cthead1_26_97_209_100.png
 #                          ${TEMP}/otbExtractROI_cthead1_26_97_209_100.png
@@ -114,7 +129,10 @@ otbTouziEdgeDetectorNew.cxx
 otbTouziEdgeDetector.cxx
 otbTouziEdgeDetectorDirection.cxx
 otbLineRatioDetectorNew.cxx
+otbLineRatioDetectorLinear.cxx
 otbLineRatioDetector.cxx
+otbLineCorrelationDetectorNew.cxx
+otbLineCorrelationDetectorLinear.cxx
 )
 
 
