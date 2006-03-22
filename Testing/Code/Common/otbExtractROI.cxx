@@ -43,7 +43,7 @@ int otbExtractROI( int argc, char ** argv )
         typedef itk::ImageFileWriter< OutputImageType >         WriterType;
         FilterType::Pointer filter = FilterType::New();
         
-        filter->SetStartX( startX );
+//        filter->SetStartX( startX );
         filter->SetStartY( startY );
         filter->SetSizeX( sizeX );
         filter->SetSizeY( sizeY );

@@ -116,15 +116,45 @@ int otbMultiToMonoChannelExtractROI ( int argc, char ** argv )
         std::cout << " -> "<<loutputPixelType<<" pour "<<outputFilename<<std::endl;
         std::string pixelType;
         if (  (linputPixelType=="-uchar")&&(loutputPixelType=="-uchar") )               return (generic_otbMultiToMonoChannelExtractROI< unsigned char, unsigned char >( argc,argv,inputFilename,outputFilename) );
+        else if (  (linputPixelType=="-short")&&(loutputPixelType=="-short") )          return (generic_otbMultiToMonoChannelExtractROI< short, short >( argc,argv,inputFilename,outputFilename) );
         else if (  (linputPixelType=="-ushort")&&(loutputPixelType=="-ushort") )        return (generic_otbMultiToMonoChannelExtractROI< unsigned short, unsigned short >( argc,argv,inputFilename,outputFilename) );
+        else if (  (linputPixelType=="-int")&&(loutputPixelType=="-int") )              return (generic_otbMultiToMonoChannelExtractROI< int, int >( argc,argv,inputFilename,outputFilename) );
         else if (  (linputPixelType=="-uint")&&(loutputPixelType=="-uint") )            return (generic_otbMultiToMonoChannelExtractROI< unsigned int, unsigned int >( argc,argv,inputFilename,outputFilename) );
         else if (  (linputPixelType=="-float")&&(loutputPixelType=="-float") )          return (generic_otbMultiToMonoChannelExtractROI<float, float >( argc,argv,inputFilename,outputFilename) );
         else if (  (linputPixelType=="-double")&&(loutputPixelType=="-double") )        return (generic_otbMultiToMonoChannelExtractROI<double, double >( argc,argv,inputFilename,outputFilename) );
         // Type -> uchar
+        else if (  (linputPixelType=="-short")&&(loutputPixelType=="-uchar") )          return (generic_otbMultiToMonoChannelExtractROI< short, unsigned char >( argc,argv,inputFilename,outputFilename) );
         else if (  (linputPixelType=="-ushort")&&(loutputPixelType=="-uchar") )         return (generic_otbMultiToMonoChannelExtractROI< unsigned short, unsigned char >( argc,argv,inputFilename,outputFilename) );
+        else if (  (linputPixelType=="-int")&&(loutputPixelType=="-uchar") )            return (generic_otbMultiToMonoChannelExtractROI< int, unsigned char >( argc,argv,inputFilename,outputFilename) );
         else if (  (linputPixelType=="-uint")&&(loutputPixelType=="-uchar") )           return (generic_otbMultiToMonoChannelExtractROI< unsigned int, unsigned char >( argc,argv,inputFilename,outputFilename) );
-//        else if (  (linputPixelType=="-float")&&(loutputPixelType=="-uchar") )          return (generic_otbMultiToMonoChannelExtractROI< float, unsigned char >( argc,argv,inputFilename,outputFilename) );
-//        else if (  (linputPixelType=="-double")&&(loutputPixelType=="-uchar") )         return (generic_otbMultiToMonoChannelExtractROI< double, unsigned char >( argc,argv,inputFilename,outputFilename) );
+        else if (  (linputPixelType=="-float")&&(loutputPixelType=="-uchar") )          return (generic_otbMultiToMonoChannelExtractROI< float, unsigned char >( argc,argv,inputFilename,outputFilename) );
+        else if (  (linputPixelType=="-double")&&(loutputPixelType=="-uchar") )         return (generic_otbMultiToMonoChannelExtractROI< double, unsigned char >( argc,argv,inputFilename,outputFilename) );
+        // Type -> ushort
+        else if (  (linputPixelType=="-uchar")&&(loutputPixelType=="-ushort") )         return (generic_otbMultiToMonoChannelExtractROI< unsigned char, unsigned short >( argc,argv,inputFilename,outputFilename) );
+        else if (  (linputPixelType=="-int")&&(loutputPixelType=="-ushort") )           return (generic_otbMultiToMonoChannelExtractROI< int, unsigned short >( argc,argv,inputFilename,outputFilename) );
+        else if (  (linputPixelType=="-uint")&&(loutputPixelType=="-ushort") )          return (generic_otbMultiToMonoChannelExtractROI< unsigned int, unsigned short >( argc,argv,inputFilename,outputFilename) );
+        else if (  (linputPixelType=="-float")&&(loutputPixelType=="-ushort") )         return (generic_otbMultiToMonoChannelExtractROI< float, unsigned short >( argc,argv,inputFilename,outputFilename) );
+        else if (  (linputPixelType=="-double")&&(loutputPixelType=="-ushort") )        return (generic_otbMultiToMonoChannelExtractROI< double, unsigned short >( argc,argv,inputFilename,outputFilename) );
+        // Type -> ushort
+        else if (  (linputPixelType=="-uchar")&&(loutputPixelType=="-short") )          return (generic_otbMultiToMonoChannelExtractROI< unsigned char, short >( argc,argv,inputFilename,outputFilename) );
+        else if (  (linputPixelType=="-int")&&(loutputPixelType=="-short") )            return (generic_otbMultiToMonoChannelExtractROI< int, short >( argc,argv,inputFilename,outputFilename) );
+        else if (  (linputPixelType=="-uint")&&(loutputPixelType=="-short") )           return (generic_otbMultiToMonoChannelExtractROI< unsigned int, short >( argc,argv,inputFilename,outputFilename) );
+        else if (  (linputPixelType=="-float")&&(loutputPixelType=="-short") )          return (generic_otbMultiToMonoChannelExtractROI< float, short >( argc,argv,inputFilename,outputFilename) );
+        else if (  (linputPixelType=="-double")&&(loutputPixelType=="-short") )         return (generic_otbMultiToMonoChannelExtractROI< double, short >( argc,argv,inputFilename,outputFilename) );
+        // Type -> int
+        else if (  (linputPixelType=="-uchar")&&(loutputPixelType=="-int") )            return (generic_otbMultiToMonoChannelExtractROI< unsigned char, int >( argc,argv,inputFilename,outputFilename) );
+        else if (  (linputPixelType=="-short")&&(loutputPixelType=="-int") )            return (generic_otbMultiToMonoChannelExtractROI< short, int >( argc,argv,inputFilename,outputFilename) );
+        else if (  (linputPixelType=="-ushort")&&(loutputPixelType=="-int") )           return (generic_otbMultiToMonoChannelExtractROI< unsigned short, int >( argc,argv,inputFilename,outputFilename) );
+        else if (  (linputPixelType=="-uint")&&(loutputPixelType=="-int") )             return (generic_otbMultiToMonoChannelExtractROI< unsigned int, int >( argc,argv,inputFilename,outputFilename) );
+        else if (  (linputPixelType=="-float")&&(loutputPixelType=="-int") )            return (generic_otbMultiToMonoChannelExtractROI< float, int >( argc,argv,inputFilename,outputFilename) );
+        else if (  (linputPixelType=="-double")&&(loutputPixelType=="-int") )           return (generic_otbMultiToMonoChannelExtractROI< double, int >( argc,argv,inputFilename,outputFilename) );
+        // Type -> double
+        else if (  (linputPixelType=="-uchar")&&(loutputPixelType=="-double") )         return (generic_otbMultiToMonoChannelExtractROI< unsigned char, double >( argc,argv,inputFilename,outputFilename) );
+        else if (  (linputPixelType=="-short")&&(loutputPixelType=="-double") )         return (generic_otbMultiToMonoChannelExtractROI< short, double >( argc,argv,inputFilename,outputFilename) );
+        else if (  (linputPixelType=="-ushort")&&(loutputPixelType=="-double") )        return (generic_otbMultiToMonoChannelExtractROI< unsigned short, double >( argc,argv,inputFilename,outputFilename) );
+        else if (  (linputPixelType=="-int")&&(loutputPixelType=="-double") )           return (generic_otbMultiToMonoChannelExtractROI< int, double >( argc,argv,inputFilename,outputFilename) );
+        else if (  (linputPixelType=="-uint")&&(loutputPixelType=="-double") )          return (generic_otbMultiToMonoChannelExtractROI< unsigned int, double >( argc,argv,inputFilename,outputFilename) );
+        else if (  (linputPixelType=="-float")&&(loutputPixelType=="-double") )         return (generic_otbMultiToMonoChannelExtractROI< float, double >( argc,argv,inputFilename,outputFilename) );
         else 
         {       
                 std::cout << " Erreur : le format des images en entrée est mal précisé dans la ligne de commande !!!"<<std::endl;
