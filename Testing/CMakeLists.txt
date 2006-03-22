@@ -10,7 +10,7 @@ MAKE_DIRECTORY(${OTBTesting_BINARY_DIR}/Temporary)
 
 IF(OTB_BINARY_DIR)
   # We are building inside the tree.
-  SUBDIRS(Code)
+  SUBDIRS(Code Fa)
 
 ELSE(OTB_BINARY_DIR)
   # We are building as a stand-alone project.
@@ -36,7 +36,7 @@ ELSE(OTB_BINARY_DIR)
   FIND_PACKAGE(OTB)
   IF(OTB_FOUND)
     INCLUDE(${OTB_USE_FILE})
-    SUBDIRS(Code)
+    SUBDIRS(Code Fa)
   ELSE(OTB_FOUND)
     MESSAGE("OTB not found.  Please set OTB_DIR")
   ENDIF(OTB_FOUND)
