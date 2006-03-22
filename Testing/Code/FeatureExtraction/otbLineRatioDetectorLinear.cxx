@@ -25,16 +25,18 @@
 #include "otbImageFileWriter.h"
 #include "otbLineRatioDetector.h"
 
-int otbLineRatioDetector( int argc, char* argv[] )
+#include "itkLinearInterpolateImageFunction.h"
+
+int otbLineRatioDetectorLinear( int argc, char* argv[] )
 {
   try 
     { 
         const char * inputFilename  = argv[1];
         const char * outputFilename = argv[2];
 
-	// Largeur de la ligne à detecter = 2*WidthLine+1
+	// Width of the linear feature = 2*WidthLine+1
         unsigned int  WidthLine((unsigned int)::atoi(argv[3]));
-        // Longueur de la ligne à detecter = 2*LengthLine+1
+        // Length of the linear feature = 2*LengthLine+1
         unsigned int  LengthLine((unsigned int)::atoi(argv[4]));
         
         typedef unsigned char                                   InputPixelType;
@@ -47,7 +49,8 @@ int otbLineRatioDetector( int argc, char* argv[] )
         typedef otb::ImageFileReader< InputImageType  >         ReaderType;
         typedef otb::ImageFileWriter< OutputImageType >         WriterType;
 
-        typedef otb::LineRatioDetector< InputImageType, OutputImageType >   FilterType;
+        typedef itk::LinearInterpolateImageFunction< InputImageType, double >	InterpolatorType;
+        typedef otb::LineRatioDetector< InputImageType, OutputImageType, InterpolatorType >   FilterType;
 	
         FilterType::Pointer FilterLineRatio = FilterType::New();
         
