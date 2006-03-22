@@ -13,7 +13,7 @@ SET(TOL 0.0)
 
 # !!!!!  Pointe sur un exe généré dans le repertoire Common
 SET(COMMON_TESTS ${CXX_TEST_PATH}/otbCommonTests)
-
+SET(IO_TESTS     ${CXX_TEST_PATH}/otbIOTests)
 
 # ---  RADARSAT (GDAL)  ---
 ADD_TEST(ioTvMultiMonoChannelROI_RADARSAT2BSQ ${COMMON_TESTS} 
@@ -54,7 +54,6 @@ ADD_TEST(ioTvMultiMonoChannelROI_ENVI2PNG ${COMMON_TESTS}
 
 # ------- TEST IO COMMON   ------------------------------
 
-SET(IO_TESTS ${CXX_TEST_PATH}/otbIOTests)
 
 
 # -------            otb::CAIImageIO   ------------------------------
