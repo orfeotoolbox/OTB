@@ -6,7 +6,7 @@
   Date      :   22 mars 2006
   Version   :   
   Role      :   Complex Geometric Moments Class of paths 
-  $Id:$
+  $Id$
 
 =========================================================================*/
 #ifndef _otbComplexMomentPathFunction_h
@@ -93,9 +93,11 @@ protected:
 private:
   ComplexMomentPathFunction( const Self& ); //purposely not implemented
   void operator=( const Self& ); //purposely not implemented
-
+  void EvaluateComplexMomentAtIndex(IndexType index,PixelType PixelValue);
+ 
   unsigned int m_P;
   unsigned int m_Q;
+  ComplexType  m_Value;
   
 };
 

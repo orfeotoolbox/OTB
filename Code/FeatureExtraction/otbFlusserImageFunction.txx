@@ -90,11 +90,15 @@ FlusserImageFunction<TInput,TOutput,TCoordRep>
 	break;
     case 2:
         {
-	ComplexType C21;
+	ComplexType C21,C12;
 	function->SetP(2);
 	function->SetQ(1);
 	C21 = function->EvaluateAtIndex( index );
-	FlusserValue = abs( C21 * conj(C21) ) ;
+	function->SetP(1);
+	function->SetQ(2);
+	C12 = function->EvaluateAtIndex( index );
+
+	FlusserValue = abs( C21 * C12 ) ;
 	}
 	break;
     case 3:

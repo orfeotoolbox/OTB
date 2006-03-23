@@ -30,6 +30,7 @@ ComplexMomentPathFunction<TInputImage,TInputPath,TOutput,TCoordRep>
 {
   m_P = 0;
   m_Q = 0;
+  m_Value = static_cast<CompleType>(0.0); 
 }
 
 /**
@@ -43,6 +44,31 @@ ComplexMomentPathFunction<TInputImage,TInputPath,TOutput,TCoordRep>
   this->Superclass::PrintSelf(os,indent);
   os << indent << " p indice value      : "  << m_P << std::endl;
   os << indent << " q indice value      : "  << m_Q << std::endl;
+}
+
+
+template < class TInputImage, class TInputPath, class TOutput, class TCoordRep>
+void
+ComplexMomentPathFunction<TInputImage,TInputPath,TOutput,TCoordRep>
+::EvaluateComplexMomentAtIndex(IndexType index,PixelType PixelValue)
+{
+    ValP = std::complex<double>(1.0,0.0);
+    ValQ = std::complex<double>(1.0,0.0);
+    unsigned int p  = m_P;
+    while(p>0)
+     {
+      ValP *= std::complex<double>(index[0], index[1]);
+      --p; 
+     }
+    unsigned int q  = m_Q;
+    while(q>0)
+     {
+      ValQ *= std::complex<double>(index[0], -index[1]);
+      --q; 
+     }
+
+    m_Value += static_cast<ComplexType>
+                    ( ValP * ValQ * std::complex<double>( static_cast<double>(PixelValue),0.0d) );          
 }
 
 
@@ -76,61 +102,83 @@ ComplexMomentPathFunction<TInputImage,TInputPath,TOutput,TCoordRep>
    Path  = this->GetInputPath();
    
    ImageSize = this->GetInputImage()->GetBufferedRegion().GetSize();
+   vertexList = InputPath->GetVertexList();
+   nbPath = vertexList->Size();
 
-   VertexDebut = 
+   VertexListTypePointer                vertexList;
+   VertexType                           cindex;
+   int                                  nbPath;
    
-   while()
-   
-
-   if(m_NeighborhoodRadius<0)
+   if(nbPath >1)
      {
-     indexPos[0] = ImageSize[0] / 2 ;
-     indexPos[1] = ImageSize[1] / 2;
+     for(int i =0 ; i<nbPath-1 ;i++)
+       {
+       cindex = vertexList->GetElement(i);
+       RealType x1 = cindex[0];
+       RealType y1 = cindex[1];
+       cindex = vertexList->GetElement(i+1);
+       RealType x2 = cindex[0];
+       RealType y2 = cindex[1];
      
-       kernelSize[0] = indexPos[0];
-       kernelSize[1] = indexPos[1];          
-     }
-     else
-     {
-       kernelSize.Fill( m_NeighborhoodRadius );
-     }  
- 
-  itk::ConstNeighborhoodIterator<InputType>
-    it(kernelSize, this->GetInputImage(), this->GetInputImage()->GetBufferedRegion());
-
-  // Set the iterator at the desired location
-  it.SetLocation(indexPos);
-  Sum = std::complex<float>(0.0,0.0); 
-
-  const unsigned int size = it.Size();
-  for (unsigned int i = 0; i < size; ++i)
-  {
-    IndexValue = it.GetIndex(i);
-    ValP = std::complex<float>(1.0,0.0);
-    ValQ = std::complex<float>(1.0,0.0);
-    unsigned int p  = m_P;
-    while(p>0)
-     {
-      ValP *= std::complex<float>(IndexValue[0], IndexValue[1]);
-      --p; 
-     }
-    unsigned int q  = m_Q;
-    while(q>0)
-     {
-      ValQ *= std::complex<float>(IndexValue[0], -IndexValue[1]);
-      --q; 
-     }
-//    std::cout<< i <<"--> "<< IndexValue << " p:"<<ValP <<" Q: "<<ValQ;  
+       RealType DeltaX = std::abs(x1-x2);
+       RealType DeltaY = std::abs(y1-y2);
+       RealType Xmin   = std::min( x1 , x2 );
+       RealType Xmax   = std::max( x1 , x2 );
+       RealType Ymin   = std::min( y1 , y2 );
+       RealType Ymax   = std::max( y1 , y2 );
           
-    Sum += ( ValP * ValQ * std::complex<float>(static_cast<float>(it.GetPixel(i)),0.0) ); 
-//    std::cout<< "Val Pixel: " << static_cast<float>(it.GetPixel(i)) <<" Result :" << Sum<<std::endl;
-  }
+       if(DeltaX>0 && DeltaY>0)
+         {
+         if(DeltaX>DeltaY)
+           {
+	   RealType Alpha = (y2-y1) / (x2-x1) ;
+	   for(RealType j = Xmin; j<=Xmax;j++)
+	      {
+	      IndexOut[0] = static_cast<int>(j) ;
+	      IndexOut[1] = static_cast<int>(Alpha * (j-x1) + y1) ;
+	      if(IsInsideBuffer(IndexOut))
+	          this->EvaluateComplexMomentAtIndex( IndexOut, Image->GetPixel(IndexOut) );
+	      }
+	   }
+           else
+	   {
+	   RealType Alpha = (x2-x1) / (y2-y1) ;
+	   for(RealType j = Ymin; j<=Ymax;j++)
+	      {
+	      IndexOut[0] = static_cast<int>(Alpha * (j-y1) + x1) ;
+	      IndexOut[1] = static_cast<int>(j);
+	      if(IsInsideBuffer(IndexOut))
+	          this->EvaluateComplexMomentAtIndex( IndexOut, Image->GetPixel(IndexOut) );
+	      }
+	   }
+         }
+         else
+         {
+         if(DeltaX>0)
+           {
+	   IndexOut[1] = static_cast<int>(Ymin); 
+	   for(RealType j = Xmin; j<=Xmax;j++)
+	     {
+	     IndexOut[0]=static_cast<int>(j);
+	     if(IsInsideBuffer(IndexOut))
+	          this->EvaluateComplexMomentAtIndex( IndexOut, Image->GetPixel(IndexOut) );
+	     }
+	   }
+	   else
+	   {
+	   IndexOut[0] = static_cast<int>(Xmin); 	 
+	   for(RealType j = Ymin; j<=Ymax;j++)
+	     {
+	     IndexOut[1]=static_cast<int>(j);
+	     if(IsInsideBuffer(IndexOut))
+	          this->EvaluateComplexMomentAtIndex( IndexOut, Image->GetPixel(IndexOut) );
+	     }
+	   }
+         }         
+       } // FOR loop
+    } // IF loop
 
-//   std::cout<<"Result dans la procedure: " <<Sum <<std::endl;
-           
-  return (static_cast<ComplexType>(Sum) );
-
-#endif
+  return (static_cast<ComplexType>(m_Value) );
 
 }
 

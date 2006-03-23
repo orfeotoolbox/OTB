@@ -96,11 +96,11 @@ HuImageFunction<TInput,TOutput,TCoordRep>
 	function->SetP(2);
 	function->SetQ(0);
 	C20 = function->EvaluateAtIndex( index );
-//	function->SetP(0);
-//	function->SetQ(2);
-//	C02 = function->EvaluateAtIndex( index );
+	function->SetP(0);
+	function->SetQ(2);
+	C02 = function->EvaluateAtIndex( index );
 
-	HuValue = abs( C20 * conj(C20) ) ;
+	HuValue = abs( C20 * C02 ) ;
 
 	}
 	break;
@@ -110,11 +110,11 @@ HuImageFunction<TInput,TOutput,TCoordRep>
 	function->SetP(3);
 	function->SetQ(0);
 	C30 = function->EvaluateAtIndex( index );
-//	function->SetP(0);
-//	function->SetQ(3);
-//	C03 = function->EvaluateAtIndex( index );
+	function->SetP(0);
+	function->SetQ(3);
+	C03 = function->EvaluateAtIndex( index );
 
-	HuValue = abs( C30 * conj(C30) );
+	HuValue = abs( C30 * C03 );
 	}
 	break;
     case 4:
@@ -123,11 +123,11 @@ HuImageFunction<TInput,TOutput,TCoordRep>
 	function->SetP(2);
 	function->SetQ(1);
 	C21 = function->EvaluateAtIndex( index );
-//	function->SetP(1);
-//	function->SetQ(2);
-//	C12 = function->EvaluateAtIndex( index );
+	function->SetP(1);
+	function->SetQ(2);
+	C12 = function->EvaluateAtIndex( index );
 
-	HuValue = abs( C21 * conj(C21) );
+	HuValue = abs( C21 * C12 );
 	}	
 	break;
 
