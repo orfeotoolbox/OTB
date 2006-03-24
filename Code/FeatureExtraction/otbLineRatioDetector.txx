@@ -241,6 +241,8 @@ void LineRatioDetector< TInputImage, TOutputImage, InterpolatorType>
           zone = 0;
         else if ( X < Xc13 )
           zone = 2;
+        else
+          continue;
     
         Sum[0][zone] += static_cast<double>(bit.GetPixel(i));
          

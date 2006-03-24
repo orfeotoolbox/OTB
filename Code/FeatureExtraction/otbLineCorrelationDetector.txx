@@ -250,8 +250,10 @@ void LineCorrelationDetector< TInputImage, TOutputImage, InterpolatorType>
       	  zone = 1;
         else if ( ( Xc12 < X ) && ( X < Xc13 ) )
           zone = 0;
-        else if ( X < Xc13 )
+        else if ( X > Xc13 )
           zone = 2;
+        else
+          continue;
     
         ValXY = static_cast<double>(bit.GetPixel(i));
         
@@ -292,10 +294,10 @@ void LineCorrelationDetector< TInputImage, TOutputImage, InterpolatorType>
         M2 = Sum[dir][1] * InvNbPixel;
         M3 = Sum[dir][2] * InvNbPixel;
         
-        // Calculation of the standard deviation for the 3 zones 
-	sigma1 = sqrt( (Sum2[dir][0] - NbPixel*M1*M1) * InvNbPixel );
-	sigma2 = sqrt( (Sum2[dir][1] - NbPixel*M2*M2) * InvNbPixel );
-	sigma3 = sqrt( (Sum2[dir][2] - NbPixel*M3*M3) * InvNbPixel ); 
+        // Calculation of the standard deviation for the 3 zones (standard deviation = sqrt(sigma)) 
+	sigma1 = (Sum2[dir][0] - NbPixel*M1*M1) * InvNbPixel;
+	sigma2 = (Sum2[dir][1] - NbPixel*M2*M2) * InvNbPixel;
+	sigma3 = (Sum2[dir][2] - NbPixel*M3*M3) * InvNbPixel; 
      	
         // Calculation of the cross correlation coefficient
         
@@ -305,24 +307,24 @@ void LineCorrelationDetector< TInputImage, TOutputImage, InterpolatorType>
         
         // rho12
         if ( M2 != 0. )
-          d1 = NbPixel*pow(sigma1,2)*pow(M1/M2,2);
-        d2 = NbPixel*pow(sigma2,2);
+          d1 = NbPixel*sigma1*pow(M1/M2,2);
+        d2 = NbPixel*sigma2;
         if ( M2 != 0. )
           d3 = NbPixel*NbPixel*pow(((M1/M2)-1.),2);
         
-        if ( ( M1 != M2 ) )
+        if ( ( d3 != 0. ) )
           rho12_theta[dir] = static_cast<double>( 1. / ( 1. + ( 2.*NbPixel*(d1+d2)/d3 ) ) );
         else
           rho12_theta[dir] = 0.;
 	 
 	// rho13 
 	if ( M3 != 0. )
-	  d1 = NbPixel*pow(sigma1,2)*pow(M1/M3,2);
-        d2 = NbPixel*pow(sigma3,2);
+	  d1 = NbPixel*sigma1*pow(M1/M3,2);
+        d2 = NbPixel*sigma3;
         if ( M3 != 0. )
           d3 = NbPixel*NbPixel*pow(((M1/M3)-1.),2);
       
-        if ( ( M1 != M3 ) )
+        if ( ( d3 != 0. ) )
           rho13_theta[dir] = static_cast<double>( 1. / ( 1. + ( 2.*NbPixel*(d1+d2)/d3 ) ) );
         else
           rho13_theta[dir] = 0.;
