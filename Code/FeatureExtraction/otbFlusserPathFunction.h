@@ -3,19 +3,16 @@
   Programme :   OTB (ORFEO ToolBox)
   Auteurs   :   CS - P. Imbo
   Language  :   C++
-  Date      :   20 mars 2006
+  Date      :   24 mars 2006
   Version   :   
-  Role      :   Flusser's invariant Class of images 
+  Role      :   Flusser's invariant Class of path 
   $Id:$
 
 =========================================================================*/
-#ifndef _otbFlusserImageFunction_h
-#define _otbFlusserImageFunction_h
+#ifndef _otbFlusserPathFunction_h
+#define _otbFlusserPathFunction_h
 
-#include "otbRealMomentImageFunction.h"
-
-#include <complex>
-
+#include "otbRealMomentPathFunction.h"
 
 namespace otb
 {
@@ -24,7 +21,7 @@ namespace otb
  * \class FlusserImageFunction
  * \brief Calculate the Flusser's invariant parameters.
  *
- * Calculate the Flusser's invariant over an image defined as:
+ * Calculate the Flusser's invariant over a path and defined as:
  *
  * - \f$ \psi_{1} = c_{11} \f$
  * - \f$ \psi_{2} = c_{21} c_{12} \f$
@@ -40,7 +37,7 @@ namespace otb
  *  
  * With :
  *
- *  \f[  c_{p,q}=\int_{-\infty}^{\infty} \int_{-\infty}^{\infty} (x+iy)^{p} \cdot (x-iy)^{q} \cdot f(x,y) \cdot
+ *  \f[  c_{p,q}=\int \int (x+iy)^{p} \cdot (x-iy)^{q} \cdot f(x,y) \cdot
  dx \cdot dy \f]
  *
  * And:
@@ -50,24 +47,24 @@ namespace otb
  * This class is templated over the input image type and the
  * coordinate representation type (e.g. float or double).
  * 
- * \ingroup ImageFunctions
+ * \ingroup PathFunctions
  */
 
-template < class TInput, 
-           class TOutput   = double,
-	   class TCoordRep = float >
-class ITK_EXPORT FlusserImageFunction :
-  public RealMomentImageFunction< TInput, TOutput,TCoordRep >
+template < class TInputImage, 
+           class TInputPath,    
+           class TOutput      = double>
+class ITK_EXPORT FlusserPathFunction :
+  public RealMomentPathFunction< TInputImage,TInputPath, TOutput >
 {
 public:
   /** Standard class typedefs. */
-  typedef FlusserImageFunction                                      Self;
-  typedef RealMomentImageFunction< TInput, TOutput,TCoordRep >      Superclass;
+  typedef FlusserPathFunction                                       Self;
+  typedef RealMomentPathFunction< TInputImage,TInputPath TOutput>   Superclass;
   typedef itk::SmartPointer<Self>                                   Pointer;
   typedef itk::SmartPointer<const Self>                             ConstPointer;
   
   /** Run-time type information (and related methods). */
-  itkTypeMacro(FlusserImageFunction, RealMomentImageFunction);
+  itkTypeMacro(FlusserPathFunction, RealMomentPathFunction);
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
@@ -78,6 +75,13 @@ public:
   typedef typename Superclass::ContinuousIndexType  ContinuousIndexType;
   typedef typename Superclass::PointType            PointType;
 
+  /** InputPathType typedef support. */
+  typedef typename Superclass::PathType                 PathType;
+  typedef typename Superclass::PathConstPointer         PathConstPointer;  
+  typedef typename PathType::ContinuousIndexType        VertexType;
+  typedef itk::VectorContainer< unsigned,VertexType >   VertexListType;
+  typedef typename VertexListType::ConstPointer         VertexListPointer;
+
   typedef TOutput                                   RealType;
   typedef typename std::complex<RealType>           ComplexType;
    
@@ -85,37 +89,21 @@ public:
   itkStaticConstMacro(ImageDimension, unsigned int,
                       InputType::ImageDimension);
   			 
-
-  /** Evalulate the function at specified index */
-  virtual RealType EvaluateAtIndex( const IndexType& index ) const;
-  
   /** Evaluate the function at non-integer positions */
-  virtual RealType Evaluate( const PointType& point ) const
-    { 
-      IndexType index;
-      this->ConvertPointToNearestIndex( point, index );
-      return this->EvaluateAtIndex( index ); 
-    }
-  virtual RealType EvaluateAtContinuousIndex( 
-    const ContinuousIndexType& cindex ) const
-    { 
-      IndexType index;
-      this->ConvertContinuousIndexToNearestIndex( cindex, index );
-      return this->EvaluateAtIndex( index ) ; 
-    }
+  virtual RealType Evaluate( const PathType& path) const;
 
   /** Get/Set the radius of the neighborhood over which the
       statistics are evaluated */  
-  itkSetClampMacro(Number,short,1,11);
+  itkSetMacro(Number,short);
   itkGetConstReferenceMacro( Number, short );
 
 protected:
-  FlusserImageFunction();
-  ~FlusserImageFunction(){};
+  FlusserPathFunction();
+  ~FlusserPathFunction(){};
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
 private:
-  FlusserImageFunction( const Self& ); //purposely not implemented
+  FlusserPathFunction( const Self& ); //purposely not implemented
   void operator=( const Self& ); //purposely not implemented
 
   short m_Number;  

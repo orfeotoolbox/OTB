@@ -3,17 +3,17 @@
   Programme :   OTB (ORFEO ToolBox)
   Auteurs   :   CS - P. Imbo
   Language  :   C++
-  Date      :   20 mars 2006
+  Date      :   24 mars 2006
   Version   :   
-  Role      :   Flusser's invariant Class of images 
+  Role      :   Flusser's invariant Class of path 
   $Id:$
 
 =========================================================================*/
-#ifndef _otbFlusserImageFunction_txx
-#define _otbFlusserImageFunction_txx
+#ifndef _otbFlusserPathFunction_txx
+#define _otbFlusserPathFunction_txx
 
-#include "otbFlusserImageFunction.h"
-#include "otbComplexMomentImageFunction.h"
+#include "otbFlusserPathFunction.h"
+#include "otbComplexMomentPathFunction.h"
 #include "itkNumericTraits.h"
 #include "itkMacro.h"
 #include <complex>
@@ -24,9 +24,9 @@ namespace otb
 /**
    * Constructor
    */
-template < class TInput, class TOutput, class TCoordRep>
-FlusserImageFunction<TInput,TOutput,TCoordRep>
-::FlusserImageFunction()
+template < class TInputImage, class TInputPath, class TOutput>
+FlusserPathFunction<TInputImage,TInputPath, TOutput >
+::FlusserPathFunction()
 {
   m_Number =-1; 
 }
@@ -34,9 +34,9 @@ FlusserImageFunction<TInput,TOutput,TCoordRep>
 /**
    *
    */
-template < class TInput, class TOutput, class TCoordRep>
+template < class TInputImage, class TInputPath, class TOutput>
 void
-FlusserImageFunction<TInput,TOutput,TCoordRep>
+FlusserPathFunction<TInputImage,TInputPath, TOutput >
 ::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   this->Superclass::PrintSelf(os,indent);
@@ -44,10 +44,10 @@ FlusserImageFunction<TInput,TOutput,TCoordRep>
 }
 
 
-template < class TInput, class TOutput, class TCoordRep>
-typename FlusserImageFunction<TInput,TOutput,TCoordRep>::RealType
-FlusserImageFunction<TInput,TOutput,TCoordRep>
-::EvaluateAtIndex(const IndexType& index) const
+template < class TInputImage, class TInputPath, class TOutput>
+typename FlusserPathFunction<TInputImage,TInputPath, TOutput>::RealType
+FlusserPathFunction<TInputImage,TInputPath, TOutput >
+::Evaluate( const PathType& path) const
 {
   typename InputType::SizeType        ImageSize;
   RealType                            FlusserValue;
@@ -61,11 +61,6 @@ FlusserImageFunction<TInput,TOutput,TCoordRep>
     return ( itk::NumericTraits<RealType>::max() );
     }
   
-  if ( !this->IsInsideBuffer( index ) )
-    {
-    return ( itk::NumericTraits<RealType>::max() );
-    }
-
   assert(m_Number > 0);
   assert(m_Number < 12);
 	
@@ -79,7 +74,7 @@ FlusserImageFunction<TInput,TOutput,TCoordRep>
 	ComplexType C11;
 	function->SetP(1);
 	function->SetQ(1);
-	C11 = function->EvaluateAtIndex( index );
+	C11 = function->Evaluate( path );
         FlusserValue = C11.real() ;
 	}
 	break;
@@ -88,10 +83,10 @@ FlusserImageFunction<TInput,TOutput,TCoordRep>
 	ComplexType C21,C12;
 	function->SetP(2);
 	function->SetQ(1);
-	C21 = function->EvaluateAtIndex( index );
+	C21 = function->Evaluate( path );
 	function->SetP(1);
 	function->SetQ(2);
-	C12 = function->EvaluateAtIndex( index );
+	C12 = function->Evaluate( path );
 
 	FlusserValue = abs( C21 * C12 ) ;
 	}
@@ -101,10 +96,10 @@ FlusserImageFunction<TInput,TOutput,TCoordRep>
 	ComplexType C20,C12;
 	function->SetP(2);
 	function->SetQ(0);
-	C20 = function->EvaluateAtIndex( index );
+	C20 = function->Evaluate( path );
 	function->SetP(1);
 	function->SetQ(2);
-	C12 = function->EvaluateAtIndex( index );
+	C12 = function->Evaluate( path );
 	FlusserValueComplex = C20 * pow(C12,2);
 	FlusserValue = FlusserValueComplex.real();
 	}
@@ -114,10 +109,10 @@ FlusserImageFunction<TInput,TOutput,TCoordRep>
 	ComplexType C20,C12;
 	function->SetP(2);
 	function->SetQ(0);
-	C20 = function->EvaluateAtIndex( index );
+	C20 = function->Evaluate( path );
 	function->SetP(1);
 	function->SetQ(2);
-	C12 = function->EvaluateAtIndex( index );
+	C12 = function->Evaluate( path );
 	FlusserValueComplex = C20 * pow(C12,2);
 	FlusserValue = FlusserValueComplex.imag();
 	}
@@ -127,10 +122,10 @@ FlusserImageFunction<TInput,TOutput,TCoordRep>
 	ComplexType C30,C12;
 	function->SetP(3);
 	function->SetQ(0);
-	C30 = function->EvaluateAtIndex( index );
+	C30 = function->Evaluate( path );
 	function->SetP(1);
 	function->SetQ(2);
-	C12 = function->EvaluateAtIndex( index );
+	C12 = function->Evaluate( path );
 
 	FlusserValueComplex = C30 * pow(C12,3) ;
 	FlusserValue = FlusserValueComplex.real();       
@@ -141,10 +136,10 @@ FlusserImageFunction<TInput,TOutput,TCoordRep>
 	ComplexType C30,C12;
 	function->SetP(3);
 	function->SetQ(0);
-	C30 = function->EvaluateAtIndex( index );
+	C30 = function->Evaluate( path );
 	function->SetP(1);
 	function->SetQ(2);
-	C12 = function->EvaluateAtIndex( index );
+	C12 = function->Evaluate( path );
 
 	FlusserValueComplex = C30 * pow(C12,3) ;
 	FlusserValue = FlusserValueComplex.real();       
@@ -155,7 +150,7 @@ FlusserImageFunction<TInput,TOutput,TCoordRep>
 	ComplexType C22;
 	function->SetP(2);
 	function->SetQ(2);
-	C22 = function->EvaluateAtIndex( index );
+	C22 = function->Evaluate( path );
         FlusserValue = C22.real() ;
 	}
 	break;
@@ -164,10 +159,10 @@ FlusserImageFunction<TInput,TOutput,TCoordRep>
 	ComplexType C31,C12;
 	function->SetP(3);
 	function->SetQ(1);
-	C31 = function->EvaluateAtIndex( index );
+	C31 = function->Evaluate( path );
 	function->SetP(1);
 	function->SetQ(2);
-	C12 = function->EvaluateAtIndex( index );
+	C12 = function->Evaluate( path );
 	FlusserValueComplex = C31 * pow(C12,2);
 	FlusserValue = FlusserValueComplex.real();
 	}
@@ -177,10 +172,10 @@ FlusserImageFunction<TInput,TOutput,TCoordRep>
 	ComplexType C31,C12;
 	function->SetP(3);
 	function->SetQ(1);
-	C31 = function->EvaluateAtIndex( index );
+	C31 = function->Evaluate( path );
 	function->SetP(1);
 	function->SetQ(2);
-	C12 = function->EvaluateAtIndex( index );
+	C12 = function->Evaluate( path );
 	FlusserValueComplex = C31 * pow(C12,2);
 	FlusserValue = FlusserValueComplex.imag();
 	}
@@ -190,10 +185,10 @@ FlusserImageFunction<TInput,TOutput,TCoordRep>
 	ComplexType C40,C12;
 	function->SetP(4);
 	function->SetQ(0);
-	C40 = function->EvaluateAtIndex( index );
+	C40 = function->Evaluate( path );
 	function->SetP(1);
 	function->SetQ(2);
-	C12 = function->EvaluateAtIndex( index );
+	C12 = function->Evaluate( path );
 	FlusserValueComplex = C40 * pow(C12,4);
 	FlusserValue = FlusserValueComplex.real();
 	}
@@ -203,10 +198,10 @@ FlusserImageFunction<TInput,TOutput,TCoordRep>
 	ComplexType C40,C12;
 	function->SetP(4);
 	function->SetQ(0);
-	C40 = function->EvaluateAtIndex( index );
+	C40 = function->Evaluate( path );
 	function->SetP(1);
 	function->SetQ(2);
-	C12 = function->EvaluateAtIndex( index );
+	C12 = function->Evaluate( path );
 	FlusserValueComplex = C40 * pow(C12,4);
 	FlusserValue = FlusserValueComplex.imag();
 	}

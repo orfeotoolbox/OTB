@@ -3,10 +3,10 @@
   Programme :   OTB (ORFEO ToolBox)
   Auteurs   :   CS - P.Imbo
   Language  :   C++
-  Date      :   20 mars 2006
+  Date      :   24 mars 2006
   Version   :   
   Role      :   
-  $Id$
+  $Id:$
 
 =========================================================================*/
 #if defined(_MSC_VER)
@@ -17,35 +17,32 @@
 #include "itkImage.h"
 
 #include "otbImageFileReader.h"
-#include "otbComplexMomentPathFunction.h"
+#include "otbHuPathFunction.h"
 #include "itkPolyLineParametricPath.h"
 
-int otbComplexMomentPath( int argc, char ** argv )
+int otbHuPath( int argc, char ** argv )
 {
   try 
     { 
         const char * inputFilename  = argv[1];
-        unsigned int  p((unsigned int)::atoi(argv[2]));
-        unsigned int  q((unsigned int)::atoi(argv[3]));
+        unsigned int  Number;
        
         typedef unsigned char     InputPixelType;
         const   unsigned int      Dimension = 2;
 
         typedef itk::Image< InputPixelType,  Dimension >  InputImageType;
 	typedef InputImageType::PointType                 ImagePointType;
-        typedef otb::ImageFileReader< InputImageType  >   ReaderType;
-	  
+        typedef otb::ImageFileReader< InputImageType  >   ReaderType;	  
 	typedef itk::PolyLineParametricPath< Dimension >	        PathType;
-	typedef otb::ComplexMomentPathFunction<InputImageType,PathType> CMType;
-	typedef CMType::ComplexType                                     ComplexType;
+	typedef otb::HuPathFunction<InputImageType,PathType>            FunctionType;
+	typedef FunctionType::RealType                                  RealType;
   
         ReaderType::Pointer reader         = ReaderType::New();	
         reader->SetFileName( inputFilename  );
         reader->Update();
 	
  	InputImageType::ConstPointer image = reader->GetOutput();
-	
-	
+		
         // Dessiner un carré:
 	ImagePointType                pos;
 	PathType::ContinuousIndexType cindex;
@@ -70,21 +67,20 @@ int otbComplexMomentPath( int argc, char ** argv )
 	image->TransformPhysicalPointToContinuousIndex(pos,cindex);
         pathElt->AddVertex(cindex);
 
-	CMType::Pointer function =CMType::New();
-
+	FunctionType::Pointer function =FunctionType::New();
 	function->SetInputImage( image );
 
-	function->SetQ(q);
-	function->SetP(p);
-		
-	InputImageType::IndexType index;
-	index[0]=10;
-	index[1]=10;
+	RealType Result;
 	
-	ComplexType Result;
-	
-        Result = function->Evaluate( *pathElt);
-        std::cout << "function->Evaluate(Path)"<< Result << std::endl;	
+	for (Number = 1 ;Number<10;Number++)
+	  {
+	   function->SetNumber(Number);
+           Result = function->Evaluate( *pathElt );
+	   std::cout << "Hu("<<Number<<") = "<< Result <<std::endl;
+	  }
+#if 0
+
+#endif
     } 
   catch( itk::ExceptionObject & err ) 
     { 

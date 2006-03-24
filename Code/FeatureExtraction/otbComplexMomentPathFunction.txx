@@ -24,21 +24,20 @@ namespace otb
 /**
    * Constructor
    */
-template < class TInputImage, class TInputPath, class TOutput, class TCoordRep>
-ComplexMomentPathFunction<TInputImage,TInputPath,TOutput,TCoordRep>
+template < class TInputImage, class TInputPath, class TOutput>
+ComplexMomentPathFunction<TInputImage,TInputPath,TOutput>
 ::ComplexMomentPathFunction()
 {
   m_P = 0;
   m_Q = 0;
-  m_Value = static_cast<CompleType>(0.0); 
 }
 
 /**
    *
    */
-template < class TInputImage, class TInputPath, class TOutput, class TCoordRep>
+template < class TInputImage, class TInputPath, class TOutput>
 void
-ComplexMomentPathFunction<TInputImage,TInputPath,TOutput,TCoordRep>
+ComplexMomentPathFunction<TInputImage,TInputPath,TOutput>
 ::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   this->Superclass::PrintSelf(os,indent);
@@ -47,11 +46,13 @@ ComplexMomentPathFunction<TInputImage,TInputPath,TOutput,TCoordRep>
 }
 
 
-template < class TInputImage, class TInputPath, class TOutput, class TCoordRep>
-void
-ComplexMomentPathFunction<TInputImage,TInputPath,TOutput,TCoordRep>
-::EvaluateComplexMomentAtIndex(IndexType index,PixelType PixelValue)
+template < class TInputImage, class TInputPath, class TOutput>
+typename ComplexMomentPathFunction<TInputImage,TInputPath,TOutput>::ComplexType 
+ComplexMomentPathFunction<TInputImage,TInputPath,TOutput>
+::EvaluateComplexMomentAtIndex(ImageIndexType index,PixelType PixelValue) const
 {
+    ComplexType                         ValP;
+    ComplexType                         ValQ;
     ValP = std::complex<double>(1.0,0.0);
     ValQ = std::complex<double>(1.0,0.0);
     unsigned int p  = m_P;
@@ -67,47 +68,41 @@ ComplexMomentPathFunction<TInputImage,TInputPath,TOutput,TCoordRep>
       --q; 
      }
 
-    m_Value += static_cast<ComplexType>
-                    ( ValP * ValQ * std::complex<double>( static_cast<double>(PixelValue),0.0d) );          
+    return ( static_cast<ComplexType>
+                    ( ValP * ValQ * std::complex<double>( static_cast<double>(PixelValue),0.0) ) );
 }
 
 
-template < class TInputImage, class TInputPath, class TOutput, class TCoordRep>
+template < class TInputImage, class TInputPath, class TOutput>
 typename ComplexMomentPathFunction<TInputImage,TInputPath,
-                                   TOutput,TCoordRep>::ComplexType
-ComplexMomentPathFunction<TInputImage,TInputPath,TOutput,TCoordRep>
-::Evaluate() const
+                                   TOutput>::ComplexType
+ComplexMomentPathFunction<TInputImage,TInputPath,TOutput>
+::Evaluate(const PathType& path) const
 {
-  typename InputType::ConstPointer    Image;
-  typename InputType::SizeType        ImageSize;
-  
-  ComplexType                         Sum;
-  ComplexType                         ValP;
-  ComplexType                         ValQ;
-  IndexType                           IndexValue;
-  IndexType                           indexPos = index;
-  typename InputType::SizeType        kernelSize;
+  typedef float                       RealType;
+
+  typename ImageType::ConstPointer    Image;
+  typename ImageType::SizeType        ImageSize;
+  PathConstPointer                    Path;
+  VertexListPointer                   vertexList;
+  VertexType                          cindex;
+  ImageIndexType                      IndexOut;
+  int                                 nbPath;
+  ComplexType  				Value;
+
+  Value = static_cast<ComplexType>(0.0);
 
   if( !this->GetInputImage() )
     {
       return std::complex<float>(0.,0.);  // A modifier
     }
-  if( !this->GetInputPath() )
-    {
-      return std::complex<float>(0.,0.);  // A modifier
-    }
-  
-     
+       
    Image = this->GetInputImage();
-   Path  = this->GetInputPath();
    
-   ImageSize = this->GetInputImage()->GetBufferedRegion().GetSize();
-   vertexList = InputPath->GetVertexList();
-   nbPath = vertexList->Size();
+   ImageSize = Image->GetBufferedRegion().GetSize();
 
-   VertexListTypePointer                vertexList;
-   VertexType                           cindex;
-   int                                  nbPath;
+   vertexList = path.GetVertexList();
+   nbPath = vertexList->Size();
    
    if(nbPath >1)
      {
@@ -137,7 +132,7 @@ ComplexMomentPathFunction<TInputImage,TInputPath,TOutput,TCoordRep>
 	      IndexOut[0] = static_cast<int>(j) ;
 	      IndexOut[1] = static_cast<int>(Alpha * (j-x1) + y1) ;
 	      if(IsInsideBuffer(IndexOut))
-	          this->EvaluateComplexMomentAtIndex( IndexOut, Image->GetPixel(IndexOut) );
+	          Value += EvaluateComplexMomentAtIndex(IndexOut, Image->GetPixel(IndexOut) );
 	      }
 	   }
            else
@@ -148,7 +143,7 @@ ComplexMomentPathFunction<TInputImage,TInputPath,TOutput,TCoordRep>
 	      IndexOut[0] = static_cast<int>(Alpha * (j-y1) + x1) ;
 	      IndexOut[1] = static_cast<int>(j);
 	      if(IsInsideBuffer(IndexOut))
-	          this->EvaluateComplexMomentAtIndex( IndexOut, Image->GetPixel(IndexOut) );
+	          Value += EvaluateComplexMomentAtIndex(IndexOut, Image->GetPixel(IndexOut) );
 	      }
 	   }
          }
@@ -161,7 +156,7 @@ ComplexMomentPathFunction<TInputImage,TInputPath,TOutput,TCoordRep>
 	     {
 	     IndexOut[0]=static_cast<int>(j);
 	     if(IsInsideBuffer(IndexOut))
-	          this->EvaluateComplexMomentAtIndex( IndexOut, Image->GetPixel(IndexOut) );
+	          Value += EvaluateComplexMomentAtIndex(IndexOut, Image->GetPixel(IndexOut) );
 	     }
 	   }
 	   else
@@ -171,14 +166,14 @@ ComplexMomentPathFunction<TInputImage,TInputPath,TOutput,TCoordRep>
 	     {
 	     IndexOut[1]=static_cast<int>(j);
 	     if(IsInsideBuffer(IndexOut))
-	          this->EvaluateComplexMomentAtIndex( IndexOut, Image->GetPixel(IndexOut) );
+	          Value += EvaluateComplexMomentAtIndex(IndexOut, Image->GetPixel(IndexOut) );
 	     }
 	   }
          }         
        } // FOR loop
     } // IF loop
 
-  return (static_cast<ComplexType>(m_Value) );
+  return (static_cast<ComplexType>(Value) );
 
 }
 

@@ -6,13 +6,14 @@
   Date      :   22 mars 2006
   Version   :   
   Role      :   Real Geometric Moments Class of Path 
-  $Id:$
+  $Id$
 
 =========================================================================*/
 #ifndef _otbRealMomentPathFunction_h
 #define _otbRealMomentPathFunction_h
 
 #include "otbGeometricMomentPathFunction.h"
+#include "itkVectorContainer.h"
 
 
 namespace otb
@@ -25,18 +26,17 @@ namespace otb
  * \ingroup PathFunctions
  */
 
-template < class TInputImage,
-           class TInputPath, 
-           class TOutput = float,
-	   class TCoordRep = float >
+template < class TInputImage, 
+           class TInputPath,    
+           class TOutput      = double>
 class ITK_EXPORT RealMomentPathFunction :
-  public GeometricMomentPathFunction<TInputImage,TInputPath, TOutput,TCoordRep >
+  public GeometricMomentPathFunction<TInputImage,TInputPath, TOutput>
 {
 public:
   /** Standard class typedefs. */
   typedef RealMomentPathFunction                                      Self;
   typedef GeometricMomentPathFunction< TInputImage, TInputPath,
-                                       TOutput,TCoordRep >            Superclass;
+                                       TOutput>                       Superclass;
   typedef itk::SmartPointer<Self>                                     Pointer;
   typedef itk::SmartPointer<const Self>                               ConstPointer;
   
@@ -45,14 +45,19 @@ public:
 
 
   /** InputImageType typedef support. */
-  typedef typename Superclass::InputType            InputType;
+  typedef typename Superclass::ImageType            ImageType;
   typedef typename Superclass::IndexType            IndexType;
   typedef typename Superclass::ContinuousIndexType  ContinuousIndexType;
   typedef typename Superclass::PointType            PointType;
-  typedef typename Superclass::InputPathType         InputPathType;
-  typedef typename Superclass::InputPathConstPointer InputPathConstPointer;
+
+  /** InputPathType typedef support. */
+  typedef typename Superclass::PathType                 PathType;
+  typedef typename Superclass::PathConstPointer         PathConstPointer;  
+  typedef typename PathType::ContinuousIndexType        VertexType;
+  typedef itk::VectorContainer< unsigned,VertexType >   VertexListType;
+  typedef typename VertexListType::ConstPointer         VertexListPointer;
  
-  typedef TOutput                                   OutputType;
+  typedef typename Superclass::OutputType               RealType;
 
 
 protected:

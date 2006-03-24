@@ -6,7 +6,7 @@
   Date      :   22 mars 2006
   Version   :   
   Role      :   Evaluate a function of an image over a specific path
-  $Id:$
+  $Id$
 
 =========================================================================*/
 #ifndef _otbPathFunction_h
@@ -42,13 +42,10 @@ namespace otb
 template <
 class TInputImage, 
 class TInputPath,
-class TOutput,
-class TCoordRep = float
+class TOutput
 >
 class ITK_EXPORT PathFunction : 
-    public FunctionBase< Point<TCoordRep,
-                               ::itk::GetImageDimension<TInputImage>::ImageDimension>, 
-                       TOutput > 
+    public itk::FunctionBase< TInputPath, TOutput > 
 {
 public:
   /** Dimension underlying input image. */
@@ -57,9 +54,7 @@ public:
 
   /** Standard class typedefs. */
   typedef PathFunction                                                 Self;
-  typedef itk::FunctionBase<  Point<TCoordRep,
-                              itkGetStaticConstMacro(ImageDimension)>,
-                              TOutput >                                Superclass;
+  typedef itk::FunctionBase<  TInputPath,TOutput >                     Superclass;
   typedef itk::SmartPointer<Self>                                      Pointer;
   typedef itk::SmartPointer<const Self>                                ConstPointer;
   
@@ -77,28 +72,28 @@ public:
 
 
   /** InputPathType typedef support. */
-  typedef TInputPath InputPathType;
+  typedef typename Superclass::InputType InputPathType;
 
   /** InputPathPointer typedef support */ 
   typedef typename InputPathType::ConstPointer InputPathConstPointer;
 
 
-
   /** OutputType typedef support. */
-  typedef TOutput OutputType;
+  typedef typename Superclass::OutputType OutputType;
 
   /** CoordRepType typedef support. */
+  typedef float     TCoordRep;
   typedef TCoordRep CoordRepType;
 
   /** Index Type. */
   typedef typename InputImageType::IndexType IndexType;
 
   /** ContinuousIndex Type. */
-  typedef ContinuousIndex<TCoordRep,itkGetStaticConstMacro(ImageDimension)>
+  typedef itk::ContinuousIndex<TCoordRep,itkGetStaticConstMacro(ImageDimension)>
           ContinuousIndexType;
 
   /** Point Type. */
-  typedef Point<TCoordRep,itkGetStaticConstMacro(ImageDimension)> PointType;
+  typedef itk::Point<TCoordRep,itkGetStaticConstMacro(ImageDimension)> PointType;
 
   /** Set the input image.
    * \warning this method caches BufferedRegion information.
@@ -109,19 +104,6 @@ public:
   /** Get the input image. */
   const InputImageType * GetInputImage() const
     { return m_Image.GetPointer(); }
-
-  /** Set the input path. */
-  virtual void SetInputPath( const InputPathType * ptr )
-    { m_Path = ptr; }
-
-  /** Get the input path. */
-  const InputPathType * GetInputPath() const
-    { return m_Path.GetPointer(); }
-
-
-  /** Evaluate the function.
-   * Subclasses must provide this method. */
-  virtual TOutput Evaluate( ) const = 0;
 
     
   /** Check if an index is inside the image buffer.
@@ -187,11 +169,10 @@ public:
 protected:
   PathFunction();
   ~PathFunction() {}
-  void PrintSelf(std::ostream& os, Indent indent) const;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
   /** Const pointer to the input image. */
   InputImageConstPointer  m_Image;
-  InputPathConstPointer   m_Path;
 
   /** Cache some values for testing if indices are inside buffered region. */
   IndexType               m_StartIndex;

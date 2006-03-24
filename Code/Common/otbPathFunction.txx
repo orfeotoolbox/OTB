@@ -20,12 +20,11 @@ namespace otb
 /**
  * Constructor
  */
-template <class TInputImage,class TInputPath, class TOutput, class TCoordRep>
-PathFunction<TInputImage, TInputPath,TOutput, TCoordRep>
-::ImageFunction()
+template <class TInputImage,class TInputPath, class TOutput>
+PathFunction<TInputImage, TInputPath,TOutput>
+::PathFunction()
 {
   m_Image = NULL;
-  m_Path  = NULL;
   m_StartIndex.Fill(0);
   m_EndIndex.Fill(0);
   m_StartContinuousIndex.Fill(0.0);
@@ -36,14 +35,13 @@ PathFunction<TInputImage, TInputPath,TOutput, TCoordRep>
 /**
  * Standard "PrintSelf" method
  */
-template <class TInputImage,class TInputPath, class TOutput, class TCoordRep>
+template <class TInputImage,class TInputPath, class TOutput>
 void
-PathFunction<TInputImage,TInputPath, TOutput, TCoordRep>
+PathFunction<TInputImage,TInputPath, TOutput>
 ::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   Superclass::PrintSelf( os, indent );
-  os << indent << "InputImage: " << m_Image.GetPointer() << std::endl;
-  os << indent << "InputPath: " << m_Path.GetPointer() << std::endl;
+  os << indent << "Input: " << m_Image.GetPointer() << std::endl;
   os << indent << "StartIndex: " << m_StartIndex << std::endl;
   os << indent << "EndIndex: " << m_EndIndex << std::endl;
   os << indent << "StartContinuousIndex: " << m_StartContinuousIndex << std::endl;
@@ -54,11 +52,10 @@ PathFunction<TInputImage,TInputPath, TOutput, TCoordRep>
 /**
  * Initialize by setting the input image
  */
-template <class TInputImage,class TInputPath, class TOutput, class TCoordRep>
+template <class TInputImage,class TInputPath, class TOutput>
 void
-PathFunction<TInputImage, TInputPath, TOutput, TCoordRep>
-::SetInputImage(
-  const InputImageType * ptr )
+PathFunction<TInputImage, TInputPath, TOutput>
+::SetInputImage( const InputImageType * ptr )
 {
   // set the input image
   m_Image = ptr;

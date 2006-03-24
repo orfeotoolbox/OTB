@@ -13,8 +13,7 @@
 #define _otbComplexMomentPathFunction_h
 
 #include "otbGeometricMomentPathFunction.h"
-
-#include <complex>
+#include "itkVectorContainer.h"
 
 namespace otb
 {
@@ -42,16 +41,17 @@ namespace otb
  */
 template < class TInputImage,
            class TInputPath, 
-           class TOutput = std::complex<double >,
-	   class TCoordRep = float >
+           class TOutput = std::complex<double> >
 class ITK_EXPORT ComplexMomentPathFunction :
-    public GeometricMomentPathFunction<TInputImage, TInputPath, TOutput,TCoordRep>
+    public GeometricMomentPathFunction< TInputImage, 
+    					TInputPath, 
+					TOutput >
 {
 public:
   /** Standard class typedefs. */
   typedef ComplexMomentPathFunction                                  Self;
   typedef GeometricMomentPathFunction<TInputImage,TInputPath, 
-                                      TOutput,TCoordRep>             Superclass;
+                                      TOutput >                      Superclass;
   typedef itk::SmartPointer<Self>                                    Pointer;
   typedef itk::SmartPointer<const Self>                              ConstPointer;
   
@@ -62,23 +62,28 @@ public:
   itkNewMacro(Self);
 
   /** InputImageType typedef support. */
-  typedef typename Superclass::InputType            InputType;
-  typedef typename Superclass::IndexType            IndexType;
+  typedef typename Superclass::ImageType            ImageType;
+  typedef typename Superclass::ImageIndexType       ImageIndexType;
+  typedef typename ImageType::PixelType             PixelType;
+
   typedef typename Superclass::ContinuousIndexType  ContinuousIndexType;
   typedef typename Superclass::PointType            PointType;
 
   /** InputPathType typedef support. */
-  typedef typename Superclass::InputPathType         InputPathType;
-  typedef typename Superclass::InputPathConstPointer InputPathConstPointer;
- 
-  typedef TOutput                                   ComplexType;
+  typedef typename Superclass::PathType                 PathType;
+  typedef typename Superclass::PathConstPointer         PathConstPointer;  
+  typedef typename PathType::ContinuousIndexType        VertexType;
+  typedef itk::VectorContainer< unsigned,VertexType >   VertexListType;
+  typedef typename VertexListType::ConstPointer         VertexListPointer;
+
+  typedef typename Superclass::OutputType               ComplexType;
 
   /** Dimension of the underlying image. */
-  itkStaticConstMacro(ImageDimension, unsigned int,
-                      InputType::ImageDimension);
+//  itkStaticConstMacro(ImageDimension, unsigned int,
+//                      InputType::ImageDimension);
   			 
   /** Evalulate the function */
-  virtual ComplexType Evaluate( ) const;
+  virtual ComplexType Evaluate(const PathType& path) const;
   
   itkSetMacro(P, unsigned int);
   itkGetConstReferenceMacro(P, unsigned int);
@@ -93,11 +98,10 @@ protected:
 private:
   ComplexMomentPathFunction( const Self& ); //purposely not implemented
   void operator=( const Self& ); //purposely not implemented
-  void EvaluateComplexMomentAtIndex(IndexType index,PixelType PixelValue);
+  ComplexType EvaluateComplexMomentAtIndex(ImageIndexType index,PixelType PixelValue) const;
  
   unsigned int m_P;
   unsigned int m_Q;
-  ComplexType  m_Value;
   
 };
 

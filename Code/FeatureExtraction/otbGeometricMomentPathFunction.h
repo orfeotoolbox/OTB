@@ -27,31 +27,30 @@ namespace otb
 
 template < class TInputImage, 
            class TInputPath,    
-           class TOutput   = float,
-	   class TCoordRep = float >
+           class TOutput >
 class ITK_EXPORT GeometricMomentPathFunction :
-  public PathFunction<TInputImage , TInputPath, TOutput, TCoordRep >
+  public PathFunction<TInputImage , TInputPath, TOutput>
 {
 public:
   /** Standard class typedefs. */
-  typedef GeometricMomentPathFunction                                        Self;
-  typedef PathFunction< TInputImage, TInputPath, TOutput,TCoordRep >         Superclass;
-  typedef itk::SmartPointer<Self>                                            Pointer;
-  typedef itk::SmartPointer<const Self>                                      ConstPointer;
+  typedef GeometricMomentPathFunction                             Self;
+  typedef PathFunction< TInputImage, TInputPath, TOutput>         Superclass;
+  typedef itk::SmartPointer<Self>                                 Pointer;
+  typedef itk::SmartPointer<const Self>                           ConstPointer;
   
   /** Run-time type information (and related methods). */
   itkTypeMacro(GeometricMomentPathFunction, PathFunction);
 
 
   /** InputImageType typedef support. */
-  typedef typename Superclass::InputType             InputType;
-  typedef typename Superclass::IndexType             IndexType;
+  typedef typename Superclass::InputImageType        ImageType;
+  typedef typename Superclass::IndexType             ImageIndexType;
   typedef typename Superclass::ContinuousIndexType   ContinuousIndexType;
   typedef typename Superclass::PointType             PointType;
-  typedef typename Superclass::InputPathType         InputPathType;
-  typedef typename Superclass::InputPathConstPointer InputPathConstPointer;
+  typedef typename Superclass::InputPathType         PathType;
+  typedef typename Superclass::InputPathConstPointer PathConstPointer;
  
-  typedef TOutput                                   OutputType;
+  typedef typename Superclass::OutputType            OutputType;
 
 
 protected:

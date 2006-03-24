@@ -5,25 +5,21 @@
   Language  :   C++
   Date      :   20 mars 2006
   Version   :   
-  Role      :   Hu's invariant Class of iamges 
-  $Id$
+  Role      :   Hu's invariant Class of images 
+  $Id:$
 
 =========================================================================*/
 #ifndef _otbHuImageFunction_h
 #define _otbHuImageFunction_h
 
-//#include "itkImageFunction.h"
 #include "otbRealMomentImageFunction.h"
-
-#include <complex>
-
 
 namespace otb
 {
 
 /**
  * \class HuImageFunction
- * \brief Calculate the Hu's invariant paramete.
+ * \brief Calculate the Hu's invariant parameter.
  *
  * Calculate the Hu's invariant over an image defined as:
  *
@@ -65,7 +61,6 @@ public:
   typedef itk::SmartPointer<const Self>                             ConstPointer;
   
   /** Run-time type information (and related methods). */
-//  itkTypeMacro(HuImageFunction, itk::ImageFunction);
   itkTypeMacro(HuImageFunction, RealMomentImageFunction);
 
   /** Method for creation through the object factory. */
