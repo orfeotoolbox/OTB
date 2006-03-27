@@ -18,7 +18,6 @@ SET(IO_TESTS     ${CXX_TEST_PATH}/otbIOTests)
 
 # -------       FAs traitees -----------------------------------
 
-
 # ---  FA 00005 ENVI (GDAL) image multi-canal ---
 ADD_TEST(FA-00005-io_EnviMultiBande_RW ${IO_TESTS} 
          otbVectorImageFileReaderWriterTest
@@ -36,6 +35,36 @@ ADD_TEST(FA-00005-io_EnviMultiBande ${COMMON_TESTS}
          -channels 1 2 3)
 
 # ---  FA 00006 ENVI (GDAL) Conversion Type de pixel ---
+
+ADD_TEST(FA-00006-io_Amst_ers1 ${CXX_TEST_PATH}/ExtractROI
+         ${INPUTDATA}/amst_ers1.ima 
+         0 0 1 100 100 
+         ${TEMP}/FA-00006-io_amst_ers1.png )
+
+ADD_TEST(FA-00006-io_Amst_ers1_Double2UChar ${COMMON_TESTS} 
+   --compare-binary  ${INPUTDATA}/amst_ers1.ima
+                     ${TEMP}/FA-00006-io_amst_ers1_double2uchar.c1
+         otbMultiToMonoChannelExtractROI
+         -double ${INPUTDATA}/amst_ers1.ima 
+         -uchar ${TEMP}/FA-00006-io_amst_ers1_double2uchar.hd )
+ADD_TEST(FA-00006-io_Amst_ers1_UChar2UChar ${COMMON_TESTS} 
+   --compare-binary  ${INPUTDATA}/amst_ers1.ima
+                     ${TEMP}/FA-00006-io_amst_ers1_uchar2uchar.c1
+         otbMultiToMonoChannelExtractROI
+         -uchar ${INPUTDATA}/amst_ers1.ima 
+         -uchar ${TEMP}/FA-00006-io_amst_ers1_uchar2uchar.hd )
+
+ADD_TEST(FA-00006-io_Amst_ers1_Double2Double ${COMMON_TESTS} 
+         otbMultiToMonoChannelExtractROI
+         -double ${INPUTDATA}/amst_ers1.ima 
+         -double ${TEMP}/FA-00006-io_amst_ers1_double2double.hd )
+
+ADD_TEST(FA-00006-io_Amst_ers1_UChar2Double ${COMMON_TESTS} 
+         otbMultiToMonoChannelExtractROI
+         -uchar ${INPUTDATA}/amst_ers1.ima 
+         -double ${TEMP}/FA-00006-io_amst_ers1_uchar2double.hd )
+
+
 ADD_TEST(FA-00006-io_Poupees_OCT_UChar2Double ${COMMON_TESTS} 
 #   --compare-image ${TOL}   ${BASELINE}/ioMultiMonoChannelROI_ENVI2PNG_poupees_1canal_302_2_134_330.png
 #                     ${TEMP}/ioMultiMonoChannelROI_ENVI2PNG_poupees_1canal_302_2_134_330.png
@@ -134,11 +163,13 @@ ADD_TEST(FA-00013-io_WriteImageTIFF_bis ${COMMON_TESTS}
 
 # -------       Fin des FAs traitees -----------------------------------
 
+ADD_EXECUTABLE(AlignementsQB  AlignementsQB.cxx)
+TARGET_LINK_LIBRARIES(AlignementsQB OTBFeatureExtraction OTBIO OTBCommon ${CAI_LIBRARY}  ${GDAL_LIBRARY} ITKIO ITKCommon)
 
 INCLUDE_DIRECTORIES("${OTBTesting_BINARY_DIR}")
 
-ADD_EXECUTABLE(AlignementsQB  AlignementsQB.cxx)
-TARGET_LINK_LIBRARIES(AlignementsQB OTBFeatureExtraction OTBIO OTBCommon ${CAI_LIBRARY}  ${GDAL_LIBRARY} ITKIO ITKCommon)
+ADD_EXECUTABLE(ExtractROI  ExtractROI.cxx)
+TARGET_LINK_LIBRARIES(ExtractROI OTBFeatureExtraction OTBIO OTBCommon ${CAI_LIBRARY}  ${GDAL_LIBRARY} ITKIO ITKCommon)
 
 
 
