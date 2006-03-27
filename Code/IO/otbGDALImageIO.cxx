@@ -317,7 +317,9 @@ void GDALImageIO::InternalReadImageInformation()
     // (take time to check !!)
     if(m_PxType == GDT_Byte)
       {
-      SetComponentType(CHAR);
+// OTB-FA-00006-CS
+//      SetComponentType(CHAR);
+      SetComponentType(UCHAR);
       }
     else if(m_PxType == GDT_UInt16)
       {
