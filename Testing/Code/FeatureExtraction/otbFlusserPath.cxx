@@ -6,7 +6,7 @@
   Date      :   24 mars 2006
   Version   :   
   Role      :   
-  $Id$
+  $Id:$
 
 =========================================================================*/
 #if defined(_MSC_VER)
@@ -17,10 +17,10 @@
 #include "itkImage.h"
 
 #include "otbImageFileReader.h"
-#include "otbHuPathFunction.h"
+#include "otbFlusserPathFunction.h"
 #include "itkPolyLineParametricPath.h"
 
-int otbHuPath( int argc, char ** argv )
+int otbFlusserPath( int argc, char ** argv )
 {
   try 
     { 
@@ -34,7 +34,7 @@ int otbHuPath( int argc, char ** argv )
 	typedef InputImageType::PointType                 ImagePointType;
         typedef otb::ImageFileReader< InputImageType  >   ReaderType;	  
 	typedef itk::PolyLineParametricPath< Dimension >	        PathType;
-	typedef otb::HuPathFunction<InputImageType,PathType>            FunctionType;
+	typedef otb::FlusserPathFunction<InputImageType,PathType>       FunctionType;
 	typedef FunctionType::RealType                                  RealType;
   
         ReaderType::Pointer reader         = ReaderType::New();	
@@ -72,11 +72,11 @@ int otbHuPath( int argc, char ** argv )
 
 	RealType Result;
 	
-	for (Number = 1 ;Number<8;Number++)
+	for (Number = 1 ;Number<12;Number++)
 	  {
 	   function->SetNumber(Number);
            Result = function->Evaluate( *pathElt );
-	   std::cout << "Hu("<<Number<<") = "<< Result <<std::endl;
+	   std::cout << "Flusser("<<Number<<") = "<< Result <<std::endl;
 	  }
     } 
   catch( itk::ExceptionObject & err ) 

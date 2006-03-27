@@ -67,10 +67,21 @@ ADD_TEST(feTuComplexMomentPathNew ${FEATUREEXTRACTION_TESTS}
         otbComplexMomentPathNew)
 	
 ADD_TEST(feTuComplexMomentPath ${FEATUREEXTRACTION_TESTS}  
-        otbComplexMomentPath)
+        otbComplexMomentPath
+	${INPUTDATA}/TeteAToto.png 1 1)
+
+ADD_TEST(feTuHuPathNew ${FEATUREEXTRACTION_TESTS}  
+        otbHuPathNew)
 
 ADD_TEST(feTuHuPath ${FEATUREEXTRACTION_TESTS}  
         otbHuPath
+	${INPUTDATA}/TeteAToto.png)
+
+ADD_TEST(feTuFlusserPathNew ${FEATUREEXTRACTION_TESTS}  
+        otbFlusserPathNew)
+
+ADD_TEST(feTuFlusserPath ${FEATUREEXTRACTION_TESTS}  
+        otbFlusserPath
 	${INPUTDATA}/TeteAToto.png)
 
 ADD_TEST(feTuTouziNew ${FEATUREEXTRACTION_TESTS}  
@@ -137,7 +148,10 @@ otbHuImage.cxx
 otbFlusserImage.cxx
 otbComplexMomentPathNew.cxx
 otbComplexMomentPath.cxx
+otbHuPathNew.cxx
 otbHuPath.cxx
+otbFlusserPathNew.cxx
+otbFlusserPath.cxx
 otbTouziEdgeDetectorNew.cxx
 otbTouziEdgeDetector.cxx
 otbTouziEdgeDetectorDirection.cxx

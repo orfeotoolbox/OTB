@@ -48,11 +48,11 @@ typename HuPathFunction<TInputImage,TInputPath, TOutput >::RealType
 HuPathFunction<TInputImage,TInputPath, TOutput >
 ::Evaluate( const PathType& path) const
 {
-  RealType                         HuValue;
   typedef ComplexMomentPathFunction<ImageType,PathType>   FunctionType;
   typedef typename FunctionType::ComplexType              ComplexType;
 
   
+  RealType                         HuValue;
   ComplexType                      HuValueComplex;
 
   typename FunctionType::Pointer function =FunctionType::New();

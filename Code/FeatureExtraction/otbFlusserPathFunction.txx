@@ -49,12 +49,14 @@ typename FlusserPathFunction<TInputImage,TInputPath, TOutput>::RealType
 FlusserPathFunction<TInputImage,TInputPath, TOutput >
 ::Evaluate( const PathType& path) const
 {
-  typename InputType::SizeType        ImageSize;
+  typedef ComplexMomentPathFunction<ImageType,PathType>   FunctionType;
+  typedef typename FunctionType::ComplexType              ComplexType;
+
+
   RealType                            FlusserValue;
   ComplexType                         FlusserValueComplex;
 
-  typedef otb::ComplexMomentImageFunction<InputType,ComplexType>   CMType;
-  typename CMType::Pointer function =CMType::New();
+  typename FunctionType::Pointer function =FunctionType::New();
 
   if( !this->GetInputImage() )
     {

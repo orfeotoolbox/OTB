@@ -6,7 +6,7 @@
   Date      :   24 mars 2006
   Version   :   
   Role      :   Flusser's invariant Class of path 
-  $Id:$
+  $Id$
 
 =========================================================================*/
 #ifndef _otbFlusserPathFunction_h
@@ -59,7 +59,7 @@ class ITK_EXPORT FlusserPathFunction :
 public:
   /** Standard class typedefs. */
   typedef FlusserPathFunction                                       Self;
-  typedef RealMomentPathFunction< TInputImage,TInputPath TOutput>   Superclass;
+  typedef RealMomentPathFunction<TInputImage,TInputPath, TOutput>   Superclass;
   typedef itk::SmartPointer<Self>                                   Pointer;
   typedef itk::SmartPointer<const Self>                             ConstPointer;
   
@@ -70,7 +70,7 @@ public:
   itkNewMacro(Self);
 
   /** InputImageType typedef support. */
-  typedef TInput                                    InputType;
+  typedef typename Superclass::ImageType            ImageType;
   typedef typename Superclass::IndexType            IndexType;
   typedef typename Superclass::ContinuousIndexType  ContinuousIndexType;
   typedef typename Superclass::PointType            PointType;
@@ -82,16 +82,12 @@ public:
   typedef itk::VectorContainer< unsigned,VertexType >   VertexListType;
   typedef typename VertexListType::ConstPointer         VertexListPointer;
 
-  typedef TOutput                                   RealType;
-  typedef typename std::complex<RealType>           ComplexType;
+  typedef typename Superclass::RealType                 RealType;
    
-  /** Dimension of the underlying image. */
-  itkStaticConstMacro(ImageDimension, unsigned int,
-                      InputType::ImageDimension);
   			 
+
   /** Evaluate the function at non-integer positions */
   virtual RealType Evaluate( const PathType& path) const;
-
   /** Get/Set the radius of the neighborhood over which the
       statistics are evaluated */  
   itkSetMacro(Number,short);
@@ -112,7 +108,7 @@ private:
 } // namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbFlusserImageFunction.txx"
+#include "otbFlusserPathFunction.txx"
 #endif
 
 #endif
