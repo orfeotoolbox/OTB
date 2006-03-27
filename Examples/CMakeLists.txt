@@ -4,4 +4,5 @@ SUBDIRS(
   StartExamples
   ExtractROI
   BasicFilters
+  FeatureExtraction
 )
