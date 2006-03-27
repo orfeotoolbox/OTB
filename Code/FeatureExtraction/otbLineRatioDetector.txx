@@ -203,9 +203,9 @@ void LineRatioDetector< TInputImage, TOutputImage, InterpolatorType>
 //std::cout << "Xc,Yc " << bit.GetIndex() << std::endl;
 
       // Initialisations
-      for (int dir=0; dir<NB_DIR; dir++)
+      for (unsigned int dir=0; dir<NB_DIR; dir++)
         {
-        for (int z=0; z<NB_ZONE; z++) 
+        for (unsigned int z=0; z<NB_ZONE; z++) 
           Sum[dir][z] = 0.;
         }
         
@@ -247,7 +247,7 @@ void LineRatioDetector< TInputImage, TOutputImage, InterpolatorType>
         Sum[0][zone] += static_cast<double>(bit.GetPixel(i));
          
         // Loop on the 3 other directions
-        for ( int dir=1; dir<NB_DIR; dir++ )
+        for (unsigned int dir=1; dir<NB_DIR; dir++ )
           {      
             ROTATION( (X-Xc), (Y-Yc), Theta[dir], xout, yout);
             
@@ -267,7 +267,7 @@ void LineRatioDetector< TInputImage, TOutputImage, InterpolatorType>
       R13 = -1.;           
            
       // Loop on the 4 directions
-      for ( int dir=0; dir<NB_DIR; dir++ )
+      for (unsigned int dir=0; dir<NB_DIR; dir++ )
         {
         		
         // Calculation of the mean for the 3 zones	

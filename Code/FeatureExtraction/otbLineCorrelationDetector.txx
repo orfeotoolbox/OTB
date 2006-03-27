@@ -211,9 +211,9 @@ void LineCorrelationDetector< TInputImage, TOutputImage, InterpolatorType>
 //std::cout << "Xc,Yc " << bit.GetIndex() << std::endl;
 
       // Initialisations
-      for (int dir=0; dir<NB_DIR; dir++)
+      for (unsigned int dir=0; dir<NB_DIR; dir++)
         {
-        for (int z=0; z<NB_ZONE; z++)
+        for (unsigned int z=0; z<NB_ZONE; z++)
           { 
           Sum[dir][z] = 0.;
           Sum2[dir][z] = 0.;
@@ -261,7 +261,7 @@ void LineCorrelationDetector< TInputImage, TOutputImage, InterpolatorType>
         Sum2[0][zone] += ValXY*ValXY;
          
         // Loop on the 3 other directions
-        for ( int dir=1; dir<NB_DIR; dir++ )
+        for (unsigned int dir=1; dir<NB_DIR; dir++ )
           {      
             ROTATION( (X-Xc), (Y-Yc), Theta[dir], xout, yout);
             
@@ -286,7 +286,7 @@ void LineCorrelationDetector< TInputImage, TOutputImage, InterpolatorType>
       double NbPixel = static_cast<double>(NbPixelZone);          
            
       // Loop on the 4 directions
-      for ( int dir=0; dir<NB_DIR; dir++ )
+      for (unsigned int dir=0; dir<NB_DIR; dir++ )
         {
         		
         // Calculation of the mean for the 3 zones	
