@@ -126,6 +126,22 @@ ADD_TEST(feTuLineCorrelationLinear ${FEATUREEXTRACTION_TESTS}
 	${INPUTDATA}/poupees_1canal.hd
 	${TEMP}/feFiltreLineCorrelationLinear_poupees_2_3.hd
 	2 3)
+	
+ADD_TEST(feTuLineCorrelation ${FEATUREEXTRACTION_TESTS}  
+        otbLineCorrelationDetector
+	${INPUTDATA}/poupees_1canal.hd
+	${TEMP}/feFiltreLineCorrelationLinear_poupees_2_3.hd
+	2 3)
+	
+ADD_TEST(feTuAssociativeSymmetricalSumNew ${FEATUREEXTRACTION_TESTS}  
+        otbAssociativeSymmetricalSumNew)
+        
+ADD_TEST(feTuAssociativeSymmetricalSum ${FEATUREEXTRACTION_TESTS}  
+        otbAssociativeSymmetricalSum
+        ${TEMP}/feFiltreLineRatioLinear_poupees_2_3.hd
+        ${TEMP}/feFiltreLineCorrelationLinear_poupees_2_3.hd
+        ${TEMP}/feFiltreASS_poupees_2_3.hd)
+        
         		        
 #ADD_TEST(tvFEPatrick2 ${FEATUREEXTRACTION_TESTS}  
 #  --compare-image ${TOL}  ${BASELINE}/otbExtractROI_cthead1_26_97_209_100.png
@@ -160,6 +176,9 @@ otbLineRatioDetectorLinear.cxx
 otbLineRatioDetector.cxx
 otbLineCorrelationDetectorNew.cxx
 otbLineCorrelationDetectorLinear.cxx
+otbLineCorrelationDetector.cxx
+otbAssociativeSymmetricalSumNew.cxx
+otbAssociativeSymmetricalSum.cxx
 )
 
 
