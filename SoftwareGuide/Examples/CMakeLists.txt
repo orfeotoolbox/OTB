@@ -156,6 +156,7 @@ SET( OTB_EXAMPLES_SRCS
   ${OTB_SOURCE_DIR}/Examples/StartExamples/MeanImageFilter.cxx
   ${OTB_SOURCE_DIR}/Examples/ExtractROI/ExtractROI.cxx
   ${OTB_SOURCE_DIR}/Examples/BasicFilters/LeeImageFilter.cxx
+  ${OTB_SOURCE_DIR}/Examples/FeatureExtraction/AlignmentsExample.cxx
 )
 
 
