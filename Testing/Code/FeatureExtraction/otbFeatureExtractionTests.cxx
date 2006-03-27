@@ -32,4 +32,7 @@ REGISTER_TEST(otbLineRatioDetector);
 REGISTER_TEST(otbLineRatioDetectorLinear);
 REGISTER_TEST(otbLineCorrelationDetectorNew);
 REGISTER_TEST(otbLineCorrelationDetectorLinear);
+REGISTER_TEST(otbLineCorrelationDetector);
+REGISTER_TEST(otbAssociativeSymmetricalSumNew);
+REGISTER_TEST(otbAssociativeSymmetricalSum);
 }
