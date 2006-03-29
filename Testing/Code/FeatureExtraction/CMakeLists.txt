@@ -139,6 +139,15 @@ ADD_TEST(feTuAssociativeSymmetricalSum ${FEATUREEXTRACTION_TESTS}
         ${TEMP}/feFiltreLineCorrelationLinear_poupees_2_3.hd
         ${TEMP}/feFiltreASS_poupees_2_3.hd)
         
+ADD_TEST(feTuAssymmetricFusionOfLineDetectorNew ${FEATUREEXTRACTION_TESTS}  
+        otbAssymmetricFusionOfLineDetectorNew)
+        
+ADD_TEST(feTuAssymmetricFusionOfLineDetector ${FEATUREEXTRACTION_TESTS}  
+        otbAssymmetricFusionOfLineDetector
+	${INPUTDATA}/poupees_1canal.hd
+	${TEMP}/feFiltreAssymmetricFusion_poupees_2_3.hd
+	2 3)
+        
 ADD_TEST(feTvHarrisImage ${FEATUREEXTRACTION_TESTS}  
         otbHarrisImage 
 	${INPUTDATA}/TeteAToto.png
@@ -191,6 +200,8 @@ otbLineCorrelationDetectorLinear.cxx
 otbLineCorrelationDetector.cxx
 otbAssociativeSymmetricalSumNew.cxx
 otbAssociativeSymmetricalSum.cxx
+otbAssymetricFusionOfLineDetectorNew.cxx
+otbAssymetricFusionOfLineDetector.cxx
 otbHarrisImage.cxx
 otbMultiplyByScalarImageTest.cxx
 )

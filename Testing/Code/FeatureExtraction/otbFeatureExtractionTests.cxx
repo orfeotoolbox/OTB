@@ -35,6 +35,8 @@ REGISTER_TEST(otbLineCorrelationDetectorLinear);
 REGISTER_TEST(otbLineCorrelationDetector);
 REGISTER_TEST(otbAssociativeSymmetricalSumNew);
 REGISTER_TEST(otbAssociativeSymmetricalSum);
+REGISTER_TEST(otbAssymetricFusionOfLineDetectorNew);
+REGISTER_TEST(otbAssymetricFusionOfLineDetector);
 REGISTER_TEST(otbHarrisImage);
 REGISTER_TEST(otbMultiplyByScalarImageFilterTest);
 
