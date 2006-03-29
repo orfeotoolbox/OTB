@@ -40,10 +40,18 @@ ADD_TEST(bfTvFiltreFrost ${BASICFILTERS_TESTS}
 	${TEMP}/bfFiltreFrost_poupees_05_05_01.png
 	05 05 0.1)
 
+# -------            otb::PointSetSource   ------------------------------
+
+ADD_TEST(bfTuImageToPointSetFilterTest ${COMMON_TESTS} 
+         otbImageToPointSetFilterTest)  
+
+
+
 # A enrichir
 SET(BasicFilters_SRCS
 otbLeeFilter.cxx
 otbFrostFilter.cxx
+otbImageToPointSetFilterTest.cxx
 )
 
 

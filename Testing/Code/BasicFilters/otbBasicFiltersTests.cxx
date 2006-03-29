@@ -11,4 +11,5 @@ void RegisterTests()
 {
 REGISTER_TEST(otbLeeFilter);
 REGISTER_TEST(otbFrostFilter);
+REGISTER_TEST(otbImageToPointSetFilterTest);
 }

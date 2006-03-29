@@ -118,7 +118,10 @@ ADD_TEST(coTvMultiToMonoROI_RGB2NG_PNG ${COMMON_TESTS}
          -startX 700 -startY 60 -sizeX 77 -sizeY 489 -channel 1 )
 
 
+# -------            otb::PointSetSource   ------------------------------
 
+ADD_TEST(coTuPointSetSource ${COMMON_TESTS} 
+         otbPointSetSourceTest)  
 
 
 # -------       Fichiers sources CXX -----------------------------------
@@ -128,6 +131,7 @@ otbExtractROI.cxx
 otbExtractROI_RGB.cxx
 otbMultiChannelExtractROI.cxx
 otbMultiToMonoChannelExtractROI.cxx
+otbPointSetSourceTest.cxx
 )
 
 
