@@ -36,11 +36,6 @@ ADD_TEST(FA-00005-io_EnviMultiBande ${COMMON_TESTS}
 
 # ---  FA 00006 ENVI (GDAL) Conversion Type de pixel ---
 
-ADD_TEST(FA-00006-io_Amst_ers1 ${CXX_TEST_PATH}/ExtractROI
-         ${INPUTDATA}/amst_ers1.ima 
-         0 0 1 100 100 
-         ${TEMP}/FA-00006-io_amst_ers1.png )
-
 ADD_TEST(FA-00006-io_Amst_ers1_Double2UChar ${COMMON_TESTS} 
    --compare-binary  ${INPUTDATA}/amst_ers1.ima
                      ${TEMP}/FA-00006-io_amst_ers1_double2uchar.c1
@@ -167,11 +162,5 @@ ADD_EXECUTABLE(AlignementsQB  AlignementsQB.cxx)
 TARGET_LINK_LIBRARIES(AlignementsQB OTBFeatureExtraction OTBIO OTBCommon ${CAI_LIBRARY}  ${GDAL_LIBRARY} ITKIO ITKCommon)
 
 INCLUDE_DIRECTORIES("${OTBTesting_BINARY_DIR}")
-
-ADD_EXECUTABLE(ExtractROI  ExtractROI.cxx)
-TARGET_LINK_LIBRARIES(ExtractROI OTBFeatureExtraction OTBIO OTBCommon ${CAI_LIBRARY}  ${GDAL_LIBRARY} ITKIO ITKCommon)
-
-
-
 
 ENDIF( NOT OTB_DISABLE_CXX_TESTING )
