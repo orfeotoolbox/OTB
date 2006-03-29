@@ -31,6 +31,7 @@ HarrisImageFilter<TInputImage, TOutputImage>
   m_HessianFilter         = HessianFilterType::New();
   m_GaussianFilter        = GaussianFilterType::New();  
   m_HessianToScalarFilter = HessianToScalarFilterType::New();
+  m_MultiplyScalarFilter  = MultiplyScalarFilterType::New();
 }
 
 template <class TInputImage, class TOutputImage>
@@ -50,9 +51,12 @@ HarrisImageFilter<TInputImage, TOutputImage>
   m_HessianToScalarFilter->SetInput( m_GaussianFilter->GetOutput() );
   m_HessianToScalarFilter->SetAlpha( this->m_Alpha );
 
-  m_HessianToScalarFilter->GraftOutput(this->GetOutput() ); 
-  m_HessianToScalarFilter->Update();
-  this->GraftOutput(m_HessianToScalarFilter->GetOutput() );
+  m_MultiplyScalarFilter->SetInput( m_HessianToScalarFilter->GetOutput() );
+  m_MultiplyScalarFilter->SetCoef( (m_SigmaD*m_SigmaD) );
+  
+  m_MultiplyScalarFilter->GraftOutput(this->GetOutput() ); 
+  m_MultiplyScalarFilter->Update();
+  this->GraftOutput(m_MultiplyScalarFilter->GetOutput() );
 }
 
 

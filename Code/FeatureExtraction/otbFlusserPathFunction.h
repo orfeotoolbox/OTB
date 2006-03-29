@@ -50,30 +50,23 @@ namespace otb
  * \ingroup PathFunctions
  */
 
-template < class TInputImage, 
-           class TInputPath,    
+template < class TInputPath,    
            class TOutput      = double>
 class ITK_EXPORT FlusserPathFunction :
-  public RealMomentPathFunction< TInputImage,TInputPath, TOutput >
+  public RealMomentPathFunction< TInputPath, TOutput >
 {
 public:
   /** Standard class typedefs. */
-  typedef FlusserPathFunction                                       Self;
-  typedef RealMomentPathFunction<TInputImage,TInputPath, TOutput>   Superclass;
-  typedef itk::SmartPointer<Self>                                   Pointer;
-  typedef itk::SmartPointer<const Self>                             ConstPointer;
+  typedef FlusserPathFunction                           Self;
+  typedef RealMomentPathFunction<TInputPath, TOutput>   Superclass;
+  typedef itk::SmartPointer<Self>                       Pointer;
+  typedef itk::SmartPointer<const Self>                 ConstPointer;
   
   /** Run-time type information (and related methods). */
   itkTypeMacro(FlusserPathFunction, RealMomentPathFunction);
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
-
-  /** InputImageType typedef support. */
-  typedef typename Superclass::ImageType            ImageType;
-  typedef typename Superclass::IndexType            IndexType;
-  typedef typename Superclass::ContinuousIndexType  ContinuousIndexType;
-  typedef typename Superclass::PointType            PointType;
 
   /** InputPathType typedef support. */
   typedef typename Superclass::PathType                 PathType;

@@ -6,7 +6,7 @@
   Date      :   24 mars 2006
   Version   :   
   Role      :   Hu's invariant Class of path 
-  $Id:$
+  $Id$
 
 =========================================================================*/
 #ifndef _otbHuPathFunction_h
@@ -46,30 +46,23 @@ namespace otb
  * \ingroup FunctionFunctions
  */
 
-template < class TInputImage, 
-           class TInputPath,    
+template < class TInputPath,    
            class TOutput      = double>
 class ITK_EXPORT HuPathFunction :
-  public RealMomentPathFunction< TInputImage,TInputPath, TOutput >
+  public RealMomentPathFunction< TInputPath, TOutput >
 {
 public:
   /** Standard class typedefs. */
-  typedef HuPathFunction                                            Self;
-  typedef RealMomentPathFunction<TInputImage,TInputPath, TOutput>   Superclass;
-  typedef itk::SmartPointer<Self>                                   Pointer;
-  typedef itk::SmartPointer<const Self>                             ConstPointer;
+  typedef HuPathFunction                                Self;
+  typedef RealMomentPathFunction<TInputPath, TOutput>   Superclass;
+  typedef itk::SmartPointer<Self>                       Pointer;
+  typedef itk::SmartPointer<const Self>                 ConstPointer;
   
   /** Run-time type information (and related methods). */
   itkTypeMacro(HuPathFunction, RealMomentPathFunction);
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
-
-  /** InputImageType typedef support. */
-  typedef typename Superclass::ImageType            ImageType;
-  typedef typename Superclass::IndexType            IndexType;
-  typedef typename Superclass::ContinuousIndexType  ContinuousIndexType;
-  typedef typename Superclass::PointType            PointType;
 
   /** InputPathType typedef support. */
   typedef typename Superclass::PathType                 PathType;
@@ -78,9 +71,8 @@ public:
   typedef itk::VectorContainer< unsigned,VertexType >   VertexListType;
   typedef typename VertexListType::ConstPointer         VertexListPointer;
 
-  typedef typename Superclass::RealType                 RealType;
-   
-  			 
+  /** OutputType typedef support. */
+  typedef typename Superclass::RealType                 RealType;  			 
 
   /** Evaluate the function at non-integer positions */
   virtual RealType Evaluate( const PathType& path) const;

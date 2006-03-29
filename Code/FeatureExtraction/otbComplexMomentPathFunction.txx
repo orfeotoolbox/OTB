@@ -24,20 +24,21 @@ namespace otb
 /**
    * Constructor
    */
-template < class TInputImage, class TInputPath, class TOutput>
-ComplexMomentPathFunction<TInputImage,TInputPath,TOutput>
+template < class TInputPath, class TOutput>
+ComplexMomentPathFunction<TInputPath,TOutput>
 ::ComplexMomentPathFunction()
 {
-  m_P = 0;
-  m_Q = 0;
+  m_P    = 0;
+  m_Q    = 0;
+  m_Step = 1.0;
 }
 
 /**
    *
    */
-template < class TInputImage, class TInputPath, class TOutput>
+template < class TInputPath, class TOutput>
 void
-ComplexMomentPathFunction<TInputImage,TInputPath,TOutput>
+ComplexMomentPathFunction<TInputPath,TOutput>
 ::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   this->Superclass::PrintSelf(os,indent);
@@ -46,13 +47,15 @@ ComplexMomentPathFunction<TInputImage,TInputPath,TOutput>
 }
 
 
-template < class TInputImage, class TInputPath, class TOutput>
-typename ComplexMomentPathFunction<TInputImage,TInputPath,TOutput>::ComplexType 
-ComplexMomentPathFunction<TInputImage,TInputPath,TOutput>
-::EvaluateComplexMomentAtIndex(ImageIndexType index,PixelType PixelValue) const
+template < class TInputPath, class TOutput>
+typename ComplexMomentPathFunction<TInputPath,TOutput>::ComplexType 
+ComplexMomentPathFunction<TInputPath,TOutput>
+::EvaluateComplexMomentAtIndex(VertexType index) const
 {
     ComplexType                         ValP;
     ComplexType                         ValQ;
+    double                              PixelValue = 1.0;
+
     ValP = std::complex<double>(1.0,0.0);
     ValQ = std::complex<double>(1.0,0.0);
     unsigned int p  = m_P;
@@ -73,38 +76,27 @@ ComplexMomentPathFunction<TInputImage,TInputPath,TOutput>
 }
 
 
-template < class TInputImage, class TInputPath, class TOutput>
-typename ComplexMomentPathFunction<TInputImage,TInputPath,
+template < class TInputPath, class TOutput>
+typename ComplexMomentPathFunction<TInputPath,
                                    TOutput>::ComplexType
-ComplexMomentPathFunction<TInputImage,TInputPath,TOutput>
+ComplexMomentPathFunction<TInputPath,TOutput>
 ::Evaluate(const PathType& path) const
 {
   typedef float                       RealType;
 
-  typename ImageType::ConstPointer    Image;
-  typename ImageType::SizeType        ImageSize;
   PathConstPointer                    Path;
   VertexListPointer                   vertexList;
   VertexType                          cindex;
-  ImageIndexType                      IndexOut;
+  VertexType                          IndexOut;
   int                                 nbPath;
-  ComplexType  				Value;
+  ComplexType  	     		      Value;
 
   Value = static_cast<ComplexType>(0.0);
-
-  if( !this->GetInputImage() )
-    {
-      return std::complex<float>(0.,0.);  // A modifier
-    }
-       
-   Image = this->GetInputImage();
+  
+  vertexList = path.GetVertexList();
+  nbPath = vertexList->Size();
    
-   ImageSize = Image->GetBufferedRegion().GetSize();
-
-   vertexList = path.GetVertexList();
-   nbPath = vertexList->Size();
-   
-   if(nbPath >1)
+  if(nbPath >1)
      {
      for(int i =0 ; i<nbPath-1 ;i++)
        {
@@ -114,64 +106,22 @@ ComplexMomentPathFunction<TInputImage,TInputPath,TOutput>
        cindex = vertexList->GetElement(i+1);
        RealType x2 = cindex[0];
        RealType y2 = cindex[1];
-     
-       RealType DeltaX = std::abs(x1-x2);
-       RealType DeltaY = std::abs(y1-y2);
-       RealType Xmin   = std::min( x1 , x2 );
-       RealType Xmax   = std::max( x1 , x2 );
-       RealType Ymin   = std::min( y1 , y2 );
-       RealType Ymax   = std::max( y1 , y2 );
-          
-       if(DeltaX>0 && DeltaY>0)
+       
+       RealType Theta;
+       RealType Norm;
+       
+       Theta = atan2(y2-y1,x2-x1);
+       Norm  = sqrt((x2-x1)*(x2-x1) + (y2-y1)*(y2-y1) );
+
+       for(RealType k = 0 ; k <=Norm ; k+=m_Step)
          {
-         if(DeltaX>DeltaY)
-           {
-	   RealType Alpha = (y2-y1) / (x2-x1) ;
-	   for(RealType j = Xmin; j<=Xmax;j++)
-	      {
-	      IndexOut[0] = static_cast<int>(j) ;
-	      IndexOut[1] = static_cast<int>(Alpha * (j-x1) + y1) ;
-	      if(IsInsideBuffer(IndexOut))
-	          Value += EvaluateComplexMomentAtIndex(IndexOut, Image->GetPixel(IndexOut) );
-	      }
-	   }
-           else
-	   {
-	   RealType Alpha = (x2-x1) / (y2-y1) ;
-	   for(RealType j = Ymin; j<=Ymax;j++)
-	      {
-	      IndexOut[0] = static_cast<int>(Alpha * (j-y1) + x1) ;
-	      IndexOut[1] = static_cast<int>(j);
-	      if(IsInsideBuffer(IndexOut))
-	          Value += EvaluateComplexMomentAtIndex(IndexOut, Image->GetPixel(IndexOut) );
-	      }
-	   }
-         }
-         else
-         {
-         if(DeltaX>0)
-           {
-	   IndexOut[1] = static_cast<int>(Ymin); 
-	   for(RealType j = Xmin; j<=Xmax;j++)
-	     {
-	     IndexOut[0]=static_cast<int>(j);
-	     if(IsInsideBuffer(IndexOut))
-	          Value += EvaluateComplexMomentAtIndex(IndexOut, Image->GetPixel(IndexOut) );
-	     }
-	   }
-	   else
-	   {
-	   IndexOut[0] = static_cast<int>(Xmin); 	 
-	   for(RealType j = Ymin; j<=Ymax;j++)
-	     {
-	     IndexOut[1]=static_cast<int>(j);
-	     if(IsInsideBuffer(IndexOut))
-	          Value += EvaluateComplexMomentAtIndex(IndexOut, Image->GetPixel(IndexOut) );
-	     }
-	   }
-         }         
+	 IndexOut[0] = x1 + k * cos(Theta);
+	 IndexOut[1] = y1 + k * sin(Theta);
+	 
+	 Value += EvaluateComplexMomentAtIndex(IndexOut );
+	 }
        } // FOR loop
-    } // IF loop
+     } // IF loop
 
   return (static_cast<ComplexType>(Value) );
 

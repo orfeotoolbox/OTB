@@ -15,8 +15,6 @@
 #include "otbFlusserPathFunction.h"
 #include "otbComplexMomentPathFunction.h"
 #include "itkNumericTraits.h"
-#include "itkMacro.h"
-#include <complex>
 
 namespace otb
 {
@@ -24,8 +22,8 @@ namespace otb
 /**
    * Constructor
    */
-template < class TInputImage, class TInputPath, class TOutput>
-FlusserPathFunction<TInputImage,TInputPath, TOutput >
+template < class TInputPath, class TOutput>
+FlusserPathFunction<TInputPath, TOutput >
 ::FlusserPathFunction()
 {
   m_Number =-1; 
@@ -34,9 +32,9 @@ FlusserPathFunction<TInputImage,TInputPath, TOutput >
 /**
    *
    */
-template < class TInputImage, class TInputPath, class TOutput>
+template < class TInputPath, class TOutput>
 void
-FlusserPathFunction<TInputImage,TInputPath, TOutput >
+FlusserPathFunction< TInputPath, TOutput >
 ::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   this->Superclass::PrintSelf(os,indent);
@@ -44,30 +42,20 @@ FlusserPathFunction<TInputImage,TInputPath, TOutput >
 }
 
 
-template < class TInputImage, class TInputPath, class TOutput>
-typename FlusserPathFunction<TInputImage,TInputPath, TOutput>::RealType
-FlusserPathFunction<TInputImage,TInputPath, TOutput >
+template < class TInputPath, class TOutput>
+typename FlusserPathFunction<TInputPath, TOutput>::RealType
+FlusserPathFunction<TInputPath, TOutput >
 ::Evaluate( const PathType& path) const
 {
-  typedef ComplexMomentPathFunction<ImageType,PathType>   FunctionType;
-  typedef typename FunctionType::ComplexType              ComplexType;
-
+  typedef ComplexMomentPathFunction<PathType>     FunctionType;
+  typedef typename FunctionType::ComplexType      ComplexType;
 
   RealType                            FlusserValue;
   ComplexType                         FlusserValueComplex;
 
   typename FunctionType::Pointer function =FunctionType::New();
-
-  if( !this->GetInputImage() )
-    {
-    return ( itk::NumericTraits<RealType>::max() );
-    }
-  
-  assert(m_Number > 0);
-  assert(m_Number < 12);
-	
-   function->SetInputImage( this->GetInputImage() );
-
+ 
+  function->SetStep( this->GetStep() );
 
   switch(m_Number)
     {

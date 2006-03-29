@@ -25,31 +25,27 @@ namespace otb
  * \ingroup PathFunctions
  */
 
-template < class TInputImage, 
-           class TInputPath,    
+template < class TInputPath,    
            class TOutput >
 class ITK_EXPORT GeometricMomentPathFunction :
-  public PathFunction<TInputImage , TInputPath, TOutput>
+  public PathFunction< TInputPath, TOutput>
 {
 public:
   /** Standard class typedefs. */
-  typedef GeometricMomentPathFunction                             Self;
-  typedef PathFunction< TInputImage, TInputPath, TOutput>         Superclass;
-  typedef itk::SmartPointer<Self>                                 Pointer;
-  typedef itk::SmartPointer<const Self>                           ConstPointer;
+  typedef GeometricMomentPathFunction                Self;
+  typedef PathFunction< TInputPath, TOutput>         Superclass;
+  typedef itk::SmartPointer<Self>                    Pointer;
+  typedef itk::SmartPointer<const Self>              ConstPointer;
   
   /** Run-time type information (and related methods). */
   itkTypeMacro(GeometricMomentPathFunction, PathFunction);
 
 
-  /** InputImageType typedef support. */
-  typedef typename Superclass::InputImageType        ImageType;
-  typedef typename Superclass::IndexType             ImageIndexType;
-  typedef typename Superclass::ContinuousIndexType   ContinuousIndexType;
-  typedef typename Superclass::PointType             PointType;
+  /** InputPathType typedef support. */
   typedef typename Superclass::InputPathType         PathType;
   typedef typename Superclass::InputPathConstPointer PathConstPointer;
  
+  /** OutputPathType typedef support. */
   typedef typename Superclass::OutputType            OutputType;
 
 

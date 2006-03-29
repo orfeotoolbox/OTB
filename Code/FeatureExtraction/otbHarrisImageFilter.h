@@ -14,8 +14,9 @@
 #include "itkImageToImageFilter.h"
 #include "itkRecursiveGaussianImageFilter.h"
 #include "itkHessianRecursiveGaussianImageFilter.h"
-#include "otbHessianToScalarImageFilter.h"
 #include "itkSymmetricSecondRankTensor.h"
+#include "otbHessianToScalarImageFilter.h"
+#include "otbMultiplyByScalarImageFilter.h"
 
 namespace otb
 {
@@ -61,11 +62,11 @@ public:
                       ::itk::GetImageDimension<InputImageType>::ImageDimension >  TensorType;
 		      
   typedef itk::HessianRecursiveGaussianImageFilter<InputImageType,TensorType >  HessianFilterType;
-//  typedef typename HessianFilterType::RealImageType                  RealImageType;
   
   typedef itk::RecursiveGaussianImageFilter<TensorType,
-                                            TensorType>                GaussianFilterType;  
-  typedef otb::HessianToScalarImageFilter<TensorType,OutputImageType > HessianToScalarFilterType;
+                                            TensorType>                     GaussianFilterType;  
+  typedef otb::HessianToScalarImageFilter<TensorType,OutputImageType >      HessianToScalarFilterType;
+  typedef otb::MultiplyByScalarImageFilter<OutputImageType,OutputImageType> MultiplyScalarFilterType;
 
   itkSetMacro(SigmaD,double);
   itkGetConstReferenceMacro(SigmaD, double);
@@ -93,8 +94,8 @@ private:
   
   typename HessianFilterType::Pointer           m_HessianFilter;
   typename GaussianFilterType::Pointer          m_GaussianFilter;
-//  typename ScaleFilterType::Pointer             m_ScaleFilter;  // ??????
   typename HessianToScalarFilterType::Pointer   m_HessianToScalarFilter;
+  typename MultiplyScalarFilterType::Pointer    m_MultiplyScalarFilter; 
 };
 } // end namespace otb
 

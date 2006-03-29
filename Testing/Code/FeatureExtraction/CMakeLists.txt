@@ -67,22 +67,19 @@ ADD_TEST(feTuComplexMomentPathNew ${FEATUREEXTRACTION_TESTS}
         otbComplexMomentPathNew)
 	
 ADD_TEST(feTuComplexMomentPath ${FEATUREEXTRACTION_TESTS}  
-        otbComplexMomentPath
-	${INPUTDATA}/TeteAToto.png 1 1)
+        otbComplexMomentPath 1 1)
 
 ADD_TEST(feTuHuPathNew ${FEATUREEXTRACTION_TESTS}  
         otbHuPathNew)
 
 ADD_TEST(feTuHuPath ${FEATUREEXTRACTION_TESTS}  
-        otbHuPath
-	${INPUTDATA}/TeteAToto.png)
+        otbHuPath)
 
 ADD_TEST(feTuFlusserPathNew ${FEATUREEXTRACTION_TESTS}  
         otbFlusserPathNew)
 
 ADD_TEST(feTuFlusserPath ${FEATUREEXTRACTION_TESTS}  
-        otbFlusserPath
-	${INPUTDATA}/TeteAToto.png)
+        otbFlusserPath)
 
 ADD_TEST(feTuTouziNew ${FEATUREEXTRACTION_TESTS}  
         otbTouziEdgeDetectorNew)
@@ -147,6 +144,12 @@ ADD_TEST(feTvHarrisImage ${FEATUREEXTRACTION_TESTS}
 	${INPUTDATA}/TeteAToto.png
 	${TEMP}/feHarrisImage.png
 	1.0 2.0 0.0)
+
+ADD_TEST(feTvHarrisPoupee ${FEATUREEXTRACTION_TESTS}  
+        otbHarrisImage 
+	${INPUTDATA}/poupees_1canal.hd
+	${TEMP}/feHarris_poupees.png
+	1.0 1.0 1.0)
 			        
 #ADD_TEST(tvFEPatrick2 ${FEATUREEXTRACTION_TESTS}  
 #  --compare-image ${TOL}  ${BASELINE}/otbExtractROI_cthead1_26_97_209_100.png

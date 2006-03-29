@@ -14,7 +14,6 @@
 #endif
 
 #include "itkExceptionObject.h"
-#include "itkImage.h"
 #include "otbComplexMomentPathFunction.h"
 #include "itkPolyLineParametricPath.h"
 
@@ -22,15 +21,10 @@ int otbComplexMomentPathNew( int argc, char ** argv )
 {
   try 
     { 
-       
-        typedef unsigned char     InputPixelType;
         const   unsigned int      Dimension = 2;
-
-        typedef itk::Image< InputPixelType,  Dimension >  InputImageType;
-	typedef InputImageType::PointType                 ImagePointType;
-	  
-	typedef itk::PolyLineParametricPath< Dimension >	        PathType;
-	typedef otb::ComplexMomentPathFunction<InputImageType,PathType> CMType;  
+       	  
+	typedef itk::PolyLineParametricPath< Dimension >       PathType;
+	typedef otb::ComplexMomentPathFunction<PathType>       CMType;  
 
 	CMType::Pointer function =CMType::New();
     } 

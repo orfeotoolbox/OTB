@@ -26,29 +26,20 @@ namespace otb
  * \ingroup PathFunctions
  */
 
-template < class TInputImage, 
-           class TInputPath,    
+template < class TInputPath,    
            class TOutput      = double>
 class ITK_EXPORT RealMomentPathFunction :
-  public GeometricMomentPathFunction<TInputImage,TInputPath, TOutput>
+  public GeometricMomentPathFunction< TInputPath, TOutput>
 {
 public:
   /** Standard class typedefs. */
   typedef RealMomentPathFunction                                      Self;
-  typedef GeometricMomentPathFunction< TInputImage, TInputPath,
-                                       TOutput>                       Superclass;
+  typedef GeometricMomentPathFunction< TInputPath, TOutput>           Superclass;
   typedef itk::SmartPointer<Self>                                     Pointer;
   typedef itk::SmartPointer<const Self>                               ConstPointer;
   
   /** Run-time type information (and related methods). */
   itkTypeMacro(RealMomentPathFunction, GeometricMomentPathFunction);
-
-
-  /** InputImageType typedef support. */
-  typedef typename Superclass::ImageType            ImageType;
-  typedef typename Superclass::IndexType            IndexType;
-  typedef typename Superclass::ContinuousIndexType  ContinuousIndexType;
-  typedef typename Superclass::PointType            PointType;
 
   /** InputPathType typedef support. */
   typedef typename Superclass::PathType                 PathType;
@@ -57,11 +48,15 @@ public:
   typedef itk::VectorContainer< unsigned,VertexType >   VertexListType;
   typedef typename VertexListType::ConstPointer         VertexListPointer;
  
+  /** OutputType typedef support. */
   typedef typename Superclass::OutputType               RealType;
 
 
+  itkSetMacro(Step, float);
+  itkGetConstReferenceMacro(Step, float);
+
 protected:
-  RealMomentPathFunction() {};
+  RealMomentPathFunction() {m_Step = 1.0;}
   ~RealMomentPathFunction(){};
   void PrintSelf(std::ostream& os, itk::Indent indent) const 
      {
@@ -71,6 +66,9 @@ protected:
 private:
   RealMomentPathFunction( const Self& ); //purposely not implemented
   void operator=( const Self& );               //purposely not implemented
+
+  float        m_Step;
+
 };
 
 } // namespace otb

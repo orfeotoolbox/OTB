@@ -6,7 +6,7 @@
   Date      :   24 mars 2006
   Version   :   
   Role      :   
-  $Id:$
+  $Id$
 
 =========================================================================*/
 #if defined(_MSC_VER)
@@ -14,8 +14,6 @@
 #endif
 
 #include "itkExceptionObject.h"
-#include "itkImage.h"
-
 #include "otbHuPathFunction.h"
 #include "itkPolyLineParametricPath.h"
 
@@ -23,17 +21,10 @@ int otbHuPathNew( int argc, char ** argv )
 {
   try 
     { 
-        const char * inputFilename  = argv[1];
-        unsigned int  Number;
-       
-        typedef unsigned char     InputPixelType;
-        const   unsigned int      Dimension = 2;
-
-        typedef itk::Image< InputPixelType,  Dimension >  InputImageType;
-	typedef itk::PolyLineParametricPath< Dimension >	        PathType;
-	typedef otb::HuPathFunction<InputImageType,PathType>       FunctionType;
-	typedef FunctionType::RealType                                  RealType;
-  
+        const   unsigned int                                     Dimension = 2;
+	typedef itk::PolyLineParametricPath< Dimension >	 PathType;
+	typedef otb::HuPathFunction<PathType>                    FunctionType;
+	typedef FunctionType::RealType                           RealType;
 
 	FunctionType::Pointer function =FunctionType::New();
 

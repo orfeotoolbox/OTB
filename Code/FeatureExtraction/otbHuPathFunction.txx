@@ -23,8 +23,8 @@ namespace otb
 /**
    * Constructor
    */
-template < class TInputImage, class TInputPath, class TOutput>
-HuPathFunction<TInputImage,TInputPath, TOutput >
+template < class TInputPath, class TOutput>
+HuPathFunction< TInputPath, TOutput >
 ::HuPathFunction()
 {
   m_Number =-1; 
@@ -33,9 +33,9 @@ HuPathFunction<TInputImage,TInputPath, TOutput >
 /**
    *
    */
-template < class TInputImage, class TInputPath, class TOutput>
+template < class TInputPath, class TOutput>
 void
-HuPathFunction<TInputImage,TInputPath, TOutput >
+HuPathFunction< TInputPath, TOutput >
 ::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   this->Superclass::PrintSelf(os,indent);
@@ -43,32 +43,20 @@ HuPathFunction<TInputImage,TInputPath, TOutput >
 }
 
 
-template < class TInputImage, class TInputPath, class TOutput>
-typename HuPathFunction<TInputImage,TInputPath, TOutput >::RealType
-HuPathFunction<TInputImage,TInputPath, TOutput >
+template < class TInputPath, class TOutput>
+typename HuPathFunction<TInputPath, TOutput >::RealType
+HuPathFunction<TInputPath, TOutput >
 ::Evaluate( const PathType& path) const
 {
-  typedef ComplexMomentPathFunction<ImageType,PathType>   FunctionType;
-  typedef typename FunctionType::ComplexType              ComplexType;
-
+  typedef ComplexMomentPathFunction<PathType>   FunctionType;
+  typedef typename FunctionType::ComplexType    ComplexType;
   
   RealType                         HuValue;
   ComplexType                      HuValueComplex;
 
   typename FunctionType::Pointer function =FunctionType::New();
-
-
-
-  if( !this->GetInputImage() )
-    {
-    return ( itk::NumericTraits<RealType>::max() );
-    }
-  
-  assert(m_Number > 0);
-  assert(m_Number < 8);
-	
-   function->SetInputImage( this->GetInputImage() );
-
+ 
+  function->SetStep( this->GetStep() );
 
   switch(m_Number)
     {
@@ -170,7 +158,6 @@ HuPathFunction<TInputImage,TInputPath, TOutput >
     default:
 	itkWarningMacro("Hu's invariant parameters are between 1 and 7");	
     }
-
 
   return (static_cast<RealType>(HuValue) );
 

@@ -6,69 +6,49 @@
   Date      :   24 mars 2006
   Version   :   
   Role      :   
-  $Id:$
+  $Id$
 
 =========================================================================*/
 #if defined(_MSC_VER)
 #pragma warning ( disable : 4786 )
 #endif
 
-#include "itkExceptionObject.h"
-#include "itkImage.h"
-
 #include "otbImageFileReader.h"
 #include "otbFlusserPathFunction.h"
 #include "itkPolyLineParametricPath.h"
+#include "itkExceptionObject.h"
 
 int otbFlusserPath( int argc, char ** argv )
 {
   try 
     { 
-        const char * inputFilename  = argv[1];
-        unsigned int  Number;
-       
-        typedef unsigned char     InputPixelType;
-        const   unsigned int      Dimension = 2;
-
-        typedef itk::Image< InputPixelType,  Dimension >  InputImageType;
-	typedef InputImageType::PointType                 ImagePointType;
-        typedef otb::ImageFileReader< InputImageType  >   ReaderType;	  
-	typedef itk::PolyLineParametricPath< Dimension >	        PathType;
-	typedef otb::FlusserPathFunction<InputImageType,PathType>       FunctionType;
-	typedef FunctionType::RealType                                  RealType;
+        unsigned int                                           Number;
+        const   unsigned int                                   Dimension = 2;
+	typedef itk::PolyLineParametricPath< Dimension >       PathType;
+	typedef otb::FlusserPathFunction<PathType>             FunctionType;
+	typedef FunctionType::RealType                         RealType;
   
-        ReaderType::Pointer reader         = ReaderType::New();	
-        reader->SetFileName( inputFilename  );
-        reader->Update();
-	
- 	InputImageType::ConstPointer image = reader->GetOutput();
-		
         // Dessiner un carré:
-	ImagePointType                pos;
 	PathType::ContinuousIndexType cindex;
 	PathType::Pointer pathElt = PathType::New();
 
  	pathElt->Initialize();
 
-        pos[0]=30;
-        pos[1]=30;
-	image->TransformPhysicalPointToContinuousIndex(pos,cindex);
+        cindex[0]=30;
+        cindex[1]=30;
         pathElt->AddVertex(cindex);
-        pos[0]= 30;
-        pos[1]=130;
-	image->TransformPhysicalPointToContinuousIndex(pos,cindex);
+        cindex[0]= 30;
+        cindex[1]=130;
         pathElt->AddVertex(cindex);
-        pos[0]=130;
-        pos[1]=130;
-	image->TransformPhysicalPointToContinuousIndex(pos,cindex);
+        cindex[0]=130;
+        cindex[1]=130;
         pathElt->AddVertex(cindex);
-        pos[0]=130;
-        pos[1]= 30;
-	image->TransformPhysicalPointToContinuousIndex(pos,cindex);
+        cindex[0]=130;
+        cindex[1]= 30;
         pathElt->AddVertex(cindex);
 
 	FunctionType::Pointer function =FunctionType::New();
-	function->SetInputImage( image );
+        function->SetStep(2.0);
 
 	RealType Result;
 	

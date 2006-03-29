@@ -39,19 +39,16 @@ namespace otb
  * 
  * \ingroup ImageFunctions
  */
-template < class TInputImage,
-           class TInputPath, 
+template < class TInputPath, 
            class TOutput = std::complex<double> >
 class ITK_EXPORT ComplexMomentPathFunction :
-    public GeometricMomentPathFunction< TInputImage, 
-    					TInputPath, 
+    public GeometricMomentPathFunction< TInputPath, 
 					TOutput >
 {
 public:
   /** Standard class typedefs. */
   typedef ComplexMomentPathFunction                                  Self;
-  typedef GeometricMomentPathFunction<TInputImage,TInputPath, 
-                                      TOutput >                      Superclass;
+  typedef GeometricMomentPathFunction<TInputPath, TOutput >          Superclass;
   typedef itk::SmartPointer<Self>                                    Pointer;
   typedef itk::SmartPointer<const Self>                              ConstPointer;
   
@@ -61,13 +58,6 @@ public:
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
 
-  /** InputImageType typedef support. */
-  typedef typename Superclass::ImageType            ImageType;
-  typedef typename Superclass::ImageIndexType       ImageIndexType;
-  typedef typename ImageType::PixelType             PixelType;
-
-  typedef typename Superclass::ContinuousIndexType  ContinuousIndexType;
-  typedef typename Superclass::PointType            PointType;
 
   /** InputPathType typedef support. */
   typedef typename Superclass::PathType                 PathType;
@@ -77,10 +67,8 @@ public:
   typedef typename VertexListType::ConstPointer         VertexListPointer;
 
   typedef typename Superclass::OutputType               ComplexType;
+  typedef float                                         RealType;
 
-  /** Dimension of the underlying image. */
-//  itkStaticConstMacro(ImageDimension, unsigned int,
-//                      InputType::ImageDimension);
   			 
   /** Evalulate the function */
   virtual ComplexType Evaluate(const PathType& path) const;
@@ -89,6 +77,8 @@ public:
   itkGetConstReferenceMacro(P, unsigned int);
   itkSetMacro(Q, unsigned int);
   itkGetConstReferenceMacro(Q, unsigned int);
+  itkSetMacro(Step, RealType);
+  itkGetConstReferenceMacro(Step, RealType);
 
 protected:
   ComplexMomentPathFunction();
@@ -98,10 +88,11 @@ protected:
 private:
   ComplexMomentPathFunction( const Self& ); //purposely not implemented
   void operator=( const Self& ); //purposely not implemented
-  ComplexType EvaluateComplexMomentAtIndex(ImageIndexType index,PixelType PixelValue) const;
+  ComplexType EvaluateComplexMomentAtIndex(VertexType index) const;
  
-  unsigned int m_P;
-  unsigned int m_Q;
+  unsigned int    m_P;
+  unsigned int    m_Q;
+  RealType        m_Step;
   
 };
 
