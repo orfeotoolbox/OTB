@@ -142,7 +142,12 @@ ADD_TEST(feTuAssociativeSymmetricalSum ${FEATUREEXTRACTION_TESTS}
         ${TEMP}/feFiltreLineCorrelationLinear_poupees_2_3.hd
         ${TEMP}/feFiltreASS_poupees_2_3.hd)
         
-        		        
+ADD_TEST(feTvHarrisImage ${FEATUREEXTRACTION_TESTS}  
+        otbHarrisImage 
+	${INPUTDATA}/TeteAToto.png
+	${TEMP}/feHarrisImage.png
+	1.0 2.0 0.0)
+			        
 #ADD_TEST(tvFEPatrick2 ${FEATUREEXTRACTION_TESTS}  
 #  --compare-image ${TOL}  ${BASELINE}/otbExtractROI_cthead1_26_97_209_100.png
 #                          ${TEMP}/otbExtractROI_cthead1_26_97_209_100.png
@@ -179,6 +184,7 @@ otbLineCorrelationDetectorLinear.cxx
 otbLineCorrelationDetector.cxx
 otbAssociativeSymmetricalSumNew.cxx
 otbAssociativeSymmetricalSum.cxx
+otbHarrisImage.cxx
 )
 
 

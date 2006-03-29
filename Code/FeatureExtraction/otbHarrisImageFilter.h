@@ -15,7 +15,7 @@
 #include "itkRecursiveGaussianImageFilter.h"
 #include "itkHessianRecursiveGaussianImageFilter.h"
 #include "otbHessianToScalarImageFilter.h"
-
+#include "itkSymmetricSecondRankTensor.h"
 
 namespace otb
 {
@@ -55,13 +55,17 @@ public:
 
   typedef typename InputImageType::SizeType SizeType;
 
-  typedef itk::HessianRecursiveGaussianImageFilter<InputImageType >  HessianFilterType;
-  typedef typename HessianFilterType::RealImageType                  RealImageType;
+  typedef itk::Image< itk::SymmetricSecondRankTensor< 
+                      typename itk::NumericTraits< InputPixelType>::RealType,
+                                      ::itk::GetImageDimension<InputImageType>::ImageDimension >,
+                      ::itk::GetImageDimension<InputImageType>::ImageDimension >  TensorType;
+		      
+  typedef itk::HessianRecursiveGaussianImageFilter<InputImageType,TensorType >  HessianFilterType;
+//  typedef typename HessianFilterType::RealImageType                  RealImageType;
   
-  typedef itk::RecursiveGaussianImageFilter<RealImageType,
-                                            RealImageType>           GaussianFilterType;  
-
-  typedef HessianToScalarFilter<RealImageType,OutputImageType >     HessianToScalarFilterType;
+  typedef itk::RecursiveGaussianImageFilter<TensorType,
+                                            TensorType>                GaussianFilterType;  
+  typedef otb::HessianToScalarImageFilter<TensorType,OutputImageType > HessianToScalarFilterType;
 
   itkSetMacro(SigmaD,double);
   itkGetConstReferenceMacro(SigmaD, double);
@@ -74,6 +78,9 @@ public:
 protected:
   HarrisImageFilter();
   virtual ~HarrisImageFilter() {};
+
+  virtual void GenerateData();
+  
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
 private:

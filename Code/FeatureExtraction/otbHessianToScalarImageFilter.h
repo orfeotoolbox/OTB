@@ -27,7 +27,7 @@ template< class TInput, class TOutput >
 class HessianToScalar
 {
 public:
-  HessianToScalar() {m_Alpha = 1.0};
+  HessianToScalar() {m_Alpha = 1.0;}
   ~HessianToScalar() {};
   inline TOutput operator()( const TInput & Hessian )
   {
@@ -83,11 +83,11 @@ public:
   
   void SetAlpha(double Alpha)
   {
-	this->Functor().SetAlpha( Alpha );
+	this->GetFunctor().SetAlpha( Alpha );
   }  
   double GetAlpha(void)const
   {
-	return( this->Functor().GetAlpha() );
+	return( this->GetFunctor().GetAlpha() );
   }  
 protected:
   HessianToScalarImageFilter() {}
