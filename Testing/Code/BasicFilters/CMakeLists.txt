@@ -42,7 +42,7 @@ ADD_TEST(bfTvFiltreFrost ${BASICFILTERS_TESTS}
 
 # -------            otb::PointSetSource   ------------------------------
 
-ADD_TEST(bfTuImageToPointSetFilterTest ${COMMON_TESTS} 
+ADD_TEST(bfTuImageToPointSetFilterTest ${BASICFILTERS_TESTS} 
          otbImageToPointSetFilterTest)  
 
 
