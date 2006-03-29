@@ -359,7 +359,8 @@ void
 LineCorrelationDetector<TInputImage, TOutput, InterpolatorType>::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   Superclass::PrintSelf( os, indent );
-  os << indent << "Radius: " << m_Radius << std::endl;
+  os << indent << "Length: " << m_LengthLine << std::endl;
+  os << indent << "Width: " << m_WidthLine << std::endl;
 }
 
 
