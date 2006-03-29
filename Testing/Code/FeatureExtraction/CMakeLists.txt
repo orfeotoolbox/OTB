@@ -150,6 +150,10 @@ ADD_TEST(feTvHarrisPoupee ${FEATUREEXTRACTION_TESTS}
 	${INPUTDATA}/poupees_1canal.hd
 	${TEMP}/feHarris_poupees.png
 	1.0 1.0 1.0)
+
+ADD_TEST(feTvMultiplyByScalarImage ${FEATUREEXTRACTION_TESTS}  
+         otbMultiplyByScalarImageFilterTest)
+
 			        
 #ADD_TEST(tvFEPatrick2 ${FEATUREEXTRACTION_TESTS}  
 #  --compare-image ${TOL}  ${BASELINE}/otbExtractROI_cthead1_26_97_209_100.png
@@ -188,6 +192,7 @@ otbLineCorrelationDetector.cxx
 otbAssociativeSymmetricalSumNew.cxx
 otbAssociativeSymmetricalSum.cxx
 otbHarrisImage.cxx
+otbMultiplyByScalarImageTest.cxx
 )
 
 
