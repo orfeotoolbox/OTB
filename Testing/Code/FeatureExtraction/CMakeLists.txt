@@ -163,6 +163,9 @@ ADD_TEST(feTvHarrisPoupee ${FEATUREEXTRACTION_TESTS}
 ADD_TEST(feTvMultiplyByScalarImage ${FEATUREEXTRACTION_TESTS}  
          otbMultiplyByScalarImageFilterTest)
 
+ADD_TEST(feTuThresholdImagePointSetFilter ${FEATUREEXTRACTION_TESTS}  
+        otbThresholdImagePointSetTest
+	${INPUTDATA}/TeteAToto.png)
 			        
 #ADD_TEST(tvFEPatrick2 ${FEATUREEXTRACTION_TESTS}  
 #  --compare-image ${TOL}  ${BASELINE}/otbExtractROI_cthead1_26_97_209_100.png
@@ -204,6 +207,7 @@ otbAssymetricFusionOfLineDetectorNew.cxx
 otbAssymetricFusionOfLineDetector.cxx
 otbHarrisImage.cxx
 otbMultiplyByScalarImageTest.cxx
+otbThresholdImageToPointSetTest.cxx
 )
 
 
