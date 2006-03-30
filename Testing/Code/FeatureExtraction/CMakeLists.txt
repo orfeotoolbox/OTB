@@ -163,8 +163,8 @@ ADD_TEST(feTvHarrisPoupee ${FEATUREEXTRACTION_TESTS}
 ADD_TEST(feTvMultiplyByScalarImage ${FEATUREEXTRACTION_TESTS}  
          otbMultiplyByScalarImageFilterTest)
 
-ADD_TEST(feTuThresholdImagePointSetFilter ${FEATUREEXTRACTION_TESTS}  
-        otbThresholdImagePointSetTest
+ADD_TEST(feTuThresholdImageToPointSetTest ${FEATUREEXTRACTION_TESTS}  
+        otbThresholdImageToPointSetTest
 	${INPUTDATA}/TeteAToto.png)
 			        
 #ADD_TEST(tvFEPatrick2 ${FEATUREEXTRACTION_TESTS}  
