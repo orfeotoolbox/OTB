@@ -240,31 +240,33 @@ void TouziEdgeDetector< TInputImage, TOutputImage>
         y = bitIndex[1];
       
         // We determine for each direction with which region the pixel belongs. 
-         
-        // Vertical direction 
-        if ( x < xc )
-      	  Sum[0][0] += static_cast<double>(bit.GetPixel(i));
-        else if ( x > xc )
-          Sum[0][1] += static_cast<double>(bit.GetPixel(i));
-      
-        // Diagonal direction 1
-        if ( (y-yc) < -(x-xc) )
-      	  Sum[1][0] += static_cast<double>(bit.GetPixel(i));
-        else if ( (y-yc) > -(x-xc) )
-          Sum[1][1] += static_cast<double>(bit.GetPixel(i));
-           
+
          // Horizontal direction
         if ( y < yc )
-      	  Sum[2][0] += static_cast<double>(bit.GetPixel(i));
+      	  Sum[0][0] += static_cast<double>(bit.GetPixel(i));
         else if ( y > yc )
-          Sum[2][1] += static_cast<double>(bit.GetPixel(i));
+          Sum[0][1] += static_cast<double>(bit.GetPixel(i));
                
-        // Diagonal direction 2
+        // Diagonal direction 1
         if ( (y-yc) < (x-xc) )
-      	  Sum[3][0] += static_cast<double>(bit.GetPixel(i));
+      	  Sum[1][0] += static_cast<double>(bit.GetPixel(i));
         else if ( (y-yc) > (x-xc) )
+          Sum[1][1] += static_cast<double>(bit.GetPixel(i));
+                                  
+        // Vertical direction 
+        if ( x > xc )
+      	  Sum[2][0] += static_cast<double>(bit.GetPixel(i));
+        else if ( x < xc )
+          Sum[2][1] += static_cast<double>(bit.GetPixel(i));
+      
+        // Diagonal direction 2
+        if ( (y-yc) > -(x-xc) )
+      	  Sum[3][0] += static_cast<double>(bit.GetPixel(i));
+        else if ( (y-yc) < -(x-xc) )
           Sum[3][1] += static_cast<double>(bit.GetPixel(i));
-          
+           
+
+
         } // end of the loop on pixels of the filter           
         
 
@@ -285,7 +287,7 @@ void TouziEdgeDetector< TInputImage, TOutputImage>
         R_contour = static_cast<double>( MAX( R_contour, R_theta[dir] ) );
 	 
         // Determination of the sign of contour
-        if ( M1 > M2 ) 
+        if ( M2 > M1 ) 
           sign = +1;
         else
           sign = -1;
