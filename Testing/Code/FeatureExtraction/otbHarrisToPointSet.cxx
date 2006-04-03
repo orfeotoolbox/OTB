@@ -29,7 +29,7 @@ int otbHarrisImageToPointSet( int argc, char ** argv )
  	
 	double SigmaD((double)::atof(argv[3]));
 	double SigmaI((double)::atof(argv[4]));
-	double Alpha((double)::atof(argv[5]));
+	double AlphaValue((double)::atof(argv[5]));
 	        
         typedef unsigned char                                   InputPixelType;
         const   unsigned int        	                        Dimension = 2;
@@ -60,25 +60,18 @@ int otbHarrisImageToPointSet( int argc, char ** argv )
 	harris->SetInput( 0,reader->GetOutput() );
         harris->SetSigmaD( SigmaD );
         harris->SetSigmaI( SigmaI );
-	harris->SetAlpha( Alpha );
+	harris->SetAlpha( AlphaValue );
 	harris->SetThreshold( Threshold );
-        harris->SetOutput( pointList );
+        harris->GraftOutput( pointList );
 
         harris->Update();
 
-        outImage->Allocate();
 	unsigned long  NbPoints  = pointList->GetNumberOfPoints();
 	for (unsigned long i = 0 ; i < NbPoints ; i++)
 	   {
 	   pointList->GetPoint(i,CoordPoint);
-#if 0
-	   bool isInside = outImage->TransformPhysicalPointToIndex(CoordPoint,index);
-	   bool isInside = outImage->TransformPhysicalPointToIndex(CoordPoint,index);
-	   if (isInside)
-	     {
-	     outImage->SetPixel(index,255);
-	     }
-#endif
+           std::cout << i <<" / " << NbPoints;
+	   std::cout << CoordPoint << std::endl;
 	   }
 	
 
