@@ -5,7 +5,7 @@
   Language  :   C++
   Date      :   29 mars 2006
   Version   :   
-  Role      : Test du filtre composite AssymetricFusionOfLineDetector  
+  Role      : Test du filtre composite AssymmetricFusionOfLineDetector  
   $Id$
 
 =========================================================================*/
@@ -21,9 +21,9 @@
 
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
-#include "otbAssymetricFusionOfLineDetectorImageFilter.h"
+#include "otbAssymmetricFusionOfLineDetectorImageFilter.h"
 
-int otbAssymetricFusionOfLineDetector( int argc, char ** argv )
+int otbAssymmetricFusionOfLineDetector( int argc, char ** argv )
 {
   try 
     { 
@@ -47,7 +47,7 @@ int otbAssymetricFusionOfLineDetector( int argc, char ** argv )
 
         typedef itk::LinearInterpolateImageFunction< InputImageType, double >	InterpolatorType;
 	
-        typedef otb::AssymetricFusionOfLineDetectorImageFilter< InputImageType, OutputImageType, InterpolatorType >   FilterType;
+        typedef otb::AssymmetricFusionOfLineDetectorImageFilter< InputImageType, OutputImageType, InterpolatorType >   FilterType;
   
         FilterType::Pointer FilterAssSymSum = FilterType::New();
         

@@ -88,7 +88,7 @@ ADD_TEST(feTvTouzi ${FEATUREEXTRACTION_TESTS}
   --compare-image ${TOL}  ${BASELINE}/feFiltreTouzi_poupees_3.hd
                           ${TEMP}/feFiltreTouzi_poupees_3.hd  
         otbTouziEdgeDetector
-	${INPUTDATA}/poupees_1canal.c1
+	${INPUTDATA}/poupees_1canal.hd
 	${TEMP}/feFiltreTouzi_poupees_3.hd
 	3)
 	
@@ -96,7 +96,7 @@ ADD_TEST(feTvTouziDir ${FEATUREEXTRACTION_TESTS}
   --compare-image ${TOL}  ${BASELINE}/feFiltreTouzi_poupees_dir_3.hd
                           ${TEMP}/feFiltreTouzi_poupees_dir_3.hd  
         otbTouziEdgeDetectorDirection
-	${INPUTDATA}/poupees_1canal.c1
+	${INPUTDATA}/poupees_1canal.hd
 	${TEMP}/feFiltreTouzi_poupees_dir_3.hd
 	3)	
 
@@ -127,7 +127,7 @@ ADD_TEST(feTuLineCorrelationLinear ${FEATUREEXTRACTION_TESTS}
 ADD_TEST(feTuLineCorrelation ${FEATUREEXTRACTION_TESTS}  
         otbLineCorrelationDetector
 	${INPUTDATA}/poupees_1canal.hd
-	${TEMP}/feFiltreLineCorrelationLinear_poupees_2_3.hd
+	${TEMP}/feFiltreLineCorrelation_poupees_2_3.hd
 	2 3)
 	
 ADD_TEST(feTuAssociativeSymmetricalSumNew ${FEATUREEXTRACTION_TESTS}  
@@ -206,8 +206,8 @@ otbLineCorrelationDetectorLinear.cxx
 otbLineCorrelationDetector.cxx
 otbAssociativeSymmetricalSumNew.cxx
 otbAssociativeSymmetricalSum.cxx
-otbAssymetricFusionOfLineDetectorNew.cxx
-otbAssymetricFusionOfLineDetector.cxx
+otbAssymmetricFusionOfLineDetectorNew.cxx
+otbAssymmetricFusionOfLineDetector.cxx
 otbHarrisImage.cxx
 otbMultiplyByScalarImageTest.cxx
 otbThresholdImageToPointSetTest.cxx
