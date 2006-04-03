@@ -67,6 +67,8 @@ int otbHarrisImageToPointSet( int argc, char ** argv )
         harris->Update();
 
 	unsigned long  NbPoints  = pointList->GetNumberOfPoints();
+	std::cout << "NbPoints : " << NbPoints <<std::endl;
+	
 	for (unsigned long i = 0 ; i < NbPoints ; i++)
 	   {
 	   pointList->GetPoint(i,CoordPoint);
@@ -76,8 +78,8 @@ int otbHarrisImageToPointSet( int argc, char ** argv )
 	
 
 
-        writer->SetInput( outImage );
-        writer->Update(); 
+ //       writer->SetInput( outImage );
+ //       writer->Update(); 
 		
     } 
   catch( itk::ExceptionObject & err ) 
