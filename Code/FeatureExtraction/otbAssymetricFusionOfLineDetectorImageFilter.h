@@ -8,8 +8,8 @@
   $Id$ 
 
 =========================================================================*/
-#ifndef __otbAssymetricFusionOfLineDetectorImageFilter_h
-#define __otbAssymetricFusionOfLineDetectorImageFilter_h
+#ifndef __otbAssymmetricFusionOfLineDetectorImageFilter_h
+#define __otbAssymmetricFusionOfLineDetectorImageFilter_h
 
 #include "itkImageToImageFilter.h"
 
@@ -21,14 +21,14 @@
 namespace otb
 {
 
-/** \class AssymetricFusionOfLineDtectorImageFilter
+/** \class AssymmetricFusionOfLineDetectorImageFilter
  *
  */
 
 template <class TInputImage, 
 	  class TOutputImage, 
 	  class InterpolatorType = itk::BSplineInterpolateImageFunction<TInputImage> >
-class AssymetricFusionOfLineDetectorImageFilter :  public itk::ImageToImageFilter< TInputImage, TOutputImage >
+class AssymmetricFusionOfLineDetectorImageFilter :  public itk::ImageToImageFilter< TInputImage, TOutputImage >
 {
 public:
 
@@ -46,14 +46,14 @@ public:
   typedef TOutputImage InputImageType2;
   
 
-  typedef AssymetricFusionOfLineDetectorImageFilter Self;
+  typedef AssymmetricFusionOfLineDetectorImageFilter Self;
   typedef itk::ImageToImageFilter< InputImageType, OutputImageType> Superclass;
   typedef itk::SmartPointer<Self> Pointer;
   typedef itk::SmartPointer<const Self>  ConstPointer;
 
   itkNewMacro(Self);
 
-  itkTypeMacro(AssymetricFusionOfLineDetectorImageFilter, ImageToImageFilter);
+  itkTypeMacro(AssymmetricFusionOfLineDetectorImageFilter, ImageToImageFilter);
   
   typedef typename InputImageType::PixelType  InputPixelType;
   typedef typename InputImageType::SizeType SizeType;
@@ -76,8 +76,8 @@ public:
   itkGetConstReferenceMacro(WidthLine, unsigned int);
 
 protected:
-  AssymetricFusionOfLineDetectorImageFilter();
-  virtual ~AssymetricFusionOfLineDetectorImageFilter() {};
+  AssymmetricFusionOfLineDetectorImageFilter();
+  virtual ~AssymmetricFusionOfLineDetectorImageFilter() {};
   
   typedef otb::LineRatioDetector< InputImageType, OutputImageType, InterpolatorType > 	LineRatioType;
   typedef otb::LineCorrelationDetector< InputImageType, OutputImageType, InterpolatorType > LineCorrelationType;
@@ -88,7 +88,7 @@ protected:
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
 private:
-  AssymetricFusionOfLineDetectorImageFilter(const Self&); //purposely not implemented
+  AssymmetricFusionOfLineDetectorImageFilter(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
 
   /** Length of the linear feature = 2*m_LengthLine+1 */ 
@@ -104,7 +104,7 @@ private:
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbAssymetricFusionOfLineDetectorImageFilter.txx"
+#include "otbAssymmetricFusionOfLineDetectorImageFilter.txx"
 #endif
 
   

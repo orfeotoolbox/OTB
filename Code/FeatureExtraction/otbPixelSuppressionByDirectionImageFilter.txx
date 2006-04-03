@@ -35,6 +35,7 @@ PixelSuppressionByDirectionImageFilter<TInputImage, TOutputImage>::PixelSuppress
 {
   m_Radius.Fill(1);
   m_AngularBeam = static_cast<InputRealType>(0.);
+  m_Distance = sqrt(2.);
 }
 
 template <class TInputImage, class TOutputImage>
@@ -168,9 +169,32 @@ void PixelSuppressionByDirectionImageFilter< TInputImage, TOutputImage>::Threade
   
   typename TInputImage::IndexType     bitIndex;
   
+  //---------------------------------------------------------------------------
+
+  InputPixelType PixelValue;
+    
+  // location of the pixel central in the input image
+  int Xc, Yc;
+
+  // Pixel location in the system axis of the region  
+  int x, y;
+  
+  // Distance between pixel (x,y) and the pixel central of the region
+  double DistanceXY;
+   
+  double tanXY;
+  double MintanXcYc, MaxtanXcYc;
+  
+  // Pixel Direction  
+  double DirectionXcYc, DirectionXY;
+
 
   //---------------------------------------------------------------------------
  
+  // Distance max between two pixels neighbours
+  m_Distance = static_cast<double>(m_Radius[0]*sqrt(2.));
+  
+  
   // Process each of the boundary faces.  These are N-d regions which border
   // the edge of the buffer.
   for (fit=faceList.begin(); fit != faceList.end(); ++fit)
@@ -183,31 +207,58 @@ void PixelSuppressionByDirectionImageFilter< TInputImage, TOutputImage>::Threade
     
     bit.OverrideBoundaryCondition(&cbc);
     bit.GoToBegin();
-    
-    // ---------------------------------------------------------------------------
-    
-    InputPixelType PixelValue;
-
-    // ---------------------------------------------------------------------------
-
-
+ 
+ 
     while ( ! bit.IsAtEnd() )
       {
-
-          
+      	
+      // Location of the pixel central of the region
+      bitIndex = bit.GetIndex();
+      
+      Xc = bitIndex[0];
+      Yc = bitIndex[1];
+      
+      DirectionXcYc = static_cast<double>( bit.GetCenterPixel() );
+      
+      MintanXcYc = tan( DirectionXcYc - m_AngularBeam );
+      MaxtanXcYc = tan( DirectionXcYc + m_AngularBeam );
+      
+      PixelValue = itin.Get();
+       
       // Loop on the region 
       for (i = 0; i < neighborhoodSize; ++i)
         {
 
-         
+        // Pixel location in the system axis of the region         	
+	bitIndex = bit.GetIndex(i);
+	
+        x = bitIndex[0] - Xc;
+        y = bitIndex[1] - Yc;
+
+	// Distance between pixel (x,y) and pixel central 
+	DistanceXY = static_cast<double>(sqrt(x*x+y*y));
+	
+	// If the pixel (x,y) is inside the circle of radius m_Distance
+	if ( DistanceXY < m_Distance )
+	   {
+	   tanXY = static_cast<double>(y/x);
+	   
+	   if ( (MintanXcYc <= tanXY) and
+	   	(tanXY <= MaxtanXcYc) )
+	      {
+	      DirectionXY = static_cast<double>(bit.GetPixel(i));	
+	      
+	      if ( ((DirectionXcYc - m_AngularBeam) <= DirectionXY) and 
+	      	   (DirectionXY <= (DirectionXcYc + m_AngularBeam)) )
+	      
+	      	 // Assignment of this value to the output pixel
+     		 itout.Set( static_cast<OutputPixelType>(PixelValue) );  	
+	         
+	      }
+	   }
 
         } // end of the loop on the pixels of the region 
-        
-
-
-      // Assignment of this value to the output pixel
-      itout.Set( static_cast<OutputPixelType>(PixelValue) );  
-
+       
       ++bit;
       ++itin;
       ++itout;

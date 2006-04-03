@@ -8,10 +8,10 @@
   $Id$ 
 
 =========================================================================*/
-#ifndef __otbAssymetricFusionOfLineDetectorImageFilter_txx
-#define __otbAssymetricFusionOfLineDetectorImageFilter_txx
+#ifndef __otbAssymmetricFusionOfLineDetectorImageFilter_txx
+#define __otbAssymmetricFusionOfLineDetectorImageFilter_txx
 
-#include "otbAssymetricFusionOfLineDetectorImageFilter.h"
+#include "otbAssymmetricFusionOfLineDetectorImageFilter.h"
 
 
 namespace otb
@@ -21,8 +21,8 @@ namespace otb
  *
  */
 template <class TInputImage, class TOutputImage, class InterpolatorType>
-AssymetricFusionOfLineDetectorImageFilter<TInputImage, TOutputImage, InterpolatorType>
-::AssymetricFusionOfLineDetectorImageFilter()
+AssymmetricFusionOfLineDetectorImageFilter<TInputImage, TOutputImage, InterpolatorType>
+::AssymmetricFusionOfLineDetectorImageFilter()
 {
   m_LengthLine = 1;
   m_WidthLine = 0;
@@ -35,7 +35,7 @@ AssymetricFusionOfLineDetectorImageFilter<TInputImage, TOutputImage, Interpolato
 
 template <class TInputImage, class TOutputImage, class InterpolatorType>
 void
-AssymetricFusionOfLineDetectorImageFilter<TInputImage, TOutputImage, InterpolatorType>
+AssymmetricFusionOfLineDetectorImageFilter<TInputImage, TOutputImage, InterpolatorType>
 ::GenerateData()
 {
   m_LineRatio->SetInput( this->GetInput() );
@@ -60,7 +60,7 @@ AssymetricFusionOfLineDetectorImageFilter<TInputImage, TOutputImage, Interpolato
  */
 template <class TInputImage, class TOutput, class InterpolatorType>
 void 
-AssymetricFusionOfLineDetectorImageFilter<TInputImage, TOutput, InterpolatorType>
+AssymmetricFusionOfLineDetectorImageFilter<TInputImage, TOutput, InterpolatorType>
 ::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   Superclass::PrintSelf( os, indent );

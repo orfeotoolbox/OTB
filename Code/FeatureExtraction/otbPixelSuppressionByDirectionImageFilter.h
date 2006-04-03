@@ -98,6 +98,8 @@ private:
   SizeType m_Radius;
   InputRealType m_AngularBeam;
   
+  double m_Distance;
+  
 };
 } // end namespace otb
 
