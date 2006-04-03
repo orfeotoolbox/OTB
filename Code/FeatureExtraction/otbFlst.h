@@ -31,16 +31,16 @@ typedef struct
 class ShapeType
 {
 public:
-    char                   inferior_type;
-    float                  value;
-    char                   open;
-    int                    area;
-    char                   removed;
+    char                            inferior_type;
+    float                           value;
+    char                            open;
+    int                             area;
+    char                            removed;
     std::vector<PointPlaneType>     pixels;
     std::vector<PointPlaneType>     boundary;
-    ShapeType                  *parent;
-    ShapeType                  *child;
-    ShapeType                  *next_sibling;
+    ShapeType                      *parent;
+    ShapeType                      *child;
+    ShapeType                      *next_sibling;
        
     ShapeType();
     ~ShapeType(); 
@@ -171,17 +171,15 @@ protected:
   unsigned char Configuration(int x,int y);  
   ShapeType* NewShape(int iCurrentArea, float currentGrayLevel, char bOfInferiorType,ShapeType* pChild);
   void UpdateSmallestShapes(PointPlaneListType* tabPoints,int iLastShapeArea, int iArea);
-  void Connect(PointPlaneListType* tabPoints,int iNbPoints,
-               ConnectionListType & tabConnections,ShapeType* pSmallestShape);
-  void NewConnection(PointPlaneType* pPoint,float level,ConnectionListType & tabConnections);	       
+  void Connect(PointPlaneListType* tabPoints,int iNbPoints,ShapeType* pSmallestShape);
+  void NewConnection(PointPlaneType* pPoint,float level);	       
   int NEIGHBOR_NOT_STORED(int x,int y);	   
   void Store_4neighbors(int x,int y);
   void Store_8neighbors(int x,int y);
   char AddIsoLevel(int* pCurrentArea, float currentGrayLevel,
 	          char* p8Connected,char* pIgnoreHoles);
-  void FindTerminalBranch(int x,int y, char b8Connected, 
-                          ConnectionListType & tabConnections);		  
-  virtual void Scan(ConnectionListType & tabConnections);
+  void FindTerminalBranch(int x,int y, char b8Connected);		  
+  virtual void Scan();
 
  
 private:

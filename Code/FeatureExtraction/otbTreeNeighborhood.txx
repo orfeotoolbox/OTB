@@ -206,11 +206,14 @@ void TreeNeighborhood::Remove()
   if(m_type == INVALID)
     return;
 //  m_NbPoints--; 
-  std::cout<< "TreeNeighborhood::Remove : m_NbPoints" << m_NbPoints << "  m_tabPoints.size() = "<<m_tabPoints.size()<<std::endl;
+  std::cout << "TreeNeighborhood::Remove : m_NbPoints" << m_NbPoints;
+  std::cout << "  m_tabPoints.size() = "<<m_tabPoints.size();
+  std::cout << " value "<<value << std::endl;
+  
   assert(m_NbPoints < (int)m_tabPoints.size());
 //  assert(m_NbPoints >= (int)0);
   valueTop = m_tabPoints[m_NbPoints--].value;
-  if(m_NbPoints == 0)
+  if(m_NbPoints <= 0)
     return;
   this->FixDown();
   if(value != valueTop && valueTop == m_otherBound)

@@ -36,11 +36,15 @@ void
 ThresholdImageToPointSetFilter<TInputImage, TOutputPointSet>
 ::GenerateData()
 {
-  InputImagePointer     inputPtr  = this->GetInput();
-  OutputPointSetPointer outputPtr = this->GetOutput(0);
+  InputImageConstPointer   inputPtr  = this->GetInput(0);
+  OutputPointSetPointer    outputPtr = this->GetOutput();
 
   unsigned int pointId = 0;
+  typename OutputPointSetType::PointType  position;
+
+  outputPtr->Initialize();
   
+
   typedef itk::ImageRegionConstIterator<TInputImage> InputIterator;
   InputIterator  inIt(inputPtr, inputPtr->GetRequestedRegion() );
 
@@ -48,37 +52,42 @@ ThresholdImageToPointSetFilter<TInputImage, TOutputPointSet>
   // walk the regions, threshold each pixel
   while( !inIt.IsAtEnd() )
     {
-    typedef typename TInputImage::PixelType PixelType;
-    const PixelType value = inIt.Get();
+    
+    const InputPixelType value = inIt.Get();
     const IndexType index = inIt.GetIndex();
     if (value >= m_Threshold)
       {
-       OutputPixelType outValue = itk::NumericTraits<OutputPixelType>(value);
+       position[0] = index[0];
+       position[1] = index[1];
 
-       outputPtr->SetPoint(pointId,index);    
-       outputPtr->SetPointData(pointId, outValue );
+       outputPtr->SetPoint(pointId,position);    
+
+//       OutputPointSetPixelType outValue;
+//       outValue = itk::NumericTraits<OutputPointSetPixelType>(value);
+//       outputPtr->SetPointData(pointId, outValue );
 
        pointId++;    
+       
       }
     ++inIt;
     }
-}
-
 #if 0
+#endif
+}
 
 /**
  * Standard "PrintSelf" method
  */
 template <class TInputImage, class TOutputPointSet>
-void 
-ThreholdImageToPointSetFilter<TInputImage, TOutputPointSet>
+void
+ThresholdImageToPointSetFilter<TInputImage, TOutputPointSet>
 ::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   Superclass::PrintSelf( os, indent );
   os << indent << "Threshold : " << m_Threshold << std::endl;
 }
 
-#endif
+
 } // end namespace otb
 
 

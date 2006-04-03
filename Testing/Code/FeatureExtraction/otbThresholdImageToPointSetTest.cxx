@@ -32,40 +32,35 @@ int otbThresholdImageToPointSetTest( int argc, char ** argv )
 
         typedef itk::Image< InputPixelType,  Dimension>              InputImageType;
         typedef otb::ImageFileReader< InputImageType  >              ReaderType;
-	typedef itk::PointSet<InputPixelType,Dimension>              PoinSetType;
+	typedef itk::PointSet<InputPixelType,Dimension>              PointSetType;
 	   
-	typedef otb::ThresholdImageToPointSetFilter<InputImageType,PoinSetType>  FunctionType;
+	typedef otb::ThresholdImageToPointSetFilter<InputImageType,PointSetType>  FunctionType;
   
         InputImageType::RegionType   region;
         InputImageType::SizeType     size;
         InputImageType::IndexType    start;
  
-#if 0
         start.Fill( 0 );
         size[0] = 50;
         size[1] = 50;
 
-        ReaderType::Pointer reader         = ReaderType::New();
-	FunctionType::Pointer function =FunctionType::New();
+        ReaderType::Pointer   reader         = ReaderType::New();
+	FunctionType::Pointer function       = FunctionType::New();
+        PointSetType::Pointer pointList      = PointSetType::New();	
 	
         reader->SetFileName( inputFilename  );
 	
 	InputImageType::Pointer image = reader->GetOutput();
 
         region.SetIndex( start );
-        region.SetSize( size );
-	
+        region.SetSize( size );	
 	image->SetRegions(region);
 	image->Update();
-	function->SetInputImage( image );
 
-	InputImageType::IndexType index;
-	index[0]=10;
-	index[1]=10;
-	
-	RealType Result;
-#endif	
-	
+	function->SetInput( 0, image );
+        function->SetOutput(pointList);
+	function->Update();
+		
     } 
   catch( itk::ExceptionObject & err ) 
     { 

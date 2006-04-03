@@ -22,9 +22,8 @@ namespace otb
  */
 
 template <class TInputImage, 
-          class TOutputPointSet>
-//         class TOutputPointSet = itk::PointSet<ITK_TYPENAME TInputImage::PixelType,
-//	                                        ITK_TYPENAME TInputImage::ImageDimension> >
+//          class TOutputPointSet>
+         class TOutputPointSet = itk::PointSet<ITK_TYPENAME TInputImage::PixelType,2> >
 class ThresholdImageToPointSetFilter :  
            public ImageToPointSetFilter< TInputImage,TOutputPointSet >
 {
@@ -46,13 +45,18 @@ public:
 
   itkTypeMacro(ThresholdImageToPointSetFilter, ImageToPointSetFilter);
   
-  typedef typename InputImageType::PixelType  InputPixelType;
-  typedef typename InputImageType::Pointer    InputImagePointer;
-  typedef typename InputImageType::SizeType   SizeType;
-  typedef typename InputImageType::IndexType  IndexType;
+  typedef typename Superclass::InputImagePixelType        InputPixelType;
+  typedef typename Superclass::InputImagePointer          InputImagePointer;
+  typedef typename Superclass::InputImageConstPointer     InputImageConstPointer;
+  typedef typename Superclass::InputImageType::SizeType   SizeType;
+  typedef typename Superclass::InputImageType::IndexType  IndexType;
 
-  typedef typename OutputPointSetType::PixelType OutputPixelType;
-  typedef typename OutputPointSetType::Pointer   OutputPointSetPointer;
+  typedef   typename Superclass::OutputPointSetType             OutputPointSetType;
+  typedef   typename Superclass::OutputPointSetPointer          OutputPointSetPointer;
+  typedef   typename Superclass::OutputPointSetType::PixelType  OutputPointSetPixelType;
+
+  itkSetMacro(Threshold,InputPixelType);
+  itkGetConstReferenceMacro(Threshold, InputPixelType);
 
 protected:
   ThresholdImageToPointSetFilter();

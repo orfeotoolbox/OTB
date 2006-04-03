@@ -166,6 +166,12 @@ ADD_TEST(feTvMultiplyByScalarImage ${FEATUREEXTRACTION_TESTS}
 ADD_TEST(feTuThresholdImageToPointSetTest ${FEATUREEXTRACTION_TESTS}  
         otbThresholdImageToPointSetTest
 	${INPUTDATA}/TeteAToto.png)
+
+ADD_TEST(feTvHarrisImageToPointSet ${FEATUREEXTRACTION_TESTS}  
+        otbHarrisImageToPointSet 
+	${INPUTDATA}/poupees_1canal.hd
+	${TEMP}/feHarris_PointSet_poupees.png
+	1.0 1.0 1.0  2.0)
 	
 ADD_TEST(feTuPixelSuppressionByDirectionNew ${FEATUREEXTRACTION_TESTS}  
         otbPixelSuppressionByDirectionNew)
@@ -211,6 +217,7 @@ otbAssymmetricFusionOfLineDetector.cxx
 otbHarrisImage.cxx
 otbMultiplyByScalarImageTest.cxx
 otbThresholdImageToPointSetTest.cxx
+otbHarrisToPointSet.cxx
 otbPixelSuppressionByDirectionNew.cxx
 )
 

@@ -21,13 +21,13 @@ namespace otb
 
 ShapeType::ShapeType()
 {
-   parent = NULL;
-   child  = NULL;
-   next_sibling = NULL;
+   parent        = NULL;
+   child         = NULL;
+   next_sibling  = NULL;
    inferior_type = 0;
-   value = 0.0;
-   area = 0;
-   removed = 0;
+   value         = 0.0;
+   area          = 0;
+   removed       = 0;
 }
  
 ShapeType::~ShapeType()
@@ -419,7 +419,7 @@ template< class TInputImage, class TOutputTree>
 void 
 Flst<TInputImage,TOutputTree>
 ::Connect(PointPlaneListType *tabPoints,int iNbPoints,
-          ConnectionListType & tabConnections,ShapeType* pSmallestShape)
+          ShapeType* pSmallestShape)
 {
   int i, iIndex;
   ShapeType *pShape;
@@ -428,17 +428,17 @@ Flst<TInputImage,TOutputTree>
 
   for(i = iNbPoints-1; i >= 0; i--) {
     iIndex = (*tabPoints)[i].y * m_Width + (*tabPoints)[i].x;
-    assert(iIndex < tabConnections.size() );
-    pShape = tabConnections[iIndex].shape;
+    assert(iIndex < m_Connections.size() );
+    pShape = m_Connections[iIndex].shape;
     if(pShape != NULL) {
-      level = tabConnections[iIndex].level;
+      level = m_Connections[iIndex].level;
       pParent = pSmallestShape;
       while(pParent->value != level) {
 	assert(pParent != &m_GlobalTree->the_shapes[m_GlobalTree->nb_shapes-1]);
 	pParent = pParent->parent;
       }
       ShapeType::InsertChildren(pParent, pShape);
-      tabConnections[iIndex].shape = NULL;
+      m_Connections[iIndex].shape = NULL;
     }
   }
 }
@@ -447,19 +447,22 @@ Flst<TInputImage,TOutputTree>
 template< class TInputImage, class TOutputTree>
 void 
 Flst<TInputImage,TOutputTree>
-::NewConnection(PointPlaneType* pPoint,float level,ConnectionListType & tabConnections)
+::NewConnection(PointPlaneType* pPoint,float level)
 {
   int iIndex;
   ShapeType *pSibling;
   ShapeType *pShape = &m_GlobalTree->the_shapes[m_GlobalTree->nb_shapes-1];
 
   iIndex = pPoint->y*m_Width + pPoint->x;
-  if( tabConnections[iIndex].shape == NULL) {
-      tabConnections[iIndex].shape = pShape;
-      tabConnections[iIndex].level = level;
+  
+  std::cout <<"New Conncetions :"<<iIndex <<std::endl; 
+
+  if( m_Connections[iIndex].shape == NULL) {
+      m_Connections[iIndex].shape = pShape;
+      m_Connections[iIndex].level = level;
   } else {
-    assert( tabConnections[iIndex].level == level);
-    pSibling = tabConnections[iIndex].shape;
+    assert( m_Connections[iIndex].level == level);
+    pSibling = m_Connections[iIndex].shape;
     while(pSibling->next_sibling != NULL)
       pSibling = pSibling->next_sibling;
     pSibling->next_sibling = pShape;
@@ -609,11 +612,18 @@ Flst<TInputImage,TOutputTree>
   iNbHoles = 0;
   iCurrentArea = *pCurrentArea;
   pNeighbor = &m_Neighborhood.m_tabPoints[1];
-  do { /* 1) Neighbor is added to the region */
+  do { 
+    /* 1) Neighbor is added to the region */
     x = pNeighbor->x; 
     y = pNeighbor->y; 
+    std::cout << "x : "<<x << " y : "<< y <<std::endl;
     m_PointsInShape[iCurrentArea].x = x;
     m_PointsInShape[iCurrentArea++].y = y;
+
+    std::cout <<"AddIsoLevel";
+    std::cout << "x : "<<x << " y : "<< y;
+    std::cout << "CurrentArea" << iCurrentArea <<std::endl;
+
     if(! *pIgnoreHoles) {
       cPattern = this->Configuration( x, y);
       iNbHoles += tabPatterns[*p8Connected][cPattern];
@@ -623,6 +633,7 @@ Flst<TInputImage,TOutputTree>
     
     Index[1] = y;
     Index[0] = x;  
+
     m_VisitedPixels->SetPixel( Index, m_Exploration);
     /* 2) Store new neighbors */
     this->Store_4neighbors(x, y);
@@ -631,7 +642,12 @@ Flst<TInputImage,TOutputTree>
 	*pIgnoreHoles = *p8Connected = (char)1;
       this->Store_8neighbors(x, y);
     }
-    m_Neighborhood.Remove();   
+    m_Neighborhood.Remove();
+    
+    std::cout << "iCurrentArea = " << iCurrentArea << " m_MaxArea = "<< m_MaxArea;
+    std::cout << " value = " << pNeighbor->value << " currentGrayLevel = " << currentGrayLevel ;
+    std::cout << "m_Neighborhood.m_type = " << m_Neighborhood.m_type <<std::endl;
+       
   } while(iCurrentArea <= m_MaxArea &&
 	  pNeighbor->value == currentGrayLevel &&  
 	  m_Neighborhood.m_type != TreeNeighborhood::INVALID);
@@ -653,8 +669,7 @@ Flst<TInputImage,TOutputTree>
 template< class TInputImage, class TOutputTree>
 void 
 Flst<TInputImage,TOutputTree>
-::FindTerminalBranch(int x,int y, char b8Connected, 
-		     ConnectionListType & tabConnections)
+::FindTerminalBranch(int x,int y, char b8Connected)
 {
   float     level;
   int       iArea;
@@ -682,9 +697,9 @@ Flst<TInputImage,TOutputTree>
       assert(iArea != 0);
       if(pLastShape != NULL) {
 	iArea = pLastShape->area;
-	this->Connect( & m_PointsInShape, iArea, tabConnections, pSmallestShape);
+	this->Connect( & m_PointsInShape, iArea, pSmallestShape);
 //  std::cout << " level = "<<level<<std::endl;
-	this->NewConnection(&m_PointsInShape[iArea], level, tabConnections);
+	this->NewConnection(&m_PointsInShape[iArea], level);
       }
       this->Levelize(m_PointsInShape, iArea, level);
       goto restart_branch;
@@ -703,11 +718,11 @@ Flst<TInputImage,TOutputTree>
     level = m_Neighborhood.m_tabPoints[1].value;
   }
   if(pLastShape != NULL) {
-    this->Connect( &m_PointsInShape, iArea, tabConnections, pSmallestShape);
+    this->Connect( &m_PointsInShape, iArea, pSmallestShape);
     if(m_AtBorder && iArea == m_HalfAreaImage)
       ShapeType::InsertChildren(m_GlobalTree->the_shapes, pLastShape);
     else if(iArea != 0)
-      this->NewConnection(&m_PointsInShape[iArea], level, tabConnections);
+      this->NewConnection(&m_PointsInShape[iArea], level);
   }
   this->Levelize(m_PointsInShape, iArea, level);
 }
@@ -717,7 +732,7 @@ Flst<TInputImage,TOutputTree>
 template< class TInputImage, class TOutputTree>
 void 
 Flst<TInputImage,TOutputTree>
-::Scan(ConnectionListType & tabConnections)
+::Scan()
 {
   int i, j;
   char b8Connected = 0;
@@ -736,7 +751,7 @@ Flst<TInputImage,TOutputTree>
 	 ( this->Is_local_min( j, i, (char)0) ||
 	  (this->Is_local_max( j, i, (char)1) &&(b8Connected=1)==1)))
 	{
-	  this->FindTerminalBranch( j, i, b8Connected, tabConnections);
+	  this->FindTerminalBranch( j, i, b8Connected);
 	  b8Connected = 0;
 	}
       }
@@ -877,7 +892,7 @@ Flst<TInputImage,TOutputTree>
       m_MaxArea <<= STEP_MAX_AREA;
     if(m_MaxArea == 0 || m_MaxArea >= m_HalfAreaImage) /* iMaxArea==0: overflow */
        m_MaxArea = m_AreaImage-1;
-    this->Scan(m_Connections);
+    this->Scan( );
     std::cout<<"Scan --> Neighborhood Size:"<<m_Neighborhood.m_tabPoints.size() <<std::endl;
 
   } while(m_MaxArea+1 < m_AreaImage);
@@ -902,6 +917,8 @@ Flst<TInputImage,TOutputTree>
         }
      }  
   std::cout << "Generate data FLST: END" <<std::endl;
+
+
 }
 
 
