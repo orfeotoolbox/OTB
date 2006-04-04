@@ -48,6 +48,7 @@ public:
   virtual void Hide(void);
   virtual void Update(void);
   virtual void Synchronize(void);
+  virtual void PrepareIHM(void);
   virtual void CreateGLSliceView( Fl_Group * g , Fl_Gl_Window * w );
   virtual void SetLabel( const char * );
   virtual void ClickSelectCallBack(
@@ -55,23 +56,24 @@ public:
                                                   float, float,
                                                   void *),
                      void * newClickSelectArg);
-  void SetGrayLevelChannel(int pChannel)
+
+  virtual void SetGrayLevelChannel(int pChannel)
   {
         glSliceView->SetGrayLevelChannel(pChannel);
   }
-  void SetRedChannel(int pChannel)
+  virtual void SetRedChannel(int pChannel)
   {
         glSliceView->SetRedChannel(pChannel);
   }
-  void SetGreenChannel(int pChannel)
+  virtual void SetGreenChannel(int pChannel)
   {
         glSliceView->SetGreenChannel(pChannel);
   }
-  void SetBlueChannel(int pChannel)
+  virtual void SetBlueChannel(int pChannel)
   {
         glSliceView->SetBlueChannel(pChannel);
   }
-  void SetRGBChannels(int pRedChannel,int pGreenChannel, int pBlueChannel)
+  virtual void SetRGBChannels(int pRedChannel,int pGreenChannel, int pBlueChannel)
   {
         glSliceView->SetRGBChannels(pRedChannel,pGreenChannel,pBlueChannel);
   }

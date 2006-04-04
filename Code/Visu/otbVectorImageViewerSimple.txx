@@ -76,6 +76,8 @@ void
 VectorImageViewerSimple<TPixel,OverlayPixelType>
 ::Update(void)
 {
+  this->PrepareIHM();
+  
 /*  this->Superclass::Update();
   glSliceView->TreatInputImage();
   glSliceView->update();*/
@@ -105,6 +107,18 @@ VectorImageViewerSimple<TPixel,OverlayPixelType>
   double iwMin  = ((int)(glSliceView->iwMin()*pow((float)10, (float)-b)))/pow((float)10,(float)-b);
   double iwMax  = ((int)(glSliceView->iwMax()*pow((float)10, (float)-b)))/pow((float)10,(float)-b);
   double iwStep = (iwMax-iwMin)/100.0;
+
+}
+
+template <class TPixel, class OverlayPixelType>
+void
+VectorImageViewerSimple<TPixel,OverlayPixelType>
+::PrepareIHM(void) 
+{
+  int SizeX = glSliceView->GetInput()->GetLargestPossibleRegion().GetSize()[0];
+  int SizeY = glSliceView->GetInput()->GetLargestPossibleRegion().GetSize()[1];
+  iviewWindow->size(SizeX, SizeY);
+
 }
 
 template <class TPixel, class OverlayPixelType>
@@ -133,6 +147,8 @@ VectorImageViewerSimple<TPixel,OverlayPixelType>
   this->glSliceView = GLVectorImageViewType::New();
   this->glSliceView->Init(x,y,w,h,label);
   this->glSliceView->box( FL_EMBOSSED_BOX );
+// THOMAS : comme l'image est invers??e par d??faut, on a remet a l'endroit
+//  this->glSliceView->flipY(true);
 
   group->remove( original );
 

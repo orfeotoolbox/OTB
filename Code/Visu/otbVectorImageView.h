@@ -1,3 +1,14 @@
+/*=========================================================================
+
+  Programme :   OTB (ORFEO ToolBox)
+  Auteurs   :   CS - T.Feuvrier
+  Language  :   C++
+  Date      :   4 avril 2005
+  Version   :   
+  Role      :   Classe de base, utilisee pour l'affichage d'une image dans une fenetre.
+  $Id$
+
+=========================================================================*/
 #ifndef _otbVectorImageView_h
 #define _otbVectorImageView_h
 
@@ -8,7 +19,7 @@
 
 #include <itkProcessObject.h>
 #include <itkVectorImage.h>
-#include <fltkUtils.h>
+//#include <fltkUtils.h>
 #include <list>
 #include <FL/fl_file_chooser.H>
 #include <fstream>
@@ -62,14 +73,14 @@ class ClickPoint
   {
   public:
     ClickPoint()
-    : x(0),y(0),z(0),value(0){}
+    : x(0),y(0),/*z(0),*/value(0){}
     ClickPoint( const ClickPoint & p )
-    { x = p.x; y = p.y; z = p.z; value = p.value; }
-    ClickPoint(float _x,float _y,float _z,double v)
-    : x(_x),y(_y),z(_z),value(v){}
+    { x = p.x; y = p.y; /*z = p.z; */value = p.value; }
+    ClickPoint(float _x,float _y,/*float _z,*/double v)
+    : x(_x),y(_y),/*z(_z),*/value(v){}
 
   public:
-    float x, y, z;
+    float x, y/*, z*/;
     double value;
   };
 
@@ -105,7 +116,7 @@ class ITK_EXPORT VectorImageView : public itk::ProcessObject
     itkTypeMacro(VectorImageView,itk::ProcessObject);
 
     // some typedefs
-    typedef itk::VectorImage<TPixel,3>          ImageType;
+    typedef itk::VectorImage<TPixel,2>          ImageType;
     typedef typename ImageType::Pointer         ImagePointer;
     typedef typename ImageType::ConstPointer    ImageConstPointer;
     typedef typename ImageType::RegionType      RegionType;
@@ -113,7 +124,9 @@ class ITK_EXPORT VectorImageView : public itk::ProcessObject
     typedef typename ImageType::IndexType       IndexType;
     typedef typename ImageType::PixelType       PixelType;
 
-   
+    itkSetMacro(ViewImageRegion, RegionType);
+    itkGetConstReferenceMacro(ViewImageRegion, RegionType);
+
   protected:
     void   (* cSliceNumCallBack)(void);
     void    * cSliceNumArg;
@@ -123,10 +136,13 @@ class ITK_EXPORT VectorImageView : public itk::ProcessObject
     bool                     cViewImData;
     bool                     cViewClickedPoints;
 //    ImagePointer             cImData;
-
-    unsigned long            cDimSize[3];
-    float                    cOrigin[3];
-    float                    cSpacing[3];
+    RegionType               m_ImageRegion;
+    RegionType               m_ViewImageRegion;
+    
+    unsigned long            cDimSize[2];
+//    IndexType                cIndex[2];
+    float                    cOrigin[2];
+    float                    cSpacing[2];
     void                    (* cViewImDataCallBack)(void);
     void                     * cViewImDataArg;
     void                    (* cViewImDataArgCallBack)(void *viewImDataArg);
@@ -134,19 +150,19 @@ class ITK_EXPORT VectorImageView : public itk::ProcessObject
     ClickModeType cClickMode;
     float         cClickSelect[3];
     float         cClickSelectV;
-    void          (* cClickSelectCallBack)(float x,float y,float z,
+    void          (* cClickSelectCallBack)(float x,float y,/*float z,*/
                                            float v);
     void           * cClickSelectArg;
-    void          (* cClickSelectArgCallBack)(float x, float y, float z, 
+    void          (* cClickSelectArgCallBack)(float x, float y, /*float z, */
                                               float v, void *clickSelectArg);
     
-    float       cBoxMin[3];
-    float       cBoxMax[3];
-    void        (* cClickBoxCallBack)(float minX, float minY, float minZ, 
-                                      float maxX, float maxY, float maxZ);
+    float       cBoxMin[2];
+    float       cBoxMax[2];
+    void        (* cClickBoxCallBack)(float minX, float minY, /*float minZ,*/
+                                      float maxX, float maxY/*, float maxZ*/);
     void         * cClickBoxArg;
-    void        (* cClickBoxArgCallBack)(float minX, float minY, float minZ,
-                                         float maxX, float maxY, float maxZ,
+    void        (* cClickBoxArgCallBack)(float minX, float minY, /*float minZ,*/
+                                         float maxX, float maxY, /*float maxZ,*/
                                          void * clickBoxArg);
     
     float       cIWMin;
@@ -159,20 +175,21 @@ class ITK_EXPORT VectorImageView : public itk::ProcessObject
     
     ImageModeType cImageMode;
     
-    bool        cFlipX[3];
+/*    bool        cFlipX[3];
     bool        cFlipY[3];
     bool        cFlipZ[3];
     bool        cTranspose[3];
-    
+*/    
     float               cWinZoom;
+/*
     unsigned int        cWinOrder[3];
     unsigned int        cWinOrientation;
     void                (* cWinOrientationCallBack)(void);
     void                 * cWinOrientationArg;
     void                (* cWinOrientationArgCallBack)(void * 
                                                        winOrientationArg);
-    
-    int         cWinCenter[3];
+*/    
+    int         cWinCenter[2];
     void        (* cWinCenterCallBack)(void);
     void        * cWinCenterArg;
     void        (* cWinCenterArgCallBack)(void * winCenterArg);
@@ -261,23 +278,6 @@ class ITK_EXPORT VectorImageView : public itk::ProcessObject
     /*! Return the maximum value for the image */
     double dataMax(void) const;
 
-    /*! Flip the image about the x-axis */
-    virtual void    flipX(bool newFlipX);
-    /*! Is the image flipped? */
-    bool            flipX(void);
-    /*! Flip the image about the y-axis */
-    virtual void    flipY(bool newFlipY);
-    /*! Is the image flipped? */
-    bool            flipY(void);
-    /*! Flip the image about the z-axis */
-    virtual void    flipZ(bool newFlipZ);
-    /*! Is the image flipped? */
-    bool            flipZ(void);
-    
-    /*! Transpose the image in the xy-plane */
-    virtual void    Transpose(bool newTranspose);
-    /*! Is the image Transpose? */
-    bool            Transpose(void);
     
     /*! Specify a zoom factor */
     void    winZoom(float newWinZoom);
@@ -285,7 +285,7 @@ class ITK_EXPORT VectorImageView : public itk::ProcessObject
     float   winZoom(void);
     /*! Specify the coordinates of the center of the region of interest 
     *  to view */
-    void    winCenter(int newWinCenterX, int newWinCenterY, int newWinCenterZ);
+    void    winCenter(int newWinCenterX, int newWinCenterY/*, int newWinCenterZ*/);
     /*! Default centering, center at the middle of the image */
     void    winCenter(void);
     /*! Get the coordinates of the center of the region of interest 
@@ -304,42 +304,20 @@ class ITK_EXPORT VectorImageView : public itk::ProcessObject
     void    winCenterCallBack(void (* newWinCenterArgCallBack)(void *), 
                               void * newWinCetnerArg);
     
-    /*! Return the total number of slices */
-    unsigned int    numSlices(void);
-    /*! Specify the slice to view */
-    void            sliceNum(unsigned int newSliceNum);
-    /*! What slice is being viewed */
-    unsigned int    sliceNum(void);
-    /*! Called when new slice is viewed */
-    void            sliceNumCallBack(
-                              void (* newSliceNumCallBack)(void));
-    void            sliceNumCallBack(
-                              void (* newSliceNumCallBack)(void *),
-                              void * newSliceNumArg);
-    
-    unsigned int orientation(void);
-    void         orientation(unsigned int newOrientation);
-    void         orientationCallBack(
-                              void (*newOrientationCallBack)(void));
-    void         orientationCallBack(
-                              void (*newOrientationArgCallBack)(void *),
-                              void * newOrientationArg);
-    
       /*! Specify the clickMode - a user click in a window will cause 
     *  various events */
     void            clickMode(ClickModeType newClickMode);
     ClickModeType   clickMode(void);
     
-    virtual void clickSelect(float newX, float newY, float newZ);
+    virtual void clickSelect(float newX, float newY/*, float newZ*/);
     float        clickSelectX(void);
     float        clickSelectY(void);
-    float        clickSelectZ(void);
     void         clickSelectCallBack(
                               void (*newClickSelectCallBack)(float, float,
-                              float, float));
+                              float/*, float*/));
     void         clickSelectCallBack(
                               void (*newClickSelectArgCallBack)(float, float,
-                              float, float,
+                              float, /*float,*/
                               void *),
                               void * newClickSelectArg);
     
@@ -362,31 +340,31 @@ class ITK_EXPORT VectorImageView : public itk::ProcessObject
       std::list< ClickPoint >::const_iterator point = cClickedPoints.begin();
       while( point != cClickedPoints.end() )
         {
-        fpoints << point->x << "  " << point->y << "  " << point->z << std::endl;
+        fpoints << point->x << "  " << point->y << /*"  " << point->z << */std::endl;
         ++point;
         }
       fpoints.close();
       };
 
-    void            boxMin(float minX, float minY, float minZ);
-    virtual void    boxMax(float maxX, float maxY, float maxZ);
+    void            boxMin(float minX, float minY/*, float minZ*/);
+    virtual void    boxMax(float maxX, float maxY/*, float maxZ*/);
     void            clickBoxCallBack(
-                              void (*newClickBoxCallBack)(float, float, float,
-                              float, float, float));
+                              void (*newClickBoxCallBack)(float, float, /*float,*/
+                              float, float/*, float*/));
     void            clickBoxCallBack(
-                              void (*newClickBoxArgCallBack)(float, float, float,
-                              float, float, float,
+                              void (*newClickBoxArgCallBack)(float, float, /*float,*/
+                              float, float, /*float,*/
                               void *),
                               void * newClickBoxArg);
     
-    void        iwMin(float newIWMin);
-    float       iwMin(void);
-    void        iwMax(float newIWMax);
-    float       iwMax(void);
-    void        iwModeMin(IWModeType newIWModeMin);
-    IWModeType  iwModeMin(void);
-    void        iwModeMax(IWModeType newIWModeMin);
-    IWModeType  iwModeMax(void);
+    virtual void        iwMin(float newIWMin);
+    virtual float       iwMin(void);
+    virtual void        iwMax(float newIWMax);
+    virtual float       iwMax(void);
+    virtual void        iwModeMin(IWModeType newIWModeMin);
+    virtual IWModeType  iwModeMin(void);
+    virtual void        iwModeMax(IWModeType newIWModeMin);
+    virtual IWModeType  iwModeMax(void);
     void        iwCallBack(void (*newIWCallBack)(void));
     void        iwCallBack(void (*newIWArgCallBack)(void *),
                            void * newIWArg);
@@ -395,20 +373,19 @@ class ITK_EXPORT VectorImageView : public itk::ProcessObject
     ImageModeType imageMode(void);
     
     virtual void size(int w, int h);
+    virtual int sizeX(void){return cW;}
+    virtual int sizeY(void){return cH;}
     virtual void resize(int x, int y, int w, int h);
     
-    virtual int  handle(int event);
-    
-
 //    virtual void update() = 0;
 //    virtual void draw() = 0;
     virtual void update(){};
     virtual void draw(){};
     
-    unsigned int WinMinX(){return cWinMinX;}
-    unsigned int WinMinY(){return cWinMinY;}
-    unsigned int WinSizeX(){return cWinSizeX;}
-    unsigned int WinSizeY(){return cWinSizeY;}
+    virtual unsigned int WinMinX(){return cWinMinX;}
+    virtual unsigned int WinMinY(){return cWinMinY;}
+    virtual unsigned int WinSizeX(){return cWinSizeX;}
+    virtual unsigned int WinSizeY(){return cWinSizeY;}
 
   void viewDetails(bool detail){cViewDetails = detail;}
   bool viewDetails(){return cViewDetails;}
