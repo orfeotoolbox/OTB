@@ -33,8 +33,8 @@ int otbPixelSuppressionByDirection( int argc, char* argv[] )
         const char * inputFilename2  = argv[2];
         const char * outputFilename = argv[3];
 
-	unsigned int  RadiusX((unsigned int)::atoi(argv[3]));
-	double	      AngularBeam((double)::atof(argv[4]));
+	unsigned int  RadiusX((unsigned int)::atoi(argv[4]));
+	double	      AngularBeam((double)::atof(argv[5]));
         
         typedef double		                                InputPixelType;
         typedef double		   	                        OutputPixelType;
@@ -47,7 +47,7 @@ int otbPixelSuppressionByDirection( int argc, char* argv[] )
         typedef otb::ImageFileReader< InputImageType1  >         ReaderType2;
         typedef otb::ImageFileWriter< OutputImageType >          WriterType;
         
-        typedef otb::PixelSuppressionByDirection< InputImageType1, OutputImageType >   FilterType;
+        typedef otb::PixelSuppressionByDirectionImageFilter< InputImageType1, OutputImageType >   FilterType;
 
         FilterType::Pointer filter = FilterType::New();
                 
@@ -58,7 +58,7 @@ int otbPixelSuppressionByDirection( int argc, char* argv[] )
 	
 
         filter->SetRadius( Radius );
-        filter->SetAngularBeam( static_cast<FilterType::InputRealType>( AngularBeam ));
+        filter->SetAngularBeam( AngularBeam );
 	
 	
         ReaderType1::Pointer reader1 = ReaderType1::New();

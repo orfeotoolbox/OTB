@@ -177,10 +177,10 @@ void LineRatioDetector< TInputImage, TOutputImage, InterpolatorType>
    // Pixel location in the input image after rotation
   TPoint point;
    
-  // location of the pixel central in the input image
+  // location of the central pixel in the input image
   int Xc, Yc;
 
-  // location of the pixel central between zone 1 and 2 and between zone 1 and 3
+  // location of the central pixel between zone 1 and 2 and between zone 1 and 3
   int Xc12, Xc13;
   
   //---------------------------------------------------------------------------
@@ -210,16 +210,16 @@ void LineRatioDetector< TInputImage, TOutputImage, InterpolatorType>
         }
         
      
-      // Location of the pixel central of the region
+      // Location of the central pixel of the region
       bitIndex = bit.GetIndex();
       
       Xc = bitIndex[0];
       Yc = bitIndex[1];
       
-      // Location of the pixel central between zone 1 and zone 2
+      // Location of the central pixel between zone 1 and zone 2
       Xc12 = Xc - m_WidthLine - 1;
       
-      // Location of the pixel central between zone 1 and zone 3
+      // Location of the central pixel between zone 1 and zone 3
       Xc13 = Xc + m_WidthLine + 1;
           
       // Loop on the region 

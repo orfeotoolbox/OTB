@@ -185,10 +185,10 @@ void LineCorrelationDetector< TInputImage, TOutputImage, InterpolatorType>
    // Pixel location in the input image after rotation
   TPoint point;
    
-  // location of the pixel central in the input image
+  // location of the central pixel in the input image
   int Xc, Yc;
 
-  // location of the pixel central between zone 1 and 2 and between zone 1 and 3
+  // location of the central pixel between zone 1 and 2 and between zone 1 and 3
   int Xc12, Xc13;
   
   //---------------------------------------------------------------------------

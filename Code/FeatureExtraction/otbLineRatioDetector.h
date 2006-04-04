@@ -46,7 +46,7 @@ namespace otb
  *
  * The intensity of detection in the three other directions R(\theta_{i})
  * is determined by rotation of the pixels of each zone around the 
- * pixel central of the region considered. By default, the pixel location after
+ * central pixel of the region considered. By default, the pixel location after
  * rotation is determined by the Spline interpolator.
  * 
  * Finally, the intensity of detection formed by the two parallel lines 

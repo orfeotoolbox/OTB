@@ -24,6 +24,8 @@
 #include "itkProgressReporter.h"
 #include <math.h>
 
+#define M_PI 3.14159265358979323846
+
 namespace otb
 {
 
@@ -33,9 +35,10 @@ namespace otb
 template <class TInputImage, class TOutputImage>
 PixelSuppressionByDirectionImageFilter<TInputImage, TOutputImage>::PixelSuppressionByDirectionImageFilter()
 {
+	
   m_Radius.Fill(1);
-  m_AngularBeam = static_cast<InputRealType>(0.);
-  m_Distance = sqrt(2.);
+  m_AngularBeam = static_cast<double>(0.);
+
 }
 
 template <class TInputImage, class TOutputImage>
@@ -173,27 +176,28 @@ void PixelSuppressionByDirectionImageFilter< TInputImage, TOutputImage>::Threade
 
   InputPixelType PixelValue;
     
-  // location of the pixel central in the input image
+  // location of the central pixel in the input image
   int Xc, Yc;
 
   // Pixel location in the system axis of the region  
   int x, y;
   
-  // Distance between pixel (x,y) and the pixel central of the region
+  // Pixel location in the system axis of the region after rotation of theta  
+  double xt, yt;
+  
+  // Distance between pixel (x,y) and the central pixel of the region
   double DistanceXY;
    
-  double tanXY;
-  double MintanXcYc, MaxtanXcYc;
-  
   // Pixel Direction  
-  double DirectionXcYc, DirectionXY;
-
+  double ThetaXcYc, Thetaxtyt, ThetaXY ;
+  
+  // Angular tolerance on the direction of the central pixel
+  double MinThetaXcYc, MaxThetaXcYc; 
+  
 
   //---------------------------------------------------------------------------
  
-  // Distance max between two pixels neighbours
-  m_Distance = static_cast<double>(m_Radius[0]*sqrt(2.));
-  
+std::cout << m_Radius[0] << std::endl;  
   
   // Process each of the boundary faces.  These are N-d regions which border
   // the edge of the buffer.
@@ -212,53 +216,106 @@ void PixelSuppressionByDirectionImageFilter< TInputImage, TOutputImage>::Threade
     while ( ! bit.IsAtEnd() )
       {
       	
-      // Location of the pixel central of the region
+      // Location of the central pixel of the region in the input image
       bitIndex = bit.GetIndex();
       
       Xc = bitIndex[0];
       Yc = bitIndex[1];
-      
-      DirectionXcYc = static_cast<double>( bit.GetCenterPixel() );
-      
-      MintanXcYc = tan( DirectionXcYc - m_AngularBeam );
-      MaxtanXcYc = tan( DirectionXcYc + m_AngularBeam );
-      
+    
+      // Get Pixel Direction from the image of directions
+      ThetaXcYc = static_cast<double>( bit.GetCenterPixel() );
+
+      // Pixel intensity in the input image      
       PixelValue = itin.Get();
-       
+
+std::cout << "(Xc,Yc)" << Xc <<","<< Yc << " ThetaXcYc -> "<< ThetaXcYc << " Pix="<< PixelValue << std::endl; 
+
+      unsigned int is_ok=0;
+      
       // Loop on the region 
       for (i = 0; i < neighborhoodSize; ++i)
         {
 
-        // Pixel location in the system axis of the region         	
+        // Pixel location in the system axis of the region (Xc,Yc) -> (0,0)        	
 	bitIndex = bit.GetIndex(i);
+
+std::cout << "(X,Y)" << bitIndex[0] <<","<< bitIndex[1] << std::endl;
 	
         x = bitIndex[0] - Xc;
         y = bitIndex[1] - Yc;
+        
+        // No calculation on the central pixel  
+        if (( x == 0 ) and ( y == 0 )) 
+           continue;
 
-	// Distance between pixel (x,y) and pixel central 
+	// Distance between pixel (x,y) and central pixel 
 	DistanceXY = static_cast<double>(sqrt(x*x+y*y));
 	
+std::cout << "Distance ("<<x<<","<<y<<") "<< DistanceXY <<" <> "<< m_Radius[0] << std::endl;	
+	
 	// If the pixel (x,y) is inside the circle of radius m_Distance
-	if ( DistanceXY < m_Distance )
+	if ( DistanceXY <= m_Radius[0] )
 	   {
-	   tanXY = static_cast<double>(y/x);
 	   
-	   if ( (MintanXcYc <= tanXY) and
-	   	(tanXY <= MaxtanXcYc) )
+	   // Rotation of the system axis in the direction of the central pixel
+	   // (x,y) -> (xt,yt)
+	   TRANSITION_MATRIX( x, y, ThetaXcYc, xt, yt );
+   	
+   	   // The absolute value of yt/xt is used to bring back the pixel (xt,yt)
+   	   // in positive co-ordinates 
+   	   // => thetaxtyt is included in the interval [0;PI/2]
+	   if ( xt != 0. )
+	      Thetaxtyt = atan( fabs(yt/xt) );
+	   else
+	      Thetaxtyt = M_PI/2.;
+	   
+std::cout << "Thetaxtyt " << Thetaxtyt  << std::endl;
+	   
+	   // Then, we test if the pixel is included in the interval [0;m_AngularBeam] 
+	   if ( (0. <= Thetaxtyt) and
+	   	(Thetaxtyt <= m_AngularBeam) )
 	      {
-	      DirectionXY = static_cast<double>(bit.GetPixel(i));	
+	      // The pixel is located in the direction of the central pixel
+	      // Get the direction of the pixel (X,Y) in the image of diretions
+	      ThetaXY = static_cast<double>(bit.GetPixel(i));
 	      
-	      if ( ((DirectionXcYc - m_AngularBeam) <= DirectionXY) and 
-	      	   (DirectionXY <= (DirectionXcYc + m_AngularBeam)) )
+	      // Angular tolerance on the direction of the central pixel
+	      MinThetaXcYc = ThetaXcYc - m_AngularBeam;
+	      MaxThetaXcYc = ThetaXcYc + m_AngularBeam;	
+
+std::cout << "ThetaXY " << ThetaXY  <<" ["<< MinThetaXcYc <<";"<< MaxThetaXcYc << "] "<< std::endl;
 	      
-	      	 // Assignment of this value to the output pixel
-     		 itout.Set( static_cast<OutputPixelType>(PixelValue) );  	
-	         
+	      if ( (MinThetaXcYc <= ThetaXY) and 
+	      	   (ThetaXY <= MaxThetaXcYc ) )
+		 {
+std::cout << "PixelValue " << PixelValue  << std::endl;	
+		 is_ok=1;
+      
+	
+     		
+     		/* if ((static_cast<double>(PixelValue) != 255.) and
+     		     (static_cast<double>(PixelValue) != 0.) )
+     		    std::cout << "PixelValue2 " << PixelValue  << std::endl;*/
+     		    
+
+		 }
+         
 	      }
+
 	   }
 
         } // end of the loop on the pixels of the region 
-       
+  
+
+      // Assignment of this value to the output pixel
+      if (is_ok == 1)
+         itout.Set( static_cast<OutputPixelType>(PixelValue) );
+      else
+         itout.Set( static_cast<OutputPixelType>(0.) );  
+         
+      if ( static_cast<double>(itout.Get()) == 2. )
+         std::cout << "PixelValue2 " << static_cast<double>(itout.Get())  << std::endl;        
+      
       ++bit;
       ++itin;
       ++itout;

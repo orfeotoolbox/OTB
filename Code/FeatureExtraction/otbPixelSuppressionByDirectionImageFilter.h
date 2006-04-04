@@ -15,6 +15,11 @@
 #include "itkImage.h"
 #include "itkNumericTraits.h"
 
+#define TRANSITION_MATRIX(_x,_y,_theta,_xout,_yout) \
+    (_xout) = (_x)*cos(_theta) + (_y)*sin(_theta); \
+    (_yout) = - (_x)*sin(_theta) + (_y)*cos(_theta)
+    
+
 namespace otb
 {
 
@@ -94,12 +99,11 @@ private:
   PixelSuppressionByDirectionImageFilter(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
 
-  
+  // Radius of the region
   SizeType m_Radius;
-  InputRealType m_AngularBeam;
-  
-  double m_Distance;
-  
+  // Angular Accuracy on the direction of the central pixel
+  double m_AngularBeam;
+
 };
 } // end namespace otb
 
