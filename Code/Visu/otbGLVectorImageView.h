@@ -1,3 +1,14 @@
+/*=========================================================================
+
+  Programme :   OTB (ORFEO ToolBox)
+  Auteurs   :   CS - T.Feuvrier
+  Language  :   C++
+  Date      :   4 avril 2005
+  Version   :   
+  Role      :   Classe permettant de gérer l'affichage d'une image dans un fenetre
+  $Id$
+
+=========================================================================*/
 #ifndef otbGLVectorImageView_h
 #define otbGLVectorImageView_h
 
@@ -5,6 +16,7 @@
 #include <FL/Fl.H>
 #include <FL/fl_draw.H>
 #include <FL/Fl_Gl_Window.H>
+#include <FL/Fl_Double_Window.H>
 
 #include "itkColorTable.h"
 #include "itkVectorImage.h"
@@ -49,10 +61,13 @@ public:
   typedef typename Superclass::ColorTableType           ColorTableType;
   typedef typename Superclass::ColorTablePointer        ColorTablePointer;
 
-  virtual void CalculeDataMinMax(double & pMin, double & pMax);
+  typedef enum { PRINCIPAL_IMAGE_VIEW, ZOOM_IMAGE_VIEW, SCROLL_IMAGE_VIEW } IdentWindowViewType;
 
-  virtual void SetWinImData(void);
- 
+  itkSetMacro(CenterPointImage,IndexType);
+  itkGetConstReferenceMacro(CenterPointImage,IndexType);
+  itkSetMacro(DrawViewRectangle,RegionType);
+  itkGetConstReferenceMacro(DrawViewRectangle,RegionType);
+
 protected:
   
 /*! FLTK required constructor - must use imData() to complete 
@@ -60,37 +75,36 @@ protected:
   GLVectorImageView();
   /*! Standard destructor */
   virtual ~GLVectorImageView(void);
+
+  IdentWindowViewType m_IdentWindowView;
+  IndexType m_CenterPointImage;
   
 public:
+
+  virtual IndexType     GetCenterRegion( const RegionType & zone );
+  static  RegionType    ShrinkRegion( const RegionType & zone, const float shrinkfactor );
+  virtual RegionType    GetViewRegion( const IndexType & centerPointImage );
+  virtual RegionType    GetViewRegion( const RegionType & region, const IndexType & centerPointImage );
+  virtual RegionType    TranslateImageRegionToWindowRegion( const RegionType & imageRegion, const  RegionType & sousimageRegion, const int windowWidth, const int windowHeight);
+
+  /** Update the view region, with the new zoom and new Window sizes */
+  virtual void          MajViewRegion(void);
+  virtual void          PrintInfos(void);
+  virtual void          BuildWithImageRegion();
+  virtual void          BuildWithWindowRegion(const int zoom);
+  
+  virtual IndexType  WindowCoord2ImageCoord( const IndexType & index )const;
+  virtual SizeType   WindowSize2ImageSize( const SizeType & size )const;
+  virtual RegionType WindowZone2ImageRegion( const RegionType & zone )const;
 
   virtual void Init(int x, int y, int w, int h, const char *l);
 
   /*! Specify the 3D image to view slice by slice */
 //  virtual void SetInputImage(ImageType * newImData);
-  virtual void TreatInputImage(void);
+  virtual void FinaliseInitialisation(void);
 //  virtual ImageType * GetInput(void) ;
 //  virtual const ImagePointer & GetInputImage(void) const;
   
-  /*! Specify the 3D image to view as an overlay */
-  void SetInputOverlay(OverlayType * newOverlayData);
-  
-  /*! Return a pointer to the overlay data */
-  const OverlayPointer & GetInputOverlay(void) const;
-  
-  /*! Turn on/off the viewing of the overlay */
-  void  ViewOverlayData(bool newViewOverlayData);
-  
-  /*! Status of the overlay - viewed /not viewed */
-  bool  ViewOverlayData(void);
-  
-  /*! Specify the opacity of the overlay */
-  void  OverlayOpacity(float newOverlayOpacity);
-  
-  /*! Get the opacity of the overlay */
-  float OverlayOpacity(void);
-  
-  /*! Called when overlay is toggled or opacity is changed */
-  void  ViewOverlayCallBack(void (* newOverlayCallBack)(void));
   
   ColorTablePointer GetColorTable(void);
   void SetColorTable(ColorTablePointer newColorTable);
@@ -102,16 +116,22 @@ public:
   /*! Status of clicked points display - on/off */
   bool ViewClickedPoints();
 
-  virtual void clickSelect(float x, float y, float z);
+  virtual void clickSelect(float x, float y/*, float z*/);
   
   virtual void size(int w, int h);
   virtual void resize(int x, int y, int w, int h);
   
   virtual void update();
   virtual void draw();
-  
-  virtual int  handle(int event);
-  
+//  virtual int  handle(int event);
+  virtual void SetDoubleWindow( Fl_Double_Window * pflDoubleWindow)
+  {
+        m_flDoubleWindow = pflDoubleWindow;
+  }
+  protected : 
+  bool                  m_ViewRectangle;
+  RegionType            m_DrawViewRectangle;
+  Fl_Double_Window *    m_flDoubleWindow;
 };
 
 } //namespace

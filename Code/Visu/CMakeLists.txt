@@ -1,3 +1,5 @@
+# OTB-FA-00015-CS
+
 #FILE(GLOB OTBVisu_SRCS "*.cxx" )
 SET ( OTBVisu_SRCS 
         toto.cxx
@@ -6,7 +8,8 @@ SET ( OTBVisu_SRCS
 #FILE(GLOB OTBVisu_GUI_SRCS "*.fl" )
 
 SET ( OTBVisu_GUI_SRCS 
-        otbVectorImageViewerGUI.fl
+#        otbVectorImageViewerGUI.fl
+        otbImageViewerGUI.fl
 )
 
 
@@ -26,7 +29,7 @@ FLTK_WRAP_UI(OTBVisu ${OTBVisu_GUI_SRCS} )
 ADD_LIBRARY(OTBVisu ${OTBVisu_SRCS} ${OTBVisu_FLTK_UI_SRCS})
 ADD_LIBRARY(OTBVisu ${OTBVisu_SRCS} )
 INSTALL_FILES(/include/otb/Visu "(\\.h|\\.txx)$")
-INSTALL_TARGETS(/lib OTBVisu)
+INSTALL_TARGETS(/lib/otb OTBVisu)
 
 TARGET_LINK_LIBRARIES(OTBVisu ${FLTK_LIBRARIES} ${OPENGL_glu_LIBRARY}
                       ${OPENGL_LIBRARIES})

@@ -1,3 +1,14 @@
+/*=========================================================================
+
+  Programme :   OTB (ORFEO ToolBox)
+  Auteurs   :   CS - T.Feuvrier
+  Language  :   C++
+  Date      :   4 avril 2005
+  Version   :   
+  Role      :   Classe de base, contenant quelques algorithmes, utilises pour visualiser une image
+  $Id$
+
+=========================================================================*/
 #ifndef otbGLVectorImageViewBase_h
 #define otbGLVectorImageViewBase_h
 
@@ -10,12 +21,17 @@
 
 #include "itkColorTable.h"
 #include "itkImage.h"
+#include "itkMacro.h"
 
 #include "otbVectorImageView.h"
 
+//#include "otbImageViewer.h"
+
 namespace otb
 {
-  
+
+
+template <class TPixel, class OverlayPixelType> class ImageViewer;
 /**
 * GLVectorImageViewBase : Derived from abstract class ImageView and Fl_Gl_Window
 * See ImageView.h for details...
@@ -40,6 +56,10 @@ public:
   typedef itk::Image<OverlayPixelType,3>   OverlayType;
   typedef typename OverlayType::Pointer    OverlayPointer;
 
+  typedef ImageViewer<TPixel,OverlayPixelType>          ImageViewerType;
+  typedef ImageViewerType *                             ImageViewerPointer;
+
+
   typedef typename Superclass::ImageType                ImageType;
   typedef typename Superclass::ImagePointer             ImagePointer;
   typedef typename Superclass::ImageConstPointer        ImageConstPointer;
@@ -57,6 +77,15 @@ public:
   
   typedef enum { GRAY_LEVEL = 1, RGB_LEVEL = 3 } ModeViewType;
 
+  virtual void ClearSelectChannels(void);
+
+  //Méthode d'accès sur le Viewer
+  itkSetMacro(Viewer,ImageViewerPointer);
+  itkGetConstMacro(Viewer,ImageViewerPointer);
+
+  itkSetMacro(NbDim,int);
+  itkSetMacro(ModeView,ModeViewType);
+
   itkSetMacro(GrayLevelChannel,int);
   itkSetMacro(RedChannel,int);
   itkSetMacro(GreenChannel,int);
@@ -69,9 +98,25 @@ public:
         SetBlueChannel(pBlueChannel);
   }
 
-  virtual void ClearSelectChannels(void);
-  
+//  itkSetMacro(ChannelsWorks, ChannelsType);
+  virtual void SetChannelsWorks(const ChannelsType & pChannelsWorks)
+  {
+        m_ChannelsWorks = pChannelsWorks;
+  }
+
+  virtual void DrawRectangle(const RegionType & zone);
+
 protected:
+
+  //Méthode Get en écriture sur le Viewer
+  itkGetMacro(Viewer,ImageViewerPointer);
+
+
+  virtual void CalculeDataMinMax(const RegionType & region, double & pMin, double & pMax);
+  virtual void SetWinImData(const RegionType & zone);
+
+
+
   bool        cValidOverlayData;
   float       cOverlayOpacity;
   
@@ -91,7 +136,6 @@ protected:
   /*! Standard destructor */
   virtual ~GLVectorImageViewBase(void);
 
-  virtual void GenerateChannelsInformations(void);
   /** Liste des canaux qui seront réellement traités [1...] */
   ChannelsType  m_ChannelsWorks;
   
@@ -116,6 +160,10 @@ public:
     cOverlayColorIndex = c;
     }
 
+private:
+    // Pointeur sur le Viewer
+    ImageViewerPointer m_Viewer;
+    
 };
 
 
