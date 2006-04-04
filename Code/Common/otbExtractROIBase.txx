@@ -240,6 +240,9 @@ ExtractROIBase<TInputImage,TOutputImage>
     outputPtr->SetSpacing( outputSpacing );
     outputPtr->SetDirection( outputDirection );
     outputPtr->SetOrigin( outputOrigin );
+// THOMAS : modif du 4 avril 2006
+    outputPtr->SetNumberOfComponentsPerPixel(
+       inputPtr->GetNumberOfComponentsPerPixel() );
     }
   else
     {
@@ -248,6 +251,8 @@ ExtractROIBase<TInputImage,TOutputImage>
                       << "cannot cast input to "
                       << typeid(itk::ImageBase<InputImageDimension>*).name() );
     }
+
+
 }
 
 
