@@ -16,7 +16,10 @@
 //#include "otbGLImageView.h"
 //#include "otbGLColorImageView.h"
 //#include "otbGLVectorImageViewBase.h"
-#include "otbGLVectorImageView.h"
+//#include "otbGLVectorImageView.h"
+//#include "otbPrincipalImageView.h"
+//#include "otbZoomImageView.h"
+#include "otbScrollImageView.h"
 
 #include "itkImage.h"
 #include "itkRGBPixel.h"
@@ -31,7 +34,10 @@ int main( int argc, char ** argv )
 //        typedef otb::GLImageView<unsigned char,double>    ViewType;
 //        typedef otb::VectorImageView<unsigned char>    ViewType;
 //        typedef otb::GLVectorImageViewBase<unsigned char,double>    ViewType;
-        typedef otb::GLVectorImageView<unsigned char,double>    ViewType;
+//        typedef otb::GLVectorImageView<unsigned char,double>    ViewType;
+//        typedef otb::PrincipalImageView<unsigned char,double>    ViewType;
+//        typedef otb::ZoomImageView<unsigned char,double>    ViewType;
+        typedef otb::ScrollImageView<unsigned char,double>    ViewType;
         ViewType::Pointer lView = ViewType::New();
     } 
 
