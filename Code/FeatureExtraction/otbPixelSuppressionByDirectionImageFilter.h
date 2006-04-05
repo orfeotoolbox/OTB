@@ -4,7 +4,7 @@
   Auteurs   :   CS - C.Ruffel
   Language  :   C++
   Date      :   30 mars 2006
-  Role      :   Filtre de suppression par direction des pixels isoles  
+  Role      :   Filtre de suppression des pixels isoles par direction  
   $Id$ 
 
 =========================================================================*/
@@ -24,8 +24,16 @@ namespace otb
 {
 
 /** \class PixelSuppressionByDirectionImageFilter
- * \brief 
+ * \brief Application of a filter of suppression of isolated pixels,
+ * not belonging to a line, strating from the directions of pixels.
  *
+ * This class implements an image filter which detects isolated pixels
+ * that have little chance of belonging to a raod and performs a pixel
+ * supression. For each pixel kept with direction \theta_{i}, we look
+ * for other pixels with a direction close to \theta_i in an angular
+ * beam around it. If none is found, the pixel is suppressed.
+ *
+ * 
  */
 
 template <class TInputImage, class TOutputImage>

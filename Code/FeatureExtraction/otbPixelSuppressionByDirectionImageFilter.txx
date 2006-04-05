@@ -4,7 +4,7 @@
   Auteurs   :   CS - C.Ruffel
   Language  :   C++
   Date      :   30 mars 2006
-  Role      :   Filtre de suppression par direction des pixels isoles  
+  Role      :   Filtre de suppression des pixels isoles par direction  
   $Id: $ 
 
 =========================================================================*/
@@ -176,13 +176,14 @@ void PixelSuppressionByDirectionImageFilter< TInputImage, TOutputImage>::Threade
 
   InputPixelType PixelValue;
     
-  // location of the central pixel in the input image
+  // Location of the central pixel in the input image
   int Xc, Yc;
 
   // Pixel location in the system axis of the region  
   int x, y;
   
-  // Pixel location in the system axis of the region after rotation of theta  
+  // Pixel location in the system axis of the region after rotation of theta
+  // where theta is the direction of the cantral pixel  
   double xt, yt;
   
   // Distance between pixel (x,y) and the central pixel of the region
@@ -228,9 +229,7 @@ std::cout << m_Radius[0] << std::endl;
       // Pixel intensity in the input image      
       PixelValue = itin.Get();
 
-std::cout << "(Xc,Yc)" << Xc <<","<< Yc << " ThetaXcYc -> "<< ThetaXcYc << " Pix="<< PixelValue << std::endl; 
-
-      unsigned int is_ok=0;
+      bool IsLine = false;
       
       // Loop on the region 
       for (i = 0; i < neighborhoodSize; ++i)
@@ -238,8 +237,6 @@ std::cout << "(Xc,Yc)" << Xc <<","<< Yc << " ThetaXcYc -> "<< ThetaXcYc << " Pix
 
         // Pixel location in the system axis of the region (Xc,Yc) -> (0,0)        	
 	bitIndex = bit.GetIndex(i);
-
-std::cout << "(X,Y)" << bitIndex[0] <<","<< bitIndex[1] << std::endl;
 	
         x = bitIndex[0] - Xc;
         y = bitIndex[1] - Yc;
@@ -250,14 +247,13 @@ std::cout << "(X,Y)" << bitIndex[0] <<","<< bitIndex[1] << std::endl;
 
 	// Distance between pixel (x,y) and central pixel 
 	DistanceXY = static_cast<double>(sqrt(x*x+y*y));
+		
 	
-std::cout << "Distance ("<<x<<","<<y<<") "<< DistanceXY <<" <> "<< m_Radius[0] << std::endl;	
-	
-	// If the pixel (x,y) is inside the circle of radius m_Distance
+	// If the pixel (x,y) is inside the circle of radius m_Radius
 	if ( DistanceXY <= m_Radius[0] )
 	   {
 	   
-	   // Rotation of the system axis in the direction of the central pixel
+	   // Rotation of the system axis in the direction of the central pixel (thetaXcYc)
 	   // (x,y) -> (xt,yt)
 	   TRANSITION_MATRIX( x, y, ThetaXcYc, xt, yt );
    	
@@ -269,7 +265,6 @@ std::cout << "Distance ("<<x<<","<<y<<") "<< DistanceXY <<" <> "<< m_Radius[0] <
 	   else
 	      Thetaxtyt = M_PI/2.;
 	   
-std::cout << "Thetaxtyt " << Thetaxtyt  << std::endl;
 	   
 	   // Then, we test if the pixel is included in the interval [0;m_AngularBeam] 
 	   if ( (0. <= Thetaxtyt) and
@@ -283,23 +278,12 @@ std::cout << "Thetaxtyt " << Thetaxtyt  << std::endl;
 	      MinThetaXcYc = ThetaXcYc - m_AngularBeam;
 	      MaxThetaXcYc = ThetaXcYc + m_AngularBeam;	
 
-std::cout << "ThetaXY " << ThetaXY  <<" ["<< MinThetaXcYc <<";"<< MaxThetaXcYc << "] "<< std::endl;
-	      
+	      // Test if the pixel belongs to a line   
 	      if ( (MinThetaXcYc <= ThetaXY) and 
 	      	   (ThetaXY <= MaxThetaXcYc ) )
-		 {
-std::cout << "PixelValue " << PixelValue  << std::endl;	
-		 is_ok=1;
-      
-	
-     		
-     		/* if ((static_cast<double>(PixelValue) != 255.) and
-     		     (static_cast<double>(PixelValue) != 0.) )
-     		    std::cout << "PixelValue2 " << PixelValue  << std::endl;*/
-     		    
-
-		 }
-         
+	      	   
+		 IsLine = true;
+    
 	      }
 
 	   }
@@ -308,13 +292,11 @@ std::cout << "PixelValue " << PixelValue  << std::endl;
   
 
       // Assignment of this value to the output pixel
-      if (is_ok == 1)
+      if (IsLine == true)
          itout.Set( static_cast<OutputPixelType>(PixelValue) );
       else
          itout.Set( static_cast<OutputPixelType>(0.) );  
-         
-      if ( static_cast<double>(itout.Get()) == 2. )
-         std::cout << "PixelValue2 " << static_cast<double>(itout.Get())  << std::endl;        
+                 
       
       ++bit;
       ++itin;
