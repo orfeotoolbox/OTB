@@ -19,7 +19,20 @@ int main( int argc, char ** argv )
 {
   try 
     { 
+        int lRunFLTK(1);
+        if( argc < 2 || argc > 3 )
+        {
+                std::cout <<" Usage : InputImage"<<std::endl;
+        }
+        
+        //Parametre utilise pour le lancement du test de facon automatique, sans intervention de l'utilisateur
+        if( argc == 3 )
+        {
+                lRunFLTK = atoi(argv[2]);
+        }
+        
         const char * inputFilename  = argv[1];
+        
 
         typedef otb::ImageViewer<unsigned char,double>    ViewerType;
         ViewerType::Pointer  lViewer = ViewerType::New();
@@ -29,21 +42,22 @@ int main( int argc, char ** argv )
         VolumeReaderType::Pointer       lReader = VolumeReaderType::New();
         lReader->SetFileName(inputFilename);
         lReader->Update();
-        std::cout << " GetNumberOfComponentsPerPixel = "<<lReader->GetOutput()->GetNumberOfComponentsPerPixel()<<std::endl;
 
-
-//        lViewer->SetLabel( "Image" );
+        lViewer->SetLabel( "Toto" );
         lViewer->SetImage( lReader->GetOutput() );  
 
 //        lViewer->SetGrayLevelChannel(1);
-        lViewer->SetRGBChannels(1,2,3);
+//        lViewer->SetRGBChannels(1,2,3);
 //        lViewer->SetRedChannel(3);
 //        lViewer->SetGreenChannel(2);
 //        lViewer->SetBlueChannel(1);
 //        lViewer->Update();
         lViewer->Show();
         
-        Fl::run();
+        if( lRunFLTK == 1 )
+        {
+                Fl::run();
+        }
 
     } 
 

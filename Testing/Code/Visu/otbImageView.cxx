@@ -4,7 +4,7 @@
   Auteurs   :   CS - T.Feuvrier
   Language  :   C++
   Date      :   11 janvier 2005
-  Version   :   
+  Version   :   Test les differents Image View
   Role      :   
   $Id$
 
@@ -12,33 +12,30 @@
 #include <stdlib.h>
 #include "itkExceptionObject.h"
 
-//#include "otbImageView.h"
-//#include "otbGLImageView.h"
-//#include "otbGLColorImageView.h"
-//#include "otbGLVectorImageViewBase.h"
-//#include "otbGLVectorImageView.h"
-//#include "otbPrincipalImageView.h"
-//#include "otbZoomImageView.h"
+#include "otbImageViewer.h"
+//#include "otbVectorImageView.h"
+#include "otbGLVectorImageViewBase.h"
+#include "otbPrincipalImageView.h"
+#include "otbZoomImageView.h"
 #include "otbScrollImageView.h"
 
-#include "itkImage.h"
-#include "itkRGBPixel.h"
-
-
-int main( int argc, char ** argv )
+int otbImageView( int argc, char ** argv )
 {
   try 
     { 
 
-//        typedef otb::ImageView<unsigned char>    ViewType;
-//        typedef otb::GLImageView<unsigned char,double>    ViewType;
-//        typedef otb::VectorImageView<unsigned char>    ViewType;
-//        typedef otb::GLVectorImageViewBase<unsigned char,double>    ViewType;
-//        typedef otb::GLVectorImageView<unsigned char,double>    ViewType;
-//        typedef otb::PrincipalImageView<unsigned char,double>    ViewType;
-//        typedef otb::ZoomImageView<unsigned char,double>    ViewType;
-        typedef otb::ScrollImageView<unsigned char,double>    ViewType;
-        ViewType::Pointer lView = ViewType::New();
+        typedef otb::GLVectorImageViewBase<unsigned char,double>    GLVectorImageViewBaseType;
+        typedef otb::PrincipalImageView<unsigned char,double>           PrincipalImageViewType;
+        typedef otb::VectorImageView<unsigned char>                     VectorImageViewType;
+        typedef otb::ZoomImageView<unsigned char,double>                ZoomImageViewType;
+        typedef otb::ScrollImageView<unsigned char,double>              ScrollImageViewType;
+
+        PrincipalImageViewType::Pointer lPrincipalImageView = PrincipalImageViewType::New();
+
+        GLVectorImageViewBaseType::Pointer lGLVectorImageViewBase = GLVectorImageViewBaseType::New();
+        VectorImageViewType::Pointer lVectorImageView = VectorImageViewType::New();
+        ZoomImageViewType::Pointer lZoomImageView = ZoomImageViewType::New();
+        ScrollImageViewType::Pointer lScrollImageView = ScrollImageViewType::New();
     } 
 
   catch( itk::ExceptionObject & err ) 

@@ -11,25 +11,32 @@ SET(TEMP ${OTBTesting_BINARY_DIR}/Temporary)
 #Tolerance sur diff pixel image
 SET(TOL 0.0)
 
-#SET(VISU_TESTS ${CXX_TEST_PATH}/otbVisuTests)
+SET(VISU_TESTS ${CXX_TEST_PATH}/otbVisuTests)
 
+ADD_TEST(viTuImageViewNew ${VISU_TESTS} 
+        otbImageView
+        )
 
-# -------            otb::ExtractROI   ------------------------------
+ADD_TEST(viTuImageViewerNew ${VISU_TESTS} 
+        otbImageViewerNew
+        )
 
+ADD_TEST(viTvImageViewer ${CXX_TEST_PATH}/otbImageViewer 
+        ${INPUTDATA}/sbuv.png
+        0 )
 
 
 # -------       Fichiers sources CXX -----------------------------------
-#SET(BasicVisu_SRCS
-#)
+SET(BasicVisu_SRCS
+otbImageView.cxx
+otbImageViewerNew.cxx
+)
 
 
 INCLUDE_DIRECTORIES("${OTBTesting_BINARY_DIR}")
 
-# ${TIFF_LIBRARY}
-
-#ADD_EXECUTABLE(otbVisuTests otbVisuTests.cxx ${BasicVisu_SRCS})
-#TARGET_LINK_LIBRARIES(otbVisuTests OTBIO OTBCommon ${CAI_LIBRARY}  ${GDAL_LIBRARY} ITKIO ITKCommon)
-
+ADD_EXECUTABLE(otbVisuTests otbVisuTests.cxx ${BasicVisu_SRCS})
+TARGET_LINK_LIBRARIES(otbVisuTests OTBVisu OTBIO OTBCommon ${CAI_LIBRARY}  ${GDAL_LIBRARY} ITKIO ITKCommon)
 
 
 #ADD_EXECUTABLE(otbImageView otbImageView.cxx)

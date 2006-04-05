@@ -8,5 +8,6 @@
 
 void RegisterTests()
 {
-REGISTER_TEST(otbFLTKImageViewer);
+REGISTER_TEST(otbImageView);
+REGISTER_TEST(otbImageViewerNew);
 }
