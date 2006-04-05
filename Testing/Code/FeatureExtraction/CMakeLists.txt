@@ -175,6 +175,13 @@ ADD_TEST(feTvHarrisImageToPointSet ${FEATUREEXTRACTION_TESTS}
 	
 ADD_TEST(feTuPixelSuppressionByDirectionNew ${FEATUREEXTRACTION_TESTS}  
         otbPixelSuppressionByDirectionNew)
+        
+ADD_TEST(feTuPixelSuppressionByDirection ${FEATUREEXTRACTION_TESTS}  
+        otbPixelSuppressionByDirection
+	${INPUTDATA}/ImageLine.bsq
+	${INPUTDATA}/ImageLineDir.bsq
+	${TEMP}/feFiltrePixelSuppr_ImageLine.hd
+	3 0.1)
 			        
 #ADD_TEST(tvFEPatrick2 ${FEATUREEXTRACTION_TESTS}  
 #  --compare-image ${TOL}  ${BASELINE}/otbExtractROI_cthead1_26_97_209_100.png
@@ -219,6 +226,7 @@ otbMultiplyByScalarImageTest.cxx
 otbThresholdImageToPointSetTest.cxx
 otbHarrisToPointSet.cxx
 otbPixelSuppressionByDirectionNew.cxx
+otbPixelSuppressionByDirection.cxx
 )
 
 
