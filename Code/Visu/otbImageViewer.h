@@ -100,6 +100,8 @@ public:
                                                   void *),
                      void * newClickSelectArg);
   virtual void ZoomAction(void);
+  virtual void PrincipalResize(void);
+  virtual void ScrollResize(void);
   virtual void PrincipalAction(const IndexType & index);
   virtual void ScrollAction(const IndexType & index);
   virtual void ExtractImagePrincipal(const RegionType & zone);

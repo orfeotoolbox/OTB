@@ -45,8 +45,83 @@ void
 ImageViewer<TPixel,TOverlayPixel>
 ::ZoomAction(void) 
 {
+        m_PrincipalView->SetDrawViewRectangle( m_ZoomView->GetViewImageRegion() );
+	m_PrincipalView->update();
+}
+template <class TPixel, class TOverlayPixel>
+void
+ImageViewer<TPixel,TOverlayPixel>
+::PrincipalResize(void) 
+{
+        IndexType lIndex;
+        SizeType  lSize;
+        lIndex[0] = static_cast<unsigned long>((m_InputImage->GetLargestPossibleRegion().GetSize()[0] - m_PrincipalView->sizeX())/2);
+        lIndex[1] = static_cast<unsigned long>((m_InputImage->GetLargestPossibleRegion().GetSize()[1] - m_PrincipalView->sizeY())/2);
+        lSize[0] = m_PrincipalView->sizeX();
+        lSize[1] = m_PrincipalView->sizeY();
+	RegionType lNewRegion;
+        lNewRegion.SetIndex(lIndex);
+        lNewRegion.SetSize(lSize);
+        //Update principal image
+        ExtractImagePrincipal( lNewRegion );
 
-//	m_PrincipalView->DrawRectangle( m_ZoomView->GetViewImageRegion() );
+        //Reconstruit la fenetre principal
+        m_PrincipalView->Show();
+        
+        //Maj de la fenetre Zoom
+	m_ZoomView->SetInput( m_PrincipalImage );
+        IndexType lNewCenter = m_PrincipalView->GetCenterRegion( m_PrincipalView->GetViewImageRegion() );
+        this->PrincipalAction( lNewCenter );
+
+        //Dessine le rectangle sur l'image Scroll
+        if ( m_ScrollImageView == true )
+        {
+                m_ScrollView->SetDrawViewRectangle( ImageViewBaseType::ShrinkRegion(m_PrincipalView->GetViewImageRegion(),(float)1./(float)m_ShrinkFactors ) );
+	        m_ScrollView->Show();
+        }
+}
+
+template <class TPixel, class TOverlayPixel>
+void
+ImageViewer<TPixel,TOverlayPixel>
+::ScrollResize(void) 
+{
+        //Détection si l'image est grande
+        m_ScrollImageView = GenereImageScroll(m_ShrinkFactors);
+        if ( m_ScrollImageView == false )
+        {
+                m_PrincipalImage = m_InputImage;
+        }
+        else
+        {
+        	// Traitement de la fenetre Principal
+        	m_ExtractROIFilter->SetInput( m_InputImage );
+                IndexType lIndex;
+                SizeType  lSize;
+                lIndex[0] = static_cast<unsigned long>((m_InputImage->GetLargestPossibleRegion().GetSize()[0] - m_PrincipalView->sizeX())/2);
+                lIndex[1] = static_cast<unsigned long>((m_InputImage->GetLargestPossibleRegion().GetSize()[1] - m_PrincipalView->sizeY())/2);
+                lSize[0] = m_PrincipalView->sizeX();
+                lSize[1] = m_PrincipalView->sizeY();
+	        RegionType lNewRegion;
+                lNewRegion.SetIndex(lIndex);
+                lNewRegion.SetSize(lSize);
+                //Update principal image
+                ExtractImagePrincipal( lNewRegion );
+
+/*        	m_ExtractROIFilter->SetSizeX( m_PrincipalView->sizeX() );
+        	m_ExtractROIFilter->SetSizeY( m_PrincipalView->sizeY() );
+        	m_ExtractROIFilter->SetStartX( (m_InputImage->GetLargestPossibleRegion().GetSize()[0] - m_PrincipalView->sizeX())/2 );
+        	m_ExtractROIFilter->SetStartY( (m_InputImage->GetLargestPossibleRegion().GetSize()[1] - m_PrincipalView->sizeY())/2 );
+        	m_ExtractROIFilter->Update();
+                m_PrincipalImage = m_ExtractROIFilter->GetOutput();
+*/
+        	// Traitement de la fenetre Scroll
+                m_ShrinkImageFilter->SetShrinkFactors(m_ShrinkFactors);
+                m_ShrinkImageFilter->SetInput( m_InputImage );
+                m_ShrinkImageFilter->Update();
+                m_ScrollImage = m_ShrinkImageFilter->GetOutput();
+        }
+        PrincipalResize();
 }
 
 template <class TPixel, class TOverlayPixel>
@@ -58,77 +133,35 @@ ImageViewer<TPixel,TOverlayPixel>
         IndexType lIndex;
         lIndex[0] = index[0] * m_ShrinkFactors;
         lIndex[1] = index[1] * m_ShrinkFactors;
-//std::cout << "lIndex image : "<<lIndex<<std::endl;
-//std::cout << "m_InputImage->GetRequestedRegion(): "<<m_InputImage->GetRequestedRegion()<<std::endl;
-//std::cout << "m_InputImage->GetLargestPossibleRegion(): "<<m_InputImage->GetLargestPossibleRegion()<<std::endl;
-//	RegionType lNewRegion = m_PrincipalView->GetViewRegion( m_InputImage->GetRequestedRegion(), lIndex );
 	RegionType lNewRegion = m_PrincipalView->GetViewRegion( m_InputImage->GetLargestPossibleRegion(), lIndex );
-//std::cout << "Nouvelle region active sur Scroll : "<<lNewRegion<<std::endl;
-//std::cout << "m_InputImage->GetRequestedRegion(): "<<m_InputImage->GetRequestedRegion()<<std::endl;
-//std::cout << "Avant Extract"<<std::endl;
-// THOMAS
+        //Update principal image
         ExtractImagePrincipal( lNewRegion );
-        m_PrincipalImage = m_ExtractROIFilter->GetOutput();
 
-//std::cout << "Nouvelle region requested sur Principal : "<<m_PrincipalImage->GetRequestedRegion()<<std::endl;
-        
         m_PrincipalView->SetInput( m_PrincipalImage );
-//std::cout << "m_InputImage->GetRequestedRegion(): "<<m_InputImage->GetRequestedRegion()<<std::endl;
-//std::cout << "m_InputImage->GetLargestPossibleRegion(): "<<m_InputImage->GetLargestPossibleRegion()<<std::endl;
-
 
         //Reconstruit la fenetre principal
         m_PrincipalView->Show();
-//        m_PrincipalView->BuildWithImageRegion();
         
         //Maj de la fenetre Zoom
 	m_ZoomView->SetInput( m_PrincipalImage );
         IndexType lNewCenter = m_PrincipalView->GetCenterRegion( m_PrincipalView->GetViewImageRegion() );
         this->PrincipalAction( lNewCenter );
 
-//std::cout << "m_InputImage->GetRequestedRegion(): "<<m_InputImage->GetRequestedRegion()<<std::endl;
-
-//	m_PrincipalView->SetCenterPointImage( lNewCenter );
-        //Maj de la region / au centre
-//        m_PrincipalView->MajViewRegion();
-//	m_PrincipalView->update();
-        
-
-//  	m_ZoomView->Show();
-
-//std::cout << "m_InputImage->GetRequestedRegion(): "<<m_InputImage->GetRequestedRegion()<<std::endl;
-
-
         //Dessine le rectangle sur l'image Scroll
         m_ScrollView->SetDrawViewRectangle( ImageViewBaseType::ShrinkRegion(m_PrincipalView->GetViewImageRegion(),(float)1./(float)m_ShrinkFactors ) );
-
-//	m_ScrollView->update();
 	m_ScrollView->Show();
-
-//	m_PrincipalView->DrawRectangle( m_ScrollView->GetViewImageRegion() );
-//	m_PrincipalView->DrawRectangle( m_ZoomView->GetViewImageRegion() );
-//	m_ScrollView->PrintInfos();
-//	m_PrincipalView->PrintInfos();
-//	m_ZoomView->PrintInfos();
-
-//std::cout << "FIN scroll Action : m_InputImage->GetRequestedRegion(): "<<m_InputImage->GetRequestedRegion()<<std::endl;
-
 }
 template <class TPixel, class TOverlayPixel>
 void
 ImageViewer<TPixel,TOverlayPixel>
 ::PrincipalAction(const IndexType & index) 
 {
-//std::cout << "   ---------------   PrincipalAction  ------------------------------- "<< std::endl;
 	//Si une action est faite sur la fenetre principale (ex : agrandir al fenetre, dans le cas ou il la fenetre scroll existe) 
-//	m_ZoomView->winCenter( x, y );
 	m_ZoomView->SetCenterPointImage( index );
         m_ZoomView->MajViewRegion();
 	m_ZoomView->update();
         m_PrincipalView->SetDrawViewRectangle( m_ZoomView->GetViewImageRegion() );
 	m_PrincipalView->update();
-
-//	m_ScrollView->DrawRectangle( m_PrincipalView->GetViewImageRegion() );
 }
 
 
@@ -141,10 +174,9 @@ ImageViewer<TPixel,TOverlayPixel>
         m_ExtractROIFilter->SetSizeY( zone.GetSize()[1] );
         m_ExtractROIFilter->SetStartX( zone.GetIndex()[0] );
         m_ExtractROIFilter->SetStartY( zone.GetIndex()[1] );
-//      m_ExtractROIFilter->SetInput( m_InputImage );
         m_ExtractROIFilter->UpdateLargestPossibleRegion();
         m_ExtractROIFilter->Update();
-//        m_PrincipalImage = m_ExtractROIFilter->GetOutput();
+        m_PrincipalImage = m_ExtractROIFilter->GetOutput();
 }
 template <class TPixel, class TOverlayPixel>
 bool
@@ -156,7 +188,6 @@ ImageViewer<TPixel,TOverlayPixel>
         pShrinkFactors = 0;
         //Si pas besoin de Scroll, alors on dit que l'image Principal n'est pas "resizable" !!!
         SizeType lInputImageSize = m_InputImage->GetLargestPossibleRegion().GetSize();
-//        if ( MIN(lInputImageSize[0], lInputImageSize[1]) > m_ScrollWinSizeMax )
         // Si la dimension Min de l'image est plus grande que la fenetre Principal, alors on créée la fenetre Scroll
         if ( MIN(lInputImageSize[0], lInputImageSize[1]) > MAX( m_PrincipalView->sizeX(), m_PrincipalView->sizeY() ) ) 
         {
@@ -182,6 +213,7 @@ ImageViewer<TPixel,TOverlayPixel>
 ::PrepareIHM(void) 
 {
         m_InputImage->Update();
+
         //Détection si l'image est grande
         m_ScrollImageView = GenereImageScroll(m_ShrinkFactors);
         if ( m_ScrollImageView == false )
@@ -191,14 +223,26 @@ ImageViewer<TPixel,TOverlayPixel>
         else
         {
         	// Traitement de la fenetre Principal
-        	m_ExtractROIFilter->SetSizeX( m_PrincipalView->sizeX() );
+        	m_ExtractROIFilter->SetInput( m_InputImage );
+                IndexType lIndex;
+                SizeType  lSize;
+                lIndex[0] = static_cast<unsigned long>((m_InputImage->GetLargestPossibleRegion().GetSize()[0] - m_PrincipalView->sizeX())/2);
+                lIndex[1] = static_cast<unsigned long>((m_InputImage->GetLargestPossibleRegion().GetSize()[1] - m_PrincipalView->sizeY())/2);
+                lSize[0] = m_PrincipalView->sizeX();
+                lSize[1] = m_PrincipalView->sizeY();
+	        RegionType lNewRegion;
+                lNewRegion.SetIndex(lIndex);
+                lNewRegion.SetSize(lSize);
+                //Update principal image
+                ExtractImagePrincipal( lNewRegion );
+
+/*        	m_ExtractROIFilter->SetSizeX( m_PrincipalView->sizeX() );
         	m_ExtractROIFilter->SetSizeY( m_PrincipalView->sizeY() );
         	m_ExtractROIFilter->SetStartX( (m_InputImage->GetLargestPossibleRegion().GetSize()[0] - m_PrincipalView->sizeX())/2 );
         	m_ExtractROIFilter->SetStartY( (m_InputImage->GetLargestPossibleRegion().GetSize()[1] - m_PrincipalView->sizeY())/2 );
-        	m_ExtractROIFilter->SetInput( m_InputImage );
         	m_ExtractROIFilter->Update();
                 m_PrincipalImage = m_ExtractROIFilter->GetOutput();
-
+*/
         	// Traitement de la fenetre Scroll
                 m_ShrinkImageFilter->SetShrinkFactors(m_ShrinkFactors);
                 m_ShrinkImageFilter->SetInput( m_InputImage );
