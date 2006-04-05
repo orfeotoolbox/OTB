@@ -14,14 +14,13 @@
 
 #include <string>
 
+#include "itkShrinkImageFilter.h"
 
 #include "otbPrincipalImageView.h"
 #include "otbScrollImageView.h"
 #include "otbZoomImageView.h"
 #include "otbImageViewerGUI.h"
 #include "otbMultiChannelExtractROI.h"
-#include "itkShrinkImageFilter.h"
-
 #include "otbGLVectorImageViewBase.h"
 
 namespace otb
@@ -65,14 +64,12 @@ public:
   typedef itk::Image< OverlayPixelType, 3 >                     OverlayType;
   typedef PrincipalImageView<InputPixelType, OverlayPixelType>  PrincipalImageViewType;
   typedef typename PrincipalImageViewType::Pointer              PrincipalImageViewPointer;
-  typedef typename PrincipalImageViewType::ColorTablePointer    ColorTablePointer;
   typedef ScrollImageView< InputPixelType, OverlayPixelType >   ScrollImageViewType;
   typedef typename ScrollImageViewType::Pointer                 ScrollImageViewPointer;
   typedef ZoomImageView< InputPixelType, OverlayPixelType >     ZoomImageViewType;
   typedef typename ZoomImageViewType::Pointer                   ZoomImageViewPointer;
 
   typedef GLVectorImageViewBase<InputPixelType, OverlayPixelType>  ImageViewBaseType;
-  typedef GLVectorImageView<InputPixelType, OverlayPixelType>   ImageViewType;
 
   typedef typename ExtractROIFilterType::InputImageType         ImageType;
   typedef typename ImageType::Pointer                           ImagePointer;
@@ -92,7 +89,6 @@ public:
   virtual void Show(void);
   virtual void Hide(void);
   virtual void Update(void);
-  virtual void Synchronize(void);
   virtual void PrepareIHM(void);
   virtual void CreatePrincipalImageView( Fl_Group * g , Fl_Gl_Window * w );
   virtual void CreateScrollImageView( Fl_Group * g , Fl_Gl_Window * w );

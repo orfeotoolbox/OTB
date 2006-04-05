@@ -52,10 +52,6 @@ public:
     /** Run-time type information (and related methods). */
     itkTypeMacro(GLVectorImageViewBase,VectorImageView);
 
-  
-  typedef itk::Image<OverlayPixelType,3>   OverlayType;
-  typedef typename OverlayType::Pointer    OverlayPointer;
-
   typedef ImageViewer<TPixel,OverlayPixelType>          ImageViewerType;
   typedef ImageViewerType *                             ImageViewerPointer;
 
@@ -68,14 +64,10 @@ public:
   typedef typename Superclass::IndexType                IndexType;
   typedef typename Superclass::PixelType                PixelType;
 
-  typedef itk::ColorTable<float>                        ColorTableType;
-  typedef typename ColorTableType::Pointer              ColorTablePointer;
-
-
   /** Typedef Liste des canaux */
-  typedef typename std::vector<int> ChannelsType;
+  typedef typename std::vector<int>                     ChannelsType;
   
-  typedef enum { GRAY_LEVEL = 1, RGB_LEVEL = 3 } ModeViewType;
+  typedef enum { GRAY_LEVEL = 1, RGB_LEVEL = 3 }        ModeViewType;
 
   virtual void ClearSelectChannels(void);
 
@@ -104,7 +96,41 @@ public:
         m_ChannelsWorks = pChannelsWorks;
   }
 
-  virtual void DrawRectangle(const RegionType & zone);
+  virtual IndexType     GetCenterRegion( const RegionType & zone );
+  static  RegionType    ShrinkRegion( const RegionType & zone, const float shrinkfactor );
+  virtual RegionType    GetViewRegion( const IndexType & centerPointImage );
+  virtual RegionType    GetViewRegion( const RegionType & region, const IndexType & centerPointImage );
+  virtual RegionType    TranslateImageRegionToWindowRegion( const RegionType & imageRegion, const  RegionType & sousimageRegion, const int windowWidth, const int windowHeight);
+
+  /** Update the view region, with the new zoom and new Window sizes */
+  virtual void          MajViewRegion(void);
+  virtual void          PrintInfos(void);
+  virtual void          BuildWithImageRegion();
+  virtual void          BuildWithWindowRegion(const int zoom);
+  
+  virtual IndexType  WindowCoord2ImageCoord( const IndexType & index )const;
+  virtual SizeType   WindowSize2ImageSize( const SizeType & size )const;
+  virtual RegionType WindowZone2ImageRegion( const RegionType & zone )const;
+
+  virtual void Init(int x, int y, int w, int h, const char *l);
+
+  virtual void FinalizeInitialisation(void);
+  
+  virtual void size(int w, int h);
+  virtual void resize(int x, int y, int w, int h);
+  
+  virtual void update();
+  virtual void draw();
+//  virtual int  handle(int event);
+  virtual void SetDoubleWindow( Fl_Double_Window * pflDoubleWindow)
+  {
+        m_flDoubleWindow = pflDoubleWindow;
+  }
+
+  itkSetMacro(CenterPointImage,IndexType);
+  itkGetConstReferenceMacro(CenterPointImage,IndexType);
+  itkSetMacro(DrawViewRectangle,RegionType);
+  itkGetConstReferenceMacro(DrawViewRectangle,RegionType);
 
 protected:
 
@@ -114,21 +140,6 @@ protected:
 
   virtual void CalculeDataMinMax(const RegionType & region, double & pMin, double & pMax);
   virtual void SetWinImData(const RegionType & zone);
-
-
-
-  bool        cValidOverlayData;
-  float       cOverlayOpacity;
-  
-  OverlayPointer cOverlayData;
-  void     (* cViewOverlayCallBack)(void);
-  
-  unsigned char * cWinOverlayData;
-  
-
-  ColorTablePointer      cColorTable;
-
-  unsigned int           cOverlayColorIndex;
   
 /*! FLTK required constructor - must use imData() to complete 
   definition */
@@ -137,33 +148,26 @@ protected:
   virtual ~GLVectorImageViewBase(void);
 
   /** Liste des canaux qui seront réellement traités [1...] */
-  ChannelsType  m_ChannelsWorks;
+  ChannelsType          m_ChannelsWorks;
   
   /** Nombre de dimensions de l'image : = 1 si GRAY_LEVEL, sinon 3 si RGB_LEVEL */
-  int m_NbDim;
+  int                   m_NbDim;
+  int                   m_RedChannel;
+  int                   m_GreenChannel;
+  int                   m_BlueChannel;
+  int                   m_GrayLevelChannel;
 
-  int  m_RedChannel;
-  int  m_GreenChannel;
-  int  m_BlueChannel;
-  int  m_GrayLevelChannel;
+  bool                  m_ViewRectangle;
+  RegionType            m_DrawViewRectangle;
+  Fl_Double_Window *    m_flDoubleWindow;
+  IndexType             m_CenterPointImage;
 
-  ModeViewType  m_ModeView;
-
-public:
-
-  /*! Display Overlay in Color 'c'. You must ensure that the color-table specified
-   * contains color 'c'. For example with the default useDiscrete() color table,
-   * SetOverlayColorIndex( 0 ) will display the overlay in red. 
-   * SetOverlayColorIndex( 1 ) purple etc.... */
-  void SetOverlayColorIndex( unsigned int c)
-    {
-    cOverlayColorIndex = c;
-    }
+  ModeViewType          m_ModeView;
 
 private:
     // Pointeur sur le Viewer
     ImageViewerPointer m_Viewer;
-    
+   
 };
 
 

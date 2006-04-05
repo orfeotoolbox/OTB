@@ -100,7 +100,7 @@ ImageViewer<TPixel,TOverlayPixel>
 
 
         //Dessine le rectangle sur l'image Scroll
-        m_ScrollView->SetDrawViewRectangle( ImageViewType::ShrinkRegion(m_PrincipalView->GetViewImageRegion(),(float)1./(float)m_ShrinkFactors ) );
+        m_ScrollView->SetDrawViewRectangle( ImageViewBaseType::ShrinkRegion(m_PrincipalView->GetViewImageRegion(),(float)1./(float)m_ShrinkFactors ) );
 
 //	m_ScrollView->update();
 	m_ScrollView->Show();
@@ -181,15 +181,9 @@ void
 ImageViewer<TPixel,TOverlayPixel>
 ::PrepareIHM(void) 
 {
+        m_InputImage->Update();
         //Détection si l'image est grande
-        
-        
         m_ScrollImageView = GenereImageScroll(m_ShrinkFactors);
-//std::cout << "Image Scroll ? "<< m_ScrollImageView <<std::endl;
-m_InputImage->Update();
-
-//std::cout << "m_InputImage->GetRequestedRegion(): "<<m_InputImage->GetRequestedRegion()<<std::endl;
-      
         if ( m_ScrollImageView == false )
         {
                 m_PrincipalImage = m_InputImage;
@@ -197,18 +191,10 @@ m_InputImage->Update();
         else
         {
         	// Traitement de la fenetre Principal
-//                ImageType::Pointer lTempInputImage = ImageType::New();
-//                ImagePointer lTempInputImage = ImageType::New();
-//                m_PrincipalImage = static_cast<ImageType *>(lTempInputImage);
-        	
         	m_ExtractROIFilter->SetSizeX( m_PrincipalView->sizeX() );
         	m_ExtractROIFilter->SetSizeY( m_PrincipalView->sizeY() );
         	m_ExtractROIFilter->SetStartX( (m_InputImage->GetLargestPossibleRegion().GetSize()[0] - m_PrincipalView->sizeX())/2 );
         	m_ExtractROIFilter->SetStartY( (m_InputImage->GetLargestPossibleRegion().GetSize()[1] - m_PrincipalView->sizeY())/2 );
-/*        	m_ExtractROIFilter->SetSizeX( 300 );
-        	m_ExtractROIFilter->SetSizeY( 300 );
-        	m_ExtractROIFilter->SetStartX( 100 );
-        	m_ExtractROIFilter->SetStartY( 100 );*/
         	m_ExtractROIFilter->SetInput( m_InputImage );
         	m_ExtractROIFilter->Update();
                 m_PrincipalImage = m_ExtractROIFilter->GetOutput();
@@ -232,60 +218,25 @@ m_InputImage->Update();
         m_PrincipalView->SetInput( m_PrincipalImage );
         m_PrincipalView->SetDoubleWindow( iviewWindowPrincipal );
         m_PrincipalView->SetViewer( this );
-//  	m_PrincipalView->BuildWithImageRegion();
-//  	m_PrincipalView->FinaliseInitialisation();
-//  	iviewWindowPrincipal->show();
-//std::cout << "APRES BUILD"<<std::endl;
-//        m_PrincipalView->PrintInfos();
   	m_PrincipalView->Show();
-//std::cout << "APRES SHOW"<<std::endl;
-        m_PrincipalView->PrintInfos();
-//  	m_PrincipalView->show();
-//std::cout << "APRES 2 ieme SHOW"<<std::endl;
-//        m_PrincipalView->PrintInfos();
-//	iviewWindowPrincipal->size( 	m_PrincipalView->GetViewImageRegion().GetSize()[0], 
-//  					m_PrincipalView->GetViewImageRegion().GetSize()[1]);
-//	iviewWindowPrincipal->size( 	m_PrincipalView->GetInput()->GetRequestedRegion().GetSize()[0], 
-//  					m_PrincipalView->GetInput()->GetRequestedRegion().GetSize()[1]);
-//  	m_PrincipalView->show();
-//  	m_PrincipalView->update();
-
-	m_PrincipalView->PrintInfos();
 
         // Fenetre ZOOM
         //----------------------------------------
-//  	iviewWindowZoom->show();
 	m_ZoomView->SetInput( m_PrincipalImage );
         m_ZoomView->SetDoubleWindow( iviewWindowZoom );
         m_ZoomView->SetViewer(this);
-//  	m_ZoomView->FinaliseInitialisation();
-	// Initialisation de la fenetre ZOOM
-	//Positionne le Zoom par défaut (facteur 4)
-//       	m_ZoomView->winZoom( 4 );
-//       	m_ZoomView->BuildWithWindowRegion(1);
   	m_ZoomView->Show();
-//  	m_ZoomView->update();
-
 
         m_PrincipalView->SetDrawViewRectangle( m_ZoomView->GetViewImageRegion() );
-//std::cout << "LA"<<std::endl;
-//        m_PrincipalView->PrintInfos();
-//        m_ZoomView->PrintInfos();
 
         // Fenetre SCROLL
         //----------------------------------------
   	if ( m_ScrollImageView == true )
   	{
 		m_ScrollView->SetInput( m_ScrollImage );
-/*  		m_ScrollView->BuildWithImageRegion();
-	        iviewWindowScroll->size( 	m_ScrollView->GetViewImageRegion().GetSize()[0], 
-  					        m_ScrollView->GetViewImageRegion().GetSize()[1]);
-  		iviewWindowScroll->show();
-  		m_ScrollView->show();
-  		m_ScrollView->update();*/
          	m_ScrollView->SetViewer(this);
                 m_ScrollView->SetDoubleWindow( iviewWindowScroll );
-                m_ScrollView->SetDrawViewRectangle( ImageViewType::ShrinkRegion(m_PrincipalView->GetViewImageRegion(),(float)m_ShrinkFactors ) );
+                m_ScrollView->SetDrawViewRectangle( ImageViewBaseType::ShrinkRegion(m_PrincipalView->GetViewImageRegion(),(float)m_ShrinkFactors ) );
                 m_ScrollView->Show();
  	}
         
@@ -301,8 +252,6 @@ m_InputImage->Update();
   		}
     		Fl::check();
   	}
-//std::cout << "m_InputImage->GetRequestedRegion(): "<<m_InputImage->GetRequestedRegion()<<std::endl;
-        
 }
 
 
@@ -313,11 +262,7 @@ ImageViewer<TPixel,TOverlayPixel>
 ::SetImage(itk::ImageBase<2> * img)
 {
   m_InputImage = dynamic_cast<ImageType *>( img );
-//  m_PrincipalView->SetInputImage( image );
-//  m_PrincipalView->SetInput( image );
-//  m_ScrollView->SetInput( image );
   this->Modified();
-  Synchronize();
 }
 
 template <class TPixel, class TOverlayPixel>
@@ -346,21 +291,6 @@ ImageViewer<TPixel,TOverlayPixel>
 ::Update(void)
 {
   this->PrepareIHM();
-  
-  
-}
-
-template <class TPixel, class TOverlayPixel>
-void
-ImageViewer<TPixel,TOverlayPixel>
-::Synchronize(void) 
-{
-  float iwDiff  = m_PrincipalView->iwMax() - m_PrincipalView->iwMin();
-  float b       = (float)((int)log10(iwDiff)-2);
-  double iwMin  = ((int)(m_PrincipalView->iwMin()*pow((float)10, (float)-b)))/pow((float)10,(float)-b);
-  double iwMax  = ((int)(m_PrincipalView->iwMax()*pow((float)10, (float)-b)))/pow((float)10,(float)-b);
-  double iwStep = (iwMax-iwMin)/100.0;
-
 }
 
 
@@ -369,11 +299,12 @@ void
 ImageViewer<TPixel,TOverlayPixel>
 ::SetLabel(const char * label)
 {
+/*
   iviewWindowPrincipal->label( label );
   iviewWindowScroll->label( label );
   iviewWindowZoom->label( label );
-
-/*  std::string lLabel;
+*/
+  std::string lLabel;
   char chaine[450];
   lLabel = std::string(label) + " - Principal Window";
 std::cout << lLabel << std::endl;
@@ -383,7 +314,7 @@ std::cout << chaine << std::endl;
 
   lLabel = std::string(label) + " - Scroll Window";
   iviewWindowScroll->label( lLabel.c_str() );
-*/
+
 
 }
 
@@ -464,16 +395,19 @@ template <class TPixel, class TOverlayPixel>
 void 
 ImageViewer<TPixel,TOverlayPixel>
 ::ClickSelectCallBack( void (*newClickSelectArgCallBack)(float, float,
-                                                         /*float,*/ float,
+                                                         float,
                                                          void *),
                                                          void * newClickSelectArg)
 {
+//THOMAS
+/*
   m_PrincipalView->clickSelectCallBack( newClickSelectArgCallBack, 
                                     newClickSelectArg           ); 
   m_ScrollView->clickSelectCallBack( newClickSelectArgCallBack, 
                                     newClickSelectArg           ); 
   m_ZoomView->clickSelectCallBack( newClickSelectArgCallBack, 
                                     newClickSelectArg           ); 
+*/
 }
 
 template <class TPixel, class TOverlayPixel>

@@ -55,14 +55,6 @@ public:
   typedef typename Superclass::IndexType                IndexType;
   typedef typename Superclass::PixelType                PixelType;
 
-  typedef typename Superclass::OverlayType              OverlayType;
-  typedef typename Superclass::OverlayPointer           OverlayPointer;
-  
-  typedef typename Superclass::ColorTableType           ColorTableType;
-  typedef typename Superclass::ColorTablePointer        ColorTablePointer;
-
-  typedef enum { PRINCIPAL_IMAGE_VIEW, ZOOM_IMAGE_VIEW, SCROLL_IMAGE_VIEW } IdentWindowViewType;
-
   itkSetMacro(CenterPointImage,IndexType);
   itkGetConstReferenceMacro(CenterPointImage,IndexType);
   itkSetMacro(DrawViewRectangle,RegionType);
@@ -76,7 +68,6 @@ protected:
   /*! Standard destructor */
   virtual ~GLVectorImageView(void);
 
-  IdentWindowViewType m_IdentWindowView;
   IndexType m_CenterPointImage;
   
 public:
@@ -99,24 +90,7 @@ public:
 
   virtual void Init(int x, int y, int w, int h, const char *l);
 
-  /*! Specify the 3D image to view slice by slice */
-//  virtual void SetInputImage(ImageType * newImData);
-  virtual void FinaliseInitialisation(void);
-//  virtual ImageType * GetInput(void) ;
-//  virtual const ImagePointer & GetInputImage(void) const;
-  
-  
-  ColorTablePointer GetColorTable(void);
-  void SetColorTable(ColorTablePointer newColorTable);
-
-
-  /*! Turn on/off the display of clicked points */
-  void ViewClickedPoints( bool newViewClickedPoints );
-
-  /*! Status of clicked points display - on/off */
-  bool ViewClickedPoints();
-
-  virtual void clickSelect(float x, float y/*, float z*/);
+  virtual void FinalizeInitialisation(void);
   
   virtual void size(int w, int h);
   virtual void resize(int x, int y, int w, int h);

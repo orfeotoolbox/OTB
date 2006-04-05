@@ -11,9 +11,8 @@ template <class TPixel, class OverlayPixelType>
 ScrollImageView<TPixel, OverlayPixelType>::
 //GLImageView(int x, int y, int w, int h, const char *l):
 //VectorImageView<TPixel>(x, y, w, h, l), Fl_Gl_Window(x, y, w, h, l)
-ScrollImageView() : GLVectorImageView<TPixel, OverlayPixelType>()
+ScrollImageView() : GLVectorImageViewBase<TPixel, OverlayPixelType>()
   {
-        this->m_IdentWindowView = Superclass::SCROLL_IMAGE_VIEW;
   }
 
 template <class TPixel, class OverlayPixelType>
@@ -32,6 +31,7 @@ ScrollImageView<TPixel, OverlayPixelType>::handle(int event)
   int y = Fl::event_y();
   int button;
   static int boxX, boxY;
+/*
   switch(event)
     {
     case FL_PUSH:
@@ -68,7 +68,7 @@ ScrollImageView<TPixel, OverlayPixelType>::handle(int event)
     default:
       break;
     }
-
+*/
   int key;
   
   switch(event)
@@ -87,6 +87,10 @@ ScrollImageView<TPixel, OverlayPixelType>::handle(int event)
     break;
     case FL_KEYUP:
     break;
+    case FL_HIDE :
+                this->GetViewer()->Hide();
+                return 0;
+                break;
     case FL_KEYBOARD:
     case FL_SHORTCUT:
     key = Fl::event_text()[0];

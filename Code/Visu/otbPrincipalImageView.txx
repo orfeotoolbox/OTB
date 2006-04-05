@@ -11,9 +11,8 @@ template <class TPixel, class OverlayPixelType>
 PrincipalImageView<TPixel, OverlayPixelType>::
 //GLImageView(int x, int y, int w, int h, const char *l):
 //VectorImageView<TPixel>(x, y, w, h, l), Fl_Gl_Window(x, y, w, h, l)
-PrincipalImageView() : GLVectorImageView<TPixel, OverlayPixelType>()
+PrincipalImageView() : GLVectorImageViewBase<TPixel, OverlayPixelType>()
   {
-        this->m_IdentWindowView = Superclass::PRINCIPAL_IMAGE_VIEW;
   }
 
 template <class TPixel, class OverlayPixelType>
@@ -32,17 +31,9 @@ PrincipalImageView<TPixel, OverlayPixelType>::handle(int event)
   int y = Fl::event_y();
   int button;
   static int boxX, boxY;
-
-std::cout << " event "  << event<<std::endl;
-//std::cout <<" FL_CLOSE="<<FL_CLOSE<<" FL_RELEASE="<<FL_RELEASE<<" FL_PUSH="<<FL_PUSH<<" FL_SHORTCUT="<<FL_SHORTCUT<<" FL_KEYBOARD="<<FL_KEYBOARD<<" FL_KEYUP="<<FL_KEYUP<<" FL_GRAG="<<FL_DRAG<<" FL_MOVE="<<FL_MOVE<<"  FL_MOUSEWHEEL="<<FL_MOUSEWHEEL<<std::endl;
-std::cout <<" FL_ENTER="<<FL_ENTER<<" FL_LEAVE="<<FL_LEAVE<<" FL_FOCUS="<<FL_FOCUS<<" FL_UNFOCUS="<<FL_UNFOCUS<<"  FL_KEYDOWN="<<FL_KEYDOWN<<std::endl;
-std::cout << " event "  << event<<std::endl;
-
+/*
   switch(event)
     {
-    case FL_CLOSE :
-//std::cout << " FL_CLOSE "  << std::endl;
-    break;
     case FL_PUSH:
     case FL_DRAG:
     case FL_RELEASE:
@@ -62,7 +53,6 @@ std::cout << " event "  << event<<std::endl;
               {
               this->make_current();
               fl_overlay_clear();
-//std::cout << "GLVectorImageView<TPixel, OverlayPixelType>::handle DRAG "  << std::endl;
               fl_overlay_rect(boxX, boxY, x-boxY, y-boxY);
               }
             else
@@ -77,8 +67,9 @@ std::cout << " event "  << event<<std::endl;
     default:
       break;
     }
-
+*/
   int key;
+#if 0
   static int fastMov = 0;
   int pace;
 
@@ -97,24 +88,23 @@ std::cout << " event "  << event<<std::endl;
 
   double scale0 = this->cWinZoom * zoomBase * fabs(this->cSpacing[0 /*this->cWinOrder[0]*/])/fabs(this->cSpacing[0]);
   double scale1 = this->cWinZoom * zoomBase * fabs(this->cSpacing[1 /*this->cWinOrder[1]*/])/fabs(this->cSpacing[0]);
+#endif
+
   switch(event)
     {
     case FL_PUSH:
     case FL_DRAG:
-      button = Fl::event_button()-1;
-//std::cout << "                                   -> region : "<<this->m_ViewImageRegion.GetIndex()[0] + x<<","<<this->m_ViewImageRegion.GetIndex()[1] + y<< std::endl;
         IndexType lCenter;
         IndexType lCenterPointImage;
         lCenter[0] = x;
         lCenter[1] = y;
         //Position du centre de l'image en coordonnees image
         lCenterPointImage = this->WindowCoord2ImageCoord(lCenter);
-//std::cout << " Principal Window : clicked souris -> ecran  : "<<lCenter<< std::endl;
-//std::cout << "                                   -> image  : "<<lCenterPointImage<< std::endl;
-      // Mise a jour de la fenetre Zoom
-      this->GetViewer()->PrincipalAction(lCenterPointImage);
-//      this->GetViewer()->PrincipalAction(this->m_ViewImageRegion.GetIndex()[0] + x,this->m_ViewImageRegion.GetIndex()[1] + y);
+        // Mise a jour de la fenetre Zoom
+        this->GetViewer()->PrincipalAction(lCenterPointImage);
+#if 0
 
+//      button = Fl::event_button()-1;
       if(button <= 0)
         {
         if(this->cClickMode == CM_SELECT || this->cClickMode == CM_BOX) 
@@ -168,8 +158,14 @@ std::cout << " event "  << event<<std::endl;
           }
         }
       return 0;
+#endif
       break;
+    case FL_HIDE :
+                this->GetViewer()->Hide();
+                return 0;
+                break;
     case FL_RELEASE:
+#if 0
       if(this->cClickMode == CM_BOX)
         {
         double originX = 0;
@@ -216,14 +212,10 @@ std::cout << " event "  << event<<std::endl;
         this->boxMax(p[0], p[1]/*, p[2]*/);
         return 1;
         }
+#endif
       return 0;
       break;
-    case FL_KEYUP:
-    //when pressing down ">" or "<" key, scrolling will go faster
-    //when the key is released, scrolling speed go back to 1
-    fastMov = 0;
-    return 1;
-    break;
+
     case FL_KEYBOARD:
     case FL_SHORTCUT:
     key = Fl::event_text()[0];
@@ -231,9 +223,6 @@ std::cout << " event "  << event<<std::endl;
         {
         case 'u':
         case 'U':
-        
-//std::cout << "Update ..."<<std::endl;
-//this->PrintInfos();
               this->update();
               return 1;
               break;
