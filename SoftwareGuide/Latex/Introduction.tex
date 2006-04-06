@@ -13,15 +13,14 @@ available on line.
 
 This software guide is divided into three parts, each of which is further
 divided into several chapters. Part I is a general introduction to OTB,
-with---in the next chapter---a description of how to install the Insight
-Toolkit on your computer. This includes installing pre-compiled libraries and
-executables, and compiling the software from the source code. Part I also
+with---in the next chapter---a description of how to install the ORFEO
+Toolbox on your computer. Part I also
 introduces basic system concepts such as an overview of the system
 architecture, and how to build applications in the C++ programming
 language. Part II describes the system from the user point of view. Dozens
 of examples are used to illustrate important system features. Part III is for
 the OTB developer. Part III explains how to create your own classes, extend
-the system, and interface to various windowing and GUI systems.
+the system, and interface to windowing and GUI systems.
 
 \section{How to Learn OTB}
 \label{sec:HowToLearnOTB}
@@ -33,24 +32,24 @@ proficient in C++, and if they are extending or modifying OTB, they
 must also be familiar with OTB's internal structures and design
 (material covered in Part III). 
 
-The key to learning how to use OTB is to become familiar with its palette of
-objects and the ways of combining them. If you are a new ORFEO Toolbox user, begin by installing the software. If you are a class
-developer, you'll want to install the source code and then compile it. Users
-may only need the precompiled binaries and executables. We recommend that you
-learn the system by studying the examples and then, if you are a class
-developer, study
-the source code. Start by reading Chapter 3,
-which provides an overview of some of the key concepts in the system, and
-then review the examples in Part II. You may also wish to compile and run the
-dozens of examples distributed with the source code found in the directory
-\code{Insight/Examples}. (Please see the file 
-\code{Insight/Examples/README.txt} for
-a description of the examples contained in the various subdirectories.) There
-are also several hundred tests found in the source distribution in 
-\code{Insight/Testing/Code}, most of which are minimally documented
+The key to learning how to use OTB is to become familiar with its
+palette of objects and the ways of combining them. If you are a new
+ORFEO Toolbox user, begin by installing the software. If you are a
+class developer, you'll want to install the source code and then
+compile it. We recommend that you learn the system by studying the
+examples and then, if you are a class developer, study the source
+code. Start by reading Chapter \ref{chapter:SystemOverview}, which provides an overview of some
+of the key concepts in the system, and then review the examples in
+Part II. You may also wish to compile and run the dozens of examples
+distributed with the source code found in the directory
+\code{OTB/Examples}. (Please see the file
+\code{OTB/Examples/README.txt} for a description of the examples
+contained in the various subdirectories.) There are also several
+hundred tests found in the source distribution in
+\code{OTB/Testing/Code}, most of which are minimally documented
 testing code. However, they may be useful to see how classes are used
 together in OTB, especially since they are designed to exercise as
-much of the functionality of each class as possible.  
+much of the functionality of each class as possible.
 
 \section{Software Organization}
 \label{sec:SoftwareOrganization}
@@ -62,35 +61,13 @@ data.
 \subsection{Obtaining the Software}
 \label{sec:ObtainingTheSoftware}
 
-There are three different ways to access the OTB source code
-(see Section \ref{sec:DownloadingOTB} on page \pageref{sec:DownloadingOTB}).
-\begin{enumerate}
-	\item	from periodic releases available on the OTB Web site,
-	\item	from CD-ROM, and
-	\item	from direct access to the CVS source code repository.
-\end{enumerate}
-Official releases are available a few times a year and announced on the OTB
-Web pages and mailing lists. However, they may not provide the latest and
-greatest features of the toolkit. In general, the periodic releases and
-CD-ROM releases are the same, except that the CD release typically contains
-additional resources and data. CVS access provides immediate access to the
-latest toolkit additions, but on any given day the source code may not be
-stable as compared to the official releases---i.e., the code may not compile,
-it may crash, or it might even produce incorrect results.
+Periodic releases of the software are available on the OTB Web
+site. These official releases are available a few times a year and
+announced on the ORFEO Web pages and mailing lists. 
 
 This software guide assumes that you are working with the official OTB
-version 2.4 release (available on the OTB Web site). If you are a new user,
-we highly recommend that you use the released version of the software. It is
-stable, consistent, and better tested than the code available from the CVS
-repository. Later, as you gain experience with OTB, you may wish to work from
-the CVS repository. However, if you do so, please be aware of the OTB quality
-testing dashboard. The Insight Toolkit is heavily tested using the
-open-source DART regression testing system
-(\url{http://public.kitware.com/dashboard.php}). Before updating the CVS
-repository, make sure that the dashboard is \emph{green} indicating stable
-code. If not green it is likely that your software update is unstable. (Learn
-more about the OTB quality dashboard in Section
-\ref{sec:DART} on page \pageref{sec:DART}.)
+version 1.0 release (available on the OTB Web site). If you are a new user,
+we highly recommend that you use the released version of the software.
 
 \section{Downloading OTB}
 \label{sec:DownloadingOTB}
@@ -99,7 +76,7 @@ more about the OTB quality dashboard in Section
 
 OTB can be downloaded without cost from the following web site:
 \begin{center} 
-  \url{http://www.itk.org/HTML/Download.php}
+  \url{http://www.itk.org/HTML/Download.php}\textbf{FIXME}
 \end{center}
 In order to track the kind of applications for which OTB is being used, you
 will be asked to complete a form prior to downloading the software.
@@ -107,66 +84,23 @@ The information you provide in this form will help developers to get a better
 idea of the interests and skills of the toolkit users. It also assists in 
 future funding requests to sponsoring agencies.
 
-Once you fill out this form you will have access to the download page where two
-options for obtaining the software will be found. (This page can be
+Once you fill out this form you will have access to the download
+page. This page can be
 book marked to facilitate subsequent visits to the download site without
-having to complete any form again.) You can get the tarball of a stable
-release or you can get the development version through CVS.  The release
-version is stable and dependable but may lack the latest features of the
-toolkit. The CVS version will have the latest additions but is inherently
-unstable and may contain components with work in progress.  The following
-sections describe the details of each one of these two alternatives.
-
-\subsection{Downloading Packaged Releases}
-\label{sec:DownloadingReleases}
-
-\index{OTB!downloading release}
+having to complete any form again.
 
 Please read the
-\code{GettingStarted.txt}\footnote{http://www.itk.org/HTML/GettingStarted.txt}
+\code{GettingStarted.txt}\footnote{http://www.itk.org/HTML/GettingStarted.txt}\textbf{FIXME}
 document first. It will give you an overview of the download and installation
 processes. Then choose the tarball that better fits your system. The options
 are \code{.zip} and \code{.tgz} files.  The first type is better suited for
 MS-Windows while the second one is the preferred format for UNIX systems.
 
-Once you unzip or untar the file a directory called \code{Insight} will be
+Once you unzip or untar the file a directory called \code{OTB} will be
 created in your disk and you will be ready for starting the configuration
 process described in Section \ref{sec:CMakeforOTB} on page 
 \pageref{sec:CMakeforOTB}.
 
-\subsection{Downloading from CVS}
-\label{sec:DownloadingFromCVS}
-
-\index{OTB!CVS repository}
-
-The Concurrent Versions System (CVS) is a tool for software version control
-\cite{Fogel1999}. Generally only developers should be using CVS, so here we 
-assume that you know what CVS is and how to use it.  For more information
-about CVS please see Section \ref{sec:CVSRepository} on page 
-\pageref{sec:CVSRepository}. (Note: please make sure that you access the 
-software via CVS only when the OTB Quality Dashboard indicates that the 
-code is stable. Learn more about the Quality Dashboard at
-\ref{sec:QualityDashboard} on page \pageref{sec:QualityDashboard}.)
-
-Access OTB via CVS using the following commands (under UNIX and Cygwin): 
-\begin{verbatim}
-cvs -d :pserver:anonymous@www.itk.org:/cvsroot/Insight login
-(respond with password "insight")
-
-cvs -d :pserver:anonymous@www.itk.org:/cvsroot/Insight co Insight
-\end{verbatim}
-
-This will trigger the download of the software into a directory named
-\code{Insight}.  Any time you want to update your version, it will be enough to
-change into this directory \code{Insight} and type:
-\begin{verbatim}
-cvs update -d -P
-\end{verbatim}
-
-Once you obtain the software you are ready to configure and compile it (see
-Section \ref{sec:CMakeforOTB} on page \pageref{sec:CMakeforOTB}). First,
-however, we recommend that you join the mailing list and read the following
-sections describing the organization of the software. 
 
 \subsection{Join the Mailing List}
 \label{sec:JoinMailList}
@@ -179,11 +113,11 @@ of the primary resources for guidance and help regarding the use of the
 toolkit. You can subscribe to the users list online at
 
 \begin{center}
-\url{http://www.itk.org/HTML/MailingLists.htm}
+\url{http://www.itk.org/HTML/MailingLists.htm}\textbf{FIXME}
 \end{center} 
 
-The insight-users mailing list is also the best mechanism for expressing your
-opinions about the toolkit and to let developers know about features that you
+The otb-users mailing list is also the best mechanism for expressing your
+opinions about the toolbox and to let developers know about features that you
 find useful, desirable or even unnecessary. OTB developers are committed to
 creating a self-sustaining open-source OTB community. Feedback from users is
 fundamental to achieving this goal.
@@ -196,118 +130,86 @@ software organization and directory structure. Even if you are installing
 pre-compiled binaries, it is helpful to know enough to navigate through the
 code base to find examples, code, and documentation.
 
-OTB is organized into several different modules, or CVS checkouts. If you are
-using an official release or CD release, you will see three important modules:
-the \code{Insight}, \code{InsightDocuments} and \code{InsightApplications}
+OTB is organized into several different modules. There are three:
+the \code{OTB}, \code{OTB-Documents} and \code{OTB-Applications}
 modules. The source code, examples and applications are found in the
-\code{Insight} module; documentation, tutorials, and material related to the
-design and marketing of OTB are found in \code{InsightDocuments}; and fairly
-complex applications using OTB (and other systems such as VTK, Qt, and FLTK)
-are available from \code{InsightApplications}. Usually you will work with the
-\code{Insight} module unless you are a developer, are teaching a course, or
+\code{OTB} module; documentation, tutorials, and material related to the
+design and marketing of OTB are found in \code{OTB-Documents}; and fairly
+complex applications using OTB (and other systems such as VTK and FLTK)
+are available from \code{OTB-Applications}. Usually you will work with the
+\code{OTB} module unless you are a developer, are teaching a course, or
 are looking at the details of various design documents. The
-\code{InsightApplications} module should only be downloaded and
+\code{OTB-Applications} module should only be downloaded and
 compiled once
-the \code{Insight} module is functioning properly.
+the \code{OTB} module is functioning properly.
 
-The \code{Insight} module contains the following subdirectories:
+The \code{OTB} module contains the following subdirectories:
 \begin{itemize}
-        \item \code{Insight/Auxiliary}---code that interfaces packages
+        \item \code{OTB/Auxiliary}---code that interfaces packages
         to OTB.
-        \item \code{Insight/Code}---the heart of the software; the location
+        \item \code{OTB/Code}---the heart of the software; the location
         of the majority of the source code.
-        \item \code{Insight/Documentation}---a compact subset of documentation
+        \item \code{OTB/Documentation}---a compact subset of documentation
         to get users started with OTB.
-        \item \code{Insight/Examples}---a suite of simple, well-documented
+        \item \code{OTB/Examples}---a suite of simple, well-documented
         examples used by this guide and to illustrate important
         OTB concepts.
-        \item \code{Insight/Testing}---a large number of small programs used
+        \item \code{OTB/Testing}---a large number of small programs used
         to test OTB. These examples tend to be minimally documented but may
-        be useful to demonstrate various system concepts. These tests are 
-        used by DART to produce the OTB Quality Dashboard 
-        (see Section \ref{sec:DART} on 
-        page \pageref{sec:DART}.)
-        \item \code{Insight/Utilities}---supporting software for the OTB
-        source code. For example, DART and Doxygen support, as well as 
-        libraries such as \code{png} and \code{zlib}.
-        \item \code{Insight/Validation}---a series of validation case studies
+        be useful to demonstrate various system concepts. 
+        \item \code{OTB/Utilities}---supporting software for the OTB
+        source code. For example, Doxygen support, as well as 
+        libraries such as \code{CAI} and \code{GDAL}.
+        \item \code{OTB/Validation}---a series of validation case studies
         including the source code used to produce the results.
-        \item \code{Insight/Wrapping}---support for the CABLE wrapping tool.
-        CABLE is used by OTB to build interfaces between the C++ library and
-        various interpreted languages (currently Tcl and Python are supported).
 \end{itemize}
 
-The source code directory structure---found in \code{Insight/Code}---is 
+The source code directory structure---found in \code{OTB/Code}---is 
 important to understand since other directory structures (such as the
-\code{Testing} and \code{Wrapping} directories) shadow the structure of the
-\code{Insight/Code} directory.
+\code{Testing} directory) shadow the structure of the
+\code{OTB/Code} directory.
 \begin{itemize}
-        \item \code{Insight/Code/Common}---core classes, macro definitions,
+        \item \code{OTB/Code/Common}---core classes, macro definitions,
         typedefs, and other software constructs central to OTB.
-        \item \code{Insight/Code/Numerics}---mathematical library and
-        supporting classes. (Note: OTB's mathematical library is based
-        on the VXL/VNL software package \url{http://vxl.sourceforge.net}.)
-        \item \code{Insight/Code/BasicFilters}---basic image processing
+        \item \code{OTB/Code/BasicFilters}---basic image processing
         filters.
-        \item \code{Insight/Code/IO}---classes that support the reading
+        \item \code{OTB/Code/IO}---classes that support the reading
         and writing of data.
-        \item \code{Insight/Code/Algorithms}---the location of most 
-        segmentation and registration algorithms.
-        \item \code{Insight/Code/SpatialObject}---classes that represent
-        and organize data using spatial relationships (e.g., the leg bone
-        is connected to the hip bone, etc.)
-        \item \code{Insight/Code/Patented}---any patented algorithms are
-        placed here. Using this code in commercial application requires
-        a patent license.
-        \item \code{Insight/Code/Local}---an empty directory used by developers
-        and users to experiment with new code.
+        \item \code{OTB/Code/Algorithms}---the location of most
+        algorithms.
+	\item \code{OTB/Code/FeatureExtraction}---
+	\item \code{OTB/Code/ChangeDetection}---
+	\item \code{OTB/Code/Learning}---
+	\item \code{OTB/Code/Visu}---
+	  
 \end{itemize}
 
-The \code{InsightDocuments} module contains the following subdirectories:
+The \code{OTB-Documents} module contains the following subdirectories:
 \begin{itemize}
-        \item \code{InsightDocuments/CourseWare}---material related to
+        \item \code{OTB-Documents/CourseWare}---material related to
         teaching OTB.
-        \item \code{InsightDocuments/Developer}---historical documents covering
-        the design and creation of OTB including progress reports and 
-        design documents.
-        \item \code{InsightDocuments/Latex}---\LaTeX{} styles to produce this
+        \item \code{OTB-Documents/Latex}---\LaTeX{} styles to produce this
         work as well as other documents.
-        \item \code{InsightDocuments/Marketing}---marketing flyers and 
+        \item \code{OTB-Documents/Marketing}---marketing flyers and 
         literature used to succinctly describe OTB.
-        \item \code{InsightDocuments/Papers}---papers related to the many
+        \item \code{OTB-Documents/Papers}---papers related to the many
         algorithms, data representations, and software tools used in OTB.
-        \item \code{InsightDocuments/SoftwareGuide}---\LaTeX{} files used to
+        \item \code{OTB-Documents/SoftwareGuide}---\LaTeX{} files used to
         create this guide. (Note that the code found in
-        \code{Insight/Examples} is used in conjunction with these \LaTeX{}
+        \code{OTB/Examples} is used in conjunction with these \LaTeX{}
         files.)
-        \item \code{InsightDocuments/Validation}---validation case studies
+        \item \code{OTB-Documents/Validation}---validation case studies
         using OTB.
-        \item \code{InsightDocuments/Web}---the source HTML and other material
-        used to produce the Web pages found at \url{http://www.itk.org}.
 \end{itemize}
 
-Similar to the \code{Insight} module, access to the \code{InsightDocuments}
-module is also available via CVS using the following commands (under UNIX and
-Cygwin):
-\begin{verbatim}
-cvs -d :pserver:anonymous@www.itk.org:/cvsroot/Insight co InsightDocuments
-\end{verbatim}
-
-The \code{InsightApplications} module contains large, relatively complex
+The \code{OTB-Applications} module contains large, relatively complex
 examples of OTB usage. See the web pages at 
-\url{http://www.itk.org/HTML/Applications.htm} for a description. Some of 
-these applications require GUI toolkits such as Qt and FLTK or other packages
+\url{http://www.itk.org/HTML/Applications.htm}\textbf{FIXME} for a description. Some of 
+these applications require GUI toolkits such as FLTK or other packages
 such as VTK (\emph{The Visualization Toolkit}
 \url{http://www.vtk.org}). Do not attempt to compile and build this module
-until you have successfully built the core \code{Insight} module.
+until you have successfully built the core \code{OTB} module.
 
-Similar to the \code{Insight} and \code{InsightDocuments} module, access to 
-the \code{InsightApplications} module is also available via CVS using the 
-following commands (under UNIX and Cygwin):
-\begin{verbatim}
-cvs -d:pserver:anonymous@www.itk.org:/cvsroot/Insight \ 
-  co InsightApplications
-\end{verbatim}
 
 \subsection{Documentation}
 \label{sec:Documentation}
@@ -321,8 +223,8 @@ aware of.
         documentation also contains inheritance and collaboration diagrams,
         listing of event invocations, and data members. The documentation is
         heavily hyper-linked to other classes and to the source code. The
-        Doxygen documentation is available on the companion CD, or on-line at
-        \url{http://www.itk.org}. Make sure that you have the right documentation
+        Doxygen documentation is available on-line at
+        \url{http://www.itk.org}\textbf{FIXME}. Make sure that you have the right documentation
         for your version of the source code.
 
 	\item[Header Files.] Each OTB class is implemented with a .h and
@@ -335,18 +237,11 @@ aware of.
 \subsection{Data}
 \label{sec:Data}
 
-The Insight Toolkit was designed to support the Visible Human Project 
-and its associated data. This data is available from the National Library of
-Medicine at \url{http://www.nlm.nih.gov/research/visible/visible_human.html}.
+The OTB Toolkit was designed to support the ORFEO Acompaniment Program 
+and its associated data. This data is available \url{http://smsc.cnes.fr/PLEIADES/index.htm}.
 
-Another source of data can be obtained from the OTB Web site at either
-of the following:
-\begin{quote}
-\url{http://www.itk.org/HTML/Data.htm} \\
-\url{ftp://public.kitware.com/pub/itk/Data/}.
-\end{quote}
 
-\section{The Insight Community and Support}
+\section{The OTB Community and Support}
 \label{sec:AdditionalResources}
 
 OTB was created from its inception as a collaborative, community
@@ -362,25 +257,24 @@ number of possibilities.
        \item Developers may contribute classes or improve existing
        classes. If you are a developer, you may request permission to join
        the OTB developers mailing list. Please do so by sending email to
-       will.schroeder ``at'' kitware.com. To become a developer you need to
+       jordi.inglada ``at'' cnes.fr. To become a developer you need to
        demonstrate both a level of competence as well as
        trustworthiness. You may wish to begin by submitting fixes to the OTB
        users mailing list.
 
-       \item Research partnerships with members of the Insight Software
-       Consortium are encouraged. Both NIH and NLM will likely provide
-       limited funding over the next few years, and will encourage the use of
-       OTB in proposed work.
+       \item Research partnerships with members of the ORFEO
+       Acompaniment Program are encouraged. CNES will encourage the use of
+       OTB in proposed work and research projects.
 
-       \item For those developing commercial applications with OTB,
-       support and consulting are available from Kitware at
-       \url{http://www.kitware.com}. Kitware also offers short OTB courses
-       either at a site of your choice or periodically at Kitware.
+%%        \item For those developing commercial applications with OTB,
+%%        support and consulting are available from Kitware at
+%%        \url{http://www.kitware.com}. Kitware also offers short OTB courses
+%%        either at a site of your choice or periodically at Kitware.
 
        \item Educators may wish to use OTB in courses. Materials are being
        developed for this purpose, e.g., a one-day, conference course and
        semester-long graduate courses. Watch the OTB web pages or check in
-       the \code{InsightDocuments/CourseWare} directory for more information.
+       the \code{OTB-Documents/CourseWare} directory for more information.
 \end{itemize}
 
 \section{A Brief History of OTB}
@@ -388,11 +282,69 @@ number of possibilities.
 
 \index{OTB!history}
 
+
+Beside the Pleiades (PHR) and Cosmo-Skymed (CSK) systems developments forming ORFEO, the dual and bilateral system (France - Italy) for Earth Observation, the ORFEO Accompaniment Program was set up, to prepare, accompany and promote the use and the exploitation of the images derived from these sensors.
+
+The creation of a preparatory program\footnote{http://smsc.cnes.fr/PLEIADES/A\_prog\_accomp.htm} is needed because of :
+\begin{itemize}
+\item the new capabilities and performances of the ORFEO systems (optical and radar high resolution, access capability, data quality, possibility to acquire simultaneously in optic and radar),
+\item the implied need of new methodological developments : new processing methods, or adaptation of existing methods,
+\item the need to realise those new developments in very close cooperation with the final users, the integration of new products in their systems.
+  
+\end{itemize}
+
+This program was initiated by CNES mid-2003 and will last until 2009.
+It consists in two parts, between which it is necessary to keep a strong interaction :
+\begin{itemize}
+\item A Thematic part.
+\item A Methodological part,
+\end{itemize}
+
+The Thematic part covers a large range of applications (civil and
+defence ones), and aims at specifying and validating value added
+products and services required by end users. This part includes
+consideration about products integration in the operational systems or
+processing lines. It also includes a careful thought on intermediary
+structures to be developed to help non-autonomous users. Lastly, this part aims at raising future users awareness, through practical demonstrations and validations.
+
+The Methodological part objective is the definition and the
+development of tools for the operational exploitation of the future
+submetric optic and radar images (tridimensional aspects, changes
+detection, texture analysis, pattern matching, optic radar
+complementarities). It is mainly based on R\&D studies and doctorate
+and post-doctorate researches.
+
+In this context, CNES\footnote{http://www.cnes.fr} decided to develop
+the \emph{ORFEO ToolBox} (OTB), a set of algorithms encapsulated in a
+software library. The goals of the OTB is to capitalise a methological
+\textit{savoir faire} in order to adopt an incremental development
+approach aimin to efficiently exploit the results obtained in the
+frame of methodological R\&D studies.
+
+All the developments are based on FLOSS (Free/Libre Open Source
+Software) or existing CNES developments.
+
+OTB is implemented in C++ and is mainly based on
+ITK\footnote{http://www.itk.org} (Insight Toolkit):
+\begin{itemize}
+  \item ITK is used as the core element of OTB
+  \item OTB classes inherit from ITK classes
+  \item The software development procedure of OTB is strngly inspired
+  from ITK's (Extreme Programming, test-based coding, Generic
+  Programming, etc.)
+  \item The documentation production procedure is the same as for ITK
+  \item Several chapters of the Sofware Guide are litterally copied
+  from ITK's Software Guide
+  \item Many examples are taken from ITK.
+\end{itemize}
+
+\subsection{ITK's history}
+      
 In 1999 the US National Library of Medicine of the National Institutes of
 Health awarded six three-year contracts to develop an open-source
 registration and segmentation toolkit, that eventually came to be known as
-the Insight Toolkit (OTB) and formed the basis of the Insight Software
-Consortium. OTB's NIH/NLM Project Manager was Dr. Terry Yoo, who coordinated the
+the Insight Toolkit (ITK) and formed the basis of the Insight Software
+Consortium. ITK's NIH/NLM Project Manager was Dr. Terry Yoo, who coordinated the
 six prime contractors composing the Insight consortium. These consortium
 members included three commercial partners---GE Corporate R\&D, Kitware,
 Inc., and MathSoft (the company name is now Insightful)---and three academic
@@ -408,170 +360,9 @@ Women's Hospital, Celina Imielinska and Pat Molholt at Columbia University,
 Jim Gee at UPenn's Grasp Lab, and George Stetten at the University of
 Pittsburgh.
 
-In 2002 the first official public release of OTB was made available. In
-addition, the National Library of Medicine awarded thirteen contracts to
-several organizations to extend OTB's capabilities. NLM funding of 
-Insight Toolkit development is continuing through 2003, with additional
-application and maintenance support anticipated beyond 2003. If you are 
-interested in potential funding opportunities, we suggest that you contact
-Dr. Terry Yoo at the National Library of Medicine for more information.
+In 2002 the first official public release of ITK was made
+available. 
 
-This guide is divided in three parts, each of which is further divided
-into chapters.
+   	
 
-La premi\`{e}re partie pr\'{e}sente l'OTB de fa\c{c}on g\'{e}n\'{e}rale, comment proc\'{e}der \`{a} son installation et sa g\'{e}n\'{e}ration sur votre machine. 
-Cette partie pr\'{e}sente donc les principes de bases d'architecture et de compilation sur un syt\`{e}me, et comment compiler une application en C++.
-
-La deuxi\`{e}me partie pr\'{e}sente l'OTB d'un point de vue \emph{utilisateur}. Elle se pr\'{e}sente sous forme d'exemples illutr\'{e}s.
-
-La troisi\`{e}me partie pr\'{e}sente l'OTB d'un point de vue \emph{d\'{e}veloppeur}.
-Cette partie explique comment cr\'{e}er vos propres classes, comment faire \'{e}voluer le produit.
-
-\section{Se familiariser avec l'OTB}
-\label{sec:CommentApprendreOTB}
-
-Il y \`{a} deux cat\'{e}gories d'utilisateurs de l'OTB :
-\begin{itemize}
-        \item Les d\'{e}veloppeurs de classes, qui cr\'{e}ent des classes C++. 
-        \item Les utilisateurs des classes existantes pour d\'{e}velopper et g\'{e}n\'{e}rer leurs propres applications.
-\end{itemize}
-
-Nous vous recommendons d'\'{e}tudier les exemples. Vous pourrez ainsi compiler et ex\'{e}cuter les exemples distribu\'{e}s 
-avec le code source diponible dans le r\'{e}pertoire \code{OTB/Examples}. Lire le fichier \code{OTB/Examples/README.txt} 
-d\'{e}crivant les diff\'{e}rents exemples founis dans les sous-r\'{e}pertoires.
-
-Il y \`{a} de plus, un ensemble de tests suffisamment document\'{e}s et disponibles dans le r\'{e}pertoire \code{OTB/Testing/Code} qui vous 
-montrent comment peuvent \^{e}tre utilis\'{e}es les classes dans l'OTB.
-
-\section{Organisation du logiciel}
-\label{sec:OrganisationLogiciel}
-
-En cours ....
-
-\section{T\'{e}l\'{e}charger l'OTB}
-\label{sec:DownloadOTB}
- 
-\index{Downloading}
-
-L'OTB peut \^{e}tre t\'{e}l\'{e}charg\'{e}e \`{a} l'adresse Internet 
-\begin{center} 
-  \url{http://www.cnes.fr/HTML/Download.php}
-\end{center}
-
-\subsection{T\'{e}l\'{e}charger le 'Package'}
-\label{sec:DownloadingReleases}
-
-\index{OTB!downloading release}
-
-Avant de d\'{e}marrer, vous pouvez consulter le document \code{GettingStarted.txt}\footnote{http://www.cnes.fr/HTML/GettingStarted.txt}. 
-Il vous donne un aper\c{c}u sur la proc\'{e}dure \`{a} suivre pour le t\'{e}l\'{e}chargement et l'installation.
-
-Choisir le fichier compress\'{e} \code{.zip} ou \code{.tgz}. Le premier est plut\^{o}t destin\'{e} pour l'environnement \emph{Microsoft Windows}, 
-le second pour les environnements \emph{unix} ou \emph{linux}.
-
-Extraire le contenu du fichier compress\'{e} (avec \emph{unzip} ou \emph{gunzip}) dans le r\'{e}pertoire \code{OTB} 
-pr\'{e}alablement cr\'{e}\'{e} sur votre syt\`{e}me.
-Vous \^{e}tes alors pr\^{e}t \`{a} proc\'{e}der \`{a} la configuration et l'installation du produit, 
-d\'{e}crite au chapitre \ref{sec:CMakeforOTB} \`{a} la page \pageref{sec:CMakeforOTB}.
-
-\subsection{T\'{e}l\'{e}charger depuis SVN}
-\label{sec:DownloadingFromSVN}
-
-\index{OTB!SVN repository}
-
-
-
-Le code source de l'OTB est accessible via un serveur \href{http://subversion.tigris.org/}{Subversion SVN} (rempla\c{c}ant du c\'{e}l\`{e}bre CVS)
- 
-
-Pour acc\'{e}der \`{a} l'OTB via SVN (sous UNIX et Cygwin), utilisez la commande suivante :
-\begin{verbatim}
-svn ......
-\end{verbatim}
-
-Ceci permet de t\'{e}l\'{e}charger le r\'{e}pertoire \code{OTB} contenant l'ensemble du code source de la biblioth\`{e}que \emph{OTB}.
-
-Vous pouvez ensuite configurer et installer l'OTB sur votre syst\`{e}me en suivant les instructions d\'{e}crites 
-au chapitre \ref{sec:CMakeforOTB} \`{a} la page \pageref{sec:CMakeforOTB})
-
-
-\subsection{Arborescence du produit}
-\label{sec:DirectoryStructure}
-
-L'OTB est organis\'{e} en trois principaux composants : la biblioth\`{e}que OTB (r\'{e}pertoire \code{OTB}), 
-les applications de l'OTB (r\'{e}pertoire \code{OTB-Applications}) et la documentation associ\'{e}e (r\'{e}pertoire \code{OTB-Documents}).
-
-Le code source ainsi que les exemples se trouvent dans le r\'{e}pertoire \code{OTB}; la documentation, 
-le tutorial et les proc\'{e}dures d'installation se trouvent dans le r\'{e}pertoire \code{OTB-Documents} ; 
-les applications plus complexes (de plus haut niveau) se trouvent dans le r\'{e}pertoire \code{OTB-Applications}.
-
-
-L'\code{OTB} contient les r\'{e}pertoires suivants :
-\begin{itemize}
-        \item \code{OTB/Code} --- contient globalement l'ensemble du code source de la biblioth\`{e}que OTB
-        \item \code{OTB/Documentation} --- contient la documentation de la biblioth\`{e}que OTB, produite par Doxygen
-        \item \code{OTB/Examples} --- contient un ensemble d'exemples, utilis\'{e}s notamment pour pr\'{e}senter le concept de l'OTB et 
-        \'{e}galement utilis\'{e} pour illustrer le guide de l'OTB
-        \item \code{OTB/Testing} --- contient un certain nombre de programmes, utilis\'{e}s pour tester et valider la biblioth\`{e}que OTB. 
-        Ces tests sont lanc\'{e}s via le moniteur de test de CMake \emph{ctest}.
-        \item \code{OTB/Utils} --- contient les codes sources des biblioth\`{e}ques utilis\'{e}es par l'OTB
-\end{itemize}
-
-Le r\'{e}pertoire \code{OTB/Code} (le coeur du logiciel) est structur\'{e} de la fa\c{c}on suivante :
-\begin{itemize}
-        \item \code{OTB/Code/Common} --- d\'{e}finitions de macro, typedefs, et toutes autres classes "factoris\'{e}es" utilis\'{e}es par les autres composants de l'OTB.
-        \item \code{OTB/Code/IO} --- classes d'entr\'{e}es/sorties pour l'acc\`{e}s aux images (encapsulation de GDAL et de CAI)
-        \item \code{OTB/Code/ChangeDetection} --- les classes de d\'{e}tections de changements
-        \item \code{OTB/Code/FiterExtraction} --- les classes contenant les primitives et descripteurs impl\'{e}ment\'{e}s
-        \item \code{OTB/Code/Learning} --- les classes d'apprentissage supervis\'{e} (utilisant SVM)
-        \item \code{OTB/Code/Visu} --- les classes de visualisation et des IHM graphiques (utilisant VTK et FLTK)
-\end{itemize}
-
-Le r\'{e}pertoire \code{OTB-Documents} contient les r\'{e}pertoires suivants :
-\begin{itemize}
-        \item \code{OTB-Documents/Latex} --- fichiers \LaTeX{} utilis\'{e}s pour la production de documents.
-        \item \code{OTB-Documents/SoftwareGuide} --- fichiers \LaTeX{} utilis\'{e}s pour g\'{e}n\'{e}rer ce guide. 
-        Les exemples illustr\'{e}s dans ce guide sont g\'{e}n\'{e}r\'{e}s \`{a} partir des codes sources, contenus 
-        dans le répertoire \code{OTB/Examples}, traduits en \LaTeX{}
-\end{itemize}
-
-La documentation \code{OTB-Documents} est disponible via SVN en utilisant la commande :
-\begin{verbatim}
-svn ....
-\end{verbatim}
-
-
-Le répertoire \code{OTB-Applications} contient les r\'{e}pertoires suivants :
-\begin{itemize}
-        \item \code{OTB-Applications/Chgts} --- application int\'{e}ractive de d\'{e}tection de changements, utilisant l'\code{OTB}
-        \item \code{OTB-Applications/Viewer} --- outil de visualisation d'images
-        \item \code{OTB-Applications/Utils} --- contient divers utilitaires comme par exemple un g\'{e}n\'{e}rateur de quick-looks, 
-        un outil d'extraction de r\'{e}gions d'int\'{e}r\^{e}t, un outil d'affichage des m\'{e}ta-donn\'{e}es des images et 
-        un outil de pseudo-ortho-rectification automatique d'images
-\end{itemize}
-
-Pour acc\'{e}der aux applications de l'OTB via SVN (sous UNIX et Cygwin), utilisez la commande suivante :
-\begin{verbatim}
-svn ......
-\end{verbatim}
-
-
-\subsection{Documentation}
-\label{sec:Documentation}
-
-Associ\'{e}e \`{a} ce document, il existe deux autres documentations :
-\begin{description}
-        \item[La Documentation Doxygen .] La documentation Doxygen est une documentation essentielle pour d\'{e}velopper avec l'OTB. 
-        Sous format HTML, elle d\'{e}crit en d\'{e}tail chaque classes et m\'{e}thodes impl\'{e}ment\'{e}es dans l'OTB. 
-        Elle est illustr\'{e}e par des diagrammes de collaboration et des diagrammes d'h\'{e}ritage. 
-        Cette documentation tr\`{e}s dynamique poss\`{e}de des hyper-liens sur les autres classes et sur le code source.
-        Cette docmentation est disponible \`{a} l'adresse \url{http://smsc.cnes.fr/PLEIADES/Fr/A_prog_accomp.htm/}.
-	\item[Les fichiers \emph{Header}.] Chaque classe de l'OTB est impl\'{e}ment\'{e}e dans un fichier .h et dans un fichier 
-	.cxx/.txx (.txx pour les classes génériques (\emph{template}) )
-\end{description}
-
-\subsection{Data}
-\label{sec:Data}
-
-Les images utilis\'{e}es dans ce guide proviennent de ............. 
 
