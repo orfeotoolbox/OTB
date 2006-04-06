@@ -52,6 +52,9 @@ public:
   typedef itk::VectorImage<TInputPixelType,2>     InputImageType;
   typedef itk::Image<TOutputPixelType,2>          OutputImageType;
 
+  /** Pixel type information */
+  typedef typename OutputImageType::ValueType   OutputValueType;
+
   /** Typedef to describe the output and input image region types. */
   typedef typename OutputImageType::RegionType OutputImageRegionType;
   typedef typename InputImageType::RegionType InputImageRegionType;

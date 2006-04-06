@@ -25,7 +25,12 @@
 
 namespace otb
 {
-
+/** \class ImageViewer
+ * \brief Base class for viewing an image.
+ *
+ * This Viewer....
+ *
+*/
 template <class TPixel, class TOverlayPixel>
 class ImageViewer :             public itk::ProcessObject,
                                 public otbImageViewerGUI
@@ -58,8 +63,6 @@ public:
                                              InputPixelType >   ExtractROIFilterType;
 
   typedef typename ExtractROIFilterType::Pointer                  ExtractROIFilterPointer;
-//  typedef typename ExtractROIFilterType::InputImageType         InputImageType;
-//  typedef typename InputImageType::Pointer                      InputImagePointer;
  
   typedef itk::Image< OverlayPixelType, 3 >                     OverlayType;
   typedef PrincipalImageView<InputPixelType, OverlayPixelType>  PrincipalImageViewType;
@@ -85,15 +88,20 @@ public:
     
   ImageViewer();
   virtual ~ImageViewer();
+  /** Set the input image */
   virtual void SetImage(itk::ImageBase<2> * img);
+  /** Show the viewer (Update) */
   virtual void Show(void);
+  /** Hide all Image View Windows */
   virtual void Hide(void);
+  /** Update */
   virtual void Update(void);
-  virtual void PrepareIHM(void);
+  
+  virtual void BuildHMI(void);
   virtual void CreatePrincipalImageView( Fl_Group * g , Fl_Gl_Window * w );
   virtual void CreateScrollImageView( Fl_Group * g , Fl_Gl_Window * w );
   virtual void CreateZoomImageView( Fl_Group * g , Fl_Gl_Window * w );
-  virtual void SetLabel( const char * );
+//  virtual void SetLabel( const char * );
   virtual void ClickSelectCallBack(
                 void (*newClickSelectArgCallBack)(float, float,
                                                   /*float,*/ float,
@@ -118,6 +126,9 @@ public:
   itkSetMacro(GreenChannel,int);
   itkSetMacro(BlueChannel,int);
 
+  itkSetStringMacro(Label);
+  itkGetStringMacro(Label);
+
   virtual void SetRGBChannels(int pRedChannel,int pGreenChannel, int pBlueChannel)
   {
         SetRedChannel(pRedChannel);
@@ -131,6 +142,11 @@ private:
         virtual void SetChannelsInformationsToImagesView(void);
         virtual bool GenereImageScroll(unsigned int & pShrinkFactors);
 
+
+        std::string m_Label;
+        static const std::string m_SuffixPrincipalTitle;
+        static const std::string m_SuffixZoomTitle;
+        static const std::string m_SuffixScrollTitle;
         int m_NbDim;
 
         int  m_RedChannel;

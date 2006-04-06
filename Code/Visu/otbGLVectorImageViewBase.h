@@ -18,6 +18,7 @@
 #include <FL/Fl_Gl_Window.H>
 
 #include <vector>
+#include <string>
 
 #include "itkColorTable.h"
 #include "itkImage.h"
@@ -132,6 +133,11 @@ public:
   itkSetMacro(DrawViewRectangle,RegionType);
   itkGetConstReferenceMacro(DrawViewRectangle,RegionType);
 
+  itkSetMacro(Label,std::string);
+//  itkGetConstReferenceMacro(Label,std::string);
+  itkSetStringMacro(Label);
+  itkGetStringMacro(Label);
+
 protected:
 
   //Méthode Get en écriture sur le Viewer
@@ -164,10 +170,12 @@ protected:
 
   ModeViewType          m_ModeView;
 
+
 private:
     // Pointeur sur le Viewer
-    ImageViewerPointer m_Viewer;
-   
+    ImageViewerPointer  m_Viewer;
+
+    std::string         m_Label;   
 };
 
 

@@ -59,6 +59,7 @@ public:
         this->m_flDoubleWindow->show();
         this->m_flDoubleWindow->size(           this->GetViewImageRegion().GetSize()[0], 
   					        this->GetViewImageRegion().GetSize()[1]);
+        this->m_flDoubleWindow->label( this->GetLabel() );
         this->show();
         this->update();
   }

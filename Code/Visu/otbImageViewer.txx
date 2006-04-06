@@ -10,11 +10,20 @@
 
 namespace otb
 {
-  
+ 
+template <class TPixel, class TOverlayPixel>
+const std::string ImageViewer<TPixel,TOverlayPixel>::m_SuffixPrincipalTitle = " - Principal Window";
+template <class TPixel, class TOverlayPixel>
+const std::string ImageViewer<TPixel,TOverlayPixel>::m_SuffixZoomTitle = " - Zoom Window";
+template <class TPixel, class TOverlayPixel>
+const std::string ImageViewer<TPixel,TOverlayPixel>::m_SuffixScrollTitle = " - Scroll Window";
+
+ 
 template <class TPixel, class TOverlayPixel>
 ImageViewer<TPixel,TOverlayPixel>
 ::ImageViewer()
 {
+        m_Label = "Image";
         this->ClearSelectChannels();
         m_ShrinkFactors = 0;
         m_PrincipalImage = NULL;
@@ -210,7 +219,7 @@ ImageViewer<TPixel,TOverlayPixel>
 template <class TPixel, class TOverlayPixel>
 void
 ImageViewer<TPixel,TOverlayPixel>
-::PrepareIHM(void) 
+::BuildHMI(void) 
 {
         m_InputImage->Update();
 
@@ -262,6 +271,7 @@ ImageViewer<TPixel,TOverlayPixel>
         m_PrincipalView->SetInput( m_PrincipalImage );
         m_PrincipalView->SetDoubleWindow( iviewWindowPrincipal );
         m_PrincipalView->SetViewer( this );
+        m_PrincipalView->SetLabel( m_Label + m_SuffixPrincipalTitle );
   	m_PrincipalView->Show();
 
         // Fenetre ZOOM
@@ -269,6 +279,7 @@ ImageViewer<TPixel,TOverlayPixel>
 	m_ZoomView->SetInput( m_PrincipalImage );
         m_ZoomView->SetDoubleWindow( iviewWindowZoom );
         m_ZoomView->SetViewer(this);
+        m_ZoomView->SetLabel( m_Label + m_SuffixZoomTitle );
   	m_ZoomView->Show();
 
         m_PrincipalView->SetDrawViewRectangle( m_ZoomView->GetViewImageRegion() );
@@ -281,6 +292,7 @@ ImageViewer<TPixel,TOverlayPixel>
          	m_ScrollView->SetViewer(this);
                 m_ScrollView->SetDoubleWindow( iviewWindowScroll );
                 m_ScrollView->SetDrawViewRectangle( ImageViewBaseType::ShrinkRegion(m_PrincipalView->GetViewImageRegion(),(float)m_ShrinkFactors ) );
+                m_ScrollView->SetLabel( m_Label + m_SuffixScrollTitle );
                 m_ScrollView->Show();
  	}
         
@@ -296,6 +308,7 @@ ImageViewer<TPixel,TOverlayPixel>
   		}
     		Fl::check();
   	}
+        SetLabel("aaa");
 }
 
 
@@ -334,9 +347,10 @@ void
 ImageViewer<TPixel,TOverlayPixel>
 ::Update(void)
 {
-  this->PrepareIHM();
+  this->BuildHMI();
 }
 
+#if 0
 
 template <class TPixel, class TOverlayPixel>
 void
@@ -348,19 +362,22 @@ ImageViewer<TPixel,TOverlayPixel>
   iviewWindowScroll->label( label );
   iviewWindowZoom->label( label );
 */
-  std::string lLabel;
+  std::string lLabel("DED");
   char chaine[450];
   lLabel = std::string(label) + " - Principal Window";
 std::cout << lLabel << std::endl;
 strcpy(chaine, label);
+  chaine[strlen(label)] = '\0';
 std::cout << chaine << std::endl;
   iviewWindowPrincipal->label( (const char*)chaine );
 
   lLabel = std::string(label) + " - Scroll Window";
-  iviewWindowScroll->label( lLabel.c_str() );
+  iviewWindowScroll->label( lLabel.data() );
+//  iviewWindowScroll->label( "SCR" );
 
 
 }
+#endif
 
 template <class TPixel, class TOverlayPixel>
 void

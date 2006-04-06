@@ -129,7 +129,6 @@ MultiChannelExtractROI<TInputPixelType,TOutputPixelType>
         {
                 outputPtr->SetVectorLength( m_ChannelsWorks.size() );
         }
-
 	outputPtr->SetNumberOfComponentsPerPixel( outputPtr->GetVectorLength() );
 
         // Appel à la methode de la classe de base
@@ -164,16 +163,12 @@ MultiChannelExtractROI<TInputPixelType,TOutputPixelType>
   OutputIterator outIt(outputPtr, outputRegionForThread);
   InputIterator inIt(inputPtr, inputRegionForThread);
 
-int cpt(0);
   // Si traitement classique
   if ( m_ChannelsWorksBool == false )
   {
         // walk the output region, and sample the input image
         while( !outIt.IsAtEnd() )
         {
-        cpt++;
-//std::cout << cpt << std::endl;
-        
                 outIt.Set( inIt.Get() );
                 ++outIt; 
                 ++inIt; 
@@ -198,7 +193,7 @@ int cpt(0);
                 for ( nbChannels = 0 ; nbChannels < m_ChannelsWorks.size() ; nbChannels++)
                 {
                         channelIn = m_ChannelsWorks[nbChannels] - 1;
-                        pixelOutput[channelOut] = pixelInput[channelIn];
+                        pixelOutput[channelOut] = static_cast<OutputValueType>(pixelInput[channelIn]);
                         channelOut++;
                 }
                 outIt.Set( pixelOutput );

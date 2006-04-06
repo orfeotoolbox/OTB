@@ -18,6 +18,7 @@ GLVectorImageViewBase() : VectorImageView<TPixel>(), Fl_Gl_Window(0,0,0,0,0)
         when(FL_WHEN_NOT_CHANGED | FL_WHEN_ENTER_KEY);
         this->ClearSelectChannels();
         m_ViewRectangle = true;
+        m_Label = "";
 }
 
 template <class TPixel, class OverlayPixelType>

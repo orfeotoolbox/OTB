@@ -240,9 +240,10 @@ ExtractROIBase<TInputImage,TOutputImage>
     outputPtr->SetSpacing( outputSpacing );
     outputPtr->SetDirection( outputDirection );
     outputPtr->SetOrigin( outputOrigin );
-// THOMAS : modif du 4 avril 2006
-    outputPtr->SetNumberOfComponentsPerPixel(
-       inputPtr->GetNumberOfComponentsPerPixel() );
+// THOMAS : dans ITK ce code est present, mais pas dans notre cas, car le nombre de composantes/pixel depend des canaux selectionnes par l'utilisateur
+//          ce parametre est renseignes dans les classes sous-jacentes
+//    outputPtr->SetNumberOfComponentsPerPixel(
+//       inputPtr->GetNumberOfComponentsPerPixel() );
     }
   else
     {

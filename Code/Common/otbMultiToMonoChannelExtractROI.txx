@@ -91,7 +91,7 @@ MultiToMonoChannelExtractROI<TInputPixelType,TOutputPixelType>
   {
                 OutputImagePixelType pixelOutput;
                 pixelInput = inIt.Get();
-                pixelOutput = pixelInput[channelIn];
+                pixelOutput = static_cast<OutputValueType>(pixelInput[channelIn]);
                 outIt.Set( pixelOutput );
                 ++outIt; 
                 ++inIt; 

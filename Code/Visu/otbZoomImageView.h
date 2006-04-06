@@ -59,6 +59,9 @@ public:
         this->m_flDoubleWindow->show();
 //        this->m_flDoubleWindow->size(           this->GetViewImageRegion().GetSize()[0], 
 //  					        this->GetViewImageRegion().GetSize()[1]);
+        ::itk::OStringStream lStream;
+        lStream << this->GetLabel() << " - ("<<this->cWinZoom<<"x)";
+        this->m_flDoubleWindow->label( lStream.str().data() );
         this->show();
         this->update();
   }

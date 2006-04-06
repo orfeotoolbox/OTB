@@ -51,19 +51,30 @@ ZoomImageView<TPixel, OverlayPixelType>::handle(int event)
                 break;
         case '+':
         case '=':
+        {
+                this->show();
                 this->winZoom(this->cWinZoom*2);
                 this->MajViewRegion();
+                ::itk::OStringStream lStream;
+                lStream << this->GetLabel() << " - ("<<this->cWinZoom<<"x)";
+                this->m_flDoubleWindow->label( lStream.str().data() );
                 this->update();
                 this->GetViewer()->ZoomAction();
                 return 1;
+        }
                 break;
         case '-':
         case '_':
+        {
                 this->winZoom(this->cWinZoom*0.5);
                 this->MajViewRegion();
+                ::itk::OStringStream lStream;
+                lStream << this->GetLabel() << " - ("<<this->cWinZoom<<"x)";
+                this->m_flDoubleWindow->label( lStream.str().data() );
                 this->update();
                 this->GetViewer()->ZoomAction();
                 return 1;
+        }
                 break;
         default:
                 break;
