@@ -43,7 +43,7 @@ int main( int argc, char ** argv )
         lReader->SetFileName(inputFilename);
         lReader->Update();
 
-        lViewer->SetLabel( "Toto" );
+        lViewer->SetLabel( "Label" );
         lViewer->SetImage( lReader->GetOutput() );  
 
 //        lViewer->SetGrayLevelChannel(1);
