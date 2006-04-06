@@ -38,10 +38,6 @@ INCLUDE_DIRECTORIES("${OTBTesting_BINARY_DIR}")
 ADD_EXECUTABLE(otbVisuTests otbVisuTests.cxx ${BasicVisu_SRCS})
 TARGET_LINK_LIBRARIES(otbVisuTests OTBVisu OTBIO OTBCommon ${CAI_LIBRARY}  ${GDAL_LIBRARY} ITKIO ITKCommon)
 
-
-#ADD_EXECUTABLE(otbImageView otbImageView.cxx)
-#TARGET_LINK_LIBRARIES(otbImageView ITKFltkImageViewer OTBVisu OTBIO OTBCommon ITKIO ITKCommon)
-
 ADD_EXECUTABLE(otbImageViewer otbImageViewer.cxx)
 TARGET_LINK_LIBRARIES(otbImageViewer ITKFltkImageViewer OTBVisu OTBIO OTBCommon ITKIO ITKCommon)
 
