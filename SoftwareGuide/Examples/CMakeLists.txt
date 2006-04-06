@@ -153,6 +153,10 @@ ADD_CUSTOM_TARGET(SoftwareGuideExamples  ALL echo)
 
 SET( OTB_EXAMPLES_SRCS
   ${OTB_SOURCE_DIR}/Examples/Installation/HelloWorld.cxx
+  ${OTB_SOURCE_DIR}/Examples/DataRepresentation/Image/Image1.cxx
+  ${OTB_SOURCE_DIR}/Examples/DataRepresentation/Image/Image2.cxx
+  ${OTB_SOURCE_DIR}/Examples/DataRepresentation/Image/Image3.cxx
+  ${OTB_SOURCE_DIR}/Examples/DataRepresentation/Image/Image4.cxx	
   ${OTB_SOURCE_DIR}/Examples/StartExamples/MeanImageFilter.cxx
   ${OTB_SOURCE_DIR}/Examples/ExtractROI/ExtractROI.cxx
   ${OTB_SOURCE_DIR}/Examples/BasicFilters/LeeImageFilter.cxx

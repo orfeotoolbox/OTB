@@ -3,21 +3,22 @@
 
 
 This chapter introduces the basic classes responsible
-for representing data in ITK. The most common classes are the
-\doxygen{Image}, the \doxygen{Mesh} and the \doxygen{PointSet}.
+for representing data in OTB. The most common classes are the
+\doxygen{otb::Image}, the \doxygen{itk::Mesh} and the \doxygen{itk::PointSet}.
 
 \section{Image}
 \label{sec:ImageSection}
 
-The \doxygen{Image} class follows the spirit of 
-\href{http://www.boost.org/more/generic_programming.html}{Generic Programming}, 
-where types are separated from the algorithmic behavior of the class.  ITK supports images
-with any pixel type and any spatial dimension.
+The \doxygen{otb::Image} class follows the spirit of
+\href{http://www.boost.org/more/generic_programming.html}{Generic
+Programming}, where types are separated from the algorithmic behavior
+of the class.  OTB supports images with any pixel type and any spatial
+dimension.
 
 \subsection{Creating an Image}\label{sec:CreatingAnImageSection}
 
-
-%\input{Image1.tex}
+\textbf{FIXME : update with otb::Image}
+\input{Image1.tex}
 
 In practice it is rare to allocate and initialize an image directly.
 Images are typically read from a source, such a file or data acquisition
@@ -30,7 +31,7 @@ a file.
 \subsection{Reading an Image from a File}
 \label{sec:ReadingImageFromFile}
 
-%\input{Image2.tex}
+\input{Image2.tex}
 
 
 
@@ -39,7 +40,7 @@ a file.
 \subsection{Accessing Pixel Data}
 \label{sec:AccessingImagePixelData}
 
-%\input{Image3.tex}
+\input{Image3.tex}
 
 
 
@@ -47,8 +48,11 @@ a file.
 \subsection{Defining Origin and Spacing}
 \label{sec:DefiningImageOriginAndSpacing}
 
-%\input{Image4.tex}
+\input{Image4.tex}
 
+\subsection{Defining Other Image Attributes}
+\label{sec:DefiningOtherImageAttributes}
+%% Geographic projections, etc?
 
 \subsection{RGB Images}
 
