@@ -20,7 +20,7 @@
 
 // Software Guide : BeginLatex
 //
-// This example illustrates how to manually construct an \doxygen{Image}
+// This example illustrates how to manually construct an \doxygen{otb::Image}
 // class.  The following is the minimal code needed to instantiate, declare
 // and create the image class.
 //
@@ -59,7 +59,7 @@ int main(int, char *[])
   //
   // The image can then be created by invoking the \code{New()} operator
   // from the corresponding image type and assigning the result
-  // to a \doxygen{SmartPointer}. 
+  // to a \doxygen{itk::SmartPointer}. 
   //
   // \index{Image!Pointer}
   // \index{Image!New()}
@@ -88,8 +88,8 @@ int main(int, char *[])
   // instantiated as previously shown, and that regions describing the image are
   // then associated with it.
   //
-  // A region is defined by two classes: the \doxygen{Index} and
-  // \doxygen{Size} classes. The origin of the region within the
+  // A region is defined by two classes: the \doxygen{itk::Index} and
+  // \doxygen{itk::Size} classes. The origin of the region within the
   // image with which it is associated is defined by Index. The
   // extent, or size, of the region is defined by Size. Index
   // is represented by a n-dimensional array where each component is an

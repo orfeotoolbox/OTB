@@ -21,11 +21,10 @@
 // Software Guide : BeginLatex
 //
 // Many image processing tasks require images of non-scalar pixel type. A
-// typical example is an image of vectors. This is the image type required to
-// represent the gradient of a scalar image. The following code illustrates
+// typical example is a multispectral image.  The following code illustrates
 // how to instantiate and use an image whose pixels are of vector type.
 //
-// For convenience we use the \doxygen{Vector} class to define the pixel
+// We could use the \doxygen{itk::Vector} class to define the pixel
 // type.  The Vector class is intended to represent a geometrical vector in
 // space. It is not intended to be used as an array container like the
 // \href{http://www.sgi.com/tech/stl/Vector.html}{\code{std::vector}} in
@@ -36,37 +35,39 @@
 // \index{itk::Vector}
 // \index{itk::Vector!header}
 //
+// However, the \doxygen{itk::Vector} is a fixed size array and it
+// assumes that the number of channels of the image is known at
+// compile time. Therefore, we prefer to use the
+// \doxygen{otb::VectorImage} class which allows to choose the number
+// of channels of the image at runtime. The pixels will be of type
+// \doxygen{itk::VariableLengthVector}. 
 //
 // The first step is to include the header file of the Vector class.
 //
 // Software Guide : EndLatex 
 
 // Software Guide : BeginCodeSnippet
-#include "itkVector.h"
+#include "itkVectorImage.h"
 // Software Guide : EndCodeSnippet
 
 
-#include "itkImage.h"
 
 int main(int, char *[])
 {
   // Software Guide : BeginLatex
   // 
-  // The Vector class is templated over the type used to represent
-  // the coordinate in space and over the dimension of the space.  In this example,
-  // we want the vector dimension to match the image dimension, but this is by
-  // no means a requirement. We could have defined a four-dimensional image
-  // with three-dimensional vectors as pixels.
+  // The VectorImage class is templated over the type used to represent
+  // the coordinate in space and over the dimension of the space.  In
+  // this example, 
+  // we want to represent Pléiades images which have 4 bands.
   //
-  // \index{itk::Vector!Instantiation}
-  // \index{itk::Vector!itk::Image}
-  // \index{itk::Image!Vector pixel}
+  // \index{itk::VectorImage!Instantiation}
   //
   // Software Guide : EndLatex 
 
   // Software Guide : BeginCodeSnippet
-  typedef itk::Vector< float, 3 >       PixelType;
-  typedef itk::Image< PixelType, 3 >    ImageType;
+  typedef unsigned char                 PixelType;
+  typedef itk::VectorImage< PixelType, 2 >    ImageType;
   // Software Guide : EndCodeSnippet
 
   // Then the image object can be created
@@ -78,11 +79,9 @@ int main(int, char *[])
 
   size[0]  = 200;  // size along X
   size[1]  = 200;  // size along Y
-  size[2]  = 200;  // size along Z
 
   start[0] =   0;  // first index on X
   start[1] =   0;  // first index on Y
-  start[2] =   0;  // first index on Z
 
   ImageType::RegionType region;
   region.SetSize( size );
@@ -90,40 +89,44 @@ int main(int, char *[])
   
   // Pixel data is allocated
   image->SetRegions( region );
+
+  // Software Guide : BeginLatex
+  // Since the pixel dimensionality is choosen at runtime, one has to
+  // pass this parameter to the image before memory allocation.
+  // Software Guide : EndLatex
+  
+  // Software Guide : BeginCodeSnippet
+  
+  image->SetNumberOfComponentsPerPixel(4);
   image->Allocate();
 
-  // The image buffer is initialized to a particular value
-  ImageType::PixelType  initialValue;
+  // Software Guide : EndCodeSnippet
 
-  // A vector can initialize all its components to the
-  // same value by using the Fill() method.
-  initialValue.Fill( 0.0 );
-
-  // Now the image buffer can be initialized with this
-  // vector value.
-  image->FillBuffer( initialValue );
 
   ImageType::IndexType pixelIndex;
  
   pixelIndex[0] = 27;   // x position
   pixelIndex[1] = 29;   // y position
-  pixelIndex[2] = 37;   // z position
 
 
   // Software Guide : BeginLatex
   //
-  // The Vector class inherits the operator \code{[]} from the
-  // \doxygen{FixedArray} class. This makes it possible to access the
-  // Vector's components using index notation.
+  // The VariableLengthVector class overloads the operator
+  // \code{[]}. This makes it possible to access the 
+  // Vector's components using index notation. The user must not
+  // forget to allocate the memory for each individual pixel by using
+  // the \code{Reserve} method.
   //
   // Software Guide : EndLatex 
 
   // Software Guide : BeginCodeSnippet
   ImageType::PixelType   pixelValue;
+  pixelValue.Reserve( 4 );
 
-  pixelValue[0] =  1.345;   // x component
-  pixelValue[1] =  6.841;   // y component
-  pixelValue[2] =  3.295;   // x component
+  pixelValue[0] =  1;   // Blue component
+  pixelValue[1] =  6;   // Red component
+  pixelValue[2] =  100; // Green component
+  pixelValue[3] =  100; // NIR component
   // Software Guide : EndCodeSnippet
 
 
@@ -138,16 +141,25 @@ int main(int, char *[])
   image->SetPixel(   pixelIndex,   pixelValue  );
   // Software Guide : EndCodeSnippet
 
+  // Software Guide : BeginLatex
 
   // The GetPixel method can also be used to read Vectors 
   // pixels from the image
+  // Software Guide : EndLatex
+
+  // Software Guide : BeginCodeSnippet
   ImageType::PixelType value = image->GetPixel( pixelIndex );
+  // Software Guide : EndCodeSnippet
 
-
+  // Software Guide : BeginLatex
+  //  
   // Lets repeat that both \code{SetPixel()} and \code{GetPixel()} are
   // inefficient and should only be used for debugging purposes or for
   // implementing interactions with a graphical user interface such as
   // querying pixel value by clicking with the mouse.
+  //
+  // Software Guide : EndLatex 
+
 
   return 0;
 }

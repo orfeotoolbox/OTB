@@ -74,7 +74,7 @@ int main( int , char * argv[])
   // Software Guide : BeginLatex
   //
   // The reader type can now be used to create one reader object.  A
-  // \doxygen{SmartPointer} (defined by the \code{::Pointer}
+  // \doxygen{itk::SmartPointer} (defined by the \code{::Pointer}
   // notation) is used to receive the reference to the newly created
   // reader.  The \code{New()} 
   // method is invoked to create an instance of the image reader.
@@ -95,7 +95,7 @@ int main( int , char * argv[])
   // of the image to be loaded in memory. This is provided through
   // the \code{SetFileName()} method. The file format here is inferred
   // from the filename extension. The user may also explicitly specify the
-  // data format explicitly using the \doxygen{ImageIO} (See
+  // data format explicitly using the \doxygen{itk::ImageIO} (See
   // Chapter~\ref{sec:ImagReadWrite} \pageref{sec:ImagReadWrite} for more
   // information
   //

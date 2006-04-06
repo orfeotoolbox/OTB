@@ -200,7 +200,7 @@ int main(int, char *[])
   // space can be mapped into an image index for the purpose of reading the
   // content of the closest pixel.
   //
-  // First, a \doxygen{Point} type must be declared. The point type is
+  // First, a \doxygen{itk::Point} type must be declared. The point type is
   // templated over the type used to represent coordinates and over the
   // dimension of the space. In this particular case, the dimension of the
   // point must match the dimension of the image. 

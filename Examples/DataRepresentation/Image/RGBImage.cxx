@@ -19,19 +19,19 @@
 #endif
 
 #include "itkImage.h"
-#include "itkImageFileReader.h"
+#include "otbImageFileReader.h"
 
 //  Software Guide : BeginLatex
 //
 //  Thanks to the flexibility offered by the
 //  \href{http://www.boost.org/more/generic_programming.html}{Generic
-//  Programming} style on which ITK is based, it is possible to
+//  Programming} style on which OTB is based, it is possible to
 //  instantiate images of arbitrary pixel type.  The following example
 //  illustrates how a color image with RGB pixels can be defined.
 //
 //  A class intended to support the RGB pixel type is available in ITK.  You
 //  could also define your own pixel class and use it to instantiate a
-//  custom image type. In order to use the \doxygen{RGBPixel} class, it is
+//  custom image type. In order to use the \doxygen{itk::RGBPixel} class, it is
 //  necessary to include its header file.
 //
 //  \index{itk::RGBPixel}
@@ -69,22 +69,22 @@ int main( int , char * argv[] )
   // Software Guide : EndLatex 
 
   // Software Guide : BeginCodeSnippet
-  typedef itk::Image< PixelType, 3 >   ImageType;
+  typedef itk::Image< PixelType, 2 >   ImageType;
   // Software Guide : EndCodeSnippet
 
 
   // Software Guide : BeginLatex
   //
   // The image type can be used to instantiate other filter, for example,
-  // an \doxygen{ImageFileReader} object that will read the image from a
+  // an \doxygen{otb::ImageFileReader} object that will read the image from a
   // file.
   //
-  // \index{itk::ImageFileReader!RGB Image}
+  // \index{otb::ImageFileReader!RGB Image}
   //
   // Software Guide : EndLatex 
 
   // Software Guide : BeginCodeSnippet
-  typedef itk::ImageFileReader< ImageType >  ReaderType;
+  typedef otb::ImageFileReader< ImageType >  ReaderType;
   // Software Guide : EndCodeSnippet
 
 
@@ -99,7 +99,6 @@ int main( int , char * argv[] )
 
   pixelIndex[0] = 25;  
   pixelIndex[1] = 35;  
-  pixelIndex[2] =  0;  
 
 
   // Software Guide : BeginLatex
@@ -135,8 +134,8 @@ int main( int , char * argv[] )
 
   // Software Guide : BeginLatex
   //
-  // The subindex notation can also be used since the \doxygen{RGBPixel} inherits the
-  // \code{[]} operator from the \doxygen{FixedArray} class.
+  // The subindex notation can also be used since the \doxygen{itk::RGBPixel} inherits the
+  // \code{[]} operator from the \doxygen{itk::FixedArray} class.
   //
   // Software Guide : EndLatex 
 
