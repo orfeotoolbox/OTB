@@ -16,27 +16,25 @@
 #include <FL/Fl.H>
 #include <FL/fl_draw.H>
 #include <FL/Fl_Gl_Window.H>
+#include <FL/Fl_Double_Window.H>
 
 #include <vector>
 #include <string>
 
-#include "itkColorTable.h"
 #include "itkImage.h"
 #include "itkMacro.h"
 
 #include "otbVectorImageView.h"
-
-//#include "otbImageViewer.h"
 
 namespace otb
 {
 
 
 template <class TPixel, class OverlayPixelType> class ImageViewer;
-/**
-* GLVectorImageViewBase : Derived from abstract class ImageView and Fl_Gl_Window
-* See ImageView.h for details...
-  **/
+/** \class GLVectorImageViewBase
+* \brief Base class for image view
+* Contain all algorithms and functionnalities for display an image in a window.
+*/
 template <class TPixel, class OverlayPixelType>
 class ITK_EXPORT GLVectorImageViewBase :        public VectorImageView<TPixel>, 
                                                 public Fl_Gl_Window

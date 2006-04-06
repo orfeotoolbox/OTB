@@ -23,8 +23,10 @@ namespace otb
 {
   
 /**
-* GLImageView : Derived from abstract class ImageView and Fl_Gl_Window
-* See ImageView.h for details...
+* \class PrincipalImageView
+* \brief Class for viewing an image in entier resolution
+* 
+* See GLVectorImageViewBase.h for details...
   **/
 template <class TPixel, class OverlayPixelType>
 class ITK_EXPORT PrincipalImageView :  public GLVectorImageViewBase<TPixel,OverlayPixelType>
@@ -53,6 +55,7 @@ public:
 
   virtual int  handle(int event);
 
+  /** Show the image (display the window) */
   virtual void Show(void)
   {
         this->BuildWithImageRegion();

@@ -28,7 +28,11 @@ namespace otb
 /** \class ImageViewer
  * \brief Base class for viewing an image.
  *
- * This Viewer....
+ * This viewer show the image with two (or three) windows display. 
+ * The 'Principal' window display de the image in entier resolution. 
+ * The zoom window display a zoom of a part of the image.
+ * If the image is big, a Scroll window is create, which contain the original image shrinked. 
+ * Use FLTK gui.
  *
 */
 template <class TPixel, class TOverlayPixel>

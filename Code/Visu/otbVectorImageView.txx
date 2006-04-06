@@ -35,7 +35,6 @@ VectorImageView<TPixel>::Init(int x, int y, int w, int h, const char * )
   
   cIWMin = 0;
   cIWMax = 0;
-  cImageMode = IMG_VAL;
   cWinZoom = 1;
   
   cWinSizeX = 0;
@@ -198,32 +197,6 @@ float VectorImageView<TPixel>::iwMax(void)
   {
   return cIWMax;
   }
-
-//
-//
-//
-template <class TPixel>
-void VectorImageView<TPixel>::imageMode(ImageModeType newImageMode)
-  {
-  cImageMode = newImageMode;
-  if(cIWCallBack != NULL)
-    cIWCallBack();
-  if(cIWArgCallBack != NULL)
-    cIWArgCallBack(cIWArg);
-  }
-
-
-
-
-template <class TPixel>
-ImageModeType VectorImageView<TPixel>::imageMode(void)
-  {
-  return cImageMode;
-  
-  }
-
-
-
 
 //
 //

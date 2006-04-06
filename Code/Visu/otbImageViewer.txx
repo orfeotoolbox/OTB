@@ -62,29 +62,30 @@ void
 ImageViewer<TPixel,TOverlayPixel>
 ::PrincipalResize(void) 
 {
-        IndexType lIndex;
-        SizeType  lSize;
-        lIndex[0] = static_cast<unsigned long>((m_InputImage->GetLargestPossibleRegion().GetSize()[0] - m_PrincipalView->sizeX())/2);
-        lIndex[1] = static_cast<unsigned long>((m_InputImage->GetLargestPossibleRegion().GetSize()[1] - m_PrincipalView->sizeY())/2);
-        lSize[0] = m_PrincipalView->sizeX();
-        lSize[1] = m_PrincipalView->sizeY();
-	RegionType lNewRegion;
-        lNewRegion.SetIndex(lIndex);
-        lNewRegion.SetSize(lSize);
-        //Update principal image
-        ExtractImagePrincipal( lNewRegion );
-
-        //Reconstruit la fenetre principal
-        m_PrincipalView->Show();
-        
-        //Maj de la fenetre Zoom
-	m_ZoomView->SetInput( m_PrincipalImage );
-        IndexType lNewCenter = m_PrincipalView->GetCenterRegion( m_PrincipalView->GetViewImageRegion() );
-        this->PrincipalAction( lNewCenter );
-
         //Dessine le rectangle sur l'image Scroll
         if ( m_ScrollImageView == true )
         {
+
+                IndexType lIndex;
+                SizeType  lSize;
+                lIndex[0] = static_cast<unsigned long>((m_InputImage->GetLargestPossibleRegion().GetSize()[0] - m_PrincipalView->sizeX())/2);
+                lIndex[1] = static_cast<unsigned long>((m_InputImage->GetLargestPossibleRegion().GetSize()[1] - m_PrincipalView->sizeY())/2);
+                lSize[0] = m_PrincipalView->sizeX();
+                lSize[1] = m_PrincipalView->sizeY();
+	        RegionType lNewRegion;
+                lNewRegion.SetIndex(lIndex);
+                lNewRegion.SetSize(lSize);
+                //Update principal image
+                ExtractImagePrincipal( lNewRegion );
+
+                //Reconstruit la fenetre principal
+                m_PrincipalView->Show();
+        
+                //Maj de la fenetre Zoom
+	        m_ZoomView->SetInput( m_PrincipalImage );
+                IndexType lNewCenter = m_PrincipalView->GetCenterRegion( m_PrincipalView->GetViewImageRegion() );
+                this->PrincipalAction( lNewCenter );
+
                 m_ScrollView->SetDrawViewRectangle( ImageViewBaseType::ShrinkRegion(m_PrincipalView->GetViewImageRegion(),(float)1./(float)m_ShrinkFactors ) );
 	        m_ScrollView->Show();
         }

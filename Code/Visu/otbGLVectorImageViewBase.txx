@@ -508,20 +508,14 @@ SetWinImData(const RegionType & zone)
       if(j-lWinMinX >= (int)this->cWinDataSizeX)
          continue;
 
-      switch( this->cImageMode ) 
+        pixelInput = lInpuPtr->GetPixel(ind);
+        pixelOutput.Reserve( lInpuPtr->GetVectorLength() );
+        // Traitement sur les canaux selectionnes.
+        for ( nbChannels = 0 ; nbChannels < this->m_ChannelsWorks.size() ; nbChannels++)
         {
-        default:
-        case IMG_VAL:
-                pixelInput = lInpuPtr->GetPixel(ind);
-                pixelOutput.Reserve( lInpuPtr->GetVectorLength() );
-                // Traitement sur les canaux selectionnes.
-                for ( nbChannels = 0 ; nbChannels < this->m_ChannelsWorks.size() ; nbChannels++)
-                {
-                        channelIn = this->m_ChannelsWorks[nbChannels] - 1;
-                        pixelOutput[channelIn] = static_cast<float>(pixelInput[channelIn]);
-                        pixelOutput[channelIn] = (float)( (pixelOutput[channelIn]-this->cIWMin) * lCoef);
-                }
-          break;
+                channelIn = this->m_ChannelsWorks[nbChannels] - 1;
+                pixelOutput[channelIn] = static_cast<float>(pixelInput[channelIn]);
+                pixelOutput[channelIn] = (float)( (pixelOutput[channelIn]-this->cIWMin) * lCoef);
         }
         // On s'assure que les valeurs sont dans [0,255]
         for ( nbChannels = 0 ; nbChannels < this->m_ChannelsWorks.size() ; nbChannels++)
