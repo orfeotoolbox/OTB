@@ -24,8 +24,8 @@
 // class.  The following is the minimal code needed to instantiate, declare
 // and create the image class.
 //
-// \index{itk::Image!Instantiation}
-// \index{itk::Image!Header}
+// \index{Image!Instantiation}
+// \index{Image!Header}
 //
 // First, the header file of the Image class must be included.
 //
@@ -45,12 +45,13 @@ int main(int, char *[])
   // Then we must decide with what type to represent the pixels
   // and what the dimension of the image will be. With these two 
   // parameters we can instantiate the image class. Here we create
-  // a 3D image with \code{unsigned short} pixel data.
+  // a 2D image, which is what we often use in remote sensing
+  // applications, anyway, with \code{unsigned short} pixel data.
   //
   // Software Guide : EndLatex 
   //
   // Software Guide : BeginCodeSnippet 
-  typedef itk::Image< unsigned short, 3 > ImageType;
+  typedef itk::Image< unsigned short, 2 > ImageType;
   // Software Guide : EndCodeSnippet 
 
   
@@ -60,8 +61,8 @@ int main(int, char *[])
   // from the corresponding image type and assigning the result
   // to a \doxygen{SmartPointer}. 
   //
-  // \index{itk::Image!Pointer}
-  // \index{itk::Image!New()}
+  // \index{Image!Pointer}
+  // \index{Image!New()}
   // 
   // Software Guide : EndLatex 
   //
@@ -72,18 +73,18 @@ int main(int, char *[])
 
   // Software Guide : BeginLatex
   //
-  // In ITK, images exist in combination with one or more
+  // In OTB, images exist in combination with one or more
   // \emph{regions}. A region is a subset of the image and indicates a
   // portion of the image that may be processed by other classes in
   // the system. One of the most common regions is the
   // \emph{LargestPossibleRegion}, which defines the image in its
-  // entirety. Other important regions found in ITK are the
+  // entirety. Other important regions found in OTB are the
   // \emph{BufferedRegion}, which is the portion of the image actually
   // maintained in memory, and the \emph{RequestedRegion}, which is
   // the region requested by a filter or other class when operating on
   // the image.
   //
-  // In ITK, manually creating an image requires that the image is
+  // In OTB, manually creating an image requires that the image is
   // instantiated as previously shown, and that regions describing the image are
   // then associated with it.
   //
@@ -102,8 +103,8 @@ int main(int, char *[])
   // that is an n-dimensional array where each component is an integer
   // indicating the grid coordinates of the initial pixel of the image.
   //
-  // \index{itk::Image!Size}
-  // \index{itk::Image!SizeType}
+  // \index{Image!Size}
+  // \index{Image!SizeType}
   //
   // Software Guide : EndLatex 
   //
@@ -112,7 +113,6 @@ int main(int, char *[])
 
   start[0] =   0;  // first index on X
   start[1] =   0;  // first index on Y
-  start[2] =   0;  // first index on Z
   // Software Guide : EndCodeSnippet 
 
   // Software Guide : BeginLatex
@@ -122,8 +122,8 @@ int main(int, char *[])
   // unsigned integers indicating the extent in pixels of the image along
   // every dimension.
   //
-  // \index{itk::Image!Index}
-  // \index{itk::Image!IndexType}
+  // \index{Image!Index}
+  // \index{Image!IndexType}
   //
   // Software Guide : EndLatex 
   // 
@@ -132,7 +132,6 @@ int main(int, char *[])
 
   size[0]  = 200;  // size along X
   size[1]  = 200;  // size along Y
-  size[2]  = 200;  // size along Z
   // Software Guide : EndCodeSnippet 
 
   // Software Guide : BeginLatex
@@ -142,8 +141,8 @@ int main(int, char *[])
   // encapsulates both concepts. The region is initialized with the
   // starting index and size of the image.
   //
-  // \index{itk::Image!itk::ImageRegion}
-  // \index{itk::Image!RegionType}
+  // \index{Image!itk::ImageRegion}
+  // \index{Image!RegionType}
   //
   // Software Guide : EndLatex 
 
@@ -156,17 +155,18 @@ int main(int, char *[])
 
   // Software Guide : BeginLatex
   //
-  // Finally, the region is passed to the \code{Image} object in order to define its
-  // extent and origin. The \code{SetRegions} method sets the
-  // LargestPossibleRegion, BufferedRegion, and RequestedRegion
-  // simultaneously. Note that none of the operations performed to this point
-  // have allocated memory for the image pixel data. It is necessary to
-  // invoke the \code{Allocate()} method to do this. Allocate does not
-  // require any arguments since all the information needed for memory
-  // allocation has already been provided by the region.
+  // Finally, the region is passed to the \code{Image} object in
+  // order to define its extent and origin. The \code{SetRegions}
+  // method sets the LargestPossibleRegion, BufferedRegion, and
+  // RequestedRegion simultaneously. Note that none of the operations
+  // performed to this point have allocated memory for the image pixel
+  // data. It is necessary to invoke the \code{Allocate()} method to
+  // do this. Allocate does not require any arguments since all the
+  // information needed for memory allocation has already been
+  // provided by the region.
   //
-  // \index{itk::Image!Allocate()}
-  // \index{itk::Image!SetRegions()}
+  // \index{Image!Allocate()}
+  // \index{Image!SetRegions()}
   //
   // Software Guide : EndLatex 
 
