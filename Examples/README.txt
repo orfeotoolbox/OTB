@@ -1,24 +1,57 @@
 $Id$
 
-OTB : répertoire des exemples
+OTB Examples Directory
 ----------------------
 
-Ce répertoire contient de simple exemples pour l'OTB
+This directory contains simple, companion examples to the ORFEO
+Toolbox (OTB). These examples are designed to demonstrate features of
+the system; they are not meant to be significant applications of the
+software (see the separate directory OTB-Applications for such
+applications).
 
-Plus précisément, le but de ces exemples est de :
+Specifically, the purpose of these examples is as follows:
 
-   * Fournir des exemples simples et les focntionnalités importantes de l'OTB et comment les utiliser
-     Ces exemples peuvent être ou non compilés lors de la génération du produit (Configuration dans le CMake).
-     
-   * Fournir les exemples illustrant le guide de l'OTB (ce guide se trouve dans le répertoire 
-     OTB-Documents/SoftwareGuide).
+   * Provide simple, minimalist examples of important features of OTB and how
+     to use them. The examples have minimal dependencies on outside packages;
+     and if they do, there should be CMake flags to turn them off.
 
-   * Etre sûr que le code est bien documenté et qu'il est toujours 'up-to-date' avec le code source de l'OTB.
+   * Provide a consistent set of examples that will work in conjunctions with
+     the OTB Software Guide.
 
-Les répertoires suivants listent les sous-répertoires avec une décription succincte du code source que l'on y trouve.
+   * Provide a consistent set of examples that will work with OTB tutorials
+     and courses.
 
-   * Installation - un exemple très simple montrant la compilation d'un petit prgramme utilisant l'OTB
+   * Make sure that the code is well documented, of consistent style, and
+     always up-to-date with the current OTB code.
 
-   * ...
+The following is a list of subdirectories with a description of the code
+found in them.
 
-Pour plus d'informations sur les exemples, lire le guide de l'OTB quise trouve dans "OTB-Documents/SoftwareGuide". 
+   * Installation - a very simple example to demonstrate compiling against
+     the OTB libraries and configuring CMake.
+
+   * DataRepresentation - creating images and meshes; shows the basics of
+     creating and executing the pipeline
+
+   * Iterators - iterating over images and meshes.
+
+   * Infrastructure - events, observers, factories, smart pointers,
+     namespaces, transforms, etc.
+
+   * Numerics - working with VNL; a focus on interface with ITK/OTB classes
+
+   * IO - the basics of reading/writing data
+
+   * Filtering - examples of image processing and mesh filters.
+
+   * Segmentation - a suite of basic segmentation examples.
+
+   * Registration - a suite of basic registration methods.
+
+   * GUI - some outside package interface: wxWindows, Qt, FLTK, Tk, VTK. The
+     absolute minimal interface.
+
+
+To learn the software from these examples, you may wish to refer to the
+"ORFEO Toolbox Software Guide".
+

@@ -1,0 +1,38 @@
+PROJECT(ImageExamples)
+INCLUDE_REGULAR_EXPRESSION("^.*$")
+
+SET(TEMP ${ITK_BINARY_DIR}/Testing/Temporary)
+
+ADD_EXECUTABLE(Image1 Image1.cxx )
+TARGET_LINK_LIBRARIES(Image1 ITKCommon)
+
+#ADD_EXECUTABLE(Image2 Image2.cxx )
+#TARGET_LINK_LIBRARIES(Image2 ITKCommon ITKIO)
+
+#ADD_EXECUTABLE(Image3 Image3.cxx )
+#TARGET_LINK_LIBRARIES(Image3 ITKCommon)
+
+#ADD_EXECUTABLE(Image4 Image4.cxx )
+#TARGET_LINK_LIBRARIES(Image4 ITKCommon)
+
+#ADD_EXECUTABLE(Image5 Image5.cxx )
+#TARGET_LINK_LIBRARIES(Image5 ITKCommon ITKIO)
+
+ADD_EXECUTABLE(RGBImage RGBImage.cxx )
+TARGET_LINK_LIBRARIES(RGBImage ITKCommon ITKIO) 
+
+ADD_EXECUTABLE(VectorImage VectorImage.cxx )
+TARGET_LINK_LIBRARIES(VectorImage ITKCommon)
+
+#ADD_EXECUTABLE(ImageAdaptor1 ImageAdaptor1.cxx )
+#TARGET_LINK_LIBRARIES(ImageAdaptor1 ITKCommon ITKIO)
+
+#ADD_EXECUTABLE(ImageAdaptor2 ImageAdaptor2.cxx )
+#TARGET_LINK_LIBRARIES(ImageAdaptor2 ITKCommon ITKIO)
+
+#ADD_EXECUTABLE(ImageAdaptor3 ImageAdaptor3.cxx )
+#TARGET_LINK_LIBRARIES(ImageAdaptor3 ITKCommon ITKIO)
+
+#ADD_EXECUTABLE(ImageAdaptor4 ImageAdaptor4.cxx )
+#TARGET_LINK_LIBRARIES(ImageAdaptor4 ITKCommon ITKIO)
+

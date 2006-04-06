@@ -5,4 +5,5 @@ SUBDIRS(
   ExtractROI
   BasicFilters
   FeatureExtraction
+  DataRepresentation
 )
