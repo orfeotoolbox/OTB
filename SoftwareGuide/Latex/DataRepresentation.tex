@@ -110,9 +110,9 @@ inks that are used for printing reproduction.  Color spaces are usually non
 linear and do not even from a Group. For example, not all visible colors can be
 represented in RGB space~\cite{Wyszecki2000}.
 
-ITK introduces the \doxygen{RGBPixel} type as a support for representing the
+ITK introduces the \doxygen{itk::RGBPixel} type as a support for representing the
 values of an RGB color space. As such, the RGBPixel class embodies a different
-concept from the one of an \doxygen{Vector} in space. For this reason, the
+concept from the one of an \doxygen{itk::Vector} in space. For this reason, the
 RGBPixel lack many of the operators that may be naively expected from it. In
 particular, there are no defined operations for subtraction or addition.
 
@@ -124,23 +124,23 @@ due to the fact that they are based on a human physiological
 response~\cite{Malacara2002}.
 
 If you decide to interpret RGB images as simply three independent channels then
-you should rather use the \doxygen{Vector} type as pixel type. In this way, you
+you should rather use the \doxygen{itk::Vector} type as pixel type. In this way, you
 will have access to the set of operations that are defined in Vector spaces.
 The current implementation of the RGBPixel in ITK presumes that RGB color
 images are intended to be used in applications where a formal interpretation of
 color is desired, therefore only the operations that are valid in a color space
 are available in the RGBPixel class.
 
-The following example illustrates how RGB images can be represented in ITK.
+The following example illustrates how RGB images can be represented in OTB.
 
 \label{sec:DefiningRGBImages}
-%\input{RGBImage.tex}
+\input{RGBImage.tex}
 
 
 \subsection{Vector Images}
-%\label{sec:DefiningVectorImages}
+\label{sec:DefiningVectorImages}
 
-%\input{VectorImage.tex}
+\input{VectorImage.tex}
 
 
 \subsection{Importing Image Data from a Buffer}
