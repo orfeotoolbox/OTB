@@ -2,38 +2,47 @@
 \label{chapter:SystemOverview}
 
 The purpose of this chapter is to provide you with an overview of the
-\emph{Insight Toolkit} system. We recommend that you read this chapter to
-gain an appreciation for the breadth and area of application of ITK.
+\emph{ORFEO Toolbox} system. We recommend that you read this chapter to
+gain an appreciation for the breadth and area of application of
+OTB. In this chapter, we will make reference either to \emph{OTB
+  features} or \emph{ITK features} without distinction. Bear in mind
+that OTB uses ITK as its core element, so all the fundamental elements
+of OTB come from ITK. OTB extends the functionalities of ITK for the
+remote sensing image processing comunity. We benefit from the Open
+Source development approach chosen for ITK, which allows us to provide
+an impressive set of functionalities with much lesser effort than it
+would have been the case in a closed source universe!
 
 \section{System Organization}
 \label{sec:SystemOrganization}
 
-The Insight Toolkit consists of several subsystems. A brief
+The ORFEO Toolbox consists of several subsystems. A brief
 description of these subsystems follows. Later sections in this chapter---and
 in some cases additional chapters---cover these concepts in more detail. (Note:
-in the previous chapter two other modules---\code{InsightDocumentation} and
-\code{InsightApplications} were briefly described.)
+in the previous chapter two other modules---\code{OTB-Documents} and
+\code{OTB-Applications} were briefly described.)
 
 \begin{description}
-	\item[Essential System Concepts.] Like any software system, ITK is
-        built around some core design concepts. Some of the more important
+	\item[Essential System Concepts.] Like any software system, OTB is
+        built around some core design concepts. OTB uses those of
+        ITK. Some of the more important
         concepts include generic programming, smart pointers for memory
         management, object factories for adaptable object instantiation,
         event management using the command/observer design paradigm, and
         multithreading support.
 
-	\item[Numerics] ITK uses VXL's VNL numerics libraries. These are
+	\item[Numerics] OTB, as ITK uses VXL's VNL numerics libraries. These are
         easy-to-use C++ wrappers around the Netlib Fortran numerical 
         analysis routines (\url{http://www.netlib.org}).
 
-	\item[Data Representation and Access.]  Two principal classes are
-        used to represent data: the \doxygen{Image} and \doxygen{Mesh}
-        classes.  In addition, various types of iterators and containers are
-        used to hold and traverse the data. Other important but less popular
-        classes are also used to represent data such as histograms and BLOX
-        images.
+	\item[Data Representation and Access.]  Two principal classes
+        are used to represent data: the \doxygen{Image} and
+        \doxygen{Mesh} classes.  In addition, various types of
+        iterators and containers are used in ITK to hold and traverse
+        the data. Other important but less popular classes are also
+        used to represent data such as histograms.
 
-	\item[Data Processing Pipeline.]  The data representation
+	\item[ITK's Data Processing Pipeline.]  The data representation
 	classes (known as \emph{data objects}) are operated on by
 	\emph{filters} that in turn may be organized into data flow
 	\emph{pipelines}. These pipelines maintain state and therefore
@@ -47,22 +56,25 @@ in the previous chapter two other modules---\code{InsightDocumentation} and
         pipeline.  The standard examples of sources and mappers are
         \emph{readers} and \emph{writers} respectively.  Readers
         input data (typically from a file), and writers output data
-        from the pipeline.
+        from the pipeline. \emph{Viewers} are another example of mappers.
 
-	\item[Spatial Objects.] Geometric shapes are represented in ITK using
-        the spatial object hierarchy.  These classes are intended to support
-        modeling of anatomical structures. Using a common basic interface,
-        the spatial objects are capable of representing regions of space in a
-        variety of different ways. For example: mesh structures, image masks,
-        and implicit equations may be used as the underlying representation
-        scheme.  Spatial objects are a natural data structure for
-        communicating the results of segmentation methods and for introducing
-        anatomical priors in both segmentation and registration methods.
+	\item[Spatial Objects.] Geometric shapes are represented in
+        OTB using the ITK spatial object hierarchy.  These classes are
+        intended to support modeling of anatomical structures in
+        ITK. OTB uses them in order to model cartographic elements. Using a
+        common basic interface, the spatial objects are capable of
+        representing regions of space in a variety of different
+        ways. For example: mesh structures, image masks, and implicit
+        equations may be used as the underlying representation scheme.
+        Spatial objects are a natural data structure for communicating
+        the results of segmentation methods and for introducing
+        geometrical priors in both segmentation and registration
+        methods.
 
-	\item[Registration Framework.] A flexible framework for registration
-        supports four different types of registration: image registration,
-        multiresolution registration, PDE-based registration, and FEM (finite
-        element method) registration.
+	\item[ITK's Registration Framework.] A flexible framework for
+        registration supports four different types of registration:
+        image registration, multiresolution registration, PDE-based
+        registration, and FEM (finite element method) registration.
 
 	\item[FEM Framework.] ITK includes a subsystem for solving general
         FEM problems, in particular non-rigid registration. The FEM package
@@ -82,13 +94,14 @@ in the previous chapter two other modules---\code{InsightDocumentation} and
 	languages such as Tcl and Python. The GCC\_XML tool is used to
 	produce an XML description of arbitrarily complex C++ code;
 	CSWIG is then used to transform the XML description into
-	wrappers using the \href{http://www.swig.org/}{SWIG} package.
+	wrappers using the \href{http://www.swig.org/}{SWIG}
+	package. OTB does not use this system at present.
 
 	\item[Auxiliary / Utilities] Several auxiliary subsystems are 
         available to supplement other classes in the system. For example,
         calculators are classes that perform specialized operations in
         support of filters (e.g., MeanCalculator computes the mean of a
-        sample). Other utilities include a partial DICOM parser, MetaIO file
+        sample). Other utilities include GDAL format file
         support, png, zlib, FLTK / Qt image viewers, and interfaces to the
         Visualization Toolkit (VTK) system.
         
@@ -99,7 +112,7 @@ in the previous chapter two other modules---\code{InsightDocumentation} and
 \label{sec:EssentialSystemConcepts}
 
 This section describes some of the core concepts and implementation features
-found in ITK.
+found in ITK and therefore also in OTB.
 
 \subsection{Generic Programming}
 \label{sec:GenericProgramming}
@@ -130,11 +143,11 @@ supported by the necessary methods and operators.
 ITK uses the techniques of generic programming in its implementation. The
 advantage of this approach is that an almost unlimited variety of data types
 are supported simply by defining the appropriate template types. For example,
-in ITK it is possible to create images consisting of almost any type of
+in OTB it is possible to create images consisting of almost any type of
 pixel. In addition, the type resolution is performed at compile-time, so the
 compiler can optimize the code to deliver maximal performance. The
 disadvantage of generic programming is that many compilers still do not
-support these advanced concepts and cannot compile ITK. And even if they do,
+support these advanced concepts and cannot compile OTB. And even if they do,
 they may produce completely undecipherable error messages due to even the
 simplest syntax errors. If you are not familiar with templated code and
 generic programming, we recommend the two books cited above.
@@ -142,7 +155,7 @@ generic programming, we recommend the two books cited above.
 \subsection{Include Files and Class Definitions}
 \label{sec:IncludeFiles}
 
-In ITK classes are defined by a maximum of two files: a header \code{.h} file
+In ITK and OTB classes are defined by a maximum of two files: a header \code{.h} file
 and an implementation file---\code{.cxx} if a non-templated class, and a
 \code{.txx} if a templated class.
 The header files contain class declarations
@@ -151,15 +164,15 @@ system to automatically produce HTML manual pages.
 
 In addition to class headers, there are a few other important header files.
 \begin{description}
-        \item[\code{itkMacro.h}] is found in the \code{Code/Common} directory
+        \item[\code{itkMacro.h}] is found in the \code{Code/Common}\textbf{FIXME} directory
         and defines standard system-wide macros (such as \code{Set/Get},
         constants, and other parameters).
 
-        \item[\code{itkNumericTraits.h}] is found in the \code{Code/Common} 
+        \item[\code{itkNumericTraits.h}] is found in the \code{Code/Common} \textbf{FIXME}
         directory and defines numeric characteristics for native types such
         as its maximum and minimum possible values.
 
-        \item[\code{itkWin32Header.h}] is found in the \code{Code/Common} 
+        \item[\code{itkWin32Header.h}] is found in the \code{Code/Common} \textbf{FIXME}
         and is used to define operating system parameters to control
         the compilation process.
 \end{description}
@@ -170,11 +183,11 @@ In addition to class headers, there are a few other important header files.
 \index{object factory}
 \index{factory}
 
-Most classes in ITK are instantiated through an \emph{object factory}
+Most classes in OTB are instantiated through an \emph{object factory}
 mechanism. That is, rather than using the standard C++ class constructor and
-destructor, instances of an ITK class are created with the static class
+destructor, instances of an OTB class are created with the static class
 \code{New()} method. In fact, the constructor and destructor are
-\code{protected:} so it is generally not possible to construct an ITK
+\code{protected:} so it is generally not possible to construct an OTB
 instance on the heap. (Note: this behavior pertains to classes that are
 derived from \doxygen{LightObject}. In some cases the need for speed or
 reduced memory footprint dictates that a class not be derived from
@@ -187,15 +200,15 @@ registered factories support the method \code{CreateInstance(classname)}
 which takes as input the name of a class to create. The factory can choose to
 create the class based on a number of factors including the computer system
 configuration and environment variables. For example, in a particular
-application an ITK user may wish to deploy their own class implemented using
+application an OTB user may wish to deploy their own class implemented using
 specialized image processing hardware (i.e., to realize a performance
 gain). By using the object factory mechanism, it is possible at run-time to
-replace the creation of a particular ITK filter with such a custom class. (Of
+replace the creation of a particular OTB filter with such a custom class. (Of
 course, the class must provide the exact same API as the one it is
 replacing.) To do this, the user compiles her class (using the same compiler,
 build options, etc.) and inserts the object code into a shared library or
 DLL. The library is then placed in a directory referred to by the
-\code{ITK\_AUTOLOAD\_PATH} environment variable. On instantiation, the object
+\code{OTB\_AUTOLOAD\_PATH} environment variable. On instantiation, the object
 factory will locate the library, determine that it can create a class of a
 particular name with the factory, and use the factory to create the
 instance. (Note: if the \code{CreateInstance()} method cannot find a factory
@@ -203,10 +216,10 @@ that can create the named class, then the instantiation of the class falls
 back to the usual constructor.)
 
 In practice object factories are used mainly (and generally transparently) by
-the ITK input/output (IO) classes. For most users the greatest impact is on
+the OTB input/output (IO) classes. For most users the greatest impact is on
 the use of the \code{New()} method to create a class. Generally the
 \code{New()} method is declared and implemented via the macro
-\code{itkNewMacro()} found in \code{Common/itkMacro.h}.
+\code{itkNewMacro()} found in \code{Common/itkMacro.h}\textbf{FIXME}.
 
 
 \subsection{Smart Pointers and Memory Management}
@@ -241,7 +254,7 @@ size). Reference counting deletes memory immediately (once all references to
 an object disappear).
 
 Reference counting is implemented through a \code{Register()}/\code{Delete()}
-member function interface.  All instances of an ITK object have a
+member function interface.  All instances of an OTB object have a
 \code{Register()} method invoked on them by any other object that references
 an them. The \code{Register()} method increments the instances' reference
 count. When the reference to the instance disappears, a \code{Delete()}
@@ -254,10 +267,10 @@ This protocol is greatly simplified by using a helper class called a
 (e.g. supports operators \code{->} and \code{*}) but automagically performs a
 \code{Register()} when referring to an instance, and an \code{UnRegister()}
 when it no longer points to the instance.  Unlike most other instances in
-ITK, SmartPointers can be allocated on the program stack, and are
+OTB, SmartPointers can be allocated on the program stack, and are
 automatically deleted when the scope that the SmartPointer was created
 is closed. As a result, you should \emph{rarely if ever call Register() or
-Delete()} in ITK. For example:
+Delete()} in OTB. For example:
 
 \small
 \begin{verbatim}
@@ -279,7 +292,7 @@ method) with a reference count of one. Assignment to the SmartPointer
 object (referred to by \code{interp}) is decremented, and if it reaches zero,
 then the interpolator is also destroyed.
 
-Note that in ITK SmartPointers are always used to refer to instances of
+Note that in OTB SmartPointers are always used to refer to instances of
 classes derived from \doxygen{LightObject}. Method invocations and function
 calls often return ``real'' pointers to instances, but they are immediately
 assigned to a SmartPointer. Raw pointers are used for non-LightObject classes when
@@ -292,7 +305,7 @@ the need for speed and/or memory demands a smaller, faster class.
 \index{exceptions}
 \index{error handling}
 
-In general, ITK uses exception handling to manage errors during program
+In general, OTB uses exception handling to manage errors during program
 execution. Exception handling is a standard part of the C++ language and
 generally takes the form as illustrated below:
 \small
@@ -325,12 +338,12 @@ code snippet is taken from \doxygen{ByteSwapper}:
 \normalsize
 
 Note that \doxygen{ByteSwapperError} is a subclass of
-\doxygen{ExceptionObject}. (In fact in ITK all exceptions should be derived
+\doxygen{ExceptionObject}. (In fact in OTB all exceptions should be derived
 from ExceptionObject.) In this example a special constructor and C++
 preprocessor variables \code{\_\_FILE\_\_} and \code{\_\_LINE\_\_} are used to instantiate
 the exception object and provide additional information to the user. You can
-choose to catch a particular exception and hence a specific ITK error, or you
-can trap \emph{any} ITK exception by catching ExceptionObject.
+choose to catch a particular exception and hence a specific OTB error, or you
+can trap \emph{any} OTB exception by catching ExceptionObject.
 
 
 \subsection{Event Handling}
@@ -342,19 +355,19 @@ can trap \emph{any} ITK exception by catching ExceptionObject.
 \index{ProgressEvent()}
 \index{InvokeEvent()}
 
-Event handling in ITK is implemented using the Subject/Observer design
+Event handling in OTB is implemented using the Subject/Observer design
 pattern \cite{Gamma1995} (sometimes referred to as the Command/Observer
 design pattern). In this approach, objects indicate that they are watching
 for a particular event---invoked by a particular instance--by registering
-with the instance that they are watching.  For example, filters in ITK
+with the instance that they are watching.  For example, filters in OTB
 periodically invoke the \doxygen{ProgressEvent}. Objects that have registered
 their interest in this event are notified when the event occurs. The
 notification occurs via an invocation of a command (i.e., function callback,
 method invocation, etc.) that is specified during the registration
-process. (Note that events in ITK are subclasses of EventObject; look
+process. (Note that events in OTB are subclasses of EventObject; look
 in \code{itkEventObject.h} to determine which events are available.)
 
-To recap via example: various objects in ITK will invoke specific events
+To recap via example: various objects in OTB will invoke specific events
 as they execute (from ProcessObject):
 \small
 \begin{verbatim}
@@ -383,10 +396,10 @@ possibility.)
 \subsection{Multi-Threading}
 \label{sec:MultiThreading}
 
-Multithreading is handled in ITK through a high-level design
+Multithreading is handled in OTB through a high-level design
 abstraction. This approach provides portable multithreading and hides the
 complexity of differing thread implementations on the many systems supported
-by ITK. For example, the class \doxygen{MultiThreader} provides support for
+by OTB. For example, the class \doxygen{MultiThreader} provides support for
 multithreaded execution using \code{sproc()} on an SGI, or
 \code{pthread\_create} on any platform supporting POSIX threads. 
 
@@ -408,7 +421,7 @@ In this example each thread invokes the same method. The multithreaded filter
 takes care to divide the image into different regions that do not overlap for
 write operations.
 
-The general philosophy in ITK regarding thread safety is that accessing
+The general philosophy in OTB regarding thread safety is that accessing
 different instances of a class (and its methods) is a thread-safe operation.
 Invoking methods on the same instance in different threads is to be avoided.
 
@@ -419,12 +432,12 @@ Invoking methods on the same instance in different threads is to be avoided.
 \index{VNL}
 \index{numerics}
 
-ITK uses the VNL numerics library to provide resources for numerical
+OTB uses the VNL numerics library to provide resources for numerical
 programming combining the ease of use of packages like Mathematica and Matlab
 with the speed of C and the elegance of C++. It provides a C++ interface to
 the high-quality Fortran routines made available in the public domain by
-numerical analysis researchers. ITK extends the functionality of VNL
-by including interface classes between VNL and ITK proper.
+numerical analysis researchers. OTB extends the functionality of VNL
+by including interface classes between VNL and OTB proper.
 
 The VNL numerics library includes classes for
 \begin{description}
@@ -470,12 +483,12 @@ search interface to this repository in its \emph{Guide to Available Mathematical
 Software (GAMS)} at \url{http://gams.nist.gov}, both as a decision tree and a
 text search.
 
-ITK also provides additional numerics functionality. A suite of optimizers, that
+OTB also provides additional numerics functionality. A suite of optimizers, that
 use VNL under the hood and integrate with the registration framework
 are available. A large collection of statistics functions---not available from
 VNL---are also provided in the \code{Insight/Numerics/Statistics}
 directory. In addition, a complete finite element (FEM) package is available,
-primarily to support the deformable registration in ITK.
+primarily to support the deformable registration in OTB.
 
 
 \section{Data Representation}
@@ -484,34 +497,34 @@ primarily to support the deformable registration in ITK.
 
 \index{data object} 
 
-There are two principle types of data represented in ITK: images and
+There are two principle types of data represented in OTB: images and
 meshes. This functionality is implemented in the classes 
 Image and Mesh, both of which are subclasses of
-\doxygen{DataObject}. In ITK, data objects are classes that are meant to
+\doxygen{DataObject}. In OTB, data objects are classes that are meant to
 be passed around the system and may participate in data flow pipelines (see
 Section~\ref{sec:DataProcessingPipeline} on
 page~\pageref{sec:DataProcessingPipeline} for more information).
 
 
-\index{itk::Image}
+\index{otb::Image}
 
-\doxygen{Image} represents an \emph{n}-dimensional, regular sampling of
+\doxygen{otb::Image} represents an \emph{n}-dimensional, regular sampling of
 data. The sampling direction is parallel to each of the coordinate axes, and
 the origin of the sampling, inter-pixel spacing, and the number of samples in
 each direction (i.e., image dimension) can be specified. The sample, or
-pixel, type in ITK is arbitrary---a template parameter \code{TPixel}
+pixel, type in OTB is arbitrary---a template parameter \code{TPixel}
 specifies the type upon template instantiation. (The dimensionality of the
 image must also be specified when the image class is instantiated.) The key
 is that the pixel type must support certain operations (for example, addition
 or difference) if the code is to compile in all cases (for example, to be
 processed by a particular filter that uses these operations). In practice the
-ITK user will use a C++ simple type (e.g., \code{int}, \code{float}) or a pre-defined pixel
+OTB user will use a C++ simple type (e.g., \code{int}, \code{float}) or a pre-defined pixel
 type and will rarely create a new type of pixel class.
 
-One of the important ITK concepts regarding images is that rectangular,
+One of the important OTB concepts regarding images is that rectangular,
 continuous pieces of the image are known as \emph{regions}. Regions are used
 to specify which part of an image to process, for example in multithreading,
-or which part to hold in memory. In ITK there are three common types of
+or which part to hold in memory. In OTB there are three common types of
 regions:
 \begin{enumerate}
 \item \code{LargestPossibleRegion}---the image in its entirety.
@@ -519,6 +532,10 @@ regions:
 \item \code{RequestedRegion}---the portion of the region requested by a 
 filter or other class when operating on the image.
 \end{enumerate}
+
+The \doxygen{otb::Image} class extends the functionalities of the
+\doxygen{itk::Image} in order to take into account particular remote
+sensing features as geographical projections, etc.
 
 \index{itk::Mesh} 
 
@@ -548,7 +565,7 @@ meshes better suited for editing, or those better suited for ``read-only''
 operations, allowing a trade-off between representation flexibility, memory,
 and speed.
 
-Mesh is a subclass of \doxygen{PointSet}. The PointSet
+Mesh is a subclass of \doxygen{itk::PointSet}. The PointSet
 class can be used to represent point clouds or randomly distributed
 landmarks, etc. The PointSet class has no associated topology.
 
@@ -588,7 +605,7 @@ Typically data objects and process objects are connected together using the
 
 \small
 \begin{verbatim}
-  typedef itk::Image<float,2> FloatImage2DType;
+  typedef otb::Image<float,2> FloatImage2DType;
 
   itk::RandomImageSource<FloatImage2DType>::Pointer random;
   random = itk::RandomImageSource<FloatImage2DType>::New();
@@ -600,17 +617,17 @@ Typically data objects and process objects are connected together using the
   shrink->SetInput(random->GetOutput());
   shrink->SetShrinkFactors(2);
 
-  itk::ImageFileWriter::Pointer<FloatImage2DType> writer;
-  writer = itk::ImageFileWriter::Pointer<FloatImage2DType>::New();
+  otb::ImageFileWriter::Pointer<FloatImage2DType> writer;
+  writer = otb::ImageFileWriter::Pointer<FloatImage2DType>::New();
   writer->SetInput (shrink->GetOutput());
   writer->SetFileName( ``test.raw'' );
   writer->Update();
 \end{verbatim}
 \normalsize 
 
-In this example the source object \doxygen{RandomImageSource} is connected
-to the \doxygen{ShrinkImageFilter}, and the shrink filter is connected to
-the mapper \doxygen{ImageFileWriter}. When the \code{Update()} method is
+In this example the source object \doxygen{itk::RandomImageSource} is connected
+to the \doxygen{itk::ShrinkImageFilter}, and the shrink filter is connected to
+the mapper \doxygen{otb::ImageFileWriter}. When the \code{Update()} method is
 invoked on the writer, the data processing pipeline causes each of these
 filters in order, culminating in writing the final data to a file on disk.
 
@@ -651,7 +668,7 @@ can:
 \begin{enumerate}
 
         \item Specify a spatial object's parent and children objects.  In
-        this way, a liver may contain vessels and those vessels can be
+        this way, a city may contain roads and those roads can be
         organized in a tree structure.
 
         \item Query if a physical point is inside an object or
@@ -668,25 +685,27 @@ can:
         its children.
 
         \item Query the resolution at which the object was originally
-        computed.  For example, you can query the resolution (i.e., voxel
+        computed.  For example, you can query the resolution (i.e., pixel
         spacing) of the image used to generate a particular instance of a
-        \doxygen{BlobSpatialObject}.
+        \doxygen{itk::LineSpatialObject}.
 \end{enumerate}
 
-Currently implemented types of spatial objects include: Blob, Ellipse, Group,
-Image, Line, Surface, and Tube.  The \doxygen{Scene} object is used to hold
-a list of spatial objects that may in turn have children.  Each spatial
-object can be assigned a color property.  Each spatial object type has its
-own capabilities. For example, \doxygen{TubeSpatialObject}s indicate to what
-point on their parent tube they connect.
+Currently implemented types of spatial objects include: Blob, Ellipse,
+Group, Image, Line, Surface, and Tube.  The \doxygen{itk::Scene}
+object is used to hold a list of spatial objects that may in turn have
+children.  Each spatial object can be assigned a color property.  Each
+spatial object type has its own capabilities. For example,
+\doxygen{TubeSpatialObject}s indicate to what point on their parent
+tube they connect.
 
-There are a limited number of spatial objects and their methods in ITK, but
+There are a limited number of spatial objects and their methods in OTB, but
 their number is growing and their potential is huge. Using the nominal
-spatial object capabilities, methods such as marching cubes or mutual
+spatial object capabilities, methods such as mutual
 information registration, can be applied to objects regardless of their
 internal representation. By having a common API, the same method can be used
-to register a parametric representation of a heart with an individual's CT
-data or to register two hand segmentations of a liver.
+to register a parametric representation of a building with an image or
+to register two different segmentations of a particular object in
+object-based change detection.
 
 %blah blah
 %
@@ -695,98 +714,98 @@ data or to register two hand segmentations of a liver.
 %
 %blah blah
 %
-\section{Wrapping}
-\label{sec:Wrapping}
+%% \section{Wrapping}
+%% \label{sec:Wrapping}
 
-\index{wrapping}
-\index{Tcl}
-\index{Python}
+%% \index{wrapping}
+%% \index{Tcl}
+%% \index{Python}
 
-While the core of ITK is implemented in C++, Tcl and Python bindings can be
-automatically generated and ITK programs can be created using these
-programming languages. This capability is under active development and is for
-the advanced user only. However, this brief description will give you an idea
-of what is possible and where to look if you are interested in this facility.
+%% While the core of OTB is implemented in C++, Tcl and Python bindings can be
+%% automatically generated and OTB programs can be created using these
+%% programming languages. This capability is under active development and is for
+%% the advanced user only. However, this brief description will give you an idea
+%% of what is possible and where to look if you are interested in this facility.
 
-The wrapping process in ITK is quite complex due to the use of generic
-programming (i.e., extensive use of C++ templates). Systems like VTK that use
-their own wrapping facility are non-templated and customized to the coding
-methodology found in the system. Even systems like SWIG that are designed
-for general wrapper generation have difficulty with ITK code because general
-C++ is difficult to parse. As a result, the ITK wrapper generator uses a
-combination of tools to produce language bindings.
-\begin{enumerate}
-  \item gccxml is a modified version of the GNU compiler gcc that
-    produces an XML description of an input C++ program.
-  \item  CABLE processes XML information from gccxml and produces
-    additional input to the next tool (i.e., CSWIG indicating what is
-    to be wrapped).
-  \item CSWIG is a modified version of SWIG that has SWIG's usual
-    parser replaced with an XML parser (XML produced from CABLE and
-    gccxml.) CSWIG produces the appropriate language bindings
-    (either Tcl or Python). (Note: since SWIG is capable of producing
-    language bindings for eleven different interpreted languages including
-    Java, and Perl, it is expected that support for some of these languages
-    will be added in the future.)
-\end{enumerate}
+%% The wrapping process in OTB is quite complex due to the use of generic
+%% programming (i.e., extensive use of C++ templates). Systems like VTK that use
+%% their own wrapping facility are non-templated and customized to the coding
+%% methodology found in the system. Even systems like SWIG that are designed
+%% for general wrapper generation have difficulty with OTB code because general
+%% C++ is difficult to parse. As a result, the OTB wrapper generator uses a
+%% combination of tools to produce language bindings.
+%% \begin{enumerate}
+%%   \item gccxml is a modified version of the GNU compiler gcc that
+%%     produces an XML description of an input C++ program.
+%%   \item  CABLE processes XML information from gccxml and produces
+%%     additional input to the next tool (i.e., CSWIG indicating what is
+%%     to be wrapped).
+%%   \item CSWIG is a modified version of SWIG that has SWIG's usual
+%%     parser replaced with an XML parser (XML produced from CABLE and
+%%     gccxml.) CSWIG produces the appropriate language bindings
+%%     (either Tcl or Python). (Note: since SWIG is capable of producing
+%%     language bindings for eleven different interpreted languages including
+%%     Java, and Perl, it is expected that support for some of these languages
+%%     will be added in the future.)
+%% \end{enumerate}
 
-To learn more about the wrapping process, please read the file found in
-\code{Wrapping/CSwig/README}. Also note that there are some simple test
-scripts found in \code{Wrapping/CSwig/Tests}. Additional tests and examples
-are found in the {Testing/Code/*/} directories.
+%% To learn more about the wrapping process, please read the file found in
+%% \code{Wrapping/CSwig/README}. Also note that there are some simple test
+%% scripts found in \code{Wrapping/CSwig/Tests}. Additional tests and examples
+%% are found in the {Testing/Code/*/} directories.
 
-The result of the wrapping process is a set of shared libraries/dll's that
-can be used by the interpreted languages. There is almost a direct
-translation from C++, with the differences being the particular syntactical
-requirements of each language. For example, in the directory
-\code{Testing/Code/Algorithms}, the test
-\code{itkCurvatureFlowTestTcl2.tcl} has a code fragment that appears as
-follows: 
-\small
-\begin{verbatim}
-  set reader [itkImageFileReaderF2_New]
-    $reader SetFileName "${ITK_TEST_INPUT}/cthead1.png"
+%% The result of the wrapping process is a set of shared libraries/dll's that
+%% can be used by the interpreted languages. There is almost a direct
+%% translation from C++, with the differences being the particular syntactical
+%% requirements of each language. For example, in the directory
+%% \code{Testing/Code/Algorithms}, the test
+%% \code{itkCurvatureFlowTestTcl2.tcl} has a code fragment that appears as
+%% follows: 
+%% \small
+%% \begin{verbatim}
+%%   set reader [itkImageFileReaderF2_New]
+%%     $reader SetFileName "${OTB_TEST_INPUT}/cthead1.png"
 
-  set cf [itkCurvatureFlowImageFilterF2F2_New]
-    $cf SetInput [$reader GetOutput]
-    $cf SetTimeStep 0.25
-    $cf SetNumberOfIterations 10
-\end{verbatim}
-\normalsize
-The same code in C++ would appear as follows:
+%%   set cf [itkCurvatureFlowImageFilterF2F2_New]
+%%     $cf SetInput [$reader GetOutput]
+%%     $cf SetTimeStep 0.25
+%%     $cf SetNumberOfIterations 10
+%% \end{verbatim}
+%% \normalsize
+%% The same code in C++ would appear as follows:
 
-\small
-\begin{verbatim}
-  itk::ImageFileReader<ImageType>::Pointer reader = 
-              itk::ImageFileReader<ImageType>::New();
-  reader->SetFileName("cthead1.png");
+%% \small
+%% \begin{verbatim}
+%%   otb::ImageFileReader<ImageType>::Pointer reader = 
+%%               otb::ImageFileReader<ImageType>::New();
+%%   reader->SetFileName("cthead1.png");
 
-  itk::CurvatureFlowImageFilter<ImageType,ImageType>::Pointer cf =
-      itk::CurvatureFlowImageFilter<ImageType,ImageType>::New();
-    cf->SetInput(reader->GetOutput());
-    cf->SetTimeStep(0.25);
-    cf->SetNumberOfIterations(10);
-\end{verbatim}
-\normalsize
+%%   itk::CurvatureFlowImageFilter<ImageType,ImageType>::Pointer cf =
+%%       itk::CurvatureFlowImageFilter<ImageType,ImageType>::New();
+%%     cf->SetInput(reader->GetOutput());
+%%     cf->SetTimeStep(0.25);
+%%     cf->SetNumberOfIterations(10);
+%% \end{verbatim}
+%% \normalsize
 
-This example demonstrates an important difference between C++ and a wrapped
-language such as Tcl.  Templated classes must be instantiated prior to
-wrapping. That is, the template parameters must be specified as part of the
-wrapping process. In the example above, the
-\code{CurvatureFlowImageFilterF2F2} indicates that this filter has been
-instantiated using an input and output image type of two-dimensional float
-values (e.g., \code{F2}). Typically just a few common types are selected for
-the wrapping process to avoid an explosion of types and hence, library
-size. To add a new type requires rerunning the wrapping process to produce
-new libraries.
+%% This example demonstrates an important difference between C++ and a wrapped
+%% language such as Tcl.  Templated classes must be instantiated prior to
+%% wrapping. That is, the template parameters must be specified as part of the
+%% wrapping process. In the example above, the
+%% \code{CurvatureFlowImageFilterF2F2} indicates that this filter has been
+%% instantiated using an input and output image type of two-dimensional float
+%% values (e.g., \code{F2}). Typically just a few common types are selected for
+%% the wrapping process to avoid an explosion of types and hence, library
+%% size. To add a new type requires rerunning the wrapping process to produce
+%% new libraries.
 
-The advantage of interpreted languages is that they do not require the
-lengthy compile/link cycle of a compiled language like C++. Moreover, they
-typically come with a suite of packages that provide useful
-functionality. For example, the Tk package (i.e., Tcl/Tk and Python/Tk)
-provides tools for creating sophisticated user interfaces. In the future it
-is likely that more applications and tests will be implemented in the various
-interpreted languages supported by ITK.
+%% The advantage of interpreted languages is that they do not require the
+%% lengthy compile/link cycle of a compiled language like C++. Moreover, they
+%% typically come with a suite of packages that provide useful
+%% functionality. For example, the Tk package (i.e., Tcl/Tk and Python/Tk)
+%% provides tools for creating sophisticated user interfaces. In the future it
+%% is likely that more applications and tests will be implemented in the various
+%% interpreted languages supported by OTB.
 
 
 %
