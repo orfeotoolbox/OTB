@@ -386,10 +386,10 @@ ImageViewer<TPixel,TOverlayPixel>
 ::CreatePrincipalImageView( Fl_Group * group, Fl_Gl_Window * original )
 {
 
-  short int x = original->x();
-  short int y = original->y();
-  short int w = original->w();
-  short int h = original->h();
+  int x = original->x();
+  int y = original->y();
+  int w = original->w();
+  int h = original->h();
 
   const char * label = original->label();
 
@@ -414,10 +414,10 @@ void
 ImageViewer<TPixel,TOverlayPixel>
 ::CreateScrollImageView( Fl_Group * group, Fl_Gl_Window * original )
 {
-  short int x = original->x();
-  short int y = original->y();
-  short int w = original->w();
-  short int h = original->h();
+  int x = original->x();
+  int y = original->y();
+  int w = original->w();
+  int h = original->h();
 
   const char * label = original->label();
 

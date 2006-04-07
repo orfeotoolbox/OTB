@@ -49,6 +49,9 @@ public:
   /** Some convenient typedefs. */
   typedef itk::LineSpatialObject<2>                     LineType;
 
+  LineSpatialObjectList(){};
+  ~LineSpatialObjectList() {};
+
 };
   
 
