@@ -9,3 +9,57 @@ What is feature extraction
 \subsection{Alignments}
 \input{AlignmentsExample}
 \subsection{Lines}
+\subsection{Geometric Moments}
+
+Using the algebraic moment theory, H. Ming-Kuel obtained a family of 7
+invariants with respect to planar transformations called Hu invariants,
+\cite{hu}. Those invariants can be seen as nonlinear combinations of
+complex geometric moments:
+\begin {equation}
+c_{pq} = \int\limits_{-\infty}^{+\infty}\int\limits_{-\infty}^{+\infty}(x + iy)^p(x- iy)^qf(x,y)dxdy,
+\label{2.2}
+\end{equation}
+where $x$ and $y$ are the coordinates of the image $f(x,y)$, $i$ is the
+imaginary unit and
+$p+q$ is the order of $c_{pq}$. The geometric moments are
+particularly useful in the case of scale changes. Hu invariants have
+been very much used in object recognition during the last 30 years,
+since they are invariant to rotation, scaling and translation. \cite{flusserinv} gives their expressions :
+
+\begin{equation}
+\begin{array}{cccc}
+\phi_1 = c_{11};& \phi_2 = c_{20}c_{02};& \phi_3 = c_{30}c_{03};& \phi_4 = c_{21}c_{12};\\
+\phi_5 = Re(c_{30}c_{12}^3);& \phi_6 = Re(c_{21}c_{12}^2);& \phi_7 = Im(c_{30}c_{12}^3).&\\
+\end{array}
+\end{equation}
+
+
+\cite{dudani} have used these invariants for the recognition of
+aircraft silhouettes. Flusser and Suk have used them for image
+registration, \cite{flusser_2}. They have been modified and
+improved by several authors. Flusser used these moments in order to
+produce a new family of descriptors of order higher than 3,
+\cite{flusserinv}. These descriptors are invariant to scale and
+rotation. They have the following expressions:
+\begin {equation}
+\begin{array}{ccc}
+\psi_1  = c_{11} = \phi_1; &  \psi_2  = c_{21}c_{12} = \phi_4; & \psi_3  = Re(c_{20}c_{12}^2) = \phi_6;\\
+\psi_4  = Im(c_{20}c_{12}^2); & \psi_5  = Re(c_{30}c_{12}^3) = \phi_5;
+& \psi_6  = Im(c_{30}c_{12}^3) = \phi_7.\\
+\psi_7  = c_{22}; & \psi_8  = Re(c_{31}c_{12}^2); & \psi_9  = Im(c_{31}c_{12}~2);\\
+\psi_{10} = Re(c_{40}c_{12}^4); & \psi_{11} = Im(c_{40}c_{12}^2). &\\
+
+\end{array}
+\end {equation}
+
+OTB allows the computation of complex moments and Flusser and Hu
+moments, and those can be computed on images and paths.
+
+\textbf{Mettra a jour quand la classe sera corrigee}
+\input{ComplexMomentImageExample}
+%% \input{ComplexMomentFunctionExample}
+
+%% \input{FlusserMomentImageExample}
+%% \input{FlusserMomentFunctionExample}
+
+
