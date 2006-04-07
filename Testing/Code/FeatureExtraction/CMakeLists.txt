@@ -11,6 +11,9 @@ SET(TOL 0.0)
 
 SET(FEATUREEXTRACTION_TESTS ${CXX_TEST_PATH}/otbFeatureExtractionTests)
 
+ADD_TEST(feTuFillGapsFilterNew ${FEATUREEXTRACTION_TESTS}  
+        otbFillGapsFilterNew)
+
 ADD_TEST(feTuAlignMV2ITK ${FEATUREEXTRACTION_TESTS}  
         otbAlignImageToPath
 	${INPUTDATA}/poupees.hd
@@ -227,6 +230,7 @@ otbThresholdImageToPointSetTest.cxx
 otbHarrisToPointSet.cxx
 otbPixelSuppressionByDirectionNew.cxx
 otbPixelSuppressionByDirection.cxx
+otbFillGapsFilterNew.cxx
 )
 
 

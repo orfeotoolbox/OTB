@@ -43,4 +43,5 @@ REGISTER_TEST(otbThresholdImageToPointSetTest);
 REGISTER_TEST(otbHarrisImageToPointSet);
 REGISTER_TEST(otbPixelSuppressionByDirectionNew);
 REGISTER_TEST(otbPixelSuppressionByDirection);
+REGISTER_TEST(otbFillGapsFilterNew);
 }
