@@ -21,10 +21,13 @@ ADD_TEST(viTuImageViewerNew ${VISU_TESTS}
         otbImageViewerNew
         )
 
-ADD_TEST(viTvImageViewer ${CXX_TEST_PATH}/otbImageViewer 
+ADD_TEST(viTvImageViewerRGB ${CXX_TEST_PATH}/otbImageViewer 
         ${INPUTDATA}/sbuv.png
         0 )
 
+ADD_TEST(viTvImageViewerNB ${CXX_TEST_PATH}/otbImageViewer 
+        ${INPUTDATA}/cthead1.png
+        0 )
 
 # -------       Fichiers sources CXX -----------------------------------
 SET(BasicVisu_SRCS
