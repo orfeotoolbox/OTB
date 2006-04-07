@@ -10,4 +10,7 @@ TARGET_LINK_LIBRARIES(TouziEdgeDetectorExample OTBCommon OTBIO ITKCommon ITKIO I
 ADD_EXECUTABLE(HarrisExample HarrisExample.cxx )
 TARGET_LINK_LIBRARIES(HarrisExample OTBCommon OTBIO ITKCommon ITKIO ITKNumerics ITKBasicFilters ITKCommon ITKStatistics itkvnl_inst itkvnl_algo itkvnl itkvcl itknetlib itksys  ITKNrrdIO itkpng itktiff itkjpeg8 itkjpeg12 itkjpeg16 ITKMetaIO itkzlib ITKDICOMParser ITKEXPAT )
 
+ADD_EXECUTABLE(ComplexMomentImageExample ComplexMomentImageExample.cxx )
+TARGET_LINK_LIBRARIES(ComplexMomentImageExample OTBCommon OTBIO ITKCommon ITKIO ITKNumerics ITKBasicFilters ITKCommon ITKStatistics itkvnl_inst itkvnl_algo itkvnl itkvcl itknetlib itksys  ITKNrrdIO itkpng itktiff itkjpeg8 itkjpeg12 itkjpeg16 ITKMetaIO itkzlib ITKDICOMParser ITKEXPAT )
+
 
