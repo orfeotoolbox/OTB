@@ -17,6 +17,11 @@ SET(COMMON_TESTS ${CXX_TEST_PATH}/otbCommonTests)
 #        -image image.png -entier 150 -e 200 -double 12.25 -float 45.36 -deuxentiers 78 56 )
 
 
+ADD_TEST(coTuLineSpatialObjectList ${COMMON_TESTS}  
+        otbLineSpatialObjectList
+        )
+
+
 # -------            otb::ExtractROI   ------------------------------
 
 ADD_TEST(coTvExtractROI ${COMMON_TESTS}  
@@ -131,6 +136,7 @@ otbExtractROI.cxx
 otbExtractROI_RGB.cxx
 otbMultiChannelExtractROI.cxx
 otbMultiToMonoChannelExtractROI.cxx
+otbLineSpatialObjectList.cxx
 otbPointSetSourceTest.cxx
 )
 
@@ -142,7 +148,7 @@ INCLUDE_DIRECTORIES("${OTBTesting_BINARY_DIR}")
 ADD_EXECUTABLE(otbCommonTests otbCommonTests.cxx ${BasicCommon_SRCS})
 TARGET_LINK_LIBRARIES(otbCommonTests OTBIO OTBCommon ${CAI_LIBRARY}  ${GDAL_LIBRARY} ITKIO ITKCommon)
 
-ADD_EXECUTABLE(otbTestExtractROI otbTestExtractROI.cxx ${BasicCommon_SRCS})
+ADD_EXECUTABLE(otbTestExtractROI otbTestExtractROI.cxx )
 TARGET_LINK_LIBRARIES(otbTestExtractROI OTBIO OTBCommon ${CAI_LIBRARY}  ${GDAL_LIBRARY} ITKIO ITKCommon)
 
 
