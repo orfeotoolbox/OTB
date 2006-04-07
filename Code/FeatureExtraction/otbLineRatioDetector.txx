@@ -66,7 +66,7 @@ void LineRatioDetector<TInputImage, TOutputImage, InterpolatorType>::GenerateInp
   m_Radius[1] = m_LengthLine ;
   
   // Define the size of the facelist by taking into account the rotation of the region
-  m_FaceList[0] = static_cast<unsigned int>( sqrt((m_Radius[0]*m_Radius[0])+ (m_Radius[1]*m_Radius[1]))+1 );
+  m_FaceList[0] = static_cast<unsigned int>( sqrt( (m_Radius[0]*m_Radius[0]) + (m_Radius[1]*m_Radius[1]) ) + 1 );
   m_FaceList[1] = m_FaceList[0];
 
   // pad the input requested region by the operator radius
@@ -98,6 +98,40 @@ void LineRatioDetector<TInputImage, TOutputImage, InterpolatorType>::GenerateInp
     }
 }
 
+/**
+ * Set up state of filter before multi-threading.
+ * InterpolatorType::SetInputImage is not thread-safe and hence
+ * has to be set up before ThreadedGenerateData
+ */
+template <class TInputImage, class TOutputImage, class InterpolatorType>
+void 
+LineRatioDetector< TInputImage, TOutputImage, InterpolatorType>
+::BeforeThreadedGenerateData()
+{
+
+  typename OutputImageType::RegionType  region;    
+  typename OutputImageType::Pointer     output = this->GetOutput();
+
+  m_DirectionOuputImage = OutputImageType::New();
+
+  region.SetSize(output->GetLargestPossibleRegion().GetSize());
+  region.SetIndex(output->GetLargestPossibleRegion().GetIndex());
+  m_DirectionOuputImage->SetRegions( region );
+  m_DirectionOuputImage->SetOrigin(output->GetOrigin());
+  m_DirectionOuputImage->SetSpacing(output->GetSpacing());
+  m_DirectionOuputImage->Allocate();
+
+}
+
+template <class TInputImage, class TOutputImage, class InterpolatorType>
+const typename LineRatioDetector< TInputImage, TOutputImage, InterpolatorType>::OutputImageType *
+LineRatioDetector< TInputImage, TOutputImage, InterpolatorType>
+::GetOutputDirection()
+{
+	this->Update();
+	return 	static_cast< const OutputImageType *> (m_DirectionOuputImage);
+}
+
 template< class TInputImage, class TOutputImage, class InterpolatorType>
 void LineRatioDetector< TInputImage, TOutputImage, InterpolatorType>
 ::ThreadedGenerateData(	
@@ -110,10 +144,12 @@ void LineRatioDetector< TInputImage, TOutputImage, InterpolatorType>
   itk::ConstNeighborhoodIterator<InputImageType> 		bit;
   typename itk::ConstNeighborhoodIterator<InputImageType>::OffsetType	off;
   itk::ImageRegionIterator<OutputImageType> 			it;
+  itk::ImageRegionIterator<OutputImageType> 			itdir;
   
   // Allocate output
-  typename OutputImageType::Pointer     output = this->GetOutput();
   typename InputImageType::ConstPointer input  = this->GetInput();
+  typename OutputImageType::Pointer     output = this->GetOutput();  
+  typename OutputImageType::Pointer     outputDir = m_DirectionOuputImage;
   
   m_Interpolator->SetInputImage(input);
    
@@ -163,10 +199,14 @@ void LineRatioDetector< TInputImage, TOutputImage, InterpolatorType>
   // Result of the filter for each direction
   double R12_theta[NB_DIR];
   double R13_theta[NB_DIR];
-  // Result in one direction
-  double R12, R13;
+  // Result for each direction
+  double R_theta[NB_DIR];
+  double Sum_R_theta = 0.;
   // Intensity of the linear feature
   double R;
+  
+  // Direction of detection
+  double Direction = 0.; 
 
   // Pixel location in the input image
   int X, Y;
@@ -193,6 +233,7 @@ void LineRatioDetector< TInputImage, TOutputImage, InterpolatorType>
     unsigned int neighborhoodSize = bit.Size();
       
     it = itk::ImageRegionIterator<OutputImageType>(output, *fit);
+    itdir = itk::ImageRegionIterator<OutputImageType>(outputDir, *fit);
     
     bit.OverrideBoundaryCondition(&nbc);
     bit.GoToBegin();
@@ -262,9 +303,10 @@ void LineRatioDetector< TInputImage, TOutputImage, InterpolatorType>
           }      
 
         } // end of the loop on the pixels of the region 
-        
-      R12 = -1.;
-      R13 = -1.;           
+          
+      R = -1.;
+      Direction = 0.;
+      Sum_R_theta = 0.;
            
       // Loop on the 4 directions
       for (unsigned int dir=0; dir<NB_DIR; dir++ )
@@ -286,20 +328,31 @@ void LineRatioDetector< TInputImage, TOutputImage, InterpolatorType>
         else
 	  R13_theta[dir] = 0.;
 	  
-	// Determination of the maximum intensity of detection
-	R12 = static_cast<double>( MAX( R12, R12_theta[dir] ) );
-        R13 = static_cast<double>( MAX( R13, R13_theta[dir] ) );  
+	// Determination of the minimum intensity of detection between R12 et R13
+	R_theta[dir] = static_cast<double>( MIN( R12_theta[dir], R13_theta[dir] ) );
+	
+	R = static_cast<double>( MAX ( R, R_theta[dir] ) );
+                
+        // Calculation of the directions
+        Direction += Theta[dir] * R_theta[dir];        
+        Sum_R_theta += R_theta[dir];
+	  
       		
         } // end of the loop on the directions
       
-      // Intensity of detection
-      R = MIN ( R12, R13 );	
+      // Determination of the direction of the contour
+      if ( Sum_R_theta != 0. )	
+        Direction = Direction / Sum_R_theta;
 
       // Assignment of this value to the output pixel
-      it.Set( static_cast<OutputPixelType>(R) );  
+      it.Set( static_cast<OutputPixelType>(R) );
+      
+      // Assignment of this value to the "outputdir" pixel
+      itdir.Set( static_cast<OutputPixelType>(Direction) );  
 
       ++bit;
       ++it;
+      ++itdir;
       progress.CompletedPixel();  
       
       }

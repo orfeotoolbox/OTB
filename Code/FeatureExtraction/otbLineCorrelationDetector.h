@@ -57,7 +57,7 @@ namespace otb
  * where \rho_{12} and \rho_{13} are the maximum response of the ratio edge 
  * detector of \rho(\theta_{i}).
  * 
- * The exit is an image of intensity of detection.
+ * The output is an image of intensity of detection.
  *
  * 
  */
@@ -65,7 +65,7 @@ namespace otb
 template <class TInputImage, 
 	  class TOutputImage,
 	  class InterpolatorType = itk::BSplineInterpolateImageFunction<TInputImage> >
-class LineCorrelationDetector :  public itk::ImageToImageFilter< TInputImage, TOutputImage >
+class ITK_EXPORT LineCorrelationDetector :  public itk::ImageToImageFilter< TInputImage, TOutputImage >
 {
 public:
   /** 	Extract dimensions as well of the images of entry of exit. */
@@ -130,11 +130,14 @@ public:
 
   virtual void GenerateInputRequestedRegion() throw(itk::InvalidRequestedRegionError);
 
+  const OutputImageType * GetOutputDirection();
+  
 protected:
   LineCorrelationDetector();
   virtual ~LineCorrelationDetector() {};
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
+  void BeforeThreadedGenerateData();
 
   /** LineCorrelationDetector can be implemented for a treatment of filter multithreaded. 
    * Thus, the ThreadedGenerateData() method is called for each thread process. 
@@ -164,6 +167,8 @@ private:
   SizeType m_FaceList;
   
   InterpolatorPointer      m_Interpolator;
+  
+  typename OutputImageType::Pointer m_DirectionOuputImage;
 
 };
 } // end namespace otb

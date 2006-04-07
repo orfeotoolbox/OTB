@@ -56,7 +56,7 @@ namespace otb
  * where R_{12} and R_{13} are the maximum response of the ratio edge 
  * detector of R(\theta_{i}).
  * 
- * The exit is an image of intensity of detection.
+ * The output is an image of intensity of detection.
  *
  * 
  */
@@ -64,7 +64,7 @@ namespace otb
 template <class TInputImage, 
 	  class TOutputImage,
 	  class InterpolatorType = itk::BSplineInterpolateImageFunction<TInputImage> >
-class LineRatioDetector :  public itk::ImageToImageFilter< TInputImage, TOutputImage >
+class ITK_EXPORT LineRatioDetector :  public itk::ImageToImageFilter< TInputImage, TOutputImage >
 {
 public:
   /** 	Extract dimensions as well of the images of entry of exit. */
@@ -87,7 +87,7 @@ public:
   /** Method for management of the "object factory". */
   itkNewMacro(Self);
 
-  /** Return the nale of the class. */
+  /** Return the name of the class. */
   itkTypeMacro(LineRatioDetector, ImageToImageFilter);
 
   /** Typedefs to describe and access Interpolator */
@@ -128,12 +128,15 @@ public:
  
 
   virtual void GenerateInputRequestedRegion() throw(itk::InvalidRequestedRegionError);
+  
+  const OutputImageType * GetOutputDirection();
 
 protected:
   LineRatioDetector();
   virtual ~LineRatioDetector() {};
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
+  void BeforeThreadedGenerateData();
 
   /** LineRatioDetector can be implemented for a treatment of filter multithreaded. 
    * Thus, the ThreadedGenerateData() method is called for each thread process. 
@@ -163,6 +166,8 @@ private:
   SizeType m_FaceList;
   
   InterpolatorPointer      m_Interpolator;
+
+  typename OutputImageType::Pointer m_DirectionOuputImage;
 
 };
 } // end namespace otb

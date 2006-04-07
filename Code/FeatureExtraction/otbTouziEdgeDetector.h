@@ -38,7 +38,7 @@ namespace otb
  * The intensity of contour is calculated in four directions 
  * vertical , diagonal 1, horizontal and diagonal 2.   
  * 
- * The exit is an image of intensity of the detection of contour R, the
+ * The output is an image of intensity of the detection of contour R, the
  * maximum response of the ratio edge detector of R(\theta_{i}:
  *	\[R = \max ( R(\theta_{i}) ) \]
  *
@@ -50,7 +50,7 @@ namespace otb
  */
 
 template <class TInputImage, class TOutputImage>
-class TouziEdgeDetector :  public itk::ImageToImageFilter< TInputImage, TOutputImage >
+class  ITK_EXPORT TouziEdgeDetector :  public itk::ImageToImageFilter< TInputImage, TOutputImage >
 {
 public:
   /** 	Extrait les dimensions aussi bien des images 

@@ -99,6 +99,40 @@ void LineCorrelationDetector<TInputImage, TOutputImage, InterpolatorType>::Gener
     }
 }
 
+/**
+ * Set up state of filter before multi-threading.
+ * InterpolatorType::SetInputImage is not thread-safe and hence
+ * has to be set up before ThreadedGenerateData
+ */
+template <class TInputImage, class TOutputImage, class InterpolatorType>
+void 
+LineCorrelationDetector< TInputImage, TOutputImage, InterpolatorType>
+::BeforeThreadedGenerateData()
+{
+
+  typename OutputImageType::RegionType  region;    
+  typename OutputImageType::Pointer     output = this->GetOutput();
+
+  m_DirectionOuputImage = OutputImageType::New();
+
+  region.SetSize(output->GetLargestPossibleRegion().GetSize());
+  region.SetIndex(output->GetLargestPossibleRegion().GetIndex());
+  m_DirectionOuputImage->SetRegions( region );
+  m_DirectionOuputImage->SetOrigin(output->GetOrigin());
+  m_DirectionOuputImage->SetSpacing(output->GetSpacing());
+  m_DirectionOuputImage->Allocate();
+
+}
+
+template <class TInputImage, class TOutputImage, class InterpolatorType>
+const typename LineCorrelationDetector< TInputImage, TOutputImage, InterpolatorType>::OutputImageType *
+LineCorrelationDetector< TInputImage, TOutputImage, InterpolatorType>
+::GetOutputDirection()
+{
+	this->Update();
+	return 	static_cast< const OutputImageType *> (m_DirectionOuputImage);
+}
+
 template< class TInputImage, class TOutputImage, class InterpolatorType>
 void LineCorrelationDetector< TInputImage, TOutputImage, InterpolatorType>
 ::ThreadedGenerateData(	
@@ -111,10 +145,13 @@ void LineCorrelationDetector< TInputImage, TOutputImage, InterpolatorType>
   itk::ConstNeighborhoodIterator<InputImageType> 		bit;
   typename itk::ConstNeighborhoodIterator<InputImageType>::OffsetType	off;
   itk::ImageRegionIterator<OutputImageType> 			it;
+  itk::ImageRegionIterator<OutputImageType> 			itdir;
   
   // Allocate output
-  typename OutputImageType::Pointer     output = this->GetOutput();
   typename InputImageType::ConstPointer input  = this->GetInput();
+  typename OutputImageType::Pointer     output = this->GetOutput();
+  typename OutputImageType::Pointer     outputDir = m_DirectionOuputImage;
+
   
   m_Interpolator->SetInputImage(input);
    
@@ -169,10 +206,14 @@ void LineCorrelationDetector< TInputImage, TOutputImage, InterpolatorType>
   // Result of the filter for each direction
   double rho12_theta[NB_DIR];
   double rho13_theta[NB_DIR];
-  // Result in one direction
-  double rho12, rho13;
+  // Result for each direction
+  double rho_theta[NB_DIR];
+  double Sum_rho_theta = 0.;
   // Intensity of the linear feature
   double rho;
+  
+  // Direction of detection
+  double Direction = 0.; 
 
   // Pixel location in the input image
   int X, Y;
@@ -201,6 +242,7 @@ void LineCorrelationDetector< TInputImage, TOutputImage, InterpolatorType>
     unsigned int neighborhoodSize = bit.Size();
       
     it = itk::ImageRegionIterator<OutputImageType>(output, *fit);
+    itdir = itk::ImageRegionIterator<OutputImageType>(outputDir, *fit);
     
     bit.OverrideBoundaryCondition(&nbc);
     bit.GoToBegin();
@@ -280,8 +322,9 @@ void LineCorrelationDetector< TInputImage, TOutputImage, InterpolatorType>
 
         } // end of the loop on the pixels of the region 
         
-      rho12 = -1.;
-      rho13 = -1.; 
+      rho = -1.;
+      Direction = 0.;
+      Sum_rho_theta = 0.;
       
       double NbPixel = static_cast<double>(NbPixelZone);          
            
@@ -330,20 +373,30 @@ void LineCorrelationDetector< TInputImage, TOutputImage, InterpolatorType>
           rho13_theta[dir] = 0.;
         
          
-	// Determination of the maximum cross correlation coefficients
-	rho12 = static_cast<double>( MAX( rho12, rho12_theta[dir] ) );
-        rho13 = static_cast<double>( MAX( rho13, rho13_theta[dir] ) );  
-      		
+	// Determination of the minimum intensity of detection between R12 et R13
+	rho_theta[dir] = static_cast<double>( MIN( rho12_theta[dir], rho13_theta[dir] ) );
+	
+	rho = static_cast<double>( MAX ( rho, rho_theta[dir] ) );
+                
+        // Calculation of the directions
+        Direction += Theta[dir] * rho_theta[dir];        
+        Sum_rho_theta += rho_theta[dir];
+	        		
         } // end of the loop on the directions
       
-      // Intensity of the linear feature
-      rho = MIN ( rho12, rho13 );	
+      // Determination of the direction of the contour
+      if ( Sum_rho_theta != 0. )	
+        Direction = Direction / Sum_rho_theta;	
 
       // Assignment of this value to the output pixel
       it.Set( static_cast<OutputPixelType>(rho) );  
 
+      // Assignment of this value to the "outputdir" pixel
+      itdir.Set( static_cast<OutputPixelType>(Direction) ); 
+      
       ++bit;
       ++it;
+      ++itdir;
       progress.CompletedPixel();  
       
       }

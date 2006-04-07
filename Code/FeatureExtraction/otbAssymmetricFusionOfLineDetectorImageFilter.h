@@ -28,7 +28,7 @@ namespace otb
 template <class TInputImage, 
 	  class TOutputImage, 
 	  class InterpolatorType = itk::BSplineInterpolateImageFunction<TInputImage> >
-class AssymmetricFusionOfLineDetectorImageFilter :  public itk::ImageToImageFilter< TInputImage, TOutputImage >
+class ITK_EXPORT AssymmetricFusionOfLineDetectorImageFilter :  public itk::ImageToImageFilter< TInputImage, TOutputImage >
 {
 public:
 

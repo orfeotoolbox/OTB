@@ -194,12 +194,16 @@ void TouziEdgeDetector< TInputImage, TOutputImage>
   int xc;
   int yc;
 
- 
+ int cpt=0;
     
   // Process each of the boundary faces.  These are N-d regions which border
   // the edge of the buffer.
   for (fit=faceList.begin(); fit != faceList.end(); ++fit)
     { 
+   
+std::cout<< cpt << std::endl;    	
+    cpt += 1;
+    
     bit = itk::ConstNeighborhoodIterator<InputImageType>(m_Radius, input, *fit);
     unsigned int neighborhoodSize = bit.Size();
       
