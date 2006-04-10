@@ -168,9 +168,14 @@ SET( OTB_EXAMPLES_SRCS
   ${OTB_SOURCE_DIR}/Examples/DataRepresentation/Mesh/Mesh3.cxx    
   ${OTB_SOURCE_DIR}/Examples/DataRepresentation/Mesh/PointSetWithVectors.cxx
   ${OTB_SOURCE_DIR}/Examples/DataRepresentation/Path/PolyLineParametricPath1.cxx
-  ${OTB_SOURCE_DIR}/Examples/IO/ImageReadWrite.cxx      
+  ${OTB_SOURCE_DIR}/Examples/IO/ImageReadWrite.cxx
+  ${OTB_SOURCE_DIR}/Examples/IO/RGBImageReadWrite.cxx
+  ${OTB_SOURCE_DIR}/Examples/IO/ImageReadCastWrite.cxx
+  ${OTB_SOURCE_DIR}/Examples/IO/ImageReadRegionOfInterestWrite.cxx
+  ${OTB_SOURCE_DIR}/Examples/IO/ComplexImageReadWrite.cxx
+  ${OTB_SOURCE_DIR}/Examples/IO/MultibandImageReadWrite.cxx
+  ${OTB_SOURCE_DIR}/Examples/IO/ExtractROI.cxx   
   ${OTB_SOURCE_DIR}/Examples/StartExamples/MeanImageFilter.cxx
-  ${OTB_SOURCE_DIR}/Examples/ExtractROI/ExtractROI.cxx
   ${OTB_SOURCE_DIR}/Examples/BasicFilters/LeeImageFilter.cxx
   ${OTB_SOURCE_DIR}/Examples/FeatureExtraction/AlignmentsExample.cxx
   ${OTB_SOURCE_DIR}/Examples/FeatureExtraction/TouziEdgeDetectorExample.cxx

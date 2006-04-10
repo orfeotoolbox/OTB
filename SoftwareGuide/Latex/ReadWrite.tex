@@ -42,21 +42,22 @@ factories.}
 
 
 The following section describes the internals of the IO architecture provided
-in the toolkit.
+in the toolbox.
 
 \section{Pluggable Factories}
 \label{sec:ImageIOPluggableFactories}
 
-The principle behind the input/output mechanism used in ITK is known as
+The principle behind the input/output mechanism used in ITK and
+therefore OTB is known as
 \emph{pluggable-factories} \cite{Gamma1995}. This concept is illustrated in
 the UML diagram in Figure~\ref{fig:ImageIOCollaborationDiagram}. From the
 user's point of view the objects responsible for reading and writing files
-are the \doxygen{ImageFileReader} and \doxygen{ImageFileWriter}
+are the \doxygen{otb::ImageFileReader} and \doxygen{otb::ImageFileWriter}
 classes. These two classes, however, are not aware of the details involved in
-reading or writing particular file formats like PNG or DICOM.  What they do
+reading or writing particular file formats like PNG or GeoTIFF.  What they do
 is to dispatch the user's requests to a set of specific classes that are
 aware of the details of image file formats. These classes are the
-\doxygen{ImageIO} classes. The ITK delegation mechanism enables users to
+\doxygen{itk::ImageIO} classes. The ITK delegation mechanism enables users to
 extend the number of supported file formats by just adding new classes to the
 ImageIO hierarchy.
 
@@ -65,7 +66,7 @@ a pointer to an ImageIO object. If this pointer is empty, it will
 be impossible to read or write an image and the image file reader/writer must
 determine which ImageIO class to use to perform IO operations.
 This is done basically by passing the filename to a centralized class, the
-\doxygen{ImageIOFactory} and asking it to identify any subclass of
+\doxygen{itk::ImageIOFactory} and asking it to identify any subclass of
 ImageIO capable of reading or writing the user-specified file. This
 is illustrated by the use cases on the right side of
 Figure~\ref{fig:ImageIOFactoriesUseCases}. The ImageIOFactory acts here as a
@@ -74,8 +75,8 @@ each file format.
 
 Each class derived from ImageIO must provide an associated factory
 class capable of producing an instance of the ImageIO class. For
-example, for PNG files, there is a \doxygen{PNGImageIO} object that knows how
-to read this image files and there is a \doxygen{PNGImageIOFactory} class
+example, for PNG files, there is a \doxygen{itk::PNGImageIO} object that knows how
+to read this image files and there is a \doxygen{itk::PNGImageIOFactory} class
 capable of constructing a PNGImageIO object and returning a pointer
 to it.  Each time a new file format is added (i.e., a new ImageIO
 subclass is created), a factory must be implemented as a derived class of the
@@ -94,30 +95,50 @@ to read the file. The factory that responds affirmatively will be used to
 create the specific ImageIO instance that will be returned to the
 ImageFileReader and used to perform the read operations.
 
+With respect to the ITK formats, OTB adds most of the remote sensing
+image formats. In order to do so, two IO libraries are encapsulated by
+their respective IO factories. These libraries are:
+\begin{itemize}
+  \item The Geospatial Data Abstraction Library, GDAL
+      \url{http://www.gdal.org/}, is a translator library for raster
+      geospatial data formats that is released under an X/MIT style
+      Open Source license. As a library, it presents a single abstract
+      data model to the calling application for all supported formats,
+      which include CEOS, GeoTIFF, ENVI, and much more. See
+      \url{http://www.remotesensing.org/gdal/formats_list.html} for
+      the full format list.
+    \item CNES's Couche Acc\`es Image, CAI, which supports SPOT image
+    formats and several CNES's inhouse image formats.
+\end{itemize}
+
+Since GDAL and CAI are themselves multi-format libraries, these IO
+factories are able to choose the appropriate ressource for reading and
+writing images. 
+
 In most cases the mechanism is transparent to the user who only interacts
 with the ImageFileReader and ImageFileWriter. It is
 possible, however, to explicitly select the type of ImageIO object
-to use.  This is illustrated by the following example.
+to use.  Please see the ITK Software for more details about this.
 
-\section{Using ImageIO Classes Explicitly}
-\label{sec:ImageReadExportVTK}
+%\section{Using ImageIO Classes Explicitly}
+%\label{sec:ImageReadExportVTK}
 %\input{ImageReadExportVTK.tex}
 
 
 \section{Reading and Writing RGB Images}
 \label{sec:RGBImagReadWrite}
-%\input{RGBImageReadWrite.tex}
+\input{RGBImageReadWrite.tex}
 
 \section{Reading, Casting and Writing Images}
 \label{sec:ImagReadCastWrite}
-%\input{ImageReadCastWrite.tex}
+\input{ImageReadCastWrite.tex}
 
 \section{Extracting Regions}
 \label{sec:ImagReadRegionOfInterestWrite}
-%\input{ImageReadRegionOfInterestWrite.tex}
+\input{ImageReadRegionOfInterestWrite.tex}
 
-\section{Extracting Slices}
-\label{sec:ImagReadExtractWrite}
+%\section{Extracting Slices}
+%\label{sec:ImagReadExtractWrite}
 %\input{ImageReadExtractWrite.tex}
 
 
@@ -125,31 +146,39 @@ to use.  This is illustrated by the following example.
 \label{sec:VectorImagReadWrite}
 
 Images whose pixel type is a Vector, a CovariantVector, an Array, or a Complex
-are quite common in image processing. It is convenient then to describe rapidly
-how those images can be saved into files and how they can be read from those
-files later on.
+are quite common in image processing. One of the uses of these tye of
+images is the processing of SLC SAR images, which are complex.
 
-\subsection{The Minimal Example}
-\label{VectorImageReadWrite}
+
+%\subsection{The Minimal Example}
+%\label{VectorImageReadWrite}
 %\input{VectorImageReadWrite.tex}
 
-\subsection{Producing and Writing Covariant Images}
-\label{CovariantVectorImageWrite}
+%\subsection{Producing and Writing Covariant Images}
+%\label{CovariantVectorImageWrite}
 %\input{CovariantVectorImageWrite.tex}
 
-\subsection{Reading Covariant Images}
-\label{CovariantVectorImageRead}
-Let's now take the image that we just created and read it into another program.
+%\subsection{Reading Covariant Images}
+%\label{CovariantVectorImageRead}
+%Let's now take the image that we just created and read it into another program.
 %\input{CovariantVectorImageRead.tex}
 
 
-\section{Reading and Writing Complex Images}
+\subsection{Reading and Writing Complex Images}
 \label{sec:ComplexImagReadWrite}
-%\input{ComplexImageReadWrite.tex}
+\input{ComplexImageReadWrite.tex}
+
+\section{Reading and Writing Multiband Images}
+\label{sec:MultibandImagReadWrite}
+\input{MultibandImageReadWrite.tex}
+
+\subsection{Extracting ROIs}
+\label{sec:ExtractROI}
+\input{ExtractROI.tex}
 
 
-\section{Extracting Components from Vector Images}
-\label{sec:VectorImageExtractComponent}
+%\section{Extracting Components from Vector Images}
+%\label{sec:VectorImageExtractComponent}
 %\input{CovariantVectorImageExtractComponent.tex}
 
 
@@ -182,120 +211,4 @@ dealing with reading and writing series of images.
 %\input{RGBImageSeriesReadWrite.tex}
 
 
-\section{Reading and Writing DICOM Images}
-\label{sec:ReadingDicomImageSeries2}
 
-% Small intro to DICOM file format
-\index{DICOM}
-\index{DICOM!Standard}
-\index{DICOM!Series}
-\index{DICOM!Introduction}
-
-\subsection{Foreword}
-With the introduction of computed tomography (CT) followed by other digital
-diagnostic imaging modalities such as MRI in the 1970's, and the increasing use
-of computers in clinical applications, the American College of Radiology
-(ACR)\footnote{\url{http://www.acr.org}} and the National Electrical
-Manufacturers Association (NEMA)\footnote{\url{http://www.nema.org}} recognized
-the need for a standard method for transferring images as well as associated
-information between devices manufactured from various vendors.
-
-ACR and NEMA formed a joint committee to develop a standard for Digital Imaging
-and Communications in Medicine (DICOM).  This standard was developed in liaison
-with other Standardization Organizations such as CEN TC251, JIRA including
-IEEE, HL7 and ANSI USA as reviewers.
-
-DICOM is a comprehensive set of standards for handling, storing and
-transmitting information in medical imaging. The DICOM standard was developed
-based on the previous NEMA specification.  The standard specifies a file format
-definition as well as a network communication protocol. DICOM was developed to
-enable integration of scanners, servers, workstations and network hardware from
-multiple vendors into an image archiving and communication system.
-
-DICOM files consist of a header and a body of image data. The header contains
-standardized as well as free-form fields. The set of standardized fields is
-called the public DICOM dictionary, an instance of this dictionary is available
-in ITK in the file~\code{Insight/Utilities/gdcm/Dict/dicomV3.dic}.  The list of
-free-form fields is also called the \emph{shadow dictionary}.
-
-A single DICOM file can contain multiples frames, allowing storage of volumes
-or animations. Image data can be compressed using a large variety of standards,
-including JPEG (both lossy and lossless), LZW (Lempel Ziv Welch), and RLE
-(Run-length encoding).
-
-The DICOM Standard is an evolving standard and it is maintained in accordance
-with the Procedures of the DICOM Standards Committee. Proposals for
-enhancements are forthcoming from the DICOM Committee member organizations
-based on input from users of the Standard. These proposals are considered for
-inclusion in future editions of the Standard. A requirement in updating the
-Standard is to maintain effective compatibility with previous editions.
-
-For a more detailed description of the DICOM standard see~\cite{DICOMStandard}.
-
-The following sections illustrate how to use the functionalities that ITK
-provides for reading and writing DICOM files. This is extremely important in
-the domain of medical imaging since most of the images that are acquired a
-clinical setting are stored and transported using the DICOM standard.
-
-DICOM functionalities in ITK are provided by the GDCM library. This open source
-library was developed by the CREATIS
-Team~\footnote{\url{http://www.creatis.insa-lyon.fr}} at
-INSA-Lyon~\cite{CreatisINSA-Lyon}.  Although originally this library was
-distributed under a LGPL
-License\footnote{\url{http://www.gnu.org/copyleft/lesser.html}}, the CREATIS Team was
-lucid enough to understand the limitations of that license and agreed to adopt
-the more open BSD-like
-License\footnote{\url{http://www.opensource.org/licenses/bsd-license.php}} that is
-used by ITK. This change in their licensing made possible to distribute GDCM
-along with ITK.
-
-GDCM is still being maintained and improved at the original CREATIS site and
-the version distributed with ITK gets updated with major releases of the GDCM
-library.
-
-\subsection{Reading and Writing a 2D Image}
-\label{DicomImageReadWrite}
-%\input{DicomImageReadWrite.tex}
-
-\subsection{Reading a 2D DICOM Series and Writing a Volume}
-\label{DicomSeriesReadImageWrite2}
-%\input{DicomSeriesReadImageWrite2.tex}
-
-\subsection{Reading a 2D DICOM Series and Writing a 2D DICOM Series}
-\label{DicomSeriesReadSeriesWrite}
-%\input{DicomSeriesReadSeriesWrite.tex}
-
-\subsection{Printing DICOM Tags From One Slice}
-\label{DicomImageReadPrintTags}
-%\input{DicomImageReadPrintTags.tex}
-
-\subsection{Printing DICOM Tags From a Series}
-\label{DicomSeriesReadPrintTags}
-%\input{DicomSeriesReadPrintTags.tex}
-
-\subsection{Changing a DICOM Header}
-\label{DicomImageReadChangeHeaderWrite}
-%\input{DicomImageReadChangeHeaderWrite.tex}
-
-
-
-
-
-\section{Standard Images}
-\section{Vector Images}
-\subsection{Extracting ROIs}
-\label{sec:ExtractROI}
-
-Cet exemple d\'ecrit l'utilisation des filtres otb::MultiChannelExtractROI et
-otb::MultiToMonoChannelExtractROI qui permettent d'extraire une r\'egion d'int\'er\^et
-sur une image multi canaux et de g\'en\'erer respectivement une image mutli ou 
-mono canal de cette r\'egion.
-
-L'exemple pr\'esent\'e ici extrait une r\'egion d'int\'er\^et sur une image SPOT5 
-quatre canaux et g\'en\`ere par l'interm\'edaire de ces deux classes otb une image trois 
-canaux (RGB) et une image mono canal (MIR) de cette r\'egion. 
-
-
-\ifitkFullVersion
-\input{ExtractROI.tex}
-\fi
