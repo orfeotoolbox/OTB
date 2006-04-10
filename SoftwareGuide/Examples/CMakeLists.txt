@@ -158,7 +158,17 @@ SET( OTB_EXAMPLES_SRCS
   ${OTB_SOURCE_DIR}/Examples/DataRepresentation/Image/Image3.cxx
   ${OTB_SOURCE_DIR}/Examples/DataRepresentation/Image/Image4.cxx
   ${OTB_SOURCE_DIR}/Examples/DataRepresentation/Image/RGBImage.cxx
-  ${OTB_SOURCE_DIR}/Examples/DataRepresentation/Image/VectorImage.cxx	
+  ${OTB_SOURCE_DIR}/Examples/DataRepresentation/Image/VectorImage.cxx
+  ${OTB_SOURCE_DIR}/Examples/DataRepresentation/Image/Image5.cxx
+  ${OTB_SOURCE_DIR}/Examples/DataRepresentation/Mesh/PointSet1.cxx
+  ${OTB_SOURCE_DIR}/Examples/DataRepresentation/Mesh/PointSet2.cxx
+  ${OTB_SOURCE_DIR}/Examples/DataRepresentation/Mesh/PointSet3.cxx
+  ${OTB_SOURCE_DIR}/Examples/DataRepresentation/Mesh/Mesh1.cxx
+  ${OTB_SOURCE_DIR}/Examples/DataRepresentation/Mesh/Mesh2.cxx
+  ${OTB_SOURCE_DIR}/Examples/DataRepresentation/Mesh/Mesh3.cxx    
+  ${OTB_SOURCE_DIR}/Examples/DataRepresentation/Mesh/PointSetWithVectors.cxx
+  ${OTB_SOURCE_DIR}/Examples/DataRepresentation/Path/PolyLineParametricPath1.cxx
+  ${OTB_SOURCE_DIR}/Examples/IO/ImageReadWrite.cxx      
   ${OTB_SOURCE_DIR}/Examples/StartExamples/MeanImageFilter.cxx
   ${OTB_SOURCE_DIR}/Examples/ExtractROI/ExtractROI.cxx
   ${OTB_SOURCE_DIR}/Examples/BasicFilters/LeeImageFilter.cxx
