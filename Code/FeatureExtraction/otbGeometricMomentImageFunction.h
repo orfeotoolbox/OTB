@@ -6,7 +6,7 @@
   Date      :   17 mars 2006
   Version   :   
   Role      :   Geometric Moments Class of images
-  $Id:$
+  $Id$
 
 =========================================================================*/
 #ifndef _otbGeometricMomentImageFunction_h

@@ -66,9 +66,6 @@ public:
  
   typedef TOutput                                   ComplexType;
 
-  /** Dimension of the underlying image. */
-//  itkStaticConstMacro(ImageDimension, unsigned int,
-//                      InputType::ImageDimension);
   			 
   /** Evalulate the function at specified index */
   virtual ComplexType EvaluateAtIndex( const IndexType& index ) const;

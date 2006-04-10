@@ -21,8 +21,7 @@
 #include "itkImageRegionIterator.h"
 #include "itkImage.h"
 #include "itkConstNeighborhoodIterator.h"
-
-#include <complex>
+#include "itkNumericTraits.h"
 namespace otb
 {
 
@@ -57,43 +56,52 @@ template < class TInput, class TOutput, class TCoordRep>
 typename ComplexMomentImageFunction<TInput,TOutput,TCoordRep>::ComplexType
 ComplexMomentImageFunction<TInput,TOutput,TCoordRep>
 ::EvaluateAtIndex(const IndexType& index) const
-{
-  typename InputType::SizeType        ImageSize;
+{  
+  typename TInput::SizeType           ImageSize;
   ComplexType                         Sum;
   ComplexType                         ValP;
   ComplexType                         ValQ;
   IndexType                           IndexValue;
   IndexType                           indexPos = index;
-  typename InputType::SizeType        kernelSize;
+  typename TInput::SizeType           kernelSize;
 
+  std::cout << "Evaluate at index "<<index <<std::endl;
+  std::cout << "ImageSize : " << this->GetInputImage()->GetBufferedRegion().GetSize() <<std::endl;
   if( !this->GetInputImage() )
     {
-      return std::complex<float>(0.,0.);  // A modifier
-//    return ( NumericTraits<RealType>::max() );
+    std::cout << "Pb with GetInputImage" << std::endl;
+    return ( std::complex<float>( itk::NumericTraits<float>::max(), itk::NumericTraits<float>::max() ) );
     }
   
-  if ( !this->IsInsideBuffer( index ) )
-    {
-      return std::complex<float>(0.,0.); // A modifier
-//    return ( NumericTraits<RealType>::max() );
-    }
-#if 0
+//  if ( !this->IsInsideBuffer( index ) )
+//    {
+//    std::cout << "Pbs with Is InsideBuffer " << std::endl;
+//    return ( std::complex<float>( itk::NumericTraits<float>::max(), itk::NumericTraits<float>::max() ) );
+//    }
+
+
+  std::cout << "Neighborhood Radius : "<< m_NeighborhoodRadius <<std::endl;
    if(m_NeighborhoodRadius<0)
      {
      ImageSize = this->GetInputImage()->GetBufferedRegion().GetSize();
+     
      indexPos[0] = ImageSize[0] / 2 ;
      indexPos[1] = ImageSize[1] / 2;
      
-       kernelSize[0] = indexPos[0];
-       kernelSize[1] = indexPos[1];          
+     kernelSize[0] = indexPos[0];
+     kernelSize[1] = indexPos[1];          
      }
      else
      {
        kernelSize.Fill( m_NeighborhoodRadius );
      }  
- 
-  itk::ConstNeighborhoodIterator<InputType>
+
+  std::cout << "kernelSize : "<< kernelSize <<std::endl;
+  std::cout << "indexPos   : "<< indexPos <<std::endl;
+
+  itk::ConstNeighborhoodIterator<TInput>
     it(kernelSize, this->GetInputImage(), this->GetInputImage()->GetBufferedRegion());
+
 
   // Set the iterator at the desired location
   it.SetLocation(indexPos);
@@ -123,11 +131,9 @@ ComplexMomentImageFunction<TInput,TOutput,TCoordRep>
 //    std::cout<< "Val Pixel: " << static_cast<float>(it.GetPixel(i)) <<" Result :" << Sum<<std::endl;
   }
 
-//   std::cout<<"Result dans la procedure: " <<Sum <<std::endl;
-           
+   std::cout<<"Result dans la procedure: " <<Sum <<std::endl;
   return (static_cast<ComplexType>(Sum) );
 
-#endif
 
 }
 

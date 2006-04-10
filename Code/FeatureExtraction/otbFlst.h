@@ -14,66 +14,13 @@
 #include "itkImage.h"
 #include "otbImageToTreeFilter.h"
 #include "otbTreeNeighborhood.h"
+#include "otbShape.h"
 //#include "otbTreeSource.h"
 #include "itkPolyLineParametricPath.h"
 
 
 namespace otb
 {
-
-
-typedef struct 
-    {
-    int x;
-    int y;
-    } PointPlaneType;
-
-class ShapeType
-{
-public:
-    char                            inferior_type;
-    float                           value;
-    char                            open;
-    int                             area;
-    char                            removed;
-    std::vector<PointPlaneType>     pixels;
-    std::vector<PointPlaneType>     boundary;
-    ShapeType                      *parent;
-    ShapeType                      *child;
-    ShapeType                      *next_sibling;
-       
-    ShapeType();
-    ~ShapeType(); 
-    static void InsertChildren(ShapeType *pParent, ShapeType *pNewChildToInsert);
- 
-};
-
-
-class ShapeList
-{
-public:
-
-  int              nrow;
-  int              ncol;
-  int              interpolation;
-  int              nb_shapes;
-  ShapeType        *the_shapes;
-  ShapeType        **smallest_shape;
-
-  ShapeList();
-  ~ShapeList();
-  void Allocate(int nrow,int ncol,float value);
-  void Delete();
-  void Change(int nrow,int ncol,float value);
-};
-
-
-
-typedef struct
-     {
-       ShapeType *shape; //Pointeur ou pas ?
-       float     level;
-     } ConnectionType;
 
 /** \class Flst
  * \brief Algorithme de Fast Level Sets Transform of an image
@@ -118,25 +65,12 @@ public:
   typedef typename IntImageType::ConstPointer   IntImageConstPointer;
   typedef typename IntImageType::IndexType      IntImageIndexType;
   typedef typename IntImageType::PixelType      IntImagePixelType;
-  
-  
-  
+    
   typedef itk::Image<float,2>                   RealImageType;
   typedef typename RealImageType::Pointer       RealImagePointer;
   typedef typename RealImageType::ConstPointer  RealImageConstPointer;
   typedef typename RealImageType::IndexType     RealImageIndexType;
     
-  typedef ShapeList 	          ShapeTreeType;
-  typedef ShapeTreeType*          ShapeTreePointer;
-  typedef const ShapeTreeType*    ShapeTreeConstPointer;
-   
-  typedef TreeNeighborhood               NeighborhoodType;
-  typedef TreeNeighborhood::NeighborType NeighborType;
-  typedef TreeNeighborhood::PointType    NeighborPointType;
-  typedef std::vector<PointPlaneType>   PointPlaneListType;
-
-  typedef std::vector<ConnectionType>   ConnectionListType;
-
 protected:
   Flst();
   virtual ~Flst();
@@ -144,13 +78,13 @@ protected:
   virtual void GenerateData();
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
- /** Définition des paramètres d'optimisation. 
- * Ils sont dépendant de la taille des images mais ces valeurs semblent 
- * convenir à  la majoritée des images. */
+/* Optimization parameters. Probably should depend on image size, but these
+values seem good for most images. */
   static const int INIT_MAX_AREA; 
   static const int STEP_MAX_AREA;
   
-  /** configuration locale des pixels */
+/* A 'local configuration' of the pixel is the logical 'or' of these values,
+stored in one byte. Corresponding bit is set if the neighbor is in region */
   static const int EAST; 
   static const int NORTH_EAST;
   static const int NORTH;
@@ -160,49 +94,78 @@ protected:
   static const int SOUTH;
   static const int SOUTH_EAST;    
   
+/* Gives for each configuration of the neighborhood around the pixel the number
+of new cc's of the complement created (sometimes negative, since
+cc's can be deleted), when the pixel is appended to the region.
+Configurations are stored on one byte. 
+tabPatterns[0]: set in 4-connectedness and complement in 8-connectedness.
+tabPatterns[1]: set in 8-connectedness and complement in 4-connectedness. */
   static const char tabPatterns[2][256];
-  
-  itkSetMacro(MinArea, int);
-  itkGetConstReferenceMacro(MinArea, int);
-      
-  char Is_local_min(int x, int y, char b8Connected);
-  char Is_local_max(int x, int y, char b8Connected);
-  void Levelize(PointPlaneListType tabPoints,int iNbPoints, float newGray);
-  unsigned char Configuration(int x,int y);  
-  ShapeType* NewShape(int iCurrentArea, float currentGrayLevel, char bOfInferiorType,ShapeType* pChild);
-  void UpdateSmallestShapes(PointPlaneListType* tabPoints,int iLastShapeArea, int iArea);
-  void Connect(PointPlaneListType* tabPoints,int iNbPoints,ShapeType* pSmallestShape);
-  void NewConnection(PointPlaneType* pPoint,float level);	       
-  int NEIGHBOR_NOT_STORED(int x,int y);	   
-  void Store_4neighbors(int x,int y);
-  void Store_8neighbors(int x,int y);
-  char AddIsoLevel(int* pCurrentArea, float currentGrayLevel,
-	          char* p8Connected,char* pIgnoreHoles);
-  void FindTerminalBranch(int x,int y, char b8Connected);		  
-  virtual void Scan();
 
+  void init_image_of_visited_pixels(int*** ptabtabVisitedPixels);
+  void free_image_of_visited_pixels(int** tabtabVisitedPixels);
+  void init_region(int iMaxArea);
+  void free_region();
+  void init_output_image(const InputImageType* image,
+  			 float***  ptabtabPixelsOutput);
+  void free_output_image(float** tabtabPixelsOutput);
+  			  
+  void add_neighbor(Neighborhood* pNeighborhood,short int x,
+                    short int y,float value);
+  void remove_neighbor(Neighborhood* pNeighborhood);
+
+  char is_local_min(float** ou,short int x,short int y,char b8Connected);
+  char is_local_max(float** ou,short int x,short int y,char b8Connected);
+     
+  void levelize(float** tabtabPixelsOutput,Point_plane* tabPoints,
+           int iNbPoints,float newGray);
+  unsigned char configuration(int** tabtabVisitedPixels,short int x,short int y);
+  
+  Shape* new_shape(int iCurrentArea,float currentGrayLevel, 
+                   char bOfInferiorType,Shape* pChild);
+  void update_smallest_shapes(Point_plane* tabPoints,int iNbPoints);
+  void connect(Point_plane* tabPoints,int iNbPoints,
+               Connection* tabConnections,Shape* pSmallestShape);
+  void new_connection(Point_plane* pPoint,float level,Connection* tabConnections);
+
+/* Is the neighbor pixel already stored for this exploration? */
+  int NEIGHBOR_NOT_STORED(short int x,short int y) 
+                 { return (tabtabVisitedNeighbors[y][x] < iExploration); };
+
+  void store_4neighbors(float** ou,short int x,short int y,Neighborhood* pNeighborhood);
+  void store_8neighbors(float** ou,short int x,short int y,Neighborhood* pNeighborhood);
+	        
+  char add_iso_level(Point_plane* tabPointsInShape,int* pCurrentArea,
+		float currentGrayLevel, Neighborhood* pNeighborhood, 
+		float** ou,int** tabtabVisitedPixels, 
+		char* p8Connected, char* pIgnoreHoles);
+  void find_terminal_branch(float** ou,int** tabtabVisitedPixels,
+                       short int x,short int y,
+	  	       char b8Connected, Neighborhood* pNeighborhood, 
+		       Connection* tabConnections);
+  void scan(float** tabtabPixelsOutput,int** tabtabVisitedPixels,
+            Neighborhood* pNeighborhood,Connection* tabConnections);
+
+//  itkSetMacro(MinArea, int);
+//  itkGetConstReferenceMacro(MinArea, int);
  
 private:
   Flst(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
 
-  int                   m_Width;
-  int                   m_Height;
-  int                   m_MinArea;
-  int                   m_MaxArea;
-  int                   m_AreaImage;
-  int                   m_HalfAreaImage;
-  int                   m_PerimeterImage;
-  int                   m_AtBorder;
-  int                   m_Exploration;
-  IntImagePointer       m_VisitedPixels;
-  IntImagePointer       m_VisitedNeighborhood;
-  RealImagePointer      m_PixelOutput;
-  NeighborhoodType      m_Neighborhood;
-  ConnectionListType    m_Connections;
-  ShapeTreePointer      m_GlobalTree;
-  PointPlaneListType    m_PointsInShape;
-        
+  int iWidth;
+  int iHeight;
+  int iMinArea; 
+  int iMaxArea; 
+  int iAreaImage; 
+  int iHalfAreaImage; 
+  int iPerimeterImage;
+  int iExploration;  /* Used to avoid reinitializing images */
+  Point_plane* tabPointsInShape;
+  int** tabtabVisitedNeighbors; /* Exterior boundary */
+  Shapes* pGlobalTree;
+  int iAtBorder; /* #points meeting at border of image */
+          
 };
 } // end namespace otb
 

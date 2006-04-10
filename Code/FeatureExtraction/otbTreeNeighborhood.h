@@ -16,6 +16,8 @@
 #pragma warning ( disable : 4786 )
 #endif
 
+#include "otbShape.h"
+
 namespace otb
 {
 
@@ -26,48 +28,69 @@ namespace otb
  *
  * \ingroup TreeNeighborhoodObjects
  */
- 
-class TreeNeighborhood 
+
+class Neighbor
 {
 public:
-    
-  typedef enum  {AMBIGUOUS, MIN, MAX, INVALID} TypeOfTree;
-  
-  
-  typedef struct {
-	int                        x;
-	int                        y;
-	float                      value;
-  } PointType;
-  
-  typedef std::vector<PointType>     NeighborType;
-  typedef TreeNeighborhood           TreeNeighborhoodType;
-  void Init(int iMaxArea);
-  void Init(int iMaxArea,int iWidth,int iHeight);
-  void ReInit(TypeOfTree type);
-  void Add(int x, int y,float value);
-  void Remove();
+  Point_plane point;    /* Neighbor pixel */
+  float       value;    /* Its gray level */
+  Neighbor() {};
+  ~Neighbor() {};
 
-  TreeNeighborhood();
-  virtual ~TreeNeighborhood() {m_tabPoints.clear();}
-  void Free();
-  
-  
-  void SetSize(int Taille);
-  const int ORDER_MAX(int k,int l);
-  const int ORDER_MIN(int k,int l);
-  const void SWAP(int k,int l);
-  const int ORDER_MAX2(int k,int l);
-  const int ORDER_MIN2(int k,int l); 
-  void FixUp();
-  void FixDown();
+protected:
 
-  NeighborType  m_tabPoints;
-  int           m_NbPoints;
-  TypeOfTree    m_type;
-  float         m_otherBound;
+private:
 
 };
+
+class Neighborhood
+{
+public:
+  typedef enum  {AMBIGUOUS, MIN, MAX, INVALID} TypeOfTree;
+
+  Neighbor   *tabPoints; /* The array of neighbors, organized as a binary tree */
+  int        iNbPoints;  /* The size of the previous arrays */
+  TypeOfTree type;       /* max- or min- oriented heap? */
+  float      otherBound; /* Min gray level if max-oriented, max if min-oriented */
+
+  void reinit_neighborhood(TypeOfTree type);
+  void init_neighborhood(int iMaxArea,int iWidth,int iHeight);
+  void free_neighborhood();
+
+  int ORDER_MAX(int k,int l)  { return (tabPoints[k].value > tabPoints[l].value); };
+  int ORDER_MIN(int k,int l)  { return (tabPoints[k].value < tabPoints[l].value); };
+  int ORDER_MAX2(int k,int l) { return (tabPoints[k].value >= tabPoints[l].value); };
+  int ORDER_MIN2(int k,int l) { return (tabPoints[k].value <= tabPoints[l].value); };
+  void SWAP(int k,int l){ tabPoints[0] = tabPoints[k];
+                          tabPoints[k] = tabPoints[l];
+			  tabPoints[l] = tabPoints[0]; };
+
+  void fix_up();
+  void fix_down();
+
+  Neighborhood() {};
+  ~Neighborhood() {};
+		    
+protected:
+
+private:
+};
+
+
+class Connection
+{
+public:
+  Shape *shape; /* Largest shape of the monotone section */
+  float level;  /* Connection level */
+  Connection() {};
+  ~Connection() {};
+
+protected:
+
+private:
+
+};
+ 
 
 } // end namespace otb
 

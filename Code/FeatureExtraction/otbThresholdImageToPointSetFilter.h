@@ -17,7 +17,7 @@
 namespace otb
 {
 
-/** \class ThrsholdImageToPointSetFilter
+/** \class ThresholdImageToPointSetFilter
  *
  */
 

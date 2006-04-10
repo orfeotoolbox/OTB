@@ -63,10 +63,10 @@ public:
   DataObjectPointer  MakeOutput(unsigned int idx);
 
   /** Set the input image of this process object.  */
-  void SetInput(unsigned int idx, const InputImageType *input);
+  void SetInput(const InputImageType *input);
 
   /** Get the input image of this process object.  */
-  const InputImageType * GetInput(unsigned int idx);
+  const InputImageType * GetInput(void);
 
   /** Get the output Mesh of this process object.  */
   OutputTreeType * GetOutput(void);

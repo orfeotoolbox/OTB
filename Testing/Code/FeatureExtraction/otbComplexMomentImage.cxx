@@ -36,28 +36,15 @@ int otbComplexMomentImage( int argc, char ** argv )
         typedef std::complex<float>                                           ComplexType;
 	typedef otb::ComplexMomentImageFunction<InputImageType,ComplexType>   CMType;
   
-        InputImageType::RegionType   region;
-        InputImageType::SizeType     size;
-        InputImageType::IndexType    start;
-
-        start.Fill( 0 );
-        size[0] = 50;
-        size[1] = 50;
 
         ReaderType::Pointer reader         = ReaderType::New();
 	CMType::Pointer function =CMType::New();
 	
         reader->SetFileName( inputFilename  );
-	
-	InputImageType::Pointer image = reader->GetOutput();
 
-        region.SetIndex( start );
-        region.SetSize( size );
+	reader->Update();
+	function->SetInputImage( reader->GetOutput() );
 	
-	image->SetRegions(region);
-	image->Update();
-	
-	function->SetInputImage( image );
 	function->SetQ(q);
 	function->SetP(p);
 	
@@ -69,6 +56,13 @@ int otbComplexMomentImage( int argc, char ** argv )
 	
         Result = function->EvaluateAtIndex( index );
         std::cout << "function->EvaluateAtIndex( index ): " << Result << std::endl;
+
+	std::cout << " Traitement local:" << std::endl;
+
+	function->SetNeighborhoodRadius(3);
+        Result = function->EvaluateAtIndex( index );
+        std::cout << "function->EvaluateAtIndex( index ): " << Result << std::endl;
+
 	
     } 
   catch( itk::ExceptionObject & err ) 

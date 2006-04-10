@@ -22,7 +22,6 @@
 #include "otbTreeSource.h"
 #include "otbImageToTreeFilter.h"
 
-
 #include "otbFlst.h"
 #include "itkTreeContainer.h"
 
@@ -34,6 +33,7 @@ int otbFlstTest( int argc, char ** argv )
         const char * outputFilename = argv[2];
 
         typedef unsigned char                                   InputPixelType;
+//        typedef float                                   	InputPixelType;
         typedef unsigned char   	                        OutputPixelType;
 	typedef float						RealPixelType;
         const   unsigned int        	                        Dimension = 2;
@@ -59,19 +59,6 @@ int otbFlstTest( int argc, char ** argv )
         typedef  itk::TreeContainer< PathType >          OutputTreeType;
         typedef  OutputTreeType::Pointer        OutputTreePointerType;
 
-
-
-	// Tester les constructeurs des différentes classes mises en oeuvre: 
-//        TreeSourceType:: Pointer TreeSourceTest;
-//        std::cout<<"AAAAAAAAAAAAAAA" <<std::endl;
-//	TreeSourceTest = TreeSourceType::New();
-	
-//        std::cout<<"AAAAAAAAAAAAAAA" <<std::endl;
-//	TreeSourceTest->AllocateShapeTree(100,1000,5.0);
-//	TreeSourceTest->DeAllocateShapeTree();
-    
-//        TreeFilterType::Pointer TreeFilterTest;
-//        TreeFilterTest = TreeFilterType::New();
 	
 	FlstType::Pointer FlstTest;
 
@@ -84,15 +71,10 @@ int otbFlstTest( int argc, char ** argv )
 	OutputTreeType  *FlstResult;
 	reader->Update();
 		
-	FlstTest->SetInput( 0, reader->GetOutput() );	
+	FlstTest->SetInput( reader->GetOutput() );
+		
 	FlstTest->Update(); 
 	
-#if 0
-
-	writer->SetInput(reader->GetOutput());
-	writer->Update();
-	
-#endif
   
     } 
   catch( itk::ExceptionObject & err ) 

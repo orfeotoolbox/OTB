@@ -66,11 +66,11 @@ ImageToTreeFilter<TInputImage,TOutputTree>
 template <class TInputImage, class TOutputTree>
 void 
 ImageToTreeFilter<TInputImage,TOutputTree>
-::SetInput(unsigned int idx,const InputImageType *input)
+::SetInput(const InputImageType *input)
 {
   // process object is not const-correct, the const_cast
   // is required here.
-  this->itk::ProcessObject::SetNthInput(idx, 
+  this->itk::ProcessObject::SetNthInput(0, 
                                    const_cast< InputImageType * >(input) );
 }
 
@@ -82,10 +82,10 @@ ImageToTreeFilter<TInputImage,TOutputTree>
 template <class TInputImage, class TOutputTree>
 const typename ImageToTreeFilter<TInputImage,TOutputTree>::InputImageType *
 ImageToTreeFilter<TInputImage,TOutputTree>
-::GetInput(unsigned int idx) 
+::GetInput(void) 
 {
   return dynamic_cast<const InputImageType*>
-    (this->itk::ProcessObject::GetInput(idx));
+    (this->itk::ProcessObject::GetInput(0));
 }
 
  
