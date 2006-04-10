@@ -3,17 +3,17 @@ PROJECT(IOExamples)
 ADD_EXECUTABLE(ImageReadWrite ImageReadWrite.cxx )
 TARGET_LINK_LIBRARIES(ImageReadWrite OTBCommon OTBIO ITKCommon ITKIO)
 
-#ADD_EXECUTABLE(ImageReadCastWrite ImageReadCastWrite.cxx )
-#TARGET_LINK_LIBRARIES(ImageReadCastWrite ITKCommon ITKIO)
+ADD_EXECUTABLE(ImageReadCastWrite ImageReadCastWrite.cxx )
+TARGET_LINK_LIBRARIES(ImageReadCastWrite OTBCommon OTBIO ITKCommon ITKIO)
 
 #ADD_EXECUTABLE(ImageReadExtractWrite ImageReadExtractWrite.cxx )
-#TARGET_LINK_LIBRARIES(ImageReadExtractWrite ITKCommon ITKIO)
+#TARGET_LINK_LIBRARIES(ImageReadExtractWrite OTBCommon OTBIO ITKCommon ITKIO)
 
-#ADD_EXECUTABLE(ImageReadRegionOfInterestWrite ImageReadRegionOfInterestWrite.cxx )
-#TARGET_LINK_LIBRARIES(ImageReadRegionOfInterestWrite ITKCommon ITKIO)
+ADD_EXECUTABLE(ImageReadRegionOfInterestWrite ImageReadRegionOfInterestWrite.cxx )
+TARGET_LINK_LIBRARIES(ImageReadRegionOfInterestWrite OTBCommon OTBIO ITKCommon ITKIO)
 
-#ADD_EXECUTABLE(RGBImageReadWrite RGBImageReadWrite.cxx )
-#TARGET_LINK_LIBRARIES(RGBImageReadWrite ITKCommon ITKIO)
+ADD_EXECUTABLE(RGBImageReadWrite RGBImageReadWrite.cxx )
+TARGET_LINK_LIBRARIES(RGBImageReadWrite OTBCommon OTBIO ITKCommon ITKIO)
 
 #ADD_EXECUTABLE(CovariantVectorImageWrite CovariantVectorImageWrite.cxx )
 #TARGET_LINK_LIBRARIES(CovariantVectorImageWrite ITKCommon ITKIO)
@@ -27,8 +27,14 @@ TARGET_LINK_LIBRARIES(ImageReadWrite OTBCommon OTBIO ITKCommon ITKIO)
 #ADD_EXECUTABLE(VectorImageReadWrite VectorImageReadWrite.cxx )
 #TARGET_LINK_LIBRARIES(VectorImageReadWrite ITKCommon ITKIO)
 
-#ADD_EXECUTABLE(ComplexImageReadWrite ComplexImageReadWrite.cxx )
-#TARGET_LINK_LIBRARIES(ComplexImageReadWrite ITKCommon ITKIO)
+ADD_EXECUTABLE(ComplexImageReadWrite ComplexImageReadWrite.cxx )
+TARGET_LINK_LIBRARIES(ComplexImageReadWrite OTBCommon OTBIO ITKCommon ITKIO)
+
+ADD_EXECUTABLE(MultibandImageReadWrite MultibandImageReadWrite.cxx )
+TARGET_LINK_LIBRARIES(MultibandImageReadWrite OTBCommon OTBIO ITKCommon ITKIO)
+
+ADD_EXECUTABLE(ExtractROI ExtractROI.cxx )
+TARGET_LINK_LIBRARIES(ExtractROI OTBCommon OTBIO ITKCommon ITKIO)
 
 #ADD_EXECUTABLE(ImageReadExportVTK ImageReadExportVTK.cxx )
 #TARGET_LINK_LIBRARIES(ImageReadExportVTK ITKCommon ITKIO)

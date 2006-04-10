@@ -15,8 +15,19 @@
 
 //  Software Guide : BeginLatex
 //
-//  Nous commençons par introduire les fichiers d'ent\^etes utilis\'es.
-//  \index{itk::ExtractROI!header}
+//  This example shows the use of the
+//  \doxygen{otb::MultiChannelExtractROI} and
+//  \doxygen{otb::MultiToMonoChannelExtractROI} which allow the
+//  extraction of ROIs from multiband images stored into
+//  \doxygen{otb::VectorImage}s. The first one povides a Vector Image
+//  as output, while the second one provides a classical
+//  \doxygen{otb::Image} with a scalar pixel type. The present example
+//  shows how to extract a ROI from a 4-band SPOT 5 image and to
+//  produce a first multi-band 3-channel image and a second
+//  mono-channel one for the SWIR band.
+
+//  We start by including the needed header files.
+//  \index{otb::ExtractROI!header}
 //
 //  Software Guide : EndLatex 
 
@@ -45,14 +56,12 @@ int main( int argc, char * argv[] )
 
 //  Software Guide : BeginLatex
 //
-//  Les param\`etres d'entr\'ee d\'efinissent le nom des images d'entr\'ee et de sortie
-//  ainsi que les coordonn\'ees du point d'origine et la taille de la r\'egion \`a extraire.
+//  The program arguments define the image file names as well as the
+//  rectangular area to be extracted.
 //
 //  Software Guide : EndLatex
 
 
-  // Noms des images d'entr\'ee et de sortie
-  // Definition de la ROI
   
   // Software Guide : BeginCodeSnippet
   const char * inputFilename  = argv[1];
@@ -67,7 +76,7 @@ int main( int argc, char * argv[] )
 
   //  Software Guide : BeginLatex
   //
-  //  On d\'efinit ensuite le type de pixel de l'image d'entr\'ee et des images de sortie.
+  //  As usual, we define the input and output pixel types.
   //
   //  Software Guide : EndLatex 
 
@@ -76,18 +85,14 @@ int main( int argc, char * argv[] )
   typedef   unsigned char  OutputPixelType;
   // Software Guide : EndCodeSnippet
 
-  // ***************************************************************************
-  // *************** Traitement de l'image trois canaux RGB ********************
-  // ***************************************************************************
       
   //  Software Guide : BeginLatex
   //
-  //  Dans un premier temps, on s'int\'eresse \`a la g\'en\'eration d'une image
-  //  multi canal de la r\'egion extraite. 
-  // 
-  //  Le type de la r\'egion est d\'efinie par la classe otb::MultiChannelExtractROI.
-  //  Il est important de noter que c'est bien le type du pixel qui est utilis\'e comme
-  //  param\`etre de la classe template d'extraction d'une r\'egion.  
+  //  First of all, we extract the multiband part by using the
+  //  \doxygen{otb::MultiChannelExtractROI} class, which is templated
+  //  over the input and output pixel types. This class in not
+  //  templated over the images types in order to force these images
+  //  to be of \doxygen{otb::VectorImage} type.
   //
   //  Software Guide : EndLatex 
  
@@ -98,8 +103,8 @@ int main( int argc, char * argv[] )
 
   //  Software Guide : BeginLatex
   //
-  //  La r\'egion est cr\'e\'ee par l'op\'erateur New() de la classe otb::MultiChannelExtractROI
-  //  \`a laquelle on attribue les coordonn\'ees du point d'origine et sa taille.
+  //  We create the extractor filter by using the \code{New} method of
+  //  the class and we set its parameters.
   //
   //  Software Guide : EndLatex
   
@@ -114,9 +119,10 @@ int main( int argc, char * argv[] )
    
   //  Software Guide : BeginLatex
   //
-  //  Reste \`a d\'efinir les canaux utilis\'es pour g\'en\'erer l'image de sortie. 
-  //  Dans le cadre de notre exemple, les canaux 1 \`a 3 de l'image initiale quatre 
-  //  canaux sont utilis\'es pour g\'en\'erer l'image finale trois canaux RGB. 
+  //  We must tell the filter which are the channels to be used. When
+  //  selecting contiguous bands, we can use the
+  //  \code{SetFirstChannel} and the \code{SetLastChannel}. Otherwise,
+  //  we select individual channels by using the \code{SetChannel} method.
   //
   //  Software Guide : EndLatex
 
@@ -127,8 +133,7 @@ int main( int argc, char * argv[] )
 
   //  Software Guide : BeginLatex
   //
-  //  Comme pour la classe itk::Image, on d\'efinit un reader et un writer sur les images
-  //  dont le type est d\'efini dans la classe otb::MultiChannelExtractROI.  
+  //  We will use the OTB readers and writers for file access.
   //
   //  Software Guide : EndLatex
 
@@ -142,21 +147,21 @@ int main( int argc, char * argv[] )
 
   //  Software Guide : BeginLatex
   //
-  //  On assigne ensuite au reader et au writer le nom des images d'entr\'ee et de sortie.
+  //  Since the number of bands of the input image is dynamically set
+  //  at runtime, the \code{Update} method of the reader must be
+  //  called before using the extractor filter.
   //
   //  Software Guide : EndLatex  
 
   // Software Guide : BeginCodeSnippet 
   reader->SetFileName( inputFilename  );
-  reader->Update(); //Necessaire pour connaitre le nombre de canaux dans l'image
+  reader->Update(); 
   writer->SetFileName( outputFilenameRGB );
   // Software Guide : EndCodeSnippet
 
   //  Software Guide : BeginLatex
   //
-  //  L'image obtenue par le reader est pass\'ee comme param\`etre d'entr\'ee de la 
-  //  classe otb::MultiChannelExtractROI et la sortie du filtre est pass\'ee 
-  //  au writer pour g\'en\'erer l'image finale. 
+  //  We can then build the pipeline as usual.
   //
   //  Software Guide : EndLatex  
      
@@ -168,8 +173,8 @@ int main( int argc, char * argv[] )
 
   //  Software Guide : BeginLatex
   //
-  //  Le filtre n'est ex\'ecut\'e qu'\`a l'appel de la m\'ethode Update() qui met
-  //  en route tout le processus de pipeline.
+  //  And execute the pipeline by calling the \code{Update} method of
+  //  the writer.
   //
   //  Software Guide : EndLatex 
     
@@ -177,24 +182,23 @@ int main( int argc, char * argv[] )
   writer->Update(); 
   // Software Guide : EndCodeSnippet
 
-  // *********************************************************************
-  // *************** Traitement de l'image mono canal ********************
-  // *********************************************************************
 
   //  Software Guide : BeginLatex
   //
-  //  La proc\'edure d'utilisation de la classe otb::MultiToMonoChannelExtractROI est 
-  //  similaire \`a celle d\'etaill\'ee ci-dessus pour la classe otb::MultiChannelExtractROI.
+  //  The usage of the \doxygen{otb::MultiToMonoChannelExtractROI} is
+  //  similar to the one of the \doxygen{otb::MultiChannelExtractROI}
+  //  described above.
   //
-  //  Le but de ce deuxi\`eme filtre est d'extraire une r\'egion d'une image multi canaux et
-  //  d'en g\'en\'erer une image mono canal.
+  //  The goal now is to extract an ROI from a multi-band image and
+  //  generate a mono-channel image as output.
   //
-  //  L'int\^eret du filtre MultiToMonoChannelExtractROI par rapport au filtre MultiChanelExtractROI
-  //  est qu'au lieu de g\'en\'erer en sortie des images de type itk::VectorImage, type encore 
-  //  tr\`es peu utilis\'e par les classes itk, il produit de simple itk::image. 
-  //
-  //  Le type du pixel est toujours utilis\'e comme param\`etre d'entr\'ee de cette nouvelle
-  //  classe template comme on peut le voir ci-dessous
+  //  We could use the \doxygen{otb::MultiChannelExtractROI} and
+  //  select a single channel, but using the
+  //  \doxygen{otb::MultiToMonoChannelExtractROI} we generate a
+  //  \doxygen{otb::Image} instead of an
+  //  \doxygen{otb::VectorImage}. This is useful from a computing and
+  //  memory usage point of view.
+  //  This class is also templated over the pixel types.
   //
   //  Software Guide : EndLatex 
  
@@ -212,7 +216,7 @@ int main( int argc, char * argv[] )
 
   //  Software Guide : BeginLatex
   //
-  // mais cette fois, seul un canal est attribu\'e au filtre d'extraction de la r\'egion.
+  // For this filter, only one output channel has to be selected.
   //
   //  Software Guide : EndLatex 
   
@@ -238,7 +242,8 @@ int main( int argc, char * argv[] )
   // \begin{figure}
   // \center
   // \includegraphics[width=0.44\textwidth]{IMAGERY_SSECH.eps}
-  // \itkcaption[Image SPOT5 initale]{Image SPOT5 initiale, sous \'echantillon\'ee (600x600).}
+  // \itkcaption[Initial SPOT 5 image]{Quicklook of the original SPOT
+  // 5 image.}
   // \label{fig:IMAGERY_SSECH}
   // \end{figure}
   //
@@ -246,16 +251,14 @@ int main( int argc, char * argv[] )
   // \center
   // \includegraphics[width=0.44\textwidth]{ROI_IMAGERY_RGB.eps}
   // \includegraphics[width=0.44\textwidth]{ROI_IMAGERY_MIR.eps}
-  // \itkcaption[ROI Image SPOT5]{R\'esultat de l'extraction d'une r\'egion d'int\'er\^et
-  // sur une image SPOT5, quatre canaux, sous \'echantillon\'ee. La figure de droite est 
-  // une image RGB g\'en\'er\'ee par la classe otb::otbMultiChannelExtractROI. La figure de
-  // gauche est une image mono canal g\'en\'er\'ee par la classe 
-  // otb::otbMultiToMonoChannelExtractROI.} 
+  // \itkcaption[ROI of a SPOT5 image]{Result of the
+  // extraction. Left: 3-channel image. Right: mono-band image.} 
   // \label{fig:ROI_IMAGERY}
   // \end{figure}
   //
-  //  La figure \ref{fig:ROI_IMAGERY} illustre le résultat de l'application de ces deux
-  //  filtres sur l'image SPOT5 pr\'esent\'ee ci-dessus.
+  //  Figure \ref{fig:ROI_IMAGERY} illustrates the result of the
+  //  application of both extraction filters on the image presented in
+  //  figure \ref{fig:IMAGERY_SSECH}.
   //
   //  Software Guide : EndLatex
 
