@@ -111,7 +111,13 @@ ADD_TEST(feTuLineRatioLinear ${FEATUREEXTRACTION_TESTS}
 	${INPUTDATA}/poupees_1canal.hd
 	${TEMP}/feFiltreLineRatioLinear_poupees_2_3.hd
 	2 3)
-		
+
+ADD_TEST(feTuLineRatioLinearDir ${FEATUREEXTRACTION_TESTS}  
+        otbLineRatioDetectorLinearDirection
+	${INPUTDATA}/poupees_1canal.hd
+	${TEMP}/feFiltreLineRatioLinear_poupees_dir_2_3.hd
+	2 3)
+			
 ADD_TEST(feTuLineRatio ${FEATUREEXTRACTION_TESTS}  
         otbLineRatioDetector
 	${INPUTDATA}/poupees_1canal.hd
@@ -126,7 +132,13 @@ ADD_TEST(feTuLineCorrelationLinear ${FEATUREEXTRACTION_TESTS}
 	${INPUTDATA}/poupees_1canal.hd
 	${TEMP}/feFiltreLineCorrelationLinear_poupees_2_3.hd
 	2 3)
-	
+      
+ADD_TEST(feTuLineCorrelationLinearDir ${FEATUREEXTRACTION_TESTS}  
+        otbLineCorrelationDetectorLinearDirection
+	${INPUTDATA}/poupees_1canal.hd
+	${TEMP}/feFiltreLineCorrelationLinear_poupees_dir_2_3.hd
+	2 3)
+		
 ADD_TEST(feTuLineCorrelation ${FEATUREEXTRACTION_TESTS}  
         otbLineCorrelationDetector
 	${INPUTDATA}/poupees_1canal.hd
@@ -216,9 +228,11 @@ otbTouziEdgeDetector.cxx
 otbTouziEdgeDetectorDirection.cxx
 otbLineRatioDetectorNew.cxx
 otbLineRatioDetectorLinear.cxx
+otbLineRatioDetectorLinearDirection.cxx
 otbLineRatioDetector.cxx
 otbLineCorrelationDetectorNew.cxx
 otbLineCorrelationDetectorLinear.cxx
+otbLineCorrelationDetectorLinearDirection.cxx
 otbLineCorrelationDetector.cxx
 otbAssociativeSymmetricalSumNew.cxx
 otbAssociativeSymmetricalSum.cxx

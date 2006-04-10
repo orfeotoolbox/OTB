@@ -5,7 +5,7 @@
   Language  :   C++
   Date      :   20 mars 2006
   Version   :   
-  Role      :   Test du filtre de detection de contours (image direction) 
+  Role      :   Test du filtre de detection de contours (image de direction) 
   $Id$
 
 =========================================================================*/

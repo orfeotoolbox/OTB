@@ -14,4 +14,7 @@ REGISTER_TEST(otbMultiChannelExtractROI );
 REGISTER_TEST(otbMultiToMonoChannelExtractROI );
 REGISTER_TEST(otbLineSpatialObjectList);
 REGISTER_TEST(otbPointSetSourceTest);
+REGISTER_TEST(otbDrawLineSpatialObjectNew);
+REGISTER_TEST(otbDrawLineSpatialObject);
+REGISTER_TEST(otbDrawLineSpatialObjectListNew);
 }
