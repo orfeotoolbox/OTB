@@ -20,8 +20,8 @@
 
 //  Software Guide : BeginLatex
 //
-//  The \doxygen{Mesh} class is intended to represent shapes in space.  It
-//  derives from the \doxygen{PointSet} class and hence inherits all the
+//  The \doxygen{itk::Mesh} class is intended to represent shapes in space.  It
+//  derives from the \doxygen{itk::PointSet} class and hence inherits all the
 //  functionality related to points and access to the pixel-data associated
 //  with the points.  The mesh class is also n-dimensional which
 //  allows a great flexibility in its use.
@@ -86,7 +86,7 @@ int main(int, char *[])
   //  Software Guide : EndLatex 
   
   // Software Guide : BeginCodeSnippet
-  const unsigned int Dimension = 3;
+  const unsigned int Dimension = 2;
   typedef itk::Mesh< PixelType, Dimension >   MeshType;
   // Software Guide : EndCodeSnippet
 
@@ -127,10 +127,10 @@ int main(int, char *[])
   MeshType::PointType p2;
   MeshType::PointType p3;
 
-  p0[0]= -1.0; p0[1]= -1.0; p0[2]= 0.0; // first  point ( -1, -1, 0 )
-  p1[0]=  1.0; p1[1]= -1.0; p1[2]= 0.0; // second point (  1, -1, 0 )
-  p2[0]=  1.0; p2[1]=  1.0; p2[2]= 0.0; // third  point (  1,  1, 0 )
-  p3[0]= -1.0; p3[1]=  1.0; p3[2]= 0.0; // fourth point ( -1,  1, 0 )
+  p0[0]= -1.0; p0[1]= -1.0; // first  point ( -1, -1 )
+  p1[0]=  1.0; p1[1]= -1.0; // second point (  1, -1 )
+  p2[0]=  1.0; p2[1]=  1.0; // third  point (  1,  1 )
+  p3[0]= -1.0; p3[1]=  1.0; // fourth point ( -1,  1 )
   // Software Guide : EndCodeSnippet
 
 

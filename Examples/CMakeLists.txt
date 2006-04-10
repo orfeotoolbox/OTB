@@ -6,4 +6,5 @@ SUBDIRS(
   BasicFilters
   FeatureExtraction
   DataRepresentation
+  IO
 )

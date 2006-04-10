@@ -1,0 +1,70 @@
+PROJECT(IOExamples)
+
+ADD_EXECUTABLE(ImageReadWrite ImageReadWrite.cxx )
+TARGET_LINK_LIBRARIES(ImageReadWrite OTBCommon OTBIO ITKCommon ITKIO)
+
+#ADD_EXECUTABLE(ImageReadCastWrite ImageReadCastWrite.cxx )
+#TARGET_LINK_LIBRARIES(ImageReadCastWrite ITKCommon ITKIO)
+
+#ADD_EXECUTABLE(ImageReadExtractWrite ImageReadExtractWrite.cxx )
+#TARGET_LINK_LIBRARIES(ImageReadExtractWrite ITKCommon ITKIO)
+
+#ADD_EXECUTABLE(ImageReadRegionOfInterestWrite ImageReadRegionOfInterestWrite.cxx )
+#TARGET_LINK_LIBRARIES(ImageReadRegionOfInterestWrite ITKCommon ITKIO)
+
+#ADD_EXECUTABLE(RGBImageReadWrite RGBImageReadWrite.cxx )
+#TARGET_LINK_LIBRARIES(RGBImageReadWrite ITKCommon ITKIO)
+
+#ADD_EXECUTABLE(CovariantVectorImageWrite CovariantVectorImageWrite.cxx )
+#TARGET_LINK_LIBRARIES(CovariantVectorImageWrite ITKCommon ITKIO)
+
+#ADD_EXECUTABLE(CovariantVectorImageRead CovariantVectorImageRead.cxx )
+#TARGET_LINK_LIBRARIES(CovariantVectorImageRead ITKCommon ITKIO)
+
+#ADD_EXECUTABLE(CovariantVectorImageExtractComponent CovariantVectorImageExtractComponent.cxx )
+#TARGET_LINK_LIBRARIES(CovariantVectorImageExtractComponent ITKCommon ITKIO)
+
+#ADD_EXECUTABLE(VectorImageReadWrite VectorImageReadWrite.cxx )
+#TARGET_LINK_LIBRARIES(VectorImageReadWrite ITKCommon ITKIO)
+
+#ADD_EXECUTABLE(ComplexImageReadWrite ComplexImageReadWrite.cxx )
+#TARGET_LINK_LIBRARIES(ComplexImageReadWrite ITKCommon ITKIO)
+
+#ADD_EXECUTABLE(ImageReadExportVTK ImageReadExportVTK.cxx )
+#TARGET_LINK_LIBRARIES(ImageReadExportVTK ITKCommon ITKIO)
+
+#ADD_EXECUTABLE(RGBImageSeriesReadWrite RGBImageSeriesReadWrite.cxx )
+#TARGET_LINK_LIBRARIES(RGBImageSeriesReadWrite ITKCommon ITKIO)
+
+#ADD_EXECUTABLE(ImageSeriesReadWrite ImageSeriesReadWrite.cxx )
+#TARGET_LINK_LIBRARIES(ImageSeriesReadWrite ITKCommon ITKIO)
+
+#ADD_EXECUTABLE(ImageReadImageSeriesWrite ImageReadImageSeriesWrite.cxx )
+#TARGET_LINK_LIBRARIES(ImageReadImageSeriesWrite ITKCommon ITKIO)
+
+#ADD_EXECUTABLE(DicomSeriesReadImageWrite DicomSeriesReadImageWrite.cxx )
+#TARGET_LINK_LIBRARIES(DicomSeriesReadImageWrite ITKCommon ITKIO)
+
+#ADD_EXECUTABLE(DicomSeriesReadImageWrite2 DicomSeriesReadImageWrite2.cxx )
+#TARGET_LINK_LIBRARIES(DicomSeriesReadImageWrite2 ITKCommon ITKIO)
+
+#ADD_EXECUTABLE(DicomSeriesReadPrintTags DicomSeriesReadPrintTags.cxx )
+#TARGET_LINK_LIBRARIES(DicomSeriesReadPrintTags ITKCommon ITKIO)
+
+#ADD_EXECUTABLE(DicomImageReadPrintTags DicomImageReadPrintTags.cxx )
+#TARGET_LINK_LIBRARIES(DicomImageReadPrintTags ITKCommon ITKIO)
+
+#ADD_EXECUTABLE(DicomImageReadWrite DicomImageReadWrite.cxx )
+#TARGET_LINK_LIBRARIES(DicomImageReadWrite ITKCommon ITKIO)
+
+#ADD_EXECUTABLE(DicomImageReadChangeHeaderWrite DicomImageReadChangeHeaderWrite.cxx )
+#TARGET_LINK_LIBRARIES(DicomImageReadChangeHeaderWrite ITKCommon ITKIO)
+
+#ADD_EXECUTABLE(DicomSeriesReadSeriesWrite DicomSeriesReadSeriesWrite.cxx )
+#TARGET_LINK_LIBRARIES(DicomSeriesReadSeriesWrite ITKCommon ITKIO)
+
+#ADD_EXECUTABLE(DicomPrintPatientInformation DicomPrintPatientInformation.cxx )
+#TARGET_LINK_LIBRARIES(DicomPrintPatientInformation ITKCommon ITKIO)
+
+#ADD_EXECUTABLE(TransformReadWrite TransformReadWrite.cxx )
+#TARGET_LINK_LIBRARIES(TransformReadWrite ITKCommon ITKIO)

@@ -22,7 +22,9 @@
 //
 // This example illustrates how to use the \doxygen{PolyLineParametricPath}.
 // This class will typically be used for representing in a concise way the
-// output of an image segmentation algorithm in 2D.  The
+// output of an image segmentation algorithm in 2D. See section
+// \ref{sec:Alignments} for an example in the context of alignment
+// detection.  The 
 // \code{PolyLineParametricPath} however could also be used for representing
 // any open or close curve in N-Dimensions as a linear piece-wise approximation.
 // 
@@ -33,7 +35,7 @@
 
 
 #include "itkImage.h"
-#include "itkImageFileReader.h"
+#include "otbImageFileReader.h"
 
 // Software Guide : BeginCodeSnippet
 #include "itkPolyLineParametricPath.h"
@@ -53,7 +55,7 @@ int main(int argc, char * argv [] )
 
   // Software Guide : BeginLatex
   // 
-  // The path is instantiated over the dimension of the image. In this case 2D. //
+  // The path is instantiated over the dimension of the image.
   // Software Guide : EndLatex 
 
   // Software Guide : BeginCodeSnippet 
@@ -65,7 +67,7 @@ int main(int argc, char * argv [] )
   // Software Guide : EndCodeSnippet 
 
 
-  typedef itk::ImageFileReader< ImageType >    ReaderType;
+  typedef otb::ImageFileReader< ImageType >    ReaderType;
 
   ReaderType::Pointer   reader = ReaderType::New();
 
