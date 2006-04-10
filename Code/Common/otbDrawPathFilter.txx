@@ -69,7 +69,7 @@ DrawPathFilter<TInputImage,TInputPath,TOutputImage>
 
   for ( outputIt.GoToBegin(); !outputIt.IsAtEnd(); ++outputIt,++inputIt)
     {
-     outputIt.Set( inputIt.Get() );
+     outputIt.Set( static_cast<OutputImagePixelType>( inputIt.Get() ) );
     }
 
   typename InputImageType::SizeType    Taille;
@@ -132,7 +132,7 @@ DrawPathFilter<TInputImage,TInputPath,TOutputImage>
        }
        else
        {
-       if(DeltaX>0)
+       if(DeltaX>0.)
          {
 	 IndexOut[1] = static_cast<int>(Ymin); 
 	 for(RealType j = Xmin; j<=Xmax;j++)

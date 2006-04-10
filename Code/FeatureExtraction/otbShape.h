@@ -127,6 +127,21 @@ public:
   void   mw_change_shapes(int nrow,int ncol,float value);     
   Shape* mw_get_smallest_shape(int iX,int iY);
 
+
+/* For each shape, find its number of proper pixels */
+  void compute_proper_pixels(int *tabNbOfProperPixels);
+
+/* Allocate the array of pixels of each shape. Thanks to the tree structure,
+we allocate only memory for the pixels of the root, and other arrays are
+just pointers */
+  void  allocate_pixels(int* tabNbOfProperPixels);  
+  
+/* Associate to each shape its array of pixels. Fills the field PIXELS of
+the tree structure. From the command line, this function has no interest,
+since that field is not saved to the file. It is meant to be called from
+another module, when this field is needed */
+  void  flst_pixels();
+  
   Shapes()
     {
     the_shapes     = NULL;

@@ -773,17 +773,19 @@ Flst<TInputImage,TOutputTree>
   pTree->the_shapes[0].value = tabtabPixelsOutput[0][0];
   std::cout << "iAreaImage = " << iAreaImage <<std::endl;
   for(i = iAreaImage-1; i >= 0; i--)
-    if(tabConnections[i].shape != NULL) {
-        std::cout << "i : " << i<< std::endl;
-
+    if(tabConnections[i].shape != NULL) 
+      {
+      std::cout << "i : " << i << " Connections: " << tabConnections[i].shape<< std::endl;
+	
       assert(tabConnections[i].level == pTree->the_shapes[0].value);
       pTree->the_shapes->insert_children( tabConnections[i].shape);
-    }
+      }
+
   std::cout << " NbShapes : " << pGlobalTree->nb_shapes << std::endl;
 
   for (int NoShape = 0 ; NoShape <= pGlobalTree->nb_shapes ; NoShape++)
     {
-    std::cout << "Shape Area: " << pGlobalTree->the_shapes[NoShape].area << std::endl;
+    std::cout << "Shape Area: "<<NoShape <<" -->" << pGlobalTree->the_shapes[NoShape].area << std::endl;
     }
 
   delete[] tabConnections;
@@ -792,7 +794,7 @@ Flst<TInputImage,TOutputTree>
   free_region(); 
   free_output_image(tabtabPixelsOutput);
   
-  
+  pGlobalTree->flst_pixels();
 
   std::cout << "GenerateData() FINI !!" << std::endl;
   delete pGlobalTree;

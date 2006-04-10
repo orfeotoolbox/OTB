@@ -227,6 +227,95 @@ Shapes::mw_get_smallest_shape(int iX,int iY)
   return(sh);
 }
 
+void 
+Shapes::compute_proper_pixels(int *tabNbOfProperPixels)
+{
+  Shape *pShape;
+  int   *pNbOfProperPixels;
+  int   i;
+  
+  /* 1) Initialize by the area */
+  pShape = the_shapes + nb_shapes-1;
+  pNbOfProperPixels = tabNbOfProperPixels + nb_shapes-1;
+  for(i = nb_shapes-1; i >= 0; i--)
+    *pNbOfProperPixels-- = (pShape--)->area;
+  /* 2) For each shape, substract its area to its parent */
+  pShape = the_shapes + nb_shapes-1;
+  for(i = nb_shapes-1; i > 0; i--, pShape--)
+    tabNbOfProperPixels[pShape->parent - the_shapes] -= pShape->area;
+
+}
+
+void 
+Shapes::allocate_pixels(int* tabNbOfProperPixels)
+{
+  Point_plane  *tabPixelsOfRoot;
+  Shape        *pShape;
+  Shape        **tabpShapesOfStack;
+  int          i;
+  int          iIndex;
+  int          iSizeOfStack;
+
+  /* 1) Memory allocation */
+  tabPixelsOfRoot = the_shapes[0].pixels = new Point_plane[nrow*ncol];
+  if(tabPixelsOfRoot == NULL)
+    std::cerr << "allocate_pixels --> Allocation of pixels"<<std::endl;
+  tabpShapesOfStack = new Shape*[nb_shapes];
+  if(tabpShapesOfStack == NULL)
+    std::cerr << "allocate_pixels --> Allocation of stack"<< std::endl;
+
+  /* 2) Enumeration of the tree in preorder, using the stack */
+  pShape = &the_shapes[0];
+  iSizeOfStack = 0; 
+  i = 0;
+  while(1)
+    if(pShape != NULL) {
+      /* Write pixels of pShape */
+      pShape->pixels = &tabPixelsOfRoot[i];
+      iIndex = pShape - the_shapes;
+      i += tabNbOfProperPixels[iIndex];
+      tabpShapesOfStack[iSizeOfStack++] = pShape; /* Push */
+      pShape = pShape->child;
+    } else {
+      if(iSizeOfStack == 0)
+	break;
+      pShape = tabpShapesOfStack[--iSizeOfStack]->next_sibling; /* Pop */
+    }
+  delete[] tabpShapesOfStack;
+
+}
+
+
+void 
+Shapes::flst_pixels()
+{
+  Shape        **ppShape;
+  int          *tabNbOfProperPixels; /* For each shape, its number of proper pixels */
+  Point_plane  *pCurrentPoint;
+  int          i;
+  int          j; 
+  int          iIndex;
+
+  /* 1) Compute nb of proper pixels in each shape */
+  tabNbOfProperPixels = new int[nb_shapes];
+  if(tabNbOfProperPixels ==NULL)
+    std::cerr << "Allocation of array error" << std::endl;
+  compute_proper_pixels(tabNbOfProperPixels);
+
+  /* 2) Allocate array for the root and make others sub-arrays */
+  allocate_pixels(tabNbOfProperPixels);
+
+  /* 3) Fill the array */
+  ppShape = smallest_shape + ncol*nrow-1;
+  for(i = nrow-1; i >= 0; i--)
+    for(j = ncol-1; j >= 0; j--, ppShape--)
+      {
+	iIndex = (*ppShape) - the_shapes;
+	pCurrentPoint = &(*ppShape)->pixels[--tabNbOfProperPixels[iIndex]];
+	pCurrentPoint->x = j; pCurrentPoint->y = i;
+      }
+  delete[] tabNbOfProperPixels;
+}
 
 
 
