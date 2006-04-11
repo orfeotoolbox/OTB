@@ -7,4 +7,5 @@ SUBDIRS(
   FeatureExtraction
   DataRepresentation
   IO
+  Filtering
 )
