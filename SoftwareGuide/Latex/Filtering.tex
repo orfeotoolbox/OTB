@@ -1,40 +1,574 @@
 \chapter{Basic Filtering}
 
-Ce chapitre pr\'{e}sente des exemples de filtrages ........
+
+This chapter introduces the most commonly used filters found in OTB.
+Most of these filters are intended to process images. They will accept one or
+more images as input and will produce one or more images as output. OTB is
+based ITK's data pipeline architecture in which the output of one filter is
+passed as input to another filter. (See Section
+\ref{sec:DataProcessingPipeline} on page \pageref{sec:DataProcessingPipeline}
+for more information.)
 
 
-\section{Speckle reduction filters}
+\section{Thresholding}
+\ifitkFullVersion
+\label{sec:ThresholdingFiltering}
+\fi
+
+The thresholding operation is used to change or identify pixel values based
+on specifying one or more values (called the \emph{threshold} value). The
+following sections describe how to perform thresholding operations using
+OTB.
+
+\subsection{Binary Thresholding}
+\label{sec:BinaryThresholdingImageFilter}
+
+\ifitkFullVersion
+\input{BinaryThresholdImageFilter.tex}
+\fi
+
+\subsection{General Thresholding}
+\label{sec:ThresholdingImageFilter}
+
+\ifitkFullVersion
+\input{ThresholdImageFilter.tex}
+\fi
+
+
+
+
+%% \section{Casting and Intensity Mapping}
+%% \label{sec:CastingImageFilters}
+
+%% The filters discussed in this section perform pixel-wise intensity mappings.
+%% Casting is used to convert one pixel type to another, while intensity mappings
+%% also take into account the different intensity ranges of the pixel types.
+
+%% \subsection{Linear Mappings}
+%% \label{sec:IntensityLinearMapping}
+
+%% \ifitkFullVersion
+%% %\input{CastingImageFilters.tex}
+%% \fi
+
+%% \subsection{Non Linear Mappings}
+%% \label{sec:IntensityNonLinearMapping}
+
+%% The following filter can be seen as a variant of the casting filters. Its main
+%% difference is the use of a smooth and continuous transition function of
+%% non-linear form.
+
+%% \ifitkFullVersion
+%% %\input{SigmoidImageFilter.tex}
+%% \fi
+
+%% \section{Gradients}
+%% \label{sec:GradientFiltering}
+
+%% Computation of gradients is a fairly common operation in image processing. The
+%% term ``gradient'' may refer in some contexts to the gradient vectors and in
+%% others to the magnitude of the gradient vectors. ITK filters attempt to
+%% reduce this ambiguity by including the \emph{magnitude} term when
+%% appropriate. ITK provides filters for computing both the image of gradient
+%% vectors and the image of magnitudes.
+
+%% \subsection{Gradient Magnitude}
+%% \label{sec:GradientMagnitudeImageFilter}
+
+%% \ifitkFullVersion
+%% %\input{GradientMagnitudeImageFilter.tex}
+%% \fi
+
+%% \subsection{Gradient Magnitude With Smoothing}
+%% \label{sec:GradientMagnitudeRecursiveGaussianImageFilter}
+
+%% \ifitkFullVersion
+%% %\input{GradientMagnitudeRecursiveGaussianImageFilter.tex}
+%% \fi
+
+
+%% \subsection{Derivative Without Smoothing}
+%% \label{sec:DerivativeImageFilter}
+
+%% \ifitkFullVersion
+%% %\input{DerivativeImageFilter.tex}
+%% \fi
+
+
+%% \section{Second Order Derivatives}
+%% \label{sec:SecondOrderDerivatives}
+
+
+%% \subsection{Second Order Recursive Gaussian}
+%% \label{sec:SecondDerivativeRecursiveGaussian}
+
+%% \ifitkFullVersion
+%% %\input{SecondDerivativeRecursiveGaussianImageFilter.tex}
+%% \fi
+
+
+%% \subsection{Laplacian Filters}
+%% \label{sec:LaplacianFilters}
+
+%% \subsubsection{Laplacian Filter Finite Difference}
+%% \subsubsection{Laplacian Filter Recursive Gaussian}
+%% \ifitkFullVersion
+%% %\input{LaplacianRecursiveGaussianImageFilter1.tex}
+%% %\input{LaplacianRecursiveGaussianImageFilter2.tex}
+%% \fi
+
+\subsection{Ratio of Means Detector }
+\input{TouziEdgeDetectorExample}
+
+
+
+\section{Edge Detection}
+
+\subsection{Canny Edge Detection}
+\ifitkFullVersion
+\input{CannyEdgeDetectionImageFilter.tex}
+\fi
+
+
+
+
+
+
+
+%% \section{Neighborhood Filters}
+%% \label{sec:NeighborhoodFilters}
+
+%% The concept of locality is frequently encountered in image processing in the
+%% form of filters that compute every output pixel using information from a small
+%% region in the neighborhood of the input pixel.  The classical form of
+%% these filters are the $3 \times 3$ filters in 2D images. Convolution masks
+%% based on these neighborhoods can perform diverse tasks ranging from noise
+%% reduction, to differential operations, to mathematical morphology.
+
+%% The Insight toolkit implements an elegant approach to neighborhood-based image
+%% filtering.  The input image is processed using a special iterator called the
+%% \doxygen{NeighborhoodIterator}. This iterator is capable of moving over all the
+%% pixels in an image and, for each position, it can address the pixels in a local
+%% neighborhood. Operators are defined that apply an algorithmic operation in the
+%% neighborhood of the input pixel to produce a value for the output pixel.  The
+%% following section describes some of the more commonly used filters that take
+%% advantage of this construction. (See Chapter
+%% \ref{sec:ImageIteratorsChapter} on page
+%% \pageref{sec:ImageIteratorsChapter} for more information about iterators.)
+
+%% \subsection{Mean Filter}
+%% \label{sec:MeanFilter}
+
+%% \ifitkFullVersion
+%% %\input{MeanImageFilter.tex}
+%% \fi
+
+%% \subsection{Median Filter}
+%% \label{sec:MedianFilter}
+
+%% \ifitkFullVersion
+%% %\input{MedianImageFilter.tex}
+%% \fi
+
+
+%% \subsection{Mathematical Morphology}
+%% \label{sec:MathematicalMorphology}
+
+%% Mathematical morphology has proved to be a powerful resource for image
+%% processing and analysis \cite{Serra1982}. ITK implements mathematical
+%% morphology filters using NeighborhoodIterators and
+%% \doxygen{NeighborhoodOperator}s.  The toolkit contains two types of image
+%% morphology algorithms, filters that operate on binary images and filters that
+%% operate on grayscale images.
+
+%% \subsubsection{Binary Filters}
+%% \label{sec:MathematicalMorphologyBinaryFilters}
+
+%% \ifitkFullVersion
+%% %\input{MathematicalMorphologyBinaryFilters.tex}
+%% \fi
+
+
+%% \subsubsection{Grayscale Filters}
+%% \label{sec:MathematicalMorphologyGrayscaleFilters}
+
+%% \ifitkFullVersion
+%% %\input{MathematicalMorphologyGrayscaleFilters.tex}
+%% \fi
+
+
+%% \subsection{Voting Filters}
+%% \label{sec:VotingFilters}
+
+%% Voting filters are quite a generic family of filters. In fact, both the Dilate
+%% and Erode filters from Mathematical Morphology are very particular cases of the
+%% broader family of voting filters. In a voting filter, the outcome of a pixel is
+%% decided by counting the number of pixels in its neighborhood and applying a
+%% rule to the result of that counting.For example, the typical implementation of
+%% Erosion in terms of a voting filter will be to say that a foreground pixel will
+%% become background if the numbers of background neighbors is greater or equal
+%% than 1. In this context, you could imagine variations of Erosion in which the
+%% count could be changed to require at least 3 foreground.
+
+%% \subsubsection{Binary Median Filter}
+
+%% One of the particular cases of Voting filters is the BinaryMedianImageFilter.
+%% This filter is equivalent to applying a Median filter over a binary image. The
+%% fact of having a binary image as input makes possible to optimize the execution
+%% of the filter since there is no real need for sorting the pixels according to
+%% their frequency in the neighborhood.
+
+%% \ifitkFullVersion
+%% %\input{BinaryMedianImageFilter.tex}
+%% \fi
+
+%% The typical effect of median filtration on a noisy digital image is a dramatic reduction in impulse noise spikes. The filter also tends to preserve brightness differences across signal steps, resulting in reduced blurring of regional boundaries. The filter also tends to preserve the positions of boundaries in an image.
+
+%% Figure \ref{fig:BinaryMedianImageFilterOutputMultipleIterations} below shows the effect of running the median filter with a 3x3 classical window size 
+%% 1, 10 and 50 times. There is a tradeoff in noise reduction and the sharpness of the image when the window size is increased\begin{figure}
+%%   \center
+%%   \includegraphics[width=0.44\textwidth]{BinaryMedianImageFilterOutput1.eps}
+%%   \includegraphics[width=0.44\textwidth]{BinaryMedianImageFilterOutput10.eps}
+%%   \includegraphics[width=0.44\textwidth]{BinaryMedianImageFilterOutput50.eps}
+%%   \itkcaption[Effect of many iterations on the BinaryMedian filter.]{Effect of 1, 10 and 50 iterations of the
+%%   BinaryMedianImageFilter using a 3x3 window.}
+%%   \label{fig:BinaryMedianImageFilterOutputMultipleIterations}
+%% \end{figure}.
+
+
+%% \subsubsection{Hole Filling Filter}
+
+%% Another variation of Voting filters is the Hole Filling filter. This filter
+%% converts background pixels into foreground only when the number of foreground
+%% pixels is a majority of the neighbors. By selecting the size of the majority,
+%% this filter can be tuned to fill-in holes of different size. To be more
+%% precise, the effect of the filter is actually related to the curvature of the
+%% edge in which the pixel is located.
+
+%% \ifitkFullVersion
+%% %\input{VotingBinaryHoleFillingImageFilter.tex}
+%% \fi
+
+
+%% \subsubsection{Iterative Hole Filling Filter}
+
+%% The Hole Filling filter can be used in an iterative way, by applying it
+%% repeatedly until no pixel changes. In this context, the filter can be seen as a
+%% binary variation of a Level Set filter.
+
+%% \ifitkFullVersion
+%% %\input{VotingBinaryIterativeHoleFillingImageFilter.tex}
+%% \fi
+
+\section{Smoothing Filters}
+\label{sec:SmoothingFilters}
+
+Real image data has a level of uncertainty that is manifested in the
+variability of measures assigned to pixels. This uncertainty is usually
+interpreted as noise and considered an undesirable component of the image
+data. This section describes several methods that can be applied to reduce
+noise on images.
+
+%% \subsection{Blurring}
+%% \label{sec:BlurringFilters}
+
+%% Blurring is the traditional approach for removing noise from images. It is
+%% usually implemented in the form of a convolution with a kernel. The effect of
+%% blurring on the image spectrum is to attenuate high spatial
+%% frequencies.  Different kernels attenuate frequencies in different ways. One
+%% of the most commonly used kernels is the Gaussian. Two implementations of
+%% Gaussian smoothing are available in the toolkit. The first one is based on a
+%% traditional convolution while the other is based on the application of IIR
+%% filters that approximate the convolution with a Gaussian
+%% \cite{Deriche1990,Deriche1993}.
+
+%% \subsubsection{Discrete Gaussian}
+%% \label{sec:DiscreteGaussianImageFilter}
+
+%% \ifitkFullVersion
+%% %\input{DiscreteGaussianImageFilter.tex}
+%% \fi
+
+
+%% \subsubsection{Binomial Blurring}
+%% \label{sec:BinomialBlurImageFilter}
+
+%% \ifitkFullVersion
+%% %\input{BinomialBlurImageFilter.tex}
+%% \fi
+
+%% \subsubsection{Recursive Gaussian IIR}
+%% \label{sec:RecursiveGaussianImageFilter}
+
+%% \ifitkFullVersion
+%% %\input{SmoothingRecursiveGaussianImageFilter.tex}
+%% \fi
+
+
+%% \subsection{Local Blurring}
+%% \label{sec:BlurringFunctions}
+
+%% In some cases it is desirable to compute smoothing in restricted regions of the
+%% image, or to do it using different parameters that are computed locally.  The
+%% following sections describe options for applying local smoothing in images.
+
+%% \subsubsection{Gaussian Blur Image Function}
+%% \label{sec:GaussianBlurImageFunction}
+
+%% \ifitkFullVersion
+%% %\input{GaussianBlurImageFunction.tex}
+%% \fi
+
+%% \subsection{Edge Preserving Smoothing}
+%% \label{sec:EdgePreservingSmoothingFilters}
+
+%% \subsubsection{Introduction to Anisotropic Diffusion}
+%% \label{sec:IntroductionAnisotropicDiffusion}
+%% \ifitkFullVersion
+%% %\input{AnisotropicDiffusionFiltering.tex}
+%% \fi
+
+
+%% \subsubsection{Gradient Anisotropic Diffusion}
+%% \label{sec:GradientAnisotropicDiffusionImageFilter}
+
+%% \ifitkFullVersion
+%% %\input{GradientAnisotropicDiffusionImageFilter.tex}
+%% \fi
+
+
+
+%% \subsubsection{Curvature Anisotropic Diffusion}
+%% \label{sec:CurvatureAnisotropicDiffusionImageFilter}
+
+%% \ifitkFullVersion
+%% %\input{CurvatureAnisotropicDiffusionImageFilter.tex}
+%% \fi
+
+%% \subsubsection{Curvature Flow}
+%% \label{sec:CurvatureFlowImageFilter}
+
+%% \ifitkFullVersion
+%% %\input{CurvatureFlowImageFilter.tex}
+%% \fi
+
+%% \subsubsection{MinMaxCurvature Flow}
+%% \label{sec:MinMaxCurvatureFlowImageFilter}
+
+%% \ifitkFullVersion
+%% %\input{MinMaxCurvatureFlowImageFilter.tex}
+%% \fi
+
+
+%% \subsubsection{Bilateral Filter}
+%% \label{sec:BilateralImageFilter}
+
+%% \ifitkFullVersion
+%% %\input{BilateralImageFilter.tex}
+%% \fi
+
+
+\subsection{Edge Preserving Speckle Reduction Filters}
 \label{sec:SpeckleFilters}
 \ifitkFullVersion
 \input{LeeImageFilter.tex}
 \fi
 
 
-\section{Filtrage de voisinage}
-\label{sec:NeighborhoodFilters}
+%% \subsection{Edge Preserving Smoothing in Vector Images}
+%% \label{sec:VectorAnisotropicDiffusion}
 
-BLA BLA....
+%% Anisotropic diffusion can also be applied to images whose pixels are vectors.
+%% In this case the diffusion is computed independently for each vector
+%% component.  The following classes implement versions of anisotropic diffusion
+%% on vector images.
+
+%% \subsubsection{Vector Gradient Anisotropic Diffusion}
+%% \label{sec:VectorGradientAnisotropicDiffusionImageFilter}
+
+%% \ifitkFullVersion
+%% %\input{VectorGradientAnisotropicDiffusionImageFilter.tex}
+%% \fi
+
+%% \subsubsection{Vector Curvature Anisotropic Diffusion}
+%% \label{sec:VectorCurvatureAnisotropicDiffusionImageFilter}
+
+%% \ifitkFullVersion
+%% %\input{VectorCurvatureAnisotropicDiffusionImageFilter.tex}
+%% \fi
 
 
-\subsection{Filtre Moyen}
-\label{sec:MeanFilter}
 
-\ifitkFullVersion
-\input{MeanImageFilter.tex}
-\fi
+%% \subsection{Edge Preserving Smoothing in Color Images}
+%% \label{sec:ColorAnisotropicDiffusion}
 
-BLA BLA Mean filter
+%% \subsubsection{Gradient Anisotropic Diffusion}
+%% \label{sec:ColorGradientAnisotropicDiffusion}
+
+%% \ifitkFullVersion
+%% %\input{RGBGradientAnisotropicDiffusionImageFilter.tex}
+%% \fi
+
+%% \subsubsection{Curvature Anisotropic Diffusion}
+%% \label{sec:ColorCurvatureAnisotropicDiffusion}
+
+%% \ifitkFullVersion
+%% %\input{RGBCurvatureAnisotropicDiffusionImageFilter.tex}
+%% \fi
 
 
-The typical effect of median filtration on a noisy digital image is a dramatic reduction in impulse noise spikes. The filter also tends to preserve brightness differences across signal steps, resulting in reduced blurring of regional boundaries. The filter also tends to preserve the positions of boundaries in an image.
 
-Figure \ref{fig:BinaryMedianImageFilterOutputMultipleIterations} below shows the effect of running the median filter with a 3x3 classical window size 
-1, 10 and 50 times. There is a tradeoff in noise reduction and the sharpness of the image when the window size is increased\begin{figure}
-  \center
-  \includegraphics[width=0.50\textwidth]{itkLogo.eps}
-  \itkcaption[Caption]{Image de tests : temporaire !!!!}
-  \label{fig:itkLogo}
-\end{figure}.
+%% \section{Distance Map}
+%% \label{sec:DistanceMap}
+
+%% \ifitkFullVersion
+%% %\input{DanielssonDistanceMapImageFilter.tex}
+%% \fi
+
+%% \ifitkFullVersion
+%% %\input{SignedDanielssonDistanceMapImageFilter.tex}
+%% \fi
+
+
+
+
+%% \section{Geometric Transformations}
+%% \label{sec:GeometricalTransformationFilters}
+
+%% \subsection{Filters You Should be Afraid to Use}
+
+%% \label{sec:ScaryImageFilters}
+%% \subsection{Change Information Image Filter}
+
+%% This one is the scariest and more dangerous filter in the entire toolkit. You
+%% should not use this filter unless you are entirely certain that you know what
+%% you are doing. In fact if you decide to use this filter, you should write your
+%% code, then go for a long walk, get more coffee and ask yourself if you really
+%% needed to use this filter. If the answer is yes, then you should discuss this
+%% issue with someone you trust and get his/her opinion in writing.  In general,
+%% if you need to use this filter, it means that you have a poor image provider
+%% that is putting your career at risk along with the life of any potential
+%% patient whose images you may end up processing.
+
+%% \subsection{Flip Image Filter}
+
+%% \ifitkFullVersion
+%% %\input{FlipImageFilter.tex}
+%% \fi
+
+%% \subsection{Resample Image Filter}
+%% \label{sec:ResampleImageFilter}
+
+%% \subsubsection{Introduction}
+
+%% \ifitkFullVersion
+%% %\input{ResampleImageFilter.tex}
+%% \fi
+
+%% \subsubsection{Importance of Spacing and Origin}
+%% \ifitkFullVersion
+%% %\input{ResampleImageFilter2.tex}
+%% \fi
+
+%% \subsubsection{A Complete Example}
+%% \ifitkFullVersion
+%% %\input{ResampleImageFilter3.tex}
+%% \fi
+
+%% \subsubsection{Rotating an Image}
+%% \ifitkFullVersion
+%% %\input{ResampleImageFilter4.tex}
+%% \fi
+
+%% \subsubsection{Rotating and Scaling an Image}
+%% \ifitkFullVersion
+%% %\input{ResampleImageFilter5.tex}
+%% \fi
+
+%% \subsubsection{Resampling using a deformation field}
+%% \ifitkFullVersion
+%% %\input{WarpImageFilter1.tex}
+%% \fi
+
+
+%% \subsubsection{Subsampling and image in the same space}
+%% \label{SubsampleVolume}
+
+%% \ifitkFullVersion
+%% %\input{SubsampleVolume.tex}
+%% \fi
+
+
+
+%% \subsubsection{Resampling an Anisotropic image to make it Isotropic}
+%% \label{ResampleVolumesToBeIsotropic}
+
+%% \ifitkFullVersion
+%% %\input{ResampleVolumesToBeIsotropic.tex}
+%% \fi
+
+
+
+%% \section{Frequency Domain}
+%% \label{sec:FrequencyDomain}
+
+
+%% \subsection{Computing a Fast Fourier Transform (FFT)}
+%% \label{FFTImageFilter}
+
+%% \ifitkFullVersion
+%% %\input{FFTImageFilter.tex}
+%% \fi
+
+
+%% \subsection{Filtering on the Frequency Domain}
+%% \label{FFTImageFilterFourierDomainFiltering}
+
+%% \ifitkFullVersion
+%% %\input{FFTImageFilterFourierDomainFiltering.tex}
+%% \fi
+
+
+
+%% \section{Extracting Surfaces}
+%% \label{sec:ExtractingSurfaces}
+
+%% \subsection{Surface extraction}
+%% \label{sec:SufaceExtraction}
+%% \index{Surface Extraction}
+
+%% \ifitkFullVersion
+%% %\input{SurfaceExtraction.tex}
+%% \fi
+
+
+
+
+%% \section{Filtrage de voisinage}
+%% \label{sec:NeighborhoodFilters}
+
+%% BLA BLA....
+
+
+%% \subsection{Filtre Moyen}
+%% \label{sec:MeanFilter}
+
+%% \ifitkFullVersion
+%% %\input{MeanImageFilter.tex}
+%% \fi
+
+%% BLA BLA Mean filter
+
+
+%% The typical effect of median filtration on a noisy digital image is a dramatic reduction in impulse noise spikes. The filter also tends to preserve brightness differences across signal steps, resulting in reduced blurring of regional boundaries. The filter also tends to preserve the positions of boundaries in an image.
+
+%% Figure \ref{fig:BinaryMedianImageFilterOutputMultipleIterations} below shows the effect of running the median filter with a 3x3 classical window size 
+%% 1, 10 and 50 times. There is a tradeoff in noise reduction and the sharpness of the image when the window size is increased\begin{figure}
+%%   \center
+%%   \includegraphics[width=0.50\textwidth]{itkLogo.eps}
+%%   \itkcaption[Caption]{Image de tests : temporaire !!!!}
+%%   \label{fig:itkLogo}
+%% \end{figure}.
 
 
 

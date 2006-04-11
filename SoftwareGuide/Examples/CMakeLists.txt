@@ -174,7 +174,10 @@ SET( OTB_EXAMPLES_SRCS
   ${OTB_SOURCE_DIR}/Examples/IO/ImageReadRegionOfInterestWrite.cxx
   ${OTB_SOURCE_DIR}/Examples/IO/ComplexImageReadWrite.cxx
   ${OTB_SOURCE_DIR}/Examples/IO/MultibandImageReadWrite.cxx
-  ${OTB_SOURCE_DIR}/Examples/IO/ExtractROI.cxx   
+  ${OTB_SOURCE_DIR}/Examples/IO/ExtractROI.cxx
+  ${OTB_SOURCE_DIR}/Examples/Filtering/BinaryThresholdImageFilter.cxx
+  ${OTB_SOURCE_DIR}/Examples/Filtering/ThresholdImageFilter.cxx
+  ${OTB_SOURCE_DIR}/Examples/Filtering/CannyEdgeDetectionImageFilter.cxx
   ${OTB_SOURCE_DIR}/Examples/StartExamples/MeanImageFilter.cxx
   ${OTB_SOURCE_DIR}/Examples/BasicFilters/LeeImageFilter.cxx
   ${OTB_SOURCE_DIR}/Examples/FeatureExtraction/AlignmentsExample.cxx
