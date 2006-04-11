@@ -88,7 +88,7 @@ ADD_TEST(feTuTouziNew ${FEATUREEXTRACTION_TESTS}
         otbTouziEdgeDetectorNew)
 		
 ADD_TEST(feTvTouzi ${FEATUREEXTRACTION_TESTS}
-  --compare-image ${TOL}  ${BASELINE}/feFiltreTouzi_poupees_3.hd
+  --compare-image ${TOL}  ${BASELINE}/feFiltreTouzi_amst_3.hd
                           ${TEMP}/feFiltreTouzi_amst_3.hd  
         otbTouziEdgeDetector
 	${INPUTDATA}/amst.png
@@ -96,7 +96,7 @@ ADD_TEST(feTvTouzi ${FEATUREEXTRACTION_TESTS}
 	3)
 	
 ADD_TEST(feTvTouziDir ${FEATUREEXTRACTION_TESTS}
-  --compare-image ${TOL}  ${BASELINE}/feFiltreTouzi_poupees_dir_3.hd
+  --compare-image ${TOL}  ${BASELINE}/feFiltreTouzi_amst_dir_3.hd
                           ${TEMP}/feFiltreTouzi_amst_dir_3.hd  
         otbTouziEdgeDetectorDirection
 	${INPUTDATA}/amst.png
