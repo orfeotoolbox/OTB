@@ -89,18 +89,18 @@ ADD_TEST(feTuTouziNew ${FEATUREEXTRACTION_TESTS}
 		
 ADD_TEST(feTvTouzi ${FEATUREEXTRACTION_TESTS}
   --compare-image ${TOL}  ${BASELINE}/feFiltreTouzi_poupees_3.hd
-                          ${TEMP}/feFiltreTouzi_poupees_3.hd  
+                          ${TEMP}/feFiltreTouzi_amst_3.hd  
         otbTouziEdgeDetector
-	${INPUTDATA}/poupees_1canal.hd
-	${TEMP}/feFiltreTouzi_poupees_3.hd
+	${INPUTDATA}/amst.png
+	${TEMP}/feFiltreTouzi_amst_3.hd
 	3)
 	
 ADD_TEST(feTvTouziDir ${FEATUREEXTRACTION_TESTS}
   --compare-image ${TOL}  ${BASELINE}/feFiltreTouzi_poupees_dir_3.hd
-                          ${TEMP}/feFiltreTouzi_poupees_dir_3.hd  
+                          ${TEMP}/feFiltreTouzi_amst_dir_3.hd  
         otbTouziEdgeDetectorDirection
-	${INPUTDATA}/poupees_1canal.hd
-	${TEMP}/feFiltreTouzi_poupees_dir_3.hd
+	${INPUTDATA}/amst.png
+	${TEMP}/feFiltreTouzi_amst_dir_3.hd
 	3)	
 
 ADD_TEST(feTuLineRatioNew ${FEATUREEXTRACTION_TESTS}  
@@ -108,20 +108,20 @@ ADD_TEST(feTuLineRatioNew ${FEATUREEXTRACTION_TESTS}
         
 ADD_TEST(feTuLineRatioLinear ${FEATUREEXTRACTION_TESTS}  
         otbLineRatioDetectorLinear
-	${INPUTDATA}/poupees_1canal.hd
-	${TEMP}/feFiltreLineRatioLinear_poupees_2_3.hd
+	${INPUTDATA}/amst.png
+	${TEMP}/feFiltreLineRatioLinear_amst_2_3.hd
 	2 3)
 
 ADD_TEST(feTuLineRatioLinearDir ${FEATUREEXTRACTION_TESTS}  
         otbLineRatioDetectorLinearDirection
-	${INPUTDATA}/poupees_1canal.hd
-	${TEMP}/feFiltreLineRatioLinear_poupees_dir_2_3.hd
+	${INPUTDATA}/amst.png
+	${TEMP}/feFiltreLineRatioLinear_amst_dir_2_3.hd
 	2 3)
 			
 ADD_TEST(feTuLineRatio ${FEATUREEXTRACTION_TESTS}  
         otbLineRatioDetector
-	${INPUTDATA}/poupees_1canal.hd
-	${TEMP}/feFiltreLineRatio_poupees_2_3.hd
+	${INPUTDATA}/amst.png
+	${TEMP}/feFiltreLineRatio_amst_2_3.hd
 	2 3)
 	
 ADD_TEST(feTuLineCorrelationNew ${FEATUREEXTRACTION_TESTS}  
@@ -129,20 +129,20 @@ ADD_TEST(feTuLineCorrelationNew ${FEATUREEXTRACTION_TESTS}
         
 ADD_TEST(feTuLineCorrelationLinear ${FEATUREEXTRACTION_TESTS}  
         otbLineCorrelationDetectorLinear
-	${INPUTDATA}/poupees_1canal.hd
-	${TEMP}/feFiltreLineCorrelationLinear_poupees_2_3.hd
+	${INPUTDATA}/amst.png
+	${TEMP}/feFiltreLineCorrelationLinear_amst_2_3.hd
 	2 3)
       
 ADD_TEST(feTuLineCorrelationLinearDir ${FEATUREEXTRACTION_TESTS}  
         otbLineCorrelationDetectorLinearDirection
-	${INPUTDATA}/poupees_1canal.hd
-	${TEMP}/feFiltreLineCorrelationLinear_poupees_dir_2_3.hd
+	${INPUTDATA}/amst.png
+	${TEMP}/feFiltreLineCorrelationLinear_amst_dir_2_3.hd
 	2 3)
 		
 ADD_TEST(feTuLineCorrelation ${FEATUREEXTRACTION_TESTS}  
         otbLineCorrelationDetector
-	${INPUTDATA}/poupees_1canal.hd
-	${TEMP}/feFiltreLineCorrelation_poupees_2_3.hd
+	${INPUTDATA}/amst.png
+	${TEMP}/feFiltreLineCorrelation_amst_2_3.hd
 	2 3)
 	
 ADD_TEST(feTuAssociativeSymmetricalSumNew ${FEATUREEXTRACTION_TESTS}  
@@ -150,17 +150,17 @@ ADD_TEST(feTuAssociativeSymmetricalSumNew ${FEATUREEXTRACTION_TESTS}
         
 ADD_TEST(feTuAssociativeSymmetricalSum ${FEATUREEXTRACTION_TESTS}  
         otbAssociativeSymmetricalSum
-        ${TEMP}/feFiltreLineRatioLinear_poupees_2_3.hd
-        ${TEMP}/feFiltreLineCorrelationLinear_poupees_2_3.hd
-        ${TEMP}/feFiltreASS_poupees_2_3.hd)
+        ${TEMP}/feFiltreLineRatioLinear_amst_2_3.hd
+        ${TEMP}/feFiltreLineCorrelationLinear_amst_2_3.hd
+        ${TEMP}/feFiltreASS_amst_2_3.hd)
         
 ADD_TEST(feTuAssymmetricFusionOfLineDetectorNew ${FEATUREEXTRACTION_TESTS}  
         otbAssymmetricFusionOfLineDetectorNew)
         
 ADD_TEST(feTuAssymmetricFusionOfLineDetector ${FEATUREEXTRACTION_TESTS}  
         otbAssymmetricFusionOfLineDetector
-	${INPUTDATA}/poupees_1canal.hd
-	${TEMP}/feFiltreAssymmetricFusion_poupees_2_3.hd
+	${INPUTDATA}/amst.png
+	${TEMP}/feFiltreAssymmetricFusion_amst_2_3.hd
 	2 3)
         
 ADD_TEST(feTvHarrisImage ${FEATUREEXTRACTION_TESTS}  

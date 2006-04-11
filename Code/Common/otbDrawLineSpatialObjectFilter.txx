@@ -136,6 +136,8 @@ DrawLineSpatialObjectFilter<TInputImage, TOutputImage>
   x2 = (*itPoints).GetPosition()[0];
   y2 = (*itPoints).GetPosition()[1];
 
+std::cout<<"("<<x1<<","<<y1<<")"<<std::endl;
+std::cout<<"("<<x2<<","<<y2<<")"<<std::endl;
 
   // Get image size
   itk::Size<2> size = output->GetLargestPossibleRegion().GetSize();
@@ -163,11 +165,13 @@ DrawLineSpatialObjectFilter<TInputImage, TOutputImage>
         {
 	outputIndex[0] = static_cast<long int>( x ) ;
 	outputIndex[1] = static_cast<long int>( Slope*(x-x1) + y1 ) ;
+
 	 
 	// Set the point if the pixel index belongs to the output image  
-	if( region.IsInside( outputIndex ) )
+	if( region.IsInside( outputIndex ) ) {
+std::cout<<"Index out ("<<outputIndex[0]<<","<<outputIndex[1]<<") Value = "<< (int)m_Value<<std::endl;
 	   output->SetPixel( outputIndex, m_Value);
-	      
+	}
 	}
 	 
       }
@@ -193,8 +197,8 @@ DrawLineSpatialObjectFilter<TInputImage, TOutputImage>
    // Exception
    else 
       {
-      itkExceptionMacro(<< "otb::DrawLineSpatialObjectFilter::GenerateData "
-                      	<< "the line is defined by one point");
+      itkExceptionMacro(<< "otb::DrawLineSpatialObjectFilter::GenerateData : "
+                      	<< "the line is defined by one point : deltaX = deltaY = 0.");
       }
 	
 }

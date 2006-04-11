@@ -29,7 +29,7 @@ namespace otb
 template <class TInputImage, class TOutputImage>
 DrawLineSpatialObjectListFilter<TInputImage, TOutputImage>::DrawLineSpatialObjectListFilter()
 {
-  this->SetNumberOfRequiredInputs(2);
+  this->SetNumberOfRequiredInputs(1);
   this->SetNumberOfRequiredOutputs(1); 
   
   m_DrawLineFilter = DrawLineType::New();
@@ -47,7 +47,7 @@ DrawLineSpatialObjectListFilter<TInputImage, TOutputImage>
 
 
 template <class TInputImage, class TOutputImage>
-typename DrawLineSpatialObjectListFilter<TInputImage, TOutputImage>::LinesListType 
+typename DrawLineSpatialObjectListFilter<TInputImage, TOutputImage>::LinesListType & 
 DrawLineSpatialObjectListFilter<TInputImage, TOutputImage>
 ::GetInputLineSpatialObjectList(void)
 {
@@ -72,26 +72,37 @@ DrawLineSpatialObjectListFilter<TInputImage, TOutputImage>
   output->Allocate();
   output->FillBuffer(0);
 
+std::cout<<"list = "<<m_InputList.size()<<std::endl;
  
   LineListIterator  itList = m_InputList.begin();
-  m_DrawLineFilter->SetInputImage( this->GetOutput() );
+/*  m_DrawLineFilter->SetInputImage( output );
   m_DrawLineFilter->SetInputLine( *itList );
   m_DrawLineFilter->GraftOutput( this->GetOutput() );
   m_DrawLineFilter->Update();
-  ++itList;
+  ++itList;*/
   
+int cpt=0;
+  
+  // Draw each line of the list
   while( itList != m_InputList.end() )
      {
+     	
+std::cout<<"cpt = "<<cpt<<" "<<std::endl;
+cpt++;
+     m_DrawLineFilter->SetInputImage( output );
      m_DrawLineFilter->SetInputLine( *itList );
+     m_DrawLineFilter->GraftOutput( this->GetOutput() );
      m_DrawLineFilter->Update();
-     ++itList;
-     m_DrawLineFilter->SetInputImage( this->GetOutput() );
+
+     itList++;
+
+	if (  itList == m_InputList.end() ) 
+	   std::cout<<"Idem"<<std::endl;  
   
      }
 
   this->GraftOutput( m_DrawLineFilter->GetOutput() );
 
- 
 	
 }
 

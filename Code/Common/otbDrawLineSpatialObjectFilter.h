@@ -24,7 +24,8 @@ namespace otb
  *
  * This class implements a filter that draws line in a binary image.
  * Inputs are a LineSpatialObject and an input image that is used to 
- * allocate the output image.
+ * allocate the output image. This filter copies the input image in 
+ * the output image.
  *  
  */
 
