@@ -1,4 +1,4 @@
-
+ 
 IF( NOT OTB_DISABLE_CXX_TESTING )
 
 SET(BASELINE ${OTB_DATA_ROOT}/Baseline/Images)
@@ -128,6 +128,25 @@ ADD_TEST(coTvMultiToMonoROI_RGB2NG_PNG ${COMMON_TESTS}
 ADD_TEST(coTuPointSetSource ${COMMON_TESTS} 
          otbPointSetSourceTest)  
 
+# -------            otb::DrawLineSpatialObjectImageFilter   ------------------------------
+
+ADD_TEST(coTuDrawLineSpatialObjectNew ${COMMON_TESTS} 
+         otbDrawLineSpatialObjectNew)
+         
+ADD_TEST(coTuDrawLineSpatialObject ${COMMON_TESTS} 
+         otbDrawLineSpatialObject
+         ${INPUTDATA}/ImageLineDir.bsq
+         ${TEMP}/coFiltreDrawLine_ImageLineDir.png 10. 22. 38. 42.)
+         
+# -------            otb::DrawLineSpatialObjectListImageFilter   ------------------------------
+
+ADD_TEST(coTuDrawLineSpatialObjectListNew ${COMMON_TESTS} 
+         otbDrawLineSpatialObjectListNew)
+
+ADD_TEST(coTuDrawLineSpatialObjectList ${COMMON_TESTS} 
+         otbDrawLineSpatialObjectList
+         ${INPUTDATA}/ImageLineDir.bsq
+         ${TEMP}/coFiltreDrawLineList_ImageLineDir.png )         
 
 # -------       Fichiers sources CXX -----------------------------------
 SET(BasicCommon_SRCS
@@ -138,6 +157,10 @@ otbMultiChannelExtractROI.cxx
 otbMultiToMonoChannelExtractROI.cxx
 otbLineSpatialObjectList.cxx
 otbPointSetSourceTest.cxx
+otbDrawLineSpatialObjectNew.cxx
+otbDrawLineSpatialObject.cxx
+otbDrawLineSpatialObjectListNew.cxx
+otbDrawLineSpatialObjectList.cxx
 )
 
 
@@ -149,6 +172,7 @@ ADD_EXECUTABLE(otbCommonTests otbCommonTests.cxx ${BasicCommon_SRCS})
 TARGET_LINK_LIBRARIES(otbCommonTests OTBIO OTBCommon ${CAI_LIBRARY}  ${GDAL_LIBRARY} ITKIO ITKCommon)
 
 ADD_EXECUTABLE(otbTestExtractROI otbTestExtractROI.cxx )
+
 TARGET_LINK_LIBRARIES(otbTestExtractROI OTBIO OTBCommon ${CAI_LIBRARY}  ${GDAL_LIBRARY} ITKIO ITKCommon)
 
 
