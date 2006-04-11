@@ -8,4 +8,5 @@ SUBDIRS(
   DataRepresentation
   IO
   Filtering
+  ChangeDetection
 )
