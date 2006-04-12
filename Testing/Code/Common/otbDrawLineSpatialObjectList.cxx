@@ -94,12 +94,12 @@ int otbDrawLineSpatialObjectList( int argc, char* argv[] )
         point.SetPosition(Vx,Vy);
         pointList.push_back(point);
         
- //       LineType::Pointer line = LineType::New();
-        line->SetId(0);
-        line->SetPoints( pointList );
-        line->ComputeBoundingBox();
+        LineType::Pointer line2 = LineType::New();
+        line2->SetId(0);
+        line2->SetPoints( pointList );
+        line2->ComputeBoundingBox();
        
-        list.push_back(line); 
+        list.push_back(line2); 
         
         filter->SetInputLineSpatialObjectList(list);
         
