@@ -12,10 +12,9 @@ What is feature extraction
 \subsection{Lines}
 \subsection{Geometric Moments}
 
-Using the algebraic moment theory, H. Ming-Kuel obtained a family of 7
-invariants with respect to planar transformations called Hu invariants,
-\cite{hu}. Those invariants can be seen as nonlinear combinations of
-complex geometric moments:
+\subsubsection{Complex Moments}
+\label{sec:ComplexMoments}
+The complex geometric moments are defined as:
 \begin {equation}
 c_{pq} = \int\limits_{-\infty}^{+\infty}\int\limits_{-\infty}^{+\infty}(x + iy)^p(x- iy)^qf(x,y)dxdy,
 \label{2.2}
@@ -23,7 +22,18 @@ c_{pq} = \int\limits_{-\infty}^{+\infty}\int\limits_{-\infty}^{+\infty}(x + iy)^
 where $x$ and $y$ are the coordinates of the image $f(x,y)$, $i$ is the
 imaginary unit and
 $p+q$ is the order of $c_{pq}$. The geometric moments are
-particularly useful in the case of scale changes. Hu invariants have
+particularly useful in the case of scale changes.
+
+\input{ComplexMomentImageExample}
+\textbf{Example with paths}
+%\input{ComplexMomentPathExample}
+
+\subsubsection{Hu Moments}
+\label{sec:HuMoments}
+Using the algebraic moment theory, H. Ming-Kuel obtained a family of 7
+invariants with respect to planar transformations called Hu invariants,
+\cite{hu}. Those invariants can be seen as nonlinear combinations of
+the complex moments. Hu invariants have
 been very much used in object recognition during the last 30 years,
 since they are invariant to rotation, scaling and translation. \cite{flusserinv} gives their expressions :
 
@@ -37,7 +47,16 @@ since they are invariant to rotation, scaling and translation. \cite{flusserinv}
 
 \cite{dudani} have used these invariants for the recognition of
 aircraft silhouettes. Flusser and Suk have used them for image
-registration, \cite{flusser_2}. They have been modified and
+registration, \cite{flusser_2}.
+
+\textbf{Examples}
+%\input{HuMomentImageExample}
+%\input{HuMomentPathExample}
+
+
+\subsubsection{Flusser Moments}
+\label{sec:FlusserMoments}
+The Hu invariants have been modified and
 improved by several authors. Flusser used these moments in order to
 produce a new family of descriptors of order higher than 3,
 \cite{flusserinv}. These descriptors are invariant to scale and
@@ -53,14 +72,8 @@ rotation. They have the following expressions:
 \end{array}
 \end {equation}
 
-OTB allows the computation of complex moments and Flusser and Hu
-moments, and those can be computed on images and paths.
-
-\textbf{Mettra a jour quand la classe sera corrigee}
-\input{ComplexMomentImageExample}
-%% \input{ComplexMomentFunctionExample}
-
-%% \input{FlusserMomentImageExample}
-%% \input{FlusserMomentFunctionExample}
+\textbf{Examples}
+%\input{FlusserMomentImageExample}
+%\input{FlusserMomentPathExample}
 
 
