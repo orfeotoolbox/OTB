@@ -26,6 +26,8 @@
 
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
+#include "otbLineSpatialObjectList.h"
+
 #include "otbDrawLineSpatialObjectListFilter.h"
 
 
@@ -57,8 +59,8 @@ int otbDrawLineSpatialObjectList( int argc, char* argv[] )
         reader->SetFileName( inputFilename  );
         writer->SetFileName( outputFilename );
         
-        typedef itk::LineSpatialObject<2>		LineType;
-  	typedef std::list< LineType::Pointer >		LinesListType;
+  	typedef otb::LineSpatialObjectList			LinesListType;
+  	typedef LinesListType::LineType	LineType;
   	LinesListType list;
   	
   	LineType::PointListType pointList;

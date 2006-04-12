@@ -14,8 +14,9 @@
 #include "itkImageToImageFilter.h"
 #include "itkLineSpatialObject.h"
 
+#include "otbLineSpatialObjectList.h"
 #include "otbDrawLineSpatialObjectFilter.h"
-#include <list>
+
 
 namespace otb
 {
@@ -54,13 +55,12 @@ public:
   typedef itk::SmartPointer<Self> Pointer;
   typedef itk::SmartPointer<const Self>  ConstPointer;
   
-  typedef itk::LineSpatialObject<2>	LineType;
-  typedef typename LineType::Pointer	LinePointer;
-  typedef std::list< LinePointer >	LinesListType;
-  
+  typedef LineSpatialObjectList                           LinesListType;
+  typedef LinesListType::LineType                  	  LineType;
+    
   typedef typename LinesListType::const_iterator LineListIterator;
   
-  typedef otb::DrawLineSpatialObjectFilter< OutputImageType, OutputImageType > DrawLineType; 
+  typedef DrawLineSpatialObjectFilter< OutputImageType, OutputImageType > DrawLineType; 
 
   /** Method for management of the "object factory". */
   itkNewMacro(Self);
