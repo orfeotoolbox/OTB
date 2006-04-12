@@ -54,7 +54,7 @@ public:
 
   itkNewMacro(Self);
 
-  itkTypeMacro(AssymmetricFusionOfLineDetectorImageFilter, ImageToImageFilter);
+  itkTypeMacro(AssymmetricFusionOfLineDetectorImageFilter, itk::ImageToImageFilter);
   
   typedef typename InputImageType::PixelType  InputPixelType;
   typedef typename InputImageType::SizeType SizeType;

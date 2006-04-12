@@ -89,7 +89,7 @@ public:
   itkNewMacro(Self);
 
   /** Return the nale of the class. */
-  itkTypeMacro(LineCorrelationDetector, ImageToImageFilter);
+  itkTypeMacro(LineCorrelationDetector, itk::ImageToImageFilter);
 
   /** Typedefs to describe and access Interpolator */
   typedef typename InterpolatorType::Pointer InterpolatorPointer;

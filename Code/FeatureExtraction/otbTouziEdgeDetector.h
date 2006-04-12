@@ -76,7 +76,7 @@ public:
   itkNewMacro(Self);
 
   /** Retourne le nom de la classe. */
-  itkTypeMacro(TouziEdgeDetector, ImageToImageFilter);
+  itkTypeMacro(TouziEdgeDetector, itk::ImageToImageFilter);
   
   /** Définition des images supportées. */
   typedef typename InputImageType::PixelType InputPixelType;

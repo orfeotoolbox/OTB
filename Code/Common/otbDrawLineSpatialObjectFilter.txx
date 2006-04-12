@@ -139,9 +139,7 @@ DrawLineSpatialObjectFilter<TInputImage, TOutputImage>
 std::cout<<"("<<x1<<","<<y1<<")"<<std::endl;
 std::cout<<"("<<x2<<","<<y2<<")"<<std::endl;
 
-  // Get image size
-  itk::Size<2> size = output->GetLargestPossibleRegion().GetSize();
-                        
+
   // Distance between two points
   double DeltaX, DeltaY;
     
