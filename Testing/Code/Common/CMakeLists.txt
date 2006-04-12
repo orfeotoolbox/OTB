@@ -148,6 +148,11 @@ ADD_TEST(coTuDrawLineSpatialObjectList ${COMMON_TESTS}
          ${INPUTDATA}/ImageLineDir.bsq
          ${TEMP}/coFiltreDrawLineList_ImageLineDir.png )         
 
+# -------            otb::ImageToLineSpatialObjectListImageFilter   ------------------------------
+
+ADD_TEST(coTuImageToLineSpatialObjectListNew ${COMMON_TESTS} 
+         otbImageToLineSpatialObjectListNew)
+         
 # -------       Fichiers sources CXX -----------------------------------
 SET(BasicCommon_SRCS
 otbTestCommandLineArgumentParser.cxx
@@ -161,6 +166,7 @@ otbDrawLineSpatialObjectNew.cxx
 otbDrawLineSpatialObject.cxx
 otbDrawLineSpatialObjectListNew.cxx
 otbDrawLineSpatialObjectList.cxx
+otbImageToLineSpatialObjectListNew.cxx
 )
 
 
