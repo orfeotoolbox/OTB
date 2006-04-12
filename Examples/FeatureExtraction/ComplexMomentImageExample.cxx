@@ -130,8 +130,7 @@ int main(int argc, char ** argv )
 
     // Software Guide : BeginCodeSnippet
 
-    ComplexType Result;
-    cmFunction->EvaluateAtIndex(center);
+    ComplexType Result = cmFunction->EvaluateAtIndex(center);
 
     std::cout << "The moment of order (" << P << "," << Q << ") is equal to " << Result << std:: endl;
 
