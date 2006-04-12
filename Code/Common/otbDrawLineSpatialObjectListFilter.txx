@@ -33,6 +33,7 @@ DrawLineSpatialObjectListFilter<TInputImage, TOutputImage>::DrawLineSpatialObjec
   this->SetNumberOfRequiredOutputs(1); 
   
   m_DrawLineFilter = DrawLineType::New();
+  m_InputList.clear();
 
 }
 
@@ -43,6 +44,7 @@ DrawLineSpatialObjectListFilter<TInputImage, TOutputImage>
 ::SetInputLineSpatialObjectList(const LinesListType & list)
 {
   m_InputList = list;
+  this->Modified();
 }
 
 
@@ -75,11 +77,11 @@ DrawLineSpatialObjectListFilter<TInputImage, TOutputImage>
 std::cout<<"list = "<<m_InputList.size()<<std::endl;
  
   LineListIterator  itList = m_InputList.begin();
-/*  m_DrawLineFilter->SetInputImage( output );
+  m_DrawLineFilter->SetInputImage( output );
   m_DrawLineFilter->SetInputLine( *itList );
   m_DrawLineFilter->GraftOutput( this->GetOutput() );
   m_DrawLineFilter->Update();
-  ++itList;*/
+  ++itList;
   
 int cpt=0;
   
@@ -89,12 +91,13 @@ int cpt=0;
      	
 std::cout<<"cpt = "<<cpt<<" "<<std::endl;
 cpt++;
-     m_DrawLineFilter->SetInputImage( output );
+    
+     m_DrawLineFilter->SetInputImage( this->GetOutput() ); 
      m_DrawLineFilter->SetInputLine( *itList );
-     m_DrawLineFilter->GraftOutput( this->GetOutput() );
      m_DrawLineFilter->Update();
+     
 
-     itList++;
+     ++itList;
 
 	if (  itList == m_InputList.end() ) 
 	   std::cout<<"Idem"<<std::endl;  

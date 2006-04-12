@@ -153,18 +153,18 @@ std::cout<<"("<<x2<<","<<y2<<")"<<std::endl;
   
   if ( (DeltaX >= DeltaY) && (DeltaX > 0.) )
      {
-     long int Xmin, Xmax;	
-     Xmin = static_cast<long int>(std::min(x1,x2));
-     Xmax = static_cast<long int>(std::max(x1,x2));
+     double Xmin, Xmax;	
+     Xmin = std::min(x1,x2);
+     Xmax = std::max(x1,x2);
   
      // Slope of the line y=slope*(x-x1)+y1
      double Slope = (y2-y1) / (x2-x1) ;
 
      // Set a point for each x value between xmin and xmax	 
-     for ( long int x = Xmin; x <= Xmax; x++)
+     for ( double x = Xmin; x <= Xmax; x++)
         {
-	outputIndex[0] = static_cast<long int>( x ) ;
-	outputIndex[1] = static_cast<long int>( Slope*(x-x1) + y1 ) ;
+	outputIndex[0] = static_cast<unsigned long>( x ) ;
+	outputIndex[1] = static_cast<unsigned long>( Slope*(x-x1) + y1 ) ;
 
 	 
 	// Set the point if the pixel index belongs to the output image  
@@ -177,19 +177,21 @@ std::cout<<"Index out ("<<outputIndex[0]<<","<<outputIndex[1]<<") Value = "<< (i
       }
    else if ( DeltaX < DeltaY )
       {
-      long int Ymin, Ymax;  
-      Ymin = static_cast<long int>(std::min(y1,y2));
-      Ymax = static_cast<long int>(std::max(y1,y2));
+      double Ymin, Ymax;  
+      Ymin = std::min(y1,y2);
+      Ymax = std::max(y1,y2);
   	 	
       double SlopeInv = (x2-x1) / (y2-y1) ;
 	 
-      for ( long int y = Ymin; y <= Ymax; y++)
+      for ( double y = Ymin; y <= Ymax; y++)
          {
-	 outputIndex[0] = static_cast<long int>( SlopeInv * (y-y1) + x1 ) ;
-	 outputIndex[1] = static_cast<long int>( y );
+	 outputIndex[0] = static_cast<unsigned long>( SlopeInv * (y-y1) + x1 ) ;
+	 outputIndex[1] = static_cast<unsigned long>( y );
 	    
-	 if( region.IsInside( outputIndex ) )
+	 if( region.IsInside( outputIndex ) ){
+std::cout<<"Index out ("<<outputIndex[0]<<","<<outputIndex[1]<<") Value = "<< (int)m_Value<<std::endl;
 	    output->SetPixel( outputIndex, m_Value);
+	   }
 	      
 	 } 
       } 

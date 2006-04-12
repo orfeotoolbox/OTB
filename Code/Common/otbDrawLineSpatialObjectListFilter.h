@@ -15,7 +15,6 @@
 #include "itkLineSpatialObject.h"
 
 #include "otbDrawLineSpatialObjectFilter.h"
-
 #include <list>
 
 namespace otb
