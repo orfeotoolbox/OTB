@@ -50,8 +50,8 @@ int main(int argc, char ** argv )
     return EXIT_FAILURE;
     }
 
-    unsigned int P((unsigned char)::atoi(argv[2]));
-    unsigned int Q((unsigned char)::atoi(argv[3]));
+    unsigned int P((unsigned char)::atoi(argv[1]));
+    unsigned int Q((unsigned char)::atoi(argv[2]));
 
 	        
     typedef unsigned char     InputPixelType;
