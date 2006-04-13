@@ -36,6 +36,7 @@
 // Software Guide : BeginCodeSnippet
 #include "otbHarrisImageFilter.h"
 // Software Guide : EndCodeSnippet
+#include "otbHarrisImageToPointSetFilter.h"
 #include "itkRescaleIntensityImageFilter.h"
 
 int main(int argc, char ** argv )
@@ -131,11 +132,97 @@ int main(int argc, char ** argv )
   // \includegraphics[width=0.25\textwidth]{ROISpot5.eps}
   // \includegraphics[width=0.25\textwidth]{ROISpot5Harris.eps}
   // \itkcaption[Lee Filter Application]{Result of applying the
-  // \doxygen{HarrisImageFilter} to a Spot 5 image.} 
+  // \doxygen{otb::HarrisImageFilter} to a Spot 5 image.} 
   // \label{fig:Harris}
   // \end{figure}
   //
+  // The output of the \doxygen{otb::HarrisImageFilter} is an image
+  // where,for each pixel, we obtain the intensity of the
+  // detection. Often, the user may want to get access to the set of
+  // points for which the output of the detector is higher than a
+  // given threshold. This can be obtained by using the
+  // \doxygen{otb::HarrisImageToPointSetFilter}. This filter is only
+  // templated over the input image type, the output being a
+  // \doxygen{itk::PointSet} with pixel type equal to the image pixel type.
+  // 
   //  Software Guide : EndLatex 
+
+    // Software Guide : BeginCodeSnippet
+    typedef otb::HarrisImageToPointSetFilter<InputImageType>   FunctionType;
+    // Software Guide : EndCodeSnippet
+
+    //  Software Guide : BeginLatex
+    //
+    //  We declare now the filter and a pointer to the output point set.
+    //  Software Guide : EndLatex 
+    // Software Guide : BeginCodeSnippet
+    typedef FunctionType::OutputPointSetType   OutputPointSetType;
+
+
+    FunctionType::Pointer        harrisPoints    = FunctionType::New();
+    OutputPointSetType::Pointer  pointSet = OutputPointSetType::New();
+    // Software Guide : EndCodeSnippet
+
+    //  Software Guide : BeginLatex
+    //
+    //  The \doxygen{otb::HarrisImageToPointSetFilter} takes the same
+    // parameters as the \doxygen{otb::HarrisImageFilter} and an
+    // additional parameter : the threshold for the point selection.
+    //
+    //  Software Guide : EndLatex
+    
+    // Software Guide : BeginCodeSnippet
+
+    harrisPoints->SetInput( 0,reader->GetOutput() );
+    harrisPoints->SetSigmaD( SigmaD );
+    harrisPoints->SetSigmaI( SigmaI );
+    harrisPoints->SetAlpha( Alpha );
+    harrisPoints->SetThreshold( 10 );
+    pointSet = harrisPoints->GetOutput();
+    // Software Guide : EndCodeSnippet
+
+    harrisPoints->Update();
+
+
+    //  Software Guide : BeginLatex
+    //
+    //  We can now iterate through the obtained pointset and access
+    //  the coordinates of the points. We start by accessing the
+    //  container of the points which is encapsulated into the point
+    //  set (see section \ref{sec:PointSetSection} for more
+    //  information on using \doxygen{itk::PointSet}s) and declaring
+    //  an iterator to it.
+    //
+    //  Software Guide : EndLatex
+    
+    // Software Guide : BeginCodeSnippet
+
+    typedef OutputPointSetType::PointsContainer ContainerType;
+    ContainerType* pointsContainer = pointSet->GetPoints();
+    typedef ContainerType::Iterator IteratorType;
+    IteratorType itList = pointsContainer->Begin();
+    // Software Guide : EndCodeSnippet
+
+    //  Software Guide : BeginLatex
+    //
+    //  And we get the points coordinates 
+    //
+    //  Software Guide : EndLatex
+    
+    // Software Guide : BeginCodeSnippet
+
+
+    while( itList != pointsContainer->End() )
+      {
+      typedef OutputPointSetType::PointType           OutputPointType;
+      OutputPointType pCoordinate = (itList.Value());
+      std::cout << pCoordinate << std::endl;
+      ++itList;
+      }
+
+    // Software Guide : EndCodeSnippet
+
+
 
 
   return EXIT_SUCCESS;
