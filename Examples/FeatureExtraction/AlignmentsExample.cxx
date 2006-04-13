@@ -7,8 +7,8 @@
 #endif
 
 //  Software Guide : BeginCommandLineArgs
-//    INPUTS: {RP001R.png}
-//    OUTPUTS: {RP001RAlign.png}
+//    INPUTS: {QB_Suburb.png}
+//    OUTPUTS: {QB_SuburbAlign.png}
 //  Software Guide : EndCommandLineArgs
 
 // Software Guide : BeginLatex
@@ -69,8 +69,8 @@ int main( int argc, char ** argv )
   const char * outputFilename = argv[2];
        
 
-  typedef unsigned char                                   InputPixelType;
-  typedef unsigned char   	                        OutputPixelType;
+  typedef unsigned short                                   InputPixelType;
+  typedef unsigned short   	                        OutputPixelType;
 
   const   unsigned int        	                        Dimension = 2;
 
@@ -182,6 +182,7 @@ int main( int argc, char ** argv )
     drawPathFilter->SetImageInput( backgroundImage );
     drawPathFilter->SetPathInput( *(listIt) );
 
+    drawPathFilter->SetValue( itk::NumericTraits<OutputPixelType>::max() );
     drawPathFilter->Update();
 
     backgroundImage = drawPathFilter->GetOutput();
@@ -197,13 +198,13 @@ int main( int argc, char ** argv )
 
   //  Software Guide : BeginLatex
   // Figure~\ref{fig:Align} shows the result of applying the alignment
-  // detection to a small patch extracted from a Spot 5 image.
+  // detection to a small patch extracted from a VHR image.
   // \begin{figure}
   // \center
-  // \includegraphics[width=0.25\textwidth]{RP001R.eps}
-  // \includegraphics[width=0.25\textwidth]{RP001RAlign.eps}
+  // \includegraphics[width=0.35\textwidth]{QB_Suburb.eps}
+  // \includegraphics[width=0.35\textwidth]{QB_SuburbAlign.eps}
   // \itkcaption[Lee Filter Application]{Result of applying the
-  // \doxygen{ImageToPathListAlignFilter} to a Spot 5 image of a round-about.} 
+  // \doxygen{ImageToPathListAlignFilter} to a VHR image of a suburb.} 
   // \label{fig:Align}
   // \end{figure}
   //
