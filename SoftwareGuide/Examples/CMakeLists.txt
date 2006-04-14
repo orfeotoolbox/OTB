@@ -187,6 +187,7 @@ SET( OTB_EXAMPLES_SRCS
   ${OTB_SOURCE_DIR}/Examples/FeatureExtraction/ComplexMomentPathExample.cxx
   ${OTB_SOURCE_DIR}/Examples/FeatureExtraction/HuMomentImageExample.cxx   
   ${OTB_SOURCE_DIR}/Examples/ChangeDetection/ChangeDetectionFrameworkExample.cxx
+  ${OTB_SOURCE_DIR}/Examples/Visu/GreyVisuExample.cxx  
 )
 
 
