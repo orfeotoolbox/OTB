@@ -8,4 +8,5 @@ SUBDIRS(
   IO
   Filtering
   ChangeDetection
+  Visu
 )
