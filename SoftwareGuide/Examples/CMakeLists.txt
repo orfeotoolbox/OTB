@@ -181,6 +181,7 @@ SET( OTB_EXAMPLES_SRCS
   ${OTB_SOURCE_DIR}/Examples/StartExamples/MeanImageFilter.cxx
   ${OTB_SOURCE_DIR}/Examples/BasicFilters/LeeImageFilter.cxx
   ${OTB_SOURCE_DIR}/Examples/FeatureExtraction/AlignmentsExample.cxx
+  ${OTB_SOURCE_DIR}/Examples/FeatureExtraction/LineRatioDetectorExample.cxx
   ${OTB_SOURCE_DIR}/Examples/FeatureExtraction/TouziEdgeDetectorExample.cxx
   ${OTB_SOURCE_DIR}/Examples/FeatureExtraction/HarrisExample.cxx
   ${OTB_SOURCE_DIR}/Examples/FeatureExtraction/ComplexMomentImageExample.cxx
