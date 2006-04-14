@@ -243,7 +243,7 @@ void LineRatioDetector< TInputImage, TOutputImage, InterpolatorType>
       {
 //std::cout << "Xc,Yc " << bit.GetIndex() << std::endl;
 
-      // Initialisations
+      // Initializations
       for (unsigned int dir=0; dir<NB_DIR; dir++)
         {
         for (unsigned int z=0; z<NB_ZONE; z++) 

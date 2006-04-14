@@ -43,8 +43,17 @@ void
 DrawLineSpatialObjectListFilter<TInputImage, TOutputImage>
 ::SetInputLineSpatialObjectList(const LinesListType & list)
 {
-  m_InputList = list;
-  this->Modified();
+  if (list.size() == 0)
+     {
+     itkExceptionMacro(<< "otb::DrawLineSpatialObjectListFilter::SetInputLineSpatialObjectList : "
+                      	<< "the list is empty");
+     }
+  else
+     {     
+     m_InputList = list;
+     this->Modified();
+     }
+
 }
 
 

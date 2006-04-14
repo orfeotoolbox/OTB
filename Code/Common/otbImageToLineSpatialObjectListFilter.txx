@@ -23,10 +23,31 @@ namespace otb
 template<class TInputImage>
 ImageToLineSpatialObjectListFilter<TInputImage>::ImageToLineSpatialObjectListFilter()
 {
-   
+   this->SetNumberOfRequiredInputs(1);
+   this->SetNumberOfRequiredOutputs(1); 
    m_OutputLinesList.clear();
 }
 
+template <class TInputImage>
+void
+ImageToLineSpatialObjectListFilter<TInputImage>
+::SetInput(const InputImageType *image)
+{  
+  this->itk::ProcessObject::SetNthInput(0, 
+                                   const_cast< InputImageType * >( image ) );
+}
+
+
+template <class TInputImage>
+const typename ImageToLineSpatialObjectListFilter<TInputImage>::InputImageType * 
+ImageToLineSpatialObjectListFilter<TInputImage>
+::GetInput(void)
+{  
+    return static_cast<const InputImageType *>
+    (this->itk::ProcessObject::GetInput(0) );
+}
+    
+    
 template<class TInputImage>
 typename ImageToLineSpatialObjectListFilter<TInputImage>::LinesListType &
 ImageToLineSpatialObjectListFilter<TInputImage>::GetOutput(void)

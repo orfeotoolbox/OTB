@@ -156,7 +156,7 @@ void TouziEdgeDetector< TInputImage, TOutputImage>
   
   typename TInputImage::IndexType     bitIndex;
 
-  // Initialisations
+  // Initializations
   // ---------------
   // Number of direction
   const int NB_DIR = 4;
@@ -223,7 +223,7 @@ std::cout<< cpt << std::endl;
       xc = bitIndex[0];
       yc = bitIndex[1];
 
-      // Initialisations
+      // Initializations
       for (int dir=0; dir<NB_DIR; dir++)
         {
         for (int m=0; m<NB_REGION; m++) 

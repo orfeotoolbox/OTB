@@ -63,7 +63,6 @@ public:
   /** Definition of the input and output images */
   typedef typename InputImageType::PixelType InputPixelType;
   
-  typedef typename InputImageType::RegionType InputImageRegionType;
 
   /** Definition of the size of the images. */
   typedef typename InputImageType::SizeType SizeType;
@@ -72,16 +71,24 @@ public:
   /** Get the list of LineSpatialObject of this process object.  */
   LinesListType & GetOutput(void);
   
+  /** Get the input image */
+  void SetInput(const InputImageType *image);
+  const InputImageType * GetInput(void);
+  
+  
 protected:
   ImageToLineSpatialObjectListFilter();
   virtual ~ImageToLineSpatialObjectListFilter() {}
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
+
+  LinesListType m_OutputLinesList; 
   
+
 private:
   ImageToLineSpatialObjectListFilter(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
 
-  LinesListType m_OutputLinesList;
+ 
 
 };
   
