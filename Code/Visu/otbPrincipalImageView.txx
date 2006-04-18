@@ -10,8 +10,6 @@ namespace otb
 
 template <class TPixel>
 PrincipalImageView<TPixel>::
-//GLImageView(int x, int y, int w, int h, const char *l):
-//VectorImageView<TPixel>(x, y, w, h, l), Fl_Gl_Window(x, y, w, h, l)
 PrincipalImageView() : GLVectorImageViewBase<TPixel>()
   {
   }
