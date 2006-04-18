@@ -52,7 +52,7 @@ int main( int argc, char ** argv )
   // Siftware Guide : BeginCodeSnippet
   typedef itk::Image< unsigned char, 2 > ImageType;
   typedef otb::ImageFileReader< ImageType > ReaderType;    
-  typedef otb::ImageViewer< ImageType::PixelType, double>    ViewerType;
+  typedef otb::ImageViewer< ImageType::PixelType>    ViewerType;
   // Software Guide : EndCodeSnippet
 
   // Software Guide : BeginLatex
