@@ -9,6 +9,7 @@
   $Id$
 
 =========================================================================*/
+// OTB-FA-00026-CS
 #ifndef otbZoomImageView_h
 #define otbZoomImageView_h
 
@@ -28,13 +29,13 @@ namespace otb
 * 
 * See GLVectorImageViewBase.h for details...
   **/
-template <class TPixel, class OverlayPixelType>
-class ITK_EXPORT ZoomImageView :  public GLVectorImageViewBase<TPixel,OverlayPixelType>
+template <class TPixel>
+class ITK_EXPORT ZoomImageView :  public GLVectorImageViewBase<TPixel>
                                 
 {
 public:
     typedef ZoomImageView                                       Self;
-    typedef GLVectorImageViewBase<TPixel,OverlayPixelType>      Superclass;
+    typedef GLVectorImageViewBase<TPixel>                       Superclass;
     typedef itk::SmartPointer<Self>                             Pointer;
     typedef itk::SmartPointer<const Self>                       ConstPointer;
 

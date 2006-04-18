@@ -1,30 +1,31 @@
 #ifndef otbScrollImageView_txx
 #define otbScrollImageView_txx
 
+// OTB-FA-00026-CS
 #include "otbScrollImageView.h"
 
 
 namespace otb
 {
 
-template <class TPixel, class OverlayPixelType>
-ScrollImageView<TPixel, OverlayPixelType>::
+template <class TPixel>
+ScrollImageView<TPixel>::
 //GLImageView(int x, int y, int w, int h, const char *l):
 //VectorImageView<TPixel>(x, y, w, h, l), Fl_Gl_Window(x, y, w, h, l)
-ScrollImageView() : GLVectorImageViewBase<TPixel, OverlayPixelType>()
+ScrollImageView() : GLVectorImageViewBase<TPixel>()
   {
   }
 
-template <class TPixel, class OverlayPixelType>
-ScrollImageView<TPixel, OverlayPixelType>::
+template <class TPixel>
+ScrollImageView<TPixel>::
 ~ScrollImageView()
 {
 
 }
 
-template <class TPixel, class OverlayPixelType>
+template <class TPixel>
 int
-ScrollImageView<TPixel, OverlayPixelType>::handle(int event)
+ScrollImageView<TPixel>::handle(int event)
   {
 
   int key;

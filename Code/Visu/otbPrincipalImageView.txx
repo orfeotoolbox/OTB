@@ -1,5 +1,6 @@
 #ifndef otbPrincipalImageView_txx
 #define otbPrincipalImageView_txx
+// OTB-FA-00026-CS
 
 #include "otbPrincipalImageView.h"
 
@@ -7,24 +8,24 @@
 namespace otb
 {
 
-template <class TPixel, class OverlayPixelType>
-PrincipalImageView<TPixel, OverlayPixelType>::
+template <class TPixel>
+PrincipalImageView<TPixel>::
 //GLImageView(int x, int y, int w, int h, const char *l):
 //VectorImageView<TPixel>(x, y, w, h, l), Fl_Gl_Window(x, y, w, h, l)
-PrincipalImageView() : GLVectorImageViewBase<TPixel, OverlayPixelType>()
+PrincipalImageView() : GLVectorImageViewBase<TPixel>()
   {
   }
 
-template <class TPixel, class OverlayPixelType>
-PrincipalImageView<TPixel, OverlayPixelType>::
+template <class TPixel>
+PrincipalImageView<TPixel>::
 ~PrincipalImageView()
 {
 
 }
 
-template <class TPixel, class OverlayPixelType>
+template <class TPixel>
 int
-PrincipalImageView<TPixel, OverlayPixelType>::handle(int event)
+PrincipalImageView<TPixel>::handle(int event)
   {
 
   int key;

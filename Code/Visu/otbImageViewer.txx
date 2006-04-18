@@ -1,6 +1,8 @@
 #ifndef _otbImageViewer_txx
 #define _otbImageViewer_txx
 
+// OTB-FA-00026-CS
+
 #include "otbImageViewer.h"
 
 #define MAX(_A,_B) ((_A) > (_B) ? (_A) : (_B))
@@ -11,16 +13,16 @@
 namespace otb
 {
  
-template <class TPixel, class TOverlayPixel>
-const std::string ImageViewer<TPixel,TOverlayPixel>::m_SuffixPrincipalTitle = " - Principal Window";
-template <class TPixel, class TOverlayPixel>
-const std::string ImageViewer<TPixel,TOverlayPixel>::m_SuffixZoomTitle = " - Zoom Window";
-template <class TPixel, class TOverlayPixel>
-const std::string ImageViewer<TPixel,TOverlayPixel>::m_SuffixScrollTitle = " - Scroll Window";
+template <class TPixel>
+const std::string ImageViewer<TPixel>::m_SuffixPrincipalTitle = " - Principal Window";
+template <class TPixel>
+const std::string ImageViewer<TPixel>::m_SuffixZoomTitle = " - Zoom Window";
+template <class TPixel>
+const std::string ImageViewer<TPixel>::m_SuffixScrollTitle = " - Scroll Window";
 
  
-template <class TPixel, class TOverlayPixel>
-ImageViewer<TPixel,TOverlayPixel>
+template <class TPixel>
+ImageViewer<TPixel>
 ::ImageViewer()
 {
         m_Label = "Image";
@@ -43,23 +45,23 @@ ImageViewer<TPixel,TOverlayPixel>
 }
 
   
-template <class TPixel, class TOverlayPixel>
-ImageViewer<TPixel,TOverlayPixel>
+template <class TPixel>
+ImageViewer<TPixel>
 ::~ImageViewer()
 {
 
 }
-template <class TPixel, class TOverlayPixel>
+template <class TPixel>
 void
-ImageViewer<TPixel,TOverlayPixel>
+ImageViewer<TPixel>
 ::ZoomAction(void) 
 {
         m_PrincipalView->SetDrawViewRectangle( m_ZoomView->GetViewImageRegion() );
 	m_PrincipalView->update();
 }
-template <class TPixel, class TOverlayPixel>
+template <class TPixel>
 void
-ImageViewer<TPixel,TOverlayPixel>
+ImageViewer<TPixel>
 ::PrincipalResize(void) 
 {
         //Dessine le rectangle sur l'image Scroll
@@ -91,9 +93,9 @@ ImageViewer<TPixel,TOverlayPixel>
         }
 }
 
-template <class TPixel, class TOverlayPixel>
+template <class TPixel>
 void
-ImageViewer<TPixel,TOverlayPixel>
+ImageViewer<TPixel>
 ::ScrollResize(void) 
 {
         //Détection si l'image est grande
@@ -134,9 +136,9 @@ ImageViewer<TPixel,TOverlayPixel>
         PrincipalResize();
 }
 
-template <class TPixel, class TOverlayPixel>
+template <class TPixel>
 void
-ImageViewer<TPixel,TOverlayPixel>
+ImageViewer<TPixel>
 ::ScrollAction(const IndexType & index) 
 {
 	//Synchronise l'image principal à partir de la zone rectangle de la fenetre scroll
@@ -161,9 +163,9 @@ ImageViewer<TPixel,TOverlayPixel>
         m_ScrollView->SetDrawViewRectangle( ImageViewBaseType::ShrinkRegion(m_PrincipalView->GetViewImageRegion(),(float)1./(float)m_ShrinkFactors ) );
 	m_ScrollView->Show();
 }
-template <class TPixel, class TOverlayPixel>
+template <class TPixel>
 void
-ImageViewer<TPixel,TOverlayPixel>
+ImageViewer<TPixel>
 ::PrincipalAction(const IndexType & index) 
 {
 	//Si une action est faite sur la fenetre principale (ex : agrandir al fenetre, dans le cas ou il la fenetre scroll existe) 
@@ -175,9 +177,9 @@ ImageViewer<TPixel,TOverlayPixel>
 }
 
 
-template <class TPixel, class TOverlayPixel>
+template <class TPixel>
 void
-ImageViewer<TPixel,TOverlayPixel>
+ImageViewer<TPixel>
 ::ExtractImagePrincipal(const RegionType & zone) 
 {
         m_ExtractROIFilter->SetSizeX( zone.GetSize()[0] );
@@ -188,9 +190,9 @@ ImageViewer<TPixel,TOverlayPixel>
         m_ExtractROIFilter->Update();
         m_PrincipalImage = m_ExtractROIFilter->GetOutput();
 }
-template <class TPixel, class TOverlayPixel>
+template <class TPixel>
 bool
-ImageViewer<TPixel,TOverlayPixel>
+ImageViewer<TPixel>
 ::GenereImageScroll(unsigned int & pShrinkFactors) 
 {
         bool lSousEchWindow(false);
@@ -217,9 +219,9 @@ ImageViewer<TPixel,TOverlayPixel>
 }
 
 
-template <class TPixel, class TOverlayPixel>
+template <class TPixel>
 void
-ImageViewer<TPixel,TOverlayPixel>
+ImageViewer<TPixel>
 ::BuildHMI(void) 
 {
         m_InputImage->Update();
@@ -314,27 +316,27 @@ ImageViewer<TPixel,TOverlayPixel>
 
 
 
-template <class TPixel, class TOverlayPixel>
+template <class TPixel>
 void
-ImageViewer<TPixel,TOverlayPixel>
+ImageViewer<TPixel>
 ::SetImage(itk::ImageBase<2> * img)
 {
   m_InputImage = dynamic_cast<ImageType *>( img );
   this->Modified();
 }
 
-template <class TPixel, class TOverlayPixel>
+template <class TPixel>
 void 
-ImageViewer<TPixel,TOverlayPixel>
+ImageViewer<TPixel>
 ::Show(void)
 {
   this->Update();
 }
 
 
-template <class TPixel, class TOverlayPixel>
+template <class TPixel>
 void 
-ImageViewer<TPixel,TOverlayPixel>
+ImageViewer<TPixel>
 ::Hide(void)
 {
   iviewWindowPrincipal->hide();
@@ -343,46 +345,17 @@ ImageViewer<TPixel,TOverlayPixel>
 }
 
 
-template <class TPixel, class TOverlayPixel>
+template <class TPixel>
 void 
-ImageViewer<TPixel,TOverlayPixel>
+ImageViewer<TPixel>
 ::Update(void)
 {
   this->BuildHMI();
 }
 
-#if 0
-
-template <class TPixel, class TOverlayPixel>
+template <class TPixel>
 void
-ImageViewer<TPixel,TOverlayPixel>
-::SetLabel(const char * label)
-{
-/*
-  iviewWindowPrincipal->label( label );
-  iviewWindowScroll->label( label );
-  iviewWindowZoom->label( label );
-*/
-  std::string lLabel("DED");
-  char chaine[450];
-  lLabel = std::string(label) + " - Principal Window";
-std::cout << lLabel << std::endl;
-strcpy(chaine, label);
-  chaine[strlen(label)] = '\0';
-std::cout << chaine << std::endl;
-  iviewWindowPrincipal->label( (const char*)chaine );
-
-  lLabel = std::string(label) + " - Scroll Window";
-  iviewWindowScroll->label( lLabel.data() );
-//  iviewWindowScroll->label( "SCR" );
-
-
-}
-#endif
-
-template <class TPixel, class TOverlayPixel>
-void
-ImageViewer<TPixel,TOverlayPixel>
+ImageViewer<TPixel>
 ::CreatePrincipalImageView( Fl_Group * group, Fl_Gl_Window * original )
 {
 
@@ -394,12 +367,8 @@ ImageViewer<TPixel,TOverlayPixel>
   const char * label = original->label();
 
 
-//  this->m_PrincipalView = new GLImageViewType(x,y,w,h,label);
   this->m_PrincipalView = PrincipalImageViewType::New();
   this->m_PrincipalView->Init(x,y,w,h,label);
-// THOMAS : comme l'image est invers??e par d??faut, on a remet a l'endroit
-//  this->m_PrincipalView->flipY(true);
-
   this->m_PrincipalView->box( FL_EMBOSSED_BOX );
 
   group->remove( original );
@@ -409,9 +378,9 @@ ImageViewer<TPixel,TOverlayPixel>
 
 }
 
-template <class TPixel, class TOverlayPixel>
+template <class TPixel>
 void
-ImageViewer<TPixel,TOverlayPixel>
+ImageViewer<TPixel>
 ::CreateScrollImageView( Fl_Group * group, Fl_Gl_Window * original )
 {
   int x = original->x();
@@ -430,9 +399,9 @@ ImageViewer<TPixel,TOverlayPixel>
   delete original;
 
 }
-template <class TPixel, class TOverlayPixel>
+template <class TPixel>
 void
-ImageViewer<TPixel,TOverlayPixel>
+ImageViewer<TPixel>
 ::CreateZoomImageView( Fl_Group * group, Fl_Gl_Window * original )
 {
   short int x = original->x();
@@ -453,9 +422,9 @@ ImageViewer<TPixel,TOverlayPixel>
 }
 
 
-template <class TPixel, class TOverlayPixel>
+template <class TPixel>
 void 
-ImageViewer<TPixel,TOverlayPixel>
+ImageViewer<TPixel>
 ::ClickSelectCallBack( void (*newClickSelectArgCallBack)(float, float,
                                                          float,
                                                          void *),
@@ -472,9 +441,9 @@ ImageViewer<TPixel,TOverlayPixel>
 */
 }
 
-template <class TPixel, class TOverlayPixel>
+template <class TPixel>
 void 
-ImageViewer<TPixel,TOverlayPixel>
+ImageViewer<TPixel>
 ::GenerateChannelsInformations(void)
 {
 
@@ -499,8 +468,6 @@ ImageViewer<TPixel,TOverlayPixel>
                         // On les choisi automatiquement,si c'est possible
                         int nbCanauxInputImage = m_PrincipalImage->GetNumberOfComponentsPerPixel();
                         
-//                        std::cout << "Nb canaux de l'image : "<<nbCanauxInputImage<<std::endl;
-
                         switch ( nbCanauxInputImage )
                         {
                                 case 1 :
@@ -544,9 +511,9 @@ ImageViewer<TPixel,TOverlayPixel>
 }
 
 
-template <class TPixel, class TOverlayPixel>
+template <class TPixel>
 void 
-ImageViewer<TPixel,TOverlayPixel>::
+ImageViewer<TPixel>::
 SetChannelsInformationsToImagesView(void)
 {
 	m_PrincipalView->SetChannelsWorks(m_ChannelsWorks);
@@ -569,9 +536,9 @@ SetChannelsInformationsToImagesView(void)
                 m_ScrollView->SetRGBChannels(m_RedChannel,m_GreenChannel,m_BlueChannel);
 	}
 }
-template <class TPixel, class TOverlayPixel>
+template <class TPixel>
 void 
-ImageViewer<TPixel,TOverlayPixel>::
+ImageViewer<TPixel>::
 ClearSelectChannels(void)
 { 
         m_RedChannel            = -1;
@@ -579,7 +546,6 @@ ClearSelectChannels(void)
         m_BlueChannel           = -1;
         m_GrayLevelChannel      = -1;
         m_ChannelsWorks.clear();
-// 	this->SetChannelsInformationsToImagesView();
 }
 
 

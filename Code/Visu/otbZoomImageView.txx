@@ -7,23 +7,23 @@
 namespace otb
 {
 
-template <class TPixel, class OverlayPixelType>
-ZoomImageView<TPixel, OverlayPixelType>::
-ZoomImageView() : GLVectorImageViewBase<TPixel, OverlayPixelType>()
+template <class TPixel>
+ZoomImageView<TPixel>::
+ZoomImageView() : GLVectorImageViewBase<TPixel>()
   {
         this->m_ViewRectangle = false;
   }
 
-template <class TPixel, class OverlayPixelType>
-ZoomImageView<TPixel, OverlayPixelType>::
+template <class TPixel>
+ZoomImageView<TPixel>::
 ~ZoomImageView()
 {
 
 }
 
-template <class TPixel, class OverlayPixelType>
+template <class TPixel>
 int
-ZoomImageView<TPixel, OverlayPixelType>::handle(int event)
+ZoomImageView<TPixel>::handle(int event)
   {
   int key;
  

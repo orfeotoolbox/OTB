@@ -9,6 +9,7 @@
   $Id$
 
 =========================================================================*/
+// OTB-FA-00026-CS
 #ifndef __otbImageViewer_h
 #define __otbImageViewer_h
 
@@ -35,7 +36,8 @@ namespace otb
  * Use FLTK gui.
  *
 */
-template <class TPixel, class TOverlayPixel>
+
+template <class TPixel>
 class ImageViewer :             public itk::ProcessObject,
                                 public otbImageViewerGUI
                                 
@@ -45,38 +47,35 @@ public:
    /**
    * Standard "Self" typedef.
    */
-    typedef ImageViewer                 Self;
-    typedef itk::ProcessObject          Superclass;
+  typedef ImageViewer                 Self;
+  typedef itk::ProcessObject          Superclass;
   /** 
    * Smart pointer typedef support.
    */
   typedef itk::SmartPointer<Self>        Pointer;
   typedef itk::SmartPointer<const Self>  ConstPointer;
 
-    /** Method for creation through the object factory. */
-    itkNewMacro(Self);
+  /** Method for creation through the object factory. */
+  itkNewMacro(Self);
 
-    /** Run-time type information (and related methods). */
-    itkTypeMacro(ImageViewer,itk::ProcessObject);
+  /** Run-time type information (and related methods). */
+  itkTypeMacro(ImageViewer,itk::ProcessObject);
 
-    typedef TPixel                      InputPixelType;
-    typedef TOverlayPixel               OverlayPixelType;
-
+  typedef TPixel                      InputPixelType;
 
   typedef otb::MultiChannelExtractROI< InputPixelType, 
                                              InputPixelType >   ExtractROIFilterType;
 
-  typedef typename ExtractROIFilterType::Pointer                  ExtractROIFilterPointer;
+  typedef typename ExtractROIFilterType::Pointer                ExtractROIFilterPointer;
  
-  typedef itk::Image< OverlayPixelType, 3 >                     OverlayType;
-  typedef PrincipalImageView<InputPixelType, OverlayPixelType>  PrincipalImageViewType;
+  typedef PrincipalImageView<InputPixelType>                    PrincipalImageViewType;
   typedef typename PrincipalImageViewType::Pointer              PrincipalImageViewPointer;
-  typedef ScrollImageView< InputPixelType, OverlayPixelType >   ScrollImageViewType;
+  typedef ScrollImageView< InputPixelType >                     ScrollImageViewType;
   typedef typename ScrollImageViewType::Pointer                 ScrollImageViewPointer;
-  typedef ZoomImageView< InputPixelType, OverlayPixelType >     ZoomImageViewType;
+  typedef ZoomImageView< InputPixelType >                       ZoomImageViewType;
   typedef typename ZoomImageViewType::Pointer                   ZoomImageViewPointer;
 
-  typedef GLVectorImageViewBase<InputPixelType, OverlayPixelType>  ImageViewBaseType;
+  typedef GLVectorImageViewBase<InputPixelType>                 ImageViewBaseType;
 
   typedef typename ExtractROIFilterType::InputImageType         ImageType;
   typedef typename ImageType::Pointer                           ImagePointer;

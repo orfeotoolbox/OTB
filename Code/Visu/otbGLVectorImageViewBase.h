@@ -9,6 +9,7 @@
   $Id$
 
 =========================================================================*/
+// OTB-FA-00026-CS
 #ifndef otbGLVectorImageViewBase_h
 #define otbGLVectorImageViewBase_h
 
@@ -30,12 +31,12 @@ namespace otb
 {
 
 
-template <class TPixel, class OverlayPixelType> class ImageViewer;
+template <class TPixel> class ImageViewer;
 /** \class GLVectorImageViewBase
 * \brief Base class for image view
 * Contain all algorithms and functionnalities for display an image in a window.
 */
-template <class TPixel, class OverlayPixelType>
+template <class TPixel>
 class ITK_EXPORT GLVectorImageViewBase :        public VectorImageView<TPixel>, 
                                                 public Fl_Gl_Window
 {
@@ -51,7 +52,7 @@ public:
     /** Run-time type information (and related methods). */
     itkTypeMacro(GLVectorImageViewBase,VectorImageView);
 
-  typedef ImageViewer<TPixel,OverlayPixelType>          ImageViewerType;
+  typedef ImageViewer<TPixel>                           ImageViewerType;
   typedef ImageViewerType *                             ImageViewerPointer;
 
 

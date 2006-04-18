@@ -1,6 +1,7 @@
 #ifndef otbGLVectorImageViewBase_txx
 #define otbGLVectorImageViewBase_txx
 
+// OTB-FA-00026-CS
 #include "itkExceptionObject.h"
 #include "itkImageRegionConstIterator.h"
 
@@ -11,8 +12,8 @@
 namespace otb
 {
 
-template <class TPixel, class OverlayPixelType>
-GLVectorImageViewBase<TPixel, OverlayPixelType>::
+template <class TPixel>
+GLVectorImageViewBase<TPixel>::
 GLVectorImageViewBase() : VectorImageView<TPixel>(), Fl_Gl_Window(0,0,0,0,0)
 {
         when(FL_WHEN_NOT_CHANGED | FL_WHEN_ENTER_KEY);
@@ -21,17 +22,17 @@ GLVectorImageViewBase() : VectorImageView<TPixel>(), Fl_Gl_Window(0,0,0,0,0)
         m_Label = "";
 }
 
-template <class TPixel, class OverlayPixelType>
-GLVectorImageViewBase<TPixel, OverlayPixelType>::
+template <class TPixel>
+GLVectorImageViewBase<TPixel>::
 ~GLVectorImageViewBase()
 {
 
 }
 
 
-template <class TPixel, class OverlayPixelType>
+template <class TPixel>
 void
-GLVectorImageViewBase<TPixel, OverlayPixelType>::
+GLVectorImageViewBase<TPixel>::
 Init(int x, int y, int w, int h, const char * l)
 {
         //Methode sur Fl_Gl_Window
@@ -41,13 +42,11 @@ Init(int x, int y, int w, int h, const char * l)
 
 //
 // Set the input image to be displayed
-// Warning: the current overlay is destroyed if the size of the image
-// is different from the size of the overlay.
 //
 // Initialise la class a partir du "m_ViewImageRegion" préalablement initialisé
-template <class TPixel, class OverlayPixelType>
+template <class TPixel>
 void 
-GLVectorImageViewBase<TPixel, OverlayPixelType>::
+GLVectorImageViewBase<TPixel>::
 FinalizeInitialisation(void)
 {
         m_CenterPointImage = GetCenterRegion(this->m_ViewImageRegion);
@@ -83,9 +82,9 @@ FinalizeInitialisation(void)
 }
 
 
-template <class TPixel, class OverlayPixelType>
-typename GLVectorImageViewBase<TPixel, OverlayPixelType>::IndexType
-GLVectorImageViewBase<TPixel, OverlayPixelType>::
+template <class TPixel>
+typename GLVectorImageViewBase<TPixel>::IndexType
+GLVectorImageViewBase<TPixel>::
 WindowCoord2ImageCoord( const IndexType & index )const
 {
         IndexType lCoord;
@@ -96,9 +95,9 @@ WindowCoord2ImageCoord( const IndexType & index )const
         }
         return lCoord;
 } 
-template <class TPixel, class OverlayPixelType>
-typename GLVectorImageViewBase<TPixel, OverlayPixelType>::SizeType
-GLVectorImageViewBase<TPixel, OverlayPixelType>::
+template <class TPixel>
+typename GLVectorImageViewBase<TPixel>::SizeType
+GLVectorImageViewBase<TPixel>::
 WindowSize2ImageSize( const SizeType & size )const
 {
         SizeType lSize;
@@ -109,9 +108,9 @@ WindowSize2ImageSize( const SizeType & size )const
         return lSize;
 } 
 
-template <class TPixel, class OverlayPixelType>
-typename GLVectorImageViewBase<TPixel, OverlayPixelType>::RegionType
-GLVectorImageViewBase<TPixel, OverlayPixelType>::
+template <class TPixel>
+typename GLVectorImageViewBase<TPixel>::RegionType
+GLVectorImageViewBase<TPixel>::
 WindowZone2ImageRegion( const RegionType & zone )const
 {
         RegionType lRegion;
@@ -123,9 +122,9 @@ WindowZone2ImageRegion( const RegionType & zone )const
 } 
 
 
-template <class TPixel, class OverlayPixelType>
-typename GLVectorImageViewBase<TPixel, OverlayPixelType>::IndexType
-GLVectorImageViewBase<TPixel, OverlayPixelType>::
+template <class TPixel>
+typename GLVectorImageViewBase<TPixel>::IndexType
+GLVectorImageViewBase<TPixel>::
 GetCenterRegion( const RegionType & zone )
 {
         IndexType lCenter;
@@ -134,9 +133,9 @@ GetCenterRegion( const RegionType & zone )
         return lCenter;
 } 
 
-template <class TPixel, class OverlayPixelType>
-typename GLVectorImageViewBase<TPixel, OverlayPixelType>::RegionType
-GLVectorImageViewBase<TPixel, OverlayPixelType>::
+template <class TPixel>
+typename GLVectorImageViewBase<TPixel>::RegionType
+GLVectorImageViewBase<TPixel>::
 ShrinkRegion( const RegionType & zone, const float shrinkfactor )
 {
         RegionType lRegion;
@@ -153,18 +152,18 @@ ShrinkRegion( const RegionType & zone, const float shrinkfactor )
 }
 
 
-template <class TPixel, class OverlayPixelType>
-typename GLVectorImageViewBase<TPixel, OverlayPixelType>::RegionType
-GLVectorImageViewBase<TPixel, OverlayPixelType>::
+template <class TPixel>
+typename GLVectorImageViewBase<TPixel>::RegionType
+GLVectorImageViewBase<TPixel>::
 GetViewRegion( const IndexType & centerPointImage )
 {
         return( GetViewRegion( this->GetInput()->GetRequestedRegion(), centerPointImage) );
 }
 
 
-template <class TPixel, class OverlayPixelType>
-typename GLVectorImageViewBase<TPixel, OverlayPixelType>::RegionType
-GLVectorImageViewBase<TPixel, OverlayPixelType>::
+template <class TPixel>
+typename GLVectorImageViewBase<TPixel>::RegionType
+GLVectorImageViewBase<TPixel>::
 GetViewRegion( const RegionType & region, const IndexType & centerPointImage )
 {
         RegionType lNewViewRegion;
@@ -197,9 +196,9 @@ GetViewRegion( const RegionType & region, const IndexType & centerPointImage )
         lNewViewRegion.SetSize(  lSize );
         return(lNewViewRegion);
 }
-template <class TPixel, class OverlayPixelType>
-typename GLVectorImageViewBase<TPixel, OverlayPixelType>::RegionType
-GLVectorImageViewBase<TPixel, OverlayPixelType>::
+template <class TPixel>
+typename GLVectorImageViewBase<TPixel>::RegionType
+GLVectorImageViewBase<TPixel>::
 TranslateImageRegionToWindowRegion( const RegionType & imageRegion, const  RegionType & sousimageRegion, const int windowWidth, const int windowHeight)
 {
         RegionType lRegion;
@@ -215,18 +214,18 @@ TranslateImageRegionToWindowRegion( const RegionType & imageRegion, const  Regio
         return(lRegion);
 }
 
-template <class TPixel, class OverlayPixelType>
+template <class TPixel>
 void
-GLVectorImageViewBase<TPixel, OverlayPixelType>::
+GLVectorImageViewBase<TPixel>::
 MajViewRegion(void)
 {
         //Position du centre de l'image en coordonnees image
         this->SetViewImageRegion( GetViewRegion(m_CenterPointImage) );
 }
 
-template <class TPixel, class OverlayPixelType>
+template <class TPixel>
 void
-GLVectorImageViewBase<TPixel, OverlayPixelType>::
+GLVectorImageViewBase<TPixel>::
 BuildWithImageRegion()
 {
         this->SetViewImageRegion( this->GetInput()->GetRequestedRegion() );
@@ -235,9 +234,9 @@ BuildWithImageRegion()
         FinalizeInitialisation();
 }
 
-template <class TPixel, class OverlayPixelType>
+template <class TPixel>
 void
-GLVectorImageViewBase<TPixel, OverlayPixelType>::
+GLVectorImageViewBase<TPixel>::
 BuildWithWindowRegion(const int zoom)
 {
         RegionType lRegion;
@@ -264,9 +263,9 @@ BuildWithWindowRegion(const int zoom)
         FinalizeInitialisation();
 }
 
-template <class TPixel, class OverlayPixelType>
+template <class TPixel>
 void
-GLVectorImageViewBase<TPixel, OverlayPixelType>::
+GLVectorImageViewBase<TPixel>::
 PrintInfos(void)
 {
 std::cout << this->GetNameOfClass()<< std::endl;
@@ -279,9 +278,9 @@ std::cout << "- m_ViewImageRegion    :   "<<this->m_ViewImageRegion<< std::endl;
 
 //
 //
-template <class TPixel, class OverlayPixelType>
+template <class TPixel>
 void 
-GLVectorImageViewBase<TPixel, OverlayPixelType>::
+GLVectorImageViewBase<TPixel>::
 update()
 {
         if( this->cValidImData == false ) 
@@ -303,8 +302,8 @@ update()
         this->redraw();
 }
 
-template <class TPixel, class OverlayPixelType>
-void GLVectorImageViewBase<TPixel, OverlayPixelType>::size(int w, int h)
+template <class TPixel>
+void GLVectorImageViewBase<TPixel>::size(int w, int h)
   {
   VectorImageView<TPixel>::size(w, h);
   Fl_Gl_Window::size(w, h);
@@ -313,9 +312,9 @@ void GLVectorImageViewBase<TPixel, OverlayPixelType>::size(int w, int h)
   }
 
 
-template <class TPixel, class OverlayPixelType>
+template <class TPixel>
 void 
-GLVectorImageViewBase<TPixel, OverlayPixelType>::
+GLVectorImageViewBase<TPixel>::
 resize(int x, int y, int w, int h)
   {
   VectorImageView<TPixel>::resize(x, y, w, h);
@@ -324,8 +323,8 @@ resize(int x, int y, int w, int h)
   this->redraw();
   }
 
-template <class TPixel, class OverlayPixelType>
-void GLVectorImageViewBase<TPixel, OverlayPixelType>::draw(void)
+template <class TPixel>
+void GLVectorImageViewBase<TPixel>::draw(void)
 {
   if( !this->valid() )
     {
@@ -407,9 +406,9 @@ void GLVectorImageViewBase<TPixel, OverlayPixelType>::draw(void)
 }
 
 
-template <class TPixel, class OverlayPixelType>
+template <class TPixel>
 void
-GLVectorImageViewBase<TPixel, OverlayPixelType>::
+GLVectorImageViewBase<TPixel>::
 ClearSelectChannels(void)
 { 
         m_RedChannel            = -1;
@@ -422,9 +421,9 @@ ClearSelectChannels(void)
 
 
 
-template <class TPixel, class OverlayPixelType>
+template <class TPixel>
 void 
-GLVectorImageViewBase<TPixel, OverlayPixelType>::
+GLVectorImageViewBase<TPixel>::
 CalculeDataMinMax(const RegionType & region, double & pMin, double & pMax)
 {
         typedef itk::ImageRegionConstIterator<ImageType> InputIterator;
@@ -467,9 +466,9 @@ CalculeDataMinMax(const RegionType & region, double & pMin, double & pMax)
         }
 }
   
-template <class TPixel, class OverlayPixelType>
+template <class TPixel>
 void 
-GLVectorImageViewBase<TPixel, OverlayPixelType>::
+GLVectorImageViewBase<TPixel>::
 SetWinImData(const RegionType & zone) 
 {
   IndexType ind;

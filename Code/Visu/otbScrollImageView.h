@@ -9,6 +9,7 @@
   $Id$
 
 =========================================================================*/
+// OTB-FA-00026-CS
 #ifndef otbScrollImageView_h
 #define otbScrollImageView_h
 
@@ -28,13 +29,13 @@ namespace otb
 * 
 * See GLVectorImageViewBase.h for details...
   **/
-template <class TPixel, class OverlayPixelType>
-class ITK_EXPORT ScrollImageView :  public GLVectorImageViewBase<TPixel,OverlayPixelType>
+template <class TPixel>
+class ITK_EXPORT ScrollImageView :  public GLVectorImageViewBase<TPixel>
                                 
 {
 public:
     typedef ScrollImageView                                     Self;
-    typedef GLVectorImageViewBase<TPixel,OverlayPixelType>      Superclass;
+    typedef GLVectorImageViewBase<TPixel>                       Superclass;
     typedef itk::SmartPointer<Self>                             Pointer;
     typedef itk::SmartPointer<const Self>                       ConstPointer;
 
