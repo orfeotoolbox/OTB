@@ -14,6 +14,9 @@ SET(FEATUREEXTRACTION_TESTS ${CXX_TEST_PATH}/otbFeatureExtractionTests)
 ADD_TEST(feTuFillGapsFilterNew ${FEATUREEXTRACTION_TESTS}  
         otbFillGapsFilterNew)
 
+ADD_TEST(feTuFillGapsFilter ${FEATUREEXTRACTION_TESTS}  
+        otbFillGapsFilter)
+
 ADD_TEST(feTuAlignMV2ITK ${FEATUREEXTRACTION_TESTS}  
         otbAlignImageToPath
 	${INPUTDATA}/poupees.hd
@@ -201,13 +204,6 @@ ADD_TEST(feTuPixelSuppressionByDirection ${FEATUREEXTRACTION_TESTS}
 	${TEMP}/feFiltrePixelSuppr_ImageLine.hd
 	3 0.1)
 			        
-#ADD_TEST(tvFEPatrick2 ${FEATUREEXTRACTION_TESTS}  
-#  --compare-image ${TOL}  ${BASELINE}/otbExtractROI_cthead1_26_97_209_100.png
-#                          ${TEMP}/otbExtractROI_cthead1_26_97_209_100.png
-#        otbFeatureExtraction
-#        ${INPUTDATA}/cthead1.png 
-#        ${TEMP}/otbExtractROI_cthead1_26_97_209_100.png 
-#        26 97 209 100 )
 
 
 # A enrichir
@@ -248,7 +244,7 @@ otbThresholdImageToPointSetTest.cxx
 otbHarrisToPointSet.cxx
 otbPixelSuppressionByDirectionNew.cxx
 otbPixelSuppressionByDirection.cxx
-otbFillGapsFilterNew.cxx
+otbFillGapsFilter.cxx
 )
 
 

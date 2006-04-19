@@ -29,8 +29,10 @@ int otbFillGapsFilter( int argc, char ** argv )
 
 	FillGapsFilterType::Pointer fillgaps = FillGapsFilterType::New();
         
-	LinesListType            linesListBeforeFillGaps;
-	LinesListType            linesListAfterFillGaps;
+	LinesListType::Pointer   linesListBeforeFillGaps = LinesListType::New();
+	const LinesListType *linesListAfterFillGaps ;
+
+  	LineType::PointListType  pointList;
         LineType::LinePointType  point;
 
         // Definition of the first line
@@ -50,7 +52,7 @@ int otbFillGapsFilter( int argc, char ** argv )
         line->SetPoints( pointList );
         line->ComputeBoundingBox();
        
-        linesListBeforeFillGaps.push_back(line);
+        linesListBeforeFillGaps->push_back(line);
         
         pointList.clear();
 
@@ -71,17 +73,18 @@ int otbFillGapsFilter( int argc, char ** argv )
         line2->SetPoints( pointList );
         line2->ComputeBoundingBox();
        
-        linesListBeforeFillGaps.push_back(line2); 
+        linesListBeforeFillGaps->push_back(line2); 
         
         pointList.clear();
 
         //  FillGapsFilter parameters
 	
-	fillgaps->SetRadius(5.);
-	fillgaps->SetAngularBeam(45.0);
+	fillgaps->SetRadius(15.);
+	fillgaps->SetAngularBeam(1.0);  // Angle in Radian
 	fillgaps->SetInput(linesListBeforeFillGaps);
-	linesListAfterFillGaps = fillgaps->SetOutput();
-
+	linesListAfterFillGaps = fillgaps->GetOutput();
+//	fillgaps->GenerateData();
+	fillgaps->Update();
 	        
     } 
   catch( itk::ExceptionObject & err ) 

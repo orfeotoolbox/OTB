@@ -16,6 +16,7 @@
 #pragma warning ( disable : 4786 )
 #endif
 #include "itkProcessObject.h"
+#include "itkDataObject.h"
 #include "otbLineSpatialObjectList.h"
 
 namespace otb
@@ -43,22 +44,28 @@ public:
   typedef LineSpatialObjectList                                 LineSpatialObjectListType;
   typedef LineSpatialObjectListType::Pointer                    LineSpatialObjectListPointer;
   typedef LineSpatialObjectListType::LineType                   LineSpatialObjectType;
+  typedef LineSpatialObjectType::PointListType                  PointListType;
+  typedef LineSpatialObjectType::LinePointType                  PointType;
 
-  typedef itk::DataObject                                       DataObject;
-  typedef itk::DataObject::Pointer                              DataObjectPointer;
-  DataObjectPointer  MakeOutput(unsigned int idx);
+  virtual void SetInput(const LineSpatialObjectListType * input);
+  const LineSpatialObjectListType * GetInput();
+
+  LineSpatialObjectListType * GetOutput();
+
 
   itkSetMacro(AngularBeam, double);
   itkGetConstReferenceMacro(AngularBeam, double);  
   itkSetMacro(Radius, double);
   itkGetConstReferenceMacro(Radius, double);  
-  
+
+ 
 protected:
   FillGapsFilter();
-  virtual ~FillGapsFilter();
+  virtual ~FillGapsFilter(){};
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
   
   virtual void GenerateData();
+
   
 private:
   FillGapsFilter(const Self&); //purposely not implemented
@@ -77,3 +84,4 @@ private:
 #endif
 
 #endif
+
