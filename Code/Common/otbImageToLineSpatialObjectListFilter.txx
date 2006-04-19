@@ -25,7 +25,10 @@ ImageToLineSpatialObjectListFilter<TInputImage>::ImageToLineSpatialObjectListFil
 {
    this->SetNumberOfRequiredInputs(1);
    this->SetNumberOfRequiredOutputs(1); 
-   m_OutputLinesList.clear();
+   
+   typename LinesListType::Pointer list = LinesListType::New();
+   this->SetOutput( list );
+   
 }
 
 template <class TInputImage>
@@ -46,15 +49,28 @@ ImageToLineSpatialObjectListFilter<TInputImage>
     return static_cast<const InputImageType *>
     (this->itk::ProcessObject::GetInput(0) );
 }
-    
-    
-template<class TInputImage>
-typename ImageToLineSpatialObjectListFilter<TInputImage>::LinesListType &
-ImageToLineSpatialObjectListFilter<TInputImage>::GetOutput(void)
-{
-        return(m_OutputLinesList);
+
+
+template <class TInputImage>
+void 
+ImageToLineSpatialObjectListFilter<TInputImage>
+::SetOutput(const LinesListType *list)
+  {  
+     this->itk::ProcessObject::SetNthOutput(0, 
+                const_cast< LinesListType * >( list ) );
+  }
+  
+  
+template <class TInputImage>
+typename ImageToLineSpatialObjectListFilter<TInputImage>::LinesListType * 
+ImageToLineSpatialObjectListFilter<TInputImage>
+::GetOutput(void)
+{ 
+    return static_cast<LinesListType *>
+    	(this->itk::ProcessObject::GetOutput(0) ); 
 }
 
+    
 /**
  *
  */

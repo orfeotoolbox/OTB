@@ -18,6 +18,7 @@
 
 #include "itkProcessObject.h"
 #include "otbLineSpatialObjectList.h"
+#include "itkLineSpatialObject.h"
 
 namespace otb
 {
@@ -58,7 +59,7 @@ public:
 
   /** Some convenient typedefs. */
   typedef LineSpatialObjectList                           LinesListType;
-  typedef LinesListType::LineType                  	  LineType;
+  typedef typename LinesListType::LineType                  	  LineType;
 
   /** Definition of the input and output images */
   typedef typename InputImageType::PixelType InputPixelType;
@@ -66,22 +67,22 @@ public:
 
   /** Definition of the size of the images. */
   typedef typename InputImageType::SizeType SizeType;
-  
-  
-  /** Get the list of LineSpatialObject of this process object.  */
-  LinesListType & GetOutput(void);
-  
-  /** Get the input image */
+
+ 
+  /** Set/Get the input image */
   void SetInput(const InputImageType *image);
   const InputImageType * GetInput(void);
-  
+
+  /** Set/Get the list of LineSpatialObject of this process object.  */
+  void SetOutput(const LinesListType *list);
+  LinesListType * GetOutput(void); 
+
+
   
 protected:
   ImageToLineSpatialObjectListFilter();
   virtual ~ImageToLineSpatialObjectListFilter() {}
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
-
-  LinesListType m_OutputLinesList; 
   
 
 private:
