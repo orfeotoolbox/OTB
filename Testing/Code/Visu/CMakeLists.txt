@@ -44,6 +44,12 @@ TARGET_LINK_LIBRARIES(otbVisuTests OTBVisu OTBIO OTBCommon ${CAI_LIBRARY}  ${GDA
 ADD_EXECUTABLE(otbImageViewer otbImageViewer.cxx)
 TARGET_LINK_LIBRARIES(otbImageViewer ITKFltkImageViewer OTBVisu OTBIO OTBCommon ITKIO ITKCommon)
 
+ADD_EXECUTABLE(otbImageViewerWithitkVectorImage otbImageViewerWithitkVectorImage.cxx)
+TARGET_LINK_LIBRARIES(otbImageViewerWithitkVectorImage ITKFltkImageViewer OTBVisu OTBIO OTBCommon ITKIO ITKCommon)
+
+ADD_EXECUTABLE(otbImageViewerWithitkImage otbImageViewerWithitkImage.cxx)
+TARGET_LINK_LIBRARIES(otbImageViewerWithitkImage ITKFltkImageViewer OTBVisu OTBIO OTBCommon ITKIO ITKCommon)
+
 
 ENDIF( NOT OTB_DISABLE_CXX_TESTING )
 
