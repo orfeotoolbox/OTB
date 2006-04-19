@@ -19,28 +19,27 @@ int otbLineSpatialObjectList( int argc, char ** argv )
 {
   try 
     { 
-/*        typedef otb::LineSpatialObjectList                                      LineSpatialObjectListType;
+        typedef otb::LineSpatialObjectList                                      LineSpatialObjectListType;
         typedef LineSpatialObjectListType::LineType                             LineSpatialObjecType;
         typedef LineSpatialObjectListType::LineType::PointListType              PointListType;
         typedef LineSpatialObjectListType::const_iterator                       LineSpatialObjectListConstIterator;
 
-        LineSpatialObjectListType listLines;
+        LineSpatialObjectListType::Pointer listLines = LineSpatialObjectListType::New();
         for( int i = 0 ; i < 10 ; i++ )
         {
                 LineSpatialObjecType::Pointer lLine = LineSpatialObjecType::New();
-                listLines.push_back( lLine );
+                listLines->push_back( lLine );
         }
         
         LineSpatialObjectListConstIterator lIter;
-        lIter = listLines.begin();
-        while( lIter != listLines.end() )
+        lIter = listLines->begin();
+        while( lIter != listLines->end() )
         {
                 LineSpatialObjecType::Pointer lLine = (*lIter);
                 PointListType lPoints = lLine->GetPoints();
-                
                 lIter++;
         }
-*/        
+        
     } 
   catch( itk::ExceptionObject & err ) 
     { 
