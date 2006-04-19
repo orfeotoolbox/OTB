@@ -61,7 +61,7 @@ int otbDrawLineSpatialObjectList( int argc, char* argv[] )
         
   	typedef otb::LineSpatialObjectList			LinesListType;
   	typedef LinesListType::LineType	LineType;
-  	LinesListType list;
+  	LinesListType::Pointer list = LinesListType::New();
   	
   	LineType::PointListType pointList;
         LineType::LinePointType point;
@@ -83,10 +83,10 @@ int otbDrawLineSpatialObjectList( int argc, char* argv[] )
         line->SetPoints( pointList );
         line->ComputeBoundingBox();
        
-        list.push_back(line);
+        list->push_back(line);
         
         pointList.clear();
-        
+                        
         // Definition of a second line
         Ux = 8.;
         Uy = 7.;
@@ -98,12 +98,13 @@ int otbDrawLineSpatialObjectList( int argc, char* argv[] )
         point.SetPosition(Vx,Vy);
         pointList.push_back(point);
         
+        
         LineType::Pointer line2 = LineType::New();
         line2->SetId(0);
         line2->SetPoints( pointList );
         line2->ComputeBoundingBox();
        
-        list.push_back(line2); 
+        list->push_back(line2); 
         
         pointList.clear();
         
@@ -123,7 +124,7 @@ int otbDrawLineSpatialObjectList( int argc, char* argv[] )
         line3->SetPoints( pointList );
         line3->ComputeBoundingBox();
        
-        list.push_back(line3); 
+        list->push_back(line3); 
         
 /*        LinesListType::const_iterator it;
         std::cout<<list.size()<<std::endl;
