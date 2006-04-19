@@ -19,7 +19,7 @@ int otbLineSpatialObjectList( int argc, char ** argv )
 {
   try 
     { 
-        typedef otb::LineSpatialObjectList                                      LineSpatialObjectListType;
+/*        typedef otb::LineSpatialObjectList                                      LineSpatialObjectListType;
         typedef LineSpatialObjectListType::LineType                             LineSpatialObjecType;
         typedef LineSpatialObjectListType::LineType::PointListType              PointListType;
         typedef LineSpatialObjectListType::const_iterator                       LineSpatialObjectListConstIterator;
@@ -40,7 +40,7 @@ int otbLineSpatialObjectList( int argc, char ** argv )
                 
                 lIter++;
         }
-        
+*/        
     } 
   catch( itk::ExceptionObject & err ) 
     { 
