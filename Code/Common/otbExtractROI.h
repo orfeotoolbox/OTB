@@ -45,8 +45,8 @@ public:
   itkTypeMacro(ExtractROI,ExtractROIBase);
 
   /** Image type information. */
-  typedef itk::Image<TInputPixel,2>  InputImageType;
-  typedef itk::Image<TOutputPixel,2> OutputImageType;
+  typedef typename Superclass::InputImageType   InputImageType;
+  typedef typename Superclass::OutputImageType  OutputImageType;
 
   /** Typedef to describe the output and input image region types. */
   typedef typename OutputImageType::RegionType OutputImageRegionType;

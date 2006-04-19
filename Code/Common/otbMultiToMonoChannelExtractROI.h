@@ -49,8 +49,8 @@ public:
   itkTypeMacro(MultiToMonoChannelExtractROI, ExtractROIBase);
 
   /** Image type information. */
-  typedef itk::VectorImage<TInputPixelType,2>     InputImageType;
-  typedef itk::Image<TOutputPixelType,2>          OutputImageType;
+  typedef typename Superclass::InputImageType   InputImageType;
+  typedef typename Superclass::OutputImageType  OutputImageType;
 
   /** Pixel type information */
   typedef typename OutputImageType::ValueType   OutputValueType;
