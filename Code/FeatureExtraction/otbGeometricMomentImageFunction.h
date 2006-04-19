@@ -51,17 +51,34 @@ public:
   typedef TOutput                                   OutputType;
 
 
+  /** Get/Set the radius of the neighborhood over which the
+      statistics are evaluated */
+  //OTB-FA-00025-CS
+  itkSetMacro( NeighborhoodRadius, int );
+  itkGetConstReferenceMacro( NeighborhoodRadius, int );
+
 protected:
-  GeometricMomentImageFunction() {};
+  GeometricMomentImageFunction() 
+  	{
+	//OTB-FA-00025-CS  
+	m_NeighborhoodRadius = -1;
+	};
+	
   ~GeometricMomentImageFunction(){};
   void PrintSelf(std::ostream& os, itk::Indent indent) const 
      {
       Superclass::PrintSelf( os, indent );
+      os << indent << " m_NeighborhoodRadius: "  << m_NeighborhoodRadius << std::endl;     
      }
      
 private:
   GeometricMomentImageFunction( const Self& ); //purposely not implemented
   void operator=( const Self& );               //purposely not implemented
+
+//OTB-FA-00025-CS
+  int m_NeighborhoodRadius;
+
+
 };
 
 } // namespace otb

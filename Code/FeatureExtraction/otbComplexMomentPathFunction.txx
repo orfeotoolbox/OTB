@@ -54,6 +54,7 @@ ComplexMomentPathFunction<TInputPath,TOutput>
 {
     ComplexType                         ValP;
     ComplexType                         ValQ;
+    ComplexType                         Result;
     double                              PixelValue = 1.0;
 
     ValP = std::complex<double>(1.0,0.0);
@@ -71,14 +72,15 @@ ComplexMomentPathFunction<TInputPath,TOutput>
       --q; 
      }
 
-    return ( static_cast<ComplexType>
-                    ( ValP * ValQ * std::complex<double>( static_cast<double>(PixelValue),0.0) ) );
+    //OTB-FA-00023-CS
+    Result = ValP * ValQ * std::complex<double>( static_cast<double>(PixelValue), 0.0); 
+    return ( static_cast<ComplexType>(Result) );
 }
 
 
 template < class TInputPath, class TOutput>
 typename ComplexMomentPathFunction<TInputPath,
-                                   TOutput>::ComplexType
+                                   TOutput>::OutputType
 ComplexMomentPathFunction<TInputPath,TOutput>
 ::Evaluate(const PathType& path) const
 {
@@ -90,6 +92,7 @@ ComplexMomentPathFunction<TInputPath,TOutput>
   VertexType                          IndexOut;
   int                                 nbPath;
   ComplexType  	     		      Value;
+
 
   Value = static_cast<ComplexType>(0.0);
   
@@ -122,11 +125,28 @@ ComplexMomentPathFunction<TInputPath,TOutput>
 	 }
        } // FOR loop
      } // IF loop
-
-  return (static_cast<ComplexType>(Value) );
+  //OTB-FA-00023-CS
+  return (static_cast<OutputType>(Value) );
 
 }
 
+template < class TInputPath, class TOutput>
+typename ComplexMomentPathFunction<TInputPath,
+                                   TOutput>::OutputType
+ComplexMomentPathFunction<TInputPath,TOutput>
+::Evaluate() const
+{
+  //OTB-FA-00022-CS
+  if( !this->GetInputPath() )
+    {
+    std::cout << "Pb with GetInputPath" << std::endl;
+    return static_cast<OutputType>(std::complex<float>( itk::NumericTraits<float>::max(), itk::NumericTraits<float>::max() ) );
+    }
+
+  OutputType Result =  Evaluate( *(this->GetInputPath()) );
+  
+  return Result;
+}
 
 } // namespace otb
 

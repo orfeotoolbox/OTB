@@ -91,6 +91,9 @@ const char Flst<TInputImage,TOutputTree>::tabPatterns[2][256] =
     0, 0, 1, 0, 0,-1, 0,-1, 0, 0, 1, 0, 0,-1, 0,-1}};
 
 
+/* ------------------------------------------------------------------------
+   --------- 
+   ------------------------------------------------------------------------ */
 
 /* ------------------------------------------------------------------------
    --------- Allocations of structures used in the algorithm --------------
@@ -111,6 +114,20 @@ Flst<TInputImage,TOutputTree>
     	(*ptabtabVisitedPixels)[i]   = new int[iWidth];
 	tabtabVisitedNeighbors[i]    = new int[iWidth];
     }   
+}
+
+template< class TInputImage, class TOutputTree>
+void 
+Flst<TInputImage,TOutputTree>
+::print_visited_pixels(int** ptabtabVisitedPixels)
+{
+  for (int i = 0 ; i < iHeight ; i++)
+  for (int j = 0 ; j < iWidth ; j++)
+    {
+      std::cout << " VisitedPixel["   <<i << "][" << j << "]=" << ptabtabVisitedPixels[i][j];
+      std::cout << " VisitedNeighbor["<<i << "][" << j << "]=" << tabtabVisitedNeighbors[i][j];
+      std::cout << std::endl;
+    }
 }
 
 template< class TInputImage, class TOutputTree>
@@ -139,6 +156,17 @@ Flst<TInputImage,TOutputTree>
     std::cerr << "init_region --> impossible to allocate the array" << std::endl;
 }
 
+template< class TInputImage, class TOutputTree>
+void 
+Flst<TInputImage,TOutputTree>
+::print_PointsInShape()
+{
+  for(int i = 0 ; i <iMaxArea ;i++)
+    {
+     std::cout << "tabPointsInShape["<<i<<"]= ("<< tabPointsInShape[i].x ;
+     std::cout << " , " << tabPointsInShape[i].y<<" )" << std::endl;
+    } 
+}
 
 /* Initialize the output image */
 template< class TInputImage, class TOutputTree>
@@ -150,26 +178,11 @@ Flst<TInputImage,TOutputTree>
   int                  j;
   RealImageIndexType   Index;
 
-#if 0
-  *ptabtabPixelsOutput = (float**) malloc(iHeight * sizeof(float*));
-  if(*ptabtabPixelsOutput == 0)
-    mwerror(FATAL, 1, "init_output_image --> allocation error\n");
-  for(i = 0; i < iHeight; i++)
-    (*ptabtabPixelsOutput)[i] = tabPixelsIn + i * iWidth;
-#endif
 
   *ptabtabPixelsOutput   = new float*[iHeight];
   for (i = 0 ; i < iHeight ; i++)
 	(*ptabtabPixelsOutput)[i] = new float[iWidth];
-#if 0
-  for (i = 0 ; i < iHeight ; i++)
-    for	(j = 0 ; j < iWidth ; j++)
-        {
-	Index[0] = i;
-	Index[0] = j;
-        (*ptabtabPixelsOutput)[i][j] = ( static_cast<float>(image->GetPixel( Index )) );
-	}
-#endif
+
 }
 
 template< class TInputImage, class TOutputTree>
@@ -202,6 +215,11 @@ Flst<TInputImage,TOutputTree>
 {
   Neighbor* pNewNeighbor;
 
+  std::cout << " add_neighbor() " << std::endl;
+  std::cout << "   NeighborPosition (" <<x<<" , "<<y<<" )= "<<value << std::endl;
+  std::cout << "   Before Adding: " << std::endl;
+  
+  pNeighborhood->print_neighborhood();
   /* 0) Tag the pixel as 'visited neighbor' */
   tabtabVisitedNeighbors[y][x] = iExploration; 
   /* 1) Update the fields TYPE and OTHERBOUND of PNEIGHBORHOOD */
@@ -238,6 +256,11 @@ Flst<TInputImage,TOutputTree>
   pNewNeighbor->point.y = y;
   pNewNeighbor->value = value;
   pNeighborhood->fix_up(); /* Update the heap of neighbors */
+
+  std::cout << "   After Adding: " << std::endl;  
+  pNeighborhood->print_neighborhood();
+  std::cout << " add_neighbor() END" << std::endl;
+
 }
 
 /* Remove the neighbor at the top of the heap, that is the root of the tree. */
@@ -249,6 +272,10 @@ Flst<TInputImage,TOutputTree>
   Neighbor* pTop = &pNeighborhood->tabPoints[1];
   float value = pTop->value;
 
+  std::cout << " remove_neighbor() " << std::endl;
+  std::cout << "   Before Removing : " << std::endl;  
+  pNeighborhood->print_neighborhood();
+
   if(pNeighborhood->type == Neighborhood::INVALID)
     return;
   *pTop = pNeighborhood->tabPoints[pNeighborhood->iNbPoints--];
@@ -257,6 +284,11 @@ Flst<TInputImage,TOutputTree>
   pNeighborhood->fix_down();
   if(value != pTop->value && pTop->value == pNeighborhood->otherBound)
     pNeighborhood->type = Neighborhood::AMBIGUOUS;
+
+  std::cout << "   After Removing : " << std::endl;  
+  pNeighborhood->print_neighborhood();
+  std::cout << " add_neighbor() END" << std::endl;
+
 }
 
 template< class TInputImage, class TOutputTree>
@@ -310,9 +342,22 @@ Flst<TInputImage,TOutputTree>
 ::levelize(float** tabtabPixelsOutput,Point_plane* tabPoints,
            int iNbPoints,float newGray)
 {
-  int i;
-  for(i = iNbPoints - 1; i >= 0; i--)
+  std::cout << "Levelize()" << std::endl;
+
+  std::cout << " iNbPoints : " << iNbPoints;
+  std::cout << " NewGray   : " << newGray;
+  std::cout << std::endl;
+
+  PrintPixelOutput(tabtabPixelsOutput);
+  print_PointsInShape();
+  
+  for(int i = iNbPoints - 1; i >= 0; i--)
     tabtabPixelsOutput[tabPoints[i].y][tabPoints[i].x] = newGray;
+
+  PrintPixelOutput(tabtabPixelsOutput);
+  
+  std::cout << "Levelize() END" << std::endl;
+
 }
 
 /* Return, coded in one byte, the local configuration around the pixel (x,y) */
@@ -365,10 +410,17 @@ Flst<TInputImage,TOutputTree>
 ::new_shape(int iCurrentArea,float currentGrayLevel, 
             char bOfInferiorType,Shape* pChild)
 {
-  std::cout << "NewShape " << pGlobalTree->nb_shapes << std::endl;
-  Shape* pNewShape = &pGlobalTree->the_shapes[pGlobalTree->nb_shapes++];
-  std::cout << "NewShape modif" << pGlobalTree->nb_shapes << std::endl;
+  std::cout << "Flst::new_shape() "   << std::endl;
+  std::cout << " iCurrentArea : "     << iCurrentArea;
+  std::cout << " currentGrayLevel : " << currentGrayLevel;
+  std::cout << " pChild : "           << pChild ;
+  std::cout << std::endl;
+  std::cout << " NbShapes: " << pGlobalTree->nb_shapes << std::endl;
 
+  PrintTree(pGlobalTree);
+  
+  Shape* pNewShape = &pGlobalTree->the_shapes[pGlobalTree->nb_shapes++];
+ 
   pNewShape->inferior_type = bOfInferiorType;
   pNewShape->value         = currentGrayLevel;
   pNewShape->open          = (char)(iAtBorder != 0);
@@ -418,6 +470,7 @@ Flst<TInputImage,TOutputTree>
   Shape* pParent;
   float level;
 
+
   for(i = iNbPoints-1; i >= 0; i--) {
     iIndex = tabPoints[i].y * iWidth + tabPoints[i].x;
     pShape = tabConnections[iIndex].shape;
@@ -428,7 +481,7 @@ Flst<TInputImage,TOutputTree>
 	assert(pParent != &pGlobalTree->the_shapes[pGlobalTree->nb_shapes-1]);
 	pParent = pParent->parent;
       }
-      pParent->insert_children( pShape);
+      insert_children(pParent, pShape);
       tabConnections[iIndex].shape = NULL;
     }
   }
@@ -444,7 +497,8 @@ Flst<TInputImage,TOutputTree>
   Shape* pSibling;
   Shape* pShape = &pGlobalTree->the_shapes[pGlobalTree->nb_shapes-1];
   
-  std::cout << "New Connection" << std::endl;
+  std::cout << "New Connection()" << std::endl;
+  
   iIndex = pPoint->y*iWidth + pPoint->x;
   if(tabConnections[iIndex].shape == NULL) {
     tabConnections[iIndex].shape = pShape;
@@ -513,9 +567,13 @@ Flst<TInputImage,TOutputTree>
   int iCurrentArea, iNbHoles;
   unsigned char cPattern;
 
-  std::cout << "AddIsoLevel" << std::endl;
-  
-
+  std::cout << "AddIsoLevel()" << std::endl;
+  std::cout << " pCurrentArea :" << *pCurrentArea;
+  std::cout << " currentGrayLevel :" << currentGrayLevel;
+  std::cout << std::endl;
+ 
+  pNeighborhood->print_neighborhood();
+    
   iNbHoles = 0;
   iCurrentArea = *pCurrentArea;
   pNeighbor = &pNeighborhood->tabPoints[1];
@@ -551,6 +609,7 @@ Flst<TInputImage,TOutputTree>
     *pCurrentArea = iCurrentArea;
     return (char)1;
   }
+
   return 0;
 }
 
@@ -570,7 +629,9 @@ Flst<TInputImage,TOutputTree>
   Shape* pSmallestShape;
   Shape* pLastShape;
 
-  std::cout << "find terminal branch" <<std::endl;
+  std::cout << "find terminal branch() ";
+  std::cout << " Location : ("<<x<<" , "<< y <<" )";
+  std::cout << std::endl;
 
  restart_branch:
   ++ iExploration;
@@ -578,8 +639,19 @@ Flst<TInputImage,TOutputTree>
   bUnknownHoles = 0;
   pSmallestShape = pLastShape = NULL;
   level = ou[y][x];
+  std::cout << "before reinit_neighbor()"<<std::endl;
+  pNeighborhood->print_neighborhood(); 
+
   pNeighborhood->reinit_neighborhood(b8Connected ? Neighborhood::MAX : Neighborhood::MIN);
+
+  std::cout << "after reinit_neighbor()"<<std::endl;
+  pNeighborhood->print_neighborhood(); 
+
   add_neighbor(pNeighborhood, x, y, level);
+
+  std::cout << "after add_neighbor()"<<std::endl;
+  pNeighborhood->print_neighborhood(); 
+  
   while(add_iso_level(tabPointsInShape, &iArea,
 		      level, pNeighborhood, ou, tabtabVisitedPixels,
 		      &b8Connected, &bUnknownHoles) != 0) 
@@ -590,7 +662,8 @@ Flst<TInputImage,TOutputTree>
       assert(iArea != 0);
       if(pLastShape != NULL) {
 	iArea = pLastShape->area;
-	std::cout << "Connect--------------->>>" << std::endl;
+	std::cout << "Connect--------------->>>"<<iArea << std::endl;
+	
 	connect(tabPointsInShape, iArea, tabConnections, pSmallestShape);
 	new_connection(&tabPointsInShape[iArea], level, tabConnections);
       }
@@ -616,11 +689,14 @@ Flst<TInputImage,TOutputTree>
   if(pLastShape != NULL) {
     connect(tabPointsInShape, iArea, tabConnections, pSmallestShape);
     if(iAtBorder && iArea == iHalfAreaImage)
-      pGlobalTree->the_shapes->insert_children( pLastShape);
+      insert_children(pGlobalTree->the_shapes, pLastShape);
     else if(iArea != 0)
       new_connection(&tabPointsInShape[iArea], level, tabConnections);
   }
   levelize(ou, tabPointsInShape, iArea, level);
+
+  std::cout << "find terminal branch() END "<< std::endl;
+
 }
 
 /* Scan the image, calling a procedure to extract terminal branch at each
@@ -642,12 +718,6 @@ Flst<TInputImage,TOutputTree>
     for(j = 0; j < iWidth; j++)
       {
  
- //     std::cout << "i: " <<i<<" j: "<< j <<" visitedPix : " << tabtabVisitedPixels[i][j];
- //     std::cout << " | iExplorationInit : " << iExplorationInit ;
- //     std::cout << " PixelValue : " << tabtabPixelsOutput[i][j];
- //     std::cout << " localMin : " << is_local_min(tabtabPixelsOutput, j, i, (char)0 );
- //     std::cout << " localMax : " << is_local_max(tabtabPixelsOutput,j,i,(char)1 );
- //     std::cout << std::endl;
       
       if(tabtabVisitedPixels[i][j] <= iExplorationInit &&
 	 (is_local_min(tabtabPixelsOutput, j, i, (char)0) ||
@@ -674,6 +744,56 @@ Flst<TInputImage,TOutputTree>
 {
   
 }  
+
+
+template<class TInputImage, class TOutputTree>
+void
+Flst<TInputImage,TOutputTree>
+::PrintTree(Shapes* pTree)
+{
+  std::cout <<std::endl;
+  std::cout << "NbShapes : " << pTree->nb_shapes;
+  std::cout << " Nb col   : " << pTree->ncol;
+  std::cout << " Nb lig   : " << pTree->nrow << std::endl;
+
+  for(int lig = 0 ; lig < pTree->nrow;lig++)
+  for(int col = 0 ; col < pTree->ncol;col++)
+    {
+    std::cout <<" smallest_shape("<< lig << " , "<< col <<" ) = " ;
+    std::cout << pTree->smallest_shape[lig*pTree->ncol+col] <<std::endl;
+    }
+
+  for (int NoShape = 0 ; NoShape <  pTree->nb_shapes ;  NoShape++ )
+    {
+    std::cout <<" NoShape :" <<NoShape;
+    std::cout << " Shape Adress :" << &pTree->the_shapes[NoShape];
+    std::cout <<" Parent : "    << pTree->the_shapes[NoShape].parent;
+    std::cout <<" Child : "     << pTree->the_shapes[NoShape].child;
+    std::cout <<" next_sibling "<< pTree->the_shapes[NoShape].next_sibling;
+    std::cout <<" pixels : "    << pTree->the_shapes[NoShape].pixels;
+    std::cout <<" value : "     << pTree->the_shapes[NoShape].value;
+    std::cout <<" open : "      << int(pTree->the_shapes[NoShape].open);
+    std::cout <<" area : "      << pTree->the_shapes[NoShape].area;
+    std::cout <<" removed : "   << int(pTree->the_shapes[NoShape].removed);
+    
+    std::cout << std::endl;
+    }
+}  
+
+template<class TInputImage, class TOutputTree>
+void
+Flst<TInputImage,TOutputTree>
+::PrintPixelOutput(float **tabtabPixelsOutput)
+{
+  for (int i = 0 ; i < iHeight ; i++)
+  for (int j = 0 ; j < iWidth ; j++)
+    {
+      std::cout << " tabtabPixelsOutput[" << i << "][" << j << "]=" << tabtabPixelsOutput[i][j];
+      std::cout << std::endl;
+    }
+
+}
+
 
 /* The "Fast Level Set Transform" gives the tree of interiors of level lines
 (named 'shapes') representing the image.
@@ -703,6 +823,9 @@ Flst<TInputImage,TOutputTree>
 
   std::cout << "Generate data FLST" <<std::endl;
   const InputImageType*  InputImage   = this->GetInput();
+  
+  
+  
   itkDebugMacro(<< "FLST::GenerateData() called");
 
   pTree = new Shapes;
@@ -732,21 +855,45 @@ Flst<TInputImage,TOutputTree>
   pGlobalTree->mw_change_shapes( iHeight, iWidth, gray);
   pGlobalTree->interpolation = 0;
 
+  PrintTree(pGlobalTree);
+  PrintTree(pTree);
+  
+  
   tabConnections = new Connection[iAreaImage];
   if(tabConnections == NULL)
     std::cerr << "Image of largest shapes: allocation error" << std::endl;
   for(i = iAreaImage-1; i >= 0; i--)
     tabConnections[i].shape = NULL;
 
+
   init_output_image(InputImage, &tabtabPixelsOutput);
+
+/*
+  tabtabPixelsOutput[0][0] = 255.;
+  tabtabPixelsOutput[0][1] = 255.;
+  tabtabPixelsOutput[0][2] = 255.;
+  tabtabPixelsOutput[0][3] = 255.;
+
+  tabtabPixelsOutput[1][0] = 255.;
+  tabtabPixelsOutput[1][1] = 0.;
+  tabtabPixelsOutput[1][2] = 0.;
+  tabtabPixelsOutput[1][3] = 255.;
+
+  tabtabPixelsOutput[2][0] = 255.;
+  tabtabPixelsOutput[2][1] = 255.;
+  tabtabPixelsOutput[2][2] = 255.;
+  tabtabPixelsOutput[2][3] = 255.;
+*/
+
   for (i = 0 ; i < iHeight ; i++)
     for	(j = 0 ; j < iWidth ; j++)
         {
-	Index[0] = i;
-	Index[1] = j;
+	Index[0] = j;
+	Index[1] = i;
+	
         tabtabPixelsOutput[i][j] = ( static_cast<float>(InputImage->GetPixel( Index )) );
 
-//	std::cout << "PixelOut [" << i << "][" << j << "] = " << tabtabPixelsOutput[i][j] << std::endl;
+	std::cout << "PixelOut [" << i << "][" << j << "] = " << tabtabPixelsOutput[i][j] << std::endl;
 	}
 
 
@@ -766,26 +913,50 @@ Flst<TInputImage,TOutputTree>
     if(iMaxArea == 0 || iMaxArea >= iHalfAreaImage) /* iMaxArea==0: overflow */
       iMaxArea = iAreaImage-1;
     scan(tabtabPixelsOutput, tabtabVisitedPixels,&neighborhood,tabConnections);
+    std::cout << " ScanResult:" <<std::endl;
+    PrintTree(pGlobalTree);
+     
   } while(iMaxArea+1 < iAreaImage);
+
+
+	
 
   /* Make connections with root */
   std::cout << " NbShapes : " << pTree->nb_shapes << std::endl;
   pTree->the_shapes[0].value = tabtabPixelsOutput[0][0];
   std::cout << "iAreaImage = " << iAreaImage <<std::endl;
   for(i = iAreaImage-1; i >= 0; i--)
+    {
+     std::cout << " Connections["<<i<<"]: " << tabConnections[i].shape<< std::endl;
+    
     if(tabConnections[i].shape != NULL) 
       {
-      std::cout << "i : " << i << " Connections: " << tabConnections[i].shape<< std::endl;
+      std::cout << "i : " << i << " Connections INSERT CHILDREN: " << std::endl;
 	
       assert(tabConnections[i].level == pTree->the_shapes[0].value);
-      pTree->the_shapes->insert_children( tabConnections[i].shape);
+      insert_children(pTree->the_shapes, tabConnections[i].shape);
       }
+    }
 
-  std::cout << " NbShapes : " << pGlobalTree->nb_shapes << std::endl;
 
-  for (int NoShape = 0 ; NoShape <= pGlobalTree->nb_shapes ; NoShape++)
+
+//  pGlobalTree->flst_pixels();
+  
+  TreePointer TreePath = TreeType::New();
+   
+  for (int NoShape = 0 ; NoShape <=pTree->nb_shapes ;  NoShape++ )
     {
-    std::cout << "Shape Area: "<<NoShape <<" -->" << pGlobalTree->the_shapes[NoShape].area << std::endl;
+    std::cout << "Shape Area : "<<NoShape <<" -->" << pTree->the_shapes[NoShape].area << std::endl;
+    std::cout << "Shape value: "<<NoShape <<" -->" << pTree->the_shapes[NoShape].value << std::endl;
+    std::cout << "Shape open : "<<NoShape <<" -->" << pTree->the_shapes[NoShape].open << std::endl;
+    std::cout << "Shape pixel: "<<NoShape <<" -->" << pTree->the_shapes[NoShape].pixels<< std::endl;
+
+    PathPointer pathList = PathType::New();
+    pathList = pTree->flst_shape_boundary(&pTree->the_shapes[NoShape]);
+    
+    
+    
+    
     }
 
   delete[] tabConnections;
@@ -794,10 +965,8 @@ Flst<TInputImage,TOutputTree>
   free_region(); 
   free_output_image(tabtabPixelsOutput);
   
-  pGlobalTree->flst_pixels();
-
   std::cout << "GenerateData() FINI !!" << std::endl;
-  delete pGlobalTree;
+//  delete pGlobalTree;
 }
 
 /**
@@ -810,6 +979,22 @@ Flst<TInputImage,TOutputTree>
 {
   Superclass::PrintSelf( os, indent );
 //  os << indent << "MinArea: " << m_MinArea << std::endl;
+}
+/* Insert a new shape and its siblings in the tree, with parent pParent */
+
+template< class TInputImage, class TOutputTree>
+void 
+Flst<TInputImage,TOutputTree> 
+::insert_children(Shape* pParent, Shape* pNewChildToInsert)
+{
+  Shape* pSibling = pNewChildToInsert;
+  while(pSibling->next_sibling != NULL) {
+    pSibling->parent = pParent;
+    pSibling = pSibling->next_sibling;
+  }
+  pSibling->parent = pParent;
+  pSibling->next_sibling = pParent->child;
+  pParent->child = pNewChildToInsert;
 }
 
 

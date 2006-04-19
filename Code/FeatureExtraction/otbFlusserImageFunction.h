@@ -6,7 +6,7 @@
   Date      :   20 mars 2006
   Version   :   
   Role      :   Flusser's invariant Class of images 
-  $Id:$
+  $Id$
 
 =========================================================================*/
 #ifndef _otbFlusserImageFunction_h
@@ -88,7 +88,7 @@ public:
 
   /** Evalulate the function at specified index */
   virtual RealType EvaluateAtIndex( const IndexType& index ) const;
-  
+
   /** Evaluate the function at non-integer positions */
   virtual RealType Evaluate( const PointType& point ) const
     { 
@@ -103,11 +103,13 @@ public:
       this->ConvertContinuousIndexToNearestIndex( cindex, index );
       return this->EvaluateAtIndex( index ) ; 
     }
+  
 
   /** Get/Set the radius of the neighborhood over which the
       statistics are evaluated */  
-  itkSetClampMacro(Number,short,1,11);
-  itkGetConstReferenceMacro( Number, short );
+  //OTB-FA-00024-CS
+  itkSetClampMacro(MomentNumber,short,1,11);
+  itkGetConstReferenceMacro( MomentNumber, short );
 
 protected:
   FlusserImageFunction();
@@ -118,7 +120,8 @@ private:
   FlusserImageFunction( const Self& ); //purposely not implemented
   void operator=( const Self& ); //purposely not implemented
 
-  short m_Number;  
+  //OTB-FA-00024-CS
+  short m_MomentNumber;  
 };
 
 } // namespace otb

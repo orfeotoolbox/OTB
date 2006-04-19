@@ -28,7 +28,8 @@ template < class TInput, class TOutput, class TCoordRep>
 FlusserImageFunction<TInput,TOutput,TCoordRep>
 ::FlusserImageFunction()
 {
-  m_Number =-1; 
+  //OTB-FA-00024-CS
+  m_MomentNumber =-1; 
 }
 
 /**
@@ -40,7 +41,8 @@ FlusserImageFunction<TInput,TOutput,TCoordRep>
 ::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   this->Superclass::PrintSelf(os,indent);
-  os << indent << " m_Number           : "  << m_Number << std::endl;
+  //OTB-FA-00024-CS
+  os << indent << " m_MomentNumber           : "  << m_MomentNumber << std::endl;
 }
 
 
@@ -66,13 +68,15 @@ FlusserImageFunction<TInput,TOutput,TCoordRep>
     return ( itk::NumericTraits<RealType>::max() );
     }
 
-  assert(m_Number > 0);
-  assert(m_Number < 12);
+  assert(m_MomentNumber > 0);
+  assert(m_MomentNumber < 12);
 	
    function->SetInputImage( this->GetInputImage() );
+//OTB-FA-00025-CS
+   function->SetNeighborhoodRadius(this->GetNeighborhoodRadius() );
 
-
-  switch(m_Number)
+  //OTB-FA-00024-CS
+  switch(m_MomentNumber)
     {
     case 1 : 
         {

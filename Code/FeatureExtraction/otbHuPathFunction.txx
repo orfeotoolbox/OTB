@@ -27,7 +27,8 @@ template < class TInputPath, class TOutput>
 HuPathFunction< TInputPath, TOutput >
 ::HuPathFunction()
 {
-  m_Number =-1; 
+  //OTB-FA-00024-CS
+  m_MomentNumber =-1; 
 }
 
 /**
@@ -39,7 +40,8 @@ HuPathFunction< TInputPath, TOutput >
 ::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   this->Superclass::PrintSelf(os,indent);
-  os << indent << " m_Number           : "  << m_Number << std::endl;
+  //OTB-FA-00024-CS
+  os << indent << " m_MomentNumber           : "  << m_MomentNumber << std::endl;
 }
 
 
@@ -57,15 +59,18 @@ HuPathFunction<TInputPath, TOutput >
   typename FunctionType::Pointer function =FunctionType::New();
  
   function->SetStep( this->GetStep() );
+  //OTB-FA-00023-CS
+  function->SetInputPath( this->GetInputPath() );
 
-  switch(m_Number)
+  //OTB-FA-00024-CS
+  switch(m_MomentNumber)
     {
     case 1 : 
         {
 	ComplexType C11;
 	function->SetP(1);
 	function->SetQ(1);
-	C11 = function->Evaluate( path );
+	C11 = function->Evaluate( );
         HuValue = C11.real() ;
 	}
 	break;
@@ -74,10 +79,10 @@ HuPathFunction<TInputPath, TOutput >
 	ComplexType C20,C02;
 	function->SetP(2);
 	function->SetQ(0);
-	C20 = function->Evaluate( path );
+	C20 = function->Evaluate( );
 	function->SetP(0);
 	function->SetQ(2);
-	C02 = function->Evaluate( path );
+	C02 = function->Evaluate( );
 
 	HuValue = abs( C20 * C02 ) ;
 
@@ -88,10 +93,10 @@ HuPathFunction<TInputPath, TOutput >
 	ComplexType C30,C03;
 	function->SetP(3);
 	function->SetQ(0);
-	C30 = function->Evaluate( path );
+	C30 = function->Evaluate( );
 	function->SetP(0);
 	function->SetQ(3);
-	C03 = function->Evaluate( path );
+	C03 = function->Evaluate( );
 
 	HuValue = abs( C30 * C03 );
 	}
@@ -101,10 +106,10 @@ HuPathFunction<TInputPath, TOutput >
 	ComplexType C21,C12;
 	function->SetP(2);
 	function->SetQ(1);
-	C21 = function->Evaluate( path );
+	C21 = function->Evaluate( );
 	function->SetP(1);
 	function->SetQ(2);
-	C12 = function->Evaluate( path );
+	C12 = function->Evaluate( );
 
 	HuValue = abs( C21 * C12 );
 	}	
@@ -115,10 +120,10 @@ HuPathFunction<TInputPath, TOutput >
 	ComplexType C30,C12;
 	function->SetP(3);
 	function->SetQ(0);
-	C30 = function->Evaluate( path );
+	C30 = function->Evaluate( );
 	function->SetP(1);
 	function->SetQ(2);
-	C12 = function->Evaluate( path );
+	C12 = function->Evaluate( );
 
 	HuValueComplex = C30 * pow(C12,3) ;
 	HuValue = HuValueComplex.real();       
@@ -130,10 +135,10 @@ HuPathFunction<TInputPath, TOutput >
 	ComplexType C20,C12;
 	function->SetP(2);
 	function->SetQ(0);
-	C20 = function->Evaluate( path );
+	C20 = function->Evaluate( );
 	function->SetP(1);
 	function->SetQ(2);
-	C12 = function->Evaluate( path );
+	C12 = function->Evaluate( );
 
 	HuValueComplex = C20 * pow( C12 ,2 );
 	HuValue = HuValueComplex.real();         
@@ -145,10 +150,10 @@ HuPathFunction<TInputPath, TOutput >
 	ComplexType C30,C12;
 	function->SetP(3);
 	function->SetQ(0);
-	C30 = function->Evaluate( path );
+	C30 = function->Evaluate( );
 	function->SetP(1);
 	function->SetQ(2);
-	C12 = function->Evaluate( path );
+	C12 = function->Evaluate( );
 
 	HuValueComplex = C30 * pow( C12 , 3);
 	HuValue = HuValueComplex.imag();         
@@ -163,6 +168,23 @@ HuPathFunction<TInputPath, TOutput >
 
 }
 
+template < class TInputPath, class TOutput>
+typename HuPathFunction<TInputPath, TOutput >::RealType
+HuPathFunction<TInputPath, TOutput >
+::Evaluate( ) const
+{
+  //OTB-FA-00022-CS
+  if( !this->GetInputPath() )
+    {
+    std::cout << "Pb with GetInputPath" << std::endl;
+    return static_cast<RealType>( itk::NumericTraits<float>::max());
+    }
+
+  RealType Result =  Evaluate( *(this->GetInputPath()) );
+  
+  return Result;
+
+}
 
 } // namespace otb
 

@@ -34,7 +34,6 @@ ComplexMomentImageFunction<TInput,TOutput,TCoordRep>
 {
   m_P = 0;
   m_Q = 0;
-  m_NeighborhoodRadius = -1;
 }
 
 /**
@@ -48,7 +47,6 @@ ComplexMomentImageFunction<TInput,TOutput,TCoordRep>
   this->Superclass::PrintSelf(os,indent);
   os << indent << " p indice value      : "  << m_P << std::endl;
   os << indent << " q indice value      : "  << m_Q << std::endl;
-  os << indent << " m_NeighborhoodRadius: "  << m_NeighborhoodRadius << std::endl;
 }
 
 
@@ -65,23 +63,13 @@ ComplexMomentImageFunction<TInput,TOutput,TCoordRep>
   IndexType                           indexPos = index;
   typename TInput::SizeType           kernelSize;
 
-  std::cout << "Evaluate at index "<<index <<std::endl;
-  std::cout << "ImageSize : " << this->GetInputImage()->GetBufferedRegion().GetSize() <<std::endl;
   if( !this->GetInputImage() )
     {
     std::cout << "Pb with GetInputImage" << std::endl;
     return ( std::complex<float>( itk::NumericTraits<float>::max(), itk::NumericTraits<float>::max() ) );
     }
-  
-//  if ( !this->IsInsideBuffer( index ) )
-//    {
-//    std::cout << "Pbs with Is InsideBuffer " << std::endl;
-//    return ( std::complex<float>( itk::NumericTraits<float>::max(), itk::NumericTraits<float>::max() ) );
-//    }
 
-
-  std::cout << "Neighborhood Radius : "<< m_NeighborhoodRadius <<std::endl;
-   if(m_NeighborhoodRadius<0)
+   if(this->GetNeighborhoodRadius()<0)
      {
      ImageSize = this->GetInputImage()->GetBufferedRegion().GetSize();
      
@@ -93,11 +81,8 @@ ComplexMomentImageFunction<TInput,TOutput,TCoordRep>
      }
      else
      {
-       kernelSize.Fill( m_NeighborhoodRadius );
+       kernelSize.Fill( this->GetNeighborhoodRadius() );
      }  
-
-  std::cout << "kernelSize : "<< kernelSize <<std::endl;
-  std::cout << "indexPos   : "<< indexPos <<std::endl;
 
   itk::ConstNeighborhoodIterator<TInput>
     it(kernelSize, this->GetInputImage(), this->GetInputImage()->GetBufferedRegion());
@@ -125,13 +110,10 @@ ComplexMomentImageFunction<TInput,TOutput,TCoordRep>
       ValQ *= std::complex<float>(IndexValue[0], -IndexValue[1]);
       --q; 
      }
-//    std::cout<< i <<"--> "<< IndexValue << " p:"<<ValP <<" Q: "<<ValQ;  
           
     Sum += ( ValP * ValQ * std::complex<float>(static_cast<float>(it.GetPixel(i)),0.0) ); 
-//    std::cout<< "Val Pixel: " << static_cast<float>(it.GetPixel(i)) <<" Result :" << Sum<<std::endl;
   }
 
-   std::cout<<"Result dans la procedure: " <<Sum <<std::endl;
   return (static_cast<ComplexType>(Sum) );
 
 

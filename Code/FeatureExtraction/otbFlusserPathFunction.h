@@ -81,10 +81,11 @@ public:
 
   /** Evaluate the function at non-integer positions */
   virtual RealType Evaluate( const PathType& path) const;
+  virtual RealType Evaluate( ) const;
   /** Get/Set the radius of the neighborhood over which the
       statistics are evaluated */  
-  itkSetMacro(Number,short);
-  itkGetConstReferenceMacro( Number, short );
+  itkSetMacro(MomentNumber,short);
+  itkGetConstReferenceMacro( MomentNumber, short );
 
 protected:
   FlusserPathFunction();
@@ -95,7 +96,7 @@ private:
   FlusserPathFunction( const Self& ); //purposely not implemented
   void operator=( const Self& ); //purposely not implemented
 
-  short m_Number;  
+  short m_MomentNumber;  
 };
 
 } // namespace otb

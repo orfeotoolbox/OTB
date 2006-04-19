@@ -118,20 +118,6 @@ Shape::mw_get_next_sibling_shape(Shape *sh)
 
 
 
-/* Insert a new shape and its siblings in the tree, with parent pParent */
-void 
-Shape::insert_children(Shape* pNewChildToInsert)
-{
-
-  Shape* pSibling = pNewChildToInsert;
-  while(pSibling->next_sibling != NULL) {
-    pSibling->parent = parent;
-    pSibling = pSibling->next_sibling;
-  }
-  pSibling->parent = parent;
-  pSibling->next_sibling = child;
-  child = pNewChildToInsert;
-}
 
 /*-- Shapes --*/
 
@@ -139,13 +125,14 @@ Shape::insert_children(Shape* pNewChildToInsert)
 /* Allocate the root of the shapes */
 
 void
-Shapes::mw_alloc_shapes( int nrow, int  ncol, float value)
+Shapes::mw_alloc_shapes( int inrow, int  incol, float value)
 {
   int size,i;
   Shape *root;
 
+  std::cout << "mw_alloc_shapes () " << std::endl;
   
-  size = nrow*ncol;
+  size = inrow*incol;
   if (size <= 0)
     {
       std::cerr << "[mw_alloc_shapes] Attempts to alloc shapes with null size" << std::endl;
@@ -166,13 +153,14 @@ Shapes::mw_alloc_shapes( int nrow, int  ncol, float value)
   root->area          = size;
   root->removed       = 0;
   root->pixels        = NULL;
-  root->parent        = NULL;
-  root->next_sibling  = NULL;
+  root->parent        = root->next_sibling;
+  root->next_sibling  = root->child;
   root->child         = NULL;
 
   nb_shapes = 1;
-  nrow      = nrow;
-  ncol      = ncol;  
+  nrow      = inrow;
+  ncol      = incol;  
+
 
   typedef Shape* ShapePtr;
   smallest_shape = new ShapePtr[size];
@@ -188,23 +176,20 @@ Shapes::mw_alloc_shapes( int nrow, int  ncol, float value)
 /* Allocate the struct and the root if they are not defined */
 
 void
-Shapes::mw_change_shapes(int nrow,int ncol,float value)
+Shapes::mw_change_shapes(int inrow,int incol,float value)
 {
   int size,i;
 
   /* Deallocate the shapes but the structure itself */
-  std::cout << "mw_change_shapes  1 " << std::endl;
-  std::cout << "nb shapes  : " <<this->nb_shapes << std::endl;
-  std::cout << "the shapes : " <<the_shapes << std::endl;
+  std::cout << "mw_change_shapes () " << std::endl;
+  std::cout << "  nb shapes  : " <<this->nb_shapes;
+  std::cout << "  the shapes : " <<the_shapes << std::endl;
   if((the_shapes != NULL) && (nb_shapes > 0))
     delete[] the_shapes[0].pixels;
-  std::cout << "mw_change_shapes  2 " << std::endl;
   if (the_shapes != NULL) delete[] the_shapes;
-  std::cout << "mw_change_shapes  3 " << std::endl;
-  if (smallest_shape != NULL) delete[] smallest_shape;
-  std::cout << "mw_change_shapes  4 " << std::endl;
-
-  mw_alloc_shapes(nrow, ncol, value);
+ if (smallest_shape != NULL) delete[] smallest_shape;
+ 
+  mw_alloc_shapes(inrow, incol, value);
 }
 
 
@@ -296,14 +281,19 @@ Shapes::flst_pixels()
   int          j; 
   int          iIndex;
 
+  std::cout << "flst_pixel () 1" << std::endl;
+  
   /* 1) Compute nb of proper pixels in each shape */
   tabNbOfProperPixels = new int[nb_shapes];
   if(tabNbOfProperPixels ==NULL)
     std::cerr << "Allocation of array error" << std::endl;
   compute_proper_pixels(tabNbOfProperPixels);
 
+  std::cout << "flst_pixel () 2" << std::endl;
+
   /* 2) Allocate array for the root and make others sub-arrays */
   allocate_pixels(tabNbOfProperPixels);
+  std::cout << "flst_pixel () 3" << std::endl;
 
   /* 3) Fill the array */
   ppShape = smallest_shape + ncol*nrow-1;
@@ -314,7 +304,297 @@ Shapes::flst_pixels()
 	pCurrentPoint = &(*ppShape)->pixels[--tabNbOfProperPixels[iIndex]];
 	pCurrentPoint->x = j; pCurrentPoint->y = i;
       }
+  std::cout << "flst_pixel () 4" << std::endl;
+
   delete[] tabNbOfProperPixels;
+}
+
+
+
+const int Shapes::EAST   = 0;
+const int Shapes::NORTH  = 1;
+const int Shapes::WEST   = 2;
+const int Shapes::SOUTH  = 3;
+
+
+void
+Shapes::TURN_LEFT(int *dir)
+{
+ *dir = (*dir==NORTH ? WEST :(*dir==WEST ? SOUTH :(*dir==SOUTH ? EAST : NORTH)));
+}
+
+void
+Shapes::TURN_RIGHT(int *dir)
+{
+ *dir = (*dir==NORTH ? EAST :(*dir==EAST ? SOUTH :(*dir==SOUTH ? WEST : NORTH)));
+}
+
+
+/* Is the point in the shape? */
+char 
+Shapes::point_in_shape(int x,int y,Shape *pShape)
+{
+  char result;
+   
+  Shape *pShapePoint = smallest_shape[y*ncol+x];
+  result = (pShape->pixels <= pShapePoint->pixels &&
+	  pShapePoint->pixels < pShape->pixels+pShape->area);
+
+  std::cout << "PointInShape() -->"<<x<<" "<<y<<" " << pShape->value;
+  std::cout << " Result : "<< int(result) <<std::endl;
+	  
+  return (pShape->pixels <= pShapePoint->pixels &&
+	  pShapePoint->pixels < pShape->pixels+pShape->area);
+}
+
+/* Find the dual point following pDualPoint as we follow the shape boundary */
+void 
+Shapes::find_next_dual_point(Point_plane *pDualPoint,int *cDirection,Shape *pShape)
+{
+  char bLeftIn, bRightIn;
+  std::cout << "Shapes::find_next_dual_point()" << std::endl;
+  std::cout << " pDualPoint : ( "<<pDualPoint->x << " , " << pDualPoint->y << " )";
+  std::cout << " Direction :" << cDirection ;
+  std::cout << std::endl;
+  
+  switch(*cDirection) {
+  case NORTH:
+    bLeftIn  = point_in_shape(pDualPoint->x-1, pDualPoint->y-1, pShape);
+    bRightIn = point_in_shape(pDualPoint->x,   pDualPoint->y-1, pShape);
+    if(bLeftIn && ! bRightIn)
+      -- pDualPoint->y;
+    else if(! bLeftIn && (! bRightIn || pShape->inferior_type)) {
+      -- pDualPoint->x;
+      TURN_LEFT(cDirection);
+    } else {
+      ++ pDualPoint->x;
+      TURN_RIGHT(cDirection);
+    }
+    break;
+  case WEST:
+    bLeftIn  = point_in_shape(pDualPoint->x-1, pDualPoint->y,   pShape);
+    bRightIn = point_in_shape(pDualPoint->x-1, pDualPoint->y-1, pShape);
+    if(bLeftIn && ! bRightIn)
+      -- pDualPoint->x;
+    else if(! bLeftIn && (! bRightIn || pShape->inferior_type)) {
+      ++ pDualPoint->y;
+      TURN_LEFT(cDirection);
+    } else {
+      -- pDualPoint->y;
+      TURN_RIGHT(cDirection);
+    }
+    break;
+  case SOUTH:
+    bLeftIn  = point_in_shape(pDualPoint->x,   pDualPoint->y, pShape);
+    bRightIn = point_in_shape(pDualPoint->x-1, pDualPoint->y, pShape);
+    if(bLeftIn && ! bRightIn)
+      ++ pDualPoint->y;
+    else if(! bLeftIn && (! bRightIn || pShape->inferior_type)) {
+      ++ pDualPoint->x;
+      TURN_LEFT(cDirection);
+    } else {
+      -- pDualPoint->x;
+      TURN_RIGHT(cDirection);
+    }
+    break;
+  case EAST:
+    bLeftIn  = point_in_shape(pDualPoint->x, pDualPoint->y-1, pShape);
+    bRightIn = point_in_shape(pDualPoint->x, pDualPoint->y,   pShape);
+    if(bLeftIn && ! bRightIn)
+      ++ pDualPoint->x;
+    else if(! bLeftIn && (! bRightIn || pShape->inferior_type)) {
+      -- pDualPoint->y;
+      TURN_LEFT(cDirection);
+    } else {
+      ++ pDualPoint->y;
+      TURN_RIGHT(cDirection);
+    }
+    break;
+  }
+}
+
+int 
+Shapes::find_closed_boundary(Shape *pShape,PathPointer pBoundary)
+{
+  short int                      x0;
+  short int                      y0;
+  Point_plane                    dualPoint;
+  int                            cDirection;
+  short int                      iWidth = (short int)ncol;
+  short int                      iHeight = (short int)nrow;
+  PathType::ContinuousIndexType  cindex;
+  
+  std::cout << " find_closed_boundary 0" << std::endl;
+  /* 1) Find initial point, with NORTH direction */
+  std::cout << "pixel : " << pShape->pixels << std::endl;
+  
+  dualPoint.x = pShape->pixels[0].x; 
+  dualPoint.y = pShape->pixels[0].y;
+  cDirection  = NORTH;
+
+  std::cout << " find_closed_boundary 1" << std::endl;
+
+  do ++ dualPoint.x;
+  while(point_in_shape(dualPoint.x, dualPoint.y, pShape));
+
+  std::cout << " find_closed_boundary 2" << std::endl;
+  
+  /* 2) Follow the boundary */
+  x0 = dualPoint.x; 
+  y0 = dualPoint.y;
+  do {
+      std::cout << " find_closed_boundary 3" << std::endl;
+      cindex[0] = dualPoint.x;
+      cindex[1] = dualPoint.y;
+      
+      pBoundary->AddVertex(cindex);
+     
+      find_next_dual_point(&dualPoint,&cDirection, pShape);
+  } while(dualPoint.x != x0 || dualPoint.y != y0 || cDirection != NORTH);
+  /* Close the boundary */
+
+  cindex[0] = dualPoint.x;
+  cindex[1] = dualPoint.y;
+      
+  pBoundary->AddVertex(cindex);
+
+  std::cout << " find_closed_boundary 4" << std::endl;
+
+}
+
+
+/* Find an initial point (to follow the boundary) at the border of the image */
+void 
+Shapes::initial_point_border(Point_plane *pDualPoint,int *cDirection,Shape *pShape)
+{
+  short int iWidth  = (short int)ncol;
+  short int iHeight = (short int)nrow;
+  short int x, y;
+
+  std::cout << "initial_point_border() --> "  ; 
+  std::cout << " pDualPoint x: " <<pDualPoint->x ;
+  std::cout << " pDualPoint y: " <<pDualPoint->y ;
+  std::cout << " Direction   :" << int(*cDirection)  << std::endl;
+
+  /* Right border */
+  *cDirection = WEST;
+  std::cout << " Direction  (WEST) :" << int(*cDirection)  << std::endl;
+  x = iWidth-1; 
+  y = 0;
+  if(point_in_shape(x, y++, pShape))
+    while(y < iHeight && point_in_shape(x, y++, pShape));
+  while(y < iHeight && ! point_in_shape(x, y, pShape))
+    ++ y;
+  if(y < iHeight) {
+    pDualPoint->x = iWidth;
+    pDualPoint->y = y;
+    return;
+  }
+  /* Top border */
+  *cDirection = SOUTH;
+  x = 0; 
+  y = 0;
+  if(point_in_shape(x++, y, pShape))
+    while(x < iWidth && point_in_shape(x++, y, pShape));
+  while(x < iWidth && ! point_in_shape(x, y, pShape))
+    ++ x;
+  if(x < iWidth) {
+    pDualPoint->x = x;
+    pDualPoint->y = 0;
+    return;
+  }
+  /* Left border */
+  *cDirection = EAST;
+  x = 0; 
+  y = iHeight-1;
+  if(point_in_shape(x, y--, pShape))
+    while(y >= 0 && point_in_shape(x, y--, pShape));
+  while(y >= 0 && ! point_in_shape(x, y, pShape))
+    -- y;
+  if(y >= 0) {
+    pDualPoint->x = 0;
+    pDualPoint->y = y+1;
+    return;
+  }
+  /* Bottom border */
+  *cDirection = NORTH;
+  x = iWidth-1; 
+  y = iHeight-1;
+  if(point_in_shape(x--, y, pShape))
+    while(x >= 0 && point_in_shape(x--, y, pShape));
+  while(x >= 0 && ! point_in_shape(x, y, pShape))
+    -- x;
+  if(x >= 0) {
+    pDualPoint->x = x+1;
+    pDualPoint->y = iHeight;
+    return;
+  }
+  std::cerr << "initial_point_border --> Coherency?"<<std::endl;
+}
+
+/* Find an open boundary */
+void 
+Shapes::find_open_boundary(Shape *pShape,PathPointer pBoundary)
+{
+  Point_plane                    dualPoint;
+  int                            cDirection;
+  Point_plane                    *pPoint;
+  short int                      iWidth  = (short int)ncol;
+  short int                      iHeight = (short int)nrow;
+  PathType::ContinuousIndexType  cindex;
+
+  std::cout << "Shapes::find_open_boundary()" << std::endl;
+  initial_point_border(&dualPoint,&cDirection, pShape);
+  do {
+      cindex[0] = dualPoint.x;
+      cindex[1] = dualPoint.y;
+      
+      pBoundary->AddVertex(cindex);
+
+    std::cout << "Shapes::find_open_boundary() DO WHILE" << std::endl;
+    find_next_dual_point(&dualPoint, &cDirection,pShape);
+  } while(0 < dualPoint.x && dualPoint.x < iWidth &&
+	  0 < dualPoint.y && dualPoint.y < iHeight);
+ 
+ /* We store the exit */
+ 
+  cindex[0] = dualPoint.x;
+  cindex[1] = dualPoint.y;
+  
+  pBoundary->AddVertex(cindex);
+      
+  std::cout << "Shapes::find_open_boundary() END" << std::endl;
+
+}
+
+
+/* Find boundary of the shape */
+Shapes::PathPointer
+Shapes::flst_shape_boundary(Shape *pShape)
+{
+  std::cout << " FLST Shape Boundary " << std::endl;
+  std::cout << "Nb ncol : " << ncol << std::endl;
+  
+  PathPointer  pBoundary = PathType::New();
+
+  std::cout << " FLST Shape Boundary ....New" << std::endl;
+     
+  if(the_shapes[0].pixels == NULL)
+    flst_pixels();
+  std::cout << " FLST Shape Boundary ....Pixel" << std::endl;
+
+  std::cout << " FLST Shape Boundary ....pShape->open " <<int(pShape->open) << std::endl;
+
+  pBoundary->Initialize();
+
+  if(pShape->open)
+    find_open_boundary( pShape, pBoundary);
+  else
+    find_closed_boundary(pShape, pBoundary);
+
+  std::cout << " FLST Shpae Boundary ....Find OK" << std::endl;
+
+  return(pBoundary);
 }
 
 

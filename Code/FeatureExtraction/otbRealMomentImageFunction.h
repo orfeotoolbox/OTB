@@ -49,7 +49,10 @@ public:
   typedef typename Superclass::PointType            PointType;
  
   typedef TOutput                                   OutputType;
+  typedef TOutput                                   RealType;
 
+
+  
 
 protected:
   RealMomentImageFunction() {};
@@ -62,6 +65,7 @@ protected:
 private:
   RealMomentImageFunction( const Self& ); //purposely not implemented
   void operator=( const Self& );               //purposely not implemented
+
 };
 
 } // namespace otb

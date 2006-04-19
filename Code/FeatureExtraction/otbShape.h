@@ -12,6 +12,8 @@
 #ifndef __otbShape_h
 #define __otbShape_h
 
+#include "itkPolyLineParametricPath.h"
+
 /** \class Shape
  *   Internal Input/Output for the following FLST (Fast Level Set Transform)
  *   structures
@@ -74,8 +76,6 @@ public:
   Shape* mw_get_first_child_shape(Shape *sh);
   Shape* mw_get_next_sibling_shape(Shape *sh);
 
-  void insert_children(Shape* pNewChildToInsert);
-
   Shape()
     {
     inferior_type = 0;
@@ -111,6 +111,10 @@ private:
 class Shapes
 {
 public:
+  typedef itk::PolyLineParametricPath<2>    PathType;
+  typedef PathType::Pointer        PathPointer;
+  typedef PathType::VertexType     VertexType;
+  
   int nrow;               /* Number of rows (dy) of the image */
   int ncol;               /* Number of columns (dx) of the image */
   int interpolation;      /* Interpolation used for the level lines:
@@ -123,8 +127,8 @@ public:
 
 
 //  Shapes* mw_new_shapes();
-  void   mw_alloc_shapes( int nrow, int  ncol, float value);
-  void   mw_change_shapes(int nrow,int ncol,float value);     
+  void   mw_alloc_shapes( int inrow, int incol, float value);
+  void   mw_change_shapes(int inrow, int incol, float value);     
   Shape* mw_get_smallest_shape(int iX,int iY);
 
 
@@ -141,7 +145,27 @@ the tree structure. From the command line, this function has no interest,
 since that field is not saved to the file. It is meant to be called from
 another module, when this field is needed */
   void  flst_pixels();
-  
+
+
+  static const int EAST; 
+  static const int NORTH;
+  static const int WEST;
+  static const int SOUTH;
+
+  void TURN_LEFT(int *dir);
+  void TURN_RIGHT(int *dir);
+/* Is the point in the shape? */
+  char point_in_shape(int x,int y,Shape *pShape);
+  void find_next_dual_point(Point_plane *pDualPoint,
+                            int *cDirection,
+			    Shape *pShape);
+  int find_closed_boundary(Shape *pShape,PathPointer pBoundary);
+/* Find an initial point (to follow the boundary) at the border of the image */
+  void initial_point_border(Point_plane *pDualPoint,
+   			    int *cDirection,Shape *pShape);		    
+/* Find an open boundary */
+  void find_open_boundary(Shape *pShape,PathPointer pBoundary);    
+  PathPointer flst_shape_boundary(Shape *pShape);
   Shapes()
     {
     the_shapes     = NULL;

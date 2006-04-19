@@ -83,7 +83,7 @@ TreeSource<TOutputTree>
 template<class TOutputTree>
 void 
 TreeSource<TOutputTree>
-::SetOutput(OutputTreeType *output)
+::SetOutput(TOutputTree *output)
 {
   itkWarningMacro(<< "SetOutput(): This method is slated to be removed from ITK.  Please use GraftOutput() in possible combination with DisconnectPipeline() instead." );
   this->itk::ProcessObject::SetNthOutput(0, output);

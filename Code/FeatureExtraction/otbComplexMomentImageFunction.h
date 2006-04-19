@@ -69,7 +69,7 @@ public:
   			 
   /** Evalulate the function at specified index */
   virtual ComplexType EvaluateAtIndex( const IndexType& index ) const;
-  
+
   /** Evaluate the function at non-integer positions */
   virtual ComplexType Evaluate( const PointType& point ) const
     { 
@@ -84,28 +84,24 @@ public:
       this->ConvertContinuousIndexToNearestIndex( cindex, index );
       return this->EvaluateAtIndex( index ) ; 
     }
+      
   itkSetMacro(P, unsigned int);
   itkGetConstReferenceMacro(P, unsigned int);
   itkSetMacro(Q, unsigned int);
   itkGetConstReferenceMacro(Q, unsigned int);
 
-  /** Get/Set the radius of the neighborhood over which the
-      statistics are evaluated */
-  itkSetMacro( NeighborhoodRadius, int );
-  itkGetConstReferenceMacro( NeighborhoodRadius, int );
 
 protected:
   ComplexMomentImageFunction();
   ~ComplexMomentImageFunction(){};
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
-
+  
 private:
   ComplexMomentImageFunction( const Self& ); //purposely not implemented
   void operator=( const Self& ); //purposely not implemented
 
   unsigned int m_P;
   unsigned int m_Q;
-  int m_NeighborhoodRadius;
   
 };
 

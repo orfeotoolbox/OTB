@@ -52,7 +52,7 @@ ADD_TEST(feTuDrawPathTestAlign ${FEATUREEXTRACTION_TESTS}
 ADD_TEST(feTuTestFLST ${FEATUREEXTRACTION_TESTS}  
         otbTestFlst
 	${INPUTDATA}/TeteAToto.png
-	${TEMP}/feFLST.png)
+	${TEMP}/feFLSTsegment.txt)
 
 ADD_TEST(feTuComplexMomentImage ${FEATUREEXTRACTION_TESTS}  
         otbComplexMomentImage
@@ -70,6 +70,9 @@ ADD_TEST(feTuComplexMomentPathNew ${FEATUREEXTRACTION_TESTS}
         otbComplexMomentPathNew)
 	
 ADD_TEST(feTuComplexMomentPath ${FEATUREEXTRACTION_TESTS}  
+        otbComplexMomentPath 1 1)
+
+ADD_TEST(feTuComplexMomentPathFloat ${FEATUREEXTRACTION_TESTS}  
         otbComplexMomentPath 1 1)
 
 ADD_TEST(feTuHuPathNew ${FEATUREEXTRACTION_TESTS}  
@@ -219,6 +222,7 @@ otbHuImage.cxx
 otbFlusserImage.cxx
 otbComplexMomentPathNew.cxx
 otbComplexMomentPath.cxx
+otbComplexMomentPathFloat.cxx
 otbHuPathNew.cxx
 otbHuPath.cxx
 otbFlusserPathNew.cxx

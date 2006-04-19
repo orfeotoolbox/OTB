@@ -57,6 +57,8 @@ public:
   void init_neighborhood(int iMaxArea,int iWidth,int iHeight);
   void free_neighborhood();
 
+  void print_neighborhood();
+
   int ORDER_MAX(int k,int l)  { return (tabPoints[k].value > tabPoints[l].value); };
   int ORDER_MIN(int k,int l)  { return (tabPoints[k].value < tabPoints[l].value); };
   int ORDER_MAX2(int k,int l) { return (tabPoints[k].value >= tabPoints[l].value); };

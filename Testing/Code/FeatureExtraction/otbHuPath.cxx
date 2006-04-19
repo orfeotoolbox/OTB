@@ -51,11 +51,13 @@ int otbHuPath( int argc, char ** argv )
 	FunctionType::Pointer function =FunctionType::New();
 
 	RealType Result;
+	function->SetInputPath( pathElt );
 	
 	for (Number = 1 ;Number<8;Number++)
 	  {
-	   function->SetNumber(Number);
-           Result = function->Evaluate( *pathElt );
+           //OTB-FA-00024-CS
+	   function->SetMomentNumber(Number);
+           Result = function->Evaluate();
 	   std::cout << "Hu("<<Number<<") = "<< Result <<std::endl;
 	  }
     } 

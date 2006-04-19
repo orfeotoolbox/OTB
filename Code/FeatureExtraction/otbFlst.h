@@ -15,9 +15,8 @@
 #include "otbImageToTreeFilter.h"
 #include "otbTreeNeighborhood.h"
 #include "otbShape.h"
-//#include "otbTreeSource.h"
 #include "itkPolyLineParametricPath.h"
-
+#include "itkTreeContainer.h"
 
 namespace otb
 {
@@ -26,10 +25,19 @@ namespace otb
  * \brief Algorithme de Fast Level Sets Transform of an image
  *
  */
-template < class TInputImage, class TOutputTree /*= itk::PolyLineParametricPath<2>*/ >
+template < class TInputImage, 
+ 	   class TOutputTree = itk::PolyLineParametricPath<2> >
 class ITK_EXPORT Flst :  public ImageToTreeFilter< TInputImage, TOutputTree >
 {
 public:
+
+  typedef itk::PolyLineParametricPath<2>      PathType;
+  typedef typename PathType::Pointer          PathPointer;
+
+  typedef itk::TreeContainer<PathPointer>        TreeType;
+  typedef typename TreeType::Pointer          TreePointer;
+
+
   /** Standard class typedefs. */
   typedef Flst                                              Self;
   typedef ImageToTreeFilter<TInputImage,TOutputTree>        Superclass;
@@ -70,7 +78,8 @@ public:
   typedef typename RealImageType::Pointer       RealImagePointer;
   typedef typename RealImageType::ConstPointer  RealImageConstPointer;
   typedef typename RealImageType::IndexType     RealImageIndexType;
-    
+ 
+   
 protected:
   Flst();
   virtual ~Flst();
@@ -146,6 +155,12 @@ tabPatterns[1]: set in 8-connectedness and complement in 4-connectedness. */
   void scan(float** tabtabPixelsOutput,int** tabtabVisitedPixels,
             Neighborhood* pNeighborhood,Connection* tabConnections);
 
+  void PrintTree(Shapes *pTree);
+  void print_PointsInShape();
+  void print_visited_pixels(int** ptabtabVisitedPixels);
+  void PrintPixelOutput(float **tabtabPixelsOutput);
+
+  void insert_children(Shape* pParent, Shape* pNewChildToInsert);  
 //  itkSetMacro(MinArea, int);
 //  itkGetConstReferenceMacro(MinArea, int);
  

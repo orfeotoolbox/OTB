@@ -20,6 +20,7 @@ REGISTER_TEST(otbHuImage);
 REGISTER_TEST(otbFlusserImage);
 REGISTER_TEST(otbComplexMomentPathNew);
 REGISTER_TEST(otbComplexMomentPath);
+REGISTER_TEST(otbComplexMomentPathFloat);
 REGISTER_TEST(otbHuPathNew);
 REGISTER_TEST(otbHuPath);
 REGISTER_TEST(otbFlusserPathNew);

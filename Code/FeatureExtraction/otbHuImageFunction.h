@@ -6,7 +6,7 @@
   Date      :   20 mars 2006
   Version   :   
   Role      :   Hu's invariant Class of images 
-  $Id:$
+  $Id$
 
 =========================================================================*/
 #ifndef _otbHuImageFunction_h
@@ -82,8 +82,8 @@ public:
 
   /** Evalulate the function at specified index */
   virtual RealType EvaluateAtIndex( const IndexType& index ) const;
-  
-  /** Evaluate the function at non-integer positions */
+
+   /** Evaluate the function at non-integer positions */
   virtual RealType Evaluate( const PointType& point ) const
     { 
       IndexType index;
@@ -97,11 +97,13 @@ public:
       this->ConvertContinuousIndexToNearestIndex( cindex, index );
       return this->EvaluateAtIndex( index ) ; 
     }
+ 
 
   /** Get/Set the radius of the neighborhood over which the
       statistics are evaluated */  
-  itkSetClampMacro(Number,short,1,7);
-  itkGetConstReferenceMacro( Number, short );
+  //OTB-FA-00024-CS
+  itkSetClampMacro(MomentNumber,short,1,7);
+  itkGetConstReferenceMacro( MomentNumber, short );
 
 protected:
   HuImageFunction();
@@ -112,7 +114,8 @@ private:
   HuImageFunction( const Self& ); //purposely not implemented
   void operator=( const Self& ); //purposely not implemented
 
-  short m_Number;  
+  //OTB-FA-00024-CS
+  short m_MomentNumber;  
 };
 
 } // namespace otb

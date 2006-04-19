@@ -104,6 +104,20 @@ Neighborhood::fix_down()
 }
 
 
+void 
+Neighborhood::print_neighborhood()
+{
+  std::cout << "pNeighborhood : " << std::endl;
+  std::cout << " iNbPoints : " <<  iNbPoints << std::endl;
+  for(int i= 0 ; i<=iNbPoints ; i++)
+    {
+    std::cout << "tabPoints["<<i <<"] =" << tabPoints[i].value ;
+    std::cout << " Position: (" <<  tabPoints[i].point.x;
+    std::cout << " , " <<  tabPoints[i].point.y << ")" ;
+    std::cout << std::endl;
+    }
+  
+}
 
 
 

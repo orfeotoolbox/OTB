@@ -66,12 +66,16 @@ public:
   typedef itk::VectorContainer< unsigned,VertexType >   VertexListType;
   typedef typename VertexListType::ConstPointer         VertexListPointer;
 
-  typedef typename Superclass::OutputType               ComplexType;
+//  typedef typename Superclass::OutputType               ComplexType;
+  typedef std::complex<double>                          ComplexType;
+  typedef TOutput                                       OutputType;
   typedef float                                         RealType;
 
   			 
   /** Evalulate the function */
-  virtual ComplexType Evaluate(const PathType& path) const;
+  //OTB-FA-00022-CS
+  virtual OutputType Evaluate(const PathType& path) const;
+  virtual OutputType Evaluate() const;
   
   itkSetMacro(P, unsigned int);
   itkGetConstReferenceMacro(P, unsigned int);

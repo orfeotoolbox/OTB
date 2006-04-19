@@ -3,7 +3,7 @@
   Programme :   OTB (ORFEO ToolBox)
   Auteurs   :   CS - P.Imbo
   Language  :   C++
-  Date      :   24 mars 2006
+  Date      :   20 mars 2006
   Version   :   
   Role      :   
   $Id$
@@ -14,20 +14,23 @@
 #endif
 
 #include "otbImageFileReader.h"
-#include "otbFlusserPathFunction.h"
-#include "itkPolyLineParametricPath.h"
+#include "otbComplexMomentPathFunction.h"
 #include "itkExceptionObject.h"
+#include "itkPolyLineParametricPath.h"
 
-int otbFlusserPath( int argc, char ** argv )
+int otbComplexMomentPathFloat( int argc, char ** argv )
 {
   try 
     { 
-        unsigned int                                           Number;
-        const   unsigned int                                   Dimension = 2;
-	typedef itk::PolyLineParametricPath< Dimension >       PathType;
-	typedef otb::FlusserPathFunction<PathType>             FunctionType;
-	typedef FunctionType::RealType                         RealType;
-  
+        unsigned int  p((unsigned int)::atoi(argv[1]));
+        unsigned int  q((unsigned int)::atoi(argv[2]));
+       
+        const   unsigned int      Dimension = 2;
+	  
+	typedef itk::PolyLineParametricPath< Dimension >	        PathType;
+	typedef std::complex<float>                                     ComplexType;
+	typedef otb::ComplexMomentPathFunction< PathType,ComplexType >  CMType;
+
         // Dessiner un carré:
 	PathType::ContinuousIndexType cindex;
 	PathType::Pointer pathElt = PathType::New();
@@ -47,20 +50,15 @@ int otbFlusserPath( int argc, char ** argv )
         cindex[1]= 30;
         pathElt->AddVertex(cindex);
 
-	FunctionType::Pointer function =FunctionType::New();
-        function->SetStep(2.0);
-        //OTB-FA-00022-CS
-        function->SetInputPath( pathElt );
+	CMType::Pointer function =CMType::New();
 
-	RealType Result;
+	function->SetQ(q);
+	function->SetP(p);
 	
-	for (Number = 1 ;Number<12;Number++)
-	  {
-           //OTB-FA-00024-CS
-	   function->SetMomentNumber(Number);
-           Result = function->Evaluate( );
-	   std::cout << "Flusser("<<Number<<") = "<< Result <<std::endl;
-	  }
+	ComplexType Result;
+	
+        Result = function->Evaluate( *pathElt);
+        std::cout << "function->Evaluate(Path)"<< Result << std::endl;	
     } 
   catch( itk::ExceptionObject & err ) 
     { 

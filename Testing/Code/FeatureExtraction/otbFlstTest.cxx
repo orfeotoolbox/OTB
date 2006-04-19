@@ -53,10 +53,10 @@ int otbFlstTest( int argc, char ** argv )
 
 	
         typedef otb::TreeSource<PathType>                       TreeSourceType;	
-        typedef otb::ImageToTreeFilter<InputImageType,PathType> TreeFilterType;
 	typedef otb::Flst<InputImageType,PathType>              FlstType;
-	
-        typedef  itk::TreeContainer< PathType >          OutputTreeType;
+//	typedef FlstType::OutputTreeType                        OutputTreeType;
+	typedef FlstType::TreeType                        OutputTreeType;
+
         typedef  OutputTreeType::Pointer        OutputTreePointerType;
 
 	
@@ -75,6 +75,15 @@ int otbFlstTest( int argc, char ** argv )
 		
 	FlstTest->Update(); 
 	
+//	OutputTreeType *sortieTree = FlstTest->GetOutput();
+	
+	std::cout << "Phase d'écriture:"<<std::endl;
+	
+	FILE *file = fopen(outputFilename,"w");
+  	if (file == NULL) {
+    		std::cerr<<"Erreur dans l'ouverture du fichier"<<std::endl;
+  	}
+  
   
     } 
   catch( itk::ExceptionObject & err ) 

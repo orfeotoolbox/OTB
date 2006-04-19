@@ -59,10 +59,20 @@ public:
   /** OutputType typedef support. */
   typedef typename Superclass::OutputType OutputType;
 
+  /** Set the input path. */
+  virtual void SetInputPath( const InputPathType * ptr );
+
+  /** Get the input path. */
+  const InputPathType * GetInputPath() const
+    { return m_Path.GetPointer(); }
+
 protected:
   PathFunction();
   ~PathFunction() {}
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
+
+  //OTB-FA-00022-CS
+  InputPathConstPointer  m_Path;
 
 private:
   PathFunction(const Self&); //purposely not implemented

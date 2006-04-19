@@ -26,7 +26,8 @@ template < class TInputPath, class TOutput>
 FlusserPathFunction<TInputPath, TOutput >
 ::FlusserPathFunction()
 {
-  m_Number =-1; 
+  //OTB-FA-00024-CS
+  m_MomentNumber =-1; 
 }
 
 /**
@@ -38,7 +39,8 @@ FlusserPathFunction< TInputPath, TOutput >
 ::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   this->Superclass::PrintSelf(os,indent);
-  os << indent << " m_Number           : "  << m_Number << std::endl;
+  //OTB-FA-00024-CS
+  os << indent << " m_MomentNumber           : "  << m_MomentNumber << std::endl;
 }
 
 
@@ -56,15 +58,18 @@ FlusserPathFunction<TInputPath, TOutput >
   typename FunctionType::Pointer function =FunctionType::New();
  
   function->SetStep( this->GetStep() );
-
-  switch(m_Number)
+  //OTB-FA-00023-CS
+  function->SetInputPath( this->GetInputPath() );
+  
+  //OTB-FA-00024-CS
+  switch(m_MomentNumber)
     {
     case 1 : 
         {
 	ComplexType C11;
 	function->SetP(1);
 	function->SetQ(1);
-	C11 = function->Evaluate( path );
+	C11 = function->Evaluate( );
         FlusserValue = C11.real() ;
 	}
 	break;
@@ -73,10 +78,10 @@ FlusserPathFunction<TInputPath, TOutput >
 	ComplexType C21,C12;
 	function->SetP(2);
 	function->SetQ(1);
-	C21 = function->Evaluate( path );
+	C21 = function->Evaluate( );
 	function->SetP(1);
 	function->SetQ(2);
-	C12 = function->Evaluate( path );
+	C12 = function->Evaluate(  );
 
 	FlusserValue = abs( C21 * C12 ) ;
 	}
@@ -86,10 +91,10 @@ FlusserPathFunction<TInputPath, TOutput >
 	ComplexType C20,C12;
 	function->SetP(2);
 	function->SetQ(0);
-	C20 = function->Evaluate( path );
+	C20 = function->Evaluate( );
 	function->SetP(1);
 	function->SetQ(2);
-	C12 = function->Evaluate( path );
+	C12 = function->Evaluate( );
 	FlusserValueComplex = C20 * pow(C12,2);
 	FlusserValue = FlusserValueComplex.real();
 	}
@@ -99,10 +104,10 @@ FlusserPathFunction<TInputPath, TOutput >
 	ComplexType C20,C12;
 	function->SetP(2);
 	function->SetQ(0);
-	C20 = function->Evaluate( path );
+	C20 = function->Evaluate( );
 	function->SetP(1);
 	function->SetQ(2);
-	C12 = function->Evaluate( path );
+	C12 = function->Evaluate( );
 	FlusserValueComplex = C20 * pow(C12,2);
 	FlusserValue = FlusserValueComplex.imag();
 	}
@@ -112,10 +117,10 @@ FlusserPathFunction<TInputPath, TOutput >
 	ComplexType C30,C12;
 	function->SetP(3);
 	function->SetQ(0);
-	C30 = function->Evaluate( path );
+	C30 = function->Evaluate( );
 	function->SetP(1);
 	function->SetQ(2);
-	C12 = function->Evaluate( path );
+	C12 = function->Evaluate( );
 
 	FlusserValueComplex = C30 * pow(C12,3) ;
 	FlusserValue = FlusserValueComplex.real();       
@@ -126,10 +131,10 @@ FlusserPathFunction<TInputPath, TOutput >
 	ComplexType C30,C12;
 	function->SetP(3);
 	function->SetQ(0);
-	C30 = function->Evaluate( path );
+	C30 = function->Evaluate( );
 	function->SetP(1);
 	function->SetQ(2);
-	C12 = function->Evaluate( path );
+	C12 = function->Evaluate( );
 
 	FlusserValueComplex = C30 * pow(C12,3) ;
 	FlusserValue = FlusserValueComplex.real();       
@@ -140,7 +145,7 @@ FlusserPathFunction<TInputPath, TOutput >
 	ComplexType C22;
 	function->SetP(2);
 	function->SetQ(2);
-	C22 = function->Evaluate( path );
+	C22 = function->Evaluate( );
         FlusserValue = C22.real() ;
 	}
 	break;
@@ -149,10 +154,10 @@ FlusserPathFunction<TInputPath, TOutput >
 	ComplexType C31,C12;
 	function->SetP(3);
 	function->SetQ(1);
-	C31 = function->Evaluate( path );
+	C31 = function->Evaluate( );
 	function->SetP(1);
 	function->SetQ(2);
-	C12 = function->Evaluate( path );
+	C12 = function->Evaluate( );
 	FlusserValueComplex = C31 * pow(C12,2);
 	FlusserValue = FlusserValueComplex.real();
 	}
@@ -162,10 +167,10 @@ FlusserPathFunction<TInputPath, TOutput >
 	ComplexType C31,C12;
 	function->SetP(3);
 	function->SetQ(1);
-	C31 = function->Evaluate( path );
+	C31 = function->Evaluate( );
 	function->SetP(1);
 	function->SetQ(2);
-	C12 = function->Evaluate( path );
+	C12 = function->Evaluate( );
 	FlusserValueComplex = C31 * pow(C12,2);
 	FlusserValue = FlusserValueComplex.imag();
 	}
@@ -175,10 +180,10 @@ FlusserPathFunction<TInputPath, TOutput >
 	ComplexType C40,C12;
 	function->SetP(4);
 	function->SetQ(0);
-	C40 = function->Evaluate( path );
+	C40 = function->Evaluate( );
 	function->SetP(1);
 	function->SetQ(2);
-	C12 = function->Evaluate( path );
+	C12 = function->Evaluate( );
 	FlusserValueComplex = C40 * pow(C12,4);
 	FlusserValue = FlusserValueComplex.real();
 	}
@@ -188,21 +193,39 @@ FlusserPathFunction<TInputPath, TOutput >
 	ComplexType C40,C12;
 	function->SetP(4);
 	function->SetQ(0);
-	C40 = function->Evaluate( path );
+	C40 = function->Evaluate( );
 	function->SetP(1);
 	function->SetQ(2);
-	C12 = function->Evaluate( path );
+	C12 = function->Evaluate( );
 	FlusserValueComplex = C40 * pow(C12,4);
 	FlusserValue = FlusserValueComplex.imag();
 	}
 	break;
 	
     default:
-	itkWarningMacro("Hu's invariant parameters are between 1 and 7");	
+	itkWarningMacro("Flusser's invariant parameters are between 1 and 11");	
     }
 
 
   return (static_cast<RealType>(FlusserValue) );
+
+}
+
+template < class TInputPath, class TOutput>
+typename FlusserPathFunction<TInputPath, TOutput>::RealType
+FlusserPathFunction<TInputPath, TOutput >
+::Evaluate() const
+{
+  //OTB-FA-00022-CS
+  if( !this->GetInputPath() )
+    {
+    std::cout << "Pb with GetInputPath" << std::endl;
+    return static_cast<RealType>( itk::NumericTraits<float>::max());
+    }
+
+  RealType Result =  Evaluate( *(this->GetInputPath()) );
+  
+  return Result;
 
 }
 

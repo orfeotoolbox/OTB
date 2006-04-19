@@ -65,7 +65,10 @@ int otbHuImage( int argc, char ** argv )
 	
 	for (Number = 1 ;Number<10;Number++)
 	  {
-	   function->SetNumber(Number);
+	   //OTB-FA-00024-CS
+	   function->SetMomentNumber(Number);
+	   //OTB-FA-00025-CS
+	   function->SetNeighborhoodRadius(3);
            Result = function->EvaluateAtIndex( index );
 	   std::cout << "Hu("<<Number<<") = "<< Result <<std::endl;
 	  }

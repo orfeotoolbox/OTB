@@ -26,7 +26,7 @@ int otbComplexMomentPathNew( int argc, char ** argv )
 	typedef itk::PolyLineParametricPath< Dimension >       PathType;
 	typedef otb::ComplexMomentPathFunction<PathType>       CMType;  
 
-	CMType::Pointer function =CMType::New();
+	CMType::Pointer function = CMType::New();
     } 
   catch( itk::ExceptionObject & err ) 
     { 
