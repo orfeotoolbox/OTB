@@ -101,6 +101,7 @@ public:
   /** Update */
   virtual void Update(void);
   
+  /** Build the HMI */
   virtual void BuildHMI(void);
   virtual void CreatePrincipalImageView( Fl_Group * g , Fl_Gl_Window * w );
   virtual void CreateScrollImageView( Fl_Group * g , Fl_Gl_Window * w );
@@ -119,8 +120,6 @@ public:
   virtual void ExtractImagePrincipal(const RegionType & zone);
 
   virtual void GenerateChannelsInformations(void);
-  
-  typedef typename std::vector<int> ChannelsType;
   
   typedef typename ImageViewBaseType::ModeViewType ModeViewType; 
   typedef typename ImageViewBaseType::ChannelsType ChannelsType; 
@@ -146,7 +145,7 @@ private:
         virtual void SetChannelsInformationsToImagesView(void);
         virtual bool GenereImageScroll(unsigned int & pShrinkFactors);
 
-
+        /** Label of the windows */
         std::string m_Label;
         static const std::string m_SuffixPrincipalTitle;
         static const std::string m_SuffixZoomTitle;
@@ -161,36 +160,28 @@ private:
         ModeViewType  m_ModeView;
         ChannelsType m_ChannelsWorks;
 
-        //  GLImageViewType * glSliceView;
         PrincipalImageViewPointer       m_PrincipalView;
         ScrollImageViewPointer          m_ScrollView;
         ZoomImageViewPointer            m_ZoomView;
  
         typedef unsigned long WinSizeType;
 
-        //Dimension de la fenêtre maximale, au dela de laquelle on créer une fenêtre Scroll
-//        WinSizeType m_ScrollWinSizeMax;
-        //Dimension par défaut de la fenetre principal
+        /** Default size for the principal image */
         WinSizeType m_InitPrincipalWinSizeMax;
-        //Initialisation de la dimension de la fenêtre dans le cas où la fenetre Scroll est créé.
+        /** Default size for the scroll image */
         WinSizeType m_InitScrollWinSizeMax;
 
-
-
-
+        /** Shrink filter use tu generate de Scroll Image */
         ShrinkImageFilterPointer m_ShrinkImageFilter;
+        /** Extract image filter use to calculte the Principal image view */
         ExtractROIFilterPointer m_ExtractROIFilter;
         ImageType * m_InputImage;
-        
         ImageType * m_PrincipalImage;
         ImageType * m_ScrollImage;
         
-        //Coordonnées du point central de l'image Principal
-        IndexType m_CenterPrincipalImage;
-        //Coordonnées du point central de l'image Zoom
-        IndexType m_CenterZoomImage;
-        
+        /** Flag to indicate if the Scroll image is activate */
         bool m_ScrollImageView;
+        /** Shrink factor for the scroll image */
         unsigned int m_ShrinkFactors;
 
 };
