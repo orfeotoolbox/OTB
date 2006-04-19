@@ -1,11 +1,11 @@
 /*=========================================================================
 
   Programme :   OTB (ORFEO ToolBox)
-  Auteurs   :   CS - T.Feuvrier
+  Auteurs   :   CS - P. IMBO
   Language  :   C++
   Date      :   7 avril 2006
   Version   :   
-  Role      :   Test élémentaire de la classe otb::FillGapsFilter
+  Role      :   Unitary test for the otb::FillGapsFilter class
   $Id$
 
 =========================================================================*/
@@ -15,18 +15,74 @@
 
 #include "itkExceptionObject.h"
 #include "otbFillGapsFilter.h"
+#include "otbLineSpatialObjectList.h"
+
 
 int otbFillGapsFilter( int argc, char ** argv )
 {
   try 
     { 
-	typedef otb::FillGapsFilter FillGapsFilterType;
+	typedef otb::FillGapsFilter              FillGapsFilterType;
+  	typedef otb::LineSpatialObjectList	 LinesListType;
+  	typedef LinesListType::LineType	         LineType;
+
+
 	FillGapsFilterType::Pointer fillgaps = FillGapsFilterType::New();
         
-        //Creation d'une liste de test
+	LinesListType            linesListBeforeFillGaps;
+	LinesListType            linesListAfterFillGaps;
+        LineType::LinePointType  point;
+
+        // Definition of the first line
+        double Ux, Uy, Vx, Vy;
+        Ux = 10.;
+        Uy = 10.;
+        Vx = 10.;
+        Vy = 20.;
+
+        point.SetPosition(Ux,Uy);
+        pointList.push_back(point);
+        point.SetPosition(Vx,Vy);
+        pointList.push_back(point);
+
+        LineType::Pointer line = LineType::New();
+        line->SetId(0);
+        line->SetPoints( pointList );
+        line->ComputeBoundingBox();
+       
+        linesListBeforeFillGaps.push_back(line);
         
-        //....
+        pointList.clear();
+
+        // Definition of a second line
+
+        Ux = 10.;
+        Uy = 30.;
+        Vx = 10.;
+        Vy = 50.;
+
+        point.SetPosition(Ux,Uy);
+        pointList.push_back(point);
+        point.SetPosition(Vx,Vy);
+        pointList.push_back(point);
         
+        LineType::Pointer line2 = LineType::New();
+        line2->SetId(0);
+        line2->SetPoints( pointList );
+        line2->ComputeBoundingBox();
+       
+        linesListBeforeFillGaps.push_back(line2); 
+        
+        pointList.clear();
+
+        //  FillGapsFilter parameters
+	
+	fillgaps->SetRadius(5.);
+	fillgaps->SetAngularBeam(45.0);
+	fillgaps->SetInput(linesListBeforeFillGaps);
+	linesListAfterFillGaps = fillgaps->SetOutput();
+
+	        
     } 
   catch( itk::ExceptionObject & err ) 
     { 
