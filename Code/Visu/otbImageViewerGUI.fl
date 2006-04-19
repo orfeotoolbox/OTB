@@ -1,17 +1,4 @@
 # data file for the Fltk User Interface Designer (fluid)
-#=========================================================================
-#
-#  Programme :   OTB (ORFEO ToolBox)
-#  Auteurs   :   CS - T.Feuvrier
-#  Language  :   C++
-#  Date      :   4 avril 2005
-#  Version   :   
-#  Role      :   Classe GUI permettant de creer les fenetres graphiques associees
-#                a l'interface du Viewer "otb::ImageViewer"
-#  $Id$
-#
-#=========================================================================
-
 version 1.0107 
 header_name {.h} 
 code_name {.cxx}
@@ -24,13 +11,13 @@ class otbImageViewerGUI {open
   } {
     Fl_Window iviewWindowPrincipal {
       label {Principal Window} open
-      xywh {64 53 500 500} type Double labelsize 10 align 33 resizable visible
+      xywh {64 53 575 585} type Double labelsize 10 align 33 resizable visible
     } {
       Fl_Group glWindowGroupPrincipal {open
-        xywh {0 0 500 500}
+        xywh {0 0 575 585}
       } {
-        Fl_Box {} {selected
-          xywh {0 0 500 500} box EMBOSSED_BOX
+        Fl_Box {} {
+          xywh {0 0 575 585} box EMBOSSED_BOX
           code0 {\#include <otbPrincipalImageView.h>}
           code1 {CreatePrincipalImageView( glWindowGroupPrincipal, o );}
           class Fl_Gl_Window
@@ -39,13 +26,13 @@ class otbImageViewerGUI {open
     }
     Fl_Window iviewWindowScroll {
       label {Scroll Window} open
-      xywh {4 572 155 200} type Double labelsize 10 resizable visible
+      xywh {56 441 210 280} type Double labelsize 10 resizable visible
     } {
       Fl_Group glWindowGroupScroll {open
-        xywh {0 0 155 200}
+        xywh {0 0 210 280}
       } {
-        Fl_Box {} {
-          xywh {0 0 155 200} box EMBOSSED_BOX
+        Fl_Box {} {selected
+          xywh {0 0 210 280} box EMBOSSED_BOX
           code0 {\#include <otbScrollImageView.h>}
           code1 {CreateScrollImageView( glWindowGroupScroll, o );}
           class Fl_Gl_Window
@@ -54,7 +41,7 @@ class otbImageViewerGUI {open
     }
     Fl_Window iviewWindowZoom {
       label {Zoom Window} open
-      xywh {420 35 200 200} type Double labelsize 10 resizable visible
+      xywh {837 68 200 200} type Double labelsize 10 resizable visible
     } {
       Fl_Group glWindowGroupZoom {open
         xywh {0 0 200 200}

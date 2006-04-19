@@ -1,3 +1,5 @@
+# OTB-FA-00015-CS
+
 SET(FltkImageViewer_SRCS
   fltkBox3D.cxx
   fltkCone3D.cxx
@@ -48,7 +50,9 @@ INCLUDE_DIRECTORIES(
 FLTK_WRAP_UI(ITKFltkImageViewer ${FltkImageViewer_GUI_SRCS} )
 
 ADD_LIBRARY(ITKFltkImageViewer ${FltkImageViewer_SRCS} ${ITKFltkImageViewer_FLTK_UI_SRCS})
-INSTALL_TARGETS(/lib ITKFltkImageViewer)
+
+INSTALL_FILES(/include/otb/Utils/FltkImageViewer "(\\.h|\\.txx)$")
+INSTALL_TARGETS(/lib/otb ITKFltkImageViewer)
 
 TARGET_LINK_LIBRARIES(ITKFltkImageViewer ${FLTK_LIBRARIES} ${OPENGL_glu_LIBRARY}
                       ${OPENGL_LIBRARIES})

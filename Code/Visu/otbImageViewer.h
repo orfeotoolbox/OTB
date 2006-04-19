@@ -78,6 +78,7 @@ public:
   typedef GLVectorImageViewBase<InputPixelType>                 ImageViewBaseType;
 
   typedef typename ExtractROIFilterType::InputImageType         ImageType;
+//  typedef typename PrincipalImageViewType::ImageType         ImageType;
   typedef typename ImageType::Pointer                           ImagePointer;
   typedef typename ImageType::ConstPointer                      ImageConstPointer;
   typedef typename ImageType::RegionType                        RegionType;

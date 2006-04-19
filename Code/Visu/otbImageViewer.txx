@@ -107,7 +107,8 @@ ImageViewer<TPixel>
         else
         {
         	// Traitement de la fenetre Principal
-        	m_ExtractROIFilter->SetInput( m_InputImage );
+//THOMAS
+/*        	m_ExtractROIFilter->SetInput( m_InputImage );
                 IndexType lIndex;
                 SizeType  lSize;
                 lIndex[0] = static_cast<unsigned long>((m_InputImage->GetLargestPossibleRegion().GetSize()[0] - m_PrincipalView->sizeX())/2);
@@ -119,21 +120,18 @@ ImageViewer<TPixel>
                 lNewRegion.SetSize(lSize);
                 //Update principal image
                 ExtractImagePrincipal( lNewRegion );
-
-/*        	m_ExtractROIFilter->SetSizeX( m_PrincipalView->sizeX() );
-        	m_ExtractROIFilter->SetSizeY( m_PrincipalView->sizeY() );
-        	m_ExtractROIFilter->SetStartX( (m_InputImage->GetLargestPossibleRegion().GetSize()[0] - m_PrincipalView->sizeX())/2 );
-        	m_ExtractROIFilter->SetStartY( (m_InputImage->GetLargestPossibleRegion().GetSize()[1] - m_PrincipalView->sizeY())/2 );
-        	m_ExtractROIFilter->Update();
-                m_PrincipalImage = m_ExtractROIFilter->GetOutput();
 */
         	// Traitement de la fenetre Scroll
                 m_ShrinkImageFilter->SetShrinkFactors(m_ShrinkFactors);
                 m_ShrinkImageFilter->SetInput( m_InputImage );
                 m_ShrinkImageFilter->Update();
                 m_ScrollImage = m_ShrinkImageFilter->GetOutput();
+
+                m_ScrollView->SetDrawViewRectangle( ImageViewBaseType::ShrinkRegion(m_PrincipalView->GetViewImageRegion(),(float)1./(float)m_ShrinkFactors ) );
+	        m_ScrollView->Show();
+
         }
-        PrincipalResize();
+//        PrincipalResize();
 }
 
 template <class TPixel>

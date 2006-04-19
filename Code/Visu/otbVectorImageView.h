@@ -20,7 +20,6 @@
 #include <itkProcessObject.h>
 #include <itkVectorImage.h>
 #include <list>
-//#include <FL/fl_file_chooser.H>
 #include <fstream>
 
 namespace otb
