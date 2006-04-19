@@ -15,7 +15,9 @@ ADD_TEST(feTuFillGapsFilterNew ${FEATUREEXTRACTION_TESTS}
         otbFillGapsFilterNew)
 
 ADD_TEST(feTuFillGapsFilter ${FEATUREEXTRACTION_TESTS}  
-        otbFillGapsFilter)
+        otbFillGapsFilter
+	${INPUTDATA}/vide.png
+	${TEMP}/feFillGaps.png)
 
 ADD_TEST(feTuAlignMV2ITK ${FEATUREEXTRACTION_TESTS}  
         otbAlignImageToPath

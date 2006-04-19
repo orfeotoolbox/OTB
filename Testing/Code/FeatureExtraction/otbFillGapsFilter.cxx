@@ -16,15 +16,42 @@
 #include "itkExceptionObject.h"
 #include "otbFillGapsFilter.h"
 #include "otbLineSpatialObjectList.h"
+#include "otbImageFileReader.h"
+#include "otbImageFileWriter.h"
+#include "otbDrawLineSpatialObjectListFilter.h"
 
 
 int otbFillGapsFilter( int argc, char ** argv )
 {
   try 
     { 
+    	const char * inputFilename  = argv[1];
+        const char * outputFilename = argv[2];
+                       
+        typedef double		                                InputPixelType;
+        typedef unsigned char	   	                        OutputPixelType;
+        const   unsigned int        	                        Dimension = 2;
+
+        typedef itk::Image< InputPixelType,  Dimension >        InputImageType;
+        typedef itk::Image< OutputPixelType, Dimension >        OutputImageType;
+
+        typedef otb::DrawLineSpatialObjectListFilter< InputImageType,OutputImageType >   FilterType;
+
 	typedef otb::FillGapsFilter              FillGapsFilterType;
   	typedef otb::LineSpatialObjectList	 LinesListType;
   	typedef LinesListType::LineType	         LineType;
+	
+        FilterType::Pointer filter = FilterType::New();
+        
+        typedef otb::ImageFileReader< InputImageType  >         ReaderType;
+        typedef otb::ImageFileWriter< OutputImageType >         WriterType;
+
+        
+        ReaderType::Pointer reader = ReaderType::New();
+        WriterType::Pointer writer = WriterType::New();
+
+        reader->SetFileName( inputFilename  );
+        writer->SetFileName( outputFilename );
 
 
 	FillGapsFilterType::Pointer fillgaps = FillGapsFilterType::New();
@@ -77,15 +104,43 @@ int otbFillGapsFilter( int argc, char ** argv )
         
         pointList.clear();
 
+
+        // Definition of a third line
+
+        Ux = 20.;
+        Uy = 50.;
+        Vx = 50.;
+        Vy = 50.;
+
+        point.SetPosition(Ux,Uy);
+        pointList.push_back(point);
+        point.SetPosition(Vx,Vy);
+        pointList.push_back(point);
+        
+        LineType::Pointer line3 = LineType::New();
+        line3->SetId(0);
+        line3->SetPoints( pointList );
+        line3->ComputeBoundingBox();
+       
+        linesListBeforeFillGaps->push_back(line3); 
+        
+        pointList.clear();
         //  FillGapsFilter parameters
 	
 	fillgaps->SetRadius(15.);
 	fillgaps->SetAngularBeam(1.0);  // Angle in Radian
 	fillgaps->SetInput(linesListBeforeFillGaps);
 	linesListAfterFillGaps = fillgaps->GetOutput();
-//	fillgaps->GenerateData();
 	fillgaps->Update();
 	        
+        
+        filter->SetInputLineSpatialObjectList(linesListAfterFillGaps);  
+        filter->SetInput( reader->GetOutput() );
+        writer->SetInput( filter->GetOutput() );
+        
+        writer->Update();
+ 
+        
     } 
   catch( itk::ExceptionObject & err ) 
     { 
