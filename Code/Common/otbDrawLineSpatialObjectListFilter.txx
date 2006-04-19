@@ -29,11 +29,10 @@ namespace otb
 template <class TInputImage, class TOutputImage>
 DrawLineSpatialObjectListFilter<TInputImage, TOutputImage>::DrawLineSpatialObjectListFilter()
 {
-  this->SetNumberOfRequiredInputs(1);
+  this->SetNumberOfRequiredInputs(2);
   this->SetNumberOfRequiredOutputs(1); 
   
   m_DrawLineFilter = DrawLineType::New();
-  m_InputList.clear();
 
 }
 
@@ -41,28 +40,21 @@ DrawLineSpatialObjectListFilter<TInputImage, TOutputImage>::DrawLineSpatialObjec
 template <class TInputImage, class TOutputImage>
 void
 DrawLineSpatialObjectListFilter<TInputImage, TOutputImage>
-::SetInputLineSpatialObjectList(const LinesListType & list)
+::SetInputLineSpatialObjectList(const LinesListType * list)
 {
-  if (list.size() == 0)
-     {
-     itkExceptionMacro(<< "otb::DrawLineSpatialObjectListFilter::SetInputLineSpatialObjectList : "
-                      	<< "the list is empty");
-     }
-  else
-     {     
-     m_InputList = list;
-     this->Modified();
-     }
+  this->itk::ProcessObject::SetNthInput(1, 
+                                   const_cast< LinesListType * >( list ) );
 
 }
 
 
 template <class TInputImage, class TOutputImage>
-typename DrawLineSpatialObjectListFilter<TInputImage, TOutputImage>::LinesListType & 
+typename DrawLineSpatialObjectListFilter<TInputImage, TOutputImage>::LinesListType * 
 DrawLineSpatialObjectListFilter<TInputImage, TOutputImage>
 ::GetInputLineSpatialObjectList(void)
 {
-  return m_InputList;   
+    return static_cast<const LinesListType *>
+    (this->itk::ProcessObject::GetInput(1) ); 
 }
 
 template <class TInputImage, class TOutputImage>
@@ -72,7 +64,8 @@ DrawLineSpatialObjectListFilter<TInputImage, TOutputImage>
 {
 
   typename InputImageType::ConstPointer input  = this->GetInput();
-  typename OutputImageType::Pointer  	output = this->GetOutput();
+  typename OutputImageType::Pointer output  = this->GetOutput();
+  typename LinesListType::Pointer  	list = this->GetInputLineSpatialObjectList();
 
   typename OutputImageType::RegionType region;
   region.SetSize(input->GetLargestPossibleRegion().GetSize());
@@ -83,9 +76,8 @@ DrawLineSpatialObjectListFilter<TInputImage, TOutputImage>
   output->Allocate();
   output->FillBuffer(0);
 
-std::cout<<"list = "<<m_InputList.size()<<std::endl;
- 
-  LineListIterator  itList = m_InputList.begin();
+
+  LineListIterator  itList = list->begin();
   m_DrawLineFilter->SetInputImage( output );
   m_DrawLineFilter->SetInputLine( *itList );
   m_DrawLineFilter->GraftOutput( this->GetOutput() );
@@ -95,7 +87,7 @@ std::cout<<"list = "<<m_InputList.size()<<std::endl;
 int cpt=0;
   
   // Draw each line of the list
-  while( itList != m_InputList.end() )
+  while( itList != list->end() )
      {
      	
 std::cout<<"cpt = "<<cpt<<" "<<std::endl;
@@ -108,7 +100,7 @@ cpt++;
 
      ++itList;
 
-	if (  itList == m_InputList.end() ) 
+	if (  itList == list->end() ) 
 	   std::cout<<"Idem"<<std::endl;  
   
      }

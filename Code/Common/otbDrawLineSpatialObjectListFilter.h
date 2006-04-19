@@ -79,8 +79,8 @@ public:
   typedef typename InputImageType::SizeType SizeType;
   
   /** Set/Get the image input of this process object. */
-  virtual void SetInputLineSpatialObjectList(const LinesListType & list);
-  LinesListType & GetInputLineSpatialObjectList(void);
+  virtual void SetInputLineSpatialObjectList(const LinesListType * list);
+  LinesListType * GetInputLineSpatialObjectList(void);
   
   
 protected:
@@ -94,7 +94,6 @@ private:
   DrawLineSpatialObjectListFilter(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
 
-  LinesListType				m_InputList;
   typename DrawLineType::Pointer	m_DrawLineFilter;
 
 
