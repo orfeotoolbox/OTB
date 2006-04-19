@@ -22,26 +22,44 @@ namespace otb
  */
 FillGapsFilter::FillGapsFilter()
 {
-        m_InputLineSpatialObjectList.clear();
-        m_OutputLineSpatialObjectList.clear();
+        this->itk::ProcessObject::SetNumberOfRequiredInputs(1);
+        this->itk::ProcessObject::SetNumberOfRequiredOutputs(1);
+
+        LineSpatialObjectListPointer output
+                = dynamic_cast<LineSpatialObjectListType*>(this->MakeOutput(0).GetPointer()); 
+
+        this->itk::ProcessObject::SetNthOutput(0, output.GetPointer());
+}
+
+/**
+ *
+ */
+FillGapsFilter::~FillGapsFilter()
+{
+}
+
+/**
+ *
+ */
+itk::DataObject::Pointer
+FillGapsFilter
+::MakeOutput(unsigned int)
+{
+  LineSpatialObjectListPointer  outputList = LineSpatialObjectListType::New();
+  return dynamic_cast< DataObject *>( outputList.GetPointer() );
 }
 
 /**
  *
  */
 
-void FillGapsFilter::
-SetOutput(const LineSpatialObjectListType & pLineSpatialObjectList)
+void 
+FillGapsFilter
+::GenerateData()
 {
-        m_InputLineSpatialObjectList = pLineSpatialObjectList;
-        this->Modified();
+        //Algo
 }
 
-FillGapsFilter::LineSpatialObjectListType &
-FillGapsFilter::GetOutput(void)
-{
-        return(m_OutputLineSpatialObjectList);
-}
 
 /**
  *

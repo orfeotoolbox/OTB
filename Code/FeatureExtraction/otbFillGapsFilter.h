@@ -28,7 +28,7 @@ class ITK_EXPORT FillGapsFilter : public itk::ProcessObject
 {
 public:
   /** Standard class typedefs. */
-  typedef FillGapsFilter                                      Self;
+  typedef FillGapsFilter                                Self;
   typedef itk::ProcessObject                            Superclass;
   typedef itk::SmartPointer<Self>                       Pointer;
   typedef itk::SmartPointer<const Self>                 ConstPointer;
@@ -40,29 +40,33 @@ public:
   itkTypeMacro(FillGapsFilter,itk::ProcessObject);
 
   /** Some convenient typedefs. */
-  typedef otb::LineSpatialObjectList                           LineSpatialObjectListType;
-  typedef LineSpatialObjectListType::LineType                  LineSpatialObjectType;
+  typedef LineSpatialObjectList                                 LineSpatialObjectListType;
+  typedef LineSpatialObjectListType::Pointer                    LineSpatialObjectListPointer;
+  typedef LineSpatialObjectListType::LineType                   LineSpatialObjectType;
 
-  
-  /** Set the list of LineSpatialObject of this process object.  */
-  void SetOutput(const LineSpatialObjectListType & pLineSpatialObjectList);
+  typedef itk::DataObject                                       DataObject;
+  typedef itk::DataObject::Pointer                              DataObjectPointer;
+  DataObjectPointer  MakeOutput(unsigned int idx);
 
-  /** Get the list of LineSpatialObject of this process object.  */
-  LineSpatialObjectListType & GetOutput(void);
+  itkSetMacro(AngularBeam, double);
+  itkGetConstReferenceMacro(AngularBeam, double);  
+  itkSetMacro(Radius, double);
+  itkGetConstReferenceMacro(Radius, double);  
   
 protected:
   FillGapsFilter();
-  virtual ~FillGapsFilter() {}
+  virtual ~FillGapsFilter();
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  
+  virtual void GenerateData();
   
 private:
   FillGapsFilter(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
 
-
-        LineSpatialObjectListType m_InputLineSpatialObjectList;
-        LineSpatialObjectListType m_OutputLineSpatialObjectList;
-
+  double m_AngularBeam;
+  double m_Radius;
+  
 };
   
 
