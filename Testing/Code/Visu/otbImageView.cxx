@@ -9,6 +9,7 @@
   $Id$
 
 =========================================================================*/
+// OTB-FA-00026-CS
 #include <stdlib.h>
 #include "itkExceptionObject.h"
 
@@ -24,16 +25,15 @@ int otbImageView( int argc, char ** argv )
   try 
     { 
 
-        typedef otb::GLVectorImageViewBase<unsigned char,double>    GLVectorImageViewBaseType;
-        typedef otb::PrincipalImageView<unsigned char,double>           PrincipalImageViewType;
+        typedef otb::GLVectorImageViewBase<unsigned char>               GLVectorImageViewBaseType;
+        typedef otb::PrincipalImageView<unsigned char>                  PrincipalImageViewType;
         typedef otb::VectorImageView<unsigned char>                     VectorImageViewType;
-        typedef otb::ZoomImageView<unsigned char,double>                ZoomImageViewType;
-        typedef otb::ScrollImageView<unsigned char,double>              ScrollImageViewType;
+        typedef otb::ZoomImageView<unsigned char>                       ZoomImageViewType;
+        typedef otb::ScrollImageView<unsigned char>                     ScrollImageViewType;
 
-        PrincipalImageViewType::Pointer lPrincipalImageView = PrincipalImageViewType::New();
-
-        GLVectorImageViewBaseType::Pointer lGLVectorImageViewBase = GLVectorImageViewBaseType::New();
         VectorImageViewType::Pointer lVectorImageView = VectorImageViewType::New();
+        GLVectorImageViewBaseType::Pointer lGLVectorImageViewBase = GLVectorImageViewBaseType::New();
+        PrincipalImageViewType::Pointer lPrincipalImageView = PrincipalImageViewType::New();
         ZoomImageViewType::Pointer lZoomImageView = ZoomImageViewType::New();
         ScrollImageViewType::Pointer lScrollImageView = ScrollImageViewType::New();
     } 

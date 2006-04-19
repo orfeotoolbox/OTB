@@ -9,6 +9,7 @@
   $Id$
 
 =========================================================================*/
+// OTB-FA-00026-CS
 #include <stdlib.h>
 #include "itkExceptionObject.h"
 
@@ -19,7 +20,7 @@ int otbImageViewerNew( int argc, char ** argv )
   try 
     { 
 
-        typedef otb::ImageViewer<unsigned char,double>    ViewerType;
+        typedef otb::ImageViewer<unsigned char>    ViewerType;
         ViewerType::Pointer  lViewer = ViewerType::New();
 
     } 
