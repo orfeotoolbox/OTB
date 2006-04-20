@@ -92,12 +92,8 @@ DrawLineSpatialObjectListFilter<TInputImage, TOutputImage>
      m_DrawLineFilter->SetInputLine( *itList );
      m_DrawLineFilter->Update();
      
-
      ++itList;
 
-	if (  itList == list->end() ) 
-	   std::cout<<"Idem"<<std::endl;  
-  
      }
 
   this->GraftOutput( m_DrawLineFilter->GetOutput() );

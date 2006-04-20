@@ -245,7 +245,13 @@ ADD_TEST(feTuLocalHoughDraw ${FEATUREEXTRACTION_TESTS}
 	${INPUTDATA}/ImageLine.bsq
 	${TEMP}/feFiltreLocalHoughDraw_ImageLine_20_20_2.hd
 	20 20 2)        
-        
+
+ADD_TEST(feTuLocalHoughDraw ${FEATUREEXTRACTION_TESTS}  
+        otbLocalHoughDraw
+	${INPUTDATA}/ImageLine.bsq
+	${TEMP}/feFiltreLocalHoughDraw_ImageLine_20_10_2.hd
+	20 10 2)   
+	        
 # -------            otb::FillGapsFilter   ------------------------------        
 
 ADD_TEST(feTuFillGapsFilterNew ${FEATUREEXTRACTION_TESTS}  

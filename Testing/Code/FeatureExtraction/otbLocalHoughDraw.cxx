@@ -75,15 +75,10 @@ int otbLocalHoughDraw( int argc, char* argv[] )
                 
 	filter->SetRadius( Radius );
 	filter->SetNumberOfLines( NumberOfLines );
-        
-std::cout<<"Avant"<<std::endl;
      
         filter->SetInput( reader->GetOutput() ); 
         filter->Update();
-        
-std::cout<< filter->GetOutput()  <<std::endl;   
- 
-std::cout<<"Apres"<<std::endl; 
+       
 
         typedef otb::DrawLineSpatialObjectListFilter< InputImageType,OutputImageType >   DrawFilterType;
 	

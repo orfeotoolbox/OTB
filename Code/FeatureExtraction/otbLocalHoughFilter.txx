@@ -104,8 +104,7 @@ LinePointResearch(LineIterator itLines, InputImageType *image, IndexType origin)
 	      
    // Check if the line is well defined by two points	               
    LinePointer line = LineType::New();
-	   
-   std::cout << "Found points" << ptList.size() << " line(s)." << std::endl;      
+	    
 	  
    if ( ptList.size() == 2 )
       {         
