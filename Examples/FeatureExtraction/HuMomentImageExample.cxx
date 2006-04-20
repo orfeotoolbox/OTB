@@ -47,7 +47,7 @@ int main(int argc, char ** argv )
 
     const char * inputFilename  = argv[1];
         
-    unsigned int mNumber((unsigned char)::atoi(argv[2]));
+    unsigned int mMomentNumber((unsigned char)::atoi(argv[2]));
 
 	        
     typedef unsigned char     InputPixelType;
@@ -118,7 +118,7 @@ int main(int argc, char ** argv )
     
     //  Software Guide : BeginLatex
     //
-    // Next, we plug the input image into the complex moment fucntion
+    // Next, we plug the input image into the complex moment function
     // and we set its parameters.
     //
     //  Software Guide : EndLatex
@@ -127,7 +127,7 @@ int main(int argc, char ** argv )
 
 
     hmFunction->SetInputImage( image );
-    hmFunction->SetNumber(mNumber);
+    hmFunction->SetMomentNumber(mMomentNumber);
 
     // Software Guide : EndCodeSnippet
 
@@ -143,7 +143,7 @@ int main(int argc, char ** argv )
 
     MomentType Result = hmFunction->EvaluateAtIndex(center);
 
-    std::cout << "The moment of order " << mNumber << " is equal to " << Result << std:: endl;
+    std::cout << "The moment of order " << mMomentNumber << " is equal to " << Result << std:: endl;
 
     // Software Guide : EndCodeSnippet
 
