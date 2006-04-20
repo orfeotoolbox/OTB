@@ -47,4 +47,8 @@ REGISTER_TEST(otbHarrisImageToPointSet);
 REGISTER_TEST(otbPixelSuppressionByDirectionNew);
 REGISTER_TEST(otbPixelSuppressionByDirection);
 REGISTER_TEST(otbFillGapsFilter);
+REGISTER_TEST(otbLocalHoughNew);
+REGISTER_TEST(otbLocalHoughDraw);
+REGISTER_TEST(otbExtractSegmentsNew);
+REGISTER_TEST(otbExtractSegments);
 }

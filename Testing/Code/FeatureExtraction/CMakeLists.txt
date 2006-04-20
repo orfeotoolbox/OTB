@@ -11,8 +11,6 @@ SET(TOL 0.0)
 
 SET(FEATUREEXTRACTION_TESTS ${CXX_TEST_PATH}/otbFeatureExtractionTests)
 
-ADD_TEST(feTuFillGapsFilterNew ${FEATUREEXTRACTION_TESTS}  
-        otbFillGapsFilterNew)
 
 ADD_TEST(feTuFillGapsFilter ${FEATUREEXTRACTION_TESTS}  
         otbFillGapsFilter
@@ -23,11 +21,15 @@ ADD_TEST(feTuAlignMV2ITK ${FEATUREEXTRACTION_TESTS}
         otbAlignImageToPath
 	${INPUTDATA}/poupees.hd
 	${TEMP}/feAlign.txt)
+
+# -------            otb::FLST   ------------------------------
 	
 ADD_TEST(feTuTestFLST ${FEATUREEXTRACTION_TESTS}  
         otbFlstTest
 	${INPUTDATA}/poupees.hd
 	${TEMP}/feoFlstListTree.txt)	
+
+# -------            otb::Draw   ------------------------------
 		
 ADD_TEST(feTuDrawSegmentIntoImage ${FEATUREEXTRACTION_TESTS}  
         otbDrawPathList
@@ -92,6 +94,8 @@ ADD_TEST(feTuFlusserPathNew ${FEATUREEXTRACTION_TESTS}
 ADD_TEST(feTuFlusserPath ${FEATUREEXTRACTION_TESTS}  
         otbFlusserPath)
 
+# -------            otb::TouziEdgeDetector   ------------------------------
+
 ADD_TEST(feTuTouziNew ${FEATUREEXTRACTION_TESTS}  
         otbTouziEdgeDetectorNew)
 		
@@ -110,6 +114,8 @@ ADD_TEST(feTvTouziDir ${FEATUREEXTRACTION_TESTS}
 	${INPUTDATA}/amst.png
 	${TEMP}/feFiltreTouzi_amst_dir_3.hd
 	3)	
+
+# -------            otb::LineRatioDetector   ------------------------------
 
 ADD_TEST(feTuLineRatioNew ${FEATUREEXTRACTION_TESTS}  
         otbLineRatioDetectorNew)
@@ -131,6 +137,8 @@ ADD_TEST(feTuLineRatio ${FEATUREEXTRACTION_TESTS}
 	${INPUTDATA}/amst.png
 	${TEMP}/feFiltreLineRatio_amst_2_3.hd
 	2 3)
+
+# -------            otb::LineCorrelationDetector   ------------------------------
 	
 ADD_TEST(feTuLineCorrelationNew ${FEATUREEXTRACTION_TESTS}  
         otbLineCorrelationDetectorNew)
@@ -152,6 +160,8 @@ ADD_TEST(feTuLineCorrelation ${FEATUREEXTRACTION_TESTS}
 	${INPUTDATA}/amst.png
 	${TEMP}/feFiltreLineCorrelation_amst_2_3.hd
 	2 3)
+
+# -------            otb::AssociativeSymmetricalSum   ------------------------------
 	
 ADD_TEST(feTuAssociativeSymmetricalSumNew ${FEATUREEXTRACTION_TESTS}  
         otbAssociativeSymmetricalSumNew)
@@ -161,6 +171,8 @@ ADD_TEST(feTuAssociativeSymmetricalSum ${FEATUREEXTRACTION_TESTS}
         ${TEMP}/feFiltreLineRatioLinear_amst_2_3.hd
         ${TEMP}/feFiltreLineCorrelationLinear_amst_2_3.hd
         ${TEMP}/feFiltreASS_amst_2_3.hd)
+
+# -------            otb::AssymmetricFusionOfLineDetector   ------------------------------
         
 ADD_TEST(feTuAssymmetricFusionOfLineDetectorNew ${FEATUREEXTRACTION_TESTS}  
         otbAssymmetricFusionOfLineDetectorNew)
@@ -170,6 +182,8 @@ ADD_TEST(feTuAssymmetricFusionOfLineDetector ${FEATUREEXTRACTION_TESTS}
 	${INPUTDATA}/amst.png
 	${TEMP}/feFiltreAssymmetricFusion_amst_2_3.hd
 	2 3)
+
+# -------            otb::HarrisImage   ------------------------------
         
 ADD_TEST(feTvHarrisImage ${FEATUREEXTRACTION_TESTS}  
         otbHarrisImage 
@@ -195,16 +209,56 @@ ADD_TEST(feTvHarrisImageToPointSet ${FEATUREEXTRACTION_TESTS}
 	${INPUTDATA}/poupees_1canal.hd
 	${TEMP}/feHarris_PointSet_poupees.png
 	1.0 1.0 1.0  2.0)
+
+# -------            otb::PixelSuppressionByDirection   ------------------------------
 	
 ADD_TEST(feTuPixelSuppressionByDirectionNew ${FEATUREEXTRACTION_TESTS}  
         otbPixelSuppressionByDirectionNew)
         
-ADD_TEST(feTuPixelSuppressionByDirection ${FEATUREEXTRACTION_TESTS}  
+ADD_TEST(feTvPixelSuppressionByDirection ${FEATUREEXTRACTION_TESTS}
+  --compare-image ${TOL}  ${BASELINE}/feFiltrePixelSuppr_ImageLine.hd
+                          ${TEMP}/feFiltrePixelSuppr_ImageLine.hd   
         otbPixelSuppressionByDirection
 	${INPUTDATA}/ImageLine.bsq
 	${INPUTDATA}/ImageLineDir.bsq
 	${TEMP}/feFiltrePixelSuppr_ImageLine.hd
 	3 0.1)
+
+# -------            otb::LocalHough   ------------------------------
+
+ADD_TEST(feTuLocalHoughNew ${FEATUREEXTRACTION_TESTS}  
+        otbLocalHoughNew)
+
+ADD_TEST(feTuLocalHough ${FEATUREEXTRACTION_TESTS}  
+        otbLocalHough
+	${INPUTDATA}/feFiltrePixelSuppression_amst_2_0_3.hd
+	${TEMP}/feFiltreLocalHoughDraw_amst_32_32_5.hd
+	32 32 5)
+	
+ADD_TEST(feTuLocalHoughDraw ${FEATUREEXTRACTION_TESTS}  
+        otbLocalHoughDraw
+	${INPUTDATA}/feFiltrePixelSuppression_amst_2_0_3.hd
+	${TEMP}/feFiltreLocalHoughDraw_amst_20_20_5.hd
+	20 20 5)        
+        
+# -------            otb::FillGapsFilter   ------------------------------        
+
+ADD_TEST(feTuFillGapsFilterNew ${FEATUREEXTRACTION_TESTS}  
+        otbFillGapsFilterNew)
+        
+# -------            otb::ExtractSegments   ------------------------------
+
+ADD_TEST(feTuExtractSegmentsNew ${FEATUREEXTRACTION_TESTS}  
+        otbExtractSegmentsNew)
+        
+ADD_TEST(feTuExtractSegments ${FEATUREEXTRACTION_TESTS}  
+        otbExtractSegments
+	${INPUTDATA}/feFiltreLineRatioLinear_amst_1_2.hd
+	${INPUTDATA}/feFiltreLineRatioLinear_amst_dir_1_2.hd
+	${TEMP}/feFiltreExtractSegments_amst.png
+	2 0.3 20 20 5)                
+
+# -----------------------------------------------------------------------
 			        
 
 
@@ -247,6 +301,11 @@ otbHarrisToPointSet.cxx
 otbPixelSuppressionByDirectionNew.cxx
 otbPixelSuppressionByDirection.cxx
 otbFillGapsFilter.cxx
+otbLocalHoughNew.cxx
+otbLocalHough.cxx
+otbLocalHoughDraw.cxx
+otbExtractSegmentsNew.cxx
+otbExtractSegments.cxx
 )
 
 
