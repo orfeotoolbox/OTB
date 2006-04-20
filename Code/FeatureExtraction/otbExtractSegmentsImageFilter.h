@@ -1,0 +1,138 @@
+/*=========================================================================
+
+  Programme :   OTB (ORFEO ToolBox)
+  Auteurs   :   CS - C.Ruffel
+  Language  :   C++
+  Date      :  19 avril 2006
+  Role      :  Extract Segments Composite Filter  
+  $Id$ 
+
+=========================================================================*/
+#ifndef __otbExtractSegmentsImageFilter_h
+#define __otbExtractSegmentsImageFilter_h
+
+#include "itkImageToImageFilter.h"
+
+#include "otbPixelSuppressionByDirectionImageFilter.h"
+#include "otbLocalHoughFilter.h"
+#include "otbDrawLineSpatialObjectListFilter.h"
+
+#include "otbLineSpatialObjectList.h"
+
+namespace otb
+{
+
+/** \class ExtractSegmentsImageFilter
+ *
+ * This class implements a composite filter that combines four filters.
+ * 
+ *
+ */
+
+template <class TInputImage, 
+	  class TOutputImage>
+class ITK_EXPORT ExtractSegmentsImageFilter : 
+public itk::ImageToImageFilter< TInputImage, TOutputImage >
+{
+public:
+
+  itkStaticConstMacro(		InputImageDimension,
+  				unsigned int,
+                      		TInputImage::ImageDimension);
+  itkStaticConstMacro(		OutputImageDimension, 
+  				unsigned int,
+                      		TOutputImage::ImageDimension);
+
+  typedef TInputImage InputImageType;
+  typedef TOutputImage OutputImageType;
+  
+  typedef TInputImage PSOutputImageType;
+  
+  typedef ExtractSegmentsImageFilter 				    Self;
+  typedef itk::ImageToImageFilter< InputImageType, OutputImageType> Superclass;
+  typedef itk::SmartPointer<Self> 				    Pointer;
+  typedef itk::SmartPointer<const Self>  			    ConstPointer;
+
+  itkNewMacro(Self);
+
+  itkTypeMacro(ExtractSegmentsImageFilter, itk::ImageToImageFilter);
+  
+  typedef typename InputImageType::PixelType  InputPixelType;
+  typedef typename InputImageType::SizeType SizeType;
+
+  typedef typename OutputImageType::PixelType OutputPixelType;
+  
+  
+  /** Definition of the list of lines. */
+  typedef LineSpatialObjectList	 LinesListType;
+ 
+
+  /** Set/Get the radius of the region of the pixel suppression by direction image filter. */
+  void SetPixelSuppressionRadius( SizeType Radius );
+  const SizeType GetPixelSuppressionRadius( void );
+  
+  /** Set/Get Angular Accuracy on the direction of the central pixel for
+      the pixel suppression by direction image filter. */
+  void SetPixelSuppressionAngularBeam( double AngularBeam );
+  const double GetPixelSuppressionAngularBeam( void );  
+
+  
+  
+  /** Set/Get the radius used to define the region of local hough filter. */
+  void SetLocalHoughRadius( SizeType Radius );
+  const SizeType GetLocalHoughRadius( void );
+  
+  /** Set/Get the number of lines we are looking for in the local hough filter. */
+  void SetLocalHoughNumberOfLines( unsigned int Radius );
+  const unsigned int GetLocalHoughNumberOfLines( void );
+  
+  /** Set/Get the radius of the disc to remove from the accumulator
+   *  for each line found */
+  void SetLocalHoughDiscRadius( float DiscRadius );
+  const float GetLocalHoughDiscRadius( void );
+
+  /** Set/Get the variance of the gaussian bluring for the accumulator */
+  void SetLocalHoughVariance( float Variance );
+  const float GetLocalHoughVariance( void );
+
+
+
+  /** Set/Get the image input of this filter.  */
+  void SetInputImage( const InputImageType *image);
+  const InputImageType * GetInputImage(void);  
+
+  /** Set/Get the image direction of this filter.  */  
+  void SetInputImageDirection( const InputImageType *image);
+  const InputImageType * GetInputImageDirection(void);
+
+
+
+protected:
+  ExtractSegmentsImageFilter();
+  virtual ~ExtractSegmentsImageFilter() {};
+  
+  typedef PixelSuppressionByDirectionImageFilter< InputImageType, PSOutputImageType > 	PixelSuppressionType;
+  typedef LocalHoughFilter< InputImageType >						LocalHoughType;
+  typedef DrawLineSpatialObjectListFilter< InputImageType, OutputImageType > 		DrawLineListType;
+
+  virtual void GenerateData();
+  
+  void PrintSelf(std::ostream& os, itk::Indent indent) const;
+
+private:
+  ExtractSegmentsImageFilter(const Self&); //purposely not implemented
+  void operator=(const Self&); //purposely not implemented
+
+  
+  typename PixelSuppressionType::Pointer	m_PixelSuppression;
+  typename LocalHoughType::Pointer		m_LocalHough;
+  typename DrawLineListType::Pointer		m_DrawLineList;
+};
+} // end namespace otb
+
+#ifndef OTB_MANUAL_INSTANTIATION
+#include "otbExtractSegmentsImageFilter.txx"
+#endif
+
+  
+#endif
