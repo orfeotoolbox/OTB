@@ -118,10 +118,10 @@
       % changes \\ to ', ' (comma-space), making it pass muster for
       % generating document info in the PDF file.
       \def\\{, }
-      \pdfinfo{
-        /Author (\@author)
-        /Title (\@title)
-      }
+      %% \pdfinfo{
+%%         /Author (\@author)
+%%         /Title (\@title)
+%%       }
     }}
     \begin{flushright}%
       {\rm\Huge\itk@HeaderFamily \@title \par}%
