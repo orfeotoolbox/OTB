@@ -8,10 +8,10 @@
   $Id$ 
 
 =========================================================================*/
-#ifndef __otbLineRatioDetector_txx
-#define __otbLineRatioDetector_txx
+#ifndef __otbLineRatioDetectorImageFilter_txx
+#define __otbLineRatioDetectorImageFilter_txx
 
-#include "otbLineRatioDetector.h"
+#include "otbLineRatioDetectorImageFilter.h"
 
 #include "itkDataObject.h"
 #include "itkExceptionObject.h"
@@ -32,7 +32,7 @@ namespace otb
  *
  */
 template <class TInputImage, class TOutputImage, class InterpolatorType >
-LineRatioDetector<TInputImage, TOutputImage, InterpolatorType>::LineRatioDetector()
+LineRatioDetectorImageFilter<TInputImage, TOutputImage, InterpolatorType>::LineRatioDetectorImageFilter()
 {
   m_Radius.Fill(1);
   m_LengthLine = 1;
@@ -42,7 +42,7 @@ LineRatioDetector<TInputImage, TOutputImage, InterpolatorType>::LineRatioDetecto
 }
 
 template <class TInputImage, class TOutputImage, class InterpolatorType>
-void LineRatioDetector<TInputImage, TOutputImage, InterpolatorType>::GenerateInputRequestedRegion() throw (itk::InvalidRequestedRegionError)
+void LineRatioDetectorImageFilter<TInputImage, TOutputImage, InterpolatorType>::GenerateInputRequestedRegion() throw (itk::InvalidRequestedRegionError)
 {
   // call the superclass' implementation of this method
   Superclass::GenerateInputRequestedRegion();
@@ -105,7 +105,7 @@ void LineRatioDetector<TInputImage, TOutputImage, InterpolatorType>::GenerateInp
  */
 template <class TInputImage, class TOutputImage, class InterpolatorType>
 void 
-LineRatioDetector< TInputImage, TOutputImage, InterpolatorType>
+LineRatioDetectorImageFilter< TInputImage, TOutputImage, InterpolatorType>
 ::BeforeThreadedGenerateData()
 {
 
@@ -124,8 +124,8 @@ LineRatioDetector< TInputImage, TOutputImage, InterpolatorType>
 }
 
 template <class TInputImage, class TOutputImage, class InterpolatorType>
-const typename LineRatioDetector< TInputImage, TOutputImage, InterpolatorType>::OutputImageType *
-LineRatioDetector< TInputImage, TOutputImage, InterpolatorType>
+const typename LineRatioDetectorImageFilter< TInputImage, TOutputImage, InterpolatorType>::OutputImageType *
+LineRatioDetectorImageFilter< TInputImage, TOutputImage, InterpolatorType>
 ::GetOutputDirection()
 {
 	this->Update();
@@ -133,7 +133,7 @@ LineRatioDetector< TInputImage, TOutputImage, InterpolatorType>
 }
 
 template< class TInputImage, class TOutputImage, class InterpolatorType>
-void LineRatioDetector< TInputImage, TOutputImage, InterpolatorType>
+void LineRatioDetectorImageFilter< TInputImage, TOutputImage, InterpolatorType>
 ::ThreadedGenerateData(	
 			const 	OutputImageRegionType& 		outputRegionForThread,
                        	int 	threadId
@@ -365,7 +365,7 @@ void LineRatioDetector< TInputImage, TOutputImage, InterpolatorType>
  */
 template <class TInputImage, class TOutput, class InterpolatorType>
 void 
-LineRatioDetector<TInputImage, TOutput, InterpolatorType>::PrintSelf(std::ostream& os, itk::Indent indent) const
+LineRatioDetectorImageFilter<TInputImage, TOutput, InterpolatorType>::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   Superclass::PrintSelf( os, indent );
   os << indent << "Length: " << m_LengthLine << std::endl;

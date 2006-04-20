@@ -8,8 +8,8 @@
   $Id$ 
 
 =========================================================================*/
-#ifndef __otbLineRatioDetector_h
-#define __otbLineRatioDetector_h
+#ifndef __otbLineRatioDetectorImageFilter_h
+#define __otbLineRatioDetectorImageFilter_h
 
 #include "itkBSplineInterpolateImageFunction.h"
 #include "itkImageToImageFilter.h"
@@ -26,7 +26,7 @@
 namespace otb
 {
 
-/** \class LineRatioDetector
+/** \class LineRatioDetectorImageFilter
  * \brief Application of the filter of detection of linear features 
  *
  * This class implements the Tupin's detector D1 used to detect 
@@ -64,7 +64,7 @@ namespace otb
 template <class TInputImage, 
 	  class TOutputImage,
 	  class InterpolatorType = itk::BSplineInterpolateImageFunction<TInputImage> >
-class ITK_EXPORT LineRatioDetector :  public itk::ImageToImageFilter< TInputImage, TOutputImage >
+class ITK_EXPORT LineRatioDetectorImageFilter :  public itk::ImageToImageFilter< TInputImage, TOutputImage >
 {
 public:
   /** 	Extract dimensions as well of the images of entry of exit. */
@@ -79,7 +79,7 @@ public:
   typedef TOutputImage OutputImageType;
 
   /** typedef for the classes standards. */
-  typedef LineRatioDetector Self;
+  typedef LineRatioDetectorImageFilter Self;
   typedef itk::ImageToImageFilter< InputImageType, OutputImageType> Superclass;
   typedef itk::SmartPointer<Self> Pointer;
   typedef itk::SmartPointer<const Self>  ConstPointer;
@@ -88,7 +88,7 @@ public:
   itkNewMacro(Self);
 
   /** Return the name of the class. */
-  itkTypeMacro(LineRatioDetector, itk::ImageToImageFilter);
+  itkTypeMacro(LineRatioDetectorImageFilter, itk::ImageToImageFilter);
 
   /** Typedefs to describe and access Interpolator */
   typedef typename InterpolatorType::Pointer InterpolatorPointer;
@@ -132,13 +132,13 @@ public:
   const OutputImageType * GetOutputDirection();
 
 protected:
-  LineRatioDetector();
-  virtual ~LineRatioDetector() {};
+  LineRatioDetectorImageFilter();
+  virtual ~LineRatioDetectorImageFilter() {};
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
   void BeforeThreadedGenerateData();
 
-  /** LineRatioDetector can be implemented for a treatment of filter multithreaded. 
+  /** LineRatioDetectorImageFilter can be implemented for a treatment of filter multithreaded. 
    * Thus, the ThreadedGenerateData() method is called for each thread process. 
    * The data image are allocated automatically by the mother class by calling the 
    * ThreadedGenerateData() method. ThreadedGenerateData can only write the portion 
@@ -150,7 +150,7 @@ protected:
                             int threadId );
 
 private:
-  LineRatioDetector(const Self&); //purposely not implemented
+  LineRatioDetectorImageFilter(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
  
   /** Length of the linear feature = 2*m_LengthLine+1 */ 
@@ -173,7 +173,7 @@ private:
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbLineRatioDetector.txx"
+#include "otbLineRatioDetectorImageFilter.txx"
 #endif
 
   
