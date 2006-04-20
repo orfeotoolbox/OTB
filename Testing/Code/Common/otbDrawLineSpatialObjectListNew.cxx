@@ -28,8 +28,8 @@ int otbDrawLineSpatialObjectListNew( int argc, char* argv[] )
 {
   try 
     {         
-        typedef unsigned char	                                InputPixelType;
-        typedef double		   	                        OutputPixelType;
+        typedef double		                                InputPixelType;
+        typedef unsigned char	   	                        OutputPixelType;
         const   unsigned int        	                        Dimension = 2;
 
         typedef itk::Image< InputPixelType,  Dimension >        InputImageType;

@@ -131,7 +131,13 @@ ADD_TEST(feTuLineRatioLinearDir ${FEATUREEXTRACTION_TESTS}
 	${INPUTDATA}/amst.png
 	${TEMP}/feFiltreLineRatioLinear_amst_dir_2_3.hd
 	2 3)
-			
+	
+ADD_TEST(feTuLineRatioLinearAmsters1 ${FEATUREEXTRACTION_TESTS}  
+        otbLineRatioDetectorLinear
+	${INPUTDATA}/amst_ers1.ima
+	${TEMP}/feFiltreLineRatioLinear_amst_ers1_1_2.hd
+	1 2)
+				
 ADD_TEST(feTuLineRatio ${FEATUREEXTRACTION_TESTS}  
         otbLineRatioDetector
 	${INPUTDATA}/amst.png
@@ -219,10 +225,10 @@ ADD_TEST(feTvPixelSuppressionByDirection ${FEATUREEXTRACTION_TESTS}
   --compare-image ${TOL}  ${BASELINE}/feFiltrePixelSuppr_ImageLine.hd
                           ${TEMP}/feFiltrePixelSuppr_ImageLine.hd   
         otbPixelSuppressionByDirection
-	${INPUTDATA}/ImageLine.bsq
+	${INPUTDATA}/ImageLine_hd.bsq
 	${INPUTDATA}/ImageLineDir.bsq
-	${TEMP}/feFiltrePixelSuppr_ImageLine.hd
-	3 0.1)
+	${TEMP}/feFiltrePixelSuppr_ImageLine_2_0_3.hd
+	2 0.3)
 
 # -------            otb::LocalHough   ------------------------------
 
@@ -231,14 +237,14 @@ ADD_TEST(feTuLocalHoughNew ${FEATUREEXTRACTION_TESTS}
 
 ADD_TEST(feTuLocalHough ${FEATUREEXTRACTION_TESTS}  
         otbLocalHough
-	${INPUTDATA}/feFiltrePixelSuppression_amst_2_0_3.hd
-	32 32 5)
+	${INPUTDATA}/ImageLine.bsq
+	32 32 2)
 	
 ADD_TEST(feTuLocalHoughDraw ${FEATUREEXTRACTION_TESTS}  
         otbLocalHoughDraw
-	${INPUTDATA}/feFiltrePixelSuppression_amst_2_0_3.hd
-	${TEMP}/feFiltreLocalHoughDraw_amst_20_20_5.hd
-	20 20 5)        
+	${INPUTDATA}/ImageLine.bsq
+	${TEMP}/feFiltreLocalHoughDraw_ImageLine_20_20_2.hd
+	20 20 2)        
         
 # -------            otb::FillGapsFilter   ------------------------------        
 
@@ -252,10 +258,10 @@ ADD_TEST(feTuExtractSegmentsNew ${FEATUREEXTRACTION_TESTS}
         
 ADD_TEST(feTuExtractSegments ${FEATUREEXTRACTION_TESTS}  
         otbExtractSegments
-	${INPUTDATA}/feFiltreLineRatioLinear_amst_1_2.hd
-	${INPUTDATA}/feFiltreLineRatioLinear_amst_dir_1_2.hd
-	${TEMP}/feFiltreExtractSegments_amst.png
-	2 0.3 20 20 5)                
+	${INPUTDATA}/ImageLine_hd.bsq
+	${INPUTDATA}/ImageLineDir.bsq
+	${TEMP}/feFiltreExtractSegments_ImageLine.png
+	2 0.3 20 20 2)                
 
 # -----------------------------------------------------------------------
 			        

@@ -31,7 +31,7 @@ int otbLocalHoughNew( int argc, char* argv[] )
     {  
     	const char * inputFilename  = argv[1];
                        
-        typedef double		                                InputPixelType;
+        typedef unsigned char	                                InputPixelType;
         const   unsigned int        	                        Dimension = 2;
 
         typedef itk::Image< InputPixelType,  Dimension >        InputImageType;
