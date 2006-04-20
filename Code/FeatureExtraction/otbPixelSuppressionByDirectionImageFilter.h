@@ -33,7 +33,11 @@ namespace otb
  * for other pixels with a direction close to \theta_i in an angular
  * beam around it. If none is found, the pixel is suppressed.
  *
- * 
+ * This filter is the first step to generate an image of segments
+ * primitives. It starts from the two output images of the line detector
+ * image filters which are the image of intensity of detection and 
+ * the image of direction.
+ *
  */
 
 template <class TInputImage, class TOutputImage>

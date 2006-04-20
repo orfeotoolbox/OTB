@@ -54,10 +54,10 @@ namespace otb
  * of the linear structure:
  *	\[R = \min (R_{12};R_{13}) \]
  * where R_{12} and R_{13} are the maximum response of the ratio edge 
- * detector of R(\theta_{i}).
+ * detector of R(\theta_{i}). The intensity of detection lies in
+ * the interval [0, 1].
  * 
- * The output is an image of intensity of detection.
- *
+ * The output is an image of intensity of detection. 
  * 
  */
 

@@ -27,7 +27,7 @@ namespace otb
  * two detectors:
  	\[ \sigma(x,y)=\fract{xy}{1-x-y+2xy} with x,y \in [0,1].]
  * 
- * \ingroup IntensityImageFilters  Multithreaded
+ * 
  */
 namespace Functor {  
 

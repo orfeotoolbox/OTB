@@ -23,6 +23,11 @@ namespace otb
 
 /** \class AssymmetricFusionOfLineDetectorImageFilter
  *
+ * This class implements a composite filter that combines three filters:
+ * two filters of line detector ( a line detector by ratio and a line
+ * detector by croos-correlation) and a filter that produces a fusion of  
+ * those two line detector filters.
+ *
  */
 
 template <class TInputImage, 
@@ -60,8 +65,6 @@ public:
   typedef typename InputImageType::SizeType SizeType;
 
   typedef typename OutputImageType::PixelType OutputPixelType;
-
-  typedef typename InputImageType::SizeType SizeType;
  
 
   /** Set the length of the linear feature. */
