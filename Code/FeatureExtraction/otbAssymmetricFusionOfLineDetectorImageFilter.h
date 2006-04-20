@@ -13,8 +13,8 @@
 
 #include "itkImageToImageFilter.h"
 
-#include "otbLineRatioDetector.h"
-#include "otbLineCorrelationDetector.h"
+#include "otbLineRatioDetectorImageFilter.h"
+#include "otbLineCorrelationDetectorImageFilter.h"
 #include "otbAssociativeSymmetricalSumImageFilter.h"
 
 
@@ -83,8 +83,8 @@ protected:
   AssymmetricFusionOfLineDetectorImageFilter();
   virtual ~AssymmetricFusionOfLineDetectorImageFilter() {};
   
-  typedef otb::LineRatioDetector< InputImageType, OutputImageType, InterpolatorType > 	LineRatioType;
-  typedef otb::LineCorrelationDetector< InputImageType, OutputImageType, InterpolatorType > LineCorrelationType;
+  typedef otb::LineRatioDetectorImageFilter< InputImageType, OutputImageType, InterpolatorType > 	LineRatioType;
+  typedef otb::LineCorrelationDetectorImageFilter< InputImageType, OutputImageType, InterpolatorType > LineCorrelationType;
   typedef otb::AssociativeSymmetricalSumImageFilter< InputImageType1, InputImageType2, OutputImageType > AssSymSumType;
 
   virtual void GenerateData();
