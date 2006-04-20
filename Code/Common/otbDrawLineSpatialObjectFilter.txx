@@ -94,8 +94,7 @@ DrawLineSpatialObjectFilter<TInputImage, TOutputImage>
     // Get the region
   typename OutputImageType::RegionType region;
   
-//  typename OutputImageType::RegionType region =
-//                        output->GetLargestPossibleRegion();
+
   region.SetSize(input->GetLargestPossibleRegion().GetSize());
   region.SetIndex(input->GetLargestPossibleRegion().GetIndex());
   output->SetRegions( region );
@@ -136,10 +135,6 @@ DrawLineSpatialObjectFilter<TInputImage, TOutputImage>
   x2 = (*itPoints).GetPosition()[0];
   y2 = (*itPoints).GetPosition()[1];
 
-std::cout<<"("<<x1<<","<<y1<<")"<<std::endl;
-std::cout<<"("<<x2<<","<<y2<<")"<<std::endl;
-
-
   // Distance between two points
   double DeltaX, DeltaY;
     
@@ -166,10 +161,9 @@ std::cout<<"("<<x2<<","<<y2<<")"<<std::endl;
 
 	 
 	// Set the point if the pixel index belongs to the output image  
-	if( region.IsInside( outputIndex ) ) {
-std::cout<<"Index out ("<<outputIndex[0]<<","<<outputIndex[1]<<") Value = "<< (int)m_Value<<std::endl;
+	if( region.IsInside( outputIndex ) ) 
 	   output->SetPixel( outputIndex, m_Value);
-	}
+	
 	}
 	 
       }
@@ -186,10 +180,9 @@ std::cout<<"Index out ("<<outputIndex[0]<<","<<outputIndex[1]<<") Value = "<< (i
 	 outputIndex[0] = static_cast<unsigned long>( SlopeInv * (y-y1) + x1 ) ;
 	 outputIndex[1] = static_cast<unsigned long>( y );
 	    
-	 if( region.IsInside( outputIndex ) ){
-std::cout<<"Index out ("<<outputIndex[0]<<","<<outputIndex[1]<<") Value = "<< (int)m_Value<<std::endl;
+	 if( region.IsInside( outputIndex ) )
 	    output->SetPixel( outputIndex, m_Value);
-	   }
+
 	      
 	 } 
       } 

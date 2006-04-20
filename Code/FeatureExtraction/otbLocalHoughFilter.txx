@@ -57,9 +57,6 @@ LinePointResearch(LineIterator itLines, InputImageType *image, IndexType origin)
    v[1] /= norm;
 
 
-std::cout<<"u(x,y) "<<u[0]<<" "<<u[1]<<std::endl;
-std::cout<<"v(x,y) "<<v[0]<<" "<<v[1]<<std::endl; 
-
    typename InputImageType::RegionType region = image->GetLargestPossibleRegion(); 
 	       
    PointListType ptList;
@@ -98,9 +95,7 @@ std::cout<<"v(x,y) "<<v[0]<<" "<<v[1]<<std::endl;
           ((region.IsInside( localIndex )) && (!region.IsInside( nextIndex ))) )
          {
    
-std::cout<<"***********localIndex "<<localIndex[0]<<" "<<localIndex[1]<<std::endl;
          point.SetPosition(localIndex[0]+origin[0],localIndex[1]+origin[1]);
-//         point.SetPosition(localIndex[0],localIndex[1]);
          ptList.push_back(point);
    
          }
@@ -153,10 +148,8 @@ LocalHoughFilter<TInputImage>
    
    // Direction X
    for ( unsigned long x=0; x < size[0]; x += m_Radius[0] )
-//   for ( unsigned long x=0; x < size[0]; x += 10 )
       {
-std::cout<<"(x)"<<x<<std::endl;
-      
+
       // Initialize the extract ROI filter in the direction X	
       ROIfilter->SetStartX(x);
       
@@ -169,9 +162,7 @@ std::cout<<"(x)"<<x<<std::endl;
 
       // Direction Y
       for ( unsigned long y=0; y < size[1]; y += m_Radius[1] )
-//      for ( unsigned long y=0; y < size[1]; y += 10 )
          {	
-std::cout<<"(y)"<<y<<std::endl; 
  	 
   	 // Initialize the extract ROI filter in the direction Y	
       	 ROIfilter->SetStartY(y);
@@ -185,15 +176,15 @@ std::cout<<"(y)"<<y<<std::endl;
       	 // Extract the local region of the input image
       	 ROIfilter->SetInput( this->GetInput() );
       	 
+      	 // ----------------------------------------------------
+      	 // Create a copy of the extract ROI filter output image
+     	 // ----------------------------------------------------
      	 
-//----------------------------------------------------------------------
-
 	 typename InputImageType::Pointer 	localImage = InputImageType::New();
 	 typename InputImageType::Pointer     	filterImage = InputImageType::New();
 	
 	  
 	 ROIfilter->UpdateLargestPossibleRegion();
-	   
 	 ROIfilter->Update();
 	 
 	 filterImage = ROIfilter->GetOutput();
@@ -231,33 +222,25 @@ std::cout<<"(y)"<<y<<std::endl;
 	    localIt.Set( static_cast<InputPixelType>(filterIt.Get()) );
 	     
 
-//------------------------------------------------------------------------
       	 // -------------------------------
       	 // Application of Hough filter
       	 // -------------------------------
-//      	 m_HoughFilter->SetInput( ROIfilter->GetOutput() );
+
        	 m_HoughFilter->SetInput( localImage );
        	 m_HoughFilter->SetNumberOfLines( m_NumberOfLines );
        	 m_HoughFilter->SetVariance( m_Variance );
        	 m_HoughFilter->SetDiscRadius( m_DiscRadius );
        	 
       	 m_HoughFilter->Modified();
-      	  
-    	 
-//    	 ROIfilter->UpdateLargestPossibleRegion();
-    	 
+      	    	 
       	 m_HoughFilter->Update();
       	 
-
-//	 typename InputImageType::Pointer  localImage = InputImageType::New();
-//	 localImage = ROIfilter->GetOutput();
 
          // ---------------------------------------	 
       	 // Get the list of LineSpatialObject lines
       	 // ---------------------------------------
+      	 
       	 lines = m_HoughFilter->GetLines(m_NumberOfLines);
-
-std::cout<<"Size "<<lines.size()<<std::endl;
 
          LineIterator itLines = lines.begin();
          

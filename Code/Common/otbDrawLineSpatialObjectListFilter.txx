@@ -84,14 +84,9 @@ DrawLineSpatialObjectListFilter<TInputImage, TOutputImage>
   m_DrawLineFilter->Update();
   ++itList;
   
-int cpt=0;
-  
   // Draw each line of the list
   while( itList != list->end() )
      {
-     	
-std::cout<<"cpt = "<<cpt<<" "<<std::endl;
-cpt++;
     
      m_DrawLineFilter->SetInputImage( this->GetOutput() ); 
      m_DrawLineFilter->SetInputLine( *itList );
