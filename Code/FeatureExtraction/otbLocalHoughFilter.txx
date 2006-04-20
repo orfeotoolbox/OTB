@@ -133,7 +133,6 @@ void
 LocalHoughFilter<TInputImage>
 ::GenerateData()
 {
-std::cout<<"Coucou"<<std::endl;
 
    typename InputImageType::ConstPointer 	input  = this->GetInput();
    
@@ -191,8 +190,6 @@ std::cout<<"(y)"<<y<<std::endl;
 
 	 typename InputImageType::Pointer 	localImage = InputImageType::New();
 	 typename InputImageType::Pointer     	filterImage = InputImageType::New();
-	 
-std::cout<<"Coucou1"<<std::endl;  
 	
 	  
 	 ROIfilter->UpdateLargestPossibleRegion();
@@ -201,7 +198,6 @@ std::cout<<"Coucou1"<<std::endl;
 	 
 	 filterImage = ROIfilter->GetOutput();
 	
-std::cout<<"Coucou2"<<std::endl;
 
 	 // Create a new image from the extracted region. The starting
 	 // index is the corner of the newly generated image (0,0)
@@ -229,13 +225,11 @@ std::cout<<"Coucou2"<<std::endl;
 	 localIt.GoToBegin();
 	 filterIt.GoToBegin();
 	
-std::cout<<"Coucou3"<<std::endl;
 	
 	 // Copy the filter image in the new local image
 	 for ( localIt.GoToBegin(); !localIt.IsAtEnd(); ++localIt,++filterIt)
 	    localIt.Set( static_cast<InputPixelType>(filterIt.Get()) );
 	     
-std::cout<<"Coucou4"<<std::endl;
 
 //------------------------------------------------------------------------
       	 // -------------------------------
@@ -248,14 +242,12 @@ std::cout<<"Coucou4"<<std::endl;
        	 m_HoughFilter->SetDiscRadius( m_DiscRadius );
        	 
       	 m_HoughFilter->Modified();
-      	 
-std::cout<<"Coucou5"<<std::endl;  
+      	  
     	 
 //    	 ROIfilter->UpdateLargestPossibleRegion();
     	 
       	 m_HoughFilter->Update();
       	 
-std::cout<<"Coucou6"<<std::endl;
 
 //	 typename InputImageType::Pointer  localImage = InputImageType::New();
 //	 localImage = ROIfilter->GetOutput();
