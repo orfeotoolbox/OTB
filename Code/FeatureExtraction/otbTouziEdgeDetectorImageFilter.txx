@@ -116,7 +116,7 @@ TouziEdgeDetectorImageFilter<TInputImage,TOutputImage>
 template <class TInputImage, class TOutputImage>
 const typename TouziEdgeDetectorImageFilter<TInputImage,TOutputImage>::OutputImageType *
 TouziEdgeDetectorImageFilter<TInputImage,TOutputImage>
-::GetOutputDirection()
+::GetOutputDirections()
 {
 	this->Update();
 	return 	static_cast< const OutputImageType *> (m_DirectionOuputImage);

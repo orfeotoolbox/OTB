@@ -102,7 +102,7 @@ public:
    * \sa ImageToImageFilter::GenerateInputRequestedRegion() */
   virtual void GenerateInputRequestedRegion() throw(itk::InvalidRequestedRegionError);
 
-  const OutputImageType * GetOutputDirection();
+  const OutputImageType * GetOutputDirections();
   
 protected:
   TouziEdgeDetectorImageFilter();
