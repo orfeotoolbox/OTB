@@ -248,8 +248,8 @@ ADD_TEST(feTuLocalHoughDraw ${FEATUREEXTRACTION_TESTS}
 
 ADD_TEST(feTuLocalHoughDraw ${FEATUREEXTRACTION_TESTS}  
         otbLocalHoughDraw
-	${INPUTDATA}/ImageLine.bsq
-	${TEMP}/feFiltreLocalHoughDraw_ImageLine_20_10_2.hd
+	${INPUTDATA}/Line.png
+	${TEMP}/feFiltreLocalHoughDraw_Line_20_10_2.png
 	20 10 2)   
 	        
 # -------            otb::FillGapsFilter   ------------------------------        
