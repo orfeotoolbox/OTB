@@ -23,7 +23,7 @@
 
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
-#include "otbLineCorrelationDetector.h"
+#include "otbLineCorrelationDetectorImageFilter.h"
 
 
 int otbLineCorrelationDetector( int argc, char* argv[] )
@@ -48,7 +48,7 @@ int otbLineCorrelationDetector( int argc, char* argv[] )
         typedef otb::ImageFileReader< InputImageType  >         ReaderType;
         typedef otb::ImageFileWriter< OutputImageType >         WriterType;
 
-        typedef otb::LineCorrelationDetector< InputImageType, OutputImageType >   FilterType;
+        typedef otb::LineCorrelationDetectorImageFilter< InputImageType, OutputImageType >   FilterType;
 	
         FilterType::Pointer FilterLineCorrelation = FilterType::New();
         

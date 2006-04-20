@@ -23,7 +23,7 @@
 
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
-#include "otbLineCorrelationDetector.h"
+#include "otbLineCorrelationDetectorImageFilter.h"
 
 #include "itkLinearInterpolateImageFunction.h"
 
@@ -50,7 +50,7 @@ int otbLineCorrelationDetectorLinear( int argc, char* argv[] )
         typedef otb::ImageFileWriter< OutputImageType >         WriterType;
 
         typedef itk::LinearInterpolateImageFunction< InputImageType, double >	InterpolatorType;
-        typedef otb::LineCorrelationDetector< InputImageType, OutputImageType, InterpolatorType >   FilterType;
+        typedef otb::LineCorrelationDetectorImageFilter< InputImageType, OutputImageType, InterpolatorType >   FilterType;
 	
         FilterType::Pointer FilterLineCorrelation = FilterType::New();
         
