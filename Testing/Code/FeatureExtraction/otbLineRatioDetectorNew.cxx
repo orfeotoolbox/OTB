@@ -20,7 +20,7 @@
 #include "itkImage.h"
 #include <iostream>
 
-#include "otbLineRatioDetector.h"
+#include "otbLineRatioDetectorImageFilter.h"
 
 
 int otbLineRatioDetectorNew( int argc, char* argv[] )
@@ -34,7 +34,7 @@ int otbLineRatioDetectorNew( int argc, char* argv[] )
         typedef itk::Image< InputPixelType,  Dimension >        InputImageType;
         typedef itk::Image< OutputPixelType, Dimension >        OutputImageType;
 
-        typedef otb::LineRatioDetector< InputImageType, OutputImageType>   FilterType;
+        typedef otb::LineRatioDetectorImageFilter< InputImageType, OutputImageType>   FilterType;
 	
         FilterType::Pointer FilterLineRatio = FilterType::New();
         

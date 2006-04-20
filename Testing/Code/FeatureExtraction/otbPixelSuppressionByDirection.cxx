@@ -40,14 +40,14 @@ int otbPixelSuppressionByDirection( int argc, char* argv[] )
         typedef double		   	                        OutputPixelType;
         const   unsigned int        	                        Dimension = 2;
 
-        typedef itk::Image< InputPixelType,  Dimension >        InputImageType1;
+        typedef itk::Image< InputPixelType,  Dimension >        InputImageType;
         typedef itk::Image< OutputPixelType, Dimension >        OutputImageType;
 
-        typedef otb::ImageFileReader< InputImageType1  >         ReaderType1;
-        typedef otb::ImageFileReader< InputImageType1  >         ReaderType2;
+        typedef otb::ImageFileReader< InputImageType  >         ReaderType1;
+        typedef otb::ImageFileReader< InputImageType  >         ReaderType2;
         typedef otb::ImageFileWriter< OutputImageType >          WriterType;
         
-        typedef otb::PixelSuppressionByDirectionImageFilter< InputImageType1, OutputImageType >   FilterType;
+        typedef otb::PixelSuppressionByDirectionImageFilter< InputImageType, OutputImageType >   FilterType;
 
         FilterType::Pointer filter = FilterType::New();
                 

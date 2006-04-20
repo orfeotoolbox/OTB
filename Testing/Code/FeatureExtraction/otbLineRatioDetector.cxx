@@ -23,7 +23,7 @@
 
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
-#include "otbLineRatioDetector.h"
+#include "otbLineRatioDetectorImageFilter.h"
 
 int otbLineRatioDetector( int argc, char* argv[] )
 {
@@ -47,7 +47,7 @@ int otbLineRatioDetector( int argc, char* argv[] )
         typedef otb::ImageFileReader< InputImageType  >         ReaderType;
         typedef otb::ImageFileWriter< OutputImageType >         WriterType;
 
-        typedef otb::LineRatioDetector< InputImageType, OutputImageType >   FilterType;
+        typedef otb::LineRatioDetectorImageFilter< InputImageType, OutputImageType >   FilterType;
 	
         FilterType::Pointer FilterLineRatio = FilterType::New();
         

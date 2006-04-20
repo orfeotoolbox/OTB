@@ -23,7 +23,7 @@
 
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
-#include "otbTouziEdgeDetector.h"
+#include "otbTouziEdgeDetectorImageFilter.h"
 
 
 int otbTouziEdgeDetector( int argc, char* argv[] )
@@ -45,7 +45,7 @@ int otbTouziEdgeDetector( int argc, char* argv[] )
         typedef otb::ImageFileReader< InputImageType  >         ReaderType;
         typedef otb::ImageFileWriter< OutputImageType >         WriterType;
 
-        typedef otb::TouziEdgeDetector< InputImageType,OutputImageType >   FilterType;
+        typedef otb::TouziEdgeDetectorImageFilter< InputImageType,OutputImageType >   FilterType;
 	
 	FilterType::SizeType Radius;
 	Radius[0] = RadiusX;

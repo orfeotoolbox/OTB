@@ -20,7 +20,7 @@
 #include "itkImage.h"
 #include <iostream>
 
-#include "otbTouziEdgeDetector.h"
+#include "otbTouziEdgeDetectorImageFilter.h"
 
 
 int otbTouziEdgeDetectorNew( int argc, char* argv[] )
@@ -34,7 +34,7 @@ int otbTouziEdgeDetectorNew( int argc, char* argv[] )
         typedef itk::Image< InputPixelType,  Dimension >        InputImageType;
         typedef itk::Image< OutputPixelType, Dimension >        OutputImageType;
 
-        typedef otb::TouziEdgeDetector< InputImageType,OutputImageType >   FilterType;
+        typedef otb::TouziEdgeDetectorImageFilter< InputImageType,OutputImageType >   FilterType;
 	
 	
         FilterType::Pointer filtreTouzi = FilterType::New();
