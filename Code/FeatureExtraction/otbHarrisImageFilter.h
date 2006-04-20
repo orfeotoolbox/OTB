@@ -54,7 +54,7 @@ public:
 
   typedef typename OutputImageType::PixelType OutputPixelType;
 
-  typedef typename InputImageType::SizeType SizeType;
+//  typedef typename InputImageType::SizeType SizeType;
 
   typedef itk::Image< itk::SymmetricSecondRankTensor< 
                       typename itk::NumericTraits< InputPixelType>::RealType,

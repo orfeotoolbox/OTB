@@ -25,7 +25,7 @@
 
 // Software Guide : BeginLatex
 //
-// This example illustrates the use of the \doxygen{otb::TouziEdgeDetector}.
+// This example illustrates the use of the \doxygen{otb::TouziEdgeDetectorImageFilter}.
 // This filter belongs to the family of the fixed false alarm rate
 // edge detectors but it is apropriate for SAR images, where the
 // speckle noise is considered as multiplicative. By analogy with the
@@ -46,7 +46,7 @@
 // Software Guide : EndLatex 
 
 // Software Guide : BeginCodeSnippet
-#include "otbTouziEdgeDetector.h"
+#include "otbTouziEdgeDetectorImageFilter.h"
 // Software Guide : EndCodeSnippet
 
 #include "itkImage.h"
@@ -96,7 +96,7 @@ int main( int argc, char * argv[] )
   //  Software Guide : EndLatex 
 
   // Software Guide : BeginCodeSnippet
-  typedef otb::TouziEdgeDetector< InternalImageType, InternalImageType >  FilterType;
+  typedef otb::TouziEdgeDetectorImageFilter< InternalImageType, InternalImageType >  FilterType;
   // Software Guide : EndCodeSnippet
 
 
@@ -182,9 +182,9 @@ int main( int argc, char * argv[] )
   //  Software Guide : BeginLatex
   //  
   //  The image obtained with the reader is passed as input to the
-  //  \doxygen{otb::TouziEdgeDetector}. The pipeline is built as follows.
+  //  \doxygen{otb::TouziEdgeDetectorImageFilter}. The pipeline is built as follows.
   //
-  //  \index{otb::TouziEdgeDetector!SetInput()}
+  //  \index{otb::TouziEdgeDetectorImageFilter!SetInput()}
   //
   //  Software Guide : EndLatex 
 
@@ -240,7 +240,7 @@ int main( int argc, char * argv[] )
 
   writer->SetFileName( argv[3] );
   // Software Guide : BeginCodeSnippet
-  rescaler->SetInput( filter->GetOutputDirection() );
+  rescaler->SetInput( filter->GetOutputDirections() );
   writer->SetInput( rescaler->GetOutput() );
   writer->Update();
   // Software Guide : EndCodeSnippet
@@ -256,7 +256,7 @@ int main( int argc, char * argv[] )
   // \includegraphics[width=0.25\textwidth]{amstTouziEdges.eps}
   // \includegraphics[width=0.25\textwidth]{amstTouziDirections.eps}
   // \itkcaption[Touzi Edge Detector Application]{Result of applying the
-  // \doxygen{otb::TouziEdgeDetector} to a SAR image. From left to right :
+  // \doxygen{otb::TouziEdgeDetectorImageFilter} to a SAR image. From left to right :
   // original image, edge intensity and edge orientation.} 
   // \label{fig:TOUZI_FILTER}
   // \end{figure}

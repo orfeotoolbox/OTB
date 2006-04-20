@@ -31,7 +31,7 @@
 
 // Software Guide : BeginLatex
 //
-// This example illustrates the use of the \doxygen{otb::RatioLineDetector}.
+// This example illustrates the use of the \doxygen{otb::RatioLineDetectorImageFilter}.
 // This filter is used for line detection in SAR images. Its principle
 // is described in \cite{tup-98}: a line is detected if two parallel
 // edges are present in the images. These edges are detected with the
@@ -42,7 +42,7 @@
 // Software Guide : EndLatex 
 
 // Software Guide : BeginCodeSnippet
-#include "otbLineRatioDetector.h"
+#include "otbLineRatioDetectorImageFilter.h"
 // Software Guide : EndCodeSnippet
 
 
@@ -114,7 +114,7 @@ int main( int argc, char* argv[] )
 
     // Software Guide : BeginCodeSnippet
 
-    typedef otb::LineRatioDetector< InternalImageType, InternalImageType >   FilterType;
+    typedef otb::LineRatioDetectorImageFilter< InternalImageType, InternalImageType >   FilterType;
 	
     FilterType::Pointer filterLineRatio = FilterType::New();
     // Software Guide : EndCodeSnippet
@@ -199,7 +199,7 @@ int main( int argc, char* argv[] )
   // \includegraphics[width=0.25\textwidth]{amstRatioLineDet.eps}
   // \includegraphics[width=0.25\textwidth]{amstRatioLineDir.eps}
   // \itkcaption[Ratio Line Detector Application]{Result of applying the
-  // \doxygen{otb::LineRatioDetector} to a SAR image. From left to right :
+  // \doxygen{otb::LineRatioDetectorImageFilter} to a SAR image. From left to right :
   // original image, line detection intensity and line orientation.} 
   // \label{fig:RATIO_LINE_FILTER}
   // \end{figure}

@@ -56,7 +56,7 @@ public:
   typedef typename TOutputImage::RegionType  ImageRegionType;
 
   /** The pixel type of the output image. */
-  typedef typename TOutputImage::InternalPixelType OutputImagePixelType;
+  //typedef typename TOutputImage::InternalPixelType OutputImagePixelType;
   
   /** Prepare l'allocation de l'image output lors du premier appel de traitement 
    * pipeline. */

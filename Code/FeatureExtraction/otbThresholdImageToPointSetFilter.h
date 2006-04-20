@@ -34,10 +34,12 @@ public:
                       		TInputImage::ImageDimension);
 
   typedef TInputImage     InputImageType;
-  typedef TOutputPointSet OutputPointSetType;
+  //typedef TOutputPointSet OutputPointSetType;
+  
 
   typedef ThresholdImageToPointSetFilter                             Self;
-  typedef ImageToPointSetFilter< InputImageType, OutputPointSetType> Superclass;
+  typedef ImageToPointSetFilter< InputImageType, TOutputPointSet> Superclass;
+  typedef   typename Superclass::OutputPointSetType             OutputPointSetType;
   typedef itk::SmartPointer<Self>                                    Pointer;
   typedef itk::SmartPointer<const Self>                              ConstPointer;
 
@@ -51,7 +53,7 @@ public:
   typedef typename Superclass::InputImageType::SizeType   SizeType;
   typedef typename Superclass::InputImageType::IndexType  IndexType;
 
-  typedef   typename Superclass::OutputPointSetType             OutputPointSetType;
+  //typedef   typename Superclass::OutputPointSetType             OutputPointSetType;
   typedef   typename Superclass::OutputPointSetPointer          OutputPointSetPointer;
   typedef   typename Superclass::OutputPointSetType::PixelType  OutputPointSetPixelType;
 

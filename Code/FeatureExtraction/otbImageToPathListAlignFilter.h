@@ -59,7 +59,7 @@ public:
   typedef typename InputImageType::PixelType          PixelType;
   
   typedef typename Superclass::OutputPathType         OutputPathType;
-  typedef typename Superclass::OutputPathListType     OutputPathListType;
+  // typedef typename Superclass::OutputPathListType     OutputPathListType;
   typedef typename Superclass::OutputPathPointerType  OutputPathPointerType;
 
 //  typedef          float                                        RealType;
