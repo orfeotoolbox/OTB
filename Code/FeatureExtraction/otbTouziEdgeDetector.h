@@ -8,8 +8,8 @@
   $Id$ 
 
 =========================================================================*/
-#ifndef __otbTouziEdgeDetector_h
-#define __otbTouziEdgeDetector_h
+#ifndef __otbTouziEdgeDetectorImageFilter_h
+#define __otbTouziEdgeDetectorImageFilter_h
 
 #include "itkImageToImageFilter.h"
 #include "itkImage.h"
@@ -22,7 +22,7 @@
 namespace otb
 {
 
-/** \class TouziEdgeDetector
+/** \class TouziEdgeDetectorImageFilter
  * \brief Application of a filter of detection of contours.
  *
  * This class implements the Touzi's ratio edge detector used to detect 
@@ -50,7 +50,7 @@ namespace otb
  */
 
 template <class TInputImage, class TOutputImage>
-class  ITK_EXPORT TouziEdgeDetector :  public itk::ImageToImageFilter< TInputImage, TOutputImage >
+class  ITK_EXPORT TouziEdgeDetectorImageFilter :  public itk::ImageToImageFilter< TInputImage, TOutputImage >
 {
 public:
   /** 	Extrait les dimensions aussi bien des images 
@@ -67,7 +67,7 @@ public:
   typedef TOutputImage OutputImageType;
 
   /** "typedef" pour les classes standards. */
-  typedef TouziEdgeDetector Self;
+  typedef TouziEdgeDetectorImageFilter Self;
   typedef itk::ImageToImageFilter< InputImageType, OutputImageType> Superclass;
   typedef itk::SmartPointer<Self> Pointer;
   typedef itk::SmartPointer<const Self>  ConstPointer;
@@ -76,7 +76,7 @@ public:
   itkNewMacro(Self);
 
   /** Retourne le nom de la classe. */
-  itkTypeMacro(TouziEdgeDetector, itk::ImageToImageFilter);
+  itkTypeMacro(TouziEdgeDetectorImageFilter, itk::ImageToImageFilter);
   
   /** Définition des images supportées. */
   typedef typename InputImageType::PixelType InputPixelType;
@@ -96,7 +96,7 @@ public:
   itkGetConstReferenceMacro(Radius, SizeType);
  
 
-  /** TouziEdgeDetector a besoin d'une zone de traitement plus large en entrée qu'en sortie 
+  /** TouziEdgeDetectorImageFilter a besoin d'une zone de traitement plus large en entrée qu'en sortie 
    * afin de permettre une utilisation du filtre par la méthode dite pipeline
    *
    * \sa ImageToImageFilter::GenerateInputRequestedRegion() */
@@ -105,13 +105,13 @@ public:
   const OutputImageType * GetOutputDirection();
   
 protected:
-  TouziEdgeDetector();
-  virtual ~TouziEdgeDetector() {};
+  TouziEdgeDetectorImageFilter();
+  virtual ~TouziEdgeDetectorImageFilter() {};
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
   void BeforeThreadedGenerateData();
 
-  /** TouziEdgeDetector peut etre implémentée pour un traitement de filtre multithreaded.
+  /** TouziEdgeDetectorImageFilter peut etre implémentée pour un traitement de filtre multithreaded.
    * Ainsi, cette implémentation fournit la méthode ThreadedGenerateData()
    * qui est appelée pour chaque thread du process. Les données image sont allouées automatiquement 
    * par la classe "mère" en appelant la méthode ThreadedGenerateData(). ThreadedGenerateData peut seulement 
@@ -123,7 +123,7 @@ protected:
                             int threadId );
 
 private:
-  TouziEdgeDetector(const Self&); //purposely not implemented
+  TouziEdgeDetectorImageFilter(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
 
   /** Déclaration du rayon */
@@ -136,7 +136,7 @@ private:
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbTouziEdgeDetector.txx"
+#include "otbTouziEdgeDetectorImageFilter.txx"
 #endif
 
   

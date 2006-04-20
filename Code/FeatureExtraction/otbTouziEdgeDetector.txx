@@ -8,10 +8,10 @@
   $Id$ 
 
 =========================================================================*/
-#ifndef __otbTouziEdgeDetector_txx
-#define __otbTouziEdgeDetector_txx
+#ifndef __otbTouziEdgeDetectorImageFilter_txx
+#define __otbTouziEdgeDetectorImageFilter_txx
 
-#include "otbTouziEdgeDetector.h"
+#include "otbTouziEdgeDetectorImageFilter.h"
 
 #include "itkDataObject.h"
 #include "itkExceptionObject.h"
@@ -33,13 +33,13 @@ namespace otb
  *
  */
 template <class TInputImage, class TOutputImage>
-TouziEdgeDetector<TInputImage, TOutputImage>::TouziEdgeDetector()
+TouziEdgeDetectorImageFilter<TInputImage, TOutputImage>::TouziEdgeDetectorImageFilter()
 {
   m_Radius.Fill(1);
 }
 
 template <class TInputImage, class TOutputImage>
-void TouziEdgeDetector<TInputImage, TOutputImage>::GenerateInputRequestedRegion() throw (itk::InvalidRequestedRegionError)
+void TouziEdgeDetectorImageFilter<TInputImage, TOutputImage>::GenerateInputRequestedRegion() throw (itk::InvalidRequestedRegionError)
 {
   // call the superclass' implementation of this method
   Superclass::GenerateInputRequestedRegion();
@@ -94,7 +94,7 @@ void TouziEdgeDetector<TInputImage, TOutputImage>::GenerateInputRequestedRegion(
  */
 template <class TInputImage, class TOutputImage>
 void 
-TouziEdgeDetector<TInputImage,TOutputImage>
+TouziEdgeDetectorImageFilter<TInputImage,TOutputImage>
 ::BeforeThreadedGenerateData()
 {
 //  std::cout << " BeforeThreadedGenerateData"<<std::endl;
@@ -114,8 +114,8 @@ TouziEdgeDetector<TInputImage,TOutputImage>
 }
 
 template <class TInputImage, class TOutputImage>
-const typename TouziEdgeDetector<TInputImage,TOutputImage>::OutputImageType *
-TouziEdgeDetector<TInputImage,TOutputImage>
+const typename TouziEdgeDetectorImageFilter<TInputImage,TOutputImage>::OutputImageType *
+TouziEdgeDetectorImageFilter<TInputImage,TOutputImage>
 ::GetOutputDirection()
 {
 	this->Update();
@@ -124,7 +124,7 @@ TouziEdgeDetector<TInputImage,TOutputImage>
 
 
 template< class TInputImage, class TOutputImage>
-void TouziEdgeDetector< TInputImage, TOutputImage>
+void TouziEdgeDetectorImageFilter< TInputImage, TOutputImage>
 ::ThreadedGenerateData(	
 			const 	OutputImageRegionType& 		outputRegionForThread,
                        	int 	threadId
@@ -329,7 +329,7 @@ std::cout<< cpt << std::endl;
  */
 template <class TInputImage, class TOutput>
 void 
-TouziEdgeDetector<TInputImage, TOutput>::PrintSelf(std::ostream& os, itk::Indent indent) const
+TouziEdgeDetectorImageFilter<TInputImage, TOutput>::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   Superclass::PrintSelf( os, indent );
   os << indent << "Radius: " << m_Radius << std::endl;
