@@ -232,7 +232,6 @@ ADD_TEST(feTuLocalHoughNew ${FEATUREEXTRACTION_TESTS}
 ADD_TEST(feTuLocalHough ${FEATUREEXTRACTION_TESTS}  
         otbLocalHough
 	${INPUTDATA}/feFiltrePixelSuppression_amst_2_0_3.hd
-	${TEMP}/feFiltreLocalHoughDraw_amst_32_32_5.hd
 	32 32 5)
 	
 ADD_TEST(feTuLocalHoughDraw ${FEATUREEXTRACTION_TESTS}  
