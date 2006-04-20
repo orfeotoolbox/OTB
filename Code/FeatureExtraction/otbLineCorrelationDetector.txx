@@ -8,10 +8,10 @@
   $Id$ 
 
 =========================================================================*/
-#ifndef __otbLineCorrelationDetector_txx
-#define __otbLineCorrelationDetector_txx
+#ifndef __otbLineCorrelationDetectorImageFilter_txx
+#define __otbLineCorrelationDetectorImageFilter_txx
 
-#include "otbLineCorrelationDetector.h"
+#include "otbLineCorrelationDetectorImageFilter.h"
 
 #include "itkDataObject.h"
 #include "itkExceptionObject.h"
@@ -32,7 +32,7 @@ namespace otb
  *
  */
 template <class TInputImage, class TOutputImage, class InterpolatorType >
-LineCorrelationDetector<TInputImage, TOutputImage, InterpolatorType>::LineCorrelationDetector()
+LineCorrelationDetectorImageFilter<TInputImage, TOutputImage, InterpolatorType>::LineCorrelationDetectorImageFilter()
 {
   m_Radius.Fill(1);
   m_LengthLine = 1;
@@ -42,7 +42,7 @@ LineCorrelationDetector<TInputImage, TOutputImage, InterpolatorType>::LineCorrel
 }
 
 template <class TInputImage, class TOutputImage, class InterpolatorType>
-void LineCorrelationDetector<TInputImage, TOutputImage, InterpolatorType>::GenerateInputRequestedRegion() throw (itk::InvalidRequestedRegionError)
+void LineCorrelationDetectorImageFilter<TInputImage, TOutputImage, InterpolatorType>::GenerateInputRequestedRegion() throw (itk::InvalidRequestedRegionError)
 {
   // call the superclass' implementation of this method
   Superclass::GenerateInputRequestedRegion();
@@ -106,7 +106,7 @@ void LineCorrelationDetector<TInputImage, TOutputImage, InterpolatorType>::Gener
  */
 template <class TInputImage, class TOutputImage, class InterpolatorType>
 void 
-LineCorrelationDetector< TInputImage, TOutputImage, InterpolatorType>
+LineCorrelationDetectorImageFilter< TInputImage, TOutputImage, InterpolatorType>
 ::BeforeThreadedGenerateData()
 {
 
@@ -125,16 +125,16 @@ LineCorrelationDetector< TInputImage, TOutputImage, InterpolatorType>
 }
 
 template <class TInputImage, class TOutputImage, class InterpolatorType>
-const typename LineCorrelationDetector< TInputImage, TOutputImage, InterpolatorType>::OutputImageType *
-LineCorrelationDetector< TInputImage, TOutputImage, InterpolatorType>
-::GetOutputDirection()
+const typename LineCorrelationDetectorImageFilter< TInputImage, TOutputImage, InterpolatorType>::OutputImageType *
+LineCorrelationDetectorImageFilter< TInputImage, TOutputImage, InterpolatorType>
+::GetOutputDirections()
 {
 	this->Update();
 	return 	static_cast< const OutputImageType *> (m_DirectionOuputImage);
 }
 
 template< class TInputImage, class TOutputImage, class InterpolatorType>
-void LineCorrelationDetector< TInputImage, TOutputImage, InterpolatorType>
+void LineCorrelationDetectorImageFilter< TInputImage, TOutputImage, InterpolatorType>
 ::ThreadedGenerateData(	
 			const 	OutputImageRegionType& 		outputRegionForThread,
                        	int 	threadId
@@ -409,7 +409,7 @@ void LineCorrelationDetector< TInputImage, TOutputImage, InterpolatorType>
  */
 template <class TInputImage, class TOutput, class InterpolatorType>
 void 
-LineCorrelationDetector<TInputImage, TOutput, InterpolatorType>::PrintSelf(std::ostream& os, itk::Indent indent) const
+LineCorrelationDetectorImageFilter<TInputImage, TOutput, InterpolatorType>::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   Superclass::PrintSelf( os, indent );
   os << indent << "Length: " << m_LengthLine << std::endl;

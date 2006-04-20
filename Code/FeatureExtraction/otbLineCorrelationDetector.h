@@ -8,8 +8,8 @@
   $Id$ 
 
 =========================================================================*/
-#ifndef __otbLineCorrelationDetector_h
-#define __otbLineCorrelationDetector_h
+#ifndef __otbLineCorrelationDetectorImageFilter_h
+#define __otbLineCorrelationDetectorImageFilter_h
 
 #include "itkBSplineInterpolateImageFunction.h"
 #include "itkImageToImageFilter.h"
@@ -26,7 +26,7 @@
 namespace otb
 {
 
-/** \class LineCorrelationDetector
+/** \class LineCorrelationDetectorImageFilter
  * \brief Application of the filter of detection of linear features 
  *
  * This class implements the Tupin's detector D2 used to detect 
@@ -65,7 +65,7 @@ namespace otb
 template <class TInputImage, 
 	  class TOutputImage,
 	  class InterpolatorType = itk::BSplineInterpolateImageFunction<TInputImage> >
-class ITK_EXPORT LineCorrelationDetector :  public itk::ImageToImageFilter< TInputImage, TOutputImage >
+class ITK_EXPORT LineCorrelationDetectorImageFilter :  public itk::ImageToImageFilter< TInputImage, TOutputImage >
 {
 public:
   /** 	Extract dimensions as well of the images of entry of exit. */
@@ -80,7 +80,7 @@ public:
   typedef TOutputImage OutputImageType;
 
   /** typedef for the classes standards. */
-  typedef LineCorrelationDetector Self;
+  typedef LineCorrelationDetectorImageFilter Self;
   typedef itk::ImageToImageFilter< InputImageType, OutputImageType> Superclass;
   typedef itk::SmartPointer<Self> Pointer;
   typedef itk::SmartPointer<const Self>  ConstPointer;
@@ -89,7 +89,7 @@ public:
   itkNewMacro(Self);
 
   /** Return the nale of the class. */
-  itkTypeMacro(LineCorrelationDetector, itk::ImageToImageFilter);
+  itkTypeMacro(LineCorrelationDetectorImageFilter, itk::ImageToImageFilter);
 
   /** Typedefs to describe and access Interpolator */
   typedef typename InterpolatorType::Pointer InterpolatorPointer;
@@ -130,16 +130,16 @@ public:
 
   virtual void GenerateInputRequestedRegion() throw(itk::InvalidRequestedRegionError);
 
-  const OutputImageType * GetOutputDirection();
+  const OutputImageType * GetOutputDirections();
   
 protected:
-  LineCorrelationDetector();
-  virtual ~LineCorrelationDetector() {};
+  LineCorrelationDetectorImageFilter();
+  virtual ~LineCorrelationDetectorImageFilter() {};
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
   void BeforeThreadedGenerateData();
 
-  /** LineCorrelationDetector can be implemented for a treatment of filter multithreaded. 
+  /** LineCorrelationDetectorImageFilter can be implemented for a treatment of filter multithreaded. 
    * Thus, the ThreadedGenerateData() method is called for each thread process. 
    * The data image are allocated automatically by the mother class by calling the 
    * ThreadedGenerateData() method. ThreadedGenerateData can only write the portion 
@@ -151,7 +151,7 @@ protected:
                             int threadId );
 
 private:
-  LineCorrelationDetector(const Self&); //purposely not implemented
+  LineCorrelationDetectorImageFilter(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
  
   /** Length of the linear feature = 2*m_LengthLine+1 */ 
@@ -174,7 +174,7 @@ private:
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbLineCorrelationDetector.txx"
+#include "otbLineCorrelationDetectorImageFilter.txx"
 #endif
 
   
