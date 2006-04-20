@@ -222,8 +222,8 @@ ADD_TEST(feTuPixelSuppressionByDirectionNew ${FEATUREEXTRACTION_TESTS}
         otbPixelSuppressionByDirectionNew)
         
 ADD_TEST(feTvPixelSuppressionByDirection ${FEATUREEXTRACTION_TESTS}
-  --compare-image ${TOL}  ${BASELINE}/feFiltrePixelSuppr_ImageLine.hd
-                          ${TEMP}/feFiltrePixelSuppr_ImageLine.hd   
+  --compare-image ${TOL}  ${BASELINE}/feFiltrePixelSuppr_ImageLine_2_0_3.hd
+                          ${TEMP}/feFiltrePixelSuppr_ImageLine_2_0_3.hd   
         otbPixelSuppressionByDirection
 	${INPUTDATA}/ImageLine_hd.bsq
 	${INPUTDATA}/ImageLineDir.bsq
