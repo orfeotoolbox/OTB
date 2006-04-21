@@ -9,8 +9,8 @@
   $Id$
 
 =========================================================================*/
-#ifndef _otbFillGapsFilter_txx
-#define _otbFillGapsFilter_txx
+#ifndef __otbFillGapsFilter_txx
+#define __otbFillGapsFilter_txx
 
 #include "otbFillGapsFilter.h"
 
@@ -20,7 +20,8 @@ namespace otb
 /**
  * Constructor
  */
- 
+
+#if 0 
 FillGapsFilter::FillGapsFilter()
 {
         this->itk::ProcessObject::SetNumberOfRequiredInputs(1);
@@ -43,6 +44,7 @@ FillGapsFilter
                                    const_cast< LineSpatialObjectListType * >( input ) );
 
 }
+
 
 const FillGapsFilter::LineSpatialObjectListType * 
 FillGapsFilter
@@ -252,6 +254,9 @@ FillGapsFilter
   Superclass::PrintSelf(os,indent);
 }
 
-}; // end namespace otb
+#endif
+
+
+} // end namespace otb
 
 #endif

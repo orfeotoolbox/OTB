@@ -9,14 +9,13 @@
   $Id$
 
 =========================================================================*/
-#ifndef _otbFillGapsFilter_h
-#define _otbFillGapsFilter_h
+#ifndef __otbFillGapsFilter_h
+#define __otbFillGapsFilter_h
 
 #if defined(_MSC_VER)
 #pragma warning ( disable : 4786 )
 #endif
 #include "itkProcessObject.h"
-#include "itkDataObject.h"
 #include "otbLineSpatialObjectList.h"
 
 namespace otb
@@ -24,9 +23,10 @@ namespace otb
 /** \class FillGapsFilter
  */
  
-//template <class TLineSpatialObject>
+
 class ITK_EXPORT FillGapsFilter : public itk::ProcessObject
 {
+
 public:
   /** Standard class typedefs. */
   typedef FillGapsFilter                                Self;
@@ -47,7 +47,7 @@ public:
   typedef LineSpatialObjectType::PointListType                  PointListType;
   typedef LineSpatialObjectType::LinePointType                  PointType;
 
-  virtual void SetInput(const LineSpatialObjectListType * input)
+  void SetInput(const LineSpatialObjectListType * input)
 {
   this->itk::ProcessObject::SetNthInput(0, 
                                    const_cast< LineSpatialObjectListType * >( input ) );
@@ -267,12 +267,12 @@ private:
   double m_Radius;
   
 };
-  
 
 } // end namespace otb
 
+
 #ifndef OTB_MANUAL_INSTANTIATION
-//#include "otbFillGapsFilter.txx"
+#include "otbFillGapsFilter.txx"
 #endif
 
 #endif
