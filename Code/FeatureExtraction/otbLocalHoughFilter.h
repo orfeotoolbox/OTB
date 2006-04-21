@@ -27,6 +27,17 @@
 namespace otb
 {
 /** \class LocalHoughFilter
+ * \brief Application of Hough filter on a nxm pixel tiling of the image.
+ *
+ * This class implements a filter that applies the hough transform on nxm
+ * pixel tiling of the image. The Hough filter is used to find straight
+ * lines in a 2-dimensional image. It detects the best line in each tile 
+ * and suppresses dubious line detection due to small local structures.
+ *
+ * Input parameters are : the tile radius, the number of lines we are 
+ * looking for, the variance of the accumulator blurring (default = 5) and 
+ * the radius of the disc to remove from the accumulator (default = 10).
+ * 
  */
  
 template <class TInputImage>

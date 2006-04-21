@@ -15,6 +15,7 @@
 
 #include "otbPixelSuppressionByDirectionImageFilter.h"
 #include "otbLocalHoughFilter.h"
+#include "otbFillGapsFilter.h"
 #include "otbDrawLineSpatialObjectListFilter.h"
 
 #include "otbLineSpatialObjectList.h"
@@ -73,8 +74,8 @@ public:
   
   /** Set/Get Angular Accuracy on the direction of the central pixel for
       the pixel suppression by direction image filter. */
-  void SetPixelSuppressionAngularBeam( double AngularBeam );
-  const double GetPixelSuppressionAngularBeam( void );  
+  void SetPixelSuppressionAngularBeam( float AngularBeam );
+  const float GetPixelSuppressionAngularBeam( void );  
 
   
   
@@ -97,6 +98,16 @@ public:
 
 
 
+  /** Set/Get the radius between two segments in the fill gaps filter. */
+  void SetFillGapsRadius( float Radius );
+  const float GetFillGapsRadius( void );
+  
+  /** Set/Get Angular Beam between two segments in the fill gaps filter. */
+  void SetFillGapsAngularBeam( float AngularBeam );
+  const float GetFillGapsAngularBeam( void );  
+  
+  
+
   /** Set/Get the image input of this filter.  */
   void SetInputImage( const InputImageType *image);
   const InputImageType * GetInputImage(void);  
@@ -113,6 +124,7 @@ protected:
   
   typedef PixelSuppressionByDirectionImageFilter< InputImageType, PSOutputImageType > 	PixelSuppressionType;
   typedef LocalHoughFilter< InputImageType >						LocalHoughType;
+  typedef FillGapsFilter								FillGapsType;
   typedef DrawLineSpatialObjectListFilter< InputImageType, OutputImageType > 		DrawLineListType;
 
   virtual void GenerateData();
@@ -126,6 +138,7 @@ private:
   
   typename PixelSuppressionType::Pointer	m_PixelSuppression;
   typename LocalHoughType::Pointer		m_LocalHough;
+  typename FillGapsType::Pointer		m_FillGaps;
   typename DrawLineListType::Pointer		m_DrawLineList;
 };
 } // end namespace otb

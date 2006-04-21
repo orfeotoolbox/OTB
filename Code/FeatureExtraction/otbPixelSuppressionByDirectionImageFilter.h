@@ -114,7 +114,7 @@ private:
   // Radius of the region
   SizeType m_Radius;
   // Angular Accuracy on the direction of the central pixel
-  double m_AngularBeam;
+  InputRealType m_AngularBeam;
 
 };
 } // end namespace otb

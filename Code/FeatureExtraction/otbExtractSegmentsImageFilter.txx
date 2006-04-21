@@ -29,6 +29,7 @@ ExtractSegmentsImageFilter<TInputImage, TOutputImage>
    
   m_PixelSuppression     = PixelSuppressionType::New();
   m_LocalHough   	 = LocalHoughType::New();
+  m_FillGaps   	 	 = FillGapsType::New();
   m_DrawLineList         = DrawLineListType::New();
 }
 
@@ -90,13 +91,13 @@ ExtractSegmentsImageFilter<TInputImage, TOutputImage>
 
 template <class TInputImage, class TOutputImage>
 void ExtractSegmentsImageFilter<TInputImage, TOutputImage>
-::SetPixelSuppressionAngularBeam(double AngularBeam)
+::SetPixelSuppressionAngularBeam(float AngularBeam)
 { 
    m_PixelSuppression->SetAngularBeam(AngularBeam); 
 }  
 
 template <class TInputImage, class TOutputImage>
-const double
+const float
 ExtractSegmentsImageFilter<TInputImage, TOutputImage>
 ::GetPixelSuppressionAngularBeam(void)
 {
@@ -166,6 +167,38 @@ ExtractSegmentsImageFilter<TInputImage, TOutputImage>
   return (m_LocalHough->GetVariance()); 	
 }  
 
+/**
+ * Set/Get FillGapsFilter parameters
+ */
+template <class TInputImage, class TOutputImage>
+void ExtractSegmentsImageFilter<TInputImage, TOutputImage>
+::SetFillGapsRadius(float Radius)
+{ 
+   m_FillGaps->SetRadius(Radius); 
+}  
+
+template <class TInputImage, class TOutputImage>
+const float
+ExtractSegmentsImageFilter<TInputImage, TOutputImage>
+::GetFillGapsRadius(void)
+{
+  return (m_FillGaps->GetRadius()); 	
+}
+
+template <class TInputImage, class TOutputImage>
+void ExtractSegmentsImageFilter<TInputImage, TOutputImage>
+::SetFillGapsAngularBeam(float AngularBeam)
+{ 
+   m_FillGaps->SetAngularBeam(AngularBeam); 
+}  
+
+template <class TInputImage, class TOutputImage>
+const float
+ExtractSegmentsImageFilter<TInputImage, TOutputImage>
+::GetFillGapsAngularBeam(void)
+{
+  return (m_FillGaps->GetAngularBeam()); 	
+}
 
 
 template <class TInputImage, class TOutputImage>
@@ -177,9 +210,11 @@ ExtractSegmentsImageFilter<TInputImage, TOutputImage>
   m_PixelSuppression->SetInputImageDirection( this->GetInputImageDirection() );
   
   m_LocalHough->SetInput( m_PixelSuppression->GetOutput() );
+  
+  m_FillGaps->SetInput ( m_LocalHough->GetOutput() );
 
   m_DrawLineList->SetInput( this->GetInputImage() );
-  m_DrawLineList->SetInputLineSpatialObjectList( m_LocalHough->GetOutput() );
+  m_DrawLineList->SetInputLineSpatialObjectList( m_FillGaps->GetOutput() );
   
   m_DrawLineList->GraftOutput( this->GetOutput() ); 
   m_DrawLineList->Update();
