@@ -46,7 +46,7 @@ REGISTER_TEST(otbThresholdImageToPointSetTest);
 REGISTER_TEST(otbHarrisImageToPointSet);
 REGISTER_TEST(otbPixelSuppressionByDirectionNew);
 REGISTER_TEST(otbPixelSuppressionByDirection);
-REGISTER_TEST(otbFillGapsFilter);
+REGISTER_TEST(otbFillGapsFilterNew);
 REGISTER_TEST(otbLocalHoughNew);
 REGISTER_TEST(otbLocalHough);
 REGISTER_TEST(otbLocalHoughDraw);

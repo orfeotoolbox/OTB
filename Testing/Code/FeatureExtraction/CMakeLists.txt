@@ -12,10 +12,6 @@ SET(TOL 0.0)
 SET(FEATUREEXTRACTION_TESTS ${CXX_TEST_PATH}/otbFeatureExtractionTests)
 
 
-ADD_TEST(feTuFillGapsFilter ${FEATUREEXTRACTION_TESTS}  
-        otbFillGapsFilter
-	${INPUTDATA}/vide.png
-	${TEMP}/feFillGaps.png)
 
 ADD_TEST(feTuAlignMV2ITK ${FEATUREEXTRACTION_TESTS}  
         otbAlignImageToPath
@@ -257,6 +253,12 @@ ADD_TEST(feTuLocalHoughDraw ${FEATUREEXTRACTION_TESTS}
 ADD_TEST(feTuFillGapsFilterNew ${FEATUREEXTRACTION_TESTS}  
         otbFillGapsFilterNew)
         
+#ADD_TEST(feTuFillGapsFilter ${FEATUREEXTRACTION_TESTS}  
+#        otbFillGapsFilter
+#	${INPUTDATA}/vide.png
+#	${TEMP}/feFillGaps.png)
+
+        
 # -------            otb::ExtractSegments   ------------------------------
 
 ADD_TEST(feTuExtractSegmentsNew ${FEATUREEXTRACTION_TESTS}  
@@ -311,7 +313,7 @@ otbThresholdImageToPointSetTest.cxx
 otbHarrisToPointSet.cxx
 otbPixelSuppressionByDirectionNew.cxx
 otbPixelSuppressionByDirection.cxx
-otbFillGapsFilter.cxx
+otbFillGapsFilterNew.cxx
 otbLocalHoughNew.cxx
 otbLocalHough.cxx
 otbLocalHoughDraw.cxx
