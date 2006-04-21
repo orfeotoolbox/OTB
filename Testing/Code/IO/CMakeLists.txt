@@ -32,14 +32,22 @@ ADD_TEST(ioTvMultiMonoChannelROI_RADARSAT_BSQ2BSQ2 ${COMMON_TESTS}
          -startX 0 -startY 0 -sizeX 337 -sizeY 280 )
 
 # ---  SAR_ERS2_SLCI (GDAL)  ---
-ADD_TEST(ioTvMultiMonoChannelROI_SAR_ERS2_SLCI2BSQ ${COMMON_TESTS} 
+
+#ADD_TEST(ioTvMultiMonoChannelROI_SAR_ERS2_SLCI2BSQ ${COMMON_TESTS} 
 #   --compare-image ${TOL}   ${BASELINE}/ioExtractROI_BSQ2PNG_poupees_100_100_77_300_channels_1_2_3.png
 #                     ${TEMP}/ioExtractROI_BSQ2PNG_poupees_100_100_77_300_channels_1_2_3.png
-         otbMultiToMonoChannelExtractROI
-         -ushort ${IMAGEDATA}/SAR_ERS2_SLCI_SCENE1/DAT_01.001 
-         -ushort ${TEMP}/ioMultiMonoChannelROI_SAR_ERS2_SLCI2PNG_channel_1.hd
-         -startX 200 -startY 100 -sizeX 1000 -sizeY 1000
-         -channel 1)
+#         otbMultiToMonoChannelExtractROI
+#         -ushort ${IMAGEDATA}/SAR_ERS2_SLCI_SCENE1/DAT_01.001 
+#         -ushort ${TEMP}/ioMultiMonoChannelROI_SAR_ERS2_SLCI2PNG_channel_1.hd
+#         -startX 200 -startY 100 -sizeX 1000 -sizeY 1000
+#         -channel 1)
+
+ADD_TEST(ioTvImageFileReaderERS ${IO_TESTS} 
+#   --compare-image ${TOL}   ${BASELINE}/ioExtractROI_BSQ2PNG_poupees_100_100_77_300_channels_1_2_3.png
+#                     ${TEMP}/ioExtractROI_BSQ2PNG_poupees_100_100_77_300_channels_1_2_3.png
+         otbImageFileReaderERS
+         ${IMAGEDATA}/SAR_ERS2_SLCI_SCENE1/DAT_01.001 
+         ${TEMP}/ioImageFileReaderERS_SLCI2PNG_channel_1.hd)
 
 # ---  ENVI (GDAL) ---
 ADD_TEST(ioTvMultiMonoChannelROI_ENVI2PNG ${COMMON_TESTS} 
@@ -50,6 +58,9 @@ ADD_TEST(ioTvMultiMonoChannelROI_ENVI2PNG ${COMMON_TESTS}
          ${TEMP}/ioMultiMonoChannelROI_ENVI2PNG_poupees_1canal_302_2_134_330.png
          -startX 302 -startY 2 -sizeX 134 -sizeY 330
          -channel 1)
+
+
+
 
 
 # ------- TEST IO COMMON   ------------------------------
@@ -70,6 +81,9 @@ ADD_TEST(ioTuCAIImageIOCanReadSPOT5TIF ${IO_TESTS} otbCAIImageIOTestCanRead
 ADD_TEST(ioTuCAIImageIOCanReadSPOT5BIL ${IO_TESTS} otbCAIImageIOTestCanRead
         ${INPUTDATA}/poupeesBIL )
 
+ADD_TEST(ioTuCAIImageIOCanRead_IKONOS_PAN ${IO_TESTS} otbCAIImageIOTestCanRead 
+        ${IMAGEDATA}/PARIS_HR/Ikonos/po_79039_pan_0000000.tif)
+
 # -------            otb::GDALImageIO   ------------------------------
 
 ADD_TEST(ioTuGDALImageIOCanRead_ENVI ${IO_TESTS} otbGDALImageIOTestCanRead 
@@ -80,6 +94,16 @@ ADD_TEST(ioTuGDALImageIOCanRead_RADARSAT ${IO_TESTS} otbGDALImageIOTestCanRead
 
 ADD_TEST(ioTuGDALImageIOCanRead_SAR_ERS2 ${IO_TESTS} otbGDALImageIOTestCanRead 
         ${IMAGEDATA}/SAR_ERS2_SLCI_SCENE1/DAT_01.001 )
+
+ADD_TEST(ioTuGDALImageIOCanRead_QUICK_PAN ${IO_TESTS} otbGDALImageIOTestCanRead 
+        ${IMAGEDATA}/PARIS_HR/QuickBird/000000183008_01_P001_PAN/02APR06105612-P1BS-000000183008_01_P001.TIF )
+
+ADD_TEST(ioTuGDALImageIOCanRead_QUICK_XS ${IO_TESTS} otbGDALImageIOTestCanRead 
+        ${IMAGEDATA}/PARIS_HR/QuickBird/000000183008_01_P001_MUL/ )
+
+ADD_TEST(ioTuGDALImageIOCanRead_IKONOS_PAN ${IO_TESTS} otbGDALImageIOTestCanRead 
+        ${IMAGEDATA}/PARIS_HR/Ikonos/po_79039_pan_0000000.tif)
+
 
 # CanWrite()
 ADD_TEST(ioTuCAIImageIOCanWriteBSQ ${IO_TESTS} otbCAIImageIOTestCanWrite 
@@ -277,6 +301,9 @@ otbImageFileWriterTest.cxx
 otbVectorImageFileReaderWriterTest.cxx
 otbImageFileReaderRGBTest.cxx
 otbImageFileWriterRGBTest.cxx
+otbMultiToMonoChannelExtractROISAR.cxx
+otbImageFileReaderERS.cxx
+
 )
 
 

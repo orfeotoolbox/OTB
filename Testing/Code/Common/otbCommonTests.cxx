@@ -9,9 +9,12 @@
 void RegisterTests()
 {
 REGISTER_TEST(otbExtractROI);
+REGISTER_TEST(otbExtractROINew);
 REGISTER_TEST(otbExtractROI_RGB);
 REGISTER_TEST(otbMultiChannelExtractROI );
+REGISTER_TEST(otbMultiChannelExtractROINew );
 REGISTER_TEST(otbMultiToMonoChannelExtractROI );
+REGISTER_TEST(otbMultiToMonoChannelExtractROINew );
 REGISTER_TEST(otbLineSpatialObjectList);
 REGISTER_TEST(otbPointSetSourceTest);
 REGISTER_TEST(otbDrawLineSpatialObjectNew);

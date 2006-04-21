@@ -19,4 +19,6 @@ REGISTER_TEST(otbImageFileWriterTest);
 REGISTER_TEST(otbVectorImageFileReaderWriterTest);
 REGISTER_TEST(otbImageFileReaderRGBTest);
 REGISTER_TEST(otbImageFileWriterRGBTest);
+REGISTER_TEST(otbMultiToMonoChannelExtractROISAR);
+REGISTER_TEST(otbImageFileReaderERS);
 }

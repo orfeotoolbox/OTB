@@ -24,6 +24,9 @@ ADD_TEST(coTuLineSpatialObjectList ${COMMON_TESTS}
 
 # -------            otb::ExtractROI   ------------------------------
 
+ADD_TEST(coTuExtractROINew ${COMMON_TESTS}
+	otbExtractROINew)
+	
 ADD_TEST(coTvExtractROI ${COMMON_TESTS}  
 #  --compare-image ${TOL}   ${BASELINE}/coExtractROI_cthead1_26_97_209_100.png
 #                    ${TEMP}/coExtractROI_cthead1_26_97_209_100.png
@@ -48,6 +51,9 @@ ADD_TEST(coTvExtractROI_RGB2 ${COMMON_TESTS}
 
 
 # -------            otb::MultiChannelExtractROI   ------------------------------
+
+ADD_TEST(coTuMultiChannelROINew ${COMMON_TESTS}   
+         otbMultiChannelExtractROINew)
 
 ADD_TEST(coTvMultiChannelROI_RGB2RGB_PNG ${COMMON_TESTS}   
   --compare-image ${TOL}   ${INPUTDATA}/sbuv.png
@@ -114,6 +120,9 @@ ADD_TEST(coTvMultiChannelROI_3c_BSQ ${COMMON_TESTS}
 
 # -------            otb::MultiToMonoChannelExtractROI   ------------------------------
 
+ADD_TEST(coTuMultiToMonoROINew ${COMMON_TESTS}   
+         otbMultiToMonoChannelExtractROINew) 
+
 ADD_TEST(coTvMultiToMonoROI_RGB2NG_PNG ${COMMON_TESTS}   
   --compare-image ${TOL}   ${BASELINE}/coMultiToMonoChannelExtractROI_RGB2NG_PNG_sbuv_700_60_77_489_channel_1.png
                            ${TEMP}/coMultiToMonoChannelExtractROI_RGB2NG_PNG_sbuv_700_60_77_489_channel_1.png
@@ -156,10 +165,13 @@ ADD_TEST(coTuImageToLineSpatialObjectListNew ${COMMON_TESTS}
 # -------       Fichiers sources CXX -----------------------------------
 SET(BasicCommon_SRCS
 otbTestCommandLineArgumentParser.cxx
+otbExtractROINew.cxx
 otbExtractROI.cxx
 otbExtractROI_RGB.cxx
 otbMultiChannelExtractROI.cxx
+otbMultiChannelExtractROINew.cxx
 otbMultiToMonoChannelExtractROI.cxx
+otbMultiToMonoChannelExtractROINew.cxx
 otbLineSpatialObjectList.cxx
 otbPointSetSourceTest.cxx
 otbDrawLineSpatialObjectNew.cxx

@@ -6,7 +6,7 @@
   Date      :   11 janvier 2005
   Version   :   
   Role      :   Test l'extraction d'une ROI dans une image mono ou multi canal, dont les valeurs sont codées en "unsigned char"
-                Les parametres de la ROI ne sont pas obligatoire, tout comme les canaux. Dans ce cas, les valauers par défaut 
+                Les parametres de la ROI ne sont pas obligatoire, tout comme les canaux. Dans ce cas, les valeurs par défaut 
                 de la classe sont utilisées
                 
   $Id$
@@ -155,6 +155,7 @@ int otbMultiToMonoChannelExtractROI ( int argc, char ** argv )
         else if (  (linputPixelType=="-int")&&(loutputPixelType=="-double") )           return (generic_otbMultiToMonoChannelExtractROI< int, double >( argc,argv,inputFilename,outputFilename) );
         else if (  (linputPixelType=="-uint")&&(loutputPixelType=="-double") )          return (generic_otbMultiToMonoChannelExtractROI< unsigned int, double >( argc,argv,inputFilename,outputFilename) );
         else if (  (linputPixelType=="-float")&&(loutputPixelType=="-double") )         return (generic_otbMultiToMonoChannelExtractROI< float, double >( argc,argv,inputFilename,outputFilename) );
+
         else 
         {       
                 std::cout << " Erreur : le format des images en entrée est mal précisé dans la ligne de commande !!!"<<std::endl;
