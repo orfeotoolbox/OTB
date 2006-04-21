@@ -31,12 +31,14 @@ int otbExtractSegments( int argc, char ** argv )
         const char * outputFilename = argv[3];
         
         unsigned int  PixelSuppressionRadiusX((unsigned int)::atoi(argv[4]));
-	double	      PixelSuppressionAngularBeam((double)::atof(argv[5]));
+	float	      PixelSuppressionAngularBeam((float)::atof(argv[5]));
 	
 	unsigned int  LocalHoughRadiusX((unsigned int)::atoi(argv[6]));
     	unsigned int  LocalHoughRadiusY((unsigned int)::atoi(argv[7]));
     	unsigned int  LocalHoughNumberOfLines((unsigned int)::atoi(argv[8]));
     	
+    	float  FillGapsRadius((float)::atoi(argv[9]));
+	float  FillGapsAngularBeam((float)::atof(argv[10]));
         
         typedef double	                                        InputPixelType;
         typedef unsigned char	   	                        OutputPixelType;
@@ -69,6 +71,9 @@ int otbExtractSegments( int argc, char ** argv )
 
 	filter->SetLocalHoughRadius( LocalHoughRadius );	
 	filter->SetLocalHoughNumberOfLines( LocalHoughNumberOfLines );	
+	
+	filter->SetFillGapsRadius( FillGapsRadius );	
+	filter->SetFillGapsAngularBeam( FillGapsAngularBeam );
 	
 	// Reader / Writer
 	
