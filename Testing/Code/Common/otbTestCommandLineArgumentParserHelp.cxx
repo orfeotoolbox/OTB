@@ -20,17 +20,19 @@ int otbTestCommandLineArgumentParserHelp( int argc, char ** argv )
   try 
     { 
         // Parse command line parameters
-        otb::CommandLineArgumentParser parser;
+        typedef otb::CommandLineArgumentParser ParserType;
+	ParserType::Pointer parser = ParserType::New();
   
-        parser.AddOption("-help","Help","-h",0,false);
-        parser.AddOption("-image","Nom d'une image","-i",1,true);
+        parser->AddOption("-help","Help","-h",0,false);
+        parser->AddOption("-image","Nom d'une image","-i",1,true);
   
-        otb::CommandLineArgumentParseResult parseResult;
-  
-        parser.ParseCommandLine(argc,argv,parseResult) ;
+        typedef otb::CommandLineArgumentParseResult ParserResultType;
+        ParserResultType::Pointer  parseResult = ParserResultType::New();
+
+        parser->ParseCommandLine(argc,argv,parseResult) ;
 
 
-        std::cout << "Image : "<<parseResult.GetStringParameter("-image")<<std::endl;
+        std::cout << "Image : "<<parseResult->GetStringParameter("-image")<<std::endl;
 
     } 
 
@@ -39,7 +41,7 @@ int otbTestCommandLineArgumentParserHelp( int argc, char ** argv )
     std::cout << "Exception itk::ExceptionObject levee !" << std::endl; 
     std::cout << err << std::endl; 
     return EXIT_FAILURE;
-    } 
+     } 
   catch( ... ) 
     { 
     std::cout << "Exception levee inconnue !" << std::endl; 

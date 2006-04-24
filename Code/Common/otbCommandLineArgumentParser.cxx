@@ -124,27 +124,24 @@ CommandLineArgumentParser
 void 
 CommandLineArgumentParser
 ::ParseCommandLine(int argc, char *argv[], 
-                           CommandLineArgumentParseResult &outResult,
+                           CommandLineArgumentParseResult * outResult,
                            bool failOnUnknownTrailingParameters ) 
 {
 	
 	
 	bool tryParse = TryParseCommandLine(argc, argv, outResult, failOnUnknownTrailingParameters);
-	bool IsHelp = outResult.IsOptionPresent("-help");
+	bool IsHelp = outResult->IsOptionPresent("-help");
 
 	if ( (IsHelp == true) )
 	{
-//	::itk::itkExceptionMacro("Help Command Line");
+		PrintUsage(std::cerr);
+		itkExceptionMacro(<<"Help Command Line");
 	}
 
-	if ( (tryParse == false) || (IsHelp == true) )
+	if ( (tryParse == false) )
   	{	
 		PrintUsage(std::cerr);
-		//Exit du programme (cette méthode doit etre appelée dans un main)
-		// ou itkException ???
-		//itk::itkExceptionMacro("ParseCommandLine argument Error");
-		//itk::itkExceptionMacro("Total frequency in the histogram must be at least 1.") ;
-		exit(EXIT_FAILURE);
+		itkExceptionMacro("ParseCommandLine() argument Error");
 	}
 }
 
@@ -152,11 +149,11 @@ CommandLineArgumentParser
 bool 
 CommandLineArgumentParser
 ::TryParseCommandLine(int argc, char *argv[], 
-                      CommandLineArgumentParseResult &outResult,
+                      CommandLineArgumentParseResult * outResult,
                       bool failOnUnknownTrailingParameters)
 {
   // Clear the result
-  outResult.Clear();
+  outResult->Clear();
 
   m_ProgramName = std::string(argv[0]);
   int index(0);
@@ -193,19 +190,19 @@ CommandLineArgumentParser
       		return false;
       	}
         // Tell the result that the option has been encountered
-        outResult.AddOption(m_OptionList[index].CommonName);
+        outResult->AddOption(m_OptionList[index].CommonName);
 
         // Pass in the parameters
         for(int j=0;j<nParameters;j++,i++)
         {
-      		outResult.AddParameter(m_OptionList[index].CommonName,std::string(argv[i+1]));
+      		outResult->AddParameter(m_OptionList[index].CommonName,std::string(argv[i+1]));
       	}
      }
      // Si le nombre de parametres n'est pas prédéfini, lecture jusqu'a la prochaine option ou fin argv  : 
      else
      {
          // Tell the result that the option has been encountered
-        outResult.AddOption(m_OptionList[index].CommonName);
+        outResult->AddOption(m_OptionList[index].CommonName);
     	bool continuer(true);
      	while (continuer == true )
      	{
@@ -218,7 +215,7 @@ CommandLineArgumentParser
      			}
      			else
      			{
-      				outResult.AddParameter(m_OptionList[index].CommonName,strArgv);
+      				outResult->AddParameter(m_OptionList[index].CommonName,strArgv);
      			}
      		}
      		else continuer = false;

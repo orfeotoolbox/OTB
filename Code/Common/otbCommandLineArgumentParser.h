@@ -23,6 +23,7 @@
 #include <map>
 
 //#include "itkIndent.h"
+#include "itkProcessObject.h"
 
 namespace otb
 {
@@ -35,9 +36,17 @@ namespace otb
  * \brief Objet retourné par lCommandLineArgumentParser
  * \see CommandLineArgumentParser
  */
-class CommandLineArgumentParseResult
+class ITK_EXPORT CommandLineArgumentParseResult : public itk::ProcessObject
 {
 public:
+  typedef CommandLineArgumentParseResult      	Self;
+  typedef itk::ProcessObject                		Superclass;
+  typedef itk::SmartPointer<Self>        	Pointer;
+  typedef itk::SmartPointer<const Self>  	ConstPointer;
+
+  itkNewMacro(Self);
+  itkTypeMacro(CommandLineArgumentParseResult,itk::ProcessObject);
+
   /** Check whether the option was passed in or not */
   bool IsOptionPresent(const char *option) const;
 
@@ -52,6 +61,10 @@ public:
   TypeValeur GetParameter(const char *option, unsigned int number=0)const;
 
   std::string GetStringParameter(const char *option, unsigned int number=0) const;
+
+protected:
+  CommandLineArgumentParseResult(){};
+  ~CommandLineArgumentParseResult(){};
 
 private:
 
@@ -89,9 +102,17 @@ private:
  *    } 
  * \endcode      
  */
-class CommandLineArgumentParser
+class ITK_EXPORT CommandLineArgumentParser : public itk::ProcessObject
 {
-public:
+public: 
+  typedef CommandLineArgumentParser      Self;
+  typedef itk::ProcessObject                	Superclass;
+  typedef itk::SmartPointer<Self>        Pointer;
+  typedef itk::SmartPointer<const Self>  ConstPointer;
+
+  itkNewMacro(Self);
+  itkTypeMacro(CommandLineArgumentParser,itk::ProcessObject);
+
   /** Add an option with 0 or more parameters (words that follow it) */
 //  void AddOption(const char *name, const int nParameters, const char * comment);
   // Au moins une valeur
@@ -104,10 +125,10 @@ public:
 //  void AddSynonim(const char *option, const char *synonim);
 
   void ParseCommandLine(int argc, char *argv[], 
-                           CommandLineArgumentParseResult &outResult,
+                           CommandLineArgumentParseResult * outResult,
                            bool failOnUnknownTrailingParameters = true);
 
-
+protected:
  CommandLineArgumentParser(){};
  ~CommandLineArgumentParser(){};
  
@@ -118,7 +139,7 @@ private:
 
   /** Try processing a command line.  Returns false if something breaks */
   bool TryParseCommandLine(int argc, char *argv[], 
-                           CommandLineArgumentParseResult &outResult,
+                           CommandLineArgumentParseResult * outResult,
                            bool failOnUnknownTrailingParameters );
 
   typedef struct 
