@@ -3,7 +3,7 @@
 
 #include "otbCommandLineArgumentParser.h"
 
-#include "itkMacro.h"
+#include "otbMacro.h"
 
 namespace otb
 {
@@ -14,11 +14,11 @@ TypeValeur
 CommandLineArgumentParseResult
 ::GetParameter(const char *option, unsigned int number)const
 {
-  std::string parametre = this->GetStringParameter(option, number);
+  std::string parameter = this->GetStringParameter(option, number);
   TypeValeur lValeur;
-  ::itk::OStringStream flux;
-//  flux << parametre;
-//  flux >> lValeur;
+  ::otb::StringStream flux;
+  flux << parameter;
+  flux >> lValeur;
   return lValeur;
 }
 

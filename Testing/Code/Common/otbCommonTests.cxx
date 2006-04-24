@@ -8,6 +8,8 @@
 
 void RegisterTests()
 {
+REGISTER_TEST(otbTestCommandLineArgumentParser);
+REGISTER_TEST(otbTestCommandLineArgumentParserHelp);
 REGISTER_TEST(otbExtractROI);
 REGISTER_TEST(otbExtractROINew);
 REGISTER_TEST(otbExtractROI_RGB);

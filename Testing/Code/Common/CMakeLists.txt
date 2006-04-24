@@ -12,10 +12,31 @@ SET(TOL 0.0)
 
 SET(COMMON_TESTS ${CXX_TEST_PATH}/otbCommonTests)
 
-#ADD_TEST(coTuCommandLineArgumentParser ${COMMON_TESTS}  
-#        otbTestCommandLineArgumentParser
-#        -image image.png -entier 150 -e 200 -double 12.25 -float 45.36 -deuxentiers 78 56 )
+# -------            otb::CommandLibneArgumentParser  -------------
 
+ADD_TEST(coTuCmdLineArgParserHelpWithArg ${COMMON_TESTS}  
+        otbTestCommandLineArgumentParserHelp
+        -help -image image.png)
+
+ADD_TEST(coTuCmdLineArgParserHelpWithoutArg ${COMMON_TESTS}  
+        otbTestCommandLineArgumentParserHelp
+        -help)
+
+ADD_TEST(coTuCmdLineArgParserDeuxEntiers_ExactNumberArg ${COMMON_TESTS}  
+        otbTestCommandLineArgumentParser
+        -image image.png -entier 150 -double 12.25 -deuxentiers 78 56 )
+
+ADD_TEST(coTuCmdLineArgParserDeuxEntier_LessArg ${COMMON_TESTS}  
+        otbTestCommandLineArgumentParser
+        -image image.png -entier 150 -double 12.25 -deuxentiers 78 )
+
+ADD_TEST(coTuCmdLineArgParserDeuxEntier_MoreArg ${COMMON_TESTS}  
+        otbTestCommandLineArgumentParser
+        -image image.png -entier 150 -double 12.25 -deuxentiers 78 56 32)
+
+ADD_TEST(coTuCmdLineArgParser_MissingObligatoryArg ${COMMON_TESTS}  
+        otbTestCommandLineArgumentParser
+        -entier 150 -double 12.25 -deuxentiers 78 56 32)
 
 ADD_TEST(coTuLineSpatialObjectList ${COMMON_TESTS}  
         otbLineSpatialObjectList
@@ -165,6 +186,7 @@ ADD_TEST(coTuImageToLineSpatialObjectListNew ${COMMON_TESTS}
 # -------       Fichiers sources CXX -----------------------------------
 SET(BasicCommon_SRCS
 otbTestCommandLineArgumentParser.cxx
+otbTestCommandLineArgumentParserHelp.cxx
 otbExtractROINew.cxx
 otbExtractROI.cxx
 otbExtractROI_RGB.cxx

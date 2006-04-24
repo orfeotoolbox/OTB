@@ -107,6 +107,10 @@ public:
                            CommandLineArgumentParseResult &outResult,
                            bool failOnUnknownTrailingParameters = true);
 
+
+ CommandLineArgumentParser(){};
+ ~CommandLineArgumentParser(){};
+ 
 private:
 
   void PrintUsage(std::ostream& os/*, itk::Indent indent*/) const;

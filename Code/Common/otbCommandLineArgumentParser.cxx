@@ -1,4 +1,5 @@
 #include "otbCommandLineArgumentParser.h"
+#include "itkMacro.h"
 
 #include <assert.h>
 #include <iostream>
@@ -124,15 +125,25 @@ void
 CommandLineArgumentParser
 ::ParseCommandLine(int argc, char *argv[], 
                            CommandLineArgumentParseResult &outResult,
-                           bool failOnUnknownTrailingParameters )
+                           bool failOnUnknownTrailingParameters ) 
 {
 	
+	
 	bool tryParse = TryParseCommandLine(argc, argv, outResult, failOnUnknownTrailingParameters);
-	if ( tryParse == false )
+	bool IsHelp = outResult.IsOptionPresent("-help");
+
+	if ( (IsHelp == true) )
 	{
+//	::itk::itkExceptionMacro("Help Command Line");
+	}
+
+	if ( (tryParse == false) || (IsHelp == true) )
+  	{	
 		PrintUsage(std::cerr);
 		//Exit du programme (cette méthode doit etre appelée dans un main)
 		// ou itkException ???
+		//itk::itkExceptionMacro("ParseCommandLine argument Error");
+		//itk::itkExceptionMacro("Total frequency in the histogram must be at least 1.") ;
 		exit(EXIT_FAILURE);
 	}
 }
@@ -163,7 +174,7 @@ CommandLineArgumentParser
       if(failOnUnknownTrailingParameters)
         {
         // Unknown argument found
-        std::cerr << "Option '" << arg << "' non reconnue !!!" << std::endl;
+        std::cerr << "The following '" << arg << "' option is unknown !!" << std::endl;
         return false;
         }
       else return true;
@@ -178,7 +189,7 @@ CommandLineArgumentParser
     	if(i+nParameters >= argc) 
       	{
       		// Too few parameters
-      		std::cerr << "Il manque un (ou plusieurs) parametre(s) pour l'option '" << arg << "'" << std::endl;
+      		std::cerr << "Missing one (or more) parameter(s) for the following '" << arg << "' option." << std::endl;
       		return false;
       	}
         // Tell the result that the option has been encountered
@@ -226,7 +237,7 @@ CommandLineArgumentParser
   	if ( (m_OptionList[i].Obligatory == true) && (m_OptionList[i].Finded == false) )
   	{
       		// Too few parameters
-      		std::cerr << "L'option '" << m_OptionList[i].CommonName << "' est obligatoire !!!" << std::endl;
+      		std::cerr << "'" << m_OptionList[i].CommonName << " option(s) is(are) obligatory(ies) !!!" << std::endl;
       		return false;
 	}	
   }
@@ -292,8 +303,8 @@ CommandLineArgumentParser
   		//Aligne le texte avec la différence en blanc
   		for (int b=largeur ; b< largeurmax ; b++) os <<" ";
   		os <<   "  :  "<<m_OptionList[i].Description;
-  		if (m_OptionList[i].NumberOfParametersFixed == true ) os << "  ("<<m_OptionList[i].NumberOfParameters<<" parametres)";
-  		else os << "  (N parametres)";
+  		if (m_OptionList[i].NumberOfParametersFixed == true ) os << "  ("<<m_OptionList[i].NumberOfParameters<<" parameters)";
+  		else os << "  (N parameters)";
   		os << std::endl;
 	}
 	os << std::endl;
