@@ -35,10 +35,12 @@ int otbImageFileReaderERS(int argc, char* argv[])
         WriterType::Pointer writer = WriterType::New();
  
         reader->SetFileName( inputFilename  );
-        writer->SetFileName( outputFilename );
-        
+	reader->Update();
+
+        writer->SetFileName( outputFilename );        
         writer->SetInput( reader->GetOutput() );
         writer->Update(); 
+
   } 
   catch( itk::ExceptionObject & err ) 
   { 

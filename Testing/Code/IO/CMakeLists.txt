@@ -285,8 +285,45 @@ ADD_TEST(ioTvMultiChannelROI_SPOT52PNG_5 ${COMMON_TESTS}
          -startX 700 -startY 700 -sizeX 1000 -sizeY 1000
          -channels 4 )
 
+# ---  Ikonos PAN  ---
+ADD_TEST(ioTvMultiChannelROI_IkonosPAN2PNG ${COMMON_TESTS} 
+#   --compare-image ${TOL}   ${BASELINE}/ioExtractROI_IkonosPAN2PNG_100_100_77_300.png
+#                     ${TEMP}/ioExtractROI_IkonosPAN2PNG_100_100_77_300.png
+         otbMultiChannelExtractROI
+         ${IMAGEDATA}/PARIS_HR/Ikonos/po_79039_pan_0000000.tif
+         ${TEMP}/ioExtractROI_IkonosPAN2PNG_100_100_77_300.png
+         -startX 100 -startY 100 -sizeX 77 -sizeY 300
+         -channels 1)
 
+# ---  Ikonos XS  ---
+ADD_TEST(ioTvMultiChannelROI_IkonosXS2PNG ${COMMON_TESTS} 
+#   --compare-image ${TOL}   ${BASELINE}/ioExtractROI_IkonosXS2PNG_100_100_77_300.png
+#                     ${TEMP}/ioExtractROI_IkonosXS2PNG_100_100_77_300.png
+         otbMultiChannelExtractROI
+         ${IMAGEDATA}/PARIS_HR/Ikonos/???
+         ${TEMP}/ioExtractROI_IkonosXS2PNG_100_100_77_300.png
+         -startX 100 -startY 100 -sizeX 77 -sizeY 300
+         -channels 1 2 3)
 
+# ---  Quickbird PAN  ---
+ADD_TEST(ioTvMultiChannelROI_QuickbirdPAN2PNG ${COMMON_TESTS} 
+#   --compare-image ${TOL}   ${BASELINE}/ioExtractROI_QuickbirdPAN2PNG_100_100_77_300.png
+#                     ${TEMP}/ioExtractROI_QuickbirdPAN2PNG_100_100_77_300.png
+         otbMultiChannelExtractROI
+         ${IMAGEDATA}/PARIS_HR/QuickBird/000000183008_01_P001_PAN/02APR06105612-P1BS-000000183008_01_P001.TIF
+         ${TEMP}/ioExtractROI_QuickbirdPAN2PNG_100_100_77_300.png
+         -startX 100 -startY 100 -sizeX 77 -sizeY 300
+         -channels 1)
+
+# ---  Quickbird XS  ---
+ADD_TEST(ioTvMultiChannelROI_QuickbirdXS2PNG ${COMMON_TESTS} 
+#   --compare-image ${TOL}   ${BASELINE}/ioExtractROI_QuickbirdXS2PNG_100_100_77_300.png
+#                     ${TEMP}/ioExtractROI_QuickbirdXS2PNG_100_100_77_300.png
+         otbMultiChannelExtractROI
+         ${IMAGEDATA}/PARIS_HR/QuickBird/000000183008_01_P001_MUL/02APR06105612-M1BS-000000183008_01_P001.TIF
+         ${TEMP}/ioExtractROI_QuickbirdXS2PNG_100_100_77_300.png
+         -startX 100 -startY 100 -sizeX 77 -sizeY 300
+         -channels 1 2 3)
 
 
 
