@@ -1,3 +1,14 @@
+/*=========================================================================
+
+  Programme :   OTB (ORFEO ToolBox)
+  Auteurs   :   CS - P.Imbo
+  Language  :   C++
+  Date      :   25 avril 2006
+  Version   :   
+  Role      :   otbMacro defines standard system-wide macros
+  $Id$
+
+=========================================================================*/
 
 
 /**
