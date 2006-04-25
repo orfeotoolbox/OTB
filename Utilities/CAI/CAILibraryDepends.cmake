@@ -1,7 +1,0 @@
-SET(OTBCommon_LIB_DEPENDS "ITKCommon;")
-SET(OTBBasicFilters_LIB_DEPENDS "ITKCommon;")
-SET(OTBIO_LIB_DEPENDS "/ORFEO/outils/libs-externes-install/lib/cai/libcai.a;/ORFEO/outils/libs-externes-install/lib/libgdal.so;OTBCommon;ITKIO;ITKCommon;")
-SET(OTBChangeDetection_LIB_DEPENDS "OTBCommon;OTBIO;ITKCommon;")
-SET(OTBFeatureExtraction_LIB_DEPENDS "OTBCommon;OTBIO;ITKCommon;ITKIO;")
-SET(OTBVisu_LIB_DEPENDS "fltk_images;fltk;fltk_gl;fltk_forms;-lSM;-lICE;-lSM;-lICE;/usr/X11R6/lib/libX11.so;/usr/X11R6/lib/libXext.so;/usr/X11R6/lib/libX11.so;/usr/X11R6/lib/libXext.so;-lm;/usr/lib/libGLU.so;/usr/lib/libGLU.so;/usr/lib/libGL.so;-lSM;-lICE;/usr/X11R6/lib/libX11.so;/usr/X11R6/lib/libXext.so;")
-SET(cai_LIB_DEPENDS "")
