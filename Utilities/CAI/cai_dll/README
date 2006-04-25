@@ -1,0 +1,71 @@
+# Version :$Header: README,v 1.5 01/01/15 15:24:06 cmf Exp $
+		INSTALLATION COUCHE_ACCES_IMAGE ATLAS
+		-------------------------------------
+##########################################################################
+# MOD : VERSION : 4.1 : DM : installation sur DEC UNIX
+##########################################################################
+
+##########################################################################
+# MOD : VERSION : 4.3 : DM : installation sur HP64Bits, pCNT, PC LINUX
+##########################################################################
+
+La Couche Acces Image peut etre installee sur HP 32 bits et 64 bits Sun OS et SUN SOLARIS 32 bits et 64 bits, sur HP ITANIUM2 , sur DEC UNIX ainsi que PC LINUX et PC NT ainsi que station XEON EMT64 Linux Redhat
+
+
+
+Pour la generer, quatre variables d'environnement doivent etre positionnees :
+
+
+MACHINE_ATLAS  represente le type de machine sur lequel se fait l'installation
+	       Les valeurs possibles : SOLARIS, SOLARIS64, HPUX, HPUX64, 
+			               WIN, LINUX, ITANIUM2, AIX, DEC, SUNOS
+
+RACINE_ATLAS  indique le repertoire racine de stockage de CAI.
+		(exle : /home/ATALGO/regine/COUCHE_IMA_V5.2)
+
+RACINE_HDF    indique le repertoire racine de stockage du freeware HDF
+		(exle : /home/ATALGO/HDF)
+
+##########################################################################
+# MOD : VERSION : 4.0 : DM : s'affranchir du compilateur 
+##########################################################################
+COMPILO : si cette variable n'est pas positionnee, le compilateur par defaut est
+	  utilise : cc. 
+	  si elle est positionnee, c'est le compilateur indique qui est utilise
+
+
+Pour generer, lancer $(RACINE_ATLAS)/ins/COUCHE_IMA.install
+
+Si vous ne voulez pas de bibliotheque dynamique, dans le fichier COUCHE_IMA.install,
+enlever l'appel au deuxieme makefile
+
+Si vous n'avez pas la biblitheque HDF a votre disposition, dans le fichier 
+$(RACINE_ATLAS)/gen/genere.mk preciser all: CAI_NOHD
+
+
+
+Remarque : 
+----------
+Pour PC LINUX et PC NT et ITANIUM2 ainsi que XEON, seule la bibliotheque simple est generee
+
+Vérifier que la variable d'environnement $PATH est à jour de façon à pouvoir 
+ acceder au précompilateur cpp
+
+
+
+		INSTALLATION COUCHE_ACCES_IMAGE QIV SUR HP
+		------------------------------------------
+
+Pour generer libimage.a , deux variables d'environnement doivent etre positionnees :
+
+
+MACHINE_ATLAS  represente le type de machine sur lequel se fait l'installation
+	       Les valeurs possibles : HPUX 
+
+
+RACINE_HDF    indique le repertoire racine de stockage du freeware HDF
+		(exle : /home/ATALGO/HDF)
+
+
+Pour generer : sous gen :
+   make -f cai_libimage.mk
