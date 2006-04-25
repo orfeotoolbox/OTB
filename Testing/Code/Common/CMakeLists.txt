@@ -38,6 +38,18 @@ ADD_TEST(coTuCmdLineArgParser_MissingObligatoryArg ${COMMON_TESTS}
         otbTestCommandLineArgumentParser
         -entier 150 -double 12.25 -deuxentiers 78 56 32)
 
+ADD_TEST(coTuCmdLineArgParser_EmptyList ${COMMON_TESTS}  
+        otbTestCommandLineArgumentParserList
+        -image image.png -entier 150 -double 12.25 -deuxentiers 78 56 -doubles)
+
+ADD_TEST(coTuCmdLineArgParser_List1Arg ${COMMON_TESTS}  
+        otbTestCommandLineArgumentParserList
+        -image image.png -entier 150 -double 12.25 -deuxentiers 78 56 -doubles 1.0)
+
+ADD_TEST(coTuCmdLineArgParser_List2Arg ${COMMON_TESTS}  
+        otbTestCommandLineArgumentParserList
+        -image image.png -entier 150 -double 12.25 -deuxentiers 78 56 -doubles 1.0 2.0)
+
 ADD_TEST(coTuLineSpatialObjectList ${COMMON_TESTS}  
         otbLineSpatialObjectList
         )
@@ -187,6 +199,7 @@ ADD_TEST(coTuImageToLineSpatialObjectListNew ${COMMON_TESTS}
 SET(BasicCommon_SRCS
 otbTestCommandLineArgumentParser.cxx
 otbTestCommandLineArgumentParserHelp.cxx
+otbTestCommandLineArgumentParserList.cxx
 otbExtractROINew.cxx
 otbExtractROI.cxx
 otbExtractROI_RGB.cxx

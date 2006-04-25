@@ -15,6 +15,7 @@
 #include "itkExceptionObject.h"
 #include "otbCommandLineArgumentParser.h"
 
+// Test de sortie en erreur
 int otbTestCommandLineArgumentParserHelp( int argc, char ** argv )
 {
   try 
@@ -40,7 +41,7 @@ int otbTestCommandLineArgumentParserHelp( int argc, char ** argv )
     { 
     std::cout << "Exception itk::ExceptionObject levee !" << std::endl; 
     std::cout << err << std::endl; 
-    return EXIT_FAILURE;
+    return EXIT_SUCCESS;
      } 
   catch( ... ) 
     { 
@@ -49,7 +50,7 @@ int otbTestCommandLineArgumentParserHelp( int argc, char ** argv )
     } 
 
 
-  return EXIT_SUCCESS;
+  return EXIT_FAILURE;
 }
 
 

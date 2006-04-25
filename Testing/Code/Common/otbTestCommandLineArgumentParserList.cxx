@@ -15,7 +15,7 @@
 #include "itkExceptionObject.h"
 #include "otbCommandLineArgumentParser.h"
 
-int otbTestCommandLineArgumentParser( int argc, char ** argv )
+int otbTestCommandLineArgumentParserList( int argc, char ** argv )
 {
   try 
     { 
@@ -28,6 +28,7 @@ int otbTestCommandLineArgumentParser( int argc, char ** argv )
         parser->AddOption("-entier","Une Valeur entiere (obligatoire)","-e");
         parser->AddOption("-deuxentiers","Deux Valeurs entieres non obligatoire","-dede",2,false);
         parser->AddOption("-double", "Valeur réelle double", "-d"); 
+        parser->AddOptionNParams("-doubles", "Liste de Valeurs réelles","-ld",false);
   
         typedef otb::CommandLineArgumentParseResult ParserResultType;
         ParserResultType::Pointer  parseResult = ParserResultType::New();
@@ -45,6 +46,14 @@ int otbTestCommandLineArgumentParser( int argc, char ** argv )
 	  }
         double lDouble = parseResult->GetParameter<double>("-double");
         std::cout << "Double : "<<lDouble<<std::endl;
+
+        std::cout << "List de Double : "<<parseResult->GetNumberOfParameters("-doubles")<<std::endl;
+        for (int i =0 ; i<parseResult->GetNumberOfParameters("-doubles") ; i++)
+        {
+                double value = parseResult->GetParameter<double>("-doubles",i);
+                std::cout << "  "<<value;
+        }
+        std::cout << std::endl;
     } 
 
   catch( itk::ExceptionObject & err ) 
