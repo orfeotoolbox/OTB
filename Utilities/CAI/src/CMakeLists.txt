@@ -21,5 +21,5 @@ SET(CAI_SRCS
 
 ADD_LIBRARY(cai ${CAI_SRCS})
 
-INSTALL_TARGETS(/lib/cai cai )
-INSTALL_FILES(/include/cai "(\\.h)$")
+INSTALL_TARGETS(/lib/otb cai )
+INSTALL_FILES(/include/otb/Utilities/CAI "(\\.h)$")
