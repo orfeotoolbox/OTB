@@ -58,7 +58,7 @@ otbImageToPointSetFilterTest.cxx
 INCLUDE_DIRECTORIES("${OTBTesting_BINARY_DIR}")
 
 ADD_EXECUTABLE(otbBasicFiltersTests otbBasicFiltersTests.cxx ${BasicFilters_SRCS})
-TARGET_LINK_LIBRARIES(otbBasicFiltersTests ${CAI_LIBRARY} ${GDAL_LIBRARY} OTBBasicFilters OTBCommon OTBIO ${CAI_LIBRARY} ITKIO ITKCommon)
+TARGET_LINK_LIBRARIES(otbBasicFiltersTests  OTBBasicFilters OTBCommon OTBIO cai ${GDAL_LIBRARY} ITKIO ITKCommon)
 
 
 ENDIF( NOT OTB_DISABLE_CXX_TESTING )

@@ -9,7 +9,7 @@ SOURCE_GROUP("XML Files" REGULAR_EXPRESSION "[.]xml$")
 
 #-----------------------------------------------------------------------------
 # OTB version number.  An even minor number corresponds to releases.
-SET(OTB_VERSION_MAJOR "2")
+SET(OTB_VERSION_MAJOR "1")
 SET(OTB_VERSION_MINOR "0")
 SET(OTB_VERSION_PATCH "0")
 
@@ -23,13 +23,13 @@ SET(OTB_VERSION_STRING "${OTB_VERSION_MAJOR}.${OTB_VERSION_MINOR}")
 #-------------------------------
 # Librairie VTK
 #-------------------------------
-#FIND_PACKAGE(VTK)
-#IF(VTK_FOUND)
-#  INCLUDE(${VTK_USE_FILE})
-#ELSE(VTK_FOUND)
-#  MESSAGE(FATAL_ERROR
-#          "Cannot build OTB project without VTK.  Please set VTK_DIR.")
-#ENDIF(VTK_FOUND)
+FIND_PACKAGE(VTK)
+IF(VTK_FOUND)
+  INCLUDE(${VTK_USE_FILE})
+ELSE(VTK_FOUND)
+  MESSAGE(FATAL_ERROR
+          "Cannot build OTB project without VTK.  Please set VTK_DIR.")
+ENDIF(VTK_FOUND)
 
 #-------------------------------
 # Librairie ITK
@@ -53,18 +53,19 @@ ENDIF(OPENGL_INCLUDE_PATH)
 #-------------------------------
 # Librairie CAI
 #-------------------------------
-FIND_LIBRARY(CAI_LIBRARY NAMES cai PATHS $ENV{CAI_DIR_LIB} )
-FIND_LIBRARY(TIFF_LIBRARY NAMES tiff PATHS $ENV{CAI_DIR_LIB} )
-FIND_PATH(CAI_INCLUDES cai_image.h $ENV{CAI_DIR_INCLUDES} )
-IF (NOT CAI_LIBRARY)
-  MESSAGE(FATAL_ERROR
-          "Cannot find CAI library. Please set CAI_DIR_LIB.")
-ENDIF (NOT CAI_LIBRARY)
+#       FIND_LIBRARY(CAI_LIBRARY NAMES cai PATHS $ENV{CAI_DIR_LIB} )
+#       FIND_LIBRARY(TIFF_LIBRARY NAMES tiff PATHS $ENV{CAI_DIR_LIB} )
+#       FIND_PATH(CAI_INCLUDES cai_image.h $ENV{CAI_DIR_INCLUDES} )
+#       IF (NOT CAI_LIBRARY)
+#         MESSAGE(FATAL_ERROR
+#                 "Cannot find CAI library. Please set CAI_DIR_LIB.")
+#       ENDIF (NOT CAI_LIBRARY)
 
-INCLUDE_DIRECTORIES(${CAI_INCLUDES})
-LINK_DIRECTORIES( $ENV{CAI_DIR_LIB} )
+#INCLUDE_DIRECTORIES(${CAI_INCLUDES})
+#LINK_DIRECTORIES( $ENV{CAI_DIR_LIB} )
 
-#       SET( ENV{CAI_DIR} ${OTB_SOURCE_DIR}/Utilities/CAI)
+#       SET( $ENV{CAI_DIR} ${OTB_SOURCE_DIR}/Utilities/CAI)
+
 
 #       FIND_PACKAGE(CAI)
 #       IF(CAI_FOUND)
@@ -243,8 +244,7 @@ OPTION(BUILD_TESTING "Generer les tests." ON)
 
 #-----------------------------------------------------------------------------
 # Dispatch the build into the proper subdirectories.
-#SUBDIRS(Utilities Code)
-SUBDIRS(Code)
+SUBDIRS(Utilities Code)
 
 IF (BUILD_EXAMPLES)
   SUBDIRS(Examples)

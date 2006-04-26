@@ -159,7 +159,7 @@ ADD_TEST(FA-00013-io_WriteImageTIFF_bis ${COMMON_TESTS}
 # -------       Fin des FAs traitees -----------------------------------
 
 ADD_EXECUTABLE(AlignementsQB  AlignementsQB.cxx)
-TARGET_LINK_LIBRARIES(AlignementsQB OTBFeatureExtraction OTBIO OTBCommon ${CAI_LIBRARY}  ${GDAL_LIBRARY} ITKIO ITKCommon)
+TARGET_LINK_LIBRARIES(AlignementsQB OTBFeatureExtraction OTBIO OTBCommon cai  ${GDAL_LIBRARY} ITKIO ITKCommon)
 
 INCLUDE_DIRECTORIES("${OTBTesting_BINARY_DIR}")
 

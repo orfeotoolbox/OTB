@@ -325,7 +325,7 @@ otbExtractSegments.cxx
 INCLUDE_DIRECTORIES("${OTBTesting_BINARY_DIR}")
 
 ADD_EXECUTABLE(otbFeatureExtractionTests otbFeatureExtractionTests.cxx ${BasicFeatureExtraction_SRCS})
-TARGET_LINK_LIBRARIES(otbFeatureExtractionTests ${CAI_LIBRARY} ${GDAL_LIBRARY} OTBFeatureExtraction OTBCommon OTBIO ${CAI_LIBRARY} ITKIO ITKCommon)
+TARGET_LINK_LIBRARIES(otbFeatureExtractionTests  OTBFeatureExtraction OTBCommon OTBIO cai ${GDAL_LIBRARY} ITKIO ITKCommon)
 
 
 ENDIF( NOT OTB_DISABLE_CXX_TESTING )

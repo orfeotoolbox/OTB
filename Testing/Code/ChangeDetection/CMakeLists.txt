@@ -88,9 +88,7 @@ otbJHMIChangeDetectionTest.cxx
 
 INCLUDE_DIRECTORIES("${OTBTesting_BINARY_DIR}")
 
-# ${TIFF_LIBRARY}
-
 ADD_EXECUTABLE(otbChangeDetectionTests otbChangeDetectionTests.cxx ${BasicChangeDetection_SRCS})
-TARGET_LINK_LIBRARIES(otbChangeDetectionTests OTBChangeDetection OTBIO OTBCommon ${CAI_LIBRARY}  ${GDAL_LIBRARY} ITKIO ITKCommon ITKStatistics)
+TARGET_LINK_LIBRARIES(otbChangeDetectionTests OTBChangeDetection OTBIO OTBCommon cai ${GDAL_LIBRARY} ITKIO ITKCommon ITKStatistics)
 
 ENDIF( NOT OTB_DISABLE_CXX_TESTING )

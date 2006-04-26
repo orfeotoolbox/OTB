@@ -19,6 +19,21 @@ SET(OTB_INCLUDE_DIRS_BUILD_TREE ${OTB_INCLUDE_DIRS_BUILD_TREE}
 )
 
 #-----------------------------------------------------------------------------
+# CAI directories
+IF(WIN32)
+        SET(OTB_INCLUDE_DIRS_BUILD_TREE ${OTB_INCLUDE_DIRS_BUILD_TREE}
+                ${OTB_SOURCE_DIR}/Utilities/CAI/cai_dll
+                ${OTB_SOURCE_DIR}/Utilities/CAI/cai_dll/inc
+                ${OTB_SOURCE_DIR}/Utilities/CAI/cai_dll/inc/inc_unix2win
+        )
+ELSE(WIN32)
+        SET(OTB_INCLUDE_DIRS_BUILD_TREE ${OTB_INCLUDE_DIRS_BUILD_TREE}
+                ${OTB_SOURCE_DIR}/Utilities/CAI
+                ${OTB_SOURCE_DIR}/Utilities/CAI/inc
+        )
+ENDIF(WIN32)
+
+#-----------------------------------------------------------------------------
 # Include directories needed for .cxx files in OTB.  These include
 # directories will NOT be available to user projects.
 SET(OTB_INCLUDE_DIRS_BUILD_TREE_CXX)
@@ -37,6 +52,8 @@ SET(OTB_INCLUDE_DIRS_INSTALL_TREE ${OTB_INCLUDE_DIRS_INSTALL_TREE}
   ${OTB_INSTALL_INCLUDE_DIR}/FeatureExtraction
   ${OTB_INSTALL_INCLUDE_DIR}/Learning
   ${OTB_INSTALL_INCLUDE_DIR}/Visu
+  ${OTB_INSTALL_INCLUDE_DIR}/Utilities
+  ${OTB_INSTALL_INCLUDE_DIR}/Utilities/CAI
 )
 
 #IF(NOT OTB_USE_SYSTEM_VXL)
