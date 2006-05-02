@@ -1,0 +1,198 @@
+#if defined(_MSC_VER)
+#pragma warning ( disable : 4786 )
+#endif
+
+#ifdef __BORLANDC__
+#define ITK_LEAN_AND_MEAN
+#endif
+
+//  Software Guide : BeginCommandLineArgs
+//    INPUTS: {ROI_QB_MUL_4.tif}, {LearningROIs.txt}
+//    OUTPUTS: {ROI_QB_MUL_4_training.png}
+//  Software Guide : EndCommandLineArgs
+
+// Software Guide : BeginLatex
+//
+// This example illustrates how to generate a training image for an
+// image supervised classification.
+//
+// Software Guide : EndLatex 
+
+
+#include "itkImage.h"
+#include "otbImageFileWriter.h"
+#include "otbImageFileReader.h"
+#include "itkImageRegionIterator.h"
+
+#include <stdio.h>
+#include <iostream>
+#include <fstream>
+
+int main( int argc, char ** argv )
+{
+  if(argc!=4)
+    {
+
+    std::cout << "Usage : " << argv[0] << " inputImage roiFile outputTrainingImage" << std::endl;
+    return EXIT_FAILURE;
+    
+    }
+
+  const char * imageFilename  = argv[1];
+  const char * roiFilename  = argv[2];
+  const char * outputFilename = argv[3];
+       
+
+  typedef unsigned char                                InputPixelType;
+  typedef int   	                        OutputPixelType;
+
+  const   unsigned int        	                        Dimension = 2;
+
+  typedef itk::Image< InputPixelType,  Dimension >	InputImageType;
+  typedef itk::Image< OutputPixelType, Dimension >        OutputImageType;
+
+  typedef otb::ImageFileReader< InputImageType  >         ReaderType;
+  typedef otb::ImageFileWriter< OutputImageType >         WriterType;
+
+  ReaderType::Pointer reader = ReaderType::New();
+  WriterType::Pointer writer = WriterType::New();
+
+  reader->SetFileName( imageFilename  );
+  writer->SetFileName( outputFilename  );
+
+  reader->Update();
+
+  // We allocate the output image
+  OutputImageType::Pointer trainingImage = OutputImageType::New();
+
+    // Declare the type of the index to access images
+  typedef itk::Index<Dimension>         myIndexType;
+
+  // Declare the type of the size 
+  typedef itk::Size<Dimension>          mySizeType;
+
+  // Declare the type of the Region
+  typedef itk::ImageRegion<Dimension>        myRegionType;
+
+  
+  // Define their size, and start index
+  mySizeType size;
+  size[0] = reader->GetOutput()->GetRequestedRegion().GetSize()[0];
+  size[1] = reader->GetOutput()->GetRequestedRegion().GetSize()[1];
+
+
+  myIndexType start;
+  start[0] = 0;
+  start[1] = 0;
+
+
+  myRegionType region;
+  region.SetIndex( start );
+  region.SetSize( size );
+
+  // Initialize Image B
+  trainingImage->SetLargestPossibleRegion( region );
+  trainingImage->SetBufferedRegion( region );
+  trainingImage->SetRequestedRegion( region );
+  trainingImage->Allocate();
+
+
+
+  // For each line of the ROIs file, we create a region iterator and
+  // assign the value of the labels to the pixels
+
+  std::ifstream roisFile;
+  roisFile.open( roiFilename );
+
+  unsigned int nbRois = 0;
+
+  roisFile >> nbRois;
+
+  std::cout << "Nb of ROIS " << nbRois << std::endl;
+  
+
+  while( !roisFile.fail() && (nbRois > 0))
+    {
+
+    --nbRois;
+    OutputPixelType label = 0;
+    unsigned long xUL, yUL, xBR, yBR = 0;
+
+    roisFile >> label;
+    roisFile >> xUL;
+    roisFile >> yUL;
+    roisFile >> xBR;
+    roisFile >> yBR;
+
+
+    std::cout << "Label : " << label << std::endl;
+    std::cout << "( " << xUL << " , " << yUL << " )" << std::endl;
+    std::cout << "( " << xBR << " , " << yBR << " )" << std::endl;
+
+    // Region creation
+
+        
+    start[0] = xUL;
+    start[1] = yUL;
+    
+    size[0]  = xBR - xUL;
+    size[1]  = yBR - yUL;
+    
+    region.SetSize( size );
+    region.SetIndex( start );
+    
+    // Iterator creation
+    typedef itk::ImageRegionIterator< OutputImageType>  IteratorType;
+    IteratorType  it( trainingImage, region );
+
+    it.GoToBegin();
+
+    // Iteration and pixel value assignment
+    while(!it.IsAtEnd())
+      {
+
+      it.Set(static_cast<OutputPixelType>(label));
+
+      //std::cout << static_cast<OutputPixelType>(label) << " -- ";
+      //std::cout << it.Get() << std::endl;
+      ++it;
+      
+      }
+
+    
+    }
+
+
+  
+  writer->SetInput( trainingImage );
+
+  
+  writer->Update();
+
+  //  Software Guide : BeginLatex
+  // Figure~\ref{fig:Align} shows the result of applying the alignment
+  // detection to a small patch extracted from a VHR image.
+  // \begin{figure}
+  // \center
+  // \includegraphics[width=0.35\textwidth]{QB_Suburb.eps}
+  // \includegraphics[width=0.35\textwidth]{QB_SuburbAlign.eps}
+  // \itkcaption[Lee Filter Application]{Result of applying the
+  // \doxygen{ImageToPathListAlignFilter} to a VHR image of a suburb.} 
+  // \label{fig:Align}
+  // \end{figure}
+  //
+  //  Software Guide : EndLatex 
+
+  //  \relatedClasses
+  //  \begin{itemize}
+  //  \item \doxygen{FrostImageFilter}
+  //  \end{itemize}
+  //
+  //  Software Guide : EndLatex
+  
+
+
+  return EXIT_SUCCESS;
+}
+
+

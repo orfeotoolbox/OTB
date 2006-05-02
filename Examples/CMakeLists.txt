@@ -9,4 +9,5 @@ SUBDIRS(
   Filtering
   ChangeDetection
   Visu
+  Learning
 )
