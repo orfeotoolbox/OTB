@@ -5,8 +5,6 @@ ADD_EXECUTABLE(AlignmentsExample AlignmentsExample.cxx )
 TARGET_LINK_LIBRARIES(AlignmentsExample OTBCommon OTBIO ITKCommon
 ITKIO)
 
-ADD_EXECUTABLE(LineRatioDetectorExample LineRatioDetectorExample.cxx )
-TARGET_LINK_LIBRARIES(LineRatioDetectorExample OTBCommon OTBIO ITKCommon ITKIO)
 
 ADD_EXECUTABLE(TouziEdgeDetectorExample TouziEdgeDetectorExample.cxx )
 TARGET_LINK_LIBRARIES(TouziEdgeDetectorExample OTBCommon OTBIO ITKCommon ITKIO)
@@ -23,3 +21,21 @@ TARGET_LINK_LIBRARIES(ComplexMomentPathExample OTBCommon OTBIO ITKCommon ITKIO)
 ADD_EXECUTABLE(HuMomentImageExample HuMomentImageExample.cxx )
 TARGET_LINK_LIBRARIES(HuMomentImageExample OTBCommon OTBIO ITKCommon ITKIO)
 
+ADD_EXECUTABLE(RatioLineDetectorExample RatioLineDetectorExample.cxx )
+TARGET_LINK_LIBRARIES(RatioLineDetectorExample OTBCommon OTBIO ITKCommon ITKIO)
+
+ADD_EXECUTABLE(CorrelationLineDetectorExample CorrelationLineDetectorExample.cxx )
+TARGET_LINK_LIBRARIES(CorrelationLineDetectorExample OTBCommon OTBIO ITKCommon ITKIO)
+
+ADD_EXECUTABLE(AssymmetricFusionOfLineDetectorExample
+AssymmetricFusionOfLineDetectorExample.cxx)
+TARGET_LINK_LIBRARIES(AssymmetricFusionOfLineDetectorExample OTBCommon OTBIO ITKCommon ITKIO)
+
+ADD_EXECUTABLE(ExtractSegmentsByStepsExample
+ExtractSegmentsByStepsExample.cxx)
+TARGET_LINK_LIBRARIES(ExtractSegmentsByStepsExample OTBCommon OTBIO ITKCommon ITKIO)
+
+
+ADD_EXECUTABLE(ExtractSegmentsExample
+ExtractSegmentsExample.cxx)
+TARGET_LINK_LIBRARIES(ExtractSegmentsExample OTBCommon OTBIO ITKCommon ITKIO)
