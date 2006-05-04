@@ -149,12 +149,19 @@ ADD_TEST(ioTvImageFileReaderRGB_BSQ2TIFF ${IO_TESTS}
         ${INPUTDATA}/poupees.hd 
         ${TEMP}/ioImageFileReaderRGB_BSQ2TIFF_poupees.tiff )
 
-ADD_TEST(ioTvImageFileReaderRGB_SPOT5TIF2PNG ${IO_TESTS} 
+ADD_TEST(ioTvImageFileReaderRGB_Cai_SPOT5TIF2PNG ${IO_TESTS} 
   --compare-image ${TOL}   ${BASELINE}/ioImageFileReaderRGB_SPOT5TIF2PNG_poupeesTIF.png
-                    ${TEMP}/ioImageFileReaderRGB_SPOT5TIF2PNG_poupeesTIF.png
+                    ${TEMP}/ioImageFileReaderRGB_Cai_SPOT5TIF2PNG_poupeesTIF.png
         otbImageFileReaderRGBTest
         ${INPUTDATA}/poupeesTIF 
-        ${TEMP}/ioImageFileReaderRGB_SPOT5TIF2PNG_poupeesTIF.png )
+        ${TEMP}/ioImageFileReaderRGB_Cai_SPOT5TIF2PNG_poupeesTIF.png )
+ADD_TEST(ioTvImageFileReaderRGB_Gdal_SPOT5TIF2PNG ${IO_TESTS} 
+  --compare-image ${TOL}   ${BASELINE}/ioImageFileReaderRGB_SPOT5TIF2PNG_poupeesTIF.png
+                    ${TEMP}/ioImageFileReaderRGB_Gdal_SPOT5TIF2PNG_poupeesTIF.png
+        otbImageFileReaderRGBTest
+        ${INPUTDATA}/poupeesTIF/IMAGERY.TIF 
+        ${TEMP}/ioImageFileReaderRGB_Gdal_SPOT5TIF2PNG_poupeesTIF.png )
+
 ADD_TEST(ioTvImageFileReaderRGB_SPOT5BIL2PNG ${IO_TESTS} 
   --compare-image ${TOL}   ${BASELINE}/ioImageFileReaderRGB_SPOT5TIF2PNG_poupeesBIL.png
                     ${TEMP}/ioImageFileReaderRGB_SPOT5TIF2PNG_poupeesBIL.png
