@@ -1,3 +1,3 @@
 # $Id$
 
-SUBDIRS(Common IO Installation BasicFilters FeatureExtraction ChangeDetection Visu Learning)
+SUBDIRS(Common IO BasicFilters FeatureExtraction ChangeDetection Visu Learning)
