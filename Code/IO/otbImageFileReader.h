@@ -24,6 +24,9 @@ namespace otb
 /** \class ImageFileReader
  * \brief Ressource en lecture pour lire une image depuis un fichier.
  *
+ * For an SPOT5 TIF image, if the user specify the directory, this image is read with CAI library.
+ * Otherwise, if the user specify the name of the image ('IMAGERY.TIF'), it read with GDAL library.
+ *
  * \sa ImageSeriesReader
  * \sa ImageIOBase
  * 

@@ -9,19 +9,21 @@ extern "C"
 #include "cai_image.h"
 }
 
+/* Includes pour tester FLTK */
 /*
 #include <FL/Fl.H>
 #include <FL/Fl_Window.H>
 */
 
 
-#include "vtkConeSource.h"
+/* Includes pour tester VTK */
+/*#include "vtkConeSource.h"
 #include "vtkPolyDataMapper.h"
 #include "vtkRenderWindow.h"
 #include "vtkCamera.h"
 #include "vtkActor.h"
 #include "vtkRenderer.h"
-
+*/
 
 #include <iostream>
 #include <string>
@@ -48,8 +50,8 @@ int main(int argc, char * argv[])
 //	Fl_Window lWindow(400, 400);
 
 	//VTK - Code extrait de VTK\Examples\Tutorial\Step1\Cxx\Cone.cxx
-  	vtkConeSource *cone = vtkConeSource::New();
-  	cone->Delete();
+//  	vtkConeSource *cone = vtkConeSource::New();
+//  	cone->Delete();
 
 	
         return EXIT_SUCCESS;

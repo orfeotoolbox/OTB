@@ -327,7 +327,6 @@ bool CAIImageIO::CanReadFile( const char* filename )
 
         std::string CaiFileName("");
         std::string CaiFormat("");
-//        std::string CaiFileNameOrigin(filename);
         formatFound = GetInfosCAI( filename, CaiFileName, CaiFormat  );
         if( formatFound == false )
         {
@@ -476,7 +475,6 @@ void CAIImageIO::ReadImageInformation()
         int NbOctetPixel;            /* Nombre octets/pixel l'image */
         std::string CaiFileName("");
         std::string CaiFormat("");
-//        std::string CaiFileNameOrigin(m_FileName);
         bool formatFound = GetInfosCAI( m_FileName.c_str(), CaiFileName, CaiFormat  );
         CAI_IMAGE * lCai(NULL);
 
@@ -490,6 +488,8 @@ void CAIImageIO::ReadImageInformation()
         {
     		itkExceptionMacro(<< "Impossible de lire les informations sur l'image " << m_FileName.c_str() <<" ("<<CaiFileName.c_str()<<";"<<CaiFormat.c_str()<<") : ("<<CAI_ERREUR<<").");
         }
+        
+std::cout << "Driver: CAI - "<<CaiFormat<<std::endl;
         
         this->SetNumberOfDimensions(2);
         m_Dimensions[0] = NbColonnes;
@@ -599,9 +599,6 @@ void CAIImageIO::WriteImageInformation(void)
                 m_NbOctetPixel = 1;
         }
 
-    std::cout<<"Component Type : "<<m_ComponentType<<std::endl;
-    std::cout<<"NbOctetPixel   : "<<m_NbOctetPixel<<std::endl;
-        
         NbColonnes = m_Dimensions[0];
         NbLignes = m_Dimensions[1];
         NbCanaux = this->GetNumberOfComponents();

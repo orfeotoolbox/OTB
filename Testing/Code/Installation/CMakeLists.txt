@@ -5,10 +5,10 @@ SET(INPUTDATA ${OTB_DATA_ROOT}/Input)
 SET(TEMP ${OTBTesting_BINARY_DIR}/Temporary)
 
 ADD_TEST(inTuInstallationTest ${CXX_TEST_PATH}/otbInstallationTest      
-  ${INPUTDATA}/poupees.jpg )
+  ${INPUTDATA}/poupees.hd )
 
 ADD_EXECUTABLE(otbInstallationTest otbInstallationTest.cxx )
-TARGET_LINK_LIBRARIES(otbInstallationTest OTBCommon cai vtkRendering )
+TARGET_LINK_LIBRARIES(otbInstallationTest OTBCommon cai )
 
 ENDIF( NOT OTB_DISABLE_CXX_TESTING )
 
