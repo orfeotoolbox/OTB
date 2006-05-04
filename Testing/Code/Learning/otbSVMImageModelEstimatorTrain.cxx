@@ -47,7 +47,7 @@ int otbSVMImageModelEstimatorTrain( int argc, char* argv[] )
     typedef otb::SVMMembershipFunction< VectorType >
       MembershipFunctionType;
     typedef otb::SVMImageModelEstimator< InputImageType,
-      MembershipFunctionType, TrainingImageType >   EstimatorType;
+                                  TrainingImageType >   EstimatorType;
 
     typedef otb::ImageFileReader< InputImageType > InputReaderType;
     typedef otb::ImageFileReader< TrainingImageType > TrainingReaderType;
@@ -66,8 +66,10 @@ int otbSVMImageModelEstimatorTrain( int argc, char* argv[] )
     svmEstimator->SetInputImage( inputReader->GetOutput() );
     svmEstimator->SetTrainingImage( trainingReader->GetOutput() );
 
+
     svmEstimator->Update();
 
+    std::cout << "Saving model" << std::endl;
     svmEstimator->SaveModel(outputModelFileName);
 
     

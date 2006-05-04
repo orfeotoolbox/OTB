@@ -38,10 +38,8 @@ int otbSVMImageModelEstimatorNew( int argc, char* argv[] )
 
 	typedef std::vector<double>   VectorType;
 
-	typedef otb::SVMMembershipFunction< VectorType >
-	                                                MembershipFunctionType;
         typedef otb::SVMImageModelEstimator< InputImageType,
-                   MembershipFunctionType, TrainingImageType >   EstimatorType;
+                                           TrainingImageType >   EstimatorType;
 	
 	
         EstimatorType::Pointer svmModel = EstimatorType::New();
