@@ -55,21 +55,21 @@ int otbSVMClassifierImage(int argc, char* argv[] )
     /** Read the input image and build the sample */
 
     typedef float                                InputPixelType;
-    typedef unsigned char	                 OutputPixelType;
+
 
     const   unsigned int        	         Dimension = 2;
 
     typedef itk::VectorImage< InputPixelType,  Dimension >	InputImageType;
-    typedef itk::Image< OutputPixelType, Dimension >        OutputImageType;
+
 
     typedef otb::ImageFileReader< InputImageType  >         ReaderType;
-    typedef otb::ImageFileWriter< OutputImageType >         WriterType;
+
 
     ReaderType::Pointer reader = ReaderType::New();
-    WriterType::Pointer writer = WriterType::New();
+
 
     reader->SetFileName( imageFilename  );
-    writer->SetFileName( outputFilename  );
+
 
     reader->Update();
 
@@ -124,7 +124,12 @@ int otbSVMClassifierImage(int argc, char* argv[] )
     classifier->Update() ;
 
     /* Build the class map */
-    std::cout << "Output image creation" << std::endl;  
+    std::cout << "Output image creation" << std::endl;
+
+    typedef ClassifierType::ClassLabelType	                 OutputPixelType;
+    typedef itk::Image< OutputPixelType, Dimension >        OutputImageType;
+
+    
     OutputImageType::Pointer outputImage = OutputImageType::New();
 
     typedef itk::Index<Dimension>         myIndexType;
@@ -168,21 +173,30 @@ int otbSVMClassifierImage(int argc, char* argv[] )
 
     while (m_iter != m_last && !outIt.IsAtEnd())
     {
-      outIt.Set(static_cast<OutputPixelType>(m_iter.GetClassLabel()));
-      ++m_iter ;
-      ++outIt;
-      }
+    outIt.Set(m_iter.GetClassLabel());
+    ++m_iter ;
+    ++outIt;
+    }
 
 
+    typedef itk::Image< unsigned char, Dimension >        FileImageType;
+
+    
     typedef itk::RescaleIntensityImageFilter< OutputImageType,
-                                            OutputImageType > RescalerType;
+      FileImageType > RescalerType;
 
     RescalerType::Pointer rescaler = RescalerType::New();
     
-    rescaler->SetOutputMinimum( itk::NumericTraits< OutputPixelType >::min());
-    rescaler->SetOutputMaximum( itk::NumericTraits< OutputPixelType >::max());
+    rescaler->SetOutputMinimum( itk::NumericTraits< unsigned char >::min());
+    rescaler->SetOutputMaximum( itk::NumericTraits< unsigned char >::max());
 
     rescaler->SetInput( outputImage );
+
+    typedef otb::ImageFileWriter< FileImageType >         WriterType;
+	
+    WriterType::Pointer writer = WriterType::New();
+
+    writer->SetFileName( outputFilename  );
     writer->SetInput( rescaler->GetOutput() );
     
     writer->Update();

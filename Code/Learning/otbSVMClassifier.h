@@ -86,7 +86,7 @@ public:
   typedef typename Superclass::MembershipFunctionPointerVector 
     MembershipFunctionPointerVector ;
 
-  typedef unsigned int ClassLabelType ;
+  typedef int ClassLabelType ;
   typedef std::vector< ClassLabelType > ClassLabelVectorType ;
 
 //   /** Sets the target data that will be classified by this */

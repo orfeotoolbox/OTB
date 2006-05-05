@@ -302,11 +302,11 @@ SVMClassifier< TSample >
       }
     
 
-    unsigned int classLabel;
-    if(nr_class == 2)
-      classLabel = static_cast<unsigned int>(v+2);
-  else
-    classLabel = static_cast<unsigned int>(v);
+    ClassLabelType classLabel;
+//     if(nr_class == 2)
+//       classLabel = static_cast<ClassLabelType>(v+2);
+//   else
+    classLabel = static_cast<ClassLabelType>(v);
 
 //  std::cout << "Add instance " << classLabel << std::endl;
 //std::cout << "Add instance ident " << iterO.GetInstanceIdentifier() << std::endl;

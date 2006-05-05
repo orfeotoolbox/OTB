@@ -21,7 +21,6 @@
 #include <iostream>
 
 #include "otbSVMImageModelEstimator.h"
-#include "otbSVMMembershipFunction.h"
 
 #include "otbImageFileReader.h"
 
@@ -44,8 +43,7 @@ int otbSVMImageModelEstimatorTrain( int argc, char* argv[] )
     
     typedef std::vector<double>   VectorType;
     
-    typedef otb::SVMMembershipFunction< VectorType >
-      MembershipFunctionType;
+
     typedef otb::SVMImageModelEstimator< InputImageType,
                                   TrainingImageType >   EstimatorType;
 

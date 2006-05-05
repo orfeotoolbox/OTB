@@ -48,8 +48,17 @@ ADD_TEST(leTuSVMImageModelEstimatorTrain ${LEARNING_TESTS}
         otbSVMImageModelEstimatorTrain
 	${INPUTDATA}/ROI_QB_MUL_4.tif
 	${INPUTDATA}/ROI_QB_MUL_4_train.hd
-	${TEMP}/svm_model)
+	${TEMP}/svm_model_image)
 
+# -------            otb::SVMPointSetModelEstimator   --------------------		
+
+ADD_TEST(leTuSVMPointSetModelEstimatorNew ${LEARNING_TESTS}  
+        otbSVMPointSetModelEstimatorNew)
+
+ADD_TEST(leTuSVMPointSetModelEstimatorTrain ${LEARNING_TESTS}  
+        otbSVMPointSetModelEstimatorTrain
+	${TEMP}/svm_model_pointset)
+	
 	
 # -------            otb::SVMClassifier   -----------------------------	
 
@@ -60,7 +69,11 @@ ADD_TEST(leTuSVMClassifierImage ${LEARNING_TESTS}
         otbSVMClassifierImage
 	${INPUTDATA}/ROI_QB_MUL_4.tif
 	${INPUTDATA}/svm_model_image
-	${TEMP}/svm_classified_image.png)		
+	${TEMP}/svm_classified_image.png)
+
+ADD_TEST(leTuSVMClassifierPointSet ${LEARNING_TESTS}  
+        otbSVMClassifierPointSet
+	${INPUTDATA}/svm_model_pointset)
 	
 
 # -----------------------------------------------------------------------
@@ -77,8 +90,11 @@ otbSVMMembershipFunctionNew.cxx
 otbSVMMembershipFunctionLoadModel.cxx
 otbSVMImageModelEstimatorNew.cxx
 otbSVMImageModelEstimatorTrain.cxx
+otbSVMPointSetModelEstimatorNew.cxx
+otbSVMPointSetModelEstimatorTrain.cxx
 otbSVMClassifierNew.cxx
 otbSVMClassifierImage.cxx
+otbSVMClassifierPointSet.cxx
 )
 
 

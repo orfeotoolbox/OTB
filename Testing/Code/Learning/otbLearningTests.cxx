@@ -17,6 +17,9 @@ REGISTER_TEST(otbSVMMembershipFunctionNew);
 REGISTER_TEST(otbSVMMembershipFunctionLoadModel);
 REGISTER_TEST(otbSVMImageModelEstimatorNew);
 REGISTER_TEST(otbSVMImageModelEstimatorTrain);
+REGISTER_TEST(otbSVMPointSetModelEstimatorNew);
+REGISTER_TEST(otbSVMPointSetModelEstimatorTrain);
 REGISTER_TEST(otbSVMClassifierNew);
 REGISTER_TEST(otbSVMClassifierImage);
+REGISTER_TEST(otbSVMClassifierPointSet);
 }
