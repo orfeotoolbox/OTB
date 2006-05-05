@@ -33,6 +33,24 @@ ELSE(WIN32)
         )
 ENDIF(WIN32)
 
+SET(OTB_INCLUDE_DIRS_BUILD_TREE ${OTB_INCLUDE_DIRS_BUILD_TREE}
+  ${OTB_SOURCE_DIR}/Utilities/GDAL/frmts
+  ${OTB_SOURCE_DIR}/Utilities/GDAL/frmts/raw
+  ${OTB_SOURCE_DIR}/Utilities/GDAL/frmts/gtiff/libgeotiff
+  ${OTB_SOURCE_DIR}/Utilities/GDAL/frmts/gtiff/libtiff
+  ${OTB_SOURCE_DIR}/Utilities/GDAL/frmts/gtiff
+#  ${OTB_SOURCE_DIR}/Utilities/GDAL/frmts/ceos
+#  ${OTB_SOURCE_DIR}/Utilities/GDAL/frmts/envisat
+  ${OTB_SOURCE_DIR}/Utilities/GDAL/frmts/msg
+  ${OTB_SOURCE_DIR}/Utilities/GDAL/frmts/msg/PublicDecompWT/COMP/WT/Inc
+  ${OTB_SOURCE_DIR}/Utilities/GDAL/gcore
+  ${OTB_SOURCE_DIR}/Utilities/GDAL/ogr
+  ${OTB_SOURCE_DIR}/Utilities/GDAL/ogr/ogrsf_frmts
+  ${OTB_SOURCE_DIR}/Utilities/GDAL/port
+  ${OTB_SOURCE_DIR}/Utilities/GDAL/alg
+)
+
+
 #-----------------------------------------------------------------------------
 # Include directories needed for .cxx files in OTB.  These include
 # directories will NOT be available to user projects.
@@ -54,6 +72,7 @@ SET(OTB_INCLUDE_DIRS_INSTALL_TREE ${OTB_INCLUDE_DIRS_INSTALL_TREE}
   ${OTB_INSTALL_INCLUDE_DIR}/Visu
   ${OTB_INSTALL_INCLUDE_DIR}/Utilities
   ${OTB_INSTALL_INCLUDE_DIR}/Utilities/CAI
+  ${OTB_INSTALL_INCLUDE_DIR}/Utilities/GDAL
 )
 
 #IF(NOT OTB_USE_SYSTEM_VXL)
