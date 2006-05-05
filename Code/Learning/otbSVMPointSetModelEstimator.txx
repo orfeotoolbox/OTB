@@ -111,19 +111,26 @@ SVMPointSetModelEstimator<TInputPointSet,  TTrainingPointSet>
   
 
   std::cout << " Before while " << std::endl;
+
+  unsigned int dataId = 0;
   while(inIt!=inEnd && trIt!=trEnd)
     {
 
     // If label != 0 
 
-      this->m_Labels.push_back(trIt.Value()[0]);
+    typename TTrainingPointSet::PixelType label;
+    trainingPointSet->GetPointData( dataId, & label );   
+    this->m_Labels.push_back(label);
 
-      std::cout << " Label " <<trIt.Value()[0] << std::endl;
+      std::cout << " Label " << label << std::endl;
+
+      typename TInputPointSet::PixelType value;
+      inputPointSet->GetPointData( dataId, & value );   
 
       typename Superclass::MeasurementVectorType v;
 
-      typename InputPointType::ConstIterator pIt = inIt.Value().Begin();
-      typename InputPointType::ConstIterator pEnd = inIt.Value().End();
+      typename TInputPointSet::PixelType::iterator pIt = value.begin();
+      typename TInputPointSet::PixelType::iterator pEnd = value.end();
 
       while(pIt!=pEnd)
 	{
@@ -135,6 +142,7 @@ SVMPointSetModelEstimator<TInputPointSet,  TTrainingPointSet>
 
     ++inIt;
     ++trIt;
+    ++dataId;
     }
 
   std::cout << " Before prepare data " << std::endl;

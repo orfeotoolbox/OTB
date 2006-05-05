@@ -121,6 +121,11 @@ public:
 //    */
 //   void Update() ;
 
+  /** Set the number of classes. */
+  itkSetMacro(NumberOfClasses, unsigned int);
+  
+  /** Get the number of classes. */
+  itkGetConstReferenceMacro(NumberOfClasses, unsigned int);
 
   /** Gets the problem */
   struct svm_problem& GetProblem();
@@ -165,7 +170,8 @@ private:
   SVMModel(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
 
-  unsigned int                    m_NumberOfModels;
+//  unsigned int                    m_NumberOfModels;
+  unsigned int         m_NumberOfClasses;
 
   /** Container to hold the SVM model itself */
   struct svm_model* m_Model;

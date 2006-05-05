@@ -134,6 +134,7 @@ SVMModelEstimator<InputPixelType, LabelPixelType>
   //std::cout << "Training done" << std::endl;
     
   m_Model->SetModel(tempModel);
+  m_Model->SetNumberOfClasses( this->GetNumberOfClasses() );
   
   //std::cout << "Training done" << std::endl;
     
