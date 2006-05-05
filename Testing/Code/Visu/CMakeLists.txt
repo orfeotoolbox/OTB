@@ -50,6 +50,8 @@ TARGET_LINK_LIBRARIES(otbImageViewerWithitkVectorImage OTBVisu OTBIO OTBCommon c
 ADD_EXECUTABLE(otbImageViewerWithitkImage otbImageViewerWithitkImage.cxx)
 TARGET_LINK_LIBRARIES(otbImageViewerWithitkImage OTBVisu OTBIO OTBCommon cai ITKIO ITKCommon)
 
+ADD_EXECUTABLE(otbImageViewerAS otbImageViewerAS.cxx)
+TARGET_LINK_LIBRARIES(otbImageViewerAS OTBVisu OTBIO OTBCommon cai ITKIO ITKCommon)
 
 ENDIF( NOT OTB_DISABLE_CXX_TESTING )
 

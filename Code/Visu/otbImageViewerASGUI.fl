@@ -1,0 +1,117 @@
+# data file for the Fltk User Interface Designer (fluid)
+version 1.0107 
+header_name {.h} 
+code_name {.cxx}
+class otbImageViewerASGUI {open
+} {
+  Function {otbImageViewerASGUI()} {} {}
+  Function {~otbImageViewerASGUI()} {return_type virtual
+  } {}
+  Function {CreateGUI()} {open
+  } {
+    Fl_Window iviewWindowPrincipal {
+      label {Principal Window} open
+      xywh {474 32 790 730} type Double box PLASTIC_DOWN_BOX color 34 labelsize 12 align 33 visible
+    } {
+      Fl_Group glWindowGroupPrincipal {open
+        xywh {-5 -5 795 680}
+      } {
+        Fl_Button bUndo {
+          label Undo
+          callback {EraseLastClickedPoint();}
+          xywh {70 455 64 25} box SHADOW_BOX labelfont 1 labelcolor 176
+        }
+        Fl_Button bLearn {
+          label Learn
+          callback {LearnAlgorythm();}
+          xywh {215 455 64 25} box SHADOW_BOX labelfont 1 labelcolor 176
+        }
+        Fl_Button bClassif {
+          label Classif
+          callback {ClassificationAlgorythm();}
+          xywh {215 490 64 25} box SHADOW_BOX labelfont 1 labelcolor 176
+        }
+        Fl_Button bReset {
+          label Reset
+          callback {EraseAllClickedPoints();}
+          xywh {70 490 65 25} box SHADOW_BOX labelfont 1 labelcolor 176
+        }
+        Fl_Button bC2 {
+          label C2
+          callback {DisplaySecondClass();}
+          xywh {585 470 64 25} box SHADOW_BOX labelfont 1 labelcolor 176
+        }
+        Fl_Button bC1 {
+          label C1
+          callback {DisplayFirstClass();}
+          xywh {470 470 64 25} box SHADOW_BOX labelfont 1 labelcolor 176
+        }
+        Fl_Menu_Bar {} {open
+          xywh {0 0 790 25} color 7 labelfont 1 labelcolor 136
+        } {
+          Submenu {} {
+            label File open
+            xywh {30 30 100 20} labelfont 1 labelcolor 176
+          } {
+            MenuItem {} {
+              label {Load File}
+              callback {LoadImage();}
+              xywh {15 15 30 20}
+            }
+            MenuItem {} {
+              label Exit
+              callback {exit(-1);}
+              xywh {15 15 30 20}
+            }
+          }
+        }
+        Fl_Box {} {
+          label Avant
+          xywh {25 70 340 375} box EMBOSSED_BOX
+          code0 {\#include <otbPrincipalImageViewAS.h>}
+          code1 {CreatePrincipalImageViewBeforeClassif( glWindowGroupPrincipal, o );}
+          class Fl_Gl_Window
+        }
+        Fl_Box {} {
+          label {Après}
+          xywh {397 70 340 375} box EMBOSSED_BOX
+          code0 {\#include <otbPrincipalImageViewAS.h>}
+          code1 {CreatePrincipalImageViewAfterClassif( glWindowGroupPrincipal, o );}
+          class Fl_Gl_Window
+        }
+        Fl_Text_Display {} {
+          label Commentaires
+          xywh {15 570 740 100} labelfont 1 labelcolor 176
+        }
+      }
+    }
+  }
+  Function {CreatePrincipalImageViewBeforeClassif( Fl_Group *,Fl_Gl_Window * w )} {return_type {virtual void}
+  } {}
+  Function {CreatePrincipalImageViewAfterClassif( Fl_Group *,Fl_Gl_Window * w )} {return_type {virtual void}
+  } {}
+  Function {SetImage( itk::ImageBase<3> * img )} {return_type {virtual void}
+  } {}
+  Function {Show(void)} {return_type {virtual void}
+  } {}
+  Function {Hide(void)} {return_type {virtual void}
+  } {}
+  Function {Update(void)} {return_type {virtual void}
+  } {}
+  Function {Synchronize(void)} {return_type {virtual void}
+  } {}
+  Function {EraseLastClickedPoint()} {return_type {virtual void}
+  } {}
+  Function {EraseAllClickedPoints()} {return_type {virtual void}
+  } {}
+  Function {LearnAlgorythm()} {return_type {virtual void}
+  } {}
+  Function {ClassificationAlgorythm()} {return_type {virtual void}
+  } {}
+  Function {DisplaySecondClass()} {return_type {virtual void}
+  } {}
+  Function {DisplayFirstClass()} {return_type {virtual void}
+  } {}
+  Function {LoadImage()} {return_type {virtual void}
+  } {}
+} 
