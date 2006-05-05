@@ -103,6 +103,13 @@ public:
   /** Get the radius of the local region. */
   itkGetConstReferenceMacro(Radius, SizeType);
 
+
+  /** Set the radius of the overlap of the local region where to apply the Hough filter. */
+  itkSetMacro(Overlap, SizeType);
+
+  /** Get the radius of the overlap. */
+  itkGetConstReferenceMacro(Overlap, SizeType);
+
   /** Set the number of lines we are looking for. */
   itkSetMacro(NumberOfLines, unsigned int);
 
@@ -142,6 +149,9 @@ private:
 
   /** Radius used to define the local region. */
   SizeType m_Radius;
+
+  /** Radius used to define the overlap of local regions. */
+  SizeType m_Overlap;
   
   /** Parameter of the Hough filter : number of lines we are looking for. */
   unsigned int  m_NumberOfLines;

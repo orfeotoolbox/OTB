@@ -31,6 +31,7 @@ LocalHoughFilter<TInputImage>::LocalHoughFilter() : ImageToLineSpatialObjectList
 						    m_Threshold(0)
 {
    m_Radius.Fill(20);
+   m_Overlap.Fill(10);
 }
 
 template <class TInputImage>
@@ -147,7 +148,7 @@ LocalHoughFilter<TInputImage>
    // Loop on the input image
    
    // Direction X
-   for ( unsigned long x=0; x < size[0]; x += m_Radius[0] )
+   for ( unsigned long x=0; x < size[0]; x += (m_Radius[0]-m_Overlap[0]) )
       {
 
       // Initialize the extract ROI filter in the direction X	
@@ -161,7 +162,7 @@ LocalHoughFilter<TInputImage>
 
 
       // Direction Y
-      for ( unsigned long y=0; y < size[1]; y += m_Radius[1] )
+      for ( unsigned long y=0; y < size[1]; y += (m_Radius[1]-m_Overlap[1]) )
          {	
  	 
   	 // Initialize the extract ROI filter in the direction Y	
