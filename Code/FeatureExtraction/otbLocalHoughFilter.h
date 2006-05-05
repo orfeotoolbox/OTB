@@ -118,6 +118,11 @@ public:
   /** Set/Get the variance of the gaussian bluring for the accumulator */
   itkSetMacro(Variance,float);
   itkGetMacro(Variance,float);
+
+  itkSetMacro(Threshold,float);
+  itkGetMacro(Threshold,float);
+
+
   
 protected:
   LocalHoughFilter();
@@ -146,6 +151,9 @@ private:
   
   /** Radius of the disc to remove from the accumulator (default = 10). */
   float m_DiscRadius;
+
+  /** Threshold abouve which a pixel is consedered as valid */
+  float m_Threshold;
   
  LinePointer LinePointResearch(LineIterator itLines, InputImageType *localImage, IndexType origin);
 

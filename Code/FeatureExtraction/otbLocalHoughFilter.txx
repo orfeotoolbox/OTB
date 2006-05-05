@@ -27,7 +27,8 @@ template <class TInputImage>
 LocalHoughFilter<TInputImage>::LocalHoughFilter() : ImageToLineSpatialObjectListFilter<TInputImage>(),
 						    m_NumberOfLines(1),
 						    m_Variance(5),
-						    m_DiscRadius(10)
+						    m_DiscRadius(10),
+						    m_Threshold(0)
 {
    m_Radius.Fill(20);
 }
@@ -229,6 +230,7 @@ LocalHoughFilter<TInputImage>
        	 m_HoughFilter->SetNumberOfLines( m_NumberOfLines );
        	 m_HoughFilter->SetVariance( m_Variance );
        	 m_HoughFilter->SetDiscRadius( m_DiscRadius );
+	 m_HoughFilter->SetThreshold( m_Threshold );
        	 
       	 m_HoughFilter->Modified();
       	    	 
