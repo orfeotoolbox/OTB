@@ -28,12 +28,12 @@ int otbSVMModelAllocateProblem( int argc, char* argv[] )
   try 
     {         
         typedef unsigned char                                   InputPixelType;
+	typedef unsigned char                                   LabelPixelType;
         const   unsigned int        	                        Dimension = 2;
 
         typedef itk::Image< InputPixelType,  Dimension >        InputImageType;
 
-	typedef itk::Vector< float, 3 > MeasurementVectorType ;
-        typedef otb::SVMModel< MeasurementVectorType >   ModelType;
+        typedef otb::SVMModel< InputPixelType, LabelPixelType >   ModelType;
 	
 	
         ModelType::Pointer svmModel = ModelType::New();

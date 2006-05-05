@@ -21,7 +21,6 @@
 #include <iostream>
 
 #include "otbSVMPointSetModelEstimator.h"
-#include "otbSVMMembershipFunction.h"
 
 
 int otbSVMPointSetModelEstimatorNew( int argc, char* argv[] )

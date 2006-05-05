@@ -15,22 +15,20 @@
 
 #include <fstream>
 
-#include "itkVector.h"
 #include "itkPoint.h"
-#include "itkImage.h"
+#include "itkPointSet.h"
 #include "itkVectorImage.h"
 
 #include "itkPointSetToListAdaptor.h"
 #include "itkSubsample.h"
 #include "itkListSample.h"
-#include "itkMinimumDecisionRule.h"
 #include "otbSVMClassifier.h"
-#include "otbSVMMembershipFunction.h"
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
 #include "itkImageRegionIterator.h"
 #include "itkRescaleIntensityImageFilter.h"
-#include "itkEuclideanDistance.h"
+
+
 
 int otbSVMClassifierImage(int argc, char* argv[] )
 {
@@ -54,7 +52,9 @@ int otbSVMClassifierImage(int argc, char* argv[] )
 
     /** Read the input image and build the sample */
 
-    typedef float                                InputPixelType;
+    typedef double                               InputPixelType;
+    typedef std::vector<InputPixelType>          InputVectorType;
+    typedef int                                LabelPixelType;
 
 
     const   unsigned int        	         Dimension = 2;
@@ -73,9 +73,18 @@ int otbSVMClassifierImage(int argc, char* argv[] )
 
     reader->Update();
 
-    typedef itk::Vector< float, 3 > MeasurementVectorType ;
-    typedef itk::Statistics::ListSample< MeasurementVectorType > SampleType ;
-    SampleType::Pointer sample = SampleType::New() ;
+
+    typedef itk::PointSet< InputVectorType,  Dimension >
+                                                       MeasurePointSetType;
+
+
+    MeasurePointSetType::Pointer mPSet = MeasurePointSetType::New();
+
+    typedef MeasurePointSetType::PointType    MeasurePointType;
+
+    typedef MeasurePointSetType::PointsContainer      MeasurePointsContainer;
+
+    MeasurePointsContainer::Pointer mCont = MeasurePointsContainer::New();
 
 
     typedef itk::ImageRegionIterator< InputImageType>  InputIteratorType;
@@ -85,26 +94,46 @@ int otbSVMClassifierImage(int argc, char* argv[] )
     inIt.GoToBegin();
     
 
+    unsigned int pointId;
     while(!inIt.IsAtEnd() )
       {
-      MeasurementVectorType mv ;
-      mv[0] = inIt.Get()[0];
-      mv[1] = inIt.Get()[1];
-      mv[2] = inIt.Get()[2];
 
-  
-      sample->PushBack(mv) ;
+      MeasurePointType mP;
+
+      mP[0] = pointId;
+      mP[1] = pointId;
+
+
+      InputVectorType measure; 
+      //measure.push_back(pow(pointId,2.0));
+      measure.push_back(static_cast<InputPixelType>(2.0*pointId));
+      measure.push_back(static_cast<InputPixelType>(-10));
+
+
+      mCont->InsertElement( pointId , mP );
+      mPSet->SetPointData( pointId, measure );   
+
 
       ++inIt;
+      ++pointId;
       }
 
-  
+
+    mPSet->SetPoints( mCont );
+
+    std::cout << "PointSet built" << std::endl;  
+
+    typedef itk::Statistics::PointSetToListAdaptor< MeasurePointSetType >
+      SampleType;
+    SampleType::Pointer sample = SampleType::New();
+    sample->SetPointSet( mPSet );
+
 
     
 
 
     /** preparing classifier and decision rule object */
-    typedef otb::SVMModel< MeasurementVectorType > ModelType;
+    typedef otb::SVMModel< InputPixelType, LabelPixelType > ModelType;
 
     ModelType::Pointer model = ModelType::New();
 
@@ -112,9 +141,7 @@ int otbSVMClassifierImage(int argc, char* argv[] )
 
     int numberOfClasses = model->GetNumberOfClasses();
     
-    typedef otb::SVMClassifier< SampleType > ClassifierType ;
-    typedef itk::MinimumDecisionRule DecisionRuleType ;
-
+    typedef otb::SVMClassifier< SampleType, LabelPixelType > ClassifierType ;
 
     ClassifierType::Pointer classifier = ClassifierType::New() ;
   

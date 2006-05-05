@@ -32,12 +32,12 @@ ADD_TEST(leTuSVMModelLoadSave ${LEARNING_TESTS}
 
 # -------            otb::SVMembershipFunction   --------------------
 
-ADD_TEST(leTuSVMMembershipFunctionNew ${LEARNING_TESTS}  
-        otbSVMMembershipFunctionNew)
+#ADD_TEST(leTuSVMMembershipFunctionNew ${LEARNING_TESTS}  
+#        otbSVMMembershipFunctionNew)
 
-ADD_TEST(leTuSVMMembershipFunctionLoadModel ${LEARNING_TESTS}  
-        otbSVMMembershipFunctionLoadModel
-	${INPUTDATA}/svm_model)
+#ADD_TEST(leTuSVMMembershipFunctionLoadModel ${LEARNING_TESTS}  
+#        otbSVMMembershipFunctionLoadModel
+#	${INPUTDATA}/svm_model)
 
 # -------            otb::SVMImageModelEstimator   --------------------	
 
@@ -86,8 +86,8 @@ otbSVMModelNew.cxx
 otbSVMModelAllocateProblem.cxx
 otbSVMModelLoad.cxx
 otbSVMModelLoadSave.cxx
-otbSVMMembershipFunctionNew.cxx
-otbSVMMembershipFunctionLoadModel.cxx
+#otbSVMMembershipFunctionNew.cxx
+#otbSVMMembershipFunctionLoadModel.cxx
 otbSVMImageModelEstimatorNew.cxx
 otbSVMImageModelEstimatorTrain.cxx
 otbSVMPointSetModelEstimatorNew.cxx

@@ -22,7 +22,6 @@
 #include <iostream>
 
 #include "otbSVMImageModelEstimator.h"
-#include "otbSVMMembershipFunction.h"
 
 
 int otbSVMImageModelEstimatorNew( int argc, char* argv[] )
