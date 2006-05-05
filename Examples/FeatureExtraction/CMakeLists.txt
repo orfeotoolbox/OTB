@@ -31,6 +31,10 @@ ADD_EXECUTABLE(AssymmetricFusionOfLineDetectorExample
 AssymmetricFusionOfLineDetectorExample.cxx)
 TARGET_LINK_LIBRARIES(AssymmetricFusionOfLineDetectorExample OTBCommon OTBIO ITKCommon ITKIO)
 
+ADD_EXECUTABLE(LocalHoughExample LocalHoughExample.cxx )
+TARGET_LINK_LIBRARIES(LocalHoughExample ITKIO OTBIO OTBCommon ITKCommon  ${CAI_LIBRARY} ${GDAL_LIBRARY})
+
+
 ADD_EXECUTABLE(ExtractSegmentsByStepsExample
 ExtractSegmentsByStepsExample.cxx)
 TARGET_LINK_LIBRARIES(ExtractSegmentsByStepsExample OTBCommon OTBIO ITKCommon ITKIO)
