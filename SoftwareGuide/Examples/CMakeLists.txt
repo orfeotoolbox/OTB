@@ -184,6 +184,7 @@ SET( OTB_EXAMPLES_SRCS
   ${OTB_SOURCE_DIR}/Examples/FeatureExtraction/RatioLineDetectorExample.cxx
   ${OTB_SOURCE_DIR}/Examples/FeatureExtraction/CorrelationLineDetectorExample.cxx
   ${OTB_SOURCE_DIR}/Examples/FeatureExtraction/AssymmetricFusionOfLineDetectorExample.cxx
+  ${OTB_SOURCE_DIR}/Examples/FeatureExtraction/LocalHoughExample.cxx  
   ${OTB_SOURCE_DIR}/Examples/FeatureExtraction/ExtractSegmentsByStepsExample.cxx
   ${OTB_SOURCE_DIR}/Examples/FeatureExtraction/ExtractSegmentsExample.cxx
   ${OTB_SOURCE_DIR}/Examples/FeatureExtraction/TouziEdgeDetectorExample.cxx
