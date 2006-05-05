@@ -15,13 +15,19 @@
 
 #include <fstream>
 
-#include "itkPoint.h"
+/*#include "itkPoint.h"
 #include "itkPointSet.h"
-#include "itkVectorImage.h"
+
 
 #include "itkPointSetToListAdaptor.h"
-#include "itkSubsample.h"
+#include "itkSubsample.h"*/
+
+
 #include "itkListSample.h"
+
+
+#include "itkVectorImage.h"
+#include "itkImageToListAdaptor.h"
 #include "otbSVMClassifier.h"
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
@@ -59,7 +65,7 @@ int otbSVMClassifierImage(int argc, char* argv[] )
 
     const   unsigned int        	         Dimension = 2;
 
-    typedef itk::VectorImage< InputPixelType,  Dimension >	InputImageType;
+    typedef itk::Image< itk::FixedArray<InputPixelType,3>,  Dimension >	InputImageType;
 
 
     typedef otb::ImageFileReader< InputImageType  >         ReaderType;
@@ -70,10 +76,11 @@ int otbSVMClassifierImage(int argc, char* argv[] )
 
     reader->SetFileName( imageFilename  );
 
-
     reader->Update();
 
+    std::cout << "Image read" << std::endl;  
 
+/*
     typedef itk::PointSet< InputVectorType,  Dimension >
                                                        MeasurePointSetType;
 
@@ -92,32 +99,37 @@ int otbSVMClassifierImage(int argc, char* argv[] )
 			     reader->GetOutput()->GetBufferedRegion() );
     
     inIt.GoToBegin();
-    
 
-    unsigned int pointId;
+    std::cout << "Building the pointset" << std::endl;  
+
+    unsigned long pointId=0;
     while(!inIt.IsAtEnd() )
       {
 
+
       MeasurePointType mP;
 
-      mP[0] = pointId;
-      mP[1] = pointId;
+      mP[0] = inIt.GetIndex()[0];
+      mP[1] = inIt.GetIndex()[1];
 
 
       InputVectorType measure; 
-      //measure.push_back(pow(pointId,2.0));
-      measure.push_back(static_cast<InputPixelType>(2.0*pointId));
-      measure.push_back(static_cast<InputPixelType>(-10));
+      measure.push_back(inIt.Get()[0]);
+      measure.push_back(inIt.Get()[1]);
+      measure.push_back(inIt.Get()[2]);
+
 
 
       mCont->InsertElement( pointId , mP );
       mPSet->SetPointData( pointId, measure );   
 
 
+
       ++inIt;
       ++pointId;
       }
 
+    std::cout << "Set the points" << std::endl;  
 
     mPSet->SetPoints( mCont );
 
@@ -127,9 +139,12 @@ int otbSVMClassifierImage(int argc, char* argv[] )
       SampleType;
     SampleType::Pointer sample = SampleType::New();
     sample->SetPointSet( mPSet );
+*/
 
+    typedef itk::Statistics::ImageToListAdaptor< InputImageType > SampleType;
+    SampleType::Pointer sample = SampleType::New();
 
-    
+    sample->SetImage(reader->GetOutput());
 
 
     /** preparing classifier and decision rule object */

@@ -17,8 +17,8 @@
 
 namespace otb{ 
 
-template< class TSample >
-SVMClassifier< TSample >
+template< class TSample, class TLabel >
+SVMClassifier< TSample, TLabel >
 ::SVMClassifier()
 {
   m_Sample = 0 ;
@@ -26,9 +26,9 @@ SVMClassifier< TSample >
   m_Model = SVMModelType::New();
 }
 
-template< class TSample >
+template< class TSample, class TLabel >
 void
-SVMClassifier< TSample >
+SVMClassifier< TSample, TLabel >
 ::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   Superclass::PrintSelf(os,indent);
@@ -46,9 +46,9 @@ SVMClassifier< TSample >
 //   os << indent << "Output: " << m_Output << std::endl;
 }
 
-// template< class TSample >
+// template< class TSample, class TLabel >
 // void
-// SVMClassifier< TSample >
+// SVMClassifier< TSample, TLabel >
 // ::SetSample(const TSample* sample)
 // {
 //   std::cout << "SVMClassifier::SetSample enter"  << std::endl;
@@ -60,26 +60,26 @@ SVMClassifier< TSample >
 //   std::cout << "SVMClassifier::SetSample exit"  << std::endl;
 // }
 
-// template< class TSample >
+// template< class TSample, class TLabel >
 // const TSample*
-// SVMClassifier< TSample >
+// SVMClassifier< TSample, TLabel >
 // ::GetSample() const
 // {
 //   return m_Sample ;
 // }
 
-// template< class TSample >
+// template< class TSample, class TLabel >
 // void
-// SVMClassifier< TSample >
+// SVMClassifier< TSample, TLabel >
 // ::SetMembershipFunctionClassLabels(ClassLabelVectorType& labels)
 // {
 //   m_ClassLabels = labels ;
 // }
 
 
-template< class TSample >
+template< class TSample, class TLabel >
 void
-SVMClassifier< TSample >
+SVMClassifier< TSample, TLabel >
 ::Update()
 {
   this->GenerateData();
@@ -87,9 +87,9 @@ SVMClassifier< TSample >
 
 
 
-template< class TSample >
+template< class TSample, class TLabel >
 void
-SVMClassifier< TSample >
+SVMClassifier< TSample, TLabel >
 ::GenerateData()
 {
 
@@ -159,17 +159,17 @@ SVMClassifier< TSample >
 //     }
 }
 
-template< class TSample >
-typename SVMClassifier< TSample >::OutputType*
-SVMClassifier< TSample >
+template< class TSample, class TLabel >
+typename SVMClassifier< TSample, TLabel >::OutputType*
+SVMClassifier< TSample, TLabel >
 ::GetOutput() 
 {
   return m_Output ;
 }
 
-template< class TSample >
+template< class TSample, class TLabel >
 void
-SVMClassifier< TSample >
+SVMClassifier< TSample, TLabel >
 ::DoClassification()
 {
 

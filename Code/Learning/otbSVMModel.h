@@ -52,7 +52,7 @@ namespace otb
  *
  * \ingroup ClassificationFilters 
  */
-template <class TVector >
+template <class TInputPixel, class TLabel >
 class ITK_EXPORT SVMModel : public itk::DataObject
 {
 public:
@@ -76,9 +76,9 @@ public:
 //   itkGetConstReferenceMacro(NumberOfModels, unsigned int);
 
 
-  /** Type definitions for the training image. */
-  typedef          TVector          InputSampleType;
-  //typedef typename TVector::Pointer InputSamplePointer;
+  typedef TInputPixel InputPixelType;
+  typedef TLabel LabelType;
+
 
   /** Type definitions for the training image. */
   //typedef typename TTrainingImage::Pointer TrainingImagePointer;

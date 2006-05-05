@@ -59,7 +59,7 @@ namespace otb{
  *
  */
 
-template< class TSample >
+template< class TSample, class TLabel >
 class ITK_EXPORT SVMClassifier : 
       public itk::Statistics::SampleClassifier< TSample >
 {
@@ -80,13 +80,16 @@ public:
   /** typedefs from TSample object */
   typedef typename TSample::MeasurementType MeasurementType ;
   typedef typename TSample::MeasurementVectorType MeasurementVectorType ;
-
+  /*typedef typename itk::NumericTraits<TSample::ValueType>::RealType
+   InputPixelType ;*/
+  typedef typename TSample::MeasurementVectorType::ValueType InputPixelType ;
   
   /** typedefs from Superclass */
   typedef typename Superclass::MembershipFunctionPointerVector 
     MembershipFunctionPointerVector ;
 
-  typedef int ClassLabelType ;
+  // FIXME :  typedef TLabel ClassLabelType ;
+  typedef unsigned int ClassLabelType ;
   typedef std::vector< ClassLabelType > ClassLabelVectorType ;
 
 //   /** Sets the target data that will be classified by this */
@@ -111,9 +114,9 @@ public:
 
 
   /** Type definitions for the SVM Model. */
-  typedef itk::VectorImage< float,  2 >	TInputImage;
 
-  typedef SVMModel< MeasurementVectorType >   SVMModelType;
+
+  typedef SVMModel< InputPixelType, TLabel >   SVMModelType;
   typedef typename SVMModelType::Pointer     SVMModelPointer;
   
   /** Set the model */

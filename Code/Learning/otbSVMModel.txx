@@ -23,8 +23,8 @@
 namespace otb
 {
 
-template <class TVector >
-SVMModel<TVector>::SVMModel()
+template <class TInputPixel, class TLabel>
+SVMModel< TInputPixel, TLabel >::SVMModel()
 {
 // FIXME:
   m_Model = Malloc(svm_model,1);
@@ -39,8 +39,8 @@ SVMModel<TVector>::SVMModel()
 
 }
 
-template <class TVector >
-SVMModel<TVector>::~SVMModel()
+template <class TInputPixel, class TLabel >
+SVMModel<TInputPixel, TLabel>::~SVMModel()
 {
 // FIXME: pbs. when deleting de problem ....
 //  std::cout << "SVMModel destructor" << std::endl;
@@ -60,9 +60,9 @@ SVMModel<TVector>::~SVMModel()
 
 }
 
-template <class TVector >
+template <class TInputPixel, class TLabel >
 void
-SVMModel<TVector>
+SVMModel<TInputPixel, TLabel>
 ::AllocateProblem(int l, long int elements)
   {
     //std::cout << "SVMModel::AllocateProblem - enter" << std::endl;
@@ -88,9 +88,9 @@ SVMModel<TVector>
   }
 
 
-template <class TVector >
+template <class TInputPixel, class TLabel >
 void
-SVMModel<TVector>
+SVMModel<TInputPixel, TLabel>
 ::SetModel(struct svm_model* aModel)
   {
     //std::cout << "SVMModel::SetModel - enter" << std::endl;
@@ -101,9 +101,9 @@ SVMModel<TVector>
   }
 
 
-template <class TVector >
+template <class TInputPixel, class TLabel >
 struct svm_problem&
-SVMModel<TVector>
+SVMModel<TInputPixel, TLabel>
 ::GetProblem()
   {
     return m_Problem;
@@ -119,9 +119,9 @@ SVMModel<TVector>
 //     return x_space;
   }
 
-template <class TVector >
+template <class TInputPixel, class TLabel >
 struct svm_node*
-SVMModel<TVector>
+SVMModel<TInputPixel, TLabel>
 ::GetXSpace()
   {
     return x_space;
@@ -129,9 +129,9 @@ SVMModel<TVector>
   }
 
 
-template <class TVector >
+template <class TInputPixel, class TLabel >
 void
-SVMModel<TVector>
+SVMModel<TInputPixel, TLabel>
 ::SaveModel(const char* model_file_name)
   {
     if(svm_save_model(model_file_name, m_Model)!=0)
@@ -141,9 +141,9 @@ SVMModel<TVector>
       }
   }
 
-template <class TVector >
+template <class TInputPixel, class TLabel >
 void
-SVMModel<TVector>
+SVMModel<TInputPixel, TLabel>
 ::LoadModel(const char* model_file_name)
   {
     m_Model = svm_load_model(model_file_name);
@@ -154,9 +154,9 @@ SVMModel<TVector>
       }
   }
 
-template <class TVector >
+template <class TInputPixel, class TLabel >
 void
-SVMModel<TVector>
+SVMModel<TInputPixel, TLabel>
 ::PrintSelf(std::ostream& os, itk::Indent indent) const
 {  Superclass::PrintSelf(os,indent); }
 // FIXME

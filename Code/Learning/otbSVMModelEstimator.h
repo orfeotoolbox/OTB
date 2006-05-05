@@ -74,7 +74,7 @@ public:
 
   /** Type definitions for the SVM Model. */
   typedef std::vector< InputPixelType > MeasurementVectorType ;
-  typedef SVMModel< MeasurementVectorType >   SVMModelType;
+  typedef SVMModel< InputPixelType, LabelPixelType >   SVMModelType;
   typedef typename SVMModelType::Pointer     SVMModelPointer;
 
   /** Set the model */

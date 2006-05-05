@@ -44,7 +44,7 @@ int otbSVMClassifierPointSet(int argc, char* argv[] )
 
     typedef double InputPixelType;
     typedef int LabelPixelType;
-    typedef std::vector<double>                             InputVectorType;
+    typedef std::vector<InputPixelType>                             InputVectorType;
     const   unsigned int        	                    Dimension = 2;
 
     typedef itk::PointSet< InputVectorType,  Dimension >
@@ -93,7 +93,7 @@ int otbSVMClassifierPointSet(int argc, char* argv[] )
 
 
     /** preparing classifier and decision rule object */
-    typedef otb::SVMModel< InputPixelType, LabelPixelType > ModelType;
+    typedef otb::SVMModel< SampleType::MeasurementVectorType::ValueType, LabelPixelType > ModelType;
 
     ModelType::Pointer model = ModelType::New();
 
