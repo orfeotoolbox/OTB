@@ -15,6 +15,15 @@ SET(TOL 0.0)
 SET(COMMON_TESTS ${CXX_TEST_PATH}/otbCommonTests)
 SET(IO_TESTS     ${CXX_TEST_PATH}/otbIOTests)
 
+# ---  STREAMING   ---
+ADD_TEST(ioTvStreamingImageFilterTest ${IO_TESTS} 
+   --compare-image ${TOL} ${TEMP}/ioStreamingImageFilterTestRef.png
+                      ${TEMP}/ioStreamingImageFilterTest.png
+         otbStreamingImageFilterTest
+         ${INPUTDATA}/poupees_1canal.hd
+         ${TEMP}/ioStreamingImageFilterTest.png
+         )
+
 # ---  RADARSAT (GDAL)  ---
 ADD_TEST(ioTvMultiMonoChannelROI_RADARSAT2BSQ ${COMMON_TESTS} 
          otbMultiToMonoChannelExtractROI
@@ -350,7 +359,7 @@ otbImageFileReaderRGBTest.cxx
 otbImageFileWriterRGBTest.cxx
 otbMultiToMonoChannelExtractROISAR.cxx
 otbImageFileReaderERS.cxx
-
+otbStreamingImageFilterTest.cxx
 )
 
 INCLUDE_DIRECTORIES("${OTBTesting_BINARY_DIR}")

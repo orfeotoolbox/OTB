@@ -21,4 +21,5 @@ REGISTER_TEST(otbImageFileReaderRGBTest);
 REGISTER_TEST(otbImageFileWriterRGBTest);
 REGISTER_TEST(otbMultiToMonoChannelExtractROISAR);
 REGISTER_TEST(otbImageFileReaderERS);
+REGISTER_TEST(otbStreamingImageFilterTest);
 }
