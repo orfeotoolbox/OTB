@@ -109,10 +109,7 @@ int main( int argc, char * argv[] )
   typedef otb::ImageFileWriter< OutputImageType >  WriterType;
   // Software Guide : EndCodeSnippet
 
-  //  Software Guide : BeginLatex
-  //  
-
-
+  
   //  Software Guide : BeginLatex
   //
   //  Both the filter and the reader are created by invoking their \code{New()}
@@ -166,9 +163,7 @@ int main( int argc, char * argv[] )
   localHough->SetThreshold( LocalHoughThreshold );	
   
   
-  // Software Guide : EndCodeSnippet
-
-
+  
 
   //  Software Guide : BeginLatex
   //  
@@ -194,7 +189,9 @@ int main( int argc, char * argv[] )
 
   
 
- 
+ // Software Guide : EndCodeSnippet
+
+
 
 
   //  Software Guide : BeginLatex

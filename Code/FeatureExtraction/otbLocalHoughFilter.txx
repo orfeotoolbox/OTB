@@ -31,7 +31,7 @@ LocalHoughFilter<TInputImage>::LocalHoughFilter() : ImageToLineSpatialObjectList
 						    m_Threshold(0)
 {
    m_Radius.Fill(20);
-   m_Overlap.Fill(10);
+   m_Overlap.Fill(0);
 }
 
 template <class TInputImage>
@@ -231,7 +231,7 @@ LocalHoughFilter<TInputImage>
        	 m_HoughFilter->SetNumberOfLines( m_NumberOfLines );
        	 m_HoughFilter->SetVariance( m_Variance );
        	 m_HoughFilter->SetDiscRadius( m_DiscRadius );
-	 m_HoughFilter->SetThreshold( m_Threshold );
+	 //m_HoughFilter->SetThreshold( m_Threshold );
        	 
       	 m_HoughFilter->Modified();
       	    	 

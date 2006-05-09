@@ -240,7 +240,7 @@ ADD_TEST(feTuLocalHoughDraw ${FEATUREEXTRACTION_TESTS}
         otbLocalHoughDraw
 	${INPUTDATA}/ImageLine.bsq
 	${TEMP}/feFiltreLocalHoughDraw_ImageLine_20_20_2.hd
-	20 20 2)        
+	20 20 1)        
 
 ADD_TEST(feTuLocalHoughDraw ${FEATUREEXTRACTION_TESTS}  
         otbLocalHoughDraw
