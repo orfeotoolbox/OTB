@@ -11,6 +11,7 @@ void RegisterTests()
 REGISTER_TEST(otbTestCommandLineArgumentParser);
 REGISTER_TEST(otbTestCommandLineArgumentParserHelp);
 REGISTER_TEST(otbTestCommandLineArgumentParserList);
+REGISTER_TEST(otbTestCommandLineArgumentParserWithError);
 REGISTER_TEST(otbExtractROI);
 REGISTER_TEST(otbExtractROINew);
 REGISTER_TEST(otbExtractROI_RGB);
@@ -25,4 +26,6 @@ REGISTER_TEST(otbDrawLineSpatialObject);
 REGISTER_TEST(otbDrawLineSpatialObjectListNew);
 REGISTER_TEST(otbDrawLineSpatialObjectList);
 REGISTER_TEST(otbImageToLineSpatialObjectListNew);
+REGISTER_TEST(otbVectorLinearInterpolateImageFunctionTestNew);
+REGISTER_TEST(otbVectorInterpolateImageFunctionTest);
 }

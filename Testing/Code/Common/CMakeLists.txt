@@ -27,15 +27,15 @@ ADD_TEST(coTuCmdLineArgParserDeuxEntiers_ExactNumberArg ${COMMON_TESTS}
         -image image.png -entier 150 -double 12.25 -deuxentiers 78 56 )
 
 ADD_TEST(coTuCmdLineArgParserDeuxEntier_LessArg ${COMMON_TESTS}  
-        otbTestCommandLineArgumentParser
+        otbTestCommandLineArgumentParserWithError
         -image image.png -entier 150 -double 12.25 -deuxentiers 78 )
 
 ADD_TEST(coTuCmdLineArgParserDeuxEntier_MoreArg ${COMMON_TESTS}  
-        otbTestCommandLineArgumentParser
+        otbTestCommandLineArgumentParserWithError
         -image image.png -entier 150 -double 12.25 -deuxentiers 78 56 32)
 
 ADD_TEST(coTuCmdLineArgParser_MissingObligatoryArg ${COMMON_TESTS}  
-        otbTestCommandLineArgumentParser
+        otbTestCommandLineArgumentParserWithError
         -entier 150 -double 12.25 -deuxentiers 78 56 32)
 
 ADD_TEST(coTuCmdLineArgParser_EmptyList ${COMMON_TESTS}  
@@ -49,6 +49,10 @@ ADD_TEST(coTuCmdLineArgParser_List1Arg ${COMMON_TESTS}
 ADD_TEST(coTuCmdLineArgParser_List2Arg ${COMMON_TESTS}  
         otbTestCommandLineArgumentParserList
         -image image.png -entier 150 -double 12.25 -deuxentiers 78 56 -doubles 1.0 2.0)
+
+ADD_TEST(coTuCmdLineArgParser_List2ArgBis ${COMMON_TESTS}  
+        otbTestCommandLineArgumentParserList
+        -image image.png -entier 150 -double 12.25 -doubles 1.0 2.0 -deuxentiers 78 56 )
 
 ADD_TEST(coTuLineSpatialObjectList ${COMMON_TESTS}  
         otbLineSpatialObjectList
@@ -194,12 +198,17 @@ ADD_TEST(coTuDrawLineSpatialObjectList ${COMMON_TESTS}
 
 ADD_TEST(coTuImageToLineSpatialObjectListNew ${COMMON_TESTS} 
          otbImageToLineSpatialObjectListNew)
+	 
+ADD_TEST(coVectorInterpolateImageFunctionTest ${COMMON_TESTS} otbVectorInterpolateImageFunctionTest)
+ADD_TEST(coVectorLinearInterpolateImageFunctionTestNew ${COMMON_TESTS} otbVectorLinearInterpolateImageFunctionTestNew)
+	 
          
 # -------       Fichiers sources CXX -----------------------------------
 SET(BasicCommon_SRCS
 otbTestCommandLineArgumentParser.cxx
 otbTestCommandLineArgumentParserHelp.cxx
 otbTestCommandLineArgumentParserList.cxx
+otbTestCommandLineArgumentParserWithError.cxx
 otbExtractROINew.cxx
 otbExtractROI.cxx
 otbExtractROI_RGB.cxx
@@ -214,6 +223,8 @@ otbDrawLineSpatialObject.cxx
 otbDrawLineSpatialObjectListNew.cxx
 otbDrawLineSpatialObjectList.cxx
 otbImageToLineSpatialObjectListNew.cxx
+otbVectorInterpolateImageFunctionTest.cxx
+otbVectorLinearInterpolateImageFunctionTestNew.cxx
 )
 
 
