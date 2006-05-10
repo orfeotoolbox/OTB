@@ -197,8 +197,6 @@ void PixelSuppressionByDirectionImageFilter< TInputImage, TOutputImage>::Threade
   
 
   //---------------------------------------------------------------------------
- 
-std::cout << m_Radius[0] << std::endl;  
   
   // Process each of the boundary faces.  These are N-d regions which border
   // the edge of the buffer.
