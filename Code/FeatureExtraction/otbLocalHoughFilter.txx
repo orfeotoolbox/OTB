@@ -148,31 +148,33 @@ LocalHoughFilter<TInputImage>
    // Loop on the input image
    
    // Direction X
-   for ( unsigned long x=0; x < size[0]; x += (m_Radius[0]-m_Overlap[0]) )
+   // x and y must be < size in order to avoid 0-sized regions
+   for ( unsigned long x=0; x < size[0]-1; x += (m_Radius[0]-m_Overlap[0]) )
       {
 
       // Initialize the extract ROI filter in the direction X	
       ROIfilter->SetStartX(x);
       
       // Number of pixels of the local region
-      if ( (x+m_Radius[0]) <= size[0] ) 
+      if ( (x+m_Radius[0]) < size[0] ) 
       	 ROIfilter->SetSizeX(m_Radius[0]);
       else
-      	 ROIfilter->SetSizeX(size[0]-x);
+      	 ROIfilter->SetSizeX(size[0]-x-1);
 
 
       // Direction Y
-      for ( unsigned long y=0; y < size[1]; y += (m_Radius[1]-m_Overlap[1]) )
+      for ( unsigned long y=0; y < size[1]-1; y += (m_Radius[1]-m_Overlap[1]) )
          {	
- 	 
+	 
   	 // Initialize the extract ROI filter in the direction Y	
       	 ROIfilter->SetStartY(y);
       	 
-      	 if ( (y+m_Radius[1]) <= size[1] ) 
+      	 if ( (y+m_Radius[1]) < size[1] ) 
       	    ROIfilter->SetSizeY(m_Radius[1]);
       	 else
-      	    ROIfilter->SetSizeY(size[1]-y);      	    
+      	    ROIfilter->SetSizeY(size[1]-y-1);      	    
 
+	 
       	
       	 // Extract the local region of the input image
       	 ROIfilter->SetInput( this->GetInput() );
@@ -187,9 +189,8 @@ LocalHoughFilter<TInputImage>
 	  
 	 ROIfilter->UpdateLargestPossibleRegion();
 	 ROIfilter->Update();
-	 
+
 	 filterImage = ROIfilter->GetOutput();
-	
 
 	 // Create a new image from the extracted region. The starting
 	 // index is the corner of the newly generated image (0,0)
@@ -207,7 +208,7 @@ LocalHoughFilter<TInputImage>
 	 localImage->SetOrigin(filterImage->GetOrigin());
 	 localImage->SetSpacing(filterImage->GetSpacing());
 	 localImage->Allocate();
-	
+
 	 typedef itk::ImageRegionIteratorWithIndex< InputImageType > LocalIteratorType; 
 	 typedef itk::ImageRegionConstIteratorWithIndex< InputImageType >  FilterIteratorType; 
 	    
@@ -217,7 +218,7 @@ LocalHoughFilter<TInputImage>
 	 localIt.GoToBegin();
 	 filterIt.GoToBegin();
 	
-	
+
 	 // Copy the filter image in the new local image
 	 for ( localIt.GoToBegin(); !localIt.IsAtEnd(); ++localIt,++filterIt)
 	    localIt.Set( static_cast<InputPixelType>(filterIt.Get()) );
@@ -243,6 +244,7 @@ LocalHoughFilter<TInputImage>
       	 // ---------------------------------------
       	 
       	 lines = m_HoughFilter->GetLines(m_NumberOfLines);
+
 
          LineIterator itLines = lines.begin();
          
