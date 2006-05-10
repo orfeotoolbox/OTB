@@ -244,49 +244,59 @@ void PixelSuppressionByDirectionImageFilter< TInputImage, TOutputImage>::Threade
            continue;
 
 	// Distance between pixel (x,y) and central pixel 
-	DistanceXY = static_cast<double>(sqrt(x*x+y*y));
+//	DistanceXY = static_cast<double>(sqrt(x*x+y*y));
 		
 	
 	// If the pixel (x,y) is inside the circle of radius m_Radius
-	if ( DistanceXY <= m_Radius[0] )
-	   {
+//	if ( DistanceXY <= m_Radius[0] )
+//	   {
 	   
-	   // Rotation of the system axis in the direction of the central pixel (thetaXcYc)
-	   // (x,y) -> (xt,yt)
-	   TRANSITION_MATRIX( x, y, ThetaXcYc, xt, yt );
+// 	   // Rotation of the system axis in the direction of the central pixel (thetaXcYc)
+// 	   // (x,y) -> (xt,yt)
+// 	   TRANSITION_MATRIX( x, y, ThetaXcYc, xt, yt );
+
    	
-   	   // The absolute value of yt/xt is used to bring back the pixel (xt,yt)
-   	   // in positive co-ordinates 
-   	   // => thetaxtyt is included in the interval [0;PI/2]
-	   if ( xt != 0. )
-	      Thetaxtyt = atan( fabs(yt/xt) );
-	   else
-	      Thetaxtyt = M_PI/2.;
+//    	   // The absolute value of yt/xt is used to bring back the pixel (xt,yt)
+//    	   // in positive co-ordinates 
+//    	   // => thetaxtyt is included in the interval [0;PI/2]
+// 	   if ( xt != 0. )
+// 	      Thetaxtyt = atan( fabs(yt/xt) );
+// 	   else
+// 	      Thetaxtyt = M_PI/2.;
+
 	   
-	   
-	   // Then, we test if the pixel is included in the interval [0;m_AngularBeam] 
-	   if ( (0. <= Thetaxtyt) and
-	   	(Thetaxtyt <= m_AngularBeam) )
-	      {
-	      // The pixel is located in the direction of the central pixel
-	      // Get the direction of the pixel (X,Y) in the image of diretions
-	      ThetaXY = static_cast<double>(bit.GetPixel(i));
+// 	   // Then, we test if the pixel is included in the interval [0;m_AngularBeam] 
+// 	   if ( (0. <= Thetaxtyt) and
+// 	   	(Thetaxtyt <= m_AngularBeam) )
+// 	      {
+// 	      // The pixel is located in the direction of the central pixel
+// 	      // Get the direction of the pixel (X,Y) in the image of diretions
+// 	      ThetaXY = static_cast<double>(bit.GetPixel(i));
 	      
-	      // Angular tolerance on the direction of the central pixel
-	      MinThetaXcYc = ThetaXcYc - m_AngularBeam;
-	      MaxThetaXcYc = ThetaXcYc + m_AngularBeam;	
+// 	      // Angular tolerance on the direction of the central pixel
+// 	      MinThetaXcYc = ThetaXcYc - m_AngularBeam;
+// 	      MaxThetaXcYc = ThetaXcYc + m_AngularBeam;	
 
-	      // Test if the pixel belongs to a line   
-	      if ( (MinThetaXcYc <= ThetaXY) and 
-	      	   (ThetaXY <= MaxThetaXcYc ) )
+// 	      // Test if the pixel belongs to a line   
+// 	      if ( (MinThetaXcYc <= ThetaXY) &&
+// 	      	   (ThetaXY <= MaxThetaXcYc ) )
 	      	   
-		 IsLine = true;
-    
-	      }
+// 		 IsLine = true;
+//	   }
 
-	   }
+	   Thetaxtyt = atan2(y,x) - M_PI/2.0;
+	   if(Thetaxtyt < 0)
+	     Thetaxtyt = M_PI + Thetaxtyt;
 
-        } // end of the loop on the pixels of the region 
+//	   std::cout << sin(Thetaxtyt) << " " << sin(ThetaXcYc) << " " << sin(bit.GetPixel(i)) << std::endl;
+	   if( (fabs(sin(Thetaxtyt-ThetaXcYc)) <= sin(m_AngularBeam)) && (fabs(sin(bit.GetPixel(i)-ThetaXcYc)) <= sin(m_AngularBeam)) )
+	     IsLine = true;
+//	   }
+	      
+
+	}
+
+       // end of the loop on the pixels of the region 
   
 
       // Assignment of this value to the output pixel
