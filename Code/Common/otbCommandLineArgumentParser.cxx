@@ -134,7 +134,7 @@ CommandLineArgumentParser
 
 	if ( (IsHelp == true) )
 	{
-		PrintUsage(std::cerr);
+		PrintUsage(std::cout);
 		itkExceptionMacro(<<"Help Command Line");
 	}
 
@@ -216,10 +216,11 @@ CommandLineArgumentParser
      			else
      			{
       				outResult->AddParameter(m_OptionList[index].CommonName,strArgv);
+     		i++;
      			}
      		}
      		else continuer = false;
-     		i++;
+//     		i++;
      	}
      }
 
