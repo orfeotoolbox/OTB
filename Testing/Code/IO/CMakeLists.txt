@@ -304,6 +304,11 @@ ADD_TEST(ioTvMultiChannelROI_SPOT52PNG_5 ${COMMON_TESTS}
          -startX 700 -startY 700 -sizeX 1000 -sizeY 1000
          -channels 4 )
 
+ADD_TEST(ioTuotbImageTest ${IO_TESTS} 
+         otbImageTest
+         ${IMAGEDATA}/SAR_ERS2_SLCI_SCENE1/DAT_01.001
+         )
+
 # ---  Ikonos PAN  ---
 ADD_TEST(ioTvMultiChannelROI_IkonosPAN2PNG ${COMMON_TESTS} 
 #   --compare-image ${TOL}   ${BASELINE}/ioExtractROI_IkonosPAN2PNG_100_100_77_300.png
@@ -347,7 +352,6 @@ ADD_TEST(ioTvMultiChannelROI_QuickbirdXS2PNG ${COMMON_TESTS}
 
 
 
-
 SET(BasicIO_SRCS
 otbGDALImageIOTestCanRead.cxx
 otbCAIImageIOTestCanRead.cxx
@@ -357,6 +361,7 @@ otbImageFileWriterTest.cxx
 otbVectorImageFileReaderWriterTest.cxx
 otbImageFileReaderRGBTest.cxx
 otbImageFileWriterRGBTest.cxx
+otbImageTest.cxx
 otbMultiToMonoChannelExtractROISAR.cxx
 otbImageFileReaderERS.cxx
 otbStreamingImageFilterTest.cxx
