@@ -199,9 +199,6 @@ ADD_TEST(coTuDrawLineSpatialObjectList ${COMMON_TESTS}
 ADD_TEST(coTuImageToLineSpatialObjectListNew ${COMMON_TESTS} 
          otbImageToLineSpatialObjectListNew)
 	 
-ADD_TEST(coVectorInterpolateImageFunctionTest ${COMMON_TESTS} otbVectorInterpolateImageFunctionTest)
-ADD_TEST(coVectorLinearInterpolateImageFunctionTestNew ${COMMON_TESTS} otbVectorLinearInterpolateImageFunctionTestNew)
-	 
          
 # -------       Fichiers sources CXX -----------------------------------
 SET(BasicCommon_SRCS
@@ -223,8 +220,6 @@ otbDrawLineSpatialObject.cxx
 otbDrawLineSpatialObjectListNew.cxx
 otbDrawLineSpatialObjectList.cxx
 otbImageToLineSpatialObjectListNew.cxx
-otbVectorInterpolateImageFunctionTest.cxx
-otbVectorLinearInterpolateImageFunctionTestNew.cxx
 )
 
 
