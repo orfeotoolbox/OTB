@@ -16,6 +16,8 @@
 //#include "otbCAIImageIO.h"
 #include "itkPNGImageIO.h"
 
+#include "itkMetaDataObject.h"
+
 #include <sys/types.h>
 #include <dirent.h>
 
@@ -45,6 +47,7 @@ GDALImageIO::GDALImageIO()
 
 GDALImageIO::~GDALImageIO()
 {
+	delete [] m_poBands;
 }
 
 
@@ -393,134 +396,6 @@ void GDALImageIO::InternalReadImageInformation()
     std::cout<<"NbOctetPixel   : "<<m_NbOctetPixel<<std::endl;
 
 
-    // See to take the spacing with GDAL
-    // Find a way to get the good indice for papszMetadata for all the
-    // dataset (the one set is working for dat_01.001!!)
-    /**********************************/ 
-    /*char** papszMetadata = GDALGetMetadata(m_poDataset,NULL);
-    if(CSLCount(papszMetadata) > 0)
-      {
-      m_Spacing[0] = (double)papszMetadata[18];
-      m_Spacing[1] = (double)papszMetadata[17];
-      }*/
-    /**********************************/
-    
-    // Default Spacing
-    m_Spacing[0]=1;
-    m_Spacing[1]=1;
-    if(m_NumberOfDimensions==3)
-      m_Spacing[2]=1;
-    
-    /********************** SPACING ***********************/
-    // Look for which type of image it is (Spot ?, RadarSat ?, ...)
-    // and set the corresponding spacing
-    int i;
-    char** papszMetadata;
-    bool spot = false;
-    bool other = false;
-    // Specific to Spot images
-    char S[] = "TIFFTAG_IMAGEDESCRIPTION=XS3 XS2 XS1";
-    char spacx[] = "CEOS_LINE_SPACING_METERS=";
-    char spacy[] = "CEOS_PIXEL_SPACING_METERS=";
-    char * cpS;
-    char * cpSpacx;
-    char * cpSpacy;
-    papszMetadata = GDALGetMetadata( m_poDataset, NULL );
-    
-    GDALDriverH hDriver = GDALGetDatasetDriver( m_poDataset );
-    printf( "Driver: %s/%s\n",
-	    GDALGetDriverShortName( hDriver ),
-	    GDALGetDriverLongName( hDriver ) );
-    if(strcmp(GDALGetDriverLongName( hDriver ), "CEOS Image")==0)
-      {
-      m_Spacing[0] = 10;
-      m_Spacing[1] = 10;
-      }
-    
-    if( CSLCount(papszMetadata) > 0 )
-       {
-       printf( "Metadata:\n" );
-       for( i = 0; papszMetadata[i] != NULL; i++ )
-	 {
-	 cpS = strstr (papszMetadata[i], S);
-	 if(cpS != NULL)
-	   {
-	   spot = true;
-	   break;
-	   }
-	 }
-       // use the number of bands to know which spot
-       if(spot==true)
-	 {
-	 if(m_NbBands == 3)
-	   {
-	   m_Spacing[0] = 20;
-	   m_Spacing[1] = 20;
-	   }
-	 else if(m_NbBands == 4)
-	   {
-	   if(m_Dimensions[0] == 6000 && m_Dimensions[1] == 6000 )
-	     {
-	     m_Spacing[0] = 10;
-	     m_Spacing[1] = 10;
-	     }
-	   else
-	     {
-	     m_Spacing[0] = 20;
-	     m_Spacing[1] = 20;
-	     }
-	   }
-	 else if(m_NbBands == 1)
-	   {
-	   if(m_Dimensions[0] == 12000 && m_Dimensions[1] == 12000)
-	     {
-	     m_Spacing[0] = 5;
-	     m_Spacing[1] = 5;
-	     }
-	   else if(m_Dimensions[0] == 24000 && m_Dimensions[1] == 24000)
-	     {
-	     m_Spacing[0] = 2.5;
-	     m_Spacing[1] = 2.5;
-	     }
-	   else
-	     {
-	     m_Spacing[0] = 10;
-	     m_Spacing[1] = 10;
-	     }
-	   }
-	 }
-       else
-	 {
-	 for( i = 0; papszMetadata[i] != NULL; i++ )
-	   {
-	   cpSpacx = strstr(papszMetadata[i], spacx);
-	   if(cpSpacx != NULL)
-	     {
-	     other = true;
-	     break;
-	     }
-	   }
-	 if(other)
-	   {
-	   char * pch = strtok (papszMetadata[i],spacx);
-	   double x = atof(pch);
-	   
-	   for( i = 0; papszMetadata[i] != NULL; i++ )
-	     {
-	     cpSpacy = strstr(papszMetadata[i], spacy);
-	     if(cpSpacy != NULL)
-	       break;
-	     }
-	   pch = strtok (papszMetadata[i],spacy);
-	   double y = atof(pch);
-	   
-	   std::cout<<"spacing : "<<x<<"  "<<y<<std::endl;
-	   }
-	 }
-       }
-     
-     
-     
     /******************************************************************/
     // Pixel Type always set to Scalar for GDAL ? maybe also to vector ?
     int numComp = 1;
@@ -538,6 +413,274 @@ void GDALImageIO::InternalReadImageInformation()
                 this->SetPixelType(VECTOR);
         }
     }
+    
+/*----------------------------------------------------------------------*/
+/*-------------------------- METADATA ----------------------------------*/
+/*----------------------------------------------------------------------*/
+ 
+    // Now initialize the itk dictionary
+    itk::MetaDataDictionary & dico = this->GetMetaDataDictionary();
+      
+    
+/* -------------------------------------------------------------------- */
+/*  Get Spacing								*/
+/* -------------------------------------------------------------------- */    
+       
+    // Default Spacing
+    m_Spacing[0]=1;
+    m_Spacing[1]=1;
+    if(m_NumberOfDimensions==3)
+      m_Spacing[2]=1;
+      
+    char** papszMetadata;
+    papszMetadata =  m_poDataset->GetMetadata( NULL );
+    
+    const char *pszValue;
+    
+    pszValue = CSLFetchNameValue( papszMetadata, "CEOS_LINE_SPACING_METERS" );
+    if ( pszValue != NULL )
+       m_Spacing[0] = atof( pszValue );
+    
+    pszValue = CSLFetchNameValue( papszMetadata, "CEOS_PIXEL_SPACING_METERS" );
+    if ( pszValue != NULL )
+       m_Spacing[1] = atof( pszValue );
+ 
+    
+    
+    /* -------------------------------------------------------------------- */
+    /*      Report general info.                                            */
+    /* -------------------------------------------------------------------- */
+    GDALDriverH		hDriver;
+    
+    hDriver = GDALGetDatasetDriver( m_poDataset );
+            
+    itk::EncapsulateMetaData<std::string>(dico, MetaDataKey::m_DriverShortNameKey, 
+            	static_cast<std::string>( GDALGetDriverShortName( hDriver ) ) );        
+    itk::EncapsulateMetaData<std::string>(dico, MetaDataKey::m_DriverLongNameKey, 
+            	static_cast<std::string>( GDALGetDriverLongName( hDriver ) ) );
+            	 
+
+/* -------------------------------------------------------------------- */    
+/* Get the projection coordinate system of the image : ProjectionRef	*/
+/* -------------------------------------------------------------------- */
+    
+    if( m_poDataset->GetProjectionRef() != NULL )
+    {
+        OGRSpatialReference*   pSR;
+        const char *		      pszProjection = NULL;
+        
+        pSR = new OGRSpatialReference( pszProjection );
+
+        pszProjection =  m_poDataset->GetProjectionRef();
+
+        if( pSR->importFromWkt( (char **)(&pszProjection) ) == CE_None )
+        {
+            char *	pszPrettyWkt = NULL;
+
+            pSR->exportToPrettyWkt( &pszPrettyWkt, FALSE );
+              itk::EncapsulateMetaData<std::string> ( dico, MetaDataKey::m_ProjectionRefKey, 
+            	static_cast<std::string>( pszPrettyWkt ) ); 
+
+              CPLFree( pszPrettyWkt );
+        }
+        else
+            itk::EncapsulateMetaData<std::string>(dico, MetaDataKey::m_ProjectionRefKey, 
+            	static_cast<std::string>( m_poDataset->GetProjectionRef() ) );
+            	
+        if (pSR != NULL)
+        {
+           delete pSR;
+           pSR = NULL;
+        }
+
+    }
+
+/* -------------------------------------------------------------------- */    
+/* Get the GCP projection coordinates of the image : GCPProjection	*/
+/* -------------------------------------------------------------------- */
+        
+    if( m_poDataset->GetGCPCount() > 0 )
+    {
+        itk::EncapsulateMetaData<std::string>(dico, MetaDataKey::m_GCPProjectionKey, 
+            	static_cast<std::string>( m_poDataset->GetGCPProjection() ) );
+            	
+        std::string key;
+
+        itk::EncapsulateMetaData<unsigned int>(dico, MetaDataKey::m_GCPCountKey, 
+            	static_cast<unsigned int>( m_poDataset->GetGCPCount() ) );
+            	
+        double minGCPRow(m_width);
+        double minGCPCol(m_height);
+        double minGCPX;
+        double minGCPY;
+            	        
+        
+        for( unsigned int cpt = 0; cpt < m_poDataset->GetGCPCount(); cpt++ )
+        {
+            const GDAL_GCP	*psGCP;
+
+            psGCP = m_poDataset->GetGCPs() + cpt;
+
+            OTB_GCP	pOtbGCP(psGCP);
+                   
+            // Origin           
+            if ( ( psGCP->dfGCPLine < minGCPRow ) &&
+                 ( psGCP->dfGCPPixel < minGCPCol ) )
+               { 
+               minGCPRow = psGCP->dfGCPLine;
+               minGCPCol = psGCP->dfGCPPixel;	  
+               minGCPX = psGCP->dfGCPX;
+               minGCPY = psGCP->dfGCPY;
+               }
+
+            // Complete the key with the GCP number : GCP_i
+            ::itk::OStringStream lStream;
+            lStream << MetaDataKey::m_GCPParametersKey << cpt;
+            key = lStream.str(); 
+            
+            itk::EncapsulateMetaData<OTB_GCP>(dico, key, pOtbGCP); 
+            
+        }
+        
+        m_Origin[0] = minGCPX;
+        m_Origin[1] = minGCPY;
+        
+    }
+
+/* -------------------------------------------------------------------- */    
+/*  Get the six coefficients of affine geoTtransform			*/
+/* -------------------------------------------------------------------- */
+
+    double adfGeoTransform[6];
+    VectorType VadfGeoTransform;
+      
+    if( m_poDataset->GetGeoTransform( adfGeoTransform ) == CE_None )
+    {
+    	for(int cpt = 0 ; cpt < 6 ; cpt++ ) VadfGeoTransform.push_back(adfGeoTransform[cpt]);
+    	
+        itk::EncapsulateMetaData<VectorType>(dico, MetaDataKey::m_GeoTransformKey, VadfGeoTransform);
+    }
+
+/* -------------------------------------------------------------------- */
+/*      Report metadata.                                                */
+/* -------------------------------------------------------------------- */
+
+    papszMetadata = GDALGetMetadata( m_poDataset, NULL );
+    if( CSLCount(papszMetadata) > 0 )
+    {
+        std::string key;
+
+        for( int cpt = 0; papszMetadata[cpt] != NULL; cpt++ )
+        {       
+            ::itk::OStringStream lStream;
+            lStream << MetaDataKey::m_MetadataKey << cpt;
+            key = lStream.str(); 
+            
+            itk::EncapsulateMetaData<std::string>(dico, key, 
+            	static_cast<std::string>( papszMetadata[cpt] ) );
+        }
+    }
+
+/* -------------------------------------------------------------------- */
+/*      Report subdatasets.                                             */
+/* -------------------------------------------------------------------- */
+
+    papszMetadata = GDALGetMetadata( m_poDataset, "SUBDATASETS" );
+    if( CSLCount(papszMetadata) > 0 )
+    {
+        std::string key;
+        
+        for( int cpt = 0; papszMetadata[cpt] != NULL; cpt++ )
+        {
+            ::itk::OStringStream lStream;
+            lStream << MetaDataKey::m_SubMetadataKey << cpt;
+            key = lStream.str(); 
+            
+            itk::EncapsulateMetaData<std::string>(dico, key, 
+            	static_cast<std::string>( papszMetadata[cpt] ) );
+        }
+    }
+
+    
+/* -------------------------------------------------------------------- */
+/* Report corners							*/
+/* -------------------------------------------------------------------- */
+   
+    double GeoX(0), GeoY(0);
+    VectorType VGeo;
+
+    GDALInfoReportCorner( "Upper Left", 0.0, 0.0, GeoX, GeoY  );    
+    VGeo.push_back(GeoX);
+    VGeo.push_back(GeoY);
+    
+    itk::EncapsulateMetaData<VectorType>(dico, MetaDataKey::m_UpperLeftCornerKey, VGeo);
+        
+    VGeo.clear();
+
+    GDALInfoReportCorner( "Upper Right", m_width, 0.0, GeoX, GeoY );
+    VGeo.push_back(GeoX);
+    VGeo.push_back(GeoY);
+
+    itk::EncapsulateMetaData<VectorType>(dico, MetaDataKey::m_UpperRightCornerKey, VGeo);
+
+    VGeo.clear();
+    
+    GDALInfoReportCorner( "Lower Left", 0.0, m_height, GeoX, GeoY);
+    VGeo.push_back(GeoX);
+    VGeo.push_back(GeoY);
+    
+    itk::EncapsulateMetaData<VectorType>(dico, MetaDataKey::m_LowerLeftCornerKey, VGeo);
+
+    VGeo.clear();
+   
+    GDALInfoReportCorner( "Lower Right", m_width, m_height, GeoX, GeoY );
+    VGeo.push_back(GeoX);
+    VGeo.push_back(GeoY);
+
+    itk::EncapsulateMetaData<VectorType>(dico, MetaDataKey::m_LowerRightCornerKey, VGeo);
+
+    VGeo.clear();
+ 
+/* -------------------------------------------------------------------- */
+/* Color Table								*/
+/* -------------------------------------------------------------------- */ 
+
+   for(int iBand = 0; iBand < GDALGetRasterCount( m_poDataset ); iBand++ )
+    {
+      GDALColorTableH	hTable;
+      GDALRasterBandH	hBand;
+      
+      hBand = GDALGetRasterBand( m_poDataset, iBand+1 );
+        
+      if( GDALGetRasterColorInterpretation(hBand) == GCI_PaletteIndex 
+            && (hTable = GDALGetRasterColorTable( hBand )) != NULL )
+        {
+            
+            unsigned int ColorEntryCount = GDALGetColorEntryCount( hTable );        
+            
+            itk::EncapsulateMetaData<std::string>(dico, MetaDataKey::m_ColorTableNameKey, 
+            	static_cast<std::string>( GDALGetPaletteInterpretationName( 
+            				GDALGetPaletteInterpretation( hTable ) ) ) );    
+            				    
+            itk::EncapsulateMetaData<unsigned int>(dico, MetaDataKey::m_ColorEntryCountKey, ColorEntryCount);        
+
+            for(int i = 0; i < GDALGetColorEntryCount( hTable ); i++ )
+            {
+                GDALColorEntry	sEntry;
+                VectorType VColorEntry;
+
+                GDALGetColorEntryAsRGB( hTable, i, &sEntry );
+                
+                VColorEntry.push_back(sEntry.c1);
+                VColorEntry.push_back(sEntry.c2);
+                VColorEntry.push_back(sEntry.c3);
+                VColorEntry.push_back(sEntry.c4);
+                
+                itk::EncapsulateMetaData<VectorType>(dico, MetaDataKey::m_ColorEntryAsRGBKey, VColorEntry);
+                
+            }
+        } 
+      }        
 
 }
 
@@ -556,6 +699,40 @@ void GDALImageIO::Write(const void* buffer)
 void GDALImageIO::WriteImageInformation()
 {
 }
+
+bool GDALImageIO::GDALInfoReportCorner( const char * corner_name, double x, double y,
+                           double &GeoX, double &GeoY)
+
+{
+    const char  *pszProjection;
+    double	adfGeoTransform[6];
+    OGRCoordinateTransformation *hTransform = NULL;
+ 
+    bool IsTrue;
+        
+/* -------------------------------------------------------------------- */
+/*      Transform the point into georeferenced coordinates.             */
+/* -------------------------------------------------------------------- */
+    if( m_poDataset->GetGeoTransform( adfGeoTransform ) == CE_None )
+    {
+        pszProjection = m_poDataset->GetProjectionRef();
+
+        GeoX = adfGeoTransform[0] + adfGeoTransform[1] * x
+            + adfGeoTransform[2] * y;
+        GeoY = adfGeoTransform[3] + adfGeoTransform[4] * x
+            + adfGeoTransform[5] * y;
+        IsTrue = true;
+    }
+
+    else
+    {
+    	GeoX = x;
+    	GeoY = y;
+        IsTrue = false;
+    }
+
+    return IsTrue;
+}
   
-} // end namespace itk
+} // end namespace otb
 

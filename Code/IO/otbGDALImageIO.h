@@ -23,11 +23,19 @@
 /* ITK Libraries */
 #include "itkImageIOBase.h"
 
+#include "otbMetaDataKey.h"
+
+
 /* GDAL Libraries */
 #include "gdal.h"
 #include "gdal_priv.h"
 #include "cpl_string.h"
 #include "cpl_conv.h"
+#include "ogr_spatialref.h"
+#include "ogr_srs_api.h"
+
+
+
 
 
 namespace otb
@@ -36,7 +44,8 @@ namespace otb
 /** Classe otbGDALImageIO
  *
  */
-class ITK_EXPORT GDALImageIO : public itk::ImageIOBase
+class ITK_EXPORT GDALImageIO : public itk::ImageIOBase,
+			       public MetaDataKey
 {
 public:
 
@@ -129,7 +138,9 @@ private:
   GDALDataType m_PxType;
   /** Nombre d'octets par pixel */
   int           m_NbOctetPixel;
-
+  
+  bool GDALInfoReportCorner( const char * corner_name, double x, double y,
+                           double &dfGeoX, double &dfGeoY);
 
 };
 
