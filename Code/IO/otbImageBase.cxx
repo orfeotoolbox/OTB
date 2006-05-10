@@ -263,7 +263,7 @@ ImageBase::VectorType ImageBase::GetLowerRightCorner( MetaDataDictionaryType & d
 }   
 
 void
-ImageBase::PrintSelf(std::ostream& os, Indent indent, const MetaDataDictionaryType & dict) const
+ImageBase::PrintSelf(std::ostream& os, itk::Indent indent, const MetaDataDictionaryType & dict) const
 { 
 
   std::vector<std::string> keys = dict.GetKeys();

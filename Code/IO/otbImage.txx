@@ -9,7 +9,8 @@
   $Id: $
 
 =========================================================================*/
-
+#ifndef __otbImage_txx
+#define __otbImage_txx
 
 #ifdef _MSC_VER
 #pragma warning ( disable : 4786 )
@@ -98,25 +99,25 @@ ImageBase::VectorType Image<TPixel, VImageDimension>::GetGeoTransform( void )
 }
 
 template <class TPixel, unsigned int VImageDimension>   
-ImageBase::  VectorType Image<TPixel, VImageDimension>::GetUpperLeftCorner( void )
+ImageBase::VectorType Image<TPixel, VImageDimension>::GetUpperLeftCorner( void )
 {
    return ( this->ImageBase::GetUpperLeftCorner( this->GetMetaDataDictionary() ) );	
 }
 
 template <class TPixel, unsigned int VImageDimension>   
-ImageBase::  VectorType Image<TPixel, VImageDimension>::GetUpperRightCorner( void )
+ImageBase::VectorType Image<TPixel, VImageDimension>::GetUpperRightCorner( void )
 {
    return ( this->ImageBase::GetUpperRightCorner( this->GetMetaDataDictionary() ) );	
 }
 
 template <class TPixel, unsigned int VImageDimension>   
-ImageBase::  VectorType Image<TPixel, VImageDimension>::GetLowerLeftCorner( void )
+ImageBase::VectorType Image<TPixel, VImageDimension>::GetLowerLeftCorner( void )
 {
    return ( this->ImageBase::GetLowerLeftCorner( this->GetMetaDataDictionary() ) );	
 }
 
 template <class TPixel, unsigned int VImageDimension>   
-ImageBase::  VectorType Image<TPixel, VImageDimension>::GetLowerRightCorner( void )
+ImageBase::VectorType Image<TPixel, VImageDimension>::GetLowerRightCorner( void )
 {
    return ( this->ImageBase::GetLowerRightCorner( this->GetMetaDataDictionary() ) );	
 }
@@ -133,4 +134,4 @@ Image<TPixel, VImageDimension>::PrintSelf(std::ostream& os, Indent indent) const
 
 
 } // end namespace otb
-
+#endif

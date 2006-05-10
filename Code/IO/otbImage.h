@@ -31,7 +31,7 @@ namespace otb
  */
 template <class TPixel, unsigned int VImageDimension=2> 
 class ITK_EXPORT Image : public itk::Image<TPixel, VImageDimension>,
-			 public ImageBase
+			 public otb::ImageBase
 {
 public: 
 
@@ -53,31 +53,31 @@ public:
   itkTypeMacro(Image, itk::Image);
 
   /** Get the projection coordinate system of the image. */
-  std::string GetProjectionRef( void );
+  virtual std::string GetProjectionRef( void );
   
   /** Get the GCP projection coordinates of the image. */
-  std::string GetGCPProjection( void );
+  virtual std::string GetGCPProjection( void );
   
-  unsigned int GetGCPCount( void );
+  virtual unsigned int GetGCPCount( void );
   
-  OTB_GCP & GetGCPs ( unsigned int GCPnum );
+  virtual OTB_GCP & GetGCPs ( unsigned int GCPnum );
     
-  std::string GetGCPId( unsigned int GCPnum );   
-  std::string GetGCPInfo( unsigned int GCPnum );
-  double GetGCPRow( unsigned int GCPnum ); 
-  double GetGCPCol( unsigned int GCPnum ); 	
-  double GetGCPX( unsigned int GCPnum ); 
-  double GetGCPY( unsigned int GCPnum ); 
-  double GetGCPZ( unsigned int GCPnum );
+  virtual std::string GetGCPId( unsigned int GCPnum );   
+  virtual std::string GetGCPInfo( unsigned int GCPnum );
+  virtual double GetGCPRow( unsigned int GCPnum ); 
+  virtual double GetGCPCol( unsigned int GCPnum ); 	
+  virtual double GetGCPX( unsigned int GCPnum ); 
+  virtual double GetGCPY( unsigned int GCPnum ); 
+  virtual double GetGCPZ( unsigned int GCPnum );
   
   /** Get the six coefficients of affine geoTtransform. */
-  VectorType GetGeoTransform( void ); 
+  virtual VectorType GetGeoTransform( void ); 
   
   /** Get image corners. */
-  VectorType GetUpperLeftCorner( void );
-  VectorType GetUpperRightCorner( void );
-  VectorType GetLowerLeftCorner( void );
-  VectorType GetLowerRightCorner( void );
+  virtual VectorType GetUpperLeftCorner( void );
+  virtual VectorType GetUpperRightCorner( void );
+  virtual VectorType GetLowerLeftCorner( void );
+  virtual VectorType GetLowerRightCorner( void );
   
   void PrintSelf(std::ostream& os, Indent indent) const;
 

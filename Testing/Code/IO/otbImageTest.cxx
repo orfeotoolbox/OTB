@@ -18,11 +18,11 @@
 
 #include "itkExceptionObject.h"
 #include <iostream>
+#include <fstream>
 #include <string>
 
 #include "otbImage.h"
 #include "otbImageFileReader.h"
-#include "otbMetaDataKey.h"
 
 
 int otbImageTest(int argc, char* argv[])
@@ -31,10 +31,15 @@ int otbImageTest(int argc, char* argv[])
   {
         // Verify the number of parameters in the command line
         const char * inputFilename  = argv[1];
+        const char * outputAsciiFilename  = argv[2];
       //  unsigned int  GCPnum((unsigned int)::atoi(argv[2]));
 
         typedef unsigned char  	                                InputPixelType;
         const   unsigned int        	                        Dimension = 2;
+
+	std::ofstream file;
+	
+	file.open(outputAsciiFilename);
 
         typedef otb::Image< InputPixelType,  Dimension >        InputImageType;
         
@@ -50,70 +55,74 @@ int otbImageTest(int argc, char* argv[])
 
 	image = reader->GetOutput();
 	
+	file << "------ IMAGE --------" << std::endl;
 	std::cout << "------ IMAGE --------" << std::endl;
+// Image n'est pas ecrit dans le fichier car des pointeurs sont affichés, donc la valeur dépend de l'instanciation 
+// -> pour pouvoir faire de tests de non regression sur la sortie ecrite dans le fichier ASCII
 	std::cout << image << std::endl;	
 	std::cout << "---------------------" << std::endl;
 	
-	std::cout << "Spacing " << image->GetSpacing() << std::endl;
-	std::cout << "Origin " << image->GetOrigin() << std::endl;
+	file << "Spacing " << image->GetSpacing() << std::endl;
+	file << "Origin " << image->GetOrigin() << std::endl;
 	
-	std::cout << "Projection REF " << image->GetProjectionRef() << std::endl;
+	file << "Projection REF " << image->GetProjectionRef() << std::endl;
 		 
-	std::cout << "GCP Projection " << image->GetGCPProjection() << std::endl;
+	file << "GCP Projection " << image->GetGCPProjection() << std::endl;
 	
 	unsigned int GCPCount = image->GetGCPCount();	
-	std::cout << "GCP Count " << image->GetGCPCount() << std::endl; 
+	file << "GCP Count " << image->GetGCPCount() << std::endl; 
 	
 	for(unsigned int GCPnum = 0 ; GCPnum < GCPCount ; GCPnum++ )
 	{
-		std::cout << "GCP[" << GCPnum << "] Id " << image->GetGCPId(GCPnum) << std::endl;
-		std::cout << "GCP[" << GCPnum << "] Info " << image->GetGCPInfo(GCPnum) << std::endl;
-		std::cout << "GCP[" << GCPnum << "] Row " << image->GetGCPRow(GCPnum) << std::endl;
-		std::cout << "GCP[" << GCPnum << "] Col " << image->GetGCPCol(GCPnum) << std::endl;
-		std::cout << "GCP[" << GCPnum << "] X " << image->GetGCPX(GCPnum) << std::endl;
-		std::cout << "GCP[" << GCPnum << "] Y " << image->GetGCPY(GCPnum) << std::endl;
-		std::cout << "GCP[" << GCPnum << "] Z " << image->GetGCPZ(GCPnum) << std::endl;
-		std::cout << "----------------" << std::endl;
+		file << "GCP[" << GCPnum << "] Id " << image->GetGCPId(GCPnum) << std::endl;
+		file << "GCP[" << GCPnum << "] Info " << image->GetGCPInfo(GCPnum) << std::endl;
+		file << "GCP[" << GCPnum << "] Row " << image->GetGCPRow(GCPnum) << std::endl;
+		file << "GCP[" << GCPnum << "] Col " << image->GetGCPCol(GCPnum) << std::endl;
+		file << "GCP[" << GCPnum << "] X " << image->GetGCPX(GCPnum) << std::endl;
+		file << "GCP[" << GCPnum << "] Y " << image->GetGCPY(GCPnum) << std::endl;
+		file << "GCP[" << GCPnum << "] Z " << image->GetGCPZ(GCPnum) << std::endl;
+		file << "----------------" << std::endl;
 	}
 	
 	InputImageType::VectorType tab = image->GetGeoTransform();
 
-	std::cout << "Geo Transform " << std::endl;
+	file << "Geo Transform " << std::endl;
 	for(int i = 0 ; i < tab.size() ; i++ )
 	{
-		std::cout << " " <<i<<" -> "<<tab[i]<< std::endl;
+		file << " " <<i<<" -> "<<tab[i]<< std::endl;
 	}
 	tab.clear();
 	
 	tab = image->GetUpperLeftCorner();
-	std::cout << "Corners " << std::endl;
+	file << "Corners " << std::endl;
 	for(int i = 0 ; i < tab.size() ; i++ )
 	{
-		std::cout << " UL[" <<i<<"] -> "<<tab[i]<< std::endl;
+		file << " UL[" <<i<<"] -> "<<tab[i]<< std::endl;
 	}
 	tab.clear();
 		
 	tab = image->GetUpperRightCorner();
 	for(int i = 0 ; i < tab.size() ; i++ )
 	{
-		std::cout << " UR[" <<i<<"] -> "<<tab[i]<< std::endl;
+		file << " UR[" <<i<<"] -> "<<tab[i]<< std::endl;
 	}
 	tab.clear();
 		
 	tab = image->GetLowerLeftCorner();
 	for(int i = 0 ; i < tab.size() ; i++ )
 	{
-		std::cout << " LL[" <<i<<"] -> "<<tab[i]<< std::endl;
+		file << " LL[" <<i<<"] -> "<<tab[i]<< std::endl;
 	}
 	tab.clear();
 			
 	tab = image->GetLowerRightCorner();
 	for(int i = 0 ; i < tab.size() ; i++ )
 	{
-		std::cout << " LR[" <<i<<"] -> "<<tab[i]<< std::endl;
+		file << " LR[" <<i<<"] -> "<<tab[i]<< std::endl;
 	}	
 	tab.clear();
 		
+	file.close();
 	
   } 
   catch( itk::ExceptionObject & err ) 

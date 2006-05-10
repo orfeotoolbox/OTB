@@ -16,11 +16,9 @@
 #pragma warning ( disable : 4786 )
 #endif
 
-#include "itkImageBase.h"
-#include "itkIndent.h"
+#include "itkMetaDataDictionary.h"
 
 #include "otbMetaDataKey.h"
-#include <gdal.h>
 
 #include <iostream>
 #include <string>
@@ -103,7 +101,6 @@ public:
   void PrintSelf(std::ostream& os, Indent indent, const MetaDataDictionaryType & dict) const;
                  
 
-protected:
   ImageBase();
   virtual ~ImageBase(){};
     
@@ -114,12 +111,8 @@ private:
   OTB_GCP m_GCP;
   
 };
-  
+
   
 } // end namespace otb
-
-#ifndef OTB_MANUAL_INSTANTIATION
-#include "otbImageBase.txx"
-#endif
 
 #endif

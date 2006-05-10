@@ -3,6 +3,7 @@
 IF( NOT OTB_DISABLE_CXX_TESTING )
 
 SET(BASELINE ${OTB_DATA_ROOT}/Baseline/Images)
+SET(BASELINE_FILES ${OTB_DATA_ROOT}/Baseline/Files)
 SET(INPUTDATA ${OTB_DATA_ROOT}/Input)
 SET(TEMP ${OTBTesting_BINARY_DIR}/Temporary)
 #Images de teledetection (grosses images )
@@ -304,11 +305,6 @@ ADD_TEST(ioTvMultiChannelROI_SPOT52PNG_5 ${COMMON_TESTS}
          -startX 700 -startY 700 -sizeX 1000 -sizeY 1000
          -channels 4 )
 
-ADD_TEST(ioTuotbImageTest ${IO_TESTS} 
-         otbImageTest
-         ${IMAGEDATA}/SAR_ERS2_SLCI_SCENE1/DAT_01.001
-         )
-
 # ---  Ikonos PAN  ---
 ADD_TEST(ioTvMultiChannelROI_IkonosPAN2PNG ${COMMON_TESTS} 
 #   --compare-image ${TOL}   ${BASELINE}/ioExtractROI_IkonosPAN2PNG_100_100_77_300.png
@@ -349,9 +345,39 @@ ADD_TEST(ioTvMultiChannelROI_QuickbirdXS2PNG ${COMMON_TESTS}
          -startX 100 -startY 100 -sizeX 77 -sizeY 300
          -channels 1 2 3)
 
+ADD_TEST(ioTuOtbImageTestSAR_ERS ${IO_TESTS} 
+   --compare-ascii   ${BASELINE_FILES}/ioOtbImageTestSAR_ERS.txt
+                     ${TEMP}/ioOtbImageTestSAR_ERS.txt
+         otbImageTest
+         ${IMAGEDATA}/SAR_ERS2_SLCI_SCENE1/DAT_01.001
+         ${TEMP}/ioOtbImageTestSAR_ERS.txt)
+
+# ---  Otb::Image Test  ---
+ADD_TEST(ioTuOtbImageTestRadarsat ${IO_TESTS} 
+   --compare-ascii   ${BASELINE_FILES}/ioOtbImageTestRadarsat.txt
+                     ${TEMP}/ioOtbImageTestRadarsat.txt
+        otbImageTest
+       	${IMAGEDATA}/RADARSAT1/SCENE01/
+        ${TEMP}/ioOtbImageTestRadarsat.txt)
+
+# ---  Otb::VectorImage Test  ---
+ADD_TEST(ioTuOtbVectorImageTestRadarsat ${IO_TESTS} 
+   --compare-ascii   ${BASELINE_FILES}/ioOtbVectorImageTestRadarsat.txt
+                     ${TEMP}/ioOtbVectorImageTestRadarsat.txt
+        otbVectorImageTest
+        ${IMAGEDATA}/RADARSAT1/SCENE01/
+        ${TEMP}/ioOtbVectorImageTestRadarsat.txt)
 
 
-
+# ---  Otb::VectorImage Test  ---
+ADD_TEST(ioTuOtbVectorImageTestSpot5 ${IO_TESTS} 
+   --compare-ascii   ${BASELINE_FILES}/ioOtbVectorImageTestSpot5.txt
+                     ${TEMP}/ioOtbVectorImageTestSpot5.txt
+        otbVectorImageTest
+        ${IMAGEDATA}/SPOT5_SCENE01/IMAGERY.TIF
+        ${TEMP}/ioOtbVectorImageTestSpot5.txt)
+        
+        
 SET(BasicIO_SRCS
 otbGDALImageIOTestCanRead.cxx
 otbCAIImageIOTestCanRead.cxx
@@ -361,10 +387,11 @@ otbImageFileWriterTest.cxx
 otbVectorImageFileReaderWriterTest.cxx
 otbImageFileReaderRGBTest.cxx
 otbImageFileWriterRGBTest.cxx
-otbImageTest.cxx
 otbMultiToMonoChannelExtractROISAR.cxx
 otbImageFileReaderERS.cxx
 otbStreamingImageFilterTest.cxx
+otbImageTest.cxx
+otbVectorImageTest.cxx
 )
 
 INCLUDE_DIRECTORIES("${OTBTesting_BINARY_DIR}")

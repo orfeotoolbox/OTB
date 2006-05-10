@@ -31,7 +31,7 @@ namespace otb
  * key of metadata used in the metadata dictionary.
  *
  */
-class /*ITK_EXPORT*/ MetaDataKey
+class ITK_EXPORT MetaDataKey
 {
 public:
 
