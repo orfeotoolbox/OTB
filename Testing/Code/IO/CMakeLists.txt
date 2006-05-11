@@ -115,23 +115,29 @@ ADD_TEST(ioTuGDALImageIOCanRead_SAR_ERS2 ${IO_TESTS} otbGDALImageIOTestCanRead
         ${IMAGEDATA}/SAR_ERS2_SLCI_SCENE1/DAT_01.001 )
 
 ADD_TEST(ioTuGDALImageIOCanRead_QUICK_PAN ${IO_TESTS} otbGDALImageIOTestCanRead 
-        ${IMAGEDATA}/PARIS_HR/QuickBird/000000183008_01_P001_PAN/02APR06105612-P1BS-000000183008_01_P001.TIF )
+        ${IMAGEDATA}/TOULOUSE/QuickBird/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF )
 
 ADD_TEST(ioTuGDALImageIOCanRead_QUICK_XS ${IO_TESTS} otbGDALImageIOTestCanRead 
-        ${IMAGEDATA}/PARIS_HR/QuickBird/000000183008_01_P001_MUL/02APR06105612-M1BS-000000183008_01_P001.TIF )
-
-ADD_TEST(ioTuCAIImageIOCanRead_QUICK_XS ${IO_TESTS} otbCAIImageIOTestCanRead 
-        ${IMAGEDATA}/PARIS_HR/QuickBird/000000183008_01_P001_MUL/02APR06105612-M1BS-000000183008_01_P001.TIF )
+        ${IMAGEDATA}/TOULOUSE/QuickBird/000000128955_01_P001_MUL/02APR01105228-M1BS-000000128955_01_P001.TIF )
 
 ADD_TEST(ioTuGDALImageIOCanRead_IKONOS_PAN ${IO_TESTS} otbGDALImageIOTestCanRead 
         ${IMAGEDATA}/PARIS_HR/Ikonos/po_79039_pan_0000000.tif)
 
+ADD_TEST(ioTuGDALImageIOCanRead_IKONOS_GRN ${IO_TESTS} otbGDALImageIOTestCanRead 
+        ${IMAGEDATA}/PARIS_HR/Ikonos/po_79039_grn_0000000.tif)
 
+ADD_TEST(ioTuGDALImageIOCanRead_IKONOS_BLU ${IO_TESTS} otbGDALImageIOTestCanRead 
+        ${IMAGEDATA}/PARIS_HR/Ikonos/po_79039_blu_0000000.tif)
+	
+ADD_TEST(ioTuGDALImageIOCanRead_IKONOS_RED ${IO_TESTS} otbGDALImageIOTestCanRead 
+        ${IMAGEDATA}/PARIS_HR/Ikonos/po_79039_red_0000000.tif)
+	
+ADD_TEST(ioTuGDALImageIOCanRead_IKONOS_NIR ${IO_TESTS} otbGDALImageIOTestCanRead 
+        ${IMAGEDATA}/PARIS_HR/Ikonos/po_79039_nir_0000000.tif)
+	
 # CanWrite()
 ADD_TEST(ioTuCAIImageIOCanWriteBSQ ${IO_TESTS} otbCAIImageIOTestCanWrite 
         ${TEMP}/ioCAIImageIOCanWriteBSQ.hd )
-
-
 
 
 # -------            otb::ImageFileReader pour CAI  ------------------------------
@@ -325,21 +331,48 @@ ADD_TEST(ioTvMultiChannelROI_IkonosPAN2PNG ${COMMON_TESTS}
          -channels 1)
 
 # ---  Ikonos XS  ---
-ADD_TEST(ioTvMultiChannelROI_IkonosXS2PNG ${COMMON_TESTS} 
-#   --compare-image ${TOL}   ${BASELINE}/ioExtractROI_IkonosXS2PNG_100_100_77_300.png
-#                     ${TEMP}/ioExtractROI_IkonosXS2PNG_100_100_77_300.png
+ADD_TEST(ioTvMultiChannelROI_IkonosRED2PNG ${COMMON_TESTS} 
+#   --compare-image ${TOL}   ${BASELINE}/ioExtractROI_IkonosRED2PNG_100_100_77_300.png
+#                     ${TEMP}/ioExtractROI_IkonosRED2PNG_100_100_77_300.png
          otbMultiChannelExtractROI
-         ${IMAGEDATA}/PARIS_HR/Ikonos/???
-         ${TEMP}/ioExtractROI_IkonosXS2PNG_100_100_77_300.png
+         ${IMAGEDATA}/PARIS_HR/Ikonos/po_79039_red_0000000.tif
+         ${TEMP}/ioExtractROI_IkonosRED2PNG_100_100_77_300.png
          -startX 100 -startY 100 -sizeX 77 -sizeY 300
-         -channels 1 2 3)
+         -channels 1)
+
+ADD_TEST(ioTvMultiChannelROI_IkonosGRN2PNG ${COMMON_TESTS} 
+#   --compare-image ${TOL}   ${BASELINE}/ioExtractROI_IkonosGRN2PNG_100_100_77_300.png
+#                     ${TEMP}/ioExtractROI_IkonosGRN2PNG_100_100_77_300.png
+         otbMultiChannelExtractROI
+         ${IMAGEDATA}/PARIS_HR/Ikonos/po_79039_grn_0000000.tif
+         ${TEMP}/ioExtractROI_IkonosGRN2PNG_100_100_77_300.png
+         -startX 100 -startY 100 -sizeX 77 -sizeY 300
+         -channels 1)
+
+ADD_TEST(ioTvMultiChannelROI_IkonosBLU2PNG ${COMMON_TESTS} 
+#   --compare-image ${TOL}   ${BASELINE}/ioExtractROI_IkonosBLU2PNG_100_100_77_300.png
+#                     ${TEMP}/ioExtractROI_IkonosBLU2PNG_100_100_77_300.png
+         otbMultiChannelExtractROI
+         ${IMAGEDATA}/PARIS_HR/Ikonos/po_79039_blu_0000000.tif
+         ${TEMP}/ioExtractROI_IkonosBLU2PNG_100_100_77_300.png
+         -startX 100 -startY 100 -sizeX 77 -sizeY 300
+         -channels 1)
+
+ADD_TEST(ioTvMultiChannelROI_IkonosNIR2PNG ${COMMON_TESTS} 
+#   --compare-image ${TOL}   ${BASELINE}/ioExtractROI_IkonosNIR2PNG_100_100_77_300.png
+#                     ${TEMP}/ioExtractROI_IkonosNIR2PNG_100_100_77_300.png
+         otbMultiChannelExtractROI
+         ${IMAGEDATA}/PARIS_HR/Ikonos/po_79039_nir_0000000.tif
+         ${TEMP}/ioExtractROI_IkonosNIR2PNG_100_100_77_300.png
+         -startX 100 -startY 100 -sizeX 77 -sizeY 300
+         -channels 1)
 
 # ---  Quickbird PAN  ---
 ADD_TEST(ioTvMultiChannelROI_QuickbirdPAN2PNG ${COMMON_TESTS} 
 #   --compare-image ${TOL}   ${BASELINE}/ioExtractROI_QuickbirdPAN2PNG_100_100_77_300.png
 #                     ${TEMP}/ioExtractROI_QuickbirdPAN2PNG_100_100_77_300.png
          otbMultiChannelExtractROI
-         ${IMAGEDATA}/PARIS_HR/QuickBird/000000183008_01_P001_PAN/02APR06105612-P1BS-000000183008_01_P001.TIF
+         ${IMAGEDATA}/TOULOUSE/QuickBird/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF
          ${TEMP}/ioExtractROI_QuickbirdPAN2PNG_100_100_77_300.png
          -startX 100 -startY 100 -sizeX 77 -sizeY 300
          -channels 1)
@@ -349,7 +382,7 @@ ADD_TEST(ioTvMultiChannelROI_QuickbirdXS2PNG ${COMMON_TESTS}
 #   --compare-image ${TOL}   ${BASELINE}/ioExtractROI_QuickbirdXS2PNG_100_100_77_300.png
 #                     ${TEMP}/ioExtractROI_QuickbirdXS2PNG_100_100_77_300.png
          otbMultiChannelExtractROI
-         ${IMAGEDATA}/PARIS_HR/QuickBird/000000183008_01_P001_MUL/02APR06105612-M1BS-000000183008_01_P001.TIF
+         ${IMAGEDATA}/TOULOUSE/QuickBird/000000128955_01_P001_MUL/02APR01105228-M1BS-000000128955_01_P001.TIF
          ${TEMP}/ioExtractROI_QuickbirdXS2PNG_100_100_77_300.png
          -startX 100 -startY 100 -sizeX 77 -sizeY 300
          -channels 1 2 3)
