@@ -18,6 +18,8 @@ extern "C"
 #include <string>
 #include <math.h>
 
+#include "otbMacro.h"
+
 // Pour supprimer les allocations faites dans la methode DetermineFormatSpot
 #define FREE(A)        { if ((A)!=NULL) { free(A); (A)=NULL; } }
 // Pour spécifique CAI
