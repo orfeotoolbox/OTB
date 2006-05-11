@@ -24,6 +24,7 @@ ADD_TEST(ioTvStreamingImageFilterTest ${IO_TESTS}
          ${INPUTDATA}/poupees_1canal.hd
          ${TEMP}/ioStreamingImageFilterTest.png
          )
+
 # ---  STREAMING   ---
 ADD_TEST(ioTvStreamingImageFileWriterTest ${IO_TESTS} 
 #   --compare-image ${TOL} ${TEMP}/ioStreamingImageFilterTestRef.png

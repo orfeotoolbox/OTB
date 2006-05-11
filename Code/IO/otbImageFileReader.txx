@@ -8,6 +8,7 @@
 #include "itkPixelTraits.h"
 #include "itkVectorImage.h"
 
+#include "otbMacro.h"
 #include "otbImageIOFactory.h"
 
 #include <itksys/SystemTools.hxx>
@@ -61,8 +62,8 @@ ImageFileReader<TOutputImage>
   output->SetBufferedRegion( output->GetRequestedRegion() );
   output->Allocate();
 
-std::cout <<"ImageFileReader<TOutputImage>::GenerateData : "<<std::endl;
-std::cout <<" output->GetRequestedRegion() : "<<output->GetRequestedRegion()<<std::endl;
+otbDebugMacro( <<"ImageFileReader<TOutputImage>::GenerateData : ");
+otbDebugMacro( <<" output->GetRequestedRegion() : "<<output->GetRequestedRegion());
 
   // Test if the file exist and if it can be open.
   // and exception will be thrown otherwise.
@@ -75,7 +76,7 @@ std::cout <<" output->GetRequestedRegion() : "<<output->GetRequestedRegion()<<st
   this->m_ImageIO->SetFileName(this->m_FileName.c_str());
 
   itk::ImageIORegion ioRegion(TOutputImage::ImageDimension);
-std::cout <<" Avant ioRegion : "<<ioRegion<<std::endl;
+otbDebugMacro( <<" Avant ioRegion : "<<ioRegion);
   
 //  itk::ImageIORegion ioRegionStreaming = output->GetRequestedRegion();
 
@@ -119,7 +120,7 @@ std::cout <<" Avant ioRegion : "<<ioRegion<<std::endl;
   ioRegion.SetSize(ioSize);
   ioRegion.SetIndex(ioStart);
 
-std::cout <<" Apres ioRegion : "<<ioRegion<<std::endl;
+otbDebugMacro( <<" Apres ioRegion : "<<ioRegion);
 
   itkDebugMacro (<< "ioRegion: " << ioRegion);
  
@@ -186,7 +187,7 @@ ImageFileReader<TOutputImage>
     }
     else
     {
-std::cout << " Streaming Image Read "<<std::endl;
+otbDebugMacro( << " Streaming Image Read ");
     }
 }
 

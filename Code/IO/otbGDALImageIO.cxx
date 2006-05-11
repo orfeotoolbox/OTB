@@ -90,7 +90,7 @@ bool GDALImageIO::CanReadFile(const char* file)
 {
   // First check the extension
   m_currentfile = file;
-  std::cout<<"Filename : "<<m_currentfile<<endl;
+  otbDebugMacro(<<"Filename : "<<m_currentfile);
   
   if(  file == NULL )
     {
@@ -266,7 +266,7 @@ void GDALImageIO::InternalReadImageInformation()
       // Set image dimensions into IO
       m_Dimensions[0] = m_width;
       m_Dimensions[1] = m_height;
-      std::cout<<"Get Dimensions : x="<<m_Dimensions[0]<<" & y="<<m_Dimensions[1]<<endl;
+      otbDebugMacro(<<"Get Dimensions : x="<<m_Dimensions[0]<<" & y="<<m_Dimensions[1]);
       }
 
     // Set Number of components
@@ -274,9 +274,9 @@ void GDALImageIO::InternalReadImageInformation()
     m_NbBands = m_poDataset->GetRasterCount();
 //    m_NumberOfComponents = m_NbBands;
     this->SetNumberOfComponents(m_NbBands);
-    std::cout<<"NbBands : "<<m_NbBands<<endl;
+    otbDebugMacro(<<"NbBands : "<<m_NbBands);
 
-    std::cout<<"Nb of Components : "<<this->GetNumberOfComponents()<<endl;
+    otbDebugMacro(<<"Nb of Components : "<<this->GetNumberOfComponents());
 
     
     // Set the number of dimensions (verify for the dim )
@@ -291,7 +291,7 @@ void GDALImageIO::InternalReadImageInformation()
       this->SetNumberOfDimensions(2);
 // Fin Modif OTB
 
-    std::cout<<"Nb of Dimensions : "<<m_NumberOfDimensions<<endl;
+    otbDebugMacro(<<"Nb of Dimensions : "<<m_NumberOfDimensions);
 
     // Automatically set the Type to Binary for GDAL data
     this->SetFileTypeToBinary();
@@ -389,8 +389,8 @@ void GDALImageIO::InternalReadImageInformation()
                 m_NbOctetPixel = 1;
         }
     
-    std::cout<<"Component Type : "<<m_ComponentType<<std::endl;
-    std::cout<<"NbOctetPixel   : "<<m_NbOctetPixel<<std::endl;
+    otbDebugMacro(<<"Component Type : "<<m_ComponentType);
+    otbDebugMacro(<<"NbOctetPixel   : "<<m_NbOctetPixel);
 
 
     /******************************************************************/

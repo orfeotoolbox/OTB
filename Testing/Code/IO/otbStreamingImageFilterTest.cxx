@@ -8,7 +8,6 @@
 
 #include "itkImage.h"
 #include "itkStreamingImageFilter.h"
-//#include "itkMeanImageFilter.h"
 
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
@@ -31,7 +30,6 @@ int otbStreamingImageFilterTest (int argc, char* argv[])
         typedef otb::ImageFileReader< InputImageType  >         ReaderType;
         typedef otb::ImageFileWriter< OutputImageType >         WriterType;
         
-//        typedef itk::MeanImageFilter<InputImageType,OutputImageType> MeanImageFilterType;
         typedef itk::StreamingImageFilter<InputImageType,OutputImageType> StreamingImageFilterType;
         
         
@@ -41,20 +39,13 @@ int otbStreamingImageFilterTest (int argc, char* argv[])
         reader->SetFileName( inputFilename  );
         writer->SetFileName( outputFilename );
         
-        
         StreamingImageFilterType::Pointer streamer = StreamingImageFilterType::New();
-//        MeanImageFilterType::Pointer filter1 = MeanImageFilterType::New();
-        
-//        filter1->SetInput( reader->GetOutput() );
-//        streamer->SetInput( filter1->GetOutput() );
 
         streamer->SetInput( reader->GetOutput() );
         streamer->SetNumberOfStreamDivisions( 10 );
         streamer->Update();
         
         writer->SetInput( streamer->GetOutput() );
-//        writer->SetInput( reader->GetOutput() );
-//        writer->SetInput( filter1->GetOutput() );
         writer->Update(); 
         
   } 

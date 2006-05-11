@@ -51,8 +51,8 @@ public:
    * file specified. */
   virtual bool CanReadFile(const char*) ;
 
-  virtual bool CanStreamRead(){  return false; };
-  virtual bool CanStreamWrite() { return false; };
+  /** Determine the file type. Returns true if the ImageIO can stream read the specified file */
+  virtual bool CanStreamRead(){  return true; };
 
   /** Set the spacing and dimension information for the set filename. */
   virtual void ReadImageInformation();
@@ -65,6 +65,9 @@ public:
   /** Determine the file type. Returns true if this ImageIO can write the
    * file specified. */
   virtual bool CanWriteFile(const char*);
+
+  /** Determine the file type. Returns true if the ImageIO can stream write the specified file */
+  virtual bool CanStreamWrite() { return true; };
 
   /** Set the spacing and dimension information for the set filename. */
   virtual void WriteImageInformation();
