@@ -65,6 +65,8 @@ int otbSVMClassifierImage(int argc, char* argv[] )
 
     const   unsigned int        	         Dimension = 2;
 
+    
+
     typedef itk::Image< itk::FixedArray<InputPixelType,3>,  Dimension >	InputImageType;
 
 

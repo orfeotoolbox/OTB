@@ -16,6 +16,7 @@
 
 #include "otbLineSpatialObjectList.h"
 #include "otbDrawLineSpatialObjectFilter.h"
+#include "itkRescaleIntensityImageFilter.h"
 
 
 namespace otb
@@ -60,7 +61,11 @@ public:
     
   typedef typename LinesListType::const_iterator LineListIterator;
   
-  typedef DrawLineSpatialObjectFilter< OutputImageType, OutputImageType > DrawLineType; 
+  typedef DrawLineSpatialObjectFilter< OutputImageType, OutputImageType > DrawLineType;
+
+  typedef itk::RescaleIntensityImageFilter< InputImageType,
+                                            OutputImageType > RescalerType; 
+
 
   /** Method for management of the "object factory". */
   itkNewMacro(Self);
@@ -95,6 +100,7 @@ private:
   void operator=(const Self&); //purposely not implemented
 
   typename DrawLineType::Pointer	m_DrawLineFilter;
+  typename RescalerType::Pointer        m_RescaleFilter;
 
 
 };

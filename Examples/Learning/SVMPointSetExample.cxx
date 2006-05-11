@@ -38,8 +38,7 @@ int main( int argc, char* argv[] )
   typedef int                             LabelPixelType;
   const   unsigned int        	                    Dimension = 2;
 
-  typedef itk::PointSet< InputVectorType,  Dimension >
-    MeasurePointSetType;
+  typedef itk::PointSet< InputVectorType,  Dimension >    MeasurePointSetType;
 
   typedef itk::PointSet< LabelPixelType,  Dimension >     LabelPointSetType;
 

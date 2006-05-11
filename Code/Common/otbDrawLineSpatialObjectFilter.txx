@@ -135,6 +135,7 @@ DrawLineSpatialObjectFilter<TInputImage, TOutputImage>
   x2 = (*itPoints).GetPosition()[0];
   y2 = (*itPoints).GetPosition()[1];
 
+
   // Distance between two points
   double DeltaX, DeltaY;
     

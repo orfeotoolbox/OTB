@@ -33,6 +33,7 @@ DrawLineSpatialObjectListFilter<TInputImage, TOutputImage>::DrawLineSpatialObjec
   this->SetNumberOfRequiredOutputs(1); 
   
   m_DrawLineFilter = DrawLineType::New();
+  m_RescaleFilter = RescalerType::New();
 
 }
 
@@ -67,6 +68,7 @@ DrawLineSpatialObjectListFilter<TInputImage, TOutputImage>
   typename OutputImageType::Pointer output  = this->GetOutput();
   typename LinesListType::Pointer  	list = this->GetInputLineSpatialObjectList();
 
+
   typename OutputImageType::RegionType region;
   region.SetSize(input->GetLargestPossibleRegion().GetSize());
   region.SetIndex(input->GetLargestPossibleRegion().GetIndex());
@@ -76,14 +78,19 @@ DrawLineSpatialObjectListFilter<TInputImage, TOutputImage>
   output->Allocate();
   output->FillBuffer(0);
 
+  m_RescaleFilter->SetOutputMinimum( itk::NumericTraits< OutputPixelType >::min());
+  m_RescaleFilter->SetOutputMaximum( itk::NumericTraits< OutputPixelType >::max());
+
+  m_RescaleFilter->SetInput( input );
 
   LineListIterator  itList = list->begin();
-  m_DrawLineFilter->SetInputImage( output );
+  m_DrawLineFilter->SetInputImage( m_RescaleFilter->GetOutput() );
   m_DrawLineFilter->SetInputLine( *itList );
   m_DrawLineFilter->GraftOutput( this->GetOutput() );
   m_DrawLineFilter->Update();
   ++itList;
-  
+
+
   // Draw each line of the list
   while( itList != list->end() )
      {
