@@ -3,14 +3,12 @@
 #pragma warning ( disable : 4786 )
 #endif
 
-//#define MAIN
-
 #include "itkExceptionObject.h"
 #include <iostream>
 
 #include "itkImage.h"
 #include "itkStreamingImageFilter.h"
-#include "itkMeanImageFilter.h"
+//#include "itkMeanImageFilter.h"
 
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
@@ -33,7 +31,7 @@ int otbStreamingImageFilterTest (int argc, char* argv[])
         typedef otb::ImageFileReader< InputImageType  >         ReaderType;
         typedef otb::ImageFileWriter< OutputImageType >         WriterType;
         
-        typedef itk::MeanImageFilter<InputImageType,OutputImageType> MeanImageFilterType;
+//        typedef itk::MeanImageFilter<InputImageType,OutputImageType> MeanImageFilterType;
         typedef itk::StreamingImageFilter<InputImageType,OutputImageType> StreamingImageFilterType;
         
         
@@ -44,17 +42,18 @@ int otbStreamingImageFilterTest (int argc, char* argv[])
         writer->SetFileName( outputFilename );
         
         
-//        StreamingImageFilterType::Pointer streamer = StreamingImageFilterType::New();
+        StreamingImageFilterType::Pointer streamer = StreamingImageFilterType::New();
 //        MeanImageFilterType::Pointer filter1 = MeanImageFilterType::New();
         
 //        filter1->SetInput( reader->GetOutput() );
 //        streamer->SetInput( filter1->GetOutput() );
 
-//        streamer->SetInput( reader->GetOutput() );
-//        streamer->SetNumberOfStreamDivisions( 5 );
-//        streamer->Update();
+        streamer->SetInput( reader->GetOutput() );
+        streamer->SetNumberOfStreamDivisions( 10 );
+        streamer->Update();
         
-        writer->SetInput( reader->GetOutput() );
+        writer->SetInput( streamer->GetOutput() );
+//        writer->SetInput( reader->GetOutput() );
 //        writer->SetInput( filter1->GetOutput() );
         writer->Update(); 
         
