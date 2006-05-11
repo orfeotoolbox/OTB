@@ -1,7 +1,10 @@
 IF( NOT OTB_DISABLE_CXX_TESTING )
 
-SET(BASELINE ${OTB_DATA_ROOT}/Baseline/Images)
-SET(INPUTDATA ${OTB_DATA_ROOT}/Input)
+SET(BASELINE ${OTB_DATA_DIR}/Baseline/OTB/Images)
+SET(BASELINE_FILES ${OTB_DATA_DIR}/Baseline/OTB/Files)
+SET(INPUTDATA ${OTB_DATA_DIR}/Input)
+#Images de teledetection (grosses images )
+SET(IMAGEDATA ${OTB_DATA_DIR}/LargeInput )
 SET(TEMP ${OTBTesting_BINARY_DIR}/Temporary)
 
 ADD_TEST(inTuInstallationTest ${CXX_TEST_PATH}/otbInstallationTest      
