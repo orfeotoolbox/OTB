@@ -22,6 +22,40 @@
 
 #include "itkMacro.h"
 
+/** This macro is used to print debug (or other information). They are
+ * also used to catch errors, etc. Example usage looks like:
+ * itkDebugMacro(<< "this is debug info" << this->SomeVariable); */
+#if defined(OTB_LEAN_AND_MEAN) || defined(__BORLANDC__)
+#define otbDebugMacro(x)
+#else
+#define otbDebugMacro(x) \
+  { if (this->GetDebug() && ::itk::Object::GetGlobalWarningDisplay())   \
+    { ::itk::OStringStream itkmsg; \
+      itkmsg << "Debug: In " __FILE__ ", line " << __LINE__ << "\n" \
+             << this->GetNameOfClass() << " (" << this << "): " x  \
+             << "\n\n"; \
+      ::itk::OutputWindowDisplayDebugText(itkmsg.str().c_str());} \
+}
+#endif
+
+
+/** This macro is used to print warning information (i.e., unusual circumstance
+ * but not necessarily fatal.) Example usage looks like:
+ * itkWarningMacro(<< "this is warning info" << this->SomeVariable); */
+#ifdef OTB_LEAN_AND_MEAN
+#define otbWarningMacro(x)
+#else
+#define otbWarningMacro(x) \
+{ if (itk::Object::GetGlobalWarningDisplay()) \
+    { ::itk::OStringStream itkmsg; \
+      itkmsg << "WARNING: In " __FILE__ ", line " << __LINE__ << "\n" \
+             << this->GetNameOfClass() << " (" << this << "): " x  \
+             << "\n\n"; \
+      itk::OutputWindowDisplayWarningText(itkmsg.str().c_str());} \
+}
+#endif
+
+
 namespace otb
 {
 
