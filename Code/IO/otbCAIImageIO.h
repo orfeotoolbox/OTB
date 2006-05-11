@@ -51,7 +51,7 @@ public:
    * file specified. */
   virtual bool CanReadFile(const char*) ;
 
-  virtual bool CanStreamRead(){  return true; };
+  virtual bool CanStreamRead(){  return false; };
   virtual bool CanStreamWrite() { return false; };
 
   /** Set the spacing and dimension information for the set filename. */

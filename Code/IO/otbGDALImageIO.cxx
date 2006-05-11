@@ -44,11 +44,13 @@ GDALImageIO::GDALImageIO()
   m_Origin[1] = 0.0;
 
   m_currentfile = NULL;
+  m_poBands = NULL;
+
 }
 
 GDALImageIO::~GDALImageIO()
 {
-	delete [] m_poBands;
+	if( m_poBands != NULL ) delete [] m_poBands;
 }
 
 

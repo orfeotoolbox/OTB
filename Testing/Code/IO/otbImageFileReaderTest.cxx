@@ -6,12 +6,12 @@
 //#define MAIN
 
 
-#include "itkImageFileWriter.h"
 #include "itkImage.h"
 #include "itkExceptionObject.h"
 #include <iostream>
 
 #include "otbImageFileReader.h"
+#include "itkImageFileWriter.h"
 
 int otbImageFileReaderTest(int argc, char* argv[])
 {
