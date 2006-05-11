@@ -51,6 +51,9 @@ public:
    * file specified. */
   virtual bool CanReadFile(const char*) ;
 
+  virtual bool CanStreamRead(){  return true; };
+  virtual bool CanStreamWrite() { return false; };
+
   /** Set the spacing and dimension information for the set filename. */
   virtual void ReadImageInformation();
   

@@ -422,13 +422,22 @@ void CAIImageIO::Read(void* buffer)
         unsigned long step = this->GetNumberOfComponents();
         unsigned char * p = static_cast<unsigned char *>(buffer);
         CAI_OK_KO lCrCai=CAI_KO;
-        int lNbLignes   = m_Dimensions[1];
-        int lNbColonnes = m_Dimensions[0];
+//        int lNbLignes   = m_Dimensions[1];
+//        int lNbColonnes = m_Dimensions[0];
+        int lNbLignes   = this->GetIORegion().GetSize()[1];
+        int lNbColonnes = this->GetIORegion().GetSize()[0];
+        int lPremiereLigne   = this->GetIORegion().GetIndex()[1] + 1; // [1... ]
+        int lPremiereColonne = this->GetIORegion().GetIndex()[0] + 1; // [1... ]
+        
         unsigned long lNbPixels = (unsigned long)(lNbColonnes*lNbLignes);
         unsigned long lTailleBuffer = (unsigned long)(m_NbOctetPixel)*lNbPixels;
         
         unsigned char* value = new unsigned char[lTailleBuffer];
         
+otbDebugMacro( << "CAIImageIO::Read()  ");
+otbDebugMacro( <<" Dimensions de l'image  : "<<m_Dimensions[0]<<","<<m_Dimensions[1]);
+otbDebugMacro( <<" Region lue (IORegion)  : "<<this->GetIORegion());
+
         // Mise a jour du step
         step = step * (unsigned long)(m_NbOctetPixel);
 
@@ -442,8 +451,8 @@ void CAIImageIO::Read(void* buffer)
         
                 lCrCai = cai_lecture_canal(     lCai,
                                                 nbComponents+1,         // Numero canal
-                                                1,                      // Premiere ligne [1... ]
-                                                1,                      // Premiere colonne [1...]
+                                                lPremiereLigne,         // Premiere ligne [1... ]
+                                                lPremiereColonne,       // Premiere colonne [1...]
                                                 lNbLignes,              // Nombre de lignes
                                                 lNbColonnes,            // Nombre de colonnes
                                                 1,                      // Pas en X
@@ -465,6 +474,7 @@ void CAIImageIO::Read(void* buffer)
           }
 
         delete [] value;
+otbDebugMacro( << "CAIImageIO::Read() terminee ");
 }
 
 void CAIImageIO::ReadImageInformation()
@@ -489,7 +499,7 @@ void CAIImageIO::ReadImageInformation()
     		itkExceptionMacro(<< "Impossible de lire les informations sur l'image " << m_FileName.c_str() <<" ("<<CaiFileName.c_str()<<";"<<CaiFormat.c_str()<<") : ("<<CAI_ERREUR<<").");
         }
         
-std::cout << "Driver: CAI - "<<CaiFormat<<std::endl;
+otbDebugMacro( << "Driver: CAI - "<<CaiFormat);
         
         this->SetNumberOfDimensions(2);
         m_Dimensions[0] = NbColonnes;
@@ -549,6 +559,7 @@ std::cout << "Driver: CAI - "<<CaiFormat<<std::endl;
         
         //Stock le pointer CAI
         m_ptrCai = (char*)lCai;
+otbDebugMacro( << "CAIImageIO::ReadImageInformation() terminee ");
 }
 
 void CAIImageIO::WriteImageInformation(void)
@@ -631,8 +642,17 @@ void CAIImageIO::Write( const void* buffer)
         unsigned long l=0;
         unsigned long step = this->GetNumberOfComponents();
         CAI_OK_KO lCrCai=CAI_KO;
-        int lNbLignes   = m_Dimensions[1];
-        int lNbColonnes = m_Dimensions[0];
+//        int lNbLignes   = m_Dimensions[1];
+//        int lNbColonnes = m_Dimensions[0];
+        int lNbLignes   = this->GetIORegion().GetSize()[1];
+        int lNbColonnes = this->GetIORegion().GetSize()[0];
+        int lPremiereLigne   = this->GetIORegion().GetIndex()[1] + 1; // [1... ]
+        int lPremiereColonne = this->GetIORegion().GetIndex()[0] + 1; // [1... ]
+
+otbDebugMacro( << "CAIImageIO::Write()  ");
+otbDebugMacro( <<" Dimensions de l'image  : "<<m_Dimensions[0]<<","<<m_Dimensions[1]);
+otbDebugMacro( <<" Region lue (IORegion)  : "<<this->GetIORegion());
+
         unsigned long lNbPixels = (unsigned long)(lNbColonnes*lNbLignes);
         unsigned long lTailleBuffer = (unsigned long)(m_NbOctetPixel)*lNbPixels;
         
@@ -657,7 +677,8 @@ void CAIImageIO::Write( const void* buffer)
                 }
                 lCrCai = cai_ecriture_canal(    lCai,
                                                 nbComponents+1,         // Numero canal
-                                                1,                      // Premiere ligne [1... ]
+//                                                1,                      // Premiere ligne [1... ]
+                                                lPremiereLigne,                      // Premiere ligne [1... ]
                                                 lNbLignes,              // Nombre de lignes
                                                 lNbColonnes,            // Nombre de colonnes
                                                 value );

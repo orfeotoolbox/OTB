@@ -49,6 +49,147 @@ void ImageFileReader<TOutputImage>
   os << indent << "m_FileName: " << this->m_FileName << "\n";
 }
 
+template <class TOutputImage>
+void
+ImageFileReader<TOutputImage>
+::GenerateData()
+{
+
+  typename TOutputImage::Pointer output = this->GetOutput();
+
+  // allocate the output buffer
+  output->SetBufferedRegion( output->GetRequestedRegion() );
+  output->Allocate();
+
+std::cout <<"ImageFileReader<TOutputImage>::GenerateData : "<<std::endl;
+std::cout <<" output->GetRequestedRegion() : "<<output->GetRequestedRegion()<<std::endl;
+
+  // Test if the file exist and if it can be open.
+  // and exception will be thrown otherwise.
+  this->TestFileExistanceAndReadability();
+
+  // Tell the ImageIO to read the file
+  //
+  OutputImagePixelType *buffer = 
+    output->GetPixelContainer()->GetBufferPointer();
+  this->m_ImageIO->SetFileName(this->m_FileName.c_str());
+
+  itk::ImageIORegion ioRegion(TOutputImage::ImageDimension);
+std::cout <<" Avant ioRegion : "<<ioRegion<<std::endl;
+  
+//  itk::ImageIORegion ioRegionStreaming = output->GetRequestedRegion();
+
+  itk::ImageIORegion::SizeType ioSize = ioRegion.GetSize();
+  itk::ImageIORegion::IndexType ioStart = ioRegion.GetIndex();
+
+/* Init IORegion with size or streaming size */
+  SizeType dimSize;
+  for(unsigned int i=0; i<TOutputImage::ImageDimension; i++)
+    {
+    if (i < this->m_ImageIO->GetNumberOfDimensions())
+      {
+      if( !this->m_ImageIO->CanStreamRead() )
+      dimSize[i] = this->m_ImageIO->GetDimensions(i);
+      else
+      dimSize[i] = output->GetRequestedRegion().GetSize()[i];
+      }
+    else
+      {
+      // Number of dimensions in the output is more than number of dimensions
+      // in the ImageIO object (the file).  Use default values for the size,
+      // spacing, and origin for the final (degenerate) dimensions.
+      dimSize[i] = 1;
+      }
+    }
+
+  for(unsigned int i = 0; i < dimSize.GetSizeDimension(); ++i)
+    {
+    ioSize[i] = dimSize[i];
+    }
+
+  typedef typename TOutputImage::IndexType   IndexType;
+  IndexType start;
+  if( !this->m_ImageIO->CanStreamRead() )  start.Fill(0);
+  else start = output->GetRequestedRegion().GetIndex();
+  for(unsigned int i = 0; i < start.GetIndexDimension(); ++i)
+    {
+    ioStart[i] = start[i];
+    }
+
+  ioRegion.SetSize(ioSize);
+  ioRegion.SetIndex(ioStart);
+
+std::cout <<" Apres ioRegion : "<<ioRegion<<std::endl;
+
+  itkDebugMacro (<< "ioRegion: " << ioRegion);
+ 
+  this->m_ImageIO->SetIORegion(ioRegion);
+
+  typedef itk::DefaultConvertPixelTraits< typename TOutputImage::IOPixelType >  ConvertPixelTraits;
+  
+  
+  
+  if ( this->m_ImageIO->GetComponentTypeInfo()
+       == typeid(ITK_TYPENAME ConvertPixelTraits::ComponentType)
+       && (this->m_ImageIO->GetNumberOfComponents()
+           == ConvertPixelTraits::GetNumberOfComponents()))
+    {
+    itkDebugMacro(<< "No buffer conversion required.");
+    // allocate a buffer and have the ImageIO read directly into it
+    this->m_ImageIO->Read(buffer);
+    return;
+    }
+  else // a type conversion is necessary
+    {
+    itkDebugMacro(<< "Buffer conversion required.");
+    // note: char is used here because the buffer is read in bytes
+    // regardles of the actual type of the pixels.
+    ImageRegionType region = output->GetBufferedRegion();
+//THOMAS : PB : le GetImageSizeInBytes s'appuie sur m_Dimension lue, donc dimensions physique,de 
+// l'image (pas celle bufferiséd ans la cas du streaming )
+    char * loadBuffer = 
+      new char[this->m_ImageIO->GetImageSizeInBytes()];
+
+    this->m_ImageIO->Read(loadBuffer);
+    
+    itkDebugMacro(<< "Buffer conversion required from: "
+                  << this->m_ImageIO->GetComponentTypeInfo().name()
+                  << " to: "
+                  << typeid(ITK_TYPENAME ConvertPixelTraits::ComponentType).name());
+
+    this->DoConvertBuffer(loadBuffer, region.GetNumberOfPixels());
+    delete [] loadBuffer;
+    }
+}
+
+
+template <class TOutputImage>
+void
+ImageFileReader<TOutputImage>
+::EnlargeOutputRequestedRegion(itk::DataObject *output)
+{
+  typename TOutputImage::Pointer out = dynamic_cast<TOutputImage*>(output);
+
+  // the ImageIO object cannot stream, then set the RequestedRegion to the
+  // LargestPossibleRegion
+  if (!this->m_ImageIO->CanStreamRead())
+    {
+    if (out)
+      {
+      out->SetRequestedRegion( out->GetLargestPossibleRegion() );
+      }
+    else
+      {
+      throw itk::ImageFileReaderException(__FILE__, __LINE__,
+                                     "Invalid output object type");
+      }
+    }
+    else
+    {
+std::cout << " Streaming Image Read "<<std::endl;
+    }
+}
+
 
 template <class TOutputImage>
 void 

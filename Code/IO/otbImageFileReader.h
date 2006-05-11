@@ -65,6 +65,16 @@ public:
    * pipeline. */
   virtual void GenerateOutputInformation(void);
 
+  /** Does the real work. */
+  virtual void GenerateData();
+
+  /** Give the reader a chance to indicate that it will produce more
+   * output than it was requested to produce. ImageFileReader cannot
+   * currently read a portion of an image (since the ImageIO objects
+   * cannot read a portion of an image), so the ImageFileReader must
+   * enlarge the RequestedRegion to the size of the image on disk. */
+  virtual void EnlargeOutputRequestedRegion(itk::DataObject *output);
+
 
 protected:
   ImageFileReader();

@@ -151,22 +151,6 @@ void GDALImageIO::ReadVolume(void*)
 {
 }
 
-// Not used anymore 
-/*void GDALImageIO::SampleImage(void* buffer,int XBegin, int YBegin, int SizeXRead, int SizeYRead, int XSample, int YSample)
-{
-  InputPixelType * p = static_cast<InputPixelType *>(buffer);
-  // pafimas = new float*[m_NbBands];
-  //p= new unsigned short*;
-  
-  if(p==NULL)
-   {
-   std::cout<<"Error in allocating memory"<<endl;
-   return;
-   }
-
-  if((m_poBands[0]->RasterIO( GF_Read,XBegin, YBegin,SizeXRead,SizeYRead , p , XSample, YSample, GDT_Byte,0, 0 ))==CE_Failure)
-    std::cout<<"[GDALImageIO::Read] Failed in reading image "<<std::endl;
-}*/
 
 // Read image with GDAL
 void GDALImageIO::Read(void* buffer)
@@ -178,8 +162,17 @@ void GDALImageIO::Read(void* buffer)
                 itkExceptionMacro(<<"Erreur allocation mémoire");
                 return;
         }
-        int lNbLignes   = m_Dimensions[1];
-        int lNbColonnes = m_Dimensions[0];
+//        int lNbLignes   = m_Dimensions[1];
+//        int lNbColonnes = m_Dimensions[0];
+        int lNbLignes   = this->GetIORegion().GetSize()[1];
+        int lNbColonnes = this->GetIORegion().GetSize()[0];
+        int lPremiereLigne   = this->GetIORegion().GetIndex()[1]; // [1... ]
+        int lPremiereColonne = this->GetIORegion().GetIndex()[0]; // [1... ]
+
+otbDebugMacro( << "GDALImageIO::Read()  ");
+otbDebugMacro( <<" Dimensions de l'image  : "<<m_Dimensions[0]<<","<<m_Dimensions[1]);
+otbDebugMacro( <<" Region lue (IORegion)  : "<<this->GetIORegion());
+
         unsigned long lNbPixels = (unsigned long)(lNbColonnes*lNbLignes);
         unsigned long lTailleBuffer = (unsigned long)(m_NbOctetPixel)*lNbPixels;
         
@@ -196,7 +189,7 @@ void GDALImageIO::Read(void* buffer)
         CPLErr lCrGdal;
         for ( int nbComponents = 0 ; nbComponents < this->GetNumberOfComponents() ; nbComponents++)
         {
-                lCrGdal = m_poBands[nbComponents]->RasterIO( GF_Read,0,0,m_Dimensions[0],m_Dimensions[1] , value , lNbColonnes, lNbLignes, m_PxType,0, 0 ) ;
+                lCrGdal = m_poBands[nbComponents]->RasterIO( GF_Read,lPremiereColonne,lPremiereLigne,lNbColonnes, lNbLignes, value , lNbColonnes, lNbLignes, m_PxType,0, 0 ) ;
                 if (lCrGdal == CE_Failure)
                 {
     	        	itkExceptionMacro(<< "Erreur lors de la lecture de l'image (format GDAL) " << m_FileName.c_str()<<".");
@@ -221,6 +214,7 @@ void GDALImageIO::Read(void* buffer)
           }
 
         delete [] value;
+otbDebugMacro( << "GDALImageIO::Read() terminee");
 
 }
 
