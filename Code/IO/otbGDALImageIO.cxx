@@ -13,6 +13,7 @@
 #include <zlib.h>
 
 #include "otbGDALImageIO.h"
+#include "otbMacro.h"
 //#include "otbCAIImageIO.h"
 #include "itkPNGImageIO.h"
 
