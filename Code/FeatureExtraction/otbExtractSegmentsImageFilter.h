@@ -25,8 +25,14 @@ namespace otb
 
 /** \class ExtractSegmentsImageFilter
  *
- * This class implements a composite filter that combines four filters.
- * 
+ * This class implements a composite filter that generate an image of segments
+ * primitives. It combines four filters : 
+ * \begin{itemize}
+ *   \item otb::PixelSuppressionByDirectionImageFilter
+ *   \item otb::LocalHoughFilter
+ *   \item otb::FillGapsFilter
+ *   \item otb::DrawLineSpatialObjectListFilter
+ * \end{itemize}
  *
  */
 

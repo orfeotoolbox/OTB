@@ -89,7 +89,7 @@ LinePointResearch(LineIterator itLines, InputImageType *image, IndexType origin)
 		
 
       // Check if the local index is inside the image and the previous
-      // index is outsideor if the local index is inside the image and
+      // index is outside or if the local index is inside the image and
       // the next index is outside
 	
 	      
