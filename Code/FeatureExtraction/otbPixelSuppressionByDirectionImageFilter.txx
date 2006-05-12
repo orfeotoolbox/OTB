@@ -201,7 +201,7 @@ void PixelSuppressionByDirectionImageFilter< TInputImage, TOutputImage>::Threade
   // Process each of the boundary faces.  These are N-d regions which border
   // the edge of the buffer.
   for (fit=faceList.begin(); fit != faceList.end(); ++fit)
-    { 
+    {
     bit = itk::ConstNeighborhoodIterator<InputImageType>(m_Radius, inputDirection, *fit);
     unsigned int neighborhoodSize = bit.Size();
       
@@ -215,95 +215,84 @@ void PixelSuppressionByDirectionImageFilter< TInputImage, TOutputImage>::Threade
     while ( ! bit.IsAtEnd() )
       {
       	
-      // Location of the central pixel of the region in the input image
+      /*// Location of the central pixel of the region in the input image
       bitIndex = bit.GetIndex();
       
       Xc = bitIndex[0];
       Yc = bitIndex[1];
-    
+    */
       // Get Pixel Direction from the image of directions
       ThetaXcYc = static_cast<double>( bit.GetCenterPixel() );
+
+//      std::cout << ThetaXcYc << std::endl ;
 
       // Pixel intensity in the input image      
       PixelValue = itin.Get();
 
       bool IsLine = false;
-      
-      // Loop on the region 
-      for (i = 0; i < neighborhoodSize; ++i)
+
+      typename itk::ConstNeighborhoodIterator<InputImageType>::OffsetType	off;
+      // Loop on the region
+      for (int i = 0; i < 2*m_Radius[0]+1; ++i)
+	for (int j = 0; j < 2*m_Radius[1]+1; ++j)
         {
 
-        // Pixel location in the system axis of the region (Xc,Yc) -> (0,0)        	
-	bitIndex = bit.GetIndex(i);
+	off[0]=i-m_Radius[0];
+	off[1]=j-m_Radius[1];
 	
-        x = bitIndex[0] - Xc;
-        y = bitIndex[1] - Yc;
+        x = off[0];
+        y = off[1];
+
         
         // No calculation on the central pixel  
         if (( x == 0 ) and ( y == 0 )) 
            continue;
 
-	// Distance between pixel (x,y) and central pixel 
-//	DistanceXY = static_cast<double>(sqrt(x*x+y*y));
+	Thetaxtyt = atan2(y,x); //result is [-PI,PI]
+	while(Thetaxtyt < 0)
+	  Thetaxtyt = M_PI + Thetaxtyt; // Theta is now [0,PI] as is
+					// the result of detectors
+	while(Thetaxtyt > M_PI/2.0)
+	  Thetaxtyt = Thetaxtyt-M_PI; // Theta is now [-PI/2,PI/2]
+
+
+//	std::cout << x << " " << y << " -> " << atan2(y,x) << " --> " << Thetaxtyt << std::endl;
+
+	if( (fabs(cos(Thetaxtyt-ThetaXcYc)) >= cos(m_AngularBeam)) // this
+								   // pixel
+								   // is
+								   // in
+								   // the
+								   // angular beam
+	    && (fabs(cos(bit.GetPixel(off)-ThetaXcYc)) >= cos(m_AngularBeam)) ) //and
+										//its
+										//direction
+										//is
+										//also
+										//in
+										//the beam
+	  {
+	  IsLine = true;
+	  continue;
+	  }
 		
 	
-	// If the pixel (x,y) is inside the circle of radius m_Radius
-//	if ( DistanceXY <= m_Radius[0] )
-//	   {
-	   
-// 	   // Rotation of the system axis in the direction of the central pixel (thetaXcYc)
-// 	   // (x,y) -> (xt,yt)
-// 	   TRANSITION_MATRIX( x, y, ThetaXcYc, xt, yt );
-
-   	
-//    	   // The absolute value of yt/xt is used to bring back the pixel (xt,yt)
-//    	   // in positive co-ordinates 
-//    	   // => thetaxtyt is included in the interval [0;PI/2]
-// 	   if ( xt != 0. )
-// 	      Thetaxtyt = atan( fabs(yt/xt) );
-// 	   else
-// 	      Thetaxtyt = M_PI/2.;
-
-	   
-// 	   // Then, we test if the pixel is included in the interval [0;m_AngularBeam] 
-// 	   if ( (0. <= Thetaxtyt) and
-// 	   	(Thetaxtyt <= m_AngularBeam) )
-// 	      {
-// 	      // The pixel is located in the direction of the central pixel
-// 	      // Get the direction of the pixel (X,Y) in the image of diretions
-// 	      ThetaXY = static_cast<double>(bit.GetPixel(i));
-	      
-// 	      // Angular tolerance on the direction of the central pixel
-// 	      MinThetaXcYc = ThetaXcYc - m_AngularBeam;
-// 	      MaxThetaXcYc = ThetaXcYc + m_AngularBeam;	
-
-// 	      // Test if the pixel belongs to a line   
-// 	      if ( (MinThetaXcYc <= ThetaXY) &&
-// 	      	   (ThetaXY <= MaxThetaXcYc ) )
-	      	   
-// 		 IsLine = true;
-//	   }
-
-	   Thetaxtyt = atan2(y,x) - M_PI/2.0;
-	   if(Thetaxtyt < 0)
-	     Thetaxtyt = M_PI + Thetaxtyt;
-
-//	   std::cout << sin(Thetaxtyt) << " " << sin(ThetaXcYc) << " " << sin(bit.GetPixel(i)) << std::endl;
-	   if( (fabs(sin(Thetaxtyt-ThetaXcYc)) <= sin(m_AngularBeam)) && (fabs(sin(bit.GetPixel(i)-ThetaXcYc)) <= sin(m_AngularBeam)) )
-	     IsLine = true;
-//	   }
-	      
-
 	}
-
-       // end of the loop on the pixels of the region 
-  
-
+      
+      // end of the loop on the pixels of the region 
+      
+      
       // Assignment of this value to the output pixel
       if (IsLine == true)
-         itout.Set( static_cast<OutputPixelType>(PixelValue) );
+	{
+	itout.Set( static_cast<OutputPixelType>(PixelValue) );
+//	std::cout << " Yes " << std::endl;
+	}
       else
-         itout.Set( static_cast<OutputPixelType>(0.) );  
+	{
+	itout.Set( static_cast<OutputPixelType>(0.) );
+//	std::cout << " No " << std::endl;
+	}
                  
       
       ++bit;
