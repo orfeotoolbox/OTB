@@ -189,12 +189,12 @@ DrawLineSpatialObjectFilter<TInputImage, TOutputImage>
       } 
 
    // Exception
-   else 
+/*   else 
       {
       itkExceptionMacro(<< "otb::DrawLineSpatialObjectFilter::GenerateData : "
                       	<< "the line is defined by one point : deltaX = deltaY = 0.");
       }
-	
+	*/
 }
 
 /**

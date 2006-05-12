@@ -169,7 +169,8 @@ protected:
       if(R14 < Rmin) Rmin = R14;
       if(R23 < Rmin) Rmin = R23;
       if(R24 < Rmin) Rmin = R24;
-      
+
+
       if(Rmin < m_Radius)
         {
 	// Sort Points such as the radius of P2 and P3 is the smallest one. 
@@ -185,7 +186,7 @@ protected:
 	   x1    = x2   ; y1    = y2; 
    	   x2    = xTemp; y2    = yTemp;
 	  }
-	if(Rmin == R13 )
+	if(Rmin == R14 )
 	  {
 	   xTemp = x3   ; yTemp = y3 ;
 	   x3    = x4   ; y3    = y4; 
@@ -196,21 +197,28 @@ protected:
 	  }
 	  
 	//Estimate the norm each line 
-	double Norm12,Norm23,Norm34;
+/*	double Norm12,Norm23,Norm34;
 	Norm12 = sqrt( (x1-x2)*(x1-x2) + (y1-y2)*(y1-y2) ); 	
 	Norm23 = sqrt( (x2-x3)*(x2-x3) + (y2-y3)*(y2-y3) );
 	Norm34 = sqrt( (x3-x4)*(x3-x4) + (y3-y4)*(y3-y4) );
-	
-	double Angle12_23,Angle12_34;
+	*/
+	double Angle12_23,Angle12_34,Angle23_34;
 	//Estimate the angle between lines 12-23 and lines 12-34 
-	Angle12_23 = (x2-x1)*(x3-x2) + (y2-y1)*(y3-y2);
+	/*Angle12_23 = (x2-x1)*(x3-x2) + (y2-y1)*(y3-y2);
 	Angle12_23 = Angle12_23 / Norm12 / Norm23;
 	
 	Angle12_34 = (x2-x1)*(x4-x3) + (y2-y1)*(y4-y3);
-	Angle12_34 = Angle12_34 / Norm12 / Norm34;
+	Angle12_34 = Angle12_34 / Norm12 / Norm34;*/
+
+	Angle12_23 = cos(atan2((y2-y1), (x2-x1))-atan2((y3-y2), (x3-x2)));
+	Angle12_34 = cos(atan2((y2-y1), (x2-x1))-atan2((y4-y3), (x4-x3)));
+	Angle23_34 = cos(atan2((y3-y2), (x3-x2))-atan2((y4-y3), (x4-x3)));
+
 	
-	if( (Angle12_23 > CosTheta) && (Angle12_34 > CosTheta) )
+	if( (Angle12_23 > CosTheta) && (Angle12_34 > CosTheta) && (Angle23_34 > CosTheta) )
 	  {
+
+
 	   // Store 23-segment
 	   PointType      point;
   	   PointListType  pointList;
