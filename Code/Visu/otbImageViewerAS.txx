@@ -21,10 +21,10 @@ ImageViewerAS<TPixel>
 {
         m_Label = "Image";
         this->ClearSelectChannels();
-        m_PrincipalImage = NULL;
-   
+        m_PrincipalLeftImage = NULL;
+        m_PrincipalRightImage = NULL;
         m_InitPrincipalWinSizeMax = 300;
-        m_ExtractROIFilter = ExtractROIFilterType::New();
+        //m_ExtractROIFilter = ExtractROIFilterType::New();
         
         CreateGUI();
 }
@@ -48,29 +48,6 @@ ImageViewerAS<TPixel>
 }
 
 
-template <class TPixel>
-void
-ImageViewerAS<TPixel>
-::ExtractImagePrincipal(const RegionType & zone) 
-{
-        m_ExtractROIFilter->SetSizeX( zone.GetSize()[0]);
-        m_ExtractROIFilter->SetSizeY( zone.GetSize()[1]);
-        m_ExtractROIFilter->SetStartX( zone.GetIndex()[0] );
-        m_ExtractROIFilter->SetStartY( zone.GetIndex()[1] );
-        m_ExtractROIFilter->UpdateLargestPossibleRegion();
-        m_ExtractROIFilter->Update();
-        m_PrincipalImage = m_ExtractROIFilter->GetOutput();
-}
-
-
-/*template <class TPixel>
-void
-ImageViewerAS<TPixel>
-::PrincipalResize() */
-
-
-
-
 
 
 
@@ -79,47 +56,51 @@ void
 ImageViewerAS<TPixel>
 ::BuildHMI(void) 
 {
-	m_InputImage->Update();
-	m_PrincipalImage = m_InputImage;
-	this->GenerateChannelsInformations();
+	m_InputLeftImage->Update();
+	m_InputRightImage->Update();
+	m_PrincipalLeftImage = m_InputLeftImage;
+	m_PrincipalRightImage = m_InputRightImage;
+	this->ClearSelectChannels();
+	this->GenerateLeftChannelsInformations();
+	this->GenerateRightChannelsInformations();
 	this->SetChannelsInformationsToImagesView();
   	this->Superclass::Update();
   	static bool firstTime = true;
 	
         // Fenetre d'affichage AVANT classif
         //----------------------------------------
-	std::cout << "Taille input image : " << m_InputImage->GetLargestPossibleRegion().GetSize()[0] 
-	<< " " << m_InputImage->GetLargestPossibleRegion().GetSize()[1] << std::endl ; 
+	/*std::cout << "Taille input image : " << m_InputLeftImage->GetLargestPossibleRegion().GetSize()[0] 
+	<< " " << m_InputLeftImage->GetLargestPossibleRegion().GetSize()[1] << std::endl ; 
 	std::cout << "Taille principal image : " << m_PrincipalViewBeforeClassif->sizeX()
-	<< " " << m_PrincipalViewBeforeClassif->sizeY() << std::endl;
+	<< " " << m_PrincipalViewBeforeClassif->sizeY() << std::endl;*/
 	
 	/*m_ShrinkImageFilter->SetShrinkFactors(0);
         m_ShrinkImageFilter->SetInput( m_InputImage );
         m_ShrinkImageFilter->Update();
         m_PrincipalImage = m_ShrinkImageFilter->GetOutput();*/
 	
-	
-	
-        m_PrincipalViewBeforeClassif->SetInput( m_PrincipalImage );
+		m_PrincipalViewBeforeClassif->SetClickable(true);
+        m_PrincipalViewBeforeClassif->SetInput( m_PrincipalLeftImage );
         m_PrincipalViewBeforeClassif->SetDoubleWindow( iviewWindowPrincipal );
         m_PrincipalViewBeforeClassif->SetViewer( this );
         m_PrincipalViewBeforeClassif->SetLabel( m_Label + m_SuffixPrincipalTitle );
-  	m_PrincipalViewBeforeClassif->Show();
+  		m_PrincipalViewBeforeClassif->Show();
 	
         // Fenetre d'affichage APRES classif
         //----------------------------------------
-        m_PrincipalViewAfterClassif->SetInput( m_PrincipalImage );
+        m_PrincipalViewAfterClassif->SetClickable(false);
+		m_PrincipalViewAfterClassif->SetInput( m_PrincipalRightImage );
         m_PrincipalViewAfterClassif->SetDoubleWindow( iviewWindowPrincipal );
         m_PrincipalViewAfterClassif->SetViewer( this );
         m_PrincipalViewAfterClassif->SetLabel( m_Label + m_SuffixPrincipalTitle );
-  	m_PrincipalViewAfterClassif->Show();
-	
+  		m_PrincipalViewAfterClassif->Show();
+
        	if( firstTime == true)
   	{
     		firstTime = false;
     		Fl::check();
     		m_PrincipalViewBeforeClassif->redraw();
-		m_PrincipalViewAfterClassif->redraw();
+			m_PrincipalViewAfterClassif->redraw();
     		Fl::check();
   	}
         SetLabel("aaa");
@@ -130,11 +111,21 @@ ImageViewerAS<TPixel>
 template <class TPixel>
 void
 ImageViewerAS<TPixel>
-::SetImage(itk::ImageBase<2> * img)
+::SetLeftImage(itk::ImageBase<2> * img)
 {
-  m_InputImage = dynamic_cast<ImageType *>( img );
+  m_InputLeftImage = dynamic_cast<ImageType *>( img );
   this->Modified();
 }
+
+template <class TPixel>
+void
+ImageViewerAS<TPixel>
+::SetRightImage(itk::ImageBase<2> * img)
+{
+  m_InputRightImage = dynamic_cast<ImageType *>( img );
+  this->Modified();
+}
+
 
 template <class TPixel>
 void 
@@ -229,71 +220,150 @@ ImageViewerAS<TPixel>
 template <class TPixel>
 void 
 ImageViewerAS<TPixel>
-::GenerateChannelsInformations(void)
+::GenerateLeftChannelsInformations(void)
 {
 
-        m_ChannelsWorks.clear();
+        m_LeftChannelsWorks.clear();
         
         //Controle que l'utilisateur a bien selectionne de canaux coherent
-        if( m_GrayLevelChannel != -1 )
+        if( m_LeftGrayLevelChannel != -1 )
         {
-                if( (m_RedChannel != -1 ) || (m_GreenChannel != -1 ) || (m_BlueChannel != -1 ) )
+                if( (m_LeftRedChannel != -1 ) || (m_LeftGreenChannel != -1 ) || (m_LeftBlueChannel != -1 ) )
                 {
                         itkExceptionMacro(<< "Vous avez selectionne un canal pour le niveau de gris, mais aussi un (ou des) canaux en RGB" );
                 }
-                
-                m_ModeView = ImageViewBaseType::GRAY_LEVEL;
+               m_LeftModeView = ImageViewBaseType::GRAY_LEVEL;
         }
         else
         {
-               m_ModeView = ImageViewBaseType::RGB_LEVEL;
-               if( (m_RedChannel == -1 ) && (m_GreenChannel == -1 ) && (m_BlueChannel == -1 ) )
+               m_LeftModeView = ImageViewBaseType::RGB_LEVEL;
+               if( (m_LeftRedChannel == -1 ) && (m_LeftGreenChannel == -1 ) && (m_LeftBlueChannel == -1 ) )
                {
                         //itkExceptionMacro(<< "Aucun canal n'a ete selectionne" );
                         // On les choisi automatiquement,si c'est possible
-                        int nbCanauxInputImage = m_PrincipalImage->GetNumberOfComponentsPerPixel();
-                        
+                        int nbCanauxInputImage = m_PrincipalLeftImage->GetNumberOfComponentsPerPixel();
+                       						
                         switch ( nbCanauxInputImage )
                         {
                                 case 1 :
-                                        m_GrayLevelChannel = 1;
-                                        m_ModeView = ImageViewBaseType::GRAY_LEVEL;
+									    m_LeftGrayLevelChannel = 1;
+                                        m_LeftModeView = ImageViewBaseType::GRAY_LEVEL;
                                         break;
                                 default :
                                 case 3 : 
-                                        m_BlueChannel = 3;
-                                        m_ModeView = ImageViewBaseType::RGB_LEVEL;
+                                        m_LeftBlueChannel = 3;
+                                        m_LeftModeView = ImageViewBaseType::RGB_LEVEL;
                                 case 2 : 
-                                        m_GreenChannel = 2;
-                                        m_RedChannel = 1;
-                                        m_ModeView = ImageViewBaseType::RGB_LEVEL;
+                                        m_LeftGreenChannel = 2;
+                                        m_LeftRedChannel = 1;
+                                        m_LeftModeView = ImageViewBaseType::RGB_LEVEL;
                                         break;
                         }
-               }
+			    }
                
         }
         // On selectionne dans "m_ChannelsWorks" que les canaux valide, a lire dans l'image d'entree
-        switch( m_ModeView )
+        switch( m_LeftModeView )
         {
-                case ImageViewBaseType::GRAY_LEVEL :       m_ChannelsWorks.push_back( m_GrayLevelChannel );
+                case ImageViewBaseType::GRAY_LEVEL :  m_LeftChannelsWorks.push_back( m_LeftGrayLevelChannel );
                         break;
-                case ImageViewBaseType::RGB_LEVEL :        
-                                        if ( m_RedChannel != -1 ) m_ChannelsWorks.push_back( m_RedChannel );
-                                        if ( m_GreenChannel != -1 ) m_ChannelsWorks.push_back( m_GreenChannel );
-                                        if ( m_BlueChannel != -1 ) m_ChannelsWorks.push_back( m_BlueChannel );
+                case ImageViewBaseType::RGB_LEVEL :							    
+                                        if ( m_LeftRedChannel != -1 ) m_LeftChannelsWorks.push_back( m_LeftRedChannel );
+                                        if ( m_LeftGreenChannel != -1 ) m_LeftChannelsWorks.push_back( m_LeftGreenChannel );
+                                        if ( m_LeftBlueChannel != -1 ) m_LeftChannelsWorks.push_back( m_LeftBlueChannel );
                         break;
         
         }
+			
         //Controle que les canaux selection existe bien dans l'image d'entree
-        for ( int nbChannels = 0 ; nbChannels < m_ChannelsWorks.size() ; nbChannels++)
+        for ( int nbChannels = 0 ; nbChannels < m_LeftChannelsWorks.size() ; nbChannels++)
         {
-                if ( (m_ChannelsWorks[nbChannels] <= 0) || (m_ChannelsWorks[nbChannels] > m_PrincipalImage->GetNumberOfComponentsPerPixel()) )
+                if ( (m_LeftChannelsWorks[nbChannels] <= 0) ||
+				(m_LeftChannelsWorks[nbChannels] > m_PrincipalLeftImage->GetNumberOfComponentsPerPixel()) )
                 {
-                        itkExceptionMacro(<< "L'image d'entree possede "<<m_PrincipalImage->GetNumberOfComponentsPerPixel()<< "\n Vous devez selectionner des canaux dans [1..."<<m_PrincipalImage->GetNumberOfComponentsPerPixel()<<"]." );
+                       	itkExceptionMacro(<< "L'image d'entree possede"
+					                      <<m_PrincipalLeftImage->GetNumberOfComponentsPerPixel()
+										  << "\n Vous devez selectionner des canaux dans [1..."<<m_PrincipalLeftImage->GetNumberOfComponentsPerPixel()<<"]." );
                 }
         }
-        m_NbDim = (int)m_ModeView;
+        m_LeftNbDim = (int)m_LeftModeView;
 }
+
+
+
+template <class TPixel>
+void 
+ImageViewerAS<TPixel>
+::GenerateRightChannelsInformations(void)
+{
+
+        m_RightChannelsWorks.clear();
+        
+        //Controle que l'utilisateur a bien selectionne de canaux coherent
+        if( m_RightGrayLevelChannel != -1 )
+        {
+                if( (m_RightRedChannel != -1 ) || (m_RightGreenChannel != -1 ) || (m_RightBlueChannel != -1 ) )
+                {
+                        itkExceptionMacro(<< "Vous avez selectionne un canal pour le niveau de gris, mais aussi un (ou des) canaux en RGB" );
+                }
+               m_RightModeView = ImageViewBaseType::GRAY_LEVEL;
+        }
+        else
+        {
+               m_RightModeView = ImageViewBaseType::RGB_LEVEL;
+               if( (m_RightRedChannel == -1 ) && (m_RightGreenChannel == -1 ) && (m_RightBlueChannel == -1 ) )
+               {
+                        //itkExceptionMacro(<< "Aucun canal n'a ete selectionne" );
+                        // On les choisi automatiquement,si c'est possible
+                        int nbCanauxInputImage = m_PrincipalRightImage->GetNumberOfComponentsPerPixel();
+                     						
+                        switch ( nbCanauxInputImage )
+                        {
+                                case 1 :
+									    m_RightGrayLevelChannel = 1;
+                                        m_RightModeView = ImageViewBaseType::GRAY_LEVEL;
+                                        break;
+                                default :
+                                case 3 : 
+                                        m_RightBlueChannel = 3;
+                                        m_RightModeView = ImageViewBaseType::RGB_LEVEL;
+                                case 2 : 
+                                        m_RightGreenChannel = 2;
+                                        m_RightRedChannel = 1;
+                                        m_RightModeView = ImageViewBaseType::RGB_LEVEL;
+                                        break;
+                        }
+			    }
+               
+        }
+        // On selectionne dans "m_ChannelsWorks" que les canaux valide, a lire dans l'image d'entree
+        switch( m_RightModeView )
+        {
+                case ImageViewBaseType::GRAY_LEVEL :  m_RightChannelsWorks.push_back( m_RightGrayLevelChannel );
+                        break;
+                case ImageViewBaseType::RGB_LEVEL :							    
+                                        if ( m_RightRedChannel != -1 ) m_RightChannelsWorks.push_back( m_RightRedChannel );
+                                        if ( m_RightGreenChannel != -1 ) m_RightChannelsWorks.push_back( m_RightGreenChannel );
+                                        if ( m_RightBlueChannel != -1 ) m_RightChannelsWorks.push_back( m_RightBlueChannel );
+                        break;
+        
+        }
+			
+        //Controle que les canaux selection existe bien dans l'image d'entree
+        for ( int nbChannels = 0 ; nbChannels < m_RightChannelsWorks.size() ; nbChannels++)
+        {
+                if ( (m_RightChannelsWorks[nbChannels] <= 0) ||
+				(m_RightChannelsWorks[nbChannels] > m_PrincipalRightImage->GetNumberOfComponentsPerPixel()) )
+                {
+                       	itkExceptionMacro(<< "L'image d'entree possede"
+					                      <<m_PrincipalRightImage->GetNumberOfComponentsPerPixel()
+										  << "\n Vous devez selectionner des canaux dans [1..."<<m_PrincipalLeftImage->GetNumberOfComponentsPerPixel()<<"]." );
+                }
+        }
+        m_RightNbDim = (int)m_RightModeView;
+}
+
+
 
 
 template <class TPixel>
@@ -301,17 +371,17 @@ void
 ImageViewerAS<TPixel>::
 SetChannelsInformationsToImagesView(void)
 {
-	m_PrincipalViewBeforeClassif->SetChannelsWorks(m_ChannelsWorks);
-	m_PrincipalViewBeforeClassif->SetModeView(m_ModeView);
-	m_PrincipalViewBeforeClassif->SetNbDim(m_NbDim);
-        m_PrincipalViewBeforeClassif->SetGrayLevelChannel(m_GrayLevelChannel);
-        m_PrincipalViewBeforeClassif->SetRGBChannels(m_RedChannel,m_GreenChannel,m_BlueChannel);
+	m_PrincipalViewBeforeClassif->SetChannelsWorks(m_LeftChannelsWorks);
+	m_PrincipalViewBeforeClassif->SetModeView(m_LeftModeView);
+	m_PrincipalViewBeforeClassif->SetNbDim(m_LeftNbDim);
+    m_PrincipalViewBeforeClassif->SetGrayLevelChannel(m_LeftGrayLevelChannel);
+    m_PrincipalViewBeforeClassif->SetRGBChannels(m_LeftRedChannel,m_LeftGreenChannel,m_LeftBlueChannel);
 	
-	m_PrincipalViewAfterClassif->SetChannelsWorks(m_ChannelsWorks);
-	m_PrincipalViewAfterClassif->SetModeView(m_ModeView);
-	m_PrincipalViewAfterClassif->SetNbDim(m_NbDim);
-        m_PrincipalViewAfterClassif->SetGrayLevelChannel(m_GrayLevelChannel);
-        m_PrincipalViewAfterClassif->SetRGBChannels(m_RedChannel,m_GreenChannel,m_BlueChannel);
+	m_PrincipalViewAfterClassif->SetChannelsWorks(m_RightChannelsWorks);
+	m_PrincipalViewAfterClassif->SetModeView(m_RightModeView);
+	m_PrincipalViewAfterClassif->SetNbDim(m_RightNbDim);
+    m_PrincipalViewAfterClassif->SetGrayLevelChannel(m_RightGrayLevelChannel);
+    m_PrincipalViewAfterClassif->SetRGBChannels(m_RightRedChannel,m_RightGreenChannel,m_RightBlueChannel);
 }
 
 
@@ -320,11 +390,16 @@ void
 ImageViewerAS<TPixel>::
 ClearSelectChannels(void)
 { 
-        m_RedChannel            = -1;
-        m_GreenChannel          = -1;
-        m_BlueChannel           = -1;
-        m_GrayLevelChannel      = -1;
-        m_ChannelsWorks.clear();
+        m_LeftRedChannel            = -1;
+        m_LeftGreenChannel          = -1;
+        m_LeftBlueChannel           = -1;
+        m_LeftGrayLevelChannel      = -1;
+        m_LeftChannelsWorks.clear();
+		m_RightRedChannel            = -1;
+        m_RightGreenChannel          = -1;
+        m_RightBlueChannel           = -1;
+        m_RightGrayLevelChannel      = -1;
+        m_RightChannelsWorks.clear();
 }
 
 // Gestion des événements boutons
@@ -363,24 +438,66 @@ template <class TPixel>
 void 
 ImageViewerAS<TPixel>::DisplayFirstClass()
 {
-	std::cout << "FIRST CLASS" << std::endl;
+	m_PrincipalViewAfterClassif->ActivateOverlay(true);
+	this->Update();  
 }
 
 template <class TPixel>
 void 
 ImageViewerAS<TPixel>::DisplaySecondClass()
 {
-	std::cout << "SECOND CLASS" << std::endl;
+	m_PrincipalViewAfterClassif->ActivateOverlay(false);
+	this->Update();  
 }
 
 template <class TPixel>
 void 
-ImageViewerAS<TPixel>::LoadImage()
+ImageViewerAS<TPixel>::LoadLeftImage()
 {
-	std::cout << "LOAD" << std::endl;
+	const char* filename = fl_file_chooser("Pick an image file", "*.*",
+	".");
+	if(filename == NULL || strlen(filename)<1)
+    {
+        return ;
+    }
+    
+	typedef otb::ImageViewerAS<unsigned char>    ViewerType;
+    typedef ViewerType::ImageType ImageType;
+    typedef otb::ImageFileReader< ImageType > VolumeReaderType;
+
+    VolumeReaderType::Pointer lReader = VolumeReaderType::New();
+    lReader->SetFileName(filename);
+    lReader->Update();
+    SetLabel( "Label" );
+    SetLeftImage( lReader->GetOutput() );
+	this->Update();    
 }
 
 template <class TPixel>
+void 
+ImageViewerAS<TPixel>::LoadRightImage()
+{
+	const char* filename = fl_file_chooser("Pick an image file", "*.*",
+	 ".");
+	if(filename == NULL || strlen(filename)<1)
+    {
+        return ;
+    }
+	
+	typedef otb::ImageViewerAS<unsigned char>    ViewerType;
+    typedef ViewerType::ImageType ImageType;
+	
+    typedef otb::ImageFileReader< ImageType > VolumeReaderType;
+    VolumeReaderType::Pointer lReader = VolumeReaderType::New();
+    lReader->SetFileName(filename);
+    lReader->Update();
+		
+    SetLabel( "Label" );
+    SetRightImage( lReader->GetOutput() );  
+	this->Update();    
+}
+
+template <class TPixel>    
 void 
 ImageViewerAS<TPixel>::SynchronizeClickedPoints(float x,float y,float z,
 ColorType color)

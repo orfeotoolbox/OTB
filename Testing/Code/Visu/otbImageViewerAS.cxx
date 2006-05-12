@@ -40,20 +40,20 @@ int main( int argc, char ** argv )
 
         typedef ViewerType::ImageType ImageType;
         typedef otb::ImageFileReader< ImageType > VolumeReaderType;
-        VolumeReaderType::Pointer       lReader = VolumeReaderType::New();
+        VolumeReaderType::Pointer lReader = VolumeReaderType::New();
         lReader->SetFileName(inputFilename);
         lReader->Update();
-	
+		
         lViewer->SetLabel( "Label" );
-        lViewer->SetImage( lReader->GetOutput() );  
-
+        lViewer->SetLeftImage( lReader->GetOutput() );  
+		lViewer->SetRightImage( lReader->GetOutput() );  
 //        lViewer->SetGrayLevelChannel(1);
 //        lViewer->SetRGBChannels(1,2,3);
 //        lViewer->SetRedChannel(3);
 //        lViewer->SetGreenChannel(2);
 //        lViewer->SetBlueChannel(1);
 //        lViewer->Update();
-	lViewer->Show();
+		lViewer->Show();
 
         if( lRunFLTK == 1 )
         {

@@ -78,11 +78,17 @@ class ITK_EXPORT VectorImageView : public itk::ProcessObject
     void         * cIWArg;
     void        (* cIWArgCallBack)(void * iwArg);
 
-//    ImageModeType cImageMode;
-    
-    float               cWinZoom;
+     
+    float          cWinZoom;
     unsigned int   cWinSizeX;
     unsigned int   cWinSizeY;
+	unsigned int   cWinMinX;
+	unsigned int   cWinMaxX;
+	unsigned int   cWinMinY;
+	unsigned int   cWinMaxY;
+	unsigned int   cWinCenter[3];
+	const ImageType      *cImData;
+	
     int   cWinDataSizeX;
     int   cWinDataSizeY;
     unsigned char  *cWinImData;

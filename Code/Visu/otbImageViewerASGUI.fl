@@ -11,77 +11,82 @@ class otbImageViewerASGUI {open
   } {
     Fl_Window iviewWindowPrincipal {
       label {Principal Window} open
-      xywh {474 32 790 730} type Double box PLASTIC_DOWN_BOX color 34 labelsize 12 align 33 visible
+      xywh {469 33 710 575} type Double box PLASTIC_DOWN_BOX color 196 labelsize 12 align 33 visible
     } {
-      Fl_Group glWindowGroupPrincipal {open
-        xywh {-5 -5 795 680}
+      Fl_Group glWindowGroupPrincipal {open selected
+        xywh {-5 -5 715 580} color 40
       } {
         Fl_Button bUndo {
           label Undo
           callback {EraseLastClickedPoint();}
-          xywh {70 455 64 25} box SHADOW_BOX labelfont 1 labelcolor 176
+          xywh {70 420 64 25} box SHADOW_BOX color 55 labelfont 1 labelcolor 176
         }
         Fl_Button bLearn {
           label Learn
           callback {LearnAlgorythm();}
-          xywh {215 455 64 25} box SHADOW_BOX labelfont 1 labelcolor 176
+          xywh {215 420 64 25} box SHADOW_BOX color 55 labelfont 1 labelcolor 176
         }
         Fl_Button bClassif {
           label Classif
           callback {ClassificationAlgorythm();}
-          xywh {215 490 64 25} box SHADOW_BOX labelfont 1 labelcolor 176
+          xywh {215 450 64 25} box SHADOW_BOX color 55 labelfont 1 labelcolor 176
         }
         Fl_Button bReset {
           label Reset
           callback {EraseAllClickedPoints();}
-          xywh {70 490 65 25} box SHADOW_BOX labelfont 1 labelcolor 176
+          xywh {70 450 65 25} box SHADOW_BOX color 55 labelfont 1 labelcolor 176
         }
         Fl_Button bC2 {
           label C2
           callback {DisplaySecondClass();}
-          xywh {585 470 64 25} box SHADOW_BOX labelfont 1 labelcolor 176
+          xywh {560 430 64 25} box SHADOW_BOX color 55 labelfont 1 labelcolor 176
         }
         Fl_Button bC1 {
           label C1
           callback {DisplayFirstClass();}
-          xywh {470 470 64 25} box SHADOW_BOX labelfont 1 labelcolor 176
+          xywh {440 430 64 25} box SHADOW_BOX color 55 labelfont 1 labelcolor 176
         }
         Fl_Menu_Bar {} {open
-          xywh {0 0 790 25} color 7 labelfont 1 labelcolor 136
+          xywh {0 0 710 25} color 7 labelfont 1 labelcolor 136
         } {
           Submenu {} {
             label File open
             xywh {30 30 100 20} labelfont 1 labelcolor 176
           } {
             MenuItem {} {
-              label {Load File}
-              callback {LoadImage();}
-              xywh {15 15 30 20}
+              label {Load Left File}
+              callback {LoadLeftImage();}
+              xywh {20 20 30 20}
+            }
+            MenuItem {} {
+              label {Load Right File}
+              callback {LoadRightImage();}
+              xywh {5 5 30 20}
             }
             MenuItem {} {
               label Exit
               callback {exit(-1);}
-              xywh {15 15 30 20}
+              xywh {20 20 30 20}
             }
           }
         }
         Fl_Box {} {
           label Avant
-          xywh {25 70 340 375} box EMBOSSED_BOX
+          xywh {10 35 340 375} box EMBOSSED_BOX
           code0 {\#include <otbPrincipalImageViewAS.h>}
           code1 {CreatePrincipalImageViewBeforeClassif( glWindowGroupPrincipal, o );}
           class Fl_Gl_Window
         }
         Fl_Box {} {
           label {Après}
-          xywh {397 70 340 375} box EMBOSSED_BOX
+          xywh {360 35 340 375} box EMBOSSED_BOX
           code0 {\#include <otbPrincipalImageViewAS.h>}
           code1 {CreatePrincipalImageViewAfterClassif( glWindowGroupPrincipal, o );}
           class Fl_Gl_Window
         }
         Fl_Text_Display {} {
           label Commentaires
-          xywh {15 570 740 100} labelfont 1 labelcolor 176
+          xywh {15 505 685 50} labelfont 1 labelcolor 176
         }
       }
     }
@@ -112,6 +117,8 @@ class otbImageViewerASGUI {open
   } {}
   Function {DisplayFirstClass()} {return_type {virtual void}
   } {}
-  Function {LoadImage()} {return_type {virtual void}
+  Function {LoadLeftImage()} {return_type {virtual void}
+  } {}
+  Function {LoadRightImage()} {open return_type {virtual void}
   } {}
 } 

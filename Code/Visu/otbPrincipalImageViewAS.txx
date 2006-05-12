@@ -57,7 +57,7 @@ PrincipalImageViewAS<TPixel, TPixelOverlay>::handle(int event)
 		  this->ViewClickedPoints(true);
 		  
 		  // Test to know if mouse click is on image
-		  if (cMem)
+		  if (cMem&&cClickable)
 		  {
 		  
 		  	if (Fl::event_button()==FL_LEFT_MOUSE)
@@ -85,7 +85,7 @@ PrincipalImageViewAS<TPixel, TPixelOverlay>::handle(int event)
     case FL_DRAG:
       {
     	nbDrag++;
-		if (cMem)
+		if (cMem&&cClickable)
 		{
 			x = Fl::event_x()-this->cOffSetX;	
         	y = Fl::event_y()-this->cOffSetY;
@@ -113,7 +113,7 @@ PrincipalImageViewAS<TPixel, TPixelOverlay>::handle(int event)
                 break;
     case FL_RELEASE:
     	this->cSelectRectangle = false ; // Display OFF for box selection
-		if (cMem)
+		if (cMem&&cClickable)
 		{
 			// Release on the picture ?
 			if ((x>0)&&(x<this->GetViewImageRegion().GetSize()[0]*this->cScale)
@@ -204,7 +204,13 @@ PrincipalImageViewAS<TPixel, TPixelOverlay>::ResetPts()
      this->cClickedPoints.clear();
      this->update();
 }
- 
+
+template <class TPixel, class TPixelOverlay>
+void
+PrincipalImageViewAS<TPixel, TPixelOverlay>::SetClickable(bool b)
+{
+     cClickable = b ;
+}
+
 }; //namespace
 #endif
-

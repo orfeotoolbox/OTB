@@ -68,6 +68,8 @@ public:
   /** Erase all clicked points */
   virtual void ResetPts();
   
+  void SetClickable(bool b);
+  
   /** Selected point correct */
   bool cMem;
   
@@ -76,6 +78,9 @@ public:
   
   /** To know if click or box */
   int nbDrag;
+
+  /** Image clickable */
+  bool cClickable;  
   
 protected:
   

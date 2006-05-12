@@ -85,8 +85,10 @@ public:
   
   ImageViewerAS();
   virtual ~ImageViewerAS();
-  /** Set the input image */
-  virtual void SetImage(itk::ImageBase<2> * img);
+  /** Set the left input image */
+  virtual void SetLeftImage(itk::ImageBase<2> * img);
+  /** Set the right input image */
+  virtual void SetRightImage(itk::ImageBase<2> * img);
   /** Show the viewer (Update) */
   virtual void Show(void);
   /** Hide all Image View Windows */
@@ -100,9 +102,9 @@ public:
   void ClassificationAlgorythm();
   void DisplayFirstClass();
   void DisplaySecondClass();
-  
-  void LoadImage();
-  
+  void LoadLeftImage();
+  void LoadRightImage();
+    
   /** Build the HMI */
   virtual void BuildHMI(void);
   virtual void CreatePrincipalImageViewBeforeClassif( Fl_Group * g , Fl_Gl_Window * w );
@@ -114,27 +116,40 @@ public:
                                                   void *),
                      void * newClickSelectArg);
   virtual void PrincipalAction(const IndexType & index);
-  virtual void ExtractImagePrincipal(const RegionType & zone);
+  //virtual void ExtractImagePrincipal(const RegionType & zone);
 
-  virtual void GenerateChannelsInformations(void);
+  virtual void GenerateLeftChannelsInformations(void);
+  virtual void GenerateRightChannelsInformations(void);
   
   typedef typename ImageViewBaseType::ModeViewType ModeViewType; 
   typedef typename ImageViewBaseType::ChannelsType ChannelsType; 
 
-  itkSetMacro(GrayLevelChannel,int);
-  itkSetMacro(RedChannel,int);
-  itkSetMacro(GreenChannel,int);
-  itkSetMacro(BlueChannel,int);
-
+  itkSetMacro(LeftGrayLevelChannel,int);
+  itkSetMacro(LeftRedChannel,int);
+  itkSetMacro(LeftGreenChannel,int);
+  itkSetMacro(LeftBlueChannel,int);
+  
+  itkSetMacro(RightGrayLevelChannel,int);
+  itkSetMacro(RightRedChannel,int);
+  itkSetMacro(RightGreenChannel,int);
+  itkSetMacro(RightBlueChannel,int);
+  
   itkSetStringMacro(Label);
   itkGetStringMacro(Label);
 
-  virtual void SetRGBChannels(int pRedChannel,int pGreenChannel, int pBlueChannel)
+  virtual void SetLeftRGBChannels(int pRedChannel,int pGreenChannel, int pBlueChannel)
   {
-        SetRedChannel(pRedChannel);
-        SetGreenChannel(pGreenChannel);
-        SetBlueChannel(pBlueChannel);
+        SetLeftRedChannel(pRedChannel);
+        SetLeftGreenChannel(pGreenChannel);
+        SetLeftBlueChannel(pBlueChannel);
   }
+  virtual void SetRightRGBChannels(int pRedChannel,int pGreenChannel, int pBlueChannel)
+  {
+        SetRightRedChannel(pRedChannel);
+        SetRightGreenChannel(pGreenChannel);
+        SetRightBlueChannel(pBlueChannel);
+  }  
+  
   virtual void ClearSelectChannels(void);
   
   /** Synchronize clicked points on images before and after classif */
@@ -151,16 +166,25 @@ private:
         /** Label of the windows */
         std::string m_Label;
         static const std::string m_SuffixPrincipalTitle;
-        int m_NbDim;
-
-        int  m_RedChannel;
-        int  m_GreenChannel;
-        int  m_BlueChannel;
-        int  m_GrayLevelChannel;
-
-        ModeViewType  m_ModeView;
-        ChannelsType m_ChannelsWorks;
-
+        
+		/** Informations for left image */
+		int  m_LeftNbDim;
+        int  m_LeftRedChannel;
+        int  m_LeftGreenChannel;
+        int  m_LeftBlueChannel;
+        int  m_LeftGrayLevelChannel;
+        ModeViewType  m_LeftModeView;
+        ChannelsType m_LeftChannelsWorks;
+		
+		/** Informations for right image */
+		int  m_RightNbDim;
+        int  m_RightRedChannel;
+        int  m_RightGreenChannel;
+        int  m_RightBlueChannel;
+        int  m_RightGrayLevelChannel;
+        ModeViewType  m_RightModeView;
+        ChannelsType m_RightChannelsWorks;
+		
         // PrincipalImageViewPointer       m_PrincipalView;
         PrincipalImageViewPointer       m_PrincipalViewBeforeClassif;
         PrincipalImageViewPointer       m_PrincipalViewAfterClassif;
@@ -171,10 +195,12 @@ private:
         WinSizeType m_InitPrincipalWinSizeMax;
   
         /** Extract image filter use to calculte the Principal image view */
-        ExtractROIFilterPointer m_ExtractROIFilter;
-        ImageType * m_InputImage;
-        ImageType * m_PrincipalImage;
-		ImageType * m_ScrollImage;
+        //ExtractROIFilterPointer m_ExtractROIFilter;
+        ImageType * m_InputLeftImage;
+		ImageType * m_InputRightImage;
+        ImageType * m_PrincipalLeftImage;
+        ImageType * m_PrincipalRightImage;
+
 };
 
 

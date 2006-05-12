@@ -19,9 +19,11 @@
 #include <FL/fl_draw.H>
 #include <FL/Fl_Gl_Window.H>
 #include <FL/Fl_Double_Window.H>
+#include <FL/fl_file_chooser.H>
 
 #include <vector>
 #include <string>
+#include "itkColorTable.h"
 
 #include "itkImage.h"
 #include "itkMacro.h"
@@ -34,6 +36,9 @@ namespace otb
 const int NUM_ClickModeTypes = 3;
 typedef enum {CM_NOP, CM_SELECT, CM_BOX} ClickModeType;
 typedef enum { COLOR_BLUE , COLOR_RED } ColorType;
+typedef enum {IMG_VAL, IMG_INV, IMG_LOG, IMG_DX, IMG_DY, IMG_DZ,
+  IMG_BLEND, IMG_MIP} ImageModeType;
+typedef enum {IW_MIN, IW_MAX, IW_FLIP} IWModeType;
 
 const char ClickModeTypeName[3][7] =
   {{'N', 'O', 'P', '\0', ' ', ' ', ' '},
@@ -64,21 +69,6 @@ class ClickPoint
     bool isForBox;
   };
 
-/*class ClickPointBox : public ClickPoint
-  {
-  public:
-    ClickPointBox()
-    : ClickPoint(0,0,0,0,COLOR_BLUE),w(0),h(0){}
-    ClickPointBox( const ClickPointBox & p )
-    { this->x = p.x; this->y = p.y; this->z = p.z;this->value = p.value;
-					this->color = p.color;w=p.w;h=p.h; }
-    ClickPointBox(float _x,float _y,float _z,double v,ColorType _color,
-				  float _w, float _h) :
-				  ClickPoint(_x,_y,_z,v,_color),w(_w),h(_h){}
-  public:
-    float w, h;
-  };*/
-
 
 template <class TPixel> class ImageViewerAS;
 /** \class GLVectorImageViewBase
@@ -94,8 +84,10 @@ public:
     typedef VectorImageView<TPixel>             Superclass;
     typedef itk::SmartPointer<Self>             Pointer;
     typedef itk::SmartPointer<const Self>       ConstPointer;
-    typedef itk::Image<TPixelOverlay,3>   		OverlayType;
+    typedef itk::Image<TPixelOverlay,2>   		OverlayType;
     typedef typename OverlayType::Pointer    OverlayPointer;
+	typedef itk::ColorTable<float>                ColorTableType;
+    typedef typename ColorTableType::Pointer      ColorTablePointer;
    
     /** Method for creation through the object factory. */
     itkNewMacro(Self);
@@ -278,6 +270,10 @@ public:
   itkGetStringMacro(Label);
   
   // Overlay
+   bool cOverlay;
+
+   /*! Activate overlay on image */   
+   void ActivateOverlay(bool b);
   
    bool        cViewOverlayData;
   /*! Specify the 3D image to view as an overlay */
@@ -300,6 +296,9 @@ public:
   
   /*! Called when overlay is toggled or opacity is changed */
   void  ViewOverlayCallBack(void (* newOverlayCallBack)(void));
+  
+  ColorTablePointer GetColorTable(void);
+  void SetColorTable(ColorTablePointer newColorTable);
   /*! Display Overlay in Color 'c'. You must ensure that the color-table specified
    * contains color 'c'. For example with the default useDiscrete() color table,
    * SetOverlayColorIndex( 0 ) will display the overlay in red. 
@@ -317,6 +316,7 @@ public:
   int cOffSetY;
   float cScale;
   
+ // virtual void SetInput( const ImageType *image);
 
 protected:
 
@@ -327,9 +327,11 @@ protected:
   OverlayPointer cOverlayData;
   void     (* cViewOverlayCallBack)(void);
   
+  ImageModeType cImageMode;
   unsigned char * cWinOverlayData;
   unsigned int    cOverlayColorIndex;
- 
+  ColorTablePointer      cColorTable;
+  
   //Méthode Get en écriture sur le Viewer
   itkGetMacro(Viewer,ImageViewerPointer);
 
