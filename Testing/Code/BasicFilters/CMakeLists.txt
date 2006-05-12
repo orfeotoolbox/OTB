@@ -48,8 +48,6 @@ ADD_TEST(bfTvFiltreFrost ${BASICFILTERS_TESTS}
 ADD_TEST(bfTuImageToPointSetFilterTest ${BASICFILTERS_TESTS} 
          otbImageToPointSetFilterTest)  
 
-
-
 # A enrichir
 SET(BasicFilters_SRCS
 otbLeeFilter.cxx
