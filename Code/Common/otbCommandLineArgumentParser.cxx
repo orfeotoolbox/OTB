@@ -135,13 +135,13 @@ CommandLineArgumentParser
 	if ( (IsHelp == true) )
 	{
 		PrintUsage(std::cout);
-		itkExceptionMacro(<<"Help Command Line");
+		itkExceptionMacro(<<"ParseCommandLine(): Help Parser");
 	}
 
 	if ( (tryParse == false) )
   	{	
 		PrintUsage(std::cerr);
-		itkExceptionMacro("ParseCommandLine() argument Error");
+		itkExceptionMacro(<<"ParseCommandLine() argument Error");
 	}
 }
 
