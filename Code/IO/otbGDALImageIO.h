@@ -35,13 +35,16 @@
 #include "ogr_srs_api.h"
 
 
-
-
-
 namespace otb
 {
 
-/** Classe otbGDALImageIO
+/** \class GDALImageIO
+ *
+ * \brief ImageIO object for reading (not writing) GDAL images
+ *
+ * The streaming read is implemented.
+ *
+ * \ingroup IOFilters
  *
  */
 class ITK_EXPORT GDALImageIO : public itk::ImageIOBase,

@@ -90,7 +90,7 @@ bool GDALImageIO::CanReadFile(const char* file)
 {
   // First check the extension
   m_currentfile = file;
-  otbDebugMacro(<<"Filename : "<<m_currentfile);
+  otbMsgDebugMacro(<<"Filename : "<<m_currentfile);
   
   if(  file == NULL )
     {
@@ -172,9 +172,9 @@ void GDALImageIO::Read(void* buffer)
         int lPremiereLigne   = this->GetIORegion().GetIndex()[1]; // [1... ]
         int lPremiereColonne = this->GetIORegion().GetIndex()[0]; // [1... ]
 
-otbDebugMacro( << "GDALImageIO::Read()  ");
-otbDebugMacro( <<" Dimensions de l'image  : "<<m_Dimensions[0]<<","<<m_Dimensions[1]);
-otbDebugMacro( <<" Region lue (IORegion)  : "<<this->GetIORegion());
+otbMsgDebugMacro( << "GDALImageIO::Read()  ");
+otbMsgDebugMacro( <<" Dimensions de l'image  : "<<m_Dimensions[0]<<","<<m_Dimensions[1]);
+otbMsgDebugMacro( <<" Region lue (IORegion)  : "<<this->GetIORegion());
 
         unsigned long lNbPixels = (unsigned long)(lNbColonnes*lNbLignes);
         unsigned long lTailleBuffer = (unsigned long)(m_NbOctetPixel)*lNbPixels;
@@ -217,7 +217,7 @@ otbDebugMacro( <<" Region lue (IORegion)  : "<<this->GetIORegion());
           }
 
         delete [] value;
-otbDebugMacro( << "GDALImageIO::Read() terminee");
+otbMsgDebugMacro( << "GDALImageIO::Read() terminee");
 
 }
 
@@ -266,7 +266,7 @@ void GDALImageIO::InternalReadImageInformation()
       // Set image dimensions into IO
       m_Dimensions[0] = m_width;
       m_Dimensions[1] = m_height;
-      otbDebugMacro(<<"Get Dimensions : x="<<m_Dimensions[0]<<" & y="<<m_Dimensions[1]);
+      otbMsgDebugMacro(<<"Get Dimensions : x="<<m_Dimensions[0]<<" & y="<<m_Dimensions[1]);
       }
 
     // Set Number of components
@@ -274,9 +274,9 @@ void GDALImageIO::InternalReadImageInformation()
     m_NbBands = m_poDataset->GetRasterCount();
 //    m_NumberOfComponents = m_NbBands;
     this->SetNumberOfComponents(m_NbBands);
-    otbDebugMacro(<<"NbBands : "<<m_NbBands);
+    otbMsgDebugMacro(<<"NbBands : "<<m_NbBands);
 
-    otbDebugMacro(<<"Nb of Components : "<<this->GetNumberOfComponents());
+    otbMsgDebugMacro(<<"Nb of Components : "<<this->GetNumberOfComponents());
 
     
     // Set the number of dimensions (verify for the dim )
@@ -291,7 +291,7 @@ void GDALImageIO::InternalReadImageInformation()
       this->SetNumberOfDimensions(2);
 // Fin Modif OTB
 
-    otbDebugMacro(<<"Nb of Dimensions : "<<m_NumberOfDimensions);
+    otbMsgDebugMacro(<<"Nb of Dimensions : "<<m_NumberOfDimensions);
 
     // Automatically set the Type to Binary for GDAL data
     this->SetFileTypeToBinary();
@@ -389,8 +389,8 @@ void GDALImageIO::InternalReadImageInformation()
                 m_NbOctetPixel = 1;
         }
     
-    otbDebugMacro(<<"Component Type : "<<m_ComponentType);
-    otbDebugMacro(<<"NbOctetPixel   : "<<m_NbOctetPixel);
+    otbMsgDebugMacro(<<"Component Type : "<<m_ComponentType);
+    otbMsgDebugMacro(<<"NbOctetPixel   : "<<m_NbOctetPixel);
 
 
     /******************************************************************/

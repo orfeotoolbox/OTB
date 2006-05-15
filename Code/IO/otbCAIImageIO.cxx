@@ -295,8 +295,8 @@ bool CAIImageIO::GetInfosCAI( const char * filename, std::string & CaiFileName, 
                 }
         }
         
-        itkDebugMacro(<< "Format CAI detecte    : "<< CaiFormat.c_str()<<".");
-        itkDebugMacro(<< "Fichier CAI determine : "<< CaiFileName.c_str()<<".");
+        otbMsgDebugMacro(<< "Format CAI detecte    : "<< CaiFormat.c_str()<<".");
+        otbMsgDebugMacro(<< "Fichier CAI determine : "<< CaiFileName.c_str()<<".");
         
         return trouve;
 }
@@ -435,10 +435,7 @@ void CAIImageIO::Read(void* buffer)
         unsigned long lTailleBuffer = (unsigned long)(m_NbOctetPixel)*lNbPixels;
         
         unsigned char* value = new unsigned char[lTailleBuffer];
-        
-otbDebugMacro( << "CAIImageIO::Read()  ");
-otbDebugMacro( <<" Dimensions de l'image  : "<<m_Dimensions[0]<<","<<m_Dimensions[1]);
-otbDebugMacro( <<" Region lue (IORegion)  : "<<this->GetIORegion());
+otbMsgDebugMacro( << "CAIImageIO::Read() IORegion Start["<<this->GetIORegion().GetIndex()[0]<<","<<this->GetIORegion().GetIndex()[1]<<"] Size ["<<this->GetIORegion().GetSize()[0]<<","<<this->GetIORegion().GetSize()[1]<<"] on Image size ["<<m_Dimensions[0]<<","<<m_Dimensions[1]<<"]");
 
         // Mise a jour du step
         step = step * (unsigned long)(m_NbOctetPixel);
@@ -476,7 +473,6 @@ otbDebugMacro( <<" Region lue (IORegion)  : "<<this->GetIORegion());
           }
 
         delete [] value;
-otbDebugMacro( << "CAIImageIO::Read() terminee ");
 }
 
 void CAIImageIO::ReadImageInformation()
@@ -501,13 +497,14 @@ void CAIImageIO::ReadImageInformation()
     		itkExceptionMacro(<< "Impossible de lire les informations sur l'image " << m_FileName.c_str() <<" ("<<CaiFileName.c_str()<<";"<<CaiFormat.c_str()<<") : ("<<CAI_ERREUR<<").");
         }
         
-otbDebugMacro( << "Driver: CAI - "<<CaiFormat);
+otbMsgDebugMacro( << "Driver: CAI - "<<CaiFormat);
         
         this->SetNumberOfDimensions(2);
         m_Dimensions[0] = NbColonnes;
         m_Dimensions[1] = NbLignes;
         this->SetNumberOfComponents(NbCanaux);
         m_NbOctetPixel = NbOctetPixel;
+otbMsgDebugMacro( <<"Dimensions de l'image cree : "<<m_Dimensions[0]<<","<<m_Dimensions[1]);
         
         if( this->GetNumberOfComponents() == 1 )
         {
@@ -561,7 +558,6 @@ otbDebugMacro( << "Driver: CAI - "<<CaiFormat);
         
         //Stock le pointer CAI
         m_ptrCai = (char*)lCai;
-otbDebugMacro( << "CAIImageIO::ReadImageInformation() terminee ");
 }
 
 void CAIImageIO::WriteImageInformation(void)
@@ -617,6 +613,7 @@ void CAIImageIO::WriteImageInformation(void)
         NbCanaux = this->GetNumberOfComponents();
         NbOctetPixel = m_NbOctetPixel;
         CAI_IMAGE * lCai(NULL);
+otbMsgDebugMacro( << "CAIImageIO::WriteImageInformation() : Dimensions de l'image cree : "<<m_Dimensions[0]<<","<<m_Dimensions[1]);
 
         lCai = cai_ouvre_creation_image(	(char *)CaiFileName.c_str(),
 	        				(char *)CaiFormat.c_str(), // Detection automatique
@@ -624,7 +621,7 @@ void CAIImageIO::WriteImageInformation(void)
 			        		NbOctetPixel,
 				        	NbColonnes,
 					        NbLignes,
-                                                "Image creee par l'OTB");
+                                                "CAI Image generate by OTB");
         if (lCai == NULL)
         {
     		itkExceptionMacro(<< "Impossible d'ecrire les informations sur l'image (cai_ouvre_creation_image) " << m_FileName.c_str() <<" ("<<CaiFileName.c_str()<<";"<<CaiFormat.c_str()<<") : ("<<CAI_ERREUR<<").");
@@ -638,7 +635,7 @@ void CAIImageIO::Write( const void* buffer)
 {
 
         // Création de l'image avant
-        this->WriteImageInformation();
+//        this->WriteImageInformation();
 
         const unsigned char * p = static_cast<const unsigned char *>(buffer);
         unsigned long l=0;
@@ -651,9 +648,7 @@ void CAIImageIO::Write( const void* buffer)
         int lPremiereLigne   = this->GetIORegion().GetIndex()[1] + 1; // [1... ]
         int lPremiereColonne = this->GetIORegion().GetIndex()[0] + 1; // [1... ]
 
-otbDebugMacro( << "CAIImageIO::Write()  ");
-otbDebugMacro( <<" Dimensions de l'image  : "<<m_Dimensions[0]<<","<<m_Dimensions[1]);
-otbDebugMacro( <<" Region lue (IORegion)  : "<<this->GetIORegion());
+otbMsgDebugMacro( << "CAIImageIO::Write() IORegion Start["<<this->GetIORegion().GetIndex()[0]<<","<<this->GetIORegion().GetIndex()[1]<<"] Size ["<<this->GetIORegion().GetSize()[0]<<","<<this->GetIORegion().GetSize()[1]<<"] on Image size ["<<m_Dimensions[0]<<","<<m_Dimensions[1]<<"]");
 
         unsigned long lNbPixels = (unsigned long)(lNbColonnes*lNbLignes);
         unsigned long lTailleBuffer = (unsigned long)(m_NbOctetPixel)*lNbPixels;

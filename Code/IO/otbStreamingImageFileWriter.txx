@@ -166,9 +166,6 @@ StreamingImageFileWriter<TInputImage>
    */
   OutputImagePointer outputPtr = this->GetOutput(0);
   OutputImageRegionType outputRegion = outputPtr->GetRequestedRegion();
-//  outputPtr->SetBufferedRegion( outputRegion );
-//  outputPtr->Allocate();
-
 
   /** Prepare ImageIO  : create ImageFactory */
   
@@ -237,10 +234,6 @@ StreamingImageFileWriter<TInputImage>
         msg << m_ImageIO<< std::endl;
         itkExceptionMacro(<<msg.str().c_str());
     }
-    
-    
-
-
 
 
   /**
@@ -273,8 +266,6 @@ StreamingImageFileWriter<TInputImage>
   streamRegion = m_RegionSplitter->GetSplit(0, numDivisions,
                                               outputRegion);
 
-
-
   // Allocation du bandeau
 //  outputPtr->SetBufferedRegion( streamRegion );
 //  outputPtr->Allocate();
@@ -291,7 +282,7 @@ StreamingImageFileWriter<TInputImage>
 
   for(unsigned int i=0; i<TInputImage::ImageDimension; i++)
     {
-// Taille finale de l'image
+// Final image size
     m_ImageIO->SetDimensions(i,outputRegion.GetSize(i));
     m_ImageIO->SetSpacing(i,spacing[i]);
     m_ImageIO->SetOrigin(i,origin[i]);
@@ -328,43 +319,28 @@ StreamingImageFileWriter<TInputImage>
        piece < numDivisions && !this->GetAbortGenerateData();
        piece++)
     {
-    streamRegion = m_RegionSplitter->GetSplit(piece, numDivisions,
+                streamRegion = m_RegionSplitter->GetSplit(piece, numDivisions,
                                               outputRegion);
       
-    inputPtr->SetRequestedRegion(streamRegion);
-    inputPtr->PropagateRequestedRegion();
-    inputPtr->UpdateOutputData();
+                inputPtr->SetRequestedRegion(streamRegion);
+                inputPtr->PropagateRequestedRegion();
+                inputPtr->UpdateOutputData();
 
-    // Write the whole image
-    itk::ImageIORegion ioRegion(TInputImage::ImageDimension);
-    for(unsigned int i=0; i<TInputImage::ImageDimension; i++)
-      {
-      ioRegion.SetSize(i,streamRegion.GetSize(i));
-      ioRegion.SetIndex(i,streamRegion.GetIndex(i));
-      }
-//    m_IORegion = ioRegion; //used by GenerateData
-  this->SetIORegion( ioRegion );
-
-  m_ImageIO->SetIORegion(m_IORegion);
+                // Write the whole image
+                itk::ImageIORegion ioRegion(TInputImage::ImageDimension);
+                for(unsigned int i=0; i<TInputImage::ImageDimension; i++)
+                {
+                        ioRegion.SetSize(i,streamRegion.GetSize(i));
+                        ioRegion.SetIndex(i,streamRegion.GetIndex(i));
+                }
+                this->SetIORegion( ioRegion );
+                m_ImageIO->SetIORegion(m_IORegion);
 
 
-    // copy the result to the proper place in the output. the input
-    // requested region determined by the RegionSplitter (as opposed
-    // to what the pipeline might have enlarged it to) is used to
-    // construct the iterators for both the input and output
-/*    itk::ImageRegionIterator<InputImageType> inIt(inputPtr, streamRegion);
-    itk::ImageRegionIterator<OutputImageType> outIt(outputPtr, streamRegion);
-*/
+                // Start writing streamregion in the image file
+                this->GenerateData();
 
-    // Start writing streamregion in the image file
-    this->GenerateData();
-/*    for (inIt.GoToBegin(), outIt.GoToBegin(); !inIt.IsAtEnd(); ++inIt, ++outIt)
-      {
-      outIt.Set( inIt.Get() );
-      }*/
-
-
-    this->UpdateProgress((float) piece / numDivisions );
+                this->UpdateProgress((float) piece / numDivisions );
     }
 
   /**
@@ -432,8 +408,6 @@ StreamingImageFileWriter<TInputImage>
 
   // Setup the image IO for writing.
   //
-//  m_ImageIO->SetFileName(m_FileName.c_str());
-
   //okay, now extract the data as a raw buffer pointer
   const void* dataPtr = (const void*) input->GetBufferPointer();
   m_ImageIO->Write(dataPtr);

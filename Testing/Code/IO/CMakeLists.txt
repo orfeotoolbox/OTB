@@ -16,23 +16,6 @@ SET(TOL 0.0)
 SET(COMMON_TESTS ${CXX_TEST_PATH}/otbCommonTests)
 SET(IO_TESTS     ${CXX_TEST_PATH}/otbIOTests)
 
-# ---  STREAMING   ---
-ADD_TEST(ioTvStreamingImageFilterTest ${IO_TESTS} 
-#   --compare-image ${TOL} ${TEMP}/ioStreamingImageFilterTestRef.png
-#                      ${TEMP}/ioStreamingImageFilterTest.png
-         otbStreamingImageFilterTest
-         ${INPUTDATA}/poupees_1canal.hd
-         ${TEMP}/ioStreamingImageFilterTest.png
-         )
-
-# ---  STREAMING   ---
-ADD_TEST(ioTvStreamingImageFileWriterTest ${IO_TESTS} 
-#   --compare-image ${TOL} ${TEMP}/ioStreamingImageFilterTestRef.png
-#                      ${TEMP}/ioStreamingImageFilterTest.png
-         otbStreamingImageFileWriterTest
-         ${INPUTDATA}/poupees_1canal.hd
-         ${TEMP}/ioStreamingImageFileWriterTest.png
-         )
 
 # ---  RADARSAT (GDAL)  ---
 ADD_TEST(ioTvMultiMonoChannelROI_RADARSAT2BSQ ${COMMON_TESTS} 
@@ -417,7 +400,77 @@ ADD_TEST(ioTuOtbVectorImageTestSpot5 ${IO_TESTS}
         ${IMAGEDATA}/SPOT5_SCENE01/IMAGERY.TIF
         ${TEMP}/ioOtbVectorImageTestSpot5.txt)
         
+
+
+# ---  STREAMING : CAI  ---
+ADD_TEST(ioTvStreamingImageFilterCAITest ${IO_TESTS} 
+#   --compare-image ${TOL} ${TEMP}/ioStreamingImageFilterTestCAI_BSQ.png
+#                      ${TEMP}/ioStreamingImageFilterTestCAI_BSQ.png
+         otbStreamingImageFilterTest
+         ${INPUTDATA}/poupees_1canal.hd
+         ${TEMP}/ioStreamingImageFilterTestCAI_BSQ.png
+         )
+
+# ---  STREAMING : GDAL  ---
+ADD_TEST(ioTvStreamingImageFilterGDALTest ${IO_TESTS} 
+#   --compare-image ${TOL} ${TEMP}/ioStreamingImageFilterTestGDAL_PoupeesTif.png
+#                      ${TEMP}/ioStreamingImageFilterTestGDAL_PoupeesTif.png
+         otbStreamingImageFilterTest
+         ${INPUTDATA}/poupeesTIF/IMAGERY.TIF 
+         ${TEMP}/ioStreamingImageFilterTestGDAL_PoupeesTif.png
+         )
+
+
+# ---  STREAMING  IMAGE   FILE    WRITER  ---
+ADD_TEST(ioTvStreamingIFWriterBSQWithoutStreaming ${IO_TESTS} 
+   --compare-binary   ${INPUTDATA}/poupees_1canal.c1
+                      ${TEMP}/ioStreamingImageFileWriterBSQWithoutStreaming.c1
+         otbStreamingImageFileWriterTest
+         ${INPUTDATA}/poupees_1canal.hd
+         ${TEMP}/ioStreamingImageFileWriterBSQWithoutStreaming.hd
+         0 # Streaming
+         )
+# ---  STREAMING  IMAGE   FILE    WRITER  ---
+ADD_TEST(ioTvStreamingIFWriterBSQWithStreaming ${IO_TESTS} 
+   --compare-binary   ${INPUTDATA}/poupees_1canal.c1
+                      ${TEMP}/ioStreamingImageFileWriterBSQWithStreaming_100.c1
+         otbStreamingImageFileWriterTest
+         ${INPUTDATA}/poupees_1canal.hd
+         ${TEMP}/ioStreamingImageFileWriterBSQWithStreaming_100.hd
+         1 # Streaming
+         100
+         )
+
+
+#----------------------------------------------------------------------------------
+# Exemples de tests sur les grosses images
+# Tests non lancés pour raison taille des fichiers produits
+#        ADD_TEST(ioTvStreamingIFWriterPARIS_SPOT5THR_WithoutStreaming ${IO_TESTS} 
+#                 otbStreamingImageFileWriterTest
+#                 ${IMAGEDATA}/PARIS/SPOT5/THR
+#                 ${TEMP}/ioStreamingImageFileWriterTestCAI_ParisSpot5THR_WithoutStreaming.hd
+#                 0 # Test sans streaming
+#                 )
+#        ADD_TEST(ioTvStreamingIFWriterPARIS_SPOT5THR_WithStreaming_1000 ${IO_TESTS} 
+#                 otbStreamingImageFileWriterTest
+#                 ${IMAGEDATA}/PARIS/SPOT5/THR
+#                 ${TEMP}/ioStreamingImageFileWriterTestCAI_ParisSpot5THR_WithStreaming_1000.hd
+#                 1 # Test sans streaming
+#                 1000 # NbDivisionsStreaming
+#                 )
+#----------------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
         
+#----------------------------------------------------------------------------------
 SET(BasicIO_SRCS
 otbGDALImageIOTestCanRead.cxx
 otbCAIImageIOTestCanRead.cxx

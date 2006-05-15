@@ -24,11 +24,13 @@
 namespace otb
 {
 
-/** \class CAIImageIO 
+/** \class CAIImageIO
  *
- *  \brief Lecture de fichier au format CAIImage. 
+ * \brief ImageIO object for reading and writing CAI images
  *
- *  \ingroup IOFilters
+ * The streaming read/write are implemented.
+ *
+ * \ingroup IOFilters
  *
  */
 class ITK_EXPORT CAIImageIO : public itk::ImageIOBase

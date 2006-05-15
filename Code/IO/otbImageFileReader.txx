@@ -62,8 +62,8 @@ ImageFileReader<TOutputImage>
   output->SetBufferedRegion( output->GetRequestedRegion() );
   output->Allocate();
 
-otbDebugMacro( <<"ImageFileReader<TOutputImage>::GenerateData : ");
-otbDebugMacro( <<" output->GetRequestedRegion() : "<<output->GetRequestedRegion());
+//otbMsgDebugMacro( <<"ImageFileReader<TOutputImage>::GenerateData : ");
+//otbMsgDebugMacro( <<" output->GetRequestedRegion() : "<<output->GetRequestedRegion());
 
   // Test if the file exist and if it can be open.
   // and exception will be thrown otherwise.
@@ -76,7 +76,7 @@ otbDebugMacro( <<" output->GetRequestedRegion() : "<<output->GetRequestedRegion(
   this->m_ImageIO->SetFileName(this->m_FileName.c_str());
 
   itk::ImageIORegion ioRegion(TOutputImage::ImageDimension);
-otbDebugMacro( <<" Avant ioRegion : "<<ioRegion);
+//otbMsgDebugMacro( <<" Avant ioRegion : "<<ioRegion);
   
 //  itk::ImageIORegion ioRegionStreaming = output->GetRequestedRegion();
 
@@ -120,7 +120,7 @@ otbDebugMacro( <<" Avant ioRegion : "<<ioRegion);
   ioRegion.SetSize(ioSize);
   ioRegion.SetIndex(ioStart);
 
-otbDebugMacro( <<" Apres ioRegion : "<<ioRegion);
+//otbMsgDebugMacro( <<" Apres ioRegion : "<<ioRegion);
 
   itkDebugMacro (<< "ioRegion: " << ioRegion);
  
@@ -187,7 +187,7 @@ ImageFileReader<TOutputImage>
     }
     else
     {
-otbDebugMacro( << " Streaming Image Read ");
+//otbMsgDebugMacro( << " Streaming Image Read ");
     }
 }
 

@@ -10,20 +10,24 @@ namespace otb
 {
 
 /** \class StreamingImageFileWriter
- * \brief Pipeline object to control data streaming for large data processing.
+ * \brief Writes image data to a single file with streaming process.
  *
- * StreamingImageFileWriter is a pipeline object that allows the user to control
- * how data is pulled through the pipeline.  To generate its
- * OutputRequestedRegion, this filter will divide the output into several
- * pieces (controlled by SetNumberOfStreamDivisions), and call the upstream
+ * StreamingImageFileWriter writes its input data to a single output file.
+ * StreamingImageFileWriter interfaces with an ImageIO class to write out the
+ * data whith streaming process.
+ *
+ * StreamingImageFileWriter will divide the output into severalpieces 
+ * (controlled by SetNumberOfStreamDivisions), and call the upstream
  * pipeline for each piece, tiling the individual outputs into one large
  * output. This reduces the memory footprint for the application since
  * each filter does not have to process the entire dataset at once.
- * This filter will produce the entire output as one image, but the upstream
- * filters will do their processing in pieces.
+ * StreamingImageFileWriter will write directly the streaming buffer in the image file.
+ * The output image is not completely allocated ; just streaming size, 
+ * calculate whith the NumberOfStreamDivisions, is allocate.
  *
- * \ingroup ITKSystemObjects
- * \ingroup DataProcessing 
+ * \sa ImageFileWriter
+ * \sa ImageSeriesReader
+ * \sa ImageIOBase
  */
 template <class TInputImage>
 class ITK_EXPORT StreamingImageFileWriter : public itk::ImageToImageFilter<TInputImage, TInputImage>
@@ -110,13 +114,12 @@ public:
 
   itkSetObjectMacro(ImageIO, itk::ImageIOBase);
   itkGetObjectMacro(ImageIO, itk::ImageIOBase);
- itkGetConstObjectMacro(ImageIO, itk::ImageIOBase);
+  itkGetConstObjectMacro(ImageIO, itk::ImageIOBase);
 
 protected:
   StreamingImageFileWriter();
   ~StreamingImageFileWriter();
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
-
 
   /** Does the real work. */
   void GenerateData(void);
@@ -133,7 +136,6 @@ private:
   std::string        m_FileName;
   
   itk::ImageIOBase::Pointer m_ImageIO;
-//  itk::ImageIOBase * m_ImageIO;
   
   bool m_UserSpecifiedImageIO; //track whether the ImageIO is user specified
   

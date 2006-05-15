@@ -9,6 +9,8 @@
 #include "vnl/vnl_vector.h"
 #include "itkVectorImage.h"
 
+#include "otbMacro.h"
+
 namespace otb
 {
 
@@ -161,6 +163,11 @@ ImageFileWriter<TInputImage>
     }
   // Notify start event observers
   this->InvokeEvent( itk::StartEvent() );
+
+otbMsgDebugMacro( << this->GetFileName() );
+  this->GetImageIO()->SetFileName( this->GetFileName() );
+  this->GetImageIO()->WriteImageInformation();
+  
 
   // Actually do something
   this->GenerateData();
