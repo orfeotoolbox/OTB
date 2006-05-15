@@ -1,0 +1,15 @@
+
+OBJ	=	CxRITFile.obj CxRITFileHeaderRecords.obj CxRITAnnotation.obj ErrorHandling.obj
+
+EXTRAFLAGS = 	-D"WIN32"
+
+GDAL_ROOT	=	..\..\..\..
+
+!INCLUDE $(GDAL_ROOT)\nmake.opt
+
+default:	$(OBJ)
+	copy *.obj ..\..\..\o
+
+clean:
+	-del *.obj
+

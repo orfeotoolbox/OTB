@@ -1,0 +1,15 @@
+
+OBJ	=	CBuffer.obj CImage.obj CQualityMeasures.obj
+
+EXTRAFLAGS = 	-I..\Inc -I..\..\DISE -D"WIN32"
+
+GDAL_ROOT	=	..\..\..\..\..
+
+!INCLUDE $(GDAL_ROOT)\nmake.opt
+
+default:	$(OBJ)
+	copy *.obj ..\..\..\..\o
+
+clean:
+	-del *.obj
+

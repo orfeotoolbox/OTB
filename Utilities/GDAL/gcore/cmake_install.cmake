@@ -1,0 +1,16 @@
+# Install script for directory: /home1/thomas/ORFEO-TOOLBOX/otb/OTB/Utilities/GDAL/gcore
+
+MESSAGE(STATUS "Installing /ORFEO/thomas/temp_install/include/otb/Utilities/GDAL/gdal_rat.h")
+FILE(INSTALL DESTINATION "/ORFEO/thomas/temp_install/include/otb/Utilities/GDAL" TYPE FILE FILES "/home1/thomas/ORFEO-TOOLBOX/otb/OTB/Utilities/GDAL/gcore/gdal_rat.h")
+MESSAGE(STATUS "Installing /ORFEO/thomas/temp_install/include/otb/Utilities/GDAL/gdaljp2metadata.h")
+FILE(INSTALL DESTINATION "/ORFEO/thomas/temp_install/include/otb/Utilities/GDAL" TYPE FILE FILES "/home1/thomas/ORFEO-TOOLBOX/otb/OTB/Utilities/GDAL/gcore/gdaljp2metadata.h")
+MESSAGE(STATUS "Installing /ORFEO/thomas/temp_install/include/otb/Utilities/GDAL/gdal_pam.h")
+FILE(INSTALL DESTINATION "/ORFEO/thomas/temp_install/include/otb/Utilities/GDAL" TYPE FILE FILES "/home1/thomas/ORFEO-TOOLBOX/otb/OTB/Utilities/GDAL/gcore/gdal_pam.h")
+MESSAGE(STATUS "Installing /ORFEO/thomas/temp_install/include/otb/Utilities/GDAL/gdal.h")
+FILE(INSTALL DESTINATION "/ORFEO/thomas/temp_install/include/otb/Utilities/GDAL" TYPE FILE FILES "/home1/thomas/ORFEO-TOOLBOX/otb/OTB/Utilities/GDAL/gcore/gdal.h")
+MESSAGE(STATUS "Installing /ORFEO/thomas/temp_install/include/otb/Utilities/GDAL/gdal_version.h")
+FILE(INSTALL DESTINATION "/ORFEO/thomas/temp_install/include/otb/Utilities/GDAL" TYPE FILE FILES "/home1/thomas/ORFEO-TOOLBOX/otb/OTB/Utilities/GDAL/gcore/gdal_version.h")
+MESSAGE(STATUS "Installing /ORFEO/thomas/temp_install/include/otb/Utilities/GDAL/gdal_priv.h")
+FILE(INSTALL DESTINATION "/ORFEO/thomas/temp_install/include/otb/Utilities/GDAL" TYPE FILE FILES "/home1/thomas/ORFEO-TOOLBOX/otb/OTB/Utilities/GDAL/gcore/gdal_priv.h")
+MESSAGE(STATUS "Installing /ORFEO/thomas/temp_install/include/otb/Utilities/GDAL/gdal_frmts.h")
+FILE(INSTALL DESTINATION "/ORFEO/thomas/temp_install/include/otb/Utilities/GDAL" TYPE FILE FILES "/home1/thomas/ORFEO-TOOLBOX/otb/OTB/Utilities/GDAL/gcore/gdal_frmts.h")
