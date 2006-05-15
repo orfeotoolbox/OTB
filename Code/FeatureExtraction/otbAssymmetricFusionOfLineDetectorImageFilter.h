@@ -13,6 +13,7 @@
 
 #include "itkImageToImageFilter.h"
 
+#include "itkLinearInterpolateImageFunction.h"
 #include "otbLineRatioDetectorImageFilter.h"
 #include "otbLineCorrelationDetectorImageFilter.h"
 #include "otbAssociativeSymmetricalSumImageFilter.h"
@@ -32,9 +33,9 @@ namespace otb
 
 template <class TInputImage, 
 	  class TOutputImage, 
-	  class InterpolatorType = itk::BSplineInterpolateImageFunction<TInputImage> >
+	  class InterpolatorType = itk::LinearInterpolateImageFunction<TInputImage> >
 class ITK_EXPORT AssymmetricFusionOfLineDetectorImageFilter : 
-public itk::ImageToImageFilter< TInputImage, TOutputImage >
+    public LineDetectorImageFilterBase< TInputImage, TOutputImage, InterpolatorType >
 {
 public:
 
@@ -53,31 +54,19 @@ public:
   
 
   typedef AssymmetricFusionOfLineDetectorImageFilter Self;
-  typedef itk::ImageToImageFilter< InputImageType, OutputImageType> Superclass;
+  typedef LineDetectorImageFilterBase< TInputImage, TOutputImage, InterpolatorType > Superclass;
   typedef itk::SmartPointer<Self> Pointer;
   typedef itk::SmartPointer<const Self>  ConstPointer;
 
   itkNewMacro(Self);
 
-  itkTypeMacro(AssymmetricFusionOfLineDetectorImageFilter, itk::ImageToImageFilter);
+  itkTypeMacro(AssymmetricFusionOfLineDetectorImageFilter, LineDetectorImageFilterBase);
   
   typedef typename InputImageType::PixelType  InputPixelType;
   typedef typename InputImageType::SizeType SizeType;
 
   typedef typename OutputImageType::PixelType OutputPixelType;
  
-
-  /** Set the length of the linear feature. */
-  itkSetMacro(LengthLine, unsigned int);
-
-  /** Get the length of the linear feature. */
-  itkGetConstReferenceMacro(LengthLine, unsigned int);
-
-  /** Set the width of the linear feature. */
-  itkSetMacro(WidthLine, unsigned int);
-
-  /** Get the length of the linear feature. */
-  itkGetConstReferenceMacro(WidthLine, unsigned int);
 
 protected:
   AssymmetricFusionOfLineDetectorImageFilter();
@@ -95,11 +84,6 @@ private:
   AssymmetricFusionOfLineDetectorImageFilter(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
 
-  /** Length of the linear feature = 2*m_LengthLine+1 */ 
-  unsigned int m_LengthLine;
- 
-  /** Width of the linear feature = 2*m_WidthLine+1 */ 
-  unsigned int m_WidthLine;
   
   typename LineRatioType::Pointer	m_LineRatio;
   typename LineCorrelationType::Pointer	m_LineCorrelation;

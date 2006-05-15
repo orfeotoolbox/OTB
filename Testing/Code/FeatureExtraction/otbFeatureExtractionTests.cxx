@@ -28,6 +28,7 @@ REGISTER_TEST(otbFlusserPath);
 REGISTER_TEST(otbTouziEdgeDetectorNew);
 REGISTER_TEST(otbTouziEdgeDetector);
 REGISTER_TEST(otbTouziEdgeDetectorDirection);
+REGISTER_TEST(otbLineDetectorBaseNew);
 REGISTER_TEST(otbLineRatioDetectorNew);
 REGISTER_TEST(otbLineRatioDetectorLinear);
 REGISTER_TEST(otbLineRatioDetectorLinearDirection);

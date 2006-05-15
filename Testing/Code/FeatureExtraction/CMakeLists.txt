@@ -114,6 +114,34 @@ ADD_TEST(feTvTouziDir ${FEATUREEXTRACTION_TESTS}
 	${TEMP}/feFiltreTouzi_amst_dir_3.hd
 	3)	
 
+# -------            otb::LineDetectorBase   ------------------------------
+
+ADD_TEST(feTuLineDetectorBaseNew ${FEATUREEXTRACTION_TESTS}  
+        otbLineDetectorBaseNew)
+	
+# -------            otb::LineCorrelationDetector   ------------------------------
+	
+ADD_TEST(feTuLineCorrelationNew ${FEATUREEXTRACTION_TESTS}  
+        otbLineCorrelationDetectorNew)
+        
+ADD_TEST(feTuLineCorrelationLinear ${FEATUREEXTRACTION_TESTS}  
+        otbLineCorrelationDetectorLinear
+	${INPUTDATA}/amst.png
+	${TEMP}/feFiltreLineCorrelationLinear_amst_2_3.hd
+	2 3)
+      
+ADD_TEST(feTuLineCorrelationLinearDir ${FEATUREEXTRACTION_TESTS}  
+        otbLineCorrelationDetectorLinearDirection
+	${INPUTDATA}/amst.png
+	${TEMP}/feFiltreLineCorrelationLinear_amst_dir_2_3.hd
+	2 3)
+		
+ADD_TEST(feTuLineCorrelation ${FEATUREEXTRACTION_TESTS}  
+        otbLineCorrelationDetector
+	${INPUTDATA}/amst.png
+	${TEMP}/feFiltreLineCorrelation_amst_2_3.hd
+	2 3)
+	
 # -------            otb::LineRatioDetector   ------------------------------
 
 ADD_TEST(feTuLineRatioNew ${FEATUREEXTRACTION_TESTS}  
@@ -143,28 +171,6 @@ ADD_TEST(feTuLineRatio ${FEATUREEXTRACTION_TESTS}
 	${TEMP}/feFiltreLineRatio_amst_2_3.hd
 	2 3)
 
-# -------            otb::LineCorrelationDetector   ------------------------------
-	
-ADD_TEST(feTuLineCorrelationNew ${FEATUREEXTRACTION_TESTS}  
-        otbLineCorrelationDetectorNew)
-        
-ADD_TEST(feTuLineCorrelationLinear ${FEATUREEXTRACTION_TESTS}  
-        otbLineCorrelationDetectorLinear
-	${INPUTDATA}/amst.png
-	${TEMP}/feFiltreLineCorrelationLinear_amst_2_3.hd
-	2 3)
-      
-ADD_TEST(feTuLineCorrelationLinearDir ${FEATUREEXTRACTION_TESTS}  
-        otbLineCorrelationDetectorLinearDirection
-	${INPUTDATA}/amst.png
-	${TEMP}/feFiltreLineCorrelationLinear_amst_dir_2_3.hd
-	2 3)
-		
-ADD_TEST(feTuLineCorrelation ${FEATUREEXTRACTION_TESTS}  
-        otbLineCorrelationDetector
-	${INPUTDATA}/amst.png
-	${TEMP}/feFiltreLineCorrelation_amst_2_3.hd
-	2 3)
 
 # -------            otb::AssociativeSymmetricalSum   ------------------------------
 	
@@ -298,14 +304,15 @@ otbFlusserPath.cxx
 otbTouziEdgeDetectorNew.cxx
 otbTouziEdgeDetector.cxx
 otbTouziEdgeDetectorDirection.cxx
-otbLineRatioDetectorNew.cxx
-otbLineRatioDetectorLinear.cxx
-otbLineRatioDetectorLinearDirection.cxx
-otbLineRatioDetector.cxx
+otbLineDetectorBaseNew.cxx
 otbLineCorrelationDetectorNew.cxx
 otbLineCorrelationDetectorLinear.cxx
 otbLineCorrelationDetectorLinearDirection.cxx
 otbLineCorrelationDetector.cxx
+otbLineRatioDetectorNew.cxx
+otbLineRatioDetectorLinear.cxx
+otbLineRatioDetectorLinearDirection.cxx
+otbLineRatioDetector.cxx
 otbAssociativeSymmetricalSumNew.cxx
 otbAssociativeSymmetricalSum.cxx
 otbAssymmetricFusionOfLineDetectorNew.cxx

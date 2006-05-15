@@ -24,9 +24,12 @@ template <class TInputImage, class TOutputImage, class InterpolatorType>
 AssymmetricFusionOfLineDetectorImageFilter<TInputImage, TOutputImage, InterpolatorType>
 ::AssymmetricFusionOfLineDetectorImageFilter()
 {
-  m_LengthLine = 1;
-  m_WidthLine = 0;
+  this->m_LengthLine = 1;
+  this->m_WidthLine = 0;
 
+  this->m_Radius.Fill(1);
+  this->m_LengthLine = 1;
+  this->m_WidthLine = 0;
   
   m_LineRatio         = LineRatioType::New();
   m_LineCorrelation   = LineCorrelationType::New();
@@ -64,8 +67,8 @@ AssymmetricFusionOfLineDetectorImageFilter<TInputImage, TOutput, InterpolatorTyp
 ::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   Superclass::PrintSelf( os, indent );
-  os << indent << "Length: " << m_LengthLine << std::endl;
-  os << indent << "Width: " << m_WidthLine << std::endl;
+  os << indent << "Length: " << this->m_LengthLine << std::endl;
+  os << indent << "Width: " << this->m_WidthLine << std::endl;
   
 }
 

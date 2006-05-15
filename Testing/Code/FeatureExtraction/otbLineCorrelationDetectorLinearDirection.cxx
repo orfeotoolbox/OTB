@@ -64,7 +64,7 @@ int otbLineCorrelationDetectorLinearDirection( int argc, char* argv[] )
         writer->SetFileName( outputFilename );
         
         FilterLineCorrelation->SetInput( reader->GetOutput() );
-        writer->SetInput( FilterLineCorrelation->GetOutputDirections() );
+        writer->SetInput( FilterLineCorrelation->GetOutputDirection() );
         
         writer->Update();
 
