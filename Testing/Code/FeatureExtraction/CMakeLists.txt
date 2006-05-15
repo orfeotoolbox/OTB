@@ -21,13 +21,6 @@ ADD_TEST(feTuAlignMV2ITK ${FEATUREEXTRACTION_TESTS}
 	${INPUTDATA}/poupees.hd
 	${TEMP}/feAlign.txt)
 
-# -------            otb::FLST   ------------------------------
-	
-ADD_TEST(feTuTestFLST ${FEATUREEXTRACTION_TESTS}  
-        otbFlstTest
-	${INPUTDATA}/poupees.hd
-	${TEMP}/feoFlstListTree.txt)	
-
 # -------            otb::Draw   ------------------------------
 		
 ADD_TEST(feTuDrawSegmentIntoImage ${FEATUREEXTRACTION_TESTS}  
@@ -55,11 +48,6 @@ ADD_TEST(feTuDrawPathTestAlign ${FEATUREEXTRACTION_TESTS}
 	${INPUTDATA}/DeuxTraits.png
 	${TEMP}/feDrawPathAlignDeuxTraits.png)
 	
-ADD_TEST(feTuTestFLST ${FEATUREEXTRACTION_TESTS}  
-        otbTestFlst
-	${INPUTDATA}/TeteAToto.png
-	${TEMP}/feFLSTsegment.txt)
-
 ADD_TEST(feTuComplexMomentImage ${FEATUREEXTRACTION_TESTS}  
         otbComplexMomentImage
 	${INPUTDATA}/TeteAToto.png 1 1)
@@ -287,7 +275,6 @@ ADD_TEST(feTuExtractSegments ${FEATUREEXTRACTION_TESTS}
 # A enrichir
 SET(BasicFeatureExtraction_SRCS
 otbAlignImageToPath.cxx
-otbFlstTest.cxx
 otbDrawPathList.cxx
 otbDrawPath.cxx
 otbDrawPathAlign.cxx

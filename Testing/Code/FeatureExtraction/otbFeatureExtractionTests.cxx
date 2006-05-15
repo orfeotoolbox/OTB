@@ -10,7 +10,6 @@
 void RegisterTests()
 {
 REGISTER_TEST(otbAlignImageToPath);
-REGISTER_TEST(otbFlstTest);
 REGISTER_TEST(otbDrawPathList);
 REGISTER_TEST(otbDrawPathListTracerLignes);
 REGISTER_TEST(otbDrawPathDessinCarre);
