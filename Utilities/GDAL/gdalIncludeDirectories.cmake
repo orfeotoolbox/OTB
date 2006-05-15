@@ -6,6 +6,7 @@ SET(GDAL_INCLUDE_DIRS_BUILD_TREE
   ${OTB_SOURCE_DIR}/Utilities/GDAL
   ${OTB_SOURCE_DIR}/Utilities/GDAL/frmts
   ${OTB_SOURCE_DIR}/Utilities/GDAL/frmts/raw
+  ${OTB_SOURCE_DIR}/Utilities/GDAL/frmts/nitf
   ${OTB_SOURCE_DIR}/Utilities/GDAL/frmts/gtiff
   ${OTB_SOURCE_DIR}/Utilities/GDAL/frmts/gtiff/libtiff
   ${OTB_SOURCE_DIR}/Utilities/GDAL/frmts/gtiff/libgeotiff
