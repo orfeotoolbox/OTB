@@ -19,36 +19,21 @@ SET(OTB_INCLUDE_DIRS_BUILD_TREE ${OTB_INCLUDE_DIRS_BUILD_TREE}
 )
 
 #-----------------------------------------------------------------------------
-# CAI directories
-IF(WIN32)
-        SET(OTB_INCLUDE_DIRS_BUILD_TREE ${OTB_INCLUDE_DIRS_BUILD_TREE}
-                ${OTB_SOURCE_DIR}/Utilities/CAI/cai_dll
-                ${OTB_SOURCE_DIR}/Utilities/CAI/cai_dll/inc
-                ${OTB_SOURCE_DIR}/Utilities/CAI/cai_dll/inc/inc_unix2win
-        )
-ELSE(WIN32)
-        SET(OTB_INCLUDE_DIRS_BUILD_TREE ${OTB_INCLUDE_DIRS_BUILD_TREE}
-                ${OTB_SOURCE_DIR}/Utilities/CAI
-                ${OTB_SOURCE_DIR}/Utilities/CAI/inc
-        )
-ENDIF(WIN32)
-
+# Include directories from the GDAL build tree.
+INCLUDE(${OTB_SOURCE_DIR}/Utilities/GDAL/gdalIncludeDirectories.cmake)
 SET(OTB_INCLUDE_DIRS_BUILD_TREE ${OTB_INCLUDE_DIRS_BUILD_TREE}
-  ${OTB_SOURCE_DIR}/Utilities/GDAL/frmts
-  ${OTB_SOURCE_DIR}/Utilities/GDAL/frmts/raw
-  ${OTB_SOURCE_DIR}/Utilities/GDAL/frmts/gtiff/libgeotiff
-  ${OTB_SOURCE_DIR}/Utilities/GDAL/frmts/gtiff/libtiff
-  ${OTB_SOURCE_DIR}/Utilities/GDAL/frmts/gtiff
-#  ${OTB_SOURCE_DIR}/Utilities/GDAL/frmts/ceos
-#  ${OTB_SOURCE_DIR}/Utilities/GDAL/frmts/envisat
-  ${OTB_SOURCE_DIR}/Utilities/GDAL/frmts/msg
-  ${OTB_SOURCE_DIR}/Utilities/GDAL/frmts/msg/PublicDecompWT/COMP/WT/Inc
-  ${OTB_SOURCE_DIR}/Utilities/GDAL/gcore
-  ${OTB_SOURCE_DIR}/Utilities/GDAL/ogr
-  ${OTB_SOURCE_DIR}/Utilities/GDAL/ogr/ogrsf_frmts
-  ${OTB_SOURCE_DIR}/Utilities/GDAL/port
-  ${OTB_SOURCE_DIR}/Utilities/GDAL/alg
-)
+  ${GDAL_INCLUDE_DIRS_BUILD_TREE}
+  )
+
+
+#-----------------------------------------------------------------------------
+# Include directories from the CAI build tree.
+INCLUDE(${OTB_SOURCE_DIR}/Utilities/CAI/caiIncludeDirectories.cmake)
+SET(OTB_INCLUDE_DIRS_BUILD_TREE ${OTB_INCLUDE_DIRS_BUILD_TREE}
+  ${CAI_INCLUDE_DIRS_BUILD_TREE}
+  )
+
+
 
 
 #-----------------------------------------------------------------------------
@@ -74,6 +59,7 @@ SET(OTB_INCLUDE_DIRS_INSTALL_TREE ${OTB_INCLUDE_DIRS_INSTALL_TREE}
   ${OTB_INSTALL_INCLUDE_DIR}/Utilities/CAI
   ${OTB_INSTALL_INCLUDE_DIR}/Utilities/GDAL
 )
+
 
 #IF(NOT OTB_USE_SYSTEM_VXL)
 #  SET(OTB_INCLUDE_DIRS_INSTALL_TREE ${OTB_INCLUDE_DIRS_INSTALL_TREE}

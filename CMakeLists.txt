@@ -23,13 +23,13 @@ SET(OTB_VERSION_STRING "${OTB_VERSION_MAJOR}.${OTB_VERSION_MINOR}")
 #-------------------------------
 # Librairie VTK
 #-------------------------------
-FIND_PACKAGE(VTK)
-IF(VTK_FOUND)
-  INCLUDE(${VTK_USE_FILE})
-ELSE(VTK_FOUND)
-  MESSAGE(FATAL_ERROR
-          "Cannot build OTB project without VTK.  Please set VTK_DIR.")
-ENDIF(VTK_FOUND)
+#       FIND_PACKAGE(VTK)
+#       IF(VTK_FOUND)
+#         INCLUDE(${VTK_USE_FILE})
+#       ELSE(VTK_FOUND)
+#         MESSAGE(FATAL_ERROR
+#                 "Cannot build OTB project without VTK.  Please set VTK_DIR.")
+#       ENDIF(VTK_FOUND)
 
 #-------------------------------
 # Librairie ITK
@@ -79,15 +79,15 @@ ENDIF(OPENGL_INCLUDE_PATH)
 #-------------------------------
 # Librairie GDAL
 #-------------------------------
-FIND_LIBRARY(GDAL_LIBRARY NAMES gdal PATHS $ENV{GDAL_DIR_LIB} )
-FIND_PATH(GDAL_INCLUDES gdal.h $ENV{GDAL_DIR_INCLUDES} )
-IF (NOT GDAL_LIBRARY)
-  MESSAGE(FATAL_ERROR
-          "Cannot find GDAL library. Please set GDAL_DIR_LIB.")
-ENDIF (NOT GDAL_LIBRARY)
+#       FIND_LIBRARY(GDAL_LIBRARY NAMES gdal PATHS $ENV{GDAL_DIR_LIB} )
+#       FIND_PATH(GDAL_INCLUDES gdal.h $ENV{GDAL_DIR_INCLUDES} )
+#       IF (NOT GDAL_LIBRARY)
+#         MESSAGE(FATAL_ERROR
+#                 "Cannot find GDAL library. Please set GDAL_DIR_LIB.")
+#       ENDIF (NOT GDAL_LIBRARY)
 
-INCLUDE_DIRECTORIES(${GDAL_INCLUDES})
-LINK_DIRECTORIES( $ENV{GDAL_DIR_LIB} )
+#       INCLUDE_DIRECTORIES(${GDAL_INCLUDES})
+#       LINK_DIRECTORIES( $ENV{GDAL_DIR_LIB} )
 
 
 #-------------------------------
@@ -462,6 +462,7 @@ EXPORT_LIBRARY_DEPENDENCIES(${OTB_BINARY_DIR}/OTBLibraryDepends.cmake)
 
 # Create the OTBConfig.cmake file containing the OTB configuration.
 INCLUDE (${OTB_SOURCE_DIR}/otbGenerateOTBConfig.cmake)
+
 
 # Install some files.
 INSTALL_FILES(/include/otb .h otbConfigure)
