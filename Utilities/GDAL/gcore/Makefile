@@ -28,6 +28,11 @@ CMAKE_BINARY_DIR = /home1/thomas/ORFEO-TOOLBOX/otb/OTB
 # Default target executed when no arguments are given to make.
 default_target: all
 
+# Special rule to drive testing with ctest.
+test:
+	@echo "Running tests..."
+	/usr/local/bin/ctest $(ARGS)
+
 # Special rule to run installation script.
 install: all
 	$(CMAKE_COMMAND) -P cmake_install.cmake
