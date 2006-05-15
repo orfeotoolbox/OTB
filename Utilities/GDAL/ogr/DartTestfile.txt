@@ -1,0 +1,11 @@
+# CMake generated Testfile for 
+# Source directory: /home1/thomas/ORFEO-TOOLBOX/otb/OTB/Utilities/GDAL/ogr
+# Build directory: /home1/thomas/ORFEO-TOOLBOX/otb/OTB/Utilities/GDAL/ogr
+# 
+# This file replicates the SUBDIRS() and ADD_TEST() commands from the source
+# tree CMakeLists.txt file, skipping any SUBDIRS() or ADD_TEST() commands
+# that are excluded by CMake control structures, i.e. IF() commands.
+#
+# The next line is critical for Dart to work
+# Duh :-)
+
