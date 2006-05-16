@@ -1,6 +1,6 @@
 # CMake generated Testfile for 
-# Source directory: /home1/thomas/ORFEO-TOOLBOX/otb/OTB/Utilities/GDAL/port
-# Build directory: /home1/thomas/ORFEO-TOOLBOX/otb/OTB/Utilities/GDAL/port
+# Source directory: /usr/local/stok/OTB/trunk/OTB/Utilities/GDAL/port
+# Build directory: /usr/local/stok/OTB/trunk/OTB/Utilities/GDAL/port
 # 
 # This file replicates the SUBDIRS() and ADD_TEST() commands from the source
 # tree CMakeLists.txt file, skipping any SUBDIRS() or ADD_TEST() commands
