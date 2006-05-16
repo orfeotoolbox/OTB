@@ -21,34 +21,22 @@
 namespace otb
 {
 
-/** \class SVMPointSetModelEstimator
- * \brief Class for SVM model estimation from images used for classification.
+/** \class SVMPointSetModelEstimator \brief Class for SVM model
+ * estimation from PointSets used for classification.
  * 
  *
- * The basic functionality of the SVMPointSetModelEstimator framework base class is to    
- * generate the models used in SVM classification. It requires input 
- * images and a training image to be provided by the user.
- * This object supports data handling of multiband images. The object
- * accepts the input image in vector format only, where each pixel is a 
- * vector and each element of the vector corresponds to an entry from
- * 1 particular band of a multiband dataset. A single band image is treated 
- * as a vector image with a single element for every vector. The classified
- * image is treated as a single band scalar image. 
+ * The basic functionality of the SVMPointSetModelEstimator is to
+ * generate the models used in SVM classification. It 
+ * requires one input poinset and a training pointset to be provided by the
+ * user.  This object supports data handling of multiband data. The
+ * object accepts the input image in vector format only, where each
+ * pixel is a vector and each element of the vector corresponds to an
+ * entry from 1 particular band of a multiband dataset. A single band
+ * data set is treated as a vector with a single element for every
+ * vector. The classified data is treated as a single band scalar
+ * data.
  *
- * EstimateModels() is a pure virtual function making this an abstract class. 
- * The template parameter is the type of a membership function the 
- * PointSetModelEstimator populates.
- *
- * A membership function represents a specific knowledge about
- * a class. In other words, it should tell us how "likely" is that a
- * measurement vector (pattern) belong to the class. 
- *
- * As the method name indicates, you can have more than one membership 
- * function. One for each classes. The order you put the membership 
- * calculator becomes the class label for the class that is represented
- * by the membership calculator. 
- *
-
+ * EstimateModels() uses the libsvm library for SVM learning.
  *
  * \ingroup ClassificationFilters 
  */
