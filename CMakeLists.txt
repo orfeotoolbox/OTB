@@ -79,15 +79,15 @@ ENDIF(OPENGL_INCLUDE_PATH)
 #-------------------------------
 # Librairie GDAL
 #-------------------------------
-#       FIND_LIBRARY(GDAL_LIBRARY NAMES gdal PATHS $ENV{GDAL_DIR_LIB} )
-#       FIND_PATH(GDAL_INCLUDES gdal.h $ENV{GDAL_DIR_INCLUDES} )
-#       IF (NOT GDAL_LIBRARY)
-#         MESSAGE(FATAL_ERROR
-#                 "Cannot find GDAL library. Please set GDAL_DIR_LIB.")
-#       ENDIF (NOT GDAL_LIBRARY)
+FIND_LIBRARY(GDAL_LIBRARY NAMES gdal PATHS $ENV{GDAL_DIR_LIB} )
+FIND_PATH(GDAL_INCLUDES gdal.h $ENV{GDAL_DIR_INCLUDES} )
+IF (NOT GDAL_LIBRARY)
+  MESSAGE(FATAL_ERROR
+          "Cannot find GDAL library. Please set GDAL_DIR_LIB.")
+ENDIF (NOT GDAL_LIBRARY)
 
-#       INCLUDE_DIRECTORIES(${GDAL_INCLUDES})
-#       LINK_DIRECTORIES( $ENV{GDAL_DIR_LIB} )
+INCLUDE_DIRECTORIES(${GDAL_INCLUDES})
+LINK_DIRECTORIES( $ENV{GDAL_DIR_LIB} )
 
 
 #-------------------------------
