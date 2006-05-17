@@ -12,18 +12,8 @@
 #ifndef __otbONERAImageIO_h
 #define __otbONERAImageIO_h
 
-#ifdef _MSC_VER
-#pragma warning ( disable : 4786 )
-#endif
-
-/* C++ Libraries */
-#include <string>
-#include "stdlib.h"
-
-/* ITK Libraries */
 #include "itkImageIOBase.h"
-
-#include "otbMetaDataKey.h"
+#include <fstream>
 
 
 namespace otb
@@ -38,8 +28,7 @@ namespace otb
  * \ingroup IOFilters
  *
  */
-class ITK_EXPORT GDALImageIO : public itk::ImageIOBase,
-			       public MetaDataKey
+class ITK_EXPORT ONERAImageIO : public itk::ImageIOBase
 {
 public:
 
@@ -99,10 +88,12 @@ protected:
   ONERAImageIO();
   /** Destructor.*/
   ~ONERAImageIO();
+
+  bool OpenOneraDataFileForReading(std::ifstream& os, const char* filename);
+  void InternalReadImageInformation(std::ifstream& file);
   
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
-  /** Read all information on the image*/
-  void InternalReadImageInformation();
+
   /** Dimension along Ox of the image*/
   int m_width;
   /** Dimension along Oy of the image*/

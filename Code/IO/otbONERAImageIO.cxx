@@ -9,20 +9,17 @@
   $Id$
 
 =========================================================================*/
-#include "itkExceptionObject.h"
-#include "itkMacro.h"
-#include "itkByteSwapper.h"
-
-#include <iostream.h>
-#include <string.h>
-#
 #include "otbONERAImageIO.h"
-#include "otbMacro.h"
+#include "itkByteSwapper.h"
+#include <itksys/SystemTools.hxx>
+#include <string.h>  // for strncpy
 
-#include <sys/types.h>
-#include <dirent.h>
+#include "itkExceptionObject.h"
+#include "otbMacro.h"
+#include "itkMacro.h"
 
 #define ONERA_MAGIC_NUMBER     33554433
+#define ONERA_HEADER_LENGTH    0
 #define ONERA_FILE_ID_OFFSET   0
 
 namespace otb
@@ -46,20 +43,19 @@ ONERAImageIO::ONERAImageIO()
   m_Origin[1] = 0.0;
 
   m_currentfile = NULL;
-  m_poBands = NULL;
 
 }
 
 ONERAImageIO::~ONERAImageIO()
 {
-	if( m_poBands != NULL ) delete [] m_poBands;
 }
 
 
 bool ONERAImageIO::CanReadFile( const char* filename ) 
 { 
   // First check the filename extension
-  std::string fname = filename;
+  std::ifstream file;
+  std::string fname(filename);
   if ( fname == "" )
     {
     otbDebugMacro(<< "No filename specified.");
@@ -134,20 +130,20 @@ void ONERAImageIO::Read(void* buffer)
 
   //read header information file:
   this->OpenOneraDataFileForReading(file, m_FileName.c_str());
-  int HeaderLength = ONERA_HEADER_LENGTH + 4 + 4*2* m_Width;
+  int HeaderLength = ONERA_HEADER_LENGTH + 4 + 4*2* m_width;
   
   file.seekg(HeaderLength, std::ios::beg);
 
   if( !this->ReadBufferAsBinary( file, buffer, this->GetImageSizeInBytes()) )
     {
-    otbExceptionMacro(<<"Read failed: Wanted " << this->GetImageSizeInBytes()
+    itkExceptionMacro(<<"Read failed: Wanted " << this->GetImageSizeInBytes()
                       << " bytes, but read " << file.gcount() << " bytes.");
     }
 
   //byte swapping depending on pixel type:
   if(this->GetComponentType() == FLOAT)
     {
-    ByteSwapper<float>::SwapRangeFromSystemToBigEndian(
+    itk::ByteSwapper<float>::SwapRangeFromSystemToBigEndian(
         reinterpret_cast<float *>(buffer),
         this->GetImageSizeInComponents() );
     }
@@ -167,7 +163,7 @@ bool ONERAImageIO::OpenOneraDataFileForReading(std::ifstream& os,
   // Make sure that we have a file to 
   if ( filename == "" )
     {
-    otbExceptionMacro(<<"A FileName must be specified.");
+    itkExceptionMacro(<<"A FileName must be specified.");
     return false;
     }
 
@@ -194,7 +190,9 @@ bool ONERAImageIO::OpenOneraDataFileForReading(std::ifstream& os,
 
 void ONERAImageIO::ReadImageInformation()
 {
-  this->InternalReadImageInformation();
+  std::ifstream file;
+  this->InternalReadImageInformation(file);
+  file.close();
 }
 
 
@@ -205,18 +203,13 @@ void ONERAImageIO::InternalReadImageInformation(std::ifstream& file)
   //read .ent file (header)
   if ( ! this->OpenOneraDataFileForReading(file, m_FileName.c_str()) )
     {
-    otbExceptionMacro(<< "Cannot read requested file");
+    itkExceptionMacro(<< "Cannot read requested file");
     }
 
 
   // Find info...
   float NbCol;
-  float NbRow
-  p = &h;
-  if( sizeof(h) != BIORAD_HEADER_LENGTH )
-    {
-    itkExceptionMacro(<< "Problem of alignement on your plateform");
-    }
+  float NbRow;
 
   file.seekg(ONERA_FILE_ID_OFFSET + 4, std::ios::beg );
   file.read((char*)(&NbCol), 4);
@@ -225,15 +218,16 @@ void ONERAImageIO::InternalReadImageInformation(std::ifstream& file)
   itk::ByteSwapper<float>::SwapFromSystemToBigEndian(&NbRow);
     
   file.seekg(0, std::ios::end);
-  long gcount = static_cast<long>(file.tellg()) - ONERA_HEADER_LENGTH - 2*4*NbCol;
+  long gcountHead = static_cast<long>(ONERA_HEADER_LENGTH + 2*4*NbCol);
+  long gcount     = static_cast<long>(file.tellg());
 
   // Set dim X,Y
   m_width = static_cast<int> ( NbCol );
-  m_height = static_cast<int> ( gcount / (4*2) );
+  m_height = static_cast<int> ( gcount-gcountHead / (4*2) );
 
   if( m_width==0 & m_height==0)
       {
-      otbExceptionMacro(<<"Unknown image dimension");
+      itkExceptionMacro(<<"Unknown image dimension");
       }
     else
       {
