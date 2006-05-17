@@ -888,7 +888,7 @@ GLVectorImageViewClick<TPixel, TPixelOverlay>
     {
       if(!this->cValidImData)
         {
-        itkExceptionMacro("GLVectorImageViewClick: Please set the input image before overlay"  
+        itkExceptionMacro(<< "GLVectorImageViewClick: Please set the input image before overlay"  
                   	 << std::endl
        				 << "GLVectorImageViewClick: Overlay not set."
 		             << std::endl);
@@ -897,7 +897,7 @@ GLVectorImageViewClick<TPixel, TPixelOverlay>
       ||  (newoverlay_size[1] != this->cDimSize[1])
       )
         {
-   		itkExceptionMacro("GLVectorImageViewClick: Error: overlay and input images should be the same size"
+   		itkExceptionMacro(<< "GLVectorImageViewClick: Error: overlay and input images should be the same size"
 					 << std::endl 
 		 			 << "Image size : " << this->cDimSize[0]<< " " << this->cDimSize[1] 
 		 			 << std::endl

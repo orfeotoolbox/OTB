@@ -87,7 +87,6 @@ class ITK_EXPORT VectorImageView : public itk::ProcessObject
 	unsigned int   cWinMinY;
 	unsigned int   cWinMaxY;
 	unsigned int   cWinCenter[3];
-	const ImageType      *cImData;
 	
     int   cWinDataSizeX;
     int   cWinDataSizeY;

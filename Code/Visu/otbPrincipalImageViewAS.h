@@ -19,6 +19,8 @@
 #include <FL/Fl_Gl_Window.H>
 
 #include "otbGLVectorImageViewClick.h"
+#include "otbSVMPointSetModelEstimator.h"
+#include "itkPointSet.h"
 
 namespace otb
 {
@@ -37,15 +39,29 @@ GLVectorImageViewClick<TPixel, TPixelOverlay>
 public:
     
     float _x,_y,_z;   
-    typedef PrincipalImageViewAS                                  Self;
-    typedef GLVectorImageViewClick<TPixel, TPixelOverlay>                       Superclass;
+    typedef PrincipalImageViewAS                                Self;
+    typedef GLVectorImageViewClick<TPixel, TPixelOverlay>       Superclass;
     typedef itk::SmartPointer<Self>                             Pointer;
     typedef itk::SmartPointer<const Self>                       ConstPointer;
+	
+	
+	
+	/*! typedef for learning and classification */
+	
+	typedef char InputPixelType;
+   	typedef std::vector<InputPixelType>                   InputVectorType;
+  	typedef int                                           LabelPixelType;
+	typedef itk::PointSet< InputVectorType,  3>  MeasurePointSetType;
+  	typedef itk::PointSet< LabelPixelType,  3>   LabelPointSetType;
+	
+	typedef otb::SVMPointSetModelEstimator< MeasurePointSetType,
+  									LabelPointSetType >   EstimatorType;
+	
 
-    /** Method for creation through the object factory. */
+    /*! Method for creation through the object factory. */
     itkNewMacro(Self);
 
-    /** Run-time type information (and related methods). */
+    /*! Run-time type information (and related methods). */
     itkTypeMacro(PrincipalImageViewAS,GLVectorImageViewClick);
 
   
@@ -59,28 +75,38 @@ public:
 
   virtual int  handle(int event);
 
-  /** Show the image (display the window) */
+  /*! Show the image (display the window) */
   virtual void Show(void);
   
-  /** Erase the last clicked point */
+  /*! Erase the last clicked point */
   virtual void UndoPt();
   
-  /** Erase all clicked points */
+  /*! Erase all clicked points */
   virtual void ResetPts();
   
+  /*! Learn Step */
+  void LearnStep();
+  
+  /*! Classification Step */
+  void ClassificationStep();
+  
+  /*! If b is false, it is not possible to click on the image */
   void SetClickable(bool b);
   
-  /** Selected point correct */
+  /*! Selected point correct */
   bool cMem;
   
-  /** Box color */
+  /*! Box color */
   ColorType cRectColor;
   
-  /** To know if click or box */
+  /*! To know if click or box */
   int nbDrag;
 
-  /** Image clickable */
+  /*! Image clickable */
   bool cClickable;  
+  
+  /*! Estimator after learning */
+  EstimatorType::Pointer cEstimator;
   
 protected:
   

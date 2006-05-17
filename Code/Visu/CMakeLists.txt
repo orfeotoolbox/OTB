@@ -32,7 +32,7 @@ ADD_LIBRARY(OTBVisu ${OTBVisu_SRCS} ${OTBVisu_FLTK_UI_SRCS})
 INSTALL_FILES(/include/otb/Visu "(\\.h|\\.txx)$")
 INSTALL_TARGETS(/lib/otb OTBVisu)
 
-TARGET_LINK_LIBRARIES(OTBVisu ${FLTK_LIBRARIES} ${OPENGL_glu_LIBRARY}
+TARGET_LINK_LIBRARIES(OTBVisu OTBLearning ${FLTK_LIBRARIES} ${OPENGL_glu_LIBRARY}
                       ${OPENGL_LIBRARIES})
 
 # The fluid-generated fltk sources have many warnings.  Disable

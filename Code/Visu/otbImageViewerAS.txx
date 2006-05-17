@@ -96,14 +96,14 @@ ImageViewerAS<TPixel>
   		m_PrincipalViewAfterClassif->Show();
 
        	if( firstTime == true)
-  	{
+  		{
     		firstTime = false;
     		Fl::check();
     		m_PrincipalViewBeforeClassif->redraw();
 			m_PrincipalViewAfterClassif->redraw();
     		Fl::check();
-  	}
-        SetLabel("aaa");
+	  	}
+        SetLabel("Application classification supervisée");
 }
 
 
@@ -424,14 +424,14 @@ template <class TPixel>
 void 
 ImageViewerAS<TPixel>::LearnAlgorythm()
 {
-	std::cout << "LEARN" << std::endl;
+	m_PrincipalViewBeforeClassif->LearnStep();
 }
 
 template <class TPixel>
 void 
 ImageViewerAS<TPixel>::ClassificationAlgorythm()
 {
-	std::cout << "CLASSIF" << std::endl;
+	m_PrincipalViewAfterClassif->ClassificationStep();
 }
 
 template <class TPixel>
