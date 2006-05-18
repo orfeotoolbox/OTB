@@ -17,7 +17,7 @@
 
 
 #include "itkExceptionObject.h"
-#include "itkImage.h"
+#include "otbImage.h"
 #include <iostream>
 
 #include "otbSVMModel.h"
@@ -31,7 +31,7 @@ int otbSVMModelNew( int argc, char* argv[] )
 	typedef unsigned char                                   LabelPixelType;
         const   unsigned int        	                        Dimension = 2;
 
-        typedef itk::Image< InputPixelType,  Dimension >        InputImageType;
+        typedef otb::Image< InputPixelType,  Dimension >        InputImageType;
 
         typedef otb::SVMModel< InputPixelType, LabelPixelType >   ModelType;
 	

@@ -17,8 +17,8 @@
 
 
 #include "itkExceptionObject.h"
-#include "itkImage.h"
-#include "itkVectorImage.h"
+#include "otbImage.h"
+#include "otbVectorImage.h"
 #include <iostream>
 
 #include "otbSVMImageModelEstimator.h"
@@ -31,9 +31,9 @@ int otbSVMImageModelEstimatorNew( int argc, char* argv[] )
         typedef double                               InputPixelType;
         const   unsigned int        	                    Dimension = 2;
 
-        typedef itk::VectorImage< InputPixelType,  Dimension >        InputImageType;
+        typedef otb::VectorImage< InputPixelType,  Dimension >        InputImageType;
 
-	typedef itk::Image< InputPixelType,  Dimension >     TrainingImageType;
+	typedef otb::Image< InputPixelType,  Dimension >     TrainingImageType;
 
 	typedef std::vector<double>   VectorType;
 

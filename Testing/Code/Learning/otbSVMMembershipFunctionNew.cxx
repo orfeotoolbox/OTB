@@ -17,7 +17,6 @@
 
 
 #include "itkExceptionObject.h"
-#include "itkImage.h"
 #include <iostream>
 
 #include "otbSVMMembershipFunction.h"

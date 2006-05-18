@@ -184,8 +184,6 @@ int main( int argc, char* argv[] )
     classifier->Update() ;
 
     /* Build the class map */
-    std::cout << "Output image creation" << std::endl;  
-
     
     std::cout << "classifier get output" << std::endl;  
     ClassifierType::OutputType* membershipSample =
