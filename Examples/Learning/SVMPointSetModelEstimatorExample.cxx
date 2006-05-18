@@ -21,6 +21,7 @@
 #include <iostream>
 #include <cstdlib> 
 
+
 // Software Guide : BeginLatex
 //
 // This example illustrates the use of the
@@ -79,10 +80,13 @@ int main( int argc, char* argv[] )
 // Software Guide : BeginLatex
 //
 // We will need to get access to the data stored in the point sets, so
-// we define the appropriate 
+// we define the appropriate for the points and the points containers
+// used by the point sets (see the section \ref{sec:PointSetSection}
+// for more information oin haw to use point sets).
 //
 // Software Guide : EndLatex
 
+// Software Guide : BeginCodeSnippet  
   typedef FeaturePointSetType::PointType    FeaturePointType;
   typedef LabelPointSetType::PointType      LabelPointType;
 
@@ -91,9 +95,21 @@ int main( int argc, char* argv[] )
 
   FeaturePointsContainer::Pointer fCont = FeaturePointsContainer::New();
   LabelPointsContainer::Pointer lCont = LabelPointsContainer::New();
+// Software Guide : EndCodeSnippet
+
+// Software Guide : BeginLatex
+//
+// We need now to build the training set for the SVM learning. In this
+// simple example, we will build a SVM who classes points depending on
+// which side of the line $x=y$ they are located. We start by
+// generating 500 random points.
+//
+// Software Guide : EndLatex
 
   /* We learn the y>x | y<x boundary*/
   srand((unsigned)time(0));
+
+// Software Guide : BeginCodeSnippet    
   int lowest = 0;
   int range = 1000;
   
@@ -105,19 +121,47 @@ int main( int argc, char* argv[] )
 
     int x_coord = lowest+static_cast<int>(range*(rand()/(RAND_MAX + 1.0)));
     int y_coord = lowest+static_cast<int>(range*(rand()/(RAND_MAX + 1.0))); 
+// Software Guide : EndCodeSnippet
 
-    std::cout << "coords : " << x_coord << " " << y_coord << std::endl;
-    mP[0] = x_coord;
-    mP[1] = y_coord;
+// Software Guide : BeginLatex
+//
+// We set the coordinates of the points. They are the same for the
+// feature vector and for the label.
+//
+// Software Guide : EndLatex
+    
+// Software Guide : BeginCodeSnippet      
+
+    fP[0] = x_coord;
+    fP[1] = y_coord;
 
     lP[0] = x_coord;
     lP[1] = y_coord;
+// Software Guide : EndCodeSnippet
 
+// Software Guide : BeginLatex
+//
+// We push the features in the vector after a normalization which is
+// useful for SVM convergence.
+//
+// Software Guide : EndLatex
+    
+// Software Guide : BeginCodeSnippet      
 
     VectorType feature; 
     feature.push_back(static_cast<PixelType>((x_coord*1.0-lowest)/range));
     feature.push_back(static_cast<PixelType>((y_coord*1.0-lowest)/range));
 
+// Software Guide : EndCodeSnippet
+
+// Software Guide : BeginLatex
+//
+// We decide on the label for each point.
+//
+// Software Guide : EndLatex
+    
+// Software Guide : BeginCodeSnippet      
+    
     LabelPixelType label;
 
     if(x_coord < y_coord)
@@ -125,10 +169,18 @@ int main( int argc, char* argv[] )
     else
       label = 1;
 
-    std::cout << "Label : " << label << std::endl;
-    std::cout << "Features : " << feature[0] << " " << feature[1] << std::endl;
+// Software Guide : EndCodeSnippet
 
-    fCont->InsertElement( pointId , mP );
+// Software Guide : BeginLatex
+//
+// And we insert the points in the points containers.
+//
+// Software Guide : EndLatex
+    
+// Software Guide : BeginCodeSnippet      
+    
+
+    fCont->InsertElement( pointId , fP );
     fPSet->SetPointData( pointId, feature );   
 
 
@@ -138,25 +190,77 @@ int main( int argc, char* argv[] )
 
     }
 
-  fPSet->SetPoints( mCont );
-  lPSet->SetPoints( lCont );
+// Software Guide : EndCodeSnippet
+
+// Software Guide : BeginLatex
+//
+// After the loop, we set the points containers to the point sets.
+//
+// Software Guide : EndLatex
     
+// Software Guide : BeginCodeSnippet      
+  
+  fPSet->SetPoints( fCont );
+  lPSet->SetPoints( lCont );
+// Software Guide : EndCodeSnippet
+
+// Software Guide : BeginLatex
+//
+// Up to now, we have only prepared the data for the SVM learning. We
+// can now create the SVM model estimator. This class is templated
+// over the feature and the label point set types.
+// \index{otb::SVMPointSetModelEstimator}
+//
+// Software Guide : EndLatex
+    
+// Software Guide : BeginCodeSnippet      
+  
   typedef otb::SVMPointSetModelEstimator< FeaturePointSetType,
-    LabelPointSetType >   EstimatorType;
+                                       LabelPointSetType >   EstimatorType;
 	
 	
   EstimatorType::Pointer estimator = EstimatorType::New();
+// Software Guide : EndCodeSnippet
 
+// Software Guide : BeginLatex
+//
+// The next step consists in setting the point sets for the estimator
+// and the number of classes for the model. The feture point set is
+// set using the \code{SetInputPointSet} and the label point set is
+// set with the \code{SetTrainingPointSet} method.
+//
+// Software Guide : EndLatex
+    
+// Software Guide : BeginCodeSnippet      
+  
   estimator->SetInputPointSet( fPSet );
   estimator->SetTrainingPointSet( lPSet );
   estimator->SetNumberOfClasses( 2 );
 
+// Software Guide : EndCodeSnippet
 
+// Software Guide : BeginLatex
+//
+// The model estimation is triggered by calling the \code{Update}
+// method.
+//
+// Software Guide : EndLatex
+    
+// Software Guide : BeginCodeSnippet      
+  
   estimator->Update();
+// Software Guide : EndCodeSnippet
 
-  std::cout << "Saving model" << std::endl;
-  estimator->SaveModel("model.svm");
-
+// Software Guide : BeginLatex
+//
+// Finally, we can save the result of the learning to a file.
+//
+// Software Guide : EndLatex
+    
+// Software Guide : BeginCodeSnippet      
+   
+  estimator->SaveModel("svm_model.svm");
+// Software Guide : EndCodeSnippet      
 
   return EXIT_SUCCESS;
 }

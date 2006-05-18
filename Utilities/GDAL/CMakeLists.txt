@@ -3,7 +3,7 @@
 #
 
 
-SUBDIRS( gcore port ogr alg )
+SUBDIRS( gcore port ogr alg apps )
 
 
 SET( GDALgtiff_SRCS
@@ -64,6 +64,8 @@ SET( GDALgtiff_SRCS
         frmts/gtiff/tif_overview.c 	
         frmts/gtiff/tif_float.c 	
         frmts/gtiff/tifvsi.cpp
+
+
 )
 
 FILE(GLOB GDALfrmts_SRCS "frmts/*.cpp" )
