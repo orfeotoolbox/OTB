@@ -17,6 +17,7 @@
 #include "itkExceptionObject.h"
 #include "otbMacro.h"
 #include "itkMacro.h"
+#include <stdio.h>
 
 #define ONERA_MAGIC_NUMBER     33554433
 #define ONERA_HEADER_LENGTH    0
@@ -56,6 +57,7 @@ bool ONERAImageIO::CanReadFile( const char* filename )
   // First check the filename extension
   std::ifstream file;
   std::string fname(filename);
+  otbDebugMacro(<< "ONERAImageIO::CanReadFile()");
   if ( fname == "" )
     {
     otbDebugMacro(<< "No filename specified.");
@@ -89,22 +91,35 @@ bool ONERAImageIO::CanReadFile( const char* filename )
 
   // Now check the content
   std::ifstream inputStream;
-  inputStream.open( filename, std::ios::in | std::ios::binary );
+  file.open( filename, std::ios::in | std::ios::binary );
   if( inputStream.fail() )
     {
     return false;
     }
 
-  // Check to see if its a ONERA file
-  unsigned long file_id;
-  file.seekg(ONERA_FILE_ID_OFFSET, std::ios::beg );
-  file.read((char*)(&file_id),4);
-  itk::ByteSwapper<unsigned long>::SwapFromSystemToBigEndian(&file_id);
 
-  otbDebugMacro(<< "Magic number: " << file_id);
+  this->m_ByteOrder = LittleEndian;
+
+  // Check to see if its a ONERA file
+  int magicNumber;
+  short NbCase;
+  
+  file.seekg(0, std::ios::beg );
+  file.read((char*)(&magicNumber),4);
+  file.seekg(6, std::ios::beg );
+  file.read((char*)(&NbCol),2);
+  otbDebugMacro(<< "Magic number Before magicNumber: " << magicNumber);
+  otbDebugMacro(<< "Magic number Before NbCase: " << NbCase);
+  
+  itk::ByteSwapper< int>::SwapFromSystemToLittleEndian(&magicNumber);
+  itk::ByteSwapper< short>::SwapFromSystemToLittleEndian(&NbCol);
+    
+  otbDebugMacro(<< "Magic number after : " << magicNumber);
+  otbDebugMacro(<< "Magic number after : " << NbCase);
 
   file.close();
-  return file_id == ONERA_MAGIC_NUMBER;
+
+  return magicNumber == ONERA_MAGIC_NUMBER;
 
 }
 
