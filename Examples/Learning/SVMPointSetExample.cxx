@@ -85,7 +85,7 @@ int main( int argc, char* argv[] )
     LabelPixelType label;
 
     if(x_coord < y_coord)
-      label= -1;
+      label = 0;
     else
       label = 1;
 
