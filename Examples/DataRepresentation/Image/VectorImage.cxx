@@ -47,7 +47,7 @@
 // Software Guide : EndLatex 
 
 // Software Guide : BeginCodeSnippet
-#include "itkVectorImage.h"
+#include "otbVectorImage.h"
 // Software Guide : EndCodeSnippet
 
 
@@ -61,13 +61,13 @@ int main(int, char *[])
   // this example, 
   // we want to represent Pléiades images which have 4 bands.
   //
-  // \index{itk::VectorImage!Instantiation}
+  // \index{otb::VectorImage!Instantiation}
   //
   // Software Guide : EndLatex 
 
   // Software Guide : BeginCodeSnippet
   typedef unsigned char                 PixelType;
-  typedef itk::VectorImage< PixelType, 2 >    ImageType;
+  typedef otb::VectorImage< PixelType, 2 >    ImageType;
   // Software Guide : EndCodeSnippet
 
   // Then the image object can be created

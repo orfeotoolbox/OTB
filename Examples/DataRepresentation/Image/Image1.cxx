@@ -33,7 +33,7 @@
 
 
 // Software Guide : BeginCodeSnippet
-#include "itkImage.h"
+#include "otbImage.h"
 // Software Guide : EndCodeSnippet
 
 
@@ -51,7 +51,7 @@ int main(int, char *[])
   // Software Guide : EndLatex 
   //
   // Software Guide : BeginCodeSnippet 
-  typedef itk::Image< unsigned short, 2 > ImageType;
+  typedef otb::Image< unsigned short, 2 > ImageType;
   // Software Guide : EndCodeSnippet 
 
   

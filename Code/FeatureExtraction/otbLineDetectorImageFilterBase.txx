@@ -51,8 +51,8 @@ void LineDetectorImageFilterBase<TInputImage, TOutputImage, InterpolatorType>::G
   Superclass::GenerateInputRequestedRegion();
   
   // get pointers to the input and output
-  typename Superclass::InputImagePointer inputPtr   =  const_cast< TInputImage * >( this->GetInput() );
-  typename Superclass::OutputImagePointer outputPtr = this->GetOutput();
+  typename InputImageType::Pointer inputPtr   =  const_cast< TInputImage * >( this->GetInput() );
+  typename OutputImageType::Pointer outputPtr = this->GetOutput();
   
   if ( !inputPtr || !outputPtr )
     {

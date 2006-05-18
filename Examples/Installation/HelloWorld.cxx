@@ -7,12 +7,12 @@
 //  Software Guide : EndLatex 
 
 // Software Guide : BeginCodeSnippet
-#include "itkImage.h"
+#include "otbImage.h"
 #include <iostream>
 
 int main()
 {
-  typedef itk::Image< unsigned short, 2 > ImageType;
+  typedef otb::Image< unsigned short, 2 > ImageType;
 
   ImageType::Pointer image = ImageType::New();
 

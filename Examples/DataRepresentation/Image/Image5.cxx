@@ -43,7 +43,7 @@
 
 
 // Software Guide : BeginCodeSnippet
-#include "itkImage.h"
+#include "otbImage.h"
 #include "itkImportImageFilter.h"
 // Software Guide : EndCodeSnippet
 
@@ -69,7 +69,7 @@ int main(int argc, char * argv[])
   // Software Guide : BeginCodeSnippet 
   typedef unsigned char   PixelType;
   const unsigned int Dimension = 2;
-  typedef itk::Image< PixelType, Dimension > ImageType;
+  typedef otb::Image< PixelType, Dimension > ImageType;
   // Software Guide : EndCodeSnippet 
 
   
@@ -250,7 +250,7 @@ int main(int argc, char * argv[])
   writer->SetFileName( argv[1] );
 
   // Software Guide : BeginCodeSnippet
-  writer->SetInput(  importFilter->GetOutput()  );
+  writer->SetInput(  dynamic_cast<ImageType*>(importFilter->GetOutput())  );
   // Software Guide : EndCodeSnippet
 
 

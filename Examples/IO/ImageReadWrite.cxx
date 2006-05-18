@@ -56,7 +56,7 @@
 // Software Guide : EndCodeSnippet
 
 
-#include "itkImage.h"
+#include "otbImage.h"
 
 
 int main( int argc, char ** argv )
@@ -96,7 +96,7 @@ int main( int argc, char ** argv )
   // Software Guide : BeginCodeSnippet
   typedef unsigned short      PixelType;
   const   unsigned int        Dimension = 2;
-  typedef itk::Image< PixelType, Dimension >    ImageType;
+  typedef otb::Image< PixelType, Dimension >    ImageType;
   // Software Guide : EndCodeSnippet
 
 
@@ -111,8 +111,8 @@ int main( int argc, char ** argv )
   //  We can now instantiate the types of the reader and writer. These two
   //  classes are parameterized over the image type.
   //
-  //  \index{itk::ImageFileReader!Instantiation}
-  //  \index{itk::ImageFileWriter!Instantiation}
+  //  \index{otb::ImageFileReader!Instantiation}
+  //  \index{otb::ImageFileWriter!Instantiation}
   //
   //  Software Guide : EndLatex 
 

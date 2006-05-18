@@ -15,7 +15,7 @@
 #include "otbLocalHoughFilter.h"
 
 #include "otbImageFileWriter.h"
-#include "itkImage.h"
+#include "otbImage.h"
 
 namespace otb
 {

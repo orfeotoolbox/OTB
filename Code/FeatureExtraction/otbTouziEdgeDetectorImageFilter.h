@@ -12,11 +12,11 @@
 #define __otbTouziEdgeDetectorImageFilter_h
 
 #include "itkImageToImageFilter.h"
-#include "itkImage.h"
+#include "otbImage.h"
 #include "itkNumericTraits.h"
 
-#define MIN(_A,_B) ((_A) < (_B) ? (_A) : (_B))   
-#define MAX(_A,_B) ((_A) > (_B) ? (_A) : (_B))
+#define MINI(_A,_B) ((_A) < (_B) ? (_A) : (_B))   
+#define MAXI(_A,_B) ((_A) > (_B) ? (_A) : (_B))
 
 
 namespace otb

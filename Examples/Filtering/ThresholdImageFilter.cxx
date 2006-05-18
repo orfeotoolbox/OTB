@@ -105,7 +105,7 @@
 #include "itkThresholdImageFilter.h"
 // Software Guide : EndCodeSnippet
 
-#include "itkImage.h"
+#include "otbImage.h"
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
 
@@ -139,7 +139,7 @@ int main( int argc, char * argv[] )
   //  Software Guide : EndLatex 
 
   // Software Guide : BeginCodeSnippet
-  typedef itk::Image< PixelType,  2 >   ImageType;
+  typedef otb::Image< PixelType,  2 >   ImageType;
   // Software Guide : EndCodeSnippet
 
 

@@ -18,7 +18,7 @@
 #pragma warning ( disable : 4786 )
 #endif
 
-#include "itkImage.h"
+#include "otbImage.h"
 #include "otbImageFileReader.h"
 
 //  Software Guide : BeginLatex
@@ -69,7 +69,7 @@ int main( int , char * argv[] )
   // Software Guide : EndLatex 
 
   // Software Guide : BeginCodeSnippet
-  typedef itk::Image< PixelType, 2 >   ImageType;
+  typedef otb::Image< PixelType, 2 >   ImageType;
   // Software Guide : EndCodeSnippet
 
 
@@ -106,7 +106,7 @@ int main( int , char * argv[] )
   // Access to the color components of the pixels can now be performed using
   // the methods provided by the RGBPixel class.
   //
-  // \index{itk::Image!GetPixel()}
+  // \index{otb::Image!GetPixel()}
   // \index{itk::RGBPixel!GetRed()}
   // \index{itk::RGBPixel!GetGreen()}
   // \index{itk::RGBPixel!GetBlue()}

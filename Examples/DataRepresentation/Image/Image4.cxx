@@ -38,7 +38,7 @@
 //
 // \begin{figure} \center
 // \includegraphics[width=\textwidth]{ImageOriginAndSpacing.eps}
-// \itkcaption[ITK Image Geometrical Concepts]{Geometrical concepts associated
+// \itkcaption[OTB Image Geometrical Concepts]{Geometrical concepts associated
 // with the OTB image.}
 // \label{fig:ImageOriginAndSpacing}
 // \end{figure}
@@ -61,12 +61,12 @@
 // Software Guide : EndLatex 
 
 
-#include "itkImage.h"
+#include "otbImage.h"
 #include "itkPoint.h"
 
 int main(int, char *[])
 {
-  typedef itk::Image< unsigned short, 2 > ImageType;
+  typedef otb::Image< unsigned short, 2 > ImageType;
 
   ImageType::Pointer image = ImageType::New();
 

@@ -36,7 +36,7 @@
 #include "otbLineRatioDetectorImageFilter.h"
 // Software Guide : EndCodeSnippet
 
-#include "itkImage.h"
+#include "otbImage.h"
 #include "otbImageFileReader.h"
 #include "itkRescaleIntensityImageFilter.h"
 #include "otbImageFileWriter.h"
@@ -79,8 +79,9 @@ int main( int argc, char * argv[] )
   //  Software Guide : EndLatex 
 
   // Software Guide : BeginCodeSnippet
+  //FIXME --> itk to otb image
   typedef itk::Image< InternalPixelType,  2 >   InternalImageType;
-  typedef itk::Image< OutputPixelType,  2 >   OutputImageType;
+  typedef otb::Image< OutputPixelType,  2 >   OutputImageType;
   // Software Guide : EndCodeSnippet
 
 

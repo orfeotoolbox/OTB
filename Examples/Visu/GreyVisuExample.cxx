@@ -13,6 +13,7 @@
 #include "itkExceptionObject.h"
 
 #include "otbImageFileReader.h"
+#include "otbImage.h"
 
   // Software Guide : BeginLatex
   //
@@ -50,7 +51,7 @@ int main( int argc, char ** argv )
   // Software Guide : EndLatex
 
   // Siftware Guide : BeginCodeSnippet
-  typedef itk::Image< unsigned char, 2 > ImageType;
+  typedef otb::Image< unsigned char, 2 > ImageType;
   typedef otb::ImageFileReader< ImageType > ReaderType;    
   typedef otb::ImageViewer< ImageType::PixelType>    ViewerType;
   // Software Guide : EndCodeSnippet

@@ -101,6 +101,7 @@ public:
   void PrintSelf(std::ostream& os, Indent indent, const MetaDataDictionaryType & dict) const;
                  
 
+protected:  
   ImageBase();
   virtual ~ImageBase(){};
     

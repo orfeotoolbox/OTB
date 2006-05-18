@@ -13,7 +13,7 @@
 #define __otbExtractROI_h
 
 #include "otbExtractROIBase.h"
-#include "itkImage.h"
+#include "otbImage.h"
 #include "itkMacro.h"
 
 namespace otb
@@ -24,17 +24,17 @@ namespace otb
  *
  * Le Pixel peut etre de type simple ou alors un itk::RGBPixel, etc.
  * \note Ces classe est paramétrée par le type de pixel des images d'entrée et de sortie. Les images manipulées dans cette classe 
- * sont de type "itk::Image".
+ * sont de type "otb::Image".
  *
  */
 template <class TInputPixel, class TOutputPixel>
 class ITK_EXPORT ExtractROI:
-    public ExtractROIBase<itk::Image<TInputPixel,2> , itk::Image<TOutputPixel,2> >
+    public ExtractROIBase<otb::Image<TInputPixel,2> , otb::Image<TOutputPixel,2> >
 {
 public:
   /** Standard class typedefs. */
   typedef ExtractROI         Self;
-  typedef ExtractROIBase<itk::Image<TInputPixel,2> , itk::Image<TOutputPixel,2> >  Superclass;
+  typedef ExtractROIBase<otb::Image<TInputPixel,2> , otb::Image<TOutputPixel,2> >  Superclass;
   typedef itk::SmartPointer<Self>  Pointer;
   typedef itk::SmartPointer<const Self>  ConstPointer;
 

@@ -46,8 +46,8 @@
 #include "otbDrawPathFilter.h"
 // Software Guide : EndCodeSnippet
 
-#include "itkImage.h"
-#include "itkImageFileWriter.h"
+#include "otbImage.h"
+#include "otbImageFileWriter.h"
 
 
 #include "otbImageFileReader.h"
@@ -74,11 +74,11 @@ int main( int argc, char ** argv )
 
   const   unsigned int        	                        Dimension = 2;
 
-  typedef itk::Image< InputPixelType,  Dimension >	InputImageType;
-  typedef itk::Image< OutputPixelType, Dimension >        OutputImageType;
+  typedef otb::Image< InputPixelType,  Dimension >	InputImageType;
+  typedef otb::Image< OutputPixelType, Dimension >        OutputImageType;
 
   typedef otb::ImageFileReader< InputImageType  >         ReaderType;
-  typedef itk::ImageFileWriter< OutputImageType >         WriterType;
+  typedef otb::ImageFileWriter< OutputImageType >         WriterType;
 
   ReaderType::Pointer reader = ReaderType::New();
   WriterType::Pointer writer = WriterType::New();

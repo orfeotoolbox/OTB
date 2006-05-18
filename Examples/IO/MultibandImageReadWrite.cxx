@@ -53,7 +53,8 @@
 // Software Guide : EndCodeSnippet
 
 
-#include "itkImage.h"
+#include "otbImage.h"
+#include "otbVectorImage.h"
 
 
 int main( int argc, char ** argv )
@@ -81,7 +82,7 @@ int main( int argc, char ** argv )
   // Software Guide : BeginCodeSnippet
   typedef unsigned short      PixelType;
   const   unsigned int        Dimension = 2;
-  typedef itk::VectorImage< PixelType, Dimension >    ImageType;
+  typedef otb::VectorImage< PixelType, Dimension >    ImageType;
   // Software Guide : EndCodeSnippet
 
 

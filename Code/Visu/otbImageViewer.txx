@@ -5,8 +5,8 @@
 
 #include "otbImageViewer.h"
 
-#define MAX(_A,_B) ((_A) > (_B) ? (_A) : (_B))
-#define MIN(_A,_B) ((_A) < (_B) ? (_A) : (_B))
+#define MAXI(_A,_B) ((_A) > (_B) ? (_A) : (_B))
+#define MINI(_A,_B) ((_A) < (_B) ? (_A) : (_B))
 
 
 
@@ -199,10 +199,10 @@ ImageViewer<TPixel>
         //Si pas besoin de Scroll, alors on dit que l'image Principal n'est pas "resizable" !!!
         SizeType lInputImageSize = m_InputImage->GetLargestPossibleRegion().GetSize();
         // Si la dimension Min de l'image est plus grande que la fenetre Principal, alors on créée la fenetre Scroll
-        if ( MIN(lInputImageSize[0], lInputImageSize[1]) > MAX( m_PrincipalView->sizeX(), m_PrincipalView->sizeY() ) ) 
+        if ( MINI(lInputImageSize[0], lInputImageSize[1]) > MAXI( m_PrincipalView->sizeX(), m_PrincipalView->sizeY() ) ) 
         {
                 //La taille
-                lShrinkFactors = (double)(MAX(lInputImageSize[0], lInputImageSize[1])) / (double)(MAX( m_ScrollView->sizeX(), m_ScrollView->sizeY() )) ;
+                lShrinkFactors = (double)(MAXI(lInputImageSize[0], lInputImageSize[1])) / (double)(MAXI( m_ScrollView->sizeX(), m_ScrollView->sizeY() )) ;
                 if( lShrinkFactors < 1. )
                 {
                         lSousEchWindow = false;

@@ -14,7 +14,7 @@
 #endif
 
 #include "itkExceptionObject.h"
-#include "itkImage.h"
+#include "otbImage.h"
 
 #include "otbImageFileReader.h"
 
@@ -52,7 +52,8 @@ int main(int argc, char ** argv )
 	        
     typedef unsigned char     InputPixelType;
     const   unsigned int      Dimension = 2;
-	
+
+    //FIXME itk-->otb image
     typedef itk::Image< InputPixelType,  Dimension >   InputImageType;
 
     typedef otb::ImageFileReader< InputImageType  >    ReaderType;

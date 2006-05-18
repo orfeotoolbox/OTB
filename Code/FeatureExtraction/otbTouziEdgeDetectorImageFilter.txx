@@ -283,12 +283,12 @@ std::cout<< cpt << std::endl;
      	
         // Calculation of the intensity of the contour
         if (( M1 != 0 ) && (M2 != 0)) 
-          R_theta[dir] = static_cast<double>( 1 - MIN( (M1/M2), (M2/M1) ) );
+          R_theta[dir] = static_cast<double>( 1 - MINI( (M1/M2), (M2/M1) ) );
         else
 	  R_theta[dir] = 0.;
 	  
 	// Determination of the maximum intensity of the contour
-        R_contour = static_cast<double>( MAX( R_contour, R_theta[dir] ) );
+        R_contour = static_cast<double>( MAXI( R_contour, R_theta[dir] ) );
 	 
         // Determination of the sign of contour
         if ( M2 > M1 ) 

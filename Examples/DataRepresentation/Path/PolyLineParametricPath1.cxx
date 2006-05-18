@@ -34,7 +34,7 @@
 // Software Guide : EndLatex 
 
 
-#include "itkImage.h"
+#include "otbImage.h"
 #include "otbImageFileReader.h"
 
 // Software Guide : BeginCodeSnippet
@@ -61,7 +61,7 @@ int main(int argc, char * argv [] )
   // Software Guide : BeginCodeSnippet 
   const unsigned int Dimension = 2;
 
-  typedef itk::Image< unsigned char, Dimension > ImageType;
+  typedef otb::Image< unsigned char, Dimension > ImageType;
 
   typedef itk::PolyLineParametricPath< Dimension > PathType;
   // Software Guide : EndCodeSnippet 

@@ -41,6 +41,7 @@
 //  Software Guide : EndLatex 
 
 
+#include "otbImage.h"
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
 #include "itkCastImageFilter.h"
@@ -83,7 +84,8 @@ int main(int argc, char* argv[])
   typedef double           RealPixelType;  //  Operations
   const   unsigned int     Dimension = 2;
 
-  typedef itk::Image<CharPixelType, Dimension>    CharImageType;
+  typedef otb::Image<CharPixelType, Dimension>    CharImageType;
+  //FIXME itk to otb image
   typedef itk::Image<RealPixelType, Dimension>    RealImageType;
 
   typedef otb::ImageFileReader< CharImageType >  ReaderType;

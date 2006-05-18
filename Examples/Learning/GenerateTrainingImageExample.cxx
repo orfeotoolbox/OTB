@@ -19,7 +19,7 @@
 // Software Guide : EndLatex 
 
 
-#include "itkImage.h"
+#include "otbImage.h"
 #include "otbImageFileWriter.h"
 #include "otbImageFileReader.h"
 #include "itkImageRegionIterator.h"
@@ -48,8 +48,8 @@ int main( int argc, char ** argv )
 
   const   unsigned int        	                        Dimension = 2;
 
-  typedef itk::Image< InputPixelType,  Dimension >	InputImageType;
-  typedef itk::Image< OutputPixelType, Dimension >        OutputImageType;
+  typedef otb::Image< InputPixelType,  Dimension >	InputImageType;
+  typedef otb::Image< OutputPixelType, Dimension >        OutputImageType;
 
   typedef otb::ImageFileReader< InputImageType  >         ReaderType;
   typedef otb::ImageFileWriter< OutputImageType >         WriterType;

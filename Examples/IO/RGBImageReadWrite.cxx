@@ -37,7 +37,7 @@
 
 // Software Guide : BeginCodeSnippet
 #include "itkRGBPixel.h"
-#include "itkImage.h"
+#include "otbImage.h"
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
 // Software Guide : EndCodeSnippet
@@ -66,7 +66,7 @@ int main( int argc, char ** argv )
 
   // Software Guide : BeginCodeSnippet
   typedef itk::RGBPixel< unsigned char >   PixelType;
-  typedef itk::Image< PixelType, 2 >       ImageType;
+  typedef otb::Image< PixelType, 2 >       ImageType;
   // Software Guide : EndCodeSnippet
 
 

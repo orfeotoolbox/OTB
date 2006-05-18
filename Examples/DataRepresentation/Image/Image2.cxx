@@ -18,7 +18,7 @@
 #pragma warning ( disable : 4786 )
 #endif
 
-#include "itkImage.h"
+#include "otbImage.h"
 
 //  Software Guide : BeginLatex
 //
@@ -44,7 +44,7 @@ int main( int , char * argv[])
   typedef unsigned char          PixelType;
   const unsigned int             Dimension = 2;
 
-  typedef itk::Image< PixelType, Dimension >   ImageType;
+  typedef otb::Image< PixelType, Dimension >   ImageType;
   // Software Guide : EndCodeSnippet
 
 

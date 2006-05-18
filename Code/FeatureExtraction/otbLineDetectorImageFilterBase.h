@@ -14,11 +14,11 @@
 #include "itkNearestNeighborInterpolateImageFunction.h"
 #include "itkLinearInterpolateImageFunction.h"
 #include "itkImageToImageFilter.h"
-#include "itkImage.h"
+#include "otbImage.h"
 #include "itkNumericTraits.h"
 
-#define MIN(_A,_B) ((_A) < (_B) ? (_A) : (_B))
-#define MAX(_A,_B) ((_A) > (_B) ? (_A) : (_B))  
+#define MINI(_A,_B) ((_A) < (_B) ? (_A) : (_B))
+#define MAXI(_A,_B) ((_A) > (_B) ? (_A) : (_B))  
 #define ROTATION(_x,_y,_theta,_xout,_yout) \
     (_xout) = (_x)*cos(_theta) - (_y)*sin(_theta); \
     (_yout) = (_x)*sin(_theta) + (_y)*cos(_theta)

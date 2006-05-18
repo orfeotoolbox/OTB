@@ -14,7 +14,7 @@
 #endif
 
 #include "itkExceptionObject.h"
-#include "itkImage.h"
+#include "otbImage.h"
 
 #include "otbImageFileReader.h"
 

@@ -84,7 +84,7 @@ ComplexMomentImageFunction<TInput,TOutput,TCoordRep>
        kernelSize.Fill( this->GetNeighborhoodRadius() );
      }  
 
-  itk::ConstNeighborhoodIterator<TInput>
+   itk::ConstNeighborhoodIterator<TInput>
     it(kernelSize, this->GetInputImage(), this->GetInputImage()->GetBufferedRegion());
 
 

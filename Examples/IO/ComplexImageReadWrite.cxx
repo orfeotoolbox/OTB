@@ -42,7 +42,7 @@
 
 // Software Guide : BeginCodeSnippet
 #include <complex>
-#include "itkImage.h"
+#include "otbImage.h"
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
 // Software Guide : EndCodeSnippet
@@ -72,7 +72,7 @@ int main( int argc, char * argv [] )
   const unsigned int Dimension = 2;
 
   typedef std::complex< float >    PixelType;
-  typedef itk::Image< PixelType, Dimension > ImageType;
+  typedef otb::Image< PixelType, Dimension > ImageType;
 // Software Guide : EndCodeSnippet
 
   

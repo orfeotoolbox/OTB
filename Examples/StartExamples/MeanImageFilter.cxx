@@ -42,9 +42,9 @@
 //  Software Guide : EndLatex 
 
 
-#include "itkImage.h"
-#include "itkImageFileReader.h"
-#include "itkImageFileWriter.h"
+#include "otbImage.h"
+#include "otbImageFileReader.h"
+#include "otbImageFileWriter.h"
 
 
 
@@ -83,13 +83,14 @@ int main( int argc, char * argv[] )
   typedef   unsigned char  InputPixelType;
   typedef   unsigned char  OutputPixelType;
 
+  //FIXME itk to otb image
   typedef itk::Image< InputPixelType,  2 >   InputImageType;
-  typedef itk::Image< OutputPixelType, 2 >   OutputImageType;
+  typedef otb::Image< OutputPixelType, 2 >   OutputImageType;
   // Software Guide : EndCodeSnippet
 
 
-  typedef itk::ImageFileReader< InputImageType  >  ReaderType;
-  typedef itk::ImageFileWriter< OutputImageType >  WriterType;
+  typedef otb::ImageFileReader< InputImageType  >  ReaderType;
+  typedef otb::ImageFileWriter< OutputImageType >  WriterType;
 
   ReaderType::Pointer reader = ReaderType::New();
   WriterType::Pointer writer = WriterType::New();

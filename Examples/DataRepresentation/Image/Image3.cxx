@@ -33,12 +33,12 @@
 // Software Guide : EndLatex 
 
 
-#include "itkImage.h"
+#include "otbImage.h"
 
 int main(int, char *[])
 {
   // First the image type should be declared
-  typedef itk::Image< unsigned short, 2 > ImageType;
+  typedef otb::Image< unsigned short, 2 > ImageType;
 
   // Then the image object can be created
   ImageType::Pointer image = ImageType::New();

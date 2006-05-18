@@ -40,7 +40,7 @@
 // Software Guide : EndCodeSnippet
 
 
-#include "itkImage.h"
+#include "otbImage.h"
 
 
 int main( int argc, char * argv[] )
