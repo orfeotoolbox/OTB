@@ -79,9 +79,9 @@ int main( int argc, char ** argv )
   typedef unsigned char        InputPixelType;
   typedef unsigned char        OutputPixelType;
   const   unsigned int        Dimension = 2;
-
-  typedef otb::Image< InputPixelType,  Dimension >    InputImageType;
-  typedef otb::Image< OutputPixelType, Dimension >    OutputImageType;
+//FIXME itk to otb image
+  typedef itk::Image< InputPixelType,  Dimension >    InputImageType;
+  typedef itk::Image< OutputPixelType, Dimension >    OutputImageType;
   // Software Guide : EndCodeSnippet
 
 
