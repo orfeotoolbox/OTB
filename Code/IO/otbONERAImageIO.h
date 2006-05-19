@@ -89,7 +89,7 @@ protected:
   /** Destructor.*/
   ~ONERAImageIO();
 
-  bool OpenOneraDataFileForReading(std::ifstream& os, const char* filename);
+  bool OpenOneraDataFileForReading(const char* filename);
   void InternalReadImageInformation(std::ifstream& file);
   
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
@@ -102,9 +102,9 @@ protected:
   int m_NbBands;
   /** Buffer*/
   //float **pafimas;
+  std::ifstream m_Datafile;
+  std::ifstream m_Headerfile;
   
-  const char* m_currentfile;
-
 private:
   ONERAImageIO(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented

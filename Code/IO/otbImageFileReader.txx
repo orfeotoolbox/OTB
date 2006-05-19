@@ -128,21 +128,19 @@ ImageFileReader<TOutputImage>
 
   typedef itk::DefaultConvertPixelTraits< typename TOutputImage::IOPixelType >  ConvertPixelTraits;
   
-  
-  
   if ( this->m_ImageIO->GetComponentTypeInfo()
        == typeid(ITK_TYPENAME ConvertPixelTraits::ComponentType)
        && (this->m_ImageIO->GetNumberOfComponents()
            == ConvertPixelTraits::GetNumberOfComponents()))
     {
-    itkDebugMacro(<< "No buffer conversion required.");
+    otbDebugMacro(<< "No buffer conversion required.");
     // allocate a buffer and have the ImageIO read directly into it
     this->m_ImageIO->Read(buffer);
     return;
     }
   else // a type conversion is necessary
     {
-    itkDebugMacro(<< "Buffer conversion required.");
+    otbDebugMacro(<< "Buffer conversion required.");
     // note: char is used here because the buffer is read in bytes
     // regardles of the actual type of the pixels.
     ImageRegionType region = output->GetBufferedRegion();
@@ -150,13 +148,13 @@ ImageFileReader<TOutputImage>
 // l'image (pas celle bufferiséd ans la cas du streaming )
     char * loadBuffer = 
       new char[this->m_ImageIO->GetImageSizeInBytes()];
-
     this->m_ImageIO->Read(loadBuffer);
-    
-    itkDebugMacro(<< "Buffer conversion required from: "
+
+    otbDebugMacro(<< "Buffer conversion required from: "
                   << this->m_ImageIO->GetComponentTypeInfo().name()
                   << " to: "
                   << typeid(ITK_TYPENAME ConvertPixelTraits::ComponentType).name());
+    
 
     this->DoConvertBuffer(loadBuffer, region.GetNumberOfPixels());
     delete [] loadBuffer;
