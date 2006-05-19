@@ -503,3 +503,29 @@ SET(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} ${OTB_REQUIRED_LINK_FLAGS}
 SET(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} ${OTB_REQUIRED_LINK_FLAGS}")
 SET(CMAKE_MODULE_LINKER_FLAGS "${CMAKE_MODULE_LINKER_FLAGS} ${OTB_REQUIRED_LINK_FLAGS}")
 
+#-----------------------------------------------------------------------------
+# The frename-registers option does not work due to a bug in the gnu compiler.
+# It must be removed or data errors will be produced and incorrect results
+# will be produced.  This is first documented in the gcc4 man page.
+IF(CMAKE_COMPILER_IS_GNUCXX)
+  SET(ALL_FLAGS "${CMAKE_C_FLAGS} ${CMAKE_CXX_FLAGS} ${CMAKE_EXE_LINKER_FLAGS} ${CMAKE_SHARED_LINKER_FLAGS} ${CMAKE_MODULE_LINKER_FLAGS}" )
+  SEPARATE_ARGUMENTS(ALL_FLAGS)
+  FOREACH(COMP_OPTION ${ALL_FLAGS})
+    #  MESSAGE("${COMP_OPTION} being checked.")
+    IF("${COMP_OPTION}" STREQUAL "-frename-registers")
+      MESSAGE(FATAL_ERROR "-frename-registers causes runtime bugs.  It must be removed from your compilation options.")
+    ENDIF("${COMP_OPTION}" STREQUAL "-frename-registers")
+    IF("${COMP_OPTION}" STREQUAL "-ffloat-store")
+      MESSAGE(FATAL_ERROR "-ffloat-store causes runtime bugs on gcc 3.2.3 (appearently not on gcc 3.4.3, but the exact criteria is not known).  It must be removed from your compilation options.")
+    ENDIF("${COMP_OPTION}" STREQUAL "-ffloat-store")
+  ENDFOREACH(COMP_OPTION)
+ENDIF(CMAKE_COMPILER_IS_GNUCXX)
+
+# If the version of CMake was too old, complain and build nothing.
+# These should be the last lines in this file.
+ELSE("${CMAKE_MAJOR_VERSION}.${CMAKE_MINOR_VERSION}" GREATER 1.7)
+  MESSAGE(SEND_ERROR
+          "This version of CMake is too old to build this version of OTB.  "
+          "Please upgrade to CMake 1.8.")
+ENDIF("${CMAKE_MAJOR_VERSION}.${CMAKE_MINOR_VERSION}" GREATER 1.7)
+
