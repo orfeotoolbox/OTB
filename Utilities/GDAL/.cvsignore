@@ -1,0 +1,10 @@
+GDALmake.opt
+config.status
+man
+*.lib
+*.pdb
+*.dll
+*.exp
+*.ilk
+
+
