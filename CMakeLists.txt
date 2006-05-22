@@ -32,6 +32,19 @@ IF(WIN32)
   ENDIF(NOT BORLAND)
 ENDIF(WIN32)
 
+# Don't build anything unless the version of CMake is high enough.
+# The matching ELSE/ENDIF should be the last lines in the file.
+IF("${CMAKE_MAJOR_VERSION}.${CMAKE_MINOR_VERSION}" GREATER 1.7)
+
+# If CMake is the version we're expecting, don't show the
+# CMAKE_BACKWARDS_COMPATIBILITY option.
+IF("${CMAKE_MAJOR_VERSION}.${CMAKE_MINOR_VERSION}" MATCHES "^1\\.8$")
+  MARK_AS_ADVANCED(FORCE CMAKE_BACKWARDS_COMPATIBILITY)
+ELSE("${CMAKE_MAJOR_VERSION}.${CMAKE_MINOR_VERSION}" MATCHES "^1\\.8$")
+  MARK_AS_ADVANCED(CLEAR CMAKE_BACKWARDS_COMPATIBILITY)
+ENDIF("${CMAKE_MAJOR_VERSION}.${CMAKE_MINOR_VERSION}" MATCHES "^1\\.8$")
+
+
 #-----------------------------------------------------------------------------
 # OTB version number.  An even minor number corresponds to releases.
 SET(OTB_VERSION_MAJOR "1")
