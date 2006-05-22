@@ -2,9 +2,53 @@
 # $Id$
 #
 
+  ADD_DEFINITIONS(-DFRMT_gxf)
 
-SUBDIRS( gcore port ogr alg apps )
+  ADD_DEFINITIONS(-DFRMT_gtiff)
+  ADD_DEFINITIONS(-DFRMT_hfa)
+  ADD_DEFINITIONS(-DFRMT_aigrid)
+  ADD_DEFINITIONS(-DFRMT_aaigrid)
 
+  ADD_DEFINITIONS(-DFRMT_ceos)
+  ADD_DEFINITIONS(-DFRMT_ceos2)
+#  ADD_DEFINITIONS(-DFRMT_iso8211)
+#  ADD_DEFINITIONS(-DFRMT_xpm)
+#  ADD_DEFINITIONS(-DFRMT_sdts)
+  ADD_DEFINITIONS(-DFRMT_raw)
+  ADD_DEFINITIONS(-DFRMT_dted)
+  ADD_DEFINITIONS(-DFRMT_mem)
+  ADD_DEFINITIONS(-DFRMT_jdem)
+  ADD_DEFINITIONS(-DFRMT_envisat)
+  ADD_DEFINITIONS(-DFRMT_elas)
+  ADD_DEFINITIONS(-DFRMT_fit)
+  ADD_DEFINITIONS(-DFRMT_vrt)
+  ADD_DEFINITIONS(-DFRMT_usgsdem)
+  ADD_DEFINITIONS(-DFRMT_l1b)
+  ADD_DEFINITIONS(-DFRMT_nitf)
+  ADD_DEFINITIONS(-DFRMT_bmp)
+  ADD_DEFINITIONS(-DFRMT_pcidsk)
+  ADD_DEFINITIONS(-DFRMT_airsar)
+  ADD_DEFINITIONS(-DFRMT_rs2)
+  ADD_DEFINITIONS(-DFRMT_ilwis)
+  ADD_DEFINITIONS(-DFRMT_rmf)
+  ADD_DEFINITIONS(-DFRMT_rik)
+  ADD_DEFINITIONS(-DFRMT_bsb)
+  ADD_DEFINITIONS(-DFRMT_gif)
+  ADD_DEFINITIONS(-DFRMT_jpeg)
+  ADD_DEFINITIONS(-DFRMT_png)
+#  ADD_DEFINITIONS(-DFRMT_pcraster)
+
+#  ADD_DEFINITIONS(-DGDAL_FORMATS="gxf gtiff hfa aigrid aaigrid ceos ceos2 iso8211 xpm sdts raw dted mem jdem envisat elas fit vrt usgsdeml1b nitf bmp pcidsk airsar rs2 ilwis rmf rik bsb gif jpeg png pcraster")
+  ADD_DEFINITIONS(-DGDAL_FORMATS="gxf gtiff hfa aigrid aaigrid ceos ceos2  raw dted mem jdem envisat elas fit vrt usgsdeml1b nitf bmp pcidsk airsar rs2 ilwis rmf rik bsb gif jpeg png")
+  
+SUBDIRS( gcore port ogr alg )
+
+#SUBDIRS( gcore port ogr )
+
+ADD_DEFINITIONS(-DZIPSUPPORT)
+ADD_DEFINITIONS(-DPIXARLOG_SUPPORT)
+# JPEG : emet des Warning dur HAVE_STDLIB_H redéfini
+ADD_DEFINITIONS(-DJPEG_SUPPORT)
 
 SET( GDALgtiff_SRCS
         frmts/gtiff/libgeotiff/geo_free.c
@@ -21,41 +65,41 @@ SET( GDALgtiff_SRCS
         frmts/gtiff/libgeotiff/geo_trans.c
         frmts/gtiff/libgeotiff/xtiff.c
 
-        frmts/gtiff/libtiff/tif_aux.c
-	frmts/gtiff/libtiff/tif_close.c
-	frmts/gtiff/libtiff/tif_codec.c
-	frmts/gtiff/libtiff/tif_color.c
-	frmts/gtiff/libtiff/tif_compress.c
-	frmts/gtiff/libtiff/tif_dir.c
-	frmts/gtiff/libtiff/tif_dirinfo.c
-	frmts/gtiff/libtiff/tif_dirread.c
-	frmts/gtiff/libtiff/tif_dirwrite.c
-	frmts/gtiff/libtiff/tif_dumpmode.c
-	frmts/gtiff/libtiff/tif_error.c
-	frmts/gtiff/libtiff/tif_extension.c
-	frmts/gtiff/libtiff/tif_fax3.c
-	frmts/gtiff/libtiff/tif_fax3sm.c
-	frmts/gtiff/libtiff/tif_getimage.c
-	frmts/gtiff/libtiff/tif_jpeg.c
-	frmts/gtiff/libtiff/tif_flush.c
-	frmts/gtiff/libtiff/tif_luv.c
-	frmts/gtiff/libtiff/tif_lzw.c
-	frmts/gtiff/libtiff/tif_next.c
-	frmts/gtiff/libtiff/tif_open.c
-	frmts/gtiff/libtiff/tif_packbits.c
-	frmts/gtiff/libtiff/tif_pixarlog.c
-	frmts/gtiff/libtiff/tif_predict.c
-	frmts/gtiff/libtiff/tif_print.c
-	frmts/gtiff/libtiff/tif_read.c
-	frmts/gtiff/libtiff/tif_swab.c
-	frmts/gtiff/libtiff/tif_strip.c
-	frmts/gtiff/libtiff/tif_thunder.c
-	frmts/gtiff/libtiff/tif_tile.c
-	frmts/gtiff/libtiff/tif_vsi.c
-	frmts/gtiff/libtiff/tif_version.c
-	frmts/gtiff/libtiff/tif_warning.c
-	frmts/gtiff/libtiff/tif_write.c
-	frmts/gtiff/libtiff/tif_zip.c
+#       frmts/gtiff/libtiff/tif_aux.c
+#	frmts/gtiff/libtiff/tif_close.c
+#	frmts/gtiff/libtiff/tif_codec.c
+#	frmts/gtiff/libtiff/tif_color.c
+#	frmts/gtiff/libtiff/tif_compress.c
+#	frmts/gtiff/libtiff/tif_dir.c
+#	frmts/gtiff/libtiff/tif_dirinfo.c
+#	frmts/gtiff/libtiff/tif_dirread.c
+#	frmts/gtiff/libtiff/tif_dirwrite.c
+#	frmts/gtiff/libtiff/tif_dumpmode.c
+#	frmts/gtiff/libtiff/tif_error.c
+#	frmts/gtiff/libtiff/tif_extension.c
+#	frmts/gtiff/libtiff/tif_fax3.c
+#	frmts/gtiff/libtiff/tif_fax3sm.c
+#	frmts/gtiff/libtiff/tif_getimage.c
+#	frmts/gtiff/libtiff/tif_jpeg.c
+#	frmts/gtiff/libtiff/tif_flush.c
+#	frmts/gtiff/libtiff/tif_luv.c
+#	frmts/gtiff/libtiff/tif_lzw.c
+#	frmts/gtiff/libtiff/tif_next.c
+#	frmts/gtiff/libtiff/tif_open.c
+#	frmts/gtiff/libtiff/tif_packbits.c
+#	frmts/gtiff/libtiff/tif_pixarlog.c
+#	frmts/gtiff/libtiff/tif_predict.c
+#	frmts/gtiff/libtiff/tif_print.c
+#	frmts/gtiff/libtiff/tif_read.c
+#	frmts/gtiff/libtiff/tif_swab.c
+#	frmts/gtiff/libtiff/tif_strip.c
+#	frmts/gtiff/libtiff/tif_thunder.c
+#	frmts/gtiff/libtiff/tif_tile.c
+#	frmts/gtiff/libtiff/tif_vsi.c
+#	frmts/gtiff/libtiff/tif_version.c
+#	frmts/gtiff/libtiff/tif_warning.c
+#	frmts/gtiff/libtiff/tif_write.c
+#	frmts/gtiff/libtiff/tif_zip.c
 
 	frmts/gtiff/geotiff.cpp 	
         frmts/gtiff/gt_wkt_srs.cpp 	
@@ -70,9 +114,40 @@ SET( GDALgtiff_SRCS
 
 FILE(GLOB GDALfrmts_SRCS "frmts/*.cpp" )
 
+FILE(GLOB GDALogr_ogrsf_frmts_C_SRCS "ogr/ogrsf_frmts/*/*.c" )
+FILE(GLOB GDALogr_ogrsf_frmts_CPP_SRCS "ogr/ogrsf_frmts/*/*.cpp" )
+
+
+SET( OTB_frmtsSubDirsSuiteDurs
+#frmts/dods/dodsdataset2.cpp
+
+)
+
 SET(GDALfrmtsSubDirs_SRCS)
 
 SET( OTB_frmtsSubDirs
+#dods
+#ecw
+
+#fits
+
+#gdb
+#grass
+#hdf4
+#hdf5
+#iso8211
+#jp2kak
+#jpeg2000
+#mrsid
+#msg
+#msgn
+#netcdf
+#ogdi
+#pcraster
+#pgchip
+#xpm
+
+sdts
 
 aaigrid
 aigrid
@@ -81,53 +156,35 @@ bmp
 bsb
 ceos
 ceos2
-#dods
+
 dted
-#ecw
 elas
 envisat
 fast
 fit
-#fits
-#gdb
 gif/libungif
 gif
-#grass
 gxf
-#hdf4
-#hdf5
 
 hfa/addtiffo_src
 hfa
 
 ilwis
-#iso8211
 jdem
-#jp2kak
 jpeg/libjpeg
 jpeg
-#jpeg2000
 l1b
 mem
-#mrsid
-#msg
-#msgn
-#netcdf
 nitf
-#ogdi
 pcidsk
-#pcraster
-#pgchip
 png/libpng
 png
 raw
 rik
 rmf
 rs2
-#sdts
 usgsdem
 vrt
-#xpm
 zlib
 )
 
@@ -163,6 +220,7 @@ FOREACH(frmtsSubDirs ${OTB_frmtsSubDirs} )
 #        ENDIF( "${REP_OK}" GREATER 0 )
 
 ENDFOREACH(frmtsSubDirs)
+
 
 
 FILE(GLOB GDALgcore_SRCS "gcore/*.cpp" )
@@ -253,8 +311,12 @@ SET( GDALogr_SRCS
 # )
 
 
-ADD_LIBRARY(gdal ${GDALfrmts_SRCS} ${GDALgtiff_SRCS} ${GDALfrmtsSubDirs_SRCS} ${GDALgcore_SRCS} ${GDALalg_SRCS} ${GDALport_SRCS} ${GDALogr_SRCS} ${GDALpymod_SRCS})
+ADD_LIBRARY(gdal ${GDALogr_ogrsf_frmts_CPP_SRCS}  ${GDALogr_ogrsf_frmts_C_SRCS} ${OTB_frmtsSubDirsSuiteDurs} ${GDALfrmts_SRCS} ${GDALgtiff_SRCS} ${GDALfrmtsSubDirs_SRCS} ${GDALgcore_SRCS} ${GDALalg_SRCS} ${GDALport_SRCS} ${GDALogr_SRCS} ${GDALpymod_SRCS})
 
+#ADD_EXECUTABLE(otbgdalinfo ${OTB_SOURCE_DIR}/Utilities/GDAL/apps/gdalinfo.c)
+#TARGET_LINK_LIBRARIES(otbgdalinfo -lm gdal -lgif /usr/lib/libjpeg.so -ltiff -lpng -lz -lrt -ldl)
+#ADD_EXECUTABLE(otbgdalinfo ${OTB_SOURCE_DIR}/Utilities/GDAL/apps/otbgdalinfo.cxx)
+#TARGET_LINK_LIBRARIES(otbgdalinfo gdal)
 
 INSTALL_TARGETS(/lib/otb gdal )
 INSTALL_FILES(/include/otb/Utilities/GDAL "(\\.h)$")
