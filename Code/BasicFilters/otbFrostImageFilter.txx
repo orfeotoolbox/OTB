@@ -172,11 +172,17 @@ void FrostImageFilter< TInputImage, TOutputImage>::ThreadedGenerateData(
 		NormFiltre  = NormFiltre  + CoefFiltre;
 		FrostFiltre = FrostFiltre + (CoefFiltre * dPixel);
 		}
-        }	      
+        }
+	  
+	  /* Modif pour VC++ 
       dPixel = (FrostFiltre/NormFiltre);      
       if (finite(dPixel)==0){
       	dPixel = 0.;
-      }
+      }*/
+	  if (NormFiltre==0.)
+	  	  dPixel=0.;
+	  else
+		  dPixel=FrostFiltre/NormFiltre;
                   
       it.Set( static_cast<OutputPixelType>( dPixel ) );
       
