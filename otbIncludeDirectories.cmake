@@ -20,10 +20,10 @@ SET(OTB_INCLUDE_DIRS_BUILD_TREE ${OTB_INCLUDE_DIRS_BUILD_TREE}
 
 #-----------------------------------------------------------------------------
 # Include directories from the GDAL build tree.
-INCLUDE(${OTB_SOURCE_DIR}/Utilities/GDAL/gdalIncludeDirectories.cmake)
-SET(OTB_INCLUDE_DIRS_BUILD_TREE ${OTB_INCLUDE_DIRS_BUILD_TREE}
-  ${GDAL_INCLUDE_DIRS_BUILD_TREE}
-  )
+#INCLUDE(${OTB_SOURCE_DIR}/Utilities/GDAL/gdalIncludeDirectories.cmake)
+#SET(OTB_INCLUDE_DIRS_BUILD_TREE ${OTB_INCLUDE_DIRS_BUILD_TREE}
+#  ${GDAL_INCLUDE_DIRS_BUILD_TREE}
+#  )
 
 
 #-----------------------------------------------------------------------------
