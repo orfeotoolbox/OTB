@@ -24,3 +24,8 @@ OTBCommon ITKCommon  OTBLearning ${CAI_LIBRARY} ${GDAL_LIBRARY})
 ADD_EXECUTABLE(SVMImageClassificationExample SVMImageClassificationExample.cxx )
 TARGET_LINK_LIBRARIES(SVMImageClassificationExample ITKIO OTBIO
 OTBCommon ITKCommon  OTBLearning ${CAI_LIBRARY} ${GDAL_LIBRARY})
+
+ADD_EXECUTABLE(SVMImageEstimatorClassificationMultiExample SVMImageEstimatorClassificationMultiExample.cxx )
+TARGET_LINK_LIBRARIES(SVMImageEstimatorClassificationMultiExample ITKIO OTBIO
+OTBCommon ITKCommon  OTBLearning ${CAI_LIBRARY} ${GDAL_LIBRARY})
+

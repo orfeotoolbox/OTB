@@ -108,7 +108,7 @@ int main( int argc, char ** argv )
 
   roisFile >> nbRois;
 
-  std::cout << "Nb of ROIS " << nbRois << std::endl;
+  std::cout << "Nb of ROIS " << int(nbRois) << std::endl;
   
 
   while( !roisFile.fail() && (nbRois > 0))
@@ -125,7 +125,7 @@ int main( int argc, char ** argv )
     roisFile >> yBR;
 
 
-    std::cout << "Label : " << label << std::endl;
+    std::cout << "Label : " << int(label) << std::endl;
     std::cout << "( " << xUL << " , " << yUL << " )" << std::endl;
     std::cout << "( " << xBR << " , " << yBR << " )" << std::endl;
 
