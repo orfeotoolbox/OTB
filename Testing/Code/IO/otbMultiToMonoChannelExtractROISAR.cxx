@@ -27,8 +27,8 @@ int otbMultiToMonoChannelExtractROISAR ( int argc, char ** argv )
         const char * inputFilename  = argv[1];
         const char * outputFilename = argv[2];
 
-        typedef std::complex<int>  	                                InputPixelType;
-        typedef std::complex<int>  	                                OutputPixelType;
+        typedef std::complex<float>  	                                InputPixelType;
+        typedef std::complex<float>  	                                OutputPixelType;
 
 
         typedef otb::MultiToMonoChannelExtractROI< InputPixelType, 
