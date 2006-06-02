@@ -155,11 +155,12 @@ CommandLineArgumentParser
   // Clear the result
   outResult->Clear();
 
+  int i;
   m_ProgramName = std::string(argv[0]);
   int index(0);
   
   // Go through the arguments
-  for(int i=1; i < argc; i++)
+  for(i=1; i < argc; i++)
     {
     // Get the next argument
     std::string arg(argv[i]);
@@ -230,7 +231,7 @@ CommandLineArgumentParser
     }
 
   // Controle que toutes les options obligatoire sont présentes dans la ligne d'argument
-  for(int i=0 ; i < m_OptionList.size() ; i++ )
+  for(i=0 ; i < m_OptionList.size() ; i++ )
   {
   	if ( (m_OptionList[i].Obligatory == true) && (m_OptionList[i].Finded == false) )
   	{
@@ -278,14 +279,16 @@ CommandLineArgumentParser
         os << " Usage : "<<m_ProgramName<<std::endl;
   	// Calcul de la largeur max en caractere de l'affichage des options (pour mise en page)
   	int largeurmax(-1);
-  	for(int i=0 ; i < m_OptionList.size() ; i++ )
+	int i;
+
+  	for(i=0 ; i < m_OptionList.size() ; i++ )
   	{
   		int largeur = m_OptionList[i].CommonName.size() + m_OptionList[i].Synonim.size();
   		if ( largeur > largeurmax ) largeurmax = largeur;
 	}
   	
   	// Controle que toutes les options obligatoire sont présentes dans la ligne d'argument
-  	for(int i=0 ; i < m_OptionList.size() ; i++ )
+  	for(i=0 ; i < m_OptionList.size() ; i++ )
   	{
   		int largeur = m_OptionList[i].CommonName.size() + m_OptionList[i].Synonim.size();
   		os << "      ";

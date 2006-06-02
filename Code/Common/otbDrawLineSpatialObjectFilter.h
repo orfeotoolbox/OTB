@@ -56,6 +56,8 @@ public:
   typedef typename Superclass::InputSpatialObjectType InputLineType;
   typedef typename InputLineType::PointListType  PointListType;
 
+  typedef itk::ProcessObject ProcessObjectType;
+
 
   /** Method for management of the "object factory". */
   itkNewMacro(Self);

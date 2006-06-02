@@ -43,7 +43,7 @@ void
 DrawLineSpatialObjectFilter<TInputImage, TOutputImage>
 ::SetInputLine(const InputLineType *line)
 {  
-  this->itk::ProcessObject::SetNthInput(0, 
+  this->ProcessObjectType::SetNthInput(0, 
                                    const_cast< InputLineType * >( line ) );
 }
 
@@ -54,7 +54,7 @@ DrawLineSpatialObjectFilter<TInputImage, TOutputImage>
 ::GetInput(void)
 {  
     return static_cast<InputLineType *>
-    (this->itk::ProcessObject::GetInput(0) );
+    (this->ProcessObjectType::GetInput(0) );
 }
     
     
@@ -63,7 +63,7 @@ void
 DrawLineSpatialObjectFilter<TInputImage, TOutputImage>
 ::SetInputImage(const InputImageType *image)
 {
-  this->itk::ProcessObject::SetNthInput(1, 
+  this->ProcessObjectType::SetNthInput(1, 
                                    const_cast< InputImageType * >( image ) );
 }
 
@@ -79,7 +79,7 @@ DrawLineSpatialObjectFilter<TInputImage, TOutputImage>
     }
   
   return static_cast<const InputImageType *>
-    (this->itk::ProcessObject::GetInput(1) );
+    (this->ProcessObjectType::GetInput(1) );
 }
 
 template <class TInputImage, class TOutputImage>
@@ -148,8 +148,10 @@ DrawLineSpatialObjectFilter<TInputImage, TOutputImage>
   if ( (DeltaX >= DeltaY) && (DeltaX > 0.) )
      {
      double Xmin, Xmax;	
-     Xmin = std::min(x1,x2);
-     Xmax = std::max(x1,x2);
+     /*Xmin = std::min(x1,x2);
+     Xmax = std::max(x1,x2);*/
+	 Xmin = x1 < x2 ? x1 : x2;
+	 Xmax = x1 > x2 ? x1 : x2;
   
      // Slope of the line y=slope*(x-x1)+y1
      double Slope = (y2-y1) / (x2-x1) ;
@@ -171,9 +173,11 @@ DrawLineSpatialObjectFilter<TInputImage, TOutputImage>
    else if ( DeltaX < DeltaY )
       {
       double Ymin, Ymax;  
-      Ymin = std::min(y1,y2);
-      Ymax = std::max(y1,y2);
-  	 	
+      /*Ymin = std::min(y1,y2);
+      Ymax = std::max(y1,y2);*/
+  	  Ymin = y1 < y2 ? y1 : y2;
+	  Ymax = y1 > y2 ? y1 : y2;
+
       double SlopeInv = (x2-x1) / (y2-y1) ;
 	 
       for ( double y = Ymin; y <= Ymax; y++)

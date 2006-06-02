@@ -399,7 +399,7 @@ update()
   
   	int l, m;
   
-  	float tf;
+  	//float tf;
   
  	int startK = this->cWinMinY;
   	if(startK<0)
@@ -759,8 +759,9 @@ GLVectorImageViewClick<TPixel,TPixelOverlay>::
 SetWinImData(const RegionType & zone) 
 {
   IndexType ind;
-  int l, m;
-  float tf;
+  int l;
+//  int m;
+//  float tf;
 
   //std::cout << "Zone : " << zone << std::endl;
   int lWinMinX = zone.GetIndex()[0];

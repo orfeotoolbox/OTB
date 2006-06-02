@@ -34,6 +34,8 @@ public:
   typedef itk::SmartPointer<Self>           Pointer;
   typedef itk::SmartPointer<const Self>     ConstPointer;
 
+  typedef itk::ProcessObject ProcessObjectType;
+
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
   

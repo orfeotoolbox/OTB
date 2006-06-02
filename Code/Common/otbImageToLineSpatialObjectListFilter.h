@@ -68,6 +68,7 @@ public:
   /** Definition of the size of the images. */
   typedef typename InputImageType::SizeType SizeType;
 
+  typedef itk::ProcessObject ProcessObjectType;
  
   /** Set/Get the input image */
   void SetInput(const InputImageType *image);

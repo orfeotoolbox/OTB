@@ -2,8 +2,14 @@
 
 // Pour CAI
 #define MAIN
+
 #define _CAI_IMAGE
+
+// A ne plus définir avec VC++, sinon conflit au niveau de cai_image.h
+#ifndef _MSC_VER
 #define _NOHDF16
+#endif
+
 extern "C"
 {
 #include "cai_image.h"
@@ -71,7 +77,7 @@ bool CAIImageIO::DetermineFormatSpot (char typspot, const char * str_repertoire 
      char str_comp[20];
      int fic_trouve;
      bool retour(true);
-     char *str_fichier(NULL);
+     char* str_fichier = NULL;
 
      strcpy(CAI_ERREUR,"");
      fic_trouve = 0;
@@ -316,7 +322,7 @@ bool CAIImageIO::CanReadFile( const char* filename )
         int NbLignes;                /* Nombre de lignes de l'image */
         int NbColonnes;              /* Nombre de colonnes de l'image */
         int NbOctetPixel;            /* Nombre octets/pixel l'image */
-        CAI_IMAGE* lCai(NULL);
+        CAI_IMAGE* lCai = NULL;
  
         //Traitement particulier sur certain format où l'on préfère utiliser 
         // Format JPEG -> lecture avec ITK (pas CAI)
@@ -373,7 +379,7 @@ bool CAIImageIO::CanWriteFile( const char * filename )
         int NbLignes(10);                /* Nombre de lignes de l'image */
         int NbColonnes(10);              /* Nombre de colonnes de l'image */
         int NbOctetPixel(8);            /* Nombre octets/pixel l'image */
-        CAI_IMAGE * lCai(NULL);
+        CAI_IMAGE * lCai = NULL;
  
         if ( fname == "" )
         {
@@ -440,7 +446,7 @@ otbMsgDebugMacro( << "CAIImageIO::Read() IORegion Start["<<this->GetIORegion().G
         // Mise a jour du step
         step = step * (unsigned long)(m_NbOctetPixel);
 
-        CAI_IMAGE * lCai(NULL);
+        CAI_IMAGE * lCai = NULL;
 
         //Recupere pointeur sur structure CAI_IMAGE
         lCai = (CAI_IMAGE *)m_ptrCai;
@@ -484,7 +490,7 @@ void CAIImageIO::ReadImageInformation()
         std::string CaiFileName("");
         std::string CaiFormat("");
         bool formatFound = GetInfosCAI( m_FileName.c_str(), CaiFileName, CaiFormat  );
-        CAI_IMAGE * lCai(NULL);
+        CAI_IMAGE * lCai = NULL;
 
         lCai = cai_ouvre_lecture_image(	(char *)CaiFileName.c_str(),
 						(char *)CaiFormat.c_str(),
@@ -612,7 +618,7 @@ void CAIImageIO::WriteImageInformation(void)
         NbLignes = m_Dimensions[1];
         NbCanaux = this->GetNumberOfComponents();
         NbOctetPixel = m_NbOctetPixel;
-        CAI_IMAGE * lCai(NULL);
+        CAI_IMAGE * lCai = NULL;
 otbMsgDebugMacro( << "CAIImageIO::WriteImageInformation() : Dimensions de l'image cree : "<<m_Dimensions[0]<<","<<m_Dimensions[1]);
 
         lCai = cai_ouvre_creation_image(	(char *)CaiFileName.c_str(),
@@ -647,6 +653,13 @@ void CAIImageIO::Write( const void* buffer)
         int lNbColonnes = this->GetIORegion().GetSize()[0];
         int lPremiereLigne   = this->GetIORegion().GetIndex()[1] + 1; // [1... ]
         int lPremiereColonne = this->GetIORegion().GetIndex()[0] + 1; // [1... ]
+		
+		// Cas particuliers : on controle que si la région à écrire est de la même dimension que l'image entière,
+		// on commence l'offset à 0 (lorsque que l'on est pas en "Streaming")
+		if( (lNbLignes == m_Dimensions[1]) && (lNbColonnes == m_Dimensions[0]))
+		{
+			lPremiereLigne = 1;
+		}
 
 otbMsgDebugMacro( << "CAIImageIO::Write() IORegion Start["<<this->GetIORegion().GetIndex()[0]<<","<<this->GetIORegion().GetIndex()[1]<<"] Size ["<<this->GetIORegion().GetSize()[0]<<","<<this->GetIORegion().GetSize()[1]<<"] on Image size ["<<m_Dimensions[0]<<","<<m_Dimensions[1]<<"]");
 
@@ -654,7 +667,7 @@ otbMsgDebugMacro( << "CAIImageIO::Write() IORegion Start["<<this->GetIORegion().
         unsigned long lTailleBuffer = (unsigned long)(m_NbOctetPixel)*lNbPixels;
         
         unsigned char* value = new unsigned char[lTailleBuffer];
-        CAI_IMAGE * lCai(NULL);
+        CAI_IMAGE * lCai = NULL;
 
         // Mise a jour du step
         step = step * (unsigned long)(m_NbOctetPixel);

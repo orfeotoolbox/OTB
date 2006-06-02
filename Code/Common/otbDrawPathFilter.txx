@@ -20,6 +20,9 @@
 #include "itkImageRegionIteratorWithIndex.h"
 #include "itkImageRegionConstIteratorWithIndex.h"
 
+
+
+
 namespace otb
 {
 
@@ -93,12 +96,19 @@ DrawPathFilter<TInputImage,TInputPath,TOutputImage>
      RealType x2 = cindex[0];
      RealType y2 = cindex[1];
      
-     RealType DeltaX = std::abs(x1-x2);
-     RealType DeltaY = std::abs(y1-y2);
-     RealType Xmin   = std::min( x1 , x2 );
-     RealType Xmax   = std::max( x1 , x2 );
-     RealType Ymin   = std::min( y1 , y2 );
-     RealType Ymax   = std::max( y1 , y2 );
+	 RealType DeltaX = fabs(x1-x2);
+     RealType DeltaY = fabs(y1-y2);
+
+     // Modifs pour compil sous VC++
+	 //RealType Xmin   = std::min( x1 , x2 );
+     //RealType Xmax   = std::max( x1 , x2 );
+     //RealType Ymin   = std::min( y1 , y2 );
+     //RealType Ymax   = std::max( y1 , y2 );
+
+	 RealType Xmin = x1<x2 ? x1 : x2 ;
+	 RealType Xmax = x1>x2 ? x1 : x2 ;
+	 RealType Ymin = y1<y2 ? y1 : y2 ;
+	 RealType Ymax = y1>y2 ? y1 : y2 ;
           
      if(DeltaX>0 && DeltaY>0)
        {

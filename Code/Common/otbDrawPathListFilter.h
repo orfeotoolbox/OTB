@@ -66,6 +66,8 @@ public:
   typedef typename OutputImageType::ValueType      OutputImageValueType; 
   typedef typename OutputImageType::IndexType      OutputImageIndexType; 
 
+  typedef itk::ProcessObject ProcessObjectType;
+
   /** ImageDimension constants */
   itkStaticConstMacro(InputImageDimension, unsigned int,
                       TInputImage::ImageDimension);

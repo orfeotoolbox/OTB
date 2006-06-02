@@ -56,9 +56,8 @@ public:
 
   void PrintSelf(std::ostream& os/*, itk::Indent indent*/) const;
 
-
   template< typename TypeValeur >
-  TypeValeur GetParameter(const char *option, unsigned int number=0)const;
+  TypeValeur GetParameter(const char *option, unsigned int number=0) const;
 
   std::string GetStringParameter(const char *option, unsigned int number=0) const;
 
@@ -161,6 +160,12 @@ private:
   std::string m_ProgramName;
 };
 
+
+// Not defined in class CommandArgumentParser to avoid known bug on VC++ 6.0 
+// (explicit template instanciation on class methods are forbidden in this compiler)
+/*template< typename TypeValeur >
+TypeValeur GetParameter(CommandLineArgumentParseResult* parser,
+						const char *option, unsigned int number=0);*/
 
 
 }

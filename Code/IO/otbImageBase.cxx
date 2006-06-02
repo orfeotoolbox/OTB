@@ -272,6 +272,7 @@ ImageBase::PrintSelf(std::ostream& os, itk::Indent indent, const MetaDataDiction
   VectorType vvalue;
   double dvalue;
   OTB_GCP gcpvalue;
+  int i ;
   
   // Copy of the const metadata dictionary in a metadata dictionary to be used
   // by the ExposeMetaData method
@@ -298,7 +299,7 @@ ImageBase::PrintSelf(std::ostream& os, itk::Indent indent, const MetaDataDiction
         case MetaDataKey::TVECTOR:
            itk::ExposeMetaData<VectorType>(dict2, keys[itkey], vvalue);
            
-           for(int i = 0 ; i < vvalue.size() ; i++ )
+           for(i = 0 ; i < vvalue.size() ; i++ )
 	      {
 	      os << indent << "---> " << keys[itkey] << "[" << i <<"] = "<< vvalue[i]<< std::endl;
 	      }

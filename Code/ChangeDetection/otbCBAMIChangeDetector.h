@@ -234,10 +234,10 @@ protected:
 
   inline TOutput Qxijkl(VectorType va, VectorType vb, VectorType vc, VectorType vd)
   {
-    IteratorType ita;
-    IteratorType itb;
-    IteratorType itc;
-    IteratorType itd;
+//    IteratorType ita;
+//    IteratorType itb;
+//    IteratorType itc;
+//    IteratorType itd;
 
 
     TOutput Eabcd_c = Exyztc(va, vb, vc, vd);

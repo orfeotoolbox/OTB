@@ -48,7 +48,7 @@ void
 DrawPathListFilter<TInputImage,TInputPath,TOutputImage>
 ::SetImageInput(const InputImageType *image)
 {
-  this->itk::ProcessObject::SetNthInput(0, 
+  this->ProcessObjectType::SetNthInput(0, 
                                    const_cast< InputImageType * >( image ) );
 }
 
@@ -64,7 +64,7 @@ DrawPathListFilter<TInputImage,TInputPath,TOutputImage>
     }
   
   return static_cast<const InputImageType *>
-    (this->itk::ProcessObject::GetInput(0) );
+    (this->ProcessObjectType::GetInput(0) );
 }
 
 
@@ -74,11 +74,11 @@ void
 DrawPathListFilter<TInputImage,TInputPath,TOutputImage>
 ::SetPathInput( InputPathListType *path)
 {
-//  this->itk::ProcessObject::SetNthInput(1, 
+//  this->ProcessObjectType::SetNthInput(1, 
 //                                  const_cast< InputPathListType * >( path ) );
 
 // Attention: A modifier  
-  this->itk::ProcessObject::SetNthInput(1,NULL);
+  this->ProcessObjectType::SetNthInput(1,NULL);
     m_PathList = path;
 }
 
@@ -99,7 +99,7 @@ DrawPathListFilter<TInputImage,TInputPath,TOutputImage>
   return (ptr);
 
 //  return static_cast<const TInputPath * >
-//    (this->itk::ProcessObject::GetInput(1) );
+//    (this->ProcessObjectType::GetInput(1) );
 }
 
 
@@ -109,7 +109,7 @@ void
 DrawPathListFilter<TInputImage,TInputPath,TOutputImage>
 ::SetImageOutput(OutputImageType *image)
 {
-  this->itk::ProcessObject::SetNthOutput(0, 
+  this->ProcessObjectType::SetNthOutput(0, 
                                    static_cast< OutputImageType * >( image ) );
 }
 
@@ -125,7 +125,7 @@ DrawPathListFilter<TInputImage,TInputPath,TOutputImage>
     }
   
   return static_cast<OutputImageType * >
-    (this->itk::ProcessObject::GetOutput(0) );
+    (this->ProcessObjectType::GetOutput(0) );
 }
 
 
@@ -193,13 +193,18 @@ DrawPathListFilter<TInputImage,TInputPath,TOutputImage>
      RealType x2 = cindex[0];
      RealType y2 = cindex[1];
      
-     RealType DeltaX = std::abs(x1-x2);
+     /*RealType DeltaX = std::abs(x1-x2);
      RealType DeltaY = std::abs(y1-y2);
      RealType Xmin   = std::min( x1 , x2 );
      RealType Xmax   = std::max( x1 , x2 );
      RealType Ymin   = std::min( y1 , y2 );
-     RealType Ymax   = std::max( y1 , y2 );
-     
+     RealType Ymax   = std::max( y1 , y2 );*/
+     RealType DeltaX = fabs(x1-x2);
+     RealType DeltaY = fabs(y1-y2);
+     RealType Xmin   = x1<x2 ? x1 : x2;
+     RealType Xmax   = x1>x2 ? x1 : x2;
+     RealType Ymin   = y1<y2 ? y1 : y2;
+     RealType Ymax   = y1>y2 ? y1 : y2;
      
      if(DeltaX>0 && DeltaY>0)
        {

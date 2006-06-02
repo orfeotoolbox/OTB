@@ -43,7 +43,7 @@ void
 DrawLineSpatialObjectListFilter<TInputImage, TOutputImage>
 ::SetInputLineSpatialObjectList(const LinesListType * list)
 {
-  this->itk::ProcessObject::SetNthInput(1, 
+  this->ProcessObjectType::SetNthInput(1, 
                                    const_cast< LinesListType * >( list ) );
 
 }
@@ -54,8 +54,9 @@ typename DrawLineSpatialObjectListFilter<TInputImage, TOutputImage>::LinesListTy
 DrawLineSpatialObjectListFilter<TInputImage, TOutputImage>
 ::GetInputLineSpatialObjectList(void)
 {
-    return static_cast<const LinesListType *>
-    (this->itk::ProcessObject::GetInput(1) ); 
+    //ROMAIN
+	return static_cast</*const */LinesListType *>
+    (this->ProcessObjectType::GetInput(1) ); 
 }
 
 template <class TInputImage, class TOutputImage>

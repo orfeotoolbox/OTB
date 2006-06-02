@@ -64,7 +64,7 @@ VectorImageView<TPixel>
 ::SetInput( const ImageType * image )
 {
   // Process object is not const-correct so the const_cast is required here
-  this->itk::ProcessObject::SetNthInput(0, 
+  this->ProcessObjectType::SetNthInput(0, 
                                    const_cast< ImageType *>( image ) );
 }
 
@@ -82,7 +82,7 @@ VectorImageView<TPixel>
     }
 
   return ( (const_cast< ImageType * >
-     (this->itk::ProcessObject::GetInput(0) ) ) );
+     (this->ProcessObjectType::GetInput(0) ) ) );
 
   }
 
@@ -100,7 +100,7 @@ VectorImageView<TPixel>
     }
 
   return ( static_cast< ImageType * >
-     (this->itk::ProcessObject::GetInput(0) ) ) ;
+     (this->ProcessObjectType::GetInput(0) ) ) ;
   }
 
 

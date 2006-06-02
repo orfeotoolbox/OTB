@@ -14,7 +14,11 @@
 #define _otbSVMModel_h
 
 #include "itkDataObject.h"
+
+extern "C"
+{
 #include "svm.h"
+}
 
 #define Malloc(type,n) (type *)malloc((n)*sizeof(type))
 
@@ -128,10 +132,16 @@ public:
   itkGetConstReferenceMacro(NumberOfClasses, unsigned int);
 
   /** Gets the problem */
-  struct svm_problem& GetProblem();
+  struct svm_problem GetProblem()
+  {
+	  return m_Problem ;
+  }
 
   /** Gets the problem */
-  struct svm_node* GetXSpace();
+  struct svm_node* GetXSpace()
+  {
+	  return x_space;
+  }
 
   /** Allocates the problem */
   void AllocateProblem(int l, long int elements);

@@ -1932,10 +1932,10 @@ void svm_binary_svc_probability(
 		int begin = i*prob->l/nr_fold;
 		int end = (i+1)*prob->l/nr_fold;
 		int j,k;
-		struct svm_problem subprob;
+		svm_problem subprob;
 
 		subprob.l = prob->l-(end-begin);
-		subprob.x = Malloc(struct svm_node*,subprob.l);
+		subprob.x = Malloc(svm_node*,subprob.l);
 		subprob.y = Malloc(double,subprob.l);
 			
 		k=0;
@@ -1979,7 +1979,7 @@ void svm_binary_svc_probability(
 			subparam.weight_label[1]=-1;
 			subparam.weight[0]=Cp;
 			subparam.weight[1]=Cn;
-			struct svm_model *submodel = svm_train(&subprob,&subparam);
+			svm_model *submodel = svm_train(&subprob,&subparam);
 			for(j=begin;j<end;j++)
 			{
 				svm_predict_values(submodel,prob->x[perm[j]],&(dec_values[perm[j]])); 
@@ -2414,10 +2414,10 @@ void svm_cross_validation(const svm_problem *prob, const svm_parameter *param, i
 		int begin = fold_start[i];
 		int end = fold_start[i+1];
 		int j,k;
-		struct svm_problem subprob;
+		svm_problem subprob;
 
 		subprob.l = l-(end-begin);
-		subprob.x = Malloc(struct svm_node*,subprob.l);
+		subprob.x = Malloc(svm_node*,subprob.l);
 		subprob.y = Malloc(double,subprob.l);
 			
 		k=0;
@@ -2433,7 +2433,7 @@ void svm_cross_validation(const svm_problem *prob, const svm_parameter *param, i
 			subprob.y[k] = prob->y[perm[j]];
 			++k;
 		}
-		struct svm_model *submodel = svm_train(&subprob,param);
+		svm_model *submodel = svm_train(&subprob,param);
 		if(param->probability && 
 		   (param->svm_type == C_SVC || param->svm_type == NU_SVC))
 		{

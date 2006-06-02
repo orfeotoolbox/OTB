@@ -101,7 +101,7 @@ SVMModel<TInputPixel, TLabel>
   }
 
 
-template <class TInputPixel, class TLabel >
+/*template <class TInputPixel, class TLabel >
 struct svm_problem&
 SVMModel<TInputPixel, TLabel>
 ::GetProblem()
@@ -126,7 +126,7 @@ SVMModel<TInputPixel, TLabel>
   {
     return x_space;
 
-  }
+  }*/
 
 
 template <class TInputPixel, class TLabel >

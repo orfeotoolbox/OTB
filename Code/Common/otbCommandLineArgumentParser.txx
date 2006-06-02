@@ -9,7 +9,7 @@ namespace otb
 {
 
 
-template< typename TypeValeur >
+template<typename TypeValeur >
 TypeValeur
 CommandLineArgumentParseResult
 ::GetParameter(const char *option, unsigned int number)const
@@ -21,6 +21,19 @@ CommandLineArgumentParseResult
   flux >> lValeur;
   return lValeur;
 }
+
+/*template<typename TypeValeur >
+TypeValeur
+GetParameter(CommandLineArgumentParseResult* parser,
+			   TypeValeur *option, unsigned int number)
+{
+  std::string parameter = parser->GetStringParameter((char*)(option), number);
+  TypeValeur lValeur;
+  ::otb::StringStream flux;
+  flux << parameter;
+  flux >> lValeur;
+  return lValeur;
+}*/
 
 
 } // end namespace otb

@@ -10,7 +10,7 @@
 #include <string.h>
 #include <list>
 #include <math.h>
-#include <zlib.h>
+//#include <zlib.h>
 
 #include "otbGDALImageIO.h"
 #include "otbMacro.h"
@@ -21,6 +21,12 @@
 
 #include <sys/types.h>
 #include <dirent.h>
+
+// ROMAIN : Modification for VC++
+#ifdef _MSC_VER 
+#    define	strcasecmp stricmp // _MICROSOFT_ VC++
+#endif
+
 
 namespace otb
 {
@@ -257,7 +263,7 @@ void GDALImageIO::InternalReadImageInformation()
     m_width = m_poDataset->GetRasterXSize();
     m_height = m_poDataset->GetRasterYSize();
        
-    if( m_width==0 & m_height==0)
+    if( (m_width==0) & (m_height==0))
       {
       itkExceptionMacro(<<"La dimension n'est pas définie.");
       }

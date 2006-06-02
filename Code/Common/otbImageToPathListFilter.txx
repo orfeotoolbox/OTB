@@ -14,7 +14,7 @@
 #define __otbImageToPathListFilter_txx
 
 #include "otbImageToPathListFilter.h"
-
+#include "itkProcessObject.h"
 
 namespace otb
 {
@@ -41,9 +41,8 @@ ImageToPathListFilter<TInputImage,TOutputPath>
 {
   // We have 1 input:  an image
 
-  // Process object is not const-correct so the const_cast is required here
-  this->itk::ProcessObject::SetNthInput(0, 
-                                   const_cast< InputImageType * >( image ) );
+	// Process object is not const-correct so the const_cast is required here
+	this->ProcessObjectType::SetNthInput(0,const_cast< InputImageType * >( image ) );
 }
 
 template <class TInputImage, class TOutputPath>
@@ -52,13 +51,15 @@ ImageToPathListFilter<TInputImage,TOutputPath>
 //OTB-FA-00010-CS  
 ::GetInput(void) 
 {
-  if (this->GetNumberOfInputs() < 1)
+  
+	
+	if (this->GetNumberOfInputs() < 1)
     {
     return 0;
     }
   
   return static_cast<const TInputImage * >
-    (this->itk::ProcessObject::GetInput(0) );
+	  (this->ProcessObjectType::GetInput(0) );
 }
   
 /**

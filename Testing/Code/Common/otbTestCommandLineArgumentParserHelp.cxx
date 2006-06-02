@@ -37,7 +37,7 @@ int otbTestCommandLineArgumentParserHelp( int argc, char ** argv )
 
     } 
 
-  catch( itk::ExceptionObject & err ) 
+  catch(itk::ExceptionObject &err) 
     { 
     return EXIT_SUCCESS;
      } 

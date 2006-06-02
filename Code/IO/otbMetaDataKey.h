@@ -70,12 +70,27 @@ public:
 	TOTB_GCP,
 	TVECTOR
   };
-  
+  /*
   typedef struct 
   {
   	std::string keyname;
   	KeyType type; 
-  } KeyTypeDef ;
+  } KeyTypeDef ;*/
+
+  typedef struct KeyTypeDef
+  {
+  	std::string keyname;
+  	KeyType type; 
+
+	KeyTypeDef() {} 
+	KeyTypeDef(std::string _keyname, KeyType _type)
+	{
+		keyname = _keyname;
+		type = _type;
+	} 
+
+  } ;
+
   
   KeyType GetKeyType(std::string name);
 

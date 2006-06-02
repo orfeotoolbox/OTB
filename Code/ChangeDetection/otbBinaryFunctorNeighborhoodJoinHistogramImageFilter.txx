@@ -77,7 +77,7 @@ BinaryFunctorNeighborhoodJoinHistogramImageFilter<TInputImage1,TInputImage2,TOut
 {
   // Calculate min and max image values in input1 image.
   Input1ImagePointer pInput1Image
-    = dynamic_cast<const TInputImage1*>(itk::ProcessObject::GetInput(0));
+    = dynamic_cast<const TInputImage1*>(ProcessObjectType::GetInput(0));
 
   Input1ImagePixelType minInput1, maxInput1;
   itk::ImageRegionConstIterator<Input1ImageType> fiIt(pInput1Image,
@@ -104,7 +104,7 @@ BinaryFunctorNeighborhoodJoinHistogramImageFilter<TInputImage1,TInputImage2,TOut
     
   // Calculate min and max image values in input2 image.
     Input2ImagePointer pInput2Image
-    = dynamic_cast<const TInputImage2*>(itk::ProcessObject::GetInput(1));
+    = dynamic_cast<const TInputImage2*>(ProcessObjectType::GetInput(1));
   Input2ImagePixelType minInput2, maxInput2;
   itk::ImageRegionConstIterator<Input2ImageType> miIt(pInput2Image,
                                                  pInput2Image->GetBufferedRegion());
@@ -186,7 +186,7 @@ BinaryFunctorNeighborhoodJoinHistogramImageFilter<TInputImage1, TInputImage2, TO
 
   this->Initialize();
   //m_Functor->SetHistogram(m_Histogram);
-  unsigned int i;
+//  unsigned int i;
   itk::ZeroFluxNeumannBoundaryCondition<TInputImage1> nbc1;
   itk::ZeroFluxNeumannBoundaryCondition<TInputImage2> nbc2;
 
@@ -194,9 +194,9 @@ BinaryFunctorNeighborhoodJoinHistogramImageFilter<TInputImage1, TInputImage2, TO
   // ImageToJoinHistogramImageFilter::GetInput(int) always returns a pointer to a
   // TInputImage1 so it cannot be used for the second input.
   Input1ImagePointer inputPtr1
-    = dynamic_cast<const TInputImage1*>(itk::ProcessObject::GetInput(0));
+    = dynamic_cast<const TInputImage1*>(ProcessObjectType::GetInput(0));
   Input2ImagePointer inputPtr2
-    = dynamic_cast<const TInputImage2*>(itk::ProcessObject::GetInput(1));
+    = dynamic_cast<const TInputImage2*>(ProcessObjectType::GetInput(1));
   OutputImagePointer outputPtr = this->GetOutput(0);
   
   

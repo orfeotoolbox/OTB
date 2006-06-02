@@ -37,20 +37,24 @@ int otbTestCommandLineArgumentParserList( int argc, char ** argv )
 
 
         std::cout << "Image : "<<parseResult->GetStringParameter("-image")<<std::endl;
-        unsigned int lEntier = parseResult->GetParameter<unsigned int>("-entier");
+        //unsigned int lEntier = otb::GetParameter<unsigned int>(parseResult,"-entier");
+		unsigned int lEntier = parseResult->GetParameter<unsigned int>("-entier");
         std::cout << "Entier : "<<lEntier<<std::endl;
 	if( parseResult->IsOptionPresent("-deuxentiers"))
 	  {
-          unsigned int lEntierDeux = parseResult->GetParameter<unsigned int>("-deuxentiers",1);
+		//unsigned int lEntierDeux = otb::GetParameter<unsigned int>(parseResult,"-deuxentiers",1);
+		unsigned int lEntierDeux = parseResult->GetParameter<unsigned int>("-deuxentiers",1);
           std::cout << "Entier : "<<lEntier<<std::endl;
 	  }
-        double lDouble = parseResult->GetParameter<double>("-double");
+	//double lDouble = otb::GetParameter<double>(parseResult,"-double");
+	double lDouble = parseResult->GetParameter<double>("-double");
         std::cout << "Double : "<<lDouble<<std::endl;
-
+		
         std::cout << "List de Double : "<<parseResult->GetNumberOfParameters("-doubles")<<std::endl;
         for (int i =0 ; i<parseResult->GetNumberOfParameters("-doubles") ; i++)
         {
-                double value = parseResult->GetParameter<double>("-doubles",i);
+			//double value = otb::GetParameter<double>(parseResult,"-doubles",i);
+			double value = parseResult->GetParameter<double>("-doubles",i);
                 std::cout << "  "<<value;
         }
         std::cout << std::endl;

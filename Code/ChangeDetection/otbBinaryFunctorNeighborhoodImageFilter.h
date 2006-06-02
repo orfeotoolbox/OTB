@@ -62,6 +62,8 @@ public:
   typedef typename OutputImageType::RegionType OutputImageRegionType;
   typedef typename OutputImageType::PixelType OutputImagePixelType;
 
+  typedef itk::ProcessObject ProcessObjectType;
+
 
   /** Connect one of the operands for pixel-wise addition */
   void SetInput1( const TInputImage1 * image1);

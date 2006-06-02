@@ -66,6 +66,7 @@ public:
   typedef itk::RescaleIntensityImageFilter< InputImageType,
                                             OutputImageType > RescalerType; 
 
+  typedef itk::ProcessObject ProcessObjectType;
 
   /** Method for management of the "object factory". */
   itkNewMacro(Self);

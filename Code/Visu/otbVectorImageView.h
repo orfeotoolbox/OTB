@@ -36,6 +36,7 @@ class ITK_EXPORT VectorImageView : public itk::ProcessObject
     typedef itk::ProcessObject                  Superclass;
     typedef itk::SmartPointer<Self>             Pointer;
     typedef itk::SmartPointer<const Self>       ConstPointer;
+	typedef itk::ProcessObject				    ProcessObjectType;
 
     /** Method for creation through the object factory. */
     itkNewMacro(Self);

@@ -6,7 +6,7 @@
   Date      :   29 mars 2006
   Version   :   
   Role      :   PointSet Source Class
-  $Id:$
+  $Id$
 
 =========================================================================*/
 #if defined(_MSC_VER)

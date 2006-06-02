@@ -56,7 +56,7 @@ void
 ImageToLineSpatialObjectListFilter<TInputImage>
 ::SetOutput(const LinesListType *list)
   {  
-     this->itk::ProcessObject::SetNthOutput(0, 
+     this->ProcessObjectType::SetNthOutput(0, 
                 const_cast< LinesListType * >( list ) );
   }
   
@@ -67,7 +67,7 @@ ImageToLineSpatialObjectListFilter<TInputImage>
 ::GetOutput(void)
 { 
     return static_cast<LinesListType *>
-    	(this->itk::ProcessObject::GetOutput(0) ); 
+    	(this->ProcessObjectType::GetOutput(0) ); 
 }
 
     
