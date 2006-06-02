@@ -20,10 +20,30 @@ SET(OTB_INCLUDE_DIRS_BUILD_TREE ${OTB_INCLUDE_DIRS_BUILD_TREE}
 
 #-----------------------------------------------------------------------------
 # Include directories from the GDAL build tree.
-#INCLUDE(${OTB_SOURCE_DIR}/Utilities/GDAL/gdalIncludeDirectories.cmake)
-#SET(OTB_INCLUDE_DIRS_BUILD_TREE ${OTB_INCLUDE_DIRS_BUILD_TREE}
-#  ${GDAL_INCLUDE_DIRS_BUILD_TREE}
-#  )
+#IF(NOT OTB_USE_EXTERNAL_GDAL)
+# 	INCLUDE(${OTB_SOURCE_DIR}/Utilities/GDAL/gdalIncludeDirectories.cmake)
+# 	SET(OTB_INCLUDE_DIRS_BUILD_TREE ${OTB_INCLUDE_DIRS_BUILD_TREE}
+#   		${GDAL_INCLUDE_DIRS_BUILD_TREE}
+#   	)
+#ENDIF(NOT OTB_USE_EXTERNAL_GDAL)
+
+#-----------------------------------------------------------------------------
+# Include directories from the ITK build tree.e
+IF(NOT OTB_USE_EXTERNAL_ITK)
+ 	INCLUDE(${OTB_SOURCE_DIR}/Utilities/ITK/itkIncludeDirectories.cmake)
+ 	SET(OTB_INCLUDE_DIRS_BUILD_TREE ${OTB_INCLUDE_DIRS_BUILD_TREE}
+   		${ITK_INCLUDE_DIRS_BUILD_TREE}
+   	)
+ENDIF(NOT OTB_USE_EXTERNAL_ITK)
+
+#-----------------------------------------------------------------------------
+# Include directories from the FLTK build tree.
+#IF(NOT OTB_USE_EXTERNAL_FLTK)
+# 	INCLUDE(${OTB_SOURCE_DIR}/Utilities/FLTK/fltkIncludeDirectories.cmake)
+# 	SET(OTB_INCLUDE_DIRS_BUILD_TREE ${OTB_INCLUDE_DIRS_BUILD_TREE}
+#   		${FLTK_INCLUDE_DIRS_BUILD_TREE}
+#   	)
+#ENDIF(NOT OTB_USE_EXTERNAL_FLTK)
 
 
 #-----------------------------------------------------------------------------
@@ -58,6 +78,7 @@ SET(OTB_INCLUDE_DIRS_INSTALL_TREE ${OTB_INCLUDE_DIRS_INSTALL_TREE}
   ${OTB_INSTALL_INCLUDE_DIR}/Utilities
   ${OTB_INSTALL_INCLUDE_DIR}/Utilities/CAI
   ${OTB_INSTALL_INCLUDE_DIR}/Utilities/GDAL
+  ${OTB_INSTALL_INCLUDE_DIR}/Utilities/ITK
 )
 
 

@@ -70,23 +70,33 @@ SET(OTB_VERSION_STRING "${OTB_VERSION_MAJOR}.${OTB_VERSION_MINOR}")
 #       ENDIF(VTK_FOUND)
 
 #-------------------------------
-# Librairie ITK
-#-------------------------------
-FIND_PACKAGE(ITK)
-IF(ITK_FOUND)
-  INCLUDE(${ITK_USE_FILE})
-ELSE(ITK_FOUND)
-  MESSAGE(FATAL_ERROR
-          "Cannot build OTB project without ITK.  Please set ITK_DIR.")
-ENDIF(ITK_FOUND)
-
-#-------------------------------
 # Librairie OpenGL
 #-------------------------------
 FIND_PACKAGE(OpenGL)
 IF(OPENGL_INCLUDE_PATH)
   INCLUDE_DIRECTORIES(${OPENGL_INCLUDE_PATH})
 ENDIF(OPENGL_INCLUDE_PATH)
+
+#-------------------------------
+# Librairie ITK
+#-------------------------------
+
+OPTION(OTB_USE_EXTERNAL_ITK "Use an outside build of ITK." ON)
+MARK_AS_ADVANCED(OTB_USE_EXTERNAL_ITK)
+IF(OTB_USE_EXTERNAL_ITK)
+	FIND_PACKAGE(ITK)
+	IF(ITK_FOUND)
+  		INCLUDE(${ITK_USE_FILE})
+ 	ELSE(ITK_FOUND)
+  		MESSAGE(FATAL_ERROR
+          	"Cannot build OTB project without ITK.  Please set ITK_DIR or set OTB_USE_EXTERNAL_ITK OFF to use INTERNAL ITK set on OTB/Utilities repository.")
+        ENDIF(ITK_FOUND)
+ELSE(OTB_USE_EXTERNAL_ITK)
+#	SET(ITK_SOURCE_DIR ${OTB_SOURCE_DIR}/Utilities/ITK)
+#	SET(ITK_BINARY_DIR ${OTB_BINARY_DIR})
+ENDIF(OTB_USE_EXTERNAL_ITK)
+
+
 
 #-------------------------------
 # Librairie CAI
@@ -117,29 +127,46 @@ ENDIF(OPENGL_INCLUDE_PATH)
 #-------------------------------
 # Librairie GDAL
 #-------------------------------
-FIND_LIBRARY(GDAL_LIBRARY NAMES gdal PATHS $ENV{GDAL_DIR_LIB} )
-FIND_PATH(GDAL_INCLUDES gdal.h $ENV{GDAL_DIR_INCLUDES} )
-IF (NOT GDAL_LIBRARY)
-  MESSAGE(FATAL_ERROR
-          "Cannot find GDAL library. Please set GDAL_DIR_LIB.")
-ENDIF (NOT GDAL_LIBRARY)
+OPTION(OTB_USE_EXTERNAL_GDAL "Use an outside build of GDAL." ON)
+MARK_AS_ADVANCED(OTB_USE_EXTERNAL_GDAL)
+IF(OTB_USE_EXTERNAL_GDAL)
 
-INCLUDE_DIRECTORIES(${GDAL_INCLUDES})
-LINK_DIRECTORIES( $ENV{GDAL_DIR_LIB} )
+	FIND_LIBRARY(GDAL_LIBRARY NAMES gdal PATHS $ENV{GDAL_DIR_LIB} )
+	FIND_PATH(GDAL_INCLUDES gdal.h $ENV{GDAL_DIR_INCLUDES} )
+	IF (NOT GDAL_LIBRARY)
+  	MESSAGE(FATAL_ERROR
+        	  "Cannot find GDAL library. Please set GDAL_DIR_LIB and GDAL_DIR_INCLUDES or set OTB_USE_EXTERNAL_GDAL OFF to use INTERNAL GDAL set on OTB/Utilities repository.")
+	ENDIF (NOT GDAL_LIBRARY)
+
+	INCLUDE_DIRECTORIES(${GDAL_INCLUDES})
+	LINK_DIRECTORIES( $ENV{GDAL_DIR_LIB} )
+
+ENDIF(OTB_USE_EXTERNAL_GDAL)
 
 
 #-------------------------------
 # Librairie FLTK
 #-------------------------------
 # Add an option to use or not use FLTK (http://www.fltk.org)
-FIND_PACKAGE(FLTK)
-IF(FLTK_FOUND)
-#  INCLUDE(${FLTK_USE_FILE})
-  INCLUDE_DIRECTORIES(${FLTK_INCLUDE_DIR})
-ELSE(FLTK_FOUND)
-  MESSAGE(FATAL_ERROR
-          "Cannot build OTB project without FLTK.  Please set FLTK_DIR.")
-ENDIF(FLTK_FOUND)
+
+OPTION(OTB_USE_EXTERNAL_FLTK "Use an outside build of FLTK." ON)
+MARK_AS_ADVANCED(OTB_USE_EXTERNAL_FLTK)
+IF(OTB_USE_EXTERNAL_FLTK)
+
+	FIND_PACKAGE(FLTK)
+	IF(FLTK_FOUND)
+	#  INCLUDE(${FLTK_USE_FILE})
+  	INCLUDE_DIRECTORIES(${FLTK_INCLUDE_DIR})
+	ELSE(FLTK_FOUND)
+  	MESSAGE(FATAL_ERROR
+        	 "Cannot build OTB project without FLTK.  Please set FLTK_DIR or set OTB_USE_EXTERNAL_FLTK OFF to use INTERNAL FLTK set on OTB/Utilities repository.")
+	ENDIF(FLTK_FOUND)
+
+ENDIF(OTB_USE_EXTERNAL_FLTK)
+
+#-------------------------------
+# End connections whith external libraries
+#-------------------------------
 
 # The fluid-generated fltk sources have many warnings.  This macro
 # will disable warnings for the generated files on some compilers.
@@ -220,6 +247,7 @@ INCLUDE_DIRECTORIES (
 # Test for some required system information.
 INCLUDE (${CMAKE_ROOT}/Modules/CMakeBackwardCompatibilityC.cmake)
 INCLUDE (${CMAKE_ROOT}/Modules/CMakeBackwardCompatibilityCXX.cmake)
+
 
 
 #-----------------------------------------------------------------------------
@@ -350,6 +378,14 @@ ENDIF(CMAKE_USE_PTHREADS)
 IF(WIN32)
   SET(OTB_REQUIRED_CXX_FLAGS "${OTB_REQUIRED_CXX_FLAGS} -DNOMINMAX")
 ENDIF(WIN32)
+
+#-----------------------------------------------------------------------------
+#
+# See if compiler preprocessor has the __FUNCTION__ directive used by itkExceptionMacro
+#
+INCLUDE(${OTB_SOURCE_DIR}/CMake/CheckCPPDirective.cmake)
+CHECK_CPP_DIRECTIVE_EXISTS(__FUNCTION__ ITK_CPP_FUNCTION)
+
 
 #-----------------------------------------------------------------------------
 # Find platform-specific differences in the handling of IEEE floating point 
@@ -541,4 +577,6 @@ ELSE("${CMAKE_MAJOR_VERSION}.${CMAKE_MINOR_VERSION}" GREATER 1.7)
           "This version of CMake is too old to build this version of OTB.  "
           "Please upgrade to CMake 1.8.")
 ENDIF("${CMAKE_MAJOR_VERSION}.${CMAKE_MINOR_VERSION}" GREATER 1.7)
+
+
 
