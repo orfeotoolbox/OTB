@@ -188,5 +188,5 @@ IF(UNIX)
   TARGET_LINK_LIBRARIES (ITKFEM -lm )
 ENDIF(UNIX)
 
-INSTALL_TARGETS(/lib/InsightToolkit ITKFEM)
-INSTALL_FILES(/include/InsightToolkit/Numerics/FEM "(\\.h|\\.txx)$")
+INSTALL_TARGETS(/lib/otb ITKFEM)
+INSTALL_FILES(/include/otb/Utilities/ITK/Numerics/FEM "(\\.h|\\.txx)$")

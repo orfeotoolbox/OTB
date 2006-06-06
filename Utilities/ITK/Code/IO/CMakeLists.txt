@@ -80,5 +80,5 @@ ITKDICOMParser
 ITKEXPAT
 ITKniftiio)
 
-INSTALL_TARGETS(/lib/InsightToolkit ITKIO)
-INSTALL_FILES(/include/InsightToolkit/IO "(\\.h|\\.txx)$")
+INSTALL_TARGETS(/lib/otb ITKIO)
+INSTALL_FILES(/include/otb/Utilities/ITK/IO "(\\.h|\\.txx)$")

@@ -58,6 +58,6 @@ ADD_DEFINITIONS(-DTEEM_ZLIB=1)
 ADD_LIBRARY(ITKNrrdIO ${nrrdio_SRCS} )
 TARGET_LINK_LIBRARIES(ITKNrrdIO ${ITK_ZLIB_LIBRARIES} )
 
-INSTALL_TARGETS(/lib/InsightToolkit ITKNrrdIO)
-INSTALL_FILES(/include/InsightToolkit/Utilities/NrrdIO "(\\.h)$")
+INSTALL_TARGETS(/lib/otb ITKNrrdIO)
+INSTALL_FILES(/include/otb/Utilities/ITK/Utilities/NrrdIO "(\\.h)$")
 

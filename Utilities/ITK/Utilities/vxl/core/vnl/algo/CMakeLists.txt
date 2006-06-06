@@ -83,7 +83,7 @@ IF(NETLIB_FOUND)
 
   ADD_LIBRARY( itkvnl_algo ${vnl_algo_sources})
   TARGET_LINK_LIBRARIES( itkvnl_algo ${NETLIB_LIBRARIES} itkvnl )
-  INSTALL_TARGETS(/lib/InsightToolkit itkvnl_algo)
+  INSTALL_TARGETS(/lib/otb itkvnl_algo)
 
   #ROMAIN
   #IF( BUILD_TESTING )

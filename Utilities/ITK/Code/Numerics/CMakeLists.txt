@@ -35,5 +35,5 @@ ADD_LIBRARY(ITKNumerics
 
 TARGET_LINK_LIBRARIES (ITKNumerics ITKCommon)
 
-INSTALL_TARGETS(/lib/InsightToolkit ITKNumerics)
-INSTALL_FILES(/include/InsightToolkit/Numerics "(\\.h|\\.txx)$")
+INSTALL_TARGETS(/lib/otb ITKNumerics)
+INSTALL_FILES(/include/otb/Utilities/ITK/Numerics "(\\.h|\\.txx)$")

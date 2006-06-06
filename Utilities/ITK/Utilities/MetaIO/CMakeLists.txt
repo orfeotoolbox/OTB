@@ -26,6 +26,6 @@ ADD_LIBRARY(ITKMetaIO
 
 #SUBDIRS(tests)
 
-INSTALL_TARGETS(/lib/InsightToolkit ITKMetaIO)
-INSTALL_FILES(/include/InsightToolkit/Utilities/MetaIO "(\\.h)$")
+INSTALL_TARGETS(/lib/otb ITKMetaIO)
+INSTALL_FILES(/include/otb/Utilities/ITK/Utilities/MetaIO "(\\.h)$")
 TARGET_LINK_LIBRARIES(ITKMetaIO ${ITK_ZLIB_LIBRARIES})

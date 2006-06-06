@@ -124,7 +124,7 @@ IF(ITK_NEED_CableSwig)
     SET(ITK_BUILD_CABLESWIG 1)
     SET(CableSwig_DIR ${ITK_BINARY_DIR}/Utilities/CableSwig)
     SET(CableSwig_FOUND 1)
-    SET(CableSwig_INSTALL_ROOT /lib/InsightToolkit/CSwig)
+    SET(CableSwig_INSTALL_ROOT /lib/otb/CSwig)
     INCLUDE(${CableSwig_DIR}/CableSwigConfig.cmake OPTIONAL) 
   ELSE(EXISTS ${ITK_SOURCE_DIR}/Utilities/CableSwig)
     # CableSwig is not included in the source distribution.  Find it.

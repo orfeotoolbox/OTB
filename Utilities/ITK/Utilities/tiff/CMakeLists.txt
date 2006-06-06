@@ -150,4 +150,4 @@ IF(UNIX)
 TARGET_LINK_LIBRARIES(itktiff -lm)
 ENDIF(UNIX)
 
-INSTALL_TARGETS(/lib/InsightToolkit itktiff)
+INSTALL_TARGETS(/lib/otb itktiff)

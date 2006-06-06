@@ -7,5 +7,5 @@ ADD_LIBRARY(ITKStatistics
 
 TARGET_LINK_LIBRARIES(ITKStatistics ITKCommon)
 
-INSTALL_TARGETS(/lib/InsightToolkit ITKStatistics)
-INSTALL_FILES(/include/InsightToolkit/Numerics/Statistics "(\\.h|\\.txx)$")
+INSTALL_TARGETS(/lib/otb ITKStatistics)
+INSTALL_FILES(/include/otb/Utilities/ITK/Numerics/Statistics "(\\.h|\\.txx)$")

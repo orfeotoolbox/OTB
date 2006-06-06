@@ -55,8 +55,8 @@ SET(KWSYS_USE_Base64 1)
 SET(KWSYS_USE_FundamentalType 1)
 SET(KWSYS_USE_CommandLineArguments 1)
 SET(KWSYS_HEADER_ROOT ${ITK_BINARY_DIR}/Utilities)
-SET(KWSYS_LIBRARY_INSTALL_DIR /lib/InsightToolkit)
-SET(KWSYS_HEADER_INSTALL_DIR /include/InsightToolkit/Utilities)
+SET(KWSYS_LIBRARY_INSTALL_DIR /lib/otb)
+SET(KWSYS_HEADER_INSTALL_DIR /include/otb/Utilities/ITK/Utilities)
 SUBDIRS(kwsys)
 
 #-----------------------------------------------------------------------------
@@ -68,5 +68,5 @@ ENDIF(ITK_BUILD_CABLESWIG)
 
 #-----------------------------------------------------------------------------
 # Install the UseITK.cmake file configured from the top-level.
-INSTALL_FILES(/lib/InsightToolkit ".cmake" "ITKConfig")
+#INSTALL_FILES(/lib/otb ".cmake" "ITKConfig")
 

@@ -38,5 +38,5 @@ ENDIF (WIN32)
 ADD_LIBRARY(${OPJ_PREFIX}openjpeg ${OpenJPEG_SRCS})
 
 # Install library
-INSTALL_TARGETS(/lib/InsightToolkit ${OPJ_PREFIX}openjpeg)
+INSTALL_TARGETS(/lib/otb ${OPJ_PREFIX}openjpeg)
 

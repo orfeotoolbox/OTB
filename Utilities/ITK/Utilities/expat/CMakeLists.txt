@@ -21,5 +21,5 @@ CONFIGURE_FILE(${ITKEXPAT_SOURCE_DIR}/expatDllConfig.h.in
 
 ADD_LIBRARY(ITKEXPAT ${expat_SRCS})
 
-INSTALL_TARGETS(/lib/InsightToolkit ITKEXPAT)
-INSTALL_FILES(/include/InsightToolkit/expat .h expat expatDllConfig)
+INSTALL_TARGETS(/lib/otb ITKEXPAT)
+INSTALL_FILES(/include/otb/Utilities/ITK/expat .h expat expatDllConfig)

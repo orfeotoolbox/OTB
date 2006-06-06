@@ -147,5 +147,5 @@ ENDIF (WIN32)
 CONFIGURE_FILE(${GDCM_SOURCE_DIR}/gdcmConfigure.h.in
                ${GDCM_BINARY_DIR}/gdcmConfigure.h @ONLY IMMEDIATE)
 
-INSTALL_FILES(/include/InsightToolkit/gdcm/src .h gdcmConfigure.h)
+INSTALL_FILES(/include/otb/Utilities/ITK/gdcm/src .h gdcmConfigure.h)
 

@@ -307,4 +307,4 @@ IF(UNIX)
   TARGET_LINK_LIBRARIES( itknetlib m )
 ENDIF(UNIX)
 
-INSTALL_TARGETS(/lib/InsightToolkit itknetlib)
+INSTALL_TARGETS(/lib/otb itknetlib)

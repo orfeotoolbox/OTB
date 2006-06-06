@@ -35,4 +35,4 @@ ELSE(UNIX)
 TARGET_LINK_LIBRARIES(itkpng ${ITK_ZLIB_LIBRARIES})
 ENDIF(UNIX)
 
-INSTALL_TARGETS(/lib/InsightToolkit itkpng)
+INSTALL_TARGETS(/lib/otb itkpng)

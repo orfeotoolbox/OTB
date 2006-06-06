@@ -24,5 +24,5 @@ IF(USE_SCSL)
         TARGET_LINK_LIBRARIES(ITKAlgorithms ${SCSL_LIB} )
 ENDIF(USE_SCSL)
 
-INSTALL_TARGETS(/lib/InsightToolkit ITKAlgorithms)
-INSTALL_FILES(/include/InsightToolkit/Algorithms "(\\.h|\\.txx)$")
+INSTALL_TARGETS(/lib/otb ITKAlgorithms)
+INSTALL_FILES(/include/otb/Utilities/ITK/Algorithms "(\\.h|\\.txx)$")

@@ -79,5 +79,5 @@ IF(CMAKE_SYSTEM MATCHES "SunOS.*")
   TARGET_LINK_LIBRARIES(itkgdcm socket nsl)
 ENDIF(CMAKE_SYSTEM MATCHES "SunOS.*")
 
-INSTALL_FILES(/include/InsightToolkit/gdcm/src "\\.h$")
-INSTALL_TARGETS(/lib/InsightToolkit itkgdcm)
+INSTALL_FILES(/include/otb/Utilities/ITK/gdcm/src "\\.h$")
+INSTALL_TARGETS(/lib/otb itkgdcm)

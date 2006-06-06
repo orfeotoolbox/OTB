@@ -23,4 +23,4 @@ SET(VCL_INCLUDE_DIR ${vxl_BINARY_DIR}/vcl ${vxl_SOURCE_DIR}/vcl)
 
 INCLUDE_DIRECTORIES(${VCL_INCLUDE_DIR} ${VXLCORE_INCLUDE_DIR})
 
-SET(VXL_INSTALL_ROOT /include/InsightToolkit/Utilities/vxl)
+SET(VXL_INSTALL_ROOT /include/otb/Utilities/ITK/Utilities/vxl)
