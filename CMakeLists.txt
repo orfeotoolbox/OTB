@@ -81,7 +81,7 @@ ENDIF(OPENGL_INCLUDE_PATH)
 # Librairie ITK
 #-------------------------------
 
-OPTION(OTB_USE_EXTERNAL_ITK "Use an outside build of ITK." ON)
+OPTION(OTB_USE_EXTERNAL_ITK "Use an outside build of ITK." OFF)
 MARK_AS_ADVANCED(OTB_USE_EXTERNAL_ITK)
 IF(OTB_USE_EXTERNAL_ITK)
 	FIND_PACKAGE(ITK)
