@@ -152,6 +152,7 @@ int main( int argc, char* argv[] )
 //  Software Guide : BeginCodeSnippet                    
 
     svmEstimator->SaveModel(outputModelFileName);
+    
 
 //  Software Guide : EndCodeSnippet            
 
@@ -176,11 +177,9 @@ int main( int argc, char* argv[] )
 
     ClassifyReaderType::Pointer cReader = ClassifyReaderType::New();
 
-
     cReader->SetFileName( inputImageFileName  );
 
     cReader->Update();
-
     
     // Software Guide : BeginLatex
 //
@@ -197,7 +196,6 @@ int main( int argc, char* argv[] )
 
     typedef itk::Statistics::ImageToListAdaptor< ClassifyImageType > SampleType;
     SampleType::Pointer sample = SampleType::New();
-
 // Software Guide : EndCodeSnippet
 
 // Software Guide : BeginLatex
@@ -210,7 +208,6 @@ int main( int argc, char* argv[] )
 // Software Guide : BeginCodeSnippet      
     
     sample->SetImage(cReader->GetOutput());
-
 
 // Software Guide : EndCodeSnippet
 
@@ -230,7 +227,7 @@ int main( int argc, char* argv[] )
     typedef otb::SVMModel< InputPixelType, LabelPixelType > ModelType;
 
     ModelType::Pointer model = svmEstimator->GetModel();
-
+    //model->LoadModel(outputModelFileName);
 // Software Guide : EndCodeSnippet
 
 
@@ -260,13 +257,17 @@ int main( int argc, char* argv[] )
 // Software Guide : EndLatex
     
 // Software Guide : BeginCodeSnippet          
-
-    int numberOfClasses = model->GetNumberOfClasses();    
+    std::cout << "GNC" << std::endl;
+    int numberOfClasses = model->GetNumberOfClasses();
+    std::cout << "SNC = "<< numberOfClasses << std::endl;
     classifier->SetNumberOfClasses(numberOfClasses) ;
+    std::cout << "SM" << std::endl;
     classifier->SetModel( model );
+    std::cout << "SS" << std::endl;
     classifier->SetSample(sample.GetPointer()) ;
+    std::cout << "Up" << std::endl;
     classifier->Update() ;
-
+    std::cout << "---" << std::endl;
 // Software Guide : EndCodeSnippet
 
 // Software Guide : BeginLatex
@@ -288,7 +289,7 @@ int main( int argc, char* argv[] )
     typedef otb::Image< OutputPixelType, Dimension >        OutputImageType;
 
     OutputImageType::Pointer outputImage = OutputImageType::New();
-
+    std::cout << "---" << std::endl;
 // Software Guide : EndCodeSnippet
 
 // Software Guide : BeginLatex
@@ -320,7 +321,7 @@ int main( int argc, char* argv[] )
 
     outputImage->SetRegions( region );
     outputImage->Allocate();
-
+    std::cout << "---" << std::endl;
 // Software Guide : EndCodeSnippet
 
 // Software Guide : BeginLatex
@@ -360,14 +361,14 @@ int main( int argc, char* argv[] )
 // Software Guide : BeginCodeSnippet      
     
 
-    
+    std::cout << "---" << std::endl;
     while (m_iter != m_last && !outIt.IsAtEnd())
     {
     outIt.Set(m_iter.GetClassLabel());
     ++m_iter ;
     ++outIt;
     }
-
+    std::cout << "---" << std::endl;
 // Software Guide : EndCodeSnippet
 
 // Software Guide : BeginLatex
@@ -388,12 +389,12 @@ int main( int argc, char* argv[] )
       FileImageType > RescalerType;
 
     RescalerType::Pointer rescaler = RescalerType::New();
-    
+    std::cout << "---" << std::endl;
     rescaler->SetOutputMinimum( itk::NumericTraits< unsigned char >::min());
     rescaler->SetOutputMaximum( itk::NumericTraits< unsigned char >::max());
 
     rescaler->SetInput( outputImage );
-
+    std::cout << "---" << std::endl;
 // Software Guide : EndCodeSnippet
 
 // Software Guide : BeginLatex

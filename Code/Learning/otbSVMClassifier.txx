@@ -180,6 +180,7 @@ SVMClassifier< TSample, TLabel >
   typename OutputType::ConstIterator endO  = m_Output->End() ;
   typename TSample::MeasurementVectorType measurements ;
 
+
   int numberOfComponentsPerSample  = iter.GetMeasurementVector().Size() ;//this->GetSample().GetMeasurementVectorSize();//
 
   int max_line_len = 1024;
@@ -187,13 +188,16 @@ SVMClassifier< TSample, TLabel >
   int max_nr_attr = 64;
   bool predict_probability = 1;
 
+
   const struct svm_model* model = m_Model->GetModel();
 
 //  char*  line = (char *) malloc(max_line_len*sizeof(char));
   //  x = (struct svm_node *) malloc(max_nr_attr*sizeof(struct
   //  svm_node));
-  m_Model->AllocateProblem(1, numberOfComponentsPerSample);
-  x = m_Model->GetXSpace();
+
+/*   m_Model->AllocateProblem(1, numberOfComponentsPerSample);*/
+
+  x = new svm_node[numberOfComponentsPerSample+1];//m_Model->GetXSpace();
 
   //std::cout << "XSpace Allocated" << std::endl;
   if(svm_check_probability_model(model)==0)
@@ -208,11 +212,14 @@ SVMClassifier< TSample, TLabel >
   int total = 0;
   double error = 0;
   double sumv = 0, sumy = 0, sumvv = 0, sumyy = 0, sumvy = 0;
-  
+
+
   int svm_type=svm_get_svm_type(model);
   //std::cout << "SVM Type = " << svm_type << std::endl;
+
   int nr_class=svm_get_nr_class(model);
   //std::cout << "SVM nr_class = " << nr_class << std::endl;
+
   int *labels=(int *) malloc(nr_class*sizeof(int));
   double *prob_estimates=NULL;
   int j;
@@ -223,17 +230,19 @@ SVMClassifier< TSample, TLabel >
       printf("Prob. model for test data: target value = predicted value + z,\nz: Laplace distribution e^(-|z|/sigma)/(2sigma),sigma=%g\n",svm_get_svr_probability(model));
     else
       {
+
       svm_get_labels(model,labels);
+
       prob_estimates = (double *) malloc(nr_class*sizeof(double));
+	}
       /*fprintf(output,"labels");		
       for(j=0;j<nr_class;j++)
 	fprintf(output," %d",labels[j]);
       fprintf(output,"\n");*/
-      }
     }
 //  while(1)
 
-  //std::cout << "Starting iterations " << std::endl;
+//  std::cout << "Starting iterations " << std::endl;
   while (iter != end && iterO != endO)
     {
     
@@ -329,7 +338,8 @@ if(predict_probability)
   
 //std::cout << "End of iterations and free" << std::endl;  
 //  free(x);
- 
+
+delete [] x;
 }
 
 } // end of namespace itk

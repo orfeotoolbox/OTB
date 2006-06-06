@@ -116,14 +116,15 @@ int main( int argc, char ** argv )
 
     --nbRois;
     OutputPixelType label = 0;
-    unsigned long xUL, yUL, xBR, yBR = 0;
+    unsigned long xUL, yUL, xBR, yBR, tmp_label = 0;
 
-    roisFile >> label;
+    roisFile >> tmp_label;
     roisFile >> xUL;
     roisFile >> yUL;
     roisFile >> xBR;
     roisFile >> yBR;
 
+    label = static_cast<OutputPixelType>(tmp_label);
 
     std::cout << "Label : " << int(label) << std::endl;
     std::cout << "( " << xUL << " , " << yUL << " )" << std::endl;
@@ -150,6 +151,7 @@ int main( int argc, char ** argv )
     // Iteration and pixel value assignment
     while(!it.IsAtEnd())
       {
+
 
       it.Set(static_cast<OutputPixelType>(label));
 

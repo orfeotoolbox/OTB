@@ -145,6 +145,7 @@ public:
 
   /** Allocates the problem */
   void AllocateProblem(int l, long int elements);
+
   
   /** Sets the model */
   void SetModel(struct svm_model* aModel);
