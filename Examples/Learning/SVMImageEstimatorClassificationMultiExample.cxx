@@ -6,14 +6,22 @@
 #define ITK_LEAN_AND_MEAN
 #endif
 
+
 //  Software Guide : BeginCommandLineArgs
 //    INPUTS: {ROI_QB_MUL_1.png}, {ROI_mask_multi.png}
-//    OUTPUTS: {ROI_QB_MUL_1_SVN_CLASS_MULTI.png}, {svm_image_model_multi.svn}
+//    OUTPUTS: {ROI_QB_MUL_1_SVN_CLASS_MULTI.png}
+//    NORMALIZE_EPS_OUTPUT_OF: {ROI_mask_multi.png}
 //  Software Guide : EndCommandLineArgs
 
 
+
 //  Software Guide : BeginLatex
-// This example illustrates .. figure~\ref{fig:SVMROISMULTI}. 
+// This example illustrates the OTB's multi-class SVM
+// capabilities. The theory behind this kind of classification is out
+// of the scope of this guide. In OTB, the multi-class SVM
+// classification is used in the same way as the two-class
+// one. Figure~\ref{fig:SVMROISMULTI} shows the image to be classified
+// and the associated ground truth, which is composed of 4 classes. 
 // \begin{figure}
 // \center
 // \includegraphics[width=0.35\textwidth]{ROI_QB_MUL_1.eps}
@@ -22,7 +30,8 @@
 // estimation of the SVM model. Left: RGB image. Right: image of labels.} 
 // \label{fig:SVMROISMULTI}
 // \end{figure}
-// The first thing to do is include the header file for the class.
+//
+// The following header files are needed for the program:
 //
 //  Software Guide : EndLatex 
 
@@ -37,13 +46,14 @@
 #include "itkImageToListAdaptor.h"
 #include "itkListSample.h"
 #include "otbSVMClassifier.h"
-#include "otbImageFileWriter.h"
-#include "itkImageRegionIterator.h"
-#include "itkRescaleIntensityImageFilter.h"
-
-
 //  Software Guide : EndCodeSnippet
 
+#include "otbImageFileWriter.h"
+#include "itkImageRegionIterator.h"
+
+
+
+#include "itkRescaleIntensityImageFilter.h"
 #include "otbImageFileReader.h"
 
 
@@ -144,18 +154,19 @@ int main( int argc, char* argv[] )
 
 //  Software Guide : EndCodeSnippet        
     
-//  Software Guide : BeginLatex
-//
-//  Finally, the estimated model can be saved to a file for later use.
-//
-//  Software Guide : EndLatex
-//  Software Guide : BeginCodeSnippet                    
 
-    svmEstimator->SaveModel(outputModelFileName);
+
+// Software Guide : BeginLatex
+//
+//  We can now proceed to the image classification. We start by
+//  declaring the type of the image to be classified. ITK's
+//  classification framework needs the type of the pixel to be of
+//  fixed type, so we declare the following types.
+//
+// Software Guide : EndLatex
+
+// Software Guide : BeginCodeSnippet  
     
-
-//  Software Guide : EndCodeSnippet            
-
 
     typedef otb::Image< itk::FixedArray<InputPixelType,3>,
                              Dimension >	        ClassifyImageType;
@@ -215,7 +226,9 @@ int main( int argc, char* argv[] )
 //
 // Now, we need to declare the SVM model which is to be used by the
 // classifier. The SVM model is templated over the type of value used
-// for the measures and the type of pixel used for the labels.
+// for the measures and the type of pixel used for the labels. The
+// model is obtained from the model estimator by calling the
+// \code{GetModel} method.
 //
 // Software Guide : EndLatex
     
@@ -227,7 +240,7 @@ int main( int argc, char* argv[] )
     typedef otb::SVMModel< InputPixelType, LabelPixelType > ModelType;
 
     ModelType::Pointer model = svmEstimator->GetModel();
-    //model->LoadModel(outputModelFileName);
+
 // Software Guide : EndCodeSnippet
 
 
@@ -257,17 +270,11 @@ int main( int argc, char* argv[] )
 // Software Guide : EndLatex
     
 // Software Guide : BeginCodeSnippet          
-    std::cout << "GNC" << std::endl;
     int numberOfClasses = model->GetNumberOfClasses();
-    std::cout << "SNC = "<< numberOfClasses << std::endl;
     classifier->SetNumberOfClasses(numberOfClasses) ;
-    std::cout << "SM" << std::endl;
     classifier->SetModel( model );
-    std::cout << "SS" << std::endl;
     classifier->SetSample(sample.GetPointer()) ;
-    std::cout << "Up" << std::endl;
     classifier->Update() ;
-    std::cout << "---" << std::endl;
 // Software Guide : EndCodeSnippet
 
 // Software Guide : BeginLatex
@@ -289,7 +296,6 @@ int main( int argc, char* argv[] )
     typedef otb::Image< OutputPixelType, Dimension >        OutputImageType;
 
     OutputImageType::Pointer outputImage = OutputImageType::New();
-    std::cout << "---" << std::endl;
 // Software Guide : EndCodeSnippet
 
 // Software Guide : BeginLatex
@@ -361,7 +367,6 @@ int main( int argc, char* argv[] )
 // Software Guide : BeginCodeSnippet      
     
 
-    std::cout << "---" << std::endl;
     while (m_iter != m_last && !outIt.IsAtEnd())
     {
     outIt.Set(m_iter.GetClassLabel());
@@ -389,12 +394,10 @@ int main( int argc, char* argv[] )
       FileImageType > RescalerType;
 
     RescalerType::Pointer rescaler = RescalerType::New();
-    std::cout << "---" << std::endl;
     rescaler->SetOutputMinimum( itk::NumericTraits< unsigned char >::min());
     rescaler->SetOutputMaximum( itk::NumericTraits< unsigned char >::max());
-
     rescaler->SetInput( outputImage );
-    std::cout << "---" << std::endl;
+    
 // Software Guide : EndCodeSnippet
 
 // Software Guide : BeginLatex
@@ -422,7 +425,7 @@ int main( int argc, char* argv[] )
 // \begin{figure}
 // \center
 // \includegraphics[width=0.35\textwidth]{ROI_QB_MUL_1.eps}
-// \includegraphics[width=0.35\textwidth]{ROI_QB_MUL_1_SVN_CLASSMULTI.eps}
+// \includegraphics[width=0.35\textwidth]{ROI_QB_MUL_1_SVN_CLASS_MULTI.eps}
 // \itkcaption[SVM Image Classification]{Result of the SVM
 // classification . Left: RGB image. Right: image of classes.} 
 // \label{fig:SVMCLASSMULTI}
