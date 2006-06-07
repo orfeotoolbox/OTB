@@ -196,7 +196,8 @@ SET( OTB_EXAMPLES_SRCS
   ${OTB_SOURCE_DIR}/Examples/Learning/SVMPointSetModelEstimatorExample.cxx
   ${OTB_SOURCE_DIR}/Examples/Learning/SVMPointSetClassificationExample.cxx  
   ${OTB_SOURCE_DIR}/Examples/Learning/SVMImageModelEstimatorExample.cxx
-  ${OTB_SOURCE_DIR}/Examples/Learning/SVMImageClassificationExample.cxx    
+  ${OTB_SOURCE_DIR}/Examples/Learning/SVMImageClassificationExample.cxx
+  ${OTB_SOURCE_DIR}/Examples/Learning/SVMImageEstimatorClassificationMultiExample.cxx
   ${OTB_SOURCE_DIR}/Examples/Visu/GreyVisuExample.cxx  
 )
 
