@@ -17,10 +17,10 @@ RM = /usr/local/bin/cmake -E remove -f
 CMAKE_EDIT_COMMAND = /usr/local/bin/ccmake
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home1/romain/ORFEO-TOOLBOX/otb/OTB
+CMAKE_SOURCE_DIR = /usr/local/stok/OTB/trunk/OTB
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home1/romain/ORFEO-TOOLBOX/otb/OTB
+CMAKE_BINARY_DIR = /usr/local/stok/OTB/trunk/OTB
 
 #=============================================================================
 # Special targets provided by cmake.
@@ -57,11 +57,11 @@ $(VERBOSE).SILENT:
 
 # The main all target
 all:
-	cd /home1/romain/ORFEO-TOOLBOX/otb/OTB && $(MAKE) -f CMakeFiles/Makefile2 Utilities/ITK/Utilities/nifti/niftilib/directorystart
+	cd /usr/local/stok/OTB/trunk/OTB && $(MAKE) -f CMakeFiles/Makefile2 Utilities/ITK/Utilities/nifti/niftilib/directorystart
 
 # The main clean target
 clean:
-	cd /home1/romain/ORFEO-TOOLBOX/otb/OTB && $(MAKE) -f CMakeFiles/Makefile2 Utilities/ITK/Utilities/nifti/niftilib/clean
+	cd /usr/local/stok/OTB/trunk/OTB && $(MAKE) -f CMakeFiles/Makefile2 Utilities/ITK/Utilities/nifti/niftilib/clean
 
 # clear depends
 depend:
@@ -69,14 +69,14 @@ depend:
 
 # Convenience name for target.
 Utilities/ITK/Utilities/nifti/niftilib/CMakeFiles/ITKniftiio.dir/rule:
-	cd /home1/romain/ORFEO-TOOLBOX/otb/OTB && $(MAKE) -f CMakeFiles/Makefile2 Utilities/ITK/Utilities/nifti/niftilib/CMakeFiles/ITKniftiio.dir/rule
+	cd /usr/local/stok/OTB/trunk/OTB && $(MAKE) -f CMakeFiles/Makefile2 Utilities/ITK/Utilities/nifti/niftilib/CMakeFiles/ITKniftiio.dir/rule
 
 # Convenience name for target.
 ITKniftiio: Utilities/ITK/Utilities/nifti/niftilib/CMakeFiles/ITKniftiio.dir/rule
 
 # target for object file
 nifti1_io.o:
-	cd /home1/romain/ORFEO-TOOLBOX/otb/OTB && $(MAKE) -f Utilities/ITK/Utilities/nifti/niftilib/CMakeFiles/ITKniftiio.dir/build.make Utilities/ITK/Utilities/nifti/niftilib/CMakeFiles/ITKniftiio.dir/nifti1_io.o
+	cd /usr/local/stok/OTB/trunk/OTB && $(MAKE) -f Utilities/ITK/Utilities/nifti/niftilib/CMakeFiles/ITKniftiio.dir/build.make Utilities/ITK/Utilities/nifti/niftilib/CMakeFiles/ITKniftiio.dir/nifti1_io.o
 
 # Help Target
 help::
