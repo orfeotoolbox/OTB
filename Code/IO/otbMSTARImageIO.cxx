@@ -85,7 +85,8 @@ bool MSTARImageIO::CanReadFile( const char* filename )
 
         int NbLignes;                /* Nombre de lignes de l'image */
         int NbColonnes;              /* Nombre de colonnes de l'image */
- 
+
+	MSTARname = filename;
 
 	MSTARfp = fopen(MSTARname,"rb");
 	if (MSTARfp == NULL)
@@ -224,6 +225,8 @@ bool MSTARImageIO::CanWriteFile( const char * filename )
                 identificationErreur = "Format MSTAR non detecte dans l'extension du fichier.";
                 itkDebugMacro(<<identificationErreur.c_str());
         }
+
+	return formatFound;
 
 }
 
