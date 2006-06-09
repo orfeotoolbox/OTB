@@ -7,6 +7,7 @@ SUBDIRS(
   DataRepresentation
   IO
   Filtering
+  Segmentation
   ChangeDetection
   Visu
   Learning

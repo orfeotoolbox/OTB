@@ -171,27 +171,6 @@ int main( int argc, char ** argv )
   
   writer->Update();
 
-  //  Software Guide : BeginLatex
-  // Figure~\ref{fig:Align} shows the result of applying the alignment
-  // detection to a small patch extracted from a VHR image.
-  // \begin{figure}
-  // \center
-  // \includegraphics[width=0.35\textwidth]{QB_Suburb.eps}
-  // \includegraphics[width=0.35\textwidth]{QB_SuburbAlign.eps}
-  // \itkcaption[Lee Filter Application]{Result of applying the
-  // \doxygen{ImageToPathListAlignFilter} to a VHR image of a suburb.} 
-  // \label{fig:Align}
-  // \end{figure}
-  //
-  //  Software Guide : EndLatex 
-
-  //  \relatedClasses
-  //  \begin{itemize}
-  //  \item \doxygen{FrostImageFilter}
-  //  \end{itemize}
-  //
-  //  Software Guide : EndLatex
-  
 
 
   return EXIT_SUCCESS;
