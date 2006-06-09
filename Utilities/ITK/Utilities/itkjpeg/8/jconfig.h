@@ -62,7 +62,9 @@ typedef unsigned char boolean;
 
 /* names mangling */
 
-#include "itkjpeg/mangle_jpeg8bits.h"
+// ROMAIN
+// #include "itkjpeg/mangle_jpeg8bits.h"
+#include "mangle_jpeg8bits.h"
 
 #if defined(__BORLANDC__)
 #pragma warn -8004 /* Disable "foo is assigned a value that is never used." */
