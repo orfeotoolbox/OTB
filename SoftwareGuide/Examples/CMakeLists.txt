@@ -192,7 +192,8 @@ SET( OTB_EXAMPLES_SRCS
   ${OTB_SOURCE_DIR}/Examples/FeatureExtraction/HarrisExample.cxx
   ${OTB_SOURCE_DIR}/Examples/FeatureExtraction/ComplexMomentImageExample.cxx
   ${OTB_SOURCE_DIR}/Examples/FeatureExtraction/ComplexMomentPathExample.cxx
-  ${OTB_SOURCE_DIR}/Examples/FeatureExtraction/HuMomentImageExample.cxx   
+  ${OTB_SOURCE_DIR}/Examples/FeatureExtraction/HuMomentImageExample.cxx
+  ${OTB_SOURCE_DIR}/Examples/Segmentation/ConnectedThresholdImageFilter.cxx
   ${OTB_SOURCE_DIR}/Examples/ChangeDetection/ChangeDetectionFrameworkExample.cxx
   ${OTB_SOURCE_DIR}/Examples/ChangeDetection/DiffChDet.cxx
   ${OTB_SOURCE_DIR}/Examples/ChangeDetection/RatioChDet.cxx	

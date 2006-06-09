@@ -1,1 +1,125 @@
 \chapter{Image Segmentation}
+Segmentation of remote sensing images is a challenging task. A myriad
+of different methods have been proposed and implemented in recent
+years. In spite of the huge effort invested in this problem, there is
+no single approach that can generally solve the problem of
+segmentation for the large variety of image modalities existing today.
+
+The most effective segmentation algorithms are obtained by carefully
+customizing combinations of components. The parameters of these components are
+tuned for the characteristics of the image modality used as input and the
+features of the objects to be segmented. 
+
+The Insight Toolkit provides a basic set of algorithms that can be used to
+develop and customize a full segmentation application. They are
+therefore available in the Orfeo Toolbox. Some of the most
+commonly used segmentation components are described in the following
+sections.
+
+
+\section{Region Growing}
+
+Region growing algorithms have proven to be an effective approach for image
+segmentation. The basic approach of a region growing algorithm is to start
+from a seed region (typically one or more pixels) that are considered to be
+inside the object to be segmented. The pixels neighboring this region are
+evaluated to determine if they should also be considered part of the
+object. If so, they are added to the region and the process continues as long
+as new pixels are added to the region.  Region growing algorithms vary
+depending on the criteria used to decide whether a pixel should be included
+in the region or not, the type connectivity used to determine neighbors, and
+the strategy used to visit neighboring pixels.
+
+Several implementations of region growing are available in ITK.  This section
+describes some of the most commonly used.
+
+\subsection{Connected Threshold}
+
+A simple criterion for including pixels in a growing region is to evaluate
+intensity value inside a specific interval.
+
+\label{sec:ConnectedThreshold}
+\input{ConnectedThresholdImageFilter.tex}
+
+\subsection{Otsu Segmentation}
+Another criterion for classifying pixels is to minimize the error of misclassification.
+The goal is to find a threshold that classifies the image into two clusters such that 
+we minimize the area under the histogram for one cluster that lies on the other cluster's 
+side of the threshold. This is equivalent to minimizing the within class variance
+or equivalently maximizing the between class variance.
+
+\label{sec:OtsuThreshold}
+\ifitkFullVersion 
+%\input{OtsuThresholdImageFilter.tex}
+\fi
+
+\label{sec:OtsuMultipleThreshold}
+\ifitkFullVersion 
+%\input{OtsuMultipleThresholdImageFilter.tex}
+\fi
+
+\subsection{Neighborhood Connected}
+\label{sec:NeighborhoodConnectedImageFilter}
+\ifitkFullVersion 
+%\input{NeighborhoodConnectedImageFilter.tex}
+\fi
+
+
+\subsection{Confidence Connected}
+\label{sec:ConfidenceConnected}
+\ifitkFullVersion 
+%\input{ConfidenceConnected.tex}
+%\input{ConfidenceConnectedOnBrainWeb.tex}
+\fi
+
+
+
+
+\subsection{Isolated Connected}
+\label{sec:IsolatedConnected}
+\ifitkFullVersion 
+%\input{IsolatedConnectedImageFilter.tex}
+\fi
+
+
+\subsection{Confidence Connected in Vector Images}
+\label{sec:VectorConfidenceConnected}
+\ifitkFullVersion 
+%\input{VectorConfidenceConnected.tex}
+\fi
+
+
+\section{Segmentation Based on Watersheds}
+\label{sec:WatershedSegmentation}
+\ifitkFullVersion 
+%\input WatershedSegmentation.tex
+\fi
+
+
+% the clearpage command helps to avoid orphans in the title of the next
+% section.
+\clearpage
+
+\section{Level Set Segmentation}
+\label{sec:LevelSetsSegmentation}
+\ifitkFullVersion 
+%\input{LevelSetsSegmentation.tex}
+\fi
+
+
+\section{Hybrid Methods} 
+\label{sec:HybridSegmentationMethods}
+
+\ifitkFullVersion 
+%\input{HybridSegmentationMethods.tex}
+\fi
+
+
+\section{Feature Extraction} 
+\label{sec:FeatureExtractionMethods}
+
+\ifitkFullVersion 
+%\input{FeatureExtractionMethods.tex}
+\fi
+
+
