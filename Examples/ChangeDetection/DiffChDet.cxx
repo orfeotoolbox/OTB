@@ -21,8 +21,8 @@
 
 //  Software Guide : BeginCommandLineArgs
 //    INPUTS: {SpotBefore.png}, {SpotAfter.png}
-//    OUTPUTS: {DiffChDet.png}
-//    5
+//    OUTPUTS: {DiffChDet.tif}
+//    3
 //  Software Guide : EndCommandLineArgs
 
 
@@ -56,7 +56,8 @@
 #include "otbImageFileReader.h"
 #include "otbStreamingImageFileWriter.h"
 #include "itkImage.h"
-#include "itkShiftScaleImageFilter.h"
+#include "itkAbsImageFilter.h"
+#include "itkRescaleIntensityImageFilter.h"
 
 #include "otbCommandProgressUpdate.h"
 
@@ -97,10 +98,7 @@ int main(int argc, char* argv[] )
   //  can be vey large, we will force the pipeline to use
   //  streaming. For this purpose, the file writer will be
   //  streamed. This is achieved by using the
-  //  \doxygen{otb::StreamingImageFileWriter} class. Also, before
-  //  saving the image to a file in, for instance, PNG format, we will
-  //  rescale the results of the change detection in order to use all
-  //  the output pixel type range of values.
+  //  \doxygen{otb::StreamingImageFileWriter} class.
   // 
   //  Software Guide : EndLatex 
 
@@ -108,7 +106,24 @@ int main(int argc, char* argv[] )
   typedef otb::ImageFileReader< InputImageType1 >  ReaderType1;
   typedef otb::ImageFileReader< InputImageType2 >  ReaderType2;
   typedef otb::StreamingImageFileWriter< OutputImageType >  WriterType;
-  typedef itk::ShiftScaleImageFilter< ChangeImageType,
+  //  Software Guide : EndCodeSnippet
+  
+  //  Software Guide : BeginLatex
+  //
+  //  The change detector will give positive and negative values
+  //  depending on the sign of the difference. We are usually
+  //  interested only in the asbolute value of the difference. For
+  //  this purpose, we will use the \doxygen{itk::AbsImageFilter}. Also, before
+  //  saving the image to a file in, for instance, PNG format, we will
+  //  rescale the results of the change detection in order to use all
+  //  the output pixel type range of values.
+  // 
+  //  Software Guide : EndLatex 
+
+  //  Software Guide : BeginCodeSnippet
+  typedef itk::AbsImageFilter< ChangeImageType,
+                                            ChangeImageType > AbsType; 
+  typedef itk::RescaleIntensityImageFilter< ChangeImageType,
                                             OutputImageType > RescalerType; 
 
   //  Software Guide : EndCodeSnippet
@@ -139,6 +154,7 @@ int main(int argc, char* argv[] )
   ReaderType2::Pointer reader2 = ReaderType2::New();
   WriterType::Pointer writer = WriterType::New();
   FilterType::Pointer   filter = FilterType::New();
+  AbsType::Pointer absFilter = AbsType::New();
   RescalerType::Pointer rescaler = RescalerType::New();
   //  Software Guide : EndCodeSnippet
 
@@ -156,12 +172,8 @@ int main(int argc, char* argv[] )
   reader1->SetFileName( inputFilename1  );
   reader2->SetFileName( inputFilename2  );
   writer->SetFileName( outputFilename );
-  rescaler->SetShift( itk::NumericTraits< InternalPixelType >::min());
-
-  float scale = itk::NumericTraits< OutputPixelType >::max()/
-    float(itk::NumericTraits< OutputPixelType >::max()+
-	  itk::NumericTraits< InternalPixelType >::min());
-  rescaler->SetScale( scale );
+  rescaler->SetOutputMinimum( itk::NumericTraits< OutputPixelType >::min());
+  rescaler->SetOutputMaximum( itk::NumericTraits< OutputPixelType >::max());
   //  Software Guide : EndCodeSnippet
   
   //  Software Guide : BeginLatex
@@ -184,7 +196,8 @@ int main(int argc, char* argv[] )
   //  Software Guide : BeginCodeSnippet
   filter->SetInput1( reader1->GetOutput() ); 
   filter->SetInput2( reader2->GetOutput() );
-  rescaler->SetInput( filter->GetOutput() );
+  absFilter->SetInput( filter->GetOutput() );
+  rescaler->SetInput( absFilter->GetOutput() );
   writer->SetInput( rescaler->GetOutput() );
   //  Software Guide : EndCodeSnippet
 
