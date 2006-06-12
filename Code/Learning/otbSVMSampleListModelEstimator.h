@@ -43,13 +43,13 @@ namespace otb
 template <class TInputSampleList, 
           class TTrainingSampleList>
 class ITK_EXPORT SVMSampleListModelEstimator: 
-    public otb::SVMModelEstimator<typename TInputSampleList::ValueType, typename TTrainingSampleList::ValueType>
+    public otb::SVMModelEstimator<typename TInputSampleList::ValueType::ValueType, typename TTrainingSampleList::ValueType::ValueType>
 {
 public:
   /** Standard class typedefs. */
   typedef SVMSampleListModelEstimator   Self;
-  typedef SVMModelEstimator<typename TInputSampleList::ValueType,
-			    typename TTrainingSampleList::ValueType>
+  typedef SVMModelEstimator<typename TInputSampleList::ValueType::ValueType,
+			    typename TTrainingSampleList::ValueType::ValueType>
                             Superclass;
 
   typedef itk::SmartPointer<Self>  Pointer;
