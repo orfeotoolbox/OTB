@@ -62,7 +62,6 @@ typedef unsigned char boolean;
 
 /* names mangling */
 
-// ROMAIN
 // #include "itkjpeg/mangle_jpeg8bits.h"
 #include "mangle_jpeg8bits.h"
 
