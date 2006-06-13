@@ -17,10 +17,10 @@ RM = /usr/local/bin/cmake -E remove -f
 CMAKE_EDIT_COMMAND = /usr/local/bin/ccmake
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /usr/local/stok/OTB/trunk/OTB
+CMAKE_SOURCE_DIR = /ORFEO/thomas/ORFEO-TOOLBOX/otb/OTB
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /usr/local/stok/OTB/trunk/OTB
+CMAKE_BINARY_DIR = /ORFEO/thomas/ORFEO-TOOLBOX/otb/OTB
 
 #=============================================================================
 # Special targets provided by cmake.
@@ -57,11 +57,11 @@ $(VERBOSE).SILENT:
 
 # The main all target
 all:
-	cd /usr/local/stok/OTB/trunk/OTB && $(MAKE) -f CMakeFiles/Makefile2 Utilities/ITK/Utilities/nifti/directorystart
+	cd /ORFEO/thomas/ORFEO-TOOLBOX/otb/OTB && $(MAKE) -f CMakeFiles/Makefile2 Utilities/ITK/Utilities/nifti/directorystart
 
 # The main clean target
 clean:
-	cd /usr/local/stok/OTB/trunk/OTB && $(MAKE) -f CMakeFiles/Makefile2 Utilities/ITK/Utilities/nifti/clean
+	cd /ORFEO/thomas/ORFEO-TOOLBOX/otb/OTB && $(MAKE) -f CMakeFiles/Makefile2 Utilities/ITK/Utilities/nifti/clean
 
 # clear depends
 depend:
@@ -69,196 +69,196 @@ depend:
 
 # Convenience name for target.
 Utilities/ITK/Utilities/nifti/CMakeFiles/Continuous.dir/rule:
-	cd /usr/local/stok/OTB/trunk/OTB && $(MAKE) -f CMakeFiles/Makefile2 Utilities/ITK/Utilities/nifti/CMakeFiles/Continuous.dir/rule
+	cd /ORFEO/thomas/ORFEO-TOOLBOX/otb/OTB && $(MAKE) -f CMakeFiles/Makefile2 Utilities/ITK/Utilities/nifti/CMakeFiles/Continuous.dir/rule
 
 # Convenience name for target.
 Continuous: Utilities/ITK/Utilities/nifti/CMakeFiles/Continuous.dir/rule
 
 # Convenience name for target.
 Utilities/ITK/Utilities/nifti/CMakeFiles/ContinuousBuild.dir/rule:
-	cd /usr/local/stok/OTB/trunk/OTB && $(MAKE) -f CMakeFiles/Makefile2 Utilities/ITK/Utilities/nifti/CMakeFiles/ContinuousBuild.dir/rule
+	cd /ORFEO/thomas/ORFEO-TOOLBOX/otb/OTB && $(MAKE) -f CMakeFiles/Makefile2 Utilities/ITK/Utilities/nifti/CMakeFiles/ContinuousBuild.dir/rule
 
 # Convenience name for target.
 ContinuousBuild: Utilities/ITK/Utilities/nifti/CMakeFiles/ContinuousBuild.dir/rule
 
 # Convenience name for target.
 Utilities/ITK/Utilities/nifti/CMakeFiles/ContinuousConfigure.dir/rule:
-	cd /usr/local/stok/OTB/trunk/OTB && $(MAKE) -f CMakeFiles/Makefile2 Utilities/ITK/Utilities/nifti/CMakeFiles/ContinuousConfigure.dir/rule
+	cd /ORFEO/thomas/ORFEO-TOOLBOX/otb/OTB && $(MAKE) -f CMakeFiles/Makefile2 Utilities/ITK/Utilities/nifti/CMakeFiles/ContinuousConfigure.dir/rule
 
 # Convenience name for target.
 ContinuousConfigure: Utilities/ITK/Utilities/nifti/CMakeFiles/ContinuousConfigure.dir/rule
 
 # Convenience name for target.
 Utilities/ITK/Utilities/nifti/CMakeFiles/ContinuousCoverage.dir/rule:
-	cd /usr/local/stok/OTB/trunk/OTB && $(MAKE) -f CMakeFiles/Makefile2 Utilities/ITK/Utilities/nifti/CMakeFiles/ContinuousCoverage.dir/rule
+	cd /ORFEO/thomas/ORFEO-TOOLBOX/otb/OTB && $(MAKE) -f CMakeFiles/Makefile2 Utilities/ITK/Utilities/nifti/CMakeFiles/ContinuousCoverage.dir/rule
 
 # Convenience name for target.
 ContinuousCoverage: Utilities/ITK/Utilities/nifti/CMakeFiles/ContinuousCoverage.dir/rule
 
 # Convenience name for target.
 Utilities/ITK/Utilities/nifti/CMakeFiles/ContinuousMemCheck.dir/rule:
-	cd /usr/local/stok/OTB/trunk/OTB && $(MAKE) -f CMakeFiles/Makefile2 Utilities/ITK/Utilities/nifti/CMakeFiles/ContinuousMemCheck.dir/rule
+	cd /ORFEO/thomas/ORFEO-TOOLBOX/otb/OTB && $(MAKE) -f CMakeFiles/Makefile2 Utilities/ITK/Utilities/nifti/CMakeFiles/ContinuousMemCheck.dir/rule
 
 # Convenience name for target.
 ContinuousMemCheck: Utilities/ITK/Utilities/nifti/CMakeFiles/ContinuousMemCheck.dir/rule
 
 # Convenience name for target.
 Utilities/ITK/Utilities/nifti/CMakeFiles/ContinuousStart.dir/rule:
-	cd /usr/local/stok/OTB/trunk/OTB && $(MAKE) -f CMakeFiles/Makefile2 Utilities/ITK/Utilities/nifti/CMakeFiles/ContinuousStart.dir/rule
+	cd /ORFEO/thomas/ORFEO-TOOLBOX/otb/OTB && $(MAKE) -f CMakeFiles/Makefile2 Utilities/ITK/Utilities/nifti/CMakeFiles/ContinuousStart.dir/rule
 
 # Convenience name for target.
 ContinuousStart: Utilities/ITK/Utilities/nifti/CMakeFiles/ContinuousStart.dir/rule
 
 # Convenience name for target.
 Utilities/ITK/Utilities/nifti/CMakeFiles/ContinuousSubmit.dir/rule:
-	cd /usr/local/stok/OTB/trunk/OTB && $(MAKE) -f CMakeFiles/Makefile2 Utilities/ITK/Utilities/nifti/CMakeFiles/ContinuousSubmit.dir/rule
+	cd /ORFEO/thomas/ORFEO-TOOLBOX/otb/OTB && $(MAKE) -f CMakeFiles/Makefile2 Utilities/ITK/Utilities/nifti/CMakeFiles/ContinuousSubmit.dir/rule
 
 # Convenience name for target.
 ContinuousSubmit: Utilities/ITK/Utilities/nifti/CMakeFiles/ContinuousSubmit.dir/rule
 
 # Convenience name for target.
 Utilities/ITK/Utilities/nifti/CMakeFiles/ContinuousTest.dir/rule:
-	cd /usr/local/stok/OTB/trunk/OTB && $(MAKE) -f CMakeFiles/Makefile2 Utilities/ITK/Utilities/nifti/CMakeFiles/ContinuousTest.dir/rule
+	cd /ORFEO/thomas/ORFEO-TOOLBOX/otb/OTB && $(MAKE) -f CMakeFiles/Makefile2 Utilities/ITK/Utilities/nifti/CMakeFiles/ContinuousTest.dir/rule
 
 # Convenience name for target.
 ContinuousTest: Utilities/ITK/Utilities/nifti/CMakeFiles/ContinuousTest.dir/rule
 
 # Convenience name for target.
 Utilities/ITK/Utilities/nifti/CMakeFiles/ContinuousUpdate.dir/rule:
-	cd /usr/local/stok/OTB/trunk/OTB && $(MAKE) -f CMakeFiles/Makefile2 Utilities/ITK/Utilities/nifti/CMakeFiles/ContinuousUpdate.dir/rule
+	cd /ORFEO/thomas/ORFEO-TOOLBOX/otb/OTB && $(MAKE) -f CMakeFiles/Makefile2 Utilities/ITK/Utilities/nifti/CMakeFiles/ContinuousUpdate.dir/rule
 
 # Convenience name for target.
 ContinuousUpdate: Utilities/ITK/Utilities/nifti/CMakeFiles/ContinuousUpdate.dir/rule
 
 # Convenience name for target.
 Utilities/ITK/Utilities/nifti/CMakeFiles/Experimental.dir/rule:
-	cd /usr/local/stok/OTB/trunk/OTB && $(MAKE) -f CMakeFiles/Makefile2 Utilities/ITK/Utilities/nifti/CMakeFiles/Experimental.dir/rule
+	cd /ORFEO/thomas/ORFEO-TOOLBOX/otb/OTB && $(MAKE) -f CMakeFiles/Makefile2 Utilities/ITK/Utilities/nifti/CMakeFiles/Experimental.dir/rule
 
 # Convenience name for target.
 Experimental: Utilities/ITK/Utilities/nifti/CMakeFiles/Experimental.dir/rule
 
 # Convenience name for target.
 Utilities/ITK/Utilities/nifti/CMakeFiles/ExperimentalBuild.dir/rule:
-	cd /usr/local/stok/OTB/trunk/OTB && $(MAKE) -f CMakeFiles/Makefile2 Utilities/ITK/Utilities/nifti/CMakeFiles/ExperimentalBuild.dir/rule
+	cd /ORFEO/thomas/ORFEO-TOOLBOX/otb/OTB && $(MAKE) -f CMakeFiles/Makefile2 Utilities/ITK/Utilities/nifti/CMakeFiles/ExperimentalBuild.dir/rule
 
 # Convenience name for target.
 ExperimentalBuild: Utilities/ITK/Utilities/nifti/CMakeFiles/ExperimentalBuild.dir/rule
 
 # Convenience name for target.
 Utilities/ITK/Utilities/nifti/CMakeFiles/ExperimentalConfigure.dir/rule:
-	cd /usr/local/stok/OTB/trunk/OTB && $(MAKE) -f CMakeFiles/Makefile2 Utilities/ITK/Utilities/nifti/CMakeFiles/ExperimentalConfigure.dir/rule
+	cd /ORFEO/thomas/ORFEO-TOOLBOX/otb/OTB && $(MAKE) -f CMakeFiles/Makefile2 Utilities/ITK/Utilities/nifti/CMakeFiles/ExperimentalConfigure.dir/rule
 
 # Convenience name for target.
 ExperimentalConfigure: Utilities/ITK/Utilities/nifti/CMakeFiles/ExperimentalConfigure.dir/rule
 
 # Convenience name for target.
 Utilities/ITK/Utilities/nifti/CMakeFiles/ExperimentalCoverage.dir/rule:
-	cd /usr/local/stok/OTB/trunk/OTB && $(MAKE) -f CMakeFiles/Makefile2 Utilities/ITK/Utilities/nifti/CMakeFiles/ExperimentalCoverage.dir/rule
+	cd /ORFEO/thomas/ORFEO-TOOLBOX/otb/OTB && $(MAKE) -f CMakeFiles/Makefile2 Utilities/ITK/Utilities/nifti/CMakeFiles/ExperimentalCoverage.dir/rule
 
 # Convenience name for target.
 ExperimentalCoverage: Utilities/ITK/Utilities/nifti/CMakeFiles/ExperimentalCoverage.dir/rule
 
 # Convenience name for target.
 Utilities/ITK/Utilities/nifti/CMakeFiles/ExperimentalMemCheck.dir/rule:
-	cd /usr/local/stok/OTB/trunk/OTB && $(MAKE) -f CMakeFiles/Makefile2 Utilities/ITK/Utilities/nifti/CMakeFiles/ExperimentalMemCheck.dir/rule
+	cd /ORFEO/thomas/ORFEO-TOOLBOX/otb/OTB && $(MAKE) -f CMakeFiles/Makefile2 Utilities/ITK/Utilities/nifti/CMakeFiles/ExperimentalMemCheck.dir/rule
 
 # Convenience name for target.
 ExperimentalMemCheck: Utilities/ITK/Utilities/nifti/CMakeFiles/ExperimentalMemCheck.dir/rule
 
 # Convenience name for target.
 Utilities/ITK/Utilities/nifti/CMakeFiles/ExperimentalStart.dir/rule:
-	cd /usr/local/stok/OTB/trunk/OTB && $(MAKE) -f CMakeFiles/Makefile2 Utilities/ITK/Utilities/nifti/CMakeFiles/ExperimentalStart.dir/rule
+	cd /ORFEO/thomas/ORFEO-TOOLBOX/otb/OTB && $(MAKE) -f CMakeFiles/Makefile2 Utilities/ITK/Utilities/nifti/CMakeFiles/ExperimentalStart.dir/rule
 
 # Convenience name for target.
 ExperimentalStart: Utilities/ITK/Utilities/nifti/CMakeFiles/ExperimentalStart.dir/rule
 
 # Convenience name for target.
 Utilities/ITK/Utilities/nifti/CMakeFiles/ExperimentalSubmit.dir/rule:
-	cd /usr/local/stok/OTB/trunk/OTB && $(MAKE) -f CMakeFiles/Makefile2 Utilities/ITK/Utilities/nifti/CMakeFiles/ExperimentalSubmit.dir/rule
+	cd /ORFEO/thomas/ORFEO-TOOLBOX/otb/OTB && $(MAKE) -f CMakeFiles/Makefile2 Utilities/ITK/Utilities/nifti/CMakeFiles/ExperimentalSubmit.dir/rule
 
 # Convenience name for target.
 ExperimentalSubmit: Utilities/ITK/Utilities/nifti/CMakeFiles/ExperimentalSubmit.dir/rule
 
 # Convenience name for target.
 Utilities/ITK/Utilities/nifti/CMakeFiles/ExperimentalTest.dir/rule:
-	cd /usr/local/stok/OTB/trunk/OTB && $(MAKE) -f CMakeFiles/Makefile2 Utilities/ITK/Utilities/nifti/CMakeFiles/ExperimentalTest.dir/rule
+	cd /ORFEO/thomas/ORFEO-TOOLBOX/otb/OTB && $(MAKE) -f CMakeFiles/Makefile2 Utilities/ITK/Utilities/nifti/CMakeFiles/ExperimentalTest.dir/rule
 
 # Convenience name for target.
 ExperimentalTest: Utilities/ITK/Utilities/nifti/CMakeFiles/ExperimentalTest.dir/rule
 
 # Convenience name for target.
 Utilities/ITK/Utilities/nifti/CMakeFiles/ExperimentalUpdate.dir/rule:
-	cd /usr/local/stok/OTB/trunk/OTB && $(MAKE) -f CMakeFiles/Makefile2 Utilities/ITK/Utilities/nifti/CMakeFiles/ExperimentalUpdate.dir/rule
+	cd /ORFEO/thomas/ORFEO-TOOLBOX/otb/OTB && $(MAKE) -f CMakeFiles/Makefile2 Utilities/ITK/Utilities/nifti/CMakeFiles/ExperimentalUpdate.dir/rule
 
 # Convenience name for target.
 ExperimentalUpdate: Utilities/ITK/Utilities/nifti/CMakeFiles/ExperimentalUpdate.dir/rule
 
 # Convenience name for target.
 Utilities/ITK/Utilities/nifti/CMakeFiles/Nightly.dir/rule:
-	cd /usr/local/stok/OTB/trunk/OTB && $(MAKE) -f CMakeFiles/Makefile2 Utilities/ITK/Utilities/nifti/CMakeFiles/Nightly.dir/rule
+	cd /ORFEO/thomas/ORFEO-TOOLBOX/otb/OTB && $(MAKE) -f CMakeFiles/Makefile2 Utilities/ITK/Utilities/nifti/CMakeFiles/Nightly.dir/rule
 
 # Convenience name for target.
 Nightly: Utilities/ITK/Utilities/nifti/CMakeFiles/Nightly.dir/rule
 
 # Convenience name for target.
 Utilities/ITK/Utilities/nifti/CMakeFiles/NightlyBuild.dir/rule:
-	cd /usr/local/stok/OTB/trunk/OTB && $(MAKE) -f CMakeFiles/Makefile2 Utilities/ITK/Utilities/nifti/CMakeFiles/NightlyBuild.dir/rule
+	cd /ORFEO/thomas/ORFEO-TOOLBOX/otb/OTB && $(MAKE) -f CMakeFiles/Makefile2 Utilities/ITK/Utilities/nifti/CMakeFiles/NightlyBuild.dir/rule
 
 # Convenience name for target.
 NightlyBuild: Utilities/ITK/Utilities/nifti/CMakeFiles/NightlyBuild.dir/rule
 
 # Convenience name for target.
 Utilities/ITK/Utilities/nifti/CMakeFiles/NightlyConfigure.dir/rule:
-	cd /usr/local/stok/OTB/trunk/OTB && $(MAKE) -f CMakeFiles/Makefile2 Utilities/ITK/Utilities/nifti/CMakeFiles/NightlyConfigure.dir/rule
+	cd /ORFEO/thomas/ORFEO-TOOLBOX/otb/OTB && $(MAKE) -f CMakeFiles/Makefile2 Utilities/ITK/Utilities/nifti/CMakeFiles/NightlyConfigure.dir/rule
 
 # Convenience name for target.
 NightlyConfigure: Utilities/ITK/Utilities/nifti/CMakeFiles/NightlyConfigure.dir/rule
 
 # Convenience name for target.
 Utilities/ITK/Utilities/nifti/CMakeFiles/NightlyCoverage.dir/rule:
-	cd /usr/local/stok/OTB/trunk/OTB && $(MAKE) -f CMakeFiles/Makefile2 Utilities/ITK/Utilities/nifti/CMakeFiles/NightlyCoverage.dir/rule
+	cd /ORFEO/thomas/ORFEO-TOOLBOX/otb/OTB && $(MAKE) -f CMakeFiles/Makefile2 Utilities/ITK/Utilities/nifti/CMakeFiles/NightlyCoverage.dir/rule
 
 # Convenience name for target.
 NightlyCoverage: Utilities/ITK/Utilities/nifti/CMakeFiles/NightlyCoverage.dir/rule
 
 # Convenience name for target.
 Utilities/ITK/Utilities/nifti/CMakeFiles/NightlyMemCheck.dir/rule:
-	cd /usr/local/stok/OTB/trunk/OTB && $(MAKE) -f CMakeFiles/Makefile2 Utilities/ITK/Utilities/nifti/CMakeFiles/NightlyMemCheck.dir/rule
+	cd /ORFEO/thomas/ORFEO-TOOLBOX/otb/OTB && $(MAKE) -f CMakeFiles/Makefile2 Utilities/ITK/Utilities/nifti/CMakeFiles/NightlyMemCheck.dir/rule
 
 # Convenience name for target.
 NightlyMemCheck: Utilities/ITK/Utilities/nifti/CMakeFiles/NightlyMemCheck.dir/rule
 
 # Convenience name for target.
 Utilities/ITK/Utilities/nifti/CMakeFiles/NightlyMemoryCheck.dir/rule:
-	cd /usr/local/stok/OTB/trunk/OTB && $(MAKE) -f CMakeFiles/Makefile2 Utilities/ITK/Utilities/nifti/CMakeFiles/NightlyMemoryCheck.dir/rule
+	cd /ORFEO/thomas/ORFEO-TOOLBOX/otb/OTB && $(MAKE) -f CMakeFiles/Makefile2 Utilities/ITK/Utilities/nifti/CMakeFiles/NightlyMemoryCheck.dir/rule
 
 # Convenience name for target.
 NightlyMemoryCheck: Utilities/ITK/Utilities/nifti/CMakeFiles/NightlyMemoryCheck.dir/rule
 
 # Convenience name for target.
 Utilities/ITK/Utilities/nifti/CMakeFiles/NightlyStart.dir/rule:
-	cd /usr/local/stok/OTB/trunk/OTB && $(MAKE) -f CMakeFiles/Makefile2 Utilities/ITK/Utilities/nifti/CMakeFiles/NightlyStart.dir/rule
+	cd /ORFEO/thomas/ORFEO-TOOLBOX/otb/OTB && $(MAKE) -f CMakeFiles/Makefile2 Utilities/ITK/Utilities/nifti/CMakeFiles/NightlyStart.dir/rule
 
 # Convenience name for target.
 NightlyStart: Utilities/ITK/Utilities/nifti/CMakeFiles/NightlyStart.dir/rule
 
 # Convenience name for target.
 Utilities/ITK/Utilities/nifti/CMakeFiles/NightlySubmit.dir/rule:
-	cd /usr/local/stok/OTB/trunk/OTB && $(MAKE) -f CMakeFiles/Makefile2 Utilities/ITK/Utilities/nifti/CMakeFiles/NightlySubmit.dir/rule
+	cd /ORFEO/thomas/ORFEO-TOOLBOX/otb/OTB && $(MAKE) -f CMakeFiles/Makefile2 Utilities/ITK/Utilities/nifti/CMakeFiles/NightlySubmit.dir/rule
 
 # Convenience name for target.
 NightlySubmit: Utilities/ITK/Utilities/nifti/CMakeFiles/NightlySubmit.dir/rule
 
 # Convenience name for target.
 Utilities/ITK/Utilities/nifti/CMakeFiles/NightlyTest.dir/rule:
-	cd /usr/local/stok/OTB/trunk/OTB && $(MAKE) -f CMakeFiles/Makefile2 Utilities/ITK/Utilities/nifti/CMakeFiles/NightlyTest.dir/rule
+	cd /ORFEO/thomas/ORFEO-TOOLBOX/otb/OTB && $(MAKE) -f CMakeFiles/Makefile2 Utilities/ITK/Utilities/nifti/CMakeFiles/NightlyTest.dir/rule
 
 # Convenience name for target.
 NightlyTest: Utilities/ITK/Utilities/nifti/CMakeFiles/NightlyTest.dir/rule
 
 # Convenience name for target.
 Utilities/ITK/Utilities/nifti/CMakeFiles/NightlyUpdate.dir/rule:
-	cd /usr/local/stok/OTB/trunk/OTB && $(MAKE) -f CMakeFiles/Makefile2 Utilities/ITK/Utilities/nifti/CMakeFiles/NightlyUpdate.dir/rule
+	cd /ORFEO/thomas/ORFEO-TOOLBOX/otb/OTB && $(MAKE) -f CMakeFiles/Makefile2 Utilities/ITK/Utilities/nifti/CMakeFiles/NightlyUpdate.dir/rule
 
 # Convenience name for target.
 NightlyUpdate: Utilities/ITK/Utilities/nifti/CMakeFiles/NightlyUpdate.dir/rule

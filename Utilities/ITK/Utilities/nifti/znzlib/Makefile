@@ -17,10 +17,10 @@ RM = /usr/local/bin/cmake -E remove -f
 CMAKE_EDIT_COMMAND = /usr/local/bin/ccmake
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /usr/local/stok/OTB/trunk/OTB
+CMAKE_SOURCE_DIR = /ORFEO/thomas/ORFEO-TOOLBOX/otb/OTB
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /usr/local/stok/OTB/trunk/OTB
+CMAKE_BINARY_DIR = /ORFEO/thomas/ORFEO-TOOLBOX/otb/OTB
 
 #=============================================================================
 # Special targets provided by cmake.
@@ -57,11 +57,11 @@ $(VERBOSE).SILENT:
 
 # The main all target
 all:
-	cd /usr/local/stok/OTB/trunk/OTB && $(MAKE) -f CMakeFiles/Makefile2 Utilities/ITK/Utilities/nifti/znzlib/directorystart
+	cd /ORFEO/thomas/ORFEO-TOOLBOX/otb/OTB && $(MAKE) -f CMakeFiles/Makefile2 Utilities/ITK/Utilities/nifti/znzlib/directorystart
 
 # The main clean target
 clean:
-	cd /usr/local/stok/OTB/trunk/OTB && $(MAKE) -f CMakeFiles/Makefile2 Utilities/ITK/Utilities/nifti/znzlib/clean
+	cd /ORFEO/thomas/ORFEO-TOOLBOX/otb/OTB && $(MAKE) -f CMakeFiles/Makefile2 Utilities/ITK/Utilities/nifti/znzlib/clean
 
 # clear depends
 depend:
@@ -69,14 +69,14 @@ depend:
 
 # Convenience name for target.
 Utilities/ITK/Utilities/nifti/znzlib/CMakeFiles/ITKznz.dir/rule:
-	cd /usr/local/stok/OTB/trunk/OTB && $(MAKE) -f CMakeFiles/Makefile2 Utilities/ITK/Utilities/nifti/znzlib/CMakeFiles/ITKznz.dir/rule
+	cd /ORFEO/thomas/ORFEO-TOOLBOX/otb/OTB && $(MAKE) -f CMakeFiles/Makefile2 Utilities/ITK/Utilities/nifti/znzlib/CMakeFiles/ITKznz.dir/rule
 
 # Convenience name for target.
 ITKznz: Utilities/ITK/Utilities/nifti/znzlib/CMakeFiles/ITKznz.dir/rule
 
 # target for object file
 znzlib.o:
-	cd /usr/local/stok/OTB/trunk/OTB && $(MAKE) -f Utilities/ITK/Utilities/nifti/znzlib/CMakeFiles/ITKznz.dir/build.make Utilities/ITK/Utilities/nifti/znzlib/CMakeFiles/ITKznz.dir/znzlib.o
+	cd /ORFEO/thomas/ORFEO-TOOLBOX/otb/OTB && $(MAKE) -f Utilities/ITK/Utilities/nifti/znzlib/CMakeFiles/ITKznz.dir/build.make Utilities/ITK/Utilities/nifti/znzlib/CMakeFiles/ITKznz.dir/znzlib.o
 
 # Help Target
 help::
