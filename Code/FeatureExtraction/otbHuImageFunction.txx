@@ -62,18 +62,23 @@ HuImageFunction<TInput,TOutput,TCoordRep>
     {
     return ( itk::NumericTraits<RealType>::max() );
     }
+
+
+/*  std::cout << "Start" << this->GetStartIndex() << std::endl;
+  std::cout << "End" << this->GetEndIndex() << std::endl; */
   
   if ( !this->IsInsideBuffer( index ) )
     {
+    std::cout << index << std::endl;
     return ( itk::NumericTraits<RealType>::max() );
     }
 
   assert(m_MomentNumber > 0);
   assert(m_MomentNumber < 8);
-	
+
    function->SetInputImage( this->GetInputImage() );
 //OTB-FA-00025-CS
-   std::cout << "Neighbor " <<this->GetNeighborhoodRadius()<<std::endl;
+//   std::cout << "Neighbor " <<this->GetNeighborhoodRadius()<<std::endl;
    function->SetNeighborhoodRadius(this->GetNeighborhoodRadius() );
 
   //OTB-FA-00024-CS

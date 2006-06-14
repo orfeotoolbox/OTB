@@ -111,7 +111,9 @@ ComplexMomentImageFunction<TInput,TOutput,TCoordRep>
       --q; 
      }
           
-    Sum += ( ValP * ValQ * std::complex<float>(static_cast<float>(it.GetPixel(i)),0.0) ); 
+    Sum += ( ValP * ValQ * std::complex<float>(static_cast<float>(it.GetPixel(i)),0.0) );
+
+    //std::cout << Sum << std::endl;
   }
 
   return (static_cast<ComplexType>(Sum) );

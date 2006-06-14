@@ -8,11 +8,19 @@ INCLUDE_REGULAR_EXPRESSION("^.*$")
 ADD_EXECUTABLE(ConnectedThresholdImageFilter ConnectedThresholdImageFilter.cxx )
 TARGET_LINK_LIBRARIES(ConnectedThresholdImageFilter OTBCommon OTBIO ITKNumerics ITKIO)
 
+ADD_EXECUTABLE(OtsuThresholdImageFilter OtsuThresholdImageFilter.cxx )
+TARGET_LINK_LIBRARIES(OtsuThresholdImageFilter OTBCommon OTBIO ITKCommon ITKIO)
+
+ADD_EXECUTABLE(OtsuMultipleThresholdImageFilter OtsuMultipleThresholdImageFilter.cxx )
+TARGET_LINK_LIBRARIES(OtsuMultipleThresholdImageFilter
+                      OTBCommon OTBIO ITKCommon ITKIO ITKStatistics)
+
 #ADD_EXECUTABLE(ConfidenceConnected ConfidenceConnected.cxx )
 #TARGET_LINK_LIBRARIES(ConfidenceConnected ITKNumerics ITKIO)
 
-#ADD_EXECUTABLE(NeighborhoodConnectedImageFilter NeighborhoodConnectedImageFilter.cxx )
-#TARGET_LINK_LIBRARIES(NeighborhoodConnectedImageFilter ITKNumerics ITKIO)
+ADD_EXECUTABLE(NeighborhoodConnectedImageFilter NeighborhoodConnectedImageFilter.cxx )
+TARGET_LINK_LIBRARIES(NeighborhoodConnectedImageFilter OTBCommon OTBIO
+ITKNumerics ITKIO)
 
 #ADD_EXECUTABLE(IsolatedConnectedImageFilter IsolatedConnectedImageFilter.cxx )
 #TARGET_LINK_LIBRARIES(IsolatedConnectedImageFilter ITKNumerics ITKIO)
