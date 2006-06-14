@@ -20,12 +20,12 @@ SET(OTB_INCLUDE_DIRS_BUILD_TREE ${OTB_INCLUDE_DIRS_BUILD_TREE}
 
 #-----------------------------------------------------------------------------
 # Include directories from the GDAL build tree.
-#IF(NOT OTB_USE_EXTERNAL_GDAL)
-# 	INCLUDE(${OTB_SOURCE_DIR}/Utilities/GDAL/gdalIncludeDirectories.cmake)
-# 	SET(OTB_INCLUDE_DIRS_BUILD_TREE ${OTB_INCLUDE_DIRS_BUILD_TREE}
-#   		${GDAL_INCLUDE_DIRS_BUILD_TREE}
-#   	)
-#ENDIF(NOT OTB_USE_EXTERNAL_GDAL)
+IF(NOT OTB_USE_EXTERNAL_GDAL)
+ 	INCLUDE(${OTB_SOURCE_DIR}/Utilities/GDAL/gdalIncludeDirectories.cmake)
+ 	SET(OTB_INCLUDE_DIRS_BUILD_TREE ${OTB_INCLUDE_DIRS_BUILD_TREE}
+   		${GDAL_INCLUDE_DIRS_BUILD_TREE}
+   	)
+ENDIF(NOT OTB_USE_EXTERNAL_GDAL)
 
 #-----------------------------------------------------------------------------
 # Include directories from the ITK build tree.e
