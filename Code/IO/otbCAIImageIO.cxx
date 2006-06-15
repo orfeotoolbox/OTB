@@ -301,9 +301,6 @@ bool CAIImageIO::GetInfosCAI( const char * filename, std::string & CaiFileName, 
                 }
         }
         
-        otbMsgDebugMacro(<< "Format CAI detecte    : "<< CaiFormat.c_str()<<".");
-        otbMsgDebugMacro(<< "Fichier CAI determine : "<< CaiFileName.c_str()<<".");
-        
         return trouve;
 }
 
@@ -503,14 +500,11 @@ void CAIImageIO::ReadImageInformation()
     		itkExceptionMacro(<< "Impossible de lire les informations sur l'image " << m_FileName.c_str() <<" ("<<CaiFileName.c_str()<<";"<<CaiFormat.c_str()<<") : ("<<CAI_ERREUR<<").");
         }
         
-otbMsgDebugMacro( << "Driver: CAI - "<<CaiFormat);
-        
         this->SetNumberOfDimensions(2);
         m_Dimensions[0] = NbColonnes;
         m_Dimensions[1] = NbLignes;
         this->SetNumberOfComponents(NbCanaux);
         m_NbOctetPixel = NbOctetPixel;
-otbMsgDebugMacro( <<"Dimensions de l'image cree : "<<m_Dimensions[0]<<","<<m_Dimensions[1]);
         
         if( this->GetNumberOfComponents() == 1 )
         {
@@ -562,6 +556,12 @@ otbMsgDebugMacro( <<"Dimensions de l'image cree : "<<m_Dimensions[0]<<","<<m_Dim
                 this->SetComponentType( UNKNOWNCOMPONENTTYPE );
         }
         
+otbMsgDebugMacro( << "Driver: CAI - "<<CaiFormat);
+otbMsgDebugMacro(<< "         Use files     : "<< m_FileName.c_str()<<" ("<<CaiFileName.c_str()<<").");
+otbMsgDebugMacro( <<"         Size          : "<<m_Dimensions[0]<<","<<m_Dimensions[1]);
+otbMsgDebugMacro( <<"         ComponentType : "<<this->GetComponentType() );
+
+
         //Stock le pointer CAI
         m_ptrCai = (char*)lCai;
 }
