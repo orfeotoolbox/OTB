@@ -29,12 +29,12 @@ namespace otb
  */
 template <class TInputPixel, class TOutputPixel>
 class ITK_EXPORT ExtractROI:
-    public ExtractROIBase<itk::Image<TInputPixel,2> , itk::Image<TOutputPixel,2> >
+    public ExtractROIBase<Image<TInputPixel,2> , Image<TOutputPixel,2> >
 {
 public:
   /** Standard class typedefs. */
   typedef ExtractROI         Self;
-  typedef ExtractROIBase<itk::Image<TInputPixel,2> , itk::Image<TOutputPixel,2> >  Superclass;
+  typedef ExtractROIBase<Image<TInputPixel,2> , Image<TOutputPixel,2> >  Superclass;
   typedef itk::SmartPointer<Self>  Pointer;
   typedef itk::SmartPointer<const Self>  ConstPointer;
 
