@@ -13,7 +13,8 @@
 #define __otbMultiChannelExtractROI_h
 
 #include "otbExtractROIBase.h"
-#include "itkVectorImage.h"
+//#include "itkVectorImage.h"
+#include "otbVectorImage.h"
 
 #include "itkMacro.h"
 #include <vector>
@@ -34,12 +35,14 @@ namespace otb
  */
 template <class TInputPixelType, class TOutputPixelType>
 class ITK_EXPORT MultiChannelExtractROI:
-    public ExtractROIBase< itk::VectorImage<TInputPixelType,2> , itk::VectorImage<TOutputPixelType,2> >
+//    public ExtractROIBase< itk::VectorImage<TInputPixelType,2> , itk::VectorImage<TOutputPixelType,2> >
+    public ExtractROIBase< VectorImage<TInputPixelType,2> , VectorImage<TOutputPixelType,2> >
 {
 public:
   /** Standard class typedefs. */
   typedef MultiChannelExtractROI                Self;
-  typedef ExtractROIBase< itk::VectorImage<TInputPixelType,2> , itk::VectorImage<TOutputPixelType,2> > Superclass;
+//  typedef ExtractROIBase< itk::VectorImage<TInputPixelType,2> , itk::VectorImage<TOutputPixelType,2> > Superclass;
+  typedef ExtractROIBase< VectorImage<TInputPixelType,2> , VectorImage<TOutputPixelType,2> > Superclass;
   typedef itk::SmartPointer<Self>               Pointer;
   typedef itk::SmartPointer<const Self>         ConstPointer;
 
