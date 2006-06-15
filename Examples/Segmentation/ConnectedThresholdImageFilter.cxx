@@ -63,7 +63,7 @@
 // Software Guide : EndCodeSnippet
 
 
-#include "itkImage.h"
+#include "otbImage.h"
 #include "itkCastImageFilter.h"
 
 
@@ -110,13 +110,12 @@ int main( int argc, char *argv[])
   // Software Guide : BeginCodeSnippet
   typedef   float           InternalPixelType;
   const     unsigned int    Dimension = 2;
-  typedef itk::Image< InternalPixelType, Dimension >  InternalImageType;
+  typedef otb::Image< InternalPixelType, Dimension >  InternalImageType;
   // Software Guide : EndCodeSnippet
 
 
   typedef unsigned char OutputPixelType;
-  //FIXME : OTBIMAGE
-  typedef itk::Image< OutputPixelType, Dimension > OutputImageType;
+  typedef otb::Image< OutputPixelType, Dimension > OutputImageType;
   typedef itk::CastImageFilter< InternalImageType, OutputImageType >
     CastingFilterType;
   CastingFilterType::Pointer caster = CastingFilterType::New();

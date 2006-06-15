@@ -85,8 +85,7 @@ int main(int argc, char* argv[])
   const   unsigned int     Dimension = 2;
 
   typedef otb::Image<CharPixelType, Dimension>    CharImageType;
-  //FIXME itk to otb image
-  typedef itk::Image<RealPixelType, Dimension>    RealImageType;
+  typedef otb::Image<RealPixelType, Dimension>    RealImageType;
 
   typedef otb::ImageFileReader< CharImageType >  ReaderType;
   typedef otb::ImageFileWriter< CharImageType >  WriterType;

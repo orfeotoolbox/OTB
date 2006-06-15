@@ -53,8 +53,7 @@ int main(int argc, char ** argv )
 	        
     typedef unsigned char     InputPixelType;
     const   unsigned int      Dimension = 2;
-//FIXME : itk::image --> otb	
-    typedef itk::Image< InputPixelType,  Dimension >   InputImageType;
+    typedef otb::Image< InputPixelType,  Dimension >   InputImageType;
 
     typedef otb::ImageFileReader< InputImageType  >    ReaderType;
 

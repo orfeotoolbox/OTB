@@ -83,8 +83,7 @@ int main( int argc, char * argv[] )
   typedef   unsigned char  InputPixelType;
   typedef   unsigned char  OutputPixelType;
 
-  //FIXME itk to otb image
-  typedef itk::Image< InputPixelType,  2 >   InputImageType;
+  typedef otb::Image< InputPixelType,  2 >   InputImageType;
   typedef otb::Image< OutputPixelType, 2 >   OutputImageType;
   // Software Guide : EndCodeSnippet
 

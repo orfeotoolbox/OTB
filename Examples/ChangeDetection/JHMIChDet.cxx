@@ -12,7 +12,7 @@
 
 #include "otbImageFileReader.h"
 #include "otbStreamingImageFileWriter.h"
-#include "itkImage.h"
+#include "otbImage.h"
 #include "itkShiftScaleImageFilter.h"
 #include "otbJoinHistogramMIImageFilter.h"
 #include "otbCommandProgressUpdate.h"
@@ -33,10 +33,10 @@ int main(int argc, char* argv[] )
   // Declare the types of the images
   typedef float InternalPixelType;
   typedef unsigned char OutputPixelType;
-  typedef itk::Image<InternalPixelType, Dimension>  InputImageType1;
-  typedef itk::Image<InternalPixelType, Dimension>  InputImageType2;
-  typedef itk::Image<InternalPixelType, Dimension>  ChangeImageType;
-  typedef itk::Image<OutputPixelType, Dimension>  OutputImageType;
+  typedef otb::Image<InternalPixelType, Dimension>  InputImageType1;
+  typedef otb::Image<InternalPixelType, Dimension>  InputImageType2;
+  typedef otb::Image<InternalPixelType, Dimension>  ChangeImageType;
+  typedef otb::Image<OutputPixelType, Dimension>  OutputImageType;
 
   typedef otb::ImageFileReader< InputImageType1 >  ReaderType1;
   typedef otb::ImageFileReader< InputImageType2 >  ReaderType2;

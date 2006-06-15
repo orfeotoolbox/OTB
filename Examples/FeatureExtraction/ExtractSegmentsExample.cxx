@@ -79,8 +79,7 @@ int main( int argc, char * argv[] )
   //  Software Guide : EndLatex 
 
   // Software Guide : BeginCodeSnippet
-  //FIXME --> itk to otb image
-  typedef itk::Image< InternalPixelType,  2 >   InternalImageType;
+  typedef otb::Image< InternalPixelType,  2 >   InternalImageType;
   typedef otb::Image< OutputPixelType,  2 >   OutputImageType;
   // Software Guide : EndCodeSnippet
 

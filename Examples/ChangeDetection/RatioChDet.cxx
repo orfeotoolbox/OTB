@@ -51,7 +51,7 @@
 
 #include "otbImageFileReader.h"
 #include "otbStreamingImageFileWriter.h"
-#include "itkImage.h"
+#include "otbImage.h"
 #include "itkShiftScaleImageFilter.h"
 #include "otbCommandProgressUpdate.h"
 
@@ -77,10 +77,10 @@ int main(int argc, char* argv[] )
   //  Software Guide : BeginCodeSnippet
   typedef float InternalPixelType;
   typedef unsigned char OutputPixelType;
-  typedef itk::Image<InternalPixelType, Dimension>  InputImageType1;
-  typedef itk::Image<InternalPixelType, Dimension>  InputImageType2;
-  typedef itk::Image<InternalPixelType, Dimension>  ChangeImageType;
-  typedef itk::Image<OutputPixelType, Dimension>  OutputImageType;
+  typedef otb::Image<InternalPixelType, Dimension>  InputImageType1;
+  typedef otb::Image<InternalPixelType, Dimension>  InputImageType2;
+  typedef otb::Image<InternalPixelType, Dimension>  ChangeImageType;
+  typedef otb::Image<OutputPixelType, Dimension>  OutputImageType;
   //  Software Guide : EndCodeSnippet
   
   //  Software Guide : BeginLatex
