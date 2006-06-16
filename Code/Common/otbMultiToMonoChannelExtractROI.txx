@@ -11,7 +11,7 @@ namespace otb
  */
 template<class TInputPixelType, class TOutputPixelType>
 MultiToMonoChannelExtractROI<TInputPixelType,TOutputPixelType>
-::MultiToMonoChannelExtractROI() :    ExtractROIBase< itk::VectorImage<TInputPixelType,2> , itk::Image<TOutputPixelType,2> >(),
+::MultiToMonoChannelExtractROI() :    ExtractROIBase< VectorImage<TInputPixelType,2> , Image<TOutputPixelType,2> >(),
                                 m_Channel(1)
 {
 

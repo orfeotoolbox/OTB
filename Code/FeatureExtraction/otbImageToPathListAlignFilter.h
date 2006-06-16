@@ -14,7 +14,7 @@
 
 #include "itkImageSource.h"
 #include "itkConceptChecking.h"
-#include "itkImage.h"
+#include "otbImage.h"
 #include "otbImageToPathListFilter.h"
 #include <vector>
 
@@ -65,7 +65,7 @@ public:
 //  typedef          float                                        RealType;
   typedef typename itk::NumericTraits<PixelType>::RealType       RealType;
 //  typedef typename itk::Image<RealType,InputImageDimension>      RealImageType; 
-  typedef typename itk::Image<RealType,InputImageDimension>      RealImageType; 
+  typedef typename otb::Image<RealType,InputImageDimension>      RealImageType; 
   typedef typename RealImageType::Pointer                        RealImageTypePointer;
   typedef typename RealImageType::IndexType                      RealImageTypeIndexType;
         

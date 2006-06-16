@@ -22,6 +22,7 @@
 #include "otbImageToLineSpatialObjectListFilter.h"
 #include "otbLineSpatialObjectList.h"
 #include "otbExtractROI.h"
+#include "otbImage.h"
 
 
 namespace otb
@@ -79,7 +80,7 @@ public:
   
   //------------------------------------------------------------
    typedef  unsigned char    OutputPixelType;
-   typedef  itk::Image< OutputPixelType, 2 > OutputImageType;
+   typedef  otb::Image< OutputPixelType, 2 > OutputImageType;
    //-----------------------------------------------  
 
   /** Definition of the pixel type of the input and output images */
