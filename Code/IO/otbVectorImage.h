@@ -31,7 +31,7 @@ namespace otb
  */
 template <class TPixel, unsigned int VImageDimension=2> 
 class ITK_EXPORT VectorImage : public itk::VectorImage<TPixel, VImageDimension>,
-			 public otb::ImageBase
+			 public ImageBase
 {
 public: 
 
@@ -51,6 +51,14 @@ public:
 
   /** Run-time type information (and related methods). */
   itkTypeMacro(VectorImage, itk::VectorImage);
+
+  /** Functor to provide a common API between DefaultPixelAccessor and
+   * DefaultVectorPixelAccessor */
+  typedef DefaultVectorPixelAccessorFunctor< Self >       AccessorFunctorType;
+
+  /** Tyepdef for the functor used to access a neighborhood of pixel pointers.*/
+  typedef VectorImageNeighborhoodAccessorFunctor< 
+                          Self >              NeighborhoodAccessorFunctorType;
 
   /** Get the projection coordinate system of the image. */
   virtual std::string GetProjectionRef( void );
