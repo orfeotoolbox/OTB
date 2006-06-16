@@ -30,21 +30,23 @@ m_NumberOfClasses( 0 )
 
   m_Done = 0;
   // default values
-  param.svm_type = C_SVC;
-  param.kernel_type = LINEAR;
-  param.degree = 3;
-  param.gamma = 0;	// 1/k
-  param.coef0 = 0;
-  param.nu = 0.5;
-  param.cache_size = 400;
-  param.C = 1;
-  param.eps = 1e-3;
-  param.p = 0.1;
-  param.shrinking = 1;
-  param.probability = 1;
-  param.nr_weight = 0;
-  param.weight_label = NULL;
-  param.weight = NULL;
+
+  	param.svm_type = C_SVC;
+	param.kernel_type = RBF;
+	param.degree = 3;
+	param.gamma = 0;	// 1/k
+	param.coef0 = 0;
+	param.nu = 0.5;
+	param.cache_size = 40;
+	param.C = 1;
+	param.eps = 1e-3;
+	param.p = 0.1;
+	param.shrinking = 1;
+	param.probability = 1;
+	param.nr_weight = 0;
+	param.weight_label = NULL;
+	param.weight = NULL;
+
   //cross_validation = 0;
 }
 
