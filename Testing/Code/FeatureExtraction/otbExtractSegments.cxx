@@ -14,10 +14,10 @@
 #endif
 
 #include "itkExceptionObject.h"
-#include "itkImage.h"
-#include "itkImageFileWriter.h"
 #include <iostream>
 
+#include "otbImage.h"
+#include "otbImageFileWriter.h"
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
 #include "otbExtractSegmentsImageFilter.h"
@@ -44,8 +44,8 @@ int otbExtractSegments( int argc, char ** argv )
         typedef unsigned char	   	                        OutputPixelType;
         const   unsigned int        	                        Dimension = 2;
 
-        typedef itk::Image< InputPixelType,  Dimension >        InputImageType;
-        typedef itk::Image< OutputPixelType, Dimension >        OutputImageType;
+        typedef otb::Image< InputPixelType,  Dimension >        InputImageType;
+        typedef otb::Image< OutputPixelType, Dimension >        OutputImageType;
 
         typedef otb::ImageFileReader< InputImageType  >         ReaderType1;
         typedef otb::ImageFileReader< InputImageType  >         ReaderType2;
