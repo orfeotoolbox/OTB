@@ -19,6 +19,8 @@
 #include "itkVectorImage.h"
 
 #include "otbImageBase.h"
+#include "itkDefaultVectorPixelAccessorFunctor.h"
+#include "itkVectorImageNeighborhoodAccessorFunctor.h"
 
 #include <iostream>
 #include <string.h>
@@ -54,10 +56,10 @@ public:
 
   /** Functor to provide a common API between DefaultPixelAccessor and
    * DefaultVectorPixelAccessor */
-  typedef DefaultVectorPixelAccessorFunctor< Self >       AccessorFunctorType;
+  typedef itk::DefaultVectorPixelAccessorFunctor< Self >       AccessorFunctorType;
 
   /** Tyepdef for the functor used to access a neighborhood of pixel pointers.*/
-  typedef VectorImageNeighborhoodAccessorFunctor< 
+  typedef itk::VectorImageNeighborhoodAccessorFunctor< 
                           Self >              NeighborhoodAccessorFunctorType;
 
   /** Get the projection coordinate system of the image. */
