@@ -32,7 +32,7 @@ m_NumberOfClasses( 0 )
   // default values
 
   	param.svm_type = C_SVC;
-	param.kernel_type = RBF;
+	param.kernel_type = LINEAR;
 	param.degree = 3;
 	param.gamma = 0;	// 1/k
 	param.coef0 = 0;
