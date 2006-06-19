@@ -49,7 +49,15 @@ ADD_TEST(ioTvImageFileReaderERS ${IO_TESTS}
 #                     ${TEMP}/ioExtractROI_BSQ2PNG_poupees_100_100_77_300_channels_1_2_3.png
          otbImageFileReaderERS
          ${IMAGEDATA}/SAR_ERS2_SLCI_SCENE1/DAT_01.001 
-         ${TEMP}/ioImageFileReaderERS_SLCI2PNG_channel_1.hd)
+         ${TEMP}/ioImageFileReaderERS_SLCI.png)
+
+ADD_TEST(ioTvImageFileReaderRADARSAT ${IO_TESTS} 
+#   --compare-image ${TOL}   ${BASELINE}/ioExtractROI_BSQ2PNG_poupees_100_100_77_300_channels_1_2_3.png
+#                     ${TEMP}/ioExtractROI_BSQ2PNG_poupees_100_100_77_300_channels_1_2_3.png
+         otbImageFileReaderERS
+         ${IMAGEDATA}/RADARSAT1/SCENE01/
+         ${TEMP}/ioImageFileReaderRADARSAT.hd)
+
 
 # ---  ENVI (GDAL) ---
 ADD_TEST(ioTvMultiMonoChannelROI_ENVI2PNG ${COMMON_TESTS} 
@@ -90,10 +98,10 @@ ADD_TEST(ioTuGDALImageIOCanRead_ENVI ${IO_TESTS} otbGDALImageIOTestCanRead
         ${INPUTDATA}/poupees_1canal.c1 )
 
 ADD_TEST(ioTuGDALImageIOCanRead_RADARSAT ${IO_TESTS} otbGDALImageIOTestCanRead 
-        ${IMAGEDATA}/RADARSAT1/SCENE01/DAT_01.001 )
+        ${IMAGEDATA}/RADARSAT1/SCENE01/ )
 
 ADD_TEST(ioTuGDALImageIOCanRead_SAR_ERS2 ${IO_TESTS} otbGDALImageIOTestCanRead 
-        ${IMAGEDATA}/SAR_ERS2_SLCI_SCENE1/DAT_01.001 )
+        ${IMAGEDATA}/SAR_ERS2_SLCI_SCENE1/ )
 
 ADD_TEST(ioTuGDALImageIOCanRead_QUICK_PAN ${IO_TESTS} otbGDALImageIOTestCanRead 
         ${IMAGEDATA}/TOULOUSE/QuickBird/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF )
@@ -120,6 +128,18 @@ ADD_TEST(ioTuGDALImageIOCanRead_IKONOS_NIR ${IO_TESTS} otbGDALImageIOTestCanRead
 ADD_TEST(ioTuCAIImageIOCanWriteBSQ ${IO_TESTS} otbCAIImageIOTestCanWrite 
         ${TEMP}/ioCAIImageIOCanWriteBSQ.hd )
 
+
+# -------            otb::ONERAImageIO   ------------------------------
+# CanRead()
+ADD_TEST(ioTuONERAImageIOCanRead ${IO_TESTS} otbONERAImageIOTestCanRead
+        ${IMAGEDATA}/ONERA/spa3_0215_rad.ent)
+	
+ADD_TEST(ioTvONERAImageFileReader ${IO_TESTS} 
+#  --compare-image ${TOL}   ${BASELINE}/ioImageFileReaderPNG2PNG_cthead1.png
+#                    ${TEMP}/ioImageFileReaderPNG2PNG_cthead1.png
+        otbImageFileReaderTest
+        ${IMAGEDATA}/ONERA/spa3_0215_rad.ent
+        ${TEMP}/ioImageFileReaderONERA.png )
 
 # -------            otb::ImageFileReader pour CAI  ------------------------------
 # Niveau de Gris
@@ -474,6 +494,7 @@ ADD_TEST(ioTvStreamingIFWriterBSQWithStreaming ${IO_TESTS}
 SET(BasicIO_SRCS
 otbGDALImageIOTestCanRead.cxx
 otbCAIImageIOTestCanRead.cxx
+otbONERAImageIOTestCanRead.cxx
 otbCAIImageIOTestCanWrite.cxx
 otbImageFileReaderTest.cxx
 otbImageFileWriterTest.cxx
