@@ -97,10 +97,11 @@ GetHeaderFileName( const std::string & filename )
 {
   std::string ImageFileName = GetRootName(filename);
   std::string fileExt = GetExtension(filename);
-  //If file was named xxx.img.gz then remove both the gz and the img endings.
+
   if(fileExt.compare("ent"))
     {
     ImageFileName += ".ent";
+    
     return( ImageFileName );
     }
   else
@@ -132,6 +133,8 @@ static std::string GetImageFileName( const std::string& filename )
 
 bool ONERAImageIO::CanReadFile( const char* FileNameToRead )
 {
+//  otbMsgDebugMacro(<<"ONERAImageIO::CanReadFile() " << FileNameToRead );
+
   std::string filename(FileNameToRead);
   std::string ext;
   if( m_Datafile.is_open() )
@@ -143,53 +146,25 @@ bool ONERAImageIO::CanReadFile( const char* FileNameToRead )
     m_Headerfile.close();
     }
 
-  // we check that the correction extension is given by the user
-  std::string filenameext = GetExtension(filename);
-  if(filenameext != std::string("ent") 
-    && filenameext != std::string("dat")
-    )
-    {
-    return false;
-    }
 
-  const std::string HeaderFileName = GetHeaderFileName(filename);
-  //
-  // Try to read ENT file
-  ext = GetExtension(HeaderFileName);
-  if(ext != std::string("ent") && ext != std::string("dat"))
-    {
-    return false;
-    }
-  m_Headerfile.open( HeaderFileName.c_str(), 
-                     std::ios::in );
+  const std::string HeaderFileName = GetRootName(filename)+".ent";
+  const std::string DataFileName = GetRootName(filename)+".dat";
+
+//  otbMsgDebugMacro(<<"HeaderFileName " << HeaderFileName );
+//  otbMsgDebugMacro(<<"DataFileName " << DataFileName );
+
+  m_Headerfile.open( HeaderFileName.c_str(),  std::ios::in );
   if( m_Headerfile.fail() )
     {
+    otbMsgDebugMacro(<<"ONERAImageIO::CanReadFile() failed header open ! " );
     return false;
     }
-
-/*  if( ! this->ReadBufferAsAscii( local_InputStream, 
-                                  (void *)&(this->m_hdr), 
-                                  sizeof(struct dsr) ) )
-    {
-    return false;
-    }
-*/    
-
- // try to read DAT file
-  const std::string ImageFileName = GetImageFileName(filename);
-  ext = GetExtension(ImageFileName);
-  if(ext != std::string("ent") && ext != std::string("dat"))
-    {
-    return false;
-    }
-
-  m_Datafile.open( ImageFileName.c_str(), 
-                     std::ios::in | std::ios::binary );
+  m_Datafile.open( DataFileName.c_str(),  std::ios::in );
   if( m_Datafile.fail() )
     {
+    otbMsgDebugMacro(<<"ONERAImageIO::CanReadFile() failed data open ! " );
     return false;
     }
-  //Read header of the DAT file
 
   this->m_ByteOrder = LittleEndian;
 

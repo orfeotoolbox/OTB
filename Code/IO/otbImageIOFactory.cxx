@@ -36,11 +36,10 @@ ImageIOFactory::RegisterBuiltInFactories()
                 if( firstTime )
                 {
 
-
                         //For an SPOT5TIF image, if the user set only the directory, this image is read with CAI.
                         //Otherwise, if the user set the name of the image ('IMAGERY.TIF') it read with GDAL.
                         
-                         // ONERA : New format for OTB
+                         // ONERA format for OTB
                         itk::ObjectFactoryBase::RegisterFactory( ONERAImageIOFactory::New() );
                         // GDAL : New format for OTB
                         itk::ObjectFactoryBase::RegisterFactory( GDALImageIOFactory::New() );
