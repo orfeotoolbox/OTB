@@ -138,7 +138,7 @@ private:
     * on regarde s'il contient un produit CEOS (fichier "DAT...")
     * Dans ce cas, GdalFileName contient le nom du fichier a ouvrir. Sinon GdalFileName contient filename
     */
-  void GetGdalImageFileName( const char * filename, std::string & GdalFileName );
+  bool GetGdalImageFileName( const char * filename, std::string & GdalFileName );
 
 
   /** GDAL parameters. */

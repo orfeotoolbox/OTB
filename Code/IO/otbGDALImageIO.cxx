@@ -13,6 +13,7 @@
 //#include <zlib.h>
 
 #include "otbGDALImageIO.h"
+//#include "gdal_misc.cpp"
 #include "otbMacro.h"
 //#include "otbCAIImageIO.h"
 #include "itkPNGImageIO.h"
@@ -35,8 +36,10 @@ GDALImageIO::GDALImageIO()
 {
   // By default set number of dimensions to two.
   this->SetNumberOfDimensions(2);
+
   // By default set pixel type to scalar.
   m_PixelType = SCALAR;
+
   // By default set component type to unsigned char
   m_ComponentType = UCHAR;
   m_UseCompression = false;
@@ -50,7 +53,7 @@ GDALImageIO::GDALImageIO()
   m_Origin[1] = 0.0;
 
   m_currentfile = NULL;
-  m_poBands = NULL;
+  m_poBands     = NULL;
 
 }
 
@@ -60,11 +63,13 @@ GDALImageIO::~GDALImageIO()
 }
 
 
-void GDALImageIO::GetGdalImageFileName( const char * filename, std::string & GdalFileName )
+bool GDALImageIO::GetGdalImageFileName( const char * filename, std::string & GdalFileName )
 {
         DIR *ptr_repertoire;
         struct dirent *cr_readdir;
-        std::string str_debut("DAT");
+//        std::string str_debut("DAT");
+        std::string str_File("DAT_01.001");
+        std::string str_FileName;
         char str_comp[20];
         bool fic_trouve(false);
 
@@ -72,23 +77,39 @@ void GDALImageIO::GetGdalImageFileName( const char * filename, std::string & Gda
         ptr_repertoire = opendir(filename);
         if (ptr_repertoire != NULL)
         {
-                while ((cr_readdir=readdir(ptr_repertoire))!=NULL && (fic_trouve==false) )
+		while ((cr_readdir=readdir(ptr_repertoire))!=NULL && (fic_trouve==false) )
                 {
-                        strncpy(str_comp,cr_readdir->d_name,str_debut.size());
-                        str_comp[str_debut.size()]='\0';  
-                        if (strcasecmp(str_comp,str_debut.c_str())==0)
-                        {
-                                 GdalFileName = std::string(filename)+std::string(cr_readdir->d_name);
+			str_FileName = std::string(cr_readdir->d_name);
+	otbMsgDebugMacro(<<".");
+	otbMsgDebugMacro(<<str_FileName.compare(str_File));
+ 			if(str_FileName.compare(str_File) == 0)
+			{
+                                 GdalFileName = std::string(filename)+str_File;
+	otbMsgDebugMacro(<<"OK");
                                  fic_trouve=true;
-                        }
+			}
+			
+                        //strncpy(str_comp,cr_readdir->d_name,str_debut.size());
+                        //strncpy(str_comp,cr_readdir->d_name,str_debut.size());
+			//otbMsgDebugMacro(<<"str_comp : "<<str_comp);
+			//str_comp[str_debut.size()]='\0';  
+                        //if (strcasecmp(str_comp,str_debut.c_str())==0)
+                        //{
+                        //         GdalFileName = std::string(filename)+std::string(cr_readdir->d_name);
+                        //         fic_trouve=true;
+                        //}
                 }
 	}
         else 
         {
                 // Sinon le filename est le nom du fichier a ouvrir
                 GdalFileName = std::string(filename);
+		fic_trouve=true;
         }
+	otbMsgDebugMacro(<<"lFileNameGdal : "<<GdalFileName.c_str());
+	otbMsgDebugMacro(<<"fic_trouve : "<<fic_trouve);
 	closedir(ptr_repertoire);
+	return( fic_trouve );
 }
 
 // Tell only if the file can be read with GDAL.
@@ -96,7 +117,6 @@ bool GDALImageIO::CanReadFile(const char* file)
 {
   // First check the extension
   m_currentfile = file;
-  otbMsgDebugMacro(<<"Filename : "<<m_currentfile);
   
   if(  file == NULL )
     {
@@ -128,20 +148,34 @@ en commentaire car CAI est mis dasn les Factory avant GDAL
 
         // Regarde si c'est un répertoire
         std::string lFileNameGdal;
-        GetGdalImageFileName(file,lFileNameGdal);
+	otbMsgDebugMacro(<<"GDALImageIO::CanReadFile()");
+        bool found = GetGdalImageFileName(file,lFileNameGdal);
+	if( found == false )
+	{
+        	return false;
+	}
+	
+	otbMsgDebugMacro(<<"lFileNameGdal : "<<lFileNameGdal.c_str());
 
 
   // Init GDAL parameters 
   GDALAllRegister();
-  
+
   // Open file with GDAL 
-  m_poDataset = (GDALDataset *) GDALOpen(lFileNameGdal.c_str(), GA_ReadOnly );
+  
+  m_poDataset = (GDALDataset *)GDALOpen(lFileNameGdal.c_str(), GA_ReadOnly );
   if(m_poDataset==NULL)
     {
-      itkDebugMacro(<<"No dataset ");
-      return false;
+        fprintf( stderr,
+                 "GDALOpen failed - %d\n%s\n",
+                 CPLGetLastErrorNo(), CPLGetLastErrorMsg() );
+		 
+        GDALDumpOpenDatasets( stderr );
+        GDALDestroyDriverManager();
+        CPLDumpSharedList( NULL );
+        itkDebugMacro(<<"No dataset ");
+        return false;
     }
-
   else
     {
       return true;
@@ -171,8 +205,7 @@ void GDALImageIO::Read(void* buffer)
                 itkExceptionMacro(<<"Erreur allocation mémoire");
                 return;
         }
-//        int lNbLignes   = m_Dimensions[1];
-//        int lNbColonnes = m_Dimensions[0];
+
         int lNbLignes   = this->GetIORegion().GetSize()[1];
         int lNbColonnes = this->GetIORegion().GetSize()[0];
         int lPremiereLigne   = this->GetIORegion().GetIndex()[1]; // [1... ]
@@ -183,8 +216,8 @@ otbMsgDebugMacro( <<" Dimensions de l'image  : "<<m_Dimensions[0]<<","<<m_Dimens
 otbMsgDebugMacro( <<" Region lue (IORegion)  : "<<this->GetIORegion());
 
         unsigned long lNbPixels = (unsigned long)(lNbColonnes*lNbLignes);
-        unsigned long lTailleBuffer = (unsigned long)(m_NbOctetPixel)*lNbPixels;
-        
+
+	unsigned long lTailleBuffer = (unsigned long)(m_NbOctetPixel)*lNbPixels;
         unsigned char* value = new unsigned char[lTailleBuffer];
         if(value==NULL)
         {
@@ -192,39 +225,52 @@ otbMsgDebugMacro( <<" Region lue (IORegion)  : "<<this->GetIORegion());
                 return;
         }
 
-        // Mise a jour du step
-        step = step * (unsigned long)(m_NbOctetPixel);
 
         CPLErr lCrGdal;
-        for ( int nbComponents = 0 ; nbComponents < this->GetNumberOfComponents() ; nbComponents++)
-        {
-                lCrGdal = m_poBands[nbComponents]->RasterIO( GF_Read,lPremiereColonne,lPremiereLigne,lNbColonnes, lNbLignes, value , lNbColonnes, lNbLignes, m_PxType,0, 0 ) ;
-                if (lCrGdal == CE_Failure)
+        unsigned long cpt(0);
+	
+  	if( GDALDataTypeIsComplex(m_PxType) )
+	{
+		otbMsgDebugMacro( << " GDALDataTypeIsComplex begin ");
+		lCrGdal = m_poBands[0]->RasterIO( GF_Read,lPremiereColonne,lPremiereLigne,lNbColonnes, lNbLignes, value , lNbColonnes, lNbLignes, m_PxType,0, 0 );
+
+		if (lCrGdal == CE_Failure)
                 {
     	        	itkExceptionMacro(<< "Erreur lors de la lecture de l'image (format GDAL) " << m_FileName.c_str()<<".");
                 }
-                // Recopie dans le buffer 
-                
-                unsigned long cpt(0);
-/*                cpt = (unsigned long )(nbComponents);
-                for ( unsigned long  i=0 ; i < lNbPixels ; i++ )
-                {
-                        p[cpt] = value[i];
-                        cpt += step;
-                }*/
-                cpt = (unsigned long )(nbComponents)* (unsigned long)(m_NbOctetPixel);
+		cpt = 0;
                 for ( unsigned long  i=0 ; i < lTailleBuffer ; i = i+m_NbOctetPixel )
                 {
-                        memcpy((void*)(&(p[cpt])),(const void*)(&(value[i])),(size_t)(m_NbOctetPixel));
-                        cpt += step;
-                }
+                        memcpy((void*)(&(p[cpt])),(const void*)(&(value[i])),(size_t)(m_NbOctetPixel));		       
+		        cpt += m_NbOctetPixel;
+                }		
+	}
+	else
+	{
+        	// Mise a jour du step
+        	step = step * (unsigned long)(m_NbOctetPixel);
 
-
-          }
-
+        	for ( int nbComponents = 0 ; nbComponents < this->GetNumberOfComponents() ; nbComponents++)
+        	{
+               		otbMsgDebugMacro( << "nbComponents"<<nbComponents);		
+			lCrGdal = m_poBands[nbComponents]->RasterIO( GF_Read,lPremiereColonne,lPremiereLigne,lNbColonnes, lNbLignes, value , lNbColonnes, lNbLignes, m_PxType,0, 0 ) ;
+			if (lCrGdal == CE_Failure)
+                	{
+    	        		itkExceptionMacro(<< "Erreur lors de la lecture de l'image (format GDAL) " << m_FileName.c_str()<<".");
+                	}
+                	// Recopie dans le buffer                 
+                	cpt = (unsigned long )(nbComponents)* (unsigned long)(m_NbOctetPixel);
+                	for ( unsigned long  i=0 ; i < lTailleBuffer ; i = i+m_NbOctetPixel )
+                	{
+                        	memcpy((void*)(&(p[cpt])),(const void*)(&(value[i])),(size_t)(m_NbOctetPixel));
+                        	cpt += step;
+                	}
+               		otbMsgDebugMacro( << "nbComponents "<<nbComponents<<" ... OK");
+          	}
+	}
+	
         delete [] value;
 otbMsgDebugMacro( << "GDALImageIO::Read() terminee");
-
 }
 
 void GDALImageIO::ReadImageInformation()
@@ -242,9 +288,13 @@ void GDALImageIO::InternalReadImageInformation()
         itkExceptionMacro(<<"Le fichier n'est pas précisé.");
     }
   
-        // Recupre le nom réel du fichier a ouvrir
-        std::string lFileNameGdal;
-        GetGdalImageFileName(m_currentfile,lFileNameGdal);
+  // Recupre le nom réel du fichier a ouvrir
+  std::string lFileNameGdal;
+  bool found = GetGdalImageFileName(m_currentfile,lFileNameGdal);
+  if( found == false )
+  {
+        itkExceptionMacro(<<"The file "<<m_currentfile<<"is not supported by GDAL !!!");
+  }
 
   // Init GDAL parameters 
   GDALAllRegister();
@@ -275,13 +325,11 @@ void GDALImageIO::InternalReadImageInformation()
       otbMsgDebugMacro(<<"Get Dimensions : x="<<m_Dimensions[0]<<" & y="<<m_Dimensions[1]);
       }
 
-    // Set Number of components
     // Get Number of Bands
     m_NbBands = m_poDataset->GetRasterCount();
-//    m_NumberOfComponents = m_NbBands;
     this->SetNumberOfComponents(m_NbBands);
+   
     otbMsgDebugMacro(<<"NbBands : "<<m_NbBands);
-
     otbMsgDebugMacro(<<"Nb of Components : "<<this->GetNumberOfComponents());
 
     
@@ -395,9 +443,6 @@ void GDALImageIO::InternalReadImageInformation()
                 m_NbOctetPixel = 1;
         }
     
-    otbMsgDebugMacro(<<"Component Type : "<<m_ComponentType);
-    otbMsgDebugMacro(<<"NbOctetPixel   : "<<m_NbOctetPixel);
-
 
     /******************************************************************/
     // Pixel Type always set to Scalar for GDAL ? maybe also to vector ?
@@ -406,15 +451,35 @@ void GDALImageIO::InternalReadImageInformation()
 // Modif OTB : 
 //    this->SetPixelType(SCALAR);
 //        this-> SetNumberOfComponents(numComp);
-        this-> SetNumberOfComponents(m_NbBands);
-        if( this->GetNumberOfComponents() == 1 )
-        {
-                this->SetPixelType(SCALAR);
-        }
-        else
-        {
-                this->SetPixelType(VECTOR);
-        }
+
+// Modif Patrick: LIRE LES IMAGES COMPLEXES
+ 	if( GDALDataTypeIsComplex(m_PxType) )
+	{
+    		otbMsgDebugMacro(<<"SetPixelType(COMPLEX)");
+		m_NbOctetPixel = m_NbOctetPixel * 2 ;
+          	this->SetNumberOfComponents( 2 );
+                this->SetPixelType(COMPLEX);
+		if(m_NbBands !=1) itkExceptionMacro(<<"GDALImageIO::InternalReadImageInformation() Can read only one band image ");
+	}
+	else
+	{
+    		otbMsgDebugMacro(<<"SetPixelType(NoCOMPLEX)");
+        	this-> SetNumberOfComponents(m_NbBands);
+        	if( this->GetNumberOfComponents() == 1 )
+        	{
+                	this->SetPixelType(SCALAR);
+        	}
+        	else
+        	{
+                	this->SetPixelType(VECTOR);
+        	}
+	}	
+
+    otbMsgDebugMacro(<<"m_PxType : "<<m_PxType);
+    otbMsgDebugMacro(<<"Component Type : "<<m_ComponentType);
+    otbMsgDebugMacro(<<"NbOctetPixel   : "<<m_NbOctetPixel);
+
+
     }
     
 /*----------------------------------------------------------------------*/
