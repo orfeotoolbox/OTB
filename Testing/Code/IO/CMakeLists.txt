@@ -137,7 +137,7 @@ ADD_TEST(ioTuONERAImageIOCanRead ${IO_TESTS} otbONERAImageIOTestCanRead
 ADD_TEST(ioTvONERAImageFileReader ${IO_TESTS} 
 #  --compare-image ${TOL}   ${BASELINE}/ioImageFileReaderPNG2PNG_cthead1.png
 #                    ${TEMP}/ioImageFileReaderPNG2PNG_cthead1.png
-        otbImageFileReaderTest
+        otbImageFileReaderONERATest
         ${IMAGEDATA}/ONERA/spa3_0215_rad.ent
         ${TEMP}/ioImageFileReaderONERA.png )
 
@@ -495,6 +495,7 @@ SET(BasicIO_SRCS
 otbGDALImageIOTestCanRead.cxx
 otbCAIImageIOTestCanRead.cxx
 otbONERAImageIOTestCanRead.cxx
+otbImageFileReaderONERA.cxx
 otbCAIImageIOTestCanWrite.cxx
 otbImageFileReaderTest.cxx
 otbImageFileWriterTest.cxx
