@@ -141,6 +141,13 @@ ADD_TEST(ioTvONERAImageFileReader ${IO_TESTS}
         ${IMAGEDATA}/ONERA/spa3_0215_rad.ent
         ${TEMP}/ioImageFileReaderONERA.png )
 
+ADD_TEST(ioTvONERAImageFileReaderComplex ${IO_TESTS} 
+#  --compare-image ${TOL}   ${BASELINE}/ioImageFileReaderPNG2PNG_cthead1.png
+#                    ${TEMP}/ioImageFileReaderPNG2PNG_cthead1.png
+        otbImageFileReaderONERAComplex
+        ${IMAGEDATA}/ONERA/spa3_0215_rad.ent
+        ${TEMP}/ioImageFileReaderONERAComplex.hd )
+
 # -------            otb::ImageFileReader pour CAI  ------------------------------
 # Niveau de Gris
 ADD_TEST(ioTvImageFileReaderPNG2PNG ${IO_TESTS} 
@@ -496,6 +503,7 @@ otbGDALImageIOTestCanRead.cxx
 otbCAIImageIOTestCanRead.cxx
 otbONERAImageIOTestCanRead.cxx
 otbImageFileReaderONERA.cxx
+otbImageFileReaderONERAComplex.cxx
 otbCAIImageIOTestCanWrite.cxx
 otbImageFileReaderTest.cxx
 otbImageFileWriterTest.cxx
