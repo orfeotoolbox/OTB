@@ -78,7 +78,7 @@ SET( GDALport_SRCS
 #        port/xmlreformat.cpp
 )
 
-GDAL_TRY_COMPIL_FOLDER( port "${GDALport_SRCS}")
+#GDAL_TRY_COMPIL_FOLDER( port "${GDALport_SRCS}")
 
 
 
