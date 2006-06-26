@@ -90,7 +90,11 @@ protected:
   ~ONERAImageIO();
 
   bool OpenOneraDataFileForReading(const char* filename);
-  void InternalReadImageInformation(std::ifstream& file);
+  bool OpenOneraHeaderFileForReading(const char* filename);
+  void InternalReadImageInformation(std::fstream& file);
+
+  bool OpenOneraDataFileForWriting(const char* filename);
+  bool OpenOneraHeaderFileForWriting(const char* filename);
   
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
@@ -102,8 +106,8 @@ protected:
   int m_NbBands;
   /** Buffer*/
   //float **pafimas;
-  std::ifstream m_Datafile;
-  std::ifstream m_Headerfile;
+  std::fstream m_Datafile;
+  std::fstream m_Headerfile;
   
 private:
   ONERAImageIO(const Self&); //purposely not implemented
