@@ -4,32 +4,34 @@
 
 
 # ----------------- MACRO TRY COMPIL d'un FOLDER PORT ----------------------------------------------
-MACRO(GDAL_TRY_COMPIL_FOLDER folder liste_sources)
- SET( OK 1 )
- FOREACH(source ${liste_sources} )
-    CONFIGURE_FILE(${source}
-    ${OTB_BINARY_DIR}/Utilities/GDAL/try_compil.cxx COPYONLY IMMEDIATE)
-    FILE(WRITE ${OTB_BINARY_DIR}/Utilities/GDAL/try_compil.cxx "\nint main(int argc, char* argv[])\n{\n   return 1;\n}\n" )
+# MACRO(GDAL_TRY_COMPIL_FOLDER folder liste_sources)
+#  SET( OK 1 )
+#  FOREACH(source ${liste_sources} )
+#     CONFIGURE_FILE(${source}
+#     ${OTB_BINARY_DIR}/Utilities/GDAL/try_compil.cxx COPYONLY IMMEDIATE)
+#     FILE(WRITE ${OTB_BINARY_DIR}/Utilities/GDAL/try_compil.cxx "\nint main(int argc, char* argv[])\n{\n   return 1;\n}\n" )
+
 #    CONFIGURE_FILE(${OTB_BINARY_DIR}/Utilities/GDAL/try_compil.cxx 
 #    ${OTB_BINARY_DIR}/Utilities/GDAL/try_compil2.cxx
 #    IMMEDIATE)
-    TRY_COMPILE(GDAL_TRY_COMPIL
-      ${OTB_BINARY_DIR}/CMakeTmp
-      ${OTB_BINARY_DIR}/Utilities/GDAL/try_compil.cxx
-      )
-#      OUTPUT_VARIABLE OUTPUT)
-    IF( NOT GDAL_TRY_COMPIL)
-      SET( OK 0 )
-    ENDIF(NOT GDAL_TRY_COMPIL)
-  ENDFOREACH(source)
-  IF(OK)
-      MESSAGE(STATUS "Checking folder ${folder} -- yes")
-      SET(GDALliste_sources_SRCS ${GDALliste_sources_SRCS} ${liste_sources} )
-  ELSE(OK) 
-      MESSAGE(STATUS "Checking folder ${folder} -- no")
-  ENDIF(OK) 
 
-ENDMACRO(GDAL_TRY_COMPIL_FOLDER)
+#     TRY_COMPILE(GDAL_TRY_COMPIL
+#       ${OTB_BINARY_DIR}/CMakeTmp
+#       ${OTB_BINARY_DIR}/Utilities/GDAL/try_compil.cxx
+#       )
+#      OUTPUT_VARIABLE OUTPUT)
+#     IF( NOT GDAL_TRY_COMPIL)
+#       SET( OK 0 )
+#     ENDIF(NOT GDAL_TRY_COMPIL)
+#   ENDFOREACH(source)
+#   IF(OK)
+#       MESSAGE(STATUS "Checking folder ${folder} -- yes")
+#       SET(GDALliste_sources_SRCS ${GDALliste_sources_SRCS} ${liste_sources} )
+#   ELSE(OK) 
+#       MESSAGE(STATUS "Checking folder ${folder} -- no")
+#   ENDIF(OK) 
+
+# ENDMACRO(GDAL_TRY_COMPIL_FOLDER)
 
 
 
@@ -339,11 +341,11 @@ ENDFOREACH(ogrSubDirs)
 
 
 # ----------------- LIBRARY ----------------------------------------------
-#ADD_LIBRARY(gdal ${GDALport_SRCS}  ${GDALgcore_SRCS} ${GDALalg_SRCS} ${GDALfrmts_SRCS} ${GDALfrmtsSubDirs_SRCS} ${GDALogr_SRCS} ${GDALogrSubDirs_SRCS})
+ADD_LIBRARY(gdal ${GDALport_SRCS}  ${GDALgcore_SRCS} ${GDALalg_SRCS} ${GDALfrmts_SRCS} ${GDALfrmtsSubDirs_SRCS} ${GDALogr_SRCS} ${GDALogrSubDirs_SRCS})
 
 
 
-ADD_LIBRARY(gdal ${GDALliste_sources_SRCS} )
+#ADD_LIBRARY(gdal ${GDALliste_sources_SRCS} )
 
 
 #ADD_EXECUTABLE(otbgdalinfo ${OTB_SOURCE_DIR}/Utilities/GDAL/apps/gdalinfo.cpp)
