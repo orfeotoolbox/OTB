@@ -52,10 +52,50 @@ int otbImageFileWriterONERAComplex(int argc, char* argv[])
         pixelValue = image->GetPixel( pixelIndex );
 	std::cout << " PixelValue : ("<< pixelIndex[0]<<" , "<< pixelIndex[1]<<" ) = "<< pixelValue << std::endl;
 
+	InputImageType::PixelType       complexValue;
+	for(unsigned int x = 100 ; x < 110 ; x++ )
+	{ 
+	  for(unsigned int y = 100 ; y < 110 ; y++ )
+	  {
+	  pixelIndex[0] = x;      // x position of the pixel
+	  pixelIndex[1] = y;      // y position of the pixel
+
+	  complexValue = image->GetPixel( pixelIndex );
+	  std::cout << " PixelValue : ("<< pixelIndex[0]<<" , "<< pixelIndex[1]<<" ) = "<< complexValue << std::endl;
+          }
+	}
+
         WriterType::Pointer complexWriter = WriterType::New();
 	complexWriter->SetFileName( outputFilename  );
 	complexWriter->SetInput( streaming->GetOutput()  );
  	complexWriter->Update();
+
+	std::cout << "Re-lecture " <<std::endl;
+        ReaderType::Pointer complexReader2 = ReaderType::New();
+        StreamingType::Pointer streaming2 = StreamingType::New();
+	complexReader2->SetFileName( outputFilename  );
+	streaming2->SetInput(complexReader2->GetOutput());
+	streaming2->Update();
+
+	InputImageType::Pointer image2 = streaming2->GetOutput();
+
+	pixelIndex[0] = 0;      // x position of the pixel
+	pixelIndex[1] = 0;      // y position of the pixel
+        pixelValue = image->GetPixel( pixelIndex );
+	std::cout << " PixelValue Write: ("<< pixelIndex[0]<<" , "<< pixelIndex[1]<<" ) = "<< pixelValue << std::endl;
+	for(unsigned int x = 100 ; x < 110 ; x++ )
+	{ 
+	  for(unsigned int y = 100 ; y < 110 ; y++ )
+	  {
+	  pixelIndex[0] = x;      // x position of the pixel
+	  pixelIndex[1] = y;      // y position of the pixel
+
+	  complexValue = image->GetPixel( pixelIndex );
+	  std::cout << " PixelValue Write: ("<< pixelIndex[0]<<" , "<< pixelIndex[1]<<" ) = "<< complexValue << std::endl;
+          }
+	}
+
+
 
   } 
   catch( itk::ExceptionObject & err ) 

@@ -137,7 +137,7 @@ static std::string GetImageFileName( const std::string& filename )
 
 bool ONERAImageIO::CanReadFile( const char* FileNameToRead )
 {
-//  otbMsgDebugMacro(<<"ONERAImageIO::CanReadFile() " << FileNameToRead );
+  otbMsgDebugMacro(<<"ONERAImageIO::CanReadFile() " << FileNameToRead );
 
   std::string filename(FileNameToRead);
   std::string ext;
@@ -533,11 +533,10 @@ void ONERAImageIO::Write(const void* buffer)
   memcpy(tempmemory,buffer,numberOfBytes);
   if(this->GetComponentType() == FLOAT)
     {
-    itk::ByteSwapper<unsigned short>::SwapRangeFromSystemToLittleEndian(
-        reinterpret_cast<unsigned short*>(tempmemory), numberOfComponents );
+    itk::ByteSwapper<float>::SwapRangeFromSystemToLittleEndian(
+        reinterpret_cast<float *>(tempmemory), numberOfComponents );
     }
-  
-   
+     
    int lNbLignes   = this->GetIORegion().GetSize()[1];
    int lNbColonnes = this->GetIORegion().GetSize()[0];
    int lPremiereLigne   = this->GetIORegion().GetIndex()[1] ; // [1... ]
@@ -592,12 +591,21 @@ void ONERAImageIO::WriteImageInformation()
   m_Headerfile << "Nb_case_par_ligne_look= \t"<< m_Dimensions[0] <<std::endl;  
   m_Headerfile << "Nb_ligne_look= \t\t\t"     << m_Dimensions[1] <<" + 1 ligne en-tete en binaire (entiers 16 bit) " << std::endl;
 
-  // Check magic_number
+  // write magic_number
   int magicNumber = ONERA_MAGIC_NUMBER; 
   itk::ByteSwapper< int>::SwapFromSystemToLittleEndian(&magicNumber);
   otbDebugMacro(<< "Magic number : " << magicNumber);
   m_Datafile.seekg(0, std::ios::beg );
   m_Datafile.write((char*)(&magicNumber),4);
+  
+  // write number of columns
+  short NbCol = m_Dimensions[0];
+  itk::ByteSwapper< short>::SwapFromSystemToLittleEndian(&NbCol);
+
+  m_Datafile.seekg(6, std::ios::beg );
+  m_Datafile.write((char*)(&NbCol),2);
+  
+
 }
 
   
