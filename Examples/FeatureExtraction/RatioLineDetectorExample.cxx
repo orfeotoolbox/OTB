@@ -20,7 +20,7 @@
 //  Software Guide : BeginCommandLineArgs
 //    INPUTS: {amst.png}
 //    OUTPUTS: {amstLineRatios.png}, {amstLineRatioDirections.png} 
-//    10 3 
+//    5 1 
 //  Software Guide : EndCommandLineArgs
 
 // Software Guide : BeginLatex

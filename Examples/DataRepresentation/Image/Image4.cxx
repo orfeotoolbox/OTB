@@ -43,8 +43,7 @@
 // \label{fig:ImageOriginAndSpacing}
 // \end{figure}
 //
-// Figure \ref{fig:ImageOriginAndSpacing}\textbf{FIXME: update for OTB
-// images}illustrates the main geometrical
+// Figure \ref{fig:ImageOriginAndSpacing} illustrates the main geometrical
 // concepts associated with the \doxygen{otb::Image}. In this figure,
 // circles are 
 // used to represent the center of pixels. The value of the pixel is assumed

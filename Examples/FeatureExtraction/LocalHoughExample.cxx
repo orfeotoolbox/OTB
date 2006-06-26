@@ -193,15 +193,6 @@ int main( int argc, char * argv[] )
 
 
 
-
-  //  Software Guide : BeginLatex
-  // We can also obtain the direction of the lines by invoking the
-  // \code{GetOutputDirections()} method. \textbf{FIXME : implement
-  // the method!!}
-  //  Software Guide : EndLatex
-
-
-
   //  Software Guide : BeginLatex Figure~\ref{fig:LOCAL_HOUGH}
   // shows the result of applying the AssymetricFusionOf edge detector filter
   // to a SAR image.  \begin{figure} \center

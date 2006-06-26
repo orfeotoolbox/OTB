@@ -20,7 +20,7 @@
 //  Software Guide : BeginCommandLineArgs
 //    INPUTS: {amst.png}
 //    OUTPUTS: {amstLineFusion.png}, {amstLineFusionDirs.png}
-//    10 3 
+//    5 1 
 //  Software Guide : EndCommandLineArgs
 
 // Software Guide : BeginLatex
@@ -217,35 +217,18 @@ int main( int argc, char * argv[] )
   writer->SetFileName( argv[2] );
   writer->Update();
 
+
+
   //  Software Guide : BeginLatex
-  // We can also obtain the direction of the lines by invoking the
-  // \code{GetOutputDirections()} method. \textbf{FIXME : implement
-  // the method!!}
-  //  Software Guide : EndLatex
-
-  writer->SetFileName( argv[3] );
-  // Software Guide : BeginCodeSnippet
-  //rescaler->SetInput( filter->GetOutputDirections() );
-  writer->SetInput( rescaler->GetOutput() );
-  writer->Update();
-  // Software Guide : EndCodeSnippet
-
-
-  //  Software Guide : BeginLatex Figure~\ref{fig:LINECORRELATION_FILTER}
+  // Figure~\ref{fig:LINECORRELATION_FILTER}
   // shows the result of applying the AssymetricFusionOf edge detector filter
   // to a SAR image.  \begin{figure} \center
   // \includegraphics[width=0.25\textwidth]{amst.eps}
   // \includegraphics[width=0.25\textwidth]{amstLineFusion.eps}
-  // \includegraphics[width=0.25\textwidth]{amstLineFusionDirs.eps}
   // \itkcaption[Line Correlation Detector Application]{Result of applying
   // the \doxygen{otb::AssymetricFusionOfDetectorImageFilter} to a SAR
-  // image. From left to right : original image, line intensity and
-  // edge orientation.}  \label{fig:LINECORRELATION_FILTER} \end{figure}
+  // image. From left to right : original image, line intensity.}  \label{fig:LINECORRELATION_FILTER} \end{figure}
   //
-  //  \relatedClasses
-  //  \begin{itemize}
-  //  \item \doxygen{otb::AssymetricFusionOfDetectorImageFilter}
-  //  \end{itemize}
   //  Software Guide : EndLatex 
 
 

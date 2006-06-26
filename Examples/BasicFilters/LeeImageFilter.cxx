@@ -175,7 +175,7 @@ int main( int argc, char * argv[] )
 
 
   //  Software Guide : BeginLatex
-  // Figure~\ref{LEE_FILTER} shows the result of applying the Lee
+  // Figure~\ref{fig:LEE_FILTER} shows the result of applying the Lee
   // filter to a SAR image.
   // \begin{figure}
   // \center

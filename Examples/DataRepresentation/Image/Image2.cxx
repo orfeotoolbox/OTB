@@ -97,7 +97,7 @@ int main( int , char * argv[])
   // from the filename extension. The user may also explicitly specify the
   // data format explicitly using the \doxygen{itk::ImageIO} (See
   // Chapter~\ref{sec:ImagReadWrite} \pageref{sec:ImagReadWrite} for more
-  // information
+  // information):
   //
   // \index{otb::ImageFileReader!SetFileName()}
   //
