@@ -193,10 +193,15 @@ SET( OTB_EXAMPLES_SRCS
   ${OTB_SOURCE_DIR}/Examples/FeatureExtraction/ComplexMomentImageExample.cxx
   ${OTB_SOURCE_DIR}/Examples/FeatureExtraction/ComplexMomentPathExample.cxx
   ${OTB_SOURCE_DIR}/Examples/FeatureExtraction/HuMomentImageExample.cxx
+  ${OTB_SOURCE_DIR}/Examples/FeatureExtraction/FlusserMomentImageExample.cxx
   ${OTB_SOURCE_DIR}/Examples/Segmentation/ConnectedThresholdImageFilter.cxx
   ${OTB_SOURCE_DIR}/Examples/Segmentation/OtsuThresholdImageFilter.cxx
   ${OTB_SOURCE_DIR}/Examples/Segmentation/OtsuMultipleThresholdImageFilter.cxx
   ${OTB_SOURCE_DIR}/Examples/Segmentation/NeighborhoodConnectedImageFilter.cxx
+  ${OTB_SOURCE_DIR}/Examples/Segmentation/ConfidenceConnected.cxx
+  ${OTB_SOURCE_DIR}/Examples/Segmentation/IsolatedConnectedImageFilter.cxx
+  ${OTB_SOURCE_DIR}/Examples/Segmentation/WatershedSegmentation.cxx
+  ${OTB_SOURCE_DIR}/Examples/Segmentation/FastMarchingImageFilter.cxx
   ${OTB_SOURCE_DIR}/Examples/ChangeDetection/ChangeDetectionFrameworkExample.cxx
   ${OTB_SOURCE_DIR}/Examples/ChangeDetection/DiffChDet.cxx
   ${OTB_SOURCE_DIR}/Examples/ChangeDetection/RatioChDet.cxx	
