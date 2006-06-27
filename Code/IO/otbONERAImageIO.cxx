@@ -155,13 +155,13 @@ bool ONERAImageIO::CanReadFile( const char* FileNameToRead )
   m_Headerfile.open( HeaderFileName.c_str(),  std::ios::in );
   if( m_Headerfile.fail() )
     {
-//    otbMsgDebugMacro(<<"ONERAImageIO::CanReadFile() failed header open ! " );
+    otbMsgDebugMacro(<<"ONERAImageIO::CanReadFile() failed header open ! " );
     return false;
     }
   m_Datafile.open( DataFileName.c_str(),  std::ios::in );
   if( m_Datafile.fail() )
     {
-//    otbMsgDebugMacro(<<"ONERAImageIO::CanReadFile() failed data open ! " );
+    otbMsgDebugMacro(<<"ONERAImageIO::CanReadFile() failed data open ! " );
     return false;
     }
 
@@ -222,8 +222,6 @@ void ONERAImageIO::Read(void* buffer)
    int lPremiereLigne   = this->GetIORegion().GetIndex()[1] ; // [1... ]
    int lPremiereColonne = this->GetIORegion().GetIndex()[0] ; // [1... ]
 
-//   otbMsgDebugMacro( << "ONERAImageIO::Read() Start");
-
   //read header information file:
   if ( ! this->OpenOneraDataFileForReading(m_FileName.c_str()) )
     {
@@ -239,13 +237,6 @@ void ONERAImageIO::Read(void* buffer)
   char* value = new char[numberOfBytesToBeRead];
   unsigned long cpt = 0;
  
-//  otbMsgDebugMacro( << "m_NbOctetPixel : " << m_NbOctetPixel);
-//  otbMsgDebugMacro( << "numberOfBytesPerLines : " << numberOfBytesPerLines);
-//  otbMsgDebugMacro( << "headerLength : " << headerLength);
-//  otbMsgDebugMacro( << "offset : " << offset);
-//  otbMsgDebugMacro( << "numberOfBytesToBeRead : " << numberOfBytesToBeRead);
-
-
   for(int LineNo = lPremiereLigne;LineNo <lPremiereLigne + lNbLignes; LineNo++ )
     {
 	offset  =  headerLength + numberOfBytesPerLines * LineNo;
@@ -272,9 +263,6 @@ void ONERAImageIO::Read(void* buffer)
     itk::ByteSwapper<float>::SwapRangeFromSystemToLittleEndian(
         reinterpret_cast<float *>(buffer),cpt);
     }
-
-//  otbMsgDebugMacro( << "ONERAImageIO::Read() Finish");
-
 }
 
 
@@ -295,9 +283,6 @@ bool ONERAImageIO::OpenOneraDataFileForReading(const char* filename)
   const std::string DataFileName = GetRootName(filename)+".dat";
   
   // Open the new file for reading
-  //otbDebugMacro(<< "Initialize: opening file " << DataFileName);
-
-  // Actually open the file
   m_Datafile.open( DataFileName.c_str(),  std::ios::in );
   if( m_Datafile.fail() )
     {
@@ -324,8 +309,6 @@ bool ONERAImageIO::OpenOneraHeaderFileForReading(const char* filename)
   const std::string HeaderFileName = GetRootName(filename)+".ent";
   
   // Open the new file for reading
-  //otbDebugMacro(<< "Initialize: opening file " << HeaderFileName);
-
   // Actually open the file
   m_Headerfile.open( HeaderFileName.c_str(),  std::ios::in );
   if( m_Headerfile.fail() )
@@ -358,22 +341,40 @@ void ONERAImageIO::InternalReadImageInformation(std::fstream& file)
     itkExceptionMacro(<< "Cannot read requested file");
     }
 
+  // check "Format_valeurs_look"  
+  char* sHeader = new char[1024];
+  // skip 3 lines 	
+  m_Headerfile.getline(sHeader,1024);
+  m_Headerfile.getline(sHeader,1024);
+  m_Headerfile.getline(sHeader,1024);
+  std::string sPixelType(sHeader);
+
+  if ( sPixelType.compare("cmplx_real_4") )
+    {
+      m_NbBands = 1;
+      this->SetFileTypeToBinary();
+      this->SetNumberOfComponents(2);
+      this->SetPixelType(COMPLEX);
+      m_ComponentType = FLOAT;
+      m_NbOctetPixel = 4;
+    }
+  else
+    {
+    itkExceptionMacro(<< "data format not supported by OTB (only 'complex_real_4' is available)");  
+    }  
+
   // Check magic_number
   int magicNumber; 
   m_Datafile.seekg(0, std::ios::beg );
   m_Datafile.read((char*)(&magicNumber),4);
   itk::ByteSwapper< int>::SwapFromSystemToLittleEndian(&magicNumber);
-//  otbDebugMacro(<< "Magic number : " << magicNumber);
-
 
   // Find info.. : Number of Row , Nb of Columns
   short NbCol;
   short NbRow;
 
   m_Datafile.seekg(6, std::ios::beg );
-  m_Datafile.read((char*)(&NbCol),2);
-//  otbDebugMacro(<< "Nb of Columns : " << NbCol);
-  
+  m_Datafile.read((char*)(&NbCol),2);  
   itk::ByteSwapper< short>::SwapFromSystemToLittleEndian(&NbCol);
     
   m_Datafile.seekg(0, std::ios::end);
@@ -384,9 +385,6 @@ void ONERAImageIO::InternalReadImageInformation(std::fstream& file)
   m_width = static_cast<int> ( NbCol );
   m_height = static_cast<int> ( (gcount-gcountHead) / (4 * 2 * NbCol) );
 
-//  otbMsgDebugMacro( << "m_width : " << m_width);
-//  otbMsgDebugMacro( << "m_height : " << m_height);
-
   if( m_width==0 & m_height==0)
       {
       itkExceptionMacro(<<"Unknown image dimension");
@@ -396,23 +394,9 @@ void ONERAImageIO::InternalReadImageInformation(std::fstream& file)
       // Set image dimensions into IO
       m_Dimensions[0] = m_width;
       m_Dimensions[1] = m_height;
-      //otbMsgDebugMacro(<<"Get Dimensions : x="<<m_Dimensions[0]<<" & y="<<m_Dimensions[1]);
       }
 
-  this->SetNumberOfDimensions(2);
-  
-//  otbMsgDebugMacro(<<"Nb of rows    : "<<m_Dimensions[1]);
-//  otbMsgDebugMacro(<<"Nb of columns : "<<m_Dimensions[0]);
-
-  m_NbBands = 1;
-  this->SetNumberOfComponents(2);
-//  otbMsgDebugMacro(<<"NbBands : "<<m_NbBands);
-//  otbMsgDebugMacro(<<"Nb of Components : "<<this->GetNumberOfComponents());
-
-  this->SetFileTypeToBinary();
-  this->SetPixelType(COMPLEX);
-//  this->SetPixelType(VECTOR);
-    
+  this->SetNumberOfDimensions(2);  
 }
 
 
@@ -433,7 +417,6 @@ bool ONERAImageIO::OpenOneraDataFileForWriting(const char* filename)
   const std::string DataFileName = GetRootName(filename)+".dat";
   
   // Open the new file for reading
-  //otbDebugMacro(<< "Initialize: opening file " << DataFileName);
 
   // Actually open the file
   m_Datafile.open( DataFileName.c_str(),  std::ios::out | std::ios::trunc | std::ios::binary);
@@ -462,8 +445,6 @@ bool ONERAImageIO::OpenOneraHeaderFileForWriting(const char* filename)
   const std::string HeaderFileName = GetRootName(filename)+".ent";
   
   // Open the new file for reading
-  //otbDebugMacro(<< "Initialize: opening file " << HeaderFileName);
-
   // Actually open the file
   m_Headerfile.open( HeaderFileName.c_str(),  std::ios::out | std::ios::trunc | std::ios::binary );
   if( m_Headerfile.fail() )
@@ -496,16 +477,8 @@ bool ONERAImageIO::CanWriteFile( const char* FileNameToWrite )
 
 void ONERAImageIO::Write(const void* buffer)
 {
-   unsigned int       dim;
-   const unsigned int dimensions = this->GetNumberOfDimensions();
-   unsigned long        numberOfPixels = 1;
-   for(dim=0; dim< dimensions; dim++ )
-      {
-      numberOfPixels *= m_Dimensions[ dim ];
-      }
 
-   unsigned long step = this->GetNumberOfComponents();
-//   unsigned char * p = static_cast<unsigned char *>(buffer);
+  unsigned long step = this->GetNumberOfComponents();
 
   const unsigned long numberOfBytes      = this->GetImageSizeInBytes();
   const unsigned long numberOfComponents = this->GetImageSizeInComponents();
@@ -520,30 +493,18 @@ void ONERAImageIO::Write(const void* buffer)
      
    int lNbLignes   = this->GetIORegion().GetSize()[1];
    int lNbColonnes = this->GetIORegion().GetSize()[0];
-   int lPremiereLigne   = this->GetIORegion().GetIndex()[1] ; // [1... ]
-   int lPremiereColonne = this->GetIORegion().GetIndex()[0] ; // [1... ]
-
-//   otbMsgDebugMacro( << "ONERAImageIO::Read() Start");
 
 
   unsigned long numberOfBytesPerLines = 2 * lNbColonnes * m_NbOctetPixel;
   unsigned long headerLength = ONERA_HEADER_LENGTH + 4 + numberOfBytesPerLines;
   unsigned long offset;
 
-
-  otbMsgDebugMacro( << "m_NbOctetPixel : " << m_NbOctetPixel);
-  otbMsgDebugMacro( << "numberOfBytesPerLines : " << numberOfBytesPerLines);
-  otbMsgDebugMacro( << "headerLength : " << headerLength);
-
   offset  =  headerLength + numberOfBytesPerLines;
   m_Datafile.seekg(offset, std::ios::beg);
   m_Datafile.write( static_cast<const char *>(tempmemory) , numberOfBytes );
   delete [] tempmemory;
-
-  otbMsgDebugMacro( << "ONERAImageIO::Write() Finish");
 }
 
-/** TODO : WriteImageInformation Method  not implemented */
 void ONERAImageIO::WriteImageInformation()
 {
 
@@ -558,24 +519,33 @@ void ONERAImageIO::WriteImageInformation()
     }
 
   /*-------- This part deals with writing header information ------ */
+  const std::string DataFileName = GetRootName( m_FileName.c_str() )+".dat";
 
   m_Headerfile << "#                    [fichier en-tete produit par les routines de otb (Orfeo ToolBox) ]" << std::endl;
   m_Headerfile << "# Nom du look :"<< std::endl;
-  m_Headerfile << "Look.dat= \t" << m_FileName.c_str() <<  std::endl;
+  m_Headerfile << "Look.dat= \t" << DataFileName.c_str() <<  std::endl;
   m_Headerfile << std::endl;
   m_Headerfile << "# Structure du fichier et codage des pixels :"<< std::endl;
   m_Headerfile << "# 4 octets precedent la premiere ligne : ils correspondent a un nombre magique [I4= 33554433] "<< std::endl;
   m_Headerfile << "# [dans ordre LSBfirst = big-endian]" << std::endl;
-  m_Headerfile << "Format_valeurs_look=\t"         << std::endl;
 
-  
+  std::string sPixelType("cmplx_real_4");
+  if(m_PixelType == COMPLEX && m_ComponentType == FLOAT)
+    {
+    sPixelType = "cmplx_real_4";
+    }
+  else
+    {
+    itkExceptionMacro(<< "data format not supported by OTB (only 'complex_real_4' is available)");  
+    }  
+       
+  m_Headerfile << "Format_valeurs_look=    \t"<< sPixelType << std::endl;
   m_Headerfile << "Nb_case_par_ligne_look= \t"<< m_Dimensions[0] <<std::endl;  
-  m_Headerfile << "Nb_ligne_look= \t\t\t"     << m_Dimensions[1] <<" + 1 ligne en-tete en binaire (entiers 16 bit) " << std::endl;
+  m_Headerfile << "Nb_ligne_look=          \t"<< m_Dimensions[1] <<" + 1 ligne en-tete en binaire (entiers 16 bit) " << std::endl;
 
   // write magic_number
   int magicNumber = ONERA_MAGIC_NUMBER; 
   itk::ByteSwapper< int>::SwapFromSystemToLittleEndian(&magicNumber);
-  otbDebugMacro(<< "Magic number : " << magicNumber);
   m_Datafile.seekg(0, std::ios::beg );
   m_Datafile.write((char*)(&magicNumber),4);
   
@@ -586,7 +556,6 @@ void ONERAImageIO::WriteImageInformation()
   m_Datafile.seekg(6, std::ios::beg );
   m_Datafile.write((char*)(&NbCol),2);
   
-
 }
 
   
