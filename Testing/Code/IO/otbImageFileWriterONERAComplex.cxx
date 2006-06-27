@@ -43,7 +43,7 @@ int otbImageFileWriterONERAComplex(int argc, char* argv[])
 	streaming->SetInput(complexReader->GetOutput());
 	streaming->Update();
 
-
+#if 0
 	InputImageType::Pointer image = streaming->GetOutput();
 	InputImageType::IndexType pixelIndex;
 	InputImageType::PixelType      pixelValue;
@@ -95,7 +95,7 @@ int otbImageFileWriterONERAComplex(int argc, char* argv[])
           }
 	}
 
-
+#endif
 
   } 
   catch( itk::ExceptionObject & err ) 
