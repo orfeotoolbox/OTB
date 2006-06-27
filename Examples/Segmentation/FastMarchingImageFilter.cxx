@@ -26,12 +26,12 @@
 //  Software Guide : BeginCommandLineArgs
 //    INPUTS: {QB_Suburb.png}
 //    OUTPUTS: {FastMarchingImageFilterOutput5.png}
-//    91 176 0.5 -0.5 3.0 100 10000
+//    91 176 0.5 -0.5 3.0 10000 10000
 //  Software Guide : EndCommandLineArgs
 //  Software Guide : BeginCommandLineArgs
 //    INPUTS: {QB_Suburb.png}
 //    OUTPUTS: {FastMarchingImageFilterOutput6.png}
-//    118 100 1.0 -0.5 3.0 100 10000
+//    118 100 1.0 -0.5 3.0 10000 10000
 //  Software Guide : EndCommandLineArgs
 //  Software Guide : BeginCommandLineArgs
 //    INPUTS: {QB_Suburb.png}
@@ -39,7 +39,7 @@
 //    OUTPUTS: [FastMarchingFilterOutput1.png]
 //    OUTPUTS: [FastMarchingFilterOutput2.png]
 //    OUTPUTS: [FastMarchingFilterOutput3.png]
-//    145 21 0.5 -0.5 3.0 100 10000
+//    145 21 0.5 -0.5 3.0 10000 10000
 //  Software Guide : EndCommandLineArgs
 
 // Software Guide : BeginLatex
