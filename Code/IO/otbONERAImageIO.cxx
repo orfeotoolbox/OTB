@@ -137,7 +137,6 @@ static std::string GetImageFileName( const std::string& filename )
 
 bool ONERAImageIO::CanReadFile( const char* FileNameToRead )
 {
-  otbMsgDebugMacro(<<"ONERAImageIO::CanReadFile() " << FileNameToRead );
 
   std::string filename(FileNameToRead);
   std::string ext;
@@ -150,23 +149,19 @@ bool ONERAImageIO::CanReadFile( const char* FileNameToRead )
     m_Headerfile.close();
     }
 
-
   const std::string HeaderFileName = GetRootName(filename)+".ent";
   const std::string DataFileName = GetRootName(filename)+".dat";
-
-//  otbMsgDebugMacro(<<"HeaderFileName " << HeaderFileName );
-//  otbMsgDebugMacro(<<"DataFileName " << DataFileName );
 
   m_Headerfile.open( HeaderFileName.c_str(),  std::ios::in );
   if( m_Headerfile.fail() )
     {
-    otbMsgDebugMacro(<<"ONERAImageIO::CanReadFile() failed header open ! " );
+//    otbMsgDebugMacro(<<"ONERAImageIO::CanReadFile() failed header open ! " );
     return false;
     }
   m_Datafile.open( DataFileName.c_str(),  std::ios::in );
   if( m_Datafile.fail() )
     {
-    otbMsgDebugMacro(<<"ONERAImageIO::CanReadFile() failed data open ! " );
+//    otbMsgDebugMacro(<<"ONERAImageIO::CanReadFile() failed data open ! " );
     return false;
     }
 
@@ -179,11 +174,18 @@ bool ONERAImageIO::CanReadFile( const char* FileNameToRead )
 
   itk::ByteSwapper< int>::SwapFromSystemToLittleEndian(&magicNumber);
 
-  otbDebugMacro(<< "Magic number : " << magicNumber);
-
+  m_Headerfile.close();
   m_Datafile.close();
 
-  return magicNumber == ONERA_MAGIC_NUMBER;
+  if( magicNumber == ONERA_MAGIC_NUMBER )
+  {
+        return true;
+  }
+  else
+  {
+        return false;
+  }
+
 }
 
 
@@ -477,40 +479,19 @@ bool ONERAImageIO::OpenOneraHeaderFileForWriting(const char* filename)
 /** Actually we decide that we can't write ONERA images format */
 bool ONERAImageIO::CanWriteFile( const char* FileNameToWrite )
 {
-//  otbMsgDebugMacro(<<"ONERAImageIO::CanWriteFile() " << FileNameToRead );
-
   std::string filename(FileNameToWrite);
-  std::string ext;
-  if( m_Datafile.is_open() )
-    {
-    m_Datafile.close();
-    }
-  if( m_Headerfile.is_open() )
-    {
-    m_Headerfile.close();
-    }
-
 
   const std::string HeaderFileName = GetRootName(filename)+".ent";
   const std::string DataFileName = GetRootName(filename)+".dat";
 
-//  otbMsgDebugMacro(<<"HeaderFileName " << HeaderFileName );
-//  otbMsgDebugMacro(<<"DataFileName " << DataFileName );
-
-  m_Headerfile.open( HeaderFileName.c_str(),  std::ios::out | std::ios::trunc );
-  if( m_Headerfile.fail() )
-    {
-    otbMsgDebugMacro(<<"ONERAImageIO::CanReadFile() failed header open ! " );
-    return false;
-    }
-  m_Datafile.open( DataFileName.c_str(),  std::ios::out | std::ios::trunc | std::ios::binary);
-  if( m_Datafile.fail() )
-    {
-    otbMsgDebugMacro(<<"ONERAImageIO::CanReadFile() failed data open ! " );
-    return false;
-    }
- 
+  if( filename == HeaderFileName )
+  {
         return true;
+  }
+  else
+  {
+        return false;
+  }
 }
 
 void ONERAImageIO::Write(const void* buffer)
