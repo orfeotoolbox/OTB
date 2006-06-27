@@ -111,14 +111,13 @@ int main(int argc, char ** argv )
     //  Software Guide : BeginLatex
     //
     // Next, we set the parameters of the plug the input path into the complex moment function
-    // and we set its parameters. \textbf{Fixme : SetInputPath a
-    // corriger dans la classe!!!}
+    // and we set its parameters.
     //
     //  Software Guide : EndLatex
 
     // Software Guide : BeginCodeSnippet
 
-    //cmFunction->SetInputPath( path );
+    cmFunction->SetInputPath( path );
     cmFunction->SetQ(Q);
     cmFunction->SetP(P);
 
@@ -136,10 +135,10 @@ int main(int argc, char ** argv )
 
     // Software Guide : BeginCodeSnippet
 
-    //ComplexType Result = cmFunction->Evaluate();
-    ComplexType Result = cmFunction->Evaluate( *path );
-
-    std::cout << "The moment of order (" << P << "," << Q << ") is equal to " << Result << std:: endl;
+    ComplexType Result = cmFunction->Evaluate();
+    
+    std::cout << "The moment of order (" << P << "," << Q <<
+                        ") is equal to " << Result << std:: endl;
 
     // Software Guide : EndCodeSnippet
 

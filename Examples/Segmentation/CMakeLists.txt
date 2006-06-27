@@ -15,21 +15,21 @@ ADD_EXECUTABLE(OtsuMultipleThresholdImageFilter OtsuMultipleThresholdImageFilter
 TARGET_LINK_LIBRARIES(OtsuMultipleThresholdImageFilter
                       OTBCommon OTBIO ITKCommon ITKIO ITKStatistics)
 
-#ADD_EXECUTABLE(ConfidenceConnected ConfidenceConnected.cxx )
-#TARGET_LINK_LIBRARIES(ConfidenceConnected ITKNumerics ITKIO)
+ADD_EXECUTABLE(ConfidenceConnected ConfidenceConnected.cxx )
+TARGET_LINK_LIBRARIES(ConfidenceConnected OTBCommon OTBIO ITKNumerics ITKIO)
 
 ADD_EXECUTABLE(NeighborhoodConnectedImageFilter NeighborhoodConnectedImageFilter.cxx )
 TARGET_LINK_LIBRARIES(NeighborhoodConnectedImageFilter OTBCommon OTBIO
 ITKNumerics ITKIO)
 
-#ADD_EXECUTABLE(IsolatedConnectedImageFilter IsolatedConnectedImageFilter.cxx )
-#TARGET_LINK_LIBRARIES(IsolatedConnectedImageFilter ITKNumerics ITKIO)
+ADD_EXECUTABLE(IsolatedConnectedImageFilter IsolatedConnectedImageFilter.cxx )
+TARGET_LINK_LIBRARIES(IsolatedConnectedImageFilter OTBCommon OTBIO ITKNumerics ITKIO)
 
 #ADD_EXECUTABLE(ConnectedThresholdImageFilter ConnectedThresholdImageFilter.cxx )
 #TARGET_LINK_LIBRARIES(ConnectedThresholdImageFilter ITKNumerics ITKIO)
 
-#ADD_EXECUTABLE(FastMarchingImageFilter FastMarchingImageFilter.cxx )
-#TARGET_LINK_LIBRARIES(FastMarchingImageFilter ITKNumerics ITKIO)
+ADD_EXECUTABLE(FastMarchingImageFilter FastMarchingImageFilter.cxx )
+TARGET_LINK_LIBRARIES(FastMarchingImageFilter OTBCommon OTBIO ITKNumerics ITKIO)
 
 #ADD_EXECUTABLE(GeodesicActiveContourShapePriorLevelSetImageFilter GeodesicActiveContourShapePriorLevelSetImageFilter.cxx )
 #TARGET_LINK_LIBRARIES(GeodesicActiveContourShapePriorLevelSetImageFilter ITKNumerics ITKIO ITKStatistics)
@@ -73,8 +73,8 @@ ITKNumerics ITKIO)
 #ADD_EXECUTABLE(CurvesLevelSetImageFilter CurvesLevelSetImageFilter.cxx )
 #TARGET_LINK_LIBRARIES(CurvesLevelSetImageFilter ITKNumerics ITKIO)
 
-#ADD_EXECUTABLE(WatershedSegmentation1 WatershedSegmentation1.cxx )
-#TARGET_LINK_LIBRARIES(WatershedSegmentation1 ITKAlgorithms ITKNumerics ITKIO)
+ADD_EXECUTABLE(WatershedSegmentation WatershedSegmentation.cxx )
+TARGET_LINK_LIBRARIES(WatershedSegmentation OTBCommon OTBIO ITKAlgorithms ITKNumerics ITKIO)
 
 
 #ADD_EXECUTABLE(SegmentationExamples SegmentationExamples.cxx )

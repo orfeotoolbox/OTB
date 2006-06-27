@@ -185,28 +185,21 @@ int main( int argc, char * argv[] )
   writer->SetInput( drawLineList->GetOutput() );
   writer->Update();
   
-  std::cout << "Local Hough done" << std::endl;
-
-  
 
  // Software Guide : EndCodeSnippet
 
 
 
-  //  Software Guide : BeginLatex Figure~\ref{fig:LOCAL_HOUGH}
-  // shows the result of applying the AssymetricFusionOf edge detector filter
-  // to a SAR image.  \begin{figure} \center
+  //  Software Guide : BeginLatex
+  // Figure~\ref{fig:LOCAL_HOUGH}
+  // shows the result of applying the \doxygen{otb::LocalHoughImageFilter}.
+  // \begin{figure} \center
   // \includegraphics[width=0.25\textwidth]{detected_lines.eps}
   // \includegraphics[width=0.25\textwidth]{detected_local_hough.eps}
   // \itkcaption[Line Correlation Detector Application]{Result of applying
-  // the \doxygen{otb::LocalHoughImageFilter} to a SAR
-  // image. From left to right : original image, line intensity and
-  // edge orientation.}  \label{fig:LOCAL_HOUGH} \end{figure}
+  // the \doxygen{otb::LocalHoughImageFilter}. From left to right :
+  // original image, extracted segments.}  \label{fig:LOCAL_HOUGH} \end{figure}
   //
-  //  \relatedClasses
-  //  \begin{itemize}
-  //  \item \doxygen{otb::AssymetricFusionOfDetectorImageFilter}
-  //  \end{itemize}
   //  Software Guide : EndLatex 
 
 

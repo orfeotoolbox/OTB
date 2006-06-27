@@ -143,10 +143,21 @@ int main(int argc, char ** argv )
 
     MomentType Result = hmFunction->EvaluateAtIndex(center);
 
-    std::cout << "The moment of order " << mMomentNumber << " is equal to " << Result << std:: endl;
+    std::cout << "The moment of order " << mMomentNumber <<
+                      " is equal to " << Result << std:: endl;
 
     // Software Guide : EndCodeSnippet
 
+
+    //  Software Guide : BeginLatex
+    //
+    //  \relatedClasses
+    //  \begin{itemize}
+    //  \item \doxygen{otb::HuImageFunction}
+    //  \end{itemize}
+    //
+    //  Software Guide : EndLatex
+    
 
 
   return EXIT_SUCCESS;

@@ -19,7 +19,11 @@ ADD_EXECUTABLE(ComplexMomentPathExample ComplexMomentPathExample.cxx )
 TARGET_LINK_LIBRARIES(ComplexMomentPathExample OTBCommon OTBIO ITKCommon ITKIO)
 
 ADD_EXECUTABLE(HuMomentImageExample HuMomentImageExample.cxx )
-TARGET_LINK_LIBRARIES(HuMomentImageExample OTBCommon OTBIO ITKCommon ITKIO)
+TARGET_LINK_LIBRARIES(HuMomentImageExample OTBCommon OTBIO ITKCommon
+ITKIO)
+
+ADD_EXECUTABLE(FlusserMomentImageExample FlusserMomentImageExample.cxx )
+TARGET_LINK_LIBRARIES(FlusserMomentImageExample OTBCommon OTBIO ITKCommon ITKIO)
 
 ADD_EXECUTABLE(RatioLineDetectorExample RatioLineDetectorExample.cxx )
 TARGET_LINK_LIBRARIES(RatioLineDetectorExample OTBCommon OTBIO ITKCommon ITKIO)
