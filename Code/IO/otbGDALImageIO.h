@@ -116,6 +116,8 @@ protected:
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
   /** Read all information on the image*/
   void InternalReadImageInformation();
+  /** Write all information on the image*/
+  void InternalWriteImageInformation();
   /** Dimension along Ox of the image*/
   int m_width;
   /** Dimension along Oy of the image*/
@@ -140,6 +142,7 @@ private:
     */
   bool GetGdalImageFileName( const char * filename, std::string & GdalFileName );
 
+  void TypeConversion(const char* extension, std::string* extGDAL);
 
   /** GDAL parameters. */
   GDALDataset* m_poDataset;

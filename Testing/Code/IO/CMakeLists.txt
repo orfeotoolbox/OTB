@@ -94,6 +94,8 @@ ADD_TEST(ioTuCAIImageIOCanReadSPOT5BIL ${IO_TESTS} otbCAIImageIOTestCanRead
 
 # -------            otb::GDALImageIO   ------------------------------
 
+# READER
+
 ADD_TEST(ioTuGDALImageIOCanRead_ENVI ${IO_TESTS} otbGDALImageIOTestCanRead 
         ${INPUTDATA}/poupees_1canal.c1 )
 
@@ -123,6 +125,12 @@ ADD_TEST(ioTuGDALImageIOCanRead_IKONOS_RED ${IO_TESTS} otbGDALImageIOTestCanRead
 	
 ADD_TEST(ioTuGDALImageIOCanRead_IKONOS_NIR ${IO_TESTS} otbGDALImageIOTestCanRead 
         ${IMAGEDATA}/PARIS/Ikonos/po_79039_nir_0000000.tif)
+        
+# WRITER
+
+ADD_TEST(ioTuGDALImageIOCanWrite_TIFF ${IO_TESTS} otbGDALImageIOTestCanWrite
+	${INPUTDATA}/testGDALWriter.tif)
+    
 	
 # CanWrite()
 ADD_TEST(ioTuCAIImageIOCanWriteBSQ ${IO_TESTS} otbCAIImageIOTestCanWrite 
@@ -244,12 +252,19 @@ ADD_TEST(ioTvImageFileWriterRGB_PNG2BSQ ${IO_TESTS}
         otbImageFileWriterRGBTest
         ${INPUTDATA}/sbuv.png 
         ${TEMP}/ioImageFileWriterRGB_PNG2BSQ_sbuv.hd )
+        
 ADD_TEST(ioTvImageFileReaderRGB_BSQ2PNG_2 ${IO_TESTS} 
   --compare-image ${TOL}   ${INPUTDATA}/sbuv.png
                     ${TEMP}/ioImageFileWriterRGB_PNG2BSQ_sbuv_2.png
         otbImageFileReaderRGBTest
         ${TEMP}/ioImageFileWriterRGB_PNG2BSQ_sbuv.hd
         ${TEMP}/ioImageFileWriterRGB_PNG2BSQ_sbuv_2.png )
+        
+# WRITER GDAL        
+ADD_TEST(ioTvGDALImageFileWriterTIF2TIF ${IO_TESTS}
+	otbImageFileWriterRGBTest
+        ${INPUTDATA}/poupeesTIF/IMAGERY.TIF
+        ${TEMP}/poupees.tiff )
 
 
 # -------            otb::MultiChannelExtractROI   ------------------------------
@@ -507,6 +522,7 @@ ADD_TEST(ioTvStreamingIFWriterBSQWithStreaming ${IO_TESTS}
 #----------------------------------------------------------------------------------
 SET(BasicIO_SRCS
 otbGDALImageIOTestCanRead.cxx
+otbGDALImageIOTestCanWrite.cxx
 otbCAIImageIOTestCanRead.cxx
 otbONERAImageIOTestCanRead.cxx
 otbImageFileReaderONERA.cxx
