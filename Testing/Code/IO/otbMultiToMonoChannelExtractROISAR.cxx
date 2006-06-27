@@ -17,7 +17,7 @@
 
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
-#include "otbMultiToMonoChannelExtractROI.h"
+#include "otbExtractROI.h"
 
 int otbMultiToMonoChannelExtractROISAR ( int argc, char ** argv )
 {
@@ -31,8 +31,8 @@ int otbMultiToMonoChannelExtractROISAR ( int argc, char ** argv )
         typedef std::complex<float>  	                                OutputPixelType;
 
 
-        typedef otb::MultiToMonoChannelExtractROI< InputPixelType, 
-                                             OutputPixelType >  ExtractROIFilterType;
+        typedef otb::ExtractROI< InputPixelType, 
+                                 OutputPixelType >  ExtractROIFilterType;
 
         ExtractROIFilterType::Pointer extractROIFilter = ExtractROIFilterType::New();
 
@@ -40,16 +40,14 @@ int otbMultiToMonoChannelExtractROISAR ( int argc, char ** argv )
 	extractROIFilter->SetStartY( 10 );
 	extractROIFilter->SetSizeX( 100 );
 	extractROIFilter->SetSizeY( 100 );
-	extractROIFilter->SetChannel( 1 );
 	
 	// Resume de la ligne de commande
 	std::cout << " ROI selectionnee : startX "<<extractROIFilter->GetStartX()<<std::endl;
 	std::cout << "                    startY "<<extractROIFilter->GetStartY()<<std::endl;
 	std::cout << "                    sizeX  "<<extractROIFilter->GetSizeX()<<std::endl;
 	std::cout << "                    sizeY  "<<extractROIFilter->GetSizeY()<<std::endl;
-	std::cout << " Canal selectionne : ("<<extractROIFilter->GetChannel()<<") : ";
 
-        typedef otb::ImageFileReader< ExtractROIFilterType::InputImageType >       ReaderType;
+        typedef otb::ImageFileReader< ExtractROIFilterType::InputImageType >        ReaderType;
         typedef otb::ImageFileWriter< ExtractROIFilterType::OutputImageType >       WriterType;
         ReaderType::Pointer reader = ReaderType::New();
         WriterType::Pointer writer = WriterType::New();

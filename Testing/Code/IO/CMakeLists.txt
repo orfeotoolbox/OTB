@@ -35,28 +35,19 @@ ADD_TEST(ioTvMultiMonoChannelROI_RADARSAT_BSQ2BSQ2 ${COMMON_TESTS}
 
 # ---  SAR_ERS2_SLCI (GDAL)  ---
 
-#ADD_TEST(ioTvMultiMonoChannelROI_SAR_ERS2_SLCI2BSQ ${COMMON_TESTS} 
-#   --compare-image ${TOL}   ${BASELINE}/ioExtractROI_BSQ2PNG_poupees_100_100_77_300_channels_1_2_3.png
-#                     ${TEMP}/ioExtractROI_BSQ2PNG_poupees_100_100_77_300_channels_1_2_3.png
-#         otbMultiToMonoChannelExtractROI
-#         -ushort ${IMAGEDATA}/SAR_ERS2_SLCI_SCENE1/DAT_01.001 
-#         -ushort ${TEMP}/ioMultiMonoChannelROI_SAR_ERS2_SLCI2PNG_channel_1.hd
-#         -startX 200 -startY 100 -sizeX 1000 -sizeY 1000
-#         -channel 1)
-
 ADD_TEST(ioTvImageFileReaderERS ${IO_TESTS} 
-#   --compare-image ${TOL}   ${BASELINE}/ioExtractROI_BSQ2PNG_poupees_100_100_77_300_channels_1_2_3.png
-#                     ${TEMP}/ioExtractROI_BSQ2PNG_poupees_100_100_77_300_channels_1_2_3.png
+#   --compare-image ${TOL}   ${BASELINE}/ioImageFileReaderERS_SLCI.png
+#                            ${TEMP}/ioImageFileReaderERS_SLCI.png
          otbImageFileReaderERS
          ${IMAGEDATA}/SAR_ERS2_SLCI_SCENE1/DAT_01.001 
          ${TEMP}/ioImageFileReaderERS_SLCI.png)
 
 ADD_TEST(ioTvImageFileReaderRADARSAT ${IO_TESTS} 
-#   --compare-image ${TOL}   ${BASELINE}/ioExtractROI_BSQ2PNG_poupees_100_100_77_300_channels_1_2_3.png
-#                     ${TEMP}/ioExtractROI_BSQ2PNG_poupees_100_100_77_300_channels_1_2_3.png
+   --compare-image ${TOL} ${BASELINE}/ioImageFileReaderRADARSAT.png
+                           ${TEMP}/ioImageFileReaderRADARSAT.png
          otbImageFileReaderERS
          ${IMAGEDATA}/RADARSAT1/SCENE01/
-         ${TEMP}/ioImageFileReaderRADARSAT.hd)
+         ${TEMP}/ioImageFileReaderRADARSAT.png)
 
 
 # ---  ENVI (GDAL) ---
@@ -143,11 +134,11 @@ ADD_TEST(ioTuONERAImageIOCanRead ${IO_TESTS} otbONERAImageIOTestCanRead
         ${IMAGEDATA}/ONERA/spa3_0215_rad.ent)
 	
 ADD_TEST(ioTvONERAImageFileReader ${IO_TESTS} 
-#  --compare-image ${TOL}   ${BASELINE}/ioImageFileReaderPNG2PNG_cthead1.png
-#                    ${TEMP}/ioImageFileReaderPNG2PNG_cthead1.png
+#  --compare-binary ${TOL}   ${BASELINE}/ioImageFileReaderONERA.dat
+#                    ${TEMP}/ioImageFileReaderONERA.dat
         otbImageFileReaderONERATest
         ${IMAGEDATA}/ONERA/spa3_0215_rad.ent
-        ${TEMP}/ioImageFileReaderONERA.png )
+        ${TEMP}/ioImageFileReaderONERA.ent )
 
 ADD_TEST(ioTvONERAImageFileReaderComplex ${IO_TESTS} 
 #  --compare-image ${TOL}   ${BASELINE}/ioImageFileReaderPNG2PNG_cthead1.png
@@ -157,8 +148,8 @@ ADD_TEST(ioTvONERAImageFileReaderComplex ${IO_TESTS}
         ${TEMP}/ioImageFileReaderONERAComplex.hd )
 
 ADD_TEST(ioTvONERAImageFileWriterComplex ${IO_TESTS} 
-  --compare-binary    ${IMAGEDATA}/ONERA/spa3_0215_rad.dat
-                           ${TEMP}/ONERA_Format_write_complex_data.dat
+#  --compare-binary    ${IMAGEDATA}/ONERA/spa3_0215_rad.dat
+#                           ${TEMP}/ONERA_Format_write_complex_data.dat
         otbImageFileWriterONERAComplex
         ${IMAGEDATA}/ONERA/spa3_0215_rad.ent
         ${TEMP}/ONERA_Format_write_complex_data.ent )

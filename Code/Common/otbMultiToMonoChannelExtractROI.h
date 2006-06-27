@@ -28,7 +28,7 @@ namespace otb
  * La méthode SetChannel permet de sélectionner le canal à traiter.
  * \note Si aucun canal n'est spécifié par l'utilisateur, alors le premier canal est traité.
  * \note Ces classe est paramétré par le type de pixel des images d'entrée et de sortie. 
- * L'image d'entrée est une image de type ype "itk::VectorImage". L'image produite en sortie est de type "itk::Image".
+ * L'image d'entrée est une image de type "itk::VectorImage". L'image produite en sortie est de type "itk::Image".
  *
  */
 template <class TInputPixelType, class TOutputPixelType>

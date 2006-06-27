@@ -14,6 +14,7 @@
 #include "itkStreamingImageFilter.h"
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
+#include "otbExtractROI.h"
 
 int otbImageFileReaderONERAComplex(int argc, char* argv[])
 {
@@ -27,13 +28,13 @@ int otbImageFileReaderONERAComplex(int argc, char* argv[])
         typedef float                             		OutputPixelType;
         const   unsigned int        	                        Dimension = 2;
 
-        typedef itk::Image< InputPixelType,  Dimension >        InputImageType;
-        typedef itk::Image< OutputPixelType, Dimension >        OutputImageType;
+        typedef otb::Image< InputPixelType,  Dimension >        InputImageType;
+        typedef otb::Image< OutputPixelType, Dimension >        OutputImageType;
 
         typedef otb::ImageFileReader< InputImageType  >         ReaderType;
         typedef otb::ImageFileWriter< OutputImageType >         WriterType;
 
-        typedef itk::StreamingImageFilter< InputImageType, InputImageType >         StreamingType;
+        typedef itk::StreamingImageFilter< InputImageType, InputImageType >  StreamingType;
 	
         StreamingType::Pointer streaming = StreamingType::New();
         ReaderType::Pointer complexReader = ReaderType::New();
@@ -43,59 +44,39 @@ int otbImageFileReaderONERAComplex(int argc, char* argv[])
 	streaming->SetInput(complexReader->GetOutput());
 	streaming->Update();
 
-
-	InputImageType::Pointer image = streaming->GetOutput();
-	InputImageType::IndexType pixelIndex;
-	InputImageType::PixelType      pixelValue;
-	pixelIndex[0] = 0;      // x position of the pixel
-	pixelIndex[1] = 0;      // y position of the pixel
-        pixelValue = image->GetPixel( pixelIndex );
-	std::cout << " PixelValue : ("<< pixelIndex[0]<<" , "<< pixelIndex[1]<<" ) = "<< pixelValue << std::endl;
-
   	typedef itk::ComplexToModulusImageFilter< 
                        InputImageType, OutputImageType > ModulusFilterType;
 
   	ModulusFilterType::Pointer modulusFilter = ModulusFilterType::New();
-  	modulusFilter->SetInput( complexReader->GetOutput() );
-//	modulusFilter->Update(); 
+  	modulusFilter->SetInput( streaming->GetOutput() );
         modulusFilter->Update(); 
 
-	OutputImageType::Pointer module = modulusFilter->GetOutput();
-        
-	InputImageType::PixelType       complexValue;
-	OutputImageType::PixelType      modulusValue;
+        typedef otb::ExtractROI< OutputPixelType, 
+                                 OutputPixelType >  ExtractROIFilterType;
 
-	for(unsigned int x = 100 ; x < 200 ; x++ )
-	{ 
-	  for(unsigned int y = 100 ; y < 200 ; y++ )
-	  {
-	  pixelIndex[0] = x;      // x position of the pixel
-	  pixelIndex[1] = y;      // y position of the pixel
+        ExtractROIFilterType::Pointer extractROIFilter = ExtractROIFilterType::New();
 
-	  complexValue = image->GetPixel( pixelIndex );
-	  modulusValue = module->GetPixel( pixelIndex );
-	  std::cout << " PixelValue : ("<< pixelIndex[0]<<" , "<< pixelIndex[1]<<" ) = "<< complexValue << std::endl;
-	  std::cout << " PixelValue : ("<< pixelIndex[0]<<" , "<< pixelIndex[1]<<" ) = "<< modulusValue << std::endl;
-          }
-	}
-	
+	extractROIFilter->SetStartX( 10 );
+	extractROIFilter->SetStartY( 10 );
+	extractROIFilter->SetSizeX( 100 );
+	extractROIFilter->SetSizeY( 100 );
+        extractROIFilter->SetInput( modulusFilter->GetOutput() );        
 
         WriterType::Pointer writer = WriterType::New();
 	
         writer->SetFileName( outputFilename );        
         writer->SetInput( modulusFilter->GetOutput() );
         writer->Update(); 
-
   } 
   catch( itk::ExceptionObject & err ) 
   { 
-    std::cerr << "Exception OTB attrappee dans exception ITK !" << std::endl; 
+    std::cerr << "Catch ITK Exception in OTB " << std::endl; 
     std::cerr << err << std::endl; 
     return EXIT_FAILURE;
   } 
   catch( ... )
   {
-    std::cerr << "Exception OTB non attrappee !" << std::endl; 
+    std::cerr << "catch OTB Exception  !" << std::endl; 
     return EXIT_FAILURE;
   }
   

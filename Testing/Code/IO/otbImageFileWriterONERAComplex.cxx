@@ -6,14 +6,14 @@
 //#define MAIN
 
 
-#include "itkImage.h"
-#include "itkVectorImage.h"
+#include "otbImage.h"
 #include "itkExceptionObject.h"
 #include <iostream>
 #include "itkComplexToModulusImageFilter.h"
 #include "itkStreamingImageFilter.h"
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
+#include "otbExtractROI.h"
 
 int otbImageFileWriterONERAComplex(int argc, char* argv[])
 {
@@ -27,8 +27,8 @@ int otbImageFileWriterONERAComplex(int argc, char* argv[])
         typedef float                             		OutputPixelType;
         const   unsigned int        	                        Dimension = 2;
 
-        typedef itk::Image< InputPixelType,  Dimension >        InputImageType;
-        typedef itk::Image< OutputPixelType, Dimension >        OutputImageType;
+        typedef otb::Image< InputPixelType,  Dimension >        InputImageType;
+        typedef otb::Image< OutputPixelType, Dimension >        OutputImageType;
 
         typedef otb::ImageFileReader< InputImageType  >         ReaderType;
         typedef otb::ImageFileWriter< InputImageType >         WriterType;
@@ -43,59 +43,21 @@ int otbImageFileWriterONERAComplex(int argc, char* argv[])
 	streaming->SetInput(complexReader->GetOutput());
 	streaming->Update();
 
-#if 0
-	InputImageType::Pointer image = streaming->GetOutput();
-	InputImageType::IndexType pixelIndex;
-	InputImageType::PixelType      pixelValue;
-	pixelIndex[0] = 0;      // x position of the pixel
-	pixelIndex[1] = 0;      // y position of the pixel
-        pixelValue = image->GetPixel( pixelIndex );
-	std::cout << " PixelValue : ("<< pixelIndex[0]<<" , "<< pixelIndex[1]<<" ) = "<< pixelValue << std::endl;
+	typedef otb::ExtractROI< InputPixelType, 
+                                 InputPixelType >  ExtractROIFilterType;
 
-	InputImageType::PixelType       complexValue;
-	for(unsigned int x = 100 ; x < 110 ; x++ )
-	{ 
-	  for(unsigned int y = 100 ; y < 110 ; y++ )
-	  {
-	  pixelIndex[0] = x;      // x position of the pixel
-	  pixelIndex[1] = y;      // y position of the pixel
+        ExtractROIFilterType::Pointer extractROIFilter = ExtractROIFilterType::New();
 
-	  complexValue = image->GetPixel( pixelIndex );
-	  std::cout << " PixelValue : ("<< pixelIndex[0]<<" , "<< pixelIndex[1]<<" ) = "<< complexValue << std::endl;
-          }
-	}
+	extractROIFilter->SetStartX( 10 );
+	extractROIFilter->SetStartY( 10 );
+	extractROIFilter->SetSizeX( 100 );
+	extractROIFilter->SetSizeY( 100 );
+        extractROIFilter->SetInput( streaming->GetOutput() );        
 
         WriterType::Pointer complexWriter = WriterType::New();
 	complexWriter->SetFileName( outputFilename  );
-	complexWriter->SetInput( streaming->GetOutput()  );
+	complexWriter->SetInput( extractROIFilter->GetOutput()  );
  	complexWriter->Update();
-
-	std::cout << "Re-lecture " <<std::endl;
-        ReaderType::Pointer complexReader2 = ReaderType::New();
-        StreamingType::Pointer streaming2 = StreamingType::New();
-	complexReader2->SetFileName( outputFilename  );
-	streaming2->SetInput(complexReader2->GetOutput());
-	streaming2->Update();
-
-	InputImageType::Pointer image2 = streaming2->GetOutput();
-
-	pixelIndex[0] = 0;      // x position of the pixel
-	pixelIndex[1] = 0;      // y position of the pixel
-        pixelValue = image->GetPixel( pixelIndex );
-	std::cout << " PixelValue Write: ("<< pixelIndex[0]<<" , "<< pixelIndex[1]<<" ) = "<< pixelValue << std::endl;
-	for(unsigned int x = 100 ; x < 110 ; x++ )
-	{ 
-	  for(unsigned int y = 100 ; y < 110 ; y++ )
-	  {
-	  pixelIndex[0] = x;      // x position of the pixel
-	  pixelIndex[1] = y;      // y position of the pixel
-
-	  complexValue = image->GetPixel( pixelIndex );
-	  std::cout << " PixelValue Write: ("<< pixelIndex[0]<<" , "<< pixelIndex[1]<<" ) = "<< complexValue << std::endl;
-          }
-	}
-
-#endif
 
   } 
   catch( itk::ExceptionObject & err ) 

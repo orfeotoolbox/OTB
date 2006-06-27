@@ -343,7 +343,7 @@ void ONERAImageIO::InternalReadImageInformation(std::fstream& file)
 
   // check "Format_valeurs_look"  
   char* sHeader = new char[1024];
-  // skip 3 lines 	
+  // skip 2 lines 	
   m_Headerfile.getline(sHeader,1024);
   m_Headerfile.getline(sHeader,1024);
   m_Headerfile.getline(sHeader,1024);
