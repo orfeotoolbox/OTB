@@ -743,6 +743,16 @@ int main( int argc, char *argv[] )
   // \label{fig:FastMarchingImageFilterOutput2}
   // \end{figure}
   //
+  //  \relatedClasses
+  //  \begin{itemize}
+  //  \item \doxygen{itk::ShapeDetectionLevelSetImageFilter}
+  //  \item \doxygen{itk::GeodesicActiveContourLevelSetImageFilter}
+  //  \item \doxygen{itk::ThresholdSegmentationLevelSetImageFilter}
+  //  \item \doxygen{itk::CannySegmentationLevelSetImageFilter}
+  //  \item \doxygen{itk::LaplacianSegmentationLevelSetImageFilter}
+  //  \end{itemize}
+  //
+  //  See the ITK Software Guide for examples of the use of these classes.
   //  Software Guide : EndLatex 
 
   return 0;
