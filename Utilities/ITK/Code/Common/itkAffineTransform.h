@@ -1,10 +1,10 @@
-/*
+/*=========================================================================
 
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkAffineTransform.h,v $
   Language:  C++
-  Date:      $Date: 2005/03/09 16:46:12 $
-  Version:   $Revision: 1.60 $
+  Date:      $Date: 2006/04/20 18:49:35 $
+  Version:   $Revision: 1.65 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -143,7 +143,7 @@ public:
   typedef typename Superclass::OutputVnlVectorType    OutputVnlVectorType;
   typedef typename Superclass::InputCovariantVectorType 
                                                       InputCovariantVectorType;
-  typedef typename Superclass::OutputCovariantVectorType      
+  typedef typename Superclass::OutputCovariantVectorType
                                                       OutputCovariantVectorType;
   typedef typename Superclass::MatrixType             MatrixType;
   typedef typename Superclass::InverseMatrixType      InverseMatrixType;
@@ -180,8 +180,8 @@ public:
    * rotation angle is in radians.  The axis of rotation goes
    * through the origin.  The transformation is given by
    *
-   * y[axis1] =  cos(angle)*x[axis1] + sin(angle)*x[axis2]
-   * y[axis2] = -sin(angle)*x[axis1] + cos(angle)*x[axis2].
+   * y[axis1] =  vcl_cos(angle)*x[axis1] + vcl_sin(angle)*x[axis2]
+   * y[axis2] = -sin(angle)*x[axis1] + vcl_cos(angle)*x[axis2].
    *
    * All coordinates other than axis1 and axis2 are unchanged;
    * a rotation of pi/2 radians will carry +axis1 into +axis2.
@@ -289,7 +289,7 @@ protected:
                   const OutputVectorType &offset);
   AffineTransform(unsigned int outputDims,
                   unsigned int paramDims);
-  AffineTransform();      
+  AffineTransform();
   
   /** Destroy an AffineTransform object   **/
   virtual ~AffineTransform();
@@ -304,16 +304,20 @@ private:
 
 }; //class AffineTransform
 
-}  // namespace itk
+}  // namespace itks
 
+// Define instantiation macro for this template.
+#define ITK_TEMPLATE_AffineTransform(_, EXPORT, x, y) namespace itk { \
+  _(2(class EXPORT AffineTransform< ITK_TEMPLATE_2 x >)) \
+  namespace Templates { typedef AffineTransform< ITK_TEMPLATE_2 x > AffineTransform##y; } \
+  }
 
-#ifndef ITK_MANUAL_INSTANTIATION
-#include "itkAffineTransform.txx"
+#if ITK_TEMPLATE_EXPLICIT
+# include "Templates/itkAffineTransform+-.h"
+#endif
+
+#if ITK_TEMPLATE_TXX
+# include "itkAffineTransform.txx"
 #endif
 
 #endif /* __itkAffineTransform_h */
-
-
-
-
-
