@@ -83,12 +83,14 @@ IF(NETLIB_FOUND)
 
   ADD_LIBRARY( itkvnl_algo ${vnl_algo_sources})
   TARGET_LINK_LIBRARIES( itkvnl_algo ${NETLIB_LIBRARIES} itkvnl )
-  INSTALL_TARGETS(/lib/otb itkvnl_algo)
+  IF(ITK_LIBRARY_PROPERTIES)
+    SET_TARGET_PROPERTIES(itkvnl_algo PROPERTIES ${ITK_LIBRARY_PROPERTIES})
+  ENDIF(ITK_LIBRARY_PROPERTIES)
+  INSTALL_TARGETS(/lib/InsightToolkit itkvnl_algo)
 
-  #ROMAIN
-  #IF( BUILD_TESTING )
-  #  SUBDIRS(tests)
-  #ENDIF( BUILD_TESTING )
+  IF( BUILD_TESTING )
+    SUBDIRS(tests)
+  ENDIF( BUILD_TESTING )
 
 ENDIF(NETLIB_FOUND)
 INSTALL_FILES(${VXL_INSTALL_ROOT}/core/vnl/algo "(\\.h|\\.txx)$")
