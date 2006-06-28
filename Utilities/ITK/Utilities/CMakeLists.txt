@@ -14,12 +14,12 @@ ITK_THIRD_PARTY_SUBDIR(PNG  png)
 ITK_THIRD_PARTY_SUBDIR(TIFF tiff)
 SET(OPJ_PREFIX "itk")
 ITK_THIRD_PARTY_SUBDIR(OpenJPEG openjpeg)
+ITK_THIRD_PARTY_SUBDIR(GDCM gdcm)
 #------------------------------------------------------------------------------
 # Other utilities libraries
 SUBDIRS(MetaIO)
 SUBDIRS(NrrdIO)
 SUBDIRS(expat)
-SUBDIRS(gdcm)
 SUBDIRS(nifti)
 
 #------------------------------------------------------------------------------
@@ -54,9 +54,14 @@ SET(KWSYS_USE_Directory 1)
 SET(KWSYS_USE_Base64 1)
 SET(KWSYS_USE_FundamentalType 1)
 SET(KWSYS_USE_CommandLineArguments 1)
+SET(KWSYS_USE_Process 1)
+SET(KWSYS_USE_DynamicLoader 1)
+SET(KWSYS_USE_Glob 1)
+SET(KWSYS_USE_Registry 1)
 SET(KWSYS_HEADER_ROOT ${ITK_BINARY_DIR}/Utilities)
-SET(KWSYS_LIBRARY_INSTALL_DIR /lib/otb)
-SET(KWSYS_HEADER_INSTALL_DIR /include/otb/Utilities/ITK/Utilities)
+SET(KWSYS_LIBRARY_INSTALL_DIR /lib/InsightToolkit)
+SET(KWSYS_HEADER_INSTALL_DIR /include/InsightToolkit/Utilities)
+SET(KWSYS_PROPERTIES_CXX ${ITK_LIBRARY_PROPERTIES})
 SUBDIRS(kwsys)
 
 #-----------------------------------------------------------------------------
@@ -68,5 +73,5 @@ ENDIF(ITK_BUILD_CABLESWIG)
 
 #-----------------------------------------------------------------------------
 # Install the UseITK.cmake file configured from the top-level.
-#INSTALL_FILES(/lib/otb ".cmake" "ITKConfig")
+INSTALL_FILES(/lib/InsightToolkit ".cmake" "ITKConfig")
 
