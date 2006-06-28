@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkTubeSpatialObject.txx,v $
   Language:  C++
-  Date:      $Date: 2006/02/09 15:37:38 $
-  Version:   $Revision: 1.66 $
+  Date:      $Date: 2006/03/19 04:37:20 $
+  Version:   $Revision: 1.67 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -238,7 +238,7 @@ TubeSpatialObject< TDimension, TTubePointType >
       double lambda = A/B;
 
       if( ((it != m_Points.begin()) && 
-          (lambda>-((*it).GetRadius()/(2*sqrt(B))))
+          (lambda>-((*it).GetRadius()/(2*vcl_sqrt(B))))
           && (lambda<0))
           || ((lambda <= 1.0) && (lambda >= 0.0))       
         )
@@ -275,7 +275,7 @@ TubeSpatialObject< TDimension, TTubePointType >
      it++;
      }
 
-     double dist = sqrt(minSquareDist);
+     double dist = vcl_sqrt(minSquareDist);
      if( dist <= ((*min).GetRadius()) ) 
        {
        return true;
@@ -388,7 +388,7 @@ TubeSpatialObject< TDimension, TTubePointType >
       l = l + t[i]*t[i];
       }
     
-    l = sqrt(l);
+    l = vcl_sqrt(l);
     if(l == 0)
       {
       std::cerr << "TubeSpatialObject::ComputeTangentAndNormals() : "; 

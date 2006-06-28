@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkCylinderSpatialObject.cxx,v $
   Language:  C++
-  Date:      $Date: 2005/03/03 20:10:15 $
-  Version:   $Revision: 1.3 $
+  Date:      $Date: 2006/03/19 04:37:20 $
+  Version:   $Revision: 1.4 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -73,7 +73,7 @@ bool CylinderSpatialObject
     double lambda = A/B;
 
     if( (
-         (lambda>-(m_Radius/(2*sqrt(B))))
+         (lambda>-(m_Radius/(2*vcl_sqrt(B))))
           && (lambda<0))
           || ((lambda <= 1.0) && (lambda >= 0.0))       
         )

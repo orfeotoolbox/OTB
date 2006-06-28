@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkGaussianSpatialObject.txx,v $
   Language:  C++
-  Date:      $Date: 2004/12/13 17:59:35 $
-  Version:   $Revision: 1.10 $
+  Date:      $Date: 2006/03/19 04:37:20 $
+  Version:   $Revision: 1.11 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -149,7 +149,7 @@ GaussianSpatialObject< TDimension >
   if(name == NULL || strstr(typeid(Self).name(), name) )
     {
     double zsq = this->SquaredZScore(point);
-    value = m_Maximum * (ScalarType)exp( -zsq / 2.0 );
+    value = m_Maximum * (ScalarType)vcl_exp(-zsq / 2.0 );
     return true;
     }
   return Superclass::ValueAt( point, value, depth,  name );

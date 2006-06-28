@@ -1,10 +1,10 @@
 /*=========================================================================
 
   Program:   Insight Segmentation & Registration Toolkit
-  Module:    $RCSfile: itkBlobSpatialObject.txx,v $
+  Module:    $RCSfile: itkContourSpatialObject.txx,v $
   Language:  C++
-  Date:      $Date: 2006/03/19 04:37:20 $
-  Version:   $Revision: 1.29 $
+  Date:      $Date: 2006/03/27 20:48:46 $
+  Version:   $Revision: 1.3 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -18,10 +18,10 @@
 #pragma warning ( disable : 4786 )
 #endif
 
-#ifndef __itkBlobSpatialObject_txx
-#define __itkBlobSpatialObject_txx
+#ifndef __itkContourSpatialObject_txx
+#define __itkContourSpatialObject_txx
 
-#include "itkBlobSpatialObject.h" 
+#include "itkContourSpatialObject.h" 
 
 #include <itkNumericTraits.h>
 
@@ -30,110 +30,167 @@ namespace itk
 
 /** Constructor */
 template< unsigned int TDimension >
-BlobSpatialObject< TDimension > 
-::BlobSpatialObject()  
+ContourSpatialObject< TDimension > 
+::ContourSpatialObject()  
 { 
   this->SetDimension(TDimension);
-  this->SetTypeName("BlobSpatialObject");
+  this->SetTypeName("ContourSpatialObject");
   this->GetProperty()->SetRed(1); 
   this->GetProperty()->SetGreen(0); 
   this->GetProperty()->SetBlue(0); 
   this->GetProperty()->SetAlpha(1); 
+  m_InterpolationType = NO_INTERPOLATION;
+  m_Closed = false;
+  m_DisplayOrientation = -1;
+  m_AttachedToSlice = -1;
 } 
 
 /** Destructor */ 
 template< unsigned int TDimension >
-BlobSpatialObject< TDimension > 
-::~BlobSpatialObject()
+ContourSpatialObject< TDimension >  
+::~ContourSpatialObject()
 { 
 } 
  
-/** Get the list of points that defines the blob */
+/** Get the list of control points */
 template< unsigned int TDimension >
-typename BlobSpatialObject< TDimension > ::PointListType &  
-BlobSpatialObject< TDimension > 
-::GetPoints() 
+typename ContourSpatialObject< TDimension > ::ControlPointListType &  
+ContourSpatialObject< TDimension > 
+::GetControlPoints() 
 { 
-  itkDebugMacro( "Getting BlobPoint list" );
-  return m_Points;
+  itkDebugMacro( "Getting control Point list" );
+  return m_ControlPoints;
 } 
 
-/** Get the list of points which are defining the blob */
+/** Get the list of control points*/
 template< unsigned int TDimension >
-const typename BlobSpatialObject< TDimension > ::PointListType &  
-BlobSpatialObject< TDimension > 
-::GetPoints() const
+const typename ContourSpatialObject< TDimension > ::ControlPointListType &  
+ContourSpatialObject< TDimension > 
+::GetControlPoints() const
 { 
-  itkDebugMacro( "Getting BlobPoint list" );
-  return m_Points;
+  itkDebugMacro( "Getting ContourPoint list" );
+  return m_ControlPoints;
 } 
 
-/** Set the points which are defining the Blob structure */
+/** Set the control points which are defining the contour */
 template< unsigned int TDimension >
 void  
-BlobSpatialObject< TDimension > 
-::SetPoints( PointListType & points )  
+ContourSpatialObject< TDimension >  
+::SetControlPoints( ControlPointListType & points )  
 {
-  // in this function, passing a null pointer as argument will
-  // just clear the list...
-  m_Points.clear();
+  m_ControlPoints.clear();
         
-  typename PointListType::iterator it,end;
+  typename ControlPointListType::iterator it,end;
   it = points.begin();    
   end = points.end();
   while(it != end)
     {
-    m_Points.push_back(*it);
+    m_ControlPoints.push_back(*it);
     it++;
     }
-    
-  this->ComputeBoundingBox();
   this->Modified();
 } 
- 
-/** Print the blob spatial object */
+
+/** Get the list of interpolated points */
+template< unsigned int TDimension >
+typename ContourSpatialObject< TDimension > ::InterpolatedPointListType &  
+ContourSpatialObject< TDimension > 
+::GetInterpolatedPoints() 
+{ 
+  itkDebugMacro( "Getting interpolated Point list" );
+  return m_InterpolatedPoints;
+} 
+
+/** Get the list of interpolated points*/
+template< unsigned int TDimension >
+const typename ContourSpatialObject< TDimension > ::InterpolatedPointListType &  
+ContourSpatialObject< TDimension > 
+::GetInterpolatedPoints() const
+{ 
+  itkDebugMacro( "Getting interpolated list" );
+  return m_InterpolatedPoints;
+} 
+
+/** Set the interpolated points which are defining the contour */
 template< unsigned int TDimension >
 void  
-BlobSpatialObject< TDimension >  
+ContourSpatialObject< TDimension >  
+::SetInterpolatedPoints( InterpolatedPointListType & points )  
+{
+  m_InterpolatedPoints.clear();
+        
+  typename InterpolatedPointListType::iterator it,end;
+  it = points.begin();    
+  end = points.end();
+  while(it != end)
+    {
+    m_InterpolatedPoints.push_back(*it);
+    it++;
+    }
+  this->Modified();
+}
+
+/** Print the contour spatial object */
+template< unsigned int TDimension >
+void  
+ContourSpatialObject< TDimension >  
 ::PrintSelf( std::ostream& os, Indent indent ) const 
 { 
-  os << indent << "BlobSpatialObject(" << this << ")" << std::endl; 
+  os << indent << "ContourSpatialObject(" << this << ")" << std::endl; 
   os << indent << "ID: " << this->GetId() << std::endl; 
-  os << indent << "nb of points: "<< static_cast<unsigned long>( m_Points.size() ) << std::endl;
+  os << indent << "# Control Points: " 
+     << static_cast< unsigned long>( m_ControlPoints.size() ) << std::endl;
+  os << indent << "Interpolation type: " << m_InterpolationType << std::endl;
+  os << indent << "Contour closed: " << m_Closed << std::endl;
+  os << indent << "Display Orientation : " << m_DisplayOrientation << std::endl;
+  os << indent << "Pin to slice : " << m_AttachedToSlice << std::endl;
   Superclass::PrintSelf( os, indent ); 
 } 
   
 /** Compute the bounds of the blob */ 
 template< unsigned int TDimension >
 bool 
-BlobSpatialObject< TDimension > 
+ContourSpatialObject< TDimension >  
 ::ComputeLocalBoundingBox() const
 { 
   itkDebugMacro( "Computing blob bounding box" );
-
-  if( this->GetBoundingBoxChildrenName().empty() || strstr(typeid(Self).name(), this->GetBoundingBoxChildrenName().c_str()) )
+ 
+  if( this->GetBoundingBoxChildrenName().empty() 
+     || strstr(typeid(Self).name(), 
+     this->GetBoundingBoxChildrenName().c_str()) )
     {
-    typename PointListType::const_iterator it  = m_Points.begin();
-    typename PointListType::const_iterator end = m_Points.end();
+    typename ControlPointListType::const_iterator it  = m_ControlPoints.begin();
+    typename ControlPointListType::const_iterator end = m_ControlPoints.end();
   
     if(it == end)
       {
       return false;
       }
     else
-      {
+      {     
       PointType pt = this->GetIndexToWorldTransform()->TransformPoint((*it).GetPosition());
       const_cast<BoundingBoxType *>(this->GetBounds())->SetMinimum(pt);
       const_cast<BoundingBoxType *>(this->GetBounds())->SetMaximum(pt);
       it++;
-      while(it!= end) 
+
+      while(it!= end)
         {  
         pt = this->GetIndexToWorldTransform()->TransformPoint((*it).GetPosition());
         const_cast<BoundingBoxType *>(this->GetBounds())->ConsiderPoint(pt);
         it++;
         }
+
+      // Add the interpolated points (if any)
+      typename InterpolatedPointListType::const_iterator itI  = m_InterpolatedPoints.begin();
+      while(itI != m_InterpolatedPoints.end()) 
+        {  
+        pt = this->GetIndexToWorldTransform()->TransformPoint((*itI).GetPosition());
+        const_cast<BoundingBoxType *>(this->GetBounds())->ConsiderPoint(pt);
+        itI++;
+        }
       }
     }
+
   return true;
 } 
 
@@ -143,11 +200,11 @@ BlobSpatialObject< TDimension >
  *  check the name of the class and the current depth */ 
 template< unsigned int TDimension >
 bool 
-BlobSpatialObject< TDimension >
+ContourSpatialObject< TDimension >
 ::IsInside( const PointType & point) const
 {
-  typename PointListType::const_iterator it = m_Points.begin();
-  typename PointListType::const_iterator itEnd = m_Points.end();
+  /*typename ControlPointListType::const_iterator it = m_ControlPoints.begin();
+  typename ControlPointListType::const_iterator itEnd = m_ControlPoints.end();
     
   if(!this->GetIndexToWorldTransform()->GetInverse(const_cast<TransformType *>(this->GetInternalInverseTransform())))
     {
@@ -155,35 +212,30 @@ BlobSpatialObject< TDimension >
     }
 
   PointType transformedPoint = this->GetInternalInverseTransform()->TransformPoint(point);
-  
+
   if( this->GetBounds()->IsInside(transformedPoint) )
     {
     while(it != itEnd)
       {
-      typename PointType::VectorType difference = 
-        transformedPoint - it->GetPosition();
-      if(fabs(difference[0]) <= 0.5 && 
-         vcl_fabs(difference[1]) <= 0.5 && 
-         vcl_fabs(difference[2]) <= 0.5)
+      if((*it).GetPosition() == transformedPoint)
         {
         return true;
         }
       it++;
       }
-    }
+    }*/
   return false;
 }
-
-
 
 /** Test if the given point is inside the blob
  *  Note: ComputeBoundingBox should be called before. */
 template< unsigned int TDimension >
 bool 
-BlobSpatialObject< TDimension > 
+ContourSpatialObject< TDimension >  
 ::IsInside( const PointType & point, unsigned int depth, char * name ) const
 {
-  itkDebugMacro( "Checking the point [" << point << "] is inside the blob" );    
+  itkDebugMacro( "Checking the point [" << point << "] is inside the blob" );
+ 
   if(name == NULL)
     {
     if(IsInside(point))
@@ -198,7 +250,7 @@ BlobSpatialObject< TDimension >
       return true;
       }
     }
-
+  
   return Superclass::IsInside(point, depth, name);
 } 
 
@@ -206,7 +258,7 @@ BlobSpatialObject< TDimension >
  *  i.e if the point is defined in the points list        */
 template< unsigned int TDimension >
 bool
-BlobSpatialObject< TDimension > 
+ContourSpatialObject< TDimension > 
 ::IsEvaluableAt( const PointType & point, unsigned int depth, char * name ) const
 {
   itkDebugMacro( "Checking if the blob is evaluable at " << point );
@@ -217,7 +269,7 @@ BlobSpatialObject< TDimension >
 /** Return 1 if the point is in the points list */
 template< unsigned int TDimension >
 bool
-BlobSpatialObject< TDimension > 
+ContourSpatialObject< TDimension > 
 ::ValueAt( const PointType & point, double & value, unsigned int depth,
            char * name ) const
 {
