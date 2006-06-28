@@ -1,5 +1,5 @@
 /* 
- * here is where system comupted values get stored these values should only
+ * here is where system computed values get stored these values should only
  * change when the target compile platform changes 
  */
 
@@ -42,6 +42,8 @@
 #cmakedefine CMAKE_NO_ANSI_STRING_STREAM
 #cmakedefine CMAKE_NO_ANSI_FOR_SCOPE
 #cmakedefine ITK_CPP_FUNCTION
+#cmakedefine ITK_USE_CONCEPT_CHECKING
+#cmakedefine ITK_EXPLICIT_INSTANTIATION
 
 #define ITK_VERSION_MAJOR @ITK_VERSION_MAJOR@
 #define ITK_VERSION_MINOR @ITK_VERSION_MINOR@

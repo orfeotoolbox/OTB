@@ -9,6 +9,10 @@ IF(ITK_USE_SYSTEM_VXL)
     )
 ENDIF(ITK_USE_SYSTEM_VXL)
 
+IF(ITK_USE_SYSTEM_GDCM)
+  SET(ITK_INCLUDE_DIRS_SYSTEM ${GDCM_DIR})
+ENDIF(ITK_USE_SYSTEM_GDCM)
+
 #-----------------------------------------------------------------------------
 # Include directories from the build tree.
 SET(ITK_INCLUDE_DIRS_BUILD_TREE ${ITK_BINARY_DIR})
@@ -32,6 +36,7 @@ SET(ITK_INCLUDE_DIRS_BUILD_TREE ${ITK_INCLUDE_DIRS_BUILD_TREE}
   ${ITK_SOURCE_DIR}/Utilities/expat
   ${ITK_SOURCE_DIR}/Utilities/nifti/niftilib
   ${ITK_SOURCE_DIR}/Utilities/nifti/znzlib
+# ROMAIN
   ${ITK_BINARY_DIR}/Utilities/gdcm
   ${ITK_BINARY_DIR}/Utilities
   ${ITK_SOURCE_DIR}/Utilities
@@ -59,6 +64,14 @@ IF(NOT ITK_USE_SYSTEM_VXL)
     ${ITK_BINARY_DIR}/Utilities/vxl/core
     )
 ENDIF(NOT ITK_USE_SYSTEM_VXL)
+
+# GDCM include directories.
+IF(NOT ITK_USE_SYSTEM_GDCM)
+  SET(ITK_INCLUDE_DIRS_BUILD_TREE ${ITK_INCLUDE_DIRS_BUILD_TREE}
+    ${ITK_BINARY_DIR}/Utilities/gdcm
+    ${ITK_SOURCE_DIR}/Utilities/gdcm/src
+    )
+ENDIF(NOT ITK_USE_SYSTEM_GDCM)
 
 # Patended include directories added only if the user explicitly enabled the
 # ITK_USE_PATENTED option. Users are responsible for getting a license from the
@@ -95,13 +108,14 @@ ENDIF(ITK_USE_SYSTEM_VXL)
 
 #-----------------------------------------------------------------------------
 # Include directories from the install tree.
-SET(ITK_INSTALL_INCLUDE_DIR "${CMAKE_INSTALL_PREFIX}/include/otb/Utilities/ITK")
+SET(ITK_INSTALL_INCLUDE_DIR "${CMAKE_INSTALL_PREFIX}/include/InsightToolkit")
 SET(ITK_INCLUDE_DIRS_INSTALL_TREE ${ITK_INCLUDE_DIRS_INSTALL_TREE}
   ${ITK_INSTALL_INCLUDE_DIR}
   ${ITK_INSTALL_INCLUDE_DIR}/Algorithms
   ${ITK_INSTALL_INCLUDE_DIR}/BasicFilters
   ${ITK_INSTALL_INCLUDE_DIR}/Common
   ${ITK_INSTALL_INCLUDE_DIR}/expat
+  ${ITK_INSTALL_INCLUDE_DIR}/gdcm/src
   ${ITK_INSTALL_INCLUDE_DIR}/Numerics
   ${ITK_INSTALL_INCLUDE_DIR}/IO
   ${ITK_INSTALL_INCLUDE_DIR}/Numerics/FEM

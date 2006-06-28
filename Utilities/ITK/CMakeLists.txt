@@ -5,8 +5,8 @@ PROJECT(ITK)
 #-----------------------------------------------------------------------------
 # ITK version number.  An even minor number corresponds to releases.
 SET(ITK_VERSION_MAJOR "2")
-SET(ITK_VERSION_MINOR "6")
-SET(ITK_VERSION_PATCH "0")
+SET(ITK_VERSION_MINOR "8")
+SET(ITK_VERSION_PATCH "1")
 
 # Version string should not include patch level.  The major.minor is
 # enough to distinguish available features of the toolkit.
@@ -69,9 +69,47 @@ OPTION(ITK_CSWIG_JAVA "Build cswig Java wrapper support " OFF)
 # once.  This has only been tested on gcc compilers.
 OPTION(ITK_EXPLICIT_INSTANTIATION "BETA-Try to explicitly build some of the core templates explictitly rather than over and over again." OFF)
 MARK_AS_ADVANCED(ITK_EXPLICIT_INSTANTIATION)
-IF( ITK_EXPLICIT_INSTANTIATION )
- ADD_DEFINITIONS(-DITK_EXPLICIT_INSTANTIATION)
-ENDIF( ITK_EXPLICIT_INSTANTIATION )
+
+
+#ROMAIN
+#IF( ITK_EXPLICIT_INSTANTIATION )
+# ADD_DEFINITIONS(-DITK_EXPLICIT_INSTANTIATION)
+#ENDIF( ITK_EXPLICIT_INSTANTIATION )
+
+#-----------------------------------------------------------------------------
+# ITK uses KWStyle for checking the coding style
+OPTION(ITK_USE_KWSTYLE "Run KWStyle in order to check for violations of the coding standard." OFF)
+MARK_AS_ADVANCED(ITK_USE_KWSTYLE)
+ 
+IF(ITK_USE_KWSTYLE)
+   FIND_PROGRAM(KWSTYLE_EXECUTABLE
+   NAMES KWStyle 
+   PATHS
+   /usr/local/bin
+   )
+   MARK_AS_ADVANCED(KWSTYLE_EXECUTABLE)
+   ADD_CUSTOM_COMMAND(
+     OUTPUT ${ITK_BINARY_DIR}/KWStyleReport.txt
+     COMMAND ${KWSTYLE_EXECUTABLE}
+     ARGS    -xml ${ITK_BINARY_DIR}/ITK.kws.xml -o ${ITK_SOURCE_DIR}/Utilities/KWStyle/ITKOverwrite.txt -R -v -d ${ITK_SOURCE_DIR} 
+     COMMENT "Coding Style Checker"
+   )
+   ADD_CUSTOM_TARGET(StyleCheck DEPENDS ${ITK_BINARY_DIR}/KWStyleReport.txt)
+ENDIF(ITK_USE_KWSTYLE)
+ 
+#-----------------------------------------------------------------------------
+# ITK turn on concept checking
+IF( NOT BORLAND )
+   OPTION(ITK_USE_CONCEPT_CHECKING "Turn on concept checking to give helpful errors at compile time if a type cannot be used as a template parameter." OFF)
+   MARK_AS_ADVANCED(ITK_USE_CONCEPT_CHECKING)
+ELSE( NOT BORLAND )
+   SET(ITK_USE_CONCEPT_CHECKING OFF)
+   MARK_AS_ADVANCED(ITK_USE_CONCEPT_CHECKING)
+ENDIF( NOT BORLAND )
+
+#END ROMAIN
+
+
 # perl support does not work, contact bill hoffman at kitware
 # if you are interested in perl wrapping.  It is close, but
 # not there yet.
@@ -210,8 +248,43 @@ IF(ITK_USE_SYSTEM_VXL)
   ENDIF(VXL_FOUND)
 ELSE(ITK_USE_SYSTEM_VXL)
   SET(VXL_NETLIB_INCLUDE_DIR ${ITK_SOURCE_DIR}/Utilities/vxl/v3p/netlib)
-  SET(VXL_NUMERICS_LIBRARIES itkvnl itkvnl_algo itknetlib)
+  SET(VXL_NUMERICS_LIBRARIES itkvnl itkvnl_algo itknetlib itkvcl)
 ENDIF(ITK_USE_SYSTEM_VXL)
+
+#ROMAIN
+
+IF(BORLAND)
+     SET(ITK_REQUIRED_CXX_FLAGS "${ITK_REQUIRED_CXX_FLAGS} -w- -whid -waus -wpar")
+     SET(ITK_REQUIRED_C_FLAGS "${ITK_REQUIRED_C_FLAGS} -w- -whid -waus -wpar")
+ENDIF(BORLAND)
+ 
+CONFIGURE_FILE(${ITK_SOURCE_DIR}/Utilities/KWStyle/ITK.kws.xml.in
+                ${ITK_BINARY_DIR}/ITK.kws.xml)
+# ITK_USE_SYSTEM_GDCM is provided so that you can use an installed or external
+# version of gdcm. If its on, you must specify the variables 
+# Important: INCLUDE(${GDCM_USE_FILE}) *has* to be set after the
+# INCLUDE_DIRECTORIES that sets all the include paths for ITK, otherwise
+# if GDCM was build with VTK support, including it will bring the VTK
+# include paths as well, and the wrong DICOMParser will be picked.
+ 
+OPTION(ITK_USE_SYSTEM_GDCM "Use an outside build of GDCM." OFF)
+MARK_AS_ADVANCED(ITK_USE_SYSTEM_GDCM)
+IF(ITK_USE_SYSTEM_GDCM)
+   FIND_PACKAGE(GDCM)
+   IF(GDCM_FOUND)
+     INCLUDE(${GDCM_USE_FILE})
+     SET(ITK_GDCM_LIBRARIES gdcm)
+   ELSE(GDCM_FOUND)
+     MESSAGE(FATAL_ERROR "Must set GDCM_DIR for ITK_USE_SYSTEM_GDCM.")
+   ENDIF(GDCM_FOUND)
+ ELSE(ITK_USE_SYSTEM_GDCM)
+   SET(ITK_GDCM_LIBRARIES itkgdcm)
+   SET(GDCM_INCLUDE_DIR
+     ${ITK_SOURCE_DIR}/Utilities/gdcm/src
+     )
+ENDIF(ITK_USE_SYSTEM_GDCM)
+
+#ROMAIN END
 
 # Provide options to use system versions of third-party libraries.
 ITK_THIRD_PARTY_OPTION(ZLIB zlib)
