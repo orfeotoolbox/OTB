@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkFEMElement3DC0LinearTetrahedron.cxx,v $
   Language:  C++
-  Date:      $Date: 2004/07/22 15:52:10 $
-  Version:   $Revision: 1.7 $
+  Date:      $Date: 2006/03/19 04:37:20 $
+  Version:   $Revision: 1.8 $
 
   Copyright (c) 2002 Insight Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -36,7 +36,7 @@ Element3DC0LinearTetrahedron
   // FIXME: Write rules for other integration orders
   pt.set_size(3);
 
-  Float d = 1.0/sqrt(3.0);
+  Float d = 1.0/vcl_sqrt(3.0);
 
   pt[0] = d;
   pt[1] = d;

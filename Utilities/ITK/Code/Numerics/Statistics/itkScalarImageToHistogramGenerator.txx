@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkScalarImageToHistogramGenerator.txx,v $
   Language:  C++
-  Date:      $Date: 2003/12/05 18:47:38 $
-  Version:   $Revision: 1.1 $
+  Date:      $Date: 2006/03/14 22:01:52 $
+  Version:   $Revision: 1.2 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -72,6 +72,30 @@ ScalarImageToHistogramGenerator< TImage >
   typename HistogramType::SizeType size;
   size.Fill( numberOfBins );
   m_HistogramGenerator->SetNumberOfBins( size );
+}
+
+
+template < class TImage >
+void
+ScalarImageToHistogramGenerator< TImage >
+::SetHistogramMin( RealPixelType minimumValue ) 
+{
+  typedef typename GeneratorType::MeasurementVectorType     MeasurementVectorType;
+  MeasurementVectorType minVector;
+  minVector[0] = minimumValue;
+  m_HistogramGenerator->SetHistogramMin( minVector );
+}
+
+
+template < class TImage >
+void
+ScalarImageToHistogramGenerator< TImage >
+::SetHistogramMax( RealPixelType maximumValue ) 
+{
+  typedef typename GeneratorType::MeasurementVectorType     MeasurementVectorType;
+  MeasurementVectorType maxVector;
+  maxVector[0] = maximumValue;
+  m_HistogramGenerator->SetHistogramMax( maxVector );
 }
 
 

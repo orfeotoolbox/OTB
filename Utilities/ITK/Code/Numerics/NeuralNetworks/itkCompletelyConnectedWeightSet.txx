@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkCompletelyConnectedWeightSet.txx,v $
   Language:  C++
-  Date:      $Date: 2005/08/02 19:17:37 $
-  Version:   $Revision: 1.1 $
+  Date:      $Date: 2006/04/17 19:35:36 $
+  Version:   $Revision: 1.2 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -37,8 +37,8 @@ CompletelyConnectedWeightSet<TVector,TOutput>
 ::SetCompleteConnectivity()
 {
   vnl_matrix<int> c;
-  unsigned int rows = WeightSetBase<TVector, TOutput>::GetNumberOfInputNodes();
-  unsigned int cols = WeightSetBase<TVector, TOutput>::GetNumberOfOutputNodes();
+  unsigned int rows = WeightSetBase<TVector, TOutput>::GetNumberOfOutputNodes();
+  unsigned int cols = WeightSetBase<TVector, TOutput>::GetNumberOfInputNodes();
   std::cout << "Connectivity matrix size= " << rows << " " << cols << std::endl;
   c.set_size(rows, cols);
   c.fill(1);

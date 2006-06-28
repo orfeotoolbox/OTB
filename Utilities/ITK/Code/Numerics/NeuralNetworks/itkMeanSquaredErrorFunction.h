@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkMeanSquaredErrorFunction.h,v $
   Language:  C++
-  Date:      $Date: 2005/08/02 19:17:37 $
-  Version:   $Revision: 1.1 $
+  Date:      $Date: 2006/04/17 21:34:31 $
+  Version:   $Revision: 1.3 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -37,6 +37,7 @@ public:
   typedef SmartPointer<Self> Pointer;
   typedef SmartPointer<const Self> ConstPointer;
   typedef typename Superclass::ErrorVectorType ErrorVectorType;
+  typedef typename Superclass::InternalVectorType InternalVectorType;
 
   /** Run-time type information (and related methods). */
   itkTypeMacro(MeanSquaredErrorFunction, FunctionBase);
@@ -47,7 +48,7 @@ public:
   /** Evaluate at the specified Error position */
   ScalarType Evaluate(const TVector& Errors) const;
 
-  ErrorVectorType EvaluateDerivative(const TVector& Errors) const;
+  InternalVectorType EvaluateDerivative(const TVector& Errors) const;
 
 protected:
 

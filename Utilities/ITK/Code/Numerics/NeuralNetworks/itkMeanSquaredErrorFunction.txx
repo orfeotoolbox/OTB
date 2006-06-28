@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkMeanSquaredErrorFunction.txx,v $
   Language:  C++
-  Date:      $Date: 2005/08/02 19:17:37 $
-  Version:   $Revision: 1.1 $
+  Date:      $Date: 2006/04/17 19:34:45 $
+  Version:   $Revision: 1.2 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -45,19 +45,28 @@ ScalarType
 MeanSquaredErrorFunction <TVector,ScalarType>
 ::Evaluate(const TVector& errors)  const
 {
-  vnl_vector <ScalarType> temp(errors.GetVnlVector());
+  vnl_vector <ScalarType> temp(errors.Size());
+ for(unsigned int i=0; i<errors.Size(); i++)
+ {
+    temp[i]=errors[i];
+ }
   return (temp.squared_magnitude() / temp.size());
 }
 
 /** Evaluate derivatives */
 template<class TVector, class ScalarType>
 typename MeanSquaredErrorFunction <TVector,ScalarType>
-::ErrorVectorType
+::InternalVectorType
 MeanSquaredErrorFunction <TVector,ScalarType>
 ::EvaluateDerivative(const TVector& errors)  const
 {
-  ScalarType m = static_cast<ScalarType>(2) / errors.GetVectorDimension();
-  return (errors * m);
+  ScalarType m = static_cast<ScalarType>(2) / errors.Size();
+  InternalVectorType temp(errors.Size());
+  for(int i=0; i<errors.Size(); i++)
+  {
+     temp[i]=errors[i]*m;
+  }
+  return temp;
 }
 
 /** Print the object */

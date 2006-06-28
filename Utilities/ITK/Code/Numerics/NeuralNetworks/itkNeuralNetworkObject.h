@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkNeuralNetworkObject.h,v $
   Language:  C++
-  Date:      $Date: 2005/08/02 19:17:37 $
-  Version:   $Revision: 1.1 $
+  Date:      $Date: 2006/04/17 19:34:45 $
+  Version:   $Revision: 1.2 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -40,7 +40,8 @@ public:
 
   typedef typename TVector::ValueType ValueType;
   typedef TOutput TargetVectorType;
-
+  typedef Array<ValueType> NetworkOutputType;
+ 
   typedef WeightSetBase<TVector, TOutput> WeightSetType;
   typedef LayerBase<TVector, TOutput> LayerType;
   typedef typename LayerType::Pointer LayerPointer;
@@ -48,10 +49,11 @@ public:
   typedef LearningFunctionBase<LayerType, TOutput> LearningFunctionType;
   typedef typename LearningFunctionType::Pointer LearningFunctionPointer;
 
-  virtual ValueType* GenerateOutput(TVector samplevector) = 0;
+  //virtual ValueType* GenerateOutput(TVector samplevector) = 0;
+  virtual NetworkOutputType GenerateOutput(TVector samplevector)=0;
 
-  virtual void BackwardPropagate(TOutput errors) = 0;
-
+  //virtual void BackwardPropagate(TOutput errors) = 0;
+  virtual void BackwardPropagate(NetworkOutputType errors) = 0;
   virtual void UpdateWeights(ValueType) = 0;
 
 protected:

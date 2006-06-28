@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkGaussianDensityFunction.txx,v $
   Language:  C++
-  Date:      $Date: 2005/07/26 15:54:55 $
-  Version:   $Revision: 1.21 $
+  Date:      $Date: 2006/03/19 04:37:20 $
+  Version:   $Revision: 1.22 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -97,7 +97,7 @@ GaussianDensityFunction< TMeasurementVector >
       
     // calculate coefficient C of multivariate gaussian
     m_PreFactor = 1.0 / (sqrt(det) * 
-                         pow(sqrt(2.0 * vnl_math::pi), double(this->GetMeasurementVectorSize()))) ;
+                         vcl_pow(sqrt(2.0 * vnl_math::pi), double(this->GetMeasurementVectorSize()))) ;
     }
 }
 
@@ -152,7 +152,7 @@ GaussianDensityFunction< TMeasurementVector >
       temp += tempVector2[i] * tempVector[i] ;
       }
       
-    return  m_PreFactor * exp( -0.5 * temp ) ;
+    return  m_PreFactor * vcl_exp(-0.5 * temp ) ;
     }
   else
     {

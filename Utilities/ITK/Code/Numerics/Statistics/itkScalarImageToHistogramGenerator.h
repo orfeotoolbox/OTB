@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkScalarImageToHistogramGenerator.h,v $
   Language:  C++
-  Date:      $Date: 2005/08/24 15:16:56 $
-  Version:   $Revision: 1.7 $
+  Date:      $Date: 2006/03/14 22:01:52 $
+  Version:   $Revision: 1.8 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -48,10 +48,11 @@ public:
                                                       >   AdaptorType;
   typedef typename AdaptorType::Pointer                   AdaptorPointer;
   typedef typename ImageType::PixelType                   PixelType;
+  typedef typename NumericTraits< PixelType >::RealType   RealPixelType;
 
   typedef itk::Statistics::ListSampleToHistogramGenerator< 
                                   AdaptorType, 
-                                  PixelType,
+                                  RealPixelType,
                                   DenseFrequencyContainer
                                                           > GeneratorType;
 
@@ -80,6 +81,11 @@ public:
   /** Set marginal scale value to be passed to the histogram generator */
   void SetMarginalScale( double marginalScale );
 
+  /** Set the minimum value from which the bins will be computed */
+  void SetHistogramMin( RealPixelType minimumValue );
+
+  /** Set the maximum value from which the bins will be computed */
+  void SetHistogramMax( RealPixelType maximumValue );
 
 protected:
   ScalarImageToHistogramGenerator();

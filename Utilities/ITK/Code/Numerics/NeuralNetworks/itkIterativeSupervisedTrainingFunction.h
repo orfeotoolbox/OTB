@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkIterativeSupervisedTrainingFunction.h,v $
   Language:  C++
-  Date:      $Date: 2005/08/02 19:17:37 $
-  Version:   $Revision: 1.1 $
+  Date:      $Date: 2006/04/18 11:23:29 $
+  Version:   $Revision: 1.2 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -43,6 +43,7 @@ public:
   itkNewMacro(Self);
 
   typedef typename Superclass::NetworkType NetworkType;
+  typedef typename Superclass::InternalVectorType InternalVectorType;
 
   void SetNumOfIterations(long i);
 

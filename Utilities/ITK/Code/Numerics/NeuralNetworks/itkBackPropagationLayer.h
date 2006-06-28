@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkBackPropagationLayer.h,v $
   Language:  C++
-  Date:      $Date: 2005/08/02 19:17:37 $
-  Version:   $Revision: 1.1 $
+  Date:      $Date: 2006/04/17 21:34:31 $
+  Version:   $Revision: 1.3 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -41,7 +41,7 @@ public:
   typedef typename Superclass::ValueType ValueType;
   typedef typename Superclass::ValuePointer ValuePointer;
   typedef vnl_vector<ValueType> NodeVectorType;
-
+  typedef typename Superclass::InternalVectorType InternalVectorType;
   typedef typename Superclass::OutputVectorType OutputVectorType;
 
   //Member Functions
@@ -58,7 +58,7 @@ public:
   void ForwardPropagate();
   void ForwardPropagate(TVector);
 
-  void BackwardPropagate(TOutput e);
+  void BackwardPropagate(InternalVectorType e);
   void BackwardPropagate();
 
   void SetOutputErrorValues(TOutput);

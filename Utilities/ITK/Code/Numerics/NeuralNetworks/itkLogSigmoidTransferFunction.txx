@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkLogSigmoidTransferFunction.txx,v $
   Language:  C++
-  Date:      $Date: 2005/08/02 19:17:37 $
-  Version:   $Revision: 1.1 $
+  Date:      $Date: 2006/03/19 04:37:20 $
+  Version:   $Revision: 1.2 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -45,7 +45,7 @@ ScalarType
 LogSigmoidTransferFunction<ScalarType>
 ::Evaluate(const ScalarType& input)  const
 {
-  const ScalarType v = 1.0 / (1.0 + exp(-input));
+  const ScalarType v = 1.0 / (1.0 + vcl_exp(-input));
   return v;
 }
 

@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkFEMElement2DC0LinearQuadrilateral.cxx,v $
   Language:  C++
-  Date:      $Date: 2003/12/15 14:13:20 $
-  Version:   $Revision: 1.10 $
+  Date:      $Date: 2006/03/19 04:37:20 $
+  Version:   $Revision: 1.11 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -173,7 +173,7 @@ Element2DC0LinearQuadrilateral
   cn = (dx * ycn) - (dy * xcn);
 
   localPt[0] = (2 * ce) / (-sqrt((be * be) - (2 * J1 * ce)) - be);
-  localPt[1] = (2 * cn) / ( sqrt((bn * bn) + (2 * J2 * cn)) - bn);
+  localPt[1] = (2 * cn) / ( vcl_sqrt((bn * bn) + (2 * J2 * cn)) - bn);
 
   bool isInside=true;
 

@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkFRPROptimizer.h,v $
   Language:  C++
-  Date:      $Date: 2005/03/22 00:13:48 $
-  Version:   $Revision: 1.1 $
+  Date:      $Date: 2006/05/25 13:41:42 $
+  Version:   $Revision: 1.2 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -71,11 +71,17 @@ public:
   typedef  CostFunctionType::Pointer        CostFunctionPointer;
 
   /** Start optimization. */
-  void StartOptimization() ;
+  void StartOptimization();
 
+  /** Set it to the Fletch-Reeves optimizer */
+  void SetToFletchReeves();
+  
+  /** Set it to the Fletch-Reeves optimizer */
+  void SetToPolakRibiere();
+  
 protected:
   FRPROptimizer() ;
-  virtual ~FRPROptimizer() ; 
+  virtual ~FRPROptimizer(); 
 
   void PrintSelf(std::ostream& os, Indent indent) const;
 
@@ -91,6 +97,14 @@ protected:
 
 private:
   FRPROptimizer(const FRPROptimizer&) ; // not implemented
+
+  typedef enum 
+    {
+    FletchReeves,
+    PolakRibiere
+    }               OptimizationType;
+
+  OptimizationType  m_OptimizationType;
 
 } ; // end of class
 

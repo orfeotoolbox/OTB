@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkCumulativeGaussianCostFunction.cxx,v $
   Language:  C++
-  Date:      $Date: 2003/12/15 14:13:19 $
-  Version:   $Revision: 1.11 $
+  Date:      $Date: 2006/03/19 04:37:19 $
+  Version:   $Revision: 1.12 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -66,7 +66,7 @@ CumulativeGaussianCostFunction
   double fitError = 0.0;
   for(int i = 0; i < (int)(numberOfElements); i++)
     {
-    fitError += pow((setTestArray->get(i) - m_OriginalDataArray->get(i)), 2);
+    fitError += vcl_pow((setTestArray->get(i) - m_OriginalDataArray->get(i)), 2);
     }
   return(sqrt((1/numberOfElements) * fitError));
 }
@@ -148,7 +148,7 @@ CumulativeGaussianCostFunction
 ::GetValue( const ParametersType & parameters ) const
 {
   for(unsigned int i = 0; i < m_RangeDimension; i++)
-    m_Measure[i] =  parameters.get(2) + ((parameters.get(3)-parameters.get(2))*(EvaluateCumulativeGaussian((i-parameters.get(0))/(parameters.get(1)*sqrt(2.0)))+1)/2);
+    m_Measure[i] =  parameters.get(2) + ((parameters.get(3)-parameters.get(2))*(EvaluateCumulativeGaussian((i-parameters.get(0))/(parameters.get(1)*vcl_sqrt(2.0)))+1)/2);
   
   return m_Measure; 
 } 
@@ -160,7 +160,7 @@ CumulativeGaussianCostFunction
   m_MeasurePointer->SetSize(m_RangeDimension);
 
   for(unsigned int i = 0; i < m_RangeDimension; i++)
-    m_MeasurePointer->put(i, parameters.get(2) + ((parameters.get(3)-parameters.get(2))*(EvaluateCumulativeGaussian((i-parameters.get(0))/(parameters.get(1)*sqrt(2.0)))+1)/2));
+    m_MeasurePointer->put(i, parameters.get(2) + ((parameters.get(3)-parameters.get(2))*(EvaluateCumulativeGaussian((i-parameters.get(0))/(parameters.get(1)*vcl_sqrt(2.0)))+1)/2));
   
   return m_MeasurePointer; 
 }

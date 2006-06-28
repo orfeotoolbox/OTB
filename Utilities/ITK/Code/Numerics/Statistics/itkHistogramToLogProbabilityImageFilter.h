@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkHistogramToLogProbabilityImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2005/04/08 21:32:05 $
-  Version:   $Revision: 1.4 $
+  Date:      $Date: 2006/03/19 04:37:20 $
+  Version:   $Revision: 1.5 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -66,12 +66,12 @@ public:
     if( A )
       {
       return static_cast<OutputPixelType>(log( static_cast<OutputPixelType>(A) / 
-        static_cast<OutputPixelType>(m_TotalFrequency)) / log(2.0) );
+        static_cast<OutputPixelType>(m_TotalFrequency)) / vcl_log(2.0) );
       }
     else
       { // Check for Log 0. Always assume that the frequency is atleast 1.
       return static_cast<OutputPixelType>(log( static_cast<OutputPixelType>(A+1) / 
-        static_cast<OutputPixelType>(m_TotalFrequency)) / log(2.0) );
+        static_cast<OutputPixelType>(m_TotalFrequency)) / vcl_log(2.0) );
       }
        
   }

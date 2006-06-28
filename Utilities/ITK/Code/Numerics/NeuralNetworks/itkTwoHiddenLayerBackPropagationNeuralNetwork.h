@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkTwoHiddenLayerBackPropagationNeuralNetwork.h,v $
   Language:  C++
-  Date:      $Date: 2005/08/02 19:17:37 $
-  Version:   $Revision: 1.1 $
+  Date:      $Date: 2006/04/18 11:23:29 $
+  Version:   $Revision: 1.3 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -48,6 +48,8 @@ public:
   typedef SmartPointer<Self> Pointer;
   typedef SmartPointer<const Self> ConstPointer;
 
+  typedef typename Superclass::NetworkOutputType NetworkOutputType;
+
   /* Method for creation through the object factory. */
   itkTypeMacro(TwoHiddenLayerBackPropagationNeuralNetwork,
                MultilayerNeuralNetworkBase);  
@@ -71,7 +73,8 @@ public:
   itkSetMacro(NumOfOutputNodes, int);
   itkGetConstReferenceMacro(NumOfOutputNodes, int);
 
-  ValueType* GenerateOutput(TVector samplevector);
+  //ValueType* GenerateOutput(TVector samplevector);
+  virtual NetworkOutputType GenerateOutput(TVector samplevector);
 
 protected:
 

@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkGaussianRadialBasisFunction.txx,v $
   Language:  C++
-  Date:      $Date: 2005/08/03 15:47:06 $
-  Version:   $Revision: 1.2 $
+  Date:      $Date: 2006/04/18 11:23:29 $
+  Version:   $Revision: 1.4 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -49,7 +49,7 @@ GaussianRadialBasisFunction< ScalarType>
 { 
   ScalarType val;
   ScalarType radius = Superclass::GetRadius(); 
-  val = exp(-0.5*pow(input,2)/pow(radius,2)); 
+  val = vcl_exp(-0.5*vcl_pow(input,2)/vcl_pow(radius,2)); 
   return val;
 }
 
@@ -60,18 +60,18 @@ GaussianRadialBasisFunction< ScalarType>
 ::EvaluateDerivative(const ScalarType& dist,const ArrayType& input,
                           char mode,int element_id) const
 {
-  ScalarType val;
+  ScalarType val = 0;;
   ScalarType radius=Superclass::GetRadius(); 
   ArrayType center = Superclass::GetCenter();
   if(mode=='u') //w.r.t centers
     {
-    ScalarType temp1= pow(radius,2);
+    ScalarType temp1= vcl_pow(radius,2);
     val=Evaluate(dist)
                       *(input.GetElement(element_id)-center.GetElement(element_id))/temp1;
     }
   else if(mode=='s') // w.r.t radius
     {
-    val=Evaluate(dist)*pow(dist,2)/pow(radius,3);
+    val=Evaluate(dist)*vcl_pow(dist,2)/vcl_pow(radius,3);
     }
   return val;
 }

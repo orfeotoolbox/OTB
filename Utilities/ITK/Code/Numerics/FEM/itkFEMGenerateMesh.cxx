@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkFEMGenerateMesh.cxx,v $
   Language:  C++
-  Date:      $Date: 2003/09/10 14:29:41 $
-  Version:   $Revision: 1.7 $
+  Date:      $Date: 2006/03/19 04:37:20 $
+  Version:   $Revision: 1.8 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -44,8 +44,8 @@ void Generate2DRectilinearMesh(itk::fem::Element::ConstPointer e0, Solver& S, vn
   S.node.clear();
 
   // Number of nodes in each dimension
-  Nel[0]=floor(Nel[0]);
-  Nel[1]=floor(Nel[1]);
+  Nel[0]=vcl_floor(Nel[0]);
+  Nel[1]=vcl_floor(Nel[1]);
   double Ni=static_cast<double>(Nel[0]);
   double Nj=static_cast<double>(Nel[1]);
 
@@ -101,9 +101,9 @@ void Generate3DRectilinearMesh
   }
 
   // Number of nodes in each dimension
-  Nel[0]=floor(Nel[0]);
-  Nel[1]=floor(Nel[1]);
-  Nel[2]=floor(Nel[2]);
+  Nel[0]=vcl_floor(Nel[0]);
+  Nel[1]=vcl_floor(Nel[1]);
+  Nel[2]=vcl_floor(Nel[2]);
   double Ni=static_cast<double>(Nel[0]);
   double Nj=static_cast<double>(Nel[1]);
   double Nk=static_cast<double>(Nel[2]);

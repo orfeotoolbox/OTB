@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkOnePlusOneEvolutionaryOptimizer.cxx,v $
   Language:  C++
-  Date:      $Date: 2005/03/07 03:39:58 $
-  Version:   $Revision: 1.32 $
+  Date:      $Date: 2006/03/19 04:37:20 $
+  Version:   $Revision: 1.33 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -32,7 +32,7 @@ OnePlusOneEvolutionaryOptimizer
 
   m_Initialized = false ;
   m_GrowthFactor = 1.05 ;
-  m_ShrinkFactor = pow(m_GrowthFactor, -0.25) ;
+  m_ShrinkFactor = vcl_pow(m_GrowthFactor, -0.25) ;
   m_InitialRadius = 1.01 ;
   m_MaximumIteration = 100 ;
   m_Stop = false ;
@@ -69,7 +69,7 @@ OnePlusOneEvolutionaryOptimizer
     m_GrowthFactor = grow ;
 
   if (shrink == -1)
-    m_ShrinkFactor = pow(m_GrowthFactor, -0.25) ;
+    m_ShrinkFactor = vcl_pow(m_GrowthFactor, -0.25) ;
   else
     m_ShrinkFactor = shrink ;
 }

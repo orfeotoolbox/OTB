@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkTwoHiddenLayerBackPropagationNeuralNetwork.txx,v $
   Language:  C++
-  Date:      $Date: 2005/08/02 19:17:37 $
-  Version:   $Revision: 1.1 $
+  Date:      $Date: 2006/04/17 19:34:45 $
+  Version:   $Revision: 1.2 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -123,7 +123,7 @@ TwoHiddenLayerBackPropagationNeuralNetwork<TVector,TOutput>
 }
 
 template<class TVector, class TOutput>
-typename TwoHiddenLayerBackPropagationNeuralNetwork<TVector, TOutput>::ValueType*
+typename TwoHiddenLayerBackPropagationNeuralNetwork<TVector, TOutput>::NetworkOutputType
 TwoHiddenLayerBackPropagationNeuralNetwork<TVector,TOutput>
 ::GenerateOutput(TVector samplevector)
 {

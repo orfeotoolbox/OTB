@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkSymmetricSigmoidTransferFunction.txx,v $
   Language:  C++
-  Date:      $Date: 2005/08/03 17:30:12 $
-  Version:   $Revision: 1.2 $
+  Date:      $Date: 2006/03/19 04:37:20 $
+  Version:   $Revision: 1.3 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -54,7 +54,7 @@ SymmetricSigmoidTransferFunction<ScalarType>
     }
   else
     {
-    val= (ScalarType)1.0/(1.0+exp(-input))-0.5;
+    val= (ScalarType)1.0/(1.0+vcl_exp(-input))-0.5;
     }
   return val;
 }

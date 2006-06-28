@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkMultilayerNeuralNetworkBase.h,v $
   Language:  C++
-  Date:      $Date: 2005/11/21 18:39:31 $
-  Version:   $Revision: 1.2 $
+  Date:      $Date: 2006/04/17 21:34:31 $
+  Version:   $Revision: 1.4 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -42,7 +42,7 @@ public:
   itkNewMacro( Self ); 
 
   typedef typename Superclass::ValueType ValueType;
-
+  typedef typename Superclass::NetworkOutputType NetworkOutputType;
   typedef typename Superclass::LayerType LayerType;
   typedef typename Superclass::WeightSetType WeightSetType;
   typedef typename Superclass::WeightSetPointer WeightSetPointer;
@@ -55,17 +55,24 @@ public:
 
   itkSetMacro(NumOfLayers, int);
   itkGetConstReferenceMacro(NumOfLayers, int);
+  
+  itkSetMacro(NumOfWeightSets, int);
+  itkGetConstReferenceMacro(NumOfWeightSets, int);
 
   void AddLayer(LayerType*);
+  LayerType* GetLayer(int layer_id);
 
   void AddWeightSet(WeightSetType*);
+  WeightSetType* GetWeightSet(int id);
 
   void SetLearningFunction(LearningFunctionType* f);
 
-  virtual ValueType* GenerateOutput(TVector samplevector);
+ // virtual ValueType* GenerateOutput(TVector samplevector);
+  virtual NetworkOutputType GenerateOutput(TVector samplevector);
 
-  virtual void BackwardPropagate(TOutput errors);
-
+//  virtual void BackwardPropagate(TOutput errors);
+  virtual void BackwardPropagate(NetworkOutputType errors);
+ 
   virtual void UpdateWeights(ValueType);
 
   void SetLearningRule(LearningFunctionType*);
@@ -83,7 +90,7 @@ protected:
   LearningFunctionPointer   m_LearningFunction;
   ValueType                 m_LearningRate;
   int                       m_NumOfLayers;
-
+  int                       m_NumOfWeightSets;
   /** Method to print the object. */
   virtual void PrintSelf( std::ostream& os, Indent indent ) const;
 };

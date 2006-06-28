@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkListSampleToHistogramGenerator.h,v $
   Language:  C++
-  Date:      $Date: 2005/08/24 15:16:48 $
-  Version:   $Revision: 1.13 $
+  Date:      $Date: 2006/03/14 22:52:18 $
+  Version:   $Revision: 1.14 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -22,6 +22,7 @@
 #include "itkHistogram.h"
 #include "itkStatisticsAlgorithm.h"
 #include "itkDenseFrequencyContainer.h"
+#include "itkNumericTraits.h"
 
 namespace itk{
 namespace Statistics{
@@ -87,7 +88,11 @@ public:
   itkStaticConstMacro(MeasurementVectorSize, unsigned int,
                       TMeasurementVectorLength);
 
-  typedef Histogram< THistogramMeasurement, 
+  /** Type needed for defining the limits of the histogram bins */
+  typedef typename NumericTraits< THistogramMeasurement >::RealType 
+                                                 HistogramMeasurementRealType;
+
+  typedef Histogram< HistogramMeasurementRealType, 
                      itkGetStaticConstMacro(MeasurementVectorSize),
                      TFrequencyContainer > HistogramType ;
 

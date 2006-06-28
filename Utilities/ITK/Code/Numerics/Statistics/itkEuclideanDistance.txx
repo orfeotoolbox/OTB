@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkEuclideanDistance.txx,v $
   Language:  C++
-  Date:      $Date: 2005/07/26 16:03:09 $
-  Version:   $Revision: 1.11 $
+  Date:      $Date: 2006/03/19 04:37:20 $
+  Version:   $Revision: 1.12 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -40,7 +40,7 @@ EuclideanDistance< TVector >
     distance += temp * temp ;
     }
   
-  return sqrt(distance) ;
+  return vcl_sqrt(distance) ;
 }
 
 
@@ -66,7 +66,7 @@ EuclideanDistance< TVector >
     distance += temp * temp ;
     }
   
-  return sqrt(distance) ;
+  return vcl_sqrt(distance) ;
 }
 
 template< class TVector >
@@ -75,7 +75,7 @@ EuclideanDistance< TVector >
 ::Evaluate(const ValueType &a, const ValueType &b) const
 {
   double temp = a - b ;
-  return sqrt(temp * temp) ;
+  return vcl_sqrt(temp * temp) ;
 }
 
 template< class TVector >

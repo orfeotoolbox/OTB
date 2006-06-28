@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkBackPropagationLayer.txx,v $
   Language:  C++
-  Date:      $Date: 2005/08/09 20:27:15 $
-  Version:   $Revision: 1.4 $
+  Date:      $Date: 2006/04/17 19:34:45 $
+  Version:   $Revision: 1.5 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -210,7 +210,7 @@ BackPropagationLayer<TVector,TOutput>
 template<class TVector, class TOutput>
 void
 BackPropagationLayer<TVector,TOutput>
-::BackwardPropagate(TOutput errors)
+::BackwardPropagate(InternalVectorType errors)
 {
   int num_nodes = this->GetNumberOfNodes();
   typename Superclass::WeightSetType::Pointer inputweightset;
@@ -253,7 +253,10 @@ void
 BackPropagationLayer<TVector,TOutput>
 ::SetOutputErrorValues(TOutput errors)
 {
-  m_OutputErrorValues = errors.GetVnlVector();
+  for(unsigned int i=0; i<errors.Size(); i++)
+    m_OutputErrorValues[i] = errors[i];
+  
+  //m_OutputErrorValues = errors.GetVnlVector();
   this->Modified();
 }
 

@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkHistogramToEntropyImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2005/04/08 20:45:48 $
-  Version:   $Revision: 1.4 $
+  Date:      $Date: 2006/03/19 04:37:20 $
+  Version:   $Revision: 1.5 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -72,13 +72,13 @@ public:
       {
       const double p = static_cast<OutputPixelType>(A) / 
         static_cast<OutputPixelType>(m_TotalFrequency);
-      return static_cast<OutputPixelType>( (-1) * p * log(p) / log(2.0)); 
+      return static_cast<OutputPixelType>( (-1) * p * vcl_log(p) / vcl_log(2.0)); 
       }
     else
       {
       const double p = static_cast<OutputPixelType>(A+1) / 
         static_cast<OutputPixelType>(m_TotalFrequency);
-      return static_cast<OutputPixelType>( (-1) * p * log(p) / log(2.0)); 
+      return static_cast<OutputPixelType>( (-1) * p * vcl_log(p) / vcl_log(2.0)); 
       }
   }
 

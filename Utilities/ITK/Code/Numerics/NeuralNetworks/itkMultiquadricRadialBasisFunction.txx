@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkMultiquadricRadialBasisFunction.txx,v $
   Language:  C++
-  Date:      $Date: 2005/08/02 19:17:37 $
-  Version:   $Revision: 1.1 $
+  Date:      $Date: 2006/03/19 04:37:20 $
+  Version:   $Revision: 1.2 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -45,7 +45,7 @@ ScalarType
 MultiquadricRadialBasisFunction<ScalarType>
 ::Evaluate(const ScalarType& input) const
 {
-  const ScalarType val = pow((input*input)+(m_Radius*m_Radius),0.5);
+  const ScalarType val = vcl_pow((input*input)+(m_Radius*m_Radius),0.5);
   return val;
 }
 

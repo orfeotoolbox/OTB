@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkTanHTransferFunction.txx,v $
   Language:  C++
-  Date:      $Date: 2005/08/02 19:17:37 $
-  Version:   $Revision: 1.1 $
+  Date:      $Date: 2006/03/19 04:37:20 $
+  Version:   $Revision: 1.2 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -42,8 +42,8 @@ ScalarType
 TanHTransferFunction<ScalarType>
 ::Evaluate(const ScalarType& input)  const
 {
-  ScalarType x = exp(input);
-  ScalarType y = exp(-input);
+  ScalarType x = vcl_exp(input);
+  ScalarType y = vcl_exp(-input);
   return static_cast<ScalarType>((float) (x - y) / (x + y));
 }
 
@@ -54,7 +54,7 @@ TanHTransferFunction<ScalarType>
 ::EvaluateDerivative(const ScalarType& input)  const
 {
   ScalarType f = Evaluate(input); 
-  return 1 - pow(f, 2);
+  return 1 - vcl_pow(f, 2);
 }
 
 /** Print the object */

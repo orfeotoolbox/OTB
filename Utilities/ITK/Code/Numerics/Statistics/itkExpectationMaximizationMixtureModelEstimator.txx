@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkExpectationMaximizationMixtureModelEstimator.txx,v $
   Language:  C++
-  Date:      $Date: 2005/05/06 18:53:40 $
-  Version:   $Revision: 1.15 $
+  Date:      $Date: 2006/03/19 04:37:20 $
+  Version:   $Revision: 1.16 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -223,7 +223,7 @@ ExpectationMaximizationMixtureModelEstimator< TSample >
   for (componentIndex = 0 ; componentIndex < m_ComponentVector.size() ;
        componentIndex++)
     {
-    logProportion = log(m_Proportions[componentIndex]) ; 
+    logProportion = vcl_log(m_Proportions[componentIndex]) ; 
     for (measurementVectorIndex = 0 ; measurementVectorIndex < size ;
          measurementVectorIndex++)
       {
@@ -231,7 +231,7 @@ ExpectationMaximizationMixtureModelEstimator< TSample >
         GetWeight(measurementVectorIndex) ;
       sum += 
         temp * ( logProportion + 
-                 log( m_ComponentVector[componentIndex]->
+                 vcl_log(m_ComponentVector[componentIndex]->
                       GetWeight(measurementVectorIndex) ) ) ;
       }
     }

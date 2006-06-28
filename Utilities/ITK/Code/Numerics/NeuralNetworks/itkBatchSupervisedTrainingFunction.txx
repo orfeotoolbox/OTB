@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkBatchSupervisedTrainingFunction.txx,v $
   Language:  C++
-  Date:      $Date: 2005/08/03 12:06:12 $
-  Version:   $Revision: 1.2 $
+  Date:      $Date: 2006/04/17 19:34:45 $
+  Version:   $Revision: 1.3 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -50,10 +50,16 @@ void BatchSupervisedTrainingFunction<TSample,TOutput,ScalarType>
 {
   this->SetTrainingSamples(samples); 
   this->SetTargetValues(targets);
-  typename Superclass::OutputVectorType outputvector;
+ 
+  InternalVectorType outputvector;
+  InternalVectorType errorvector;
+  outputvector.SetSize(targets->GetMeasurementVectorSize());
+  errorvector.SetSize(targets->GetMeasurementVectorSize());
+  std::cout<<"Target dim ="<<targets->GetMeasurementVectorSize()<<std::endl;
+  //typename Superclass::OutputVectorType outputvector;
   typename Superclass::VectorType inputvector;
   typename Superclass::OutputVectorType targetvector;
-  typename Superclass::OutputVectorType errorvector;
+  //typename Superclass::OutputVectorType errorvector;
  
   long num_iterations = this->GetIterations();
   m_Stop = false;
@@ -67,8 +73,11 @@ void BatchSupervisedTrainingFunction<TSample,TOutput,ScalarType>
       {
       inputvector = this->m_InputSamples[i];
       targetvector = this->m_Targets[i];
-      outputvector = net->GenerateOutput(inputvector);
-      errorvector = targetvector - outputvector; 
+      
+      outputvector=net->GenerateOutput(inputvector);
+      
+      for(unsigned int k=0; k<targetvector.Size(); k++)
+        errorvector[k] = targetvector[k] - outputvector[k]; 
         
       outf << this->m_PerformanceFunction->Evaluate(errorvector) <<
       " "<<errorvector[0]<<std::endl;

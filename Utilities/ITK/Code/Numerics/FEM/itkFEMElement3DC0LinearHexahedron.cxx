@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkFEMElement3DC0LinearHexahedron.cxx,v $
   Language:  C++
-  Date:      $Date: 2003/12/15 14:13:20 $
-  Version:   $Revision: 1.6 $
+  Date:      $Date: 2006/03/19 04:37:20 $
+  Version:   $Revision: 1.7 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -234,7 +234,7 @@ Element3DC0LinearHexahedron
 //   cn = (dx * ycn) - (dy * xcn);
 
 //   localPt[0] = (2 * ce) / (-sqrt((be * be) - (2 * J1 * ce)) - be);
-//   localPt[1] = (2 * cn) / ( sqrt((bn * bn) + (2 * J2 * cn)) - bn);
+//   localPt[1] = (2 * cn) / ( vcl_sqrt((bn * bn) + (2 * J2 * cn)) - bn);
 
   // FIXME
   bool IsInside=false;

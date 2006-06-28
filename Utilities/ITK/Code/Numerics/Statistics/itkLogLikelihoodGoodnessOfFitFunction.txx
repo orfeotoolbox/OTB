@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkLogLikelihoodGoodnessOfFitFunction.txx,v $
   Language:  C++
-  Date:      $Date: 2004/09/11 00:15:16 $
-  Version:   $Revision: 1.10 $
+  Date:      $Date: 2006/03/19 04:37:20 $
+  Version:   $Revision: 1.11 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -52,7 +52,7 @@ LogLikelihoodGoodnessOfFitFunction< TInputHistogram >
 
     if ( ratio > this->GetEpsilon() && px > 0 )
       {
-      sum += px * log(ratio);
+      sum += px * vcl_log(ratio);
       }
     else
       {

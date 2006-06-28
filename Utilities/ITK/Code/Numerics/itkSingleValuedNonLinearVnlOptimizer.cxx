@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkSingleValuedNonLinearVnlOptimizer.cxx,v $
   Language:  C++
-  Date:      $Date: 2005/07/26 16:17:41 $
-  Version:   $Revision: 1.14 $
+  Date:      $Date: 2006/05/12 12:58:27 $
+  Version:   $Revision: 1.15 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -29,7 +29,8 @@ SingleValuedNonLinearVnlOptimizer
   m_CostFunctionAdaptor = 0;
   m_Maximize = false;
   m_Command = CommandType::New();
-  m_Command->SetCallbackFunction( this, &SingleValuedNonLinearVnlOptimizer::IterationReport );
+  m_Command->SetCallbackFunction( this, 
+      &SingleValuedNonLinearVnlOptimizer::IterationReport );
   m_CachedValue = 0;
   m_CachedCurrentPosition.Fill(0);
   m_CachedDerivative.Fill(0);

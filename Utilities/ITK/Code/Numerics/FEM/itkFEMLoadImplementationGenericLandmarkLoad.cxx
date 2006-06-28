@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkFEMLoadImplementationGenericLandmarkLoad.cxx,v $
   Language:  C++
-  Date:      $Date: 2003/12/15 14:13:20 $
-  Version:   $Revision: 1.8 $
+  Date:      $Date: 2006/03/19 04:37:20 $
+  Version:   $Revision: 1.9 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -64,7 +64,7 @@ LoadImplementationGenericLandmarkLoad
   force =  (load->m_target-new_source) / load->eta ;
  
 //  std::cout << " disp " << disp <<  std::endl;
-  //force /= sqrt(fmag);
+  //force /= vcl_sqrt(fmag);
   new_source = (load->GetTarget() - new_source);
 //  std::cout << " force = " << force <<  " distance  " << new_source.magnitude() << std::endl;
   

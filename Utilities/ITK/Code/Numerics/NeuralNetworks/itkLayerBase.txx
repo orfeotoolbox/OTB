@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkLayerBase.txx,v $
   Language:  C++
-  Date:      $Date: 2005/08/02 19:17:37 $
-  Version:   $Revision: 1.1 $
+  Date:      $Date: 2006/04/17 19:34:45 $
+  Version:   $Revision: 1.2 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -69,6 +69,26 @@ LayerBase<TVector,TOutput>
 ::SetTransferFunction(TransferFunctionType* f)
 {
   m_ActivationFunction = f;
+  this->Modified();
+}
+
+template<class TVector, class TOutput>
+void
+LayerBase<TVector,TOutput>
+::SetInputWeightSet(WeightSetType* weightset)
+{
+  m_InputWeightSet=weightset; 
+  m_InputWeightSet->SetOutputLayerId(m_LayerId);
+  this->Modified();
+}
+
+template<class TVector, class TOutput>
+void
+LayerBase<TVector,TOutput>
+::SetOutputWeightSet(WeightSetType* weightset)
+{
+  m_OutputWeightSet=weightset; 
+  m_OutputWeightSet->SetInputLayerId(m_LayerId);
   this->Modified();
 }
 

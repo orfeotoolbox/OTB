@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkTrainingFunctionBase.txx,v $
   Language:  C++
-  Date:      $Date: 2005/08/02 19:17:37 $
-  Version:   $Revision: 1.1 $
+  Date:      $Date: 2006/04/17 19:34:45 $
+  Version:   $Revision: 1.2 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -45,7 +45,9 @@ void TrainingFunctionBase<TSample,TOutput,ScalarType>
   typename TSample::ConstIterator iter = samples->Begin();
   while (iter != samples->End())
     {
-    m_InputSamples.push_back(defaultconverter(iter.GetMeasurementVector()));
+    //m_InputSamples.push_back(defaultconverter(iter.GetMeasurementVector()));
+    m_InputSamples.push_back(iter.GetMeasurementVector());
+    
     ++iter;
     }
 }
@@ -57,7 +59,8 @@ void TrainingFunctionBase<TSample,TOutput,ScalarType>
   typename TOutput::ConstIterator iter = targets->Begin();
   while (iter != targets->End())
     {
-    m_Targets.push_back(targetconverter(iter.GetMeasurementVector()));
+    //m_Targets.push_back(targetconverter(iter.GetMeasurementVector()));
+    m_Targets.push_back(iter.GetMeasurementVector());
     ++iter;
     }
   std::cout << "Num of Sample Targets converted= " << m_Targets.size()

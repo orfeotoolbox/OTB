@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkGaussianGoodnessOfFitComponent.txx,v $
   Language:  C++
-  Date:      $Date: 2005/07/26 15:54:55 $
-  Version:   $Revision: 1.10 $
+  Date:      $Date: 2006/03/19 04:37:20 $
+  Version:   $Revision: 1.11 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -226,7 +226,7 @@ GaussianGoodnessOfFitComponent< TInputSample >
   double mean = 0.0 ;
   double standardDeviation = 1.0 ;
 
-  double nx = fabs( x - mean ) / standardDeviation ;
+  double nx = vcl_fabs(x - mean ) / standardDeviation ;
   
   double t = 1 / (1 + 0.2316419 * nx);
   double tt = t*t;
@@ -234,7 +234,7 @@ GaussianGoodnessOfFitComponent< TInputSample >
   double tttt = ttt*t;
   double ttttt = tttt*t;
   
-  double z = exp(-nx*nx/2) / sqrt(2*vnl_math::pi);
+  double z = vcl_exp(-nx*nx/2) / vcl_sqrt(2*vnl_math::pi);
   
   if ( x > mean )
     {

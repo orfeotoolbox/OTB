@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkSingleValuedVnlCostFunctionAdaptor.cxx,v $
   Language:  C++
-  Date:      $Date: 2005/03/30 22:26:05 $
-  Version:   $Revision: 1.18 $
+  Date:      $Date: 2006/05/12 12:58:27 $
+  Version:   $Revision: 1.19 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -211,8 +211,8 @@ SingleValuedVnlCostFunctionAdaptor
   return m_NegateCostFunction;
 }
 
-/**  Returns whether the cost function is going to be negated or not. 
- *   This is useful for adapting optimizers that are only minimizers. */
+/**  This method reports iterations events. It is intended to 
+ *   help monitoring the progress of the optimization process. */
 void 
 SingleValuedVnlCostFunctionAdaptor
 ::ReportIteration( const EventObject & event ) const
@@ -256,7 +256,6 @@ SingleValuedVnlCostFunctionAdaptor
 {
   return m_CachedCurrentParameters;
 }
-
 
 
 

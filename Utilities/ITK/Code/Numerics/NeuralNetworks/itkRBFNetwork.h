@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkRBFNetwork.h,v $
   Language:  C++
-  Date:      $Date: 2005/08/03 14:40:14 $
-  Version:   $Revision: 1.2 $
+  Date:      $Date: 2006/04/18 11:23:29 $
+  Version:   $Revision: 1.4 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -49,11 +49,10 @@ public:
   typedef SmartPointer<const Self> ConstPointer;
   typedef typename Superclass::ValueType ValueType;
   typedef Array<ValueType> ArrayType;
-
   typedef TransferFunctionBase<ValueType> TransferFunctionType;
   typedef RadialBasisFunctionBase<ValueType> RBFType;
   typedef InputFunctionBase<ValueType*, ValueType> InputFunctionType;
-  typedef EuclideanDistance<TVector> DistanceMetricType; 
+  typedef EuclideanDistance<ArrayType> DistanceMetricType; 
 
   typename InputFunctionType::Pointer InputFunction;
   typename DistanceMetricType::Pointer DistanceMetric;
@@ -62,6 +61,8 @@ public:
   typename RBFType::Pointer HiddenTransferFunction;
   typename TransferFunctionType::Pointer OutputTransferFunction;
   
+  typedef typename Superclass::NetworkOutputType NetworkOutputType;
+
   /* Method for creation through the object factory. */
   itkTypeMacro(RBFNetwork,
                MultilayerNeuralNetworkBase);  
@@ -89,7 +90,8 @@ public:
   itkSetMacro(Classes, int);
   itkGetConstReferenceMacro(Classes,int);
 
-  ValueType* GenerateOutput(TVector samplevector);
+ // ValueType* GenerateOutput(TVector samplevector);
+  virtual NetworkOutputType GenerateOutput(TVector samplevector);
 
   void SetInputTransferFunction(TransferFunctionType* f);
   void SetDistanceMetric(DistanceMetricType* f);
@@ -98,6 +100,9 @@ public:
 
   void SetInputFunction(InputFunctionType* f);
   void InitializeWeights();
+
+  void SetCenter(TVector c);
+  void SetRadius(ValueType r);
 
 protected:
 
@@ -115,6 +120,8 @@ private:
   int       m_Classes;
   ValueType m_HiddenLayerBias;
   ValueType m_OutputLayerBias;
+  std::vector<TVector> m_Centers;  // ui....uc
+  std::vector<double> m_Radii;
 };
 
 } // end namespace Statistics

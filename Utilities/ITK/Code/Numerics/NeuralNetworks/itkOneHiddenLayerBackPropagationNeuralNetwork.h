@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkOneHiddenLayerBackPropagationNeuralNetwork.h,v $
   Language:  C++
-  Date:      $Date: 2005/08/03 14:40:14 $
-  Version:   $Revision: 1.2 $
+  Date:      $Date: 2006/04/17 21:34:31 $
+  Version:   $Revision: 1.4 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -50,7 +50,8 @@ public:
   typedef SmartPointer<Self> Pointer;
   typedef SmartPointer<const Self> ConstPointer;
   typedef typename Superclass::ValueType ValueType;
-
+  typedef typename Superclass::NetworkOutputType NetworkOutputType;
+  
   typedef TransferFunctionBase<ValueType> TransferFunctionType;
   typedef InputFunctionBase<ValueType*, ValueType> InputFunctionType;
   
@@ -78,7 +79,8 @@ public:
   itkSetMacro(OutputLayerBias, ValueType);
   itkGetConstReferenceMacro(OutputLayerBias, ValueType);
 
-  ValueType* GenerateOutput(TVector samplevector);
+  //ValueType* GenerateOutput(TVector samplevector);
+  NetworkOutputType GenerateOutput(TVector samplevector);
 
   void SetInputTransferFunction(TransferFunctionType* f);
   void SetHiddenTransferFunction(TransferFunctionType* f);

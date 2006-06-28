@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkGoodnessOfFitFunctionBase.txx,v $
   Language:  C++
-  Date:      $Date: 2003/09/10 14:29:45 $
-  Version:   $Revision: 1.6 $
+  Date:      $Date: 2006/03/19 04:37:20 $
+  Version:   $Revision: 1.7 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -27,7 +27,7 @@ GoodnessOfFitFunctionBase< TInputHistogram >
 ::GoodnessOfFitFunctionBase()
 {
   m_Epsilon = 1e-20 ;
-  m_LogEpsilon = log(m_Epsilon) ;
+  m_LogEpsilon = vcl_log(m_Epsilon) ;
 
   m_UseExpectedHistogram = true ;
   m_ObservedHistogram = 0 ;

@@ -3,8 +3,8 @@
 Program:   Insight Segmentation & Registration Toolkit
 Module:    $RCSfile: itkGaussianMixtureModelComponent.txx,v $
 Language:  C++
-Date:      $Date: 2005/07/26 15:54:55 $
-Version:   $Revision: 1.15 $
+Date:      $Date: 2006/03/19 04:37:20 $
+Version:   $Revision: 1.16 $
 
 Copyright (c) Insight Software Consortium. All rights reserved.
 See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -149,7 +149,7 @@ GaussianMixtureModelComponent< TSample >
       }
     }
 
-  changes = sqrt(changes) ;
+  changes = vcl_sqrt(changes) ;
   return changes ;
 }
 
@@ -177,7 +177,7 @@ GaussianMixtureModelComponent< TSample >
     {
     temp = m_Mean[i] - meanEstimate[i] ;
     changes = temp * temp ;
-    changes = sqrt(changes) ;
+    changes = vcl_sqrt(changes) ;
     if ( changes > this->GetMinimalParametersChange() )
       {
       changed = true ;
@@ -210,7 +210,7 @@ GaussianMixtureModelComponent< TSample >
       temp = m_Covariance.GetVnlMatrix().get(i, j) - 
         covEstimate.GetVnlMatrix().get(i, j) ;
       changes = temp * temp ;
-      changes = sqrt(changes) ;
+      changes = vcl_sqrt(changes) ;
       if ( changes > this->GetMinimalParametersChange() )
         {
         changed = true ;

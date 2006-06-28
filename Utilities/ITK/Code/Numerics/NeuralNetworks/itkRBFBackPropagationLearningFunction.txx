@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkRBFBackPropagationLearningFunction.txx,v $
   Language:  C++
-  Date:      $Date: 2005/08/03 15:47:06 $
-  Version:   $Revision: 1.3 $
+  Date:      $Date: 2006/04/17 19:34:45 $
+  Version:   $Revision: 1.4 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -48,7 +48,7 @@ RBFBackPropagationLearningFunction<LayerType,TOutput>
 
   typedef RBFLayer<InputVectorType,OutputVectorType>
                                                             RbfLayerType;
-  typedef typename RbfLayerType::NodeArrayType ArrayType;
+  typedef typename RbfLayerType::InternalVectorType ArrayType;
   typename LayerType::ValuePointer currentdeltavalues = inputweightset->GetTotalDeltaValues();
   vnl_matrix<ValueType> DW_temp(currentdeltavalues,inputweightset->GetNumberOfOutputNodes(),
                                            inputweightset->GetNumberOfInputNodes());

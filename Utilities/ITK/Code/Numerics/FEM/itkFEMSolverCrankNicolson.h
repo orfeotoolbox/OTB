@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkFEMSolverCrankNicolson.h,v $
   Language:  C++
-  Date:      $Date: 2003/09/10 14:29:44 $
-  Version:   $Revision: 1.17 $
+  Date:      $Date: 2006/03/19 04:37:20 $
+  Version:   $Revision: 1.18 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -122,7 +122,7 @@ public:
   Float BrentsMethod(Float tol=0.01,unsigned int MaxIters=25);
   Float EvaluateResidual(Float t=1.0);
   Float GetDeformationEnergy(Float t=1.0);
-  inline Float GSSign(Float a,Float b) { return (b > 0.0 ? fabs(a) : -1.*fabs(a)); }
+  inline Float GSSign(Float a,Float b) { return (b > 0.0 ? vcl_fabs(a) : -1.*vcl_fabs(a)); }
   inline Float GSMax(Float a,Float b) { return (a > b ? a : b); }
 
   void SetEnergyToMin(Float xmin);
