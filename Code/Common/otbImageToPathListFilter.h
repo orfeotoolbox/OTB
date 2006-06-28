@@ -59,7 +59,6 @@ public:
                       TInputImage::ImageDimension);
   
   /** Set/Get the image input of this process object. */
-//OTB-FA-00010-CS  
   virtual void SetInput( const InputImageType * image);
   const InputImageType * GetInput(void);
 

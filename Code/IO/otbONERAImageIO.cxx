@@ -476,7 +476,7 @@ void ONERAImageIO::Write(const void* buffer)
 void ONERAImageIO::WriteImageInformation()
 {
 
-  if ( ! this->OpenOneraDataFileForWriting(m_FileName.c_str()) )
+  if ( ! this->OpenOneraHeaderFileForWriting(m_FileName.c_str()) )
     {
     itkExceptionMacro(<< "Cannot read requested file");
     }

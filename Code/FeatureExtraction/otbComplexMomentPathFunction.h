@@ -73,7 +73,6 @@ public:
 
   			 
   /** Evalulate the function */
-  //OTB-FA-00022-CS
   virtual OutputType Evaluate(const PathType& path) const;
   virtual OutputType Evaluate() const;
   

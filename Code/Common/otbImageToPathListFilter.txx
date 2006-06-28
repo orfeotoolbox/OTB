@@ -36,7 +36,6 @@ ImageToPathListFilter<TInputImage,TOutputPath>
 template <class TInputImage, class TOutputPath>
 void
 ImageToPathListFilter<TInputImage,TOutputPath>
-//OTB-FA-00010-CS  
 ::SetInput(const InputImageType *image)
 {
   // We have 1 input:  an image
@@ -48,7 +47,6 @@ ImageToPathListFilter<TInputImage,TOutputPath>
 template <class TInputImage, class TOutputPath>
 const typename ImageToPathListFilter<TInputImage,TOutputPath>::InputImageType *
 ImageToPathListFilter<TInputImage,TOutputPath>
-//OTB-FA-00010-CS  
 ::GetInput(void) 
 {
   

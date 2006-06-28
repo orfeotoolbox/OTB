@@ -75,13 +75,10 @@ public:
   typedef typename Superclass::RealType                 RealType;  			 
 
   /** Evaluate the function at non-integer positions */
-  //OTB-FA-00023-CS
   virtual RealType Evaluate( const PathType& path) const;
-  //OTB-FA-00022-CS
   virtual RealType Evaluate( ) const;
   /** Get/Set the radius of the neighborhood over which the
       statistics are evaluated */  
-  //OTB-FA-00024-CS
   itkSetMacro(MomentNumber,short);
   itkGetConstReferenceMacro( MomentNumber, short );
 
@@ -94,7 +91,6 @@ private:
   HuPathFunction( const Self& ); //purposely not implemented
   void operator=( const Self& ); //purposely not implemented
 
-  //OTB-FA-00024-CS
   short m_MomentNumber;  
 };
 

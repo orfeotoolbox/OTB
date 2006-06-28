@@ -28,7 +28,6 @@ template < class TInput, class TOutput, class TCoordRep>
 HuImageFunction<TInput,TOutput,TCoordRep>
 ::HuImageFunction()
 {
-  //OTB-FA-00024-CS
   m_MomentNumber =-1; 
 }
 
@@ -41,7 +40,6 @@ HuImageFunction<TInput,TOutput,TCoordRep>
 ::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   this->Superclass::PrintSelf(os,indent);
-  //OTB-FA-00024-CS
   os << indent << " m_MomentNumber           : "  << m_MomentNumber << std::endl;
 }
 
@@ -77,11 +75,9 @@ HuImageFunction<TInput,TOutput,TCoordRep>
   assert(m_MomentNumber < 8);
 
    function->SetInputImage( this->GetInputImage() );
-//OTB-FA-00025-CS
 //   std::cout << "Neighbor " <<this->GetNeighborhoodRadius()<<std::endl;
    function->SetNeighborhoodRadius(this->GetNeighborhoodRadius() );
 
-  //OTB-FA-00024-CS
   switch(m_MomentNumber)
     {
     case 1 : 

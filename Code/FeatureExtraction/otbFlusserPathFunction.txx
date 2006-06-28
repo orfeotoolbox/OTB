@@ -26,7 +26,6 @@ template < class TInputPath, class TOutput>
 FlusserPathFunction<TInputPath, TOutput >
 ::FlusserPathFunction()
 {
-  //OTB-FA-00024-CS
   m_MomentNumber =-1; 
 }
 
@@ -39,7 +38,6 @@ FlusserPathFunction< TInputPath, TOutput >
 ::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   this->Superclass::PrintSelf(os,indent);
-  //OTB-FA-00024-CS
   os << indent << " m_MomentNumber           : "  << m_MomentNumber << std::endl;
 }
 
@@ -58,10 +56,8 @@ FlusserPathFunction<TInputPath, TOutput >
   typename FunctionType::Pointer function =FunctionType::New();
  
   function->SetStep( this->GetStep() );
-  //OTB-FA-00023-CS
   function->SetInputPath( this->GetInputPath() );
   
-  //OTB-FA-00024-CS
   switch(m_MomentNumber)
     {
     case 1 : 
@@ -216,7 +212,6 @@ typename FlusserPathFunction<TInputPath, TOutput>::RealType
 FlusserPathFunction<TInputPath, TOutput >
 ::Evaluate() const
 {
-  //OTB-FA-00022-CS
   if( !this->GetInputPath() )
     {
     std::cout << "Pb with GetInputPath" << std::endl;

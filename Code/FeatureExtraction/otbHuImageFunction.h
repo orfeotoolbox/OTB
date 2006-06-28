@@ -101,7 +101,6 @@ public:
 
   /** Get/Set the radius of the neighborhood over which the
       statistics are evaluated */  
-  //OTB-FA-00024-CS
   itkSetClampMacro(MomentNumber,short,1,7);
   itkGetConstReferenceMacro( MomentNumber, short );
 
@@ -114,7 +113,6 @@ private:
   HuImageFunction( const Self& ); //purposely not implemented
   void operator=( const Self& ); //purposely not implemented
 
-  //OTB-FA-00024-CS
   short m_MomentNumber;  
 };
 

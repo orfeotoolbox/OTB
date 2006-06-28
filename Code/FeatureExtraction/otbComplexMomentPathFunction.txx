@@ -72,7 +72,6 @@ ComplexMomentPathFunction<TInputPath,TOutput>
       --q; 
      }
 
-    //OTB-FA-00023-CS
     Result = ValP * ValQ * std::complex<double>( static_cast<double>(PixelValue), 0.0); 
     return ( static_cast<ComplexType>(Result) );
 }
@@ -125,7 +124,6 @@ ComplexMomentPathFunction<TInputPath,TOutput>
 	 }
        } // FOR loop
      } // IF loop
-  //OTB-FA-00023-CS
   return (static_cast<OutputType>(Value) );
 
 }
@@ -136,7 +134,6 @@ typename ComplexMomentPathFunction<TInputPath,
 ComplexMomentPathFunction<TInputPath,TOutput>
 ::Evaluate() const
 {
-  //OTB-FA-00022-CS
   if( !this->GetInputPath() )
     {
     std::cout << "Pb with GetInputPath" << std::endl;

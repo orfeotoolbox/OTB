@@ -53,14 +53,12 @@ public:
 
   /** Get/Set the radius of the neighborhood over which the
       statistics are evaluated */
-  //OTB-FA-00025-CS
   itkSetMacro( NeighborhoodRadius, int );
   itkGetConstReferenceMacro( NeighborhoodRadius, int );
 
 protected:
   GeometricMomentImageFunction() 
   	{
-	//OTB-FA-00025-CS  
 	m_NeighborhoodRadius = -1;
 	};
 	
@@ -75,7 +73,6 @@ private:
   GeometricMomentImageFunction( const Self& ); //purposely not implemented
   void operator=( const Self& );               //purposely not implemented
 
-//OTB-FA-00025-CS
   int m_NeighborhoodRadius;
 
 

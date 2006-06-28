@@ -62,7 +62,6 @@ public:
   typedef typename OutputImageType::ValueType     OutputImageValueType; 
   
 
-//OTB-FA-00011-CS
   itkSetMacro(Value, OutputImagePixelType);
   itkGetConstReferenceMacro(Value, OutputImagePixelType);
   

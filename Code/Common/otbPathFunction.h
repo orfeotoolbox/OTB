@@ -71,7 +71,6 @@ protected:
   ~PathFunction() {}
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
-  //OTB-FA-00022-CS
   InputPathConstPointer  m_Path;
 
 private:
