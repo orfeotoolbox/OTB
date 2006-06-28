@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkNumericTraits.h,v $
   Language:  C++
-  Date:      $Date: 2005/10/09 23:34:33 $
-  Version:   $Revision: 1.48 $
+  Date:      $Date: 2006/03/19 04:36:59 $
+  Version:   $Revision: 1.49 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -49,7 +49,7 @@ public:
   /** Return the type that can be printed. */
   typedef T PrintType; 
 
-  /** Return value of abs(). */
+  /** Return value of vcl_abs(). */
   typedef T AbsType; 
 
   /** Accumulation of addition and multiplication. */

@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkImageBase.txx,v $
   Language:  C++
-  Date:      $Date: 2005/12/07 11:17:23 $
-  Version:   $Revision: 1.49 $
+  Date:      $Date: 2006/04/13 17:57:25 $
+  Version:   $Revision: 1.50 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -19,8 +19,11 @@
 =========================================================================*/
 #ifndef _itkImageBase_txx
 #define _itkImageBase_txx
+
 #include "itkImageBase.h"
+
 #include "itkFastMutexLock.h"
+#include "itkProcessObject.h"
 #include "itkSpatialOrientation.h"
 
 namespace itk

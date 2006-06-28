@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkImage.h,v $
   Language:  C++
-  Date:      $Date: 2005/12/28 19:08:06 $
-  Version:   $Revision: 1.134 $
+  Date:      $Date: 2006/04/20 14:54:09 $
+  Version:   $Revision: 1.136 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -370,28 +370,21 @@ private:
   /** Memory for the current buffer. */
   PixelContainerPointer m_Buffer;
 };
-#ifdef ITK_EXPLICIT_INSTANTIATION
-   extern template class Image<float         ,2>;
-   extern template class Image<double        ,2>;
-   extern template class Image<unsigned char ,2>;
-   extern template class Image<unsigned short,2>;
-   extern template class Image<unsigned int  ,2>;
-   extern template class Image<signed char   ,2>;
-   extern template class Image<signed short  ,2>;
-   extern template class Image<signed int    ,2>;
-   extern template class Image<float         ,3>;
-   extern template class Image<double        ,3>;
-   extern template class Image<unsigned char ,3>;
-   extern template class Image<unsigned short,3>;
-   extern template class Image<unsigned int  ,3>;
-   extern template class Image<signed char   ,3>;
-   extern template class Image<signed short  ,3>;
-   extern template class Image<signed int    ,3>;
-#endif
+
 } // end namespace itk
-#ifndef ITK_MANUAL_INSTANTIATION
-#include "itkImage.txx"
+
+// Define instantiation macro for this template.
+#define ITK_TEMPLATE_Image(_, EXPORT, x, y) namespace itk { \
+  _(2(class EXPORT Image< ITK_TEMPLATE_2 x >)) \
+  namespace Templates { typedef Image< ITK_TEMPLATE_2 x > Image##y; } \
+  }
+
+#if ITK_TEMPLATE_EXPLICIT
+# include "Templates/itkImage+-.h"
+#endif
+
+#if ITK_TEMPLATE_TXX
+# include "itkImage.txx"
 #endif
 
 #endif
-

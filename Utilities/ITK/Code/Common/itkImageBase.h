@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkImageBase.h,v $
   Language:  C++
-  Date:      $Date: 2006/01/27 16:57:41 $
-  Version:   $Revision: 1.66 $
+  Date:      $Date: 2006/04/20 14:54:09 $
+  Version:   $Revision: 1.68 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -21,9 +21,12 @@
 #define __itkImageBase_h
 
 #include "itkDataObject.h"
-#include "itkProcessObject.h"
+
+#include "itkImageRegion.h"
 #include "itkIndex.h"
+#include "itkObjectFactory.h"
 #include "itkOffset.h"
+#include "itkPoint.h"
 #include "itkSize.h"
 #include "itkFixedArray.h"
 #include "itkPoint.h"
@@ -416,16 +419,20 @@ private:
   RegionType          m_BufferedRegion;
 };
 
-#ifdef ITK_EXPLICIT_INSTANTIATION
-   extern template class ImageBase<2>;
-   extern template class ImageBase<3>;
-#endif
-
 } // end namespace itk
 
-#ifndef ITK_MANUAL_INSTANTIATION
-#include "itkImageBase.txx"
+// Define instantiation macro for this template.
+#define ITK_TEMPLATE_ImageBase(_, EXPORT, x, y) namespace itk { \
+  _(1(class EXPORT ImageBase< ITK_TEMPLATE_1 x >)) \
+  namespace Templates { typedef ImageBase< ITK_TEMPLATE_1 x > ImageBase##y; } \
+  }
+
+#if ITK_TEMPLATE_EXPLICIT
+# include "Templates/itkImageBase+-.h"
+#endif
+
+#if ITK_TEMPLATE_TXX
+# include "itkImageBase.txx"
 #endif
 
 #endif
-

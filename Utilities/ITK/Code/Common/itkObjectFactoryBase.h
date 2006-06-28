@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkObjectFactoryBase.h,v $
   Language:  C++
-  Date:      $Date: 2003/09/10 14:29:19 $
-  Version:   $Revision: 1.35 $
+  Date:      $Date: 2006/05/10 20:27:16 $
+  Version:   $Revision: 1.36 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -148,7 +148,7 @@ protected:
       bool enableFlag,
       CreateObjectFunctionBase* createFunction);
     
-  /** This method is provioded by sub-classes of ObjectFactoryBase.
+  /** This method is provided by sub-classes of ObjectFactoryBase.
    * It should create the named itk object or return 0 if that object
    * is not supported by the factory implementation. */
   virtual LightObject::Pointer CreateObject(const char* itkclassname );
@@ -183,7 +183,7 @@ private:
   void* m_LibraryHandle;
   unsigned long m_LibraryDate;
   std::string m_LibraryPath;
-  };
+};
 
 } // end namespace itk
 

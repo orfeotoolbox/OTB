@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkImageAdaptor.h,v $
   Language:  C++
-  Date:      $Date: 2006/03/10 22:23:17 $
-  Version:   $Revision: 1.62 $
+  Date:      $Date: 2006/05/10 20:27:16 $
+  Version:   $Revision: 1.63 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -30,7 +30,7 @@ namespace itk
  * ImageAdaptors are templated over the ImageType and over a functor
  * that will specify what part of the pixel can be accessed
  *
- * The basic aspects of this class are the types it defines.  
+ * The basic aspects of this class are the types it defines.
  *
  * Image adaptors can be used as intermediate classes that allow
  * the sending of an image to a filter, specifying what part of the
@@ -40,7 +40,7 @@ namespace itk
  * These two will specify how data can be put
  * and get from parts of each pixel. It should define the types
  * ExternalType and InternalType too.
- * 
+ *
  * \ingroup ImageAdaptors
  *
  */

@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkArray.txx,v $
   Language:  C++
-  Date:      $Date: 2005/09/13 21:33:07 $
-  Version:   $Revision: 1.31 $
+  Date:      $Date: 2006/03/16 11:43:26 $
+  Version:   $Revision: 1.32 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -14,15 +14,15 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef _itkArray_txx
-#define _itkArray_txx
+#ifndef __itkArray_txx
+#define __itkArray_txx
 
 #include "itkArray.h"
 
 namespace itk
 {
 
-/** Default constructor  */
+/** Default constructor s*/
 template < typename TValueType >
 Array<TValueType >
 ::Array():vnl_vector<TValueType>()
@@ -61,7 +61,7 @@ Array<TValueType >
 }
 
 
-/** Destructor*/
+/** Destructor */
 template < typename TValueType >
 Array<TValueType >
 ::~Array()
@@ -141,7 +141,6 @@ void Array<TValueType >
     }
     
 }
-
 
 
 template < typename TValueType >

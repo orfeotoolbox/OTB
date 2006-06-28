@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkVersion.h,v $
   Language:  C++
-  Date:      $Date: 2006/03/10 01:10:08 $
-  Version:   $Revision: 1.1932 $
+  Date:      $Date: 2006/05/26 00:09:30 $
+  Version:   $Revision: 1.2003 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -25,10 +25,10 @@
 
 #define ITK_VERSION_TO_STRING(x) ITK_VERSION_TO_STRING0(x)
 #define ITK_VERSION_TO_STRING0(x) #x
-#define ITK_VERSION ITK_VERSION_TO_STRING(ITK_VERSION_MAJOR) \
-                    ITK_VERSION_TO_STRING(ITK_VERSION_MINOR) \
+#define ITK_VERSION ITK_VERSION_TO_STRING(ITK_VERSION_MAJOR) "." \
+                    ITK_VERSION_TO_STRING(ITK_VERSION_MINOR) "." \
                     ITK_VERSION_TO_STRING(ITK_VERSION_PATCH)
-#define ITK_SOURCE_VERSION "itk version " ITK_VERSION ", itk source $Revision: 1.1932 $, $Date: 2006/03/10 01:10:08 $ (GMT)"
+#define ITK_SOURCE_VERSION "itk version " ITK_VERSION ", itk source $Revision: 1.2003 $, $Date: 2006/05/26 00:09:30 $ (GMT)"
 
 namespace itk
 {

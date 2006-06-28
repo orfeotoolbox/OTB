@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkBSplineKernelFunction.h,v $
   Language:  C++
-  Date:      $Date: 2006/02/06 22:01:53 $
-  Version:   $Revision: 1.6 $
+  Date:      $Date: 2006/03/18 20:13:35 $
+  Version:   $Revision: 1.7 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -44,8 +44,8 @@ class ITK_EXPORT BSplineKernelFunction : public KernelFunction
 public:
   /** Standard class typedefs. */
   typedef BSplineKernelFunction Self;
-  typedef KernelFunction Superclass;
-  typedef SmartPointer<Self>  Pointer;
+  typedef KernelFunction        Superclass;
+  typedef SmartPointer<Self>    Pointer;
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self); 
@@ -152,7 +152,8 @@ private:
       }
     else if ( absValue < 2.0 )
       {
-      return ( 8.0 - 12 * absValue + 6.0 * sqrValue - sqrValue * absValue ) / 6.0;
+      return ( 8.0 - 12 * absValue + 6.0 * sqrValue - 
+                                            sqrValue * absValue ) / 6.0;
       }
     else
       {
@@ -164,12 +165,13 @@ private:
   /** Unimplemented spline order */
   inline double Evaluate ( const DispatchBase&, const double&) const
     {
-    itkExceptionMacro("Evaluate not implemented for spline order " << SplineOrder);
-    return 0.0; //This is to avoid compiler warning about missing return statement.  It should never be evaluated.
+    itkExceptionMacro("Evaluate not implemented for spline\
+                                                      order " << SplineOrder);
+    return 0.0; // This is to avoid compiler warning about missing 
+                // return statement.  It should never be evaluated.
     }
 
 };
-
 
 
 } // end namespace itk

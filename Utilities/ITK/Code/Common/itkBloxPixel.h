@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkBloxPixel.h,v $
   Language:  C++
-  Date:      $Date: 2003/09/10 14:29:02 $
-  Version:   $Revision: 1.13 $
+  Date:      $Date: 2006/03/16 22:07:45 $
+  Version:   $Revision: 1.14 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -29,18 +29,18 @@ namespace itk
  * \brief Holds a linked list of BloxItem's
  *
  * itk::BloxPixel is a specialized "value added" version of the basic STL list
- * intended as a base class for all pixels stored in itk::BloxImage derived classes.
+ * intended as a base class for all pixels stored in itk::BloxImage derived 
+ * classes.
  * A particular type of itk::BloxImage is fully specialized by setting the type
  * of itk::BloxPixel that it holds, so in some sense this is the most important
  * class in the blox hierarchy.
  *
- * It is assumed that particular itk::BloxPixel derived types will add functionality
- * to this base class; for example, eigenanalysis of core atom populations in
- * itk::BloxCoreAtomPixel
+ * It is assumed that particular itk::BloxPixel derived types will add 
+ * functionality to this base class; for example, eigenanalysis of core atom 
+ * populations in itk::BloxCoreAtomPixel
  *
  * \ingroup ImageObjects
- * */
-
+ */
 template <typename TItemType>
 class BloxPixel : public std::list<TItemType*>
 {

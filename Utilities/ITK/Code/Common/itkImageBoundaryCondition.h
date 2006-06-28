@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkImageBoundaryCondition.h,v $
   Language:  C++
-  Date:      $Date: 2005/09/07 14:46:30 $
-  Version:   $Revision: 1.12 $
+  Date:      $Date: 2006/04/20 16:59:33 $
+  Version:   $Revision: 1.13 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -92,6 +92,14 @@ public:
       const NeighborhoodAccessorFunctorType &neighborhoodAccessorFunctor) const = 0;
   
   virtual ~ImageBoundaryCondition() {}
+
+  /** Tell if the boundary condition can index to any location within
+    * the associated iterator's neighborhood or if it has some limited
+    * subset (such as none) that it relies upon.
+    * Subclasses should override this method if they can safely limit
+    * indexes to active pixels (or no pixels).
+    */
+  virtual bool RequiresCompleteNeighborhood() { return true; }
 };
   
 }// end namespace itk

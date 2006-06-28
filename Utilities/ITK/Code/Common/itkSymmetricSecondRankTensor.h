@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkSymmetricSecondRankTensor.h,v $
   Language:  C++
-  Date:      $Date: 2005/06/29 20:43:38 $
-  Version:   $Revision: 1.21 $
+  Date:      $Date: 2006/04/21 00:09:54 $
+  Version:   $Revision: 1.22 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -191,6 +191,8 @@ inline SymmetricSecondRankTensor< TValueType, VLength> operator*
 
 
 } // end namespace itk
+
+#include "itkNumericTraitsTensorPixel.h"
 
 #ifndef ITK_MANUAL_INSTANTIATION
 #include "itkSymmetricSecondRankTensor.txx"

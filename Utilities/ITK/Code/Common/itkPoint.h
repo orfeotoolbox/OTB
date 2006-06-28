@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkPoint.h,v $
   Language:  C++
-  Date:      $Date: 2005/05/28 19:56:27 $
-  Version:   $Revision: 1.62 $
+  Date:      $Date: 2006/04/20 14:54:10 $
+  Version:   $Revision: 1.65 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -17,9 +17,12 @@
 #ifndef __itkPoint_h
 #define __itkPoint_h
 
+#include "itkFixedArray.h"
+
+#include "itkNumericTraits.h"
 #include "itkVector.h"
-#include "vnl/vnl_vector_ref.h"
-#include "itkIndent.h"
+
+#include <vnl/vnl_vector_ref.h>
 
 namespace itk
 {
@@ -238,7 +241,7 @@ public:
   template < typename TCoordRepB >
   RealType EuclideanDistanceTo( const Point<TCoordRepB,NPointDimension> & pa ) const
   {
-  const double distance = sqrt( 
+  const double distance = vcl_sqrt(
     static_cast<double>( this->SquaredEuclideanDistanceTo( pa ) ) ) ;
   return static_cast<RealType>( distance );
   }
@@ -293,18 +296,24 @@ public:
     const WeightContainerType & weights );
 };
 
-#ifdef ITK_EXPLICIT_INSTANTIATION
-   extern template class Point<float         ,2>;
-   extern template class Point<double        ,2>;
-   extern template class Point<float         ,3>;
-   extern template class Point<double        ,3>;
-#endif
-
 }  // end namespace itk
 
-#ifndef ITK_MANUAL_INSTANTIATION
-#include "itkPoint.txx"
+// Define instantiation macro for this template.
+#define ITK_TEMPLATE_Point(_, EXPORT, x, y) namespace itk { \
+  _(2(class EXPORT Point< ITK_TEMPLATE_2 x >)) \
+  _(1(EXPORT std::ostream& operator<<(std::ostream&, \
+                                      const Point< ITK_TEMPLATE_2 x >&))) \
+  _(1(EXPORT std::istream& operator>>(std::istream&, \
+                                      Point< ITK_TEMPLATE_2 x >&))) \
+  namespace Templates { typedef Point< ITK_TEMPLATE_2 x > Point##y; } \
+  }
+
+#if ITK_TEMPLATE_EXPLICIT
+# include "Templates/itkPoint+-.h"
 #endif
 
+#if ITK_TEMPLATE_TXX
+# include "itkPoint.txx"
+#endif
 
 #endif 

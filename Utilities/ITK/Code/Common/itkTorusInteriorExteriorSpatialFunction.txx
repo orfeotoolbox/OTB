@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkTorusInteriorExteriorSpatialFunction.txx,v $
   Language:  C++
-  Date:      $Date: 2003/09/10 14:29:28 $
-  Version:   $Revision: 1.4 $
+  Date:      $Date: 2006/03/19 04:36:59 $
+  Version:   $Revision: 1.5 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -49,7 +49,7 @@ TorusInteriorExteriorSpatialFunction<VDimension, TInput>
   double y = position[1] - m_Origin[1];
   double z = position[2] - m_Origin[2];
 
-  double k = pow(m_MajorRadius - sqrt(x*x + y*y), 2.0) + z*z;
+  double k = vcl_pow(m_MajorRadius - vcl_sqrt(x*x + y*y), 2.0) + z*z;
 
   if( k <= (m_MinorRadius * m_MinorRadius) )
     return true;

@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkCenteredSimilarity2DTransform.h,v $
   Language:  C++
-  Date:      $Date: 2005/08/11 16:44:08 $
-  Version:   $Revision: 1.2 $
+  Date:      $Date: 2006/03/19 23:22:26 $
+  Version:   $Revision: 1.4 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -24,12 +24,15 @@
 namespace itk
 {
 
-/** \brief CenteredSimilarity2DTransform of a vector space (e.g. space coordinates)
+/** \class CenteredSimilarity2DTransform
+ *  \brief CenteredSimilarity2DTransform of a vector space 
+ *        (e.g. space coordinates)
  *
  * This transform applies a homogenous scale and rigid transform in
  * 2D space. The transform is specified as a scale and rotation around
  * a arbitrary center and is followed by a translation.
- * given one angle for rotation, a homogeneous scale and a 2D offset for translation. 
+ * given one angle for rotation, a homogeneous scale and a 2D offset 
+ * for translation. 
  *
  * The main difference between this class and its superclass
  * Similarity2DTransform is that the center of transformation is exposed
@@ -50,16 +53,16 @@ namespace itk
  *
  * \ingroup Transforms
  */
-template < class TScalarType=double >    // Data type for scalars (float or double)
+template < class TScalarType=double >    // Data type for scalars
 class ITK_EXPORT CenteredSimilarity2DTransform : 
             public Similarity2DTransform< TScalarType > 
 {
 public:
   /** Standard class typedefs. */
-  typedef CenteredSimilarity2DTransform Self;
+  typedef CenteredSimilarity2DTransform          Self;
   typedef Similarity2DTransform< TScalarType >   Superclass;
-  typedef SmartPointer<Self>        Pointer;
-  typedef SmartPointer<const Self>  ConstPointer;
+  typedef SmartPointer<Self>                     Pointer;
+  typedef SmartPointer<const Self>               ConstPointer;
     
   /** New macro for creation of through a Smart Pointer. */
   itkNewMacro( Self );
@@ -94,8 +97,10 @@ public:
   typedef typename Superclass::OutputVectorType  OutputVectorType;
   
   /** CovariantVector type. */
-  typedef typename Superclass::InputCovariantVectorType   InputCovariantVectorType;
-  typedef typename Superclass::OutputCovariantVectorType  OutputCovariantVectorType;
+  typedef typename Superclass::InputCovariantVectorType   
+                                                 InputCovariantVectorType;
+  typedef typename Superclass::OutputCovariantVectorType  
+                                                 OutputCovariantVectorType;
   
   /** VnlVector type. */
   typedef typename Superclass::InputVnlVectorType   InputVnlVectorType;

@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkGaussianOperator.txx,v $
   Language:  C++
-  Date:      $Date: 2006/01/11 19:43:32 $
-  Version:   $Revision: 1.20 $
+  Date:      $Date: 2006/03/19 04:36:58 $
+  Version:   $Revision: 1.21 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -80,7 +80,7 @@ GaussianOperator<TPixel,VDimension, TAllocator>
   double d, accumulator;
   double m;
 
-  if ((d=fabs(y)) < 3.75)
+  if ((d=vcl_fabs(y)) < 3.75)
     {
     m=y/3.75;
     m*=m;
@@ -107,7 +107,7 @@ GaussianOperator<TPixel,VDimension, TAllocator>
   double d, accumulator;
   double m;
 
-  if ((d=fabs(y)) < 3.75)
+  if ((d=vcl_fabs(y)) < 3.75)
     {
     m=y/3.75;
     m*=m;
@@ -147,7 +147,7 @@ GaussianOperator<TPixel,VDimension, TAllocator>
   if (y==0.0) return 0.0;
   else
     {
-    toy=2.0/fabs(y);
+    toy=2.0/vcl_fabs(y);
     qip=accumulator=0.0;
     qi=1.0;
     for (j=2*(n+(int)::sqrt(ACCURACY*n)); j>0 ; j--)

@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkWindows.h,v $
   Language:  C++
-  Date:      $Date: 2003/09/10 14:29:30 $
-  Version:   $Revision: 1.10 $
+  Date:      $Date: 2006/03/18 18:06:38 $
+  Version:   $Revision: 1.11 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -25,4 +25,3 @@
 #include <windows.h>
 #include <winbase.h>
 #endif
-

@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkEllipsoidInteriorExteriorSpatialFunction.txx,v $
   Language:  C++
-  Date:      $Date: 2005/11/22 17:29:30 $
-  Version:   $Revision: 1.25 $
+  Date:      $Date: 2006/03/19 04:36:58 $
+  Version:   $Revision: 1.26 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -70,7 +70,7 @@ EllipsoidInteriorExteriorSpatialFunction<VDimension, TInput>
       {      
       orientationVector[j] = m_Orientations[i][j];
       }
-    distanceSquared += pow(static_cast<double>((orientationVector * pointVector)/(.5*m_Axes[i])),static_cast<double>(2));
+    distanceSquared += vcl_pow(static_cast<double>((orientationVector * pointVector)/(.5*m_Axes[i])),static_cast<double>(2));
     }        
 
   if(distanceSquared <= 1)

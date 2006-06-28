@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkMetaDataObject.h,v $
   Language:  C++
-  Date:      $Date: 2006/03/09 17:08:06 $
-  Version:   $Revision: 1.18 $
+  Date:      $Date: 2006/04/04 18:24:47 $
+  Version:   $Revision: 1.19 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -68,7 +68,7 @@ namespace itk
         typedef SmartPointer<const Self>  ConstPointer;
 
         /** Method for creation through the object factory. */
-        itkNewMacro(Self);
+        itkFactorylessNewMacro(Self);
 
         /** Run-time type information (and related methods). */
         itkTypeMacro(MetaDataObject, MetaDataObjectBase);

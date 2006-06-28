@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkWindowedSincInterpolateImageFunction.txx,v $
   Language:  C++
-  Date:      $Date: 2006/02/06 22:01:58 $
-  Version:   $Revision: 1.10 $
+  Date:      $Date: 2006/03/19 04:36:59 $
+  Version:   $Revision: 1.12 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -57,16 +57,10 @@ const double
 BlackmanWindowFunction<VRadius, TInput, TOutput>
 ::m_Factor2 = 2.0 * vnl_math::pi / VRadius;
 
-
-
-
 } // end namespace Function
 
 
-/**
- * Window size constant
- */
-  
+/** Window size constant */ 
 template<class TInputImage, unsigned int VRadius,  
   class TWindowFunction, class TBoundaryCondition, class TCoordRep>
 const unsigned int
@@ -74,9 +68,8 @@ WindowedSincInterpolateImageFunction<TInputImage,VRadius,
   TWindowFunction,TBoundaryCondition,TCoordRep>
 ::m_WindowSize = VRadius << 1;
 
-/**
- * Constructor
- */
+
+/** Constructor */
 template<class TInputImage, unsigned int VRadius,  
   class TWindowFunction, class TBoundaryCondition, class TCoordRep>
 WindowedSincInterpolateImageFunction<TInputImage,VRadius,
@@ -103,9 +96,7 @@ WindowedSincInterpolateImageFunction<TInputImage,VRadius,
     }
 }
 
-/**
- * Destructor
- */
+/** Destructor */
 template<class TInputImage, unsigned int VRadius,  
   class TWindowFunction, class TBoundaryCondition, class TCoordRep>
 WindowedSincInterpolateImageFunction<TInputImage,VRadius,
@@ -185,9 +176,7 @@ WindowedSincInterpolateImageFunction<TInputImage,VRadius,
     }
 }
 
-/**
- * PrintSelf
- */
+/** PrintSelf */
 template<class TInputImage, unsigned int VRadius,  
   class TWindowFunction, class TBoundaryCondition, class TCoordRep>
 void
@@ -199,9 +188,7 @@ WindowedSincInterpolateImageFunction<TInputImage,VRadius,
 }
 
 
-/**
- * Evaluate at image index position
- */
+/** Evaluate at image index position */
 template<class TInputImage, unsigned int VRadius,  
   class TWindowFunction, class TBoundaryCondition, class TCoordRep>
 typename WindowedSincInterpolateImageFunction<TInputImage,VRadius,
@@ -222,7 +209,7 @@ WindowedSincInterpolateImageFunction<TInputImage,VRadius,
     {
     // The following "if" block is equivalent to the following line without
     // having to call floor.
-    //    baseIndex[dim] = (long) floor( index[dim] );
+    //    baseIndex[dim] = (long) vcl_floor(index[dim] );
     if (index[dim] >= 0.0)
       {
       baseIndex[dim] = (long) index[dim];
@@ -245,7 +232,8 @@ WindowedSincInterpolateImageFunction<TInputImage,VRadius,
   // Position the neighborhood at the index of interest
   Size<ImageDimension> radius;
   radius.Fill(VRadius);
-  IteratorType nit = IteratorType( radius, this->GetInputImage(), this->GetInputImage()->GetBufferedRegion());
+  IteratorType nit = IteratorType( radius, this->GetInputImage(), 
+                                  this->GetInputImage()->GetBufferedRegion());
   nit.SetLocation( baseIndex );
   
   // Compute the sinc function for each dimension
@@ -261,8 +249,7 @@ WindowedSincInterpolateImageFunction<TInputImage,VRadius,
       {
       for( unsigned int i = 0; i < m_WindowSize; i++)
         {
-        xWeight[dim][i] = 
-          static_cast<int>(i) == VRadius - 1 ? 1 : 0;
+        xWeight[dim][i] = static_cast<int>(i) == VRadius - 1 ? 1 : 0;
         }
       }
     else
@@ -272,7 +259,7 @@ WindowedSincInterpolateImageFunction<TInputImage,VRadius,
         {
         // Increment the offset, taking it through the range
         // (dist + rad - 1, ..., dist - rad), i.e. all x
-        // such that abs(x) <= rad
+        // such that vcl_abs(x) <= rad
         x -= 1.0;
 
         // Compute the weight for this m

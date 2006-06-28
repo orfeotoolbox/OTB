@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkVolumeSplineKernelTransform.h,v $
   Language:  C++
-  Date:      $Date: 2003/09/10 14:29:29 $
-  Version:   $Revision: 1.7 $
+  Date:      $Date: 2006/03/18 18:06:38 $
+  Version:   $Revision: 1.8 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -36,10 +36,10 @@ class ITK_EXPORT VolumeSplineKernelTransform :
 {
 public:
   /** Standard class typedefs. */
-  typedef VolumeSplineKernelTransform Self;
-  typedef KernelTransform<    TScalarType, NDimensions>   Superclass;
-  typedef SmartPointer<Self>        Pointer;
-  typedef SmartPointer<const Self>  ConstPointer;
+  typedef VolumeSplineKernelTransform                 Self;
+  typedef KernelTransform<TScalarType, NDimensions>   Superclass;
+  typedef SmartPointer<Self>                          Pointer;
+  typedef SmartPointer<const Self>                    ConstPointer;
   
   /** New macro for creation of through a Smart Pointer */
   itkNewMacro( Self );
@@ -61,13 +61,15 @@ public:
                               
   /** These (rather redundant) typedefs are needed because on SGI, typedefs
    * are not inherited */
-  typedef typename Superclass::InputPointType  InputPointType;
-  typedef typename Superclass::OutputPointType  OutputPointType;
-  typedef typename Superclass::InputVectorType InputVectorType;
-  typedef typename Superclass::OutputVectorType OutputVectorType;
-  typedef typename Superclass::InputCovariantVectorType InputCovariantVectorType;
-  typedef typename Superclass::OutputCovariantVectorType OutputCovariantVectorType;
-  typedef typename Superclass::PointsIterator PointsIterator;
+  typedef typename Superclass::InputPointType     InputPointType;
+  typedef typename Superclass::OutputPointType    OutputPointType;
+  typedef typename Superclass::InputVectorType    InputVectorType;
+  typedef typename Superclass::OutputVectorType   OutputVectorType;
+  typedef typename Superclass::InputCovariantVectorType  
+                                                  InputCovariantVectorType;
+  typedef typename Superclass::OutputCovariantVectorType 
+                                                  OutputCovariantVectorType;
+  typedef typename Superclass::PointsIterator     PointsIterator;
     
 
 protected:
@@ -91,10 +93,10 @@ protected:
 
   /** Compute the contribution of the landmarks weighted by the kernel funcion
       to the global deformation of the space  */
-  virtual void ComputeDeformationContribution( const InputPointType & inputPoint,
-                                                     OutputPointType & result ) const;
+  virtual void ComputeDeformationContribution(const InputPointType & inputPoint,
+                                              OutputPointType & result ) const;
 
- private:
+private:
   VolumeSplineKernelTransform(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
 

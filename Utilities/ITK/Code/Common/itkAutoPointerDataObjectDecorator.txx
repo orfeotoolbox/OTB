@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkAutoPointerDataObjectDecorator.txx,v $
   Language:  C++
-  Date:      $Date: 2004/03/05 20:56:34 $
-  Version:   $Revision: 1.2 $
+  Date:      $Date: 2006/03/16 11:43:45 $
+  Version:   $Revision: 1.3 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -17,17 +17,15 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef _itkAutoPointerDataObjectDecorator_txx
-#define _itkAutoPointerDataObjectDecorator_txx
+#ifndef __itkAutoPointerDataObjectDecorator_txx
+#define __itkAutoPointerDataObjectDecorator_txx
 
 #include "itkAutoPointerDataObjectDecorator.h"
 
 namespace itk
 {
-
-/**
- *
- */
+ 
+/** Constructor */
 template<class T>
 AutoPointerDataObjectDecorator<T>
 ::AutoPointerDataObjectDecorator() : m_Component()
@@ -35,19 +33,14 @@ AutoPointerDataObjectDecorator<T>
 }
 
 
-/**
- *
- */
+/** Destructor */
 template<class T>
 AutoPointerDataObjectDecorator<T>
 ::~AutoPointerDataObjectDecorator()
 {
 }
 
-
-/**
- *
- */
+/** Set value */
 template<class T>
 void
 AutoPointerDataObjectDecorator<T>
@@ -63,9 +56,7 @@ AutoPointerDataObjectDecorator<T>
 }
 
 
-/**
- *
- */
+/** PrintSelf method */
 template<class T>
 void 
 AutoPointerDataObjectDecorator<T>

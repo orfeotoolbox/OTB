@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkComplexToPhaseImageAdaptor.h,v $
   Language:  C++
-  Date:      $Date: 2005/05/27 16:17:08 $
-  Version:   $Revision: 1.1 $
+  Date:      $Date: 2006/03/19 23:24:29 $
+  Version:   $Revision: 1.4 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -51,7 +51,7 @@ public:
     {output = (TInternalType)(input);}
 
   static inline TExternalType Get( const TInternalType & input ) 
-    {return (TExternalType)( atan2( input.imag(), input.real() ) );}
+    {return (TExternalType)( vcl_atan2(input.imag(), input.real() ) );}
 };
   
 } // end namespace Accessor
@@ -73,12 +73,12 @@ class ITK_EXPORT ComplexToPhaseImageAdaptor : public
 {
 public:
   /** Standard class typedefs. */
-  typedef ComplexToPhaseImageAdaptor  Self;
+  typedef ComplexToPhaseImageAdaptor                Self;
   typedef ImageAdaptor<TImage, Accessor::ComplexToPhasePixelAccessor<
                                typename TImage::PixelType,
                                TOutputPixelType> >  Superclass;
-  typedef SmartPointer<Self>  Pointer;
-  typedef SmartPointer<const Self>  ConstPointer;
+  typedef SmartPointer<Self>                        Pointer;
+  typedef SmartPointer<const Self>                  ConstPointer;
   
   /** Method for creation through the object factory. */
   itkNewMacro(Self);  
@@ -86,11 +86,11 @@ public:
   /** Run-time type information (and related methods). */
   itkTypeMacro( ComplexToPhaseImageAdaptor, ImageAdaptor );
 
- protected:
+protected:
   ComplexToPhaseImageAdaptor() {}
   virtual ~ComplexToPhaseImageAdaptor() {}
   
- private:
+private:
   ComplexToPhaseImageAdaptor(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
 

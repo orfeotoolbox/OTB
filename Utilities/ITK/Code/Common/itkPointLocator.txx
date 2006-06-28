@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkPointLocator.txx,v $
   Language:  C++
-  Date:      $Date: 2004/01/05 17:55:59 $
-  Version:   $Revision: 1.18 $
+  Date:      $Date: 2006/03/19 04:36:59 $
+  Version:   $Revision: 1.19 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -103,7 +103,7 @@ for (i=0; i<3; i++)
 if ( this->Automatic && (estNumPts > 0) )
 {
   level = (float) estNumPts / this->NumberOfPointsPerBucket;
-  level = ::ceil( pow((double)level,(double)0.33333333) );
+  level = ::ceil( vcl_pow((double)level,(double)0.33333333) );
   for (i=0; i<3; i++)
     {
     ndivs[i] = (int) level;

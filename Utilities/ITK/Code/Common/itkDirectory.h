@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkDirectory.h,v $
   Language:  C++
-  Date:      $Date: 2006/03/06 16:41:47 $
-  Version:   $Revision: 1.27 $
+  Date:      $Date: 2006/05/10 20:27:15 $
+  Version:   $Revision: 1.28 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -71,7 +71,7 @@ private:
   Directory(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
 
-  itksys::Directory* m_Internal;
+  ::itksys::Directory* m_Internal;
 }; // End Class: Directory
 
 } // end namespace itk

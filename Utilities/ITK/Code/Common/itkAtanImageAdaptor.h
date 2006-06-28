@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkAtanImageAdaptor.h,v $
   Language:  C++
-  Date:      $Date: 2003/09/10 14:29:00 $
-  Version:   $Revision: 1.11 $
+  Date:      $Date: 2006/03/19 04:36:58 $
+  Version:   $Revision: 1.13 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -26,7 +26,7 @@ namespace itk
 namespace Accessor {
 /**
  * \class AtanPixelAccessor
- * \brief Give access to the atan() function of a value
+ * \brief Give access to the vcl_atan() function of a value
  *
  * AtanPixelAccessor is templated over an internal type and an
  * external type representation. This class cast the input
@@ -41,8 +41,8 @@ class ITK_EXPORT AtanPixelAccessor
 {
 public:
 
- /** External typedef. It defines the external aspect
-   * that this class will exhibit. */
+  /** External typedef. It defines the external aspect
+   *  that this class will exhibit. */
   typedef TExternalType ExternalType;
 
   /** Internal typedef. It defines the internal real
@@ -50,10 +50,10 @@ public:
   typedef TInternalType InternalType;
 
   static inline void Set(TInternalType & output, const TExternalType & input) 
-    {output = (TInternalType)atan((double)input);}
+    {output = (TInternalType)vcl_atan((double)input);}
 
   static inline TExternalType Get( const TInternalType & input ) 
-    {return (TExternalType)atan((double)input);}
+    {return (TExternalType)vcl_atan((double)input);}
 };
 
   
@@ -61,7 +61,7 @@ public:
  
 /**
  * \class AtanImageAdaptor
- * \brief Presents an image as being composed of the atan() of its pixels
+ * \brief Presents an image as being composed of the vcl_atan() of its pixels
  *
  * Additional casting is performed according to the input and output image
  * types following C++ default casting rules.
@@ -78,13 +78,13 @@ class ITK_EXPORT AtanImageAdaptor : public
 {
 public:
   /** Standard class typedefs. */
-  typedef AtanImageAdaptor  Self;
+  typedef AtanImageAdaptor                                  Self;
   typedef ImageAdaptor<TImage,Accessor::AtanPixelAccessor<
                                        typename TImage::PixelType,
                                        TOutputPixelType> >
                                                             Superclass;
-  typedef SmartPointer<Self>  Pointer;
-  typedef SmartPointer<const Self>  ConstPointer;
+  typedef SmartPointer<Self>                                Pointer;
+  typedef SmartPointer<const Self>                          ConstPointer;
   
   /** Run-time type information (and related methods). */
   itkTypeMacro( AtanImageAdaptor, ImageAdaptor );

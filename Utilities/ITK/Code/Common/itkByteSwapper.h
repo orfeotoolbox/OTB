@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkByteSwapper.h,v $
   Language:  C++
-  Date:      $Date: 2003/09/10 14:29:03 $
-  Version:   $Revision: 1.14 $
+  Date:      $Date: 2006/03/18 18:06:25 $
+  Version:   $Revision: 1.15 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -42,9 +42,9 @@ class ITK_EXPORT ByteSwapper : public Object
 {
 public:
   /** Standard class typedefs. */
-  typedef ByteSwapper       Self;
-  typedef Object  Superclass;
-  typedef SmartPointer<Self>  Pointer;
+  typedef ByteSwapper               Self;
+  typedef Object                    Superclass;
+  typedef SmartPointer<Self>        Pointer;
   typedef SmartPointer<const Self>  ConstPointer;
   
   /** Work around MSVC bug (including ByteSwapper.h in a templated class). */
@@ -80,7 +80,8 @@ public:
    * can be handled. Single byte types are not swapped;
    * others raise an exception. The method is used to
    * swap to and from Big Endian. */
-  static void SwapWriteRangeFromSystemToBigEndian(T *p, int num, OStreamType *fp);
+  static void SwapWriteRangeFromSystemToBigEndian(T *p, int num, 
+                                                  OStreamType *fp);
   
   /** Generic swap method handles type T. The swapping is
    * done in-place. Either 2-byte or 4-byte swapping
@@ -103,7 +104,8 @@ public:
    * can be handled. Single byte types are not swapped;
    * others raise an exception. The method is used to
    * swap to and from Little Endian. */
-  static void SwapWriteRangeFromSystemToLittleEndian(T *p, int num, OStreamType *fp);
+  static void SwapWriteRangeFromSystemToLittleEndian(T *p, int num, 
+                                                     OStreamType *fp);
   
 protected:
   ByteSwapper() {}

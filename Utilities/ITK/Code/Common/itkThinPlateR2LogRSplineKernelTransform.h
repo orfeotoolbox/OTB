@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkThinPlateR2LogRSplineKernelTransform.h,v $
   Language:  C++
-  Date:      $Date: 2003/09/10 14:29:27 $
-  Version:   $Revision: 1.6 $
+  Date:      $Date: 2006/03/19 04:36:59 $
+  Version:   $Revision: 1.7 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -83,7 +83,7 @@ protected:
   /** Compute G(x)
    * For the thin plate spline, this is:
    * G(x) = r(x)*I
-   * \f$ G(x) = r(x)^2 log( r(x) ) *I \f$
+   * \f$ G(x) = r(x)^2 log(r(x) ) *I \f$
    * where
    * r(x) = Euclidean norm = sqrt[x1^2 + x2^2 + x3^2]
    * \f[ r(x) = \sqrt{ x_1^2 + x_2^2 + x_3^2 }  \f]

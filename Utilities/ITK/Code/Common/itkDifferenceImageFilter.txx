@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkDifferenceImageFilter.txx,v $
   Language:  C++
-  Date:      $Date: 2003/12/15 14:13:19 $
-  Version:   $Revision: 1.9 $
+  Date:      $Date: 2006/05/31 17:28:38 $
+  Version:   $Revision: 1.10 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -107,7 +107,7 @@ DifferenceImageFilter<TInputImage, TOutputImage>
 ::ThreadedGenerateData(const OutputImageRegionType &threadRegion, int threadId)
 {
   typedef ConstNeighborhoodIterator<InputImageType> SmartIterator;
-  typedef ImageRegionConstIterator<OutputImageType> InputIterator;
+  typedef ImageRegionConstIterator<InputImageType> InputIterator;
   typedef ImageRegionIterator<OutputImageType> OutputIterator;
   typedef NeighborhoodAlgorithm::ImageBoundaryFacesCalculator<InputImageType> FacesCalculator;
   typedef typename FacesCalculator::RadiusType RadiusType;

@@ -3,8 +3,8 @@
 Program:   Insight Segmentation & Registration Toolkit
 Module:    $RCSfile: itkBloxCoreAtomPixel.h,v $
 Language:  C++
-Date:      $Date: 2003/09/10 14:29:02 $
-Version:   $Revision: 1.21 $
+Date:      $Date: 2006/03/18 20:10:36 $
+Version:   $Revision: 1.22 $
 
 Copyright (c) Insight Software Consortium. All rights reserved.
 See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -39,7 +39,8 @@ namespace itk
  * */
 
 template <unsigned int NDimensions>
-class ITK_EXPORT BloxCoreAtomPixel : public BloxPixel< BloxCoreAtomItem<NDimensions> >
+class ITK_EXPORT BloxCoreAtomPixel : public BloxPixel< 
+                                            BloxCoreAtomItem<NDimensions> >
 {
 public:
 
@@ -76,7 +77,8 @@ public:
   /** Calculate and store the mean of core atom diameters. */
   double CalcMeanCoreAtomDiameter();
 
-  /** Perform eigenanalysis on the population of core atoms stored in this pixel. */
+  /** Perform eigenanalysis on the population of core atoms 
+   *  stored in this pixel. */
   bool DoCoreAtomEigenanalysis();
 
   /** Perform eigenanalysis on the voted CMatrix */

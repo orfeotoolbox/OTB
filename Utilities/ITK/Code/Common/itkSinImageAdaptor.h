@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkSinImageAdaptor.h,v $
   Language:  C++
-  Date:      $Date: 2003/09/10 14:29:26 $
-  Version:   $Revision: 1.11 $
+  Date:      $Date: 2006/04/01 13:44:21 $
+  Version:   $Revision: 1.13 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -25,7 +25,7 @@ namespace itk
  
 namespace Accessor {
 /** \class SinPixelAccessor
- * \brief Give access to the sin() function of a value
+ * \brief Give access to the vcl_sin() function of a value
  *
  * SinPixelAccessor is templated over an internal type and an
  * external type representation. This class cast the input
@@ -47,16 +47,16 @@ public:
   typedef TInternalType InternalType;
 
   static inline void Set(TInternalType & output, const TExternalType & input) 
-    {output = (TInternalType)sin((double)input);}
+    {output = (TInternalType)vcl_sin((double)input);}
 
   static inline TExternalType Get( const TInternalType & input ) 
-    {return (TExternalType)sin((double)input);}
+    {return (TExternalType)vcl_sin((double)input);}
 };
   
 } // end namespace Accessor
  
 /** \class SinImageAdaptor
- * \brief Presents an image as being composed of the sin() of its pixels
+ * \brief Presents an image as being composed of the vcl_sin() of its pixels
  *
  * Additional casting is performed according to the input and output image
  * types following C++ default casting rules.
@@ -72,11 +72,11 @@ class ITK_EXPORT SinImageAdaptor : public
 {
 public:
   /** Standard class typedefs. */
-  typedef SinImageAdaptor  Self;
+  typedef SinImageAdaptor           Self;
   typedef ImageAdaptor<TImage, Accessor::SinPixelAccessor<
                                typename TImage::PixelType,
                                TOutputPixelType> >  Superclass;
-  typedef SmartPointer<Self>  Pointer;
+  typedef SmartPointer<Self>        Pointer;
   typedef SmartPointer<const Self>  ConstPointer;
   
   /** Method for creation through the object factory. */
@@ -85,11 +85,11 @@ public:
   /** Run-time type information (and related methods). */
   itkTypeMacro( SinImageAdaptor, ImageAdaptor );
 
- protected:
+protected:
   SinImageAdaptor() {}
   virtual ~SinImageAdaptor() {}
   
- private:
+private:
   SinImageAdaptor(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
 

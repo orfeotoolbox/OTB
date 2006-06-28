@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkChainCodePath.txx,v $
   Language:  C++
-  Date:      $Date: 2004/12/04 19:58:30 $
-  Version:   $Revision: 1.5 $
+  Date:      $Date: 2006/03/18 20:14:09 $
+  Version:   $Revision: 1.6 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -14,8 +14,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef _itkChainCodePath_txx
-#define _itkChainCodePath_txx
+#ifndef __itkChainCodePath_txx
+#define __itkChainCodePath_txx
 
 #include "itkChainCodePath.h"
 #include "itkNumericTraits.h"
@@ -74,8 +74,6 @@ ChainCodePath<VDimension>
   return index;
 }
 
-
-
 template <unsigned int VDimension>
 typename ChainCodePath<VDimension>::OffsetType
 ChainCodePath<VDimension>
@@ -91,11 +89,7 @@ ChainCodePath<VDimension>
     }
 }
 
-
-
-/**
- * Constructor
- */
+/** Constructor */
 template <unsigned int VDimension>
 ChainCodePath<VDimension>
 ::ChainCodePath()
@@ -103,11 +97,7 @@ ChainCodePath<VDimension>
   m_Start = this->GetZeroIndex();
 }
 
-
-
-/**
- * Standard "PrintSelf" method
- */
+/** Standard "PrintSelf" method */
 template <unsigned int VDimension>
 void
 ChainCodePath<VDimension>
@@ -117,9 +107,6 @@ ChainCodePath<VDimension>
   os << indent << "Start index:  " << m_Start << std::endl;
 }
 
-
-
 } // end namespace itk
 
 #endif
-

@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkBSplineDerivativeKernelFunction.h,v $
   Language:  C++
-  Date:      $Date: 2006/02/06 22:01:51 $
-  Version:   $Revision: 1.4 $
+  Date:      $Date: 2006/03/18 20:13:35 $
+  Version:   $Revision: 1.5 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -44,8 +44,8 @@ class ITK_EXPORT BSplineDerivativeKernelFunction : public KernelFunction
 public:
   /** Standard class typedefs. */
   typedef BSplineDerivativeKernelFunction Self;
-  typedef KernelFunction Superclass;
-  typedef SmartPointer<Self>  Pointer;
+  typedef KernelFunction                  Superclass;
+  typedef SmartPointer<Self>              Pointer;
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self); 
@@ -87,8 +87,6 @@ private:
   typename KernelType::Pointer  m_KernelFunction;
 
 };
-
-
 
 } // end namespace itk
 

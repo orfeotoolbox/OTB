@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkImageRegionMultidimensionalSplitter.txx,v $
   Language:  C++
-  Date:      $Date: 2004/08/22 14:48:47 $
-  Version:   $Revision: 1.7 $
+  Date:      $Date: 2006/03/19 04:36:59 $
+  Version:   $Revision: 1.8 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -34,7 +34,7 @@ ImageRegionMultidimensionalSplitter<VImageDimension>
 
   // requested number of splits per dimension
   double splitsPerDimension =
-    ::ceil( pow( (double) requestedNumber, 1.0/(double) VImageDimension));
+    ::ceil( vcl_pow((double) requestedNumber, 1.0/(double) VImageDimension));
 
   // if a given dimension has fewer pixels that splitsPerDimension, then
   // only split number of pixels times
@@ -78,7 +78,7 @@ ImageRegionMultidimensionalSplitter<VImageDimension>
   
   // requested number of splits per dimension
   double splitsPerDimension =
-    ::ceil( pow( (double) numberOfPieces, 1.0/(double) VImageDimension));
+    ::ceil( vcl_pow((double) numberOfPieces, 1.0/(double) VImageDimension));
 
   // if a given dimension has fewer pixels that splitsPerDimension, then
   // only split number of pixels times

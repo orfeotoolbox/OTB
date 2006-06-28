@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkVertexCell.h,v $
   Language:  C++
-  Date:      $Date: 2005/07/26 17:45:58 $
-  Version:   $Revision: 1.52 $
+  Date:      $Date: 2006/03/18 18:06:38 $
+  Version:   $Revision: 1.53 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -59,7 +59,8 @@ public:
   virtual unsigned int GetDimension(void) const;
   virtual unsigned int GetNumberOfPoints(void) const;
   virtual CellFeatureCount GetNumberOfBoundaryFeatures(int dimension) const;
-  virtual bool GetBoundaryFeature(int dimension, CellFeatureIdentifier, CellAutoPointer &);
+  virtual bool GetBoundaryFeature(int dimension, CellFeatureIdentifier, 
+                                                         CellAutoPointer &);
   virtual void SetPointIds(PointIdConstIterator first);
   virtual void SetPointIds(PointIdConstIterator first,
                            PointIdConstIterator last);
@@ -93,7 +94,7 @@ protected:
    */
   PointIdentifier m_PointIds[NumberOfPoints];
 
- private:
+private:
   VertexCell(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
 };

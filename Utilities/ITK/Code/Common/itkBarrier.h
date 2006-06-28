@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkBarrier.h,v $
   Language:  C++
-  Date:      $Date: 2006/02/06 22:08:11 $
-  Version:   $Revision: 1.8 $
+  Date:      $Date: 2006/03/16 22:07:44 $
+  Version:   $Revision: 1.9 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -44,7 +44,7 @@ namespace itk {
  * A barrier class is used to synchronize threaded execution by allowing
  * threads to block until each has reached a desired state.  As each thread
  * enters the barrier it blocks. When all threads have entered the barrier,
- * all all released and continue to execute.
+ * all released and continue to execute.
  *
  * A thread enters the barrier by calling Wait() on the barrier class.
  * To set up a barrier class, call Initialize(n) where n is the number of
@@ -57,15 +57,14 @@ namespace itk {
  * this limit can be safely raised if necessary.  To enable the fetchop
  * implementation, set ITK_USE_FETCHOP_BARRIERS and link applications against
  * -lfetchop.
- *
-*/
+ */
 class ITKCommon_EXPORT Barrier : public LightObject
 {
 public:
   /** Standard class typedefs. */
-  typedef Barrier      Self;
-  typedef LightObject  Superclass;
-  typedef SmartPointer<Self>  Pointer;
+  typedef Barrier                   Self;
+  typedef LightObject               Superclass;
+  typedef SmartPointer<Self>        Pointer;
   typedef SmartPointer<const Self>  ConstPointer;
 
   /** Method for creation through the object factory. */

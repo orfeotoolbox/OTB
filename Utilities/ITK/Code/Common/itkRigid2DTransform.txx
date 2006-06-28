@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkRigid2DTransform.txx,v $
   Language:  C++
-  Date:      $Date: 2006/01/28 17:16:33 $
-  Version:   $Revision: 1.17 $
+  Date:      $Date: 2006/03/19 04:36:59 $
+  Version:   $Revision: 1.18 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -96,7 +96,7 @@ void
 Rigid2DTransform<TScalarType>
 ::ComputeMatrixParameters( void )
 {
-  m_Angle = acos(this->GetMatrix()[0][0]); 
+  m_Angle = vcl_acos(this->GetMatrix()[0][0]); 
 
   if(this->GetMatrix()[1][0]<0.0)
     {
@@ -176,7 +176,7 @@ void
 Rigid2DTransform<TScalarType>
 ::SetAngleInDegrees(TScalarType angle)
 {
-  const TScalarType angleInRadians = angle * atan(1.0) / 45.0;
+  const TScalarType angleInRadians = angle * vcl_atan(1.0) / 45.0;
   this->SetAngle( angleInRadians );
 }
 
@@ -186,8 +186,8 @@ void
 Rigid2DTransform<TScalarType>
 ::ComputeMatrix( void )
 {
-  const double ca = cos( m_Angle );
-  const double sa = sin( m_Angle );
+  const double ca = vcl_cos(m_Angle );
+  const double sa = vcl_sin(m_Angle );
 
   MatrixType rotationMatrix;
   rotationMatrix[0][0]= ca; rotationMatrix[0][1]=-sa;
@@ -256,8 +256,8 @@ Rigid2DTransform<TScalarType>::
 GetJacobian( const InputPointType & p ) const
 {
 
-  const double ca = cos( this->GetAngle() );
-  const double sa = sin( this->GetAngle() );
+  const double ca = vcl_cos(this->GetAngle() );
+  const double sa = vcl_sin(this->GetAngle() );
 
   this->m_Jacobian.Fill(0.0);
 

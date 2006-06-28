@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkComplexToRealImageAdaptor.h,v $
   Language:  C++
-  Date:      $Date: 2004/11/14 20:16:34 $
-  Version:   $Revision: 1.1 $
+  Date:      $Date: 2006/03/19 23:24:29 $
+  Version:   $Revision: 1.3 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -57,7 +57,8 @@ public:
 } // end namespace Accessor
  
 /** \class ComplexToRealImageAdaptor
- * \brief Presents a complex image as being composed of real() part of its pixels
+ * \brief Presents a complex image as being composed of real() part of 
+ *        its pixels
  *
  * Additional casting is performed according to the input and output image
  * types following C++ default casting rules.
@@ -73,12 +74,12 @@ class ITK_EXPORT ComplexToRealImageAdaptor : public
 {
 public:
   /** Standard class typedefs. */
-  typedef ComplexToRealImageAdaptor  Self;
+  typedef ComplexToRealImageAdaptor                 Self;
   typedef ImageAdaptor<TImage, Accessor::ComplexToRealPixelAccessor<
                                typename TImage::PixelType,
                                TOutputPixelType> >  Superclass;
-  typedef SmartPointer<Self>  Pointer;
-  typedef SmartPointer<const Self>  ConstPointer;
+  typedef SmartPointer<Self>                        Pointer;
+  typedef SmartPointer<const Self>                  ConstPointer;
   
   /** Method for creation through the object factory. */
   itkNewMacro(Self);  
@@ -86,11 +87,11 @@ public:
   /** Run-time type information (and related methods). */
   itkTypeMacro( ComplexToRealImageAdaptor, ImageAdaptor );
 
- protected:
+protected:
   ComplexToRealImageAdaptor() {}
   virtual ~ComplexToRealImageAdaptor() {}
   
- private:
+private:
   ComplexToRealImageAdaptor(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
 

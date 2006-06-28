@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkVersorRigid3DTransform.h,v $
   Language:  C++
-  Date:      $Date: 2005/10/03 03:52:19 $
-  Version:   $Revision: 1.24 $
+  Date:      $Date: 2006/03/18 18:06:38 $
+  Version:   $Revision: 1.25 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -32,7 +32,7 @@ namespace itk
  *
  * \ingroup Transforms
  */
-template < class TScalarType=double >    // Data type for scalars (float or double)
+template < class TScalarType=double >//Data type for scalars (float or double)
 class ITK_EXPORT VersorRigid3DTransform : 
       public VersorTransform< TScalarType > 
 {
@@ -55,7 +55,7 @@ public:
   itkStaticConstMacro(OutputSpaceDimension, unsigned int, 3);
   itkStaticConstMacro(ParametersDimension, unsigned int, 6);
 
-    /** Parameters Type   */
+  /** Parameters Type   */
   typedef typename Superclass::ParametersType         ParametersType;
   typedef typename Superclass::JacobianType           JacobianType;
   typedef typename Superclass::ScalarType             ScalarType;
@@ -67,7 +67,7 @@ public:
   typedef typename Superclass::OutputVnlVectorType    OutputVnlVectorType;
   typedef typename Superclass::InputCovariantVectorType 
                                                       InputCovariantVectorType;
-  typedef typename Superclass::OutputCovariantVectorType      
+  typedef typename Superclass::OutputCovariantVectorType
                                                       OutputCovariantVectorType;
   typedef typename Superclass::MatrixType             MatrixType;
   typedef typename Superclass::InverseMatrixType      InverseMatrixType;

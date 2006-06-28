@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkAbsImageAdaptor.h,v $
   Language:  C++
-  Date:      $Date: 2003/11/05 17:55:37 $
-  Version:   $Revision: 1.1 $
+  Date:      $Date: 2006/03/19 04:36:58 $
+  Version:   $Revision: 1.4 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -24,7 +24,7 @@ namespace itk
  
 namespace Accessor {
 /** \class AbsPixelAccessor
- * \brief Give access to the abs() function of a value
+ * \brief Give access to the vcl_abs() function of a value
  *
  * AbsPixelAccessor is templated over an internal type and an
  * external type representation. This class cast the input
@@ -46,16 +46,18 @@ public:
   typedef TInternalType InternalType;
 
   static inline void Set(TInternalType & output, const TExternalType & input) 
-    {output = (TInternalType)((input > NumericTraits<TExternalType>::Zero) ? input : -input );}
+    {output = (TInternalType)(
+             (input > NumericTraits<TExternalType>::Zero) ? input : -input );}
 
   static inline TExternalType Get( const TInternalType & input ) 
-    {return (TExternalType) ( (input > NumericTraits<TInternalType>::Zero) ? input : -input );}
+    {return (TExternalType) ( 
+             (input > NumericTraits<TInternalType>::Zero) ? input : -input );}
 };
   
 } // end namespace Accessor
  
 /** \class AbsImageAdaptor
- * \brief Presents an image as being composed of the abs() of its pixels
+ * \brief Presents an image as being composed of the vcl_abs() of its pixels
  *
  * Additional casting is performed according to the input and output image
  * types following C++ default casting rules.
@@ -71,12 +73,12 @@ class ITK_EXPORT AbsImageAdaptor : public
 {
 public:
   /** Standard class typedefs. */
-  typedef AbsImageAdaptor  Self;
+  typedef AbsImageAdaptor                           Self;
   typedef ImageAdaptor<TImage, Accessor::AbsPixelAccessor<
                                typename TImage::PixelType,
                                TOutputPixelType> >  Superclass;
-  typedef SmartPointer<Self>  Pointer;
-  typedef SmartPointer<const Self>  ConstPointer;
+  typedef SmartPointer<Self>                        Pointer;
+  typedef SmartPointer<const Self>                  ConstPointer;
   
   /** Method for creation through the object factory. */
   itkNewMacro(Self);  
@@ -84,11 +86,11 @@ public:
   /** Run-time type information (and related methods). */
   itkTypeMacro( AbsImageAdaptor, ImageAdaptor );
 
- protected:
+protected:
   AbsImageAdaptor() {}
   virtual ~AbsImageAdaptor() {}
   
- private:
+private:
   AbsImageAdaptor(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
 

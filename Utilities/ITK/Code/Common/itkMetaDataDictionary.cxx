@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkMetaDataDictionary.cxx,v $
   Language:  C++
-  Date:      $Date: 2005/04/05 19:17:23 $
-  Version:   $Revision: 1.15 $
+  Date:      $Date: 2006/04/04 18:25:20 $
+  Version:   $Revision: 1.16 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -56,8 +56,8 @@ MetaDataDictionary
       it != m_Dictionary->end();
       it++)
     {
-    os << it->first <<  "  " ;
-    it->second->Print(os);
+    os << (*it).first <<  "  " ;
+    (*it).second->Print(os);
     }
 }
 

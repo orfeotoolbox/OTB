@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkZeroFluxNeumannBoundaryCondition.h,v $
   Language:  C++
-  Date:      $Date: 2005/09/07 14:46:31 $
-  Version:   $Revision: 1.16 $
+  Date:      $Date: 2006/03/18 18:06:38 $
+  Version:   $Revision: 1.17 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -60,14 +60,14 @@ class ITK_EXPORT  ZeroFluxNeumannBoundaryCondition
 {
 public:
   /** Standard class typedefs. */ 
-  typedef ZeroFluxNeumannBoundaryCondition Self;
-  typedef ImageBoundaryCondition<TImage> Superclass;
+  typedef ZeroFluxNeumannBoundaryCondition    Self;
+  typedef ImageBoundaryCondition<TImage>      Superclass;
   
   /** Extract information from the image type. */
-  typedef typename Superclass::PixelType PixelType;
+  typedef typename Superclass::PixelType        PixelType;
   typedef typename Superclass::PixelPointerType PixelPointerType;
-  typedef typename Superclass::IndexType IndexType;
-  typedef typename Superclass::OffsetType OffsetType;
+  typedef typename Superclass::IndexType        IndexType;
+  typedef typename Superclass::OffsetType       OffsetType;
   typedef typename Superclass::NeighborhoodType NeighborhoodType;
 
   typedef typename Superclass::NeighborhoodAccessorFunctorType 

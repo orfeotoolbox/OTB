@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkRigid3DPerspectiveTransform.txx,v $
   Language:  C++
-  Date:      $Date: 2006/01/28 17:16:33 $
-  Version:   $Revision: 1.28 $
+  Date:      $Date: 2006/03/19 04:36:59 $
+  Version:   $Revision: 1.29 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -86,7 +86,7 @@ Rigid3DPerspectiveTransform<TScalarType>
   axis[2] = parameters[2];
   if( norm > 0)
     {
-    norm = sqrt(norm);
+    norm = vcl_sqrt(norm);
     }
 
   double epsilon = 1e-10;
@@ -161,8 +161,8 @@ void
 Rigid3DPerspectiveTransform<TScalarType>::
 SetRotation(const Vector<TScalarType,3> & axis, double angle )
 {
-  const double sinus   = sin(angle/2.0);
-  const double cosinus = cos(angle/2.0);
+  const double sinus   = vcl_sin(angle/2.0);
+  const double cosinus = vcl_cos(angle/2.0);
   Vector<TScalarType,3> norm;
   norm = axis;
   norm.Normalize();

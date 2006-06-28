@@ -1,3 +1,19 @@
+/*=========================================================================
+
+  Program:   Insight Segmentation & Registration Toolkit
+  Module:    $RCSfile: itkBloxBoundaryProfileImage.txx,v $
+  Language:  C++
+  Date:      $Date: 2006/03/16 22:07:45 $
+  Version:   $Revision: 1.4 $
+
+  Copyright (c) Insight Software Consortium. All rights reserved.
+  See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
+
+     This software is distributed WITHOUT ANY WARRANTY; without even 
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     PURPOSE.  See the above copyright notices for more information.
+
+=========================================================================*/
 #ifndef __itkBloxBoundaryProfileImage_txx
 #define __itkBloxBoundaryProfileImage_txx
 

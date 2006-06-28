@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkDefaultDynamicMeshTraits.h,v $
   Language:  C++
-  Date:      $Date: 2003/09/10 14:29:05 $
-  Version:   $Revision: 1.24 $
+  Date:      $Date: 2006/05/10 20:27:15 $
+  Version:   $Revision: 1.25 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -51,8 +51,8 @@ namespace itk
  *
  * TInterpolationWeight =
  *    Numerical type to store interpolation weights.
- * 
- * \ingroup MeshObjects 
+ *
+ * \ingroup MeshObjects
  */
 template <
   typename TPixelType,
@@ -67,18 +67,18 @@ class DefaultDynamicMeshTraits
 public:
   /** Standard class typedefs. */
   typedef DefaultDynamicMeshTraits  Self;
-  
+
   /** Just save all the template parameters. */
   typedef TPixelType      PixelType;
   typedef TCellPixelType  CellPixelType;
   typedef TCoordRep  CoordRepType;
   typedef TInterpolationWeight  InterpolationWeightType;
-    
+
   /** Just save all the template parameters. */
   itkStaticConstMacro(PointDimension, unsigned int, VPointDimension);
   itkStaticConstMacro(MaxTopologicalDimension, unsigned int,
-                      VMaxTopologicalDimension);  
-  
+                      VMaxTopologicalDimension);
+
   /** The type to be used to identify a point.  This should be the index type
    * to the PointsContainer. */
   typedef unsigned long  PointIdentifier;
@@ -91,7 +91,7 @@ public:
    * the cells.  Since this will probably be an index into a static array,
    * this will probably never change from an integer setting. */
   typedef unsigned long  CellFeatureIdentifier;
-  
+
   /** The type of point used by the mesh.  This should never change from
    * this setting, regardless of the mesh type. */
   typedef Point< CoordRepType, VPointDimension >  PointType;

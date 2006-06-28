@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkBSplineDeformableTransform.txx,v $
   Language:  C++
-  Date:      $Date: 2005/09/21 13:52:50 $
-  Version:   $Revision: 1.24 $
+  Date:      $Date: 2006/04/22 12:31:35 $
+  Version:   $Revision: 1.28 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -14,8 +14,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef _itkBSplineDeformableTransform_txx
-#define _itkBSplineDeformableTransform_txx
+#ifndef __itkBSplineDeformableTransform_txx
+#define __itkBSplineDeformableTransform_txx
 
 #include "itkBSplineDeformableTransform.h"
 #include "itkContinuousIndex.h"
@@ -87,13 +87,11 @@ BSplineDeformableTransform<TScalarType, NDimensions,VSplineOrder>
     m_JacobianImage[j]->SetSpacing( m_GridSpacing.GetDataPointer() );
     }
 
-  /********************************************************** 
-    Fixed Parameters store the following information:
-        Grid Size
-        Grid Origin
-        Grid Spacing
-     The size of these is equal to the  NInputDimensions
-  **********************************************************/
+  /** Fixed Parameters store the following information:
+   *     Grid Size
+   *     Grid Origin
+   *     Grid Spacing
+   *  The size of these is equal to the  NInputDimensions */
   this->m_FixedParameters.SetSize ( NDimensions * 3 );
   this->m_FixedParameters.Fill ( 0.0 );
   
@@ -159,10 +157,13 @@ BSplineDeformableTransform<TScalarType, NDimensions,VSplineOrder>
 
     // Set the valid region
     // If the grid spans the interval [start,last].
-    // The valid interval for evaluation is [start+offset,last-offset] when spline order is even.
-    // The valid interval for evaluation is [start+offset,last-offset) when spline order is odd
-    // Where offset = floor( spline / 2 ).
-    // Note that the last pixel is not included in the valid region with odd spline orders.
+    // The valid interval for evaluation is [start+offset,last-offset]
+    // when spline order is even.
+    // The valid interval for evaluation is [start+offset,last-offset)
+    // when spline order is odd.
+    // Where offset = vcl_floor(spline / 2 ).
+    // Note that the last pixel is not included in the valid region
+    // with odd spline orders.
     typename RegionType::SizeType size = m_GridRegion.GetSize();
     typename RegionType::IndexType index = m_GridRegion.GetIndex();
     for ( unsigned int j = 0; j < SpaceDimension; j++ )
@@ -179,7 +180,6 @@ BSplineDeformableTransform<TScalarType, NDimensions,VSplineOrder>
 
     this->Modified();
     }
-
 }
 
 
@@ -235,12 +235,13 @@ void
 BSplineDeformableTransform<TScalarType, NDimensions,VSplineOrder>
 ::SetIdentity()
 {
-   if( m_InputParametersPointer )
-     {
-     ParametersType * parameters = const_cast<ParametersType *>( m_InputParametersPointer );
-     parameters->Fill( 0.0 );
-     this->Modified();
-     }
+  if( m_InputParametersPointer )
+    {
+    ParametersType * parameters =
+      const_cast<ParametersType *>( m_InputParametersPointer );
+    parameters->Fill( 0.0 );
+    this->Modified();
+    }
 }
 
 
@@ -255,8 +256,10 @@ BSplineDeformableTransform<TScalarType, NDimensions,VSplineOrder>
   // expected number of parameters
   if ( parameters.Size() != this->GetNumberOfParameters() )
     {
-    itkExceptionMacro(<<"Mismatched between parameters size " << parameters.size() 
-                      << " and region size " << m_GridRegion.GetNumberOfPixels() );
+    itkExceptionMacro(<<"Mismatched between parameters size "
+                      << parameters.size() 
+                      << " and region size "
+                      << m_GridRegion.GetNumberOfPixels() );
     }
 
   // Clean up buffered parameters
@@ -284,8 +287,10 @@ BSplineDeformableTransform<TScalarType, NDimensions,VSplineOrder>
   // expected number of parameters
   if ( parameters.Size() != NDimensions*3 )
     {
-    itkExceptionMacro(<<"Mismatched between parameters size " << parameters.size() 
-                      << " and number of fixed parameters " << NDimensions*3 );
+    itkExceptionMacro(<< "Mismatched between parameters size "
+                      << parameters.size() 
+                      << " and number of fixed parameters "
+                      << NDimensions*3 );
     }
 
   /********************************************************** 
@@ -340,7 +345,8 @@ BSplineDeformableTransform<TScalarType, NDimensions,VSplineOrder>
    * NOTE: For efficiency, parameters are not copied locally. The parameters
    * are assumed to be maintained by the caller.
    */
-  PixelType * dataPointer = const_cast<PixelType *>(( m_InputParametersPointer->data_block() ));
+  PixelType * dataPointer =
+    const_cast<PixelType *>(( m_InputParametersPointer->data_block() ));
   unsigned int numberOfPixels = m_GridRegion.GetNumberOfPixels();
 
   for ( unsigned int j = 0; j < SpaceDimension; j++ )
@@ -380,8 +386,10 @@ BSplineDeformableTransform<TScalarType, NDimensions,VSplineOrder>
   // expected number of parameters
   if ( parameters.Size() != this->GetNumberOfParameters() )
     {
-    itkExceptionMacro(<<"Mismatched between parameters size " << parameters.size() 
-                      << " and region size " << m_GridRegion.GetNumberOfPixels() );
+    itkExceptionMacro(<<"Mismatched between parameters size "
+                      << parameters.size() 
+                      << " and region size "
+                      << m_GridRegion.GetNumberOfPixels() );
     }
 
   // copy it
@@ -645,8 +653,6 @@ BSplineDeformableTransform<TScalarType, NDimensions,VSplineOrder>
     }
 
 }
-
-
 
 // Transform a point
 template<class TScalarType, unsigned int NDimensions, unsigned int VSplineOrder>

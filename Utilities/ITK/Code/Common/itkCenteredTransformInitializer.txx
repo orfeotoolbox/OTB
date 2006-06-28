@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkCenteredTransformInitializer.txx,v $
   Language:  C++
-  Date:      $Date: 2004/04/26 02:10:04 $
-  Version:   $Revision: 1.15 $
+  Date:      $Date: 2006/03/19 23:22:26 $
+  Version:   $Revision: 1.16 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -31,7 +31,6 @@ CenteredTransformInitializer<TTransform, TFixedImage, TMovingImage >
   m_FixedCalculator  = FixedImageCalculatorType::New();
   m_MovingCalculator = MovingImageCalculatorType::New();
 }
-
 
 
 template < class TTransform, class TFixedImage, class TMovingImage >
@@ -123,7 +122,8 @@ CenteredTransformInitializer<TTransform, TFixedImage, TMovingImage >
     
     for( unsigned int m=0; m<InputSpaceDimension; m++ )
       {
-      centerMoving[m] = movingOrigin[m] + movingSpacing[m] * movingSize[m] / 2.0;
+      centerMoving[m] = movingOrigin[m] + movingSpacing[m] 
+                                                   * movingSize[m] / 2.0;
       }
 
     for( unsigned int i=0; i<InputSpaceDimension; i++)
@@ -138,11 +138,8 @@ CenteredTransformInitializer<TTransform, TFixedImage, TMovingImage >
 
   m_Transform->SetTranslation( translationVector );
 
-
 }
   
-
-      
 
 template < class TTransform, class TFixedImage, class TMovingImage >
 void 
@@ -159,7 +156,7 @@ CenteredTransformInitializer<TTransform, TFixedImage, TMovingImage >
   else
     {
     os << indent << "None" << std::endl;
-    }      
+    }
 
   os << indent << "FixedImage   = " << std::endl;
   if (m_FixedImage)
@@ -169,7 +166,7 @@ CenteredTransformInitializer<TTransform, TFixedImage, TMovingImage >
   else
     {
     os << indent << "None" << std::endl;
-    }      
+    }
 
   os << indent << "MovingImage   = " << std::endl;
   if (m_MovingImage)
@@ -179,7 +176,7 @@ CenteredTransformInitializer<TTransform, TFixedImage, TMovingImage >
   else
     {
     os << indent << "None" << std::endl;
-    }      
+    }
 
   os << indent << "MovingMomentCalculator   = " << std::endl;
   if (m_MovingCalculator)
@@ -189,7 +186,7 @@ CenteredTransformInitializer<TTransform, TFixedImage, TMovingImage >
   else
     {
     os << indent << "None" << std::endl;
-    }      
+    }
 
   os << indent << "FixedMomentCalculator   = " << std::endl;
   if (m_FixedCalculator)
@@ -199,7 +196,7 @@ CenteredTransformInitializer<TTransform, TFixedImage, TMovingImage >
   else
     {
     os << indent << "None" << std::endl;
-    }      
+    }
 
 }
  

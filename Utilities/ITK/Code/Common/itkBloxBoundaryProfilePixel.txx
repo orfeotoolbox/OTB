@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkBloxBoundaryProfilePixel.txx,v $
   Language:  C++
-  Date:      $Date: 2003/09/10 14:29:02 $
-  Version:   $Revision: 1.4 $
+  Date:      $Date: 2006/03/16 22:07:45 $
+  Version:   $Revision: 1.5 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -22,18 +22,18 @@
 namespace itk
 {
 
-template <unsigned int NDimensions>
-BloxBoundaryProfilePixel<NDimensions>
+/** Constructor */
+template <unsigned int TDimensions>
+BloxBoundaryProfilePixel<TDimensions>
 ::BloxBoundaryProfilePixel()
 {
-
 }
 
-template <unsigned int NDimensions>
-BloxBoundaryProfilePixel<NDimensions>
+/** Destructor */
+template <unsigned int TDimensions>
+BloxBoundaryProfilePixel<TDimensions>
 ::~BloxBoundaryProfilePixel()
 {
-
 }
 
 } // end namespace itk

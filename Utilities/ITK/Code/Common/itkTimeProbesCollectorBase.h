@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkTimeProbesCollectorBase.h,v $
   Language:  C++
-  Date:      $Date: 2005/11/23 16:53:26 $
-  Version:   $Revision: 1.5 $
+  Date:      $Date: 2006/04/21 20:21:39 $
+  Version:   $Revision: 1.6 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -55,7 +55,7 @@ public:
   virtual void Stop( const char * name );
   
   /** Report the summary of results from the time probes */
-  virtual void Report(void) const;
+  virtual void Report( std::ostream & os = std::cout ) const;
 
   /** Destroy the set of probes. New probes can be created after invoking this method. */
   virtual void Clear(void);

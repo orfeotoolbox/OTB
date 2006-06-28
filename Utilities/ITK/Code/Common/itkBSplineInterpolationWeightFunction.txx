@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkBSplineInterpolationWeightFunction.txx,v $
   Language:  C++
-  Date:      $Date: 2006/02/06 22:01:53 $
-  Version:   $Revision: 1.11 $
+  Date:      $Date: 2006/03/19 04:36:58 $
+  Version:   $Revision: 1.13 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -46,17 +46,16 @@ inline int BSplineFloor(double x)
 namespace itk
 {
 
-/**
- * Constructor
- */
-template <class TCoordRep, unsigned int VSpaceDimension, unsigned int VSplineOrder>
+/** Constructor */
+template <class TCoordRep, unsigned int VSpaceDimension, 
+                                                  unsigned int VSplineOrder>
 BSplineInterpolationWeightFunction<TCoordRep, VSpaceDimension, VSplineOrder>
 ::BSplineInterpolationWeightFunction()
 {
 
   // Initialize the number of weights;
   m_NumberOfWeights = 
-    static_cast<unsigned long>( pow( static_cast<double>(SplineOrder + 1),
+    static_cast<unsigned long>( vcl_pow(static_cast<double>(SplineOrder + 1),
                                      static_cast<double>(SpaceDimension) ) );
 
   // Initialize support region is a hypercube of length SplineOrder + 1
@@ -96,7 +95,8 @@ BSplineInterpolationWeightFunction<TCoordRep, VSpaceDimension, VSplineOrder>
 /**
  * Standard "PrintSelf" method
  */
-template <class TCoordRep, unsigned int VSpaceDimension, unsigned int VSplineOrder>
+template <class TCoordRep, unsigned int VSpaceDimension, 
+                                                  unsigned int VSplineOrder>
 void
 BSplineInterpolationWeightFunction<TCoordRep, VSpaceDimension, VSplineOrder>
 ::PrintSelf(
@@ -110,12 +110,11 @@ BSplineInterpolationWeightFunction<TCoordRep, VSpaceDimension, VSplineOrder>
 }
 
 
-
-/**
- * Compute weights for interpolation at continous index position
- */
-template <class TCoordRep, unsigned int VSpaceDimension, unsigned int VSplineOrder>
-typename BSplineInterpolationWeightFunction<TCoordRep, VSpaceDimension, VSplineOrder>
+/** Compute weights for interpolation at continous index position */
+template <class TCoordRep, unsigned int VSpaceDimension, 
+                                                  unsigned int VSplineOrder>
+typename BSplineInterpolationWeightFunction<TCoordRep, VSpaceDimension, 
+                                                               VSplineOrder>
 ::WeightsType
 BSplineInterpolationWeightFunction<TCoordRep, VSpaceDimension, VSplineOrder>
 ::Evaluate(
@@ -131,12 +130,11 @@ BSplineInterpolationWeightFunction<TCoordRep, VSpaceDimension, VSplineOrder>
 }
 
 
-
-/**
- * Compute weights for interpolation at continous index position
- */
-template <class TCoordRep, unsigned int VSpaceDimension, unsigned int VSplineOrder>
-void BSplineInterpolationWeightFunction<TCoordRep, VSpaceDimension, VSplineOrder>
+/** Compute weights for interpolation at continous index position */
+template <class TCoordRep, unsigned int VSpaceDimension, 
+                                                 unsigned int VSplineOrder>
+void BSplineInterpolationWeightFunction<TCoordRep, VSpaceDimension, 
+                                                              VSplineOrder>
 ::Evaluate(
   const ContinuousIndexType & index,
   WeightsType & weights, 
@@ -179,8 +177,6 @@ void BSplineInterpolationWeightFunction<TCoordRep, VSpaceDimension, VSplineOrder
 
 }
 
-
 } // end namespace itk
 
 #endif
-

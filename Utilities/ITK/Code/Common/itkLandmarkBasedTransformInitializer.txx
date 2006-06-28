@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkLandmarkBasedTransformInitializer.txx,v $
   Language:  C++
-  Date:      $Date: 2006/02/24 17:15:23 $
-  Version:   $Revision: 1.10 $
+  Date:      $Date: 2006/04/07 23:00:45 $
+  Version:   $Revision: 1.12 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -261,7 +261,8 @@ LandmarkBasedTransformInitializer<TTransform, TFixedImage, TMovingImage >
         }
       else
         {
-        itkWarningMacro(<< "Less than 3 landmarks available. Rotation is not computed");
+        // Remember.. 
+        // Less than 3 landmarks available. Rotation is not computed 
         }
       
       transform->SetCenter(fixedCentroid);
@@ -388,9 +389,9 @@ LandmarkBasedTransformInitializer<TTransform, TFixedImage, TMovingImage >
           }
 
         itkDebugMacro(<< "Dot Product of landmarks: " << s_dot << " Cross Product: " << s_cross);
-        if( fabs(s_dot) > 0.00005 )
+        if( vcl_fabs(s_dot) > 0.00005 )
           {
-          rotationAngle = atan2(s_cross, s_dot);
+          rotationAngle = vcl_atan2(s_cross, s_dot);
           }
         else
           {

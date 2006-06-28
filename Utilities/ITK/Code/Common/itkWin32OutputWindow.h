@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkWin32OutputWindow.h,v $
   Language:  C++
-  Date:      $Date: 2003/09/10 14:29:30 $
-  Version:   $Revision: 1.25 $
+  Date:      $Date: 2006/03/18 18:06:38 $
+  Version:   $Revision: 1.26 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -45,9 +45,9 @@ class ITKCommon_EXPORT Win32OutputWindow : public OutputWindow
 {
 public:
   /** Standard class typedefs. */
-  typedef Win32OutputWindow   Self;
-  typedef OutputWindow  Superclass;
-  typedef SmartPointer<Self>  Pointer;
+  typedef Win32OutputWindow         Self;
+  typedef OutputWindow              Superclass;
+  typedef SmartPointer<Self>        Pointer;
   typedef SmartPointer<const Self>  ConstPointer;
   
   /** Method for creation through the object factory. */

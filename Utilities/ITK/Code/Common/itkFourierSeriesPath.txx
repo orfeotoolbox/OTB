@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkFourierSeriesPath.txx,v $
   Language:  C++
-  Date:      $Date: 2006/02/06 22:01:55 $
-  Version:   $Revision: 1.6 $
+  Date:      $Date: 2006/03/19 04:36:58 $
+  Version:   $Revision: 1.7 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -48,8 +48,8 @@ FourierSeriesPath<VDimension>
     {
     // input defined over [0,1] maps to theta defined over [0,2pi * n]
     theta = M_PI*2.0*n*input;
-    output += ( m_CosCoefficients->ElementAt(n) * cos(theta) +
-                m_SinCoefficients->ElementAt(n) * sin(theta) ) * 2.0;
+    output += ( m_CosCoefficients->ElementAt(n) * vcl_cos(theta) +
+                m_SinCoefficients->ElementAt(n) * vcl_sin(theta) ) * 2.0;
     }
   
   return output;
@@ -73,8 +73,8 @@ FourierSeriesPath<VDimension>
     {
     // input defined over [0,1] maps to theta defined over [0,2pi * n]
     theta = M_PI*2.0*n*input;
-    output += ( m_SinCoefficients->ElementAt(n) * cos(theta) -
-                m_CosCoefficients->ElementAt(n) * sin(theta) ) * (2.0 * n);
+    output += ( m_SinCoefficients->ElementAt(n) * vcl_cos(theta) -
+                m_CosCoefficients->ElementAt(n) * vcl_sin(theta) ) * (2.0 * n);
     }
   
   return output;

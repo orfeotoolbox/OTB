@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkFloodFilledFunctionConditionalConstIterator.txx,v $
   Language:  C++
-  Date:      $Date: 2004/12/11 20:29:18 $
-  Version:   $Revision: 1.20 $
+  Date:      $Date: 2006/05/20 14:15:23 $
+  Version:   $Revision: 1.21 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -14,8 +14,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef _itkFloodFilledFunctionConditionalConstIterator_txx
-#define _itkFloodFilledFunctionConditionalConstIterator_txx
+#ifndef __itkFloodFilledFunctionConditionalConstIterator_txx
+#define __itkFloodFilledFunctionConditionalConstIterator_txx
 
 #include "itkFloodFilledFunctionConditionalConstIterator.h"
 #include "itkImageRegionConstIterator.h"
@@ -196,7 +196,7 @@ FloodFilledFunctionConditionalConstIterator<TImage, TFunction>
       // then test it.
       if( m_ImageRegion.IsInside( tempIndex ) )
         {
-        if( tempPtr->GetPixel( tempIndex )==0 )
+        if( tempPtr->GetPixel( tempIndex ) == 0 )
           {
           // if it is inside, push it into the queue  
           if(  this->IsPixelIncluded( tempIndex ) )

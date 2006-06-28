@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkVector.txx,v $
   Language:  C++
-  Date:      $Date: 2006/01/16 20:36:04 $
-  Version:   $Revision: 1.49 $
+  Date:      $Date: 2006/03/19 04:36:59 $
+  Version:   $Revision: 1.50 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -164,7 +164,7 @@ typename Vector<T, TVectorDimension>::RealValueType
 Vector<T, TVectorDimension>
 ::GetNorm( void ) const
 {
-  return RealValueType( sqrt( double(this->GetSquaredNorm()) )); 
+  return RealValueType( vcl_sqrt(double(this->GetSquaredNorm()) )); 
 }
 
 

@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkRGBPixel.h,v $
   Language:  C++
-  Date:      $Date: 2005/08/12 16:16:03 $
-  Version:   $Revision: 1.36 $
+  Date:      $Date: 2006/04/21 00:09:54 $
+  Version:   $Revision: 1.37 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -149,6 +149,8 @@ ITK_EXPORT std::istream& operator>>(std::istream& is,
                                           RGBPixel<TComponent> & c); 
 
 } // end namespace itk
+
+#include "itkNumericTraitsRGBPixel.h"
 
 #ifndef ITK_MANUAL_INSTANTIATION
 #include "itkRGBPixel.txx"

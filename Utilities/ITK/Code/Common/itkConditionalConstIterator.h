@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkConditionalConstIterator.h,v $
   Language:  C++
-  Date:      $Date: 2004/11/01 21:16:30 $
-  Version:   $Revision: 1.8 $
+  Date:      $Date: 2006/03/18 20:14:38 $
+  Version:   $Revision: 1.9 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -70,11 +70,11 @@ public:
   /** operator= is provided to make sure the handle to the image is properly
    * reference counted. */
   Self &operator=(const Self& it)
-  {
+    {
     m_Image = it.m_Image;     // copy the smart pointer
     m_Region = it.m_Region;   // copy the region
     return *this;
-  }
+    }
   
   /** Get the dimension (size) of the index. */
   static unsigned int GetIteratorDimension() 

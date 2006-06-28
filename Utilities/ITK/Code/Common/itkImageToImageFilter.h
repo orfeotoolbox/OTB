@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkImageToImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2006/02/10 14:48:26 $
-  Version:   $Revision: 1.44 $
+  Date:      $Date: 2006/04/13 17:57:25 $
+  Version:   $Revision: 1.45 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -254,48 +254,6 @@ private:
   void operator=(const Self&); //purposely not implemented
 };
 
-
-#ifdef ITK_EXPLICIT_INSTANTIATION
-   export template class ImageToImageFilter<Image<float         ,2>, Image<float         ,2> >;
-   export template class ImageToImageFilter<Image<double        ,2>, Image<double        ,2> >;
-   export template class ImageToImageFilter<Image<unsigned char ,2>, Image<unsigned char ,2> >;
-   export template class ImageToImageFilter<Image<unsigned short,2>, Image<unsigned short,2> >;
-   export template class ImageToImageFilter<Image<signed char   ,2>, Image<signed char   ,2> >;
-   export template class ImageToImageFilter<Image<signed short  ,2>, Image<signed short  ,2> >;
-   export template class ImageToImageFilter<Image<signed int    ,2>, Image<signed int    ,2> >;
-
-   export template class ImageToImageFilter<Image<double        ,2>, Image<float         ,2> >;
-   export template class ImageToImageFilter<Image<unsigned char ,2>, Image<float         ,2> >;
-   export template class ImageToImageFilter<Image<unsigned short,2>, Image<float         ,2> >;
-   export template class ImageToImageFilter<Image<signed char   ,2>, Image<float         ,2> >;
-   export template class ImageToImageFilter<Image<signed short  ,2>, Image<float         ,2> >;
-
-   export template class ImageToImageFilter<Image<float         ,2>, Image<double        ,2> >;
-   export template class ImageToImageFilter<Image<float         ,2>, Image<unsigned char ,2> >;
-   export template class ImageToImageFilter<Image<float         ,2>, Image<unsigned short,2> >;
-   export template class ImageToImageFilter<Image<float         ,2>, Image<signed char   ,2> >;
-   export template class ImageToImageFilter<Image<float         ,2>, Image<signed short  ,2> >;
-
-   export template class ImageToImageFilter<Image<float         ,3>, Image<float         ,3> >;
-   export template class ImageToImageFilter<Image<double        ,3>, Image<double        ,3> >;
-   export template class ImageToImageFilter<Image<unsigned char ,3>, Image<unsigned char ,3> >;
-   export template class ImageToImageFilter<Image<unsigned short,3>, Image<unsigned short,3> >;
-   export template class ImageToImageFilter<Image<signed char   ,3>, Image<signed char   ,3> >;
-   export template class ImageToImageFilter<Image<signed short  ,3>, Image<signed short  ,3> >;
-   export template class ImageToImageFilter<Image<signed int    ,3>, Image<signed int    ,3> >;
-
-   export template class ImageToImageFilter<Image<double        ,3>, Image<float         ,3> >;
-   export template class ImageToImageFilter<Image<unsigned char ,3>, Image<float         ,3> >;
-   export template class ImageToImageFilter<Image<unsigned short,3>, Image<float         ,3> >;
-   export template class ImageToImageFilter<Image<signed char   ,3>, Image<float         ,3> >;
-   export template class ImageToImageFilter<Image<signed short  ,3>, Image<float         ,3> >;
-
-   export template class ImageToImageFilter<Image<float         ,3>, Image<double        ,3> >;
-   export template class ImageToImageFilter<Image<float         ,3>, Image<unsigned char ,3> >;
-   export template class ImageToImageFilter<Image<float         ,3>, Image<unsigned short,3> >;
-   export template class ImageToImageFilter<Image<float         ,3>, Image<signed char   ,3> >;
-   export template class ImageToImageFilter<Image<float         ,3>, Image<signed short  ,3> >;
-#endif
 } // end namespace itk
 
 #ifndef ITK_MANUAL_INSTANTIATION

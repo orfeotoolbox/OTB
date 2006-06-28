@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkBloxCoreAtomPixel.txx,v $
   Language:  C++
-  Date:      $Date: 2005/01/14 05:17:41 $
-  Version:   $Revision: 1.19 $
+  Date:      $Date: 2006/03/18 20:10:36 $
+  Version:   $Revision: 1.20 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -60,8 +60,7 @@ void
 BloxCoreAtomPixel<NDimensions>
 ::CalcMeanCoreAtomIntensity()
 {
-
-/*
+  /*
   double temp_intensity = 0.0;
   int num_core_atoms = 0;
 
@@ -73,13 +72,14 @@ BloxCoreAtomPixel<NDimensions>
     CoreAtomItemType* pCoreAtom = *bpiterator;
 
     //get mean intensity for this core atom
-    temp_intensity = (pCoreAtom->GetBoundaryPointA()->GetValue() + pCoreAtom->GetBoundaryPointB()->GetValue())/2
+    temp_intensity = (pCoreAtom->GetBoundaryPointA()->GetValue() 
+                      + pCoreAtom->GetBoundaryPointB()->GetValue())/2;
 
     m_MeanCoreAtomIntensity += temp_intensity;
     num_core_atoms++;
     }
   m_MeanCoreAtomIntensity /= num_core_atoms;
-*/
+  */
 }
 
 template <unsigned int NDimensions>
@@ -93,7 +93,8 @@ BloxCoreAtomPixel<NDimensions>
   PositionType center;
 
   // Walk through all of the items in the voting pixel
-  for (bpiterator = votingPixel->begin(); bpiterator != votingPixel->end(); ++bpiterator)
+  for (bpiterator = votingPixel->begin(); bpiterator != votingPixel->end();
+                                                                  ++bpiterator)
     {
     // Get the pointer of the core atom
     CoreAtomItemType* pCoreAtom = *bpiterator;
@@ -138,10 +139,13 @@ BloxCoreAtomPixel<NDimensions>
     }
 
   if(numCoreAtoms>0) // Check for /0 to be safe
+    {
     m_MeanCoreAtomDiameter /= numCoreAtoms;
+    }
   else
+    {
     m_MeanCoreAtomDiameter = 0;
-
+    }
   return m_MeanCoreAtomDiameter;
 }
 
@@ -210,7 +214,8 @@ BloxCoreAtomPixel<NDimensions>
     } // end row loop
 
   // Do eigen analysis
-  vnl_generalized_eigensystem* pEigenSys = new vnl_generalized_eigensystem(m_RawCMatrix, identMatrix);
+  vnl_generalized_eigensystem* pEigenSys = 
+                    new vnl_generalized_eigensystem(m_RawCMatrix, identMatrix);
 
   // Now, store the results
   
@@ -254,7 +259,9 @@ BloxCoreAtomPixel<NDimensions>
 ::NormalizeVotedCMatrix()
 {
   if(m_ConstituencySize != 0)
+    {
     m_VotedCMatrix /= m_ConstituencySize;
+    }
 }
 
 template <unsigned int NDimensions>
@@ -273,7 +280,8 @@ BloxCoreAtomPixel<NDimensions>
     } // end row loop
 
   // Do eigen analysis
-  vnl_generalized_eigensystem* pEigenSys = new vnl_generalized_eigensystem(m_VotedCMatrix, identMatrix);
+  vnl_generalized_eigensystem* pEigenSys = 
+                new vnl_generalized_eigensystem(m_VotedCMatrix, identMatrix);
 
   // Now, store the results
   
@@ -287,20 +295,6 @@ BloxCoreAtomPixel<NDimensions>
     }
 
   delete pEigenSys;
-
-  //printf("VotedCMatrix\n");
-  for(int i = 0; i < 3; i++)
-    {
-    //printf("%f %f %f\n", m_VotedCMatrix(i,0), m_VotedCMatrix(i,1), m_VotedCMatrix(i,2) );
-    }
-  //printf("\n");
-
-  //printf("Voted eigenvectors\n");
-  for(int i = 0; i < 3; i++)
-    {
-    //printf("%f %f %f\n", m_VotedEigenvectors(i,0), m_VotedEigenvectors(i,1), m_VotedEigenvectors(i,2) );
-    }
-  //printf("\n");
 }
 
 } // end namespace itk

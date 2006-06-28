@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkCenteredSimilarity2DTransform.txx,v $
   Language:  C++
-  Date:      $Date: 2006/01/28 17:16:33 $
-  Version:   $Revision: 1.6 $
+  Date:      $Date: 2006/03/19 04:36:58 $
+  Version:   $Revision: 1.8 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -14,8 +14,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef _itkCenteredSimilarity2DTransform_txx
-#define _itkCenteredSimilarity2DTransform_txx
+#ifndef __itkCenteredSimilarity2DTransform_txx
+#define __itkCenteredSimilarity2DTransform_txx
 
 #include "itkCenteredSimilarity2DTransform.h"
 
@@ -26,7 +26,8 @@ namespace itk
 // Constructor with default arguments
 template <class TScalarType>
 CenteredSimilarity2DTransform<TScalarType>
-::CenteredSimilarity2DTransform():Superclass(OutputSpaceDimension, ParametersDimension)
+::CenteredSimilarity2DTransform():Superclass(OutputSpaceDimension,
+                                             ParametersDimension)
 {
 }
 
@@ -118,8 +119,8 @@ CenteredSimilarity2DTransform<TScalarType>::
 GetJacobian( const InputPointType & p ) const
 {
   const double angle = this->GetAngle();
-  const double ca = cos( angle );
-  const double sa = sin( angle );
+  const double ca = vcl_cos(angle );
+  const double sa = vcl_sin(angle );
 
   this->m_Jacobian.Fill(0.0);
 
@@ -134,8 +135,10 @@ GetJacobian( const InputPointType & p ) const
   this->m_Jacobian[1][0] =    sa * ( p[0] - cx ) + ca * ( p[1] - cy ); 
 
   // derivatives with respect to the angle
-  this->m_Jacobian[0][1] = ( -sa * ( p[0] - cx ) - ca * ( p[1] - cy ) ) * this->GetScale();
-  this->m_Jacobian[1][1] = (  ca * ( p[0] - cx ) - sa * ( p[1] - cy ) ) * this->GetScale();
+  this->m_Jacobian[0][1] = ( -sa * ( p[0] - cx ) - ca * ( p[1] - cy ) ) 
+                                                          * this->GetScale();
+  this->m_Jacobian[1][1] = (  ca * ( p[0] - cx ) - sa * ( p[1] - cy ) ) 
+                                                          * this->GetScale();
 
   // compute derivatives with respect to the center part
   // first with respect to cx
@@ -162,7 +165,7 @@ void
 CenteredSimilarity2DTransform<TScalarType>::
 SetFixedParameters( const ParametersType & itkNotUsed(parameters) )
 {
- // no fixed parameters
+  // no fixed parameters
 }
 
 template <class TScalarType>
@@ -194,7 +197,8 @@ CloneInverseTo( Pointer & result ) const
   result->SetCenter( this->GetCenter() );  // inverse have the same center
   result->SetScale( 1.0 / this->GetScale() );
   result->SetAngle( -this->GetAngle() );
-  result->SetTranslation( -( this->GetInverseMatrix() * this->GetTranslation() ) );
+  result->SetTranslation( -( this->GetInverseMatrix() 
+                                                  * this->GetTranslation() ) );
 }
 
 // Create and return a clone of the transformation

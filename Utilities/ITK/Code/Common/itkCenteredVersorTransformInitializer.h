@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkCenteredVersorTransformInitializer.h,v $
   Language:  C++
-  Date:      $Date: 2004/04/25 19:11:57 $
-  Version:   $Revision: 1.1 $
+  Date:      $Date: 2006/03/19 23:22:34 $
+  Version:   $Revision: 1.3 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -26,7 +26,8 @@
 namespace itk
 {
 
-/** \brief CenteredVersorTransformInitializer is a helper class intended to
+/** \class CenteredVersorTransformInitializer
+ * \brief CenteredVersorTransformInitializer is a helper class intended to
  * initialize the center of rotation, versor, and translation of the 
  * VersorRigid3DTransform.
  * 
@@ -65,8 +66,10 @@ public:
 
   /** Dimension of parameters. */
   itkStaticConstMacro(SpaceDimension, unsigned int, Superclass::SpaceDimension);
-  itkStaticConstMacro(InputSpaceDimension, unsigned int, Superclass::InputSpaceDimension);
-  itkStaticConstMacro(OutputSpaceDimension, unsigned int, Superclass::OutputSpaceDimension);
+  itkStaticConstMacro(InputSpaceDimension, unsigned int, 
+                                               Superclass::InputSpaceDimension);
+  itkStaticConstMacro(OutputSpaceDimension, unsigned int, 
+                                              Superclass::OutputSpaceDimension);
 
   
   /** Image Types to use in the initialization of the transform */
@@ -75,8 +78,6 @@ public:
 
   typedef   typename Superclass::FixedImagePointer   FixedImagePointer;
   typedef   typename Superclass::MovingImagePointer  MovingImagePointer;
-
-
 
   /** Offset type. */
   typedef typename Superclass::OffsetType  OffsetType;
@@ -87,10 +88,8 @@ public:
   /** Vector type. */
   typedef typename Superclass::OutputVectorType  OutputVectorType;
   
-
   /** Initialize the transform using data from the images */
   void InitializeTransform() const;
-
 
 protected:
   CenteredVersorTransformInitializer();
@@ -101,7 +100,6 @@ protected:
 private:
   CenteredVersorTransformInitializer(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
-
 
 }; //class CenteredVersorTransformInitializer
 

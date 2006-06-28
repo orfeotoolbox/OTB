@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkSimilarity2DTransform.txx,v $
   Language:  C++
-  Date:      $Date: 2006/01/28 17:16:33 $
-  Version:   $Revision: 1.20 $
+  Date:      $Date: 2006/03/19 04:36:59 $
+  Version:   $Revision: 1.21 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -120,8 +120,8 @@ Similarity2DTransform<TScalarType>
 {
   const double angle = this->GetAngle();
 
-  const double cc = cos( angle );
-  const double ss = sin( angle );
+  const double cc = vcl_cos(angle );
+  const double ss = vcl_sin(angle );
 
   const double ca = cc * m_Scale;
   const double sa = ss * m_Scale;
@@ -140,17 +140,17 @@ void
 Similarity2DTransform<TScalarType>
 ::ComputeMatrixParameters( void )
 {
-  m_Scale = sqrt( vnl_math_sqr( this->GetMatrix()[0][0] ) +
+  m_Scale = vcl_sqrt(vnl_math_sqr( this->GetMatrix()[0][0] ) +
                   vnl_math_sqr( this->GetMatrix()[0][1] ) );
 
-  this->SetVarAngle( acos( this->GetMatrix()[0][0] / m_Scale ) ); 
+  this->SetVarAngle( vcl_acos(this->GetMatrix()[0][0] / m_Scale ) ); 
 
   if(this->GetMatrix()[1][0]<0.0)
     {
     this->SetVarAngle( this->GetAngle() );
     }
 
-  if( ( this->GetMatrix()[1][0] / m_Scale ) - sin(this->GetAngle()) > 0.000001)
+  if( ( this->GetMatrix()[1][0] / m_Scale ) - vcl_sin(this->GetAngle()) > 0.000001)
     {
     std::cout << "Bad Rotation Matrix" << std::endl;
     }
@@ -164,8 +164,8 @@ Similarity2DTransform<TScalarType>::
 GetJacobian( const InputPointType & p ) const
 {
   const double angle = this->GetAngle();
-  const double ca = cos( angle );
-  const double sa = sin( angle );
+  const double ca = vcl_cos(angle );
+  const double sa = vcl_sin(angle );
 
   this->m_Jacobian.Fill(0.0);
 

@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkVector.h,v $
   Language:  C++
-  Date:      $Date: 2006/01/22 17:29:45 $
-  Version:   $Revision: 1.74 $
+  Date:      $Date: 2006/04/21 00:09:54 $
+  Version:   $Revision: 1.77 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -18,9 +18,9 @@
 #define __itkVector_h
 
 #include "itkFixedArray.h"
-#include "itkNumericTraits.h"
-#include "vnl/vnl_vector_ref.h"
-#include "itkIndent.h"
+
+#include "itkNumericTraits.h"   // RealValueType type
+#include <vnl/vnl_vector_ref.h> // Get_vnl_vector method return
 
 
 namespace itk
@@ -253,11 +253,26 @@ ITKCommon_EXPORT Vector<int,3> CrossProduct( const Vector<int,3> &,
                                        const Vector<int,3> &  );
 
 } // end namespace itk
-  
 
-#ifndef ITK_MANUAL_INSTANTIATION
-#include "itkVector.txx"
+#include "itkNumericTraitsVectorPixel.h"
+
+
+// Define instantiation macro for this template.
+#define ITK_TEMPLATE_Vector(_, EXPORT, x, y) namespace itk { \
+  _(2(class EXPORT Vector< ITK_TEMPLATE_2 x >)) \
+  _(1(EXPORT std::ostream& operator<<(std::ostream&, \
+                                      const Vector< ITK_TEMPLATE_2 x >&))) \
+  _(1(EXPORT std::istream& operator>>(std::istream&, \
+                                      Vector< ITK_TEMPLATE_2 x >&))) \
+  namespace Templates { typedef Vector< ITK_TEMPLATE_2 x > Vector##y; } \
+  }
+
+#if ITK_TEMPLATE_EXPLICIT
+# include "Templates/itkVector+-.h"
 #endif
 
+#if ITK_TEMPLATE_TXX
+# include "itkVector.txx"
+#endif
 
-#endif 
+#endif

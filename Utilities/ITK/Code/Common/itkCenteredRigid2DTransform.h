@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkCenteredRigid2DTransform.h,v $
   Language:  C++
-  Date:      $Date: 2005/08/11 16:44:07 $
-  Version:   $Revision: 1.11 $
+  Date:      $Date: 2006/03/19 23:22:17 $
+  Version:   $Revision: 1.13 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -24,7 +24,8 @@
 namespace itk
 {
 
-/** \brief CenteredRigid2DTransform of a vector space (e.g. space coordinates)
+/** \class CenteredRigid2DTransform
+ * \brief CenteredRigid2DTransform of a vector space (e.g. space coordinates)
  *
  * This transform applies a rigid transformation is 2D space.
  * The transform is specified as a rotation around arbitrary center
@@ -48,16 +49,16 @@ namespace itk
  *
  * \ingroup Transforms
  */
-template < class TScalarType=double >    // Data type for scalars (float or double)
+template < class TScalarType=double >    // Data type for scalars
 class ITK_EXPORT CenteredRigid2DTransform : 
             public Rigid2DTransform< TScalarType > 
 {
 public:
   /** Standard class typedefs. */
-  typedef CenteredRigid2DTransform Self;
+  typedef CenteredRigid2DTransform          Self;
   typedef Rigid2DTransform< TScalarType >   Superclass;
-  typedef SmartPointer<Self>        Pointer;
-  typedef SmartPointer<const Self>  ConstPointer;
+  typedef SmartPointer<Self>                Pointer;
+  typedef SmartPointer<const Self>          ConstPointer;
     
   /** New macro for creation of through a Smart Pointer. */
   itkNewMacro( Self );
@@ -91,8 +92,10 @@ public:
   typedef typename Superclass::OutputVectorType  OutputVectorType;
   
   /** CovariantVector type. */
-  typedef typename Superclass::InputCovariantVectorType   InputCovariantVectorType;
-  typedef typename Superclass::OutputCovariantVectorType  OutputCovariantVectorType;
+  typedef typename Superclass::InputCovariantVectorType   
+                                                InputCovariantVectorType;
+  typedef typename Superclass::OutputCovariantVectorType  
+                                                OutputCovariantVectorType;
   
   /** VnlVector type. */
   typedef typename Superclass::InputVnlVectorType   InputVnlVectorType;

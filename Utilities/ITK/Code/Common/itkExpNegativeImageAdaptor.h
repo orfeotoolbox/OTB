@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkExpNegativeImageAdaptor.h,v $
   Language:  C++
-  Date:      $Date: 2003/09/10 14:29:07 $
-  Version:   $Revision: 1.2 $
+  Date:      $Date: 2006/03/19 04:36:58 $
+  Version:   $Revision: 1.3 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -25,7 +25,7 @@ namespace itk
  
 namespace Accessor {
 /** \class ExpNegativePixelAccessor
- * \brief Give access to the exp() function of a value
+ * \brief Give access to the vcl_exp() function of a value
  *
  * ExpNegativePixelAccessor is templated over an internal type and an
  * external type representation. This class cast the input
@@ -47,17 +47,17 @@ public:
   typedef TInternalType InternalType;
 
   static inline void Set(TInternalType & output, const TExternalType & input) 
-    {output = static_cast<TInternalType>( exp(-static_cast<double>( input ) ) );}
+    {output = static_cast<TInternalType>( vcl_exp(-static_cast<double>( input ) ) );}
 
   static inline TExternalType Get( const TInternalType & input ) 
-    {return static_cast<TExternalType>( exp( -static_cast<double>( input) ) );}
+    {return static_cast<TExternalType>( vcl_exp(-static_cast<double>( input) ) );}
 
 };
   
 } // end namespace Accessor
 
 /** \class ExpNegativeImageAdaptor
- * \brief Presents an image as being composed of the exp() of its pixels
+ * \brief Presents an image as being composed of the vcl_exp() of its pixels
  *
  * Additional casting is performed according to the input and output image
  * types following C++ default casting rules.

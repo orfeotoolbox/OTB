@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkAddImageAdaptor.h,v $
   Language:  C++
-  Date:      $Date: 2003/09/10 14:29:00 $
-  Version:   $Revision: 1.2 $
+  Date:      $Date: 2006/03/19 04:36:58 $
+  Version:   $Revision: 1.4 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -24,7 +24,7 @@ namespace itk
 {
  
 /** \class AddImageAdaptor
- * \brief Presents an image as being composed of the log() of its pixels
+ * \brief Presents an image as being composed of the vcl_log() of its pixels
  *
  * Additional casting is performed according to the input and output image
  * types following C++ default casting rules.
@@ -38,12 +38,12 @@ class ITK_EXPORT AddImageAdaptor : public
 {
 public:
   /** Standard class typedefs. */
-  typedef AddImageAdaptor  Self;
+  typedef AddImageAdaptor                                        Self;
   typedef ImageAdaptor<TImage,
                        Accessor::AddPixelAccessor<
                                  typename TImage::PixelType > >  Superclass;
-  typedef SmartPointer<Self>  Pointer;
-  typedef SmartPointer<const Self>  ConstPointer;
+  typedef SmartPointer<Self>                                     Pointer;
+  typedef SmartPointer<const Self>                               ConstPointer;
   
   typedef typename TImage::PixelType      PixelType;
 

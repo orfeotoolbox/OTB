@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkImportImageContainer.h,v $
   Language:  C++
-  Date:      $Date: 2004/05/03 21:25:52 $
-  Version:   $Revision: 1.16 $
+  Date:      $Date: 2006/04/20 14:54:10 $
+  Version:   $Revision: 1.18 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -148,9 +148,19 @@ private:
 };
 
 } // end namespace itk
-  
-#ifndef ITK_MANUAL_INSTANTIATION
-#include "itkImportImageContainer.txx"
+
+// Define instantiation macro for this template.
+#define ITK_TEMPLATE_ImportImageContainer(_, EXPORT, x, y) namespace itk { \
+  _(2(class EXPORT ImportImageContainer< ITK_TEMPLATE_2 x >)) \
+  namespace Templates { typedef ImportImageContainer< ITK_TEMPLATE_2 x > ImportImageContainer##y; } \
+  }
+
+#if ITK_TEMPLATE_EXPLICIT
+# include "Templates/itkImportImageContainer+-.h"
+#endif
+
+#if ITK_TEMPLATE_TXX
+# include "itkImportImageContainer.txx"
 #endif
 
 #endif

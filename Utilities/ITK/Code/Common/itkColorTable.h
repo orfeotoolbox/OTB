@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkColorTable.h,v $
   Language:  C++
-  Date:      $Date: 2005/06/09 11:12:48 $
-  Version:   $Revision: 1.16 $
+  Date:      $Date: 2006/03/18 20:14:25 $
+  Version:   $Revision: 1.17 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -34,9 +34,9 @@ class ITK_EXPORT ColorTable : public Object
 {
 public:
   /** Standard class typedefs. */
-  typedef ColorTable   Self;
-  typedef Object Superclass;
-  typedef SmartPointer<Self>  Pointer;
+  typedef ColorTable                Self;
+  typedef Object                    Superclass;
+  typedef SmartPointer<Self>        Pointer;
   typedef SmartPointer<const Self>  ConstPointer;
   
   /** Method for creation through the object factory. */

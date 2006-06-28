@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkImageRegion.h,v $
   Language:  C++
-  Date:      $Date: 2003/09/10 14:29:11 $
-  Version:   $Revision: 1.26 $
+  Date:      $Date: 2006/04/20 14:54:09 $
+  Version:   $Revision: 1.28 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -21,7 +21,7 @@
 #define __itkImageRegion_h
 
 #include "itkRegion.h"
-#include "itkObjectFactory.h"
+
 #include "itkIndex.h"
 #include "itkSize.h"
 #include "itkContinuousIndex.h"
@@ -269,16 +269,24 @@ private:
 
 
 template<unsigned int VImageDimension>
-std::ostream & operator<<(std::ostream &os, const ImageRegion<VImageDimension> &region)
-{
-  region.Print(os);
-  return os;
-}
+std::ostream & operator<<(std::ostream &os, const ImageRegion<VImageDimension> &region);
 
 } // end namespace itk
 
-#ifndef ITK_MANUAL_INSTANTIATION
-#include "itkImageRegion.txx"
+// Define instantiation macro for this template.
+#define ITK_TEMPLATE_ImageRegion(_, EXPORT, x, y) namespace itk { \
+  _(1(class EXPORT ImageRegion< ITK_TEMPLATE_1 x >)) \
+  _(1(EXPORT std::ostream& operator<<(std::ostream&, \
+                                      const ImageRegion< ITK_TEMPLATE_1 x >&))) \
+  namespace Templates { typedef ImageRegion< ITK_TEMPLATE_1 x > ImageRegion##y; } \
+  }
+
+#if ITK_TEMPLATE_EXPLICIT
+# include "Templates/itkImageRegion+-.h"
+#endif
+
+#if ITK_TEMPLATE_TXX
+# include "itkImageRegion.txx"
 #endif
 
 #endif

@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkConditionalConstIterator.txx,v $
   Language:  C++
-  Date:      $Date: 2003/09/10 14:29:04 $
-  Version:   $Revision: 1.2 $
+  Date:      $Date: 2006/03/18 20:14:38 $
+  Version:   $Revision: 1.3 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -14,8 +14,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef _itkConditionalConstIterator_txx
-#define _itkConditionalConstIterator_txx
+#ifndef __itkConditionalConstIterator_txx
+#define __itkConditionalConstIterator_txx
 
 #include "itkConditionalConstIterator.h"
 
@@ -34,9 +34,6 @@ ConditionalConstIterator<TImageType>
 ::~ConditionalConstIterator()
 {
 }
-
-
-
 
 } // end namespace itk
 

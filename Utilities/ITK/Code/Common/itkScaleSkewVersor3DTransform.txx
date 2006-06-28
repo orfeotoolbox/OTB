@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkScaleSkewVersor3DTransform.txx,v $
   Language:  C++
-  Date:      $Date: 2006/01/28 17:16:33 $
-  Version:   $Revision: 1.11 $
+  Date:      $Date: 2006/03/19 04:36:59 $
+  Version:   $Revision: 1.12 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -78,7 +78,7 @@ ScaleSkewVersor3DTransform<TScalarType>
   axis[2] = parameters[2];
   if( norm > 0)
     {
-    norm = sqrt(norm);
+    norm = vcl_sqrt(norm);
     }
 
   double epsilon = 1e-10;
@@ -128,7 +128,7 @@ ScaleSkewVersor3DTransform<TScalarType>
 // 
 // Parameters are ordered as:
 //
-// p[0:2] = right part of the versor (axis times sin(t/2))
+// p[0:2] = right part of the versor (axis times vcl_sin(t/2))
 // p[3:5] = translation components
 // p[6:8] = Scale
 // p[9:14] = Skew {xy, xz, yx, yz, zx, zy}

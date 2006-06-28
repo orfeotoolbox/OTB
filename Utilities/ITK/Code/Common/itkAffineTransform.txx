@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkAffineTransform.txx,v $
   Language:  C++
-  Date:      $Date: 2005/05/03 14:19:23 $
-  Version:   $Revision: 1.54 $
+  Date:      $Date: 2006/03/19 04:36:58 $
+  Version:   $Revision: 1.56 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -14,8 +14,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef _itkAffineTransform_txx
-#define _itkAffineTransform_txx
+#ifndef __itkAffineTransform_txx
+#define __itkAffineTransform_txx
 
 #include "itkNumericTraits.h"
 #include "itkAffineTransform.h"
@@ -25,16 +25,15 @@
 namespace itk
 {
 
-// Constructor with default arguments
+/** Constructor with default arguments */
 template<class TScalarType, unsigned int NDimensions>
 AffineTransform<TScalarType, NDimensions>::
-AffineTransform():
-  Superclass(SpaceDimension,ParametersDimension)
+AffineTransform(): Superclass(SpaceDimension,ParametersDimension)
 {
 }
 
 
-// Constructor with default arguments
+/** Constructor with default arguments */
 template<class TScalarType, unsigned int NDimensions>
 AffineTransform<TScalarType, NDimensions>::
 AffineTransform( unsigned int outputSpaceDimension, 
@@ -44,8 +43,7 @@ AffineTransform( unsigned int outputSpaceDimension,
 }
 
 
-
-// Constructor with explicit arguments
+/** Constructor with explicit arguments */
 template<class TScalarType, unsigned int NDimensions>
 AffineTransform<TScalarType, NDimensions>::
 AffineTransform(const MatrixType & matrix,
@@ -55,9 +53,7 @@ AffineTransform(const MatrixType & matrix,
 }
 
 
-
-
-// Destructor
+/**  Destructor */
 template<class TScalarType, unsigned int NDimensions>
 AffineTransform<TScalarType, NDimensions>::
 ~AffineTransform()
@@ -66,8 +62,7 @@ AffineTransform<TScalarType, NDimensions>::
 }
 
 
-
-// Print self
+/** Print self */
 template<class TScalarType, unsigned int NDimensions>
 void
 AffineTransform<TScalarType, NDimensions>::
@@ -77,7 +72,7 @@ PrintSelf(std::ostream &os, Indent indent) const
 }
 
 
-// Compose with a translation
+/** Compose with a translation */
 template<class TScalarType, unsigned int NDimensions>
 void
 AffineTransform<TScalarType, NDimensions>::
@@ -99,7 +94,7 @@ Translate(const OutputVectorType &trans, bool pre)
 }
 
 
-// Compose with isotropic scaling
+/** Compose with isotropic scaling */
 template<class TScalarType, unsigned int NDimensions>
 void
 AffineTransform<TScalarType, NDimensions>
@@ -128,8 +123,7 @@ AffineTransform<TScalarType, NDimensions>
 }
 
 
-
-// Compose with anisotropic scaling
+/** Compose with anisotropic scaling */
 template<class TScalarType, unsigned int NDimensions>
 void
 AffineTransform<TScalarType, NDimensions>
@@ -162,8 +156,7 @@ AffineTransform<TScalarType, NDimensions>
 }
 
 
-
-// Compose with elementary rotation
+/** Compose with elementary rotation */
 template<class TScalarType, unsigned int NDimensions>
 void
 AffineTransform<TScalarType, NDimensions>
@@ -180,10 +173,10 @@ AffineTransform<TScalarType, NDimensions>
       }
     trans[i][i] = 1.0;
     }
-  trans[axis1][axis1] =  cos(angle);
-  trans[axis1][axis2] =  sin(angle);
+  trans[axis1][axis1] =  vcl_cos(angle);
+  trans[axis1][axis2] =  vcl_sin(angle);
   trans[axis2][axis1] = -sin(angle);
-  trans[axis2][axis2] =  cos(angle);
+  trans[axis2][axis2] =  vcl_cos(angle);
   if (pre) 
     {
     this->SetVarMatrix( this->GetMatrix() * trans );
@@ -200,9 +193,9 @@ AffineTransform<TScalarType, NDimensions>
 }
 
 
-// Compose with 2D rotation
-// \todo Find a way to generate a compile-time error
-// is this is used with NDimensions != 2.
+/** Compose with 2D rotation
+ * \todo Find a way to generate a compile-time error
+ * is this is used with NDimensions != 2. */
 template<class TScalarType, unsigned int NDimensions>
 void
 AffineTransform<TScalarType, NDimensions>
@@ -210,10 +203,10 @@ AffineTransform<TScalarType, NDimensions>
 {
   MatrixType trans;
 
-  trans[0][0] =  cos(angle);
+  trans[0][0] =  vcl_cos(angle);
   trans[0][1] = -sin(angle);
-  trans[1][0] = sin(angle);
-  trans[1][1] =  cos(angle);
+  trans[1][0] = vcl_sin(angle);
+  trans[1][1] =  vcl_cos(angle);
   if (pre) 
     {
     this->SetVarMatrix( this->GetMatrix() * trans );
@@ -230,10 +223,9 @@ AffineTransform<TScalarType, NDimensions>
 }
 
 
-
-// Compose with 3D rotation
-// \todo Find a way to generate a compile-time error
-// is this is used with NDimensions != 3.
+/** Compose with 3D rotation
+ *  \todo Find a way to generate a compile-time error
+ *  is this is used with NDimensions != 3. */
 template<class TScalarType, unsigned int NDimensions>
 void
 AffineTransform<TScalarType, NDimensions>
@@ -244,16 +236,16 @@ AffineTransform<TScalarType, NDimensions>
   ScalarType q0, q1, q2, q3;
 
   // Convert the axis to a unit vector
-  r = sqrt(axis[0]*axis[0] + axis[1]*axis[1] + axis[2]*axis[2]);
+  r = vcl_sqrt(axis[0]*axis[0] + axis[1]*axis[1] + axis[2]*axis[2]);
   x1 = axis[0] / r;
   x2 = axis[1] / r;
   x3 = axis[2] / r;
 
   // Compute quaternion elements
-  q0 = cos(angle/2.0);
-  q1 = x1 * sin(angle/2.0);
-  q2 = x2 * sin(angle/2.0);
-  q3 = x3 * sin(angle/2.0);
+  q0 = vcl_cos(angle/2.0);
+  q1 = x1 * vcl_sin(angle/2.0);
+  q2 = x2 * vcl_sin(angle/2.0);
+  q3 = x3 * vcl_sin(angle/2.0);
 
   // Compute elements of the rotation matrix
   trans[0][0] = q0*q0 + q1*q1 - q2*q2 - q3*q3;
@@ -283,7 +275,7 @@ AffineTransform<TScalarType, NDimensions>
 }
 
 
-// Compose with elementary rotation
+/** Compose with elementary rotation */
 template<class TScalarType, unsigned int NDimensions>
 void
 AffineTransform<TScalarType, NDimensions>
@@ -317,7 +309,7 @@ AffineTransform<TScalarType, NDimensions>
 }
 
 
-// Compute a distance between two affine transforms
+/** Compute a distance between two affine transforms */
 template<class TScalarType, unsigned int NDimensions>
 typename AffineTransform<TScalarType, NDimensions>::ScalarType
 AffineTransform<TScalarType, NDimensions>
@@ -335,12 +327,11 @@ AffineTransform<TScalarType, NDimensions>
     term = this->GetOffset()[i] - other->GetOffset()[i];
     result += term * term;
     }
-  return sqrt(result);
+  return vcl_sqrt(result);
 }
 
 
-
-// Compute a distance between self and the identity transform
+/** Compute a distance between self and the identity transform */
 template<class TScalarType, unsigned int NDimensions>
 typename AffineTransform<TScalarType, NDimensions>::ScalarType
 AffineTransform<TScalarType, NDimensions>
@@ -366,16 +357,18 @@ AffineTransform<TScalarType, NDimensions>
     result += term * term;
     }
 
-  return sqrt(result);
+  return vcl_sqrt(result);
 }
 
-// Back transform a point
+/** Back transform a point */
 template<class TScalarType, unsigned int NDimensions>
 typename AffineTransform<TScalarType, NDimensions>::InputPointType
 AffineTransform<TScalarType, NDimensions>::
 BackTransform(const OutputPointType &point) const 
 {
-  itkWarningMacro(<<"BackTransform(): This method is slated to be removed from ITK.  Instead, please use GetInverse() to generate an inverse transform and then perform the transform using that inverted transform.");
+  itkWarningMacro(<<"BackTransform(): This method is slated to be removed\
+   from ITK.  Instead, please use GetInverse() to generate an inverse\
+   transform and then perform the transform using that inverted transform.");
   InputPointType result;       // Converted point
   ScalarType temp[NDimensions];
   unsigned int i, j;
@@ -397,38 +390,41 @@ BackTransform(const OutputPointType &point) const
 }
 
 
-// Back transform a vector
+/** Back transform a vector */
 template<class TScalarType, unsigned int NDimensions>
 typename AffineTransform<TScalarType, NDimensions>::InputVectorType
 AffineTransform<TScalarType, NDimensions>::
 BackTransform(const OutputVectorType &vect ) const 
 {
-  itkWarningMacro(<<"BackTransform(): This method is slated to be removed from ITK.  Instead, please use GetInverse() to generate an inverse transform and then perform the transform using that inverted transform.");
+  itkWarningMacro(<<"BackTransform(): This method is slated to be removed\
+   from ITK. Instead, please use GetInverse() to generate an inverse\
+   transform and then perform the transform using that inverted transform.");
   return this->GetInverseMatrix() * vect;
 }
 
 
-
-
-// Back transform a vnl_vector
+/** Back transform a vnl_vector */
 template<class TScalarType, unsigned int NDimensions>
 typename AffineTransform<TScalarType, NDimensions>::InputVnlVectorType
 AffineTransform<TScalarType, NDimensions>::
 BackTransform(const OutputVnlVectorType &vect ) const 
 {
-  itkWarningMacro(<<"BackTransform(): This method is slated to be removed from ITK.  Instead, please use GetInverse() to generate an inverse transform and then perform the transform using that inverted transform.");
+  itkWarningMacro(<<"BackTransform(): This method is slated to be removed\
+   from ITK. Instead, please use GetInverse() to generate an inverse\
+    transform and then perform the transform using that inverted transform.");
   return this->GetInverseMatrix() * vect;
 }
 
 
-
-// Back Transform a CovariantVector
+/** Back Transform a CovariantVector */
 template<class TScalarType, unsigned int NDimensions>
 typename AffineTransform<TScalarType, NDimensions>::InputCovariantVectorType
 AffineTransform<TScalarType, NDimensions>::
 BackTransform(const OutputCovariantVectorType &vec) const 
 {
-  itkWarningMacro(<<"BackTransform(): This method is slated to be removed from ITK.  Instead, please use GetInverse() to generate an inverse transform and then perform the transform using that inverted transform.");
+  itkWarningMacro(<<"BackTransform(): This method is slated to be removed\
+   from ITK. Instead, please use GetInverse() to generate an inverse\
+   transform and then perform the transform using that inverted transform.");
 
   InputCovariantVectorType result;    // Converted vector
 
@@ -444,9 +440,7 @@ BackTransform(const OutputCovariantVectorType &vec) const
 }
 
 
-
-
-// Back transform a given point which is represented as type PointType
+/** Back transform a given point which is represented as type PointType */
 template<class TScalarType, unsigned int NDimensions>
 typename AffineTransform<TScalarType, NDimensions>::InputPointType
 AffineTransform<TScalarType, NDimensions>::
@@ -458,4 +452,3 @@ BackTransformPoint(const OutputPointType &point) const
 } // namespace
 
 #endif
-

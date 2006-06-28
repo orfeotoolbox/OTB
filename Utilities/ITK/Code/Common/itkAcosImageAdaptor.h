@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkAcosImageAdaptor.h,v $
   Language:  C++
-  Date:      $Date: 2003/09/10 14:29:00 $
-  Version:   $Revision: 1.12 $
+  Date:      $Date: 2006/03/19 04:36:58 $
+  Version:   $Revision: 1.14 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -25,7 +25,7 @@ namespace itk
  
 namespace Accessor {
 /** \class AcosPixelAccessor
- * \brief Give access to the acos() function of a value
+ * \brief Give access to the vcl_acos() function of a value
  *
  * AcosPixelAccessor is templated over an internal type and an
  * external type representation. This class cast the input
@@ -48,23 +48,22 @@ public:
   typedef TInternalType InternalType;
 
   static inline void Set(TInternalType & output, const TExternalType & input) 
-  {output = (TInternalType)acos((double)input);}
+  {output = (TInternalType)vcl_acos((double)input);}
 
   static inline TExternalType Get( const TInternalType & input ) 
-  {return (TExternalType)acos((double)input);}
+  {return (TExternalType)vcl_acos((double)input);}
 
 };
 
 } // end namespace Accessor
 
 /** \class AcosImageAdaptor
- * \brief Presents an image as being composed of the acos() of its pixels
+ * \brief Presents an image as being composed of the vcl_acos() of its pixels
  *
  * Additional casting is performed according to the input and output image
  * types following C++ default casting rules.
  *
- * \ingroup ImageAdaptors 
-*/
+ * \ingroup ImageAdaptors */
 template <class TImage, class TOutputPixelType>
 class ITK_EXPORT AcosImageAdaptor : public
 ImageAdaptor<TImage,Accessor::AcosPixelAccessor<
@@ -73,11 +72,11 @@ ImageAdaptor<TImage,Accessor::AcosPixelAccessor<
 {
 public:
   /** Standard class typedefs. */
-  typedef AcosImageAdaptor  Self;
+  typedef AcosImageAdaptor          Self;
   typedef ImageAdaptor<TImage,Accessor::AcosPixelAccessor<
     typename TImage::PixelType,
-    TOutputPixelType> >  Superclass;
-  typedef SmartPointer<Self>  Pointer;
+    TOutputPixelType> >             Superclass;
+  typedef SmartPointer<Self>        Pointer;
   typedef SmartPointer<const Self>  ConstPointer;
   
   /** Method for creation through the object factory. */

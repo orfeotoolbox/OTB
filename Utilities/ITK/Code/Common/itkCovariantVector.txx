@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkCovariantVector.txx,v $
   Language:  C++
-  Date:      $Date: 2006/01/16 20:36:04 $
-  Version:   $Revision: 1.39 $
+  Date:      $Date: 2006/03/19 04:36:58 $
+  Version:   $Revision: 1.40 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -203,7 +203,7 @@ typename CovariantVector<T, NVectorDimension>::RealValueType
 CovariantVector<T, NVectorDimension>
 ::GetNorm( void ) const
 {
-  return sqrt( this->GetSquaredNorm() ); 
+  return vcl_sqrt(this->GetSquaredNorm() ); 
 }
 
 

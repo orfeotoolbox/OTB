@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkTimeProbesCollectorBase.cxx,v $
   Language:  C++
-  Date:      $Date: 2003/09/10 14:29:27 $
-  Version:   $Revision: 1.4 $
+  Date:      $Date: 2006/04/21 20:21:38 $
+  Version:   $Revision: 1.5 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -71,32 +71,32 @@ TimeProbesCollectorBase
 
 void 
 TimeProbesCollectorBase
-::Report(void) const
+::Report( std::ostream & os ) const
 {
   MapType::const_iterator probe = m_Probes.begin();
   MapType::const_iterator end   = m_Probes.end();
 
-  std::cout.width(20);
-  std::cout <<  " Probe Tag ";
-  std::cout.width(10);
-  std::cout <<  " Starts ";
-  std::cout.width(10);
-  std::cout <<  " Stops  ";
-  std::cout.width(15);
-  std::cout <<  "  Time  ";
-  std::cout << std::endl;
+  os.width(20);
+  os <<  " Probe Tag ";
+  os.width(10);
+  os <<  " Starts ";
+  os.width(10);
+  os <<  " Stops  ";
+  os.width(15);
+  os <<  "  Time  ";
+  os << std::endl;
   
   while( probe != end )
     {
-    std::cout.width(20);
-    std::cout <<  probe->first.c_str() << "  ";
-    std::cout.width(10);
-    std::cout <<  probe->second.GetNumberOfStarts() <<  "   ";
-    std::cout.width(10);
-    std::cout <<  probe->second.GetNumberOfStops() <<  "   ";
-    std::cout.width(15);
-    std::cout <<  probe->second.GetMeanTime();
-    std::cout << std::endl;
+    os.width(20);
+    os <<  probe->first.c_str() << "  ";
+    os.width(10);
+    os <<  probe->second.GetNumberOfStarts() <<  "   ";
+    os.width(10);
+    os <<  probe->second.GetNumberOfStops() <<  "   ";
+    os.width(15);
+    os <<  probe->second.GetMeanTime();
+    os << std::endl;
     probe++;
     }
 

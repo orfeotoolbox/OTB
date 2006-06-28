@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkVectorLinearInterpolateImageFunction.txx,v $
   Language:  C++
-  Date:      $Date: 2006/02/06 22:01:58 $
-  Version:   $Revision: 1.14 $
+  Date:      $Date: 2006/03/19 04:36:59 $
+  Version:   $Revision: 1.15 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -77,7 +77,7 @@ VectorLinearInterpolateImageFunction< TInputImage, TCoordRep >
 
   for( dim = 0; dim < ImageDimension; dim++ )
     {
-    baseIndex[dim] = (long) floor( index[dim] );
+    baseIndex[dim] = (long) vcl_floor(index[dim] );
     distance[dim] = index[dim] - double( baseIndex[dim] );
     }
   

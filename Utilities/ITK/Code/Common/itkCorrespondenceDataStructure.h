@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkCorrespondenceDataStructure.h,v $
   Language:  C++
-  Date:      $Date: 2004/03/18 21:42:47 $
-  Version:   $Revision: 1.5 $
+  Date:      $Date: 2006/03/19 23:23:19 $
+  Version:   $Revision: 1.6 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -27,24 +27,21 @@ namespace itk
 
 /**
  * \class CorrespondenceDataStructure
- * \brief A data structure designed to contain medial node clique correspondence data between two images.  
- * 
+ * \brief A data structure designed to contain medial node clique 
+ * correspondence data between two images.  
  *
  * \ingroup 
  *
- * \sa 
- *
- *  */
-
+ */
 template<typename TItemType, int VCliqueSize>
 class CorrespondenceDataStructure : public DataObject {
 public:
 
   /** Standard class typedefs. */   
   typedef CorrespondenceDataStructure Self;
-  typedef DataObject Superclass;
-  typedef SmartPointer<Self>   Pointer;
-  typedef SmartPointer<const Self>  ConstPointer;
+  typedef DataObject                  Superclass;
+  typedef SmartPointer<Self>          Pointer;
+  typedef SmartPointer<const Self>    ConstPointer;
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
@@ -59,7 +56,8 @@ public:
   typedef CorrespondingList<TItemType, VCliqueSize> CorrespondingListType;
 
   /** The typedef for the NodePairList. */
-  typedef SecondaryNodeList<CorrespondingListType, VCliqueSize> SecondaryNodeListType;
+  typedef SecondaryNodeList<CorrespondingListType, VCliqueSize> 
+                                                    SecondaryNodeListType;
 
   /** The typedef for the NodeList. */
   typedef NodeList<SecondaryNodeListType> NodeListType;

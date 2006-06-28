@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkBinaryBallStructuringElement.txx,v $
   Language:  C++
-  Date:      $Date: 2005/12/10 13:49:27 $
-  Version:   $Revision: 1.10 $
+  Date:      $Date: 2006/03/19 23:21:38 $
+  Version:   $Revision: 1.12 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -14,8 +14,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef _itkBinaryBallStructuringElement_txx
-#define _itkBinaryBallStructuringElement_txx
+#ifndef __itkBinaryBallStructuringElement_txx
+#define __itkBinaryBallStructuringElement_txx
 #include "itkBinaryBallStructuringElement.h"
 
 #include "itkImage.h"
@@ -63,8 +63,7 @@ BinaryBallStructuringElement<TPixel, VDimension, TAllocator>
   //
 
   // Ellipsoid spatial function typedef
-  typedef EllipsoidInteriorExteriorSpatialFunction<VDimension>
-    EllipsoidType;
+  typedef EllipsoidInteriorExteriorSpatialFunction<VDimension> EllipsoidType;
   
   // Create an ellipsoid spatial function for the source image
   typename EllipsoidType::Pointer spatialFunction = EllipsoidType::New();
@@ -113,8 +112,7 @@ BinaryBallStructuringElement<TPixel, VDimension, TAllocator>
   // Copy the ellipsoid into the kernel
   //
   Iterator kernel_it;
-  for (it.GoToBegin(), kernel_it=this->Begin(); !it.IsAtEnd();
-       ++it, ++kernel_it)
+  for (it.GoToBegin(), kernel_it=this->Begin();!it.IsAtEnd();++it,++kernel_it)
     {
     *kernel_it = it.Get();
     }

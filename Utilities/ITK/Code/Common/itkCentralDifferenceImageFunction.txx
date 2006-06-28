@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkCentralDifferenceImageFunction.txx,v $
   Language:  C++
-  Date:      $Date: 2006/02/06 22:01:53 $
-  Version:   $Revision: 1.29 $
+  Date:      $Date: 2006/03/18 20:13:58 $
+  Version:   $Revision: 1.30 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -83,7 +83,7 @@ CentralDifferenceImageFunction<TInputImage,TCoordRep>
 
     derivative[dim] *= 0.5 / this->GetInputImage()->GetSpacing()[dim];
     neighIndex[dim] += 1;
-  }
+    }
 
   return ( derivative );
 

@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkImage.txx,v $
   Language:  C++
-  Date:      $Date: 2005/12/02 12:02:28 $
-  Version:   $Revision: 1.96 $
+  Date:      $Date: 2006/05/10 20:27:16 $
+  Version:   $Revision: 1.97 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -19,6 +19,7 @@
 =========================================================================*/
 #ifndef _itkImage_txx
 #define _itkImage_txx
+
 #include "itkImage.h"
 #include "itkProcessObject.h"
 

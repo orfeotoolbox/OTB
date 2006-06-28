@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkBinaryBallStructuringElement.h,v $
   Language:  C++
-  Date:      $Date: 2003/09/10 14:29:01 $
-  Version:   $Revision: 1.4 $
+  Date:      $Date: 2006/03/18 20:10:36 $
+  Version:   $Revision: 1.5 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -22,7 +22,8 @@
 namespace itk {
   
 /** \class BinaryBallStructuringElement
- * \brief A Neighborhood that represents a ball structuring element (ellipsoid) with binary elements.
+ * \brief A Neighborhood that represents a ball structuring element 
+ *       (ellipsoid) with binary elements.
  *
  * This class defines a Neighborhood whose elements are either 0 or 1
  * depending on whether they are outside or inside an ellipsoid whose
@@ -54,7 +55,7 @@ class ITK_EXPORT BinaryBallStructuringElement
 {
 public:
   /** Standard class typedefs. */
-  typedef BinaryBallStructuringElement Self;
+  typedef BinaryBallStructuringElement                 Self;
   typedef Neighborhood<TPixel, VDimension, TAllocator> Superclass;
 
   /** External support for allocator type. */
@@ -69,11 +70,11 @@ public:
   /** Iterator typedef support. Note the naming is intentional, i.e.,
   * ::iterator and ::const_iterator, because the allocator may be a
   * vnl object or other type, which uses this form. */
-  typedef typename AllocatorType::iterator Iterator;
+  typedef typename AllocatorType::iterator       Iterator;
   typedef typename AllocatorType::const_iterator ConstIterator;
   
   /** Size and value typedef support. */
-  typedef typename Superclass::SizeType SizeType;
+  typedef typename Superclass::SizeType      SizeType;
   typedef typename Superclass::SizeValueType SizeValueType;
   
   /** Radius typedef support. */
@@ -91,15 +92,15 @@ public:
   /** Copy constructor. */
   BinaryBallStructuringElement(const Self& other)
     : Neighborhood<TPixel, VDimension, TAllocator>(other)
-  {
-  }
+    {
+    }
 
   /** Assignment operator. */
   Self &operator=(const Self& other)
-  {
+    {
     Superclass::operator=(other);
     return *this;
-  }
+    }
 
   /** Build the structuring element */
   void CreateStructuringElement();   

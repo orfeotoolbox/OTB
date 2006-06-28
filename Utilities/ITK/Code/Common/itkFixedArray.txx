@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkFixedArray.txx,v $
   Language:  C++
-  Date:      $Date: 2005/08/08 21:36:17 $
-  Version:   $Revision: 1.20 $
+  Date:      $Date: 2006/04/13 17:57:25 $
+  Version:   $Revision: 1.21 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -225,6 +225,25 @@ FixedArray<TValueType, VLength>
   return array;
 }
 
+template <typename TValueType, unsigned int VLength>
+std::ostream & operator<<(std::ostream &os, const FixedArray<TValueType,VLength> &arr)
+{
+  os << "[";
+  if ( VLength == 1 )
+    {
+    os << arr[0] ;
+    }
+  else
+    {
+    for (int i=0; i < static_cast<int>(VLength) - 1; ++i)
+      {
+      os << arr[i] << ", ";
+      }
+    os << arr[VLength-1];
+    }
+  os << "]";
+  return os;
+}
 
 } // namespace itk
 

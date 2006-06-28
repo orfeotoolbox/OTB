@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkCovariantVector.h,v $
   Language:  C++
-  Date:      $Date: 2006/01/22 17:29:45 $
-  Version:   $Revision: 1.43 $
+  Date:      $Date: 2006/04/21 00:09:52 $
+  Version:   $Revision: 1.44 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -247,6 +247,7 @@ ITKCommon_EXPORT void CrossProduct(  CovariantVector<int,3>,
 
 } // end namespace itk
   
+#include "itkNumericTraitsCovariantVectorPixel.h"
 
 #ifndef ITK_MANUAL_INSTANTIATION
 #include "itkCovariantVector.txx"

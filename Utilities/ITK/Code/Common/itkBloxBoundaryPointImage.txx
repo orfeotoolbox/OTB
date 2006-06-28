@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkBloxBoundaryPointImage.txx,v $
   Language:  C++
-  Date:      $Date: 2003/09/10 14:29:01 $
-  Version:   $Revision: 1.22 $
+  Date:      $Date: 2006/03/18 18:06:14 $
+  Version:   $Revision: 1.23 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -43,8 +43,8 @@ BloxBoundaryPointImage<VImageDimension>
 ::PrintSelf(std::ostream& os, Indent indent) const
 {
   Superclass::PrintSelf(os,indent);
-
-  os << indent << "Total number of boundary points: " << m_NumBoundaryPoints << std::endl;
+  os << indent << "Total number of boundary points: "
+     << m_NumBoundaryPoints << std::endl;
 }
 
 } // end namespace itk

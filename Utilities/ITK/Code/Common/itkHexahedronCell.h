@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkHexahedronCell.h,v $
   Language:  C++
-  Date:      $Date: 2006/01/10 11:00:38 $
-  Version:   $Revision: 1.47 $
+  Date:      $Date: 2006/04/05 19:00:17 $
+  Version:   $Revision: 1.48 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -109,9 +109,9 @@ protected:
   PointIdentifier m_PointIds[NumberOfPoints];
 
   void InterpolationDerivs(CoordRepType pcoords[3], CoordRepType derivs[24]);
-  void InterpolationFunctions(CoordRepType pcoords[3], CoordRepType sf[8]);
+  void InterpolationFunctions(CoordRepType pcoords[3], InterpolationWeightType sf[8]);
   void EvaluateLocation(int& itkNotUsed(subId), PointsContainer* points, CoordRepType pcoords[3],
-                                     CoordRepType x[3], CoordRepType *weights);
+                                     CoordRepType x[3], InterpolationWeightType *weights);
   
 public:
   HexahedronCell() {}

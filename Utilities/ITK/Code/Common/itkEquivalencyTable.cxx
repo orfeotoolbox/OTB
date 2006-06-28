@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkEquivalencyTable.cxx,v $
   Language:  C++
-  Date:      $Date: 2005/05/26 16:27:48 $
-  Version:   $Revision: 1.7 $
+  Date:      $Date: 2006/05/20 14:12:55 $
+  Version:   $Revision: 1.8 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -34,7 +34,7 @@ bool EquivalencyTable::Add(unsigned long a, unsigned long b)
   
   if (result.second == false)
     { // Stop endless loops.
-    if ( (*(result.first)).second  == b ) return false;
+    if ( (*(result.first)).second == b ) return false;
     else return (this->Add((*(result.first)).second, b));
     }
   else return true;
@@ -58,7 +58,7 @@ bool EquivalencyTable::AddAndFlatten(unsigned long a, unsigned long b)
   
   if (result.second == false)
     { // Stop endless loops.
-    if ( (*(result.first)).second  == bFlattened ) return false;
+    if ( (*(result.first)).second == bFlattened ) return false;
     else return (this->Add((*(result.first)).second, bFlattened));
     }
   else
@@ -121,4 +121,3 @@ void EquivalencyTable
 
   
 }// end namespace itk
-

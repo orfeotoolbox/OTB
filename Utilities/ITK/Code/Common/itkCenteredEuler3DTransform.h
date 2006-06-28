@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkCenteredEuler3DTransform.h,v $
   Language:  C++
-  Date:      $Date: 2005/03/09 16:46:13 $
-  Version:   $Revision: 1.5 $
+  Date:      $Date: 2006/03/19 23:22:17 $
+  Version:   $Revision: 1.7 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -26,7 +26,8 @@
 namespace itk
 {
 
-/** \brief CenteredEuler3DTransform of a vector space (e.g. space coordinates)
+/** \class CenteredEuler3DTransform
+ * \brief CenteredEuler3DTransform of a vector space (e.g. space coordinates)
  *
  * This transform applies a rotation about a specific coordinate or
  * centre of rotation followed by a translation.
@@ -39,10 +40,10 @@ class ITK_EXPORT CenteredEuler3DTransform :
 {
 public:
   /** Standard class typedefs. */
-  typedef CenteredEuler3DTransform Self;
+  typedef CenteredEuler3DTransform        Self;
   typedef Euler3DTransform< TScalarType > Superclass;
-  typedef SmartPointer<Self>        Pointer;
-  typedef SmartPointer<const Self>  ConstPointer;
+  typedef SmartPointer<Self>              Pointer;
+  typedef SmartPointer<const Self>        ConstPointer;
   
   /** Run-time type information (and related methods). */
   itkTypeMacro( CenteredEuler3DTransform, Euler3DTransform );

@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkElasticBodyReciprocalSplineKernelTransform.h,v $
   Language:  C++
-  Date:      $Date: 2003/09/10 14:29:06 $
-  Version:   $Revision: 1.7 $
+  Date:      $Date: 2006/04/17 01:50:19 $
+  Version:   $Revision: 1.8 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -50,7 +50,7 @@ public:
   typedef SmartPointer<const Self>  ConstPointer;
     
   /** Run-time type information (and related methods). */
-  itkTypeMacro( ThinPlateSplineKernelTransform, KernelTransform );
+  itkTypeMacro( ElasticBodyReciprocalSplineKernelTransform, KernelTransform );
 
   /** New macro for creation of through a Smart Pointer */
   itkNewMacro( Self );

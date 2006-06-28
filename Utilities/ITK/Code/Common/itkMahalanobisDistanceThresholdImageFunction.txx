@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkMahalanobisDistanceThresholdImageFunction.txx,v $
   Language:  C++
-  Date:      $Date: 2006/02/06 22:01:56 $
-  Version:   $Revision: 1.6 $
+  Date:      $Date: 2006/03/19 04:36:59 $
+  Version:   $Revision: 1.7 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -106,7 +106,7 @@ MahalanobisDistanceThresholdImageFunction<TInputImage,TCoordRep>
   double mahalanobisDistance = 
     m_MahalanobisDistanceMembershipFunction->Evaluate( 
                                     this->GetInputImage()->GetPixel( index ) );
-  return ( sqrt( mahalanobisDistance ) <= m_Threshold );
+  return ( vcl_sqrt(mahalanobisDistance ) <= m_Threshold );
 }
 
 
@@ -132,7 +132,7 @@ MahalanobisDistanceThresholdImageFunction<TInputImage,TCoordRep>
     m_MahalanobisDistanceMembershipFunction->Evaluate( 
                                   this->GetInputImage()->GetPixel( index ) );
   
-  const double mahalanobisDistance = sqrt( mahalanobisDistanceSquared );
+  const double mahalanobisDistance = vcl_sqrt(mahalanobisDistanceSquared );
 
   return  mahalanobisDistance;
 }

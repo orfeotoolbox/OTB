@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkBackwardDifferenceOperator.h,v $
   Language:  C++
-  Date:      $Date: 2003/09/10 14:29:01 $
-  Version:   $Revision: 1.17 $
+  Date:      $Date: 2006/03/16 22:07:43 $
+  Version:   $Revision: 1.18 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -36,15 +36,15 @@ namespace itk {
  * \ingroup Operators
  *
  */
-template<class TPixel, unsigned int VDimension=2,
+template<class TPixel, unsigned int TDimension=2,
   class TAllocator = NeighborhoodAllocator<TPixel> >
 class ITK_EXPORT BackwardDifferenceOperator
-  : public NeighborhoodOperator<TPixel, VDimension, TAllocator>
+  : public NeighborhoodOperator<TPixel, TDimension, TAllocator>
 {
 public:
   /** Standard class typedefs. */
-  typedef BackwardDifferenceOperator Self;
-  typedef NeighborhoodOperator<TPixel, VDimension, TAllocator> Superclass;
+  typedef BackwardDifferenceOperator                           Self;
+  typedef NeighborhoodOperator<TPixel, TDimension, TAllocator> Superclass;
     
   /** From Superclass */
   typedef typename Superclass::PixelType PixelType;
@@ -76,5 +76,3 @@ private:
 #endif
 
 #endif
-
-

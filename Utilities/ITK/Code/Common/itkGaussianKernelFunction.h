@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkGaussianKernelFunction.h,v $
   Language:  C++
-  Date:      $Date: 2006/02/06 22:01:55 $
-  Version:   $Revision: 1.9 $
+  Date:      $Date: 2006/03/19 04:36:58 $
+  Version:   $Revision: 1.10 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -52,7 +52,7 @@ public:
 
   /** Evaluate the function. */
   inline double Evaluate (const double& u) const
-    { return ( exp( -0.5 * vnl_math_sqr( u ) ) * m_Factor ); }
+    { return ( vcl_exp(-0.5 * vnl_math_sqr( u ) ) * m_Factor ); }
 
 protected:
   GaussianKernelFunction();

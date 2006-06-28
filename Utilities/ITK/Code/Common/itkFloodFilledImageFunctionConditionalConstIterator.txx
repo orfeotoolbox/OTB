@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkFloodFilledImageFunctionConditionalConstIterator.txx,v $
   Language:  C++
-  Date:      $Date: 2005/03/11 14:58:14 $
-  Version:   $Revision: 1.4 $
+  Date:      $Date: 2006/05/20 14:15:24 $
+  Version:   $Revision: 1.5 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -14,8 +14,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef _itkFloodFilledImageFunctionConditionalConstIterator_txx
-#define _itkFloodFilledImageFunctionConditionalConstIterator_txx
+#ifndef __itkFloodFilledImageFunctionConditionalConstIterator_txx
+#define __itkFloodFilledImageFunctionConditionalConstIterator_txx
 
 #include "itkFloodFilledImageFunctionConditionalConstIterator.h"
 

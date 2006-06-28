@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkComplexToModulusImageAdaptor.h,v $
   Language:  C++
-  Date:      $Date: 2005/05/27 16:17:08 $
-  Version:   $Revision: 1.1 $
+  Date:      $Date: 2006/04/01 13:44:21 $
+  Version:   $Revision: 1.5 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -51,14 +51,15 @@ public:
     {output = (TInternalType)(input);}
 
   static inline TExternalType Get( const TInternalType & input ) 
-    {return (TExternalType)( sqrt( input.real() * input.real() + 
+    {return (TExternalType)( vcl_sqrt(input.real() * input.real() + 
                                    input.imag() * input.imag() ) ); }
 };
   
 } // end namespace Accessor
  
 /** \class ComplexToModulusImageAdaptor
- * \brief Presents a complex image as being composed of abs() part of its pixels
+ * \brief Presents a complex image as being composed of vcl_abs() part
+ * of its pixels
  *
  * Additional casting is performed according to the input and output image
  * types following C++ default casting rules.
@@ -74,12 +75,12 @@ class ITK_EXPORT ComplexToModulusImageAdaptor : public
 {
 public:
   /** Standard class typedefs. */
-  typedef ComplexToModulusImageAdaptor  Self;
+  typedef ComplexToModulusImageAdaptor              Self;
   typedef ImageAdaptor<TImage, Accessor::ComplexToModulusPixelAccessor<
                                typename TImage::PixelType,
                                TOutputPixelType> >  Superclass;
-  typedef SmartPointer<Self>  Pointer;
-  typedef SmartPointer<const Self>  ConstPointer;
+  typedef SmartPointer<Self>                        Pointer;
+  typedef SmartPointer<const Self>                  ConstPointer;
   
   /** Method for creation through the object factory. */
   itkNewMacro(Self);  
@@ -87,11 +88,11 @@ public:
   /** Run-time type information (and related methods). */
   itkTypeMacro( ComplexToModulusImageAdaptor, ImageAdaptor );
 
- protected:
+protected:
   ComplexToModulusImageAdaptor() {}
   virtual ~ComplexToModulusImageAdaptor() {}
   
- private:
+private:
   ComplexToModulusImageAdaptor(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
 

@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkSimpleFilterWatcher.h,v $
   Language:  C++
-  Date:      $Date: 2006/02/06 22:01:58 $
-  Version:   $Revision: 1.6 $
+  Date:      $Date: 2006/05/19 13:26:23 $
+  Version:   $Revision: 1.7 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -63,6 +63,9 @@ namespace itk
 class ITKCommon_EXPORT SimpleFilterWatcher
 {
 public:
+  /** Classes that need access to filter's private data */
+  friend class XMLFilterWatcher;
+
   /** Constructor. Takes a ProcessObject to monitor and an optional
    * comment string that is prepended to each event message. */
   SimpleFilterWatcher(itk::ProcessObject* o, const char *comment="");

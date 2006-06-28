@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkAutoPointerDataObjectDecorator.h,v $
   Language:  C++
-  Date:      $Date: 2004/03/08 12:57:17 $
-  Version:   $Revision: 1.3 $
+  Date:      $Date: 2006/03/16 11:43:45 $
+  Version:   $Revision: 1.4 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -28,7 +28,8 @@ namespace itk
 
 
 /** \class AutoPointerDataObjectDecorator
- * \brief Decorates any pointer to a simple object with a DataObject API using AutoPointer semantics.
+ * \brief Decorates any pointer to a simple object with a DataObject API using
+ * AutoPointer semantics.
  *
  * AutoPointerDataObjectDecorator decorates a pointer to an object
  * with a DataObject API. This allows a pointer to an object to be
@@ -53,13 +54,13 @@ class ITK_EXPORT AutoPointerDataObjectDecorator : public DataObject
 {
 public:
   /** Standard typedefs. */
-  typedef AutoPointerDataObjectDecorator           Self;
-  typedef DataObject  Superclass;
-  typedef SmartPointer<Self>  Pointer;
-  typedef SmartPointer<const Self>  ConstPointer;
+  typedef AutoPointerDataObjectDecorator   Self;
+  typedef DataObject                       Superclass;
+  typedef SmartPointer<Self>               Pointer;
+  typedef SmartPointer<const Self>         ConstPointer;
 
   /** Typedef for the component type (object being decorated) */
-  typedef T ComponentType;
+  typedef T                ComponentType;
   typedef std::auto_ptr<T> ComponentPointer;
   
   /** Method for creation through the object factory. */
@@ -96,4 +97,3 @@ private:
 #endif
 
 #endif
-

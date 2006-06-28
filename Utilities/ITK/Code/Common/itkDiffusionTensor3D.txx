@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkDiffusionTensor3D.txx,v $
   Language:  C++
-  Date:      $Date: 2005/07/09 23:18:38 $
-  Version:   $Revision: 1.6 $
+  Date:      $Date: 2006/03/19 04:36:58 $
+  Version:   $Revision: 1.7 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -170,7 +170,7 @@ DiffusionTensor3D<T>
 ::GetFractionalAnisotropy() const
 {
   // Computed as 
-  // FA = sqrt(1.5*sum(sum(N.*N))/sum((sum(D.*D))))
+  // FA = vcl_sqrt(1.5*sum(sum(N.*N))/sum((sum(D.*D))))
   // where N = D - ((1/3)*trace(D)*eye(3,3))
   // equation (28) in http://lmi.bwh.harvard.edu/papers/pdfs/2002/westinMEDIA02.pdf
   const RealValueType isp   = this->GetInnerScalarProduct();
@@ -180,7 +180,7 @@ DiffusionTensor3D<T>
     const RealValueType trace = this->GetTrace();
     const RealValueType anisotropy = 3.0 * isp - trace * trace;
     const RealValueType fractionalAnisotropy =
-        static_cast< RealValueType >( sqrt( anisotropy / ( 2.0 * isp ) ) );
+        static_cast< RealValueType >( vcl_sqrt(anisotropy / ( 2.0 * isp ) ) );
     return fractionalAnisotropy;
     }
  
@@ -188,7 +188,7 @@ DiffusionTensor3D<T>
 
    /*
    // Computed as 
-   // FA = sqrt(1.5 * ( \sum_i ( lambda_i - lambda_mean )^2 ) / \sum_i ( lambda_i^2 ) )
+   // FA = vcl_sqrt(1.5 * ( \sum_i ( lambda_i - lambda_mean )^2 ) / \sum_i ( lambda_i^2 ) )
    // as in http://splweb.bwh.harvard.edu:8000/pages/papers/martha/DTI_Tech354.pdf
    // [lambda = eig(A)].
    EigenValuesArrayType eigenValues;
@@ -242,10 +242,10 @@ DiffusionTensor3D<T>
     }
 
   const RealValueType relativeAnisotropySquared =
-        static_cast< RealValueType >( anisotropy / ( sqrt( 3.0 ) * trace ) ); 
+        static_cast< RealValueType >( anisotropy / ( vcl_sqrt(3.0 ) * trace ) ); 
 
   const RealValueType relativeAnisotropy =
-        static_cast< RealValueType >( sqrt( relativeAnisotropySquared ) );
+        static_cast< RealValueType >( vcl_sqrt(relativeAnisotropySquared ) );
 
   return relativeAnisotropy;
 }

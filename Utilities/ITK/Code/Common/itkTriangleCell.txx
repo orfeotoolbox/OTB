@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkTriangleCell.txx,v $
   Language:  C++
-  Date:      $Date: 2005/08/22 18:11:25 $
-  Version:   $Revision: 1.42 $
+  Date:      $Date: 2006/03/19 04:36:59 $
+  Version:   $Revision: 1.43 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -491,7 +491,7 @@ TriangleCell< TCellInterface >
   //
   for (maxComponent=0.0, i=0; i<3; i++)
     {
-    // trying to avoid an expensive call to fabs()
+    // trying to avoid an expensive call to vcl_fabs()
     if (n[i] < 0)
       {
       fabsn = -n[i];

@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkAddPixelAccessor.h,v $
   Language:  C++
-  Date:      $Date: 2003/09/10 14:29:00 $
-  Version:   $Revision: 1.2 $
+  Date:      $Date: 2006/03/16 11:43:26 $
+  Version:   $Revision: 1.3 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -16,7 +16,6 @@
 =========================================================================*/
 #ifndef __itkAddPixelAccessor_h
 #define __itkAddPixelAccessor_h
-
 
 
 namespace itk
@@ -42,7 +41,7 @@ public:
   /** Standard class typedefs. */
   typedef   AddPixelAccessor        Self;
 
- /** External typedef. It defines the external aspect
+  /** External typedef. It defines the external aspect
    * that this class will exhibit */
   typedef     TPixel      ExternalType;
 
@@ -68,8 +67,10 @@ public:
 
   /** Assignment Operator */
   Self & operator=( const Self & apa )
-    { this->m_Value = apa.m_Value;
-      return *this; }
+    { 
+    this->m_Value = apa.m_Value;
+    return *this; 
+    }
 
   /** Constructors */
   AddPixelAccessor():m_Value( NumericTraits<TPixel>::Zero ) {}
@@ -88,4 +89,3 @@ private:
 
 
 #endif
-

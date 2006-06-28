@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkSimpleFastMutexLock.cxx,v $
   Language:  C++
-  Date:      $Date: 2003/09/10 14:29:26 $
-  Version:   $Revision: 1.3 $
+  Date:      $Date: 2006/05/10 20:27:16 $
+  Version:   $Revision: 1.4 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -22,7 +22,7 @@
 namespace itk
 {
 
-// Construct a new SimpleMutexLock 
+// Construct a new SimpleMutexLock
 SimpleFastMutexLock::SimpleFastMutexLock()
 {
 #ifdef ITK_USE_SPROC
@@ -30,7 +30,7 @@ SimpleFastMutexLock::SimpleFastMutexLock()
 #endif
 
 #if defined(_WIN32) && !defined(ITK_USE_PTHREADS)
-  //this->MutexLock = CreateMutex( NULL, FALSE, NULL ); 
+  //this->MutexLock = CreateMutex( NULL, FALSE, NULL );
   InitializeCriticalSection(&m_FastMutexLock);
 #endif
 

@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkPeriodicBoundaryCondition.txx,v $
   Language:  C++
-  Date:      $Date: 2005/09/07 14:46:31 $
-  Version:   $Revision: 1.5 $
+  Date:      $Date: 2006/04/20 17:01:27 $
+  Version:   $Revision: 1.6 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -34,9 +34,6 @@ PeriodicBoundaryCondition<TImage>
   unsigned int i;
   
   // Find the pointer of the closest boundary pixel
-  //  std::cout << "Boundary offset = " << boundary_offset << std::endl;
-  // std::cout << "point index = " << point_index << std::endl;
-
 
   // Return the value of the pixel at the closest boundary point.
   for (i = 0; i < ImageDimension; ++i)

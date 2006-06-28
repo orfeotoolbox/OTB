@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkCenteredAffineTransform.txx,v $
   Language:  C++
-  Date:      $Date: 2006/01/27 03:37:09 $
-  Version:   $Revision: 1.11 $
+  Date:      $Date: 2006/03/18 18:06:25 $
+  Version:   $Revision: 1.12 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -14,8 +14,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef _itkCenteredAffineTransform_txx
-#define _itkCenteredAffineTransform_txx
+#ifndef __itkCenteredAffineTransform_txx
+#define __itkCenteredAffineTransform_txx
 
 #include "itkNumericTraits.h"
 #include "itkCenteredAffineTransform.h"
@@ -42,7 +42,8 @@ CenteredAffineTransform<TScalarType, NDimensions>::
 
 // Get parameters
 template<class TScalarType, unsigned int NDimensions>
-const typename CenteredAffineTransform<TScalarType, NDimensions>::ParametersType &
+const typename CenteredAffineTransform<TScalarType, 
+                                       NDimensions>::ParametersType &
 CenteredAffineTransform<TScalarType, NDimensions>::
 GetParameters( void ) const
 {
@@ -83,10 +84,7 @@ GetParameters( void ) const
 
 }
 
-
-
-
-// Set parameters
+/** Set the parameters */
 template<class TScalarType, unsigned int NDimensions>
 void
 CenteredAffineTransform<TScalarType, NDimensions>::
@@ -138,7 +136,8 @@ SetParameters( const ParametersType & parameters )
 
 // Compute the Jacobian in one position 
 template<class TScalarType, unsigned int NDimensions>
-const typename CenteredAffineTransform<TScalarType, NDimensions>::JacobianType & 
+const typename CenteredAffineTransform<TScalarType, NDimensions>
+::JacobianType & 
 CenteredAffineTransform<TScalarType, NDimensions>::
 GetJacobian( const InputPointType & p ) const
 {

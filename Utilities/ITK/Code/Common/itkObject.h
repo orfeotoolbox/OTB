@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkObject.h,v $
   Language:  C++
-  Date:      $Date: 2006/02/05 20:57:46 $
-  Version:   $Revision: 1.43 $
+  Date:      $Date: 2006/05/10 20:27:16 $
+  Version:   $Revision: 1.44 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -49,7 +49,7 @@ public:
   typedef LightObject  Superclass;
   typedef SmartPointer<Self>  Pointer;
   typedef SmartPointer<const Self>  ConstPointer;
-  
+
   /** Method for creation through the object factory. */
   static Pointer New();
 

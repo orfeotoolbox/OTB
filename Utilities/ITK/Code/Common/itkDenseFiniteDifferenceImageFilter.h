@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkDenseFiniteDifferenceImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2004/09/29 21:38:47 $
-  Version:   $Revision: 1.17 $
+  Date:      $Date: 2006/04/23 04:16:05 $
+  Version:   $Revision: 1.19 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -29,7 +29,7 @@ namespace itk {
  * performs ``dense'' iteration, ie. iteration over all pixels in the input and
  * output at each change calculation and update step. Dense iteration is in
  * contrast to a ``sparse'' iteration over a subset of the pixels.  See
- * documenation for FiniteDifferenceImageFilter for an overview of the
+ * documentation for FiniteDifferenceImageFilter for an overview of the
  * iterative finite difference algorithm:
  *
  * \par
@@ -95,7 +95,18 @@ public:
 
   /** The container type for the update buffer. */
   typedef OutputImageType UpdateBufferType;
-  
+
+#ifdef ITK_USE_CONCEPT_CHECKING
+  /** Begin concept checking */
+  itkConceptMacro(OutputTimesDoubleCheck,
+    (Concept::MultiplyOperator<PixelType, double>));
+  itkConceptMacro(OutputAdditiveOperatorsCheck,
+    (Concept::AdditiveOperators<PixelType>));
+  itkConceptMacro(InputConvertibleToOutputCheck,
+    (Concept::Convertible<typename TInputImage::PixelType, PixelType>));
+  /** End concept checking */
+#endif
+
 protected:
   DenseFiniteDifferenceImageFilter()
     { m_UpdateBuffer = UpdateBufferType::New(); }
@@ -108,7 +119,7 @@ protected:
   virtual void CopyInputToOutput();
 
   /** This method applies changes from the m_UpdateBuffer to the output using
-   * the ThreadedAPplyUpdate() method and a multithreading mechanism.  "dt" is
+   * the ThreadedApplyUpdate() method and a multithreading mechanism.  "dt" is
    * the time step to use for the update of each pixel. */
   virtual void ApplyUpdate(TimeStepType dt);
 

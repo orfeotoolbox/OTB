@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkRealTimeClock.h,v $
   Language:  C++
-  Date:      $Date: 2006/03/09 17:08:07 $
-  Version:   $Revision: 1.5 $
+  Date:      $Date: 2006/05/10 20:27:16 $
+  Version:   $Revision: 1.6 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -39,9 +39,9 @@ class ITKCommon_EXPORT RealTimeClock : public Object
 {
 public:
   typedef RealTimeClock Self;
-  typedef itk::Object Superclass;
-  typedef itk::SmartPointer< Self > Pointer;
-  typedef itk::SmartPointer< const Self > ConstPointer;
+  typedef Object Superclass;
+  typedef SmartPointer< Self > Pointer;
+  typedef SmartPointer< const Self > ConstPointer;
 
   /** Method for defining the name of the class */
   itkTypeMacro(RealTimeClock, Object);
@@ -77,7 +77,7 @@ protected:
   virtual ~RealTimeClock();
 
   /** Print the object information in a stream. */
-  virtual void PrintSelf( std::ostream& os, itk::Indent indent ) const;
+  virtual void PrintSelf( std::ostream& os, Indent indent ) const;
 
 private:
   FrequencyType    m_Frequency;

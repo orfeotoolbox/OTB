@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkChainCodePath2D.cxx,v $
   Language:  C++
-  Date:      $Date: 2006/02/06 22:01:53 $
-  Version:   $Revision: 1.5 $
+  Date:      $Date: 2006/03/18 20:14:09 $
+  Version:   $Revision: 1.6 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -29,8 +29,6 @@ ChainCodePath2D
   return DecodeOffset( m_Chain2D[input] );
 }
 
-
-
 ChainCodePath2D::IndexType
 ChainCodePath2D
 ::EvaluateToIndex( const InputType & input ) const
@@ -47,7 +45,6 @@ ChainCodePath2D
 }
 
 
-
 ChainCodePath2D::OffsetType
 ChainCodePath2D
 ::IncrementInput( InputType & input ) const
@@ -61,7 +58,6 @@ ChainCodePath2D
     return this->GetZeroOffset();
     }
 }
-
 
 
 std::string
@@ -85,10 +81,7 @@ ChainCodePath2D
 }
 
 
-
-/**
- * Constructor
- */
+/** Constructor */
 ChainCodePath2D
 ::ChainCodePath2D()
 {
@@ -147,9 +140,7 @@ ChainCodePath2D::~ChainCodePath2D()
 {
 }
 
-/**
- * Standard "PrintSelf" method
- */
+/** Standard "PrintSelf" method */
 void
 ChainCodePath2D
 ::PrintSelf( std::ostream& os, Indent indent) const
@@ -160,4 +151,3 @@ ChainCodePath2D
 
 
 } // end namespace itk
-

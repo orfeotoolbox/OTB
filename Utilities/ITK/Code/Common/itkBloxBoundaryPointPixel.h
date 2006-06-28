@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkBloxBoundaryPointPixel.h,v $
   Language:  C++
-  Date:      $Date: 2003/09/10 14:29:01 $
-  Version:   $Revision: 1.5 $
+  Date:      $Date: 2006/03/18 20:10:36 $
+  Version:   $Revision: 1.6 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -31,7 +31,8 @@ namespace itk
  * */
 
 template <unsigned int NDimensions>
-class ITK_EXPORT BloxBoundaryPointPixel : public BloxPixel< BloxBoundaryPointItem<NDimensions> >
+class ITK_EXPORT BloxBoundaryPointPixel : public BloxPixel< 
+                                          BloxBoundaryPointItem<NDimensions> >
 {
 public:
   BloxBoundaryPointPixel();

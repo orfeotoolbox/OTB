@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkConicShellInteriorExteriorSpatialFunction.txx,v $
   Language:  C++
-  Date:      $Date: 2005/01/14 05:17:42 $
-  Version:   $Revision: 1.16 $
+  Date:      $Date: 2006/03/19 23:22:57 $
+  Version:   $Revision: 1.17 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -54,23 +54,26 @@ ConicShellInteriorExteriorSpatialFunction<VDimension, TInput>
 }
 
 template <unsigned int VDimension, typename TInput>
-typename ConicShellInteriorExteriorSpatialFunction<VDimension, TInput>::OutputType
+typename ConicShellInteriorExteriorSpatialFunction<VDimension, TInput>
+::OutputType
 ConicShellInteriorExteriorSpatialFunction<VDimension, TInput>
 ::Evaluate(const InputType& position) const
 {
   // As from the header...
-  /*
+  /**
    * We are creating search areas from BoundaryPoint1 in which to look for 
    * candidate BoundaryPoint2's with which to form core atoms.  Assume the 
    * "worst case" that BoundaryPoint2 is somewhere in that search area pointing
    * directly at BoundaryPoint1. 
    *
-   * The search area (ConicShell?) from each BoundaryPoint1 has the following parameters: 
+   * The search area (ConicShell?) from each BoundaryPoint1 has the following 
+   * parameters: 
    *
    * DistanceMax and DistanceMin from the location of the BoundaryPoint 
    *
    * AngleMax from the line along the gradient at the boundary point.
-   * This is determined in n dimensions by taking the dot product of two vectors,
+   * This is determined in n dimensions by taking the dot product of 
+   * two vectors,
    * (1) the normalized gradient at BoundaryPoint1 and
    * (2) the normalized vector from BoundaryPoint1 to BoundaryPoint2.
    *
@@ -104,7 +107,6 @@ ConicShellInteriorExteriorSpatialFunction<VDimension, TInput>
   GradientType originGradient = m_OriginGradient;
 
   // Now compute the dot product
-  // double dotprod = dot_product(originGradient.GetVnlVector(), vecOriginToTest.GetVnlVector());
   double dotprod = originGradient * vecOriginToTest;
 
   if(m_Polarity==1)

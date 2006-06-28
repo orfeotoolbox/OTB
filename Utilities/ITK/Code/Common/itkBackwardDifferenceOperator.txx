@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkBackwardDifferenceOperator.txx,v $
   Language:  C++
-  Date:      $Date: 2003/09/10 14:29:01 $
-  Version:   $Revision: 1.18 $
+  Date:      $Date: 2006/03/16 22:07:44 $
+  Version:   $Revision: 1.19 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -14,16 +14,18 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef _itkBackwardDifferenceOperator_txx
-#define _itkBackwardDifferenceOperator_txx
+#ifndef __itkBackwardDifferenceOperator_txx
+#define __itkBackwardDifferenceOperator_txx
+
 #include "itkBackwardDifferenceOperator.h"
+
 namespace itk
 {
 
-template <class TPixel, unsigned int VDimension, class TAllocator>
-typename BackwardDifferenceOperator<TPixel, VDimension, TAllocator>
+template <class TPixel, unsigned int TDimension, class TAllocator>
+typename BackwardDifferenceOperator<TPixel, TDimension, TAllocator>
 ::CoefficientVector
-BackwardDifferenceOperator<TPixel, VDimension, TAllocator>
+BackwardDifferenceOperator<TPixel, TDimension, TAllocator>
 ::GenerateCoefficients()
 {
   CoefficientVector coeff(3);

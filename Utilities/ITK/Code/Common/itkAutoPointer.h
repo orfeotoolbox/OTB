@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkAutoPointer.h,v $
   Language:  C++
-  Date:      $Date: 2003/09/10 14:29:00 $
-  Version:   $Revision: 1.9 $
+  Date:      $Date: 2006/03/18 18:06:14 $
+  Version:   $Revision: 1.11 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -50,9 +50,7 @@ public:
   typedef AutoPointer   Self;
   
   /** Constructor.  */
-  AutoPointer ():
-    m_Pointer(0),
-    m_IsOwner(false)
+  AutoPointer (): m_Pointer(0),m_IsOwner(false)
     { }
 
   /** Copy constructor.  */
@@ -64,11 +62,9 @@ public:
 
 
   /** Constructor to pointer p.  */
-  explicit AutoPointer ( ObjectType * p, bool takeOwnership ):
-                    m_Pointer(p),
-                    m_IsOwner(takeOwnership)
-      { }
-
+  explicit AutoPointer ( ObjectType * p, bool takeOwnership ): 
+                                        m_Pointer(p), m_IsOwner(takeOwnership)
+    { }
 
   /** Destructor.  */
   ~AutoPointer ()
@@ -129,19 +125,17 @@ public:
     { return m_IsOwner; }
 
   /** Release the pointer hold by the current AutoPointer 
-      and return the raw pointer so it can be hold by 
-      another AutoPointer. This operation is intended to
-      be used for facilitating polymorphism.
-  
-      Example: if class Cow derives from Mammal,
-      AutoPointer<Cow> onecow = new Cow;
-      AutoPointer<Mammal> onemammal = onecow.ReleaseOwnership(); 
-
-      Note that the AutoPointer still points to the object after the
-      ReleaseOwnership operation, but it doesn't own the object any
-      more.
-
-    */
+   *  and return the raw pointer so it can be hold by 
+   *  another AutoPointer. This operation is intended to
+   *  be used for facilitating polymorphism.
+   * 
+   *  Example: if class Cow derives from Mammal,
+   *  AutoPointer<Cow> onecow = new Cow;
+   *  AutoPointer<Mammal> onemammal = onecow.ReleaseOwnership(); 
+   *
+   *  Note that the AutoPointer still points to the object after the
+   *  ReleaseOwnership operation, but it doesn't own the object any
+   *  more. */
   ObjectType * ReleaseOwnership( void ) 
     {
     m_IsOwner = false;
@@ -152,7 +146,7 @@ public:
   ObjectType *GetPointer () const 
     { return m_Pointer; }
 
-   /** Comparison of pointers. Equal comparison.  */
+  /** Comparison of pointers. Equal comparison.  */
   bool operator == (const AutoPointer &r) const
     { return (void*)m_Pointer == (void*) r.m_Pointer; }
 
@@ -229,7 +223,8 @@ template <typename TAutoPointerBase, typename TAutoPointerDerived>
 void
 ITK_EXPORT TransferAutoPointer(TAutoPointerBase & pa, TAutoPointerDerived & pb)
 {
-  pa.TakeNoOwnership( pb.GetPointer() ); // give a chance to natural polymorphism
+  // give a chance to natural polymorphism
+  pa.TakeNoOwnership( pb.GetPointer() ); 
   if( pb.IsOwner() )
     {
     pa.TakeOwnership();      // pa Take Ownership

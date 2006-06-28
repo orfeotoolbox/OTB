@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkConstantBoundaryCondition.h,v $
   Language:  C++
-  Date:      $Date: 2005/09/07 14:46:30 $
-  Version:   $Revision: 1.17 $
+  Date:      $Date: 2006/04/20 16:59:33 $
+  Version:   $Revision: 1.19 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -62,14 +62,14 @@ class ITK_EXPORT ConstantBoundaryCondition
 {
 public:
   /** Self & superclass typedefs */ 
-  typedef ConstantBoundaryCondition Self;
+  typedef ConstantBoundaryCondition      Self;
   typedef ImageBoundaryCondition<TImage> Superclass;
   
   /** Extract information from the image type */
-  typedef typename Superclass::PixelType PixelType;
+  typedef typename Superclass::PixelType        PixelType;
   typedef typename Superclass::PixelPointerType PixelPointerType;
-  typedef typename Superclass::IndexType IndexType;
-  typedef typename Superclass::OffsetType OffsetType;
+  typedef typename Superclass::IndexType        IndexType;
+  typedef typename Superclass::OffsetType       OffsetType;
   typedef typename Superclass::NeighborhoodType NeighborhoodType;
     
   typedef typename Superclass::NeighborhoodAccessorFunctorType 
@@ -106,6 +106,11 @@ public:
   const PixelType &GetConstant() const
     {  return m_Constant;  }
   
+  /** Tell if the boundary condition can index to any location within
+    * the associated iterator's neighborhood or if it has some limited
+    * subset (such as none) that it relies upon. */
+  bool RequiresCompleteNeighborhood() { return false; }
+
 private:
   PixelType m_Constant;
 };

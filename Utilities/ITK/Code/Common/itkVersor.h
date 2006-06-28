@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkVersor.h,v $
   Language:  C++
-  Date:      $Date: 2005/02/26 21:32:45 $
-  Version:   $Revision: 1.18 $
+  Date:      $Date: 2006/03/19 04:36:59 $
+  Version:   $Revision: 1.20 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -175,13 +175,13 @@ public:
 
   /** Returns the axis of the rotation.
    * It is a unit vector parallel to the axis. */
-   VectorType GetAxis( void ) const;
+  VectorType GetAxis( void ) const;
    
   /** Returns the Right part
    * It is a vector part of the Versor. It is 
    * called Right because it is equivalent to
    * a right angle rotation. */
-   VectorType GetRight( void ) const;
+  VectorType GetRight( void ) const;
    
   /** Set the versor using a vector and angle
    * the unit vector parallel to the given vector 
@@ -189,14 +189,15 @@ public:
   void Set( const VectorType & axis, ValueType angle );
   
   /** Set the versor using an orthogonal matrix.
-   * Based on code from:
-   *  http://www.euclideanspace.com/maths/geometry/rotations/conversions/matrixToQuaternion/index.htm
+   *  Based on code from:
+   *  http://www.euclideanspace.com/maths/geometry/rotations/
+   *  conversions/matrixToQuaternion/index.htm
    */
   void Set( const MatrixType & m );
 
   /** Set the versor using the right part.
    * the magnitude of the vector given is assumed to 
-   * be equal to sin(angle/2).
+   * be equal to vcl_sin(angle/2).
    * This method will compute internally the scalar
    * part that preserve the Versor as a unit quaternion. */
   void Set( const VectorType & axis );
@@ -252,18 +253,18 @@ public:
    * multiplication of the rotaion angle of the quaternion. */
   Self Exponential( ValueType exponent ) const;
 
-private:
-   /** Component parallel to x axis.  */
-   ValueType  m_X;
+private: 
+  /** Component parallel to x axis.  */
+  ValueType  m_X;
    
-   /** Component parallel to y axis.  */
-   ValueType  m_Y;
+  /** Component parallel to y axis.  */
+  ValueType  m_Y;
    
-   /** Component parallel to z axis.  */
-   ValueType  m_Z;
+  /** Component parallel to z axis.  */
+  ValueType  m_Z;
 
-   /** Escalar component of the Versor.  */
-   ValueType  m_W;
+  /** Escalar component of the Versor.  */
+  ValueType  m_W;
 };
 
 template< class T>  

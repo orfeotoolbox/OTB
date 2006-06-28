@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkConditionVariable.cxx,v $
   Language:  C++
-  Date:      $Date: 2006/02/06 22:01:54 $
-  Version:   $Revision: 1.7 $
+  Date:      $Date: 2006/03/18 20:14:38 $
+  Version:   $Revision: 1.8 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -149,7 +149,8 @@ void ConditionVariable::Wait(SimpleMutexLock *mutex)
     // This call atomically signals the m_WaitersAreDone event and waits
     // until it can acquire the external mutex.  This is required to
     // ensure fairness
-    SignalObjectAndWait( m_WaitersAreDone, mutex->GetMutexLock(), INFINITE, FALSE);
+    SignalObjectAndWait( m_WaitersAreDone, mutex->GetMutexLock(), 
+                                                             INFINITE, FALSE);
     }
   else
     {
@@ -162,4 +163,3 @@ void ConditionVariable::Wait(SimpleMutexLock *mutex)
 }
 
 }//end of namespace itk
-

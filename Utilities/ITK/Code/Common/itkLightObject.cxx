@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkLightObject.cxx,v $
   Language:  C++
-  Date:      $Date: 2006/02/06 22:01:56 $
-  Version:   $Revision: 1.31 $
+  Date:      $Date: 2006/05/10 20:27:16 $
+  Version:   $Revision: 1.32 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -164,7 +164,7 @@ LightObject
 /**
  * Sets the reference count (use with care)
  */
-void 
+void
 LightObject
 ::SetReferenceCount(int ref)
 {
@@ -179,7 +179,7 @@ LightObject
 }
 
 LightObject
-::~LightObject() 
+::~LightObject()
 {
   /**
    * warn user if reference counting is on and the object is being referenced
@@ -196,7 +196,7 @@ LightObject
  * Chaining method to print an object's instance variables, as well as
  * its superclasses.
  */
-void 
+void
 LightObject
 ::PrintSelf(std::ostream& os, Indent indent) const
 {
@@ -204,7 +204,7 @@ LightObject
   char const * mangledName = typeid(*this).name();
   int status;
   char* unmangled = abi::__cxa_demangle(mangledName, 0, 0, &status);
-  
+
   os << indent << "RTTI typeinfo:   ";
 
   if(status == 0)
@@ -228,7 +228,7 @@ LightObject
 /**
  * Define a default print header for all objects.
  */
-void 
+void
 LightObject
 ::PrintHeader(std::ostream& os, Indent indent) const
 {
@@ -239,7 +239,7 @@ LightObject
 /**
  * Define a default print trailer for all objects.
  */
-void 
+void
 LightObject
 ::PrintTrailer(std::ostream& itkNotUsed(os), Indent itkNotUsed(indent)) const
 {
@@ -252,7 +252,7 @@ LightObject
  * PrintSelf method that all objects should define, if they have anything
  * interesting to print out.
  */
-std::ostream& 
+std::ostream&
 operator<<(std::ostream& os, const LightObject& o)
 {
   o.Print(os);

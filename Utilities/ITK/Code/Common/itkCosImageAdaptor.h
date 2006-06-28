@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkCosImageAdaptor.h,v $
   Language:  C++
-  Date:      $Date: 2003/09/10 14:29:05 $
-  Version:   $Revision: 1.11 $
+  Date:      $Date: 2006/03/19 23:23:38 $
+  Version:   $Revision: 1.13 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -25,7 +25,7 @@ namespace itk
  
 namespace Accessor {
 /** \class CosPixelAccessor
- * \brief Give access to the cos() function of a value
+ * \brief Give access to the vcl_cos() function of a value
  *
  * CosPixelAccessor is templated over an internal type and an
  * external type representation. This class cast the input
@@ -47,10 +47,10 @@ public:
   typedef TInternalType InternalType;
 
   static inline void Set(TInternalType & output, const TExternalType & input) 
-    {output = (TInternalType)cos((double)input);}
+    {output = (TInternalType)vcl_cos((double)input);}
 
   static inline TExternalType Get( const TInternalType & input ) 
-    {return (TExternalType)cos((double)input);}
+    {return (TExternalType)vcl_cos((double)input);}
 
 };
 
@@ -58,7 +58,7 @@ public:
 } // end namespace Accessor
 
 /** \class CosImageAdaptor
- * \brief Presents an image as being composed of the cos() of its pixels
+ * \brief Presents an image as being composed of the vcl_cos() of its pixels
  *
  * Additional casting is performed according to the input and output image
  * types following C++ default casting rules.
@@ -73,12 +73,12 @@ class ITK_EXPORT CosImageAdaptor : public
 {
 public:
   /** Standard class typedefs. */
-  typedef CosImageAdaptor  Self;
+  typedef CosImageAdaptor                                   Self;
   typedef ImageAdaptor<TImage,Accessor::CosPixelAccessor<
                                        typename TImage::PixelType,
                                        TOutputPixelType> >  Superclass;
-  typedef SmartPointer<Self>  Pointer;
-  typedef SmartPointer<const Self>  ConstPointer;
+  typedef SmartPointer<Self>                                Pointer;
+  typedef SmartPointer<const Self>                          ConstPointer;
   
   /** Method for creation through the object factory. */
   itkNewMacro(Self);  
@@ -86,11 +86,11 @@ public:
   /** Run-time type information (and related methods). */
   itkTypeMacro( CosImageAdaptor, ImageAdaptor );
 
- protected:
+protected:
   CosImageAdaptor() {}
   virtual ~CosImageAdaptor() {}
   
- private:
+private:
   CosImageAdaptor(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
 };

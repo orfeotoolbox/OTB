@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkSymmetricEllipsoidInteriorExteriorSpatialFunction.txx,v $
   Language:  C++
-  Date:      $Date: 2005/05/06 18:53:39 $
-  Version:   $Revision: 1.16 $
+  Date:      $Date: 2006/03/19 04:36:59 $
+  Version:   $Revision: 1.17 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -57,9 +57,9 @@ SymmetricEllipsoidInteriorExteriorSpatialFunction<VDimension, TInput>
     pointVector[i] = position[i] - m_Center[i];
     }
 
-  uniqueTerm = pow(static_cast<double>(((pointVector * m_Orientation)/(.5*m_UniqueAxis))),static_cast<double>(2));
+  uniqueTerm = vcl_pow(static_cast<double>(((pointVector * m_Orientation)/(.5*m_UniqueAxis))),static_cast<double>(2));
   symmetricVector = pointVector - (m_Orientation * (pointVector * m_Orientation));
-  symmetricTerm = pow(static_cast<double>(((symmetricVector.GetNorm())/(.5*m_SymmetricAxes))),static_cast<double>(2));
+  symmetricTerm = vcl_pow(static_cast<double>(((symmetricVector.GetNorm())/(.5*m_SymmetricAxes))),static_cast<double>(2));
 
   if((uniqueTerm + symmetricTerm) >= 0 && (uniqueTerm + symmetricTerm) <= 1)
     {    

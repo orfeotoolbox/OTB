@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkBinaryThresholdSpatialFunction.h,v $
   Language:  C++
-  Date:      $Date: 2006/02/06 22:01:53 $
-  Version:   $Revision: 1.6 $
+  Date:      $Date: 2006/03/19 23:21:39 $
+  Version:   $Revision: 1.8 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -45,12 +45,12 @@ class ITK_EXPORT BinaryThresholdSpatialFunction :
 {
 public:
   /** Standard class typedefs. */
-  typedef BinaryThresholdSpatialFunction Self;
+  typedef BinaryThresholdSpatialFunction                       Self;
   typedef SpatialFunction< bool, 
                            ::itk::GetImageDimension<TFunction>::ImageDimension, 
                            ITK_TYPENAME TFunction::InputType > Superclass;
-  typedef SmartPointer<Self> Pointer;
-  typedef SmartPointer<const Self>  ConstPointer;
+  typedef SmartPointer<Self>                                   Pointer;
+  typedef SmartPointer<const Self>                             ConstPointer;
   
   /** Run-time type information (and related methods). */
   itkTypeMacro(BinaryThresholdSpatialFunction, SpatialFunction);

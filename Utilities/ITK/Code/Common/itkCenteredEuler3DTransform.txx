@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkCenteredEuler3DTransform.txx,v $
   Language:  C++
-  Date:      $Date: 2006/01/28 17:16:32 $
-  Version:   $Revision: 1.8 $
+  Date:      $Date: 2006/03/19 04:36:58 $
+  Version:   $Revision: 1.10 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -14,8 +14,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef _itkCenteredEuler3DTransform_txx
-#define _itkCenteredEuler3DTransform_txx
+#ifndef __itkCenteredEuler3DTransform_txx
+#define __itkCenteredEuler3DTransform_txx
 
 #include "itkCenteredEuler3DTransform.h"
 
@@ -138,12 +138,12 @@ CenteredEuler3DTransform<TScalarType>::
 GetJacobian( const InputPointType & p ) const
 {
   // need to check if angles are in the right order
-  const double cx = cos(this->GetAngleX());
-  const double sx = sin(this->GetAngleX());
-  const double cy = cos(this->GetAngleY());
-  const double sy = sin(this->GetAngleY()); 
-  const double cz = cos(this->GetAngleZ());
-  const double sz = sin(this->GetAngleZ());
+  const double cx = vcl_cos(this->GetAngleX());
+  const double sx = vcl_sin(this->GetAngleX());
+  const double cy = vcl_cos(this->GetAngleY());
+  const double sy = vcl_sin(this->GetAngleY()); 
+  const double cz = vcl_cos(this->GetAngleZ());
+  const double sz = vcl_sin(this->GetAngleZ());
 
   this->m_Jacobian.Fill(0.0);
 
@@ -164,7 +164,8 @@ GetJacobian( const InputPointType & p ) const
     
     this->m_Jacobian[0][2] = (-sz*cy)*px+(-sz*sy*sx-cz*cx)*py
                                         +(-sz*sy*cx+cz*sx)*pz;
-    this->m_Jacobian[1][2] = (cz*cy)*px+(cz*sy*sx-sz*cx)*py+(cz*sy*cx+sz*sx)*pz;  
+    this->m_Jacobian[1][2] = (cz*cy)*px+(cz*sy*sx-sz*cx)*py
+                                                        +(cz*sy*cx+sz*sx)*pz;  
     this->m_Jacobian[2][2] = 0;
     }
   else

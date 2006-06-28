@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkFloodFilledSpatialFunctionConditionalConstIterator.txx,v $
   Language:  C++
-  Date:      $Date: 2004/12/11 20:29:18 $
-  Version:   $Revision: 1.12 $
+  Date:      $Date: 2006/03/19 04:36:58 $
+  Version:   $Revision: 1.13 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -108,7 +108,7 @@ FloodFilledSpatialFunctionConditionalConstIterator<TImage, TFunction>
   unsigned int counter;
   unsigned int counterCopy;
   unsigned int dim = TImage::ImageDimension;
-  unsigned int numReps = static_cast<unsigned int>( pow(
+  unsigned int numReps = static_cast<unsigned int>( vcl_pow(
                                                       static_cast<double>( 2.0 ),
                                                       static_cast<double>( dim ) ) );
 
@@ -153,7 +153,7 @@ FloodFilledSpatialFunctionConditionalConstIterator<TImage, TFunction>
   unsigned int counter;
   unsigned int counterCopy;
   unsigned int dim = TImage::ImageDimension;
-  unsigned int numReps = static_cast<unsigned int>( pow(
+  unsigned int numReps = static_cast<unsigned int>( vcl_pow(
                                                       static_cast<double>( 2.0 ),
                                                       static_cast<double>( dim ) ) );
   IndexType tempIndex;

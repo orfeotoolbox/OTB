@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkImageFunction.h,v $
   Language:  C++
-  Date:      $Date: 2006/02/27 20:20:05 $
-  Version:   $Revision: 1.38 $
+  Date:      $Date: 2006/05/09 09:02:38 $
+  Version:   $Revision: 1.39 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -171,7 +171,7 @@ public:
     this->ConvertContinuousIndexToNearestIndex( cindex, index );
     }
 
-  /** Convert point to continuous idnex */
+  /** Convert point to continuous index */
    void ConvertPointToContinousIndex( const PointType & point,
     ContinuousIndexType & cindex ) const
     {

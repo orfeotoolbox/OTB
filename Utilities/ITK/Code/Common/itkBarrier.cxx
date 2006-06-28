@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkBarrier.cxx,v $
   Language:  C++
-  Date:      $Date: 2006/02/06 22:08:11 $
-  Version:   $Revision: 1.6 $
+  Date:      $Date: 2006/03/16 22:07:44 $
+  Version:   $Revision: 1.7 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -73,7 +73,8 @@ void Barrier::Initialize( unsigned int n )
   // Create the reservoir.
   if (Barrier::m_ReservoirInitialized == false)
     {
-    Barrier::m_Reservoir = atomic_alloc_reservoir(USE_DEFAULT_PM, m_MaxBarriers, 0);
+    Barrier::m_Reservoir = atomic_alloc_reservoir(USE_DEFAULT_PM, 
+                                                  m_MaxBarriers, 0);
     if (Barrier::m_Reservoir != 0)
       {
       Barrier::m_ReservoirInitialized = true;
@@ -130,4 +131,3 @@ void Barrier::Wait()
 }
 
 }// end namespace itk
-

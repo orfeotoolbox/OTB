@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkBSplineInterpolationWeightFunction.h,v $
   Language:  C++
-  Date:      $Date: 2006/02/06 22:01:53 $
-  Version:   $Revision: 1.6 $
+  Date:      $Date: 2006/03/18 20:13:35 $
+  Version:   $Revision: 1.7 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -55,9 +55,9 @@ public:
   /** Standard class typedefs. */
   typedef BSplineInterpolationWeightFunction Self;
   typedef FunctionBase< ContinuousIndex<TCoordRep,VSpaceDimension>,
-            Array<double> > Superclass;
-  typedef SmartPointer<Self>  Pointer;
-  typedef SmartPointer<const Self>  ConstPointer;
+            Array<double> >                  Superclass;
+  typedef SmartPointer<Self>                 Pointer;
+  typedef SmartPointer<const Self>           ConstPointer;
 
   /** New macro for creation of through the object factory.*/
   itkNewMacro( Self );
@@ -76,7 +76,7 @@ public:
 
   /** Index and size typedef support. */
   typedef Index<VSpaceDimension> IndexType;
-  typedef Size<VSpaceDimension> SizeType;
+  typedef Size<VSpaceDimension>  SizeType;
 
   /** ContinuousIndex typedef support. */
   typedef ContinuousIndex<TCoordRep,VSpaceDimension> ContinuousIndexType;
@@ -124,8 +124,7 @@ private:
   TableType m_OffsetToIndexTable;
 
   /** Interpolation kernel type. */
-  typedef BSplineKernelFunction<itkGetStaticConstMacro(SplineOrder)>
-     KernelType;
+  typedef BSplineKernelFunction<itkGetStaticConstMacro(SplineOrder)> KernelType;
   
   /** Interpolation kernel. */
   typename KernelType::Pointer m_Kernel;

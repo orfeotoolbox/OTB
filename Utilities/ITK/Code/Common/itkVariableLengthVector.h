@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkVariableLengthVector.h,v $
   Language:  C++
-  Date:      $Date: 2006/03/10 18:13:40 $
-  Version:   $Revision: 1.7 $
+  Date:      $Date: 2006/04/21 00:09:54 $
+  Version:   $Revision: 1.8 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -425,6 +425,7 @@ std::ostream & operator<<(std::ostream &os, const VariableLengthVector<TValueTyp
 
 } // namespace itk
 
+#include "itkNumericTraitsVariableLengthVectorPixel.h"
 
 #ifndef ITK_MANUAL_INSTANTIATION
 #include "itkVariableLengthVector.txx"

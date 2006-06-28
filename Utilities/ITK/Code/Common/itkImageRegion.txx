@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkImageRegion.txx,v $
   Language:  C++
-  Date:      $Date: 2003/09/10 14:29:11 $
-  Version:   $Revision: 1.18 $
+  Date:      $Date: 2006/04/13 17:57:25 $
+  Version:   $Revision: 1.19 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -19,6 +19,7 @@
 =========================================================================*/
 #ifndef _itkImageRegion_txx
 #define _itkImageRegion_txx
+
 #include "itkImageRegion.h"
 
 namespace itk
@@ -192,6 +193,13 @@ ImageRegion<VImageDimension>
   return ImageRegion<SliceDimension>(sliceIndex, sliceSize);
 }
 
+template<unsigned int VImageDimension>
+std::ostream & operator<<(std::ostream &os, const ImageRegion<VImageDimension> &region)
+{
+  region.Print(os);
+  return os;
+}
 
 } // end namespace itk
+
 #endif

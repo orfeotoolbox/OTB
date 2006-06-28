@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkContinuousIndex.h,v $
   Language:  C++
-  Date:      $Date: 2003/09/10 14:29:05 $
-  Version:   $Revision: 1.8 $
+  Date:      $Date: 2006/03/19 23:23:51 $
+  Version:   $Revision: 1.9 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -26,12 +26,12 @@ namespace itk
 /** \class ContinuousIndex
  * \brief A templated class holding a point in n-Dimensional image space.
  * 
- * ContinuousIndex is a templated class that holds a set of coordinates (components).
- * The template parameter TCoordRep can
- * be any data type that behaves like a primitive (or atomic) data type (int,
- * short, float, complex).  The VIndexDimension defines the number of
- * components in the continous index array. 
- *
+ * ContinuousIndex is a templated class that holds a set of coordinates 
+ * (components).
+ * The template parameter TCoordRep can be any data type that behaves 
+ * like a primitive (or atomic) data type (int, short, float, complex).  
+ * The VIndexDimension defines the number of  components in the continous 
+ * index array. 
  * 
  * \sa Point
  * \sa Index
@@ -40,13 +40,12 @@ namespace itk
  * \ingroup ImageObjects
  *
  */
-
 template<class TCoordRep = double, unsigned int VIndexDimension=2>
 class ContinuousIndex : public Point< TCoordRep, VIndexDimension >
 {
 public:
   /** Standard class typedefs. */
-  typedef ContinuousIndex  Self;
+  typedef ContinuousIndex                   Self;
   typedef Point<TCoordRep,VIndexDimension>  Superclass;
   
   /** ValueType can be used to declare a variable that is the same type
@@ -70,7 +69,6 @@ public:
 
   /** Pass-through constructor to the Point base class. */
   ContinuousIndex(const Self& r): Superclass(r) {}
-//  ContinuousIndex(const Superclass& r) : Superclass(r) {}
   ContinuousIndex(const ValueType r[IndexDimension]): Superclass(r) {}  
   
   /** Construct from discrete index type */
@@ -82,8 +80,6 @@ public:
       }
     }
 };
-
-
 
 } // namespace itk
 

@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkCenteredTransformInitializer.h,v $
   Language:  C++
-  Date:      $Date: 2004/04/26 02:17:29 $
-  Version:   $Revision: 1.7 $
+  Date:      $Date: 2006/03/19 23:22:26 $
+  Version:   $Revision: 1.9 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -27,7 +27,8 @@
 namespace itk
 {
 
-/** \brief CenteredTransformInitializer is a helper class intended to
+/** \class CenteredTransformInitializer
+ * \brief CenteredTransformInitializer is a helper class intended to
  * initialize the center of rotation and the translation of Transforms having
  * the center of rotation among their parameters.
  * 
@@ -56,11 +57,10 @@ namespace itk
  * 
  * \ingroup Transforms
  */
-template < class TTransform,     
+template < class TTransform,
            class TFixedImage,
            class TMovingImage > 
-class ITK_EXPORT CenteredTransformInitializer : 
-            public Object
+class ITK_EXPORT CenteredTransformInitializer : public Object
 {
 public:
   /** Standard class typedefs. */
@@ -80,11 +80,13 @@ public:
   typedef typename TransformType::Pointer   TransformPointer;
 
   /** Dimension of parameters. */
-  itkStaticConstMacro(SpaceDimension, unsigned int, TransformType::SpaceDimension);
-  itkStaticConstMacro(InputSpaceDimension, unsigned int, TransformType::InputSpaceDimension);
-  itkStaticConstMacro(OutputSpaceDimension, unsigned int, TransformType::OutputSpaceDimension);
+  itkStaticConstMacro(SpaceDimension, unsigned int, 
+                      TransformType::SpaceDimension);
+  itkStaticConstMacro(InputSpaceDimension, unsigned int, 
+                      TransformType::InputSpaceDimension);
+  itkStaticConstMacro(OutputSpaceDimension, unsigned int, 
+                      TransformType::OutputSpaceDimension);
 
-  
   /** Image Types to use in the initialization of the transform */
   typedef   TFixedImage              FixedImageType;
   typedef   TMovingImage             MovingImageType;
@@ -96,8 +98,10 @@ public:
   typedef ImageMomentsCalculator< FixedImageType >   FixedImageCalculatorType;
   typedef ImageMomentsCalculator< MovingImageType >  MovingImageCalculatorType;
 
-  typedef   typename FixedImageCalculatorType::Pointer    FixedImageCalculatorPointer;
-  typedef   typename MovingImageCalculatorType::Pointer   MovingImageCalculatorPointer;
+  typedef typename FixedImageCalculatorType::Pointer
+                                                 FixedImageCalculatorPointer;
+  typedef typename MovingImageCalculatorType::Pointer 
+                                                 MovingImageCalculatorPointer;
 
 
   /** Offset type. */

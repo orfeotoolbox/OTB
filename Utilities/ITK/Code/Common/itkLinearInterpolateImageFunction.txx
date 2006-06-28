@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkLinearInterpolateImageFunction.txx,v $
   Language:  C++
-  Date:      $Date: 2006/02/06 22:01:56 $
-  Version:   $Revision: 1.32 $
+  Date:      $Date: 2006/03/19 04:36:59 $
+  Version:   $Revision: 1.33 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -80,7 +80,7 @@ LinearInterpolateImageFunction< TInputImage, TCoordRep >
     {
     // The following "if" block is equivalent to the following line without
     // having to call floor.
-    //    baseIndex[dim] = (long) floor( index[dim] );
+    //    baseIndex[dim] = (long) vcl_floor(index[dim] );
     if (index[dim] >= 0.0)
       {
       baseIndex[dim] = (long) index[dim];

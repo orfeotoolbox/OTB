@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkScaleLogarithmicTransform.txx,v $
   Language:  C++
-  Date:      $Date: 2006/01/27 03:37:09 $
-  Version:   $Revision: 1.4 $
+  Date:      $Date: 2006/03/19 04:36:59 $
+  Version:   $Revision: 1.5 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -51,7 +51,7 @@ ScaleLogarithmicTransform<ScalarType, NDimensions>
   ScaleType scales;
   for( unsigned int i=0; i<SpaceDimension; i++ )
     {
-    scales[i] = exp( parameters[i] );
+    scales[i] = vcl_exp(parameters[i] );
     }
   this->m_Parameters = parameters;
   this->SetScale( scales );
@@ -75,7 +75,7 @@ ScaleLogarithmicTransform<TScalarType,NDimensions>
   // Transfer the translation part
   for(unsigned int i=0; i < SpaceDimension; i++) 
     {
-    this->m_Parameters[i] = log( scales[i] );
+    this->m_Parameters[i] = vcl_log(scales[i] );
     }
 
   itkDebugMacro(<<"After getting parameters " << this->m_Parameters );

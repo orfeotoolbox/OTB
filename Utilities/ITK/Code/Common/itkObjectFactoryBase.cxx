@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkObjectFactoryBase.cxx,v $
   Language:  C++
-  Date:      $Date: 2005/05/03 00:46:49 $
-  Version:   $Revision: 1.40 $
+  Date:      $Date: 2006/05/10 20:27:16 $
+  Version:   $Revision: 1.42 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -61,7 +61,7 @@ bool operator==(const ObjectFactoryBase::OverrideInformation& rhs,
                 const ObjectFactoryBase::OverrideInformation& lhs)
 {
   return (rhs.m_Description == lhs.m_Description
-          && rhs.m_OverrideWithName == lhs.m_OverrideWithName);
+       && rhs.m_OverrideWithName == lhs.m_OverrideWithName);
 }
 
 /**
@@ -400,7 +400,7 @@ ObjectFactoryBase
 {
   if ( factory->m_LibraryHandle == 0 )
     {
-    const char* nonDynamicName = "Non-Dynamicly loaded factory";
+    const char nonDynamicName[] = "Non-Dynamicaly loaded factory";
     factory->m_LibraryPath = nonDynamicName;
     }
   if ( strcmp(factory->GetITKSourceVersion(), 
@@ -515,7 +515,6 @@ LightObject::Pointer
 ObjectFactoryBase
 ::CreateObject(const char* itkclassname)
 {
-  m_OverrideMap->find(itkclassname);
   OverRideMap::iterator pos = m_OverrideMap->find(itkclassname);
   if ( pos != m_OverrideMap->end() )
     {
