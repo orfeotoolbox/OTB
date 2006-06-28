@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkBrains2HeaderBase.cxx,v $
   Language:  C++
-  Date:      $Date: 2006/02/05 20:57:46 $
-  Version:   $Revision: 1.7 $
+  Date:      $Date: 2006/04/17 12:59:57 $
+  Version:   $Revision: 1.8 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -99,9 +99,7 @@ std::ifstream & Brains2HeaderBase::ReadBrains2Header(std::ifstream  & inputstrea
 //DEBUG:    std::cerr << "ReadBrains2Header: Key is |" << Key << "|" << std::endl;
     if(inputstream.eof() == true)
       {
-      ExceptionObject exception(__FILE__, __LINE__);
-      exception.SetDescription("Unexpected end of file");
-      throw exception;
+      itkGenericExceptionMacro(<< "Unexpected end of file");
       }
     //Check for the case where the specific header type begins and ends
     //i.e. MASK_HEADER_BEGIN and MASK_HEADER_END, or IMAGE_HEADER_BEGIN and IMAGE_HEADER_END

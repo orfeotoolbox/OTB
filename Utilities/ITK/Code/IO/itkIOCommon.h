@@ -3,8 +3,8 @@
 Program:   Insight Segmentation & Registration Toolkit
 Module:    $RCSfile: itkIOCommon.h,v $
 Language:  C++
-Date:      $Date: 2004/03/23 18:09:11 $
-Version:   $Revision: 1.19 $
+Date:      $Date: 2006/03/31 17:22:47 $
+Version:   $Revision: 1.20 $
 
 Copyright (c) Insight Software Consortium. All rights reserved.
 See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -89,6 +89,7 @@ extern const char *const SPM_ROI_SCALE;
 extern const char *const ITK_FileNotes;
 extern const char *const ITK_CoordinateOrientation;
 extern const char *const ITK_Origin;
+extern const char *const ITK_Spacing;
 extern const char *const ITK_FileOriginator;
 extern const char *const ITK_OriginationDate;
 extern const char *const ITK_PatientID;

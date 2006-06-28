@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkImageSeriesWriter.txx,v $
   Language:  C++
-  Date:      $Date: 2005/04/24 17:37:43 $
-  Version:   $Revision: 1.22 $
+  Date:      $Date: 2006/05/04 15:50:31 $
+  Version:   $Revision: 1.26 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -25,6 +25,8 @@
 #include "itkProgressReporter.h"
 #include "itkImageRegionIterator.h"
 #include "itkImageRegionConstIterator.h"
+#include "itkMetaDataObject.h"
+#include "itkArray.h"
 
 #include <stdio.h>
 namespace itk
@@ -260,32 +262,32 @@ ImageSeriesWriter<TInputImage,TOutputImage>
   // dimension of the input.
   for ( unsigned int i=0; i < TOutputImage::ImageDimension; i++ )
     {
-    outRegion.SetSize(i,inputImage->GetRequestedRegion().GetSize()[i]);
+    outRegion.SetSize( i, inputImage->GetRequestedRegion().GetSize()[i] );
     }
 
   // Allocate an image for output and create an iterator for it
   typename OutputImageType::Pointer outputImage = OutputImageType::New();
-    outputImage->SetRegions(outRegion);
+    outputImage->SetRegions( outRegion );
     outputImage->Allocate();
-  ImageRegionIterator<OutputImageType> ot (outputImage, outRegion );
+  ImageRegionIterator<OutputImageType> ot( outputImage, outRegion );
 
   // Set the origin and spacing of the output
   double spacing[TOutputImage::ImageDimension];
   double origin[TOutputImage::ImageDimension];
   typename TOutputImage::DirectionType direction;
-  for ( unsigned int i=0; i < TOutputImage::ImageDimension; i++ )
+  for( unsigned int i=0; i < TOutputImage::ImageDimension; i++ )
     {
     origin[i] = inputImage->GetOrigin()[i];
     spacing[i] = inputImage->GetSpacing()[i];
     outRegion.SetSize(i,inputImage->GetRequestedRegion().GetSize()[i]);
-    for ( unsigned int j=0; j < TOutputImage::ImageDimension; j++ )
+    for( unsigned int j=0; j < TOutputImage::ImageDimension; j++ )
       {
       direction[j][i] = inputImage->GetDirection()[j][i];
       }
     }
-  outputImage->SetOrigin(origin);
-  outputImage->SetSpacing(spacing);
-  outputImage->SetDirection(direction);
+  outputImage->SetOrigin( origin );
+  outputImage->SetSpacing( spacing );
+  outputImage->SetDirection( direction );
   
   Index<TInputImage::ImageDimension> inIndex;
   Size<TInputImage::ImageDimension> inSize;
@@ -293,15 +295,15 @@ ImageSeriesWriter<TInputImage,TOutputImage>
   unsigned long pixelsPerFile = outputImage->GetRequestedRegion().GetNumberOfPixels();
 
   inSize.Fill(1);
-  for (unsigned int ns = 0; ns < TOutputImage::ImageDimension; ns++)
+  for( unsigned int ns = 0; ns < TOutputImage::ImageDimension; ns++ )
     {
     inSize[ns] = outRegion.GetSize()[ns]; 
     }
 
   unsigned int expectedNumberOfFiles = 1;
-  for (unsigned int n = TOutputImage::ImageDimension;
+  for( unsigned int n = TOutputImage::ImageDimension;
        n < TInputImage::ImageDimension;
-       n++)
+       n++ )
     {
     expectedNumberOfFiles *= inRegion.GetSize(n);
     }
@@ -318,20 +320,20 @@ ImageSeriesWriter<TInputImage,TOutputImage>
   itkDebugMacro( <<"Number of files to write = " << m_FileNames.size() );
 
 
-  ProgressReporter progress(this, 0, 
-                            expectedNumberOfFiles,
-                            expectedNumberOfFiles);
+  ProgressReporter progress( this, 0, 
+                             expectedNumberOfFiles,
+                             expectedNumberOfFiles );
 
   // For each "slice" in the input, copy the region to the output,
   // build a filename and write the file.
 
   typename InputImageType::OffsetValueType offset = 0;
-  for (unsigned int slice=0; slice < m_FileNames.size(); slice++)
+  for( unsigned int slice=0; slice < m_FileNames.size(); slice++ )
     {
     // Select a "slice" of the image. 
-    inIndex = inputImage->ComputeIndex(offset);
-    inRegion.SetIndex(inIndex);
-    inRegion.SetSize(inSize);
+    inIndex = inputImage->ComputeIndex( offset );
+    inRegion.SetIndex( inIndex );
+    inRegion.SetSize( inSize );
 
     ImageRegionConstIterator<InputImageType> it (inputImage,
                                                  inRegion);
@@ -339,9 +341,9 @@ ImageSeriesWriter<TInputImage,TOutputImage>
     // Copy the selected "slice" into the output image.
     it.GoToBegin();
     ot.GoToBegin();
-    while (!ot.IsAtEnd())
+    while( !ot.IsAtEnd() )
       {
-      ot.Set(it.Get());
+      ot.Set( it.Get() );
       ++it;
       ++ot;
       }
@@ -349,19 +351,64 @@ ImageSeriesWriter<TInputImage,TOutputImage>
     typename WriterType::Pointer writer = WriterType::New();
     
     writer->UseInputMetaDataDictionaryOff(); // use the dictionary from the ImageIO class
-    writer->SetInput(outputImage);
+    writer->SetInput( outputImage );
 
-    if (m_ImageIO)
+    if( m_ImageIO )
       {
-      writer->SetImageIO(m_ImageIO);
+      writer->SetImageIO( m_ImageIO );
       }
 
     if( m_MetaDataDictionaryArray )
       {
-      DictionaryRawPointer dictionary = (*m_MetaDataDictionaryArray)[slice];
-      m_ImageIO->SetMetaDataDictionary( (*dictionary) );
+      if( m_ImageIO )
+        {
+        if( slice > m_MetaDataDictionaryArray->size() - 1 )
+          {
+          itkExceptionMacro ("The slice number: " << slice + 1 << " exceeds the size of the MetaDataDictionaryArray " << m_MetaDataDictionaryArray->size() << ".");
+          }
+        DictionaryRawPointer dictionary = (*m_MetaDataDictionaryArray)[slice];
+        m_ImageIO->SetMetaDataDictionary( (*dictionary) );
+        }
+      else
+        {
+        itkExceptionMacro(<< "Attempted to use a MetaDataDictionaryArray without specifying an ImageIO!");
+        }
       }
+    else
+      {
+      if( m_ImageIO )
+        {
+        DictionaryType & dictionary = m_ImageIO->GetMetaDataDictionary();
 
+
+        typename InputImageType::SpacingType spacing = inputImage->GetSpacing();
+
+        // origin of the outpu slice in the 
+        // N-Dimensional space of the input image.
+        typename InputImageType::PointType   origin;  
+    
+        inputImage->TransformIndexToPhysicalPoint( inIndex, origin );
+
+        const unsigned int inputImageDimension = TInputImage::ImageDimension;
+
+        typedef Array< double > DoubleArrayType;
+
+        DoubleArrayType originArray(  inputImageDimension );
+        DoubleArrayType spacingArray( inputImageDimension );
+
+        for( unsigned int d = 0; d < inputImageDimension; d++ )
+          {
+          originArray[ d ]  = origin[ d ];
+          spacingArray[ d ] = spacing[ d ];
+          }
+
+        EncapsulateMetaData< DoubleArrayType >( dictionary, ITK_Origin, originArray );
+        EncapsulateMetaData< DoubleArrayType >( dictionary, ITK_Spacing, spacingArray );
+        EncapsulateMetaData<  unsigned int   >( dictionary, ITK_NumberOfDimensions, inputImageDimension );
+
+        }
+      }
+    
     writer->SetFileName( m_FileNames[slice].c_str() );
     writer->Update();
 
@@ -375,7 +422,7 @@ ImageSeriesWriter<TInputImage,TOutputImage>
 template <class TInputImage,class TOutputImage>
 void 
 ImageSeriesWriter<TInputImage,TOutputImage>
-::PrintSelf(std::ostream& os, Indent indent) const
+::PrintSelf( std::ostream& os, Indent indent ) const
 {
   Superclass::PrintSelf(os,indent);
 

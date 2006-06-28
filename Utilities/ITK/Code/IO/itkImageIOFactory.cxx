@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkImageIOFactory.cxx,v $
   Language:  C++
-  Date:      $Date: 2005/11/14 15:07:11 $
-  Version:   $Revision: 1.29 $
+  Date:      $Date: 2006/05/10 20:27:16 $
+  Version:   $Revision: 1.31 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -40,15 +40,15 @@
 
 namespace itk
 {
-  
-ImageIOBase::Pointer 
+
+ImageIOBase::Pointer
 ImageIOFactory::CreateImageIO(const char* path, FileModeType mode)
 {
 
   RegisterBuiltInFactories();
 
   std::list<ImageIOBase::Pointer> possibleImageIO;
-  std::list<LightObject::Pointer> allobjects = 
+  std::list<LightObject::Pointer> allobjects =
     ObjectFactoryBase::CreateAllInstance("itkImageIOBase");
   for(std::list<LightObject::Pointer>::iterator i = allobjects.begin();
       i != allobjects.end(); ++i)
@@ -61,13 +61,13 @@ ImageIOFactory::CreateImageIO(const char* path, FileModeType mode)
     else
       {
       std::cerr << "Error ImageIO factory did not return an ImageIOBase: "
-                << (*i)->GetNameOfClass() 
+                << (*i)->GetNameOfClass()
                 << std::endl;
       }
     }
   for(std::list<ImageIOBase::Pointer>::iterator k = possibleImageIO.begin();
       k != possibleImageIO.end(); ++k)
-    { 
+    {
     if( mode == ReadMode )
       {
       if((*k)->CanReadFile(path))
@@ -94,17 +94,17 @@ ImageIOFactory::RegisterBuiltInFactories()
 
   static SimpleMutexLock mutex;
   {
-  // This helper class makes sure the Mutex is unlocked 
+  // This helper class makes sure the Mutex is unlocked
   // in the event an exception is thrown.
   MutexLockHolder<SimpleMutexLock> mutexHolder( mutex );
   if( firstTime )
     {
+    ObjectFactoryBase::RegisterFactory( BioRadImageIOFactory::New() );
     ObjectFactoryBase::RegisterFactory( GDCMImageIOFactory::New() );
     ObjectFactoryBase::RegisterFactory( MetaImageIOFactory::New() );
     ObjectFactoryBase::RegisterFactory( PNGImageIOFactory::New() );
     ObjectFactoryBase::RegisterFactory( VTKImageIOFactory::New() );
     ObjectFactoryBase::RegisterFactory( GiplImageIOFactory::New() );
-    ObjectFactoryBase::RegisterFactory( BioRadImageIOFactory::New() );
     ObjectFactoryBase::RegisterFactory( LSMImageIOFactory::New()); //should be before TIFF
     ObjectFactoryBase::RegisterFactory( NiftiImageIOFactory::New());
     ObjectFactoryBase::RegisterFactory( AnalyzeImageIOFactory::New());

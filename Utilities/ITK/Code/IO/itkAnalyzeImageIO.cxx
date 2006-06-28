@@ -2,8 +2,8 @@
 Program:   Insight Segmentation & Registration Toolkit
 Module:    $RCSfile: itkAnalyzeImageIO.cxx,v $
 Language:  C++
-Date:      $Date: 2006/02/16 00:35:15 $
-Version:   $Revision: 1.67 $
+Date:      $Date: 2006/05/26 15:07:46 $
+Version:   $Revision: 1.69 $
 
 Copyright (c) Insight Software Consortium. All rights reserved.
 See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -810,10 +810,23 @@ void AnalyzeImageIO::ReadImageInformation()
   //   m_hdr.dime.dim[3] = 1;
   //   m_hdr.dime.dim[4] = 1;
   unsigned int numberOfDimensions = this->m_hdr.dime.dim[0];
+
+  if (numberOfDimensions == 0)
+    {
+    itkExceptionMacro("AnalyzeImageIO cannot process file: "
+                      << this->GetFileName()
+                      << ". Number of dimensions is 0." <<std::endl
+                      << "hdr.dime[0] = " << m_hdr.dime.dim[0] << std::endl
+                      << "hdr.dime[1] = " << m_hdr.dime.dim[1] << std::endl
+                      << "hdr.dime[2] = " << m_hdr.dime.dim[2] << std::endl
+                      << "hdr.dime[3] = " << m_hdr.dime.dim[3] << std::endl
+                      << "hdr.dime[4] = " << m_hdr.dime.dim[4] << std::endl);
+    return;
+    }
   while(this->m_hdr.dime.dim[numberOfDimensions] <=1 )
-      {
-      --numberOfDimensions;
-      }
+    {
+    --numberOfDimensions;
+    }
     
   this->SetNumberOfDimensions(numberOfDimensions);
   switch( this->m_hdr.dime.datatype )

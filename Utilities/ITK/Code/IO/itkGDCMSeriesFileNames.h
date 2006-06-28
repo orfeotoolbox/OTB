@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkGDCMSeriesFileNames.h,v $
   Language:  C++
-  Date:      $Date: 2006/02/05 19:48:05 $
-  Version:   $Revision: 1.11 $
+  Date:      $Date: 2006/06/06 12:53:07 $
+  Version:   $Revision: 1.12.2.1 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -21,7 +21,7 @@
 #include "itkObjectFactory.h"
 #include "itkExceptionObject.h"
 #include <vector>
-#include "gdcm/src/gdcmSerieHelper.h"
+#include "gdcmSerieHelper.h"
 
 namespace itk
 {
@@ -161,6 +161,24 @@ public:
     m_SerieHelper->AddRestriction( tag );
     }
 
+
+  /** Parse any sequences in the DICOM file. Defaults to false
+   *  to skip sequences. This makes loading DICOM files faster when
+   *  sequences are not needed.
+   */
+  itkSetMacro(LoadSequences, bool);
+  itkGetMacro(LoadSequences, bool);
+  itkBooleanMacro(LoadSequences);
+
+  /** Parse any private tags in the DICOM file. Defaults to false
+   * to skip private tags. This makes loading DICOM files faster when
+   * private tags are not needed.
+   */
+  itkSetMacro(LoadPrivateTags, bool);
+  itkGetMacro(LoadPrivateTags, bool);
+  itkBooleanMacro(LoadPrivateTags);
+
+  
 protected:
   GDCMSeriesFileNames();
   ~GDCMSeriesFileNames();
@@ -187,6 +205,9 @@ private:
   SerieUIDContainer m_SeriesUIDs;
 
   bool              m_UseSeriesDetails;
+  bool m_LoadSequences;
+  bool m_LoadPrivateTags;
+
 };
 
 } //namespace ITK

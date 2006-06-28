@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkGDCMImageIO.cxx,v $
   Language:  C++
-  Date:      $Date: 2006/03/08 18:28:57 $
-  Version:   $Revision: 1.93 $
+  Date:      $Date: 2006/06/06 12:53:07 $
+  Version:   $Revision: 1.105.2.1 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -18,7 +18,9 @@
 
 =========================================================================*/
 #include "itkGDCMImageIO.h"
+#include "itkIOCommon.h"
 #include "itkPoint.h"
+#include "itkArray.h"
 #include "itkMatrix.h"
 #include <vnl/vnl_vector.h>
 #include <vnl/vnl_matrix.h>
@@ -28,13 +30,13 @@
 
 #include <itksys/SystemTools.hxx>
 #include <itksys/Base64.h>
-#include "gdcm/src/gdcmValEntry.h" //internal of gdcm
-#include "gdcm/src/gdcmBinEntry.h" //internal of gdcm
-#include "gdcm/src/gdcmFile.h"
-#include "gdcm/src/gdcmFileHelper.h"
-#include "gdcm/src/gdcmUtil.h"
-#include "gdcm/src/gdcmGlobal.h"   // access to dictionary
-#include "gdcm/src/gdcmDictSet.h"  // access to dictionary
+#include "gdcmValEntry.h" //internal of gdcm
+#include "gdcmBinEntry.h" //internal of gdcm
+#include "gdcmFile.h"
+#include "gdcmFileHelper.h"
+#include "gdcmUtil.h"
+#include "gdcmGlobal.h"   // access to dictionary
+#include "gdcmDictSet.h"  // access to dictionary
 
 
 #include <fstream>
@@ -43,10 +45,24 @@
 
 namespace itk
 {
+class InternalHeader
+{
+public:
+  InternalHeader() : m_Header(0) {}
+  gdcm::File *m_Header;
+};
+
+// Initialize static members
+bool GDCMImageIO::m_LoadSequencesDefault = false;
+bool GDCMImageIO::m_LoadPrivateTagsDefault = false;
+
 
 GDCMImageIO::GDCMImageIO()
+  : m_LoadSequences( m_LoadSequencesDefault ),
+    m_LoadPrivateTags( m_LoadPrivateTagsDefault )
 {
-  this->SetNumberOfDimensions(3); //needed for getting the 3 coordinates of 
+  this->DICOMHeader = new InternalHeader;
+  this->SetNumberOfDimensions(3); //needed for getting the 3 coordinates of
                                   // the origin, even if it is a 2D slice.
   m_ByteOrder = LittleEndian; //default
   m_FileType = Binary;  //default...always true
@@ -65,16 +81,22 @@ GDCMImageIO::GDCMImageIO()
   m_MaxSizeLoadEntry = 0xfff;
 
   m_InternalComponentType = UNKNOWNCOMPONENTTYPE;
+
+  // by default assume that images will be 2D.
+  // This number is updated according the information 
+  // received through the MetaDataDictionary
+  m_GlobalNumberOfDimensions = 2;
 }
 
 GDCMImageIO::~GDCMImageIO()
 {
+  delete this->DICOMHeader;
 }
 
-bool GDCMImageIO::OpenGDCMFileForReading(std::ifstream& os, 
+bool GDCMImageIO::OpenGDCMFileForReading(std::ifstream& os,
                                          const char* filename)
 {
-  // Make sure that we have a file to 
+  // Make sure that we have a file to
   if ( filename == "" )
     {
     itkExceptionMacro(<<"A FileName must be specified.");
@@ -86,7 +108,7 @@ bool GDCMImageIO::OpenGDCMFileForReading(std::ifstream& os,
     {
     os.close();
     }
-  
+
   // Open the new file for reading
   itkDebugMacro(<< "Initialize: opening file " << filename);
 
@@ -102,11 +124,10 @@ bool GDCMImageIO::OpenGDCMFileForReading(std::ifstream& os,
 }
 
 
-bool GDCMImageIO::OpenGDCMFileForWriting(std::ofstream& os, 
+bool GDCMImageIO::OpenGDCMFileForWriting(std::ofstream& os,
                                          const char* filename)
-                                       
 {
-  // Make sure that we have a file to 
+  // Make sure that we have a file to
   if ( filename == "" )
     {
     itkExceptionMacro(<<"A FileName must be specified.");
@@ -118,14 +139,14 @@ bool GDCMImageIO::OpenGDCMFileForWriting(std::ofstream& os,
     {
     os.close();
     }
-  
+
   // Open the new file for writing
   itkDebugMacro(<< "Initialize: opening file " << filename);
 
 #ifdef __sgi
   // Create the file. This is required on some older sgi's
   std::ofstream tFile(filename,std::ios::out);
-  tFile.close();                    
+  tFile.close();
 #endif
 
   // Actually open the file
@@ -147,8 +168,8 @@ bool GDCMImageIO::OpenGDCMFileForWriting(std::ofstream& os,
 
 // This method will only test if the header looks like a
 // GDCM image file.
-bool GDCMImageIO::CanReadFile(const char* filename) 
-{ 
+bool GDCMImageIO::CanReadFile(const char* filename)
+{
   std::ifstream file;
   std::string fname(filename);
 
@@ -167,15 +188,8 @@ bool GDCMImageIO::CanReadFile(const char* filename)
   // Check to see if its a valid dicom file gdcm is able to parse:
   // We are parsing the header one time here:
 
-  gdcm::File header;
-  header.SetFileName( fname );
-  header.Load();
-  if (!header.IsReadable())
-    {
-    return false;
-    }
-
-  return true;
+  bool pre;
+  return gdcm::Document::CanReadFile(file, pre);
 }
 
 // Internal function to rescale pixel according to Rescale Slope/Intercept
@@ -184,10 +198,105 @@ void RescaleFunction(TBuffer* buffer, TSource *source,
                      double slope, double intercept, size_t size)
 {
   size /= sizeof(TSource);
-  for(unsigned int i=0; i<size; i++)
-   {
-   buffer[i] = (TBuffer)(source[i]*slope + intercept);
-   }
+
+  if (slope != 1.0 && intercept != 0.0)
+    {
+    // Duff's device.  Instead of this code:
+    //
+    //   for(unsigned int i=0; i<size; i++)
+    //    {
+    //    buffer[i] = (TBuffer)(source[i]*slope + intercept);
+    //    }
+    //
+    // use Duff's device which exploits "fall through"
+    register size_t n = (size + 7) / 8;
+    switch ( size % 8)
+      {
+      case 0: do { *buffer++ = (TBuffer)((*source++)*slope + intercept);
+      case 7:      *buffer++ = (TBuffer)((*source++)*slope + intercept);
+      case 6:      *buffer++ = (TBuffer)((*source++)*slope + intercept);
+      case 5:      *buffer++ = (TBuffer)((*source++)*slope + intercept);
+      case 4:      *buffer++ = (TBuffer)((*source++)*slope + intercept);
+      case 3:      *buffer++ = (TBuffer)((*source++)*slope + intercept);
+      case 2:      *buffer++ = (TBuffer)((*source++)*slope + intercept);
+      case 1:      *buffer++ = (TBuffer)((*source++)*slope + intercept);
+                 }  while (--n > 0);
+      }
+    }
+  else if (slope == 1.0 && intercept != 0.0)
+    {
+    // Duff's device.  Instead of this code:
+    //
+    //   for(unsigned int i=0; i<size; i++)
+    //    {
+    //    buffer[i] = (TBuffer)(source[i] + intercept);
+    //    }
+    //
+    // use Duff's device which exploits "fall through"
+    register size_t n = (size + 7) / 8;
+    switch ( size % 8)
+      {
+      case 0: do { *buffer++ = (TBuffer)(*source++ + intercept);
+      case 7:      *buffer++ = (TBuffer)(*source++ + intercept);
+      case 6:      *buffer++ = (TBuffer)(*source++ + intercept);
+      case 5:      *buffer++ = (TBuffer)(*source++ + intercept);
+      case 4:      *buffer++ = (TBuffer)(*source++ + intercept);
+      case 3:      *buffer++ = (TBuffer)(*source++ + intercept);
+      case 2:      *buffer++ = (TBuffer)(*source++ + intercept);
+      case 1:      *buffer++ = (TBuffer)(*source++ + intercept);
+                 }  while (--n > 0);
+      }
+    }
+  else if (slope != 1.0 && intercept == 0.0)
+    {
+    // Duff's device.  Instead of this code:
+    //
+    //   for(unsigned int i=0; i<size; i++)
+    //    {
+    //    buffer[i] = (TBuffer)(source[i]*slope);
+    //    }
+    //
+    // use Duff's device which exploits "fall through"
+    register size_t n = (size + 7) / 8;
+    switch ( size % 8)
+      {
+      case 0: do { *buffer++ = (TBuffer)((*source++)*slope);
+      case 7:      *buffer++ = (TBuffer)((*source++)*slope);
+      case 6:      *buffer++ = (TBuffer)((*source++)*slope);
+      case 5:      *buffer++ = (TBuffer)((*source++)*slope);
+      case 4:      *buffer++ = (TBuffer)((*source++)*slope);
+      case 3:      *buffer++ = (TBuffer)((*source++)*slope);
+      case 2:      *buffer++ = (TBuffer)((*source++)*slope);
+      case 1:      *buffer++ = (TBuffer)((*source++)*slope);
+                 }  while (--n > 0);
+      }
+    }
+  else
+    {
+    // Duff's device.  Instead of this code:
+    //
+    //   for(unsigned int i=0; i<size; i++)
+    //    {
+    //    buffer[i] = (TBuffer)(source[i]);
+    //    }
+    //
+    // use Duff's device which exploits "fall through"
+    register size_t n = (size + 7) / 8;
+    switch ( size % 8)
+      {
+      case 0: do { *buffer++ = (TBuffer)(*source++);
+      case 7:      *buffer++ = (TBuffer)(*source++);
+      case 6:      *buffer++ = (TBuffer)(*source++);
+      case 5:      *buffer++ = (TBuffer)(*source++);
+      case 4:      *buffer++ = (TBuffer)(*source++);
+      case 3:      *buffer++ = (TBuffer)(*source++);
+      case 2:      *buffer++ = (TBuffer)(*source++);
+      case 1:      *buffer++ = (TBuffer)(*source++);
+                 }  while (--n > 0);
+      }
+    }
+    
+    
 }
 
 
@@ -238,9 +347,8 @@ void GDCMImageIO::Read(void* buffer)
   //Should I handle differently dicom lut ?
   //GdcmHeader.HasLUT()
 
-  gdcm::FileHelper gfile;
-  gfile.SetFileName( m_FileName );
-  gfile.Load();
+  gdcm::File *header = this->DICOMHeader->m_Header;
+  gdcm::FileHelper gfile(header);
 
   size_t size = gfile.GetImageDataSize();
   unsigned char *source = (unsigned char*)gfile.GetImageData();
@@ -322,17 +430,21 @@ void GDCMImageIO::InternalReadImageInformation(std::ifstream& file)
     itkExceptionMacro(<< "Cannot read requested file");
     }
 
-  gdcm::File header;
-  header.SetMaxSizeLoadEntry(m_MaxSizeLoadEntry);
-  header.SetFileName( m_FileName );
-  header.Load();
+  gdcm::File *header = new gdcm::File;
+  delete this->DICOMHeader->m_Header;
+  this->DICOMHeader->m_Header = header;
+  header->SetMaxSizeLoadEntry(m_MaxSizeLoadEntry);
+  header->SetFileName( m_FileName );
+  header->SetLoadMode( (m_LoadSequences ? 0 : gdcm::LD_NOSEQ)
+                       | (m_LoadPrivateTags ? 0 : gdcm::LD_NOSHADOW));
+  header->Load();
 
   // We don't need to positionate the Endian related stuff (by using
   // this->SetDataByteOrderToBigEndian() or SetDataByteOrderToLittleEndian()
   // since the reading of the file is done by gdcm.
   // But we do need to set up the data type for downstream filters:
 
-  int numComp = header.GetNumberOfScalarComponents();
+  int numComp = header->GetNumberOfScalarComponents();
   this->SetNumberOfComponents(numComp);
   if (numComp == 1)
     {
@@ -342,7 +454,7 @@ void GDCMImageIO::InternalReadImageInformation(std::ifstream& file)
     {
     this->SetPixelType(RGB);
     }
-  std::string type = header.GetPixelType();
+  std::string type = header->GetPixelType();
   if( type == "8U")
     {
     SetComponentType(ImageIOBase::UCHAR);
@@ -382,17 +494,17 @@ void GDCMImageIO::InternalReadImageInformation(std::ifstream& file)
   m_InternalComponentType = m_ComponentType;
 
   // set values in case we don't find them
-  m_Dimensions[0] = header.GetXSize();
-  m_Dimensions[1] = header.GetYSize();
-  m_Dimensions[2] = header.GetZSize();
+  m_Dimensions[0] = header->GetXSize();
+  m_Dimensions[1] = header->GetYSize();
+  m_Dimensions[2] = header->GetZSize();
 
-  m_Spacing[0] = header.GetXSpacing();
-  m_Spacing[1] = header.GetYSpacing();
-  m_Spacing[2] = header.GetZSpacing();
+  m_Spacing[0] = header->GetXSpacing();
+  m_Spacing[1] = header->GetYSpacing();
+  m_Spacing[2] = header->GetZSpacing();
 
 
   float imageOrientation[6];
-  header.GetImageOrientationPatient(imageOrientation);
+  header->GetImageOrientationPatient(imageOrientation);
   vnl_vector<double> rowDirection(3), columnDirection(3);
 
   rowDirection[0] = imageOrientation[0];
@@ -410,13 +522,13 @@ void GDCMImageIO::InternalReadImageInformation(std::ifstream& file)
   this->SetDirection(2, sliceDirection);
 
   // Dicom's origin is always in LPS
-  m_Origin[0] = header.GetXOrigin();
-  m_Origin[1] = header.GetYOrigin();
-  m_Origin[2] = header.GetZOrigin();
+  m_Origin[0] = header->GetXOrigin();
+  m_Origin[1] = header->GetYOrigin();
+  m_Origin[2] = header->GetZOrigin();
 
   //For grayscale image :
-  m_RescaleSlope = header.GetRescaleSlope();
-  m_RescaleIntercept = header.GetRescaleIntercept();
+  m_RescaleSlope = header->GetRescaleSlope();
+  m_RescaleIntercept = header->GetRescaleIntercept();
 
   // Before copying the image we need to check the slope/offset
   // If they are not integer the scalar become FLOAT:
@@ -429,8 +541,8 @@ void GDCMImageIO::InternalReadImageInformation(std::ifstream& file)
   float fs = float(s);
   float fi = float(i);
 
-  double slope_dif = fabs(fs - m_RescaleSlope);
-  double inter_dif = fabs(fi - m_RescaleIntercept);
+  double slope_dif = vcl_fabs(fs - m_RescaleSlope);
+  double inter_dif = vcl_fabs(fi - m_RescaleIntercept);
   if (slope_dif > 0.0 || inter_dif > 0.0)
     {
     if (m_ComponentType != ImageIOBase::DOUBLE)
@@ -467,9 +579,9 @@ void GDCMImageIO::InternalReadImageInformation(std::ifstream& file)
   //Now copying the gdcm dictionary to the itk dictionary:
   MetaDataDictionary & dico = this->GetMetaDataDictionary();
 
-  gdcm::DocEntry* d = header.GetFirstEntry();
+  gdcm::DocEntry* d = header->GetFirstEntry();
 
-  // Copy of the header content
+  // Copy of the header->content
   while(d)
   {
     // Because BinEntry is a ValEntry...
@@ -482,7 +594,7 @@ void GDCMImageIO::InternalReadImageInformation(std::ifstream& file)
           // base64 streams have to be a multiple of 4 bytes long
           int encodedLengthEstimate = 2 * b->GetLength();
           encodedLengthEstimate = ((encodedLengthEstimate / 4) + 1) * 4;
-            
+
           char *bin = new char[encodedLengthEstimate];
           int encodedLengthActual = itksysBase64_Encode(
             (const unsigned char *) b->GetBinArea(),
@@ -490,23 +602,23 @@ void GDCMImageIO::InternalReadImageInformation(std::ifstream& file)
             (unsigned char *) bin,
             0);
           std::string encodedValue(bin, encodedLengthActual);
-          EncapsulateMetaData<std::string>(dico, b->GetKey(), encodedValue); 
+          EncapsulateMetaData<std::string>(dico, b->GetKey(), encodedValue);
           delete []bin;
-          }      
+          }
         }
       }
     else if ( gdcm::ValEntry* v = dynamic_cast<gdcm::ValEntry*>(d) )
-      {   
+      {
       // Only copying field from the public DICOM dictionary
       if( v->GetName() != "unkn")
-        {       
+        {
         EncapsulateMetaData<std::string>(dico, v->GetKey(), v->GetValue() );
         }
       }
     //else
     // We skip pb of SQ recursive exploration, and we do not copy binary entries
 
-    d = header.GetNextEntry();
+    d = header->GetNextEntry();
   }
 
   // Now is a good time to fill in the class member:
@@ -559,7 +671,7 @@ bool GDCMImageIO::CanWriteFile(const char* name)
     {
     return true;
     }
-  
+
   std::string::size_type dicomPos = filename.rfind(".dicom");
   if ( (dicomPos != std::string::npos)
        && (dicomPos == filename.length() - 6) )
@@ -573,11 +685,11 @@ bool GDCMImageIO::CanWriteFile(const char* name)
     {
     return true;
     }
-    
+
   return false;
 }
 
-void GDCMImageIO::WriteImageInformation() 
+void GDCMImageIO::WriteImageInformation()
 {
 }
 
@@ -598,11 +710,11 @@ void GDCMImageIO::Write(const void* buffer)
   std::string value;
   MetaDataDictionary & dict = this->GetMetaDataDictionary();
 #if defined(_MSC_VER) && _MSC_VER < 1300
-  // Not using real iterators, but instead the GetKeys() method 
+  // Not using real iterators, but instead the GetKeys() method
   // since VS6 is broken and does not export properly iterators
-  // GetKeys will duplicate the entire DICOM header 
+  // GetKeys will duplicate the entire DICOM header
   std::vector<std::string> keys = dict.GetKeys();
-  for( std::vector<std::string>::const_iterator it = keys.begin(); 
+  for( std::vector<std::string>::const_iterator it = keys.begin();
     it != keys.end(); ++it )
     {
     const std::string &key = *it; //Needed for bcc32
@@ -627,18 +739,8 @@ void GDCMImageIO::Write(const void* buffer)
         {
         if(dictEntry->GetGroup() != 0 && dictEntry->GetElement() != 0)
           {
-          // Sometime input DICOM is not perfect so let's make sure not to pass
-          // anything bad.
-          if (dictEntry->GetVR() == "PN" )
-            {
-            std::string::size_type pos = value.find(' ');
-            if( pos != std::string::npos )
-              {
-              value.replace(pos,1,"^");
-              }
-            }
           header->InsertValEntry( value,
-                                  dictEntry->GetGroup(), 
+                                  dictEntry->GetGroup(),
                                   dictEntry->GetElement());
           }
         }
@@ -655,12 +757,52 @@ void GDCMImageIO::Write(const void* buffer)
           {
           header->InsertBinEntry( bin,
                                   decodedLengthActual,
-                                  dictEntry->GetGroup(), 
+                                  dictEntry->GetGroup(),
                                   dictEntry->GetElement());
           }
         delete []bin;
         }
       }
+    else
+      {
+      // This is not a DICOM entry, then check if it is one of the ITK standard ones
+      if( key == ITK_NumberOfDimensions )
+        {
+        unsigned int numberOfDimensions;
+        ExposeMetaData<unsigned int>(dict, key, numberOfDimensions);
+        m_GlobalNumberOfDimensions = numberOfDimensions;
+        }
+      else 
+        {
+        if( key == ITK_Origin )
+          {
+          typedef Array< double > DoubleArrayType;
+          DoubleArrayType originArray;
+          ExposeMetaData< DoubleArrayType >( dict, key, originArray );
+          m_Origin[0] = originArray[0];
+          m_Origin[1] = originArray[1];
+          m_Origin[2] = originArray[2];
+          }
+        else
+          {
+          if( key == ITK_Spacing )
+            {
+            typedef Array< double > DoubleArrayType;
+            DoubleArrayType spacingArray;
+            ExposeMetaData< DoubleArrayType >( dict, key, spacingArray );
+            m_Spacing[0] = spacingArray[0];
+            m_Spacing[1] = spacingArray[1];
+            m_Spacing[2] = spacingArray[2];
+            }
+          else
+            {
+            std::cerr << "GDCMImageIO: non-DICOM and non-ITK standard key = ";
+            std::cerr << key << std::endl;
+            }
+          }
+        }
+      }
+
 #if !(defined(_MSC_VER) && _MSC_VER < 1300)
     ++itr;
 #endif
@@ -675,7 +817,7 @@ void GDCMImageIO::Write(const void* buffer)
   str << m_Dimensions[1];
   header->InsertValEntry( str.str(), 0x0028,0x0010); // Rows
 
-  if(m_Dimensions.size() > 2 && m_Dimensions[2]>1)
+  if( m_Dimensions.size() > 2 && m_Dimensions[2] > 1 )
     {
     str.str("");
     str << m_Dimensions[2];
@@ -697,52 +839,50 @@ void GDCMImageIO::Write(const void* buffer)
     str << m_Spacing[2];
     header->InsertValEntry(str.str(),0x0018,0x0088); // Spacing Between Slices
     }
- 
-// This code still needs work. Spacing, origin and direction are all
-// 3D, yet the image is 2D. If the user set these, all is well,
-// because the user will pass in the proper number (3) of
-// elements. However, ImageSeriesWriter will call ImageFileWriter with
-// 2D images. ImageFileWriter will call its ImageIO with 2D images and
-// only pass in spacing, origin and direction with 2 elements. For
-// now, we expect that the MetaDataDictionary will have the proper
-// settings for pixel spacing, spacing between slices, image position
-// patient and the row/column direction cosines.
 
-#if 0
-  // Handle Origin = Image Position Patient
-  // Origin must be converted into LPS coordinates
-  // DICOM specifies its origin in LPS coordinate, regardless of how
-  // the data is acquired. itk's origin must be in the same
-  // coordinate system as the data.
-  Point<double,3> itkOrigin, dicomOrigin;
-  Matrix<double,3,3> itkDirection;
-  itkOrigin[0] = m_Origin[0];
-  itkOrigin[1] = m_Origin[1];
-  itkOrigin[2] = m_Origin[2];
-  std::cout << "m_Origin: " << itkOrigin << std::endl;
-  for (unsigned int i = 0; i < 3; i++)
+// This code still needs work. Spacing, origin and direction are all 3D, yet
+// the image is 2D. If the user set these, all is well, because the user will
+// pass in the proper number (3) of elements. However, ImageSeriesWriter will
+// call its ImageIO with 2D images and only pass in spacing, origin and
+// direction with 2 elements. For now, we expect that the MetaDataDictionary
+// will have the proper settings for pixel spacing, spacing between slices,
+// image position patient and the row/column direction cosines.
+
+  if( ( m_Dimensions.size() > 2 && m_Dimensions[2]>1 ) || 
+        m_GlobalNumberOfDimensions == 3 )
     {
-    for (unsigned int j = 0; j < 3; j++)
+    // Handle Origin = Image Position Patient
+    // Origin must be converted into LPS coordinates
+    // DICOM specifies its origin in LPS coordinate, regardless of how
+    // the data is acquired. itk's origin must be in the same
+    // coordinate system as the data.
+    Point<double,3> itkOrigin, dicomOrigin;
+    Matrix<double,3,3> itkDirection;
+    itkOrigin[0] = m_Origin[0];
+    itkOrigin[1] = m_Origin[1];
+    itkOrigin[2] = m_Origin[2];
+    for (unsigned int i = 0; i < 3; i++)
       {
-      itkDirection[i][j] = m_Direction[i][j];
+      for (unsigned int j = 0; j < 3; j++)
+        {
+        itkDirection[i][j] = m_Direction[i][j];
+        }
       }
-    }
-  dicomOrigin = itkDirection * itkOrigin;
-  std::cout << "Direction: " << itkDirection;
-  str.str("");
-  str << dicomOrigin[0] << "\\" << dicomOrigin[1] << "\\" << dicomOrigin[2];
-  header->InsertValEntry(str.str(),0x0020,0x0032); // Image Position Patient
+    dicomOrigin = itkDirection * itkOrigin;
+    str.str("");
+    str << dicomOrigin[0] << "\\" << dicomOrigin[1] << "\\" << dicomOrigin[2];
+    header->InsertValEntry(str.str(),0x0020,0x0032); // Image Position (Patient)
 
-  // Handle Direction = Image Orientation Patient
-  str.str("");
-  str << m_Direction[0][0] << "\\" 
-      << m_Direction[1][0] << "\\" 
-      << m_Direction[2][0] << "\\" 
-      << m_Direction[0][1] << "\\" 
-      << m_Direction[1][1] << "\\" 
+    // Handle Direction = Image Orientation Patient
+    str.str("");
+    str << m_Direction[0][0] << "\\"
+      << m_Direction[1][0] << "\\"
+      << m_Direction[2][0] << "\\"
+      << m_Direction[0][1] << "\\"
+      << m_Direction[1][1] << "\\"
       << m_Direction[2][1];
-  header->InsertValEntry(str.str(),0x0020,0x0037); // Image Orientation Patient
-#endif
+    header->InsertValEntry(str.str(),0x0020,0x0037); // Image Orientation (Patient)
+    }
 
   str.unsetf( itksys_ios::ios::fixed ); // back to normal
   // Handle the bitDepth:
@@ -776,7 +916,7 @@ void GDCMImageIO::Write(const void* buffer)
         bitsStored    = "16"; // Bits Stored
         highBit       = "15"; // High Bit
         pixelRep      = "1";  // Pixel Representation
-        break;    
+        break;
 
       case ImageIOBase::USHORT:
         bitsAllocated = "16"; // Bits Allocated
@@ -796,16 +936,16 @@ void GDCMImageIO::Write(const void* buffer)
     switch (this->GetComponentType())
       {
       case ImageIOBase::CHAR:
-        bitsAllocated = "24"; // Bits Allocated
-        bitsStored    = "24"; // Bits Stored
-        highBit       = "24"; // High Bit
+        bitsAllocated = "8"; // Bits Allocated
+        bitsStored    = "8"; // Bits Stored
+        highBit       = "7"; // High Bit
         pixelRep      = "1"; // Pixel Representation
         break;
 
       case ImageIOBase::UCHAR:
-        bitsAllocated = "24"; // Bits Allocated
-        bitsStored    = "24"; // Bits Stored
-        highBit       = "24"; // High Bit
+        bitsAllocated = "8"; // Bits Allocated
+        bitsStored    = "8"; // Bits Stored
+        highBit       = "7"; // High Bit
         pixelRep      = "0"; // Pixel Representation
         break;
 
@@ -824,6 +964,10 @@ void GDCMImageIO::Write(const void* buffer)
   header->InsertValEntry( highBit, 0x0028, 0x0102 ); //High Bit
   header->InsertValEntry( pixelRep, 0x0028, 0x0103 ); //Pixel Representation
 
+  str.str("");
+  str << m_NumberOfComponents;
+  header->InsertValEntry(str.str(),0x0028,0x0002); // Samples per Pixel
+
   if( !m_KeepOriginalUID )
   {
     // UID generation part:
@@ -837,7 +981,7 @@ void GDCMImageIO::Write(const void* buffer)
       m_FrameOfReferenceInstanceUID = gdcm::Util::CreateUniqueUID( m_UIDPrefix );
     }
     std::string uid = gdcm::Util::CreateUniqueUID( m_UIDPrefix );
-  
+
     header->InsertValEntry( uid, 0x0008, 0x0018); //[SOP Instance UID]
     header->InsertValEntry( uid, 0x0002, 0x0003); //[Media Stored SOP Instance UID]
     header->InsertValEntry( m_StudyInstanceUID, 0x0020, 0x000d); //[Study Instance UID]
@@ -992,7 +1136,7 @@ bool GDCMImageIO::GetValueFromTag(const std::string & tag, std::string & value)
   return ExposeMetaData<std::string>(dict, tag, value);
 }
 
-bool GDCMImageIO::GetLabelFromTag( const std::string & tagkey, 
+bool GDCMImageIO::GetLabelFromTag( const std::string & tagkey,
                                          std::string & labelId )
 {
   gdcm::Dict *pubDict = gdcm::Global::GetDicts()->GetDefaultPubDict();
@@ -1000,8 +1144,8 @@ bool GDCMImageIO::GetLabelFromTag( const std::string & tagkey,
   gdcm::DictEntry *dictentry = pubDict->GetEntry( tagkey );
 
   bool found;
-  
-  // If tagkey was found (ie DICOM tag from public dictionary), 
+
+  // If tagkey was found (ie DICOM tag from public dictionary),
   // then return the name:
   if( dictentry )
     {
@@ -1030,6 +1174,8 @@ void GDCMImageIO::PrintSelf(std::ostream& os, Indent indent) const
   os << indent << "StudyInstanceUID: " << m_StudyInstanceUID << std::endl;
   os << indent << "SeriesInstanceUID: " << m_SeriesInstanceUID << std::endl;
   os << indent << "FrameOfReferenceInstanceUID: " << m_FrameOfReferenceInstanceUID << std::endl;
+  os << indent << "LoadSequences:" << m_LoadSequences << std::endl;
+  os << indent << "LoadPrivateTags:" << m_LoadPrivateTags << std::endl;
 
   os << indent << "Patient Name:" << m_PatientName << std::endl;
   os << indent << "Patient ID:" << m_PatientID << std::endl;

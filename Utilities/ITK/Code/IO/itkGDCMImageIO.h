@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkGDCMImageIO.h,v $
   Language:  C++
-  Date:      $Date: 2006/03/06 22:38:22 $
-  Version:   $Revision: 1.25 $
+  Date:      $Date: 2006/05/04 16:36:27 $
+  Version:   $Revision: 1.29 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -31,7 +31,7 @@ namespace itk
  *
  *  \brief ImageIO class for reading and writing DICOM V3.0 and ACR/NEMA (V1.0 & V2.0) images
  *  This class is only an adaptor to the gdcm library (currently gdcm 1.2.x is used):
- *  
+ *
  *  http://creatis-www.insa-lyon.fr/Public/Gdcm/
  *
  *  CREATIS INSA - Lyon 2003-2005
@@ -53,6 +53,7 @@ namespace itk
  *  \ingroup IOFilters
  *
  */
+class InternalHeader;
 class ITK_EXPORT GDCMImageIO : public ImageIOBase
 {
 public:
@@ -159,6 +160,54 @@ public:
    */
   itkSetMacro(MaxSizeLoadEntry, long);
 
+  /** Parse any sequences in the DICOM file. Defaults to the value of
+   *  LoadSequencesDefault. Loading DICOM files is faster when
+   *  sequences are not needed.
+   */
+  itkSetMacro(LoadSequences, bool);
+  itkGetMacro(LoadSequences, bool);
+  itkBooleanMacro(LoadSequences);
+
+  /** Parse any private tags in the DICOM file. Defaults to the value
+   * of LoadPrivateTagsDefault. Loading DICOM files is faster when
+   * private tags are not needed.
+   */
+  itkSetMacro(LoadPrivateTags, bool);
+  itkGetMacro(LoadPrivateTags, bool);
+  itkBooleanMacro(LoadPrivateTags);  
+
+  /** Global method to define the default value for
+   * LoadSequences. When instances of GDCMImageIO are created, the
+   * ivar LoadSequences is initialized to the value of
+   * LoadSequencesDefault.  This method is useful when relying on the
+   * IO factory mechanism to load images rather than specifying a
+   * particular ImageIO object on the readers. Default is false. */
+  static void SetLoadSequencesDefault(bool b)
+    { m_LoadSequencesDefault = b; }
+  static void LoadSequencesDefaultOn()
+    { m_LoadSequencesDefault = true; }
+  static void LoadSequencesDefaultOff()
+    { m_LoadSequencesDefault = false; }
+  static bool GetLoadSequencesDefault()
+    { return m_LoadSequencesDefault; }
+
+  /** Global method to define the default value for
+   * LoadPrivateTags. When instances of GDCMImageIO are created, the
+   * ivar LoadPrivateTags is initialized to the value of
+   * LoadPrivateTagsDefault.  This method is useful when relying on the
+   * IO factory mechanism to load images rather than specifying a
+   * particular ImageIO object on the readers. Default is false. */
+  static void SetLoadPrivateTagsDefault(bool b)
+    { m_LoadPrivateTagsDefault = b; }
+  static void LoadPrivateTagsDefaultOn()
+    { m_LoadPrivateTagsDefault = true; }
+  static void LoadPrivateTagsDefaultOff()
+    { m_LoadPrivateTagsDefault = false; }
+  static bool GetLoadPrivateTagsDefault() 
+    { return m_LoadPrivateTagsDefault; }
+  
+  
+  
 protected:
   GDCMImageIO();
   ~GDCMImageIO();
@@ -199,7 +248,17 @@ private:
   std::string m_Model;
   std::string m_ScanOptions;
 
+  bool m_LoadSequences;
+  bool m_LoadPrivateTags;
+  static bool m_LoadSequencesDefault;
+  static bool m_LoadPrivateTagsDefault;
+  
+  /** defines whether this image is a 2D out of a 2D image
+   *  or a 2D out of a 3D image. */
+  unsigned int m_GlobalNumberOfDimensions;
+  
   ImageIOBase::IOComponentType m_InternalComponentType;
+  InternalHeader *DICOMHeader;
 };
 
 } // end namespace itk

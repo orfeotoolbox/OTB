@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkGDCMSeriesFileNames.cxx,v $
   Language:  C++
-  Date:      $Date: 2006/02/02 18:28:19 $
-  Version:   $Revision: 1.26 $
+  Date:      $Date: 2006/06/06 12:53:07 $
+  Version:   $Revision: 1.28.2.1 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -18,9 +18,9 @@
 #define _itkGDCMSeriesFileNames_h
 
 #include "itkGDCMSeriesFileNames.h"
-#include "gdcm/src/gdcmSerieHelper.h"
-#include "gdcm/src/gdcmFile.h"
-#include "gdcm/src/gdcmUtil.h"
+#include "gdcmSerieHelper.h"
+#include "gdcmFile.h"
+#include "gdcmUtil.h"
 #include <itksys/SystemTools.hxx>
 
 #include <vector>
@@ -35,6 +35,8 @@ GDCMSeriesFileNames::GDCMSeriesFileNames()
   m_InputDirectory = "";
   m_OutputDirectory = "";
   m_UseSeriesDetails = true;
+  m_LoadSequences = false;
+  m_LoadPrivateTags = false;
 }
 
 GDCMSeriesFileNames::~GDCMSeriesFileNames()
@@ -57,6 +59,8 @@ void GDCMSeriesFileNames::SetInputDirectory (std::string const &name)
   m_InputDirectory = name;
   m_SerieHelper->Clear();
   m_SerieHelper->SetUseSeriesDetails( m_UseSeriesDetails );
+  m_SerieHelper->SetLoadMode( (m_LoadSequences ? 0 : gdcm::LD_NOSEQ)
+                              | (m_LoadPrivateTags ? 0: gdcm::LD_NOSHADOW));
   m_SerieHelper->SetDirectory( name ); //as a side effect it also execute
   this->Modified();
 }
@@ -250,6 +254,9 @@ void GDCMSeriesFileNames::PrintSelf(std::ostream& os, Indent indent) const
 
   unsigned int i;
   os << indent << "InputDirectory: " << m_InputDirectory << std::endl;
+  os << indent << "LoadSequences:" << m_LoadSequences << std::endl;
+  os << indent << "LoadPrivateTags:" << m_LoadPrivateTags << std::endl;
+
   for (i = 0; i < m_InputFileNames.size(); i++)
     {
     os << indent << "InputFilenames[" << i << "]: " << m_InputFileNames[i] << std::endl;

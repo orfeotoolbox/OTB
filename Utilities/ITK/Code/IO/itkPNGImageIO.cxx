@@ -4,8 +4,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkPNGImageIO.cxx,v $
   Language:  C++
-  Date:      $Date: 2006/01/01 13:37:18 $
-  Version:   $Revision: 1.55 $
+  Date:      $Date: 2006/05/16 19:38:10 $
+  Version:   $Revision: 1.57 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -218,6 +218,10 @@ void PNGImageIO::Read(void* buffer)
 #endif
     }
 
+  if (info_ptr->valid & PNG_INFO_sBIT)
+    {
+    png_set_shift(png_ptr, &(info_ptr->sig_bit));
+    }
   // have libpng handle interlacing
   //int number_of_passes = png_set_interlace_handling(png_ptr);
   // update the info now that we have defined the filters
@@ -445,7 +449,7 @@ void PNGImageIO::WriteSlice(const std::string& fileName, const void* buffer)
     //            of the Exception and prevent the catch() from recognizing it.
     //            For details, see Bug # 1872 in the bugtracker.
 
-    ::itk::ExceptionObject excp(__FILE__, __LINE__, "Problem while openeing the file.", "WriteSlice"); 
+    ::itk::ExceptionObject excp(__FILE__, __LINE__, "Problem while opening the file.", ITK_LOCATION); 
     throw excp; 
     }
 
