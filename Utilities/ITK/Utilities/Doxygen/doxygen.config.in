@@ -318,7 +318,7 @@ SORT_MEMBER_DOCS       = YES
 # by member name. If set to NO (the default) the members will appear in 
 # declaration order.
 
-SORT_BRIEF_DOCS        = NO
+SORT_BRIEF_DOCS        = YES
 
 # If the SORT_BY_SCOPE_NAME tag is set to YES, the class list will be 
 # sorted by fully-qualified names, including namespaces. If set to 
@@ -1079,8 +1079,10 @@ PREDEFINED  =  "itkNotUsed(x)="\
                   virtual const char *GetNameOfClass() const;" \
                "itkEventMacro(thisClass,superclass)= \
                   class thisClass : public superclass {};" \
-               "itkConceptMacro(name,concept)= \
-                  enum { name = 0 };" \
+               "itkConceptMacro(thisName,thisConcept)= \
+                  /** This class requires thisName \
+                      in the form of thisConcept */   \
+                  typedef thisConcept thisName;" \
                "vcl_numeric_limits= \
                   std::numeric_limits" \
                "ITK_TYPENAME= \
