@@ -3,8 +3,8 @@
   Program:   gdcm
   Module:    $RCSfile: gdcmFile.cxx,v $
   Language:  C++
-  Date:      $Date: 2006/02/20 15:56:57 $
-  Version:   $Revision: 1.14 $
+  Date:      $Date: 2006/05/10 20:27:18 $
+  Version:   $Revision: 1.15 $
                                                                                 
   Copyright (c) CREATIS (Centre de Recherche et d'Applications en Traitement de
   l'Image). All rights reserved. See Doc/License.txt or
@@ -589,6 +589,10 @@ float File::GetYSpacing()
  */
 float File::GetZSpacing()
 {
+   // There are still a lot of modality we are not dealing with, esp US
+   // There are tags like: D 3004|000c [DS]    [Grid Frame Offset Vector] [0.0\2.00000003000000...]
+   // or D 0018|1065 [DS] [Frame Time Vector] [0.0\8.000000e+01\8.000000e+01\
+   // That are perfeclty valid to be used
    // Spacing Between Slices : distance between the middle of 2 slices
    // Slices may be :
    //   jointives     (Spacing between Slices = Slice Thickness)

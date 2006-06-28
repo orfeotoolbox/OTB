@@ -3,8 +3,8 @@
   Program:   gdcm
   Module:    $RCSfile: gdcmDictSet.cxx,v $
   Language:  C++
-  Date:      $Date: 2006/02/18 12:36:38 $
-  Version:   $Revision: 1.6 $
+  Date:      $Date: 2006/05/12 19:11:06 $
+  Version:   $Revision: 1.7 $
                                                                                 
   Copyright (c) CREATIS (Centre de Recherche et d'Applications en Traitement de
   l'Image). All rights reserved. See Doc/License.txt or
@@ -186,16 +186,16 @@ std::string DictSet::BuildDictPath()
    const char *envPath;
    envPath = getenv("GDCM_DICT_PATH");
 
-   if (envPath && (strlen(envPath) != 0)) 
+   if (envPath && (strlen(envPath) != 0))
    {
       resultPath = envPath;
       gdcmWarningMacro( "Dictionary path set from environnement");
-   } 
+   }
    else
    {
       resultPath = PUB_DICT_PATH;
    }
-   if ( resultPath[resultPath.length()-1] != '/' )
+   if ( resultPath.length() && resultPath[resultPath.length()-1] != '/' )
    {
       resultPath += '/';
    }

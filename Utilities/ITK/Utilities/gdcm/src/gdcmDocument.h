@@ -3,8 +3,8 @@
   Program:   gdcm
   Module:    $RCSfile: gdcmDocument.h,v $
   Language:  C++
-  Date:      $Date: 2006/02/18 12:36:39 $
-  Version:   $Revision: 1.9 $
+  Date:      $Date: 2006/04/04 13:59:52 $
+  Version:   $Revision: 1.11 $
  
   Copyright (c) CREATIS (Centre de Recherche et d'Applications en Traitement de
   l'Image). All rights reserved. See Doc/License.txt or
@@ -91,6 +91,7 @@ typedef std::list<Element> ListElements;
                         Filename = fileName, IsDocumentModified = true; }
 
    std::ifstream *OpenFile();
+   static bool CanReadFile(std::istream &os, bool &hasPreamble);
    bool CloseFile();
    void WriteContent( std::ofstream *fp, FileType type );
 
@@ -101,25 +102,25 @@ typedef std::list<Element> ListElements;
    void LoadDocEntrySafe(DocEntry *entry);
    void SetMaxSizeLoadEntry(long);
    void AddForceLoadElement(uint16_t group, uint16_t elem);
- 
+
 // Ordering of Documents
    bool operator<(Document &document);
 
 /**
- * \brief Sets the LoadMode as a boolean string. 
+ * \brief Sets the LoadMode as a boolean string.
  *        LD_NOSEQ, LD_NOSHADOW, LD_NOSHADOWSEQ
  ... (nothing more, right now)
  *        WARNING : before using NO_SHADOW, be sure *all* your files
- *        contain accurate values in the 0x0000 element (if any) 
+ *        contain accurate values in the 0x0000 element (if any)
  *        of *each* Shadow Group. The parser will fail if the size is wrong !
- * @param   mode Load mode to be used    
+ * @param   mode Load mode to be used
  */
-   void SetLoadMode (int mode) { if (LoadMode != mode) 
+   void SetLoadMode (int mode) { if (LoadMode != mode)
                                      LoadMode=mode, IsDocumentModified = true; }
 
 protected:
 // Methods
-   // Constructor and destructor are protected to forbid end user 
+   // Constructor and destructor are protected to forbid end user
    // to instanciate from this class Document (only gdcm::File and
    // gdcm::DicomDir are meaningfull).
    Document();

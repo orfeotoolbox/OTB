@@ -3,8 +3,8 @@
   Program:   gdcm
   Module:    $RCSfile: gdcmDocument.cxx,v $
   Language:  C++
-  Date:      $Date: 2006/02/20 15:56:57 $
-  Version:   $Revision: 1.19 $
+  Date:      $Date: 2006/05/10 20:27:17 $
+  Version:   $Revision: 1.23 $
                                                                                 
   Copyright (c) CREATIS (Centre de Recherche et d'Applications en Traitement de
   l'Image). All rights reserved. See Doc/License.txt or
@@ -550,16 +550,16 @@ uint32_t Document::SwapLong(uint32_t a)
       case 1234 :
          break;
       case 4321 :
-//         a=( ((a<<24) & 0xff000000) | ((a<<8)  & 0x00ff0000) | 
+//         a=( ((a<<24) & 0xff000000) | ((a<<8)  & 0x00ff0000) |
 //             ((a>>8)  & 0x0000ff00) | ((a>>24) & 0x000000ff) );
 // save CPU time
-         a=( ( a<<24)               | ((a<<8)  & 0x00ff0000) | 
+         a=( ( a<<24)               | ((a<<8)  & 0x00ff0000) |
              ((a>>8)  & 0x0000ff00) |  (a>>24)                );
-         break;   
+         break;
       case 3412 :
 //       a=( ((a<<16) & 0xffff0000) | ((a>>16) & 0x0000ffff) );
          a=( (a<<16)                | (a>>16)  );
-         break;  
+         break;
       case 2143 :
          a=( ((a<< 8) & 0xff00ff00) | ((a>>8) & 0x00ff00ff)  );
       break;
@@ -568,19 +568,19 @@ uint32_t Document::SwapLong(uint32_t a)
          a = 0;
    }
    return a;
-} 
+}
 
 //
 // -----------------File I/O ---------------
 /**
  * \brief  Tries to open the file \ref Document::Filename and
  *         checks the preamble when existing.
- * @return The FILE pointer on success. 
+ * @return The FILE pointer on success.
  */
 std::ifstream *Document::OpenFile()
 {
    HasDCMPreamble = false;
-   if (Filename.length() == 0) 
+   if (Filename.length() == 0)
    {
       return 0;
    }
@@ -595,13 +595,13 @@ std::ifstream *Document::OpenFile()
    if ( ! *Fp )
    {
    // Don't user gdcmErrorMacro :
-   // a spurious message will appear when you use, for instance 
+   // a spurious message will appear when you use, for instance
    // gdcm::FileHelper *fh = new gdcm::FileHelper( outputFileName );
    // to create outputFileName.
-   
-   // FIXME : if the upper comment is still usefull 
+
+   // FIXME : if the upper comment is still useful
    //         --> the constructor is not so good ...
-   
+
       gdcmWarningMacro( "Cannot open file: " << Filename.c_str());
       delete Fp;
       Fp = 0;
@@ -609,19 +609,31 @@ std::ifstream *Document::OpenFile()
       //exit(1); // No function is allowed to leave the application instead
                  // of warning the caller
    }
- 
-   uint16_t zero = 0;
-   Fp->read((char*)&zero, (size_t)2);
-   if ( Fp->eof() )
+   if( !CanReadFile(*Fp, HasDCMPreamble) )
    {
+      // -- Neither ACR/No Preamble Dicom nor DICOMV3 file
       CloseFile();
+      gdcmWarningMacro( "Neither ACR/No Preamble Dicom nor DICOMV3 file: "
+                      << Filename.c_str());
       return 0;
    }
- 
+   return Fp;
+}
+
+bool Document::CanReadFile(std::istream &os, bool &hasPreamble)
+{
+   hasPreamble = false;
+   uint16_t zero = 0;
+   os.read((char*)&zero, (size_t)2);
+   if ( os.eof() )
+   {
+      return false;
+   }
+
    //-- Broken ACR or DICOM with no Preamble; may start with a Shadow Group --
    // FIXME : We cannot be sure the preable is only zeroes..
    //         (see ACUSON-24-YBR_FULL-RLE.dcm )
-   if ( 
+   if (
        zero == 0x0001 || zero == 0x0100 || zero == 0x0002 || zero == 0x0200 ||
        zero == 0x0003 || zero == 0x0300 || zero == 0x0004 || zero == 0x0400 ||
        zero == 0x0005 || zero == 0x0500 || zero == 0x0006 || zero == 0x0600 ||
@@ -631,36 +643,28 @@ std::ifstream *Document::OpenFile()
         "ACR/DICOM starting by 0x(%04x) at the beginning of the file\n", zero);
       // FIXME : is it a Warning message, or a Debug message?
       gdcmWarningMacro( msg.c_str() );
-      return Fp;
+      return true;
    }
- 
+
    //-- DICOM --
-   Fp->seekg(126L, std::ios::cur);  // Once per Document
+   os.seekg(126L, std::ios::cur);  // Once per Document
    char dicm[4]; // = {' ',' ',' ',' '};
-   Fp->read(dicm,  (size_t)4);
-   if ( Fp->eof() )
+   os.read(dicm,  (size_t)4);
+   if ( os.eof() )
    {
-      CloseFile();
-      return 0;
+      return false;
    }
    if ( memcmp(dicm, "DICM", 4) == 0 )
    {
-      HasDCMPreamble = true;
-      return Fp;
+      hasPreamble = true;
+      return true;
    }
-
-   // -- Neither ACR/No Preamble Dicom nor DICOMV3 file
-   CloseFile();
-   // Don't user Warning nor Error, not to pollute the output
-   // while directory recursive parsing ...
-   gdcmDebugMacro( "Neither ACR/No Preamble Dicom nor DICOMV3 file: "
-                      << Filename.c_str()); 
-   return 0;
+   return false;
 }
 
 /**
- * \brief closes the file  
- * @return  TRUE if the close was successfull 
+ * \brief closes the file
+ * @return  TRUE if the close was successfull
  */
 bool Document::CloseFile()
 {
@@ -674,9 +678,9 @@ bool Document::CloseFile()
 }
 
 /**
- * \brief Writes in a file all the Entries (Dicom Elements) 
+ * \brief Writes in a file all the Entries (Dicom Elements)
  * @param fp file pointer on an already open file (actually: Output File Stream)
- * @param filetype Type of the File to be written 
+ * @param filetype Type of the File to be written
  *          (ACR-NEMA, ExplicitVR, ImplicitVR)
  */
 void Document::WriteContent(std::ofstream *fp, FileType filetype)
@@ -1031,23 +1035,23 @@ void Document::ParseDES(DocEntrySet *set, long offset,
          newDocEntry = Backtrack(newDocEntry);
       }
       else
-      { 
-         PreviousDocEntry = newDocEntry; 
+      {
+         PreviousDocEntry = newDocEntry;
       }
- 
+
       used = true;
       newValEntry = dynamic_cast<ValEntry*>(newDocEntry);
       newBinEntry = dynamic_cast<BinEntry*>(newDocEntry);
 
-      if ( newValEntry || newBinEntry )  
+      if ( newValEntry || newBinEntry )
       {
        //////////////////////////// ContentEntry
          if ( newBinEntry )
          {
             vr = newDocEntry->GetVR();
-            if ( Filetype == ExplicitVR && 
+            if ( Filetype == ExplicitVR &&
                  !Global::GetVR()->IsVROfBinaryRepresentable(vr) )
-            { 
+            {
                 ////// Neither ValEntry NOR BinEntry: should mean UNKOWN VR
                 gdcmWarningMacro( std::hex << newDocEntry->GetGroup() 
                                   << "|" << newDocEntry->GetElement()
@@ -1073,12 +1077,12 @@ void Document::ParseDES(DocEntrySet *set, long offset,
             //   newBinEntry->SetKey(  parentSQItem->GetBaseTagKey()
             //                       + newBinEntry->GetKey() );
             //}
-           
+
             if ( !set->AddEntry( newBinEntry ) )
             {
                gdcmWarningMacro( "in ParseDES : cannot add a BinEntry "
-                                   << newBinEntry->GetKey()  
-                                   << " (at offset : " 
+                                   << newBinEntry->GetKey()
+                                   << " (at offset : "
                                    << newBinEntry->GetOffset() << " )" );
                used=false;
             }
@@ -1939,10 +1943,21 @@ void Document::FixDocEntryFoundLength(DocEntry *entry,
    // Occurence of such images is quite low (unless one leaves close to a
    // 'Leonardo' source. Hence, one might consider commenting out the
    // following fix on efficiency reasons.
-   else if ( gr   == 0x0009 && ( elem == 0x1113 || elem == 0x1114 ) )
+   else if ( gr == 0x0009 && ( elem == 0x1113 || elem == 0x1114 ) )
    {
-      foundLength = 4;
-      entry->SetReadLength(4); // a bug is to be fixed !
+      // Ideally we should check we are in Explicit and double check
+      // that VR=UL... this is done properly in gdcm2
+      if( foundLength == 6 )
+      {
+         gdcmWarningMacro( "Replacing Length from 6 into 4" );
+         foundLength = 4;
+         entry->SetReadLength(4); // a bug is to be fixed !
+      }
+      else if ( foundLength%4 )
+      {
+         gdcmErrorMacro( "This looks like to a buggy Siemens DICOM file."
+          "The length of this tag seems to be wrong" );
+      }
    } 
  
    else if ( entry->GetVR() == "SQ" )
@@ -2292,7 +2307,7 @@ DocEntry *Document::ReadNextDocEntry()
    // In 'true DICOM' files Group 0002 is always little endian
    if ( HasDCMPreamble )
       HandleOutOfGroup0002(group, elem);
- 
+
    std::string vr = FindDocEntryVR();
    std::string realVR = vr;
 
@@ -2303,8 +2318,8 @@ DocEntry *Document::ReadNextDocEntry()
          realVR = "UL";     // must be UL
       }
       else if (group%2 == 1 &&  (elem >= 0x0010 && elem <=0x00ff ))
-      {  
-      // DICOM PS 3-5 7.8.1 a) states that those 
+      {
+      // DICOM PS 3-5 7.8.1 a) states that those
       // (gggg-0010->00FF where gggg is odd) attributes have to be LO
          realVR = "LO";
       }
@@ -2333,7 +2348,7 @@ DocEntry *Document::ReadNextDocEntry()
          // We thought this was explicit VR, but we end up with an
          // implicit VR tag. Let's backtrack.
          if ( newEntry->GetGroup() != 0xfffe )
-         { 
+         {
             std::string msg;
             int offset = Fp->tellg();
             msg = Util::Format("Entry (%04x,%04x) at 0x(%x) should be Explicit VR\n", 

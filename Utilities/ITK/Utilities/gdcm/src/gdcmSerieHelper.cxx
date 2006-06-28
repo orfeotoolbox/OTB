@@ -3,8 +3,8 @@
   Program:   gdcm
   Module:    $RCSfile: gdcmSerieHelper.cxx,v $
   Language:  C++
-  Date:      $Date: 2006/02/20 18:29:58 $
-  Version:   $Revision: 1.21 $
+  Date:      $Date: 2006/03/28 19:59:13 $
+  Version:   $Revision: 1.22 $
                                                                                 
   Copyright (c) CREATIS (Centre de Recherche et d'Applications en Traitement de
   l'Image). All rights reserved. See Doc/License.txt or
@@ -43,6 +43,7 @@ SerieHelper::SerieHelper()
    ClearAll();
    UserLessThanFunction = 0;
    DirectOrder = true;
+   LoadMode = 0;
 }
 
 /**

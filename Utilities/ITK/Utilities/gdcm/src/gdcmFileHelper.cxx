@@ -4,8 +4,8 @@
   Module:    $RCSfile: gdcmFileHelper.cxx,v $
   Language:  C++
 
-  Date:      $Date: 2006/03/08 20:09:44 $
-  Version:   $Revision: 1.12 $
+  Date:      $Date: 2006/03/21 16:22:58 $
+  Version:   $Revision: 1.14 $
                                                                                 
   Copyright (c) CREATIS (Centre de Recherche et d'Applications en Traitement de
   l'Image). All rights reserved. See Doc/License.txt or
@@ -791,14 +791,14 @@ bool FileHelper::CheckWriteIntegrity()
       int numberBitsAllocated = FileInternal->GetBitsAllocated();
       if ( numberBitsAllocated == 0 || numberBitsAllocated == 12 )
       {
-         gdcmWarningMacro( "numberBitsAllocated changed from " 
-                          << numberBitsAllocated << " to 16 " 
+         gdcmWarningMacro( "numberBitsAllocated changed from "
+                          << numberBitsAllocated << " to 16 "
                           << " for consistency purpose" );
          numberBitsAllocated = 16;
       }
 
       size_t decSize = FileInternal->GetXSize()
-                     * FileInternal->GetYSize() 
+                     * FileInternal->GetYSize()
                      * FileInternal->GetZSize()
                      * FileInternal->GetSamplesPerPixel()
                      * ( numberBitsAllocated / 8 );
@@ -811,8 +811,8 @@ bool FileHelper::CheckWriteIntegrity()
          case WMODE_RAW :
             if ( decSize!=PixelWriteConverter->GetUserDataSize() )
             {
-               gdcmWarningMacro( "Data size (Raw) is incorrect. Should be " 
-                           << decSize << " / Found :" 
+               gdcmWarningMacro( "Data size (Raw) is incorrect. Should be "
+                           << decSize << " / Found :"
                            << PixelWriteConverter->GetUserDataSize() );
                return false;
             }
@@ -820,8 +820,8 @@ bool FileHelper::CheckWriteIntegrity()
          case WMODE_RGB :
             if ( rgbSize!=PixelWriteConverter->GetUserDataSize() )
             {
-               gdcmWarningMacro( "Data size (RGB) is incorrect. Should be " 
-                          << decSize << " / Found " 
+               gdcmWarningMacro( "Data size (RGB) is incorrect. Should be "
+                          << decSize << " / Found "
                           << PixelWriteConverter->GetUserDataSize() );
                return false;
             }
@@ -1625,8 +1625,8 @@ void FileHelper::CheckMandatoryElements()
    // Patient's Name : if missing, we set it to 'GDCM^Patient'
    CheckMandatoryEntry(0x0010,0x0010,"GDCM^Patient");
 
-   // Patient ID
-   CheckMandatoryEntry(0x0010,0x0020,"");
+   // Patient ID : 'type 2' entry but some DICOM implementation really needs it.
+   CheckMandatoryEntry(0x0010,0x0020,"GDCM ID");
 
    // Patient's Birth Date : 'type 2' entry -> must exist, value not mandatory
    CheckMandatoryEntry(0x0010,0x0030,"");

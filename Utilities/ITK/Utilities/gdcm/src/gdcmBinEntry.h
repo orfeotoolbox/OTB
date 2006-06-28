@@ -3,8 +3,8 @@
   Program:   gdcm
   Module:    $RCSfile: gdcmBinEntry.h,v $
   Language:  C++
-  Date:      $Date: 2006/02/18 12:36:38 $
-  Version:   $Revision: 1.4 $
+  Date:      $Date: 2006/03/21 16:22:57 $
+  Version:   $Revision: 1.5 $
                                                                                 
   Copyright (c) CREATIS (Centre de Recherche et d'Applications en Traitement de
   l'Image). All rights reserved. See Doc/License.txt or
@@ -34,7 +34,7 @@ namespace gdcm
  *          representable
  *          BinEntry is a specialisation of ContentEntry
  */
- 
+
 class GDCM_EXPORT BinEntry  : public ContentEntry
 {
 public:
