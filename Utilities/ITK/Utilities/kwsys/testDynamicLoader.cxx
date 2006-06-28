@@ -53,7 +53,8 @@ kwsys_stl::string GetLibName(const char* lname)
 int TestDynamicLoader(const char* libname, const char* symbol, int r1, int r2, int r3)
 {
   kwsys_ios::cerr << "Testing: " << libname << kwsys_ios::endl;
-  kwsys::LibHandle l = kwsys::DynamicLoader::OpenLibrary(libname);
+  kwsys::DynamicLoader::LibraryHandle l
+    = kwsys::DynamicLoader::OpenLibrary(libname);
   // If result is incompatible with expectation just fails (xor):
   if( (r1 && !l) || (!r1 && l) )
     {
@@ -61,13 +62,15 @@ int TestDynamicLoader(const char* libname, const char* symbol, int r1, int r2, i
       << kwsys::DynamicLoader::LastError() << kwsys_ios::endl;
     return 1;
     }
-  kwsys::DynamicLoaderFunction f = kwsys::DynamicLoader::GetSymbolAddress(l, symbol);
+  kwsys::DynamicLoader::SymbolPointer f
+    = kwsys::DynamicLoader::GetSymbolAddress(l, symbol);
   if( (r2 && !f) || (!r2 && f) )
     {
     kwsys_ios::cerr
       << kwsys::DynamicLoader::LastError() << kwsys_ios::endl;
     return 1;
     }
+#ifndef __APPLE__
   int s = kwsys::DynamicLoader::CloseLibrary(l);
   if( (r3 && !s) || (!r3 && s) )
     {
@@ -75,12 +78,24 @@ int TestDynamicLoader(const char* libname, const char* symbol, int r1, int r2, i
       << kwsys::DynamicLoader::LastError() << kwsys_ios::endl;
     return 1;
     }
+#else
+  (void)r3;
+#endif
   return 0;
 }
 
-int main(int , char *[])
+int main(int argc, char *argv[])
 {
+#if defined(_WIN32)
+  SetErrorMode(SEM_FAILCRITICALERRORS | SEM_NOGPFAULTERRORBOX);
+#endif
   int res;
+  if( argc == 3 )
+    {
+    // User specify a libname and symbol to check.
+    res = TestDynamicLoader(argv[1], argv[2],1,1,1);
+    return res;
+    }
   // Make sure that inexistant lib is giving correct result
   res = TestDynamicLoader("azerty_", "foo_bar",0,0,0);
   // Make sure that random binary file cannnot be assimilated as dylib
@@ -94,8 +109,8 @@ int main(int , char *[])
   // Now try on the generated library
   kwsys_stl::string libname = GetLibName("testDynload");
   res += TestDynamicLoader(libname.c_str(), "dummy",1,0,1);
-  res += TestDynamicLoader(libname.c_str(), "TestDynamicLoaderFunction",1,1,1);
-  res += TestDynamicLoader(libname.c_str(), "_TestDynamicLoaderFunction",1,0,1);
+  res += TestDynamicLoader(libname.c_str(), "TestDynamicLoaderSymbolPointer",1,1,1);
+  res += TestDynamicLoader(libname.c_str(), "_TestDynamicLoaderSymbolPointer",1,0,1);
   res += TestDynamicLoader(libname.c_str(), "TestDynamicLoaderData",1,1,1);
   res += TestDynamicLoader(libname.c_str(), "_TestDynamicLoaderData",1,0,1);
 

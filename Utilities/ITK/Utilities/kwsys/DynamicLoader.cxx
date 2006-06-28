@@ -37,8 +37,8 @@
 // 1. HP machines which uses shl_load
 // 2. Mac OS X 10.2.x and earlier which uses NSLinkModule
 // 3. Windows which uses LoadLibrary
-// 4. Most unix systems (including Mac OS X 10.3 and later) which use dlopen (default)
-// Each part of the ifdef contains a complete implementation for
+// 4. Most unix systems (including Mac OS X 10.3 and later) which use dlopen
+// (default) Each part of the ifdef contains a complete implementation for
 // the static methods of DynamicLoader.
 
 namespace KWSYS_NAMESPACE
@@ -66,25 +66,25 @@ namespace KWSYS_NAMESPACE
 {
 
 //----------------------------------------------------------------------------
-LibHandle DynamicLoader::OpenLibrary(const char* libname )
+DynamicLoader::LibraryHandle DynamicLoader::OpenLibrary(const char* libname )
 {
   return shl_load(libname, BIND_DEFERRED | DYNAMIC_PATH, 0L);
 }
 
 //----------------------------------------------------------------------------
-int DynamicLoader::CloseLibrary(LibHandle lib)
+int DynamicLoader::CloseLibrary(DynamicLoader::LibraryHandle lib)
 {
   return !shl_unload(lib);
 }
 
 //----------------------------------------------------------------------------
-DynamicLoaderFunction
-DynamicLoader::GetSymbolAddress(LibHandle lib, const char* sym)
+DynamicLoader::SymbolPointer
+DynamicLoader::GetSymbolAddress(DynamicLoader::LibraryHandle lib, const char* sym)
 {
   void* addr;
   int status;
 
-  /* TYPE_PROCEDURE Look for a function or procedure.
+  /* TYPE_PROCEDURE Look for a function or procedure. (This used to be default)
    * TYPE_DATA      Look for a symbol in the data segment (for example, variables).
    * TYPE_UNDEFINED Look for any symbol.
    */
@@ -92,7 +92,7 @@ DynamicLoader::GetSymbolAddress(LibHandle lib, const char* sym)
   void* result = (status < 0) ? (void*)0 : addr;
 
   // Hack to cast pointer-to-data to pointer-to-function.
-  return *reinterpret_cast<DynamicLoaderFunction*>(&result);
+  return *reinterpret_cast<DynamicLoader::SymbolPointer*>(&result);
 }
 
 //----------------------------------------------------------------------------
@@ -149,7 +149,7 @@ namespace KWSYS_NAMESPACE
 {
 
 //----------------------------------------------------------------------------
-LibHandle DynamicLoader::OpenLibrary(const char* libname )
+DynamicLoader::LibraryHandle DynamicLoader::OpenLibrary(const char* libname )
 {
   NSObjectFileImageReturnCode rc;
   NSObjectFileImage image = 0;
@@ -160,19 +160,27 @@ LibHandle DynamicLoader::OpenLibrary(const char* libname )
     {
     return 0;
     }
-  return NSLinkModule(image, libname,
-    NSLINKMODULE_OPTION_PRIVATE|NSLINKMODULE_OPTION_BINDNOW);
+  NSModule handle = NSLinkModule(image, libname,
+    NSLINKMODULE_OPTION_BINDNOW|NSLINKMODULE_OPTION_RETURN_ON_ERROR);
+  NSDestroyObjectFileImage(image);
+  return handle;
 }
 
 //----------------------------------------------------------------------------
-int DynamicLoader::CloseLibrary( LibHandle lib)
+int DynamicLoader::CloseLibrary( DynamicLoader::LibraryHandle lib)
 {
+  // NSUNLINKMODULE_OPTION_KEEP_MEMORY_MAPPED
+  // With  this  option  the memory for the module is not deallocated
+  // allowing pointers into the module to still be valid.
+  // You should use this option instead if your code experience some problems
+  // reported against Panther 10.3.9 (fixed in Tiger 10.4.2 and up)
   bool success = NSUnLinkModule(lib, NSUNLINKMODULE_OPTION_NONE);
   return success;
 }
 
 //----------------------------------------------------------------------------
-DynamicLoaderFunction DynamicLoader::GetSymbolAddress(LibHandle lib, const char* sym)
+DynamicLoader::SymbolPointer DynamicLoader::GetSymbolAddress(
+  DynamicLoader::LibraryHandle lib, const char* sym)
 {
   void *result=0;
   // Need to prepend symbols with '_' on Apple-gcc compilers
@@ -189,7 +197,7 @@ DynamicLoaderFunction DynamicLoader::GetSymbolAddress(LibHandle lib, const char*
 
   delete[] rsym;
   // Hack to cast pointer-to-data to pointer-to-function.
-  return *reinterpret_cast<DynamicLoaderFunction*>(&result);
+  return *reinterpret_cast<DynamicLoader::SymbolPointer*>(&result);
 }
 
 //----------------------------------------------------------------------------
@@ -228,9 +236,9 @@ namespace KWSYS_NAMESPACE
 {
 
 //----------------------------------------------------------------------------
-LibHandle DynamicLoader::OpenLibrary(const char* libname)
+DynamicLoader::LibraryHandle DynamicLoader::OpenLibrary(const char* libname)
 {
-  LibHandle lh;
+  DynamicLoader::LibraryHandle lh;
 #ifdef UNICODE
   wchar_t libn[MB_CUR_MAX];
   mbstowcs(libn, libname, MB_CUR_MAX);
@@ -242,13 +250,14 @@ LibHandle DynamicLoader::OpenLibrary(const char* libname)
 }
 
 //----------------------------------------------------------------------------
-int DynamicLoader::CloseLibrary(LibHandle lib)
+int DynamicLoader::CloseLibrary(DynamicLoader::LibraryHandle lib)
 {
   return (int)FreeLibrary(lib);
 }
 
 //----------------------------------------------------------------------------
-DynamicLoaderFunction DynamicLoader::GetSymbolAddress(LibHandle lib, const char* sym)
+DynamicLoader::SymbolPointer DynamicLoader::GetSymbolAddress(
+  DynamicLoader::LibraryHandle lib, const char* sym)
 {
   void *result;
 #ifdef __BORLANDC__
@@ -271,7 +280,7 @@ DynamicLoaderFunction DynamicLoader::GetSymbolAddress(LibHandle lib, const char*
   delete[] rsym;
 #endif
   // Hack to cast pointer-to-data to pointer-to-function.
-  return *reinterpret_cast<DynamicLoaderFunction*>(&result);
+  return *reinterpret_cast<DynamicLoader::SymbolPointer*>(&result);
 }
 
 //----------------------------------------------------------------------------
@@ -329,13 +338,13 @@ namespace KWSYS_NAMESPACE
 {
 
 //----------------------------------------------------------------------------
-LibHandle DynamicLoader::OpenLibrary(const char* libname )
+DynamicLoader::LibraryHandle DynamicLoader::OpenLibrary(const char* libname )
 {
   return dlopen(libname, RTLD_LAZY);
 }
 
 //----------------------------------------------------------------------------
-int DynamicLoader::CloseLibrary(LibHandle lib)
+int DynamicLoader::CloseLibrary(DynamicLoader::LibraryHandle lib)
 {
   if (lib)
     {
@@ -347,12 +356,17 @@ int DynamicLoader::CloseLibrary(LibHandle lib)
 }
 
 //----------------------------------------------------------------------------
-DynamicLoaderFunction DynamicLoader::GetSymbolAddress(LibHandle lib, const char* sym)
+DynamicLoader::SymbolPointer DynamicLoader::GetSymbolAddress(
+  DynamicLoader::LibraryHandle lib, const char* sym)
 {
-  void* result = dlsym(lib, sym);
-
   // Hack to cast pointer-to-data to pointer-to-function.
-  return *reinterpret_cast<DynamicLoaderFunction*>(&result);
+  union 
+  {
+    void* pvoid;
+    DynamicLoader::SymbolPointer psym;
+  } result;
+  result.pvoid = dlsym(lib, sym);
+  return result.psym;
 }
 
 //----------------------------------------------------------------------------
