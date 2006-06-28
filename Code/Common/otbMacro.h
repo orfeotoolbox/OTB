@@ -49,6 +49,20 @@
 }
 #endif
 
+#if defined(OTB_LEAN_AND_MEAN) || defined(__BORLANDC__)
+#define otbMsgDevMacro(x)
+#else
+  #ifdef OTB_ACTIVE_MSG_DEV_MACRO
+    #define otbMsgDevMacro(x) \
+    { { ::itk::OStringStream itkmsg; \
+      itkmsg << " Msg Dev: " x << "\n"; \
+      ::itk::OutputWindowDisplayDebugText(itkmsg.str().c_str());} \
+     }
+  #else
+     #define otbMsgDevMacro(x)
+  #endif
+#endif
+
 
 /** This macro is used to print warning information (i.e., unusual circumstance
  * but not necessarily fatal.) Example usage looks like:
