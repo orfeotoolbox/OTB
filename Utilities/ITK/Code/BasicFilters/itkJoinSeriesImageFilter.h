@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkJoinSeriesImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2005/01/12 21:16:54 $
-  Version:   $Revision: 1.2 $
+  Date:      $Date: 2006/03/22 16:26:39 $
+  Version:   $Revision: 1.3 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -83,6 +83,14 @@ public:
   /** Set/Get origin of the new dimension */
   itkSetMacro(Origin, double);
   itkGetMacro(Origin, double);
+
+#ifdef ITK_USE_CONCEPT_CHECKING
+  /** Begin concept checking */
+  itkConceptMacro(InputConvertibleToOutputCheck,
+     (Concept::Convertible<typename TInputImage::PixelType,
+                           typename TOutputImage::PixelType>));
+  /** End concept checking */
+#endif
 
 protected:
   JoinSeriesImageFilter();

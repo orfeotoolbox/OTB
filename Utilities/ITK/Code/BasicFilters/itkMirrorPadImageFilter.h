@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkMirrorPadImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2005/07/27 15:21:10 $
-  Version:   $Revision: 1.14 $
+  Date:      $Date: 2006/03/22 16:26:42 $
+  Version:   $Revision: 1.15 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -78,7 +78,14 @@ public:
   /** ImageDimension enumeration. */
   itkStaticConstMacro(ImageDimension, unsigned int,
                       TInputImage::ImageDimension);
-  
+
+#ifdef ITK_USE_CONCEPT_CHECKING
+  /** Begin concept checking */
+  itkConceptMacro(InputConvertibleToOutputCheck,
+    (Concept::Convertible<InputImagePixelType, OutputImagePixelType>));
+  /** End concept checking */
+#endif
+
 protected:
   MirrorPadImageFilter() {};
   ~MirrorPadImageFilter() {};

@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkSparseFieldFourthOrderLevelSetImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2004/11/04 20:40:40 $
-  Version:   $Revision: 1.12 $
+  Date:      $Date: 2006/03/30 15:36:25 $
+  Version:   $Revision: 1.14 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -229,7 +229,7 @@ class ITK_EXPORT SparseFieldFourthOrderLevelSetImageFilter
       processing band. */
   unsigned int GetMinimumNumberOfLayers() const
   {
-    return (int)ceil(m_CurvatureBandWidth+
+    return (int)vcl_ceil(m_CurvatureBandWidth+
                      itkGetStaticConstMacro(ImageDimension));
   }
 
@@ -270,6 +270,13 @@ class ITK_EXPORT SparseFieldFourthOrderLevelSetImageFilter
     
     m_RefitIteration++;
   }
+
+#ifdef ITK_USE_CONCEPT_CHECKING
+  /** Begin concept checking */
+  itkConceptMacro(OutputHasNumericTraitsCheck,
+                  (Concept::HasNumericTraits<ValueType>));
+  /** End concept checking */
+#endif
 
 protected:
   SparseFieldFourthOrderLevelSetImageFilter();

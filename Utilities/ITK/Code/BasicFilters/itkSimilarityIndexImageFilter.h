@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkSimilarityIndexImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2003/09/10 14:28:56 $
-  Version:   $Revision: 1.7 $
+  Date:      $Date: 2006/03/30 15:36:25 $
+  Version:   $Revision: 1.8 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -109,6 +109,15 @@ public:
   
   /** Return the computed similarity index. */
   itkGetMacro(SimilarityIndex,RealType);
+
+#ifdef ITK_USE_CONCEPT_CHECKING
+  /** Begin concept checking */
+  itkConceptMacro(Input1HasNumericTraitsCheck,
+                  (Concept::HasNumericTraits<InputImage1PixelType>));
+  itkConceptMacro(Input2HasNumericTraitsCheck,
+                  (Concept::HasNumericTraits<InputImage2PixelType>));
+  /** End concept checking */
+#endif
 
 protected:
   SimilarityIndexImageFilter();

@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkMedianImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2003/09/10 14:28:51 $
-  Version:   $Revision: 1.4 $
+  Date:      $Date: 2006/03/22 16:26:42 $
+  Version:   $Revision: 1.5 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -90,6 +90,17 @@ public:
    *
    * \sa ImageToImageFilter::GenerateInputRequestedRegion() */
   virtual void GenerateInputRequestedRegion() throw(InvalidRequestedRegionError);
+
+#ifdef ITK_USE_CONCEPT_CHECKING
+  /** Begin concept checking */
+  itkConceptMacro(SameDimensionCheck,
+                  (Concept::SameDimension<InputImageDimension, OutputImageDimension>));
+  itkConceptMacro(InputConvertibleToOutputCheck,
+                  (Concept::Convertible<InputPixelType, OutputPixelType>));
+  itkConceptMacro(InputLessThanComparableCheck,
+                  (Concept::LessThanComparable<InputPixelType>));
+  /** End concept checking */
+#endif
 
 protected:
   MedianImageFilter();

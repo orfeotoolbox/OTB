@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkGrayscaleErodeImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2004/04/30 21:02:03 $
-  Version:   $Revision: 1.17 $
+  Date:      $Date: 2006/03/28 19:59:04 $
+  Version:   $Revision: 1.19 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -74,6 +74,29 @@ public:
   /** Default boundary condition type */
   typedef typename Superclass::DefaultBoundaryConditionType DefaultBoundaryConditionType;
   
+  /** ImageDimension constants */
+  itkStaticConstMacro(InputImageDimension, unsigned int,
+                      TInputImage::ImageDimension);
+  itkStaticConstMacro(OutputImageDimension, unsigned int,
+                      TOutputImage::ImageDimension);
+  itkStaticConstMacro(KernelDimension, unsigned int,
+                      TKernel::NeighborhoodDimension);
+
+#ifdef ITK_USE_CONCEPT_CHECKING
+  /** Begin concept checking */
+  itkConceptMacro(InputConvertibleToOutputCheck,
+    (Concept::Convertible<PixelType, typename TOutputImage::PixelType>));
+  itkConceptMacro(SameDimensionCheck1,
+     (Concept::SameDimension<InputImageDimension, OutputImageDimension>));
+  itkConceptMacro(SameDimensionCheck2,
+    (Concept::SameDimension<InputImageDimension, KernelDimension>));
+  itkConceptMacro(InputLessThanComparableCheck,
+    (Concept::LessThanComparable<PixelType>));
+  itkConceptMacro(KernelGreaterThanIntCheck,
+    (Concept::GreaterThanComparable<typename TKernel::PixelType, int>));
+  /** End concept checking */
+#endif
+
 protected:
   GrayscaleErodeImageFilter();
   ~GrayscaleErodeImageFilter() {};

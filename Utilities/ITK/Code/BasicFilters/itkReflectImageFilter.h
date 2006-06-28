@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkReflectImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2003/09/10 14:28:55 $
-  Version:   $Revision: 1.8 $
+  Date:      $Date: 2006/03/22 16:26:44 $
+  Version:   $Revision: 1.9 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -59,7 +59,22 @@ public:
   /** Set the direction in which to reflect the data. */
   itkGetMacro( Direction, unsigned int );
   itkSetMacro( Direction, unsigned int );
-  
+
+  /** ImageDimension constants */
+  itkStaticConstMacro(InputImageDimension, unsigned int,
+                      TInputImage::ImageDimension);
+  itkStaticConstMacro(OutputImageDimension, unsigned int,
+                      TOutputImage::ImageDimension);
+
+#ifdef ITK_USE_CONCEPT_CHECKING
+  /** Begin concept checking */
+  itkConceptMacro(SameDimensionCheck,
+    (Concept::SameDimension<InputImageDimension, OutputImageDimension>));
+  itkConceptMacro(InputConvertibleToOutputCheck,
+    (Concept::Convertible<InputImagePixelType, OutputImagePixelType>));
+  /** End concept checking */
+#endif
+
 protected:
   ReflectImageFilter();
   virtual ~ReflectImageFilter() {};

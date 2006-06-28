@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkVotingBinaryImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2004/11/21 02:29:10 $
-  Version:   $Revision: 1.4 $
+  Date:      $Date: 2006/04/04 13:13:51 $
+  Version:   $Revision: 1.6 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -102,6 +102,21 @@ public:
    *
    * \sa ImageToImageFilter::GenerateInputRequestedRegion() */
   virtual void GenerateInputRequestedRegion() throw(InvalidRequestedRegionError);
+
+#ifdef ITK_USE_CONCEPT_CHECKING
+  /** Begin concept checking */
+  itkConceptMacro(InputEqualityComparableCheck,
+    (Concept::EqualityComparable<InputPixelType>));
+  itkConceptMacro(IntConvertibleToInputCheck,
+    (Concept::Convertible<int, InputPixelType>));
+  itkConceptMacro(InputConvertibleToOutputCheck,
+    (Concept::Convertible<InputPixelType, OutputPixelType>));
+  itkConceptMacro(SameDimensionCheck,
+    (Concept::SameDimension<InputImageDimension, OutputImageDimension>));
+  itkConceptMacro(InputOStreamWritableCheck,
+    (Concept::OStreamWritable<InputPixelType>));
+  /** End concept checking */
+#endif
 
 protected:
   VotingBinaryImageFilter();

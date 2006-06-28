@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkDirectedHausdorffDistanceImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2003/09/10 14:28:46 $
-  Version:   $Revision: 1.7 $
+  Date:      $Date: 2006/03/27 17:01:06 $
+  Version:   $Revision: 1.8 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -113,6 +113,13 @@ public:
   
   /** Return the computed directed Hausdorff distance. */
   itkGetMacro(DirectedHausdorffDistance,RealType);
+
+#ifdef ITK_USE_CONCEPT_CHECKING
+  /** Begin concept checking */
+  itkConceptMacro(InputHasNumericTraitsCheck,
+    (Concept::HasNumericTraits<InputImage1PixelType>));
+  /** End concept checking */
+#endif
 
 protected:
   DirectedHausdorffDistanceImageFilter();

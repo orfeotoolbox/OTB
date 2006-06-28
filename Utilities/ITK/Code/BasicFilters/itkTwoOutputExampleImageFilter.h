@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkTwoOutputExampleImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2003/09/10 14:28:58 $
-  Version:   $Revision: 1.8 $
+  Date:      $Date: 2006/04/03 15:07:52 $
+  Version:   $Revision: 1.10 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -88,6 +88,15 @@ public:
   /** Set the image output of this process object.  */
   void SetInverseOutput(OutputImageType *output)
   { this->SetNthOutput(1, output); };
+
+#ifdef ITK_USE_CONCEPT_CHECKING
+  /** Begin concept checking */
+  itkConceptMacro(ComparableCheck,
+                  (Concept::Comparable<PixelType>));
+  itkConceptMacro(OStreamWritableCheck,
+                  (Concept::OStreamWritable<PixelType>));
+  /** Begin concept checking */
+#endif
 
 protected:
   TwoOutputExampleImageFilter();

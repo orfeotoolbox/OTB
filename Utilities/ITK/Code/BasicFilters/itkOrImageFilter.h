@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkOrImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2006/01/23 17:55:48 $
-  Version:   $Revision: 1.3 $
+  Date:      $Date: 2006/03/30 15:36:25 $
+  Version:   $Revision: 1.4 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -91,7 +91,16 @@ public:
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
-  
+
+#ifdef ITK_USE_CONCEPT_CHECKING
+  /** Begin concept checking */
+  itkConceptMacro(Input1Input2OutputLogicalOperatorsCheck,
+    (Concept::LogicalOperators<typename TInputImage1::PixelType,
+                               typename TInputImage2::PixelType,
+                               typename TOutputImage::PixelType>));
+  /** End concept checking */
+#endif
+
 protected:
   OrImageFilter() {}
   virtual ~OrImageFilter() {}

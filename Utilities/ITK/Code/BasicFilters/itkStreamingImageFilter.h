@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkStreamingImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2003/09/10 14:28:57 $
-  Version:   $Revision: 1.12 $
+  Date:      $Date: 2006/03/23 15:24:22 $
+  Version:   $Revision: 1.13 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -70,6 +70,8 @@ public:
   /** Dimension of input image. */
   itkStaticConstMacro(InputImageDimension, unsigned int,
                       InputImageType::ImageDimension);
+  itkStaticConstMacro(OutputImageDimension, unsigned int,
+                      OutputImageType::ImageDimension);
 
   /** SmartPointer to a region splitting object */
   typedef ImageRegionSplitter<itkGetStaticConstMacro(InputImageDimension)>
@@ -96,7 +98,16 @@ public:
    * in UpdateOutputData() since it must update a little, execute a little,
    * update some more, execute some more, etc. */
   virtual void UpdateOutputData(DataObject *output);
-  
+
+#ifdef ITK_USE_CONCEPT_CHECKING
+  /** Begin concept checking */
+  itkConceptMacro(SameDimensionCheck,
+    (Concept::SameDimension<InputImageDimension, OutputImageDimension>));
+  itkConceptMacro(InputConvertibleToOutputCheck,
+    (Concept::Convertible<InputImagePixelType, OutputImagePixelType>));
+  /** End concept checking */
+#endif
+
 protected:
   StreamingImageFilter();
   ~StreamingImageFilter();

@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkObjectMorphologyImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2005/01/16 15:10:52 $
-  Version:   $Revision: 1.6 $
+  Date:      $Date: 2006/03/29 14:43:58 $
+  Version:   $Revision: 1.8 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -102,6 +102,10 @@ public:
   /** Image related typedefs. */
   itkStaticConstMacro(ImageDimension, unsigned int,
                       TInputImage::ImageDimension);
+  itkStaticConstMacro(OutputImageDimension, unsigned int,
+                      TOutputImage::ImageDimension );
+  itkStaticConstMacro(KernelDimension, unsigned int,
+                      TKernel::NeighborhoodDimension);  
 
   /** Neighborhood iterator type. */
   typedef ConstNeighborhoodIterator<TInputImage> 
@@ -165,6 +169,26 @@ public:
    * not consider that outside extent when determining if a pixel is on
    * an object's boundary. */
   itkGetMacro(UseBoundaryCondition, bool);
+
+#ifdef ITK_USE_CONCEPT_CHECKING
+  /** Begin concept checking */
+  itkConceptMacro(SameDimensionCheck1,
+    (Concept::SameDimension<ImageDimension, OutputImageDimension>));
+  itkConceptMacro(SameDimensionCheck2,
+    (Concept::SameDimension<ImageDimension, KernelDimension>));
+  itkConceptMacro(OutputInputEqualityComparableCheck,
+    (Concept::EqualityComparable<typename TOutputImage::PixelType,
+                                 PixelType>));
+  itkConceptMacro(InputConvertibleToOutputCheck,
+    (Concept::Convertible<PixelType, typename TOutputImage::PixelType>));
+  itkConceptMacro(IntConvertibleToOutputCheck,
+    (Concept::Convertible<int, typename TOutputImage::PixelType>));
+  itkConceptMacro(InputEqualityComparable,
+    (Concept::EqualityComparable<PixelType>));
+  itkConceptMacro(InputOStreamWritableCheck,
+    (Concept::OStreamWritable<PixelType>));
+  /** End concept checking */
+#endif
 
 protected:
   ObjectMorphologyImageFilter();

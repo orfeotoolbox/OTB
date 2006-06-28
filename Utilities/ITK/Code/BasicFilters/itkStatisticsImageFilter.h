@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkStatisticsImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2005/06/15 15:04:07 $
-  Version:   $Revision: 1.13 $
+  Date:      $Date: 2006/03/30 15:36:25 $
+  Version:   $Revision: 1.14 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -118,6 +118,13 @@ public:
   /** Make a DataObject of the correct type to be used as the specified
    * output. */
   virtual DataObjectPointer MakeOutput(unsigned int idx);
+
+#ifdef ITK_USE_CONCEPT_CHECKING
+  /** Begin concept checking */
+  itkConceptMacro(InputHasNumericTraitsCheck,
+                  (Concept::HasNumericTraits<PixelType>));
+  /** End concept checking */
+#endif
 
 protected:
   StatisticsImageFilter();

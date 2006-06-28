@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkRelabelComponentImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2005/08/03 18:50:05 $
-  Version:   $Revision: 1.12 $
+  Date:      $Date: 2006/03/22 16:26:44 $
+  Version:   $Revision: 1.13 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -93,8 +93,10 @@ public:
   typedef typename TInputImage::PixelType InputPixelType;
   typedef typename TInputImage::InternalPixelType InputInternalPixelType;
   itkStaticConstMacro(ImageDimension, unsigned int,
-                      TOutputImage::ImageDimension);
-  
+                      TOutputImage::ImageDimension); 
+  itkStaticConstMacro(InputImageDimension, unsigned int,
+                      TInputImage::ImageDimension);
+ 
   /**
    * Image typedef support
    */
@@ -195,9 +197,23 @@ public:
         {
         return 0;
         }
-    }  
+    }
 
-  
+#ifdef ITK_USE_CONCEPT_CHECKING
+  /** Begin concept checking */
+  itkConceptMacro(InputEqualityComparableCheck,
+    (Concept::EqualityComparable<InputPixelType>));
+  itkConceptMacro(UnsignedLongConvertibleToInputCheck,
+    (Concept::Convertible<unsigned long, InputPixelType>));
+  itkConceptMacro(OutputLongConvertibleToUnsignedLongCheck,
+    (Concept::Convertible<OutputPixelType, unsigned long>));
+  itkConceptMacro(InputConvertibleToOutputCheck,
+    (Concept::Convertible<InputPixelType, OutputPixelType>));
+  itkConceptMacro(SameDimensionCheck,
+    (Concept::SameDimension<InputImageDimension, ImageDimension>));
+  /** End concept checking */
+#endif
+
 protected:
 
   RelabelComponentImageFilter()

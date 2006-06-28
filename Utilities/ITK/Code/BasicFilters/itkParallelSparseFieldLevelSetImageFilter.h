@@ -3,8 +3,8 @@
 Program:   Insight Segmentation & Registration Toolkit
 Module:    $RCSfile: itkParallelSparseFieldLevelSetImageFilter.h,v $
 Language:  C++
-Date:      $Date: 2004/01/07 02:17:59 $
-Version:   $Revision: 1.13 $
+Date:      $Date: 2006/03/30 15:36:25 $
+Version:   $Revision: 1.15 $
 
 Copyright (c) Insight Software Consortium. All rights reserved.
 See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -321,7 +321,18 @@ public:
   // get the active list for that thread
   return m_Data[ThreadNum].m_Layers[0];
   }
-  
+
+#ifdef ITK_USE_CONCEPT_CHECKING
+  /** Begin concept checking */
+  itkConceptMacro(OutputEqualityComparableCheck,
+                  (Concept::EqualityComparable<PixelType>));
+  itkConceptMacro(DoubleConvertibleToOutputCheck,
+                  (Concept::Convertible<double, PixelType>));
+  itkConceptMacro(OutputOStreamWritableCheck,
+                  (Concept::OStreamWritable<PixelType>));
+  /** End concept checking */
+#endif
+
 protected:
   ParallelSparseFieldLevelSetImageFilter();
   ~ParallelSparseFieldLevelSetImageFilter() {}

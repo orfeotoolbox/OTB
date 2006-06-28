@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkAtan2ImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2006/01/23 17:55:47 $
-  Version:   $Revision: 1.17 $
+  Date:      $Date: 2006/03/19 04:36:55 $
+  Version:   $Revision: 1.19 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -31,7 +31,7 @@ namespace itk
  * Numeric conversions (castings) are done by the C++ defaults.
  * 
  * Both pixel input types are casted to \c double in order to be 
- * used as parameters of \c atan2(). The resulting \c double value
+ * used as parameters of \c vcl_atan2(). The resulting \c double value
  * is casted to the output pixel type.
  *
  * \ingroup IntensityImageFilters Multithreaded
@@ -55,7 +55,7 @@ public:
   inline TOutput operator()( const TInput1 & A, const TInput2 & B)
   {
     return static_cast<TOutput>( 
-      atan2(
+      vcl_atan2(
         static_cast<double>(A),
         static_cast<double>(B)  )
       );
@@ -86,7 +86,18 @@ public:
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
-  
+
+#ifdef ITK_USE_CONCEPT_CHECKING
+  /** Begin concept checking */
+  itkConceptMacro(Input1ConvertibleToDoubleCheck,
+    (Concept::Convertible<typename TInputImage1::PixelType, double>));
+  itkConceptMacro(Input2ConvertibleToDoubleCheck,
+    (Concept::Convertible<typename TInputImage2::PixelType, double>));
+  itkConceptMacro(DoubleConvertibleToOutputCheck,
+    (Concept::Convertible<double, typename TOutputImage::PixelType>));
+  /** End concept checking */
+#endif
+
 protected:
   Atan2ImageFilter() {}
   virtual ~Atan2ImageFilter() {}

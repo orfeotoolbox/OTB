@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkWeightedAddImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2006/01/14 14:33:41 $
-  Version:   $Revision: 1.2 $
+  Date:      $Date: 2006/03/31 14:31:04 $
+  Version:   $Revision: 1.3 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -125,6 +125,19 @@ public:
     this->GetFunctor().SetAlpha( alpha );
     this->Modified();
     }
+
+#ifdef ITK_USE_CONCEPT_CHECKING
+  /** Begin concept checking */
+  itkConceptMacro(Input1HasNumericTraitsCheck,
+    (Concept::HasNumericTraits<typename TInputImage1::PixelType>));
+  itkConceptMacro(Input1RealTypeMultiplyCheck,
+    (Concept::MultiplyOperator<typename TInputImage1::PixelType,
+                               RealType, RealType>));
+  itkConceptMacro(Input2RealTypeMultiplyCheck,
+    (Concept::MultiplyOperator<typename TInputImage2::PixelType,
+                               RealType, RealType>));
+  /** End concept checking */
+#endif
 
 protected:
   WeightedAddImageFilter() {}

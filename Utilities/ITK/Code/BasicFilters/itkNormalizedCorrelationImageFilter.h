@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkNormalizedCorrelationImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2005/05/13 12:11:12 $
-  Version:   $Revision: 1.2 $
+  Date:      $Date: 2006/03/30 21:14:31 $
+  Version:   $Revision: 1.4 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -68,8 +68,12 @@ public:
 
   /** Extract some information from the image types.  Dimensionality
    * of the two images is assumed to be the same. */
+  itkStaticConstMacro(InputImageDimension, unsigned int,
+                      TInputImage::ImageDimension);
   itkStaticConstMacro(ImageDimension, unsigned int,
                       TOutputImage::ImageDimension);
+  itkStaticConstMacro(MaskImageDimension, unsigned int,
+                      TMaskImage::ImageDimension);
   
   /** Image typedef support. */
   typedef TInputImage  InputImageType;
@@ -106,6 +110,17 @@ public:
   {
     this->SetOperator(t);
   }
+
+#ifdef ITK_USE_CONCEPT_CHECKING
+  /** Begin concept checking */
+  itkConceptMacro(SameDimensionCheck,
+    (Concept::SameDimension<InputImageDimension, MaskImageDimension>));
+  itkConceptMacro(OutputHasNumericTraitsCheck,
+    (Concept::HasNumericTraits<OutputPixelType>));
+  itkConceptMacro(OperatorHasNumericTraitsCheck,
+    (Concept::HasNumericTraits<OperatorValueType>));
+  /** End concept checking */
+#endif
 
 protected:
   NormalizedCorrelationImageFilter() {}

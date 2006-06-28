@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkTensorFractionalAnisotropyImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2006/01/23 17:55:48 $
-  Version:   $Revision: 1.5 $
+  Date:      $Date: 2006/04/03 15:07:52 $
+  Version:   $Revision: 1.6 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -94,6 +94,12 @@ public:
   void PrintSelf(std::ostream& os, Indent indent) const
     { this->Superclass::PrintSelf( os, indent ); }
   
+#ifdef ITK_USE_CONCEPT_CHECKING
+  /** Begin concept checking */
+  itkConceptMacro(InputHasNumericTraitsCheck,
+                  (Concept::HasNumericTraits<InputValueType>));
+  /** End concept checking */
+#endif
 
 protected:
   TensorFractionalAnisotropyImageFilter() {};

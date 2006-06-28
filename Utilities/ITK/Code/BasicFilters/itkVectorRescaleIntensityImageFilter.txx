@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkVectorRescaleIntensityImageFilter.txx,v $
   Language:  C++
-  Date:      $Date: 2004/07/08 23:06:33 $
-  Version:   $Revision: 1.1 $
+  Date:      $Date: 2006/03/19 04:36:58 $
+  Version:   $Revision: 1.2 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -98,7 +98,7 @@ VectorRescaleIntensityImageFilter<TInputImage, TOutputImage>
     ++it;
     }
 
-  m_InputMaximumMagnitude = sqrt( maximumSquaredMagnitude );
+  m_InputMaximumMagnitude = vcl_sqrt(maximumSquaredMagnitude );
 
   m_Scale = static_cast<InputRealType>( m_OutputMaximumMagnitude ) /
             static_cast<InputRealType>( m_InputMaximumMagnitude  ) ;

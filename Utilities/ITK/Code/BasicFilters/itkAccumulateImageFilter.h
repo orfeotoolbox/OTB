@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkAccumulateImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2005/09/23 03:06:06 $
-  Version:   $Revision: 1.4 $
+  Date:      $Date: 2006/03/27 17:01:04 $
+  Version:   $Revision: 1.8 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -81,10 +81,15 @@ public:
   itkStaticConstMacro(OutputImageDimension, unsigned int,
                       TOutputImage::ImageDimension);
 
-  /** Input and output images must be the same dimension. */
+  /** Input and output images must be the same dimension, or the output's
+      dimension must be one less than that of the input. */
+#ifdef ITK_USE_CONCEPT_CHECKING
+  /** Begin concept checking */
   itkConceptMacro(ImageDimensionCheck,
-      (Concept::SameDimension<itkGetStaticConstMacro(InputImageDimension),
-                              itkGetStaticConstMacro(OutputImageDimension)>));
+      (Concept::SameDimensionOrMinusOne<itkGetStaticConstMacro(InputImageDimension),
+                                        itkGetStaticConstMacro(OutputImageDimension)>));
+  /** End concept checking */
+#endif
 
   /** Set the direction in which to accumulate the data.  It must be
    * set before the update of the filter. Defaults to the last

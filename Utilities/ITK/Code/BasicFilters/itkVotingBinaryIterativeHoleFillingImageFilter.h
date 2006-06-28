@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkVotingBinaryIterativeHoleFillingImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2005/12/09 13:27:54 $
-  Version:   $Revision: 1.2 $
+  Date:      $Date: 2006/04/04 13:13:51 $
+  Version:   $Revision: 1.4 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -129,6 +129,15 @@ public:
 
   /** Returns the number of pixels that changed when the filter was executed. */
   itkGetConstReferenceMacro( NumberOfPixelsChanged, unsigned int );
+
+#ifdef ITK_USE_CONCEPT_CHECKING
+  /** Begin concept checking */
+  itkConceptMacro(InputEqualityComparableCheck,
+    (Concept::EqualityComparable<InputPixelType>));
+  itkConceptMacro(InputOStreamWritableeCheck,
+    (Concept::OStreamWritable<InputPixelType>));
+  /** End concept checking */
+#endif
 
 protected:
   VotingBinaryIterativeHoleFillingImageFilter();

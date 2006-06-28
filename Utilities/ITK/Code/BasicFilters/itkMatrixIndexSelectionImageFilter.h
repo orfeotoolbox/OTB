@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkMatrixIndexSelectionImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2006/01/15 04:28:36 $
-  Version:   $Revision: 1.3 $
+  Date:      $Date: 2006/03/29 14:53:40 $
+  Version:   $Revision: 1.4 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -98,6 +98,13 @@ public:
 
   void GetIndices(unsigned int& i, unsigned int& j) const
     { return this->GetFunctor().GetIndices(i,j); }
+
+#ifdef ITK_USE_CONCEPT_CHECKING
+  /** Begin concept checking */
+  itkConceptMacro(InputHasNumericTraitsCheck,
+    (Concept::HasNumericTraits<typename TInputImage::PixelType::ValueType>));
+  /** End concept checking */
+#endif
 
 protected:
   MatrixIndexSelectionImageFilter() {}

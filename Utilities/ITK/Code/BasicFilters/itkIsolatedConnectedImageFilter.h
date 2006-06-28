@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkIsolatedConnectedImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2004/11/26 15:09:06 $
-  Version:   $Revision: 1.14 $
+  Date:      $Date: 2006/03/29 14:53:40 $
+  Version:   $Revision: 1.15 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -194,6 +194,13 @@ public:
   /** Get the flag that tells whether the algorithm failed to find a
    * threshold. */
   itkGetConstReferenceMacro(ThresholdingFailed, bool);
+
+#ifdef ITK_USE_CONCEPT_CHECKING
+  /** Begin concept checking */
+  itkConceptMacro(InputHasNumericTraitsCheck,
+                  (Concept::HasNumericTraits<InputImagePixelType>));
+  /** End concept checking */
+#endif
 
 protected:
   IsolatedConnectedImageFilter();

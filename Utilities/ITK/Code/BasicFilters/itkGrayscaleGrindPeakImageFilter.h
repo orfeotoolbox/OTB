@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkGrayscaleGrindPeakImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2005/08/23 15:09:02 $
-  Version:   $Revision: 1.2 $
+  Date:      $Date: 2006/03/28 19:59:05 $
+  Version:   $Revision: 1.3 $
 
   Copyright (c) 2002 Insight Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -108,7 +108,14 @@ public:
   itkSetMacro(FullyConnected, bool);
   itkGetConstReferenceMacro(FullyConnected, bool);
   itkBooleanMacro(FullyConnected);
-  
+
+#ifdef ITK_USE_CONCEPT_CHECKING
+  /** Begin concept checking */
+  itkConceptMacro(InputOStreamWritableCheck,
+                  (Concept::OStreamWritable<InputImagePixelType>));
+  /** End concept checking */
+#endif
+
 protected:
   GrayscaleGrindPeakImageFilter();
   ~GrayscaleGrindPeakImageFilter() {};

@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkDoubleThresholdImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2005/08/23 15:08:59 $
-  Version:   $Revision: 1.4 $
+  Date:      $Date: 2006/03/27 17:01:07 $
+  Version:   $Revision: 1.6 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -75,9 +75,6 @@ public:
   typedef typename TInputImage::PixelType  InputPixelType;
   typedef typename TOutputImage::PixelType OutputPixelType;
 
-  /** The input pixel type must support comparison operators. */
-  itkConceptMacro(PixelTypeComparable, (Concept::Comparable<InputPixelType>));
-
   /** Set the "outside" pixel value. The default value 
    * NumericTraits<OutputPixelType>::Zero. */
   itkSetMacro(OutsideValue,OutputPixelType);
@@ -125,7 +122,20 @@ public:
   itkSetMacro(FullyConnected, bool);
   itkGetConstReferenceMacro(FullyConnected, bool);
   itkBooleanMacro(FullyConnected);
-  
+
+#ifdef ITK_USE_CONCEPT_CHECKING
+  /** Begin concept checking */
+  itkConceptMacro(OutputEqualityComparableCheck,
+                  (Concept::EqualityComparable<OutputPixelType>));
+  itkConceptMacro(InputComparableCheck,
+                  (Concept::Comparable<InputPixelType>));
+  itkConceptMacro(InputOStreamWritableCheck,
+                  (Concept::OStreamWritable<InputPixelType>));
+  itkConceptMacro(OutputOStreamWritableCheck,
+                  (Concept::OStreamWritable<OutputPixelType>));
+  /** End concept checking */
+#endif
+
 protected:
   DoubleThresholdImageFilter();
   virtual ~DoubleThresholdImageFilter() {}

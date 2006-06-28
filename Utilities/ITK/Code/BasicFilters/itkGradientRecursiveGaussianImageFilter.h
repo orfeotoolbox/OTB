@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkGradientRecursiveGaussianImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2005/06/19 16:41:17 $
-  Version:   $Revision: 1.34 $
+  Date:      $Date: 2006/03/28 19:59:02 $
+  Version:   $Revision: 1.35 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -131,6 +131,15 @@ public:
    * the pipeline execution model.
    * \sa ImageToImageFilter::GenerateInputRequestedRegion() */
   virtual void GenerateInputRequestedRegion() throw(InvalidRequestedRegionError);
+
+#ifdef ITK_USE_CONCEPT_CHECKING
+  /** Begin concept checking */
+  itkConceptMacro(InputHasNumericTraitsCheck,
+                  (Concept::HasNumericTraits<PixelType>));
+  itkConceptMacro(OutputHasPixelTraitsCheck,
+                  (Concept::HasPixelTraits<OutputPixelType>));
+  /** End concept checking */
+#endif
 
 protected:
   GradientRecursiveGaussianImageFilter();

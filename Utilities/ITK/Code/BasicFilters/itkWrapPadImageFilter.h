@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkWrapPadImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2005/07/27 15:21:12 $
-  Version:   $Revision: 1.15 $
+  Date:      $Date: 2006/03/23 15:24:22 $
+  Version:   $Revision: 1.16 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -81,7 +81,14 @@ public:
   /** ImageDimension enumeration. */
   itkStaticConstMacro(ImageDimension, unsigned int,
                       TInputImage::ImageDimension );
-  
+
+#ifdef ITK_USE_CONCEPT_CHECKING
+  /** Begin concept checking */
+  itkConceptMacro(InputConvertibleToOutputCheck,
+    (Concept::Convertible<InputImagePixelType, OutputImagePixelType>));
+  /** End concept checking */
+#endif
+
 protected:
   WrapPadImageFilter() {};
   ~WrapPadImageFilter() {};

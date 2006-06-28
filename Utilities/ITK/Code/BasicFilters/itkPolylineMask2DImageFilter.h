@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkPolylineMask2DImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2005/12/02 16:58:11 $
-  Version:   $Revision: 1.3 $
+  Date:      $Date: 2006/03/22 16:26:44 $
+  Version:   $Revision: 1.4 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -57,6 +57,8 @@ public:
   /** Number of dimensions. */
   itkStaticConstMacro(NDimensions, unsigned int,
                       TInputImage::ImageDimension);
+  itkStaticConstMacro(NOutputDimensions, unsigned int,
+                      TOutputImage::ImageDimension);
   
   /** Some convenient typedefs for input image */
   typedef TInputImage InputImageType;
@@ -79,7 +81,19 @@ public:
 
   /* Generate Data */
   void GenerateData(void);
- 
+
+#ifdef ITK_USE_CONCEPT_CHECKING
+  /** Begin concept checking */
+  itkConceptMacro(SameDimensionCheck,
+    (Concept::SameDimension<NDimensions, NOutputDimensions>));
+  itkConceptMacro(IntConvertibleOutputCheck,
+    (Concept::Convertible<int, OutputImagePixelType>));
+  itkConceptMacro(OutputEqualityComparableCheck,
+    (Concept::EqualityComparable<OutputImagePixelType>));
+  itkConceptMacro(InputConvertibleToOutputCheck,
+    (Concept::Convertible<InputImagePixelType, OutputImagePixelType>));
+  /** End concept checking */
+#endif
 
 protected:
   PolylineMask2DImageFilter();

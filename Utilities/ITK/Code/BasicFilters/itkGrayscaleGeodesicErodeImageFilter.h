@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkGrayscaleGeodesicErodeImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2005/08/23 15:09:02 $
-  Version:   $Revision: 1.4 $
+  Date:      $Date: 2006/03/17 14:22:27 $
+  Version:   $Revision: 1.5 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -135,6 +135,17 @@ public:
   itkSetMacro(FullyConnected, bool);
   itkGetConstReferenceMacro(FullyConnected, bool);
   itkBooleanMacro(FullyConnected);
+
+#ifdef ITK_USE_CONCEPT_CHECKING
+  /** Begin concept checking */
+  itkConceptMacro(SameDimensionCheck,
+    (Concept::SameDimension<MarkerImageDimension, OutputImageDimension>));
+  itkConceptMacro(InputComparableCheck,
+    (Concept::Comparable<MarkerImagePixelType>));
+  itkConceptMacro(InputConvertibleToOutputCheck,
+    (Concept::Convertible<MarkerImagePixelType, OutputImagePixelType>));
+  /** End concept checking */
+#endif
 
 protected:
   GrayscaleGeodesicErodeImageFilter();

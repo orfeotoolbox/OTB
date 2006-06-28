@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkBinaryThresholdImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2006/01/15 04:28:35 $
-  Version:   $Revision: 1.8 $
+  Date:      $Date: 2006/04/18 18:34:23 $
+  Version:   $Revision: 1.11 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -33,6 +33,14 @@ namespace itk
  * depending on whether of not the corresponding input image pixel
  * lie between the two thresholds ( LowerThreshold and UpperThreshold ).
  * Values equal to either threshold is considered to be between the thresholds.
+ *
+ * More precisely
+ * \f[ Output(x_i) =
+       \begin{cases}
+         InsideValue & \text{if $LowerThreshold \leq x_i \leq UpperThreshold$} \     \
+         OutsideValue & \text{otherwise}
+       \end{cases}
+   \f]
  * 
  * This filter is templated over the input image type
  * and the output image type.
@@ -122,9 +130,6 @@ public:
   typedef typename TInputImage::PixelType  InputPixelType;
   typedef typename TOutputImage::PixelType OutputPixelType;
 
-  /** The input pixel type must support comparison operators. */
-  itkConceptMacro(PixelTypeComparable, (Concept::Comparable<InputPixelType>));
-
   /** Type of DataObjects to use for scalar inputs */
   typedef SimpleDataObjectDecorator<InputPixelType> InputPixelObjectType;
   
@@ -158,7 +163,20 @@ public:
   virtual InputPixelType GetLowerThreshold() const;
   virtual InputPixelObjectType *GetLowerThresholdInput();
   virtual const InputPixelObjectType *GetLowerThresholdInput() const;
-  
+
+#ifdef ITK_USE_CONCEPT_CHECKING
+  /** Begin concept checking */
+  itkConceptMacro(OutputEqualityComparableCheck,
+                  (Concept::EqualityComparable<OutputPixelType>));
+  itkConceptMacro(InputPixelTypeComparable,
+                  (Concept::Comparable<InputPixelType>));
+  itkConceptMacro(InputOStreamWritableCheck,
+                  (Concept::OStreamWritable<InputPixelType>));
+  itkConceptMacro(OutputOStreamWritableCheck,
+                  (Concept::OStreamWritable<OutputPixelType>));
+  /** End concept checking */
+#endif
+
 protected:
   BinaryThresholdImageFilter();
   virtual ~BinaryThresholdImageFilter() {}

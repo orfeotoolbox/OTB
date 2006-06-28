@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkGradientAnisotropicDiffusionImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2003/09/10 14:28:47 $
-  Version:   $Revision: 1.26 $
+  Date:      $Date: 2006/03/27 17:01:09 $
+  Version:   $Revision: 1.27 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -68,7 +68,14 @@ public:
 
   /** Extract information from the superclass. */
   itkStaticConstMacro(ImageDimension, unsigned int,Superclass::ImageDimension);
-  
+
+#ifdef ITK_USE_CONCEPT_CHECKING
+  /** Begin concept checking */
+  itkConceptMacro(UpdateBufferHasNumericTraitsCheck,
+    (Concept::HasNumericTraits<typename UpdateBufferType::PixelType>));
+  /** End concept checking */
+#endif
+
 protected:
   GradientAnisotropicDiffusionImageFilter()
   {

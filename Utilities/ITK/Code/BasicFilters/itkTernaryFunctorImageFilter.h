@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkTernaryFunctorImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2006/01/15 04:28:36 $
-  Version:   $Revision: 1.35 $
+  Date:      $Date: 2006/03/29 14:42:55 $
+  Version:   $Revision: 1.37 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -98,6 +98,27 @@ public:
         this->Modified();
         }
     }
+
+  /** Image dimensions */
+  itkStaticConstMacro(Input1ImageDimension, unsigned int,
+                      TInputImage1::ImageDimension);
+  itkStaticConstMacro(Input2ImageDimension, unsigned int,
+                      TInputImage2::ImageDimension);
+  itkStaticConstMacro(Input3ImageDimension, unsigned int,
+                      TInputImage3::ImageDimension);
+  itkStaticConstMacro(OutputImageDimension, unsigned int,
+                      TOutputImage::ImageDimension);
+
+#ifdef ITK_USE_CONCEPT_CHECKING
+  /** Begin concept checking */
+  itkConceptMacro(SameDimensionCheck1,
+    (Concept::SameDimension<Input1ImageDimension, Input2ImageDimension>));
+  itkConceptMacro(SameDimensionCheck2,
+    (Concept::SameDimension<Input1ImageDimension, Input3ImageDimension>));
+  itkConceptMacro(SameDimensionCheck3,
+    (Concept::SameDimension<Input1ImageDimension, OutputImageDimension>));
+  /** End concept checking */
+#endif
 
 protected:
   TernaryFunctorImageFilter();

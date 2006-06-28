@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkBSplineDecompositionImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2003/09/10 14:28:43 $
-  Version:   $Revision: 1.6 $
+  Date:      $Date: 2006/03/16 13:35:01 $
+  Version:   $Revision: 1.7 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -87,6 +87,8 @@ public:
 
   /** Dimension underlying input image. */
   itkStaticConstMacro(ImageDimension, unsigned int,TInputImage::ImageDimension);
+  itkStaticConstMacro(OutputImageDimension, unsigned int,
+                      TOutputImage::ImageDimension);
 
   /** Iterator typedef support */
   typedef itk::ImageLinearIteratorWithIndex<TOutputImage> OutputLinearIterator;
@@ -96,6 +98,21 @@ public:
   void SetSplineOrder(unsigned int SplineOrder);
   itkGetMacro(SplineOrder, int);
 
+#ifdef ITK_USE_CONCEPT_CHECKING
+  /** Begin concept checking */
+  itkConceptMacro(DimensionCheck,
+    (Concept::SameDimension<ImageDimension, OutputImageDimension>));
+  itkConceptMacro(InputConvertibleToDoubleCheck,
+    (Concept::Convertible<typename TInputImage::PixelType, double>));
+  itkConceptMacro(OutputConvertibleToDoubleCheck,
+    (Concept::Convertible<typename TOutputImage::PixelType, double>));
+  itkConceptMacro(InputConvertibleToOutputCheck,
+     (Concept::Convertible<typename TInputImage::PixelType,
+                           typename TOutputImage::PixelType>));
+  itkConceptMacro(DoubleConvertibleToOutputCheck,
+    (Concept::Convertible<double, typename TOutputImage::PixelType>));
+  /** End concept checking */
+#endif
 
 protected:
   BSplineDecompositionImageFilter();

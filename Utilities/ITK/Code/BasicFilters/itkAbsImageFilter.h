@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkAbsImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2006/01/23 17:55:46 $
-  Version:   $Revision: 1.4 $
+  Date:      $Date: 2006/03/30 14:30:37 $
+  Version:   $Revision: 1.7 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -18,6 +18,7 @@
 #define __itkAbsImageFilter_h
 
 #include "itkUnaryFunctorImageFilter.h"
+#include "itkConceptChecking.h"
 
 namespace itk
 {
@@ -67,7 +68,17 @@ public:
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
-  
+
+#ifdef ITK_USE_CONCEPT_CHECKING
+  /** Begin concept checking */
+  itkConceptMacro(ConvertibleCheck,
+    (Concept::Convertible<typename TInputImage::PixelType,
+                          typename TOutputImage::PixelType>));
+  itkConceptMacro(InputGreaterThanIntCheck,
+    (Concept::GreaterThanComparable<typename TInputImage::PixelType, int>));
+  /** End concept checking */
+#endif
+
 protected:
   AbsImageFilter() {}
   virtual ~AbsImageFilter() {}

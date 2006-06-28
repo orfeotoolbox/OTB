@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkModulusImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2006/02/03 13:23:15 $
-  Version:   $Revision: 1.1 $
+  Date:      $Date: 2006/03/29 14:53:40 $
+  Version:   $Revision: 1.2 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -102,6 +102,13 @@ public:
   
   /** Process to execute before entering the multithreaded section */
   void BeforeThreadedGenerateData(void);
+
+#ifdef ITK_USE_CONCEPT_CHECKING
+  /** Begin concept checking */
+  itkConceptMacro(InputHasNumericTraitsCheck,
+                  (Concept::HasNumericTraits<InputPixelType>));
+  /** End concept checking */
+#endif
 
 protected:
   ModulusImageFilter();

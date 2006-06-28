@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkThresholdImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2005/10/14 15:36:51 $
-  Version:   $Revision: 1.19 $
+  Date:      $Date: 2006/04/03 15:07:52 $
+  Version:   $Revision: 1.21 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -59,8 +59,15 @@ public:
   typedef typename TImage::PixelType PixelType;
   
   /** The pixel type must support comparison operators. */
-  itkConceptMacro(PixelTypeComparable, (Concept::Comparable<PixelType>));
-  
+#ifdef ITK_USE_CONCEPT_CHECKING
+  /** Begin concept checking */
+  itkConceptMacro(PixelTypeComparableCheck,
+                  (Concept::Comparable<PixelType>));
+  itkConceptMacro(PixelTypeOStreamWritableCheck,
+                  (Concept::OStreamWritable<PixelType>));
+  /** End concept checking */
+#endif
+
   /** Set the "outside" pixel value. The default value 
    * NumericTraits<PixelType>::Zero. */
   itkSetMacro(OutsideValue,PixelType);

@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkNonThreadedShrinkImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2003/09/10 14:28:53 $
-  Version:   $Revision: 1.17 $
+  Date:      $Date: 2006/03/22 16:26:43 $
+  Version:   $Revision: 1.18 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -67,6 +67,8 @@ public:
   /** ImageDimension enumeration. */
   itkStaticConstMacro(ImageDimension, unsigned int,
                       TInputImage::ImageDimension );
+  itkStaticConstMacro(OutputImageDimension, unsigned int,
+                      TOutputImage::ImageDimension );
 
   /** Set the shrink factors. Values are clamped to 
    * a minimum value of 1. Default is 1 for all dimensions. */
@@ -97,6 +99,16 @@ public:
    * pipeline execution model.
    * * \sa ProcessObject::GenerateInputRequestedRegion() */
   virtual void GenerateInputRequestedRegion();
+
+#ifdef ITK_USE_CONCEPT_CHECKING
+  /** Begin concept checking */
+  itkConceptMacro(InputConvertibleToOutputCheck,
+    (Concept::Convertible<typename TInputImage::PixelType,
+                          typename TOutputImage::PixelType>));
+  itkConceptMacro(SameDimensionCheck,
+    (Concept::SameDimension<ImageDimension, OutputImageDimension>));
+  /** End concept checking */
+#endif
 
 protected:
   NonThreadedShrinkImageFilter();

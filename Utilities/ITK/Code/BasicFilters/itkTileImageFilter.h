@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkTileImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2004/07/12 15:44:13 $
-  Version:   $Revision: 1.2 $
+  Date:      $Date: 2006/04/03 15:07:52 $
+  Version:   $Revision: 1.4 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -104,6 +104,17 @@ public:
   /** Get the pixel value for locations that are not covered by an
    * input image. */
   itkGetMacro(DefaultPixelValue,OutputPixelType);
+
+#ifdef ITK_USE_CONCEPT_CHECKING
+  /** Begin concept checking */
+  itkConceptMacro(OutputEqualityComparableCheck,
+                  (Concept::EqualityComparable<OutputPixelType>));
+  itkConceptMacro(SameTypeCheck,
+                  (Concept::SameType<InputPixelType, OutputPixelType>));
+  itkConceptMacro(OutputOStreamWritableCheck,
+                  (Concept::OStreamWritable<OutputPixelType>));
+  /** End concept checking */
+#endif
 
 protected:
   TileImageFilter();

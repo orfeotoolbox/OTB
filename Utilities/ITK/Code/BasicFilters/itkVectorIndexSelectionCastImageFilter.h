@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkVectorIndexSelectionCastImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2006/01/15 04:28:36 $
-  Version:   $Revision: 1.10 $
+  Date:      $Date: 2006/05/30 01:05:16 $
+  Version:   $Revision: 1.13 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -103,12 +103,58 @@ public:
         this->Modified();
         }
     }
-  unsigned int GetIndex(void) const { return this->GetFunctor().GetIndex(); }
+  unsigned int GetIndex(void) const 
+    { 
+    return this->GetFunctor().GetIndex(); 
+    }
+
+#ifdef ITK_USE_CONCEPT_CHECKING
+  /** Begin concept checking */
+  itkConceptMacro(InputHasNumericTraitsCheck,
+    (Concept::HasNumericTraits<typename TInputImage::PixelType::ValueType>));
+  /** End concept checking */
+#endif
 
 protected:
   VectorIndexSelectionCastImageFilter() {}
   virtual ~VectorIndexSelectionCastImageFilter() {}
     
+  virtual void BeforeThreadedGenerateData()
+    {
+    const unsigned int index = this->GetIndex();
+    const TInputImage * image = this->GetInput();
+
+    const unsigned int numberOfRunTimeComponents = 
+               image->GetNumberOfComponentsPerPixel();
+    
+    typedef typename TInputImage::PixelType    PixelType;
+
+    typedef typename itk::NumericTraits< PixelType >::RealType 
+                                                         PixelRealType;
+
+    typedef typename itk::NumericTraits< PixelType >::ScalarRealType 
+                                                         PixelScalarRealType;
+
+    const unsigned int numberOfCompileTimeComponents =
+             sizeof( PixelRealType ) / sizeof( PixelScalarRealType );
+
+    unsigned int numberOfComponents = numberOfRunTimeComponents;
+
+    if( numberOfCompileTimeComponents > numberOfRunTimeComponents )
+      {
+      numberOfComponents = numberOfCompileTimeComponents;
+      }
+      
+    if( index >= numberOfComponents )
+      {
+        itkExceptionMacro(
+            << "Selected index = " << index 
+            << " is greater than the number of components = "
+            << numberOfComponents );
+      }
+    }
+    
+
 private:
   VectorIndexSelectionCastImageFilter(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented

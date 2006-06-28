@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkLabelStatisticsImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2005/11/20 13:23:43 $
-  Version:   $Revision: 1.8 $
+  Date:      $Date: 2006/03/29 14:53:40 $
+  Version:   $Revision: 1.9 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -292,6 +292,13 @@ public:
   /** specify Histogram parameters  */
   void SetHistogramParameters(const int numBins, RealType lowerBound,
     RealType upperBound) ;
+
+#ifdef ITK_USE_CONCEPT_CHECKING
+  /** Begin concept checking */
+  itkConceptMacro(InputHasNumericTraitsCheck,
+                  (Concept::HasNumericTraits<PixelType>));
+  /** End concept checking */
+#endif
 
 protected:
   LabelStatisticsImageFilter();

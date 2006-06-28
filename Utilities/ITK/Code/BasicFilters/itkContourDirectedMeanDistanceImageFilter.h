@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkContourDirectedMeanDistanceImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2005/04/17 23:21:17 $
-  Version:   $Revision: 1.3 $
+  Date:      $Date: 2006/03/27 17:01:04 $
+  Version:   $Revision: 1.4 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -115,6 +115,13 @@ public:
   
   /** Return the computed directed Mean distance. */
   itkGetMacro(ContourDirectedMeanDistance,RealType);
+
+#ifdef ITK_USE_CONCEPT_CHECKING
+  /** Begin concept checking */
+  itkConceptMacro(InputHasNumericTraitsCheck,
+    (Concept::HasNumericTraits<InputImage1PixelType>));
+  /** End concept checking */
+#endif
 
 protected:
   ContourDirectedMeanDistanceImageFilter();

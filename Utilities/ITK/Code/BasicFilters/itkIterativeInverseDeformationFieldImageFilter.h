@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkIterativeInverseDeformationFieldImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2004/12/21 22:47:30 $
-  Version:   $Revision: 1.5 $
+  Date:      $Date: 2006/03/29 14:53:40 $
+  Version:   $Revision: 1.6 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -106,6 +106,13 @@ namespace itk
     itkGetMacro(StopValue, double);
 
     char* GetReport() {return this->m_Report;}
+
+#ifdef ITK_USE_CONCEPT_CHECKING
+    /** Begin concept checking */
+    itkConceptMacro(OutputHasNumericTraitsCheck,
+                    (Concept::HasNumericTraits<OutputImageValueType>));
+    /** End concept checking */
+#endif
 
   protected:
     IterativeInverseDeformationFieldImageFilter();

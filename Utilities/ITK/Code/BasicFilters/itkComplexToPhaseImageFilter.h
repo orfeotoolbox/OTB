@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkComplexToPhaseImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2006/01/23 17:55:47 $
-  Version:   $Revision: 1.3 $
+  Date:      $Date: 2006/04/03 14:33:37 $
+  Version:   $Revision: 1.6 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -45,7 +45,7 @@ public:
     return !(*this != other);
   }
   inline TOutput operator()( const TInput & A )
-  { return (TOutput)( atan2( A.imag(), A.real() ) );}
+  { return (TOutput)( vcl_atan2(A.imag(), A.real() ) );}
 }; 
 }
 
@@ -68,7 +68,19 @@ public:
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
-  
+
+  typedef typename TInputImage::PixelType   InputPixelType;
+  typedef typename TOutputImage::PixelType  OutputPixelType;
+  typedef typename NumericTraits< InputPixelType >::ValueType InputPixelValueType;
+
+#ifdef ITK_USE_CONCEPT_CHECKING
+  /** Begin concept checking */
+  itkConceptMacro(InputConvertibleToOutputCheck,
+    (Concept::Convertible<InputPixelValueType, OutputPixelType>));
+  /** End concept checking */
+#endif
+
+
 protected:
   ComplexToPhaseImageFilter() {}
   virtual ~ComplexToPhaseImageFilter() {}

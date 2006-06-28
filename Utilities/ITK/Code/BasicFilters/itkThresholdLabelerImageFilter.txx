@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkThresholdLabelerImageFilter.txx,v $
   Language:  C++
-  Date:      $Date: 2005/04/16 20:13:34 $
-  Version:   $Revision: 1.3 $
+  Date:      $Date: 2006/03/15 01:57:09 $
+  Version:   $Revision: 1.4 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -33,6 +33,7 @@ ThresholdLabelerImageFilter<TInputImage, TOutputImage>
 ::ThresholdLabelerImageFilter()
 {
   m_Thresholds.clear();
+  m_RealThresholds.clear();
   m_LabelOffset = NumericTraits<OutputPixelType>::Zero;
 }
 
@@ -53,6 +54,14 @@ ThresholdLabelerImageFilter<TInputImage, TOutputImage>
     os << m_Thresholds[j] << " ";
     }
   os << std::endl;
+
+  os << indent << "Real Thresholds: ";
+  for (unsigned long i=0; i<m_RealThresholds.size(); i++)
+    {
+    os << m_RealThresholds[i] << " ";
+    }
+  os << std::endl;
+
 
   os << indent << "LabelOffset: " << m_LabelOffset << std::endl;
 }
@@ -75,7 +84,7 @@ ThresholdLabelerImageFilter<TInputImage, TOutputImage>
     }
 
   // set up the functor values
-  this->GetFunctor().SetThresholds( m_Thresholds );
+  this->GetFunctor().SetThresholds( m_RealThresholds );
   this->GetFunctor().SetLabelOffset( m_LabelOffset );
 }
 

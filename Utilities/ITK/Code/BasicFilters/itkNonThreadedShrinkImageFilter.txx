@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkNonThreadedShrinkImageFilter.txx,v $
   Language:  C++
-  Date:      $Date: 2003/12/09 17:18:53 $
-  Version:   $Revision: 1.21 $
+  Date:      $Date: 2006/03/19 04:36:56 $
+  Version:   $Revision: 1.22 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -249,10 +249,10 @@ NonThreadedShrinkImageFilter<TInputImage,TOutputImage>
     {
     outputSpacing[i] = inputSpacing[i] * (double) m_ShrinkFactors[i];
     outputSize[i] = (unsigned int)
-      floor( ((double)(inputSize[i] - m_ShrinkFactors[i] + 1))
+      vcl_floor(((double)(inputSize[i] - m_ShrinkFactors[i] + 1))
              / (double) m_ShrinkFactors[i]);
     outputStartIndex[i] = (int)
-      ceil( (double) inputStartIndex[i] / (double) m_ShrinkFactors[i] );
+      vcl_ceil((double) inputStartIndex[i] / (double) m_ShrinkFactors[i] );
     }
 
   outputPtr->SetSpacing( outputSpacing );

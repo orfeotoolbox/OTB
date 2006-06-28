@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkEigenAnalysis2DImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2005/05/03 23:14:44 $
-  Version:   $Revision: 1.14 $
+  Date:      $Date: 2006/03/27 17:01:08 $
+  Version:   $Revision: 1.15 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -100,6 +100,13 @@ public:
 
   /**  Create the Output */
   DataObject::Pointer MakeOutput(unsigned int idx);
+
+#ifdef ITK_USE_CONCEPT_CHECKING
+  /** Begin concept checking */
+  itkConceptMacro(VectorComponentHasNumericTraitsCheck,
+    (Concept::HasNumericTraits<VectorComponentType>));
+  /** End concept checking */
+#endif
 
 protected:
   EigenAnalysis2DImageFilter();

@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkLaplacianImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2003/09/10 14:28:51 $
-  Version:   $Revision: 1.11 $
+  Date:      $Date: 2006/03/22 16:26:39 $
+  Version:   $Revision: 1.12 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -63,6 +63,8 @@ public:
   typedef typename TOutputImage::InternalPixelType OutputInternalPixelType;
   typedef typename TInputImage::PixelType InputPixelType;
   typedef typename TInputImage::InternalPixelType InputInternalPixelType;
+  itkStaticConstMacro(InputImageDimension, unsigned int,
+                      TInputImage::ImageDimension);
   itkStaticConstMacro(ImageDimension, unsigned int,
                       TOutputImage::ImageDimension);
   
@@ -104,8 +106,14 @@ public:
       image in its calculations */
   itkSetMacro(UseImageSpacing, bool);
   itkGetMacro(UseImageSpacing, bool);
-  
-  
+
+#ifdef ITK_USE_CONCEPT_CHECKING
+  /** Begin concept checking */
+  itkConceptMacro(SameDimensionCheck,
+    (Concept::SameDimension<InputImageDimension, ImageDimension>));
+  /** End concept checking */
+#endif
+
 protected:
   LaplacianImageFilter()
   {

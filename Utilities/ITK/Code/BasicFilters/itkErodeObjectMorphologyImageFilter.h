@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkErodeObjectMorphologyImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2005/01/16 15:10:52 $
-  Version:   $Revision: 1.5 $
+  Date:      $Date: 2006/03/27 17:01:08 $
+  Version:   $Revision: 1.7 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -79,6 +79,13 @@ public:
 
   /** Get the value to be assigned to eroded pixels */
   itkGetMacro(BackgroundValue, PixelType);
+
+#ifdef ITK_USE_CONCEPT_CHECKING
+  /** Begin concept checking */
+  itkConceptMacro(KernelGreaterThanIntCheck,
+    (Concept::GreaterThanComparable<typename TKernel::PixelType, int>));
+  /** End concept checking */
+#endif
 
 protected:
   ErodeObjectMorphologyImageFilter();

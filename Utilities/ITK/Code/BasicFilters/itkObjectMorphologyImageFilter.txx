@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkObjectMorphologyImageFilter.txx,v $
   Language:  C++
-  Date:      $Date: 2006/01/11 19:43:32 $
-  Version:   $Revision: 1.14 $
+  Date:      $Date: 2006/03/19 04:36:56 $
+  Version:   $Revision: 1.15 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -190,7 +190,7 @@ ObjectMorphologyImageFilter<TInputImage, TOutputImage, TKernel>
 {
 
   static const unsigned int s =
-    (unsigned int)pow((double)3.0,
+    (unsigned int)vcl_pow((double)3.0,
                       (double)(ImageDimension));
 
   PixelType tf;

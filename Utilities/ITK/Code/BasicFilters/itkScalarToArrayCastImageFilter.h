@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkScalarToArrayCastImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2003/09/10 14:28:55 $
-  Version:   $Revision: 1.4 $
+  Date:      $Date: 2006/03/30 15:36:25 $
+  Version:   $Revision: 1.5 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -55,6 +55,15 @@ public:
 
   typedef typename Superclass::OutputImageRegionType OutputImageRegionType ;
   typedef typename TOutputImage::PixelType OutputImagePixelType ;
+
+#ifdef ITK_USE_CONCEPT_CHECKING
+  /** Begin concept checking */
+  itkConceptMacro(OutputHasNumericTraitsCheck,
+    (Concept::HasNumericTraits<typename OutputImagePixelType::ValueType>));
+  itkConceptMacro(OutputHasPixelTraitsCheck,
+    (Concept::HasPixelTraits<OutputImagePixelType>));
+  /** End concept checking */
+#endif
 
 protected:
   ScalarToArrayCastImageFilter() ;

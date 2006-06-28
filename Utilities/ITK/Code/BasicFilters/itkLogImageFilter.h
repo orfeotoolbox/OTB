@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkLogImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2006/01/23 17:55:48 $
-  Version:   $Revision: 1.18 $
+  Date:      $Date: 2006/03/19 04:36:56 $
+  Version:   $Revision: 1.20 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -24,7 +24,7 @@ namespace itk
 {
   
 /** \class LogImageFilter
- * \brief Computes the log(x) pixel-wise
+ * \brief Computes the vcl_log(x) pixel-wise
  *
  * \ingroup IntensityImageFilters  Multithreaded
  */
@@ -46,7 +46,7 @@ public:
   }
   inline TOutput operator()( const TInput & A )
   {
-    return (TOutput)log((double)A);
+    return (TOutput)vcl_log((double)A);
   }
 }; 
 }
@@ -68,7 +68,16 @@ public:
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
-  
+
+#ifdef ITK_USE_CONCEPT_CHECKING
+  /** Begin concept checking */
+  itkConceptMacro(InputConvertibleToDoubleCheck,
+    (Concept::Convertible<typename TInputImage::PixelType, double>));
+  itkConceptMacro(DoubleConvertibleToOutputCheck,
+    (Concept::Convertible<double, typename TOutputImage::PixelType>));
+  /** End concept checking */
+#endif
+
 protected:
   LogImageFilter() {}
   virtual ~LogImageFilter() {}

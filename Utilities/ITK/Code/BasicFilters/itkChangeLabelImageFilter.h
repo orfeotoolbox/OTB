@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkChangeLabelImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2006/01/24 07:39:04 $
-  Version:   $Revision: 1.4 $
+  Date:      $Date: 2006/03/13 15:54:34 $
+  Version:   $Revision: 1.5 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -135,9 +135,6 @@ public:
   typedef typename TInputImage::PixelType  InputPixelType;
   typedef typename TOutputImage::PixelType OutputPixelType;
 
-  /** The input pixel type must support comparison operators. */
-  itkConceptMacro(PixelTypeComparable, (Concept::Comparable<InputPixelType>));
-
   /** Type of the change map to use for change requests */
   typedef std::map<InputPixelType, OutputPixelType> ChangeMapType;
 
@@ -149,7 +146,16 @@ public:
   
   /** Clears the entire change map */
   void ClearChangeMap( );
-  
+
+#ifdef ITK_USE_CONCEPT_CHECKING
+  /** Begin concept checking */
+  itkConceptMacro(InputConvertibleToOutputCheck,
+                  (Concept::Convertible<InputPixelType, OutputPixelType>));
+  itkConceptMacro(PixelTypeComparable,
+                  (Concept::Comparable<InputPixelType>));
+  /** End concept checking */
+#endif
+
 protected:
   ChangeLabelImageFilter();
   virtual ~ChangeLabelImageFilter() {}

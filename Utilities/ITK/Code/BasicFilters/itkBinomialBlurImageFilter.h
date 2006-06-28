@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkBinomialBlurImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2003/09/10 14:28:44 $
-  Version:   $Revision: 1.14 $
+  Date:      $Date: 2006/03/16 13:35:01 $
+  Version:   $Revision: 1.15 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -53,6 +53,7 @@ public:
 
   /** Number of dimensions */
   itkStaticConstMacro(NDimensions, unsigned int, TInputImage::ImageDimension);
+  itkStaticConstMacro(NOutputDimensions, unsigned int, TOutputImage::ImageDimension);
 
   /** typedef for images */
   typedef TInputImage                             InputImageType;
@@ -82,6 +83,18 @@ public:
    * that is 2*Repetitions larger than the output. In other words, this
    * filter needs a border of "Repetitions" pixels. */
   void GenerateInputRequestedRegion();
+
+#ifdef ITK_USE_CONCEPT_CHECKING
+  /** Begin concept checking */
+  itkConceptMacro(SameDimensionCheck,
+    (Concept::SameDimension<itkGetStaticConstMacro(NDimensions),
+                            itkGetStaticConstMacro(NOutputDimensions)>));
+  itkConceptMacro(InputConvertibleToDoubleCheck,
+    (Concept::Convertible<typename TInputImage::PixelType, double>));
+  itkConceptMacro(DoubleConvertibleToOutputCheck,
+    (Concept::Convertible<double, PixelType>));
+  /** End concept checking */
+#endif
 
 protected:
   BinomialBlurImageFilter();

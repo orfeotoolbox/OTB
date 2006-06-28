@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkMorphologicalGradientImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2006/02/03 12:46:46 $
-  Version:   $Revision: 1.1 $
+  Date:      $Date: 2006/03/29 14:53:40 $
+  Version:   $Revision: 1.2 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -76,6 +76,8 @@ public:
                       TInputImage::ImageDimension);
   itkStaticConstMacro(OutputImageDimension, unsigned int,
                       TOutputImage::ImageDimension);
+  itkStaticConstMacro(KernelDimension, unsigned int,
+                      TKernel::NeighborhoodDimension);
 
   /** Standard New method. */
   itkNewMacro(Self);  
@@ -89,6 +91,25 @@ public:
   
   /** Get the kernel (structuring element). */
   itkGetConstReferenceMacro(Kernel, KernelType);
+
+#ifdef ITK_USE_CONCEPT_CHECKING
+  /** Begin concept checking */
+  itkConceptMacro(SameDimensionCheck1,
+    (Concept::SameDimension<InputImageDimension, KernelDimension>));
+  itkConceptMacro(SameDimensionCheck2,
+    (Concept::SameDimension<InputImageDimension, OutputImageDimension>));
+  itkConceptMacro(InputLessThanComparableCheck,
+    (Concept::LessThanComparable<InputImagePixelType>));
+  itkConceptMacro(InputGreaterThanComparableCheck,
+    (Concept::GreaterThanComparable<InputImagePixelType>));
+  itkConceptMacro(InputAdditiveOperatorsCheck,
+    (Concept::AdditiveOperators<InputImagePixelType>));
+  itkConceptMacro(InputConvertibleToOutputCheck,
+    (Concept::Convertible<InputImagePixelType, OutputImagePixelType>));
+  itkConceptMacro(KernelGreaterThanIntCheck,
+    (Concept::GreaterThanComparable<typename TKernel::PixelType, int>));
+  /** End concept checking */
+#endif
 
 protected:
   MorphologicalGradientImageFilter();

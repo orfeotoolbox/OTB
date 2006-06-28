@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkStatisticsImageFilter.txx,v $
   Language:  C++
-  Date:      $Date: 2005/06/15 15:04:07 $
-  Version:   $Revision: 1.18 $
+  Date:      $Date: 2006/03/19 04:36:57 $
+  Version:   $Revision: 1.19 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -294,7 +294,7 @@ StatisticsImageFilter<TInputImage>
   // unbiased estimate
   variance = (sumOfSquares - (sum*sum / static_cast<RealType>(count)))
     / (static_cast<RealType>(count) - 1);
-  sigma = sqrt(variance);
+  sigma = vcl_sqrt(variance);
 
   // Set the outputs
   this->GetMinimumOutput()->Set( minimum );

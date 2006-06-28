@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkJoinImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2006/01/23 17:55:48 $
-  Version:   $Revision: 1.14 $
+  Date:      $Date: 2006/04/08 12:44:49 $
+  Version:   $Revision: 1.16 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -227,6 +227,18 @@ public:
 
   /** Run-time type information (and related methods). */
   itkTypeMacro(JoinImageFilter, BinaryFunctorImageFilter);
+
+#ifdef ITK_USE_CONCEPT_CHECKING
+  /** Begin concept checking */
+  itkConceptMacro(Input1HasPixelTraitsCheck,
+    (Concept::HasPixelTraits<typename TInputImage1::PixelType>));
+  itkConceptMacro(Input2HasPixelTraitsCheck,
+    (Concept::HasPixelTraits<typename TInputImage2::PixelType>));
+  itkConceptMacro(Input1Input2HasJoinTraitsCheck,
+    (Concept::HasJoinTraits<typename PixelTraits<typename TInputImage1::PixelType>::ValueType,
+                            typename PixelTraits<typename TInputImage2::PixelType>::ValueType>));
+  /** End concept checking */
+#endif
 
 protected:
   JoinImageFilter() {}

@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkMultiplyImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2006/01/23 17:55:48 $
-  Version:   $Revision: 1.22 $
+  Date:      $Date: 2006/03/31 14:31:04 $
+  Version:   $Revision: 1.23 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -75,7 +75,16 @@ public:
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
-  
+
+#ifdef ITK_USE_CONCEPT_CHECKING
+  /** Begin concept checking */
+  itkConceptMacro(Input1Input2OutputMultiplyOperatorCheck,
+    (Concept::MultiplyOperator<typename TInputImage1::PixelType,
+                               typename TInputImage2::PixelType,
+                               typename TOutputImage::PixelType>));
+  /** End concept checking */
+#endif
+
 protected:
   MultiplyImageFilter() {}
   virtual ~MultiplyImageFilter() {}

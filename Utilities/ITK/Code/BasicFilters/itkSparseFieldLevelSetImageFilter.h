@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkSparseFieldLevelSetImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2004/12/21 22:47:31 $
-  Version:   $Revision: 1.21 $
+  Date:      $Date: 2006/04/23 04:40:31 $
+  Version:   $Revision: 1.24 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -305,7 +305,18 @@ public:
   { this->SetInterpolateSurfaceLocation(true); }
   void InterpolateSurfaceLocationOff()
   { this->SetInterpolateSurfaceLocation(false); }
-  
+
+#ifdef ITK_USE_CONCEPT_CHECKING
+  /** Begin concept checking */
+  itkConceptMacro(OutputEqualityComparableCheck,
+    (Concept::EqualityComparable<typename TOutputImage::PixelType>));
+  itkConceptMacro(DoubleConvertibleToOutputCheck,
+    (Concept::Convertible<double, typename TOutputImage::PixelType>));
+  itkConceptMacro(OutputOStreamWritableCheck,
+    (Concept::OStreamWritable<typename TOutputImage::PixelType>));
+  /** End concept checking */
+#endif
+
 protected:
   SparseFieldLevelSetImageFilter();
   ~SparseFieldLevelSetImageFilter();
@@ -403,7 +414,7 @@ protected:
   m_NeighborList;
   
   /** The constant gradient to maintain between isosurfaces in the
-      spare-field of the level-set image.  This value defaults to 1.0 */
+      sparse-field of the level-set image.  This value defaults to 1.0 */
   static double m_ConstantGradientValue;
 
   /** Multiplicative identity of the ValueType. */

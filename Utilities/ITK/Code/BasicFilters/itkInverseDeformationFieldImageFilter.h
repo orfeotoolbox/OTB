@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkInverseDeformationFieldImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2005/07/27 15:21:10 $
-  Version:   $Revision: 1.2 $
+  Date:      $Date: 2006/03/29 14:53:40 $
+  Version:   $Revision: 1.3 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -163,6 +163,13 @@ public:
 
   /** Method Compute the Modified Time based on changed to the components. */
   unsigned long GetMTime( void ) const;
+
+#ifdef ITK_USE_CONCEPT_CHECKING
+  /** Begin concept checking */
+  itkConceptMacro(OutputHasNumericTraitsCheck,
+    (Concept::HasNumericTraits<OutputPixelComponentType>));
+  /** End concept checking */
+#endif
 
 protected:
   InverseDeformationFieldImageFilter();

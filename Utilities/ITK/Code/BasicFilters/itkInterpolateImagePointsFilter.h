@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkInterpolateImagePointsFilter.h,v $
   Language:  C++
-  Date:      $Date: 2004/10/19 01:17:47 $
-  Version:   $Revision: 1.9 $
+  Date:      $Date: 2006/03/29 14:53:40 $
+  Version:   $Revision: 1.10 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -142,6 +142,13 @@ public:
   
   /**  Overloaded to set the input image to the largest possible region */
   void GenerateInputRequestedRegion();
+
+#ifdef ITK_USE_CONCEPT_CHECKING
+  /** Begin concept checking */
+  itkConceptMacro(InputHasNumericTraitsCheck,
+    (Concept::HasNumericTraits<typename TInputImage::PixelType>));
+  /** End concept checking */
+#endif
 
 protected:
   /** Main function for calculating interpolated values at each coordinate 

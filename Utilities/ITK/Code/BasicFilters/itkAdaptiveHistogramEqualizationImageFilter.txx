@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkAdaptiveHistogramEqualizationImageFilter.txx,v $
   Language:  C++
-  Date:      $Date: 2006/01/11 19:43:31 $
-  Version:   $Revision: 1.26 $
+  Date:      $Date: 2006/03/19 04:36:55 $
+  Version:   $Revision: 1.27 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -43,7 +43,7 @@ AdaptiveHistogramEqualizationImageFilter<TImageType>
   s = vnl_math_sgn(u-v);
   ad = vnl_math_abs(2.0*(u-v));
   
-  return 0.5*s*pow(ad,m_Alpha) - m_Beta*0.5*s*ad + m_Beta*u;
+  return 0.5*s*vcl_pow(ad,m_Alpha) - m_Beta*0.5*s*ad + m_Beta*u;
 }
 
 template <class TImageType>

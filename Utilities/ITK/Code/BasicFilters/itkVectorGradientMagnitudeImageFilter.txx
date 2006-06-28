@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkVectorGradientMagnitudeImageFilter.txx,v $
   Language:  C++
-  Date:      $Date: 2006/01/11 19:43:32 $
-  Version:   $Revision: 1.11 $
+  Date:      $Date: 2006/03/19 04:36:58 $
+  Version:   $Revision: 1.12 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -329,12 +329,12 @@ VectorGradientMagnitudeImageFilter<TInputImage, TRealType, TOutputImage>
   
   if (D < -epsilon) // D < 0, three real solutions, by far the common case.
     {
-    double phi = 1.0/3.0 * acos(-q / sqrt(-cb_p));
-    double t = 2.0 * sqrt(-p);
+    double phi = 1.0/3.0 * vcl_acos(-q / vcl_sqrt(-cb_p));
+    double t = 2.0 * vcl_sqrt(-p);
       
-    s[0] =   t * cos(phi);
-    s[1] = - t * cos(phi + dpi / 3);
-    s[2] = - t * cos(phi - dpi / 3);
+    s[0] =   t * vcl_cos(phi);
+    s[1] = - t * vcl_cos(phi + dpi / 3);
+    s[2] = - t * vcl_cos(phi - dpi / 3);
     num = 3;
     }
 
@@ -356,7 +356,7 @@ VectorGradientMagnitudeImageFilter<TInputImage, TRealType, TOutputImage>
   else // Only one real solution. This case misses a double root on rare
        // occasions with very large char eqn coefficients.
     {
-    double sqrt_D = sqrt(D);
+    double sqrt_D = vcl_sqrt(D);
     double u = vnl_math_cuberoot(sqrt_D - q);
     double v = - vnl_math_cuberoot(sqrt_D + q);
       

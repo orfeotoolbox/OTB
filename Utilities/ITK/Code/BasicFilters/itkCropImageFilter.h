@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkCropImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2003/09/10 14:28:46 $
-  Version:   $Revision: 1.6 $
+  Date:      $Date: 2006/03/17 14:22:26 $
+  Version:   $Revision: 1.7 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -77,8 +77,16 @@ public:
   itkGetMacro(UpperBoundaryCropSize, SizeType); 
   itkSetMacro(LowerBoundaryCropSize, SizeType);
   itkGetMacro(LowerBoundaryCropSize, SizeType);
-  
-                 
+
+#ifdef ITK_USE_CONCEPT_CHECKING
+  /** Begin concept checking */
+  itkConceptMacro(InputConvertibleToOutputCheck,
+    (Concept::Convertible<InputImagePixelType, OutputImagePixelType>));
+  itkConceptMacro(SameDimensionCheck,
+    (Concept::SameDimension<InputImageDimension, OutputImageDimension>));
+  /** End concept checking */
+#endif
+
 protected:
   CropImageFilter()
   {

@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkCurvatureAnisotropicDiffusionImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2003/09/10 14:28:46 $
-  Version:   $Revision: 1.29 $
+  Date:      $Date: 2006/03/27 17:01:04 $
+  Version:   $Revision: 1.31 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -76,7 +76,14 @@ public:
   /** Extract superclass image dimension. */
   itkStaticConstMacro(ImageDimension, unsigned int,
                       Superclass::ImageDimension);
-  
+
+#ifdef ITK_USE_CONCEPT_CHECKING
+  /** Begin concept checking */
+  itkConceptMacro(OutputHasNumericTraitsCheck,
+    (Concept::HasNumericTraits<typename TOutputImage::PixelType>));
+  /** End concept checking */
+#endif
+
 protected:
   CurvatureAnisotropicDiffusionImageFilter()
   {
@@ -89,7 +96,7 @@ protected:
   virtual void InitializeIteration()
   {
     Superclass::InitializeIteration();
-    if (this->GetTimeStep() >  0.5 / pow(2.0, static_cast<double>(ImageDimension))  )
+    if (this->GetTimeStep() >  0.5 / vcl_pow(2.0, static_cast<double>(ImageDimension))  )
       {
       itkWarningMacro(<< "Anisotropic diffusion is using a time step which may introduce instability into the solution." );
       }

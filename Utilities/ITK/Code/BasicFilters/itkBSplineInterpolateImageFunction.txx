@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkBSplineInterpolateImageFunction.txx,v $
   Language:  C++
-  Date:      $Date: 2006/01/11 19:43:31 $
-  Version:   $Revision: 1.12 $
+  Date:      $Date: 2006/03/19 04:36:55 $
+  Version:   $Revision: 1.13 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -486,7 +486,7 @@ BSplineInterpolateImageFunction<TImageType,TCoordRep,TCoefficientType>
     {
     if (splineOrder & 1)     // Use this index calculation for odd splineOrder
       {
-      indx = (long)floor((float)x[n]) - splineOrder / 2;
+      indx = (long)vcl_floor((float)x[n]) - splineOrder / 2;
       for (unsigned int k = 0; k <= splineOrder; k++)
         {
         evaluateIndex[n][k] = indx++;
@@ -494,7 +494,7 @@ BSplineInterpolateImageFunction<TImageType,TCoordRep,TCoefficientType>
       }
     else                       // Use this index calculation for even splineOrder
       { 
-      indx = (long)floor((float)(x[n] + 0.5)) - splineOrder / 2;
+      indx = (long)vcl_floor((float)(x[n] + 0.5)) - splineOrder / 2;
       for (unsigned int k = 0; k <= splineOrder; k++)
         {
         evaluateIndex[n][k] = indx++;

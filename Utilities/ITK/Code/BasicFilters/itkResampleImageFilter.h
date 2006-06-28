@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkResampleImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2005/11/04 15:32:59 $
-  Version:   $Revision: 1.43 $
+  Date:      $Date: 2006/05/21 15:56:19 $
+  Version:   $Revision: 1.46 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -21,6 +21,7 @@
 #include "itkTransform.h"
 #include "itkMatrixOffsetTransformBase.h"
 #include "itkIdentityTransform.h"
+#include "itkTranslationTransform.h"
 #include "itkImageFunction.h"
 #include "itkImageRegionIterator.h"
 #include "itkImageToImageFilter.h"
@@ -116,6 +117,11 @@ public:
   typedef IdentityTransform<TInterpolatorPrecisionType, itkGetStaticConstMacro(ImageDimension)> IdentityTransformType;
   typedef typename IdentityTransformType::ConstPointer IdentityTransformPointerType;
   
+  /** TranslationTransform typedef. If the transform being used is a
+   * TranslationTransform, the we can use a fast path. */
+  typedef TranslationTransform<TInterpolatorPrecisionType, itkGetStaticConstMacro(ImageDimension)> TranslationTransformType;
+  typedef typename TranslationTransformType::ConstPointer TranslationTransformPointerType;
+ 
   /** Interpolator typedef. */
   typedef InterpolateImageFunction<InputImageType, TInterpolatorPrecisionType> InterpolatorType;
   typedef typename InterpolatorType::Pointer  InterpolatorPointerType;
@@ -140,7 +146,7 @@ public:
   /** Image spacing,origin and direction typedef */
   typedef typename TOutputImage::SpacingType SpacingType;
   typedef typename TOutputImage::PointType   OriginPointType;
-  typedef typename TInputImage::DirectionType DirectionType;
+  typedef typename TOutputImage::DirectionType DirectionType;
   
   /** Set the coordinate transformation.
    * Set the coordinate transform to use for resampling.  Note that this
@@ -252,6 +258,13 @@ public:
   /** Method Compute the Modified Time based on changed to the components. */
   unsigned long GetMTime( void ) const;
 
+#ifdef ITK_USE_CONCEPT_CHECKING
+  /** Begin concept checking */
+  itkConceptMacro(OutputHasNumericTraitsCheck,
+                  (Concept::HasNumericTraits<PixelType>));
+  /** End concept checking */
+#endif
+
 protected:
   ResampleImageFilter();
   ~ResampleImageFilter() {};
@@ -291,7 +304,7 @@ private:
   PixelType               m_DefaultPixelValue; // default pixel value if the point 
                                                // is outside the image
   SpacingType             m_OutputSpacing; // output image spacing
-  PointType               m_OutputOrigin;  // output image origin
+  OriginPointType         m_OutputOrigin;  // output image origin
   DirectionType           m_OutputDirection; // output image direction cosines
   IndexType               m_OutputStartIndex; // output image start index
   bool m_UseReferenceImage;

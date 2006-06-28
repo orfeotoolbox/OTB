@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkAbsoluteValueDifferenceImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2006/01/23 17:55:46 $
-  Version:   $Revision: 1.4 $
+  Date:      $Date: 2006/03/15 14:31:26 $
+  Version:   $Revision: 1.5 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -18,6 +18,7 @@
 #define __itkAbsoluteValueDifferenceImageFilter_h
 
 #include "itkBinaryFunctorImageFilter.h"
+#include "itkConceptChecking.h"
 
 namespace itk
 {
@@ -96,7 +97,18 @@ public:
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
-  
+
+#ifdef ITK_USE_CONCEPT_CHECKING
+  /** Begin concept checking */
+  itkConceptMacro(Input1CovertibleToDoubleCheck,
+    (Concept::Convertible<typename TInputImage1::PixelType, double>));
+  itkConceptMacro(Input2ConvertibleToDoubleCheck,
+    (Concept::Convertible<typename TInputImage2::PixelType, double>));
+  itkConceptMacro(DoubleCovertibleToOutputCheck,
+    (Concept::Convertible<double, typename TOutputImage::PixelType>));
+  /** End concept checking */
+#endif
+
 protected:
   AbsoluteValueDifferenceImageFilter() {}
   virtual ~AbsoluteValueDifferenceImageFilter() {}

@@ -3,8 +3,8 @@
 Program:   Insight Segmentation & Registration Toolkit
 Module:    $RCSfile: itkLabelStatisticsImageFilter.txx,v $
 Language:  C++
-Date:      $Date: 2005/11/20 13:23:43 $
-Version:   $Revision: 1.15 $
+Date:      $Date: 2006/03/19 04:36:56 $
+Version:   $Revision: 1.16 $
 
 Copyright (c) Insight Software Consortium. All rights reserved.
 See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -225,7 +225,7 @@ LabelStatisticsImageFilter<TInputImage, TLabelImage>
       }
     
     // sigma
-    (*mapIt).second.m_Sigma = sqrt((*mapIt).second.m_Variance);
+    (*mapIt).second.m_Sigma = vcl_sqrt((*mapIt).second.m_Variance);
     }
   
 }

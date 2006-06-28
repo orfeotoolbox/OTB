@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkResampleImageFilter.txx,v $
   Language:  C++
-  Date:      $Date: 2005/11/08 20:11:13 $
-  Version:   $Revision: 1.52 $
+  Date:      $Date: 2006/05/02 19:41:32 $
+  Version:   $Revision: 1.54 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -188,21 +188,26 @@ ResampleImageFilter<TInputImage,TOutputImage,TInterpolatorPrecisionType>
   // can be used if the transformation is linear.  If the
   // transformation is subclass of MatrixOffsetTransformBase or
   // IdentityTransform, then we can use the fast path.
-  if (dynamic_cast<const LinearTransformType *>(m_Transform.GetPointer()))
+  if( dynamic_cast<const LinearTransformType *>(m_Transform.GetPointer()))
     {
     this->LinearThreadedGenerateData(outputRegionForThread, threadId);
     return;
     }
-  else if (dynamic_cast<const IdentityTransformType *>(m_Transform.GetPointer()))
+
+  if( dynamic_cast<const TranslationTransformType *>(m_Transform.GetPointer()))
     {
     this->LinearThreadedGenerateData(outputRegionForThread, threadId);
     return;
     }
-  else
+
+  if( dynamic_cast<const IdentityTransformType *>(m_Transform.GetPointer()))
     {
-    this->NonlinearThreadedGenerateData(outputRegionForThread, threadId);
+    this->LinearThreadedGenerateData(outputRegionForThread, threadId);
     return;
     }
+
+  this->NonlinearThreadedGenerateData(outputRegionForThread, threadId);
+  
 }
 
 

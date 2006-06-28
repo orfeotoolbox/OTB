@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkBSplineDecompositionImageFilter.txx,v $
   Language:  C++
-  Date:      $Date: 2006/01/11 19:43:31 $
-  Version:   $Revision: 1.8 $
+  Date:      $Date: 2006/03/19 04:36:55 $
+  Version:   $Revision: 1.9 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -140,7 +140,7 @@ BSplineDecompositionImageFilter<TInputImage, TOutputImage>
     {
     case 3:
       m_NumberOfPoles = 1;
-      m_SplinePoles[0] = sqrt(3.0) - 2.0;
+      m_SplinePoles[0] = vcl_sqrt(3.0) - 2.0;
       break;
     case 0:
       m_NumberOfPoles = 0;
@@ -150,18 +150,18 @@ BSplineDecompositionImageFilter<TInputImage, TOutputImage>
       break;
     case 2:
       m_NumberOfPoles = 1;
-      m_SplinePoles[0] = sqrt(8.0) - 3.0;
+      m_SplinePoles[0] = vcl_sqrt(8.0) - 3.0;
       break;
     case 4:
       m_NumberOfPoles = 2;
-      m_SplinePoles[0] = sqrt(664.0 - sqrt(438976.0)) + sqrt(304.0) - 19.0;
-      m_SplinePoles[1] = sqrt(664.0 + sqrt(438976.0)) - sqrt(304.0) - 19.0;
+      m_SplinePoles[0] = vcl_sqrt(664.0 - vcl_sqrt(438976.0)) + vcl_sqrt(304.0) - 19.0;
+      m_SplinePoles[1] = vcl_sqrt(664.0 + vcl_sqrt(438976.0)) - vcl_sqrt(304.0) - 19.0;
       break;
     case 5:
       m_NumberOfPoles = 2;
-      m_SplinePoles[0] = sqrt(135.0 / 2.0 - sqrt(17745.0 / 4.0)) + sqrt(105.0 / 4.0)
+      m_SplinePoles[0] = vcl_sqrt(135.0 / 2.0 - vcl_sqrt(17745.0 / 4.0)) + vcl_sqrt(105.0 / 4.0)
         - 13.0 / 2.0;
-      m_SplinePoles[1] = sqrt(135.0 / 2.0 + sqrt(17745.0 / 4.0)) - sqrt(105.0 / 4.0)
+      m_SplinePoles[1] = vcl_sqrt(135.0 / 2.0 + vcl_sqrt(17745.0 / 4.0)) - vcl_sqrt(105.0 / 4.0)
         - 13.0 / 2.0;
       break;
     default:
@@ -191,7 +191,7 @@ BSplineDecompositionImageFilter<TInputImage, TOutputImage>
   zn = z;
   if (m_Tolerance > 0.0)
     {
-    horizon = (long)ceil(log(m_Tolerance) / log(fabs(z)));
+    horizon = (long)vcl_ceil(log(m_Tolerance) / vcl_log(fabs(z)));
     }
   if (horizon < m_DataLength[m_IteratorDirection])
     {
@@ -207,7 +207,7 @@ BSplineDecompositionImageFilter<TInputImage, TOutputImage>
   else {
   /* full loop */
   iz = 1.0 / z;
-  z2n = pow(z, (double)(m_DataLength[m_IteratorDirection] - 1L));
+  z2n = vcl_pow(z, (double)(m_DataLength[m_IteratorDirection] - 1L));
   sum = m_Scratch[0] + z2n * m_Scratch[m_DataLength[m_IteratorDirection] - 1L];
   z2n *= z2n * iz;
   for (unsigned int n = 1; n <= (m_DataLength[m_IteratorDirection] - 2); n++)

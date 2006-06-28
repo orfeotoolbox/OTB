@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkAddImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2006/01/23 17:55:47 $
-  Version:   $Revision: 1.10 $
+  Date:      $Date: 2006/03/24 16:03:15 $
+  Version:   $Revision: 1.11 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -102,7 +102,16 @@ public:
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
-  
+
+#ifdef ITK_USE_CONCEPT_CHECKING
+  /** Begin concept checking */
+  itkConceptMacro(Input1Input2OutputAdditiveOperatorsCheck,
+    (Concept::AdditiveOperators<typename TInputImage1::PixelType,
+                                typename TInputImage2::PixelType,
+                                typename TOutputImage::PixelType>));
+  /** End concept checking */
+#endif
+
 protected:
   AddImageFilter() {}
   virtual ~AddImageFilter() {}

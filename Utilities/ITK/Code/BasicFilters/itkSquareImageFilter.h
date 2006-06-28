@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkSquareImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2006/01/23 17:55:48 $
-  Version:   $Revision: 1.6 $
+  Date:      $Date: 2006/03/31 14:31:04 $
+  Version:   $Revision: 1.7 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -70,7 +70,16 @@ public:
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
-  
+
+#ifdef ITK_USE_CONCEPT_CHECKING
+  /** Begin concept checking */
+  itkConceptMacro(InputHasNumericTraitsCheck,
+    (Concept::HasNumericTraits<typename TInputImage::PixelType>));
+  itkConceptMacro(RealTypeMultiplyOperatorCheck,
+    (Concept::MultiplyOperator<typename NumericTraits<typename TInputImage::PixelType>::RealType>));
+  /** End concept checking */
+#endif
+
 protected:
   SquareImageFilter() {}
   virtual ~SquareImageFilter() {}

@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkGradientNDAnisotropicDiffusionFunction.txx,v $
   Language:  C++
-  Date:      $Date: 2005/07/13 13:50:54 $
-  Version:   $Revision: 1.11 $
+  Date:      $Date: 2006/03/19 04:36:56 $
+  Version:   $Revision: 1.12 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -132,8 +132,8 @@ GradientNDAnisotropicDiffusionFunction<TImage>
       }
     else
       {
-      Cx = exp(( vnl_math_sqr( dx_forward ) + accum)  / m_K );
-      Cxd= exp(( vnl_math_sqr( dx_backward) + accum_d)/ m_K );
+      Cx = vcl_exp(( vnl_math_sqr( dx_forward ) + accum)  / m_K );
+      Cxd= vcl_exp(( vnl_math_sqr( dx_backward) + accum_d)/ m_K );
       }
 
     // Conductance modified first order derivatives.

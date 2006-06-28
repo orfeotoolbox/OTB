@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkBinaryMorphologyImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2005/09/13 19:17:35 $
-  Version:   $Revision: 1.1 $
+  Date:      $Date: 2006/03/24 16:03:16 $
+  Version:   $Revision: 1.2 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -153,16 +153,21 @@ public:
   typedef typename InputImageType::SizeType InputSizeType;
 
   /** Input and output images must be the same dimension. */
+#ifdef ITK_USE_CONCEPT_CHECKING
+  /** Begin concept checking */
   itkConceptMacro(ImageDimensionCheck,
       (Concept::SameDimension<itkGetStaticConstMacro(InputImageDimension),
                               itkGetStaticConstMacro(OutputImageDimension)>));
-
+  itkConceptMacro(InputHasNumericTraitsCheck,
+    (Concept::HasNumericTraits<InputPixelType>));
 // Cannot get this to work with gcc compiler
 #if 0
   /** Input and structuring element must be the same dimnesion. */
   itkConceptMacro(KernelDimensionCheck,
       (Concept::SameDimension<itkGetStaticConstMacro(KernelDimension),
                               itkGetStaticConstMacro(InputImageDimension)>));
+#endif
+  /** End concept checking */
 #endif
 
   /** Set kernel (structuring element).*/

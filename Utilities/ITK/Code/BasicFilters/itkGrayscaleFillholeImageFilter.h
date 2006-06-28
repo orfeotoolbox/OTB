@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkGrayscaleFillholeImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2005/08/23 15:09:01 $
-  Version:   $Revision: 1.4 $
+  Date:      $Date: 2006/03/28 19:59:05 $
+  Version:   $Revision: 1.5 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -104,7 +104,14 @@ public:
   itkSetMacro(FullyConnected, bool);
   itkGetConstReferenceMacro(FullyConnected, bool);
   itkBooleanMacro(FullyConnected);
-  
+
+#ifdef ITK_USE_CONCEPT_CHECKING
+  /** Begin concept checking */
+  itkConceptMacro(InputOStreamWritableCheck,
+                  (Concept::OStreamWritable<InputImagePixelType>));
+  /** End concept checking */
+#endif
+
 protected:
   GrayscaleFillholeImageFilter();
   ~GrayscaleFillholeImageFilter() {};

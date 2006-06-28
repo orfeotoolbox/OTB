@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkBinaryFunctorImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2006/01/15 04:28:35 $
-  Version:   $Revision: 1.32 $
+  Date:      $Date: 2006/03/15 14:31:26 $
+  Version:   $Revision: 1.33 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -91,6 +91,25 @@ public:
       this->Modified();
       }
   }
+
+  /** ImageDimension constants */
+  itkStaticConstMacro(
+    InputImage1Dimension, unsigned int, TInputImage1::ImageDimension);
+  itkStaticConstMacro(
+    InputImage2Dimension, unsigned int, TInputImage2::ImageDimension);
+  itkStaticConstMacro(
+    OutputImageDimension, unsigned int, TOutputImage::ImageDimension);
+
+#ifdef ITK_USE_CONCEPT_CHECKING
+  /** Begin concept checking */
+  itkConceptMacro(SameDimensionCheck1,
+    (Concept::SameDimension<itkGetStaticConstMacro(InputImage1Dimension),
+                            itkGetStaticConstMacro(InputImage2Dimension)>));
+  itkConceptMacro(SameDimensionCheck2,
+    (Concept::SameDimension<itkGetStaticConstMacro(InputImage1Dimension),
+                            itkGetStaticConstMacro(OutputImageDimension)>));
+  /** End concept checking */
+#endif
 
 protected:
   BinaryFunctorImageFilter();

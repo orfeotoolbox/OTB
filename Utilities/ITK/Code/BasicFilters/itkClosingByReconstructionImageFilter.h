@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkClosingByReconstructionImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2005/12/07 22:20:16 $
-  Version:   $Revision: 1.2 $
+  Date:      $Date: 2006/03/17 14:22:25 $
+  Version:   $Revision: 1.3 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -109,6 +109,13 @@ public:
   itkSetMacro(PreserveIntensities, bool);
   itkGetConstReferenceMacro(PreserveIntensities, bool);
   itkBooleanMacro(PreserveIntensities);
+
+#ifdef ITK_USE_CONCEPT_CHECKING
+  /** Begin concept checking */
+  itkConceptMacro(InputConvertibleToOutputCheck,
+    (Concept::Convertible<InputImagePixelType, OutputImagePixelType>));
+  /** End concept checking */
+#endif
 
 protected:
   ClosingByReconstructionImageFilter();

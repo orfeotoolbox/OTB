@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkBSplineCenteredResampleImageFilterBase.txx,v $
   Language:  C++
-  Date:      $Date: 2006/01/10 21:21:08 $
-  Version:   $Revision: 1.10 $
+  Date:      $Date: 2006/03/19 04:36:55 $
+  Version:   $Revision: 1.11 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -341,7 +341,7 @@ void BSplineCenteredResampleImageFilterBase<TInputImage, TOutputImage>
     outVal2 = 0;
     for (long k = -k0; k < this->m_hSize; k += 2L )
       {
-      long kk = abs(static_cast<int>(k));
+      long kk = vcl_abs(static_cast<int>(k));
       i1 = inK + ( k + 1L )/2L;
       if (i1 < 0L )
         {

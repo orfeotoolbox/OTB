@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkSobelEdgeDetectionImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2003/09/10 14:28:56 $
-  Version:   $Revision: 1.9 $
+  Date:      $Date: 2006/03/30 15:36:25 $
+  Version:   $Revision: 1.10 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -61,6 +61,8 @@ public:
   typedef typename TInputImage::InternalPixelType InputInternalPixelType;
   itkStaticConstMacro(ImageDimension, unsigned int,
                       TOutputImage::ImageDimension );
+  itkStaticConstMacro(InputImageDimension, unsigned int,
+                      TInputImage::ImageDimension );
   
   /**
    * Image typedef support
@@ -95,6 +97,15 @@ public:
    * \sa ImageToImageFilter::GenerateInputRequestedRegion()
    */
   virtual void GenerateInputRequestedRegion() throw(InvalidRequestedRegionError);
+
+#ifdef ITK_USE_CONCEPT_CHECKING
+  /** Begin concept checking */
+  itkConceptMacro(SameDimensionCheck,
+    (Concept::SameDimension<InputImageDimension, ImageDimension>));
+  itkConceptMacro(OutputHasNumericTraitsCheck,
+    (Concept::HasNumericTraits<OutputPixelType>));
+  /** End concept checking */
+#endif
 
 protected:
   SobelEdgeDetectionImageFilter() {}

@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkHoughTransform2DLinesImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2005/05/02 22:56:56 $
-  Version:   $Revision: 1.7 $
+  Date:      $Date: 2006/03/29 14:53:39 $
+  Version:   $Revision: 1.9 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -38,7 +38,7 @@ namespace itk
  * to be extracted. The output is the image of the accumulator.
  * GetLines() returns a list of LinesSpatialObjects
  *
- * Lines are parameterized in the form: R = x*cos(Teta)+y*sin(Teta)
+ * Lines are parameterized in the form: R = x*vcl_cos(Teta)+y*vcl_sin(Teta)
  * where R is the perpendicular distance from the origin and Teta 
  * the angle with the normal.
  *
@@ -142,6 +142,17 @@ public:
   /** Set the variance of the gaussian bluring for the accumulator */
   itkSetMacro(Variance,float);
   itkGetMacro(Variance,float);
+
+#ifdef ITK_USE_CONCEPT_CHECKING
+  /** Begin concept checking */
+  itkConceptMacro(IntConvertibleToOutputCheck,
+    (Concept::Convertible<int, TOutputPixelType>));
+  itkConceptMacro(InputGreaterThanFloatCheck,
+    (Concept::GreaterThanComparable<PixelType, float>));
+  itkConceptMacro(OutputPlusIntCheck,
+    (Concept::AdditiveOperators<TOutputPixelType, int>));
+  /** End concept checking */
+#endif
 
 protected:
 

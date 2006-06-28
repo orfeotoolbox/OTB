@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkCannyEdgeDetectionImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2005/11/16 19:31:40 $
-  Version:   $Revision: 1.20 $
+  Date:      $Date: 2006/04/10 16:38:49 $
+  Version:   $Revision: 1.22 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -135,6 +135,8 @@ public:
   /** ImageDimension constant    */
   itkStaticConstMacro(ImageDimension, unsigned int,
                       TInputImage::ImageDimension);
+  itkStaticConstMacro(OutputImageDimension, unsigned int,
+                      TOutputImage::ImageDimension);
   
   /** Typedef of double containers */
   typedef FixedArray<double, itkGetStaticConstMacro(ImageDimension)> ArrayType;
@@ -209,6 +211,21 @@ public:
    *
    * \sa ImageToImageFilter::GenerateInputRequestedRegion()  */  
   virtual void GenerateInputRequestedRegion() throw(InvalidRequestedRegionError);
+
+#ifdef ITK_USE_CONCEPT_CHECKING
+  /** Begin concept checking */
+  itkConceptMacro(InputHasNumericTraitsCheck,
+    (Concept::HasNumericTraits<InputImagePixelType>));
+  itkConceptMacro(OutputHasNumericTraitsCheck,
+    (Concept::HasNumericTraits<OutputImagePixelType>));
+  itkConceptMacro(SameDimensionCheck,
+    (Concept::SameDimension<ImageDimension, OutputImageDimension>));
+  itkConceptMacro(InputIsFloatingPointCheck,
+    (Concept::IsFloatingPoint<InputImagePixelType>));
+  itkConceptMacro(OutputIsFloatingPointCheck,
+    (Concept::IsFloatingPoint<OutputImagePixelType>));
+  /** End concept checking */
+#endif
 
 protected:
   CannyEdgeDetectionImageFilter();

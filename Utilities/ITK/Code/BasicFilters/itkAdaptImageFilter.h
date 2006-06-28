@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkAdaptImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2006/01/15 04:28:35 $
-  Version:   $Revision: 1.16 $
+  Date:      $Date: 2006/03/19 04:36:55 $
+  Version:   $Revision: 1.17 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -90,7 +90,7 @@ private:
  * (i.e. short to float) or can extract a subcomponent of a pixel
  * (i.e. extract the green component of an RGB pixel.
  * AdaptImageFilter could also be used for performing simple
- * arithmetic operations at a pixel (i.e. taking the sqrt() or sin()
+ * arithmetic operations at a pixel (i.e. taking the vcl_sqrt() or vcl_sin()
  * of a pixel); however, these types of operations could also be
  * accomplished using the itk::UnaryImageFilter.
  *

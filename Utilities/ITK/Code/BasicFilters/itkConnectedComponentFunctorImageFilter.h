@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkConnectedComponentFunctorImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2005/12/13 16:59:38 $
-  Version:   $Revision: 1.2 $
+  Date:      $Date: 2006/03/24 16:03:17 $
+  Version:   $Revision: 1.4 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -77,6 +77,8 @@ public:
   typedef typename TMaskImage::PixelType MaskPixelType;
   itkStaticConstMacro(ImageDimension, unsigned int,
                       TOutputImage::ImageDimension);
+  itkStaticConstMacro(InputImageDimension, unsigned int,
+                      TInputImage::ImageDimension);
   
   /**
    * Image typedef support
@@ -126,7 +128,28 @@ public:
     m_Functor = functor;
     this->Modified();
   }
-  
+
+#ifdef ITK_USE_CONCEPT_CHECKING
+  /** Begin concept checking */
+  itkConceptMacro(SameDimensionCheck,
+    (Concept::SameDimension<InputImageDimension, ImageDimension>));
+  itkConceptMacro(InputEqualityComparableCheck,
+    (Concept::EqualityComparable<InputPixelType>));
+  itkConceptMacro(OutputEqualityComparableCheck,
+    (Concept::EqualityComparable<OutputPixelType>));
+  itkConceptMacro(OutputConvertibleToUnsignedIntCheck,
+    (Concept::Convertible<OutputPixelType, unsigned int>));
+  itkConceptMacro(OutputConvertibleToUnsignedLongCheck,
+    (Concept::Convertible<OutputPixelType, unsigned long>));
+  itkConceptMacro(OutputConvertibleToLongCheck,
+    (Concept::Convertible<OutputPixelType, long>));
+  itkConceptMacro(UnsignedLongConvertibleToOutputCheck,
+    (Concept::Convertible<unsigned long, OutputPixelType>));
+  itkConceptMacro(OutputIncrementDecrementOperatorsCheck,
+    (Concept::IncrementDecrementOperators<OutputPixelType>));
+  /** End concept checking */
+#endif
+
 protected:
   ConnectedComponentFunctorImageFilter() {}
   virtual ~ConnectedComponentFunctorImageFilter() {}

@@ -3,8 +3,8 @@
 Program:   Insight Segmentation & Registration Toolkit
 Module:    $RCSfile: itkConfidenceConnectedImageFilter.txx,v $
 Language:  C++
-Date:      $Date: 2006/01/27 17:38:54 $
-Version:   $Revision: 1.32 $
+Date:      $Date: 2006/03/19 04:36:56 $
+Version:   $Revision: 1.33 $
 
 Copyright (c) Insight Software Consortium. All rights reserved.
 See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -175,8 +175,8 @@ ConfidenceConnectedImageFilter<TInputImage,TOutputImage>
     }
 
 
-  lower = m_Mean - m_Multiplier * sqrt( m_Variance );
-  upper = m_Mean + m_Multiplier * sqrt( m_Variance );
+  lower = m_Mean - m_Multiplier * vcl_sqrt(m_Variance );
+  upper = m_Mean + m_Multiplier * vcl_sqrt(m_Variance );
   
   // Find the highest and lowest seed intensity.
   InputRealType lowestSeedIntensity = itk::NumericTraits<InputImagePixelType>::max();
@@ -226,7 +226,7 @@ ConfidenceConnectedImageFilter<TInputImage,TOutputImage>
   function->ThresholdBetween(static_cast<InputImagePixelType>(lower),
                              static_cast<InputImagePixelType>(upper));
 
-  itkDebugMacro(<< "\nLower intensity = " << lower << ", Upper intensity = " << upper << "\nmean = " << m_Mean << " , sqrt(variance) = " << sqrt( m_Variance ));
+  itkDebugMacro(<< "\nLower intensity = " << lower << ", Upper intensity = " << upper << "\nmean = " << m_Mean << " , vcl_sqrt(variance) = " << vcl_sqrt(m_Variance ));
 
 
   // Segment the image, the iterator walks the output image (so Set()
@@ -279,12 +279,12 @@ ConfidenceConnectedImageFilter<TInputImage,TOutputImage>
     // if the variance is zero, there is no point in continuing
     if ( m_Variance == 0 )
       {
-      itkDebugMacro(<< "\nLower intensity = " << lower << ", Upper intensity = " << upper << "\nmean = " << m_Mean << ", variance = " << m_Variance << " , sqrt(variance) = " << sqrt(m_Variance));
+      itkDebugMacro(<< "\nLower intensity = " << lower << ", Upper intensity = " << upper << "\nmean = " << m_Mean << ", variance = " << m_Variance << " , vcl_sqrt(variance) = " << vcl_sqrt(m_Variance));
       itkDebugMacro(<< "\nsum = " << sum << ", sumOfSquares = " << sumOfSquares << "\nnum = " << num);
       break;
       }
-    lower = m_Mean - m_Multiplier * sqrt( m_Variance );
-    upper = m_Mean + m_Multiplier * sqrt( m_Variance );
+    lower = m_Mean - m_Multiplier * vcl_sqrt(m_Variance );
+    upper = m_Mean + m_Multiplier * vcl_sqrt(m_Variance );
 
     // Adjust lower and upper to always contain the seed's intensity, otherwise, no pixels will be
     // returned by the iterator and a zero variance will result
@@ -310,7 +310,7 @@ ConfidenceConnectedImageFilter<TInputImage,TOutputImage>
     function->ThresholdBetween(static_cast<InputImagePixelType>(lower),
                                static_cast<InputImagePixelType>(upper));
     
-    itkDebugMacro(<< "\nLower intensity = " << lower << ", Upper intensity = " << upper << "\nmean = " << m_Mean << ", variance = " << m_Variance << " , sqrt(variance) = " << sqrt( m_Variance ));
+    itkDebugMacro(<< "\nLower intensity = " << lower << ", Upper intensity = " << upper << "\nmean = " << m_Mean << ", variance = " << m_Variance << " , vcl_sqrt(variance) = " << vcl_sqrt(m_Variance ));
     itkDebugMacro(<< "\nsum = " << sum << ", sumOfSquares = " << sumOfSquares << "\nnum = " << num);
     
 

@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkExpandImageFilter.txx,v $
   Language:  C++
-  Date:      $Date: 2003/12/09 17:16:22 $
-  Version:   $Revision: 1.13 $
+  Date:      $Date: 2006/03/19 04:36:56 $
+  Version:   $Revision: 1.14 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -259,11 +259,11 @@ ExpandImageFilter<TInputImage,TOutputImage>
   for (i = 0; i < TInputImage::ImageDimension; i++)
     {
     inputRequestedRegionSize[i]
-      = (long) ceil( (double)outputRequestedRegionSize[i] / 
+      = (long) vcl_ceil((double)outputRequestedRegionSize[i] / 
                      (double) m_ExpandFactors[i] ) + 1;
 
     inputRequestedRegionStartIndex[i]
-      = (long) floor( (double)outputRequestedRegionStartIndex[i] / 
+      = (long) vcl_floor((double)outputRequestedRegionStartIndex[i] / 
                       (double)m_ExpandFactors[i] );
     }
 

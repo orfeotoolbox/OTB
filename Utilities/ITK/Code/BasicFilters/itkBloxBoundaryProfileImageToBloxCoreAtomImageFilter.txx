@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkBloxBoundaryProfileImageToBloxCoreAtomImageFilter.txx,v $
   Language:  C++
-  Date:      $Date: 2006/03/06 21:56:45 $
-  Version:   $Revision: 1.9 $
+  Date:      $Date: 2006/03/19 04:36:56 $
+  Version:   $Revision: 1.10 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -289,7 +289,7 @@ BloxBoundaryProfileImageToBloxCoreAtomImageFilter< TInputImage, TOutputImage, TS
                 m_IntensityFlag = 1;
               else m_IntensityFlag = 0;
 
-              if( fabs( (pBPOne->GetLowerIntensity() - pBPTwo->GetLowerIntensity()) ) <= m_IntensityThreshold
+              if( vcl_fabs((pBPOne->GetLowerIntensity() - pBPTwo->GetLowerIntensity()) ) <= m_IntensityThreshold
                   && m_IntensityFlag == true )
                 m_CreateCoreAtom = true;
               else
@@ -303,7 +303,7 @@ BloxBoundaryProfileImageToBloxCoreAtomImageFilter< TInputImage, TOutputImage, TS
                 m_IntensityFlag = 1;
               else m_IntensityFlag = 0;
 
-              if( fabs( (pBPOne->GetLowerIntensity() - pBPTwo->GetUpperIntensity()) ) <= m_IntensityThreshold
+              if( vcl_fabs((pBPOne->GetLowerIntensity() - pBPTwo->GetUpperIntensity()) ) <= m_IntensityThreshold
                   && m_IntensityFlag == true )
                 m_CreateCoreAtom = true;
               else
@@ -317,7 +317,7 @@ BloxBoundaryProfileImageToBloxCoreAtomImageFilter< TInputImage, TOutputImage, TS
                 m_IntensityFlag = 1;
               else m_IntensityFlag = 0;
 
-              if( fabs( (pBPOne->GetUpperIntensity() - pBPTwo->GetLowerIntensity()) ) <= m_IntensityThreshold
+              if( vcl_fabs((pBPOne->GetUpperIntensity() - pBPTwo->GetLowerIntensity()) ) <= m_IntensityThreshold
                   && m_IntensityFlag == true )
                 m_CreateCoreAtom = true;
               else
@@ -331,7 +331,7 @@ BloxBoundaryProfileImageToBloxCoreAtomImageFilter< TInputImage, TOutputImage, TS
                 m_IntensityFlag = 1;
               else m_IntensityFlag = 0;
 
-              if( fabs( (pBPOne->GetUpperIntensity() - pBPTwo->GetUpperIntensity()) ) <= m_IntensityThreshold
+              if( vcl_fabs((pBPOne->GetUpperIntensity() - pBPTwo->GetUpperIntensity()) ) <= m_IntensityThreshold
                   && m_IntensityFlag == true )
                 m_CreateCoreAtom = true;
               else

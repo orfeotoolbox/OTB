@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkExtractImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2004/10/31 17:50:41 $
-  Version:   $Revision: 1.11 $
+  Date:      $Date: 2006/03/17 14:22:26 $
+  Version:   $Revision: 1.12 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -103,6 +103,13 @@ public:
    *  ExtractionRegion.Size = 0. */
   void SetExtractionRegion(InputImageRegionType extractRegion);
   itkGetMacro(ExtractionRegion, InputImageRegionType);
+
+#ifdef ITK_USE_CONCEPT_CHECKING
+  /** Begin concept checking */
+  itkConceptMacro(InputCovertibleToOutputCheck,
+    (Concept::Convertible<InputImagePixelType, OutputImagePixelType>));
+  /** End concept checking */
+#endif
 
 protected:
   ExtractImageFilter();

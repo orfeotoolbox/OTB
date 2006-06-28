@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkBilateralImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2004/11/04 20:40:37 $
-  Version:   $Revision: 1.18 $
+  Date:      $Date: 2006/03/24 16:03:16 $
+  Version:   $Revision: 1.19 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -160,7 +160,14 @@ public:
    * range of [0, 4*m_RangeSigma]. Default is 100. */
   itkSetMacro(NumberOfRangeGaussianSamples, unsigned long);
   itkGetMacro(NumberOfRangeGaussianSamples, unsigned long);
-  
+
+#ifdef ITK_USE_CONCEPT_CHECKING
+  /** Begin concept checking */
+  itkConceptMacro(OutputHasNumericTraitsCheck,
+                  (Concept::HasNumericTraits<OutputPixelType>));
+  /** End concept checking */
+#endif
+
 protected:
   /** Constructor.  Default value for DomainSigma is 4. Default value
    * RangeSigma is 50. */

@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkBloxBoundaryPointImageToBloxBoundaryProfileImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2003/09/10 14:28:44 $
-  Version:   $Revision: 1.14 $
+  Date:      $Date: 2006/03/16 13:35:01 $
+  Version:   $Revision: 1.15 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -130,6 +130,13 @@ public:
   /** Parameters required to find boundary profiles */
   void Initialize(double setUniqueAxis, double setSymmetricAxes, unsigned int numberOfBins,
                   unsigned int splatMethod, unsigned int spaceDimension);
+
+#ifdef ITK_USE_CONCEPT_CHECKING
+  /** Begin concept checking */
+  itkConceptMacro(SourceConvertibleToDoubleCheck,
+    (Concept::Convertible<typename TSourceImage::PixelType, double>));
+  /** End concept checking */
+#endif
 
 protected:
   BloxBoundaryPointImageToBloxBoundaryProfileImageFilter();

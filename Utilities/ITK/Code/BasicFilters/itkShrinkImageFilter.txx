@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkShrinkImageFilter.txx,v $
   Language:  C++
-  Date:      $Date: 2006/02/01 19:45:43 $
-  Version:   $Revision: 1.52 $
+  Date:      $Date: 2006/03/19 04:36:56 $
+  Version:   $Revision: 1.53 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -272,14 +272,14 @@ ShrinkImageFilter<TInputImage,TOutputImage>
     
     outputSpacing[i] = inputSpacing[i] * (float) m_ShrinkFactors[i];
     outputSize[i] = (unsigned long)
-      floor( (float) inputSize[i] / (float) m_ShrinkFactors[i]);
+      vcl_floor((float) inputSize[i] / (float) m_ShrinkFactors[i]);
     if( outputSize[i] < 1 )
       {
       outputSize[i] = 1;
       }
     
     outputStartIndex[i] = (long)
-      ceil( (float) inputStartIndex[i] / (float) m_ShrinkFactors[i] );
+      vcl_ceil((float) inputStartIndex[i] / (float) m_ShrinkFactors[i] );
     }
   
   outputPtr->SetSpacing( outputSpacing );

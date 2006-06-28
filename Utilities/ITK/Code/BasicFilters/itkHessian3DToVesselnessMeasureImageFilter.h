@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkHessian3DToVesselnessMeasureImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2005/06/14 17:20:04 $
-  Version:   $Revision: 1.1 $
+  Date:      $Date: 2006/05/24 15:27:24 $
+  Version:   $Revision: 1.3 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -72,10 +72,12 @@ public:
   /** Image dimension = 3. */
   itkStaticConstMacro(ImageDimension, unsigned int,
                       ::itk::GetImageDimension<InputImageType>::ImageDimension);
+  itkStaticConstMacro(InputPixelDimension, unsigned int,
+                      InputPixelType::ImageDimension);
 
-  typedef   itk::FixedArray< double, InputPixelType::Dimension >
+  typedef  FixedArray< double, itkGetStaticConstMacro(InputPixelDimension) >
                                                           EigenValueArrayType;
-  typedef  itk::Image< EigenValueArrayType, InputImageType::ImageDimension >
+  typedef  Image< EigenValueArrayType, itkGetStaticConstMacro(ImageDimension) >
                                                           EigenValueImageType;
   typedef   SymmetricEigenAnalysisImageFilter< 
               InputImageType, EigenValueImageType >     EigenAnalysisFilterType;
@@ -90,8 +92,14 @@ public:
   /** Set/Get macros for alpha_1 */
   itkSetMacro(Alpha2, double);
   itkGetMacro(Alpha2, double);
-    
-    
+
+#ifdef ITK_USE_CONCEPT_CHECKING
+  /** Begin concept checking */
+  itkConceptMacro(DoubleConvertibleToOutputCheck,
+                  (Concept::Convertible<OutputPixelType>));
+  /** End concept checking */
+#endif
+
 protected:
   Hessian3DToVesselnessMeasureImageFilter();
   ~Hessian3DToVesselnessMeasureImageFilter() {};

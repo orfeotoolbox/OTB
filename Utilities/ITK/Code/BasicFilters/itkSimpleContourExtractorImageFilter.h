@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkSimpleContourExtractorImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2005/01/09 13:45:53 $
-  Version:   $Revision: 1.2 $
+  Date:      $Date: 2006/03/30 15:36:25 $
+  Version:   $Revision: 1.3 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -128,6 +128,15 @@ public:
   *
   * \sa ImageToImageFilter::GenerateInputRequestedRegion() */
   virtual void GenerateInputRequestedRegion() throw(InvalidRequestedRegionError);
+
+#ifdef ITK_USE_CONCEPT_CHECKING
+  /** Begin concept checking */
+  itkConceptMacro(InputHasNumericTraitsCheck,
+                  (Concept::HasNumericTraits<InputPixelType>));
+  itkConceptMacro(OutputHasNumericTraitsCheck,
+                  (Concept::HasNumericTraits<OutputPixelType>));
+  /** End concept checking */
+#endif
 
 protected:
   SimpleContourExtractorImageFilter();

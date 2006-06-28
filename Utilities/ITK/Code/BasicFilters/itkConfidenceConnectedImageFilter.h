@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkConfidenceConnectedImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2006/01/27 17:36:24 $
-  Version:   $Revision: 1.13 $
+  Date:      $Date: 2006/03/24 16:03:17 $
+  Version:   $Revision: 1.14 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -141,6 +141,14 @@ public:
    * executed using the Update() method. */
   itkGetConstReferenceMacro( Variance, InputRealType );
 
+#ifdef ITK_USE_CONCEPT_CHECKING
+  /** Begin concept checking */
+  itkConceptMacro(InputHasNumericTraitsCheck,
+    (Concept::HasNumericTraits<InputImagePixelType>));
+  itkConceptMacro(OutputHasNumericTraitsCheck,
+    (Concept::HasNumericTraits<OutputImagePixelType>));
+  /** End concept checking */
+#endif
 
 protected:
   ConfidenceConnectedImageFilter();

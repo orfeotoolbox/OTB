@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkMaximumImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2006/01/23 17:55:48 $
-  Version:   $Revision: 1.6 $
+  Date:      $Date: 2006/03/29 14:53:40 $
+  Version:   $Revision: 1.8 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -87,7 +87,21 @@ public:
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
-  
+
+#ifdef ITK_USE_CONCEPT_CHECKING
+  /** Begin concept checking */
+  itkConceptMacro(Input1ConvertibleToOutputCheck,
+    (Concept::Convertible<typename TInputImage1::PixelType,
+                          typename TOutputImage::PixelType>));
+  itkConceptMacro(Input2ConvertibleToOutputCheck,
+    (Concept::Convertible<typename TInputImage2::PixelType,
+                          typename TOutputImage::PixelType>));
+  itkConceptMacro(Input1GreaterThanInput2Check,
+    (Concept::GreaterThanComparable<typename TInputImage1::PixelType,
+                                    typename TInputImage2::PixelType>));
+  /** End concept checking */
+#endif
+
 protected:
   MaximumImageFilter() {}
   virtual ~MaximumImageFilter() {}

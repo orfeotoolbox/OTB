@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkVectorConnectedComponentImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2006/01/23 17:55:48 $
-  Version:   $Revision: 1.5 $
+  Date:      $Date: 2006/04/03 15:07:52 $
+  Version:   $Revision: 1.6 $
 
      This software is distributed WITHOUT ANY WARRANTY; without even 
      the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
@@ -94,7 +94,14 @@ public:
 
   virtual InputValueType GetDistanceThreshold()
     {return (this->GetFunctor().GetDistanceThreshold());}
-  
+
+#ifdef ITK_USE_CONCEPT_CHECKING
+  /** Begin concept checking */
+  itkConceptMacro(InputHasNumericTraitsCheck,
+                  (Concept::HasNumericTraits<InputValueType>));
+  /** End concept checking */
+#endif
+
 protected:
   VectorConnectedComponentImageFilter() {};
   virtual ~VectorConnectedComponentImageFilter() {};

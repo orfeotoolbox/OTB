@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkEigenAnalysis2DImageFilter.txx,v $
   Language:  C++
-  Date:      $Date: 2003/09/10 14:28:47 $
-  Version:   $Revision: 1.18 $
+  Date:      $Date: 2006/03/19 04:36:56 $
+  Version:   $Revision: 1.19 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -234,7 +234,7 @@ EigenAnalysis2DImageFilter<TInputImage,TEigenValueImage,TEigenVectorImage>
     const double dxy = xx - yy;
     const double sxy = xx + yy;
 
-    const double S = sqrt( dxy * dxy + 4.0 * xy * xy);
+    const double S = vcl_sqrt(dxy * dxy + 4.0 * xy * xy);
 
     const double pp =  ( sxy + S ) / 2.0;
     const double qq =  ( sxy - S ) / 2.0;

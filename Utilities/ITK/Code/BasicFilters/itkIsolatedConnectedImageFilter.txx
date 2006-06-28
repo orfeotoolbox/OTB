@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkIsolatedConnectedImageFilter.txx,v $
   Language:  C++
-  Date:      $Date: 2004/11/25 15:38:32 $
-  Version:   $Revision: 1.26 $
+  Date:      $Date: 2006/03/19 04:36:56 $
+  Version:   $Revision: 1.27 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -136,8 +136,8 @@ IsolatedConnectedImageFilter<TInputImage,TOutputImage>
     // two sets of seeds.
     const unsigned int maximumIterationsInBinarySearch = 
       static_cast< unsigned int > (
-        log( ( static_cast<float>( upper ) - static_cast< float >( lower ) ) /
-             static_cast<float>( m_IsolatedValueTolerance ) )  / log( 2.0 ) );
+        vcl_log(( static_cast<float>( upper ) - static_cast< float >( lower ) ) /
+             static_cast<float>( m_IsolatedValueTolerance ) )  / vcl_log(2.0 ) );
 
     progressWeight = 1.0f / static_cast<float>( maximumIterationsInBinarySearch + 2 );
     cumulatedProgress = 0.0f;
@@ -202,8 +202,8 @@ IsolatedConnectedImageFilter<TInputImage,TOutputImage>
     // two sets of seeds.
     const unsigned int maximumIterationsInBinarySearch = 
       static_cast< unsigned int > (
-        log( ( static_cast<float>( upper ) - static_cast< float >( lower ) ) /
-             static_cast<float>( m_IsolatedValueTolerance ) )  / log( 2.0 ) );
+        vcl_log(( static_cast<float>( upper ) - static_cast< float >( lower ) ) /
+             static_cast<float>( m_IsolatedValueTolerance ) )  / vcl_log(2.0 ) );
 
     progressWeight = 1.0f / static_cast<float>( maximumIterationsInBinarySearch + 2 );
     cumulatedProgress = 0.0f;

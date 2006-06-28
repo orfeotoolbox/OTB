@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkNaryFunctorImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2005/03/24 22:23:05 $
-  Version:   $Revision: 1.13 $
+  Date:      $Date: 2006/03/29 14:53:40 $
+  Version:   $Revision: 1.14 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -87,6 +87,21 @@ public:
       }
   }
   
+  /** ImageDimension constants */
+  itkStaticConstMacro(
+    InputImageDimension, unsigned int, TInputImage::ImageDimension);
+  itkStaticConstMacro(
+    OutputImageDimension, unsigned int, TOutputImage::ImageDimension);
+
+#ifdef ITK_USE_CONCEPT_CHECKING
+  /** Begin concept checking */
+  itkConceptMacro(SameDimensionCheck,
+    (Concept::SameDimension<InputImageDimension, OutputImageDimension>));
+  itkConceptMacro(OutputHasNumericTraitsCheck,
+    (Concept::HasNumericTraits<OutputImagePixelType>));
+  /** End concept checking */
+#endif
+
 protected:
   NaryFunctorImageFilter();
   virtual ~NaryFunctorImageFilter() {};

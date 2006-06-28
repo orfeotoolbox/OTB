@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkDanielssonDistanceMapImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2004/03/07 02:00:51 $
-  Version:   $Revision: 1.29 $
+  Date:      $Date: 2006/03/17 14:22:26 $
+  Version:   $Revision: 1.30 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -91,9 +91,11 @@ public:
   /** Type for the size of the input image. */
   typedef typename RegionType::SizeType   SizeType;
   
-  /** The dimension of the input image. */
+  /** The dimension of the input and output images. */
   itkStaticConstMacro(InputImageDimension, unsigned int,
                       InputImageType::ImageDimension);
+  itkStaticConstMacro(OutputImageDimension, unsigned int,
+                      TOutputImage::ImageDimension);
 
   /** Pointer Type for the vector distance image */
   typedef Image< OffsetType,
@@ -158,6 +160,22 @@ public:
 
   /** Get vector field of distances. */
   VectorImageType * GetVectorDistanceMap(void);
+
+#ifdef ITK_USE_CONCEPT_CHECKING
+  /** Begin concept checking */
+  itkConceptMacro(SameDimensionCheck,
+    (Concept::SameDimension<InputImageDimension, OutputImageDimension>));
+  itkConceptMacro(UnsignedIntConvertibleToOutputCheck,
+    (Concept::Convertible<unsigned int, typename TOutputImage::PixelType>));
+  itkConceptMacro(IntConvertibleToOutputCheck,
+    (Concept::Convertible<int, typename TOutputImage::PixelType>));
+  itkConceptMacro(DoubleConvertibleToOutputCheck,
+    (Concept::Convertible<double, typename TOutputImage::PixelType>));
+  itkConceptMacro(InputConvertibleToOutputCheck,
+    (Concept::Convertible<typename TInputImage::PixelType,
+                          typename TOutputImage::PixelType>));
+  /** End concept checking */
+#endif
 
 protected:
   DanielssonDistanceMapImageFilter();

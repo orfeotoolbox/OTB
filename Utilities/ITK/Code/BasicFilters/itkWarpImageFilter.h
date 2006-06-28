@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkWarpImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2005/07/27 15:21:12 $
-  Version:   $Revision: 1.20 $
+  Date:      $Date: 2006/04/04 13:13:51 $
+  Version:   $Revision: 1.21 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -114,6 +114,10 @@ public:
   /** Determine the image dimension. */
   itkStaticConstMacro(ImageDimension, unsigned int,
                       TOutputImage::ImageDimension );
+  itkStaticConstMacro(InputImageDimension, unsigned int,
+                      TInputImage::ImageDimension );
+  itkStaticConstMacro(DeformationFieldDimension, unsigned int,
+                      TDeformationField::ImageDimension );
 
   /** Deformation field typedef support. */
   typedef TDeformationField    DeformationFieldType;
@@ -184,6 +188,19 @@ public:
   /** This method is used to set the state of the filter after 
    * multi-threading. */
   virtual void AfterThreadedGenerateData();
+
+#ifdef ITK_USE_CONCEPT_CHECKING
+  /** Begin concept checking */
+  itkConceptMacro(SameDimensionCheck1,
+    (Concept::SameDimension<ImageDimension, InputImageDimension>));
+  itkConceptMacro(SameDimensionCheck2,
+    (Concept::SameDimension<ImageDimension, DeformationFieldDimension>));
+  itkConceptMacro(InputHasNumericTraitsCheck,
+    (Concept::HasNumericTraits<typename TInputImage::PixelType>));
+  itkConceptMacro(DeformationFieldHasNumericTraitsCheck,
+    (Concept::HasNumericTraits<typename TDeformationField::PixelType::ValueType>));
+  /** End concept checking */
+#endif
 
 protected:
   WarpImageFilter();

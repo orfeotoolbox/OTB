@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkZeroCrossingImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2003/09/10 14:29:00 $
-  Version:   $Revision: 1.10 $
+  Date:      $Date: 2006/04/04 13:13:52 $
+  Version:   $Revision: 1.12 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -85,6 +85,8 @@ public:
   /** ImageDimension enumeration   */
   itkStaticConstMacro(ImageDimension, unsigned int,
                       TInputImage::ImageDimension );
+  itkStaticConstMacro(OutputImageDimension, unsigned int,
+                      TOutputImage::ImageDimension );
   
   /** ZeroCrossingImageFilter needs a larger input requested
    * region than the output requested region (larger by the kernel
@@ -103,7 +105,20 @@ public:
   /** Set/Get the label value for non-zero-crossing pixels. */
   itkSetMacro(BackgroundValue, OutputImagePixelType);
   itkGetMacro(BackgroundValue, OutputImagePixelType);
-  
+
+#ifdef ITK_USE_CONCEPT_CHECKING
+  /** Begin concept checking */
+  itkConceptMacro(OutputEqualityComparableCheck,
+    (Concept::EqualityComparable<OutputImagePixelType>));
+  itkConceptMacro(SameDimensionCheck,
+    (Concept::SameDimension<ImageDimension, OutputImageDimension>));
+  itkConceptMacro(InputComparableCheck,
+    (Concept::Comparable<InputImagePixelType>));
+  itkConceptMacro(OutputOStreamWritableCheck,
+    (Concept::OStreamWritable<OutputImagePixelType>));
+  /** End concept checking */
+#endif
+
 protected:
   ZeroCrossingImageFilter()
   {

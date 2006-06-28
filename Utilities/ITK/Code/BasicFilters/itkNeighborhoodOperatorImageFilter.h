@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkNeighborhoodOperatorImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2005/05/13 17:15:34 $
-  Version:   $Revision: 1.31 $
+  Date:      $Date: 2006/03/31 14:31:04 $
+  Version:   $Revision: 1.33 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -71,6 +71,8 @@ public:
    * of the two images is assumed to be the same. */
   itkStaticConstMacro(ImageDimension, unsigned int,
                       TOutputImage::ImageDimension);
+  itkStaticConstMacro(InputImageDimension, unsigned int,
+                      TInputImage::ImageDimension);
   
   /** Image typedef support. */
   typedef TInputImage  InputImageType;
@@ -124,6 +126,21 @@ public:
    *
    * \sa ProcessObject::GenerateInputRequestedRegion() */
   virtual void GenerateInputRequestedRegion() throw (InvalidRequestedRegionError);
+
+#ifdef ITK_USE_CONCEPT_CHECKING
+  /** Begin concept checking */
+  itkConceptMacro(SameDimensionCheck,
+    (Concept::SameDimension<InputImageDimension, ImageDimension>));
+  itkConceptMacro(OperatorConvertibleToOutputCheck,
+    (Concept::Convertible<OperatorValueType, OutputPixelType>));
+  itkConceptMacro(InputConvertibleToOperatorCheck,
+    (Concept::Convertible<InputPixelType, OperatorValueType>));
+  itkConceptMacro(OperatorMultiplyOperatorCheck,
+    (Concept::MultiplyOperator<OperatorValueType>));
+  itkConceptMacro(OperatorAdditiveOperatorsCheck,
+    (Concept::AdditiveOperators<OperatorValueType>));
+  /** End concept checking */
+#endif
 
 protected:
   NeighborhoodOperatorImageFilter()

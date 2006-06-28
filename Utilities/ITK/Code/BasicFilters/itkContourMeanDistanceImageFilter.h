@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkContourMeanDistanceImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2005/01/21 12:12:30 $
-  Version:   $Revision: 1.2 $
+  Date:      $Date: 2006/03/27 17:01:04 $
+  Version:   $Revision: 1.3 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -115,6 +115,13 @@ public:
   
   /** Return the computed Mean distance. */
   itkGetMacro(MeanDistance,RealType);
+
+#ifdef ITK_USE_CONCEPT_CHECKING
+  /** Begin concept checking */
+  itkConceptMacro(InputHasNumericTraitsCheck,
+    (Concept::HasNumericTraits<InputImage1PixelType>));
+  /** End concept checking */
+#endif
 
 protected:
   ContourMeanDistanceImageFilter();

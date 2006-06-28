@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkHoughTransform2DCirclesImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2004/01/14 12:17:42 $
-  Version:   $Revision: 1.8 $
+  Date:      $Date: 2006/03/31 14:31:04 $
+  Version:   $Revision: 1.11 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -143,6 +143,19 @@ public:
   /** Set the sweep angle */
   itkSetMacro(SweepAngle,float);
   itkGetMacro(SweepAngle,float);
+
+#ifdef ITK_USE_CONCEPT_CHECKING
+  /** Begin concept checking */
+  itkConceptMacro(IntConvertibleToOutputCheck,
+    (Concept::Convertible<int, TOutputPixelType>));
+  itkConceptMacro(InputGreaterThanDoubleCheck,
+    (Concept::GreaterThanComparable<PixelType, double>));
+  itkConceptMacro(OutputPlusIntCheck,
+    (Concept::AdditiveOperators<TOutputPixelType, int>));
+  itkConceptMacro(OutputDividedByIntCheck,
+    (Concept::DivisionOperators<TOutputPixelType, int>));
+  /** End concept checking */
+#endif
 
 protected:
 

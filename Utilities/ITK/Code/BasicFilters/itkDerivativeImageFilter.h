@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkDerivativeImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2003/12/17 14:41:27 $
-  Version:   $Revision: 1.19 $
+  Date:      $Date: 2006/03/17 14:22:26 $
+  Version:   $Revision: 1.20 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -74,8 +74,13 @@ public:
   itkTypeMacro(DerivativeImageFilter, ImageToImageFilter);
 
   /** The output pixel type must be signed. */
-  itkConceptMacro(SignedOutputPixelType, (Concept::Signed<OutputPixelType>));
-  
+#ifdef ITK_USE_CONCEPT_CHECKING
+  /** Begin concept checking */
+  itkConceptMacro(SignedOutputPixelType,
+                  (Concept::Signed<OutputPixelType>));
+  /** End concept checking */
+#endif
+
   /** Standard get/set macros for filter parameters. */
   itkSetMacro(Order, unsigned int);
   itkGetMacro(Order, unsigned int);

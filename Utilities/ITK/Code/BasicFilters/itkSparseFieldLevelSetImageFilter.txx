@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkSparseFieldLevelSetImageFilter.txx,v $
   Language:  C++
-  Date:      $Date: 2006/02/10 19:08:39 $
-  Version:   $Revision: 1.37 $
+  Date:      $Date: 2006/04/23 04:25:48 $
+  Version:   $Revision: 1.39 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -537,7 +537,7 @@ SparseFieldLevelSetImageFilter<TInputImage, TOutputImage>
     statusIt.Set( m_StatusNull );
     }
 
-  // Initialize the boundary pixels in the status images to
+  // Initialize the boundary pixels in the status image to
   // m_StatusBoundaryPixel values.  Uses the face calculator to find all of the
   // region faces.
   typedef NeighborhoodAlgorithm::ImageBoundaryFacesCalculator<StatusImageType>
@@ -590,7 +590,7 @@ SparseFieldLevelSetImageFilter<TInputImage, TOutputImage>
   // outside of the active layer.
   this->ConstructActiveLayer();
 
-  // Construct the rest of the non active set layers using the first two
+  // Construct the rest of the non-active set layers using the first two
   // layers. Inside layers are odd numbers, outside layers are even numbers.
   for (i = 1; i < m_Layers.size() - 2; ++i)
     {
@@ -666,7 +666,7 @@ SparseFieldLevelSetImageFilter<TInputImage, TOutputImage>
   //
   // During construction we also check whether any of the layers of the active
   // set (or the active set itself) is sitting on a boundary pixel location. If
-  // this is the case, then we need to active bounds checking in the solver
+  // this is the case, then we need to do active bounds checking in the solver.
   //
   
   unsigned int i;
@@ -921,7 +921,7 @@ SparseFieldLevelSetImageFilter<TInputImage, TOutputImage>
           { //  Neighbors are same sign OR at least one neighbor is zero.
           dx_forward  = forwardValue - centerValue;
           dx_backward = centerValue - backwardValue;
-          
+
           // Pick the larger magnitude derivative.
           if (::vnl_math_abs(dx_forward) > ::vnl_math_abs(dx_backward) )
             {
@@ -952,7 +952,7 @@ SparseFieldLevelSetImageFilter<TInputImage, TOutputImage>
          // to surfaces that pass close to the center of cells.  This is a
          // heuristic fudge factor that improves interpolation and reduces
          // "wiggling" at convergence.
-                offset[i] = (offset[i] * centerValue) * sqrt(ImageDimension +0.5)
+                offset[i] = (offset[i] * centerValue) * vcl_sqrt(ImageDimension +0.5)
                   / (norm_grad_phi_squared + MIN_NORM);
         //        offset[i] = (offset[i] * centerValue) / (sqrt(norm_grad_phi_squared) + MIN_NORM);
         }

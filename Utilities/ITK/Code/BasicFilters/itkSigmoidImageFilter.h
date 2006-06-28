@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkSigmoidImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2006/01/15 04:28:36 $
-  Version:   $Revision: 1.10 $
+  Date:      $Date: 2006/03/31 14:31:04 $
+  Version:   $Revision: 1.13 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -70,7 +70,7 @@ public:
   inline TOutput operator()( const TInput & A )
   {
     const double x = ( static_cast<double>(A) - m_Beta ) / m_Alpha;
-    const double e = 1.0 / ( 1.0 + exp( - x ) );
+    const double e = 1.0 / ( 1.0 + vcl_exp(- x ) );
     const double v = 
       (m_OutputMaximum - m_OutputMinimum ) * e + m_OutputMinimum;
     return static_cast<TOutput>( v );
@@ -170,6 +170,21 @@ public:
     this->GetFunctor().SetOutputMaximum( max );
     this->Modified();
   }
+
+#ifdef ITK_USE_CONCEPT_CHECKING
+  /** Begin concept checking */
+  itkConceptMacro(InputConvertibleToDoubleCheck,
+    (Concept::Convertible<typename TInputImage::PixelType, double>));
+  itkConceptMacro(OutputAdditiveOperatorsCheck,
+    (Concept::AdditiveOperators<OutputPixelType>));
+  itkConceptMacro(DoubleConvertibleToOutputCheck,
+    (Concept::Convertible<double, OutputPixelType>));
+  itkConceptMacro(OutputTimesDoubleCheck,
+    (Concept::MultiplyOperator<OutputPixelType, double>));
+  itkConceptMacro(OutputDoubleAdditiveOperatorsCheck,
+    (Concept::AdditiveOperators<OutputPixelType, OutputPixelType, double>));
+  /** End concept checking */
+#endif
 
 protected:
   SigmoidImageFilter() {}

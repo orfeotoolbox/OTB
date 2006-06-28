@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkPolylineMaskImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2005/08/10 00:24:01 $
-  Version:   $Revision: 1.6 $
+  Date:      $Date: 2006/03/30 15:36:25 $
+  Version:   $Revision: 1.7 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -109,7 +109,13 @@ public:
   ProjPlanePointType TransformProjectPoint(PointType inputPoint);
   /* Generate Data */
   void GenerateData(void);
- 
+
+#ifdef ITK_USE_CONCEPT_CHECKING
+  /** Begin concept checking */
+  itkConceptMacro(VectorHasNumericTraitsCheck,
+    (Concept::HasNumericTraits<typename VectorType::ValueType>));
+  /** End concept checking */
+#endif
 
 protected:
   PolylineMaskImageFilter();

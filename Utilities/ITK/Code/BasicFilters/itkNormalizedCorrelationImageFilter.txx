@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkNormalizedCorrelationImageFilter.txx,v $
   Language:  C++
-  Date:      $Date: 2006/01/11 19:43:32 $
-  Version:   $Revision: 1.6 $
+  Date:      $Date: 2006/03/19 04:36:56 $
+  Version:   $Revision: 1.7 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -129,13 +129,13 @@ NormalizedCorrelationImageFilter<TInputImage, TMaskImage, TOutputImage, TOperato
     = static_cast<OutputPixelRealType>(this->GetOperator().Size());
   OutputPixelRealType mean = sum / num;
   OutputPixelRealType var = (sumOfSquares - (sum*sum/num)) / (num - 1.0);
-  OutputPixelRealType std = sqrt(var);
+  OutputPixelRealType std = vcl_sqrt(var);
 
   // convert std to a scaling factor k such that
   //
   //        || (coeff - mean) / k || = 1.0
   //
-  double k = std * sqrt(num-1.0);
+  double k = std * vcl_sqrt(num-1.0);
   
   // normalize the template
   for (ntIt = normalizedTemplate.Begin(), tIt = this->GetOperator().Begin();
@@ -216,7 +216,7 @@ NormalizedCorrelationImageFilter<TInputImage, TMaskImage, TOutputImage, TOperato
           sum += value;
           sumOfSquares += (value*value);
           }
-        denominator = sqrt( sumOfSquares - (sum*sum/realTemplateSize) );
+        denominator = vcl_sqrt(sumOfSquares - (sum*sum/realTemplateSize) );
       
         it.Value() = numerator / denominator;
       
@@ -252,7 +252,7 @@ NormalizedCorrelationImageFilter<TInputImage, TMaskImage, TOutputImage, TOperato
             sum += value;
             sumOfSquares += (value*value);
             }
-          denominator = sqrt( sumOfSquares - (sum*sum/realTemplateSize) );
+          denominator = vcl_sqrt(sumOfSquares - (sum*sum/realTemplateSize) );
 
           it.Value() = numerator / denominator ;
           }

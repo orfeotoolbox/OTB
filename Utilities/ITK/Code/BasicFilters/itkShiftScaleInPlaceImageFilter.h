@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkShiftScaleInPlaceImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2003/09/10 14:28:56 $
-  Version:   $Revision: 1.3 $
+  Date:      $Date: 2006/03/31 14:31:04 $
+  Version:   $Revision: 1.4 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -96,6 +96,17 @@ public:
   /** Get the number of pixels that underflowed and overflowed. */
   itkGetMacro(UnderflowCount,long);
   itkGetMacro(OverflowCount,long);
+
+#ifdef ITK_USE_CONCEPT_CHECKING
+  /** Begin concept checking */
+  itkConceptMacro(InputHasNumericTraitsCheck,
+                  (Concept::HasNumericTraits<InputImagePixelType>));
+  itkConceptMacro(InputPlusRealTypeCheck,
+                  (Concept::AdditiveOperators<InputImagePixelType, RealType, RealType>));
+  itkConceptMacro(RealTypeMultiplyOperatorCheck,
+                  (Concept::MultiplyOperator<RealType>));
+  /** End concept checking */
+#endif
 
 protected:
   ShiftScaleInPlaceImageFilter();

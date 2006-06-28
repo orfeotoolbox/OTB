@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkMinimumMaximumImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2004/08/13 11:06:19 $
-  Version:   $Revision: 1.11 $
+  Date:      $Date: 2006/03/29 14:53:40 $
+  Version:   $Revision: 1.12 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -93,6 +93,17 @@ public:
   /** Make a DataObject of the correct type to be used as the specified
    * output. */
   virtual DataObjectPointer MakeOutput(unsigned int idx);
+
+#ifdef ITK_USE_CONCEPT_CHECKING
+  /** Begin concept checking */
+  itkConceptMacro(LessThanComparableCheck,
+                  (Concept::LessThanComparable<PixelType>));
+  itkConceptMacro(GreaterThanComparableCheck,
+                  (Concept::GreaterThanComparable<PixelType>));
+  itkConceptMacro(OStreamWritableCheck,
+                  (Concept::OStreamWritable<PixelType>));
+  /** End concept checking */
+#endif
 
 protected:
   MinimumMaximumImageFilter();

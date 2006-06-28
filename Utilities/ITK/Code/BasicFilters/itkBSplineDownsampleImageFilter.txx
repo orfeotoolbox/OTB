@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkBSplineDownsampleImageFilter.txx,v $
   Language:  C++
-  Date:      $Date: 2003/12/09 17:15:07 $
-  Version:   $Revision: 1.7 $
+  Date:      $Date: 2006/03/19 04:36:55 $
+  Version:   $Revision: 1.8 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -140,8 +140,8 @@ BSplineDownsampleImageFilter<TInputImage,TOutputImage, ResamplerType>
     //TODO:  Verify this is being rounded correctly.
     outputSpacing[i] = inputSpacing[i] * (double) 2;
     //TODO:  Verify this is being rounded correctly.
-    outputSize[i] = (unsigned int) floor( (double)(inputSize[i] / 2.0) );
-    outputStartIndex[i] = (int)ceil( (double) inputStartIndex[i] / 2.0 );
+    outputSize[i] = (unsigned int) vcl_floor((double)(inputSize[i] / 2.0) );
+    outputStartIndex[i] = (int)vcl_ceil((double) inputStartIndex[i] / 2.0 );
     }
 
   outputPtr->SetSpacing( outputSpacing );

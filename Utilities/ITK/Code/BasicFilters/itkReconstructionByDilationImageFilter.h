@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkReconstructionByDilationImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2005/08/23 15:08:59 $
-  Version:   $Revision: 1.1 $
+  Date:      $Date: 2006/03/30 15:36:25 $
+  Version:   $Revision: 1.2 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -115,6 +115,19 @@ public:
   itkSetMacro(FullyConnected, bool);
   itkGetConstReferenceMacro(FullyConnected, bool);
   itkBooleanMacro(FullyConnected);
+
+#ifdef ITK_USE_CONCEPT_CHECKING
+  /** Begin concept checking */
+  itkConceptMacro(InputConvertibleToOutputCheck,
+    (Concept::Convertible<MarkerImagePixelType, OutputImagePixelType>));
+  itkConceptMacro(SameDimensionCheck,
+    (Concept::SameDimension<MarkerImageDimension, OutputImageDimension>));
+  itkConceptMacro(OutputComparableCheck,
+    (Concept::Comparable<OutputImagePixelType>));
+  itkConceptMacro(InputGreaterThanComparableCheck,
+    (Concept::GreaterThanComparable<MarkerImagePixelType>));
+  /** End concept checking */
+#endif
 
 protected:
   ReconstructionByDilationImageFilter();

@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkCosImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2006/01/23 17:55:48 $
-  Version:   $Revision: 1.19 $
+  Date:      $Date: 2006/03/19 04:36:56 $
+  Version:   $Revision: 1.21 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -24,7 +24,7 @@ namespace itk
 {
   
 /** \class CosImageFilter
- * \brief Computes the cos(x) pixel-wise
+ * \brief Computes the vcl_cos(x) pixel-wise
  *
  * This filter is templated over the pixel type of the input image
  * and the pixel type of the output image. 
@@ -33,8 +33,8 @@ namespace itk
  * each one of them it will do the following: 
  *
  * - cast the pixel value to \c double, 
- * - apply the \c cos() function to the \c double value
- * - cast the \c double value resulting from \c cos() to the pixel type of the output image 
+ * - apply the \c vcl_cos() function to the \c double value
+ * - cast the \c double value resulting from \c vcl_cos() to the pixel type of the output image 
  * - store the casted value into the output image.
  * 
  * The filter expect both images to have the same dimension (e.g. both 2D, or both 3D, or both ND)
@@ -83,7 +83,16 @@ public:
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
-  
+
+#ifdef ITK_USE_CONCEPT_CHECKING
+  /** Begin concept checking */
+  itkConceptMacro(InputConvertibleToDoubleCheck,
+    (Concept::Convertible<typename TInputImage::PixelType, double>));
+  itkConceptMacro(DoubleConvertibleToOutputCheck,
+    (Concept::Convertible<double, typename TOutputImage::PixelType>));
+  /** End concept checking */
+#endif
+
 protected:
   CosImageFilter() {}
   virtual ~CosImageFilter() {}

@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkExpNegativeImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2006/01/15 04:28:36 $
-  Version:   $Revision: 1.5 $
+  Date:      $Date: 2006/03/19 04:36:56 $
+  Version:   $Revision: 1.7 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -24,9 +24,9 @@ namespace itk
 {
   
 /** \class ExpNegativeImageFilter
- * \brief Computes the function exp(-K.x) pixel-wise
+ * \brief Computes the function vcl_exp(-K.x) pixel-wise
  *
- * Every output pixel is equal to exp(-K.x ). where x is the intensity of the
+ * Every output pixel is equal to vcl_exp(-K.x ). where x is the intensity of the
  * homologous input pixel, and K is a user-provided constant.
  * 
  * \ingroup IntensityImageFilters  Multithreaded
@@ -56,7 +56,7 @@ public:
   
   inline TOutput operator()( const TInput & A )
   {
-    return static_cast<TOutput>( exp( - m_Factor * static_cast<double>(A) ) );
+    return static_cast<TOutput>( vcl_exp(- m_Factor * static_cast<double>(A) ) );
   }
 
   void SetFactor( double factor ) {
@@ -98,6 +98,16 @@ public:
     this->GetFunctor().SetFactor( factor );
     this->Modified();
   }
+
+#ifdef ITK_USE_CONCEPT_CHECKING
+  /** Begin concept checking */
+  itkConceptMacro(InputConvertibleToDoubleCheck,
+    (Concept::Convertible<typename TInputImage::PixelType, double>));
+  itkConceptMacro(DoubleConvertibleToOutputCheck,
+    (Concept::Convertible<double, typename TOutputImage::PixelType>));
+  /** End concept checking */
+#endif
+
 protected:
   ExpNegativeImageFilter() {}
   virtual ~ExpNegativeImageFilter() {}

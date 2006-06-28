@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkVectorResampleImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2006/03/04 21:03:00 $
-  Version:   $Revision: 1.8 $
+  Date:      $Date: 2006/04/03 15:07:53 $
+  Version:   $Revision: 1.9 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -191,6 +191,15 @@ public:
 
   /** Method Compute the Modified Time based on changed to the components. */
   unsigned long GetMTime( void ) const;
+
+#ifdef ITK_USE_CONCEPT_CHECKING
+  /** Begin concept checking */
+  itkConceptMacro(InputHasNumericTraitsCheck,
+    (Concept::HasNumericTraits<typename TInputImage::PixelType::ValueType>));
+  itkConceptMacro(OutputHasNumericTraitsCheck,
+    (Concept::HasNumericTraits<PixelComponentType>));
+  /** End concept checking */
+#endif
 
 protected:
   VectorResampleImageFilter();

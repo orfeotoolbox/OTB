@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkShrinkImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2006/02/01 19:44:24 $
-  Version:   $Revision: 1.40 $
+  Date:      $Date: 2006/03/22 16:26:45 $
+  Version:   $Revision: 1.42 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -33,7 +33,7 @@ namespace itk
  * in each dimension. The algorithm implemented is a simple subsample. 
  * The output image size in each dimension is given by:
  *
- * outputSize[j] = max( floor(inputSize[j]/shrinkFactor[j]), 1 ); 
+ * outputSize[j] = max( vcl_floor(inputSize[j]/shrinkFactor[j]), 1 ); 
  *
  * Since this filter produces an image which is a different resolution 
  * and with different pixel spacing than its input image, 
@@ -78,6 +78,8 @@ public:
   /** ImageDimension enumeration. */
   itkStaticConstMacro(ImageDimension, unsigned int,
                       TInputImage::ImageDimension );
+  itkStaticConstMacro(OutputImageDimension, unsigned int,
+                      TOutputImage::ImageDimension );
 
   /** Set the shrink factors. Values are clamped to 
    * a minimum value of 1. Default is 1 for all dimensions. */
@@ -108,6 +110,15 @@ public:
    * \sa ProcessObject::GenerateInputRequestedRegion() */
   virtual void GenerateInputRequestedRegion();
   virtual void EnlargeOutputRequestedRegion(DataObject *output); 
+
+#ifdef ITK_USE_CONCEPT_CHECKING
+  /** Begin concept checking */
+  itkConceptMacro(InputConvertibleToOutputCheck,
+    (Concept::Convertible<typename TInputImage::PixelType, typename TOutputImage::PixelType>));
+  itkConceptMacro(SameDimensionCheck,
+    (Concept::SameDimension<ImageDimension, OutputImageDimension>));
+  /** End concept checking */
+#endif
 
 protected:
   ShrinkImageFilter();

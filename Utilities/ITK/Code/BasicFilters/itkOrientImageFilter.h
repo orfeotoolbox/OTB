@@ -3,8 +3,8 @@
 Program:   Insight Segmentation & Registration Toolkit
 Module:    $RCSfile: itkOrientImageFilter.h,v $
 Language:  C++
-Date:      $Date: 2005/09/12 16:06:39 $
-Version:   $Revision: 1.5 $
+Date:      $Date: 2006/03/22 16:26:43 $
+Version:   $Revision: 1.6 $
 
 Copyright (c) Insight Software Consortium. All rights reserved.
 See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -175,15 +175,6 @@ public:
   itkStaticConstMacro(OutputImageDimension, unsigned int,
                       TOutputImage::ImageDimension);
 
-  /** The dimensions of the input image must equal those of the
-      output image. */
-  itkConceptMacro(SameDimension,
-    (Concept::SameDimension<itkGetStaticConstMacro(InputImageDimension),itkGetStaticConstMacro(OutputImageDimension)>));
-
-  /** The dimension of the input image must be 3. */
-  itkConceptMacro(DimensionShouldBe3,
-    (Concept::SameDimension<itkGetStaticConstMacro(InputImageDimension),3>));
-
   /** Standard New method. */
   itkNewMacro(Self);
 
@@ -247,6 +238,17 @@ public:
    * below.
    * \sa ProcessObject::GenerateOutputInformaton() */
   virtual void GenerateOutputInformation();
+
+#ifdef ITK_USE_CONCEPT_CHECKING
+  /** Begin concept checking */
+  itkConceptMacro(InputConvertibleToOutput,
+    (Concept::Convertible<InputImagePixelType, OutputImagePixelType>));
+  itkConceptMacro(SameDimension,
+    (Concept::SameDimension<itkGetStaticConstMacro(InputImageDimension),itkGetStaticConstMacro(OutputImageDimension)>));
+  itkConceptMacro(DimensionShouldBe3,
+    (Concept::SameDimension<itkGetStaticConstMacro(InputImageDimension),3>));
+  /** End concept checking */
+#endif
 
 protected:
   OrientImageFilter();

@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkVectorGradientMagnitudeImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2005/03/30 15:13:39 $
-  Version:   $Revision: 1.11 $
+  Date:      $Date: 2006/04/03 15:07:52 $
+  Version:   $Revision: 1.12 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -240,6 +240,15 @@ public:
   /** A specialized solver for finding the roots of a cubic polynomial.
    *  Necessary to multi-thread the 3D case */
   static int CubicSolver(double *, double *);
+
+#ifdef ITK_USE_CONCEPT_CHECKING
+  /** Begin concept checking */
+  itkConceptMacro(InputHasNumericTraitsCheck,
+                  (Concept::HasNumericTraits<typename InputPixelType::ValueType>));
+  itkConceptMacro(RealTypeHasNumericTraitsCheck,
+                  (Concept::HasNumericTraits<RealType>));
+  /** End concept checking */
+#endif
 
 protected:
   VectorGradientMagnitudeImageFilter();

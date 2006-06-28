@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkWhiteTopHatImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2005/08/23 15:16:38 $
-  Version:   $Revision: 1.1 $
+  Date:      $Date: 2006/04/04 13:13:52 $
+  Version:   $Revision: 1.2 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -77,6 +77,19 @@ public:
   
   /** Get the kernel (structuring element). */
   itkGetConstReferenceMacro(Kernel, KernelType);
+
+#ifdef ITK_USE_CONCEPT_CHECKING
+  /** Begin concept checking */
+  itkConceptMacro(InputAdditiveOperatorsCheck,
+    (Concept::AdditiveOperators<InputImagePixelType>));
+  itkConceptMacro(InputConvertibleToOutputCheck,
+    (Concept::Convertible<InputImagePixelType, OutputImagePixelType>));
+  itkConceptMacro(InputGreaterThanComparableCheck,
+    (Concept::GreaterThanComparable<InputImagePixelType>));
+  itkConceptMacro(KernelGreaterThanIntCheck,
+    (Concept::GreaterThanComparable<typename TKernel::PixelType, int>));
+  /** End concept checking */
+#endif
 
 protected:
   WhiteTopHatImageFilter();

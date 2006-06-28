@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkSignedDanielssonDistanceMapImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2005/04/17 23:02:20 $
-  Version:   $Revision: 1.3 $
+  Date:      $Date: 2006/03/30 15:36:25 $
+  Version:   $Revision: 1.4 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -191,6 +191,15 @@ public:
 
   /** Get vector field of distances. */
   VectorImageType * GetVectorDistanceMap(void);
+
+#ifdef ITK_USE_CONCEPT_CHECKING
+  /** Begin concept checking */
+  itkConceptMacro(IntConvertibleToInputCheck,
+                  (Concept::Convertible<int, PixelType>));
+  itkConceptMacro(InputHasNumericTraitsCheck,
+                  (Concept::HasNumericTraits<PixelType>));
+  /** End concept checking */
+#endif
 
 protected:
   SignedDanielssonDistanceMapImageFilter();

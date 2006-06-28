@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkDiffusionTensor3DReconstructionImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2006/02/19 00:35:41 $
-  Version:   $Revision: 1.10 $
+  Date:      $Date: 2006/03/27 17:01:06 $
+  Version:   $Revision: 1.12 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -237,6 +237,26 @@ public:
 #undef GetBValue
 #endif
   itkGetConstReferenceMacro( BValue, TTensorPixelType);
+
+#ifdef ITK_USE_CONCEPT_CHECKING
+  /** Begin concept checking */
+  itkConceptMacro(ReferenceEqualityComparableCheck,
+    (Concept::EqualityComparable<ReferencePixelType>));
+  itkConceptMacro(TensorEqualityComparableCheck,
+    (Concept::EqualityComparable<TensorPixelType>));
+  itkConceptMacro(GradientConvertibleToDoubleCheck,
+    (Concept::Convertible<GradientPixelType, double>));
+  itkConceptMacro(DoubleConvertibleToTensorCheck,
+    (Concept::Convertible<double, TensorPixelType>));
+  itkConceptMacro(GradientReferenceAdditiveOperatorsCheck,
+    (Concept::AdditiveOperators<GradientPixelType, GradientPixelType,
+                                ReferencePixelType>));
+  itkConceptMacro(ReferenceOStreamWritableCheck,
+    (Concept::OStreamWritable<ReferencePixelType>));
+  itkConceptMacro(TensorOStreamWritableCheck,
+    (Concept::OStreamWritable<TensorPixelType>));
+  /** End concept checking */
+#endif
 
 protected:
   DiffusionTensor3DReconstructionImageFilter();
