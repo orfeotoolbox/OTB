@@ -24,7 +24,7 @@
 //    140 125 140 25 0.2 2.0
 //  Software Guide : EndCommandLineArgs
 //  Software Guide : BeginCommandLineArgs
-//    INPUTS: {FatMRISlice.png}
+//    INPUTS: {QB_Suburb.png}
 //    OUTPUTS: {HybridSegmentationFuzzyVoronoiOutput2.png}
 //    80 200 140 300 0.3 3.0
 //  Software Guide : EndCommandLineArgs
@@ -32,8 +32,8 @@
 // Software Guide : BeginLatex
 //
 // This example illustrates the use of the
-// \doxygen{SimpleFuzzyConnectednessScalarImageFilter} and
-// \doxygen{VoronoiSegmentationImageFilter} to build a hybrid segmentation that
+// \doxygen{itk::SimpleFuzzyConnectednessScalarImageFilter} and
+// \doxygen{itk::VoronoiSegmentationImageFilter} to build a hybrid segmentation that
 // integrates fuzzy connectedness with the Voronoi diagram classification.
 //
 // Please note that the Fuzzy Connectedness algorithm is covered by a Patent
@@ -51,9 +51,9 @@
 // Software Guide : EndCodeSnippet
 
 
-#include "itkImage.h"
-#include "itkImageFileReader.h"
-#include "itkImageFileWriter.h"
+#include "otbImage.h"
+#include "otbImageFileReader.h"
+#include "otbImageFileWriter.h"
 
 #include "itkRescaleIntensityImageFilter.h"
 
@@ -81,17 +81,17 @@ int main( int argc, char *argv[] )
   // Software Guide : BeginCodeSnippet
   typedef  float     InputPixelType;
   const    unsigned int      Dimension = 2;
-  typedef itk::Image< InputPixelType, Dimension >  InputImageType;
+  typedef otb::Image< InputPixelType, Dimension >  InputImageType;
   // Software Guide : EndCodeSnippet
 
 
   //  Software Guide : BeginLatex
   //  
   //  Fuzzy connectedness segmentation is performed first to generate
-  //  a rough segmentation that yields a sample of tissue from the
+  //  a rough segmentation that yields a sample from the
   //  region to be segmented.  A binary result, representing the
   //  sample, is used as a prior for the next step.  Here, we use the
-  //  \doxygen{SimpleFuzzyConnectednessScalarImageFilter}, but we may
+  //  \doxygen{itk::SimpleFuzzyConnectednessScalarImageFilter}, but we may
   //  also utilize any other image segmentation filter instead.  The
   //  result produced by the fuzzy segmentation filter is stored in a
   //  binary image.  Below, we declare the type of the image using a
@@ -101,7 +101,7 @@ int main( int argc, char *argv[] )
 
   // Software Guide : BeginCodeSnippet
   typedef unsigned char      BinaryPixelType;
-  typedef itk::Image< BinaryPixelType, Dimension >      BinaryImageType;
+  typedef otb::Image< BinaryPixelType, Dimension >      BinaryImageType;
   // Software Guide : EndCodeSnippet
 
 
@@ -124,7 +124,7 @@ int main( int argc, char *argv[] )
   //  
   //  The fuzzy connectedness segmentation filter is created by invoking the
   //  \code{New()} method and assigning the result to a
-  //  \doxygen{SmartPointer}.
+  //  \doxygen{itk::SmartPointer}.
   //
   //  \index{itk::SimpleFuzzy\-Connectedness\-Scalar\-Image\-Filter!New()}
   //  \index{itk::SimpleFuzzy\-Connectedness\-Scalar\-Image\-Filter!Pointer}
@@ -152,7 +152,7 @@ int main( int argc, char *argv[] )
 
   // Software Guide : BeginCodeSnippet
   typedef unsigned char OutputPixelType;
-  typedef itk::Image< OutputPixelType, Dimension > OutputImageType;
+  typedef otb::Image< OutputPixelType, Dimension > OutputImageType;
   // Software Guide : EndCodeSnippet
                         
 
@@ -192,7 +192,7 @@ int main( int argc, char *argv[] )
   //  Software Guide : BeginLatex
   //
   // \begin{figure} \center
-  // \includegraphics[width=0.44\textwidth]{FatMRISlice.eps}
+  // \includegraphics[width=0.44\textwidth]{QB_Suburb.eps}
   // \includegraphics[width=0.44\textwidth]{HybridSegmentationFuzzyVoronoiOutput2.eps}
   // \itkcaption[Segmentation result for the hybrid segmentation
   // approach]{Another segmentation result for the hybrid segmentation
@@ -205,8 +205,8 @@ int main( int argc, char *argv[] )
 
   // We instantiate reader and writer types
   //
-  typedef  itk::ImageFileReader< InputImageType > ReaderType;
-  typedef  itk::ImageFileWriter<  OutputImageType  > WriterType;
+  typedef  otb::ImageFileReader< InputImageType > ReaderType;
+  typedef  otb::ImageFileWriter<  OutputImageType  > WriterType;
 
   ReaderType::Pointer reader = ReaderType::New();
   WriterType::Pointer writer = WriterType::New();
@@ -349,7 +349,7 @@ int main( int argc, char *argv[] )
   //  The output of the Voronoi diagram classification is an image mask with
   //  zeros everywhere and ones inside the segmented object. This image will
   //  appear black on many image viewers since they do not usually stretch
-  //  the gray levels. Here, we add a \doxygen{RescaleIntensityImageFilter}
+  //  the gray levels. Here, we add a \doxygen{itk::RescaleIntensityImageFilter}
   //  in order to expand the dynamic range to more typical values.
   //
   //  Software Guide : EndLatex 
@@ -382,13 +382,14 @@ int main( int argc, char *argv[] )
 
   //  Software Guide : BeginLatex
   //
-  //  We execute this program on the image \code{QB_Suburb.png} available
+  //  We execute this program on the image \code{QB\_Suburb.png} available
   //  in the directory \code{Examples/Data}. The following parameters are
   //  passed to the command line:
   // 
   //  \small
   //  \begin{verbatim}
-  //HybridSegmentationFuzzyVoronoi QB_Suburb.png Output.png 140 125 140 25 0.2 2.0
+  //HybridSegmentationFuzzyVoronoi QB_Suburb.png Output.png
+                                             140 125 140 25 0.2 2.0
   //  \end{verbatim}
   //  \normalsize
   //
@@ -401,12 +402,13 @@ int main( int argc, char *argv[] )
   //
   //  Note that in order to successfully segment other images, these
   //  parameters have to be adjusted to reflect the data. For example, when
-  //  segmenting the input image \code{FatMRISlice.png} we apply the
+  //  segmenting the input image \code{QB\_Suburb.png} we apply the
   //  following new set of parameters parameters.
   // 
   //  \small
   //  \begin{verbatim}
-  //HybridSegmentationFuzzyVoronoi FatMRISlice.png Output.png 80 200 140 300 0.3 3.0
+  //HybridSegmentationFuzzyVoronoi QB_Suburb.png Output.png
+					       80 200 140 300 0.3 3.0
   //  \end{verbatim}
   //  \normalsize
   //

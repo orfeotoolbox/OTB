@@ -8,6 +8,7 @@ SUBDIRS(
   IO
   Filtering
   Segmentation
+  Patented
   ChangeDetection
   Visu
   Learning
