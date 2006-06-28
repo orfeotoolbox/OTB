@@ -1,6 +1,151 @@
 \chapter{Change Detection}
 \section{Introduction}
-Similarity, windows, 2 dates, etc.
+Change detection techniques try to detect and locate areas which have
+changed between two or more observations of the same scene. These
+changes can be of different types, with different origins and of
+different temporal length. This allows to distinguish different kinds
+of applications:
+\begin{itemize}
+\item \emph{land use monitoring}, which corresponds to the
+  characterization of the evolution of the vegetation, or its seasonal
+  changes;
+\item \emph{natural resources management}, which corresponds mainly
+  to the characterisation of the evolution of the urban areas, the
+  evolution of the deforestation, etc.
+\item \emph{damage mapping}, which corresponds to the location of
+  damages caused by natural or industrial disasters.
+\end{itemize}
+
+From the point of view of the observed phenomena, one can distinguish
+2 types of changes whose nature is rather different: the abrupt
+changes and the progressive changes, which can eventually be
+periodic. From the data point of view, one can have:
+
+       \begin{itemize}
+       \item Image pairs before and after the event. The applications
+       are mainly the abrupt changes.
+
+	 \item Multi-temporal image series on which 2 types on changes
+	 may appear:
+	 \begin{itemize}
+	   \item The slow changes like for instance the erosion,
+	   vegetation evolution, etc. The knowledge of the studied
+	   phenomena and of their consequences on the geometrical
+	   and radiometrical evolution at the different dates is a
+	   very important information for this kind of analysis.
+
+	     \item The abrupt changes may pose different kinds of
+	     problems depending on whether the date of the change is
+	     known in the image series or not. The detection of areas
+	     affected by a change occurred at a known date may exploit
+	     this a priori information in order to split the image
+	     series into two sub-series (before an after) and use the
+	     temporal redundancy in order to improve the detection
+	     results. On the other hand, when the date of the change
+	     is not known, the problem has a higher difficulty.
+
+	 \end{itemize}
+	 
+       \end{itemize}
+
+From this classification of the different types of problems, one can
+infer 4 cases for which one can look for algorithms as a function of
+the available data:
+\begin{enumerate}
+\item Abrupt changes in an image pair. This is no doubt the field for
+  which more work has been done. One can find tools at the 3 classical
+  levels of image processing: data level (differences, rations, with
+  or without pre-filtering, etc.), feature level (edges, targets,
+  etc.), and interpretation level (post-classification comparison).
+
+\item Abrupt changes within an image series and a known date. One can
+  rely on bi-date techniques, either by fusing the images into 2 stacks
+  (before and after), or by fusing the results obtained by different
+  image couples (one after and one before the event). One can also use
+  specific discontinuity detection techniques to be applied in the
+  temporal axis.
+
+\item Abrupt changes within an image series and an unknown date. This
+  case can be seen either as a generalization of the preceding one (testing
+  the N-1 positions for N dates) or as a particular case of the
+  following one.
+
+\item Progressive changes within an image series. One can work in two
+  steps:
+  \begin{enumerate}
+    \item detect the change areas using stability criteria in the
+    temporal areas;
+    \item identify the changes using prior information about the type
+    of changes of interest.
+  \end{enumerate}
+  
+\end{enumerate}
+
+
+
+
+\subsection{Surface-based approaches}\label{secChgtAbr}
+In this section we discuss about the damage assessment techniques
+which can be applied when only two images (before/after) are available.\\
+
+As it has been shown in recent review works
+\cite{Coppin03,Lu04,Radke05,Richards05}, a relatively high number of
+methods exist, but most of them have been developed for optical and
+infrared sensors. Only a few recent works on change detection with
+radar images exist
+\cite{Stabel02,Bruzzone02b,Onana_2003,Inglada03,Derrode03,Bazi05}.
+However, the intrinsic limits of passive sensors, mainly related to
+their dependence on meteorological and illumination conditions, impose
+severe constraints for operational applications. The principal
+difficulties related to change detection are of four types:
+
+\begin{enumerate}
+\item In the case of radar images, the speckle noise makes the image
+  exploitation difficult.
+\item The geometric configuration of the image acquisition can produce
+  images which are difficult to compare.
+\item Also, the temporal gap between the two acquisitions an thus the
+  sensor aging and the inter-calibration are sources of variability
+  which are difficult to deal with.
+\item Finally, the normal evolution of the observed scenes must not be
+  confused with the changes of interest.
+\end{enumerate}
+
+The problem of detecting abrupt changes between a pair of images is
+the following: Let $I_{1},I_{2}$ be two images acquired at different
+dates $t_{1},t_{2}$; we aim at producing a thematic map which shows
+the areas where changes have taken place.
+
+Three main categories of methods exist:
+
+\begin{itemize}
+\item{Strategy $1$: Post Classification Comparison}
+
+The principle of this approach \cite{Deer_1998} is two obtain two
+land-use maps independently for each date and comparing them. 
+
+
+
+\item{Strategy $2$: Joint classification}
+
+This method consists in producing the change map directly from a joint
+classification of both images.
+
+\item{Strategy $3$: Simple detectors}
+
+The last approach consists in producing an image of change likelihood
+(by differences, ratios or any other approach) and thresholding it in
+order to produce the change map.
+
+\end{itemize}
+
+
+Because of its simplicity and its low computation overhead, the third
+strategy is the one which has been chosen for the CNES processing
+chain presented in this document.
+
+
+
 \section{Change Detection Framework}
 \label{sec:ChangeDetectionFramework}
 \input{ChangeDetectionFrameworkExample.tex}
@@ -8,10 +153,191 @@ Similarity, windows, 2 dates, etc.
 \label{sec:SimpleDetectors}
 \subsection{Mean Difference}
 \label{sec:MeanDifference}
+
+The simplest change detector is based on the pixel-wise differencing
+of image values: 
+\begin{equation}
+I_{D}(i,j)=I_{2}(i,j)-I_{1}(i,j).
+\end{equation}
+
+In order to make the algorithm robust to noise, one actually uses
+local means instead of pixel values.
+
 \input{DiffChDet}
+
 \subsection{Ratio Of Means}
 \label{sec:RatioOfMeans}
+
+This detector is similar to the previous one except that it uses a
+ratio instead of the difference:
+\begin{equation}
+\displaystyle I_{R}(i,j) = \frac{\displaystyle I_{2}(i,j)}{\displaystyle I_{1}(i,j)}.
+\end{equation}
+
+The use of the ratio makes this detector robust to multiplicative
+noise which is a good model for the speckle phenomenon which is
+present in radar images.
+
+In order to have a bounded and normalized detector the following
+expression is actually used:
+
+
+\begin{equation}
+\displaystyle I_{R}(i,j) = 1 - min \left(\frac{\displaystyle I_{2}(i,j)}{\displaystyle I_{1}(i,j)},\frac{\displaystyle I_{1}(i,j)}{\displaystyle I_{2}(i,j)}\right).
+\end{equation}
+
+
 \input{RatioChDet}
+
+
 
 \section{Statistical Detectors}
 \label{sec:StatisticalDetectors}
+
+%% \subsection{Local Correlation}
+
+%% The correlation coefficient measures the likelihood of a linear
+%% relationship between two random variables:
+%% \begin{equation}
+%% \begin{split}
+%% I_\rho(i,j) &= \frac{1}{N}\frac{\sum_{i,j}(I_1(i,j)-m_{I_1})(I_2(i,j)-m_{I_2})}{\sigma_{I_1}
+%% \sigma_{I_2}}\\
+%% & = \sum_{(I_1(i,j),I_2(i,j))}\frac{(I_1(i,j)-m_{I_1})(I_2(i,j)-m_{I_2})}{\sigma_{I_1}
+%% \sigma_{I_2}}p_{ij}
+%% \end{split}
+%% \end{equation}
+
+%% where $I_1(i,j)$ and $I_2(i,j)$ are the pixel values of the 2 images and
+%% $p_{ij}$ is the joint probability density. This is like using a linear model:
+%% \begin{equation}
+%% I_2(i,j) = (I_1(i,j)-m_{I_1})\frac{\sigma_{I_2}}{\sigma_{I_1}}+m_{I_2}
+%% \end{equation}
+%% for which we evaluate the likelihood with  $p_{ij}$.
+
+%% With respect to the difference detector, this one will be robust to
+%% illumination changes.
+
+%% \subsection{Mutual Information}
+
+%% Other sophisticated change detectors can be used by applying some
+%% concepts of information theory. We have chosen to implement several
+%% detectors based on the mutual information measure
+%% \cite{Thevenaz2000,Inglada_2002}. This kind of measure needs for the
+%% estimation of the joint density probabilities for the pair of images
+%% to be compared. Depending on how this estimation is made, one can
+%% choose between robust but slow detectors or quick but less robust ones.\\
+
+%% The mutual information is a divergence (some kind of distance) between
+%% the joint probability $p_{1,2}$ and the product of marginal ones
+%% $p_1\cdot p_2$. Therefore, it is a measure of statistical dependence
+%% between the two images and can thus be understood as a generalization
+%% of the correlation coefficient. This means that it can be applied to
+%% the multi-sensor case.\\
+
+%% The divergence used is written as:
+%% \begin{equation}
+%% K(P,Q) = \int p \log\frac{p}{q},
+%% \end{equation}
+
+%% so the mutual information detector is written as:
+
+
+%% \begin{equation}
+%% I_{MI}(i,j) = \int p_{1,2} \log\frac{p_{1,2}}{p_1\cdot p_2}.
+%% \end{equation}
+
+
+%% \subsubsection{Joint histogram}
+%% In this version of the detector, a joint probability density $p_{ij}$ is
+%% estimated only once for the pair of images. This makes it a rather
+%% quick detector.
+%% \subsubsection{Local histogram}
+%% This version uses a local estimation of the probabilities in the
+%% neighborhood of each pixel. It is the slowest detector, but the most
+%% robust one.
+%% \subsubsection{Cumulant-based}
+
+%% This version is the quickest one, but it is only an approximation of the
+%%     mutual information. Indeed, a probability density can be
+%%     reconstructed from a series expansion of its cumulants. The
+%%     cumulants are defined as follows:
+%% \begin{subequations}
+%% \begin{equation}
+%% E\left[\prod_{k \in N} X_k\right]=\sum_{N_1\cup\cdot\cdot\cdot \cup
+%% N_n=N}cum(X_k, k \in N_1)\cdot\cdot\cdot cum(X_k,k\in N_n)=\kappa_k,
+%% \end{equation}
+%% \begin{equation}
+%% cum(X_k, k\in N)=\sum_{N_1\cup\cdot\cdot\cdot \cup N_n=N}
+%% (-1)^{n-1}(n-1)!E\left[\prod_{k\in N_1} X_k \right]\cdot\cdot\cdot
+%% E\left[\prod_{k\in N_n} X_k \right],
+%% \end{equation}
+%% \end{subequations}
+
+%% For instance, one has 
+        
+%% \begin{equation}
+%% cum(X_1,X_2)=E(X_1,X_2)-(EX_1)(EX_2)=cov(X_1,X_2).
+%% \end{equation}
+
+%% \begin{equation}
+%%   \begin{split}
+%%     cum(X_1,X_2,X_3)=&E(X_1,X_2,X_3)-E(X_1,X_2)(EX_3)-E(X_1,X_3)(EX_2)\\
+%%     & -E(X_2,X_3)(EX_1)+2(EX_1)(EX_2)(EX_3)
+%%   \end{split}
+%% \end{equation}
+
+%% Using these cumulants, the series expansion of the probability density
+%% function $f(x)$ can be written as a modulation of the normalized
+%% Gaussian function $\Phi(x)$:
+
+
+%%       \begin{equation}
+%%   f(x) \approx  \Phi(x)\left[ P_0(x) +
+%%   P_1(x)\frac{1}{\sqrt{n}}+ P_2(x)\frac{1}{n} + ...+ P_r(x)\frac{1}{n^{r/2}}\right],
+%% \end{equation}
+%% with
+%% \begin{subequations}
+%%   \begin{equation}
+%%     P_0(x) = 1,
+%%   \end{equation}
+%%   \begin{equation}
+%%     P_1(x) = \frac{\kappa_3}{3!}H_3(x),
+%%   \end{equation}
+%%   \begin{equation}
+%%     P_2(x) = \frac{\kappa_4}{4!}H_4(x) + \frac{10\kappa_3^2}{6!}H_6(x),
+%%   \end{equation}
+%% \end{subequations}
+%% and the Hermite polynomials
+%% \begin{subequations}
+%%   \begin{equation}
+%%     H_0(x) = 1,
+%%   \end{equation}
+%%   \begin{equation}
+%%     H_1(x) = x,
+%%   \end{equation}
+%%   \begin{equation}
+%%     H_2(x) = x^2 -1,
+%%   \end{equation}
+%%   \begin{equation}
+%%     H_3(x) = x^3-3x.
+%%   \end{equation}
+%% \end{subequations}
+
+%% When thiese approximations are used in the expression of the mutual
+%% information, one has the following result:
+    
+%%     \begin{equation}
+%% I_{IM}(i,j)({\underline Y})\approx \frac{1}{4}\sum_{kl\neq
+%% kk}\left(cum_2(Y_k,Y_l)\right)^2+\frac{1}{48}\sum_{klmn\neq
+%% kkkk}\left(cum_4(Y_k,Y_l,Y_m,Y_n)\right)^2,
+%% \label{kim}
+%% \end{equation}
+%%  where $\{k,l,m,n\}$ can take the values 1 and 2 (the image index) and
+%%  the cumulants are computed in the neighborhood if the pixel of
+%%  coordinates $(i,j)$.
+
+
+
+
+
+
