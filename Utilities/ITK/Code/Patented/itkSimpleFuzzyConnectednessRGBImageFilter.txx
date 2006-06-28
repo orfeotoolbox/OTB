@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkSimpleFuzzyConnectednessRGBImageFilter.txx,v $
   Language:  C++
-  Date:      $Date: 2004/12/28 15:04:19 $
-  Version:   $Revision: 1.2 $
+  Date:      $Date: 2006/03/19 04:37:20 $
+  Version:   $Revision: 1.3 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -95,8 +95,8 @@ SimpleFuzzyConnectednessRGBImageFilter<TInputImage,TOutputImage>
       + s02*(m_Diff_VarianceInverse[0][2]+m_Diff_VarianceInverse[2][0])
       + s12*(m_Diff_VarianceInverse[1][2]+m_Diff_VarianceInverse[2][1]);
 
-    return( (NumericTraits<unsigned short>::max())*(this->GetWeight()*exp(-0.5*tmp1)  
-                                                    +(1-this->GetWeight())*exp(-0.5*tmp3)) );
+    return( (NumericTraits<unsigned short>::max())*(this->GetWeight()*vcl_exp(-0.5*tmp1)  
+                                                    +(1-this->GetWeight())*vcl_exp(-0.5*tmp3)) );
     }
 }
 

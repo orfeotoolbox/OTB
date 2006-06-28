@@ -1,1 +1,1 @@
-INSTALL_FILES(/include/otb/Utilities/ITK/Patented "(\\.h|\\.txx)$")
+INSTALL_FILES(/include/InsightToolkit/Patented "(\\.h|\\.txx)$")

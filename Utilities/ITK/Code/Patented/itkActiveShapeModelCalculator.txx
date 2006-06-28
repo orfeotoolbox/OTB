@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkActiveShapeModelCalculator.txx,v $
   Language:  C++
-  Date:      $Date: 2004/10/18 21:28:47 $
-  Version:   $Revision: 1.2 $
+  Date:      $Date: 2006/03/19 04:37:20 $
+  Version:   $Revision: 1.3 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -495,8 +495,8 @@ ActiveShapeModelCalculator<TImage>
               dx = dxyRef2[ 1 ] - dxyRef1[ 1 ];
               dy = dxyRef1[ 0 ] - dxyRef2[ 0 ];
 
-              ax = abs(dx) * 2;
-              ay = abs(dy) * 2;
+              ax = vcl_abs(dx) * 2;
+              ay = vcl_abs(dy) * 2;
               if (dx < 0) sx = -1; else sx = 1;
               if (dy < 0) sy = -1; else sy = 1;
               count = 1;
