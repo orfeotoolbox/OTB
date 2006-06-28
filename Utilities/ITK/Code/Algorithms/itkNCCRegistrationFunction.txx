@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkNCCRegistrationFunction.txx,v $
   Language:  C++
-  Date:      $Date: 2006/01/11 19:43:31 $
-  Version:   $Revision: 1.10 $
+  Date:      $Date: 2006/03/19 04:36:55 $
+  Version:   $Revision: 1.11 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -227,13 +227,13 @@ NCCRegistrationFunction<TFixedImage,TMovingImage,TDeformationField>
   double updatenorm=0.0;
   if( (sff*smm) != 0.0)
   {
-    double factor = 1.0 / sqrt( sff * smm );
+    double factor = 1.0 / vcl_sqrt(sff * smm );
     for(unsigned int i=0; i<ImageDimension; i++)
     {
       update[i] = factor * ( derivativeF[i] - (sfm/smm)*derivativeM[i]);
       updatenorm+=(update[i]*update[i]);
     }
-    updatenorm=sqrt(updatenorm);
+    updatenorm=vcl_sqrt(updatenorm);
     m_MetricTotal+=sfm*factor;
     this->m_Energy+=sfm*factor;
   } 

@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkBinaryMinMaxCurvatureFlowImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2003/09/10 14:28:28 $
-  Version:   $Revision: 1.8 $
+  Date:      $Date: 2006/03/23 15:26:09 $
+  Version:   $Revision: 1.9 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -106,7 +106,15 @@ public:
   itkSetMacro( Threshold, double );
   itkGetMacro( Threshold, double );
   
-protected:
+#ifdef ITK_USE_CONCEPT_CHECKING
+  /** Begin concept checking */
+  itkConceptMacro(InputConvertibleToOutputCheck,
+                  (Concept::Convertible<typename TInputImage::PixelType,
+                                        typename TOutputImage::PixelType>));
+  /** End concept checking */
+#endif
+
+protected:protected:
   BinaryMinMaxCurvatureFlowImageFilter();
   ~BinaryMinMaxCurvatureFlowImageFilter() {}
   void PrintSelf(std::ostream& os, Indent indent) const;

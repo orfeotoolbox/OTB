@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkMRFImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2005/03/30 21:55:54 $
-  Version:   $Revision: 1.41 $
+  Date:      $Date: 2006/04/05 13:59:34 $
+  Version:   $Revision: 1.42 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -303,7 +303,22 @@ public:
   
   /* Get macro for number of iterations */
   itkGetConstReferenceMacro( NumberOfIterations, unsigned int );
-  
+
+#ifdef ITK_USE_CONCEPT_CHECKING
+  /** Begin concept checking */
+  itkConceptMacro(UnsignedIntConvertibleToClassifiedCheck,
+    (Concept::Convertible<unsigned int, LabelledImagePixelType>));
+  itkConceptMacro(ClassifiedConvertibleToUnsignedIntCheck,
+    (Concept::Convertible<LabelledImagePixelType, unsigned int> ));
+  itkConceptMacro(ClassifiedConvertibleToIntCheck,
+    (Concept::Convertible<LabelledImagePixelType, int> ));
+  itkConceptMacro(IntConvertibleToClassifiedCheck,
+    (Concept::Convertible<int, LabelledImagePixelType>));
+  itkConceptMacro(SameDimensionCheck,
+    (Concept::SameDimension<InputImageDimension, ClassifiedImageDimension>));
+  /** End concept checking */
+#endif
+
 protected:
   MRFImageFilter();
   ~MRFImageFilter();

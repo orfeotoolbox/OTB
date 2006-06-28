@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkScalarImageKmeansImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2005/06/16 14:02:18 $
-  Version:   $Revision: 1.3 $
+  Date:      $Date: 2006/04/05 13:59:37 $
+  Version:   $Revision: 1.4 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -136,6 +136,13 @@ public:
   /** Get the region over which the statistics will be computed */
   itkGetConstReferenceMacro( ImageRegion, ImageRegionType );
   
+#ifdef ITK_USE_CONCEPT_CHECKING
+  /** Begin concept checking */
+  itkConceptMacro(InputHasNumericTraitsCheck,
+                  (Concept::HasNumericTraits<InputPixelType>));
+  /** End concept checking */
+#endif
+
 protected:
   ScalarImageKmeansImageFilter();
   virtual ~ScalarImageKmeansImageFilter() {}

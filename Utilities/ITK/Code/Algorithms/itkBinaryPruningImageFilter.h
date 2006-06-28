@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkBinaryPruningImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2005/01/28 15:08:54 $
-  Version:   $Revision: 1.3 $
+  Date:      $Date: 2006/04/23 04:12:03 $
+  Version:   $Revision: 1.6 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -23,33 +23,30 @@
 
 namespace itk
 {
-
 /** \class BinaryPruningImageFilter
-*
-* This class is parametrized over the type of the input image
-* and the type of the output image.
-*
-* This filter remove spurs pixel of less than a certain length input image.
-* 
-*
-* The input is assumed to be a binary image.
-
-*
-* This filter is sequential pruning algorithm and known to be computational time
-* dependable of the image size.  The algorithm is the N-dimensional version
-* of the  given for two dimensions in:
-* 
-* Rafael C. Gonzales and Richard E. Woods. 
-* Digital Image Processing. 
-* Addison Wesley, 491-494, (1993).
-*
-* \sa MorphologyImageFilter
-* \sa BinaryPruningImageFilter
-* \sa BinaryErodeImageFilter
-* \sa BinaryDilateImageFilter
-* \sa BinaryThinningImageFilter
-* \ingroup ImageEnhancement MathematicalMorphologyImageFilters
-*/
+ *
+ * \brief This filter removes "spurs" of less than a certain
+ * length in the input image.
+ *
+ * This class is parametrized over the type of the input image
+ * and the type of the output image.
+ *
+ * The input is assumed to be a binary image.  
+ *
+ * This filter is a sequential pruning algorithm and known to be computational time
+ * dependable of the image size.  The algorithm is the N-dimensional version
+ * of that given for two dimensions in:
+ * 
+ * Rafael C. Gonzales and Richard E. Woods. 
+ * Digital Image Processing. 
+ * Addison Wesley, 491-494, (1993).
+ *
+ * \sa MorphologyImageFilter
+ * \sa BinaryErodeImageFilter
+ * \sa BinaryDilateImageFilter
+ * \sa BinaryThinningImageFilter
+ * \ingroup ImageEnhancement MathematicalMorphologyImageFilters
+ */
 
 template <class TInputImage,class TOutputImage>
 class ITK_EXPORT BinaryPruningImageFilter :
@@ -102,6 +99,26 @@ public:
   itkSetMacro(Iteration, unsigned int);
   itkGetMacro(Iteration, unsigned int);
 
+  /** ImageDimension enumeration   */
+  itkStaticConstMacro(InputImageDimension, unsigned int,
+                      TInputImage::ImageDimension );
+  itkStaticConstMacro(OutputImageDimension, unsigned int,
+                      TOutputImage::ImageDimension );
+
+#ifdef ITK_USE_CONCEPT_CHECKING
+  /** Start concept checking */
+  itkConceptMacro(SameDimensionCheck,
+    (Concept::SameDimension<InputImageDimension, OutputImageDimension>));
+  itkConceptMacro(SameTypeCheck,
+    (Concept::SameType<PixelType, typename TOutputImage::PixelType>));
+  itkConceptMacro(AdditiveOperatorsCheck,
+    (Concept::AdditiveOperators<PixelType>));
+  itkConceptMacro(IntConvertibleToPixelTypeCheck,
+    (Concept::Convertible<int, PixelType>));
+  itkConceptMacro(PixelLessThanIntCheck,
+    (Concept::LessThanComparable<PixelType, int>));
+  /** End concept checking */
+#endif
 
 protected:
   BinaryPruningImageFilter();

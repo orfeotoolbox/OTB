@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkOtsuMultipleThresholdsImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2005/01/14 22:32:53 $
-  Version:   $Revision: 1.1 $
+  Date:      $Date: 2006/04/05 13:59:37 $
+  Version:   $Revision: 1.3 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -19,6 +19,8 @@
 
 #include "itkImageToImageFilter.h"
 #include "itkFixedArray.h"
+#include "itkOtsuMultipleThresholdsCalculator.h"
+#include "itkScalarImageToHistogramGenerator.h"
 
 namespace itk {
 
@@ -73,7 +75,11 @@ public:
   typedef typename TOutputImage::RegionType OutputImageRegionType;
 
   /** Threshold vector types. */
-  typedef std::vector<InputPixelType> ThresholdVectorType;
+  typedef itk::Statistics::ScalarImageToHistogramGenerator< 
+                                           TInputImage > HistogramGeneratorType;
+  typedef typename HistogramGeneratorType::HistogramType HistogramType;
+  typedef OtsuMultipleThresholdsCalculator< HistogramType > OtsuCalculatorType;
+  typedef typename OtsuCalculatorType::OutputType  ThresholdVectorType;
   
   /** Image related typedefs. */
   itkStaticConstMacro(InputImageDimension, unsigned int,
@@ -96,9 +102,17 @@ public:
   /** Get the computed threshold. */
   const ThresholdVectorType & GetThresholds() const
     {
-      return m_Thresholds;
+    return m_Thresholds;
     }
 
+#ifdef ITK_USE_CONCEPT_CHECKING
+  /** Begin concept checking */
+  itkConceptMacro(OutputComparableCheck,
+    (Concept::Comparable<OutputPixelType>));
+  itkConceptMacro(OutputOStreamWritableCheck,
+    (Concept::OStreamWritable<OutputPixelType>));
+  /** End concept checking */
+#endif
 
 protected:
   OtsuMultipleThresholdsImageFilter();

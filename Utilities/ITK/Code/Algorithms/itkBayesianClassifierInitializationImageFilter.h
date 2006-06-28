@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkBayesianClassifierInitializationImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2005/12/09 17:15:01 $
-  Version:   $Revision: 1.4 $
+  Date:      $Date: 2006/03/31 14:31:05 $
+  Version:   $Revision: 1.5 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -142,6 +142,21 @@ public:
   itkGetMacro( NumberOfClasses, unsigned int );
 
   virtual void GenerateOutputInformation(); 
+
+#ifdef ITK_USE_CONCEPT_CHECKING
+  /** Begin concept checking */
+  itkConceptMacro(InputMultiplyOperatorCheck,
+    (Concept::MultiplyOperator<InputPixelType>));
+  itkConceptMacro(DoubleConvertibleToProbabilityCheck,
+    (Concept::Convertible<double, TProbabilityPrecisionType>));
+  itkConceptMacro(InputHasNumericTraitsCheck,
+    (Concept::HasNumericTraits<InputPixelType>));
+  itkConceptMacro(ProbabilityHasNumericTraitsCheck,
+    (Concept::HasNumericTraits<TProbabilityPrecisionType>));
+  itkConceptMacro(DoublePlusInputCheck,
+    (Concept::AdditiveOperators<double, InputPixelType>));
+  /** End concept checking */
+#endif
 
 protected:
   BayesianClassifierInitializationImageFilter();

@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkBioGenome.h,v $
   Language:  C++
-  Date:      $Date: 2006/02/05 20:57:45 $
-  Version:   $Revision: 1.2 $
+  Date:      $Date: 2006/03/19 04:36:53 $
+  Version:   $Revision: 1.3 $
 
   Copyright (c) 2002 Insight Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -27,7 +27,7 @@
 
 #include <map>
 #include <string>
-#include <math.h>
+#include "vcl_cmath.h"
 
 namespace itk {
 
@@ -62,7 +62,7 @@ public:
    *  be used for gene network computations.  */
   static double Sigmoide( double threshold, double slant, double value )
     {
-    return atan(   ( value - threshold ) / slant   ) / 3.1416 + 0.5001;
+    return vcl_atan(( value - threshold ) / slant   ) / 3.1416 + 0.5001;
     }
 
 private:

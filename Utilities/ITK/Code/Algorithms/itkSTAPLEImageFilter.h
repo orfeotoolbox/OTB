@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkSTAPLEImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2004/03/01 19:44:21 $
-  Version:   $Revision: 1.1 $
+  Date:      $Date: 2006/04/05 13:59:37 $
+  Version:   $Revision: 1.2 $
 
   Copyright (c) 2002 Insight Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -212,7 +212,14 @@ public:
 
   /** Get the number of elapsed iterations of the iterative E-M algorithm. */
   itkGetMacro(ElapsedIterations, unsigned int);
-  
+
+#ifdef ITK_USE_CONCEPT_CHECKING
+  /** Begin concept checking */
+  itkConceptMacro(InputHasNumericTraitsCheck,
+                  (Concept::HasNumericTraits<InputPixelType>));
+  /** End concept checking */
+#endif
+
 protected:
   STAPLEImageFilter()
   {

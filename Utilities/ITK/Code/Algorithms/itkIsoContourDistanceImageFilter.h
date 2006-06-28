@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkIsoContourDistanceImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2003/09/10 14:28:33 $
-  Version:   $Revision: 1.5 $
+  Date:      $Date: 2006/04/04 13:20:13 $
+  Version:   $Revision: 1.7 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -74,6 +74,8 @@ public:
   /** Dimensionality of input and output data is assumed to be the same.
    * It is inherited from the superclass. */
   itkStaticConstMacro(ImageDimension, unsigned int, TInputImage::ImageDimension);
+  itkStaticConstMacro(OutputImageDimension, unsigned int,
+                      TOutputImage::ImageDimension);
   
    /** The pixel type of the output image will be used in computations.
    * Inherited from the superclass. */
@@ -118,7 +120,27 @@ public:
   NarrowBandPointer GetNarrowBand() const
   { return m_NarrowBand; }
 
- 
+#ifdef ITK_USE_CONCEPT_CHECKING
+  /** Begin concept checking */
+  itkConceptMacro(InputEqualityComparableCheck,
+    (Concept::EqualityComparable<InputPixelType>));
+  itkConceptMacro(OutputEqualityComparableCheck,
+    (Concept::EqualityComparable<PixelType>));
+  itkConceptMacro(SameDimensionCheck,
+    (Concept::SameDimension<ImageDimension, OutputImageDimension>));
+  itkConceptMacro(DoubleConvertibleToOutputCheck,
+    (Concept::Convertible<double, PixelType>));
+  itkConceptMacro(InputConvertibleToOutputCheck,
+    (Concept::Convertible<InputPixelType, PixelType>));
+  itkConceptMacro(OutputAdditiveOperatorsCheck,
+    (Concept::AdditiveOperators<PixelType>));
+  itkConceptMacro(InputOStreamWritableCheck,
+    (Concept::OStreamWritable<InputPixelType>));
+  itkConceptMacro(OutputOStreamWritableCheck,
+    (Concept::OStreamWritable<PixelType>));
+  /** End concept checking */
+#endif
+
 protected:
   IsoContourDistanceImageFilter();
   ~IsoContourDistanceImageFilter(){};

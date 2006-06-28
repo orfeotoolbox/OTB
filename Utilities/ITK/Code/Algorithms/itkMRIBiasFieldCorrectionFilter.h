@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkMRIBiasFieldCorrectionFilter.h,v $
   Language:  C++
-  Date:      $Date: 2005/09/13 04:28:23 $
-  Version:   $Revision: 1.35 $
+  Date:      $Date: 2006/03/19 04:36:54 $
+  Version:   $Revision: 1.36 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -479,13 +479,13 @@ protected:
   bool CheckMaskImage(ImageMaskType* mask) ;
 
 protected:
-  /** Converts image data from source to target applying log(pixel + 1)
+  /** Converts image data from source to target applying vcl_log(pixel + 1)
    * to all pixels. If the source pixel has negative value, it sets 
    * the value of the corresponding pixel in the targe image as zero.  */
   void Log1PImage(InternalImageType* source, 
                   InternalImageType* target) ;
 
-  /** Converts image data from source to target applying exp(pixel) - 1
+  /** Converts image data from source to target applying vcl_exp(pixel) - 1
    * to all pixels.  */
   void ExpImage(InternalImageType* source, 
                 InternalImageType* target) ;

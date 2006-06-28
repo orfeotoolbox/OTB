@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkMultiResolutionImageRegistrationMethod.txx,v $
   Language:  C++
-  Date:      $Date: 2005/12/22 19:04:18 $
-  Version:   $Revision: 1.12 $
+  Date:      $Date: 2006/03/19 04:36:55 $
+  Version:   $Revision: 1.13 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -197,14 +197,14 @@ MultiResolutionImageRegistrationMethod<TFixedImage,TMovingImage>
       const float scaleFactor = static_cast<float>( schedule[ level ][ dim ] );
 
       size[ dim ] = static_cast<typename SizeType::SizeValueType>(
-        floor( static_cast<float>( inputSize[ dim ] ) / scaleFactor ) );
+        vcl_floor(static_cast<float>( inputSize[ dim ] ) / scaleFactor ) );
       if( size[ dim ] < 1 )
         {
         size[ dim ] = 1;
         }
       
       start[ dim ] = static_cast<typename IndexType::IndexValueType>(
-        ceil(  static_cast<float>( inputStart[ dim ] ) / scaleFactor ) ); 
+        vcl_ceil(static_cast<float>( inputStart[ dim ] ) / scaleFactor ) ); 
       }
     m_FixedImageRegionPyramid[ level ].SetSize( size );
     m_FixedImageRegionPyramid[ level ].SetIndex( start );

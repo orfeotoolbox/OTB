@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkImageKmeansModelEstimator.txx,v $
   Language:  C++
-  Date:      $Date: 2006/01/11 19:43:30 $
-  Version:   $Revision: 1.11 $
+  Date:      $Date: 2006/03/19 04:36:54 $
+  Version:   $Revision: 1.12 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -610,8 +610,8 @@ ImageKmeansModelEstimator<TInputImage, TMembershipFunction>
   double        muloffset;
   double        rand_num ;
 
-  addoffset = m_OffsetAdd / pow( 2.0, ( double ) scale );
-  muloffset = m_OffsetMultiply / pow( 2.0, ( double ) scale );
+  addoffset = m_OffsetAdd / vcl_pow(2.0, ( double ) scale );
+  muloffset = m_OffsetMultiply / vcl_pow(2.0, ( double ) scale );
 
   for ( i = 0; i < m_VectorDimension; i++ ) 
     {
@@ -623,7 +623,7 @@ ImageKmeansModelEstimator<TInputImage, TMembershipFunction>
       newCodeword[i] = addoffset * rand_num;
       }
 
-    else if ( fabs(oldCodeword[i]) < 0.9 * addoffset ) 
+    else if ( vcl_fabs(oldCodeword[i]) < 0.9 * addoffset ) 
       {
       newCodeword[i] = oldCodeword[i];
 

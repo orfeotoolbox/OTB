@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkVoronoiPartitioningImageFilter.txx,v $
   Language:  C++
-  Date:      $Date: 2004/12/21 22:47:29 $
-  Version:   $Revision: 1.7 $
+  Date:      $Date: 2006/03/19 04:36:55 $
+  Version:   $Revision: 1.8 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -188,7 +188,7 @@ VoronoiPartitioningImageFilter <TInputImage,TOutputImage>
   double savevar;
   if(num > 1)
     {
-    savevar = sqrt((addpp - (addp*addp)/static_cast<double>(num) )
+    savevar = vcl_sqrt((addpp - (addp*addp)/static_cast<double>(num) )
                    /(static_cast<double>(num)-1.0));
     }
   else
@@ -197,7 +197,7 @@ VoronoiPartitioningImageFilter <TInputImage,TOutputImage>
     }
 
   
-  return (savevar >= 0 && sqrt(savevar) < m_SigmaThreshold);
+  return (savevar >= 0 && vcl_sqrt(savevar) < m_SigmaThreshold);
 }
 
 template <class TInputImage, class TOutputImage>

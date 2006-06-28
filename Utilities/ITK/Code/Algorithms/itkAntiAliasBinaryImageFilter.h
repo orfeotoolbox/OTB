@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkAntiAliasBinaryImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2005/10/24 22:36:06 $
-  Version:   $Revision: 1.12 $
+  Date:      $Date: 2006/04/04 13:20:11 $
+  Version:   $Revision: 1.13 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -143,6 +143,16 @@ public:
     itkWarningMacro("GetMaximumIterations is deprecated. Please use GetNumberOfIterations instead.");
     return this->GetNumberOfIterations();
   } 
+
+#ifdef ITK_USE_CONCEPT_CHECKING
+  /** Begin concept checking */
+  itkConceptMacro(DoubleConvertibleToOutputCheck,
+                  (Concept::Convertible<double, typename TOutputImage::PixelType>));
+  itkConceptMacro(InputOStreamWritableCheck,
+                  (Concept::OStreamWritable<typename TInputImage::PixelType>));
+  /** End concept checking */
+#endif
+
 protected:
   AntiAliasBinaryImageFilter();
   ~AntiAliasBinaryImageFilter() {}

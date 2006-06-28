@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkVoronoiSegmentationImageFilter.txx,v $
   Language:  C++
-  Date:      $Date: 2004/12/21 22:47:29 $
-  Version:   $Revision: 1.37 $
+  Date:      $Date: 2006/03/19 04:36:55 $
+  Version:   $Revision: 1.38 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -82,7 +82,7 @@ VoronoiSegmentationImageFilter <TInputImage,TOutputImage,TBinaryPriorImage>
   if(num > 1)
     {
     savemean = addp/num;
-    saveSTD = sqrt((addpp - (addp*addp)/(num) )/(num-1));
+    saveSTD = vcl_sqrt((addpp - (addp*addp)/(num) )/(num-1));
     }
   else
     {
@@ -91,7 +91,7 @@ VoronoiSegmentationImageFilter <TInputImage,TOutputImage,TBinaryPriorImage>
     }
 
 //   // jvm - Mahalanobis distance
-//   if (savevar > 0 && fabs(savemean - m_Mean) / m_Var < 2.5)
+//   if (savevar > 0 && vcl_fabs(savemean - m_Mean) / m_Var < 2.5)
 //     return true;
 //   else
 //     return false;
@@ -200,12 +200,12 @@ VoronoiSegmentationImageFilter <TInputImage,TOutputImage,TBinaryPriorImage>
     }
 
   m_Mean = addp/num;
-  m_STD = sqrt((addpp - (addp*addp)/num)/(num-1));
+  m_STD = vcl_sqrt((addpp - (addp*addp)/num)/(num-1));
   float b_Mean = addb/numb;
 
   if(this->GetUseBackgroundInAPrior())
     {
-    m_MeanTolerance = fabs(m_Mean-b_Mean)*this->GetMeanDeviation();
+    m_MeanTolerance = vcl_fabs(m_Mean-b_Mean)*this->GetMeanDeviation();
     }
   else
     {

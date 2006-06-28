@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkThresholdSegmentationLevelSetFunction.h,v $
   Language:  C++
-  Date:      $Date: 2003/09/10 14:28:39 $
-  Version:   $Revision: 1.12 $
+  Date:      $Date: 2006/04/18 19:04:23 $
+  Version:   $Revision: 1.13 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -27,7 +27,7 @@ namespace itk {
  * segment structures in images based on intensity values.
  *
  * \par  SegmentationLevelSetFunction is a subclass of the generic LevelSetFunction.
- * It useful for segmentations based on intensity values in an image.  It works
+ * It is useful for segmentations based on intensity values in an image.  It works
  * by constructing a speed term (feature image) with positive values inside an
  * intensity window (between a low and high threshold) and negative values
  * outside that intensity window.  The evolving level set front will lock onto
@@ -41,8 +41,8 @@ namespace itk {
  *  calculation.
  *
  *  \par
- *  Image $f$ is thresholded pixel by pixel using upper threshold
- *  $U$ and lower threshold $L$ according to the following formula.
+ *  Image \f$ f \f$ is thresholded pixel by pixel using upper threshold
+ *  \f$ U \f$ and lower threshold \f$ L \f$ according to the following formula.
  *
  * \par
  *  \f$  f(x) = \left\{ \begin{array}{ll} g(x) - L & \mbox{if $(g)x < (U-L)/2 + L$} \\ U - g(x) & \mbox{otherwise} \end{array} \right. \f$ 

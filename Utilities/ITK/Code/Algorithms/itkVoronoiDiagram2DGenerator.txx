@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkVoronoiDiagram2DGenerator.txx,v $
   Language:  C++
-  Date:      $Date: 2003/09/10 14:28:40 $
-  Version:   $Revision: 1.19 $
+  Date:      $Date: 2006/03/19 04:36:55 $
+  Version:   $Revision: 1.20 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -1036,7 +1036,7 @@ GenerateVDFortune(void)
 
   m_Deltay = m_Pymax - m_Pymin;
   m_Deltax = m_Pxmax - m_Pxmin;
-  m_SqrtNSites = sqrt((float) (m_NumberOfSeeds + 4));
+  m_SqrtNSites = vcl_sqrt((float) (m_NumberOfSeeds + 4));
 
 /* Initialize outputLists. */
   m_Nedges = 0;

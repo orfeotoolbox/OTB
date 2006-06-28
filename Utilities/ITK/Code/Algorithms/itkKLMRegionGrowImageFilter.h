@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkKLMRegionGrowImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2004/11/04 20:40:32 $
-  Version:   $Revision: 1.43 $
+  Date:      $Date: 2006/04/04 13:20:13 $
+  Version:   $Revision: 1.44 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -237,18 +237,6 @@ public:
   /** Type definition for the output image iterators.  */
   typedef ImageRegionIterator< TOutputImage >   OutputImageIterator;
 
-  /** The dimensions of the input image must equal those of the
-      output image. */
-  itkConceptMacro(SameDimension,
-    (Concept::SameDimension<itkGetStaticConstMacro(InputImageDimension),itkGetStaticConstMacro(OutputImageDimension)>));
-
-#if THIS_CONCEPT_FAILS_ON_GCC
-  /** The input pixel type must be the same as that of the output
-      image. */
-  itkConceptMacro(SameVectorDimension,
-    (Concept::SameDimension<itkGetStaticConstMacro(InputImageVectorDimension),itkGetStaticConstMacro(OutputImageVectorDimension)>));
-#endif
-
   /** type definition for the region label type. */
   typedef typename KLMSegmentationRegion::RegionLabelType RegionLabelType;
 
@@ -298,6 +286,23 @@ public:
 
   /** Function that prints all the border information.  */
   void PrintAlgorithmBorderStats(void);
+
+#ifdef ITK_USE_CONCEPT_CHECKING
+  /** Begin concept checking */
+  itkConceptMacro(InputHasNumericTraitsCheck,
+    (Concept::HasNumericTraits<typename InputImagePixelType::ValueType>));
+  itkConceptMacro(SameDimension,
+    (Concept::SameDimension<itkGetStaticConstMacro(InputImageDimension),
+                            itkGetStaticConstMacro(OutputImageDimension)>));
+#if THIS_CONCEPT_FAILS_ON_GCC
+  /** The input pixel type must be the same as that of the output
+      image. */
+  itkConceptMacro(SameVectorDimension,
+    (Concept::SameDimension<itkGetStaticConstMacro(InputImageVectorDimension),
+                            itkGetStaticConstMacro(OutputImageVectorDimension)>));
+#endif
+  /** End concept checking */
+#endif
 
 protected:
   KLMRegionGrowImageFilter();

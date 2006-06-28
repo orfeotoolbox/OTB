@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkBayesianClassifierImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2005/12/09 17:15:01 $
-  Version:   $Revision: 1.10 $
+  Date:      $Date: 2006/03/31 14:31:05 $
+  Version:   $Revision: 1.11 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -171,7 +171,27 @@ public:
   /** Number of iterations to apply the smoothing filter */
   itkSetMacro( NumberOfSmoothingIterations, unsigned int );
   itkGetMacro( NumberOfSmoothingIterations, unsigned int );
-  
+
+#ifdef ITK_USE_CONCEPT_CHECKING
+  /** Begin concept checking */
+  itkConceptMacro(UnsignedIntConvertibleToLabelsCheck,
+    (Concept::Convertible<unsigned int, TLabelsType>));
+  itkConceptMacro(PosteriorsAdditiveOperatorsCheck,
+    (Concept::AdditiveOperators<TPosteriorsPrecisionType>));
+  itkConceptMacro(IntConvertibleToPosteriorsCheck,
+    (Concept::Convertible<int, TPosteriorsPrecisionType>));
+  itkConceptMacro(InputHasNumericTraitsCheck,
+    (Concept::HasNumericTraits<typename InputPixelType::ValueType>));
+  itkConceptMacro(PosteriorsHasNumericTraitsCheck,
+    (Concept::HasNumericTraits<TPosteriorsPrecisionType>));
+  itkConceptMacro(PriorsHasNumericTraitsCheck,
+    (Concept::HasNumericTraits<TPriorsPrecisionType>));
+  itkConceptMacro(InputPriorsPosteriorsMultiplyOperatorCheck,
+    (Concept::MultiplyOperator<typename InputPixelType::ValueType,
+                               PriorsPixelType, PosteriorsPixelType>));
+  /** End concept checking */
+#endif
+
 protected:
 
   BayesianClassifierImageFilter();

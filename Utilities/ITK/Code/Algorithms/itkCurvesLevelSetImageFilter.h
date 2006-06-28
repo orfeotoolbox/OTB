@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkCurvesLevelSetImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2004/06/01 18:33:44 $
-  Version:   $Revision: 1.5 $
+  Date:      $Date: 2006/04/04 13:20:12 $
+  Version:   $Revision: 1.6 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -133,6 +133,13 @@ public:
   float GetDerivativeSigma() const
    { return m_CurvesFunction->GetDerivativeSigma(); }
     
+#ifdef ITK_USE_CONCEPT_CHECKING
+  /** Begin concept checking */
+  itkConceptMacro(OutputHasNumericTraitsCheck,
+    (Concept::HasNumericTraits<TOutputPixelType>));
+  /** End concept checking */
+#endif
+
 protected:
   ~CurvesLevelSetImageFilter() {}
   CurvesLevelSetImageFilter();

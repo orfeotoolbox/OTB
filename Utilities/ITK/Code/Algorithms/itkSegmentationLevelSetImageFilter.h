@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkSegmentationLevelSetImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2005/04/02 17:17:42 $
-  Version:   $Revision: 1.29 $
+  Date:      $Date: 2006/04/05 13:59:37 $
+  Version:   $Revision: 1.30 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -446,6 +446,13 @@ public:
       filter execution unless AutoGenerateSpeedAdvection is set to Off.*/
   void GenerateAdvectionImage();
   
+#ifdef ITK_USE_CONCEPT_CHECKING
+  /** Begin concept checking */
+  itkConceptMacro(OutputHasNumericTraitsCheck,
+                  (Concept::HasNumericTraits<TOutputPixelType>));
+  /** End concept checking */
+#endif
+
 protected:
   virtual ~SegmentationLevelSetImageFilter() {}
   SegmentationLevelSetImageFilter(const Self&);

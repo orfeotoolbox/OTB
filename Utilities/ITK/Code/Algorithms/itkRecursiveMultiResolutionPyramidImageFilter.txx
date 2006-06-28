@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkRecursiveMultiResolutionPyramidImageFilter.txx,v $
   Language:  C++
-  Date:      $Date: 2004/12/21 22:47:29 $
-  Version:   $Revision: 1.13 $
+  Date:      $Date: 2006/03/19 04:36:55 $
+  Version:   $Revision: 1.14 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -321,14 +321,14 @@ RecursiveMultiResolutionPyramidImageFilter<TInputImage, TOutputImage>
       requestedIndex[idim] += radius[idim];
       
       // take into account shrink component
-      requestedSize[idim] = static_cast<SizeValueType>( floor(
+      requestedSize[idim] = static_cast<SizeValueType>( vcl_floor(
                                                           static_cast<double>(requestedSize[idim]) / 
                                                           static_cast<double>(factors[idim]) ) );
       if( requestedSize[idim] < 1 )
         {
         requestedSize[idim] = 1;
         }
-      requestedIndex[idim] = static_cast<IndexValueType>( ceil(
+      requestedIndex[idim] = static_cast<IndexValueType>( vcl_ceil(
                                                             static_cast<double>(requestedIndex[idim]) /
                                                             static_cast<double>(factors[idim]) ) );
 

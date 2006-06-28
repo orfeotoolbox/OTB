@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkLabelVotingImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2005/07/15 11:48:09 $
-  Version:   $Revision: 1.2 $
+  Date:      $Date: 2006/04/07 11:42:31 $
+  Version:   $Revision: 1.4 $
 
   Copyright (c) 2002 Insight Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -94,6 +94,8 @@ public:
 
   /** Extract some information from the image types.  Dimensionality
    * of the two images is assumed to be the same. */
+  itkStaticConstMacro(InputImageDimension, unsigned int,
+                      TInputImage::ImageDimension );
   itkStaticConstMacro(ImageDimension, unsigned int,
                       TOutputImage::ImageDimension);
   
@@ -136,7 +138,28 @@ public:
       this->Modified();
       }
   }
-  
+
+#ifdef ITK_USE_CONCEPT_CHECKING
+  /** Begin concept checking */
+  itkConceptMacro(InputConvertibleToOutputCheck,
+    (Concept::Convertible<InputPixelType, OutputPixelType>));
+  itkConceptMacro(IntConvertibleToInputCheck,
+    (Concept::Convertible<int, InputPixelType>));
+  itkConceptMacro(SameDimensionCheck,
+    (Concept::SameDimension<InputImageDimension, ImageDimension>));
+  itkConceptMacro(InputConvertibleToUnsignedIntCheck,
+    (Concept::Convertible<InputPixelType, unsigned int>));
+  itkConceptMacro(IntConvertibleToOutputPixelType,
+    (Concept::Convertible<int, OutputPixelType>));
+  itkConceptMacro(InputPlusIntCheck,
+    (Concept::AdditiveOperators<InputPixelType, int>));
+  itkConceptMacro(InputIncrementDecrementOperatorsCheck,
+    (Concept::IncrementDecrementOperators<InputPixelType>));
+  itkConceptMacro(OutputOStreamWritableCheck,
+    (Concept::OStreamWritable<OutputPixelType>));
+  /** End concept checking */
+#endif
+
 protected:
   LabelVotingImageFilter() { this->m_HasLabelForUndecidedPixels = false; }
   virtual ~LabelVotingImageFilter() {}  

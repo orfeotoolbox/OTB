@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkImageToSpatialObjectRegistrationMethod.txx,v $
   Language:  C++
-  Date:      $Date: 2005/08/12 07:34:54 $
-  Version:   $Revision: 1.6 $
+  Date:      $Date: 2006/04/18 14:22:51 $
+  Version:   $Revision: 1.7 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -82,6 +82,7 @@ ImageToSpatialObjectRegistrationMethod<TFixedImage,TMovingSpatialObject>
     itkExceptionMacro(<<"Interpolator is not present");
     }
 
+  m_Interpolator->SetInputImage( m_FixedImage );
 
   // Setup the metric
   m_Metric->SetFixedImage( m_FixedImage );

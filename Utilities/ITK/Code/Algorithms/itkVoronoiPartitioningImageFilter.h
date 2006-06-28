@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkVoronoiPartitioningImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2003/09/10 14:28:40 $
-  Version:   $Revision: 1.8 $
+  Date:      $Date: 2006/04/05 13:59:37 $
+  Version:   $Revision: 1.9 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -75,6 +75,21 @@ public:
    * considered homogeneous. */
   itkSetMacro(SigmaThreshold, double);
   itkGetMacro(SigmaThreshold, double);
+
+  /** ImageDimension enumeration   */
+  itkStaticConstMacro(InputImageDimension, unsigned int,
+                      TInputImage::ImageDimension );
+  itkStaticConstMacro(OutputImageDimension, unsigned int,
+                      TOutputImage::ImageDimension );
+
+#ifdef ITK_USE_CONCEPT_CHECKING
+  /** Begin concept checking */
+  itkConceptMacro(SameDimensionCheck,
+    (Concept::SameDimension<InputImageDimension, OutputImageDimension>));
+  itkConceptMacro(IntConvertibleToOutputCheck,
+    (Concept::Convertible<int, OutputPixelType>));
+  /** End concept checking */
+#endif
 
 protected:
   VoronoiPartitioningImageFilter();

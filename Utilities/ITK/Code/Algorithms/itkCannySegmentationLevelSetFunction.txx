@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkCannySegmentationLevelSetFunction.txx,v $
   Language:  C++
-  Date:      $Date: 2005/08/09 20:48:14 $
-  Version:   $Revision: 1.9 $
+  Date:      $Date: 2006/04/12 07:31:14 $
+  Version:   $Revision: 1.10 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -100,7 +100,7 @@ void CannySegmentationLevelSetFunction<TImageType, TFeatureImageType>
     m_Canny->SetInput(m_Caster->GetOutput());
     }
 
-  m_Canny->SetThreshold(m_Threshold);
+  m_Canny->SetUpperThreshold(m_Threshold);
   m_Canny->SetVariance(m_Variance);
   m_Canny->SetMaximumError(0.01);
   m_Canny->SetOutsideValue(NumericTraits<ScalarValueType>::Zero);

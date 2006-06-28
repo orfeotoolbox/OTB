@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkMeanSquareRegistrationFunction.txx,v $
   Language:  C++
-  Date:      $Date: 2006/01/11 19:43:31 $
-  Version:   $Revision: 1.11 $
+  Date:      $Date: 2006/03/19 04:36:54 $
+  Version:   $Revision: 1.12 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -170,7 +170,7 @@ MeanSquareRegistrationFunction<TFixedImage,TMovingImage,TDeformationField>
   if (normalizemetric) 
   {  
     denominator = speedValue*speedValue *fixedGradientSquaredMagnitude;
-    denominator = sqrt(denominator);
+    denominator = vcl_sqrt(denominator);
   }
   if (denominator == 0) denominator=1.0;
  

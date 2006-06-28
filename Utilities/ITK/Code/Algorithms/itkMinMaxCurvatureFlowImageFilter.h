@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkMinMaxCurvatureFlowImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2003/09/10 14:28:35 $
-  Version:   $Revision: 1.13 $
+  Date:      $Date: 2006/03/31 14:31:05 $
+  Version:   $Revision: 1.14 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -111,7 +111,29 @@ public:
   /** Set/Get the stencil radius. */
   itkSetMacro( StencilRadius, RadiusValueType );
   itkGetMacro( StencilRadius, RadiusValueType );
-  
+
+#ifdef ITK_USE_CONCEPT_CHECKING
+  /** Begin concept checking */
+  itkConceptMacro(UnsignedLongConvertibleToOutputCheck,
+    (Concept::Convertible<unsigned long, typename TOutputImage::PixelType>));
+  itkConceptMacro(OutputLessThanComparableCheck,
+    (Concept::LessThanComparable<typename TOutputImage::PixelType>));
+  itkConceptMacro(LongConvertibleToOutputCheck,
+    (Concept::Convertible<long, typename TOutputImage::PixelType>));
+  itkConceptMacro(OutputDoubleComparableCheck,
+    (Concept::Comparable<typename TOutputImage::PixelType, double>));
+  itkConceptMacro(OutputDoubleMultiplyAndAssignOperatorCheck,
+    (Concept::MultiplyAndAssignOperator<typename TOutputImage::PixelType,
+                                        double>));
+  itkConceptMacro(OutputGreaterThanUnsignedLongCheck,
+    (Concept::GreaterThanComparable<typename TOutputImage::PixelType,
+                                    unsigned long>));
+  itkConceptMacro(UnsignedLongOutputAditiveOperatorsCheck,
+    (Concept::AdditiveOperators<unsigned long,
+                                typename TOutputImage::PixelType>));
+  /** End concept checking */
+#endif
+
 protected:
   MinMaxCurvatureFlowImageFilter();
   ~MinMaxCurvatureFlowImageFilter() {}

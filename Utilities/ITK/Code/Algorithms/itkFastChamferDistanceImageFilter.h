@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkFastChamferDistanceImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2003/09/10 14:28:30 $
-  Version:   $Revision: 1.4 $
+  Date:      $Date: 2006/03/24 13:39:24 $
+  Version:   $Revision: 1.6 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -71,6 +71,9 @@ public:
   /** Type for input image. */
   typedef   TInputImage       InputImageType;
   
+  /** Type for input image. */
+  typedef   TOutputImage      OutputImageType;
+  
   /** Type for the region of the input image. */
   typedef typename InputImageType::RegionType   RegionType;
   
@@ -86,9 +89,11 @@ public:
   /** Type for the size of the input image. */
   typedef typename RegionType::SizeType   SizeType;
   
-  /** The dimension of the input image. */
+  /** The dimension of the input and output images. */
   itkStaticConstMacro(ImageDimension, unsigned int,
                       InputImageType::ImageDimension);
+  itkStaticConstMacro(OutputImageDimension, unsigned int,
+                      OutputImageType::ImageDimension);
   
   /** Pointer Type for input image. */
   typedef typename InputImageType::ConstPointer InputImagePointer;
@@ -135,6 +140,29 @@ public:
   NarrowBandPointer GetNarrowBand() const
   { return m_NarrowBand; }
   
+#ifdef ITK_USE_CONCEPT_CHECKING
+  /** Begin concept checking */
+  itkConceptMacro(SameDimensionCheck,
+    (Concept::SameDimension<ImageDimension, OutputImageDimension>));
+  itkConceptMacro(SameTypeCheck,
+    (Concept::SameType<PixelType, typename TOutputImage::PixelType>));
+  itkConceptMacro(FloatConvertibleToPixelTypeCheck,
+    (Concept::Convertible<float, PixelType>));
+  itkConceptMacro(PixelTypeConvertibleToFloatCheck,
+    (Concept::Convertible<PixelType, float>));
+  itkConceptMacro(PixelTypeGreaterThanFloatCheck,
+    (Concept::GreaterThanComparable<PixelType, float>));
+  itkConceptMacro(PixelTypeLessThanFloatCheck,
+    (Concept::LessThanComparable<PixelType, float>));
+  itkConceptMacro(PixelTypeFloatAdditiveOperatorsCheck,
+    (Concept::AdditiveOperators<PixelType, float, float>));
+  itkConceptMacro(FloatGreaterThanPixelTypeCheck,
+    (Concept::GreaterThanComparable<float, PixelType>));
+  itkConceptMacro(FloatLessThanPixelTypeCheck,
+    (Concept::LessThanComparable<float, PixelType>));
+  /** End concept checking */
+#endif
+
 protected:
   FastChamferDistanceImageFilter();
   virtual ~FastChamferDistanceImageFilter() {};

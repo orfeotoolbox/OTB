@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkMeanReciprocalSquareDifferencePointSetToImageMetric.txx,v $
   Language:  C++
-  Date:      $Date: 2005/03/29 16:22:45 $
-  Version:   $Revision: 1.3 $
+  Date:      $Date: 2006/03/19 04:36:54 $
+  Version:   $Revision: 1.4 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -58,7 +58,7 @@ MeanReciprocalSquareDifferencePointSetToImageMetric<TFixedPointSet,TMovingImage>
   MeasureType measure = NumericTraits< MeasureType >::Zero;
 
   this->m_NumberOfPixelsCounted = 0;
-  double lambdaSquared = pow(this->m_Lambda, 2);
+  double lambdaSquared = vcl_pow(this->m_Lambda, 2);
 
   this->SetTransformParameters( parameters );
 
@@ -123,7 +123,7 @@ MeanReciprocalSquareDifferencePointSetToImageMetric<TFixedPointSet,TMovingImage>
 
   this->m_NumberOfPixelsCounted = 0;
 
-  double lambdaSquared = pow(this->m_Lambda, 2);
+  double lambdaSquared = vcl_pow(this->m_Lambda, 2);
   
   this->SetTransformParameters( parameters );
 
@@ -235,7 +235,7 @@ MeanReciprocalSquareDifferencePointSetToImageMetric<TFixedPointSet,TMovingImage>
   MeasureType measure = NumericTraits< MeasureType >::Zero;
 
   this->SetTransformParameters( parameters );
-  double lambdaSquared = pow(this->m_Lambda, 2);
+  double lambdaSquared = vcl_pow(this->m_Lambda, 2);
 
   typedef  typename NumericTraits< MeasureType >::AccumulateType AccumulateType;
 
@@ -296,7 +296,7 @@ MeanReciprocalSquareDifferencePointSetToImageMetric<TFixedPointSet,TMovingImage>
         for(unsigned int dim=0; dim<Self::FixedPointSetDimension; dim++)
           {
           sum -= jacobian( dim, par ) * gradient[dim] * 
-            pow( lambdaSquared + diffSquared, 2 );
+            vcl_pow(lambdaSquared + diffSquared, 2 );
           }
         derivative[par] += diff * sum;
         }

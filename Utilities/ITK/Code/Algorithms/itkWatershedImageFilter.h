@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkWatershedImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2005/01/12 23:09:39 $
-  Version:   $Revision: 1.42 $
+  Date:      $Date: 2006/03/31 14:31:05 $
+  Version:   $Revision: 1.43 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -240,6 +240,19 @@ public:
    
   // Override since the filter produces all of its output
   void EnlargeOutputRequestedRegion(DataObject *data);
+
+#ifdef ITK_USE_CONCEPT_CHECKING
+  /** Begin concept checking */
+  itkConceptMacro(InputEqualityComparableCheck,
+    (Concept::EqualityComparable<ScalarType>));
+  itkConceptMacro(InputAdditiveOperatorsCheck,
+    (Concept::AdditiveOperators<ScalarType>));
+  itkConceptMacro(DoubleInputMultiplyOperatorCheck,
+    (Concept::MultiplyOperator<double, ScalarType, ScalarType>));
+  itkConceptMacro(InputLessThanComparableCheck,
+    (Concept::LessThanComparable<ScalarType>));
+  /** End concept checking */
+#endif
 
 protected:
   WatershedImageFilter();

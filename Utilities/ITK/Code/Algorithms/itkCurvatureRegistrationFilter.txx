@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkCurvatureRegistrationFilter.txx,v $
   Language:  C++
-  Date:      $Date: 2006/02/05 20:57:46 $
-  Version:   $Revision: 1.3 $
+  Date:      $Date: 2006/03/19 04:36:53 $
+  Version:   $Revision: 1.4 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -164,9 +164,9 @@ CurvatureRegistrationFilter<TFixedImage,TMovingImage,TDeformationField,TImageFor
     for ( int idx = 0; idx < m_FixedImageDimensions[dim]; ++idx )
       {
 #ifdef SLOW_DCT
-      m_DiagonalElements[dim][idx] = -2 + 2 * cos( vnl_math::pi * idx / m_FixedImageDimensions[dim] );
+      m_DiagonalElements[dim][idx] = -2 + 2 * vcl_cos(vnl_math::pi * idx / m_FixedImageDimensions[dim] );
 #else
-      m_DiagonalElements[dim][idx] = -2 + 2 * cos( vnl_math::pi * (idx+1) / m_FixedImageDimensions[dim] );
+      m_DiagonalElements[dim][idx] = -2 + 2 * vcl_cos(vnl_math::pi * (idx+1) / m_FixedImageDimensions[dim] );
 #endif
       }
     }

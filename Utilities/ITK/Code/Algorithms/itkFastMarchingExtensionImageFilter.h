@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkFastMarchingExtensionImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2003/09/10 14:28:30 $
-  Version:   $Revision: 1.21 $
+  Date:      $Date: 2006/04/04 13:20:13 $
+  Version:   $Revision: 1.22 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -113,6 +113,13 @@ public:
   /** Get the container of auxiliary values at the initial trial points. */
   typename AuxValueContainer::Pointer GetAuxiliaryTrialValues()
   { return m_AuxTrialValues; }
+
+#ifdef ITK_USE_CONCEPT_CHECKING
+  /** Begin concept checking */
+  itkConceptMacro(AuxValueHasNumericTraitsCheck,
+                  (Concept::HasNumericTraits<TAuxValue>));
+  /** End concept checking */
+#endif
 
 protected:
   FastMarchingExtensionImageFilter();

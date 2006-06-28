@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkVoronoiSegmentationImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2003/12/09 22:39:35 $
-  Version:   $Revision: 1.30 $
+  Date:      $Date: 2006/04/06 13:18:56 $
+  Version:   $Revision: 1.32 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -107,8 +107,22 @@ public:
   /** Take a prior from other segmentation node, should be an
    * binary object. */
   void TakeAPrior(const BinaryObjectImage* aprior);
-  
-  
+
+  /** ImageDimension enumeration   */
+  itkStaticConstMacro(InputImageDimension, unsigned int,
+                      TInputImage::ImageDimension );
+  itkStaticConstMacro(OutputImageDimension, unsigned int,
+                      TOutputImage::ImageDimension );
+
+#ifdef ITK_USE_CONCEPT_CHECKING
+  /** Begin concept checking */
+  itkConceptMacro(SameDimensionCheck,
+    (Concept::SameDimension<InputImageDimension, OutputImageDimension>));
+  itkConceptMacro(IntConvertibleToOutputCheck,
+    (Concept::Convertible<int, typename TOutputImage::PixelType>));
+  /** End concept checking */
+#endif
+
 protected:
   VoronoiSegmentationImageFilter();
   ~VoronoiSegmentationImageFilter();

@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkCannySegmentationLevelSetImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2005/04/02 17:30:21 $
-  Version:   $Revision: 1.12 $
+  Date:      $Date: 2006/04/04 13:20:12 $
+  Version:   $Revision: 1.13 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -173,6 +173,14 @@ public:
       advection images */
   OutputImageType *GetCannyImage(void)
     { return this->m_CannyFunction->GetCannyImage(); }
+
+#ifdef ITK_USE_CONCEPT_CHECKING
+  /** Begin concept checking */
+  itkConceptMacro(OutputHasNumericTraitsCheck,
+    (Concept::HasNumericTraits<TOutputPixelType>));
+  /** End concept checking */
+#endif
+
 protected:
   ~CannySegmentationLevelSetImageFilter() {}
   CannySegmentationLevelSetImageFilter();

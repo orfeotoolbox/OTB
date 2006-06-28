@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkVoronoiSegmentationRGBImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2003/12/09 22:39:35 $
-  Version:   $Revision: 1.31 $
+  Date:      $Date: 2006/04/06 13:18:56 $
+  Version:   $Revision: 1.33 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -120,6 +120,21 @@ public:
   void TakeAPrior(const BinaryObjectImage* aprior);
 
   void SetInput(const InputImageType *input); 
+
+  /** ImageDimension enumeration   */
+  itkStaticConstMacro(InputImageDimension, unsigned int,
+                      TInputImage::ImageDimension );
+  itkStaticConstMacro(OutputImageDimension, unsigned int,
+                      TOutputImage::ImageDimension );
+
+#ifdef ITK_USE_CONCEPT_CHECKING
+  /** Begin concept checking */
+  itkConceptMacro(SameDimensionCheck,
+    (Concept::SameDimension<InputImageDimension, OutputImageDimension>));
+  itkConceptMacro(IntConvertibleToOutputCheck,
+    (Concept::Convertible<int, typename TOutputImage::PixelType>));
+  /** End concept checking */
+#endif
 
 protected:
   VoronoiSegmentationRGBImageFilter();

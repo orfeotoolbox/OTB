@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkMeanSquaresImageToImageMetric.h,v $
   Language:  C++
-  Date:      $Date: 2003/09/10 14:28:35 $
-  Version:   $Revision: 1.27 $
+  Date:      $Date: 2006/04/11 12:36:55 $
+  Version:   $Revision: 1.28 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -85,6 +85,20 @@ public:
   /**  Get value and derivatives for multiple valued optimizers. */
   void GetValueAndDerivative( const TransformParametersType & parameters,
                               MeasureType& Value, DerivativeType& Derivative ) const;
+
+#ifdef ITK_USE_CONCEPT_CHECKING
+  /** Begin concept checking */
+  itkConceptMacro(MovingPixelTypeHasNumericTraitsCheck,
+    (Concept::HasNumericTraits<typename TMovingImage::PixelType>));
+  itkConceptMacro(MovingRealTypeAdditivieOperatorsCheck,
+    (Concept::AdditiveOperators<
+     typename NumericTraits<typename TMovingImage::PixelType>::RealType>));
+  itkConceptMacro(MovingRealTypeMultiplyOperatorCheck,
+    (Concept::MultiplyOperator<
+     typename NumericTraits<typename TMovingImage::PixelType>::RealType>));
+
+  /** End concept checking */
+#endif
 
 protected:
   MeanSquaresImageToImageMetric();

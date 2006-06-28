@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkCurvatureFlowImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2003/10/07 16:42:27 $
-  Version:   $Revision: 1.34 $
+  Date:      $Date: 2006/03/31 14:31:05 $
+  Version:   $Revision: 1.36 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -134,7 +134,26 @@ public:
 
   /** Get the timestep parameter. */
   itkGetMacro(TimeStep, TimeStepType);
-  
+
+#ifdef ITK_USE_CONCEPT_CHECKING
+  /** Begin concept checking */
+  itkConceptMacro(DoubleConvertibleToOutputCheck,
+    (Concept::Convertible<double, PixelType>));
+  itkConceptMacro(OutputConvertibleToDoubleCheck,
+    (Concept::Convertible<PixelType, double>));
+  itkConceptMacro(OutputDivisionOperatorsCheck,
+    (Concept::DivisionOperators<PixelType>));
+  itkConceptMacro(DoubleOutputMultiplyOperatorCheck,
+    (Concept::MultiplyOperator<double, PixelType, PixelType>));
+  itkConceptMacro(IntOutputMultiplyOperatorCheck,
+    (Concept::MultiplyOperator<int, PixelType, PixelType>));
+  itkConceptMacro(OutputLessThanDoubleCheck,
+    (Concept::LessThanComparable<PixelType, double>));
+  itkConceptMacro(OutputDoubleAdditiveOperatorsCheck,
+    (Concept::AdditiveOperators<PixelType, double>));
+  /** End concept checking */
+#endif
+
 protected:
   CurvatureFlowImageFilter();
   ~CurvatureFlowImageFilter() {}

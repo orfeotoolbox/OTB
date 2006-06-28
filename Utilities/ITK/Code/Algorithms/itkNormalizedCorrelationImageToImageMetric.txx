@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkNormalizedCorrelationImageToImageMetric.txx,v $
   Language:  C++
-  Date:      $Date: 2005/08/10 00:11:24 $
-  Version:   $Revision: 1.45 $
+  Date:      $Date: 2006/03/19 04:36:55 $
+  Version:   $Revision: 1.46 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -116,7 +116,7 @@ NormalizedCorrelationImageToImageMetric<TFixedImage,TMovingImage>
     sfm -= ( sf * sm / this->m_NumberOfPixelsCounted );
     }
 
-  const RealType denom = -1.0 * sqrt( sff * smm );
+  const RealType denom = -1.0 * vcl_sqrt(sff * smm );
 
   if( this->m_NumberOfPixelsCounted > 0 && denom != 0.0)
     {
@@ -310,7 +310,7 @@ NormalizedCorrelationImageToImageMetric<TFixedImage,TMovingImage>
     sfm -= ( sf * sm / this->m_NumberOfPixelsCounted );
     }
 
-  const RealType denom = -1.0 * sqrt( sff * smm );
+  const RealType denom = -1.0 * vcl_sqrt(sff * smm );
 
   if( this->m_NumberOfPixelsCounted > 0 && denom != 0.0)
     {
@@ -509,7 +509,7 @@ NormalizedCorrelationImageToImageMetric<TFixedImage,TMovingImage>
     sfm -= ( sf * sm / this->m_NumberOfPixelsCounted );
     }
 
-  const RealType denom = -1.0 * sqrt( sff * smm );
+  const RealType denom = -1.0 * vcl_sqrt(sff * smm );
 
   if( this->m_NumberOfPixelsCounted > 0 && denom != 0.0)
     {

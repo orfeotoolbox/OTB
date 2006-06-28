@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkEuclideanDistancePointMetric.txx,v $
   Language:  C++
-  Date:      $Date: 2004/12/21 22:47:26 $
-  Version:   $Revision: 1.2 $
+  Date:      $Date: 2006/03/19 04:36:54 $
+  Version:   $Revision: 1.3 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -118,7 +118,7 @@ EuclideanDistancePointMetric<TFixedPointSet,TMovingPointSet,TDistanceMap>
 
         if(!m_ComputeSquaredDistance)
           {
-          dist = sqrt(dist);
+          dist = vcl_sqrt(dist);
           }
 
         if(dist<minimumDistance)

@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkFastMarchingUpwindGradientImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2005/04/17 18:42:01 $
-  Version:   $Revision: 1.2 $
+  Date:      $Date: 2006/03/31 14:31:05 $
+  Version:   $Revision: 1.4 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -141,6 +141,8 @@ public:
    */
   itkSetMacro( TargetReachedMode, int );
   itkGetConstReferenceMacro( TargetReachedMode, int );
+  void SetTargetReachedModeToNoTargets()
+    { this->SetTargetReachedMode(NoTargets); }
   void SetTargetReachedModeToOneTarget() 
     { this->SetTargetReachedMode(OneTarget); }
   void SetTargetReachedModeToAllTargets() 
@@ -151,9 +153,17 @@ public:
 
   enum
     {
-    OneTarget,
-    AllTargets
+      NoTargets,
+      OneTarget,
+      AllTargets
     };
+
+#ifdef ITK_USE_CONCEPT_CHECKING
+  /** Begin concept checking */
+  itkConceptMacro(LevelSetDoubleDivisionOperatorsCheck,
+    (Concept::DivisionOperators<typename TLevelSet::PixelType, double>));
+  /** End concept checking */
+#endif
 
 protected:
   FastMarchingUpwindGradientImageFilter();
@@ -161,6 +171,8 @@ protected:
   void PrintSelf( std::ostream& os, Indent indent ) const;
 
   virtual void Initialize( LevelSetImageType * );
+
+  void GenerateData();
 
   virtual void UpdateNeighbors( const IndexType& index, 
                                 const SpeedImageType *, LevelSetImageType * );

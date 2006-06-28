@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkBinaryThinningImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2005/01/31 19:39:38 $
-  Version:   $Revision: 1.3 $
+  Date:      $Date: 2006/04/04 13:20:12 $
+  Version:   $Revision: 1.5 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -99,6 +99,28 @@ public:
   /** Get Skelenton by thinning image. */
   OutputImageType * GetThinning(void);
 
+  /** ImageDimension enumeration   */
+  itkStaticConstMacro(InputImageDimension, unsigned int,
+                      TInputImage::ImageDimension );
+  itkStaticConstMacro(OutputImageDimension, unsigned int,
+                      TOutputImage::ImageDimension );
+
+#ifdef ITK_USE_CONCEPT_CHECKING
+  /** Begin concept checking */
+  itkConceptMacro(SameDimensionCheck,
+    (Concept::SameDimension<InputImageDimension, OutputImageDimension>));
+  itkConceptMacro(InputAdditiveOperatorsCheck,
+    (Concept::AdditiveOperators<PixelType>));
+  itkConceptMacro(InputConvertibleToIntCheck,
+    (Concept::Convertible<PixelType, int>));
+  itkConceptMacro(IntConvertibleToInputCheck,
+    (Concept::Convertible<int, PixelType>));
+  itkConceptMacro(SameTypeCheck,
+    (Concept::SameType<PixelType, typename TOutputImage::PixelType>));
+  itkConceptMacro(InputIntComparableCheck,
+    (Concept::Comparable<PixelType, int>));
+  /** End concept checking */
+#endif
 
 protected:
   BinaryThinningImageFilter();

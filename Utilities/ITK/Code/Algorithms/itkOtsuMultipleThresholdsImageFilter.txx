@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkOtsuMultipleThresholdsImageFilter.txx,v $
   Language:  C++
-  Date:      $Date: 2005/01/19 18:29:35 $
-  Version:   $Revision: 1.7 $
+  Date:      $Date: 2006/03/15 01:57:09 $
+  Version:   $Revision: 1.8 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -44,16 +44,13 @@ OtsuMultipleThresholdsImageFilter<TInputImage, TOutputImage>
   progress->SetMiniPipelineFilter(this);
 
   // Create a histogram of the image intensities
-  typedef itk::Statistics::ScalarImageToHistogramGenerator< TInputImage > HistogramGeneratorType;
   typename HistogramGeneratorType::Pointer histogramGenerator = HistogramGeneratorType::New();
   histogramGenerator->SetInput(  this->GetInput()  );
   histogramGenerator->SetNumberOfBins( m_NumberOfHistogramBins );
   histogramGenerator->Compute();
 
   // Compute the multiple Otsu Thresholds for the input image
-  typedef typename HistogramGeneratorType::HistogramType HistogramType;
-  typedef OtsuMultipleThresholdsCalculator< HistogramType > OtsuType;
-  typename OtsuType::Pointer otsuThresholdCalculator = OtsuType::New();
+  typename OtsuCalculatorType::Pointer otsuThresholdCalculator = OtsuCalculatorType::New();
   otsuThresholdCalculator->SetInputHistogram( histogramGenerator->GetOutput() );
   otsuThresholdCalculator->SetNumberOfThresholds( m_NumberOfThresholds );
   otsuThresholdCalculator->Update();
@@ -66,7 +63,7 @@ OtsuMultipleThresholdsImageFilter<TInputImage, TOutputImage>
   progress->RegisterInternalFilter(threshold,.5f);
   threshold->GraftOutput (this->GetOutput());
   threshold->SetInput (this->GetInput());
-  threshold->SetThresholds( m_Thresholds );
+  threshold->SetRealThresholds( m_Thresholds );
   threshold->SetLabelOffset( m_LabelOffset );
   threshold->Update();
 

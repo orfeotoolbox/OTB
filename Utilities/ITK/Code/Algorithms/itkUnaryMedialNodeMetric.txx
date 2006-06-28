@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkUnaryMedialNodeMetric.txx,v $
   Language:  C++
-  Date:      $Date: 2003/09/10 14:28:40 $
-  Version:   $Revision: 1.3 $
+  Date:      $Date: 2006/03/19 04:36:55 $
+  Version:   $Revision: 1.4 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -61,7 +61,7 @@ UnaryMedialNodeMetric<VDimensions>
   for(int i = 0; i < VDimensions - 1; ++i)
     {
     double differenceTemp = (eigenvalueA(i) - eigenvalueB(i));
-    difference += pow(differenceTemp,2);
+    difference += vcl_pow(differenceTemp,2);
     }
 
   // Eigenvalue term for the metric.
@@ -71,7 +71,7 @@ UnaryMedialNodeMetric<VDimensions>
   double scaleA = m_MedialNodeA->GetMeanCoreAtomDiameter();
   double scaleB = m_MedialNodeB->GetMeanCoreAtomDiameter();
 
-  double scaleResult = 1 - fabs( (scaleA - scaleB)/(scaleA + scaleB) );
+  double scaleResult = 1 - vcl_fabs((scaleA - scaleB)/(scaleA + scaleB) );
 
   // The final metric calculation.
   m_MetricResult = eigenResult * scaleResult;

@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkExtensionVelocitiesImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2003/09/10 14:28:30 $
-  Version:   $Revision: 1.24 $
+  Date:      $Date: 2006/04/04 13:20:12 $
+  Version:   $Revision: 1.25 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -97,6 +97,15 @@ public:
 
   /** Get one of the extended velocity images. */
   AuxImageType * GetOutputVelocityImage( unsigned int idx = 0 );
+
+#ifdef ITK_USE_CONCEPT_CHECKING
+  /** Begin concept checking */
+  itkConceptMacro(AuxValueHasNumericTraitsCheck,
+    (Concept::HasNumericTraits<TAuxValue>));
+  itkConceptMacro(LevelSetOStreamWritableCheck,
+    (Concept::OStreamWritable<PixelType>));
+  /** End concept checking */
+#endif
 
 protected:
   ExtensionVelocitiesImageFilter();

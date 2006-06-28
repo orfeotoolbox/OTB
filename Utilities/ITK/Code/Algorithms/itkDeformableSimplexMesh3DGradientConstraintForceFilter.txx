@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkDeformableSimplexMesh3DGradientConstraintForceFilter.txx,v $
   Language:  C++
-  Date:      $Date: 2005/08/31 00:02:16 $
-  Version:   $Revision: 1.7 $
+  Date:      $Date: 2006/03/19 04:36:54 $
+  Version:   $Revision: 1.8 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -381,7 +381,7 @@ DeformableSimplexMesh3DGradientConstraintForceFilter<TInputMesh, TOutputMesh>
     vec_for[2] = this->m_Gradient->GetPixel(coord3)[2];
     // check magnitude
      
-    mag = sqrt(dot_product(vec_for.Get_vnl_vector(),vec_for.Get_vnl_vector()));
+    mag = vcl_sqrt(dot_product(vec_for.Get_vnl_vector(),vec_for.Get_vnl_vector()));
     if (mag > max)
       {
       max =  mag;

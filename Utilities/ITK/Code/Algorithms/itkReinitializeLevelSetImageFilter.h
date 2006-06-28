@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkReinitializeLevelSetImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2003/09/10 14:28:38 $
-  Version:   $Revision: 1.16 $
+  Date:      $Date: 2006/04/05 13:59:37 $
+  Version:   $Revision: 1.17 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -119,6 +119,15 @@ public:
   /** Get the output narrowband. */
   NodeContainerPointer GetOutputNarrowBand() const
   { return m_OutputNarrowBand; }
+
+#ifdef ITK_USE_CONCEPT_CHECKING
+  /** Begin concept checking */
+  itkConceptMacro(LevelSetDoubleAdditiveOperatorsCheck,
+                  (Concept::AdditiveOperators<PixelType, double>));
+  itkConceptMacro(LevelSetOStreamWritableCheck,
+                  (Concept::OStreamWritable<PixelType>));
+  /** End concept checking */
+#endif
 
 protected:
   ReinitializeLevelSetImageFilter();
