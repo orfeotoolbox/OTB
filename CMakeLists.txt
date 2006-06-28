@@ -127,9 +127,9 @@ ENDIF(OTB_USE_EXTERNAL_ITK)
 #-------------------------------
 # Librairie GDAL
 #-------------------------------
-OPTION(OTB_USE_EXTERNAL_GDAL "Use an outside build of GDAL." ON)
+#       OPTION(OTB_USE_EXTERNAL_GDAL "Use an outside build of GDAL." ON)
 # MARK_AS_ADVANCED(OTB_USE_EXTERNAL_GDAL)
-IF(OTB_USE_EXTERNAL_GDAL)
+#       IF(OTB_USE_EXTERNAL_GDAL)
 
 	FIND_LIBRARY(GDAL_LIBRARY NAMES gdal PATHS $ENV{GDAL_DIR_LIB} )
 	FIND_PATH(GDAL_INCLUDES gdal.h $ENV{GDAL_DIR_INCLUDES} )
@@ -141,7 +141,7 @@ IF(OTB_USE_EXTERNAL_GDAL)
 	INCLUDE_DIRECTORIES(${GDAL_INCLUDES})
 	LINK_DIRECTORIES( $ENV{GDAL_DIR_LIB} )
 
-ENDIF(OTB_USE_EXTERNAL_GDAL)
+#       ENDIF(OTB_USE_EXTERNAL_GDAL)
 
 
 #-------------------------------
@@ -149,20 +149,14 @@ ENDIF(OTB_USE_EXTERNAL_GDAL)
 #-------------------------------
 # Add an option to use or not use FLTK (http://www.fltk.org)
 
-OPTION(OTB_USE_EXTERNAL_FLTK "Use an outside build of FLTK." ON)
-# MARK_AS_ADVANCED(OTB_USE_EXTERNAL_FLTK)
-IF(OTB_USE_EXTERNAL_FLTK)
-
-	FIND_PACKAGE(FLTK)
-	IF(FLTK_FOUND)
-	#  INCLUDE(${FLTK_USE_FILE})
-  	INCLUDE_DIRECTORIES(${FLTK_INCLUDE_DIR})
-	ELSE(FLTK_FOUND)
-  	MESSAGE(FATAL_ERROR
-        	 "Cannot build OTB project without FLTK.  Please set FLTK_DIR or set OTB_USE_EXTERNAL_FLTK OFF to use INTERNAL FLTK set on OTB/Utilities repository.")
-	ENDIF(FLTK_FOUND)
-
-ENDIF(OTB_USE_EXTERNAL_FLTK)
+FIND_PACKAGE(FLTK)
+IF(FLTK_FOUND)
+#  INCLUDE(${FLTK_USE_FILE})
+   INCLUDE_DIRECTORIES(${FLTK_INCLUDE_DIR})
+ELSE(FLTK_FOUND)
+   MESSAGE(FATAL_ERROR
+	 "Cannot build OTB project without FLTK.  Please set FLTK_DIR or set OTB_USE_EXTERNAL_FLTK OFF to use INTERNAL FLTK set on OTB/Utilities repository.")
+ENDIF(FLTK_FOUND)
 
 #-------------------------------
 # End connections whith external libraries
