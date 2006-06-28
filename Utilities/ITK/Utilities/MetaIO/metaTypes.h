@@ -25,7 +25,7 @@ typedef unsigned short      MET_USHORT_TYPE;
 typedef int                 MET_INT_TYPE;
 typedef unsigned int        MET_UINT_TYPE;
 typedef int                 MET_LONG_TYPE;
-typedef unsigned int        MET_ULONG_TYPE;
+typedef unsigned long       MET_ULONG_TYPE;
 #if defined(_WIN32) && !defined(__CYGWIN__) && !defined(__MING_W32__)
 typedef __int64             MET_LONG_LONG_TYPE;
 typedef unsigned __int64    MET_ULONG_LONG_TYPE;
@@ -128,8 +128,21 @@ const char MET_OrientationTypeName[MET_NUM_ORIENTATION_TYPES][3] = {
    {'S','I','\0'},
    {'I','S','\0'},
    {'?','?','\0'}};
-
    
+
+// Type associated with the units for distance measures reported in the header
+typedef enum { MET_DISTANCE_UNITS_UNKNOWN, MET_DISTANCE_UNITS_UM,
+               MET_DISTANCE_UNITS_MM, MET_DISTANCE_UNITS_CM 
+             } MET_DistanceUnitsEnumType;
+
+#define MET_NUM_DISTANCE_UNITS_TYPES 4
+
+const char MET_DistanceUnitsTypeName[MET_NUM_DISTANCE_UNITS_TYPES][3] = {
+    {'?', '\0', '\0'},
+    {'u', 'm', '\0'},
+    {'m', 'm', '\0'},
+    {'c', 'm', '\0'}};
+
 // Structure used to define a field (variable = value definition) in a MetaFile
 typedef struct
    {
@@ -147,5 +160,16 @@ typedef struct
                                   //   meta data
    } MET_FieldRecordType;
 
+
+typedef enum { MET_NO_INTERPOLATION, MET_EXPLICIT_INTERPOLATION, MET_BEZIER_INTERPOLATION, MET_LINEAR_INTERPOLATION} 
+                                                                        MET_InterpolationEnumType;
+
+#define MET_NUM_INTERPOLATION_TYPES 4
+
+const char MET_InterpolationTypeName[MET_NUM_INTERPOLATION_TYPES][17] = {
+   {'M','E','T','_','N','O','N','E','\0',' ',' ',' ',' ',' ',' ',' ',' '},
+   {'M','E','T','_','E','X','P','L','I','C','I','T','\0',' ',' ',' ',' '},
+   {'M','E','T','_','B','E','Z','I','E','R','\0',' ',' ',' ',' ',' ',' '},
+   {'M','E','T','_','L','I','N','E','A','R','\0',' ',' ',' ',' ',' ',' '}};
 
 #endif

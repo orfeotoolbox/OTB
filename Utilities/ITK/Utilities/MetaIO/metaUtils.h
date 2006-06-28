@@ -28,7 +28,7 @@
 #include <string>
 #include <typeinfo>
 
-#include <metaTypes.h>
+#include "metaTypes.h"
 
 
 
@@ -240,9 +240,16 @@ inline MET_ValueEnumType MET_GetPixelType(const std::type_info& ptype)
     }
   else
     {
-    std::cerr  <<"Couldn't convert pixel type" << std::endl;
+    std::cerr << "MET_GetPixelType: Couldn't convert pixel type : " 
+              << ptype.name() << std::endl;
     return MET_NONE;
     }
 }
+
+extern bool MET_StringToInterpolationType(const char * _str,
+                               MET_InterpolationEnumType * _type);
+
+extern bool MET_InterpolationTypeToString(MET_InterpolationEnumType _type,
+                               char * _str);
 
 #endif
