@@ -26,8 +26,8 @@ ADD_TEST(ioTvMultiMonoChannelROI_RADARSAT2BSQ ${COMMON_TESTS}
 
 # ---  RADARSAT (GDAL)  Nom répertoire ---
 ADD_TEST(ioTvMultiMonoChannelROI_RADARSAT_BSQ2BSQ2 ${COMMON_TESTS} 
-   --compare-image ${TOL} ${TEMP}/ioMultiMonoChannelROI_RADARSAT2PNG_2559_3591_337_280.hd
-                      ${TEMP}/ioMultiMonoChannelROI_RADARSAT2PNG_2559_3591_337_280_2.hd
+   --compare-binary   ${BASELINE}/ioMultiMonoChannelROI_RADARSAT2PNG_2559_3591_337_280_2.c1
+                      ${TEMP}/ioMultiMonoChannelROI_RADARSAT2PNG_2559_3591_337_280_2.c1
          otbMultiToMonoChannelExtractROI
          -ushort ${TEMP}/ioMultiMonoChannelROI_RADARSAT2PNG_2559_3591_337_280.hd
          -ushort ${TEMP}/ioMultiMonoChannelROI_RADARSAT2PNG_2559_3591_337_280_2.hd
@@ -134,25 +134,25 @@ ADD_TEST(ioTuONERAImageIOCanRead ${IO_TESTS} otbONERAImageIOTestCanRead
         ${IMAGEDATA}/ONERA/spa3_0215_rad.ent)
 	
 ADD_TEST(ioTvONERAImageFileReader ${IO_TESTS} 
-#  --compare-binary ${TOL}   ${BASELINE}/ioImageFileReaderONERA.dat
-#                    ${TEMP}/ioImageFileReaderONERA.dat
+  --compare-binary  ${BASELINE}/ioImageFileReaderONERA.dat
+                    ${TEMP}/ioImageFileReaderONERA.dat
         otbImageFileReaderONERATest
         ${IMAGEDATA}/ONERA/spa3_0215_rad.ent
         ${TEMP}/ioImageFileReaderONERA.ent )
 
 ADD_TEST(ioTvONERAImageFileReaderComplex ${IO_TESTS} 
-#  --compare-image ${TOL}   ${BASELINE}/ioImageFileReaderPNG2PNG_cthead1.png
-#                    ${TEMP}/ioImageFileReaderPNG2PNG_cthead1.png
+  --compare-binary    ${BASELINE}/ioImageFileReaderONERAComplex.c1
+                      ${TEMP}/ioImageFileReaderONERAComplex.c1
         otbImageFileReaderONERAComplex
         ${IMAGEDATA}/ONERA/spa3_0215_rad.ent
         ${TEMP}/ioImageFileReaderONERAComplex.hd )
 
 ADD_TEST(ioTvONERAImageFileWriterComplex ${IO_TESTS} 
-#  --compare-binary    ${IMAGEDATA}/ONERA/spa3_0215_rad.dat
-#                           ${TEMP}/ONERA_Format_write_complex_data.dat
+  --compare-binary         ${BASELINE}/ioImageFileReaderONERAComplexWrite.dat
+                           ${TEMP}/ioImageFileReaderONERAComplexWrite.dat
         otbImageFileWriterONERAComplex
         ${IMAGEDATA}/ONERA/spa3_0215_rad.ent
-        ${TEMP}/ONERA_Format_write_complex_data.ent )
+        ${TEMP}/ioImageFileReaderONERAComplexWrite.ent )
 
 # -------            otb::ImageFileReader pour CAI  ------------------------------
 # Niveau de Gris
@@ -343,8 +343,8 @@ ADD_TEST(ioTvMultiChannelROI_SPOT52PNG_5 ${COMMON_TESTS}
 
 # ---  Ikonos PAN  ---
 ADD_TEST(ioTvMultiChannelROI_IkonosPAN2PNG ${COMMON_TESTS} 
-#   --compare-image ${TOL}   ${BASELINE}/ioExtractROI_IkonosPAN2PNG_100_100_77_300.png
-#                     ${TEMP}/ioExtractROI_IkonosPAN2PNG_100_100_77_300.png
+   --compare-image ${TOL}   ${BASELINE}/ioExtractROI_IkonosPAN2PNG_100_100_77_300.png
+                     ${TEMP}/ioExtractROI_IkonosPAN2PNG_100_100_77_300.png
          otbMultiChannelExtractROI
          ${IMAGEDATA}/PARIS/Ikonos/po_79039_pan_0000000.tif
          ${TEMP}/ioExtractROI_IkonosPAN2PNG_100_100_77_300.png
@@ -353,8 +353,8 @@ ADD_TEST(ioTvMultiChannelROI_IkonosPAN2PNG ${COMMON_TESTS}
 
 # ---  Ikonos XS  ---
 ADD_TEST(ioTvMultiChannelROI_IkonosRED2PNG ${COMMON_TESTS} 
-#   --compare-image ${TOL}   ${BASELINE}/ioExtractROI_IkonosRED2PNG_100_100_77_300.png
-#                     ${TEMP}/ioExtractROI_IkonosRED2PNG_100_100_77_300.png
+   --compare-image ${TOL}   ${BASELINE}/ioExtractROI_IkonosRED2PNG_100_100_77_300.png
+                            ${TEMP}/ioExtractROI_IkonosRED2PNG_100_100_77_300.png
          otbMultiChannelExtractROI
          ${IMAGEDATA}/PARIS/Ikonos/po_79039_red_0000000.tif
          ${TEMP}/ioExtractROI_IkonosRED2PNG_100_100_77_300.png
@@ -362,8 +362,8 @@ ADD_TEST(ioTvMultiChannelROI_IkonosRED2PNG ${COMMON_TESTS}
          -channels 1)
 
 ADD_TEST(ioTvMultiChannelROI_IkonosGRN2PNG ${COMMON_TESTS} 
-#   --compare-image ${TOL}   ${BASELINE}/ioExtractROI_IkonosGRN2PNG_100_100_77_300.png
-#                     ${TEMP}/ioExtractROI_IkonosGRN2PNG_100_100_77_300.png
+   --compare-image ${TOL}   ${BASELINE}/ioExtractROI_IkonosGRN2PNG_100_100_77_300.png
+                     ${TEMP}/ioExtractROI_IkonosGRN2PNG_100_100_77_300.png
          otbMultiChannelExtractROI
          ${IMAGEDATA}/PARIS/Ikonos/po_79039_grn_0000000.tif
          ${TEMP}/ioExtractROI_IkonosGRN2PNG_100_100_77_300.png
@@ -371,8 +371,8 @@ ADD_TEST(ioTvMultiChannelROI_IkonosGRN2PNG ${COMMON_TESTS}
          -channels 1)
 
 ADD_TEST(ioTvMultiChannelROI_IkonosBLU2PNG ${COMMON_TESTS} 
-#   --compare-image ${TOL}   ${BASELINE}/ioExtractROI_IkonosBLU2PNG_100_100_77_300.png
-#                     ${TEMP}/ioExtractROI_IkonosBLU2PNG_100_100_77_300.png
+   --compare-image ${TOL}   ${BASELINE}/ioExtractROI_IkonosBLU2PNG_100_100_77_300.png
+                     ${TEMP}/ioExtractROI_IkonosBLU2PNG_100_100_77_300.png
          otbMultiChannelExtractROI
          ${IMAGEDATA}/PARIS/Ikonos/po_79039_blu_0000000.tif
          ${TEMP}/ioExtractROI_IkonosBLU2PNG_100_100_77_300.png
@@ -380,8 +380,8 @@ ADD_TEST(ioTvMultiChannelROI_IkonosBLU2PNG ${COMMON_TESTS}
          -channels 1)
 
 ADD_TEST(ioTvMultiChannelROI_IkonosNIR2PNG ${COMMON_TESTS} 
-#   --compare-image ${TOL}   ${BASELINE}/ioExtractROI_IkonosNIR2PNG_100_100_77_300.png
-#                     ${TEMP}/ioExtractROI_IkonosNIR2PNG_100_100_77_300.png
+   --compare-image ${TOL}   ${BASELINE}/ioExtractROI_IkonosNIR2PNG_100_100_77_300.png
+                     ${TEMP}/ioExtractROI_IkonosNIR2PNG_100_100_77_300.png
          otbMultiChannelExtractROI
          ${IMAGEDATA}/PARIS/Ikonos/po_79039_nir_0000000.tif
          ${TEMP}/ioExtractROI_IkonosNIR2PNG_100_100_77_300.png

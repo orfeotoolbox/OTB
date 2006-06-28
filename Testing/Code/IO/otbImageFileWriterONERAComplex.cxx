@@ -41,7 +41,7 @@ int otbImageFileWriterONERAComplex(int argc, char* argv[])
 	complexReader->SetFileName( inputFilename  );
 	streaming->SetNumberOfStreamDivisions(100);
 	streaming->SetInput(complexReader->GetOutput());
-	streaming->Update();
+	//streaming->Update();
 
 	typedef otb::ExtractROI< InputPixelType, 
                                  InputPixelType >  ExtractROIFilterType;

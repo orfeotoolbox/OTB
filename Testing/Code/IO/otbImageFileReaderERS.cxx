@@ -42,7 +42,6 @@ int otbImageFileReaderERS(int argc, char* argv[])
 	complexReader->SetFileName( inputFilename  );
 	streaming->SetNumberOfStreamDivisions(100);
 	streaming->SetInput(complexReader->GetOutput());
-	streaming->Update();
 
         typedef otb::MultiChannelExtractROI< OutputPixelType, 
                                              OutputPixelType >  ExtractROIFilterType;
@@ -52,6 +51,7 @@ int otbImageFileReaderERS(int argc, char* argv[])
 	extractROIFilter->SetStartX( 10 );
 	extractROIFilter->SetStartY( 10 );
 	extractROIFilter->SetSizeX( 100 );
+	extractROIFilter->SetSizeY( 100 );
 	extractROIFilter->SetSizeY( 100 );
         extractROIFilter->SetInput( streaming->GetOutput() );        
 

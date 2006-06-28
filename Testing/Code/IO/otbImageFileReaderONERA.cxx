@@ -43,7 +43,6 @@ int otbImageFileReaderONERATest(int argc, char* argv[])
 	complexReader->SetFileName( inputFilename  );
 	streaming->SetNumberOfStreamDivisions(100);
 	streaming->SetInput(complexReader->GetOutput());
-	streaming->Update();
         
         typedef otb::MultiChannelExtractROI< OutputPixelType, 
                                              OutputPixelType >  ExtractROIFilterType;

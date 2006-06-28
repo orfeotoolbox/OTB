@@ -42,14 +42,12 @@ int otbImageFileReaderONERAComplex(int argc, char* argv[])
 	complexReader->SetFileName( inputFilename  );
 	streaming->SetNumberOfStreamDivisions(100);
 	streaming->SetInput(complexReader->GetOutput());
-	streaming->Update();
 
   	typedef itk::ComplexToModulusImageFilter< 
                        InputImageType, OutputImageType > ModulusFilterType;
 
   	ModulusFilterType::Pointer modulusFilter = ModulusFilterType::New();
   	modulusFilter->SetInput( streaming->GetOutput() );
-        modulusFilter->Update(); 
 
         typedef otb::ExtractROI< OutputPixelType, 
                                  OutputPixelType >  ExtractROIFilterType;
