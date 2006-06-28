@@ -22,6 +22,7 @@
 # include <sys/stat.h>
 # include <sys/types.h>
 
+#include "otbSystem.h"
 
 #define ONERA_MAGIC_NUMBER     33554433
 #define ONERA_HEADER_LENGTH    0
@@ -61,46 +62,13 @@ ONERAImageIO::~ONERAImageIO()
 }
 
 
-//GetExtension from uiig library.
-static std::string
-GetExtension( const std::string& filename ) {
-
-  // This assumes that the final '.' in a file name is the delimiter
-  // for the file's extension type
-  const std::string::size_type it = filename.find_last_of( "." );
-
-  // This determines the file's type by creating a new string
-  // who's value is the extension of the input filename
-  // eg. "myimage.gif" has an extension of "gif"
-  std::string fileExt( filename, it+1, filename.length() );
-
-  return( fileExt );
-}
-
-//GetRootName from uiig library.
-static std::string
-GetRootName( const std::string& filename )
-{
-  const std::string fileExt = GetExtension(filename);
-
-  // Create a base filename
-  // i.e Image.ent --> Image
-  if( fileExt.length() > 0 )
-    {
-    const std::string::size_type it = filename.find_last_of( fileExt );
-    std::string baseName( filename, 0, it-fileExt.length() );
-    return( baseName );
-    }
-  //Default to return same as input when the extension is nothing (Analyze)
-  return( filename );
-}
 
 
 static std::string
 GetHeaderFileName( const std::string & filename )
 {
-  std::string ImageFileName = GetRootName(filename);
-  std::string fileExt = GetExtension(filename);
+  std::string ImageFileName = System::GetRootName(filename);
+  std::string fileExt = System::GetExtension(filename);
 
   if(fileExt.compare("ent"))
     {
@@ -117,8 +85,8 @@ GetHeaderFileName( const std::string & filename )
 //Returns the base image filename.
 static std::string GetImageFileName( const std::string& filename )
 {
-  std::string fileExt = GetExtension(filename);
-  std::string ImageFileName = GetRootName(filename);
+  std::string fileExt = System::GetExtension(filename);
+  std::string ImageFileName = System::GetRootName(filename);
 
   if(fileExt.compare("dat") )
     {
@@ -149,8 +117,8 @@ bool ONERAImageIO::CanReadFile( const char* FileNameToRead )
     m_Headerfile.close();
     }
 
-  const std::string HeaderFileName = GetRootName(filename)+".ent";
-  const std::string DataFileName = GetRootName(filename)+".dat";
+  const std::string HeaderFileName = System::GetRootName(filename)+".ent";
+  const std::string DataFileName = System::GetRootName(filename)+".dat";
 
   m_Headerfile.open( HeaderFileName.c_str(),  std::ios::in );
   if( m_Headerfile.fail() )
@@ -280,7 +248,7 @@ bool ONERAImageIO::OpenOneraDataFileForReading(const char* filename)
     {
     m_Datafile.close();
     }
-  const std::string DataFileName = GetRootName(filename)+".dat";
+  const std::string DataFileName = System::GetRootName(filename)+".dat";
   
   // Open the new file for reading
   m_Datafile.open( DataFileName.c_str(),  std::ios::in );
@@ -306,7 +274,7 @@ bool ONERAImageIO::OpenOneraHeaderFileForReading(const char* filename)
     {
     m_Headerfile.close();
     }
-  const std::string HeaderFileName = GetRootName(filename)+".ent";
+  const std::string HeaderFileName = System::GetRootName(filename)+".ent";
   
   // Open the new file for reading
   // Actually open the file
@@ -414,7 +382,7 @@ bool ONERAImageIO::OpenOneraDataFileForWriting(const char* filename)
     {
     m_Datafile.close();
     }
-  const std::string DataFileName = GetRootName(filename)+".dat";
+  const std::string DataFileName = System::GetRootName(filename)+".dat";
   
   // Open the new file for reading
 
@@ -442,7 +410,7 @@ bool ONERAImageIO::OpenOneraHeaderFileForWriting(const char* filename)
     {
     m_Headerfile.close();
     }
-  const std::string HeaderFileName = GetRootName(filename)+".ent";
+  const std::string HeaderFileName = System::GetRootName(filename)+".ent";
   
   // Open the new file for reading
   // Actually open the file
@@ -462,8 +430,8 @@ bool ONERAImageIO::CanWriteFile( const char* FileNameToWrite )
 {
   std::string filename(FileNameToWrite);
 
-  const std::string HeaderFileName = GetRootName(filename)+".ent";
-  const std::string DataFileName = GetRootName(filename)+".dat";
+  const std::string HeaderFileName = System::GetRootName(filename)+".ent";
+  const std::string DataFileName = System::GetRootName(filename)+".dat";
 
   if( filename == HeaderFileName )
   {
@@ -519,7 +487,7 @@ void ONERAImageIO::WriteImageInformation()
     }
 
   /*-------- This part deals with writing header information ------ */
-  const std::string DataFileName = GetRootName( m_FileName.c_str() )+".dat";
+  const std::string DataFileName = System::GetRootName( m_FileName.c_str() )+".dat";
 
   m_Headerfile << "#                    [fichier en-tete produit par les routines de otb (Orfeo ToolBox) ]" << std::endl;
   m_Headerfile << "# Nom du look :"<< std::endl;
