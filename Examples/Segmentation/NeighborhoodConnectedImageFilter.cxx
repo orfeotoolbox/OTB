@@ -344,7 +344,7 @@ int main( int argc, char *argv[] )
   //  As with the ConnectedThresholdImageFilter, several seeds could
   //  be provided to the filter by using the \code{AddSeed()} method.
   //  Compare the output of Figure
-  //  \ref{fig:NeighborhoodConnectedImageFilterOutput} with those of Figure
+  //  \ref{fig:NeighborhoodConnectedThresholdOutput} with those of Figure
   //  \ref{fig:ConnectedThresholdOutput} produced by the
   //  ConnectedThresholdImageFilter. You may want to play with the
   //  value of the neighborhood radius and see how it affect the smoothness of

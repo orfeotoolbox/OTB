@@ -62,8 +62,7 @@
 //
 // Since the change detectors operate on neighborhoods, the functor
 // call will take 2 arguments which are
-// \doxygen{itk::ConstNeighborhoodIterator}s. See chapter
-// \ref{sec:ImageIteratorsChapter} for more information about ITK iterators.
+// \doxygen{itk::ConstNeighborhoodIterator}s. 
 //
 // The change detector functor is templated over the types of the
 // input iterators and the output result type. The core of the change

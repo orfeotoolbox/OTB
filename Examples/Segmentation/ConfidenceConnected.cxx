@@ -97,9 +97,7 @@
 //
 //  Noise present in the image can reduce the capacity of this filter to grow
 //  large regions. When faced with noisy images, it is usually convenient to
-//  pre-process the image by using an edge-preserving smoothing filter. Any of
-//  the filters discussed in Section~\ref{sec:EdgePreservingSmoothingFilters}
-//  can be used to this end. In this particular example we use the
+//  pre-process the image by using an edge-preserving smoothing filter.  In this particular example we use the
 //  \doxygen{itk::CurvatureFlowImageFilter}, hence we need to include its header
 //  file.
 //
@@ -383,7 +381,7 @@ int main( int argc, char *argv[] )
   //  \itkcaption[ConnectedThreshold example parameters]{Parameters used for
   //  segmenting some structures shown in
   //  Figure~\ref{fig:ConnectedThresholdOutput} with the filter
-  //  \doxygen{ConnectedThresholdImageFilter}.\label{tab:ConnectedThresholdOutput}}
+  //  \doxygen{ConnectedThresholdImageFilter}.\label{tab:ConfidenceConnectedThresholdOutput}}
   //  \end{table}
   //
   //

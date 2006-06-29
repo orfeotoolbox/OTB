@@ -29,10 +29,10 @@
 // pixel data contained in the image. Note that these two methods are
 // relatively slow and should not be used in situations where
 // high-performance access is required. Image iterators are the appropriate
-// mechanism to efficiently access image pixel data. (See
-// Chapter~\ref{sec:ImageIteratorsChapter} on page
-// \pageref{sec:ImageIteratorsChapter} for information about image
-// iterators.)
+// mechanism to efficiently access image pixel data. %(See
+// %Chapter~\ref{sec:ImageIteratorsChapter} on page
+// %\pageref{sec:ImageIteratorsChapter} for information about image
+// %iterators.)
 //
 // Software Guide : EndLatex 
 

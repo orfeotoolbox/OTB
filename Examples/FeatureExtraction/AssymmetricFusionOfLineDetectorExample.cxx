@@ -227,14 +227,14 @@ int main( int argc, char * argv[] )
 
 
   //  Software Guide : BeginLatex
-  // Figure~\ref{fig:LINECORRELATION_FILTER}
+  // Figure~\ref{fig:LINEFUSION_FILTER}
   // shows the result of applying the AssymetricFusionOf edge detector filter
   // to a SAR image.  \begin{figure} \center
   // \includegraphics[width=0.25\textwidth]{amst.eps}
   // \includegraphics[width=0.25\textwidth]{amstLineFusion.eps}
   // \itkcaption[Line Correlation Detector Application]{Result of applying
   // the \doxygen{otb::AssymetricFusionOfDetectorImageFilter} to a SAR
-  // image. From left to right : original image, line intensity.}  \label{fig:LINECORRELATION_FILTER} \end{figure}
+  // image. From left to right : original image, line intensity.}  \label{fig:LINEFUSION_FILTER} \end{figure}
   //
   //  Software Guide : EndLatex 
 

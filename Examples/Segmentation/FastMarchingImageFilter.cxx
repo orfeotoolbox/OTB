@@ -339,9 +339,9 @@ int main( int argc, char *argv[] )
   //  defined with the methods \code{SetOutputMinimum()} and
   //  \code{SetOutputMaximum()}. In our case, we want these two values to be
   //  $0.0$ and $1.0$ respectively in order to get a nice speed image to feed
-  //  to the FastMarchingImageFilter. Additional details on the use of
-  //  the SigmoidImageFilter are presented in
-  //  Section~\ref{sec:IntensityNonLinearMapping}.
+  //  to the FastMarchingImageFilter. %Additional details on the use of
+  //  %the SigmoidImageFilter are presented in
+  //  %Section~\ref{sec:IntensityNonLinearMapping}.
   //
   //  Software Guide : EndLatex 
 
@@ -397,8 +397,8 @@ int main( int argc, char *argv[] )
   //
   //  The CurvatureAnisotropicDiffusionImageFilter class requires a couple
   //  of parameters to be defined. The following are typical values. However they may have to be adjusted depending on the amount of
-  //  noise present in the input image. This filter has been discussed in
-  //  Section~\ref{sec:GradientAnisotropicDiffusionImageFilter}.
+  //  noise present in the input image. %This filter has been discussed in
+  //  %Section~\ref{sec:GradientAnisotropicDiffusionImageFilter}.
   //
   //  Software Guide : EndLatex 
 
@@ -414,8 +414,8 @@ int main( int argc, char *argv[] )
   //  The GradientMagnitudeRecursiveGaussianImageFilter performs the
   //  equivalent of a convolution with a Gaussian kernel followed by a
   //  derivative operator. The sigma of this Gaussian can be used to control
-  //  the range of influence of the image edges. This filter has been discussed
-  //  in Section~\ref{sec:GradientMagnitudeRecursiveGaussianImageFilter}
+  //  the range of influence of the image edges. %This filter has been discussed
+  //  %in Section~\ref{sec:GradientMagnitudeRecursiveGaussianImageFilter}
   //
   //  \index{itk::Gradient\-Magnitude\-Recursive\-Gaussian\-Image\-Filter!SetSigma()}
   //
