@@ -1,4 +1,3 @@
-# OTB-FA-00015-CS
 
 #FILE(GLOB OTBVisu_SRCS "*.cxx" )
 SET ( OTBVisu_SRCS 

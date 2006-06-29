@@ -1,12 +1,18 @@
 /*=========================================================================
 
-  Programme :   OTB (ORFEO ToolBox)
-  Auteurs   :   CS - P.Imbo
-  Language  :   C++
-  Date      :   08 fevrier 2006
-  Version   :   
-  Role      :   
-  $Id: $
+  Program:   ORFEO Toolbox
+  Language:  C++
+  Date:      $Date$
+  Version:   $Revision$
+
+
+  Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
+  See OTBCopyright.txt for details.
+
+
+     This software is distributed WITHOUT ANY WARRANTY; without even 
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
 #ifndef __otbImageToPathListAlignFilter_txx
@@ -225,7 +231,6 @@ ImageToPathListAlignFilter<TInputImage,TOutputPath>
 
   typename RealImageType::RegionType region;
   region.SetSize(InputImage->GetLargestPossibleRegion().GetSize());
-// OTB-FA-00012-CS  
   IndexOut[0] = 0;
   IndexOut[1] = 0;
 //  region.SetIndex(InputImage->GetLargestPossibleRegion().GetIndex());
@@ -329,7 +334,6 @@ ImageToPathListAlignFilter<TInputImage,TOutputPath>
 
 
   // Get the input and output pointers 
-// OTB-FA-00010-CS  
   const InputImageType  * InputImage   = this->GetInput();
   OutputPathListType *   OutputPath   = this->GetOutput();
   // Generate the image

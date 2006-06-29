@@ -1,15 +1,20 @@
 /*=========================================================================
 
-  Programme :   OTB (ORFEO ToolBox)
-  Auteurs   :   CS - R.Garrigues
-  Language  :   C++
-  Date      :   27 avril 2006
-  Version   :   
-  Role      :   Classe de type Viewer, permettant de visualiser une image
-  $Id$
+  Program:   ORFEO Toolbox
+  Language:  C++
+  Date:      $Date$
+  Version:   $Revision$
+
+
+  Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
+  See OTBCopyright.txt for details.
+
+
+     This software is distributed WITHOUT ANY WARRANTY; without even 
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-// OTB-FA-00026-CS
 #ifndef __otbImageViewerAS_h
 #define __otbImageViewerAS_h
 

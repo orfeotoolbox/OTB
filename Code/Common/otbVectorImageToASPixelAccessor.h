@@ -1,12 +1,18 @@
 /*=========================================================================
 
-  Program:   Orfeo Tool Box
-  Module:    $RCSfile: otbVectorImageToASImageAdaptor.h,v $
+  Program:   ORFEO Toolbox
   Language:  C++
-  Date:      $Date: 2006/16/05 17:55:25 $
-  Version:   $Revision: 1.0 $
+  Date:      $Date$
+  Version:   $Revision$
 
-  Copyright (c) R. Garrigues
+
+  Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
+  See OTBCopyright.txt for details.
+
+
+     This software is distributed WITHOUT ANY WARRANTY; without even 
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
 

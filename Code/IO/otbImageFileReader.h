@@ -1,12 +1,18 @@
 /*=========================================================================
 
-  Programme :   OTB (ORFEO ToolBox)
-  Auteurs   :   CS - T.Feuvrier
-  Language  :   C++
-  Date      :   16 janvier 2005
-  Version   :   
-  Role      :   Ressource de lecture d'une image dans OTB
-  $Id$
+  Program:   ORFEO Toolbox
+  Language:  C++
+  Date:      $Date$
+  Version:   $Revision$
+
+
+  Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
+  See OTBCopyright.txt for details.
+
+
+     This software is distributed WITHOUT ANY WARRANTY; without even 
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
 #ifndef __otbImageFileReader_h
@@ -33,7 +39,6 @@ namespace otb
  * \ingroup IOFilters
  *
  */
-// OTB-FA-00008-CS
 template <class TOutputImage>
 class ITK_EXPORT ImageFileReader : public itk::ImageFileReader<TOutputImage>
 {
