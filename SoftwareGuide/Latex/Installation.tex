@@ -19,14 +19,34 @@ MS-Windows, Linux on Intel-compatible hardware, Solaris, Mac
 OSX, and Cygwin.  It is known to work with the following compilers:
 \textbf{FIXME}
 \begin{itemize}
-\item Visual Studio 6, .NET 2002, .NET 2003
-\item GCC 2.95.x, 2.96, 3.x
+\item Visual Studio 6%, .NET 2002, .NET 2003
+\item GCC 2.95.x, 2.96, 3.x, 4.x
 \end{itemize}
 
 Given the advanced usage of C++ features in the toolbox, some
 compilers may have difficulties processing the code. If you are
 currently using an outdated compiler this may be an excellent excuse
 for upgrading this old piece of software!
+
+\section{External Libraries}
+
+The OTB depends on 3 libraries:
+\begin{itemize}
+  \item ITK: you have the choice between using OTB's internal version
+  of ITK or building your own ITK outside the OTB source tree. The
+  recommended choice is the first one. See next section for
+  details. If you choose to use an external version of ITK, go to
+  \url{http://www.itk.org} and follow the guidelines to download and
+  install ITK.
+  \item GDAL: The support of remote sensing imagery formats is ensured
+    through the use of the GDAL library. Please see
+\url{http://www.remotesensing.org/gdal/} for informations on how to
+download and install this library on your system.
+\item Fltk: this library is used for the visualization
+  functionnalities. See \url{http://www.fltk.org/} for details about
+  dowloading and installing Fltk. OTB has been tested with version 1.1.7.
+\end{itemize}
+
 
 \section{Configuring OTB}
 \label{sec:ConfiguringOTB}
@@ -130,9 +150,8 @@ testing option will considerably increase the build time.  It is not
 desirable to enable this option for a first build of the toolbox.
 
 An additional resource is available in the \code{OTB-Applications} module,
-which contains multiple applications incorporating GUIs and different levels
-of visualization.  However, due to the large number of applications and the
-fact that some of them rely on third party libraries, building this module
+which contains applications incorporating GUIs and different levels
+of visualization.  However, building this module
 should be postponed until you are familiar with the basic structure of the
 toolbox and the building process. 
 
@@ -162,6 +181,12 @@ the normal build process, about 600 small test programs will be compiled. This
 will verify that the basic components of OTB have been correctly built on your
 system.
 
+\subsubsection{Building ITK}
+
+The OTB installation procedure allows you to choose between building
+the OTB with an external version of ITK already present in your
+system. The choice is made by using the \code{OTB\_USE\_EXTERNAL\_ITK}
+CMake variable.
 
 \section{Getting Started With OTB }
 \label{sec:GettingStartedWithOTB}
