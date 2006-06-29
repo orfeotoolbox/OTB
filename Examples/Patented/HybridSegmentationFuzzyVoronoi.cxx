@@ -51,7 +51,7 @@
 // Software Guide : EndCodeSnippet
 
 
-#include "otbImage.h"
+#include "itkImage.h"
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
 
@@ -81,7 +81,7 @@ int main( int argc, char *argv[] )
   // Software Guide : BeginCodeSnippet
   typedef  float     InputPixelType;
   const    unsigned int      Dimension = 2;
-  typedef otb::Image< InputPixelType, Dimension >  InputImageType;
+  typedef itk::Image< InputPixelType, Dimension >  InputImageType;
   // Software Guide : EndCodeSnippet
 
 
@@ -101,7 +101,7 @@ int main( int argc, char *argv[] )
 
   // Software Guide : BeginCodeSnippet
   typedef unsigned char      BinaryPixelType;
-  typedef otb::Image< BinaryPixelType, Dimension >      BinaryImageType;
+  typedef itk::Image< BinaryPixelType, Dimension >      BinaryImageType;
   // Software Guide : EndCodeSnippet
 
 
@@ -152,7 +152,7 @@ int main( int argc, char *argv[] )
 
   // Software Guide : BeginCodeSnippet
   typedef unsigned char OutputPixelType;
-  typedef otb::Image< OutputPixelType, Dimension > OutputImageType;
+  typedef itk::Image< OutputPixelType, Dimension > OutputImageType;
   // Software Guide : EndCodeSnippet
                         
 
@@ -389,7 +389,7 @@ int main( int argc, char *argv[] )
   //  \small
   //  \begin{verbatim}
   //HybridSegmentationFuzzyVoronoi QB_Suburb.png Output.png
-                                             140 125 140 25 0.2 2.0
+  //                                           140 125 140 25 0.2 2.0
   //  \end{verbatim}
   //  \normalsize
   //
@@ -408,7 +408,7 @@ int main( int argc, char *argv[] )
   //  \small
   //  \begin{verbatim}
   //HybridSegmentationFuzzyVoronoi QB_Suburb.png Output.png
-					       80 200 140 300 0.3 3.0
+  //					       80 200 140 300 0.3 3.0
   //  \end{verbatim}
   //  \normalsize
   //

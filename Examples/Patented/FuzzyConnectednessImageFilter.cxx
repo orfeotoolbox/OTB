@@ -84,7 +84,7 @@ int main( int argc, char *argv[] )
   // Software Guide : BeginCodeSnippet
   typedef  float            InputPixelType;
   const    unsigned int     Dimension = 2;
-  typedef otb::Image< InputPixelType, Dimension >  InputImageType;
+  typedef itk::Image< InputPixelType, Dimension >  InputImageType;
   // Software Guide : EndCodeSnippet
 
   //  Software Guide : BeginLatex
@@ -97,7 +97,7 @@ int main( int argc, char *argv[] )
 
   // Software Guide : BeginCodeSnippet
   typedef   unsigned char   BinaryPixelType;
-  typedef otb::Image< BinaryPixelType, Dimension >      BinaryImageType;
+  typedef itk::Image< BinaryPixelType, Dimension >      BinaryImageType;
   // Software Guide : EndCodeSnippet
 
 
