@@ -263,8 +263,30 @@ ENDIF(BUILD_TESTING)
 
 #-----------------------------------------------------------------------------
 # Output directories.
-SET (LIBRARY_OUTPUT_PATH ${OTB_BINARY_DIR}/bin CACHE INTERNAL "Les librairies sont generees dans le m�e repertoire.")
-SET (EXECUTABLE_OUTPUT_PATH ${OTB_BINARY_DIR}/bin CACHE INTERNAL "Les executables sont generes dans le m�e repertoire.")
+
+
+#SET (LIBRARY_OUTPUT_PATH ${OTB_BINARY_DIR}/bin CACHE INTERNAL "Les librairies sont generees dans le m�e repertoire.")
+#SET (EXECUTABLE_OUTPUT_PATH ${OTB_BINARY_DIR}/bin CACHE INTERNAL "Les executables sont generes dans le m�e repertoire.")
+
+#ROMAIN
+IF(NOT LIBRARY_OUTPUT_PATH)
+   SET (LIBRARY_OUTPUT_PATH ${OTB_BINARY_DIR}/bin CACHE INTERNAL "Single output directory for building all libraries.")
+ENDIF(NOT LIBRARY_OUTPUT_PATH)
+IF(NOT EXECUTABLE_OUTPUT_PATH)
+   SET (EXECUTABLE_OUTPUT_PATH ${OTB_BINARY_DIR}/bin CACHE INTERNAL "Single output directory for building all executables.")
+ENDIF(NOT EXECUTABLE_OUTPUT_PATH)
+
+IF(NOT OTB_NO_LIBRARY_VERSION)
+   # This setting of SOVERSION assumes that any API change
+   # will increment either the minor or major version number of OTB.
+   SET(OTB_LIBRARY_PROPERTIES 
+       VERSION   "${OTB_VERSION_MAJOR}.${OTB_VERSION_MINOR}.${OTB_VERSION_PATCH}"
+       SOVERSION "${OTB_VERSION_MAJOR}.${OTB_VERSION_MINOR}")
+ENDIF(NOT OTB_NO_LIBRARY_VERSION)
+
+
+
+
 MARK_AS_ADVANCED(LIBRARY_OUTPUT_PATH EXECUTABLE_OUTPUT_PATH)
 SET(OTB_LIBRARY_PATH "${LIBRARY_OUTPUT_PATH}")
 SET(OTB_EXECUTABLE_PATH "${EXECUTABLE_OUTPUT_PATH}")
