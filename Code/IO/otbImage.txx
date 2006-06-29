@@ -130,7 +130,7 @@ ImageBase::VectorType Image<TPixel, VImageDimension>::GetLowerRightCorner( void 
 
 template <class TPixel, unsigned int VImageDimension> 
 void 
-Image<TPixel, VImageDimension>::PrintSelf(std::ostream& os, Indent indent) const
+Image<TPixel, VImageDimension>::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   Superclass::PrintSelf(os,indent);
   

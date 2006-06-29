@@ -46,8 +46,6 @@ public:
   
   typedef MetaDataKey::VectorType	VectorType;
   
-  typedef itk::Indent			Indent;	
-
   /** Get the projection coordinate system of the image. */
   
   std::string GetProjectionRef( MetaDataDictionaryType & dict );
@@ -104,7 +102,7 @@ public:
   VectorType GetLowerRightCorner( MetaDataDictionaryType & dict );
   virtual VectorType GetLowerRightCorner() = 0; 
   
-  void PrintSelf(std::ostream& os, Indent indent, const MetaDataDictionaryType & dict) const;
+  void PrintSelf(std::ostream& os, itk::Indent indent, const MetaDataDictionaryType & dict) const;
                  
 
 protected:  
