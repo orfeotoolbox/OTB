@@ -14,8 +14,8 @@ IF(NETLIB_FOUND)
     test_util.cxx       test_util.h
 
     # The tests
-    test_algo.cxx
-    test_amoeba.cxx
+    # test_algo.cxx #removing for OTB
+    # test_amoeba.cxx #removing for OTB
     test_cholesky.cxx
     test_complex_eigensystem.cxx
     #test_convolve.cxx # Removing for ITK: needs vul
@@ -27,7 +27,7 @@ IF(NETLIB_FOUND)
     test_functions.cxx
     test_generalized_eigensystem.cxx
     test_levenberg_marquardt.cxx
-    test_minimizers.cxx
+    #test_minimizers.cxx #removing for OTB
     test_qr.cxx
     test_qsvd.cxx
     test_rank.cxx

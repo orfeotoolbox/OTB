@@ -1,6 +1,6 @@
 #include <testlib/testlib_register.h>
 
-DECLARE( test_amoeba );
+//DECLARE( test_amoeba );
 DECLARE( test_cholesky );
 DECLARE( test_complex_eigensystem );
 //DECLARE( test_convolve );
@@ -13,7 +13,7 @@ DECLARE( test_fft2d );
 DECLARE( test_functions );
 DECLARE( test_generalized_eigensystem );
 DECLARE( test_levenberg_marquardt );
-DECLARE( test_minimizers );
+//DECLARE( test_minimizers );
 DECLARE( test_qr );
 DECLARE( test_qsvd );
 DECLARE( test_rational );
@@ -24,12 +24,12 @@ DECLARE( test_sparse_matrix );
 DECLARE( test_integral );
 DECLARE( test_svd );
 //DECLARE( test_symmetric_eigensystem );
-DECLARE( test_algo );
+//DECLARE( test_algo );
 
 void
 register_tests()
 {
-  REGISTER( test_amoeba );
+  //REGISTER( test_amoeba );
   REGISTER( test_cholesky );
   REGISTER( test_complex_eigensystem );
   //REGISTER( test_convolve );
@@ -42,7 +42,7 @@ register_tests()
   REGISTER( test_functions );
   REGISTER( test_generalized_eigensystem );
   REGISTER( test_levenberg_marquardt );
-  REGISTER( test_minimizers );
+  //REGISTER( test_minimizers );
   REGISTER( test_qr );
   REGISTER( test_qsvd );
   REGISTER( test_real_eigensystem );
@@ -52,7 +52,7 @@ register_tests()
   REGISTER( test_sparse_matrix );
   REGISTER( test_svd );
   //REGISTER( test_symmetric_eigensystem );
-  REGISTER( test_algo );
+  //REGISTER( test_algo );
 }
 
 DEFINE_MAIN;
