@@ -95,7 +95,7 @@ public:
   virtual VectorType GetLowerLeftCorner( void );
   virtual VectorType GetLowerRightCorner( void );
   
-  void PrintSelf(std::ostream& os, Indent indent) const;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
 protected:
   VectorImage();
