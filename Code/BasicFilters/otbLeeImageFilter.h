@@ -1,11 +1,18 @@
 /*=========================================================================
 
-  Programme :   OTB (ORFEO ToolBox)
-  Auteurs   :   CS - P.Imbo
-  Language  :   C++
-  Date      :   23 janvier 2006
-  Role      :  Filtre de débruitage de LEE sur une image 
-  $Id$ 
+  Program:   ORFEO Toolbox
+  Language:  C++
+  Date:      $Date$
+  Version:   $Revision$
+
+
+  Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
+  See OTBCopyright.txt for details.
+
+
+     This software is distributed WITHOUT ANY WARRANTY; without even 
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
 #ifndef __otbLeeImageFilter_h
@@ -119,7 +126,6 @@ private:
   /** Déclaration du rayon */
   SizeType m_Radius;
   /** Déclaration du nombre de vues du filtre */
-// OTB-FA-00018-CS
   double m_NbLooks;
 };
 } // end namespace otb
