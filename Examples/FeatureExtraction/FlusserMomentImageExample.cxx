@@ -160,7 +160,7 @@ int main(int argc, char ** argv )
     //
     //  \relatedClasses
     //  \begin{itemize}
-    //  \item \doxygen{otb::FlusserImageFunction}
+    //  \item \doxygen{otb::FlusserPathFunction}
     //  \end{itemize}
     //
     //  Software Guide : EndLatex

@@ -160,7 +160,7 @@ int main(int argc, char ** argv )
     //
     //  \relatedClasses
     //  \begin{itemize}
-    //  \item \doxygen{otb::HuImageFunction}
+    //  \item \doxygen{otb::HuPathFunction}
     //  \end{itemize}
     //
     //  Software Guide : EndLatex
