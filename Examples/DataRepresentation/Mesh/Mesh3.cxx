@@ -1,13 +1,17 @@
 /*=========================================================================
 
-  Program:   Insight Segmentation & Registration Toolkit
-  Module:    $RCSfile: Mesh3.cxx,v $
+  Program:   ORFEO Toolbox
   Language:  C++
-  Date:      $Date: 2005/02/08 03:51:53 $
-  Version:   $Revision: 1.13 $
+  Date:      $Date$
+  Version:   $Revision$
 
-  Copyright (c) Insight Software Consortium. All rights reserved.
-  See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
+
+  Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
+  See OTBCopyright.txt for details.
+
+  Some parts of this code are derived from ITK. See ITKCopyright.txt
+  for details.
+
 
      This software is distributed WITHOUT ANY WARRANTY; without even 
      the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 

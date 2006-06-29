@@ -1,13 +1,17 @@
 /*=========================================================================
 
-  Program:   Insight Segmentation & Registration Toolkit
-  Module:    $RCSfile: CannyEdgeDetectionImageFilter.cxx,v $
+  Program:   ORFEO Toolbox
   Language:  C++
-  Date:      $Date: 2005/08/27 01:45:48 $
-  Version:   $Revision: 1.11 $
+  Date:      $Date$
+  Version:   $Revision$
 
-  Copyright (c) 2002 Insight Consortium. All rights reserved.
-  See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
+
+  Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
+  See OTBCopyright.txt for details.
+
+  Some parts of this code are derived from ITK. See ITKCopyright.txt
+  for details.
+
 
      This software is distributed WITHOUT ANY WARRANTY; without even 
      the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 

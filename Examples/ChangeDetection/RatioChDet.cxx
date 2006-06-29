@@ -1,14 +1,21 @@
 /*=========================================================================
 
-  Programme :   RatioChDet
-  Auteurs   :   CNES - J. INGLADA
-  Language  :   C++
-  Date      :   8 juin 2006
+  Program:   ORFEO Toolbox
+  Language:  C++
+  Date:      $Date$
+  Version:   $Revision$
 
-  Role      :   Détection de changements par rapport de moyennes locales
 
+  Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
+  See OTBCopyright.txt for details.
+
+
+     This software is distributed WITHOUT ANY WARRANTY; without even 
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
+
 //  Software Guide : BeginCommandLineArgs
 //    INPUTS: {GomaAvant.png}, {GomaApres.png}
 //    OUTPUTS: {RatioChDet.tif}
