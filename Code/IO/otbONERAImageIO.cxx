@@ -123,13 +123,13 @@ bool ONERAImageIO::CanReadFile( const char* FileNameToRead )
   m_Headerfile.open( HeaderFileName.c_str(),  std::ios::in );
   if( m_Headerfile.fail() )
     {
-    otbMsgDebugMacro(<<"ONERAImageIO::CanReadFile() failed header open ! " );
+    otbMsgDevMacro(<<"ONERAImageIO::CanReadFile() failed header open ! " );
     return false;
     }
   m_Datafile.open( DataFileName.c_str(),  std::ios::in );
   if( m_Datafile.fail() )
     {
-    otbMsgDebugMacro(<<"ONERAImageIO::CanReadFile() failed data open ! " );
+    otbMsgDevMacro(<<"ONERAImageIO::CanReadFile() failed data open ! " );
     return false;
     }
 
@@ -289,13 +289,13 @@ bool ONERAImageIO::OpenOneraHeaderFileForReading(const char* filename)
 
 void ONERAImageIO::ReadImageInformation()
 {
-  this->InternalReadImageInformation(m_Datafile);
+  this->InternalReadImageInformation();
 }
 
 
 
 
-void ONERAImageIO::InternalReadImageInformation(std::fstream& file)
+void ONERAImageIO::InternalReadImageInformation()
 {
 
 

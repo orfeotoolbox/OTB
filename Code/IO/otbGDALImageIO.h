@@ -142,9 +142,10 @@ private:
     */
   bool GetGdalImageFileName( const char * filename, std::string & GdalFileName );
 
-  void TypeConversion(const char* extension, std::string* extGDAL);
+  std::string TypeConversion(const char* extension);
 
   /** GDAL parameters. */
+  GDALDriver * m_hDriver;
   GDALDataset* m_poDataset;
   GDALRasterBand** m_poBands;
   GDALDataType m_PxType;
