@@ -91,7 +91,7 @@ protected:
 
   bool OpenOneraDataFileForReading(const char* filename);
   bool OpenOneraHeaderFileForReading(const char* filename);
-  void InternalReadImageInformation(std::fstream& file);
+  void InternalReadImageInformation();
 
   bool OpenOneraDataFileForWriting(const char* filename);
   bool OpenOneraHeaderFileForWriting(const char* filename);
