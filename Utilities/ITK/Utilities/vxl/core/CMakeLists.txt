@@ -7,7 +7,8 @@ SET(global_sources
 )
 
 # common test executable
-SUBDIRS(testlib)
+# ROMAIN
+#SUBDIRS(testlib)
 
 # numerics
 SUBDIRS(vnl)

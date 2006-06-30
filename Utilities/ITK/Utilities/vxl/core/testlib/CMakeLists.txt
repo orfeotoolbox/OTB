@@ -25,5 +25,6 @@ ADD_LIBRARY( itktestlib ${testlib_sources} )
 TARGET_LINK_LIBRARIES( itktestlib itkvcl )
 
 IF( BUILD_TESTING )
-  SUBDIRS( tests )
+#ROMAIN
+#  SUBDIRS( tests )
 ENDIF( BUILD_TESTING )

@@ -12,8 +12,8 @@ ADD_DEFINITIONS(-DHAVE_ZLIB)
 IF("${ITK_VERSION_MAJOR}" GREATER 0.0)
 #   MESSAGE(STATUS "---------------------ITK ZLIB  ${ITK_ZLIB_LIBRARIES}")
   SET(PACKAGE_PREFIX "ITK")
-  SET(LIB_INSTALL_DIR "/lib/InsightToolkit")
-  SET(INCLUDE_INSTALL_DIR "/include/InsightToolkit")
+  SET(LIB_INSTALL_DIR "/lib/otb")
+  SET(INCLUDE_INSTALL_DIR "/include/otb/Utilities/ITK")
   SET(NIFTI_ZLIB_LIBRARIES ${ITK_ZLIB_LIBRARIES})
 ELSE("${ITK_VERSION_MAJOR}" GREATER 0.0)
 ###  USE AS STAND ALONE PACKAGE
@@ -25,6 +25,8 @@ ELSE("${ITK_VERSION_MAJOR}" GREATER 0.0)
   SET(INCLUDE_INSTALL_DIR "/include")
 
   #Needs an if clause and more work before testing can take place.
-  SUBDIRS(Testing utils fsliolib examples)
+  #ROMAIN
+  #SUBDIRS(Testing utils fsliolib examples)
+  SUBDIRS(utils fsliolib examples)
   ENABLE_TESTING()
 ENDIF("${ITK_VERSION_MAJOR}" GREATER 0.0)

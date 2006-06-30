@@ -59,8 +59,8 @@ SET(KWSYS_USE_DynamicLoader 1)
 SET(KWSYS_USE_Glob 1)
 SET(KWSYS_USE_Registry 1)
 SET(KWSYS_HEADER_ROOT ${ITK_BINARY_DIR}/Utilities)
-SET(KWSYS_LIBRARY_INSTALL_DIR /lib/InsightToolkit)
-SET(KWSYS_HEADER_INSTALL_DIR /include/InsightToolkit/Utilities)
+SET(KWSYS_LIBRARY_INSTALL_DIR /lib/otb)
+SET(KWSYS_HEADER_INSTALL_DIR /include/otb/Utilities/ITK/Utilities)
 SET(KWSYS_PROPERTIES_CXX ${ITK_LIBRARY_PROPERTIES})
 SUBDIRS(kwsys)
 
@@ -73,5 +73,5 @@ ENDIF(ITK_BUILD_CABLESWIG)
 
 #-----------------------------------------------------------------------------
 # Install the UseITK.cmake file configured from the top-level.
-INSTALL_FILES(/lib/InsightToolkit ".cmake" "ITKConfig")
+INSTALL_FILES(/lib/otb ".cmake" "ITKConfig")
 

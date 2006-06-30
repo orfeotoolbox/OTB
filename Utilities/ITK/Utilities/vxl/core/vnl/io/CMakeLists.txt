@@ -29,5 +29,6 @@ ADD_LIBRARY(vnl_io ${vnl_io_sources} )
 TARGET_LINK_LIBRARIES( vnl_io vnl vsl )
 
 IF(BUILD_TESTING)
-  SUBDIRS(tests)
+#ROMAIN
+#  SUBDIRS(tests)
 ENDIF(BUILD_TESTING)
