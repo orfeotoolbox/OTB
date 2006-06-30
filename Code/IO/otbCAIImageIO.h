@@ -100,6 +100,8 @@ private:
   bool DetermineFormatSpot (char typspot, const char * str_repertoire ,
 				char * str_debut );
 
+  void OpenCAIFileForWriting();
+
   /** Pointer sur la structure CAI */
   char *   m_ptrCai;
   /** Nombre d'octets par pixel */

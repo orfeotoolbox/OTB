@@ -152,7 +152,7 @@ ADD_TEST(coTvMultiChannelROI_3c_BSQ ${COMMON_TESTS}
   --compare-binary  ${BASELINE}/coMultiChannelExtractROI_RGB2NG_PNG_poupees_303_2_134_330_channels_345.c1
                     ${TEMP}/coMultiChannelExtractROI_RGB2NG_PNG_poupees_303_2_134_330_channels_345.c1
          otbMultiChannelExtractROI 
-         ${TEMP}/coMultiChannelExtractROI_RGB2NG_PNG_poupees_303_2_134_330_channels_1232.hd
+         ${TEMP}/coMultiChannelExtractROI_RGB2NG_PNG_poupees_303_2_134_330_channels_12321.hd
          ${TEMP}/coMultiChannelExtractROI_RGB2NG_PNG_poupees_303_2_134_330_channels_345.hd
          -startX 0 -startY 0 -sizeX 134  -sizeY 330 -channels 3 4 5 )
 

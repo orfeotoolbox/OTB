@@ -394,9 +394,9 @@ ADD_TEST(ioTvMultiChannelROI_QuickbirdPAN2PNG ${COMMON_TESTS}
 #                     ${TEMP}/ioExtractROI_QuickbirdPAN2PNG_100_100_77_300.png
          otbMultiChannelExtractROI
          ${IMAGEDATA}/TOULOUSE/QuickBird/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF
-         ${TEMP}/ioExtractROI_QuickbirdPAN2PNG_100_100_77_300.png
+         ${TEMP}/ioExtractROI_QuickbirdXS2PNG_100_100_77_300.png
          -startX 100 -startY 100 -sizeX 77 -sizeY 300
-         -channels 1)
+         -channels 1 2 3)
 
 # ---  Quickbird XS  ---
 ADD_TEST(ioTvMultiChannelROI_QuickbirdXS2PNG ${COMMON_TESTS} 
