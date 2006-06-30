@@ -40,8 +40,8 @@
 // figure~\ref{fig:SVMROIS}. 
 // \begin{figure}
 // \center
-// \includegraphics[width=0.35\textwidth]{ROI_QB_MUL_1.eps}
-// \includegraphics[width=0.35\textwidth]{ROI_mask.eps}
+// \includegraphics[width=0.45\textwidth]{ROI_QB_MUL_1.eps}
+// \includegraphics[width=0.45\textwidth]{ROI_mask.eps}
 // \itkcaption[SVM Image Model Estimation]{Images used for the
 // estimation of the SVM model. Left: RGB image. Right: image of labels.} 
 // \label{fig:SVMROIS}

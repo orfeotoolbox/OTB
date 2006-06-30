@@ -388,8 +388,8 @@ int main(int argc, char* argv[] )
 // Figure \ref{fig:SVMCLASS} shows the result of the SVM classification.
 // \begin{figure}
 // \center
-// \includegraphics[width=0.35\textwidth]{ROI_QB_MUL_1.eps}
-// \includegraphics[width=0.35\textwidth]{ROI_QB_MUL_1_SVN_CLASS.eps}
+// \includegraphics[width=0.45\textwidth]{ROI_QB_MUL_1.eps}
+// \includegraphics[width=0.45\textwidth]{ROI_QB_MUL_1_SVN_CLASS.eps}
 // \itkcaption[SVM Image Classification]{Result of the SVM
 // classification . Left: RGB image. Right: image of classes.} 
 // \label{fig:SVMCLASS}

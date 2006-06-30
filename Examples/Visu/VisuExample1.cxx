@@ -25,9 +25,8 @@
 
   // Software Guide : BeginLatex
   //
-  // \textbf{FIXME !! This example segfaults (see bug no. 27)}.
   // This example shows the use of the \doxygen{otb::ImageViewer}
-  // class for greylevel image visualization. As usual, we start by
+  // class for image visualization. As usual, we start by
   // including the header file for the class.
   //
   // Software Guide : EndLatex
@@ -53,8 +52,8 @@ int main( int argc, char ** argv )
   //
   // We will build a very simple pipeline where a reader gets an image
   // from a file and gives it to the viewer. We define the types for
-  // the pixel, the image and the reader. The viewer clas is templated
-  // over the pixel type \textbf{Fixme for bugs 26 and 28}.
+  // the pixel, the image and the reader. The viewer class is templated
+  // over the scalar component of the pixel type.
   //
   // Software Guide : EndLatex
 
@@ -120,12 +119,11 @@ int main( int argc, char ** argv )
   // \begin{figure}
   // \center
   // \includegraphics[width=.8\textwidth]{VisuGrey.eps}
-  // \itkcaption[Grey level image visualization.]{Example of grey
-  // mevel image visualization.}
-  // \label{fig:VisuGrey}
+  // \itkcaption[Image visualization.]{Example of image visualization.}
+  // \label{fig:Visu1}
   // \end{figure}
   // The the \doxygen{otb::ImageViewer} class creates 3 windows (see
-  // figure \ref{fig:VisuGrey}) for an improved visualization of large
+  // figure \ref{fig:Visu1}) for an improved visualization of large
   // images. This procedure is inspired from the navigation window of
   // the Gimp and other image visualization tools. The navigation
   // window is called here \emph{scroll} window and it shows the

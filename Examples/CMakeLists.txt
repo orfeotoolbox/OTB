@@ -12,4 +12,5 @@ SUBDIRS(
   ChangeDetection
   Visu
   Learning
+  Classification
 )

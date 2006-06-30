@@ -42,8 +42,8 @@
 // and the associated ground truth, which is composed of 4 classes. 
 // \begin{figure}
 // \center
-// \includegraphics[width=0.35\textwidth]{ROI_QB_MUL_1.eps}
-// \includegraphics[width=0.35\textwidth]{ROI_mask_multi.eps}
+// \includegraphics[width=0.45\textwidth]{ROI_QB_MUL_1.eps}
+// \includegraphics[width=0.45\textwidth]{ROI_mask_multi.eps}
 // \itkcaption[SVM Image Model Estimation]{Images used for the
 // estimation of the SVM model. Left: RGB image. Right: image of labels.} 
 // \label{fig:SVMROISMULTI}
@@ -442,8 +442,8 @@ int main( int argc, char* argv[] )
 // Figure \ref{fig:SVMCLASSMULTI} shows the result of the SVM classification.
 // \begin{figure}
 // \center
-// \includegraphics[width=0.35\textwidth]{ROI_QB_MUL_1.eps}
-// \includegraphics[width=0.35\textwidth]{ROI_QB_MUL_1_SVN_CLASS_MULTI.eps}
+// \includegraphics[width=0.45\textwidth]{ROI_QB_MUL_1.eps}
+// \includegraphics[width=0.45\textwidth]{ROI_QB_MUL_1_SVN_CLASS_MULTI.eps}
 // \itkcaption[SVM Image Classification]{Result of the SVM
 // classification . Left: RGB image. Right: image of classes.} 
 // \label{fig:SVMCLASSMULTI}
