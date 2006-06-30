@@ -194,28 +194,29 @@ expression is actually used:
 \section{Statistical Detectors}
 \label{sec:StatisticalDetectors}
 
-%% \subsection{Local Correlation}
+\subsection{Local Correlation}
+\label{sec:LocalCorrelation}
+The correlation coefficient measures the likelihood of a linear
+relationship between two random variables:
+\begin{equation}
+\begin{split}
+I_\rho(i,j) &= \frac{1}{N}\frac{\sum_{i,j}(I_1(i,j)-m_{I_1})(I_2(i,j)-m_{I_2})}{\sigma_{I_1}
+\sigma_{I_2}}\\
+& = \sum_{(I_1(i,j),I_2(i,j))}\frac{(I_1(i,j)-m_{I_1})(I_2(i,j)-m_{I_2})}{\sigma_{I_1}
+\sigma_{I_2}}p_{ij}
+\end{split}
+\end{equation}
 
-%% The correlation coefficient measures the likelihood of a linear
-%% relationship between two random variables:
-%% \begin{equation}
-%% \begin{split}
-%% I_\rho(i,j) &= \frac{1}{N}\frac{\sum_{i,j}(I_1(i,j)-m_{I_1})(I_2(i,j)-m_{I_2})}{\sigma_{I_1}
-%% \sigma_{I_2}}\\
-%% & = \sum_{(I_1(i,j),I_2(i,j))}\frac{(I_1(i,j)-m_{I_1})(I_2(i,j)-m_{I_2})}{\sigma_{I_1}
-%% \sigma_{I_2}}p_{ij}
-%% \end{split}
-%% \end{equation}
+where $I_1(i,j)$ and $I_2(i,j)$ are the pixel values of the 2 images and
+$p_{ij}$ is the joint probability density. This is like using a linear model:
+\begin{equation}
+I_2(i,j) = (I_1(i,j)-m_{I_1})\frac{\sigma_{I_2}}{\sigma_{I_1}}+m_{I_2}
+\end{equation}
+for which we evaluate the likelihood with  $p_{ij}$.
 
-%% where $I_1(i,j)$ and $I_2(i,j)$ are the pixel values of the 2 images and
-%% $p_{ij}$ is the joint probability density. This is like using a linear model:
-%% \begin{equation}
-%% I_2(i,j) = (I_1(i,j)-m_{I_1})\frac{\sigma_{I_2}}{\sigma_{I_1}}+m_{I_2}
-%% \end{equation}
-%% for which we evaluate the likelihood with  $p_{ij}$.
-
-%% With respect to the difference detector, this one will be robust to
-%% illumination changes.
+With respect to the difference detector, this one will be robust to
+illumination changes.
+\input{CorrelChDet.tex}
 
 %% \subsection{Mutual Information}
 

@@ -207,13 +207,20 @@ SET( OTB_EXAMPLES_SRCS
   ${OTB_SOURCE_DIR}/Examples/Patented/FuzzyConnectednessImageFilter.cxx
   ${OTB_SOURCE_DIR}/Examples/ChangeDetection/ChangeDetectionFrameworkExample.cxx
   ${OTB_SOURCE_DIR}/Examples/ChangeDetection/DiffChDet.cxx
-  ${OTB_SOURCE_DIR}/Examples/ChangeDetection/RatioChDet.cxx	
+  ${OTB_SOURCE_DIR}/Examples/ChangeDetection/RatioChDet.cxx
+  ${OTB_SOURCE_DIR}/Examples/ChangeDetection/CorrelChDet.cxx
+  ${OTB_SOURCE_DIR}/Examples/Classification/KdTreeBasedKMeansClustering.cxx
+  ${OTB_SOURCE_DIR}/Examples/Classification/ScalarImageKmeansModelEstimator.cxx
+  ${OTB_SOURCE_DIR}/Examples/Classification/ScalarImageKmeansClassifier.cxx
+  ${OTB_SOURCE_DIR}/Examples/Classification/BayesianPluginClassifier.cxx
+  ${OTB_SOURCE_DIR}/Examples/Classification/ExpectationMaximizationMixtureModelEstimator.cxx
+  ${OTB_SOURCE_DIR}/Examples/Classification/ScalarImageMarkovRandomField1.cxx
   ${OTB_SOURCE_DIR}/Examples/Learning/SVMPointSetModelEstimatorExample.cxx
   ${OTB_SOURCE_DIR}/Examples/Learning/SVMPointSetClassificationExample.cxx  
   ${OTB_SOURCE_DIR}/Examples/Learning/SVMImageModelEstimatorExample.cxx
   ${OTB_SOURCE_DIR}/Examples/Learning/SVMImageClassificationExample.cxx
   ${OTB_SOURCE_DIR}/Examples/Learning/SVMImageEstimatorClassificationMultiExample.cxx
-  ${OTB_SOURCE_DIR}/Examples/Visu/GreyVisuExample.cxx  
+  ${OTB_SOURCE_DIR}/Examples/Visu/VisuExample1.cxx  
 )
 
 
