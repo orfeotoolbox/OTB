@@ -108,9 +108,8 @@ bool MSTARImageIO::CanReadFile( const char* filename )
 	MSTARfp = fopen(MSTARname,"rb");
 	if (MSTARfp == NULL)
 	  {
-	  fprintf(stderr,
-		  "\n\nError: Unable to open [%s] for reading!\n\n", MSTARname);
-	  return 0;
+	  otbMsgDevMacro(<<"\nError: Unable to open ["<<MSTARname<<"] for reading!\n");
+	  return false;
 	  }
 
 /****************************************************
