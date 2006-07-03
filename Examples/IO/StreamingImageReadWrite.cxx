@@ -85,7 +85,7 @@ int main( int argc, char ** argv )
   //  Software Guide : EndLatex 
 
   // Software Guide : BeginCodeSnippet
-  typedef unsigned short      PixelType;
+  typedef unsigned char      PixelType;
   const   unsigned int        Dimension = 2;
   typedef otb::Image< PixelType, Dimension >    ImageType;
   // Software Guide : EndCodeSnippet

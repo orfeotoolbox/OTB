@@ -93,7 +93,8 @@ int main( int argc, char * argv[] )
   //  Software Guide : EndLatex 
 
   // Software Guide : BeginCodeSnippet
-  typedef otb::LineCorrelationDetectorImageFilter< InternalImageType, InternalImageType >  FilterType;
+  typedef otb::LineCorrelationDetectorImageFilter< InternalImageType,
+                                          InternalImageType >  FilterType;
   // Software Guide : EndCodeSnippet
 
 

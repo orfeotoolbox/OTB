@@ -89,7 +89,8 @@ int main( int argc, char * argv[] )
   //  Software Guide : EndLatex 
 
   // Software Guide : BeginCodeSnippet
-  typedef otb::AssymmetricFusionOfLineDetectorImageFilter< InternalImageType, InternalImageType >  FilterType;
+  typedef otb::AssymmetricFusionOfLineDetectorImageFilter< InternalImageType,
+                                               InternalImageType >  FilterType;
   // Software Guide : EndCodeSnippet
 
 
