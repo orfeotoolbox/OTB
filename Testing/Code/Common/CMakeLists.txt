@@ -143,21 +143,21 @@ ADD_TEST(coTvMultiChannelROI_RGB2NG_PNG3 ${COMMON_TESTS}
 ADD_TEST(coTvMultiChannelROI_5c_BSQ ${COMMON_TESTS}   
 #  --compare-binary  ${BASELINE}/coMultiChannelExtractROI_RGB2NG_PNG_poupees_303_2_134_330_channels_12321.c1
 #                    ${TEMP}/coMultiChannelExtractROI_RGB2NG_PNG_poupees_303_2_134_330_channels_12321.c1
-  --compare-image ${TOL} ${BASELINE}/coMultiChannelExtractROI_RGB2NG_PNG_poupees_303_2_134_330_channels_12321.hdr
-                    ${TEMP}/coMultiChannelExtractROI_RGB2NG_PNG_poupees_303_2_134_330_channels_12321.hdr
+  --compare-image ${TOL} ${BASELINE}/coMultiChannelExtractROI_RGB_ENVI_poupees_303_2_134_330_channels_12321.hdr
+                    ${TEMP}/coMultiChannelExtractROI_RGB_ENVI_poupees_303_2_134_330_channels_12321.hdr
          otbMultiChannelExtractROI 
          ${INPUTDATA}/poupees.hdr 
-         ${TEMP}/coMultiChannelExtractROI_RGB2NG_PNG_poupees_303_2_134_330_channels_12321.hdr
+         ${TEMP}/coMultiChannelExtractROI_RGB_ENVI_poupees_303_2_134_330_channels_12321.hdr
          -startX 303 -startY 2 -sizeX 134  -sizeY 330 -channels 1 2 3 2 1 )
 
 ADD_TEST(coTvMultiChannelROI_3c_BSQ ${COMMON_TESTS}   
 #  --compare-binary  ${BASELINE}/coMultiChannelExtractROI_RGB2NG_PNG_poupees_303_2_134_330_channels_345.c1
 #                    ${TEMP}/coMultiChannelExtractROI_RGB2NG_PNG_poupees_303_2_134_330_channels_345.c1
-  --compare-image  ${TOL}  ${BASELINE}/coMultiChannelExtractROI_RGB2NG_PNG_poupees_303_2_134_330_channels_345.hdr
-                    ${TEMP}/coMultiChannelExtractROI_RGB2NG_PNG_poupees_303_2_134_330_channels_345.hdr
+  --compare-image  ${TOL}  ${BASELINE}/coMultiChannelExtractROI_RGB_ENVI_poupees_303_2_134_330_channels_345.hdr
+                    ${TEMP}/coMultiChannelExtractROI_RGB_ENVI_poupees_303_2_134_330_channels_345.hdr
          otbMultiChannelExtractROI 
-         ${TEMP}/coMultiChannelExtractROI_RGB2NG_PNG_poupees_303_2_134_330_channels_12321.hdr
-         ${TEMP}/coMultiChannelExtractROI_RGB2NG_PNG_poupees_303_2_134_330_channels_345.hdr
+         ${TEMP}/coMultiChannelExtractROI_RGB_ENVI_poupees_303_2_134_330_channels_12321.hdr
+         ${TEMP}/coMultiChannelExtractROI_RGB_ENVI_poupees_303_2_134_330_channels_345.hdr
          -startX 0 -startY 0 -sizeX 134  -sizeY 330 -channels 3 4 5 )
 
 
@@ -234,10 +234,10 @@ INCLUDE_DIRECTORIES("${OTBTesting_BINARY_DIR}")
 # ${TIFF_LIBRARY}
 
 ADD_EXECUTABLE(otbCommonTests otbCommonTests.cxx ${BasicCommon_SRCS})
-TARGET_LINK_LIBRARIES(otbCommonTests OTBIO OTBCommon cai ${GDAL_LIBRARY} ITKIO ITKCommon)
+TARGET_LINK_LIBRARIES(otbCommonTests OTBIO OTBCommon gdal ITKIO ITKCommon)
 
 ADD_EXECUTABLE(otbTestExtractROI otbTestExtractROI.cxx )
-TARGET_LINK_LIBRARIES(otbTestExtractROI OTBIO OTBCommon cai ${GDAL_LIBRARY} ITKIO ITKCommon)
+TARGET_LINK_LIBRARIES(otbTestExtractROI OTBIO OTBCommon gdal ITKIO ITKCommon)
 
 
 ENDIF( NOT OTB_DISABLE_CXX_TESTING )
