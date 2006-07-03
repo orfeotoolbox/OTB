@@ -53,7 +53,7 @@ int main( int argc, char ** argv )
   // We will build a very simple pipeline where a reader gets an image
   // from a file and gives it to the viewer. We define the types for
   // the pixel, the image and the reader. The viewer class is templated
-  // over the scalar component of the pixel type.
+  // over the scalar component of the pixel type. 
   //
   // Software Guide : EndLatex
 

@@ -97,7 +97,10 @@ int main( int argc, char *argv[] )
   // vector-valued data and the segmentation is done using floating point
   // scalar data.  Images are converted from RGB pixel type to
   // numerical vector type using \doxygen{VectorCastImageFilter}.
-  //\textbf{FIXME: otbImage}
+  // Please pay attention to the fact that we are using
+  // \doxygen{itk::Image}s since the
+  // \doxygen{itk::VectorGradientMagnitudeImageFilter} has some
+  // internal typedefs which make polymorfism impossible.
   // Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
@@ -122,7 +125,7 @@ int main( int argc, char *argv[] )
     CastFilterType;
   typedef itk::VectorGradientAnisotropicDiffusionImageFilter<VectorImageType,
     VectorImageType>  DiffusionFilterType;
-  typedef itk::VectorGradientMagnitudeImageFilter<VectorImageType>
+  typedef itk::VectorGradientMagnitudeImageFilter<VectorImageType,float,ScalarImageType>
     GradientMagnitudeFilterType; 
   typedef itk::WatershedImageFilter<ScalarImageType> WatershedFilterType;
   // Software Guide : EndCodeSnippet

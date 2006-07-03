@@ -16,6 +16,7 @@ SET(OTB_INCLUDE_DIRS_BUILD_TREE ${OTB_INCLUDE_DIRS_BUILD_TREE}
   ${OTB_SOURCE_DIR}/Code/FeatureExtraction
   ${OTB_SOURCE_DIR}/Code/Learning
   ${OTB_SOURCE_DIR}/Code/Visu
+  ${OTB_SOURCE_DIR}/Code/Segmentation  
 )
 
 #-----------------------------------------------------------------------------
