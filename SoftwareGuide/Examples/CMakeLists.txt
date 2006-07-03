@@ -203,7 +203,7 @@ SET( OTB_EXAMPLES_SRCS
   ${OTB_SOURCE_DIR}/Examples/Segmentation/IsolatedConnectedImageFilter.cxx
   ${OTB_SOURCE_DIR}/Examples/Segmentation/WatershedSegmentation.cxx
   ${OTB_SOURCE_DIR}/Examples/Segmentation/FastMarchingImageFilter.cxx
-  #${OTB_SOURCE_DIR}/Examples/Patented/HybridSegmentationFuzzyVoronoi.cxx
+  ${OTB_SOURCE_DIR}/Examples/Patented/HybridSegmentationFuzzyVoronoi.cxx
   ${OTB_SOURCE_DIR}/Examples/Patented/FuzzyConnectednessImageFilter.cxx
   ${OTB_SOURCE_DIR}/Examples/ChangeDetection/ChangeDetectionFrameworkExample.cxx
   ${OTB_SOURCE_DIR}/Examples/ChangeDetection/DiffChDet.cxx
