@@ -28,8 +28,6 @@
 
 void RegisterTests()
 {
-REGISTER_TEST(otbCAIImageIOTestCanRead);
-REGISTER_TEST(otbCAIImageIOTestCanWrite);
 REGISTER_TEST(otbGDALImageIOTestCanRead);
 REGISTER_TEST(otbGDALImageIOTestCanWrite);
 REGISTER_TEST(otbONERAImageIOTestCanRead);

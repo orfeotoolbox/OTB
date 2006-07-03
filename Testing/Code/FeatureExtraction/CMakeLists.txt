@@ -18,14 +18,14 @@ SET(FEATUREEXTRACTION_TESTS ${CXX_TEST_PATH}/otbFeatureExtractionTests)
 
 ADD_TEST(feTuAlignMV2ITK ${FEATUREEXTRACTION_TESTS}  
         otbAlignImageToPath
-	${INPUTDATA}/poupees.hd
+	${INPUTDATA}/poupees.hdr
 	${TEMP}/feAlign.txt)
 
 # -------            otb::Draw   ------------------------------
 		
 ADD_TEST(feTuDrawSegmentIntoImage ${FEATUREEXTRACTION_TESTS}  
         otbDrawPathList
-	${INPUTDATA}/poupees.hd
+	${INPUTDATA}/poupees.hdr
 	${TEMP}/feDrawPathIntoPoupees.png)
 
 ADD_TEST(feTuDrawSegmentIntoImageLine ${FEATUREEXTRACTION_TESTS}  
@@ -87,19 +87,19 @@ ADD_TEST(feTuTouziNew ${FEATUREEXTRACTION_TESTS}
         otbTouziEdgeDetectorNew)
 		
 ADD_TEST(feTvTouzi ${FEATUREEXTRACTION_TESTS}
-  --compare-image ${TOL}  ${BASELINE}/feFiltreTouzi_amst_3.hd
-                          ${TEMP}/feFiltreTouzi_amst_3.hd  
+  --compare-image ${TOL}  ${BASELINE}/feFiltreTouzi_amst_3.hdr
+                          ${TEMP}/feFiltreTouzi_amst_3.hdr
         otbTouziEdgeDetector
 	${INPUTDATA}/amst.png
-	${TEMP}/feFiltreTouzi_amst_3.hd
+	${TEMP}/feFiltreTouzi_amst_3.hdr
 	3)
 	
 ADD_TEST(feTvTouziDir ${FEATUREEXTRACTION_TESTS}
-  --compare-image ${TOL}  ${BASELINE}/feFiltreTouzi_amst_dir_3.hd
-                          ${TEMP}/feFiltreTouzi_amst_dir_3.hd  
+  --compare-image ${TOL}  ${BASELINE}/feFiltreTouzi_amst_dir_3.hdr
+                          ${TEMP}/feFiltreTouzi_amst_dir_3.hdr  
         otbTouziEdgeDetectorDirection
 	${INPUTDATA}/amst.png
-	${TEMP}/feFiltreTouzi_amst_dir_3.hd
+	${TEMP}/feFiltreTouzi_amst_dir_3.hdr
 	3)	
 
 # -------            otb::LineDetectorBase   ------------------------------
@@ -115,19 +115,19 @@ ADD_TEST(feTuLineCorrelationNew ${FEATUREEXTRACTION_TESTS}
 ADD_TEST(feTuLineCorrelationLinear ${FEATUREEXTRACTION_TESTS}  
         otbLineCorrelationDetectorLinear
 	${INPUTDATA}/amst.png
-	${TEMP}/feFiltreLineCorrelationLinear_amst_2_3.hd
+	${TEMP}/feFiltreLineCorrelationLinear_amst_2_3.hdr
 	2 3)
       
 ADD_TEST(feTuLineCorrelationLinearDir ${FEATUREEXTRACTION_TESTS}  
         otbLineCorrelationDetectorLinearDirection
 	${INPUTDATA}/amst.png
-	${TEMP}/feFiltreLineCorrelationLinear_amst_dir_2_3.hd
+	${TEMP}/feFiltreLineCorrelationLinear_amst_dir_2_3.hdr
 	2 3)
 		
 ADD_TEST(feTuLineCorrelation ${FEATUREEXTRACTION_TESTS}  
         otbLineCorrelationDetector
 	${INPUTDATA}/amst.png
-	${TEMP}/feFiltreLineCorrelation_amst_2_3.hd
+	${TEMP}/feFiltreLineCorrelation_amst_2_3.hdr
 	2 3)
 	
 # -------            otb::LineRatioDetector   ------------------------------
@@ -138,25 +138,25 @@ ADD_TEST(feTuLineRatioNew ${FEATUREEXTRACTION_TESTS}
 ADD_TEST(feTuLineRatioLinear ${FEATUREEXTRACTION_TESTS}  
         otbLineRatioDetectorLinear
 	${INPUTDATA}/amst.png
-	${TEMP}/feFiltreLineRatioLinear_amst_2_3.hd
+	${TEMP}/feFiltreLineRatioLinear_amst_2_3.hdr
 	2 3)
 
 ADD_TEST(feTuLineRatioLinearDir ${FEATUREEXTRACTION_TESTS}  
         otbLineRatioDetectorLinearDirection
 	${INPUTDATA}/amst.png
-	${TEMP}/feFiltreLineRatioLinear_amst_dir_2_3.hd
+	${TEMP}/feFiltreLineRatioLinear_amst_dir_2_3.hdr
 	2 3)
 	
 ADD_TEST(feTuLineRatioLinearAmsters1 ${FEATUREEXTRACTION_TESTS}  
         otbLineRatioDetectorLinear
 	${INPUTDATA}/amst_ers1.ima
-	${TEMP}/feFiltreLineRatioLinear_amst_ers1_1_2.hd
+	${TEMP}/feFiltreLineRatioLinear_amst_ers1_1_2.hdr
 	1 2)
 				
 ADD_TEST(feTuLineRatio ${FEATUREEXTRACTION_TESTS}  
         otbLineRatioDetector
 	${INPUTDATA}/amst.png
-	${TEMP}/feFiltreLineRatio_amst_2_3.hd
+	${TEMP}/feFiltreLineRatio_amst_2_3.hdr
 	2 3)
 
 
@@ -167,9 +167,9 @@ ADD_TEST(feTuAssociativeSymmetricalSumNew ${FEATUREEXTRACTION_TESTS}
         
 ADD_TEST(feTuAssociativeSymmetricalSum ${FEATUREEXTRACTION_TESTS}  
         otbAssociativeSymmetricalSum
-        ${TEMP}/feFiltreLineRatioLinear_amst_2_3.hd
-        ${TEMP}/feFiltreLineCorrelationLinear_amst_2_3.hd
-        ${TEMP}/feFiltreASS_amst_2_3.hd)
+        ${TEMP}/feFiltreLineRatioLinear_amst_2_3.hdr
+        ${TEMP}/feFiltreLineCorrelationLinear_amst_2_3.hdr
+        ${TEMP}/feFiltreASS_amst_2_3.hdr)
 
 # -------            otb::AssymmetricFusionOfLineDetector   ------------------------------
         
@@ -179,7 +179,7 @@ ADD_TEST(feTuAssymmetricFusionOfLineDetectorNew ${FEATUREEXTRACTION_TESTS}
 ADD_TEST(feTuAssymmetricFusionOfLineDetector ${FEATUREEXTRACTION_TESTS}  
         otbAssymmetricFusionOfLineDetector
 	${INPUTDATA}/amst.png
-	${TEMP}/feFiltreAssymmetricFusion_amst_2_3.hd
+	${TEMP}/feFiltreAssymmetricFusion_amst_2_3.hdr
 	2 3)
 
 # -------            otb::HarrisImage   ------------------------------
@@ -192,7 +192,7 @@ ADD_TEST(feTvHarrisImage ${FEATUREEXTRACTION_TESTS}
 
 ADD_TEST(feTvHarrisPoupee ${FEATUREEXTRACTION_TESTS}  
         otbHarrisImage 
-	${INPUTDATA}/poupees_1canal.hd
+	${INPUTDATA}/poupees_1canal.c1.hdr
 	${TEMP}/feHarris_poupees.png
 	1.0 1.0 1.0)
 
@@ -205,7 +205,7 @@ ADD_TEST(feTuThresholdImageToPointSetTest ${FEATUREEXTRACTION_TESTS}
 
 ADD_TEST(feTvHarrisImageToPointSet ${FEATUREEXTRACTION_TESTS}  
         otbHarrisImageToPointSet 
-	${INPUTDATA}/poupees_1canal.hd
+	${INPUTDATA}/poupees_1canal.c1.hdr
 	${TEMP}/feHarris_PointSet_poupees.png
 	1.0 1.0 1.0  2.0)
 
@@ -215,12 +215,12 @@ ADD_TEST(feTuPixelSuppressionByDirectionNew ${FEATUREEXTRACTION_TESTS}
         otbPixelSuppressionByDirectionNew)
         
 ADD_TEST(feTvPixelSuppressionByDirection ${FEATUREEXTRACTION_TESTS}
-  --compare-image ${TOL}  ${BASELINE}/feFiltrePixelSuppr_ImageLine_2_0_3.hd
-                          ${TEMP}/feFiltrePixelSuppr_ImageLine_2_0_3.hd   
+  --compare-image ${TOL}  ${BASELINE}/feFiltrePixelSuppr_ImageLine_2_0_3.hdr
+                          ${TEMP}/feFiltrePixelSuppr_ImageLine_2_0_3.hdr
         otbPixelSuppressionByDirection
-	${INPUTDATA}/ImageLine_hd.bsq
-	${INPUTDATA}/ImageLineDir.bsq
-	${TEMP}/feFiltrePixelSuppr_ImageLine_2_0_3.hd
+	${INPUTDATA}/ImageLine_hd.bsq.hdr
+	${INPUTDATA}/ImageLineDir.bsq.hdr
+	${TEMP}/feFiltrePixelSuppr_ImageLine_2_0_3.hdr
 	2 0.3)
 
 # -------            otb::LocalHough   ------------------------------
@@ -235,8 +235,8 @@ ADD_TEST(feTuLocalHough ${FEATUREEXTRACTION_TESTS}
 	
 ADD_TEST(feTuLocalHoughDraw ${FEATUREEXTRACTION_TESTS}  
         otbLocalHoughDraw
-	${INPUTDATA}/ImageLine.bsq
-	${TEMP}/feFiltreLocalHoughDraw_ImageLine_20_20_2.hd
+	${INPUTDATA}/ImageLine.bsq.hdr
+	${TEMP}/feFiltreLocalHoughDraw_ImageLine_20_20_2.hdr
 	20 20 1)        
 
 ADD_TEST(feTuLocalHoughDraw ${FEATUREEXTRACTION_TESTS}  
@@ -263,8 +263,8 @@ ADD_TEST(feTuExtractSegmentsNew ${FEATUREEXTRACTION_TESTS}
         
 ADD_TEST(feTuExtractSegments ${FEATUREEXTRACTION_TESTS}  
         otbExtractSegments
-	${INPUTDATA}/ImageLine_hd.bsq
-	${INPUTDATA}/ImageLineDir.bsq
+	${INPUTDATA}/ImageLine_hd.bsq.hdr
+	${INPUTDATA}/ImageLineDir.bsq.hdr
 	${TEMP}/feFiltreExtractSegments_ImageLine.png
 	2 0.3 20 20 2)                
 

@@ -141,19 +141,23 @@ ADD_TEST(coTvMultiChannelROI_RGB2NG_PNG3 ${COMMON_TESTS}
          -startX 700 -startY 60 -sizeX 77 -sizeY 489 -channels 3 )
 
 ADD_TEST(coTvMultiChannelROI_5c_BSQ ${COMMON_TESTS}   
-  --compare-binary  ${BASELINE}/coMultiChannelExtractROI_RGB2NG_PNG_poupees_303_2_134_330_channels_12321.c1
-                    ${TEMP}/coMultiChannelExtractROI_RGB2NG_PNG_poupees_303_2_134_330_channels_12321.c1
+#  --compare-binary  ${BASELINE}/coMultiChannelExtractROI_RGB2NG_PNG_poupees_303_2_134_330_channels_12321.c1
+#                    ${TEMP}/coMultiChannelExtractROI_RGB2NG_PNG_poupees_303_2_134_330_channels_12321.c1
+  --compare-image ${TOL} ${BASELINE}/coMultiChannelExtractROI_RGB2NG_PNG_poupees_303_2_134_330_channels_12321.hdr
+                    ${TEMP}/coMultiChannelExtractROI_RGB2NG_PNG_poupees_303_2_134_330_channels_12321.hdr
          otbMultiChannelExtractROI 
-         ${INPUTDATA}/poupees.hd 
-         ${TEMP}/coMultiChannelExtractROI_RGB2NG_PNG_poupees_303_2_134_330_channels_12321.hd
+         ${INPUTDATA}/poupees.hdr 
+         ${TEMP}/coMultiChannelExtractROI_RGB2NG_PNG_poupees_303_2_134_330_channels_12321.hdr
          -startX 303 -startY 2 -sizeX 134  -sizeY 330 -channels 1 2 3 2 1 )
 
 ADD_TEST(coTvMultiChannelROI_3c_BSQ ${COMMON_TESTS}   
-  --compare-binary  ${BASELINE}/coMultiChannelExtractROI_RGB2NG_PNG_poupees_303_2_134_330_channels_345.c1
-                    ${TEMP}/coMultiChannelExtractROI_RGB2NG_PNG_poupees_303_2_134_330_channels_345.c1
+#  --compare-binary  ${BASELINE}/coMultiChannelExtractROI_RGB2NG_PNG_poupees_303_2_134_330_channels_345.c1
+#                    ${TEMP}/coMultiChannelExtractROI_RGB2NG_PNG_poupees_303_2_134_330_channels_345.c1
+  --compare-image  ${TOL}  ${BASELINE}/coMultiChannelExtractROI_RGB2NG_PNG_poupees_303_2_134_330_channels_345.hdr
+                    ${TEMP}/coMultiChannelExtractROI_RGB2NG_PNG_poupees_303_2_134_330_channels_345.hdr
          otbMultiChannelExtractROI 
-         ${TEMP}/coMultiChannelExtractROI_RGB2NG_PNG_poupees_303_2_134_330_channels_12321.hd
-         ${TEMP}/coMultiChannelExtractROI_RGB2NG_PNG_poupees_303_2_134_330_channels_345.hd
+         ${TEMP}/coMultiChannelExtractROI_RGB2NG_PNG_poupees_303_2_134_330_channels_12321.hdr
+         ${TEMP}/coMultiChannelExtractROI_RGB2NG_PNG_poupees_303_2_134_330_channels_345.hdr
          -startX 0 -startY 0 -sizeX 134  -sizeY 330 -channels 3 4 5 )
 
 

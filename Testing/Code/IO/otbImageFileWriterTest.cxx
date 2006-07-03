@@ -20,13 +20,11 @@
 #pragma warning ( disable : 4786 )
 #endif
 
-//#define MAIN
-
-#include "itkImageFileReader.h"
 #include "itkImage.h"
 #include "itkExceptionObject.h"
 #include <iostream>
 
+#include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
 
 int otbImageFileWriterTest(int argc, char* argv[])
@@ -44,7 +42,7 @@ int otbImageFileWriterTest(int argc, char* argv[])
         typedef itk::Image< InputPixelType,  Dimension >        InputImageType;
         typedef itk::Image< OutputPixelType, Dimension >        OutputImageType;
 
-        typedef itk::ImageFileReader< InputImageType  >         ReaderType;
+        typedef otb::ImageFileReader< InputImageType  >         ReaderType;
         typedef otb::ImageFileWriter< OutputImageType >         WriterType;
 
         ReaderType::Pointer reader = ReaderType::New();

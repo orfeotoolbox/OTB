@@ -21,11 +21,6 @@
 //
 #include "otbBonjour.h"
 
-#define MAIN
-extern "C"
-{
-#include "cai_image.h"
-}
 
 /* Includes pour tester FLTK */
 /*
@@ -45,31 +40,20 @@ extern "C"
 
 #include <iostream>
 #include <string>
+#include "otbGDALImageIO.h"
 
 int main(int argc, char * argv[])
 {
 	//OTB
 	otb::Bonjour lBonjour;
 	
-	//CAI
-	CAI_IMAGE * lCai=NULL;
-	int lNbCanaux,lNbOctPix,lNbLignes,lNbColonnes;
-	char lImage[1024];
-        strcpy(lImage,argv[1]);
-	char lFormatImage[1024]="AUTO";
-	lCai = cai_ouvre_lecture_image(lImage,lFormatImage,&lNbCanaux,&lNbOctPix,&lNbColonnes,&lNbLignes);
-        if ( lCai == NULL )
+  	otb::GDALImageIO::Pointer lGDALImageIO = otb::GDALImageIO::New();
+        bool lCanRead = lGDALImageIO->CanReadFile(argv[1]);
+        if ( lCanRead == false)
         {
-                std::cerr << "Erreur CAI : "<<CAI_ERREUR << std::endl;
+                std::cerr << "Cannot  open image file ["<<argv[1] <<"].");
                 return EXIT_FAILURE;
         }
-
-	//FLTK
-//	Fl_Window lWindow(400, 400);
-
-	//VTK - Code extrait de VTK\Examples\Tutorial\Step1\Cxx\Cone.cxx
-//  	vtkConeSource *cone = vtkConeSource::New();
-//  	cone->Delete();
 
 	
         return EXIT_SUCCESS;

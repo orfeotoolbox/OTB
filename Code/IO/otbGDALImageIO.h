@@ -101,7 +101,8 @@ public:
   virtual bool CanWriteFile(const char*);
 
   /** Determine the file type. Returns true if the ImageIO can stream write the specified file */
-  virtual bool CanStreamWrite() { return false; };
+//THOMAS
+  virtual bool CanStreamWrite() { return true; };
 
   /** Writes the spacing and dimentions of the image.
    * Assumes SetFileName has been called with a valid file name. */
@@ -146,9 +147,12 @@ private:
     * on regarde s'il contient un produit CEOS (fichier "DAT...")
     * Dans ce cas, GdalFileName contient le nom du fichier a ouvrir. Sinon GdalFileName contient filename
     */
-  bool GetGdalImageFileName( const char * filename, std::string & GdalFileName );
+  bool GetGdalReadImageFileName( const char * filename, std::string & GdalFileName );
+  
+  /** Determine real file name to write the image */
+  std::string GetGdalWriteImageFileName(std::string & extGDAL, std::string filename );
 
-  std::string TypeConversion(const char* extension);
+  std::string TypeConversion(std::string name);
 
   /** GDAL parameters. */
   GDALDriver * m_hDriver;
@@ -160,6 +164,8 @@ private:
   
   bool GDALInfoReportCorner( const char * corner_name, double x, double y,
                            double &dfGeoX, double &dfGeoY);
+
+  bool m_FlagWriteImageInformation;
 
 };
 

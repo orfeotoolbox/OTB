@@ -23,12 +23,12 @@
 //#define MAIN
 
 
-#include "itkImage.h"
+#include "otbImage.h"
 #include "itkExceptionObject.h"
 #include <iostream>
 
 #include "otbImageFileReader.h"
-#include "itkImageFileWriter.h"
+#include "otbImageFileWriter.h"
 
 int otbImageFileReaderTest(int argc, char* argv[])
 {
@@ -42,11 +42,11 @@ int otbImageFileReaderTest(int argc, char* argv[])
         typedef unsigned char  	                                OutputPixelType;
         const   unsigned int        	                        Dimension = 2;
 
-        typedef itk::Image< InputPixelType,  Dimension >        InputImageType;
-        typedef itk::Image< OutputPixelType, Dimension >        OutputImageType;
+        typedef otb::Image< InputPixelType,  Dimension >        InputImageType;
+        typedef otb::Image< OutputPixelType, Dimension >        OutputImageType;
 
         typedef otb::ImageFileReader< InputImageType  >         ReaderType;
-        typedef itk::ImageFileWriter< OutputImageType >         WriterType;
+        typedef otb::ImageFileWriter< OutputImageType >         WriterType;
 
         ReaderType::Pointer reader = ReaderType::New();
         WriterType::Pointer writer = WriterType::New();

@@ -18,8 +18,8 @@
 
 
 #include "itkExceptionObject.h"
-#include "itkImageFileReader.h"
-#include "itkImageFileWriter.h"
+#include "otbImageFileReader.h"
+#include "otbImageFileWriter.h"
 #include "itkImage.h"
 
 #include "otbExtractROI.h"
@@ -46,8 +46,8 @@ int otbExtractROI( int argc, char ** argv )
         typedef FilterType::InputImageType        InputImageType;
         typedef FilterType::OutputImageType       OutputImageType;
 
-        typedef itk::ImageFileReader< InputImageType  >         ReaderType;
-        typedef itk::ImageFileWriter< OutputImageType >         WriterType;
+        typedef otb::ImageFileReader< InputImageType  >         ReaderType;
+        typedef otb::ImageFileWriter< OutputImageType >         WriterType;
         FilterType::Pointer filter = FilterType::New();
         
 //        filter->SetStartX( startX );

@@ -27,9 +27,11 @@
 #include "itkNumericTraits.h"
 #include "itkMultiThreader.h"
 #include "itkImage.h"
-//#include "itkImageFileReader.h"
 #include "otbImageFileReader.h"
-#include "itkImageFileWriter.h"
+
+//THOMAS
+#include "otbImageFileWriter.h"
+
 #include "itkImageRegionConstIterator.h"
 #include "itkSubtractImageFilter.h"
 #include "itkRescaleIntensityImageFilter.h"
@@ -151,7 +153,7 @@ int main(int ac, char* av[] )
       {
       // Invoke the test's "main" function.
       result = (*f)(ac-1, av+1);
-
+otbMsgDebugMacro(<<"----------------     DEBUT Controle NON-REGRESION  ------------------- ");
       // Make a list of possible baselines
       // Test de non regression sur des images
       if (baselineFilenameImage && testFilenameImage)
@@ -224,6 +226,8 @@ int main(int ac, char* av[] )
             }
         result += baseline->second;
         }
+
+otbMsgDebugMacro(<<"----------------     FIN Controle NON-REGRESION  ------------------- ");
 
       }
     catch(const itk::ExceptionObject& e)
@@ -339,7 +343,6 @@ int RegressionTestImage (const char *testImageFilename, const char *baselineImag
   typedef itk::Image<double,ITK_TEST_DIMENSION_MAX> ImageType;
   typedef itk::Image<unsigned char,ITK_TEST_DIMENSION_MAX> OutputType;
   typedef itk::Image<unsigned char,2> DiffOutputType;
-//  typedef itk::ImageFileReader<ImageType> ReaderType;
   typedef otb::ImageFileReader<ImageType> ReaderType;
 
   // Read the baseline file
@@ -385,7 +388,7 @@ int RegressionTestImage (const char *testImageFilename, const char *baselineImag
     }
 
 
-    std::cout << " (RegressionTestImage DifferenceThreshold : "<<toleranceDiffPixelImage<<")"<<std::endl;
+    otbMsgDebugMacro(<< "RegressionTestImage DifferenceThreshold : "<<toleranceDiffPixelImage);
   // Now compare the two images
   typedef itk::DifferenceImageFilter<ImageType,ImageType> DiffType;
   DiffType::Pointer diff = DiffType::New();
@@ -396,12 +399,13 @@ int RegressionTestImage (const char *testImageFilename, const char *baselineImag
 
   double status = diff->GetTotalDifference();
 
+    otbMsgDebugMacro(<< "Status diff->GetTotalDifference : "<<status);
   // if there are discrepencies, create an diff image
   if (status && reportErrors)
     {
     typedef itk::RescaleIntensityImageFilter<ImageType,OutputType> RescaleType;
     typedef itk::ExtractImageFilter<OutputType,DiffOutputType> ExtractType;
-    typedef itk::ImageFileWriter<DiffOutputType> WriterType;
+    typedef otb::ImageFileWriter<DiffOutputType> WriterType;
     typedef itk::ImageRegion<ITK_TEST_DIMENSION_MAX> RegionType;
     OutputType::IndexType index; index.Fill(0);
     OutputType::SizeType size; size.Fill(0);

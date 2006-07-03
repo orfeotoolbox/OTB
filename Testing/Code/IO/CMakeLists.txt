@@ -17,20 +17,23 @@ SET(COMMON_TESTS ${CXX_TEST_PATH}/otbCommonTests)
 SET(IO_TESTS     ${CXX_TEST_PATH}/otbIOTests)
 
 
+
+
+
 # ---  RADARSAT (GDAL)  ---
-ADD_TEST(ioTvMultiMonoChannelROI_RADARSAT2BSQ ${COMMON_TESTS} 
+ADD_TEST(ioTvMultiMonoChannelROI_RADARSAT2ENVI ${COMMON_TESTS} 
          otbMultiToMonoChannelExtractROI
          -ushort ${IMAGEDATA}/RADARSAT1/SCENE01/
-         -ushort ${TEMP}/ioMultiMonoChannelROI_RADARSAT2PNG_2559_3591_337_280.hd
+         -ushort ${TEMP}/ioMultiMonoChannelROI_RADARSAT2ENVI_2559_3591_337_280.hdr
          -startX 2559 -startY 3591 -sizeX 337 -sizeY 280 )
 
 # ---  RADARSAT (GDAL)  Nom répertoire ---
-ADD_TEST(ioTvMultiMonoChannelROI_RADARSAT_BSQ2BSQ2 ${COMMON_TESTS} 
-   --compare-binary   ${BASELINE}/ioMultiMonoChannelROI_RADARSAT2PNG_2559_3591_337_280_2.c1
-                      ${TEMP}/ioMultiMonoChannelROI_RADARSAT2PNG_2559_3591_337_280_2.c1
+ADD_TEST(ioTvMultiMonoChannelROI_RADARSAT_ENVI2ENVI ${COMMON_TESTS} 
+   --compare-image ${TOL} ${BASELINE}/ioMultiMonoChannelROI_RADARSAT2ENVI_2559_3591_337_280.hdr
+                      ${TEMP}/ioMultiMonoChannelROI_RADARSAT_ENVI2ENVI_2559_3591_337_280_2.hdr
          otbMultiToMonoChannelExtractROI
-         -ushort ${TEMP}/ioMultiMonoChannelROI_RADARSAT2PNG_2559_3591_337_280.hd
-         -ushort ${TEMP}/ioMultiMonoChannelROI_RADARSAT2PNG_2559_3591_337_280_2.hd
+         -ushort ${TEMP}/ioMultiMonoChannelROI_RADARSAT2ENVI_2559_3591_337_280.hdr
+         -ushort ${TEMP}/ioMultiMonoChannelROI_RADARSAT_ENVI2ENVI_2559_3591_337_280_2.hdr
          -startX 0 -startY 0 -sizeX 337 -sizeY 280 )
 
 # ---  SAR_ERS2_SLCI (GDAL)  ---
@@ -39,7 +42,7 @@ ADD_TEST(ioTvImageFileReaderERS ${IO_TESTS}
 #   --compare-image ${TOL}   ${BASELINE}/ioImageFileReaderERS_SLCI.png
 #                            ${TEMP}/ioImageFileReaderERS_SLCI.png
          otbImageFileReaderERS
-         ${IMAGEDATA}/SAR_ERS2_SLCI_SCENE1/DAT_01.001 
+         ${IMAGEDATA}/SAR_ERS2_SLCI_SCENE1/
          ${TEMP}/ioImageFileReaderERS_SLCI.png)
 
 ADD_TEST(ioTvImageFileReaderRADARSAT ${IO_TESTS} 
@@ -55,7 +58,7 @@ ADD_TEST(ioTvMultiMonoChannelROI_ENVI2PNG ${COMMON_TESTS}
    --compare-image ${TOL}   ${BASELINE}/ioMultiMonoChannelROI_ENVI2PNG_poupees_1canal_302_2_134_330.png
                      ${TEMP}/ioMultiMonoChannelROI_ENVI2PNG_poupees_1canal_302_2_134_330.png
          otbMultiToMonoChannelExtractROI
-         ${INPUTDATA}/poupees_1canal.c1
+         ${INPUTDATA}/poupees_1canal.c1.hdr
          ${TEMP}/ioMultiMonoChannelROI_ENVI2PNG_poupees_1canal_302_2_134_330.png
          -startX 302 -startY 2 -sizeX 134 -sizeY 330
          -channel 1)
@@ -70,17 +73,17 @@ ADD_TEST(ioTvMultiMonoChannelROI_ENVI2PNG ${COMMON_TESTS}
 
 # -------            otb::CAIImageIO   ------------------------------
 # CanRead()
-ADD_TEST(ioTuCAIImageIOCanReadBSQ ${IO_TESTS} otbCAIImageIOTestCanRead
-        ${INPUTDATA}/poupees.hd )
+# ADD_TEST(ioTuCAIImageIOCanReadBSQ ${IO_TESTS} otbCAIImageIOTestCanRead
+#         ${INPUTDATA}/poupees.hd )
 
-ADD_TEST(ioTuCAIImageIOCanReadSPOT4 ${IO_TESTS} otbCAIImageIOTestCanRead
-        ${IMAGEDATA}/SPOT4_SCENE01 )
+# ADD_TEST(ioTuCAIImageIOCanReadSPOT4 ${IO_TESTS} otbCAIImageIOTestCanRead
+#         ${IMAGEDATA}/SPOT4_SCENE01 )
 
-ADD_TEST(ioTuCAIImageIOCanReadSPOT5TIF ${IO_TESTS} otbCAIImageIOTestCanRead
-        ${INPUTDATA}/poupeesTIF )
+# ADD_TEST(ioTuCAIImageIOCanReadSPOT5TIF ${IO_TESTS} otbCAIImageIOTestCanRead
+#         ${INPUTDATA}/poupeesTIF )
 
-ADD_TEST(ioTuCAIImageIOCanReadSPOT5BIL ${IO_TESTS} otbCAIImageIOTestCanRead
-        ${INPUTDATA}/poupeesBIL )
+# ADD_TEST(ioTuCAIImageIOCanReadSPOT5BIL ${IO_TESTS} otbCAIImageIOTestCanRead
+#         ${INPUTDATA}/poupeesBIL )
 
 
 # -------            otb::GDALImageIO   ------------------------------
@@ -88,7 +91,7 @@ ADD_TEST(ioTuCAIImageIOCanReadSPOT5BIL ${IO_TESTS} otbCAIImageIOTestCanRead
 # READER
 
 ADD_TEST(ioTuGDALImageIOCanRead_ENVI ${IO_TESTS} otbGDALImageIOTestCanRead 
-        ${INPUTDATA}/poupees_1canal.c1 )
+        ${INPUTDATA}/poupees_1canal.c1.hdr )
 
 ADD_TEST(ioTuGDALImageIOCanRead_RADARSAT ${IO_TESTS} otbGDALImageIOTestCanRead 
         ${IMAGEDATA}/RADARSAT1/SCENE01/ )
@@ -116,6 +119,13 @@ ADD_TEST(ioTuGDALImageIOCanRead_IKONOS_RED ${IO_TESTS} otbGDALImageIOTestCanRead
 	
 ADD_TEST(ioTuGDALImageIOCanRead_IKONOS_NIR ${IO_TESTS} otbGDALImageIOTestCanRead 
         ${IMAGEDATA}/PARIS/Ikonos/po_79039_nir_0000000.tif)
+
+ADD_TEST(ioTuGDALImageIOCanRead_SPOT4 ${IO_TESTS} otbGDALImageIOTestCanRead
+        ${IMAGEDATA}/SPOT4_SCENE01/ )
+
+ADD_TEST(ioTuGDALImageIOCanRead_SPOT5TIF ${IO_TESTS} otbGDALImageIOTestCanRead
+        ${INPUTDATA}/poupeesTIF/ )
+
         
 # WRITER
 
@@ -124,8 +134,8 @@ ADD_TEST(ioTuGDALImageIOCanWrite_TIFF ${IO_TESTS} otbGDALImageIOTestCanWrite
     
 	
 # CanWrite()
-ADD_TEST(ioTuCAIImageIOCanWriteBSQ ${IO_TESTS} otbCAIImageIOTestCanWrite 
-        ${TEMP}/ioCAIImageIOCanWriteBSQ.hd )
+# ADD_TEST(ioTuCAIImageIOCanWriteBSQ ${IO_TESTS} otbCAIImageIOTestCanWrite 
+#        ${TEMP}/ioCAIImageIOCanWriteBSQ.hd )
 
 
 # -------            otb::ONERAImageIO   ------------------------------
@@ -134,22 +144,22 @@ ADD_TEST(ioTuONERAImageIOCanRead ${IO_TESTS} otbONERAImageIOTestCanRead
         ${IMAGEDATA}/ONERA/spa3_0215_rad.ent)
 	
 ADD_TEST(ioTvONERAImageFileReader ${IO_TESTS} 
-  --compare-binary  ${BASELINE}/ioImageFileReaderONERA.dat
-                    ${TEMP}/ioImageFileReaderONERA.dat
+  --compare-image ${TOL}  ${BASELINE}/ioImageFileReaderONERA.ent
+                    ${TEMP}/ioImageFileReaderONERA.ent
         otbImageFileReaderONERATest
         ${IMAGEDATA}/ONERA/spa3_0215_rad.ent
         ${TEMP}/ioImageFileReaderONERA.ent )
 
 ADD_TEST(ioTvONERAImageFileReaderComplex ${IO_TESTS} 
-  --compare-binary    ${BASELINE}/ioImageFileReaderONERAComplex.c1
-                      ${TEMP}/ioImageFileReaderONERAComplex.c1
+  --compare-image ${TOL}  ${BASELINE}/ioImageFileReaderONERAComplex.hdr
+                      ${TEMP}/ioImageFileReaderONERAComplex.hdr
         otbImageFileReaderONERAComplex
         ${IMAGEDATA}/ONERA/spa3_0215_rad.ent
-        ${TEMP}/ioImageFileReaderONERAComplex.hd )
+        ${TEMP}/ioImageFileReaderONERAComplex.hdr )
 
 ADD_TEST(ioTvONERAImageFileWriterComplex ${IO_TESTS} 
-  --compare-binary         ${BASELINE}/ioImageFileReaderONERAComplexWrite.dat
-                           ${TEMP}/ioImageFileReaderONERAComplexWrite.dat
+  --compare-image ${TOL}   ${BASELINE}/ioImageFileReaderONERAComplexWrite.ent
+                           ${TEMP}/ioImageFileReaderONERAComplexWrite.ent
         otbImageFileWriterONERAComplex
         ${IMAGEDATA}/ONERA/spa3_0215_rad.ent
         ${TEMP}/ioImageFileReaderONERAComplexWrite.ent )
@@ -176,24 +186,28 @@ ADD_TEST(ioTvImageFileReaderRGB_PNG2TIFF ${IO_TESTS}
         ${INPUTDATA}/sbuv.png 
         ${TEMP}/ioImageFileReaderRGB_PNG2TIFF_sbuv.tiff )
 ADD_TEST(ioTvImageFileReaderRGB_BSQ2PNG ${IO_TESTS} 
-  --compare-image ${TOL}   ${BASELINE}/ioImageFileReaderRGB_BSQ2PNG_poupees.png
+#  --compare-image ${TOL}   ${BASELINE}/ioImageFileReaderRGB_BSQ2PNG_poupees.png
+  --compare-image ${TOL}   ${INPUTDATA}/poupees.hdr
                     ${TEMP}/ioImageFileReaderRGB_BSQ2PNG_poupees.png
         otbImageFileReaderRGBTest
-        ${INPUTDATA}/poupees.hd 
+        ${INPUTDATA}/poupees.hdr 
         ${TEMP}/ioImageFileReaderRGB_BSQ2PNG_poupees.png )
+
 ADD_TEST(ioTvImageFileReaderRGB_BSQ2TIFF ${IO_TESTS} 
-  --compare-image ${TOL}   ${BASELINE}/ioImageFileReaderRGB_BSQ2TIFF_poupees.tiff
+#  --compare-image ${TOL}   ${BASELINE}/ioImageFileReaderRGB_BSQ2TIFF_poupees.tiff
+  --compare-image ${TOL}   ${INPUTDATA}/poupees.hdr 
                     ${TEMP}/ioImageFileReaderRGB_BSQ2TIFF_poupees.tiff
         otbImageFileReaderRGBTest
-        ${INPUTDATA}/poupees.hd 
+        ${INPUTDATA}/poupees.hdr 
         ${TEMP}/ioImageFileReaderRGB_BSQ2TIFF_poupees.tiff )
 
 ADD_TEST(ioTvImageFileReaderRGB_Cai_SPOT5TIF2PNG ${IO_TESTS} 
   --compare-image ${TOL}   ${BASELINE}/ioImageFileReaderRGB_SPOT5TIF2PNG_poupeesTIF.png
                     ${TEMP}/ioImageFileReaderRGB_Cai_SPOT5TIF2PNG_poupeesTIF.png
         otbImageFileReaderRGBTest
-        ${INPUTDATA}/poupeesTIF 
+        ${INPUTDATA}/poupeesTIF/
         ${TEMP}/ioImageFileReaderRGB_Cai_SPOT5TIF2PNG_poupeesTIF.png )
+
 ADD_TEST(ioTvImageFileReaderRGB_Gdal_SPOT5TIF2PNG ${IO_TESTS} 
   --compare-image ${TOL}   ${BASELINE}/ioImageFileReaderRGB_SPOT5TIF2PNG_poupeesTIF.png
                     ${TEMP}/ioImageFileReaderRGB_Gdal_SPOT5TIF2PNG_poupeesTIF.png
@@ -201,12 +215,13 @@ ADD_TEST(ioTvImageFileReaderRGB_Gdal_SPOT5TIF2PNG ${IO_TESTS}
         ${INPUTDATA}/poupeesTIF/IMAGERY.TIF 
         ${TEMP}/ioImageFileReaderRGB_Gdal_SPOT5TIF2PNG_poupeesTIF.png )
 
-ADD_TEST(ioTvImageFileReaderRGB_SPOT5BIL2PNG ${IO_TESTS} 
-  --compare-image ${TOL}   ${BASELINE}/ioImageFileReaderRGB_SPOT5TIF2PNG_poupeesBIL.png
-                    ${TEMP}/ioImageFileReaderRGB_SPOT5TIF2PNG_poupeesBIL.png
-        otbImageFileReaderRGBTest
-        ${INPUTDATA}/poupeesBIL
-        ${TEMP}/ioImageFileReaderRGB_SPOT5TIF2PNG_poupeesBIL.png )
+# Suppression CAI
+# ADD_TEST(ioTvImageFileReaderRGB_SPOT5BIL2PNG ${IO_TESTS} 
+#   --compare-image ${TOL}   ${BASELINE}/ioImageFileReaderRGB_SPOT5TIF2PNG_poupeesBIL.png
+#                     ${TEMP}/ioImageFileReaderRGB_SPOT5TIF2PNG_poupeesBIL.png
+#         otbImageFileReaderRGBTest
+#         ${INPUTDATA}/poupeesBIL
+#         ${TEMP}/ioImageFileReaderRGB_SPOT5TIF2PNG_poupeesBIL.png )
 
 
 # -------            otb::ImageFileWriter pour CAI  ------------------------------
@@ -222,12 +237,12 @@ ADD_TEST(ioTvImageFileWriterPNG2PNG ${IO_TESTS}
 ADD_TEST(ioTvImageFileWriterPNG2BSQ ${IO_TESTS} 
         otbImageFileWriterTest
         ${INPUTDATA}/cthead1.png 
-        ${TEMP}/ioImageFileWriterPNG2BSQ_cthead1.hd )
+        ${TEMP}/ioImageFileWriterPNG2BSQ_cthead1.hdr )
 ADD_TEST(ioTvImageFileReaderBSQ2PNG ${IO_TESTS} 
   --compare-image ${TOL}   ${INPUTDATA}/cthead1.png
                     ${TEMP}/ioImageFileWriterPNG2BSQ_cthead1_2.png
         otbImageFileReaderTest
-        ${TEMP}/ioImageFileWriterPNG2BSQ_cthead1.hd 
+        ${TEMP}/ioImageFileWriterPNG2BSQ_cthead1.hdr 
         ${TEMP}/ioImageFileWriterPNG2BSQ_cthead1_2.png )
 
 # RGB
@@ -242,13 +257,13 @@ ADD_TEST(ioTvImageFileWriterRGB_PNG2PNG ${IO_TESTS}
 ADD_TEST(ioTvImageFileWriterRGB_PNG2BSQ ${IO_TESTS} 
         otbImageFileWriterRGBTest
         ${INPUTDATA}/sbuv.png 
-        ${TEMP}/ioImageFileWriterRGB_PNG2BSQ_sbuv.hd )
+        ${TEMP}/ioImageFileWriterRGB_PNG2BSQ_sbuv.hdr )
         
 ADD_TEST(ioTvImageFileReaderRGB_BSQ2PNG_2 ${IO_TESTS} 
   --compare-image ${TOL}   ${INPUTDATA}/sbuv.png
                     ${TEMP}/ioImageFileWriterRGB_PNG2BSQ_sbuv_2.png
         otbImageFileReaderRGBTest
-        ${TEMP}/ioImageFileWriterRGB_PNG2BSQ_sbuv.hd
+        ${TEMP}/ioImageFileWriterRGB_PNG2BSQ_sbuv.hdr
         ${TEMP}/ioImageFileWriterRGB_PNG2BSQ_sbuv_2.png )
         
 # WRITER GDAL        
@@ -258,13 +273,80 @@ ADD_TEST(ioTvGDALImageFileWriterTIF2TIF ${IO_TESTS}
         ${TEMP}/poupees.tiff )
 
 
+# -------            otb::ImageFileReader pour GDAL  ------------------------------
+# -------            otb::ImageFileWriter pour GDAL  ------------------------------
+
+
+ADD_TEST(ioTvImageReaderWriterRgbPNG2PNG ${IO_TESTS} 
+   --compare-image ${TOL}   ${INPUTDATA}/poupees.png
+                     ${TEMP}/ioImageReaderWriterRgbPNG2PNG_poupees.png
+        otbImageFileReaderRGBTest
+        ${INPUTDATA}/poupees.png
+        ${TEMP}/ioImageReaderWriterRgbPNG2PNG_poupees.png )
+
+ADD_TEST(ioTvImageReaderWriterRgbPNG2TIF ${IO_TESTS} 
+   --compare-image ${TOL}   ${INPUTDATA}/poupees.png
+                     ${TEMP}/ioImageReaderWriterRgbPNG2TIF_poupees.tif
+        otbImageFileReaderRGBTest
+        ${INPUTDATA}/poupees.png
+        ${TEMP}/ioImageReaderWriterRgbPNG2TIF_poupees.tif )
+ADD_TEST(ioTvImageReaderWriterRgbPNG2ENVI ${IO_TESTS} 
+   --compare-image ${TOL}   ${INPUTDATA}/poupees.png
+                     ${TEMP}/ioImageReaderWriterRgbPNG2ENVI_poupees
+        otbImageFileReaderRGBTest
+        ${INPUTDATA}/poupees.png
+        ${TEMP}/ioImageReaderWriterRgbPNG2ENVI_poupees.hdr )
+ADD_TEST(ioTvImageReaderWriterRgbPNG2JPEG ${IO_TESTS} 
+   --compare-image 2   ${INPUTDATA}/poupees.png
+                     ${TEMP}/ioImageReaderWriterRgbPNG2JPEG_poupees.jpg
+        otbImageFileReaderRGBTest
+        ${INPUTDATA}/poupees.png
+        ${TEMP}/ioImageReaderWriterRgbPNG2JPEG_poupees.jpg )
+
+ADD_TEST(ioTvImageReaderWriterRgbTIF2PNG ${IO_TESTS} 
+   --compare-image ${TOL}   ${INPUTDATA}/poupees.tif
+                     ${TEMP}/ioImageReaderWriterRgbTIF2PNG_poupees.png
+        otbImageFileReaderRGBTest
+        ${INPUTDATA}/poupees.tif
+        ${TEMP}/ioImageReaderWriterRgbTIF2PNG_poupees.png )
+ADD_TEST(ioTvImageReaderWriterRgbENVI2PNG ${IO_TESTS} 
+   --compare-image ${TOL}   ${INPUTDATA}/poupees
+                     ${TEMP}/ioImageReaderWriterRgbENVI2PNG_poupees.png
+        otbImageFileReaderRGBTest
+        ${INPUTDATA}/poupees
+        ${TEMP}/ioImageReaderWriterRgbENVI2PNG_poupees.png )
+ADD_TEST(ioTvImageReaderWriterRgbJPEG2PNG ${IO_TESTS} 
+   --compare-image ${TOL}   ${INPUTDATA}/couleurs.jpg
+                     ${TEMP}/ioImageReaderWriterRgbJPEG2PNG_couleurs.png
+        otbImageFileReaderRGBTest
+        ${INPUTDATA}/couleurs.jpg
+        ${TEMP}/ioImageReaderWriterRgbJPEG2PNG_couleurs.png )
+ADD_TEST(ioTvImageReaderWriterRgbJPEG2TIF ${IO_TESTS} 
+   --compare-image ${TOL}   ${INPUTDATA}/couleurs.jpg
+                     ${TEMP}/ioImageReaderWriterRgbJPEG2TIF_couleurs.tif
+        otbImageFileReaderRGBTest
+        ${INPUTDATA}/couleurs.jpg
+        ${TEMP}/ioImageReaderWriterRgbJPEG2TIF_couleurs.tif )
+        
+
+
+
+
+
+
+
+
+
+
+
+
 # -------            otb::MultiChannelExtractROI   ------------------------------
 # ---  SPOT4 (CAI)  ---
 ADD_TEST(ioTvMultiChannelROI_SPOT42PNG ${COMMON_TESTS} 
    --compare-image ${TOL}   ${BASELINE}/ioExtractROI_SPOT42PNG_spot4_700_60_77_489_channels_1_2_3.png
                      ${TEMP}/ioExtractROI_SPOT42PNG_spot4_700_60_77_489_channels_1_2_3.png
          otbMultiChannelExtractROI
-         ${IMAGEDATA}/SPOT4_SCENE01
+         ${IMAGEDATA}/SPOT4_SCENE01/
          ${TEMP}/ioExtractROI_SPOT42PNG_spot4_700_60_77_489_channels_1_2_3.png
          -startX 700 -startY 60 -sizeX 77 -sizeY 489
          -channels 1 2 3 )
@@ -272,7 +354,7 @@ ADD_TEST(ioTvMultiChannelROI_SPOT42PNG_2 ${COMMON_TESTS}
    --compare-image ${TOL}   ${BASELINE}/ioExtractROI_SPOT42PNG_spot4_700_60_77_489_channels_3_2_1.png
                      ${TEMP}/ioExtractROI_SPOT42PNG_spot4_700_60_77_489_channels_3_2_1.png
          otbMultiChannelExtractROI
-         ${IMAGEDATA}/SPOT4_SCENE01
+         ${IMAGEDATA}/SPOT4_SCENE01/
          ${TEMP}/ioExtractROI_SPOT42PNG_spot4_700_60_77_489_channels_3_2_1.png
          -startX 700 -startY 60 -sizeX 77 -sizeY 489
          -channels 3 2 1 )
@@ -282,20 +364,20 @@ ADD_TEST(ioTvMultiChannelROI_BSQ2PNG_2 ${COMMON_TESTS}
    --compare-image ${TOL}   ${BASELINE}/ioExtractROI_BSQ2PNG_poupees_100_100_77_300_channels_1_2_3.png
                      ${TEMP}/ioExtractROI_BSQ2PNG_poupees_100_100_77_300_channels_1_2_3.png
          otbMultiChannelExtractROI
-         -uchar ${INPUTDATA}/poupees.hd
+         -uchar ${INPUTDATA}/poupees.hdr
          -uchar ${TEMP}/ioExtractROI_BSQ2PNG_poupees_100_100_77_300_channels_1_2_3.png
          -startX 100 -startY 100 -sizeX 77 -sizeY 300
          -channels 1 2 3 )
 
 # ---  SPOT5 BIL (CAI)  ---
-ADD_TEST(ioTvMultiChannelROI_SPOT5BIL2PNG_2 ${COMMON_TESTS} 
-   --compare-image ${TOL}   ${BASELINE}/ioExtractROI_SPOT5BIL2PNG_poupees_100_100_77_300_channels_1_2_3.png
-                     ${TEMP}/ioExtractROI_SPOT5BIL2PNG_poupees_100_100_77_300_channels_1_2_3.png
-         otbMultiChannelExtractROI
-         ${INPUTDATA}/poupeesBIL
-         ${TEMP}/ioExtractROI_SPOT5BIL2PNG_poupees_100_100_77_300_channels_1_2_3.png
-         -startX 100 -startY 100 -sizeX 77 -sizeY 300
-         -channels 1 2 3 )
+# ADD_TEST(ioTvMultiChannelROI_SPOT5BIL2PNG_2 ${COMMON_TESTS} 
+#   --compare-image ${TOL}   ${BASELINE}/ioExtractROI_SPOT5BIL2PNG_poupees_100_100_77_300_channels_1_2_3.png
+#                     ${TEMP}/ioExtractROI_SPOT5BIL2PNG_poupees_100_100_77_300_channels_1_2_3.png
+#         otbMultiChannelExtractROI
+#         ${INPUTDATA}/poupeesBIL
+#         ${TEMP}/ioExtractROI_SPOT5BIL2PNG_poupees_100_100_77_300_channels_1_2_3.png
+#         -startX 100 -startY 100 -sizeX 77 -sizeY 300
+#         -channels 1 2 3 )
 
 # ---  SPOT5 (CAI)  ---
 # ---  Test sur l'image SPOT 5 4 canaux  ---
@@ -303,7 +385,7 @@ ADD_TEST(ioTvMultiChannelROI_SPOT52PNG ${COMMON_TESTS}
    --compare-image ${TOL}   ${BASELINE}/ioExtractROI_SPOT52PNG_spot5_700_700_1000_1000_channels_1_2_3.png
                      ${TEMP}/ioExtractROI_SPOT52PNG_spot5_700_700_1000_1000_channels_1_2_3.png
          otbMultiChannelExtractROI
-         ${IMAGEDATA}/SPOT5_SCENE01
+         ${IMAGEDATA}/SPOT5_SCENE01/
          ${TEMP}/ioExtractROI_SPOT52PNG_spot5_700_700_1000_1000_channels_1_2_3.png
          -startX 700 -startY 700 -sizeX 1000 -sizeY 1000
          -channels 1 2 3 )
@@ -312,7 +394,7 @@ ADD_TEST(ioTvMultiChannelROI_SPOT52PNG_2 ${COMMON_TESTS}
    --compare-image ${TOL}   ${BASELINE}/ioExtractROI_SPOT52PNG_spot5_700_700_1000_1000_channel_1.png
                      ${TEMP}/ioExtractROI_SPOT52PNG_spot5_700_700_1000_1000_channel_1.png
          otbMultiChannelExtractROI
-         ${IMAGEDATA}/SPOT5_SCENE01
+         ${IMAGEDATA}/SPOT5_SCENE01/
          ${TEMP}/ioExtractROI_SPOT52PNG_spot5_700_700_1000_1000_channel_1.png
          -startX 700 -startY 700 -sizeX 1000 -sizeY 1000
          -channels 1 )
@@ -320,7 +402,7 @@ ADD_TEST(ioTvMultiChannelROI_SPOT52PNG_3 ${COMMON_TESTS}
    --compare-image ${TOL}   ${BASELINE}/ioExtractROI_SPOT52PNG_spot5_700_700_1000_1000_channel_2.png
                      ${TEMP}/ioExtractROI_SPOT52PNG_spot5_700_700_1000_1000_channel_2.png
          otbMultiChannelExtractROI
-         ${IMAGEDATA}/SPOT5_SCENE01
+         ${IMAGEDATA}/SPOT5_SCENE01/
          ${TEMP}/ioExtractROI_SPOT52PNG_spot5_700_700_1000_1000_channel_2.png
          -startX 700 -startY 700 -sizeX 1000 -sizeY 1000
          -channels 2 )
@@ -328,7 +410,7 @@ ADD_TEST(ioTvMultiChannelROI_SPOT52PNG_4 ${COMMON_TESTS}
    --compare-image ${TOL}   ${BASELINE}/ioExtractROI_SPOT52PNG_spot5_700_700_1000_1000_channel_3.png
                      ${TEMP}/ioExtractROI_SPOT52PNG_spot5_700_700_1000_1000_channel_3.png
          otbMultiChannelExtractROI
-         ${IMAGEDATA}/SPOT5_SCENE01
+         ${IMAGEDATA}/SPOT5_SCENE01/
          ${TEMP}/ioExtractROI_SPOT52PNG_spot5_700_700_1000_1000_channel_3.png
          -startX 700 -startY 700 -sizeX 1000 -sizeY 1000
          -channels 3 )
@@ -336,7 +418,7 @@ ADD_TEST(ioTvMultiChannelROI_SPOT52PNG_5 ${COMMON_TESTS}
    --compare-image ${TOL}   ${BASELINE}/ioExtractROI_SPOT52PNG_spot5_700_700_1000_1000_channel_4.png
                      ${TEMP}/ioExtractROI_SPOT52PNG_spot5_700_700_1000_1000_channel_4.png
          otbMultiChannelExtractROI
-         ${IMAGEDATA}/SPOT5_SCENE01
+         ${IMAGEDATA}/SPOT5_SCENE01/
          ${TEMP}/ioExtractROI_SPOT52PNG_spot5_700_700_1000_1000_channel_4.png
          -startX 700 -startY 700 -sizeX 1000 -sizeY 1000
          -channels 4 )
@@ -412,7 +494,7 @@ ADD_TEST(ioTuOtbImageTestSAR_ERS ${IO_TESTS}
    --compare-ascii   ${BASELINE_FILES}/ioOtbImageTestSAR_ERS.txt
                      ${TEMP}/ioOtbImageTestSAR_ERS.txt
          otbImageTest
-         ${IMAGEDATA}/SAR_ERS2_SLCI_SCENE1/DAT_01.001
+         ${IMAGEDATA}/SAR_ERS2_SLCI_SCENE1/
          ${TEMP}/ioOtbImageTestSAR_ERS.txt)
 
 # ---  Otb::Image Test  ---
@@ -437,22 +519,22 @@ ADD_TEST(ioTuOtbVectorImageTestSpot5 ${IO_TESTS}
    --compare-ascii   ${BASELINE_FILES}/ioOtbVectorImageTestSpot5.txt
                      ${TEMP}/ioOtbVectorImageTestSpot5.txt
         otbVectorImageTest
-        ${IMAGEDATA}/SPOT5_SCENE01/IMAGERY.TIF
+        ${IMAGEDATA}/SPOT5_SCENE01/
         ${TEMP}/ioOtbVectorImageTestSpot5.txt)
         
 
 
 # ---  STREAMING : CAI  ---
-ADD_TEST(ioTvStreamingImageFilterCAITest ${IO_TESTS} 
-#   --compare-image ${TOL} ${TEMP}/ioStreamingImageFilterTestCAI_BSQ.png
-#                      ${TEMP}/ioStreamingImageFilterTestCAI_BSQ.png
+ADD_TEST(ioTvStreamingImageFilterGDAL_ENVI ${IO_TESTS} 
+   --compare-image ${TOL} ${TEMP}/ioStreamingImageFilterTestCDAL_ENVI.png
+                      ${TEMP}/ioStreamingImageFilterTestCDAL_ENVI.png
          otbStreamingImageFilterTest
-         ${INPUTDATA}/poupees_1canal.hd
-         ${TEMP}/ioStreamingImageFilterTestCAI_BSQ.png
+         ${INPUTDATA}/poupees_1canal.c1.hdr
+         ${TEMP}/ioStreamingImageFilterTestCDAL_ENVI.png
          )
 
 # ---  STREAMING : GDAL  ---
-ADD_TEST(ioTvStreamingImageFilterGDALTest ${IO_TESTS} 
+ADD_TEST(ioTvStreamingImageFilterGDAL_TIFF ${IO_TESTS} 
 #   --compare-image ${TOL} ${TEMP}/ioStreamingImageFilterTestGDAL_PoupeesTif.png
 #                      ${TEMP}/ioStreamingImageFilterTestGDAL_PoupeesTif.png
          otbStreamingImageFilterTest
@@ -463,20 +545,24 @@ ADD_TEST(ioTvStreamingImageFilterGDALTest ${IO_TESTS}
 
 # ---  STREAMING  IMAGE   FILE    WRITER  ---
 ADD_TEST(ioTvStreamingIFWriterBSQWithoutStreaming ${IO_TESTS} 
-   --compare-binary   ${INPUTDATA}/poupees_1canal.c1
-                      ${TEMP}/ioStreamingImageFileWriterBSQWithoutStreaming.c1
+#   --compare-binary   ${INPUTDATA}/poupees_1canal.c1
+#                      ${TEMP}/ioStreamingImageFileWriterBSQWithoutStreaming.c1
+   --compare-image ${TOL}   ${INPUTDATA}/poupees_1canal.c1.hdr
+                      ${TEMP}/ioStreamingImageFileWriterBSQWithoutStreaming.hdr
          otbStreamingImageFileWriterTest
-         ${INPUTDATA}/poupees_1canal.hd
-         ${TEMP}/ioStreamingImageFileWriterBSQWithoutStreaming.hd
+         ${INPUTDATA}/poupees_1canal.c1.hdr
+         ${TEMP}/ioStreamingImageFileWriterBSQWithoutStreaming.hdr
          0 # Streaming
          )
 # ---  STREAMING  IMAGE   FILE    WRITER  ---
 ADD_TEST(ioTvStreamingIFWriterBSQWithStreaming ${IO_TESTS} 
-   --compare-binary   ${INPUTDATA}/poupees_1canal.c1
-                      ${TEMP}/ioStreamingImageFileWriterBSQWithStreaming_100.c1
+#   --compare-binary   ${INPUTDATA}/poupees_1canal.c1
+#                      ${TEMP}/ioStreamingImageFileWriterBSQWithStreaming_100.c1
+   --compare-image ${TOL}   ${INPUTDATA}/poupees_1canal.c1.hdr
+                      ${TEMP}/ioStreamingImageFileWriterBSQWithStreaming_100.hdr
          otbStreamingImageFileWriterTest
-         ${INPUTDATA}/poupees_1canal.hd
-         ${TEMP}/ioStreamingImageFileWriterBSQWithStreaming_100.hd
+         ${INPUTDATA}/poupees_1canal.c1.hdr
+         ${TEMP}/ioStreamingImageFileWriterBSQWithStreaming_100.hdr
          1 # Streaming
          100
          )
@@ -514,12 +600,10 @@ ADD_TEST(ioTvStreamingIFWriterBSQWithStreaming ${IO_TESTS}
 SET(BasicIO_SRCS
 otbGDALImageIOTestCanRead.cxx
 otbGDALImageIOTestCanWrite.cxx
-otbCAIImageIOTestCanRead.cxx
 otbONERAImageIOTestCanRead.cxx
 otbImageFileReaderONERA.cxx
 otbImageFileReaderONERAComplex.cxx
 otbImageFileWriterONERAComplex.cxx
-otbCAIImageIOTestCanWrite.cxx
 otbImageFileReaderTest.cxx
 otbImageFileWriterTest.cxx
 otbVectorImageFileReaderWriterTest.cxx
@@ -536,7 +620,7 @@ otbVectorImageTest.cxx
 INCLUDE_DIRECTORIES("${OTBTesting_BINARY_DIR}")
 
 ADD_EXECUTABLE(otbIOTests otbIOTests.cxx ${BasicIO_SRCS})
-TARGET_LINK_LIBRARIES(otbIOTests OTBIO OTBCommon  cai ${GDAL_LIBRARY} ITKIO ITKCommon)
+TARGET_LINK_LIBRARIES(otbIOTests OTBIO OTBCommon  gdal ITKIO ITKCommon)
 
 ENDIF( NOT OTB_DISABLE_CXX_TESTING )
 

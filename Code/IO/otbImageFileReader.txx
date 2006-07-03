@@ -170,15 +170,12 @@ ImageFileReader<TOutputImage>
 
     this->m_ImageIO->Read(loadBuffer);
     
-    otbMsgDebugMacro(<< "Buffer conversion required from: "
+    otbMsgDevMacro(<< "Buffer conversion required from: "
                      << this->m_ImageIO->GetComponentTypeInfo().name()
                      << " to: "
-                     << typeid(ITK_TYPENAME ConvertPixelTraits::ComponentType).name());
+                     << typeid(ITK_TYPENAME ConvertPixelTraits::ComponentType).name() << "  ImageSizeInBytes()"<<this->m_ImageIO->GetImageSizeInBytes()<<"  region.GetNumberOfPixels()"<<region.GetNumberOfPixels());
 
     this->DoConvertBuffer(loadBuffer, region.GetNumberOfPixels());
-
-otbMsgDebugMacro(<<"ImageSizeInBytes()"<<this->m_ImageIO->GetImageSizeInBytes());
-otbMsgDebugMacro(<<"region.GetNumberOfPixels()"<<region.GetNumberOfPixels());
 
     delete [] loadBuffer;
     }
@@ -208,7 +205,7 @@ ImageFileReader<TOutputImage>
     }
     else
     {
-//otbMsgDebugMacro( << " Streaming Image Read ");
+otbMsgDevMacro( << " Streaming Image Read ");
     }
 }
 

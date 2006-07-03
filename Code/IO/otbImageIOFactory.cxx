@@ -23,7 +23,6 @@
 #include "itkMutexLock.h"
 #include "itkMutexLockHolder.h"
 
-#include "otbCAIImageIOFactory.h"
 #include "otbGDALImageIOFactory.h"
 #include "otbONERAImageIOFactory.h"
 #include "otbMSTARImageIOFactory.h"
@@ -52,19 +51,13 @@ ImageIOFactory::RegisterBuiltInFactories()
                 itk::MutexLockHolder<itk::SimpleMutexLock> mutexHolder( mutex );
                 if( firstTime )
                 {
-
-                        //For an SPOT5TIF image, if the user set only the directory, this image is read with CAI.
-                        //Otherwise, if the user set the name of the image ('IMAGERY.TIF') it read with GDAL.
-                        
-
+                        // ONERA format for OTB
+                        itk::ObjectFactoryBase::RegisterFactory( ONERAImageIOFactory::New() );			
+                        // MSTAR Format for OTB
+			itk::ObjectFactoryBase::RegisterFactory( MSTARImageIOFactory::New() );
                         // GDAL : New format for OTB
                         itk::ObjectFactoryBase::RegisterFactory( GDALImageIOFactory::New() );
-                        // CAI : New format for OTB
-                        itk::ObjectFactoryBase::RegisterFactory( CAIImageIOFactory::New() );
-                         // ONERA format for OTB
-                        itk::ObjectFactoryBase::RegisterFactory( ONERAImageIOFactory::New() );			//MSTAR Format
-			itk::ObjectFactoryBase::RegisterFactory( MSTARImageIOFactory::New() );
-                       firstTime = false;
+                        firstTime = false;
                 }
         }
 
