@@ -53,7 +53,7 @@
 // Software Guide : EndCodeSnippet
 
 
-#include "itkImage.h"
+#include "otbImage.h"
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
 
@@ -83,7 +83,7 @@ int main( int argc, char *argv[] )
   // Software Guide : BeginCodeSnippet
   typedef  float     InputPixelType;
   const    unsigned int      Dimension = 2;
-  typedef itk::Image< InputPixelType, Dimension >  InputImageType;
+  typedef otb::Image< InputPixelType, Dimension >  InputImageType;
   // Software Guide : EndCodeSnippet
 
 
@@ -103,7 +103,7 @@ int main( int argc, char *argv[] )
 
   // Software Guide : BeginCodeSnippet
   typedef unsigned char      BinaryPixelType;
-  typedef itk::Image< BinaryPixelType, Dimension >      BinaryImageType;
+  typedef otb::Image< BinaryPixelType, Dimension >      BinaryImageType;
   // Software Guide : EndCodeSnippet
 
 
@@ -154,7 +154,7 @@ int main( int argc, char *argv[] )
 
   // Software Guide : BeginCodeSnippet
   typedef unsigned char OutputPixelType;
-  typedef itk::Image< OutputPixelType, Dimension > OutputImageType;
+  typedef otb::Image< OutputPixelType, Dimension > OutputImageType;
   // Software Guide : EndCodeSnippet
                         
 

@@ -12,4 +12,5 @@ SUBDIRS(
   Visu
   Learning
   Classification
+  Segmentation
 )

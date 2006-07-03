@@ -219,7 +219,7 @@ void
 VoronoiSegmentationImageFilter <TInputImage,TOutputImage,TBinaryPriorImage>
 ::PrintSelf(std::ostream& os, Indent indent) const
 {
-  Superclass::PrintSelf(os, indent);
+  //Superclass::PrintSelf(os, indent); // comment for OTB
 
   os << indent << "Mean = " << m_Mean << std::endl;
   os << indent << "MeanTolerance = " << m_MeanTolerance << std::endl;
