@@ -7,7 +7,6 @@ SUBDIRS(
   DataRepresentation
   IO
   Filtering
-  Segmentation
   Patented
   ChangeDetection
   Visu
