@@ -297,8 +297,8 @@ ADD_TEST(ioTvImageReaderWriterRgbPNG2ENVI ${IO_TESTS}
         ${INPUTDATA}/poupees.png
         ${TEMP}/ioImageReaderWriterRgbPNG2ENVI_poupees.hdr )
 ADD_TEST(ioTvImageReaderWriterRgbPNG2JPEG ${IO_TESTS} 
-   --compare-image 2   ${INPUTDATA}/poupees.png
-                     ${TEMP}/ioImageReaderWriterRgbPNG2JPEG_poupees.jpg
+   --compare-image ${TOL} ${INPUTDATA}/poupees.png
+                 ${TEMP}/ioImageReaderWriterRgbPNG2JPEG_poupees.jpg
         otbImageFileReaderRGBTest
         ${INPUTDATA}/poupees.png
         ${TEMP}/ioImageReaderWriterRgbPNG2JPEG_poupees.jpg )
@@ -359,13 +359,13 @@ ADD_TEST(ioTvMultiChannelROI_SPOT42PNG_2 ${COMMON_TESTS}
          -startX 700 -startY 60 -sizeX 77 -sizeY 489
          -channels 3 2 1 )
 
-# ---  BSQ (CAI)  ---
-ADD_TEST(ioTvMultiChannelROI_BSQ2PNG_2 ${COMMON_TESTS} 
-   --compare-image ${TOL}   ${BASELINE}/ioExtractROI_BSQ2PNG_poupees_100_100_77_300_channels_1_2_3.png
-                     ${TEMP}/ioExtractROI_BSQ2PNG_poupees_100_100_77_300_channels_1_2_3.png
+# ---  ENVI  ---
+ADD_TEST(ioTvMultiChannelROI_ENVI2PNG_2 ${COMMON_TESTS} 
+   --compare-image ${TOL}   ${BASELINE}/ioExtractROI_ENVI2PNG_poupees_100_100_77_300_channels_1_2_3.png
+                     ${TEMP}/ioExtractROI_ENVI2PNG_poupees_100_100_77_300_channels_1_2_3.png
          otbMultiChannelExtractROI
          -uchar ${INPUTDATA}/poupees.hdr
-         -uchar ${TEMP}/ioExtractROI_BSQ2PNG_poupees_100_100_77_300_channels_1_2_3.png
+         -uchar ${TEMP}/ioExtractROI_ENVI2PNG_poupees_100_100_77_300_channels_1_2_3.png
          -startX 100 -startY 100 -sizeX 77 -sizeY 300
          -channels 1 2 3 )
 

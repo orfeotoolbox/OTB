@@ -42,19 +42,19 @@ otbImageViewerNew.cxx
 INCLUDE_DIRECTORIES("${OTBTesting_BINARY_DIR}")
 
 ADD_EXECUTABLE(otbVisuTests otbVisuTests.cxx ${BasicVisu_SRCS})
-TARGET_LINK_LIBRARIES(otbVisuTests OTBVisu OTBIO OTBCommon cai  ${GDAL_LIBRARY} ITKIO ITKCommon)
+TARGET_LINK_LIBRARIES(otbVisuTests OTBVisu OTBIO OTBCommon gdal ITKIO ITKCommon)
 
 ADD_EXECUTABLE(otbImageViewer otbImageViewer.cxx)
-TARGET_LINK_LIBRARIES(otbImageViewer OTBVisu OTBIO OTBCommon cai ITKIO ITKCommon)
+TARGET_LINK_LIBRARIES(otbImageViewer OTBVisu OTBIO OTBCommon gdal ITKIO ITKCommon)
 
 ADD_EXECUTABLE(otbImageViewerWithitkVectorImage otbImageViewerWithitkVectorImage.cxx)
-TARGET_LINK_LIBRARIES(otbImageViewerWithitkVectorImage OTBVisu OTBIO OTBCommon cai ITKIO ITKCommon)
+TARGET_LINK_LIBRARIES(otbImageViewerWithitkVectorImage OTBVisu OTBIO OTBCommon gdal ITKIO ITKCommon)
 
 ADD_EXECUTABLE(otbImageViewerWithitkImage otbImageViewerWithitkImage.cxx)
-TARGET_LINK_LIBRARIES(otbImageViewerWithitkImage OTBVisu OTBIO OTBCommon cai ITKIO ITKCommon)
+TARGET_LINK_LIBRARIES(otbImageViewerWithitkImage OTBVisu OTBIO OTBCommon gdal ITKIO ITKCommon)
 
 ADD_EXECUTABLE(otbImageViewerAS otbImageViewerAS.cxx)
-TARGET_LINK_LIBRARIES(otbImageViewerAS OTBVisu OTBIO OTBCommon cai ITKIO ITKCommon)
+TARGET_LINK_LIBRARIES(otbImageViewerAS OTBVisu OTBIO OTBCommon gdal ITKIO ITKCommon)
 
 ENDIF( NOT OTB_DISABLE_CXX_TESTING )
 
