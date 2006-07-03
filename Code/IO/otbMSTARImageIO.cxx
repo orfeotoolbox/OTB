@@ -125,9 +125,9 @@ bool MSTARImageIO::CanReadFile( const char* filename )
 	tptr = (char *) strstr(tbuff,"PhoenixHeaderLength= ");
 	if (tptr == (char *) NULL)
 	  {
-	  fprintf(stderr,"Can not determine Phoenix header length!\n");
+//	  fprintf(stderr,"Can not determine Phoenix header length!\n");
 	  fclose(MSTARfp);
-	  return 0;
+	  return false;
 	  } else
 	  {
 	  sscanf((tptr+20), "%d", &phlen);
@@ -137,9 +137,9 @@ bool MSTARImageIO::CanReadFile( const char* filename )
 	tptr = (char *) strstr(tbuff,"native_header_length= ");
 	if (tptr == (char *) NULL)
 	  {
-	  fprintf(stderr,"Can not determine native header length!\n");
+//	  fprintf(stderr,"Can not determine native header length!\n");
 	  fclose(MSTARfp);
-	  return 0;
+	  return false;
 	  } else
 	  {
 	  sscanf((tptr+21), "%d", &nhlen);
@@ -149,10 +149,9 @@ bool MSTARImageIO::CanReadFile( const char* filename )
 	tptr = (char *) strstr(tbuff,"NumberOfColumns= ");
 	if (tptr == (char *) NULL)
 	  {
-	  fprintf(stderr,
-		  "Error: Can not determine MSTAR image width");
+	  otbMsgDevMacro(<<"Error: Can not determine MSTAR image width");
 	  fclose(MSTARfp);
-	  return 0;
+	  return false;
 	  } else
         {
          sscanf((tptr+16), "%d", &numcols);
@@ -163,10 +162,9 @@ bool MSTARImageIO::CanReadFile( const char* filename )
 	tptr = (char *) strstr(tbuff,"NumberOfRows= ");
 	if (tptr == (char *) NULL)
 	  {
-	  fprintf(stderr,
-		  "Error: Can not determine MSTAR image height!");
+	  otbMsgDevMacro(<<"Error: Can not determine MSTAR image height!");
 	  fclose(MSTARfp);
-	  return 0;
+	  return false;
 	  } else
 	  {
 	  sscanf((tptr+13), "%d",&numrows);
@@ -216,7 +214,7 @@ bool MSTARImageIO::CanReadFile( const char* filename )
 
 
 	fclose(MSTARfp);
-	std::cout << "Can read MSTAR" << std::endl;
+	otbMsgDevMacro(<< "Can read MSTAR");
         return bool(true);
 }
   
@@ -251,9 +249,6 @@ bool MSTARImageIO::CanWriteFile( const char * filename )
  
 void MSTARImageIO::Read(void* buffer)
 {
-
-  std::cout << "In Read" << std::endl;
-
 
   MSTARfp = fopen(MSTARname,"rb");
   if (MSTARfp == NULL)
@@ -341,9 +336,8 @@ void MSTARImageIO::Read(void* buffer)
         unsigned long lTailleBuffer = (unsigned long)(m_NbOctetPixel)*lNbPixels;
         
         unsigned char* value = new unsigned char[lTailleBuffer];
-otbMsgDebugMacro( << "MSTARImageIO::Read() IORegion Start["<<this->GetIORegion().GetIndex()[0]<<","<<this->GetIORegion().GetIndex()[1]<<"] Size ["<<this->GetIORegion().GetSize()[0]<<","<<this->GetIORegion().GetSize()[1]<<"] on Image size ["<<m_Dimensions[0]<<","<<m_Dimensions[1]<<"]");
 
-
+otbMsgDevMacro( << "MSTARImageIO::Read() IORegion Start["<<this->GetIORegion().GetIndex()[0]<<","<<this->GetIORegion().GetIndex()[1]<<"] Size ["<<this->GetIORegion().GetSize()[0]<<","<<this->GetIORegion().GetSize()[1]<<"] on Image size ["<<m_Dimensions[0]<<","<<m_Dimensions[1]<<"]");
 
 /******************************************************
  * Set up location to point to MSTAR magnitude data.. *
@@ -402,7 +396,7 @@ switch (byteorder)
 switch (mstartype)
   {
    case CHIP_IMAGE:
-     std::cout << " Chip and all " << std::endl;
+     otbMsgDevMacro(<< " Chip and all ");
      totchunks = nchunks * 2;
      bytesPerImage = totchunks * sizeof(float);
      CHIPdata = (float *) malloc(bytesPerImage);
@@ -422,7 +416,7 @@ switch (mstartype)
        {
         case LSB_FIRST: /* Little-endian..do byteswap */
 
-          printf("Performing auto-byteswap...\n"); 
+          otbMsgDevMacro(<<"Performing auto-byteswap...\n"); 
           for (i = 0; i < totchunks; i++)
               {
                fread(bigfloatbuf, sizeof(char), 4, MSTARfp);
@@ -462,18 +456,16 @@ switch (mstartype)
      FSCENEdata = (unsigned short *) malloc( bytesPerImage );
      if (FSCENEdata == (unsigned short *) NULL)
         {
-         fprintf(stderr,
-                 "Error: Unable to malloc fullscene memory!\n");
          fclose(MSTARfp);
-         exit(1);
+         itkExceptionMacro(<<"Error: Unable to malloc fullscene memory!\n");
         }
 
-     printf("Reading MSTAR fullscene magnitude data from [%s]\n", MSTARname);
+     otbMsgDevMacro(<<"Reading MSTAR fullscene magnitude data from ["<<MSTARname<<"].");
 
      switch (byteorder)
        {
        case LSB_FIRST: /* Little-endian..do byteswap */
-	 printf("Performing auto-byteswap...\n"); 
+	 otbMsgDevMacro(<<"Performing auto-byteswap..."); 
 	 for (i = 0; i < nchunks; i++)
 	   {
 	   fread(bigushortbuf, sizeof(char), 2, MSTARfp);
@@ -487,7 +479,7 @@ switch (mstartype)
 	 break;
        }
      
-     printf("Writing MSTAR fullscene magnitude data to [%s]\n", RAWname);
+     otbMsgDevMacro(<<"Writing MSTAR fullscene magnitude data to ["<<RAWname<<"].");
      //n = fwrite(FSCENEdata, sizeof(short), nchunks, RAWfp);
      for ( int nbComponents = 0 ; nbComponents < 1 ; nbComponents++)
         {
@@ -506,17 +498,16 @@ switch (mstartype)
 
      if (n != nchunks)
        {
-       fprintf(stderr, "Error: in writing MSTAR Fullscene data!");
        fclose(MSTARfp);
-       exit(1);
+       itkExceptionMacro(<< "Error: in writing MSTAR Fullscene data!");
        }
      
-     printf("Reading MSTAR fullscene phase data from [%s]\n", MSTARname);
+     otbMsgDevMacro(<<"Reading MSTAR fullscene phase data from ["<<MSTARname<<"].");
      
      switch (byteorder)
        {
        case LSB_FIRST: /* Little-endian..do byteswap */
-	 printf("Performing auto-byteswap...\n"); 
+	 otbMsgDevMacro(<<"Performing auto-byteswap..."); 
 	 for (i = 0; i < nchunks; i++)
 	   {
 	   fread(bigushortbuf, sizeof(char), 2, MSTARfp);
@@ -530,7 +521,7 @@ switch (mstartype)
 	 break;
        }
      
-     printf("Writing MSTAR fullscene phase data to [%s]\n", RAWname);
+     otbMsgDevMacro(<<"Writing MSTAR fullscene phase data to ["<<RAWname<<"].");
 //     n = fwrite(FSCENEdata, sizeof(short), nchunks, RAWfp);
      for ( int nbComponents = 1 ; nbComponents < this->GetNumberOfComponents() ; nbComponents++)
         {
@@ -549,10 +540,8 @@ switch (mstartype)
 
      if (n != nchunks)
        {
-       fprintf(stderr, 
-	       "Error: in writing MSTAR Fullscene Phase data!");
        fclose(MSTARfp);
-       exit(1);
+       itkExceptionMacro(<<"Error: in writing MSTAR Fullscene Phase data!");
        }
      
           /* Cleanup: free memory */
