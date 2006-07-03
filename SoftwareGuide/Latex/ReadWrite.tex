@@ -52,12 +52,12 @@ therefore OTB is known as
 \emph{pluggable-factories} \cite{Gamma1995}. This concept is illustrated in
 the UML diagram in Figure~\ref{fig:ImageIOCollaborationDiagram}. From the
 user's point of view the objects responsible for reading and writing files
-are the \doxygen{otb::ImageFileReader} and \doxygen{otb::ImageFileWriter}
+are the \doxygen{otb}{ImageFileReader} and \doxygen{otb}{ImageFileWriter}
 classes. These two classes, however, are not aware of the details involved in
 reading or writing particular file formats like PNG or GeoTIFF.  What they do
 is to dispatch the user's requests to a set of specific classes that are
 aware of the details of image file formats. These classes are the
-\doxygen{itk::ImageIO} classes. The ITK delegation mechanism enables users to
+\doxygen{itk}{ImageIO} classes. The ITK delegation mechanism enables users to
 extend the number of supported file formats by just adding new classes to the
 ImageIO hierarchy.
 
@@ -66,7 +66,7 @@ a pointer to an ImageIO object. If this pointer is empty, it will
 be impossible to read or write an image and the image file reader/writer must
 determine which ImageIO class to use to perform IO operations.
 This is done basically by passing the filename to a centralized class, the
-\doxygen{itk::ImageIOFactory} and asking it to identify any subclass of
+\doxygen{itk}{ImageIOFactory} and asking it to identify any subclass of
 ImageIO capable of reading or writing the user-specified file. This
 is illustrated by the use cases on the right side of
 Figure~\ref{fig:ImageIOFactoriesUseCases}. The ImageIOFactory acts here as a
@@ -75,8 +75,8 @@ each file format.
 
 Each class derived from ImageIO must provide an associated factory
 class capable of producing an instance of the ImageIO class. For
-example, for PNG files, there is a \doxygen{itk::PNGImageIO} object that knows how
-to read this image files and there is a \doxygen{itk::PNGImageIOFactory} class
+example, for PNG files, there is a \doxygen{itk}{PNGImageIO} object that knows how
+to read this image files and there is a \doxygen{itk}{PNGImageIOFactory} class
 capable of constructing a PNGImageIO object and returning a pointer
 to it.  Each time a new file format is added (i.e., a new ImageIO
 subclass is created), a factory must be implemented as a derived class of the

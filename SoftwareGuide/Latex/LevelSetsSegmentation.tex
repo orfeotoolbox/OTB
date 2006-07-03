@@ -36,7 +36,7 @@ Sethian \cite{Sethian1996}.
 The following sections introduce practical examples of some
 of the level set segmentation methods available in ITK.  The remainder of this
 section describes features common to all of these filters except the
-\doxygen{itk::FastMarchingImageFilter}, which is derived from a different code
+\doxygen{itk}{FastMarchingImageFilter}, which is derived from a different code
 framework.  Understanding these features will aid in using the filters
 more effectively.
 
@@ -84,7 +84,7 @@ The solution $\Gamma$ is calculated to subpixel precision.  The best discrete
 approximation of the surface is therefore the set of grid positions closest to
 the zero-crossings in the image, as shown in
 Figure~\ref{fig:LevelSetSegmentationFigure1}.  The
-\doxygen{itk::ZeroCrossingImageFilter} operates by finding exactly those grid 
+\doxygen{itk}{ZeroCrossingImageFilter} operates by finding exactly those grid 
 positions and can be used to extract the surface. 
 
 
@@ -110,7 +110,7 @@ must travel in the image dictates the total number of iterations required.
 
 Some level-set techniques are relatively insensitive to initial conditions
 and are therefore suitable for region-growing segmentation. Other techniques,
-such as the \doxygen{itk::LaplacianSegmentationLevelSetImageFilter}, can easily
+such as the \doxygen{itk}{LaplacianSegmentationLevelSetImageFilter}, can easily
 become ``stuck'' on image features close to their initialization and should
 be used only when a reasonable prior segmentation is available as the
 initialization.  For best efficiency, your initial model of the surface

@@ -38,8 +38,8 @@ literature
 \subsection{Fuzzy Connectedness and Confidence Connectedness }
 
 Probably the simplest combination of hybrid filters is the pair formed by the
-\doxygen{ConfidenceConnectednessImageFilter} and
-\doxygen{SimpleFuzzyConnectednessScalarImageFilter}. In this combination the
+\doxygen{itk}{ConfidenceConnectednessImageFilter} and
+\doxygen{itk}{SimpleFuzzyConnectednessScalarImageFilter}. In this combination the
 confidence connectedness filter is used to produce a rough segmentation of an
 object and to compute and estimation of the mean and variance of
 gray values in such structure. The values of mean and variance are then passed
@@ -86,9 +86,9 @@ details, see \cite{Udupa1996}). Two fuzzy connectedness filters are available
 in the toolkit:
 
 \begin{itemize}
-\item The \doxygen{SimpleFuzzyConnectednessScalarImageFilter}, an implementation of the
+\item The \doxygen{itk}{SimpleFuzzyConnectednessScalarImageFilter}, an implementation of the
 fuzzy connectedness segmentation of single-channel (grayscale) image.
-\item The \doxygen{SimpleFuzzyConnectednessRGBImageFilter}, an implementation
+\item The \doxygen{itk}{SimpleFuzzyConnectednessRGBImageFilter}, an implementation
 of fuzzy connectedness segmentation of a three-channel (RGB) image.
 \end{itemize}
 
@@ -108,8 +108,8 @@ fuzzy connectedness algorithm.  We define boundary regions as the external
 regions that are adjacent to the internal regions.  We further subdivide the
 boundary regions by adding seed points to them. We converge to the final
 segmentation using simple stopping criteria (for details, see
-\cite{Imielinska2001}). Two Voronoi-based segmentation methods are available in ITK: the \doxygen{VoronoiSegmentationImageFilter} for processing single-channel
-(grayscale) images, and the \doxygen{VoronoiSegmentationRGBImageFilter}, for
+\cite{Imielinska2001}). Two Voronoi-based segmentation methods are available in ITK: the \doxygen{itk}{VoronoiSegmentationImageFilter} for processing single-channel
+(grayscale) images, and the \doxygen{itk}{VoronoiSegmentationRGBImageFilter}, for
 segmenting three-channel (RGB) images. New classes can be derived from the
 base class by defining other homogeneity measurements and targeting
 multichannel images with an arbitrary number of channels.  The other classes

@@ -43,7 +43,7 @@ container type, and dimensionality.  Because ITK image iterators are
 specifically designed to work with \emph{image} containers, their interface and
 implementation is optimized for image processing tasks.  Using the ITK
 iterators instead of accessing data directly through the
-\doxygen{Image} interface has many advantages. Code is more
+\doxygen{itk}{Image} interface has many advantages. Code is more
 compact and often generalizes automatically to higher dimensions, algorithms
 run much faster, and iterators simplify tasks such as multithreading and
 neighborhood-based image processing.
@@ -82,7 +82,7 @@ non-const iterator cannot be instantiated on a non-const image pointer.
 Const versions of iterators may read, but may not write pixel values.
 
 Here is a simple example that defines and constructs a simple image iterator
-for an \doxygen{Image}.
+for an \doxygen{itk}{Image}.
 
 \small
 \begin{verbatim}
@@ -166,7 +166,7 @@ dimensionality of the image and the extent of the iteration region to use proper
 \begin{itemize}
 \index{Iterators!operator+=()}
 \item \textbf{\code{operator+=( OffsetType )}} Moves the iterator to the pixel
-position at the current index plus specified \doxygen{Offset}.
+position at the current index plus specified \doxygen{itk}{Offset}.
 
 \index{Iterators!operator-=()}
 \item \textbf{\code{operator-=( OffsetType )}} Moves the iterator to 
@@ -174,7 +174,7 @@ the pixel position at the current index minus specified Offset.
 
 \index{Iterators!SetPosition()}
 \item \textbf{\code{SetPosition( IndexType )}} Moves the iterator to the given
-\doxygen{Index} position.
+\doxygen{itk}{Index} position.
 \end{itemize}
 
 The \code{SetPosition()} method may be extremely slow for more complicated
@@ -341,7 +341,7 @@ convenient to write reverse iteration in a \code{while} loop.
 \label{sec:ImageIterators}
 %Introduction and overview
 This section describes iterators that walk rectilinear image regions and
-reference a single pixel at a time.  The \doxygen{ImageRegionIterator} is the
+reference a single pixel at a time.  The \doxygen{itk}{ImageRegionIterator} is the
 most basic ITK image iterator and the first choice for most applications. The
 rest of the iterators in this section are specializations of
 ImageRegionIterator that are designed make common image processing
@@ -506,7 +506,7 @@ some useful information about the iterator and its underlying image.
 
 \index{NeighborhoodIterator!GetRadius()}
 \item \textbf{\code{SizeType GetRadius()}} Returns the ND radius of the
-neighborhood as an \doxygen{Size}.
+neighborhood as an \doxygen{itk}{Size}.
 
 \index{NeighborhoodIterator!GetImagePointer()}
 \item \textbf{\code{const ImageType *GetImagePointer()}} Returns the pointer to
@@ -634,7 +634,7 @@ multiple dereferences of the same pixels.
 \index{NeighborhoodIterator!GetNeighborhood()}
 \index{NeighborhoodIterator!SetNeighborhood()}
 \item \textbf{\code{NeighborhoodType GetNeighborhood()}} Return a
-\doxygen{Neighborhood} of the same size and shape as the neighborhood
+\doxygen{itk}{Neighborhood} of the same size and shape as the neighborhood
 iterator and contains all of the values at the iterator position.
 
 \item \textbf{\code{void SetNeighborhood(NeighborhoodType \&N)}} Set all
@@ -743,7 +743,7 @@ status)}} Sets the value at neighborhood array position \code{i} to value
 \end{itemize}
 
 The following sections describe the two ITK neighborhood iterator classes,
-\doxygen{NeighborhoodIterator} and \doxygen{ShapedNeighborhoodIterator}.
+\doxygen{itk}{NeighborhoodIterator} and \doxygen{itk}{ShapedNeighborhoodIterator}.
 Each has a const and a non-const version.  The shaped iterator is a refinement
 of the standard NeighborhoodIterator that supports an
 arbitrarily-shaped (non-rectilinear) neighborhood.
@@ -754,8 +754,8 @@ arbitrarily-shaped (non-rectilinear) neighborhood.
 \index{NeighborhoodIterator!examples}
 \index{Neighborhood iterators!examples}
 The standard neighborhood iterator class in ITK is the
-\doxygen{NeighborhoodIterator}.  Together with its \code{const} version,
-\doxygen{ConstNeighborhoodIterator}, it implements the complete API
+\doxygen{itk}{NeighborhoodIterator}.  Together with its \code{const} version,
+\doxygen{itk}{ConstNeighborhoodIterator}, it implements the complete API
 described above.  This section provides several examples to illustrate the use
 of NeighborhoodIterator.
 
@@ -809,10 +809,10 @@ a bit mask, or \emph{stencil}, with different offsets in the rectilinear
 neighborhood of the normal neighborhood iterator turned off or on to create a
 pattern.  Inactive positions (those not in the stencil) are not updated during
 iteration and their values cannot be read or written.  The shaped iterator is
-implemented in the class \doxygen{ShapedNeighborhoodIterator}, which is a
+implemented in the class \doxygen{itk}{ShapedNeighborhoodIterator}, which is a
 subclass of
-\doxygen{NeighborhoodIterator}.  A const version,
-\doxygen{ConstShapedNeighborhoodIterator}, is also available.
+\doxygen{itk}{NeighborhoodIterator}.  A const version,
+\doxygen{itk}{ConstShapedNeighborhoodIterator}, is also available.
 
 \index{Neighborhood iterators!active neighbors}
 \index{Neighborhood iterators!inactive neighbors}

@@ -36,8 +36,8 @@ in the previous chapter two other modules---\code{OTB-Documents} and
         analysis routines (\url{http://www.netlib.org}).
 
 	\item[Data Representation and Access.]  Two principal classes
-        are used to represent data: the \doxygen{Image} and
-        \doxygen{Mesh} classes.  In addition, various types of
+        are used to represent data: the \doxygen{otb}{Image} and
+        \doxygen{itk}{Mesh} classes.  In addition, various types of
         iterators and containers are used in ITK to hold and traverse
         the data. Other important but less popular classes are also
         used to represent data such as histograms.
@@ -189,13 +189,13 @@ destructor, instances of an OTB class are created with the static class
 \code{New()} method. In fact, the constructor and destructor are
 \code{protected:} so it is generally not possible to construct an OTB
 instance on the heap. (Note: this behavior pertains to classes that are
-derived from \doxygen{LightObject}. In some cases the need for speed or
+derived from \doxygen{itk}{LightObject}. In some cases the need for speed or
 reduced memory footprint dictates that a class not be derived from
 LightObject and in this case instances may be created on the heap. An
-example of such a class is \doxygen{EventObject}.)
+example of such a class is \doxygen{itk}{EventObject}.)
 
 The object factory enables users to control run-time instantiation of classes
-by registering one or more factories with \doxygen{ObjectFactoryBase}. These
+by registering one or more factories with \doxygen{itk}{ObjectFactoryBase}. These
 registered factories support the method \code{CreateInstance(classname)}
 which takes as input the name of a class to create. The factory can choose to
 create the class based on a number of factors including the computer system
@@ -263,7 +263,7 @@ is equivalent to an \code{UnRegister()} method. When the reference count
 returns to zero, the instance is destroyed.
 
 This protocol is greatly simplified by using a helper class called a
-\doxygen{SmartPointer}. The smart pointer acts like a regular pointer
+\doxygen{itk}{SmartPointer}. The smart pointer acts like a regular pointer
 (e.g. supports operators \code{->} and \code{*}) but automagically performs a
 \code{Register()} when referring to an instance, and an \code{UnRegister()}
 when it no longer points to the instance.  Unlike most other instances in
@@ -293,7 +293,7 @@ object (referred to by \code{interp}) is decremented, and if it reaches zero,
 then the interpolator is also destroyed.
 
 Note that in OTB SmartPointers are always used to refer to instances of
-classes derived from \doxygen{LightObject}. Method invocations and function
+classes derived from \doxygen{itk}{LightObject}. Method invocations and function
 calls often return ``real'' pointers to instances, but they are immediately
 assigned to a SmartPointer. Raw pointers are used for non-LightObject classes when
 the need for speed and/or memory demands a smaller, faster class.
@@ -322,7 +322,7 @@ generally takes the form as illustrated below:
 \normalsize
 
 where a particular class may throw an exceptions as demonstrated below (this
-code snippet is taken from \doxygen{ByteSwapper}:
+code snippet is taken from \doxygen{itk}{ByteSwapper}:
 \small
 \begin{verbatim}
   switch ( sizeof(T) )
@@ -337,8 +337,8 @@ code snippet is taken from \doxygen{ByteSwapper}:
 \end{verbatim}
 \normalsize
 
-Note that \doxygen{ByteSwapperError} is a subclass of
-\doxygen{ExceptionObject}. (In fact in OTB all exceptions should be derived
+Note that \doxygen{itk}{ByteSwapperError} is a subclass of
+\doxygen{itk}{ExceptionObject}. (In fact in OTB all exceptions should be derived
 from ExceptionObject.) In this example a special constructor and C++
 preprocessor variables \code{\_\_FILE\_\_} and \code{\_\_LINE\_\_} are used to instantiate
 the exception object and provide additional information to the user. You can
@@ -360,7 +360,7 @@ pattern \cite{Gamma1995} (sometimes referred to as the Command/Observer
 design pattern). In this approach, objects indicate that they are watching
 for a particular event---invoked by a particular instance--by registering
 with the instance that they are watching.  For example, filters in OTB
-periodically invoke the \doxygen{ProgressEvent}. Objects that have registered
+periodically invoke the \doxygen{itk}{ProgressEvent}. Objects that have registered
 their interest in this event are notified when the event occurs. The
 notification occurs via an invocation of a command (i.e., function callback,
 method invocation, etc.) that is specified during the registration
@@ -399,14 +399,14 @@ possibility.)
 Multithreading is handled in OTB through a high-level design
 abstraction. This approach provides portable multithreading and hides the
 complexity of differing thread implementations on the many systems supported
-by OTB. For example, the class \doxygen{MultiThreader} provides support for
+by OTB. For example, the class \doxygen{itk}{MultiThreader} provides support for
 multithreaded execution using \code{sproc()} on an SGI, or
 \code{pthread\_create} on any platform supporting POSIX threads. 
 
 Multithreading is typically employed by an algorithm during its execution
 phase. MultiThreader can be used to execute a single method on
 multiple threads, or to specify a method per thread. For example, in the 
-class \doxygen{ImageSource} (a superclass for most image processing filters)
+class \doxygen{itk}{ImageSource} (a superclass for most image processing filters)
 the \code{GenerateData()} method uses the following methods:
 
 \small
@@ -500,7 +500,7 @@ primarily to support the deformable registration in OTB.
 There are two principle types of data represented in OTB: images and
 meshes. This functionality is implemented in the classes 
 Image and Mesh, both of which are subclasses of
-\doxygen{DataObject}. In OTB, data objects are classes that are meant to
+\doxygen{itk}{DataObject}. In OTB, data objects are classes that are meant to
 be passed around the system and may participate in data flow pipelines (see
 Section~\ref{sec:DataProcessingPipeline} on
 page~\pageref{sec:DataProcessingPipeline} for more information).
@@ -508,7 +508,7 @@ page~\pageref{sec:DataProcessingPipeline} for more information).
 
 \index{otb::Image}
 
-\doxygen{otb::Image} represents an \emph{n}-dimensional, regular sampling of
+\doxygen{otb}{Image} represents an \emph{n}-dimensional, regular sampling of
 data. The sampling direction is parallel to each of the coordinate axes, and
 the origin of the sampling, inter-pixel spacing, and the number of samples in
 each direction (i.e., image dimension) can be specified. The sample, or
@@ -533,8 +533,8 @@ regions:
 filter or other class when operating on the image.
 \end{enumerate}
 
-The \doxygen{otb::Image} class extends the functionalities of the
-\doxygen{itk::Image} in order to take into account particular remote
+The \doxygen{otb}{Image} class extends the functionalities of the
+\doxygen{itk}{Image} in order to take into account particular remote
 sensing features as geographical projections, etc.
 
 \index{itk::Mesh} 
@@ -565,7 +565,7 @@ meshes better suited for editing, or those better suited for ``read-only''
 operations, allowing a trade-off between representation flexibility, memory,
 and speed.
 
-Mesh is a subclass of \doxygen{itk::PointSet}. The PointSet
+Mesh is a subclass of \doxygen{itk}{PointSet}. The PointSet
 class can be used to represent point clouds or randomly distributed
 landmarks, etc. The PointSet class has no associated topology.
 
@@ -625,9 +625,9 @@ Typically data objects and process objects are connected together using the
 \end{verbatim}
 \normalsize 
 
-In this example the source object \doxygen{itk::RandomImageSource} is connected
-to the \doxygen{itk::ShrinkImageFilter}, and the shrink filter is connected to
-the mapper \doxygen{otb::ImageFileWriter}. When the \code{Update()} method is
+In this example the source object \doxygen{itk}{RandomImageSource} is connected
+to the \doxygen{itk}{ShrinkImageFilter}, and the shrink filter is connected to
+the mapper \doxygen{otb}{ImageFileWriter}. When the \code{Update()} method is
 invoked on the writer, the data processing pipeline causes each of these
 filters in order, culminating in writing the final data to a file on disk.
 
@@ -687,15 +687,15 @@ can:
         \item Query the resolution at which the object was originally
         computed.  For example, you can query the resolution (i.e., pixel
         spacing) of the image used to generate a particular instance of a
-        \doxygen{itk::LineSpatialObject}.
+        \doxygen{itk}{LineSpatialObject}.
 \end{enumerate}
 
 Currently implemented types of spatial objects include: Blob, Ellipse,
-Group, Image, Line, Surface, and Tube.  The \doxygen{itk::Scene}
+Group, Image, Line, Surface, and Tube.  The \doxygen{itk}{Scene}
 object is used to hold a list of spatial objects that may in turn have
 children.  Each spatial object can be assigned a color property.  Each
 spatial object type has its own capabilities. For example,
-\doxygen{TubeSpatialObject}s indicate to what point on their parent
+\doxygen{itk}{TubeSpatialObject}s indicate to what point on their parent
 tube they connect.
 
 There are a limited number of spatial objects and their methods in OTB, but
