@@ -28,23 +28,23 @@
 // typical example is a multispectral image.  The following code illustrates
 // how to instantiate and use an image whose pixels are of vector type.
 //
-// We could use the \doxygen{itk::Vector} class to define the pixel
+// We could use the \doxygen{itk}{Vector} class to define the pixel
 // type.  The Vector class is intended to represent a geometrical vector in
 // space. It is not intended to be used as an array container like the
 // \href{http://www.sgi.com/tech/stl/Vector.html}{\code{std::vector}} in
 // \href{http://www.sgi.com/tech/stl/}{STL}.  If you are interested in
-// containers, the \doxygen{VectorContainer} class may provide the
+// containers, the \doxygen{itk}{VectorContainer} class may provide the
 // functionality you want.
 //
 // \index{itk::Vector}
 // \index{itk::Vector!header}
 //
-// However, the \doxygen{itk::Vector} is a fixed size array and it
+// However, the \doxygen{itk}{Vector} is a fixed size array and it
 // assumes that the number of channels of the image is known at
 // compile time. Therefore, we prefer to use the
-// \doxygen{otb::VectorImage} class which allows to choose the number
+// \doxygen{otb}{VectorImage} class which allows to choose the number
 // of channels of the image at runtime. The pixels will be of type
-// \doxygen{itk::VariableLengthVector}. 
+// \doxygen{itk}{VariableLengthVector}. 
 //
 // The first step is to include the header file of the Vector class.
 //

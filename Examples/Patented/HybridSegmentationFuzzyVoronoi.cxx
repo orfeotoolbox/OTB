@@ -23,19 +23,14 @@
 //  Software Guide : BeginCommandLineArgs
 //    INPUTS: {QB_Suburb.png}
 //    OUTPUTS: {HybridSegmentationFuzzyVoronoiOutput.png}
-//    140 125 140 25 0.2 2.0
-//  Software Guide : EndCommandLineArgs
-//  Software Guide : BeginCommandLineArgs
-//    INPUTS: {QB_Suburb.png}
-//    OUTPUTS: {HybridSegmentationFuzzyVoronoiOutput2.png}
-//    80 200 140 300 0.3 3.0
+//    111 38 75 20 0.5 3.0
 //  Software Guide : EndCommandLineArgs
 
 // Software Guide : BeginLatex
 //
 // This example illustrates the use of the
-// \doxygen{itk::SimpleFuzzyConnectednessScalarImageFilter} and
-// \doxygen{itk::VoronoiSegmentationImageFilter} to build a hybrid segmentation that
+// \doxygen{itk}{SimpleFuzzyConnectednessScalarImageFilter} and
+// \doxygen{itk}{VoronoiSegmentationImageFilter} to build a hybrid segmentation that
 // integrates fuzzy connectedness with the Voronoi diagram classification.
 //
 // Please note that the Fuzzy Connectedness algorithm is covered by a Patent
@@ -93,7 +88,7 @@ int main( int argc, char *argv[] )
   //  a rough segmentation that yields a sample from the
   //  region to be segmented.  A binary result, representing the
   //  sample, is used as a prior for the next step.  Here, we use the
-  //  \doxygen{itk::SimpleFuzzyConnectednessScalarImageFilter}, but we may
+  //  \doxygen{itk}{SimpleFuzzyConnectednessScalarImageFilter}, but we may
   //  also utilize any other image segmentation filter instead.  The
   //  result produced by the fuzzy segmentation filter is stored in a
   //  binary image.  Below, we declare the type of the image using a
@@ -126,7 +121,7 @@ int main( int argc, char *argv[] )
   //  
   //  The fuzzy connectedness segmentation filter is created by invoking the
   //  \code{New()} method and assigning the result to a
-  //  \doxygen{itk::SmartPointer}.
+  //  \doxygen{itk}{SmartPointer}.
   //
   //  \index{itk::SimpleFuzzy\-Connectedness\-Scalar\-Image\-Filter!New()}
   //  \index{itk::SimpleFuzzy\-Connectedness\-Scalar\-Image\-Filter!Pointer}
@@ -191,18 +186,6 @@ int main( int argc, char *argv[] )
   //
   //  Software Guide : EndLatex 
 
-  //  Software Guide : BeginLatex
-  //
-  // \begin{figure} \center
-  // \includegraphics[width=0.44\textwidth]{QB_Suburb.eps}
-  // \includegraphics[width=0.44\textwidth]{HybridSegmentationFuzzyVoronoiOutput2.eps}
-  // \itkcaption[Segmentation result for the hybrid segmentation
-  // approach]{Another segmentation result for the hybrid segmentation
-  // approach.}
-  // \label{fig:HybridSegmentationFuzzyVoronoiOutput2}
-  // \end{figure}
-  //
-  //  Software Guide : EndLatex 
 
 
   // We instantiate reader and writer types
@@ -351,7 +334,7 @@ int main( int argc, char *argv[] )
   //  The output of the Voronoi diagram classification is an image mask with
   //  zeros everywhere and ones inside the segmented object. This image will
   //  appear black on many image viewers since they do not usually stretch
-  //  the gray levels. Here, we add a \doxygen{itk::RescaleIntensityImageFilter}
+  //  the gray levels. Here, we add a \doxygen{itk}{RescaleIntensityImageFilter}
   //  in order to expand the dynamic range to more typical values.
   //
   //  Software Guide : EndLatex 
@@ -391,33 +374,19 @@ int main( int argc, char *argv[] )
   //  \small
   //  \begin{verbatim}
   //HybridSegmentationFuzzyVoronoi QB_Suburb.png Output.png
-  //                                           140 125 140 25 0.2 2.0
+  //                                           111 38 75 20 0.5 2.0
   //  \end{verbatim}
   //  \normalsize
   //
-  //  $(140,125)$ specifies the index position of a seed point in the image,
-  //  while $140$ and $25$ are the estimated mean and standard deviation,
-  //  respectively, of the object to be segmented.  Finally, $0.2$ and $2.0$
+  //  $(111,38)$ specifies the index position of a seed point in the image,
+  //  while $75$ and $20$ are the estimated mean and standard deviation,
+  //  respectively, of the object to be segmented.  Finally, $0.5$ and $2.0$
   //  are the tolerance for the mean and standard deviation, respectively.
   //  Figure~\ref{fig:HybridSegmentationFuzzyVoronoiOutput} shows the input
   //  image and the binary mask resulting from the segmentation.
   //
   //  Note that in order to successfully segment other images, these
-  //  parameters have to be adjusted to reflect the data. For example, when
-  //  segmenting the input image \code{QB\_Suburb.png} we apply the
-  //  following new set of parameters parameters.
-  // 
-  //  \small
-  //  \begin{verbatim}
-  //HybridSegmentationFuzzyVoronoi QB_Suburb.png Output.png
-  //					       80 200 140 300 0.3 3.0
-  //  \end{verbatim}
-  //  \normalsize
-  //
-  //  Figure~\ref{fig:HybridSegmentationFuzzyVoronoiOutput2} shows the input
-  //  image and the binary mask resulting from this segmentation. Note that,
-  //  we can segment color (RGB) and other multi-channel images using an
-  //  approach similar to this example.
+  //  parameters have to be adjusted to reflect the data.
   //
   //  Software Guide : EndLatex 
 

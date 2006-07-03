@@ -35,7 +35,7 @@
 
 //  Software Guide : BeginLatex
 // This example illustrates the class
-// \doxygen{otb::MeanDifferenceImageFilter} for detecting changes
+// \doxygen{otb}{MeanDifferenceImageFilter} for detecting changes
 // between pairs of images. This filter computes the mean intensity in
 // the neighborhood of each pixel of the pair of images to be compared
 // and uses the difference of means as a change indicator. This
@@ -104,7 +104,7 @@ int main(int argc, char* argv[] )
   //  can be vey large, we will force the pipeline to use
   //  streaming. For this purpose, the file writer will be
   //  streamed. This is achieved by using the
-  //  \doxygen{otb::StreamingImageFileWriter} class.
+  //  \doxygen{otb}{StreamingImageFileWriter} class.
   // 
   //  Software Guide : EndLatex 
 
@@ -119,7 +119,7 @@ int main(int argc, char* argv[] )
   //  The change detector will give positive and negative values
   //  depending on the sign of the difference. We are usually
   //  interested only in the asbolute value of the difference. For
-  //  this purpose, we will use the \doxygen{itk::AbsImageFilter}. Also, before
+  //  this purpose, we will use the \doxygen{itk}{AbsImageFilter}. Also, before
   //  saving the image to a file in, for instance, PNG format, we will
   //  rescale the results of the change detection in order to use all
   //  the output pixel type range of values.
@@ -136,7 +136,7 @@ int main(int argc, char* argv[] )
   
   //  Software Guide : BeginLatex
   //
-  //  The \doxygen{otb::MeanDifferenceImageFilter} is templated over
+  //  The \doxygen{otb}{MeanDifferenceImageFilter} is templated over
   //  the types of the two input images and the type of the generated change
   //  image.
   // 

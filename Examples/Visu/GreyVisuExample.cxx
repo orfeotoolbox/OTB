@@ -26,7 +26,7 @@
   // Software Guide : BeginLatex
   //
   // \textbf{FIXME !! This example segfaults (see bug no. 27)}.
-  // This example shows the use of the \doxygen{otb::ImageViewer}
+  // This example shows the use of the \doxygen{otb}{ImageViewer}
   // class for greylevel image visualization. As usual, we start by
   // including the header file for the class.
   //
@@ -124,7 +124,7 @@ int main( int argc, char ** argv )
   // mevel image visualization.}
   // \label{fig:VisuGrey}
   // \end{figure}
-  // The the \doxygen{otb::ImageViewer} class creates 3 windows (see
+  // The the \doxygen{otb}{ImageViewer} class creates 3 windows (see
   // figure \ref{fig:VisuGrey}) for an improved visualization of large
   // images. This procedure is inspired from the navigation window of
   // the Gimp and other image visualization tools. The navigation

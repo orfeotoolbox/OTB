@@ -68,13 +68,13 @@
 // distributions belonging to exponential family such as Poisson,
 // Binomial, Exponential, and Normal distributions have analytical
 // solutions for updating the parameter set. The
-// \subdoxygen{itk::Statistics}{ExpectationMaximizationMixtureModelEstimator}
+// \subdoxygen{itk}{Statistics}{ExpectationMaximizationMixtureModelEstimator}
 // class assumes that such type of components.
 //
-// In the following example we use the \subdoxygen{itk::Statistics}{ListSample} as
-// the sample (test and training). The \subdoxygen{itk::Vector} is our measurement
+// In the following example we use the \subdoxygen{itk}{Statistics}{ListSample} as
+// the sample (test and training). The \subdoxygen{itk}{Vector} is our measurement
 // vector class. To store measurement vectors into two separate sample
-// container, we use the \subdoxygen{itk::Statistics}{Subsample} objects.
+// container, we use the \subdoxygen{itk}{Statistics}{Subsample} objects.
 //
 // Software Guide : EndLatex 
 
@@ -97,7 +97,7 @@
 // Software Guide : BeginLatex
 //
 // We will fill the sample with random variables from two normal 
-// distribution using the \subdoxygen{itk::Statistics}{NormalVariateGenerator}.
+// distribution using the \subdoxygen{itk}{Statistics}{NormalVariateGenerator}.
 //
 // Software Guide : EndLatex
 

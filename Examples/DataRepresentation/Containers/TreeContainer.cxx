@@ -27,9 +27,9 @@
 //
 // \index{itk::TreeContainer}
 //
-// This example shows how to use the \doxygen{TreeContainer} and the
+// This example shows how to use the \doxygen{itk}{TreeContainer} and the
 // associated TreeIterators.
-// The \doxygen{TreeContainer} implements the notion of tree and is
+// The \doxygen{itk}{TreeContainer} implements the notion of tree and is
 // templated over the type of node so it can virtually handle any 
 // objects. Each node is supposed to have only one parent so no cycle
 // is present in the tree. No checking is done to ensure a cycle-free
@@ -86,7 +86,7 @@ int main(int, char* [])
   tree->Add(7,1);
 // Software Guide : EndCodeSnippet
 // Software Guide : BeginLatex
-// We define an \doxygen{LevelOrderTreeIterator} to parse the tree in level order.
+// We define an \doxygen{itk}{LevelOrderTreeIterator} to parse the tree in level order.
 // This particular iterator takes three arguments. The first one is the actual tree
 // to be parsed, the second one is the maximum depth level and the third one is the
 // starting node. The \code{GetNode()} function return a node given its value. Once
@@ -118,7 +118,7 @@ int main(int, char* [])
   levelIt.CountChildren();
 // Software Guide : EndCodeSnippet
 // Software Guide : BeginLatex
-// The \doxygen{ChildTreeIterator} provides another way to iterate through a tree
+// The \doxygen{itk}{ChildTreeIterator} provides another way to iterate through a tree
 // by listing all the children of a node.
 // Software Guide : EndLatex 
   std::cout << "ChildTreeIterator:" << std::endl;
@@ -156,7 +156,7 @@ int main(int, char* [])
   delete childItClone;
 // Software Guide : EndCodeSnippet
 // Software Guide : BeginLatex
-// The \doxygen{LeafTreeIterator} iterates through the leaves of the tree.
+// The \doxygen{itk}{LeafTreeIterator} iterates through the leaves of the tree.
 // Software Guide : EndLatex 
   std::cout << "LeafTreeIterator:" << std::endl;
 // Software Guide : BeginCodeSnippet
@@ -170,7 +170,7 @@ int main(int, char* [])
   std::cout << std::endl;
 // Software Guide : EndCodeSnippet
 // Software Guide : BeginLatex
-// The \doxygen{InOrderTreeIterator} iterates through the tree
+// The \doxygen{itk}{InOrderTreeIterator} iterates through the tree
 // in the order from left to right.
 // Software Guide : EndLatex 
   std::cout << "InOrderTreeIterator:" << std::endl;
@@ -185,7 +185,7 @@ int main(int, char* [])
   std::cout << std::endl;
 // Software Guide : EndCodeSnippet
 // Software Guide : BeginLatex
-// The \doxygen{PreOrderTreeIterator} iterates through the tree
+// The \doxygen{itk}{PreOrderTreeIterator} iterates through the tree
 // from left to right but do a depth first search.
 // Software Guide : EndLatex 
   std::cout << "PreOrderTreeIterator:" << std::endl;
@@ -200,7 +200,7 @@ int main(int, char* [])
   std::cout << std::endl;
 // Software Guide : EndCodeSnippet
 // Software Guide : BeginLatex
-// The \doxygen{PostOrderTreeIterator} iterates through the tree
+// The \doxygen{itk}{PostOrderTreeIterator} iterates through the tree
 // from left to right but goes from the leaves to the root in the search.
 // Software Guide : EndLatex
   std::cout << "PostOrderTreeIterator:" << std::endl;
@@ -215,7 +215,7 @@ int main(int, char* [])
   std::cout << std::endl;
 // Software Guide : EndCodeSnippet
 // Software Guide : BeginLatex
-// The \doxygen{RootTreeIterator} goes from one node to the
+// The \doxygen{itk}{RootTreeIterator} goes from one node to the
 // root. The second arguments is the starting node. Here we go from the leaf
 // node (value = 6) up to the root.
 // Software Guide : EndLatex 
@@ -253,7 +253,7 @@ int main(int, char* [])
   PreOrderIt2.Add(5);
 // Software Guide : EndCodeSnippet
 // Software Guide : BeginLatex
-// The \doxygen{TreeIteratorClone} can be used to have a generic copy of
+// The \doxygen{itk}{TreeIteratorClone} can be used to have a generic copy of
 // an iterator.
 // Software Guide : EndLatex 
 // Software Guide : BeginCodeSnippet

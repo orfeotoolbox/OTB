@@ -29,7 +29,7 @@
 // This example illustrates the Change Detector framework implemented
 // in OTB. This framework uses the generic programming approach. All
 // change detection filters are
-// \doxygen{otb::BinaryFunctorNeighborhoodImageFilter}s, that is, they
+// \doxygen{otb}{BinaryFunctorNeighborhoodImageFilter}s, that is, they
 // are filters taking two images as input and providing one image as
 // output. The change detection computation itself is performed on a
 // the neighborhood of each pixel of the input images. 
@@ -62,7 +62,7 @@
 //
 // Since the change detectors operate on neighborhoods, the functor
 // call will take 2 arguments which are
-// \doxygen{itk::ConstNeighborhoodIterator}s. 
+// \doxygen{itk}{ConstNeighborhoodIterator}s. 
 //
 // The change detector functor is templated over the types of the
 // input iterators and the output result type. The core of the change
@@ -106,7 +106,7 @@ public:
 //
 // The next step is the definition of the change detector filter. As
 // stated above, this filter will inherit from
-// \doxygen{otb::BinaryFunctorNeighborhoodImageFilter} which is
+// \doxygen{otb}{BinaryFunctorNeighborhoodImageFilter} which is
 // templated over the 2 input image types, the output image type and
 // the functor used to perform the change detection operation.
 //
@@ -157,7 +157,7 @@ private:
 //
 // Pay attention to the fact that no \code{.txx} file is needed, since
 // filtering operation is implemented in the
-// \doxygen{otb::BinaryFunctorNeighborhoodImageFilter} class. So all
+// \doxygen{otb}{BinaryFunctorNeighborhoodImageFilter} class. So all
 // the algorithmics part is inside the functor.
 //
 // We can now write a program using the change detector.
@@ -198,7 +198,7 @@ int main(int argc, char* argv[] )
   // Software Guide : BeginLatex
   //
   // We declare the readers, the writer, but also the
-  // \doxygen{itk::RescaleIntensityImageFilter} which will be used to
+  // \doxygen{itk}{RescaleIntensityImageFilter} which will be used to
   // rescale the result before writing it to a file.
   //
   // SoftwareGuide : EndLatex

@@ -31,7 +31,7 @@
 // This example shows how to use the Markov Random Field approach for
 // classifying the pixel of a scalar image.
 //
-// The  \subdoxygen{itk::Statistics}{MRFImageFilter} is used for refining an initial
+// The  \subdoxygen{itk}{Statistics}{MRFImageFilter} is used for refining an initial
 // classification by introducing the spatial coherence of the labels. The user
 // should provide two images as input. The first image is the one to be
 // classified while the second image is an image of labels representing an
@@ -110,7 +110,7 @@ int main( int argc, char * argv [] )
 //
 // First we define the pixel type and dimension of the image that we intend to
 // classify. With this image type we can also declare the
-// \doxygen{otb::ImageFileReader} needed for reading the input image, create one and
+// \doxygen{otb}{ImageFileReader} needed for reading the input image, create one and
 // set its input filename. 
 //
 // Software Guide : EndLatex 
@@ -155,7 +155,7 @@ int main( int argc, char * argv [] )
 // whose pixels have multiple components, that is, images of vector type, we
 // must adapt our scalar image in order to satisfy the interface expected by
 // the \code{MRFImageFilter}. We do this by using the
-// \doxygen{itk::ScalarToArrayCastImageFilter}. With this filter we will present our
+// \doxygen{itk}{ScalarToArrayCastImageFilter}. With this filter we will present our
 // scalar image as a vector image whose vector pixels contain a single
 // component. 
 // 
@@ -179,7 +179,7 @@ int main( int argc, char * argv [] )
 //
 // With the input image type \code{ImageType} and labeled image type
 // \code{LabelImageType} we instantiate the type of the
-// \doxygen{itk::MRFImageFilter} that will apply the Markov Random Field algorithm
+// \doxygen{itk}{MRFImageFilter} that will apply the Markov Random Field algorithm
 // in order to refine the pixel classification.
 //
 // Software Guide : EndLatex 
@@ -234,7 +234,7 @@ int main( int argc, char * argv [] )
 // Given that the MRF filter needs to continually relabel the pixels, it needs
 // access to a set of membership functions that will measure to what degree
 // every pixel belongs to a particular class.  The classification is performed
-// by the \doxygen{itk::ImageClassifierBase} class, that is instantiated using the
+// by the \doxygen{itk}{ImageClassifierBase} class, that is instantiated using the
 // type of the input vector image and the type of the labeled image.
 // 
 // Software Guide : EndLatex 
@@ -273,7 +273,7 @@ int main( int argc, char * argv [] )
 // Software Guide : BeginLatex
 //
 // We now instantiate the membership functions. In this case we use the
-// \subdoxygen{itk::Statistics}{DistanceToCentroidMembershipFunction} class
+// \subdoxygen{itk}{Statistics}{DistanceToCentroidMembershipFunction} class
 // templated over the pixel type of the vector image, which in our example
 // happens to be a vector of dimension 1.
 // 
@@ -369,7 +369,7 @@ int main( int argc, char * argv [] )
 // functions have comparable value. This is necessary since the label
 // image and the input image can have different dynamic ranges. The fidelity
 // function is usually computed using a distance function, such as the
-// \doxygen{itk::DistanceToCentroidMembershipFunction} or one of the other 
+// \doxygen{itk}{DistanceToCentroidMembershipFunction} or one of the other 
 // membership functions. They tend to have values in the order of the means
 // specified. 
 // Software Guide : EndLatex 
@@ -408,10 +408,10 @@ int main( int argc, char * argv [] )
 
 // Software Guide : BeginLatex
 //
-// The output image produced by the \doxygen{itk::MRFImageFilter} has the same pixel
+// The output image produced by the \doxygen{itk}{MRFImageFilter} has the same pixel
 // type as the labeled input image. In the following lines we use the
 // \code{OutputImageType} in order to instantiate the type of a
-// \doxygen{otb::ImageFileWriter}. Then create one, and connect it to the output of
+// \doxygen{otb}{ImageFileWriter}. Then create one, and connect it to the output of
 // the classification filter after passing it through an intensity rescaler
 // to rescale it to an 8 bit dynamic range
 //

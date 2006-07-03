@@ -36,12 +36,12 @@
 //  Software Guide : BeginLatex
 //
 //  This example shows the use of the
-//  \doxygen{otb::MultiChannelExtractROI} and
-//  \doxygen{otb::MultiToMonoChannelExtractROI} which allow the
+//  \doxygen{otb}{MultiChannelExtractROI} and
+//  \doxygen{otb}{MultiToMonoChannelExtractROI} which allow the
 //  extraction of ROIs from multiband images stored into
-//  \doxygen{otb::VectorImage}s. The first one povides a Vector Image
+//  \doxygen{otb}{VectorImage}s. The first one povides a Vector Image
 //  as output, while the second one provides a classical
-//  \doxygen{otb::Image} with a scalar pixel type. The present example
+//  \doxygen{otb}{Image} with a scalar pixel type. The present example
 //  shows how to extract a ROI from a 4-band SPOT 5 image and to
 //  produce a first multi-band 3-channel image and a second
 //  mono-channel one for the SWIR band.
@@ -109,10 +109,10 @@ int main( int argc, char * argv[] )
   //  Software Guide : BeginLatex
   //
   //  First of all, we extract the multiband part by using the
-  //  \doxygen{otb::MultiChannelExtractROI} class, which is templated
+  //  \doxygen{otb}{MultiChannelExtractROI} class, which is templated
   //  over the input and output pixel types. This class in not
   //  templated over the images types in order to force these images
-  //  to be of \doxygen{otb::VectorImage} type.
+  //  to be of \doxygen{otb}{VectorImage} type.
   //
   //  Software Guide : EndLatex 
  
@@ -205,18 +205,18 @@ int main( int argc, char * argv[] )
 
   //  Software Guide : BeginLatex
   //
-  //  The usage of the \doxygen{otb::MultiToMonoChannelExtractROI} is
-  //  similar to the one of the \doxygen{otb::MultiChannelExtractROI}
+  //  The usage of the \doxygen{otb}{MultiToMonoChannelExtractROI} is
+  //  similar to the one of the \doxygen{otb}{MultiChannelExtractROI}
   //  described above.
   //
   //  The goal now is to extract an ROI from a multi-band image and
   //  generate a mono-channel image as output.
   //
-  //  We could use the \doxygen{otb::MultiChannelExtractROI} and
+  //  We could use the \doxygen{otb}{MultiChannelExtractROI} and
   //  select a single channel, but using the
-  //  \doxygen{otb::MultiToMonoChannelExtractROI} we generate a
-  //  \doxygen{otb::Image} instead of an
-  //  \doxygen{otb::VectorImage}. This is useful from a computing and
+  //  \doxygen{otb}{MultiToMonoChannelExtractROI} we generate a
+  //  \doxygen{otb}{Image} instead of an
+  //  \doxygen{otb}{VectorImage}. This is useful from a computing and
   //  memory usage point of view.
   //  This class is also templated over the pixel types.
   //

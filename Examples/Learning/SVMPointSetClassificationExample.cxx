@@ -36,12 +36,12 @@
 
 //  Software Guide : BeginLatex
 // This example illustrates the use of the
-// \doxygen{otb::SVMClassifier} class for performing SVM
+// \doxygen{otb}{SVMClassifier} class for performing SVM
 // classification on pointsets.
 // The first thing to do is include the header file for the
-// class. Since the \doxygen{otb::SVMClassifier} takes
-// \doxygen{itk::ListSample}s as input, the class
-// \doxygen{itk::PointSetToListAdaptor} is needed.\\
+// class. Since the \doxygen{otb}{SVMClassifier} takes
+// \doxygen{itk}{ListSample}s as input, the class
+// \doxygen{itk}{PointSetToListAdaptor} is needed.\\
 //
 // We start by including the needed header files.
 //
@@ -195,7 +195,7 @@ int main( int argc, char* argv[] )
 //
 // Once the pointset is ready, we must transform it to a sample which
 // is compatible with the classification framework. We will use a
-// \doxygen{itk::Statistics::PointSetToListAdaptor} for this
+// \doxygen{itk}{Statistics::PointSetToListAdaptor} for this
 // task. This class is templated over the point set type used for
 // storing the measures.
 //

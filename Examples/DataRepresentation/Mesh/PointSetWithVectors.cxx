@@ -29,7 +29,7 @@
 //  points for producing geometric representations or storing
 //  multi-band informations.  The following code shows
 //  how vector values can be used as pixel type on the PointSet class.  The
-//  \doxygen{itk::Vector} class is used here as the pixel type. This class is
+//  \doxygen{itk}{Vector} class is used here as the pixel type. This class is
 //  appropriate for representing the relative position between two points. It
 //  could then be used to manage displacements in disparity map
 //  estimations, for example. 
@@ -163,8 +163,8 @@ int main(int, char *[])
 
   //  Software Guide : BeginLatex
   //
-  //  The \doxygen{itk::Vector} class has overloaded the \code{+} operator with
-  //  the \doxygen{itk::Point}. In other words, vectors can be added to points in
+  //  The \doxygen{itk}{Vector} class has overloaded the \code{+} operator with
+  //  the \doxygen{itk}{Point}. In other words, vectors can be added to points in
   //  order to produce new points.  This property is exploited in the center
   //  of the loop in order to update the points positions with a single
   //  statement.
@@ -188,11 +188,11 @@ int main(int, char *[])
 
   //  Software Guide : BeginLatex
   //
-  //  Note that \doxygen{itk::Vector} is not the appropriate class for
+  //  Note that \doxygen{itk}{Vector} is not the appropriate class for
   //  representing normals to surfaces and gradients of functions. This is due
   //  to the way in which vectors behave under affine transforms. ITK has a
   //  specific class for representing normals and function gradients. This is
-  //  the \doxygen{itk::CovariantVector} class.
+  //  the \doxygen{itk}{CovariantVector} class.
   //
   //  Software Guide : EndLatex 
 

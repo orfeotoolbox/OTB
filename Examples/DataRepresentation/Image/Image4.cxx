@@ -48,7 +48,7 @@
 // \end{figure}
 //
 // Figure \ref{fig:ImageOriginAndSpacing} illustrates the main geometrical
-// concepts associated with the \doxygen{otb::Image}. In this figure,
+// concepts associated with the \doxygen{otb}{Image}. In this figure,
 // circles are 
 // used to represent the center of pixels. The value of the pixel is assumed
 // to exist as a Dirac Delta Function located at the pixel center. Pixel
@@ -203,7 +203,7 @@ int main(int, char *[])
   // space can be mapped into an image index for the purpose of reading the
   // content of the closest pixel.
   //
-  // First, a \doxygen{itk::Point} type must be declared. The point type is
+  // First, a \doxygen{itk}{Point} type must be declared. The point type is
   // templated over the type used to represent coordinates and over the
   // dimension of the space. In this particular case, the dimension of the
   // point must match the dimension of the image. 
@@ -217,10 +217,10 @@ int main(int, char *[])
 
   // Software Guide : BeginLatex
   //
-  // The Point class, like an \doxygen{itk::Index}, is a relatively small and
+  // The Point class, like an \doxygen{itk}{Index}, is a relatively small and
   // simple object.  For this reason, it is not reference-counted like the
   // large data objects in OTB.  Consequently, it is also not manipulated
-  // with \doxygen{itk::SmartPointer}s.  Point objects are simply declared as
+  // with \doxygen{itk}{SmartPointer}s.  Point objects are simply declared as
   // instances of any other C++ class.  Once the point is declared, its
   // components can be accessed using traditional array notation. In
   // particular, the \code{[]} operator is available. For efficiency reasons,

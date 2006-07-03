@@ -24,7 +24,7 @@
 
 //  Software Guide : BeginLatex
 //
-//  The \doxygen{itk::PointSet} class was designed to interact with the Image class.
+//  The \doxygen{itk}{PointSet} class was designed to interact with the Image class.
 //  For this reason it was found convenient to allow the points in the set to
 //  hold values that could be computed from images. The value associated with
 //  the point is referred as \code{PixelType} in order to make it consistent
@@ -114,8 +114,8 @@ int main(int, char *[])
   //  Data associated with points is internally stored in
   //  \code{PointDataContainer}s.  In the same way as with points, the actual
   //  container type used depend on whether the style of the PointSet is static
-  //  or dynamic. Static point sets will use an \doxygen{itk::VectorContainer} while
-  //  dynamic point sets will use an \doxygen{itk::MapContainer}.  The type of the
+  //  or dynamic. Static point sets will use an \doxygen{itk}{VectorContainer} while
+  //  dynamic point sets will use an \doxygen{itk}{MapContainer}.  The type of the
   //  data container is defined as one of the traits in the PointSet. The
   //  following declaration illustrates how the type can be taken from the
   //  traits and used to conveniently declare a similar type on the global

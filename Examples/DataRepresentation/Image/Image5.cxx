@@ -24,11 +24,11 @@
 
 // Software Guide : BeginLatex
 //
-// This example illustrates how to import data into the \doxygen{otb::Image}
+// This example illustrates how to import data into the \doxygen{otb}{Image}
 // class. This is particularly useful for interfacing with other software
 // systems. Many systems use a contiguous block of memory as a buffer
 // for image pixel data. The current example assumes this is the case and
-// feeds the buffer into an \doxygen{ImportImageFilter}, thereby producing an
+// feeds the buffer into an \doxygen{itk}{ImportImageFilter}, thereby producing an
 // Image as output.
 
 //
@@ -191,7 +191,7 @@ int main(int argc, char * argv[])
   //  programming languages. Note that ITK
   //  does not use \code{for()} loops in its internal code to access
   //  pixels. All pixel access tasks are instead performed using
-  //  \doxygen{itk::ImageIterator}s that support the management of 
+  //  \doxygen{itk}{ImageIterator}s that support the management of 
   //  n-dimensional images.
   //
   //  Software Guide : EndLatex 

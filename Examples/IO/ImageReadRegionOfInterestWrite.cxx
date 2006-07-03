@@ -47,7 +47,7 @@
 
 //  Software Guide : BeginLatex
 //  
-//  The \doxygen{otb::ExtractROI} is the filter used to extract a
+//  The \doxygen{otb}{ExtractROI} is the filter used to extract a
 //  region from an image. Its header is included below.
 //
 //  \index{otb::ExtractROI!header}
@@ -90,7 +90,7 @@ int main( int argc, char ** argv )
 
   //  Software Guide : BeginLatex
   //  
-  //  The types for the \doxygen{otb::ImageFileReader} and \doxygen{otb::ImageFileWriter}
+  //  The types for the \doxygen{otb}{ImageFileReader} and \doxygen{otb}{ImageFileWriter}
   //  are instantiated using the image types.
   //
   //  Software Guide : EndLatex 
@@ -106,11 +106,11 @@ int main( int argc, char ** argv )
   //  The ExtractROI type is instantiated using
   //  the input and output pixel types. Using the pixel types as
   //  template parameters instead of the image types allows to
-  //  restrict the use of this class to \doxygen{otb::Image}s which
+  //  restrict the use of this class to \doxygen{otb}{Image}s which
   //  are used with scalar pixel types. See section
   //  \ref{sec:ExtractROI} for the extraction of ROIs on
-  //  \doxygen{otb::VectorImage}s. A filter object is created with the 
-  //  New() method and assigned to a \doxygen{SmartPointer}.
+  //  \doxygen{otb}{VectorImage}s. A filter object is created with the 
+  //  New() method and assigned to a \doxygen{itk}{SmartPointer}.
   //
   //  Software Guide : EndLatex 
 
@@ -128,7 +128,7 @@ int main( int argc, char ** argv )
   //  defined by the user. This is done by defining a rectangle with
   //  the following methods (the filter assumes that a 2D image is
   //  being processed, for N-D region extraction, you can use the
-  //  \doxygen{itk::RegionOfInterestImageFilter} class). 
+  //  \doxygen{itk}{RegionOfInterestImageFilter} class). 
   //
   //  Software Guide : EndLatex 
 

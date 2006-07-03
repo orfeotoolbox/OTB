@@ -26,7 +26,7 @@
 //
 // This example shows how to compute the KMeans model of an Scalar Image.
 //
-// The  \subdoxygen{itk::Statistics}{KdTreeBasedKmeansEstimator} is used for taking
+// The  \subdoxygen{itk}{Statistics}{KdTreeBasedKmeansEstimator} is used for taking
 // a scalar image and applying the K-Means algorithm in order to define classes
 // that represents statistical distributions of intensity values in the pixels.
 // One of the drawbacks of this technique is that the spatial

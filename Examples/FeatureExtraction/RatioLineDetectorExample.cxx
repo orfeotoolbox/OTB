@@ -32,7 +32,7 @@
 
 // Software Guide : BeginLatex
 //
-// This example illustrates the use of the \doxygen{otb::RatioLineDetectorImageFilter}.
+// This example illustrates the use of the \doxygen{otb}{RatioLineDetectorImageFilter}.
 // This filter is used for line detection in SAR images. Its principle
 // is described in \cite{tup-98}: a line is detected if two parallel
 // edges are present in the images. These edges are detected with the
@@ -99,7 +99,7 @@ int main( int argc, char * argv[] )
 
   //  Software Guide : BeginLatex
   //
-  //  An \doxygen{ImageFileReader} class is also instantiated in order to read
+  //  An \doxygen{otb}{ImageFileReader} class is also instantiated in order to read
   //  image data from a file. 
   //
   //  Software Guide : EndLatex 
@@ -110,7 +110,7 @@ int main( int argc, char * argv[] )
 
   //  Software Guide : BeginLatex
   //  
-  // An \doxygen{ImageFileWriter} is instantiated in order to write the
+  // An \doxygen{otb}{ImageFileWriter} is instantiated in order to write the
   // output image to a file.
   //
   //  Software Guide : EndLatex 
@@ -179,7 +179,7 @@ int main( int argc, char * argv[] )
   //  Software Guide : BeginLatex
   //  
   //  The image obtained with the reader is passed as input to the
-  //  \doxygen{otb::LineRatioDetectorImageFilter}. The pipeline is built as follows.
+  //  \doxygen{otb}{LineRatioDetectorImageFilter}. The pipeline is built as follows.
   //
   //  \index{otb::LineRatioDetectorImageFilter!SetInput()}
   //
@@ -248,13 +248,13 @@ int main( int argc, char * argv[] )
   // \includegraphics[width=0.25\textwidth]{amstLineRatios.eps}
   // \includegraphics[width=0.25\textwidth]{amstLineRatioDirections.eps}
   // \itkcaption[Line Ratio Detector Application]{Result of applying
-  // the \doxygen{otb::LineRatioDetectorImageFilter} to a SAR
+  // the \doxygen{otb}{LineRatioDetectorImageFilter} to a SAR
   // image. From left to right : original image, line intensity and
   // edge orientation.}  \label{fig:LINERATIO_FILTER} \end{figure}
   //
   //  \relatedClasses
   //  \begin{itemize}
-  //  \item \doxygen{otb::LineCorrelationDetectorImageFilter}
+  //  \item \doxygen{otb}{LineCorrelationDetectorImageFilter}
   //  \end{itemize}
   //  Software Guide : EndLatex 
 

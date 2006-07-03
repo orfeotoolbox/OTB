@@ -55,7 +55,7 @@
 // \index{itk::Binary\-Threshold\-Image\-Filter!Instantiation}
 // \index{itk::Binary\-Threshold\-Image\-Filter!Header}
 //
-// The first step required to use the \doxygen{itk::BinaryThresholdImageFilter} is
+// The first step required to use the \doxygen{itk}{BinaryThresholdImageFilter} is
 // to include its header file. 
 //
 // Software Guide : EndLatex 
@@ -120,7 +120,7 @@ int main( int argc, char * argv[] )
 
   //  Software Guide : BeginLatex
   //
-  //  An \doxygen{otb::ImageFileReader} class is also instantiated in order to read
+  //  An \doxygen{otb}{ImageFileReader} class is also instantiated in order to read
   //  image data from a file. (See Section \ref{sec:IO} on page 
   //  \pageref{sec:IO} for more information about reading
   //  and writing data.) 
@@ -134,7 +134,7 @@ int main( int argc, char * argv[] )
 
   //  Software Guide : BeginLatex
   //  
-  // An \doxygen{otb::ImageFileWriter} is instantiated in order to write the output
+  // An \doxygen{otb}{ImageFileWriter} is instantiated in order to write the output
   // image to a file.
   //
   //  Software Guide : EndLatex 
@@ -148,7 +148,7 @@ int main( int argc, char * argv[] )
   //  Software Guide : BeginLatex
   //
   //  Both the filter and the reader are created by invoking their \code{New()}
-  //  methods and assigning the result to \doxygen{SmartPointer}s.
+  //  methods and assigning the result to \doxygen{itk}{SmartPointer}s.
   //
   //  Software Guide : EndLatex 
 
@@ -253,7 +253,7 @@ int main( int argc, char * argv[] )
   //
   //  \relatedClasses
   //  \begin{itemize}
-  //  \item \doxygen{itk::ThresholdImageFilter}
+  //  \item \doxygen{itk}{ThresholdImageFilter}
   //  \end{itemize}
   //
   //  Software Guide : EndLatex 

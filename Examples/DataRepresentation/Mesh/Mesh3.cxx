@@ -70,7 +70,7 @@ int main(int, char *[])
 
   //  Software Guide : BeginLatex
   //
-  //  The \doxygen{itk::LineCell} type can now be instantiated using the traits
+  //  The \doxygen{itk}{LineCell} type can now be instantiated using the traits
   //  taken from the Mesh.  
   //
   //  \index{itk::LineCell!Instantiation}
@@ -145,7 +145,7 @@ int main(int, char *[])
 
   //  Software Guide : BeginLatex
   //
-  //  Data associated with cells is inserted in the \doxygen{itk::Mesh} by using
+  //  Data associated with cells is inserted in the \doxygen{itk}{Mesh} by using
   //  the \code{SetCellData()} method.  It requires the user to provide an
   //  identifier and the value to be inserted. The identifier should match one
   //  of the inserted cells. In this simple example, the square of the cell

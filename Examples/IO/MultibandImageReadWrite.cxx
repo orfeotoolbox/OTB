@@ -25,17 +25,17 @@
 
 //  Software Guide : BeginLatex
 //
-//  The \doxygen{otb::Image} class with a vector pixel type could be
+//  The \doxygen{otb}{Image} class with a vector pixel type could be
 //  used for representing multispectral images, with one band per
 //  vector component, however, this is not a practical way, since the
 //  dimensionality of the vector must be known at compile time. OTB
-//  offers the \doxygen{otb::VectorImage} where the dimensionality of
+//  offers the \doxygen{otb}{VectorImage} where the dimensionality of
 //  the vector stored for each pixel can be chosen at runtime. This is
 //  needed for the image file readers in order to dynamically set the
 //  number of bands of an image read from a file.
 //
 //  The OTB Readers and Writers are able to deal with
-//  \doxygen{otb::VectorImage}s transparently for the user.
+//  \doxygen{otb}{VectorImage}s transparently for the user.
 //
 //  The first step for performing reading and writing is to include the
 //  following headers.
@@ -106,7 +106,7 @@ int main( int argc, char ** argv )
   //  Software Guide : BeginLatex
   //
   //  Then, we create one object of each type using the New() method and
-  //  assigning the result to a \doxygen{SmartPointer}.
+  //  assigning the result to a \doxygen{itk}{SmartPointer}.
   //
   //  \index{otb::ImageFileReader!New()}
   //  \index{otb::ImageFileWriter!New()}

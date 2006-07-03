@@ -25,7 +25,7 @@
 
   // Software Guide : BeginLatex
   //
-  // This example shows the use of the \doxygen{otb::ImageViewer}
+  // This example shows the use of the \doxygen{otb}{ImageViewer}
   // class for image visualization. As usual, we start by
   // including the header file for the class.
   //
@@ -122,7 +122,7 @@ int main( int argc, char ** argv )
   // \itkcaption[Image visualization.]{Example of image visualization.}
   // \label{fig:Visu1}
   // \end{figure}
-  // The the \doxygen{otb::ImageViewer} class creates 3 windows (see
+  // The the \doxygen{otb}{ImageViewer} class creates 3 windows (see
   // figure \ref{fig:Visu1}) for an improved visualization of large
   // images. This procedure is inspired from the navigation window of
   // the Gimp and other image visualization tools. The navigation

@@ -44,7 +44,7 @@
 // Software Guide : BeginLatex
 //
 // The following example illustrates how to preprocess and segment images
-// using the \doxygen{itk::WatershedImageFilter}. Note that the care with which
+// using the \doxygen{itk}{WatershedImageFilter}. Note that the care with which
 // the data is preprocessed will greatly affect the quality of your result.
 // Typically, the best results are obtained by preprocessing the original
 // image with an edge-preserving diffusion filter, such as one of the
@@ -54,9 +54,9 @@
 // object boundaries.  A suitable height function for many applications can
 // be generated as the gradient magnitude of the image to be segmented.
 //
-// The \doxygen{itk::VectorGradientMagnitudeAnisotropicDiffusionImageFilter} class
+// The \doxygen{itk}{VectorGradientMagnitudeAnisotropicDiffusionImageFilter} class
 // is used to smooth the image and the
-// \doxygen{itk::VectorGradientMagnitudeImageFilter} is used to generate the
+// \doxygen{itk}{VectorGradientMagnitudeImageFilter} is used to generate the
 // height function.  We begin by including all preprocessing filter header
 // files and the header file for the WatershedImageFilter.  We
 // use the vector versions of these filters because the input data is a color
@@ -96,10 +96,10 @@ int main( int argc, char *argv[] )
   // work properly.  The preprocessing stages are done directly on the
   // vector-valued data and the segmentation is done using floating point
   // scalar data.  Images are converted from RGB pixel type to
-  // numerical vector type using \doxygen{VectorCastImageFilter}.
+  // numerical vector type using \doxygen{itk}{VectorCastImageFilter}.
   // Please pay attention to the fact that we are using
-  // \doxygen{itk::Image}s since the
-  // \doxygen{itk::VectorGradientMagnitudeImageFilter} has some
+  // \doxygen{itk}{Image}s since the
+  // \doxygen{itk}{VectorGradientMagnitudeImageFilter} has some
   // internal typedefs which make polymorfism impossible.
   // Software Guide : EndLatex
 
@@ -196,10 +196,10 @@ int main( int argc, char *argv[] )
   // for the purposes of this example, we will convert it to RGB pixels.  RGB
   // images have the advantage that they can be saved as a simple png file
   // and viewed using any standard image viewer software.  The
-  // \subdoxygen{itk::Functor}{ScalarToRGBPixelFunctor} class is a special
+  // \subdoxygen{itk}{Functor}{ScalarToRGBPixelFunctor} class is a special
   // function object designed to hash a scalar value into an
-  // \doxygen{itk::RGBPixel}. Plugging this functor into the
-  // \doxygen{itk::UnaryFunctorImageFilter} creates an image filter for that
+  // \doxygen{itk}{RGBPixel}. Plugging this functor into the
+  // \doxygen{itk}{UnaryFunctorImageFilter} creates an image filter for that
   // converts scalar images to RGB images.
   //
   // Software Guide : EndLatex

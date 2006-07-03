@@ -32,9 +32,9 @@
 //  CEOS and GeoTiff.
 //
 //  The metadata support is embedded in OTB's IO functionnalities and
-//  is accessible through the \doxygen{otb::Image} and
-//  \doxygen{otb::VectorImage} classes. You should avoid using the
-//  \doxygen{itk::Image} class if you want to have metadata support.
+//  is accessible through the \doxygen{otb}{Image} and
+//  \doxygen{otb}{VectorImage} classes. You should avoid using the
+//  \doxygen{itk}{Image} class if you want to have metadata support.
 //
 //  SoftwareGuide: EndLatex
 

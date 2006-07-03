@@ -36,7 +36,7 @@
 //  Software Guide : BeginLatex
 //
 //  This example introduces the use of the
-//  \doxygen{itk::CannyEdgeDetectionImageFilter}. This filter is widely used for
+//  \doxygen{itk}{CannyEdgeDetectionImageFilter}. This filter is widely used for
 //  edge detection since it is the optimal solution satisfying the constraints
 //  of good sensitivity, localization and noise robustness.
 //
@@ -101,7 +101,7 @@ int main(int argc, char* argv[])
   //
   //  This filter operates on image of pixel type float. It is then necessary
   //  to cast the type of the input images that are usually of integer type.
-  //  The \doxygen{itk::CastImageFilter} is used here for that purpose. Its image 
+  //  The \doxygen{itk}{CastImageFilter} is used here for that purpose. Its image 
   //  template parameters are defined for casting from the input type to the
   //  float type using for processing.
   //
@@ -118,7 +118,7 @@ int main(int argc, char* argv[])
 
   //  Software Guide : BeginLatex
   //
-  //  The \doxygen{itk::CannyEdgeDetectionImageFilter} is instantiated using the float image type.
+  //  The \doxygen{itk}{CannyEdgeDetectionImageFilter} is instantiated using the float image type.
   //
   //  \index{itk::CannyEdgeDetectionImageFilter|textbf}
   //

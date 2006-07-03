@@ -32,7 +32,7 @@
 
 // Software Guide : BeginLatex
 //
-// This example illustrates the use of the \doxygen{otb::TouziEdgeDetectorImageFilter}.
+// This example illustrates the use of the \doxygen{otb}{TouziEdgeDetectorImageFilter}.
 // This filter belongs to the family of the fixed false alarm rate
 // edge detectors but it is apropriate for SAR images, where the
 // speckle noise is considered as multiplicative. By analogy with the
@@ -189,7 +189,7 @@ int main( int argc, char * argv[] )
   //  Software Guide : BeginLatex
   //  
   //  The image obtained with the reader is passed as input to the
-  //  \doxygen{otb::TouziEdgeDetectorImageFilter}. The pipeline is built as follows.
+  //  \doxygen{otb}{TouziEdgeDetectorImageFilter}. The pipeline is built as follows.
   //
   //  \index{otb::TouziEdgeDetectorImageFilter!SetInput()}
   //
@@ -263,7 +263,7 @@ int main( int argc, char * argv[] )
   // \includegraphics[width=0.25\textwidth]{amstTouziEdges.eps}
   // \includegraphics[width=0.25\textwidth]{amstTouziDirections.eps}
   // \itkcaption[Touzi Edge Detector Application]{Result of applying the
-  // \doxygen{otb::TouziEdgeDetectorImageFilter} to a SAR image. From left to right :
+  // \doxygen{otb}{TouziEdgeDetectorImageFilter} to a SAR image. From left to right :
   // original image, edge intensity and edge orientation.} 
   // \label{fig:TOUZI_FILTER}
   // \end{figure}

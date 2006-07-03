@@ -30,7 +30,7 @@
 // This example shows how to use the KMeans model for classifying the pixel of
 // a scalar image.
 //
-// The  \subdoxygen{itk::Statistics}{ScalarImageKmeansImageFilter} is used for taking
+// The  \subdoxygen{itk}{Statistics}{ScalarImageKmeansImageFilter} is used for taking
 // a scalar image and applying the K-Means algorithm in order to define classes
 // that represents statistical distributions of intensity values in the pixels.
 // The classes are then used in this filter for generating a labeled image where
@@ -65,7 +65,7 @@ int main( int argc, char * argv [] )
 //
 // First we define the pixel type and dimension of the image that we intend to
 // classify. With this image type we can also declare the
-// \doxygen{otb::ImageFileReader} needed for reading the input image, create one and
+// \doxygen{otb}{ImageFileReader} needed for reading the input image, create one and
 // set its input filename.
 //
 // Software Guide : EndLatex 
@@ -87,7 +87,7 @@ int main( int argc, char * argv [] )
 // Software Guide : BeginLatex
 //
 // With the \code{ImageType} we instantiate the type of the
-// \doxygen{itk::ScalarImageKmeansImageFilter} that will compute the K-Means model
+// \doxygen{itk}{ScalarImageKmeansImageFilter} that will compute the K-Means model
 // and then classify the image pixels. 
 //
 // Software Guide : EndLatex 
@@ -166,11 +166,11 @@ int main( int argc, char * argv [] )
 
 // Software Guide : BeginLatex
 //
-// The \doxygen{itk::ScalarImageKmeansImageFilter} is predefined for producing an 8
+// The \doxygen{itk}{ScalarImageKmeansImageFilter} is predefined for producing an 8
 // bits scalar image as output. This output image contains labels associated
 // to each one of the classes in the K-Means algorithm. In the following lines
 // we use the \code{OutputImageType} in order to instantiate the type of a
-// \doxygen{otb::ImageFileWriter}. Then create one, and connect it to the output of
+// \doxygen{otb}{ImageFileWriter}. Then create one, and connect it to the output of
 // the classification filter.
 //
 // Software Guide : EndLatex 

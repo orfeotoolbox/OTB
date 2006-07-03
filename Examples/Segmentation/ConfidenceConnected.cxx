@@ -51,7 +51,7 @@
 // \index{itk::ConfidenceConnectedImageFilter!header}
 //
 // The following example illustrates the use of the
-// \doxygen{itk::ConfidenceConnectedImageFilter}. The criterion used by the
+// \doxygen{itk}{ConfidenceConnectedImageFilter}. The criterion used by the
 // ConfidenceConnectedImageFilter is based on simple statistics of the
 // current region. First, the algorithm computes the mean and standard
 // deviation of intensity values for all the pixels currently included in the
@@ -78,7 +78,7 @@
 // considered for inclusion in the region.
 //
 // Let's look at the minimal code required to use this algorithm. First, the
-// following header defining the \doxygen{itk::ConfidenceConnectedImageFilter} class
+// following header defining the \doxygen{itk}{ConfidenceConnectedImageFilter} class
 // must be included.
 //
 // Software Guide : EndLatex 
@@ -98,7 +98,7 @@
 //  Noise present in the image can reduce the capacity of this filter to grow
 //  large regions. When faced with noisy images, it is usually convenient to
 //  pre-process the image by using an edge-preserving smoothing filter.  In this particular example we use the
-//  \doxygen{itk::CurvatureFlowImageFilter}, hence we need to include its header
+//  \doxygen{itk}{CurvatureFlowImageFilter}, hence we need to include its header
 //  file.
 //
 //  Software Guide : EndLatex 
@@ -173,7 +173,7 @@ int main( int argc, char *argv[] )
   //  Software Guide : BeginLatex
   //  
   //  Next the filter is created by invoking the \code{New()} method and
-  //  assigning the result to a \doxygen{itk::SmartPointer}.
+  //  assigning the result to a \doxygen{itk}{SmartPointer}.
   //
   //  Software Guide : EndLatex 
 
@@ -306,7 +306,7 @@ int main( int argc, char *argv[] )
   //  \emph{typical} region of the structure to be segmented. A
   //  small neighborhood around the seed point will be used to compute the
   //  initial mean and standard deviation for the inclusion criterion. The
-  //  seed is passed in the form of a \doxygen{itk::Index} to the \code{SetSeed()}
+  //  seed is passed in the form of a \doxygen{itk}{Index} to the \code{SetSeed()}
   //  method.
   //
   //  \index{itk::ConfidenceConnectedImageFilter!SetSeed()}
@@ -381,7 +381,7 @@ int main( int argc, char *argv[] )
   //  \itkcaption[ConnectedThreshold example parameters]{Parameters used for
   //  segmenting some structures shown in
   //  Figure~\ref{fig:ConnectedThresholdOutput} with the filter
-  //  \doxygen{ConnectedThresholdImageFilter}.\label{tab:ConfidenceConnectedThresholdOutput}}
+  //  \doxygen{itk}{ConnectedThresholdImageFilter}.\label{tab:ConfidenceConnectedThresholdOutput}}
   //  \end{table}
   //
   //

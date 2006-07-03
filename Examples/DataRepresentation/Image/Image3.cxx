@@ -76,7 +76,7 @@ int main(int, char *[])
   // unique index. An index is an array of integers that defines the position
   // of the pixel along each coordinate dimension of the image. The IndexType
   // is automatically defined by the image and can be accessed using the
-  // scope operator like \doxygen{itk::Index}. The length of the array will match
+  // scope operator like \doxygen{itk}{Index}. The length of the array will match
   // the dimensions of the associated image.
   //
   // The following code illustrates the declaration of an index variable and

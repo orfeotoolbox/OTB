@@ -60,7 +60,7 @@ int main( int argc, char ** argv )
 
   // Software Guide : BeginLatex
   //
-  // The \doxygen{itk::RGBPixel} class is templated over the type used to
+  // The \doxygen{itk}{RGBPixel} class is templated over the type used to
   // represent each one of the red, green and blue components. A typical
   // instantiation of the RGB image class might be as follows.
   //
@@ -130,7 +130,7 @@ int main( int argc, char ** argv )
   //  You may have noticed that apart from the declaration of the
   //  \code{PixelType} there is nothing in this code that is specific for RGB
   //  images. All the actions required to support color images are implemented
-  //  internally in the \doxygen{itk::ImageIO} objects.
+  //  internally in the \doxygen{itk}{ImageIO} objects.
   //
   //  Software Guide : EndLatex 
 

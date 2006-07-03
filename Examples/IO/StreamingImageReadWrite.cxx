@@ -25,16 +25,16 @@
 
 //  Software Guide : BeginLatex
 //
-//  As we have seen, the reading of images is managed by the class \doxygen{otb::ImageFileReader}
+//  As we have seen, the reading of images is managed by the class \doxygen{otb}{ImageFileReader}
 //  while writing is performed by the class
-//  \doxygen{otb::ImageFileWriter}. ITK's pipeline implements
+//  \doxygen{otb}{ImageFileWriter}. ITK's pipeline implements
 //  streaming. That means that a filter for which the
 //  \code{ThreadedGenerateData} method is implemented, will only produce the
 //  data for the region requested by the following filter in the
 //  pipeline. Therefore, in order to use the streaming functionnality
 //  one needs to use a filter at the end of the pipeline which
 //  requests for adjacent regions of the image to be processed. In
-//  ITK, the \doxygen{itk::StreamingImageFilter} class is used for
+//  ITK, the \doxygen{itk}{StreamingImageFilter} class is used for
 //  this purpose. However, ITK does not implement streaming from/to
 //  files. This means that even if the pipeline has a small memory
 //  footprint, the images have to be stored in memory at least after
@@ -44,7 +44,7 @@
 //  this is transparent for the programmer, and if a streaming loop is
 //  used at the end of the pipeline, the read operation will be
 //  streamed. For the file writing, the
-//  \doxygen{otb::StreamingImageFileWriter} has to be used.
+//  \doxygen{otb}{StreamingImageFileWriter} has to be used.
 //
 //  The first step for performing streamed reading and writing is to include the
 //  following headers.
@@ -109,7 +109,7 @@ int main( int argc, char ** argv )
   //  Software Guide : BeginLatex
   //
   //  Then, we create one object of each type using the New() method and
-  //  assigning the result to a \doxygen{SmartPointer}.
+  //  assigning the result to a \doxygen{itk}{SmartPointer}.
   //
   //  \index{otb::ImageFileReader!New()}
   //  \index{otb::ImageFileWriter!New()}

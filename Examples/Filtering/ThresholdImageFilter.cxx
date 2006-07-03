@@ -62,7 +62,7 @@
 // \label{fig:ThresholdTransferFunctionOutside}
 // \end{figure}
 //
-// This example illustrates the use of the \doxygen{itk::ThresholdImageFilter}.
+// This example illustrates the use of the \doxygen{itk}{ThresholdImageFilter}.
 // This filter can be used to transform the intensity levels of an image in
 // three different ways. 
 //
@@ -160,7 +160,7 @@ int main( int argc, char * argv[] )
 
   //  Software Guide : BeginLatex
   //
-  //  An \doxygen{otb::ImageFileReader} class is also instantiated in order to read
+  //  An \doxygen{otb}{ImageFileReader} class is also instantiated in order to read
   //  image data from a file. 
   //
   //  Software Guide : EndLatex 
@@ -171,7 +171,7 @@ int main( int argc, char * argv[] )
 
   //  Software Guide : BeginLatex
   //  
-  // An \doxygen{otb::ImageFileWriter} is instantiated in order to write the
+  // An \doxygen{otb}{ImageFileWriter} is instantiated in order to write the
   // output image to a file.
   //
   //  Software Guide : EndLatex 
@@ -202,7 +202,7 @@ int main( int argc, char * argv[] )
   //  Software Guide : BeginLatex
   //  
   //  The image obtained with the reader is passed as input to the
-  //  \doxygen{itk::ThresholdImageFilter}.
+  //  \doxygen{itk}{ThresholdImageFilter}.
   //
   //  \index{itk::ThresholdImageFilter!SetInput()}
   //  \index{itk::FileImageReader!GetOutput()}
@@ -310,7 +310,7 @@ int main( int argc, char * argv[] )
   //
   //  \relatedClasses
   //  \begin{itemize}
-  //  \item \doxygen{itk::BinaryThresholdImageFilter}
+  //  \item \doxygen{itk}{BinaryThresholdImageFilter}
   //  \end{itemize}
   //
   //  Software Guide : EndLatex 

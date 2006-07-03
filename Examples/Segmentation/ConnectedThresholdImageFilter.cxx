@@ -50,7 +50,7 @@
 // Software Guide : BeginLatex
 //
 // The following example illustrates the use of the
-// \doxygen{itk::ConnectedThresholdImageFilter}. This filter uses the
+// \doxygen{itk}{ConnectedThresholdImageFilter}. This filter uses the
 // flood fill iterator. Most of the algorithmic complexity of a region
 // growing method comes from visiting neighboring pixels. The flood
 // fill iterator assumes this responsibility and greatly simplifies
@@ -92,7 +92,7 @@
 //  Noise present in the image can reduce the capacity of this filter to grow
 //  large regions. When faced with noisy images, it is usually convenient to
 //  pre-process the image by using an edge-preserving smoothing filter.  In this particular example we use the
-//  \doxygen{CurvatureFlowImageFilter}, hence we need to include its header
+//  \doxygen{itk}{CurvatureFlowImageFilter}, hence we need to include its header
 //  file.
 //
 //  Software Guide : EndLatex 
@@ -167,7 +167,7 @@ int main( int argc, char *argv[])
   //  Software Guide : BeginLatex
   //  
   //  Then the filter is created by invoking the \code{New()} method and
-  //  assigning the result to a \doxygen{itk::SmartPointer}.
+  //  assigning the result to a \doxygen{itk}{SmartPointer}.
   //
   //  Software Guide : EndLatex 
 
@@ -278,7 +278,7 @@ int main( int argc, char *argv[])
   //  The initialization of the algorithm requires the user to provide a seed
   //  point. It is convenient to select this point to be placed in a
   //  \emph{typical} region of the structure to be segmented. The
-  //  seed is passed in the form of a \doxygen{itk::Index} to the \code{SetSeed()}
+  //  seed is passed in the form of a \doxygen{itk}{Index} to the \code{SetSeed()}
   //  method.
   //
   //  \index{itk::ConnectedThresholdImageFilter!SetSeed()}
@@ -341,7 +341,7 @@ int main( int argc, char *argv[])
   //  \itkcaption[ConnectedThreshold example parameters]{Parameters used for
   //  segmenting some structures shown in
   //  Figure~\ref{fig:ConnectedThresholdOutput} with the filter
-  //  \doxygen{ConnectedThresholdImageFilter}.\label{tab:ConnectedThresholdOutput}}
+  //  \doxygen{itk}{ConnectedThresholdImageFilter}.\label{tab:ConnectedThresholdOutput}}
   //  \end{table}
   //
   // \begin{figure} \center

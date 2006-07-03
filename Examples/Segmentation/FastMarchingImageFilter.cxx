@@ -53,7 +53,7 @@
 // can be used.
 //
 // The following example illustrates the use of the
-// \doxygen{itk::FastMarchingImageFilter}. This filter implements a fast marching
+// \doxygen{itk}{FastMarchingImageFilter}. This filter implements a fast marching
 // solution to a simple level set evolution problem.  In this example, the
 // speed term used in the differential equation is expected to be provided by
 // the user in the form of an image.  This image is typically computed as a
@@ -90,12 +90,12 @@
 // Figure~\ref{fig:FastMarchingCollaborationDiagram} shows the major components
 // involved in the application of the FastMarchingImageFilter to a
 // segmentation task. It involves an initial stage of smoothing using the
-// \doxygen{itk::CurvatureAnisotropicDiffusionImageFilter}. The smoothed image is
+// \doxygen{itk}{CurvatureAnisotropicDiffusionImageFilter}. The smoothed image is
 // passed as the input to the
-// \doxygen{itk::GradientMagnitudeRecursiveGaussianImageFilter} and then to the
-// \doxygen{itk::SigmoidImageFilter}.  Finally, the output of the
+// \doxygen{itk}{GradientMagnitudeRecursiveGaussianImageFilter} and then to the
+// \doxygen{itk}{SigmoidImageFilter}.  Finally, the output of the
 // FastMarchingImageFilter is passed to a
-// \doxygen{itk::BinaryThresholdImageFilter} in order to produce a binary mask
+// \doxygen{itk}{BinaryThresholdImageFilter} in order to produce a binary mask
 // representing the segmented object.
 //
 // The code in the following example illustrates the typical setup of a
@@ -132,7 +132,7 @@
 
 //  Software Guide : BeginLatex
 //  
-//  Of course, we will need the \doxygen{otb::Image} class and the
+//  Of course, we will need the \doxygen{otb}{Image} class and the
 //  FastMarchingImageFilter class. Hence we include their headers.
 //
 //  Software Guide : EndLatex 
@@ -158,8 +158,8 @@
 
 //  Software Guide : BeginLatex
 //  
-//  Reading and writing images will be done with the \doxygen{otb::ImageFileReader}
-//  and \doxygen{otb::ImageFileWriter}.
+//  Reading and writing images will be done with the \doxygen{otb}{ImageFileReader}
+//  and \doxygen{otb}{ImageFileWriter}.
 //
 //  Software Guide : EndLatex 
 
@@ -169,7 +169,7 @@
 // Software Guide : EndCodeSnippet
 
 
-//  The \doxygen{itk::RescaleIntensityImageFilter} is used to renormailize the
+//  The \doxygen{itk}{RescaleIntensityImageFilter} is used to renormailize the
 //  output of filters before sending them to files.
 // 
 #include "itkRescaleIntensityImageFilter.h"
@@ -291,7 +291,7 @@ int main( int argc, char *argv[] )
   //  Software Guide : BeginLatex
   //  
   //  Then, the filter is created by invoking the \code{New()} method and
-  //  assigning the result to a \doxygen{itk::SmartPointer}.
+  //  assigning the result to a \doxygen{itk}{SmartPointer}.
   //
   //  Software Guide : EndLatex 
 
@@ -514,7 +514,7 @@ int main( int argc, char *argv[] )
   //  Software Guide : BeginLatex
   //
   //  Nodes are created as stack variables and initialized with a value and an
-  //  \doxygen{itk::Index} position.
+  //  \doxygen{itk}{Index} position.
   //
   //  \index{itk::FastMarchingImageFilter!Seed initialization}
   //
@@ -749,11 +749,11 @@ int main( int argc, char *argv[] )
   //
   //  \relatedClasses
   //  \begin{itemize}
-  //  \item \doxygen{itk::ShapeDetectionLevelSetImageFilter}
-  //  \item \doxygen{itk::GeodesicActiveContourLevelSetImageFilter}
-  //  \item \doxygen{itk::ThresholdSegmentationLevelSetImageFilter}
-  //  \item \doxygen{itk::CannySegmentationLevelSetImageFilter}
-  //  \item \doxygen{itk::LaplacianSegmentationLevelSetImageFilter}
+  //  \item \doxygen{itk}{ShapeDetectionLevelSetImageFilter}
+  //  \item \doxygen{itk}{GeodesicActiveContourLevelSetImageFilter}
+  //  \item \doxygen{itk}{ThresholdSegmentationLevelSetImageFilter}
+  //  \item \doxygen{itk}{CannySegmentationLevelSetImageFilter}
+  //  \item \doxygen{itk}{LaplacianSegmentationLevelSetImageFilter}
   //  \end{itemize}
   //
   //  See the ITK Software Guide for examples of the use of these classes.

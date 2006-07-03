@@ -35,7 +35,7 @@
 //  reading an image of one pixel type and writing it on a different pixel
 //  type. This process not only involves casting but also rescaling the image
 //  intensity since the dynamic range of the input and output pixel types can
-//  be quite different.  The \doxygen{itk::RescaleIntensityImageFilter} is used
+//  be quite different.  The \doxygen{itk}{RescaleIntensityImageFilter} is used
 //  here to linearly rescale the image values.
 //
 //  The first step in this example is to include the appropriate headers.

@@ -32,7 +32,7 @@
 
 // Software Guide : BeginLatex
 //
-// This example illustrates the use of the \doxygen{otb::ExtractSegmentsImageFilter}.
+// This example illustrates the use of the \doxygen{otb}{ExtractSegmentsImageFilter}.
 //
 // The first step required to use this filter is to include its header file. 
 //
@@ -119,7 +119,7 @@ int main( int argc, char * argv[] )
 
   //  Software Guide : BeginLatex
   //
-  //  An \doxygen{ImageFileReader} class is also instantiated in order to read
+  //  An \doxygen{otb}{ImageFileReader} class is also instantiated in order to read
   //  image data from a file. 
   //
   //  Software Guide : EndLatex 
@@ -130,7 +130,7 @@ int main( int argc, char * argv[] )
 
   //  Software Guide : BeginLatex
   //  
-  // An \doxygen{ImageFileWriter} is instantiated in order to write the
+  // An \doxygen{otb}{ImageFileWriter} is instantiated in order to write the
   // output image to a file.
   //
   //  Software Guide : EndLatex 
@@ -180,7 +180,7 @@ int main( int argc, char * argv[] )
   //  Software Guide : BeginLatex
   //  
   //  The image obtained with the reader is passed as input to the
-  //  \doxygen{otb::ExtractSegmentsImageFilter}. The pipeline is built as follows.
+  //  \doxygen{otb}{ExtractSegmentsImageFilter}. The pipeline is built as follows.
   //
   //  \index{otb::ExtractSegmentsImageFilter!SetInput()}
   //
@@ -282,13 +282,13 @@ int main( int argc, char * argv[] )
   // \includegraphics[width=0.25\textwidth]{amst.eps}
   // \includegraphics[width=0.25\textwidth]{amstSegmentExtractionBySteps.eps}
   // \itkcaption[Line Correlation Detector Application]{Result of applying
-  // the \doxygen{otb::AssymetricFusionOfDetectorImageFilter} to a SAR
+  // the \doxygen{otb}{AssymetricFusionOfDetectorImageFilter} to a SAR
   // image. From left to right : original image, line intensity and
   // edge orientation.}  \label{fig:LINECORRELATION_FILTER} \end{figure}
   //
   //  \relatedClasses
   //  \begin{itemize}
-  //  \item \doxygen{otb::AssymetricFusionOfDetectorImageFilter}
+  //  \item \doxygen{otb}{AssymetricFusionOfDetectorImageFilter}
   //  \end{itemize}
   //  Software Guide : EndLatex 
 

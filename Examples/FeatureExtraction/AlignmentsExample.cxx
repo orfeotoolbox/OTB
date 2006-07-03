@@ -31,7 +31,7 @@
 
 // Software Guide : BeginLatex
 //
-// This example illustrates the use of the \doxygen{ImageToPathListAlignFilter}.
+// This example illustrates the use of the \doxygen{otb}{ImageToPathListAlignFilter}.
 // This filter allows to extract meaninful alignments. Alignments
 // (that is edges and lines) are detected using the {\em Gestalt}
 // approach proposed by Desolneux et al. \cite{desolneux}. In this
@@ -55,7 +55,7 @@
 
 // Software Guide : BeginLatex
 // In order to visualize the detected alignments, we will use the
-// facility class \doxygen{DrawPathFilter} which draws a
+// facility class \doxygen{otb}{DrawPathFilter} which draws a
 // \code{itk::PolyLineParametricPath} on top of a given image.
 // Software Guide : EndLatex
 
@@ -108,7 +108,7 @@ int main( int argc, char ** argv )
 
   //  Software Guide : BeginLatex
   //
-  //  The \doxygen{ImageToPathListAlignFilter} is templated over the
+  //  The \doxygen{otb}{ImageToPathListAlignFilter} is templated over the
   //  input image type and the output path type, so we start by
   //  defining:
   //
@@ -148,7 +148,7 @@ int main( int argc, char ** argv )
 
   //  Software Guide : BeginLatex
   //
-  //  As stated, above, the \doxygen{DrawPathFilter}, is useful for
+  //  As stated, above, the \doxygen{otb}{DrawPathFilter}, is useful for
   //  drawint the detected alignments. This class is templated over
   //  the input image and path types and also on the output image
   //  type.
@@ -163,7 +163,7 @@ int main( int argc, char ** argv )
   // Software Guide : EndCodeSnippet
   //  Software Guide : BeginLatex
   // We will now go through the list of detected paths and feed them
-  // to the \doxygen{DrawPathFilter} inside a loop. We will use a list
+  // to the \doxygen{otb}{DrawPathFilter} inside a loop. We will use a list
   // iterator inside a \code{while} statement.
 
   // Software Guide : BeginCodeSnippet
@@ -179,7 +179,7 @@ int main( int argc, char ** argv )
   // Software Guide : BeginLatex
   //
   // We define a dummy image will be iteratively fed to the
-  // \doxygen{DrawPathFilter} after the drawing of each alignment.
+  // \doxygen{otb}{DrawPathFilter} after the drawing of each alignment.
   //
   // Software Guide : EndLatex
 
@@ -222,7 +222,7 @@ int main( int argc, char ** argv )
   // \includegraphics[width=0.35\textwidth]{QB_Suburb.eps}
   // \includegraphics[width=0.35\textwidth]{QB_SuburbAlign.eps}
   // \itkcaption[Lee Filter Application]{Result of applying the
-  // \doxygen{ImageToPathListAlignFilter} to a VHR image of a suburb.} 
+  // \doxygen{otb}{ImageToPathListAlignFilter} to a VHR image of a suburb.} 
   // \label{fig:Align}
   // \end{figure}
   //
@@ -230,7 +230,7 @@ int main( int argc, char ** argv )
 
   //  \relatedClasses
   //  \begin{itemize}
-  //  \item \doxygen{FrostImageFilter}
+  //  \item \doxygen{otb}{FrostImageFilter}
   //  \end{itemize}
   //
   //  Software Guide : EndLatex

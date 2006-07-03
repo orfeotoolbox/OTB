@@ -23,7 +23,7 @@
 // Software Guide : BeginLatex
 //
 // This example illustrates the use of the
-// \doxygen{itk::SimpleFuzzyConnectednessScalarImageFilter}. This filter computes an
+// \doxygen{itk}{SimpleFuzzyConnectednessScalarImageFilter}. This filter computes an
 // affinity map from a seed point provided by the user. This affinity map
 // indicates for every pixels how homogeneous is the path that will link it to
 // the seed point.
@@ -48,7 +48,7 @@
 //
 // Since the FuzzyConnectednessImageFilter requires an estimation of the
 // gray level mean and variance for the region to be segmented, we use here the
-// \doxygen{itk::ConfidenceConnectedImageFilter} as a preprocessor that produces a
+// \doxygen{itk}{ConfidenceConnectedImageFilter} as a preprocessor that produces a
 // rough segmentation and estimates from it the values of the mean and the
 // variance.
 //
@@ -144,7 +144,7 @@ int main( int argc, char *argv[] )
   //  
   //  The fuzzy connectedness segmentation filter is created by invoking the
   //  \code{New()} method and assigning the result to a
-  //  \doxygen{itk::SmartPointer}.
+  //  \doxygen{itk}{SmartPointer}.
   //
   //  \index{itk::SimpleFuzzy\-Connectedness\-Scalar\-Image\-Filter!New()}
   //  \index{itk::SimpleFuzzy\-Connectedness\-Scalar\-Image\-Filter!Pointer}

@@ -24,7 +24,7 @@
 
 // Software Guide : BeginLatex
 //
-// This example illustrates how to use the \doxygen{PolyLineParametricPath}.
+// This example illustrates how to use the \doxygen{itk}{PolyLineParametricPath}.
 // This class will typically be used for representing in a concise way the
 // output of an image segmentation algorithm in 2D. See section
 // \ref{sec:Alignments} for an example in the context of alignment

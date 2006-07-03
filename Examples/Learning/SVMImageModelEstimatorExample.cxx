@@ -32,7 +32,7 @@
 
 //  Software Guide : BeginLatex
 // This example illustrates the use of the
-// \doxygen{otb::SVMImageModelEstimator} class. This class allows the
+// \doxygen{otb}{SVMImageModelEstimator} class. This class allows the
 // estimation of a SVM model (supervised learning) from a feature
 // image and an image of labels. In this example, we will train an SVM
 // to separate between water and non-water pixels by using the RGB
@@ -91,7 +91,7 @@ int main( int argc, char* argv[] )
     
 //  Software Guide : BeginLatex
 //
-//  The \doxygen{otb::SVMImageModelEstimator} class is templated over
+//  The \doxygen{otb}{SVMImageModelEstimator} class is templated over
 //  the input (features) and the training (labels) images.
 //
 // Software Guide : EndLatex

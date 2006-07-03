@@ -33,7 +33,7 @@
 
 // Software Guide : BeginLatex
 //
-// This example illustrates the use of the \doxygen{otb::ComplexMomentImageFunction}.
+// This example illustrates the use of the \doxygen{otb}{ComplexMomentImageFunction}.
 // 
 // The first step required to use this filter is to include its header file. 
 //
@@ -70,7 +70,7 @@ int main(int argc, char ** argv )
 
     //  Software Guide : BeginLatex
     //
-    //  The \doxygen{otb::ComplexMomentImageFunction} is templated over the
+    //  The \doxygen{otb}{ComplexMomentImageFunction} is templated over the
     //  input image type and the output complex type value, so we start by
     //  defining:
     //

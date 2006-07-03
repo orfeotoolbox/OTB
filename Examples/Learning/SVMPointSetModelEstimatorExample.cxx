@@ -32,8 +32,8 @@
 // Software Guide : BeginLatex
 //
 // This example illustrates the use of the
-// \doxygen{otb::otbSVMPointSetModelEstimator} in order to perform the
-// SVM learning from an \doxygen{itk::PointSet} data structure.
+// \doxygen{otb}{otbSVMPointSetModelEstimator} in order to perform the
+// SVM learning from an \doxygen{itk}{PointSet} data structure.
 //
 // The first step required to use this filter is to include its header file. 
 //

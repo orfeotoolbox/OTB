@@ -24,10 +24,10 @@
 
 //  Software Guide : BeginLatex
 //
-//  A \doxygen{itk::Mesh} can contain a variety of cell types. Typical cells are
-//  the \doxygen{itk::LineCell}, \doxygen{itk::TriangleCell},
-//  \doxygen{itk::QuadrilateralCell} and
-//  \doxygen{itk::TetrahedronCell}. The latter will not be used very
+//  A \doxygen{itk}{Mesh} can contain a variety of cell types. Typical cells are
+//  the \doxygen{itk}{LineCell}, \doxygen{itk}{TriangleCell},
+//  \doxygen{itk}{QuadrilateralCell} and
+//  \doxygen{itk}{TetrahedronCell}. The latter will not be used very
 //  often in the remote sensing context. Additional
 //  flexibility is provided for managing cells at the price of a bit more of
 //  complexity than in the case of point management.
@@ -109,7 +109,7 @@ int main(int, char *[])
   //  since it is now necessary to establish a protocol to make clear who is
   //  responsible for allocating and releasing the cells' memory. This protocol
   //  is implemented in the form of a specific type of pointer called the
-  //  \code{CellAutoPointer}. This pointer, based on the \doxygen{itk::AutoPointer},
+  //  \code{CellAutoPointer}. This pointer, based on the \doxygen{itk}{AutoPointer},
   //  differs in many respects from the SmartPointer. The CellAutoPointer has an
   //  internal pointer to the actual object and a boolean flag that indicates
   //  if the CellAutoPointer is responsible for releasing the cell memory

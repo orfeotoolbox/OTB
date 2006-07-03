@@ -42,13 +42,13 @@
 // measurement vector that changes its cluster membership from the
 // previous iteration, then the algorithm stops.
 //
-// The \subdoxygen{itk::Statistics}{KdTreeBasedKmeansEstimator} is a variation of
+// The \subdoxygen{itk}{Statistics}{KdTreeBasedKmeansEstimator} is a variation of
 // this logic. The k-means clustering algorithm is computationally very
 // expensive because it has to recalculate the mean at each iteration. To
 // update the mean values, we have to calculate the distance between k means
 // and each and every measurement vector. To reduce the computational burden,
 // the KdTreeBasedKmeansEstimator uses a special data structure: the
-// k-d tree (\subdoxygen{itk::Statistics}{KdTree}) with additional
+// k-d tree (\subdoxygen{itk}{Statistics}{KdTree}) with additional
 // information. The additional information includes the number and the vector
 // sum of measurement vectors under each node under the tree architecture.
 //
@@ -61,8 +61,8 @@
 // \cite{Kanungo2000}. Our implementation of this scheme follows the
 // article by the Kanungo et al \cite{Kanungo2000}.
 //
-// We use the \subdoxygen{itk::Statistics}{ListSample} as the input sample, the
-// \doxygen{itk::Vector} as the measurement vector. The following code
+// We use the \subdoxygen{itk}{Statistics}{ListSample} as the input sample, the
+// \doxygen{itk}{Vector} as the measurement vector. The following code
 // snippet includes their header files.
 //
 // Software Guide : EndLatex 
@@ -74,12 +74,12 @@
 
 // Software Guide : BeginLatex
 //
-// Since this k-means algorithm requires a \subdoxygen{itk::Statistics}{KdTree}
+// Since this k-means algorithm requires a \subdoxygen{itk}{Statistics}{KdTree}
 // object as an input, we include the KdTree class header file. As mentioned
 // above, we need a k-d tree with the vector sum and the number of
 // measurement vectors. Therefore we use the
-// \subdoxygen{itk::Statistics}{WeightedCentroidKdTreeGenerator} instead of the
-// \subdoxygen{itk::Statistics}{KdTreeGenerator} that generate a k-d tree without
+// \subdoxygen{itk}{Statistics}{WeightedCentroidKdTreeGenerator} instead of the
+// \subdoxygen{itk}{Statistics}{KdTreeGenerator} that generate a k-d tree without
 // such additional information.
 //
 // Software Guide : EndLatex
@@ -104,10 +104,10 @@
 // Software Guide : BeginLatex
 //
 // To generate the clusters, we must create k instances of
-// \subdoxygen{itk::Statistics}{EuclideanDistance} function as the membership
+// \subdoxygen{itk}{Statistics}{EuclideanDistance} function as the membership
 // functions for each cluster and plug that---along with a sample---into an
-// \subdoxygen{itk::Statistics}{SampleClassifier} object to get a
-// \subdoxygen{itk::Statistics}{MembershipSample} that stores pairs of measurement
+// \subdoxygen{itk}{Statistics}{SampleClassifier} object to get a
+// \subdoxygen{itk}{Statistics}{MembershipSample} that stores pairs of measurement
 // vectors and their associated class labels (k labels).
 //
 // Software Guide : EndLatex
@@ -121,7 +121,7 @@
 // Software Guide : BeginLatex
 //
 // We will fill the sample with random variables from two normal
-// distribution using the \subdoxygen{itk::Statistics}{NormalVariateGenerator}.
+// distribution using the \subdoxygen{itk}{Statistics}{NormalVariateGenerator}.
 //
 // Software Guide : EndLatex
 
@@ -281,7 +281,7 @@ int main()
   // the estimated k means and the measurement vectors. We use the
   // EuclideanDistance class as membership functions. Our choice
   // for the decision rule is the
-  // \subdoxygen{itk::Statistics}{MinimumDecisionRule} that returns the
+  // \subdoxygen{itk}{Statistics}{MinimumDecisionRule} that returns the
   // index of the membership functions that have the smallest value for
   // a measurement vector.
   //

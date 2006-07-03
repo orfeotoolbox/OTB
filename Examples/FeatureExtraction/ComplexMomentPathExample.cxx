@@ -35,8 +35,8 @@
 // The complex moments can be computed on images, but sometimes we are
 // interested in computing them on shapes extracted from images by
 // segmentation algorithms. These shapes can be represented by
-// \doxygen{itk::Path}s. This example illustrates the use of the
-// \doxygen{otb::ComplexMomentPathFunction} for the computation of
+// \doxygen{itk}{Path}s. This example illustrates the use of the
+// \doxygen{otb}{ComplexMomentPathFunction} for the computation of
 // complex geometric moments on ITK paths.
 // 
 // The first step required to use this filter is to include its header file. 
@@ -66,7 +66,7 @@ int main(int argc, char ** argv )
 
     //  Software Guide : BeginLatex
     //
-    //  The \doxygen{otb::ComplexMomentPathFunction} is templated over the
+    //  The \doxygen{otb}{ComplexMomentPathFunction} is templated over the
     //  input path type and the output complex type value, so we start by
     //  defining:
     //
@@ -133,7 +133,7 @@ int main(int argc, char ** argv )
     //  Software Guide : BeginLatex
     // Since the paths are defined in physical coordinates, we do not
     // need to set the center for the moment computation as we did
-    // with the \doxygen{otb::ComplexMomentImageFunction}. The same
+    // with the \doxygen{otb}{ComplexMomentImageFunction}. The same
     // applies for the size of the neighborhood around the
     // center pixel for the moment computation. The moment computation
     // is triggered by calling the \code{Evaluate} method.

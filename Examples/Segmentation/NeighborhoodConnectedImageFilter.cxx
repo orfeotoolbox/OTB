@@ -46,8 +46,8 @@
 // Software Guide : BeginLatex
 //
 // The following example illustrates the use of the
-// \doxygen{itk::NeighborhoodConnectedImageFilter}.  This filter is a close variant
-// of the \doxygen{itk::ConnectedThresholdImageFilter}. On one hand, the
+// \doxygen{itk}{NeighborhoodConnectedImageFilter}.  This filter is a close variant
+// of the \doxygen{itk}{ConnectedThresholdImageFilter}. On one hand, the
 // ConnectedThresholdImageFilter accepts a pixel in the region if its intensity
 // is in the interval defined by two user-provided threshold values.  The
 // NeighborhoodConnectedImageFilter, on the other hand, will only accept a
@@ -76,7 +76,7 @@
 
 //  Software Guide : BeginLatex
 //
-//  The \doxygen{itk::CurvatureFlowImageFilter} is used here to smooth the image
+//  The \doxygen{itk}{CurvatureFlowImageFilter} is used here to smooth the image
 //  while preserving edges.
 //
 //  Software Guide : EndLatex 
@@ -151,7 +151,7 @@ int main( int argc, char *argv[] )
   //  Software Guide : BeginLatex
   //  
   //  Then, the filter is created by invoking the \code{New()} method and
-  //  assigning the result to a \doxygen{itk::SmartPointer}.
+  //  assigning the result to a \doxygen{itk}{SmartPointer}.
   //
   //  Software Guide : EndLatex 
 
@@ -328,7 +328,7 @@ int main( int argc, char *argv[] )
   //  \itkcaption[NeighborhoodConnectedThreshold example parameters]{Parameters used for
   //  segmenting some structures shown in
   //  Figure~\ref{fig:NeighborhoodConnectedThresholdOutput} with the filter
-  //  \doxygen{itk::NeighborhoodConnectedThresholdImageFilter}.\label{tab:NeighborhoodConnectedThresholdOutput}}
+  //  \doxygen{itk}{NeighborhoodConnectedThresholdImageFilter}.\label{tab:NeighborhoodConnectedThresholdOutput}}
   //  \end{table}
   //
   // \begin{figure} \center

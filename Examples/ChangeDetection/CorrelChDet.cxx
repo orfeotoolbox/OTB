@@ -32,7 +32,7 @@
 
 //  Software Guide : BeginLatex
 // This example illustrates the class
-// \doxygen{otb::CorrelationChangeDetector} for detecting changes
+// \doxygen{otb}{CorrelationChangeDetector} for detecting changes
 // between pairs of images. This filter computes the correlation coefficient in
 // the neighborhood of each pixel of the pair of images to be compared. This
 // example will use the images shown in
@@ -88,7 +88,7 @@ int main(int argc, char* argv[] )
   //  can be vey large, we will force the pipeline to use
   //  streaming. For this purpose, the file writer will be
   //  streamed. This is achieved by using the
-  //  \doxygen{otb::StreamingImageFileWriter} class.
+  //  \doxygen{otb}{StreamingImageFileWriter} class.
   // 
   //  Software Guide : EndLatex 
 
@@ -115,7 +115,7 @@ int main(int argc, char* argv[] )
   
   //  Software Guide : BeginLatex
   //
-  //  The \doxygen{otb::CorrelationChangeDetector} is templated over
+  //  The \doxygen{otb}{CorrelationChangeDetector} is templated over
   //  the types of the two input images and the type of the generated change
   //  image.
   // 

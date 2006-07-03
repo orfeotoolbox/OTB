@@ -24,8 +24,8 @@
 
 //  Software Guide : BeginLatex
 //
-//  The \doxygen{PointSet} class uses an internal container to manage the storage of
-//  \doxygen{Point}s. It is more efficient, in general, to manage points by using the
+//  The \doxygen{itk}{PointSet} class uses an internal container to manage the storage of
+//  \doxygen{itk}{Point}s. It is more efficient, in general, to manage points by using the
 //  access methods provided directly on the points container. The following
 //  example illustrates how to interact with the point container and how to use
 //  point iterators.
@@ -57,8 +57,8 @@ int main(int, char *[])
   //
   //  The actual type of the PointsContainer depends on what style of
   //  PointSet is being used. The dynamic PointSet use the
-  //  \doxygen{itk::MapContainer} while the static PointSet uses the
-  //  \doxygen{itk::VectorContainer}. The vector and map containers are basically
+  //  \doxygen{itk}{MapContainer} while the static PointSet uses the
+  //  \doxygen{itk}{VectorContainer}. The vector and map containers are basically
   //  ITK wrappers around the \href{http://www.sgi.com/tech/stl/}{STL}
   //  classes \href{http://www.sgi.com/tech/stl/Map.html}{\code{std::map}}
   //  and \href{http://www.sgi.com/tech/stl/Vector.html}{\code{std::vector}}.
@@ -67,7 +67,7 @@ int main(int, char *[])
   //  and vector container are templated over the type of the elements they
   //  contain. In this case they are templated over PointType.
   //  Containers are reference counted object. They are then created with the
-  //  \code{New()} method and assigned to a \doxygen{SmartPointer} after
+  //  \code{New()} method and assigned to a \doxygen{itk}{SmartPointer} after
   //  creation.  The following line creates a point container compatible with
   //  the type of the PointSet from which the trait has been taken.
   //

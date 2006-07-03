@@ -34,12 +34,12 @@
 //  Generally speaking they are referred to as filters, although readers have
 //  no pipeline input and writers have no pipeline output.
 //
-//  The reading of images is managed by the class \doxygen{otb::ImageFileReader}
-//  while writing is performed by the class \doxygen{otb::ImageFileWriter}. These
+//  The reading of images is managed by the class \doxygen{otb}{ImageFileReader}
+//  while writing is performed by the class \doxygen{otb}{ImageFileWriter}. These
 //  two classes are independent of any particular file format. The actual low
 //  level task of reading and writing specific file formats is done behind
 //  the scenes by a family of classes of type
-//  \doxygen{itk::ImageIO}. Actually, the OTB image Readers and
+//  \doxygen{itk}{ImageIO}. Actually, the OTB image Readers and
 //  Writers are very similar to those of ITK, but provide new
 //  functionnalities which are specific to remote sensing images.
 //
@@ -129,7 +129,7 @@ int main( int argc, char ** argv )
   //  Software Guide : BeginLatex
   //
   //  Then, we create one object of each type using the New() method and
-  //  assigning the result to a \doxygen{SmartPointer}.
+  //  assigning the result to a \doxygen{itk}{SmartPointer}.
   //
   //  \index{otb::ImageFileReader!New()}
   //  \index{otb::ImageFileWriter!New()}
@@ -225,7 +225,7 @@ int main( int argc, char ** argv )
   //  extension, but the architecture supports arbitrarily complex processes
   //  to determine whether a file can be read or written. Alternatively, the
   //  user can specify the data file format by explicit instantiation and
-  //  assignment the appropriate \doxygen{itk::ImageIO} subclass.
+  //  assignment the appropriate \doxygen{itk}{ImageIO} subclass.
   //
   //
   //  Software Guide : EndLatex 

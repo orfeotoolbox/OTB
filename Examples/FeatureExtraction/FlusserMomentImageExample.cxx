@@ -33,7 +33,7 @@
 
 // Software Guide : BeginLatex
 //
-// This example illustrates the use of the \doxygen{otb::FlusserMomentImageFunction}.
+// This example illustrates the use of the \doxygen{otb}{FlusserMomentImageFunction}.
 // 
 // The first step required to use this filter is to include its header file. 
 //
@@ -70,7 +70,7 @@ int main(int argc, char ** argv )
 
     //  Software Guide : BeginLatex
     //
-    //  The \doxygen{otb::FlusserImageFunction} is templated over the
+    //  The \doxygen{otb}{FlusserImageFunction} is templated over the
     //  input image type and the output (real) type value, so we start by
     //  defining:
     //
@@ -160,7 +160,7 @@ int main(int argc, char ** argv )
     //
     //  \relatedClasses
     //  \begin{itemize}
-    //  \item \doxygen{otb::FlusserPathFunction}
+    //  \item \doxygen{otb}{FlusserPathFunction}
     //  \end{itemize}
     //
     //  Software Guide : EndLatex

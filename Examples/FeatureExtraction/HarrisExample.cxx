@@ -34,7 +34,7 @@
 
 // Software Guide : BeginLatex
 //
-// This example illustrates the use of the \doxygen{HarrisImageFilter}.
+// This example illustrates the use of the \doxygen{otb}{HarrisImageFilter}.
 // 
 // The first step required to use this filter is to include its header file. 
 //
@@ -73,7 +73,7 @@ int main(int argc, char ** argv )
 
     //  Software Guide : BeginLatex
     //
-    //  The \doxygen{HarrisImageFilter} is templated over the
+    //  The \doxygen{otb}{HarrisImageFilter} is templated over the
     //  input and output image types, so we start by
     //  defining:
     //
@@ -102,7 +102,7 @@ int main(int argc, char ** argv )
     
     //  Software Guide : BeginLatex
     //
-    // The \doxygen{HarrisImageFilter} needs some parameters to
+    // The \doxygen{otb}{HarrisImageFilter} needs some parameters to
     // operate. The derivative computation is performed by a
     // convolution with the derivative of a Gaussian kernel of
     // variance $\sigma_D$ (derivation scale) and 
@@ -139,18 +139,18 @@ int main(int argc, char ** argv )
   // \includegraphics[width=0.25\textwidth]{ROISpot5.eps}
   // \includegraphics[width=0.25\textwidth]{ROISpot5Harris.eps}
   // \itkcaption[Lee Filter Application]{Result of applying the
-  // \doxygen{otb::HarrisImageFilter} to a Spot 5 image.} 
+  // \doxygen{otb}{HarrisImageFilter} to a Spot 5 image.} 
   // \label{fig:Harris}
   // \end{figure}
   //
-  // The output of the \doxygen{otb::HarrisImageFilter} is an image
+  // The output of the \doxygen{otb}{HarrisImageFilter} is an image
   // where,for each pixel, we obtain the intensity of the
   // detection. Often, the user may want to get access to the set of
   // points for which the output of the detector is higher than a
   // given threshold. This can be obtained by using the
-  // \doxygen{otb::HarrisImageToPointSetFilter}. This filter is only
+  // \doxygen{otb}{HarrisImageToPointSetFilter}. This filter is only
   // templated over the input image type, the output being a
-  // \doxygen{itk::PointSet} with pixel type equal to the image pixel type.
+  // \doxygen{itk}{PointSet} with pixel type equal to the image pixel type.
   // 
   //  Software Guide : EndLatex 
 
@@ -172,8 +172,8 @@ int main(int argc, char ** argv )
 
     //  Software Guide : BeginLatex
     //
-    //  The \doxygen{otb::HarrisImageToPointSetFilter} takes the same
-    // parameters as the \doxygen{otb::HarrisImageFilter} and an
+    //  The \doxygen{otb}{HarrisImageToPointSetFilter} takes the same
+    // parameters as the \doxygen{otb}{HarrisImageFilter} and an
     // additional parameter : the threshold for the point selection.
     //
     //  Software Guide : EndLatex
@@ -197,7 +197,7 @@ int main(int argc, char ** argv )
     //  the coordinates of the points. We start by accessing the
     //  container of the points which is encapsulated into the point
     //  set (see section \ref{sec:PointSetSection} for more
-    //  information on using \doxygen{itk::PointSet}s) and declaring
+    //  information on using \doxygen{itk}{PointSet}s) and declaring
     //  an iterator to it.
     //
     //  Software Guide : EndLatex

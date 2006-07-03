@@ -30,12 +30,12 @@
 // all the components of the classifier system and the data flow. This system
 // differs with the previous k-means clustering algorithms in several
 // ways. The biggest difference is that this classifier uses the
-// \subdoxygen{itk::Statistics}{GaussianDensityFunction}s as membership functions
-// instead of the \subdoxygen{itk::Statistics}{EuclideanDistance}. Since the
+// \subdoxygen{itk}{Statistics}{GaussianDensityFunction}s as membership functions
+// instead of the \subdoxygen{itk}{Statistics}{EuclideanDistance}. Since the
 // membership function is different, the membership function requires a
 // different set of parameters, mean vectors and covariance matrices. We
-// choose the \subdoxygen{itk::Statistics}{MeanCalculator} (sample mean) and the
-// \subdoxygen{itk::Statistics}{CovarianceCalculator} (sample covariance) for the
+// choose the \subdoxygen{itk}{Statistics}{MeanCalculator} (sample mean) and the
+// \subdoxygen{itk}{Statistics}{CovarianceCalculator} (sample covariance) for the
 // estimation algorithms of the two parameters. If we want more robust
 // estimation algorithm, we can replace these estimation algorithms with more
 // alternatives without changing other components in the classifier system.
@@ -52,10 +52,10 @@
 //  \protect\label{fig:BayesianPluginClassifier}
 // \end{figure}
 //
-// We use the \subdoxygen{itk::Statistics}{ListSample} as the sample (test
-// and training). The \doxygen{itk::Vector} is our measurement vector
+// We use the \subdoxygen{itk}{Statistics}{ListSample} as the sample (test
+// and training). The \doxygen{itk}{Vector} is our measurement vector
 // class. To store measurement vectors into two separate sample
-// containers, we use the \subdoxygen{itk::Statistics}{Subsample} objects. 
+// containers, we use the \subdoxygen{itk}{Statistics}{Subsample} objects. 
 //
 // Software Guide : EndLatex 
 
@@ -93,7 +93,7 @@
 // Software Guide : BeginLatex
 //
 // We will fill the sample with random variables from two normal 
-// distribution using the \subdoxygen{itk::Statistics}{NormalVariateGenerator}.
+// distribution using the \subdoxygen{itk}{Statistics}{NormalVariateGenerator}.
 //
 // Software Guide : EndLatex
 

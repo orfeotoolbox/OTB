@@ -33,7 +33,7 @@
 //  Software Guide : EndCommandLineArgs
 
 // Software Guide : BeginLatex
-// This example illustrates how to use the \doxygen{itk::OtsuMultipleThresholdsCalculator}.
+// This example illustrates how to use the \doxygen{itk}{OtsuMultipleThresholdsCalculator}.
 // Software Guide : EndLatex 
 
 // Software Guide : BeginCodeSnippet
@@ -205,7 +205,7 @@ int main( int argc, char * argv[] )
   //
   //  \relatedClasses
   //  \begin{itemize}
-  //  \item \doxygen{itk::ThresholdImageFilter}
+  //  \item \doxygen{itk}{ThresholdImageFilter}
   //  \end{itemize}
   //
   //  Software Guide : EndLatex 

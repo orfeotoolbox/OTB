@@ -35,7 +35,7 @@
 //
 //  A class intended to support the RGB pixel type is available in ITK.  You
 //  could also define your own pixel class and use it to instantiate a
-//  custom image type. In order to use the \doxygen{itk::RGBPixel} class, it is
+//  custom image type. In order to use the \doxygen{itk}{RGBPixel} class, it is
 //  necessary to include its header file.
 //
 //  \index{itk::RGBPixel}
@@ -80,7 +80,7 @@ int main( int , char * argv[] )
   // Software Guide : BeginLatex
   //
   // The image type can be used to instantiate other filter, for example,
-  // an \doxygen{otb::ImageFileReader} object that will read the image from a
+  // an \doxygen{otb}{ImageFileReader} object that will read the image from a
   // file.
   //
   // \index{otb::ImageFileReader!RGB Image}
@@ -138,8 +138,8 @@ int main( int , char * argv[] )
 
   // Software Guide : BeginLatex
   //
-  // The subindex notation can also be used since the \doxygen{itk::RGBPixel} inherits the
-  // \code{[]} operator from the \doxygen{itk::FixedArray} class.
+  // The subindex notation can also be used since the \doxygen{itk}{RGBPixel} inherits the
+  // \code{[]} operator from the \doxygen{itk}{FixedArray} class.
   //
   // Software Guide : EndLatex 
 

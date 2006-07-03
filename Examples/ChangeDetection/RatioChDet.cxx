@@ -26,7 +26,7 @@
 
 //  Software Guide : BeginLatex
 // This example illustrates the class
-// \doxygen{otb::MeanRatioImageFilter} for detecting changes
+// \doxygen{otb}{MeanRatioImageFilter} for detecting changes
 // between pairs of images. This filter computes the mean intensity in
 // the neighborhood of each pixel of the pair of images to be compared
 // and uses the ratio of means as a change indicator. This change
@@ -96,7 +96,7 @@ int main(int argc, char* argv[] )
   //  can be vey large, we will force the pipeline to use
   //  streaming. For this purpose, the file writer will be
   //  streamed. This is achieved by using the
-  //  \doxygen{otb::StreamingImageFileWriter} class.
+  //  \doxygen{otb}{StreamingImageFileWriter} class.
   // 
   //  Software Guide : EndLatex 
 
@@ -126,7 +126,7 @@ int main(int argc, char* argv[] )
   
   //  Software Guide : BeginLatex
   //
-  //  The \doxygen{otb::MeanRatioImageFilter} is templated over
+  //  The \doxygen{otb}{MeanRatioImageFilter} is templated over
   //  the types of the two input images and the type of the generated change
   //  image.
   // 

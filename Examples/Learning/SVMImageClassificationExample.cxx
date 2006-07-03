@@ -41,7 +41,7 @@
 
 //  Software Guide : BeginLatex
 // This example illustrates the use of the
-// \doxygen{otb::SVMClassifier} class for performing SVM
+// \doxygen{otb}{SVMClassifier} class for performing SVM
 // classification on images.
 // In this example, we will use an SVM model estimated in the example
 // of section \ref{sec:LearningWithImages}
@@ -49,9 +49,9 @@
 // values only. The images used for this example are shown in
 // figure~\ref{fig:SVMROIS}. 
 // The first thing to do is include the header file for the
-// class. Since the \doxygen{otb::SVMClassifier} takes
-// \doxygen{itk::ListSample}s as input, the class
-// \doxygen{itk::PointSetToListAdaptor} is needed.\\
+// class. Since the \doxygen{otb}{SVMClassifier} takes
+// \doxygen{itk}{ListSample}s as input, the class
+// \doxygen{itk}{PointSetToListAdaptor} is needed.\\
 //
 //
 //  Software Guide : EndLatex 
@@ -143,7 +143,7 @@ int main(int argc, char* argv[] )
 //
 // The image has now to be transformed to a sample which
 // is compatible with the classification framework. We will use a
-// \doxygen{itk::Statistics::ImageToListAdaptor} for this
+// \doxygen{itk}{Statistics::ImageToListAdaptor} for this
 // task. This class is templated over the image type used for
 // storing the measures.
 //
@@ -342,7 +342,7 @@ int main(int argc, char* argv[] )
 //
 // Only for visualization purposes, we choose to rescale the image of
 // classes before sving it to a file. We will use the
-// \doxygen{itk::RescaleIntensityImageFilter} for this purpose.
+// \doxygen{itk}{RescaleIntensityImageFilter} for this purpose.
 //
 // Software Guide : EndLatex
     
