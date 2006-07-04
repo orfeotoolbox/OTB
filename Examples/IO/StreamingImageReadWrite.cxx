@@ -62,7 +62,7 @@
 #include "otbStreamingImageFileWriter.h"
 // Software Guide : EndCodeSnippet
 
-
+#include "itkRescaleIntensityImageFilter.h"
 #include "otbImage.h"
 
 
@@ -94,7 +94,8 @@ int main( int argc, char ** argv )
   //  Software Guide : BeginLatex
   //
   //  We can now instantiate the types of the reader and writer. These two
-  //  classes are parameterized over the image type.
+  //  classes are parameterized over the image type. We will rescale
+  //  the intensities of the as an example of intermediate processing step.
   //
   //  \index{otb::StreamingImageFileWriter!Instantiation}
   //
@@ -102,6 +103,7 @@ int main( int argc, char ** argv )
 
   // Software Guide : BeginCodeSnippet
   typedef otb::ImageFileReader< ImageType >  ReaderType;
+  typedef itk::RescaleIntensityImageFilter< ImageType, ImageType> RescalerType;
   typedef otb::StreamingImageFileWriter< ImageType >  WriterType;
   // Software Guide : EndCodeSnippet
 
@@ -120,6 +122,7 @@ int main( int argc, char ** argv )
 
   // Software Guide : BeginCodeSnippet
   ReaderType::Pointer reader = ReaderType::New();
+  RescalerType::Pointer rescaler = RescalerType::New();
   WriterType::Pointer writer = WriterType::New();
   // Software Guide : EndCodeSnippet
 
@@ -133,7 +136,8 @@ int main( int argc, char ** argv )
   //  Software Guide : BeginLatex
   //
   //  The name of the file to be read or written is passed with the
-  //  SetFileName() method. 
+  //  SetFileName() method. We also choose the range of intensities
+  //  for the rescaler.
   //
   //  \index{otb::ImageFileReader!SetFileName()}
   //  \index{otb::StreamingImageFileWriter!SetFileName()}
@@ -144,6 +148,8 @@ int main( int argc, char ** argv )
 
   // Software Guide : BeginCodeSnippet
   reader->SetFileName( inputFilename  );
+  rescaler->SetOutputMinimum(0);
+  rescaler->SetOutputMaximum(255);
   writer->SetFileName( outputFilename );
   // Software Guide : EndCodeSnippet
 
@@ -151,13 +157,13 @@ int main( int argc, char ** argv )
   //  Software Guide : BeginLatex
   //
   //  We can now connect these readers and writers to filters to create a
-  //  pipeline. For example, we can create a short pipeline by passing
-  //  the output of the reader directly to the input of the writer.
+  //  pipeline. 
   //
   //  Software Guide : EndLatex 
 
   // Software Guide : BeginCodeSnippet
-  writer->SetInput( reader->GetOutput() );
+  rescaler->SetInput( reader->GetOutput() );
+  writer->SetInput( rescaler->GetOutput() );
   // Software Guide : EndCodeSnippet
 
 
