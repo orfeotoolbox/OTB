@@ -76,23 +76,18 @@ we highly recommend that you use the released version of the software.
 
 OTB can be downloaded without cost from the following web site:
 \begin{center} 
-  \url{http://www.itk.org/HTML/Download.php}\textbf{FIXME}
+  \url{http://smsc.cnes.fr/PLEIADES/A_prog_accomp.htm}
 \end{center}
 In order to track the kind of applications for which OTB is being used, you
 will be asked to complete a form prior to downloading the software.
 The information you provide in this form will help developers to get a better
-idea of the interests and skills of the toolkit users. It also assists in 
-future funding requests to sponsoring agencies.
+idea of the interests and skills of the toolkit users.
 
 Once you fill out this form you will have access to the download
-page. This page can be
-book marked to facilitate subsequent visits to the download site without
-having to complete any form again.
+page. This page can be book marked to facilitate subsequent visits to
+the download site without having to complete any form again.
 
-Please read the
-\code{GettingStarted.txt}\footnote{http://www.itk.org/HTML/GettingStarted.txt}\textbf{FIXME}
-document first. It will give you an overview of the download and installation
-processes. Then choose the tarball that better fits your system. The options
+ Then choose the tarball that better fits your system. The options
 are \code{.zip} and \code{.tgz} files.  The first type is better suited for
 MS-Windows while the second one is the preferred format for UNIX systems.
 
@@ -145,12 +140,8 @@ the \code{OTB} module is functioning properly.
 
 The \code{OTB} module contains the following subdirectories:
 \begin{itemize}
-        \item \code{OTB/Auxiliary}---code that interfaces packages
-        to OTB.
         \item \code{OTB/Code}---the heart of the software; the location
         of the majority of the source code.
-        \item \code{OTB/Documentation}---a compact subset of documentation
-        to get users started with OTB.
         \item \code{OTB/Examples}---a suite of simple, well-documented
         examples used by this guide and to illustrate important
         OTB concepts.
@@ -158,10 +149,7 @@ The \code{OTB} module contains the following subdirectories:
         to test OTB. These examples tend to be minimally documented but may
         be useful to demonstrate various system concepts. 
         \item \code{OTB/Utilities}---supporting software for the OTB
-        source code. For example, Doxygen support, as well as 
-        libraries such as \code{CAI} and \code{GDAL}.
-        \item \code{OTB/Validation}---a series of validation case studies
-        including the source code used to produce the results.
+        source code. For example, libraries such as \code{ITK} and \code{GDAL}.
 \end{itemize}
 
 The source code directory structure---found in \code{OTB/Code}---is 
@@ -175,12 +163,13 @@ important to understand since other directory structures (such as the
         filters.
         \item \code{OTB/Code/IO}---classes that support the reading
         and writing of data.
-        \item \code{OTB/Code/Algorithms}---the location of most
-        algorithms.
-	\item \code{OTB/Code/FeatureExtraction}---
-	\item \code{OTB/Code/ChangeDetection}---
-	\item \code{OTB/Code/Learning}---
-	\item \code{OTB/Code/Visu}---
+	\item \code{OTB/Code/FeatureExtraction}---the location of many
+	feature extraction algorithms.
+	\item \code{OTB/Code/ChangeDetection}---a set of remote
+	sensing image change detection algorithms.
+	\item \code{OTB/Code/Learning}---several functionnalities for
+	supervised learning and classification.
+	\item \code{OTB/Code/Visu}---utilities for simple image visualization.
 	  
 \end{itemize}
 
@@ -218,14 +207,14 @@ Besides this text, there are other documentation resources that you should be
 aware of.
 \begin{description}
         \item[Doxygen Documentation.] The Doxygen documentation is an
-        essential resource when working with OTB. These extensive Web pages
-        describe in detail every class and method in the system. The
-        documentation also contains inheritance and collaboration diagrams,
-        listing of event invocations, and data members. The documentation is
-        heavily hyper-linked to other classes and to the source code. The
-        Doxygen documentation is available on-line at
-        \url{http://www.itk.org}\textbf{FIXME}. Make sure that you have the right documentation
-        for your version of the source code.
+        essential resource when working with OTB. These extensive Web
+        pages describe in detail every class and method in the
+        system. The documentation also contains inheritance and
+        collaboration diagrams, listing of event invocations, and data
+        members. The documentation is heavily hyper-linked to other
+        classes and to the source code. The Doxygen documentation is
+        available on-line at
+        \url{http://smsc.cnes.fr/PLEIADES/OTB/Doxygen/html/}.
 
 	\item[Header Files.] Each OTB class is implemented with a .h and
         .cxx/.txx file (.txx file for templated classes). All methods

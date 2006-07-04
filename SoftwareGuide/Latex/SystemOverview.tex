@@ -164,15 +164,16 @@ system to automatically produce HTML manual pages.
 
 In addition to class headers, there are a few other important header files.
 \begin{description}
-        \item[\code{itkMacro.h}] is found in the \code{Code/Common}\textbf{FIXME} directory
+        \item[\code{itkMacro.h}] is found in the
+        \code{Utilities/ITK/Code/Common} directory
         and defines standard system-wide macros (such as \code{Set/Get},
         constants, and other parameters).
 
-        \item[\code{itkNumericTraits.h}] is found in the \code{Code/Common} \textbf{FIXME}
+        \item[\code{itkNumericTraits.h}] is found in the \code{Utilities/ITK/Code/Common}
         directory and defines numeric characteristics for native types such
         as its maximum and minimum possible values.
 
-        \item[\code{itkWin32Header.h}] is found in the \code{Code/Common} \textbf{FIXME}
+        \item[\code{itkWin32Header.h}] is found in the \code{Utilities/ITK/Code/Common}
         and is used to define operating system parameters to control
         the compilation process.
 \end{description}
@@ -219,7 +220,7 @@ In practice object factories are used mainly (and generally transparently) by
 the OTB input/output (IO) classes. For most users the greatest impact is on
 the use of the \code{New()} method to create a class. Generally the
 \code{New()} method is declared and implemented via the macro
-\code{itkNewMacro()} found in \code{Common/itkMacro.h}\textbf{FIXME}.
+\code{itkNewMacro()} found in \code{Utilities/ITK/Common/itkMacro.h}.
 
 
 \subsection{Smart Pointers and Memory Management}
@@ -292,7 +293,7 @@ method) with a reference count of one. Assignment to the SmartPointer
 object (referred to by \code{interp}) is decremented, and if it reaches zero,
 then the interpolator is also destroyed.
 
-Note that in OTB SmartPointers are always used to refer to instances of
+Note that in ITK SmartPointers are always used to refer to instances of
 classes derived from \doxygen{itk}{LightObject}. Method invocations and function
 calls often return ``real'' pointers to instances, but they are immediately
 assigned to a SmartPointer. Raw pointers are used for non-LightObject classes when
@@ -339,7 +340,7 @@ code snippet is taken from \doxygen{itk}{ByteSwapper}:
 
 Note that \doxygen{itk}{ByteSwapperError} is a subclass of
 \doxygen{itk}{ExceptionObject}. (In fact in OTB all exceptions should be derived
-from ExceptionObject.) In this example a special constructor and C++
+from \code{itk::ExceptionObject}.) In this example a special constructor and C++
 preprocessor variables \code{\_\_FILE\_\_} and \code{\_\_LINE\_\_} are used to instantiate
 the exception object and provide additional information to the user. You can
 choose to catch a particular exception and hence a specific OTB error, or you
@@ -396,7 +397,7 @@ possibility.)
 \subsection{Multi-Threading}
 \label{sec:MultiThreading}
 
-Multithreading is handled in OTB through a high-level design
+Multithreading is handled in OTB through ITK's high-level design
 abstraction. This approach provides portable multithreading and hides the
 complexity of differing thread implementations on the many systems supported
 by OTB. For example, the class \doxygen{itk}{MultiThreader} provides support for
@@ -421,7 +422,7 @@ In this example each thread invokes the same method. The multithreaded filter
 takes care to divide the image into different regions that do not overlap for
 write operations.
 
-The general philosophy in OTB regarding thread safety is that accessing
+The general philosophy in ITK regarding thread safety is that accessing
 different instances of a class (and its methods) is a thread-safe operation.
 Invoking methods on the same instance in different threads is to be avoided.
 
@@ -432,12 +433,12 @@ Invoking methods on the same instance in different threads is to be avoided.
 \index{VNL}
 \index{numerics}
 
-OTB uses the VNL numerics library to provide resources for numerical
+OTB; as ITK, uses the VNL numerics library to provide resources for numerical
 programming combining the ease of use of packages like Mathematica and Matlab
 with the speed of C and the elegance of C++. It provides a C++ interface to
 the high-quality Fortran routines made available in the public domain by
-numerical analysis researchers. OTB extends the functionality of VNL
-by including interface classes between VNL and OTB proper.
+numerical analysis researchers. ITK extends the functionality of VNL
+by including interface classes between VNL and ITK proper.
 
 The VNL numerics library includes classes for
 \begin{description}
@@ -483,12 +484,12 @@ search interface to this repository in its \emph{Guide to Available Mathematical
 Software (GAMS)} at \url{http://gams.nist.gov}, both as a decision tree and a
 text search.
 
-OTB also provides additional numerics functionality. A suite of optimizers, that
+ITK also provides additional numerics functionality. A suite of optimizers, that
 use VNL under the hood and integrate with the registration framework
 are available. A large collection of statistics functions---not available from
 VNL---are also provided in the \code{Insight/Numerics/Statistics}
 directory. In addition, a complete finite element (FEM) package is available,
-primarily to support the deformable registration in OTB.
+primarily to support the deformable registration in ITK.
 
 
 \section{Data Representation}
@@ -521,10 +522,10 @@ processed by a particular filter that uses these operations). In practice the
 OTB user will use a C++ simple type (e.g., \code{int}, \code{float}) or a pre-defined pixel
 type and will rarely create a new type of pixel class.
 
-One of the important OTB concepts regarding images is that rectangular,
+One of the important ITK concepts regarding images is that rectangular,
 continuous pieces of the image are known as \emph{regions}. Regions are used
 to specify which part of an image to process, for example in multithreading,
-or which part to hold in memory. In OTB there are three common types of
+or which part to hold in memory. In ITK there are three common types of
 regions:
 \begin{enumerate}
 \item \code{LargestPossibleRegion}---the image in its entirety.
@@ -698,7 +699,7 @@ spatial object type has its own capabilities. For example,
 \doxygen{itk}{TubeSpatialObject}s indicate to what point on their parent
 tube they connect.
 
-There are a limited number of spatial objects and their methods in OTB, but
+There are a limited number of spatial objects and their methods in ITK, but
 their number is growing and their potential is huge. Using the nominal
 spatial object capabilities, methods such as mutual
 information registration, can be applied to objects regardless of their
