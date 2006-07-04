@@ -23,7 +23,7 @@ SET(IO_TESTS     ${CXX_TEST_PATH}/otbIOTests)
 ADD_TEST(FA-00005-io_EnviMultiBande_RW ${IO_TESTS} 
          otbVectorImageFileReaderWriterTest
          ${INPUTDATA}/GomaBestScale_w15_50.raw
-         ${TEMP}/FA-00005-io_EnviMultiBande_GomaBestScale_w15.hd
+         ${TEMP}/FA-00005-io_EnviMultiBande_GomaBestScale_w15.hdr
          )
 
 ADD_TEST(FA-00005-io_EnviMultiBande ${COMMON_TESTS} 
@@ -134,7 +134,7 @@ ADD_TEST(FA-00006-io_Radarsat_R8_Double2Double ${COMMON_TESTS}
          )
 
 ADD_TEST(FA-00012-co_AlignementsQB ${CXX_TEST_PATH}/AlignementsQB
-        ${INPUTDATA}/poupees.hd 
+        ${INPUTDATA}/poupees.hdr 
         ${TEMP}/FA-00012-co_AlignementsQB.png 
         )
 
