@@ -38,16 +38,6 @@ ENDIF(NOT OTB_USE_EXTERNAL_ITK)
 
 
 #-----------------------------------------------------------------------------
-# Include directories from the CAI build tree.
-INCLUDE(${OTB_SOURCE_DIR}/Utilities/CAI/caiIncludeDirectories.cmake)
-SET(OTB_INCLUDE_DIRS_BUILD_TREE ${OTB_INCLUDE_DIRS_BUILD_TREE}
-  ${CAI_INCLUDE_DIRS_BUILD_TREE}
-  )
-
-
-
-
-#-----------------------------------------------------------------------------
 # Include directories needed for .cxx files in OTB.  These include
 # directories will NOT be available to user projects.
 SET(OTB_INCLUDE_DIRS_BUILD_TREE_CXX)
