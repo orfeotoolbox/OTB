@@ -74,8 +74,7 @@ TARGET_LINK_LIBRARIES(FastMarchingImageFilter OTBCommon OTBIO ITKNumerics ITKIO)
 #TARGET_LINK_LIBRARIES(CurvesLevelSetImageFilter ITKNumerics ITKIO)
 
 ADD_EXECUTABLE(WatershedSegmentation WatershedSegmentation.cxx )
-TARGET_LINK_LIBRARIES(WatershedSegmentation OTBCommon OTBIO
-OTBSegmentation ITKAlgorithms ITKNumerics ITKIO)
+TARGET_LINK_LIBRARIES(WatershedSegmentation OTBCommon OTBIO ITKAlgorithms ITKNumerics ITKIO)
 
 
 #ADD_EXECUTABLE(SegmentationExamples SegmentationExamples.cxx )
