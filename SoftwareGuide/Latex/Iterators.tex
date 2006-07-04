@@ -43,7 +43,7 @@ container type, and dimensionality.  Because ITK image iterators are
 specifically designed to work with \emph{image} containers, their interface and
 implementation is optimized for image processing tasks.  Using the ITK
 iterators instead of accessing data directly through the
-\doxygen{itk}{Image} interface has many advantages. Code is more
+\doxygen{otb}{Image} interface has many advantages. Code is more
 compact and often generalizes automatically to higher dimensions, algorithms
 run much faster, and iterators simplify tasks such as multithreading and
 neighborhood-based image processing.
@@ -82,11 +82,11 @@ non-const iterator cannot be instantiated on a non-const image pointer.
 Const versions of iterators may read, but may not write pixel values.
 
 Here is a simple example that defines and constructs a simple image iterator
-for an \doxygen{itk}{Image}.
+for an \doxygen{otb}{Image}.
 
 \small
 \begin{verbatim}
-  typedef itk::Image<float, 3> ImageType;
+  typedef otb::Image<float, 3> ImageType;
   typedef itk::ImageRegionConstIterator< ImageType > ConstIteratorType;
   typedef itk::ImageRegionIterator< ImageType > IteratorType;
 

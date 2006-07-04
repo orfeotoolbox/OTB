@@ -152,14 +152,12 @@ colorlinks,linkcolor={blue},citecolor={blue},urlcolor={blue},
 
 
 
-\ifitkPrintedVersion 
+%%\ifitkPrintedVersion 
 %% \input{Cover.tex}
-\fi
+%%\fi
 
-\ifitkFullVersion 
 \input{Abstract.tex}
 \input{Contributors.tex}
-\fi
 
 
 
@@ -195,16 +193,13 @@ colorlinks,linkcolor={blue},citecolor={blue},urlcolor={blue},
 
 \part{Introduction}
 
-\ifitkFullVersion
 \input{Introduction.tex}
 \input{Installation.tex}
 \input{SystemOverview.tex}
-\fi
 
 
 \part{User's guide}
 
-\ifitkFullVersion
 \input{DataRepresentation.tex}
 \input{ReadWrite.tex}
 \input{Filtering.tex}
@@ -213,24 +208,15 @@ colorlinks,linkcolor={blue},citecolor={blue},urlcolor={blue},
 \input{ChangeDetection.tex}
 \input{Classification.tex}
 \input{Visualization.tex}
-\fi
 
 
 %%% \input{Applications.tex}
 
 
-%%%\part{Developper's guide}
-\ifitkFullVersion
+\part{Developper's guide}
 \input{Iterators.tex}
-\fi
-
-\ifitkFullVersion
 \input{ImageAdaptors.tex}
-\fi
-
-\ifitkFullVersion
 \input{WriteAFilter.tex}
-\fi
 
 \backmatter
 
@@ -253,10 +239,10 @@ colorlinks,linkcolor={blue},citecolor={blue},urlcolor={blue},
 \InputIfFileExists{SoftwareGuide.ind}
 
 
-\ifitkPrintedVersion
-\cleardoublepage
+%%\ifitkPrintedVersion
+%%\cleardoublepage
 %%% \input{MarketingMaterial.tex}
-\fi
+%%\fi
 
 
 

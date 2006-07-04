@@ -157,6 +157,10 @@ SET( OTB_EXAMPLES_SRCS
   ${OTB_SOURCE_DIR}/Examples/DataRepresentation/Image/Image2.cxx
   ${OTB_SOURCE_DIR}/Examples/DataRepresentation/Image/Image3.cxx
   ${OTB_SOURCE_DIR}/Examples/DataRepresentation/Image/Image4.cxx
+  ${OTB_SOURCE_DIR}/Examples/DataRepresentation/Image/ImageAdaptor1.cxx
+  ${OTB_SOURCE_DIR}/Examples/DataRepresentation/Image/ImageAdaptor2.cxx
+  ${OTB_SOURCE_DIR}/Examples/DataRepresentation/Image/ImageAdaptor3.cxx
+  ${OTB_SOURCE_DIR}/Examples/DataRepresentation/Image/ImageAdaptor4.cxx      
   ${OTB_SOURCE_DIR}/Examples/DataRepresentation/Image/RGBImage.cxx
   ${OTB_SOURCE_DIR}/Examples/DataRepresentation/Image/VectorImage.cxx
   ${OTB_SOURCE_DIR}/Examples/DataRepresentation/Image/Image5.cxx
@@ -180,6 +184,7 @@ SET( OTB_EXAMPLES_SRCS
   ${OTB_SOURCE_DIR}/Examples/Filtering/BinaryThresholdImageFilter.cxx
   ${OTB_SOURCE_DIR}/Examples/Filtering/ThresholdImageFilter.cxx
   ${OTB_SOURCE_DIR}/Examples/Filtering/CannyEdgeDetectionImageFilter.cxx
+  ${OTB_SOURCE_DIR}/Examples/Filtering/CompositeFilterExample.cxx  
   ${OTB_SOURCE_DIR}/Examples/StartExamples/MeanImageFilter.cxx
   ${OTB_SOURCE_DIR}/Examples/BasicFilters/LeeImageFilter.cxx
   ${OTB_SOURCE_DIR}/Examples/FeatureExtraction/AlignmentsExample.cxx

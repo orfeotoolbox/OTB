@@ -40,20 +40,20 @@ information.
         \index{mapper}
 
         \item A \textbf{data object} represents and provides access to
-        data. In ITK, the data object (ITK class \doxygen{DataObject}) is 
-        typically of type \doxygen{Image} or \doxygen{Mesh}.
+        data. In ITK, the data object (ITK class \doxygen{itk}{DataObject}) is 
+        typically of type \doxygen{otb}{Image} or \doxygen{itk}{Mesh}.
         \index{data object}
 
-        \item A \textbf{region} (ITK class \doxygen{Region}) represents a 
+        \item A \textbf{region} (ITK class \doxygen{itk}{Region}) represents a 
         piece, or subset of the entire data set.
         \index{region}
 
-        \item An \textbf{image region} (ITK class \doxygen{ImageRegion})
+        \item An \textbf{image region} (ITK class \doxygen{itk}{ImageRegion})
         represents a structured portion of data. ImageRegion is implemented
-        using the \doxygen{Index} and \doxygen{Size} classes
+        using the \doxygen{itk}{Index} and \doxygen{itk}{Size} classes
         \index{image region}
 
-        \item A \textbf{mesh region} (ITK class \doxygen{MeshRegion}) 
+        \item A \textbf{mesh region} (ITK class \doxygen{itk}{MeshRegion}) 
         represents an unstructured portion of data.
         \index{mesh region}
 
@@ -78,7 +78,7 @@ information.
         \index{RequestedRegion}
 
         \item The \textbf{modified time} (represented by ITK class
-        \doxygen{TimeStamp}) is a monotonically increasing integer value that
+        \doxygen{itk}{TimeStamp}) is a monotonically increasing integer value that
         characterizes a point in time when an object was last modified.
         \index{modified time}
 
@@ -117,7 +117,7 @@ ITK filter is to identify the number and types of input and
 output. Having done so, there are often superclasses that simplify
 this task via class derivation. For example, most filters in ITK take
 a single image as input, and produce a single image on output. The
-superclass \doxygen{ImageToImageFilter} is a convenience class that
+superclass \doxygen{itk}{ImageToImageFilter} is a convenience class that
 provide most of the functionality needed for such a filter.
 
 Some common base classes for new filters include:
@@ -162,8 +162,8 @@ for an overview of multi-threading in ITK.)
 
 An important note: the GenerateData() method is required to allocate memory
 for the output. The ThreadedGenerateData() method is not. In default
-implementation (see \doxygen{ImageSource}, a superclass of
-\doxygen{ImageToImageFilter})
+implementation (see \doxygen{itk}{ImageSource}, a superclass of
+\doxygen{itk}{ImageToImageFilter})
 \code{GenerateData()} allocates memory and then invokes
 \code{ThreadedGenerateData()}.
 
@@ -281,14 +281,14 @@ particular size (i.e., region). It may be that the user asks to process a
 region of interest within a large image, or that memory limitations result in
 processing the data in several pieces. For example, an application may
 compute the memory required by a pipeline, and then use
-\doxygen{StreamingImageFilter} to break the data processing into several pieces.
+\doxygen{itk}{StreamingImageFilter} to break the data processing into several pieces.
 The data request is propagated through the pipeline in the upstream
 direction, and the negotiation process configures each filter to produce
 output data of a particular size.
 
 The secret to creating a streaming filter is to understand how this
 negotiation process works, and how to override its default behavior by using
-the appropriate virtual functions defined in \doxygen{ProcessObject}. The next
+the appropriate virtual functions defined in \doxygen{itk}{ProcessObject}. The next
 section describes the specifics of these methods, and when to override
 them. Examples are provided along the way to illustrate concepts.
 
@@ -334,7 +334,7 @@ to the output (via \code{DataObject::CopyInformation()}). Remember, information
 is metadata describing the output, such as the origin, spacing,
 and LargestPossibleRegion (i.e., largest possible size) of an image.
 
-A good example of this behavior is \doxygen{ShrinkImageFilter}. This filter
+A good example of this behavior is \doxygen{itk}{ShrinkImageFilter}. This filter
 takes an input image and shrinks it by some integral value. The result is that
 the spacing and LargestPossibleRegion of the output will be different to that 
 of the input. Thus, \code{GenerateOutputInformation()} is overloaded.
@@ -388,13 +388,13 @@ three methods that the filter developer may choose to overload.
         or other region boundary effects.
 \end{itemize}
 
-\doxygen{RGBGibbsPriorFilter} is an example of a filter that needs to
+\doxygen{itk}{RGBGibbsPriorFilter} is an example of a filter that needs to
 invoke \code{EnlargeOutputRequestedRegion()}. The designer of this
 filter decided that the filter should operate on all the data. Note
 that a subtle interplay between this method and
 \code{GenerateInputRequestedRegion()} is occurring here. The default
 behavior of \code{GenerateInputRequestedRegion()} (at least for
-\doxygen{ImageToImageFilter}) is to set the input RequestedRegion to
+\doxygen{itk}{ImageToImageFilter}) is to set the input RequestedRegion to
 the output's ReqestedRegion. Hence, by overriding the method
 \code{EnlargeOutputRequestedRegion()} to set the output to the
 LargestPossibleRegion, effectively sets the input to this filter to
@@ -404,7 +404,7 @@ filter, and therefore the pipeline, does not stream. This could be
 fixed by reimplementing the filter with the notion of streaming built
 in to the algorithm.)
 
-\doxygen{GradientMagnitudeImageFilter} is an example of a filter that needs to
+\doxygen{itk}{GradientMagnitudeImageFilter} is an example of a filter that needs to
 invoke \code{GenerateInputRequestedRegion()}. It needs a larger input requested
 region because a kernel is required to compute the gradient at a pixel. Hence
 the input needs to be ``padded out'' so the filter has enough data to compute
@@ -453,7 +453,7 @@ Filters that can process data in pieces can typically multi-process
 using the data parallel, shared memory implementation built into the
 pipeline execution process. To create a multithreaded filter, simply
 define and implement a \code{ThreadedGenerateData()} method. For
-example, a \doxygen{ImageToImageFilter} would create the method:
+example, a \doxygen{itk}{ImageToImageFilter} would create the method:
 
 \small
 \begin{verbatim}
@@ -562,17 +562,15 @@ Some of these are described below:
 \end{description}
 
 Much more useful information can be learned from browsing the source in
-\code{Code/Common/itkMacro.h} and for the \doxygen{Object} and
-\doxygen{LightObject} classes. 
+\code{Code/Common/itkMacro.h} and for the \doxygen{itk}{Object} and
+\doxygen{itk}{LightObject} classes. 
 
 
 
 %
 % Section on how to write composite filters
 %
-\ifitkFullVersion
 \input{WriteACompositeFilter.tex}
-\fi
 
 
 %

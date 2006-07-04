@@ -23,7 +23,7 @@ example is to take an image of pixel type \code{unsigned char} and
 present it as an image of pixel type \code{float}. The motivation for
 using image adaptors in this case is to avoid the extra memory
 resources required by using a casting filter.  When we use the
-\doxygen{CastImageFilter} for the conversion, the filter creates a
+\doxygen{itk}{CastImageFilter} for the conversion, the filter creates a
 memory buffer large enough to store the \code{float} image. The
 \code{float} image requires four times the memory of the
 original image and contains no useful additional information. Image
@@ -46,37 +46,29 @@ adaptors are defined for many single valued and single parameter
 functions such as trigonometric, exponential and logarithmic
 functions. For example,
 \begin{itemize}
-\item \doxygen{ExpImageAdaptor}
-\item \doxygen{SinImageAdaptor}
-\item \doxygen{CosImageAdaptor}
+\item \doxygen{itk}{ExpImageAdaptor}
+\item \doxygen{itk}{SinImageAdaptor}
+\item \doxygen{itk}{CosImageAdaptor}
 \end{itemize}
 
 The following examples illustrate common applications of image adaptors.
 
 \section{Image Casting}
 \label{sec:ImageAdaptorForBasicCasting}
-\ifitkFullVersion
 \input{ImageAdaptor1.tex}
-\fi
 
 \section{Adapting RGB Images}
 \label{sec:ImageAdaptorForRGB}
-\ifitkFullVersion
 \input{ImageAdaptor2.tex}
-\fi
 
 
 \section{Adapting Vector Images}
 \label{sec:ImageAdaptorForVectors}
-\ifitkFullVersion
 \input{ImageAdaptor3.tex}
-\fi
 
 \section{Adaptors for Simple Computation}
 \label{sec:ImageAdaptorForSimpleComputation}
-\ifitkFullVersion
 \input{ImageAdaptor4.tex}
-\fi
 
 
 \section{Adaptors and Writers}
