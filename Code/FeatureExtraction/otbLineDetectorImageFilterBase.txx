@@ -270,8 +270,10 @@ void LineDetectorImageFilterBase< TInputImage, TOutputImage, InterpolatorType>
 
       // Loop on the region 
       //for (i = 0; i < neighborhoodSize; ++i)
-      for (int i = 0; i < m_Radius[0]; ++i)
-	for (int j = 0; j < m_Radius[1]; ++j)
+//      for (int i = 0; i < m_Radius[0]; ++i)
+//	for (int j = 0; j < m_Radius[1]; ++j)
+      for (int i = 0; i < m_Radius[0]; i++)
+	for (int j = 0; j < m_Radius[1]; j++)
         {
 
 	off[0]=i-m_Radius[0]/2;

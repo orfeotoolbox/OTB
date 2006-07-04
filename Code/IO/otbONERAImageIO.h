@@ -128,7 +128,8 @@ private:
 
 
   /** Nombre d'octets par pixel */
-  int           m_NbOctetPixel;
+  int     m_NbOctetPixel;
+  bool    m_FlagWriteImageInformation;
   
 
 };
