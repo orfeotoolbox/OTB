@@ -225,7 +225,23 @@ SET( OTB_EXAMPLES_SRCS
   ${OTB_SOURCE_DIR}/Examples/Learning/SVMImageModelEstimatorExample.cxx
   ${OTB_SOURCE_DIR}/Examples/Learning/SVMImageClassificationExample.cxx
   ${OTB_SOURCE_DIR}/Examples/Learning/SVMImageEstimatorClassificationMultiExample.cxx
-  ${OTB_SOURCE_DIR}/Examples/Visu/VisuExample1.cxx  
+  ${OTB_SOURCE_DIR}/Examples/Visu/VisuExample1.cxx
+  ${OTB_SOURCE_DIR}/Examples/Iterators/ImageLinearIteratorWithIndex.cxx
+  ${OTB_SOURCE_DIR}/Examples/Iterators/NeighborhoodIterators2.cxx
+  ${OTB_SOURCE_DIR}/Examples/Iterators/NeighborhoodIterators5.cxx
+  ${OTB_SOURCE_DIR}/Examples/Iterators/ImageRandomConstIteratorWithIndex.cxx
+  ${OTB_SOURCE_DIR}/Examples/Iterators/ShapedNeighborhoodIterators1.cxx
+  ${OTB_SOURCE_DIR}/Examples/Iterators/ShapedNeighborhoodIterators2.cxx
+  ${OTB_SOURCE_DIR}/Examples/Iterators/NeighborhoodIterators3.cxx
+  ${OTB_SOURCE_DIR}/Examples/Iterators/IteratorsExamples.cxx
+  ${OTB_SOURCE_DIR}/Examples/Iterators/ImageLinearIteratorWithIndex2.cxx
+  ${OTB_SOURCE_DIR}/Examples/Iterators/ImageRegionIterator.cxx
+  ${OTB_SOURCE_DIR}/Examples/Iterators/ImageSliceIteratorWithIndex.cxx
+  ${OTB_SOURCE_DIR}/Examples/Iterators/NeighborhoodIterators6.cxx
+  ${OTB_SOURCE_DIR}/Examples/Iterators/NeighborhoodIterators1.cxx
+  ${OTB_SOURCE_DIR}/Examples/Iterators/NeighborhoodIterators4.cxx
+  ${OTB_SOURCE_DIR}/Examples/Iterators/ImageRegionIteratorWithIndex.cxx
+
 )
 
 
