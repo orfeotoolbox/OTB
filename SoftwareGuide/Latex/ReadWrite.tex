@@ -96,23 +96,18 @@ create the specific ImageIO instance that will be returned to the
 ImageFileReader and used to perform the read operations.
 
 With respect to the ITK formats, OTB adds most of the remote sensing
-image formats. In order to do so, two IO libraries are encapsulated by
-their respective IO factories. These libraries are:
-\begin{itemize}
-  \item The Geospatial Data Abstraction Library, GDAL
-      \url{http://www.gdal.org/}, is a translator library for raster
+image formats. In order to do so, the Geospatial Data Abstraction Library, GDAL
+      \url{http://www.gdal.org/}, is encapsultated in a ImageIO
+      factory. GDAL is a translator library for raster
       geospatial data formats that is released under an X/MIT style
       Open Source license. As a library, it presents a single abstract
       data model to the calling application for all supported formats,
       which include CEOS, GeoTIFF, ENVI, and much more. See
       \url{http://www.remotesensing.org/gdal/formats_list.html} for
       the full format list.
-    \item CNES's Couche Acc\`es Image, CAI, which supports SPOT image
-    formats and several CNES's inhouse image formats.
-\end{itemize}
 
-Since GDAL and CAI are themselves multi-format libraries, these IO
-factories are able to choose the appropriate ressource for reading and
+      Since GDAL is itself a multi-format library, the GDAL IO
+factory is able to choose the appropriate ressource for reading and
 writing images. 
 
 In most cases the mechanism is transparent to the user who only interacts
