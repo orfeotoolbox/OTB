@@ -13,4 +13,5 @@ SUBDIRS(
   Learning
   Classification
   Segmentation
+  Iterators
 )
