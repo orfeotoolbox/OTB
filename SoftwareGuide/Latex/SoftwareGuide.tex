@@ -84,7 +84,7 @@ colorlinks,linkcolor={blue},citecolor={blue},urlcolor={blue},
 %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\title{The ORFEO Tool Box Software Guide\\First edition\\Draft Version}
+\title{The ORFEO Tool Box Software Guide\\ OTB-1.0}
 
 \author{OTB Development Team}
 
@@ -220,7 +220,18 @@ colorlinks,linkcolor={blue},citecolor={blue},urlcolor={blue},
 
 
 %%%\part{Developper's guide}
-%%%\input{Iterators.tex}
+\ifitkFullVersion
+\input{Iterators.tex}
+\fi
+
+\ifitkFullVersion
+\input{ImageAdaptors.tex}
+\fi
+
+\ifitkFullVersion
+\input{WriteAFilter.tex}
+\fi
+
 \backmatter
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

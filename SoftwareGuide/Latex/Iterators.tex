@@ -459,16 +459,16 @@ area, or \emph{extent}, of the iterator can be dereferenced.
 
 
 
-%% \begin{figure}
-%% \centering
-%% \includegraphics[width=0.6\textwidth]{NeighborhoodIteratorFig1.eps}
-%% \itkcaption[Neighborhood iterator]{Path of a $3x3$ neighborhood
-%% iterator through a 2D image region.  The extent of the neighborhood is
-%% indicated by the hashing around the iterator position. Pixels that lie within
-%% this extent are accessible through the iterator.  An arrow denotes a single
-%% iterator step, the result of one \code{++} operation.}
-%% \protect\label{fig:NeighborhoodIteratorFig1}
-%% \end{figure}
+\begin{figure}
+\centering
+\includegraphics[width=0.6\textwidth]{NeighborhoodIteratorFig1.eps}
+\itkcaption[Neighborhood iterator]{Path of a $3x3$ neighborhood
+iterator through a 2D image region.  The extent of the neighborhood is
+indicated by the hashing around the iterator position. Pixels that lie within
+this extent are accessible through the iterator.  An arrow denotes a single
+iterator step, the result of one \code{++} operation.}
+\protect\label{fig:NeighborhoodIteratorFig1}
+\end{figure}
 
 \index{Neighborhood iterators!construction of}
 \index{Neighborhood iterators!radius of}
@@ -491,16 +491,16 @@ The radius of the neighborhood iterator is queried after construction
 by calling the \code{GetRadius()} method.  Some other methods provide
 some useful information about the iterator and its underlying image.
 
-%% \begin{figure}
-%% \centering
-%% \includegraphics[width=0.9\textwidth]{NeighborhoodIteratorFig2.eps}
-%% \itkcaption[Some possible neighborhood iterator shapes]{Several possible 2D
-%% neighborhood iterator shapes are shown along with their radii and sizes.  A
-%% neighborhood pixel can be dereferenced by its integer index (top) or its
-%% offset from the center (bottom).  The center pixel of each iterator is
-%% shaded.}
-%% \protect\label{fig:NeighborhoodIteratorFig2}
-%% \end{figure}
+\begin{figure}
+\centering
+\includegraphics[width=0.9\textwidth]{NeighborhoodIteratorFig2.eps}
+\itkcaption[Some possible neighborhood iterator shapes]{Several possible 2D
+neighborhood iterator shapes are shown along with their radii and sizes.  A
+neighborhood pixel can be dereferenced by its integer index (top) or its
+offset from the center (bottom).  The center pixel of each iterator is
+shaded.}
+\protect\label{fig:NeighborhoodIteratorFig2}
+\end{figure}
 
 \begin{itemize}
 
