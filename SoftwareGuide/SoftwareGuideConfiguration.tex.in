@@ -6,11 +6,11 @@
 
 % Define command to make reference to on-line Doxygen documentation
 \newcommand{\doxygen}[2]{
-\href{http://www.itk.org/Doxygen/html/class#1_1_1#2.html}{\code{#1::#2}}}  
+\href{http://smsc.cnes.fr/PLEIADES/OTB/Doxygen/html/class#1_1_1#2.html}{\code{#1::#2}}}  
 
 % Define command to make reference to on-line Doxygen documentation
 \newcommand{\subdoxygen}[3]{
-\href{http://www.itk.org/Doxygen/html/class#1_1_1#2_1_1#3.html}{\code{#1::#2::#3}}}  
+\href{http://smsc.cnes.fr/PLEIADES/OTB/Doxygen/html/class#1_1_1#2_1_1#3.html}{\code{#1::#2::#3}}}  
 
 % Define command for the standard comment introducing classes with similar functionalities
 \newcommand{\relatedClasses}{
