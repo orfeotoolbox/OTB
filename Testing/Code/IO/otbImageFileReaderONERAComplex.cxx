@@ -23,7 +23,6 @@
 //#define MAIN
 
 
-#include "itkImage.h"
 #include "itkVectorImage.h"
 #include "itkExceptionObject.h"
 #include <iostream>
@@ -60,14 +59,8 @@ int otbImageFileReaderONERAComplex(int argc, char* argv[])
 	streaming->SetNumberOfStreamDivisions(100);
 	streaming->SetInput(complexReader->GetOutput());
 
-  	typedef itk::ComplexToModulusImageFilter< 
-                       InputImageType, OutputImageType > ModulusFilterType;
-
-  	ModulusFilterType::Pointer modulusFilter = ModulusFilterType::New();
-  	modulusFilter->SetInput( streaming->GetOutput() );
-
-        typedef otb::ExtractROI< OutputPixelType, 
-                                 OutputPixelType >  ExtractROIFilterType;
+        typedef otb::ExtractROI< InputPixelType, 
+                                 InputPixelType >  ExtractROIFilterType;
 
         ExtractROIFilterType::Pointer extractROIFilter = ExtractROIFilterType::New();
 
@@ -75,7 +68,13 @@ int otbImageFileReaderONERAComplex(int argc, char* argv[])
 	extractROIFilter->SetStartY( 10 );
 	extractROIFilter->SetSizeX( 100 );
 	extractROIFilter->SetSizeY( 100 );
-        extractROIFilter->SetInput( modulusFilter->GetOutput() );        
+        extractROIFilter->SetInput( streaming->GetOutput() );        
+
+  	typedef itk::ComplexToModulusImageFilter< 
+                       InputImageType, OutputImageType > ModulusFilterType;
+
+  	ModulusFilterType::Pointer modulusFilter = ModulusFilterType::New();
+  	modulusFilter->SetInput( extractROIFilter->GetOutput() );
 
         WriterType::Pointer writer = WriterType::New();
 	

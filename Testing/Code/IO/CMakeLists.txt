@@ -151,22 +151,28 @@ ADD_TEST(ioTvONERAImageFileReader ${IO_TESTS}
 #                    ${TEMP}/ioImageFileReaderONERA.ent
         otbImageFileReaderONERATest
         ${IMAGEDATA}/ONERA/spa3_0215_rad.ent
-#        ${TEMP}/ioImageFileReaderONERA.ent )
         ${TEMP}/ioImageFileReaderONERA.hdr )
 
 ADD_TEST(ioTvONERAImageFileReaderComplex ${IO_TESTS} 
-  --compare-image ${TOL}  ${BASELINE}/ioImageFileReaderONERAComplex.hdr
-                      ${TEMP}/ioImageFileReaderONERAComplex.hdr
+#  --compare-image ${TOL}  ${BASELINE}/ioImageFileReaderONERAComplex.hdr
+#                      ${TEMP}/ioImageFileReaderONERAComplex.hdr
         otbImageFileReaderONERAComplex
         ${IMAGEDATA}/ONERA/spa3_0215_rad.ent
         ${TEMP}/ioImageFileReaderONERAComplex.hdr )
 
 ADD_TEST(ioTvONERAImageFileWriterComplex ${IO_TESTS} 
-  --compare-image ${TOL}   ${BASELINE}/ioImageFileReaderONERAComplexWrite.ent
-                           ${TEMP}/ioImageFileReaderONERAComplexWrite.ent
+#  --compare-image ${TOL}   ${BASELINE}/ioImageFileReaderONERAComplexWrite.ent
+#                           ${TEMP}/ioImageFileReaderONERAComplexWrite.ent
         otbImageFileWriterONERAComplex
         ${IMAGEDATA}/ONERA/spa3_0215_rad.ent
         ${TEMP}/ioImageFileReaderONERAComplexWrite.ent )
+
+ADD_TEST(ioTvONERAImageStreamWriter ${IO_TESTS} 
+  --compare-image ${TOL}   ${TEMP}/ioImageFileReaderONERAStreamWrite.ent
+                           ${IMAGEDATA}/ONERA/spa3_0215_rad.ent
+        otbImageFileWriterStreamingONERAComplex
+        ${IMAGEDATA}/ONERA/spa3_0215_rad.ent
+        ${TEMP}/ioImageFileReaderONERAStreamWrite.ent )
 
 # -------            otb::ImageFileReader pour CAI  ------------------------------
 # Niveau de Gris
@@ -608,6 +614,7 @@ otbONERAImageIOTestCanRead.cxx
 otbImageFileReaderONERA.cxx
 otbImageFileReaderONERAComplex.cxx
 otbImageFileWriterONERAComplex.cxx
+otbImageFileWriterStreamingONERAComplex.cxx
 otbImageFileReaderTest.cxx
 otbImageFileWriterTest.cxx
 otbVectorImageFileReaderWriterTest.cxx
