@@ -24,15 +24,15 @@ TARGET_LINK_LIBRARIES(RGBImage OTBCommon OTBIO ITKCommon ITKIO)
 ADD_EXECUTABLE(VectorImage VectorImage.cxx )
 TARGET_LINK_LIBRARIES(VectorImage OTBCommon ITKCommon OTBIO ITKIO)
 
-#ADD_EXECUTABLE(ImageAdaptor1 ImageAdaptor1.cxx )
-#TARGET_LINK_LIBRARIES(ImageAdaptor1 ITKCommon ITKIO)
+ADD_EXECUTABLE(ImageAdaptor1 ImageAdaptor1.cxx )
+TARGET_LINK_LIBRARIES(ImageAdaptor1 OTBCommon ITKCommon OTBIO ITKIO)
 
-#ADD_EXECUTABLE(ImageAdaptor2 ImageAdaptor2.cxx )
-#TARGET_LINK_LIBRARIES(ImageAdaptor2 ITKCommon ITKIO)
+ADD_EXECUTABLE(ImageAdaptor2 ImageAdaptor2.cxx )
+TARGET_LINK_LIBRARIES(ImageAdaptor2 OTBCommon ITKCommon OTBIO ITKIO)
 
-#ADD_EXECUTABLE(ImageAdaptor3 ImageAdaptor3.cxx )
-#TARGET_LINK_LIBRARIES(ImageAdaptor3 ITKCommon ITKIO)
+ADD_EXECUTABLE(ImageAdaptor3 ImageAdaptor3.cxx )
+TARGET_LINK_LIBRARIES(ImageAdaptor3 OTBCommon ITKCommon OTBIO ITKIO)
 
-#ADD_EXECUTABLE(ImageAdaptor4 ImageAdaptor4.cxx )
-#TARGET_LINK_LIBRARIES(ImageAdaptor4 ITKCommon ITKIO)
+ADD_EXECUTABLE(ImageAdaptor4 ImageAdaptor4.cxx )
+TARGET_LINK_LIBRARIES(ImageAdaptor4 OTBCommon ITKCommon OTBIO ITKIO)
 
