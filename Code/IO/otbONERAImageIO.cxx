@@ -52,7 +52,6 @@ ONERAImageIO::ONERAImageIO()
   m_Origin[0] = 0.0;
   m_Origin[1] = 0.0;
 
-  m_FlagWriteImageInformation = true;
 
 }
 
@@ -196,6 +195,11 @@ void ONERAImageIO::Read(void* buffer)
    int lNbColonnes = this->GetIORegion().GetSize()[0];
    int lPremiereLigne   = this->GetIORegion().GetIndex()[1] ; // [1... ]
    int lPremiereColonne = this->GetIORegion().GetIndex()[0] ; // [1... ]
+
+otbMsgDevMacro( <<" ONERAImageIO::Read()  ");
+otbMsgDevMacro( <<" Dimensions de l'image  : "<<m_Dimensions[0]<<","<<m_Dimensions[1]);
+otbMsgDevMacro( <<" Region lue (IORegion)  : "<<this->GetIORegion());
+otbMsgDevMacro( <<" Nb Of Components  : "<<this->GetNumberOfComponents());
 
   //read header information file:
   if ( ! this->OpenOneraDataFileForReading(m_FileName.c_str()) )
@@ -372,6 +376,14 @@ void ONERAImageIO::InternalReadImageInformation()
       }
 
   this->SetNumberOfDimensions(2);  
+
+otbMsgDebugMacro( <<"Driver to read: ONERA");
+otbMsgDebugMacro( <<"         Read  file         : "<< m_FileName);
+otbMsgDebugMacro( <<"         Size               : "<<m_Dimensions[0]<<","<<m_Dimensions[1]);
+otbMsgDebugMacro( <<"         ComponentType      : "<<this->GetComponentType() );
+otbMsgDebugMacro( <<"         NumberOfComponents : "<<this->GetNumberOfComponents());
+otbMsgDebugMacro( <<"         NbOctetPixel       : "<<m_NbOctetPixel);
+
 }
 
 
@@ -452,63 +464,32 @@ bool ONERAImageIO::CanWriteFile( const char* FileNameToWrite )
 
 void ONERAImageIO::Write(const void* buffer)
 {
-  if( m_FlagWriteImageInformation == true )
-    {
-     otbMsgDevMacro(<<"ONERAImageIO::Write() m_FlagWriteImageInformation : " <<m_FlagWriteImageInformation );
-     this->WriteImageInformation();
-     m_FlagWriteImageInformation = false;
-    }
 
-  unsigned long step                     = this->GetNumberOfComponents();
+  unsigned long step = this->GetNumberOfComponents();
+
   const unsigned long numberOfBytes      = this->GetImageSizeInBytes();
   const unsigned long numberOfComponents = this->GetImageSizeInComponents();
 
-  int lNbLignes   = this->GetIORegion().GetSize()[1];
-  int lNbColonnes = this->GetIORegion().GetSize()[0];
-  int lPremiereLigne   = this->GetIORegion().GetIndex()[1] ; // [1... ]
-  int lPremiereColonne = this->GetIORegion().GetIndex()[0] ; // [1... ]
-
-  unsigned long numberOfBytesPerLines = step * lNbColonnes * m_NbOctetPixel;
-  unsigned long headerLength = ONERA_HEADER_LENGTH + 4 + numberOfBytesPerLines;
-  unsigned long offset;
-  unsigned long numberOfBytesToBeWrite = step * m_NbOctetPixel *lNbColonnes;
-  unsigned long numberOfBytesRegion = step * m_NbOctetPixel *lNbColonnes *lNbLignes;
-  unsigned long numberOfBytesWrite;        
-
-
-  char *tempmemory = new char[numberOfBytesRegion];
-  memcpy(tempmemory,buffer,numberOfBytesRegion);
-
+  char *tempmemory = new char[numberOfBytes];
+  memcpy(tempmemory,buffer,numberOfBytes);
   if(this->GetComponentType() == FLOAT)
     {
     itk::ByteSwapper<float>::SwapRangeFromSystemToLittleEndian(
-        reinterpret_cast<float *>(tempmemory), numberOfBytesRegion );
+        reinterpret_cast<float *>(tempmemory), numberOfComponents );
     }
-   
+     
+   int lNbLignes   = this->GetIORegion().GetSize()[1];
+   int lNbColonnes = this->GetIORegion().GetSize()[0];
 
-  char* value = new char[numberOfBytesToBeWrite];
-  unsigned long cpt = 0;
- 
-  for(int LineNo = lPremiereLigne;LineNo <lPremiereLigne + lNbLignes; LineNo++ )
-    {
-	for( unsigned long  i=0 ; i < numberOfBytesToBeWrite ; i = i+  2 * m_NbOctetPixel )
-           {
-            memcpy((void*)(&(value[i])),(const void*)(&(tempmemory[cpt])),(size_t)( 2* m_NbOctetPixel) );
-            cpt += 2*m_NbOctetPixel;
-           }
 
-	offset  =  headerLength + numberOfBytesPerLines * LineNo;
-	offset +=  m_NbOctetPixel * lPremiereColonne;
-  	m_Datafile.seekg(offset, std::ios::beg);
-	m_Datafile.write( static_cast<char *>( value ), numberOfBytesToBeWrite );
-    	numberOfBytesWrite = m_Datafile.gcount();
-  	m_Datafile.seekg(offset, std::ios::end);
-    }
+  unsigned long numberOfBytesPerLines = 2 * lNbColonnes * m_NbOctetPixel;
+  unsigned long headerLength = ONERA_HEADER_LENGTH + 4 + numberOfBytesPerLines;
+  unsigned long offset;
 
-  delete [] value;
+  offset  =  headerLength + numberOfBytesPerLines;
+  m_Datafile.seekg(offset, std::ios::beg);
+  m_Datafile.write( static_cast<const char *>(tempmemory) , numberOfBytes );
   delete [] tempmemory;
-
-
 }
 
 void ONERAImageIO::WriteImageInformation()
@@ -536,7 +517,7 @@ void ONERAImageIO::WriteImageInformation()
   m_Headerfile << "# [dans ordre LSBfirst = big-endian]" << std::endl;
 
   std::string sPixelType("cmplx_real_4");
-  if( (this->GetPixelType() == COMPLEX) && (m_ComponentType == FLOAT) )
+  if(m_PixelType == COMPLEX && m_ComponentType == FLOAT)
     {
     sPixelType = "cmplx_real_4";
     }
