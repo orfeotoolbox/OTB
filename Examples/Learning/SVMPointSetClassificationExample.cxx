@@ -99,7 +99,7 @@ int main( int argc, char* argv[] )
 // We will need to get access to the data stored in the point sets, so
 // we define the appropriate for the points and the points containers
 // used by the point sets (see the section \ref{sec:PointSetSection}
-// for more information oin haw to use point sets).
+// for more information on how to use point sets).
 //
 // Software Guide : EndLatex
 
@@ -245,7 +245,7 @@ int main( int argc, char* argv[] )
 //
 // After instantiation, we can load a model saved to a file (see
 // section \ref{sec:LearningWithPointSets} for an example of model
-// estimation and storage to a file.
+// estimation and storage to a file).
 //
 // Software Guide : EndLatex
     
