@@ -4,11 +4,6 @@ IF(NOT OTB_USE_EXTERNAL_ITK)
 	SUBDIRS( ITK )
 ENDIF(NOT OTB_USE_EXTERNAL_ITK)
 
-#IF(NOT OTB_USE_EXTERNAL_GDAL)
-#	SUBDIRS( GDAL )
-#ENDIF(NOT OTB_USE_EXTERNAL_GDAL)
-
-#THOMAS - 4 juillet 2006
 #-----------------------------------------------------------------------------
 # Install the UseOTB.cmake file configured from the top-level.
 INSTALL_FILES(/lib/otb ".cmake" "OTBConfig")
