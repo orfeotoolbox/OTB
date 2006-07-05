@@ -15,7 +15,7 @@ ENDIF(ITK_USE_SYSTEM_GDCM)
 
 #-----------------------------------------------------------------------------
 # Include directories from the build tree.
-SET(ITK_INCLUDE_DIRS_BUILD_TREE ${ITK_BINARY_DIR})
+SET(ITK_INCLUDE_DIRS_BUILD_TREE ${ITK_INCLUDE_DIRS})
 
 # These directories are always needed.
 SET(ITK_INCLUDE_DIRS_BUILD_TREE ${ITK_INCLUDE_DIRS_BUILD_TREE}
@@ -108,7 +108,9 @@ ENDIF(ITK_USE_SYSTEM_VXL)
 
 #-----------------------------------------------------------------------------
 # Include directories from the install tree.
-SET(ITK_INSTALL_INCLUDE_DIR "${CMAKE_INSTALL_PREFIX}/include/InsightToolkit")
+#THOMAS
+SET(ITK_INSTALL_INCLUDE_DIR "${CMAKE_INSTALL_PREFIX}/include/otb/Utilities/ITK")
+#SET(ITK_INSTALL_INCLUDE_DIR "${CMAKE_INSTALL_PREFIX}/include/InsightToolkit")
 SET(ITK_INCLUDE_DIRS_INSTALL_TREE ${ITK_INCLUDE_DIRS_INSTALL_TREE}
   ${ITK_INSTALL_INCLUDE_DIR}
   ${ITK_INSTALL_INCLUDE_DIR}/Algorithms

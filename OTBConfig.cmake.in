@@ -5,6 +5,11 @@
 # This file is configured by OTB and used by the UseOTB.cmake module
 # to load OTB's settings for an external project.
 
+
+# Option use external ITK.
+SET(OTB_USE_EXTERNAL_ITK "@OTB_USE_EXTERNAL_ITK@")
+
+
 # The OTB source tree.
 SET(OTB_SOURCE_DIR "@OTB_SOURCE_DIR@")
 
@@ -46,9 +51,11 @@ SET(OTB_CableSwig_DIR "@OTB_CableSwig_DIR_CONFIG@")
 # SET(OTB_LIBRARIES OTBAlgorithms OTBStatistics OTBFEM)
 
 # The OTB library dependencies.
-IF(NOT OTB_NO_LIBRARY_DEPENDS)
+IF(NOT OTB_NO_LIBRARY_DEPENDS AND
+    EXISTS "@OTB_LIBRARY_DEPENDS_FILE@")
   INCLUDE("@OTB_LIBRARY_DEPENDS_FILE@")
-ENDIF(NOT OTB_NO_LIBRARY_DEPENDS)
+ENDIF(NOT OTB_NO_LIBRARY_DEPENDS AND
+    EXISTS "@OTB_LIBRARY_DEPENDS_FILE@")
 
 # Whether OTB was built using a system VXL.
 SET(OTB_USE_SYSTEM_VXL "@OTB_USE_SYSTEM_VXL@")

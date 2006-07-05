@@ -23,6 +23,11 @@ CONFIGURE_FILE(${ITK_SOURCE_DIR}/itkConfigure.h.in
                ${ITK_BINARY_DIR}/itkConfigure.h)
 
 
+
+
+# Install some files.
+#INSTALL_FILES(/lib/otb .cmake UseITK ITKConfig )
+
 #-----------------------------------------------------------------------------
 # Configure Dart testing support.  This should be done before any
 # MESSAGE(FATAL_ERROR ...) commands are invoked.
@@ -183,7 +188,19 @@ IF(ITK_NEED_CableSwig)
 ENDIF(ITK_NEED_CableSwig)
 
 #-----------------------------------------------------------------------------
+# Copy the UseITK.cmake file to the binary tree for backward compatability.
+CONFIGURE_FILE(${ITK_SOURCE_DIR}/UseITK.cmake.in
+               ${ITK_BINARY_DIR}/UseITK.cmake COPYONLY IMMEDIATE)
 
+# Create the ITKConfig.cmake file containing the ITK configuration.
+INCLUDE (${ITK_SOURCE_DIR}/itkGenerateITKConfig.cmake)
+
+# Install some files.
+#THOMAS
+INSTALL_FILES(/include/otb/Utilities/ITK .h itkConfigure)
+
+#THOMAS
+#INSTALL_FILES(/lib/InsightToolkit .cmake UseITK ITKLibraryDepends)
 
 #-----------------------------------------------------------------------------
 # Find wrapping language API libraries.

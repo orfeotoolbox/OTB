@@ -17,11 +17,16 @@ SET(OTB_BUILD_SETTINGS_FILE ${OTB_BINARY_DIR}/OTBBuildSettings.cmake)
 # Library directory.
 SET(OTB_LIBRARY_DIRS_CONFIG ${OTB_LIBRARY_PATH})
 
+
+# THOMAS 
+SET(OTB_LIBRARY_DIRS_CONFIG ${OTB_LIBRARY_DIRS_CONFIG} ${GDAL_LIBRARY_DIRS} ${ITK_LIBRARY_DIRS} )
+
 # Determine the include directories needed.
 SET(OTB_INCLUDE_DIRS_CONFIG
   ${OTB_INCLUDE_DIRS_BUILD_TREE}
-  ${OTB_INCLUDE_DIRS_SOURCE_TREE}
-  ${OTB_INCLUDE_DIRS_SYSTEM}
+#THOMAS
+  ${OTB_INCLUDE_DIRS_BUILD_TREE_CXX}
+  ${OTB_INCLUDE_DIRS_SYSTEM} 
 )
 
 #-----------------------------------------------------------------------------
@@ -44,7 +49,7 @@ SET(OTB_BUILD_SETTINGS_FILE
     ${CMAKE_INSTALL_PREFIX}/lib/otb/OTBBuildSettings.cmake)
 
 # Include directories.
-SET(OTB_INCLUDE_DIRS_CONFIG
+SET(OTB_INCLUDE_DIRS_CONFIG 
   ${OTB_INCLUDE_DIRS_INSTALL_TREE}
   ${OTB_INCLUDE_DIRS_SYSTEM}
 )
@@ -52,7 +57,11 @@ SET(OTB_INCLUDE_DIRS_CONFIG
 # Link directories.
 SET(OTB_LIBRARY_DIRS_CONFIG ${CMAKE_INSTALL_PREFIX}/lib/otb)
 
+#THOMAS
+SET(OTB_LIBRARY_DIRS_CONFIG ${OTB_LIBRARY_DIRS_CONFIG} ${GDAL_LIBRARY_DIRS} ${ITK_LIBRARY_DIRS} )
+
 #-----------------------------------------------------------------------------
 # Configure OTBConfig.cmake for the install tree.
-#CONFIGURE_FILE(${OTB_SOURCE_DIR}/CMake/OTBConfig.cmake.in
-#               ${OTB_BINARY_DIR}/Utilities/OTBConfig.cmake @ONLY IMMEDIATE)
+#THOMAS
+CONFIGURE_FILE(${OTB_SOURCE_DIR}/OTBConfig.cmake.in
+               ${OTB_BINARY_DIR}/Utilities/OTBConfig.cmake @ONLY IMMEDIATE)
