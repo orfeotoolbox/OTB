@@ -34,22 +34,26 @@ found in them.
      creating and executing the pipeline
 
    * Iterators - iterating over images and meshes.
-
-   * Infrastructure - events, observers, factories, smart pointers,
-     namespaces, transforms, etc.
-
-   * Numerics - working with VNL; a focus on interface with ITK/OTB classes
-
-   * IO - the basics of reading/writing data
+   
+   * IO - the basics of reading/writing data.
 
    * Filtering - examples of image processing and mesh filters.
 
+   * FeatureExtraction - examples of low-level information extraction.
+
+   * ChangeDetection - detecting changes between pairs of images.
+
+   * Learning - Support Vector Machine examples.
+
+   * Classification - simple examples of image classification.
+
    * Segmentation - a suite of basic segmentation examples.
 
-   * Registration - a suite of basic registration methods.
+   * Visu - simple examples for image visualization.
 
-   * GUI - some outside package interface: wxWindows, Qt, FLTK, Tk, VTK. The
-     absolute minimal interface.
+   
+
+   
 
 
 To learn the software from these examples, you may wish to refer to the
