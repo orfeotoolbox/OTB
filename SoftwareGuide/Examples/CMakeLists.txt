@@ -196,6 +196,8 @@ SET( OTB_EXAMPLES_SRCS
   ${OTB_SOURCE_DIR}/Examples/Filtering/DiscreteGaussianImageFilter.cxx
   ${OTB_SOURCE_DIR}/Examples/Filtering/GradientAnisotropicDiffusionImageFilter.cxx
   ${OTB_SOURCE_DIR}/Examples/Filtering/DanielssonDistanceMapImageFilter.cxx
+  ${OTB_SOURCE_DIR}/Examples/Filtering/MathematicalMorphologyBinaryFilters.cxx
+  ${OTB_SOURCE_DIR}/Examples/Filtering/MathematicalMorphologyGrayscaleFilters.cxx
   ${OTB_SOURCE_DIR}/Examples/BasicFilters/LeeImageFilter.cxx
   ${OTB_SOURCE_DIR}/Examples/FeatureExtraction/AlignmentsExample.cxx
   ${OTB_SOURCE_DIR}/Examples/FeatureExtraction/RatioLineDetectorExample.cxx
