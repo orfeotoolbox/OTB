@@ -166,18 +166,42 @@ int main( int argc, char ** argv )
   writer->SetInput( rescaler->GetOutput() );
   // Software Guide : EndCodeSnippet
 
+  //  Software Guide : BeginLatex
+  //
+  //  We can now trigger the pipeline execution by calling the
+  //  \code{Update} method on the writer.
+  //
+  //  Software Guide : EndLatex 
+
+
+
+
 
 
   try 
-    { 
-    writer->Update(); 
+    {
+    // Software Guide : BeginCodeSnippet
+    writer->Update();
+      // Software Guide : EndCodeSnippet
     } 
   catch( itk::ExceptionObject & err ) 
     { 
     std::cerr << "ExceptionObject caught !" << std::endl; 
     std::cerr << err << std::endl; 
     return EXIT_FAILURE;
-    } 
+    }
+
+  //  Software Guide : BeginLatex
+  //
+  //  The writer will ask its preceding filter to provide different
+  //  portions of the image. Each filter in the pipeline will do the
+  //  same until the request arrives to the reader. In this way, the
+  //  pipeline will be executed for each requested region and the
+  //  whole input image will be read, processed and written without
+  //  being fully loaded in memory.
+  //
+  //  Software Guide : EndLatex 
+
 
   return EXIT_SUCCESS;
 }
