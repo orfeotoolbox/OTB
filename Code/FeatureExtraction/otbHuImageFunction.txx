@@ -68,12 +68,9 @@ HuImageFunction<TInput,TOutput,TCoordRep>
     }
 
 
-/*  std::cout << "Start" << this->GetStartIndex() << std::endl;
-  std::cout << "End" << this->GetEndIndex() << std::endl; */
-  
   if ( !this->IsInsideBuffer( index ) )
     {
-    std::cout << index << std::endl;
+    otbMsgDevMacro( << index );
     return ( itk::NumericTraits<RealType>::max() );
     }
 
@@ -81,7 +78,6 @@ HuImageFunction<TInput,TOutput,TCoordRep>
   assert(m_MomentNumber < 8);
 
    function->SetInputImage( this->GetInputImage() );
-//   std::cout << "Neighbor " <<this->GetNeighborhoodRadius()<<std::endl;
    function->SetNeighborhoodRadius(this->GetNeighborhoodRadius() );
 
   switch(m_MomentNumber)

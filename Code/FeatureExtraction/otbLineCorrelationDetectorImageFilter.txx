@@ -119,8 +119,6 @@ double LineCorrelationDetectorImageFilter<TInputImage, TOutputImage, Interpolato
   
   unsigned int  NbPixel = m1->size();
 
-//  std::cout << m1->size() << " " << m2->size() << " " << m3->size() << " " << std::endl;
-     	
   // Calculation of the cross correlation coefficient
   
   double d1 = 0.;

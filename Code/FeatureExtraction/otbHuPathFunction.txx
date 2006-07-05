@@ -22,6 +22,7 @@
 #include "otbComplexMomentPathFunction.h"
 #include "itkNumericTraits.h"
 #include "itkMacro.h"
+#include "otbMacro.h"
 
 namespace otb
 {
@@ -177,7 +178,7 @@ HuPathFunction<TInputPath, TOutput >
 {
   if( !this->GetInputPath() )
     {
-    std::cout << "Pb with GetInputPath" << std::endl;
+    otbMsgDevMacro( << "Pb with GetInputPath" );
     return static_cast<RealType>( itk::NumericTraits<float>::max());
     }
 

@@ -29,6 +29,7 @@
 #include "itkZeroFluxNeumannBoundaryCondition.h"
 #include "itkProgressReporter.h"
 #include <math.h>
+#include "otbMacro.h"
 
 #define M_PI 3.14159265358979323846
 
@@ -75,7 +76,7 @@ void LineDetectorImageFilterBase<TInputImage, TOutputImage, InterpolatorType>::G
   m_Radius[1] = static_cast<unsigned int>(3*(2*m_WidthLine+1) + 2); 
   m_Radius[0] = 2*m_LengthLine+1 ;
 
-  std::cout << m_Radius[0] << " " << m_Radius[1] << std::endl;
+  otbMsgDevMacro( << m_Radius[0] << " " << m_Radius[1] );
   
   // Define the size of the facelist by taking into account the rotation of the region
   m_FaceList[0] = static_cast<unsigned int>( sqrt( (m_Radius[0]*m_Radius[0]) + (m_Radius[1]*m_Radius[1]) ) + 1 );
@@ -203,7 +204,6 @@ void LineDetectorImageFilterBase< TInputImage, TOutputImage, InterpolatorType>
       Theta[i] = Theta[i]-M_PI;
     if((i/double(NB_DIR))==0.5)
       Theta[i]=0.;*/
-//    std::cout << Theta[i] << std::endl;
     }
 
   // Number of the zone 
@@ -325,7 +325,6 @@ void LineDetectorImageFilterBase< TInputImage, TOutputImage, InterpolatorType>
 	  {
 	  
 
-//	  std::cout << "Direction " << dir << std::endl;
 	  double Rtemp = this->ComputeMeasure(&PixelValues[dir][0], &PixelValues[dir][1], &PixelValues[dir][2]);
 	  
 	  if( Rtemp > R)
@@ -337,7 +336,6 @@ void LineDetectorImageFilterBase< TInputImage, TOutputImage, InterpolatorType>
 	  
 	  } // end of the loop on the directions
 
-//	std::cout << R << std::endl;
 	if( R >= this->GetThreshold() )
 	  {
       

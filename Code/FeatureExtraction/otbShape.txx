@@ -136,8 +136,6 @@ Shapes::mw_alloc_shapes( int inrow, int  incol, float value)
   int size,i;
   Shape *root;
 
-  std::cout << "mw_alloc_shapes () " << std::endl;
-  
   size = inrow*incol;
   if (size <= 0)
     {
@@ -187,9 +185,9 @@ Shapes::mw_change_shapes(int inrow,int incol,float value)
   int size,i;
 
   /* Deallocate the shapes but the structure itself */
-  std::cout << "mw_change_shapes () " << std::endl;
-  std::cout << "  nb shapes  : " <<this->nb_shapes;
-  std::cout << "  the shapes : " <<the_shapes << std::endl;
+  otbMsgDevMacro( << "mw_change_shapes () " );
+  otbMsgDevMacro( << "  nb shapes  : " <<this->nb_shapes);
+  otbMsgDevMacro( << "  the shapes : " <<the_shapes );
   if((the_shapes != NULL) && (nb_shapes > 0))
     delete[] the_shapes[0].pixels;
   if (the_shapes != NULL) delete[] the_shapes;
@@ -287,19 +285,15 @@ Shapes::flst_pixels()
   int          j; 
   int          iIndex;
 
-  std::cout << "flst_pixel () 1" << std::endl;
-  
   /* 1) Compute nb of proper pixels in each shape */
   tabNbOfProperPixels = new int[nb_shapes];
   if(tabNbOfProperPixels ==NULL)
     std::cerr << "Allocation of array error" << std::endl;
   compute_proper_pixels(tabNbOfProperPixels);
 
-  std::cout << "flst_pixel () 2" << std::endl;
 
   /* 2) Allocate array for the root and make others sub-arrays */
   allocate_pixels(tabNbOfProperPixels);
-  std::cout << "flst_pixel () 3" << std::endl;
 
   /* 3) Fill the array */
   ppShape = smallest_shape + ncol*nrow-1;
@@ -310,7 +304,6 @@ Shapes::flst_pixels()
 	pCurrentPoint = &(*ppShape)->pixels[--tabNbOfProperPixels[iIndex]];
 	pCurrentPoint->x = j; pCurrentPoint->y = i;
       }
-  std::cout << "flst_pixel () 4" << std::endl;
 
   delete[] tabNbOfProperPixels;
 }
@@ -346,8 +339,7 @@ Shapes::point_in_shape(int x,int y,Shape *pShape)
   result = (pShape->pixels <= pShapePoint->pixels &&
 	  pShapePoint->pixels < pShape->pixels+pShape->area);
 
-  std::cout << "PointInShape() -->"<<x<<" "<<y<<" " << pShape->value;
-  std::cout << " Result : "<< int(result) <<std::endl;
+  otbMsgDevMacro( << "PointInShape() -->"<<x<<" "<<y<<" " << pShape->value << " Result : "<< int(result));
 	  
   return (pShape->pixels <= pShapePoint->pixels &&
 	  pShapePoint->pixels < pShape->pixels+pShape->area);
@@ -358,10 +350,8 @@ void
 Shapes::find_next_dual_point(Point_plane *pDualPoint,int *cDirection,Shape *pShape)
 {
   char bLeftIn, bRightIn;
-  std::cout << "Shapes::find_next_dual_point()" << std::endl;
-  std::cout << " pDualPoint : ( "<<pDualPoint->x << " , " << pDualPoint->y << " )";
-  std::cout << " Direction :" << cDirection ;
-  std::cout << std::endl;
+  otbMsgDevMacro( << "Shapes::find_next_dual_point()" );
+  otbMsgDevMacro( << " pDualPoint : ( "<<pDualPoint->x << " , " << pDualPoint->y << " Direction :" << cDirection );
   
   switch(*cDirection) {
   case NORTH:
@@ -430,26 +420,26 @@ Shapes::find_closed_boundary(Shape *pShape,PathPointer pBoundary)
   short int                      iHeight = (short int)nrow;
   PathType::ContinuousIndexType  cindex;
   
-  std::cout << " find_closed_boundary 0" << std::endl;
+  otbMsgDevMacro( << " find_closed_boundary 0" );
   /* 1) Find initial point, with NORTH direction */
-  std::cout << "pixel : " << pShape->pixels << std::endl;
+  otbMsgDevMacro( << "pixel : " << pShape->pixels );
   
   dualPoint.x = pShape->pixels[0].x; 
   dualPoint.y = pShape->pixels[0].y;
   cDirection  = NORTH;
 
-  std::cout << " find_closed_boundary 1" << std::endl;
+  otbMsgDevMacro( << " find_closed_boundary 1" );
 
   do ++ dualPoint.x;
   while(point_in_shape(dualPoint.x, dualPoint.y, pShape));
 
-  std::cout << " find_closed_boundary 2" << std::endl;
+  otbMsgDevMacro( << " find_closed_boundary 2" );
   
   /* 2) Follow the boundary */
   x0 = dualPoint.x; 
   y0 = dualPoint.y;
   do {
-      std::cout << " find_closed_boundary 3" << std::endl;
+      otbMsgDevMacro( << " find_closed_boundary 3" );
       cindex[0] = dualPoint.x;
       cindex[1] = dualPoint.y;
       
@@ -464,7 +454,7 @@ Shapes::find_closed_boundary(Shape *pShape,PathPointer pBoundary)
       
   pBoundary->AddVertex(cindex);
 
-  std::cout << " find_closed_boundary 4" << std::endl;
+  otbMsgDevMacro( << " find_closed_boundary 4" );
 
 }
 
@@ -477,14 +467,12 @@ Shapes::initial_point_border(Point_plane *pDualPoint,int *cDirection,Shape *pSha
   short int iHeight = (short int)nrow;
   short int x, y;
 
-  std::cout << "initial_point_border() --> "  ; 
-  std::cout << " pDualPoint x: " <<pDualPoint->x ;
-  std::cout << " pDualPoint y: " <<pDualPoint->y ;
-  std::cout << " Direction   :" << int(*cDirection)  << std::endl;
+  otbMsgDevMacro( << "initial_point_border() --> "  ); 
+  otbMsgDevMacro( << " pDualPoint x: " <<pDualPoint->x << " pDualPoint y: " <<pDualPoint->y << " Direction   :" << int(*cDirection)  );
 
   /* Right border */
   *cDirection = WEST;
-  std::cout << " Direction  (WEST) :" << int(*cDirection)  << std::endl;
+  otbMsgDevMacro( << " Direction  (WEST) :" << int(*cDirection)  );
   x = iWidth-1; 
   y = 0;
   if(point_in_shape(x, y++, pShape))
@@ -549,7 +537,7 @@ Shapes::find_open_boundary(Shape *pShape,PathPointer pBoundary)
   short int                      iHeight = (short int)nrow;
   PathType::ContinuousIndexType  cindex;
 
-  std::cout << "Shapes::find_open_boundary()" << std::endl;
+  otbMsgDevMacro( << "Shapes::find_open_boundary()" );
   initial_point_border(&dualPoint,&cDirection, pShape);
   do {
       cindex[0] = dualPoint.x;
@@ -557,7 +545,7 @@ Shapes::find_open_boundary(Shape *pShape,PathPointer pBoundary)
       
       pBoundary->AddVertex(cindex);
 
-    std::cout << "Shapes::find_open_boundary() DO WHILE" << std::endl;
+    otbMsgDevMacro( << "Shapes::find_open_boundary() DO WHILE" );
     find_next_dual_point(&dualPoint, &cDirection,pShape);
   } while(0 < dualPoint.x && dualPoint.x < iWidth &&
 	  0 < dualPoint.y && dualPoint.y < iHeight);
@@ -569,7 +557,7 @@ Shapes::find_open_boundary(Shape *pShape,PathPointer pBoundary)
   
   pBoundary->AddVertex(cindex);
       
-  std::cout << "Shapes::find_open_boundary() END" << std::endl;
+  otbMsgDevMacro( << "Shapes::find_open_boundary() END" );
 
 }
 
@@ -578,18 +566,18 @@ Shapes::find_open_boundary(Shape *pShape,PathPointer pBoundary)
 Shapes::PathPointer
 Shapes::flst_shape_boundary(Shape *pShape)
 {
-  std::cout << " FLST Shape Boundary " << std::endl;
-  std::cout << "Nb ncol : " << ncol << std::endl;
+  otbMsgDevMacro( << " FLST Shape Boundary " );
+  otbMsgDevMacro( << "Nb ncol : " << ncol );
   
   PathPointer  pBoundary = PathType::New();
 
-  std::cout << " FLST Shape Boundary ....New" << std::endl;
+  otbMsgDevMacro( << " FLST Shape Boundary ....New" );
      
   if(the_shapes[0].pixels == NULL)
     flst_pixels();
-  std::cout << " FLST Shape Boundary ....Pixel" << std::endl;
+  otbMsgDevMacro( << " FLST Shape Boundary ....Pixel" );
 
-  std::cout << " FLST Shape Boundary ....pShape->open " <<int(pShape->open) << std::endl;
+  otbMsgDevMacro( << " FLST Shape Boundary ....pShape->open " <<int(pShape->open) );
 
   pBoundary->Initialize();
 
@@ -598,7 +586,7 @@ Shapes::flst_shape_boundary(Shape *pShape)
   else
     find_closed_boundary(pShape, pBoundary);
 
-  std::cout << " FLST Shpae Boundary ....Find OK" << std::endl;
+  otbMsgDevMacro( << " FLST Shpae Boundary ....Find OK" );
 
   return(pBoundary);
 }

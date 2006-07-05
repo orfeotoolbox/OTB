@@ -231,8 +231,6 @@ void PixelSuppressionByDirectionImageFilter< TInputImage, TOutputImage>::Threade
       // Get Pixel Direction from the image of directions
       ThetaXcYc = static_cast<double>( bit.GetCenterPixel() );
 
-//      std::cout << ThetaXcYc << std::endl ;
-
       // Pixel intensity in the input image      
       PixelValue = itin.Get();
 
@@ -263,8 +261,6 @@ void PixelSuppressionByDirectionImageFilter< TInputImage, TOutputImage>::Threade
 	  Thetaxtyt = Thetaxtyt-M_PI; // Theta is now [-PI/2,PI/2]
 
 
-//	std::cout << x << " " << y << " -> " << atan2(y,x) << " --> " << Thetaxtyt << std::endl;
-
 	if( (fabs(cos(Thetaxtyt-ThetaXcYc)) >= cos(m_AngularBeam)) // this
 								   // pixel
 								   // is
@@ -293,12 +289,10 @@ void PixelSuppressionByDirectionImageFilter< TInputImage, TOutputImage>::Threade
       if (IsLine == true)
 	{
 	itout.Set( static_cast<OutputPixelType>(PixelValue) );
-//	std::cout << " Yes " << std::endl;
 	}
       else
 	{
 	itout.Set( static_cast<OutputPixelType>(0.) );
-//	std::cout << " No " << std::endl;
 	}
                  
       

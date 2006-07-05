@@ -22,6 +22,7 @@
 #include "itkImageRegionIterator.h"
 #include "itkImage.h"
 #include "itkConstNeighborhoodIterator.h"
+#include "otbMacro.h"
 
 #include <complex>
 namespace otb
@@ -142,7 +143,7 @@ ComplexMomentPathFunction<TInputPath,TOutput>
 {
   if( !this->GetInputPath() )
     {
-    std::cout << "Pb with GetInputPath" << std::endl;
+    otbMsgDevMacro( << "Pb with GetInputPath" );
     return static_cast<OutputType>(std::complex<float>( itk::NumericTraits<float>::max(), itk::NumericTraits<float>::max() ) );
     }
 

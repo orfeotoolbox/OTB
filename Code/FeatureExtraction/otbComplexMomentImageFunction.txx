@@ -23,6 +23,8 @@
 #include "itkImage.h"
 #include "itkConstNeighborhoodIterator.h"
 #include "itkNumericTraits.h"
+#include "otbMacro.h"
+
 namespace otb
 {
 
@@ -66,7 +68,7 @@ ComplexMomentImageFunction<TInput,TOutput,TCoordRep>
 
   if( !this->GetInputImage() )
     {
-    std::cout << "Pb with GetInputImage" << std::endl;
+    otbMsgDevMacro( << "Pb with GetInputImage" );
     return ( std::complex<float>( itk::NumericTraits<float>::max(), itk::NumericTraits<float>::max() ) );
     }
 
@@ -114,7 +116,6 @@ ComplexMomentImageFunction<TInput,TOutput,TCoordRep>
           
     Sum += ( ValP * ValQ * std::complex<float>(static_cast<float>(it.GetPixel(i)),0.0) );
 
-    //std::cout << Sum << std::endl;
   }
 
   return (static_cast<ComplexType>(Sum) );

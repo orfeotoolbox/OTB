@@ -83,9 +83,6 @@ double LineRatioDetectorImageFilter<TInputImage, TOutputImage, InterpolatorType>
   M2 /= m2->size();
   M3 /= m3->size();
 
-//  std::cout << M1 << " "  << M2 << " "  << M3 << std::endl;
-
-
   double R12 = 0.0;
   double R13 = 0.0;
   

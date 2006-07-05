@@ -21,6 +21,7 @@
 #define __otbTreeNeighborhood_txx
 
 #include "otbTreeNeighborhood.h"
+#include "otbMacro.h"
 
 namespace otb
 {

@@ -21,6 +21,7 @@
 #include "otbFlusserPathFunction.h"
 #include "otbComplexMomentPathFunction.h"
 #include "itkNumericTraits.h"
+#include "otbMacro.h"
 
 namespace otb
 {
@@ -220,7 +221,7 @@ FlusserPathFunction<TInputPath, TOutput >
 {
   if( !this->GetInputPath() )
     {
-    std::cout << "Pb with GetInputPath" << std::endl;
+    otbMsgDevMacro( << "Pb with GetInputPath" );
     return static_cast<RealType>( itk::NumericTraits<float>::max());
     }
 

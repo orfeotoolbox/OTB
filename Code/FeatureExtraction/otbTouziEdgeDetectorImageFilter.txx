@@ -30,6 +30,7 @@
 //#include "itkOffset.h"
 #include "itkProgressReporter.h"
 #include <math.h>
+#include "otbMacro.h"
 
 #define M_PI 3.14159265358979323846
 
@@ -104,7 +105,6 @@ void
 TouziEdgeDetectorImageFilter<TInputImage,TOutputImage>
 ::BeforeThreadedGenerateData()
 {
-//  std::cout << " BeforeThreadedGenerateData"<<std::endl;
 
   typename OutputImageType::RegionType region;    
   typename OutputImageType::Pointer     output = this->GetOutput();
@@ -208,7 +208,7 @@ void TouziEdgeDetectorImageFilter< TInputImage, TOutputImage>
   for (fit=faceList.begin(); fit != faceList.end(); ++fit)
     { 
    
-std::cout<< cpt << std::endl;    	
+otbMsgDevMacro(<< cpt );    	
     cpt += 1;
     
     bit = itk::ConstNeighborhoodIterator<InputImageType>(m_Radius, input, *fit);
