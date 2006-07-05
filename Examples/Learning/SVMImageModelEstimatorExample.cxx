@@ -76,7 +76,7 @@ int main( int argc, char* argv[] )
 //
 //  We define the types for the input and training images. Even if the
 //  input image will be an RGB image, we can read it as a 3 component
-//  vector image. This simlifies the interfacing with OTB's SVM
+//  vector image. This simplifies the interfacing with OTB's SVM
 //  framework.
 //
 // Software Guide : EndLatex
