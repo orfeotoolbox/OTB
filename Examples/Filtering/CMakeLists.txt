@@ -71,11 +71,13 @@ TARGET_LINK_LIBRARIES(MedianImageFilter OTBCommon OTBIO ITKCommon ITKIO)
 ADD_EXECUTABLE(MeanImageFilter MeanImageFilter.cxx )
 TARGET_LINK_LIBRARIES(MeanImageFilter OTBCommon OTBIO ITKCommon ITKIO)
 
-#ADD_EXECUTABLE(MathematicalMorphologyBinaryFilters MathematicalMorphologyBinaryFilters.cxx )
-#TARGET_LINK_LIBRARIES(MathematicalMorphologyBinaryFilters ITKCommon ITKIO)
+ADD_EXECUTABLE(MathematicalMorphologyBinaryFilters MathematicalMorphologyBinaryFilters.cxx )
+TARGET_LINK_LIBRARIES(MathematicalMorphologyBinaryFilters OTBCommon
+OTBIO ITKCommon ITKIO)
 
-#ADD_EXECUTABLE(MathematicalMorphologyGrayscaleFilters MathematicalMorphologyGrayscaleFilters.cxx )
-#TARGET_LINK_LIBRARIES(MathematicalMorphologyGrayscaleFilters ITKCommon ITKIO)
+ADD_EXECUTABLE(MathematicalMorphologyGrayscaleFilters MathematicalMorphologyGrayscaleFilters.cxx )
+TARGET_LINK_LIBRARIES(MathematicalMorphologyGrayscaleFilters OTBCommon
+OTBIO ITKCommon ITKIO)
 
 #ADD_EXECUTABLE(MorphologicalImageEnhancement MorphologicalImageEnhancement.cxx )
 #TARGET_LINK_LIBRARIES(MorphologicalImageEnhancement ITKCommon ITKIO)
