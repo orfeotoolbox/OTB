@@ -1,3 +1,0 @@
-# Sources of non-templated classes.
-
-INSTALL_FILES(/include/otb/Utilities/CAI "(\\.h)$")
