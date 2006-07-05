@@ -234,7 +234,8 @@ int main( int argc, char* argv[] )
 // Software Guide : BeginCodeSnippet      
     
 
-    typedef otb::SVMModel< SampleType::MeasurementVectorType::ValueType, LabelPixelType > ModelType;
+    typedef otb::SVMModel< SampleType::MeasurementVectorType::ValueType,
+                                                 LabelPixelType > ModelType;
 
     ModelType::Pointer model = ModelType::New();
 

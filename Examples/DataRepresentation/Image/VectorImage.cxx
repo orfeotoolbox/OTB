@@ -63,7 +63,7 @@ int main(int, char *[])
   // The VectorImage class is templated over the type used to represent
   // the coordinate in space and over the dimension of the space.  In
   // this example, 
-  // we want to represent Pléiades images which have 4 bands.
+  // we want to represent Pl\'eiades images which have 4 bands.
   //
   // \index{otb::VectorImage!Instantiation}
   //
