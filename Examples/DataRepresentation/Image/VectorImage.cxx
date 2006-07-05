@@ -46,7 +46,7 @@
 // of channels of the image at runtime. The pixels will be of type
 // \doxygen{itk}{VariableLengthVector}. 
 //
-// The first step is to include the header file of the Vector class.
+// The first step is to include the header file of the VectorImage class.
 //
 // Software Guide : EndLatex 
 
