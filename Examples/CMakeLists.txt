@@ -1,7 +1,6 @@
 # $Id$
 
 SUBDIRS( 
-  StartExamples
   BasicFilters
   FeatureExtraction
   DataRepresentation

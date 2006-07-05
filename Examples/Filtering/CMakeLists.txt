@@ -65,11 +65,11 @@ TARGET_LINK_LIBRARIES(DerivativeImageFilter OTBCommon OTBIO ITKCommon ITKIO)
 #ADD_EXECUTABLE(SigmoidImageFilter SigmoidImageFilter.cxx )
 #TARGET_LINK_LIBRARIES(SigmoidImageFilter ITKCommon ITKIO)
 
-#ADD_EXECUTABLE(MedianImageFilter MedianImageFilter.cxx )
-#TARGET_LINK_LIBRARIES(MedianImageFilter ITKCommon ITKIO)
+ADD_EXECUTABLE(MedianImageFilter MedianImageFilter.cxx )
+TARGET_LINK_LIBRARIES(MedianImageFilter OTBCommon OTBIO ITKCommon ITKIO)
 
-#ADD_EXECUTABLE(MeanImageFilter MeanImageFilter.cxx )
-#TARGET_LINK_LIBRARIES(MeanImageFilter ITKCommon ITKIO)
+ADD_EXECUTABLE(MeanImageFilter MeanImageFilter.cxx )
+TARGET_LINK_LIBRARIES(MeanImageFilter OTBCommon OTBIO ITKCommon ITKIO)
 
 #ADD_EXECUTABLE(MathematicalMorphologyBinaryFilters MathematicalMorphologyBinaryFilters.cxx )
 #TARGET_LINK_LIBRARIES(MathematicalMorphologyBinaryFilters ITKCommon ITKIO)
@@ -89,8 +89,8 @@ TARGET_LINK_LIBRARIES(DerivativeImageFilter OTBCommon OTBIO ITKCommon ITKIO)
 #ADD_EXECUTABLE(BinaryMinMaxCurvatureFlowImageFilter BinaryMinMaxCurvatureFlowImageFilter.cxx )
 #TARGET_LINK_LIBRARIES(BinaryMinMaxCurvatureFlowImageFilter ITKCommon ITKBasicFilters ITKIO)
 
-#ADD_EXECUTABLE(DiscreteGaussianImageFilter DiscreteGaussianImageFilter.cxx )
-#TARGET_LINK_LIBRARIES(DiscreteGaussianImageFilter ITKCommon ITKBasicFilters ITKIO)
+ADD_EXECUTABLE(DiscreteGaussianImageFilter DiscreteGaussianImageFilter.cxx )
+TARGET_LINK_LIBRARIES(DiscreteGaussianImageFilter OTBCommon OTBIO ITKCommon ITKBasicFilters ITKIO)
 
 #ADD_EXECUTABLE(GaussianBlurImageFunction GaussianBlurImageFunction.cxx )
 #TARGET_LINK_LIBRARIES(GaussianBlurImageFunction ITKCommon ITKBasicFilters ITKIO)
@@ -118,8 +118,9 @@ OTBIO ITKCommon ITKBasicFilters ITKIO)
 #ADD_EXECUTABLE(CurvatureAnisotropicDiffusionImageFilter CurvatureAnisotropicDiffusionImageFilter.cxx )
 #TARGET_LINK_LIBRARIES(CurvatureAnisotropicDiffusionImageFilter ITKCommon ITKBasicFilters ITKIO)
 
-#ADD_EXECUTABLE(GradientAnisotropicDiffusionImageFilter GradientAnisotropicDiffusionImageFilter.cxx )
-#TARGET_LINK_LIBRARIES(GradientAnisotropicDiffusionImageFilter ITKCommon ITKBasicFilters ITKIO)
+ADD_EXECUTABLE(GradientAnisotropicDiffusionImageFilter GradientAnisotropicDiffusionImageFilter.cxx )
+TARGET_LINK_LIBRARIES(GradientAnisotropicDiffusionImageFilter
+OTBCommon OTBIO ITKCommon ITKBasicFilters ITKIO)
 
 #ADD_EXECUTABLE(VectorGradientAnisotropicDiffusionImageFilter VectorGradientAnisotropicDiffusionImageFilter.cxx )
 #TARGET_LINK_LIBRARIES(VectorGradientAnisotropicDiffusionImageFilter ITKCommon ITKBasicFilters ITKIO)
@@ -136,8 +137,9 @@ OTBIO ITKCommon ITKBasicFilters ITKIO)
 #ADD_EXECUTABLE(RGBToGrayscale RGBToGrayscale.cxx )
 #TARGET_LINK_LIBRARIES(RGBToGrayscale ITKCommon ITKBasicFilters ITKIO)
 
-#ADD_EXECUTABLE(DanielssonDistanceMapImageFilter DanielssonDistanceMapImageFilter.cxx )
-#TARGET_LINK_LIBRARIES(DanielssonDistanceMapImageFilter ITKCommon ITKBasicFilters ITKIO)
+ADD_EXECUTABLE(DanielssonDistanceMapImageFilter DanielssonDistanceMapImageFilter.cxx )
+TARGET_LINK_LIBRARIES(DanielssonDistanceMapImageFilter OTBCommon OTBIO
+ITKCommon ITKBasicFilters ITKIO)
 
 #ADD_EXECUTABLE(SignedDanielssonDistanceMapImageFilter SignedDanielssonDistanceMapImageFilter.cxx )
 #TARGET_LINK_LIBRARIES(SignedDanielssonDistanceMapImageFilter ITKCommon ITKBasicFilters ITKIO)

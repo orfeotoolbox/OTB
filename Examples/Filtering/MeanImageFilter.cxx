@@ -1,21 +1,19 @@
 /*=========================================================================
 
-  Program:   ORFEO Toolbox
+  Program:   Insight Segmentation & Registration Toolkit
+  Module:    $RCSfile: MeanImageFilter.cxx,v $
   Language:  C++
-  Date:      $Date$
-  Version:   $Revision$
+  Date:      $Date: 2005/08/31 13:55:21 $
+  Version:   $Revision: 1.22 $
 
-
-  Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
-  See OTBCopyright.txt for details.
-
+  Copyright (c) Insight Software Consortium. All rights reserved.
+  See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
 
      This software is distributed WITHOUT ANY WARRANTY; without even 
      the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-
 #if defined(_MSC_VER)
 #pragma warning ( disable : 4786 )
 #endif
@@ -25,14 +23,19 @@
 #endif
 
 //  Software Guide : BeginCommandLineArgs
-//    INPUTS: {Circle.png}
-//    OUTPUTS: {CircleMeanOutput.png}
-//    10 10
+//    INPUTS: {QB_Suburb.png}
+//    OUTPUTS: {MeanImageFilterOutput.png}
 //  Software Guide : EndCommandLineArgs
 
 //  Software Guide : BeginLatex
 //
-//  BLA BLA...
+//  The \doxygen{itk}{MeanImageFilter} is commonly used for noise
+//  reduction. The filter computes the value of each output pixel by
+//  finding the statistical mean of the neighborhood of the
+//  corresponding input pixel.  The following figure illustrates the
+//  local effect of the MeanImageFilter. The statistical mean of the
+//  neighborhood on the left is passed as the output value associated
+//  with the pixel at the center of the neighborhood.
 //
 //  \begin{center}
 //  \begin{picture}(200,46)
@@ -52,7 +55,11 @@
 //  \end{picture}
 //  \end{center}
 //
-//  Suite BLA BLA...
+//  Note that this algorithm is sensitive to the presence of outliers in the
+//  neighborhood.  This filter will work on images of any dimension thanks to
+//  the internal use of \doxygen{itk}{SmartNeighborhoodIterator} and
+//  \doxygen{itk}{NeighborhoodOperator}.  The size of the neighborhood over which
+//  the mean is computed can be set by the user.
 //
 //  \index{itk::MeanImageFilter}
 //
@@ -81,10 +88,10 @@
 
 int main( int argc, char * argv[] )
 {
-  if( argc < 5 )
+  if( argc < 3 )
     {
     std::cerr << "Usage: " << std::endl;
-    std::cerr << argv[0] << "  inputImageFile   outputImageFile raduisX raduisY" << std::endl;
+    std::cerr << argv[0] << "  inputImageFile   outputImageFile" << std::endl;
     return EXIT_FAILURE;
     }
 
@@ -150,8 +157,8 @@ int main( int argc, char * argv[] )
   // Software Guide : BeginCodeSnippet
   InputImageType::SizeType indexRadius;
   
-  indexRadius[0] = atoi(argv[3]); // radius along x
-  indexRadius[1] = atoi(argv[4]); // radius along y
+  indexRadius[0] = 1; // radius along x
+  indexRadius[1] = 1; // radius along y
 
   filter->SetRadius( indexRadius );
   // Software Guide : EndCodeSnippet
@@ -180,14 +187,17 @@ int main( int argc, char * argv[] )
   // 
   // \begin{figure}
   // \center
-  // \includegraphics[width=0.44\textwidth]{Circle.eps}
-  // \includegraphics[width=0.44\textwidth]{CircleMeanOutput.eps}
-  // \itkcaption[Effect of the MedianImageFilter]{Effect of the MeanImageFilter on point.}
-  // \label{fig:CircleMeanOutput}
+  // \includegraphics[width=0.44\textwidth]{QB_Suburb.eps}
+  // \includegraphics[width=0.44\textwidth]{MeanImageFilterOutput.eps}
+  // \itkcaption[Effect of the MedianImageFilter]{Effect of the MeanImageFilter.}
+  // \label{fig:MeanImageFilterOutput}
   // \end{figure}
   //
-  //  Figure \ref{fig:CircleMeanOutput} illustrates the effect of this
-  //  filter on an image of a point avec voisinage de \(10,10\) correspondant a un filtre de taille $ 21 \times 21 $.
+  //  Figure \ref{fig:MeanImageFilterOutput} illustrates the effect of this
+  //  filter using neighborhood radii of
+  //  \(1,1\) which corresponds to a $ 3 \times 3 $ classical neighborhood.
+  //  It can be seen from this picture that edges are rapidly degraded by the
+  //  diffusion of intensity values among neighbors.
   //
   //  Software Guide : EndLatex 
 
