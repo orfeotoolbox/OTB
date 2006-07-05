@@ -19,8 +19,8 @@ introduces basic system concepts such as an overview of the system
 architecture, and how to build applications in the C++ programming
 language. Part II describes the system from the user point of view. Dozens
 of examples are used to illustrate important system features. Part III is for
-the OTB developer. Part III explains how to create your own classes, extend
-the system, and interface to windowing and GUI systems.
+the OTB developer. Part III explains how to create your own classes and extend
+the system.%, and interface to windowing and GUI systems.
 
 \section{How to Learn OTB}
 \label{sec:HowToLearnOTB}
@@ -33,10 +33,7 @@ must also be familiar with OTB's internal structures and design
 (material covered in Part III). 
 
 The key to learning how to use OTB is to become familiar with its
-palette of objects and the ways of combining them. If you are a new
-ORFEO Toolbox user, begin by installing the software. If you are a
-class developer, you'll want to install the source code and then
-compile it. We recommend that you learn the system by studying the
+palette of objects and the ways of combining them. We recommend that you learn the system by studying the
 examples and then, if you are a class developer, study the source
 code. Start by reading Chapter \ref{chapter:SystemOverview}, which provides an overview of some
 of the key concepts in the system, and then review the examples in
@@ -66,8 +63,8 @@ site. These official releases are available a few times a year and
 announced on the ORFEO Web pages and mailing lists. 
 
 This software guide assumes that you are working with the official OTB
-version 1.0 release (available on the OTB Web site). If you are a new user,
-we highly recommend that you use the released version of the software.
+version 1.0 release (available on the OTB Web site). %If you are a new user,
+%we highly recommend that you use the released version of the software.
 
 \section{Downloading OTB}
 \label{sec:DownloadingOTB}
@@ -121,8 +118,7 @@ fundamental to achieving this goal.
 \label{sec:DirectoryStructure}
 
 To begin your OTB odyssey, you will first need to know something about OTB's
-software organization and directory structure. Even if you are installing
-pre-compiled binaries, it is helpful to know enough to navigate through the
+software organization and directory structure. It is helpful to know enough to navigate through the
 code base to find examples, code, and documentation.
 
 OTB is organized into several different modules. There are three:
@@ -149,7 +145,7 @@ The \code{OTB} module contains the following subdirectories:
         to test OTB. These examples tend to be minimally documented but may
         be useful to demonstrate various system concepts. 
         \item \code{OTB/Utilities}---supporting software for the OTB
-        source code. For example, libraries such as \code{ITK} and \code{GDAL}.
+        source code. For example, libraries such as \code{ITK}.% and \code{GDAL}.
 \end{itemize}
 
 The source code directory structure---found in \code{OTB/Code}---is 
@@ -298,10 +294,10 @@ structures to be developed to help non-autonomous users. Lastly, this part aims 
 
 The Methodological part objective is the definition and the
 development of tools for the operational exploitation of the future
-submetric optic and radar images (tridimensional aspects, changes
+submetric optic and radar images (tridimensional aspects, change
 detection, texture analysis, pattern matching, optic radar
 complementarities). It is mainly based on R\&D studies and doctorate
-and post-doctorate researches.
+and post-doctorate research.
 
 In this context, CNES\footnote{http://www.cnes.fr} decided to develop
 the \emph{ORFEO ToolBox} (OTB), a set of algorithms encapsulated in a
@@ -318,12 +314,12 @@ ITK\footnote{http://www.itk.org} (Insight Toolkit):
 \begin{itemize}
   \item ITK is used as the core element of OTB
   \item OTB classes inherit from ITK classes
-  \item The software development procedure of OTB is strngly inspired
+  \item The software development procedure of OTB is strongly inspired
   from ITK's (Extreme Programming, test-based coding, Generic
   Programming, etc.)
   \item The documentation production procedure is the same as for ITK
   \item Several chapters of the Sofware Guide are litterally copied
-  from ITK's Software Guide
+  from ITK's Software Guide (with permission).
   \item Many examples are taken from ITK.
 \end{itemize}
 
@@ -341,7 +337,7 @@ partners---University of North Carolina (UNC), University of Tennessee (UT)
 (Ross Whitaker subsequently moved to University of Utah), and University of
 Pennsylvania (UPenn). The Principle Investigators for these partners were,
 respectively, Bill Lorensen at GE CRD, Will Schroeder at Kitware, Vikram
-Chalana at Insightful, Stephen Aylward with Luis Ibanez at UNC (Luis is now
+Chalana at Insightful, Stephen Aylward with Luis Ib\'a\~nez at UNC (Luis is now
 at Kitware), Ross Whitaker with Josh Cates at UT (both now at Utah), and
 Dimitri Metaxas at UPenn (now at Rutgers). In addition, several
 subcontractors rounded out the consortium including Peter Raitu at Brigham \&
