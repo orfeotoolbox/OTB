@@ -152,14 +152,13 @@ ImageFileReader<TOutputImage>
        && (this->m_ImageIO->GetNumberOfComponents()
            == ConvertPixelTraits::GetNumberOfComponents()))
     {
-    otbMsgDebugMacro(<< "No buffer conversion required.");
+    otbMsgDevMacro(<< "No buffer conversion required.");
     // allocate a buffer and have the ImageIO read directly into it
     this->m_ImageIO->Read(buffer);
     return;
     }
   else // a type conversion is necessary
     {
-    otbMsgDebugMacro(<< "Buffer conversion required.");
     // note: char is used here because the buffer is read in bytes
     // regardles of the actual type of the pixels.
     ImageRegionType region = output->GetBufferedRegion();

@@ -24,7 +24,7 @@
 
 #include <gdal.h>
 #include <gdal_priv.h>
-#include <iostream.h>
+//#include <iostream.h>
 #include <string.h>
 #include <list>
 #include <vector>
@@ -33,7 +33,6 @@
 
 #include "otbGDALImageIO.h"
 #include "otbMacro.h"
-//#include "otbCAIImageIO.h"
 #include "itkPNGImageIO.h"
 #include "itkJPEGImageIO.h"
 
@@ -84,8 +83,9 @@ GDALImageIO::GDALImageIO()
 
 GDALImageIO::~GDALImageIO()
 {
-        if( m_poDataset != NULL ) delete m_poDataset;
+//THOMAS
 //	if( m_hDriver != NULL ) GDALClose( m_hDriver ); //Ne pas le faire  sinon SegFault !!!!
+        if( m_poDataset != NULL ) delete m_poDataset;
         if( m_poBands != NULL ) delete [] m_poBands;
 }
 
@@ -167,21 +167,9 @@ bool GDALImageIO::CanReadFile(const char* file)
     }
         bool lCanRead(false);
 
-        // Avant toutes choses, on regarde si cette image ne peut pas être lue par CAI
-/* 
-en commentaire car CAI est mis dasn les Factory avant GDAL
-  	otb::CAIImageIO::Pointer lCAIImageIO = otb::CAIImageIO::New();
-        lCanRead = lCAIImageIO->CanReadFile(file);
-        if ( lCanRead == true)
-        {
-                //Si oui, alors la priorité est donnée à CAI ; on dit que cette image ne doit pas être lue avec GDAL
-                //La priorité est donnée à CAI
-                return false;
-        }
-*/
         //Traitement particulier sur certain format où l'on préfère utiliser 
         // Format PNG -> lecture avec ITK (pas GDAL)
-/* THOMAS */
+//THOMAS
   	itk::PNGImageIO::Pointer lPNGImageIO = itk::PNGImageIO::New();
         lCanRead = lPNGImageIO->CanReadFile(file);
         if ( lCanRead == true)
@@ -189,7 +177,7 @@ en commentaire car CAI est mis dasn les Factory avant GDAL
                 return false;
         }
 
-/* THOMAS */
+//THOMAS - 4 juillet 2006
   	itk::JPEGImageIO::Pointer lJPEGImageIO = itk::JPEGImageIO::New();
         lCanRead = lJPEGImageIO->CanReadFile(file);
         if ( lCanRead == true)

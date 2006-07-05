@@ -23,6 +23,7 @@
 #include "itkImageRegionIterator.h"
 #include "itkObjectFactoryBase.h"
 #include "itkImageFileWriter.h"
+#include "otbMacro.h"
 
 namespace otb
 {
@@ -244,10 +245,10 @@ StreamingImageFileWriter<TInputImage>
 
 
   /** Control if the ImageIO is CanStreamWrite */
-    if( m_ImageIO->CanStreamRead() == false )
+    if( m_ImageIO->CanStreamWrite() == false )
     {
         itk::OStringStream msg;
-        msg << "The ImageFactory selected for the this image file <"<<m_FileName.c_str()<<"> is not StreamWrited "<< std::endl;
+        msg << "The ImageFactory selected for the this image file <"<<m_FileName.c_str()<<"> is not StreamWrite "<< std::endl;
         msg << m_ImageIO<< std::endl;
         itkExceptionMacro(<<msg.str().c_str());
     }
@@ -422,6 +423,12 @@ StreamingImageFileWriter<TInputImage>
     // Set the pixel and component type; the number of components.
     m_ImageIO->SetPixelTypeInfo(typeid(ScalarType));  
     }
+
+
+otbMsgDevMacro( <<" InputImage GetImageDimensions : "<<input->GetImageDimension());
+otbMsgDevMacro( <<"     - GetRequestedRegion : "<<input->GetRequestedRegion());
+otbMsgDevMacro( <<"     - GetLargestPossibleRegion : "<<input->GetLargestPossibleRegion());
+otbMsgDevMacro( <<"     - GetBufferedRegion : "<<input->GetBufferedRegion());
 
   // Setup the image IO for writing.
   //
