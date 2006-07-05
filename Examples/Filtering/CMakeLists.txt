@@ -18,17 +18,19 @@ IF( USE_FFTWF )
   #TARGET_LINK_LIBRARIES(FFTDirectInverse2 ITKCommon ITKIO ITKAlgorithms )
 ENDIF( USE_FFTWF )
 
-#ADD_EXECUTABLE(GradientMagnitudeImageFilter GradientMagnitudeImageFilter.cxx )
-#TARGET_LINK_LIBRARIES(GradientMagnitudeImageFilter ITKCommon ITKIO)
+ADD_EXECUTABLE(GradientMagnitudeImageFilter GradientMagnitudeImageFilter.cxx )
+TARGET_LINK_LIBRARIES(GradientMagnitudeImageFilter OTBCommon OTBIO ITKCommon ITKIO)
 
-#ADD_EXECUTABLE(GradientMagnitudeRecursiveGaussianImageFilter GradientMagnitudeRecursiveGaussianImageFilter.cxx )
-#TARGET_LINK_LIBRARIES(GradientMagnitudeRecursiveGaussianImageFilter ITKCommon ITKIO)
+ADD_EXECUTABLE(GradientMagnitudeRecursiveGaussianImageFilter GradientMagnitudeRecursiveGaussianImageFilter.cxx )
+TARGET_LINK_LIBRARIES(GradientMagnitudeRecursiveGaussianImageFilter
+OTBCommon OTBIO ITKCommon ITKIO)
 
 #ADD_EXECUTABLE(GradientRecursiveGaussianImageFilter GradientRecursiveGaussianImageFilter.cxx )
 #TARGET_LINK_LIBRARIES(GradientRecursiveGaussianImageFilter ITKCommon ITKIO)
 
-#ADD_EXECUTABLE(SecondDerivativeRecursiveGaussianImageFilter SecondDerivativeRecursiveGaussianImageFilter.cxx )
-#TARGET_LINK_LIBRARIES(SecondDerivativeRecursiveGaussianImageFilter ITKCommon ITKIO)
+ADD_EXECUTABLE(SecondDerivativeRecursiveGaussianImageFilter SecondDerivativeRecursiveGaussianImageFilter.cxx )
+TARGET_LINK_LIBRARIES(SecondDerivativeRecursiveGaussianImageFilter
+OTBCommon OTBIO ITKCommon ITKIO)
 
 ADD_EXECUTABLE(BinaryThresholdImageFilter BinaryThresholdImageFilter.cxx )
 TARGET_LINK_LIBRARIES(BinaryThresholdImageFilter OTBCommon OTBIO ITKCommon ITKIO)
@@ -57,8 +59,8 @@ TARGET_LINK_LIBRARIES(ThresholdImageFilter OTBCommon OTBIO ITKCommon ITKIO)
 ADD_EXECUTABLE(CannyEdgeDetectionImageFilter CannyEdgeDetectionImageFilter.cxx )
 TARGET_LINK_LIBRARIES(CannyEdgeDetectionImageFilter OTBCommon OTBIO ITKCommon ITKIO)
 
-#ADD_EXECUTABLE(DerivativeImageFilter DerivativeImageFilter.cxx )
-#TARGET_LINK_LIBRARIES(DerivativeImageFilter ITKCommon ITKIO)
+ADD_EXECUTABLE(DerivativeImageFilter DerivativeImageFilter.cxx )
+TARGET_LINK_LIBRARIES(DerivativeImageFilter OTBCommon OTBIO ITKCommon ITKIO)
 
 #ADD_EXECUTABLE(SigmoidImageFilter SigmoidImageFilter.cxx )
 #TARGET_LINK_LIBRARIES(SigmoidImageFilter ITKCommon ITKIO)
@@ -99,11 +101,13 @@ TARGET_LINK_LIBRARIES(CannyEdgeDetectionImageFilter OTBCommon OTBIO ITKCommon IT
 #ADD_EXECUTABLE(SmoothingRecursiveGaussianImageFilter2 SmoothingRecursiveGaussianImageFilter2.cxx )
 #TARGET_LINK_LIBRARIES(SmoothingRecursiveGaussianImageFilter2 ITKCommon ITKBasicFilters ITKIO)
 
-#ADD_EXECUTABLE(LaplacianRecursiveGaussianImageFilter1 LaplacianRecursiveGaussianImageFilter1.cxx )
-#TARGET_LINK_LIBRARIES(LaplacianRecursiveGaussianImageFilter1 ITKCommon ITKBasicFilters ITKIO)
+ADD_EXECUTABLE(LaplacianRecursiveGaussianImageFilter1 LaplacianRecursiveGaussianImageFilter1.cxx )
+TARGET_LINK_LIBRARIES(LaplacianRecursiveGaussianImageFilter1 OTBCommon
+OTBIO ITKCommon ITKBasicFilters ITKIO)
 
-#ADD_EXECUTABLE(LaplacianRecursiveGaussianImageFilter2 LaplacianRecursiveGaussianImageFilter2.cxx )
-#TARGET_LINK_LIBRARIES(LaplacianRecursiveGaussianImageFilter2 ITKCommon ITKBasicFilters ITKIO)
+ADD_EXECUTABLE(LaplacianRecursiveGaussianImageFilter2 LaplacianRecursiveGaussianImageFilter2.cxx )
+TARGET_LINK_LIBRARIES(LaplacianRecursiveGaussianImageFilter2 OTBCommon
+OTBIO ITKCommon ITKBasicFilters ITKIO)
 
 #ADD_EXECUTABLE(ScaleSpaceGenerator2D ScaleSpaceGenerator2D.cxx )
 #TARGET_LINK_LIBRARIES(ScaleSpaceGenerator2D ITKCommon ITKBasicFilters ITKIO)
