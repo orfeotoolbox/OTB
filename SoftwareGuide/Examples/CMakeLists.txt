@@ -191,7 +191,11 @@ SET( OTB_EXAMPLES_SRCS
   ${OTB_SOURCE_DIR}/Examples/Filtering/SecondDerivativeRecursiveGaussianImageFilter.cxx
   ${OTB_SOURCE_DIR}/Examples/Filtering/LaplacianRecursiveGaussianImageFilter1.cxx
   ${OTB_SOURCE_DIR}/Examples/Filtering/LaplacianRecursiveGaussianImageFilter2.cxx
-  ${OTB_SOURCE_DIR}/Examples/StartExamples/MeanImageFilter.cxx
+  ${OTB_SOURCE_DIR}/Examples/Filtering/MeanImageFilter.cxx
+  ${OTB_SOURCE_DIR}/Examples/Filtering/MedianImageFilter.cxx
+  ${OTB_SOURCE_DIR}/Examples/Filtering/DiscreteGaussianImageFilter.cxx
+  ${OTB_SOURCE_DIR}/Examples/Filtering/GradientAnisotropicDiffusionImageFilter.cxx
+  ${OTB_SOURCE_DIR}/Examples/Filtering/DanielssonDistanceMapImageFilter.cxx
   ${OTB_SOURCE_DIR}/Examples/BasicFilters/LeeImageFilter.cxx
   ${OTB_SOURCE_DIR}/Examples/FeatureExtraction/AlignmentsExample.cxx
   ${OTB_SOURCE_DIR}/Examples/FeatureExtraction/RatioLineDetectorExample.cxx

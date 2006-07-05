@@ -133,40 +133,40 @@ vectors and the image of magnitudes.
 
 
 
-%% \section{Neighborhood Filters}
-%% \label{sec:NeighborhoodFilters}
+\section{Neighborhood Filters}
+\label{sec:NeighborhoodFilters}
 
-%% The concept of locality is frequently encountered in image processing in the
-%% form of filters that compute every output pixel using information from a small
-%% region in the neighborhood of the input pixel.  The classical form of
-%% these filters are the $3 \times 3$ filters in 2D images. Convolution masks
-%% based on these neighborhoods can perform diverse tasks ranging from noise
-%% reduction, to differential operations, to mathematical morphology.
+The concept of locality is frequently encountered in image processing in the
+form of filters that compute every output pixel using information from a small
+region in the neighborhood of the input pixel.  The classical form of
+these filters are the $3 \times 3$ filters in 2D images. Convolution masks
+based on these neighborhoods can perform diverse tasks ranging from noise
+reduction, to differential operations, to mathematical morphology.
 
-%% The Insight toolkit implements an elegant approach to neighborhood-based image
-%% filtering.  The input image is processed using a special iterator called the
-%% \doxygen{itk}{NeighborhoodIterator}. This iterator is capable of moving over all the
-%% pixels in an image and, for each position, it can address the pixels in a local
-%% neighborhood. Operators are defined that apply an algorithmic operation in the
-%% neighborhood of the input pixel to produce a value for the output pixel.  The
-%% following section describes some of the more commonly used filters that take
-%% advantage of this construction. (See Chapter
-%% \ref{sec:ImageIteratorsChapter} on page
-%% \pageref{sec:ImageIteratorsChapter} for more information about iterators.)
+The Insight toolkit implements an elegant approach to neighborhood-based image
+filtering.  The input image is processed using a special iterator called the
+\doxygen{itk}{NeighborhoodIterator}. This iterator is capable of moving over all the
+pixels in an image and, for each position, it can address the pixels in a local
+neighborhood. Operators are defined that apply an algorithmic operation in the
+neighborhood of the input pixel to produce a value for the output pixel.  The
+following section describes some of the more commonly used filters that take
+advantage of this construction. (See Chapter
+\ref{sec:ImageIteratorsChapter} on page
+\pageref{sec:ImageIteratorsChapter} for more information about iterators.)
 
-%% \subsection{Mean Filter}
-%% \label{sec:MeanFilter}
+\subsection{Mean Filter}
+\label{sec:MeanFilter}
 
-%% \ifitkFullVersion
-%% %\input{MeanImageFilter.tex}
-%% \fi
+\ifitkFullVersion
+\input{MeanImageFilter.tex}
+\fi
 
-%% \subsection{Median Filter}
-%% \label{sec:MedianFilter}
+\subsection{Median Filter}
+\label{sec:MedianFilter}
 
-%% \ifitkFullVersion
-%% %\input{MedianImageFilter.tex}
-%% \fi
+\ifitkFullVersion
+\input{MedianImageFilter.tex}
+\fi
 
 
 %% \subsection{Mathematical Morphology}
@@ -267,25 +267,25 @@ interpreted as noise and considered an undesirable component of the image
 data. This section describes several methods that can be applied to reduce
 noise on images.
 
-%% \subsection{Blurring}
-%% \label{sec:BlurringFilters}
+\subsection{Blurring}
+\label{sec:BlurringFilters}
 
-%% Blurring is the traditional approach for removing noise from images. It is
-%% usually implemented in the form of a convolution with a kernel. The effect of
-%% blurring on the image spectrum is to attenuate high spatial
-%% frequencies.  Different kernels attenuate frequencies in different ways. One
-%% of the most commonly used kernels is the Gaussian. Two implementations of
-%% Gaussian smoothing are available in the toolkit. The first one is based on a
-%% traditional convolution while the other is based on the application of IIR
-%% filters that approximate the convolution with a Gaussian
-%% \cite{Deriche1990,Deriche1993}.
+Blurring is the traditional approach for removing noise from images. It is
+usually implemented in the form of a convolution with a kernel. The effect of
+blurring on the image spectrum is to attenuate high spatial
+frequencies.  Different kernels attenuate frequencies in different ways. One
+of the most commonly used kernels is the Gaussian. Two implementations of
+Gaussian smoothing are available in the toolkit. The first one is based on a
+traditional convolution while the other is based on the application of IIR
+filters that approximate the convolution with a Gaussian
+\cite{Deriche1990,Deriche1993}.
 
-%% \subsubsection{Discrete Gaussian}
-%% \label{sec:DiscreteGaussianImageFilter}
+\subsubsection{Discrete Gaussian}
+\label{sec:DiscreteGaussianImageFilter}
 
-%% \ifitkFullVersion
-%% %\input{DiscreteGaussianImageFilter.tex}
-%% \fi
+\ifitkFullVersion
+\input{DiscreteGaussianImageFilter.tex}
+\fi
 
 
 %% \subsubsection{Binomial Blurring}
@@ -317,22 +317,22 @@ noise on images.
 %% %\input{GaussianBlurImageFunction.tex}
 %% \fi
 
-%% \subsection{Edge Preserving Smoothing}
-%% \label{sec:EdgePreservingSmoothingFilters}
+\subsection{Edge Preserving Smoothing}
+\label{sec:EdgePreservingSmoothingFilters}
 
-%% \subsubsection{Introduction to Anisotropic Diffusion}
-%% \label{sec:IntroductionAnisotropicDiffusion}
-%% \ifitkFullVersion
-%% %\input{AnisotropicDiffusionFiltering.tex}
-%% \fi
+\subsubsection{Introduction to Anisotropic Diffusion}
+\label{sec:IntroductionAnisotropicDiffusion}
+\ifitkFullVersion
+\input{AnisotropicDiffusionFiltering.tex}
+\fi
 
 
-%% \subsubsection{Gradient Anisotropic Diffusion}
-%% \label{sec:GradientAnisotropicDiffusionImageFilter}
+\subsubsection{Gradient Anisotropic Diffusion}
+\label{sec:GradientAnisotropicDiffusionImageFilter}
 
-%% \ifitkFullVersion
-%% %\input{GradientAnisotropicDiffusionImageFilter.tex}
-%% \fi
+\ifitkFullVersion
+\input{GradientAnisotropicDiffusionImageFilter.tex}
+\fi
 
 
 
@@ -366,11 +366,6 @@ noise on images.
 %% \fi
 
 
-\subsection{Edge Preserving Speckle Reduction Filters}
-\label{sec:SpeckleFilters}
-\ifitkFullVersion
-\input{LeeImageFilter.tex}
-\fi
 
 
 %% \subsection{Edge Preserving Smoothing in Vector Images}
@@ -414,14 +409,20 @@ noise on images.
 %% %\input{RGBCurvatureAnisotropicDiffusionImageFilter.tex}
 %% \fi
 
+\subsection{Edge Preserving Speckle Reduction Filters}
+\label{sec:SpeckleFilters}
+\ifitkFullVersion
+\input{LeeImageFilter.tex}
+\fi
 
 
-%% \section{Distance Map}
-%% \label{sec:DistanceMap}
 
-%% \ifitkFullVersion
-%% %\input{DanielssonDistanceMapImageFilter.tex}
-%% \fi
+\section{Distance Map}
+\label{sec:DistanceMap}
+
+\ifitkFullVersion
+\input{DanielssonDistanceMapImageFilter.tex}
+\fi
 
 %% \ifitkFullVersion
 %% %\input{SignedDanielssonDistanceMapImageFilter.tex}
@@ -545,8 +546,6 @@ noise on images.
 %% \section{Filtrage de voisinage}
 %% \label{sec:NeighborhoodFilters}
 
-%% BLA BLA....
-
 
 %% \subsection{Filtre Moyen}
 %% \label{sec:MeanFilter}
@@ -554,8 +553,6 @@ noise on images.
 %% \ifitkFullVersion
 %% %\input{MeanImageFilter.tex}
 %% \fi
-
-%% BLA BLA Mean filter
 
 
 %% The typical effect of median filtration on a noisy digital image is a dramatic reduction in impulse noise spikes. The filter also tends to preserve brightness differences across signal steps, resulting in reduced blurring of regional boundaries. The filter also tends to preserve the positions of boundaries in an image.
