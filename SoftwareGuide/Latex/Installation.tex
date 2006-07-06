@@ -234,8 +234,20 @@ IF(OTB_FOUND)
   INCLUDE(${OTB_USE_FILE})
 ELSE(OTB_FOUND)
   MESSAGE(FATAL_ERROR
-          "OTB not found. Please set OTB_DIR.")
+      "Cannot build OTB project without OTB.  Please set OTB_DIR.")
 ENDIF(OTB_FOUND)
+
+    
+IF(OTB_USE_EXTERNAL_ITK)
+      FIND_PACKAGE(ITK)
+      IF(ITK_FOUND)
+              INCLUDE(${ITK_USE_FILE})
+      ELSE(ITK_FOUND)
+              MESSAGE(FATAL_ERROR
+       "Cannot build ITK project without ITK.  Please set ITK_DIR.")
+      ENDIF(ITK_FOUND)
+ENDIF(OTB_USE_EXTERNAL_ITK)
+
 
 ADD_EXECUTABLE(HelloWorld HelloWorld.cxx )
 
@@ -250,9 +262,16 @@ file with a predefined strategy for finding OTB \footnote{Similar files are
 provided in CMake for other commonly used libraries, all of them named
 \code{Find*.cmake}}. If the strategy for finding OTB fails, CMake will prompt
 you for the directory where OTB is installed in your system. In that case you
-will write this information in the \code{OTB\_BINARY\_DIR} variable. The line \code{
+will write this information in the \code{OTB\__DIR} variable. The line \code{
 INCLUDE(\$\{USE\_OTB\_FILE\})} loads the \code{UseOTB.cmake} file to set
-all the configuration information from OTB. The line \code{ADD\_EXECUTABLE}
+all the configuration information from OTB.
+
+The next block of lines is needed in order for CMake to know whether you
+are using the OTB's internal version of ITK or an external one. In the
+second case, CMake will try to find ITK in your system. As for OTB, if
+it fails in finding ITK, it will ask you to manually set the ITK location.
+
+The line \code{ADD\_EXECUTABLE}
 defines as its first argument the name of the executable that will be produced
 as result of this project. The remaining arguments of \code{ADD\_EXECUTABLE}
 are the names of the source files to be compiled and linked.  Finally, the
