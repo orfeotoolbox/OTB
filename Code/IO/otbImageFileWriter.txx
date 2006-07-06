@@ -32,8 +32,8 @@ namespace otb
 {
 
 //---------------------------------------------------------
-template <class TInputImage>
-ImageFileWriter<TInputImage>
+template <class TInputImage, unsigned int toto>
+ImageFileWriter<TInputImage,toto>
 ::ImageFileWriter() : itk::ImageFileWriter<TInputImage>(),
                                 m_UserSpecifiedIORegion(false),
                                 m_FactorySpecifiedImageIO(false)
@@ -43,8 +43,8 @@ ImageFileWriter<TInputImage>
 
 
 //---------------------------------------------------------
-template <class TInputImage>
-ImageFileWriter<TInputImage>
+template <class TInputImage, unsigned int toto>
+ImageFileWriter<TInputImage,toto>
 ::~ImageFileWriter()
 {
 }
@@ -52,9 +52,9 @@ ImageFileWriter<TInputImage>
 
   
 //---------------------------------------------------------
-template <class TInputImage>
+template <class TInputImage, unsigned int toto>
 void 
-ImageFileWriter<TInputImage>
+ImageFileWriter<TInputImage,toto>
 ::Write()
 {
   const InputImageType * input = this->GetInput();
@@ -201,9 +201,9 @@ ImageFileWriter<TInputImage>
 
 
 //---------------------------------------------------------
-template <class TInputImage>
+template <class TInputImage, unsigned int toto>
 void 
-ImageFileWriter<TInputImage>
+ImageFileWriter<TInputImage,toto>
 ::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   Superclass::PrintSelf(os,indent);

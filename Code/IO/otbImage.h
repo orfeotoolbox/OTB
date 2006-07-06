@@ -39,9 +39,12 @@ namespace otb
  * \brief Creation of an "otb" image which contains metadata.
  *
  */
-template <class TPixel, unsigned int VImageDimension=2> 
-class ITK_EXPORT Image : public itk::Image<TPixel, VImageDimension>,
-			 public ImageBase
+ 
+// Le 3ieme parametre template est bidon MAIS necessaire pour compiler avec Microsoft Visual C++ 6.0 
+template <class TPixel,unsigned int VImageDimension, unsigned int toto=0 > 
+class ITK_EXPORT Image : public itk::Image<TPixel,VImageDimension>,
+				ImageBase
+					 
 {
 public: 
   /** Standard class typedefs. */
@@ -65,7 +68,7 @@ public:
   typedef typename Superclass::PixelType PixelType;
 
   /** Typedef alias for PixelType */
-  typedef typename Superclass::ValueType ValueType ;
+  typedef typename Superclass::ValueType ValueType;
 
   /** Internal Pixel representation. Used to maintain a uniform API
    * with Image Adaptors and allow to keep a particular internal

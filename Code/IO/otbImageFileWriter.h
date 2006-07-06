@@ -36,7 +36,9 @@ namespace otb
  * \ingroup IOFilters
  *
  */
-template <class TInputImage>
+
+// Le 3ieme parametre template est bidon MAIS necessaire pour compiler avec Microsoft Visual C++ 6.0 
+template <class TInputImage, unsigned int toto=0>
 class ITK_EXPORT ImageFileWriter : public itk::ImageFileWriter<TInputImage>
 {
 public:
