@@ -23,10 +23,10 @@
 #endif
 
 //  Software Guide : BeginCommandLineArgs
-//    INPUTS: {QB_Suburb.png}
+//    INPUTS: {ROISpot5.png}
 //    OUTPUTS: {MathematicalMorphologyBinaryErosionOutput.png}
 //    OUTPUTS: {MathematicalMorphologyBinaryDilationOutput.png}
-//    100 180
+//    150 180
 //  Software Guide : EndCommandLineArgs
 
 //  Software Guide : BeginLatex
