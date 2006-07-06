@@ -38,13 +38,15 @@
 
 #include "itkMetaDataObject.h"
 
-#include <sys/types.h>
+/*#include <sys/types.h>
 #include <dirent.h>
+*/
 
 // ROMAIN : Modification for VC++
-#ifdef _MSC_VER 
+/*#ifdef _MSC_VER 
 #define	strcasecmp stricmp // _MICROSOFT_ VC++
 #endif
+*/
 
 #include "otbSystem.h"
 
@@ -92,8 +94,8 @@ GDALImageIO::~GDALImageIO()
 
 bool GDALImageIO::GetGdalReadImageFileName( const char * filename, std::string & GdalFileName )
 {
-        DIR *ptr_repertoire;
-        struct dirent *cr_readdir;
+//        DIR *ptr_repertoire;
+//        struct dirent *cr_readdir;
 //        std::string str_debut("DAT");
         std::vector<std::string> listFileSearch;
         listFileSearch.push_back("DAT_01.001");// RADARSAT ou SAR_ERS2
@@ -104,7 +106,27 @@ bool GDALImageIO::GetGdalReadImageFileName( const char * filename, std::string &
         bool fic_trouve(false);
 
         // Si c'est un répertoire, on regarde le contenu pour voir si c'est pas du RADARSAT, ERS
-        ptr_repertoire = opendir(filename);
+
+        std::vector<std::string> listFileFind;
+        listFileFind = System::Readdir(std::string (filename));
+        if( listFileFind.empty() == false )
+        {
+                int cpt(0);
+		while ( (cpt < listFileFind.size()) && (fic_trouve==false) )
+                {
+			str_FileName = std::string(listFileFind[cpt]);
+                        for(int i = 0 ; i < listFileSearch.size() ; i++)
+                        {
+         			if(str_FileName.compare(listFileSearch[i]) == 0)
+	        		{
+                                         GdalFileName = std::string(filename)+listFileSearch[i];
+                                         fic_trouve=true;
+        			}
+                        }
+                        cpt++;
+                }
+
+/*        ptr_repertoire = opendir(filename);
         if (ptr_repertoire != NULL)
         {
 		while ((cr_readdir=readdir(ptr_repertoire))!=NULL && (fic_trouve==false) )
@@ -129,6 +151,7 @@ bool GDALImageIO::GetGdalReadImageFileName( const char * filename, std::string &
                         //         fic_trouve=true;
                         //}
                 }
+*/
 	}
         else 
         {
@@ -150,7 +173,7 @@ bool GDALImageIO::GetGdalReadImageFileName( const char * filename, std::string &
         }
 	otbMsgDevMacro(<<"lFileNameGdal : "<<GdalFileName.c_str());
 	otbMsgDevMacro(<<"fic_trouve : "<<fic_trouve);
-	closedir(ptr_repertoire);
+//	closedir(ptr_repertoire);
 	return( fic_trouve );
 }
 

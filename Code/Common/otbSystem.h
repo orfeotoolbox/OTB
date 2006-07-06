@@ -19,6 +19,7 @@
 #define _otbSystem_h
 
 #include <string>
+#include <vector>
 
 namespace otb
 {
@@ -42,6 +43,8 @@ public:
   /** Get the root name */
   static std::string GetRootName( const std::string& filename );
 
+  /** Get list of file find in a directory */
+  static std::vector<std::string> System::Readdir(std::string pszPath);
 };
 
 } // namespace otb
