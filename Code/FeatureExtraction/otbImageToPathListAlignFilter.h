@@ -71,7 +71,7 @@ public:
 //  typedef          float                                        RealType;
   typedef typename itk::NumericTraits<PixelType>::RealType       RealType;
 //  typedef typename itk::Image<RealType,InputImageDimension>      RealImageType; 
-  typedef typename Image<RealType,InputImageDimension>      RealImageType; 
+  typedef typename otb::Image<RealType,InputImageDimension>      RealImageType; 
   typedef typename RealImageType::Pointer                        RealImageTypePointer;
   typedef typename RealImageType::IndexType                      RealImageTypeIndexType;
         
