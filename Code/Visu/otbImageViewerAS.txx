@@ -21,8 +21,8 @@
 #include "otbImageViewerAS.h"
 #include <iostream>
 
-#define MAX(_A,_B) ((_A) > (_B) ? (_A) : (_B))
-#define MIN(_A,_B) ((_A) < (_B) ? (_A) : (_B))
+//#define MAX(_A,_B) ((_A) > (_B) ? (_A) : (_B))
+//#define MIN(_A,_B) ((_A) < (_B) ? (_A) : (_B))
 
 
 
@@ -478,7 +478,8 @@ ImageViewerAS<TPixel>::LoadLeftImage()
         return ;
     }
     
-	typedef otb::ImageViewerAS<unsigned char>    ViewerType;
+    
+    typedef otb::ImageViewerAS<unsigned char>    ViewerType;
     typedef ViewerType::ImageType ImageType;
     typedef otb::ImageFileReader< ImageType > VolumeReaderType;
 
@@ -501,7 +502,7 @@ ImageViewerAS<TPixel>::LoadRightImage()
         return ;
     }
 	
-	typedef otb::ImageViewerAS<unsigned char>    ViewerType;
+    typedef otb::ImageViewerAS<unsigned char>    ViewerType;
     typedef ViewerType::ImageType ImageType;
 	
     typedef otb::ImageFileReader< ImageType > VolumeReaderType;

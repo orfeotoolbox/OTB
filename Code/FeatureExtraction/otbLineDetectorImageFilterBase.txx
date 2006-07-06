@@ -59,8 +59,8 @@ void LineDetectorImageFilterBase<TInputImage, TOutputImage, InterpolatorType>::G
   Superclass::GenerateInputRequestedRegion();
   
   // get pointers to the input and output
-  typename InputImageType::Pointer inputPtr   =  const_cast< TInputImage * >( this->GetInput() );
-  typename OutputImageType::Pointer outputPtr = this->GetOutput();
+  typename Superclass::InputImagePointer inputPtr   =  const_cast< TInputImage * >( this->GetInput() );
+  typename Superclass::OutputImagePointer outputPtr = this->GetOutput();
   
   if ( !inputPtr || !outputPtr )
     {
@@ -194,7 +194,9 @@ void LineDetectorImageFilterBase< TInputImage, TOutputImage, InterpolatorType>
   // Number of zone	  
   const int NB_ZONE = 3;  
   // Definition of the 4 directions
-  double Theta[NB_DIR];
+  //double Theta[NB_DIR];
+  //ROMAIN
+  double* Theta = new double[NB_DIR];
 
   // La rotation nulle correspond a un contour horizontal -> 0 !!
   for(int i=0; i<NB_DIR; i++)
@@ -266,7 +268,11 @@ void LineDetectorImageFilterBase< TInputImage, TOutputImage, InterpolatorType>
 
 
       // Contains for the 4 directions the the pixels belonging to each zone
-      std::vector<double> PixelValues[NB_DIR][NB_ZONE];
+	  //std::vector<double> PixelValues[NB_DIR][NB_ZONE];
+	  // ROMAIN
+		std::vector<double>** PixelValues=new std::vector<double>*[NB_DIR];
+		for (int i=0; i<NB_DIR; i++)
+			PixelValues[i] = new std::vector<double>[NB_ZONE];
 
       // Loop on the region 
       //for (i = 0; i < neighborhoodSize; ++i)
@@ -357,10 +363,15 @@ void LineDetectorImageFilterBase< TInputImage, TOutputImage, InterpolatorType>
 	++it;
 	++itdir;
 	progress.CompletedPixel();  
-	
-      }
+
+	// ROMAIN
+	for (int i=0; i<NB_DIR; i++)
+		delete[] PixelValues[i];
+	delete[] PixelValues;
+    }
     
     }
+	delete[] Theta;
 }
 
 template <class TInputImage, class TOutput, class InterpolatorType>

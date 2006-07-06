@@ -99,7 +99,7 @@ FlusserImageFunction<TInput,TOutput,TCoordRep>
 	function->SetQ(2);
 	C12 = function->EvaluateAtIndex( index );
 
-	FlusserValue = abs( C21 * C12 ) ;
+	FlusserValue = std::abs( C21 * C12 ) ;
 	}
 	break;
     case 3:
@@ -111,7 +111,7 @@ FlusserImageFunction<TInput,TOutput,TCoordRep>
 	function->SetP(1);
 	function->SetQ(2);
 	C12 = function->EvaluateAtIndex( index );
-	FlusserValueComplex = C20 * pow(C12,2);
+	FlusserValueComplex = C20 * std::pow(C12,2);
 	FlusserValue = FlusserValueComplex.real();
 	}
 	break;
@@ -124,7 +124,7 @@ FlusserImageFunction<TInput,TOutput,TCoordRep>
 	function->SetP(1);
 	function->SetQ(2);
 	C12 = function->EvaluateAtIndex( index );
-	FlusserValueComplex = C20 * pow(C12,2);
+	FlusserValueComplex = C20 * std::pow(C12,2);
 	FlusserValue = FlusserValueComplex.imag();
 	}
 	break;
@@ -138,7 +138,7 @@ FlusserImageFunction<TInput,TOutput,TCoordRep>
 	function->SetQ(2);
 	C12 = function->EvaluateAtIndex( index );
 
-	FlusserValueComplex = C30 * pow(C12,3) ;
+	FlusserValueComplex = C30 * std::pow(C12,3) ;
 	FlusserValue = FlusserValueComplex.real();       
 	}	
 	break;
@@ -152,7 +152,7 @@ FlusserImageFunction<TInput,TOutput,TCoordRep>
 	function->SetQ(2);
 	C12 = function->EvaluateAtIndex( index );
 
-	FlusserValueComplex = C30 * pow(C12,3) ;
+	FlusserValueComplex = C30 * std::pow(C12,3) ;
 	FlusserValue = FlusserValueComplex.real();       
 	}	
 	break;
@@ -174,7 +174,7 @@ FlusserImageFunction<TInput,TOutput,TCoordRep>
 	function->SetP(1);
 	function->SetQ(2);
 	C12 = function->EvaluateAtIndex( index );
-	FlusserValueComplex = C31 * pow(C12,2);
+	FlusserValueComplex = C31 * std::pow(C12,2);
 	FlusserValue = FlusserValueComplex.real();
 	}
 	break;
@@ -187,7 +187,7 @@ FlusserImageFunction<TInput,TOutput,TCoordRep>
 	function->SetP(1);
 	function->SetQ(2);
 	C12 = function->EvaluateAtIndex( index );
-	FlusserValueComplex = C31 * pow(C12,2);
+	FlusserValueComplex = C31 * std::pow(C12,2);
 	FlusserValue = FlusserValueComplex.imag();
 	}
 	break;
@@ -200,7 +200,7 @@ FlusserImageFunction<TInput,TOutput,TCoordRep>
 	function->SetP(1);
 	function->SetQ(2);
 	C12 = function->EvaluateAtIndex( index );
-	FlusserValueComplex = C40 * pow(C12,4);
+	FlusserValueComplex = C40 * std::pow(C12,4);
 	FlusserValue = FlusserValueComplex.real();
 	}
 	break;
@@ -213,7 +213,7 @@ FlusserImageFunction<TInput,TOutput,TCoordRep>
 	function->SetP(1);
 	function->SetQ(2);
 	C12 = function->EvaluateAtIndex( index );
-	FlusserValueComplex = C40 * pow(C12,4);
+	FlusserValueComplex = C40 * std::pow(C12,4);
 	FlusserValue = FlusserValueComplex.imag();
 	}
 	break;

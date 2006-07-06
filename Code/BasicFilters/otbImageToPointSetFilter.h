@@ -55,10 +55,12 @@ public:
   typedef   typename InputImageType::ConstPointer   InputImageConstPointer;
   typedef   typename InputImageType::RegionType     InputImageRegionType; 
   typedef   typename InputImageType::PixelType      InputImagePixelType; 
-
+  
   /** Some PointSet related typedefs. */
   typedef   typename Superclass::OutputPointSetType     OutputPointSetType;
   typedef   typename Superclass::OutputPointSetPointer  OutputPointSetPointer;
+  
+  typedef   itk::ProcessObject			    ProcessObjectType;
 
   /** Set the input image of this process object.  */
   void SetInput(unsigned int idx, const InputImageType *input);
