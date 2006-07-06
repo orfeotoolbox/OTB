@@ -30,6 +30,8 @@ ADD_LIBRARY(OTBVisu ${OTBVisu_SRCS} ${OTBVisu_FLTK_UI_SRCS})
 #ADD_LIBRARY(OTBVisu ${OTBVisu_SRCS} )
 INSTALL_FILES(/include/otb/Visu "(\\.h|\\.txx)$")
 INSTALL_TARGETS(/lib/otb OTBVisu)
+# A terme, remplacer par une macro qui a partir des sources .fl determine les .h
+INSTALL_FILES(/include/otb/Visu FILES ${OTB_BINARY_DIR}/Code/Visu/otbImageViewerGUI.h ${OTB_BINARY_DIR}/Code/Visu/otbImageViewerASGUI.h)
 
 TARGET_LINK_LIBRARIES(OTBVisu OTBLearning ${FLTK_LIBRARIES} ${OPENGL_glu_LIBRARY}
                       ${OPENGL_LIBRARIES})
