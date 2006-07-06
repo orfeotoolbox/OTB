@@ -502,8 +502,6 @@ otbMsgDevMacro( <<" Nb Of Components  : "<<this->GetNumberOfComponents());
         reinterpret_cast<float *>(tempmemory), numberOfComponents );
     }
      
-   int lNbLignes   = this->GetIORegion().GetSize()[1];
-   int lNbColonnes = this->GetIORegion().GetSize()[0];
 
 //  char* value = new char[numberOfBytesToBeWrite];
 //  unsigned long cpt = 0;
