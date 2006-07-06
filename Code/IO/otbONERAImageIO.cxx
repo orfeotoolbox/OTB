@@ -31,7 +31,7 @@
 #include "otbSystem.h"
 
 #define ONERA_MAGIC_NUMBER     33554433
-#define ONERA_HEADER_LENGTH    0
+#define ONERA_HEADER_LENGTH    4
 #define ONERA_FILE_ID_OFFSET   0
 
 namespace otb
@@ -208,10 +208,15 @@ otbMsgDevMacro( <<" Nb Of Components  : "<<this->GetNumberOfComponents());
     }
 
   unsigned long numberOfBytesPerLines = 2 * m_width * m_NbOctetPixel;
-  unsigned long headerLength = ONERA_HEADER_LENGTH + 4 + numberOfBytesPerLines;
+  unsigned long headerLength = ONERA_HEADER_LENGTH + numberOfBytesPerLines;
   unsigned long offset;
   unsigned long numberOfBytesToBeRead = 2 * m_NbOctetPixel *lNbColonnes;
   unsigned long numberOfBytesRead;        
+
+otbMsgDevMacro( <<" ONERAImageIO::Read()  ");
+otbMsgDevMacro( <<" Dimensions de l'image  : "<<m_Dimensions[0]<<","<<m_Dimensions[1]);
+otbMsgDevMacro( <<" Region lue (IORegion)  : "<<this->GetIORegion());
+otbMsgDevMacro( <<" Nb Of Components  : "<<this->GetNumberOfComponents());
 
   char* value = new char[numberOfBytesToBeRead];
   unsigned long cpt = 0;
@@ -349,12 +354,11 @@ void ONERAImageIO::InternalReadImageInformation()
   itk::ByteSwapper< int>::SwapFromSystemToLittleEndian(&magicNumber);
 
   // Find info.. : Number of Row , Nb of Columns
-  short NbCol;
-  short NbRow;
+  int NbCol;
 
-  m_Datafile.seekg(6, std::ios::beg );
+  m_Datafile.seekg(ONERA_HEADER_LENGTH + 2, std::ios::beg );
   m_Datafile.read((char*)(&NbCol),2);  
-  itk::ByteSwapper< short>::SwapFromSystemToLittleEndian(&NbCol);
+  itk::ByteSwapper<int>::SwapFromSystemToLittleEndian(&NbCol);
     
   m_Datafile.seekg(0, std::ios::end);
   long gcountHead = static_cast<long>(ONERA_HEADER_LENGTH + 2*4*NbCol);
@@ -364,7 +368,8 @@ void ONERAImageIO::InternalReadImageInformation()
   m_width = static_cast<int> ( NbCol );
   m_height = static_cast<int> ( (gcount-gcountHead) / (4 * 2 * NbCol) );
 
-  if( m_width==0 & m_height==0)
+otbMsgDebugMacro( <<"         Size               : "<<m_width<<","<<m_height);
+  if( (m_width==0) || (m_height==0))
       {
       itkExceptionMacro(<<"Unknown image dimension");
       }
@@ -470,8 +475,27 @@ void ONERAImageIO::Write(const void* buffer)
   const unsigned long numberOfBytes      = this->GetImageSizeInBytes();
   const unsigned long numberOfComponents = this->GetImageSizeInComponents();
 
-  char *tempmemory = new char[numberOfBytes];
-  memcpy(tempmemory,buffer,numberOfBytes);
+  int lNbLignes   = this->GetIORegion().GetSize()[1];
+  int lNbColonnes = this->GetIORegion().GetSize()[0];
+  int lPremiereLigne   = this->GetIORegion().GetIndex()[1] ; // [1... ]
+  int lPremiereColonne = this->GetIORegion().GetIndex()[0] ; // [1... ]
+
+otbMsgDevMacro( <<" ONERAImageIO::Write()  ");
+otbMsgDevMacro( <<" Dimensions de l'image  : "<<m_Dimensions[0]<<","<<m_Dimensions[1]);
+otbMsgDevMacro( <<" Region lue (IORegion)  : "<<this->GetIORegion());
+otbMsgDevMacro( <<" Nb Of Components  : "<<this->GetNumberOfComponents());
+
+  unsigned long numberOfBytesPerLines = step * lNbColonnes * m_NbOctetPixel;
+  unsigned long headerLength = ONERA_HEADER_LENGTH + numberOfBytesPerLines;
+  unsigned long offset;
+//  unsigned long numberOfBytesToBeWrite = step * m_NbOctetPixel *lNbColonnes;
+  unsigned long numberOfBytesRegion = step * m_NbOctetPixel *lNbColonnes *lNbLignes;
+//  unsigned long numberOfBytesWrite;        
+
+
+  char *tempmemory = new char[numberOfBytesRegion];
+  memcpy(tempmemory,buffer,numberOfBytesRegion);
+
   if(this->GetComponentType() == FLOAT)
     {
     itk::ByteSwapper<float>::SwapRangeFromSystemToLittleEndian(
@@ -481,14 +505,28 @@ void ONERAImageIO::Write(const void* buffer)
    int lNbLignes   = this->GetIORegion().GetSize()[1];
    int lNbColonnes = this->GetIORegion().GetSize()[0];
 
+//  char* value = new char[numberOfBytesToBeWrite];
+//  unsigned long cpt = 0;
+ 
+  for(int LineNo = lPremiereLigne;LineNo <lPremiereLigne + lNbLignes; LineNo++ )
+    {
+/*	for( unsigned long  i=0 ; i < numberOfBytesPerLines ; i = i+  2 * m_NbOctetPixel )
+           {
+            memcpy((void*)(&(value[i])),(const void*)(&(tempmemory[cpt])),(size_t)( 2* m_NbOctetPixel) );
+            cpt += 2*m_NbOctetPixel;
+           }
+*/
+	char* value = tempmemory + numberOfBytesPerLines * (LineNo - lPremiereLigne);
 
-  unsigned long numberOfBytesPerLines = 2 * lNbColonnes * m_NbOctetPixel;
-  unsigned long headerLength = ONERA_HEADER_LENGTH + 4 + numberOfBytesPerLines;
-  unsigned long offset;
+	offset  =  headerLength + numberOfBytesPerLines * LineNo;
+	offset +=  m_NbOctetPixel * lPremiereColonne;
+  	m_Datafile.seekg(offset, std::ios::beg);
+	m_Datafile.write( static_cast<char *>( value ), numberOfBytesPerLines );
+//    	numberOfBytesWrite = m_Datafile.gcount();
+//  	m_Datafile.seekg(offset, std::ios::end);
+    }
 
-  offset  =  headerLength + numberOfBytesPerLines;
-  m_Datafile.seekg(offset, std::ios::beg);
-  m_Datafile.write( static_cast<const char *>(tempmemory) , numberOfBytes );
+//  delete [] value;
   delete [] tempmemory;
 }
 
@@ -532,17 +570,37 @@ void ONERAImageIO::WriteImageInformation()
 
   // write magic_number
   int magicNumber = ONERA_MAGIC_NUMBER; 
+  int NbCol = m_Dimensions[0];
+  int NbRow = m_Dimensions[1];
+  int ByteSizeCol = NbCol*4*2;
+
   itk::ByteSwapper< int>::SwapFromSystemToLittleEndian(&magicNumber);
   m_Datafile.seekg(0, std::ios::beg );
   m_Datafile.write((char*)(&magicNumber),4);
   
-  // write number of columns
-  short NbCol = m_Dimensions[0];
-  itk::ByteSwapper< short>::SwapFromSystemToLittleEndian(&NbCol);
+  char * tab = new char[ByteSizeCol];
+  for( int i = 0 ; i < (NbRow + 1) ; i++)
+  {
+  	m_Datafile.write((char*)(tab),ByteSizeCol);
+  }
+  delete [] tab;
 
-  m_Datafile.seekg(6, std::ios::beg );
-  m_Datafile.write((char*)(&NbCol),2);
+  // write number of columns
+  itk::ByteSwapper<int>::SwapFromSystemToLittleEndian(&NbCol);
+
+  m_Datafile.seekg(ONERA_MAGIC_NUMBER, std::ios::beg );
+  m_Datafile.write((char*)(&NbCol),4);
   
+  
+otbMsgDebugMacro( <<"Driver to write: ONERA");
+otbMsgDebugMacro( <<"         Write file         : "<< m_FileName);
+otbMsgDebugMacro( <<"         Size               : "<<m_Dimensions[0]<<","<<m_Dimensions[1]);
+otbMsgDebugMacro( <<"         ComponentType      : "<<this->GetComponentType() );
+otbMsgDebugMacro( <<"         NumberOfComponents : "<<this->GetNumberOfComponents());
+otbMsgDebugMacro( <<"         NbOctetPixel       : "<<m_NbOctetPixel);
+
+
+
 }
 
   
