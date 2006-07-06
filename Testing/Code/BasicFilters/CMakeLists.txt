@@ -51,6 +51,8 @@ ADD_TEST(bfTuImageToPointSetFilterTest ${BASICFILTERS_TESTS}
 # A enrichir
 SET(BasicFilters_SRCS
 otbLeeFilter.cxx
+otbFrostFilterTest.cxx
+otbFrostFilterNew.cxx
 otbFrostFilter.cxx
 otbImageToPointSetFilterTest.cxx
 )
