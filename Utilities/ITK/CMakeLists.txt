@@ -76,7 +76,7 @@ OPTION(ITK_EXPLICIT_INSTANTIATION "BETA-Try to explicitly build some of the core
 MARK_AS_ADVANCED(ITK_EXPLICIT_INSTANTIATION)
 
 
-#ROMAIN
+
 #IF( ITK_EXPLICIT_INSTANTIATION )
 # ADD_DEFINITIONS(-DITK_EXPLICIT_INSTANTIATION)
 #ENDIF( ITK_EXPLICIT_INSTANTIATION )
@@ -112,7 +112,7 @@ ELSE( NOT BORLAND )
    MARK_AS_ADVANCED(ITK_USE_CONCEPT_CHECKING)
 ENDIF( NOT BORLAND )
 
-#END ROMAIN
+
 
 
 # perl support does not work, contact bill hoffman at kitware
@@ -196,10 +196,7 @@ CONFIGURE_FILE(${ITK_SOURCE_DIR}/UseITK.cmake.in
 INCLUDE (${ITK_SOURCE_DIR}/itkGenerateITKConfig.cmake)
 
 # Install some files.
-#THOMAS
 INSTALL_FILES(/include/otb/Utilities/ITK .h itkConfigure)
-
-#THOMAS
 #INSTALL_FILES(/lib/InsightToolkit .cmake UseITK ITKLibraryDepends)
 
 #-----------------------------------------------------------------------------
@@ -268,7 +265,6 @@ ELSE(ITK_USE_SYSTEM_VXL)
   SET(VXL_NUMERICS_LIBRARIES itkvnl itkvnl_algo itknetlib itkvcl)
 ENDIF(ITK_USE_SYSTEM_VXL)
 
-#ROMAIN
 
 IF(BORLAND)
      SET(ITK_REQUIRED_CXX_FLAGS "${ITK_REQUIRED_CXX_FLAGS} -w- -whid -waus -wpar")
@@ -301,7 +297,6 @@ IF(ITK_USE_SYSTEM_GDCM)
      )
 ENDIF(ITK_USE_SYSTEM_GDCM)
 
-#ROMAIN END
 
 # Provide options to use system versions of third-party libraries.
 ITK_THIRD_PARTY_OPTION(ZLIB zlib)

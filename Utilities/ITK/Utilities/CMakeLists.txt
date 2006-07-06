@@ -73,5 +73,5 @@ ENDIF(ITK_BUILD_CABLESWIG)
 
 #-----------------------------------------------------------------------------
 # Install the UseITK.cmake file configured from the top-level.
-INSTALL_FILES(/lib/otb ".cmake" "ITKConfig")
+#INSTALL_FILES(/lib/otb ".cmake" "ITKConfig")
 
