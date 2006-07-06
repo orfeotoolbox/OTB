@@ -43,19 +43,20 @@ int otbImageFileWriterStreamingONERAComplex(int argc, char* argv[])
 
         typedef otb::ImageFileReader< ImageType  >         ReaderType;
         typedef otb::StreamingImageFileWriter< ImageType >          WriterType;
-        typedef itk::StreamingImageFilter< ImageType, 
-					   ImageType >       StreamingType;
+/*        typedef itk::StreamingImageFilter< ImageType, 
+					   ImageType >       StreamingType;*/
 
         ReaderType::Pointer complexReader = ReaderType::New(); 
 	complexReader->SetFileName( inputFilename  );
 
-        StreamingType::Pointer streaming = StreamingType::New();
+/*        StreamingType::Pointer streaming = StreamingType::New();
 	streaming->SetNumberOfStreamDivisions(100);
 	streaming->SetInput(complexReader->GetOutput());
- 
+*/ 
         WriterType::Pointer complexWriter = WriterType::New();
+	complexWriter->SetNumberOfStreamDivisions(100);
 	complexWriter->SetFileName( outputFilename  );
-	complexWriter->SetInput( streaming->GetOutput()  );
+	complexWriter->SetInput( complexReader->GetOutput()  );
  	complexWriter->Update();
 
   } 
