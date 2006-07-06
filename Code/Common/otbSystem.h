@@ -31,7 +31,7 @@ namespace otb
  * System operations, filename manipulations, etc.
  *
  */
-class System 
+class /*ITK_EXPORT*/ System 
 {
 public:
 

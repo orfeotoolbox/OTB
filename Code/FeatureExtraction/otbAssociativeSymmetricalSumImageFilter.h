@@ -38,7 +38,7 @@ namespace otb
 namespace Functor {  
 
 template< class TInput1, class TInput2, class TOutput>
-class AssociativeSymmetricalSum
+class ITK_EXPORT AssociativeSymmetricalSum
 {
 public:
   AssociativeSymmetricalSum() {};

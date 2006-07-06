@@ -43,7 +43,7 @@ namespace otb
 */
 
 template <class TPixel>
-class ImageViewer :             public itk::ProcessObject,
+class ITK_EXPORT ImageViewer :  public itk::ProcessObject,
                                 public otbImageViewerGUI
                                 
 {

@@ -31,7 +31,7 @@ namespace otb
 
 template <class TInputImage, 
           class TOutputPointSet = itk::PointSet<ITK_TYPENAME TInputImage::PixelType,2> >
-class HarrisImageToPointSetFilter :  
+class ITK_EXPORT HarrisImageToPointSetFilter :  
            public ImageToPointSetFilter< TInputImage,TOutputPointSet >
 {
 public:

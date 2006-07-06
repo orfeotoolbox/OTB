@@ -43,7 +43,7 @@ namespace Accessor
  */
 
 template <class T>
-class VectorImageToASPixelAccessor
+class ITK_EXPORT VectorImageToASPixelAccessor
 {
 public:
   /** Standard class typedefs. */

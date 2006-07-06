@@ -36,7 +36,7 @@ namespace otb
  * \ingroup TreeNeighborhoodObjects
  */
 
-class Neighbor
+class ITK_EXPORT Neighbor
 {
 public:
   Point_plane point;    /* Neighbor pixel */
@@ -50,7 +50,7 @@ private:
 
 };
 
-class Neighborhood
+class ITK_EXPORT Neighborhood
 {
 public:
   typedef enum  {AMBIGUOUS, MIN, MAX, INVALID} TypeOfTree;
@@ -86,7 +86,7 @@ private:
 };
 
 
-class Connection
+class ITK_EXPORT Connection
 {
 public:
   Shape *shape; /* Largest shape of the monotone section */

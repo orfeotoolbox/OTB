@@ -34,7 +34,7 @@ namespace otb
  *
  */
 template <class TImage>
-class VectorImageToASImageAdaptor : public
+class ITK_EXPORT VectorImageToASImageAdaptor : public
       itk::ImageAdaptor<TImage,otb::Accessor::VectorImageToASPixelAccessor<
            typename TImage::PixelType::ValueType> >
 {

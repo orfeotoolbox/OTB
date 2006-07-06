@@ -32,7 +32,7 @@ namespace otb
  *
  */
 template <class TInputImage, class TOutputPath>
-class ImageToPathListAlignFilter : public ImageToPathListFilter<TInputImage,TOutputPath>
+class ITK_EXPORT ImageToPathListAlignFilter : public ImageToPathListFilter<TInputImage,TOutputPath>
 {
 public:
   /** Standard class typedefs. */
