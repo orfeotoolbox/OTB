@@ -29,7 +29,7 @@
 #include "itkImageIteratorWithIndex.h"
 #include "itkImageRegionIteratorWithIndex.h"
 #include "itkImageRegionConstIteratorWithIndex.h"
-
+#include "otbMacro.h"
 namespace otb
 {
 
@@ -187,7 +187,7 @@ DrawPathListFilter<TInputImage,TInputPath,TOutputImage>
     
   int nbPath = InputPath->size();
   
-  std::cout <<"nbPath: " <<nbPath <<std::endl;
+  otbMsgDevMacro( <<"nbPath: " <<nbPath);
  
   for(int i =0 ; i<nbPath ;i++)
      {

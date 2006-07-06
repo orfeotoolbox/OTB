@@ -314,11 +314,11 @@ void MSTARImageIO::Read(void* buffer)
 	if (nhlen == 0)
 	  {/* Implies FLOAT MSTAR chip image */
 	  mstartype = CHIP_IMAGE;
-	  std::cout << " Chip type " << std::endl;
+	  otbMsgDevMacro(<< " Chip type ");
 	  } else
 	  {
 	  mstartype = FSCENE_IMAGE; /* UnShort Fullscene */
-	  std::cout << " Scene type " << std::endl;
+	  otbMsgDevMacro(<< << " Scene type " );
 	  }
 
 

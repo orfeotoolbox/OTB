@@ -47,21 +47,12 @@ template <class TInputImage, class TOutputImage>
 class FrostImageFilter :  public itk::ImageToImageFilter< TInputImage, TOutputImage >
 {
 public:
-  /** 	Extrait les dimensions aussi bien des images 
-  	d'entrée (Input) que de sortie (Output). */
-  itkStaticConstMacro(		InputImageDimension,
-  				unsigned int,
-                      		TInputImage::ImageDimension);
-  itkStaticConstMacro(		OutputImageDimension, 
-  				unsigned int,
-                      		TOutputImage::ImageDimension);
 
-  /** "typedef" pour simplifier la définition et la déclaration de variables. */
+ /** Some Image related typedefs. */
   typedef TInputImage InputImageType;
-  /** "typedef" pour simplifier la définition et la déclaration de variables. */
   typedef TOutputImage OutputImageType;
 
-  /** "typedef" pour les classes standards. */
+  /** Standard class typedefs. */
   typedef FrostImageFilter Self;
   typedef itk::ImageToImageFilter< InputImageType, OutputImageType> Superclass;
   typedef itk::SmartPointer<Self> Pointer;
@@ -70,7 +61,7 @@ public:
   /** Methode pour la gestion "object factory". */
   itkNewMacro(Self);
 
-  /** Retourne le nom de la classe. */
+  /** Run-time type information (and related methods). */
   itkTypeMacro(FrostImageFilter, ImageToImageFilter);
   
   /** Définition des images supportées. */
@@ -84,6 +75,15 @@ public:
 
   /** "typedef" définissant la taille d'une image. */
   typedef typename InputImageType::SizeType SizeType;
+
+ /** ImageDimension constants */
+  itkStaticConstMacro(		InputImageDimension,
+  				unsigned int,
+                      		TInputImage::ImageDimension);
+  itkStaticConstMacro(		OutputImageDimension, 
+  				unsigned int,
+                      		TOutputImage::ImageDimension);
+
 
   /** Positionne le rayon définissant le voisinage utilisé pour le calcul du filtre. */
   itkSetMacro(Radius, SizeType);
