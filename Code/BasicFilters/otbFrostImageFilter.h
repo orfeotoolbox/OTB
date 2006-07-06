@@ -44,7 +44,7 @@ namespace otb
  */
 
 template <class TInputImage, class TOutputImage>
-class FrostImageFilter :  public itk::ImageToImageFilter< TInputImage, TOutputImage >
+class ITK_EXPORT FrostImageFilter :  public itk::ImageToImageFilter< TInputImage, TOutputImage >
 {
 public:
 
