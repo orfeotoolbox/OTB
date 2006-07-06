@@ -1,3 +1,4 @@
+
 /*=========================================================================
 
   Program:   ORFEO Toolbox
@@ -15,6 +16,7 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
+
 #ifndef otbPrincipalImageView_txx
 #define otbPrincipalImageView_txx
 
@@ -43,17 +45,6 @@ PrincipalImageView<TPixel>::handle(int event)
   {
 
   int key;
-/*
-std::cout <<"PrincipalImageView::handle : event "<<event<<std::endl;
-  int toto = Fl::event_state();
-std::cout <<"  ->Fl::event_state "<<toto<<std::endl;
-  int titi = Fl::event_state(event);
-std::cout <<"  ->Fl::event_state "<<titi<<std::endl;
-  int tata = Fl::event_button();
-std::cout <<"  ->Fl::event_button "<<tata<<std::endl;
-  int dede = Fl::event_key();
-std::cout <<"  ->Fl::event_key "<<dede<<std::endl;
-*/
   switch(event)
     {
     case FL_PUSH:

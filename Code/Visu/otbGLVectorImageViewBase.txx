@@ -22,6 +22,7 @@
 #include "itkImageRegionConstIterator.h"
 
 #include "otbGLVectorImageViewBase.h"
+#include "otbMacro.h"
 
 #include <math.h>
 
@@ -284,12 +285,12 @@ void
 GLVectorImageViewBase<TPixel>::
 PrintInfos(void)
 {
-std::cout << this->GetNameOfClass()<< std::endl;
-std::cout << "- cW, cH               :   ["<<this->cW<<","<<this->cH<<"]"<< std::endl;
-std::cout << "- zoom                 :   "<<this->winZoom()<< std::endl;
-std::cout << "- zoom                 :   "<<this->cWinZoom<< std::endl;
-std::cout << "- m_CenterPointImage   :   "<<m_CenterPointImage<< std::endl;
-std::cout << "- m_ViewImageRegion    :   "<<this->m_ViewImageRegion<< std::endl;
+otbMsgDevMacro(  << this->GetNameOfClass() );
+otbMsgDevMacro(  << "- cW, cH               :   ["<<this->cW<<","<<this->cH<<"]");
+otbMsgDevMacro(  << "- zoom                 :   "<<this->winZoom() );
+otbMsgDevMacro(  << "- zoom                 :   "<<this->cWinZoom);
+otbMsgDevMacro(  << "- m_CenterPointImage   :   "<<m_CenterPointImage);
+otbMsgDevMacro(  << "- m_ViewImageRegion    :   "<<this->m_ViewImageRegion);
 }
 
 //

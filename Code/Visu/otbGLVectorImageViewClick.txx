@@ -24,6 +24,7 @@
 
 #include "otbGLVectorImageViewClick.h"
 #include "otbImageFileReader.h"
+#include "otbMacro.h"
 
 #include <math.h>
 
@@ -297,7 +298,7 @@ void
 GLVectorImageViewClick<TPixel,TPixelOverlay>::
 BuildWithWindowRegion(const int zoom)
 {
-        //std::cout << "BUILDWITHWINDOWREGION" << std::endl ;
+        //otbMsgDevMacro( << "BUILDWITHWINDOWREGION" ) ;
 		RegionType lRegion;
         RegionType lWindow;
         SizeType lSize;
@@ -327,12 +328,12 @@ void
 GLVectorImageViewClick<TPixel,TPixelOverlay>::
 PrintInfos(void)
 {
-std::cout << this->GetNameOfClass()<< std::endl;
-std::cout << "- cW, cH               :   ["<<this->cW<<","<<this->cH<<"]"<< std::endl;
-std::cout << "- zoom                 :   "<<this->winZoom()<< std::endl;
-std::cout << "- zoom                 :   "<<this->cWinZoom<< std::endl;
-std::cout << "- m_CenterPointImage   :   "<<m_CenterPointImage<< std::endl;
-std::cout << "- m_ViewImageRegion    :   "<<this->m_ViewImageRegion<< std::endl;
+otbMsgDevMacro(  << this->GetNameOfClass() );
+otbMsgDevMacro(  << "- cW, cH               :  ["<<this->cW<<","<<this->cH<<"]"< );
+otbMsgDevMacro(  << "- zoom                 :   "<<this->winZoom() );
+otbMsgDevMacro(  << "- zoom                 :   "<<this->cWinZoom );
+otbMsgDevMacro(  << "- m_CenterPointImage   :   "<<m_CenterPointImage);
+otbMsgDevMacro(  << "- m_ViewImageRegion    :   "<<this->m_ViewImageRegion);
 }
 
 //
@@ -458,7 +459,7 @@ update()
       		/*l = (j-this->cWinMinX) + (k-this->cWinMinY)*this->cWinDataSizeX;
       		//this->cWinImData[l] = (unsigned char)tf;
       		unsigned int overlayColorIndex = 0;
-			std::cout << "l : " << l << std::endl;
+			otbMsgDevMacro(  << "l : " << l );
 	  
       		if( this->cValidOverlayData ) 
         	{
@@ -476,7 +477,7 @@ update()
             		{
            				m = (int)*((unsigned short *)&(cOverlayData->GetPixel(ind)));
             		}
-					//if (m!=255) std::cout << "m : " << m << std::endl ;
+					//if (m!=255) otbMsgDevMacro(  << "m : " << m ) ;
 					
           			if( m >= (int)cColorTable->GetNumberOfColors() ) 
            			{ 
@@ -490,7 +491,7 @@ update()
               			{
               				overlayColorIndex = cOverlayColorIndex;
               			}
-						std::cout << "hu ?" << std::endl;
+						otbMsgDevMacro(  << "hu ?" );
 						cWinOverlayData[l+0] = 
              				 (unsigned char)(cColorTable->GetColorComponent(overlayColorIndex,
                                                              'r') * 255);
@@ -513,7 +514,7 @@ update()
             		{
             			if( sizeof( TPixelOverlay ) == 3 )
               			{
-		      				std::cout << "ho ?" << std::endl;
+		      				otbMsgDevMacro(  << "ho ?" );
 							cWinOverlayData[l+0] = 
                					((unsigned char *)&(cOverlayData->GetPixel(ind)))[0];
               				cWinOverlayData[l+1] = 
@@ -527,7 +528,7 @@ update()
               			{
              				if( sizeof( TPixelOverlay ) == 4 ) 
                 			{
-                				std::cout << "ha ?" << std::endl;
+                				otbMsgDevMacro(  << "ha ?" );
 								cWinOverlayData[l+0] = 
                   					((unsigned char *)&(cOverlayData->GetPixel(ind)))[0];
                 				cWinOverlayData[l+1] = 
@@ -780,7 +781,7 @@ SetWinImData(const RegionType & zone)
 //  int m;
 //  float tf;
 
-  //std::cout << "Zone : " << zone << std::endl;
+  //otbMsgDevMacro(  << "Zone : " << zone );
   int lWinMinX = zone.GetIndex()[0];
   int lWinMinY = zone.GetIndex()[1];
   int lWinMaxX = lWinMinX + zone.GetSize()[0] - 1;

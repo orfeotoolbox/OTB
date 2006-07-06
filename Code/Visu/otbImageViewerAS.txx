@@ -20,6 +20,7 @@
 
 #include "otbImageViewerAS.h"
 #include <iostream>
+#include "otbMacro.h"
 
 //#define MAX(_A,_B) ((_A) > (_B) ? (_A) : (_B))
 //#define MIN(_A,_B) ((_A) < (_B) ? (_A) : (_B))
@@ -86,10 +87,12 @@ ImageViewerAS<TPixel>
 	
         // Fenetre d'affichage AVANT classif
         //----------------------------------------
-	/*std::cout << "Taille input image : " << m_InputLeftImage->GetLargestPossibleRegion().GetSize()[0] 
-	<< " " << m_InputLeftImage->GetLargestPossibleRegion().GetSize()[1] << std::endl ; 
-	std::cout << "Taille principal image : " << m_PrincipalViewBeforeClassif->sizeX()
-	<< " " << m_PrincipalViewBeforeClassif->sizeY() << std::endl;*/
+	/*
+	otbMsgDevMacro( << "Taille input image : " << m_InputLeftImage->GetLargestPossibleRegion().GetSize()[0] 
+	<< " " << m_InputLeftImage->GetLargestPossibleRegion().GetSize()[1] ) ; 
+	otbMsgDevMacro(  << "Taille principal image : " << m_PrincipalViewBeforeClassif->sizeX()
+	<< " " << m_PrincipalViewBeforeClassif->sizeY() );
+	*/
 	
 	/*m_ShrinkImageFilter->SetShrinkFactors(0);
         m_ShrinkImageFilter->SetInput( m_InputImage );
