@@ -15,12 +15,13 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
+
 #ifndef _otbSVMSampleListModelEstimator_txx
 #define _otbSVMSampleListModelEstimator_txx
 
 #include "otbSVMSampleListModelEstimator.h"
 #include "itkCommand.h"
-
+#include "otbMacro.h"
 
 namespace otb
 {
@@ -106,11 +107,11 @@ SVMSampleListModelEstimator<TInputSampleList,  TTrainingSampleList>
   this->m_Labels.resize(0);
   
 
-  std::cout << " Input nb points " << inputSampleListSize <<std::endl;
-  std::cout << " Training nb points " << trainingSampleListSize <<std::endl;
+  otbMsgDevMacro(  << " Input nb points " << inputSampleListSize );
+  otbMsgDevMacro(  << " Training nb points " << trainingSampleListSize );
   
 
-  std::cout << " Before while " << std::endl;
+  otbMsgDevMacro(  << " Before while " );
 
   while(inIt!=inEnd && trIt!=trEnd)
     {
@@ -122,7 +123,7 @@ SVMSampleListModelEstimator<TInputSampleList,  TTrainingSampleList>
 
     this->m_Labels.push_back(label);
 
-    std::cout << " Label " << label << std::endl;
+    otbMsgDevMacro(  << " Label " << label );
 
     typename TInputSampleList::MeasurementVectorType value =
       inIt.GetMeasurementVector();
@@ -144,9 +145,9 @@ SVMSampleListModelEstimator<TInputSampleList,  TTrainingSampleList>
     ++trIt;
     }
 
-  std::cout << " Before prepare data " << std::endl;
+  otbMsgDevMacro(  << " Before prepare data " );
   this->PrepareData();
-  std::cout << " After prepare data " << std::endl;
+  otbMsgDevMacro(  << " After prepare data " );
 }
 
 

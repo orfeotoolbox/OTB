@@ -20,7 +20,7 @@
 
 #include "otbSVMPointSetModelEstimator.h"
 #include "itkCommand.h"
-
+#include "otbMacro.h"
 
 namespace otb
 {
@@ -111,11 +111,11 @@ SVMPointSetModelEstimator<TInputPointSet,  TTrainingPointSet>
   this->m_Labels.resize(0);
   
 
-  std::cout << " Input nb points " << inputPointSetSize <<std::endl;
-  std::cout << " Training nb points " << trainingPointSetSize <<std::endl;
+  otbMsgDevMacro(  << " Input nb points " << inputPointSetSize );
+  otbMsgDevMacro(  << " Training nb points " << trainingPointSetSize );
   
 
-  std::cout << " Before while " << std::endl;
+  otbMsgDevMacro(  << " Before while " );
 
   unsigned int dataId = 0;
   while(inIt!=inEnd && trIt!=trEnd)
@@ -127,7 +127,7 @@ SVMPointSetModelEstimator<TInputPointSet,  TTrainingPointSet>
     trainingPointSet->GetPointData( dataId, & label );   
     this->m_Labels.push_back(label);
 
-      std::cout << " Label " << label << std::endl;
+      otbMsgDevMacro(  << " Label " << label );
 
       typename TInputPointSet::PixelType value;
       inputPointSet->GetPointData( dataId, & value );   
@@ -150,9 +150,9 @@ SVMPointSetModelEstimator<TInputPointSet,  TTrainingPointSet>
     ++dataId;
     }
 
-  std::cout << " Before prepare data " << std::endl;
+  otbMsgDevMacro(  << " Before prepare data " );
   this->PrepareData();
-  std::cout << " After prepare data " << std::endl;
+  otbMsgDevMacro(  << " After prepare data " );
 }
 
 

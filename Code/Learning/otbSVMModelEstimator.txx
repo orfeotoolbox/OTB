@@ -19,6 +19,7 @@
 #define _otbSVMModelEstimator_txx
 
 #include "otbSVMModelEstimator.h"
+#include "otbMacro.h"
 #include "itkCommand.h"
 
 
@@ -134,16 +135,16 @@ SVMModelEstimator<InputPixelType, LabelPixelType>
     throw itk::ExceptionObject(__FILE__, __LINE__,error_msg,ITK_LOCATION);
     }
 
-  //std::cout << "Starting training" << std::endl;
+  otbMsgDevMacro(  << "Starting training" );
 
   svm_model* tempModel = svm_train(&prob,&param);
 
-  //std::cout << "Training done" << std::endl;
+  otbMsgDevMacro(  << "Training done" );
     
   m_Model->SetModel(tempModel);
   m_Model->SetNumberOfClasses( this->GetNumberOfClasses() );
   
-  //std::cout << "Training done" << std::endl;
+  otbMsgDevMacro(  << "Training done" );
     
 
 }// end train classifier 
@@ -169,10 +170,10 @@ SVMModelEstimator< InputPixelType, LabelPixelType >
   prob = m_Model->GetProblem();
   x_space = m_Model->GetXSpace();
 
-  //std::cout << "x_space " <<  x_space << std::endl;
+  otbMsgDevMacro(  << "x_space " <<  x_space );
 
-  //std::cout << "prob = " << &prob << std::endl;
-  //std::cout << "prob.l = " << prob.l << std::endl;
+  otbMsgDevMacro(  << "prob = " << &prob );
+  otbMsgDevMacro(  << "prob.l = " << prob.l );
 
   long int j=0;
   long int i=0;
@@ -184,19 +185,19 @@ SVMModelEstimator< InputPixelType, LabelPixelType >
   typename TrainingLabelsType::iterator labelsEnd = m_Labels.end();
 
 
-  //std::cout << " Before while " << std::endl;
+  otbMsgDevMacro(  << " Before while " );
   while(measIt!=measEnd && labelsIt!=labelsEnd)
     {
 
       double label = static_cast<double>(*labelsIt);
-/*      std::cout << label << std::endl;
-      std::cout << prob.x[i] << std::endl;
-      std::cout << prob.y[i] << std::endl;
-      std::cout << &x_space[j] << std::endl;*/
+      otbMsgDevMacro(  << label       );
+      otbMsgDevMacro(  << prob.x[i]   );
+      otbMsgDevMacro(  << prob.y[i]   );
+      otbMsgDevMacro(  << &x_space[j] );
       prob.x[i] = &x_space[j];
       prob.y[i] = label;
 
-      std::cout << "Label " << label << " " << i <<"/" << probl<<std::endl;
+      otbMsgDevMacro(  << "Label " << label << " " << i <<"/" << probl);
 
       typename MeasurementVectorType::iterator compIt = (*measIt).begin();
       typename MeasurementVectorType::iterator compEnd = (*measIt).end();
@@ -205,12 +206,12 @@ SVMModelEstimator< InputPixelType, LabelPixelType >
       
       while(compIt!=compEnd)
 	{
-/*	std::cout << "Index " << x_space[j].index << std::endl;	
-	std::cout << "Value " << x_space[j].value << std::endl;*/
+	otbMsgDevMacro(  << "Index " << x_space[j].index );	
+	otbMsgDevMacro(  << "Value " << x_space[j].value );
+	
 	x_space[j].index = k+1;
 	x_space[j].value = (*compIt);
-	std::cout << x_space[j].index << ":" << x_space[j].value << " ";
-	std::cout << "j: " << j << " " << std::endl;
+	otbMsgDevMacro(  << x_space[j].index << ":" << x_space[j].value << " " << "j: " << j << " " );
 	++j;
 	++k;
 	++compIt;
@@ -218,7 +219,7 @@ SVMModelEstimator< InputPixelType, LabelPixelType >
       if(j>=1 && x_space[j-1].index > max_index)
 	max_index = x_space[j-1].index;
       x_space[j++].index = -1;
-      //    std::cout << std::endl;
+      //    otbMsgDevMacro( " " );
       ++i;
 
       ++measIt;
@@ -227,7 +228,7 @@ SVMModelEstimator< InputPixelType, LabelPixelType >
 		  
     }
 
-  std::cout << "Processed " << i << " examples" << std::endl;
+  otbMsgDevMacro(  << "Processed " << i << " examples" );
 
   if(param.gamma == 0)
     param.gamma = 1.0/max_index;

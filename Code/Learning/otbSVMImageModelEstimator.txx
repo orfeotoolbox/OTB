@@ -19,6 +19,8 @@
 #define _otbSVMImageModelEstimator_txx
 
 #include "otbSVMImageModelEstimator.h"
+#include "otbMacro.h"
+
 #include "itkCommand.h"
 #include "itkImageRegionConstIterator.h"
 
@@ -121,7 +123,7 @@ SVMImageModelEstimator<TInputImage,  TTrainingImage>
   
 
 
-  //std::cout << " Before while " << std::endl;
+  otbMsgDevMacro(  << " Before while " );
   while(!inIt.IsAtEnd() && !trIt.IsAtEnd())
     {
 

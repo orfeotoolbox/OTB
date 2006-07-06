@@ -18,6 +18,7 @@
 #ifndef __otbSVMModel_txx
 #define __otbSVMModel_txx
 #include "otbSVMModel.h"
+#include "otbMacro.h"
 
 #if defined(_MSC_VER)
 #pragma warning ( disable : 4786 )
@@ -35,7 +36,7 @@ SVMModel< TInputPixel, TLabel >::SVMModel()
   m_Model = Malloc(svm_model,1);
 
   m_Problem.l = 0;
-  //std::cout << "SVMModel::SVMModel - m_Problem.l = " <<  m_Problem.l << std::endl;
+  otbMsgDevMacro(  << "SVMModel::SVMModel - m_Problem.l = " <<  m_Problem.l );
   m_Problem.y = new double[1];
   m_Problem.x = new struct svm_node*[1];
   x_space = new struct svm_node[1];
@@ -48,15 +49,15 @@ template <class TInputPixel, class TLabel >
 SVMModel<TInputPixel, TLabel>::~SVMModel()
 {
 // FIXME: pbs. when deleting de problem ....
-//  std::cout << "SVMModel destructor" << std::endl;
+  otbMsgDevMacro(  << "SVMModel destructor" );
 
   /*
   delete [] m_Problem.y;//free(m_Problem.y);
-  std::cout << "SVMModel destructor - y done" << std::endl;
+  otbMsgDevMacro(  << "SVMModel destructor - y done" );
   delete [] m_Problem.x; //free(m_Problem.x);
-  std::cout << "SVMModel destructor - x done" << std::endl;
+  otbMsgDevMacro(  << "SVMModel destructor - x done" );
   delete [] x_space;//
-  std::cout << "SVMModel destructor - x_space done" << std::endl;
+  otbMsgDevMacro(  << "SVMModel destructor - x_space done" );
   //free(x_space);
 */
 
@@ -70,25 +71,24 @@ void
 SVMModel<TInputPixel, TLabel>
 ::AllocateProblem(int l, long int elements)
   {
-    //std::cout << "SVMModel::AllocateProblem - enter" << std::endl;
-    //std::cout << "SVMModel::AllocateProblem - l = " << l << std::endl;
-    //std::cout << "SVMModel::AllocateProblem - elements = " << elements << std::endl;
-
-    //std::cout << "SVMModel::AllocateProblem - m_Problem.l = " <<  m_Problem.l << std::endl;
+    otbMsgDevMacro(  << "SVMModel::AllocateProblem - enter" );
+    otbMsgDevMacro(  << "SVMModel::AllocateProblem - l = " << l );
+    otbMsgDevMacro(  << "SVMModel::AllocateProblem - elements = " << elements );
+    otbMsgDevMacro(  << "SVMModel::AllocateProblem - m_Problem.l = " << m_Problem.l );
     m_Problem.l = l;
-    //std::cout << "SVMModel::AllocateProblem - m_Problem.l = " <<  m_Problem.l << std::endl;
-    //std::cout << "SVMModel::AllocateProblem - l done" << std::endl;
+    otbMsgDevMacro(  << "SVMModel::AllocateProblem - m_Problem.l = " <<  m_Problem.l );
+    otbMsgDevMacro(  << "SVMModel::AllocateProblem - l done" );
     delete [] m_Problem.y;
     m_Problem.y = new double[l];//Malloc(double,l);
-    //std::cout << "SVMModel::AllocateProblem - y done" << std::endl;
+    otbMsgDevMacro(  << "SVMModel::AllocateProblem - y done" );
     delete [] m_Problem.x;
     m_Problem.x = new struct svm_node*[l];//Malloc(struct svm_node* ,l);
-    //std::cout << "SVMModel::AllocateProblem - x done" << std::endl;
+    otbMsgDevMacro(  << "SVMModel::AllocateProblem - x done" );
     delete [] x_space;
     x_space = new struct svm_node[elements];
     //free(x_space);
     //x_space = Malloc(struct svm_node,elements);
-    //std::cout << "SVMModel::AllocateProblem - x_space done" << std::endl;
+    //otbMsgDevMacro(  << "SVMModel::AllocateProblem - x_space done" );
 
   }
 
@@ -98,11 +98,11 @@ void
 SVMModel<TInputPixel, TLabel>
 ::SetModel(struct svm_model* aModel)
   {
-    //std::cout << "SVMModel::SetModel - enter" << std::endl;
+    otbMsgDevMacro(  << "SVMModel::SetModel - enter");
     //svm_destroy_model(m_Model);
-    //std::cout << "SVMModel::SetModel - destroyed" << std::endl;
+    otbMsgDevMacro(  << "SVMModel::SetModel - destroyed" );
     m_Model = aModel;
-    //std::cout << "SVMModel::SetModel - out" << std::endl;
+    otbMsgDevMacro(  << "SVMModel::SetModel - out" );
   }
 
 
@@ -113,14 +113,14 @@ SVMModel<TInputPixel, TLabel>
   {
     return m_Problem;
     
-//     //std::cout << "SVMModel::GetProblem - enter" << std::endl;
+//     otbMsgDevMacro(  << "SVMModel::GetProblem - enter" );
 //     aProblem.l = m_Problem.l;
 //     aProblem.y = m_Problem.y;
 //     aProblem.x = m_Problem.x;
 
-//     //std::cout << "SVMModel::GetProblem - x_space " << x_space << std::endl;
+//     otbMsgDevMacro(  << "SVMModel::GetProblem - x_space " << x_space );
 // //    aNode = x_space;
-//     //std::cout << "SVMModel::GetProblem - out" << std::endl;
+//     otbMsgDevMacro(  << "SVMModel::GetProblem - out" );
 //     return x_space;
   }
 

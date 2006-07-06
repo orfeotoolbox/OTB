@@ -1,17 +1,5 @@
 /*=========================================================================
 
-  Program :   OTB (ORFEO ToolBox)
-  Authors   :   CNES - J. Inglada
-  Language  :   C++
-  Date      :   26 April 2006
-  Version   :   
-  Role      :   SVM Classifier
-  $Id$
-
-
-=========================================================================*/
-/*=========================================================================
-
   Program:   ORFEO Toolbox
   Language:  C++
   Date:      $Date$
@@ -31,6 +19,7 @@
 #define __otbSVMClassifier_txx
 
 #include "otbSVMClassifier.h"
+#include "otbMacro.h"
 
 namespace otb{ 
 
@@ -68,13 +57,13 @@ SVMClassifier< TSample, TLabel >
 // SVMClassifier< TSample, TLabel >
 // ::SetSample(const TSample* sample)
 // {
-//   std::cout << "SVMClassifier::SetSample enter"  << std::endl;
+//   otbMsgDevMacro(  << "SVMClassifier::SetSample enter" );
 //   if ( m_Sample != sample )
 //     {
 //     m_Sample = sample ;
 //     m_Output->SetSample(sample) ;
 //     }
-//   std::cout << "SVMClassifier::SetSample exit"  << std::endl;
+//   otbMsgDevMacro(  << "SVMClassifier::SetSample exit"  );
 // }
 
 // template< class TSample, class TLabel >
@@ -111,25 +100,25 @@ SVMClassifier< TSample, TLabel >
 {
 
 
-  //std::cout << "Before Resize 0" <<  std::endl;
+  otbMsgDevMacro(  << "Before Resize 0" );
 /*  unsigned int i ;
   typename TSample::ConstIterator iter = this->GetSample()->Begin() ;
   typename TSample::ConstIterator end  = this->GetSample()->End() ;
   typename TSample::MeasurementVectorType measurements ;
 */
-  //std::cout << "Before Resize " <<  std::endl;
+  otbMsgDevMacro(  << "Before Resize " );
   m_Output->SetSample(this->GetSample()) ;
-  //std::cout << "m_Output " << m_Output <<  std::endl;
+  otbMsgDevMacro(  << "m_Output " << m_Output );
 
   m_Output->Resize( this->GetSample()->Size() ) ;
 
   
-  //std::cout << "Resize to " << this->GetSample()->Size() << std::endl;
-  //std::cout << "Resize to " << m_Output->GetSample()->Size() << std::endl;
+  otbMsgDevMacro(  << "Resize to " << this->GetSample()->Size() );
+  otbMsgDevMacro(  << "Resize to " << m_Output->GetSample()->Size() );
   
   //std::vector< double > discriminantScores ;
   unsigned int numberOfClasses = this->GetNumberOfClasses() ;
-  //std::cout << "NbClass " << numberOfClasses << std::endl;
+  otbMsgDevMacro(  << "NbClass " << numberOfClasses );
   //discriminantScores.resize(numberOfClasses) ;
   //unsigned int classLabel ;
 
@@ -139,9 +128,9 @@ SVMClassifier< TSample, TLabel >
 /*typename Superclass::DecisionRuleType::Pointer rule = 
     this->GetDecisionRule() ;*/
 
-  //std::cout << "Do Classif "  << std::endl;
+  otbMsgDevMacro(  << "Do Classif "  );
   this->DoClassification();
-  //std::cout << "End of classif" << std::endl;  
+  otbMsgDevMacro(  << "End of classif" );  
 
 //   if ( m_ClassLabels.size() != this->GetNumberOfMembershipFunctions() )
 //     {
@@ -216,7 +205,7 @@ SVMClassifier< TSample, TLabel >
 
   x = new svm_node[numberOfComponentsPerSample+1];//m_Model->GetXSpace();
 
-  //std::cout << "XSpace Allocated" << std::endl;
+  otbMsgDevMacro(  << "XSpace Allocated" );
   if(svm_check_probability_model(model)==0)
     {
     throw itk::ExceptionObject(__FILE__, __LINE__,
@@ -232,10 +221,10 @@ SVMClassifier< TSample, TLabel >
 
 
   int svm_type=svm_get_svm_type(model);
-  //std::cout << "SVM Type = " << svm_type << std::endl;
+  otbMsgDevMacro(  << "SVM Type = " << svm_type );
 
   int nr_class=svm_get_nr_class(model);
-  //std::cout << "SVM nr_class = " << nr_class << std::endl;
+  otbMsgDevMacro(  << "SVM nr_class = " << nr_class );
 
   int *labels=(int *) malloc(nr_class*sizeof(int));
   double *prob_estimates=NULL;
@@ -259,7 +248,7 @@ SVMClassifier< TSample, TLabel >
     }
 //  while(1)
 
-//  std::cout << "Starting iterations " << std::endl;
+  otbMsgDevMacro(  << "Starting iterations " );
   while (iter != end && iterO != endO)
     {
     
@@ -292,28 +281,28 @@ SVMClassifier< TSample, TLabel >
 
 
     measurements = iter.GetMeasurementVector() ;
-    //std::cout << "Loop on components " << svm_type << std::endl;
+    otbMsgDevMacro(  << "Loop on components " << svm_type );
     for(i=0; i<numberOfComponentsPerSample; i++)
       {
-      //std::cout << i << " " << measurements[i] << std::endl;
-      //std::cout << "Index "<< x[i].index << std::endl;
-      //std::cout << "Value "<< x[i].value << std::endl;
+      otbMsgDevMacro(  << i << " " << measurements[i] );
+      otbMsgDevMacro(  << "Index "<< x[i].index );
+      otbMsgDevMacro(  << "Value "<< x[i].value );
       x[i].index = i+1 ;
       x[i].value = measurements[i];
-      //std::cout << "Index "<< x[i].index << std::endl;
-      //std::cout << "Value "<< x[i].value << std::endl;
-      //std::cout << "-------------------" << std::endl;
+      otbMsgDevMacro(  << "Index "<< x[i].index );
+      otbMsgDevMacro(  << "Value "<< x[i].value );
+      otbMsgDevMacro(  << "-------------------" );
 	
       }
 
 
-    //std::cout << "Starting prediction" << std::endl;
+    otbMsgDevMacro(  << "Starting prediction" );
 
     if (predict_probability && (svm_type==C_SVC || svm_type==NU_SVC))
       {
-      //std::cout << "With predict" << std::endl;
+      otbMsgDevMacro(  << "With predict" );
       v = svm_predict_probability(model,x,prob_estimates);
-      //std::cout << "Value : " << v << std::endl;
+      otbMsgDevMacro(  << "Value : " << v );
       /*fprintf(output,"%g ",v);
       for(j=0;j<nr_class;j++)
 	fprintf(output,"%g ",prob_estimates[j]);
@@ -321,9 +310,9 @@ SVMClassifier< TSample, TLabel >
       }
     else
       {
-      //std::cout << "Without predict" << std::endl;
+      otbMsgDevMacro(  << "Without predict" );
       v = svm_predict(model,x);
-      //std::cout << "Value : " << v << std::endl;
+      otbMsgDevMacro(  << "Value : " << v );
       //fprintf(output,"%g\n",v);
       }
     
@@ -334,32 +323,30 @@ SVMClassifier< TSample, TLabel >
 //   else
     classLabel = static_cast<ClassLabelType>(v);
 
-//  std::cout << "Add instance " << classLabel << std::endl;
-//std::cout << "Add instance ident " << iterO.GetInstanceIdentifier() << std::endl;
-m_Output->AddInstance(classLabel, iterO.GetInstanceIdentifier()) ;
-//std::cout << "After add instance " << iterO.GetClassLabel() << std::endl;  
-
+  otbMsgDevMacro(  << "Add instance " << classLabel ); 
+  otbMsgDevMacro(  << "Add instance ident " << iterO.GetInstanceIdentifier() );
+  m_Output->AddInstance(classLabel, iterO.GetInstanceIdentifier()) ;
+  otbMsgDevMacro(  << "After add instance " << iterO.GetClassLabel() );  
 
   ++iter;
   ++iterO;
-    
-    
+        
 }
 
-//std::cout << "End of iterations " << std::endl;
+otbMsgDevMacro(  << "End of iterations " );
 if(predict_probability)
   {
   free(prob_estimates);
   free(labels);
   }
   
-//std::cout << "End of iterations and free" << std::endl;  
+otbMsgDevMacro(  << "End of iterations and free" );  
 //  free(x);
 
 delete [] x;
 }
 
-} // end of namespace itk
+} // end of namespace otb
 
 #endif
 

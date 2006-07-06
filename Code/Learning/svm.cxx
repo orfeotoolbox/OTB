@@ -27,6 +27,7 @@
 #include <stdarg.h>
 #include <iostream>
 #include "svm.h"
+#include "otbMacro.h"
 
 typedef float Qfloat;
 typedef signed char schar;
@@ -2159,7 +2160,7 @@ svm_model *svm_train(const svm_problem *prob, const svm_parameter *param)
 	else
 	{
 		// classification
-	//std::cout << "Classification SVM" << std::endl;
+	        otbMsgDevMacro(  << "Classification SVM");
 		int l = prob->l;
 		int nr_class;
 		int *label = NULL;
@@ -2168,9 +2169,9 @@ svm_model *svm_train(const svm_problem *prob, const svm_parameter *param)
 		int *perm = Malloc(int,l);
 
 		// group training data of the same class
-		//std::cout << "group training data of the same class" << std::endl;
+		otbMsgDevMacro(  << "group training data of the same class");
 		svm_group_classes(prob,&nr_class,&label,&start,&count,perm);
-				//std::cout << "done" << std::endl;
+		otbMsgDevMacro( << "done" );
 		svm_node **x = Malloc(svm_node *,l);
 		int i;
 		for(i=0;i<l;i++)
@@ -2178,7 +2179,7 @@ svm_model *svm_train(const svm_problem *prob, const svm_parameter *param)
 
 		// calculate weighted C
 
-		//std::cout << "calculate weighted C" << std::endl;
+		otbMsgDevMacro( << "calculate weighted C" );
 		double *weighted_C = Malloc(double, nr_class);
 		for(i=0;i<nr_class;i++)
 			weighted_C[i] = param->C;
@@ -2194,11 +2195,11 @@ svm_model *svm_train(const svm_problem *prob, const svm_parameter *param)
 				weighted_C[j] *= param->weight[i];
 		}
 
-		//std::cout << "done" << std::endl;
+		otbMsgDevMacro(<< "done" );
 
 		// train k*(k-1)/2 models
 
-		//std::cout << "train k*(k-1)/2 models" << std::endl;
+		otbMsgDevMacro(  << "train k*(k-1)/2 models");
 		bool *nonzero = Malloc(bool,l);
 		for(i=0;i<l;i++)
 			nonzero[i] = false;
@@ -2211,7 +2212,7 @@ svm_model *svm_train(const svm_problem *prob, const svm_parameter *param)
 			probB=Malloc(double,nr_class*(nr_class-1)/2);
 		}
 
-		//std::cout << "For all " << nr_class << " classes" << std::endl;
+		otbMsgDevMacro( << "For all " << nr_class << " classes" );
 		int p = 0;
 		for(i=0;i<nr_class;i++)
 			for(int j=i+1;j<nr_class;j++)
@@ -2250,7 +2251,7 @@ svm_model *svm_train(const svm_problem *prob, const svm_parameter *param)
 			}
 
 		// build output
-		//std::cout << "build output" << std::endl;
+		otbMsgDevMacro(  << "build output" );
 
 		model->nr_class = nr_class;
 		
