@@ -120,7 +120,7 @@ int main(int ac, char* av[] )
       av += 1;
       ac -= 1;
       }
-    else if (strcmp(av[1], "--compare-image") == 0)
+    if (strcmp(av[1], "--compare-image") == 0)
       {
       lToleranceDiffPixelImage = (double)(::atof(av[2]));
       baselineFilenameImage = av[3];
