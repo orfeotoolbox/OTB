@@ -6,7 +6,6 @@ SUBDIRS(
   DataRepresentation
   IO
   Filtering
-  Patented
   ChangeDetection
   Visu
   Learning
@@ -14,3 +13,8 @@ SUBDIRS(
   Segmentation
   Iterators
 )
+
+IF(OTB_USE_PATENTED)
+  SUBDIRS( Patented )
+ENDIF(OTB_USE_PATENTED)
+

@@ -254,6 +254,12 @@ IF( OTB_SHOW_ALL_MSG_DEBUG )
 ENDIF( OTB_SHOW_ALL_MSG_DEBUG )
 
 
+#-----------------------------------------------------------------------------
+# Option for generate Patented examples  !!!
+OPTION(OTB_USE_PATENTED "Build patented examples. ITK must be genereted whith patented option (ITK_USE_PATENTED = ON)." OFF)
+MARK_AS_ADVANCED(OTB_USE_PATENTED)
+
+
 IF(WIN32)
    IF(BUILD_SHARED_LIBS)
      SET(OTB_COMMON_BUILD_TYPE "SHARED")
