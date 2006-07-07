@@ -65,7 +65,8 @@ int main( int argc, char* argv[] )
   LabelPointsContainer::Pointer lCont = LabelPointsContainer::New();
 
   /* We learn the y>x | y<x boundary*/
-  srand((unsigned)time(0));
+//  srand((unsigned)time(0));
+  srand(0);
   int lowest = 0;
   int range = 1000;
   
