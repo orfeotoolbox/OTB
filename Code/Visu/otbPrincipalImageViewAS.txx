@@ -27,7 +27,6 @@
 //#include "itkPointSetToListAdaptor.h"
 #include "otbSVMClassifier.h"
 //#include "itkVectorToRGBImageAdaptor.h"
-#include "otbMacro.h"
 
 namespace otb
 {
@@ -75,7 +74,7 @@ PrincipalImageViewAS<TPixel, TPixelOverlay>::handle(int event)
 		  else 
 				cMem = true;
 		  
-		  otbMsgDevMacro( << "Coord : " << x << " " << y);
+		  //std::cout << "Coord : " << x << " " << y << std::endl;
 		  
 		  // Clicked points display
 		  this->ViewClickedPoints(true);
@@ -87,19 +86,19 @@ PrincipalImageViewAS<TPixel, TPixelOverlay>::handle(int event)
 		  	if (Fl::event_button()==FL_LEFT_MOUSE)
 		  	{
 		  		colorTmp = COLOR_BLUE;
-				otbMsgDevMacro( << "Click gauche !!");
+				//std::cout << "Click gauche !!" << std::endl;
 		  	}	
 		  	else if (Fl::event_button()==FL_RIGHT_MOUSE)
 		  	{
 		  		colorTmp = COLOR_RED;
-		  		otbMsgDevMacro( << "Click droit !!" );			
+		  		//std::cout << "Click droit !!" << std::endl;			
 		  	}
 		  	this->clickSelect(x,y,z,colorTmp);
 			// Synchronize two displays in HMI
 		  	this->GetViewer()->SynchronizeClickedPoints(x,y,z,colorTmp);
 					    		  
 	        /*for (it=this->cClickedPoints.begin();it!=this->cClickedPoints.end();it++)
-		  	otbMsgDevMacro( << "Point : " << (*it).x << " " << (*it).y ) ;
+		  	std::cout << "Point : " << (*it).x << " " << (*it).y << std::endl ;
 		  	this->cClickedPoints.pop_back();*/
 		  	this->coord[0] = x;
 		  	this->coord[1] = y;
@@ -165,12 +164,12 @@ PrincipalImageViewAS<TPixel, TPixelOverlay>::handle(int event)
 				}
 			
 				this->clickSelectBox(xTmp,yTmp,z,cRectColor,
-							static_cast<int>(fabs(this->coord[2]-this->coord[0])),
-							static_cast<int>(fabs(this->coord[1]-this->coord[3])));
+							static_cast<int>(fabs(static_cast<float>(this->coord[2]-this->coord[0]))),
+							static_cast<int>(fabs(static_cast<float>(this->coord[1]-this->coord[3]))));
 				// Synchronize two displays in HMI
 				this->GetViewer()->SynchronizeClickedPointsBox(xTmp,yTmp,z,cRectColor,
-										static_cast<int>(fabs(this->coord[2]-this->coord[0])),
-										static_cast<int>(fabs(this->coord[1]-this->coord[3])));	
+										static_cast<int>(fabs(static_cast<float>(this->coord[2]-this->coord[0]))),
+										static_cast<int>(fabs(static_cast<float>(this->coord[1]-this->coord[3]))));	
 			}							
 		}
 		return 0;
@@ -362,7 +361,7 @@ PrincipalImageViewAS<TPixel, TPixelOverlay>::LearnStep()
 	 }
   }
   
-  otbMsgDevMacro( << "Nb de points : " << pointId) ;
+  std::cout << "Nb de points : " << pointId << std::endl ;
   
   mPSet->SetPoints( mCont );
   lPSet->SetPoints( lCont );
@@ -373,7 +372,7 @@ PrincipalImageViewAS<TPixel, TPixelOverlay>::LearnStep()
 
   cEstimator->Update();
 
-  otbMsgDevMacro( << "Saving model");
+  std::cout << "Saving model" << std::endl;
 }
 
 
@@ -401,7 +400,7 @@ PrincipalImageViewAS<TPixel, TPixelOverlay>::ClassificationStep()
 	
 	sample->SetImage(v2im);
 
-    otbMsgDevMacro( << "Sample set to Adaptor" );  
+    std::cout << "Sample set to Adaptor" << std::endl;  
 
 
     // preparing classifier and decision rule object 
@@ -411,7 +410,7 @@ PrincipalImageViewAS<TPixel, TPixelOverlay>::ClassificationStep()
 
     int numberOfClasses = model->GetNumberOfClasses();
 
-    otbMsgDevMacro( << "Classification for " << numberOfClasses << " classes " );
+    std::cout << "Classification for " << numberOfClasses << " classes " << std::endl;
     
     typedef otb::SVMClassifier< SampleType, LabelPixelType > ClassifierType ;
 
@@ -423,13 +422,13 @@ PrincipalImageViewAS<TPixel, TPixelOverlay>::ClassificationStep()
     classifier->Update() ;
 
     // Build the class map 
-    otbMsgDevMacro( << "Output image creation");  
+    std::cout << "Output image creation" << std::endl;  
 
     
-    otbMsgDevMacro( << "classifier get output" );  
+    std::cout << "classifier get output" << std::endl;  
     ClassifierType::OutputType* membershipSample =
       classifier->GetOutput() ;
-    otbMsgDevMacro( << "Sample iterators" );  
+    std::cout << "Sample iterators" << std::endl;  
     ClassifierType::OutputType::ConstIterator m_iter =
       membershipSample->Begin() ;
     ClassifierType::OutputType::ConstIterator m_last =
@@ -457,14 +456,14 @@ PrincipalImageViewAS<TPixel, TPixelOverlay>::ClassificationStep()
       if(label != expectedLabel )
 	error++;
 
-      otbMsgDevMacro( << int(label) << "/" << int(expectedLabel) << " --- " << dist );
+      std::cout << int(label) << "/" << int(expectedLabel) << " --- " << dist << std::endl;
       
       
       ++pointId;
       ++m_iter ;
       }
     
-    otbMsgDevMacro( << "Error = " << error/pointId );*/
+    std::cout << "Error = " << error/pointId << std::endl;*/
     
 
 	
