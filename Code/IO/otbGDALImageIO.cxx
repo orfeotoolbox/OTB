@@ -24,6 +24,7 @@
 
 #include <gdal.h>
 #include <gdal_priv.h>
+//#include <iostream.h>
 #include <string.h>
 #include <list>
 #include <vector>
@@ -36,6 +37,16 @@
 #include "itkJPEGImageIO.h"
 
 #include "itkMetaDataObject.h"
+
+/*#include <sys/types.h>
+#include <dirent.h>
+*/
+
+// ROMAIN : Modification for VC++
+/*#ifdef _MSC_VER 
+#define	strcasecmp stricmp // _MICROSOFT_ VC++
+#endif
+*/
 
 #include "otbSystem.h"
 
@@ -83,15 +94,20 @@ GDALImageIO::~GDALImageIO()
 
 bool GDALImageIO::GetGdalReadImageFileName( const char * filename, std::string & GdalFileName )
 {
+//        DIR *ptr_repertoire;
+//        struct dirent *cr_readdir;
+//        std::string str_debut("DAT");
         std::vector<std::string> listFileSearch;
-        std::vector<std::string> listFileFind;
         listFileSearch.push_back("DAT_01.001");// RADARSAT ou SAR_ERS2
         listFileSearch.push_back("IMAGERY.TIF");//Pour format SPOT5TIF
         listFileSearch.push_back("IMAG_01.DAT");//Pour format SPOT4
         std::string str_FileName;
+//        char str_comp[20];
         bool fic_trouve(false);
 
         // Si c'est un répertoire, on regarde le contenu pour voir si c'est pas du RADARSAT, ERS
+
+        std::vector<std::string> listFileFind;
         listFileFind = System::Readdir(std::string (filename));
         if( listFileFind.empty() == false )
         {
@@ -109,6 +125,33 @@ bool GDALImageIO::GetGdalReadImageFileName( const char * filename, std::string &
                         }
                         cpt++;
                 }
+
+/*        ptr_repertoire = opendir(filename);
+        if (ptr_repertoire != NULL)
+        {
+		while ((cr_readdir=readdir(ptr_repertoire))!=NULL && (fic_trouve==false) )
+                {
+			str_FileName = std::string(cr_readdir->d_name);
+                        for(int i = 0 ; i < listFileSearch.size() ; i++)
+                        {
+         			if(str_FileName.compare(listFileSearch[i]) == 0)
+	        		{
+                                         GdalFileName = std::string(filename)+listFileSearch[i];
+                                         fic_trouve=true;
+        			}
+                        }
+		
+                        //strncpy(str_comp,cr_readdir->d_name,str_debut.size());
+                        //strncpy(str_comp,cr_readdir->d_name,str_debut.size());
+			//otbMsgDebugMacro(<<"str_comp : "<<str_comp);
+			//str_comp[str_debut.size()]='\0';  
+                        //if (strcasecmp(str_comp,str_debut.c_str())==0)
+                        //{
+                        //         GdalFileName = std::string(filename)+std::string(cr_readdir->d_name);
+                        //         fic_trouve=true;
+                        //}
+                }
+*/
 	}
         else 
         {
@@ -130,6 +173,7 @@ bool GDALImageIO::GetGdalReadImageFileName( const char * filename, std::string &
         }
 	otbMsgDevMacro(<<"lFileNameGdal : "<<GdalFileName.c_str());
 	otbMsgDevMacro(<<"fic_trouve : "<<fic_trouve);
+//	closedir(ptr_repertoire);
 	return( fic_trouve );
 }
 
@@ -148,6 +192,7 @@ bool GDALImageIO::CanReadFile(const char* file)
 
         //Traitement particulier sur certain format où l'on préfère utiliser 
         // Format PNG -> lecture avec ITK (pas GDAL)
+//THOMAS
   	itk::PNGImageIO::Pointer lPNGImageIO = itk::PNGImageIO::New();
         lCanRead = lPNGImageIO->CanReadFile(file);
         if ( lCanRead == true)
@@ -175,7 +220,8 @@ bool GDALImageIO::CanReadFile(const char* file)
         // Init GDAL parameters 
         GDALAllRegister();
 
-        // Open file with GDAL 
+  // Open file with GDAL 
+  
         m_poDataset = (GDALDataset *)GDALOpen(lFileNameGdal.c_str(), GA_ReadOnly );
         if(m_poDataset==NULL)
         {

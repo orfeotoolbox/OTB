@@ -250,10 +250,10 @@ void PixelSuppressionByDirectionImageFilter< TInputImage, TOutputImage>::Threade
 
         
         // No calculation on the central pixel  
-        if (( x == 0 ) and ( y == 0 )) 
+        if (( x == 0 ) && ( y == 0 )) 
            continue;
 
-	Thetaxtyt = atan2(y,x); //result is [-PI,PI]
+	Thetaxtyt = atan2( static_cast<double>(y), static_cast<double>(x) ); //result is [-PI,PI]
 	while(Thetaxtyt < 0)
 	  Thetaxtyt = M_PI + Thetaxtyt; // Theta is now [0,PI] as is
 					// the result of detectors

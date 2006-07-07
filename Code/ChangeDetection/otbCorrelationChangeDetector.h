@@ -79,8 +79,8 @@ public:
     for(unsigned long pos = 0; pos< itA.Size(); ++pos)
       {
 
-      varA += pow(static_cast<TOutput>(itA.GetPixel(pos))-meanA,2.0);
-      varB += pow(static_cast<TOutput>(itB.GetPixel(pos))-meanB,2.0);
+		  varA += static_cast<TOutput>( pow( static_cast<float>(itA.GetPixel(pos))-static_cast<float>(meanA),static_cast<float>(2.0)));
+		  varB += static_cast<TOutput>( pow( static_cast<float>(itB.GetPixel(pos))-static_cast<float>(meanB),static_cast<float>(2.0)));
 
       }
 
