@@ -50,7 +50,7 @@ ADD_TEST(leTuSVMImageModelEstimatorNew ${LEARNING_TESTS}
 ADD_TEST(leTuSVMImageModelEstimatorTrain ${LEARNING_TESTS}  
         otbSVMImageModelEstimatorTrain
 	${INPUTDATA}/ROI_QB_MUL_4.tif
-	${INPUTDATA}/ROI_QB_MUL_4_train.hdr
+	${INPUTDATA}/ROI_QB_MUL_4_train.c1.hdr
 	${TEMP}/svm_model_image)
 
 # -------            otb::SVMPointSetModelEstimator   --------------------		
