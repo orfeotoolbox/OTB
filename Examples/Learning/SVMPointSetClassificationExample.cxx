@@ -127,7 +127,7 @@ int main( int argc, char* argv[] )
 // Software Guide : EndLatex
 
   
-  srand((unsigned)time(0));
+  srand(0);
 
 // Software Guide : BeginCodeSnippet        
   int lowest = 0;

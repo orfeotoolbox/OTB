@@ -114,7 +114,7 @@ int main( int argc, char* argv[] )
 // Software Guide : EndLatex
 
   /* We learn the y>x | y<x boundary*/
-  srand((unsigned)time(0));
+  srand(0);
 
 // Software Guide : BeginCodeSnippet    
   int lowest = 0;
