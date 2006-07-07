@@ -60,6 +60,7 @@ class ITK_EXPORT SVMModelEstimator : public itk::LightProcessObject
 public:
   /** Standard class typedefs. */
   typedef SVMModelEstimator   Self;
+  typedef itk::LightProcessObject   Superclass;
 
   typedef itk::SmartPointer<Self>  Pointer;
   typedef itk::SmartPointer<const Self>  ConstPointer;

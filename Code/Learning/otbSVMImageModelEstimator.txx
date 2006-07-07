@@ -27,16 +27,41 @@
 
 namespace otb
 {
-template<class TInputImage, 
-         class TTrainingImage>
+//Sous Visual, il n'aime pas l'appel à constructeur .. bizarre !!!
+#if defined(WIN32) || defined(WIN32CE)
+template<class TInputImage, class TTrainingImage>
 SVMImageModelEstimator<TInputImage, TTrainingImage>
-::SVMImageModelEstimator(void):  SVMModelEstimator<typename TInputImage::PixelType::ComponentType,
-    typename TTrainingImage::PixelType>::SVMModelEstimator()
+::SVMImageModelEstimator()
+{
+	this->m_NumberOfClasses = 0;
+        this->m_Model = Superclass::SVMModelType::New();
+
+        this->m_Done = 0;
+
+  	this->param.svm_type = C_SVC;
+	this->param.kernel_type = LINEAR;
+	this->param.degree = 3;
+	this->param.gamma = 0;	// 1/k
+	this->param.coef0 = 0;
+	this->param.nu = 0.5;
+	this->param.cache_size = 40;
+	this->param.C = 1;
+	this->param.eps = 1e-3;
+	this->param.p = 0.1;
+	this->param.shrinking = 1;
+	this->param.probability = 1;
+	this->param.nr_weight = 0;
+	this->param.weight_label = NULL;
+	this->param.weight = NULL;
+}
+#else
+template<class TInputImage, class TTrainingImage>
+SVMImageModelEstimator<TInputImage, TTrainingImage>
+::SVMImageModelEstimator():  SVMModelEstimator<ITK_TYPENAME TInputImage::PixelType::ComponentType, ITK_TYPENAME TTrainingImage::PixelType >::SVMModelEstimator()
 
 {
-
-
 }
+#endif
 
 
 template<class TInputImage, 
