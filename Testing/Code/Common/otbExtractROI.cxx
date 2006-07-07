@@ -24,7 +24,7 @@
 
 #include "otbExtractROI.h"
 
-int otbExtractROI( int argc, char ** argv )
+int otbExtractROI( int argc, char * argv[] )
 {
   try 
     { 

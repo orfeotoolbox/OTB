@@ -30,7 +30,7 @@
 #include "otbImageFileWriter.h"
 
 
-int otbDrawPathDessinCarre( int argc, char ** argv )
+int otbDrawPathDessinCarre( int argc, char * argv[] )
 {
   try 
     { 

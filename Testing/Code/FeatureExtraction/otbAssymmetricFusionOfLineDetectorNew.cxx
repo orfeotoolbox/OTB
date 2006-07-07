@@ -33,7 +33,7 @@
 
 #include "otbAssymmetricFusionOfLineDetectorImageFilter.h"
 
-int otbAssymmetricFusionOfLineDetectorNew( int argc, char ** argv )
+int otbAssymmetricFusionOfLineDetectorNew( int argc, char * argv[] )
 {
   try 
     { 

@@ -26,7 +26,7 @@
 #include "otbImageFileReader.h"
 #include "otbHuImageFunction.h"
 
-int otbHuImage( int argc, char ** argv )
+int otbHuImage( int argc, char * argv[] )
 {
   try 
     { 

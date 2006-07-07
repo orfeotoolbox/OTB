@@ -27,7 +27,7 @@
 #include "otbThresholdImageToPointSetFilter.h"
 #include "itkPointSet.h"
 
-int otbThresholdImageToPointSetTest( int argc, char ** argv )
+int otbThresholdImageToPointSetTest( int argc, char * argv[] )
 {
   try 
     { 

@@ -25,7 +25,7 @@
 #include "itkExceptionObject.h"
 #include "itkPolyLineParametricPath.h"
 
-int otbComplexMomentPath( int argc, char ** argv )
+int otbComplexMomentPath( int argc, char * argv[] )
 {
   try 
     { 

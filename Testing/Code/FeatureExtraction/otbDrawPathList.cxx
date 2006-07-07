@@ -32,7 +32,7 @@
 #include "otbImageFileWriter.h"
 
 
-int otbDrawPathListTracerLignes( int argc, char ** argv )
+int otbDrawPathListTracerLignes( int argc, char * argv[] )
 {
   try 
     { 
@@ -194,7 +194,7 @@ int otbDrawPathListTracerLignes( int argc, char ** argv )
 }
 
 
-int otbDrawPathList( int argc, char ** argv )
+int otbDrawPathList( int argc, char * argv[] )
 {
   try 
     { 

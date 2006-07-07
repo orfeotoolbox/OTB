@@ -25,7 +25,7 @@
 #include "itkExceptionObject.h"
 
 
-int otbPointSetSourceTest(int, char* [] ) 
+int otbPointSetSourceTest(int argc, char* argv[] ) 
 {
   // Declare the PointSet pixel type.
   // Those are the values associated 

@@ -26,7 +26,7 @@
 #include "otbImageFileReader.h"
 #include "otbFlusserImageFunction.h"
 
-int otbFlusserImage( int argc, char ** argv )
+int otbFlusserImage( int argc, char * argv[] )
 {
   try 
     { 

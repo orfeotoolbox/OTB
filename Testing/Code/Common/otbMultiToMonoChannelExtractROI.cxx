@@ -23,7 +23,7 @@
 #include "otbMultiToMonoChannelExtractROI.h"
 
 template < typename  InputPixelType, typename OutputPixelType  >
-int generic_otbMultiToMonoChannelExtractROI ( int argc, char ** argv, const char * inputFilename,const char * outputFilename)
+int generic_otbMultiToMonoChannelExtractROI ( int argc, char * argv[], const char * inputFilename,const char * outputFilename)
 {
   try 
     { 
@@ -84,7 +84,7 @@ int generic_otbMultiToMonoChannelExtractROI ( int argc, char ** argv, const char
   return EXIT_SUCCESS;
 }
 
-int otbMultiToMonoChannelExtractROI ( int argc, char ** argv )
+int otbMultiToMonoChannelExtractROI ( int argc, char * argv[] )
 {
         std::string linputPixelType;
         std::string loutputPixelType;

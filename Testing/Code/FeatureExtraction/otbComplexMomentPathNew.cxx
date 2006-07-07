@@ -24,7 +24,7 @@
 #include "otbComplexMomentPathFunction.h"
 #include "itkPolyLineParametricPath.h"
 
-int otbComplexMomentPathNew( int argc, char ** argv )
+int otbComplexMomentPathNew( int argc, char * argv[] )
 {
   try 
     { 

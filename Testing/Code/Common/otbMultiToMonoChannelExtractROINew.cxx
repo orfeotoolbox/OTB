@@ -19,7 +19,7 @@
 #include "itkExceptionObject.h"
 #include "otbMultiToMonoChannelExtractROI.h"
 
-int otbMultiToMonoChannelExtractROINew ( int argc, char ** argv )
+int otbMultiToMonoChannelExtractROINew ( int argc, char * argv[] )
 {
   try 
     { 

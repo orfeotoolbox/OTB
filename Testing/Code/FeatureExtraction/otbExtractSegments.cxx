@@ -29,7 +29,7 @@
 #include "otbImageFileWriter.h"
 #include "otbExtractSegmentsImageFilter.h"
 
-int otbExtractSegments( int argc, char ** argv )
+int otbExtractSegments( int argc, char * argv[] )
 {
   try 
     { 

@@ -24,7 +24,7 @@
 #include "itkExceptionObject.h"
 #include <iostream>
 
-int otbImageIOFactoryTest(int , char* [])
+int otbImageIOFactoryTest(int argc, char* argv [])
 {
   try
   {

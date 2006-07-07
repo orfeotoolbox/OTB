@@ -23,7 +23,7 @@
 #include "otbImageFileWriter.h"
 #include "otbExtractROI.h"
 
-int otbMultiToMonoChannelExtractROISAR ( int argc, char ** argv )
+int otbMultiToMonoChannelExtractROISAR ( int argc, char * argv[] )
 {
   try 
     { 

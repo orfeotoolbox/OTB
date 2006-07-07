@@ -29,7 +29,7 @@
 #include "itkMeanImageFilter.h"
 
 
-int otbFrostFilterTest( int argc, char ** argv )
+int otbFrostFilterTest( int argc, char * argv[] )
 {
 
   typedef itk::Image<float,2> FloatImage2DType;

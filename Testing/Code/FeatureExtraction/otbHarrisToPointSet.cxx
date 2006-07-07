@@ -27,7 +27,7 @@
 #include "itkImageFileWriter.h"
 #include "otbHarrisImageToPointSetFilter.h"
 
-int otbHarrisImageToPointSet( int argc, char ** argv )
+int otbHarrisImageToPointSet( int argc, char * argv[] )
 {
   try 
     { 

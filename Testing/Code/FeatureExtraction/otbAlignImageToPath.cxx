@@ -39,7 +39,7 @@
 
 #include <stdio.h>
 
-int otbAlignImageToPath( int argc, char ** argv )
+int otbAlignImageToPath( int argc, char * argv[] )
 {
   try 
     { 

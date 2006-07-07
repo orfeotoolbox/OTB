@@ -24,7 +24,7 @@
 #include "itkImage.h"
 #include "itkPointSet.h"
 
-int otbImageToPointSetFilterTest(int , char *[] )
+int otbImageToPointSetFilterTest(int argc, char *argv[] )
 {
 
 

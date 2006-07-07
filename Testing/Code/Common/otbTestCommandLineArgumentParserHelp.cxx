@@ -22,7 +22,7 @@
 #include "otbCommandLineArgumentParser.h"
 
 // Test de sortie en erreur
-int otbTestCommandLineArgumentParserHelp( int argc, char ** argv )
+int otbTestCommandLineArgumentParserHelp( int argc, char * argv[] )
 {
   try 
     { 

@@ -21,7 +21,7 @@
 #include "itkExceptionObject.h"
 #include "otbCommandLineArgumentParser.h"
 
-int otbTestCommandLineArgumentParserWithError( int argc, char ** argv )
+int otbTestCommandLineArgumentParserWithError( int argc, char * argv[] )
 {
   try 
     { 

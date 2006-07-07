@@ -21,7 +21,7 @@
 #include "otbLineSpatialObjectList.h"
 #include <list>
 
-int otbLineSpatialObjectList( int argc, char ** argv )
+int otbLineSpatialObjectList( int argc, char * argv[] )
 {
   try 
     { 

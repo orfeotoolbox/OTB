@@ -26,7 +26,7 @@
 #include "itkRGBPixel.h"
 
 
-int otbExtractROI_RGB( int argc, char ** argv )
+int otbExtractROI_RGB( int argc, char * argv[] )
 {
   try 
     { 

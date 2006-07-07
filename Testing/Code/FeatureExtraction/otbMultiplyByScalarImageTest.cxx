@@ -25,7 +25,7 @@
 #include "itkImageRegionIteratorWithIndex.h"
 #include "otbMultiplyByScalarImageFilter.h"
 
-int otbMultiplyByScalarImageFilterTest( int argc, char ** argv )
+int otbMultiplyByScalarImageFilterTest( int argc, char * argv[] )
 {
   try 
     { 

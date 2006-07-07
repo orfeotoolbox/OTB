@@ -27,7 +27,7 @@
 #include "otbZoomImageView.h"
 #include "otbScrollImageView.h"
 
-int otbImageView( int argc, char ** argv )
+int otbImageView( int argc, char * argv[] )
 {
   try 
     { 

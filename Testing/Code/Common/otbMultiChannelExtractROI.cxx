@@ -28,7 +28,7 @@
 
 
 template < typename  InputPixelType /*= unsigned char */, typename OutputPixelType /*= unsigned char*/ >
-int generic_otbMultiChannelExtractROI( int argc, char ** argv, const char * inputFilename,const char * outputFilename)
+int generic_otbMultiChannelExtractROI( int argc, char * argv[], const char * inputFilename,const char * outputFilename)
 {
   try 
     { 
@@ -129,7 +129,7 @@ int generic_otbMultiChannelExtractROI( int argc, char ** argv, const char * inpu
 }
 
 
-int otbMultiChannelExtractROI ( int argc, char ** argv )
+int otbMultiChannelExtractROI ( int argc, char * argv[] )
 {
         std::string linputPixelType;
         std::string loutputPixelType;

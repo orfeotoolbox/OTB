@@ -24,7 +24,7 @@
 #include "otbHuPathFunction.h"
 #include "itkPolyLineParametricPath.h"
 
-int otbHuPathNew( int argc, char ** argv )
+int otbHuPathNew( int argc, char * argv[] )
 {
   try 
     { 

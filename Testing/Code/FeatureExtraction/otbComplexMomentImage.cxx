@@ -26,7 +26,7 @@
 #include "otbImageFileReader.h"
 #include "otbComplexMomentImageFunction.h"
 
-int otbComplexMomentImage( int argc, char ** argv )
+int otbComplexMomentImage( int argc, char * argv[] )
 {
   try 
     { 

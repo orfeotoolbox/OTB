@@ -27,7 +27,7 @@
 #include "itkImageFileWriter.h"
 #include "otbHarrisImageFilter.h"
 
-int otbHarrisImage( int argc, char ** argv )
+int otbHarrisImage( int argc, char * argv[] )
 {
   try 
     { 

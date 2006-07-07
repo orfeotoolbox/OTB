@@ -25,7 +25,7 @@
 #include "itkPolyLineParametricPath.h"
 #include "itkExceptionObject.h"
 
-int otbHuPath( int argc, char ** argv )
+int otbHuPath( int argc, char * argv[] )
 {
   try 
     { 

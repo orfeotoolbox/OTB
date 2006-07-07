@@ -22,7 +22,7 @@
 
 #include "otbImageViewer.h"
 
-int otbImageViewerNew( int argc, char ** argv )
+int otbImageViewerNew( int argc, char * argv[] )
 {
   try 
     { 

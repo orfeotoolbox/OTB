@@ -28,7 +28,7 @@
 #include "otbDrawLineSpatialObjectListFilter.h"
 
 
-int otbFillGapsFilter( int argc, char ** argv )
+int otbFillGapsFilter( int argc, char * argv[] )
 {
   try 
     { 

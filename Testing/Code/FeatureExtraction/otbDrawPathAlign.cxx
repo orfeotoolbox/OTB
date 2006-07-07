@@ -32,7 +32,7 @@
 #include "otbImageFileWriter.h"
 
 
-int otbDrawPathAlign( int argc, char ** argv )
+int otbDrawPathAlign( int argc, char * argv[] )
 {
   try 
     { 

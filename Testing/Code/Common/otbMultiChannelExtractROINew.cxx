@@ -20,7 +20,7 @@
 #include "otbMultiChannelExtractROI.h"
 
 
-int otbMultiChannelExtractROINew ( int argc, char ** argv )
+int otbMultiChannelExtractROINew ( int argc, char * argv[] )
 {
   try 
     { 

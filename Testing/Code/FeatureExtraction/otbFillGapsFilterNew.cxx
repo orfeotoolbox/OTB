@@ -23,7 +23,7 @@
 #include "itkExceptionObject.h"
 #include "otbFillGapsFilter.h"
 
-int otbFillGapsFilterNew( int argc, char ** argv )
+int otbFillGapsFilterNew( int argc, char * argv[] )
 {
   try 
     { 

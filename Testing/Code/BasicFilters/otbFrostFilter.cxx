@@ -29,7 +29,7 @@
 #include "itkMeanImageFilter.h"
 
 
-int otbFrostFilter( int argc, char ** argv )
+int otbFrostFilter( int argc, char * argv[] )
 {
   try 
     { 

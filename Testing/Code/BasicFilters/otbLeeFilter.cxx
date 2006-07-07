@@ -28,7 +28,7 @@
 #include "otbLeeImageFilter.h"
 
 
-int otbLeeFilter( int argc, char ** argv )
+int otbLeeFilter( int argc, char * argv[] )
 {
   try 
     { 
