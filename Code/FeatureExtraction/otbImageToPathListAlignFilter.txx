@@ -27,7 +27,9 @@
 #include "itkImageLinearConstIteratorWithIndex.h"
 #include "itkImageLinearIteratorWithIndex.h"
 
-
+#if defined(WIN32) || defined(WIN32CE)
+#define M_PI 3.141592654
+#endif 
 
 
 namespace otb
@@ -188,7 +190,8 @@ ImageToPathListAlignFilter<TInputImage,TOutputPath>
 {
   std::vector<double> out;
   int adr1,adr2,x,y;
-  double lambda,q;
+//  double lambda;
+  double q;
 
   q = 1.0-p;
   out.resize((n+1)*(n+1));
@@ -312,8 +315,8 @@ void
 ImageToPathListAlignFilter<TInputImage,TOutputPath>
 ::GenerateData(void)
 { 
-  SizeType size;
-  double origin[InputImageDimension];
+//  SizeType size;
+//  double origin[InputImageDimension];
   typename InputImageType::SizeType Taille;
   RealImageTypeIndexType indexAngle;
 //  Flist result;
@@ -326,7 +329,8 @@ ImageToPathListAlignFilter<TInputImage,TOutputPath>
   std::vector<one_segment> seg;
   int mx,my,ox,oy,nx,ny,n;
   int xx,yy,pos,posmax,nblocs,inbloc,max_nblocs;
-  int cur,i,j,side,tmp,l,lphase;
+  int cur,i,j,side,l,lphase;
+  // int tmp;
   int itheta,ntheta;
   float theta,theta0,dtheta,dx,dy,prec;
   float error =0.0; 
@@ -345,7 +349,7 @@ ImageToPathListAlignFilter<TInputImage,TOutputPath>
   ny = Taille[1];
   max_nfa = pow(10.0,-(m_Eps));
     
-  typename InputImageType::IndexType adr;
+//  typename InputImageType::IndexType adr;
 
   /*** maximal length for a line */
   n = (int)ceil(hypot((double)nx,(double)ny))+1;
