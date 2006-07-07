@@ -79,7 +79,7 @@ void LineDetectorImageFilterBase<TInputImage, TOutputImage, InterpolatorType>::G
   otbMsgDevMacro( << m_Radius[0] << " " << m_Radius[1] );
   
   // Define the size of the facelist by taking into account the rotation of the region
-  m_FaceList[0] = static_cast<unsigned int>( sqrt( (m_Radius[0]*m_Radius[0]) + (m_Radius[1]*m_Radius[1]) ) + 1 );
+  m_FaceList[0] = static_cast<unsigned int>( sqrt( static_cast<double>((m_Radius[0]*m_Radius[0]) + (m_Radius[1]*m_Radius[1]) ) + 1) );
   m_FaceList[1] = m_FaceList[0];
   
   // pad the input requested region by the operator radius
