@@ -21,6 +21,8 @@
 #include <string>
 #include <vector>
 
+#include "itkWin32Header.h"
+
 namespace otb
 {
 
@@ -31,7 +33,7 @@ namespace otb
  * System operations, filename manipulations, etc.
  *
  */
-class /*ITK_EXPORT*/ System 
+class ITK_EXPORT System 
 {
 public:
 
