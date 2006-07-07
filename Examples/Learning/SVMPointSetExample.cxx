@@ -216,7 +216,7 @@ int main( int argc, char* argv[] )
 
       ClassifierType::ClassLabelType expectedLabel;
       if(measure[0] < measure[1])
-	expectedLabel= -1;
+	expectedLabel= 0;
       else
 	expectedLabel = 1;
 
