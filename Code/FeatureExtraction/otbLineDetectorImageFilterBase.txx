@@ -81,7 +81,7 @@ void LineDetectorImageFilterBase<TInputImage, TOutputImage, InterpolatorType>::G
   otbMsgDevMacro( << m_Radius[0] << " " << m_Radius[1] );
   
   // Define the size of the facelist by taking into account the rotation of the region
-  m_FaceList[0] = static_cast<unsigned int>( sqrt( static_cast<double>((m_Radius[0]*m_Radius[0]) + (m_Radius[1]*m_Radius[1]) ) + 1) );
+  m_FaceList[0] = static_cast<unsigned int>( sqrt( static_cast<double>((m_Radius[0]*m_Radius[0]) + (m_Radius[1]*m_Radius[1]) ) ) + 1 );
   m_FaceList[1] = m_FaceList[0];
   
   // pad the input requested region by the operator radius
@@ -277,9 +277,6 @@ void LineDetectorImageFilterBase< TInputImage, TOutputImage, InterpolatorType>
 			PixelValues[i] = new std::vector<double>[NB_ZONE];
 
       // Loop on the region 
-      //for (i = 0; i < neighborhoodSize; ++i)
-//      for (int i = 0; i < m_Radius[0]; ++i)
-//	for (int j = 0; j < m_Radius[1]; ++j)
       for (int i = 0; i < m_Radius[0]; i++)
 	for (int j = 0; j < m_Radius[1]; j++)
         {
@@ -316,10 +313,7 @@ void LineDetectorImageFilterBase< TInputImage, TOutputImage, InterpolatorType>
             
 	  Index[0] = static_cast<CoordRepType>(xout + Xc);
 	  Index[1] = static_cast<CoordRepType>(yout + Yc);
-//THOMAS
-//	  PixelValues[dir][zone].push_back(static_cast<double>(interpolator->EvaluateAtContinuousIndex( Index )));
-          double result = static_cast<double>(interpolator->EvaluateAtContinuousIndex( Index ));
-	  PixelValues[dir][zone].push_back(result );
+	  PixelValues[dir][zone].push_back(static_cast<double>(interpolator->EvaluateAtContinuousIndex( Index )));
           
           }      
 

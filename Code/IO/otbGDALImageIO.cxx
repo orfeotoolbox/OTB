@@ -1030,6 +1030,7 @@ void GDALImageIO::InternalWriteImageInformation()
 
 otbMsgDebugMacro( <<"Driver to write: GDAL - "<<extGDAL);
 otbMsgDebugMacro( <<"         Write file         : "<< m_FileName);
+otbMsgDebugMacro( <<"         GDAL file name     : "<< realFileName);
 otbMsgDebugMacro( <<"         Size               : "<<m_Dimensions[0]<<","<<m_Dimensions[1]);
 otbMsgDebugMacro( <<"         ComponentType      : "<<this->GetComponentType() );
 otbMsgDebugMacro( <<"         NumberOfComponents : "<<this->GetNumberOfComponents());

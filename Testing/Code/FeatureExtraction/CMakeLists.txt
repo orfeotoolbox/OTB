@@ -147,10 +147,12 @@ ADD_TEST(feTuLineRatioLinearDir ${FEATUREEXTRACTION_TESTS}
 	${TEMP}/feFiltreLineRatioLinear_amst_dir_2_3.hdr
 	2 3)
 	
-ADD_TEST(feTuLineRatioLinearAmsters1 ${FEATUREEXTRACTION_TESTS}  
+ADD_TEST(feTvLineRatioLinearAmsters1 ${FEATUREEXTRACTION_TESTS}  
+  --compare-image ${TOL}  ${BASELINE}/feFiltreLineRatioLinear_amst_ers1_ima_extrait.hdr
+                          ${TEMP}/feFiltreLineRatioLinear_amst_ers1_ima_extrait.hdr
         otbLineRatioDetectorLinear
-	${INPUTDATA}/amst_ers1.ima
-	${TEMP}/feFiltreLineRatioLinear_amst_ers1_1_2.hdr
+	${INPUTDATA}/amst_ers1.ima.extrait.419_187_70_66.hdr
+	${TEMP}/feFiltreLineRatioLinear_amst_ers1_ima_extrait.hdr
 	1 2)
 				
 ADD_TEST(feTuLineRatio ${FEATUREEXTRACTION_TESTS}  
