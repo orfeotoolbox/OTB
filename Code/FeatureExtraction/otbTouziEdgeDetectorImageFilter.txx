@@ -209,8 +209,7 @@ void TouziEdgeDetectorImageFilter< TInputImage, TOutputImage>
   for (fit=faceList.begin(); fit != faceList.end(); ++fit)
     { 
    
-otbMsgDevMacro(<< cpt );    	
-    cpt += 1;
+   cpt += 1;
     
     bit = itk::ConstNeighborhoodIterator<InputImageType>(m_Radius, input, *fit);
     unsigned int neighborhoodSize = bit.Size();
