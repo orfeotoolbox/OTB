@@ -27,9 +27,9 @@
 #include "itkImageLinearConstIteratorWithIndex.h"
 #include "itkImageLinearIteratorWithIndex.h"
 
-#if defined(WIN32) || defined(WIN32CE)
-#define M_PI 3.141592654
-#endif 
+#ifndef M_PI
+#define M_PI 3.14159265358979323846
+#endif
 
 
 namespace otb

@@ -31,7 +31,9 @@
 #include <math.h>
 #include "otbMacro.h"
 
+#ifndef M_PI
 #define M_PI 3.14159265358979323846
+#endif
 
 namespace otb
 {
@@ -314,8 +316,10 @@ void LineDetectorImageFilterBase< TInputImage, TOutputImage, InterpolatorType>
             
 	  Index[0] = static_cast<CoordRepType>(xout + Xc);
 	  Index[1] = static_cast<CoordRepType>(yout + Yc);
-                        
-	  PixelValues[dir][zone].push_back(static_cast<double>(interpolator->EvaluateAtContinuousIndex( Index )));
+//THOMAS
+//	  PixelValues[dir][zone].push_back(static_cast<double>(interpolator->EvaluateAtContinuousIndex( Index )));
+          double result = static_cast<double>(interpolator->EvaluateAtContinuousIndex( Index ));
+	  PixelValues[dir][zone].push_back(result );
           
           }      
 
