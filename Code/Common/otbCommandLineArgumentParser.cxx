@@ -248,12 +248,12 @@ CommandLineArgumentParser
     }
 
   // Controle que toutes les options obligatoire sont présentes dans la ligne d'argument
-  for(i=0 ; i < m_OptionList.size() ; i++ )
+  for(unsigned int cpt=0 ; cpt < m_OptionList.size() ; cpt++ )
   {
-  	if ( (m_OptionList[i].Obligatory == true) && (m_OptionList[i].Finded == false) )
+  	if ( (m_OptionList[cpt].Obligatory == true) && (m_OptionList[cpt].Finded == false) )
   	{
       		// Too few parameters
-      		std::cerr << "'" << m_OptionList[i].CommonName << " option(s) is(are) obligatory(ies) !!!" << std::endl;
+      		std::cerr << "'" << m_OptionList[cpt].CommonName << " option(s) is(are) obligatory(ies) !!!" << std::endl;
       		return false;
 	}	
   }
