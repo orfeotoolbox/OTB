@@ -58,7 +58,8 @@ int generic_otbMultiToMonoChannelExtractROI ( int argc, char * argv[], const cha
         typename WriterType::Pointer writer = WriterType::New();
 
         reader->SetFileName( inputFilename  );
-        reader->Update(); //Necessaire pour connaitre le nombre de canaux dans l'image
+//THOMAS
+//        reader->Update(); //Necessaire pour connaitre le nombre de canaux dans l'image
         writer->SetFileName( outputFilename );
         extractROIFilter->SetInput( reader->GetOutput() );
         

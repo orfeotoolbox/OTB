@@ -71,22 +71,6 @@ ADD_TEST(ioTvMultiMonoChannelROI_ENVI2PNG ${COMMON_TESTS}
 # ------- TEST IO COMMON   ------------------------------
 
 
-
-# -------            otb::CAIImageIO   ------------------------------
-# CanRead()
-# ADD_TEST(ioTuCAIImageIOCanReadBSQ ${IO_TESTS} otbCAIImageIOTestCanRead
-#         ${INPUTDATA}/poupees.hd )
-
-# ADD_TEST(ioTuCAIImageIOCanReadSPOT4 ${IO_TESTS} otbCAIImageIOTestCanRead
-#         ${IMAGEDATA}/SPOT4_SCENE01 )
-
-# ADD_TEST(ioTuCAIImageIOCanReadSPOT5TIF ${IO_TESTS} otbCAIImageIOTestCanRead
-#         ${INPUTDATA}/poupeesTIF )
-
-# ADD_TEST(ioTuCAIImageIOCanReadSPOT5BIL ${IO_TESTS} otbCAIImageIOTestCanRead
-#         ${INPUTDATA}/poupeesBIL )
-
-
 # -------            otb::GDALImageIO   ------------------------------
 
 # READER
@@ -481,24 +465,25 @@ ADD_TEST(ioTvMultiChannelROI_IkonosNIR2PNG ${COMMON_TESTS}
          -channels 1)
 
 # ---  Quickbird PAN  ---
-ADD_TEST(ioTvMultiChannelROI_QuickbirdPAN2PNG ${COMMON_TESTS} 
-#   --compare-image ${TOL}   ${BASELINE}/ioExtractROI_QuickbirdPAN2PNG_100_100_77_300.png
-#                     ${TEMP}/ioExtractROI_QuickbirdPAN2PNG_100_100_77_300.png
+ADD_TEST(ioTvMultiChannelROI_QuickbirdPAN2TIFF ${COMMON_TESTS} 
+   --compare-image ${TOL}   ${BASELINE}/ioExtractROI_QuickbirdPAN2TIFF_1000_1000_100_150.tif
+                     ${TEMP}/ioExtractROI_QuickbirdPAN2TIFF_1000_1000_100_150.tif
          otbMultiChannelExtractROI
-         ${IMAGEDATA}/TOULOUSE/QuickBird/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF
-         ${TEMP}/ioExtractROI_QuickbirdXS2PNG_100_100_77_300.png
-         -startX 100 -startY 100 -sizeX 77 -sizeY 300
-         -channels 1 2 3)
+         -ushort ${IMAGEDATA}/TOULOUSE/QuickBird/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF
+         -ushort ${TEMP}/ioExtractROI_QuickbirdPAN2TIFF_1000_1000_100_150.tif
+         -startX 1000 -startY 1000 -sizeX 100 -sizeY 150
+         )
 
 # ---  Quickbird XS  ---
-ADD_TEST(ioTvMultiChannelROI_QuickbirdXS2PNG ${COMMON_TESTS} 
-#   --compare-image ${TOL}   ${BASELINE}/ioExtractROI_QuickbirdXS2PNG_100_100_77_300.png
-#                     ${TEMP}/ioExtractROI_QuickbirdXS2PNG_100_100_77_300.png
+ADD_TEST(ioTvMultiChannelROI_QuickbirdXS2TIFF ${COMMON_TESTS} 
+   --compare-image ${TOL}   ${BASELINE}/ioExtractROI_QuickbirdXS2TIFF_1000_1000_100_150.tif
+                     ${TEMP}/ioExtractROI_QuickbirdXS2TIFF_1000_1000_100_150.tif
          otbMultiChannelExtractROI
-         ${IMAGEDATA}/TOULOUSE/QuickBird/000000128955_01_P001_MUL/02APR01105228-M1BS-000000128955_01_P001.TIF
-         ${TEMP}/ioExtractROI_QuickbirdXS2PNG_100_100_77_300.png
-         -startX 100 -startY 100 -sizeX 77 -sizeY 300
-         -channels 1 2 3)
+         -ushort ${IMAGEDATA}/TOULOUSE/QuickBird/000000128955_01_P001_MUL/02APR01105228-M1BS-000000128955_01_P001.TIF
+         -ushort ${TEMP}/ioExtractROI_QuickbirdXS2TIFF_1000_1000_100_150.tif
+         -startX 1000 -startY 1000 -sizeX 100 -sizeY 150
+         )
+#         -channels 1 2 3)
 
 ADD_TEST(ioTuOtbImageTestSAR_ERS ${IO_TESTS} 
    --compare-ascii   ${BASELINE_FILES}/ioOtbImageTestSAR_ERS.txt
@@ -534,9 +519,10 @@ ADD_TEST(ioTuOtbVectorImageTestSpot5 ${IO_TESTS}
         
 
 
-# ---  STREAMING : CAI  ---
+# ---  STREAMING : GDAL  ---
 ADD_TEST(ioTvStreamingImageFilterGDAL_ENVI ${IO_TESTS} 
-   --compare-image ${TOL} ${TEMP}/ioStreamingImageFilterTestCDAL_ENVI.png
+#   --compare-image ${TOL} ${TEMP}/ioStreamingImageFilterTestCDAL_ENVI.png
+   --compare-image ${TOL} ${INPUTDATA}/poupees_1canal.c1.hdr
                       ${TEMP}/ioStreamingImageFilterTestCDAL_ENVI.png
          otbStreamingImageFilterTest
          ${INPUTDATA}/poupees_1canal.c1.hdr
@@ -555,8 +541,6 @@ ADD_TEST(ioTvStreamingImageFilterGDAL_TIFF ${IO_TESTS}
 
 # ---  STREAMING  IMAGE   FILE    WRITER  ---
 ADD_TEST(ioTvStreamingIFWriterBSQWithoutStreaming ${IO_TESTS} 
-#   --compare-binary   ${INPUTDATA}/poupees_1canal.c1
-#                      ${TEMP}/ioStreamingImageFileWriterBSQWithoutStreaming.c1
    --compare-image ${TOL}   ${INPUTDATA}/poupees_1canal.c1.hdr
                       ${TEMP}/ioStreamingImageFileWriterBSQWithoutStreaming.hdr
          otbStreamingImageFileWriterTest
@@ -566,8 +550,6 @@ ADD_TEST(ioTvStreamingIFWriterBSQWithoutStreaming ${IO_TESTS}
          )
 # ---  STREAMING  IMAGE   FILE    WRITER  ---
 ADD_TEST(ioTvStreamingIFWriterBSQWithStreaming ${IO_TESTS} 
-#   --compare-binary   ${INPUTDATA}/poupees_1canal.c1
-#                      ${TEMP}/ioStreamingImageFileWriterBSQWithStreaming_100.c1
    --compare-image ${TOL}   ${INPUTDATA}/poupees_1canal.c1.hdr
                       ${TEMP}/ioStreamingImageFileWriterBSQWithStreaming_100.hdr
          otbStreamingImageFileWriterTest

@@ -101,7 +101,8 @@ int generic_otbMultiChannelExtractROI( int argc, char * argv[], const char * inp
         typename WriterType::Pointer writer = WriterType::New();
 
         reader->SetFileName( inputFilename  );
-        reader->Update(); //Necessaire pour connaitre le nombre de canaux dans l'image
+//THOMAS
+//        reader->Update(); //Necessaire pour connaitre le nombre de canaux dans l'image
         writer->SetFileName( outputFilename );
         extractROIFilter->SetInput( reader->GetOutput() );
         extractROIFilter->Update(); 
@@ -116,6 +117,11 @@ int generic_otbMultiChannelExtractROI( int argc, char * argv[], const char * inp
     { 
     std::cout << "Exception itk::ExceptionObject levee !" << std::endl; 
     std::cout << err << std::endl; 
+    return EXIT_FAILURE;
+    } 
+  catch( std::bad_alloc & err ) 
+    { 
+    std::cout << "Exception bad_alloc : "<<(char*)err.what()<< std::endl; 
     return EXIT_FAILURE;
     } 
   catch( ... ) 

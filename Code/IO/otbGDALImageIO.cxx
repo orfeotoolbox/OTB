@@ -377,7 +377,7 @@ void GDALImageIO::InternalReadImageInformation()
     m_width = m_poDataset->GetRasterXSize();
     m_height = m_poDataset->GetRasterYSize();
        
-    if( (m_width==0) & (m_height==0))
+    if( (m_width==0) || (m_height==0))
       {
       itkExceptionMacro(<<"La dimension n'est pas définie.");
       }
