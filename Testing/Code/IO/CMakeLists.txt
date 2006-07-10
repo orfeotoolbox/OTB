@@ -130,30 +130,29 @@ ADD_TEST(ioTuONERAImageIOCanRead ${IO_TESTS} otbONERAImageIOTestCanRead
 	
 
 ADD_TEST(ioTvONERAImageFileReader ${IO_TESTS} 
-#  --compare-image ${TOL}  ${BASELINE}/ioImageFileReaderONERA.ent
-#  --compare-image ${TOL}  ${TEMP}/ioImageFileReaderONERA.ent
-#                    ${TEMP}/ioImageFileReaderONERA.ent
+  --compare-image ${TOL}  ${BASELINE}/ioImageFileReaderONERA.hdr
+                          ${TEMP}/ioImageFileReaderONERA.hdr
         otbImageFileReaderONERATest
         ${IMAGEDATA}/ONERA/spa3_0215_rad.ent
         ${TEMP}/ioImageFileReaderONERA.hdr )
 
 ADD_TEST(ioTvONERAImageFileReaderComplex ${IO_TESTS} 
-#  --compare-image ${TOL}  ${BASELINE}/ioImageFileReaderONERAComplex.hdr
-#                      ${TEMP}/ioImageFileReaderONERAComplex.hdr
+  --compare-image ${TOL}  ${BASELINE}/ioImageFileReaderONERAComplex.hdr
+                      ${TEMP}/ioImageFileReaderONERAComplex.hdr
         otbImageFileReaderONERAComplex
         ${IMAGEDATA}/ONERA/spa3_0215_rad.ent
         ${TEMP}/ioImageFileReaderONERAComplex.hdr )
 
 ADD_TEST(ioTvONERAImageFileWriterComplex ${IO_TESTS} 
-#  --compare-image ${TOL}   ${BASELINE}/ioImageFileReaderONERAComplexWrite.ent
-#                           ${TEMP}/ioImageFileReaderONERAComplexWrite.ent
+  --compare-image ${TOL}   ${BASELINE}/ioImageFileReaderONERAComplexWrite.ent
+                           ${TEMP}/ioImageFileReaderONERAComplexWrite.ent
         otbImageFileWriterONERAComplex
         ${IMAGEDATA}/ONERA/spa3_0215_rad.ent
         ${TEMP}/ioImageFileReaderONERAComplexWrite.ent )
 
 ADD_TEST(ioTvONERAImageStreamWriter ${IO_TESTS} 
-#  --compare-image ${TOL}   ${TEMP}/ioImageFileReaderONERAStreamWrite.ent
-#                           ${IMAGEDATA}/ONERA/spa3_0215_rad.ent
+  --compare-image ${TOL}   ${TEMP}/ioImageFileReaderONERAStreamWrite.ent
+                           ${IMAGEDATA}/ONERA/spa3_0215_rad.ent
         otbImageFileWriterStreamingONERAComplex
         ${IMAGEDATA}/ONERA/spa3_0215_rad.ent
         ${TEMP}/ioImageFileReaderONERAStreamWrite.ent )

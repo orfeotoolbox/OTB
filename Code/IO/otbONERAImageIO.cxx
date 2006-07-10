@@ -49,6 +49,8 @@ ONERAImageIO::ONERAImageIO()
   m_Origin[0] = 0.0;
   m_Origin[1] = 0.0;
 
+  m_FlagWriteImageInformation = true;
+
 
 }
 
@@ -446,7 +448,6 @@ bool ONERAImageIO::OpenOneraHeaderFileForWriting(const char* filename)
 
 
 
-/** Actually we decide that we can't write ONERA images format */
 bool ONERAImageIO::CanWriteFile( const char* FileNameToWrite )
 {
   std::string filename(FileNameToWrite);
@@ -466,6 +467,12 @@ bool ONERAImageIO::CanWriteFile( const char* FileNameToWrite )
 
 void ONERAImageIO::Write(const void* buffer)
 {
+   
+  if( m_FlagWriteImageInformation == true )
+  {
+    	this->WriteImageInformation();
+  	m_FlagWriteImageInformation = false;
+  }
 
   unsigned long step = this->GetNumberOfComponents();
 

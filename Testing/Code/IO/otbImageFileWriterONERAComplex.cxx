@@ -26,8 +26,6 @@
 #include "otbImage.h"
 #include "itkExceptionObject.h"
 #include <iostream>
-#include "itkComplexToModulusImageFilter.h"
-#include "itkStreamingImageFilter.h"
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
 #include "otbExtractROI.h"
@@ -40,28 +38,20 @@ int otbImageFileWriterONERAComplex(int argc, char* argv[])
         const char * inputFilename  = argv[1];
         const char * outputFilename = argv[2];
 
-        typedef std::complex<float>  	                        InputPixelType;
-        typedef float                             		OutputPixelType;
+        typedef std::complex<float>  	                        PixelType;
         const   unsigned int        	                        Dimension = 2;
 
-        typedef otb::Image< InputPixelType,  Dimension >        InputImageType;
-        typedef otb::Image< OutputPixelType, Dimension >        OutputImageType;
+        typedef otb::Image< PixelType,  Dimension >        ImageType;
 
-        typedef otb::ImageFileReader< InputImageType  >         ReaderType;
-        typedef otb::ImageFileWriter< InputImageType >         WriterType;
+        typedef otb::ImageFileReader< ImageType  >         ReaderType;
+        typedef otb::ImageFileWriter< ImageType >         WriterType;
 
-        typedef itk::StreamingImageFilter< InputImageType, InputImageType >         StreamingType;
-	
-        StreamingType::Pointer streaming = StreamingType::New();
         ReaderType::Pointer complexReader = ReaderType::New();
  
 	complexReader->SetFileName( inputFilename  );
-	streaming->SetNumberOfStreamDivisions(100);
-	streaming->SetInput(complexReader->GetOutput());
-	//streaming->Update();
 
-	typedef otb::ExtractROI< InputPixelType, 
-                                 InputPixelType >  ExtractROIFilterType;
+	typedef otb::ExtractROI< PixelType, 
+                                 PixelType >  ExtractROIFilterType;
 
         ExtractROIFilterType::Pointer extractROIFilter = ExtractROIFilterType::New();
 
@@ -69,8 +59,9 @@ int otbImageFileWriterONERAComplex(int argc, char* argv[])
 	extractROIFilter->SetStartY( 10 );
 	extractROIFilter->SetSizeX( 100 );
 	extractROIFilter->SetSizeY( 100 );
-        extractROIFilter->SetInput( streaming->GetOutput() );        
-
+        extractROIFilter->SetInput( complexReader->GetOutput() );        
+	extractROIFilter->Update();
+	
         WriterType::Pointer complexWriter = WriterType::New();
 	complexWriter->SetFileName( outputFilename  );
 	complexWriter->SetInput( extractROIFilter->GetOutput()  );
