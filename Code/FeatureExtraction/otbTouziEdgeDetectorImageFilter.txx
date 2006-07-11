@@ -141,7 +141,6 @@ void TouziEdgeDetectorImageFilter< TInputImage, TOutputImage>
   unsigned int i;
   itk::ZeroFluxNeumannBoundaryCondition<InputImageType> 	nbc;
   itk::ConstNeighborhoodIterator<InputImageType> 		bit;
-  typename itk::ConstNeighborhoodIterator<InputImageType>::OffsetType	off;
   itk::ImageRegionIterator<OutputImageType> 			it;
   itk::ImageRegionIterator<OutputImageType> 			it_dir;
   

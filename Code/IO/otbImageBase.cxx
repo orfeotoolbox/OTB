@@ -278,7 +278,7 @@ ImageBase::PrintSelf(std::ostream& os, itk::Indent indent, const MetaDataDiction
   VectorType vvalue;
   double dvalue;
   OTB_GCP gcpvalue;
-  int i ;
+  unsigned int i ;
   
   // Copy of the const metadata dictionary in a metadata dictionary to be used
   // by the ExposeMetaData method

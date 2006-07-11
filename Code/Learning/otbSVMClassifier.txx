@@ -228,7 +228,6 @@ SVMClassifier< TSample, TLabel >
 
   int *labels=(int *) malloc(nr_class*sizeof(int));
   double *prob_estimates=NULL;
-  int j;
   
   if(predict_probability) 
     {
@@ -253,10 +252,12 @@ SVMClassifier< TSample, TLabel >
     {
     
     int i = 0;
-    int c;
-    double target,v;
+    double v;
     
-    /*if (fscanf(input,"%lf",&target)==EOF)
+    /*
+    double target;
+    int c;
+    if (fscanf(input,"%lf",&target)==EOF)
       break;*/
     
 //     while(1)

@@ -269,7 +269,7 @@ CommandLineArgumentParser
 	//Cherche dans la liste des options installées
 	bool trouve(false);
 	bool continuer(true);
-	int cpt(0);
+	unsigned int cpt(0);
 	std::string strOption(option);
 	while ( continuer == true )
 	{
@@ -296,7 +296,7 @@ CommandLineArgumentParser
         os << " Usage : "<<m_ProgramName<<std::endl;
   	// Calcul de la largeur max en caractere de l'affichage des options (pour mise en page)
   	int largeurmax(-1);
-	int i;
+	unsigned int i;
 
   	for(i=0 ; i < m_OptionList.size() ; i++ )
   	{

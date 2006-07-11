@@ -152,7 +152,7 @@ void PixelSuppressionByDirectionImageFilter< TInputImage, TOutputImage>::Threade
                        	int 	threadId
 				)
 {
-  unsigned int i; 
+
   itk::ConstantBoundaryCondition<InputImageType> 		cbc;
   const InputPixelType cvalue = 255;
   cbc.SetConstant(cvalue);
@@ -179,30 +179,24 @@ void PixelSuppressionByDirectionImageFilter< TInputImage, TOutputImage>::Threade
   // support progress methods/callbacks
   itk::ProgressReporter progress(this, threadId, outputRegionForThread.GetNumberOfPixels());
   
-  typename TInputImage::IndexType     bitIndex;
+  //typename TInputImage::IndexType     bitIndex;
   
   //---------------------------------------------------------------------------
 
   InputPixelType PixelValue;
     
   // Location of the central pixel in the input image
-  int Xc, Yc;
+//  int Xc, Yc;
 
   // Pixel location in the system axis of the region  
   int x, y;
   
   // Pixel location in the system axis of the region after rotation of theta
   // where theta is the direction of the cantral pixel  
-  double xt, yt;
   
-  // Distance between pixel (x,y) and the central pixel of the region
-  double DistanceXY;
-   
+
   // Pixel Direction  
-  double ThetaXcYc, Thetaxtyt, ThetaXY ;
-  
-  // Angular tolerance on the direction of the central pixel
-  double MinThetaXcYc, MaxThetaXcYc; 
+  double ThetaXcYc, Thetaxtyt ;
   
 
   //---------------------------------------------------------------------------

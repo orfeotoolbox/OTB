@@ -55,7 +55,7 @@ typename FlusserImageFunction<TInput,TOutput,TCoordRep>::RealType
 FlusserImageFunction<TInput,TOutput,TCoordRep>
 ::EvaluateAtIndex(const IndexType& index) const
 {
-  typename InputType::SizeType        ImageSize;
+  
   RealType                            FlusserValue;
   ComplexType                         FlusserValueComplex;
 

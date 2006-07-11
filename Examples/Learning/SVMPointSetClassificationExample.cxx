@@ -129,11 +129,12 @@ int main( int argc, char* argv[] )
   
   srand(0);
 
+  unsigned int pointId;
 // Software Guide : BeginCodeSnippet        
   int lowest = 0;
   int range = 1000;
 
-  for(unsigned int pointId = 0; pointId<100; pointId++)
+  for(pointId = 0; pointId<100; pointId++)
     {
     
     MeasurePointType tP;
@@ -324,7 +325,7 @@ int main( int argc, char* argv[] )
     
 
     double error = 0.0;
-    unsigned int pointId = 0;
+    pointId = 0;
     while (m_iter != m_last)
       {
 

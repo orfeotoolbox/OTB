@@ -53,8 +53,7 @@ int
 PrincipalImageViewAS<TPixel, TPixelOverlay>::handle(int event)
   {
 
-  int key, x, y ,z=0;
-  bool mem;
+  int key, x=0, y=0 ,z=0;
   ColorType colorTmp;
 
   std::list<ClickPoint>::iterator it;

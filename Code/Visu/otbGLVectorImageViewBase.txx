@@ -489,9 +489,8 @@ GLVectorImageViewBase<TPixel>::
 SetWinImData(const RegionType & zone) 
 {
   IndexType ind;
-  int l, m;
-  float tf;
-
+  int l;
+  
   int lWinMinX = zone.GetIndex()[0];
   int lWinMinY = zone.GetIndex()[1];
   int lWinMaxX = lWinMinX + zone.GetSize()[0] - 1;

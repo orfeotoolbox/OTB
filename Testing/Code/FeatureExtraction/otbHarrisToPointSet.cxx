@@ -59,9 +59,8 @@ int otbHarrisToPointSet( int argc, char * argv[] )
 	OutputPointSetType::Pointer  pointList = OutputPointSetType::New();
         OutputImageType::Pointer     outImage  = OutputImageType::New();
         WriterType::Pointer          writer    = WriterType::New();
-	OutputPointType              *CoordPoint;
-	InputImageType::IndexType   index;
-	
+	OutputPointType              *CoordPoint = NULL;
+		
         reader->SetFileName( inputFilename  );
         writer->SetFileName( outputFilename );
  	
