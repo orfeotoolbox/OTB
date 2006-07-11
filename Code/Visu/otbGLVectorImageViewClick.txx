@@ -329,7 +329,7 @@ GLVectorImageViewClick<TPixel,TPixelOverlay>::
 PrintInfos(void)
 {
 otbMsgDevMacro(  << this->GetNameOfClass() );
-otbMsgDevMacro(  << "- cW, cH               :  ["<<this->cW<<","<<this->cH<<"]"< );
+otbMsgDevMacro(  << "- cW, cH               :  ["<<this->cW<<","<<this->cH<<"]" );
 otbMsgDevMacro(  << "- zoom                 :   "<<this->winZoom() );
 otbMsgDevMacro(  << "- zoom                 :   "<<this->cWinZoom );
 otbMsgDevMacro(  << "- m_CenterPointImage   :   "<<m_CenterPointImage);
