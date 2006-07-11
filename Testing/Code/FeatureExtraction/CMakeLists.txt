@@ -234,16 +234,19 @@ ADD_TEST(feTvMultiplyByScalarImage ${FEATUREEXTRACTION_TESTS}
          otbMultiplyByScalarImageFilterTest)
 
 ADD_TEST(feTuThresholdImageToPointSetTest ${FEATUREEXTRACTION_TESTS}  
+  --compare-ascii  ${BASELINE_FILES}/feThresholdImageToPointSet.txt
+                   ${TEMP}/feThresholdImageToPointSet.txt
         otbThresholdImageToPointSetTest
-	${INPUTDATA}/TeteAToto.png)
+	${INPUTDATA}/TeteAToto.png
+	${TEMP}/feThresholdImageToPointSet.txt )
 
 ADD_TEST(feTvHarrisToPointSet ${FEATUREEXTRACTION_TESTS}  
-  --compare-ascii  ${BASELINE_FILES}/feHarrisToPointSet.txt
-                   ${TEMP}/feHarrisToPointSet.txt
+#  --compare-ascii  ${BASELINE_FILES}/feHarrisToPointSet.txt
+#                   ${TEMP}/feHarrisToPointSet.txt
         otbHarrisToPointSet
-	${INPUTDATA}/poupees_1canal.c1.hdr
+	${INPUTDATA}/TeteAToto.png
 	${TEMP}/feHarrisToPointSet.txt
-	1.0 1.0 1.0  2.0)
+	1.0 2.0 0.0 2.0)
 
 # -------            otb::PixelSuppressionByDirection   ------------------------------
 	

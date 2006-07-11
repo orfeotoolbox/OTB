@@ -39,39 +39,34 @@ int otbHarrisToPointSet( int argc, char * argv[] )
 	double SigmaI((double)::atof(argv[4]));
 	double AlphaValue((double)::atof(argv[5]));
 	        
-        typedef unsigned char                                   InputPixelType;
+        typedef unsigned char                                   PixelType;
         const   unsigned int        	                        Dimension = 2;
-        typedef unsigned char   	                        OutputPixelType;
 
-	InputPixelType Threshold((OutputPixelType)::atoi(argv[6]));
+	PixelType Threshold((PixelType)::atoi(argv[6]));
 	
-        typedef itk::Image< InputPixelType,  Dimension>            InputImageType;
-        typedef itk::Image< OutputPixelType, Dimension>            OutputImageType;
-        typedef otb::ImageFileReader< InputImageType  >            ReaderType;  
-        typedef otb::ImageFileWriter< OutputImageType >            WriterType;
-	typedef otb::HarrisImageToPointSetFilter<InputImageType>   FunctionType;
+        typedef itk::Image< PixelType,  Dimension>                 ImageType;
+        typedef otb::ImageFileReader< ImageType  >                 ReaderType;  
+	typedef otb::HarrisImageToPointSetFilter<ImageType>        FunctionType;
         typedef FunctionType::OutputPointSetType                   OutputPointSetType;
 	typedef OutputPointSetType::PointType                      OutputPointType;
-        typedef itk::Image< OutputPixelType, Dimension >	   OutputImageType;
   
-        ReaderType::Pointer          reader    = ReaderType::New();
-	FunctionType::Pointer        harris    = FunctionType::New();
-	OutputPointSetType::Pointer  pointList = OutputPointSetType::New();
-        OutputImageType::Pointer     outImage  = OutputImageType::New();
-        WriterType::Pointer          writer    = WriterType::New();
-	OutputPointType              *CoordPoint = NULL;
-		
+        ReaderType::Pointer           reader    = ReaderType::New();
+	FunctionType::Pointer         harris    = FunctionType::New();
+	OutputPointSetType::Pointer   pointList = OutputPointSetType::New();
+	OutputPointType               CoordPoint;
+	ImageType::IndexType   index;
+	
         reader->SetFileName( inputFilename  );
-        writer->SetFileName( outputFilename );
  	
 	harris->SetInput( 0,reader->GetOutput() );
         harris->SetSigmaD( SigmaD );
         harris->SetSigmaI( SigmaI );
 	harris->SetAlpha( AlphaValue );
 	harris->SetThreshold( Threshold );
-        harris->GraftOutput( pointList );
+	harris->SetOutput(pointList);
 
         harris->Update();
+
 
 	std::ofstream file;
 	file.open(outputFilename);
@@ -81,9 +76,9 @@ int otbHarrisToPointSet( int argc, char * argv[] )
 	
 	for (unsigned long i = 0 ; i < NbPoints ; i++)
 	   {
-	   pointList->GetPoint(i,CoordPoint);
-           file << i <<" / " << NbPoints;
-	   file << CoordPoint << std::endl;
+	   pointList->GetPoint(i,&CoordPoint);
+           file << i <<" / " << NbPoints << " : " ;
+	   file << CoordPoint[0]<<" , "<< CoordPoint[1] << std::endl;
 	   }
 	
 	file.close();
