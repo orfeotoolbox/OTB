@@ -108,7 +108,7 @@ int main(int argc, char ** argv )
     // variance $\sigma_D$ (derivation scale) and 
     // the smoothing of the image is performed by convolving with a
     // Gaussian kernel of variance $\sigma_I$ (integration
-    // scale). This allows the coputation of the following matrix:
+    // scale). This allows the computation of the following matrix:
     // \begin{equation}
     // \mu(\mathbf{x},\sigma_I,\sigma_D) = \sigma_D^2 g(\sigma_I)\star
     // \left[\begin{array}{cc} L_x^2(\mathbf{x},\sigma_D) &
