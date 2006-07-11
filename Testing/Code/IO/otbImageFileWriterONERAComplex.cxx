@@ -55,8 +55,8 @@ int otbImageFileWriterONERAComplex(int argc, char* argv[])
 
         ExtractROIFilterType::Pointer extractROIFilter = ExtractROIFilterType::New();
 
-	extractROIFilter->SetStartX( 10 );
-	extractROIFilter->SetStartY( 10 );
+	extractROIFilter->SetStartX( 20 );
+	extractROIFilter->SetStartY( 20 );
 	extractROIFilter->SetSizeX( 100 );
 	extractROIFilter->SetSizeY( 100 );
         extractROIFilter->SetInput( complexReader->GetOutput() );        

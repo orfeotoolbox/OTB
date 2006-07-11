@@ -353,11 +353,11 @@ void ONERAImageIO::InternalReadImageInformation()
   itk::ByteSwapper< int>::SwapFromSystemToLittleEndian(&magicNumber);
 
   // Find info.. : Number of Row , Nb of Columns
-  int NbCol;
+  short NbCol;
 
   m_Datafile.seekg(ONERA_HEADER_LENGTH + 2, std::ios::beg );
   m_Datafile.read((char*)(&NbCol),2);  
-  itk::ByteSwapper<int>::SwapFromSystemToLittleEndian(&NbCol);
+  itk::ByteSwapper<short>::SwapFromSystemToLittleEndian(&NbCol);
     
   m_Datafile.seekg(0, std::ios::end);
   long gcountHead = static_cast<long>(ONERA_HEADER_LENGTH + 2*4*NbCol);
@@ -489,13 +489,19 @@ otbMsgDevMacro( <<" Dimensions de l'image  : "<<m_Dimensions[0]<<","<<m_Dimensio
 otbMsgDevMacro( <<" Region lue (IORegion)  : "<<this->GetIORegion());
 otbMsgDevMacro( <<" Nb Of Components  : "<<this->GetNumberOfComponents());
 
+	// Cas particuliers : on controle que si la région à écrire est de la même dimension que l'image entière,
+	// on commence l'offset à 0 (lorsque que l'on est pas en "Streaming")
+	if( (lNbLignes == m_Dimensions[1]) && (lNbColonnes == m_Dimensions[0]))
+	{
+                otbMsgDevMacro(<<"Force l'offset de l'IORegion à 0");
+		lPremiereLigne = 0;
+		lPremiereColonne = 0;
+	}
+
   unsigned long numberOfBytesPerLines = step * lNbColonnes * m_NbOctetPixel;
   unsigned long headerLength = ONERA_HEADER_LENGTH + numberOfBytesPerLines;
   unsigned long offset;
-//  unsigned long numberOfBytesToBeWrite = step * m_NbOctetPixel *lNbColonnes;
   unsigned long numberOfBytesRegion = step * m_NbOctetPixel *lNbColonnes *lNbLignes;
-//  unsigned long numberOfBytesWrite;        
-
 
   char *tempmemory = new char[numberOfBytesRegion];
   memcpy(tempmemory,buffer,numberOfBytesRegion);
@@ -505,30 +511,17 @@ otbMsgDevMacro( <<" Nb Of Components  : "<<this->GetNumberOfComponents());
     itk::ByteSwapper<float>::SwapRangeFromSystemToLittleEndian(
         reinterpret_cast<float *>(tempmemory), numberOfComponents );
     }
-     
-
-//  char* value = new char[numberOfBytesToBeWrite];
-//  unsigned long cpt = 0;
  
   for(int LineNo = lPremiereLigne;LineNo <lPremiereLigne + lNbLignes; LineNo++ )
     {
-/*	for( unsigned long  i=0 ; i < numberOfBytesPerLines ; i = i+  2 * m_NbOctetPixel )
-           {
-            memcpy((void*)(&(value[i])),(const void*)(&(tempmemory[cpt])),(size_t)( 2* m_NbOctetPixel) );
-            cpt += 2*m_NbOctetPixel;
-           }
-*/
 	char* value = tempmemory + numberOfBytesPerLines * (LineNo - lPremiereLigne);
 
 	offset  =  headerLength + numberOfBytesPerLines * LineNo;
 	offset +=  m_NbOctetPixel * lPremiereColonne;
   	m_Datafile.seekg(offset, std::ios::beg);
 	m_Datafile.write( static_cast<char *>( value ), numberOfBytesPerLines );
-//    	numberOfBytesWrite = m_Datafile.gcount();
-//  	m_Datafile.seekg(offset, std::ios::end);
     }
 
-//  delete [] value;
   delete [] tempmemory;
 }
 
@@ -557,7 +550,7 @@ void ONERAImageIO::WriteImageInformation()
   m_Headerfile << "# [dans ordre LSBfirst = big-endian]" << std::endl;
 
   std::string sPixelType("cmplx_real_4");
-  if(m_PixelType == COMPLEX && m_ComponentType == FLOAT)
+  if( (m_PixelType == COMPLEX) && (m_ComponentType == FLOAT) )
     {
     sPixelType = "cmplx_real_4";
     }
@@ -572,8 +565,8 @@ void ONERAImageIO::WriteImageInformation()
 
   // write magic_number
   int magicNumber = ONERA_MAGIC_NUMBER; 
-  int NbCol = m_Dimensions[0];
-  int NbRow = m_Dimensions[1];
+  short NbCol = static_cast<short>(m_Dimensions[0]);
+  short NbRow = static_cast<short>(m_Dimensions[1]);
   int ByteSizeCol = NbCol*4*2;
 
   itk::ByteSwapper< int>::SwapFromSystemToLittleEndian(&magicNumber);
@@ -588,10 +581,10 @@ void ONERAImageIO::WriteImageInformation()
   delete [] tab;
 
   // write number of columns
-  itk::ByteSwapper<int>::SwapFromSystemToLittleEndian(&NbCol);
+  itk::ByteSwapper<short>::SwapFromSystemToLittleEndian(&NbCol);
 
-  m_Datafile.seekg(ONERA_MAGIC_NUMBER, std::ios::beg );
-  m_Datafile.write((char*)(&NbCol),4);
+  m_Datafile.seekg(ONERA_HEADER_LENGTH+2, std::ios::beg );
+  m_Datafile.write((char*)(&NbCol),2);
   
   
 otbMsgDebugMacro( <<"Driver to write: ONERA");

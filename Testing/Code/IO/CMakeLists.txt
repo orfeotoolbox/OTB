@@ -151,10 +151,10 @@ ADD_TEST(ioTvONERAImageFileWriterComplex ${IO_TESTS}
         ${TEMP}/ioImageFileReaderONERAComplexWrite.ent )
 
 ADD_TEST(ioTvONERAImageStreamWriter ${IO_TESTS} 
-  --compare-image ${TOL}   ${TEMP}/ioImageFileReaderONERAStreamWrite.ent
-                           ${IMAGEDATA}/ONERA/spa3_0215_rad.ent
+  --compare-image ${TOL}   ${TEMP}/ioImageFileReaderONERAComplexWrite.ent
+  			   ${TEMP}/ioImageFileReaderONERAStreamWrite.ent
         otbImageFileWriterStreamingONERAComplex
-        ${IMAGEDATA}/ONERA/spa3_0215_rad.ent
+        ${TEMP}/ioImageFileReaderONERAComplexWrite.ent
         ${TEMP}/ioImageFileReaderONERAStreamWrite.ent )
 
 # -------            otb::ImageFileReader pour CAI  ------------------------------
