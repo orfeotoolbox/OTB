@@ -367,7 +367,6 @@ void ONERAImageIO::InternalReadImageInformation()
   m_width = static_cast<int> ( NbCol );
   m_height = static_cast<int> ( (gcount-gcountHead) / (4 * 2 * NbCol) );
 
-otbMsgDebugMacro( <<"         Size               : "<<m_width<<","<<m_height);
   if( (m_width==0) || (m_height==0))
       {
       itkExceptionMacro(<<"Unknown image dimension");
