@@ -15,6 +15,7 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
+
 #ifndef __otbThresholdImageToPointSetFilter_txx
 #define __otbThresholdImageToPointSetFilter_txx
 
@@ -24,9 +25,6 @@
 namespace otb
 {
 
-/**
- *
- */
 template <class TInputImage, class TOutputPointSet>
 ThresholdImageToPointSetFilter<TInputImage, TOutputPointSet>
 ::ThresholdImageToPointSetFilter()
@@ -34,9 +32,6 @@ ThresholdImageToPointSetFilter<TInputImage, TOutputPointSet>
   m_Threshold = itk::NumericTraits<InputPixelType>::max();  
 }
 
-/**
- *
- */
 
 template <class TInputImage, class TOutputPointSet>
 void
@@ -78,8 +73,6 @@ ThresholdImageToPointSetFilter<TInputImage, TOutputPointSet>
       }
     ++inIt;
     }
-#if 0
-#endif
 }
 
 /**

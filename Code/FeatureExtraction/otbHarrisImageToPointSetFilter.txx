@@ -46,6 +46,8 @@ HarrisImageToPointSetFilter<TInputImage, TOutputPointSet>
 ::GenerateData()
 {
    
+  typename OutputPointSetType::Pointer pointList = this->GetOutput(); 
+
   m_HarrisFilter->SetInput( 0, this->GetInput(0) );
   m_HarrisFilter->SetSigmaD( m_SigmaD );
   m_HarrisFilter->SetSigmaI( m_SigmaI );
@@ -53,10 +55,10 @@ HarrisImageToPointSetFilter<TInputImage, TOutputPointSet>
 
   m_ThresholdFilter->SetInput(0,m_HarrisFilter->GetOutput() );
   m_ThresholdFilter->SetThreshold(m_Threshold ); 
- 
-  m_ThresholdFilter->GraftOutput(this->GetOutput() ); 
+
+  m_ThresholdFilter->SetOutput(pointList ); 
   m_ThresholdFilter->Update();
-  this->GraftOutput(m_ThresholdFilter->GetOutput() );
+ 
 }
 
 

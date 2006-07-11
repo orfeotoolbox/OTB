@@ -550,9 +550,6 @@ ImageToPathListAlignFilter<TInputImage,TOutputPath>
     
     OutputPath->push_back(path);
   }
-#if 0 
-#endif  
-  printf("finish\n");
   itkDebugMacro(<< "ImageToPathListAlignFilter::GenerateData() finished");
 
 } // end update function  
