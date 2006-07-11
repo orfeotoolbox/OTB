@@ -318,7 +318,7 @@ void MSTARImageIO::Read(void* buffer)
 	  } else
 	  {
 	  mstartype = FSCENE_IMAGE; /* UnShort Fullscene */
-	  otbMsgDevMacro(<< << " Scene type " );
+	  otbMsgDevMacro( << " Scene type " );
 	  }
 
 
