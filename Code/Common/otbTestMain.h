@@ -271,7 +271,7 @@ int RegressionTestAsciiFile(const char * testAsciiFileName, const char * baselin
     	}
     	if (!fluxfileref)
     	{
-    		std::cerr << "Impossible to open the baseline ASCII file <"<<testAsciiFileName<<">.\n";
+    		std::cerr << "Impossible to open the baseline ASCII file <"<<baselineAsciiFileName<<">.\n";
     		return 1000;
     	}
 	

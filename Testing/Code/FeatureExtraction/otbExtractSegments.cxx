@@ -44,7 +44,7 @@ int otbExtractSegments( int argc, char * argv[] )
     	unsigned int  LocalHoughRadiusY((unsigned int)::atoi(argv[7]));
     	unsigned int  LocalHoughNumberOfLines((unsigned int)::atoi(argv[8]));
     	
-    	float  FillGapsRadius((float)::atoi(argv[9]));
+    	float  FillGapsRadius((float)::atof(argv[9]));
 	float  FillGapsAngularBeam((float)::atof(argv[10]));
         
         typedef double	                                        InputPixelType;

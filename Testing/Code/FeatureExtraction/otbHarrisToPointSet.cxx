@@ -24,10 +24,11 @@
 #include "itkImage.h"
 
 #include "otbImageFileReader.h"
-#include "itkImageFileWriter.h"
+#include "otbImageFileWriter.h"
 #include "otbHarrisImageToPointSetFilter.h"
+#include <fstream>
 
-int otbHarrisImageToPointSet( int argc, char * argv[] )
+int otbHarrisToPointSet( int argc, char * argv[] )
 {
   try 
     { 
@@ -47,7 +48,7 @@ int otbHarrisImageToPointSet( int argc, char * argv[] )
         typedef itk::Image< InputPixelType,  Dimension>            InputImageType;
         typedef itk::Image< OutputPixelType, Dimension>            OutputImageType;
         typedef otb::ImageFileReader< InputImageType  >            ReaderType;  
-        typedef itk::ImageFileWriter< OutputImageType >            WriterType;
+        typedef otb::ImageFileWriter< OutputImageType >            WriterType;
 	typedef otb::HarrisImageToPointSetFilter<InputImageType>   FunctionType;
         typedef FunctionType::OutputPointSetType                   OutputPointSetType;
 	typedef OutputPointSetType::PointType                      OutputPointType;
@@ -73,21 +74,21 @@ int otbHarrisImageToPointSet( int argc, char * argv[] )
 
         harris->Update();
 
+	std::ofstream file;
+	file.open(outputFilename);
+
 	unsigned long  NbPoints  = pointList->GetNumberOfPoints();
-	std::cout << "NbPoints : " << NbPoints <<std::endl;
+	file << "NbPoints : " << NbPoints <<std::endl;
 	
 	for (unsigned long i = 0 ; i < NbPoints ; i++)
 	   {
 	   pointList->GetPoint(i,CoordPoint);
-           std::cout << i <<" / " << NbPoints;
-	   std::cout << CoordPoint << std::endl;
+           file << i <<" / " << NbPoints;
+	   file << CoordPoint << std::endl;
 	   }
 	
-
-
- //       writer->SetInput( outImage );
- //       writer->Update(); 
-		
+	file.close();
+	
     } 
   catch( itk::ExceptionObject & err ) 
     { 

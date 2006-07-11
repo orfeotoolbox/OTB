@@ -61,7 +61,7 @@ REGISTER_TEST(otbAssymmetricFusionOfLineDetector);
 REGISTER_TEST(otbHarrisImage);
 REGISTER_TEST(otbMultiplyByScalarImageFilterTest);
 REGISTER_TEST(otbThresholdImageToPointSetTest);
-REGISTER_TEST(otbHarrisImageToPointSet);
+REGISTER_TEST(otbHarrisToPointSet);
 REGISTER_TEST(otbPixelSuppressionByDirectionNew);
 REGISTER_TEST(otbPixelSuppressionByDirection);
 REGISTER_TEST(otbFillGapsFilterNew);
