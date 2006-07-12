@@ -148,6 +148,11 @@ SVMImageModelEstimator<TInputImage,  TTrainingImage>
   
 
 
+
+  //This works with Image< itk::Vector > and with VectorImage< scalar >.
+  unsigned int numberOfComponents = inIt.Get().Size();
+
+
   otbMsgDevMacro(  << " Before while " );
   while(!inIt.IsAtEnd() && !trIt.IsAtEnd())
     {
@@ -158,7 +163,7 @@ SVMImageModelEstimator<TInputImage,  TTrainingImage>
 
       typename Superclass::MeasurementVectorType v;
 
-      for(int k=0; k<inputImage->GetNumberOfComponentsPerPixel(); k++)
+      for(int k=0; k<numberOfComponents; k++)
 	{
 	v.push_back(inIt.Get()[k]);
 	}
