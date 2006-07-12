@@ -67,7 +67,6 @@ double LineRatioDetectorImageFilter<TInputImage, TOutputImage, InterpolatorType>
   std::vector<double>::iterator m3It = m3->begin();
   std::vector<double>::iterator m3End = m3->end();
 
-  otbMsgDevMacro( << "Means " );
   while( m1It!=m1End && m2It!=m2End && m3It!=m3End )
     {
 
