@@ -886,7 +886,7 @@ otbMsgDevMacro( << "GDALImageIO::Write() IORegion Start["<<this->GetIORegion().G
 
         unsigned long lNbPixels = (unsigned long)(lNbColonnes*lNbLignes);
         unsigned long lTailleBuffer = (unsigned long)(m_NbOctetPixel)*lNbPixels;
-        otbMsgDebugMacro( <<" TailleBuffer : "<< lTailleBuffer);
+otbMsgDevMacro( <<" TailleBuffer alloué : "<< lTailleBuffer);
         
         unsigned char* value = new unsigned char[lTailleBuffer];
         if(value==NULL)
