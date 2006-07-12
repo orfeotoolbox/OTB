@@ -98,7 +98,11 @@ public:
     param.svm_type = svmtype;
   }
 
-  /** Set the kernel type to LINEAR, POLY, RBF, SIGMOID */
+  /** Set the kernel type to LINEAR, POLY, RBF, SIGMOID
+	linear: u'*v
+	polynomial: (gamma*u'*v + coef0)^degree
+	radial basis function: exp(-gamma*|u-v|^2)
+	sigmoid: tanh(gamma*u'*v + coef0)*/
   void SetKernelType(int kerneltype)
   {
     param.kernel_type = kerneltype;
