@@ -241,8 +241,8 @@ ADD_TEST(feTuThresholdImageToPointSetTest ${FEATUREEXTRACTION_TESTS}
 	${TEMP}/feThresholdImageToPointSet.txt )
 
 ADD_TEST(feTvHarrisToPointSet ${FEATUREEXTRACTION_TESTS}  
-#  --compare-ascii  ${BASELINE_FILES}/feHarrisToPointSet.txt
-#                   ${TEMP}/feHarrisToPointSet.txt
+  --compare-ascii  ${BASELINE_FILES}/feHarrisToPointSet.txt
+                   ${TEMP}/feHarrisToPointSet.txt
         otbHarrisToPointSet
 	${INPUTDATA}/TeteAToto.png
 	${TEMP}/feHarrisToPointSet.txt
