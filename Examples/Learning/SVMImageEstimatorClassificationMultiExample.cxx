@@ -71,7 +71,9 @@
 
 
 
-#include "itkRescaleIntensityImageFilter.h"
+#include "itkUnaryFunctorImageFilter.h"
+#include "itkScalarToRGBPixelFunctor.h"
+
 #include "otbImageFileReader.h"
 
 
@@ -396,25 +398,28 @@ int main( int argc, char* argv[] )
 
 // Software Guide : BeginLatex
 //
-// Only for visualization purposes, we choose to rescale the image of
-// classes before sving it to a file. We will use the
-// \doxygen{itk}{RescaleIntensityImageFilter} for this purpose.
+// Only for visualization purposes, we choose a color mapping to the image of
+// classes before sving it to a file. The
+// \subdoxygen{itk}{Functor}{ScalarToRGBPixelFunctor} class is a special
+// function object designed to hash a scalar value into an
+// \doxygen{itk}{RGBPixel}. Plugging this functor into the
+// \doxygen{itk}{UnaryFunctorImageFilter} creates an image filter for that
+// converts scalar images to RGB images.
 //
 // Software Guide : EndLatex
     
 // Software Guide : BeginCodeSnippet      
     
+    typedef itk::RGBPixel<unsigned char>   RGBPixelType;
+    typedef otb::Image<RGBPixelType, 2>    RGBImageType;
+    typedef itk::Functor::ScalarToRGBPixelFunctor<unsigned long>
+      ColorMapFunctorType;
+    typedef itk::UnaryFunctorImageFilter<OutputImageType,
+    RGBImageType, ColorMapFunctorType> ColorMapFilterType;
+    ColorMapFilterType::Pointer colormapper = ColorMapFilterType::New();
 
-    typedef otb::Image< unsigned char, Dimension >        FileImageType;
+    colormapper->SetInput( outputImage );
 
-    
-    typedef itk::RescaleIntensityImageFilter< OutputImageType,
-      FileImageType > RescalerType;
-
-    RescalerType::Pointer rescaler = RescalerType::New();
-    rescaler->SetOutputMinimum( itk::NumericTraits< unsigned char >::min());
-    rescaler->SetOutputMaximum( itk::NumericTraits< unsigned char >::max());
-    rescaler->SetInput( outputImage );
     
 // Software Guide : EndCodeSnippet
 
@@ -426,12 +431,12 @@ int main( int argc, char* argv[] )
     
 // Software Guide : BeginCodeSnippet      
 
-    typedef otb::ImageFileWriter< FileImageType >         WriterType;
+    typedef otb::ImageFileWriter<RGBImageType> WriterType;
 	
     WriterType::Pointer writer = WriterType::New();
 
     writer->SetFileName( outputImageFileName  );
-    writer->SetInput( rescaler->GetOutput() );
+    writer->SetInput( colormapper->GetOutput() );
     
     writer->Update();
 // Software Guide : EndCodeSnippet          
