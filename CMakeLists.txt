@@ -180,12 +180,6 @@ INCLUDE_DIRECTORIES( ${OTB_INCLUDE_DIRS} )
 INCLUDE (${CMAKE_ROOT}/Modules/CMakeBackwardCompatibilityC.cmake)
 INCLUDE (${CMAKE_ROOT}/Modules/CMakeBackwardCompatibilityCXX.cmake)
 
-
-
-#-----------------------------------------------------------------------------
-# Repertoire des images de télédetection.
-SET( OTB_DATA_DIR "$ENV{OTB_DATA_DIR}" CACHE STRING "Image directory")
-
 #-----------------------------------------------------------------------------
 # Configure Dart testing support.  This should be done before any
 # MESSAGE(FATAL_ERROR ...) commands are invoked.
@@ -449,7 +443,7 @@ ENDIF(OTB_SIZEOF_LONG_LONG)
 
 #-----------------------------------------------------------------------------
 # Configure the default OTB_DATA_ROOT for the location of OTB Data.
-FIND_PATH(OTB_DATA_ROOT OTBData.readme ${OTB_SOURCE_DIR}/Testing/Data $ENV{OTB_DATA_ROOT})
+FIND_PATH(OTB_DATA_ROOT OTBData.readme $ENV{OTB_DATA_ROOT})
 MARK_AS_ADVANCED(OTB_DATA_ROOT)
 
 

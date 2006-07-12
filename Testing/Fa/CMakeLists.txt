@@ -2,11 +2,11 @@
 
 IF( NOT OTB_DISABLE_CXX_TESTING )
 
-SET(BASELINE ${OTB_DATA_DIR}/Baseline/OTB/Fa)
-SET(BASELINE_FILES ${OTB_DATA_DIR}/Baseline/OTB/Files)
-SET(INPUTDATA ${OTB_DATA_DIR}/Input)
+SET(BASELINE ${OTB_DATA_ROOT}/Baseline/OTB/Fa)
+SET(BASELINE_FILES ${OTB_DATA_ROOT}/Baseline/OTB/Files)
+SET(INPUTDATA ${OTB_DATA_ROOT}/Input)
 #Images de teledetection (grosses images )
-SET(IMAGEDATA ${OTB_DATA_DIR}/LargeInput )
+SET(IMAGEDATA ${OTB_DATA_ROOT}/LargeInput )
 SET(TEMP ${OTBTesting_BINARY_DIR}/Temporary)
 
 #Tolerance sur diff pixel image
