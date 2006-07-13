@@ -266,4 +266,3 @@ FillGapsFilter
 
 } // end namespace otb
 
-#endif

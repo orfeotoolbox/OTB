@@ -63,7 +63,7 @@ public:
 
  
 protected:
-  FillGapsFilter()
+  FillGapsFilter();
 
   virtual ~FillGapsFilter(){};
 
