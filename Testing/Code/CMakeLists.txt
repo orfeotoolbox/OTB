@@ -1,3 +1,7 @@
 # $Id$
 
-SUBDIRS(Common IO BasicFilters FeatureExtraction ChangeDetection Visu Learning)
+SUBDIRS(Common IO BasicFilters FeatureExtraction ChangeDetection Learning)
+
+IF(OTB_USE_VISU)
+        SUBDIRS(Visu)
+ENDIF(OTB_USE_VISU)

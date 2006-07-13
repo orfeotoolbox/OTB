@@ -59,14 +59,6 @@ SET(OTB_VERSION_STRING "${OTB_VERSION_MAJOR}.${OTB_VERSION_MINOR}")
 # RECHERCHE DES LIBRAIRIES EXTERNES UTILISEES
 
 #-------------------------------
-# Librairie OpenGL
-#-------------------------------
-FIND_PACKAGE(OpenGL)
-IF(OPENGL_INCLUDE_PATH)
-  INCLUDE_DIRECTORIES(${OPENGL_INCLUDE_PATH})
-ENDIF(OPENGL_INCLUDE_PATH)
-
-#-------------------------------
 # Librairie ITK
 #-------------------------------
 
@@ -102,20 +94,37 @@ INCLUDE_DIRECTORIES(${GDAL_INCLUDE_DIRS})
 
 LINK_DIRECTORIES( ${GDAL_LIBRARY_DIRS} )
 
+#-----------------------------------------------------------------------------
+# Option for generate Visu tools !!!
+OPTION(OTB_USE_VISU "Generate Visu tools directory. If ON, find OpenGL and FLTK package." ON)
+MARK_AS_ADVANCED(OTB_USE_VISU)
+IF(OTB_USE_VISU)
 
-#-------------------------------
-# Librairie FLTK
-#-------------------------------
-# Add an option to use or not use FLTK (http://www.fltk.org)
+        #-------------------------------
+        # Librairie OpenGL
+        #-------------------------------
+        FIND_PACKAGE(OpenGL)
+        IF(OPENGL_INCLUDE_PATH)
+                INCLUDE_DIRECTORIES(${OPENGL_INCLUDE_PATH})
+        ENDIF(OPENGL_INCLUDE_PATH)
 
-FIND_PACKAGE(FLTK)
-IF(FLTK_FOUND)
-#  INCLUDE(${FLTK_USE_FILE})
-   INCLUDE_DIRECTORIES(${FLTK_INCLUDE_DIR})
-ELSE(FLTK_FOUND)
-   MESSAGE(FATAL_ERROR
-	 "Cannot build OTB project without FLTK.  Please set FLTK_DIR.")
-ENDIF(FLTK_FOUND)
+        #-------------------------------
+        # Librairie FLTK
+        #-------------------------------
+        # Add an option to use or not use FLTK (http://www.fltk.org)
+
+        FIND_PACKAGE(FLTK)
+        IF(FLTK_FOUND)
+        #  INCLUDE(${FLTK_USE_FILE})
+           INCLUDE_DIRECTORIES(${FLTK_INCLUDE_DIR})
+        ELSE(FLTK_FOUND)
+           MESSAGE(FATAL_ERROR
+	         "Cannot build OTB project without FLTK.  Please set FLTK_DIR or set OTB_USE_VISU to OFF.")
+        ENDIF(FLTK_FOUND)
+
+ENDIF(OTB_USE_VISU)
+
+
 
 #-------------------------------
 # End connections whith external libraries
