@@ -66,7 +66,9 @@ int otbSVMClassifierPointSet(int argc, char* argv[] )
 
     MeasurePointsContainer::Pointer mCont = MeasurePointsContainer::New();
     
-    for(unsigned int pointId = 0; pointId<20; pointId++)
+    unsigned int pointId;
+    
+    for(pointId = 0; pointId<20; pointId++)
       {
 
       MeasurePointType mP;
@@ -133,7 +135,7 @@ int otbSVMClassifierPointSet(int argc, char* argv[] )
 
 
     double error = 0.0;
-    unsigned int pointId = 0;
+    pointId = 0;
     while (m_iter != m_last)
       {
       ClassifierType::ClassLabelType label = m_iter.GetClassLabel();

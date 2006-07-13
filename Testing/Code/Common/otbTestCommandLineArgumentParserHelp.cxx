@@ -45,6 +45,8 @@ int otbTestCommandLineArgumentParserHelp( int argc, char * argv[] )
 
   catch(itk::ExceptionObject &err) 
     { 
+    std::cout << "Exception itk::ExceptionObject levee ! Cas nominal" << std::endl; 
+    std::cout << err << std::endl; 
     return EXIT_SUCCESS;
      } 
   catch( ... ) 
