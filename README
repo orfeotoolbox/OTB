@@ -6,3 +6,82 @@ Thank you.
 
 The OTB Development Team.
 
+***Notes for those who do not read the doc***
+
+Installation on Linux/Unix platforms
+------------------------------------
+
+0. We assume that you will install everything on a directory called
+INSTALL_DIR, which usually is /usr/local, /home/jordi/local or
+whatever you want.
+1. Make sure that you have downloaded the source code for:
+       - CMake (http://www.cmake.org)
+       - GDAL (http://www.gdal.org/)
+       - Fltk (http://www.fltk.org)
+
+2. Install GDAL:
+      cd INSTALL_DIR
+      gunzip gdal.1.3.2.tar.gz
+      tar xvf gdal.1.3.2.tar
+      cd gdal.1.3.2
+      ./configure --prefix=INSTALL_DIR
+      make
+      make install
+
+3. Install CMake:
+      cd INSTALL_DIR
+      gunzip cmake-2.2.3.tar.gz
+      tar xvf cmake-2.2.3.tar
+      cd cmake-2.2.3
+      ./configure --prefix=INSTALL_DIR
+      make
+      make install
+
+      In order to properly use cmake, add INSTALL_DIR/bin to your path
+      with export PATH=$PATH:INSTALL_DIR/bin or something similar.
+
+4. Install Fltk using CMake (do not use the configure script)
+
+      cd INSTALL_DIR
+      bunzip2 fltk-1.1.7-source.tar.bz2 OR
+      gunzip fltk-1.1.7-source.tar.gz
+      mkdir Fltk-binary
+      cd Fltk-binary
+      ccmake ../fltk-1.1.7
+      --> follow the CMake instructions, in particular:
+          --> set CMAKE_INSTALL_PREFIX to INSTALL_DIR within CMake
+	  --> set BUILD_EXAMPLES to ON within CMake
+	  --> generate the configuration with 'g'
+      make
+      make install
+      --> check that the examples located in
+      INSTALL_DIR/Fltk-binary/bin work, in particular, the fractals
+      example which makes use of the OpenGL library needed by OTB.
+
+5. Install OTB
+
+      cd INSTALL_DIR
+      gunzip OrfeoToolbox-1.0.0.tgz
+      tar xvf OrfeoToolbox-1.0.0.tar
+      mkdir OTB-Binary
+      cd OTB-Binary
+      ccmake ../OrfeoToolbox-1.0.0
+      --> follow the CMake instructions, in particular:
+	  --> set BUILD_EXAMPLES to ON within CMake
+	  --> set BUILD_SHARED_LIBS to OFF within CMake
+	  --> set BUILD_TESTING to OFF within CMake
+	  --> set CMAKE_INSTALL_PREFIX to INSTALL_DIR within CMake
+	  --> set GDAL_INCLUDE_DIRS to INSTALL_DIR/include within CMake
+	  --> set GDAL_LIBRARY_DIRS to INSTALL_DIR/lib within CMake
+	  --> set OTB_USE_EXTERNAL_ITK to OFF within CMake
+	  --> set FLTK_DIR to INSTALL_DIR/Fltk-Binary within CMake
+	  --> generate the configuration with 'g'
+       make
+       make install
+            
+
+6. That should be all! Otherwise, subscribe to
+   otb-users@googlegroups.com and you will get some help.
+            
+
+
