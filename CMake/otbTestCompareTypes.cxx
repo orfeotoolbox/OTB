@@ -1,16 +1,20 @@
 /*=========================================================================
 
-  Program:   Orfeo Toolbox
-  Module:    $RCSfile: otbTestCompareTypes.cxx,v $
+  Program:   ORFEO Toolbox
   Language:  C++
-  Date:      $Date: 2006/07/10 15:31:11 $
-  Version:   $Revision: 1.1 $
+  Date:      $Date$
+  Version:   $Revision$
 
-  Copyright (c)  Orfeo Toolbox. All rights reserved.
+
+  Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
   See OTBCopyright.txt for details.
 
-     This software is distributed WITHOUT ANY WARRANTY; without even
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
+  Some parts of this code are derived from ITK. See ITKCopyright.txt
+  for details.
+
+
+     This software is distributed WITHOUT ANY WARRANTY; without even 
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
