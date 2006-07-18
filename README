@@ -85,3 +85,10 @@ whatever you want.
             
 
 
+** Sun OS ans HP UX users **
+----------------------------
+
+Please make sure that you use the GNU tar command, since the tar
+command shipped with Sun workstations may give problems. See
+<http://groups.google.com/group/otb-users/browse_thread/thread/3758159f06092ae4>
+for details.
