@@ -10,15 +10,22 @@ SET(TEMP ${OTBTesting_BINARY_DIR}/Temporary)
 
 
 #Tolerance sur diff pixel image
+#Utiliser EPSILON lorsuqe par exemple sous Windows, il y a qques differences
 SET(TOL 0.0)
+SET(EPSILON 0.0000001)
 
 SET(FEATUREEXTRACTION_TESTS ${CXX_TEST_PATH}/otbFeatureExtractionTests)
 
 
 
+IF(WIN32)
+        SET(BASELINE_FILES_FE_ALIGN ${BASELINE_FILES}/feAlign_WIN32.txt)
+ELSE(WIN32)
+        SET(BASELINE_FILES_FE_ALIGN ${BASELINE_FILES}/feAlign.txt)
+ENDIF(WIN32)
 ADD_TEST(feTvAlignMV2ITK ${FEATUREEXTRACTION_TESTS}  
-  --compare-ascii ${BASELINE_FILES}/feAlign.txt
-                          ${TEMP}/feAlign.txt
+   --compare-ascii      ${BASELINE_FILES_FE_ALIGN}
+                        ${TEMP}/feAlign.txt
         otbAlignImageToPath
 	${INPUTDATA}/poupees.hdr
 	${TEMP}/feAlign.txt)
@@ -99,7 +106,7 @@ ADD_TEST(feTuTouziNew ${FEATUREEXTRACTION_TESTS}
         otbTouziEdgeDetectorNew)
 		
 ADD_TEST(feTvTouzi ${FEATUREEXTRACTION_TESTS}
-  --compare-image ${TOL}  ${BASELINE}/feFiltreTouzi_amst_3.hdr
+  --compare-image ${EPSILON}  ${BASELINE}/feFiltreTouzi_amst_3.hdr
                           ${TEMP}/feFiltreTouzi_amst_3.hdr
         otbTouziEdgeDetector
 	${INPUTDATA}/amst.png
@@ -107,7 +114,7 @@ ADD_TEST(feTvTouzi ${FEATUREEXTRACTION_TESTS}
 	3)
 	
 ADD_TEST(feTvTouziDir ${FEATUREEXTRACTION_TESTS}
-  --compare-image ${TOL}  ${BASELINE}/feFiltreTouzi_amst_dir_3.hdr
+  --compare-image ${EPSILON}  ${BASELINE}/feFiltreTouzi_amst_dir_3.hdr
                           ${TEMP}/feFiltreTouzi_amst_dir_3.hdr  
         otbTouziEdgeDetectorDirection
 	${INPUTDATA}/amst.png
