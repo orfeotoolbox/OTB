@@ -1,0 +1,332 @@
+\section{Introduction}
+\subsection{What is OTB?}
+OTB, the ORFEO Toolbox is a library of image processing algorithms developed by CNES in the
+frame of the ORFEO Accompaniment Program. 
+OTB is based on the medical image processing library ITK, \url{http://www.itk.org}, and offers
+particular functionnalities for remote sensing image processing in
+general and for high spatial resolution images in particular.
+
+OTB provides:
+\begin{itemize}
+\item image access: optimized read/write access for most of remote sensing
+image formats, meta-data access, simple visualization;
+\item filtering: blurring, denoising, enhancement;
+\item feature extraction: interest points, alignments, lines;
+\item image segmentation: region growing, watershed, level sets;
+\item classification: K-means, SVM, Markov random fields; 
+\item change detection.  
+\end{itemize}
+
+
+Many of these functionnalities are provided by ITK and have been tested
+and documented for the use with remote sensing data.
+
+\subsection{What is ORFEO?}
+ORFEO stands for Optical ans Radar Federated Earth Observation.  n
+2001 a cooperation program was set between France and Italy to develop
+ORFEO, an Earth observation dual system with metric resolution: Italy
+is in charge of COSMO-Skymed the radar component development, and
+France of PLEIADES the optic component.
+
+The PLEIADES optic component is composed of two "small satellites"
+(mass of one ton) offering a spatial resolution at nadir of 0.7 m and
+a field of view of 20 km. Their great agility enables a daily access
+all over the world, essentially for defence and civil security
+applications, and a coverage capacity necessary for the cartography
+kind of applications at scales better than those accessible to SPOT
+family satellites. Moreover, PLEIADES will have stereoscopic
+acquisition capacity to meet the fine cartography needs, notably in
+urban regions, and to bring more information when used with aerial
+photography.
+
+The ORFEO "targeted" acquisition capacities made it a system
+particularly adapted to defence or civil security missions, as well as
+critical geophysical phenomena survey such as volcanic eruptions,
+which require a priority use of the system resources.
+
+
+With respect to the constraints of the franco-italian agreement,
+cooperations have been set up for the PLEIADES optical component with
+Sweden, Belgium, Spain and Austria.
+
+\subsubsection{Where can I get more information about ORFEO?}
+At the PLEIADES HR web site: \url{http://smsc.cnes.fr/PLEIADES/}.
+
+\subsection{What is the ORFEO Accompaniment Program?}
+Beside the Pleiades (PHR) and Cosmo-Skymed (CSK) systems developments forming ORFEO, the dual and bilateral system (France - Italy) for Earth Observation, the ORFEO Accompaniment Program was set up, to prepare, accompany and promote the use and the exploitation of the images derived from these sensors.
+
+The creation of a preparatory program is needed because of :
+\begin{itemize}
+  \item  the new capabilities and performances of the ORFEO systems (optical and radar high resolution, access capability, data quality, possibility to acquire simultaneously in optic and radar),
+  \item the implied need of new methodological developments : new processing methods, or adaptation of existing methods,
+  \item the need to realise those new developments in very close cooperation with the final users, the integration of new products in their systems.
+\end{itemize}
+  
+
+This program was initiated by CNES mid-2003 and will last until 2009.
+It consists in two parts, between which it is necessary to keep a strong interaction:
+\begin{itemize}
+\item A Methodological part,
+\item A Thematic part.
+\end{itemize}
+
+
+This Accompaniment Program uses simulated data (acquired during airborne campaigns) and satellite images quite similar to Pleiades (as QuickBird and Ikonos), used in a communal way on a set of special sites. The validation of specified products and services will be realised with those simulated data
+
+Apart from the initial cooperation with Italy, the ORFEO Accompaniment
+Program enlarged to Belgium, with integration of Belgian experts in
+the different WG as well as a participation to the methodological
+part.
+
+\subsubsection{Where can I get more information about the ORFEO
+  Accompaniment Program?}
+Go to the following web site:
+\url{http://smsc.cnes.fr/PLEIADES/A_prog_accomp.htm}.
+
+\subsection{Who is responsible for the OTB development?}
+The French Centre National d'\'Etudes Spatiales, CNES, initiated the ORFEO
+Toolbox and is responsible for the specification of the library. CNES
+funds the industrial development contracts and research contracts
+needed for the evolution of OTB.
+
+\section{Licence}
+\subsection{Which is the OTB licence?}
+OTB is distributed under a free software licence:
+\url{http://www.cecill.info/licences/Licence_CeCILL_V2-en.html}.
+
+
+\subsection{If I write an application using OTB am I forced to distribute that application?}
+No. The license gives you the option to distribute your application if
+you want to. You do not have to exercise this option in the license.
+
+\subsection{If I wanted to distribute an application using OTB what license would I need to use?}
+    The CeCILL licence.
+
+\subsection{I am a commercial user. Is there any restriction on the
+  use of OTB?}
+OTB can be used internally ("in-house") without restriction, but only
+redistributed in other software that is under the CeCILL licence.
+
+\section{Getting OTB}
+\subsection{Who can download the OTB?}
+Anybody can download the OTB at no cost. 
+\subsection{Where can I download the OTB?}
+Go to \url{http://smsc.cnes.fr/PLEIADES/A_prog_accomp.htm}
+ and follow the "ORFEO Toolbox" link. You will have access to the OTB
+source code and to the Software User's Guide.
+\section{Installing OTB}
+\subsection{Which platforms are supported}
+OTB is a multi-platform library. It has successfully been installed on
+the following platforms:
+\begin{itemize}
+  \item Linux/Unix with GCC (2.95.X, 3.3.X, 4.1.X).
+  \item Windows with Visual Studio 7.1
+\end{itemize}
+
+Support for the following platforms is planned:
+\begin{itemize}
+  \item Windows with VC++ 6.
+  \item Cygwin.
+  \item Windows with Mingw.
+\end{itemize}
+
+\subsection{Which libraries/packages are needed before installing
+ OTB?}
+\begin{itemize}
+\item CMake (http://www.cmake.org)
+\item GDAL (http://www.gdal.org/)
+\item Fltk (http://www.fltk.org)
+\end{itemize}
+       
+\subsection{Main steps}
+In order to install OTB on your system follow these steps (in the
+given order):
+\begin{enumerate}
+  \item Install CMake.
+  \item Install GDAL.
+  \item Install Fltk using the CMake scripts. Do not use the
+  \texttt{configure} approach or the project files for Microsoft
+  Visual Studio shipped with Fltk.
+  \item Install ITK if you do not want to use the ITK version provided
+  with OTB. Use CMake for the configuration.
+  \item Install OTB using CMake for the configuration.
+\end{enumerate}
+\subsubsection{Unix/Linux Platforms}
+\begin{enumerate}
+\item We assume that you will install everything on a directory called
+\texttt{INSTALL\_DIR}, which usually is \texttt{/usr/local}, \texttt{/home/jordi/local} or
+whatever you want.
+\item Make sure that you have downloaded the source code for:
+  \begin{itemize}
+  \item CMake (http://www.cmake.org)
+  \item GDAL (http://www.gdal.org/)
+  \item Fltk (http://www.fltk.org)
+  \end{itemize}
+    
+\item Install GDAL:
+  \begin{verbatim}
+      cd INSTALL_DIR
+      gunzip gdal.1.3.2.tar.gz
+      tar xvf gdal.1.3.2.tar
+      cd gdal.1.3.2
+      ./configure --prefix=INSTALL_DIR
+      make
+      make install
+  \end{verbatim}
+      
+
+\item Install CMake:
+  \begin{verbatim}
+      cd INSTALL_DIR
+      gunzip cmake-2.2.3.tar.gz
+      tar xvf cmake-2.2.3.tar
+      cd cmake-2.2.3
+      ./configure --prefix=INSTALL_DIR
+      make
+      make install
+  \end{verbatim}
+      In order to properly use cmake, add \texttt{INSTALL\_DIR/bin} to
+      your path with \texttt{export PATH=\$PATH:INSTALL\_DIR/bin} or
+      something similar.
+
+\item Install Fltk using CMake (do not use the configure script)
+  \begin{verbatim}
+      cd INSTALL_DIR
+      bunzip2 fltk-1.1.7-source.tar.bz2 OR
+      gunzip fltk-1.1.7-source.tar.gz
+      mkdir Fltk-binary
+      cd Fltk-binary
+      ccmake ../fltk-1.1.7
+      --> follow the CMake instructions, in particular:
+          --> set CMAKE_INSTALL_PREFIX to INSTALL_DIR within CMake
+	  --> set BUILD_EXAMPLES to ON within CMake
+	  --> generate the configuration with 'g'
+      make
+      make install
+      --> check that the examples located in
+      INSTALL_DIR/Fltk-binary/bin work, in particular, the fractals
+      example which makes use of the OpenGL library needed by OTB.
+  \end{verbatim}
+      
+
+\item Install OTB
+  \begin{verbatim}
+      cd INSTALL_DIR
+      gunzip OrfeoToolbox-1.0.0.tgz
+      tar xvf OrfeoToolbox-1.0.0.tar
+      mkdir OTB-Binary
+      cd OTB-Binary
+      ccmake ../OrfeoToolbox-1.0.0
+      --> follow the CMake instructions, in particular:
+	  --> set BUILD_EXAMPLES to ON within CMake
+	  --> set BUILD_SHARED_LIBS to OFF within CMake
+	  --> set BUILD_TESTING to OFF within CMake
+	  --> set CMAKE_INSTALL_PREFIX to INSTALL_DIR within CMake
+	  --> set GDAL_INCLUDE_DIRS to INSTALL_DIR/include within CMake
+	  --> set GDAL_LIBRARY_DIRS to INSTALL_DIR/lib within CMake
+	  --> set OTB_USE_EXTERNAL_ITK to OFF within CMake
+	  --> set FLTK_DIR to INSTALL_DIR/Fltk-Binary within CMake
+	  --> generate the configuration with 'g'
+       make
+       make install
+  \end{verbatim}
+      
+            
+\item That should be all! Otherwise, subscribe to
+   otb-users@googlegroups.com and you will get some help.
+  
+\end{enumerate}
+
+\subsection{Specific platform issues}
+\subsubsection{SunOS/HP UX}
+Due to a bug in the tar command shipped with some versions of SunOS,
+problems may appear when configuring, compiling or installing OTB.
+
+See \url{http://www.gnu.org/software/tar/manual/tar.html#Checksumming} for
+details on the bug characterization.
+
+The solution is to use the GNU tar command if it is available on your
+system (gtar).
+
+
+
+\section{Using OTB}
+
+\section{Getting help}
+\subsection{Is there any mailing list?}
+Yes. There is a discussion group at
+\url{http://groups.google.com/group/otb-users/} where you can get help
+on the set up and the use of OTB.
+
+\subsection{Which is the main source of documentation?}
+The main source of documentation is the OTB Software Guide which can
+be downloaded at \url{http://smsc.cnes.fr/PLEIADES/A_prog_accomp.htm}
+ following the {\em ORFEO Toolbox} link. It contains
+tenths of commented examples which should be a good starting point for
+any new OTB user. The code source for these examples is distributed with
+the toolbox. Another information source is the on-line API
+documentation which is available at the same download area.
+
+
+\section{OTB's Roadmap}
+\subsection{Which will be the next version of OTB?}
+OTB's version numbers have 3 digits. The first one is for major
+versions, the second one is for minor versions and the last one is for
+bugfixes.
+
+The first version was 1.0.0. The next one will probably be 1.0.1.
+
+\subsubsection{What is a major version?}
+A major version of the library implies the addition of ne high-level
+functionalities as image registration, object recognition, etc.
+
+\subsubsection{What is a minor version?}
+A minor version is released when low-level functionnalities are
+available within one major functionnality, as for instance a new
+change detector, a new feature extractor, etc.
+
+\subsubsection{What is a bugfix version?}
+A bugfix version is released when significant bugs are identified and fixed.
+
+\subsection{When will the next version of OTB be available?}
+We plan to release major new OTB version once a year, that is, version
+2.0.0 should be available mid-2007, version 3.0.0 should be relased
+mid-2008, and so on.
+
+\subsection{What features will the OTB include and when?}
+There is no detailed plan about the availability of OTB new features,
+since OTB's content depends on ongoing research work and on feedback
+from thematic users of the ORFEO Accompaniment Program.
+
+Nevertheless, the main milestones for the OTB development are the
+following:
+\begin{itemize}
+  \item{Version 1 (2006):}
+    \begin{itemize}
+    \item core of the system,
+    \item IO,
+    \item basic filtering, segmentation and classification,
+    \item basic feature extraction,
+    \item basic change detection.
+    \end{itemize}
+    \item{Version 2 (2007):}
+      \begin{itemize}
+      \item geometric corrections,
+      \item radiometric corrections,
+      \item registration.
+      \end{itemize}
+    \item{Version 3 (2008):}
+      \begin{itemize}
+      \item multi-scale and multi-resolution analysis,
+      \item object detection and recognition,
+      \item supervised learning.
+      \end{itemize}
+    \item{Version 4 (2009):}
+      \begin{itemize}
+	\item data fusion,
+	\item spatial reasoning.
+      \end{itemize}
+    
+\end{itemize}
+
+%% \subsection{When will feature X or Y be included in OTB?}
