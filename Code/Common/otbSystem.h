@@ -40,6 +40,10 @@ public:
   /** Standard class typedefs. */
   typedef System  Self;
 
+  /** Return true if the parameter 'pszPath' specify a directory name) */
+  static bool IsADirName(std::string pszPath);
+  /** Return true if the parameter 'pszPath' specify a file name) */
+  static bool IsAFileName(std::string pszPath);
   /** Get the extension of the file name */
   static std::string GetExtension( const std::string& filename );
   /** Get the root name */

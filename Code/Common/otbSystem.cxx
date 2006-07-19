@@ -77,12 +77,43 @@ System::GetRootName( const std::string& filename )
   return( filename );
 }
 
+bool System::IsAFileName(std::string pszPath)
+{
+        return( ! IsADirName(pszPath) );
+}
+
 
 #if defined(WIN32) || defined(WIN32CE)
 
 /*=====================================================================
                    WIN32 / MSVC++ implementation
  *====================================================================*/
+
+bool System::IsADirName(std::string pszPath)
+{
+    struct _finddata_t c_file;
+    long    hFile;
+    bool isADir(false);
+    std::string  pszFileSpec;
+    std::string path(pszPath);
+    
+    if (pszPath.empty() == true)
+        path = ".";
+
+    pszFileSpec = path + "\\*.*";
+
+    if ( (hFile = _findfirst( pszFileSpec.c_str(), &c_file )) != -1L )
+    {
+        isADir = true;
+        _findclose( hFile );
+    }
+    else
+    {
+        isADir = false;
+    }
+
+    return isADir;
+}
 
 std::vector<std::string> System::Readdir(std::string pszPath)
 {
@@ -115,6 +146,29 @@ std::vector<std::string> System::Readdir(std::string pszPath)
 /*=====================================================================
                       POSIX (Unix) implementation
  *====================================================================*/
+
+bool System::IsADirName(std::string pszPath)
+{
+    bool isADir(false);
+    DIR           *hDir;
+    struct dirent *psDirEntry;
+    std::string path(pszPath);
+    
+    if (pszPath.empty() == true)
+        path = ".";
+
+    if ( (hDir = opendir(path.c_str())) != NULL )
+    {
+        isADir = true;
+        closedir( hDir );
+    }
+    else
+    {
+        isADir = false;
+    }
+
+    return isADir;
+}
 
 /**
  * Read names in a directory.

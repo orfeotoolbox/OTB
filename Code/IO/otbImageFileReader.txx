@@ -26,6 +26,7 @@
 #include "itkVectorImage.h"
 
 #include "otbMacro.h"
+#include "otbSystem.h"
 #include "otbImageIOFactory.h"
 
 #include <itksys/SystemTools.hxx>
@@ -347,6 +348,45 @@ ImageFileReader<TOutputImage>
 
 }
 
+template <class TOutputImage>
+void 
+ImageFileReader<TOutputImage>
+::TestFileExistanceAndReadability()
+{
+    // Test if the file exists.
+    if( ! itksys::SystemTools::FileExists( this->m_FileName.c_str() ) )
+      {
+      itk::ImageFileReaderException e(__FILE__, __LINE__);
+      itk::OStringStream msg;
+      msg <<"The file doesn't exists. "
+          << std::endl << "Filename = " << this->m_FileName
+          << std::endl;
+      e.SetDescription(msg.str().c_str());
+      throw e;
+      return;
+      }
+
+    // Test if the file can be open for reading access.
+    //Only if m_FileName speciy a filname (not a dirname)
+    if( otb::System::IsAFileName( this->m_FileName ) == true )
+    {
+        std::ifstream readTester;
+        readTester.open( this->m_FileName.c_str() );
+        if( readTester.fail() )
+        {
+                readTester.close();
+                itk::OStringStream msg;
+                msg <<"The file couldn't be opened for reading. "
+                        << std::endl << "Filename: " << this->m_FileName
+                        << std::endl;
+                itk::ImageFileReaderException e(__FILE__, __LINE__,msg.str().c_str(),ITK_LOCATION);
+                throw e;
+                return;
+
+        }
+        readTester.close();
+    }
+}
 
 
 } //namespace otb

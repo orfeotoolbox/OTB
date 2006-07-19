@@ -85,6 +85,13 @@ protected:
 
   
 private:
+  /** Test whether the given filename exist and it is readable,
+      this is intended to be called before attempting to use 
+      ImageIO classes for actually reading the file. If the file
+      doesn't exist or it is not readable, and exception with an
+      approriate message will be thrown. */
+  void TestFileExistanceAndReadability();
+
   ImageFileReader(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
   
