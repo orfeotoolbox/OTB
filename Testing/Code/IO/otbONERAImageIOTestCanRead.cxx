@@ -20,7 +20,6 @@
 #pragma warning ( disable : 4786 )
 #endif
 
-//#define MAIN
 #include "otbONERAImageIO.h"
 #include "itkExceptionObject.h"
 #include <iostream>
@@ -33,7 +32,7 @@ int otbONERAImageIOTestCanRead(int argc, char* argv[])
         bool lCanRead = lONERAImageIO->CanReadFile(argv[1]);
         if ( lCanRead == false)
         {
-                std::cerr << "Erreur otb::CAIImageIO : impossible d'ouvrir l'image "<<argv[1]<<"."<<std::endl;
+                std::cerr << "Erreur otb::ONERAImageIO : impossible d'ouvrir l'image "<<argv[1]<<"."<<std::endl;
                 return EXIT_FAILURE;
         }
   }
