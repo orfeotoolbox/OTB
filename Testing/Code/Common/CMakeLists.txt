@@ -14,6 +14,14 @@ SET(TOL 0.0)
 
 SET(COMMON_TESTS ${CXX_TEST_PATH}/otbCommonTests)
 
+# -------            otb::System  -------------
+ADD_TEST(coTuSystemTests_IsA_Methods ${COMMON_TESTS}  
+        otbSystemTest
+        ${OTB_DATA_ROOT}/OTBData.readme
+        ${OTB_DATA_ROOT}
+        )
+
+
 # -------            otb::CommandLibneArgumentParser  -------------
 
 ADD_TEST(coTuCmdLineArgParserHelpWithArg ${COMMON_TESTS}  
@@ -208,6 +216,7 @@ ADD_TEST(coTuImageToLineSpatialObjectListNew ${COMMON_TESTS}
          
 # -------       Fichiers sources CXX -----------------------------------
 SET(BasicCommon_SRCS
+otbSystemTest.cxx
 otbTestCommandLineArgumentParser.cxx
 otbTestCommandLineArgumentParserHelp.cxx
 otbTestCommandLineArgumentParserList.cxx

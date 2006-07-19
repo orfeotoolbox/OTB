@@ -26,6 +26,7 @@
 
 void RegisterTests()
 {
+REGISTER_TEST(otbSystemTest);
 REGISTER_TEST(otbTestCommandLineArgumentParser);
 REGISTER_TEST(otbTestCommandLineArgumentParserHelp);
 REGISTER_TEST(otbTestCommandLineArgumentParserList);
