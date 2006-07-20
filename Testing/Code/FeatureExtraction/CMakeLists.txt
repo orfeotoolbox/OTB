@@ -16,15 +16,8 @@ SET(EPSILON 0.0000001)
 
 SET(FEATUREEXTRACTION_TESTS ${CXX_TEST_PATH}/otbFeatureExtractionTests)
 
-
-
-IF(WIN32)
-        SET(BASELINE_FILES_FE_ALIGN ${BASELINE_FILES}/feAlign_WIN32.txt)
-ELSE(WIN32)
-        SET(BASELINE_FILES_FE_ALIGN ${BASELINE_FILES}/feAlign.txt)
-ENDIF(WIN32)
 ADD_TEST(feTvAlignMV2ITK ${FEATUREEXTRACTION_TESTS}  
-   --compare-ascii      ${BASELINE_FILES_FE_ALIGN}
+   --compare-ascii      ${BASELINE_FILES}/feAlign.txt
                         ${TEMP}/feAlign.txt
         otbAlignImageToPath
 	${INPUTDATA}/poupees.hdr
