@@ -20,15 +20,10 @@
 #pragma warning ( disable : 4786 )
 #endif
 
-//#define MAIN
 
-
-#include "otbImage.h"
-#include "itkVectorImage.h"
+#include "otbVectorImage.h"
 #include "itkExceptionObject.h"
 #include <iostream>
-#include "itkComplexToModulusImageFilter.h"
-#include "itkStreamingImageFilter.h"
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
 #include "otbMultiChannelExtractROI.h"
@@ -51,15 +46,7 @@ int otbImageFileReaderONERATest(int argc, char* argv[])
         typedef otb::ImageFileReader< InputImageType  >            ReaderType;
         typedef otb::ImageFileWriter< OutputImageType >            WriterType;
 
-        typedef itk::StreamingImageFilter< InputImageType, 
-					   OutputImageType >       StreamingType;
-	
-        StreamingType::Pointer streaming = StreamingType::New();
-        ReaderType::Pointer complexReader = ReaderType::New();
- 
-	complexReader->SetFileName( inputFilename  );
-	streaming->SetNumberOfStreamDivisions(100);
-	streaming->SetInput(complexReader->GetOutput());
+        ReaderType::Pointer Reader = ReaderType::New();
         
         typedef otb::MultiChannelExtractROI< OutputPixelType, 
                                              OutputPixelType >  ExtractROIFilterType;
@@ -70,10 +57,11 @@ int otbImageFileReaderONERATest(int argc, char* argv[])
 	extractROIFilter->SetStartY( 10 );
 	extractROIFilter->SetSizeX( 100 );
 	extractROIFilter->SetSizeY( 100 );
-        extractROIFilter->SetInput( streaming->GetOutput() );        
+        extractROIFilter->SetInput( Reader->GetOutput() );        
 	
         WriterType::Pointer writer = WriterType::New();
 	
+	Reader->SetFileName( inputFilename  );
         writer->SetFileName( outputFilename );        
         writer->SetInput( extractROIFilter->GetOutput() );
         writer->Update(); 
@@ -83,6 +71,11 @@ int otbImageFileReaderONERATest(int argc, char* argv[])
   { 
     std::cerr << "Exception OTB attrappee dans exception ITK !" << std::endl; 
     std::cerr << err << std::endl; 
+    return EXIT_FAILURE;
+  } 
+  catch( std::bad_alloc & err ) 
+  { 
+    std::cout << "Exception bad_alloc : "<<(char*)err.what()<< std::endl; 
     return EXIT_FAILURE;
   } 
   catch( ... )

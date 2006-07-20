@@ -20,14 +20,10 @@
 #pragma warning ( disable : 4786 )
 #endif
 
-//#define MAIN
-
-
-#include "itkVectorImage.h"
 #include "itkExceptionObject.h"
 #include <iostream>
 #include "itkComplexToModulusImageFilter.h"
-#include "itkStreamingImageFilter.h"
+#include "otbImage.h"
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
 #include "otbExtractROI.h"
@@ -50,14 +46,9 @@ int otbImageFileReaderONERAComplex(int argc, char* argv[])
         typedef otb::ImageFileReader< InputImageType  >         ReaderType;
         typedef otb::ImageFileWriter< OutputImageType >         WriterType;
 
-        typedef itk::StreamingImageFilter< InputImageType, InputImageType >  StreamingType;
-	
-        StreamingType::Pointer streaming = StreamingType::New();
-        ReaderType::Pointer complexReader = ReaderType::New();
+        ReaderType::Pointer Reader = ReaderType::New();
  
-	complexReader->SetFileName( inputFilename  );
-	streaming->SetNumberOfStreamDivisions(100);
-	streaming->SetInput(complexReader->GetOutput());
+        Reader->SetFileName( inputFilename  );
 
         typedef otb::ExtractROI< InputPixelType, 
                                  InputPixelType >  ExtractROIFilterType;
@@ -68,7 +59,7 @@ int otbImageFileReaderONERAComplex(int argc, char* argv[])
 	extractROIFilter->SetStartY( 10 );
 	extractROIFilter->SetSizeX( 100 );
 	extractROIFilter->SetSizeY( 100 );
-        extractROIFilter->SetInput( streaming->GetOutput() );        
+        extractROIFilter->SetInput( Reader->GetOutput() );        
 
   	typedef itk::ComplexToModulusImageFilter< 
                        InputImageType, OutputImageType > ModulusFilterType;

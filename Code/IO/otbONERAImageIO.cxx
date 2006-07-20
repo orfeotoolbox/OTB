@@ -212,11 +212,6 @@ otbMsgDevMacro( <<" Nb Of Components  : "<<this->GetNumberOfComponents());
   unsigned long numberOfBytesToBeRead = 2 * m_NbOctetPixel *lNbColonnes;
   unsigned long numberOfBytesRead;        
 
-otbMsgDevMacro( <<" ONERAImageIO::Read()  ");
-otbMsgDevMacro( <<" Dimensions de l'image  : "<<m_Dimensions[0]<<","<<m_Dimensions[1]);
-otbMsgDevMacro( <<" Region lue (IORegion)  : "<<this->GetIORegion());
-otbMsgDevMacro( <<" Nb Of Components  : "<<this->GetNumberOfComponents());
-
   char* value = new char[numberOfBytesToBeRead];
   unsigned long cpt = 0;
  
@@ -225,19 +220,31 @@ otbMsgDevMacro( <<" Nb Of Components  : "<<this->GetNumberOfComponents());
 	offset  =  headerLength + numberOfBytesPerLines * LineNo;
 	offset +=  m_NbOctetPixel * lPremiereColonne;
   	m_Datafile.seekg(offset, std::ios::beg);
+/*        bool bRead = this->ReadBufferAsBinary(m_Datafile, (void*)value, numberOfBytesToBeRead);
+        if( bRead == false )
+        {
+      		itkExceptionMacro(<<"ONERAImageIO::Read() Can Read the specified Region"); // read failed
+        }
+*/       
         m_Datafile.read( static_cast<char *>( value ), numberOfBytesToBeRead );
     	numberOfBytesRead = m_Datafile.gcount();
-        if( numberOfBytesRead != numberOfBytesToBeRead )
-	  if( ( numberOfBytesRead != numberOfBytesToBeRead )  || m_Datafile.fail() )
-             {
+#ifdef __APPLE_CC__
+  // fail() is broken in the Mac. It returns true when reaches eof().
+        if ( numberOfBytesRead != numberOfBytesToBeRead )
+#else
+        if ( ( numberOfBytesRead != numberOfBytesToBeRead )  || m_Datafile.fail() )
+#endif
+        {
       		itkExceptionMacro(<<"ONERAImageIO::Read() Can Read the specified Region"); // read failed
-      	     }
+        }
 
-	for( unsigned long  i=0 ; i < numberOfBytesRead ; i = i+  2 * m_NbOctetPixel )
+/*	for( unsigned long  i=0 ; i < numberOfBytesRead ; i = i+  2 * m_NbOctetPixel )
            {
             memcpy((void*)(&(p[cpt])),(const void*)(&(value[i])),(size_t)( 2* m_NbOctetPixel));
             cpt += 2*m_NbOctetPixel;
-           }
+           } */
+        memcpy((void*)(&(p[cpt])),(const void*)(value),(size_t)( numberOfBytesToBeRead));
+        cpt += numberOfBytesToBeRead;
     }
 
   //byte swapping depending on pixel type:
@@ -246,6 +253,9 @@ otbMsgDevMacro( <<" Nb Of Components  : "<<this->GetNumberOfComponents());
     itk::ByteSwapper<float>::SwapRangeFromSystemToLittleEndian(
         reinterpret_cast<float *>(buffer),cpt);
     }
+
+  delete [] value;
+    
 }
 
 
@@ -266,7 +276,7 @@ bool ONERAImageIO::OpenOneraDataFileForReading(const char* filename)
   const std::string DataFileName = System::GetRootName(filename)+".dat";
   
   // Open the new file for reading
-  m_Datafile.open( DataFileName.c_str(),  std::ios::in );
+  m_Datafile.open( DataFileName.c_str(),  std::ios::in | std::ios::binary );
   if( m_Datafile.fail() )
     {
     otbMsgDebugMacro(<<"ONERAImageIO::CanReadFile() failed data open ! " );
@@ -316,12 +326,12 @@ void ONERAImageIO::InternalReadImageInformation()
 
   if ( ! this->OpenOneraDataFileForReading(m_FileName.c_str()) )
     {
-    itkExceptionMacro(<< "Cannot read requested file");
+    itkExceptionMacro(<< "Cannot read ONERA data file "<<m_FileName );
     }
 
-  if ( ! this->OpenOneraDataFileForReading(m_FileName.c_str()) )
+  if ( ! this->OpenOneraHeaderFileForReading(m_FileName.c_str()) )
     {
-    itkExceptionMacro(<< "Cannot read requested file");
+    itkExceptionMacro(<< "Cannot read ONERA header file "<<m_FileName);
     }
 
   // check "Format_valeurs_look"  

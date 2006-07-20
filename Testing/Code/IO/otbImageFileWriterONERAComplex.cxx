@@ -20,9 +20,6 @@
 #pragma warning ( disable : 4786 )
 #endif
 
-//#define MAIN
-
-
 #include "otbImage.h"
 #include "itkExceptionObject.h"
 #include <iostream>
@@ -72,6 +69,11 @@ int otbImageFileWriterONERAComplex(int argc, char* argv[])
   { 
     std::cerr << "Exception OTB attrappee dans exception ITK !" << std::endl; 
     std::cerr << err << std::endl; 
+    return EXIT_FAILURE;
+  } 
+  catch( std::bad_alloc & err ) 
+  { 
+    std::cout << "Exception bad_alloc : "<<(char*)err.what()<< std::endl; 
     return EXIT_FAILURE;
   } 
   catch( ... )
