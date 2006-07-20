@@ -85,6 +85,11 @@ int otbImageFileReaderERS(int argc, char* argv[])
     std::cerr << err << std::endl; 
     return EXIT_FAILURE;
   } 
+  catch( std::bad_alloc & err ) 
+  { 
+    std::cout << "Exception bad_alloc : "<<(char*)err.what()<< std::endl; 
+    return EXIT_FAILURE;
+  } 
   catch( ... )
   {
     std::cerr << "Exception OTB non attrappee !" << std::endl; 

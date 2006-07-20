@@ -501,7 +501,7 @@ ADD_TEST(ioTuOtbImageTestRadarsat ${IO_TESTS}
 
 # ---  Otb::VectorImage Test  ---
 ADD_TEST(ioTuOtbVectorImageTestRadarsat ${IO_TESTS} 
-   --compare-ascii   ${BASELINE_FILES}/ioOtbVectorImageTestRadarsat.txt
+   --compare-ascii   ${TEMP}/ioOtbImageTestRadarsat.txt
                      ${TEMP}/ioOtbVectorImageTestRadarsat.txt
         otbVectorImageTest
         ${IMAGEDATA}/RADARSAT1/SCENE01/
