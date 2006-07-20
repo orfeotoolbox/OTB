@@ -153,6 +153,10 @@ int main(int ac, char* av[] )
       {
       // Invoke the test's "main" function.
       result = (*f)(ac-1, av+1);
+      
+      if (result!=0)
+       	itkGenericExceptionMacro(<<"Bad function return, no regresion test !");
+            
 otbMsgDebugMacro(<<"----------------     DEBUT Controle NON-REGRESION  ------------------- ");
       // Make a list of possible baselines
       // Test de non regression sur des images
