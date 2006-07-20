@@ -368,7 +368,7 @@ ImageFileReader<TOutputImage>
 
     // Test if the file can be open for reading access.
     //Only if m_FileName speciy a filname (not a dirname)
-    if( otb::System::IsAFileName( this->m_FileName ) == true )
+    if( System::IsAFileName( this->m_FileName ) == true )
     {
         std::ifstream readTester;
         readTester.open( this->m_FileName.c_str() );
