@@ -78,12 +78,13 @@ void LineDetectorImageFilterBase<TInputImage, TOutputImage, InterpolatorType>::G
   m_Radius[1] = static_cast<unsigned int>(3*(2*m_WidthLine+1) + 2); 
   m_Radius[0] = 2*m_LengthLine+1 ;
 
-  otbMsgDevMacro( << m_Radius[0] << " " << m_Radius[1] );
-  
   // Define the size of the facelist by taking into account the rotation of the region
   m_FaceList[0] = static_cast<unsigned int>( sqrt( static_cast<double>((m_Radius[0]*m_Radius[0]) + (m_Radius[1]*m_Radius[1]) ) ) + 1 );
   m_FaceList[1] = m_FaceList[0];
   
+  otbMsgDevMacro( << "Radius   : "<<m_Radius[0]<<" "<<m_Radius[1]);
+  otbMsgDevMacro( << "-> FaceList : "<<m_FaceList[0]<<" "<<m_FaceList[1]);
+
   // pad the input requested region by the operator radius
   inputRequestedRegion.PadByRadius( m_FaceList );
 
@@ -233,6 +234,8 @@ void LineDetectorImageFilterBase< TInputImage, TOutputImage, InterpolatorType>
   int Yc12, Yc13;
   
   //---------------------------------------------------------------------------
+  otbMsgDevMacro( << "Theta    : "<<Theta[0]<<" "<<Theta[1]<<" "<<Theta[2]<<" "<<Theta[3]);
+
  
   // Process each of the boundary faces.  These are N-d regions which border
   // the edge of the buffer.
@@ -248,6 +251,7 @@ void LineDetectorImageFilterBase< TInputImage, TOutputImage, InterpolatorType>
     bit.OverrideBoundaryCondition(&nbc);
     bit.GoToBegin();
 
+  otbMsgDevMacro( << " ------------------- FaceList --------------------------");
 
 
     while ( ! bit.IsAtEnd() )
@@ -272,9 +276,14 @@ void LineDetectorImageFilterBase< TInputImage, TOutputImage, InterpolatorType>
       // Contains for the 4 directions the the pixels belonging to each zone
 	  //std::vector<double> PixelValues[NB_DIR][NB_ZONE];
 	  // ROMAIN
-		std::vector<double>** PixelValues=new std::vector<double>*[NB_DIR];
-		for (int i=0; i<NB_DIR; i++)
-			PixelValues[i] = new std::vector<double>[NB_ZONE];
+        std::vector<double>** PixelValues = NULL;
+        PixelValues = new std::vector<double>*[NB_DIR];
+	for (int i=0; i<NB_DIR; i++)
+        {
+		PixelValues[i] = NULL;
+                PixelValues[i] = new std::vector<double>[NB_ZONE];
+        }
+  otbMsgDevMacro( << "\tCentre Xc/Yc="<<Xc<<" "<<Yc<<" Yc12/Yc13="<<Yc12<<" "<<Yc13);          
 
       // Loop on the region 
       for (int i = 0; i < m_Radius[0]; i++)
@@ -302,6 +311,7 @@ void LineDetectorImageFilterBase< TInputImage, TOutputImage, InterpolatorType>
           continue;
 
                  
+        otbMsgDevMacro( << "\t\tPoint traite (i,j)=("<<i<<","<<j<<") -> X,Y="<<X<<","<<Y<<"  zone="<<zone);
         // Loop on the directions
         for (unsigned int dir=0; dir<NB_DIR; dir++ )
           {      
@@ -314,7 +324,7 @@ void LineDetectorImageFilterBase< TInputImage, TOutputImage, InterpolatorType>
 	  Index[0] = static_cast<CoordRepType>(xout + Xc);
 	  Index[1] = static_cast<CoordRepType>(yout + Yc);
 	  PixelValues[dir][zone].push_back(static_cast<double>(interpolator->EvaluateAtContinuousIndex( Index )));
-          
+         otbMsgDevMacro( << "\t\t\tInterpole : direction "<<dir<<" out(x,y)=("<<xout<<","<<yout<<") Index : "<<Index[0]<<" "<<Index[1]);
           }      
 
         } // end of the loop on the pixels of the region 
@@ -337,9 +347,9 @@ void LineDetectorImageFilterBase< TInputImage, TOutputImage, InterpolatorType>
 	    Direction = Theta[dir];
 	    }
 	  
-	  
 	  } // end of the loop on the directions
 
+        otbMsgDevMacro( << "\t\tR,Direction : "<<R<<","<<Direction);	  
 	if( R >= this->GetThreshold() )
 	  {
       
@@ -364,8 +374,12 @@ void LineDetectorImageFilterBase< TInputImage, TOutputImage, InterpolatorType>
 
 	// ROMAIN
 	for (int i=0; i<NB_DIR; i++)
+        {
 		delete[] PixelValues[i];
+                PixelValues[i] = NULL;
+        }
 	delete[] PixelValues;
+        PixelValues = NULL;
     }
     
     }
