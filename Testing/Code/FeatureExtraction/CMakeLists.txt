@@ -17,9 +17,9 @@ SET(EPSILON 0.0000001)
 SET(FEATUREEXTRACTION_TESTS ${CXX_TEST_PATH}/otbFeatureExtractionTests)
 
 ADD_TEST(feTvAlignMV2ITK ${FEATUREEXTRACTION_TESTS}  
-   --compare-ascii      ${BASELINE_FILES}/feAlign.txt
+   --compare-ascii ${EPS}     ${BASELINE_FILES}/feAlign.txt
                         ${TEMP}/feAlign.txt
-        otbAlignImageToPath
+        otbAlignImageToPath 
 	${INPUTDATA}/poupees.hdr
 	${TEMP}/feAlign.txt)
 
@@ -234,16 +234,16 @@ ADD_TEST(feTvMultiplyByScalarImage ${FEATUREEXTRACTION_TESTS}
          otbMultiplyByScalarImageFilterTest)
 
 ADD_TEST(feTuThresholdImageToPointSetTest ${FEATUREEXTRACTION_TESTS}  
-  --compare-ascii  ${BASELINE_FILES}/feThresholdImageToPointSet.txt
+  --compare-ascii ${EPS} ${BASELINE_FILES}/feThresholdImageToPointSet.txt
                    ${TEMP}/feThresholdImageToPointSet.txt
-        otbThresholdImageToPointSetTest
+        otbThresholdImageToPointSetTest 
 	${INPUTDATA}/TeteAToto.png
 	${TEMP}/feThresholdImageToPointSet.txt )
 
 ADD_TEST(feTvHarrisToPointSet ${FEATUREEXTRACTION_TESTS}  
-  --compare-ascii  ${BASELINE_FILES}/feHarrisToPointSet.txt
+  --compare-ascii ${EPS} ${BASELINE_FILES}/feHarrisToPointSet.txt
                    ${TEMP}/feHarrisToPointSet.txt
-        otbHarrisToPointSet
+        otbHarrisToPointSet 
 	${INPUTDATA}/TeteAToto.png
 	${TEMP}/feHarrisToPointSet.txt
 	1.0 2.0 0.0 2.0)

@@ -12,6 +12,9 @@ SET(TEMP ${OTBTesting_BINARY_DIR}/Temporary)
 #Tolerance sur diff pixel image
 SET(TOL 0.0)
 
+#Epsilon pour le compare ascii
+SET(EPS 0.0001)
+
 # !!!!!  Pointe sur un exe généré dans le repertoire Common
 SET(COMMON_TESTS ${CXX_TEST_PATH}/otbCommonTests)
 SET(IO_TESTS     ${CXX_TEST_PATH}/otbIOTests)
@@ -485,34 +488,34 @@ ADD_TEST(ioTvMultiChannelROI_QuickbirdXS2TIFF ${COMMON_TESTS}
 #         -channels 1 2 3)
 
 ADD_TEST(ioTuOtbImageTestSAR_ERS ${IO_TESTS} 
-   --compare-ascii   ${BASELINE_FILES}/ioOtbImageTestSAR_ERS.txt
+   --compare-ascii ${EPS}  ${BASELINE_FILES}/ioOtbImageTestSAR_ERS.txt
                      ${TEMP}/ioOtbImageTestSAR_ERS.txt
-         otbImageTest
+         otbImageTest 
          ${IMAGEDATA}/SAR_ERS2_SLCI_SCENE1/
          ${TEMP}/ioOtbImageTestSAR_ERS.txt)
 
 # ---  Otb::Image Test  ---
 ADD_TEST(ioTuOtbImageTestRadarsat ${IO_TESTS} 
-   --compare-ascii   ${BASELINE_FILES}/ioOtbImageTestRadarsat.txt
+   --compare-ascii ${EPS}  ${BASELINE_FILES}/ioOtbImageTestRadarsat.txt
                      ${TEMP}/ioOtbImageTestRadarsat.txt
-        otbImageTest
+        otbImageTest 
        	${IMAGEDATA}/RADARSAT1/SCENE01/
         ${TEMP}/ioOtbImageTestRadarsat.txt)
 
 # ---  Otb::VectorImage Test  ---
 ADD_TEST(ioTuOtbVectorImageTestRadarsat ${IO_TESTS} 
-   --compare-ascii   ${TEMP}/ioOtbImageTestRadarsat.txt
+   --compare-ascii ${EPS}  ${TEMP}/ioOtbImageTestRadarsat.txt
                      ${TEMP}/ioOtbVectorImageTestRadarsat.txt
-        otbVectorImageTest
+        otbVectorImageTest 
         ${IMAGEDATA}/RADARSAT1/SCENE01/
         ${TEMP}/ioOtbVectorImageTestRadarsat.txt)
 
 
 # ---  Otb::VectorImage Test  ---
 ADD_TEST(ioTuOtbVectorImageTestSpot5 ${IO_TESTS} 
-   --compare-ascii   ${BASELINE_FILES}/ioOtbVectorImageTestSpot5.txt
+   --compare-ascii ${EPS}  ${BASELINE_FILES}/ioOtbVectorImageTestSpot5.txt
                      ${TEMP}/ioOtbVectorImageTestSpot5.txt
-        otbVectorImageTest
+        otbVectorImageTest 
         ${IMAGEDATA}/SPOT5_SCENE01/
         ${TEMP}/ioOtbVectorImageTestSpot5.txt)
         

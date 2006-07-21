@@ -32,6 +32,9 @@
 //THOMAS
 #include "otbImageFileWriter.h"
 
+//ROMAIN
+#include "otbMacro.h" // otb::StringStream
+
 #include "itkImageRegionConstIterator.h"
 #include "itkSubtractImageFilter.h"
 #include "itkRescaleIntensityImageFilter.h"
@@ -52,7 +55,7 @@ std::map<std::string,int> RegressionTestBaselines (char *);
 
 int RegressionTestImage (const char *, const char *, int, const double);
 int RegressionTestBinaryFile(const char *, const char *, int);
-int RegressionTestAsciiFile(const char *, const char *, int);
+int RegressionTestAsciiFile(const char *, const char *, int, const double);
 
 void RegisterTests();
 void PrintAvailableTests()
@@ -71,6 +74,7 @@ void PrintAvailableTests()
 int main(int ac, char* av[] )
 {
   double lToleranceDiffPixelImage(0);
+  double lEpsilon(0);
   char *baselineFilenameImage = NULL;
   char *testFilenameImage = NULL;
   char *baselineFilenameBinary = NULL;
@@ -137,10 +141,11 @@ int main(int ac, char* av[] )
       }
     else if (strcmp(av[1], "--compare-ascii") == 0)
       {
-      baselineFilenameAscii = av[2];
-      testFilenameAscii = av[3];
-      av += 3;
-      ac -= 3;
+      lEpsilon = (double)(::atof(av[2]));	
+      baselineFilenameAscii = av[3];
+      testFilenameAscii = av[4];
+      av += 4;
+      ac -= 4;
       }
     testToRun = av[1];
     }
@@ -202,12 +207,14 @@ otbMsgDebugMacro(<<"----------------     DEBUT Controle NON-REGRESION  ---------
         std::map<std::string,int>::iterator baseline = baselines.begin();
         baseline->second = RegressionTestAsciiFile(testFilenameAscii,
                                                  (baseline->first).c_str(),
-                                                 0);
+                                                 0,
+                                                 lEpsilon);
         if (baseline->second != 0)
             {
 	        baseline->second = RegressionTestAsciiFile(testFilenameAscii,
                                                  (baseline->first).c_str(),
-                                                 1);
+                                                 1,
+                                                 lEpsilon);
             }
         result += baseline->second;
         }
@@ -261,12 +268,56 @@ otbMsgDebugMacro(<<"----------------     FIN Controle NON-REGRESION  -----------
 
 // Regression Testing Code
 
-int RegressionTestAsciiFile(const char * testAsciiFileName, const char * baselineAsciiFileName, int reportErrors)
+bool isNumber(int i)
+{
+	return ((i>47)&&(i<58));
+}
+
+bool isPoint(int i)
+{
+	return (i==46);
+}
+
+bool isMinusSign(int i)
+{
+	return (i==45);
+}
+
+bool isNumeric(std::string str)
+{
+	int nbOfPoints = 0 ;
+	int nbOfNumbers = 0 ;
+	int number ;
+	int i = 0 ;
+	bool result = true ;
+
+    	while ((i<str.size())&&(result==true))
+	{
+		number = str[i];
+		
+		if (isPoint(number))
+			nbOfPoints++ ;
+		if (isNumber(number))
+			nbOfNumbers++;
+		if ((!isNumber(number)&&!isPoint(number)&&!isMinusSign(number))
+		  ||(isMinusSign(number)&&(i!=0)))
+			result = false ;
+			
+		i++;
+	}
+	if ((str.size()==0)||(nbOfPoints > 1)||(nbOfNumbers==0))
+		result = false ;
+
+	return result;
+}
+
+int RegressionTestAsciiFile(const char * testAsciiFileName, const char * baselineAsciiFileName, int reportErrors, const double epsilon)
 {
 	std::ifstream fluxfiletest(testAsciiFileName);
 	std::ifstream fluxfileref(baselineAsciiFileName);
 	std::string strfiletest;
 	std::string strfileref;
+
 	int nbdiff(0);
     	if (!fluxfiletest)
     	{
@@ -278,16 +329,37 @@ int RegressionTestAsciiFile(const char * testAsciiFileName, const char * baselin
     		std::cerr << "Impossible to open the baseline ASCII file <"<<baselineAsciiFileName<<">.\n";
     		return 1000;
     	}
-	
-	while ( !fluxfiletest.eof() )
+
+	while ( std::getline(fluxfileref,strfileref)!=0  )
 	{
-		fluxfiletest >> strfiletest;
-		fluxfileref >> strfileref;
-		if ( strfiletest != strfileref )
+		otb::StringStream buffstreamRef, buffstreamTest ;
+					
+		std::getline(fluxfiletest,strfiletest);
+			
+		buffstreamRef << strfileref ;
+		buffstreamTest << strfiletest ;
+	
+		while (buffstreamRef.peek() != EOF)
 		{
-			nbdiff++;
+			std::string strRef;
+			std::string strTest;			
+			
+			buffstreamRef >> strRef ;
+			buffstreamTest >> strTest ;
+			
+			if (isNumeric(strRef))
+			{
+				if ((atof(strRef.c_str())-atof(strTest.c_str())) > epsilon)
+					nbdiff++;
+			}
+			else 
+			{
+				if ( strRef != strTest )
+					nbdiff++;
+			}
 		}
 	}
+	
 	fluxfiletest.close();
 	fluxfileref.close();
 	
