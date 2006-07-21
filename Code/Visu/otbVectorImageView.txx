@@ -25,12 +25,9 @@ namespace otb
   
 
 template <class TPixel>
-VectorImageView<TPixel>::VectorImageView(/*int x, int y, int w, int h, const char **/ )
+VectorImageView<TPixel>::VectorImageView()
 {
-
-  this->SetNumberOfRequiredInputs(1);
-  this->SetNumberOfRequiredOutputs(0);
-    
+  Init(0,0,0,0,NULL);
 }
 
 template <class TPixel>
