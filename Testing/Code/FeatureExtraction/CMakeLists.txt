@@ -12,7 +12,12 @@ SET(TEMP ${OTBTesting_BINARY_DIR}/Temporary)
 #Tolerance sur diff pixel image
 #Utiliser EPSILON lorsuqe par exemple sous Windows, il y a qques differences
 SET(TOL 0.0)
-SET(EPSILON 0.0000001)
+SET(EPSILON 0.0001)
+
+#Tolerance sur la difference des valeurs numeriques dans le --compare-ascii
+SET(EPS 0.001)
+
+
 
 SET(FEATUREEXTRACTION_TESTS ${CXX_TEST_PATH}/otbFeatureExtractionTests)
 

@@ -45,7 +45,19 @@ CommandLineArgumentParseResult
 }
 
 
+unsigned int
+CommandLineArgumentParseResult
+::GetUIntParameter(const char *option, unsigned int number) const
+{
+	return GetParameter<unsigned int>(option,number);
+}
 
+double
+CommandLineArgumentParseResult
+::GetDoubleParameter(const char *option, unsigned int number) const
+{
+	return GetParameter<double>(option,number);
+}
 
 std::string 
 CommandLineArgumentParseResult

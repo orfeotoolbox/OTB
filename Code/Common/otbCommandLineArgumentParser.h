@@ -62,8 +62,8 @@ public:
 
   void PrintSelf(std::ostream& os/*, itk::Indent indent*/) const;
 
-  template< typename TypeValeur >
-  TypeValeur GetParameter(const char *option, unsigned int number=0) const;
+  unsigned int GetUIntParameter(const char *option, unsigned int number=0) const;
+  double GetDoubleParameter(const char *option, unsigned int number=0) const;
 
   std::string GetStringParameter(const char *option, unsigned int number=0) const;
 
@@ -73,6 +73,8 @@ protected:
 
 private:
 
+  template< typename TypeValeur >
+  TypeValeur GetParameter(const char *option, unsigned int number=0) const;
 
   typedef std::vector< std::string > ParameterArrayType;
   typedef std::map< std::string, ParameterArrayType > OptionMapType;

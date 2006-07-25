@@ -305,7 +305,7 @@ bool isNumeric(std::string str)
 			
 		i++;
 	}
-	if ((str.size()==0)||(nbOfPoints > 1)||(nbOfNumbers==0))
+	if ((str.size()==0)||(nbOfPoints > 1)/*||(nbOfNumbers==0)*/)
 		result = false ;
 
 	return result;
@@ -315,10 +315,17 @@ int RegressionTestAsciiFile(const char * testAsciiFileName, const char * baselin
 {
 	std::ifstream fluxfiletest(testAsciiFileName);
 	std::ifstream fluxfileref(baselineAsciiFileName);
+	enum TypeEtat { ETAT_NUM, ETAT_CHAR } ;
+
+	std::string diffAsciiFileName(testAsciiFileName);
+	diffAsciiFileName += ".diff.txt" ;
+	std::ofstream fluxfilediff(diffAsciiFileName.c_str());
+	
 	std::string strfiletest;
 	std::string strfileref;
 
 	int nbdiff(0);
+	int numLine(1);
     	if (!fluxfiletest)
     	{
     		std::cerr << "Impossible to open the test ASCII file <"<<testAsciiFileName<<">.\n";
@@ -329,6 +336,8 @@ int RegressionTestAsciiFile(const char * testAsciiFileName, const char * baselin
     		std::cerr << "Impossible to open the baseline ASCII file <"<<baselineAsciiFileName<<">.\n";
     		return 1000;
     	}
+
+	TypeEtat etatPrec, etatCour ;
 
 	while ( std::getline(fluxfileref,strfileref)!=0  )
 	{
@@ -342,26 +351,121 @@ int RegressionTestAsciiFile(const char * testAsciiFileName, const char * baselin
 		while (buffstreamRef.peek() != EOF)
 		{
 			std::string strRef;
-			std::string strTest;			
+			std::string strTest;
+			
+			std::string strNumRef;
+			std::string strCharRef;
+			std::string strNumTest;
+			std::string strCharTest;
 			
 			buffstreamRef >> strRef ;
 			buffstreamTest >> strTest ;
 			
-			if (isNumeric(strRef))
+			bool chgt= false;
+			std::string charTmpRef;
+			std::string charTmpTest;
+	
+			unsigned int i=0;
+
+			while (i < strRef.size())
 			{
-				if ((atof(strRef.c_str())-atof(strTest.c_str())) > epsilon)
-					nbdiff++;
-			}
-			else 
+				charTmpRef=strRef[i];
+				charTmpTest=strTest[i];
+				
+				if (isNumeric(charTmpRef))
+					etatCour = ETAT_NUM;
+				else 
+					etatCour = ETAT_CHAR;
+				
+				// initialisation de l'état de "référence"
+				if (i==0)
+					etatPrec=etatCour;
+
+				// Cas où l'on a un chiffre après des caractères
+				if ((etatCour==ETAT_NUM)&&(etatPrec==ETAT_CHAR))
+				{
+					if ( strCharRef != strCharTest )
+					{
+						fluxfilediff << "Diff at line " << numLine 
+						     << " : " << strCharRef
+						     << " != " << strCharTest << std::endl ;
+						nbdiff++;
+					}
+										
+					strCharRef="";
+					strCharTest="";
+					strNumRef=charTmpRef;
+					strNumTest=charTmpTest;
+					chgt=true;
+				}
+				// Cas où l'on a un caractère après des chiffres
+				else if ((etatCour==ETAT_CHAR)&&(etatPrec==ETAT_NUM))
+				{
+					
+					if (fabs(atof(strNumRef.c_str())-atof(strNumTest.c_str())) > epsilon)
+					{
+						fluxfilediff << "Diff at line " << numLine << " : fabs ( (" 
+						     << strNumRef << ") - (" << strNumTest
+						     << ") ) > " << epsilon << std::endl ;
+						nbdiff++;
+					}	
+					
+					strNumRef="";
+					strNumTest="";
+					strCharRef=charTmpRef;
+					strCharTest=charTmpTest;
+					chgt=true;
+				}
+				else if (etatCour==etatPrec)
+				{
+					if (etatCour==ETAT_CHAR)
+					{
+						strCharRef+=charTmpRef;
+						strCharTest+=charTmpTest;
+					}						
+					else
+					{
+						strNumRef+=charTmpRef;
+						strNumTest+=charTmpTest;
+					}
+				}
+
+				etatPrec = etatCour;
+				i++;
+			}	
+			
+			// Cas le plus simple : chaine de caractere ou valeur numérique entre 2 separateurs
+			if (!chgt)
 			{
-				if ( strRef != strTest )
-					nbdiff++;
+				if (isNumeric(strRef))
+				{
+					
+					if (fabs(atof(strRef.c_str())-atof(strTest.c_str())) > epsilon)
+					{
+						fluxfilediff << "Diff at line " << numLine << " : fabs( (" 
+							     << strRef << ") - (" << strTest
+							     << ") ) > " << epsilon << std::endl ;
+						nbdiff++;
+					}
+				}
+				else 
+				{
+					if ( strRef != strTest )
+					{
+						fluxfilediff << "Diff at line " << numLine 
+							     << " : " << strRef
+							     << " != " << strTest << std::endl ;
+						nbdiff++;
+					}
+				}
 			}
 		}
+		numLine++;
 	}
 	
 	fluxfiletest.close();
 	fluxfileref.close();
+	fluxfilediff.close();
 	
 	if ( nbdiff!=0 && reportErrors)
 	{

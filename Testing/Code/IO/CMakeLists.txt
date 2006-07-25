@@ -12,8 +12,8 @@ SET(TEMP ${OTBTesting_BINARY_DIR}/Temporary)
 #Tolerance sur diff pixel image
 SET(TOL 0.0)
 
-#Epsilon pour le compare ascii
-SET(EPS 0.0001)
+#Tolerance sur la difference des valeurs numeriques dans le --compare-ascii
+SET(EPS 0.001)
 
 # !!!!!  Pointe sur un exe généré dans le repertoire Common
 SET(COMMON_TESTS ${CXX_TEST_PATH}/otbCommonTests)
