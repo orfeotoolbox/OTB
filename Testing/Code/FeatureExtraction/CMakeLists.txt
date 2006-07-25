@@ -285,7 +285,7 @@ ADD_TEST(feTvLocalHoughDraw ${FEATUREEXTRACTION_TESTS}
 	${TEMP}/feFiltreLocalHoughDraw_ImageLine_20_20_2.hdr
 	20 20 1)        
 
-ADD_TEST(feTvLocalHoughDraw ${FEATUREEXTRACTION_TESTS}  
+ADD_TEST(feTvLocalHoughDrawBis ${FEATUREEXTRACTION_TESTS}  
   --compare-image ${TOL}  ${BASELINE}/feFiltreLocalHoughDraw_Line_20_10_2.png
                           ${TEMP}/feFiltreLocalHoughDraw_Line_20_10_2.png
         otbLocalHoughDraw
