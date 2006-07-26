@@ -5,7 +5,7 @@ OTB-v.1.0.1 - Changes since version 1.0.0
   (OTB_USE_VISU variable within CMake). This allows you to build OTB
   without Fltk and Open GL.
 
-- Improved robustness of the MV C++ 7 installation.
+- Improved robustness of the MV C++ 7.1 installation.
 
 - Minor changes needed for the portability of OTB-Applications.
 
