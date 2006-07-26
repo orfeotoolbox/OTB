@@ -112,6 +112,7 @@
   \begin{titlepage}%
     \let\footnotesize\small
     \let\footnoterule\relax
+    \includegraphics[width=1.5in]{\logoCNES}
     \itk@doHorizontalRule%
     \@ifundefined{pdfinfo}{}{{
       % This \def is required to deal with multi-line authors; it
