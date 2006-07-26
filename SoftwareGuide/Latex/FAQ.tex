@@ -115,6 +115,7 @@ Go to \url{http://smsc.cnes.fr/PLEIADES/A_prog_accomp.htm}
  and follow the "ORFEO Toolbox" link. You will have access to the OTB
 source code and to the Software User's Guide.
 \section{Installing OTB}
+\label{sec:FAQInstall}
 \subsection{Which platforms are supported}
 OTB is a multi-platform library. It has successfully been installed on
 the following platforms:
@@ -189,7 +190,7 @@ whatever you want.
       your path with \texttt{export PATH=\$PATH:INSTALL\_DIR/bin} or
       something similar.
 
-\item Install Fltk using CMake (do not use the configure script)
+\item Install Fltk (optional) using CMake (do not use the configure script)
   \begin{verbatim}
       cd INSTALL_DIR
       bunzip2 fltk-1.1.7-source.tar.bz2 OR
@@ -226,7 +227,9 @@ whatever you want.
 	  --> set GDAL_INCLUDE_DIRS to INSTALL_DIR/include within CMake
 	  --> set GDAL_LIBRARY_DIRS to INSTALL_DIR/lib within CMake
 	  --> set OTB_USE_EXTERNAL_ITK to OFF within CMake
-	  --> set FLTK_DIR to INSTALL_DIR/Fltk-Binary within CMake
+	  --> set FLTK_DIR to INSTALL_DIR/Fltk-Binary within CMake OR
+	      if you do not have FLTK press 't' to change to advanced
+              mode and set OTB_USE_VISU to OFF 
 	  --> generate the configuration with 'g'
        make
        make install
@@ -276,7 +279,7 @@ OTB's version numbers have 3 digits. The first one is for major
 versions, the second one is for minor versions and the last one is for
 bugfixes.
 
-The first version was 1.0.0. The next one will probably be 1.0.1.
+The first version was 1.0.0. The next one will probably be 1.0.2.
 
 \subsubsection{What is a major version?}
 A major version of the library implies the addition of high-level
