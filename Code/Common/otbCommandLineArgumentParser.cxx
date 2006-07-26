@@ -20,6 +20,7 @@
 
 #include <assert.h>
 #include <iostream>
+#include "otbConfigure.h" // Pour OTB_VERSION_MAJOR, OTB_VERSION_MINOR et OTB_VERSION_PATCH genere dans le ccmake
 
 namespace otb
 {
@@ -35,8 +36,6 @@ CommandLineArgumentParseResult
 }
 
 
-
-
 bool 
 CommandLineArgumentParseResult
 ::IsOptionPresent(const char *option)const
@@ -45,36 +44,78 @@ CommandLineArgumentParseResult
 }
 
 
+/*
 unsigned int
 CommandLineArgumentParseResult
-::GetUIntParameter(const char *option, unsigned int number) const
+::GetParameterUInt(const char *option, unsigned int number) const
 {
 	return GetParameter<unsigned int>(option,number);
 }
 
+int
+CommandLineArgumentParseResult
+::GetParameterInt(const char *option, unsigned int number) const
+{
+	return GetParameter<int>(option,number);
+}
+unsigned short
+CommandLineArgumentParseResult
+::GetParameterUShort(const char *option, unsigned int number) const
+{
+	return GetParameter<unsigned short>(option,number);
+}
+
+short
+CommandLineArgumentParseResult
+::GetParameterShort(const char *option, unsigned int number) const
+{
+	return GetParameter<short>(option,number);
+}
+unsigned long
+CommandLineArgumentParseResult
+::GetParameterULong(const char *option, unsigned int number) const
+{
+	return GetParameter<unsigned long>(option,number);
+}
+
+long
+CommandLineArgumentParseResult
+::GetParameterLong(const char *option, unsigned int number) const
+{
+	return GetParameter<long>(option,number);
+}
+
+float
+CommandLineArgumentParseResult
+::GetParameterFloat(const char *option, unsigned int number) const
+{
+	return GetParameter<float>(option,number);
+}
 double
 CommandLineArgumentParseResult
-::GetDoubleParameter(const char *option, unsigned int number) const
+::GetParameterDouble(const char *option, unsigned int number) const
 {
 	return GetParameter<double>(option,number);
 }
+*/
+
 
 std::string 
 CommandLineArgumentParseResult
-::GetStringParameter(const char *option, unsigned int number)const
+::GetParameterString(const char *option, unsigned int number)const
 {
-  assert(this->IsOptionPresent(option));
+        if( this->IsOptionPresent(option) == false )
+        {
+		itkExceptionMacro(<<"GetParameterString(): The following '"<<option<<"' option is unknown !!");
+        }
   
-  OptionMapType::const_iterator it = m_OptionMap.begin();
-  it = m_OptionMap.find(std::string(option));
-  
-//  assert(number < m_OptionMap[std::string(option)].size());
-ParameterArrayType pat = (*it).second;
-
-std::string lString = pat[number];
-
-  return ( lString );
+        OptionMapType::const_iterator it = m_OptionMap.begin();
+        it = m_OptionMap.find(std::string(option));
+        ParameterArrayType pat = (*it).second;
+        std::string lString = pat[number];
+        return ( lString );
 }
+
 int  
 CommandLineArgumentParseResult
 ::GetNumberOfParameters(const char *option)
@@ -111,6 +152,14 @@ CommandLineArgumentParseResult
 
 
 // --------- CommandLineArgumentParser  ----------------------------------------
+ 
+CommandLineArgumentParser
+::CommandLineArgumentParser()
+{
+        AddOption("--help","Help","-h",0,false);
+        AddOption("--version","Version","-v",0,false);
+}
+
 void 
 CommandLineArgumentParser
 ::AddOption(const char *name, const  char * comment, char *synonim, int nParameters, bool obligatory )
@@ -156,17 +205,21 @@ CommandLineArgumentParser
                            CommandLineArgumentParseResult * outResult,
                            bool failOnUnknownTrailingParameters ) 
 {
-	
-	
-	bool tryParse = TryParseCommandLine(argc, argv, outResult, failOnUnknownTrailingParameters);
-	bool IsHelp = outResult->IsOptionPresent("-help");
+	bool tryParse = TryParseCommandLine(argc, argv, outResult, false, failOnUnknownTrailingParameters);
 
-	if ( (IsHelp == true) )
+	bool IsHelp = outResult->IsOptionPresent("--help");
+	if ( IsHelp == true )
 	{
 		PrintUsage(std::cout);
 		itkExceptionMacro(<<"ParseCommandLine(): Help Parser");
 	}
-
+	bool IsVersion = outResult->IsOptionPresent("--version");
+	if ( IsVersion == true )
+	{
+		PrintVersion(std::cout);
+		itkExceptionMacro(<<"ParseCommandLine(): Version Parser");
+	}
+	tryParse = TryParseCommandLine(argc, argv, outResult, true, failOnUnknownTrailingParameters);
 	if ( (tryParse == false) )
   	{	
 		PrintUsage(std::cerr);
@@ -179,6 +232,7 @@ bool
 CommandLineArgumentParser
 ::TryParseCommandLine(int argc, char *argv[], 
                       CommandLineArgumentParseResult * outResult,
+                      bool reportFailedMsg,
                       bool failOnUnknownTrailingParameters)
 {
   // Clear the result
@@ -201,7 +255,10 @@ CommandLineArgumentParser
       if(failOnUnknownTrailingParameters)
         {
         // Unknown argument found
-        std::cerr << "The following '" << arg << "' option is unknown !!" << std::endl;
+        if( reportFailedMsg == true) 
+        {
+                std::cerr << "The following '" << arg << "' option is unknown !!" << std::endl;
+        }
         return false;
         }
       else return true;
@@ -216,7 +273,10 @@ CommandLineArgumentParser
     	if(i+nParameters >= argc) 
       	{
       		// Too few parameters
-      		std::cerr << "Missing one (or more) parameter(s) for the following '" << arg << "' option." << std::endl;
+                if( reportFailedMsg == true) 
+                {
+      		        std::cerr << "Missing one (or more) parameter(s) for the following '" << arg << "' option." << std::endl;
+                }
       		return false;
       	}
         // Tell the result that the option has been encountered
@@ -265,7 +325,10 @@ CommandLineArgumentParser
   	if ( (m_OptionList[cpt].Obligatory == true) && (m_OptionList[cpt].Finded == false) )
   	{
       		// Too few parameters
-      		std::cerr << "'" << m_OptionList[cpt].CommonName << " option(s) is(are) obligatory(ies) !!!" << std::endl;
+                if( reportFailedMsg == true) 
+                {
+      		        std::cerr << "'" << m_OptionList[cpt].CommonName << "' option is obligatory !!!" << std::endl;
+                }
       		return false;
 	}	
   }
@@ -302,7 +365,7 @@ CommandLineArgumentParser
 
 void
 CommandLineArgumentParser
-::PrintUsage(std::ostream& os/*, itk::Indent indent*/)const
+::PrintUsage(std::ostream& os)const
 {
 	os << std::endl;
         os << " Usage : "<<m_ProgramName<<std::endl;
@@ -333,14 +396,35 @@ CommandLineArgumentParser
   		//Aligne le texte avec la différence en blanc
   		for (int b=largeur ; b< largeurmax ; b++) os <<" ";
   		os <<   "  :  "<<m_OptionList[i].Description;
-  		if (m_OptionList[i].NumberOfParametersFixed == true ) os << "  ("<<m_OptionList[i].NumberOfParameters<<" parameters)";
-  		else os << "  (N parameters)";
+  		if (m_OptionList[i].NumberOfParametersFixed == true )
+                {
+                        switch( m_OptionList[i].NumberOfParameters )
+                        {
+                                case 0 :
+                                        break;
+                                case 1 :
+                                        os << "  ("<<m_OptionList[i].NumberOfParameters<<" parameter)";
+                                        break;
+                                default :
+                                        os << "  ("<<m_OptionList[i].NumberOfParameters<<" parameters)";
+                                        break;
+                        }
+  		}
+                else
+                {
+                                        os << "  (N parameters)";
+                }
   		os << std::endl;
 	}
 	os << std::endl;
 }
 
-
+void
+CommandLineArgumentParser
+::PrintVersion(std::ostream& os)const
+{
+        os << " OTB Version : "<<OTB_VERSION_STRING<<std::endl;
+}
 
 
 }

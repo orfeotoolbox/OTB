@@ -30,7 +30,6 @@ int otbTestCommandLineArgumentParserHelp( int argc, char * argv[] )
         typedef otb::CommandLineArgumentParser ParserType;
 	ParserType::Pointer parser = ParserType::New();
   
-        parser->AddOption("-help","Help","-h",0,false);
         parser->AddOption("-image","Nom d'une image","-i",1,true);
   
         typedef otb::CommandLineArgumentParseResult ParserResultType;
@@ -39,7 +38,7 @@ int otbTestCommandLineArgumentParserHelp( int argc, char * argv[] )
         parser->ParseCommandLine(argc,argv,parseResult) ;
 
 
-        std::cout << "Image : "<<parseResult->GetStringParameter("-image")<<std::endl;
+        std::cout << "Image : "<<parseResult->GetParameterString("-image")<<std::endl;
 
     } 
 

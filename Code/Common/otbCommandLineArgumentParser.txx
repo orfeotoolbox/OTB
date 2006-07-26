@@ -31,27 +31,13 @@ TypeValeur
 CommandLineArgumentParseResult
 ::GetParameter(const char *option, unsigned int number)const
 {
-  std::string parameter = this->GetStringParameter(option, number);
+  std::string parameter = this->GetParameterString(option, number);
   TypeValeur lValeur;
   ::otb::StringStream flux;
   flux << parameter;
   flux >> lValeur;
   return lValeur;
 }
-
-/*template<typename TypeValeur >
-TypeValeur
-GetParameter(CommandLineArgumentParseResult* parser,
-			   TypeValeur *option, unsigned int number)
-{
-  std::string parameter = parser->GetStringParameter((char*)(option), number);
-  TypeValeur lValeur;
-  ::otb::StringStream flux;
-  flux << parameter;
-  flux >> lValeur;
-  return lValeur;
-}*/
-
 
 } // end namespace otb
 

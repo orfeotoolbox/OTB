@@ -26,11 +26,11 @@ ADD_TEST(coTuSystemTests_IsA_Methods ${COMMON_TESTS}
 
 ADD_TEST(coTuCmdLineArgParserHelpWithArg ${COMMON_TESTS}  
         otbTestCommandLineArgumentParserHelp
-        -help -image image.png)
+        --help -image image.png)
 
 ADD_TEST(coTuCmdLineArgParserHelpWithoutArg ${COMMON_TESTS}  
         otbTestCommandLineArgumentParserHelp
-        -help)
+        --help)
 
 ADD_TEST(coTuCmdLineArgParserDeuxEntiers_ExactNumberArg ${COMMON_TESTS}  
         otbTestCommandLineArgumentParser

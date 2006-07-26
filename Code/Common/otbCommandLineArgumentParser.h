@@ -46,7 +46,7 @@ class ITK_EXPORT CommandLineArgumentParseResult : public itk::ProcessObject
 {
 public:
   typedef CommandLineArgumentParseResult      	Self;
-  typedef itk::ProcessObject                		Superclass;
+  typedef itk::ProcessObject                	Superclass;
   typedef itk::SmartPointer<Self>        	Pointer;
   typedef itk::SmartPointer<const Self>  	ConstPointer;
 
@@ -62,10 +62,32 @@ public:
 
   void PrintSelf(std::ostream& os/*, itk::Indent indent*/) const;
 
-  unsigned int GetUIntParameter(const char *option, unsigned int number=0) const;
-  double GetDoubleParameter(const char *option, unsigned int number=0) const;
+#define otbGetParameterMacro(name,type) \
+  virtual type GetParameter##name (const char *option, unsigned int number=0) const \
+  { \
+    return GetParameter<type>(option,number); \
+  }
+  otbGetParameterMacro(Short,short);
+  otbGetParameterMacro(UShort,unsigned short);
+  otbGetParameterMacro(Int,int);
+  otbGetParameterMacro(UInt,unsigned int);
+  otbGetParameterMacro(Long,long);
+  otbGetParameterMacro(ULong,unsigned long);
+  otbGetParameterMacro(Float,float);
+  otbGetParameterMacro(Double,double);
 
-  std::string GetStringParameter(const char *option, unsigned int number=0) const;
+/*
+  short                 GetParameterShort(const char *option, unsigned int number=0) const;
+  unsigned short        GetParameterUShort(const char *option, unsigned int number=0) const;
+  int                   GetParameterInt(const char *option, unsigned int number=0) const;
+  unsigned int          GetParameterUInt(const char *option, unsigned int number=0) const;
+  long                  GetParameterLong(const char *option, unsigned int number=0) const;
+  unsigned long         GetParameterULong(const char *option, unsigned int number=0) const;
+  float                 GetParameterFloat(const char *option, unsigned int number=0) const;
+  double                GetParameterDouble(const char *option, unsigned int number=0) const;
+*/
+  std::string           GetParameterString(const char *option, unsigned int number=0) const;
+
 
 protected:
   CommandLineArgumentParseResult(){};
@@ -136,17 +158,19 @@ public:
                            bool failOnUnknownTrailingParameters = true);
 
 protected:
- CommandLineArgumentParser(){};
+ CommandLineArgumentParser();
  ~CommandLineArgumentParser(){};
  
 private:
 
-  void PrintUsage(std::ostream& os/*, itk::Indent indent*/) const;
+  void PrintUsage(std::ostream& os) const;
+  void PrintVersion(std::ostream& os) const;
   bool FindOption(const std::string & , int & index);
 
   /** Try processing a command line.  Returns false if something breaks */
   bool TryParseCommandLine(int argc, char *argv[], 
                            CommandLineArgumentParseResult * outResult,
+                           bool reportFailedMsg,
                            bool failOnUnknownTrailingParameters );
 
   typedef struct 
