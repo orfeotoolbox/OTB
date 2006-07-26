@@ -1,0 +1,11 @@
+OTB-v.1.0.1 - Changes since version 1.0.0
+-----------------------------------------
+
+- The use of FLTK is now an option. If you disable FLTK, OTB
+  visualization functionnalities will not be built.
+
+- Improved robustness of the MV C++ 7 installation.
+
+- Minor changes needed for the portability of OTB-Applications.
+
+- Bugfixes related to the IO framework on MS Windows platforms.
