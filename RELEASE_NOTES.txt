@@ -1,8 +1,9 @@
 OTB-v.1.0.1 - Changes since version 1.0.0
 -----------------------------------------
 
-- The use of FLTK is now an option. If you disable FLTK, OTB
-  visualization functionnalities will not be built.
+- Building the visualization functionnalities is now an option
+  (OTB_USE_VISU variable within CMake). This allows you to build OTB
+  without Fltk and Open GL.
 
 - Improved robustness of the MV C++ 7 installation.
 
