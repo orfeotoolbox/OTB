@@ -49,11 +49,11 @@ ENDIF("${CMAKE_MAJOR_VERSION}.${CMAKE_MINOR_VERSION}" MATCHES "^1\\.8$")
 # OTB version number.  An even minor number corresponds to releases.
 SET(OTB_VERSION_MAJOR "1")
 SET(OTB_VERSION_MINOR "0")
-SET(OTB_VERSION_PATCH "0")
+SET(OTB_VERSION_PATCH "1")
 
 # Version string should not include patch level.  The major.minor is
 # enough to distinguish available features of the toolkit.
-SET(OTB_VERSION_STRING "${OTB_VERSION_MAJOR}.${OTB_VERSION_MINOR}")
+SET(OTB_VERSION_STRING "${OTB_VERSION_MAJOR}.${OTB_VERSION_MINOR}.${OTB_VERSION_PATCH}")
 
 #-----------------------------------------------------------------------------
 # RECHERCHE DES LIBRAIRIES EXTERNES UTILISEES
