@@ -128,16 +128,18 @@ ExtractROIBase<TInputImage,TOutputImage>
         typename Superclass::InputImageConstPointer  inputPtr  = this->GetInput();
 
         // Recupere Region de l'image d'entree
-        const InputImageRegionType& inputRegion = inputPtr->GetRequestedRegion();
+//        const InputImageRegionType& inputRegion = inputPtr->GetRequestedRegion();
+        const InputImageRegionType& inputRegion = inputPtr->GetLargestPossibleRegion();
+
         if ( (m_SizeX == 0) || (m_SizeX > (inputRegion.GetSize()[0] - m_StartX)) )
         {
                 m_SizeX = inputRegion.GetSize()[0] - m_StartX;
         }
-        if ( m_SizeY == 0 || (m_SizeY > (inputRegion.GetSize()[1] - m_StartY)) )
+        if ( (m_SizeY == 0) || (m_SizeY > (inputRegion.GetSize()[1] - m_StartY)) )
         {       
                 m_SizeY = inputRegion.GetSize()[1] - m_StartY;
         }
-        
+
         InputImageIndexType start;
         start[0] = m_StartX;
         start[1] = m_StartY;
