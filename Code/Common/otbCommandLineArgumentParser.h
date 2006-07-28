@@ -30,6 +30,7 @@
 
 //#include "itkIndent.h"
 #include "itkProcessObject.h"
+#include "otbMacro.h"
 
 namespace otb
 {
@@ -62,11 +63,17 @@ public:
 
   void PrintSelf(std::ostream& os/*, itk::Indent indent*/) const;
 
-#define otbGetParameterMacro(name,type) \
-  virtual type GetParameter##name (const char *option, unsigned int number=0) const \
-  { \
-    return GetParameter<type>(option,number); \
+#define otbGetParameterMacro(name,type)                                                 \
+  virtual type GetParameter##name (const char *option, unsigned int number=0) const     \
+  {                                                                                     \
+        std::string parameter = this->GetParameterString(option, number);               \
+        type lValeur;                                                                   \
+        ::otb::StringStream flux;                                                       \
+        flux << parameter;                                                              \
+        flux >> lValeur;                                                                \
+        return lValeur;                                                                 \
   }
+  
   otbGetParameterMacro(Short,short);
   otbGetParameterMacro(UShort,unsigned short);
   otbGetParameterMacro(Int,int);
@@ -192,19 +199,6 @@ private:
   std::string m_ProgramName;
 };
 
-
-// Not defined in class CommandArgumentParser to avoid known bug on VC++ 6.0 
-// (explicit template instanciation on class methods are forbidden in this compiler)
-/*template< typename TypeValeur >
-TypeValeur GetParameter(CommandLineArgumentParseResult* parser,
-						const char *option, unsigned int number=0);*/
-
-
 }
-
-#ifndef OTB_MANUAL_INSTANTIATION
-#include "otbCommandLineArgumentParser.txx"
-#endif
-
 
 #endif // __otbCommandLineArgumentParser_h_

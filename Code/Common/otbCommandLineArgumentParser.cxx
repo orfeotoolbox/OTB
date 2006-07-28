@@ -20,7 +20,7 @@
 
 #include <assert.h>
 #include <iostream>
-#include "otbConfigure.h" // Pour OTB_VERSION_MAJOR, OTB_VERSION_MINOR et OTB_VERSION_PATCH genere dans le ccmake
+#include "otbConfigure.h" // Pour OTB_VERSION_STRING genere par le ccmake
 
 namespace otb
 {
@@ -32,7 +32,6 @@ CommandLineArgumentParseResult
 ::PrintSelf(std::ostream& os/*, itk::Indent indent*/)const
 {
 
-
 }
 
 
@@ -42,63 +41,6 @@ CommandLineArgumentParseResult
 {
   return (m_OptionMap.find(std::string(option)) != m_OptionMap.end());
 }
-
-
-/*
-unsigned int
-CommandLineArgumentParseResult
-::GetParameterUInt(const char *option, unsigned int number) const
-{
-	return GetParameter<unsigned int>(option,number);
-}
-
-int
-CommandLineArgumentParseResult
-::GetParameterInt(const char *option, unsigned int number) const
-{
-	return GetParameter<int>(option,number);
-}
-unsigned short
-CommandLineArgumentParseResult
-::GetParameterUShort(const char *option, unsigned int number) const
-{
-	return GetParameter<unsigned short>(option,number);
-}
-
-short
-CommandLineArgumentParseResult
-::GetParameterShort(const char *option, unsigned int number) const
-{
-	return GetParameter<short>(option,number);
-}
-unsigned long
-CommandLineArgumentParseResult
-::GetParameterULong(const char *option, unsigned int number) const
-{
-	return GetParameter<unsigned long>(option,number);
-}
-
-long
-CommandLineArgumentParseResult
-::GetParameterLong(const char *option, unsigned int number) const
-{
-	return GetParameter<long>(option,number);
-}
-
-float
-CommandLineArgumentParseResult
-::GetParameterFloat(const char *option, unsigned int number) const
-{
-	return GetParameter<float>(option,number);
-}
-double
-CommandLineArgumentParseResult
-::GetParameterDouble(const char *option, unsigned int number) const
-{
-	return GetParameter<double>(option,number);
-}
-*/
-
 
 std::string 
 CommandLineArgumentParseResult
