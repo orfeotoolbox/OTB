@@ -14,6 +14,7 @@ SET(TEMP ${OTBTesting_BINARY_DIR}/Temporary)
 SET(TOL 0.0)
 SET(EPSILON 0.0001)
 
+
 #Tolerance sur la difference des valeurs numeriques dans le --compare-ascii
 SET(EPS 0.001)
 
@@ -276,22 +277,52 @@ ADD_TEST(feTuLocalHough ${FEATUREEXTRACTION_TESTS}
         otbLocalHough
 	${INPUTDATA}/ImageLine.bsq.hdr
 	32 32 2)
-	
+
+#ROMAIN : Fichiers de comparaison différents sous windows et linux
+IF(UNIX)
+  SET(BASELINEDATA ${BASELINE}/feFiltreLocalHoughDraw_ImageLine_20_20_2.hdr)
+ELSE(UNIX)
+  SET(BASELINEDATA ${BASELINE}/feFiltreLocalHoughDraw_ImageLine_20_20_2_win32.hdr)
+ENDIF(UNIX)
+
 ADD_TEST(feTvLocalHoughDraw ${FEATUREEXTRACTION_TESTS}  
-  --compare-image ${TOL}  ${BASELINE}/feFiltreLocalHoughDraw_ImageLine_20_20_2.hdr
+  --compare-image ${EPSILON}  ${BASELINEDATA}
                           ${TEMP}/feFiltreLocalHoughDraw_ImageLine_20_20_2.hdr
         otbLocalHoughDraw
 	${INPUTDATA}/ImageLine.bsq.hdr
 	${TEMP}/feFiltreLocalHoughDraw_ImageLine_20_20_2.hdr
-	20 20 1)        
+	20 20 1)       
+
+#ROMAIN : Fichiers de comparaison différents sous windows et linux
+IF(UNIX)
+  SET(BASELINEDATA ${BASELINE}/feFiltreLocalHoughDraw_Line_20_10_2.png)
+ELSE(UNIX)
+  SET(BASELINEDATA ${BASELINE}/feFiltreLocalHoughDraw_Line_20_10_2_win32.png)
+ENDIF(UNIX)
 
 ADD_TEST(feTvLocalHoughDrawBis ${FEATUREEXTRACTION_TESTS}  
-  --compare-image ${TOL}  ${BASELINE}/feFiltreLocalHoughDraw_Line_20_10_2.png
+  --compare-image ${EPSILON}  ${BASELINEDATA}
                           ${TEMP}/feFiltreLocalHoughDraw_Line_20_10_2.png
         otbLocalHoughDraw
 	${INPUTDATA}/Line.png
 	${TEMP}/feFiltreLocalHoughDraw_Line_20_10_2.png
 	20 10 2)   
+
+#ADD_TEST(feTvLocalHoughDraw ${FEATUREEXTRACTION_TESTS}  
+#  --compare-image ${EPSILON}  ${BASELINE}/feFiltreLocalHoughDraw_ImageLine_20_20_2.hdr
+#                          ${TEMP}/feFiltreLocalHoughDraw_ImageLine_20_20_2.hdr
+#        otbLocalHoughDraw
+#	${INPUTDATA}/ImageLine.bsq.hdr
+#	${TEMP}/feFiltreLocalHoughDraw_ImageLine_20_20_2.hdr
+#	20 20 1)        
+
+#ADD_TEST(feTvLocalHoughDrawBis ${FEATUREEXTRACTION_TESTS}  
+#  --compare-image ${EPSILON}  ${BASELINE}/feFiltreLocalHoughDraw_Line_20_10_2.png
+#                          ${TEMP}/feFiltreLocalHoughDraw_Line_20_10_2.png
+#        otbLocalHoughDraw
+#	${INPUTDATA}/Line.png
+#	${TEMP}/feFiltreLocalHoughDraw_Line_20_10_2.png
+#	20 10 2)   
 	        
 # -------            otb::FillGapsFilter   ------------------------------        
 
