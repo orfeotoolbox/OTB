@@ -23,9 +23,12 @@
 #include "itkMutexLock.h"
 #include "itkMutexLockHolder.h"
 
-#include "otbGDALImageIOFactory.h"
 #include "otbONERAImageIOFactory.h"
 #include "otbMSTARImageIOFactory.h"
+#include "otbLUMImageIOFactory.h"
+#include "otbBSQImageIOFactory.h"
+#include "otbGDALImageIOFactory.h"
+
 
 namespace otb
 {
@@ -53,10 +56,22 @@ ImageIOFactory::RegisterBuiltInFactories()
                 {
                         // ONERA format for OTB
                         itk::ObjectFactoryBase::RegisterFactory( ONERAImageIOFactory::New() );			
-                        // MSTAR Format for OTB
+                        
+			// MSTAR Format for OTB
 			itk::ObjectFactoryBase::RegisterFactory( MSTARImageIOFactory::New() );
-                        // GDAL : New format for OTB
+
+			// LUM : New format for OTB
+                        itk::ObjectFactoryBase::RegisterFactory( LUMImageIOFactory::New() );                        
+
+			// BSQ : New format for OTB
+                        //itk::ObjectFactoryBase::RegisterFactory( BSQImageIOFactory::New() );
+
+			// GDAL : New format for OTB
                         itk::ObjectFactoryBase::RegisterFactory( GDALImageIOFactory::New() );
+
+
+
+                        
                         firstTime = false;
                 }
         }
