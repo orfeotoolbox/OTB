@@ -26,7 +26,7 @@
 
 #include "itkNumericTraits.h"
 #include "itkMultiThreader.h"
-#include "itkImage.h"
+#include "otbImage.h"
 #include "otbImageFileReader.h"
 
 //THOMAS
@@ -520,9 +520,10 @@ int RegressionTestBinaryFile(const char * testBinaryFileName, const char * basel
 int RegressionTestImage (const char *testImageFilename, const char *baselineImageFilename, int reportErrors, const double toleranceDiffPixelImage)
 {
   // Use the factory mechanism to read the test and baseline files and convert them to double
-  typedef itk::Image<double,ITK_TEST_DIMENSION_MAX> ImageType;
-  typedef itk::Image<unsigned char,ITK_TEST_DIMENSION_MAX> OutputType;
-  typedef itk::Image<unsigned char,2> DiffOutputType;
+
+  typedef otb::Image<double,ITK_TEST_DIMENSION_MAX> ImageType;
+  typedef otb::Image<unsigned char,ITK_TEST_DIMENSION_MAX> OutputType;
+  typedef otb::Image<unsigned char,2> DiffOutputType;
   typedef otb::ImageFileReader<ImageType> ReaderType;
 
   // Read the baseline file
