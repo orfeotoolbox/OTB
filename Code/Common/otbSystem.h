@@ -23,6 +23,14 @@
 
 #include "itkWin32Header.h"
 
+
+
+#ifdef _WIN
+      #define OTB_FILE_SEPARATOR '\\'
+#else 
+     #define OTB_FILE_SEPARATOR '/'     
+#endif
+
 namespace otb
 {
 
@@ -48,6 +56,10 @@ public:
   static std::string GetExtension( const std::string& filename );
   /** Get the root name */
   static std::string GetRootName( const std::string& filename );
+  /** Get the Path of the file name */
+  static std::string GetPathName( const std::string& filename );
+  /** Get the short filename of the file name */
+  static std::string GetShortFileName( const std::string& filename );
 
   /** Get list of file find in a directory */
   static std::vector<std::string> Readdir(std::string pszPath);

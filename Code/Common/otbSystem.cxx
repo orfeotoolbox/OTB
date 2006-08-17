@@ -83,6 +83,26 @@ bool System::IsAFileName(std::string pszPath)
 }
 
 
+//GetPathName.
+std::string
+System::GetPathName( const std::string& filename )
+{
+  const std::string::size_type it = filename.find_last_of( OTB_FILE_SEPARATOR );
+  std::string pathName( filename, 0, it );
+
+  return( pathName );
+}
+
+//GetExtension from uiig library.
+std::string
+System::GetShortFileName( const std::string& filename )
+{
+  const std::string::size_type it = filename.find_last_of( OTB_FILE_SEPARATOR );
+  std::string shortFileName( filename, it+1, filename.length() );
+
+  return( shortFileName );
+}
+
 #if defined(WIN32) || defined(WIN32CE)
 
 /*=====================================================================
