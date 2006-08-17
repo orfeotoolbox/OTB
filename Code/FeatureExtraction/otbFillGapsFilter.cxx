@@ -27,12 +27,12 @@ namespace otb
 
 FillGapsFilter::FillGapsFilter()
 {
-        this->itk::ProcessObject::SetNumberOfRequiredInputs(1);
-        this->itk::ProcessObject::SetNumberOfRequiredOutputs(1);
+        this->ProcessObjectType::SetNumberOfRequiredInputs(1);
+        this->ProcessObjectType::SetNumberOfRequiredOutputs(1);
 
         LineSpatialObjectListPointer output = LineSpatialObjectListType::New();
 	
-        this->itk::ProcessObject::SetNthOutput(0, output );
+        this->ProcessObjectType::SetNthOutput(0, output );
 
 	m_Radius      =  4.0;
 	m_AngularBeam =  1.0;
@@ -43,7 +43,7 @@ void
 FillGapsFilter
 ::SetInput(const LineSpatialObjectListType * input)
 {
-  this->itk::ProcessObject::SetNthInput(0, 
+  this->ProcessObjectType::SetNthInput(0, 
                                    const_cast< LineSpatialObjectListType * >( input ) );
 }
 
@@ -53,7 +53,7 @@ FillGapsFilter
 ::GetInput(void)
 {
     return static_cast<const LineSpatialObjectListType *>
-    (this->itk::ProcessObject::GetInput(0) ); 
+    (this->ProcessObjectType::GetInput(0) ); 
 }
 
 
@@ -62,7 +62,7 @@ FillGapsFilter
 ::GetOutput(void)
 {
     return static_cast<LineSpatialObjectListType *>
-    (this->itk::ProcessObject::GetOutput(0) ); 
+    (this->ProcessObjectType::GetOutput(0) ); 
 }
 
 

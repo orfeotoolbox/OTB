@@ -50,6 +50,8 @@ public:
   typedef LineSpatialObjectListType::LineType                   LineSpatialObjectType;
   typedef LineSpatialObjectType::PointListType                  PointListType;
   typedef LineSpatialObjectType::LinePointType                  PointType;
+  
+  typedef itk::ProcessObject                                    ProcessObjectType;
 
   void SetInput(const LineSpatialObjectListType * input);
   const LineSpatialObjectListType * GetInput();
