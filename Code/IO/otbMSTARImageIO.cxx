@@ -653,6 +653,8 @@ otbMsgDebugMacro( <<"Dimensions de l'image cree : "<<m_Dimensions[0]<<","<<m_Dim
         m_PixelType = VECTOR;
 
 
+/* Cleanup: close files */
+        fclose(MSTARfp);
 
 	this->SetComponentType( FLOAT );
 	        
