@@ -142,7 +142,7 @@ private:
       }
   char* cai_test_pFpf();
   int   cai_istyp_connu(char *type_code);
-  char* BSQImageIO::cai_En_majuscule( char *mot );
+  char* cai_En_majuscule( char *mot );
 
 };
 
