@@ -40,6 +40,7 @@ template <class TInputImage, class TOutputImage>
 LeeImageFilter<TInputImage, TOutputImage>::LeeImageFilter()
 {
   m_Radius.Fill(1);
+  SetNbLooks(1.0);
 }
 
 template <class TInputImage, class TOutputImage>
