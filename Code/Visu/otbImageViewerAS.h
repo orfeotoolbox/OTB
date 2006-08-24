@@ -172,8 +172,8 @@ private:
         std::string m_Label;
         static const std::string m_SuffixPrincipalTitle;
         
-		/** Informations for left image */
-		int  m_LeftNbDim;
+	/** Informations for left image */
+	int  m_LeftNbDim;
         int  m_LeftRedChannel;
         int  m_LeftGreenChannel;
         int  m_LeftBlueChannel;
@@ -181,8 +181,8 @@ private:
         ModeViewType  m_LeftModeView;
         ChannelsType m_LeftChannelsWorks;
 		
-		/** Informations for right image */
-		int  m_RightNbDim;
+	/** Informations for right image */
+	int  m_RightNbDim;
         int  m_RightRedChannel;
         int  m_RightGreenChannel;
         int  m_RightBlueChannel;

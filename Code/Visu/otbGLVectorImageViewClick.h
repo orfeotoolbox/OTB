@@ -30,7 +30,7 @@
 #include <string>
 #include "itkColorTable.h"
 
-#include "itkImage.h"
+#include "otbImage.h"
 #include "itkMacro.h"
 
 #include "otbVectorImageView.h"
@@ -89,7 +89,7 @@ public:
     typedef VectorImageView<TPixel>             Superclass;
     typedef itk::SmartPointer<Self>             Pointer;
     typedef itk::SmartPointer<const Self>       ConstPointer;
-    typedef itk::Image<TPixelOverlay,2>   		OverlayType;
+    typedef otb::Image<TPixelOverlay,2>   		OverlayType;
     typedef typename OverlayType::Pointer    OverlayPointer;
 	typedef itk::ColorTable<float>                ColorTableType;
     typedef typename ColorTableType::Pointer      ColorTablePointer;
@@ -282,10 +282,18 @@ public:
   
    bool        cViewOverlayData;
   /*! Specify the 3D image to view as an overlay */
-  void SetInputOverlay(OverlayType * newOverlayData);
+  void SetInputOverlay( OverlayPointer newOverlayData,
+  			OverlayPointer newOverlayDataClassRed, 
+		   	OverlayPointer newOverlayDataClassBlue);
   
   /*! Return a pointer to the overlay data */
   const OverlayPointer & GetInputOverlay(void) const;
+
+  /*! Return a pointer to the overlay data for the Red Class*/
+  const OverlayPointer & GetInputOverlayRed(void) const;
+
+  /*! Return a pointer to the overlay data for the Blue Class*/
+  const OverlayPointer & GetInputOverlayBlue(void) const;
   
   /*! Turn on/off the viewing of the overlay */
   void  ViewOverlayData(bool newViewOverlayData);
@@ -328,8 +336,13 @@ protected:
   //Méthodes utilisées pour l'overlay de l'image
   bool        cValidOverlayData;
   float       cOverlayOpacity;
-  
+  // Overlay utilisé pour afficher le résultat de la classification
   OverlayPointer cOverlayData;
+  // Overlay utilisé pour afficher le résultat de la classe #Rouge
+  OverlayPointer cOverlayDataClassRed;
+  // Overlay utilisé pour afficher le résultat de la classe #Bleu
+  OverlayPointer cOverlayDataClassBlue;
+  
   void     (* cViewOverlayCallBack)(void);
   
   ImageModeType cImageMode;

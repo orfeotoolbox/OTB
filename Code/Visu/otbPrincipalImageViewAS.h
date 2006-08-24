@@ -50,18 +50,24 @@ public:
     typedef itk::SmartPointer<Self>                             Pointer;
     typedef itk::SmartPointer<const Self>                       ConstPointer;
 	
+    /* typdef for the image*/
+    typedef typename Superclass::ImageType              ImageType;
+    typedef typename Superclass::ImagePointer           ImagePointer;
+    typedef typename Superclass::ImageConstPointer      ImageConstPointer;
+    typedef typename Superclass::RegionType             RegionType;
+    typedef typename Superclass::SizeType               SizeType;
+    typedef typename Superclass::IndexType              IndexType;
+    typedef typename Superclass::PixelType              PixelType;
 	
+    /* typedef for learning and classification */
+    typedef float                                       InputPixelType;
+    typedef std::vector<InputPixelType>                 InputVectorType;
+    typedef int                                         LabelPixelType;
+    typedef itk::PointSet< InputVectorType, 2>          MeasurePointSetType;
+    typedef itk::PointSet< LabelPixelType,  2>          LabelPointSetType;
 	
-	/*! typedef for learning and classification */
-	
-	typedef char InputPixelType;
-   	typedef std::vector<InputPixelType>                   InputVectorType;
-  	typedef int                                           LabelPixelType;
-	typedef itk::PointSet< InputVectorType,  3>  MeasurePointSetType;
-  	typedef itk::PointSet< LabelPixelType,  3>   LabelPointSetType;
-	
-	typedef otb::SVMPointSetModelEstimator< MeasurePointSetType,
-  									LabelPointSetType >   EstimatorType;
+    typedef otb::SVMPointSetModelEstimator< MeasurePointSetType,
+  						LabelPointSetType >   EstimatorType;
 	
 
     /*! Method for creation through the object factory. */
@@ -71,13 +77,6 @@ public:
     itkTypeMacro(PrincipalImageViewAS,GLVectorImageViewClick);
 
   
-  typedef typename Superclass::ImageType                ImageType;
-  typedef typename Superclass::ImagePointer             ImagePointer;
-  typedef typename Superclass::ImageConstPointer        ImageConstPointer;
-  typedef typename Superclass::RegionType               RegionType;
-  typedef typename Superclass::SizeType                 SizeType;
-  typedef typename Superclass::IndexType                IndexType;
-  typedef typename Superclass::PixelType                PixelType;
 
   virtual int  handle(int event);
 

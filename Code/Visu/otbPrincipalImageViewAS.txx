@@ -22,11 +22,18 @@
 #include "itkPointSet.h"
 #include "otbSVMPointSetModelEstimator.h"
 #include "itkListSample.h"
+//#include "otbVectorImageToASImageAdaptor.h"
+#include "otbVectorImage.h"
+#include "otbImage.h"
 #include "itkImageToListAdaptor.h"
-#include "otbVectorImageToASImageAdaptor.h"
+#include "itkScalarToArrayCastImageFilter.h"
+#include "itkVectorCastImageFilter.h"
+
 //#include "itkPointSetToListAdaptor.h"
 #include "otbSVMClassifier.h"
-//#include "itkVectorToRGBImageAdaptor.h"
+#include "itkVectorToRGBImageAdaptor.h"
+#include "itkVectorCastImageFilter.h"
+#include "itkCastImageFilter.h"
 
 namespace otb
 {
@@ -35,6 +42,7 @@ template <class TPixel, class TPixelOverlay>
 PrincipalImageViewAS<TPixel, TPixelOverlay>::
 PrincipalImageViewAS() : GLVectorImageViewClick<TPixel, TPixelOverlay>()
   {
+  //cEstimator = EstimatorType::New();
 		
   }
 
@@ -228,14 +236,10 @@ template <class TPixel, class TPixelOverlay>
 void
 PrincipalImageViewAS<TPixel, TPixelOverlay>::LearnStep()
 {
-  cEstimator = EstimatorType::New();
   
   // Declaration for input image values
   ImagePointer lInpuPtr = this->GetInput();
-  PixelType  pixelInput;
-  IndexType ind;
-  int nbChannels(0);
-  int channelIn(0);
+  IndexType     ind;
   
   // Scale calcul for correspondance between real image and displayed image
   double zoomBase = (double)this->cW / (this->cDimSize[0]);
@@ -251,7 +255,7 @@ PrincipalImageViewAS<TPixel, TPixelOverlay>::LearnStep()
   // Conversion from ClickedPoint structure to PointSet structure
  
   MeasurePointSetType::Pointer mPSet = MeasurePointSetType::New();
-  LabelPointSetType::Pointer lPSet = LabelPointSetType::New();
+  LabelPointSetType::Pointer   lPSet = LabelPointSetType::New();
 
   typedef MeasurePointSetType::PointType                MeasurePointType;
   typedef LabelPointSetType::PointType                  LabelPointType;
@@ -260,118 +264,158 @@ PrincipalImageViewAS<TPixel, TPixelOverlay>::LearnStep()
   typedef LabelPointSetType::PointsContainer            LabelPointsContainer;
 
   MeasurePointsContainer::Pointer mCont = MeasurePointsContainer::New();
-  LabelPointsContainer::Pointer lCont = LabelPointsContainer::New();
+  LabelPointsContainer::Pointer   lCont = LabelPointsContainer::New();
 	
   int pointId=0, indiceIm = 0;
   
-  MeasurePointType mP;
-  LabelPointType lP;
-  InputVectorType measure;
-  LabelPixelType label;
-  
-  for (it=this->cClickedPoints.begin(); it!=this->cClickedPoints.end(); it++)
+  MeasurePointType   mP;
+  LabelPointType     lP;
+  LabelPixelType     label;
+  PixelType          pixelInput;
+  int                noChannels(0);
+  int                nbChannels(0);
+  int                channelIn(0);
+
+  InputVectorType    measure(this->m_ChannelsWorks.size() );
+
+
+  it=this->cClickedPoints.begin();
+  while(it!=this->cClickedPoints.end() )
   {
-  	// ClickPoint is a point	
+	
+	// ClickPoint is a point	
 	if (!(it->isForBox))
 	{
+		// index position for the measured point 
 		mP[0]=it->x;	
 		mP[1]=it->y;
 
+		mP[0]=(int)((it->x)*zoomBase);
+		mP[1]=(int)((it->y)*zoomBase);
+
+		// index position for the label point 
 		lP[0]=it->x;
 		lP[1]=it->y;
+
+		lP[0]=(int)((it->x)*zoomBase);
+		lP[1]=(int)((it->y)*zoomBase);
 	
-		 
 		// Recuperation of real values in input image, not display values 
 		ind[0]=(int)((it->x)*zoomBase);
 		ind[1]=(int)((it->y)*zoomBase);
+	
+		/*
+		std::cout <<" points : "<<  ind[0] << " , " << ind[1] << std::endl;
+		*/
 		
 		// Traitement sur les canaux selectionnes.
 		pixelInput = lInpuPtr->GetPixel(ind);
-        for ( nbChannels = 0 ; nbChannels < this->m_ChannelsWorks.size() ; nbChannels++)
-        {
-                channelIn = this->m_ChannelsWorks[nbChannels] - 1;
-                measure.push_back(static_cast<InputPixelType>(pixelInput[channelIn]));
-        }
 		
+
+                for ( nbChannels = 0 ; nbChannels < this->m_ChannelsWorks.size() ; nbChannels++)
+                {
+                    channelIn = this->m_ChannelsWorks[nbChannels] - 1;
+                    measure[nbChannels] = static_cast<InputPixelType>(pixelInput[channelIn]);
+                }
 		if (it->color == COLOR_BLUE)
-     		 label= -1;
-    	else if (it->color == COLOR_RED)
+     		         label= -1;
+    	        else if (it->color == COLOR_RED)
 			 label = 1;
 		else
 			 itkExceptionMacro(<< "Unknown color");
 			 
 		mCont->InsertElement( pointId , mP );
-    	mPSet->SetPointData( pointId, measure ); 
+    	        mPSet->SetPointData( pointId, measure ); 
 		
 		lCont->InsertElement( pointId , lP );
-    	lPSet->SetPointData( pointId, label ); 
+    	        lPSet->SetPointData( pointId, label ); 
 		
 		pointId++;
-		indiceIm+=3;
 	}
 	// ClickPoint is a box
 	else 
 	{
-		int startX = (int)it->x;
-		int endX = (int)(it->x+it->w);
-		int startY = (int)it->y;
-		int endY = (int)(it->y+it->h);
+		int startX = (int)((it->x)*zoomBase); 
+		int endX   = (int)((it->x+it->w)*zoomBase);
+		int startY = (int)((it->y)*zoomBase);
+		int endY   = (int)((it->y+it->h)*zoomBase);
+		int temp;
 		
-		for (int i=startX; i<endX; i++)
+		if(startX > endX )
 		{
-			for (int j=startY; j<endY; j++)
-			{
-						
-				mP[0]=i;	
-				mP[1]=j;
+		temp   = endX;
+		endX   = startX;
+		startX = temp;
+		}
+		if(startY > endY )
+		{
+		temp   = endY;
+		endY   = startY;
+		startY = temp;
+		}
+		
+		for (int i=startX; i<=endX; i++)
+		{
+		  for (int j=startY; j<=endY; j++)
+	          {		
+		        // index position for the measured point 
+		        mP[0]=i;	
+		        mP[1]=j;
 
-				lP[0]=i;
-				lP[1]=j;
+		        // index position for the label point 
+		        lP[0]=i;
+		        lP[1]=j;
 										  
-				// Recuperation of real values in input image, not display values 
-				ind[0]=(int)(i*zoomBase);
-				ind[1]=(int)(j*zoomBase);
+			// Recuperation of real values in input image, not display values 
+			ind[0]=i;
+			ind[1]=j;
 				
-				// Traitement sur les canaux selectionnes.
-				pixelInput = lInpuPtr->GetPixel(ind);
+		        /*
+			std::cout <<" box : "<<  ind[0] << " , " << ind[1] << std::endl;
+			*/
+			
+			// Traitement sur les canaux selectionnes.
+			pixelInput = lInpuPtr->GetPixel(ind);
 		        for ( nbChannels = 0 ; nbChannels < this->m_ChannelsWorks.size() ; nbChannels++)
         		{
-                	channelIn = this->m_ChannelsWorks[nbChannels] - 1;
-	                measure.push_back(static_cast<InputPixelType>(pixelInput[channelIn]));
-    		    }
+                	  channelIn = this->m_ChannelsWorks[nbChannels] - 1;
+                          measure[nbChannels] = static_cast<InputPixelType>(pixelInput[channelIn]);
+    		        }
 		
-				if (it->color == COLOR_BLUE)
+			if (it->color == COLOR_BLUE)
      		   		label = -1;
 		    	else if (it->color == COLOR_RED)
-					label = 1;
-				else
-					itkExceptionMacro(<< "Unknown color");
+				label = 1;
+			else
+				itkExceptionMacro(<< "Unknown color");
 			 
-				mCont->InsertElement( pointId , mP );
+			mCont->InsertElement( pointId , mP );
     			mPSet->SetPointData( pointId, measure ); 
 		
-				lCont->InsertElement( pointId , lP );
+			lCont->InsertElement( pointId , lP );
     			lPSet->SetPointData( pointId, label ); 
 		
-				pointId++;
-				indiceIm+=3;
-			}
+			pointId++;
+		  }
 		}
 	 }
+	 ++it;
   }
   
-  std::cout << "Nb de points : " << pointId << std::endl ;
-  
   mPSet->SetPoints( mCont );
-  lPSet->SetPoints( lCont );
+  lPSet->SetPoints( lCont );  
   
-  cEstimator->SetInputPointSet( mPSet );
-  cEstimator->SetTrainingPointSet( lPSet );
-  cEstimator->SetNumberOfClasses( 2 );
+  EstimatorType::Pointer learningEstimator = EstimatorType::New();
 
-  cEstimator->Update();
+  learningEstimator->SetInputPointSet( mPSet );
+  learningEstimator->SetTrainingPointSet( lPSet );
+  learningEstimator->SetNumberOfClasses( 2 );
+  learningEstimator->Modified();
 
-  std::cout << "Saving model" << std::endl;
+  learningEstimator->Update();
+  
+  cEstimator = learningEstimator;
+  std::cout << "End learning model" << std::endl;
 }
 
 
@@ -379,40 +423,34 @@ template <class TPixel, class TPixelOverlay>
 void
 PrincipalImageViewAS<TPixel, TPixelOverlay>::ClassificationStep()
 {
-	// TODO :
-	// Erreur de compil pour le passage de v2im au sample->SetImage()
-	// Regarder l'objet créé par le nouvel adaptor VectorImageToASImageAdaptor	
-	
-	// Image conversion from reader to classification
-	/*typedef itk::VectorImage<TPixel,2> ImageType;	
-	typedef otb::VectorImageToASImageAdaptor<ImageType> InputTType;
-	
-	typename InputTType::Pointer v2im = InputTType::New();
-	
-	v2im->SetImage(this->GetInput());
-	
-	// Image definition for classification
-	typedef itk::Image< itk::FixedArray<InputPixelType,3>, 2 >	InputClassifImageType;
-	typedef itk::Statistics::ImageToListAdaptor< InputClassifImageType > SampleType;
-	
+
+     // Image conversion from reader to classification
+    typedef otb::VectorImage<TPixel,2>                                   ReaderImageType;	
+    typedef itk::FixedArray< float, 3 >                                  MeasurementVectorType;
+    typedef otb::Image< MeasurementVectorType, 2 >                       InputClassifImageType;
+
+    typename ReaderImageType::Pointer inputImage;
+    inputImage = this->GetInput();
+
+    typedef itk::VectorCastImageFilter<ReaderImageType,InputClassifImageType> CasterType;
+    typename CasterType::Pointer caster = CasterType::New();
+    caster->SetInput(inputImage);
+    caster->Update();
+
+    // Image definition for classification
+    typedef itk::Statistics::ImageToListAdaptor< InputClassifImageType > SampleType;
     SampleType::Pointer sample = SampleType::New();
-	
-	sample->SetImage(v2im);
-
+    sample->SetImage( caster->GetOutput() );
+ 
     std::cout << "Sample set to Adaptor" << std::endl;  
-
 
     // preparing classifier and decision rule object 
     typedef otb::SVMModel< SampleType::MeasurementVectorType::ValueType, LabelPixelType > ModelType;
 
-    ModelType::Pointer model = cEstimator->GetModel();
-
+    ModelType::Pointer model = cEstimator->GetModel();    
     int numberOfClasses = model->GetNumberOfClasses();
-
-    std::cout << "Classification for " << numberOfClasses << " classes " << std::endl;
     
     typedef otb::SVMClassifier< SampleType, LabelPixelType > ClassifierType ;
-
     ClassifierType::Pointer classifier = ClassifierType::New() ;
   
     classifier->SetNumberOfClasses(numberOfClasses) ;
@@ -421,52 +459,92 @@ PrincipalImageViewAS<TPixel, TPixelOverlay>::ClassificationStep()
     classifier->Update() ;
 
     // Build the class map 
-    std::cout << "Output image creation" << std::endl;  
+    std::cout << "Generating classify map" << std::endl;  
 
     
-    std::cout << "classifier get output" << std::endl;  
     ClassifierType::OutputType* membershipSample =
       classifier->GetOutput() ;
-    std::cout << "Sample iterators" << std::endl;  
-    ClassifierType::OutputType::ConstIterator m_iter =
+     ClassifierType::OutputType::ConstIterator m_iter =
       membershipSample->Begin() ;
     ClassifierType::OutputType::ConstIterator m_last =
       membershipSample->End() ;
 
+    const   unsigned int        	         Dimension = 2;
+    typedef ClassifierType::ClassLabelType	            OutputPixelType;
+    typedef otb::Image< TPixelOverlay, Dimension >        OutputImageType;
 
-    double error = 0.0;
-    unsigned int pointId = 0;
-    while (m_iter != m_last)
-      {
+    typename OutputImageType::Pointer outputImage = OutputImageType::New();
+    typename OutputImageType::Pointer ImageClassBlue = OutputImageType::New();
+    typename OutputImageType::Pointer ImageClassRed  = OutputImageType::New();
+
+    typedef itk::Index<Dimension>         myIndexType;
+    typedef itk::Size<Dimension>          mySizeType;
+    typedef itk::ImageRegion<Dimension>        myRegionType;
+
+    mySizeType size;
+    size[0] = inputImage->GetRequestedRegion().GetSize()[0];
+    size[1] = inputImage->GetRequestedRegion().GetSize()[1];
+
+    myIndexType start;
+    start[0] = 0;
+    start[1] = 0;
+
+    myRegionType region;
+    region.SetIndex( start );
+    region.SetSize( size );
+
+    outputImage->SetRegions( region );
+    outputImage->Allocate();
+
+    ImageClassBlue->SetRegions( region );
+    ImageClassBlue->Allocate();
+
+    ImageClassRed->SetRegions( region );
+    ImageClassRed->Allocate();
+
+
+
+    std::cout << "Image iterator" << std::endl;  
+    typedef itk::ImageRegionIterator< OutputImageType>  OutputIteratorType;
+    OutputIteratorType  outIt(       outputImage,   outputImage->GetBufferedRegion() );
+    OutputIteratorType  classRedIt(  ImageClassRed, outputImage->GetBufferedRegion() );
+    OutputIteratorType  classBlueIt( ImageClassBlue,outputImage->GetBufferedRegion() );
+
+    outIt.GoToBegin();
+    classRedIt.GoToBegin();
+    classBlueIt.GoToBegin();
+
+    TPixelOverlay MaxValue = static_cast<TPixelOverlay>(255);
+    TPixelOverlay MinValue = static_cast<TPixelOverlay>(0);
+
+    
+    while (m_iter != m_last && !outIt.IsAtEnd())
+    {
       ClassifierType::ClassLabelType label = m_iter.GetClassLabel();
+      if( label == -1 ) 
+      {
+      classBlueIt.Set(MaxValue);
+      classRedIt.Set(MinValue);
+      }	
+      if( label == 1 ) 
+      {
+      classBlueIt.Set(MinValue);
+      classRedIt.Set(MaxValue);
+      }	
       
-      InputVectorType measure; 
+      outIt.Set(m_iter.GetClassLabel());
       
-      tPSet->GetPointData(pointId, &measure);
-
-      ClassifierType::ClassLabelType expectedLabel;
-      if(measure[0] < measure[1])
-	expectedLabel= -1;
-      else
-	expectedLabel = 1;
-
-      double dist = fabs(measure[0] - measure[1]);
-      
-      if(label != expectedLabel )
-	error++;
-
-      std::cout << int(label) << "/" << int(expectedLabel) << " --- " << dist << std::endl;
-      
-      
-      ++pointId;
       ++m_iter ;
-      }
-    
-    std::cout << "Error = " << error/pointId << std::endl;*/
-    
+      ++outIt;
+      ++classRedIt;
+      ++classBlueIt;
+    }
 
+//  cOverlayData ....
+  this->SetInputOverlay(outputImage,ImageClassRed, ImageClassBlue);
+//ViewOverlayData(true);
 	
-
+std::cout << "End Classif" << std::endl;
 
 }	
 

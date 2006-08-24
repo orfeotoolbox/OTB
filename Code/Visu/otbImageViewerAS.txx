@@ -451,7 +451,7 @@ template <class TPixel>
 void 
 ImageViewerAS<TPixel>::ClassificationAlgorythm()
 {
-	m_PrincipalViewAfterClassif->ClassificationStep();
+	m_PrincipalViewBeforeClassif->ClassificationStep();
 }
 
 template <class TPixel>

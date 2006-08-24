@@ -25,7 +25,7 @@
 */
 
 #include <itkProcessObject.h>
-#include <itkVectorImage.h>
+#include <otbVectorImage.h>
 #include <list>
 #include <fstream>
 
@@ -52,7 +52,7 @@ class ITK_EXPORT VectorImageView : public itk::ProcessObject
     itkTypeMacro(VectorImageView,itk::ProcessObject);
 
     // some typedefs
-    typedef itk::VectorImage<TPixel,2>          ImageType;
+    typedef otb::VectorImage<TPixel,2>          ImageType;
     typedef typename ImageType::Pointer         ImagePointer;
     typedef typename ImageType::ConstPointer    ImageConstPointer;
     typedef typename ImageType::RegionType      RegionType;

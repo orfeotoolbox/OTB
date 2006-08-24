@@ -276,19 +276,6 @@ BuildWithImageRegion()
         //Termine l'initialisation 
         FinalizeInitialisation();
 		
-		// Initialise l'overlay
-		if (cOverlay)
-		{
-		const char* inputFilename = "maskrom.png" ;
-	
-    	typedef otb::ImageFileReader< OverlayType > VolumeReaderType;
-    	typename VolumeReaderType::Pointer lReader = VolumeReaderType::New();
-    	lReader->SetFileName(inputFilename);
-    	lReader->Update();
-		
-		SetInputOverlay(lReader->GetOutput());
-		ViewOverlayData(true);
-		}
 		
 	//PrintInfos();
 }
@@ -388,7 +375,6 @@ update()
  	{
 	    this->cWinMaxX = (int)this->cDimSize[0] - 1;
     }
-  
     this->cWinSizeY = (int)(this->cDimSize[1]);
     this->cWinMinY = 0;
     this->cWinMaxY = (int)( (int)(this->cDimSize[1]) - 1 );
@@ -455,94 +441,7 @@ update()
       		//if(j-this->cWinMinX >= (int)this->cWinDataSizeX)
          	//	continue;
 
-      
-      		/*l = (j-this->cWinMinX) + (k-this->cWinMinY)*this->cWinDataSizeX;
-      		//this->cWinImData[l] = (unsigned char)tf;
-      		unsigned int overlayColorIndex = 0;
-			otbMsgDevMacro(  << "l : " << l );
-	  
-      		if( this->cValidOverlayData ) 
-        	{
-       			l = l * 4;
-                
-        		if( sizeof( TPixelOverlay ) == 1  ||
-            		sizeof( TPixelOverlay ) == 2      )
-          		{
-		  		
-          			if (sizeof( TPixelOverlay ) == 1)
-            		{
-			   			m = (int)*((unsigned char *)&(cOverlayData->GetPixel(ind)));
-	           		}
-          			else
-            		{
-           				m = (int)*((unsigned short *)&(cOverlayData->GetPixel(ind)));
-            		}
-					//if (m!=255) otbMsgDevMacro(  << "m : " << m ) ;
-					
-          			if( m >= (int)cColorTable->GetNumberOfColors() ) 
-           			{ 
- 						m = cColorTable->GetNumberOfColors() - 1;
-            		}
-          			
-		  			if( m > 0 )
-					{
-	       				overlayColorIndex = m-1;
-            			if( static_cast<unsigned int>(m) > cOverlayColorIndex )
-              			{
-              				overlayColorIndex = cOverlayColorIndex;
-              			}
-						otbMsgDevMacro(  << "hu ?" );
-						cWinOverlayData[l+0] = 
-             				 (unsigned char)(cColorTable->GetColorComponent(overlayColorIndex,
-                                                             'r') * 255);
-
-            			cWinOverlayData[l+1] = 
-              				(unsigned char)(cColorTable->GetColorComponent(overlayColorIndex,
-                                                             'g') * 255);
-            			cWinOverlayData[l+2] = 
-              				(unsigned char)(cColorTable->GetColorComponent(overlayColorIndex,
-                                                             'b') * 255);
-            			cWinOverlayData[l+3] = 
-             				(unsigned char)(cOverlayOpacity*255);
-	      			}
-          		}
-        		else 
-          		{
-          			if(((unsigned char *)&(cOverlayData->GetPixel(ind)))[0]
-            			+ ((unsigned char *)&(cOverlayData->GetPixel(ind)))[1]
-            			+ ((unsigned char *)&(cOverlayData->GetPixel(ind)))[2] > 0)
-            		{
-            			if( sizeof( TPixelOverlay ) == 3 )
-              			{
-		      				otbMsgDevMacro(  << "ho ?" );
-							cWinOverlayData[l+0] = 
-               					((unsigned char *)&(cOverlayData->GetPixel(ind)))[0];
-              				cWinOverlayData[l+1] = 
-              					((unsigned char *)&(cOverlayData->GetPixel(ind)))[1];
-              				cWinOverlayData[l+2] = 
-              				    ((unsigned char *)&(cOverlayData->GetPixel(ind)))[2];
-              				cWinOverlayData[l+3] = 
-              					(unsigned char)(cOverlayOpacity*255);
-              			}
-            			else 
-              			{
-             				if( sizeof( TPixelOverlay ) == 4 ) 
-                			{
-                				otbMsgDevMacro(  << "ha ?" );
-								cWinOverlayData[l+0] = 
-                  					((unsigned char *)&(cOverlayData->GetPixel(ind)))[0];
-                				cWinOverlayData[l+1] = 
-                  					((unsigned char *)&(cOverlayData->GetPixel(ind)))[1];
-                				cWinOverlayData[l+2] = 
-                  					((unsigned char *)&(cOverlayData->GetPixel(ind)))[2];
-                				cWinOverlayData[l+3] = 
-                  					(unsigned char)(((unsigned char *)
-                 					 &(cOverlayData->GetPixel(ind)))[3]*cOverlayOpacity);
-                			}
-              			}
-            		}
-          		}
-        	}*/
+            
        }
   }
   }
@@ -565,7 +464,7 @@ void
 GLVectorImageViewClick<TPixel,TPixelOverlay>::
 resize(int x, int y, int w, int h)
   {
-  VectorImageView<TPixel>::resize(x, y, w, h);
+  VectorImageView<TPixel>::resize(x, y, w, h); 						
   Fl_Gl_Window::resize(x, y, w, h);
   this->update();
   this->redraw();
@@ -876,7 +775,9 @@ ViewClickedPoints()
 template <class TPixel, class TPixelOverlay>
 void 
 GLVectorImageViewClick<TPixel, TPixelOverlay>
-::SetInputOverlay( OverlayType * newOverlayData )
+::SetInputOverlay( OverlayPointer newOverlayData,
+		   OverlayPointer newOverlayDataClassRed, 
+		   OverlayPointer newOverlayDataClassBlue)
   {
   RegionType newoverlay_region = 
     newOverlayData->GetLargestPossibleRegion();
@@ -888,7 +789,9 @@ GLVectorImageViewClick<TPixel, TPixelOverlay>
       &&  (newoverlay_size[1] == this->cDimSize[1])
     )
     {
-    this->cOverlayData = newOverlayData;
+    this->cOverlayData          = newOverlayData;
+    this->cOverlayDataClassRed  = newOverlayDataClassRed;
+    this->cOverlayDataClassBlue = newOverlayDataClassBlue;
     
     //this->cViewOverlayData  = true;
     this->cValidOverlayData = true;

@@ -76,7 +76,7 @@ private:
 };
   
 }  // end namespace Accessor
-}  // end namespace itk
+}  // end namespace otb
 
 #endif
 
