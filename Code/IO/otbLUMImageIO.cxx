@@ -30,15 +30,25 @@
 # include <string.h>
 # include <sys/types.h>
 # include <stdlib.h>
-# include <unistd.h>
-# include <dirent.h>
 # include <sys/stat.h>
 # include <fcntl.h>
 # include <fcntl.h>
 # include <malloc.h>
 # include <math.h>
-# include <unistd.h>
 
+#if defined(WIN32) || defined(WIN32CE)
+/* WIN32 PLATFORM */
+        #ifndef WIN32CE
+                #  include <io.h>
+        #else
+                #  include <wce_io.h>
+        #endif
+
+#else
+/* UNIX PLATFORM */
+# include <unistd.h>
+# include <dirent.h>
+#endif
 
 namespace otb
 {
@@ -204,9 +214,9 @@ void LUMImageIO::ReadImageInformation()
   shortFileName = System::GetRootName(shortFileName);
   
   // Get Dataset 
-  char repert[pathFileName.length()];
+  char* repert = new char[pathFileName.length()];
   sprintf(repert, "%s" ,pathFileName.c_str() );  
-  char image[shortFileName.length()];
+  char* image = new char[shortFileName.length()];
   sprintf(image, "%s" ,shortFileName.c_str() );  
 
   
@@ -308,6 +318,9 @@ void LUMImageIO::ReadImageInformation()
        this->SetPixelType(VECTOR);
      }
   }
+  
+  delete[] repert;
+  delete[] image;
 }
 
 
@@ -429,9 +442,9 @@ void LUMImageIO::InternalWriteImageInformation()
   shortFileName = System::GetRootName(shortFileName);
   
   // Get Dataset 
-  char repert[pathFileName.length()];
+  char* repert = new char[pathFileName.length()];
   sprintf(repert, "%s" ,pathFileName.c_str() );  
-  char image[shortFileName.length()];
+  char* image = new char[shortFileName.length()];
   sprintf(image, "%s" ,shortFileName.c_str() );  
  
   m_NbBands = this->GetNumberOfComponents();
@@ -498,6 +511,8 @@ void LUMImageIO::InternalWriteImageInformation()
       return;
   }
   
+  delete[] repert;
+  delete[] image;
 }
 
 
@@ -538,6 +553,127 @@ void LUMImageIO::InternalWriteImageInformation()
 /* --------                                                                  */
 /*                                                                           */
 /*****************************************************************************/
+
+#if defined(WIN32) || defined(WIN32CE)
+/* WIN32 PLATFORM */
+
+long int LUMImageIO::cai_liste_ima_lum (char *repert,char ***tab_ima)
+
+
+{
+   struct _finddata_t dp; /* Structure ouverture repertoire */ 
+   long    hFile; 
+   std::string  pszFileSpec;
+   std::string path(repert);
+
+   char *pch0,*pch1;    /* pointeurs sur chaine de caracteres          */
+//   char car;            /* variable de travail                         */  
+   int nb_ima;          /* nombre d'images lum identifiees             */
+   long int i;          /* indice de boucle                            */
+   long int ll,dif;     /* variables de travail                        */
+   char blanc;          /* caractere blanc                             */
+        
+
+
+/*........................................
+   INITIALISATION et ouverture du repertoire choisi
+  .........................................*/
+   if (path.empty() == true)
+        path = ".";
+
+   pszFileSpec = path + "\\*.*";
+
+   nb_ima=0;
+
+   hFile = _findfirst( pszFileSpec.c_str(), &dp ) ;
+
+   if(hFile!=-1L)
+   {
+/*......................................
+
+   premiere passe pour comptabiliser les images du format donne
+
+
+   POUR CHAQUE FICHIER DU REPERTOIRE ,
+      TEST POUR SAVOIR SI CE FICHIER EST UNE IMAGE LUM
+      (EXTENSION =.lum)
+     ..........................................*/
+
+      do
+      {
+    	 pch0=strstr(dp.name,".lum");
+     	if (pch0 != NULL)
+     	{
+        	ll = strlen(dp.name);
+        	dif = (long)(dp.name-pch0);
+        	dif=labs(dif);
+        	pch1=pch0+4;
+        	if (((ll-4)==dif)||((*pch1)==blanc))
+	     		nb_ima=nb_ima+1;
+     
+    	 }
+
+      } while ( _findnext( hFile, &dp ) == 0 );
+
+    _findclose( hFile );
+
+/*.....................................
+     ALLOCATION DU TABLEAU CONTENANT LA LISTE DES IMAGES DU FORMAT LUM
+     ......................................*/
+    *tab_ima = (char **) calloc(nb_ima,sizeof(char *));
+    for (i=0;i<nb_ima;i=i+1)
+      (*tab_ima)[i]=(char *)calloc(1,100);
+
+/*......................................
+
+   deuxieme passe pour constituer la liste des images du format donne
+
+   POUR CHAQUE FICHIER DU REPERTOIRE ,
+      TEST POUR SAVOIR SI CE FICHIER EST UNE IMAGE LUM
+       (EXTENSION =.lum)
+   SI C`EST LE CAS,STOCKAGE DANS LA LISTE
+   ..........................................*/
+   hFile = _findfirst( pszFileSpec.c_str(), &dp ) ;
+ 
+   nb_ima=0;
+ 
+   do
+   {
+     pch0=strstr(dp.name,".lum");
+     if (pch0 != NULL)
+     {
+        ll = strlen(dp.name);
+        dif = (long)(dp.name-pch0);
+        dif=labs(dif);
+        pch1=pch0+4;
+        if (((ll-4)==dif)||((*pch1)==blanc))
+        {
+            *pch0='\0';
+            strcpy((*tab_ima)[nb_ima],dp.name);
+	    nb_ima=nb_ima+1;
+        }
+     
+     }
+   } while ( _findnext( hFile, &dp ) == 0 );  
+
+   _findclose( hFile );
+
+   }
+   else
+   {
+     /* Erreur : Repertoire inexistant */
+      nb_ima=-1;
+   }
+
+    return(nb_ima);
+
+}
+/* Fin de l'operation cai_liste_ima_lum*/
+
+
+#else
+/* UNIX PLATFORM */
+
 long int LUMImageIO::cai_liste_ima_lum (char *repert,char ***tab_ima)
 
 
@@ -545,7 +681,7 @@ long int LUMImageIO::cai_liste_ima_lum (char *repert,char ***tab_ima)
    DIR *dirp;		/* pointeur sur structure ouverture repertoire */
    struct dirent *dp;   /* structure resultat de la fonction readdir   */
    char *pch0,*pch1;    /* pointeurs sur chaine de caracteres          */
-   char car;            /* variable de travail                         */  
+//   char car;            /* variable de travail                         */  
    int nb_ima;          /* nombre d'images lum identifiees             */
    long int i;          /* indice de boucle                            */
    long int ll,dif;     /* variables de travail                        */
@@ -640,6 +776,8 @@ long int LUMImageIO::cai_liste_ima_lum (char *repert,char ***tab_ima)
 
 }
 /* Fin de l'operation cai_liste_ima_lum*/
+#endif
+
 /*****************************************************************************/
 /*                                                                           */
 /* OPERATION :    cai_ouvre_lecture_lum                                      */
@@ -823,7 +961,11 @@ CAI_IMAGE* LUMImageIO::cai_ouvre_lecture_lum(	char *repert,
 
 	if ( (v!=0) &&  (v1!=NULL) ) 
 	{	
+/*#if defined(WIN32) || defined(WIN32CE)*/
+		swab( (char*)nb_col, (char*)&nb_col2,4 );
+/*#else
 		swab( (void*)nb_col, (void*)&nb_col2,4 );
+#endif*/
 		cai_inverser_tableau((short *)nb_col, (short *)&nb_col2,nb);
 	}
 /*..................................
@@ -836,7 +978,12 @@ CAI_IMAGE* LUMImageIO::cai_ouvre_lecture_lum(	char *repert,
 
 	if ( (v!=0) && (v1!=NULL) )
 	{
+/*#if defined(WIN32) || defined(WIN32CE)*/
+		swab( (char*)nb_lig, (char*)&nb_lig2,4 );
+/*#else
 		swab( (void*)nb_lig, (void*)&nb_lig2,4 );
+#endif*/
+		
 		cai_inverser_tableau((short *)nb_lig, (short *)&nb_lig2,nb);
 	}
 	
@@ -1470,7 +1617,11 @@ CAI_OK_KO LUMImageIO::cai_lecture_canal_lum(	CAI_IMAGE *image1 ,
    {
 	
 	/*modification ordre selon nb octets par pixel*/
-       	swab( (void*)(data_image), (void*)(data_image2), taille_image);
+/*#if defined(WIN32) || defined(WIN32CE)*/
+	   swab( (char*)(data_image), (char*)(data_image2), taille_image);
+/*#else       	
+	   swab( (void*)(data_image), (void*)(data_image2), taille_image);
+#endif*/
 		
 	if (oct_pix!=2)
         { 
@@ -1981,7 +2132,11 @@ CAI_IMAGE* LUMImageIO::cai_ouvre_modifie_lum(	char *repert,
 	if ( (v!=0) && (v1!=NULL) )
 	
 	{	
+/*#if defined(WIN32) || defined(WIN32CE)*/
+		swab( (char*)nb_col, (char*)&nb_col2,4 );
+/*#else
 		swab( (void*)nb_col, (void*)&nb_col2,4 );
+#endif*/
 		cai_inverser_tableau((short *)nb_col, (short *)&nb_col2,nb);
 	}
 /*..................................
@@ -1994,7 +2149,12 @@ CAI_IMAGE* LUMImageIO::cai_ouvre_modifie_lum(	char *repert,
 
 	if ( (v!=0) && (v1!=NULL) )
 	{
+/*#if defined(WIN32) || defined(WIN32CE)*/
+		swab( (char*)nb_lig, (char*)&nb_lig2,4 );
+/*#else
 		swab( (void*)nb_lig, (void*)&nb_lig2,4 );
+#endif*/
+		
 		cai_inverser_tableau((short *)nb_lig, (short *)&nb_lig2,nb);
 	}
 
