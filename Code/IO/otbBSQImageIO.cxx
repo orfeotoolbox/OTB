@@ -30,14 +30,25 @@
 # include <string.h>
 # include <sys/types.h>
 # include <stdlib.h>
-# include <unistd.h>
-# include <dirent.h>
 # include <sys/stat.h>
 # include <fcntl.h>
 # include <fcntl.h>
 # include <malloc.h>
 # include <math.h>
+
+#if defined(WIN32) || defined(WIN32CE)
+/* WIN32 PLATFORM */
+        #ifndef WIN32CE
+                #  include <io.h>
+        #else
+                #  include <wce_io.h>
+        #endif
+
+#else
+/* UNIX PLATFORM */
 # include <unistd.h>
+# include <dirent.h>
+#endif
 
 
 namespace otb
@@ -205,9 +216,9 @@ void BSQImageIO::ReadImageInformation()
   shortFileName = System::GetRootName(shortFileName);
   
   // Get Dataset 
-  char repert[pathFileName.length()];
+  char* repert = new char[pathFileName.length()];
   sprintf(repert, "%s" ,pathFileName.c_str() );  
-  char image[shortFileName.length()];
+  char* image = new char[shortFileName.length()];
   sprintf(image, "%s" ,shortFileName.c_str() );  
 
   
@@ -221,6 +232,8 @@ void BSQImageIO::ReadImageInformation()
   if( m_image == NULL )
   {
       itkExceptionMacro(<<"The BSQ dataset file is NULL.");
+      delete[] repert;
+      delete[] image;
       return;
   }
   else
@@ -295,6 +308,9 @@ void BSQImageIO::ReadImageInformation()
        this->SetPixelType(VECTOR);
      }
   }
+  
+  delete[] repert;
+  delete[] image;
 }
 
 
@@ -418,9 +434,9 @@ void BSQImageIO::InternalWriteImageInformation()
   shortFileName = System::GetRootName(shortFileName);
   
   // Get Dataset 
-  char repert[pathFileName.length()];
+  char* repert = new char[pathFileName.length()];
   sprintf(repert, "%s" ,pathFileName.c_str() );  
-  char image[shortFileName.length()];
+  char* image = new char[shortFileName.length()];
   sprintf(image, "%s" ,shortFileName.c_str() );  
  
   m_NbBands = this->GetNumberOfComponents();
@@ -472,8 +488,13 @@ void BSQImageIO::InternalWriteImageInformation()
   if( m_image == NULL )
   {
       itkExceptionMacro(<<"The BSQ dataset file is NULL.");
+      delete[] repert;
+      delete[] image;
       return;
   }
+  
+  delete[] repert;
+  delete[] image;
 }
 
 
@@ -987,7 +1008,7 @@ CAI_IMAGE* BSQImageIO::cai_ouvre_creation_bsq(char *repert,
    char *type_machine;          /* ordre rangement octets machine de travail*/
    int reconnaissance_type;     
 
-
+      
 /*........................................
    INITIALISATION et allocation de place pour la structure CAI_IMAGE
   .........................................*/
@@ -1114,9 +1135,13 @@ CAI_IMAGE* BSQImageIO::cai_ouvre_creation_bsq(char *repert,
 /* MOD : VERSION : 5.1 : DM :  Maj du tag TYPE lorsque l'image est codée     */
 /* en reel  et que l'utilisateur le precise dans le param  "label"           */
 /*****************************************************************************/
-     		if ((strcasecmp(label,"R4") == 0)||
-			(strcasecmp(label,"FLOAT")== 0)||
-				(strcasecmp(label,"REEL") == 0))
+     		// Variable de type std::string utilisée pour comparer les chaînes de caractères
+     		// Etait utilisée sous LINUX la fonction strcasecmp, non définie sous Windows
+     		std::string strLabel(label);
+     		
+     		if ( (strLabel == "R4")||
+			(strLabel == "FLOAT")||
+				(strLabel == "REEL") )
        			sprintf ( image1->COD_PIX , "R4" );
      		else
        			sprintf ( image1->COD_PIX , "I4" );     
@@ -1356,8 +1381,12 @@ CAI_OK_KO BSQImageIO::cai_lecture_canal_bsq(CAI_IMAGE *image1 ,
 	else
         {
 	    /*modification ordre selon nb octets par pixel*/
-       	    swab( (void*)(data_image), (void*)(data_image2), taille_image);
-		
+/*#if defined(WIN32) || defined(WIN32CE)*/
+		swab( (char*)(data_image), (char*)(data_image2), taille_image);
+/*#else
+		swab( (void*)(data_image), (void*)(data_image2), taille_image);
+#endif*/
+       	    	
 	   if (oct_pix!=2)
            { 
               Nb = taille_image/2;
@@ -1612,7 +1641,7 @@ CAI_OK_KO BSQImageIO::cai_dest_ima_bsq ( char *repertoire ,
 {
 int	i_can;			/* compteur de canaux */
 long int     iret;              /* code retour fonction fermetrue lecture */
-char	str_num_canal[3];	/* suffixe numero du canal */
+//char	str_num_canal[3];	/* suffixe numero du canal */
 char	nom_fic_entete[1024];	/* nom du fichier entete a detruire */
 char    nom_ima_complet[1024];  /* repertoire + nom de l'image */
 char	nom_fic_canal[1024];	/* nom du fichier canal a detruire */
