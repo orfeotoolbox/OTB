@@ -229,6 +229,8 @@ void LUMImageIO::ReadImageInformation()
   if( m_image == NULL )
   {
       itkExceptionMacro(<<"The LUM dataset file is NULL.");
+      delete[] repert;
+      delete[] image;
       return;
   }
   else
@@ -821,11 +823,11 @@ CAI_IMAGE* LUMImageIO::cai_ouvre_lecture_lum(	char *repert,
 {
    FILE *fic_in;	      /* pointeur sur descripteur de fichier         */
    CAI_IMAGE *image1;	      /* pointeur su descripteur de fichier image    */       
-   int  iret,icr;	      /* indicateur de retour ok ou pas              */
+   int  iret/*,icr*/;	      /* indicateur de retour ok ou pas              */
    char nom_fic[1024];	      /* nom du fichier en-tete		             */
    char nom_fic_canal[1024];  /* nom fichier canal dont on teste existence   */
    int nbbits;		      /* nb de bits par pixel du fichier en-tete     */
-   int retour;		      /* retour de la fonction comparaison chaines   */ 
+//   int retour;		      /* retour de la fonction comparaison chaines   */ 
    int i,num;		      /* indice 			             */
    char *type_cod;	      /* type de codage du pixel                     */
    char cod_pix[5];           /* codage du pixel                             */
@@ -1435,7 +1437,7 @@ CAI_OK_KO LUMImageIO::cai_lecture_canal_lum(	CAI_IMAGE *image1 ,
 
 {
 
- int   num,i,j,k,kk;        /* variables de travail                          */
+ int   num,i,j,k/*,kk*/;        /* variables de travail                          */
  long pt_oct,n;		    /* position courante dans le fichier image       */
  int no_oct;                /* numero du premier octet a lire                */
  int iret;                  /* indicateur d'erreur                           */
@@ -1902,21 +1904,21 @@ CAI_OK_KO LUMImageIO::cai_dest_ima_lum ( char *repertoire ,
 
 
 {
-int	i_can;			/* compteur de canaux */
-int     iret;                   /* code retour fonction fermetrue lecture */
-char	str_num_canal[3];	/* suffixe numero du canal */
+//int	i_can;			/* compteur de canaux */
+//int     iret;                   /* code retour fonction fermetrue lecture */
+//char	str_num_canal[3];	/* suffixe numero du canal */
 char	nom_fic_entete[1024];	/* nom du fichier entete a detruire */
 char    nom_ima_complet[1024];  /* repertoire + nom de l'image */
-char	nom_fic_canal[1024];	/* nom du fichier canal a detruire */
+//char	nom_fic_canal[1024];	/* nom du fichier canal a detruire */
 
 int	cr_stat;		/* code retour de fonction status de fichier */
 struct stat buf_stat;		/* structure decrivant status de fichier */ 
 
-CAI_IMAGE   *image1;             /* structure ouverture image */
-int         nb_can;	        /* nombre de canaux de l'image */
-int         nboct_pix;		/* nombre d'octets par pixel image */
-int         nb_col;	        /* nombre de colonnes de l'image */
-int         nb_lig;             /* nombre de lignes de l'image */
+//CAI_IMAGE   *image1;             /* structure ouverture image */
+//int         nb_can;	        /* nombre de canaux de l'image */
+//int         nboct_pix;		/* nombre d'octets par pixel image */
+//int         nb_col;	        /* nombre de colonnes de l'image */
+//int         nb_lig;             /* nombre de lignes de l'image */
 
 /************************************************/
 /* Constitution du nom du fichier d'entete	*/
@@ -1989,11 +1991,11 @@ CAI_IMAGE* LUMImageIO::cai_ouvre_modifie_lum(	char *repert,
 {
    FILE *fic_in;	      /* pointeur sur descripteur de fichier         */
    CAI_IMAGE *image1;	      /* pointeur su descripteur de fichier image    */       
-   int  iret,icr;	      /* indicateur de retour ok ou pas              */
+   int  iret/*,icr*/;	      /* indicateur de retour ok ou pas              */
    char nom_fic[1024];	      /* nom du fichier en-tete		             */
    char nom_fic_canal[1024];  /* nom fichier canal dont on teste existence   */
    int nbbits;		      /* nb de bits par pixel du fichier en-tete     */
-   int retour;		      /* retour de la fonction comparaison chaines   */ 
+//   int retour;		      /* retour de la fonction comparaison chaines   */ 
    int i,num;		      /* indice 			             */
    char *type_cod;	      /* type de codage du pixel                     */
    char cod_pix[5];           /* codage du pixel                             */
