@@ -290,10 +290,10 @@ public:
   const OverlayPointer & GetInputOverlay(void) const;
 
   /*! Return a pointer to the overlay data for the Red Class*/
-  const OverlayPointer & GetInputOverlayRed(void) const;
+  const OverlayPointer & GetInputOverlayClassRed(void) const;
 
   /*! Return a pointer to the overlay data for the Blue Class*/
-  const OverlayPointer & GetInputOverlayBlue(void) const;
+  const OverlayPointer & GetInputOverlayClassBlue(void) const;
   
   /*! Turn on/off the viewing of the overlay */
   void  ViewOverlayData(bool newViewOverlayData);

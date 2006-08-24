@@ -541,7 +541,7 @@ PrincipalImageViewAS<TPixel, TPixelOverlay>::ClassificationStep()
     }
 
 //  cOverlayData ....
-  this->SetInputOverlay(outputImage,ImageClassRed, ImageClassBlue);
+  this->SetInputOverlay(outputImage,ImageClassRed, ImageClassBlue );
 //ViewOverlayData(true);
 	
 std::cout << "End Classif" << std::endl;

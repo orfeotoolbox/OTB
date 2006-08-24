@@ -840,6 +840,24 @@ GLVectorImageViewClick<TPixel, TPixelOverlay>
   {
   	return this->cOverlayData;
   }
+
+  template <class TPixel, class TPixelOverlay>
+  const typename GLVectorImageViewClick<TPixel, 
+  TPixelOverlay>::OverlayPointer &
+  GLVectorImageViewClick<TPixel, TPixelOverlay>::GetInputOverlayClassRed( void ) 
+  const
+  {
+  	return this->cOverlayDataClassRed;
+  }
+
+  template <class TPixel, class TPixelOverlay>
+  const typename GLVectorImageViewClick<TPixel, 
+  TPixelOverlay>::OverlayPointer &
+  GLVectorImageViewClick<TPixel, TPixelOverlay>::GetInputOverlayClassBlue( void ) 
+  const
+  {
+  	return this->cOverlayDataClassBlue;
+  }
   
   template <class TPixel, class TPixelOverlay>
   void 
