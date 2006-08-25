@@ -277,23 +277,23 @@ public:
   // Overlay
    bool cOverlay;
 
-   /*! Activate overlay on image */   
-   void ActivateOverlay(bool b);
+   /*! Activate overlays on image */   
+   void ActivateOverlayFirst(bool b);
+   void ActivateOverlaySecond(bool b);
   
    bool        cViewOverlayData;
   /*! Specify the 3D image to view as an overlay */
-  void SetInputOverlay( OverlayPointer newOverlayData,
-  			OverlayPointer newOverlayDataClassRed, 
-		   	OverlayPointer newOverlayDataClassBlue);
+  void SetInputOverlay(	OverlayPointer newOverlayDataClassFirst, 
+		   	OverlayPointer newOverlayDataClassSecond);
   
   /*! Return a pointer to the overlay data */
   const OverlayPointer & GetInputOverlay(void) const;
 
   /*! Return a pointer to the overlay data for the Red Class*/
-  const OverlayPointer & GetInputOverlayClassRed(void) const;
+  const OverlayPointer & GetInputOverlayClassFirst(void) const;
 
   /*! Return a pointer to the overlay data for the Blue Class*/
-  const OverlayPointer & GetInputOverlayClassBlue(void) const;
+  const OverlayPointer & GetInputOverlayClassSecond(void) const;
   
   /*! Turn on/off the viewing of the overlay */
   void  ViewOverlayData(bool newViewOverlayData);
@@ -335,18 +335,25 @@ protected:
 
   //Méthodes utilisées pour l'overlay de l'image
   bool        cValidOverlayData;
+  //Booleens permettant l'affichage des overlays de la classification
+  bool	      cViewOverlayClassFirst;
+  bool	      cViewOverlayClassSecond;
+  
   float       cOverlayOpacity;
   // Overlay utilisé pour afficher le résultat de la classification
-  OverlayPointer cOverlayData;
-  // Overlay utilisé pour afficher le résultat de la classe #Rouge
-  OverlayPointer cOverlayDataClassRed;
-  // Overlay utilisé pour afficher le résultat de la classe #Bleu
-  OverlayPointer cOverlayDataClassBlue;
+  // OverlayPointer cOverlayData;
+  // Overlay utilisé pour afficher le résultat de la classe #C1
+  OverlayPointer cOverlayDataClassFirst;
+  // Overlay utilisé pour afficher le résultat de la classe #C2
+  OverlayPointer cOverlayDataClassSecond;
+  
   
   void     (* cViewOverlayCallBack)(void);
   
   ImageModeType cImageMode;
-  unsigned char * cWinOverlayData;
+  //unsigned char * cWinOverlayData;
+  unsigned char * cWinOverlayDataFirst;
+  unsigned char * cWinOverlayDataSecond;
   unsigned int    cOverlayColorIndex;
   ColorTablePointer      cColorTable;
   

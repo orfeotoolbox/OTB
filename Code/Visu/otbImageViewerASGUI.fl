@@ -13,7 +13,7 @@ class otbImageViewerASGUI {open
       label {Principal Window} open
       xywh {469 33 710 575} type Double box PLASTIC_DOWN_BOX color 196 labelsize 12 align 33 visible
     } {
-      Fl_Group glWindowGroupPrincipal {open selected
+      Fl_Group glWindowGroupPrincipal {open
         xywh {-5 -5 715 580} color 40
       } {
         Fl_Button bUndo {
@@ -23,12 +23,12 @@ class otbImageViewerASGUI {open
         }
         Fl_Button bLearn {
           label Learn
-          callback {LearnAlgorythm();}
+          callback {LearnAlgorithm();}
           xywh {215 420 64 25} box SHADOW_BOX color 55 labelfont 1 labelcolor 176
         }
         Fl_Button bClassif {
           label Classif
-          callback {ClassificationAlgorythm();}
+          callback {ClassificationAlgorithm();} selected
           xywh {215 450 64 25} box SHADOW_BOX color 55 labelfont 1 labelcolor 176
         }
         Fl_Button bReset {
@@ -109,9 +109,9 @@ class otbImageViewerASGUI {open
   } {}
   Function {EraseAllClickedPoints()} {return_type {virtual void}
   } {}
-  Function {LearnAlgorythm()} {return_type {virtual void}
+  Function {LearnAlgorithm()} {return_type {virtual void}
   } {}
-  Function {ClassificationAlgorythm()} {return_type {virtual void}
+  Function {ClassificationAlgorithm()} {return_type {virtual void}
   } {}
   Function {DisplaySecondClass()} {return_type {virtual void}
   } {}

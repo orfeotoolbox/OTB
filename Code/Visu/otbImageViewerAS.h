@@ -103,8 +103,8 @@ public:
   /** Gestion des événements associés aux bouttons */
   void EraseLastClickedPoint();
   void EraseAllClickedPoints();
-  void LearnAlgorythm();
-  void ClassificationAlgorythm();
+  void LearnAlgorithm();
+  void ClassificationAlgorithm();
   void DisplayFirstClass();
   void DisplaySecondClass();
   void LoadLeftImage();

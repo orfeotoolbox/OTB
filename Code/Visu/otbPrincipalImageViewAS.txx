@@ -474,8 +474,8 @@ PrincipalImageViewAS<TPixel, TPixelOverlay>::ClassificationStep()
     typedef otb::Image< TPixelOverlay, Dimension >        OutputImageType;
 
     typename OutputImageType::Pointer outputImage = OutputImageType::New();
-    typename OutputImageType::Pointer ImageClassBlue = OutputImageType::New();
-    typename OutputImageType::Pointer ImageClassRed  = OutputImageType::New();
+    typename OutputImageType::Pointer ImageClassFirst = OutputImageType::New();
+    typename OutputImageType::Pointer ImageClassSecond  = OutputImageType::New();
 
     typedef itk::Index<Dimension>         myIndexType;
     typedef itk::Size<Dimension>          mySizeType;
@@ -496,23 +496,23 @@ PrincipalImageViewAS<TPixel, TPixelOverlay>::ClassificationStep()
     outputImage->SetRegions( region );
     outputImage->Allocate();
 
-    ImageClassBlue->SetRegions( region );
-    ImageClassBlue->Allocate();
+    ImageClassFirst->SetRegions( region );
+    ImageClassFirst->Allocate();
 
-    ImageClassRed->SetRegions( region );
-    ImageClassRed->Allocate();
+    ImageClassSecond->SetRegions( region );
+    ImageClassSecond->Allocate();
 
 
 
     std::cout << "Image iterator" << std::endl;  
     typedef itk::ImageRegionIterator< OutputImageType>  OutputIteratorType;
     OutputIteratorType  outIt(       outputImage,   outputImage->GetBufferedRegion() );
-    OutputIteratorType  classRedIt(  ImageClassRed, outputImage->GetBufferedRegion() );
-    OutputIteratorType  classBlueIt( ImageClassBlue,outputImage->GetBufferedRegion() );
+    OutputIteratorType  classSecondIt(  ImageClassSecond, outputImage->GetBufferedRegion() );
+    OutputIteratorType  classFirstIt( ImageClassFirst,outputImage->GetBufferedRegion() );
 
     outIt.GoToBegin();
-    classRedIt.GoToBegin();
-    classBlueIt.GoToBegin();
+    classSecondIt.GoToBegin();
+    classFirstIt.GoToBegin();
 
     TPixelOverlay MaxValue = static_cast<TPixelOverlay>(255);
     TPixelOverlay MinValue = static_cast<TPixelOverlay>(0);
@@ -523,30 +523,31 @@ PrincipalImageViewAS<TPixel, TPixelOverlay>::ClassificationStep()
       ClassifierType::ClassLabelType label = m_iter.GetClassLabel();
       if( label == -1 ) 
       {
-      classBlueIt.Set(MaxValue);
-      classRedIt.Set(MinValue);
+      classFirstIt.Set(MaxValue);
+      classSecondIt.Set(MinValue);
       }	
       if( label == 1 ) 
       {
-      classBlueIt.Set(MinValue);
-      classRedIt.Set(MaxValue);
+      classFirstIt.Set(MinValue);
+      classSecondIt.Set(MaxValue);
       }	
       
       outIt.Set(m_iter.GetClassLabel());
       
       ++m_iter ;
       ++outIt;
-      ++classRedIt;
-      ++classBlueIt;
+      ++classSecondIt;
+      ++classFirstIt;
     }
 
 //  cOverlayData ....
-  this->SetInputOverlay(outputImage,ImageClassRed, ImageClassBlue );
+    this->SetInputOverlay(ImageClassFirst, ImageClassSecond );
 //ViewOverlayData(true);
 	
 std::cout << "End Classif" << std::endl;
 
 }	
+
 
 
 template <class TPixel, class TPixelOverlay>

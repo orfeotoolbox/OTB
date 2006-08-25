@@ -42,9 +42,12 @@ GLVectorImageViewClick() : VectorImageView<TPixel>(), Fl_Gl_Window(0,0,0,0,0)
   cOverlay = false ;
   cValidOverlayData     = false;
   cViewOverlayData      = false;
+  cViewOverlayClassFirst = false;
+  cViewOverlayClassSecond = false;
   cViewOverlayCallBack  = NULL;
   cOverlayOpacity       = 0.0;
-  cWinOverlayData       = NULL;
+  cWinOverlayDataFirst       = NULL;
+  cWinOverlayDataSecond      = NULL;
   cOverlayColorIndex = 7;  //default white
 	
   cClickMode = CM_SELECT;
@@ -396,7 +399,8 @@ update()
  	//memset( this->cWinImData, 0, this->cWinDataSizeX*this->cWinDataSizeY );
   	if( this->cValidOverlayData ) 
     {
-    	memset(this->cWinOverlayData, 0, this->cWinDataSizeX*this->cWinDataSizeY*4);
+    	memset(this->cWinOverlayDataFirst, 0, this->cWinDataSizeX*this->cWinDataSizeY*4);
+    	memset(this->cWinOverlayDataSecond, 0, this->cWinDataSizeX*this->cWinDataSizeY*4);
     }
 
   	IndexType ind;
@@ -425,18 +429,32 @@ update()
       	{
       		ind[0] = j;
       
-	  		m = (int)*((unsigned char *)&(cOverlayData->GetPixel(ind)));
-			cWinOverlayData[l+0] = 
-               		((unsigned char *)&(cOverlayData->GetPixel(ind)))[0];
-            cWinOverlayData[l+1] = 
-              		((unsigned char *)&(cOverlayData->GetPixel(ind)))[1];
-            cWinOverlayData[l+2] = 
-              	    ((unsigned char *)&(cOverlayData->GetPixel(ind)))[2];
-	  		if (cWinOverlayData[l+0]==255)
-				cWinOverlayData[l+3] = (unsigned char)(0);
+	  		//m = (int)*((unsigned char *)&(cOverlayDataFirst->GetPixel(ind)));
+			
+			//Donnees pour l'overlay de la classe #C1
+			cWinOverlayDataFirst[l+0] = 
+               			((unsigned char *)&(cOverlayDataClassFirst->GetPixel(ind)))[0];
+            		cWinOverlayDataFirst[l+1] = 
+              			((unsigned char *)&(cOverlayDataClassFirst->GetPixel(ind)))[1];
+            		cWinOverlayDataFirst[l+2] = 
+              	    		((unsigned char *)&(cOverlayDataClassFirst->GetPixel(ind)))[2];
+	  		if (cWinOverlayDataFirst[l+0]==255)
+				cWinOverlayDataFirst[l+3] = (unsigned char)(0);
 			else
-				cWinOverlayData[l+3] = (unsigned char)(255);
+				cWinOverlayDataFirst[l+3] = (unsigned char)(255);
 				
+			//Donnees pour l'overlay de la classe #C2
+			cWinOverlayDataSecond[l+0] = 
+               			((unsigned char *)&(cOverlayDataClassSecond->GetPixel(ind)))[0];
+            		cWinOverlayDataSecond[l+1] = 
+              			((unsigned char *)&(cOverlayDataClassSecond->GetPixel(ind)))[1];
+            		cWinOverlayDataSecond[l+2] = 
+              	    		((unsigned char *)&(cOverlayDataClassSecond->GetPixel(ind)))[2];
+	  		if (cWinOverlayDataSecond[l+0]==255)
+				cWinOverlayDataSecond[l+3] = (unsigned char)(0);
+			else
+				cWinOverlayDataSecond[l+3] = (unsigned char)(255);	
+								
 	  		l+=4;
       		//if(j-this->cWinMinX >= (int)this->cWinDataSizeX)
          	//	continue;
@@ -537,17 +555,27 @@ void GLVectorImageViewClick<TPixel,TPixelOverlay>::draw(void)
  	     	glDrawPixels(this->cWinDataSizeX,this->cWinDataSizeY, 
                          GL_RGB,GL_UNSIGNED_BYTE,this->cWinImData );
          }
-      }
+    }
 
-      // Affichage de l'overlay
-      if(cOverlay && cValidOverlayData && cViewOverlayData) 
-      {
+   // Affichage de l'overlay de la classe #C1
+   if(cOverlay && cValidOverlayData && cViewOverlayData && cViewOverlayClassFirst) 
+   {
 	  glEnable(GL_BLEND);
-      glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-      glDrawPixels(this->cWinDataSizeX, this->cWinDataSizeY, GL_RGBA, 
-        GL_UNSIGNED_BYTE, this->cWinOverlayData);
-      glDisable(GL_BLEND);
-      }
+   	  glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+      	  glDrawPixels(this->cWinDataSizeX, this->cWinDataSizeY, GL_RGBA, 
+          GL_UNSIGNED_BYTE, this->cWinOverlayDataFirst);
+      	  glDisable(GL_BLEND);
+   }
+   
+   // Affichage de l'overlay de la classe #C2
+   if(cOverlay && cValidOverlayData && cViewOverlayData && cViewOverlayClassSecond) 
+   {
+	  glEnable(GL_BLEND);
+   	  glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+      	  glDrawPixels(this->cWinDataSizeX, this->cWinDataSizeY, GL_RGBA, 
+          GL_UNSIGNED_BYTE, this->cWinOverlayDataSecond);
+      	  glDisable(GL_BLEND);
+   }
 
   // Selection Box display
   if (this->cSelectRectangle)
@@ -775,12 +803,11 @@ ViewClickedPoints()
 template <class TPixel, class TPixelOverlay>
 void 
 GLVectorImageViewClick<TPixel, TPixelOverlay>
-::SetInputOverlay( OverlayPointer newOverlayData,
-		   OverlayPointer newOverlayDataClassRed, 
-		   OverlayPointer newOverlayDataClassBlue)
+::SetInputOverlay( OverlayPointer newOverlayDataClassFirst, 
+		   OverlayPointer newOverlayDataClassSecond)
   {
   RegionType newoverlay_region = 
-    newOverlayData->GetLargestPossibleRegion();
+    newOverlayDataClassFirst->GetLargestPossibleRegion();
 
   SizeType   newoverlay_size   = newoverlay_region.GetSize();
 
@@ -789,22 +816,28 @@ GLVectorImageViewClick<TPixel, TPixelOverlay>
       &&  (newoverlay_size[1] == this->cDimSize[1])
     )
     {
-    this->cOverlayData          = newOverlayData;
-    this->cOverlayDataClassRed  = newOverlayDataClassRed;
-    this->cOverlayDataClassBlue = newOverlayDataClassBlue;
+   // this->cOverlayData          = newOverlayData;
+    this->cOverlayDataClassFirst  = newOverlayDataClassFirst;
+    this->cOverlayDataClassSecond = newOverlayDataClassSecond;
     
-    //this->cViewOverlayData  = true;
+    this->cOverlay=true;
+    this->cViewOverlayData  = true;
     this->cValidOverlayData = true;
     this->cOverlayOpacity   = (float)0.0;
     
-    if(this->cWinOverlayData != NULL) 
+    if(this->cWinOverlayDataFirst != NULL) 
       {
-      delete [] this->cWinOverlayData;
+      delete [] this->cWinOverlayDataFirst;
+      }
+    if(this->cWinOverlayDataSecond != NULL) 
+      {
+      delete [] this->cWinOverlayDataSecond;
       }
     
 
     const unsigned long bufferSize = this->cWinDataSizeX * this->cWinDataSizeY * 4;
-    this->cWinOverlayData = new unsigned char[ bufferSize ];
+    this->cWinOverlayDataFirst = new unsigned char[ bufferSize ];
+    this->cWinOverlayDataSecond = new unsigned char[ bufferSize ];
     }
   else // return a warning
     {
@@ -844,19 +877,20 @@ GLVectorImageViewClick<TPixel, TPixelOverlay>
   template <class TPixel, class TPixelOverlay>
   const typename GLVectorImageViewClick<TPixel, 
   TPixelOverlay>::OverlayPointer &
-  GLVectorImageViewClick<TPixel, TPixelOverlay>::GetInputOverlayClassRed( void ) 
+  GLVectorImageViewClick<TPixel, TPixelOverlay>::GetInputOverlayClassFirst( void ) 
   const
   {
-  	return this->cOverlayDataClassRed;
+  	return this->cOverlayDataClassFirst;
   }
+  
 
   template <class TPixel, class TPixelOverlay>
   const typename GLVectorImageViewClick<TPixel, 
   TPixelOverlay>::OverlayPointer &
-  GLVectorImageViewClick<TPixel, TPixelOverlay>::GetInputOverlayClassBlue( void ) 
+  GLVectorImageViewClick<TPixel, TPixelOverlay>::GetInputOverlayClassSecond( void ) 
   const
   {
-  	return this->cOverlayDataClassBlue;
+  	return this->cOverlayDataClassSecond;
   }
   
   template <class TPixel, class TPixelOverlay>
@@ -1194,11 +1228,18 @@ void GLVectorImageViewClick<TPixel,TPixelOverlay>::boxMax(float x, float y, floa
 template <class TPixel, class TPixelOverlay>
 void
 GLVectorImageViewClick<TPixel, TPixelOverlay>::
-ActivateOverlay(bool b)
+ActivateOverlayFirst(bool b)
 {
-	cOverlay = b ;
+	cViewOverlayClassFirst = b ;
 }
-  
+
+template <class TPixel, class TPixelOverlay>
+void
+GLVectorImageViewClick<TPixel, TPixelOverlay>::
+ActivateOverlaySecond(bool b)
+{
+	cViewOverlayClassSecond = b ;
+}
 
 
 

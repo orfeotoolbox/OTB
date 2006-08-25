@@ -442,31 +442,36 @@ ImageViewerAS<TPixel>::EraseAllClickedPoints()
 
 template <class TPixel>
 void 
-ImageViewerAS<TPixel>::LearnAlgorythm()
+ImageViewerAS<TPixel>::LearnAlgorithm()
 {
 	m_PrincipalViewBeforeClassif->LearnStep();
 }
 
 template <class TPixel>
 void 
-ImageViewerAS<TPixel>::ClassificationAlgorythm()
+ImageViewerAS<TPixel>::ClassificationAlgorithm()
 {
 	m_PrincipalViewBeforeClassif->ClassificationStep();
+	m_PrincipalViewAfterClassif->SetInputOverlay(m_PrincipalViewBeforeClassif->GetInputOverlayClassFirst(),
+						     m_PrincipalViewBeforeClassif->GetInputOverlayClassSecond());
 }
 
 template <class TPixel>
 void 
 ImageViewerAS<TPixel>::DisplayFirstClass()
 {
-	m_PrincipalViewAfterClassif->ActivateOverlay(true);
+	m_PrincipalViewAfterClassif->ActivateOverlayFirst(true);
+	m_PrincipalViewAfterClassif->ActivateOverlaySecond(false);
 	this->Update();  
 }
+
 
 template <class TPixel>
 void 
 ImageViewerAS<TPixel>::DisplaySecondClass()
 {
-	m_PrincipalViewAfterClassif->ActivateOverlay(false);
+	m_PrincipalViewAfterClassif->ActivateOverlayFirst(false);
+	m_PrincipalViewAfterClassif->ActivateOverlaySecond(true);
 	this->Update();  
 }
 
