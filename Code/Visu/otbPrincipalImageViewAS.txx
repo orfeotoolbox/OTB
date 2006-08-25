@@ -42,7 +42,6 @@ template <class TPixel, class TPixelOverlay>
 PrincipalImageViewAS<TPixel, TPixelOverlay>::
 PrincipalImageViewAS() : GLVectorImageViewClick<TPixel, TPixelOverlay>()
   {
-  //cEstimator = EstimatorType::New();
 		
   }
 
@@ -403,16 +402,23 @@ PrincipalImageViewAS<TPixel, TPixelOverlay>::LearnStep()
   }
   
   mPSet->SetPoints( mCont );
+  std::cout << "1" << std::endl;
   lPSet->SetPoints( lCont );  
+  std::cout << "2" << std::endl;
   
   EstimatorType::Pointer learningEstimator = EstimatorType::New();
 
+  std::cout << "3" << std::endl;
   learningEstimator->SetInputPointSet( mPSet );
+  std::cout << "4" << std::endl;
   learningEstimator->SetTrainingPointSet( lPSet );
+  std::cout << "5" << std::endl;
   learningEstimator->SetNumberOfClasses( 2 );
-  learningEstimator->Modified();
+  std::cout << "6" << std::endl;
 
+  std::cout << "pointId : " << pointId << std::endl;
   learningEstimator->Update();
+  std::cout << "7" << std::endl;
   
   cEstimator = learningEstimator;
   std::cout << "End learning model" << std::endl;
