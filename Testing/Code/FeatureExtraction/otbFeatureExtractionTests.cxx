@@ -42,6 +42,8 @@ REGISTER_TEST(otbHuPathNew);
 REGISTER_TEST(otbHuPath);
 REGISTER_TEST(otbFlusserPathNew);
 REGISTER_TEST(otbFlusserPath);
+REGISTER_TEST(otbOrientationPathNew);
+REGISTER_TEST(otbOrientationPath);
 REGISTER_TEST(otbTouziEdgeDetectorNew);
 REGISTER_TEST(otbTouziEdgeDetector);
 REGISTER_TEST(otbTouziEdgeDetectorDirection);

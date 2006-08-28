@@ -98,6 +98,23 @@ ADD_TEST(feTuFlusserPathNew ${FEATUREEXTRACTION_TESTS}
 
 ADD_TEST(feTuFlusserPath ${FEATUREEXTRACTION_TESTS}  
         otbFlusserPath)
+	
+# -------            otb::OrientationPathFunction   ------------------------
+ 	
+ADD_TEST(feTuOrientationPathNew ${FEATUREEXTRACTION_TESTS}  
+        otbOrientationPathNew)
+
+ADD_TEST(feTuOrientationPath_000 ${FEATUREEXTRACTION_TESTS}  
+        otbOrientationPath 0.0)
+
+ADD_TEST(feTuOrientationPath_045 ${FEATUREEXTRACTION_TESTS}  
+        otbOrientationPath 45.0)
+
+ADD_TEST(feTuOrientationPath_090 ${FEATUREEXTRACTION_TESTS}  
+        otbOrientationPath 90.0)
+
+ADD_TEST(feTuOrientationPath1_80 ${FEATUREEXTRACTION_TESTS}  
+        otbOrientationPath 180.0)
 
 # -------            otb::TouziEdgeDetector   ------------------------------
 
@@ -370,6 +387,8 @@ otbHuPathNew.cxx
 otbHuPath.cxx
 otbFlusserPathNew.cxx
 otbFlusserPath.cxx
+otbOrientationPathNew.cxx
+otbOrientationPath.cxx
 otbTouziEdgeDetectorNew.cxx
 otbTouziEdgeDetector.cxx
 otbTouziEdgeDetectorDirection.cxx
