@@ -25,7 +25,7 @@ namespace otb
 {
 
 /**
- * \class OrientaionPathFunction
+ * \class OrientationPathFunction
  * \brief Calculate the orientation angle of a path defined by 2 points.
  * The result value is in radian.
  * 
