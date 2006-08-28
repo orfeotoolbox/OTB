@@ -18,7 +18,6 @@
 #ifndef _otbOrientationPathFunction_h
 #define _otbOrientationPathFunction_h
 
-#include "otbOrientationPathFunction.h"
 #include "otbPathFunction.h"
 #include "itkVectorContainer.h"
 
