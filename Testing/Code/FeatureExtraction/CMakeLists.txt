@@ -116,6 +116,20 @@ ADD_TEST(feTuOrientationPath_090 ${FEATUREEXTRACTION_TESTS}
 ADD_TEST(feTuOrientationPath1_80 ${FEATUREEXTRACTION_TESTS}  
         otbOrientationPath 180.0)
 
+# -------            otb::CompacityPathFunction   ------------------------
+ 	
+ADD_TEST(feTuCompacityPathNew ${FEATUREEXTRACTION_TESTS}  
+        otbCompacityPathNew)
+
+ADD_TEST(feTuCompacityPathCircle ${FEATUREEXTRACTION_TESTS}  
+        otbCompacityPathCircle 1000)
+
+ADD_TEST(feTuCompacityPathSquare ${FEATUREEXTRACTION_TESTS}  
+        otbCompacityPathSquare 10.0)
+
+ADD_TEST(feTuCompacityPathRectangle ${FEATUREEXTRACTION_TESTS}  
+        otbCompacityPathRectangle 10.0  20.0)
+	
 # -------            otb::TouziEdgeDetector   ------------------------------
 
 ADD_TEST(feTuTouziNew ${FEATUREEXTRACTION_TESTS}  
@@ -389,6 +403,10 @@ otbFlusserPathNew.cxx
 otbFlusserPath.cxx
 otbOrientationPathNew.cxx
 otbOrientationPath.cxx
+otbCompacityPathNew.cxx
+otbCompacityPathCircle.cxx
+otbCompacityPathSquare.cxx
+otbCompacityPathRectangle.cxx
 otbTouziEdgeDetectorNew.cxx
 otbTouziEdgeDetector.cxx
 otbTouziEdgeDetectorDirection.cxx
