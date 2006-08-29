@@ -36,7 +36,7 @@
 # include <malloc.h>
 # include <math.h>
 
-#if defined(WIN32) || defined(WIN32CE)
+#if (defined(WIN32) || defined(WIN32CE)) && !defined(__CYGWIN__)
 /* WIN32 PLATFORM */
         #ifndef WIN32CE
                 #  include <io.h>
@@ -556,7 +556,7 @@ void LUMImageIO::InternalWriteImageInformation()
 /*                                                                           */
 /*****************************************************************************/
 
-#if defined(WIN32) || defined(WIN32CE)
+#if (defined(WIN32) || defined(WIN32CE)) && !defined(__CYGWIN__)
 /* WIN32 PLATFORM */
 
 long int LUMImageIO::cai_liste_ima_lum (char *repert,char ***tab_ima)
@@ -1057,6 +1057,7 @@ ERREUR:
   
     if (iret == 0)
     {
+        delete image1;
 	return (NULL);
      }
     else
@@ -1381,6 +1382,7 @@ CAI_IMAGE*  LUMImageIO::cai_ouvre_creation_lum(	char *repert,
 ERREUR :
 
    if (fic !=NULL) cai_dest_ima_lum ( repert ,  nom_image );
+   delete image1;
    return(NULL);
 }
   
@@ -2228,6 +2230,7 @@ CAI_IMAGE* LUMImageIO::cai_ouvre_modifie_lum(	char *repert,
 ERREUR:
     if (iret == 0)
     {
+	delete image1;
 	return (NULL);
      }
     else
