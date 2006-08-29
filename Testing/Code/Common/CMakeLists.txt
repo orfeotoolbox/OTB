@@ -213,6 +213,13 @@ ADD_TEST(coTuDrawLineSpatialObjectList ${COMMON_TESTS}
 ADD_TEST(coTuImageToLineSpatialObjectListNew ${COMMON_TESTS} 
          otbImageToLineSpatialObjectListNew)
 	 
+# -------            otb::PathListToHistogramGenerator   ---------------------------
+
+ADD_TEST(coTuPathListToHistogramGeneratorNew ${COMMON_TESTS} 
+         otbPathListToHistogramGeneratorNew)  
+
+ADD_TEST(coTuPathListToHistogramGenerator ${COMMON_TESTS} 
+         otbPathListToHistogramGenerator)  
          
 # -------       Fichiers sources CXX -----------------------------------
 SET(BasicCommon_SRCS
@@ -235,6 +242,8 @@ otbDrawLineSpatialObject.cxx
 otbDrawLineSpatialObjectListNew.cxx
 otbDrawLineSpatialObjectList.cxx
 otbImageToLineSpatialObjectListNew.cxx
+otbPathListToHistogramGeneratorNew.cxx
+otbPathListToHistogramGenerator.cxx
 )
 
 
@@ -243,7 +252,7 @@ INCLUDE_DIRECTORIES("${OTBTesting_BINARY_DIR}")
 # ${TIFF_LIBRARY}
 
 ADD_EXECUTABLE(otbCommonTests otbCommonTests.cxx ${BasicCommon_SRCS})
-TARGET_LINK_LIBRARIES(otbCommonTests OTBIO OTBCommon gdal ITKIO ITKCommon)
+TARGET_LINK_LIBRARIES(otbCommonTests OTBIO OTBCommon gdal ITKIO ITKStatistics ITKCommon)
 
 ADD_EXECUTABLE(otbTestExtractROI otbTestExtractROI.cxx )
 TARGET_LINK_LIBRARIES(otbTestExtractROI OTBIO OTBCommon gdal ITKIO ITKCommon)

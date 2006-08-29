@@ -45,4 +45,6 @@ REGISTER_TEST(otbDrawLineSpatialObject);
 REGISTER_TEST(otbDrawLineSpatialObjectListNew);
 REGISTER_TEST(otbDrawLineSpatialObjectList);
 REGISTER_TEST(otbImageToLineSpatialObjectListNew);
+REGISTER_TEST(otbPathListToHistogramGeneratorNew);
+REGISTER_TEST(otbPathListToHistogramGenerator);
 }

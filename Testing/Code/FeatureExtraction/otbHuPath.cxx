@@ -20,7 +20,6 @@
 #pragma warning ( disable : 4786 )
 #endif
 
-#include "otbImageFileReader.h"
 #include "otbHuPathFunction.h"
 #include "itkPolyLineParametricPath.h"
 #include "itkExceptionObject.h"
