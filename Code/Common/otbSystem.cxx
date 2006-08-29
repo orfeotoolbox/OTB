@@ -20,7 +20,8 @@
 #include <string.h> // strdup
 
 
-#if defined(WIN32) || defined(WIN32CE)
+
+#if (defined(WIN32) || defined(WIN32CE)) && !defined(__CYGWIN__)
 /*=====================================================================
                    WIN32 / MSVC++ implementation
  *====================================================================*/
@@ -103,7 +104,7 @@ System::GetShortFileName( const std::string& filename )
   return( shortFileName );
 }
 
-#if defined(WIN32) || defined(WIN32CE)
+#if (defined(WIN32) || defined(WIN32CE)) && !defined(__CYGWIN__)
 
 /*=====================================================================
                    WIN32 / MSVC++ implementation
