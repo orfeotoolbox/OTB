@@ -219,7 +219,7 @@ ADD_TEST(coTuPathListToHistogramGeneratorNew ${COMMON_TESTS}
          otbPathListToHistogramGeneratorNew)  
 
 ADD_TEST(coTuPathListToHistogramGenerator ${COMMON_TESTS} 
-         otbPathListToHistogramGenerator)  
+         otbPathListToHistogramGenerator 100 2)  
          
 # -------       Fichiers sources CXX -----------------------------------
 SET(BasicCommon_SRCS

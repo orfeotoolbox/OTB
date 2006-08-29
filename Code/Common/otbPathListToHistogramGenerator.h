@@ -28,6 +28,8 @@
 
 namespace otb {
 
+
+
 /** \class PathListToHistogramGenerator
  *  \brief This class generates an histogram from a list of path.
  *
@@ -64,11 +66,13 @@ public:
 
   typedef TFunction                                       FunctionType;
 
-  typedef double                                                   MeasurementType;
-  typedef itk::Vector< MeasurementType , 1 >                       ListSampleVectorType ;
+  typedef typename TFunction::OutputType                  RealType;
+
+  typedef RealType                                                 MeasurementType;
+  typedef itk::Vector< MeasurementType ,1 >                        ListSampleVectorType ;
   typedef itk::Statistics::ListSample< ListSampleVectorType >      ListSampleType ;
-  typedef ListSampleType::Pointer                                  ListSamplePointer;
-  typedef ListSampleType::ConstPointer                             ListSampleConstPointer;
+  typedef typename ListSampleType::Pointer                         ListSamplePointer;
+  typedef typename ListSampleType::ConstPointer                    ListSampleConstPointer;
   
   typedef itk::Statistics::DenseFrequencyContainer        FrequencyContainerType;
 

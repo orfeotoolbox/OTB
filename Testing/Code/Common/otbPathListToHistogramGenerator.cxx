@@ -32,6 +32,8 @@ int otbPathListToHistogramGenerator( int argc, char* argv[] )
 {
   try 
     {         
+        unsigned int  NbOfBins((unsigned int)::atoi(argv[1]));
+        unsigned int  NbOfPointsPerHistogram((unsigned int)::atoi(argv[2]));
         const   unsigned int        	                       Dimension = 2;
 	typedef itk::PolyLineParametricPath< Dimension >       PathType;
         typedef PathType::Pointer                              PathPointer;
@@ -42,10 +44,10 @@ int otbPathListToHistogramGenerator( int argc, char* argv[] )
         typedef otb::PathListToHistogramGenerator< PathType,FunctionType >   HistogramGeneratorType;
 	
         PathType::ContinuousIndexType cindex;
-	int NbAngle = 100;
-	
+	int NbAngle = NbOfPointsPerHistogram*NbOfBins;
+
         /* build segments list */
-	PathListType*  PathList;
+	PathListType*  PathList = new PathListType;
         PathList->clear();
 	
 	for(int i = 0 ; i <NbAngle ; i++)
@@ -64,12 +66,11 @@ int otbPathListToHistogramGenerator( int argc, char* argv[] )
 	    PathList->push_back(pathElt); 
 	}
 
-	
 	HistogramGeneratorType::Pointer histogramGenerator = HistogramGeneratorType::New();
 
         typedef HistogramGeneratorType::SizeType   HistogramSizeType;
 	HistogramSizeType hsize;
-        hsize[0] = 127;  // number of bins for the Red   channel
+        hsize[0] = NbOfBins;  // number of bins for the Red   channel
 	
         histogramGenerator->SetInput(  PathList  );
         histogramGenerator->SetNumberOfBins( hsize );
@@ -86,7 +87,12 @@ int otbPathListToHistogramGenerator( int argc, char* argv[] )
 
        for( unsigned int bin=0; bin < histogramSize; bin++ )
        {
-            std::cout << "bin = " << bin << " frequency = ";
+            if(histogram->GetFrequency( bin, 0 ) !=NbOfPointsPerHistogram)
+	    {
+    			std::cout << "Error in histogram value !" << std::endl; 
+                        return EXIT_FAILURE; 
+	    }	    
+	    std::cout << "bin = " << bin << " frequency = ";
             std::cout << histogram->GetFrequency( bin, 0 ) << std::endl;
        }
 	
