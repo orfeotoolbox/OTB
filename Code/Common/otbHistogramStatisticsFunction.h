@@ -49,7 +49,7 @@ public:
   typedef typename TInputHistogram::MeasurementType  MeasurementType;
   typedef typename TInputHistogram::FrequencyType    FrequencyType;
 
-  typedef typename itk::NumericTraits<MeasurementType>::RealType EntropyType;
+  typedef typename itk::NumericTraits<MeasurementType>::RealType RealType;
 
   /**Standard Macros */
   itkTypeMacro(HistogramStatisticsFunction, HistogramAlgorithmsBase);
@@ -60,7 +60,13 @@ public:
                                                                                                                                       
   /** Returns the entropy value */
   OutputType GetEntropy();
+
+  /** Returns the mean value from histogram*/
+  OutputType GetMean();
   
+  /** Returns the covariance value from histogram*/
+  OutputType GetCovariance();
+
   /** Stores the histogram pointer */
   void SetInputHistogram( const TInputHistogram * histogram ) 
   {
@@ -83,12 +89,20 @@ protected:
 
   /** Calculate the entropy value */
   void CalculateEntropy();
+
+  /** Calculate mean value */
+  void CalculateMean();
                          
+  /** Calculate covariance value */
+  void CalculateCovariance();
 
 private:
 
   OutputType m_entropy ;
+  OutputType m_mean ;
+  OutputType m_covariance ;
   bool m_IsModified;
+  
   /** Target histogram data pointer */
   typename TInputHistogram::ConstPointer m_InputHistogram ;
   

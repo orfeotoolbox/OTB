@@ -58,6 +58,9 @@ int otbHistogramStatisticsFunction(int argc, char* argv[])
   
   
   MeasurementType Entropy;
+  MeasurementType Mean;
+  MeasurementType Covariance;
+
   Entropy = HistogramStatisticsFunction->GetEntropy();
   std::cout << "Entropy 1 : " << Entropy << std::endl;
  
@@ -66,14 +69,32 @@ int otbHistogramStatisticsFunction(int argc, char* argv[])
   	std::cout << "Error in entropy estimation" << std::endl;
 	return EXIT_FAILURE;
   }
+
+  Mean = HistogramStatisticsFunction->GetMean();
+  std::cout << "Mean 1 : " << Mean << std::endl;
  
+  if( Mean != NbOfBins/2. ) 
+  {
+  	std::cout << "Error in mean estimation" << std::endl;
+	return EXIT_FAILURE;
+  }
+
+  Covariance = HistogramStatisticsFunction->GetCovariance();
+  std::cout << "Covariance 1 : " << Covariance << std::endl;
+
+  if( Covariance != 0 ) 
+  {
+  	std::cout << "Error in covariance estimation" << std::endl;
+	return EXIT_FAILURE;
+  }
+
   // create histogram just all value equal to zero except the first one
   for (HistogramType::Iterator iter = histogram->Begin(); iter != histogram->End(); ++iter)
     {
         if(iter == histogram->Begin())
 	{
 		iter.SetFrequency(1.0);
-	}
+	} 
 	else
 	{
 		iter.SetFrequency(0.0);	
@@ -81,11 +102,31 @@ int otbHistogramStatisticsFunction(int argc, char* argv[])
     }
  
   HistogramStatisticsFunction->Update();
+
   Entropy = HistogramStatisticsFunction->GetEntropy();
   std::cout << "Entropy 2 : " << Entropy << std::endl;
+
   if( Entropy!=0.0 ) 
   {
   	std::cout << "Error in entropy estimation" << std::endl;
+	return EXIT_FAILURE;
+  }
+
+  Mean = HistogramStatisticsFunction->GetMean();
+  std::cout << "Mean 2 : " << Mean << std::endl;
+
+  if( Mean != 0.5 ) 
+  {
+  	std::cout << "Error in mean estimation" << std::endl;
+	return EXIT_FAILURE;
+  }
+
+  Covariance = HistogramStatisticsFunction->GetCovariance();
+  std::cout << "Covariance 2 : " << Covariance << std::endl;
+
+  if( Covariance != 0 ) 
+  {
+  	std::cout << "Error in covariance estimation" << std::endl;
 	return EXIT_FAILURE;
   }
   
