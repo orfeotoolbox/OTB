@@ -220,6 +220,11 @@ ADD_TEST(coTuPathListToHistogramGeneratorNew ${COMMON_TESTS}
 
 ADD_TEST(coTuPathListToHistogramGenerator ${COMMON_TESTS} 
          otbPathListToHistogramGenerator 100 2)  
+
+# -------            otb::HistogramStatisticFunction   ---------------------------
+
+ADD_TEST(coTuHistogramStatisticFunction ${COMMON_TESTS} 
+         otbHistogramStatisticFunction)  
          
 # -------       Fichiers sources CXX -----------------------------------
 SET(BasicCommon_SRCS
@@ -244,6 +249,7 @@ otbDrawLineSpatialObjectList.cxx
 otbImageToLineSpatialObjectListNew.cxx
 otbPathListToHistogramGeneratorNew.cxx
 otbPathListToHistogramGenerator.cxx
+otbHistogramStatisticFunction.cxx
 )
 
 
@@ -252,7 +258,7 @@ INCLUDE_DIRECTORIES("${OTBTesting_BINARY_DIR}")
 # ${TIFF_LIBRARY}
 
 ADD_EXECUTABLE(otbCommonTests otbCommonTests.cxx ${BasicCommon_SRCS})
-TARGET_LINK_LIBRARIES(otbCommonTests OTBIO OTBCommon gdal ITKIO ITKStatistics ITKCommon)
+TARGET_LINK_LIBRARIES(otbCommonTests OTBIO OTBCommon gdal ITKIO ITKAlgorithms ITKStatistics ITKCommon)
 
 ADD_EXECUTABLE(otbTestExtractROI otbTestExtractROI.cxx )
 TARGET_LINK_LIBRARIES(otbTestExtractROI OTBIO OTBCommon gdal ITKIO ITKCommon)

@@ -74,7 +74,6 @@ int otbPathListToHistogramGenerator( int argc, char* argv[] )
 	
         histogramGenerator->SetInput(  PathList  );
         histogramGenerator->SetNumberOfBins( hsize );
-        histogramGenerator->SetMarginalScale( 10.0 );
         histogramGenerator->Compute();
 
         typedef HistogramGeneratorType::HistogramType  HistogramType;
