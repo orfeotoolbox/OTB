@@ -24,9 +24,9 @@
 
 
 #include "itkHistogram.h"
-#include "otbHistogramStatisticFunction.h"
+#include "otbHistogramStatisticsFunction.h"
 
-int otbHistogramStatisticFunction(int argc, char* argv[])
+int otbHistogramStatisticsFunction(int argc, char* argv[])
 {
   unsigned int  NbOfBins((unsigned int)::atoi(argv[1]));
 
@@ -51,14 +51,14 @@ int otbHistogramStatisticFunction(int argc, char* argv[])
         iter.SetFrequency(1.0);
     }
   
-  typedef otb::HistogramStatisticFunction<HistogramType,MeasurementType>  HistogramStatisticFunctionType;
-  HistogramStatisticFunctionType::Pointer HistogramStatisticFunction = HistogramStatisticFunctionType::New();
+  typedef otb::HistogramStatisticsFunction<HistogramType,MeasurementType>  HistogramStatisticsFunctionType;
+  HistogramStatisticsFunctionType::Pointer HistogramStatisticsFunction = HistogramStatisticsFunctionType::New();
 
-  HistogramStatisticFunction->SetInputHistogram(histogram.GetPointer());
+  HistogramStatisticsFunction->SetInputHistogram(histogram.GetPointer());
   
   
   MeasurementType Entropy;
-  Entropy = HistogramStatisticFunction->GetEntropy();
+  Entropy = HistogramStatisticsFunction->GetEntropy();
   std::cout << "Entropy 1 : " << Entropy << std::endl;
  
   if(fabs(Entropy-log(NbOfBins))>0.00001 ) 
@@ -80,8 +80,8 @@ int otbHistogramStatisticFunction(int argc, char* argv[])
 	}
     }
  
-  HistogramStatisticFunction->Update();
-  Entropy = HistogramStatisticFunction->GetEntropy();
+  HistogramStatisticsFunction->Update();
+  Entropy = HistogramStatisticsFunction->GetEntropy();
   std::cout << "Entropy 2 : " << Entropy << std::endl;
   if( Entropy!=0.0 ) 
   {

@@ -17,15 +17,15 @@
 =========================================================================*/
 
 
-#ifndef __otbHistogramStatisticFunction_h
-#define __otbHistogramStatisticFunction_h
+#ifndef __otbHistogramStatisticsFunction_h
+#define __otbHistogramStatisticsFunction_h
 
 #include "itkHistogramAlgorithmBase.h"
 
 namespace otb
 {
 
-/** \class HistogramStatisticFunction
+/** \class HistogramStatisticsFunction
  * \brief Computes parameters for a histogram.
  * 
  * You plug in the target histogram using SetInputHistogram method and 
@@ -36,12 +36,12 @@ namespace otb
  */
 
 template< class TInputHistogram, class TOutput >
-class HistogramStatisticFunction :
+class HistogramStatisticsFunction :
       public itk::HistogramAlgorithmBase< TInputHistogram >
 {
 public:
   /**Standard class typedefs. */
-  typedef HistogramStatisticFunction                      Self;
+  typedef HistogramStatisticsFunction                      Self;
   typedef itk::HistogramAlgorithmBase<TInputHistogram>    Superclass;
   typedef itk::SmartPointer<Self>                         Pointer;
   typedef itk::SmartPointer<const Self>                   ConstPointer;
@@ -52,7 +52,7 @@ public:
   typedef typename itk::NumericTraits<MeasurementType>::RealType EntropyType;
 
   /**Standard Macros */
-  itkTypeMacro(HistogramStatisticFunction, HistogramAlgorithmsBase);
+  itkTypeMacro(HistogramStatisticsFunction, HistogramAlgorithmsBase);
   itkNewMacro(Self) ;
                                                                                                                                       
   /** Typedef for the output type */
@@ -74,8 +74,8 @@ public:
 
 protected:
 
-  HistogramStatisticFunction() ;
-  virtual ~HistogramStatisticFunction() {}
+  HistogramStatisticsFunction() ;
+  virtual ~HistogramStatisticsFunction() {}
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
                                                                                                                                       
   /** Calculates the thresholds and save them */
@@ -97,7 +97,7 @@ private:
 } // end of namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbHistogramStatisticFunction.txx"
+#include "otbHistogramStatisticsFunction.txx"
 #endif
 
 #endif

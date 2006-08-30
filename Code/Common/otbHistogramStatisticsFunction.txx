@@ -16,24 +16,24 @@
 
 =========================================================================*/
 
-#ifndef _otbHistogramStatisticFunction_txx
-#define _otbHistogramStatisticFunction_txx
+#ifndef _otbHistogramStatisticsFunction_txx
+#define _otbHistogramStatisticsFunction_txx
 
-#include "otbHistogramStatisticFunction.h"
+#include "otbHistogramStatisticsFunction.h"
 
 namespace otb
 {
 
 template< class TInputHistogram, class TOutput >
-HistogramStatisticFunction< TInputHistogram, TOutput>
-::HistogramStatisticFunction()
+HistogramStatisticsFunction< TInputHistogram, TOutput>
+::HistogramStatisticsFunction()
 {
   m_IsModified = true;
 }
 
 template< class TInputHistogram, class TOutput >
-typename HistogramStatisticFunction< TInputHistogram, TOutput>::OutputType
-HistogramStatisticFunction< TInputHistogram, TOutput>
+typename HistogramStatisticsFunction< TInputHistogram, TOutput>::OutputType
+HistogramStatisticsFunction< TInputHistogram, TOutput>
 ::GetEntropy()
 {
   if(m_IsModified == true)
@@ -45,7 +45,7 @@ HistogramStatisticFunction< TInputHistogram, TOutput>
 
 template< class TInputHistogram, class TOutput >
 void
-HistogramStatisticFunction< TInputHistogram, TOutput>
+HistogramStatisticsFunction< TInputHistogram, TOutput>
 ::CalculateEntropy()
 {
   typename TInputHistogram::ConstPointer histogram = m_InputHistogram;
@@ -81,9 +81,11 @@ HistogramStatisticFunction< TInputHistogram, TOutput>
 }
 
 
+
+
 template< class TInputHistogram, class TOutput >
 void
-HistogramStatisticFunction< TInputHistogram, TOutput>
+HistogramStatisticsFunction< TInputHistogram, TOutput>
 ::GenerateData()
 {
 
@@ -94,7 +96,7 @@ HistogramStatisticFunction< TInputHistogram, TOutput>
 
 template< class TInputHistogram, class TOutput >
 void
-HistogramStatisticFunction< TInputHistogram, TOutput>
+HistogramStatisticsFunction< TInputHistogram, TOutput>
 ::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   Superclass::PrintSelf(os,indent);

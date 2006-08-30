@@ -47,5 +47,5 @@ REGISTER_TEST(otbDrawLineSpatialObjectList);
 REGISTER_TEST(otbImageToLineSpatialObjectListNew);
 REGISTER_TEST(otbPathListToHistogramGeneratorNew);
 REGISTER_TEST(otbPathListToHistogramGenerator);
-REGISTER_TEST(otbHistogramStatisticFunction);
+REGISTER_TEST(otbHistogramStatisticsFunction);
 }

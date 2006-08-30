@@ -223,8 +223,8 @@ ADD_TEST(coTuPathListToHistogramGenerator ${COMMON_TESTS}
 
 # -------            otb::HistogramStatisticFunction   ---------------------------
 
-ADD_TEST(coTuHistogramStatisticFunction ${COMMON_TESTS} 
-         otbHistogramStatisticFunction 100)  
+ADD_TEST(coTuHistogramStatisticsFunction ${COMMON_TESTS} 
+         otbHistogramStatisticsFunction 100)  
          
 # -------       Fichiers sources CXX -----------------------------------
 SET(BasicCommon_SRCS
@@ -249,7 +249,7 @@ otbDrawLineSpatialObjectList.cxx
 otbImageToLineSpatialObjectListNew.cxx
 otbPathListToHistogramGeneratorNew.cxx
 otbPathListToHistogramGenerator.cxx
-otbHistogramStatisticFunction.cxx
+otbHistogramStatisticsFunction.cxx
 )
 
 
