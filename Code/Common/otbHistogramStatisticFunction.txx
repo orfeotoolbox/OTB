@@ -28,14 +28,27 @@ template< class TInputHistogram, class TOutput >
 HistogramStatisticFunction< TInputHistogram, TOutput>
 ::HistogramStatisticFunction()
 {
+  m_IsModified = true;
 }
-                                                    
+
 template< class TInputHistogram, class TOutput >
 typename HistogramStatisticFunction< TInputHistogram, TOutput>::OutputType
 HistogramStatisticFunction< TInputHistogram, TOutput>
 ::GetEntropy()
 {
-  typename TInputHistogram::ConstPointer histogram = this->GetInputHistogram();
+  if(m_IsModified == true)
+  {
+  	this->Update();
+  }
+  return m_entropy;
+}                                                    
+
+template< class TInputHistogram, class TOutput >
+void
+HistogramStatisticFunction< TInputHistogram, TOutput>
+::CalculateEntropy()
+{
+  typename TInputHistogram::ConstPointer histogram = m_InputHistogram;
 
   // TODO: as an improvement, the class could accept multi-dimensional histograms
   // and the user could specify the dimension to apply the algorithm to.
@@ -50,19 +63,22 @@ HistogramStatisticFunction< TInputHistogram, TOutput>
 
   EntropyType entropy = itk::NumericTraits<EntropyType>::Zero;
   FrequencyType globalFrequency = histogram->GetTotalFrequency();
-  
+  if(globalFrequency == 0)
+    {
+    itkExceptionMacro(<<"Histogram must contain at least 1 element.");
+    }
   while (iter != end)
     {
-    EntropyType Proba = static_cast<EntropyType>(iter.GetMeasurementVector()[0]);
-    Proba /= static_cast<EntropyType>(globalFrequency);
-    
-    entropy +=  Proba * log (Proba); 
+    EntropyType Proba = static_cast<EntropyType>(iter.GetFrequency());
+    Proba /= static_cast<EntropyType>(globalFrequency); 
+    if(Proba !=0.0)   
+      {
+      entropy -=  Proba * log(Proba);
+      } 
     ++iter ;
     }
   m_entropy = static_cast<OutputType>(entropy); 
-  return m_entropy;
 }
-
 
 
 template< class TInputHistogram, class TOutput >
@@ -70,8 +86,11 @@ void
 HistogramStatisticFunction< TInputHistogram, TOutput>
 ::GenerateData()
 {
-  m_entropy=GetEntropy();
+
+  	CalculateEntropy();
+	m_IsModified = false;
 }
+
 
 template< class TInputHistogram, class TOutput >
 void

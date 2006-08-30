@@ -224,7 +224,7 @@ ADD_TEST(coTuPathListToHistogramGenerator ${COMMON_TESTS}
 # -------            otb::HistogramStatisticFunction   ---------------------------
 
 ADD_TEST(coTuHistogramStatisticFunction ${COMMON_TESTS} 
-         otbHistogramStatisticFunction)  
+         otbHistogramStatisticFunction 100)  
          
 # -------       Fichiers sources CXX -----------------------------------
 SET(BasicCommon_SRCS

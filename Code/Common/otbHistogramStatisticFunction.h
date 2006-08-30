@@ -60,20 +60,38 @@ public:
                                                                                                                                       
   /** Returns the entropy value */
   OutputType GetEntropy();
-                                             
+  
+  /** Stores the histogram pointer */
+  void SetInputHistogram( const TInputHistogram * histogram ) 
+  {
+      if ( m_InputHistogram != histogram )
+      {
+        m_InputHistogram = histogram ;
+        this->Modified() ;
+	m_IsModified = true; 
+      }
+  }
+
 protected:
+
   HistogramStatisticFunction() ;
   virtual ~HistogramStatisticFunction() {}
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
                                                                                                                                       
   /** Calculates the thresholds and save them */
-  void GenerateData() ;
+  void GenerateData();
+
+  /** Calculate the entropy value */
+  void CalculateEntropy();
                          
 
 private:
 
   OutputType m_entropy ;
-
+  bool m_IsModified;
+  /** Target histogram data pointer */
+  typename TInputHistogram::ConstPointer m_InputHistogram ;
+  
 } ; // end of class
                                                                                                                                       
 } // end of namespace otb

@@ -26,29 +26,31 @@
 #include "itkHistogram.h"
 #include "otbHistogramStatisticFunction.h"
 
-int otbHistogramStatisticFunction(int, char*[])
+int otbHistogramStatisticFunction(int argc, char* argv[])
 {
+  unsigned int  NbOfBins((unsigned int)::atoi(argv[1]));
+
   typedef float MeasurementType ;
   typedef itk::Statistics::Histogram< MeasurementType, 1 > HistogramType ;
   HistogramType::Pointer histogram = HistogramType::New() ;
 
   // initialize histogram
   HistogramType::SizeType size;
-  size.Fill(64) ;
+  size.Fill(NbOfBins) ;
   HistogramType::MeasurementVectorType lowerBound ;
   HistogramType::MeasurementVectorType upperBound ;
   lowerBound[0] = 0.0 ;
-  upperBound[0] = 64.0 ;
+  upperBound[0] = NbOfBins ;
 
   histogram->Initialize(size, lowerBound, upperBound ) ;
   
 
-  // create histogram 
+  // create histogram with same value for each frequency
   for (HistogramType::Iterator iter = histogram->Begin(); iter != histogram->End(); ++iter)
     {
         iter.SetFrequency(1.0);
     }
-
+  
   typedef otb::HistogramStatisticFunction<HistogramType,MeasurementType>  HistogramStatisticFunctionType;
   HistogramStatisticFunctionType::Pointer HistogramStatisticFunction = HistogramStatisticFunctionType::New();
 
@@ -57,11 +59,34 @@ int otbHistogramStatisticFunction(int, char*[])
   
   MeasurementType Entropy;
   Entropy = HistogramStatisticFunction->GetEntropy();
-  std::cout << "Entropy : " << Entropy << std::endl;
+  std::cout << "Entropy 1 : " << Entropy << std::endl;
  
-  if(fabs(Entropy)>0.0 ) 
+  if(fabs(Entropy-log(NbOfBins))>0.00001 ) 
   {
-  	return EXIT_FAILURE;
+  	std::cout << "Error in entropy estimation" << std::endl;
+	return EXIT_FAILURE;
+  }
+ 
+  // create histogram just all value equal to zero except the first one
+  for (HistogramType::Iterator iter = histogram->Begin(); iter != histogram->End(); ++iter)
+    {
+        if(iter == histogram->Begin())
+	{
+		iter.SetFrequency(1.0);
+	}
+	else
+	{
+		iter.SetFrequency(0.0);	
+	}
+    }
+ 
+  HistogramStatisticFunction->Update();
+  Entropy = HistogramStatisticFunction->GetEntropy();
+  std::cout << "Entropy 2 : " << Entropy << std::endl;
+  if( Entropy!=0.0 ) 
+  {
+  	std::cout << "Error in entropy estimation" << std::endl;
+	return EXIT_FAILURE;
   }
   
   return EXIT_SUCCESS;
