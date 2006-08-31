@@ -48,7 +48,6 @@ public:
 
   typedef typename TInputHistogram::MeasurementType  MeasurementType;
   typedef typename TInputHistogram::FrequencyType    FrequencyType;
-
   typedef typename itk::NumericTraits<MeasurementType>::RealType RealType;
 
   /**Standard Macros */
@@ -56,7 +55,7 @@ public:
   itkNewMacro(Self) ;
                                                                                                                                       
   /** Typedef for the output type */
-  typedef TOutput OutputType;
+  typedef std::vector<TOutput> OutputType;
                                                                                                                                       
   /** Returns the entropy value */
   OutputType GetEntropy();

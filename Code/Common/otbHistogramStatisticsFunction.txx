@@ -74,14 +74,7 @@ HistogramStatisticsFunction< TInputHistogram, TOutput>
 {
   typename TInputHistogram::ConstPointer histogram = m_InputHistogram;
 
-  // TODO: as an improvement, the class could accept multi-dimensional histograms
-  // and the user could specify the dimension to apply the algorithm to.
-  if (histogram->GetSize().GetSizeDimension() != 1)
-    {
-    itkExceptionMacro(<<"Histogram must be 1-dimensional.");
-    }
 
-  // compute global mean
   typename TInputHistogram::ConstIterator iter = histogram->Begin() ;
   typename TInputHistogram::ConstIterator end = histogram->End() ;
 
@@ -101,7 +94,8 @@ HistogramStatisticsFunction< TInputHistogram, TOutput>
       } 
     ++iter ;
     }
-  m_entropy = static_cast<OutputType>(entropy); 
+  m_entropy.resize(1);
+  m_entropy[0] = static_cast<TOutput>(entropy); 
 }
 
 
@@ -112,31 +106,22 @@ HistogramStatisticsFunction< TInputHistogram, TOutput>
 {
   typename TInputHistogram::ConstPointer histogram = m_InputHistogram;
 
-  // TODO: as an improvement, the class could accept multi-dimensional histograms
-  // and the user could specify the dimension to apply the algorithm to.
-  if (histogram->GetSize().GetSizeDimension() != 1)
-    {
-    itkExceptionMacro(<<"Histogram must be 1-dimensional.");
-    }
+  unsigned int NumberOfDimension =  histogram->GetSize().GetSizeDimension();
+  std::vector<TOutput> GlobalMean(NumberOfDimension);
+  m_mean.resize(NumberOfDimension);
 
-  // compute global mean
-  typename TInputHistogram::ConstIterator iter = histogram->Begin() ;
-  typename TInputHistogram::ConstIterator end = histogram->End() ;
-
-  RealType mean = itk::NumericTraits<RealType>::Zero;
-  FrequencyType globalFrequency = histogram->GetTotalFrequency();
-  if(globalFrequency == 0)
+  for( unsigned int noDim = 0; noDim < NumberOfDimension; noDim++ )
     {
-    itkExceptionMacro(<<"Histogram must contain at least 1 element.");
-    }
-  while (iter != end)
-    {
-    mean += static_cast<RealType>(iter.GetMeasurementVector()[0]) * static_cast<RealType>(iter.GetFrequency());
-    ++iter ;
-    }
-  mean /= static_cast<RealType>(globalFrequency);
-  
-  m_mean = static_cast<OutputType>(mean); 
+    MeasurementType mean = itk::NumericTraits<MeasurementType>::Zero;
+    for (unsigned int i = 0; i < histogram->GetSize()[noDim]; i++)
+      {
+      MeasurementType val  = histogram->GetMeasurement(i, noDim);
+      FrequencyType freq = histogram->GetFrequency(i, noDim);
+      mean += val*freq;
+      }
+    mean /=  histogram->GetTotalFrequency();
+    m_mean[noDim] = static_cast<TOutput>(mean);
+    }  
 }
 
 template< class TInputHistogram, class TOutput >
@@ -144,6 +129,7 @@ void
 HistogramStatisticsFunction< TInputHistogram, TOutput>
 ::CalculateCovariance()
 {
+#if 0
   typename TInputHistogram::ConstPointer histogram = m_InputHistogram;
 
   // TODO: as an improvement, the class could accept multi-dimensional histograms
@@ -173,6 +159,7 @@ HistogramStatisticsFunction< TInputHistogram, TOutput>
   covariance /= static_cast<RealType>(globalFrequency);
   
   m_covariance = static_cast<OutputType>(covariance); 
+#endif
 }
 
 template< class TInputHistogram, class TOutput >
