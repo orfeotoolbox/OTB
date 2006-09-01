@@ -82,8 +82,8 @@ int otbHistogramStatisticsFunction(int argc, char* argv[])
   	std::cout << "Error in mean estimation" << std::endl;
 	return EXIT_FAILURE;
   }
-/*
-  Covariance = HistogramStatisticsFunction->GetCovariance();
+
+  Covariance = HistogramStatisticsFunction->GetCovariance()[0];
   std::cout << "Covariance 1 : " << Covariance << std::endl;
 
   if( Covariance != 0 ) 
@@ -91,7 +91,7 @@ int otbHistogramStatisticsFunction(int argc, char* argv[])
   	std::cout << "Error in covariance estimation" << std::endl;
 	return EXIT_FAILURE;
   }
-*/
+
   // create histogram just all value equal to zero except the first one
   for (HistogramType::Iterator iter = histogram->Begin(); iter != histogram->End(); ++iter)
     {
@@ -124,8 +124,8 @@ int otbHistogramStatisticsFunction(int argc, char* argv[])
   	std::cout << "Error in mean estimation" << std::endl;
 	return EXIT_FAILURE;
   }
-/*
-  Covariance = HistogramStatisticsFunction->GetCovariance();
+
+  Covariance = HistogramStatisticsFunction->GetCovariance()[0];
   std::cout << "Covariance 2 : " << Covariance << std::endl;
 
   if( Covariance != 0 ) 
@@ -133,6 +133,6 @@ int otbHistogramStatisticsFunction(int argc, char* argv[])
   	std::cout << "Error in covariance estimation" << std::endl;
 	return EXIT_FAILURE;
   }
-*/  
+  
   return EXIT_SUCCESS;
 }
