@@ -32,4 +32,6 @@ REGISTER_TEST(otbFrostFilterNew);
 REGISTER_TEST(otbFrostFilterTest);
 REGISTER_TEST(otbFrostFilter);
 REGISTER_TEST(otbImageToPointSetFilterTest);
+REGISTER_TEST(otbLogPolarResampleImageFilterNew);
+REGISTER_TEST(otbLogPolarResampleImageFilter);
 }
