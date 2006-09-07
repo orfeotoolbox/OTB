@@ -19,8 +19,6 @@
 #ifndef __otbLogPolarResampleImageFilter_h
 #define __otbLogPolarResampleImageFilter_h
 
-//#include "itkImageFunction.h"
-//#include "itkImageRegionIterator.h"
 #include "otbImage.h"
 #include "itkImageToImageFilter.h"
 #include "itkLinearInterpolateImageFunction.h"
@@ -203,10 +201,7 @@ private:
   InterpolatorPointer     m_Interpolator;        // Image function for interpolation
   OutputPixelType         m_DefaultPixelValue;   // default pixel value if the point 
                                                  // is outside the image
-         // output image spacing
-  OriginPointType         m_OutputOrigin;        // output image origin
-  IndexType               m_OutputStartIndex;    // output image start index
-  bool			  m_IsOriginAtCenter;     // true if input image origin is at center of the image
+  bool			  m_IsOriginAtCenter;    // true if input image origin is at center of the image
   double		  m_AngularStep;
   double		  m_RadialStep;
   double		  m_RadialNumberOfSamples;
