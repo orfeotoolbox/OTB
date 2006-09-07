@@ -382,8 +382,8 @@ ADD_TEST(feTvExtractSegments ${FEATUREEXTRACTION_TESTS}
 
 # -------            otb::ForwardFourierMellinTransformImageFilter   -------------
 
-ADD_TEST(feTuForwardFourierMellinTransformImageFilterNew ${COMMON_TESTS} 
-         otbForwardFourierMellinTransformImageFilterNew)  
+#ADD_TEST(feTuForwardFourierMellinTransformImageFilterNew ${COMMON_TESTS} 
+#         otbForwardFourierMellinTransformImageFilterNew)  
 
 # -----------------------------------------------------------------------
 			        
@@ -440,7 +440,6 @@ otbLocalHough.cxx
 otbLocalHoughDraw.cxx
 otbExtractSegmentsNew.cxx
 otbExtractSegments.cxx
-otbForwardFourierMellinTransformImageFilterNew.cxx
 )
 
 
