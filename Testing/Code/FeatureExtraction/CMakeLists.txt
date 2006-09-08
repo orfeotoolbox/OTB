@@ -382,8 +382,8 @@ ADD_TEST(feTvExtractSegments ${FEATUREEXTRACTION_TESTS}
 
 # -------            otb::ForwardFourierMellinTransformImageFilter   -------------
 
-#ADD_TEST(feTuForwardFourierMellinTransformImageFilterNew ${COMMON_TESTS} 
-#         otbForwardFourierMellinTransformImageFilterNew)  
+ADD_TEST(feTuForwardFourierMellinImageFilterNew ${FEATUREEXTRACTION_TESTS} 
+         otbFourierMellinImageFilterNew)  
 
 # -----------------------------------------------------------------------
 			        
@@ -440,13 +440,14 @@ otbLocalHough.cxx
 otbLocalHoughDraw.cxx
 otbExtractSegmentsNew.cxx
 otbExtractSegments.cxx
+otbFourierMellinImageFilterNew.cxx
 )
 
 
 INCLUDE_DIRECTORIES("${OTBTesting_BINARY_DIR}")
 
 ADD_EXECUTABLE(otbFeatureExtractionTests otbFeatureExtractionTests.cxx ${BasicFeatureExtraction_SRCS})
-TARGET_LINK_LIBRARIES(otbFeatureExtractionTests  OTBFeatureExtraction OTBCommon OTBIO gdal ITKIO ITKCommon)
+TARGET_LINK_LIBRARIES(otbFeatureExtractionTests  OTBFeatureExtraction OTBCommon OTBIO gdal ITKIO ITKCommon ITKAlgorithms)
 
 
 ENDIF( NOT OTB_DISABLE_CXX_TESTING )

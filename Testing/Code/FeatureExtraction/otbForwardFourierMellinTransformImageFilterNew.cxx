@@ -37,11 +37,12 @@ int otbForwardFourierMellinTransformImageFilterNew(int argc, char* argv[])
   typedef otb::Image< PixelType, Dimension >        InputImageType;
   typedef otb::Image< PixelType, Dimension >        OutputImageType;
    
-  typedef itk::LinearInterpolateImageFunction< InputImageType, double >	InterpolatorType;
-  typedef otb::ForwardFourierMellinTransformImageFilter<PixelType,InterpolatorType> FourierMellinTransformType;
+  typedef itk::LinearInterpolateImageFunction< InputImageType, double >		InterpolatorType;
+  typedef otb::ForwardFourierMellinTransformImageFilter<PixelType,
+  				InterpolatorType,Dimension> 			FourierMellinTransformType;
   try 
     { 
-  
+     FourierMellinTransformType::Pointer fourierMellinTransform = FourierMellinTransformType::New();
     } 
   catch( itk::ExceptionObject & err ) 
     { 

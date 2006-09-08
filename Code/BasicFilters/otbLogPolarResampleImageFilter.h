@@ -141,7 +141,7 @@ public:
   /** Set the Sigma value. */
   itkSetMacro(Sigma, double);
   /** Get the Sigma value. */
-  itkGetConstReferenceMacro(Sigma, double);
+  itkGetConstMacro(Sigma, double);
 
   /** LogPolarResampleImageFilter produces an image which is a different size
    * than its input.  As such, it needs to provide an implementation
