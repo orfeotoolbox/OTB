@@ -57,7 +57,7 @@ const double
 ForwardFourierMellinTransformImageFilter<TPixel, TInterpol, Dimension >
 ::GetAngularStep()
 {
-	return m_LogPolarResample->GetAngularStep();
+	return static_cast<const double>(m_LogPolarResample->GetAngularStep() );
 }
 
 
@@ -104,7 +104,7 @@ const double
 ForwardFourierMellinTransformImageFilter<TPixel, TInterpol, Dimension >
 ::GetRadialNumberOfSamples( )
 {
-	return m_LogPolarResample->GetRadialNumberOfSamples();
+	return static_cast<const double>(m_LogPolarResample->GetRadialNumberOfSamples() );
 }
 
 template < class TPixel,class  TInterpol,unsigned int   Dimension >

@@ -385,6 +385,11 @@ ADD_TEST(feTvExtractSegments ${FEATUREEXTRACTION_TESTS}
 ADD_TEST(feTuForwardFourierMellinImageFilterNew ${FEATUREEXTRACTION_TESTS} 
          otbFourierMellinImageFilterNew)  
 
+ADD_TEST(feTuForwardFourierMellinImageFilter ${FEATUREEXTRACTION_TESTS}  
+        otbFourierMellinImageFilter
+        ${INPUTDATA}/DeuxCercles.hdr
+	${TEMP}/feTuForwardFourierMellinImageFilter.hdr)
+
 # -----------------------------------------------------------------------
 			        
 
@@ -441,6 +446,7 @@ otbLocalHoughDraw.cxx
 otbExtractSegmentsNew.cxx
 otbExtractSegments.cxx
 otbFourierMellinImageFilterNew.cxx
+otbFourierMellinImageFilter.cxx
 )
 
 

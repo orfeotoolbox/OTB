@@ -77,4 +77,5 @@ REGISTER_TEST(otbLocalHoughDraw);
 REGISTER_TEST(otbExtractSegmentsNew);
 REGISTER_TEST(otbExtractSegments);
 REGISTER_TEST(otbFourierMellinImageFilterNew);
+REGISTER_TEST(otbFourierMellinImageFilter);
 }
