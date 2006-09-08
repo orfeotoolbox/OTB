@@ -288,25 +288,24 @@ LogPolarResampleImageFilter<TInputImage,TInterpolator>
     itkExceptionMacro(<< "LogPolarResampleImageFilter::GenerateOutputInformation() Image size msut be greater than zero for the Radial part"<< std::endl);
     }
 
-  m_RadialStep = log(Radial_max) / m_RadialNumberOfSamples;
-
   double bx = log(m_RadialNumberOfSamples) / log(2.0);
   if(int(bx)!=bx)
     {
      m_RadialNumberOfSamples = pow(2,int(bx)+1);
     }
+  m_RadialStep = log(Radial_max) / m_RadialNumberOfSamples;
   
   if( m_AngularNumberOfSamples ==0 )
     {
     itkExceptionMacro(<< "LogPolarResampleImageFilter::GenerateOutputInformation() Image size msut be greater than zero for the Angular part");
     }
 
-  m_AngularStep = Angular_max / m_AngularNumberOfSamples;
   double by = log(m_AngularNumberOfSamples) / log(2.0);
   if(int(by)!=by)
     {
      m_AngularNumberOfSamples = pow(2,int(by)+1);
     }
+  m_AngularStep = Angular_max / m_AngularNumberOfSamples;
   
   Size[0] = static_cast<SizeValueType>(m_AngularNumberOfSamples);
   Size[1] = static_cast<SizeValueType>(m_RadialNumberOfSamples);

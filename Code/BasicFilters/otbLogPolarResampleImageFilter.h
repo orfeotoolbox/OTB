@@ -133,6 +133,11 @@ public:
   /** Get the Radial number of samples. */
   itkGetConstReferenceMacro(RadialNumberOfSamples, double);
 
+  /** Set the Angular number of samples. */
+  itkSetMacro(AngularNumberOfSamples, double);
+  /** Get the Angular number of samples. */
+  itkGetConstReferenceMacro(AngularNumberOfSamples, double);
+
   /** Set the Sigma value. */
   itkSetMacro(Sigma, double);
   /** Get the Sigma value. */
