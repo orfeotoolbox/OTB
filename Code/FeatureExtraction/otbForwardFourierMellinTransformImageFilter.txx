@@ -39,11 +39,46 @@ ForwardFourierMellinTransformImageFilter<TPixel, TInterpol, Dimension >
 ::GenerateData()
 {
 	m_LogPolarResample->SetInput( this->GetInput() );
-	m_FourierTransform->SetInput( m_LogPolarResample->GetOutput() );
-	m_FourierTransform->GraftOutput( this->GetOutput() );
+	m_LogPolarResample->Update();
+ 	m_FourierTransform->SetInput( m_LogPolarResample->GetOutput() );
+ 	m_FourierTransform->GraftOutput( this->GetOutput() );
+
 	m_FourierTransform->Update();
-  	this->GraftOutput(m_FourierTransform->GetOutput() );
+ 	this->GraftOutput( m_FourierTransform->GetOutput() );
 }
+
+
+/** 
+ * Inform pipeline of required output region
+ */
+template < class TPixel,class  TInterpol,unsigned int   Dimension >
+void
+ForwardFourierMellinTransformImageFilter<TPixel, TInterpol, Dimension >
+::GenerateOutputInformation()
+{
+  // call the superclass' implementation of this method
+  Superclass::GenerateOutputInformation();
+
+  // get pointers to the input and output
+  ImagePointer inputPtr  =  const_cast<InputImageType *>( this->GetInput() );
+  OutputImagePointer   outputPtr = this->GetOutput();;
+  if ( !inputPtr )
+    {
+    return;
+    }
+
+  m_LogPolarResample->GenerateOutputInformation();
+    
+  
+  OutputImageRegionType    outputLargestPossibleRegion;
+  outputLargestPossibleRegion.SetSize( m_LogPolarResample->GetOutput()->GetLargestPossibleRegion().GetSize() );
+  outputLargestPossibleRegion.SetIndex( m_LogPolarResample->GetOutput()->GetLargestPossibleRegion().GetIndex() );
+  outputPtr->SetLargestPossibleRegion( outputLargestPossibleRegion );
+
+  return;
+}
+
+
 
 template < class TPixel,class  TInterpol,unsigned int   Dimension >
 void

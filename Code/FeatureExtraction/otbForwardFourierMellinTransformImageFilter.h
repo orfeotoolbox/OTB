@@ -72,6 +72,16 @@ public:
   /** InputImageType typedef support. */
   typedef typename InputImageType::PixelType            PixeltType;
   typedef typename InputImageType::IndexType            IndexType;
+  typedef typename InputImageType::Pointer              ImagePointer;
+  typedef typename InputImageType::ConstPointer         ImageConstPointer;
+  
+  /** InputImageType typedef support. */
+  typedef typename OutputImageType::PixelType            OutputPixeltType;
+  typedef typename OutputImageType::IndexType            OutputIndexType;
+  typedef typename OutputImageType::Pointer              OutputImagePointer;
+  typedef typename OutputImageType::ConstPointer         OutputImageConstPointer;
+  typedef typename OutputImageType::RegionType 	  	 OutputImageRegionType;
+
  
   typedef typename OutputImageType::PixelType            ComplexType;
 
@@ -123,12 +133,20 @@ public:
   void SetInterpolator( InterpolatorPointer interpolator );
 //  InterpolatorConstPointer GetInterpolator( void );  
 
+  /** ForwardFourierMellinTransformImageFilter produces an image which is a different size
+   * than its input.  As such, it needs to provide an implementation
+   * for GenerateOutputInformation() in order to inform the pipeline
+   * execution model.  The original documentation of this method is
+   * below. \sa ProcessObject::GenerateOutputInformaton() */
+  virtual void GenerateOutputInformation();
+
 
 protected:
   ForwardFourierMellinTransformImageFilter();
   ~ForwardFourierMellinTransformImageFilter(){};
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
   void GenerateData();
+
   
 private:
   ForwardFourierMellinTransformImageFilter( const Self& ); //purposely not implemented

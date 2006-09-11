@@ -61,7 +61,7 @@ int otbFourierMellinImageFilter(int argc, char* argv[])
 //	FourierMellinTransform->SetIsOriginAtCenter(true);
 //	FourierMellinTransform->SetAngularNumberOfSamples(512);
 //	FourierMellinTransform->SetRadialNumberOfSamples(513);
-	
+//	FourierMellinTransform->Update();
         writer->SetInput( FourierMellinTransform->GetOutput() );
         
         writer->Update(); 
