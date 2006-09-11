@@ -39,7 +39,7 @@ ForwardFourierMellinTransformImageFilter<TPixel, TInterpol, Dimension >
 ::GenerateData()
 {
 	m_LogPolarResample->SetInput( this->GetInput() );
-	m_FourierTransform->SetInput( m_LogPolarResample->GetInput() );
+	m_FourierTransform->SetInput( m_LogPolarResample->GetOutput() );
 	m_FourierTransform->GraftOutput( this->GetOutput() );
 	m_FourierTransform->Update();
   	this->GraftOutput(m_FourierTransform->GetOutput() );
