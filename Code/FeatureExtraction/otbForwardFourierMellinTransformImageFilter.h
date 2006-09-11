@@ -81,7 +81,7 @@ public:
   typedef typename InterpolatorType::ConstPointer 		InterpolatorConstPointer;
   typedef typename InterpolatorType::CoordRepType 		CoordRepType;
   typedef typename InterpolatorType::PointType   		PointType;
-  typedef typename InterpolatorType::CoordRepType   		CoordRepType;
+  //typedef typename InterpolatorType::CoordRepType   		CoordRepType;
 
 
   typedef LogPolarResampleImageFilter<InputImageType,TInterpol>   LogPolarResampleImageFilterType;

@@ -75,7 +75,7 @@ public:
   typedef typename InputImageType::ConstPointer 		InputImageConstPointer;
   typedef typename InputImageType::PixelType 			InputPixelType;
   typedef typename InputImageType::RegionType 			InputImageRegionType;
-  typedef typename InputImageType::SizeType 			SizeType;
+  //typedef typename InputImageType::SizeType 			SizeType;
   
   typedef TInputImage 						OutputImageType;
   typedef typename OutputImageType::Pointer 			OutputImagePointer;
@@ -97,7 +97,7 @@ public:
   /** Typedefs to describe and access Interpolator */
   typedef TInterpolator 					InterpolatorType;
   typedef typename InterpolatorType::Pointer 			InterpolatorPointer;
-  typedef typename InterpolatorType::CoordRepType 		CoordRepType;
+  //typedef typename InterpolatorType::CoordRepType 		CoordRepType;
   typedef typename InterpolatorType::PointType   		PointType;
   typedef typename InterpolatorType::CoordRepType   		CoordRepType;
 
