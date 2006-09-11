@@ -40,11 +40,17 @@ template <class TInputImage,  class TInterpolator>
 LogPolarResampleImageFilter<TInputImage, TInterpolator>
 ::LogPolarResampleImageFilter()
 {
-  m_RadialStep  = 1.0;
-  m_AngularStep = 1.0;
   m_RadialNumberOfSamples  = 128;
   m_AngularNumberOfSamples = 128;
-  m_IsOriginAtCenter = true;
+  
+  m_RadialStep  = 1.0;
+  m_AngularStep = 1.0;    
+
+  m_AngularStepIsConfigured = false;
+  m_RadialStepIsConfigured  = false;
+
+
+  m_OriginIsAtCenter = true;
   m_DefaultPixelValue = 0;
   m_Interpolator = itk::LinearInterpolateImageFunction<InputImageType, CoordRepType>::New();
   
@@ -64,7 +70,7 @@ LogPolarResampleImageFilter<TInputImage, TInterpolator>
   os << indent << "m_AngularStep: " << m_AngularStep << std::endl;
   os << indent << "m_RadialNumberOfSamples: " << m_RadialNumberOfSamples << std::endl;
   os << indent << "m_AngularNumberOfSamples: " << m_AngularNumberOfSamples << std::endl;
-  os << indent << "m_IsOriginAtCenter: " << (m_IsOriginAtCenter ? "On" : "Off") << std::endl;
+  os << indent << "m_OriginIsAtCenter: " << (m_OriginIsAtCenter ? "On" : "Off") << std::endl;
   os << indent << "m_DefaultPixelValue: " << m_DefaultPixelValue << std::endl;
   os << indent << "m_Interpolator: " << m_Interpolator.GetPointer() << std::endl;
  
@@ -162,7 +168,7 @@ LogPolarResampleImageFilter<TInputImage,TInterpolator>
     inputPoint[0] = exp(Rho) * cos(Theta);
     inputPoint[1] = exp(Rho) * sin(Theta);
   
-    if(m_IsOriginAtCenter == true)
+    if(m_OriginIsAtCenter == true)
       {
       inputPoint[0] += inputPtr->GetLargestPossibleRegion().GetSize()[0]/2.;
       inputPoint[1] += inputPtr->GetLargestPossibleRegion().GetSize()[1]/2.;
@@ -256,7 +262,6 @@ LogPolarResampleImageFilter<TInputImage,TInterpolator>
   // call the superclass' implementation of this method
   Superclass::GenerateOutputInformation();
 
-
   // get pointers to the input and output
   InputImagePointer  inputPtr  = const_cast< TInputImage *>( this->GetInput() );
   OutputImagePointer outputPtr = this->GetOutput();
@@ -264,64 +269,40 @@ LogPolarResampleImageFilter<TInputImage,TInterpolator>
     {
     return;
     }
-  SizeType                Size;                // Size of the output image
-  Size = inputPtr->GetLargestPossibleRegion().GetSize();
     
-  SpacingType             OutputSpacing;
-  OutputSpacing[0] = m_AngularStep;
-  OutputSpacing[1] = m_RadialStep;
-  
+  if(m_RadialStepIsConfigured == true)
+    {
+    std::cout << "1" << std::endl;
+    CalculateRadialNumberOfSamples();
+    }  
+    else
+    {
+    std::cout << "2" << std::endl;
+    CalculateRadialStep();
+    }      
 
-  double Radial_max;
-  double Angular_max;
-  Radial_max  = sqrt(Size[0]*Size[0]+Size[1]*Size[1]);
-  Angular_max = 90.0; 
-  if(m_IsOriginAtCenter == true)
+  if(m_AngularStepIsConfigured == true)
     {
-    Radial_max /= 2.0;
-    Angular_max = 360.0;
-    }
-  
-  
-  if( Radial_max == 0. || m_RadialNumberOfSamples ==0 )
+    std::cout << "3" << std::endl;
+    CalculateAngularNumberOfSamples();
+    }  
+    else
     {
-    itkExceptionMacro(<< "LogPolarResampleImageFilter::GenerateOutputInformation() Image size msut be greater than zero for the Radial part"<< std::endl);
-    }
+    std::cout << "4" << std::endl;
+    CalculateAngularStep();
+    }      
 
-  double bx = log(m_RadialNumberOfSamples) / log(2.0);
-  if(int(bx)!=bx)
-    {
-     m_RadialNumberOfSamples = pow(2,int(bx)+1);
-    }
-  m_RadialStep = log(Radial_max) / m_RadialNumberOfSamples;
-  
-  if( m_AngularNumberOfSamples ==0 )
-    {
-    itkExceptionMacro(<< "LogPolarResampleImageFilter::GenerateOutputInformation() Image size msut be greater than zero for the Angular part");
-    }
 
-  double by = log(m_AngularNumberOfSamples) / log(2.0);
-  if(int(by)!=by)
-    {
-     m_AngularNumberOfSamples = pow(2,int(by)+1);
-    }
-  m_AngularStep = Angular_max / m_AngularNumberOfSamples;
+  SizeType                Size;                // Size of the output image
   
   Size[0] = static_cast<SizeValueType>(m_AngularNumberOfSamples);
   Size[1] = static_cast<SizeValueType>(m_RadialNumberOfSamples);
 
-  OriginPointType         OutputOrigin;        // output image origin
-  IndexType               OutputStartIndex;    // output image start index
-  OutputOrigin.Fill(0.0);
-  OutputStartIndex.Fill( 0 );
-
+  std::cout << "Size : " << Size << std::endl;
+  
   OutputImageRegionType    outputLargestPossibleRegion;
   outputLargestPossibleRegion.SetSize( Size );
-  outputLargestPossibleRegion.SetIndex( OutputStartIndex );
   outputPtr->SetLargestPossibleRegion( outputLargestPossibleRegion );
-
-  outputPtr->SetSpacing( OutputSpacing );
-  outputPtr->SetOrigin( OutputOrigin );
 
   return;
 }
@@ -349,6 +330,159 @@ LogPolarResampleImageFilter<TInputImage,TInterpolator>
 
   return latestTime;
 }
+
+
+template <class TInputImage, class TInterpolator>
+void
+LogPolarResampleImageFilter<TInputImage,TInterpolator>
+::CalculateRadialNumberOfSamples()
+{
+
+  // get pointers to the input and output
+  InputImagePointer  inputPtr  = const_cast< TInputImage *>( this->GetInput() );
+
+  if ( !inputPtr )
+    {
+    return;
+    }
+  
+  SizeType                Size;                // Size of the output image
+  Size = inputPtr->GetLargestPossibleRegion().GetSize();
+
+  double Radial_max = sqrt(Size[0]*Size[0]+Size[1]*Size[1]);
+  if(m_OriginIsAtCenter == true)
+    {
+    Radial_max /= 2.0;
+    }    
+  if( m_RadialStep <=0. )
+    {
+    itkExceptionMacro(<< "LogPolarResampleImageFilter::CalculateRadialNumberOfSamples() m_RadialStep must be greater than zero: " <<std::endl);
+    }
+  m_RadialNumberOfSamples = log(Radial_max) / m_RadialStep;
+
+  double bx = log(m_RadialNumberOfSamples) / log(2.0);
+  if(int(bx)!=bx)
+    {
+     m_RadialNumberOfSamples = pow(2,int(bx)+1);
+    }  	
+}
+
+template <class TInputImage, class TInterpolator>
+void
+LogPolarResampleImageFilter<TInputImage,TInterpolator>
+::CalculateAngularNumberOfSamples()
+{
+  double Angular_max = 90.0; 
+  if(m_OriginIsAtCenter == true)
+    {
+    Angular_max = 360.0;
+    }
+
+  if( m_RadialStep <=0.0 )
+    {
+    itkExceptionMacro(<< "LogPolarResampleImageFilter::CalculateAngularNumberOfSamples() m_RadialStep must be greater than zero"<<std::endl);
+    }
+
+  m_AngularNumberOfSamples = Angular_max / m_AngularStep;
+
+  double by = log(m_AngularNumberOfSamples) / log(2.0);
+  if(int(by)!=by)
+    {
+     m_AngularNumberOfSamples = pow(2,int(by)+1);
+    }
+}
+
+template <class TInputImage, class TInterpolator>
+void
+LogPolarResampleImageFilter<TInputImage,TInterpolator>
+::CalculateRadialStep()
+{
+  // get pointers to the input and output
+  InputImagePointer  inputPtr  = const_cast< TInputImage *>( this->GetInput() );
+
+  SizeType                Size;                // Size of the output image
+  Size = inputPtr->GetLargestPossibleRegion().GetSize();
+
+  if( m_RadialNumberOfSamples <1 )
+    {
+    itkExceptionMacro(<< "LogPolarResampleImageFilter::CalculateRadialStep() m_RadialNumberOfSamples must be greater than one"<<std::endl);
+    }
+
+  double by = log(m_RadialNumberOfSamples) / log(2.0);
+  if(int(by)!=by)
+    {
+     m_RadialNumberOfSamples = pow(2,int(by)+1);
+    }
+
+  double Radial_max = sqrt(Size[0]*Size[0]+Size[1]*Size[1]);
+  if(m_OriginIsAtCenter == true)
+    {
+    Radial_max /= 2.0;
+    }   
+  m_RadialStep = log(Radial_max) / m_RadialNumberOfSamples ;   
+}
+
+template <class TInputImage, class TInterpolator>
+void
+LogPolarResampleImageFilter<TInputImage,TInterpolator>
+::CalculateAngularStep()
+{  
+  if( m_RadialNumberOfSamples <1 )
+    {
+    itkExceptionMacro(<< "LogPolarResampleImageFilter::CalculateAngularStep() m_RadialNumberOfSamples must be greater than one"<<std::endl);
+    }
+  double by = log(m_AngularNumberOfSamples) / log(2.0);
+  if(int(by)!=by)
+    {
+     m_AngularNumberOfSamples = pow(2,int(by)+1);
+    }
+
+  double Angular_max = 90.0; 
+  if(m_OriginIsAtCenter == true)
+    {
+    Angular_max = 360.0;
+    }
+
+  m_AngularStep = Angular_max / m_AngularNumberOfSamples;
+
+}
+
+template <class TInputImage, class TInterpolator>
+void
+LogPolarResampleImageFilter<TInputImage,TInterpolator>
+::SetAngularStep(double angularStep)
+{
+  m_AngularStep = angularStep;
+  m_AngularStepIsConfigured = true;
+}
+
+template <class TInputImage, class TInterpolator>
+void
+LogPolarResampleImageFilter<TInputImage,TInterpolator>
+::SetRadialStep(double radialStep)
+{
+  m_RadialStep = radialStep;
+  m_RadialStepIsConfigured = true;
+}
+
+template <class TInputImage, class TInterpolator>
+void
+LogPolarResampleImageFilter<TInputImage,TInterpolator>
+::SetAngularNumberOfSamples(double angularNumberOfSamples)
+{
+  m_AngularNumberOfSamples = angularNumberOfSamples;
+  m_AngularStepIsConfigured = false;
+}
+
+template <class TInputImage, class TInterpolator>
+void
+LogPolarResampleImageFilter<TInputImage,TInterpolator>
+::SetRadialNumberOfSamples(double radialNumberOfSamples)
+{
+  m_RadialNumberOfSamples = radialNumberOfSamples;
+  m_RadialStepIsConfigured = false;
+}
+
 
 
 } // end namespace otb

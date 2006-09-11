@@ -124,17 +124,22 @@ public:
   itkGetMacro(DefaultPixelValue,OutputPixelType);
 
   /** Set the Angular spacing. */
-  itkSetMacro(AngularStep, double);
+  void SetAngularStep( double angularStep );
   /** Get the Angular spacing. */
   itkGetConstReferenceMacro(AngularStep, double);
 
+  /** Set the Radial spacing. */
+  void SetRadialStep( double radialStep );
+  /** Get the Radial spacing. */
+  itkGetConstReferenceMacro(RadialStep, double);
+
   /** Set the Radial number of samples. */
-  itkSetMacro(RadialNumberOfSamples, double);
+  void SetRadialNumberOfSamples( double radialNumberOfSamples );
   /** Get the Radial number of samples. */
   itkGetConstReferenceMacro(RadialNumberOfSamples, double);
 
   /** Set the Angular number of samples. */
-  itkSetMacro(AngularNumberOfSamples, double);
+  void SetAngularNumberOfSamples( double angularNumberOfSamples );
   /** Get the Angular number of samples. */
   itkGetConstReferenceMacro(AngularNumberOfSamples, double);
 
@@ -169,9 +174,9 @@ public:
   unsigned long GetMTime( void ) const;
 
 
-  itkSetMacro(IsOriginAtCenter, bool);
-  itkBooleanMacro(IsOriginAtCenter);
-  itkGetMacro(IsOriginAtCenter, bool);
+  itkSetMacro(OriginIsAtCenter, bool);
+  itkBooleanMacro(OriginIsAtCenter);
+  itkGetMacro(OriginIsAtCenter, bool);
 
 #ifdef ITK_USE_CONCEPT_CHECKING
   /** Begin concept checking */
@@ -201,17 +206,25 @@ private:
   LogPolarResampleImageFilter(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
 
+  void CalculateRadialNumberOfSamples();
+  void CalculateAngularNumberOfSamples();
+  void CalculateRadialStep();
+  void CalculateAngularStep();
+    
   OutputImagePointer      m_OutputImage;
 
   InterpolatorPointer     m_Interpolator;        // Image function for interpolation
   OutputPixelType         m_DefaultPixelValue;   // default pixel value if the point 
                                                  // is outside the image
-  bool			  m_IsOriginAtCenter;    // true if input image origin is at center of the image
+  bool			  m_OriginIsAtCenter;    // true if input image origin is at center of the image
   double		  m_AngularStep;
   double		  m_RadialStep;
   double		  m_RadialNumberOfSamples;
   double		  m_AngularNumberOfSamples;
   double 		  m_Sigma;
+  bool 			  m_AngularStepIsConfigured;
+  bool 			  m_RadialStepIsConfigured;
+  
 };
 
   

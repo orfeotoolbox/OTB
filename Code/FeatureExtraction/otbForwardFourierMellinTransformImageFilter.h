@@ -118,20 +118,20 @@ public:
   const double GetAngularNumberOfSamples( void );  
 
   /** Set/Get the Sigma value for the Log-polar resampler  */
-  void SetSimga( double sigma );
+  void SetSigma( double sigma );
   const double GetSigma( void );  
 
-  /** Set/Get the IsAtCenter value for the Log-polar resampler  */
-  void SetIsAtCenter( bool isAtCenter );
-  const bool GetIsAtCenter( void );  
+  /** Set/Get the OriginIsAtCenter value for the Log-polar resampler  */
+  void SetOriginIsAtCenter( bool isAtCenter );
+  const bool GetOriginIsAtCenter( void );  
 
   /** Set/Get the Default pixel value for the Log-polar resampler  */
   void SetDefaultPixelValue( PixelType pixelValue );
-//  const PixelType GetDefaultPixelValue( void );  
+  const PixelType GetDefaultPixelValue( void );  
 
   /** Set/Get the Interpolator pointer for the Log-polar resampler  */
   void SetInterpolator( InterpolatorPointer interpolator );
-//  InterpolatorConstPointer GetInterpolator( void );  
+  InterpolatorConstPointer GetInterpolator( void );  
 
   /** ForwardFourierMellinTransformImageFilter produces an image which is a different size
    * than its input.  As such, it needs to provide an implementation

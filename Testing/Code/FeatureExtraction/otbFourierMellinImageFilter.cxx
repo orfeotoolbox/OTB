@@ -58,10 +58,9 @@ int otbFourierMellinImageFilter(int argc, char* argv[])
         writer->SetFileName( outputFilename );
 
 	FourierMellinTransform->SetInput( reader->GetOutput() );
-//	FourierMellinTransform->SetIsOriginAtCenter(true);
-//	FourierMellinTransform->SetAngularNumberOfSamples(512);
-//	FourierMellinTransform->SetRadialNumberOfSamples(513);
-//	FourierMellinTransform->Update();
+	FourierMellinTransform->SetOriginIsAtCenter(true);
+	FourierMellinTransform->SetAngularNumberOfSamples(128);
+	FourierMellinTransform->SetRadialNumberOfSamples(129);
         writer->SetInput( FourierMellinTransform->GetOutput() );
         
         writer->Update(); 

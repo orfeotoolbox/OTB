@@ -132,7 +132,7 @@ void
 ForwardFourierMellinTransformImageFilter<TPixel, TInterpol, Dimension >
 ::SetRadialNumberOfSamples(double radialNumberOfSamples )
 {
-	m_LogPolarResample->GetRadialNumberOfSamples(radialNumberOfSamples);
+	m_LogPolarResample->SetRadialNumberOfSamples(radialNumberOfSamples);
 }
 template < class TPixel,class  TInterpol,unsigned int   Dimension >
 const double
@@ -145,7 +145,7 @@ ForwardFourierMellinTransformImageFilter<TPixel, TInterpol, Dimension >
 template < class TPixel,class  TInterpol,unsigned int   Dimension >
 void
 ForwardFourierMellinTransformImageFilter<TPixel, TInterpol, Dimension >
-::SetSimga(double sigma )
+::SetSigma(double sigma )
 {
 	m_LogPolarResample->SetSimga(sigma);
 }
@@ -160,17 +160,18 @@ ForwardFourierMellinTransformImageFilter<TPixel, TInterpol, Dimension >
 template < class TPixel,class  TInterpol,unsigned int   Dimension >
 void
 ForwardFourierMellinTransformImageFilter<TPixel, TInterpol, Dimension >
-::SetIsAtCenter(bool isAtCenter)
+::SetOriginIsAtCenter(bool isAtCenter)
 {
-	m_LogPolarResample->SetIsAtCenter(isAtCenter);
+	m_LogPolarResample->SetOriginIsAtCenter(isAtCenter);
 }
 template < class TPixel,class  TInterpol,unsigned int   Dimension >
 const bool
 ForwardFourierMellinTransformImageFilter<TPixel, TInterpol, Dimension >
-::GetIsAtCenter( )
+::GetOriginIsAtCenter()
 {
-	return m_LogPolarResample->GetIsAtCenter();
+	return m_LogPolarResample->GetOriginIsAtCenter();
 }
+
 
 template < class TPixel,class  TInterpol,unsigned int   Dimension >
 void
@@ -180,15 +181,15 @@ ForwardFourierMellinTransformImageFilter<TPixel, TInterpol, Dimension >
 	m_LogPolarResample->SetDefaultPixelValue(pixelValue);
 }
 
-/*
+
 template < class TPixel,class  TInterpol,unsigned int   Dimension >
-const PixelType
+const TPixel
 ForwardFourierMellinTransformImageFilter<TPixel, TInterpol, Dimension >
 ::GetDefaultPixelValue( )
 {
 	return static_cast<const PixelType>(m_LogPolarResample->GetDefaultPixelValue());
 }
-*/
+
 
 template < class TPixel,class  TInterpol,unsigned int   Dimension >
 void
@@ -197,15 +198,14 @@ ForwardFourierMellinTransformImageFilter<TPixel, TInterpol, Dimension >
 {
 	m_LogPolarResample->SetInterpolator(interpolator);
 }
-/*
 template < class TPixel,class  TInterpol,unsigned int   Dimension >
-InterpolatorConstPointer
+typename TInterpol::ConstPointer 
 ForwardFourierMellinTransformImageFilter<TPixel, TInterpol, Dimension >
 ::GetInterpolator( )
 {
 	return static_cast<InterpolatorConstPointer>(m_LogPolarResample->GetInterpolator());
 }
-*/
+
 
 /**
  * Standard "PrintSelf" method

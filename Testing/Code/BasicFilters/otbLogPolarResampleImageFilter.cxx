@@ -59,7 +59,7 @@ int otbLogPolarResampleImageFilter(int argc, char* argv[])
         writer->SetFileName( outputFilename );
 
 	LogPolarImage->SetInput( reader->GetOutput() );
-	LogPolarImage->SetIsOriginAtCenter(true);
+	LogPolarImage->SetOriginIsAtCenter(true);
 	LogPolarImage->SetAngularNumberOfSamples(512);
 	LogPolarImage->SetRadialNumberOfSamples(513);
 	
