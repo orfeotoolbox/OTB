@@ -39,7 +39,6 @@ ForwardFourierMellinTransformImageFilter<TPixel, TInterpol, Dimension >
 ::GenerateData()
 {
 	m_LogPolarResample->SetInput( this->GetInput() );
-	m_LogPolarResample->Update();
  	m_FourierTransform->SetInput( m_LogPolarResample->GetOutput() );
  	m_FourierTransform->GraftOutput( this->GetOutput() );
 
@@ -69,7 +68,6 @@ ForwardFourierMellinTransformImageFilter<TPixel, TInterpol, Dimension >
 
   m_LogPolarResample->GenerateOutputInformation();
     
-  
   OutputImageRegionType    outputLargestPossibleRegion;
   outputLargestPossibleRegion.SetSize( m_LogPolarResample->GetOutput()->GetLargestPossibleRegion().GetSize() );
   outputLargestPossibleRegion.SetIndex( m_LogPolarResample->GetOutput()->GetLargestPossibleRegion().GetIndex() );

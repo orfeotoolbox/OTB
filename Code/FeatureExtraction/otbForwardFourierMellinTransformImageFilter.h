@@ -34,10 +34,14 @@ namespace otb
  *
  * This class implements a composite filter. It combines two filters : 
  * \begin{itemize}
- *   \item otb::LogPolarResampleImageFilter
- *   \item itk:: ...
+ *   \item otb::LogPolarResampleImageFilter : converting the input image in a
+ log-polar system coordinate
+ *   \item itk::VnlFFTRealToComplexConjugateImageFilter : applying the Forward
+ Fourier transform of the log-polar image.
  * \end{itemize}
  * 
+ * N.B.: the Fourier transform image is coded from 0.0 to 1.0
+ *
  * \ingroup ImageFunctions
  */
 

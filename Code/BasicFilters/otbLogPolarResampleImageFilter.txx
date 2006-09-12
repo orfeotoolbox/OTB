@@ -50,9 +50,11 @@ LogPolarResampleImageFilter<TInputImage, TInterpolator>
   m_RadialStepIsConfigured  = false;
 
 
-  m_OriginIsAtCenter = true;
+  m_OriginIsAtCenter  = true;
   m_DefaultPixelValue = 0;
-  m_Interpolator = itk::LinearInterpolateImageFunction<InputImageType, CoordRepType>::New();
+  m_Sigma             = 0.5;
+  
+  m_Interpolator      = itk::LinearInterpolateImageFunction<InputImageType, CoordRepType>::New();
   
 }
 

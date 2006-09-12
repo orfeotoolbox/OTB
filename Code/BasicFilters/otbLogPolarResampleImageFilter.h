@@ -38,22 +38,13 @@ namespace otb
  * This function is set via SetInterpolator().  The default is
  * itk::LinearInterpolateImageFunction<InputImageType, TInterpolatorPrecisionType>, which
  *
- * Output information (spacing, size and direction) for the output
- * image should be set. This information has the normal defaults of
- * unit spacing, zero origin and identity direction. Optionally, the
- * output information can be obtained from a reference image. If the
- * reference image is provided and UseReferenceImage is On, then the
- * spacing, origin and direction of the reference image will be used.
- *
- * Since this filter produces an image which is a different size than
- * its input, it needs to override several of the methods defined
- * in ProcessObject in order to properly manage the pipeline execution model.
- * In particular, this filter overrides
- * ProcessObject::GenerateInputRequestedRegion() and
- * ProcessObject::GenerateOutputInformation().
- *
  * This filter is implemented as a multithreaded filter.  It provides a 
  * ThreadedGenerateData() method for its implementation.
+ *
+ * By default the sigma value is fixed to 0.5
+ +
+ + The resampled Log-polar image dimension is a power of two for each
+ direction.
  *
  * \ingroup GeometricTransforms
  */
