@@ -385,10 +385,22 @@ ADD_TEST(feTvExtractSegments ${FEATUREEXTRACTION_TESTS}
 ADD_TEST(feTuForwardFourierMellinImageFilterNew ${FEATUREEXTRACTION_TESTS} 
          otbFourierMellinImageFilterNew)  
 
-ADD_TEST(feTuForwardFourierMellinImageFilter ${FEATUREEXTRACTION_TESTS}  
+ADD_TEST(feTuForwardFourierMellinImageFilterTestFFT ${FEATUREEXTRACTION_TESTS}  
+        otbFourierMellinImageFilterTestFFT
+        ${INPUTDATA}/TestFFT.hdr
+	${TEMP}/feFFTTest.hdr)
+
+ADD_TEST(feTuForwardFourierMellinImageFilterTestFFT3Croix ${FEATUREEXTRACTION_TESTS}  
+        otbFourierMellinImageFilterTestFFT
+        ${INPUTDATA}/TestFFT3Croix.hdr
+	${TEMP}/feFFTTest3Croix.hdr)
+
+ADD_TEST(feTvForwardFourierMellinImageFilter ${FEATUREEXTRACTION_TESTS}  
+#  --compare-image ${TOL}  ${BASELINE}/feForwardFourierMellinImageFilter.hdr
+#                          ${TEMP}/feForwardFourierMellinImageFilter.hdr
         otbFourierMellinImageFilter
         ${INPUTDATA}/DeuxCercles.hdr
-	${TEMP}/feTuForwardFourierMellinImageFilter.hdr)
+	${TEMP}/feForwardFourierMellinImageFilter.hdr)
 
 # -----------------------------------------------------------------------
 			        
@@ -446,6 +458,7 @@ otbLocalHoughDraw.cxx
 otbExtractSegmentsNew.cxx
 otbExtractSegments.cxx
 otbFourierMellinImageFilterNew.cxx
+otbFourierMellinImageFilterTestFFT.cxx
 otbFourierMellinImageFilter.cxx
 )
 
