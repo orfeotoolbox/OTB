@@ -48,7 +48,9 @@ ADD_TEST(bfTvFiltreFrost ${BASICFILTERS_TESTS}
 ADD_TEST(bfTuLogPolarResampleImageFilterNew ${BASICFILTERS_TESTS}  
         otbLogPolarResampleImageFilterNew )
 
-ADD_TEST(bfTuLogPolarResampleImageFilter ${BASICFILTERS_TESTS}  
+ADD_TEST(bfTvLogPolarResampleImageFilter ${BASICFILTERS_TESTS}  
+  --compare-image ${TOL}  ${BASELINE}/bfLogPolarResampleImageFilter.hdr
+                          ${TEMP}/bfLogPolarResampleImageFilter.hdr 
         otbLogPolarResampleImageFilter
         ${INPUTDATA}/DeuxCercles.hdr
 	${TEMP}/bfLogPolarResampleImageFilter.hdr)
