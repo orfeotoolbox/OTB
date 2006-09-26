@@ -25,8 +25,6 @@
 
 #include "otbONERAImageIOFactory.h"
 #include "otbMSTARImageIOFactory.h"
-#include "otbLUMImageIOFactory.h"
-#include "otbBSQImageIOFactory.h"
 #include "otbGDALImageIOFactory.h"
 
 
@@ -60,17 +58,8 @@ ImageIOFactory::RegisterBuiltInFactories()
 			// MSTAR Format for OTB
 			itk::ObjectFactoryBase::RegisterFactory( MSTARImageIOFactory::New() );
 
-			// LUM : New format for OTB
-                        itk::ObjectFactoryBase::RegisterFactory( LUMImageIOFactory::New() );                        
-
-			// BSQ : New format for OTB
-                        //itk::ObjectFactoryBase::RegisterFactory( BSQImageIOFactory::New() );
-
 			// GDAL : New format for OTB
                         itk::ObjectFactoryBase::RegisterFactory( GDALImageIOFactory::New() );
-
-
-
                         
                         firstTime = false;
                 }

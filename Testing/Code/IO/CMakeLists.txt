@@ -324,49 +324,6 @@ ADD_TEST(ioTvImageReaderWriterRgbJPEG2TIF ${IO_TESTS}
         ${TEMP}/ioImageReaderWriterRgbJPEG2TIF_couleurs.tif )
         
 
-# -------            otb::LUMImageIO   ------------------------------
-# CanRead()
-ADD_TEST(ioTuLUMImageIOCanRead ${IO_TESTS} otbLUMImageIOTestCanRead
-        ${INPUTDATA}/formatLum.lum)
-
-ADD_TEST(ioTvImageFileReaderLUM2HDR ${IO_TESTS} 
-  --compare-image ${TOL}   ${BASELINE}/ioImageFileReaderLUM2HDR.hdr
-                    ${TEMP}/ioImageFileReaderLUM2HDR.hdr
-        otbLUMImageIOTest
-        ${INPUTDATA}/formatLum.lum 
-        ${TEMP}/ioImageFileReaderLUM2HDR.hdr )
-
-ADD_TEST(ioTvImageFileReaderWriterLUM ${IO_TESTS} 
-  --compare-image ${TOL}   ${INPUTDATA}/formatLum.lum
-                    ${TEMP}/ioImageFileReaderWriterLUM.lum
-        otbLUMImageIOTest
-        ${INPUTDATA}/formatLum.lum 
-        ${TEMP}/ioImageFileReaderWriterLUM.lum )
-
-# -------            otb::BSQImageIO   ------------------------------
-# CanRead()
-ADD_TEST(ioTuBSQImageIOCanRead ${IO_TESTS} otbBSQImageIOTestCanRead
-        ${INPUTDATA}/poupees.hd)
-
-ADD_TEST(ioTvImageFileReaderBSQ2HDR ${IO_TESTS} 
-  --compare-image ${TOL}   ${BASELINE}/ioImageFileReaderBSQ2HDR.png
-                    ${TEMP}/ioImageFileReaderBSQ2HDR.png
-        otbImageFileReaderRGBTest
-        ${INPUTDATA}/poupees.hd
-        ${TEMP}/ioImageFileReaderBSQ2HDR.png )
-
-ADD_TEST(ioTvImageFileReaderWriterBSQ ${IO_TESTS} 
-  --compare-image ${TOL}   ${INPUTDATA}/poupees.hd
-                    ${TEMP}/ioImageFileReaderWriterBSQ.hd
-        otbVectorImageFileReaderWriterTest
-        ${INPUTDATA}/poupees.hd
-        ${TEMP}/ioImageFileReaderWriterBSQ.hd )
-
-
-
-
-
-
 
 # -------            otb::MultiChannelExtractROI   ------------------------------
 # ---  SPOT4 (CAI)  ---
@@ -398,7 +355,7 @@ ADD_TEST(ioTvMultiChannelROI_ENVI2PNG_2 ${COMMON_TESTS}
          -startX 100 -startY 100 -sizeX 77 -sizeY 300
          -channels 1 2 3 )
 
-# ---  SPOT5 BIL (CAI)  ---  std::cout<<"LUMImageIO::WriteImageInformation() : " << std::endl;
+# ---  SPOT5 BIL (CAI)  ---  
  
 
 # ADD_TEST(ioTvMultiChannelROI_SPOT5BIL2PNG_2 ${COMMON_TESTS} 
@@ -634,9 +591,6 @@ otbImageFileReaderONERA.cxx
 otbImageFileReaderONERAComplex.cxx
 otbImageFileWriterONERAComplex.cxx
 otbImageFileWriterStreamingONERAComplex.cxx
-otbLUMImageIOTestCanRead.cxx
-otbLUMImageIOTest.cxx
-otbBSQImageIOTestCanRead.cxx
 otbImageFileReaderTest.cxx
 otbImageFileWriterTest.cxx
 otbVectorImageFileReaderWriterTest.cxx
