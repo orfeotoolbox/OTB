@@ -121,21 +121,21 @@ OTB is a multi-platform library. It has successfully been installed on
 the following platforms:
 \begin{itemize}
   \item Linux/Unix with GCC (2.95.X, 3.3.X, 4.1.X).
-  \item Windows with Visual Studio 7.1
+  \item Windows with Visual Studio 7.1.
+  \item Windows with Mingw. (mingw + msys at http://www.mingw.org)
 \end{itemize}
 
 Support for the following platforms is planned:
 \begin{itemize}
   \item Windows with VC++ 6.
-  \item Cygwin.
-  \item Windows with Mingw.
+  \item Cygwin. (http://www.cygwin.com)
 \end{itemize}
 
 \subsection{Which libraries/packages are needed before installing
  OTB?}
 \begin{itemize}
 \item CMake (http://www.cmake.org)
-\item GDAL (http://www.gdal.org/)
+\item GDAL (http://www.gdal.org)
 \item Fltk (http://www.fltk.org)
 \end{itemize}
        
@@ -152,19 +152,21 @@ given order):
   with OTB. Use CMake for the configuration.
   \item Install OTB using CMake for the configuration.
 \end{enumerate}
-\subsubsection{Unix/Linux Platforms}
-\begin{enumerate}
+
 \item We assume that you will install everything on a directory called
 \texttt{INSTALL\_DIR}, which usually is \texttt{/usr/local}, \texttt{/home/jordi/local} or
 whatever you want.
 \item Make sure that you have downloaded the source code for:
   \begin{itemize}
   \item CMake (http://www.cmake.org)
-  \item GDAL (http://www.gdal.org/)
+  \item GDAL (http://www.gdal.org)
   \item Fltk (http://www.fltk.org)
   \end{itemize}
+
+\subsubsection{Unix/Linux Platforms}
+\begin{enumerate}
     
-\item Install GDAL:
+\item Install GDAL
   \begin{verbatim}
       cd INSTALL_DIR
       gunzip gdal.1.3.2.tar.gz
@@ -176,7 +178,7 @@ whatever you want.
   \end{verbatim}
       
 
-\item Install CMake:
+\item Install CMake
   \begin{verbatim}
       cd INSTALL_DIR
       gunzip cmake-2.2.3.tar.gz
@@ -235,11 +237,85 @@ whatever you want.
        make install
   \end{verbatim}
       
-            
-\item That should be all! Otherwise, subscribe to
-   otb-users@googlegroups.com and you will get some help.
   
 \end{enumerate}
+
+\subsubsection{Microsoft Visual Studio C++ 7.1}
+\begin{enumerate}
+\item Install GDAL
+
+	MSVC++ 7.1 project files are needed to compile GDAL.
+	
+	These files can be downloaded at http://vterrain.org/dist/gdal132\_vc71.zip.
+	
+	Then, unzip it to your GDAL folder, and it will create a folder (named "VisualStudio").
+	
+	Load the solution (.sln file) and build the gdal project.
+	
+	More details can be found at http://vterrain.org/Distrib/gdal.html.
+
+\item Install FLTK
+
+	Use CMake on Windows to generate MSVC++ project files from fltk sources.
+	
+	Open the solution and build the fltk project.
+
+\item Install OTB
+
+	Use CMake on Windows to generate MSVC++ project files from otb sources.
+	
+	Open the solution and build the otb project.
+
+\end{enumerate}
+
+\subsubsection{MinGW on Windows platform}
+\begin{enumerate}
+
+\item Download the lastest version of mingw and msys at www.mingw.org and install those two programs.
+
+	Then, launch MinGW, a promp appears (similar to Linux one).
+
+\item Install GDAL
+	To compile GDAL, at configure step, use these options :
+\begin{verbatim}
+	./configure -prefix=INSTALL\_DIR --host=mingw32 --without-libtool --without-python 
+	--with-png=internal -with-libtiff=internal -with-jpeg=internal
+\end{verbatim}
+	Then the usual make and make install.
+
+\item Install FLTK
+	Generate MSYS Makefiles with CMake (Windows version) from fltk sources.
+	
+	Then, under prompt, tape make and make install where you have generated Makefiles with CMake.
+
+\item Install OTB
+	Similar to fltk install.
+
+\end{enumerate}
+
+\subsubsection{Cygwin}
+\begin{enumerate}
+
+\item Download the lastest version at www.cygwin.com and install it.
+	Then, launch it, a prompt appears (similar to Linux one).
+
+\item Install GDAL
+	To compile GDAL, at configure step, use these options :
+\begin{verbatim}
+	./configure --prefix=INSTALL\_DIR --with-png=internal --with-libtiff=internal
+	--with-jpeg=internal
+\end{verbatim}]
+	Then the usual make and make install.
+
+\item Install FLTK
+	See Linux part for details (same procedure).
+
+\item Install OTB
+	See Linux part for details (same procedure).
+\end{enumerate}
+
+\item That should be all! Otherwise, subscribe to
+   otb-users@googlegroups.com and you will get some help.
 
 \subsection{Specific platform issues}
 \subsubsection{SunOS/HP UX}
@@ -252,6 +328,12 @@ details on the bug characterization.
 The solution is to use the GNU tar command if it is available on your
 system (gtar).
 
+\subsubsection{Cygwin}
+Due to an unknown bug, FLTK can't compile on some versions of Cygwin (OpenGL problems).
+
+Put OTB\_USE\_VISU to OFF to avoid these problems.
+
+Some bugs can appear while compiling GDAL with JPEG2000 files : disable this format to resolve the problem.
 
 
 \section{Using OTB}
