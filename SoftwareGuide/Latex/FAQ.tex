@@ -121,22 +121,23 @@ OTB is a multi-platform library. It has successfully been installed on
 the following platforms:
 \begin{itemize}
   \item Linux/Unix with GCC (2.95.X, 3.3.X, 4.1.X).
-  \item Windows with Visual Studio 7.1.
-  \item Windows with Mingw. (mingw + msys at http://www.mingw.org)
+  \item Windows with Microsoft Visual Studio C++ 7.1 .NET 2003.
+  \item Windows with MinGW. (mingw + msys at \url{http://www.mingw.org})
+  \item Cygwin. (\url{http://www.cygwin.com})
 \end{itemize}
 
 Support for the following platforms is planned:
 \begin{itemize}
-  \item Windows with VC++ 6.
-  \item Cygwin. (http://www.cygwin.com)
+  \item Windows with MVSC++ 6.0.
+  \item Windows with MVSC++ 8.0 .NET 2005.  
 \end{itemize}
 
 \subsection{Which libraries/packages are needed before installing
  OTB?}
 \begin{itemize}
-\item CMake (http://www.cmake.org)
-\item GDAL (http://www.gdal.org)
-\item Fltk (http://www.fltk.org)
+\item CMake (\url{http://www.cmake.org})
+\item GDAL (\url{http://www.gdal.org})
+\item Fltk (\url{http://www.fltk.org})
 \end{itemize}
        
 \subsection{Main steps}
@@ -158,9 +159,9 @@ given order):
 whatever you want.
 \item Make sure that you have downloaded the source code for:
   \begin{itemize}
-  \item CMake (http://www.cmake.org)
-  \item GDAL (http://www.gdal.org)
-  \item Fltk (http://www.fltk.org)
+  \item CMake (\url{http://www.cmake.org})
+  \item GDAL (\url{http://www.gdal.org})
+  \item Fltk (\url{http://www.fltk.org})
   \end{itemize}
 
 \subsubsection{Unix/Linux Platforms}
@@ -246,15 +247,15 @@ whatever you want.
 
 	MSVC++ 7.1 project files are needed to compile GDAL.
 	
-	These files can be downloaded at http://vterrain.org/dist/gdal132\_vc71.zip.
+	These files can be downloaded at \url{http://vterrain.org/dist/gdal132_vc71.zip}.
 	
 	Then, unzip it to your GDAL folder, and it will create a folder (named "VisualStudio").
 	
 	Load the solution (.sln file) and build the gdal project.
 	
-	More details can be found at http://vterrain.org/Distrib/gdal.html.
+	More details can be found at \url{http://vterrain.org/Distrib/gdal.html}.
 
-\item Install FLTK
+\item Install Fltk
 
 	Use CMake on Windows to generate MSVC++ project files from fltk sources.
 	
@@ -271,24 +272,29 @@ whatever you want.
 \subsubsection{MinGW on Windows platform}
 \begin{enumerate}
 
-\item Download the lastest version of mingw and msys at www.mingw.org and install those two programs.
+\item Download the lastest version of mingw and msys at \url{http://www.mingw.org} and install those 
+	two programs.
 
-	Then, launch MinGW, a promp appears (similar to Linux one).
+	Then, launch MinGW : a promp appears (similar to Linux one).
 
 \item Install GDAL
+
 	To compile GDAL, at configure step, use these options :
 \begin{verbatim}
-	./configure -prefix=INSTALL\_DIR --host=mingw32 --without-libtool --without-python 
-	--with-png=internal -with-libtiff=internal -with-jpeg=internal
+	./configure -prefix=INSTALL_DIR --host=mingw32 --without-libtool 
+	--without-python --with-png=internal --with-libtiff=internal
+	--with-jpeg=internal
 \end{verbatim}
 	Then the usual make and make install.
 
-\item Install FLTK
+\item Install Fltk
+
 	Generate MSYS Makefiles with CMake (Windows version) from fltk sources.
 	
 	Then, under prompt, tape make and make install where you have generated Makefiles with CMake.
 
 \item Install OTB
+
 	Similar to fltk install.
 
 \end{enumerate}
@@ -296,21 +302,24 @@ whatever you want.
 \subsubsection{Cygwin}
 \begin{enumerate}
 
-\item Download the lastest version at www.cygwin.com and install it.
+\item Download the lastest version at \url{http://www.cygwin.com} and install it.
 	Then, launch it, a prompt appears (similar to Linux one).
 
 \item Install GDAL
+
 	To compile GDAL, at configure step, use these options :
 \begin{verbatim}
-	./configure --prefix=INSTALL\_DIR --with-png=internal --with-libtiff=internal
+	./configure --prefix=INSTALL_DIR --with-png=internal --with-libtiff=internal
 	--with-jpeg=internal
 \end{verbatim}]
 	Then the usual make and make install.
 
-\item Install FLTK
+\item Install Fltk
+
 	See Linux part for details (same procedure).
 
 \item Install OTB
+
 	See Linux part for details (same procedure).
 \end{enumerate}
 
@@ -329,7 +338,7 @@ The solution is to use the GNU tar command if it is available on your
 system (gtar).
 
 \subsubsection{Cygwin}
-Due to an unknown bug, FLTK can't compile on some versions of Cygwin (OpenGL problems).
+Due to an unknown bug, Fltk can't compile on some versions of Cygwin (OpenGL problems).
 
 Put OTB\_USE\_VISU to OFF to avoid these problems.
 
