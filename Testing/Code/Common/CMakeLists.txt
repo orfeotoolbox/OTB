@@ -251,6 +251,16 @@ ADD_TEST(coTvImageList ${COMMON_TESTS}
          ${TEMP}/coImageList_amst.png
 )
 
+# -------            otb::ImageListSource   -------------------------------------------
+
+ADD_TEST(coTuImageListSourceNew ${COMMON_TESTS} 
+         otbImageListSourceNew)  
+
+# -------            otb::ImageToImageListFilter   -------------------------------------------
+
+ADD_TEST(coTuImageToImageListFilterNew ${COMMON_TESTS} 
+         otbImageToImageListFilterNew) 
+
          
 # -------       Fichiers sources CXX -----------------------------------
 SET(BasicCommon_SRCS
@@ -280,6 +290,8 @@ otbObjectListNew.cxx
 otbObjectList.cxx
 otbImageListNew.cxx
 otbImageList.cxx
+otbImageListSourceNew.cxx
+otbImageToImageListFilterNew.cxx
 )
 
 

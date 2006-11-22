@@ -35,7 +35,7 @@ class ImageList
   : public ObjectList<TImage>
   {
   public:
-    /** Standards typedefs */
+    /** Standard typedefs */
     typedef ImageList Self;
     typedef ObjectList<TImage> Superclass;
     typedef itk::SmartPointer<Self> Pointer;
@@ -60,7 +60,7 @@ class ImageList
     ImageList(){};
     /** Destructor */
     ~ImageList(){};
-    /**PrintSelf method */
+    /** PrintSelf method */
     void PrintSelf(std::ostream& os, itk::Indent indent) const 
       {
 	Superclass::PrintSelf(os,indent);
