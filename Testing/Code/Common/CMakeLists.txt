@@ -237,6 +237,20 @@ ADD_TEST(coTvObjectList ${COMMON_TESTS}
 	 ${INPUTDATA}/poupees.png
 	 ${INPUTDATA}/sbuv.png
  )
+
+# -------            otb::ImageList   -------------------------------------------
+
+ADD_TEST(coTuImageListNew ${COMMON_TESTS} 
+         otbImageListNew)  
+
+ADD_TEST(coTvImageList ${COMMON_TESTS}  
+	--compare-image ${TOL}   ${INPUTDATA}/amst.png
+				 ${TEMP}/coImageList_amst.png
+         otbImageList 
+	 ${INPUTDATA}/amst.png
+         ${TEMP}/coImageList_amst.png
+)
+
          
 # -------       Fichiers sources CXX -----------------------------------
 SET(BasicCommon_SRCS
@@ -264,6 +278,8 @@ otbPathListToHistogramGenerator.cxx
 otbHistogramStatisticsFunction.cxx
 otbObjectListNew.cxx
 otbObjectList.cxx
+otbImageListNew.cxx
+otbImageList.cxx
 )
 
 

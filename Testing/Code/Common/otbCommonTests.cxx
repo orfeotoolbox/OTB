@@ -50,4 +50,6 @@ REGISTER_TEST(otbPathListToHistogramGenerator);
 REGISTER_TEST(otbHistogramStatisticsFunction);
 REGISTER_TEST(otbObjectListNew);
 REGISTER_TEST(otbObjectList);
+REGISTER_TEST(otbImageListNew);
+REGISTER_TEST(otbImageList);
 }
