@@ -27,5 +27,5 @@
 void RegisterTests()
 {
 REGISTER_TEST(otbMorphologicalPyramidAnalyseFilterNew);
-
+REGISTER_TEST(otbMorphologicalPyramidAnalyseFilter);
 }

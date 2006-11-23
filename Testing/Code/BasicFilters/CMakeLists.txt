@@ -67,10 +67,10 @@ ADD_TEST(bfTuOpeningClosingFilterNew ${BASICFILTERS_TESTS}
 
 ADD_TEST(bfTvOpeningClosingFilter ${BASICFILTERS_TESTS}
    --compare-image ${TOL}  ${BASELINE}/bfFiltreOpeningClosing_1.tif
-                           ${TEMP}/ROI_IKO_PAN_LesHalles_OC_MorphoFilter_1.tif
+                           ${TEMP}/bfFiltreOpeningClosing_1.tif
         otbOpeningClosingMorphologicalFilter
         ${INPUTDATA}/ROI_IKO_PAN_LesHalles.tif
-	${TEMP}/ROI_IKO_PAN_LesHalles_OC_MorphoFilter_1.tif
+	${TEMP}/bfFiltreOpeningClosing_1.tif
 	1)
 
 # -------            otb::ClosingOpeningMorphologicalFilter   ------------------------------
@@ -80,10 +80,10 @@ ADD_TEST(bfTuClosingOpeningFilterNew ${BASICFILTERS_TESTS}
 
 ADD_TEST(bfTvClosingOpeningFilter ${BASICFILTERS_TESTS}
    --compare-image ${TOL}  ${BASELINE}/bfFiltreClosingOpening_1.tif
-                           ${TEMP}/ROI_IKO_PAN_LesHalles_CO_MorphoFilter_1.tif
+                           ${TEMP}/bfFiltreClosingOpening_1.tif
         otbClosingOpeningMorphologicalFilter
         ${INPUTDATA}/ROI_IKO_PAN_LesHalles.tif
-	${TEMP}/ROI_IKO_PAN_LesHalles_CO_MorphoFilter_1.tif
+	${TEMP}/bfFiltreClosingOpening_1.tif
 	1)
 
 # A enrichir

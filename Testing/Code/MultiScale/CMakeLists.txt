@@ -16,13 +16,32 @@ SET(MULTISCALE_TESTS ${CXX_TEST_PATH}/otbMultiScaleTests)
 
 # -------            otb::MorphologicalPyramidAnalyseFilter   ----------
 
-ADD_TEST(msTuMorphologicalPyramidAnalyseFilterNew ${MULTISCALE_TESTS} 
-         otbMorphologicalPyramidAnalyseFilterNew) 
+ADD_TEST(msTuMorphoPyrAnalyseFilterNew ${MULTISCALE_TESTS} 
+         otbMorphologicalPyramidAnalyseFilterNew)
+
+ADD_TEST(msTvMorphoPyrAnalyseFilter ${MULTISCALE_TESTS} 
+  --compare-n-images ${TOL} 5
+		   ${BASELINE}/msPyrAn_mire_log_an_2.png
+		   ${TEMP}/msPyrAn_mire_log_an_2.png
+		   ${BASELINE}/msPyrAn_mire_log_sf_2.png
+		   ${TEMP}/msPyrAn_mire_log_sf_2.png
+		   ${BASELINE}/msPyrAn_mire_log_if_2.png
+		   ${TEMP}/msPyrAn_mire_log_if_2.png
+		   ${BASELINE}/msPyrAn_mire_log_sd_2.png
+		   ${TEMP}/msPyrAn_mire_log_sd_2.png
+		   ${BASELINE}/msPyrAn_mire_log_id_2.png
+		   ${TEMP}/msPyrAn_mire_log_id_2.png
+         otbMorphologicalPyramidAnalyseFilter
+	 ${INPUTDATA}/mire_log.png
+	 ${TEMP}/msPyrAn_mire_log
+	 png
+	 2
+	 2.0)
 
 # -------       Fichiers sources CXX -----------------------------------
 SET(BasicMultiScale_SRCS
 otbMorphologicalPyramidAnalyseFilterNew.cxx
-#otbMorphologicalPyramidAnalyseFilter.cxx
+otbMorphologicalPyramidAnalyseFilter.cxx
 )
 
 

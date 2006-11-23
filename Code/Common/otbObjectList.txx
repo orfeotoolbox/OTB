@@ -162,7 +162,9 @@ namespace otb
   template <class TObject>
   ObjectList<TObject>::Iterator
   ::Iterator(InternalIteratorType iter)
-  {}
+  {
+    m_Iter=iter;
+  }
   /**
    * Get the current object.
    * \return The current object pointed by the iterator.
@@ -245,7 +247,9 @@ namespace otb
   template <class TObject>
   ObjectList<TObject>::ConstIterator
   ::ConstIterator(InternalConstIteratorType iter)
-  {}
+  {
+    m_Iter=iter;
+  }
   /**
    * Get the current object.
    * \return The current object pointed by the iterator.
@@ -348,7 +352,9 @@ namespace otb
   template <class TObject>
   ObjectList<TObject>::ReverseIterator
   ::ReverseIterator(InternalReverseIteratorType iter)
-  {}
+  {
+    m_Iter=iter;
+  }
   /**
    * Get the current object.
    * \return The current object pointed by the iterator.
@@ -431,7 +437,9 @@ namespace otb
   template <class TObject>
   ObjectList<TObject>::ReverseConstIterator
   ::ReverseConstIterator(InternalReverseConstIteratorType iter)
-  {}
+  {
+    m_Iter=iter;
+  }
   /**
    * Get the current object.
    * \return The current object pointed by the iterator.

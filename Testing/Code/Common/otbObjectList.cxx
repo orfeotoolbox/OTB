@@ -24,7 +24,7 @@
 
 void fail(char * failString)
 {
-  std::cout<<"Test failed in "<<failString<<std::endl;
+  std::cerr<<"Test failed in "<<failString<<std::endl;
   exit(-1);
 }
 
@@ -123,6 +123,11 @@ int otbObjectList(int argc, char * argv[])
 
       // Testing iterator
       ImageListType::Iterator iter = imageList->Begin();
+
+      if(!(iter!=imageList->End()))
+      {
+	fail("Iterator/Begin()!=Iterator/End()");
+      }
       unsigned int index = 0;
       while(iter!=imageList->End())
 	{
@@ -130,11 +135,11 @@ int otbObjectList(int argc, char * argv[])
 	    {
 	      fail("Iterator/1/iter.Get()");
 	    }
-	  else if(index==1&&(reader2->GetOutput()!=iter.Get()))
+	  if((index==1)&&(reader2->GetOutput()!=iter.Get()))
 	    {
 	      fail("Iterator/2/iter.Get()");
 	    }
-	  else
+	  if(index>1)
 	    {
 	      fail("Iterator/OutOfBound/iter.Get()");
 	    }
@@ -151,11 +156,11 @@ int otbObjectList(int argc, char * argv[])
 	    {
 	      fail("ConstIterator/1/iter.Get()");
 	    }
-	  else if(index==1&&(reader2->GetOutput()!=constIter.Get()))
+	  if((index==1)&&(reader2->GetOutput()!=constIter.Get()))
 	    {
 	      fail("ConstIterator/2/iter.Get()");
 	    }
-	  else
+	  if(index>1)
 	    {
 	      fail("ConstIterator/OutOfBound/iter.Get()");
 	    }
@@ -165,18 +170,23 @@ int otbObjectList(int argc, char * argv[])
 
       //Testing reverse iterator
       ImageListType::ReverseIterator revIter = imageList->ReverseBegin();
+      if(!(revIter!=imageList->ReverseEnd()))
+      {
+	fail("ReverseIterator/ReverseBegin()!=ReverseIterator/ReverseEnd()");
+      }
+
       index = 0;
       while(revIter!=imageList->ReverseEnd())
 	{
-	  if((index==0)&&(reader1->GetOutput()!=revIter.Get()))
+	  if((index==0)&&(reader2->GetOutput()!=revIter.Get()))
 	    {
 	      fail("ReverseIterator/1/iter.Get()");
 	    }
-	  else if(index==1&&(reader2->GetOutput()!=revIter.Get()))
+	  if((index==1)&&(reader1->GetOutput()!=revIter.Get()))
 	    {
 	      fail("ReverseIterator/2/iter.Get()");
 	    }
-	  else
+	  if(index>1)
 	    {
 	      fail("ReverseIterator/OutOfBound/iter.Get()");
 	    }
@@ -189,15 +199,15 @@ int otbObjectList(int argc, char * argv[])
       index = 0;
       while(revConstIter!=imageList->ReverseEnd())
 	{
-	  if((index==0)&&(reader1->GetOutput()!=revConstIter.Get()))
+	  if((index==0)&&(reader2->GetOutput()!=revConstIter.Get()))
 	    {
 	      fail("ReverseConstIterator/1/iter.Get()");
 	    }
-	  else if(index==1&&(reader2->GetOutput()!=revConstIter.Get()))
+	  if((index==1)&&(reader1->GetOutput()!=revConstIter.Get()))
 	    {
 	      fail("ReverseConstIterator/2/iter.Get()");
 	    }
-	  else
+	  if(index>1)
 	    {
 	      fail("ReverseConstIterator/OutOfBound/iter.Get()");
 	    }

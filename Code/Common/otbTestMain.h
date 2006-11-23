@@ -145,8 +145,8 @@ int main(int ac, char* av[] )
 	    baseLineFilenamesImage.push_back(av[4+2*i]);
 	    testFilenamesImage.push_back(av[5+2*i]);
 	  }
-	av+=2+2*nbComparisons;
-	ac-=2+2*nbComparisons;
+	av+=3+2*nbComparisons;
+	ac-=3+2*nbComparisons;
       }
     else if (strcmp(av[1], "--compare-binary") == 0)
       {

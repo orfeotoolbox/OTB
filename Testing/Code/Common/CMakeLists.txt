@@ -245,10 +245,10 @@ ADD_TEST(coTuImageListNew ${COMMON_TESTS}
 
 ADD_TEST(coTvImageList ${COMMON_TESTS}  
 	--compare-image ${TOL}   ${INPUTDATA}/amst.png
-				 ${TEMP}/coImageList_amst.png
+				 ${TEMP}/amst.png
          otbImageList 
 	 ${INPUTDATA}/amst.png
-         ${TEMP}/coImageList_amst.png
+         ${TEMP}/amst.png
 )
 
 # -------            otb::ImageListSource   -------------------------------------------
