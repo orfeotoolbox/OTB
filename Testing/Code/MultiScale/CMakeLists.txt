@@ -14,6 +14,28 @@ SET(TOL 0.0)
 
 SET(MULTISCALE_TESTS ${CXX_TEST_PATH}/otbMultiScaleTests)
 
+
+# -------            otb::MorphologicalPyramidAnalyseFilter   ----------
+
+ADD_TEST(msTuMorphoPyrResamplerNew ${MULTISCALE_TESTS} 
+         otbMorphologicalPyramidResamplerNew)
+
+ADD_TEST(msTvMorphoPyrResampler ${MULTISCALE_TESTS} 
+  --compare-n-images ${TOL} 2
+		   ${BASELINE}/msPyrResampler_IKO_LesHalles_256_2.tif
+		   ${TEMP}/msPyrResampler_IKO_LesHalles_256_2.tif
+		   ${BASELINE}/msPyrResampler_IKO_LesHalles_full.tif
+		   ${TEMP}/msPyrResampler_IKO_LesHalles_full.tif
+         otbMorphologicalPyramidResampler
+	 ${INPUTDATA}/ROI_IKO_PAN_LesHalles.tif
+	 ${TEMP}/msPyrResampler_IKO_LesHalles_256_2.tif
+	 ${TEMP}/msPyrResampler_IKO_LesHalles_full.tif
+	 256
+	 256
+#	 2.0
+#	 2.0
+	 )
+
 # -------            otb::MorphologicalPyramidAnalyseFilter   ----------
 
 ADD_TEST(msTuMorphoPyrAnalyseFilterNew ${MULTISCALE_TESTS} 
@@ -38,10 +60,29 @@ ADD_TEST(msTvMorphoPyrAnalyseFilter ${MULTISCALE_TESTS}
 	 2
 	 2.0)
 
+# -------            otb::MorphologicalPyramidAnalyseFilter   ----------
+
+ADD_TEST(msTuMorphoPyrSynthesisFilterNew ${MULTISCALE_TESTS} 
+         otbMorphologicalPyramidSynthesisFilterNew)
+
+ADD_TEST(msTvMorphoPyrSynthesisFilter ${MULTISCALE_TESTS} 
+   --compare-image ${TOL} 
+ 		   ${INPUTDATA}/ROI_IKO_PAN_LesHalles.tif
+ 		   ${TEMP}/msPyrSynth_IKO_Halles_4_2.tif
+         otbMorphologicalPyramidSynthesisFilter
+	 ${INPUTDATA}/ROI_IKO_PAN_LesHalles.tif
+	 ${TEMP}/msPyrSynth_IKO_Halles_4_2.tif
+	 4
+	 2.0)
+
 # -------       Fichiers sources CXX -----------------------------------
 SET(BasicMultiScale_SRCS
+otbMorphologicalPyramidResamplerNew.cxx
+otbMorphologicalPyramidResampler.cxx
 otbMorphologicalPyramidAnalyseFilterNew.cxx
 otbMorphologicalPyramidAnalyseFilter.cxx
+otbMorphologicalPyramidSynthesisFilterNew.cxx
+otbMorphologicalPyramidSynthesisFilter.cxx
 )
 
 

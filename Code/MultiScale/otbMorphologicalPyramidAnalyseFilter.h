@@ -79,8 +79,7 @@ public:
   typedef typename InputImageType::ValueType           ValueType;  
   typedef typename InputImageType::PixelType           PixelType;
   typedef typename InputImageType::SpacingType         SpacingType;
-  /** Size and spacing vector typedefs */
-  typedef std::vector<SpacingType>                     SpacingVectorType;
+  /** Size vector typedefs */
   typedef std::vector<SizeType>                        SizeVectorType;
   /** Accessors */
   itkSetMacro(NumberOfIterations, int);
@@ -92,10 +91,11 @@ public:
   itkGetConstReferenceMacro(InfFiltre,OutputImageListPointerType);
   itkGetConstReferenceMacro(SupDeci,OutputImageListPointerType);
   itkGetConstReferenceMacro(InfDeci,OutputImageListPointerType);
-  /* /\** Spacings list getters *\/ */
-/*   virtual  std::vector<typename TOutputImage::SpacingType> GetSpacing(); */
-/*   /\** Size list getters *\/ */
-/*   virtual  std::vector<typename TOutputImage::SizeType> GetSize(); */
+  /**
+   * Get the vector of sizes
+   * \return The vector of sizes
+   */
+  std::vector<typename TOutputImage::SizeType> GetSize();
 
 protected:  
   /** Constructor */
@@ -107,14 +107,6 @@ protected:
   virtual void GenerateData();
   /** Printself method */
   virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;  
-  /**
-   * Resample an image according to specific size and spacing.
-   * \param image The image to down sample.
-   * \param size The new size of the image.
-   * \param spacing The new spacing of the image.
-   * \return The resampled image.
-   */
-  InputImagePointerType ResampleImage(InputImagePointerType image, SizeType size, SpacingType spacing);
 
  private:
   /** Number of iterations of the algorithm */
@@ -129,8 +121,6 @@ protected:
   OutputImageListPointerType m_SupDeci;
   /** Inf details from subsampling operations */
   OutputImageListPointerType m_InfDeci;
-  /** Spacings vector */
-  SpacingVectorType m_Spacing;
   /** Sizes vector */
   SizeVectorType m_Size;
 };

@@ -19,15 +19,12 @@ PURPOSE.  See the above copyright notices for more information.
 #define _otbMorphologicalPyramidAnalyseFilter_txx
 
 #include "otbMorphologicalPyramidAnalyseFilter.h"
+
 #include "itkSubtractImageFilter.h"
 #include "itkMaximumImageFilter.h"
 #include  "itkImageDuplicator.h"
-#include "itkResampleImageFilter.h"
-#include "itkIdentityTransform.h"
-#include "itkLinearInterpolateImageFunction.h"
+#include "otbMorphologicalPyramidResampler.h"
 #include "itkProgressAccumulator.h"
-#include "itkImageRegionConstIterator.h"
-#include "itkImageRegionIterator.h"
 #include "otbMacro.h"
 
 namespace otb
@@ -53,120 +50,16 @@ namespace otb
   MorphologicalPyramidAnalyseFilter<TInputImage,TOutputImage,TMorphoFilter>
   ::~MorphologicalPyramidAnalyseFilter(){}
 
-  // template <class TInputImage, class TOutputImage, class TMorphoFilter>
-  // std::vector<typename TOutputImage::SpacingType>
-  // MorphologicalPyramidAnalyseFilter<TInputImage,TOutputImage,TMorphoFilter>
-  // ::GetSpacing(void)
-  // {
-  //   return m_Spacing;
-  // }
-  // template <class TInputImage, class TOutputImage, class TMorphoFilter>
-  // std::vector<typename TOutputImage::SizeType>
-  // MorphologicalPyramidAnalyseFilter<TInputImage,TOutputImage,TMorphoFilter>
-  // ::GetSize(void)
-  // {
-  //   return m_Size;
-  // }
-
   /**
-   * Resample an image according to specific size and spacing.
-   * \param image The image to down sample.
-   * \param size The new size of the image.
-   * \param spacing The new spacing of the image.
-   * \return The resampled image.
+   * Get the vector of sizes
+   * \return The vector of sizes
    */
   template <class TInputImage, class TOutputImage, class TMorphoFilter>
-  typename MorphologicalPyramidAnalyseFilter<TInputImage,TOutputImage,TMorphoFilter>
-  ::InputImagePointerType
+  std::vector<typename TOutputImage::SizeType>
   MorphologicalPyramidAnalyseFilter<TInputImage,TOutputImage,TMorphoFilter>
-  ::ResampleImage(InputImagePointerType image, SizeType size, SpacingType spacing)
+  ::GetSize(void)
   {
-    otbMsgDebugMacro(<<"Call to the ResampleImage method");
-    // local variables
-    unsigned int i;
-    InputImagePointerType result;
-  
-    // Filters definition
-    typedef itk::ResampleImageFilter<InputImageType,InputImageType> ResampleFilterType;
-    typedef itk::IdentityTransform<double,InputImageType::ImageDimension> TransformType;
-    typedef itk::LinearInterpolateImageFunction<InputImageType,double> InterpolatorType;
-    typedef itk::ImageRegionConstIterator<InputImageType> ConstIteratorType;
-    typedef itk::ImageRegionIterator<InputImageType> IteratorType;
-  
-    // Resampling Filter instantiation
-    typename ResampleFilterType::Pointer resampler = ResampleFilterType::New();
-    typename InterpolatorType::Pointer interpolator = InterpolatorType::New();
-    typename TransformType::Pointer transform = TransformType::New();
-    resampler->SetTransform(transform);
-    resampler->SetInterpolator(interpolator);
-
-    // Resampling filter set up
-    resampler->SetOutputSpacing(spacing);
-    resampler->SetOutputOrigin(image->GetOrigin());
-    resampler->SetSize(size);
-    //resampler->ReleaseDataFlagOn();
-
-    // Compute the resampled image
-    resampler->SetInput(image);
-    resampler->Update();
-    result = resampler->GetOutput();
-    otbMsgDebugMacro(<<"Resampling done.");
-
-    // // Spacing, scale and size variables declarations 
-//     // For special cases management
-//     typename InputImageType::RegionType::IndexType inputStart;
-//     typename InputImageType::RegionType::IndexType outputStart;
-//     typename InputImageType::RegionType::SizeType  inputSize;
-//     typename InputImageType::RegionType inputRegion;
-//     typename InputImageType::RegionType outputRegion;
-
-//     // Spmetimes the last line is black
-//     // In this case, we simply duplicate it
-//     if(spacing[0]*static_cast<float>(size[0]-1)>=(this->GetInput()->GetSpacing()[0]
-// 						      *static_cast<float>(image->GetLargestPossibleRegion().GetSize()[0]-1)))
-//       {
-// 	inputStart[0]=size[0]-2;
-// 	inputStart[1]=0;
-// 	outputStart[0]=size[0]-1;
-// 	outputStart[1]=0;
-// 	inputSize[0]=1;
-// 	inputSize[1]=size[1];
-// 	inputRegion.SetSize(inputSize);
-// 	outputRegion.SetSize(inputSize);
-// 	inputRegion.SetIndex(inputStart);
-// 	outputRegion.SetIndex(outputStart);
-// 	ConstIteratorType inputIt(result, inputRegion);
-// 	IteratorType outputIt(result,outputRegion);
-// 	// Last line duplication
-// 	for(inputIt.GoToBegin(), outputIt.GoToBegin(); !inputIt.IsAtEnd();++inputIt,++outputIt)
-// 	  {
-// 	    outputIt.Set(inputIt.Get());
-// 	  }
-//       }
-//     // Spmetimes the last column is black
-//     // In this case, we simply duplicate it
-//     if(spacing[1]*static_cast<float>(size[1]-1)>=(this->GetInput()->GetSpacing()[1]
-// 						      *static_cast<float>(image->GetLargestPossibleRegion().GetSize()[1]-1)))
-//       {
-// 	inputStart[1]=size[1]-2;
-// 	inputStart[0]=0;
-// 	outputStart[1]=size[1]-1;
-// 	outputStart[0]=0;
-// 	inputSize[1]=1;
-// 	inputSize[0]=size[0];
-// 	inputRegion.SetSize(inputSize);
-// 	outputRegion.SetSize(inputSize);
-// 	inputRegion.SetIndex(inputStart);
-// 	outputRegion.SetIndex(outputStart);
-// 	ConstIteratorType inputIt(result, inputRegion);
-// 	IteratorType outputIt(result,outputRegion);
-// 	// Last column duplication
-// 	for(inputIt.GoToBegin(), outputIt.GoToBegin(); !inputIt.IsAtEnd();++inputIt,++outputIt)
-// 	  {
-// 	    outputIt.Set(inputIt.Get());
-// 	  }
-//       }
-    return result;
+    return m_Size;
   }
   /**
    * Main computation method
@@ -182,7 +75,8 @@ namespace otb
     typedef itk::SubtractImageFilter<InputImageType,InputImageType,OutputImageType> SubtractFilterType;
     typedef itk::MaximumImageFilter<InputImageType,InputImageType,InputImageType> MaxFilterType;
     typedef itk::ImageDuplicator<InputImageType> DuplicatorType;
-  
+    typedef otb::morphologicalPyramid::Resampler<InputImageType,OutputImageType> ResamplerType;  
+
     // Input Image duplication to the currentImage Pointer 
     typename DuplicatorType::Pointer duplicator = DuplicatorType::New();
     duplicator->SetInputImage(this->GetInput());
@@ -202,9 +96,9 @@ namespace otb
     typename MorphoFilterType::Pointer morphoFilter;
     typename MaxFilterType::Pointer max;
     typename SubtractFilterType::Pointer subtract1,subtract2,subtract3,subtract4;
+    typename ResamplerType::Pointer resampler1, resampler2;
   
-    // Spacing and size vectors declarations
-    typename InputImageType::SpacingType spacing;
+    // Size vector declaration
     typename InputImageType::SizeType size;
 
     // local variables declarations and initialisations
@@ -249,33 +143,41 @@ namespace otb
 	m_InfFiltre->PushBack(subtract2->GetOutput());
 	otbMsgDebugMacro("MorphologicalPyramidAnalyseFilter: step "<<i<<" - Image appended to m_InfFiltre");
 	// New  Size/Spacing computation
-	spacing = morphoFilter->GetOutput()->GetSpacing();
 	size = morphoFilter->GetOutput()->GetLargestPossibleRegion().GetSize();
-	m_Spacing.push_back(spacing);
 	m_Size.push_back(size);
 	otbMsgDebugMacro(<<"New size and spacing :");
 	for (int j =0; j<InputImageType::ImageDimension;j++)
 	  {
 	    sizeTmp=size[j];
 	    size[j]=static_cast<int>(round(static_cast<double>(sizeTmp)/this->GetSubSampleScale()));
-	    spacing[j]=spacing[j]*((static_cast<double>(sizeTmp))/(static_cast<double>(size[j])));
-	    otbMsgDebugMacro(<<" "<<size[j]<<", "<<spacing[j]);
 	  }
+	otbMsgDebugMacro(<<"New size: "<<size);
     
 	// Image subsampling 
 	// Current image becomes the newly subsampled image
-	currentImage = ResampleImage(morphoFilter->GetOutput(),size,spacing);
+	resampler1 = ResamplerType::New();
+	resampler1->SetInput(morphoFilter->GetOutput());
+	resampler1->SetSize(size);
+	resampler1->Update();
+	currentImage=resampler1->GetOutput();
+	//currentImage = ResampleImage(morphoFilter->GetOutput(),size,spacing);
+	
 	otbMsgDebugMacro(<<"MorphologicalPyramidAnalyseFilter: DownSampling OK "<<currentImage->GetLargestPossibleRegion().GetSize());
 	// New current image is appeneded to the output list
 	OutputImageList->PushBack(currentImage);
 
 	// Image upsampling
-	upsampled = ResampleImage(currentImage,m_Size.back(),m_Spacing.back());
-	otbMsgDebugMacro(<<"MorphologicalPyramidAnalyseFilter: UpSampling OK "<<upsampled->GetLargestPossibleRegion().GetSize());
+	//upsampled = ResampleImage(currentImage,m_Size.back(),m_Spacing.back());
+	resampler2 = ResamplerType::New();
+	resampler2->SetInput(resampler1->GetOutput());
+	resampler2->SetSize(m_Size.back());
+	resampler2->Update();
+
+	otbMsgDebugMacro(<<"MorphologicalPyramidAnalyseFilter: UpSampling OK "<<resampler2->GetOutput()->GetLargestPossibleRegion().GetSize());
 	// Computation of the details lost in the subsampling operation
 	max=MaxFilterType::New();
 	max->SetInput1(morphoFilter->GetOutput());
-	max->SetInput2(upsampled);
+	max->SetInput2(resampler2->GetOutput());
 	max->Update();
 	otbMsgDebugMacro(<<"MorphologicalPyramidAnalyseFilter: Max OK "<<max->GetOutput()->GetLargestPossibleRegion().GetSize());
 
@@ -291,7 +193,7 @@ namespace otb
 	// SupDeci detail image computation
 	subtract3 = SubtractFilterType::New();
 	subtract3->SetInput1(max->GetOutput());
-	subtract3->SetInput2(upsampled);
+	subtract3->SetInput2(resampler2->GetOutput());
 	subtract3->Update();
 	otbMsgDebugMacro(<<"MorphologicalPyramidAnalyseFilter: subtract3 OK "<<subtract3->GetOutput()->GetLargestPossibleRegion().GetSize());
 	m_SupDeci->PushBack(subtract3->GetOutput());
