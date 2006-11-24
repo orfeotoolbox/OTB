@@ -53,7 +53,7 @@ namespace otb
 	  /** Creation through object factory macro */
 	  itkNewMacro(Self);
 	  /** Type macro */
-	  itkTypeMacro(MorphologicalPyramidResampler,ImageToImageFilter);
+	  itkTypeMacro(Resampler,ImageToImageFilter);
 	  /** Template parameters typedefs */
 	  typedef TInputImage                           InputImageType;
 	  typedef TOutputImage                          OutputImageType;

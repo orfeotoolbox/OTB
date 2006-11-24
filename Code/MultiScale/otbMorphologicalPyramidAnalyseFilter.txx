@@ -49,18 +49,6 @@ namespace otb
   template <class TInputImage, class TOutputImage, class TMorphoFilter>
   MorphologicalPyramidAnalyseFilter<TInputImage,TOutputImage,TMorphoFilter>
   ::~MorphologicalPyramidAnalyseFilter(){}
-
-  /**
-   * Get the vector of sizes
-   * \return The vector of sizes
-   */
-  template <class TInputImage, class TOutputImage, class TMorphoFilter>
-  std::vector<typename TOutputImage::SizeType>
-  MorphologicalPyramidAnalyseFilter<TInputImage,TOutputImage,TMorphoFilter>
-  ::GetSize(void)
-  {
-    return m_Size;
-  }
   /**
    * Main computation method
    */
@@ -98,7 +86,7 @@ namespace otb
     typename SubtractFilterType::Pointer subtract1,subtract2,subtract3,subtract4;
     typename ResamplerType::Pointer resampler1, resampler2;
   
-    // Size vector declaration
+    // Size declaration
     typename InputImageType::SizeType size;
 
     // local variables declarations and initialisations
@@ -142,10 +130,9 @@ namespace otb
 	otbMsgDebugMacro(<<"MorphologicalPyramidAnalyseFilter: subtract2 OK "<<subtract2->GetOutput()->GetLargestPossibleRegion().GetSize());
 	m_InfFiltre->PushBack(subtract2->GetOutput());
 	otbMsgDebugMacro("MorphologicalPyramidAnalyseFilter: step "<<i<<" - Image appended to m_InfFiltre");
-	// New  Size/Spacing computation
+	
+	// New  Size
 	size = morphoFilter->GetOutput()->GetLargestPossibleRegion().GetSize();
-	m_Size.push_back(size);
-	otbMsgDebugMacro(<<"New size and spacing :");
 	for (int j =0; j<InputImageType::ImageDimension;j++)
 	  {
 	    sizeTmp=size[j];
@@ -160,17 +147,15 @@ namespace otb
 	resampler1->SetSize(size);
 	resampler1->Update();
 	currentImage=resampler1->GetOutput();
-	//currentImage = ResampleImage(morphoFilter->GetOutput(),size,spacing);
 	
 	otbMsgDebugMacro(<<"MorphologicalPyramidAnalyseFilter: DownSampling OK "<<currentImage->GetLargestPossibleRegion().GetSize());
 	// New current image is appeneded to the output list
 	OutputImageList->PushBack(currentImage);
 
 	// Image upsampling
-	//upsampled = ResampleImage(currentImage,m_Size.back(),m_Spacing.back());
 	resampler2 = ResamplerType::New();
 	resampler2->SetInput(resampler1->GetOutput());
-	resampler2->SetSize(m_Size.back());
+	resampler2->SetSize(morphoFilter->GetOutput()->GetLargestPossibleRegion().GetSize());
 	resampler2->Update();
 
 	otbMsgDebugMacro(<<"MorphologicalPyramidAnalyseFilter: UpSampling OK "<<resampler2->GetOutput()->GetLargestPossibleRegion().GetSize());

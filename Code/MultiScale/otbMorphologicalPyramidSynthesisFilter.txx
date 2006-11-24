@@ -24,6 +24,7 @@ PURPOSE.  See the above copyright notices for more information.
 #include "itkSubtractImageFilter.h"
 #include "itkAddImageFilter.h"
 #include  "itkImageDuplicator.h"
+#include "otbMacro.h"
 
 namespace otb
 {
@@ -40,17 +41,6 @@ template <class TInputImage, class TOutputImage>
 MorphologicalPyramidSynthesisFilter<TInputImage,TOutputImage>
 ::~MorphologicalPyramidSynthesisFilter() {}
 /**
- * Get the vector of sizes
- * \param size The vector of sizes
- */
-template <class TInputImage, class TOutputImage>
-void
-MorphologicalPyramidSynthesisFilter<TInputImage,TOutputImage>
-::SetSize(std::vector<typename TOutputImage::SizeType> size)
-{
-  m_Size=size;
-}
-/**
  * Main computation method
  */
 template <class TInputImage, class TOutputImage>
@@ -58,6 +48,7 @@ void
 MorphologicalPyramidSynthesisFilter<TInputImage,TOutputImage>
 ::GenerateData(void)
 {
+  otbMsgDebugMacro(<<"MorphologicalPyramidSynthesisFilter : Entering main method.");
   // Input image pointer
   OutputImageListType *   OutputImageList   = this->GetOutput();
   // typedefs of the filters
@@ -79,13 +70,27 @@ MorphologicalPyramidSynthesisFilter<TInputImage,TOutputImage>
   typename SubtractFilterType::Pointer subtract1,subtract2;
   typename ResamplerType::Pointer resampler;
 
+
+  // Size vector computation
+  SizeVectorType size;
+
+  ImageListIterator it = m_SupFiltre->Begin();
+  
+  while(it!=m_SupFiltre->End())
+    {
+      size.push_back(it.Get()->GetLargestPossibleRegion().GetSize());
+      ++it;
+    }
+  otbMsgDebugMacro(<<"MorphologicalPyramidSynthesisFilter : Size vector computation OK");
+
   // Iterators definition  
   ImageListReverseIterator itInfFiltre = m_InfFiltre->ReverseBegin();
   ImageListReverseIterator itSupFiltre = m_SupFiltre->ReverseBegin();
   ImageListReverseIterator itInfDeci = m_InfDeci->ReverseBegin();
   ImageListReverseIterator itSupDeci = m_SupDeci->ReverseBegin();
-  SizeReverseIterator itSize = m_Size.rbegin();
+  SizeReverseIterator itSize = size.rbegin();
 
+  int i =1;
  //--------------------------------------------------------//
   //                      Main loop                         //
   //--------------------------------------------------------//
@@ -93,14 +98,16 @@ MorphologicalPyramidSynthesisFilter<TInputImage,TOutputImage>
 	&& itSupFiltre!=m_SupFiltre->ReverseEnd()
 	&& itInfDeci!=m_InfDeci->ReverseEnd()
 	&& itSupDeci!=m_SupDeci->ReverseEnd()
-	&& itSize!=m_Size.rend())
+	&& itSize!=size.rend())
     {
-    
+
+      ++i;
       // Upsampling current image
     resampler = ResamplerType::New();
     resampler->SetSize(*itSize);
     resampler->SetInput(currentImage);
-
+    resampler->Update();
+    otbMsgDebugMacro(<<"MorphologicalPyramidSynthesisFilter: step "<<i<<" Upsampling OK");
     // Adding *Sup details from current level
     add1= AddFilterType::New();
     add1->SetInput1(resampler->GetOutput());
@@ -117,6 +124,8 @@ MorphologicalPyramidSynthesisFilter<TInputImage,TOutputImage>
     subtract2->SetInput1(subtract1->GetOutput());
     subtract2->SetInput2(itInfDeci.Get());
     subtract2->Update();
+    otbMsgDebugMacro(<<"MorphologicalPyramidSynthesisFilter: step "<<i<<" Details addition OK");
+    
     
     // Updating current image
     currentImage=subtract2->GetOutput();
@@ -129,6 +138,7 @@ MorphologicalPyramidSynthesisFilter<TInputImage,TOutputImage>
     ++itInfDeci;
     ++itSize;
     } 
+  otbMsgDebugMacro(<<"MorphologicalPyramidSynthesisFilter: Exiting main method.");
   }
 /**
  * PrintSelf method

@@ -81,11 +81,6 @@ public:
   itkSetMacro(InfFiltre,OutputImageListPointerType);
   itkSetMacro(SupDeci,OutputImageListPointerType);
   itkSetMacro(InfDeci,OutputImageListPointerType);  
-  /**
-   * Set the vector of sizes
-   * \param size The vector of sizes
-   */
-  virtual  void  SetSize(std::vector<typename TOutputImage::SizeType> size);    
 
 protected:
   /** Constructor */
@@ -105,8 +100,6 @@ protected:
   OutputImageListPointerType m_SupDeci;
   /** Inf details from subsampling operations */
   OutputImageListPointerType m_InfDeci;
-  /** Sizes vector */
-  SizeVectorType m_Size;
 };
 }// End namespace otb
 

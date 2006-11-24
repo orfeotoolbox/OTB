@@ -22,7 +22,7 @@ PURPOSE.  See the above copyright notices for more information.
 
 namespace otb 
 {
-/** \class ImageListSource
+/** \class ImageToImageListFilter
  *  \brief Base class for all the filters taking an image input 
  *  to produce an image list.
  * \ingroup Images

@@ -261,6 +261,11 @@ ADD_TEST(coTuImageListSourceNew ${COMMON_TESTS}
 ADD_TEST(coTuImageToImageListFilterNew ${COMMON_TESTS} 
          otbImageToImageListFilterNew) 
 
+# -------            otb::ImageListToImageListFilter   -------------------------------------------
+
+ADD_TEST(coTvImageListToImageListFilterNew ${COMMON_TESTS} 
+         otbImageListToImageListFilterNew) 
+
          
 # -------       Fichiers sources CXX -----------------------------------
 SET(BasicCommon_SRCS
@@ -292,6 +297,7 @@ otbImageListNew.cxx
 otbImageList.cxx
 otbImageListSourceNew.cxx
 otbImageToImageListFilterNew.cxx
+otbImageListToImageListFilterNew.cxx
 )
 
 

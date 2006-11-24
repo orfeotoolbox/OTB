@@ -30,8 +30,6 @@ int otbMorphologicalPyramidResampler(int argc, char * argv[])
       const char* outputFilename2 = argv[3];
       const unsigned int size_x = atoi(argv[4]);
       const unsigned int size_y = atoi(argv[5]);
-      // const float spacing_x = atof(argv[5]);
-//       const float spacing_y = atof(argv[6]);
 
       const unsigned int Dimension = 2;
       typedef unsigned char InputPixelType;
@@ -54,15 +52,10 @@ int otbMorphologicalPyramidResampler(int argc, char * argv[])
       size[0] = size_x;
       size[1] = size_y;
 
-      // InputImageType::SpacingType spacing;
-//       spacing[0] = spacing_x;
-//       spacing[1] = spacing_y;
-
       // Instantiation
       ResamplerType::Pointer resampler = ResamplerType::New();
       resampler->SetInput(reader->GetOutput());
       resampler->SetSize(size);
-      // resampler->SetSpacing(spacing);
 
       // File writing
       WriterType::Pointer writer = WriterType::New();

@@ -79,8 +79,6 @@ public:
   typedef typename InputImageType::ValueType           ValueType;  
   typedef typename InputImageType::PixelType           PixelType;
   typedef typename InputImageType::SpacingType         SpacingType;
-  /** Size vector typedefs */
-  typedef std::vector<SizeType>                        SizeVectorType;
   /** Accessors */
   itkSetMacro(NumberOfIterations, int);
   itkSetMacro(SubSampleScale, float);
@@ -91,11 +89,6 @@ public:
   itkGetConstReferenceMacro(InfFiltre,OutputImageListPointerType);
   itkGetConstReferenceMacro(SupDeci,OutputImageListPointerType);
   itkGetConstReferenceMacro(InfDeci,OutputImageListPointerType);
-  /**
-   * Get the vector of sizes
-   * \return The vector of sizes
-   */
-  std::vector<typename TOutputImage::SizeType> GetSize();
 
 protected:  
   /** Constructor */
@@ -121,8 +114,6 @@ protected:
   OutputImageListPointerType m_SupDeci;
   /** Inf details from subsampling operations */
   OutputImageListPointerType m_InfDeci;
-  /** Sizes vector */
-  SizeVectorType m_Size;
 };
 }// End namespace otb
 

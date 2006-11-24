@@ -18,21 +18,23 @@ PURPOSE.  See the above copyright notices for more information.
 #include "itkExceptionObject.h"
 
 #include "otbMorphologicalPyramidAnalyseFilter.h"
-#include "otbMorphologicalPyramidSynthesisFilter.h"
+#include "otbMorphologicalPyramidMRToMSConverter.h"
 #include "otbOpeningClosingMorphologicalFilter.h"
 #include "itkBinaryBallStructuringElement.h"
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
 #include "otbImage.h"
 
-int otbMorphologicalPyramidSynthesisFilter(int argc, char * argv[])
+int otbMorphologicalPyramidMRToMSConverter(int argc, char * argv[])
 {
   try
     {
       const char * inputFilename = argv[1];
-      const char * outputFilename = argv[2];
-      const unsigned int numberOfIterations = atoi(argv[3]);
-      const float subSampleScale = atof(argv[4]);
+      const char * outputFilename1 = argv[2];
+      const char * outputFilename2 = argv[3];
+      const char * outputFilename3 = argv[4];
+      const unsigned int numberOfIterations = atoi(argv[5]);
+      const float subSampleScale = atof(argv[6]);
       
       const unsigned int Dimension = 2;
       typedef unsigned char InputPixelType;
@@ -47,10 +49,10 @@ int otbMorphologicalPyramidSynthesisFilter(int argc, char * argv[])
       typedef itk::BinaryBallStructuringElement<InputPixelType,Dimension> StructuringElementType;
       typedef otb::OpeningClosingMorphologicalFilter<InputImageType,InputImageType,StructuringElementType>
 	OpeningClosingFilterType;
-      typedef otb::MorphologicalPyramidAnalyseFilter<InputImageType,OutputImageType,OpeningClosingFilterType>
+      typedef otb::MorphologicalPyramidAnalyseFilter<InputImageType,InputImageType,OpeningClosingFilterType>
 	PyramidAnalyseFilterType;
-      typedef otb::MorphologicalPyramidSynthesisFilter<InputImageType,OutputImageType>
-	PyramidSynthesisFilterType;
+      typedef otb::morphologicalPyramid::MRToMSConverter<InputImageType,OutputImageType> MRToMSConverterType;
+
 
       // Reading input image
       ReaderType::Pointer reader = ReaderType::New();
@@ -63,20 +65,31 @@ int otbMorphologicalPyramidSynthesisFilter(int argc, char * argv[])
       pyramidAnalyse->SetInput(reader->GetOutput());
       pyramidAnalyse->Update();
 
-      // Synthesis
-      PyramidSynthesisFilterType::Pointer pyramidSynthesis = PyramidSynthesisFilterType::New();
-      pyramidSynthesis->SetInput(pyramidAnalyse->GetOutput()->Back());
-      pyramidSynthesis->SetSupFiltre(pyramidAnalyse->GetSupFiltre());
-      pyramidSynthesis->SetSupDeci(pyramidAnalyse->GetSupDeci());
-      pyramidSynthesis->SetInfFiltre(pyramidAnalyse->GetInfFiltre());
-      pyramidSynthesis->SetInfDeci(pyramidAnalyse->GetInfDeci());
-      pyramidSynthesis->Update();
+      // From multi resolution to multi scale
+      MRToMSConverterType::Pointer mrtoms = MRToMSConverterType::New();
+      mrtoms->SetInput(pyramidAnalyse->GetOutput());
+      mrtoms->SetNumberOfIterations(numberOfIterations);
+      mrtoms->SetSupFiltre(pyramidAnalyse->GetSupFiltre());
+      mrtoms->SetSupDeci(pyramidAnalyse->GetSupDeci());
+      mrtoms->SetInfFiltre(pyramidAnalyse->GetInfFiltre());
+      mrtoms->SetInfDeci(pyramidAnalyse->GetInfDeci());
+      mrtoms->Update();
 
-      // Writing the output image
-      WriterType::Pointer writer = WriterType::New();
-      writer->SetFileName(outputFilename);
-      writer->SetInput(pyramidSynthesis->GetOutput()->Back());
-      writer->Update();
+      // Writing the output images
+      WriterType::Pointer writer1 = WriterType::New();
+      writer1->SetFileName(outputFilename1);
+      writer1->SetInput(mrtoms->GetSupFiltreFullResolution()->Back());
+      writer1->Update();
+
+      WriterType::Pointer writer2 = WriterType::New();
+      writer2->SetFileName(outputFilename2);
+      writer2->SetInput(mrtoms->GetInfFiltreFullResolution()->Back());
+      writer2->Update();
+
+      WriterType::Pointer writer3 = WriterType::New();
+      writer3->SetFileName(outputFilename3);
+      writer3->SetInput(mrtoms->GetOutput()->Back());
+      writer3->Update();
       
     }
       catch( itk::ExceptionObject & err ) 

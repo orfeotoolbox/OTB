@@ -187,8 +187,8 @@ otbMsgDebugMacro(<<"----------------     DEBUT Controle NON-REGRESION  ---------
 	  std::vector<char*>::iterator itBaselineFilenames = baseLineFilenamesImage.begin();
 	  std::vector<char*>::iterator itTestFilenames = testFilenamesImage.begin();
 	  // For each couple of baseline and test file, do the comparison
-	  for(;(itBaselineFilenames != baseLineFilenamesImage.begin())
-		&&(itTestFilenames != testFilenamesImage.begin());
+	  for(;(itBaselineFilenames != baseLineFilenamesImage.end())
+		&&(itTestFilenames != testFilenamesImage.end());
 	      ++itBaselineFilenames,++itTestFilenames)
 	    {
 	      char * baselineFilenameImage = (*itBaselineFilenames);

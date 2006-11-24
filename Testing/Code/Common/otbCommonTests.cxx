@@ -54,4 +54,5 @@ REGISTER_TEST(otbImageListNew);
 REGISTER_TEST(otbImageList);
 REGISTER_TEST(otbImageListSourceNew);
 REGISTER_TEST(otbImageToImageListFilterNew);
+REGISTER_TEST(otbImageListToImageListFilterNew);
 }

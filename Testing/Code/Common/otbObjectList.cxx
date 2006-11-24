@@ -222,6 +222,25 @@ int otbObjectList(int argc, char * argv[])
 	{
 	  fail("Clear()");
 	}
+
+
+      // Testing erase with iterators
+      imageList->PushBack(reader1->GetOutput());
+      imageList->PushBack(reader2->GetOutput());
+      imageList->PushBack(reader3->GetOutput());
+
+      ImageListType::Iterator begin = imageList->Begin()+1;
+      ImageListType::Iterator end = imageList->End();
+      imageList->Erase(begin,end);
+
+      if(imageList->Size()!=1)
+	{
+	  fail("Erase(Iterator,Iterator)/Size()");
+	}
+      if(imageList->Back()!=reader1->GetOutput())
+	{
+	  fail("Erase(Iterator,Iterator)/Back()");
+	}
     }
 
   catch( itk::ExceptionObject & err ) 

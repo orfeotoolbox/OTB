@@ -197,6 +197,28 @@ namespace otb
   {
     --m_Iter;
     return *this;
+  } 
+  /**
+   * Add
+   */
+  template <class TObject>
+  typename ObjectList<TObject>::Iterator& 
+  ObjectList<TObject>::Iterator
+  ::operator+(int i)
+  {
+    m_Iter=m_Iter+i;
+    return *this;
+  }
+  /**
+   * Remove
+   */
+  template <class TObject>
+  typename ObjectList<TObject>::Iterator& 
+  ObjectList<TObject>::Iterator
+  ::operator-(int i)
+  {
+    m_Iter=m_Iter-i;
+    return *this;
   }
   /**
    * Difference comparison operator.
@@ -629,6 +651,18 @@ namespace otb
     ReverseConstIterator iter(m_InternalContainer.rend());
     return iter;
   } 
+  /**
+   * Erase elements from begin to last.
+   * \param begin Iterator pointing on first object to erase.
+   * \param end Iterator pointing past the last object to erase.
+   */
+  template <class TObject>
+  void
+  ObjectList<TObject>
+  ::Erase(Iterator begin, Iterator end)
+  {
+    m_InternalContainer.erase(begin.m_Iter,end.m_Iter);
+  }
   /**PrintSelf method */
   template <class TObject>
   void 

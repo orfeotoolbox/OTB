@@ -15,7 +15,7 @@ SET(TOL 0.0)
 SET(MULTISCALE_TESTS ${CXX_TEST_PATH}/otbMultiScaleTests)
 
 
-# -------            otb::MorphologicalPyramidAnalyseFilter   ----------
+# -------            otb::MorphologicalPyramidResampler  ----------
 
 ADD_TEST(msTuMorphoPyrResamplerNew ${MULTISCALE_TESTS} 
          otbMorphologicalPyramidResamplerNew)
@@ -32,8 +32,6 @@ ADD_TEST(msTvMorphoPyrResampler ${MULTISCALE_TESTS}
 	 ${TEMP}/msPyrResampler_IKO_LesHalles_full.tif
 	 256
 	 256
-#	 2.0
-#	 2.0
 	 )
 
 # -------            otb::MorphologicalPyramidAnalyseFilter   ----------
@@ -60,7 +58,7 @@ ADD_TEST(msTvMorphoPyrAnalyseFilter ${MULTISCALE_TESTS}
 	 2
 	 2.0)
 
-# -------            otb::MorphologicalPyramidAnalyseFilter   ----------
+# -------            otb::MorphologicalPyramidSynthesisFilter   ----------
 
 ADD_TEST(msTuMorphoPyrSynthesisFilterNew ${MULTISCALE_TESTS} 
          otbMorphologicalPyramidSynthesisFilterNew)
@@ -75,6 +73,28 @@ ADD_TEST(msTvMorphoPyrSynthesisFilter ${MULTISCALE_TESTS}
 	 4
 	 2.0)
 
+# -------            otb::MorphologicalPyramidMRToMSConverter   ----------
+
+ADD_TEST(msTuMorphoPyrMRToMSConverterNew ${MULTISCALE_TESTS} 
+         otbMorphologicalPyramidMRToMSConverterNew)
+
+ADD_TEST(msTvMorphoPyrMRToMSConverter ${MULTISCALE_TESTS} 
+   --compare-n-images ${TOL} 3
+ 		   ${BASELINE}/msPyrMRToMS_IKO_Halles_4_2_sf_full.tif
+ 		   ${TEMP}/msPyrMRToMS_IKO_Halles_4_2_sf_full.tif
+		   ${BASELINE}/msPyrMRToMS_IKO_Halles_4_2_if_full.tif
+ 		   ${TEMP}/msPyrMRToMS_IKO_Halles_4_2_if_full.tif
+		   ${BASELINE}/msPyrMRToMS_IKO_Halles_4_2_an_full.tif
+ 		   ${TEMP}/msPyrMRToMS_IKO_Halles_4_2_an_full.tif
+
+         otbMorphologicalPyramidMRToMSConverter
+	 ${INPUTDATA}/ROI_IKO_PAN_LesHalles.tif
+	 ${TEMP}/msPyrMRToMS_IKO_Halles_4_2_sf_full.tif
+	 ${TEMP}/msPyrMRToMS_IKO_Halles_4_2_if_full.tif
+	 ${TEMP}/msPyrMRToMS_IKO_Halles_4_2_an_full.tif
+	 4
+	 2.0)
+
 # -------       Fichiers sources CXX -----------------------------------
 SET(BasicMultiScale_SRCS
 otbMorphologicalPyramidResamplerNew.cxx
@@ -83,6 +103,8 @@ otbMorphologicalPyramidAnalyseFilterNew.cxx
 otbMorphologicalPyramidAnalyseFilter.cxx
 otbMorphologicalPyramidSynthesisFilterNew.cxx
 otbMorphologicalPyramidSynthesisFilter.cxx
+otbMorphologicalPyramidMRToMSConverterNew.cxx
+otbMorphologicalPyramidMRToMSConverter.cxx
 )
 
 

@@ -134,8 +134,8 @@ Resampler<TInputImage, TOuputImage>
   typename TransformType::ParametersType scales(2);
   typename InputImageType::SizeType inputSize = this->GetInput()->GetLargestPossibleRegion().GetSize();
   typename InputImageType::SpacingType inputSpacing = this->GetInput()->GetSpacing();
-  scales[0]=static_cast<double>(inputSize[0])/static_cast<double>(m_Size[0]);
-  scales[1]=static_cast<double>(inputSize[1])/static_cast<double>(m_Size[1]);
+  scales[0]=static_cast<double>(inputSize[0]-1)/static_cast<double>(m_Size[0]-1);
+  scales[1]=static_cast<double>(inputSize[1]-1)/static_cast<double>(m_Size[1]-1);
   transform->SetParameters(scales);
 
   // Resampling filter set up
@@ -156,64 +156,6 @@ Resampler<TInputImage, TOuputImage>
   resampler->Update();
   result = resampler->GetOutput();
 
- //  // variable definition for the following cases
-//   typename OutputImageType::RegionType::IndexType inputStart;
-//   typename OutputImageType::RegionType::IndexType outputStart;
-//   typename OutputImageType::RegionType::SizeType  size;
-//   typename OutputImageType::RegionType inputRegion;
-//   typename OutputImageType::RegionType outputRegion;
-
-//   // Gestion d'un cas particulier qui fait apparaître une bande
-//   // noire sur un des bords de l'image
-//   // Dans ce cas on duplique la dernière ligne de l'image
-//   if(m_Spacing[0]*static_cast<float>(m_Size[0]-1)>=(this->GetInput()->GetSpacing()[0]*static_cast<float>(this->GetInput()->GetLargestPossibleRegion().GetSize()[0]-1)))
-//       {
-//       inputStart[0]=m_Size[0]-2;
-//       inputStart[1]=0;
-//       outputStart[0]=m_Size[0]-1;
-//       outputStart[1]=0;
-//       size[0]=1;
-//       size[1]=m_Size[1];
-//       inputRegion.SetSize(size);
-//       outputRegion.SetSize(size);
-//       inputRegion.SetIndex(inputStart);
-//       outputRegion.SetIndex(outputStart);
-//       ConstIteratorType inputIt(result, inputRegion);
-//       IteratorType outputIt(result,outputRegion);
-//       // Duplication de la dernière ligne
-//       for(inputIt.GoToBegin(), outputIt.GoToBegin(); !inputIt.IsAtEnd();++inputIt,++outputIt)
-// 	{
-// 	outputIt.Set(inputIt.Get());
-// 	}      
-//       }
-//      // Gestion d'un cas particulier qui fait apparaître une bande
-//      // noire sur un des bords de l'image
-//      // Dans ce cas on duplique la dernière colonne de l'image
-//      if(m_Spacing[1]*static_cast<float>(m_Size[1]-1)>=(this->GetInput()->GetSpacing()[1]*static_cast<float>(this->GetInput()->GetLargestPossibleRegion().GetSize()[1]-1)))
-//       {
-//       typename OutputImageType::RegionType::IndexType inputStart;
-//       typename OutputImageType::RegionType::IndexType outputStart;
-//       typename OutputImageType::RegionType::SizeType  size;
-//       typename OutputImageType::RegionType inputRegion;
-//       typename OutputImageType::RegionType outputRegion;
-//       inputStart[1]=m_Size[1]-2;
-//       inputStart[0]=0;
-//       outputStart[1]=m_Size[1]-1;
-//       outputStart[0]=0;
-//       size[1]=1;
-//       size[0]=m_Size[0];
-//       inputRegion.SetSize(size);
-//       outputRegion.SetSize(size);
-//       inputRegion.SetIndex(inputStart);
-//       outputRegion.SetIndex(outputStart);
-//       ConstIteratorType inputIt(result, inputRegion);
-//       IteratorType outputIt(result,outputRegion);
-//       // Duplication de la dernière colonne
-//       for(inputIt.GoToBegin(), outputIt.GoToBegin(); !inputIt.IsAtEnd();++inputIt,++outputIt)
-// 	{
-// 	outputIt.Set(inputIt.Get());
-// 	}      
-//      }
   /** Output filter connexion */
   this->GraftOutput(result);
 }

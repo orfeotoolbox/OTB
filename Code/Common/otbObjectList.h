@@ -110,12 +110,15 @@ class ObjectList
   void Clear(void);
 
   class ConstIterator;
+  class ReverseConstIterator;
+
   /** \class Iterator
    *  \brief Iterator of the object list.
    */
   class Iterator
     {
     public:
+      friend class ObjectList;
       friend class ConstIterator;
       /** typedef of the internal iterator */
       typedef typename InternalContainerType::iterator InternalIteratorType;
@@ -137,6 +140,15 @@ class ObjectList
        */
       Iterator& operator--();
       /**
+       * Add
+       */
+      Iterator& operator+(int i);
+
+      /**
+       * Remove
+       */
+      Iterator& operator-(int i);
+      /**
        * Difference comparison operator.
        */
       bool operator!=(const Iterator &it);
@@ -152,7 +164,6 @@ class ObjectList
        * Copy operator.
        */
       Iterator(const Iterator &it);
-
     private:
       // Internal iterator.
       InternalIteratorType m_Iter;
@@ -211,8 +222,6 @@ class ObjectList
       // Internal iterator.
       InternalConstIteratorType m_Iter;
     };
-
-  class ReverseConstIterator;
   /** \class ReverseIterator
    *  \brief ReverseIterator of the object list.
    */
@@ -354,7 +363,13 @@ class ObjectList
    * \return The iterator.
    */
   ReverseConstIterator ReverseEnd(void) const;
- 
+  /**
+   * Erase elements from begin to last.
+   * \param begin Iterator pointing on first object to erase.
+   * \param end Iterator pointing past the last object to erase.
+   */
+  void Erase(Iterator begin, Iterator end);
+
  protected:
   /** Constructor */
   ObjectList();
