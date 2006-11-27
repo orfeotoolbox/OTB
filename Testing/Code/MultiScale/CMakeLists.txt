@@ -95,6 +95,39 @@ ADD_TEST(msTvMorphoPyrMRToMSConverter ${MULTISCALE_TESTS}
 	 4
 	 2.0)
 
+# -------            otb::MorphologicalPyramidSegmenter   ----------
+
+ADD_TEST(msTuMorphoPyrSegmenterNew ${MULTISCALE_TESTS} 
+         otbMorphologicalPyramidSegmenterNew)
+
+ADD_TEST(msTvMorphoPyrSegmentBright ${MULTISCALE_TESTS} 
+   --compare-image ${TOL} 
+ 		   ${BASELINE}/msPyrSegmenter_IKO_Halles_4_2_sf.tif
+ 		   ${TEMP}/msPyrSegmenter_IKO_Halles_4_2_sf.tif
+         otbMorphologicalPyramidSegmenter
+	 ${TEMP}/msPyrMRToMS_IKO_Halles_4_2_sf_full.tif
+	 ${INPUTDATA}/ROI_IKO_PAN_LesHalles.tif
+	 ${TEMP}/msPyrSegmenter_IKO_Halles_4_2_sf.tif
+	 0
+	 0.9
+	 0.9
+	 10
+)
+
+ADD_TEST(msTvMorphoPyrSegmentDark ${MULTISCALE_TESTS} 
+   --compare-image ${TOL} 
+ 		   ${BASELINE}/msPyrSegmenter_IKO_Halles_4_2_if.tif
+ 		   ${TEMP}/msPyrSegmenter_IKO_Halles_4_2_if.tif
+         otbMorphologicalPyramidSegmenter
+	 ${TEMP}/msPyrMRToMS_IKO_Halles_4_2_if_full.tif
+	 ${INPUTDATA}/ROI_IKO_PAN_LesHalles.tif
+	 ${TEMP}/msPyrSegmenter_IKO_Halles_4_2_if.tif
+	 1
+	 0.9
+	 0.9
+	 10
+)
+
 # -------       Fichiers sources CXX -----------------------------------
 SET(BasicMultiScale_SRCS
 otbMorphologicalPyramidResamplerNew.cxx
@@ -105,6 +138,8 @@ otbMorphologicalPyramidSynthesisFilterNew.cxx
 otbMorphologicalPyramidSynthesisFilter.cxx
 otbMorphologicalPyramidMRToMSConverterNew.cxx
 otbMorphologicalPyramidMRToMSConverter.cxx
+otbMorphologicalPyramidSegmenterNew.cxx
+otbMorphologicalPyramidSegmenter.cxx
 )
 
 
