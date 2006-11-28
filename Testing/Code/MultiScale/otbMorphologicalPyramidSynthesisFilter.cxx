@@ -64,7 +64,7 @@ int otbMorphologicalPyramidSynthesisFilter(int argc, char * argv[])
       pyramidAnalyse->Update();
 
       // Synthesis
-      PyramidSynthesisFilterType::Pointer pyramidSynthesis = PyramidSynthesisFilterType::New();
+      PyramidSynthesisFilterType::Pointer pyramidSynthesis = PyramidSynthesisFilterType::New();      
       pyramidSynthesis->SetInput(pyramidAnalyse->GetOutput()->Back());
       pyramidSynthesis->SetSupFiltre(pyramidAnalyse->GetSupFiltre());
       pyramidSynthesis->SetSupDeci(pyramidAnalyse->GetSupDeci());

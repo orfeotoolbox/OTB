@@ -203,13 +203,20 @@ Segmenter<TInputImage, TOuputImage>
 
   // Filter instantiation
   typename HistGeneratorType::Pointer histogram = HistGeneratorType::New();
-  // Thresholds are computed from the quantile
-  histogram->SetInput(rescaler->GetOutput());
+  // Seeds Threshold is computed from the quantile
+  histogram->SetInput(details);
   histogram->SetNumberOfBins(255);
   histogram->SetMarginalScale(10.0);
   histogram->Compute();
   InputPixelType  pointSetThreshold = 
     static_cast<InputPixelType>(histogram->GetOutput()->Quantile(0,m_SeedsQuantile));
+
+  // Segmentation Threshold is computed from the quantile
+  histogram = HistGeneratorType::New();
+  histogram->SetInput(rescaler->GetOutput());
+  histogram->SetNumberOfBins(255);
+  histogram->SetMarginalScale(10.0);
+  histogram->Compute();
   InputPixelType  connectedThresholdValue = 
     static_cast<InputPixelType>(histogram->GetOutput()->Quantile(0,m_ConnectedThresholdQuantile));
 

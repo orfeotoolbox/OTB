@@ -1,20 +1,20 @@
 /*=========================================================================
 
-Program:   ORFEO Toolbox
-Language:  C++
-Date:      $Date$
-Version:   $Revision$
+ Program:   ORFEO Toolbox
+ Language:  C++
+ Date:      $Date$
+ Version:   $Revision$
 
 
-Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
-See OTBCopyright.txt for details.
+ Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
+ See OTBCopyright.txt for details.
 
 
-This software is distributed WITHOUT ANY WARRANTY; without even 
-the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
-PURPOSE.  See the above copyright notices for more information.
+ This software is distributed WITHOUT ANY WARRANTY; without even 
+ the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+ PURPOSE.  See the above copyright notices for more information.
 
-=========================================================================*/
+ =========================================================================*/
 #ifndef _otbMorphologicalPyramidMRToMSConverter_h
 #define _otbMorphologicalPyramidMRToMSConverter_h
 
@@ -52,25 +52,96 @@ namespace otb
 	  /** Input parameters typedefs */
 	  typedef TInputImage                                     InputImageType;
 	  typedef typename Superclass::InputImagePointer          InputImagePointer;
+	  typedef typename Superclass::InputImageListType         InputImageListType;
 	  typedef typename Superclass::InputImageListPointerType  InputImageListPointerType;
+	  typedef typename InputImageListType::Iterator           InputImageListIteratorType;
 	  /** Output parameters typedefs */
 	  typedef TOutputImage                                    OutputImageType;
 	  typedef typename Superclass::OutputImagePointer         OutputImagePointerType;
 	  typedef typename Superclass::OutputImageListType        OutputImageListType;
 	  typedef typename Superclass::OutputImageListPointerType OutputImageListPointerType;
-	  /** Input image lists setters */
-	  itkSetMacro(SupFiltre,InputImageListPointerType);
-	  itkSetMacro(InfFiltre,InputImageListPointerType);
-	  itkSetMacro(SupDeci,InputImageListPointerType);
-	  itkSetMacro(InfDeci,InputImageListPointerType);
+	  
+	  /**
+	   * Set The input list.
+	   * \param imageList The analysed image at each level of the pyramid.
+	   */
+	    void SetInput(InputImageListType * imageList);
+	  /**
+	   * Set The SupFiltre details
+	   * \param imageList The brighter details extracted from the filtering operation.
+	   */
+	  void SetSupFiltre(InputImageListType * imageList);
+	  /**
+	   * Set The InfFiltre details
+	   * \param imageList The darker details extracted from the filtering operation.
+	   */
+	  void SetInfFiltre(InputImageListType * imageList);
+	  /**
+	   * Set The SupDeci details
+	   * \param imageList The brighter details extracted from the filtering operation.
+	   */
+	  void SetSupDeci(InputImageListType * imageList);
+	  /**
+	   * Set The InfDeci details
+	   * \param imageList The darker details extracted from the filtering operation.
+	   */
+	  void SetInfDeci(InputImageListType * imageList);
+	  /**
+	   * Get the input list.
+	   * \return The list of the analysed image at each pyramid level.
+	   */
+	  InputImageListType* GetInput(void); 
+	  /**
+	   * Get The SupFiltre details
+	   * \return The brighter details extracted from the filtering operation.
+	   */
+	  InputImageListType* GetSupFiltre(void);   
+	  /**
+	   * Get The InfFiltre details
+	   * \return The darker details extracted from the filtering operation.
+	   */
+	  InputImageListType* GetInfFiltre(void);
+	  /**
+	   * Get The SupDeci details
+	   * \return The brighter details extracted from the resampling operation.
+	   */
+	  InputImageListType* GetSupDeci(void);
+	  /**
+	   * Get The InfDeci details
+	   * \return The brighter details extracted from the resampling operation.
+	   */
+	  InputImageListType* GetInfDeci(void);
+	  /**
+	   * Get The inputList at full resolution.
+	   * \return The analysed image at each pyramid level
+	   * resampled at full resolution.
+	   */
+	  OutputImageListType* GetOutput(void);
+	  /**
+	   * Get The SupFiltre details at full resolution.
+	   * \return The brighter details extracted from the filtering operation 
+	   * resampled at full resolution.
+	   */
+	  OutputImageListType * GetSupFiltreFullResolution(void);
+	  /**
+	   * Get The InfFiltre details at full resolution.
+	   * \return The darker details extracted from the filtering operation
+	   * resampled at full resolution.
+	   */
+	  OutputImageListType * GetInfFiltreFullResolution(void);
+	  /**
+	   * Get The SupDeci details at full resolution.
+	   * \return The brighter details extracted from the resampling operation 
+	   * resampled at full resolution.
+	   */
+	  OutputImageListType * GetSupDeciFullResolution(void);
+	  /**
+	   * Get The InfDeci details at full resolution.
+	   * \return The darker details extracted from the resampling operation
+	   * resampled at full resolution.
+	   */
+	  OutputImageListType * GetInfDeciFullResolution(void);
 
-	  /** Number of iterations accessors */
-	  itkSetMacro(NumberOfIterations, unsigned int);
-	  itkGetMacro(NumberOfIterations, unsigned int);
-
-	  /** Full resolution detail image lists getters */
-	  itkGetMacro(SupFiltreFullResolution,OutputImageListPointerType);
-	  itkGetMacro(InfFiltreFullResolution,OutputImageListPointerType);
 	protected:
 	  /** Constructor */
 	  MRToMSConverter();
@@ -85,18 +156,6 @@ namespace otb
 	  private :
 	    MRToMSConverter(const Self&); // purposely not implemented
 	  void operator=(const Self&); // purposely not implemented
-
-	  InputImageListPointerType  m_SupFiltre;
-	  InputImageListPointerType  m_InfFiltre;
-	  InputImageListPointerType  m_SupDeci;
-	  InputImageListPointerType  m_InfDeci;
-	  OutputImageListPointerType m_SupFiltreFullResolution;
-	  OutputImageListPointerType m_InfFiltreFullResolution;
-	  unsigned int m_NumberOfIterations;
-
-
-
-
 	};
     } // End namespace morphologicalPyramid
 }// End namespace otb

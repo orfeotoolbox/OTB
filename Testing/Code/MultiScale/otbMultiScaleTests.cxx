@@ -36,4 +36,6 @@ REGISTER_TEST(otbMorphologicalPyramidMRToMSConverterNew);
 REGISTER_TEST(otbMorphologicalPyramidMRToMSConverter);
 REGISTER_TEST(otbMorphologicalPyramidSegmenterNew);
 REGISTER_TEST(otbMorphologicalPyramidSegmenter);
+REGISTER_TEST(otbMorphologicalPyramidSegmentationFilterNew);
+REGISTER_TEST(otbMorphologicalPyramidSegmentationFilter);
 }

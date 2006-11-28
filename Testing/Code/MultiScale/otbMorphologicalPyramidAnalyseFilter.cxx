@@ -73,6 +73,7 @@ int otbMorphologicalPyramidAnalyseFilter(int argc, char * argv[])
       WriterType::Pointer writer =  WriterType::New();
 
       int i=1;
+      std::stringstream oss;
       // Writing the results images
       std::cout<<(itAnalyse!=(pyramid->GetOutput()->End()))<<std::endl;
       while((itAnalyse!=pyramid->GetOutput()->End())
@@ -82,7 +83,6 @@ int otbMorphologicalPyramidAnalyseFilter(int argc, char * argv[])
 	    &&(itSupDeci!=pyramid->GetSupDeci()->End())
 	    )
 	{
-	  std::stringstream oss;
 	  oss<<outputFilenamePrefix<<"_an_"<<i<<"."<<outputFilenameSuffix;
 	  writer->SetInput(itAnalyse.Get());
 	  writer->SetFileName(oss.str().c_str());	  

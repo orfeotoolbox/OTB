@@ -36,12 +36,19 @@ namespace otb
   MorphologicalPyramidAnalyseFilter<TInputImage,TOutputImage, TMorphoFilter>
   ::MorphologicalPyramidAnalyseFilter()
   {
+    this->SetNumberOfRequiredOutputs(2);
     m_SubSampleScale = 2.0;
     m_NumberOfIterations = 4;
-    m_SupFiltre = OutputImageListType::New();
-    m_InfFiltre = OutputImageListType::New();
-    m_SupDeci =   OutputImageListType::New();
-    m_InfDeci =   OutputImageListType::New();
+    OutputImageListPointerType supFiltre = OutputImageListType::New();
+    this->SetNthOutput(0,supFiltre.GetPointer());
+    OutputImageListPointerType infFiltre = OutputImageListType::New();
+    this->SetNthOutput(1,infFiltre.GetPointer());
+    OutputImageListPointerType outputList = OutputImageListType::New();
+    this->SetNthOutput(2,outputList.GetPointer());
+    OutputImageListPointerType supDeci =   OutputImageListType::New();
+    this->SetNthOutput(3,supDeci.GetPointer());
+    OutputImageListPointerType infDeci =   OutputImageListType::New();
+    this->SetNthOutput(4,infDeci.GetPointer());
   }
   /**
    * Destructor
@@ -49,6 +56,66 @@ namespace otb
   template <class TInputImage, class TOutputImage, class TMorphoFilter>
   MorphologicalPyramidAnalyseFilter<TInputImage,TOutputImage,TMorphoFilter>
   ::~MorphologicalPyramidAnalyseFilter(){}
+  /**
+   * Get The Analyse image at each level of the pyramid.
+   * \return The analysed image at each level of the pyramid.
+   */
+  template <class TInputImage, class TOutputImage, class TMorphoFilter>
+  typename MorphologicalPyramidAnalyseFilter<TInputImage,TOutputImage,TMorphoFilter>
+  ::OutputImageListType*
+  MorphologicalPyramidAnalyseFilter<TInputImage,TOutputImage,TMorphoFilter>
+  ::GetOutput(void)
+  {
+    return dynamic_cast<OutputImageListType*>(this->itk::ProcessObject::GetOutput(2));
+  }  
+  /**
+   * Get The SupFiltre details
+   * \return The brighter details extracted from the filtering operation.
+   */
+  template <class TInputImage, class TOutputImage, class TMorphoFilter>
+  typename MorphologicalPyramidAnalyseFilter<TInputImage,TOutputImage,TMorphoFilter>
+  ::OutputImageListType*
+  MorphologicalPyramidAnalyseFilter<TInputImage,TOutputImage,TMorphoFilter>
+  ::GetSupFiltre(void)
+  {
+    return dynamic_cast<OutputImageListType*>(this->itk::ProcessObject::GetOutput(0));
+  }
+  /**
+   * Get The InfFiltre details
+   * \return The darker details extracted from the filtering operation.
+   */
+  template <class TInputImage, class TOutputImage, class TMorphoFilter>
+  typename MorphologicalPyramidAnalyseFilter<TInputImage,TOutputImage,TMorphoFilter>
+  ::OutputImageListType*
+  MorphologicalPyramidAnalyseFilter<TInputImage,TOutputImage,TMorphoFilter>
+  ::GetInfFiltre(void)
+  {
+    return dynamic_cast<OutputImageListType*>(this->itk::ProcessObject::GetOutput(1));
+  }
+  /**
+   * Get The SupDeci details
+   * \return The brighter details extracted from the resampling operation.
+   */
+  template <class TInputImage, class TOutputImage, class TMorphoFilter>
+  typename MorphologicalPyramidAnalyseFilter<TInputImage,TOutputImage,TMorphoFilter>
+  ::OutputImageListType*
+  MorphologicalPyramidAnalyseFilter<TInputImage,TOutputImage,TMorphoFilter>
+  ::GetSupDeci(void)
+  {
+    return dynamic_cast<OutputImageListType*>(this->itk::ProcessObject::GetOutput(3));
+  }
+  /**
+   * Get The InfDeci details
+   * \return The brighter details extracted from the resampling operation.
+   */
+  template <class TInputImage, class TOutputImage, class TMorphoFilter>
+  typename MorphologicalPyramidAnalyseFilter<TInputImage,TOutputImage,TMorphoFilter>
+  ::OutputImageListType*
+  MorphologicalPyramidAnalyseFilter<TInputImage,TOutputImage,TMorphoFilter>
+  ::GetInfDeci(void)
+  {
+    return dynamic_cast<OutputImageListType*>(this->itk::ProcessObject::GetOutput(4));
+  }
   /**
    * Main computation method
    */
@@ -59,6 +126,13 @@ namespace otb
   { 
     // Input image pointer
     OutputImageListType *   OutputImageList   = this->GetOutput();
+
+    // Output images pointers
+    OutputImageListType * supFiltre = this->GetSupFiltre();
+    OutputImageListType * infFiltre = this->GetInfFiltre();
+    OutputImageListType * supDeci = this->GetSupDeci();
+    OutputImageListType * infDeci = this->GetInfDeci();
+
     // typedefs of the filters
     typedef itk::SubtractImageFilter<InputImageType,InputImageType,OutputImageType> SubtractFilterType;
     typedef itk::MaximumImageFilter<InputImageType,InputImageType,InputImageType> MaxFilterType;
@@ -119,8 +193,8 @@ namespace otb
 	subtract1->SetInput2(morphoFilter->GetOutput());
 	subtract1->Update();
 	otbMsgDebugMacro(<<"MorphologicalPyramidAnalyseFilter: subtract1 OK "<<subtract1->GetOutput()->GetLargestPossibleRegion().GetSize());
-	m_SupFiltre->PushBack(subtract1->GetOutput());
-	otbMsgDebugMacro("MorphologicalPyramidAnalyseFilter: step "<<i<<" - Image appended to m_SupFiltre");
+	supFiltre->PushBack(subtract1->GetOutput());
+	otbMsgDebugMacro("MorphologicalPyramidAnalyseFilter: step "<<i<<" - Image appended to SupFiltre");
 
 	// InfFiltre detail image computation
 	subtract2 = SubtractFilterType::New();
@@ -128,8 +202,8 @@ namespace otb
 	subtract2->SetInput2(currentImage);
 	subtract2->Update();
 	otbMsgDebugMacro(<<"MorphologicalPyramidAnalyseFilter: subtract2 OK "<<subtract2->GetOutput()->GetLargestPossibleRegion().GetSize());
-	m_InfFiltre->PushBack(subtract2->GetOutput());
-	otbMsgDebugMacro("MorphologicalPyramidAnalyseFilter: step "<<i<<" - Image appended to m_InfFiltre");
+	infFiltre->PushBack(subtract2->GetOutput());
+	otbMsgDebugMacro("MorphologicalPyramidAnalyseFilter: step "<<i<<" - Image appended to InfFiltre");
 	
 	// New  Size
 	size = morphoFilter->GetOutput()->GetLargestPossibleRegion().GetSize();
@@ -172,8 +246,8 @@ namespace otb
 	subtract4->SetInput2(morphoFilter->GetOutput());
 	subtract4->Update();
 	otbMsgDebugMacro(<<"MorphologicalPyramidAnalyseFilter: subtract4 OK "<<subtract4->GetOutput()->GetLargestPossibleRegion().GetSize());
-	m_InfDeci->PushBack(subtract4->GetOutput());
-	otbMsgDebugMacro("MorphologicalPyramidAnalyseFilter: step "<<i<<" - Image appended to m_InfDeci");
+	infDeci->PushBack(subtract4->GetOutput());
+	otbMsgDebugMacro("MorphologicalPyramidAnalyseFilter: step "<<i<<" - Image appended to InfDeci");
 
 	// SupDeci detail image computation
 	subtract3 = SubtractFilterType::New();
@@ -181,8 +255,8 @@ namespace otb
 	subtract3->SetInput2(resampler2->GetOutput());
 	subtract3->Update();
 	otbMsgDebugMacro(<<"MorphologicalPyramidAnalyseFilter: subtract3 OK "<<subtract3->GetOutput()->GetLargestPossibleRegion().GetSize());
-	m_SupDeci->PushBack(subtract3->GetOutput());
-	otbMsgDebugMacro("MorphologicalPyramidAnalyseFilter: step "<<i<<" - Image appended to m_SupDeci");
+	supDeci->PushBack(subtract3->GetOutput());
+	otbMsgDebugMacro("MorphologicalPyramidAnalyseFilter: step "<<i<<" - Image appended to SupDeci");
 
 	// Iteration ounter incrementation
 	i++;

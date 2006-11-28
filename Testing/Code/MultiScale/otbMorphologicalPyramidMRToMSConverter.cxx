@@ -63,12 +63,10 @@ int otbMorphologicalPyramidMRToMSConverter(int argc, char * argv[])
       pyramidAnalyse->SetNumberOfIterations(numberOfIterations);
       pyramidAnalyse->SetSubSampleScale(subSampleScale);
       pyramidAnalyse->SetInput(reader->GetOutput());
-      pyramidAnalyse->Update();
 
       // From multi resolution to multi scale
       MRToMSConverterType::Pointer mrtoms = MRToMSConverterType::New();
       mrtoms->SetInput(pyramidAnalyse->GetOutput());
-      mrtoms->SetNumberOfIterations(numberOfIterations);
       mrtoms->SetSupFiltre(pyramidAnalyse->GetSupFiltre());
       mrtoms->SetSupDeci(pyramidAnalyse->GetSupDeci());
       mrtoms->SetInfFiltre(pyramidAnalyse->GetInfFiltre());

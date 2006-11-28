@@ -84,12 +84,32 @@ public:
   itkSetMacro(SubSampleScale, float);
   itkGetConstReferenceMacro(NumberOfIterations, int);
   itkGetConstReferenceMacro(SubSampleScale, float);
-  /** Details images lists getters */
-  itkGetConstReferenceMacro(SupFiltre,OutputImageListPointerType);
-  itkGetConstReferenceMacro(InfFiltre,OutputImageListPointerType);
-  itkGetConstReferenceMacro(SupDeci,OutputImageListPointerType);
-  itkGetConstReferenceMacro(InfDeci,OutputImageListPointerType);
-
+  /**
+   * Get The Analyse image at each level of the pyramid.
+   * \return The analysed image at each level of the pyramid.
+   */
+  OutputImageListType* GetOutput(void);
+  /**
+   * Get The SupFiltre details
+   * \return The brighter details extracted from the filtering operation.
+   */
+  OutputImageListType * GetSupFiltre(void);
+  /**
+   * Get The InfFiltre details
+   * \return The darker details extracted from the filtering operation.
+   */
+  OutputImageListType * GetInfFiltre(void);
+  /**
+   * Get The SupDeci details
+   * \return The brighter details extracted from the resampling operation.
+   */
+  OutputImageListType * GetSupDeci(void);
+  /**
+   * Get The InfDeci details
+   * \return The brighter details extracted from the resampling operation.
+   */
+  OutputImageListType * GetInfDeci(void);
+  
 protected:  
   /** Constructor */
   MorphologicalPyramidAnalyseFilter();
@@ -106,14 +126,6 @@ protected:
   int m_NumberOfIterations;
   /** Subsampling scale used */
   float m_SubSampleScale;
-  /** Sup details from filtering operations */
-  OutputImageListPointerType m_SupFiltre;
-  /** Inf details from filtering operations */
-  OutputImageListPointerType m_InfFiltre;
-  /** Sup details from subsampling operations */
-  OutputImageListPointerType m_SupDeci;
-  /** Inf details from subsampling operations */
-  OutputImageListPointerType m_InfDeci;
 };
 }// End namespace otb
 

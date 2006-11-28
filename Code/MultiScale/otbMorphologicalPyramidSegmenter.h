@@ -98,13 +98,17 @@ namespace otb
 	  /** Min object size parameter accessor */
 	  itkSetMacro(MinimumObjectSize,unsigned long);
 	  itkGetMacro(MinimumObjectSize,unsigned long);
+	  /** Quantile for seeds extraction */
 	  itkSetMacro(SeedsQuantile,float);
 	  itkGetMacro(SeedsQuantile,float);
+	  /** Quantile for connected thresholding */
 	  itkSetMacro(ConnectedThresholdQuantile,float);
 	  itkGetMacro(ConnectedThresholdQuantile,float);
+	  /** Toogle the darker detail segmentation */
 	  itkSetMacro(SegmentDarkDetailsBool,bool);
 	  itkGetMacro(SegmentDarkDetailsBool,bool);
 	  itkBooleanMacro(SegmentDarkDetailsBool);
+	  /** Get the number of segmented objects */
 	  itkGetMacro(NumberOfObjects,OutputPixelType);
 
 	protected:

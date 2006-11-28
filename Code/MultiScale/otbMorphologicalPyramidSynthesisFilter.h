@@ -72,15 +72,52 @@ public:
   typedef typename InputImageType::ValueType                            ValueType;  
   typedef typename InputImageType::PixelType                            PixelType;
   typedef typename InputImageType::SpacingType                          SpacingType;
+  typedef otb::ImageList<InputImageType>                                InputImageListType;
+  typedef typename InputImageListType::Pointer                          InputImageListPointerType;
   /** Size vector typedefs */
   typedef std::vector<SizeType>                                         SizeVectorType;
   typedef typename SizeVectorType::iterator                             SizeIterator;
-  typedef typename SizeVectorType::reverse_iterator                     SizeReverseIterator;
-  /** Details images lists setters */
-  itkSetMacro(SupFiltre,OutputImageListPointerType);
-  itkSetMacro(InfFiltre,OutputImageListPointerType);
-  itkSetMacro(SupDeci,OutputImageListPointerType);
-  itkSetMacro(InfDeci,OutputImageListPointerType);  
+  typedef typename SizeVectorType::reverse_iterator                     SizeReverseIterator;  
+  /**
+   * Set The SupFiltre details
+   * \param imageList The brighter details extracted from the filtering operation.
+   */
+  void SetSupFiltre(InputImageListType * imageList);
+  /**
+   * Set The InfFiltre details
+   * \param imageList The darker details extracted from the filtering operation.
+   */
+  void SetInfFiltre(InputImageListType * imageList);
+  /**
+   * Set The SupDeci details
+   * \param imageList The brighter details extracted from the filtering operation.
+   */
+  void SetSupDeci(InputImageListType * imageList);
+  /**
+   * Set The InfDeci details
+   * \param imageList The darker details extracted from the filtering operation.
+   */
+  void SetInfDeci(InputImageListType * imageList);
+  /**
+   * Get The SupFiltre details
+   * \return The brighter details extracted from the filtering operation.
+   */
+  InputImageListType* GetSupFiltre(void);   
+  /**
+   * Get The InfFiltre details
+   * \return The darker details extracted from the filtering operation.
+   */
+  InputImageListType* GetInfFiltre(void);
+  /**
+   * Get The SupDeci details
+   * \return The brighter details extracted from the resampling operation.
+   */
+  InputImageListType* GetSupDeci(void);
+  /**
+   * Get The InfDeci details
+   * \return The brighter details extracted from the resampling operation.
+   */
+  InputImageListType* GetInfDeci(void);
 
 protected:
   /** Constructor */
@@ -92,14 +129,6 @@ protected:
   virtual void GenerateData();
   /** Printself method */
   virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;  
-   /** Sup details from filtering operations */
-  OutputImageListPointerType m_SupFiltre;
-  /** Inf details from filtering operations */
-  OutputImageListPointerType m_InfFiltre;
-  /** Sup details from subsampling operations */
-  OutputImageListPointerType m_SupDeci;
-  /** Inf details from subsampling operations */
-  OutputImageListPointerType m_InfDeci;
 };
 }// End namespace otb
 
