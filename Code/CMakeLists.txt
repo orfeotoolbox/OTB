@@ -1,5 +1,5 @@
 SUBDIRS(Common BasicFilters IO ChangeDetection FeatureExtraction Learning
-MultiScale) 
+MultiScale SpatialReasoning) 
 
 IF(OTB_USE_VISU)
         SUBDIRS(Visu)
