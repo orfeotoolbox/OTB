@@ -1,0 +1,89 @@
+/*=========================================================================
+
+  Program:   ORFEO Toolbox
+  Language:  C++
+  Date:      $Date$
+  Version:   $Revision$
+
+
+  Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
+  See OTBCopyright.txt for details.
+
+
+     This software is distributed WITHOUT ANY WARRANTY; without even 
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     PURPOSE.  See the above copyright notices for more information.
+
+=========================================================================*/
+#include "itkExceptionObject.h"
+#include "otbImageToImageRCC8Calculator.h"
+#include "otbImage.h"
+#include "otbImageList.h"
+#include "otbImageFileReader.h"
+
+int otbImageToImageRCC8Calculator(int argc, char* argv[])
+{
+try
+  {
+    const unsigned int Dimension = 2;
+
+    int    nbImages  = atoi(argv[1]);
+    char * outfile   = argv[2];
+
+    typedef unsigned char PixelType;
+    typedef otb::Image<PixelType,Dimension> ImageType;
+    typedef otb::ImageFileReader<ImageType> ReaderType;
+    typedef otb::ImageToImageRCC8Calculator<ImageType> CalculatorType;
+    typedef otb::ImageList<ImageType> ImageListType;
+    typedef ImageListType::Iterator IteratorType;
+    // reference image list
+    ImageListType::Pointer images = ImageListType::New();
+
+    // Reading input images
+    std::ofstream out;
+    out.open(outfile,std::ios::out);
+    out<<"Test results from otbImageToImageRCC8calculator test."<<std::endl;
+    for(int i=1;i<=nbImages;++i)
+      {
+	ReaderType::Pointer reader = ReaderType::New();
+	out<<argv[2+i]<<std::endl;
+	reader->SetFileName(argv[2+i]);
+	reader->Update();
+	images->PushBack(reader->GetOutput());
+      }
+    out<<std::endl;
+    // Declaration
+    CalculatorType::Pointer calc;
+    // Computing relations for each images couple
+    int i =1;
+    int j = 1;
+    for(IteratorType it1=images->Begin();it1!=images->End();++it1)
+      {
+	for(IteratorType it2=images->Begin();it2!=images->End();++it2)
+	  {
+	    std::cout<<"Test: computing relation "<<i<<","<<j<<std::endl;
+	    calc=CalculatorType::New();
+	    calc->SetInput1(it1.Get());
+	    calc->SetInput2(it2.Get());
+	    out<<calc->GetValue()<<"\t";
+	    j++;
+	  }
+	j=1;
+	i++;
+	out<<std::endl;
+      }
+    out.close();
+  }
+  catch( itk::ExceptionObject & err ) 
+    { 
+    std::cout << "Exception itk::ExceptionObject thrown !" << std::endl; 
+    std::cout << err << std::endl; 
+    return EXIT_FAILURE;
+    } 
+  catch( ... ) 
+    { 
+    std::cout << "Unknown exception thrown !" << std::endl; 
+    return EXIT_FAILURE;
+    } 
+  return EXIT_SUCCESS;
+}

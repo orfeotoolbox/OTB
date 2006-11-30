@@ -1,0 +1,547 @@
+/*=========================================================================
+
+  Program:   ORFEO Toolbox
+  Language:  C++
+  Date:      $Date$
+  Version:   $Revision$
+
+
+  Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
+  See OTBCopyright.txt for details.
+
+
+     This software is distributed WITHOUT ANY WARRANTY; without even 
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     PURPOSE.  See the above copyright notices for more information.
+
+=========================================================================*/
+#ifndef _otbImageToImageRCC8Calculator_txx
+#define _otbImageToImageRCC8Calculator_txx
+
+#include "otbImageToImageRCC8Calculator.h"
+#include "itkBinaryDilateImageFilter.h"
+#include "itkBinaryBallStructuringElement.h"
+#include "itkInvertIntensityImageFilter.h"
+#include "itkSubtractImageFilter.h"
+#include "itkAndImageFilter.h"
+#include "itkImageRegionIterator.h"
+#include "itkImageRegionConstIterator.h"
+#include "itkImageSliceConstIteratorWithIndex.h"
+#include "otbMacro.h"
+
+namespace otb
+{     
+  /**
+   * Constructor
+   */
+  template<class TInputImage>
+  ImageToImageRCC8Calculator<TInputImage>
+  ::ImageToImageRCC8Calculator()
+  {
+    m_Value        = OTB_RCC8_DC;
+    m_InsideValue  = static_cast<PixelType>(255);
+    m_OutsideValue = static_cast<PixelType>(0);
+    m_Level1APrioriKnowledge=false;
+    m_Level3APrioriKnowledge=false;
+    this->SetNumberOfRequiredInputs(2);
+//     this->SetNumberOfOutputs(0);
+//     this->SetNumberOfRequiredOutputs(0);
+  }
+  /**
+   * Set the first input image.
+   * \param image
+   */
+  template<class TInputImage>
+  void
+  ImageToImageRCC8Calculator<TInputImage>
+  ::SetInput1(ImageType * image)
+  {
+    this->SetNthInput(0,const_cast<ImageType *>(image));
+  }
+  /**
+   * Set the second input image.
+   * \param image
+   */
+  template<class TInputImage>
+  void
+  ImageToImageRCC8Calculator<TInputImage>
+  ::SetInput2(ImageType * image)
+  {
+    this->SetNthInput(1,const_cast<ImageType *>(image));
+  }
+  /**
+   * Get the first input image.
+   * \return The first input image.
+   */
+  template<class TInputImage>
+  typename ImageToImageRCC8Calculator<TInputImage>
+  ::ImageType*
+  ImageToImageRCC8Calculator<TInputImage>
+  ::GetInput1(void)
+  {
+    return dynamic_cast<ImageType*>(this->itk::ProcessObject::GetInput(0));
+  }
+  /**
+   * Get the second input image.
+   * \return The second input image.
+   */
+  template<class TInputImage>
+  typename ImageToImageRCC8Calculator<TInputImage>
+  ::ImageType*
+  ImageToImageRCC8Calculator<TInputImage>
+  ::GetInput2(void)
+  {
+    return dynamic_cast<ImageType*>(this->itk::ProcessObject::GetInput(1));
+  }
+  /**
+   * Get the RCC8 relation.
+   * \return The RCC8 relation value.
+   */
+  template <class TInputImage>
+  typename ImageToImageRCC8Calculator<TInputImage>
+  ::RCC8ValueType
+  ImageToImageRCC8Calculator<TInputImage>
+  ::GetValue(void)
+  {
+    this->Update();
+    return m_Value;
+  }
+  /**
+   * Compute the minimal image region required.
+   * \return The minimal region required.
+   */
+  template <class TInputImage>
+  typename ImageToImageRCC8Calculator<TInputImage>
+  ::RegionType 
+  ImageToImageRCC8Calculator<TInputImage>
+  ::ComputeMinimalRegion(void)
+  {
+    // Input images pointers
+    typename ImageType::Pointer image1 = this->GetInput1();
+    typename ImageType::Pointer image2 = this->GetInput2();
+    // Iterator definition
+    typedef itk::ImageSliceConstIteratorWithIndex<ImageType> SliceIteratorType;
+    // Indexes containing upper-left and lower-right corner
+    typename ImageType::IndexType min;
+    typename ImageType::IndexType max;
+    min[0]=0;
+    min[1]=0;
+    max[1]=0;
+    max[1]=0;
+    for ( unsigned int axis = 0; axis < ImageType::ImageDimension; axis++ )
+      { // Create the forward iterator to find lower bound
+	SliceIteratorType fit1(image1,image1->GetLargestPossibleRegion());
+	SliceIteratorType fit2(image2,image2->GetLargestPossibleRegion());
+	fit1.SetFirstDirection( !axis );
+	fit1.SetSecondDirection( axis );
+	fit1.GoToBegin();
+	fit2.SetFirstDirection( !axis );
+	fit2.SetSecondDirection( axis );
+	fit2.GoToBegin();
+	// Walk through the two images line by line
+	while (!fit1.IsAtEnd()&&!fit2.IsAtEnd())
+	  {
+	    while (!fit1.IsAtEndOfSlice()&&!fit2.IsAtEndOfSlice())
+	      {
+		while(!fit1.IsAtEndOfLine()&&!fit2.IsAtEndOfLine())
+		  {
+		    // If a common intersection is found
+		    if ((fit1.Get()==m_InsideValue)||(fit2.Get()==m_InsideValue))
+		      {
+			// then the lower bound is found
+			min[axis]=fit1.GetIndex()[axis];
+			fit1.GoToReverseBegin(); // skip to the end
+			fit2.GoToReverseBegin();
+			break;
+		      }
+		    ++fit1;
+		    ++fit2;
+		  }
+		fit1.NextLine();
+		fit2.NextLine();
+	      }
+	    fit1.NextSlice();
+	    fit2.NextSlice();
+	  }
+	// Create the reverse iterator to find upper bound
+	SliceIteratorType rit1(image1,image1->GetLargestPossibleRegion());
+	SliceIteratorType rit2(image2,image2->GetLargestPossibleRegion());
+	rit1.SetFirstDirection(!axis);
+	rit1.SetSecondDirection(axis);
+	rit1.GoToReverseBegin();
+	rit2.SetFirstDirection(!axis);
+	rit2.SetSecondDirection(axis);
+	rit2.GoToReverseBegin();
+	// Walk through the two images line by line
+	while (!rit1.IsAtReverseEnd()&&!rit2.IsAtReverseEnd())
+	  {
+	    while (!rit1.IsAtReverseEndOfSlice()&&!rit2.IsAtReverseEndOfSlice())
+	      {
+		while (!rit1.IsAtReverseEndOfLine()&&!rit2.IsAtReverseEndOfLine())
+		  {
+		    // If a common intersection is found
+		    if ((rit1.Get()==m_InsideValue)||(rit2.Get()==m_InsideValue))
+		      {
+			max[axis]=rit1.GetIndex()[axis];
+			rit1.GoToBegin();
+			rit2.GoToBegin(); //Skip to reverse end
+			break;
+		      }
+		    --rit1;
+		    --rit2;
+		  }
+		rit1.PreviousLine();
+		rit2.PreviousLine();
+	      }
+	    rit1.PreviousSlice();
+	    rit2.PreviousSlice();
+	  }
+      }
+    typename ImageType::RegionType region;
+    typename ImageType::SizeType size;
+    size[0]=max[0]-min[0];
+    size[1]=max[1]-min[1];
+    region.SetIndex(min);
+    region.SetSize(size);
+    otbMsgDebugMacro(<<"RCC8Calculator->ComputeMinimalRegion(): index: "<<min<<" size: "<<size);
+    return region;
+  }
+/**
+ * Compute a bool image of minimal ROI size, surrounded by a false padding, and corresponding
+ * to the input image.
+ * \param image The image to convert.
+ * \return The converted image
+ */
+ template<class TInputImage>
+typename ImageToImageRCC8Calculator<TInputImage>
+::BoolImagePointerType 
+ImageToImageRCC8Calculator<TInputImage>
+::ConvertToBoolImage(ImagePointerType image)
+{
+  typedef itk::ImageRegionConstIterator<ImageType> ConstIterator;
+  typedef itk::ImageRegionIterator<BoolImageType> Iterator;
+  typename BoolImageType::Pointer output = BoolImageType::New();
+  typename BoolImageType::SizeType boolImageSize;
+  boolImageSize[0]=m_MinimalROI.GetSize()[0]+2;
+  boolImageSize[1]=m_MinimalROI.GetSize()[1]+2;
+  typename BoolImageType::IndexType boolImageIndex;
+  boolImageIndex[0]=m_MinimalROI.GetIndex()[0]-1;
+  boolImageIndex[1]=m_MinimalROI.GetIndex()[1]-1;
+  typename BoolImageType::RegionType boolRegion;
+  boolRegion.SetSize(boolImageSize);
+  boolRegion.SetIndex(boolImageIndex);
+  output->SetRegions(boolRegion);
+  output->Allocate();
+  output->FillBuffer(false);
+  
+  ConstIterator inputIt(image,m_MinimalROI);
+  Iterator outputIt(output,m_MinimalROI);
+  inputIt.GoToBegin();
+  outputIt.GoToBegin();
+  while(!inputIt.IsAtEnd()&&!outputIt.IsAtEnd())
+    {
+      outputIt.Set(inputIt.Get()==m_InsideValue);
+      ++inputIt;
+      ++outputIt;
+    }
+  otbMsgDebugMacro(<<"RCC8Calculator->ConvertToBoolImage() size: "<<output->GetLargestPossibleRegion().GetSize());
+  return output;
+}
+  /**
+   * Compute the intersection between regions edges.
+   * \return true if the intersection is not empty.
+   */
+  template<class TInputImage>
+  bool 
+  ImageToImageRCC8Calculator<TInputImage>
+  ::ComputeEdgeEdgeBool(void)
+  {
+    
+  /// Definition of the Filters used to compute the boolean
+    typedef itk::SubtractImageFilter<BoolImageType,BoolImageType,BoolImageType> SubtractFilterType;
+    typedef itk::BinaryBallStructuringElement<bool,BoolImageType::ImageDimension> BinaryBallStructuringElementType;
+    typedef itk::BinaryDilateImageFilter<BoolImageType,BoolImageType,BinaryBallStructuringElementType> DilateFilterType;
+    typedef itk::AndImageFilter<BoolImageType,BoolImageType,BoolImageType> AndFilterType;
+    /// Declaration and instantiation
+    typename DilateFilterType::Pointer dilateFilter1 = DilateFilterType::New();
+    typename DilateFilterType::Pointer dilateFilter2 = DilateFilterType::New();
+    typename SubtractFilterType::Pointer subtractFilter1 = SubtractFilterType::New();
+    typename SubtractFilterType::Pointer subtractFilter2 = SubtractFilterType::New();
+    typename AndFilterType::Pointer andFilter = AndFilterType::New();
+    /// Configuration of the erosion filter
+    BinaryBallStructuringElementType structElement1,structElement2;
+    structElement1.SetRadius(1);
+    structElement2.SetRadius(1);
+    structElement1.CreateStructuringElement();
+    structElement2.CreateStructuringElement();
+    dilateFilter1->SetKernel(structElement1);
+    dilateFilter2->SetKernel(structElement2);
+    /// The erosion is performed to get the surounding edge of this
+    /// region by substraction to the original image 
+    dilateFilter1->SetInput(m_BoolImage1);
+    dilateFilter1->Update();
+    subtractFilter1->SetInput2(m_BoolImage1);
+    subtractFilter1->SetInput1(dilateFilter1->GetOutput());
+    subtractFilter1->Update();
+    /// The erosion is performed to get the surounding edge of this
+    /// region by substraction to the original image 
+    dilateFilter2->SetInput(m_BoolImage2);
+    dilateFilter2->Update();
+    subtractFilter2->SetInput2(m_BoolImage2);
+    subtractFilter2->SetInput1(dilateFilter2->GetOutput());
+    subtractFilter2->Update();
+    /// Now we can compute the intersection between the 2 edges
+    andFilter->SetInput1(subtractFilter1->GetOutput());
+    andFilter->SetInput2(subtractFilter2->GetOutput());
+    andFilter->Update();
+    /// test if the intersection is empty or not
+    return this->IsBoolImageNotEmpty(andFilter->GetOutput());
+  }
+  /**
+   * Compute the intersection between exterior of region1 and
+   * interior of region2.
+   * \return true if the intersection is not empty.
+   */
+  template<class TInputImage>
+  bool 
+  ImageToImageRCC8Calculator<TInputImage>
+  ::ComputeExterInterBool(void)
+  {
+  /// Definition of the filters used
+    typedef itk::InvertIntensityImageFilter<BoolImageType,BoolImageType> InvertFilterType;
+    typedef itk::AndImageFilter<BoolImageType,BoolImageType,BoolImageType> AndFilterType;
+    /// Declaration and instantiation
+    typename InvertFilterType::Pointer invert = InvertFilterType::New();
+    typename AndFilterType::Pointer andFilter = AndFilterType::New();
+    /// The exterior is the inverted input image
+    invert->SetInput(m_BoolImage1);
+    andFilter->SetInput1(m_BoolImage2);
+    andFilter->SetInput2(invert->GetOutput());
+    andFilter->Update();
+    /// test if the intersection is empty or not
+    return IsBoolImageNotEmpty(andFilter->GetOutput());
+  }
+  /**
+   * Compute the intersection between interior of region1 and
+   * exterior of region2.
+   * \return true if the intersection is not empty.
+   */
+  template<class TInputImage>
+  bool 
+  ImageToImageRCC8Calculator<TInputImage>
+  ::ComputeInterExterBool(void)
+  {
+  /// Definition of the filters used
+    typedef itk::InvertIntensityImageFilter<BoolImageType,BoolImageType> InvertFilterType;
+    typedef itk::AndImageFilter<BoolImageType,BoolImageType,BoolImageType> AndFilterType;
+    /// Declaration and instantiation
+    typename InvertFilterType::Pointer invert = InvertFilterType::New();
+    typename AndFilterType::Pointer andFilter = AndFilterType::New();
+    /// The exterior is the inverted input image
+    invert->SetInput(m_BoolImage2);
+    andFilter->SetInput1(m_BoolImage1);
+    andFilter->SetInput2(invert->GetOutput());
+    andFilter->Update();
+    /// test if the intersection is empty or not
+    return IsBoolImageNotEmpty(andFilter->GetOutput());
+  }
+  /**
+   * Compute the intersection between regions interiors.
+   * \return true if the intersection is not empty.
+   */
+  template<class TInputImage>
+  bool 
+  ImageToImageRCC8Calculator<TInputImage>
+  ::ComputeInterInterBool(void)
+  {
+   /// Definition of the filters used
+    typedef itk::AndImageFilter<BoolImageType,BoolImageType,BoolImageType> AndFilterType;
+    typedef itk::MinimumMaximumImageCalculator<BoolImageType> MinMaxCalculatorType;
+    /// Declaration and instantiation
+    typename AndFilterType::Pointer andFilter = AndFilterType::New();
+    /// The exterior is the inverted input image
+    andFilter->SetInput1(m_BoolImage1);
+    andFilter->SetInput2(m_BoolImage2);
+    andFilter->Update();
+    /// test if the intersection is empty or not
+    return IsBoolImageNotEmpty(andFilter->GetOutput());
+  }
+  /**
+   * Compute the relation value from the input booleans. Please note
+   * that the actual computed value is set to the m_Value parameters, and has
+   * nothing to do with the returned boolean, which indicates if the determination
+   * process was successful.
+   * \param edgeEdgeBool True if edge-edge intersection is not empty.
+   * \param interExterBool True if interior-exterior intersection is not empty.
+   * \param ExterInterBool True if exterior-interior intersection is not empty.
+   * \return True if the decision process was successful.
+   */
+  template<class TInputImage>
+  bool 
+  ImageToImageRCC8Calculator<TInputImage>
+  ::ComputeRelation(bool edgeEdgeBool, bool interExterBool, bool exterInterBool)
+  {
+    otbMsgDebugMacro(<<"RCC8Calculator->ComputeRelation()");
+    // This decision process is based on a decision tree
+    if ((!interExterBool)&&(edgeEdgeBool)&&(!exterInterBool))
+      {
+	m_Value=OTB_RCC8_EQ;
+	return true;
+      }
+    else if ((!interExterBool)&&(edgeEdgeBool)&&(exterInterBool))
+      {
+	m_Value=OTB_RCC8_TPP;
+	return true;
+      }
+    else if ((interExterBool)&&(!edgeEdgeBool)&&(!exterInterBool))
+      {
+	m_Value=OTB_RCC8_NTPPI;
+	return true;
+      }
+    else if ((interExterBool)&&(!edgeEdgeBool)&&(exterInterBool))
+      {
+	m_Value=OTB_RCC8_DC;
+	return true;
+      }
+    else if ((interExterBool)&&(edgeEdgeBool)&&(!exterInterBool))
+      {
+	m_Value=OTB_RCC8_TPPI;
+	return true;
+      }
+    else
+      {
+	return false;
+      }
+  }
+  /**
+   * Test if the boolean image is totally black or not. This is a based on the lazy operator 
+   * paradigm.
+   * \param The image to test.
+   * \return True or false.
+   */
+  template<class TInputImage>
+  bool 
+  ImageToImageRCC8Calculator<TInputImage>
+  ::IsBoolImageNotEmpty(BoolImagePointerType image)
+  {
+    typedef itk::ImageRegionConstIterator<BoolImageType> IteratorType;
+    // TODO : il faudra éventuellement changer qq chose ici.
+    IteratorType it(image,image->GetLargestPossibleRegion());
+    it.GoToBegin();
+    while(!it.IsAtEnd())
+      {
+	if(it.Get())
+	  {
+	    return true;
+	  }
+	++it;
+      }
+    return false;
+  }
+  /**
+   * Main computation method.
+   */
+  template <class TInputImage>
+  void
+  ImageToImageRCC8Calculator<TInputImage>
+  ::GenerateData(void)
+  {
+    otbMsgDebugMacro(<<"RCC8Calculator->GenerateData()");
+    /// First we compute the minimal region of interest we will use for the relation computation
+    m_MinimalROI=this->ComputeMinimalRegion();
+    /// If they are disjoint, the answer is trivial
+    if((m_MinimalROI.GetSize()[0]==0)||(m_MinimalROI.GetSize()[1]==0))
+      {
+	/// The relation is DC
+	m_Value=OTB_RCC8_DC;
+	otbMsgDebugMacro(<<"RCC8Calculator->GenerateData(): Disjoint regions");
+      }
+    else
+      {
+	/// else each input images is cast to boolean type and reduced to
+	// the minimal region
+	m_BoolImage1=ConvertToBoolImage(this->GetInput1());
+	m_BoolImage2=ConvertToBoolImage(this->GetInput2());
+	otbMsgDebugMacro(<<"RCC8Calculator->GenerateData(): Bool images computed: "<<m_BoolImage1->GetLargestPossibleRegion().GetSize());
+	/// Then the boolean which will be used to determine the relation
+	/// are declared
+	bool edgeEdgeBool,interExterBool,exterInterBool,interInterBool;
+	/// The boolean edgeEdge is needed in each case, so it si computed
+	/// now
+	edgeEdgeBool = ComputeEdgeEdgeBool();
+	otbMsgDebugMacro(<<"RCC8Calculator->GenerateData(): edgeEdge "<<edgeEdgeBool);
+	/// Here comes the outside knowledge
+	if(this->GetLevel1APrioriKnowledge())
+	  {
+	    /// If the Level1APrioriKnowledge is set, then the
+	    /// interExterBool is set to true
+	    interExterBool=true;
+	  }
+	else
+	  {
+	    /// Else it must be computed
+	    interExterBool = ComputeInterExterBool();
+	    otbMsgDebugMacro(<<"RCC8Calculator->GenerateData(): interExter "<<interExterBool);
+	  }
+	/// At this stage we can determine if the relation is of type NTPP
+	if((!interExterBool)&&(!edgeEdgeBool))
+	  {
+	    m_Value=OTB_RCC8_NTPP;
+	  }
+	else
+	  {
+	    /// If not, we must consider the intersection between exterior
+	    if(this->GetLevel3APrioriKnowledge())
+	      {
+		/// If the Level3APRioriKnowledge flag is set, this boolean
+		/// can be determined from the two others
+		exterInterBool=(edgeEdgeBool!=interExterBool);
+	      }
+	    else
+	      {
+		/// Else it must be computed
+		exterInterBool = ComputeExterInterBool();  
+		otbMsgDebugMacro(<<"RCC8Calculator->GenerateData(): ExterInter "<<exterInterBool);
+	      }
+	    /// If it is not sufficient to compute the relation
+	    if(!ComputeRelation(edgeEdgeBool,interExterBool,exterInterBool))
+	      {
+		/// Compute the last boolean
+		interInterBool = ComputeInterInterBool();
+		otbMsgDebugMacro(<<"RCC8Calculator->GenerateData(): InterInter "<<interInterBool);
+		/// Which allow the full determination
+		if ((interExterBool)&&(edgeEdgeBool)&&(exterInterBool)&&(!interInterBool))
+		  {
+		    m_Value=OTB_RCC8_EC;
+		  }
+		else
+		  {
+		    m_Value=OTB_RCC8_PO;
+		  }
+	      }
+	  }
+      }
+  }
+   /**
+   * PrintSelf method
+   */
+  template<class TInputImage>
+  void
+  ImageToImageRCC8Calculator<TInputImage>
+  ::PrintSelf( std::ostream& os,itk::Indent indent ) const
+  {
+    Superclass::PrintSelf(os,indent);
+
+    //  os << indent << "RelationIndex: "
+    //      << m_RelationIndex
+    //      << std::endl;
+    //   os << indent << "RelationName: "
+    //      << m_RelationName
+    //      << std::endl;
+  }
+
+} // end namespace itk
+
+#endif
+
+

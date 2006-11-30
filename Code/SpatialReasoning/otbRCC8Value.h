@@ -15,17 +15,22 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
+#ifndef _otbRCC8Value_h
+#define _otbRCC8Value_h
 
-// this file defines the otbMultiScaleTest for the test driver
-// and all it expects is that you have a function called RegisterTests
-#if defined(_MSC_VER)
-#pragma warning ( disable : 4786 )
-#endif
-#include <iostream>
-#include "otbTestMain.h" 
-
-void RegisterTests()
+namespace otb
 {
-REGISTER_TEST(otbImageToImageRCC8CalculatorNew);
-REGISTER_TEST(otbImageToImageRCC8Calculator);
-}
+  // Coding enum system to represent the RCC8 relation values.
+typedef enum {
+OTB_RCC8_DC,
+OTB_RCC8_EC,
+OTB_RCC8_PO,
+OTB_RCC8_TPP,       
+OTB_RCC8_TPPI,
+OTB_RCC8_NTPP,
+OTB_RCC8_NTPPI,
+OTB_RCC8_EQ
+} 
+RCC8Value; 
+}// End namespace otb 
+#endif
