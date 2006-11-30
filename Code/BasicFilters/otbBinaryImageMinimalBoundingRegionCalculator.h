@@ -30,7 +30,7 @@ namespace otb
  *
  * This class is used for instance in the RCC8 calculator filter,
  * where the input region used for computation has to be the smallest possible
- * for costs reasons. The Pad flag allows the user to get a region 1 pixel larger
+ * for costs reasons. The Pad arg allows the user to get a region of pad  pixel larger
  * at each bound in case a security margin has to be kept. 
  *
  * \sa ImageToImageRCC8Calculator
@@ -55,12 +55,11 @@ public:
 	typedef typename InputImageType::RegionType RegionType;
 	typedef typename InputImageType::Pointer InputImagePointerType;
 	/** Toogle the pad option */
-	itkBooleanMacro(Pad);
 	itkGetMacro(Region,RegionType);
 	itkSetMacro(InsideValue,PixelType);
 	itkGetMacro(InsideValue,PixelType);
-	itkSetMacro(Pad,bool);
-	itkGetMacro(Pad,bool);
+	itkSetMacro(Pad,unsigned int);
+	itkGetMacro(Pad,unsigned int);
 	
 protected:
 	/** Constructor */
@@ -77,7 +76,7 @@ private:
 	/** The computed region */
 	RegionType m_Region;
 	/** Toogle if pad wanted */
-	bool m_Pad;
+	unsigned int  m_Pad;
 	/** Inside value */
 	PixelType m_InsideValue;
 };

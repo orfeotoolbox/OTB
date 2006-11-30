@@ -31,13 +31,15 @@ template <class TInputImage>
 BinaryImageMinimalBoundingRegionCalculator<TInputImage>
 ::BinaryImageMinimalBoundingRegionCalculator() 
 {
-  m_Pad=false;
+  // The pad option is desactivated by default
+  m_Pad=0;
+  // Set the default region
   typename InputImageType::SizeType size;
   typename InputImageType::IndexType index;
   size[0]=0;
   size[1]=0;
   index[0]=0;
-  index[1]=1;
+  index[1]=0;
   m_Region.SetSize(size);
   m_Region.SetIndex(index);
   m_InsideValue=static_cast<PixelType>(255);
@@ -118,28 +120,32 @@ BinaryImageMinimalBoundingRegionCalculator<TInputImage>
 	    rit.PreviousSlice();
 	  }
       }
-    otbMsgDebugMacro(<<"BinaryImageMinimalBoundingBoxCalculator: min "<<min);
-    otbMsgDebugMacro(<<"BinaryImageMinimalBoundingBoxCalculator: max "<<max);
+    
+    // Compute size and index of the region
     typename InputImageType::SizeType size;
     typename InputImageType::IndexType index;
     RegionType maxRegion = image->GetLargestPossibleRegion();
-
-    if(m_Pad)
+    // If the pad option is activated
+    if(m_Pad>0)
       {
 	for(int i=0;i<InputImageType::ImageDimension;i++)
 	  {
+	    // If we are not on boundary case, we can do what we want
 	    if(min[i]> maxRegion.GetIndex()[i])
 	      {
-		index[i]= min[i]-1;
+		index[i]= min[i]-m_Pad;
 	      }
+	    // else we are at beginning of the image, so don't pad
 	    else
 	      {
 		index[i]= maxRegion.GetIndex()[i]; 
 	      }
-	    if (index[i]+max[i]-min[i]+2<=maxRegion.GetIndex()[i]+maxRegion.GetSize()[i])
+	    // If are not on boundary case, we can pad the size
+	    if (index[i]+max[i]-min[i]+2*m_Pad+1<=maxRegion.GetIndex()[i]+maxRegion.GetSize()[i])
 	      {
-		size[i]=max[i]-min[i]+2;
+		size[i]=max[i]-min[i]+2*m_Pad+1;
 	      }
+	    // Else we must restrain ourselves to the image boundaries
 	    else 
 	      {
 		size[i]=maxRegion.GetSize()[i]+maxRegion.GetIndex()[i]
@@ -148,6 +154,7 @@ BinaryImageMinimalBoundingRegionCalculator<TInputImage>
 	  }
       }
     else
+      // If the pad option is not activated, the result is simple
       {
 	for(int i=0;i<InputImageType::ImageDimension;i++)
 	  {
@@ -155,6 +162,9 @@ BinaryImageMinimalBoundingRegionCalculator<TInputImage>
 	    index[i]=min[i];
 	  }
       }
+    otbMsgDebugMacro(<<"BinaryImageMinimalBoundingBoxCalculator: index "<<index);
+    otbMsgDebugMacro(<<"BinaryImageMinimalBoundingBoxCalculator: size "<<size);
+    // Set the size and index of the output region
     m_Region.SetIndex(index);
     m_Region.SetSize(size);
 }
@@ -165,7 +175,7 @@ template <class TInputImage>
 void
 BinaryImageMinimalBoundingRegionCalculator<TInputImage>
 ::PrintSelf( std::ostream& os,itk::Indent indent ) const
-  {
+  { 
     Superclass::PrintSelf(os,indent);
   }
 

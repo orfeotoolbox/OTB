@@ -26,7 +26,7 @@
 #include "itkAndImageFilter.h"
 #include "itkImageRegionIterator.h"
 #include "itkImageRegionConstIterator.h"
-#include "itkImageSliceConstIteratorWithIndex.h"
+#include "otbBinaryImageMinimalBoundingRegionCalculator.h"
 #include "otbMacro.h"
 
 namespace otb
@@ -116,91 +116,33 @@ namespace otb
     // Input images pointers
     typename ImageType::Pointer image1 = this->GetInput1();
     typename ImageType::Pointer image2 = this->GetInput2();
-    // Iterator definition
-    typedef itk::ImageSliceConstIteratorWithIndex<ImageType> SliceIteratorType;
-    // Indexes containing upper-left and lower-right corner
-    typename ImageType::IndexType min;
-    typename ImageType::IndexType max;
-    min[0]=0;
-    min[1]=0;
-    max[1]=0;
-    max[1]=0;
-    for ( unsigned int axis = 0; axis < ImageType::ImageDimension; axis++ )
-      { // Create the forward iterator to find lower bound
-	SliceIteratorType fit1(image1,image1->GetLargestPossibleRegion());
-	SliceIteratorType fit2(image2,image2->GetLargestPossibleRegion());
-	fit1.SetFirstDirection( !axis );
-	fit1.SetSecondDirection( axis );
-	fit1.GoToBegin();
-	fit2.SetFirstDirection( !axis );
-	fit2.SetSecondDirection( axis );
-	fit2.GoToBegin();
-	// Walk through the two images line by line
-	while (!fit1.IsAtEnd()&&!fit2.IsAtEnd())
-	  {
-	    while (!fit1.IsAtEndOfSlice()&&!fit2.IsAtEndOfSlice())
-	      {
-		while(!fit1.IsAtEndOfLine()&&!fit2.IsAtEndOfLine())
-		  {
-		    // If a common intersection is found
-		    if ((fit1.Get()==m_InsideValue)||(fit2.Get()==m_InsideValue))
-		      {
-			// then the lower bound is found
-			min[axis]=fit1.GetIndex()[axis];
-			fit1.GoToReverseBegin(); // skip to the end
-			fit2.GoToReverseBegin();
-			break;
-		      }
-		    ++fit1;
-		    ++fit2;
-		  }
-		fit1.NextLine();
-		fit2.NextLine();
-	      }
-	    fit1.NextSlice();
-	    fit2.NextSlice();
-	  }
-	// Create the reverse iterator to find upper bound
-	SliceIteratorType rit1(image1,image1->GetLargestPossibleRegion());
-	SliceIteratorType rit2(image2,image2->GetLargestPossibleRegion());
-	rit1.SetFirstDirection(!axis);
-	rit1.SetSecondDirection(axis);
-	rit1.GoToReverseBegin();
-	rit2.SetFirstDirection(!axis);
-	rit2.SetSecondDirection(axis);
-	rit2.GoToReverseBegin();
-	// Walk through the two images line by line
-	while (!rit1.IsAtReverseEnd()&&!rit2.IsAtReverseEnd())
-	  {
-	    while (!rit1.IsAtReverseEndOfSlice()&&!rit2.IsAtReverseEndOfSlice())
-	      {
-		while (!rit1.IsAtReverseEndOfLine()&&!rit2.IsAtReverseEndOfLine())
-		  {
-		    // If a common intersection is found
-		    if ((rit1.Get()==m_InsideValue)||(rit2.Get()==m_InsideValue))
-		      {
-			max[axis]=rit1.GetIndex()[axis];
-			rit1.GoToBegin();
-			rit2.GoToBegin(); //Skip to reverse end
-			break;
-		      }
-		    --rit1;
-		    --rit2;
-		  }
-		rit1.PreviousLine();
-		rit2.PreviousLine();
-	      }
-	    rit1.PreviousSlice();
-	    rit2.PreviousSlice();
-	  }
-      }
-    typename ImageType::RegionType region;
+    typename ImageType::RegionType region1, region2, region;
+    typedef otb::BinaryImageMinimalBoundingRegionCalculator<ImageType> RegionCalculator;
+    typename RegionCalculator::Pointer rc =RegionCalculator::New();
+    rc->SetInput(image1);
+    rc->SetPad(2);
+    rc->SetInsideValue(this->GetInsideValue());
+    rc->Update();
+    region1=rc->GetRegion();
+    rc=RegionCalculator::New();
+    rc->SetInput(image2);
+    rc->SetPad(2);
+    rc->SetInsideValue(this->GetInsideValue());
+    rc->Update();
+    region2=rc->GetRegion();
     typename ImageType::SizeType size;
-    size[0]=max[0]-min[0];
-    size[1]=max[1]-min[1];
-    region.SetIndex(min);
+    typename ImageType::IndexType index;
+    
+    for(int i=0;i<ImageType::ImageDimension;i++)
+      {
+	index[i]=std::max(region1.GetIndex()[i],region2.GetIndex()[i]);
+	int potSize = std::min(region1.GetIndex()[i]+region1.GetSize()[i],
+			 region2.GetIndex()[i]+region2.GetSize()[i]);
+	size[i]=(potSize-index[i]<0 ? 0 : potSize-index[i]);
+      }
+    region.SetIndex(index);
     region.SetSize(size);
-    otbMsgDebugMacro(<<"RCC8Calculator->ComputeMinimalRegion(): index: "<<min<<" size: "<<size);
+    otbMsgDebugMacro(<<"RCC8Calculator->ComputeMinimalRegion(): index: "<<index<<" size: "<<size);
     return region;
   }
 /**
@@ -447,7 +389,7 @@ ImageToImageRCC8Calculator<TInputImage>
     /// First we compute the minimal region of interest we will use for the relation computation
     m_MinimalROI=this->ComputeMinimalRegion();
     /// If they are disjoint, the answer is trivial
-    if((m_MinimalROI.GetSize()[0]==0)||(m_MinimalROI.GetSize()[1]==0))
+    if((m_MinimalROI.GetSize()[0]<=1)||(m_MinimalROI.GetSize()[1]<=1))
       {
 	/// The relation is DC
 	m_Value=OTB_RCC8_DC;

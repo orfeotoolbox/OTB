@@ -70,7 +70,7 @@ try
 for(IteratorType it=images->Begin();it!=images->End();++it)
       {
 	brct = BoundingRegionCalculatorType::New();
-	brct->SetPad(true);
+	brct->SetPad(1);
 	brct->SetInput(it.Get());
 	brct->Update();
 	RegionType region = brct->GetRegion();
