@@ -30,8 +30,8 @@ namespace otb
 /**
    * Constructor
    */
-template < class TInputPath, class TOutput>
-HuPathFunction< TInputPath, TOutput >
+template < class TInputPath, class TOutput, class TPrecision>
+HuPathFunction< TInputPath, TOutput, TPrecision  >
 ::HuPathFunction()
 {
   m_MomentNumber =-1; 
@@ -40,9 +40,9 @@ HuPathFunction< TInputPath, TOutput >
 /**
    *
    */
-template < class TInputPath, class TOutput>
+template < class TInputPath, class TOutput, class TPrecision>
 void
-HuPathFunction< TInputPath, TOutput >
+HuPathFunction< TInputPath, TOutput, TPrecision  >
 ::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   this->Superclass::PrintSelf(os,indent);
@@ -50,9 +50,9 @@ HuPathFunction< TInputPath, TOutput >
 }
 
 
-template < class TInputPath, class TOutput>
-typename HuPathFunction<TInputPath, TOutput >::RealType
-HuPathFunction<TInputPath, TOutput >
+template < class TInputPath, class TOutput, class TPrecision>
+typename HuPathFunction<TInputPath, TOutput, TPrecision  >::RealType
+HuPathFunction<TInputPath, TOutput, TPrecision  >
 ::Evaluate( const PathType& path) const
 {
   typedef ComplexMomentPathFunction<PathType>   FunctionType;
@@ -171,15 +171,15 @@ HuPathFunction<TInputPath, TOutput >
 
 }
 
-template < class TInputPath, class TOutput>
-typename HuPathFunction<TInputPath, TOutput >::RealType
-HuPathFunction<TInputPath, TOutput >
+template < class TInputPath, class TOutput, class TPrecision>
+typename HuPathFunction<TInputPath, TOutput, TPrecision >::RealType
+HuPathFunction<TInputPath, TOutput, TPrecision >
 ::Evaluate( ) const
 {
   if( !this->GetInputPath() )
     {
     otbMsgDevMacro( << "Pb with GetInputPath" );
-    return static_cast<RealType>( itk::NumericTraits<float>::max());
+    return static_cast<RealType>( itk::NumericTraits<PrecisionType>::max());
     }
 
   RealType Result =  Evaluate( *(this->GetInputPath()) );

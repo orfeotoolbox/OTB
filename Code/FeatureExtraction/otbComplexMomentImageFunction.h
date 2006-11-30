@@ -46,15 +46,16 @@ namespace otb
  * \ingroup ImageFunctions
  */
 template < class TInput, 
-           class TOutput = std::complex<double >,
+           class TOutput = std::complex<double>,
+           class TPrecision = double,
 	   class TCoordRep = float >
 class ITK_EXPORT ComplexMomentImageFunction :
-    public GeometricMomentImageFunction<TInput, TOutput,TCoordRep>
+    public GeometricMomentImageFunction<TInput, TOutput, TPrecision, TCoordRep>
 {
 public:
   /** Standard class typedefs. */
   typedef ComplexMomentImageFunction                                 Self;
-  typedef GeometricMomentImageFunction<TInput, TOutput,TCoordRep>    Superclass;
+  typedef GeometricMomentImageFunction<TInput, TOutput, TPrecision, TCoordRep>    Superclass;
   typedef itk::SmartPointer<Self>                                    Pointer;
   typedef itk::SmartPointer<const Self>                              ConstPointer;
   
@@ -70,8 +71,13 @@ public:
   typedef typename Superclass::ContinuousIndexType  ContinuousIndexType;
   typedef typename Superclass::PointType            PointType;
  
-  typedef TOutput                                   ComplexType;
+  typedef typename Superclass::OutputType           ComplexType;
 
+  /** Type for calculation precision */
+  typedef typename Superclass::PrecisionType        PrecisionType;
+  			 
+  /** ComplexType for calculation precision */
+  typedef std::complex<PrecisionType>               ComplexPrecisionType;
   			 
   /** Evalulate the function at specified index */
   virtual ComplexType EvaluateAtIndex( const IndexType& index ) const;

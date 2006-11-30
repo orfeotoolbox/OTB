@@ -31,8 +31,8 @@ namespace otb
 /**
    * Constructor
    */
-template < class TInput, class TOutput, class TCoordRep>
-ComplexMomentImageFunction<TInput,TOutput,TCoordRep>
+template < class TInput, class TOutput, class TPrecision, class TCoordRep>
+ComplexMomentImageFunction<TInput,TOutput,TPrecision,TCoordRep>
 ::ComplexMomentImageFunction()
 {
   m_P = 0;
@@ -42,9 +42,9 @@ ComplexMomentImageFunction<TInput,TOutput,TCoordRep>
 /**
    *
    */
-template < class TInput, class TOutput, class TCoordRep>
+template < class TInput, class TOutput, class TPrecision, class TCoordRep>
 void
-ComplexMomentImageFunction<TInput,TOutput,TCoordRep>
+ComplexMomentImageFunction<TInput,TOutput,TPrecision,TCoordRep>
 ::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   this->Superclass::PrintSelf(os,indent);
@@ -53,15 +53,15 @@ ComplexMomentImageFunction<TInput,TOutput,TCoordRep>
 }
 
 
-template < class TInput, class TOutput, class TCoordRep>
-typename ComplexMomentImageFunction<TInput,TOutput,TCoordRep>::ComplexType
-ComplexMomentImageFunction<TInput,TOutput,TCoordRep>
+template < class TInput, class TOutput, class TPrecision, class TCoordRep>
+typename ComplexMomentImageFunction<TInput,TOutput,TPrecision,TCoordRep>::ComplexType
+ComplexMomentImageFunction<TInput,TOutput,TPrecision,TCoordRep>
 ::EvaluateAtIndex(const IndexType& index) const
 {  
   typename TInput::SizeType           ImageSize;
-  ComplexType                         Sum;
-  ComplexType                         ValP;
-  ComplexType                         ValQ;
+  ComplexPrecisionType                Sum;
+  ComplexPrecisionType                ValP;
+  ComplexPrecisionType                ValQ;
   IndexType                           IndexValue;
   IndexType                           indexPos = index;
   typename TInput::SizeType           kernelSize;
@@ -69,7 +69,7 @@ ComplexMomentImageFunction<TInput,TOutput,TCoordRep>
   if( !this->GetInputImage() )
     {
     otbMsgDevMacro( << "Pb with GetInputImage" );
-    return ( std::complex<float>( itk::NumericTraits<float>::max(), itk::NumericTraits<float>::max() ) );
+    return ( static_cast<ComplexType>( itk::NumericTraits<PrecisionType>::max(), itk::NumericTraits<PrecisionType>::max() ) );
     }
 
    if(this->GetNeighborhoodRadius()<0)
@@ -93,28 +93,28 @@ ComplexMomentImageFunction<TInput,TOutput,TCoordRep>
 
   // Set the iterator at the desired location
   it.SetLocation(indexPos);
-  Sum = std::complex<float>(0.0,0.0); 
+  Sum = ComplexPrecisionType(0.0,0.0); 
 
   const unsigned int size = it.Size();
   for (unsigned int i = 0; i < size; ++i)
   {
     IndexValue = it.GetIndex(i);
-    ValP = std::complex<float>(1.0,0.0);
-    ValQ = std::complex<float>(1.0,0.0);
+    ValP = ComplexPrecisionType(1.0,0.0);
+    ValQ = ComplexPrecisionType(1.0,0.0);
     unsigned int p  = m_P;
     while(p>0)
      {
-      ValP *= std::complex<float>(IndexValue[0], IndexValue[1]);
+      ValP *= ComplexPrecisionType(IndexValue[0], IndexValue[1]);
       --p; 
      }
     unsigned int q  = m_Q;
     while(q>0)
      {
-      ValQ *= std::complex<float>(IndexValue[0], -IndexValue[1]);
+      ValQ *= ComplexPrecisionType(IndexValue[0], -IndexValue[1]);
       --q; 
      }
           
-    Sum += ( ValP * ValQ * std::complex<float>(static_cast<float>(it.GetPixel(i)),0.0) );
+    Sum += ( ValP * ValQ * ComplexPrecisionType(static_cast<PrecisionType>(it.GetPixel(i)),0.0) );
 
   }
 

@@ -33,7 +33,8 @@ namespace otb
 
 template < class TInput, 
            class TOutput = float,
-	   class TCoordRep = float >
+	   class TPrecision = double,
+           class TCoordRep = float >
 class ITK_EXPORT GeometricMomentImageFunction :
   public itk::ImageFunction<TInput, TOutput,TCoordRep >
 {
@@ -55,7 +56,8 @@ public:
   typedef typename Superclass::PointType            PointType;
  
   typedef TOutput                                   OutputType;
-
+  /** Type for calculation precision */
+  typedef TPrecision                                PrecisionType;
 
   /** Get/Set the radius of the neighborhood over which the
       statistics are evaluated */

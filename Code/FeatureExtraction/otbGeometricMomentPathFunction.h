@@ -32,7 +32,8 @@ namespace otb
  */
 
 template < class TInputPath,    
-           class TOutput >
+           class TOutput,
+       	   class TPrecision = double>
 class ITK_EXPORT GeometricMomentPathFunction :
   public PathFunction< TInputPath, TOutput>
 {
@@ -53,6 +54,9 @@ public:
  
   /** OutputPathType typedef support. */
   typedef typename Superclass::OutputType            OutputType;
+
+  /** Type for calculation precision */
+  typedef TPrecision                                 PrecisionType;
 
 
 protected:

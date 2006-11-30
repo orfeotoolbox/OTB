@@ -53,14 +53,15 @@ namespace otb
  */
 
 template < class TInputPath,    
-           class TOutput      = double>
+           class TOutput    = double,
+           class TPrecision = double>
 class ITK_EXPORT HuPathFunction :
-  public RealMomentPathFunction< TInputPath, TOutput >
+  public RealMomentPathFunction< TInputPath, TOutput, TPrecision >
 {
 public:
   /** Standard class typedefs. */
   typedef HuPathFunction                                Self;
-  typedef RealMomentPathFunction<TInputPath, TOutput>   Superclass;
+  typedef RealMomentPathFunction<TInputPath, TOutput, TPrecision>   Superclass;
   typedef itk::SmartPointer<Self>                       Pointer;
   typedef itk::SmartPointer<const Self>                 ConstPointer;
   
@@ -79,6 +80,9 @@ public:
 
   /** OutputType typedef support. */
   typedef typename Superclass::RealType                 RealType;  			 
+ 
+  /** Type for calculation precision */
+  typedef typename Superclass::PrecisionType            PrecisionType;
 
   /** Evaluate the function at non-integer positions */
   virtual RealType Evaluate( const PathType& path) const;

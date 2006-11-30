@@ -33,14 +33,15 @@ namespace otb
 
 template < class TInput, 
            class TOutput = float,
+           class TPrecision = double,
 	   class TCoordRep = float >
 class ITK_EXPORT RealMomentImageFunction :
-  public GeometricMomentImageFunction<TInput, TOutput,TCoordRep >
+  public GeometricMomentImageFunction<TInput, TOutput, TPrecision, TCoordRep >
 {
 public:
   /** Standard class typedefs. */
   typedef RealMomentImageFunction                                     Self;
-  typedef GeometricMomentImageFunction< TInput, TOutput,TCoordRep >   Superclass;
+  typedef GeometricMomentImageFunction< TInput, TOutput, TPrecision, TCoordRep >   Superclass;
   typedef itk::SmartPointer<Self>                                     Pointer;
   typedef itk::SmartPointer<const Self>                               ConstPointer;
   
@@ -54,8 +55,11 @@ public:
   typedef typename Superclass::ContinuousIndexType  ContinuousIndexType;
   typedef typename Superclass::PointType            PointType;
  
-  typedef TOutput                                   OutputType;
-  typedef TOutput                                   RealType;
+  /** Type for calculation precision */
+  typedef typename Superclass::PrecisionType        PrecisionType;
+
+  typedef typename Superclass::OutputType           OutputType;
+  typedef OutputType                                RealType;
 
 
   

@@ -30,8 +30,8 @@ namespace otb
 /**
    * Constructor
    */
-template < class TInput, class TOutput, class TCoordRep>
-HuImageFunction<TInput,TOutput,TCoordRep>
+template < class TInput, class TOutput, class TPrecision, class TCoordRep>
+HuImageFunction<TInput,TOutput,TPrecision,TCoordRep>
 ::HuImageFunction()
 {
   m_MomentNumber =-1; 
@@ -40,9 +40,9 @@ HuImageFunction<TInput,TOutput,TCoordRep>
 /**
    *
    */
-template < class TInput, class TOutput, class TCoordRep>
+template < class TInput, class TOutput, class TPrecision, class TCoordRep>
 void
-HuImageFunction<TInput,TOutput,TCoordRep>
+HuImageFunction<TInput,TOutput,TPrecision,TCoordRep>
 ::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   this->Superclass::PrintSelf(os,indent);
@@ -50,9 +50,9 @@ HuImageFunction<TInput,TOutput,TCoordRep>
 }
 
 
-template < class TInput, class TOutput, class TCoordRep>
-typename HuImageFunction<TInput,TOutput,TCoordRep>::RealType
-HuImageFunction<TInput,TOutput,TCoordRep>
+template < class TInput, class TOutput, class TPrecision, class TCoordRep>
+typename HuImageFunction<TInput,TOutput,TPrecision,TCoordRep>::RealType
+HuImageFunction<TInput,TOutput,TPrecision,TCoordRep>
 ::EvaluateAtIndex(const IndexType& index) const
 {
   //typename InputType::SizeType        ImageSize;

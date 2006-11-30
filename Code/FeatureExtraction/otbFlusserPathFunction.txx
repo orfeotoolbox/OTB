@@ -29,8 +29,8 @@ namespace otb
 /**
    * Constructor
    */
-template < class TInputPath, class TOutput>
-FlusserPathFunction<TInputPath, TOutput >
+template < class TInputPath, class TOutput, class TPrecision>
+FlusserPathFunction<TInputPath, TOutput, TPrecision >
 ::FlusserPathFunction()
 {
   m_MomentNumber =-1; 
@@ -39,9 +39,9 @@ FlusserPathFunction<TInputPath, TOutput >
 /**
    *
    */
-template < class TInputPath, class TOutput>
+template < class TInputPath, class TOutput, class TPrecision>
 void
-FlusserPathFunction< TInputPath, TOutput >
+FlusserPathFunction< TInputPath, TOutput, TPrecision >
 ::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   this->Superclass::PrintSelf(os,indent);
@@ -49,9 +49,9 @@ FlusserPathFunction< TInputPath, TOutput >
 }
 
 
-template < class TInputPath, class TOutput>
-typename FlusserPathFunction<TInputPath, TOutput>::RealType
-FlusserPathFunction<TInputPath, TOutput >
+template < class TInputPath, class TOutput, class TPrecision>
+typename FlusserPathFunction<TInputPath, TOutput, TPrecision>::RealType
+FlusserPathFunction<TInputPath, TOutput, TPrecision >
 ::Evaluate( const PathType& path) const
 {
   typedef ComplexMomentPathFunction<PathType>     FunctionType;
@@ -214,15 +214,15 @@ FlusserPathFunction<TInputPath, TOutput >
 
 }
 
-template < class TInputPath, class TOutput>
-typename FlusserPathFunction<TInputPath, TOutput>::RealType
-FlusserPathFunction<TInputPath, TOutput >
+template < class TInputPath, class TOutput, class TPrecision>
+typename FlusserPathFunction<TInputPath, TOutput, TPrecision>::RealType
+FlusserPathFunction<TInputPath, TOutput, TPrecision >
 ::Evaluate() const
 {
   if( !this->GetInputPath() )
     {
     otbMsgDevMacro( << "Pb with GetInputPath" );
-    return static_cast<RealType>( itk::NumericTraits<float>::max());
+    return static_cast<RealType>( itk::NumericTraits<PrecisionType>::max());
     }
 
   RealType Result =  Evaluate( *(this->GetInputPath()) );

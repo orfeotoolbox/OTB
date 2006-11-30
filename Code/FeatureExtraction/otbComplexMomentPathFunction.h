@@ -46,15 +46,17 @@ namespace otb
  * \ingroup ImageFunctions
  */
 template < class TInputPath, 
-           class TOutput = std::complex<double> >
+           class TOutput = std::complex<double>,
+           class TPrecision = double>
 class ITK_EXPORT ComplexMomentPathFunction :
     public GeometricMomentPathFunction< TInputPath, 
-					TOutput >
+					TOutput,
+                                        TPrecision >
 {
 public:
   /** Standard class typedefs. */
   typedef ComplexMomentPathFunction                                  Self;
-  typedef GeometricMomentPathFunction<TInputPath, TOutput >          Superclass;
+  typedef GeometricMomentPathFunction<TInputPath, TOutput, TPrecision>  Superclass;
   typedef itk::SmartPointer<Self>                                    Pointer;
   typedef itk::SmartPointer<const Self>                              ConstPointer;
   
@@ -72,11 +74,18 @@ public:
   typedef itk::VectorContainer< unsigned,VertexType >   VertexListType;
   typedef typename VertexListType::ConstPointer         VertexListPointer;
 
-//  typedef typename Superclass::OutputType               ComplexType;
-  typedef std::complex<double>                          ComplexType;
-  typedef TOutput                                       OutputType;
-  typedef float                                         RealType;
+  /** Complex Type */
+  typedef typename Superclass::OutputType               ComplexType;
 
+  typedef typename Superclass::OutputType               OutputType;
+
+  typedef double                                        RealType;
+ 
+  /** Type for calculation precision */
+  typedef typename Superclass::PrecisionType            PrecisionType;
+  			 
+  /** ComplexType for calculation precision */
+  typedef std::complex<PrecisionType>                   ComplexPrecisionType;
   			 
   /** Evalulate the function */
   virtual OutputType Evaluate(const PathType& path) const;

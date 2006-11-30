@@ -30,8 +30,8 @@ namespace otb
 /**
    * Constructor
    */
-template < class TInput, class TOutput, class TCoordRep>
-FlusserImageFunction<TInput,TOutput,TCoordRep>
+template < class TInput, class TOutput, class TPrecision, class TCoordRep>
+FlusserImageFunction<TInput,TOutput,TPrecision,TCoordRep>
 ::FlusserImageFunction()
 {
   m_MomentNumber =-1; 
@@ -40,9 +40,9 @@ FlusserImageFunction<TInput,TOutput,TCoordRep>
 /**
    *
    */
-template < class TInput, class TOutput, class TCoordRep>
+template < class TInput, class TOutput, class TPrecision, class TCoordRep>
 void
-FlusserImageFunction<TInput,TOutput,TCoordRep>
+FlusserImageFunction<TInput,TOutput,TPrecision,TCoordRep>
 ::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   this->Superclass::PrintSelf(os,indent);
@@ -50,9 +50,9 @@ FlusserImageFunction<TInput,TOutput,TCoordRep>
 }
 
 
-template < class TInput, class TOutput, class TCoordRep>
-typename FlusserImageFunction<TInput,TOutput,TCoordRep>::RealType
-FlusserImageFunction<TInput,TOutput,TCoordRep>
+template < class TInput, class TOutput, class TPrecision, class TCoordRep>
+typename FlusserImageFunction<TInput,TOutput,TPrecision,TCoordRep>::RealType
+FlusserImageFunction<TInput,TOutput,TPrecision,TCoordRep>
 ::EvaluateAtIndex(const IndexType& index) const
 {
   

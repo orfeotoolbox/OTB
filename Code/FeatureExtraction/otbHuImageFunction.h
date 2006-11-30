@@ -54,15 +54,16 @@ namespace otb
 //  public itk::ImageFunction< TInput, TOutput,TCoordRep >
 
 template < class TInput, 
-           class TOutput   = double,
-	   class TCoordRep = float >
+           class TOutput    = double,
+           class TPrecision = double,
+	   class TCoordRep  = float >
 class ITK_EXPORT HuImageFunction :
-  public RealMomentImageFunction< TInput, TOutput,TCoordRep >
+  public RealMomentImageFunction< TInput, TOutput, TPrecision, TCoordRep >
 {
 public:
   /** Standard class typedefs. */
   typedef HuImageFunction                                           Self;
-  typedef RealMomentImageFunction< TInput, TOutput,TCoordRep >      Superclass;
+  typedef RealMomentImageFunction< TInput, TOutput, TPrecision, TCoordRep >      Superclass;
   typedef itk::SmartPointer<Self>                                   Pointer;
   typedef itk::SmartPointer<const Self>                             ConstPointer;
   
@@ -78,8 +79,11 @@ public:
   typedef typename Superclass::ContinuousIndexType  ContinuousIndexType;
   typedef typename Superclass::PointType            PointType;
 
-  typedef TOutput                                   RealType;
+  typedef typename Superclass::RealType             RealType;
   typedef typename std::complex<RealType>           ComplexType;
+
+  /** Type for calculation precision */
+  typedef typename Superclass::PrecisionType        PrecisionType;
    
   /** Dimension of the underlying image. */
   itkStaticConstMacro(ImageDimension, unsigned int,

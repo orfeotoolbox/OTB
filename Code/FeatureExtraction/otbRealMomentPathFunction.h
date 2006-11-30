@@ -33,14 +33,15 @@ namespace otb
  */
 
 template < class TInputPath,    
-           class TOutput      = double>
+           class TOutput      = double,
+       	   class TPrecision   = double>
 class ITK_EXPORT RealMomentPathFunction :
-  public GeometricMomentPathFunction< TInputPath, TOutput>
+  public GeometricMomentPathFunction< TInputPath, TOutput, TPrecision>
 {
 public:
   /** Standard class typedefs. */
   typedef RealMomentPathFunction                                      Self;
-  typedef GeometricMomentPathFunction< TInputPath, TOutput>           Superclass;
+  typedef GeometricMomentPathFunction< TInputPath, TOutput, TPrecision> Superclass;
   typedef itk::SmartPointer<Self>                                     Pointer;
   typedef itk::SmartPointer<const Self>                               ConstPointer;
   
@@ -54,6 +55,9 @@ public:
   typedef itk::VectorContainer< unsigned,VertexType >   VertexListType;
   typedef typename VertexListType::ConstPointer         VertexListPointer;
  
+  /** Type for calculation precision */
+  typedef typename Superclass::PrecisionType            PrecisionType;
+   
   /** OutputType typedef support. */
   typedef typename Superclass::OutputType               RealType;
 

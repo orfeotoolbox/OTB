@@ -31,8 +31,8 @@ namespace otb
 /**
    * Constructor
    */
-template < class TInputPath, class TOutput>
-ComplexMomentPathFunction<TInputPath,TOutput>
+template < class TInputPath, class TOutput, class TPrecision>
+ComplexMomentPathFunction<TInputPath,TOutput,TPrecision>
 ::ComplexMomentPathFunction()
 {
   m_P    = 0;
@@ -43,9 +43,9 @@ ComplexMomentPathFunction<TInputPath,TOutput>
 /**
    *
    */
-template < class TInputPath, class TOutput>
+template < class TInputPath, class TOutput, class TPrecision>
 void
-ComplexMomentPathFunction<TInputPath,TOutput>
+ComplexMomentPathFunction<TInputPath,TOutput,TPrecision>
 ::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   this->Superclass::PrintSelf(os,indent);
@@ -54,51 +54,48 @@ ComplexMomentPathFunction<TInputPath,TOutput>
 }
 
 
-template < class TInputPath, class TOutput>
-typename ComplexMomentPathFunction<TInputPath,TOutput>::ComplexType 
-ComplexMomentPathFunction<TInputPath,TOutput>
+template < class TInputPath, class TOutput, class TPrecision>
+typename ComplexMomentPathFunction<TInputPath,TOutput,TPrecision>::ComplexType 
+ComplexMomentPathFunction<TInputPath,TOutput,TPrecision>
 ::EvaluateComplexMomentAtIndex(VertexType index) const
 {
-    ComplexType                         ValP;
-    ComplexType                         ValQ;
-    ComplexType                         Result;
-    double                              PixelValue = 1.0;
+    ComplexPrecisionType                         ValP;
+    ComplexPrecisionType                         ValQ;
+    ComplexPrecisionType                         Result;
+    PrecisionType                                PixelValue(1.0);
 
-    ValP = std::complex<double>(1.0,0.0);
-    ValQ = std::complex<double>(1.0,0.0);
+    ValP = ComplexPrecisionType(1.0,0.0);
+    ValQ = ComplexPrecisionType(1.0,0.0);
     unsigned int p  = m_P;
     while(p>0)
      {
-      ValP *= std::complex<double>(index[0], index[1]);
+      ValP *= ComplexPrecisionType(index[0], index[1]);
       --p; 
      }
     unsigned int q  = m_Q;
     while(q>0)
      {
-      ValQ *= std::complex<double>(index[0], -index[1]);
+      ValQ *= ComplexPrecisionType(index[0], -index[1]);
       --q; 
      }
 
-    Result = ValP * ValQ * std::complex<double>( static_cast<double>(PixelValue), 0.0); 
+    Result = ValP * ValQ * ComplexPrecisionType( static_cast<PrecisionType>(PixelValue), 0.0); 
     return ( static_cast<ComplexType>(Result) );
 }
 
 
-template < class TInputPath, class TOutput>
+template < class TInputPath, class TOutput, class TPrecision>
 typename ComplexMomentPathFunction<TInputPath,
-                                   TOutput>::OutputType
-ComplexMomentPathFunction<TInputPath,TOutput>
+                                   TOutput,TPrecision>::OutputType
+ComplexMomentPathFunction<TInputPath,TOutput,TPrecision>
 ::Evaluate(const PathType& path) const
 {
-  typedef float                       RealType;
-
   PathConstPointer                    Path;
   VertexListPointer                   vertexList;
   VertexType                          cindex;
   VertexType                          IndexOut;
   int                                 nbPath;
   ComplexType  	     		      Value;
-
 
   Value = static_cast<ComplexType>(0.0);
   
@@ -110,14 +107,14 @@ ComplexMomentPathFunction<TInputPath,TOutput>
      for(int i =0 ; i<nbPath-1 ;i++)
        {
        cindex = vertexList->GetElement(i);
-       RealType x1 = cindex[0];
-       RealType y1 = cindex[1];
+       PrecisionType x1 = cindex[0];
+       PrecisionType y1 = cindex[1];
        cindex = vertexList->GetElement(i+1);
-       RealType x2 = cindex[0];
-       RealType y2 = cindex[1];
+       PrecisionType x2 = cindex[0];
+       PrecisionType y2 = cindex[1];
        
-       RealType Theta;
-       RealType Norm;
+       PrecisionType Theta;
+       PrecisionType Norm;
        
        Theta = atan2(y2-y1,x2-x1);
        Norm  = sqrt((x2-x1)*(x2-x1) + (y2-y1)*(y2-y1) );
@@ -135,16 +132,16 @@ ComplexMomentPathFunction<TInputPath,TOutput>
 
 }
 
-template < class TInputPath, class TOutput>
+template < class TInputPath, class TOutput, class TPrecision>
 typename ComplexMomentPathFunction<TInputPath,
-                                   TOutput>::OutputType
-ComplexMomentPathFunction<TInputPath,TOutput>
+                                   TOutput,TPrecision>::OutputType
+ComplexMomentPathFunction<TInputPath,TOutput,TPrecision>
 ::Evaluate() const
 {
   if( !this->GetInputPath() )
     {
     otbMsgDevMacro( << "Pb with GetInputPath" );
-    return static_cast<OutputType>(std::complex<float>( itk::NumericTraits<float>::max(), itk::NumericTraits<float>::max() ) );
+    return static_cast<OutputType>(ComplexPrecisionType( itk::NumericTraits<PrecisionType>::max(), itk::NumericTraits<PrecisionType>::max() ) );
     }
 
   OutputType Result =  Evaluate( *(this->GetInputPath()) );
