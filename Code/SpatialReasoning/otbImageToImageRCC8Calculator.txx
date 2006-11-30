@@ -44,8 +44,6 @@ namespace otb
     m_Level1APrioriKnowledge=false;
     m_Level3APrioriKnowledge=false;
     this->SetNumberOfRequiredInputs(2);
-//     this->SetNumberOfOutputs(0);
-//     this->SetNumberOfRequiredOutputs(0);
   }
   /**
    * Set the first input image.
@@ -103,7 +101,6 @@ namespace otb
   ImageToImageRCC8Calculator<TInputImage>
   ::GetValue(void)
   {
-    this->Update();
     return m_Value;
   }
   /**
@@ -531,13 +528,6 @@ ImageToImageRCC8Calculator<TInputImage>
   ::PrintSelf( std::ostream& os,itk::Indent indent ) const
   {
     Superclass::PrintSelf(os,indent);
-
-    //  os << indent << "RelationIndex: "
-    //      << m_RelationIndex
-    //      << std::endl;
-    //   os << indent << "RelationName: "
-    //      << m_RelationName
-    //      << std::endl;
   }
 
 } // end namespace itk

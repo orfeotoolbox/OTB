@@ -38,4 +38,6 @@ REGISTER_TEST(otbOpeningClosingMorphologicalFilterNew);
 REGISTER_TEST(otbOpeningClosingMorphologicalFilter);
 REGISTER_TEST(otbClosingOpeningMorphologicalFilterNew);
 REGISTER_TEST(otbClosingOpeningMorphologicalFilter);
+REGISTER_TEST(otbBinaryImageMinimalBoundingRegionCalculatorNew);
+REGISTER_TEST(otbBinaryImageMinimalBoundingRegionCalculator);
 }

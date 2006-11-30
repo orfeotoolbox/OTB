@@ -16,12 +16,12 @@
 
 =========================================================================*/
 #include "itkExceptionObject.h"
-#include "otbImageToImageRCC8Calculator.h"
 #include "otbImage.h"
-#include "otbImageList.h"
+#include "otbBinaryImageMinimalBoundingRegionCalculator.h"
 #include "otbImageFileReader.h"
+#include "otbImageList.h"
 
-int otbImageToImageRCC8Calculator(int argc, char* argv[])
+int otbBinaryImageMinimalBoundingRegionCalculator(int argc, char* argv[])
 {
 try
   {
@@ -33,16 +33,18 @@ try
     typedef unsigned char PixelType;
     typedef otb::Image<PixelType,Dimension> ImageType;
     typedef otb::ImageFileReader<ImageType> ReaderType;
-    typedef otb::ImageToImageRCC8Calculator<ImageType> CalculatorType;
+    typedef otb::BinaryImageMinimalBoundingRegionCalculator<ImageType>
+      BoundingRegionCalculatorType;
+    typedef BoundingRegionCalculatorType::RegionType RegionType;
     typedef otb::ImageList<ImageType> ImageListType;
     typedef ImageListType::Iterator IteratorType;
     // reference image list
     ImageListType::Pointer images = ImageListType::New();
-
+    
     // Reading input images
     std::ofstream out;
     out.open(outfile,std::ios::out);
-    out<<"Test results from otbImageToImageRCC8calculator test."<<std::endl;
+    out<<"Test results from otbBinaryImageBoundingRegionCalculator test."<<std::endl;
     for(int i=1;i<=nbImages;++i)
       {
 	ReaderType::Pointer reader = ReaderType::New();
@@ -52,29 +54,31 @@ try
 	images->PushBack(reader->GetOutput());
       }
     out<<std::endl;
+
     // Declaration
-    CalculatorType::Pointer calc;
-    // Computing relations for each images couple
-    int i =1;
-    int j = 1;
-    for(IteratorType it1=images->Begin();it1!=images->End();++it1)
+    BoundingRegionCalculatorType::Pointer brct;
+    // Computing bounding region for each image
+    for(IteratorType it=images->Begin();it!=images->End();++it)
       {
-	for(IteratorType it2=images->Begin();it2!=images->End();++it2)
-	  {
-	    std::cout<<"Test: computing relation "<<i<<","<<j<<std::endl;
-	    calc=CalculatorType::New();
-	    calc->SetInput1(it1.Get());
-	    calc->SetInput2(it2.Get());
-	    calc->Update();
-	    out<<calc->GetValue()<<"\t";
-	    j++;
-	  }
-	j=1;
-	i++;
-	out<<std::endl;
+	brct = BoundingRegionCalculatorType::New();
+	brct->SetInput(it.Get());
+	brct->Update();
+	RegionType region = brct->GetRegion();
+	out<<region.GetIndex()<<"\t"<<region.GetSize()<<std::endl;
       }
+ out<<std::endl<<"Testing the pad option"<<std::endl<<std::endl;
+for(IteratorType it=images->Begin();it!=images->End();++it)
+      {
+	brct = BoundingRegionCalculatorType::New();
+	brct->SetPad(true);
+	brct->SetInput(it.Get());
+	brct->Update();
+	RegionType region = brct->GetRegion();
+	out<<region.GetIndex()<<"\t"<<region.GetSize()<<std::endl;
+      }
+
     out.close();
-  }
+ }
   catch( itk::ExceptionObject & err ) 
     { 
     std::cout << "Exception itk::ExceptionObject thrown !" << std::endl; 

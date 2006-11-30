@@ -86,6 +86,25 @@ ADD_TEST(bfTvClosingOpeningFilter ${BASICFILTERS_TESTS}
 	${TEMP}/bfFiltreClosingOpening_1.tif
 	1)
 
+
+# -------            otb::BinaryImageMinimalBoundingRegionCalculator   ----------------------------
+
+ADD_TEST(bfTuBoundingRegionCalculatorNew ${BASICFILTERS_TESTS}  
+         otbBinaryImageMinimalBoundingRegionCalculatorNew)
+
+ADD_TEST(bfTvBoundingRegionCalculator ${BASICFILTERS_TESTS}
+   --compare-ascii ${TOL}
+ 		   ${BASELINE_FILES}/bfBoundingRegionCalculatorOutput.txt
+ 		   ${TEMP}/bfBoundingRegionCalculatorOutput.txt
+        otbBinaryImageMinimalBoundingRegionCalculator
+	4	
+	${TEMP}/bfBoundingRegionCalculatorOutput.txt
+	${INPUTDATA}/rcc8_mire1.png
+	${INPUTDATA}/rcc8_mire2.png
+	${INPUTDATA}/rcc8_mire3.png
+	${INPUTDATA}/rcc8_mire4.png
+	)
+
 # A enrichir
 SET(BasicFilters_SRCS
 otbLeeFilter.cxx
@@ -99,6 +118,8 @@ otbOpeningClosingMorphologicalFilterNew.cxx
 otbOpeningClosingMorphologicalFilter.cxx
 otbClosingOpeningMorphologicalFilterNew.cxx
 otbClosingOpeningMorphologicalFilter.cxx
+otbBinaryImageMinimalBoundingRegionCalculatorNew.cxx
+otbBinaryImageMinimalBoundingRegionCalculator.cxx
 )
 
 
