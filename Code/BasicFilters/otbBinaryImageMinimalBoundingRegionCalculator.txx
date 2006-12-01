@@ -162,8 +162,8 @@ BinaryImageMinimalBoundingRegionCalculator<TInputImage>
 	    index[i]=min[i];
 	  }
       }
-    otbMsgDebugMacro(<<"BinaryImageMinimalBoundingBoxCalculator: index "<<index);
-    otbMsgDebugMacro(<<"BinaryImageMinimalBoundingBoxCalculator: size "<<size);
+    // otbMsgDebugMacro(<<"BinaryImageMinimalBoundingBoxCalculator: index "<<index);
+    // otbMsgDebugMacro(<<"BinaryImageMinimalBoundingBoxCalculator: size "<<size);
     // Set the size and index of the output region
     m_Region.SetIndex(index);
     m_Region.SetSize(size);

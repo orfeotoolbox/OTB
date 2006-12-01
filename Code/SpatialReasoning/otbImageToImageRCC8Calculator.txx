@@ -142,7 +142,7 @@ namespace otb
       }
     region.SetIndex(index);
     region.SetSize(size);
-    otbMsgDebugMacro(<<"RCC8Calculator->ComputeMinimalRegion(): index: "<<index<<" size: "<<size);
+    // otbMsgDebugMacro(<<"RCC8Calculator->ComputeMinimalRegion(): index: "<<index<<" size: "<<size);
     return region;
   }
 /**
@@ -183,7 +183,7 @@ ImageToImageRCC8Calculator<TInputImage>
       ++inputIt;
       ++outputIt;
     }
-  otbMsgDebugMacro(<<"RCC8Calculator->ConvertToBoolImage() size: "<<output->GetLargestPossibleRegion().GetSize());
+  // otbMsgDebugMacro(<<"RCC8Calculator->ConvertToBoolImage() size: "<<output->GetLargestPossibleRegion().GetSize());
   return output;
 }
   /**
@@ -320,7 +320,7 @@ ImageToImageRCC8Calculator<TInputImage>
   ImageToImageRCC8Calculator<TInputImage>
   ::ComputeRelation(bool edgeEdgeBool, bool interExterBool, bool exterInterBool)
   {
-    otbMsgDebugMacro(<<"RCC8Calculator->ComputeRelation()");
+    // otbMsgDebugMacro(<<"RCC8Calculator->ComputeRelation()");
     // This decision process is based on a decision tree
     if ((!interExterBool)&&(edgeEdgeBool)&&(!exterInterBool))
       {
@@ -385,7 +385,7 @@ ImageToImageRCC8Calculator<TInputImage>
   ImageToImageRCC8Calculator<TInputImage>
   ::GenerateData(void)
   {
-    otbMsgDebugMacro(<<"RCC8Calculator->GenerateData()");
+    // otbMsgDebugMacro(<<"RCC8Calculator->GenerateData()");
     /// First we compute the minimal region of interest we will use for the relation computation
     m_MinimalROI=this->ComputeMinimalRegion();
     /// If they are disjoint, the answer is trivial
@@ -393,7 +393,7 @@ ImageToImageRCC8Calculator<TInputImage>
       {
 	/// The relation is DC
 	m_Value=OTB_RCC8_DC;
-	otbMsgDebugMacro(<<"RCC8Calculator->GenerateData(): Disjoint regions");
+	// otbMsgDebugMacro(<<"RCC8Calculator->GenerateData(): Disjoint regions");
       }
     else
       {
@@ -401,14 +401,14 @@ ImageToImageRCC8Calculator<TInputImage>
 	// the minimal region
 	m_BoolImage1=ConvertToBoolImage(this->GetInput1());
 	m_BoolImage2=ConvertToBoolImage(this->GetInput2());
-	otbMsgDebugMacro(<<"RCC8Calculator->GenerateData(): Bool images computed: "<<m_BoolImage1->GetLargestPossibleRegion().GetSize());
+	// otbMsgDebugMacro(<<"RCC8Calculator->GenerateData(): Bool images computed: "<<m_BoolImage1->GetLargestPossibleRegion().GetSize());
 	/// Then the boolean which will be used to determine the relation
 	/// are declared
 	bool edgeEdgeBool,interExterBool,exterInterBool,interInterBool;
 	/// The boolean edgeEdge is needed in each case, so it si computed
 	/// now
 	edgeEdgeBool = ComputeEdgeEdgeBool();
-	otbMsgDebugMacro(<<"RCC8Calculator->GenerateData(): edgeEdge "<<edgeEdgeBool);
+	// otbMsgDebugMacro(<<"RCC8Calculator->GenerateData(): edgeEdge "<<edgeEdgeBool);
 	/// Here comes the outside knowledge
 	if(this->GetLevel1APrioriKnowledge())
 	  {
@@ -420,7 +420,7 @@ ImageToImageRCC8Calculator<TInputImage>
 	  {
 	    /// Else it must be computed
 	    interExterBool = ComputeInterExterBool();
-	    otbMsgDebugMacro(<<"RCC8Calculator->GenerateData(): interExter "<<interExterBool);
+	    // otbMsgDebugMacro(<<"RCC8Calculator->GenerateData(): interExter "<<interExterBool);
 	  }
 	/// At this stage we can determine if the relation is of type NTPP
 	if((!interExterBool)&&(!edgeEdgeBool))
@@ -440,14 +440,14 @@ ImageToImageRCC8Calculator<TInputImage>
 	      {
 		/// Else it must be computed
 		exterInterBool = ComputeExterInterBool();  
-		otbMsgDebugMacro(<<"RCC8Calculator->GenerateData(): ExterInter "<<exterInterBool);
+		// otbMsgDebugMacro(<<"RCC8Calculator->GenerateData(): ExterInter "<<exterInterBool);
 	      }
 	    /// If it is not sufficient to compute the relation
 	    if(!ComputeRelation(edgeEdgeBool,interExterBool,exterInterBool))
 	      {
 		/// Compute the last boolean
 		interInterBool = ComputeInterInterBool();
-		otbMsgDebugMacro(<<"RCC8Calculator->GenerateData(): InterInter "<<interInterBool);
+		// otbMsgDebugMacro(<<"RCC8Calculator->GenerateData(): InterInter "<<interInterBool);
 		/// Which allow the full determination
 		if ((interExterBool)&&(edgeEdgeBool)&&(exterInterBool)&&(!interInterBool))
 		  {
