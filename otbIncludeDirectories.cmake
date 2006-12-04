@@ -19,6 +19,8 @@ SET(OTB_INCLUDE_DIRS_BUILD_TREE ${OTB_INCLUDE_DIRS_BUILD_TREE}
   ${OTB_SOURCE_DIR}/Code/SpatialReasoning
   ${OTB_SOURCE_DIR}/Code/Visu
   ${OTB_BINARY_DIR}/Code/Visu
+  ${OTB_SOURCE_DIR}/Utilities/BGL
+  ${OTB_SOURCE_DIR}/Utilities/BGL/boost
 )
 
 #-----------------------------------------------------------------------------
@@ -72,6 +74,8 @@ SET(OTB_INCLUDE_DIRS_INSTALL_TREE ${OTB_INCLUDE_DIRS_INSTALL_TREE}
   ${OTB_INSTALL_INCLUDE_DIR}/Visu
   ${OTB_INSTALL_INCLUDE_DIR}/Utilities
   ${OTB_INSTALL_INCLUDE_DIR}/Utilities/ITK
+  ${OTB_INSTALL_INCLUDE_DIR}/Utilities/BGL
+  ${OTB_INSTALL_INCLUDE_DIR}/Utilities/BGL/boost
 )
 
 SET(OTB_INCLUDE_DIRS_INSTALL_TREE ${OTB_INCLUDE_DIRS_INSTALL_TREE}

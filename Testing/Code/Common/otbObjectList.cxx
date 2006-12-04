@@ -24,7 +24,7 @@
 
 void fail(char * failString)
 {
-  std::cerr<<"Test failed in "<<failString<<std::endl;
+  std::cout<<"Test failed in "<<failString<<std::endl;
   exit(-1);
 }
 

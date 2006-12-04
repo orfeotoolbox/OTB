@@ -27,8 +27,24 @@ namespace otb
 {
 /**
  * \class ImageToImageRCC8Calculator
- * \brief 
- * 
+ * \brief This class compute the RCC8 relation between the regions from two segmentation images.
+ *
+ * The RCC8 system comes from qualitative spatial reasoning. 
+ * It is a set of pairwise disjoint exhaustive relation between two closed region of space.
+ * There are 8 possible relations :
+ * DC: Disconnected
+ * EC: Externaly connected
+ * PO: Partial overlap
+ * TPP: Tangential proper part
+ * NTPP: Non tangential proper part
+ * TPPI: Tangential proper part inverse
+ * NTPPI: Non tangential proper part inverse
+ * EQ: Equivalence
+ *
+ * The goal of this class is to determine which of these 8 relations link the two inputs regions represented
+ * by the segmentation images. Since this class will further be used iteratively on a possibly large set 
+ * of region, it is optimised : the decision is managed by a decision tree, and the input data size is reduced 
+ * to the smallest set needed to determine the relation.
  */
 template <class TInputImage>            
   class ImageToImageRCC8Calculator : public itk::ImageToImageFilter<TInputImage,TInputImage>

@@ -34,32 +34,6 @@ OpeningClosingMorphologicalFilter<TInputImage, TOuputImage, TKernel>
   : m_Kernel()
 {}
 
-
-
-// /// Méthode standard pour la gestion du pipeline d'exécution
-// template <class TInputImage,class TOuputImage, class TKernel>
-// void
-// OpeningClosingMorphologicalFilter<TInputImage, TOuputImage, TKernel>
-// ::GenerateInputRequestedRegion()
-// {
-//   // Appel à l'implémentation de la classe supérieur
-//   Superclass::GenerateInputRequestedRegion();
-//   // Réccupération de l'image en entrée
-//   InputImagePointer input = const_cast<InputImageType *>(this->GetInput());
-//   input->SetRequestedRegion( input->GetLargestPossibleRegion());
-// }
-// /// Méthode standard pour la gestion du pipeline d'exécution
-// template <class TInputImage,class TOuputImage, class TKernel>
-// void
-// OpeningClosingMorphologicalFilter<TInputImage, TOuputImage, TKernel>
-// ::EnlargeOutputRequestedRegion(itk::DataObject *)
-// {
-//   this->GetOutput()->SetRequestedRegion( this->GetOutput()->GetLargestPossibleRegion());
-// }
-
-
-
-
 /**
  * Main computation method
  */
