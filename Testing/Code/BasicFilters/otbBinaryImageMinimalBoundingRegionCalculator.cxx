@@ -48,12 +48,10 @@ try
     for(int i=1;i<=nbImages;++i)
       {
 	ReaderType::Pointer reader = ReaderType::New();
-	out<<argv[2+i]<<std::endl;
 	reader->SetFileName(argv[2+i]);
 	reader->Update();
 	images->PushBack(reader->GetOutput());
       }
-    out<<std::endl;
 
     // Declaration
     BoundingRegionCalculatorType::Pointer brct;
