@@ -64,13 +64,14 @@ public:
   /** Edge typedef */
   typedef RCC8Edge EdgeType;
   typedef typename EdgeType::Pointer EdgePointerType;
+  typedef typename EdgeType::RCC8ValueType RCC8ValueType;
   /** Typedef for the boost graph representation */
   typedef boost::adjacency_list
   <boost::vecS,boost::vecS,boost::bidirectionalS,
-   VertexPointerType,EdgePointerType> GraphType;
+   VertexPointerType,EdgePointerType> InternalGraphType;
   /** Edges and vertices descriptors typedefs (boost objects)*/
-  typedef typename GraphType::vertex_descriptor  VertexDescriptorType;
-  typedef typename GraphType::edge_descriptor    EdgeDescriptorType;
+  typedef typename InternalGraphType::vertex_descriptor  VertexDescriptorType;
+  typedef typename InternalGraphType::edge_descriptor    EdgeDescriptorType;
   /** Getters and Setters for the number of vertices */
   itkSetMacro(NumberOfVertices,int);
   itkGetConstReferenceMacro(NumberOfVertices,int);
@@ -78,7 +79,7 @@ public:
    *  Return the internal boost graph object.
    *  \return The internal boost graph object
    */
-  GraphType GetGraph(void){return m_Graph;};
+  InternalGraphType GetGraph(void){return m_Graph;};
   /**
    * Since the number of vertices is mandatory to instantiate the
    * internal boost representation, the build method has to be called
@@ -103,8 +104,12 @@ public:
    * \param index2 The index of the target vertex.
    * \param edge The edge.
    */
-  void AddEdge(unsigned int index1, unsigned int index2, EdgePointerType edge);
-
+  void AddEdge(unsigned int index1, unsigned int index2, RCC8ValueType r);
+  
+  /**
+   * \class EdgeIterator
+   * \brief Iterates on the graph edges
+   */
 protected:
   /** Constructor */
   RCC8Graph();
@@ -118,7 +123,7 @@ private:
   /** Defines the number of vertices (ie total number of segmentation regions)*/
   int m_NumberOfVertices;
   /** Internal representation using the boost graph library */
-  GraphType m_Graph;
+  InternalGraphType m_Graph;
 };
 } // end namespace otb
 

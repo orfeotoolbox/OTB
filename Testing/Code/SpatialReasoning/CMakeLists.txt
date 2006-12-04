@@ -72,8 +72,7 @@ ADD_TEST(srTuRCC8GraphNew ${SPATIALREASONING_TESTS}
          otbRCC8GraphNew)
 
 ADD_TEST(srTvRCC8Graph ${SPATIALREASONING_TESTS} 
-         otbRCC8Graph
-	 20	 
+         otbRCC8Graph	 
 	 )
 
 # -------            otb::RCC8GraphSource   --------------------------

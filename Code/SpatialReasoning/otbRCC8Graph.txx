@@ -73,14 +73,16 @@ namespace otb
    * Add an edge in the graph.
    * \param index1 The index of the source vertex. 
    * \param index2 The index of the target vertex.
-   * \param edge The edge.
+   * \param r The rcc8 value associated to the edge.
    */
   template <class TVertex>
   void
   RCC8Graph<TVertex>
-  ::AddEdge(unsigned int index1, unsigned int index2, EdgePointerType edge)
+  ::AddEdge(unsigned int index1, unsigned int index2, RCC8ValueType r)
   {
     EdgeDescriptorType e = boost::add_edge(index1,index2,m_Graph).first;
+    EdgeType::Pointer edge = EdgeType::New();
+    edge->SetValue(r);
     m_Graph[e]=edge;
   }
   /**

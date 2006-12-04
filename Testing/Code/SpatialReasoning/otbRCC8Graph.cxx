@@ -18,6 +18,7 @@
 #include "itkExceptionObject.h"
 #include "otbRCC8Graph.h"
 #include "otbRCC8VertexBase.h"
+#include "otbRCC8VertexIterator.h"
 
 bool fail(bool test, char * reason)
 {
@@ -33,12 +34,14 @@ int otbRCC8Graph(int argc, char* argv[])
 try
   {
     const unsigned int Dimension = 2;
-    unsigned int nbVertices = atoi(argv[1]);
+    const unsigned int nbVertices = 3;
    
     typedef unsigned short  LabelType;
     typedef otb::RCC8VertexBase<LabelType> VertexType;
     typedef otb::RCC8Graph<VertexType> RCC8GraphType;
     typedef RCC8GraphType::EdgeType EdgeType;
+    typedef otb::RCC8VertexIterator<RCC8GraphType> VertexIteratorType;
+    // typedef RCC8GraphType::EdgeIterator   EdgeIteratorType;
     
     // Instantiation
     RCC8GraphType::Pointer rcc8Graph = RCC8GraphType::New();
@@ -52,12 +55,17 @@ try
     // Testing the set vertex method
     VertexType::Pointer vertex1 = VertexType::New();    
     VertexType::Pointer vertex2 = VertexType::New();
+    VertexType::Pointer vertex3 = VertexType::New();
     vertex1->SetSegmentationImageIndex(0);
     vertex1->SetObjectLabelInImage(1);
     vertex2->SetSegmentationImageIndex(1);
     vertex2->SetObjectLabelInImage(2);
+    vertex3->SetSegmentationImageIndex(2);
+    vertex3->SetObjectLabelInImage(3);
+
     rcc8Graph->SetVertex(0,vertex1);
     rcc8Graph->SetVertex(1,vertex2);
+    rcc8Graph->SetVertex(2,vertex3);
     fail(rcc8Graph->GetVertex(0)->GetSegmentationImageIndex()!=0,
 	 "rcc8Graph->GetVertex(0)->GetSegmentationImageIndex()!=0");
     fail(rcc8Graph->GetVertex(0)->GetObjectLabelInImage()!=1,
@@ -66,9 +74,52 @@ try
 	 "rcc8Graph->GetVertex(1)->GetSegmentationImageIndex()!=1");
     fail(rcc8Graph->GetVertex(1)->GetObjectLabelInImage()!=2,
 	 "rcc8Graph->GetVertex(1)->GetObjectLabelInImgage()!=2");
-    EdgeType::Pointer edge = EdgeType::New();
-    edge->SetValue(otb::OTB_RCC8_NTPPI);
-    rcc8Graph->AddEdge(0,1,edge);
+    fail(rcc8Graph->GetVertex(2)->GetSegmentationImageIndex()!=2,
+	 "rcc8Graph->GetVertex(2)->GetSegmentationImageIndex()!=2");
+    fail(rcc8Graph->GetVertex(2)->GetObjectLabelInImage()!=3,
+	 "rcc8Graph->GetVertex(2)->GetObjectLabelInImgage()!=3");
+
+    // Testing the vertex iterators
+    int i=0;
+    VertexIteratorType v(rcc8Graph);
+    for(v.GoToBegin();!v.IsAtEnd();++v,i++)
+      {
+	fail(v.Get()->GetSegmentationImageIndex()!=i,
+	  "v.Get()->GetSegmentationImageIndex()!=i");
+	fail(v.Get()->GetObjectLabelInImage()!=(i+1),
+	 "v.Get()->GetSegmentationImageIndex()!=i");
+      }
+    
+    // // Testing the edge iterator
+//     rcc8Graph->AddEdge(0,1,otb::OTB_RCC8_NTPPI);
+//     rcc8Graph->AddEdge(1,2,otb::OTB_RCC8_EC);
+//     i = 0;
+//     EdgeIteratorType e = rcc8Graph->EdgeBegin();
+//     for(;e!=rcc8Graph->EdgeEnd();++e,i++)
+//       {
+// 	if(i==0)
+// 	  {
+// 	    fail(e.GetValue()!=otb::OTB_RCC8_NTPPI,
+// 		 "e.GetValue()!=otb::OTB_RCC8_NTPPI");
+// 	    fail(e.GetSourceIndex()!=0,
+// 		 "e.GetSourceIndex()!=0");
+// 	    fail(e.GetTargetIndex()!=1,
+// 		 "e.GetTargetIndex()!=1");
+// 	  }
+// 	else if(i==1)
+// 	  {
+// 	    fail(e.GetValue()!=otb::OTB_RCC8_EC,
+// 		 "e.GetValue()!=otb::OTB_RCC8_EC");
+// 	    fail(e.GetSourceIndex()!=1,
+// 		 "e.GetSourceIndex()!=1");
+// 	    fail(e.GetTargetIndex()!=2,
+// 		 "e.GetTargetIndex()!=2");
+// 	  }
+// 	else
+// 	  {
+// 	    fail(true,"Edge iterator out of bound."); 
+// 	  }
+//       }
   }
 catch( itk::ExceptionObject & err ) 
   { 
