@@ -1,0 +1,18 @@
+
+
+INSTALL_FILES(/include/otb/Utilities/BGL/boost "(\\.hpp|\\.h|\\.txx)$")
+INSTALL_FILES(/include/otb/Utilities/BGL/boost/bind "(\\.hpp|\\.h|\\.txx)$")
+INSTALL_FILES(/include/otb/Utilities/BGL/boost/config "(\\.hpp|\\.h|\\.txx)$")
+INSTALL_FILES(/include/otb/Utilities/BGL/boost/detail "(\\.hpp|\\.h|\\.txx)$")
+INSTALL_FILES(/include/otb/Utilities/BGL/boost/function "(\\.hpp|\\.h|\\.txx)$")
+INSTALL_FILES(/include/otb/Utilities/BGL/boost/functional "(\\.hpp|\\.h|\\.txx)$")
+INSTALL_FILES(/include/otb/Utilities/BGL/boost/graph "(\\.hpp|\\.h|\\.txx)$")
+INSTALL_FILES(/include/otb/Utilities/BGL/boost/iterator "(\\.hpp|\\.h|\\.txx)$")
+INSTALL_FILES(/include/otb/Utilities/BGL/boost/mpl "(\\.hpp|\\.h|\\.txx)$")
+INSTALL_FILES(/include/otb/Utilities/BGL/boost/optional "(\\.hpp|\\.h|\\.txx)$")
+INSTALL_FILES(/include/otb/Utilities/BGL/boost/pending "(\\.hpp|\\.h|\\.txx)$")
+INSTALL_FILES(/include/otb/Utilities/BGL/boost/preprocessor "(\\.hpp|\\.h|\\.txx)$")
+INSTALL_FILES(/include/otb/Utilities/BGL/boost/spirit "(\\.hpp|\\.h|\\.txx)$")
+INSTALL_FILES(/include/otb/Utilities/BGL/boost/tuple "(\\.hpp|\\.h|\\.txx)$")
+INSTALL_FILES(/include/otb/Utilities/BGL/boost/type_traits "(\\.hpp|\\.h|\\.txx)$")
+INSTALL_FILES(/include/otb/Utilities/BGL/boost/utility"(\\.hpp|\\.h|\\.txx)$")
