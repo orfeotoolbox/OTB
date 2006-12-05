@@ -81,6 +81,25 @@ ADD_TEST(srTvRCC8Graph ${SPATIALREASONING_TESTS}
 ADD_TEST(srTuRCC8GraphSourceNew ${SPATIALREASONING_TESTS} 
          otbRCC8GraphSourceNew)
 
+# -------        otb::RCC8GraphFileWriter   --------------------------
+
+ADD_TEST(srTuRCC8GraphFileWriterNew ${SPATIALREASONING_TESTS} 
+         otbRCC8GraphFileWriterNew)
+
+ADD_TEST(srTvRCC8GraphFileWriter ${SPATIALREASONING_TESTS} 
+	--compare-ascii	${TOL}
+			${BASELINE_FILES}/srRCC8GraphWriterOutput1.dot
+			${TEMP}/srRCC8GraphWriterOutput1.dot
+	 otbRCC8GraphFileWriter
+			${TEMP}/srRCC8GraphWriterOutput1.dot
+)
+
+# -------        otb::RCC8GraphFileReader   --------------------------
+
+#ADD_TEST(srTuRCC8GraphFileReaderNew ${SPATIALREASONING_TESTS} 
+#         otbRCC8GraphFileReaderNew)
+
+
 # -------       Fichiers sources CXX -----------------------------------
 SET(BasicSpatialReasoning_SRCS
 otbImageToImageRCC8CalculatorNew.cxx
@@ -94,6 +113,9 @@ otbRCC8Edge.cxx
 otbRCC8GraphNew.cxx
 otbRCC8Graph.cxx
 otbRCC8GraphSourceNew.cxx
+otbRCC8GraphFileWriterNew.cxx
+otbRCC8GraphFileWriter.cxx
+#otbRCC8GraphFileReaderNew.cxx
 )
 
 INCLUDE_DIRECTORIES("${OTBTesting_BINARY_DIR}")

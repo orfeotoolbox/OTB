@@ -62,6 +62,19 @@ namespace otb
   {
     return (*(m_Graph->GetGraph()))[*m_Iter];
   }
+  /**
+   * Get the current vertex index.
+   * \return The current vertex index.
+   */
+  template <class TGraph>
+  typename  RCC8VertexIterator<TGraph>
+  ::VertexDescriptorType 
+  RCC8VertexIterator<TGraph>
+  ::GetIndex(void)
+  {
+    IndexMapType index = get(boost::vertex_index,(*m_Graph->GetGraph()));
+    return index[*m_Iter];
+  }
   /** 
     * Return true if the iterator is at the end.
     * \return True if the iterator is at the end.

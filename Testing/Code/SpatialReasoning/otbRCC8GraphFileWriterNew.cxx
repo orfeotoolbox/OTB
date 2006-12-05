@@ -18,17 +18,19 @@
 #include "itkExceptionObject.h"
 #include "otbRCC8Graph.h"
 #include "otbRCC8VertexBase.h"
+#include "otbRCC8GraphFileWriter.h"
 
-int otbRCC8GraphNew(int argc, char* argv[])
+int otbRCC8GraphFileWriterNew(int argc, char* argv[])
 {
 try
   {
     typedef unsigned char  PixelType;
     typedef otb::RCC8VertexBase<PixelType> VertexType;
     typedef otb::RCC8Graph<VertexType> RCC8GraphType;
+    typedef otb::RCC8GraphFileWriter<RCC8GraphType> RCC8GraphFileWriterType;
     
     // Instantiation
-    RCC8GraphType::Pointer rcc8Graph = RCC8GraphType::New();
+    RCC8GraphFileWriterType::Pointer rcc8GraphWriter = RCC8GraphFileWriterType::New();
   }
 catch( itk::ExceptionObject & err ) 
   { 
@@ -43,3 +45,4 @@ catch( ... )
   } 
  return EXIT_SUCCESS;
 }
+

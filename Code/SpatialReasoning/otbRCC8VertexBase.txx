@@ -60,7 +60,7 @@ RCC8VertexBase<TLabel>
   results.push_back(oss.str());
   oss.str("");
   results.push_back("ObjectLabelInImage");
-  oss<<m_ObjectLabelInImage;
+  oss<<static_cast<unsigned int>(m_ObjectLabelInImage);
   results.push_back(oss.str());
   oss.str("");
   return results;

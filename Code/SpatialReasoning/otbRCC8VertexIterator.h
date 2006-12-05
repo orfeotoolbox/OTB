@@ -38,9 +38,11 @@ class RCC8VertexIterator
   typedef typename GraphType::InternalGraphType InternalGraphType;
   typedef typename GraphType::Pointer GraphPointerType;
   typedef typename GraphType::VertexPointerType VertexPointerType;
+  typedef typename GraphType::VertexDescriptorType VertexDescriptorType;
   /** typedef of the internal iterator */
   typedef typename boost::graph_traits<InternalGraphType>::vertex_iterator InternalIteratorType;
-
+/** Typedef of the index map */
+  typedef typename boost::property_map<InternalGraphType, boost::vertex_index_t>::type IndexMapType;
   /** Constructor */
   RCC8VertexIterator();  
    /** Copy constructor */
@@ -52,6 +54,11 @@ class RCC8VertexIterator
    * \return The current vertex pointed by the iterator.
    */
   VertexPointerType Get(void);
+  /**
+   * Get the current vertex index.
+   * \return The current vertex index.
+   */
+  VertexDescriptorType GetIndex(void);
    /** 
     * Return true if the iterator is at the end.
     * \return True if the iterator is at the end.

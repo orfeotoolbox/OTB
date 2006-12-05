@@ -34,9 +34,7 @@ int otbRCC8Graph(int argc, char* argv[])
 {
   try
     {
-      const unsigned int Dimension = 2;
       const unsigned int nbVertices = 3;
-   
       typedef unsigned short  LabelType;
       typedef otb::RCC8VertexBase<LabelType> VertexType;
       typedef otb::RCC8Graph<VertexType> RCC8GraphType;
