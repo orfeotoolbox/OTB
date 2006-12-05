@@ -18,11 +18,13 @@
 #ifndef _otbRCC8VertexIterator_txx
 #define _otbRCC8VertexIterator_txx
 
+#include "otbRCC8VertexIterator.h"
 
 namespace otb
 {
-
- /** Constructor */
+ /** 
+  * Constructor
+  */
   template <class TGraph>
   RCC8VertexIterator<TGraph>
   ::RCC8VertexIterator()
@@ -46,7 +48,7 @@ namespace otb
   ::RCC8VertexIterator(TGraph * graph) 
   {
     m_Graph=graph;
-    tie(m_Iter,m_End)=vertices(m_Graph->GetGraph());
+    tie(m_Iter,m_End)=vertices(*(m_Graph->GetGraph()));
   }
   /**
    * Get the current object.
@@ -58,7 +60,7 @@ namespace otb
   RCC8VertexIterator<TGraph>
   ::Get(void)
   {
-    return (m_Graph->GetGraph())[*m_Iter];
+    return (*(m_Graph->GetGraph()))[*m_Iter];
   }
   /** 
     * Return true if the iterator is at the end.
@@ -79,7 +81,7 @@ namespace otb
   RCC8VertexIterator<TGraph>
   ::GoToBegin(void)
   {
-    tie(m_Iter,m_End)=vertices(m_Graph->GetGraph());
+    tie(m_Iter,m_End)=vertices(*(m_Graph->GetGraph()));
   }
   /**
    * Increment.

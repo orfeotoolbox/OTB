@@ -79,7 +79,7 @@ public:
    *  Return the internal boost graph object.
    *  \return The internal boost graph object
    */
-  InternalGraphType GetGraph(void){return m_Graph;};
+  InternalGraphType * GetGraph(void){return &m_Graph;};
   /**
    * Since the number of vertices is mandatory to instantiate the
    * internal boost representation, the build method has to be called
@@ -105,11 +105,11 @@ public:
    * \param edge The edge.
    */
   void AddEdge(unsigned int index1, unsigned int index2, RCC8ValueType r);
-  
   /**
-   * \class EdgeIterator
-   * \brief Iterates on the graph edges
+   * Get number of edges
+   * /return The number of edges.
    */
+  unsigned int GetNumberOfEdges(void);
 protected:
   /** Constructor */
   RCC8Graph();

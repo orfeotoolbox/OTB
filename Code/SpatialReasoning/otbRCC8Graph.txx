@@ -39,7 +39,9 @@ namespace otb
   {
     for(int i = 0; i<m_NumberOfVertices;i++)
       {
-	boost::add_vertex(m_Graph);
+	VertexDescriptorType id = boost::add_vertex(m_Graph);
+	VertexPointerType vertex = VertexType::New();
+	m_Graph[id]=vertex;
       }
   }
   /**
@@ -85,6 +87,19 @@ namespace otb
     edge->SetValue(r);
     m_Graph[e]=edge;
   }
+ /**
+   * Get number of edges
+   * /return The number of edges.
+   */
+  template <class TVertex>
+  unsigned int
+  RCC8Graph<TVertex>
+  ::GetNumberOfEdges(void)
+  {
+    return num_edges(m_Graph);
+
+  }
+
   /**
    * PrintSelf method
    */

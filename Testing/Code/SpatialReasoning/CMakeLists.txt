@@ -67,6 +67,7 @@ ADD_TEST(srTvRCC8Edge ${SPATIALREASONING_TESTS}
 	 )
 
 # -------            otb::RCC8Graph   --------------------------
+# (also testing otb::RCC8VertexIterator and otb::RCC8EdgeIterator)
 
 ADD_TEST(srTuRCC8GraphNew ${SPATIALREASONING_TESTS} 
          otbRCC8GraphNew)
