@@ -117,7 +117,12 @@ protected:
     ~RCC8Graph(){};
     /** PrintSelf method */
     void PrintSelf(std::ostream& os, itk::Indent indent) const;
-
+    /**
+     * Initialize a range of vertex.
+     * \param num The index of the last vertices to intialize.
+     */
+    void Initialize( unsigned int num);
+    
 private:
   
   /** Defines the number of vertices (ie total number of segmentation regions)*/

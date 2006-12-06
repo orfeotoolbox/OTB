@@ -38,26 +38,25 @@ RCC8VertexWithCompacity<TLabel,TPrecision>
 template <class TLabel,class TPrecision>
 void
 RCC8VertexWithCompacity<TLabel,TPrecision>
-::SetAttributesVector(AttributesVectorType attributes)
+::SetAttributesMap(AttributesMapType attributes)
 {
-  this->Superclass::SetAttributesVector(attributes);
-  m_Compacity=static_cast<TPrecision>(atof(attributes[5].c_str()));
+  this->Superclass::SetAttributesMap(attributes);
+  m_Compacity=static_cast<TPrecision>(atof(attributes["Compacity"].c_str()));
 }
 /**
  * Get an attributes vector representing the VertexBase attributes.
  * \return The attributes vector
  */
 template <class TLabel,class TPrecision>
-typename RCC8VertexWithCompacity<TLabel,TPrecision>::AttributesVectorType
+typename RCC8VertexWithCompacity<TLabel,TPrecision>::AttributesMapType
 RCC8VertexWithCompacity<TLabel,TPrecision>
-::GetAttributesVector(void)
+::GetAttributesMap(void)
 {  
   std::stringstream oss;
-  AttributesVectorType results;
-  results=this->Superclass::GetAttributesVector();
-  results.push_back("Compacity");
+  AttributesMapType results;
+  results=this->Superclass::GetAttributesMap();
   oss<<m_Compacity;
-  results.push_back(oss.str());
+  results["Compacity"]=oss.str();
   oss.str("");
   return results;
 }

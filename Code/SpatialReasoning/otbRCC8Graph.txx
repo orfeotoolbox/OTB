@@ -26,7 +26,9 @@ namespace otb
   template <class TVertex>
   RCC8Graph<TVertex>
   ::RCC8Graph()
-  {};
+  {
+    m_NumberOfVertices = 0;
+  };
   /**
    * since the number of vertices is mandatory to instantiate the
    * internal boost representation, the build method has to be called
@@ -37,7 +39,18 @@ namespace otb
   RCC8Graph<TVertex>
   ::Build(void)
   {
-    for(int i = 0; i<m_NumberOfVertices;i++)
+    this->Initialize(m_NumberOfVertices-1);
+  }
+  /**
+   * Initialize a range of vertex.
+   * \param num The index of the last vertices to intialize.
+   */
+  template <class TVertex>
+  void 
+  RCC8Graph<TVertex>
+  ::Initialize( unsigned int num)
+  {
+    for(int id = boost::num_vertices(m_Graph); id<=num;id++)
       {
 	VertexDescriptorType id = boost::add_vertex(m_Graph);
 	VertexPointerType vertex = VertexType::New();
@@ -54,6 +67,11 @@ namespace otb
   RCC8Graph<TVertex>
   ::SetVertex(unsigned int index, VertexPointerType vertex)
   {
+    if(index>=m_NumberOfVertices)
+      {
+	this->Initialize(index);
+	m_NumberOfVertices = index+1;
+      }
     VertexDescriptorType v = *boost::vertices(m_Graph).first;
     m_Graph[v+index]= vertex;
   }
@@ -97,9 +115,7 @@ namespace otb
   ::GetNumberOfEdges(void)
   {
     return num_edges(m_Graph);
-
   }
-
   /**
    * PrintSelf method
    */

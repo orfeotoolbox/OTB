@@ -96,9 +96,22 @@ ADD_TEST(srTvRCC8GraphFileWriter ${SPATIALREASONING_TESTS}
 
 # -------        otb::RCC8GraphFileReader   --------------------------
 
-#ADD_TEST(srTuRCC8GraphFileReaderNew ${SPATIALREASONING_TESTS} 
-#         otbRCC8GraphFileReaderNew)
+ADD_TEST(srTuRCC8GraphFileReaderNew ${SPATIALREASONING_TESTS} 
+         otbRCC8GraphFileReaderNew)
 
+ADD_TEST(srTvRCC8GraphFileReader ${SPATIALREASONING_TESTS} 
+	 otbRCC8GraphFileReader
+			${TEMP}/srRCC8GraphWriterOutput1.dot
+)
+
+ADD_TEST(srTvRCC8GraphIOEndToEnd ${SPATIALREASONING_TESTS}
+	--compare-ascii	${TOL}
+			${BASELINE_FILES}/srRCC8GraphWriterOutput1.dot
+			${TEMP}/srRCC8GraphIOEndToEndOut.dot
+	 otbRCC8GraphIOEndToEnd
+	                ${BASELINE_FILES}/srRCC8GraphWriterOutput1.dot
+			${TEMP}/srRCC8GraphIOEndToEndOut.dot
+)
 
 # -------       Fichiers sources CXX -----------------------------------
 SET(BasicSpatialReasoning_SRCS
@@ -115,7 +128,9 @@ otbRCC8Graph.cxx
 otbRCC8GraphSourceNew.cxx
 otbRCC8GraphFileWriterNew.cxx
 otbRCC8GraphFileWriter.cxx
-#otbRCC8GraphFileReaderNew.cxx
+otbRCC8GraphFileReaderNew.cxx
+otbRCC8GraphFileReader.cxx
+otbRCC8GraphIOEndToEnd.cxx
 )
 
 INCLUDE_DIRECTORIES("${OTBTesting_BINARY_DIR}")

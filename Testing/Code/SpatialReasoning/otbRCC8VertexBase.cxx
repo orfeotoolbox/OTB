@@ -26,7 +26,7 @@ try
     unsigned int imageIndex = atoi(argv[1]);
     LabelType objectLabel = static_cast<LabelType>(atof(argv[2]));
     typedef otb::RCC8VertexBase<LabelType> RCC8VertexType;
-    typedef RCC8VertexType::AttributesVectorType AttributesVectorType;
+    typedef RCC8VertexType::AttributesMapType AttributesMapType;
     // Instantiation
     RCC8VertexType::Pointer vertex1= RCC8VertexType::New();
     // Getters / setters tests
@@ -43,30 +43,20 @@ try
 	return EXIT_FAILURE;
       }
     // attributes vector set test
-    AttributesVectorType attr1 = vertex1->GetAttributesVector(); 
-    if(attr1[0].compare(std::string("SegmentationImageIndex"))!=0)
+    AttributesMapType attr1 = vertex1->GetAttributesMap(); 
+    if(attr1["SegmentationImageIndex"].compare(std::string(argv[1]))!=0)
       {
-	std::cout<<"Test failed: vertex1->GetAttributesVector()[0]!=\"SegmentationImageIndex\""<<std::endl;
+	std::cout<<"Test failed: vertex1->GetAttributesMap()[\"SegmentationImageIndex\"]!=std::string(argv[1])"<<std::endl;
 	return EXIT_FAILURE;
       }
-    if(attr1[2].compare(std::string("ObjectLabelInImage"))!=0)
+    if(attr1["ObjectLabelInImage"].compare(std::string(argv[2]))!=0)
       {
-	std::cout<<"Test failed: vertex1->GetAttributesVector()[2]!=\"ObjectLabelInImage\""<<std::endl;
-	return EXIT_FAILURE;
-      }
-    if(attr1[1].compare(std::string(argv[1]))!=0)
-      {
-	std::cout<<"Test failed: vertex1->GetAttributesVector()[1]!=std::string(argv[1])"<<std::endl;
-	return EXIT_FAILURE;
-      }
-    if(attr1[3].compare(std::string(argv[2]))!=0)
-      {
-	std::cout<<"Test failed: vertex1->GetAttributesVector()[3]!=std::string(argv[2])"<<std::endl;
+	std::cout<<"Test failed: vertex1->GetAttributesMap()[\"ObjectLabelInImage\"]!=std::string(argv[2])"<<std::endl;
 	return EXIT_FAILURE;
       }
     // attributes vector get test
     RCC8VertexType::Pointer vertex2 = RCC8VertexType::New();
-    vertex2->SetAttributesVector(attr1);
+    vertex2->SetAttributesMap(attr1);
     if(vertex1->GetSegmentationImageIndex()!=vertex2->GetSegmentationImageIndex())
       {
 	std::cout<<"Test failed: vertex1->GetSegmentationImageIndex()!=vertex2->GetSegmentationImageIndex()"<<std::endl;

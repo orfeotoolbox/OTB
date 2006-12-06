@@ -33,6 +33,7 @@ template <class TInputGraph>
 RCC8GraphFileWriter<TInputGraph>
 ::RCC8GraphFileWriter()
 {
+  this->SetNumberOfRequiredInputs(1);
   m_FileName = "";
   otbMsgDebugMacro(<<"RCC8GraphFileWriter: Call to constructor");
 }
@@ -65,21 +66,7 @@ typename RCC8GraphFileWriter<TInputGraph>
 RCC8GraphFileWriter<TInputGraph>
 ::GetInput(void)
 {
-//   if(this->GetNumberOfInputs()<1)
-//     {
-//       return 0;
-//     }
   return static_cast<TInputGraph*>(this->itk::ProcessObject::GetInput(0));
-}
-/**
- * Update method
- */
-template <class TInputGraph>
-void
-RCC8GraphFileWriter<TInputGraph>
-::Update(void)
-{
-  this->GenerateData();
 }
 /**
  * Main computation method.
@@ -157,34 +144,25 @@ RCC8GraphFileWriter<TInputGraph>
 ::WriteVertex(std::ofstream& of, VertexDescriptorType index,
 		   VertexPointerType vertex)
 {
-  typedef typename VertexType::AttributesVectorType AttributesVectorType;
-  typedef typename AttributesVectorType::iterator IteratorType;
-  AttributesVectorType attr = vertex->GetAttributesVector();
-  if(attr.size()%2!=0)
+  typedef typename VertexType::AttributesMapType AttributesMapType;
+  typedef typename AttributesMapType::iterator IteratorType;
+  AttributesMapType attr = vertex->GetAttributesMap();
+  otbMsgDebugMacro(<<"RCC8GraphFileWriter: WriteVertex call: "<<index);
+  of<<index<<" [";
+  IteratorType it = attr.begin();
+  while(it!=attr.end())
     {
-      // We may throw an exception here
-      return;
-    }
-  else
-    {
-      otbMsgDebugMacro(<<"RCC8GraphFileWriter: WriteVertex call: "<<index);
-      of<<index<<" [";
-      IteratorType it = attr.begin();
-      while(it<attr.end())
+      of<<(*it).first<<"=\"";
+      of<<(*it).second<<"\"";
+      ++it;
+      if(it==attr.end())
 	{
-	  of<<(*it)<<"=\"";
-	  ++it;
-	  of<<(*it)<<"\"";
-	  ++it;
-	  if(it==attr.end())
-	    {
-	     of<<"];"<<std::endl;
-	    }
-	  else
-	    {
-	      of<<",";
-	    } 
+	  of<<"];"<<std::endl;
 	}
+      else
+	{
+	  of<<",";
+	} 
     }
 }
 /**

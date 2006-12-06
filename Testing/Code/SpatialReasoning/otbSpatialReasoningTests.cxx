@@ -39,5 +39,7 @@ REGISTER_TEST(otbRCC8Graph);
 REGISTER_TEST(otbRCC8GraphSourceNew);
 REGISTER_TEST(otbRCC8GraphFileWriterNew);
 REGISTER_TEST(otbRCC8GraphFileWriter);
- // REGISTER_TEST(otbRCC8GraphFileReaderNew);
+REGISTER_TEST(otbRCC8GraphFileReaderNew);
+REGISTER_TEST(otbRCC8GraphFileReader);
+REGISTER_TEST(otbRCC8GraphIOEndToEnd);
 }

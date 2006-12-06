@@ -48,7 +48,7 @@ class RCC8VertexBase : public itk::DataObject
   typedef TLabel LabelType;
   
   /** char* vector attributes */
-  typedef std::vector<std::string> AttributesVectorType;
+  typedef std::map<std::string,std::string> AttributesMapType;
  
   /** Segmentation image index accessors */
   itkGetMacro(SegmentationImageIndex,unsigned int);
@@ -60,12 +60,12 @@ class RCC8VertexBase : public itk::DataObject
    * Set the VertexBase attributes from the attributes vector.
    * \param attributes The vector containing the parsed attributes.
    */
-  virtual void SetAttributesVector(AttributesVectorType attributes);
+  virtual void SetAttributesMap(AttributesMapType attributes);
   /**
    * Get an attributes vector representing the VertexBase attributes.
    * \return The attributes vector
    */
-  virtual AttributesVectorType GetAttributesVector(void);
+  virtual AttributesMapType GetAttributesMap(void);
 
 protected:
   /** Constructor */

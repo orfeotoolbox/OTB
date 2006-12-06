@@ -47,7 +47,7 @@ namespace otb
       /** Precision  typedef */
       typedef TPrecision PrecisionType;
       /** char* vector attributes */
-      typedef  typename Superclass::AttributesVectorType  AttributesVectorType;
+      typedef  typename Superclass::AttributesMapType  AttributesMapType;
  
       /** Segmentation image index accessors */
       itkGetMacro(Compacity,PrecisionType);
@@ -56,12 +56,12 @@ namespace otb
        * Set the VertexWithCompacity attributes from the attributes vector.
        * \param attributes The vector containing the parsed attributes.
        */
-      void SetAttributesVector(AttributesVectorType attributes);
+      void SetAttributesMap(AttributesMapType attributes);
       /**
        * Get an attributes vector representing the VertexWithCompacity attributes.
        * \return The attributes vector
        */
-      AttributesVectorType GetAttributesVector(void);
+      AttributesMapType GetAttributesMap(void);
 
       protected:
       /** Constructor */

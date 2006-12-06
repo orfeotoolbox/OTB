@@ -39,29 +39,27 @@ RCC8VertexBase<TLabel>
 template <class TLabel>
 void
 RCC8VertexBase<TLabel>
-::SetAttributesVector(AttributesVectorType attributes)
+::SetAttributesMap(AttributesMapType attributes)
 {
-  m_SegmentationImageIndex=static_cast<unsigned int>(atoi(attributes[1].c_str()));
-  m_ObjectLabelInImage=static_cast<LabelType>(atof(attributes[3].c_str()));
+  m_SegmentationImageIndex=static_cast<unsigned int>(atoi(attributes["SegmentationImageIndex"].c_str()));
+  m_ObjectLabelInImage=static_cast<LabelType>(atof(attributes["ObjectLabelInImage"].c_str()));
 }
 /**
  * Get an attributes vector representing the VertexBase attributes.
  * \return The attributes vector
  */
 template <class TLabel>
-typename RCC8VertexBase<TLabel>::AttributesVectorType
+typename RCC8VertexBase<TLabel>::AttributesMapType
 RCC8VertexBase<TLabel>
-::GetAttributesVector(void)
+::GetAttributesMap(void)
 {  
   std::stringstream oss;
-  AttributesVectorType results;
-  results.push_back("SegmentationImageIndex");
+  AttributesMapType results;
   oss<<m_SegmentationImageIndex;
-  results.push_back(oss.str());
+  results["SegmentationImageIndex"]=oss.str();
   oss.str("");
-  results.push_back("ObjectLabelInImage");
   oss<<static_cast<unsigned int>(m_ObjectLabelInImage);
-  results.push_back(oss.str());
+  results["ObjectLabelInImage"]=oss.str();
   oss.str("");
   return results;
 }

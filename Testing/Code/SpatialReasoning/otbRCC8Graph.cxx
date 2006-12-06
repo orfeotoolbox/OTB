@@ -21,12 +21,12 @@ PURPOSE.  See the above copyright notices for more information.
 #include "otbRCC8VertexIterator.h"
 #include "otbRCC8EdgeIterator.h"
 
-bool fail(bool test, char * reason)
+void fail(bool test, char * reason)
 {
   if(test)
     {
       std::cout<<"Test failed: "<<reason<<std::endl;
-      return EXIT_FAILURE;
+      exit(-1);
     }
 }
 
@@ -45,12 +45,12 @@ int otbRCC8Graph(int argc, char* argv[])
       // Instantiation
       RCC8GraphType::Pointer rcc8Graph = RCC8GraphType::New();
       // Setting the number of vertices
-      rcc8Graph->SetNumberOfVertices(nbVertices);
+      rcc8Graph->SetNumberOfVertices(nbVertices-1);
       // Call to the build method
       rcc8Graph->Build();
       // Testing the number of vertices getter
-      fail(rcc8Graph->GetNumberOfVertices()!=nbVertices,
-	   "rcc8Graph->GetNumberOfVertices()!=nbVertices");
+      fail(rcc8Graph->GetNumberOfVertices()!=nbVertices-1,
+	   "rcc8Graph->GetNumberOfVertices()!=nbVertices-1");
       // Testing the set vertex method
       VertexType::Pointer vertex1 = VertexType::New();    
       VertexType::Pointer vertex2 = VertexType::New();
@@ -65,6 +65,8 @@ int otbRCC8Graph(int argc, char* argv[])
       rcc8Graph->SetVertex(0,vertex1);
       rcc8Graph->SetVertex(1,vertex2);
       rcc8Graph->SetVertex(2,vertex3);
+      fail(rcc8Graph->GetNumberOfVertices()!=nbVertices,
+	   "rcc8Graph->GetNumberOfVertices()!=nbVertices");
       fail(rcc8Graph->GetVertex(0)->GetSegmentationImageIndex()!=0,
 	   "rcc8Graph->GetVertex(0)->GetSegmentationImageIndex()!=0");
       fail(rcc8Graph->GetVertex(0)->GetObjectLabelInImage()!=1,

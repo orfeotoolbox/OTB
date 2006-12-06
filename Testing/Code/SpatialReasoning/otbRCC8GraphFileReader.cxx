@@ -1,0 +1,144 @@
+/*=========================================================================
+
+  Program:   ORFEO Toolbox
+  Language:  C++
+  Date:      $Date$
+  Version:   $Revision$
+
+
+  Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
+  See OTBCopyright.txt for details.
+
+
+     This software is distributed WITHOUT ANY WARRANTY; without even 
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     PURPOSE.  See the above copyright notices for more information.
+
+=========================================================================*/
+#include "itkExceptionObject.h"
+#include "otbRCC8Graph.h"
+#include "otbRCC8VertexIterator.h"
+#include "otbRCC8EdgeIterator.h"
+#include "otbRCC8VertexBase.h"
+#include "otbRCC8GraphFileReader.h"
+
+bool failed(bool test,char* reason)
+{
+  if(test)
+    {
+      std::cout<<"Test failed: "<<reason<<std::endl;
+      exit(-1);
+    }
+}
+
+int otbRCC8GraphFileReader(int argc, char* argv[])
+{
+try
+  {
+    char * inputFilename = argv[1];
+    typedef unsigned int  LabelType;
+    typedef otb::RCC8VertexBase<LabelType> VertexType;
+    typedef otb::RCC8Graph<VertexType> RCC8GraphType;
+    typedef otb::RCC8GraphFileReader<RCC8GraphType> RCC8GraphFileReaderType;
+    typedef otb::RCC8VertexIterator<RCC8GraphType> VertexIteratorType;
+    typedef otb::RCC8EdgeIterator<RCC8GraphType> EdgeIteratorType;
+    
+    // Instantiation
+    RCC8GraphFileReaderType::Pointer rcc8GraphReader = RCC8GraphFileReaderType::New();
+    rcc8GraphReader->SetFileName(inputFilename);
+    rcc8GraphReader->Update();
+    
+    // Getting the output graph
+    RCC8GraphType::Pointer graph = rcc8GraphReader->GetOutput();
+    
+    // Checking vertices
+    VertexIteratorType vIt(graph);
+    int count = 0;
+
+    failed(graph->GetNumberOfVertices()!=4,
+	   "graph->GetNumberOfVertices()!=4");
+    failed(graph->GetNumberOfEdges()!=6,
+	   "graph->GetNumberOfEdges()!=6");
+
+    for(vIt.GoToBegin();!vIt.IsAtEnd();++vIt,++count)
+      {
+	failed(vIt.Get()->GetSegmentationImageIndex()!=count,
+	     "vIt.Get()->GetSegmentationImageIndex()!=count");
+	failed(vIt.Get()->GetObjectLabelInImage()!=count,
+	     "vIt.Get()->GetObjectLabelInImage()!=count");
+      }
+    
+    // Checking edges
+    EdgeIteratorType eIt(graph);
+    count=0;
+    for(eIt.GoToBegin();!eIt.IsAtEnd();++eIt,++count)
+      {
+	switch(count)
+	  {
+	  case 0:
+	    failed(eIt.GetValue()!=otb::OTB_RCC8_EC,
+		 "eIt.GetValue()!=otb::OTB_RCC8_EC");
+	    failed(eIt.GetSourceIndex()!=0,
+		 "eIt.GetSourceIndex()!=0");
+	    failed(eIt.GetTargetIndex()!=1,
+		 "eIt.GetTargetIndex()!=1");
+	    break;	    
+	  case 1:
+	    failed(eIt.GetValue()!=otb::OTB_RCC8_PO,
+		 "eIt.GetValue()!=otb::OTB_RCC8_PO");
+	    failed(eIt.GetSourceIndex()!=1,
+		 "eIt.GetSourceIndex()!=1");
+	    failed(eIt.GetTargetIndex()!=2,
+		 "eIt.GetTargetIndex()!=2");
+	    break;
+	  case 2:
+	    failed(eIt.GetValue()!=otb::OTB_RCC8_TPP,
+		 "eIt.GetValue()!=otb::OTB_RCC8_TPP");
+	    failed(eIt.GetSourceIndex()!=2,
+		 "eIt.GetSourceIndex()!=2");
+	    failed(eIt.GetTargetIndex()!=3,
+		 "eIt.GetTargetIndex()!=3");
+	    break;
+	  case 3:
+	    failed(eIt.GetValue()!=otb::OTB_RCC8_TPPI,
+		 "eIt.GetValue()!=otb::OTB_RCC8_TPPI");
+	    failed(eIt.GetSourceIndex()!=0,
+		 "eIt.GetSourceIndex()!=0");
+	    failed(eIt.GetTargetIndex()!=2,
+		 "eIt.GetTargetIndex()!=2");
+	    break;
+	  case 4:
+	    failed(eIt.GetValue()!=otb::OTB_RCC8_NTPP,
+		 "eIt.GetValue()!=otb::OTB_RCC8_NTPP");
+	    failed(eIt.GetSourceIndex()!=1,
+		 "eIt.GetSourceIndex()!=1");
+	    failed(eIt.GetTargetIndex()!=3,
+		 "eIt.GetTargetIndex()!=3");
+	    break;
+	  case 5:
+	    failed(eIt.GetValue()!=otb::OTB_RCC8_NTPPI,
+		 "eIt.GetValue()!=otb::OTB_RCC8_NTPPI");
+	    failed(eIt.GetSourceIndex()!=0,
+		 "eIt.GetSourceIndex()!=0");
+	    failed(eIt.GetTargetIndex()!=3,
+		 "eIt.GetTargetIndex()!=3");
+	    break;
+	  default:
+	    failed(true,"Error in graph reading.");
+	    break;
+	  }
+      }
+  }
+catch( itk::ExceptionObject & err ) 
+  { 
+    std::cout << "Exception itk::ExceptionObject thrown !" << std::endl; 
+    std::cout << err << std::endl; 
+    return EXIT_FAILURE;
+  } 
+catch( ... ) 
+  { 
+    std::cout << "Unknown exception thrown !" << std::endl; 
+    return EXIT_FAILURE;
+  } 
+ return EXIT_SUCCESS;
+}

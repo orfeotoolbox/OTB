@@ -24,7 +24,17 @@
 namespace otb
 {
 /**
- * \class RCC8GraphFileWriter
+ * \class RCC8GraphFileWriter 
+ * \brief This class writes a RCC8 Graph to a dot file (graphviz file format).
+ * 
+ * The writer first loops on the vertices of the graph, getting the property map 
+ * from each vertex and printing it in a line.
+ *
+ * It then iterates on the edges of the graphs, printing source index, target index, 
+ * and RCC8 value in a line for each of them. 
+ *
+ * \sa RCC8GraphFileReader
+ * \sa RCC8Graph
  */
 template <class TInputGraph> 
 class RCC8GraphFileWriter 
@@ -47,7 +57,7 @@ public:
   typedef typename VertexType::Pointer VertexPointerType;
   typedef typename InputGraphType::VertexDescriptorType VertexDescriptorType;
   typedef typename InputGraphType::RCC8ValueType RCC8ValueType;
-  typedef typename VertexType::AttributesVectorType AttributesVectorType;
+  typedef typename VertexType::AttributesMapType AttributesMapType;
   /** Set the filename */
   itkSetStringMacro(FileName);
   /** Get the filename */
@@ -62,8 +72,6 @@ public:
    * \return The input graph pointer.
    */
   InputGraphPointerType GetInput();
-  /** Update method */
-  virtual void Update(void);
  
 protected:
   /** Constructor */
