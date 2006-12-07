@@ -42,5 +42,7 @@ REGISTER_TEST(otbRCC8GraphFileWriter);
 REGISTER_TEST(otbRCC8GraphFileReaderNew);
 REGISTER_TEST(otbRCC8GraphFileReader);
 REGISTER_TEST(otbRCC8GraphIOEndToEnd);
-//REGISTER_TEST(otbImageListToRCC8GraphFilterNew);
+REGISTER_TEST(otbImageListToRCC8GraphFilterNew);
+REGISTER_TEST(otbImageMultiSegmentationToRCC8GraphFilterNew);
+//REGISTER_TEST(otbImageMultiSegmentationToRCC8GraphFilter);
 }

@@ -19,9 +19,9 @@ PURPOSE.  See the above copyright notices for more information.
 #include "otbRCC8Graph.h"
 #include "otbImage.h"
 #include "otbRCC8VertexBase.h"
-#include "otbImageListToRCC8GraphFilter.h"
+#include "otbImageMultiSegmentationToRCC8GraphFilter.h"
 
-int otbImageListToRCC8GraphFilterNew(int argc, char* argv[])
+int otbImageMultiSegmentationToRCC8GraphFilterNew(int argc, char* argv[])
 {
 try 
   {
@@ -30,11 +30,11 @@ try
     typedef otb::Image<LabelPixelType,Dimension> LabelImageType;
     typedef otb::RCC8VertexBase<LabelPixelType> VertexType;
     typedef otb::RCC8Graph<VertexType> RCC8GraphType;
-    typedef otb::ImageListToRCC8GraphFilter<LabelImageType,RCC8GraphType>
-      ImageListToRCC8GraphFilterType;
+    typedef otb::ImageMultiSegmentationToRCC8GraphFilter<LabelImageType,RCC8GraphType>
+      RCC8GraphFilterType;
 
     // Instanatiation
-    ImageListToRCC8GraphFilterType::Pointer filter = ImageListToRCC8GraphFilterType::New();
+    RCC8GraphFilterType::Pointer filter = RCC8GraphFilterType::New();
 
   }
 catch( itk::ExceptionObject & err ) 
