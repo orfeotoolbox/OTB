@@ -39,8 +39,8 @@ namespace otb
   ::ImageToImageRCC8Calculator()
   {
     m_Value        = OTB_RCC8_DC;
-    m_InsideValue  = static_cast<PixelType>(255);
-    m_OutsideValue = static_cast<PixelType>(0);
+    m_InsideValue1  = static_cast<PixelType>(255);
+    m_InsideValue2  = static_cast<PixelType>(255);
     m_Level1APrioriKnowledge=false;
     m_Level3APrioriKnowledge=false;
     this->SetNumberOfRequiredInputs(2);
@@ -121,13 +121,13 @@ namespace otb
     typename RegionCalculator::Pointer rc =RegionCalculator::New();
     rc->SetInput(image1);
     rc->SetPad(2);
-    rc->SetInsideValue(this->GetInsideValue());
+    rc->SetInsideValue(this->GetInsideValue1());
     rc->Update();
     region1=rc->GetRegion();
     rc=RegionCalculator::New();
     rc->SetInput(image2);
     rc->SetPad(2);
-    rc->SetInsideValue(this->GetInsideValue());
+    rc->SetInsideValue(this->GetInsideValue2());
     rc->Update();
     region2=rc->GetRegion();
     typename ImageType::SizeType size;
@@ -149,13 +149,14 @@ namespace otb
  * Compute a bool image of minimal ROI size, surrounded by a false padding, and corresponding
  * to the input image.
  * \param image The image to convert.
+ * \param insideValue The inside value.
  * \return The converted image
  */
- template<class TInputImage>
+template<class TInputImage>
 typename ImageToImageRCC8Calculator<TInputImage>
 ::BoolImagePointerType 
 ImageToImageRCC8Calculator<TInputImage>
-::ConvertToBoolImage(ImagePointerType image)
+::ConvertToBoolImage(ImagePointerType image, PixelType insideValue)
 {
   typedef itk::ImageRegionConstIterator<ImageType> ConstIterator;
   typedef itk::ImageRegionIterator<BoolImageType> Iterator;
@@ -179,7 +180,7 @@ ImageToImageRCC8Calculator<TInputImage>
   outputIt.GoToBegin();
   while(!inputIt.IsAtEnd()&&!outputIt.IsAtEnd())
     {
-      outputIt.Set(inputIt.Get()==m_InsideValue);
+      outputIt.Set(inputIt.Get()==insideValue);
       ++inputIt;
       ++outputIt;
     }
@@ -399,8 +400,8 @@ ImageToImageRCC8Calculator<TInputImage>
       {
 	/// else each input images is cast to boolean type and reduced to
 	// the minimal region
-	m_BoolImage1=ConvertToBoolImage(this->GetInput1());
-	m_BoolImage2=ConvertToBoolImage(this->GetInput2());
+	m_BoolImage1=ConvertToBoolImage(this->GetInput1(),m_InsideValue1);
+	m_BoolImage2=ConvertToBoolImage(this->GetInput2(),m_InsideValue2);
 	// otbMsgDebugMacro(<<"RCC8Calculator->GenerateData(): Bool images computed: "<<m_BoolImage1->GetLargestPossibleRegion().GetSize());
 	/// Then the boolean which will be used to determine the relation
 	/// are declared

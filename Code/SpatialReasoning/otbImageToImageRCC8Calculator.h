@@ -98,12 +98,12 @@ public:
    * \return The second input image.
    */
   ImageType * GetInput2(void);
-  /** Set/Get the inside value of the regions */
-  itkSetMacro(InsideValue,PixelType);
-  itkGetMacro(InsideValue,PixelType);
-  /** Set/Get the outside value of the regions */
-  itkSetMacro(OutsideValue,PixelType);
-  itkGetMacro(OutsideValue,PixelType);
+  /** Set/Get the inside value of the region of image 1*/
+  itkSetMacro(InsideValue1,PixelType);
+  itkGetMacro(InsideValue1,PixelType);
+  /** Set/Get the inside value of the region of image 2*/
+  itkSetMacro(InsideValue2,PixelType);
+  itkGetMacro(InsideValue2,PixelType);
 
  protected:
   /** Constructor */
@@ -164,9 +164,10 @@ public:
    * Compute a bool image of minimal ROI size, surrounded by a false padding, and corresponding
    * to the input image.
    * \param image The image to convert.
+   * \param insideValue The inside value.
    * \return The converted image
    */
-  BoolImagePointerType ConvertToBoolImage(ImagePointerType image); 
+  BoolImagePointerType ConvertToBoolImage(ImagePointerType image, PixelType insideValue); 
   /** Main computation method */
   void GenerateData(void);
   /** PrintSelf method */
@@ -181,10 +182,10 @@ public:
   bool m_Level1APrioriKnowledge;
   /**  Decision tree Level 3 A priori knowledge */
   bool m_Level3APrioriKnowledge;
-  /** Inside value */
-  PixelType m_InsideValue;
-  /** Outside value */
-  PixelType m_OutsideValue;
+  /** Inside value 1 */
+  PixelType m_InsideValue1;
+  /** Inside value 2 */
+  PixelType m_InsideValue2;
   /** Internal bool image representation*/
   BoolImagePointerType m_BoolImage1;
   BoolImagePointerType m_BoolImage2;
