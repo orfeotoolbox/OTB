@@ -19,12 +19,36 @@
 #define __otbRCC8GraphFileWriter_h
 
 #include "itkProcessObject.h"
+#include "itkExceptionObject.h"
 #include "otbRCC8Graph.h"
 
 namespace otb
 {
+/** \class RCC8GraphFileWriterException
+ * \brief Base exception class for IO problems during writing. 
+ */ 
+class RCC8GraphFileWriterException 
+  : public itk::ExceptionObject 
+{
+public:
+  /** Run-time information. */
+  itkTypeMacro( RCC8GraphFileWriterException, ExceptionObject );
+
+  /** Constructor. */
+  RCC8GraphFileWriterException(const char *file, unsigned int line, 
+                           const char* message = "Error in IO",
+                           const char* loc = "Unknown" ) : 
+    ExceptionObject(file, line, message, loc)
+  {}
+  /** Constructor. */
+  RCC8GraphFileWriterException(const std::string &file, unsigned int line, 
+                           const char* message = "Error in IO",
+                           const char* loc = "Unknown" ) :
+    ExceptionObject(file, line, message, loc)
+  {}
+};
 /**
- * \class RCC8GraphFileWriter 
+ * \Class RCC8GraphFileWriter 
  * \brief This class writes a RCC8 Graph to a dot file (graphviz file format).
  * 
  * The writer first loops on the vertices of the graph, getting the property map 
@@ -66,13 +90,17 @@ public:
    * Set the input graph.
    * \param inputGraph The graph to write.
    */
-  void SetInput(const InputGraphType* inputGraph);
+  virtual void SetInput(const InputGraphType* inputGraph);
   /**
    * Get the input graph.
    * \return The input graph pointer.
    */
-  InputGraphPointerType GetInput();
- 
+  virtual InputGraphPointerType GetInput();
+  /**
+   * Update method.
+   */
+  virtual void Update(void);
+
 protected:
   /** Constructor */
   RCC8GraphFileWriter();
@@ -81,7 +109,12 @@ protected:
   /**
    * Main computation method.
    */
-  void GenerateData(void);
+  virtual void GenerateData(void);
+ /**
+  * Write Method.
+  * Performs checkings and invoke GenerateData().
+  */
+  virtual void Write(void);  
   /**
    * Write an edge to file.
    * \param of The output file stream.

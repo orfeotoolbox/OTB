@@ -19,9 +19,33 @@
 #define __otbRCC8GraphFileReader_h
 
 #include "otbRCC8GraphSource.h"
+#include "itkExceptionObject.h"
 
 namespace otb
 {
+/** \class RCC8GraphFileReaderException
+ * \brief Base exception class for IO problems during reading. 
+ */ 
+class RCC8GraphFileReaderException 
+  : public itk::ExceptionObject 
+{
+public:
+  /** Run-time information. */
+  itkTypeMacro( RCC8GraphFileReaderException, ExceptionObject );
+
+  /** Constructor. */
+  RCC8GraphFileReaderException(const char *file, unsigned int line, 
+                           const char* message = "Error in IO",
+                           const char* loc = "Unknown" ) : 
+    ExceptionObject(file, line, message, loc)
+  {}
+  /** Constructor. */
+  RCC8GraphFileReaderException(const std::string &file, unsigned int line, 
+                           const char* message = "Error in IO",
+                           const char* loc = "Unknown" ) :
+    ExceptionObject(file, line, message, loc)
+  {}
+};
 /**
  * \class RCC8GraphFileReader
  * \brief This class reads a RCC8 graph from a .dot file (graphviz format).

@@ -35,7 +35,6 @@ RCC8GraphFileWriter<TInputGraph>
 {
   this->SetNumberOfRequiredInputs(1);
   m_FileName = "";
-  otbMsgDebugMacro(<<"RCC8GraphFileWriter: Call to constructor");
 }
 /**
  * Destructor
@@ -69,6 +68,49 @@ RCC8GraphFileWriter<TInputGraph>
   return static_cast<TInputGraph*>(this->itk::ProcessObject::GetInput(0));
 }
 /**
+ * Update method.
+ * (Call the Write() method).
+ */
+template <class TInputGraph>
+void
+RCC8GraphFileWriter<TInputGraph>
+::Update(void)
+{
+  this->Write();
+}
+/**
+ * Write Method.
+ * Performs checkings and invoke GenerateData().
+ */
+template <class TInputGraph>
+void
+RCC8GraphFileWriter<TInputGraph>
+::Write(void)
+{
+  InputGraphType * input = this->GetInput();
+
+  itkDebugMacro( <<"Writing a RCC8Graph file" );
+
+  // Make sure input is available
+  if ( input == 0 )
+    {
+    itkExceptionMacro(<< "No input to writer!");
+    }
+
+  // Make sure that we can write the file given the name
+  //
+  if ( m_FileName == "" )
+    {
+    itkExceptionMacro(<<"No filename was specified");
+    }
+
+  if(input->GetSource())
+    {
+      input->GetSource()->UpdateOutputData(input);
+    }
+  this->GenerateData();
+}
+/**
  * Main computation method.
  */
 template <class TInputGraph>
@@ -86,8 +128,21 @@ RCC8GraphFileWriter<TInputGraph>
 
   // Output file stream
   std::ofstream out;
+
   // open the outputfile
   out.open(m_FileName.c_str(), std::ios::out);
+
+  // Test if the file has been opened correctly
+  if(!out)
+    {
+      RCC8GraphFileWriterException e(__FILE__, __LINE__);
+      itk::OStringStream msg;
+      msg << " Could not create IO object for file ";
+      msg<<m_FileName<<"."<<std::endl;
+      e.SetDescription(msg.str().c_str());
+      throw e;
+      return;
+    }
   
   // Start writing the graph to file
   out<<"digraph G {"<<std::endl;

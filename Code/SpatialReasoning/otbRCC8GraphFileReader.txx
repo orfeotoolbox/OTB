@@ -103,9 +103,26 @@ void
 RCC8GraphFileReader<TOutputGraph>
 ::GenerateData()
 {  
+  otbMsgDevMacro(<<"RCC8GraphFileWriter: Call to the GenerateData method");
   std::ifstream fin;
   std::string line;
+  
+  // open file input stream
   fin.open(m_FileName.c_str());
+  
+  // Test if the file has been opened correctly
+  if(!fin)
+    {
+      RCC8GraphFileReaderException e(__FILE__, __LINE__);
+      itk::OStringStream msg;
+      msg << " Could not create IO object for file ";
+      msg<<m_FileName<<"."<<std::endl;
+      e.SetDescription(msg.str().c_str());
+      throw e;
+      return;
+    }
+
+  // if so, parse it
   while(!fin.eof())
     {
       std::getline(fin,line);
@@ -114,7 +131,7 @@ RCC8GraphFileReader<TOutputGraph>
 	  // edge line
 	  this->ParseEdge(line);
 	}
-      else 
+      else if(line.find("[")!=std::string::npos)
 	{
 	  // vertex line
 	  this->ParseVertex(line);

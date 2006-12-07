@@ -31,8 +31,6 @@ RCC8GraphSource<TOutputGraph>
 {
   this->Superclass::SetNumberOfRequiredOutputs(1);
   this->Superclass::SetNthOutput(0,TOutputGraph::New().GetPointer());
-  TOutputGraph * output = this->GetOutput();
-  output = OutputGraphType::New();
 }
 /**
  * Get the output Graph

@@ -113,6 +113,12 @@ ADD_TEST(srTvRCC8GraphIOEndToEnd ${SPATIALREASONING_TESTS}
 			${TEMP}/srRCC8GraphIOEndToEndOut.dot
 )
 
+# -------        otb::ImageListToRCC8GraphFilter   --------------------------
+
+#ADD_TEST(srTuImageListToRCC8GraphFilterNew ${SPATIALREASONING_TESTS} 
+#         otbImageListToRCC8GraphFilterNew)
+
+
 # -------       Fichiers sources CXX -----------------------------------
 SET(BasicSpatialReasoning_SRCS
 otbImageToImageRCC8CalculatorNew.cxx
@@ -131,6 +137,7 @@ otbRCC8GraphFileWriter.cxx
 otbRCC8GraphFileReaderNew.cxx
 otbRCC8GraphFileReader.cxx
 otbRCC8GraphIOEndToEnd.cxx
+#otbImageListTORCC8GraphFilterNew.cxx
 )
 
 INCLUDE_DIRECTORIES("${OTBTesting_BINARY_DIR}")
