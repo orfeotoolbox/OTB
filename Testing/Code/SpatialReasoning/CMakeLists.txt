@@ -127,20 +127,17 @@ ADD_TEST(srTuMultiSegToRCC8GraphFilterNew ${SPATIALREASONING_TESTS}
          otbImageMultiSegmentationToRCC8GraphFilterNew)
 
 
-#ADD_TEST(srTvMultiSegToRCC8GraphFilter ${SPATIALREASONING_TESTS}
-#	--compare-ascii	${TOL}
-#			${BASELINE_FILES}/srRCC8GraphFilterOutput.dot
-#			${TEMP}/srRCC8GraphFilterOutput.dot
-#	 otbImageMultiSegmentationToRCC8GraphFilter
-#			${TEMP}/srRCC8GraphFilterOutput.dot
-#			4
-#			${INPUTDATA}/
-#			${INPUTDATA}/
-#			${INPUTDATA}/
-#			${INPUTDATA}/
-#)
-
-
+ADD_TEST(srTvMultiSegToRCC8GraphFilter ${SPATIALREASONING_TESTS}
+	--compare-ascii	${TOL}
+			${BASELINE_FILES}/srRCC8GraphFilterOutput.dot
+			${TEMP}/srRCC8GraphFilterOutput.dot
+	 otbImageMultiSegmentationToRCC8GraphFilter
+			${TEMP}/srRCC8GraphFilterOutput.dot
+			2
+			${INPUTDATA}/Seg1InputForRCC8Graph.tif
+			${INPUTDATA}/Seg2InputForRCC8Graph.tif
+			
+)
 
 # -------       Fichiers sources CXX -----------------------------------
 SET(BasicSpatialReasoning_SRCS
@@ -162,7 +159,7 @@ otbRCC8GraphFileReader.cxx
 otbRCC8GraphIOEndToEnd.cxx
 otbImageListToRCC8GraphFilterNew.cxx
 otbImageMultiSegmentationToRCC8GraphFilterNew.cxx
-#otbImageMultiSegmentationToRCC8GraphFilter.cxx
+otbImageMultiSegmentationToRCC8GraphFilter.cxx
 )
 
 INCLUDE_DIRECTORIES("${OTBTesting_BINARY_DIR}")

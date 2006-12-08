@@ -43,22 +43,16 @@ public:
   itkTypeMacro(ImageMultiSegmentationToRCC8GraphFilter,ImageListToRCC8GraphFilter);
   /** Input related typedefs */
   typedef TInputImage InputImageType;
+  typedef typename InputImageType::PixelType PixelType;
   typedef typename InputImageType::Pointer InputImagePointerType;
+  typedef typename Superclass::InputImageListType InputImageListType;
+  typedef typename InputImageListType::Pointer InputImageListPointerType;
+  typedef typename InputImageListType::ConstIterator ConstListIteratorType;
   /** Output related typedefs */
   typedef TOutputGraph OutputGraphType;
   typedef typename OutputGraphType::Pointer OutputGraphPointerType;
   typedef typename OutputGraphType::VertexType VertexType;
   typedef typename VertexType::Pointer VertexPointerType;
-  
-/*   /// Get The statistics for the different relations */
-/*   itkGetConstMacro(TotalNumberOfRegions,int); */
-/*   itkGetConstMacro(NumberOfRelations,int); */
-/*   /// Get the number of regions by segmentation image */
-/*   std::vector<int> GetNumberOfRegions(void); */
-/*   /// Set a filter to not take in account relations whose index is */
-/*   /// under the threshold */
-/*   itkGetConstMacro(RelationFilter,int); */
-/*   itkSetMacro(RelationFilter,int);       */          
 
 protected:
   /** Constructor */
@@ -71,9 +65,6 @@ protected:
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
 private:
- /*  int m_NumberOfRelations; */
-/*   int m_TotalNumberOfRegions; */
-/*   std::vector<unsigned int> m_NumberOfRegions; */
 };
 } // End namespace otb
 

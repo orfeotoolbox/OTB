@@ -46,21 +46,21 @@ try
     ImageListType::Pointer inputList = ImageListType::New();
 
     // Reading input images
-    for(int i=3;i<nbImages+2;i++)
+    for(int i=0;i<nbImages;i++)
       {
 	ReaderType::Pointer reader = ReaderType::New();
-	reader->SetFilename(argv[i]);
+	reader->SetFileName(argv[3+i]);
 	reader->Update();
 	inputList->PushBack(reader->GetOutput());
       }
-
+    std::cout<<"Input image loaded into images list."<<std::endl;
     // Instanatiation
     RCC8GraphFilterType::Pointer filter = RCC8GraphFilterType::New();
     filter->SetInput(inputList);
     
     // Writing output graph
     GraphWriterType::Pointer writer = GraphWriterType::New();
-    writer->SetFilename(outputFilename);
+    writer->SetFileName(outputFilename);
     writer->SetInput(filter->GetOutput());
     writer->Update();
 

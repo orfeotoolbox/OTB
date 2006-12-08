@@ -130,6 +130,8 @@ namespace otb
     rc->SetInsideValue(this->GetInsideValue2());
     rc->Update();
     region2=rc->GetRegion();
+    // otbMsgDebugMacro(<<"RCC8Calculator->ComputeMinimalRegion() Region1: index: "<<region1.GetIndex()<<" size: "<<region1.GetSize());
+    // otbMsgDebugMacro(<<"RCC8Calculator->ComputeMinimalRegion() Region2: index: "<<region2.GetIndex()<<" size: "<<region2.GetSize());
     typename ImageType::SizeType size;
     typename ImageType::IndexType index;
     
@@ -167,6 +169,8 @@ ImageToImageRCC8Calculator<TInputImage>
   typename BoolImageType::IndexType boolImageIndex;
   boolImageIndex[0]=m_MinimalROI.GetIndex()[0]-1;
   boolImageIndex[1]=m_MinimalROI.GetIndex()[1]-1;
+  //otbMsgDebugMacro(<<"RCC8Calculator->ConvertToBoolImage() size: "<<boolImageSize<<" index: "<<boolImageIndex);  
+
   typename BoolImageType::RegionType boolRegion;
   boolRegion.SetSize(boolImageSize);
   boolRegion.SetIndex(boolImageIndex);
@@ -184,7 +188,7 @@ ImageToImageRCC8Calculator<TInputImage>
       ++inputIt;
       ++outputIt;
     }
-  // otbMsgDebugMacro(<<"RCC8Calculator->ConvertToBoolImage() size: "<<output->GetLargestPossibleRegion().GetSize());
+  
   return output;
 }
   /**
