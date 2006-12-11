@@ -53,7 +53,14 @@ public:
   typedef typename OutputGraphType::Pointer OutputGraphPointerType;
   typedef typename OutputGraphType::VertexType VertexType;
   typedef typename VertexType::Pointer VertexPointerType;
-
+  typedef typename OutputGraphType::VertexDescriptorType VertexDescriptorType;
+  /** Knowledge enum typedef */
+  typedef typename OutputGraphType::RCC8ValueType RCC8ValueType;
+  typedef enum {NO_INFO,LEVEL_1,LEVEL_3,FULL} KnowledgeValueType;
+  typedef std::pair<KnowledgeValueType,RCC8ValueType> KnowledgeStateType; 
+  /** Toogle optimisation flag */
+  itkBooleanMacro(Optimisation);
+  itkSetMacro(Optimisation,bool);
 protected:
   /** Constructor */
   ImageMultiSegmentationToRCC8GraphFilter();
@@ -63,8 +70,17 @@ protected:
   virtual void GenerateData();
   /** PrintSelf method */
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  /**
+   * Get the composition knowledge.
+   * \param r1 First RCC8 relation value,
+   * \param r2 Second RCC8 relation value,
+   * \return The knowledge associated with the composition.
+   */
+  KnowledgeStateType GetKnowledge(RCC8ValueType r1, RCC8ValueType r2);
 
 private:
+  /** Optimisation flag */
+  bool m_Optimisation;
 };
 } // End namespace otb
 

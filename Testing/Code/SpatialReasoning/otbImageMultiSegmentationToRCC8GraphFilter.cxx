@@ -30,7 +30,8 @@ try
   {
     const unsigned int Dimension = 2;
     char * outputFilename = argv[1];
-    unsigned int nbImages = atoi(argv[2]);
+    int useOptimisation = atoi(argv[2]);
+    unsigned int nbImages = atoi(argv[3]);
     
     // typedefs
     typedef unsigned short LabelPixelType;
@@ -49,7 +50,7 @@ try
     for(int i=0;i<nbImages;i++)
       {
 	ReaderType::Pointer reader = ReaderType::New();
-	reader->SetFileName(argv[3+i]);
+	reader->SetFileName(argv[4+i]);
 	reader->Update();
 	inputList->PushBack(reader->GetOutput());
       }
@@ -57,6 +58,7 @@ try
     // Instanatiation
     RCC8GraphFilterType::Pointer filter = RCC8GraphFilterType::New();
     filter->SetInput(inputList);
+    filter->SetOptimisation(useOptimisation>0);
     
     // Writing output graph
     GraphWriterType::Pointer writer = GraphWriterType::New();

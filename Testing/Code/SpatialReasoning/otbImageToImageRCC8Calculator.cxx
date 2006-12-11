@@ -51,7 +51,7 @@ try
 	images->PushBack(reader->GetOutput());
       }
     // Declaration
-    CalculatorType::Pointer calc;
+    CalculatorType::Pointer calc,calc1,calc2;
     // Computing relations for each images couple
     int i =1;
     int j = 1;
@@ -65,6 +65,39 @@ try
 	    calc->SetInput2(it2.Get());
 	    calc->Update();
 	    out<<calc->GetValue()<<"\t";
+
+	    if(calc->GetValue()<3
+	       ||calc->GetValue()==4
+	       ||calc->GetValue()==6)
+	      {
+		calc1=CalculatorType::New();
+		calc1->SetInput1(it1.Get());
+		calc1->SetInput2(it2.Get());
+		calc1->SetLevel1APrioriKnowledge(true);
+		calc1->Update();
+		if(calc1->GetValue()!=calc->GetValue())
+		  {
+		    std::cout<<"Test failed: Result with level1AprioriKnowledge ";
+		    std::cout<<"different from result without a priori knowledge"<<std::endl;
+		    std::cout<<calc->GetValue()<<"!="<<calc1->GetValue()<<std::endl;
+		    return EXIT_FAILURE;
+		  }
+	      }
+	    if(calc->GetValue()<4)
+	      {
+		calc2=CalculatorType::New();
+		calc2->SetInput1(it1.Get());
+		calc2->SetInput2(it2.Get());
+		calc2->SetLevel3APrioriKnowledge(true);
+		calc2->Update();
+		if(calc2->GetValue()!=calc->GetValue())
+		  {
+		    std::cout<<"Test failed: Result with level3AprioriKnowledge ";
+		    std::cout<<"different from result without a priori knowledge"<<std::endl;
+		    std::cout<<calc->GetValue()<<"!="<<calc1->GetValue()<<std::endl;
+		    return EXIT_FAILURE;
+		  }
+	      }
 	    j++;
 	  }
 	j=1;

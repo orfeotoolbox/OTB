@@ -22,6 +22,8 @@
 #include "itkMinimumMaximumImageCalculator.h"
 #include "otbImageToImageRCC8Calculator.h"
 #include "otbRCC8VertexIterator.h"
+#include "otbRCC8InEdgeIterator.h"
+#include "otbRCC8OutEdgeIterator.h"
 
 namespace otb
 {
@@ -31,7 +33,9 @@ namespace otb
 template <class TInputImage, class TOutputGraph>
 ImageMultiSegmentationToRCC8GraphFilter<TInputImage, TOutputGraph>
 ::ImageMultiSegmentationToRCC8GraphFilter()
-{}
+{
+  m_Optimisation=false;
+}
 /**
  * Destructor.
  */
@@ -39,6 +43,50 @@ template <class TInputImage, class TOutputGraph>
 ImageMultiSegmentationToRCC8GraphFilter<TInputImage, TOutputGraph>
 ::~ImageMultiSegmentationToRCC8GraphFilter()
 {}
+template <class TInputImage, class TOutputGraph>
+typename ImageMultiSegmentationToRCC8GraphFilter<TInputImage, TOutputGraph>
+::KnowledgeStateType
+ImageMultiSegmentationToRCC8GraphFilter<TInputImage, TOutputGraph>
+::GetKnowledge(RCC8ValueType r1, RCC8ValueType r2)
+{
+  // otbMsgDebugMacro(<<"RCC8GraphFilter: entering GetKnowledge method.");
+  // This is the RCC8 composition table
+ const int knowledge[8][8]
+    ={
+      /**         DC  EC  PO TPP TPPi NTPP i  EQ */
+      /** DC */  {-3, -2, -2, -2,  0, -2,  0,  0},
+      /** EC  */ {-1, -3, -2, -3, -1, -3,  0,  1},
+      /** PO  */ {-1, -1, -3, -3, -1, -3, -1,  2},
+      /** TPP */ { 0, -1, -2, -3, -3,  5, -1,  3},
+      /** TPPi*/ {-1, -1, -1, -3, -1, -3,  6,  4},
+      /** NTPP*/ { 0,  0, -2,  5, -2,  5, -3,  5},
+      /** NTPPi*/{-1, -1, -1, -1,  6, -3,  6,  6},
+      /** EQ  */ { 0,  1,  2,  3,  4,  5,  6,  7}
+    };
+
+  int value = knowledge[r1][r2];
+  // Each negative case correspond to a level of knowledge
+  if(value>=0)
+    { 
+      // otbMsgDebugMacro(<<"RCC8GraphFilter: leaving GetKnowledge method: FULL");
+      return KnowledgeStateType(FULL,static_cast<RCC8ValueType>(value));
+    }
+  else if(value==-1)
+    {
+      // otbMsgDebugMacro(<<"RCC8GraphFilter: leaving GetKnowledge method: LEVEL_1");
+      return KnowledgeStateType(LEVEL_1,OTB_RCC8_DC);
+    }
+  else if(value==-2)
+    {
+      // otbMsgDebugMacro(<<"RCC8GraphFilter: leaving GetKnowledge method.LEVEL_3");
+      return KnowledgeStateType(LEVEL_3,OTB_RCC8_DC);
+    }
+  else 
+    {
+      // otbMsgDebugMacro(<<"RCC8GraphFilter: leaving GetKnowledge method.NO_INFO");
+      return KnowledgeStateType(NO_INFO,OTB_RCC8_DC);
+    }
+}
 /**
  * Main computation method.
  */
@@ -53,10 +101,16 @@ ImageMultiSegmentationToRCC8GraphFilter<TInputImage, TOutputGraph>
   // Ouptut graph pointer 
   OutputGraphPointerType graph = this->GetOutput();
 
+  // invert value vector
+  RCC8ValueType invert[8]={OTB_RCC8_DC,OTB_RCC8_EC,OTB_RCC8_PO,OTB_RCC8_TPPI,
+			   OTB_RCC8_TPP,OTB_RCC8_NTPPI,OTB_RCC8_NTPP,OTB_RCC8_EQ};
+
   // Some typedefs
   typedef itk::MinimumMaximumImageCalculator<InputImageType> MinMaxCalculatorType;
   typedef ImageToImageRCC8Calculator<InputImageType> RCC8CalculatorType;
   typedef RCC8VertexIterator<OutputGraphType> VertexIteratorType; 
+  typedef RCC8InEdgeIterator<OutputGraphType> InEdgeIteratorType;
+  typedef RCC8OutEdgeIterator<OutputGraphType> OutEdgeIteratorType;
 
     // Vector of label
   std::vector<PixelType> maxLabelVector;
@@ -116,14 +170,81 @@ ImageMultiSegmentationToRCC8GraphFilter<TInputImage, TOutputGraph>
 	      calc->SetInsideValue1(label1);
 	      calc->SetInput2(segList->GetNthElement(target));
 	      calc->SetInsideValue2(label2);
-	      calc->Update();
+	      RCC8ValueType value=OTB_RCC8_DC;
+	      
+	      // if the optimisations are activated
+	      if(m_Optimisation)
+		{
+		 //  otbMsgDebugMacro(<<"RCC8GraphFilter: Entering optimisation loop");
+		  InEdgeIteratorType inIt1(vIt1.GetIndex(),graph);
+		  InEdgeIteratorType inIt2(vIt2.GetIndex(),graph);
+		  // otbMsgDebugMacro(<<"Optimisation loop: iterators initialised");
+		  VertexDescriptorType betweenIndex;
+		  KnowledgeStateType know(NO_INFO,OTB_RCC8_DC);
+		  inIt1.GoToBegin();
 
+		  // Iterate through the edges going to the first vertex
+		  while(!inIt1.IsAtEnd()&&(know.first!=FULL))
+		    {
+		      betweenIndex = inIt1.GetSourceIndex();
+		      inIt2.GoToBegin();
+		      bool edgeFound = false;
+		      while(!inIt2.IsAtEnd()&&(know.first!=FULL))
+			{
+			  // try to find an intermediate vertex between the two ones which
+			  // we vant to compute the relationship
+			  if(inIt2.GetSourceIndex()==betweenIndex)
+			    {
+			      // if an intermediate vertex is found
+			      edgeFound = true;
+			      // otbMsgDebugMacro(<<"Optimisation loop: found an intermediary vertex:" <<betweenIndex);
+			      // See if it brings some info on the RCCC8 value
+			      know = GetKnowledge(invert[inIt1.GetValue()],inIt2.GetValue());
+			      calc->SetLevel1APrioriKnowledge(know.first==LEVEL_1);
+			      calc->SetLevel3APrioriKnowledge(know.first==LEVEL_3);
+			     //  otbMsgDebugMacro(<<"Optimisation loop: knowledge: "<<know.first<<","<<know.second);
+			    }  
+			  ++inIt2;
+			}
+		      // If no intermediate was found
+		      if(!edgeFound)
+			{
+			 //  otbMsgDebugMacro(<<"Optimisation loop: found an intermediary vertex:" <<betweenIndex);
+			  // Try using a DC relationship
+			  know = GetKnowledge(invert[inIt1.GetValue()],OTB_RCC8_DC);
+			  calc->SetLevel1APrioriKnowledge(know.first==LEVEL_1);
+			  calc->SetLevel3APrioriKnowledge(know.first==LEVEL_3);
+			  // otbMsgDebugMacro(<<"Optimisation loop: knowledge: "<<know.first<<","<<know.second);
+			}
+		      ++inIt1;
+		    }
+		  // If the search has fully determined the RCC8
+		  if(know.first==FULL)
+		    {
+		      // Get the value
+		      value=know.second;
+		    }
+		  else
+		    {
+		      // Else trigger the computation
+		      // (which will take the optimisation phase info into account)
+		      calc->Update();
+		      value=calc->GetValue();
+		    }
+		  // otbMsgDebugMacro(<<"RCC8GraphFilter: Leaving optimisation loop");
+		}
+	      // If the optimisations are not activated
+	      else
+		{
+		  calc->Update();
+		  value=calc->GetValue();
+		}
 	      // If the vertices are connected
-	      if(calc->GetValue()>OTB_RCC8_DC)
+	      if(value>OTB_RCC8_DC)
 		{
 		  // Add the edge to the graph.
-		  otbMsgDebugMacro(<<"Adding edge: "<<source<<" -> "<<target<<": "<<calc->GetValue());
-		  graph->AddEdge(vIt1.GetIndex(),vIt2.GetIndex(),calc->GetValue());
+		  otbMsgDebugMacro(<<"Adding edge: "<<vIt1.GetIndex()<<" -> "<<vIt2.GetIndex()<<": "<<value);
+		  graph->AddEdge(vIt1.GetIndex(),vIt2.GetIndex(),value);
 		}
 	    }
 	}

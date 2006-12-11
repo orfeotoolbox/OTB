@@ -104,7 +104,11 @@ public:
   /** Set/Get the inside value of the region of image 2*/
   itkSetMacro(InsideValue2,PixelType);
   itkGetMacro(InsideValue2,PixelType);
-
+/** Set external knowledge to help the decision process */
+  itkSetMacro(Level1APrioriKnowledge,bool);
+  itkSetMacro(Level3APrioriKnowledge,bool);
+  itkGetMacro(Level1APrioriKnowledge,bool);
+  itkGetMacro(Level3APrioriKnowledge,bool);
  protected:
   /** Constructor */
   ImageToImageRCC8Calculator();
@@ -115,11 +119,6 @@ public:
    * \return The minimal region required.
    */
   RegionType ComputeMinimalRegion(void);
-  /** Set external knowledge to help the decision process */
-  itkSetMacro(Level1APrioriKnowledge,bool);
-  itkSetMacro(Level3APrioriKnowledge,bool);
-  itkGetMacro(Level1APrioriKnowledge,bool);
-  itkGetMacro(Level3APrioriKnowledge,bool);
   /**
    * Compute the intersection between regions edges.
    * \return true if the intersection is not empty.

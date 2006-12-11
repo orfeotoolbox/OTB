@@ -147,6 +147,7 @@ int otbRCC8Graph(int argc, char* argv[])
       InEdgeIteratorType inEdgeIt(vertexIndex,rcc8Graph);
       for(inEdgeIt.GoToBegin();!inEdgeIt.IsAtEnd();++inEdgeIt)
 	{
+	  std::cout<<"testing inEdgeIt"<<std::endl;
 	  fail(!((inEdgeIt.GetSourceIndex()==0)||(inEdgeIt.GetSourceIndex()==3)),
 	       "!((inEdgeIt.GetSourceIndex()==0)||(inEdgeIt.GetSourceIndex()==3))");
 	}
@@ -154,8 +155,9 @@ int otbRCC8Graph(int argc, char* argv[])
       OutEdgeIteratorType outEdgeIt(vertexIndex,rcc8Graph);
       for(outEdgeIt.GoToBegin();!outEdgeIt.IsAtEnd();++outEdgeIt)
 	{
-	  fail(!((inEdgeIt.GetSourceIndex()==0)||(inEdgeIt.GetSourceIndex()==3)),
-	       "!((inEdgeIt.GetSourceIndex()==2)||(inEdgeIt.GetSourceIndex()==4))");
+	  std::cout<<"testing outEdgeIt"<<std::endl;
+	  fail(!((outEdgeIt.GetTargetIndex()==2)||(outEdgeIt.GetTargetIndex()==4)),
+	       "!((outEdgeIt.GetTargetIndex()==2)||(outEdgeIt.GetTargetIndex()==4))");
 	}
     }
   catch( itk::ExceptionObject & err ) 

@@ -419,6 +419,7 @@ ImageToImageRCC8Calculator<TInputImage>
 	  {
 	    /// If the Level1APrioriKnowledge is set, then the
 	    /// interExterBool is set to true
+	    // otbMsgDebugMacro(<<"RCC8Calculator->GenerateData(): Level1APrioriKnowledge.");
 	    interExterBool=true;
 	  }
 	else
@@ -439,7 +440,8 @@ ImageToImageRCC8Calculator<TInputImage>
 	      {
 		/// If the Level3APRioriKnowledge flag is set, this boolean
 		/// can be determined from the two others
-		exterInterBool=(edgeEdgeBool!=interExterBool);
+		// otbMsgDebugMacro(<<"RCC8Calculator->GenerateData(): Level3APrioriKnowledge.");
+		exterInterBool=true;
 	      }
 	    else
 	      {

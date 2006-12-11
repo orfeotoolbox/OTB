@@ -127,16 +127,54 @@ ADD_TEST(srTuMultiSegToRCC8GraphFilterNew ${SPATIALREASONING_TESTS}
          otbImageMultiSegmentationToRCC8GraphFilterNew)
 
 
-ADD_TEST(srTvMultiSegToRCC8GraphFilter ${SPATIALREASONING_TESTS}
+ADD_TEST(srTvMultiSegToRCC8GraphFilter1 ${SPATIALREASONING_TESTS}
 	--compare-ascii	${TOL}
 			${BASELINE_FILES}/srRCC8GraphFilterOutput.dot
 			${TEMP}/srRCC8GraphFilterOutput.dot
 	 otbImageMultiSegmentationToRCC8GraphFilter
 			${TEMP}/srRCC8GraphFilterOutput.dot
+			0
 			2
 			${INPUTDATA}/Seg1InputForRCC8Graph.tif
-			${INPUTDATA}/Seg2InputForRCC8Graph.tif
-			
+			${INPUTDATA}/Seg2InputForRCC8Graph.tif			
+)
+
+ADD_TEST(srTvMultiSegToRCC8GraphFilter1WithOpti ${SPATIALREASONING_TESTS}
+	--compare-ascii	${TOL}
+			${BASELINE_FILES}/srRCC8GraphFilterOutput.dot
+			${TEMP}/srRCC8GraphFilterOutputWithOpti.dot
+	 otbImageMultiSegmentationToRCC8GraphFilter
+			${TEMP}/srRCC8GraphFilterOutputWithOpti.dot
+			1
+			2
+			${INPUTDATA}/Seg1InputForRCC8Graph.tif
+			${INPUTDATA}/Seg2InputForRCC8Graph.tif		
+)
+
+ADD_TEST(srTvMultiSegToRCC8GraphFilter2 ${SPATIALREASONING_TESTS}
+	--compare-ascii ${TOL}
+			${BASELINE_FILES}/srRCC8GraphFilterOutput2.dot
+			${TEMP}/srRCC8GraphFilterOutput2.dot
+	 otbImageMultiSegmentationToRCC8GraphFilter
+			${TEMP}/srRCC8GraphFilterOutput2.dot
+			0
+			3
+			${INPUTDATA}/Seg3InputForRCC8Graph.tif
+			${INPUTDATA}/Seg4InputForRCC8Graph.tif
+			${INPUTDATA}/Seg5InputForRCC8Graph.tif
+)
+
+ADD_TEST(srTvMultiSegToRCC8GraphFilter2WithOpti ${SPATIALREASONING_TESTS}
+	--compare-ascii ${TOL}
+			${BASELINE_FILES}/srRCC8GraphFilterOutput2.dot
+			${TEMP}/srRCC8GraphFilterOutput2WithOpti.dot
+	 otbImageMultiSegmentationToRCC8GraphFilter
+			${TEMP}/srRCC8GraphFilterOutput2WithOpti.dot
+			1
+			3
+			${INPUTDATA}/Seg3InputForRCC8Graph.tif
+			${INPUTDATA}/Seg4InputForRCC8Graph.tif
+			${INPUTDATA}/Seg5InputForRCC8Graph.tif
 )
 
 # -------       Fichiers sources CXX -----------------------------------
