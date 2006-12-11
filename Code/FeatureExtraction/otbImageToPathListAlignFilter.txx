@@ -222,7 +222,7 @@ ImageToPathListAlignFilter<TInputImage,TOutputPath>
 template <class TInputImage, class TOutputPath>
 void 
 ImageToPathListAlignFilter<TInputImage,TOutputPath>
-::AngleCalculate(const InputImageType* InputImage, RealImageTypePointer AngleImage)
+::AngleCalculate(const InputImageType* InputImage)
 {
   float threshold;
   int n,p,x,y;
@@ -238,10 +238,10 @@ ImageToPathListAlignFilter<TInputImage,TOutputPath>
   IndexOut[1] = 0;
 //  region.SetIndex(InputImage->GetLargestPossibleRegion().GetIndex());
   region.SetIndex(IndexOut);
-  AngleImage->SetRegions( region );
-  AngleImage->SetOrigin(InputImage->GetOrigin());
-  AngleImage->SetSpacing(InputImage->GetSpacing());
-  AngleImage->Allocate();
+  m_AngleImage->SetRegions( region );
+  m_AngleImage->SetOrigin(InputImage->GetOrigin());
+  m_AngleImage->SetSpacing(InputImage->GetSpacing());
+  m_AngleImage->Allocate();
    
   n = Taille[0];
   p = Taille[1];
@@ -255,13 +255,13 @@ ImageToPathListAlignFilter<TInputImage,TOutputPath>
      idx[0] = (n-1) ;
      idx[1] = x ;
 //     indice = (n-1)*p +x
-     AngleImage->SetPixel(idx,static_cast<RealType>(-1000.0));
+     m_AngleImage->SetPixel(idx,static_cast<RealType>(-1000.0));
   } 
   for (y=0;y<n;y++){
      idx[0] = y;
      idx[1] = p-1;
 //     indice = p*y+p-1     
-     AngleImage->SetPixel(idx,static_cast<RealType>(-1000.0));
+     m_AngleImage->SetPixel(idx,static_cast<RealType>(-1000.0));
   }
   
   typename InputImageType::IndexType adr;
@@ -304,11 +304,10 @@ ImageToPathListAlignFilter<TInputImage,TOutputPath>
       norm = gx*gx + gy*gy;
       
       if (norm <=threshold)
-         AngleImage->SetPixel(adr,static_cast<RealType>(-1000.0));
-         else AngleImage->SetPixel(adr,static_cast<RealType>(atan2(gx,-gy)));
+         m_AngleImage->SetPixel(adr,static_cast<RealType>(-1000.0));
+         else m_AngleImage->SetPixel(adr,static_cast<RealType>(atan2(gx,-gy)));
     }
 }
-
 
 template <class TInputImage, class TOutputPath>
 void
@@ -355,8 +354,9 @@ ImageToPathListAlignFilter<TInputImage,TOutputPath>
   n = (int)ceil(hypot((double)nx,(double)ny))+1;
 
   /*** compute angle map of u ***/
-  RealImageTypePointer AngleImage = RealImageType::New(); 
-  this->AngleCalculate( InputImage,AngleImage);
+  RealImageTypePointer lAngleImagePointer = RealImageType::New();
+  m_AngleImage = static_cast<RealImageType*>(lAngleImagePointer.GetPointer()); 
+  this->AngleCalculate( InputImage );
 
   /*** compute P(k,l) ***/
   test = tab(n,1.0/(double)(m_NbGradDirection),(double)(nx*ny)*(double)(nx*ny));    
@@ -430,7 +430,7 @@ ImageToPathListAlignFilter<TInputImage,TOutputPath>
 	    assert( indexAngle[0] >= 0 );
 	    assert( indexAngle[1] >= 0 );
 	    
-	    error = static_cast<float>( AngleImage->GetPixel(indexAngle) );
+	    error = static_cast<float>( m_AngleImage->GetPixel(indexAngle) );
 	    if (error>-100.0) {
 	      error -= theta;
 	      while (error<=-M_PI) error += 2.0*M_PI;

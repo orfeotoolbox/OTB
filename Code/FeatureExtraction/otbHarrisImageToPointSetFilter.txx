@@ -34,7 +34,9 @@ HarrisImageToPointSetFilter<TInputImage, TOutputPointSet>
   m_SigmaD = 1.0;
   m_SigmaI = 1.0;
   m_Alpha  = 1.0;
-  m_Threshold = itk::NumericTraits<InputPixelType>::max();  
+  
+  m_LowerThreshold = itk::NumericTraits<InputPixelType>::NonpositiveMin();  
+  m_UpperThreshold = itk::NumericTraits<InputPixelType>::max();
   
   m_HarrisFilter     = HarrisImageFilterType::New();
   m_ThresholdFilter  = ThresholdImageToPointSetType::New();
@@ -54,7 +56,8 @@ HarrisImageToPointSetFilter<TInputImage, TOutputPointSet>
   m_HarrisFilter->SetAlpha(  m_Alpha  );
 
   m_ThresholdFilter->SetInput(0,m_HarrisFilter->GetOutput() );
-  m_ThresholdFilter->SetThreshold(m_Threshold ); 
+  m_ThresholdFilter->SetLowerThreshold(m_LowerThreshold); 
+  m_ThresholdFilter->SetUpperThreshold(m_UpperThreshold); 
 
   m_ThresholdFilter->SetOutput(pointList ); 
   m_ThresholdFilter->Update();
@@ -74,7 +77,8 @@ HarrisImageToPointSetFilter<TInputImage, TOutputPointSet>
   os << indent << "Sigma_D    : " << this->m_SigmaD    << std::endl;
   os << indent << "Sigma_I    : " << this->m_SigmaI    << std::endl;
   os << indent << "Alpha      : " << this->m_Alpha     << std::endl;
-  os << indent << "Threshold  : " << this->m_Threshold << std::endl;
+  os << indent << "LowerThreshold  : " << this->m_LowerThreshold << std::endl;
+  os << indent << "UpperThreshold  : " << this->m_UpperThreshold << std::endl;
 }
 
 

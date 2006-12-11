@@ -24,7 +24,7 @@
 #include "itkImage.h"
 
 #include "otbImageFileReader.h"
-#include "itkImageFileWriter.h"
+#include "otbImageFileWriter.h"
 #include "otbHarrisImageFilter.h"
 
 int otbHarrisImage( int argc, char * argv[] )
@@ -46,7 +46,7 @@ int otbHarrisImage( int argc, char * argv[] )
         typedef itk::Image< OutputPixelType, Dimension >	              OutputImageType;
         typedef otb::ImageFileReader< InputImageType  >                       ReaderType;  
 	typedef otb::HarrisImageFilter<InputImageType,OutputImageType>        FunctionType;
-        typedef itk::ImageFileWriter< OutputImageType >                       WriterType;
+        typedef otb::ImageFileWriter< OutputImageType >                       WriterType;
   
 
         ReaderType::Pointer reader   = ReaderType::New();

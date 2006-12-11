@@ -226,7 +226,7 @@ Segmenter<TInputImage, TOuputImage>
 
   typename PointSetFilterType::Pointer pointSetFilter = PointSetFilterType::New();
   pointSetFilter->SetInput(0,details);
-  pointSetFilter->SetThreshold(pointSetThreshold);
+  pointSetFilter->SetLowerThreshold(pointSetThreshold);
   pointSetFilter->Update();
 
   /////////////////////////////////////

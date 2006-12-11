@@ -18,10 +18,11 @@
 
 #include "otbSystem.h"
 #include <string.h> // strdup
+#include <ctype.h> //toupper, tolower
 
 
+#if (defined(WIN32) || defined(WIN32CE)) && !defined(__CYGWIN__) && !defined(__MINGW32__)
 
-#if (defined(WIN32) || defined(WIN32CE)) && !defined(__CYGWIN__)
 /*=====================================================================
                    WIN32 / MSVC++ implementation
  *====================================================================*/
@@ -104,7 +105,31 @@ System::GetShortFileName( const std::string& filename )
   return( shortFileName );
 }
 
-#if (defined(WIN32) || defined(WIN32CE)) && !defined(__CYGWIN__)
+// Set to upper a string
+std::string System::SetToUpper( const std::string& str )
+{
+        std::string lString(str);
+        for(int i=0 ; i<lString.size() ; i++)
+        {
+                lString[i]=toupper(lString[i]);
+        }
+        return(lString);
+}
+
+// Set to lower a string
+std::string System::SetToLower( const std::string& str )
+{
+        std::string lString(str);
+        for(int i=0 ; i<lString.size() ; i++)
+        {
+                lString[i]=tolower(lString[i]);
+        }
+        return(lString);
+}
+
+
+
+#if (defined(WIN32) || defined(WIN32CE)) && !defined(__CYGWIN__) && !defined(__MINGW32__)
 
 /*=====================================================================
                    WIN32 / MSVC++ implementation

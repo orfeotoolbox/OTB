@@ -1,3 +1,21 @@
+OTB-v.1.0.2 - Changes since version 1.0.1
+-----------------------------------------
+
+- OTB can now been compiled on several new platforms :
+       - Microsoft Visual Studio .NET 2005 (8.0).
+       - Cygwin.
+       - MinGW on Windows platform. 
+
+- LUM and BSQ formats have been added.
+
+
+Note : On MS Windows platforms, if you have any problem related 
+       to using the OTB's internal version of ITK, you could try to use 
+       an external version of ITK (use ITK 2.6 or later) by setting 
+       OTB_USE_EXTERNAL_ITK to ON and ITK_DIR to the directory where 
+       your ITK built resides.
+
+       
 OTB-v.1.0.1 - Changes since version 1.0.0
 -----------------------------------------
 
@@ -5,7 +23,7 @@ OTB-v.1.0.1 - Changes since version 1.0.0
   (OTB_USE_VISU variable within CMake). This allows you to build OTB
   without Fltk and Open GL.
 
-- Improved robustness of the MV C++ 7.1 installation.
+- Improved robustness of the Microsoft Visual Studio .NET 2003 (7.1) installation.
 
 - Minor changes needed for the portability of OTB-Applications.
 

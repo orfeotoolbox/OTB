@@ -21,8 +21,8 @@
 #endif
 
 #include "itkExceptionObject.h"
-#include "itkImage.h"
 
+#include "otbImage.h"
 #include "otbImageFileReader.h"
 #include "otbThresholdImageToPointSetFilter.h"
 #include "itkPointSet.h"
@@ -38,21 +38,27 @@ int otbThresholdImageToPointSetTest( int argc, char * argv[] )
         typedef unsigned char                                        InputPixelType;
         const   unsigned int        	                             Dimension = 2;
 
-        typedef itk::Image< InputPixelType,  Dimension>              InputImageType;
+        typedef otb::Image< InputPixelType,  Dimension>              InputImageType;
         typedef otb::ImageFileReader< InputImageType  >              ReaderType;
 	typedef itk::PointSet<InputPixelType,Dimension>              PointSetType; 
 	typedef otb::ThresholdImageToPointSetFilter<InputImageType,PointSetType>  FunctionType;
 	typedef PointSetType::PointType                              PointType;
-  
+	typedef FunctionType::InputPixelType InputPixelType;
+	typedef FunctionType::OutputPointSetType OutputPointSetType;
+	
+	InputPixelType LowerThreshold((InputPixelType)::atoi(argv[3]));
+	InputPixelType UpperThreshold((InputPixelType)::atoi(argv[4]));
+
         ReaderType::Pointer   reader         = ReaderType::New();
 	FunctionType::Pointer function       = FunctionType::New();
-        PointSetType::Pointer pointList      = PointSetType::New();	
 	
         reader->SetFileName( inputFilename  );
 
 	function->SetInput( 0,reader->GetOutput() );
-        function->SetOutput(pointList);
+	function->SetLowerThreshold( LowerThreshold );
+	function->SetUpperThreshold( UpperThreshold );
 	function->Update();
+	OutputPointSetType * pointList = function->GetOutput();
 		
 	std::ofstream file;
 	file.open(outputFilename);
@@ -65,8 +71,7 @@ int otbThresholdImageToPointSetTest( int argc, char * argv[] )
 	for (unsigned long i = 0 ; i < NbPoints ; i++)
 	   {
 	   pointList->GetPoint(i,&CoordPoint);
-           file << i <<" / " << NbPoints<<" : ";
-	   file << CoordPoint[0] << " , "<<CoordPoint[1]<< std::endl;
+           file << i+1 <<"/" << NbPoints<<" : " << CoordPoint[0] << " , "<<CoordPoint[1]<< std::endl;
 	   }
 
 	file.close();

@@ -46,4 +46,16 @@ REGISTER_TEST(otbImageFileWriterStreamingONERAComplex);
 REGISTER_TEST(otbStreamingImageFilterTest);
 REGISTER_TEST(otbStreamingImageFileWriterTest);
 REGISTER_TEST(otbVectorImageTest);
+
+REGISTER_TEST(otbShortImageIOTest);
+REGISTER_TEST(otbShortRGBImageIOTest);
+REGISTER_TEST(otbIntImageIOTest);
+REGISTER_TEST(otbFloatImageIOTest);
+REGISTER_TEST(otbDoubleImageIOTest);
+
+REGISTER_TEST(otbLUMImageIOTestCanRead);
+REGISTER_TEST(otbLUMImageIOTestCanWrite);
+REGISTER_TEST(otbBSQImageIOTestCanRead);
+REGISTER_TEST(otbBSQImageIOTestCanWrite);
+
 }

@@ -42,7 +42,8 @@ int otbHarrisToPointSet( int argc, char * argv[] )
         typedef unsigned char                                   PixelType;
         const   unsigned int        	                        Dimension = 2;
 
-	PixelType Threshold((PixelType)::atoi(argv[6]));
+	PixelType LowerThreshold((PixelType)::atoi(argv[6]));
+	PixelType UpperThreshold((PixelType)::atoi(argv[7]));
 	
         typedef itk::Image< PixelType,  Dimension>                 ImageType;
         typedef otb::ImageFileReader< ImageType  >                 ReaderType;  
@@ -52,7 +53,6 @@ int otbHarrisToPointSet( int argc, char * argv[] )
   
         ReaderType::Pointer           reader    = ReaderType::New();
 	FunctionType::Pointer         harris    = FunctionType::New();
-	OutputPointSetType::Pointer   pointList = OutputPointSetType::New();
 	OutputPointType               CoordPoint;
 	
         reader->SetFileName( inputFilename  );
@@ -61,12 +61,13 @@ int otbHarrisToPointSet( int argc, char * argv[] )
         harris->SetSigmaD( SigmaD );
         harris->SetSigmaI( SigmaI );
 	harris->SetAlpha( AlphaValue );
-	harris->SetThreshold( Threshold );
-	harris->SetOutput(pointList);
+	harris->SetLowerThreshold( LowerThreshold );
+	harris->SetUpperThreshold( UpperThreshold );
+	OutputPointSetType * pointList = harris->GetOutput();
 
         harris->Update();
 
-
+        std::cout << "Threshold Lower/Upper : "<<harris->GetLowerThreshold()<<"/"<<harris->GetUpperThreshold()<<std::endl;
 	std::ofstream file;
 	file.open(outputFilename);
 
@@ -76,7 +77,7 @@ int otbHarrisToPointSet( int argc, char * argv[] )
 	for (unsigned long i = 0 ; i < NbPoints ; i++)
 	   {
 	   pointList->GetPoint(i,&CoordPoint);
-           file << i <<" / " << NbPoints << " : " ;
+           file << i+1 <<" / " << NbPoints << " : " ;
 	   file << CoordPoint[0]<<" , "<< CoordPoint[1] << std::endl;
 	   }
 	

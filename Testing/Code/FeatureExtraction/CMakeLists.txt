@@ -270,20 +270,62 @@ ADD_TEST(feTvHarrisPoupee ${FEATUREEXTRACTION_TESTS}
 ADD_TEST(feTvMultiplyByScalarImage ${FEATUREEXTRACTION_TESTS}  
          otbMultiplyByScalarImageFilterTest)
 
-ADD_TEST(feTuThresholdImageToPointSetTest ${FEATUREEXTRACTION_TESTS}  
-  --compare-ascii ${EPS} ${BASELINE_FILES}/feThresholdImageToPointSet.txt
-                   ${TEMP}/feThresholdImageToPointSet.txt
+ADD_TEST(feTuThresholdImageToPointSet1 ${FEATUREEXTRACTION_TESTS}  
+  --compare-ascii ${EPS} ${BASELINE_FILES}/feThresholdImageToPointSet_Threshold_0To255.txt
+                   ${TEMP}/feThresholdImageToPointSet_Threshold_0To255.txt
         otbThresholdImageToPointSetTest 
-	${INPUTDATA}/TeteAToto.png
-	${TEMP}/feThresholdImageToPointSet.txt )
+	${INPUTDATA}/small_points.hdr
+	${TEMP}/feThresholdImageToPointSet_Threshold_0To255.txt
+	0 255 )
+ADD_TEST(feTuThresholdImageToPointSet2 ${FEATUREEXTRACTION_TESTS}  
+  --compare-ascii ${EPS} ${BASELINE_FILES}/feThresholdImageToPointSet_Threshold_0To0.txt
+                   ${TEMP}/feThresholdImageToPointSet_Threshold_0To0.txt
+        otbThresholdImageToPointSetTest 
+	${INPUTDATA}/small_points.hdr
+	${TEMP}/feThresholdImageToPointSet_Threshold_0To0.txt
+	0 0 )
+ADD_TEST(feTuThresholdImageToPointSet3 ${FEATUREEXTRACTION_TESTS}  
+  --compare-ascii ${EPS} ${BASELINE_FILES}/feThresholdImageToPointSet_Threshold_255To255.txt
+                   ${TEMP}/feThresholdImageToPointSet_Threshold_255To255.txt
+        otbThresholdImageToPointSetTest 
+	${INPUTDATA}/small_points.hdr
+	${TEMP}/feThresholdImageToPointSet_Threshold_255To255.txt
+	255 255 )
+ADD_TEST(feTuThresholdImageToPointSet4 ${FEATUREEXTRACTION_TESTS}  
+  --compare-ascii ${EPS} ${BASELINE_FILES}/feThresholdImageToPointSet_Threshold_1To200.txt
+                   ${TEMP}/feThresholdImageToPointSet_Threshold_1To200.txt
+        otbThresholdImageToPointSetTest 
+	${INPUTDATA}/small_points.hdr
+	${TEMP}/feThresholdImageToPointSet_Threshold_1To200.txt
+	1 200 )
 
-ADD_TEST(feTvHarrisToPointSet ${FEATUREEXTRACTION_TESTS}  
-  --compare-ascii ${EPS} ${BASELINE_FILES}/feHarrisToPointSet.txt
-                   ${TEMP}/feHarrisToPointSet.txt
+ADD_TEST(feTvHarrisProduceImageToValidHarrisToPointSet ${FEATUREEXTRACTION_TESTS}  
+        otbHarrisImage 
+	${INPUTDATA}/small_points.hdr
+	${TEMP}/small_points_harris.hdr
+	1.0 1.0 1.0)
+
+ADD_TEST(feTvHarrisToPointSet1 ${FEATUREEXTRACTION_TESTS}  
+  --compare-ascii ${EPS}        ${BASELINE_FILES}/feHarrisToPointSet_Threshold_2To255.txt
+                                ${TEMP}/feHarrisToPointSet_Threshold_2To255.txt
         otbHarrisToPointSet 
-	${INPUTDATA}/TeteAToto.png
-	${TEMP}/feHarrisToPointSet.txt
-	1.0 2.0 0.0 2.0)
+	${INPUTDATA}/small_points.hdr
+	${TEMP}/feHarrisToPointSet_Threshold_2To255.txt
+	1.0 1.0 1.0 2.0 255.0)
+ADD_TEST(feTvHarrisToPointSet2 ${FEATUREEXTRACTION_TESTS}  
+  --compare-ascii ${EPS}        ${BASELINE_FILES}/feHarrisToPointSet_Threshold_20To90.txt
+                                ${TEMP}/feHarrisToPointSet_Threshold_20To90.txt
+        otbHarrisToPointSet 
+	${INPUTDATA}/small_points.hdr
+	${TEMP}/feHarrisToPointSet_Threshold_20To90.txt
+	1.0 1.0 1.0 20 90)
+ADD_TEST(feTvHarrisToPointSet3 ${FEATUREEXTRACTION_TESTS}  
+  --compare-ascii ${EPS}        ${BASELINE_FILES}/feHarrisToPointSet_Threshold_100To160.txt
+                                ${TEMP}/feHarrisToPointSet_Threshold_100To160.txt
+        otbHarrisToPointSet 
+	${INPUTDATA}/small_points.hdr
+	${TEMP}/feHarrisToPointSet_Threshold_100To160.txt
+	1.0 1.0 1.0 100 160)
 
 # -------            otb::PixelSuppressionByDirection   ------------------------------
 	

@@ -74,6 +74,281 @@ ADD_TEST(ioTvMultiMonoChannelROI_ENVI2PNG ${COMMON_TESTS}
 # ------- TEST IO COMMON   ------------------------------
 
 
+# -------            otb::LUMImageIO   ------------------------------
+# CanRead()
+ADD_TEST(ioTuLUMImageIOCanRead ${IO_TESTS} otbLUMImageIOTestCanRead
+        ${INPUTDATA}/poupees.lum)
+
+# CanWrite()
+ADD_TEST(ioTuLUMImageIOCanWrite ${IO_TESTS} otbLUMImageIOTestCanWrite
+        ${TEMP}/poupees.lum)
+
+ADD_TEST(ioTvImageFileReaderHDR2LUM ${IO_TESTS} 
+  --compare-image ${TOL}        ${INPUTDATA}/poupees_1canal.c1.hdr
+                                ${TEMP}/ioImageFileReaderHDR2LUM.lum
+        otbImageFileReaderTest
+        ${INPUTDATA}/poupees_1canal.c1.hdr 
+        ${TEMP}/ioImageFileReaderHDR2LUM.lum )
+
+ADD_TEST(ioTvImageFileReaderPNG2LUM ${IO_TESTS} 
+  --compare-image ${TOL}        ${INPUTDATA}/cthead1.png
+                                ${TEMP}/ioImageFileReaderPNG2LUM.lum
+        otbImageFileReaderTest
+        ${INPUTDATA}/cthead1.png 
+        ${TEMP}/ioImageFileReaderPNG2LUM.lum )
+
+ADD_TEST(ioTvImageFileReaderLUM2LUM ${IO_TESTS} 
+  --compare-image ${TOL}        ${TEMP}/ioImageFileReaderPNG2LUM.lum
+                                ${TEMP}/ioImageFileReaderLUM2LUM.lum
+        otbImageFileReaderTest
+        ${TEMP}/ioImageFileReaderPNG2LUM.lum 
+        ${TEMP}/ioImageFileReaderLUM2LUM.lum )
+
+ADD_TEST(ioTvImageFileWriterLUM2HDR ${IO_TESTS} 
+  --compare-image ${TOL}        ${INPUTDATA}/cthead1.png
+                                ${TEMP}/ioImageFileReaderLUM2HDR.hdr
+        otbImageFileReaderTest
+        ${TEMP}/ioImageFileReaderLUM2LUM.lum 
+        ${TEMP}/ioImageFileReaderLUM2HDR.hdr )
+
+# --- Image I2
+ADD_TEST(ioTvImageFileReaderShortLUM2HDR ${IO_TESTS} 
+  --compare-image ${TOL}        ${INPUTDATA}/poupees_I2.lum
+                                ${TEMP}/ioImageFileReaderI2_LUM2HDR.hdr
+        otbShortImageIOTest
+        ${INPUTDATA}/poupees_I2.lum
+        ${TEMP}/ioImageFileReaderI2_LUM2HDR.hdr )
+
+ADD_TEST(ioTvImageFileReaderShortHDR2LUM ${IO_TESTS} 
+  --compare-image ${TOL}        ${INPUTDATA}/poupees_I2.lum
+                                ${TEMP}/ioImageFileReaderI2_HDR2LUM.lum
+        otbShortImageIOTest
+        ${TEMP}/ioImageFileReaderI2_LUM2HDR.hdr
+        ${TEMP}/ioImageFileReaderI2_HDR2LUM.lum )
+
+ADD_TEST(ioTvImageFileReaderShortLUM2LUM ${IO_TESTS} 
+  --compare-image ${TOL}        ${INPUTDATA}/poupees_I2.lum
+                                ${TEMP}/ioImageFileReaderI2_LUM2LUM.lum
+        otbShortImageIOTest
+        ${INPUTDATA}/poupees_I2.lum
+        ${TEMP}/ioImageFileReaderI2_LUM2LUM.lum )
+
+# --- Image I4
+ADD_TEST(ioTvImageFileReaderIntLUM2HDR ${IO_TESTS} 
+  --compare-image ${TOL}        ${INPUTDATA}/poupees_I4.lum
+                                ${TEMP}/ioImageFileReaderI4_LUM2HDR.hdr
+        otbIntImageIOTest
+        ${INPUTDATA}/poupees_I4.lum
+        ${TEMP}/ioImageFileReaderI4_LUM2HDR.hdr )
+ADD_TEST(ioTvImageFileReaderIntHDR2LUM ${IO_TESTS} 
+  --compare-image ${TOL}        ${INPUTDATA}/poupees_I4.lum
+                                ${TEMP}/ioImageFileReaderI4_HDR2LUM.lum
+        otbIntImageIOTest
+        ${TEMP}/ioImageFileReaderI4_LUM2HDR.hdr
+        ${TEMP}/ioImageFileReaderI4_HDR2LUM.lum )
+
+# --- Image FLOAT
+ADD_TEST(ioTvImageFileReaderFloatLUM2HDR ${IO_TESTS} 
+  --compare-image ${TOL}        ${INPUTDATA}/poupees_R4.lum
+                                ${TEMP}/ioImageFileReaderR4_LUM2HDR.hdr
+        otbFloatImageIOTest
+        ${INPUTDATA}/poupees_R4.lum
+        ${TEMP}/ioImageFileReaderR4_LUM2HDR.hdr )
+ADD_TEST(ioTvImageFileReaderFloatHDR2LUM ${IO_TESTS} 
+  --compare-image ${TOL}        ${INPUTDATA}/poupees_R4.lum
+                                ${TEMP}/ioImageFileReaderR4_HDR2LUM.lum
+        otbFloatImageIOTest
+        ${TEMP}/ioImageFileReaderR4_LUM2HDR.hdr
+        ${TEMP}/ioImageFileReaderR4_HDR2LUM.lum )
+
+# --- Image DOUBLE
+ADD_TEST(ioTvImageFileReaderDoubleLUM2HDR ${IO_TESTS} 
+  --compare-image ${TOL}        ${INPUTDATA}/poupees_R8.lum
+                                ${TEMP}/ioImageFileReaderR8_LUM2HDR.hdr
+        otbDoubleImageIOTest
+        ${INPUTDATA}/poupees_R8.lum
+        ${TEMP}/ioImageFileReaderR8_LUM2HDR.hdr )
+ADD_TEST(ioTvImageFileReaderDoubleHDR2LUM ${IO_TESTS} 
+  --compare-image ${TOL}        ${INPUTDATA}/poupees_R8.lum
+                                ${TEMP}/ioImageFileReaderR8_HDR2LUM.lum
+        otbDoubleImageIOTest
+        ${TEMP}/ioImageFileReaderR8_LUM2HDR.hdr
+        ${TEMP}/ioImageFileReaderR8_HDR2LUM.lum )
+
+
+
+
+ADD_TEST(ioTvImageFileReaderFloatPNG2LUM ${IO_TESTS} 
+  --compare-image ${TOL}        ${INPUTDATA}/cthead1.png
+                                ${TEMP}/ioImageFileReaderFloatPNG2LUM.lum
+        otbFloatImageIOTest
+        ${INPUTDATA}/cthead1.png 
+        ${TEMP}/ioImageFileReaderFloatPNG2LUM.lum )
+
+
+# ---  STREAMING : LUM  ---
+ADD_TEST(ioTvStreamingImageFilterLUM2PNG ${IO_TESTS} 
+   --compare-image ${TOL}       ${TEMP}/ioImageFileReaderPNG2LUM.lum
+                                ${TEMP}/ioStreamingImageFilterTestLUM.png
+         otbStreamingImageFilterTest
+         ${TEMP}/ioImageFileReaderPNG2LUM.lum
+         ${TEMP}/ioStreamingImageFilterTestLUM.png
+         )
+
+# ---  LUM STREAMING  IMAGE   FILE    WRITER  ---
+ADD_TEST(ioTvStreamingIFWriterLUMWithoutStreaming ${IO_TESTS} 
+   --compare-image ${TOL}       ${TEMP}/ioImageFileReaderPNG2LUM.lum
+                                ${TEMP}/ioStreamingImageFileWriterLUM2LUMWithoutStreaming.lum
+         otbStreamingImageFileWriterTest
+         ${TEMP}/ioImageFileReaderPNG2LUM.lum
+         ${TEMP}/ioStreamingImageFileWriterLUM2LUMWithoutStreaming.lum
+         0 # Streaming
+         )
+# ---  LUM STREAMING  IMAGE   FILE    WRITER  ---
+ADD_TEST(ioTvStreamingIFWriterLUMWithStreaming ${IO_TESTS} 
+   --compare-image ${TOL}       ${TEMP}/ioImageFileReaderPNG2LUM.lum
+                                ${TEMP}/ioStreamingImageFileWriterLUM2LUMWithStreaming_10.lum
+         otbStreamingImageFileWriterTest
+         ${TEMP}/ioImageFileReaderPNG2LUM.lum
+         ${TEMP}/ioStreamingImageFileWriterLUM2LUMWithStreaming_10.lum
+         1 # Streaming
+         10
+         )
+
+
+# -------            otb::BSQImageIO   ------------------------------
+# CanRead()
+ADD_TEST(ioTuBSQImageIOCanRead ${IO_TESTS} otbBSQImageIOTestCanRead
+        ${INPUTDATA}/poupees.hd)
+
+# CanWrite()
+ADD_TEST(ioTuBSQImageIOCanWrite ${IO_TESTS} otbBSQImageIOTestCanWrite
+        ${TEMP}/poupees.hd)
+
+ADD_TEST(ioTvImageFileReaderPNG2BSQ ${IO_TESTS} 
+  --compare-image ${TOL}        ${INPUTDATA}/cthead1.png
+                                ${TEMP}/ioImageFileReaderPNG2BSQ.hd
+        otbImageFileReaderTest
+        ${INPUTDATA}/cthead1.png 
+        ${TEMP}/ioImageFileReaderPNG2BSQ.hd )
+
+ADD_TEST(ioTvImageFileReaderPNG2ENVI ${IO_TESTS} 
+  --compare-image ${TOL}        ${TEMP}/ioImageFileReaderPNG2BSQ.hd
+                                ${TEMP}/ioImageFileReaderPNG2ENVI.hdr
+        otbImageFileReaderTest
+        ${INPUTDATA}/cthead1.png 
+        ${TEMP}/ioImageFileReaderPNG2ENVI.hdr )
+
+ADD_TEST(ioTvImageFileReaderBSQ2PNG ${IO_TESTS} 
+  --compare-image ${TOL}        ${INPUTDATA}/poupees_1canal.hd
+                                ${TEMP}/ioImageFileReaderBSQ2PNG.png
+        otbImageFileReaderTest
+        ${INPUTDATA}/poupees_1canal.hd 
+        ${TEMP}/ioImageFileReaderBSQ2PNG.png )
+
+ADD_TEST(ioTvImageFileReaderRGB_PNG2BSQ ${IO_TESTS} 
+  --compare-image ${TOL}        ${INPUTDATA}/sbuv.png
+                                ${TEMP}/ioImageFileReaderRGB_PNG2BSQ.hd
+        otbImageFileReaderRGBTest
+        ${INPUTDATA}/sbuv.png 
+        ${TEMP}/ioImageFileReaderRGB_PNG2BSQ.hd )
+
+ADD_TEST(ioTvImageFileReaderRGB_PNG2ENVI ${IO_TESTS} 
+  --compare-image ${TOL}        ${INPUTDATA}/sbuv.png
+                                ${TEMP}/ioImageFileReaderRGB_PNG2ENVI.hdr
+        otbImageFileReaderRGBTest
+        ${INPUTDATA}/sbuv.png 
+        ${TEMP}/ioImageFileReaderRGB_PNG2ENVI.hdr )
+
+# --- Image I2
+ADD_TEST(ioTvImageFileReaderShortRGB_BSQ2HDR ${IO_TESTS} 
+  --compare-image ${TOL}        ${INPUTDATA}/poupees_I2.hd
+                                ${TEMP}/ioImageFileReaderI2_BSQ2HDR.hdr
+        otbShortRGBImageIOTest
+        ${INPUTDATA}/poupees_I2.hd
+        ${TEMP}/ioImageFileReaderI2_BSQ2HDR.hdr )
+
+ADD_TEST(ioTvImageFileReaderShortHDR2BSQ ${IO_TESTS} 
+  --compare-image ${TOL}        ${INPUTDATA}/poupees_I2.hd
+                                ${TEMP}/ioImageFileReaderI2_HDR2BSQ.hd
+        otbShortRGBImageIOTest
+        ${TEMP}/ioImageFileReaderI2_BSQ2HDR.hdr
+        ${TEMP}/ioImageFileReaderI2_HDR2BSQ.hd )
+
+# --- Image I4
+ADD_TEST(ioTvImageFileReaderIntBSQ2HDR ${IO_TESTS} 
+  --compare-image ${TOL}        ${INPUTDATA}/poupees_I4.hd
+                                ${TEMP}/ioImageFileReaderI4_BSQ2HDR.hdr
+        otbIntImageIOTest
+        ${INPUTDATA}/poupees_I4.hd
+        ${TEMP}/ioImageFileReaderI4_BSQ2HDR.hdr )
+ADD_TEST(ioTvImageFileReaderIntHDR2BSQ ${IO_TESTS} 
+  --compare-image ${TOL}        ${INPUTDATA}/poupees_I4.hd
+                                ${TEMP}/ioImageFileReaderI4_HDR2BSQ.hd
+        otbIntImageIOTest
+        ${TEMP}/ioImageFileReaderI4_BSQ2HDR.hdr
+        ${TEMP}/ioImageFileReaderI4_HDR2BSQ.hd )
+
+# --- Image FLOAT
+ADD_TEST(ioTvImageFileReaderFloatBSQ2HDR ${IO_TESTS} 
+  --compare-image ${TOL}        ${INPUTDATA}/poupees_R4.hd
+                                ${TEMP}/ioImageFileReaderR4_BSQ2HDR.hdr
+        otbFloatImageIOTest
+        ${INPUTDATA}/poupees_R4.hd
+        ${TEMP}/ioImageFileReaderR4_BSQ2HDR.hdr )
+ADD_TEST(ioTvImageFileReaderFloatHDR2BSQ ${IO_TESTS} 
+  --compare-image ${TOL}        ${INPUTDATA}/poupees_R4.hd
+                                ${TEMP}/ioImageFileReaderR4_HDR2BSQ.hd
+        otbFloatImageIOTest
+        ${TEMP}/ioImageFileReaderR4_BSQ2HDR.hdr
+        ${TEMP}/ioImageFileReaderR4_HDR2BSQ.hd )
+
+# --- Image DOUBLE
+ADD_TEST(ioTvImageFileReaderDoubleBSQ2HDR ${IO_TESTS} 
+  --compare-image ${TOL}        ${INPUTDATA}/poupees_R8.hd
+                                ${TEMP}/ioImageFileReaderR8_BSQ2HDR.hdr
+        otbDoubleImageIOTest
+        ${INPUTDATA}/poupees_R8.hd
+        ${TEMP}/ioImageFileReaderR8_BSQ2HDR.hdr )
+ADD_TEST(ioTvImageFileReaderDoubleHDR2BSQ ${IO_TESTS} 
+  --compare-image ${TOL}        ${INPUTDATA}/poupees_R8.hd
+                                ${TEMP}/ioImageFileReaderR8_HDR2BSQ.hd
+        otbDoubleImageIOTest
+        ${TEMP}/ioImageFileReaderR8_BSQ2HDR.hdr
+        ${TEMP}/ioImageFileReaderR8_HDR2BSQ.hd )
+
+
+# ---  STREAMING FILTER : BSQ  ---
+ADD_TEST(ioTvStreamingImageFilterBSQ2PNG ${IO_TESTS} 
+   --compare-image ${TOL}       ${TEMP}/ioImageFileReaderPNG2BSQ.hd
+                                ${TEMP}/ioStreamingImageFilterTestBSQ.png
+         otbStreamingImageFilterTest
+         ${TEMP}/ioImageFileReaderPNG2BSQ.hd
+         ${TEMP}/ioStreamingImageFilterTestBSQ.png
+         )
+
+# ---  BSQ STREAMING  IMAGE   FILE    WRITER  ---
+ADD_TEST(ioTvStreamingIFWriterBSQWithoutStreaming ${IO_TESTS} 
+   --compare-image ${TOL}       ${TEMP}/ioImageFileReaderPNG2BSQ.hd
+                                ${TEMP}/ioStreamingImageFileWriterBSQ2BSQWithoutStreaming.hd
+         otbStreamingImageFileWriterTest
+         ${TEMP}/ioImageFileReaderPNG2BSQ.hd
+         ${TEMP}/ioStreamingImageFileWriterBSQ2BSQWithoutStreaming.hd
+         0 # Streaming
+         )
+# ---  BSQ STREAMING  IMAGE   FILE    WRITER  ---
+ADD_TEST(ioTvStreamingIFWriterBSQWithStreaming ${IO_TESTS} 
+   --compare-image ${TOL}       ${TEMP}/ioImageFileReaderPNG2BSQ.hd
+                                ${TEMP}/ioStreamingImageFileWriterBSQ2BSQWithStreaming_10.hd
+         otbStreamingImageFileWriterTest
+         ${TEMP}/ioImageFileReaderPNG2BSQ.hd
+         ${TEMP}/ioStreamingImageFileWriterBSQ2BSQWithStreaming_10.hd
+         1 # Streaming
+         10
+         )
+
+
+
 # -------            otb::GDALImageIO   ------------------------------
 
 # READER
@@ -232,7 +507,7 @@ ADD_TEST(ioTvImageFileWriterPNG2BSQ ${IO_TESTS}
         otbImageFileWriterTest
         ${INPUTDATA}/cthead1.png 
         ${TEMP}/ioImageFileWriterPNG2BSQ_cthead1.hdr )
-ADD_TEST(ioTvImageFileReaderBSQ2PNG ${IO_TESTS} 
+ADD_TEST(ioTvImageFileReaderENVI2PNG ${IO_TESTS} 
   --compare-image ${TOL}   ${INPUTDATA}/cthead1.png
                     ${TEMP}/ioImageFileWriterPNG2BSQ_cthead1_2.png
         otbImageFileReaderTest
@@ -326,6 +601,8 @@ ADD_TEST(ioTvImageReaderWriterRgbJPEG2TIF ${IO_TESTS}
 
 
 # -------            otb::MultiChannelExtractROI   ------------------------------
+
+
 # ---  SPOT4 (CAI)  ---
 ADD_TEST(ioTvMultiChannelROI_SPOT42PNG ${COMMON_TESTS} 
    --compare-image ${TOL}   ${BASELINE}/ioExtractROI_SPOT42PNG_spot4_700_60_77_489_channels_1_2_3.png
@@ -455,6 +732,26 @@ ADD_TEST(ioTvMultiChannelROI_IkonosNIR2PNG ${COMMON_TESTS}
          otbMultiChannelExtractROI
          ${IMAGEDATA}/PARIS/Ikonos/po_79039_nir_0000000.tif
          ${TEMP}/ioExtractROI_IkonosNIR2PNG_100_100_77_300.png
+         -startX 100 -startY 100 -sizeX 77 -sizeY 300
+         -channels 1)
+
+# ---  LUM ----
+ADD_TEST(ioTvMultiChannelROI_IkonosNIR2LUM ${COMMON_TESTS} 
+   --compare-image ${TOL}   ${BASELINE}/ioExtractROI_IkonosNIR2PNG_100_100_77_300.png
+                     ${TEMP}/ioExtractROI_IkonosNIR2LUM_100_100_77_300.lum
+         otbMultiChannelExtractROI
+         ${IMAGEDATA}/PARIS/Ikonos/po_79039_nir_0000000.tif
+         ${TEMP}/ioExtractROI_IkonosNIR2LUM_100_100_77_300.lum
+         -startX 100 -startY 100 -sizeX 77 -sizeY 300
+         -channels 1)
+
+# ---  BSQ ----
+ADD_TEST(ioTvMultiChannelROI_IkonosNIR2BSQ ${COMMON_TESTS} 
+   --compare-image ${TOL}       ${BASELINE}/ioExtractROI_IkonosNIR2PNG_100_100_77_300.png
+                                ${TEMP}/ioExtractROI_IkonosNIR2BSQ_100_100_77_300.hd
+         otbMultiChannelExtractROI
+         ${IMAGEDATA}/PARIS/Ikonos/po_79039_nir_0000000.tif
+         ${TEMP}/ioExtractROI_IkonosNIR2BSQ_100_100_77_300.hd
          -startX 100 -startY 100 -sizeX 77 -sizeY 300
          -channels 1)
 
@@ -602,6 +899,15 @@ otbStreamingImageFilterTest.cxx
 otbStreamingImageFileWriterTest.cxx
 otbImageTest.cxx
 otbVectorImageTest.cxx
+otbLUMImageIOTestCanRead.cxx
+otbLUMImageIOTestCanWrite.cxx
+otbBSQImageIOTestCanRead.cxx
+otbBSQImageIOTestCanWrite.cxx
+otbFloatImageIOTest.cxx
+otbShortImageIOTest.cxx
+otbShortRGBImageIOTest.cxx
+otbIntImageIOTest.cxx
+otbDoubleImageIOTest.cxx
 )
 
 INCLUDE_DIRECTORIES("${OTBTesting_BINARY_DIR}")

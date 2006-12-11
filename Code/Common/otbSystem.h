@@ -38,7 +38,7 @@ namespace otb
 /** \class System
  * \brief System operations.
  *
- * System operations, filename manipulations, etc.
+ * System operations, filename or strings manipulations, etc.
  *
  */
 class ITK_EXPORT System 
@@ -60,6 +60,10 @@ public:
   static std::string GetPathName( const std::string& filename );
   /** Get the short filename of the file name */
   static std::string GetShortFileName( const std::string& filename );
+  /** Set to upper a string */
+  static std::string SetToUpper( const std::string& str );
+  /** Set to upper a string */
+  static std::string SetToLower( const std::string& str );
 
   /** Get list of file find in a directory */
   static std::vector<std::string> Readdir(std::string pszPath);

@@ -184,7 +184,7 @@ int main(int argc, char ** argv )
     harrisPoints->SetSigmaD( SigmaD );
     harrisPoints->SetSigmaI( SigmaI );
     harrisPoints->SetAlpha( Alpha );
-    harrisPoints->SetThreshold( 10 );
+    harrisPoints->SetLowerThreshold( 10 );
     pointSet = harrisPoints->GetOutput();
     // Software Guide : EndCodeSnippet
 

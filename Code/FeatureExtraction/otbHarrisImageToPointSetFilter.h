@@ -67,9 +67,10 @@ public:
   itkGetConstReferenceMacro(SigmaI, double);
   itkSetMacro(Alpha,double);
   itkGetConstReferenceMacro(Alpha, double);
-  itkSetMacro(Threshold,InputPixelType);
-  itkGetConstReferenceMacro(Threshold, InputPixelType);
-
+  itkSetMacro(LowerThreshold,InputPixelType);
+  itkGetConstReferenceMacro(LowerThreshold, InputPixelType);
+  itkSetMacro(UpperThreshold,InputPixelType);
+  itkGetConstReferenceMacro(UpperThreshold, InputPixelType);
 
 protected:
   HarrisImageToPointSetFilter();
@@ -83,7 +84,8 @@ private:
   HarrisImageToPointSetFilter(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
 
-  InputPixelType m_Threshold;
+  InputPixelType m_LowerThreshold;
+  InputPixelType m_UpperThreshold;
   double         m_SigmaD;
   double         m_SigmaI;
   double         m_Alpha;

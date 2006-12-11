@@ -123,7 +123,7 @@ protected:
   virtual void GenerateOutputInformation(){}; // do nothing
   virtual void GenerateData();
   virtual std::vector<double> tab(int n,double p,double m);
-  virtual void AngleCalculate( const InputImageType*  InputImageIn,RealImageTypePointer AngleImage);
+  virtual void AngleCalculate( const InputImageType*  InputImageIn);
   
   SizeType     m_Size;
   double       m_Spacing[InputImageDimension];
@@ -142,6 +142,8 @@ private:
   double	m_MinGradNorm;		/// Minimum gradient norm to define a direction, default 2.
   double	m_Eps;			/// -log10(max. number of false alarms), default 0
   std::vector<float> m_seglist;
+
+  RealImageType * m_AngleImage; //Angle image use by GenerateData and AngleCalculate methods
 };
 
 } // end namespace otb

@@ -220,12 +220,6 @@ otbMsgDevMacro( <<" Nb Of Components  : "<<this->GetNumberOfComponents());
 	offset  =  headerLength + numberOfBytesPerLines * LineNo;
 	offset +=  m_NbOctetPixel * lPremiereColonne;
   	m_Datafile.seekg(offset, std::ios::beg);
-/*        bool bRead = this->ReadBufferAsBinary(m_Datafile, (void*)value, numberOfBytesToBeRead);
-        if( bRead == false )
-        {
-      		itkExceptionMacro(<<"ONERAImageIO::Read() Can Read the specified Region"); // read failed
-        }
-*/       
         m_Datafile.read( static_cast<char *>( value ), numberOfBytesToBeRead );
     	numberOfBytesRead = m_Datafile.gcount();
 #ifdef __APPLE_CC__
@@ -527,7 +521,7 @@ otbMsgDevMacro( <<" Nb Of Components  : "<<this->GetNumberOfComponents());
 
 	offset  =  headerLength + numberOfBytesPerLines * LineNo;
 	offset +=  m_NbOctetPixel * lPremiereColonne;
-  	m_Datafile.seekg(offset, std::ios::beg);
+  	m_Datafile.seekp(offset, std::ios::beg);
 	m_Datafile.write( static_cast<char *>( value ), numberOfBytesPerLines );
     }
 
@@ -579,7 +573,7 @@ void ONERAImageIO::WriteImageInformation()
   int ByteSizeCol = NbCol*4*2;
 
   itk::ByteSwapper< int>::SwapFromSystemToLittleEndian(&magicNumber);
-  m_Datafile.seekg(0, std::ios::beg );
+  m_Datafile.seekp(0, std::ios::beg );
   m_Datafile.write((char*)(&magicNumber),4);
   
   char * tab = new char[ByteSizeCol];
@@ -592,7 +586,7 @@ void ONERAImageIO::WriteImageInformation()
   // write number of columns
   itk::ByteSwapper<short>::SwapFromSystemToLittleEndian(&NbCol);
 
-  m_Datafile.seekg(ONERA_HEADER_LENGTH+2, std::ios::beg );
+  m_Datafile.seekp(ONERA_HEADER_LENGTH+2, std::ios::beg );
   m_Datafile.write((char*)(&NbCol),2);
   
   

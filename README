@@ -6,20 +6,25 @@ Thank you.
 
 The OTB Development Team.
 
+
+
+
 ***Notes for those who do not read the doc***
+
+We assume that you will install everything on a directory called
+INSTALL_DIR, which usually is /usr/local, /home/jordi/local or
+whatever you want.
+
+Make sure that you have downloaded the source code for:
+       - CMake (http://www.cmake.org)
+       - GDAL (http://www.gdal.org/)
+       - Fltk (http://www.fltk.org)
+            
 
 Installation on Linux/Unix platforms
 ------------------------------------
 
-0. We assume that you will install everything on a directory called
-INSTALL_DIR, which usually is /usr/local, /home/jordi/local or
-whatever you want.
-1. Make sure that you have downloaded the source code for:
-       - CMake (http://www.cmake.org)
-       - GDAL (http://www.gdal.org/)
-       - Fltk (http://www.fltk.org)
-
-2. Install GDAL:
+1. Install GDAL:
       cd INSTALL_DIR
       gunzip gdal.1.3.2.tar.gz
       tar xvf gdal.1.3.2.tar
@@ -28,7 +33,7 @@ whatever you want.
       make
       make install
 
-3. Install CMake:
+2. Install CMake:
       cd INSTALL_DIR
       gunzip cmake-2.2.3.tar.gz
       tar xvf cmake-2.2.3.tar
@@ -40,7 +45,7 @@ whatever you want.
       In order to properly use cmake, add INSTALL_DIR/bin to your path
       with export PATH=$PATH:INSTALL_DIR/bin or something similar.
 
-4. Install Fltk using CMake (do not use the configure script)
+3. Install Fltk using CMake (do not use the configure script)
 
       cd INSTALL_DIR
       bunzip2 fltk-1.1.7-source.tar.bz2 OR
@@ -58,7 +63,7 @@ whatever you want.
       INSTALL_DIR/Fltk-binary/bin work, in particular, the fractals
       example which makes use of the OpenGL library needed by OTB.
 
-5. Install OTB
+4. Install OTB
 
       cd INSTALL_DIR
       gunzip OrfeoToolbox-1.0.0.tgz
@@ -78,11 +83,114 @@ whatever you want.
 	  --> generate the configuration with 'g'
        make
        make install
-            
+      
 
-6. That should be all! Otherwise, subscribe to
+Installation on Microsoft Visual Studio .NET 2003 (7.1)
+-------------------------------------------------------
+
+1. Install GDAL
+
+	MSVC++ 7.1 project files are needed to compile GDAL.
+	These files can be downloaded at http://vterrain.org/dist/gdal132_vc71.zip.
+	Then, unzip it to your GDAL folder, and it will create a folder (named "VisualStudio").
+	Load the solution (.sln file) and build the gdal project.
+	More details can be found at http://vterrain.org/Distrib/gdal.html.
+
+2. Install Fltk
+
+	Use CMake on Windows to generate MSVC++ 7.1 project files from fltk sources.
+	Open the solution and build the fltk project.
+
+3. Install OTB
+
+	Use CMake on Windows to generate MSVC++ 7.1 project files from otb sources.
+		Open the solution and build the otb project.
+
+
+Installation on Microsoft Visual Studio .NET 2005 (8.0)
+-------------------------------------------------------
+
+1. Install GDAL
+
+        Open a MS-DOS prompt.
+        Run the VCVARS32.bat script that comes with the compiler (it can be found in 
+        Microsoft Visual Studio 8/VC/bin).
+        Then, go to the GDAL root directory, and tape : 
+                nmake /f makefile.vc
+        Once the build is successful, tape this line to install GDAL :
+                nmake /f makefile.vc install
+   
+        More details about this install can be found at www.gdal.org/gdal_building.html.
+                
+2. Install Fltk
+
+	Use CMake on Windows to generate MSVC++ 8.0 project files from fltk sources.
+	Open the solution and build the fltk project.
+
+3. Install OTB
+
+	Use CMake on Windows to generate MSVC++ 8.0 project files from otb sources.
+	Open the solution and build the otb project.
+
+
+Installation with MinGW on Windows platform
+-------------------------------------------
+
+0. Install MinGW
+
+	Download the lastest version of mingw and msys at http://www.mingw.org and install those 
+	two programs.
+	Then, launch MinGW : a promp appears (similar to Linux one).
+
+1. Install GDAL
+
+	To compile GDAL, at configure step, use these options :
+		./configure -prefix=INSTALL_DIR --host=mingw32 --without-libtool 
+		--without-python --with-png=internal --with-libtiff=internal
+		--with-jpeg=internal
+
+	Then lauch the usual make and make install.
+
+2. Install Fltk
+
+	Generate MSYS Makefiles with CMake (Windows version) from fltk sources.
+	Then, under prompt, tape make and make install where you have generated Makefiles with CMake.
+
+3. Install OTB
+
+	Similar to fltk install.
+
+
+Installation on Cygwin platform
+-------------------------------
+
+0. Install Cygwin
+
+	Download the lastest version at http://www.cygwin.com and install it.
+	Then, launch it, a prompt appears (similar to Linux one).
+
+1. Install GDAL
+
+	To compile GDAL, at configure step, use these options :
+		./configure --prefix=INSTALL_DIR --with-png=internal --with-libtiff=internal
+		--with-jpeg=internal
+
+	Then lauch the usual make and make install.
+
+2. Install Fltk
+
+	See Linux part for details (same procedure).
+
+3. Install OTB
+
+	See Linux part for details (same procedure).
+
+
+
+
+That should be all! Otherwise, subscribe to
    otb-users@googlegroups.com and you will get some help.
-            
+
 
 
 ** Sun OS ans HP UX users **
@@ -92,3 +200,22 @@ Please make sure that you use the GNU tar command, since the tar
 command shipped with Sun workstations may give problems. See
 <http://groups.google.com/group/otb-users/browse_thread/thread/3758159f06092ae4>
 for details.
+
+
+** Cygwin users **
+------------------
+
+Due to an unknown bug, Fltk can't compile on some versions of Cygwin (OpenGL problems).
+Put OTB_USE_VISU to OFF to avoid these problems.
+
+Some bugs can appear while compiling GDAL with JPEG2000 files : disable this format to resolve the problem.
+
+
+** Microsoft Visual Studio .NET 2005 (8.0) users **
+---------------------------------------------------
+
+Execution errors can appear on some platforms, using GDAL compiled with MSVC++ 8.0.
+
+This problem can be resolved by downloading GDAL binaries for Windows
+at http://vterrain.org/Distrib/gdal.html.
+

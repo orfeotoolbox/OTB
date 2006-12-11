@@ -49,7 +49,7 @@ ENDIF("${CMAKE_MAJOR_VERSION}.${CMAKE_MINOR_VERSION}" MATCHES "^1\\.8$")
 # OTB version number.  An even minor number corresponds to releases.
 SET(OTB_VERSION_MAJOR "1")
 SET(OTB_VERSION_MINOR "0")
-SET(OTB_VERSION_PATCH "1")
+SET(OTB_VERSION_PATCH "2")
 
 # Version string should not include patch level.  The major.minor is
 # enough to distinguish available features of the toolkit.
@@ -273,8 +273,8 @@ IF(WIN32)
 ENDIF(WIN32)
 
 
-OPTION(BUILD_EXAMPLES "Generer les exemples." ON)
-OPTION(BUILD_TESTING "Generer les tests." ON)
+OPTION(BUILD_EXAMPLES "Generer les exemples." OFF)
+OPTION(BUILD_TESTING "Generer les tests." OFF)
 
 #-----------------------------------------------------------------------------
 # Dispatch the build into the proper subdirectories.

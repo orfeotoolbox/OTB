@@ -24,15 +24,15 @@
 #include "itkExceptionObject.h"
 #include <iostream>
 
-int otbLUMImageIOTestCanRead(int argc, char* argv[])
+int otbLUMImageIOTestCanWrite(int argc, char* argv[])
 {
   try
   {
   	otb::LUMImageIO::Pointer lLUMImageIO = otb::LUMImageIO::New();
-        bool lCanRead = lLUMImageIO->CanReadFile(argv[1]);
+        bool lCanRead = lLUMImageIO->CanWriteFile(argv[1]);
         if ( lCanRead == false)
         {
-                std::cerr << "Erreur otb::LUMImageIO : impossible d'ouvrir l'image LUM "<<argv[1]<<"."<<std::endl;
+                std::cerr << "Erreur otb::L'image "<<argv[1]<<" n'est pas une image LUM."<<std::endl;
                 return EXIT_FAILURE;
         }
   }

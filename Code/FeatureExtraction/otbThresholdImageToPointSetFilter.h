@@ -41,12 +41,10 @@ public:
                       		TInputImage::ImageDimension);
 
   typedef TInputImage     InputImageType;
-  //typedef TOutputPointSet OutputPointSetType;
-  
 
   typedef ThresholdImageToPointSetFilter                             Self;
   typedef ImageToPointSetFilter< InputImageType, TOutputPointSet> Superclass;
-  typedef   typename Superclass::OutputPointSetType             OutputPointSetType;
+  typedef typename Superclass::OutputPointSetType             		OutputPointSetType;
   typedef itk::SmartPointer<Self>                                    Pointer;
   typedef itk::SmartPointer<const Self>                              ConstPointer;
 
@@ -64,8 +62,10 @@ public:
   typedef   typename Superclass::OutputPointSetPointer          OutputPointSetPointer;
   typedef   typename Superclass::OutputPointSetType::PixelType  OutputPointSetPixelType;
 
-  itkSetMacro(Threshold,InputPixelType);
-  itkGetConstReferenceMacro(Threshold, InputPixelType);
+  itkSetMacro(LowerThreshold,InputPixelType);
+  itkGetConstReferenceMacro(LowerThreshold, InputPixelType);
+  itkSetMacro(UpperThreshold,InputPixelType);
+  itkGetConstReferenceMacro(UpperThreshold, InputPixelType);
 
 protected:
   ThresholdImageToPointSetFilter();
@@ -79,7 +79,8 @@ private:
   ThresholdImageToPointSetFilter(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
 
-  InputPixelType m_Threshold;
+  InputPixelType m_LowerThreshold;
+  InputPixelType m_UpperThreshold;
 };
 } // end namespace otb
 

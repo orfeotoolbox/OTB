@@ -29,7 +29,8 @@ template <class TInputImage, class TOutputPointSet>
 ThresholdImageToPointSetFilter<TInputImage, TOutputPointSet>
 ::ThresholdImageToPointSetFilter()
 {
-  m_Threshold = itk::NumericTraits<InputPixelType>::max();  
+  m_LowerThreshold = itk::NumericTraits<InputPixelType>::NonpositiveMin();
+  m_UpperThreshold = itk::NumericTraits<InputPixelType>::max();  
 }
 
 
@@ -45,28 +46,23 @@ ThresholdImageToPointSetFilter<TInputImage, TOutputPointSet>
   typename OutputPointSetType::PointType  position;
 
   outputPtr->Initialize();
-  
 
   typedef itk::ImageRegionConstIterator<TInputImage> InputIterator;
   InputIterator  inIt(inputPtr, inputPtr->GetRequestedRegion() );
 
-          
   // walk the regions, threshold each pixel
   while( !inIt.IsAtEnd() )
     {
     
     const InputPixelType value = inIt.Get();
     const IndexType index = inIt.GetIndex();
-    if (value >= m_Threshold)
+    
+    if ((value >= m_LowerThreshold) && (value <= m_UpperThreshold))
       {
        position[0] = index[0];
        position[1] = index[1];
 
        outputPtr->SetPoint(pointId,position);    
-
-//       OutputPointSetPixelType outValue;
-//       outValue = itk::NumericTraits<OutputPointSetPixelType>(value);
-//       outputPtr->SetPointData(pointId, outValue );
 
        pointId++;    
        
@@ -84,7 +80,8 @@ ThresholdImageToPointSetFilter<TInputImage, TOutputPointSet>
 ::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   Superclass::PrintSelf( os, indent );
-  os << indent << "Threshold : " << m_Threshold << std::endl;
+  os << indent << "LowerThreshold : " << m_LowerThreshold << std::endl;
+  os << indent << "UpperThreshold : " << m_UpperThreshold << std::endl;
 }
 
 

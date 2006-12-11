@@ -20,19 +20,19 @@
 #pragma warning ( disable : 4786 )
 #endif
 
-#include "otbLUMImageIO.h"
+#include "otbBSQImageIO.h"
 #include "itkExceptionObject.h"
 #include <iostream>
 
-int otbLUMImageIOTestCanRead(int argc, char* argv[])
+int otbBSQImageIOTestCanWrite(int argc, char* argv[])
 {
   try
   {
-  	otb::LUMImageIO::Pointer lLUMImageIO = otb::LUMImageIO::New();
-        bool lCanRead = lLUMImageIO->CanReadFile(argv[1]);
+  	otb::BSQImageIO::Pointer lBSQImageIO = otb::BSQImageIO::New();
+        bool lCanRead = lBSQImageIO->CanWriteFile(argv[1]);
         if ( lCanRead == false)
         {
-                std::cerr << "Erreur otb::LUMImageIO : impossible d'ouvrir l'image LUM "<<argv[1]<<"."<<std::endl;
+                std::cerr << "Erreur otb::L'image "<<argv[1]<<" n'est pas une image BSQ."<<std::endl;
                 return EXIT_FAILURE;
         }
   }
