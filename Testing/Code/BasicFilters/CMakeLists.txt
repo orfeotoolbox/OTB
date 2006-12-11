@@ -97,7 +97,7 @@ ADD_TEST(bfTvBoundingRegionCalculator ${BASICFILTERS_TESTS}
  		   ${BASELINE_FILES}/bfBoundingRegionCalculatorOutput.txt
  		   ${TEMP}/bfBoundingRegionCalculatorOutput.txt
         otbBinaryImageMinimalBoundingRegionCalculator
-	5
+	4
 	${TEMP}/bfBoundingRegionCalculatorOutput.txt
 	${INPUTDATA}/rcc8_mire1.png
 	${INPUTDATA}/rcc8_mire2.png
