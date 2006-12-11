@@ -122,14 +122,14 @@ the following platforms:
 \begin{itemize}
   \item Linux/Unix with GCC (2.95.X, 3.3.X, 4.1.X).
   \item Windows with Microsoft Visual Studio C++ 7.1 .NET 2003.
+  \item Windows with Microsoft Visual Studio C++ 8.0 .NET 2005.  
   \item Windows with MinGW. (mingw + msys at \url{http://www.mingw.org})
   \item Cygwin. (\url{http://www.cygwin.com})
 \end{itemize}
 
 Support for the following platforms is planned:
 \begin{itemize}
-  \item Windows with MVSC++ 6.0.
-  \item Windows with MVSC++ 8.0 .NET 2005.  
+  \item Windows with Microsoft Visual Studio C++ 6.0.
 \end{itemize}
 
 \subsection{Which libraries/packages are needed before installing
@@ -256,13 +256,49 @@ whatever you want. Make sure that you have downloaded the source code for:
 
 \item Install Fltk
 
-	Use CMake on Windows to generate MSVC++ project files from fltk sources.
+	Use CMake on Windows to generate MSVC++ 7.1 project files from fltk sources.
 	
 	Open the solution and build the fltk project.
 
 \item Install OTB
 
-	Use CMake on Windows to generate MSVC++ project files from otb sources.
+	Use CMake on Windows to generate MSVC++ 7.1 project files from otb sources.
+	
+	Open the solution and build the otb project.
+
+\end{enumerate}
+
+\subsubsection{Microsoft Visual Studio C++ 8.0}
+\begin{enumerate}
+\item Install GDAL
+
+        Open a MS-DOS prompt.
+        
+        Run the VCVARS32.bat script that comes with the compiler (it can be found in 
+        Microsoft Visual Studio 8/VC/bin).
+        
+        Then, go to the GDAL root directory, and tape : 
+        \begin{verbatim}
+                nmake /f makefile.vc
+        \end{verbatim}
+        
+        Once the build is successful, tape this line to install GDAL :
+        \begin{verbatim}
+                nmake /f makefile.vc install
+        \end{verbatim}
+	
+        More details about this install can be found at \url{www.gdal.org/gdal_building.html}.
+                
+        
+\item Install Fltk
+
+	Use CMake on Windows to generate MSVC++ 8.0 project files from fltk sources.
+	
+	Open the solution and build the fltk project.
+
+\item Install OTB
+
+	Use CMake on Windows to generate MSVC++ 8.0 project files from otb sources.
 	
 	Open the solution and build the otb project.
 
@@ -343,6 +379,11 @@ Put OTB\_USE\_VISU to OFF to avoid these problems.
 
 Some bugs can appear while compiling GDAL with JPEG2000 files : disable this format to resolve the problem.
 
+\subsubsection{MSVC++ 8.0}
+Execution errors can appear on some platforms, using GDAL compiled with MSVC++ 8.0.
+
+This problem can be resolved by downloading GDAL binaries for Windows
+at \url{http://vterrain.org/Distrib/gdal.html}.
 
 \section{Using OTB}
 
