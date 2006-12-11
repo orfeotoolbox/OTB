@@ -20,6 +20,8 @@ PURPOSE.  See the above copyright notices for more information.
 #include "otbRCC8VertexBase.h"
 #include "otbRCC8VertexIterator.h"
 #include "otbRCC8EdgeIterator.h"
+#include "otbRCC8InEdgeIterator.h"
+#include "otbRCC8OutEdgeIterator.h"
 
 void fail(bool test, char * reason)
 {
@@ -41,6 +43,8 @@ int otbRCC8Graph(int argc, char* argv[])
       typedef RCC8GraphType::EdgeType EdgeType;
       typedef otb::RCC8VertexIterator<RCC8GraphType> VertexIteratorType;
       typedef otb::RCC8EdgeIterator<RCC8GraphType>   EdgeIteratorType;
+      typedef otb::RCC8InEdgeIterator<RCC8GraphType> InEdgeIteratorType;
+      typedef otb::RCC8OutEdgeIterator<RCC8GraphType> OutEdgeIteratorType;
     
       // Instantiation
       RCC8GraphType::Pointer rcc8Graph = RCC8GraphType::New();
@@ -124,6 +128,34 @@ int otbRCC8Graph(int argc, char* argv[])
 	    {
 	      fail(true,"Edge iterator out of bound."); 
 	    }
+	}
+
+      // Adding vertices and edges to test the in and out iterators
+      VertexType::Pointer vertex4 = VertexType::New();
+      VertexType::Pointer vertex5 = VertexType::New();
+      vertex4->SetSegmentationImageIndex(3);
+      vertex4->SetObjectLabelInImage(3);
+      vertex5->SetSegmentationImageIndex(4);
+      vertex5->SetObjectLabelInImage(4);
+      rcc8Graph->SetVertex(3,vertex4);
+      rcc8Graph->SetVertex(4,vertex5);
+      rcc8Graph->AddEdge(3,1,otb::OTB_RCC8_NTPP);
+      rcc8Graph->AddEdge(1,4,otb::OTB_RCC8_PO);
+      
+      // Testing the in edge iterator
+      int vertexIndex=1;
+      InEdgeIteratorType inEdgeIt(vertexIndex,rcc8Graph);
+      for(inEdgeIt.GoToBegin();!inEdgeIt.IsAtEnd();++inEdgeIt)
+	{
+	  fail(!((inEdgeIt.GetSourceIndex()==0)||(inEdgeIt.GetSourceIndex()==3)),
+	       "!((inEdgeIt.GetSourceIndex()==0)||(inEdgeIt.GetSourceIndex()==3))");
+	}
+      // Testing the out edge iterator
+      OutEdgeIteratorType outEdgeIt(vertexIndex,rcc8Graph);
+      for(outEdgeIt.GoToBegin();!outEdgeIt.IsAtEnd();++outEdgeIt)
+	{
+	  fail(!((inEdgeIt.GetSourceIndex()==0)||(inEdgeIt.GetSourceIndex()==3)),
+	       "!((inEdgeIt.GetSourceIndex()==2)||(inEdgeIt.GetSourceIndex()==4))");
 	}
     }
   catch( itk::ExceptionObject & err ) 

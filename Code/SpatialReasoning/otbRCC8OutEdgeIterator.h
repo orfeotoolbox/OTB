@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef _otbRCC8EdgeIterator_h
-#define _otbRCC8EdgeIterator_h
+#ifndef _otbRCC8OutEdgeIterator_h
+#define _otbRCC8OutEdgeIterator_h
 
 #include "otbRCC8Graph.h"
 
@@ -24,14 +24,14 @@ namespace otb
 {
 /**
  * \class EdgeIterator
- * \brief Iterates on the graph edges.
+ * \brief Iterates on the graph out edges from a vertex.
  */
 template <class TGraph>
-class RCC8EdgeIterator 
+class RCC8OutEdgeIterator 
 {
  public:
   /** self typedef */
-  typedef RCC8EdgeIterator Self;
+  typedef RCC8OutEdgeIterator Self;
 
   /** Graph typedef */
   typedef TGraph GraphType;
@@ -42,36 +42,26 @@ class RCC8EdgeIterator
   typedef typename GraphType::VertexDescriptorType VertexDescriptorType;
   typedef typename GraphType::RCC8ValueType RCC8ValueType;
   /** typedef of the internal iterator */
-  typedef typename boost::graph_traits<InternalGraphType>::edge_iterator InternalIteratorType;
+  typedef typename boost::graph_traits<InternalGraphType>::out_edge_iterator InternalIteratorType;
   /** Typedef of the index map */
   typedef typename boost::property_map<InternalGraphType, boost::vertex_index_t>::type IndexMapType;
 
   /** Constructor */
-  RCC8EdgeIterator();  
+  RCC8OutEdgeIterator();  
    /** Copy constructor */
-   RCC8EdgeIterator(const Self& iter);
+   RCC8OutEdgeIterator(const Self& iter);
    /**  Constructor with input graph */
-   RCC8EdgeIterator(TGraph * graph);
+   RCC8OutEdgeIterator(VertexDescriptorType vertex,TGraph * graph);
   /**
    * Get the current edge value.
    * \return The value of the current edge pointed by the iterator.
    */
   RCC8ValueType GetValue(void);
- /**
-   * Return the source vertex of the current edge.
-   * \return The source edge.
-   */
-  VertexPointerType GetSourceVertex(void);
   /**
    * Return the target vertex of the current edge.
    * \return The target vertex.
    */
   VertexPointerType GetTargetVertex(void);
-  /**
-   * Return the source vertex index of the current edge.
-   * \return The souce vertex index.
-   */
-  VertexDescriptorType GetSourceIndex(void);
   /**
    * Return the target vertex index of the current edge.
    * \return The target vertex index.
@@ -99,7 +89,6 @@ class RCC8EdgeIterator
    * Add
    */
   Self& operator+(int i);
-
   /**
    * Remove
    */
@@ -123,11 +112,13 @@ class RCC8EdgeIterator
   InternalIteratorType m_Iter;
   // Input graph pointer
   GraphPointerType m_Graph;
+  // source vertex descriptor
+  VertexDescriptorType m_VertexIndex;
 };
 } // End namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbRCC8EdgeIterator.txx"
+#include "otbRCC8OutEdgeIterator.txx"
 #endif
 
 #endif

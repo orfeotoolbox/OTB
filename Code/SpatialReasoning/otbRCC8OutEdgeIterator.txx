@@ -15,96 +15,73 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef _otbRCC8EdgeIterator_txx
-#define _otbRCC8EdgeIterator_txx
+#ifndef _otbRCC8OutEdgeIterator_txx
+#define _otbRCC8OutEdgeIterator_txx
 
-#include "otbRCC8EdgeIterator.h"
+#include "otbRCC8OutEdgeIterator.h"
 
 namespace otb
 {
  /** Constructor */
   template <class TGraph>
-  RCC8EdgeIterator<TGraph>
-  ::RCC8EdgeIterator()
+  RCC8OutEdgeIterator<TGraph>
+  ::RCC8OutEdgeIterator()
   {}
   /**
    * Copy operator.
    */
   template <class TGraph>
-  RCC8EdgeIterator<TGraph>
-  ::RCC8EdgeIterator(const Self& iter)
+  RCC8OutEdgeIterator<TGraph>
+  ::RCC8OutEdgeIterator(const Self& iter)
   {
     m_Iter=iter.m_Iter;
     m_Graph=iter.m_Graph;
+    m_VertexIndex = iter.m_VertexIndex;
     m_End=iter.m_End;
   }
   /**  
    *Constructor with input graph 
    */
   template <class TGraph>
-  RCC8EdgeIterator<TGraph>
-  ::RCC8EdgeIterator(TGraph * graph) 
+  RCC8OutEdgeIterator<TGraph>
+  ::RCC8OutEdgeIterator(VertexDescriptorType vertex,TGraph * graph) 
   {
     m_Graph=graph;
-    tie(m_Iter,m_End)=edges(*m_Graph->GetGraph());
+    m_VertexIndex = vertex;
+    tie(m_Iter,m_End)=out_edges(vertex,*m_Graph->GetGraph());
   }
   /**
    * Get the current edge value.
    * \return The value of the current edge pointed by the iterator.
    */
   template <class TGraph>
-  typename  RCC8EdgeIterator<TGraph>
+  typename  RCC8OutEdgeIterator<TGraph>
   ::RCC8ValueType 
-  RCC8EdgeIterator<TGraph>
+  RCC8OutEdgeIterator<TGraph>
   ::GetValue(void)
   {
     return (*m_Graph->GetGraph())[*m_Iter]->GetValue();
-  }
-  /**
-   * Return the source vertex of the current edge.
-   * \return The source edge.
-   */
-  template <class TGraph>
-  typename  RCC8EdgeIterator<TGraph>
-  ::VertexPointerType 
-  RCC8EdgeIterator<TGraph>
-  ::GetSourceVertex(void)
-  {
-    return (*m_Graph->GetGraph())[source(*m_Iter,(*m_Graph->GetGraph()))]; 
   }
   /**
    * Return the target vertex of the current edge.
    * \return The target vertex.
    */
   template <class TGraph>
-  typename  RCC8EdgeIterator<TGraph>
+  typename  RCC8OutEdgeIterator<TGraph>
   ::VertexPointerType 
-  RCC8EdgeIterator<TGraph>
+  RCC8OutEdgeIterator<TGraph>
   ::GetTargetVertex(void)
   {
     return (*m_Graph->GetGraph())[target(*m_Iter,(*m_Graph->GetGraph()))];    
-  }
-  /**
-   * Return the source vertex index of the current edge.
-   * \return The souce vertex index.
-   */
-  template <class TGraph>
-  typename  RCC8EdgeIterator<TGraph>
-  ::VertexDescriptorType 
-  RCC8EdgeIterator<TGraph>
-  ::GetSourceIndex(void)
-  {
-    IndexMapType index = get(boost::vertex_index, (*m_Graph->GetGraph()));
-    return index[source(*m_Iter,(*m_Graph->GetGraph()))]; 
   }
   /**
    * Return the target vertex index of the current edge.
    * \return The target vertex index.
    */
   template <class TGraph>
-  typename  RCC8EdgeIterator<TGraph>
+  typename  RCC8OutEdgeIterator<TGraph>
   ::VertexDescriptorType 
-  RCC8EdgeIterator<TGraph>
+  RCC8OutEdgeIterator<TGraph>
   ::GetTargetIndex(void)
   {
     IndexMapType index = get(boost::vertex_index,(*m_Graph->GetGraph()));
@@ -116,7 +93,7 @@ namespace otb
    */
   template <class TGraph>
   bool
-  RCC8EdgeIterator<TGraph>
+  RCC8OutEdgeIterator<TGraph>
   ::IsAtEnd(void)
   {
     return (m_Iter==m_End);
@@ -126,18 +103,18 @@ namespace otb
    */
   template <class TGraph>
   void 
-  RCC8EdgeIterator<TGraph>
+  RCC8OutEdgeIterator<TGraph>
   ::GoToBegin(void)
   {
-    tie(m_Iter,m_End)=edges(*m_Graph->GetGraph());
+    tie(m_Iter,m_End)=out_edges(m_VertexIndex,*m_Graph->GetGraph());
   }
   /**
    * Increment.
    */
   template <class TGraph>
-  typename RCC8EdgeIterator<TGraph> 
+  typename RCC8OutEdgeIterator<TGraph> 
   ::Self& 
-  RCC8EdgeIterator<TGraph>
+  RCC8OutEdgeIterator<TGraph>
   ::operator++()
   { 
     ++m_Iter;
@@ -147,9 +124,9 @@ namespace otb
    * Decrement.
    */
   template <class TGraph>
-  typename RCC8EdgeIterator<TGraph> 
+  typename RCC8OutEdgeIterator<TGraph> 
   ::Self& 
-  RCC8EdgeIterator<TGraph>
+  RCC8OutEdgeIterator<TGraph>
   ::operator--()
   {
     --m_Iter;
@@ -159,9 +136,9 @@ namespace otb
    * Add
    */
   template <class TGraph>
-  typename RCC8EdgeIterator<TGraph> 
+  typename RCC8OutEdgeIterator<TGraph> 
   ::Self& 
-  RCC8EdgeIterator<TGraph>
+  RCC8OutEdgeIterator<TGraph>
   ::operator+(int i)
   {
     m_Iter=m_Iter+i;
@@ -171,9 +148,9 @@ namespace otb
    * Remove
    */
   template <class TGraph>
-  typename RCC8EdgeIterator<TGraph> 
+  typename RCC8OutEdgeIterator<TGraph> 
   ::Self& 
-  RCC8EdgeIterator<TGraph>
+  RCC8OutEdgeIterator<TGraph>
   ::operator-(int i)
   {
     m_Iter=m_Iter-i;
@@ -184,7 +161,7 @@ namespace otb
    */
   template <class TGraph>
   bool 
-  RCC8EdgeIterator<TGraph>
+  RCC8OutEdgeIterator<TGraph>
   ::operator!=(const Self& iter)
   {
     return (m_Iter != iter.m_Iter);
@@ -194,7 +171,7 @@ namespace otb
    */
   template <class TGraph>
   bool 
-  RCC8EdgeIterator<TGraph>
+  RCC8OutEdgeIterator<TGraph>
   ::operator==(const Self& iter)
   {
     return (m_Iter == iter.m_Iter);
@@ -203,9 +180,9 @@ namespace otb
    * Instantiation operator.
    */
   template <class TGraph>
-  typename RCC8EdgeIterator<TGraph> 
+  typename RCC8OutEdgeIterator<TGraph> 
   ::Self& 
-  RCC8EdgeIterator<TGraph>
+  RCC8OutEdgeIterator<TGraph>
   ::operator=(const Self& iter)
   {
     m_Iter = iter.m_Iter;
