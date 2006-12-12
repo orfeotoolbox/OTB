@@ -31,7 +31,7 @@ namespace otb
  * methods and iterators interfaces.
  */
 template <class TObject>
-class ObjectList
+class ITK_EXPORT ObjectList
   : public itk::DataObject
 {
  public:

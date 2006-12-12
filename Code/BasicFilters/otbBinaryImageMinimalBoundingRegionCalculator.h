@@ -36,7 +36,7 @@ namespace otb
  * \sa ImageToImageRCC8Calculator
  */
 template <class TInputImage>
-class BinaryImageMinimalBoundingRegionCalculator
+class ITK_EXPORT BinaryImageMinimalBoundingRegionCalculator
   : public itk::ImageToImageFilter<TInputImage,TInputImage>
 {
 public:

@@ -35,7 +35,13 @@ namespace morphologicalPyramid
  */
 template <class TInputImage,class TOuputImage>
 Resampler<TInputImage, TOuputImage>
-::Resampler(){}
+::Resampler()
+{
+  for(int i=0;i<InputImageType::ImageDimension;++i)
+  {
+     m_Size[i]=0;
+  }
+}
   /**
    * Configure input requested region to be the largest possible region.
    */

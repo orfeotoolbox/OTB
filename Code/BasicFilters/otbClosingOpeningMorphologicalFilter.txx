@@ -31,35 +31,10 @@ namespace otb {
 template <class TInputImage,class TOuputImage, class TKernel>
 ClosingOpeningMorphologicalFilter<TInputImage, TOuputImage, TKernel>
 ::ClosingOpeningMorphologicalFilter()
-  : m_Kernel()
-{}
-
-
-
-// /// Méthode standard pour la gestion du pipeline d'exécution
-// template <class TInputImage,class TOuputImage, class TKernel>
-// void
-// ClosingOpeningMorphologicalFilter<TInputImage, TOuputImage, TKernel>
-// ::GenerateInputRequestedRegion()
-// {
-//   // Appel à l'implémentation de la classe supérieur
-//   Superclass::GenerateInputRequestedRegion();
-//   // Réccupération de l'image en entrée
-//   InputImagePointer input = const_cast<InputImageType *>(this->GetInput());
-//   input->SetRequestedRegion( input->GetLargestPossibleRegion());
-// }
-// /// Méthode standard pour la gestion du pipeline d'exécution
-// template <class TInputImage,class TOuputImage, class TKernel>
-// void
-// ClosingOpeningMorphologicalFilter<TInputImage, TOuputImage, TKernel>
-// ::EnlargeOutputRequestedRegion(itk::DataObject *)
-// {
-//   this->GetOutput()->SetRequestedRegion( this->GetOutput()->GetLargestPossibleRegion());
-// }
-
-
-
-
+{
+m_Kernel.SetRadius(1);
+m_Kernel.CreateStructuringElement();
+}
 /**
  * Main computation method
  */

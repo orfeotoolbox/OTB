@@ -36,7 +36,7 @@ namespace otb
        * \sa MorphologicalPyramidSynthesisFilter
        */
       template <class TInputImage, class TOutputImage>
-	class  MRToMSConverter
+	class ITK_EXPORT MRToMSConverter
 	: public ImageListToImageListFilter<TInputImage,TOutputImage>
 	{
 	  public :

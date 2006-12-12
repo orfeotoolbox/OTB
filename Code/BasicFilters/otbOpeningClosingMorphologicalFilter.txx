@@ -31,8 +31,10 @@ namespace otb {
 template <class TInputImage,class TOuputImage, class TKernel>
 OpeningClosingMorphologicalFilter<TInputImage, TOuputImage, TKernel>
 ::OpeningClosingMorphologicalFilter()
-  : m_Kernel()
-{}
+{
+	m_Kernel.SetRadius(1);
+	m_Kernel.CreateStructuringElement();
+}
 
 /**
  * Main computation method

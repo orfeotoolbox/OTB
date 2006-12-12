@@ -30,7 +30,8 @@ namespace otb
    * \sa RCC8Graph, RCC8Edge, RCC8VertexBase
    */
   template <class TLabel, class TPrecision = float>
-    class RCC8VertexWithCompacity : public RCC8VertexBase<TLabel>
+    class ITK_EXPORT RCC8VertexWithCompacity 
+		: public RCC8VertexBase<TLabel>
     {
       public:
       /** Standard class typedefs */

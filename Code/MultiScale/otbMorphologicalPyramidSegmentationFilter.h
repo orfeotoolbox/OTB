@@ -53,7 +53,7 @@ namespace otb
  * ClosingOpeningMorphologicalFilter, Segmenter, MRToMSConverter, Resampler
  */
 template <class TInputImage, class TOutputImage>
-class MorphologicalPyramidSegmentationFilter
+class ITK_EXPORT MorphologicalPyramidSegmentationFilter
   : public ImageListToImageListFilter<TInputImage,TOutputImage>
 {
 public:

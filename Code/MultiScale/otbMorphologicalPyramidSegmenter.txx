@@ -44,6 +44,11 @@ Segmenter<TInputImage, TOuputImage>
 ::Segmenter()
 {
   this->SetNumberOfRequiredInputs(2);
+	m_SeedsQuantile = 0.9;
+	m_MinimumObjectSize = 10;
+	m_SegmentDarkDetailsBool = false;
+	m_NumberOfObjects = 0;
+	m_ConnectedThresholdQuantile = 0.9;
 }
 /**
  * Set the details image.

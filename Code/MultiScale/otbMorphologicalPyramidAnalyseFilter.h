@@ -47,7 +47,7 @@ namespace otb
  * ClosingOpeningMorphologicalFilter
  */
 template <class TInputImage, class TOutputImage, class TMorphoFilter>
-class MorphologicalPyramidAnalyseFilter
+class ITK_EXPORT MorphologicalPyramidAnalyseFilter
   : public ImageToImageListFilter<TInputImage,TOutputImage>
 {
 public:

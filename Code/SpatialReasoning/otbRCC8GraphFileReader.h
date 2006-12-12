@@ -26,7 +26,7 @@ namespace otb
 /** \class RCC8GraphFileReaderException
  * \brief Base exception class for IO problems during reading. 
  */ 
-class RCC8GraphFileReaderException 
+class ITK_EXPORT RCC8GraphFileReaderException 
   : public itk::ExceptionObject 
 {
 public:

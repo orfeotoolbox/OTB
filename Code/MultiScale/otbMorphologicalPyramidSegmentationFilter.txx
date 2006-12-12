@@ -34,6 +34,9 @@ MorphologicalPyramidSegmentationFilter<TInputImage,TOutputImage>
 ::MorphologicalPyramidSegmentationFilter() 
 {
   this->SetNumberOfRequiredInputs(3);
+	m_MinimumObjectSize = 10;
+	m_SeedsQuantile = 0.9;
+	m_ConnectedThresholdQuantile = 0.9;
 }
 /**
  * Destructor

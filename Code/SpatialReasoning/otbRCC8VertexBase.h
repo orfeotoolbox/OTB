@@ -32,7 +32,8 @@ namespace otb
  * \sa RCC8Graph, RCC8Edge
  */
 template <class TLabel>
-class RCC8VertexBase : public itk::DataObject
+class ITK_EXPORT RCC8VertexBase 
+: public itk::DataObject
 {
  public:
   /** Standard class typedefs */

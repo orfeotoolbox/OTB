@@ -47,7 +47,7 @@ namespace otb
  * to the smallest set needed to determine the relation.
  */
 template <class TInputImage>            
-  class ImageToImageRCC8Calculator : public itk::ImageToImageFilter<TInputImage,TInputImage>
+  class ITK_EXPORT ImageToImageRCC8Calculator : public itk::ImageToImageFilter<TInputImage,TInputImage>
 {
 public:
   /** Standard class typedefs. */

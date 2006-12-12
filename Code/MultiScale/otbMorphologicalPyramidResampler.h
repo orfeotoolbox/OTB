@@ -41,7 +41,7 @@ namespace otb
        * \sa ScaleTransform
        */
       template <class TInputImage, class TOutputImage>
-	class  Resampler
+	class ITK_EXPORT Resampler
 	: public itk::ImageToImageFilter<TInputImage,TOutputImage>
 	{
 	  public :

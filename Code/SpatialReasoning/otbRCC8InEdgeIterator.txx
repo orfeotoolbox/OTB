@@ -26,7 +26,10 @@ namespace otb
   template <class TGraph>
   RCC8InEdgeIterator<TGraph>
   ::RCC8InEdgeIterator()
-  {}
+  {
+	m_Graph = GraphType::New();
+	tie(m_Iter,m_End)=in_edges(0,*m_Graph->GetGraph());
+	}
   /**
    * Copy operator.
    */

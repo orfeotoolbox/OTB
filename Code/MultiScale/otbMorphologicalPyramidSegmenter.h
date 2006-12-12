@@ -43,7 +43,7 @@ namespace otb
        * \sa ScaleTransform
        */
       template <class TInputImage, class TOutputImage>
-	class  Segmenter
+	class ITK_EXPORT Segmenter
 	: public itk::ImageToImageFilter<TInputImage,TOutputImage>
 	{
 	  public :

@@ -27,7 +27,7 @@ namespace otb
  * produce a RCC8 graph.
  */
 template <class TInputImage, class TOutputGraph>
-class ImageListToRCC8GraphFilter
+class ITK_EXPORT ImageListToRCC8GraphFilter
   : public RCC8GraphSource<TOutputGraph>
 {
 public:

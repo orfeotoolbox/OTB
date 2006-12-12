@@ -45,7 +45,8 @@ namespace otb
  * applications, one should provide a patch for this class including
  * the new functionnalities, for consistency reason.
  */
-template <class TVertex>  class RCC8Graph  :
+template <class TVertex>  
+class ITK_EXPORT RCC8Graph  :
     public itk::DataObject
 {
 public:

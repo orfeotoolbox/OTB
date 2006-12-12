@@ -28,7 +28,7 @@ namespace otb
  * and build the RCC8 graph of the set of regions it represents.
  */
 template <class TInputImage, class TOutputGraph>
-class ImageMultiSegmentationToRCC8GraphFilter 
+class ITK_EXPORT ImageMultiSegmentationToRCC8GraphFilter 
   : public ImageListToRCC8GraphFilter<TInputImage,TOutputGraph>
 {
 public:
