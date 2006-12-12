@@ -160,12 +160,11 @@ MorphologicalPyramidSegmentationFilter<TInputImage,TOutputImage>
   InputImageListPointerType darker = mrtoms->GetInfFiltreFullResolution();
 
   // Segmentation filter definition
-  typename SegmenterType::Pointer segmenter;
   typename InputImageListType::Iterator it; 
   // Segment the supfiltre details
   for(it= brighter->Begin();it!=brighter->End();++it)
     {
-      segmenter = SegmenterType::New();
+      typename SegmenterType::Pointer segmenter = SegmenterType::New();
       segmenter->SetMinimumObjectSize(m_MinimumObjectSize);
       segmenter->SetSeedsQuantile(m_SeedsQuantile);
       segmenter->SetConnectedThresholdQuantile(m_ConnectedThresholdQuantile);
@@ -180,7 +179,7 @@ MorphologicalPyramidSegmentationFilter<TInputImage,TOutputImage>
   // Segment the infFiltre details
   for(it= darker->Begin();it!= darker->End();++it)
     {
-      segmenter = SegmenterType::New();
+      typename SegmenterType::Pointer segmenter = SegmenterType::New();
       segmenter->SetMinimumObjectSize(m_MinimumObjectSize);
       segmenter->SetSeedsQuantile(m_SeedsQuantile);
       segmenter->SetConnectedThresholdQuantile(m_ConnectedThresholdQuantile);
