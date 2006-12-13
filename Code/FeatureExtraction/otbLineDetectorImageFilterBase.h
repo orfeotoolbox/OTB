@@ -134,7 +134,7 @@ public:
   
   virtual void GenerateInputRequestedRegion() throw(itk::InvalidRequestedRegionError);
   
-  const OutputImageType * GetOutputDirection();
+  OutputImageType * GetOutputDirection();
 
 protected:
   LineDetectorImageFilterBase();
@@ -168,16 +168,11 @@ protected:
   /** Size of the facelist*/
   SizeType m_FaceList;
   
-
-
   OutputImagePointerType m_OutputDirection;
 
   OutputPixelType m_Threshold;
 
   unsigned int m_NumberOfDirections;
-
-long unsigned int m_PadLowerBound[2];
-long unsigned int m_PadUpperBound[2];
 private:
   LineDetectorImageFilterBase(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented

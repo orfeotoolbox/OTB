@@ -162,92 +162,88 @@ ADD_TEST(feTuLineCorrelationNew ${FEATUREEXTRACTION_TESTS}
         otbLineCorrelationDetectorNew)
         
 ADD_TEST(feTvLineCorrelationLinear ${FEATUREEXTRACTION_TESTS}  
-  --compare-image ${TOL}  ${BASELINE}/feFiltreLineCorrelationLinear_amst_2_3.hdr
+  --compare-n-images ${TOL} 2
+			  ${BASELINE}/feFiltreLineCorrelationLinear_amst_2_3.hdr
                           ${TEMP}/feFiltreLineCorrelationLinear_amst_2_3.hdr
+			  ${BASELINE}/feFiltreLineCorrelationLinear_amst_dir_2_3.hdr
+                          ${TEMP}/feFiltreLineCorrelationLinear_amst_dir_2_3.hdr
         otbLineCorrelationDetectorLinear
 	${INPUTDATA}/amst.png
 	${TEMP}/feFiltreLineCorrelationLinear_amst_2_3.hdr
+	${TEMP}/feFiltreLineCorrelationLinear_amst_dir_2_3.hdr
 	2 3)
-      
-#ADD_TEST(feTvLineCorrelationLinearDir ${FEATUREEXTRACTION_TESTS}  
-#  --compare-image ${TOL}  ${BASELINE}/feFiltreLineCorrelationLinear_amst_dir_2_3.hdr
-#                          ${TEMP}/feFiltreLineCorrelationLinear_amst_dir_2_3.hdr
-#        otbLineCorrelationDetectorLinearDirection
-#	${INPUTDATA}/amst.png
-#	${TEMP}/feFiltreLineCorrelationLinear_amst_dir_2_3.hdr
-#	2 3)
 		
-#ADD_TEST(feTvLineCorrelation ${FEATUREEXTRACTION_TESTS}  
-#  --compare-image ${TOL}  ${BASELINE}/feFiltreLineCorrelation_amst_2_3.hdr
-#                          ${TEMP}/feFiltreLineCorrelation_amst_2_3.hdr
-#        otbLineCorrelationDetector
-#	${INPUTDATA}/amst.png
-#	${TEMP}/feFiltreLineCorrelation_amst_2_3.hdr
-#	2 3)
-#	
+ADD_TEST(feTvLineCorrelation ${FEATUREEXTRACTION_TESTS}  
+  --compare-image ${TOL}  ${BASELINE}/feFiltreLineCorrelation_amst_2_3.hdr
+                          ${TEMP}/feFiltreLineCorrelation_amst_2_3.hdr
+        otbLineCorrelationDetector
+	${INPUTDATA}/amst.png
+	${TEMP}/feFiltreLineCorrelation_amst_2_3.hdr
+	2 3)
+	
 # -------            otb::LineRatioDetector   ------------------------------
 
-#ADD_TEST(feTuLineRatioNew ${FEATUREEXTRACTION_TESTS}  
-#        otbLineRatioDetectorNew)
-#        
-#ADD_TEST(feTvLineRatioLinear ${FEATUREEXTRACTION_TESTS}  
-#  --compare-image ${TOL}  ${BASELINE}/feFiltreLineRatioLinear_amst_2_3.hdr
-#                          ${TEMP}/feFiltreLineRatioLinear_amst_2_3.hdr
-#        otbLineRatioDetectorLinear
-#	${INPUTDATA}/amst.png
-#	${TEMP}/feFiltreLineRatioLinear_amst_2_3.hdr
-#	2 3)
-
-#ADD_TEST(feTvLineRatioLinearDir ${FEATUREEXTRACTION_TESTS}  
-#  --compare-image ${TOL}  ${BASELINE}/feFiltreLineRatioLinear_amst_dir_2_3.hdr
-#                          ${TEMP}/feFiltreLineRatioLinear_amst_dir_2_3.hdr
-#        otbLineRatioDetectorLinearDirection
-#	${INPUTDATA}/amst.png
-#	${TEMP}/feFiltreLineRatioLinear_amst_dir_2_3.hdr
-#	2 3)
-#	
-#ADD_TEST(feTvLineRatioLinearAmsters1 ${FEATUREEXTRACTION_TESTS}  
-#  --compare-image ${TOL}  ${BASELINE}/feFiltreLineRatioLinear_amst_ers1_ima_extrait.hdr
-#                          ${TEMP}/feFiltreLineRatioLinear_amst_ers1_ima_extrait.hdr
-#        otbLineRatioDetectorLinear
-#	${INPUTDATA}/amst_ers1.ima.extrait.419_187_70_66.hdr
-#	${TEMP}/feFiltreLineRatioLinear_amst_ers1_ima_extrait.hdr
-#	1 2)
-#				
-#ADD_TEST(feTvLineRatio ${FEATUREEXTRACTION_TESTS}  
-#  --compare-image ${TOL}  ${BASELINE}/feFiltreLineRatio_amst_2_3.hdr
-#                          ${TEMP}/feFiltreLineRatio_amst_2_3.hdr
-#        otbLineRatioDetector
-#	${INPUTDATA}/amst.png
-#	${TEMP}/feFiltreLineRatio_amst_2_3.hdr
-#	2 3)
+ADD_TEST(feTuLineRatioNew ${FEATUREEXTRACTION_TESTS}  
+        otbLineRatioDetectorNew)
+        
+ADD_TEST(feTvLineRatioLinear ${FEATUREEXTRACTION_TESTS}  
+  --compare-n-images ${TOL} 2
+			  ${BASELINE}/feFiltreLineRatioLinear_amst_2_3.hdr
+                          ${TEMP}/feFiltreLineRatioLinear_amst_2_3.hdr
+			  ${BASELINE}/feFiltreLineRatioLinear_amst_dir_2_3.hdr
+                          ${TEMP}/feFiltreLineRatioLinear_amst_dir_2_3.hdr
+        otbLineRatioDetectorLinear
+	${INPUTDATA}/amst.png
+	${TEMP}/feFiltreLineRatioLinear_amst_2_3.hdr
+	${TEMP}/feFiltreLineRatioLinear_amst_dir_2_3.hdr
+	2 3)
+	
+ADD_TEST(feTvLineRatioLinearAmsters1 ${FEATUREEXTRACTION_TESTS}  
+  --compare-n-images ${TOL} 2
+			  ${BASELINE}/feFiltreLineRatioLinear_amst_ers1_ima_extrait.hdr
+                          ${TEMP}/feFiltreLineRatioLinear_amst_ers1_ima_extrait.hdr
+			  ${BASELINE}/feFiltreLineRatioLinear_amst_dir_ers1_ima_extrait.hdr
+			  ${TEMP}/feFiltreLineRatioLinear_amst_dir_ers1_ima_extrait.hdr
+        otbLineRatioDetectorLinear
+	${INPUTDATA}/amst_ers1.ima.extrait.419_187_70_66.hdr
+	${TEMP}/feFiltreLineRatioLinear_amst_ers1_ima_extrait.hdr
+	${TEMP}/feFiltreLineRatioLinear_amst_dir_ers1_ima_extrait.hdr
+	1 2)
+				
+ADD_TEST(feTvLineRatio ${FEATUREEXTRACTION_TESTS}  
+  --compare-image ${TOL}  ${BASELINE}/feFiltreLineRatio_amst_2_3.hdr
+                          ${TEMP}/feFiltreLineRatio_amst_2_3.hdr
+        otbLineRatioDetector
+	${INPUTDATA}/amst.png
+	${TEMP}/feFiltreLineRatio_amst_2_3.hdr
+	2 3)
 
 
 # -------            otb::AssociativeSymmetricalSum   ------------------------------
 	
-#ADD_TEST(feTuAssociativeSymmetricalSumNew ${FEATUREEXTRACTION_TESTS}  
-#        otbAssociativeSymmetricalSumNew)
-#        
-#ADD_TEST(feTvAssociativeSymmetricalSum ${FEATUREEXTRACTION_TESTS}  
-#  --compare-image ${TOL}  ${BASELINE}/feFiltreASS_amst_2_3.hdr
-#                          ${TEMP}/feFiltreASS_amst_2_3.hdr
-#        otbAssociativeSymmetricalSum
-#        ${TEMP}/feFiltreLineRatioLinear_amst_2_3.hdr
-#        ${TEMP}/feFiltreLineCorrelationLinear_amst_2_3.hdr
-#        ${TEMP}/feFiltreASS_amst_2_3.hdr)
+ADD_TEST(feTuAssociativeSymmetricalSumNew ${FEATUREEXTRACTION_TESTS}  
+        otbAssociativeSymmetricalSumNew)
+        
+ADD_TEST(feTvAssociativeSymmetricalSum ${FEATUREEXTRACTION_TESTS}  
+  --compare-image ${TOL}  ${BASELINE}/feFiltreASS_amst_2_3.hdr
+                          ${TEMP}/feFiltreASS_amst_2_3.hdr
+        otbAssociativeSymmetricalSum
+        ${TEMP}/feFiltreLineRatioLinear_amst_2_3.hdr
+        ${TEMP}/feFiltreLineCorrelationLinear_amst_2_3.hdr
+        ${TEMP}/feFiltreASS_amst_2_3.hdr)
 
 # -------            otb::AssymmetricFusionOfLineDetector   ------------------------------
         
-#ADD_TEST(feTuAssymmetricFusionOfLineDetectorNew ${FEATUREEXTRACTION_TESTS}  
-#        otbAssymmetricFusionOfLineDetectorNew)
-        
-#ADD_TEST(feTvAssymmetricFusionOfLineDetector ${FEATUREEXTRACTION_TESTS}  
-#  --compare-image ${TOL}  ${BASELINE}/feFiltreAssymmetricFusion_amst_2_3.hdr
-#                          ${TEMP}/feFiltreAssymmetricFusion_amst_2_3.hdr
-#        otbAssymmetricFusionOfLineDetector
-#	${INPUTDATA}/amst.png
-#	${TEMP}/feFiltreAssymmetricFusion_amst_2_3.hdr
-#	2 3)
+ADD_TEST(feTuAssymmetricFusionOfLineDetectorNew ${FEATUREEXTRACTION_TESTS}  
+        otbAssymmetricFusionOfLineDetectorNew)
+       
+ADD_TEST(feTvAssymmetricFusionOfLineDetector ${FEATUREEXTRACTION_TESTS}  
+  --compare-image ${TOL}  ${BASELINE}/feFiltreAssymmetricFusion_amst_2_3.hdr
+                          ${TEMP}/feFiltreAssymmetricFusion_amst_2_3.hdr
+        otbAssymmetricFusionOfLineDetector
+	${INPUTDATA}/amst.png
+	${TEMP}/feFiltreAssymmetricFusion_amst_2_3.hdr
+	2 3)
 
 # -------            otb::HarrisImage   ------------------------------
         
@@ -477,16 +473,14 @@ otbTouziEdgeDetectorDirection.cxx
 otbLineDetectorBaseNew.cxx
 otbLineCorrelationDetectorNew.cxx
 otbLineCorrelationDetectorLinear.cxx
-#otbLineCorrelationDetectorLinearDirection.cxx
-#otbLineCorrelationDetector.cxx
-#otbLineRatioDetectorNew.cxx
-#otbLineRatioDetectorLinear.cxx
-#otbLineRatioDetectorLinearDirection.cxx
-#otbLineRatioDetector.cxx
-#otbAssociativeSymmetricalSumNew.cxx
-#otbAssociativeSymmetricalSum.cxx
-#otbAssymmetricFusionOfLineDetectorNew.cxx
-#otbAssymmetricFusionOfLineDetector.cxx
+otbLineCorrelationDetector.cxx
+otbLineRatioDetectorNew.cxx
+otbLineRatioDetectorLinear.cxx
+otbLineRatioDetector.cxx
+otbAssociativeSymmetricalSumNew.cxx
+otbAssociativeSymmetricalSum.cxx
+otbAssymmetricFusionOfLineDetectorNew.cxx
+otbAssymmetricFusionOfLineDetector.cxx
 otbHarrisImage.cxx
 otbMultiplyByScalarImageTest.cxx
 otbThresholdImageToPointSetTest.cxx

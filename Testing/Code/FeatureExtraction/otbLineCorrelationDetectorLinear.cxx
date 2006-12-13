@@ -39,12 +39,13 @@ int otbLineCorrelationDetectorLinear( int argc, char* argv[] )
   try 
     { 
         const char * inputFilename  = argv[1];
-        const char * outputFilename = argv[2];
+        const char * outputFilename1 = argv[2];
+	const char * outputFilename2 = argv[3];
 
 	// Largeur de la ligne à detecter = 2*WidthLine+1
-        unsigned int  WidthLine((unsigned int)::atoi(argv[3]));
+        unsigned int  WidthLine((unsigned int)::atoi(argv[4]));
         // Longueur de la ligne à detecter = 2*LengthLine+1
-        unsigned int  LengthLine((unsigned int)::atoi(argv[4]));
+        unsigned int  LengthLine((unsigned int)::atoi(argv[5]));
         
         typedef unsigned char                                   InputPixelType;
         typedef double		   	                        OutputPixelType;
@@ -65,16 +66,21 @@ int otbLineCorrelationDetectorLinear( int argc, char* argv[] )
 	FilterLineCorrelation->SetLengthLine( LengthLine );
 	
         ReaderType::Pointer reader = ReaderType::New();
-        WriterType::Pointer writer = WriterType::New();
+        WriterType::Pointer writer1 = WriterType::New();
+	WriterType::Pointer writer2 = WriterType::New();
 
         reader->SetFileName( inputFilename  );
-        writer->SetFileName( outputFilename );
-        
-        FilterLineCorrelation->SetInput( reader->GetOutput() );
-        writer->SetInput( FilterLineCorrelation->GetOutput() );
-        
-        writer->Update();
+        writer1->SetFileName( outputFilename1 );
+        writer2->SetFileName(outputFilename2);
 
+
+        FilterLineCorrelation->SetInput( reader->GetOutput() );
+        writer1->SetInput( FilterLineCorrelation->GetOutput() );
+        writer2->SetInput( FilterLineCorrelation->GetOutputDirection() );
+
+
+        writer1->Update();
+	writer2->Update();
     } 
   catch( itk::ExceptionObject & err ) 
     { 
