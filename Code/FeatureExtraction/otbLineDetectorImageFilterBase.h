@@ -176,7 +176,8 @@ protected:
 
   unsigned int m_NumberOfDirections;
 
-  
+long unsigned int m_PadLowerBound[2];
+long unsigned int m_PadUpperBound[2];
 private:
   LineDetectorImageFilterBase(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
