@@ -87,7 +87,7 @@ int generic_otbMultiChannelExtractROI( int argc, char * argv[], const char * inp
 	std::cout << " Canaux selectionnes ("<<extractROIFilter->GetNbChannels()<<") : ";
 	typename ExtractROIFilterType::ChannelsType lChannels;
 	lChannels = extractROIFilter->GetChannels();
-	for(int i=0 ; i< lChannels.size(); i++)
+	for(unsigned int i=0 ; i< lChannels.size(); i++)
 	{
 		std::cout << lChannels[i]<<" ";
 	}

@@ -31,7 +31,7 @@ int generic_otbMultiToMonoChannelExtractROI ( int argc, char * argv[], const cha
                                              OutputPixelType >  ExtractROIFilterType;
 
         typename ExtractROIFilterType::Pointer extractROIFilter = ExtractROIFilterType::New();
-        int cpt(0),nbcanaux(0);
+        int cpt(0);
 
 	while ( argv[cpt] != NULL )
 	{
