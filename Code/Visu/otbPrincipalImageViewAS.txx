@@ -208,7 +208,7 @@ void PrincipalImageViewAS<TPixel, TPixelOverlay>::Show(void)
 {
      this->BuildWithImageRegion();
      this->m_flDoubleWindow->show();
-     this->m_flDoubleWindow->label( this->GetLabel() );
+     this->m_flDoubleWindow->label( this->GetLabel().c_str() );
      this->show();
      this->update();
 }

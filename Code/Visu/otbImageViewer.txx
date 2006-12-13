@@ -309,6 +309,10 @@ ImageViewer<TPixel>
                 m_ScrollView->SetDoubleWindow( iviewWindowScroll );
                 m_ScrollView->SetDrawViewRectangle( ImageViewBaseType::ShrinkRegion(m_PrincipalView->GetViewImageRegion(),(float)m_ShrinkFactors ) );
                 m_ScrollView->SetLabel( m_Label + m_SuffixScrollTitle );
+/*                std::string lString;
+                lString = m_Label;// + m_SuffixScrollTitle;
+                m_ScrollView->SetLabel( lString );
+*/
                 m_ScrollView->Show();
  	}
         

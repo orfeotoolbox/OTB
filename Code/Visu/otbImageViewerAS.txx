@@ -22,10 +22,6 @@
 #include <iostream>
 #include "otbMacro.h"
 
-//#define MAX(_A,_B) ((_A) > (_B) ? (_A) : (_B))
-//#define MIN(_A,_B) ((_A) < (_B) ? (_A) : (_B))
-
-
 
 namespace otb
 {

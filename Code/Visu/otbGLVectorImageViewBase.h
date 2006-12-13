@@ -138,9 +138,10 @@ public:
   itkGetConstReferenceMacro(DrawViewRectangle,RegionType);
 
   itkSetMacro(Label,std::string);
+  itkGetConstMacro(Label,std::string);
 //  itkGetConstReferenceMacro(Label,std::string);
-  itkSetStringMacro(Label);
-  itkGetStringMacro(Label);
+//  itkSetStringMacro(Label);
+//  itkGetStringMacro(Label);
 
 protected:
 
