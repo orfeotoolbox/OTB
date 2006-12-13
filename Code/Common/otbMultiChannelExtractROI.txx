@@ -119,7 +119,7 @@ MultiChannelExtractROI<TInputPixelType,TOutputPixelType>
                       << typeid(itk::ImageBase<InputImageDimension>*).name() );
                 }
                 
-                for( int channel = m_FirstChannel ; channel <= m_LastChannel ; channel ++ )
+                for( unsigned int channel = m_FirstChannel ; channel <= m_LastChannel ; channel ++ )
                 {
                         m_ChannelsWorks.push_back(channel);
                 }
