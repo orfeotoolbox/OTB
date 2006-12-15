@@ -1,5 +1,5 @@
-# Sources of non-templated classes.
 
+# Sources of non-templated classes.
 FILE(GLOB OTBBasicFilters_SRCS "*.cxx" )
 
 ADD_LIBRARY(OTBBasicFilters ${OTBBasicFilters_SRCS})
