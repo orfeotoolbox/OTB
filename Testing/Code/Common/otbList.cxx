@@ -18,11 +18,11 @@
 #include "itkExceptionObject.h"
 
 #include "otbImageFileReader.h"
-#include "otbObjectList.h"
+#include "otbList.h"
 #include "otbImage.h"
-#include "otbMacro.h"
 
-int otbObjectList(int argc, char * argv[])
+
+int otbList(int argc, char * argv[])
 {
   try
     {
@@ -34,7 +34,7 @@ int otbObjectList(int argc, char * argv[])
       typedef unsigned char InputPixelType;
       typedef otb::Image<InputPixelType,Dimension> InputImageType;
       typedef otb::ImageFileReader<InputImageType> ReaderType;
-      typedef otb::ObjectList<InputImageType> ImageListType;
+      typedef otb::List<InputImageType> ImageListType;
 
       // Reading image 1
       ReaderType::Pointer reader1 = ReaderType::New();

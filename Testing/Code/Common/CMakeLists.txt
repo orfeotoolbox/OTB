@@ -237,6 +237,15 @@ ADD_TEST(coTvObjectList ${COMMON_TESTS}
 	 ${INPUTDATA}/poupees.png
 	 ${INPUTDATA}/sbuv.png
  )
+ADD_TEST(coTuListNew ${COMMON_TESTS} 
+         otbListNew)  
+
+ADD_TEST(coTvList ${COMMON_TESTS}   
+         otbList 
+         ${INPUTDATA}/couleurs.jpg 
+	 ${INPUTDATA}/poupees.png
+	 ${INPUTDATA}/sbuv.png
+ )
 
 # -------            otb::ImageList   -------------------------------------------
 
@@ -298,6 +307,8 @@ otbImageList.cxx
 otbImageListSourceNew.cxx
 otbImageToImageListFilterNew.cxx
 otbImageListToImageListFilterNew.cxx
+otbListNew.cxx
+otbList.cxx
 )
 
 
