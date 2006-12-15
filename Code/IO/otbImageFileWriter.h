@@ -78,8 +78,8 @@ private:
   ImageFileWriter(const Self&); //purposely not implemented
   void operator=(const Self&);  //purposely not implemented
 
-  bool m_FactorySpecifiedImageIO; //track whether the factory mechanism set the ImageIO
   bool m_UserSpecifiedIORegion;   //track whether the region is user specified
+  bool m_FactorySpecifiedImageIO; //track whether the factory mechanism set the ImageIO
 
 
 };
