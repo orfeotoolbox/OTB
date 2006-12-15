@@ -86,6 +86,20 @@
 }
 #endif
 
+/** This macro is used to control condition and print message. It use ONLY by the OTB developpers 
+  * This macro do an exit() program !! 
+  */
+#define otbControlConditionTestMacro(condition, message) \
+{       if( (condition) ) \
+        { \
+                std::cout << "Test failed at line " << __LINE__ << " in file " << __FILE__  << "\n" \
+                          << "Error message: " << message << "\n\n"; \
+                exit(EXIT_FAILURE);\
+        } \
+}
+
+
+
 
 namespace otb
 {
