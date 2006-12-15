@@ -79,6 +79,27 @@ ADD_TEST(leTuSVMClassifierPointSet ${LEARNING_TESTS}
 	${INPUTDATA}/svm_model_pointset)
 	
 
+# -------            otb::SOMMap   -----------------------------	
+
+ADD_TEST(leTuSOMMapNew ${LEARNING_TESTS}  
+        otbSOMMapNew)
+
+ADD_TEST(leTvSOMMap ${LEARNING_TESTS}  
+        otbSOMMap)
+
+# -------            otb::SOM   -----------------------------	
+
+ADD_TEST(leTuSOMNew ${LEARNING_TESTS}  
+        otbSOMNew)
+
+ADD_TEST(leTvSOM ${LEARNING_TESTS}  
+        --compare-image ${TOL}
+	${BASELINE}/leSOMPoupeesSubOutputMap1.hdr
+	${TEMP}/leSOMPoupeesSubOutputMap1.hdr
+	otbSOM
+	${INPUTDATA}/poupees_sub.png
+	${TEMP}/leSOMPoupeesSubOutputMap1.hdr
+	32 32 10 10 5 1.0 0.1 128)
 # -----------------------------------------------------------------------
 			        
 
@@ -98,6 +119,10 @@ otbSVMPointSetModelEstimatorTrain.cxx
 otbSVMClassifierNew.cxx
 otbSVMClassifierImage.cxx
 otbSVMClassifierPointSet.cxx
+otbSOMMapNew.cxx
+otbSOMMap.cxx
+otbSOMNew.cxx
+otbSOM.cxx
 )
 
 

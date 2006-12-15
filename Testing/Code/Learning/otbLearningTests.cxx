@@ -41,4 +41,8 @@ REGISTER_TEST(otbSVMPointSetModelEstimatorTrain);
 REGISTER_TEST(otbSVMClassifierNew);
 REGISTER_TEST(otbSVMClassifierImage);
 REGISTER_TEST(otbSVMClassifierPointSet);
+REGISTER_TEST(otbSOMMapNew);
+REGISTER_TEST(otbSOMMap);
+REGISTER_TEST(otbSOMNew);
+REGISTER_TEST(otbSOM);
 }
