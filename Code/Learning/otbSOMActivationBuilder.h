@@ -32,7 +32,7 @@ namespace otb
  * \sa SOMMap
  * \sa SOM
  */
-template <class TInputImage, class TInputMap, class TOutputImage>
+template <class TListSample, class TInputMap, class TOutputImage>
 class ITK_EXPORT SOMActivationBuilder
   : public itk::ImageToImageFilter<TInputMap,TOutputImage>
 {
@@ -50,26 +50,20 @@ class ITK_EXPORT SOMActivationBuilder
   itkTypeMacro(SOMActivationBuilder,ImageToImageFilter);
   
   /** Template related typedefs */
-  typedef TInputImage InputImageType;
+  typedef TListSample ListSampleType;
   typedef TOutputImage OutputImageType;
   typedef TInputMap InputMapType;
 
-  typedef typename InputImageType::Pointer InputImagePointerType;
+  typedef typename ListSampleType::Pointer  ListSamplePointerType;
   typedef typename OutputImageType::Pointer OutputImagePointerType;
   typedef typename InputMapType::Pointer InputMapPointerType;
 
   /** Image Dimension */
   itkStaticConstMacro(ImageDimension,unsigned int, InputMapType::ImageDimension);
-  
-  /** Set the vector set image. 
-   * \param image the vector set image.
-   */
-  void SetVectorSet(InputImageType * image);
-  /**
-   * Get the vector set image.
-   * \return the vector set image.
-   */
-  InputImageType * GetVectorSet(void);
+
+  /** ListSample accessor */
+  itkSetObjectMacro(ListSample,ListSampleType);
+  itkGetObjectMacro(ListSample,ListSampleType);
 
  protected:
   /** Constructor */
@@ -84,6 +78,8 @@ class ITK_EXPORT SOMActivationBuilder
  private:
   SOMActivationBuilder(const Self&); // purposely not implemented 
   void operator=(const Self&);// purposely not implemented 
+  /** ListSample object */
+  ListSamplePointerType m_ListSample;
 };
 } // end namespace otb
 

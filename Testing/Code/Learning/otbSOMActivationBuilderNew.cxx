@@ -21,6 +21,7 @@
 #include "otbSOMActivationBuilder.h"
 #include "itkRGBPixel.h"
 #include "itkEuclideanDistance.h"
+#include "itkImageToListAdaptor.h"
 
 
 int otbSOMActivationBuilderNew(int argc, char* argv[])
@@ -35,12 +36,13 @@ try
 
     typedef otb::SOMMap<PixelType,DistanceType,Dimension> MapType;
     typedef otb::Image<PixelType,Dimension> InputImageType;
+    typedef itk::Statistics::ImageToListAdaptor<InputImageType> AdaptorType;
     typedef otb::Image<OutputPixelType,Dimension> OutputImageType;
-    typedef otb::SOMActivationBuilder<InputImageType,MapType,OutputImageType> SOMActivationBuilderType;
+    typedef otb::SOMActivationBuilder<AdaptorType,MapType,OutputImageType> SOMActivationBuilderType;
 
     // Instantiation
     SOMActivationBuilderType::Pointer somAct = SOMActivationBuilderType::New();
-  }
+  } 
 catch( itk::ExceptionObject & err ) 
   { 
     std::cout << "Exception itk::ExceptionObject thrown !" << std::endl; 

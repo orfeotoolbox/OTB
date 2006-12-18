@@ -38,24 +38,24 @@ namespace otb
  * \sa SOMMap
  * \sa SOMActivationBuilder
  */
-template <class TInputImage,class TMap>  
+template <class TListSample,class TMap>  
 class ITK_EXPORT SOM  
-: public itk::ImageToImageFilter<TInputImage,TMap>
+: public itk::ImageSource<TMap>
 {
   public:
   /** Standard typedefs */
   typedef SOM                           Self;
-  typedef itk::ImageToImageFilter<TInputImage,TMap> Superclass;
+  typedef itk::ImageSource<TMap>        Superclass;
   typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
   
   /** Creation through object factory macro */
   itkNewMacro(Self);
   /** Runtime informations macro */
-  itkTypeMacro(SOM,ImageToImageFilter);
+  itkTypeMacro(SOM,ImageSource);
 
-  typedef TInputImage InputImageType;
-  typedef typename InputImageType::Pointer InputImagePointerType;
+  typedef TListSample                      ListSampleType;
+  typedef typename ListSampleType::Pointer ListSamplePointerType;
   typedef TMap  MapType;
   typedef typename MapType::PixelType NeuronType;
   typedef typename NeuronType::ValueType ValueType;
@@ -86,6 +86,8 @@ class ITK_EXPORT SOM
   itkGetMacro(RandomInit,bool);
   itkSetMacro(Seed,unsigned int);
   itkGetMacro(Seed,unsigned int);
+  itkGetObjectMacro(ListSample,ListSampleType);
+  itkSetObjectMacro(ListSample,ListSampleType);
 
   protected:
   /** Constructor */
@@ -104,13 +106,7 @@ class ITK_EXPORT SOM
   /**
    * Step one iteration.
    */
-  void Step(unsigned int currentIteration);
-  /**
-   * Get The index of the winning neuron for a sample.
-   * \param the sample.
-   * \return The index of the winning neuron.
-   */
-  IndexType GetWinner(const NeuronType& sample);
+  void Step(unsigned int currentIteration);  
   /** PrintSelf method */
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
   
@@ -135,6 +131,9 @@ class ITK_EXPORT SOM
   bool m_RandomInit;
   /** Seed for random initialisation */
   unsigned int m_Seed;
+  /** The input list sample */
+  ListSamplePointerType m_ListSample;
+
 };
 } // end namespace otb
 

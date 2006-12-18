@@ -25,8 +25,6 @@
 #include "otbImageFileWriter.h"
 #include "itkImageToListAdaptor.h"
 
-
-
 int otbSOM(int argc, char* argv[])
 {
 try
@@ -50,17 +48,21 @@ try
     typedef otb::SOMMap<PixelType,DistanceType,Dimension> MapType;
     typedef otb::Image<PixelType,Dimension> ImageType;
     typedef otb::ImageFileReader<ImageType> ReaderType;
+    typedef itk::Statistics::ImageToListAdaptor<ImageType> ListAdaptorType;
     
-    typedef otb::SOM<ImageType,MapType> SOMType;
+    typedef otb::SOM<ListAdaptorType,MapType> SOMType;
     typedef otb::ImageFileWriter<MapType> WriterType;
 
     ReaderType::Pointer reader = ReaderType::New();
     reader->SetFileName(inputFileName);
     reader->Update();
+
+    ListAdaptorType::Pointer adaptor = ListAdaptorType::New();
+    adaptor->SetImage(reader->GetOutput());
     
     // Instantiation
     SOMType::Pointer som = SOMType::New();
-    som->SetInput(reader->GetOutput());
+    som->SetListSample(adaptor);
     SOMType::SizeType size;
     size[0]=sizeX;
     size[1]=sizeY;

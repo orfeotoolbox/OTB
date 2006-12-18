@@ -31,7 +31,8 @@ try
     typedef itk::RGBPixel<ComponentType> PixelType;
     typedef itk::Statistics::EuclideanDistance<PixelType> DistanceType;
     typedef otb::SOMMap<PixelType,DistanceType,Dimension> SOMMapType;
-    typedef otb::SOM<SOMMapType,SOMMapType> SOMType;
+    typedef itk::Statistics::ImageToListAdaptor<SOMMapType> AdaptorType;
+    typedef otb::SOM<AdaptorType,SOMMapType> SOMType;
 
     // Instantiation
     SOMType::Pointer som = SOMType::New();

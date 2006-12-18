@@ -35,7 +35,7 @@ template <class TListSample,class TMap>
 SOM<TListSample,TMap>
 ::SOM()
 {
-  this->SetNumberOfRequiredInputs(1);
+  this->SetNumberOfRequiredInputs(0);
   this->SetNumberOfRequiredOutputs(1);
 
   m_MapSize.Fill(10);
@@ -115,8 +115,6 @@ void
 SOM<TListSample,TMap>
 ::Step(unsigned int currentIteration)
 {  
-  InputImagePointerType image = const_cast<InputImageType*>(this->GetInput());
-
   // Compute the new learning coefficient
   double newBeta = (m_BetaEnd-m_BetaInit)/static_cast<double>(m_NumberOfIterations)
     *static_cast<double>(currentIteration)+m_BetaInit;
@@ -129,15 +127,11 @@ SOM<TListSample,TMap>
   newSize[1]=m_NeighborhoodSizeInit[1]-static_cast<int>((static_cast<float>(currentIteration)
   /static_cast<float>(m_NumberOfIterations))*static_cast<float>(m_NeighborhoodSizeInit[1]-2));
 
-  // define an iterator on the training set 
-  typedef itk::ImageRegionIterator<InputImageType> IteratorType;
-  IteratorType it(image,image->GetLargestPossibleRegion());
-
  // update the neurons map with each example of the training set.
   otbMsgDebugMacro(<<"Beta: "<<newBeta<<", radius: "<<newSize);
- for(it.GoToBegin();!it.IsAtEnd();++it)
+ for(typename ListSampleType::Iterator it=m_ListSample->Begin();it!=m_ListSample->End();++it)
    {
-     UpdateMap(it.Get(),newBeta,newSize);
+     UpdateMap(it.GetMeasurementVector(),newBeta,newSize);
    }
 }
 /** 
@@ -171,7 +165,8 @@ SOM<TListSample,TMap>
 	{
 	  for(int i=0;i<NeuronType::Length;++i)
 	    {
-	      neuronInit[i]=static_cast<typename NeuronType::ValueType>(generator->GetUniformVariate(static_cast<double>(m_MinWeight),static_cast<double>(m_MaxWeight)));
+	      neuronInit[i]=static_cast<typename NeuronType::ValueType>(
+	        generator->GetUniformVariate(static_cast<double>(m_MinWeight),static_cast<double>(m_MaxWeight)));
 	    }
 	  it.Set(neuronInit);
 	}

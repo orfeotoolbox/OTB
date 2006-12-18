@@ -44,21 +44,25 @@ try
 
     typedef otb::Image<PixelType,Dimension> InputImageType;
     typedef otb::ImageFileReader<InputImageType> ReaderType;
+    typedef itk::Statistics::ImageToListAdaptor<InputImageType> AdaptorType;
 
     typedef otb::Image<OutputPixelType,Dimension> OutputImageType;
     typedef otb::ImageFileWriter<OutputImageType> WriterType;
 
-    typedef otb::SOMActivationBuilder<InputImageType,MapType,OutputImageType> SOMActivationBuilderType;
+    typedef otb::SOMActivationBuilder<AdaptorType,MapType,OutputImageType> SOMActivationBuilderType;
 
     ReaderType::Pointer reader = ReaderType::New();
     reader->SetFileName(vectorSetFileName);    
+    reader->Update();
+    AdaptorType::Pointer adaptor = AdaptorType::New();
+    adaptor->SetImage(reader->GetOutput());
     
     MapReaderType::Pointer mapReader = MapReaderType::New();
     mapReader->SetFileName(mapFileName);
 
     SOMActivationBuilderType::Pointer somAct = SOMActivationBuilderType::New();
     somAct->SetInput(mapReader->GetOutput());
-    somAct->SetVectorSet(reader->GetOutput());
+    somAct->SetListSample(adaptor);
 
     WriterType::Pointer writer = WriterType::New();
     writer->SetFileName(outputFileName);
