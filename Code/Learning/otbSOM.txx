@@ -24,6 +24,7 @@ PURPOSE.  See the above copyright notices for more information.
 #include "itkRandomImageSource.h"
 #include "otbMacro.h"
 #include "itkImageRegionIterator.h"
+#include "itkMersenneTwisterRandomVariateGenerator.h"
 
 namespace otb
 {
@@ -45,6 +46,7 @@ SOM<TListSample,TMap>
   m_MinWeight=static_cast<ValueType>(0.0);
   m_MaxWeight=static_cast<ValueType>(128.0);
   m_RandomInit=false;
+  m_Seed=123574651;
 }
 /** 
  * Destructor 
@@ -132,7 +134,7 @@ SOM<TListSample,TMap>
   IteratorType it(image,image->GetLargestPossibleRegion());
 
  // update the neurons map with each example of the training set.
- otbMsgDebugMacro(<<"Beta: "<<newBeta<<", radius: "<<newSize);
+  otbMsgDebugMacro(<<"Beta: "<<newBeta<<", radius: "<<newSize);
  for(it.GoToBegin();!it.IsAtEnd();++it)
    {
      UpdateMap(it.Get(),newBeta,newSize);
@@ -158,9 +160,22 @@ SOM<TListSample,TMap>
   
   if(m_RandomInit)
     {
+      typedef itk::Statistics::MersenneTwisterRandomVariateGenerator GeneratorType;
+      typedef itk::ImageRegionIterator<MapType> IteratorType;
+      GeneratorType::Pointer generator = GeneratorType::New();
+      generator->Initialize(m_Seed);
+      NeuronType neuronInit;
+      IteratorType it(map,map->GetLargestPossibleRegion());
       
-
-    }
+      for(it.GoToBegin();!it.IsAtEnd();++it)
+	{
+	  for(int i=0;i<NeuronType::Length;++i)
+	    {
+	      neuronInit[i]=static_cast<typename NeuronType::ValueType>(generator->GetUniformVariate(static_cast<double>(m_MinWeight),static_cast<double>(m_MaxWeight)));
+	    }
+	  it.Set(neuronInit);
+	}
+    }  
   else
     {
       NeuronType neuronInit;

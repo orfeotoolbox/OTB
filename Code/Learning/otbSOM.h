@@ -24,8 +24,19 @@ PURPOSE.  See the above copyright notices for more information.
 namespace otb
 {
 /**
- * \class SOM
- * \brief
+ * \class SOM 
+ * \brief This class is responsible for the learning of a self organizing map from a 
+ * set of vector represented by the input image (each vector is a pixel of the image).
+ *
+ * The learning process iteratively select the best-response neuron for each input vector,
+ * enhancing its response and the response of its neighbors with respect to a certain radius, 
+ * computed from an initial radius, and to a certain learning factor, decreasing at each iteration.
+ *
+ * The SOMMap produced as output can be either initialized with a constant custom value or randomly 
+ * generated following a normal law. The seed for the random intialization can be modified.
+ *
+ * \sa SOMMap
+ * \sa SOMActivationBuilder
  */
 template <class TInputImage,class TMap>  
 class ITK_EXPORT SOM  
@@ -73,6 +84,8 @@ class ITK_EXPORT SOM
   itkGetMacro(NeighborhoodSizeInit,SizeType);
   itkSetMacro(RandomInit,bool);
   itkGetMacro(RandomInit,bool);
+  itkSetMacro(Seed,unsigned int);
+  itkGetMacro(Seed,unsigned int);
 
   protected:
   /** Constructor */
@@ -120,6 +133,8 @@ class ITK_EXPORT SOM
   ValueType m_MaxWeight;
   /** Random initialisation bool */
   bool m_RandomInit;
+  /** Seed for random initialisation */
+  unsigned int m_Seed;
 };
 } // end namespace otb
 

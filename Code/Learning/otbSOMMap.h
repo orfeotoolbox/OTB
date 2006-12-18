@@ -26,7 +26,21 @@ namespace otb
 {
 /**
  * \class SOMMap
- * \brief
+ * \brief This class represent a Self Organizing Map.
+ *
+ * The Self organizing map (or Kohonen map) is a type of neural networks. It is based on an analogy with
+ * the visual cortex, where similar inputs activate neighbor neurons.
+ *
+ * This class extends the Image object, where each pixel represents a neuron in the map.
+ * It is templated with a distance parameter used to compute the neuron response to an input.
+ * Thanks to the extensiong of the Image object, reading and writing is supported through standard image
+ * readers and writers.
+ *
+ * The training is done via the SOM class, and the activation map can be produced with the SOMActivationBuilder 
+ * class.
+ *
+ * \sa SOM
+ * \sa SOMActivationBuilder
  */
 template <class TNeuron=itk::FixedArray<float,3>, 
           class TDistance=itk::Statistics::EuclideanDistance<TNeuron>,unsigned int VMapDimension=2>  
