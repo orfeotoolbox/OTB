@@ -21,15 +21,8 @@
 #include "otbRCC8EdgeIterator.h"
 #include "otbRCC8VertexBase.h"
 #include "otbRCC8GraphFileReader.h"
+#include "otbMacro.h"
 
-bool failed(bool test,char* reason)
-{
-  if(test)
-    {
-      std::cout<<"Test failed: "<<reason<<std::endl;
-      exit(-1);
-    }
-}
 
 int otbRCC8GraphFileReader(int argc, char* argv[])
 {
@@ -55,16 +48,16 @@ try
     VertexIteratorType vIt(graph);
     int count = 0;
 
-    failed(graph->GetNumberOfVertices()!=4,
+    otbControlConditionTestMacro(graph->GetNumberOfVertices()!=4,
 	   "graph->GetNumberOfVertices()!=4");
-    failed(graph->GetNumberOfEdges()!=6,
+    otbControlConditionTestMacro(graph->GetNumberOfEdges()!=6,
 	   "graph->GetNumberOfEdges()!=6");
 
     for(vIt.GoToBegin();!vIt.IsAtEnd();++vIt,++count)
       {
-	failed(vIt.Get()->GetSegmentationImageIndex()!=count,
+	otbControlConditionTestMacro(vIt.Get()->GetSegmentationImageIndex()!=count,
 	     "vIt.Get()->GetSegmentationImageIndex()!=count");
-	failed(vIt.Get()->GetObjectLabelInImage()!=count,
+	otbControlConditionTestMacro(vIt.Get()->GetObjectLabelInImage()!=count,
 	     "vIt.Get()->GetObjectLabelInImage()!=count");
       }
     
@@ -76,55 +69,55 @@ try
 	switch(count)
 	  {
 	  case 0:
-	    failed(eIt.GetValue()!=otb::OTB_RCC8_EC,
+	    otbControlConditionTestMacro(eIt.GetValue()!=otb::OTB_RCC8_EC,
 		 "eIt.GetValue()!=otb::OTB_RCC8_EC");
-	    failed(eIt.GetSourceIndex()!=0,
+	    otbControlConditionTestMacro(eIt.GetSourceIndex()!=0,
 		 "eIt.GetSourceIndex()!=0");
-	    failed(eIt.GetTargetIndex()!=1,
+	    otbControlConditionTestMacro(eIt.GetTargetIndex()!=1,
 		 "eIt.GetTargetIndex()!=1");
 	    break;	    
 	  case 1:
-	    failed(eIt.GetValue()!=otb::OTB_RCC8_PO,
+	    otbControlConditionTestMacro(eIt.GetValue()!=otb::OTB_RCC8_PO,
 		 "eIt.GetValue()!=otb::OTB_RCC8_PO");
-	    failed(eIt.GetSourceIndex()!=1,
+	    otbControlConditionTestMacro(eIt.GetSourceIndex()!=1,
 		 "eIt.GetSourceIndex()!=1");
-	    failed(eIt.GetTargetIndex()!=2,
+	    otbControlConditionTestMacro(eIt.GetTargetIndex()!=2,
 		 "eIt.GetTargetIndex()!=2");
 	    break;
 	  case 2:
-	    failed(eIt.GetValue()!=otb::OTB_RCC8_TPP,
+	    otbControlConditionTestMacro(eIt.GetValue()!=otb::OTB_RCC8_TPP,
 		 "eIt.GetValue()!=otb::OTB_RCC8_TPP");
-	    failed(eIt.GetSourceIndex()!=2,
+	    otbControlConditionTestMacro(eIt.GetSourceIndex()!=2,
 		 "eIt.GetSourceIndex()!=2");
-	    failed(eIt.GetTargetIndex()!=3,
+	    otbControlConditionTestMacro(eIt.GetTargetIndex()!=3,
 		 "eIt.GetTargetIndex()!=3");
 	    break;
 	  case 3:
-	    failed(eIt.GetValue()!=otb::OTB_RCC8_TPPI,
+	    otbControlConditionTestMacro(eIt.GetValue()!=otb::OTB_RCC8_TPPI,
 		 "eIt.GetValue()!=otb::OTB_RCC8_TPPI");
-	    failed(eIt.GetSourceIndex()!=0,
+	    otbControlConditionTestMacro(eIt.GetSourceIndex()!=0,
 		 "eIt.GetSourceIndex()!=0");
-	    failed(eIt.GetTargetIndex()!=2,
+	    otbControlConditionTestMacro(eIt.GetTargetIndex()!=2,
 		 "eIt.GetTargetIndex()!=2");
 	    break;
 	  case 4:
-	    failed(eIt.GetValue()!=otb::OTB_RCC8_NTPP,
+	    otbControlConditionTestMacro(eIt.GetValue()!=otb::OTB_RCC8_NTPP,
 		 "eIt.GetValue()!=otb::OTB_RCC8_NTPP");
-	    failed(eIt.GetSourceIndex()!=1,
+	    otbControlConditionTestMacro(eIt.GetSourceIndex()!=1,
 		 "eIt.GetSourceIndex()!=1");
-	    failed(eIt.GetTargetIndex()!=3,
+	    otbControlConditionTestMacro(eIt.GetTargetIndex()!=3,
 		 "eIt.GetTargetIndex()!=3");
 	    break;
 	  case 5:
-	    failed(eIt.GetValue()!=otb::OTB_RCC8_NTPPI,
+	    otbControlConditionTestMacro(eIt.GetValue()!=otb::OTB_RCC8_NTPPI,
 		 "eIt.GetValue()!=otb::OTB_RCC8_NTPPI");
-	    failed(eIt.GetSourceIndex()!=0,
+	    otbControlConditionTestMacro(eIt.GetSourceIndex()!=0,
 		 "eIt.GetSourceIndex()!=0");
-	    failed(eIt.GetTargetIndex()!=3,
+	    otbControlConditionTestMacro(eIt.GetTargetIndex()!=3,
 		 "eIt.GetTargetIndex()!=3");
 	    break;
 	  default:
-	    failed(true,"Error in graph reading.");
+	    otbControlConditionTestMacro(true,"Error in graph reading.");
 	    break;
 	  }
       }

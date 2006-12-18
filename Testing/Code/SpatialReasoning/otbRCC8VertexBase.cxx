@@ -17,6 +17,7 @@
 =========================================================================*/
 #include "itkExceptionObject.h"
 #include "otbRCC8VertexBase.h"
+#include "otbMacro.h"
 
 int otbRCC8VertexBase(int argc, char* argv[])
 {
@@ -32,41 +33,24 @@ try
     // Getters / setters tests
     vertex1->SetSegmentationImageIndex(imageIndex);
     vertex1->SetObjectLabelInImage(objectLabel);
-    if(vertex1->GetSegmentationImageIndex()!=imageIndex)
-      {
-	std::cout<<"Test failed: vertex1->GetSegmentationImageIndex()!=imageIndex"<<std::endl;
-	return EXIT_FAILURE;
-      }
-    if(vertex1->GetObjectLabelInImage()!=objectLabel)
-      {
-	std::cout<<"Test failed: vertex1->GetSegmentationImageIndex()!=imageIndex"<<std::endl;
-	return EXIT_FAILURE;
-      }
+    otbControlConditionTestMacro(vertex1->GetSegmentationImageIndex()!=imageIndex,
+				 "Test failed: vertex1->GetSegmentationImageIndex()!=imageIndex");
+    otbControlConditionTestMacro( vertex1->GetObjectLabelInImage()!=objectLabel,
+				  "Test failed: vertex1->GetSegmentationImageIndex()!=imageIndex");
     // attributes vector set test
     AttributesMapType attr1 = vertex1->GetAttributesMap(); 
-    if(attr1["SegmentationImageIndex"].compare(std::string(argv[1]))!=0)
-      {
-	std::cout<<"Test failed: vertex1->GetAttributesMap()[\"SegmentationImageIndex\"]!=std::string(argv[1])"<<std::endl;
-	return EXIT_FAILURE;
-      }
-    if(attr1["ObjectLabelInImage"].compare(std::string(argv[2]))!=0)
-      {
-	std::cout<<"Test failed: vertex1->GetAttributesMap()[\"ObjectLabelInImage\"]!=std::string(argv[2])"<<std::endl;
-	return EXIT_FAILURE;
-      }
+    otbControlConditionTestMacro( attr1["SegmentationImageIndex"].compare(std::string(argv[1]))!=0,
+				  "Test failed: vertex1->GetAttributesMap()[\"SegmentationImageIndex\"]!=std::string(argv[1])");
+    otbControlConditionTestMacro(attr1["ObjectLabelInImage"].compare(std::string(argv[2]))!=0,
+				 "Test failed: vertex1->GetAttributesMap()[\"ObjectLabelInImage\"]!=std::string(argv[2])");
     // attributes vector get test
     RCC8VertexType::Pointer vertex2 = RCC8VertexType::New();
     vertex2->SetAttributesMap(attr1);
-    if(vertex1->GetSegmentationImageIndex()!=vertex2->GetSegmentationImageIndex())
-      {
-	std::cout<<"Test failed: vertex1->GetSegmentationImageIndex()!=vertex2->GetSegmentationImageIndex()"<<std::endl;
-	return EXIT_FAILURE;
-      }
-    if(vertex1->GetObjectLabelInImage()!=vertex2->GetObjectLabelInImage())
-      {
-	std::cout<<"Test failed: vertex1->GetObjectLabelInImage()!=vertex2->GetObjectLabelInImage()"<<std::endl;
-	return EXIT_FAILURE;
-      }
+    otbControlConditionTestMacro(vertex1->GetSegmentationImageIndex()!=vertex2->GetSegmentationImageIndex(),
+				 "Test failed: vertex1->GetSegmentationImageIndex()!=vertex2->GetSegmentationImageIndex()");
+
+    otbControlConditionTestMacro(vertex1->GetObjectLabelInImage()!=vertex2->GetObjectLabelInImage(),
+				 "Test failed: vertex1->GetObjectLabelInImage()!=vertex2->GetObjectLabelInImage()");
   }
 catch( itk::ExceptionObject & err ) 
   { 
