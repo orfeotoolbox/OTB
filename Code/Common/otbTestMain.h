@@ -301,6 +301,12 @@ bool isNumber(int i)
 	return ((i>47)&&(i<58));
 }
 
+bool isHexaNumber(int i)
+{
+return (((i>47)&&(i<58))||((i>96)&&(i<103)));
+}
+
+
 bool isPoint(int i)
 {
 	return (i==46);
@@ -337,6 +343,23 @@ bool isNumeric(std::string str)
 		result = false ;
 
 	return result;
+}
+
+bool isHexaPointerAddress(std::string str)
+{
+  unsigned int size = str.size();
+  bool result=((str[0]==40)
+	       &&(str[size-1]==41)
+	       &&(str[1]==48)
+	       &&(str[2]==120)
+	       &&(size==11));
+  int i=3;
+  while(result&&(i<size-1))
+    {
+      result=result&&isHexaNumber(str[i]);
+      ++i;
+    }
+  return result;
 }
 
 int RegressionTestAsciiFile(const char * testAsciiFileName, const char * baselineAsciiFileName, int reportErrors, const double epsilon)
@@ -394,99 +417,108 @@ int RegressionTestAsciiFile(const char * testAsciiFileName, const char * baselin
 			std::string charTmpTest;
 	
 			unsigned int i=0;
-
-			while (i < strRef.size())
-			{
+			if(!isHexaPointerAddress(strRef))
+			  {
+			    while (i < strRef.size())
+			      {
 				charTmpRef=strRef[i];
 				charTmpTest=strTest[i];
 				
 				if (isNumeric(charTmpRef))
-					etatCour = ETAT_NUM;
+				  etatCour = ETAT_NUM;
 				else 
-					etatCour = ETAT_CHAR;
+				  etatCour = ETAT_CHAR;
 				
 				// initialisation de l'état de "référence"
 				if (i==0)
-					etatPrec=etatCour;
-
+				  etatPrec=etatCour;
+				
 				// Cas où l'on a un chiffre après des caractères
 				if ((etatCour==ETAT_NUM)&&(etatPrec==ETAT_CHAR))
-				{
-					if ( strCharRef != strCharTest )
-					{
-						fluxfilediff << "Diff at line " << numLine 
+				  {
+				    if ( strCharRef != strCharTest )
+				      {
+					fluxfilediff << "Diff at line " << numLine 
 						     << " : " << strCharRef
 						     << " != " << strCharTest << std::endl ;
-						nbdiff++;
-					}
-										
-					strCharRef="";
-					strCharTest="";
-					strNumRef=charTmpRef;
-					strNumTest=charTmpTest;
-					chgt=true;
-				}
+					nbdiff++;
+				      }
+				    
+				    strCharRef="";
+				    strCharTest="";
+				    strNumRef=charTmpRef;
+				    strNumTest=charTmpTest;
+				    chgt=true;
+				  }
 				// Cas où l'on a un caractère après des chiffres
 				else if ((etatCour==ETAT_CHAR)&&(etatPrec==ETAT_NUM))
-				{
-					
-					if (fabs(atof(strNumRef.c_str())-atof(strNumTest.c_str())) > epsilon)
-					{
-						fluxfilediff << "Diff at line " << numLine << " : fabs ( (" 
+				  {
+				    
+				    if (fabs(atof(strNumRef.c_str())-atof(strNumTest.c_str())) > epsilon)
+				      {
+					fluxfilediff << "Diff at line " << numLine << " : fabs ( (" 
 						     << strNumRef << ") - (" << strNumTest
 						     << ") ) > " << epsilon << std::endl ;
-						nbdiff++;
-					}	
-					
-					strNumRef="";
-					strNumTest="";
-					strCharRef=charTmpRef;
-					strCharTest=charTmpTest;
-					chgt=true;
-				}
+					nbdiff++;
+				      }	
+				    
+				    strNumRef="";
+				    strNumTest="";
+				    strCharRef=charTmpRef;
+				    strCharTest=charTmpTest;
+				    chgt=true;
+				  }
 				else if (etatCour==etatPrec)
-				{
-					if (etatCour==ETAT_CHAR)
-					{
-						strCharRef+=charTmpRef;
-						strCharTest+=charTmpTest;
-					}						
-					else
-					{
-						strNumRef+=charTmpRef;
-						strNumTest+=charTmpTest;
-					}
-				}
-
+				  {
+				    if (etatCour==ETAT_CHAR)
+				      {
+					strCharRef+=charTmpRef;
+					strCharTest+=charTmpTest;
+				      }						
+				    else
+				      {
+					strNumRef+=charTmpRef;
+					strNumTest+=charTmpTest;
+				      }
+				  }
+				
 				etatPrec = etatCour;
 				i++;
-			}	
-			
-			// Cas le plus simple : chaine de caractere ou valeur numérique entre 2 separateurs
-			if (!chgt)
-			{
+			      }	
+			    
+			    // Cas le plus simple : chaine de caractere ou valeur numérique entre 2 separateurs
+			    if (!chgt)
+			      {
 				if (isNumeric(strRef))
-				{
-					
-					if (fabs(atof(strRef.c_str())-atof(strTest.c_str())) > epsilon)
-					{
-						fluxfilediff << "Diff at line " << numLine << " : fabs( (" 
-							     << strRef << ") - (" << strTest
-							     << ") ) > " << epsilon << std::endl ;
-						nbdiff++;
-					}
-				}
+				  {
+				    
+				    if (fabs(atof(strRef.c_str())-atof(strTest.c_str())) > epsilon)
+				      {
+					fluxfilediff << "Diff at line " << numLine << " : fabs( (" 
+						     << strRef << ") - (" << strTest
+						     << ") ) > " << epsilon << std::endl ;
+					nbdiff++;
+				      }
+				  }
 				else 
-				{
-					if ( strRef != strTest )
-					{
-						fluxfilediff << "Diff at line " << numLine 
-							     << " : " << strRef
-							     << " != " << strTest << std::endl ;
-						nbdiff++;
-					}
-				}
-			}
+				  {
+				    if ( strRef != strTest )
+				      {
+					fluxfilediff << "Diff at line " << numLine 
+						     << " : " << strRef
+						     << " != " << strTest << std::endl ;
+					nbdiff++;
+				      }
+				  }
+			      }
+			  }
+			else
+			  {
+			    fluxfilediff<<"Pointer address found at line "<<numLine
+			      <<" : "<<strRef
+					<<" -> comparison skipped."<<std::endl;
+			    
+			  }
 		}
 		numLine++;
 	}
