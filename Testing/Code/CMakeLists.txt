@@ -1,7 +1,7 @@
 # $Id$
 
 SUBDIRS(Common IO BasicFilters FeatureExtraction ChangeDetection Learning
-MultiScale SpatialReasoning)
+MultiScale DisparityMap SpatialReasoning)
 
 IF(OTB_USE_VISU)
         SUBDIRS(Visu)
