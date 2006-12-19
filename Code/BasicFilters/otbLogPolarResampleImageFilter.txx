@@ -52,7 +52,6 @@ LogPolarResampleImageFilter<TInputImage, TInterpolator>
 
   m_OriginIsAtCenter  = true;
   m_DefaultPixelValue = 0;
-  m_Sigma             = 0.5;
   
   m_Interpolator      = itk::LinearInterpolateImageFunction<InputImageType, CoordRepType>::New();
   
@@ -150,11 +149,6 @@ LogPolarResampleImageFilter<TInputImage,TInterpolator>
         
   typedef typename InterpolatorType::OutputType OutputType;
 
-  // Min/max values of the output pixel type AND these values
-  // represented as the output type of the interpolator
-  const OutputPixelType minOutputValue =  itk::NumericTraits<OutputPixelType >::NonpositiveMin();
-  const OutputPixelType maxOutputValue =  itk::NumericTraits<OutputPixelType >::max();
-
   // Walk the output region
   outIt.GoToBegin();
 
@@ -185,23 +179,8 @@ LogPolarResampleImageFilter<TInputImage,TInterpolator>
       {
       OutputPixelType pixval;
       double valueTemp = static_cast<double>(m_Interpolator->EvaluateAtContinuousIndex(inputIndex) );
-      valueTemp *= exp(m_Sigma * Rho);
-      valueTemp *= m_RadialStep; 
       OutputPixelType value = static_cast<OutputPixelType>(valueTemp);
-      
-      if( value < minOutputValue )
-        {
-        pixval = minOutputValue;
-        }
-      else if( value > maxOutputValue )
-        {
-        pixval = maxOutputValue;
-        }
-      else 
-        {
-        pixval = static_cast<OutputPixelType>( value );
-        }
-      outIt.Set( pixval );      
+      outIt.Set(value);      
       }
     else
       {
@@ -212,13 +191,8 @@ LogPolarResampleImageFilter<TInputImage,TInterpolator>
     ++outIt;
     }
 
-  return;
-  
+  return;  
 }
-
-
-
-
 /** 
  * Inform pipeline of necessary input image region
  *

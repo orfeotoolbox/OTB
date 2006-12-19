@@ -134,11 +134,6 @@ public:
   /** Get the Angular number of samples. */
   itkGetConstReferenceMacro(AngularNumberOfSamples, double);
 
-  /** Set the Sigma value. */
-  itkSetMacro(Sigma, double);
-  /** Get the Sigma value. */
-  itkGetConstMacro(Sigma, double);
-
   /** LogPolarResampleImageFilter produces an image which is a different size
    * than its input.  As such, it needs to provide an implementation
    * for GenerateOutputInformation() in order to inform the pipeline
@@ -212,7 +207,6 @@ private:
   double		  m_RadialStep;
   double		  m_RadialNumberOfSamples;
   double		  m_AngularNumberOfSamples;
-  double 		  m_Sigma;
   bool 			  m_AngularStepIsConfigured;
   bool 			  m_RadialStepIsConfigured;
   

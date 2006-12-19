@@ -20,7 +20,7 @@
 #define _otbForwardFourierMellinTransformImageFilter_txx
 
 #include "otbForwardFourierMellinTransformImageFilter.h"
-
+#include "itkImageRegionIteratorWithIndex.h"
 
 namespace otb
 {
@@ -38,8 +38,47 @@ void
 ForwardFourierMellinTransformImageFilter<TPixel, TInterpol, Dimension >
 ::GenerateData()
 {
+       // Normalization is specific to FourierMellin convergence conditions, and
+       // thus should be implemented here instead of in the resample filter.
+
+       typedef itk::ImageRegionIteratorWithIndex<InputImageType> IteratorType;
+
 	m_LogPolarResample->SetInput( this->GetInput() );
- 	m_FourierTransform->SetInput( m_LogPolarResample->GetOutput() );
+	m_LogPolarResample->Update();
+	
+	typename InputImageType::Pointer tempImage = m_LogPolarResample->GetOutput();
+	IteratorType it(tempImage,tempImage->GetLargestPossibleRegion());
+
+        // Min/max values of the output pixel type AND these values
+        // represented as the output type of the interpolator
+        const PixelType minOutputValue =  itk::NumericTraits<PixelType >::NonpositiveMin();
+        const PixelType maxOutputValue =  itk::NumericTraits<PixelType >::max();
+
+	for(it.GoToBegin();!it.IsAtEnd();++it)
+	  {
+	    double Rho   = it.GetIndex()[1]*m_LogPolarResample->GetRadialStep();
+	    PixelType pixval;
+	    double valueTemp = static_cast<double>(it.Get());
+	    valueTemp *= exp(m_Sigma * Rho);
+	    valueTemp *=m_LogPolarResample->GetRadialStep() ; 
+	    PixelType value = static_cast<PixelType>(valueTemp);
+	    
+	    if( value < minOutputValue )
+	      {
+		pixval = minOutputValue;
+	      }
+	    else if( value > maxOutputValue )
+	      {
+		pixval = maxOutputValue;
+	      }
+	    else 
+	      {
+		pixval = static_cast<PixelType>(value);
+	      }
+	    it.Set(pixval);      
+	  }
+
+ 	m_FourierTransform->SetInput(tempImage );
  	m_FourierTransform->GraftOutput( this->GetOutput() );
 
 	m_FourierTransform->Update();
@@ -139,22 +178,6 @@ ForwardFourierMellinTransformImageFilter<TPixel, TInterpol, Dimension >
 {
 	return static_cast<const double>(m_LogPolarResample->GetRadialNumberOfSamples() );
 }
-
-template < class TPixel,class  TInterpol,unsigned int   Dimension >
-void
-ForwardFourierMellinTransformImageFilter<TPixel, TInterpol, Dimension >
-::SetSigma(double sigma )
-{
-	m_LogPolarResample->SetSimga(sigma);
-}
-template < class TPixel,class  TInterpol,unsigned int   Dimension >
-const double
-ForwardFourierMellinTransformImageFilter<TPixel, TInterpol, Dimension >
-::GetSigma( )
-{
-	return m_LogPolarResample->GetSigma();
-}
-
 template < class TPixel,class  TInterpol,unsigned int   Dimension >
 void
 ForwardFourierMellinTransformImageFilter<TPixel, TInterpol, Dimension >

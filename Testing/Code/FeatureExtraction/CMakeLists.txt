@@ -434,8 +434,8 @@ ADD_TEST(feTuForwardFourierMellinImageFilterTestFFT3Croix ${FEATUREEXTRACTION_TE
 	${TEMP}/feFFTTest3Croix.hdr)
 
 ADD_TEST(feTvForwardFourierMellinImageFilter ${FEATUREEXTRACTION_TESTS}  
-#  --compare-image ${TOL}  ${BASELINE}/feForwardFourierMellinImageFilter.hdr
-#                          ${TEMP}/feForwardFourierMellinImageFilter.hdr
+  --compare-image ${TOL}  ${BASELINE}/feForwardFourierMellinImageFilter.hdr
+                          ${TEMP}/feForwardFourierMellinImageFilter.hdr
         otbFourierMellinImageFilter
         ${INPUTDATA}/DeuxCercles.hdr
 	${TEMP}/feForwardFourierMellinImageFilter.hdr)

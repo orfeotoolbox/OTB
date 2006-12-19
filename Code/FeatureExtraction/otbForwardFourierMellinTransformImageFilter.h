@@ -122,8 +122,8 @@ public:
   const double GetAngularNumberOfSamples( void );  
 
   /** Set/Get the Sigma value for the Log-polar resampler  */
-  void SetSigma( double sigma );
-  const double GetSigma( void );  
+  itkSetMacro(Sigma,double);
+   itkGetMacro(Sigma,double);  
 
   /** Set/Get the OriginIsAtCenter value for the Log-polar resampler  */
   void SetOriginIsAtCenter( bool isAtCenter );
@@ -158,6 +158,9 @@ private:
 
   LogPolarResampleImageFilterPointer	   m_LogPolarResample;
   FourierImageFilterPointer 	           m_FourierTransform;
+
+  /** Sigma for normalization */
+  double m_Sigma;
 };
 
 } // namespace otb
