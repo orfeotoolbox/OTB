@@ -105,6 +105,37 @@ ADD_TEST(bfTvBoundingRegionCalculator ${BASICFILTERS_TESTS}
 	${INPUTDATA}/rcc8_mire4.png
 	)
 
+# -------            otb::LogPolarTransform   ----------------------------
+
+ADD_TEST(bfTuLogPolarTransformNew ${BASICFILTERS_TESTS}  
+         otbLogPolarTransformNew)
+
+ADD_TEST(bfTvLogPolarTransform ${BASICFILTERS_TESTS}
+        otbLogPolarTransform
+	1 1 6 0 0 10 20 45 60 3.14 3.14 1 0 0 1
+	)
+
+ADD_TEST(bfTvLogPolarTransformResample ${BASICFILTERS_TESTS}  
+  --compare-image ${TOL}  ${BASELINE}/bfLogPolarResampleImageFilter.hdr
+                          ${TEMP}/bfLogPolarResampleOutput.hdr 
+        otbLogPolarTransformResample
+        ${INPUTDATA}/DeuxCercles.hdr
+	${TEMP}/bfLogPolarResampleOutput.hdr
+        1.0 1.0	
+)
+
+
+# -------            otb::InverseLogPolarTransform   ----------------------------
+
+ADD_TEST(bfTuInverseLogPolarTransformNew ${BASICFILTERS_TESTS}  
+         otbInverseLogPolarTransformNew)
+
+ADD_TEST(bfTvInverseLogPolarTransform ${BASICFILTERS_TESTS}
+        otbInverseLogPolarTransform
+	1 1 6 0 0 10 20 45 60 3.14 3.14 1 0 0 1
+	)
+
+
 # A enrichir
 SET(BasicFilters_SRCS
 otbLeeFilter.cxx
@@ -120,6 +151,11 @@ otbClosingOpeningMorphologicalFilterNew.cxx
 otbClosingOpeningMorphologicalFilter.cxx
 otbBinaryImageMinimalBoundingRegionCalculatorNew.cxx
 otbBinaryImageMinimalBoundingRegionCalculator.cxx
+otbLogPolarTransformNew.cxx
+otbLogPolarTransform.cxx
+otbLogPolarTransformResample.cxx
+otbInverseLogPolarTransformNew.cxx
+otbInverseLogPolarTransform.cxx
 )
 
 

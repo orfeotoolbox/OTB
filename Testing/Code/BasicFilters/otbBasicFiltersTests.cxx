@@ -40,4 +40,9 @@ REGISTER_TEST(otbClosingOpeningMorphologicalFilterNew);
 REGISTER_TEST(otbClosingOpeningMorphologicalFilter);
 REGISTER_TEST(otbBinaryImageMinimalBoundingRegionCalculatorNew);
 REGISTER_TEST(otbBinaryImageMinimalBoundingRegionCalculator);
+REGISTER_TEST(otbLogPolarTransformNew);
+REGISTER_TEST(otbLogPolarTransform);
+REGISTER_TEST(otbLogPolarTransformResample);
+REGISTER_TEST(otbInverseLogPolarTransformNew);
+REGISTER_TEST(otbInverseLogPolarTransform);
 }
