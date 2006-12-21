@@ -49,7 +49,8 @@ class ITK_EXPORT List
 
   /** Template parameter typedefs */
   typedef TObject ObjectType;
-  typedef ObjectType* ObjectPointerType;
+//  typedef ObjectType* ObjectPointerType;
+  typedef typename ObjectType::Pointer ObjectPointerType;
   typedef std::vector<ObjectPointerType> InternalContainerType;
 
   /**
@@ -76,29 +77,48 @@ class ITK_EXPORT List
    * Append an element to the list.
    * \param element Pointer to the element to append.
    */
-  void PushBack(ObjectPointerType element);
+  void PushBack(const ObjectType* element);
   /**
    * Set the nth element of the list.
    * \param index The index where to put the element.
    * \param element Pointer to the element to set.
    */
-  void SetNthElement(unsigned int index, ObjectPointerType element);
+  void SetNthElement(unsigned int index, const ObjectType* element);
   /**
    * Get the nth element of the list.
    * \param index The index of the object to get.
    * \return The pointer to the nth element of the list.
    */
-  ObjectPointerType GetNthElement(unsigned int index);
+  ObjectType* GetNthElement(unsigned int index);
+  /**
+   * Get the nth element of the const list.
+   * \param index The index of the object to get.
+   * \return The pointer to the nth element of the list.
+   */
+  const ObjectType* GetNthElement(unsigned int index)const
+  {
+    return m_InternalContainer[index].GetPointer();
+  }
   /**
    * Return the first element of the list.
    * \return The first element of the list.
    */
-  ObjectPointerType Front(void);
+  ObjectType* Front(void);
+  /**
+   * Return the first element of the const list.
+   * \return The first element of the list.
+   */
+//  const ObjectType* Front(void) const;
   /**
    * Return the last element of the list.
    * \return The last element of the list.
    */
-  ObjectPointerType Back(void);
+  ObjectType* Back(void);
+  /**
+   * Return the last element of the const list.
+   * \return The last element of the list.
+   */
+//  const ObjectType* Back(void)const;
   /**
    * Erase the nth element of the list.
    * \param index The index of the element to erase.

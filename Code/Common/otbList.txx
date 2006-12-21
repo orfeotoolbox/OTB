@@ -80,9 +80,9 @@ namespace otb
   template <class TObject>
   void 
   List<TObject>
-  ::PushBack(ObjectPointerType element)
+  ::PushBack(const ObjectType* element)
   {
-    m_InternalContainer.push_back(element);
+    m_InternalContainer.push_back(const_cast<ObjectType*>(element));
   }
   /**
    * Set the nth element of the list.
@@ -92,7 +92,7 @@ namespace otb
   template <class TObject>
   void 
   List<TObject>
-  ::SetNthElement(unsigned int index,ObjectPointerType element)
+  ::SetNthElement(unsigned int index,const ObjectType * element)
   {
     m_InternalContainer[index]=element;
   }
@@ -102,35 +102,68 @@ namespace otb
    * \return The pointer to the nth element of the list.
    */
   template <class TObject>
-  typename List<TObject>::ObjectPointerType 
+  typename List<TObject>::ObjectType *
   List<TObject>
   ::GetNthElement(unsigned int index)
   {
-    return m_InternalContainer[index];
+    return m_InternalContainer[index].GetPointer();
   }
+  /**
+   * Get the nth element of the const list.
+   * \param index The index of the object to get.
+   * \return The pointer to the nth element of the list.
+   */
+/*  template <class TObject>
+  typename const List<TObject>::ObjectType *
+  List<TObject>
+  ::GetNthElement(unsigned int index)const
+  {
+    return m_InternalContainer[index].GetPointer();
+  }*/
 /**
    * Return the first element of the list.
    * \return The first element of the list.
    */
-
   template <class TObject>
-  typename List<TObject>::ObjectPointerType 
+  typename List<TObject>::ObjectType *
   List<TObject>
   ::Front(void)
   {
-    return m_InternalContainer.front();
+    return m_InternalContainer.front().GetPointer();
   }
+/**
+   * Return the first element of the const list.
+   * \return The first element of the list.
+   */
+/*  template <class TObject>
+  typename const List<TObject>::ObjectType *
+  List<TObject>
+  ::Front(void)const
+  {
+    return m_InternalContainer.front().GetPointer();
+  }*/
   /**
    * Return the last element of the list.
    * \return The last element of the list.
    */
   template <class TObject>
-  typename List<TObject>::ObjectPointerType 
+  typename List<TObject>::ObjectType *
   List<TObject>
   ::Back(void)
   {
-    return m_InternalContainer.back();
+    return m_InternalContainer.back().GetPointer();
   }
+  /**
+   * Return the last element of the const list.
+   * \return The last element of the list.
+   */
+/*  template <class TObject>
+  typename const List<TObject>::ObjectType *
+  List<TObject>
+  ::Back(void)const
+  {
+    return m_InternalContainer.back().GetPointer();
+  }*/
   /**
    * Erase the nth element in the list.
    * \param index The index of the element to erase.
@@ -669,8 +702,18 @@ namespace otb
   List<TObject>
   ::PrintSelf(std::ostream& os, itk::Indent indent) const
   {
-    Superclass::PrintSelf(os,indent);
-    os << indent << "Size: " << m_InternalContainer.size() << std::endl;
+        Superclass::PrintSelf(os,indent);
+        os << indent << "Size: " << m_InternalContainer.size() << std::endl;
+        os << indent << "List contains : " << std::endl;
+        ConstIterator iter = this->Begin();
+        while(iter!=this->End())
+	{
+                os << indent.GetNextIndent() << iter.Get().GetPointer() << std::endl;
+                os << indent.GetNextIndent() << iter.Get() << std::endl;
+//                iter.Get()->PrintSelf(os,indent.GetNextIndent());
+//                iter.Get()->Print(os,indent.GetNextIndent());
+	        ++iter;
+	}
   }
 } // end namespace otb
 
