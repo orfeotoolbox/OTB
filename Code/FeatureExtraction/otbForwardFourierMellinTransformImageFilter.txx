@@ -1,233 +1,109 @@
 /*=========================================================================
 
-  Program:   ORFEO Toolbox
-  Language:  C++
-  Date:      $Date$
-  Version:   $Revision$
+Program:   ORFEO Toolbox
+Language:  C++
+Date:      $Date$
+Version:   $Revision$
 
 
-  Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
-  See OTBCopyright.txt for details.
+Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
+See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
-     PURPOSE.  See the above copyright notices for more information.
+This software is distributed WITHOUT ANY WARRANTY; without even 
+the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-
 #ifndef _otbForwardFourierMellinTransformImageFilter_txx
 #define _otbForwardFourierMellinTransformImageFilter_txx
 
 #include "otbForwardFourierMellinTransformImageFilter.h"
 #include "itkImageRegionIteratorWithIndex.h"
+#include "otbLogPolarTransform.h"
+#include "itkResampleImageFilter.h"
 
 namespace otb
 {
+  template < class TPixel,class  TInterpol,unsigned int   Dimension >
+  ForwardFourierMellinTransformImageFilter<TPixel, TInterpol, Dimension >
+  ::ForwardFourierMellinTransformImageFilter()
+  {
+    m_FourierTransform = FourierImageFilterType::New();
+    m_Interpolator = InterpolatorType::New();
+    m_Sigma = 1.0;
+    m_OutputSize.Fill(512); 
+  }
+  template < class TPixel,class  TInterpol,unsigned int   Dimension >
+  void
+  ForwardFourierMellinTransformImageFilter<TPixel, TInterpol, Dimension >
+  ::GenerateData()
+  {
+    // some typedefs
+    typedef otb::LogPolarTransform<double> LogPolarTransformType;
+    typedef itk::ResampleImageFilter<InputImageType,InputImageType,double> ResampleFilterType;
+    typedef itk::ImageRegionIteratorWithIndex<InputImageType> IteratorType;
 
-template < class TPixel,class  TInterpol,unsigned int   Dimension >
-ForwardFourierMellinTransformImageFilter<TPixel, TInterpol, Dimension >
-::ForwardFourierMellinTransformImageFilter()
-{
-  m_LogPolarResample = LogPolarResampleImageFilterType::New();  
-  m_FourierTransform = FourierImageFilterType::New();
-}
-
-template < class TPixel,class  TInterpol,unsigned int   Dimension >
-void
-ForwardFourierMellinTransformImageFilter<TPixel, TInterpol, Dimension >
-::GenerateData()
-{
-       // Normalization is specific to FourierMellin convergence conditions, and
-       // thus should be implemented here instead of in the resample filter.
-
-       typedef itk::ImageRegionIteratorWithIndex<InputImageType> IteratorType;
-
-	m_LogPolarResample->SetInput( this->GetInput() );
-	m_LogPolarResample->Update();
-	
-	typename InputImageType::Pointer tempImage = m_LogPolarResample->GetOutput();
-	IteratorType it(tempImage,tempImage->GetLargestPossibleRegion());
-
-        // Min/max values of the output pixel type AND these values
-        // represented as the output type of the interpolator
-        const PixelType minOutputValue =  itk::NumericTraits<PixelType >::NonpositiveMin();
-        const PixelType maxOutputValue =  itk::NumericTraits<PixelType >::max();
-
-	for(it.GoToBegin();!it.IsAtEnd();++it)
-	  {
-	    double Rho   = it.GetIndex()[1]*m_LogPolarResample->GetRadialStep();
-	    PixelType pixval;
-	    double valueTemp = static_cast<double>(it.Get());
-	    valueTemp *= exp(m_Sigma * Rho);
-	    valueTemp *=m_LogPolarResample->GetRadialStep() ; 
-	    PixelType value = static_cast<PixelType>(valueTemp);
-	    
-	    if( value < minOutputValue )
-	      {
-		pixval = minOutputValue;
-	      }
-	    else if( value > maxOutputValue )
-	      {
-		pixval = maxOutputValue;
-	      }
-	    else 
-	      {
-		pixval = static_cast<PixelType>(value);
-	      }
-	    it.Set(pixval);      
-	  }
-
- 	m_FourierTransform->SetInput(tempImage );
- 	m_FourierTransform->GraftOutput( this->GetOutput() );
-
-	m_FourierTransform->Update();
- 	this->GraftOutput( m_FourierTransform->GetOutput() );
-}
-
-
-/** 
- * Inform pipeline of required output region
- */
-template < class TPixel,class  TInterpol,unsigned int   Dimension >
-void
-ForwardFourierMellinTransformImageFilter<TPixel, TInterpol, Dimension >
-::GenerateOutputInformation()
-{
-  // call the superclass' implementation of this method
-  Superclass::GenerateOutputInformation();
-
-  // get pointers to the input and output
-  ImagePointer inputPtr  =  const_cast<InputImageType *>( this->GetInput() );
-  OutputImagePointer   outputPtr = this->GetOutput();;
-  if ( !inputPtr )
-    {
-    return;
-    }
-
-  m_LogPolarResample->GenerateOutputInformation();
+    typename ResampleFilterType::Pointer resampler = ResampleFilterType::New();
+    typename LogPolarTransformType::Pointer transform  = LogPolarTransformType::New();
     
-  OutputImageRegionType    outputLargestPossibleRegion;
-  outputLargestPossibleRegion.SetSize( m_LogPolarResample->GetOutput()->GetLargestPossibleRegion().GetSize() );
-  outputLargestPossibleRegion.SetIndex( m_LogPolarResample->GetOutput()->GetLargestPossibleRegion().GetIndex() );
-  outputPtr->SetLargestPossibleRegion( outputLargestPossibleRegion );
+    typename LogPolarTransformType::ParametersType params(4);
+    // Center the transform
+    params[0]=0.5*static_cast<double>(this->GetInput()->GetLargestPossibleRegion().GetSize()[0]);
+    params[1]=0.5*static_cast<double>(this->GetInput()->GetLargestPossibleRegion().GetSize()[1]);
+    params[2]=360./m_OutputSize[0];
+    params[3]=log(sqrt(pow(this->GetInput()->GetLargestPossibleRegion().GetSize()[0],2)
+		       +pow(this->GetInput()->GetLargestPossibleRegion().GetSize()[1],2))/2)/m_OutputSize[1];
+  transform->SetParameters(params);
+  
+  // log polar resampling
+  resampler->SetInput(this->GetInput());
+  resampler->SetTransform(transform);
+  resampler->SetInterpolator(m_Interpolator);
+  resampler->SetDefaultPixelValue(m_DefaultPixelValue);
+  resampler->SetSize(m_OutputSize);
+  resampler->Update();
 
-  return;
+  typename InputImageType::Pointer tempImage = resampler->GetOutput();
+  IteratorType it(tempImage,tempImage->GetLargestPossibleRegion());
+
+  // Min/max values of the output pixel type AND these values
+  // represented as the output type of the interpolator
+  const PixelType minOutputValue =  itk::NumericTraits<PixelType >::NonpositiveMin();
+  const PixelType maxOutputValue =  itk::NumericTraits<PixelType >::max();
+
+  // Normalization is specific to FourierMellin convergence conditions, and
+  // thus should be implemented here instead of in the resample filter.
+  for(it.GoToBegin();!it.IsAtEnd();++it)
+  {
+    double Rho   = it.GetIndex()[1]*params[3];
+    PixelType pixval;
+    double valueTemp = static_cast<double>(it.Get());
+    valueTemp *= exp(m_Sigma * Rho);
+    valueTemp *=params[3];
+    PixelType value = static_cast<PixelType>(valueTemp);
+	    
+    if( value < minOutputValue )
+      {
+	pixval = minOutputValue;
+      }
+    else if( value > maxOutputValue )
+      {
+	pixval = maxOutputValue;
+      }
+    else 
+      {
+	pixval = static_cast<PixelType>(value);
+      }
+    it.Set(pixval);      
+  }
+  // Fourrier transform of the output
+  m_FourierTransform->SetInput(tempImage );
+  m_FourierTransform->GraftOutput( this->GetOutput() );
+
+  m_FourierTransform->Update();
+  this->GraftOutput( m_FourierTransform->GetOutput() );
 }
-
-
-
-template < class TPixel,class  TInterpol,unsigned int   Dimension >
-void
-ForwardFourierMellinTransformImageFilter<TPixel, TInterpol, Dimension >
-::SetAngularStep(double angularStep )
-{
-	m_LogPolarResample->SetAngularStep(angularStep);
-}
-template < class TPixel,class  TInterpol,unsigned int   Dimension >
-const double
-ForwardFourierMellinTransformImageFilter<TPixel, TInterpol, Dimension >
-::GetAngularStep()
-{
-	return static_cast<const double>(m_LogPolarResample->GetAngularStep() );
-}
-
-
-template < class TPixel,class  TInterpol,unsigned int   Dimension >
-void
-ForwardFourierMellinTransformImageFilter<TPixel, TInterpol, Dimension >
-::SetRadialStep(double radialStep )
-{
-	m_LogPolarResample->GetRadialStep(radialStep);
-}
-template < class TPixel,class  TInterpol,unsigned int   Dimension >
-const double
-ForwardFourierMellinTransformImageFilter<TPixel, TInterpol, Dimension >
-::GetRadialStep( )
-{
-	return m_LogPolarResample->GetRadialStep();
-}
-
-template < class TPixel,class  TInterpol,unsigned int   Dimension >
-void
-ForwardFourierMellinTransformImageFilter<TPixel, TInterpol, Dimension >
-::SetAngularNumberOfSamples(double angularNumberOfSamples )
-{
-	m_LogPolarResample->SetAngularNumberOfSamples(angularNumberOfSamples);
-}
-template < class TPixel,class  TInterpol,unsigned int   Dimension >
-const double
-ForwardFourierMellinTransformImageFilter<TPixel, TInterpol, Dimension >
-::GetAngularNumberOfSamples()
-{
-	return m_LogPolarResample->GetAngularNumberOfSamples();
-}
-
-
-template < class TPixel,class  TInterpol,unsigned int   Dimension >
-void
-ForwardFourierMellinTransformImageFilter<TPixel, TInterpol, Dimension >
-::SetRadialNumberOfSamples(double radialNumberOfSamples )
-{
-	m_LogPolarResample->SetRadialNumberOfSamples(radialNumberOfSamples);
-}
-template < class TPixel,class  TInterpol,unsigned int   Dimension >
-const double
-ForwardFourierMellinTransformImageFilter<TPixel, TInterpol, Dimension >
-::GetRadialNumberOfSamples( )
-{
-	return static_cast<const double>(m_LogPolarResample->GetRadialNumberOfSamples() );
-}
-template < class TPixel,class  TInterpol,unsigned int   Dimension >
-void
-ForwardFourierMellinTransformImageFilter<TPixel, TInterpol, Dimension >
-::SetOriginIsAtCenter(bool isAtCenter)
-{
-	m_LogPolarResample->SetOriginIsAtCenter(isAtCenter);
-}
-template < class TPixel,class  TInterpol,unsigned int   Dimension >
-const bool
-ForwardFourierMellinTransformImageFilter<TPixel, TInterpol, Dimension >
-::GetOriginIsAtCenter()
-{
-	return m_LogPolarResample->GetOriginIsAtCenter();
-}
-
-
-template < class TPixel,class  TInterpol,unsigned int   Dimension >
-void
-ForwardFourierMellinTransformImageFilter<TPixel, TInterpol, Dimension >
-::SetDefaultPixelValue(PixelType pixelValue)
-{
-	m_LogPolarResample->SetDefaultPixelValue(pixelValue);
-}
-
-
-template < class TPixel,class  TInterpol,unsigned int   Dimension >
-const TPixel
-ForwardFourierMellinTransformImageFilter<TPixel, TInterpol, Dimension >
-::GetDefaultPixelValue( )
-{
-	return static_cast<const PixelType>(m_LogPolarResample->GetDefaultPixelValue());
-}
-
-
-template < class TPixel,class  TInterpol,unsigned int   Dimension >
-void
-ForwardFourierMellinTransformImageFilter<TPixel, TInterpol, Dimension >
-::SetInterpolator(InterpolatorPointer interpolator )
-{
-	m_LogPolarResample->SetInterpolator(interpolator);
-}
-template < class TPixel,class  TInterpol,unsigned int   Dimension >
-typename TInterpol::ConstPointer 
-ForwardFourierMellinTransformImageFilter<TPixel, TInterpol, Dimension >
-::GetInterpolator( )
-{
-	return static_cast<InterpolatorConstPointer>(m_LogPolarResample->GetInterpolator());
-}
-
-
 /**
  * Standard "PrintSelf" method
  */
@@ -237,11 +113,6 @@ ForwardFourierMellinTransformImageFilter<TPixel, TInterpol, Dimension >
 ::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   Superclass::PrintSelf( os, indent );
-  os << indent << "m_LogPolarResample : " << m_LogPolarResample.GetPointer() << std::endl;
 }
-
-
 } // end namespace otb
-
-
 #endif

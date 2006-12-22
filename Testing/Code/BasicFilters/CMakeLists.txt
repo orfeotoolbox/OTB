@@ -119,7 +119,7 @@ ADD_TEST(bfTvLogPolarTransformResample ${BASICFILTERS_TESTS}
   --compare-image ${TOL}  ${BASELINE}/bfLogPolarTransformResampleOutput.hdr
                           ${TEMP}/bfLogPolarTransformResampleOutput.hdr
         otbLogPolarTransformResample
-        ${INPUTDATA}/DeuxCercles.hdr
+        ${INPUTDATA}/circle.hdr
 	${TEMP}/bfLogPolarTransformResampleOutput.hdr
 )
 

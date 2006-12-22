@@ -30,6 +30,7 @@ try
   {
     char * inputFileName = argv[1];
     char * outputFileName = argv[2];
+    
 
     const unsigned int Dimension = 2;
     typedef double PrecisionType;
@@ -61,9 +62,9 @@ try
     // Center the transform
     params[0]=0.5*static_cast<double>(size[0]);
     params[1]=0.5*static_cast<double>(size[1]);
-    params[2]=360./1024;
+    params[2]=360./reader->GetOutput()->GetLargestPossibleRegion().GetSize()[0];
     params[3]=log(sqrt(pow(size[0],2)
-		       +pow(size[1],2))/2)/512;
+		       +pow(size[1],2))/2)/reader->GetOutput()->GetLargestPossibleRegion().GetSize()[1];
     transform->SetParameters(params);
 
     

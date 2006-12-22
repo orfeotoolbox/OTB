@@ -423,21 +423,27 @@ ADD_TEST(feTvExtractSegments ${FEATUREEXTRACTION_TESTS}
 ADD_TEST(feTuForwardFourierMellinImageFilterNew ${FEATUREEXTRACTION_TESTS} 
          otbFourierMellinImageFilterNew)  
 
-ADD_TEST(feTuForwardFourierMellinImageFilterTestFFT ${FEATUREEXTRACTION_TESTS}  
+ADD_TEST(feTuForwardFourierMellinImageFilterCroix ${FEATUREEXTRACTION_TESTS}  
+ --compare-image ${TOL}  ${BASELINE}/feFourierMellinCroixOutput.hdr
+                          ${TEMP}/feFourierMellinCroixOutput.hdr
         otbFourierMellinImageFilterTestFFT
         ${INPUTDATA}/TestFFT.hdr
-	${TEMP}/feFFTTest.hdr)
+	${TEMP}/feFourierMellinCroixOutput.hdr
+)
 
-ADD_TEST(feTuForwardFourierMellinImageFilterTestFFT3Croix ${FEATUREEXTRACTION_TESTS}  
-        otbFourierMellinImageFilterTestFFT
+ADD_TEST(feTuForwardFourierMellinImageFilter3Croix ${FEATUREEXTRACTION_TESTS}  
+   --compare-image ${TOL}  ${BASELINE}/feFourierMellin3CroixOutput.hdr
+                          ${TEMP}/feFourierMellin3CroixOutput.hdr
+    otbFourierMellinImageFilterTestFFT
         ${INPUTDATA}/TestFFT3Croix.hdr
-	${TEMP}/feFFTTest3Croix.hdr)
+	${TEMP}/feFourierMellin3CroixOutput.hdr
+)
 
 ADD_TEST(feTvForwardFourierMellinImageFilter ${FEATUREEXTRACTION_TESTS}  
   --compare-image ${TOL}  ${BASELINE}/feForwardFourierMellinImageFilter.hdr
                           ${TEMP}/feForwardFourierMellinImageFilter.hdr
         otbFourierMellinImageFilter
-        ${INPUTDATA}/DeuxCercles.hdr
+        ${INPUTDATA}/circle.hdr
 	${TEMP}/feForwardFourierMellinImageFilter.hdr)
 
 # -----------------------------------------------------------------------
