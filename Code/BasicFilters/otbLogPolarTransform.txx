@@ -110,7 +110,12 @@ LogPolarTransform<TScalarType>
 ::TransformVector(const InputVectorType &vector) const
 {
   OutputVectorType result;
-
+  double theta = vector[0]*m_Scale[0]*acos(-1.0)/180.0;
+  double logRho   = vector[1]*m_Scale[1];
+  result[0]=0.;
+  result[1]=0.;
+  result[0]+=exp(logRho) *cos(theta);
+  result[1]+=exp(logRho) *sin(theta);
  
   return result;
 }
@@ -126,7 +131,12 @@ LogPolarTransform<TScalarType>
 ::TransformVector(const InputVnlVectorType &vector) const
 {
   OutputVnlVectorType result;
-
+double theta = vector[0]*m_Scale[0]*acos(-1.0)/180.0;
+  double logRho   = vector[1]*m_Scale[1];
+  result[0]=0.;
+  result[1]=0.;
+  result[0]+=exp(logRho) *cos(theta);
+  result[1]+=exp(logRho) *sin(theta);
 
 
   return result;

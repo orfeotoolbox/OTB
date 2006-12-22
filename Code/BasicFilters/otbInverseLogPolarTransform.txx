@@ -127,19 +127,34 @@ InverseLogPolarTransform<TScalarType>
 ::TransformVector(const InputVectorType &vector) const
 {
   OutputVectorType result;
-  double rho =sqrt(pow(vector[0],2)+pow(vector[1],2));
-  result[0]=(1/m_Scale[0])*asin((vector[1])/rho);
-  // degree conversion
-  result[0]=result[0]*(180/acos(-1.0))+180;
-  // Avoiding asin indetermination
-  result[0]=((vector[0])>=0 ? result[0] : result[0]+90);
-  result[1]=(1/2*m_Scale[1])*log(pow(vector[0],2)+pow(vector[1],2));
+ double rho =sqrt(pow(vector[0]-m_Center[0],2)+pow(vector[1]-m_Center[1],2));
+  if(rho>0)
+    {
+      result[0]=(1/m_Scale[0])*asin((vector[1]-m_Center[1])/rho);
+      // degree conversion
+      result[0]=result[0]*(180/acos(-1.0));
+      // Deplacing the range to [0,90], [270,360]
+      result[0]= result[0]>0 ? result[0] : result[0]+360;
+      // Avoiding asin indetermination
+      if((vector[0]-m_Center[0])>=0)
+	{
+	  result[0]=result[0]<90 ? result[0]+90 : result[0]-90;
+	}
+      result[1]=(1/m_Scale[1])*log(rho);
+      // otbMsgDebugMacro(<<log(pow(vector[0]-m_Center[0],2)+pow(vector[1]-m_Center[1],2)));
+    }
+  else
+    {
+      // for rho=0, reject the vector outside the angular range to avoid nan error
+      result[0]=400;
+      result[1]=0;
+    }
   return result;
 }
 /**
- * Transform a vnl vector representing a point.
- * \param vector The point to transform.
- * \return The transformed point.
+ * Transform a vnl vector representing a vector.
+ * \param vector The vector to transform.
+ * \return The transformed vector.
  */  
 template <class TScalarType>
 typename InverseLogPolarTransform<TScalarType>
@@ -151,15 +166,22 @@ InverseLogPolarTransform<TScalarType>
   double rho =sqrt(pow(vector[0],2)+pow(vector[1],2));
   if(rho>0)
     {
-      result[0]=(1/m_Scale[0])*asin((vector[1])/rho);
+      result[0]=(1/m_Scale[0])*asin((vector[1]-m_Center[1])/rho);
       // degree conversion
-      result[0]=result[0]*(180/acos(-1.0))+180;
+      result[0]=result[0]*(180/acos(-1.0));
+      // Deplacing the range to [0,90], [270,360]
+      result[0]= result[0]>0 ? result[0] : result[0]+360;
       // Avoiding asin indetermination
-      result[0]=((vector[0])>=0 ? result[0] : result[0]+90);
-      result[1]=(1/2*m_Scale[1])*log(pow(vector[0],2)+pow(vector[1],2));
+      if((vector[0]-m_Center[0])>=0)
+	{
+	  result[0]=result[0]<90 ? result[0]+90 : result[0]-90;
+	}
+      result[1]=(1/m_Scale[1])*log(rho);
+      // otbMsgDebugMacro(<<log(pow(vector[0]-m_Center[0],2)+pow(vector[1]-m_Center[1],2)));
     }
   else
     {
+      // for rho=0, reject the vector outside the angular range to avoid nan error
       result[0]=400;
       result[1]=0;
     }
