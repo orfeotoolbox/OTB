@@ -94,7 +94,7 @@ namespace otb
   List<TObject>
   ::SetNthElement(unsigned int index,const ObjectType * element)
   {
-    m_InternalContainer[index]=element;
+    m_InternalContainer[index]=const_cast<ObjectType*>(element);
   }
   /**
    * Get the nth element of the list.
