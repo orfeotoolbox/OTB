@@ -29,6 +29,7 @@
 #include "itkImageRegionIteratorWithIndex.h"
 #include "itkImageLinearIteratorWithIndex.h"
 #include "itkSpecialCoordinatesImage.h"
+#include "otbMacro.h"
 
 namespace otb
 {
@@ -163,6 +164,7 @@ LogPolarResampleImageFilter<TInputImage,TInterpolator>
 
     inputPoint[0] = exp(Rho) * cos(Theta);
     inputPoint[1] = exp(Rho) * sin(Theta);
+    otbMsgDebugMacro(<<outputPoint<<" -> "<<Rho<<", "<<Theta<<" -> "<<inputPoint<<" radial step: "<<m_RadialStep);
   
     if(m_OriginIsAtCenter == true)
       {

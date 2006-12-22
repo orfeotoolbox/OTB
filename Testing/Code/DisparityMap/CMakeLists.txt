@@ -15,8 +15,28 @@ SET(TOL 0.0)
 SET(DISPARITYMAP_TESTS ${CXX_TEST_PATH}/otbDisparityMapTests)
 
 
+# -------            otb::DisparityMapEstimationMethod   ----------
+
+ADD_TEST(dmTuDisparityMapEstimationMethodNew ${DISPARITYMAP_TESTS} 
+	 otbDisparityMapEstimationMethodNew)
+
+ADD_TEST(dmTvDisparityMapEstimationMethod ${DISPARITYMAP_TESTS} 
+   --compare-ascii ${TOL}
+ 		   ${BASELINE_FILES}/dmDisparityMapEstimationOutput1.txt
+ 		   ${TEMP}/dmDisparityMapEstimationOutput1.txt
+	 otbDisparityMapEstimationMethod
+	           ${INPUTDATA}/fixed.png
+	           ${INPUTDATA}/moving.png
+	           ${INPUTDATA}/pointSet.png
+	           ${TEMP}/dmDisparityMapEstimationOutput1.txt
+		   20 20
+)
+
+
 # -------       Fichiers sources CXX -----------------------------------
 SET(BasicDisparityMap_SRCS
+otbDisparityMapEstimationMethodNew.cxx
+otbDisparityMapEstimationMethod.cxx
 )
 
 INCLUDE_DIRECTORIES("${OTBTesting_BINARY_DIR}")

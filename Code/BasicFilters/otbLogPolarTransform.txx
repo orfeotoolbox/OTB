@@ -78,7 +78,6 @@ LogPolarTransform<TScalarType>
   
   return this->m_Parameters;
 }
-
 /**
  * Transform a point.
  * \param point The point to transform.
@@ -88,13 +87,15 @@ template <class TScalarType>
 typename LogPolarTransform<TScalarType>
 ::OutputPointType
  LogPolarTransform<TScalarType>
-::TransformPoint(const InputPointType &point)
+::TransformPoint(const InputPointType &point) const
 {
-  double Theta = point[0]*m_Scale[0]*acos(-1.0)/180.0;
-  double Rho   = point[1]*m_Scale[1];
   OutputPointType result;
-  result[0]=exp(Rho) * cos(Theta)+m_Center[0];
-  result[1]=exp(Rho) * sin(Theta)+m_Center[1];
+  double theta = point[0]*m_Scale[0]*acos(-1.0)/180.0;
+  double logRho   = point[1]*m_Scale[1];
+  result[0]=m_Center[0];
+  result[1]=m_Center[1];
+  result[0]+=exp(logRho) *cos(theta);
+  result[1]+=exp(logRho) *sin(theta);
   return result;
 }
 /**
@@ -106,14 +107,11 @@ template <class TScalarType>
 typename LogPolarTransform<TScalarType>
 ::OutputVectorType
 LogPolarTransform<TScalarType>
-::TransformVector(const InputVectorType &vector)
+::TransformVector(const InputVectorType &vector) const
 {
-
-  double Theta = vector[0]*m_Scale[0]*acos(-1.0)/180.0;
-  double Rho   = vector[1]*m_Scale[1];
   OutputVectorType result;
-  result[0]=exp(Rho) * cos(Theta);
-  result[1]=exp(Rho) * sin(Theta);
+
+ 
   return result;
 }
 /**
@@ -125,13 +123,12 @@ template <class TScalarType>
 typename LogPolarTransform<TScalarType>
 ::OutputVnlVectorType
 LogPolarTransform<TScalarType>
-::TransformVector(const InputVnlVectorType &vector)
+::TransformVector(const InputVnlVectorType &vector) const
 {
-  double Theta = vector[0]*m_Scale[0]*acos(-1.0)/180.0;
-  double Rho   = vector[1]*m_Scale[1];
   OutputVnlVectorType result;
-  result[0]=exp(Rho) * cos(Theta);
-  result[1]=exp(Rho) * sin(Theta);
+
+
+
   return result;
 }
 /**

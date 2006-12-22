@@ -15,7 +15,7 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#include "otbLogPolarTransform.h"
+#include "otbInverseLogPolarTransform.h"
 #include "otbImage.h"
 #include "itkLinearInterpolateImageFunction.h"
 #include "itkResampleImageFilter.h"
@@ -24,7 +24,7 @@
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
 
-int otbLogPolarTransformResample(int argc, char* argv[])
+int otbInverseLogPolarTransformResample(int argc, char* argv[])
 {
 try
   {
@@ -35,7 +35,7 @@ try
     typedef double PrecisionType;
     typedef unsigned char PixelType;
     typedef otb::Image<PixelType,Dimension> ImageType;
-    typedef otb::LogPolarTransform<PrecisionType> LogPolarTransformType;
+    typedef otb::InverseLogPolarTransform<PrecisionType> InverseLogPolarTransformType;
     typedef itk::LinearInterpolateImageFunction<ImageType,PrecisionType> InterpolatorType;
     typedef otb::ImageFileReader<ImageType> ReaderType;
     typedef otb::ImageFileWriter<ImageType> WriterType;
@@ -50,20 +50,26 @@ try
     interpolator->SetInputImage(reader->GetOutput());
 
     std::cout<<interpolator<<std::endl;
-    LogPolarTransformType::Pointer transform = LogPolarTransformType::New();
-    
-    LogPolarTransformType::ParametersType params(4);
-    // Center the transform
-    params[0]=0.5*static_cast<double>(reader->GetOutput()->GetLargestPossibleRegion().GetSize()[0]);
-    params[1]=0.5*static_cast<double>(reader->GetOutput()->GetLargestPossibleRegion().GetSize()[1]);
-    params[2]=360./1024;
-    params[3]=log(sqrt(pow(reader->GetOutput()->GetLargestPossibleRegion().GetSize()[0],2)
-+pow(reader->GetOutput()->GetLargestPossibleRegion().GetSize()[1],2))/2)/512;
-    transform->SetParameters(params);
+    InverseLogPolarTransformType::Pointer transform = InverseLogPolarTransformType::New();
 
     ImageType::SizeType size;
-    size[0]=1024;
-    size[1]=512;
+    size[0]=720;
+    size[1]=540;
+
+
+    InverseLogPolarTransformType::ParametersType params(4);
+    // Center the transform
+    params[0]=0.5*static_cast<double>(size[0]);
+    params[1]=0.5*static_cast<double>(size[1]);
+    params[2]=360./1024;
+    params[3]=log(sqrt(pow(size[0],2)
+		       +pow(size[1],2))/2)/512;
+    transform->SetParameters(params);
+
+    
+
+    // ImageType::SpacingType spacing;
+//     spacing.Fill(1.0);
 
     ResampleFilterType::Pointer resampler = ResampleFilterType::New();
     resampler->SetInput(reader->GetOutput());

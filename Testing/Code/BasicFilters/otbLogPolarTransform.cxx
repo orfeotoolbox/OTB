@@ -56,11 +56,13 @@ try
 	    PointType p = transform->TransformPoint(*it);
 	    
 	    PointType pprime;
-
-	    double Theta = (*it)[0]*angularStep*acos(-1.0)/180.0;
-	    double Rho   = (*it)[1]*radialStep;
-	    pprime[0]=exp(Rho) * cos(Theta);
-	    pprime[1]=exp(Rho) * sin(Theta);
+	    
+	      double theta = (*it)[0]*angularStep*acos(-1.0)/180.0;
+	      double logRho   = (*it)[1]*radialStep;
+	   
+	    std::cout<<"Rho: "<<logRho<<", Theta: "<<theta<<std::endl;
+	    pprime[0]=exp(logRho) * cos(theta);
+	    pprime[1]=exp(logRho) * sin(theta);
 
 	    std::cout<<"Original Point: "<<(*it)<<", Reference point: "<<pprime<<", Transformed point: "<<p<<std::endl;
 	    otbControlConditionTestMacro(p[0]!=pprime[0],"Error while transforming point.");

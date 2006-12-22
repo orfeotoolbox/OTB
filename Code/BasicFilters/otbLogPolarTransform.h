@@ -71,25 +71,25 @@ class ITK_EXPORT LogPolarTransform
      * Get the transform parameters through the standard interface.
      * \return The parameters of the transform.
      */
-     ParametersType& GetParameters(void) const;
+     virtual ParametersType& GetParameters(void) const;
     /**
      * Transform a point.
      * \param point The point to transform.
      * \return The transformed point.
      */
-    OutputPointType TransformPoint(const InputPointType &point);
+    OutputPointType TransformPoint(const InputPointType &point) const;
     /**
      * Transform a vector representing a point.
      * \param vector The point to transform.
      * \return The transformed point.
      */
-    OutputVectorType TransformVector(const InputVectorType &vector);
+    OutputVectorType TransformVector(const InputVectorType &vector) const;
     /**
      * Transform a vnl vector representing a point.
      * \param vector The point to transform.
      * \return The transformed point.
      */
-    OutputVnlVectorType TransformVector(const InputVnlVectorType &vector);
+    OutputVnlVectorType TransformVector(const InputVnlVectorType &vector) const;
 
   protected:
     /** Constructor */

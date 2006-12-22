@@ -88,15 +88,30 @@ template <class TScalarType>
 typename InverseLogPolarTransform<TScalarType>
 ::OutputPointType
  InverseLogPolarTransform<TScalarType>
-::TransformPoint(const InputPointType &point)
+::TransformPoint(const InputPointType &point) const
 {
   OutputPointType result;
-  result[0]=0;
-  result[1]=0;
-  if((point[0]-m_Center[0]!=0)&&(point[1]-m_Center[1]!=0))
+  double rho =sqrt(pow(point[0]-m_Center[0],2)+pow(point[1]-m_Center[1],2));
+  if(rho>0)
     {
-      result[0]=(1/m_Scale[0])*asin((point[1]-m_Center[1])/sqrt(pow(point[0]-m_Center[0],2)+pow(point[1]-m_Center[1],2)));
-      result[1]=(1/2*m_Scale[1])*log(sqrt(pow(point[0]-m_Center[0],2)+pow(point[1]-m_Center[1],2)));
+      result[0]=(1/m_Scale[0])*asin((point[1]-m_Center[1])/rho);
+      // degree conversion
+      result[0]=result[0]*(180/acos(-1.0));
+      // Deplacing the range to [0,90], [270,360]
+      result[0]= result[0]>0 ? result[0] : result[0]+360;
+      // Avoiding asin indetermination
+      if((point[0]-m_Center[0])>=0)
+	{
+	  result[0]=result[0]<90 ? result[0]+90 : result[0]-90;
+	}
+      result[1]=(1/m_Scale[1])*log(rho);
+      // otbMsgDebugMacro(<<log(pow(point[0]-m_Center[0],2)+pow(point[1]-m_Center[1],2)));
+    }
+  else
+    {
+      // for rho=0, reject the point outside the angular range to avoid nan error
+      result[0]=400;
+      result[1]=0;
     }
   return result;
 }
@@ -109,16 +124,16 @@ template <class TScalarType>
 typename InverseLogPolarTransform<TScalarType>
 ::OutputVectorType
 InverseLogPolarTransform<TScalarType>
-::TransformVector(const InputVectorType &vector)
+::TransformVector(const InputVectorType &vector) const
 {
   OutputVectorType result;
-  result[0]=0;
-  result[1]=0;
-  if((vector[0]!=0)&&(vector[1]!=0))
-    {
-      result[0]=(1/m_Scale[0])*asin((vector[1])/sqrt(pow(vector[0],2)+pow(vector[1],2)));
-      result[1]=(1/2*m_Scale[1])*log(sqrt(pow(vector[0],2)+pow(vector[1],2)));
-    }
+  double rho =sqrt(pow(vector[0],2)+pow(vector[1],2));
+  result[0]=(1/m_Scale[0])*asin((vector[1])/rho);
+  // degree conversion
+  result[0]=result[0]*(180/acos(-1.0))+180;
+  // Avoiding asin indetermination
+  result[0]=((vector[0])>=0 ? result[0] : result[0]+90);
+  result[1]=(1/2*m_Scale[1])*log(pow(vector[0],2)+pow(vector[1],2));
   return result;
 }
 /**
@@ -130,15 +145,23 @@ template <class TScalarType>
 typename InverseLogPolarTransform<TScalarType>
 ::OutputVnlVectorType
 InverseLogPolarTransform<TScalarType>
-::TransformVector(const InputVnlVectorType &vector)
+::TransformVector(const InputVnlVectorType &vector) const
 {
   OutputVnlVectorType result;
-  result[0]=0;
-  result[1]=0;
-  if((vector[0]!=0)&&(vector[1]!=0))
+  double rho =sqrt(pow(vector[0],2)+pow(vector[1],2));
+  if(rho>0)
     {
-      result[0]=(1/m_Scale[0])*asin((vector[1])/sqrt(pow(vector[0],2)+pow(vector[1],2)));
-      result[1]=(1/2*m_Scale[1])*log(sqrt(pow(vector[0],2)+pow(vector[1],2)));
+      result[0]=(1/m_Scale[0])*asin((vector[1])/rho);
+      // degree conversion
+      result[0]=result[0]*(180/acos(-1.0))+180;
+      // Avoiding asin indetermination
+      result[0]=((vector[0])>=0 ? result[0] : result[0]+90);
+      result[1]=(1/2*m_Scale[1])*log(pow(vector[0],2)+pow(vector[1],2));
+    }
+  else
+    {
+      result[0]=400;
+      result[1]=0;
     }
   return result;
 }

@@ -26,4 +26,6 @@
 
 void RegisterTests()
 {
+REGISTER_TEST(otbDisparityMapEstimationMethodNew);
+REGISTER_TEST(otbDisparityMapEstimationMethod);
 }

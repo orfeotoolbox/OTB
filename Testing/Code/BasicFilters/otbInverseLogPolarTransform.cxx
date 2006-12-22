@@ -53,16 +53,27 @@ try
       {
 	PointType p = transform->TransformPoint(*it);
 	PointType pprime;
-	if(((*it)[0]==0)&&((*it)[0]==0))
-	  {
-	    pprime.Fill(0);
-	  }
-	else
-	  {
-	    pprime[0]=(1/angularStep)*asin((*it)[1]/sqrt((*it)[0]*(*it)[0]+(*it)[1]*(*it)[1]));
-	    pprime[1]=(1/2*radialStep)*log((*it)[0]*(*it)[0]+(*it)[1]*(*it)[1]);
-	  }
+	double rho = sqrt((*it)[0]*(*it)[0]+(*it)[1]*(*it)[1]);
 
+	if(rho>0)
+	  {
+	    pprime[0]=(1/angularStep)*asin((*it)[1]/rho);
+	    pprime[0]=pprime[0]*(180/acos(-1.0));
+	    // Deplacing the range to [0,90], [270,360]
+	    pprime[0]= pprime[0]>0 ? pprime[0] : pprime[0]+360;
+	    // Avoiding asin indetermination
+	    if(p[0]>=0)
+	      {
+	    pprime[0]=pprime[0]<90 ? pprime[0]+90 : pprime[0]-90;
+	      }
+	    pprime[1]=(1/radialStep)*log(rho);
+	  }
+	else 
+	  {
+	    pprime[0]=400;
+	    pprime[1]=0;
+	  }
+	
 	std::cout<<"Original Point: "<<(*it)<<", Reference point: "<<pprime<<", Transformed point: "<<p<<std::endl;
 	otbControlConditionTestMacro(p[0]!=pprime[0],"Error while transforming point.");
 	otbControlConditionTestMacro(p[1]!=pprime[1],"Error while transforming point.");

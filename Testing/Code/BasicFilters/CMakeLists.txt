@@ -112,16 +112,15 @@ ADD_TEST(bfTuLogPolarTransformNew ${BASICFILTERS_TESTS}
 
 ADD_TEST(bfTvLogPolarTransform ${BASICFILTERS_TESTS}
         otbLogPolarTransform
-	1 1 6 0 0 10 20 45 60 3.14 3.14 1 0 0 1
+	1 1 6 0 0 0 10 45 0 3.14 3.14 18 1 50 50
 	)
 
 ADD_TEST(bfTvLogPolarTransformResample ${BASICFILTERS_TESTS}  
-  --compare-image ${TOL}  ${BASELINE}/bfLogPolarResampleImageFilter.hdr
-                          ${TEMP}/bfLogPolarResampleOutput.hdr 
+  --compare-image ${TOL}  ${BASELINE}/bfLogPolarTransformResampleOutput.hdr
+                          ${TEMP}/bfLogPolarTransformResampleOutput.hdr
         otbLogPolarTransformResample
         ${INPUTDATA}/DeuxCercles.hdr
-	${TEMP}/bfLogPolarResampleOutput.hdr
-        1.0 1.0	
+	${TEMP}/bfLogPolarTransformResampleOutput.hdr
 )
 
 
@@ -134,6 +133,14 @@ ADD_TEST(bfTvInverseLogPolarTransform ${BASICFILTERS_TESTS}
         otbInverseLogPolarTransform
 	1 1 6 0 0 10 20 45 60 3.14 3.14 1 0 0 1
 	)
+
+ADD_TEST(bfTvInverseLogPolarTransformResample ${BASICFILTERS_TESTS}  
+--compare-image ${TOL}  ${BASELINE}/bfInverseLogPolarTransformResampleOutput.hdr
+                          ${TEMP}/bfInverseLogPolarTransformResampleOutput.hdr
+        otbInverseLogPolarTransformResample
+	${BASELINE}/bfLogPolarTransformResampleOutput.hdr
+	${TEMP}/bfInverseLogPolarTransformResampleOutput.hdr
+)
 
 
 # A enrichir
@@ -156,13 +163,14 @@ otbLogPolarTransform.cxx
 otbLogPolarTransformResample.cxx
 otbInverseLogPolarTransformNew.cxx
 otbInverseLogPolarTransform.cxx
+otbInverseLogPolarTransformResample.cxx
 )
 
 
 INCLUDE_DIRECTORIES("${OTBTesting_BINARY_DIR}")
 
 ADD_EXECUTABLE(otbBasicFiltersTests otbBasicFiltersTests.cxx ${BasicFilters_SRCS})
-TARGET_LINK_LIBRARIES(otbBasicFiltersTests  OTBBasicFilters OTBCommon OTBIO gdal ITKIO ITKCommon)
+TARGET_LINK_LIBRARIES(otbBasicFiltersTests  OTBBasicFilters OTBCommon OTBIO gdal ITKIO ITKCommon ITKBasicFilters)
 
 
 ENDIF( NOT OTB_DISABLE_CXX_TESTING )

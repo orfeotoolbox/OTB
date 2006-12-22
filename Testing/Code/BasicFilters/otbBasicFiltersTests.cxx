@@ -45,4 +45,5 @@ REGISTER_TEST(otbLogPolarTransform);
 REGISTER_TEST(otbLogPolarTransformResample);
 REGISTER_TEST(otbInverseLogPolarTransformNew);
 REGISTER_TEST(otbInverseLogPolarTransform);
+REGISTER_TEST(otbInverseLogPolarTransformResample);
 }
