@@ -54,7 +54,7 @@ class ITK_EXPORT ForwardFourierMellinTransformImageFilter :
 {
 public:
 
-  typedef TPixel						     PixelType;
+  //typedef TPixel						     PixelType;
   typedef otb::Image< TPixel , Dimension >                           InputImageType;
   typedef otb::Image< std::complex< TPixel > , Dimension >           OutputImageType;
 
