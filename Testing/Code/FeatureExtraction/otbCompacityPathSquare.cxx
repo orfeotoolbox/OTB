@@ -30,7 +30,6 @@ int otbCompacityPathSquare( int argc, char * argv[] )
     { 
         double        A ((double)::atof(argv[1]));
 
-        unsigned int                                           Number;
         const   unsigned int                                   Dimension = 2;
 	typedef itk::PolyLineParametricPath< Dimension >       PathType;
 	typedef otb::CompacityPathFunction<PathType>           FunctionType;

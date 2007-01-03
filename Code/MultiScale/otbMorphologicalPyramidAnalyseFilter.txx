@@ -165,7 +165,6 @@ namespace otb
 
     // local variables declarations and initialisations
     int i = 0;
-    int j;
     int sizeTmp;
     //--------------------------------------------------------//
     //                      Main loop                         //

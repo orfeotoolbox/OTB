@@ -78,7 +78,7 @@ int otbRCC8Graph(int argc, char* argv[])
 	   "rcc8Graph->GetVertex(2)->GetObjectLabelInImgage()!=3");
 
       // Testing the vertex iterators
-      int i=0;
+      unsigned int i=0;
       VertexIteratorType v(rcc8Graph);
       for(v.GoToBegin();!v.IsAtEnd();++v,i++)
 	{

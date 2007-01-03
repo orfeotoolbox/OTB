@@ -185,7 +185,7 @@ void LineDetectorImageFilterBase< TInputImage, TOutputImage, InterpolatorType>
   // --------------------------------------------------------------------------
   
   // Number of direction
-  const int NB_DIR = this->GetNumberOfDirections();
+  const unsigned int NB_DIR = this->GetNumberOfDirections();
   // Number of zone	  
   const int NB_ZONE = 3;  
   // Definition of the 4 directions
@@ -194,7 +194,7 @@ void LineDetectorImageFilterBase< TInputImage, TOutputImage, InterpolatorType>
   double* Theta = new double[NB_DIR];
 
   // La rotation nulle correspond a un contour horizontal -> 0 !!
-  for(int i=0; i<NB_DIR; i++)
+  for(unsigned int i=0; i<NB_DIR; i++)
     {
     Theta[i] = (M_PI*(i/double(NB_DIR)));
 /*    if(Theta[i]>M_PI)
@@ -238,7 +238,6 @@ void LineDetectorImageFilterBase< TInputImage, TOutputImage, InterpolatorType>
     { 	
     bit = itk::ConstNeighborhoodIterator<InputImageType>(m_Radius, input, *fit);
     cit = itk::ConstNeighborhoodIterator<InputImageType>(m_FaceList, input,*fit);
-    unsigned int neighborhoodSize = bit.Size();
     
     it = itk::ImageRegionIterator<OutputImageType>(output, *fit);
     itdir = itk::ImageRegionIterator<OutputImageType>(outputDir, *fit);
@@ -283,9 +282,9 @@ void LineDetectorImageFilterBase< TInputImage, TOutputImage, InterpolatorType>
 	    tempImage->SetRegions(tempRegion);
 	    tempImage->Allocate();
 	    
-	    for(int p = 0; p<=2*m_FaceList[0];p++)
+	    for(unsigned int p = 0; p<=2*m_FaceList[0];p++)
 	      {
-		for(int q = 0; q<=2*m_FaceList[1];q++)
+		for(unsigned int q = 0; q<=2*m_FaceList[1];q++)
 		  {
 		    typename itk::ConstNeighborhoodIterator<InputImageType>::OffsetType  index;
 		    index[0]=p-m_FaceList[0];
@@ -309,15 +308,15 @@ void LineDetectorImageFilterBase< TInputImage, TOutputImage, InterpolatorType>
 	  // ROMAIN
         std::vector<double>** PixelValues = NULL;
         PixelValues = new std::vector<double>*[NB_DIR];
-	for (int i=0; i<NB_DIR; i++)
+	for (unsigned int i=0; i<NB_DIR; i++)
         {
 		PixelValues[i] = NULL;
                 PixelValues[i] = new std::vector<double>[NB_ZONE];
         }
 	//otbMsgDevMacro( << "\tCentre Xc/Yc="<<Xc<<" "<<Yc<<" Yc12/Yc13="<<Yc12<<" "<<Yc13);          
       // Loop on the region 
-      for (int i = 0; i < m_Radius[0]; i++)
-	for (int j = 0; j < m_Radius[1]; j++)
+      for (unsigned int i = 0; i < m_Radius[0]; i++)
+	for (unsigned int j = 0; j < m_Radius[1]; j++)
         {
 
 	off[0]=i-m_Radius[0]/2;
@@ -397,7 +396,7 @@ void LineDetectorImageFilterBase< TInputImage, TOutputImage, InterpolatorType>
 	progress.CompletedPixel();  
 
 	// ROMAIN
-	for (int i=0; i<NB_DIR; i++)
+	for (unsigned int i=0; i<NB_DIR; i++)
         {
 		delete[] PixelValues[i];
                 PixelValues[i] = NULL;

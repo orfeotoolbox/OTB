@@ -276,7 +276,7 @@ Segmenter<TInputImage, TOuputImage>
   OutputPixelType num = 0;
   if(relabeler->GetNumberOfObjects()==1)
     {
-      int surface = rescaler->GetOutput()->GetLargestPossibleRegion().GetSize()[0]
+      unsigned int surface = rescaler->GetOutput()->GetLargestPossibleRegion().GetSize()[0]
 	*rescaler->GetOutput()->GetLargestPossibleRegion().GetSize()[1];
       if(relabeler->GetSizeOfObjectsInPixels()[0]==surface)
 	{

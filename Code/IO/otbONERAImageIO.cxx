@@ -69,44 +69,44 @@ ONERAImageIO::~ONERAImageIO()
 
 
 
-static std::string
-GetHeaderFileName( const std::string & filename )
-{
-  std::string ImageFileName = System::GetRootName(filename);
-  std::string fileExt = System::GetExtension(filename);
+// static std::string
+// GetHeaderFileName( const std::string & filename )
+// {
+//   std::string ImageFileName = System::GetRootName(filename);
+//   std::string fileExt = System::GetExtension(filename);
 
-  if(fileExt.compare("ent"))
-    {
-    ImageFileName += ".ent";
+//   if(fileExt.compare("ent"))
+//     {
+//     ImageFileName += ".ent";
     
-    return( ImageFileName );
-    }
-  else
-    {
-    return("");
-    }  
-}
+//     return( ImageFileName );
+//     }
+//   else
+//     {
+//     return("");
+//     }  
+// }
 
 //Returns the base image filename.
-static std::string GetImageFileName( const std::string& filename )
-{
-  std::string fileExt = System::GetExtension(filename);
-  std::string ImageFileName = System::GetRootName(filename);
+// static std::string GetImageFileName( const std::string& filename )
+// {
+//   std::string fileExt = System::GetExtension(filename);
+//   std::string ImageFileName = System::GetRootName(filename);
 
-  if(fileExt.compare("dat") )
-    {
-    ImageFileName += ".dat";
-    return( ImageFileName );
-    }
-  else
-    {
-    //uiig::Reporter* reporter = uiig::Reporter::getReporter();
-    //std::string temp="Error, Can not determine compressed file image name. ";
-    //temp+=filename;
-    //reporter->setMessage( temp );
-    return ("");
-    }
-}
+//   if(fileExt.compare("dat") )
+//     {
+//     ImageFileName += ".dat";
+//     return( ImageFileName );
+//     }
+//   else
+//     {
+//     //uiig::Reporter* reporter = uiig::Reporter::getReporter();
+//     //std::string temp="Error, Can not determine compressed file image name. ";
+//     //temp+=filename;
+//     //reporter->setMessage( temp );
+//     return ("");
+//     }
+// }
 
 bool ONERAImageIO::CanReadFile( const char* FileNameToRead )
 {
@@ -187,7 +187,6 @@ void ONERAImageIO::Read(void* buffer)
       numberOfPixels *= m_Dimensions[ dim ];
       }
 
-   unsigned long step = this->GetNumberOfComponents();
    unsigned char * p = static_cast<unsigned char *>(buffer);
    
    int lNbLignes   = this->GetIORegion().GetSize()[1];
@@ -479,11 +478,10 @@ void ONERAImageIO::Write(const void* buffer)
 
   unsigned long step = this->GetNumberOfComponents();
 
-  const unsigned long numberOfBytes      = this->GetImageSizeInBytes();
   const unsigned long numberOfComponents = this->GetImageSizeInComponents();
 
-  int lNbLignes   = this->GetIORegion().GetSize()[1];
-  int lNbColonnes = this->GetIORegion().GetSize()[0];
+  unsigned int lNbLignes   = this->GetIORegion().GetSize()[1];
+  unsigned int lNbColonnes = this->GetIORegion().GetSize()[0];
   int lPremiereLigne   = this->GetIORegion().GetIndex()[1] ; // [1... ]
   int lPremiereColonne = this->GetIORegion().GetIndex()[0] ; // [1... ]
 
@@ -515,7 +513,7 @@ otbMsgDevMacro( <<" Nb Of Components  : "<<this->GetNumberOfComponents());
         reinterpret_cast<float *>(tempmemory), numberOfComponents );
     }
  
-  for(int LineNo = lPremiereLigne;LineNo <lPremiereLigne + lNbLignes; LineNo++ )
+  for(unsigned int LineNo = lPremiereLigne;LineNo <lPremiereLigne + lNbLignes; LineNo++ )
     {
 	char* value = tempmemory + numberOfBytesPerLines * (LineNo - lPremiereLigne);
 

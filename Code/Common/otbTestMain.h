@@ -140,7 +140,7 @@ int main(int ac, char* av[] )
 	// Number of comparisons to do
 	unsigned int nbComparisons=(unsigned int)(::atoi(av[3]));
 	// Retrieve all the file names
-	for(int i = 0; i<nbComparisons;i++)
+	for(unsigned int i = 0; i<nbComparisons;i++)
 	  {
 	    baseLineFilenamesImage.push_back(av[4+2*i]);
 	    testFilenamesImage.push_back(av[5+2*i]);
@@ -322,7 +322,7 @@ bool isNumeric(std::string str)
 	int nbOfPoints = 0 ;
 	int nbOfNumbers = 0 ;
 	int number ;
-	int i = 0 ;
+	unsigned int i = 0 ;
 	bool result = true ;
 
     	while ((i<str.size())&&(result==true))
@@ -353,7 +353,7 @@ bool isHexaPointerAddress(std::string str)
 	       &&(str[1]==48)
 	       &&(str[2]==120)
 	       &&(size==11));
-  int i=3;
+  unsigned int i=3;
   while(result&&(i<size-1))
     {
       result=result&&isHexaNumber(str[i]);

@@ -74,8 +74,8 @@ public:
   typedef typename InternalGraphType::vertex_descriptor  VertexDescriptorType;
   typedef typename InternalGraphType::edge_descriptor    EdgeDescriptorType;
   /** Getters and Setters for the number of vertices */
-  itkSetMacro(NumberOfVertices,int);
-  itkGetConstReferenceMacro(NumberOfVertices,int);
+  itkSetMacro(NumberOfVertices,unsigned int);
+  itkGetConstReferenceMacro(NumberOfVertices,unsigned int);
   /**
    *  Return the internal boost graph object.
    *  \return The internal boost graph object
@@ -127,7 +127,7 @@ protected:
 private:
   
   /** Defines the number of vertices (ie total number of segmentation regions)*/
-  int m_NumberOfVertices;
+  unsigned int m_NumberOfVertices;
   /** Internal representation using the boost graph library */
   InternalGraphType m_Graph;
 };

@@ -61,9 +61,6 @@ public:
   inline TOutput operator()( const TInput1 & itA, 
                              const TInput2 & itB, const HistogramType* histogram)
   {
-
-    TOutput entropyX = itk::NumericTraits<TOutput>::Zero;
-    TOutput entropyY = itk::NumericTraits<TOutput>::Zero;
     TOutput jointEntropy = itk::NumericTraits<TOutput>::Zero;
     HistogramFrequencyType totalFreq = histogram->GetTotalFrequency();
 

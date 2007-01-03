@@ -188,10 +188,8 @@ SVMClassifier< TSample, TLabel >
 
 
   int numberOfComponentsPerSample  = iter.GetMeasurementVector().Size() ;//this->GetSample().GetMeasurementVectorSize();//
-
-  int max_line_len = 1024;
+ 
   struct svm_node *x;
-  int max_nr_attr = 64;
   bool predict_probability = 1;
 
 
@@ -212,13 +210,6 @@ SVMClassifier< TSample, TLabel >
 			       "Model does not support probabiliy estimates",ITK_LOCATION);
     //    predict_probability=0;
     }
-
-
-  int correct = 0;
-  int total = 0;
-  double error = 0;
-  double sumv = 0, sumy = 0, sumvv = 0, sumyy = 0, sumvy = 0;
-
 
   int svm_type=svm_get_svm_type(model);
   otbMsgDevMacro(  << "SVM Type = " << svm_type );

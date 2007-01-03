@@ -119,7 +119,6 @@ double LineCorrelationDetectorImageFilter<TInputImage, TOutputImage, Interpolato
   sigma3 = sqrt(sigma3);
   */
   
-  unsigned int  NbPixel = m1->size();
 
   // Calculation of the cross correlation coefficient
   

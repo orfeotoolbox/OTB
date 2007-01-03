@@ -30,7 +30,6 @@ int otbCompacityPathCircle( int argc, char * argv[] )
     { 
         unsigned int  NbOfPoints((unsigned int)::atoi(argv[1]));
 
-        unsigned int                                           Number;
         const   unsigned int                                   Dimension = 2;
 	typedef itk::PolyLineParametricPath< Dimension >       PathType;
 	typedef otb::CompacityPathFunction<PathType>           FunctionType;
@@ -52,7 +51,7 @@ int otbCompacityPathCircle( int argc, char * argv[] )
 	
  	pathElt->Initialize();
         
-	for(int noTheta = 0 ; noTheta < NbOfPoints ; noTheta++)
+	for(unsigned int noTheta = 0 ; noTheta < NbOfPoints ; noTheta++)
 	{
 	     RealType Theta = deltaTheta * static_cast<RealType>(noTheta);
 	

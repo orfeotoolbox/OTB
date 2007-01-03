@@ -111,11 +111,11 @@ bool GDALImageIO::GetGdalReadImageFileName( const char * filename, std::string &
         listFileFind = System::Readdir(std::string (filename));
         if( listFileFind.empty() == false )
         {
-                int cpt(0);
+                unsigned int cpt(0);
 		while ( (cpt < listFileFind.size()) && (fic_trouve==false) )
                 {
 			str_FileName = std::string(listFileFind[cpt]);
-                        for(int i = 0 ; i < listFileSearch.size() ; i++)
+                        for(unsigned int i = 0 ; i < listFileSearch.size() ; i++)
                         {
          			if(str_FileName.compare(listFileSearch[i]) == 0)
 	        		{
@@ -316,7 +316,7 @@ otbMsgDevMacro( <<" Nb Of Components  : "<<this->GetNumberOfComponents());
         	// Mise a jour du step
         	step = step * (unsigned long)(m_NbOctetPixel);
 
-        	for ( int nbComponents = 0 ; nbComponents < this->GetNumberOfComponents() ; nbComponents++)
+        	for (unsigned int nbComponents = 0 ; nbComponents < this->GetNumberOfComponents() ; nbComponents++)
         	{
 			lCrGdal = m_poBands[nbComponents]->RasterIO( GF_Read,lPremiereColonne,lPremiereLigne,lNbColonnes, lNbLignes, value , lNbColonnes, lNbLignes, m_PxType,0, 0 ) ;
 			if (lCrGdal == CE_Failure)
@@ -508,7 +508,6 @@ void GDALImageIO::InternalReadImageInformation()
 
     /******************************************************************/
     // Pixel Type always set to Scalar for GDAL ? maybe also to vector ?
-    int numComp = 1;
 
 // Modif OTB : 
 //    this->SetPixelType(SCALAR);
@@ -645,7 +644,7 @@ void GDALImageIO::InternalReadImageInformation()
         double minGCPY;
             	        
         
-        for( unsigned int cpt = 0; cpt < m_poDataset->GetGCPCount(); cpt++ )
+        for( int cpt = 0; cpt < m_poDataset->GetGCPCount(); cpt++ )
         {
             const GDAL_GCP	*psGCP;
 
@@ -868,8 +867,8 @@ void GDALImageIO::Write(const void* buffer)
                 return;
         }
 
-        int lNbLignes   = this->GetIORegion().GetSize()[1];
-        int lNbColonnes = this->GetIORegion().GetSize()[0];
+        unsigned int lNbLignes   = this->GetIORegion().GetSize()[1];
+        unsigned int lNbColonnes = this->GetIORegion().GetSize()[0];
         int lPremiereLigne   = this->GetIORegion().GetIndex()[1]; // [1... ]
         int lPremiereColonne = this->GetIORegion().GetIndex()[0]; // [1... ]
 
@@ -901,7 +900,7 @@ otbMsgDevMacro( <<" TailleBuffer alloué : "<< lTailleBuffer);
         CPLErr lCrGdal;
         
  
-        for ( int nbComponents = 0 ; nbComponents < this->GetNumberOfComponents() ; nbComponents++)
+        for (unsigned int nbComponents = 0 ; nbComponents < this->GetNumberOfComponents() ; nbComponents++)
         {
 	        cpt = (unsigned long )(nbComponents)* (unsigned long)(m_NbOctetPixel);
      
@@ -1088,7 +1087,6 @@ bool GDALImageIO::GDALInfoReportCorner( const char * corner_name, double x, doub
 {
     const char  *pszProjection;
     double	adfGeoTransform[6];
-    OGRCoordinateTransformation *hTransform = NULL;
  
     bool IsTrue;
         

@@ -163,7 +163,7 @@ SVMImageModelEstimator<TInputImage,  TTrainingImage>
 
       typename Superclass::MeasurementVectorType v;
 
-      for(int k=0; k<numberOfComponents; k++)
+      for(unsigned int k=0; k<numberOfComponents; k++)
 	{
 	v.push_back(inIt.Get()[k]);
 	}

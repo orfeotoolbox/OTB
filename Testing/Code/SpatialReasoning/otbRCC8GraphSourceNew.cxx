@@ -25,7 +25,6 @@ int otbRCC8GraphSourceNew(int argc, char* argv[])
 {
 try
   {
-    const unsigned int Dimension = 2;
     typedef unsigned char  PixelType;
     typedef otb::RCC8VertexBase<PixelType> VertexType;
     typedef otb::RCC8Graph<VertexType> RCC8GraphType;

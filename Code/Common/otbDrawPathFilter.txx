@@ -124,8 +124,8 @@ DrawPathFilter<TInputImage,TInputPath,TOutputImage>
 	    {
 	    IndexOut[0] = static_cast<int>(j) ;
 	    IndexOut[1] = static_cast<int>(Alpha * (j-x1) + y1) ;
-	    if(IndexOut[0]>=0 && IndexOut[0]<Taille[0] && 
-	       IndexOut[1]>=0 && IndexOut[1]<Taille[1])
+	    if(IndexOut[0]>=0 && IndexOut[0]<(int)Taille[0] && 
+	       IndexOut[1]>=0 && IndexOut[1]<(int)Taille[1])
 	          OutputImage->SetPixel(IndexOut,m_Value);
 	    }
 	 }
@@ -136,8 +136,8 @@ DrawPathFilter<TInputImage,TInputPath,TOutputImage>
 	    {
 	    IndexOut[0] = static_cast<int>(Alpha * (j-y1) + x1) ;
 	    IndexOut[1] = static_cast<int>(j);
-	    if(IndexOut[0]>=0 && IndexOut[0]<Taille[0] && 
-	       IndexOut[1]>=0 && IndexOut[1]<Taille[1])
+	    if(IndexOut[0]>=0 && IndexOut[0]<(int)Taille[0] && 
+	       IndexOut[1]>=0 && IndexOut[1]<(int)Taille[1])
 	          OutputImage->SetPixel(IndexOut,m_Value);
 	    }
 	 
@@ -151,8 +151,8 @@ DrawPathFilter<TInputImage,TInputPath,TOutputImage>
 	 for(RealType j = Xmin; j<=Xmax;j++)
 	   {
 	   IndexOut[0]=static_cast<int>(j);
-	   if(IndexOut[0]>=0 && IndexOut[0]<Taille[0] && 
-	      IndexOut[1]>=0 && IndexOut[1]<Taille[1])
+	   if(IndexOut[0]>=0 && IndexOut[0]<(int)Taille[0] && 
+	      IndexOut[1]>=0 && IndexOut[1]<(int)Taille[1])
 	          OutputImage->SetPixel(IndexOut,m_Value);
 	  
 	   }
@@ -164,8 +164,8 @@ DrawPathFilter<TInputImage,TInputPath,TOutputImage>
 	 for(RealType j = Ymin; j<=Ymax;j++)
 	   {
 	   IndexOut[1]=static_cast<int>(j);
-	   if( (IndexOut[0]>=0) && (IndexOut[0]<Taille[0]) && 
-	      (IndexOut[1]>=0) && (IndexOut[1]<Taille[1]))
+	   if( (IndexOut[0]>=0) && (IndexOut[0]<(int)Taille[0]) && 
+	      (IndexOut[1]>=0) && (IndexOut[1]<(int)Taille[1]))
 	          OutputImage->SetPixel(IndexOut,m_Value);
 	   }
 	 }

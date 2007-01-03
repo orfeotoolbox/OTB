@@ -117,8 +117,6 @@ void LUMImageIO::ReadVolume(void*)
 // Read image 
 void LUMImageIO::Read(void* buffer)
 {
-        const unsigned int dimensions = this->GetNumberOfDimensions();
-        unsigned long step = this->GetNumberOfComponents();
         char * p = static_cast<char *>(buffer);
    
         int lNbLignes   = this->GetIORegion().GetSize()[1];
@@ -190,7 +188,6 @@ void LUMImageIO::ReadImageInformation()
         }
 
         //Read header informations
-        bool lResult = InternalReadHeaderInformation(m_File,true);
 
 otbMsgDebugMacro( <<"Driver to read: LUM");
 otbMsgDebugMacro( <<"         Read  file         : "<< m_FileName);
@@ -330,12 +327,9 @@ void LUMImageIO::Write(const void* buffer)
   	        m_FlagWriteImageInformation = false;
         }
 
-        unsigned long step = this->GetNumberOfComponents();
-        const unsigned long numberOfBytes      = this->GetImageSizeInBytes();
-        const unsigned long numberOfComponents = this->GetImageSizeInComponents();
-        int lNbLignes   = this->GetIORegion().GetSize()[1];
-        int lNbColonnes = this->GetIORegion().GetSize()[0];
-        int lPremiereLigne   = this->GetIORegion().GetIndex()[1] ; // [1... ]
+        unsigned int lNbLignes   = this->GetIORegion().GetSize()[1];
+        unsigned int lNbColonnes = this->GetIORegion().GetSize()[0];
+        unsigned int lPremiereLigne   = this->GetIORegion().GetIndex()[1] ; // [1... ]
         int lPremiereColonne = this->GetIORegion().GetIndex()[0] ; // [1... ]
 
 	// Cas particuliers : on controle que si la région à écrire est de la même dimension que l'image entière,
@@ -361,7 +355,7 @@ otbMsgDevMacro( <<" GetComponentSize       : "<<this->GetComponentSize());
 
         const char * p = static_cast<const char *>(buffer);
  
-        for(int LineNo = lPremiereLigne;LineNo <lPremiereLigne + lNbLignes; LineNo++ )
+        for(unsigned int LineNo = lPremiereLigne;LineNo <lPremiereLigne + lNbLignes; LineNo++ )
         {
 	        offset  =  headerLength + numberOfBytesPerLines * LineNo;
 	        offset +=  this->GetComponentSize() * lPremiereColonne;
@@ -403,7 +397,7 @@ void LUMImageIO::WriteImageInformation()
         m_File.seekp(0, std::ios::beg );
         char* value = new char[headerLength];
         //Write Header line and all file (whitout information)
-        for(int numLigne=0 ; numLigne<(m_Dimensions[1]+1) ; numLigne++)
+        for(unsigned int numLigne=0 ; numLigne<(m_Dimensions[1]+1) ; numLigne++)
         {
                 m_File.write(value,headerLength);
         }
@@ -447,7 +441,7 @@ int LUMImageIO::CaiGetTypeLum(          const   char *          type_code,
                                                 int &           inbbits, 
 					        std::string &   str_cod_pix)
 {
-	int ind;	        /* indice de boucle sur les types reconnus */
+	unsigned int ind;	/* indice de boucle sur les types reconnus */
 	int trouve,icr,taille;  /* indice pour la recherche                */
         int mod2;		/* modulo2				   */
         char* pch0;

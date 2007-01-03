@@ -206,7 +206,6 @@ void PixelSuppressionByDirectionImageFilter< TInputImage, TOutputImage>::Threade
   for (fit=faceList.begin(); fit != faceList.end(); ++fit)
     {
     bit = itk::ConstNeighborhoodIterator<InputImageType>(m_Radius, inputDirection, *fit);
-    unsigned int neighborhoodSize = bit.Size();
       
     itin = itk::ImageRegionConstIterator<InputImageType>(input, *fit);  
     itout = itk::ImageRegionIterator<OutputImageType>(output, *fit);
@@ -234,8 +233,8 @@ void PixelSuppressionByDirectionImageFilter< TInputImage, TOutputImage>::Threade
 
       typename itk::ConstNeighborhoodIterator<InputImageType>::OffsetType	off;
       // Loop on the region
-      for (int i = 0; i < 2*m_Radius[0]+1; ++i)
-	for (int j = 0; j < 2*m_Radius[1]+1; ++j)
+      for (unsigned int i = 0; i < 2*m_Radius[0]+1; ++i)
+	for (unsigned int j = 0; j < 2*m_Radius[1]+1; ++j)
         {
 
 	off[0]=i-m_Radius[0];

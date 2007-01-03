@@ -92,7 +92,6 @@ public:
     MeasurementVectorType upperBound;
 
     double upperBoundIncreaseFactor = 0.001;
-    bool usePaddingValue = false;
 
     histogramSize.Fill(256);
 

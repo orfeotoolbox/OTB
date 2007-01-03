@@ -30,7 +30,6 @@ int otbOrientationPath( int argc, char * argv[] )
     { 
         double        Theta((double)::atof(argv[1]));
 
-        unsigned int                                           Number;
         const   unsigned int                                   Dimension = 2;
 	typedef itk::PolyLineParametricPath< Dimension >       PathType;
 	typedef otb::OrientationPathFunction<PathType>         FunctionType;

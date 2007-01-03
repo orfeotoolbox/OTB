@@ -139,7 +139,6 @@ void FrostImageFilter< TInputImage, TOutputImage>::ThreadedGenerateData(
     { 
     bit = itk::ConstNeighborhoodIterator<InputImageType>(m_Radius, input, *fit);
     unsigned int neighborhoodSize = bit.Size();
-    unsigned int CenterPos        = bit.GetCenterNeighborhoodIndex(); 
     it = itk::ImageRegionIterator<OutputImageType>(output, *fit);
     bit.OverrideBoundaryCondition(&nbc);
     bit.GoToBegin();

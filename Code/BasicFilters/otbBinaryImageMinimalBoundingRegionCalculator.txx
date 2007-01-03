@@ -131,7 +131,7 @@ BinaryImageMinimalBoundingRegionCalculator<TInputImage>
 	for(int i=0;i<InputImageType::ImageDimension;i++)
 	  {
 	    // If we are not on boundary case, we can do what we want
-	    if(min[i]-m_Pad> maxRegion.GetIndex()[i])
+	    if((int)(min[i]-m_Pad)> maxRegion.GetIndex()[i])
 	      {
 		index[i]= min[i]-m_Pad;
 	      }

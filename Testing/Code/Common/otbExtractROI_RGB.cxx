@@ -40,7 +40,6 @@ int otbExtractROI_RGB( int argc, char * argv[] )
 
         typedef itk::RGBPixel<unsigned char>                    InputPixelType;
         typedef itk::RGBPixel<unsigned char>                    OutputPixelType;
-        const   unsigned int        	                        Dimension = 2;
 
         typedef otb::ExtractROI< InputPixelType, 
                                             OutputPixelType >   FilterType;

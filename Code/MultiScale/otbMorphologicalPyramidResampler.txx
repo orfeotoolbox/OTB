@@ -97,7 +97,6 @@ Resampler<TInputImage,TOutputImage>
   unsigned int i;
   // Computing output spacing, size and index from input data
   const typename InputImageType::SpacingType& inputSpacing    = inputPtr->GetSpacing();
-  const typename InputImageType::SizeType&    inputSize       = inputPtr->GetLargestPossibleRegion().GetSize();
   const typename InputImageType::IndexType&   inputStartIndex = inputPtr->GetLargestPossibleRegion().GetIndex();
   typename OutputImageType::IndexType   outputStartIndex;
   typename OutputImageType::SpacingType spacing;  
@@ -121,7 +120,6 @@ void
 Resampler<TInputImage, TOuputImage>
 ::GenerateData()
 {
-  unsigned int i;
   typename OutputImageType::Pointer result;
 
   // Filters typedefs

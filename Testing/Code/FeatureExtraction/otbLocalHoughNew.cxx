@@ -33,9 +33,7 @@
 int otbLocalHoughNew( int argc, char* argv[] )
 {
   try 
-    {  
-    	const char * inputFilename  = argv[1];
-                       
+    {                         
         typedef unsigned char	                                InputPixelType;
         const   unsigned int        	                        Dimension = 2;
 

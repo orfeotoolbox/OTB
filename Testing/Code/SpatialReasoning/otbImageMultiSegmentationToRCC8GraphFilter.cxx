@@ -47,7 +47,7 @@ try
     ImageListType::Pointer inputList = ImageListType::New();
 
     // Reading input images
-    for(int i=0;i<nbImages;i++)
+    for(unsigned int i=0;i<nbImages;i++)
       {
 	ReaderType::Pointer reader = ReaderType::New();
 	reader->SetFileName(argv[4+i]);

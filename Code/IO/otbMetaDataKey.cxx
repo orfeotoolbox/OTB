@@ -99,7 +99,6 @@ MetaDataKey::KeyType MetaDataKey::GetKeyType(std::string name)
       {
 //      if ( strcmp(name.c_str(),Types[i].keyname.c_str()) == 0 ) 
 
-        int x = name.find(Types[i].keyname);
         
         if ( (name.find(Types[i].keyname) >= 0 ) &&
              (name.find(Types[i].keyname) <= name.size() ) ) 

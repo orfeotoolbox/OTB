@@ -224,9 +224,6 @@ bool MSTARImageIO::CanWriteFile( const char * filename )
 {
         bool formatFound = false;
         std::string fname = filename;
-        int NbLignes(10);                /* Nombre de lignes de l'image */
-        int NbColonnes(10);              /* Nombre de colonnes de l'image */
-        int NbOctetPixel(8);            /* Nombre octets/pixel l'image */
  
         if ( fname == "" )
         {
@@ -328,8 +325,6 @@ void MSTARImageIO::Read(void* buffer)
 
         int lNbLignes   = this->GetIORegion().GetSize()[1];
         int lNbColonnes = this->GetIORegion().GetSize()[0];
-        int lPremiereLigne   = this->GetIORegion().GetIndex()[1] + 1; // [1... ]
-        int lPremiereColonne = this->GetIORegion().GetIndex()[0] + 1; // [1... ]
         
         unsigned long lNbPixels = (unsigned long)(lNbColonnes*lNbLignes);
         unsigned long lTailleBuffer = (unsigned long)(m_NbOctetPixel)*lNbPixels;
@@ -522,7 +517,7 @@ switch (mstartype)
      
      otbMsgDevMacro(<<"Writing MSTAR fullscene phase data to ["<<RAWname<<"].");
 //     n = fwrite(FSCENEdata, sizeof(short), nchunks, RAWfp);
-     for ( int nbComponents = 1 ; nbComponents < this->GetNumberOfComponents() ; nbComponents++)
+     for ( unsigned int nbComponents = 1 ; nbComponents < this->GetNumberOfComponents() ; nbComponents++)
         {
 	// Recopie dans le buffer 
         

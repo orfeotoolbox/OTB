@@ -109,7 +109,7 @@ System::GetShortFileName( const std::string& filename )
 std::string System::SetToUpper( const std::string& str )
 {
         std::string lString(str);
-        for(int i=0 ; i<lString.size() ; i++)
+        for(unsigned int i=0 ; i<lString.size() ; i++)
         {
                 lString[i]=toupper(lString[i]);
         }
@@ -120,7 +120,7 @@ std::string System::SetToUpper( const std::string& str )
 std::string System::SetToLower( const std::string& str )
 {
         std::string lString(str);
-        for(int i=0 ; i<lString.size() ; i++)
+        for(unsigned int i=0 ; i<lString.size() ; i++)
         {
                 lString[i]=tolower(lString[i]);
         }
@@ -197,7 +197,6 @@ bool System::IsADirName(std::string pszPath)
 {
     bool isADir(false);
     DIR           *hDir;
-    struct dirent *psDirEntry;
     std::string path(pszPath);
     
     if (pszPath.empty() == true)

@@ -50,7 +50,7 @@ namespace otb
   RCC8Graph<TVertex>
   ::Initialize( unsigned int num)
   {
-    for(int id = boost::num_vertices(m_Graph); id<=num;id++)
+    for(unsigned int id = boost::num_vertices(m_Graph); id<=num;id++)
       {
 	VertexDescriptorType id = boost::add_vertex(m_Graph);
 	VertexPointerType vertex = VertexType::New();

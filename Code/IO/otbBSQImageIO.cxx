@@ -64,7 +64,7 @@ BSQImageIO::~BSQImageIO()
         }
         if( m_ChannelsFile !=  NULL)
         {
-                for( int numComponent = 0 ; numComponent<this->GetNumberOfComponents() ; numComponent++)
+                for(unsigned int numComponent = 0 ; numComponent<this->GetNumberOfComponents() ; numComponent++)
                 {
                         if( m_ChannelsFile[numComponent].is_open() )
                         {
@@ -111,7 +111,6 @@ void BSQImageIO::ReadVolume(void*)
 // Read image 
 void BSQImageIO::Read(void* buffer)
 {
-        const unsigned int dimensions = this->GetNumberOfDimensions();
         unsigned long step = this->GetNumberOfComponents();
         char * p = static_cast<char *>(buffer);
    
@@ -142,7 +141,7 @@ otbMsgDevMacro( <<" Nb Of Components       : "<<this->GetNumberOfComponents());
                 return;
         }
 
-        for ( int nbComponents = 0 ; nbComponents < this->GetNumberOfComponents() ; nbComponents++)
+        for (unsigned int nbComponents = 0 ; nbComponents < this->GetNumberOfComponents() ; nbComponents++)
         {
                 cpt = (unsigned long )(nbComponents)* (unsigned long)(this->GetComponentSize());
                 //Read region of the channel
@@ -208,7 +207,6 @@ void BSQImageIO::ReadImageInformation()
         }
 
         //Read header informations
-        bool lResult = InternalReadHeaderInformation(m_FileName, m_HeaderFile,true);
 
 otbMsgDebugMacro( <<"Driver to read: BSQ");
 otbMsgDebugMacro( <<"         Read  file         : "<< m_FileName);
@@ -410,7 +408,7 @@ bool BSQImageIO::InternalReadHeaderInformation(const std::string & file_name, st
         m_ChannelsFile = new std::fstream[this->GetNumberOfComponents() ];
         
         //Try to open channels file
-        for (int channels = 0 ; channels<m_ChannelsFileName.size() ; channels++)
+        for (unsigned int channels = 0 ; channels<m_ChannelsFileName.size() ; channels++)
         {
                 m_ChannelsFile[channels].open( m_ChannelsFileName[channels].c_str(),  std::ios::in | std::ios::binary );
                 if( m_ChannelsFile[channels].fail() )
@@ -453,8 +451,8 @@ void BSQImageIO::Write(const void* buffer)
         }
 
         unsigned long step = this->GetNumberOfComponents();
-        int lNbLignes   = this->GetIORegion().GetSize()[1];
-        int lNbColonnes = this->GetIORegion().GetSize()[0];
+        unsigned int lNbLignes   = this->GetIORegion().GetSize()[1];
+        unsigned int lNbColonnes = this->GetIORegion().GetSize()[0];
         int lPremiereLigne   = this->GetIORegion().GetIndex()[1] ; // [1... ]
         int lPremiereColonne = this->GetIORegion().GetIndex()[0] ; // [1... ]
 
@@ -490,11 +488,11 @@ otbMsgDevMacro( <<" GetComponentSize       : "<<this->GetComponentSize());
                 return;
         }
 
-        for ( int nbComponents = 0 ; nbComponents < this->GetNumberOfComponents() ; nbComponents++)
+        for (unsigned int nbComponents = 0 ; nbComponents < this->GetNumberOfComponents() ; nbComponents++)
         {
                 cpt = (unsigned long )(nbComponents)* (unsigned long)(this->GetComponentSize());
                 //Read region of the channel
-                for(int LineNo = lPremiereLigne;LineNo <lPremiereLigne + lNbLignes; LineNo++ )
+                for(unsigned int LineNo = lPremiereLigne;LineNo <lPremiereLigne + lNbLignes; LineNo++ )
                 {
                         for ( unsigned long  i=0 ; i < numberOfBytesToBeWrite ; i = i+this->GetComponentSize() )
                         {
@@ -605,7 +603,7 @@ void BSQImageIO::WriteImageInformation()
         m_ChannelsFile = new std::fstream[this->GetNumberOfComponents() ];
 
         //Try to open channels file
-        for (int channels = 0 ; channels<m_ChannelsFileName.size() ; channels++)
+        for (unsigned int channels = 0 ; channels<m_ChannelsFileName.size() ; channels++)
         {
                 m_ChannelsFile[channels].open( m_ChannelsFileName[channels].c_str(),  std::ios::out | std::ios::trunc | std::ios::binary );
                 if( m_ChannelsFile[channels].fail() )
@@ -619,11 +617,11 @@ void BSQImageIO::WriteImageInformation()
         unsigned long headerLength = this->GetComponentSize() * m_Dimensions[0];
         char* value = new char[headerLength];
 
-        for (int channels = 0 ; channels<m_ChannelsFileName.size() ; channels++)
+        for (unsigned int channels = 0 ; channels<m_ChannelsFileName.size() ; channels++)
         {
                 m_ChannelsFile[channels].seekp(0, std::ios::beg );
                 //Write Header line and all file (whitout information)
-                for(int numLigne=0 ; numLigne<(m_Dimensions[1]) ; numLigne++)
+                for(unsigned int numLigne=0 ; numLigne<(m_Dimensions[1]) ; numLigne++)
                 {
                         m_ChannelsFile[channels].write(value,headerLength);
                 }

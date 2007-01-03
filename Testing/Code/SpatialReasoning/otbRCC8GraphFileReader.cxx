@@ -46,7 +46,7 @@ try
     
     // Checking vertices
     VertexIteratorType vIt(graph);
-    int count = 0;
+    unsigned int count = 0;
 
     otbControlConditionTestMacro(graph->GetNumberOfVertices()!=4,
 	   "graph->GetNumberOfVertices()!=4");
