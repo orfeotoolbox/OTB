@@ -164,7 +164,7 @@ LogPolarResampleImageFilter<TInputImage,TInterpolator>
 
     inputPoint[0] = exp(Rho) * cos(Theta);
     inputPoint[1] = exp(Rho) * sin(Theta);
-    otbMsgDebugMacro(<<outputPoint<<" -> "<<Rho<<", "<<Theta<<" -> "<<inputPoint<<" radial step: "<<m_RadialStep);
+    // otbMsgDebugMacro(<<outputPoint<<" -> "<<Rho<<", "<<Theta<<" -> "<<inputPoint<<" radial step: "<<m_RadialStep);
   
     if(m_OriginIsAtCenter == true)
       {
@@ -179,7 +179,6 @@ LogPolarResampleImageFilter<TInputImage,TInterpolator>
     // Evaluate input at right position and copy to the output
     if( m_Interpolator->IsInsideBuffer(inputIndex) )
       {
-      OutputPixelType pixval;
       double valueTemp = static_cast<double>(m_Interpolator->EvaluateAtContinuousIndex(inputIndex) );
       OutputPixelType value = static_cast<OutputPixelType>(valueTemp);
       outIt.Set(value);      
