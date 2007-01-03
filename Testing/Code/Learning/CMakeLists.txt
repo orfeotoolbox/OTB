@@ -147,7 +147,7 @@ otbSOMActivationBuilder.cxx
 INCLUDE_DIRECTORIES("${OTBTesting_BINARY_DIR}")
 
 ADD_EXECUTABLE(otbLearningTests otbLearningTests.cxx ${BasicLearning_SRCS})
-TARGET_LINK_LIBRARIES(otbLearningTests gdal OTBLearning OTBCommon OTBIO ITKIO ITKCommon)
+TARGET_LINK_LIBRARIES(otbLearningTests gdal otbsvm OTBLearning OTBCommon OTBIO ITKIO ITKCommon)
 
 
 ENDIF( NOT OTB_DISABLE_CXX_TESTING )

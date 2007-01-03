@@ -4,7 +4,8 @@ IF(NOT OTB_USE_EXTERNAL_ITK)
 	SUBDIRS( ITK )
 ENDIF(NOT OTB_USE_EXTERNAL_ITK)
 
-SUBDIRS( BGL )
+SUBDIRS( BGL otbsvm )
+
 
 #-----------------------------------------------------------------------------
 # Install the UseOTB.cmake file configured from the top-level.
