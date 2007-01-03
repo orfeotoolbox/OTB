@@ -23,77 +23,83 @@
 #include "itkSingleValuedNonLinearOptimizer.h"
 #include "itkDataObjectDecorator.h"
 #include "itkPointSet.h"
+#include "otbPointSetSource.h"
 
 namespace otb
 {
   /** \class DisparityMapEstimationMethod
-   *  \brief MAECENAS 
+   *  \brief This class performs an estimation of the local deformation 
+   *  modelled by a given transform between the fixed and the moving image, 
+   *  at each point of the given point set. 
    *
+   *  It uses the ITK registration framework locally for each point and thus
+   *  provides the flexibility of this framework. The parameters of each transform
+   *  are stored in the ouptut point set associated data. Optimizer, metric,
+   *  interpolator and transform fixed parameters have to be set by the user.
+   *
+   *  This classs is derived form the MAECENAS code provided by Jordi Inglada, 
+   *  from Cnes.
    */
-template <class TFixedImage, class TMovingImage>
+template <class TFixedImage, class TMovingImage, class TPointSet>
 class ITK_EXPORT DisparityMapEstimationMethod
-  : public itk::ProcessObject
+  : public PointSetSource<TPointSet>
 {
  public:
   /** Standard class typedefs. */
   typedef DisparityMapEstimationMethod  Self;
-  typedef ProcessObject                 Superclass;
+  typedef PointSetSource<TPointSet>          Superclass;
   typedef itk::SmartPointer<Self>            Pointer;
   typedef itk::SmartPointer<const Self>      ConstPointer;
-
+  
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
+  
   /** Run-time type information (and related methods). */
   itkTypeMacro(DisparityMapEstimationMethod, ProcessObject);
-
-  /**  Type of the Fixed image. */
+  
+  /** Typedef for the Fixed image. */
   typedef TFixedImage  FixedImageType;
   typedef typename FixedImageType::Pointer FixedImagePointerType;
   typedef typename FixedImageType::PixelType FixedPixelType;
-
-  /**  Type of the Moving image. */
+  typedef typename FixedImageType::SizeType SizeType;
+  
+  /** Typedef for the Moving image. */
   typedef TMovingImage MovingImageType;
   typedef typename MovingImageType::Pointer MovingImagePointerType;
   typedef typename MovingImageType::PixelType MovingPixelType;
 
-  /**  Type of the metric. */
+ /** Typedef for the input and ouptut point set */
+  typedef TPointSet PointSetType;
+  typedef typename PointSetType::Pointer PointSetPointerType;
+
+  /**  Typedef for the generic metric. */
   typedef itk::ImageToImageMetric<FixedImageType,MovingImageType>  MetricType;
-  typedef typename MetricType::Pointer MetricPointer;
+  typedef typename MetricType::Pointer MetricPointerType;
   typedef typename MetricType::FixedImageRegionType FixedImageRegionType;
 
-  /**  Type of the Transform . */
+  /** Typedef for the generic transform . */
   typedef typename MetricType::TransformType TransformType;
-  typedef typename TransformType::Pointer TransformPointer;
+  typedef typename TransformType::Pointer TransformPointerType;
 
-  /** Type for the output: Using Decorator pattern for enabling
-   *  the Transform to be passed in the data pipeline */
+  /** Using Decorator pattern for enabling the Transform to be passed in the data pipeline */
   typedef itk::DataObjectDecorator<TransformType> TransformOutputType;
-  typedef typename TransformOutputType::Pointer TransformOutputPointer;
-  typedef typename TransformOutputType::ConstPointer TransformOutputConstPointer;
+  typedef typename TransformOutputType::Pointer TransformOutputPointerType;
+  typedef typename TransformOutputType::ConstPointer TransformOutputConstPointerType;
   
-  /**  Type of the Interpolator. */
+  /** Typedef for the generic interpolator. */
   typedef typename MetricType::InterpolatorType InterpolatorType;
-  typedef typename InterpolatorType::Pointer InterpolatorPointer;
+  typedef typename InterpolatorType::Pointer InterpolatorPointerType;
 
-  /**  Type of the optimizer. */
+  /** Typedef for  the generic optimizer. */
   typedef itk::SingleValuedNonLinearOptimizer OptimizerType;
+  typedef typename OptimizerType::Pointer OptimizerPointerType;
 
   /** Type of the Transformation parameters This is the same type used to
    *  represent the search space of the optimization algorithm */
   typedef typename MetricType::TransformParametersType ParametersType;
 
-  /** Point set typedef */
-  typedef itk::PointSet<ParametersType,FixedImageType::ImageDimension> PointSetType;
-  typedef typename PointSetType::Pointer PointSetPointerType;
-
   /** Smart Pointer type to a DataObject. */
   typedef typename itk::DataObject::Pointer DataObjectPointer;
-
- 
-  void StartRegistration(void);
-
-  /** Method that initiates the optimization process. */
-  void StartOptimization(void);
 
   /** Set/Get the Fixed image. */
   itkSetObjectMacro(FixedImage,FixedImageType);
@@ -108,67 +114,94 @@ class ITK_EXPORT DisparityMapEstimationMethod
   itkGetObjectMacro(PointSet,PointSetType);
 
   /** Set/Get the Optimizer. */
-  itkSetObjectMacro( Optimizer,  OptimizerType );
-  itkGetObjectMacro( Optimizer,  OptimizerType );
+  itkSetObjectMacro(Optimizer,OptimizerType);
+  itkGetObjectMacro(Optimizer,OptimizerType);
 
   /** Set/Get the Metric. */
-  itkSetObjectMacro( Metric, MetricType );
-  itkGetObjectMacro( Metric, MetricType );
+  itkSetObjectMacro(Metric, MetricType);
+  itkGetObjectMacro(Metric,MetricType);
 
   /** Set/Get the Transfrom. */
-  itkSetObjectMacro( Transform, TransformType );
-  itkGetObjectMacro( Transform, TransformType );
+  itkSetObjectMacro(Transform,TransformType);
+  itkGetObjectMacro(Transform,TransformType);
 
   /** Set/Get the Interpolator. */
-  itkSetObjectMacro( Interpolator, InterpolatorType );
-  itkGetObjectMacro( Interpolator, InterpolatorType );
+  itkSetObjectMacro(Interpolator,InterpolatorType);
+  itkGetObjectMacro(Interpolator,InterpolatorType);
 
-  itkSetMacro(WinSize,unsigned int);
-  itkGetMacro(WinSize,unsigned int);
+  /** Set/Get the window size */
+  itkSetMacro(WinSize,SizeType);
+  itkGetMacro(WinSize,SizeType);
 
-  itkSetMacro(ExploSize,unsigned int);
-  itkGetMacro(ExploSize,unsigned int);
+  /** Set/Get the exploration area size */
+  itkSetMacro(ExploSize,SizeType);
+  itkGetMacro(ExploSize,SizeType);
 
-/*   /\** Set/Get the initial transformation parameters. *\/ */
-/*   virtual void SetInitialTransformParameters( const ParametersType & param ); */
-/*   itkGetConstReferenceMacro( InitialTransformParameters, ParametersType ); */
+  /** Set/Get the initial transformation parameters. */
+  itkSetMacro(InitialTransformParameters,ParametersType);
+  itkGetConstReferenceMacro(InitialTransformParameters,ParametersType);
 
 protected:
+  /**
+   * Constructor.
+   */
   DisparityMapEstimationMethod();
-  virtual ~DisparityMapEstimationMethod() {};
- /*  void PrintSelf(std::ostream& os, Indent indent) const; */
-
-  /** Method invoked by the pipeline in order to trigger the computation of 
-   * the registration. */
+  /**
+   * Destructor.
+   */
+  virtual ~DisparityMapEstimationMethod();
+  /**
+   * Standard PrintSelf method.
+   */
+  void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  /**
+   * Main computation method.
+   */
   void  GenerateData ();
-
-/*   /\** Provides derived classes with the ability to set this private var *\/ */
-/*   itkSetMacro( LastTransformParameters, ParametersType ); */
-
 
 private:
   DisparityMapEstimationMethod(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
-  
-  MetricPointer                    m_Metric;
-  OptimizerType::Pointer           m_Optimizer;
-
-  MovingImagePointerType          m_MovingImage;
-  FixedImagePointerType           m_FixedImage;
-
-  TransformPointer                 m_Transform;
-  InterpolatorPointer              m_Interpolator;
-
-  ParametersType                   m_InitialTransformParameters;
-  ParametersType                   m_LastTransformParameters;
-  
-  bool                             m_FixedImageRegionDefined;
-  FixedImageRegionType             m_FixedImageRegion;
-    
-  PointSetPointerType              m_PointSet;
-
-  unsigned int                     m_ExploSize;
-  unsigned int                     m_WinSize;
+  /**
+   * The metric used for local registration.
+   */
+  MetricPointerType       m_Metric;
+  /**
+   * The optimizer used for local registration.
+   */
+  OptimizerPointerType    m_Optimizer;
+  /**
+   * The transform used for local registration.
+   */
+  TransformPointerType    m_Transform;
+  /**
+   * The interpolator used for local registration.
+   */
+  InterpolatorPointerType m_Interpolator;
+  /**
+   * The input point set.
+   */
+  PointSetPointerType     m_PointSet;
+  /**
+   * The moving image.
+   */
+  MovingImagePointerType  m_MovingImage;
+  /**
+   * The fixed image.
+   */
+  FixedImagePointerType   m_FixedImage;
+  /**
+   * The initial transform parameters.
+   */
+  ParametersType          m_InitialTransformParameters;
+  /**
+   * The size of the exploration area
+   */
+  SizeType                m_ExploSize;
+  /**
+   * The size of the window
+   */
+  SizeType                m_WinSize;
   };
 }// end namespace otb
 #ifndef OTB_MANUAL_INSTANTIATION

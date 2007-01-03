@@ -40,16 +40,20 @@ try
     const unsigned int Dimension=2;
     typedef unsigned char PixelType;
     typedef otb::Image<PixelType,Dimension> ImageType;
-    typedef otb::DisparityMapEstimationMethod<ImageType,ImageType> DMEstimationType;
+   
     typedef itk::TranslationTransform<double,Dimension> TransformType;
+    typedef TransformType::ParametersType ParametersType;
+    typedef itk::PointSet<ParametersType,Dimension> PointSetType;
+     typedef otb::DisparityMapEstimationMethod<ImageType,ImageType,PointSetType> DMEstimationType;
     typedef itk::NormalizedCorrelationImageToImageMetric<ImageType,ImageType> MetricType;
     typedef itk::LinearInterpolateImageFunction<ImageType,double> InterpolatorType;
-    typedef itk::GradientDescentOptimizer                         OptimizerType;
-    typedef DMEstimationType::PointSetType PointSetType;
+    typedef itk::GradientDescentOptimizer                         OptimizerType;   
     typedef otb::ImageFileReader<ImageType> ReaderType;
     typedef otb::ThresholdImageToPointSetFilter<ImageType,PointSetType> PointSetSourceType;
     typedef PointSetType::PointsContainer::Iterator PointSetIteratorType;
+    typedef PointSetType::PointsContainer PointsContainerType;
     typedef PointSetType::PointDataContainer::Iterator PointDataIteratorType;
+    typedef PointSetType::PointDataContainer PointDataContainerType;
     
     //Input images reading
     ReaderType::Pointer fixedReader = ReaderType::New();
@@ -69,13 +73,13 @@ try
     mm->SetImage(pointSetReader->GetOutput());
     mm->ComputeMinimum();
     mm->ComputeMaximum();
-    std::cout<<"min: "<<mm->GetMinimum()<<" max: "<<mm->GetMaximum()<<std::endl;
+    std::cout<<"min: "<<(int)mm->GetMinimum()<<" max: "<<(int)mm->GetMaximum()<<std::endl;
 
 
 
     PointSetSourceType::Pointer pointSetSource = PointSetSourceType::New();
-    pointSetSource->SetLowerThreshold(1);
-    pointSetSource->SetUpperThreshold(256);
+    pointSetSource->SetLowerThreshold(mm->GetMaximum());
+    pointSetSource->SetUpperThreshold(mm->GetMaximum());
     pointSetSource->SetInput(0,pointSetReader->GetOutput());
     pointSetSource->Update();
 
@@ -95,8 +99,8 @@ try
     dmestimator->SetMetric(metric);
 
     // For gradient descent
-    optimizer->SetLearningRate( 15.0 );
-    optimizer->SetNumberOfIterations( 200 );
+    optimizer->SetLearningRate( 5.0 );
+    optimizer->SetNumberOfIterations( 600 );
     DMEstimationType::ParametersType initialParameters(transform->GetNumberOfParameters() );
     initialParameters[0] = 0.0;  // Initial offset in mm along X
     initialParameters[1] = 0.0;  // Initial offset in mm along Y
@@ -105,29 +109,37 @@ try
     // dmestimator->SetInitialTransformParameters(initialParameters);
 
     // inputs wiring
+    ImageType::SizeType win,explo;
+    win.Fill(winSize);
+    explo.Fill(exploSize);
+    
     dmestimator->SetFixedImage(fixedReader->GetOutput());
     dmestimator->SetMovingImage(movingReader->GetOutput());
     dmestimator->SetPointSet(pointSetSource->GetOutput());
-    dmestimator->SetWinSize(winSize);
-    dmestimator->SetExploSize(exploSize);
+    dmestimator->SetWinSize(win);
+    dmestimator->SetExploSize(explo);
+    dmestimator->SetInitialTransformParameters(initialParameters);
     // Estimation trigger
     dmestimator->Update();
 
     // Point set retrieving
-    PointSetType::Pointer pointSet = dmestimator->GetPointSet();
+    PointSetType::Pointer pointSet = dmestimator->GetOutput();
     
     // Writing output transform parameters
     std::ofstream out;
     out.open(outputFileName,std::ios::out);
     PointSetIteratorType it = pointSet->GetPoints()->Begin();
-  //   int idData=0;
-   //  PointDataIteratorType itData = pointSet->GetPointData()->Begin();
+//     unsigned int idData=0;
+    PointDataIteratorType itData = pointSet->GetPointData()->Begin();
+    std::cout<<"Point data size: "<<pointSet->GetPointData()->Size()<<std::endl;
     for(;it!=pointSet->GetPoints()->End()
-// &&itData!=pointSet->GetPointData()->End()
-;++it)
+    &&itData!=pointSet->GetPointData()->End()
+;++it,++itData)
       {
 	out<<"Point "<<it.Value()<<" -> transform parameters: ";
+        out<<itData.Value();
 	out<<std::endl;
+	
       }
     out.close();
   }
