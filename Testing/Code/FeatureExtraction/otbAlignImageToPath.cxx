@@ -112,7 +112,7 @@ int otbAlignImageToPath( int argc, char * argv[] )
 	   cindex = vertexList->GetElement(1);
 	   x2 = cindex[0];
 	   y2 = cindex[1];
-	   
+	   fprintf(file,"%8.4f %8.3f\n",x1,y1);
 	}
   	fclose(file);
         
