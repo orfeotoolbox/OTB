@@ -106,3 +106,48 @@ TARGET_LINK_LIBRARIES(ScalarImageMarkovRandomField1 OTBIO OTBCommon ITKIO ITKCom
 
 
 
+
+IF( NOT OTB_DISABLE_CXX_TESTING )
+
+SET(BASELINE ${OTB_DATA_ROOT}/Baseline/Examples/Classification)
+
+SET(INPUTDATA ${OTB_SOURCE_DIR}/Examples/Data)
+SET(TEMP ${OTB_BINARY_DIR}/Testing/Temporary)
+
+SET(EXE_TESTS ${CXX_TEST_PATH}/otbClassificationExamplesTests)
+
+SET(TOL 0.0)
+
+
+# ------- ScalarImageMarkovRandomField1Test----------
+
+ADD_TEST(ScalarImageMarkovRandomField1Test ${EXE_TESTS}
+	--compare-n-images ${TOL} 1
+	${BASELINE}/ScalarImageMarkovRandomField1Output.png
+	${TEMP}/ScalarImageMarkovRandomField1Output.png
+	ScalarImageMarkovRandomField1Test
+	${INPUTDATA}/QB_Suburb.png
+	${INPUTDATA}/QB_Suburb_labelled.png
+	${TEMP}/ScalarImageMarkovRandomField1Output.png
+    50 3 4 79.5097 138.136 213.846 25.9395
+)
+
+# ------- ScalarImageKmeansClassifierTest----------
+
+ADD_TEST(ScalarImageKmeansClassifierTest ${EXE_TESTS}
+	--compare-n-images ${TOL} 1
+	${BASELINE}/QB_Suburb_labelled.png
+	${TEMP}/QB_Suburb_labelled.png
+	ScalarImageKmeansClassifierTest
+	${INPUTDATA}/QB_Suburb.png
+	${TEMP}/QB_Suburb_labelled.png
+    0 4 79.5097 138.136 213.846 25.9395
+)
+
+
+INCLUDE_DIRECTORIES("${OTBTesting_BINARY_DIR}")
+
+ADD_EXECUTABLE(otbClassificationExamplesTests otbClassificationExamplesTests.cxx)
+TARGET_LINK_LIBRARIES(otbClassificationExamplesTests gdal ITKIO ITKAlgorithms ITKStatistics ITKCommon OTBBasicFilters OTBCommon OTBDisparityMap OTBIO OTBSpatialReasoning OTBChangeDetection OTBFeatureExtraction  OTBLearning  OTBMultiScale)
+
+ENDIF( NOT OTB_DISABLE_CXX_TESTING )

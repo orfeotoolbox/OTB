@@ -248,3 +248,267 @@ ENDIF(NOT BORLAND)
 
 ENDIF( NOT ITK_DISABLE_CXX_TESTING )
 
+
+IF( NOT OTB_DISABLE_CXX_TESTING )
+
+SET(BASELINE ${OTB_DATA_ROOT}/Baseline/Examples/Filtering)
+
+SET(INPUTDATA ${OTB_SOURCE_DIR}/Examples/Data)
+SET(TEMP ${OTB_BINARY_DIR}/Testing/Temporary)
+
+SET(EXE_TESTS ${CXX_TEST_PATH}/otbFilteringExamplesTests)
+
+SET(TOL 0.0)
+
+
+# ------- MathematicalMorphologyBinaryFiltersTest----------
+
+ADD_TEST(MathematicalMorphologyBinaryFiltersTest ${EXE_TESTS}
+	--compare-n-images ${TOL} 2
+	${BASELINE}/MathematicalMorphologyBinaryErosionOutput.png
+	${TEMP}/MathematicalMorphologyBinaryErosionOutput.png
+	${BASELINE}/MathematicalMorphologyBinaryDilationOutput.png
+	${TEMP}/MathematicalMorphologyBinaryDilationOutput.png
+	MathematicalMorphologyBinaryFiltersTest
+	${INPUTDATA}/ROISpot5.png
+	${TEMP}/MathematicalMorphologyBinaryErosionOutput.png
+	${TEMP}/MathematicalMorphologyBinaryDilationOutput.png
+    150 180
+)
+
+# ------- DanielssonDistanceMapImageFilterTest----------
+
+ADD_TEST(DanielssonDistanceMapImageFilterTest ${EXE_TESTS}
+	--compare-n-images ${TOL} 3
+	${BASELINE}/DanielssonDistanceMapImageFilterOutput1.png
+	${TEMP}/DanielssonDistanceMapImageFilterOutput1.png
+	${BASELINE}/DanielssonDistanceMapImageFilterOutput2.png
+	${TEMP}/DanielssonDistanceMapImageFilterOutput2.png
+	${BASELINE}/DanielssonDistanceMapImageFilterOutput3.mhd
+	${TEMP}/DanielssonDistanceMapImageFilterOutput3.mhd
+	DanielssonDistanceMapImageFilterTest
+	${INPUTDATA}/FivePoints.png
+	${TEMP}/DanielssonDistanceMapImageFilterOutput1.png
+	${TEMP}/DanielssonDistanceMapImageFilterOutput2.png
+	${TEMP}/DanielssonDistanceMapImageFilterOutput3.mhd
+)
+
+# ------- MeanImageFilterTest----------
+
+ADD_TEST(MeanImageFilterTest ${EXE_TESTS}
+	--compare-n-images ${TOL} 1
+	${BASELINE}/MeanImageFilterOutput.png
+	${TEMP}/MeanImageFilterOutput.png
+	MeanImageFilterTest
+	${INPUTDATA}/QB_Suburb.png
+	${TEMP}/MeanImageFilterOutput.png
+)
+
+# ------- ThresholdImageFilterTest----------
+
+ADD_TEST(ThresholdImageFilterTest ${EXE_TESTS}
+	--compare-n-images ${TOL} 3
+	${BASELINE}/ThresholdImageFilterOutputBelow.png
+	${TEMP}/ThresholdImageFilterOutputBelow.png
+	${BASELINE}/ThresholdImageFilterOutputAbove.png
+	${TEMP}/ThresholdImageFilterOutputAbove.png
+	${BASELINE}/ThresholdImageFilterOutputOutside.png
+	${TEMP}/ThresholdImageFilterOutputOutside.png
+	ThresholdImageFilterTest
+	${INPUTDATA}/ROISpot5.png
+	${TEMP}/ThresholdImageFilterOutputBelow.png
+	${TEMP}/ThresholdImageFilterOutputAbove.png
+	${TEMP}/ThresholdImageFilterOutputOutside.png
+)
+
+# ------- GradientMagnitudeRecursiveGaussianImageFilterTest----------
+
+ADD_TEST(GradientMagnitudeRecursiveGaussianImageFilterTest ${EXE_TESTS}
+	--compare-n-images ${TOL} 1
+	${BASELINE}/GradientMagnitudeRecursiveGaussianImageFilterOutput3.png
+	${TEMP}/GradientMagnitudeRecursiveGaussianImageFilterOutput3.png
+	GradientMagnitudeRecursiveGaussianImageFilterTest
+	${INPUTDATA}/ROISpot5.png
+	${TEMP}/GradientMagnitudeRecursiveGaussianImageFilterOutput3.png
+    3
+)
+
+# ------- GradientMagnitudeRecursiveGaussianImageFilterTest----------
+
+ADD_TEST(GradientMagnitudeRecursiveGaussianImageFilterTest ${EXE_TESTS}
+	--compare-n-images ${TOL} 1
+	${BASELINE}/GradientMagnitudeRecursiveGaussianImageFilterOutput5.png
+	${TEMP}/GradientMagnitudeRecursiveGaussianImageFilterOutput5.png
+	GradientMagnitudeRecursiveGaussianImageFilterTest
+	${INPUTDATA}/ROISpot5.png
+	${TEMP}/GradientMagnitudeRecursiveGaussianImageFilterOutput5.png
+    5
+)
+
+# ------- GradientAnisotropicDiffusionImageFilterTest----------
+
+ADD_TEST(GradientAnisotropicDiffusionImageFilterTest ${EXE_TESTS}
+	--compare-n-images ${TOL} 1
+	${BASELINE}/GradientAnisotropicDiffusionImageFilterOutput.png
+	${TEMP}/GradientAnisotropicDiffusionImageFilterOutput.png
+	GradientAnisotropicDiffusionImageFilterTest
+	${INPUTDATA}/QB_Suburb.png
+	${TEMP}/GradientAnisotropicDiffusionImageFilterOutput.png
+    5 0.125 3
+)
+
+# ------- GradientMagnitudeImageFilterTest----------
+
+ADD_TEST(GradientMagnitudeImageFilterTest ${EXE_TESTS}
+	--compare-n-images ${TOL} 1
+	${BASELINE}/GradientMagnitudeImageFilterOutput.png
+	${TEMP}/GradientMagnitudeImageFilterOutput.png
+	GradientMagnitudeImageFilterTest
+	${INPUTDATA}/ROISpot5.png
+	${TEMP}/GradientMagnitudeImageFilterOutput.png
+)
+
+# ------- MathematicalMorphologyGrayscaleFiltersTest----------
+
+ADD_TEST(MathematicalMorphologyGrayscaleFiltersTest ${EXE_TESTS}
+	--compare-n-images ${TOL} 2
+	${BASELINE}/MathematicalMorphologyGrayscaleErosionOutput.png
+	${TEMP}/MathematicalMorphologyGrayscaleErosionOutput.png
+	${BASELINE}/MathematicalMorphologyGrayscaleDilationOutput.png
+	${TEMP}/MathematicalMorphologyGrayscaleDilationOutput.png
+	MathematicalMorphologyGrayscaleFiltersTest
+	${INPUTDATA}/QB_Suburb.png
+	${TEMP}/MathematicalMorphologyGrayscaleErosionOutput.png
+	${TEMP}/MathematicalMorphologyGrayscaleDilationOutput.png
+    150 180
+)
+
+# ------- LaplacianRecursiveGaussianImageFilter1Test----------
+
+ADD_TEST(LaplacianRecursiveGaussianImageFilter1Test ${EXE_TESTS}
+	--compare-n-images ${TOL} 2
+	${BASELINE}/LaplacianRecursiveGaussianImageFilteroutput3.mha
+	${TEMP}/LaplacianRecursiveGaussianImageFilteroutput3.mha
+        ${BASELINE}/LaplacianRecursiveGaussianImageFilterOutput3.png
+	${TEMP}/LaplacianRecursiveGaussianImageFilterOutput3.png
+	LaplacianRecursiveGaussianImageFilter1Test
+	${INPUTDATA}/ROISpot5.png
+	${TEMP}/LaplacianRecursiveGaussianImageFilteroutput3.mha
+        3
+        ${TEMP}/LaplacianRecursiveGaussianImageFilterOutput3.png
+)
+
+# ------- LaplacianRecursiveGaussianImageFilter1Test----------
+
+ADD_TEST(LaplacianRecursiveGaussianImageFilter1Test ${EXE_TESTS}
+	--compare-n-images ${TOL} 2
+	${BASELINE}/LaplacianRecursiveGaussianImageFilteroutput5.mha
+	${TEMP}/LaplacianRecursiveGaussianImageFilteroutput5.mha
+        ${BASELINE}/LaplacianRecursiveGaussianImageFilterOutput5.png
+	${TEMP}/LaplacianRecursiveGaussianImageFilterOutput5.png
+	LaplacianRecursiveGaussianImageFilter1Test
+	${INPUTDATA}/ROISpot5.png
+	${TEMP}/LaplacianRecursiveGaussianImageFilteroutput5.mha
+        5
+	${TEMP}/LaplacianRecursiveGaussianImageFilterOutput5.png	
+)
+
+# ------- LaplacianRecursiveGaussianImageFilter2Test----------
+
+ADD_TEST(LaplacianRecursiveGaussianImageFilter2Test ${EXE_TESTS}
+	--compare-n-images ${TOL} 2
+	${BASELINE}/LaplacianRecursiveGaussianImageFilter2output3.mha
+	${TEMP}/LaplacianRecursiveGaussianImageFilter2output3.mha
+	${BASELINE}/LaplacianRecursiveGaussianImageFilter2Output3.png
+	${TEMP}/LaplacianRecursiveGaussianImageFilter2Output3.png
+	LaplacianRecursiveGaussianImageFilter2Test
+	${INPUTDATA}/ROISpot5.png
+	${TEMP}/LaplacianRecursiveGaussianImageFilter2output3.mha
+        3
+	${TEMP}/LaplacianRecursiveGaussianImageFilter2Output3.png
+)
+
+# ------- LaplacianRecursiveGaussianImageFilter2Test----------
+
+ADD_TEST(LaplacianRecursiveGaussianImageFilter2Test ${EXE_TESTS}
+	--compare-n-images ${TOL} 2
+	${BASELINE}/LaplacianRecursiveGaussianImageFilter2output5.mha
+	${TEMP}/LaplacianRecursiveGaussianImageFilter2output5.mha
+	${BASELINE}/LaplacianRecursiveGaussianImageFilter2Output5.png
+	${TEMP}/LaplacianRecursiveGaussianImageFilter2Output5.png
+	LaplacianRecursiveGaussianImageFilter2Test
+	${INPUTDATA}/ROISpot5.png
+	${TEMP}/LaplacianRecursiveGaussianImageFilter2output5.mha
+        5
+	${TEMP}/LaplacianRecursiveGaussianImageFilter2Output5.png
+)
+
+# ------- CannyEdgeDetectionImageFilterTest----------
+
+ADD_TEST(CannyEdgeDetectionImageFilterTest ${EXE_TESTS}
+	--compare-n-images ${TOL} 1
+	${BASELINE}/CannyEdgeDetectorImageFilterOutput.png
+	${TEMP}/CannyEdgeDetectorImageFilterOutput.png
+	CannyEdgeDetectionImageFilterTest
+	${INPUTDATA}/ROISpot5.png
+	${TEMP}/CannyEdgeDetectorImageFilterOutput.png
+ 2
+)
+
+# ------- DiscreteGaussianImageFilterTest----------
+
+ADD_TEST(DiscreteGaussianImageFilterTest ${EXE_TESTS}
+	--compare-n-images ${TOL} 1
+	${BASELINE}/DiscreteGaussianImageFilterOutput.png
+	${TEMP}/DiscreteGaussianImageFilterOutput.png
+	DiscreteGaussianImageFilterTest
+	${INPUTDATA}/QB_Suburb.png
+	${TEMP}/DiscreteGaussianImageFilterOutput.png
+    4 9
+)
+
+# ------- MedianImageFilterTest----------
+
+ADD_TEST(MedianImageFilterTest ${EXE_TESTS}
+	--compare-n-images ${TOL} 1
+	${BASELINE}/MedianImageFilterOutput.png
+	${TEMP}/MedianImageFilterOutput.png
+	MedianImageFilterTest
+	${INPUTDATA}/QB_Suburb.png
+	${TEMP}/MedianImageFilterOutput.png
+)
+
+# ------- BinaryThresholdImageFilterTest----------
+
+ADD_TEST(BinaryThresholdImageFilterTest ${EXE_TESTS}
+	--compare-n-images ${TOL} 1
+	${BASELINE}/BinaryThresholdImageFilterOutput.png
+	${TEMP}/BinaryThresholdImageFilterOutput.png
+	BinaryThresholdImageFilterTest
+	${INPUTDATA}/ROISpot5.png
+	${TEMP}/BinaryThresholdImageFilterOutput.png
+ 150 180 0 255
+)
+
+# ------- DerivativeImageFilterTest----------
+
+ADD_TEST(DerivativeImageFilterTest ${EXE_TESTS}
+	--compare-n-images ${TOL} 2
+	${BASELINE}/DerivativeImageFilterFloatOutput.mhd
+	${TEMP}/DerivativeImageFilterFloatOutput.mhd
+	${BASELINE}/DerivativeImageFilterOutput.png
+	${TEMP}/DerivativeImageFilterOutput.png
+	DerivativeImageFilterTest
+	${INPUTDATA}/ROISpot5.png
+	${TEMP}/DerivativeImageFilterFloatOutput.mhd
+	${TEMP}/DerivativeImageFilterOutput.png
+    1 0
+)
+
+
+INCLUDE_DIRECTORIES("${OTBTesting_BINARY_DIR}")
+
+ADD_EXECUTABLE(otbFilteringExamplesTests otbFilteringExamplesTests.cxx)
+TARGET_LINK_LIBRARIES(otbFilteringExamplesTests gdal ITKIO ITKAlgorithms ITKStatistics ITKCommon OTBBasicFilters OTBCommon OTBDisparityMap OTBIO OTBSpatialReasoning OTBChangeDetection OTBFeatureExtraction  OTBLearning  OTBMultiScale)
+
+ENDIF( NOT OTB_DISABLE_CXX_TESTING )

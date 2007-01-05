@@ -82,3 +82,38 @@ TARGET_LINK_LIBRARIES(MetadataExample OTBCommon OTBIO ITKCommon ITKIO)
 
 #ADD_EXECUTABLE(TransformReadWrite TransformReadWrite.cxx )
 #TARGET_LINK_LIBRARIES(TransformReadWrite ITKCommon ITKIO)
+
+IF( NOT OTB_DISABLE_CXX_TESTING )
+
+SET(BASELINE ${OTB_DATA_ROOT}/Baseline/Examples/IO)
+
+SET(INPUTDATA ${OTB_SOURCE_DIR}/Examples/Data)
+SET(TEMP ${OTB_BINARY_DIR}/Testing/Temporary)
+
+SET(EXE_TESTS ${CXX_TEST_PATH}/otbIOExamplesTests)
+
+SET(TOL 0.0)
+
+
+# ------- ExtractROITest----------
+
+ADD_TEST(ExtractROITest ${EXE_TESTS}
+	--compare-n-images ${TOL} 2
+	${BASELINE}/ROI_IMAGERY_RGB.png
+	${TEMP}/ROI_IMAGERY_RGB.png
+	${BASELINE}/ROI_IMAGERY_MIR.png
+	${TEMP}/ROI_IMAGERY_MIR.png
+	ExtractROITest
+	${INPUTDATA}/IMAGERY_SSECH.tif
+	${TEMP}/ROI_IMAGERY_RGB.png
+	${TEMP}/ROI_IMAGERY_MIR.png
+    0 0 100 100
+)
+
+
+INCLUDE_DIRECTORIES("${OTBTesting_BINARY_DIR}")
+
+ADD_EXECUTABLE(otbIOExamplesTests otbIOExamplesTests.cxx)
+TARGET_LINK_LIBRARIES(otbIOExamplesTests gdal ITKIO ITKAlgorithms ITKStatistics ITKCommon OTBBasicFilters OTBCommon OTBDisparityMap OTBIO OTBSpatialReasoning OTBChangeDetection OTBFeatureExtraction  OTBLearning  OTBMultiScale)
+
+ENDIF( NOT OTB_DISABLE_CXX_TESTING )

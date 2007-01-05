@@ -123,3 +123,244 @@ TARGET_LINK_LIBRARIES(WatershedSegmentation OTBCommon OTBIO ITKAlgorithms ITKNum
 
 
 
+
+IF( NOT OTB_DISABLE_CXX_TESTING )
+
+SET(BASELINE ${OTB_DATA_ROOT}/Baseline/Examples/Segmentation)
+
+SET(INPUTDATA ${OTB_SOURCE_DIR}/Examples/Data)
+SET(TEMP ${OTB_BINARY_DIR}/Testing/Temporary)
+
+SET(EXE_TESTS ${CXX_TEST_PATH}/otbSegmentationExamplesTests)
+
+SET(TOL 0.0)
+
+
+# ------- IsolatedConnectedImageFilterTest----------
+
+ADD_TEST(IsolatedConnectedImageFilterTest ${EXE_TESTS}
+	--compare-n-images ${TOL} 1
+	${BASELINE}/ConnectedThresholdOutput1.png
+	${TEMP}/ConnectedThresholdOutput1.png
+	IsolatedConnectedImageFilterTest
+	${INPUTDATA}/QB_Suburb.png
+	${TEMP}/ConnectedThresholdOutput1.png
+  110 38 50 100
+)
+
+# ------- IsolatedConnectedImageFilterTest----------
+
+ADD_TEST(IsolatedConnectedImageFilterTest ${EXE_TESTS}
+	--compare-n-images ${TOL} 1
+	${BASELINE}/IsolatedConnectedImageFilterOutput1.png
+	${TEMP}/IsolatedConnectedImageFilterOutput1.png
+	IsolatedConnectedImageFilterTest
+	${INPUTDATA}/QB_Suburb.png
+	${TEMP}/IsolatedConnectedImageFilterOutput1.png
+  61 140 150 63 43
+)
+
+# ------- FastMarchingImageFilterTest----------
+
+ADD_TEST(FastMarchingImageFilterTest ${EXE_TESTS}
+	--compare-n-images ${TOL} 1
+	${BASELINE}/FastMarchingImageFilterOutput5.png
+	${TEMP}/FastMarchingImageFilterOutput5.png
+	FastMarchingImageFilterTest
+	${INPUTDATA}/QB_Suburb.png
+	${TEMP}/FastMarchingImageFilterOutput5.png
+    91 176 0.5 -0.5 3.0 10000 10000
+)
+
+# ------- FastMarchingImageFilterTest----------
+
+ADD_TEST(FastMarchingImageFilterTest ${EXE_TESTS}
+	--compare-n-images ${TOL} 1
+	${BASELINE}/FastMarchingImageFilterOutput6.png
+	${TEMP}/FastMarchingImageFilterOutput6.png
+	FastMarchingImageFilterTest
+	${INPUTDATA}/QB_Suburb.png
+	${TEMP}/FastMarchingImageFilterOutput6.png
+    118 100 1.0 -0.5 3.0 10000 10000
+)
+
+# ------- FastMarchingImageFilterTest----------
+
+ADD_TEST(FastMarchingImageFilterTest ${EXE_TESTS}
+	--compare-n-images ${TOL} 1
+	${BASELINE}/FastMarchingImageFilterOutput7.png
+	${TEMP}/FastMarchingImageFilterOutput7.png
+	FastMarchingImageFilterTest
+	${INPUTDATA}/QB_Suburb.png
+	${TEMP}/FastMarchingImageFilterOutput7.png
+    145 21 0.5 -0.5 3.0 10000 10000
+)
+
+# ------- OtsuThresholdImageFilterTest----------
+
+ADD_TEST(OtsuThresholdImageFilterTest ${EXE_TESTS}
+	--compare-n-images ${TOL} 1
+	${BASELINE}/OtsuThresholdImageFilterOutput.png
+	${TEMP}/OtsuThresholdImageFilterOutput.png
+	OtsuThresholdImageFilterTest
+	${INPUTDATA}/QB_Suburb.png
+	${TEMP}/OtsuThresholdImageFilterOutput.png
+    255 0
+)
+
+# ------- ConfidenceConnectedTest----------
+
+ADD_TEST(ConfidenceConnectedTest ${EXE_TESTS}
+	--compare-n-images ${TOL} 1
+	${BASELINE}/ConfidenceConnectedOutput1.png
+	${TEMP}/ConfidenceConnectedOutput1.png
+	ConfidenceConnectedTest
+	${INPUTDATA}/QB_Suburb.png
+	${TEMP}/ConfidenceConnectedOutput1.png
+  110 38
+)
+
+# ------- ConfidenceConnectedTest----------
+
+ADD_TEST(ConfidenceConnectedTest ${EXE_TESTS}
+	--compare-n-images ${TOL} 1
+	${BASELINE}/ConfidenceConnectedOutput2.png
+	${TEMP}/ConfidenceConnectedOutput2.png
+	ConfidenceConnectedTest
+	${INPUTDATA}/QB_Suburb.png
+	${TEMP}/ConfidenceConnectedOutput2.png
+  118 100
+)
+
+# ------- ConfidenceConnectedTest----------
+
+ADD_TEST(ConfidenceConnectedTest ${EXE_TESTS}
+	--compare-n-images ${TOL} 1
+	${BASELINE}/ConfidenceConnectedOutput3.png
+	${TEMP}/ConfidenceConnectedOutput3.png
+	ConfidenceConnectedTest
+	${INPUTDATA}/QB_Suburb.png
+	${TEMP}/ConfidenceConnectedOutput3.png
+  169 146
+)
+
+# ------- NeighborhoodConnectedImageFilterTest----------
+
+ADD_TEST(NeighborhoodConnectedImageFilterTest ${EXE_TESTS}
+	--compare-n-images ${TOL} 1
+	${BASELINE}/NeighborhoodConnectedThresholdOutput1.png
+	${TEMP}/NeighborhoodConnectedThresholdOutput1.png
+	NeighborhoodConnectedImageFilterTest
+	${INPUTDATA}/QB_Suburb.png
+	${TEMP}/NeighborhoodConnectedThresholdOutput1.png
+  110 38 50 100
+)
+
+# ------- NeighborhoodConnectedImageFilterTest----------
+
+ADD_TEST(NeighborhoodConnectedImageFilterTest ${EXE_TESTS}
+	--compare-n-images ${TOL} 1
+	${BASELINE}/NeighborhoodConnectedThresholdOutput2.png
+	${TEMP}/NeighborhoodConnectedThresholdOutput2.png
+	NeighborhoodConnectedImageFilterTest
+	${INPUTDATA}/QB_Suburb.png
+	${TEMP}/NeighborhoodConnectedThresholdOutput2.png
+  118 100 0 10
+)
+
+# ------- NeighborhoodConnectedImageFilterTest----------
+
+ADD_TEST(NeighborhoodConnectedImageFilterTest ${EXE_TESTS}
+	--compare-n-images ${TOL} 1
+	${BASELINE}/NeighborhoodConnectedThresholdOutput3.png
+	${TEMP}/NeighborhoodConnectedThresholdOutput3.png
+	NeighborhoodConnectedImageFilterTest
+	${INPUTDATA}/QB_Suburb.png
+	${TEMP}/NeighborhoodConnectedThresholdOutput3.png
+  169 146 220 255
+)
+
+# ------- WatershedSegmentationTest----------
+
+ADD_TEST(WatershedSegmentationTest ${EXE_TESTS}
+	--compare-n-images ${TOL} 1
+	${BASELINE}/WatershedSegmentation1Output1.png
+	${TEMP}/WatershedSegmentation1Output1.png
+	WatershedSegmentationTest
+	${INPUTDATA}/ROI_QB_MUL_3.tif
+	${TEMP}/WatershedSegmentation1Output1.png
+  2 10 0 0.05 1
+)
+
+# ------- WatershedSegmentationTest----------
+
+ADD_TEST(WatershedSegmentationTest ${EXE_TESTS}
+	--compare-n-images ${TOL} 1
+	${BASELINE}/WatershedSegmentation1Output2.png
+	${TEMP}/WatershedSegmentation1Output2.png
+	WatershedSegmentationTest
+	${INPUTDATA}/ROI_QB_MUL_3.tif
+	${TEMP}/WatershedSegmentation1Output2.png
+  2 10 0.001 0.15 0
+)
+
+# ------- ConnectedThresholdImageFilterTest----------
+
+ADD_TEST(ConnectedThresholdImageFilterTest ${EXE_TESTS}
+	--compare-n-images ${TOL} 1
+	${BASELINE}/ConnectedThresholdOutput1.png
+	${TEMP}/ConnectedThresholdOutput1.png
+	ConnectedThresholdImageFilterTest
+	${INPUTDATA}/QB_Suburb.png
+	${TEMP}/ConnectedThresholdOutput1.png
+  110 38 50 100
+)
+
+# ------- ConnectedThresholdImageFilterTest----------
+
+ADD_TEST(ConnectedThresholdImageFilterTest ${EXE_TESTS}
+	--compare-n-images ${TOL} 1
+	${BASELINE}/ConnectedThresholdOutput2.png
+	${TEMP}/ConnectedThresholdOutput2.png
+	ConnectedThresholdImageFilterTest
+	${INPUTDATA}/QB_Suburb.png
+	${TEMP}/ConnectedThresholdOutput2.png
+  118 100 0 10
+)
+
+# ------- ConnectedThresholdImageFilterTest----------
+
+ADD_TEST(ConnectedThresholdImageFilterTest ${EXE_TESTS}
+	--compare-n-images ${TOL} 1
+	${BASELINE}/ConnectedThresholdOutput3.png
+	${TEMP}/ConnectedThresholdOutput3.png
+	ConnectedThresholdImageFilterTest
+	${INPUTDATA}/QB_Suburb.png
+	${TEMP}/ConnectedThresholdOutput3.png
+  169 146 220 255
+)
+
+# ------- OtsuMultipleThresholdImageFilterTest----------
+
+ADD_TEST(OtsuMultipleThresholdImageFilterTest ${EXE_TESTS}
+	--compare-n-images ${TOL} 3
+	${BASELINE}/OtsuMultipleThresholdsOutput000.png
+	${TEMP}/OtsuMultipleThresholdsOutput000.png
+	${BASELINE}/OtsuMultipleThresholdsOutput001.png
+	${TEMP}/OtsuMultipleThresholdsOutput001.png
+	${BASELINE}/OtsuMultipleThresholdsOutput002.png
+	${TEMP}/OtsuMultipleThresholdsOutput002.png
+	OtsuMultipleThresholdImageFilterTest
+	${INPUTDATA}/QB_Suburb.png
+	${TEMP}/OtsuMultipleThresholdsOutput000.png
+	${TEMP}/OtsuMultipleThresholdsOutput001.png
+	${TEMP}/OtsuMultipleThresholdsOutput002.png
+)
+
+
+INCLUDE_DIRECTORIES("${OTBTesting_BINARY_DIR}")
+
+ADD_EXECUTABLE(otbSegmentationExamplesTests otbSegmentationExamplesTests.cxx)
+TARGET_LINK_LIBRARIES(otbSegmentationExamplesTests gdal ITKIO ITKAlgorithms ITKStatistics ITKCommon OTBBasicFilters OTBCommon OTBDisparityMap OTBIO OTBSpatialReasoning OTBChangeDetection OTBFeatureExtraction  OTBLearning  OTBMultiScale)
+
+ENDIF( NOT OTB_DISABLE_CXX_TESTING )

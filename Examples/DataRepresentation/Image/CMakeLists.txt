@@ -36,3 +36,47 @@ TARGET_LINK_LIBRARIES(ImageAdaptor3 OTBCommon ITKCommon OTBIO ITKIO)
 ADD_EXECUTABLE(ImageAdaptor4 ImageAdaptor4.cxx )
 TARGET_LINK_LIBRARIES(ImageAdaptor4 OTBCommon ITKCommon OTBIO ITKIO)
 
+
+IF( NOT OTB_DISABLE_CXX_TESTING )
+
+SET(BASELINE ${OTB_DATA_ROOT}/Baseline/Examples/DataRepresentation/Image)
+
+SET(INPUTDATA ${OTB_SOURCE_DIR}/Examples/Data)
+SET(TEMP ${OTB_BINARY_DIR}/Testing/Temporary)
+
+SET(EXE_TESTS ${CXX_TEST_PATH}/otbImageExamplesTests)
+
+SET(TOL 0.0)
+
+
+# ------- ImageAdaptor4Test----------
+
+ADD_TEST(ImageAdaptor4Test ${EXE_TESTS}
+	--compare-n-images ${TOL} 1
+	${BASELINE}/ImageAdaptorThresholdingA.png
+	${TEMP}/ImageAdaptorThresholdingA.png
+	ImageAdaptor4Test
+	${INPUTDATA}/QB_Suburb.png
+	${TEMP}/ImageAdaptorThresholdingA.png
+    100
+)
+
+# ------- ImageAdaptor4Test----------
+
+ADD_TEST(ImageAdaptor4Test ${EXE_TESTS}
+	--compare-n-images ${TOL} 1
+	${BASELINE}/ImageAdaptorThresholdingB.png
+	${TEMP}/ImageAdaptorThresholdingB.png
+	ImageAdaptor4Test
+	${INPUTDATA}/QB_Suburb.png
+	${TEMP}/ImageAdaptorThresholdingB.png
+    200
+)
+
+
+INCLUDE_DIRECTORIES("${OTBTesting_BINARY_DIR}")
+
+ADD_EXECUTABLE(otbImageExamplesTests otbImageExamplesTests.cxx)
+TARGET_LINK_LIBRARIES(otbImageExamplesTests gdal ITKIO ITKAlgorithms ITKStatistics ITKCommon OTBBasicFilters OTBCommon OTBDisparityMap OTBIO OTBSpatialReasoning OTBChangeDetection OTBFeatureExtraction  OTBLearning  OTBMultiScale)
+
+ENDIF( NOT OTB_DISABLE_CXX_TESTING )
