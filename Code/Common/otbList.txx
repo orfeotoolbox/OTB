@@ -85,6 +85,19 @@ namespace otb
     m_InternalContainer.push_back(const_cast<ObjectType*>(element));
   }
   /**
+   * Delete the last element to the list.
+   */
+  template <class TObject>
+  void 
+  List<TObject>
+  ::PopBack(void)
+  {
+    if( m_InternalContainer.size() > 0 ) 
+    {
+        m_InternalContainer.pop_back();
+    }
+  }
+  /**
    * Set the nth element of the list.
    * \param index The index where to put the element.
    * \param element Pointer to the element to set.

@@ -79,6 +79,10 @@ class ITK_EXPORT List
    */
   void PushBack(const ObjectType* element);
   /**
+   * Delete the last element to the list.
+   */
+  void PopBack(void);
+  /**
    * Set the nth element of the list.
    * \param index The index where to put the element.
    * \param element Pointer to the element to set.
@@ -99,7 +103,13 @@ class ITK_EXPORT List
   {
     return m_InternalContainer[index].GetPointer();
   }
-  /**
+  const ObjectPointerType GetNthPointerElement(unsigned int index)const
+  {
+    return m_InternalContainer[index];
+  }
+ 
+ 
+   /**
    * Return the first element of the list.
    * \return The first element of the list.
    */
