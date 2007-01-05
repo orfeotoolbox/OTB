@@ -57,13 +57,13 @@ SVMClassifier< TSample, TLabel >
 // SVMClassifier< TSample, TLabel >
 // ::SetSample(const TSample* sample)
 // {
-//   otbMsgDevMacro(  << "SVMClassifier::SetSample enter" );
+//   otbMsgDebugMacro(  << "SVMClassifier::SetSample enter" );
 //   if ( m_Sample != sample )
 //     {
 //     m_Sample = sample ;
 //     m_Output->SetSample(sample) ;
 //     }
-//   otbMsgDevMacro(  << "SVMClassifier::SetSample exit"  );
+//   otbMsgDebugMacro(  << "SVMClassifier::SetSample exit"  );
 // }
 
 // template< class TSample, class TLabel >
@@ -100,25 +100,25 @@ SVMClassifier< TSample, TLabel >
 {
 
 
-  otbMsgDevMacro(  << "Before Resize 0" );
+  // otbMsgDebugMacro(  << "Before Resize 0" );
 /*  unsigned int i ;
   typename TSample::ConstIterator iter = this->GetSample()->Begin() ;
   typename TSample::ConstIterator end  = this->GetSample()->End() ;
   typename TSample::MeasurementVectorType measurements ;
 */
-  otbMsgDevMacro(  << "Before Resize " );
+ //  otbMsgDebugMacro(  << "Before Resize " );
   m_Output->SetSample(this->GetSample()) ;
-  otbMsgDevMacro(  << "m_Output " << m_Output );
+  otbMsgDebugMacro(  << "m_Output " << m_Output );
 
   m_Output->Resize( this->GetSample()->Size() ) ;
 
   
-  otbMsgDevMacro(  << "Resize to " << this->GetSample()->Size() );
-  otbMsgDevMacro(  << "Resize to " << m_Output->GetSample()->Size() );
+  otbMsgDebugMacro(  << "Resize to " << this->GetSample()->Size() );
+  otbMsgDebugMacro(  << "Resize to " << m_Output->GetSample()->Size() );
   
   //std::vector< double > discriminantScores ;
   unsigned int numberOfClasses = this->GetNumberOfClasses() ;
-  otbMsgDevMacro(  << "NbClass " << numberOfClasses );
+  otbMsgDebugMacro(  << "NbClass " << numberOfClasses );
   //discriminantScores.resize(numberOfClasses) ;
   //unsigned int classLabel ;
 
@@ -128,9 +128,9 @@ SVMClassifier< TSample, TLabel >
 /*typename Superclass::DecisionRuleType::Pointer rule = 
     this->GetDecisionRule() ;*/
 
-  otbMsgDevMacro(  << "Do Classif "  );
+  otbMsgDebugMacro(  << "Do Classif "  );
   this->DoClassification();
-  otbMsgDevMacro(  << "End of classif" );  
+  otbMsgDebugMacro(  << "End of classif" );  
 
 //   if ( m_ClassLabels.size() != this->GetNumberOfMembershipFunctions() )
 //     {
@@ -203,7 +203,7 @@ SVMClassifier< TSample, TLabel >
 
   x = new svm_node[numberOfComponentsPerSample+1];//m_Model->GetXSpace();
 
-  otbMsgDevMacro(  << "XSpace Allocated" );
+  otbMsgDebugMacro(  << "XSpace Allocated" );
   if(svm_check_probability_model(model)==0)
     {
     throw itk::ExceptionObject(__FILE__, __LINE__,
@@ -212,10 +212,10 @@ SVMClassifier< TSample, TLabel >
     }
 
   int svm_type=svm_get_svm_type(model);
-  otbMsgDevMacro(  << "SVM Type = " << svm_type );
+  otbMsgDebugMacro(  << "SVM Type = " << svm_type );
 
   int nr_class=svm_get_nr_class(model);
-  otbMsgDevMacro(  << "SVM nr_class = " << nr_class );
+  otbMsgDebugMacro(  << "SVM nr_class = " << nr_class );
 
   int *labels=(int *) malloc(nr_class*sizeof(int));
   double *prob_estimates=NULL;
@@ -238,7 +238,7 @@ SVMClassifier< TSample, TLabel >
     }
 //  while(1)
 
-  otbMsgDevMacro(  << "Starting iterations " );
+  otbMsgDebugMacro(  << "Starting iterations " );
   while (iter != end && iterO != endO)
     {
     
@@ -273,28 +273,28 @@ SVMClassifier< TSample, TLabel >
 
 
     measurements = iter.GetMeasurementVector() ;
-    otbMsgDevMacro(  << "Loop on components " << svm_type );
+    // otbMsgDebugMacro(  << "Loop on components " << svm_type );
     for(i=0; i<numberOfComponentsPerSample; i++)
       {
-      otbMsgDevMacro(  << i << " " << measurements[i] );
-      otbMsgDevMacro(  << "Index "<< x[i].index );
-      otbMsgDevMacro(  << "Value "<< x[i].value );
+      // otbMsgDebugMacro(  << i << " " << measurements[i] );
+//       otbMsgDebugMacro(  << "Index "<< x[i].index );
+//       otbMsgDebugMacro(  << "Value "<< x[i].value );
       x[i].index = i+1 ;
       x[i].value = measurements[i];
-      otbMsgDevMacro(  << "Index "<< x[i].index );
-      otbMsgDevMacro(  << "Value "<< x[i].value );
-      otbMsgDevMacro(  << "-------------------" );
+      // otbMsgDebugMacro(  << "Index "<< x[i].index );
+//       otbMsgDebugMacro(  << "Value "<< x[i].value );
+//       otbMsgDebugMacro(  << "-------------------" );
 	
       }
 
 
-    otbMsgDevMacro(  << "Starting prediction" );
+    // otbMsgDebugMacro(  << "Starting prediction" );
 
     if (predict_probability && (svm_type==C_SVC || svm_type==NU_SVC))
       {
-      otbMsgDevMacro(  << "With predict" );
+     //  otbMsgDebugMacro(  << "With predict" );
       v = svm_predict_probability(model,x,prob_estimates);
-      otbMsgDevMacro(  << "Value : " << v );
+     //  otbMsgDebugMacro(  << "Value : " << v );
       /*fprintf(output,"%g ",v);
       for(j=0;j<nr_class;j++)
 	fprintf(output,"%g ",prob_estimates[j]);
@@ -302,9 +302,9 @@ SVMClassifier< TSample, TLabel >
       }
     else
       {
-      otbMsgDevMacro(  << "Without predict" );
+    //   otbMsgDebugMacro(  << "Without predict" );
       v = svm_predict(model,x);
-      otbMsgDevMacro(  << "Value : " << v );
+    //   otbMsgDebugMacro(  << "Value : " << v );
       //fprintf(output,"%g\n",v);
       }
     
@@ -315,24 +315,24 @@ SVMClassifier< TSample, TLabel >
 //   else
     classLabel = static_cast<ClassLabelType>(v);
 
-  otbMsgDevMacro(  << "Add instance " << classLabel ); 
-  otbMsgDevMacro(  << "Add instance ident " << iterO.GetInstanceIdentifier() );
+ //  otbMsgDebugMacro(  << "Add instance " << classLabel ); 
+//   otbMsgDebugMacro(  << "Add instance ident " << iterO.GetInstanceIdentifier() );
   m_Output->AddInstance(classLabel, iterO.GetInstanceIdentifier()) ;
-  otbMsgDevMacro(  << "After add instance " << iterO.GetClassLabel() );  
+//   otbMsgDebugMacro(  << "After add instance " << iterO.GetClassLabel() );  
 
   ++iter;
   ++iterO;
         
 }
 
-otbMsgDevMacro(  << "End of iterations " );
+// otbMsgDebugMacro(  << "End of iterations " );
 if(predict_probability)
   {
   free(prob_estimates);
   free(labels);
   }
   
-otbMsgDevMacro(  << "End of iterations and free" );  
+// otbMsgDebugMacro(  << "End of iterations and free" );  
 //  free(x);
 
 delete [] x;

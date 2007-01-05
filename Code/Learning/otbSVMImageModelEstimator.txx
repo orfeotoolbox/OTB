@@ -153,7 +153,7 @@ SVMImageModelEstimator<TInputImage,  TTrainingImage>
   unsigned int numberOfComponents = inIt.Get().Size();
 
 
-  otbMsgDevMacro(  << " Before while " );
+ //  otbMsgDevMacro(  << " Before while " );
   while(!inIt.IsAtEnd() && !trIt.IsAtEnd())
     {
 

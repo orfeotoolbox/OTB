@@ -36,7 +36,7 @@ SVMModel< TInputPixel, TLabel >::SVMModel()
   m_Model = Malloc(svm_model,1);
 
   m_Problem.l = 0;
-  otbMsgDevMacro(  << "SVMModel::SVMModel - m_Problem.l = " <<  m_Problem.l );
+  otbMsgDebugMacro(  << "SVMModel::SVMModel - m_Problem.l = " <<  m_Problem.l );
   m_Problem.y = new double[1];
   m_Problem.x = new struct svm_node*[1];
   x_space = new struct svm_node[1];
@@ -49,15 +49,15 @@ template <class TInputPixel, class TLabel >
 SVMModel<TInputPixel, TLabel>::~SVMModel()
 {
 // FIXME: pbs. when deleting de problem ....
-  otbMsgDevMacro(  << "SVMModel destructor" );
+  otbMsgDebugMacro(  << "SVMModel destructor" );
 
   /*
   delete [] m_Problem.y;//free(m_Problem.y);
-  otbMsgDevMacro(  << "SVMModel destructor - y done" );
+  otbMsgDebugMacro(  << "SVMModel destructor - y done" );
   delete [] m_Problem.x; //free(m_Problem.x);
-  otbMsgDevMacro(  << "SVMModel destructor - x done" );
+  otbMsgDebugMacro(  << "SVMModel destructor - x done" );
   delete [] x_space;//
-  otbMsgDevMacro(  << "SVMModel destructor - x_space done" );
+  otbMsgDebugMacro(  << "SVMModel destructor - x_space done" );
   //free(x_space);
 */
 
@@ -71,24 +71,24 @@ void
 SVMModel<TInputPixel, TLabel>
 ::AllocateProblem(int l, long int elements)
   {
-    otbMsgDevMacro(  << "SVMModel::AllocateProblem - enter" );
-    otbMsgDevMacro(  << "SVMModel::AllocateProblem - l = " << l );
-    otbMsgDevMacro(  << "SVMModel::AllocateProblem - elements = " << elements );
-    otbMsgDevMacro(  << "SVMModel::AllocateProblem - m_Problem.l = " << m_Problem.l );
+    otbMsgDebugMacro(  << "SVMModel::AllocateProblem - enter" );
+    otbMsgDebugMacro(  << "SVMModel::AllocateProblem - l = " << l );
+    otbMsgDebugMacro(  << "SVMModel::AllocateProblem - elements = " << elements );
+    otbMsgDebugMacro(  << "SVMModel::AllocateProblem - m_Problem.l = " << m_Problem.l );
     m_Problem.l = l;
-    otbMsgDevMacro(  << "SVMModel::AllocateProblem - m_Problem.l = " <<  m_Problem.l );
-    otbMsgDevMacro(  << "SVMModel::AllocateProblem - l done" );
+    otbMsgDebugMacro(  << "SVMModel::AllocateProblem - m_Problem.l = " <<  m_Problem.l );
+    otbMsgDebugMacro(  << "SVMModel::AllocateProblem - l done" );
     delete [] m_Problem.y;
     m_Problem.y = new double[l];//Malloc(double,l);
-    otbMsgDevMacro(  << "SVMModel::AllocateProblem - y done" );
+    otbMsgDebugMacro(  << "SVMModel::AllocateProblem - y done" );
     delete [] m_Problem.x;
     m_Problem.x = new struct svm_node*[l];//Malloc(struct svm_node* ,l);
-    otbMsgDevMacro(  << "SVMModel::AllocateProblem - x done" );
+    otbMsgDebugMacro(  << "SVMModel::AllocateProblem - x done" );
     delete [] x_space;
     x_space = new struct svm_node[elements];
     //free(x_space);
     //x_space = Malloc(struct svm_node,elements);
-    //otbMsgDevMacro(  << "SVMModel::AllocateProblem - x_space done" );
+    //otbMsgDebugMacro(  << "SVMModel::AllocateProblem - x_space done" );
 
   }
 
@@ -98,11 +98,11 @@ void
 SVMModel<TInputPixel, TLabel>
 ::SetModel(struct svm_model* aModel)
   {
-    otbMsgDevMacro(  << "SVMModel::SetModel - enter");
+    otbMsgDebugMacro(  << "SVMModel::SetModel - enter");
     //svm_destroy_model(m_Model);
-    otbMsgDevMacro(  << "SVMModel::SetModel - destroyed" );
+    otbMsgDebugMacro(  << "SVMModel::SetModel - destroyed" );
     m_Model = aModel;
-    otbMsgDevMacro(  << "SVMModel::SetModel - out" );
+    otbMsgDebugMacro(  << "SVMModel::SetModel - out" );
   }
 
 
@@ -113,14 +113,14 @@ SVMModel<TInputPixel, TLabel>
   {
     return m_Problem;
     
-//     otbMsgDevMacro(  << "SVMModel::GetProblem - enter" );
+//     otbMsgDebugMacro(  << "SVMModel::GetProblem - enter" );
 //     aProblem.l = m_Problem.l;
 //     aProblem.y = m_Problem.y;
 //     aProblem.x = m_Problem.x;
 
-//     otbMsgDevMacro(  << "SVMModel::GetProblem - x_space " << x_space );
+//     otbMsgDebugMacro(  << "SVMModel::GetProblem - x_space " << x_space );
 // //    aNode = x_space;
-//     otbMsgDevMacro(  << "SVMModel::GetProblem - out" );
+//     otbMsgDebugMacro(  << "SVMModel::GetProblem - out" );
 //     return x_space;
   }
 

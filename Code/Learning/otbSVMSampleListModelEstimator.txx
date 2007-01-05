@@ -107,11 +107,11 @@ SVMSampleListModelEstimator<TInputSampleList,  TTrainingSampleList>
   this->m_Labels.resize(0);
   
 
-  otbMsgDevMacro(  << " Input nb points " << inputSampleListSize );
-  otbMsgDevMacro(  << " Training nb points " << trainingSampleListSize );
+  otbMsgDebugMacro(  << " Input nb points " << inputSampleListSize );
+  otbMsgDebugMacro(  << " Training nb points " << trainingSampleListSize );
   
 
-  otbMsgDevMacro(  << " Before while " );
+ //  otbMsgDebugMacro(  << " Before while " );
 
   while(inIt!=inEnd && trIt!=trEnd)
     {
@@ -123,7 +123,7 @@ SVMSampleListModelEstimator<TInputSampleList,  TTrainingSampleList>
 
     this->m_Labels.push_back(label);
 
-    otbMsgDevMacro(  << " Label " << label );
+    // otbMsgDebugMacro(  << " Label " << label );
 
     typename TInputSampleList::MeasurementVectorType value =
       inIt.GetMeasurementVector();
@@ -145,9 +145,9 @@ SVMSampleListModelEstimator<TInputSampleList,  TTrainingSampleList>
     ++trIt;
     }
 
-  otbMsgDevMacro(  << " Before prepare data " );
+  // otbMsgDebugMacro(  << " Before prepare data " );
   this->PrepareData();
-  otbMsgDevMacro(  << " After prepare data " );
+//   otbMsgDebugMacro(  << " After prepare data " );
 }
 
 
