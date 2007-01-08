@@ -851,6 +851,19 @@ ADD_TEST(ioTvStreamingIFWriterBSQWithStreaming ${IO_TESTS}
          )
 
 
+ADD_TEST(ioTvStreamingIFWriterWithFilter ${IO_TESTS} 
+   --compare-image ${TOL}   ${BASELINE}/ioStreamingImageFileWriterWithFilter_1_100.hdr
+                            ${TEMP}/ioStreamingImageFileWriterWithFilter_1_100.hdr
+         otbStreamingImageFileWriterWithFilterTest
+         ${INPUTDATA}/poupees_1canal.c1.hdr
+         ${TEMP}/ioStreamingImageFileWriterWithFilter_1_100.hdr
+         1
+	 1 # Streaming
+         100
+         )
+
+
+
 #----------------------------------------------------------------------------------
 # Exemples de tests sur les grosses images
 # Tests non lancés pour raison taille des fichiers produits
@@ -897,6 +910,7 @@ otbMultiToMonoChannelExtractROISAR.cxx
 otbImageFileReaderERS.cxx
 otbStreamingImageFilterTest.cxx
 otbStreamingImageFileWriterTest.cxx
+otbStreamingImageFileWriterWithFilterTest.cxx
 otbImageTest.cxx
 otbVectorImageTest.cxx
 otbLUMImageIOTestCanRead.cxx
