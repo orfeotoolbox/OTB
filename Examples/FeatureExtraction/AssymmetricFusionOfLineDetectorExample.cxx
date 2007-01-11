@@ -26,7 +26,8 @@
 
 //  Software Guide : BeginCommandLineArgs
 //    INPUTS: {amst.png}
-//    OUTPUTS: {amstLineFusion.png}, {amstLineFusionDirs.png}
+//    OUTPUTS: {amstLineFusion.png}
+// old output {amstLineFusionDirs.png}
 //    5 1 
 //  Software Guide : EndCommandLineArgs
 
@@ -50,10 +51,10 @@
 int main( int argc, char * argv[] )
 {
 
-  if( argc != 6 )
+  if( argc != 5)
     {
     std::cerr << "Usage: " << argv[0] << " inputImageFile ";
-    std::cerr << " outputEdgesImageFile outputDirectionsImageFile length width" << std::endl;  
+    std::cerr << " outputEdgesImageFile length width" << std::endl;  
     return EXIT_FAILURE;
     }
   
@@ -203,8 +204,8 @@ int main( int argc, char * argv[] )
 
   // Software Guide : BeginCodeSnippet
 
-  filter->SetLengthLine( atoi(argv[4]) );
-  filter->SetWidthLine( atoi(argv[5]) );
+  filter->SetLengthLine( atoi(argv[3]) );
+  filter->SetWidthLine( atoi(argv[4]) );
   // Software Guide : EndCodeSnippet
 
 
@@ -224,8 +225,6 @@ int main( int argc, char * argv[] )
 
   writer->SetFileName( argv[2] );
   writer->Update();
-
-
 
   //  Software Guide : BeginLatex
   // Figure~\ref{fig:LINEFUSION_FILTER}

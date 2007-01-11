@@ -128,15 +128,12 @@ ADD_TEST(ExtractSegmentsByStepsExampleTest ${EXE_TESTS}
 # ------- AssymmetricFusionOfLineDetectorExampleTest----------
 
 ADD_TEST(AssymmetricFusionOfLineDetectorExampleTest ${EXE_TESTS}
-	--compare-n-images ${TOL} 2
+	--compare-n-images ${TOL} 1
 	${BASELINE}/amstLineFusion.png
 	${TEMP}/amstLineFusion.png
-	${BASELINE}/amstLineFusionDirs.png
-	${TEMP}/amstLineFusionDirs.png
 	AssymmetricFusionOfLineDetectorExampleTest
 	${INPUTDATA}/amst.png
 	${TEMP}/amstLineFusion.png
-	${TEMP}/amstLineFusionDirs.png
     5 1 
 )
 
