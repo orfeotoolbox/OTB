@@ -274,7 +274,7 @@ BuildWithWindowRegion(const int zoom)
         lRegion.SetIndex(lIndex);
         lRegion.SetSize(lSize);
         this->m_ViewImageRegion = lRegion;
-        this->cWinZoom = (float)zoom;
+        this->cWinZoom = (double)zoom;
 
         //Termine l'initialisation 
         FinalizeInitialisation();
