@@ -87,7 +87,7 @@ class ITK_EXPORT VectorImageView : public itk::ProcessObject
     void        (* cIWArgCallBack)(void * iwArg);
 
      
-    float          cWinZoom;
+    double          cWinZoom;
     unsigned int   cWinSizeX;
     unsigned int   cWinSizeY;
 	unsigned int   cWinMinX;
@@ -152,9 +152,9 @@ class ITK_EXPORT VectorImageView : public itk::ProcessObject
 
     
     /*! Specify a zoom factor */
-    void    winZoom(float newWinZoom);
+    void    winZoom(double newWinZoom);
     /*! How much is the window zoomed */
-    float   winZoom(void);
+    double   winZoom(void);
     
 
     virtual void        iwMin(float newIWMin);

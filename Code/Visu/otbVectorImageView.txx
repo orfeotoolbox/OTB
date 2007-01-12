@@ -49,7 +49,7 @@ VectorImageView<TPixel>::Init(int x, int y, int w, int h, const char * )
   
   cIWMin = 0;
   cIWMax = 0;
-  cWinZoom = 1;
+  cWinZoom = 1.;
   
   cWinSizeX = 0;
   cWinSizeY = 0;
@@ -238,7 +238,7 @@ void VectorImageView<TPixel>::iwCallBack(void (* newIWArgCallBack)(void *),
 //
 //
 template <class TPixel>
-void VectorImageView<TPixel>::winZoom(float newWinZoom)
+void VectorImageView<TPixel>::winZoom(double newWinZoom)
   {
 //  if(newWinZoom>0.1 && newWinZoom<cDimSize[cWinOrder[0]])
 //On interdit le zoom < 1 
@@ -252,7 +252,7 @@ void VectorImageView<TPixel>::winZoom(float newWinZoom)
 
 
 template <class TPixel>
-float VectorImageView<TPixel>::winZoom(void)
+double VectorImageView<TPixel>::winZoom(void)
   {
   return cWinZoom;
   }
