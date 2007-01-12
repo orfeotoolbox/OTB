@@ -275,6 +275,21 @@ ADD_TEST(coTuImageToImageListFilterNew ${COMMON_TESTS}
 ADD_TEST(coTvImageListToImageListFilterNew ${COMMON_TESTS} 
          otbImageListToImageListFilterNew) 
 
+# -------            otb::ConcatenateVectorImageAdaptor  -------------------------------------------
+
+ADD_TEST(coTuConcatenateVectorImageFilterNew ${COMMON_TESTS} 
+         otbConcatenateVectorImageFilterNew)  
+
+ADD_TEST(coTvConcatenateVectorImageFilter ${COMMON_TESTS}
+         --compare-image ${TOL}
+	 ${BASELINE}/coConcatenateVectorImageFilterOutput1.hdr
+         ${TEMP}/coConcatenateVectorImageFilterOutput1.hdr
+	 otbConcatenateVectorImageFilter 
+	 ${INPUTDATA}/poupees.png
+         ${INPUTDATA}/poupees.png
+	 ${TEMP}/coConcatenateVectorImageFilterOutput1.hdr
+)
+
          
 # -------       Fichiers sources CXX -----------------------------------
 SET(BasicCommon_SRCS
@@ -309,6 +324,8 @@ otbImageToImageListFilterNew.cxx
 otbImageListToImageListFilterNew.cxx
 otbListNew.cxx
 otbList.cxx
+otbConcatenateVectorImageFilterNew.cxx
+otbConcatenateVectorImageFilter.cxx
 )
 
 

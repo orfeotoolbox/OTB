@@ -80,7 +80,7 @@ namespace otb
 	   */
 	  void SetDetailsImage(const InputImageType * detailsImage);
 	  /**
-	   * Set the details image.
+	   * Get the details image.
 	   * \return detailsImage The input details image.
 	   */
 	  InputImageType * GetDetailsImage(void);
