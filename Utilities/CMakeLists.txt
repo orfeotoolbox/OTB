@@ -6,6 +6,10 @@ ENDIF(NOT OTB_USE_EXTERNAL_ITK)
 
 SUBDIRS( BGL otbsvm )
 
+IF(BUILD_TESTING)
+        SUBDIRS( Dart )
+ENDIF(BUILD_TESTING)
+
 
 #-----------------------------------------------------------------------------
 # Install the UseOTB.cmake file configured from the top-level.
