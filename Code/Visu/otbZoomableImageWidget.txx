@@ -1,0 +1,210 @@
+/*=========================================================================
+
+  Program:   ORFEO Toolbox
+  Language:  C++
+  Date:      $Date$
+  Version:   $Revision$
+
+
+  Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
+  See OTBCopyright.txt for details.
+
+
+     This software is distributed WITHOUT ANY WARRANTY; without even 
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     PURPOSE.  See the above copyright notices for more information.
+
+=========================================================================*/
+#ifndef _otbZoomableImageWidget_txx
+#define _otbZoomableImageWidget_txx
+
+#include "otbZoomableImageWidget.h"
+#include "otbMacro.h"
+#include "itkMacro.h"
+
+namespace otb
+{
+/** 
+ * Constructor.
+ */
+template <class TPixel>
+ZoomableImageWidget<TPixel>
+::ZoomableImageWidget()
+{
+  m_ZoomUpperLeftCorner.Fill(0);
+  // SizeType size;
+//   IndexType index;
+//   size.Fill(256);
+//   index.Fill(0);
+//   RegionType region;
+//   region.SetIndex(index);
+//   region.SetSize(size);
+//   this->SetViewedRegion(region);
+}
+
+/** 
+ * Destructor.
+ */
+template <class TPixel>
+ZoomableImageWidget<TPixel>
+::~ZoomableImageWidget()
+{}
+/** 
+ * Initialize the widget.
+ */
+template <class TPixel>
+void 
+ZoomableImageWidget<TPixel>
+::Init(int x, int y, int w, int h, const char * l)
+{
+  if(!this->GetInput())
+    {
+      itkExceptionMacro("No input image!");
+    }
+  else
+    {
+      this->GetInput()->Update();
+      if(this->GetImageOverlayVisible())
+	{
+	  this->GetInputOverlay()->Update();
+	}
+      this->Label(l);
+      this->resize(x, y, w, h);
+    }
+}
+/** 
+ * Resize the widget.
+ */
+template <class TPixel>
+void 
+ZoomableImageWidget<TPixel>
+::resize(int x, int y, int w, int h)
+{
+  //otbMsgDebugMacro(<<"resize: "<<x<<" "<<y<<" "<<w<<" "<<h);
+  SizeType size;
+  size[0]=static_cast<unsigned int>((double)w/this->GetOpenGlIsotropicZoom())+1;
+  size[1]=static_cast<unsigned int>((double)h/this->GetOpenGlIsotropicZoom())+1;
+  RegionType region;
+  region.SetSize(size);
+  region.SetIndex(m_ZoomUpperLeftCorner);
+  region.Crop(this->GetInput()->GetLargestPossibleRegion());
+  this->SetViewedRegion(region);
+  this->Fl_Gl_Window::resize(x,y,w,h);
+  this->redraw();
+}
+/** 
+ * Test if the buffer has to be updated.
+ */
+template <class TPixel>
+bool 
+ZoomableImageWidget<TPixel>
+::UpdateOpenGlBufferedRegionRequested(void)
+{
+  RegionType viewed = this->GetViewedRegion();
+  RegionType buffered = this->GetBufferedRegion();
+  IndexType viewedULCorner = viewed.GetIndex();
+  IndexType bufferedULCorner = buffered.GetIndex();
+  IndexType viewedRDCorner = viewed.GetIndex()+viewed.GetSize();
+  IndexType bufferedRDCorner = buffered.GetIndex()+buffered.GetSize();
+  return ( viewedULCorner[0]<bufferedULCorner[0]
+	   ||viewedULCorner[1]<bufferedULCorner[1]
+	   ||viewedRDCorner[0]>bufferedRDCorner[0]
+	   ||viewedRDCorner[1]>bufferedRDCorner[1]);
+}
+
+/** 
+ * Test if the buffer has to be updated.
+ */
+template <class TPixel>
+bool 
+ZoomableImageWidget<TPixel>
+::UpdateOpenGlImageOverlayBufferedRegionRequested(void)
+{
+  RegionType viewed = this->GetViewedRegion();
+  RegionType buffered = this->GetImageOverlayBufferedRegion();
+  IndexType viewedULCorner = viewed.GetIndex();
+  IndexType bufferedULCorner = buffered.GetIndex();
+  IndexType viewedRDCorner = viewed.GetIndex()+viewed.GetSize();
+  IndexType bufferedRDCorner = buffered.GetIndex()+buffered.GetSize();
+  return ( viewedULCorner[0]<bufferedULCorner[0]
+	   ||viewedULCorner[1]<bufferedULCorner[1]
+	   ||viewedRDCorner[0]>bufferedRDCorner[0]
+	   ||viewedRDCorner[1]>bufferedRDCorner[1]);
+}
+/** 
+ * Update OpenGlBuffer. 
+ */
+template <class TPixel>
+void 
+ZoomableImageWidget<TPixel>
+::UpdateOpenGlBufferedRegion(void)
+{
+  //otbMsgDebugMacro(<<"UpdateOpenGlBufferedRegion: "<<this->GetViewedRegion());
+  this->SetBufferedRegion(this->GetViewedRegion());
+}
+/** 
+ * Update OpenGlBuffer. 
+ */
+template <class TPixel>
+void 
+ZoomableImageWidget<TPixel>
+::UpdateOpenGlImageOverlayBufferedRegion(void)
+{
+  //otbMsgDebugMacro(<<"UpdateOpenGlBufferedRegion: "<<this->GetViewedRegion());
+  this->SetImageOverlayBufferedRegion(this->GetViewedRegion());
+}
+/** 
+ * Set a new zoom factor (>1). 
+ * \param zoomFactor The new zoom factor.
+ */
+template <class TPixel>
+void 
+ZoomableImageWidget<TPixel>
+::SetZoomFactor(double zoomFactor)
+{
+  if(zoomFactor<1)
+    itkExceptionMacro(<<"Zoom factor must be >1 !");
+
+  RegionType region = this->GetViewedRegion();
+  
+  IndexType newIndex;
+  SizeType newSize;
+  RegionType newRegion;
+
+  newSize[0] = static_cast<unsigned int>((double)this->w()/zoomFactor)+1;
+  newSize[1] = static_cast<unsigned int>((double)this->h()/zoomFactor)+1;
+  otbMsgDebugMacro(<<"SetZoomFactor: newSize ->"<<newSize);
+  otbMsgDebugMacro(<<"SetZoomFactor: newIndex ->"<<newIndex);
+  newRegion.SetIndex(m_ZoomUpperLeftCorner);
+  newRegion.SetSize(newSize);
+  this->SetViewedRegion(newRegion);
+  this->SetOpenGlIsotropicZoom(zoomFactor);
+}
+/** 
+ * Set a new zoom factor (>1). 
+ * \param zoomFactor The new zoom factor.
+ */
+template <class TPixel>
+void 
+ZoomableImageWidget<TPixel>
+::SetZoomUpperLeftCorner(IndexType index)
+{
+  IndexType newIndex;
+  SizeType size;
+  RegionType newRegion;
+
+  size = this->GetViewedRegion().GetSize();
+  otbMsgDebugMacro(<<"SetZoomCenter: Size ->"<<size);
+  
+  otbMsgDebugMacro(<<"SetZoomCenter: newIndex ->"<<newIndex);
+  newRegion.SetIndex(index);
+  newRegion.SetSize(size);
+  this->SetViewedRegion(newRegion);
+  m_ZoomUpperLeftCorner = index;
+}
+
+
+
+
+} // end namespace otb
+#endif
