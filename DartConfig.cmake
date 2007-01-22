@@ -10,7 +10,7 @@ SET (DROP_LOCATION "/cgi-bin/HTTPUploadDartFile.cgi")
 #SET (DROP_SITE_USER "ftpuser")
 #SET (DROP_SITE_PASSWORD "public")
 
-SET (DROP_SITE_MODE "active")
+#SET (DROP_SITE_MODE "active")
 
 SET (TRIGGER_SITE "http://${DROP_SITE}/cgi-bin/Submit-Orfeotoolbox-TestingResults.cgi")
 
