@@ -18,6 +18,8 @@ SET (TRIGGER_SITE "http://${DROP_SITE}/cgi-bin/Submit-Orfeotoolbox-TestingResult
 SET (PROJECT_URL "http://smsc.cnes.fr/PLEIADES/")
 
 # Dart server configuration 
+SET (ROLLUP_URL "http://${DROP_SITE}/cgi-bin/OrfeotoolboxRollup.cgi}
+
 #SET (ROLLUP_URL "http://${DROP_SITE}/cgi-bin/insight-rollup-dashboard.sh")
 #SET (ROLLUP_URL "http://${DROP_SITE}/cgi-bin/orfeotoolbox-rollup-dashboard.sh")
 #SET (CVS_WEB_URL "http://${DROP_SITE}/cgi-bin/viewcvs.cgi/")
@@ -30,7 +32,7 @@ SET (USE_DOXYGEN "On")
 SET (DOXYGEN_URL "http://${DROP_SITE}/OrfeoToolbox/Doxygen/html/" )
 
 SET (USE_GNATS "On")
-SET (GNATS_WEB_URL "http://${DROP_SITE}/bugTracker/query.php?projects=6&status%5B%5D=1&status%5B%5D=2&status%5B%5D=3&status%5B%5D=4&status%5B%5D=6&op=doquery")
+SET (GNATS_WEB_URL "http://nemo/bugTracker/query.php?projects=6&status%5B%5D=1&status%5B%5D=2&status%5B%5D=3&status%5B%5D=4&status%5B%5D=6&op=doquery")
 
 # Continuous email delivery variables
 #SET (CONTINUOUS_FROM "lorensen@crd.ge.com")
