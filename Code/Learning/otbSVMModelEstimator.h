@@ -98,6 +98,12 @@ public:
     param.svm_type = svmtype;
   }
 
+  /** Get the SVM type (C_SVC, NU_SVC, ONE_CLASS, EPSILON_SVR, NU_SVR) */
+  int GetSVMType(void)
+  {
+    return param.svm_type;
+  }
+  
   /** Set the kernel type to LINEAR, POLY, RBF, SIGMOID
 	linear: u'*v
 	polynomial: (gamma*u'*v + coef0)^degree
@@ -108,6 +114,12 @@ public:
     param.kernel_type = kerneltype;
   }
 
+ /** Get the kernel type */
+ int GetKernelType(void)
+  {
+    return param.kernel_type;
+  }
+
   /** Set the degree of the polynomial kernel */
   void SetPolynomialKernelDegree(int degree)
   {
@@ -115,10 +127,22 @@ public:
     param.degree = static_cast<double>(degree);
   }
 
+
+  /** Get the degree of the polynomial kernel */
+  int GetPolynomialKernelDegree(void)
+  {
+    return static_cast<int>(param.degree);
+  }
+
   /** Set the gamma parameter for poly/rbf/sigmoid kernels */
   void SetKernelGamma(double gamma)
   {
     param.gamma = gamma;
+  }
+ /** Get the gamma parameter for poly/rbf/sigmoid kernels */
+  double GetKernelGamma(void)
+  {
+    return param.gamma;
   }
 
   /** Set the coef0 parameter for poly/sigmoid kernels */
@@ -127,16 +151,34 @@ public:
     param.coef0 = coef0;
   }
 
+  /** Get the coef0 parameter for poly/sigmoid kernels */
+  double GetKernelCoef0(void)
+  {
+    return param.coef0;
+  }
+
   /** Set the Nu parameter for the training */
   void SetNu(double nu)
   {
     param.nu = nu;
   }
 
+  /** Set the Nu parameter for the training */
+  double GetNu(void)
+    {
+      return param.nu;
+    }
+  
   /** Set the cache size in MB for the training */
   void SetCacheSize(int cSize)
   {
     param.cache_size = static_cast<double>(cSize);
+  }
+
+  /** Get the cache size in MB for the training */
+  int GetCacheSize(void)
+  {
+    return static_cast<int>(param.cache_size);
   }
 
   /** Set the C parameter for the training for C_SVC, EPSILON_SVR and NU_SVR */
@@ -145,11 +187,24 @@ public:
     param.C = c;
   }
 
+/** Get the C parameter for the training for C_SVC, EPSILON_SVR and NU_SVR */
+  double GetC(void)
+  {
+    return param.C;
+  }
+
   /** Set the tolerance for the stopping criterion for the training*/
   void SetEpsilon(double eps)
   {
     param.eps = eps;
   }
+
+/** Get the tolerance for the stopping criterion for the training*/
+  double GetEpsilon(void)
+  {
+    return param.eps;
+  }
+
 
   /* Set the value of p for EPSILON_SVR */
   void SetP(double p)
@@ -158,16 +213,36 @@ public:
     param.p = p;
   }
 
+  
+  /* Get the value of p for EPSILON_SVR */
+  double GetP(void)
+  {
+    return param.p;
+  }
+
   /** Use the shrinking heuristics for the training */
   void DoShrinking(bool s)
   {
     param.shrinking = static_cast<int>(s);
   }
 
+  /** Get Use the shrinking heuristics for the training boolean */
+  bool GetDoShrinking(void)
+  {
+    return static_cast<bool>(param.shrinking);
+  }
+
+
   /** Do probability estimates */
   void DoProbabilityEstimates(bool prob)
   {
     param.probability = static_cast<int>(prob);
+  }
+
+  /** Get Do probability estimates boolean */
+  bool GetDoProbabilityEstimates(void)
+  {
+    return static_cast<bool>(param.probability);
   }
 
   /*
