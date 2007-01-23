@@ -2,7 +2,7 @@
 # the specified NIGHLY_START_TIME. Time is specified in 24 hour format.
 SET (NIGHTLY_START_TIME "21:00:00 EDT")
 
-SET (BUILD_NAME "${CMAKE_SYSTEM}-${CMAKE_CXX_COMPILER}-${CMAKE_BUILD_TYPE}")
+SET (BUILDNAME "${BUILDNAME}_${CMAKE_BUILD_TYPE}")
 
 
 # Dart server to submit results (used by client)
