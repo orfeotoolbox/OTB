@@ -249,7 +249,7 @@ ImageWidgetBase<TPixel>
     }
   else
     {
-      otbMsgDebugMacro(<<"Show");
+      //otbMsgDebugMacro(<<"Show");
       m_Image->Update();
       this->show();
       this->redraw();
@@ -338,7 +338,7 @@ void
 ImageWidgetBase<TPixel>
 ::RebuildOpenGlBuffer(void)
 {
-  otbMsgDebugMacro(<<"RebuildOpenGlBuffer");
+  //otbMsgDebugMacro(<<"RebuildOpenGlBuffer");
   if(m_OpenGlBuffer != NULL)
     {
       //otbMsgDebugMacro(<<"Deleting previous buffer ...");
@@ -380,7 +380,7 @@ void
 ImageWidgetBase<TPixel>
 ::RebuildOpenGlImageOverlayBuffer(void)
 {
-  otbMsgDebugMacro(<<"RebuildOpenGlImageOverlayBuffer");
+  //otbMsgDebugMacro(<<"RebuildOpenGlImageOverlayBuffer");
   if(m_OpenGlImageOverlayBuffer != NULL)
     {
       //otbMsgDebugMacro(<<"Deleting previous buffer ...");
