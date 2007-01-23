@@ -2,6 +2,9 @@
 # the specified NIGHLY_START_TIME. Time is specified in 24 hour format.
 SET (NIGHTLY_START_TIME "21:00:00 EDT")
 
+SET (BUILD_NAME "${CMAKE_SYSTEM}-${CMAKE_CXX_COMPILER}-${CMAKE_BUILD_TYPE}")
+
+
 # Dart server to submit results (used by client)
 SET (DROP_METHOD "http")
 SET (DROP_SITE "nemo/dart_server")
@@ -32,7 +35,7 @@ SET (USE_DOXYGEN "On")
 SET (DOXYGEN_URL "http://${DROP_SITE}/OrfeoToolbox/Doxygen/html/" )
 
 SET (USE_GNATS "On")
-SET (GNATS_WEB_URL "http://nemo/bugTracker/query.php?projects=6&status%5B%5D=1&status%5B%5D=2&status%5B%5D=3&status%5B%5D=4&status%5B%5D=6&op=doquery")
+SET (GNATS_WEB_URL "http://nemo/http://nemo/phpBugTracker/phpbt-1.0.1/")
 
 # Continuous email delivery variables
 #SET (CONTINUOUS_FROM "lorensen@crd.ge.com")
