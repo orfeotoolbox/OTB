@@ -90,6 +90,8 @@ class ImageWidgetBase
     itkSetMacro(BlackTransparency,bool);
     itkGetMacro(BlackTransparency,bool);
 
+    itkGetMacro(ViewModelIsRGB,bool);
+
     
     itkGetMacro(ImageOverlayOpacity,unsigned char);
 
