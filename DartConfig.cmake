@@ -6,9 +6,10 @@ SET (BUILDNAME "${BUILDNAME}${CMAKE_BUILD_TYPE}")
 
 
 # Dart server to submit results (used by client)
-SET (DROP_METHOD "http")
-SET (DROP_SITE "nemo/dart_server")
-SET (DROP_LOCATION "/cgi-bin/HTTPUploadDartFile.cgi")
+SET (DROP_METHOD "xmlrpc")
+SET (DROP_SITE "http://nemo:8081")
+SET (DROP_LOCATION "OTB")
+SET (COMPRESS_SUBMISSION ON)
 #SET (DROP_LOCATION "/incoming")
 #SET (DROP_SITE_USER "ftpuser")
 #SET (DROP_SITE_PASSWORD "public")
