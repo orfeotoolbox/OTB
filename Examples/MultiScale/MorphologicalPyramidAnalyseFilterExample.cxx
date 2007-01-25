@@ -21,7 +21,7 @@ PURPOSE.  See the above copyright notices for more information.
 //    INPUTS: {suburb2.png}
 //    OUTPUTS: {suburb2_an_1.png}, {suburb2_an_2.png},  {suburb2_an_3.png}, {suburb2_an_4.png}
 //    OUTPUTS: {suburb2_sf_1.png}, {suburb2_sf_2.png}, {suburb2_sf_3.png}, {suburb2_sf_4.png}
-//    OUTPUTS: {suburb2_if_1.png}, {suburb2_if_2.png}, {suburb2_aif_3.png}, {suburb2_if_4.png}
+//    OUTPUTS: {suburb2_if_1.png}, {suburb2_if_2.png}, {suburb2_if_3.png}, {suburb2_if_4.png}
 //    OUTPUTS: {suburb2_id_1.png}, {suburb2_id_2.png}, {suburb2_id_3.png}, {suburb2_id_4.png}
 //    OUTPUTS: {suburb2_sd_1.png}, {suburb2_sd_2.png}, {suburb2_sd_3.png}, {suburb2_sd_4.png}
 //    4 2 
@@ -109,7 +109,8 @@ int main(int argc, char * argv[])
 // Software Guide : BeginCodeSnippet
 
       
-      typedef itk::BinaryBallStructuringElement<InputPixelType,Dimension> StructuringElementType;
+      typedef itk::BinaryBallStructuringElement<InputPixelType,
+                                   Dimension> StructuringElementType;
 
 // Software Guide : EndCodeSnippet
 
@@ -126,8 +127,9 @@ int main(int argc, char * argv[])
 
 // Software Guide : BeginCodeSnippet
 
-      typedef otb::OpeningClosingMorphologicalFilter<InputImageType,InputImageType,StructuringElementType>
-	OpeningClosingFilterType;
+      typedef otb::OpeningClosingMorphologicalFilter<InputImageType,
+                                 InputImageType,StructuringElementType>
+	                                       OpeningClosingFilterType;
 
 // Software Guide : EndCodeSnippet
 
@@ -142,8 +144,9 @@ int main(int argc, char * argv[])
 // Software Guide : BeginCodeSnippet
 
       
-      typedef otb::MorphologicalPyramidAnalyseFilter<InputImageType,OutputImageType,OpeningClosingFilterType>
-	PyramidFilterType;
+      typedef otb::MorphologicalPyramidAnalyseFilter<InputImageType,
+                              OutputImageType,OpeningClosingFilterType>
+	                                              PyramidFilterType;
 
 // Software Guide : EndCodeSnippet
 
@@ -157,7 +160,8 @@ int main(int argc, char * argv[])
 
 // Software Guide : BeginCodeSnippet
       
-      typedef PyramidFilterType::OutputImageListType::Iterator ImageListIterator;
+      typedef PyramidFilterType::OutputImageListType::Iterator
+	                                             ImageListIterator;
 // Software Guide : EndCodeSnippet
 
 // Software Guide : BeginLatex
@@ -182,6 +186,7 @@ int main(int argc, char * argv[])
 //    \item the number of iterations or levels of the pyramid;
 //    \item the subsample scale or decimation factor between two
 // successive pyramid levels.
+//\end{itemize}      
 // After that, we plug the pipeline and run it by calling the
 // \code{Update()} method.      
 // Software Guide : EndLatex 
@@ -283,6 +288,16 @@ int main(int argc, char * argv[])
 
 // Software Guide : BeginLatex
 //
+// Figure \ref{fig:PYR_IM} shows the test image to be processed by the
+// morphological pyramid.
+// \begin{figure}
+// \center
+// \includegraphics[width=0.5\textwidth]{suburb2.eps}
+// \itkcaption[Morphological pyramid analysis]{Test image for the
+// morphological pyramid.}
+// \label{fig:PYR_IM}
+// \end{figure}
+//      
 // Figure \ref{fig:PYR_AN} shows the 4 levels of analysis of the image.
 // \begin{figure}
 // \center
@@ -341,7 +356,6 @@ int main(int argc, char * argv[])
 //      
 // Software Guide : EndLatex 
 
-// Software Guide : BeginCodeSnippet                        
 
       
       return EXIT_SUCCESS;
