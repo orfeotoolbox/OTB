@@ -11,6 +11,7 @@ SUBDIRS(
   Classification
   Segmentation
   Iterators
+  MultiScale
 )
 
 IF(OTB_USE_VISU)
