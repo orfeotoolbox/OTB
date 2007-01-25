@@ -27,7 +27,6 @@
 //  Software Guide : BeginCommandLineArgs
 //    INPUTS: {amst.png}
 //    OUTPUTS: {amstLineFusion.png}
-// old output {amstLineFusionDirs.png}
 //    5 1 
 //  Software Guide : EndCommandLineArgs
 
