@@ -209,7 +209,7 @@ namespace otb
 	for (int j =0; j<InputImageType::ImageDimension;j++)
 	  {
 	    sizeTmp=size[j];
-	    size[j]=static_cast<int>(round(static_cast<double>(sizeTmp)/this->GetSubSampleScale()));
+	    size[j]=static_cast<unsigned int>(static_cast<double>(sizeTmp)/this->GetSubSampleScale());
 	  }
 	otbMsgDebugMacro(<<"New size: "<<size);
     

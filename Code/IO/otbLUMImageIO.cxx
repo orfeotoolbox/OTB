@@ -488,7 +488,7 @@ int LUMImageIO::CaiGetTypeLum(          const   char *          type_code,
 		    if ((nbbits%8)!=0) taille =trouve+1;
 			else taille  = trouve;		    
                } 
-	       pch0 = strstr(type_code,"U");
+	       pch0 = const_cast<char *>(strstr(type_code,"U"));
                if (taille == 1)
                {
 		  if (pch0==NULL) sprintf(cod_pix,"OCT");

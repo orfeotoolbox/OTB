@@ -52,8 +52,8 @@ namespace otb
     params[0]=0.5*static_cast<double>(this->GetInput()->GetLargestPossibleRegion().GetSize()[0]);
     params[1]=0.5*static_cast<double>(this->GetInput()->GetLargestPossibleRegion().GetSize()[1]);
     params[2]=360./m_OutputSize[0];
-    params[3]=log(sqrt(pow(this->GetInput()->GetLargestPossibleRegion().GetSize()[0],2)
-		       +pow(this->GetInput()->GetLargestPossibleRegion().GetSize()[1],2))/2)/m_OutputSize[1];
+    params[3]=log(sqrt(pow(static_cast<double>(this->GetInput()->GetLargestPossibleRegion().GetSize()[0]),2)
+		       +pow(static_cast<double>(this->GetInput()->GetLargestPossibleRegion().GetSize()[1]),2.))/2)/m_OutputSize[1];
   transform->SetParameters(params);
   
   // log polar resampling

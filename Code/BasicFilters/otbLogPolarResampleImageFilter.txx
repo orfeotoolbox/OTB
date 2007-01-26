@@ -326,7 +326,7 @@ LogPolarResampleImageFilter<TInputImage,TInterpolator>
   SizeType                Size;                // Size of the output image
   Size = inputPtr->GetLargestPossibleRegion().GetSize();
 
-  double Radial_max = sqrt(Size[0]*Size[0]+Size[1]*Size[1]);
+  double Radial_max = sqrt(static_cast<double>(Size[0]*Size[0]+Size[1]*Size[1]));
   if(m_OriginIsAtCenter == true)
     {
     Radial_max /= 2.0;
@@ -340,7 +340,7 @@ LogPolarResampleImageFilter<TInputImage,TInterpolator>
   double bx = log(m_RadialNumberOfSamples) / log(2.0);
   if(int(bx)!=bx)
     {
-     m_RadialNumberOfSamples = pow(2,int(bx)+1);
+     m_RadialNumberOfSamples = static_cast<unsigned int>(pow(2,static_cast<double>(int(bx)+1)));
     }  	
 }
 
@@ -365,7 +365,7 @@ LogPolarResampleImageFilter<TInputImage,TInterpolator>
   double by = log(m_AngularNumberOfSamples) / log(2.0);
   if(int(by)!=by)
     {
-     m_AngularNumberOfSamples = pow(2,int(by)+1);
+     m_AngularNumberOfSamples = static_cast<unsigned int>(pow(2,static_cast<double>(int(by)+1)));
     }
 }
 
@@ -388,10 +388,10 @@ LogPolarResampleImageFilter<TInputImage,TInterpolator>
   double by = log(m_RadialNumberOfSamples) / log(2.0);
   if(int(by)!=by)
     {
-     m_RadialNumberOfSamples = pow(2,int(by)+1);
+     m_RadialNumberOfSamples = static_cast<unsigned int>(pow(2,static_cast<double>(int(by)+1)));
     }
 
-  double Radial_max = sqrt(Size[0]*Size[0]+Size[1]*Size[1]);
+  double Radial_max = sqrt(static_cast<double>(Size[0]*Size[0]+Size[1]*Size[1]));
   if(m_OriginIsAtCenter == true)
     {
     Radial_max /= 2.0;
@@ -411,7 +411,7 @@ LogPolarResampleImageFilter<TInputImage,TInterpolator>
   double by = log(m_AngularNumberOfSamples) / log(2.0);
   if(int(by)!=by)
     {
-     m_AngularNumberOfSamples = pow(2,int(by)+1);
+     m_AngularNumberOfSamples = static_cast<unsigned int>(pow(2,static_cast<double>(int(by)+1)));
     }
 
   double Angular_max = 90.0; 
