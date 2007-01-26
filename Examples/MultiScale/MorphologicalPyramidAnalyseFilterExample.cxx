@@ -18,12 +18,12 @@ PURPOSE.  See the above copyright notices for more information.
 
 
 //  Software Guide : BeginCommandLineArgs
-//    INPUTS: {suburb2.png}
-//    OUTPUTS: {suburb2_an_1.png}, {suburb2_an_2.png},  {suburb2_an_3.png}, {suburb2_an_4.png}
-//    OUTPUTS: {suburb2_sf_1.png}, {suburb2_sf_2.png}, {suburb2_sf_3.png}, {suburb2_sf_4.png}
-//    OUTPUTS: {suburb2_if_1.png}, {suburb2_if_2.png}, {suburb2_if_3.png}, {suburb2_if_4.png}
-//    OUTPUTS: {suburb2_id_1.png}, {suburb2_id_2.png}, {suburb2_id_3.png}, {suburb2_id_4.png}
-//    OUTPUTS: {suburb2_sd_1.png}, {suburb2_sd_2.png}, {suburb2_sd_3.png}, {suburb2_sd_4.png}
+//    INPUTS: {suburb2.jpeg}
+//    OUTPUTS: {suburb2_an_1.jpeg}, {suburb2_an_2.jpeg},  {suburb2_an_3.jpeg}, {suburb2_an_4.jpeg}
+//    OUTPUTS: {suburb2_sf_1.jpeg}, {suburb2_sf_2.jpeg}, {suburb2_sf_3.jpeg}, {suburb2_sf_4.jpeg}
+//    OUTPUTS: {suburb2_if_1.jpeg}, {suburb2_if_2.jpeg}, {suburb2_if_3.jpeg}, {suburb2_if_4.jpeg}
+//    OUTPUTS: {suburb2_id_1.jpeg}, {suburb2_id_2.jpeg}, {suburb2_id_3.jpeg}, {suburb2_id_4.jpeg}
+//    OUTPUTS: {suburb2_sd_1.jpeg}, {suburb2_sd_2.jpeg}, {suburb2_sd_3.jpeg}, {suburb2_sd_4.jpeg}
 //    4 2 
 //  Software Guide : EndCommandLineArgs
 
@@ -137,7 +137,7 @@ int main(int argc, char * argv[])
 //
 // We can finally define the type of the morpholoical pyramid
 // filter. The filter is templated over the input and output mage
-// types and the {\em lowpas} orphological filter to be used.
+// types and the {\em lowpas} morphological filter to be used.
 //
 // Software Guide : EndLatex 
 
@@ -217,7 +217,7 @@ int main(int argc, char * argv[])
 // \code{GetInfDeci()} method;
 // to decimation
 // \end{itemize}
-// Each oe of these methods provides a list of images (one for each
+// Each one of these methods provides a list of images (one for each
 // level of analysis), so we can iterate through the image lists by
 // using iterators.
 //      
