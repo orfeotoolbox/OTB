@@ -1,6 +1,6 @@
 # Dashboard is opened for submissions for a 24 hour period starting at
 # the specified NIGHLY_START_TIME. Time is specified in 24 hour format.
-SET (NIGHTLY_START_TIME "00:10:00 EDT")
+SET (NIGHTLY_START_TIME "00:10:00 CET")
 
 SET (BUILDNAME "${BUILDNAME}${CMAKE_BUILD_TYPE}")
 
