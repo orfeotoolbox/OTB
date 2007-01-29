@@ -190,7 +190,8 @@ int main(int argc, char * argv[])
 // Software Guide : EndLatex 
 
 // Software Guide : BeginCodeSnippet            
-      PyramidAnalyseFilterType::Pointer pyramidAnalyse = PyramidAnalyseFilterType::New();
+      PyramidAnalyseFilterType::Pointer pyramidAnalyse =
+	                        PyramidAnalyseFilterType::New();
       pyramidAnalyse->SetNumberOfIterations(numberOfIterations);
       pyramidAnalyse->SetSubSampleScale(subSampleScale);
       pyramidAnalyse->SetInput(reader->GetOutput());
@@ -230,11 +231,13 @@ int main(int argc, char * argv[])
       pyramidSynthesis->SetSupDeci(pyramidAnalyse->GetSupDeci());
       pyramidSynthesis->SetInfFiltre(pyramidAnalyse->GetInfFiltre());
       pyramidSynthesis->SetInfDeci(pyramidAnalyse->GetInfDeci());
-
+// Software Guide : EndCodeSnippet
+      
 // Software Guide : BeginLatex
 //      
 // After that, we plug the pipeline and run it by calling the
-// \code{Update()} method.      
+// \code{Update()} method.
+//      
 // Software Guide : EndLatex 
 
 // Software Guide : BeginCodeSnippet                  
@@ -272,7 +275,7 @@ int main(int argc, char * argv[])
 // \itkcaption[Morphological pyramid analysis and synthesis]{Result of
 // the morphological pyramid analysis and synthesis. Left: original
 // image. Right: result of applying the analysis and the synthesis steps.}
-// \label{fig:PYR_SD}
+// \label{fig:PYR_ANSYN}
 // \end{figure}
 //
 // Of course, in a real application, a specific processing will be
