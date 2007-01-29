@@ -29,6 +29,9 @@ ADD_EXECUTABLE(SVMImageEstimatorClassificationMultiExample SVMImageEstimatorClas
 TARGET_LINK_LIBRARIES(SVMImageEstimatorClassificationMultiExample ITKIO OTBIO
 OTBCommon ITKCommon  OTBLearning  gdal)
 
+ADD_EXECUTABLE(SOMExample SOMExample.cxx )
+TARGET_LINK_LIBRARIES(SOMExample ITKIO OTBIO OTBCommon ITKCommon  OTBLearning  gdal)
+
 
 IF( NOT OTB_DISABLE_CXX_TESTING )
 
