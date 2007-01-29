@@ -24,6 +24,8 @@ PURPOSE.  See the above copyright notices for more information.
 #include "otbImageFileWriter.h"
 #include "otbImage.h"
 
+#include "itkMacro.h"
+
 int otbMorphologicalPyramidAnalyseFilter(int argc, char * argv[])
 {
   try
@@ -73,7 +75,8 @@ int otbMorphologicalPyramidAnalyseFilter(int argc, char * argv[])
       WriterType::Pointer writer =  WriterType::New();
 
       int i=1;
-      std::stringstream oss;
+//      std::stringstream oss;
+      itk::OStringStream oss;
       // Writing the results images
       std::cout<<(itAnalyse!=(pyramid->GetOutput()->End()))<<std::endl;
       while((itAnalyse!=pyramid->GetOutput()->End())
