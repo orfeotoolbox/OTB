@@ -2,58 +2,33 @@
 \section{Introduction}
 
 In this chapter, the tools for multi-scale and multi-resoltuion
-processing (analysis, synthesis and fusion) will be presented.
+processing (analysis, synthesis and fusion) will be presented. Most of
+the algorithms are based on pyramidal approaches. These approaches
+were first used for image compression and they are based on the fact
+that, once an image has been low-pass filtered it does not have
+details beyond the cut-off frequency of the low-pass
+filter any more. Therefore, the image can be subsampled -- decimated -- without
+any loss of information.
+
+A pyramidal decomposition is thus performed applying the following 3
+steps in an iterative way:
+\begin{enumerate}
+  \item Low pas filter the image $I_{n}$ in order to produce $F(I_n)$;
+  \item Compute the difference $D_n = I_n - F(I_n)$ which corresponds
+  to the details at level $n$;
+  \item Subsample $F_(I_n)$ in order to obtain $I_{n+1}$.
+\end{enumerate}
+
+The result is a series of decrasing resolution images $I_k$ and a
+series of decreasing resolution details $D_k$.
 
 
-%% \section{Pyramidal Approaches}
-%% \subsection{Les algorithmes pyramidaux}\label{sec:pyramidaux}
-%% \indent Les analyses pyramidales permettent une décomposition multi-résolution de l'image et étaient à l'origine utilisées en compression. Elles se basent sur le principe suivant : une fois l'image filtrée par un filtre passe-bas, elle ne contient plus de détail dont la fréquence spatiale soit supérieure au seuil du filtrage. Si le filtrage est linéaire, on peut donc, en vertu du théorème de Shannon, sous-échantillonner l'image d'un facteur dépendant du seuil du filtrage, et ce sans perte d'information (nous verrons dans la section \ref{sec:pyr_mor} les précautions à prendre pour l'utilisation de filtres non-linéaires).  L'application d'une décomposition pyramidale s'effectue donc de manière récursive en 3 étapes :
 
-%% \begin{enumerate}
-%% \item Application à l'image $I_{n}$ d'un opérateur d'un filtrage de nature passe-bas,
-%% \item Extraction des différences $D_{n}$ entre l'image filtrée $F(I_{n})$et l'image $I_{n}$, qui correspondent aux détails extraits au niveau n,
-%% \item Sous échantillonage de l'image filtrée $F(I_{n})$, ce qui donnera l'image originale au niveau n+1.
-%% \end{enumerate}
-
-%% \indent Le résultat obtenu est une succession d'images contenant les détails de l'image à des résolutions de plus en plus basses, et dont la taille est réduite du facteur de sous-échantillonnage à chaque étape. La dernière image produite contient tous les détails dont la fréquence spatiale est inférieure au seuil du dernier filtrage. La figure \ref{pyr_an} propose un synoptique de la phase d'analyse d'un algorithme pyramidal.\\
-
-%% \indent Une fois la phase d'analyse effectuée, on dispose théoriquement de toute l'information de l'image, codée de manière optimale : en effet chaque détail est représenté à la fréquence d'analyse la plus basse respectant le théorème de Shanon. On peut alors effectuer une reconstruction dans le cadre de la compression d'image, ou pour fusionner deux sources d'informations multi-résolution. Cette reconstruction est théoriquement sans perte, si l'on considère des filtres parfaits et le respect absolu des conditions de Shanon. Cette reconstruction s'effectue également de manière récursive, en deux étapes :
-%% \begin{enumerate}
-%% \item Sur-échantillonage de l'image $I_{n+1}$ à la résolution de l'image $I_{n}$
-%% \item Ajout des détails $D_{n}$ extraits au niveau n, ce qui donnera l'image originale au niveau n.
-%% \end{enumerate}
-
-%% \indent La figure \ref{pyr_rec} propose un synoptique de la phase de reconstruction d'un algorithme pyramidal.
-
-
-%% %% \begin{figure}[!ht]
-%% %% \begin{center}
-%% %% \includegraphics[width=0.7\textwidth]{pyr_an}
-%% %% \end{center}
-%% %% \caption{Synoptique de la phase d'analyse d'un algorithme pyramidal}
-%% %% \label{pyr_an}
-%% %% \end{figure}
-
-%% %% \begin{figure}[!hb]
-%% %% \begin{center}
-%% %% \includegraphics[width=0.7\textwidth]{pyr_rec}
-%% %% \end{center}
-%% %% \caption{Synoptique de la phase de reconstruction d'un algorithme pyramidal}
-%% %% \label{pyr_rec}
-%% %% \end{figure}
-
-
-\subsection{Morphological pyramid}\label{secMorphoPyr}
-Pyramidal decompositions are usually based on the following statement: once an
-image has been smoothed with a linear filter, it does not contain
-any more high-frequency details. Therefore, it can be down-sampled
-without any loss of information, according to Shannon Theorem. By
-iterating the same smoothing on the down-sampled image, a
-multi-resolution decomposition of the scene is
-computed. If the smoothing filter is a morphological filter, this
-is no longer true, as the filter is not linear. However, by keeping
-the details possibly lost in the down-sampling operation, such a
-decomposition can be used. 
+\section{Morphological Pyramid}\label{secMorphoPyr}
+If the smoothing filter used in the pyramidal analysis is a
+morphological filter, one cannot safely subsample the filtered image
+without loss of information. However, by keeping the details possibly
+lost in the down-sampling operation, such a decomposition can be used.
 
 The Morphological Pyramid is an approach to such a
 decomposition. It's computation process is an iterative analysis
@@ -66,4 +41,13 @@ computing the details lost in the down-sampling.
 \input{MorphologicalPyramidSynthesisFilterExample.tex}
 
 
+\subsection{Morphological Pyramid Exploitation}
+One of the possible uses of the morphological pyramid is the
+segmentation of objects -- regions -- of a particular scale.
 
+\input{MorphologicalPyramidSegmenterExample.tex}
+
+This same approach can be applied to all the levels of the
+morphological pyramid analysis.
+
+\input{MorphologicalPyramidSegmentationExample.tex}
