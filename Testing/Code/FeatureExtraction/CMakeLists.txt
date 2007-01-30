@@ -8,17 +8,24 @@ SET(INPUTDATA ${OTB_DATA_ROOT}/Input)
 SET(IMAGEDATA ${OTB_DATA_ROOT}/LargeInput )
 SET(TEMP ${OTBTesting_BINARY_DIR}/Temporary)
 
-
-#Tolerance sur diff pixel image
-#Utiliser EPSILON lorsuqe par exemple sous Windows, il y a qques differences
+#Tolerance de base
 SET(TOL 0.0)
-SET(EPSILON 0.0001)
-
 
 #Tolerance sur la difference des valeurs numeriques dans le --compare-ascii
 SET(EPS 0.001)
 
-
+#Tolerance sur diff pixel image
+#Sous Windows EPSILON est different de 0.0
+SET(EPSILON 0.0)
+IF(WIN32)
+  IF(NOT BORLAND)
+    IF(NOT CYGWIN)
+      IF(NOT MINGW)
+        SET(EPSILON 0.0001)
+      ENDIF(NOT MINGW)
+    ENDIF(NOT CYGWIN)
+  ENDIF(NOT BORLAND)
+ENDIF(WIN32)
 
 SET(FEATUREEXTRACTION_TESTS ${CXX_TEST_PATH}/otbFeatureExtractionTests)
 
@@ -162,7 +169,7 @@ ADD_TEST(feTuLineCorrelationNew ${FEATUREEXTRACTION_TESTS}
         otbLineCorrelationDetectorNew)
         
 ADD_TEST(feTvLineCorrelationLinear ${FEATUREEXTRACTION_TESTS}  
-  --compare-n-images ${TOL} 2
+  --compare-n-images ${EPSILON} 2
 			  ${BASELINE}/feFiltreLineCorrelationLinear_amst_2_3.hdr
                           ${TEMP}/feFiltreLineCorrelationLinear_amst_2_3.hdr
 			  ${BASELINE}/feFiltreLineCorrelationLinear_amst_dir_2_3.hdr
@@ -174,7 +181,7 @@ ADD_TEST(feTvLineCorrelationLinear ${FEATUREEXTRACTION_TESTS}
 	2 3)
 		
 ADD_TEST(feTvLineCorrelation ${FEATUREEXTRACTION_TESTS}  
-  --compare-image ${TOL}  ${BASELINE}/feFiltreLineCorrelation_amst_2_3.hdr
+  --compare-image ${EPSILON}  ${BASELINE}/feFiltreLineCorrelation_amst_2_3.hdr
                           ${TEMP}/feFiltreLineCorrelation_amst_2_3.hdr
         otbLineCorrelationDetector
 	${INPUTDATA}/amst.png
@@ -187,7 +194,7 @@ ADD_TEST(feTuLineRatioNew ${FEATUREEXTRACTION_TESTS}
         otbLineRatioDetectorNew)
         
 ADD_TEST(feTvLineRatioLinear ${FEATUREEXTRACTION_TESTS}  
-  --compare-n-images ${TOL} 2
+  --compare-n-images ${EPSILON} 2
 			  ${BASELINE}/feFiltreLineRatioLinear_amst_2_3.hdr
                           ${TEMP}/feFiltreLineRatioLinear_amst_2_3.hdr
 			  ${BASELINE}/feFiltreLineRatioLinear_amst_dir_2_3.hdr
@@ -199,7 +206,7 @@ ADD_TEST(feTvLineRatioLinear ${FEATUREEXTRACTION_TESTS}
 	2 3)
 	
 ADD_TEST(feTvLineRatioLinearAmsters1 ${FEATUREEXTRACTION_TESTS}  
-  --compare-n-images ${TOL} 2
+  --compare-n-images ${EPSILON} 2
 			  ${BASELINE}/feFiltreLineRatioLinear_amst_ers1_ima_extrait.hdr
                           ${TEMP}/feFiltreLineRatioLinear_amst_ers1_ima_extrait.hdr
 			  ${BASELINE}/feFiltreLineRatioLinear_amst_dir_ers1_ima_extrait.hdr
@@ -211,7 +218,7 @@ ADD_TEST(feTvLineRatioLinearAmsters1 ${FEATUREEXTRACTION_TESTS}
 	1 2)
 				
 ADD_TEST(feTvLineRatio ${FEATUREEXTRACTION_TESTS}  
-  --compare-image ${TOL}  ${BASELINE}/feFiltreLineRatio_amst_2_3.hdr
+  --compare-image ${EPSILON}  ${BASELINE}/feFiltreLineRatio_amst_2_3.hdr
                           ${TEMP}/feFiltreLineRatio_amst_2_3.hdr
         otbLineRatioDetector
 	${INPUTDATA}/amst.png
@@ -225,7 +232,7 @@ ADD_TEST(feTuAssociativeSymmetricalSumNew ${FEATUREEXTRACTION_TESTS}
         otbAssociativeSymmetricalSumNew)
         
 ADD_TEST(feTvAssociativeSymmetricalSum ${FEATUREEXTRACTION_TESTS}  
-  --compare-image ${TOL}  ${BASELINE}/feFiltreASS_amst_2_3.hdr
+  --compare-image ${EPSILON}  ${BASELINE}/feFiltreASS_amst_2_3.hdr
                           ${TEMP}/feFiltreASS_amst_2_3.hdr
         otbAssociativeSymmetricalSum
         ${TEMP}/feFiltreLineRatioLinear_amst_2_3.hdr
@@ -238,7 +245,7 @@ ADD_TEST(feTuAssymmetricFusionOfLineDetectorNew ${FEATUREEXTRACTION_TESTS}
         otbAssymmetricFusionOfLineDetectorNew)
        
 ADD_TEST(feTvAssymmetricFusionOfLineDetector ${FEATUREEXTRACTION_TESTS}  
-  --compare-image ${TOL}  ${BASELINE}/feFiltreAssymmetricFusion_amst_2_3.hdr
+  --compare-image ${EPSILON}  ${BASELINE}/feFiltreAssymmetricFusion_amst_2_3.hdr
                           ${TEMP}/feFiltreAssymmetricFusion_amst_2_3.hdr
         otbAssymmetricFusionOfLineDetector
 	${INPUTDATA}/amst.png
@@ -347,7 +354,7 @@ ADD_TEST(feTuLocalHough ${FEATUREEXTRACTION_TESTS}
 	${INPUTDATA}/ImageLine.bsq.hdr
 	32 32 2)
 
-#ROMAIN : Fichiers de comparaison différents sous windows et linux
+#ROMAIN : Fichiers de comparaison diffï¿½rents sous windows et linux
 IF(UNIX)
   SET(BASELINEDATA ${BASELINE}/feFiltreLocalHoughDraw_ImageLine_20_20_2.hdr)
 ELSE(UNIX)
@@ -362,7 +369,7 @@ ADD_TEST(feTvLocalHoughDraw ${FEATUREEXTRACTION_TESTS}
 	${TEMP}/feFiltreLocalHoughDraw_ImageLine_20_20_2.hdr
 	20 20 1)       
 
-#ROMAIN : Fichiers de comparaison différents sous windows et linux
+#ROMAIN : Fichiers de comparaison diffï¿½rents sous windows et linux
 IF(UNIX)
   SET(BASELINEDATA ${BASELINE}/feFiltreLocalHoughDraw_Line_20_10_2.png)
 ELSE(UNIX)
