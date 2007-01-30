@@ -69,8 +69,8 @@ int otbMorphologicalPyramidAnalyseFilter(int argc, char * argv[])
       ImageListIterator itAnalyse = pyramid->GetOutput()->Begin();
       ImageListIterator itSupFiltre = pyramid->GetSupFiltre()->Begin();
       ImageListIterator itInfFiltre = pyramid->GetInfFiltre()->Begin();
-      ImageListIterator itInfDeci = pyramid->GetSupDeci()->Begin();
-      ImageListIterator itSupDeci =  pyramid->GetInfDeci()->Begin();
+      ImageListIterator itInfDeci = pyramid->GetInfDeci()->Begin();
+      ImageListIterator itSupDeci =  pyramid->GetSupDeci()->Begin();
 
       WriterType::Pointer writer =  WriterType::New();
 
@@ -78,7 +78,6 @@ int otbMorphologicalPyramidAnalyseFilter(int argc, char * argv[])
 //      std::stringstream oss;
       itk::OStringStream oss;
       // Writing the results images
-      std::cout<<(itAnalyse!=(pyramid->GetOutput()->End()))<<std::endl;
       while((itAnalyse!=pyramid->GetOutput()->End())
 	    &&(itSupFiltre!=pyramid->GetSupFiltre()->End())
 	    &&(itInfFiltre!=pyramid->GetInfFiltre()->End())

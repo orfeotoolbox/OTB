@@ -80,8 +80,8 @@ int main(int ac, char* av[] )
   char *baselineFilenameAscii = NULL;
   char *testFilenameAscii = NULL;
   // vector if image filenames to compare
-  std::vector<char*> baseLineFilenamesImage;
-  std::vector<char*> testFilenamesImage;
+  std::vector<std::string> baseLineFilenamesImage;
+  std::vector<std::string> testFilenamesImage;
 
 
 // On some sgi machines, threads and stl don't mix.
@@ -129,6 +129,8 @@ int main(int ac, char* av[] )
     if (strcmp(av[1], "--compare-image") == 0)
       {
       lToleranceDiffPixelImage = (double)(::atof(av[2]));
+      baseLineFilenamesImage.reserve(1);
+      testFilenamesImage.reserve(1);
       baseLineFilenamesImage.push_back(av[3]);
       testFilenamesImage.push_back(av[4]);
       av += 4;
@@ -139,6 +141,8 @@ int main(int ac, char* av[] )
 	lToleranceDiffPixelImage = (double)(::atof(av[2]));
 	// Number of comparisons to do
 	unsigned int nbComparisons=(unsigned int)(::atoi(av[3]));
+        baseLineFilenamesImage.reserve(nbComparisons);
+        testFilenamesImage.reserve(nbComparisons);
 	// Retrieve all the file names
 	for(unsigned int i = 0; i<nbComparisons;i++)
 	  {
@@ -184,46 +188,30 @@ otbMsgDebugMacro(<<"----------------     DEBUT Controle NON-REGRESION  ---------
       if ((baseLineFilenamesImage.size()>0) && (testFilenamesImage.size()>0))
         {
 	  // Creates iterators on baseline filenames vector and test filenames vector
-	  std::vector<char*>::iterator itBaselineFilenames = baseLineFilenamesImage.begin();
-	  std::vector<char*>::iterator itTestFilenames = testFilenamesImage.begin();
+	  std::vector<std::string>::iterator itBaselineFilenames = baseLineFilenamesImage.begin();
+	  std::vector<std::string>::iterator itTestFilenames = testFilenamesImage.begin();
 	  // For each couple of baseline and test file, do the comparison
 	  for(;(itBaselineFilenames != baseLineFilenamesImage.end())
 		&&(itTestFilenames != testFilenamesImage.end());
 	      ++itBaselineFilenames,++itTestFilenames)
 	    {
-	      char * baselineFilenameImage = (*itBaselineFilenames);
-	      char * testFilenameImage = (*itTestFilenames);
+	      std::string baselineFilenameImage = (*itBaselineFilenames);
+	      std::string testFilenameImage = (*itTestFilenames);
 
-	      std::map<std::string,int> baselines = RegressionTestBaselines(baselineFilenameImage);
+	      std::map<std::string,int> baselines = RegressionTestBaselines(const_cast<char*>(baselineFilenameImage.c_str()));
 	      std::map<std::string,int>::iterator baseline = baselines.begin();
-	      std::string bestBaseline;
-	      int bestBaselineStatus = itk::NumericTraits<int>::max();
-	      while (baseline != baselines.end())
-		{
-		  baseline->second = RegressionTestImage(testFilenameImage,
+	      baseline->second = RegressionTestImage(testFilenameImage.c_str(),
 							 (baseline->first).c_str(),
 							 0,
 							 lToleranceDiffPixelImage);
-		  if (baseline->second < bestBaselineStatus)
+		  if (baseline->second != 0)
 		    {
-		      bestBaseline = baseline->first;
-		      bestBaselineStatus = baseline->second;
-		    }
-		  if (baseline->second == 0)
-		    {
-		      break;
-		    }
-		  ++baseline;
-		}
-	      // if the best we can do still has errors, generate the error images
-	      if (bestBaselineStatus)
-		{
-		  baseline->second = RegressionTestImage(testFilenameImage,
-							 bestBaseline.c_str(),
+		    baseline->second = RegressionTestImage(testFilenameImage.c_str(),
+							 (baseline->first).c_str(),
 							 1,
 							 lToleranceDiffPixelImage);
 		}
-	      result += bestBaselineStatus;
+	      result += baseline->second;
 	    }
         }
       // Test de non regression sur des fichiers ascii
