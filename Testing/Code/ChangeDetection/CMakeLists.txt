@@ -17,8 +17,8 @@ SET(CHANGEDETECTION_TESTS ${CXX_TEST_PATH}/otbChangeDetectionTests)
 # -------            otb::CBAMI   ------------------------------
 
 ADD_TEST(cdTvCBAMI ${CHANGEDETECTION_TESTS}  
-#  --compare-image ${TOL}   ${BASELINE}/coExtractROI_cthead1_26_97_209_100.png
-#                    ${TEMP}/coExtractROI_cthead1_26_97_209_100.png
+  --compare-image ${TOL}   ${BASELINE}/cdCBAMIImage.png
+                    ${TEMP}/cdCBAMIImage.png
         otbCBAMIChangeDetectionTest
 	 ${INPUTDATA}/GomaAvant.png 
 	 ${INPUTDATA}/GomaApres.png
@@ -27,8 +27,8 @@ ADD_TEST(cdTvCBAMI ${CHANGEDETECTION_TESTS}
 	 )
 	 
 ADD_TEST(cdTvCorrel ${CHANGEDETECTION_TESTS}
-#  --compare-image ${TOL}   ${BASELINE}/coExtractROI_cthead1_26_97_209_100.png
-#                    ${TEMP}/coExtractROI_cthead1_26_97_209_100.png
+  --compare-image ${TOL}   ${BASELINE}/cdCorrelImage.png
+                    ${TEMP}/cdCorrelImage.png
 	otbCorrelChangeDetectionTest 
 	 ${INPUTDATA}/GomaAvant.png 
 	 ${INPUTDATA}/GomaApres.png 
@@ -37,8 +37,8 @@ ADD_TEST(cdTvCorrel ${CHANGEDETECTION_TESTS}
 	 )
 
 ADD_TEST(cdTvMeanDiff ${CHANGEDETECTION_TESTS}
-#  --compare-image ${TOL}   ${BASELINE}/coExtractROI_cthead1_26_97_209_100.png
-#                    ${TEMP}/coExtractROI_cthead1_26_97_209_100.png
+  --compare-image ${TOL}   ${BASELINE}/cdMeanDiffImage.png
+                    ${TEMP}/cdMeanDiffImage.png
 	otbMeanDiffChangeDetectionTest 
 	 ${INPUTDATA}/GomaAvant.png 
 	 ${INPUTDATA}/GomaApres.png
@@ -47,8 +47,8 @@ ADD_TEST(cdTvMeanDiff ${CHANGEDETECTION_TESTS}
 	 )
 
 ADD_TEST(cdTvMeanRatio ${CHANGEDETECTION_TESTS}
-#  --compare-image ${TOL}   ${BASELINE}/coExtractROI_cthead1_26_97_209_100.png
-#                    ${TEMP}/coExtractROI_cthead1_26_97_209_100.png
+  --compare-image ${TOL}   ${BASELINE}/cdMeanRatioImage.png
+                    ${TEMP}/cdMeanRatioImage.png
 	otbMeanRatioChangeDetectionTest 
 	 ${INPUTDATA}/GomaAvant.png 
 	 ${INPUTDATA}/GomaApres.png
@@ -57,18 +57,18 @@ ADD_TEST(cdTvMeanRatio ${CHANGEDETECTION_TESTS}
 	 )
 	 
 ADD_TEST(cdTvLHMI ${CHANGEDETECTION_TESTS}
-#  --compare-image ${TOL}   ${BASELINE}/coExtractROI_cthead1_26_97_209_100.png
-#                    ${TEMP}/coExtractROI_cthead1_26_97_209_100.png
+#  --compare-image ${TOL}   ${BASELINE}/cdLHMIImage.png
+#                    ${TEMP}/cdLHMIImage.png
 	otbLHMIChangeDetectionTest 
-	 ${INPUTDATA}/GomaAvant.png 
-	 ${INPUTDATA}/GomaApres.png
+	 ${INPUTDATA}/GomaAvantSousEch.png 
+	 ${INPUTDATA}/GomaApresSousEch.png
 	 2 
 	 ${TEMP}/cdLHMIImage.png 
 	 )
 
 ADD_TEST(cdTvJHMI ${CHANGEDETECTION_TESTS}
-#  --compare-image ${TOL}   ${BASELINE}/coExtractROI_cthead1_26_97_209_100.png
-#                    ${TEMP}/coExtractROI_cthead1_26_97_209_100.png
+  --compare-image ${TOL}   ${BASELINE}/cdJHMIImage.png
+                    ${TEMP}/cdJHMIImage.png
 	otbJHMIChangeDetectionTest 
 	 ${INPUTDATA}/GomaAvant.png 
 	 ${INPUTDATA}/GomaApres.png
