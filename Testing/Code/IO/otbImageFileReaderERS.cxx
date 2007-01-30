@@ -28,7 +28,6 @@
 #include "itkExceptionObject.h"
 #include <iostream>
 #include "itkComplexToModulusImageFilter.h"
-#include "itkStreamingImageFilter.h"
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
 #include "otbMultiChannelExtractROI.h"
@@ -51,16 +50,12 @@ int otbImageFileReaderERS(int argc, char* argv[])
         typedef otb::ImageFileReader< InputImageType  >         ReaderType;
         typedef otb::ImageFileWriter< OutputImageType >         WriterType;
 
-        typedef itk::StreamingImageFilter< InputImageType, OutputImageType >         StreamingType;
-	
-        StreamingType::Pointer streaming = StreamingType::New();
+      
         ReaderType::Pointer complexReader = ReaderType::New();
  
 	complexReader->SetFileName( inputFilename  );
-	streaming->SetNumberOfStreamDivisions(100);
-	streaming->SetInput(complexReader->GetOutput());
 
-        typedef otb::MultiChannelExtractROI< OutputPixelType, 
+        typedef otb::MultiChannelExtractROI< InputPixelType, 
                                              OutputPixelType >  ExtractROIFilterType;
 
         ExtractROIFilterType::Pointer extractROIFilter = ExtractROIFilterType::New();
@@ -70,14 +65,14 @@ int otbImageFileReaderERS(int argc, char* argv[])
 	extractROIFilter->SetSizeX( 100 );
 	extractROIFilter->SetSizeY( 100 );
 	extractROIFilter->SetSizeY( 100 );
-        extractROIFilter->SetInput( streaming->GetOutput() );        
+        extractROIFilter->SetInput( complexReader->GetOutput() );        
 
         WriterType::Pointer writer = WriterType::New();
 	
         writer->SetFileName( outputFilename );        
         writer->SetInput( extractROIFilter->GetOutput() );
         writer->Update(); 
-
+ 
   } 
   catch( itk::ExceptionObject & err ) 
   { 
