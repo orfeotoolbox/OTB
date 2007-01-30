@@ -53,10 +53,11 @@ int otbOrientationPath( int argc, char * argv[] )
         function->SetInputPath( pathElt );
 
 	RealType ResultTheta = function->Evaluate();
+	std::cout.precision(10);
 	std::cout << "Orientation found : " << ResultTheta <<std::endl;
-	if( ResultTheta != Theta )
+	if( abs(ResultTheta-Theta)>=10e-15)
 	{
-		std::cout << "Error in Theta estimation :" << std::endl;
+		std::cout << "Error in Theta estimation:" <<(ResultTheta-Theta)<<std::endl;
 		return EXIT_FAILURE;
 	}
 	
