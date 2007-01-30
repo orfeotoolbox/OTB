@@ -18,6 +18,8 @@ PURPOSE.  See the above copyright notices for more information.
 #ifndef _otbMorphologicalPyramidAnalyseFilter_txx
 #define _otbMorphologicalPyramidAnalyseFilter_txx
 
+#include <math.h>
+
 #include "otbMorphologicalPyramidAnalyseFilter.h"
 
 #include "itkSubtractImageFilter.h"
@@ -147,7 +149,7 @@ namespace otb
     typename InputImageType::Pointer upsampled;
 
     // Structuring element size computation
-    const int structElementDimension=static_cast<int>(ceilf(this->GetSubSampleScale()/2.));
+    const int structElementDimension=static_cast<int>(ceil(static_cast<double>(this->GetSubSampleScale()/2.)));
   
     // Structuring element creation
     KernelType structuringElement;
