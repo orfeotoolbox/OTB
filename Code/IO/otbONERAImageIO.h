@@ -18,6 +18,7 @@
 #ifndef __otbONERAImageIO_h
 #define __otbONERAImageIO_h
 
+#include "itkByteSwapper.h"
 #include "itkImageIOBase.h"
 #include <fstream>
 
@@ -119,18 +120,24 @@ private:
   ONERAImageIO(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
 
-  /** Méthode analyse le nom du fichier a ouvrir. S'il s'agit d'un répertoire, 
-    * on regarde s'il contient un produit le fichier entête (fichier "ENT...")
+  /** Mï¿½thode analyse le nom du fichier a ouvrir. S'il s'agit d'un rï¿½pertoire, 
+    * on regarde s'il contient un produit le fichier entï¿½te (fichier "ENT...")
     * Dans ce cas, ONERAFileName contient le nom du fichier a ouvrir. 
     * Sinon ONERAFileName contient filename
     */
   void GetOneraImageFileName( const char * filename, std::string & OneraFileName );
 
+#define otbSwappFileToSystemMacro(StrongType, WeakType, buffer, buffer_size) \
+    else if ( this->GetComponentType() == WeakType ) \
+    { \
+        typedef itk::ByteSwapper< StrongType > InternalByteSwapperType; \
+        InternalByteSwapperType::SwapRangeFromSystemToLittleEndian((StrongType *)buffer, buffer_size ); \
+    }
 
   /** Nombre d'octets par pixel */
   int     m_NbOctetPixel;
   bool    m_FlagWriteImageInformation;
-  
+
 
 };
 

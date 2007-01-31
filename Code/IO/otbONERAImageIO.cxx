@@ -241,11 +241,20 @@ otbMsgDevMacro( <<" Nb Of Components  : "<<this->GetNumberOfComponents());
     }
 
   //byte swapping depending on pixel type:
-  if(this->GetComponentType() == FLOAT)
+/*  if(this->GetComponentType() == FLOAT)
     {
     itk::ByteSwapper<float>::SwapRangeFromSystemToLittleEndian(
         reinterpret_cast<float *>(buffer),cpt);
-    }
+    }*/
+        unsigned long numberOfPixelsPerRegion = lNbLignes * lNbColonnes * 2;
+        // Swap bytes if necessary
+        if ( 0 ) {}
+        otbSwappFileToSystemMacro( float, FLOAT, buffer, numberOfPixelsPerRegion )
+        otbSwappFileToSystemMacro( double, DOUBLE, buffer, numberOfPixelsPerRegion )
+        else
+        {
+                itkExceptionMacro(<<"ONERAImageIO::Read() undefined component type! " );
+        }
 
   delete [] value;
     
@@ -386,7 +395,9 @@ void ONERAImageIO::InternalReadImageInformation()
 otbMsgDebugMacro( <<"Driver to read: ONERA");
 otbMsgDebugMacro( <<"         Read  file         : "<< m_FileName);
 otbMsgDebugMacro( <<"         Size               : "<<m_Dimensions[0]<<","<<m_Dimensions[1]);
-otbMsgDebugMacro( <<"         ComponentType      : "<<this->GetComponentType() );
+otbMsgDebugMacro( <<"         PixelType          : "<<this->GetPixelTypeAsString(this->GetPixelType()));
+otbMsgDebugMacro( <<"         ComponentType      : "<<this->GetComponentTypeAsString(this->GetComponentType()));
+otbMsgDebugMacro( <<"         ComponentSize      : "<<this->GetComponentSize());
 otbMsgDebugMacro( <<"         NumberOfComponents : "<<this->GetNumberOfComponents());
 otbMsgDebugMacro( <<"         NbOctetPixel       : "<<m_NbOctetPixel);
 
@@ -490,11 +501,11 @@ otbMsgDevMacro( <<" Dimensions de l'image  : "<<m_Dimensions[0]<<","<<m_Dimensio
 otbMsgDevMacro( <<" Region lue (IORegion)  : "<<this->GetIORegion());
 otbMsgDevMacro( <<" Nb Of Components  : "<<this->GetNumberOfComponents());
 
-	// Cas particuliers : on controle que si la région à écrire est de la même dimension que l'image entière,
-	// on commence l'offset à 0 (lorsque que l'on est pas en "Streaming")
+	// Cas particuliers : on controle que si la rï¿½gion ï¿½ ï¿½crire est de la mï¿½me dimension que l'image entiï¿½re,
+	// on commence l'offset ï¿½ 0 (lorsque que l'on est pas en "Streaming")
 	if( (lNbLignes == m_Dimensions[1]) && (lNbColonnes == m_Dimensions[0]))
 	{
-                otbMsgDevMacro(<<"Force l'offset de l'IORegion à 0");
+                otbMsgDevMacro(<<"Force l'offset de l'IORegion ï¿½ 0");
 		lPremiereLigne = 0;
 		lPremiereColonne = 0;
 	}
