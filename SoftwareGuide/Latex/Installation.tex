@@ -252,7 +252,7 @@ ENDIF(OTB_USE_EXTERNAL_ITK)
 
 ADD_EXECUTABLE(HelloWorld HelloWorld.cxx )
 
-TARGET_LINK_LIBRARIES(HelloWorld OTBCommon)
+TARGET_LINK_LIBRARIES(HelloWorld OTBCommon OTBIO ITKCommon ITKIO)
 \end{verbatim}
 
 \normalsize
