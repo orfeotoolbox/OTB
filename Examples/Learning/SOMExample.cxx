@@ -26,6 +26,14 @@
 // This example illustrates the use of the
 // \doxygen{otb}{SOM} class for building Kohonen's Self Organizing
 // Maps.
+//
+// We will use the SOM in order to build a color table from an input
+// image. Our input image is coded with $3\times 8$ bits and we would
+// like to code it with only 64 levels. We will use the SOM in order
+// to learn which are the 64 most representative RGB values of the
+// input image and we will assume that this is the optimal color table
+// for the image.
+//
 // The first thing to do is include the header file for the
 // class. We will also need the header files for the map itself and
 // the activation map builder whose utility will be explained at the
@@ -317,7 +325,14 @@ int main(int argc, char* argv[])
 //  Software Guide : BeginLatex
 // Figure \ref{fig:SOMMAP} shows the result of the SOM learning. Since
 // we have performed a learning on RGB pixel values, the produced SOM
-// can be interpreted as an optimal color table for the input image.
+// can be interpreted as an optimal color table for the input
+// image. It can be observed that the obtained colors are
+// topologically organised, so similar colors are also close in the
+// map. This topological organisation can be exploited to further
+// reduce the number of coding levels of the pixels without
+// performing a new learning: we can subsample the map to get a new
+// color table. Also, a bilinear interpolation between the neurons can
+// be used to increase the number of coding levels.
 // \begin{figure}
 // \center
 // \includegraphics[width=0.45\textwidth]{ROI_QB_MUL_1.eps}
