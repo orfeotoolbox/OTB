@@ -211,7 +211,8 @@ namespace otb
 	for (int j =0; j<InputImageType::ImageDimension;j++)
 	  {
 	    sizeTmp=size[j];
-	    size[j]=static_cast<unsigned int>(static_cast<double>(sizeTmp)/this->GetSubSampleScale());
+	    // As we knwow that our values will always be positive ones, we can simulate round by ceil(value+0.5)
+	    size[j]=static_cast<unsigned int>(ceil((static_cast<double>(sizeTmp)/this->GetSubSampleScale())+0.5));
 	  }
 	otbMsgDebugMacro(<<"New size: "<<size);
     

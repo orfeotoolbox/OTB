@@ -48,9 +48,9 @@
 // estimation of the SVM model. Left: RGB image. Right: image of labels.} 
 // \label{fig:SVMROISMULTI}
 // \end{figure}
-//
+
 // The following header files are needed for the program:
-//
+
 //  Software Guide : EndLatex 
 
 
@@ -85,7 +85,7 @@ int main( int argc, char *argv[])
     const char* inputImageFileName = argv[1];
     const char* trainingImageFileName = argv[2];
     const char* outputImageFileName = argv[3];
-    const char* outputModelFileName = argv[4];
+//  const char* outputModelFileName = argv[4];
 
 //  Software Guide : BeginLatex
 //
