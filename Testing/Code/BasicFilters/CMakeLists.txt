@@ -111,8 +111,13 @@ ADD_TEST(bfTuLogPolarTransformNew ${BASICFILTERS_TESTS}
          otbLogPolarTransformNew)
 
 ADD_TEST(bfTvLogPolarTransform ${BASICFILTERS_TESTS}
+   --compare-ascii ${TOL}
+ 		   ${BASELINE_FILES}/bfLogPolarTransformResults.txt
+ 		   ${TEMP}/bfLogPolarTransformResults.txt
         otbLogPolarTransform
-	1 1 6 0 0 0 10 45 0 3.14 3.14 18 1 50 50
+	1 1 
+	${TEMP}/bfLogPolarTransformResults.txt
+	5 0 0 0 10 45 0 3.14 3.14 18 1
 	)
 
 ADD_TEST(bfTvLogPolarTransformResample ${BASICFILTERS_TESTS}  
