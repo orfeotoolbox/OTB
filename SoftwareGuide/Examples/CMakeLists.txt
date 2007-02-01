@@ -164,6 +164,7 @@ SET( OTB_EXAMPLES_SRCS
   ${OTB_SOURCE_DIR}/Examples/DataRepresentation/Image/RGBImage.cxx
   ${OTB_SOURCE_DIR}/Examples/DataRepresentation/Image/VectorImage.cxx
   ${OTB_SOURCE_DIR}/Examples/DataRepresentation/Image/Image5.cxx
+  ${OTB_SOURCE_DIR}/Examples/DataRepresentation/Image/ImageListExample.cxx  
   ${OTB_SOURCE_DIR}/Examples/DataRepresentation/Mesh/PointSet1.cxx
   ${OTB_SOURCE_DIR}/Examples/DataRepresentation/Mesh/PointSet2.cxx
   ${OTB_SOURCE_DIR}/Examples/DataRepresentation/Mesh/PointSet3.cxx
