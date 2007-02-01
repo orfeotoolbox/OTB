@@ -79,7 +79,7 @@ FullResolutionImageWidget<TPixel>
 ::resize(int x, int y, int w, int h)
 {
   //otbMsgDebugMacro(<<"resize: "<<x<<" "<<y<<" "<<w<<" "<<h);
-  IndexType index;
+  // IndexType index;
   SizeType size;
   size[0]=w;
   size[1]=h;
@@ -88,11 +88,12 @@ FullResolutionImageWidget<TPixel>
   region.SetIndex(m_UpperRightCorner);
   region.Crop(this->GetInput()->GetLargestPossibleRegion());
   this->SetViewedRegion(region);
+  this->redraw();
   this->Fl_Gl_Window::resize(region.GetIndex()[0],
 	       region.GetIndex()[1], 
 	       region.GetSize()[0],
 	       region.GetSize()[1]);
-  this->redraw();
+  
 }
 /** 
  * Test if the buffer has to be updated.

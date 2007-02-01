@@ -68,7 +68,7 @@ ZoomableImageWidget<TPixel>
 	{
 	  this->GetInputOverlay()->Update();
 	}
-      this->Label(l);
+      this->label(l);
       this->resize(x, y, w, h);
     }
 }
@@ -106,10 +106,11 @@ ZoomableImageWidget<TPixel>
   IndexType bufferedULCorner = buffered.GetIndex();
   IndexType viewedRDCorner = viewed.GetIndex()+viewed.GetSize();
   IndexType bufferedRDCorner = buffered.GetIndex()+buffered.GetSize();
-  return ( viewedULCorner[0]<bufferedULCorner[0]
-	   ||viewedULCorner[1]<bufferedULCorner[1]
-	   ||viewedRDCorner[0]>bufferedRDCorner[0]
-	   ||viewedRDCorner[1]>bufferedRDCorner[1]);
+ //  return ( viewedULCorner[0]<bufferedULCorner[0]
+//  	   ||viewedULCorner[1]<bufferedULCorner[1]
+//  	   ||viewedRDCorner[0]>bufferedRDCorner[0]
+//  	   ||viewedRDCorner[1]>bufferedRDCorner[1]);
+  return true;
 }
 
 /** 
@@ -126,10 +127,11 @@ ZoomableImageWidget<TPixel>
   IndexType bufferedULCorner = buffered.GetIndex();
   IndexType viewedRDCorner = viewed.GetIndex()+viewed.GetSize();
   IndexType bufferedRDCorner = buffered.GetIndex()+buffered.GetSize();
-  return ( viewedULCorner[0]<bufferedULCorner[0]
-	   ||viewedULCorner[1]<bufferedULCorner[1]
-	   ||viewedRDCorner[0]>bufferedRDCorner[0]
-	   ||viewedRDCorner[1]>bufferedRDCorner[1]);
+ //  return ( viewedULCorner[0]<bufferedULCorner[0]
+//  	   ||viewedULCorner[1]<bufferedULCorner[1]
+//  	   ||viewedRDCorner[0]>bufferedRDCorner[0]
+//  	   ||viewedRDCorner[1]>bufferedRDCorner[1]);
+  return true;
 }
 /** 
  * Update OpenGlBuffer. 
@@ -171,8 +173,8 @@ ZoomableImageWidget<TPixel>
   SizeType newSize;
   RegionType newRegion;
 
-  newSize[0] = static_cast<unsigned int>((double)this->w()/zoomFactor)+1;
-  newSize[1] = static_cast<unsigned int>((double)this->h()/zoomFactor)+1;
+  newSize[0] = static_cast<unsigned int>((double)this->w()/zoomFactor);
+  newSize[1] = static_cast<unsigned int>((double)this->h()/zoomFactor);
   otbMsgDebugMacro(<<"SetZoomFactor: newSize ->"<<newSize);
   otbMsgDebugMacro(<<"SetZoomFactor: newIndex ->"<<newIndex);
   newRegion.SetIndex(m_ZoomUpperLeftCorner);
@@ -189,14 +191,13 @@ void
 ZoomableImageWidget<TPixel>
 ::SetZoomUpperLeftCorner(IndexType index)
 {
-  IndexType newIndex;
   SizeType size;
   RegionType newRegion;
 
   size = this->GetViewedRegion().GetSize();
   otbMsgDebugMacro(<<"SetZoomCenter: Size ->"<<size);
   
-  otbMsgDebugMacro(<<"SetZoomCenter: newIndex ->"<<newIndex);
+  otbMsgDebugMacro(<<"SetZoomCenter: newIndex ->"<<index);
   newRegion.SetIndex(index);
   newRegion.SetSize(size);
   this->SetViewedRegion(newRegion);

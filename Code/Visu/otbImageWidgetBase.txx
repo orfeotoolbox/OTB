@@ -250,6 +250,7 @@ ImageWidgetBase<TPixel>
   else
     {
       //otbMsgDebugMacro(<<"Show");
+      m_Image->SetRequestedRegion(m_BufferedRegion);
       m_Image->Update();
       this->show();
       this->redraw();
@@ -267,11 +268,15 @@ ImageWidgetBase<TPixel>
  if(this->UpdateOpenGlBufferedRegionRequested())
     {
       UpdateOpenGlBufferedRegion();
+      m_Image->SetRequestedRegion(m_BufferedRegion);
+      m_Image->Update();
       RebuildOpenGlBuffer();
     }
  if(m_ImageOverlayVisible && this->UpdateOpenGlImageOverlayBufferedRegionRequested())
     {
       UpdateOpenGlImageOverlayBufferedRegion();
+      m_ImageOverlay->SetRequestedRegion(m_BufferedRegion);
+      m_ImageOverlay->Update();
       RebuildOpenGlImageOverlayBuffer();
     }
 
@@ -355,18 +360,18 @@ ImageWidgetBase<TPixel>
   unsigned int index = 0;
   for(it.GoToBegin();!it.IsAtEnd();++it)
     {
-      m_OpenGlBuffer[index] = it.Get()[m_RedChannelIndex];
+      m_OpenGlBuffer[index] = static_cast<unsigned int>(it.Get()[m_RedChannelIndex]);
       if(m_ViewModelIsRGB)
 	{
-	  m_OpenGlBuffer[index+1] = it.Get()[m_GreenChannelIndex];
-	  m_OpenGlBuffer[index+2] = it.Get()[m_BlueChannelIndex];
+	  m_OpenGlBuffer[index+1] = static_cast<unsigned int>(it.Get()[m_GreenChannelIndex]);
+	  m_OpenGlBuffer[index+2] = static_cast<unsigned int>(it.Get()[m_BlueChannelIndex]);
 	  m_OpenGlBuffer[index+3] = 256;
 	  index+=4;
 	}
       else
 	{
-	  m_OpenGlBuffer[index+1] = it.Get()[m_RedChannelIndex];
-	  m_OpenGlBuffer[index+2] = it.Get()[m_RedChannelIndex];
+	  m_OpenGlBuffer[index+1] = static_cast<unsigned int>(it.Get()[m_RedChannelIndex]);
+	  m_OpenGlBuffer[index+2] = static_cast<unsigned int>(it.Get()[m_RedChannelIndex]);
 	  m_OpenGlBuffer[index+3] = 256;
 	  index+=4;
 	}
@@ -408,9 +413,9 @@ ImageWidgetBase<TPixel>
 	    }
 	  else
 	    {
-	      m_OpenGlImageOverlayBuffer[index] = it.Get()[0];
-	      m_OpenGlImageOverlayBuffer[index+1] = it.Get()[1];
-	      m_OpenGlImageOverlayBuffer[index+2] = it.Get()[2];
+	      m_OpenGlImageOverlayBuffer[index] =   static_cast<unsigned int>(it.Get()[0]);
+	      m_OpenGlImageOverlayBuffer[index+1] = static_cast<unsigned int>( it.Get()[1]);
+	      m_OpenGlImageOverlayBuffer[index+2] = static_cast<unsigned int>(it.Get()[2]);
 	      m_OpenGlImageOverlayBuffer[index+3] = m_ImageOverlayOpacity;
 	    } 
 	  index+=4;
@@ -420,10 +425,10 @@ ImageWidgetBase<TPixel>
     {
       for(it.GoToBegin();!it.IsAtEnd();++it)
 	{
-	  m_OpenGlImageOverlayBuffer[index] = it.Get()[0];
-	  m_OpenGlImageOverlayBuffer[index+1] = it.Get()[1];
-	  m_OpenGlImageOverlayBuffer[index+2] = it.Get()[2];
-	  m_OpenGlImageOverlayBuffer[index+3] = m_ImageOverlayOpacity;
+	  m_OpenGlImageOverlayBuffer[index] =  static_cast<unsigned int>(it.Get()[0]);
+	  m_OpenGlImageOverlayBuffer[index+1] =static_cast<unsigned int>(it.Get()[1]);
+	  m_OpenGlImageOverlayBuffer[index+2] =static_cast<unsigned int>(it.Get()[2]);
+	  m_OpenGlImageOverlayBuffer[index+3] =m_ImageOverlayOpacity;
 	  index+=4;
 	}
     }

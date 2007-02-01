@@ -32,10 +32,57 @@ ADD_TEST(viTvImageViewerNB ${CXX_TEST_PATH}/otbImageViewer
         ${INPUTDATA}/cthead1.png
         0 )
 
+# -------       otb::ImageWidgetBase -----------------------------------
+
+ADD_TEST(viTuImageWidgetBaseNew ${VISU_TESTS} 
+        otbImageWidgetBaseNew
+        )
+
+# -------       otb::FixedSizeFullImageWidget -----------------------------------
+
+ADD_TEST(viTuFixedSizeFullImageWidgetNew ${VISU_TESTS} 
+        otbFixedSizeFullImageWidgetNew
+        )
+
+ADD_TEST(viTvFixedSizFullImageWidget ${VISU_TESTS} 
+        otbFixedSizeFullImageWidget
+	${INPUTDATA}/poupees.png
+        )
+
+# -------       otb::FullResolutionImageWidget -----------------------------------
+
+ADD_TEST(viTuFullResolutionImageWidgetNew ${VISU_TESTS} 
+        otbFullResolutionImageWidgetNew
+        )
+
+ADD_TEST(viTvFullResolutionImageWidget ${VISU_TESTS} 
+        otbFullResolutionImageWidget
+	${INPUTDATA}/poupees.png
+        )
+
+# -------   otb::ZoomableImageWidget  -----------------------------------
+
+ADD_TEST(viTuZoomableImageWidgetNew ${VISU_TESTS} 
+        otbZoomableImageWidgetNew
+        )
+
+ADD_TEST(viTvZoomableImageWidget ${VISU_TESTS} 
+        otbZoomableImageWidget
+	${INPUTDATA}/poupees.png
+        )
+
+
 # -------       Fichiers sources CXX -----------------------------------
 SET(BasicVisu_SRCS
 otbImageView.cxx
 otbImageViewerNew.cxx
+otbImageWidgetBaseNew.cxx
+otbFixedSizeFullImageWidgetNew.cxx
+otbFixedSizeFullImageWidget.cxx
+otbFullResolutionImageWidgetNew.cxx
+otbFullResolutionImageWidget.cxx
+otbZoomableImageWidgetNew.cxx
+otbZoomableImageWidget.cxx
 )
 
 
