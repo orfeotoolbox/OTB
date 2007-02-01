@@ -36,7 +36,8 @@ TARGET_LINK_LIBRARIES(ImageAdaptor3 OTBCommon ITKCommon OTBIO ITKIO)
 ADD_EXECUTABLE(ImageAdaptor4 ImageAdaptor4.cxx )
 TARGET_LINK_LIBRARIES(ImageAdaptor4 OTBCommon ITKCommon OTBIO ITKIO)
 
-
+ADD_EXECUTABLE(ImageListExample ImageListExample.cxx )
+TARGET_LINK_LIBRARIES(ImageListExample OTBCommon ITKCommon OTBIO ITKIO)
 IF( NOT OTB_DISABLE_CXX_TESTING )
 
 SET(BASELINE ${OTB_DATA_ROOT}/Baseline/Examples/DataRepresentation/Image)
