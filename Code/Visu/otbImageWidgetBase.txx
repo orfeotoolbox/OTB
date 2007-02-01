@@ -139,12 +139,12 @@ ImageWidgetBase<TPixel>
       resp[0]=static_cast<int>(x);
     }
   
-  if(x<maxIndex[1])
+  if(y<maxIndex[1])
     {
       resp[1]=maxIndex[1];
       
     }
-  else if(x>maxIndex[1]+maxSize[1])
+  else if(y>maxIndex[1]+maxSize[1])
     {
       resp[1] = maxIndex[1]+maxSize[1];
     }
