@@ -127,17 +127,33 @@ private:
     */
   void GetOneraImageFileName( const char * filename, std::string & OneraFileName );
 
+#define otbSwappFileOrderToSystemOrderMacro(StrongType, buffer, buffer_size) \
+    { \
+        typedef itk::ByteSwapper< StrongType > InternalByteSwapperType; \
+        if ( m_ByteOrder != m_FileByteOrder ) \
+        { \
+                if ( m_ByteOrder == LittleEndian ) \
+                { \
+                        InternalByteSwapperType::SwapRangeFromSystemToBigEndian( (StrongType *)buffer, buffer_size ); \
+                } \
+                else if ( m_ByteOrder == BigEndian ) \
+                { \
+                        InternalByteSwapperType::SwapRangeFromSystemToLittleEndian((StrongType *)buffer, buffer_size ); \
+                } \
+        } \
+    }
+
 #define otbSwappFileToSystemMacro(StrongType, WeakType, buffer, buffer_size) \
     else if ( this->GetComponentType() == WeakType ) \
     { \
-        typedef itk::ByteSwapper< StrongType > InternalByteSwapperType; \
-        InternalByteSwapperType::SwapRangeFromSystemToLittleEndian((StrongType *)buffer, buffer_size ); \
+        otbSwappFileOrderToSystemOrderMacro( StrongType, buffer, buffer_size )\
     }
 
   /** Nombre d'octets par pixel */
   int     m_NbOctetPixel;
   bool    m_FlagWriteImageInformation;
-
+  /** File byte order */
+  itk::ImageIOBase::ByteOrder m_FileByteOrder;
 
 };
 

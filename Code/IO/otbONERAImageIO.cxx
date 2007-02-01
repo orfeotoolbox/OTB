@@ -51,6 +51,16 @@ ONERAImageIO::ONERAImageIO()
 
   m_FlagWriteImageInformation = true;
 
+  if ( itk::ByteSwapper<char>::SystemIsLittleEndian() == true)
+  {
+        m_ByteOrder = LittleEndian;
+  }
+  else
+  {
+        m_ByteOrder = BigEndian;
+  }
+
+  m_FileByteOrder = BigEndian;
 
 }
 
@@ -65,48 +75,6 @@ ONERAImageIO::~ONERAImageIO()
     m_Headerfile.close();
     }
 }
-
-
-
-
-// static std::string
-// GetHeaderFileName( const std::string & filename )
-// {
-//   std::string ImageFileName = System::GetRootName(filename);
-//   std::string fileExt = System::GetExtension(filename);
-
-//   if(fileExt.compare("ent"))
-//     {
-//     ImageFileName += ".ent";
-    
-//     return( ImageFileName );
-//     }
-//   else
-//     {
-//     return("");
-//     }  
-// }
-
-//Returns the base image filename.
-// static std::string GetImageFileName( const std::string& filename )
-// {
-//   std::string fileExt = System::GetExtension(filename);
-//   std::string ImageFileName = System::GetRootName(filename);
-
-//   if(fileExt.compare("dat") )
-//     {
-//     ImageFileName += ".dat";
-//     return( ImageFileName );
-//     }
-//   else
-//     {
-//     //uiig::Reporter* reporter = uiig::Reporter::getReporter();
-//     //std::string temp="Error, Can not determine compressed file image name. ";
-//     //temp+=filename;
-//     //reporter->setMessage( temp );
-//     return ("");
-//     }
-// }
 
 bool ONERAImageIO::CanReadFile( const char* FileNameToRead )
 {
@@ -138,14 +106,28 @@ bool ONERAImageIO::CanReadFile( const char* FileNameToRead )
     return false;
     }
 
-  this->m_ByteOrder = LittleEndian;
-
   // Check magic_number
   int magicNumber; 
   m_Datafile.seekg(0, std::ios::beg );
   m_Datafile.read((char*)(&magicNumber),4);
 
-  itk::ByteSwapper< int>::SwapFromSystemToLittleEndian(&magicNumber);
+  if( magicNumber == ONERA_MAGIC_NUMBER )
+  {
+  	m_FileByteOrder = m_ByteOrder;
+  }
+  else
+  {
+        if ( m_ByteOrder == LittleEndian )
+        {
+		m_FileByteOrder = BigEndian;
+        }
+        else if ( m_ByteOrder == BigEndian ) 
+        {
+		m_FileByteOrder = LittleEndian;
+        }
+  }
+  // Swap if necessary
+  otbSwappFileOrderToSystemOrderMacro(int, &magicNumber, 1);
 
   m_Headerfile.close();
   m_Datafile.close();
@@ -231,21 +213,11 @@ otbMsgDevMacro( <<" Nb Of Components  : "<<this->GetNumberOfComponents());
       		itkExceptionMacro(<<"ONERAImageIO::Read() Can Read the specified Region"); // read failed
         }
 
-/*	for( unsigned long  i=0 ; i < numberOfBytesRead ; i = i+  2 * m_NbOctetPixel )
-           {
-            memcpy((void*)(&(p[cpt])),(const void*)(&(value[i])),(size_t)( 2* m_NbOctetPixel));
-            cpt += 2*m_NbOctetPixel;
-           } */
         memcpy((void*)(&(p[cpt])),(const void*)(value),(size_t)( numberOfBytesToBeRead));
         cpt += numberOfBytesToBeRead;
     }
 
   //byte swapping depending on pixel type:
-/*  if(this->GetComponentType() == FLOAT)
-    {
-    itk::ByteSwapper<float>::SwapRangeFromSystemToLittleEndian(
-        reinterpret_cast<float *>(buffer),cpt);
-    }*/
         unsigned long numberOfPixelsPerRegion = lNbLignes * lNbColonnes * 2;
         // Swap bytes if necessary
         if ( 0 ) {}
@@ -358,18 +330,35 @@ void ONERAImageIO::InternalReadImageInformation()
     itkExceptionMacro(<< "data format not supported by OTB (only 'complex_real_4' is available)");  
     }  
 
+
+
   // Check magic_number
   int magicNumber; 
   m_Datafile.seekg(0, std::ios::beg );
   m_Datafile.read((char*)(&magicNumber),4);
-  itk::ByteSwapper< int>::SwapFromSystemToLittleEndian(&magicNumber);
+  if( magicNumber == ONERA_MAGIC_NUMBER )
+  {
+  	m_FileByteOrder = m_ByteOrder;
+  }
+  else
+  {
+        if ( m_ByteOrder == LittleEndian )
+        {
+		m_FileByteOrder = BigEndian;
+        }
+        else if ( m_ByteOrder == BigEndian ) 
+        {
+		m_FileByteOrder = LittleEndian;
+        }
+  }
+  otbSwappFileOrderToSystemOrderMacro(int, &magicNumber, 1);
 
   // Find info.. : Number of Row , Nb of Columns
   short NbCol;
 
   m_Datafile.seekg(ONERA_HEADER_LENGTH + 2, std::ios::beg );
   m_Datafile.read((char*)(&NbCol),2);  
-  itk::ByteSwapper<short>::SwapFromSystemToLittleEndian(&NbCol);
+  otbSwappFileOrderToSystemOrderMacro(short, &NbCol, 1);
     
   m_Datafile.seekg(0, std::ios::end);
   long gcountHead = static_cast<long>(ONERA_HEADER_LENGTH + 2*4*NbCol);
@@ -400,6 +389,8 @@ otbMsgDebugMacro( <<"         ComponentType      : "<<this->GetComponentTypeAsSt
 otbMsgDebugMacro( <<"         ComponentSize      : "<<this->GetComponentSize());
 otbMsgDebugMacro( <<"         NumberOfComponents : "<<this->GetNumberOfComponents());
 otbMsgDebugMacro( <<"         NbOctetPixel       : "<<m_NbOctetPixel);
+otbMsgDebugMacro( <<"         Host byte order    : "<<this->GetByteOrderAsString(m_ByteOrder));
+otbMsgDebugMacro( <<"         File byte order    : "<<this->GetByteOrderAsString(m_FileByteOrder));
 
 }
 
@@ -505,7 +496,7 @@ otbMsgDevMacro( <<" Nb Of Components  : "<<this->GetNumberOfComponents());
 	// on commence l'offset � 0 (lorsque que l'on est pas en "Streaming")
 	if( (lNbLignes == m_Dimensions[1]) && (lNbColonnes == m_Dimensions[0]))
 	{
-                otbMsgDevMacro(<<"Force l'offset de l'IORegion � 0");
+                otbMsgDevMacro(<<"Force l'offset de l'IORegion a 0");
 		lPremiereLigne = 0;
 		lPremiereColonne = 0;
 	}
@@ -518,12 +509,6 @@ otbMsgDevMacro( <<" Nb Of Components  : "<<this->GetNumberOfComponents());
   char *tempmemory = new char[numberOfBytesRegion];
   memcpy(tempmemory,buffer,numberOfBytesRegion);
 
-  if(this->GetComponentType() == FLOAT)
-    {
-    itk::ByteSwapper<float>::SwapRangeFromSystemToLittleEndian(
-        reinterpret_cast<float *>(tempmemory), numberOfComponents );
-    }
- 
   for(unsigned int LineNo = lPremiereLigne;LineNo <lPremiereLigne + lNbLignes; LineNo++ )
     {
 	char* value = tempmemory + numberOfBytesPerLines * (LineNo - lPremiereLigne);
@@ -581,7 +566,7 @@ void ONERAImageIO::WriteImageInformation()
   short NbRow = static_cast<short>(m_Dimensions[1]);
   int ByteSizeCol = NbCol*4*2;
 
-  itk::ByteSwapper< int>::SwapFromSystemToLittleEndian(&magicNumber);
+//  itk::ByteSwapper< int>::SwapFromSystemToLittleEndian(&magicNumber);
   m_Datafile.seekp(0, std::ios::beg );
   m_Datafile.write((char*)(&magicNumber),4);
   
@@ -593,7 +578,7 @@ void ONERAImageIO::WriteImageInformation()
   delete [] tab;
 
   // write number of columns
-  itk::ByteSwapper<short>::SwapFromSystemToLittleEndian(&NbCol);
+//  itk::ByteSwapper<short>::SwapFromSystemToLittleEndian(&NbCol);
 
   m_Datafile.seekp(ONERA_HEADER_LENGTH+2, std::ios::beg );
   m_Datafile.write((char*)(&NbCol),2);
@@ -605,6 +590,7 @@ otbMsgDebugMacro( <<"         Size               : "<<m_Dimensions[0]<<","<<m_Di
 otbMsgDebugMacro( <<"         ComponentType      : "<<this->GetComponentType() );
 otbMsgDebugMacro( <<"         NumberOfComponents : "<<this->GetNumberOfComponents());
 otbMsgDebugMacro( <<"         NbOctetPixel       : "<<m_NbOctetPixel);
+otbMsgDebugMacro( <<"         Host byte order    : "<<this->GetByteOrderAsString(m_ByteOrder));
 
 
 
