@@ -31,6 +31,8 @@ void RegisterTests()
 REGISTER_TEST(otbGDALImageIOTestCanRead);
 REGISTER_TEST(otbGDALImageIOTestCanWrite);
 REGISTER_TEST(otbONERAImageIOTestCanRead);
+REGISTER_TEST(otbMSTARImageIOTestCanRead);
+REGISTER_TEST(otbImageFileReaderMSTAR);
 REGISTER_TEST(otbImageFileReaderTest);
 REGISTER_TEST(otbImageFileWriterTest);
 REGISTER_TEST(otbVectorImageFileReaderWriterTest);

@@ -15,7 +15,7 @@ SET(TOL 0.0)
 #Tolerance sur la difference des valeurs numeriques dans le --compare-ascii
 SET(EPS 0.001)
 
-# !!!!!  Pointe sur un exe généré dans le repertoire Common
+# !!!!!  Pointe sur un exe gï¿½nï¿½rï¿½ dans le repertoire Common
 SET(COMMON_TESTS ${CXX_TEST_PATH}/otbCommonTests)
 SET(IO_TESTS     ${CXX_TEST_PATH}/otbIOTests)
 
@@ -30,7 +30,7 @@ ADD_TEST(ioTvMultiMonoChannelROI_RADARSAT2ENVI ${COMMON_TESTS}
          -ushort ${TEMP}/ioMultiMonoChannelROI_RADARSAT2ENVI_2559_3591_337_280.hdr
          -startX 2559 -startY 3591 -sizeX 337 -sizeY 280 )
 
-# ---  RADARSAT (GDAL)  Nom répertoire ---
+# ---  RADARSAT (GDAL)  Nom rï¿½pertoire ---
 ADD_TEST(ioTvMultiMonoChannelROI_RADARSAT_ENVI2ENVI ${COMMON_TESTS} 
 # THOMAS (provisoire) : Images OK mais erreur au DIFF ITK !!!
 #   --compare-image ${TOL} ${BASELINE}/ioMultiMonoChannelROI_RADARSAT2ENVI_2559_3591_337_280.hdr
@@ -434,6 +434,21 @@ ADD_TEST(ioTvONERAImageStreamWriter ${IO_TESTS}
         otbImageFileWriterStreamingONERAComplex
         ${TEMP}/ioImageFileReaderONERAComplexWrite.ent
         ${TEMP}/ioImageFileReaderONERAStreamWrite.ent )
+
+# -------            otb::ONERAImageIO   ------------------------------
+# CanRead()
+ADD_TEST(ioTuMSTARImageIOCanRead1 ${IO_TESTS} otbMSTARImageIOTestCanRead
+        ${INPUTDATA}/MSTAR/HB19896.016)
+
+ADD_TEST(ioTuMSTARImageIOCanRead2 ${IO_TESTS} otbMSTARImageIOTestCanRead
+        ${INPUTDATA}/MSTAR/HB20010.000)
+
+ADD_TEST(ioTvImageFileReaderMSTAR ${IO_TESTS} 
+#  --compare-image ${TOL}   ${BASELINE}/ioImageFileReaderPNG2PNG_cthead1.png
+#                    ${TEMP}/ioImageFileReaderPNG2PNG_cthead1.png
+        otbImageFileReaderMSTAR
+        ${INPUTDATA}/MSTAR/HB19896.016
+        ${TEMP}/ioImageFileReaderMSTAR_rescal_chanel1.png )
 
 # -------            otb::ImageFileReader pour CAI  ------------------------------
 # Niveau de Gris
@@ -866,7 +881,7 @@ ADD_TEST(ioTvStreamingIFWriterWithFilter ${IO_TESTS}
 
 #----------------------------------------------------------------------------------
 # Exemples de tests sur les grosses images
-# Tests non lancés pour raison taille des fichiers produits
+# Tests non lancï¿½s pour raison taille des fichiers produits
 #        ADD_TEST(ioTvStreamingIFWriterPARIS_SPOT5THR_WithoutStreaming ${IO_TESTS} 
 #                 otbStreamingImageFileWriterTest
 #                 ${IMAGEDATA}/PARIS/SPOT5/THR
@@ -896,6 +911,8 @@ ADD_TEST(ioTvStreamingIFWriterWithFilter ${IO_TESTS}
 SET(BasicIO_SRCS
 otbGDALImageIOTestCanRead.cxx
 otbGDALImageIOTestCanWrite.cxx
+otbMSTARImageIOTestCanRead.cxx
+otbImageFileReaderMSTAR.cxx
 otbONERAImageIOTestCanRead.cxx
 otbImageFileReaderONERA.cxx
 otbImageFileReaderONERAComplex.cxx
