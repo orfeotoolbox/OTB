@@ -43,18 +43,6 @@ ADD_TEST(bfTvFiltreFrost ${BASICFILTERS_TESTS}
 	${TEMP}/bfFiltreFrost_poupees_05_05_01.png
 	05 05 0.1)
 
-# -------            otb::LogPolarResampleImageFilter   ------------------------------
-
-ADD_TEST(bfTuLogPolarResampleImageFilterNew ${BASICFILTERS_TESTS}  
-        otbLogPolarResampleImageFilterNew )
-
-ADD_TEST(bfTvLogPolarResampleImageFilter ${BASICFILTERS_TESTS}  
-  --compare-image ${TOL}  ${BASELINE}/bfLogPolarResampleImageFilter.hdr
-                          ${TEMP}/bfLogPolarResampleImageFilter.hdr 
-        otbLogPolarResampleImageFilter
-        ${INPUTDATA}/DeuxCercles.hdr
-	${TEMP}/bfLogPolarResampleImageFilter.hdr)
-
 # -------            otb::PointSetSource   ------------------------------
 
 ADD_TEST(bfTuImageToPointSetFilterTest ${BASICFILTERS_TESTS} 
@@ -155,8 +143,6 @@ otbFrostFilterTest.cxx
 otbFrostFilterNew.cxx
 otbFrostFilter.cxx
 otbImageToPointSetFilterTest.cxx
-otbLogPolarResampleImageFilterNew.cxx
-otbLogPolarResampleImageFilter.cxx
 otbOpeningClosingMorphologicalFilterNew.cxx
 otbOpeningClosingMorphologicalFilter.cxx
 otbClosingOpeningMorphologicalFilterNew.cxx
