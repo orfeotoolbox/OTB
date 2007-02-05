@@ -12,6 +12,9 @@
 
 int otbImageFileReaderMSTAR(int argc, char* argv[])
 {
+  try
+  {
+
   typedef float InputPixelType;
   typedef unsigned char OutputPixelType;
   const unsigned int   InputDimension = 2;
@@ -102,5 +105,19 @@ int otbImageFileReaderMSTAR(int argc, char* argv[])
   writer->SetFileName( argv[2] );
 
   writer->Update();
+  }
+  catch( itk::ExceptionObject & err ) 
+  { 
+    std::cerr << "Exception OTB attrappee dans exception ITK !" << std::endl; 
+    std::cerr << err << std::endl; 
+    return EXIT_FAILURE;
+  } 
+  catch( ... )
+  {
+    std::cerr << "Exception OTB non attrappee !" << std::endl; 
+    return EXIT_FAILURE;
+  }
+  
+  return EXIT_SUCCESS;
 
 }

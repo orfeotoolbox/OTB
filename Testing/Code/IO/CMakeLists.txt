@@ -444,8 +444,8 @@ ADD_TEST(ioTuMSTARImageIOCanRead2 ${IO_TESTS} otbMSTARImageIOTestCanRead
         ${INPUTDATA}/MSTAR/HB20010.000)
 
 ADD_TEST(ioTvImageFileReaderMSTAR ${IO_TESTS} 
-#  --compare-image ${TOL}   ${BASELINE}/ioImageFileReaderPNG2PNG_cthead1.png
-#                    ${TEMP}/ioImageFileReaderPNG2PNG_cthead1.png
+  --compare-image ${TOL}   ${BASELINE}/ioImageFileReaderMSTAR_rescal_chanel1.png
+                    ${TEMP}/ioImageFileReaderMSTAR_rescal_chanel1.png
         otbImageFileReaderMSTAR
         ${INPUTDATA}/MSTAR/HB19896.016
         ${TEMP}/ioImageFileReaderMSTAR_rescal_chanel1.png )
