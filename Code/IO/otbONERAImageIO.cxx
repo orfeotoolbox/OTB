@@ -227,6 +227,7 @@ otbMsgDevMacro( <<" Nb Of Components  : "<<this->GetNumberOfComponents());
         {
                 itkExceptionMacro(<<"ONERAImageIO::Read() undefined component type! " );
         }
+    
 
   delete [] value;
     
