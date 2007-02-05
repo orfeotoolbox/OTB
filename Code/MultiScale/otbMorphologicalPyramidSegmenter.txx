@@ -34,7 +34,7 @@
 
 namespace otb
 {
-namespace morphologicalPyramid
+namespace MorphologicalPyramid
 {
 /**
  * Constructor
@@ -310,6 +310,6 @@ Segmenter<TInputImage, TOuputImage>
   Superclass::PrintSelf(os,indent);
 
 }
-} // End namespace morphologicalPyramid
+} // End namespace MorphologicalPyramid
 } // End namespace otb
 #endif

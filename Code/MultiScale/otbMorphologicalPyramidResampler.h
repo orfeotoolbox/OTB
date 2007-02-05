@@ -22,7 +22,7 @@ PURPOSE.  See the above copyright notices for more information.
 
 namespace otb
 {
-  namespace morphologicalPyramid
+  namespace MorphologicalPyramid
     {
       /**
        * \class Resampler
@@ -89,7 +89,7 @@ namespace otb
 	  /// Output image size
 	  SizeType m_Size;
 	};
-    } // End namespace morphologicalPyramid
+    } // End namespace MorphologicalPyramid
 }// End namespace otb
 
 #ifndef ITK_MANUAL_INSTANTIATION

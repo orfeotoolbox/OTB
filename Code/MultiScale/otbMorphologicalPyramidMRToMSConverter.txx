@@ -24,7 +24,7 @@ PURPOSE.  See the above copyright notices for more information.
 
 namespace otb
 {
-  namespace morphologicalPyramid
+  namespace MorphologicalPyramid
   {
     /**
      * Constructor
@@ -351,6 +351,6 @@ namespace otb
     {
       Superclass::PrintSelf(os,indent);
     }
-  } // End namespace morphologicalPyramid
+  } // End namespace MorphologicalPyramid
 } // End namespace otb
 #endif

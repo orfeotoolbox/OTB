@@ -30,7 +30,7 @@ int otbMorphologicalPyramidSegmenterNew(int argc, char * argv[])
       typedef otb::Image<InputPixelType,Dimension> InputImageType;
       typedef otb::Image<OutputPixelType,Dimension> OutputImageType;
    
-      typedef otb::morphologicalPyramid::Segmenter<InputImageType,OutputImageType>
+      typedef otb::MorphologicalPyramid::Segmenter<InputImageType,OutputImageType>
 	SegmenterType;
 
       // Instantiation

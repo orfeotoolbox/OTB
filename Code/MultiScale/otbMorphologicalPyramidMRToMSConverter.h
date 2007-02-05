@@ -22,7 +22,7 @@
 
 namespace otb
 {
-  namespace morphologicalPyramid
+  namespace MorphologicalPyramid
     {
       /**
        * \class MRToMSConverter
@@ -157,7 +157,7 @@ namespace otb
 	    MRToMSConverter(const Self&); // purposely not implemented
 	  void operator=(const Self&); // purposely not implemented
 	};
-    } // End namespace morphologicalPyramid
+    } // End namespace MorphologicalPyramid
 }// End namespace otb
 
 #ifndef ITK_MANUAL_INSTANTIATION

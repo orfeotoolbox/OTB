@@ -28,7 +28,7 @@
 
 namespace otb
 {
-namespace morphologicalPyramid
+namespace MorphologicalPyramid
 {
 /**
  * Constructor
@@ -104,9 +104,9 @@ Resampler<TInputImage,TOutputImage>
      {
      outputStartIndex[i] =  inputStartIndex[i] ;
      }
-  // Affectation du spacing à l'image de sortie
+  // Affectation du spacing ï¿½ l'image de sortie
   outputPtr->SetSpacing( inputSpacing );
-  // Génération de la région de l'image de sortie
+  // Gï¿½nï¿½ration de la rï¿½gion de l'image de sortie
   typename OutputImageType::RegionType outputLargestPossibleRegion;
   outputLargestPossibleRegion.SetSize(this->GetSize());
   outputLargestPossibleRegion.SetIndex(outputStartIndex);
@@ -174,6 +174,6 @@ Resampler<TInputImage, TOuputImage>
   Superclass::PrintSelf(os,indent);
   os << indent << "Size: " << m_Size << std::endl;
 }
-} // End namespace morphologicalPyramid
+} // End namespace MorphologicalPyramid
 } // End namespace otb
 #endif

@@ -41,7 +41,7 @@ int otbMorphologicalPyramidResampler(int argc, char * argv[])
       typedef otb::ImageFileReader<InputImageType> ReaderType;
       typedef otb::ImageFileWriter<OutputImageType> WriterType;
 
-      typedef otb::morphologicalPyramid::Resampler<InputImageType,OutputImageType>
+      typedef otb::MorphologicalPyramid::Resampler<InputImageType,OutputImageType>
 	ResamplerType;
 
       // Input image reading

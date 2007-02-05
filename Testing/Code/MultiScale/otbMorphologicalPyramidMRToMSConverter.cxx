@@ -51,7 +51,7 @@ int otbMorphologicalPyramidMRToMSConverter(int argc, char * argv[])
 	OpeningClosingFilterType;
       typedef otb::MorphologicalPyramidAnalyseFilter<InputImageType,InputImageType,OpeningClosingFilterType>
 	PyramidAnalyseFilterType;
-      typedef otb::morphologicalPyramid::MRToMSConverter<InputImageType,OutputImageType> MRToMSConverterType;
+      typedef otb::MorphologicalPyramid::MRToMSConverter<InputImageType,OutputImageType> MRToMSConverterType;
 
 
       // Reading input image

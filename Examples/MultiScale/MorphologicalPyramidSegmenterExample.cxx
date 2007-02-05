@@ -96,7 +96,7 @@ int main(int argc, char * argv[])
 
 // Software Guide : BeginCodeSnippet
       
-      typedef otb::morphologicalPyramid::Segmenter<InputImageType,
+      typedef otb::MorphologicalPyramid::Segmenter<InputImageType,
                                                       LabelImageType>
 	                                                SegmenterType;
 

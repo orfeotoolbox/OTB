@@ -43,7 +43,7 @@ int otbMorphologicalPyramidSegmenter(int argc, char * argv[])
       typedef otb::ImageFileReader<InputImageType> ReaderType;
       typedef otb::ImageFileWriter<OutputImageType> WriterType;
 
-      typedef otb::morphologicalPyramid::Segmenter<InputImageType,OutputImageType>
+      typedef otb::MorphologicalPyramid::Segmenter<InputImageType,OutputImageType>
 	SegmenterType;
 
       // Input images reading

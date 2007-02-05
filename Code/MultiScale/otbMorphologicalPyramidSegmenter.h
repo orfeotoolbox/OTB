@@ -22,7 +22,7 @@ PURPOSE.  See the above copyright notices for more information.
 
 namespace otb
 {
-  namespace morphologicalPyramid
+  namespace MorphologicalPyramid
     {
       /**
        * \class Segmenter
@@ -143,7 +143,7 @@ namespace otb
 	  /** Number of segmented objects */
 	  OutputPixelType m_NumberOfObjects;
 	};
-    } // End namespace morphologicalPyramid
+    } // End namespace MorphologicalPyramid
 }// End namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
