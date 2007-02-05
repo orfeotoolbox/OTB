@@ -83,7 +83,7 @@ int otbImageFileReaderMSTAR(int argc, char* argv[])
         ++inputIt, ++outputIt)
     {
     outputIt.Set(  inputIt.Get()[0]  );
-    std::cout << inputIt.Get()[0] << " - " << inputIt.Get()[1] << std::endl;
+//    std::cout << inputIt.Get()[0] << " - " << inputIt.Get()[1] << std::endl;
     }
   
 
