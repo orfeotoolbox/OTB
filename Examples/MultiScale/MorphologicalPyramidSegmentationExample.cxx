@@ -21,8 +21,8 @@ PURPOSE.  See the above copyright notices for more information.
 //
 // This example illustrates the use of the
 // \doxygen{otb}{MorphologicalSegmentationFilter}. This filter
-// performs a segmentation of the details \code{supFiltre} and
-// \code{infFiltre} extracted with the morphological pyramid. The
+// performs a segmentation of the details \code{supFilter} and
+// \code{infFilter} extracted with the morphological pyramid. The
 // segmentation algorithm used is based on seeds extraction using the
 // \doxygen{otb}{ImageToPointSetFilter}, followed by a connected
 // threshold segmentation using the
@@ -36,10 +36,10 @@ PURPOSE.  See the above copyright notices for more information.
 // methods. The brighter and darker details depend on the filter used
 // in the pyramid analysis. If the
 // \doxygen{otb}{OpeningClosingMorphologicalFilter} filter is used,
-// then the brighter details are those from the \code{supFiltre} image
+// then the brighter details are those from the \code{supFilter} image
 // list, whereas if the
 // \doxygen{otb}{ClosingOpeningMorphologicalFilter} filter is used,
-// the brighter details are those from the \code{infFiltre} list. The
+// the brighter details are those from the \code{infFilter} list. The
 // output of the segmentation filter is a single segmentation images
 // list, containing first the brighter details segmentation from
 // higher scale to lower, and then the darker details in the same
@@ -69,7 +69,7 @@ PURPOSE.  See the above copyright notices for more information.
 
 #include "otbOpeningClosingMorphologicalFilter.h"
 #include "itkBinaryBallStructuringElement.h"
-#include "otbMorphologicalPyramidAnalyseFilter.h"
+#include "otbMorphologicalPyramidAnalysisFilter.h"
 // Software Guide : EndCodeSnippet
 
 #include "otbImageFileReader.h"
@@ -83,8 +83,8 @@ int main(int argc, char * argv[])
       const char* inputFilename = argv[1];
       const char* outputFilenamePrefix = argv[2];
       const char * outputFilenameSuffix = argv[3];
-      const unsigned int numberOfIterations = atoi(argv[4]);
-      const double subSampleScale = atof(argv[5]);
+      const unsigned int numberOfLevels = atoi(argv[4]);
+      const double decimationRatio = atof(argv[5]);
       const float seedsQuantile = atof(argv[6]);
       const float segmentationQuantile = atof(argv[7]);
       const unsigned int minObjectSize = atoi(argv[8]);
@@ -114,7 +114,7 @@ int main(int argc, char * argv[])
       typedef otb::OpeningClosingMorphologicalFilter<InputImageType,
                                     InputImageType,StructuringElementType>
 	                                          OpeningClosingFilterType;
-      typedef otb::MorphologicalPyramidAnalyseFilter<InputImageType,
+      typedef otb::MorphologicalPyramidAnalysisFilter<InputImageType,
                                    InputImageType,OpeningClosingFilterType>
 	                                                  PyramidFilterType;
 
@@ -158,8 +158,8 @@ int main(int argc, char * argv[])
       reader->SetFileName(inputFilename);
 
       PyramidFilterType::Pointer pyramid = PyramidFilterType::New();
-      pyramid->SetNumberOfIterations(numberOfIterations);
-      pyramid->SetSubSampleScale(subSampleScale);
+      pyramid->SetNumberOfLevels(numberOfLevels);
+      pyramid->SetDecimationRatio(decimationRatio);
       pyramid->SetInput(reader->GetOutput());
 
 // Software Guide : EndCodeSnippet
@@ -182,8 +182,8 @@ int main(int argc, char * argv[])
 
       SegmentationFilterType::Pointer segmentation = SegmentationFilterType::New();
       segmentation->SetReferenceImage(reader->GetOutput());
-      segmentation->SetBrighterDetails(pyramid->GetSupFiltre());
-      segmentation->SetDarkerDetails(pyramid->GetInfFiltre());
+      segmentation->SetBrighterDetails(pyramid->GetSupFilter());
+      segmentation->SetDarkerDetails(pyramid->GetInfFilter());
       segmentation->SetSeedsQuantile(seedsQuantile);
       segmentation->SetConnectedThresholdQuantile(segmentationQuantile);
       segmentation->SetMinimumObjectSize(minObjectSize);

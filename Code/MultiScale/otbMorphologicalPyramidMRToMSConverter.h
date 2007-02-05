@@ -67,15 +67,15 @@ namespace otb
 	   */
 	    void SetInput(InputImageListType * imageList);
 	  /**
-	   * Set The SupFiltre details
+	   * Set The SupFilter details
 	   * \param imageList The brighter details extracted from the filtering operation.
 	   */
-	  void SetSupFiltre(InputImageListType * imageList);
+	  void SetSupFilter(InputImageListType * imageList);
 	  /**
-	   * Set The InfFiltre details
+	   * Set The InfFilter details
 	   * \param imageList The darker details extracted from the filtering operation.
 	   */
-	  void SetInfFiltre(InputImageListType * imageList);
+	  void SetInfFilter(InputImageListType * imageList);
 	  /**
 	   * Set The SupDeci details
 	   * \param imageList The brighter details extracted from the filtering operation.
@@ -92,15 +92,15 @@ namespace otb
 	   */
 	  InputImageListType* GetInput(void); 
 	  /**
-	   * Get The SupFiltre details
+	   * Get The SupFilter details
 	   * \return The brighter details extracted from the filtering operation.
 	   */
-	  InputImageListType* GetSupFiltre(void);   
+	  InputImageListType* GetSupFilter(void);   
 	  /**
-	   * Get The InfFiltre details
+	   * Get The InfFilter details
 	   * \return The darker details extracted from the filtering operation.
 	   */
-	  InputImageListType* GetInfFiltre(void);
+	  InputImageListType* GetInfFilter(void);
 	  /**
 	   * Get The SupDeci details
 	   * \return The brighter details extracted from the resampling operation.
@@ -118,17 +118,17 @@ namespace otb
 	   */
 	  OutputImageListType* GetOutput(void);
 	  /**
-	   * Get The SupFiltre details at full resolution.
+	   * Get The SupFilter details at full resolution.
 	   * \return The brighter details extracted from the filtering operation 
 	   * resampled at full resolution.
 	   */
-	  OutputImageListType * GetSupFiltreFullResolution(void);
+	  OutputImageListType * GetSupFilterFullResolution(void);
 	  /**
-	   * Get The InfFiltre details at full resolution.
+	   * Get The InfFilter details at full resolution.
 	   * \return The darker details extracted from the filtering operation
 	   * resampled at full resolution.
 	   */
-	  OutputImageListType * GetInfFiltreFullResolution(void);
+	  OutputImageListType * GetInfFilterFullResolution(void);
 	  /**
 	   * Get The SupDeci details at full resolution.
 	   * \return The brighter details extracted from the resampling operation 

@@ -34,12 +34,12 @@ ADD_TEST(msTvMorphoPyrResampler ${MULTISCALE_TESTS}
 	 256
 	 )
 
-# -------            otb::MorphologicalPyramidAnalyseFilter   ----------
+# -------            otb::MorphologicalPyramidAnalysisFilter   ----------
 
-ADD_TEST(msTuMorphoPyrAnalyseFilterNew ${MULTISCALE_TESTS} 
-         otbMorphologicalPyramidAnalyseFilterNew)
+ADD_TEST(msTuMorphoPyrAnalysisFilterNew ${MULTISCALE_TESTS} 
+         otbMorphologicalPyramidAnalysisFilterNew)
 
-ADD_TEST(msTvMorphoPyrAnalyseFilter ${MULTISCALE_TESTS} 
+ADD_TEST(msTvMorphoPyrAnalysisFilter ${MULTISCALE_TESTS} 
   --compare-n-images ${TOL} 5
 		   ${BASELINE}/msPyrAn_mire_log_an_2.png
 		   ${TEMP}/msPyrAn_mire_log_an_2.png
@@ -51,7 +51,7 @@ ADD_TEST(msTvMorphoPyrAnalyseFilter ${MULTISCALE_TESTS}
 		   ${TEMP}/msPyrAn_mire_log_sd_2.png
 		   ${BASELINE}/msPyrAn_mire_log_id_2.png
 		   ${TEMP}/msPyrAn_mire_log_id_2.png
-         otbMorphologicalPyramidAnalyseFilter
+         otbMorphologicalPyramidAnalysisFilter
 	 ${INPUTDATA}/mire_log.png
 	 ${TEMP}/msPyrAn_mire_log
 	 png
@@ -161,8 +161,8 @@ ADD_TEST(msTvMorphoPyrSegmentationFilter ${MULTISCALE_TESTS}
 SET(BasicMultiScale_SRCS
 otbMorphologicalPyramidResamplerNew.cxx
 otbMorphologicalPyramidResampler.cxx
-otbMorphologicalPyramidAnalyseFilterNew.cxx
-otbMorphologicalPyramidAnalyseFilter.cxx
+otbMorphologicalPyramidAnalysisFilterNew.cxx
+otbMorphologicalPyramidAnalysisFilter.cxx
 otbMorphologicalPyramidSynthesisFilterNew.cxx
 otbMorphologicalPyramidSynthesisFilter.cxx
 otbMorphologicalPyramidMRToMSConverterNew.cxx

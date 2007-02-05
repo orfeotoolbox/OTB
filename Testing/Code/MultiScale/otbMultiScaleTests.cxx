@@ -28,8 +28,8 @@ void RegisterTests()
 {
 REGISTER_TEST(otbMorphologicalPyramidResamplerNew);
 REGISTER_TEST(otbMorphologicalPyramidResampler);
-REGISTER_TEST(otbMorphologicalPyramidAnalyseFilterNew);
-REGISTER_TEST(otbMorphologicalPyramidAnalyseFilter);
+REGISTER_TEST(otbMorphologicalPyramidAnalysisFilterNew);
+REGISTER_TEST(otbMorphologicalPyramidAnalysisFilter);
 REGISTER_TEST(otbMorphologicalPyramidSynthesisFilterNew);
 REGISTER_TEST(otbMorphologicalPyramidSynthesisFilter);
 REGISTER_TEST(otbMorphologicalPyramidMRToMSConverterNew);

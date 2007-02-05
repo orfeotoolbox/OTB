@@ -19,7 +19,7 @@ PURPOSE.  See the above copyright notices for more information.
 #include "otbMorphologicalPyramidSegmentationFilter.h"
 #include "otbOpeningClosingMorphologicalFilter.h"
 #include "itkBinaryBallStructuringElement.h"
-#include "otbMorphologicalPyramidAnalyseFilter.h"
+#include "otbMorphologicalPyramidAnalysisFilter.h"
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
 #include "otbImage.h"
@@ -31,8 +31,8 @@ int otbMorphologicalPyramidSegmentationFilter(int argc, char * argv[])
       const char* inputFilename = argv[1];
       const char* outputFilenamePrefix = argv[2];
       const char * outputFilenameSuffix = argv[3];
-      const unsigned int numberOfIterations = atoi(argv[4]);
-      const double subSampleScale = atof(argv[5]);
+      const unsigned int numberOfLevels = atoi(argv[4]);
+      const double decimationRatio = atof(argv[5]);
       const float seedsQuantile = atof(argv[6]);
       const float segmentationQuantile = atof(argv[7]);
       const unsigned int minObjectSize = atoi(argv[8]);
@@ -50,7 +50,7 @@ int otbMorphologicalPyramidSegmentationFilter(int argc, char * argv[])
       typedef itk::BinaryBallStructuringElement<InputPixelType,Dimension> StructuringElementType;
       typedef otb::OpeningClosingMorphologicalFilter<InputImageType,InputImageType,StructuringElementType>
 	OpeningClosingFilterType;
-      typedef otb::MorphologicalPyramidAnalyseFilter<InputImageType,InputImageType,OpeningClosingFilterType>
+      typedef otb::MorphologicalPyramidAnalysisFilter<InputImageType,InputImageType,OpeningClosingFilterType>
 	PyramidFilterType;
       typedef otb::MorphologicalPyramidSegmentationFilter<InputImageType,OutputImageType>
 	SegmentationFilterType;
@@ -62,15 +62,15 @@ int otbMorphologicalPyramidSegmentationFilter(int argc, char * argv[])
 
       //Analyse
       PyramidFilterType::Pointer pyramid = PyramidFilterType::New();
-      pyramid->SetNumberOfIterations(numberOfIterations);
-      pyramid->SetSubSampleScale(subSampleScale);
+      pyramid->SetNumberOfLevels(numberOfLevels);
+      pyramid->SetDecimationRatio(decimationRatio);
       pyramid->SetInput(reader->GetOutput());
 
       // Segmentation
       SegmentationFilterType::Pointer segmentation = SegmentationFilterType::New();
       segmentation->SetReferenceImage(reader->GetOutput());
-      segmentation->SetBrighterDetails(pyramid->GetSupFiltre());
-      segmentation->SetDarkerDetails(pyramid->GetInfFiltre());
+      segmentation->SetBrighterDetails(pyramid->GetSupFilter());
+      segmentation->SetDarkerDetails(pyramid->GetInfFilter());
       segmentation->SetSeedsQuantile(seedsQuantile);
       segmentation->SetConnectedThresholdQuantile(segmentationQuantile);
       segmentation->SetMinimumObjectSize(minObjectSize);

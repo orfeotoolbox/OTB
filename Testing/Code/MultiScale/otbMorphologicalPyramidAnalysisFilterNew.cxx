@@ -16,12 +16,12 @@
 
 =========================================================================*/
 #include "itkExceptionObject.h"
-#include "otbMorphologicalPyramidAnalyseFilter.h"
+#include "otbMorphologicalPyramidAnalysisFilter.h"
 #include "otbOpeningClosingMorphologicalFilter.h"
 #include "itkBinaryBallStructuringElement.h"
 #include "otbImage.h"
 
-int otbMorphologicalPyramidAnalyseFilterNew(int argc, char * argv[])
+int otbMorphologicalPyramidAnalysisFilterNew(int argc, char * argv[])
 {
   try
     {
@@ -33,7 +33,7 @@ int otbMorphologicalPyramidAnalyseFilterNew(int argc, char * argv[])
       typedef itk::BinaryBallStructuringElement<InputPixelType,Dimension> StructuringElementType;
       typedef otb::OpeningClosingMorphologicalFilter<InputImageType,InputImageType,StructuringElementType>
 	OpeningClosingFilterType;
-      typedef otb::MorphologicalPyramidAnalyseFilter<InputImageType,OutputImageType,OpeningClosingFilterType>
+      typedef otb::MorphologicalPyramidAnalysisFilter<InputImageType,OutputImageType,OpeningClosingFilterType>
 	PyramidFilterType;
       // Instantiation
       PyramidFilterType::Pointer pyramid = PyramidFilterType::New();

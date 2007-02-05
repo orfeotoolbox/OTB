@@ -17,7 +17,7 @@ PURPOSE.  See the above copyright notices for more information.
 =========================================================================*/
 #include "itkExceptionObject.h"
 
-#include "otbMorphologicalPyramidAnalyseFilter.h"
+#include "otbMorphologicalPyramidAnalysisFilter.h"
 #include "otbOpeningClosingMorphologicalFilter.h"
 #include "itkBinaryBallStructuringElement.h"
 #include "otbImageFileReader.h"
@@ -26,15 +26,15 @@ PURPOSE.  See the above copyright notices for more information.
 
 #include "itkMacro.h"
 
-int otbMorphologicalPyramidAnalyseFilter(int argc, char * argv[])
+int otbMorphologicalPyramidAnalysisFilter(int argc, char * argv[])
 {
   try
     {
       const char * inputFilename = argv[1];
       const char * outputFilenamePrefix = argv[2];
       const char * outputFilenameSuffix = argv[3];
-      const unsigned int numberOfIterations = atoi(argv[4]);
-      const float subSampleScale = atof(argv[5]);
+      const unsigned int numberOfLevels = atoi(argv[4]);
+      const float decimationRatio = atof(argv[5]);
 
       const unsigned int Dimension = 2;
       typedef unsigned char InputPixelType;
@@ -49,7 +49,7 @@ int otbMorphologicalPyramidAnalyseFilter(int argc, char * argv[])
       typedef itk::BinaryBallStructuringElement<InputPixelType,Dimension> StructuringElementType;
       typedef otb::OpeningClosingMorphologicalFilter<InputImageType,InputImageType,StructuringElementType>
 	OpeningClosingFilterType;
-      typedef otb::MorphologicalPyramidAnalyseFilter<InputImageType,OutputImageType,OpeningClosingFilterType>
+      typedef otb::MorphologicalPyramidAnalysisFilter<InputImageType,OutputImageType,OpeningClosingFilterType>
 	PyramidFilterType;
       typedef PyramidFilterType::OutputImageListType::Iterator ImageListIterator;
       
@@ -59,16 +59,16 @@ int otbMorphologicalPyramidAnalyseFilter(int argc, char * argv[])
 
       // Instantiation
       PyramidFilterType::Pointer pyramid = PyramidFilterType::New();
-      pyramid->SetNumberOfIterations(numberOfIterations);
-      pyramid->SetSubSampleScale(subSampleScale);
+      pyramid->SetNumberOfLevels(numberOfLevels);
+      pyramid->SetDecimationRatio(decimationRatio);
       pyramid->SetInput(reader->GetOutput());
       pyramid->Update();
 
 
       // Retrieving iterators on the results images
       ImageListIterator itAnalyse = pyramid->GetOutput()->Begin();
-      ImageListIterator itSupFiltre = pyramid->GetSupFiltre()->Begin();
-      ImageListIterator itInfFiltre = pyramid->GetInfFiltre()->Begin();
+      ImageListIterator itSupFilter = pyramid->GetSupFilter()->Begin();
+      ImageListIterator itInfFilter = pyramid->GetInfFilter()->Begin();
       ImageListIterator itInfDeci = pyramid->GetInfDeci()->Begin();
       ImageListIterator itSupDeci =  pyramid->GetSupDeci()->Begin();
 
@@ -79,8 +79,8 @@ int otbMorphologicalPyramidAnalyseFilter(int argc, char * argv[])
       itk::OStringStream oss;
       // Writing the results images
       while((itAnalyse!=pyramid->GetOutput()->End())
-	    &&(itSupFiltre!=pyramid->GetSupFiltre()->End())
-	    &&(itInfFiltre!=pyramid->GetInfFiltre()->End())
+	    &&(itSupFilter!=pyramid->GetSupFilter()->End())
+	    &&(itInfFilter!=pyramid->GetInfFilter()->End())
 	    &&(itInfDeci!=pyramid->GetInfDeci()->End())
 	    &&(itSupDeci!=pyramid->GetSupDeci()->End())
 	    )
@@ -91,12 +91,12 @@ int otbMorphologicalPyramidAnalyseFilter(int argc, char * argv[])
 	  writer->Update();
 	  oss.str("");
 	  oss<<outputFilenamePrefix<<"_sf_"<<i<<"."<<outputFilenameSuffix;
-	  writer->SetInput(itSupFiltre.Get());
+	  writer->SetInput(itSupFilter.Get());
 	  writer->SetFileName(oss.str().c_str());
 	  writer->Update();
 	  oss.str("");
 	  oss<<outputFilenamePrefix<<"_if_"<<i<<"."<<outputFilenameSuffix;
-	  writer->SetInput(itInfFiltre.Get());
+	  writer->SetInput(itInfFilter.Get());
 	  writer->SetFileName(oss.str().c_str());
 	  writer->Update();
 	  oss.str("");
@@ -112,8 +112,8 @@ int otbMorphologicalPyramidAnalyseFilter(int argc, char * argv[])
 	  writer->Update();
 	  oss.str("");
 	  ++itAnalyse;
-	  ++itSupFiltre;
-	  ++itInfFiltre;
+	  ++itSupFilter;
+	  ++itInfFilter;
 	  ++itInfDeci;
 	  ++itSupDeci;
 	  ++i;

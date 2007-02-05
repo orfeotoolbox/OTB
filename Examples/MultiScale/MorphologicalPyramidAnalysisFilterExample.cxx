@@ -37,7 +37,7 @@ PURPOSE.  See the above copyright notices for more information.
 
 // Software Guide : BeginCodeSnippet
 
-#include "otbMorphologicalPyramidAnalyseFilter.h"
+#include "otbMorphologicalPyramidAnalysisFilter.h"
 
 // Software Guide : EndCodeSnippet
 // Software Guide : BeginLatex
@@ -65,7 +65,7 @@ int main(int argc, char * argv[])
     if( argc != 24)
     {
     std::cerr << "Usage: " << argv[0] << " inputImageFile ";
-    std::cerr << " outputImagePrefix iterations subsampleScale" << std::endl;  
+    std::cerr << " outputImagePrefix iterations decimationRatio" << std::endl;  
     return EXIT_FAILURE;
     }
 
@@ -73,8 +73,8 @@ int main(int argc, char * argv[])
       const char * inputFilename = argv[1];
       const char * outputFilenamePrefix = "suburb2";
       const char * outputFilenameSuffix = "png";
-      const unsigned int numberOfIterations = atoi(argv[22]);
-      const float subSampleScale = atof(argv[23]);
+      const unsigned int numberOfLevels = atoi(argv[22]);
+      const float decimationRatio = atof(argv[23]);
 
 // Software Guide : BeginLatex
 //
@@ -144,7 +144,7 @@ int main(int argc, char * argv[])
 // Software Guide : BeginCodeSnippet
 
       
-      typedef otb::MorphologicalPyramidAnalyseFilter<InputImageType,
+      typedef otb::MorphologicalPyramidAnalysisFilter<InputImageType,
                               OutputImageType,OpeningClosingFilterType>
 	                                              PyramidFilterType;
 
@@ -193,8 +193,8 @@ int main(int argc, char * argv[])
 
 // Software Guide : BeginCodeSnippet            
       PyramidFilterType::Pointer pyramid = PyramidFilterType::New();
-      pyramid->SetNumberOfIterations(numberOfIterations);
-      pyramid->SetSubSampleScale(subSampleScale);
+      pyramid->SetNumberOfLevels(numberOfLevels);
+      pyramid->SetDecimationRatio(decimationRatio);
       pyramid->SetInput(reader->GetOutput());
       pyramid->Update();
 
@@ -208,9 +208,9 @@ int main(int argc, char * argv[])
 // \item the analysed image at each level of the pyramid through the
 // \code{GetOutput()} method;
 // \item the brighter details extracted from the filtering operation  through the
-// \code{GetSupFiltre()} method;
+// \code{GetSupFilter()} method;
 // \item the darker details extracted from the filtering operation through the
-// \code{GetInfFiltre()} method;
+// \code{GetInfFilter()} method;
 // \item the brighter details extracted from the resampling operation  through the
 // \code{GetSupDeci()} method;
 // \item the darker details extracted from the resampling operation  through the
@@ -227,8 +227,8 @@ int main(int argc, char * argv[])
 
 
       ImageListIterator itAnalyse = pyramid->GetOutput()->Begin();
-      ImageListIterator itSupFiltre = pyramid->GetSupFiltre()->Begin();
-      ImageListIterator itInfFiltre = pyramid->GetInfFiltre()->Begin();
+      ImageListIterator itSupFilter = pyramid->GetSupFilter()->Begin();
+      ImageListIterator itInfFilter = pyramid->GetInfFilter()->Begin();
       ImageListIterator itInfDeci = pyramid->GetSupDeci()->Begin();
       ImageListIterator itSupDeci =  pyramid->GetInfDeci()->Begin();
 
@@ -250,8 +250,8 @@ int main(int argc, char * argv[])
       // Writing the results images
       std::cout<<(itAnalyse!=(pyramid->GetOutput()->End()))<<std::endl;
       while((itAnalyse!=pyramid->GetOutput()->End())
-	    &&(itSupFiltre!=pyramid->GetSupFiltre()->End())
-	    &&(itInfFiltre!=pyramid->GetInfFiltre()->End())
+	    &&(itSupFilter!=pyramid->GetSupFilter()->End())
+	    &&(itInfFilter!=pyramid->GetInfFilter()->End())
 	    &&(itInfDeci!=pyramid->GetInfDeci()->End())
 	    &&(itSupDeci!=pyramid->GetSupDeci()->End())
 	    )
@@ -260,11 +260,11 @@ int main(int argc, char * argv[])
 	  writer->SetFileName(argv[0*4+i+1]);	  
 	  writer->Update();
 
-	  writer->SetInput(itSupFiltre.Get());
+	  writer->SetInput(itSupFilter.Get());
 	  writer->SetFileName(argv[1*4+i+1]);
 	  writer->Update();
 
-	  writer->SetInput(itInfFiltre.Get());
+	  writer->SetInput(itInfFilter.Get());
 	  writer->SetFileName(argv[2*4+i+1]);
 	  writer->Update();
 
@@ -277,8 +277,8 @@ int main(int argc, char * argv[])
 	  writer->Update();
 
 	  ++itAnalyse;
-	  ++itSupFiltre;
-	  ++itInfFiltre;
+	  ++itSupFilter;
+	  ++itInfFilter;
 	  ++itInfDeci;
 	  ++itSupDeci;
 	  ++i;

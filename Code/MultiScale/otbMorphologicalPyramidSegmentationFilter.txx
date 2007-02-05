@@ -147,24 +147,24 @@ MorphologicalPyramidSegmentationFilter<TInputImage,TOutputImage>
   OutputImageListPointerType outputList = this->GetOutput();
 
   // Multi resolution to multi scale filter typedef
-  typedef otb::morphologicalPyramid::MRToMSConverter<InputImageType,InputImageType> MRToMSConverterType;
+  typedef otb::MorphologicalPyramid::MRToMSConverter<InputImageType,InputImageType> MRToMSConverterType;
 
   // Segmentation filter typedef
-  typedef otb::morphologicalPyramid::Segmenter<InputImageType,OutputImageType> SegmenterType;
+  typedef otb::MorphologicalPyramid::Segmenter<InputImageType,OutputImageType> SegmenterType;
 
   // MR To MS conversion
   typename MRToMSConverterType::Pointer mrtoms = MRToMSConverterType::New();
-  mrtoms->SetSupFiltre(this->GetBrighterDetails());
-  mrtoms->SetInfFiltre(this->GetDarkerDetails());
+  mrtoms->SetSupFilter(this->GetBrighterDetails());
+  mrtoms->SetInfFilter(this->GetDarkerDetails());
   mrtoms->Update();
   
   // Full resolution Input images lists pointers
-  InputImageListPointerType brighter = mrtoms->GetSupFiltreFullResolution();
-  InputImageListPointerType darker = mrtoms->GetInfFiltreFullResolution();
+  InputImageListPointerType brighter = mrtoms->GetSupFilterFullResolution();
+  InputImageListPointerType darker = mrtoms->GetInfFilterFullResolution();
 
   // Segmentation filter definition
   typename InputImageListType::Iterator it; 
-  // Segment the supfiltre details
+  // Segment the supFilter details
   for(it= brighter->Begin();it!=brighter->End();++it)
     {
       typename SegmenterType::Pointer segmenter = SegmenterType::New();
@@ -179,7 +179,7 @@ MorphologicalPyramidSegmentationFilter<TInputImage,TOutputImage>
     }
   
   
-  // Segment the infFiltre details
+  // Segment the infFilter details
   for(it= darker->Begin();it!= darker->End();++it)
     {
       typename SegmenterType::Pointer segmenter = SegmenterType::New();

@@ -17,7 +17,7 @@ PURPOSE.  See the above copyright notices for more information.
 =========================================================================*/
 #include "itkExceptionObject.h"
 
-#include "otbMorphologicalPyramidAnalyseFilter.h"
+#include "otbMorphologicalPyramidAnalysisFilter.h"
 #include "otbMorphologicalPyramidMRToMSConverter.h"
 #include "otbOpeningClosingMorphologicalFilter.h"
 #include "itkBinaryBallStructuringElement.h"
@@ -33,8 +33,8 @@ int otbMorphologicalPyramidMRToMSConverter(int argc, char * argv[])
       const char * outputFilename1 = argv[2];
       const char * outputFilename2 = argv[3];
       const char * outputFilename3 = argv[4];
-      const unsigned int numberOfIterations = atoi(argv[5]);
-      const float subSampleScale = atof(argv[6]);
+      const unsigned int numberOfLevels = atoi(argv[5]);
+      const float decimationRatio = atof(argv[6]);
       
       const unsigned int Dimension = 2;
       typedef unsigned char InputPixelType;
@@ -49,8 +49,8 @@ int otbMorphologicalPyramidMRToMSConverter(int argc, char * argv[])
       typedef itk::BinaryBallStructuringElement<InputPixelType,Dimension> StructuringElementType;
       typedef otb::OpeningClosingMorphologicalFilter<InputImageType,InputImageType,StructuringElementType>
 	OpeningClosingFilterType;
-      typedef otb::MorphologicalPyramidAnalyseFilter<InputImageType,InputImageType,OpeningClosingFilterType>
-	PyramidAnalyseFilterType;
+      typedef otb::MorphologicalPyramidAnalysisFilter<InputImageType,InputImageType,OpeningClosingFilterType>
+	PyramidAnalysisFilterType;
       typedef otb::MorphologicalPyramid::MRToMSConverter<InputImageType,OutputImageType> MRToMSConverterType;
 
 
@@ -59,29 +59,29 @@ int otbMorphologicalPyramidMRToMSConverter(int argc, char * argv[])
       reader->SetFileName(inputFilename);
 
       // Analysis
-      PyramidAnalyseFilterType::Pointer pyramidAnalyse = PyramidAnalyseFilterType::New();
-      pyramidAnalyse->SetNumberOfIterations(numberOfIterations);
-      pyramidAnalyse->SetSubSampleScale(subSampleScale);
-      pyramidAnalyse->SetInput(reader->GetOutput());
+      PyramidAnalysisFilterType::Pointer pyramidAnalysis = PyramidAnalysisFilterType::New();
+      pyramidAnalysis->SetNumberOfLevels(numberOfLevels);
+      pyramidAnalysis->SetDecimationRatio(decimationRatio);
+      pyramidAnalysis->SetInput(reader->GetOutput());
 
       // From multi resolution to multi scale
       MRToMSConverterType::Pointer mrtoms = MRToMSConverterType::New();
-      mrtoms->SetInput(pyramidAnalyse->GetOutput());
-      mrtoms->SetSupFiltre(pyramidAnalyse->GetSupFiltre());
-      mrtoms->SetSupDeci(pyramidAnalyse->GetSupDeci());
-      mrtoms->SetInfFiltre(pyramidAnalyse->GetInfFiltre());
-      mrtoms->SetInfDeci(pyramidAnalyse->GetInfDeci());
+      mrtoms->SetInput(pyramidAnalysis->GetOutput());
+      mrtoms->SetSupFilter(pyramidAnalysis->GetSupFilter());
+      mrtoms->SetSupDeci(pyramidAnalysis->GetSupDeci());
+      mrtoms->SetInfFilter(pyramidAnalysis->GetInfFilter());
+      mrtoms->SetInfDeci(pyramidAnalysis->GetInfDeci());
       mrtoms->Update();
 
       // Writing the output images
       WriterType::Pointer writer1 = WriterType::New();
       writer1->SetFileName(outputFilename1);
-      writer1->SetInput(mrtoms->GetSupFiltreFullResolution()->Back());
+      writer1->SetInput(mrtoms->GetSupFilterFullResolution()->Back());
       writer1->Update();
 
       WriterType::Pointer writer2 = WriterType::New();
       writer2->SetFileName(outputFilename2);
-      writer2->SetInput(mrtoms->GetInfFiltreFullResolution()->Back());
+      writer2->SetInput(mrtoms->GetInfFilterFullResolution()->Back());
       writer2->Update();
 
       WriterType::Pointer writer3 = WriterType::New();

@@ -15,14 +15,14 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef _otbMorphologicalPyramidAnalyseFilter_h
-#define _otbMorphologicalPyramidAnalyseFilter_h
+#ifndef _otbMorphologicalPyramidAnalysisFilter_h
+#define _otbMorphologicalPyramidAnalysisFilter_h
 
 #include "otbImageToImageListFilter.h"
 
 namespace otb
 {
-/** \class MorphologicalPyramidAnalyseFilter
+/** \class MorphologicalPyramidAnalysisFilter
  * \brief Multiscale analysis filter using the morphological pyramid algorithm.
  *
  * Pyramidal decomposition is based on the following statement : once an
@@ -36,7 +36,7 @@ namespace otb
  * the details possibly lost in the down-sampling operation, such a
  * decomposition can be used. 
  *
- * The MorphologicalPyramidAnalyseFilter provide such a
+ * The MorphologicalPyramidAnalysisFilter provide such a
  * decomposition. It's computation process is an iterative analyse
  * involving smoothing by the morphological filter, computing the
  * details lost in the smoothing, down-sampling the current image, and
@@ -47,19 +47,19 @@ namespace otb
  * ClosingOpeningMorphologicalFilter
  */
 template <class TInputImage, class TOutputImage, class TMorphoFilter>
-class ITK_EXPORT MorphologicalPyramidAnalyseFilter
+class ITK_EXPORT MorphologicalPyramidAnalysisFilter
   : public ImageToImageListFilter<TInputImage,TOutputImage>
 {
 public:
   /** Standard typedefs */
-  typedef MorphologicalPyramidAnalyseFilter                    Self;
+  typedef MorphologicalPyramidAnalysisFilter                    Self;
   typedef ImageToImageListFilter<TInputImage,TOutputImage>     Superclass;
   typedef itk::SmartPointer<Self>                              Pointer;
   typedef itk::SmartPointer<const Self>                        ConstPointer;
   /** Creation through object factory macro */
   itkNewMacro(Self);
   /** Type macro */
-  itkTypeMacro(MorphologicalPyramidAnalyseFilter,MorphologicalPyramidAnalyseFilter);
+  itkTypeMacro(MorphologicalPyramidAnalysisFilter,MorphologicalPyramidAnalysisFilter);
   /** Input image dimension constant macro */
   itkStaticConstMacro(InputImageDimension, unsigned int,TInputImage::ImageDimension);
   /** Template parameters typedefs */
@@ -80,25 +80,25 @@ public:
   typedef typename InputImageType::PixelType           PixelType;
   typedef typename InputImageType::SpacingType         SpacingType;
   /** Accessors */
-  itkSetMacro(NumberOfIterations, int);
-  itkSetMacro(SubSampleScale, float);
-  itkGetConstReferenceMacro(NumberOfIterations, int);
-  itkGetConstReferenceMacro(SubSampleScale, float);
+  itkSetMacro(NumberOfLevels, int);
+  itkSetMacro(DecimationRatio, float);
+  itkGetConstReferenceMacro(NumberOfLevels, int);
+  itkGetConstReferenceMacro(DecimationRatio, float);
   /**
    * Get The Analyse image at each level of the pyramid.
    * \return The analysed image at each level of the pyramid.
    */
   OutputImageListType* GetOutput(void);
   /**
-   * Get The SupFiltre details
+   * Get The SupFilter details
    * \return The brighter details extracted from the filtering operation.
    */
-  OutputImageListType * GetSupFiltre(void);
+  OutputImageListType * GetSupFilter(void);
   /**
-   * Get The InfFiltre details
+   * Get The InfFilter details
    * \return The darker details extracted from the filtering operation.
    */
-  OutputImageListType * GetInfFiltre(void);
+  OutputImageListType * GetInfFilter(void);
   /**
    * Get The SupDeci details
    * \return The brighter details extracted from the resampling operation.
@@ -112,9 +112,9 @@ public:
   
 protected:  
   /** Constructor */
-  MorphologicalPyramidAnalyseFilter();
+  MorphologicalPyramidAnalysisFilter();
   /** Destructor */
-  ~MorphologicalPyramidAnalyseFilter();
+  ~MorphologicalPyramidAnalysisFilter();
   virtual void GenerateOutputInformation(){}; // does nothing
   /** Main computation method */
   virtual void GenerateData();
@@ -122,15 +122,15 @@ protected:
   virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;  
 
  private:
-  /** Number of iterations of the algorithm */
-  int m_NumberOfIterations;
+  /** Number of levels of the algorithm */
+  int m_NumberOfLevels;
   /** Subsampling scale used */
-  float m_SubSampleScale;
+  float m_DecimationRatio;
 };
 }// End namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbMorphologicalPyramidAnalyseFilter.txx"
+#include "otbMorphologicalPyramidAnalysisFilter.txx"
 #endif
 
 #endif
