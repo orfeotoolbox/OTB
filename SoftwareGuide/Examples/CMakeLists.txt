@@ -223,7 +223,7 @@ SET( OTB_EXAMPLES_SRCS
   ${OTB_SOURCE_DIR}/Examples/Segmentation/FastMarchingImageFilter.cxx
   #${OTB_SOURCE_DIR}/Examples/Patented/HybridSegmentationFuzzyVoronoi.cxx
   ${OTB_SOURCE_DIR}/Examples/Patented/FuzzyConnectednessImageFilter.cxx
-  ${OTB_SOURCE_DIR}/Examples/MultiScale/MorphologicalPyramidAnalyseFilterExample.cxx
+  ${OTB_SOURCE_DIR}/Examples/MultiScale/MorphologicalPyramidAnalysisFilterExample.cxx
   ${OTB_SOURCE_DIR}/Examples/MultiScale/MorphologicalPyramidSynthesisFilterExample.cxx
   ${OTB_SOURCE_DIR}/Examples/MultiScale/MorphologicalPyramidSegmenterExample.cxx
   ${OTB_SOURCE_DIR}/Examples/MultiScale/MorphologicalPyramidSegmentationExample.cxx      
