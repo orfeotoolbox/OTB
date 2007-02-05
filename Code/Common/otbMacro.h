@@ -91,9 +91,7 @@
   */
 #define otbControlConditionTestMacro(condition, message) \
 {       if( (condition) ) \
-        { \
-                itk::ExceptionMacro(<<message<<"\n -> condition '"<<condition<<"' not OK.\n\n"; \
-        } \
+          itkGenericExceptionMacro(<<message);\
 }
 
 
