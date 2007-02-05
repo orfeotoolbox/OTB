@@ -209,7 +209,7 @@ public:
   /* Set the value of p for EPSILON_SVR */
   void SetP(double p)
   {
-    param.svm_type = EPSILON_SVR;
+    //param.svm_type = EPSILON_SVR;
     param.p = p;
   }
 
