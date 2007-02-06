@@ -81,9 +81,9 @@ public:
   typedef typename InputImageType::SpacingType         SpacingType;
   /** Accessors */
   itkSetMacro(NumberOfLevels, int);
-  itkSetMacro(DecimationRatio, float);
+  itkSetMacro(DecimationRatio, double);
   itkGetConstReferenceMacro(NumberOfLevels, int);
-  itkGetConstReferenceMacro(DecimationRatio, float);
+  itkGetConstReferenceMacro(DecimationRatio, double);
   /**
    * Get The Analyse image at each level of the pyramid.
    * \return The analysed image at each level of the pyramid.
@@ -125,7 +125,7 @@ protected:
   /** Number of levels of the algorithm */
   int m_NumberOfLevels;
   /** Subsampling scale used */
-  float m_DecimationRatio;
+  double m_DecimationRatio;
 };
 }// End namespace otb
 

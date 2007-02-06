@@ -147,7 +147,7 @@ Segmenter<TInputImage, TOuputImage>
   InputImagePointerType original = this->GetOriginalImage();
 
   // Typedefs for details image enhancement
-  typedef float FloatPixelType;
+  typedef double FloatPixelType;
   typedef otb::Image<FloatPixelType,InputImageType::ImageDimension> FloatImageType;
   typedef itk::InvertIntensityImageFilter<InputImageType,InputImageType> InvertFilterType;
   typedef itk::MultiplyImageFilter<FloatImageType,FloatImageType,FloatImageType> MultiplyFilterType;

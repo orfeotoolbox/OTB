@@ -87,11 +87,11 @@ public:
   itkSetMacro(MinimumObjectSize,unsigned long);
   itkGetMacro(MinimumObjectSize,unsigned long);
   /** Quantile for seeds extraction */
-  itkSetMacro(SeedsQuantile,float);
-  itkGetMacro(SeedsQuantile,float);
+  itkSetMacro(SeedsQuantile,double);
+  itkGetMacro(SeedsQuantile,double);
   /** Quantile for connected thresholding */
-  itkSetMacro(ConnectedThresholdQuantile,float);
-  itkGetMacro(ConnectedThresholdQuantile,float);
+  itkSetMacro(ConnectedThresholdQuantile,double);
+  itkGetMacro(ConnectedThresholdQuantile,double);
   /**
    * Get a vector containing the number of segmented objects for each image.
    * \return The vector.
@@ -145,9 +145,9 @@ protected:
  private:
   unsigned long  m_MinimumObjectSize;
   /** Quantile for seeds determination */
-  float m_SeedsQuantile;
+  double m_SeedsQuantile;
   /** Quantile to set the connectedThresholdFilter threshold */
-  float m_ConnectedThresholdQuantile;
+  double m_ConnectedThresholdQuantile;
   /** Number of segmented objects per images */
   NumberOfObjectsVectorType m_NumberOfObjectsVector;
 };

@@ -149,7 +149,7 @@ namespace otb
     typename InputImageType::Pointer upsampled;
 
     // Structuring element size computation
-    const int structElementDimension=static_cast<int>(ceil(static_cast<double>(this->GetDecimationRatio()/2.)));
+    const int structElementDimension=static_cast<int>(vcl_ceil(this->GetDecimationRatio()/2.));
   
     // Structuring element creation
     KernelType structuringElement;
@@ -212,7 +212,7 @@ namespace otb
 	  {
 	    sizeTmp=size[j];
 	    // As we knwow that our values will always be positive ones, we can simulate round by ceil(value+0.5)
-	    size[j]=static_cast<unsigned int>(ceil((static_cast<double>(sizeTmp)/this->GetDecimationRatio())+0.5));
+	    size[j]=static_cast<unsigned int>(vcl_ceil((static_cast<double>(sizeTmp)/this->GetDecimationRatio())+0.5));
 	  }
 	otbMsgDebugMacro(<<"New size: "<<size);
     

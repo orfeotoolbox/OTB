@@ -99,11 +99,11 @@ namespace otb
 	  itkSetMacro(MinimumObjectSize,unsigned long);
 	  itkGetMacro(MinimumObjectSize,unsigned long);
 	  /** Quantile for seeds extraction */
-	  itkSetMacro(SeedsQuantile,float);
-	  itkGetMacro(SeedsQuantile,float);
+	  itkSetMacro(SeedsQuantile,double);
+	  itkGetMacro(SeedsQuantile,double);
 	  /** Quantile for connected thresholding */
-	  itkSetMacro(ConnectedThresholdQuantile,float);
-	  itkGetMacro(ConnectedThresholdQuantile,float);
+	  itkSetMacro(ConnectedThresholdQuantile,double);
+	  itkGetMacro(ConnectedThresholdQuantile,double);
 	  /** Toogle the darker detail segmentation */
 	  itkSetMacro(SegmentDarkDetailsBool,bool);
 	  itkGetMacro(SegmentDarkDetailsBool,bool);
@@ -135,9 +135,9 @@ namespace otb
 	  /** Minimum size for the segmented object */
 	  unsigned long  m_MinimumObjectSize;
 	  /** Quantile for seeds determination */
-	  float m_SeedsQuantile;
+	  double m_SeedsQuantile;
 	  /** Quantile to set the connectedThresholdFilter threshold */
-	  float m_ConnectedThresholdQuantile;
+	  double m_ConnectedThresholdQuantile;
 	  /** Set to true if the details to segment are darker than background */
 	  bool m_SegmentDarkDetailsBool;
 	  /** Number of segmented objects */
