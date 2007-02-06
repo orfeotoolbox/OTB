@@ -80,18 +80,18 @@ ADD_TEST(msTuMorphoPyrMRToMSConverterNew ${MULTISCALE_TESTS}
 
 ADD_TEST(msTvMorphoPyrMRToMSConverter ${MULTISCALE_TESTS} 
    --compare-n-images ${TOL} 3
- 		   ${BASELINE}/msPyrMRToMS_IKO_Halles_4_2_sf_full.tif
- 		   ${TEMP}/msPyrMRToMS_IKO_Halles_4_2_sf_full.tif
-		   ${BASELINE}/msPyrMRToMS_IKO_Halles_4_2_if_full.tif
- 		   ${TEMP}/msPyrMRToMS_IKO_Halles_4_2_if_full.tif
-		   ${BASELINE}/msPyrMRToMS_IKO_Halles_4_2_an_full.tif
- 		   ${TEMP}/msPyrMRToMS_IKO_Halles_4_2_an_full.tif
+ 		   ${BASELINE}/msPyrMRToMS_IKO_Halles_4_2_sf_full.hdr
+ 		   ${TEMP}/msPyrMRToMS_IKO_Halles_4_2_sf_full.hdr
+		   ${BASELINE}/msPyrMRToMS_IKO_Halles_4_2_if_full.hdr
+ 		   ${TEMP}/msPyrMRToMS_IKO_Halles_4_2_if_full.hdr
+		   ${BASELINE}/msPyrMRToMS_IKO_Halles_4_2_an_full.hdr
+ 		   ${TEMP}/msPyrMRToMS_IKO_Halles_4_2_an_full.hdr
 
          otbMorphologicalPyramidMRToMSConverter
 	 ${INPUTDATA}/ROI_IKO_PAN_LesHalles.tif
-	 ${TEMP}/msPyrMRToMS_IKO_Halles_4_2_sf_full.tif
-	 ${TEMP}/msPyrMRToMS_IKO_Halles_4_2_if_full.tif
-	 ${TEMP}/msPyrMRToMS_IKO_Halles_4_2_an_full.tif
+	 ${TEMP}/msPyrMRToMS_IKO_Halles_4_2_sf_full.hdr
+	 ${TEMP}/msPyrMRToMS_IKO_Halles_4_2_if_full.hdr
+	 ${TEMP}/msPyrMRToMS_IKO_Halles_4_2_an_full.hdr
 	 4
 	 2.0)
 
@@ -105,7 +105,7 @@ ADD_TEST(msTvMorphoPyrSegmentBright ${MULTISCALE_TESTS}
  		   ${BASELINE}/msPyrSegmenter_IKO_Halles_4_2_sf.tif
  		   ${TEMP}/msPyrSegmenter_IKO_Halles_4_2_sf.tif
          otbMorphologicalPyramidSegmenter
-	 ${TEMP}/msPyrMRToMS_IKO_Halles_4_2_sf_full.tif
+	 ${TEMP}/msPyrMRToMS_IKO_Halles_4_2_sf_full.hdr
 	 ${INPUTDATA}/ROI_IKO_PAN_LesHalles.tif
 	 ${TEMP}/msPyrSegmenter_IKO_Halles_4_2_sf.tif
 	 0
@@ -119,7 +119,7 @@ ADD_TEST(msTvMorphoPyrSegmentDark ${MULTISCALE_TESTS}
  		   ${BASELINE}/msPyrSegmenter_IKO_Halles_4_2_if.tif
  		   ${TEMP}/msPyrSegmenter_IKO_Halles_4_2_if.tif
          otbMorphologicalPyramidSegmenter
-	 ${TEMP}/msPyrMRToMS_IKO_Halles_4_2_if_full.tif
+	 ${TEMP}/msPyrMRToMS_IKO_Halles_4_2_if_full.hdr
 	 ${INPUTDATA}/ROI_IKO_PAN_LesHalles.tif
 	 ${TEMP}/msPyrSegmenter_IKO_Halles_4_2_if.tif
 	 1

@@ -37,8 +37,8 @@ int otbMorphologicalPyramidMRToMSConverter(int argc, char * argv[])
       const float decimationRatio = atof(argv[6]);
       
       const unsigned int Dimension = 2;
-      typedef unsigned char InputPixelType;
-      typedef unsigned char OutputPixelType;
+      typedef double InputPixelType;
+      typedef double OutputPixelType;
 
       typedef otb::Image<InputPixelType,Dimension> InputImageType;
       typedef otb::Image<OutputPixelType,Dimension> OutputImageType;

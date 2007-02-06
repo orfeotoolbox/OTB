@@ -38,7 +38,7 @@ int otbMorphologicalPyramidSegmentationFilter(int argc, char * argv[])
       const unsigned int minObjectSize = atoi(argv[8]);
 
       const unsigned int Dimension = 2;
-      typedef unsigned char InputPixelType;
+      typedef double InputPixelType;
       typedef unsigned short OutputPixelType;
 
       typedef otb::Image<InputPixelType,Dimension> InputImageType;
