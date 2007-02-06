@@ -76,6 +76,8 @@ class FixedSizeFullImageWidget
     void operator=(const Self&);// purposely not implemented
 
     SizeType m_WindowSize;
+    bool m_ImageLoaded;
+    bool m_ImageOverlayLoaded;
 };
 } // end namespace otb
 #ifndef OTB_MANUAL_INSTANTIATION

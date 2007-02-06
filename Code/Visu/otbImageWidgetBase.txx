@@ -250,8 +250,8 @@ ImageWidgetBase<TPixel>
   else
     {
       //otbMsgDebugMacro(<<"Show");
-      m_Image->SetRequestedRegion(m_BufferedRegion);
-      m_Image->Update();
+      // m_Image->SetRequestedRegion(m_BufferedRegion);
+//       m_Image->Update();
       this->show();
       this->redraw();
     }
@@ -268,8 +268,8 @@ ImageWidgetBase<TPixel>
  if(this->UpdateOpenGlBufferedRegionRequested())
     {
       UpdateOpenGlBufferedRegion();
-      m_Image->SetRequestedRegion(m_BufferedRegion);
-      m_Image->Update();
+      // m_Image->SetRequestedRegion(m_BufferedRegion);
+//       m_Image->Update();
       RebuildOpenGlBuffer();
     }
  if(m_ImageOverlayVisible && this->UpdateOpenGlImageOverlayBufferedRegionRequested())

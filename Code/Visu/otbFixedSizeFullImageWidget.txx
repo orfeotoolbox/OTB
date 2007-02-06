@@ -38,6 +38,8 @@ FixedSizeFullImageWidget<TPixel>
   region.SetIndex(index);
   region.SetSize(m_WindowSize);
   this->SetViewedRegion(region);
+  m_ImageLoaded=false;
+  m_ImageOverlayLoaded=false;
 }
 
 /** 
@@ -98,16 +100,25 @@ bool
 FixedSizeFullImageWidget<TPixel>
 ::UpdateOpenGlBufferedRegionRequested(void)
 {
-  RegionType viewed = this->GetViewedRegion();
-  RegionType buffered = this->GetBufferedRegion();
-  IndexType viewedULCorner = viewed.GetIndex();
-  IndexType bufferedULCorner = buffered.GetIndex();
-  IndexType viewedRDCorner = viewed.GetIndex()+viewed.GetSize();
-  IndexType bufferedRDCorner = buffered.GetIndex()+buffered.GetSize();
-  return ( viewedULCorner[0]<bufferedULCorner[0]
-	   ||viewedULCorner[1]<bufferedULCorner[1]
-	   ||viewedRDCorner[0]>bufferedRDCorner[0]
-	   ||viewedRDCorner[1]>bufferedRDCorner[1]);
+  // RegionType viewed = this->GetViewedRegion();
+//   RegionType buffered = this->GetBufferedRegion();
+//   IndexType viewedULCorner = viewed.GetIndex();
+//   IndexType bufferedULCorner = buffered.GetIndex();
+//   IndexType viewedRDCorner = viewed.GetIndex()+viewed.GetSize();
+//   IndexType bufferedRDCorner = buffered.GetIndex()+buffered.GetSize();
+//   return ( viewedULCorner[0]<bufferedULCorner[0]
+// 	   ||viewedULCorner[1]<bufferedULCorner[1]
+// 	   ||viewedRDCorner[0]>bufferedRDCorner[0]
+// 	   ||viewedRDCorner[1]>bufferedRDCorner[1]);
+  if(m_ImageLoaded)
+    {
+      return false;
+    }
+  else
+    {
+      m_ImageLoaded=true;
+      return true;
+    }
 }
 /** 
  * Update OpenGlBuffer. 
@@ -128,16 +139,16 @@ bool
 FixedSizeFullImageWidget<TPixel>
 ::UpdateOpenGlImageOverlayBufferedRegionRequested(void)
 {
-  RegionType viewed = this->GetViewedRegion();
-  RegionType buffered = this->GetImageOverlayBufferedRegion();
-  IndexType viewedULCorner = viewed.GetIndex();
-  IndexType bufferedULCorner = buffered.GetIndex();
-  IndexType viewedRDCorner = viewed.GetIndex()+viewed.GetSize();
-  IndexType bufferedRDCorner = buffered.GetIndex()+buffered.GetSize();
-  return ( viewedULCorner[0]<bufferedULCorner[0]
-	   ||viewedULCorner[1]<bufferedULCorner[1]
-	   ||viewedRDCorner[0]>bufferedRDCorner[0]
-	   ||viewedRDCorner[1]>bufferedRDCorner[1]);
+if(m_ImageOverlayLoaded)
+    {
+      
+      return false;
+    }
+  else
+    {
+      m_ImageOverlayLoaded=true;
+      return true;
+    }
 }
 /** 
  * Update OpenGlBuffer. 
