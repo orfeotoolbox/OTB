@@ -57,7 +57,7 @@ int otbObjectList(int argc, char * argv[])
       // Testing reserve/capacity
       imageList->Reserve(2);
 
-      otbControlConditionTestMacro(imageList->Capacity()!=2,"Reserve/Capacity()");
+      otbControlConditionTestMacro((imageList->Capacity()!=2),"Reserve/Capacity()");
 
       // Testing Size/Element accessor
       imageList->PushBack(reader1->GetOutput());

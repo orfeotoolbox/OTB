@@ -31,6 +31,7 @@ REGISTER_TEST(otbImageViewerNew);
 REGISTER_TEST(otbImageWidgetBaseNew);
 REGISTER_TEST(otbFixedSizeFullImageWidgetNew);
 REGISTER_TEST(otbFixedSizeFullImageWidget);
+REGISTER_TEST(otbFullLargeImageWidget);
 REGISTER_TEST(otbFullResolutionImageWidgetNew);
 REGISTER_TEST(otbFullResolutionImageWidget);
 REGISTER_TEST(otbZoomableImageWidgetNew);
