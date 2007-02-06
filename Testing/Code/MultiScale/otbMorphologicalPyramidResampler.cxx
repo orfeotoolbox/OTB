@@ -32,8 +32,8 @@ int otbMorphologicalPyramidResampler(int argc, char * argv[])
       const unsigned int size_y = atoi(argv[5]);
 
       const unsigned int Dimension = 2;
-      typedef unsigned char InputPixelType;
-      typedef unsigned char OutputPixelType;
+      typedef double InputPixelType;
+      typedef double OutputPixelType;
 
       typedef otb::Image<InputPixelType,Dimension> InputImageType;
       typedef otb::Image<OutputPixelType,Dimension> OutputImageType;

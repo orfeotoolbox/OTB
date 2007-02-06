@@ -22,14 +22,14 @@ ADD_TEST(msTuMorphoPyrResamplerNew ${MULTISCALE_TESTS}
 
 ADD_TEST(msTvMorphoPyrResampler ${MULTISCALE_TESTS} 
   --compare-n-images ${TOL} 2
-		   ${BASELINE}/msPyrResampler_IKO_LesHalles_256_2.tif
-		   ${TEMP}/msPyrResampler_IKO_LesHalles_256_2.tif
-		   ${BASELINE}/msPyrResampler_IKO_LesHalles_full.tif
-		   ${TEMP}/msPyrResampler_IKO_LesHalles_full.tif
+		   ${BASELINE}/msPyrResampler_IKO_LesHalles_256_2.hdr
+		   ${TEMP}/msPyrResampler_IKO_LesHalles_256_2.hdr
+		   ${BASELINE}/msPyrResampler_IKO_LesHalles_full.hdr
+		   ${TEMP}/msPyrResampler_IKO_LesHalles_full.hdr
          otbMorphologicalPyramidResampler
 	 ${INPUTDATA}/ROI_IKO_PAN_LesHalles.tif
-	 ${TEMP}/msPyrResampler_IKO_LesHalles_256_2.tif
-	 ${TEMP}/msPyrResampler_IKO_LesHalles_full.tif
+	 ${TEMP}/msPyrResampler_IKO_LesHalles_256_2.hdr
+	 ${TEMP}/msPyrResampler_IKO_LesHalles_full.hdr
 	 256
 	 256
 	 )
