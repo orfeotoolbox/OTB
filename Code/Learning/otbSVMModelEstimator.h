@@ -69,9 +69,6 @@ public:
   itkNewMacro(Self);
 
 
-
-
-
     /** Set the number of classes. */
   itkSetMacro(NumberOfClasses, unsigned int);
 
@@ -123,7 +120,6 @@ public:
   /** Set the degree of the polynomial kernel */
   void SetPolynomialKernelDegree(int degree)
   {
-    param.kernel_type = POLY;
     param.degree = static_cast<double>(degree);
   }
 
