@@ -481,7 +481,8 @@ void ONERAImageIO::Write(const void* buffer)
 
   unsigned long step = this->GetNumberOfComponents();
 
-  const unsigned long numberOfComponents = this->GetImageSizeInComponents();
+  // variable not used.
+  // const unsigned long numberOfComponents = this->GetImageSizeInComponents();
 
   unsigned int lNbLignes   = this->GetIORegion().GetSize()[1];
   unsigned int lNbColonnes = this->GetIORegion().GetSize()[0];

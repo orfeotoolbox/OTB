@@ -152,7 +152,7 @@ DrawPathListFilter<TInputImage,TInputPath,TOutputImage>
   
   InputImageSizeType          Taille;
   OutputImageIndexType        IndexOut;
-  typedef float                                        RealType; 
+  typedef double                                        RealType; 
   typedef typename InputPathType::ContinuousIndexType  VertexType;
 //  typedef itk::ContinuousIndex<RealType,2>             VertexType; 
   typedef itk::VectorContainer< unsigned,VertexType >  VertexListType;

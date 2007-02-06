@@ -79,8 +79,8 @@ public:
     for(unsigned long pos = 0; pos< itA.Size(); ++pos)
       {
 
-		  varA += static_cast<TOutput>( pow( static_cast<float>(itA.GetPixel(pos))-static_cast<float>(meanA),static_cast<float>(2.0)));
-		  varB += static_cast<TOutput>( pow( static_cast<float>(itB.GetPixel(pos))-static_cast<float>(meanB),static_cast<float>(2.0)));
+		  varA += static_cast<TOutput>( vcl_pow( static_cast<double>(itA.GetPixel(pos))-static_cast<double>(meanA),static_cast<double>(2.0)));
+		  varB += static_cast<TOutput>( vcl_pow( static_cast<double>(itB.GetPixel(pos))-static_cast<double>(meanB),static_cast<double>(2.0)));
 
       }
 
@@ -92,7 +92,7 @@ public:
     for(unsigned long pos = 0; pos< itA.Size(); ++pos)
       {
       
-      crossCorrel += (static_cast<TOutput>(itA.GetPixel(pos))-meanA)*(static_cast<TOutput>(itB.GetPixel(pos))-meanB)/(itA.Size()*sqrt(varA*varB));
+      crossCorrel += (static_cast<TOutput>(itA.GetPixel(pos))-meanA)*(static_cast<TOutput>(itB.GetPixel(pos))-meanB)/(itA.Size()*vcl_sqrt(varA*varB));
 
       }
 

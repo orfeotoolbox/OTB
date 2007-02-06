@@ -26,9 +26,6 @@
 #include "itkImageRegionIteratorWithIndex.h"
 #include "itkImageRegionConstIteratorWithIndex.h"
 
-
-
-
 namespace otb
 {
 
@@ -51,7 +48,7 @@ DrawPathFilter<TInputImage,TInputPath,TOutputImage>
   typedef typename InputPathType::ContinuousIndexType               VertexType;
   typedef itk::VectorContainer< unsigned,VertexType >               VertexListType;
   typedef typename VertexListType::ConstPointer                     VertexListTypePointer;
-  typedef float                                                     RealType;
+  typedef double                                                     RealType;
   
   typedef itk::ImageRegionIteratorWithIndex< OutputImageType > OutputIteratorType; 
   typedef itk::ImageRegionConstIteratorWithIndex< InputImageType >  InputIteratorType; 
