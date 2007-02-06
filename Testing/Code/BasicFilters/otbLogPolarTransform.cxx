@@ -73,8 +73,6 @@ try
 	    pprime[1]=exp(logRho) * sin(theta);
 
 	    file <<"Original Point: "<<(*it)<<", Reference point: "<<pprime<<", Transformed point: "<<p<<std::endl<<std::endl;
-//	    otbControlConditionTestMacro(p[0]!=pprime[0],"Error while transforming point.");
-//	    otbControlConditionTestMacro(p[1]!=pprime[1],"Error while transforming point.");
 	  }
   
   	file.close();

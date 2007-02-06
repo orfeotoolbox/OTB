@@ -17,6 +17,7 @@
 =========================================================================*/
 #include "otbInverseLogPolarTransform.h"
 #include "otbMacro.h"
+#include <fstream>
 
 int otbInverseLogPolarTransform(int argc, char* argv[])
 {
@@ -24,20 +25,25 @@ try
   {
     double radialStep = atof(argv[1]);
     double angularStep = atof(argv[2]);
-    unsigned int nbPoints = atoi(argv[3]);
+    const char * outputFilename(argv[3]);
+    unsigned int nbPoints = atoi(argv[4]);
 
     typedef double PrecisionType;
     typedef otb::InverseLogPolarTransform<PrecisionType> InverseLogPolarTransformType;
     typedef itk::Point<PrecisionType,2> PointType;
     typedef std::vector<PointType> PointsVectorType;
+
+    std::ofstream file;
+    file.open(outputFilename);
+    file << "input points retrieval : "<<std::endl;
     // input points retrieval
     PointsVectorType vect;
     for(unsigned int i=0;i<nbPoints;++i)
       {
 	PointType p;
-	p[0]=atof(argv[4+2*i]);
-	p[1]=atof(argv[5+2*i]);
-	std::cout<<"Adding point "<<p<<"."<<std::endl;
+	p[0]=atof(argv[5+2*i]);
+	p[1]=atof(argv[6+2*i]);
+	file <<"Adding point "<<p<<"."<<std::endl;
 	vect.push_back(p);
       }
     // Instantiation
@@ -48,6 +54,8 @@ try
     params[2]=radialStep;
     params[3]=angularStep;
     transform->SetParameters(params);
+    
+    file << "Transform calculation ... :" <<std::endl;
 
     for(PointsVectorType::iterator it=vect.begin();it!=vect.end();++it)
       {
@@ -74,10 +82,9 @@ try
 	    pprime[1]=0;
 	  }
 	
-	std::cout<<"Original Point: "<<(*it)<<", Reference point: "<<pprime<<", Transformed point: "<<p<<std::endl;
-	otbControlConditionTestMacro(p[0]!=pprime[0],"Error while transforming point.");
-	otbControlConditionTestMacro(p[1]!=pprime[1],"Error while transforming point.");
+	file <<"Original Point: "<<(*it)<<", Reference point: "<<pprime<<", Transformed point: "<<p<<std::endl;
       }
+    file.close();
   }
 catch( itk::ExceptionObject & err ) 
   { 
