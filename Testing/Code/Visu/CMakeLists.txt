@@ -49,14 +49,6 @@ ADD_TEST(viTvFixedSizFullImageWidget ${VISU_TESTS}
 	${INPUTDATA}/poupees.png
         )
 
-ADD_TEST(viTvFullLargeImageWidget ${VISU_TESTS} 
-        otbFullLargeImageWidget
-	//${IMAGEDATA}/TOULOUSE/QuickBird/000000128955_01_P001_MUL/02APR01105228-M1BS-000000128955_01_P001.TIF
-	${IMAGEDATA}/TOULOUSE/QuickBird/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF
-	
-        )
-
-
 # -------       otb::FullResolutionImageWidget -----------------------------------
 
 ADD_TEST(viTuFullResolutionImageWidgetNew ${VISU_TESTS} 
@@ -87,7 +79,6 @@ otbImageViewerNew.cxx
 otbImageWidgetBaseNew.cxx
 otbFixedSizeFullImageWidgetNew.cxx
 otbFixedSizeFullImageWidget.cxx
-otbFullLargeImageWidget.cxx
 otbFullResolutionImageWidgetNew.cxx
 otbFullResolutionImageWidget.cxx
 otbZoomableImageWidgetNew.cxx

@@ -140,6 +140,31 @@ ADD_TEST(bfTvInverseLogPolarTransformResample ${BASICFILTERS_TESTS}
 	${TEMP}/bfInverseLogPolarTransformResampleOutput.hdr
 )
 
+# -------            otb::StreamingShrinkImageFilter   ----------------------------
+
+  ADD_TEST(bfTuStreamingShrinkImageFilterNew ${BASICFILTERS_TESTS}  
+         otbStreamingShrinkImageFilterNew)
+
+
+ ADD_TEST(bfTvStreamingShrinkImageFilterQBPAN ${BASICFILTERS_TESTS}  
+--compare-image ${TOL}
+		${BASELINE}/bfTvStreamingShrinkImageFilterQBPANOutput.hdr
+		${TEMP}/bfTvStreamingShrinkImageFilterQBPANOutput.hdr
+	otbStreamingShrinkImageFilter
+	${IMAGEDATA}/TOULOUSE/QuickBird/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF
+	${TEMP}/bfTvStreamingShrinkImageFilterQBPANOutput.hdr
+	50
+)
+	
+ADD_TEST(bfTvStreamingShrinkImageFilterQBMUL ${BASICFILTERS_TESTS}  
+--compare-image ${TOL}
+		${BASELINE}/bfTvStreamingShrinkImageFilterQBMULOutput.hdr
+		${TEMP}/bfTvStreamingShrinkImageFilterQBMULOutput.hdr
+		otbStreamingShrinkImageFilter
+	${IMAGEDATA}/TOULOUSE/QuickBird/000000128955_01_P001_MUL/02APR01105228-M1BS-000000128955_01_P001.TIF
+	${TEMP}/bfTvStreamingShrinkImageFilterQBMULOutput.hdr
+	20
+)
 
 # A enrichir
 SET(BasicFilters_SRCS
@@ -160,6 +185,8 @@ otbLogPolarTransformResample.cxx
 otbInverseLogPolarTransformNew.cxx
 otbInverseLogPolarTransform.cxx
 otbInverseLogPolarTransformResample.cxx
+otbStreamingShrinkImageFilterNew.cxx
+otbStreamingShrinkImageFilter.cxx
 )
 
 
