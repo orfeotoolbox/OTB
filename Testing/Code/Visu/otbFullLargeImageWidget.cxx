@@ -19,7 +19,6 @@ PURPOSE.  See the above copyright notices for more information.
 #include "otbImageFileReader.h"
 #include "itkNonThreadedShrinkImageFilter.h"
 #include "itkStreamingImageFilter.h"
-#include "itkVectorRescaleIntensityImageFilter.h"
 #include <FL/Fl.H>
 
 
@@ -34,12 +33,10 @@ int otbFullLargeImageWidget( int argc, char * argv[] )
       typedef otb::ImageFileReader<ImageType> ReaderType;
       typedef itk::NonThreadedShrinkImageFilter<ImageType,ImageType> ShrinkFilterType;
       typedef itk::StreamingImageFilter<ImageType,ImageType> StreamingFilterType;
-      typedef itk::VectorRescaleIntensityImageFilter<ImageType,ImageType> RescalerType;
-
 
       ReaderType::Pointer reader = ReaderType::New();
       ImageType::SizeType size;
-      ImageType::IndexType index;
+      // ImageType::IndexType index;
       ImageType::RegionType region;
 
       
@@ -64,16 +61,14 @@ int otbFullLargeImageWidget( int argc, char * argv[] )
        streaming->SetNumberOfStreamDivisions(size[0]/2);
        streaming->SetInput(shrink->GetOutput());
        
-       RescalerType::Pointer rescaler = RescalerType::New();
-       rescaler->SetInput(streaming->GetOutput());
-       rescaler->SetOutputMaximumMagnitude(255);
+      
 
        size = shrink->GetOutput()->GetLargestPossibleRegion().GetSize();
        Fl_Window window(size[0],size[1]);
 
        WidgetType::Pointer widget = WidgetType::New();   
        window.resizable(widget.GetPointer());
-       widget->SetInput(rescaler->GetOutput());
+       widget->SetInput(shrink->GetOutput());
        // if(shrink->GetOutput()->GetNumberOfComponentsPerPixel()>=3)
 //  	widget->SetViewModelToRGB();
 //        else
