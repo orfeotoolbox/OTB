@@ -47,7 +47,7 @@ ADD_EXECUTABLE(ExtractSegmentsExample
 ExtractSegmentsExample.cxx)
 TARGET_LINK_LIBRARIES(ExtractSegmentsExample OTBFeatureExtraction OTBCommon OTBIO ITKCommon ITKIO)
 
-IF( NOT OTB_DISABLE_CXX_TESTING )
+IF( NOT OTB_DISABLE_CXX_TESTING AND NOT OTB_DISABLE_CXX_EXAMPLES_TESTING )
 
 SET(BASELINE ${OTB_DATA_ROOT}/Baseline/Examples/FeatureExtraction)
 
@@ -181,4 +181,4 @@ INCLUDE_DIRECTORIES("${OTBTesting_BINARY_DIR}")
 ADD_EXECUTABLE(otbFeatureExtractionExamplesTests otbFeatureExtractionExamplesTests.cxx)
 TARGET_LINK_LIBRARIES(otbFeatureExtractionExamplesTests gdal ITKIO ITKAlgorithms ITKStatistics ITKCommon OTBBasicFilters OTBCommon OTBDisparityMap OTBIO OTBSpatialReasoning OTBChangeDetection OTBFeatureExtraction  OTBLearning  OTBMultiScale)
 
-ENDIF( NOT OTB_DISABLE_CXX_TESTING )
+ENDIF( NOT OTB_DISABLE_CXX_TESTING AND NOT OTB_DISABLE_CXX_EXAMPLES_TESTING )

@@ -256,6 +256,10 @@ IF( OTB_SHOW_ALL_MSG_DEBUG )
  ADD_DEFINITIONS(-DOTB_ACTIVE_MSG_DEV_MACRO)
 ENDIF( OTB_SHOW_ALL_MSG_DEBUG )
 
+#-----------------------------------------------------------------------------
+# Option for disable example testing
+OPTION(OTB_DISABLE_CXX_EXAMPLES_TESTING "Disable examples testing." OFF)
+MARK_AS_ADVANCED(OTB_DISABLE_CXX_EXAMPLES_TESTING)
 
 #-----------------------------------------------------------------------------
 # Option for generate Patented examples  !!!

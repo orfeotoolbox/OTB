@@ -38,7 +38,8 @@ TARGET_LINK_LIBRARIES(ImageAdaptor4 OTBCommon ITKCommon OTBIO ITKIO)
 
 ADD_EXECUTABLE(ImageListExample ImageListExample.cxx )
 TARGET_LINK_LIBRARIES(ImageListExample OTBCommon ITKCommon OTBIO ITKIO)
-IF( NOT OTB_DISABLE_CXX_TESTING )
+
+IF( NOT OTB_DISABLE_CXX_TESTING AND NOT OTB_DISABLE_CXX_EXAMPLES_TESTING )
 
 SET(BASELINE ${OTB_DATA_ROOT}/Baseline/Examples/DataRepresentation/Image)
 
@@ -80,4 +81,4 @@ INCLUDE_DIRECTORIES("${OTBTesting_BINARY_DIR}")
 ADD_EXECUTABLE(otbImageExamplesTests otbImageExamplesTests.cxx)
 TARGET_LINK_LIBRARIES(otbImageExamplesTests gdal ITKIO ITKAlgorithms ITKStatistics ITKCommon OTBBasicFilters OTBCommon OTBDisparityMap OTBIO OTBSpatialReasoning OTBChangeDetection OTBFeatureExtraction  OTBLearning  OTBMultiScale)
 
-ENDIF( NOT OTB_DISABLE_CXX_TESTING )
+ENDIF( NOT OTB_DISABLE_CXX_TESTING AND NOT OTB_DISABLE_CXX_EXAMPLES_TESTING )

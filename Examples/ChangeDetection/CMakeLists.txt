@@ -20,7 +20,7 @@ ADD_EXECUTABLE(JHMIChDet JHMIChDet.cxx)
 TARGET_LINK_LIBRARIES(JHMIChDet OTBIO OTBCommon gdal ITKCommon ITKIO ITKStatistics)
 
 
-IF( NOT OTB_DISABLE_CXX_TESTING )
+IF( NOT OTB_DISABLE_CXX_TESTING AND NOT OTB_DISABLE_CXX_EXAMPLES_TESTING)
 
 SET(BASELINE ${OTB_DATA_ROOT}/Baseline/Examples/ChangeDetection)
 
@@ -77,4 +77,4 @@ INCLUDE_DIRECTORIES("${OTBTesting_BINARY_DIR}")
 ADD_EXECUTABLE(otbChangeDetectionExamplesTests otbChangeDetectionExamplesTests.cxx)
 TARGET_LINK_LIBRARIES(otbChangeDetectionExamplesTests gdal ITKIO ITKAlgorithms ITKStatistics ITKCommon OTBBasicFilters OTBCommon OTBDisparityMap OTBIO OTBSpatialReasoning OTBChangeDetection OTBFeatureExtraction  OTBLearning  OTBMultiScale)
 
-ENDIF( NOT OTB_DISABLE_CXX_TESTING )
+ENDIF( NOT OTB_DISABLE_CXX_TESTING AND NOT OTB_DISABLE_CXX_EXAMPLES_TESTING )
