@@ -262,6 +262,15 @@ OPTION(OTB_DISABLE_CXX_EXAMPLES_TESTING "Disable examples testing." OFF)
 MARK_AS_ADVANCED(OTB_DISABLE_CXX_EXAMPLES_TESTING)
 
 #-----------------------------------------------------------------------------
+# Option to define streaming activation in applications
+# Use by otbConfigure.h.in
+SET(OTB_STREAM_IMAGE_SIZE_TO_ACTIVATE_STREAMING 8*2000*2000 CACHE STRING "Image size to activate using streaming for applications.")
+MARK_AS_ADVANCED(OTB_STREAM_IMAGE_SIZE_TO_ACTIVATE_STREAMING)
+SET(OTB_STREAM_MAX_SIZE_BUFFER_FOR_STREAMING 8*2000*10 CACHE STRING "Max size buffer for streaming.")
+MARK_AS_ADVANCED(OTB_STREAM_MAX_SIZE_BUFFER_FOR_STREAMING)
+
+
+#-----------------------------------------------------------------------------
 # Option for generate Patented examples  !!!
 OPTION(OTB_USE_PATENTED "Build patented examples. ITK must be genereted whith patented option (ITK_USE_PATENTED = ON)." OFF)
 MARK_AS_ADVANCED(OTB_USE_PATENTED)
