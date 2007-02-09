@@ -23,7 +23,7 @@
 #endif
 
 /* Setup the export macro.  */
-#if defined(_WIN32) && 0
+#if defined(_WIN32) && 1
 # if defined(itksys_EXPORTS)
 #  define itksys_EXPORT __declspec(dllexport)
 # else
