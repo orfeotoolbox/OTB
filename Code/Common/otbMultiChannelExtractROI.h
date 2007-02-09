@@ -31,11 +31,11 @@ namespace otb
 /** \class MultiChannelExtractROI
  * \brief Extrait une partie d'une image d'une image multi-canal.
  *
- * Il est possible d'extraire tous les canaux de l'image ou seulement ceux précisés par l'utilisateur.
- * La méthode SetChannel permet de sélectionner un canal (une liste est incrémentée).
- * Les méthodes SetFirstChannel/SetLastChannel permettent de définir une liste de canaux, définit par cet intervalle.
- * \note Si aucun canal n'est spécifié par l'utilisateur, alors tous les canaux de l'image d'entrée sont traités
- * \note Ces classe est paramétrée par le type de pixel des images d'entrée et de sortie. Les images manipulées dans cette classe 
+ * Il est possible d'extraire tous les canaux de l'image ou seulement ceux prï¿½cisï¿½s par l'utilisateur.
+ * La mï¿½thode SetChannel permet de sï¿½lectionner un canal (une liste est incrï¿½mentï¿½e).
+ * Les mï¿½thodes SetFirstChannel/SetLastChannel permettent de dï¿½finir une liste de canaux, dï¿½finit par cet intervalle.
+ * \note Si aucun canal n'est spï¿½cifiï¿½ par l'utilisateur, alors tous les canaux de l'image d'entrï¿½e sont traitï¿½s
+ * \note Ces classe est paramï¿½trï¿½e par le type de pixel des images d'entrï¿½e et de sortie. Les images manipulï¿½es dans cette classe 
  * sont de type "itk::VectorImage".
  *
  */
@@ -84,15 +84,25 @@ public:
   itkSetMacro(LastChannel,unsigned int);
   itkGetConstMacro(LastChannel,unsigned int);
 
+  /** ExtractImageFilter can produce an image which is a different
+   * resolution than its input image.  As such, ExtractImageFilter
+   * needs to provide an implementation for
+   * GenerateOutputInformation() in order to inform the pipeline
+   * execution model.  The original documentation of this method is
+   * below.
+   *
+   * \sa ProcessObject::GenerateOutputInformaton()  */
+  virtual void GenerateOutputInformation();
+
   /** Typedef Liste des canaux */
   typedef typename std::vector<unsigned int> ChannelsType;
 
-  /** Renvoie la liste des canaux traités */
+  /** Renvoie la liste des canaux traitï¿½s */
   ChannelsType GetChannels()const
   {
         return (m_Channels);
   }
-  /** Renvoie le nombre de canaux traités */
+  /** Renvoie le nombre de canaux traitï¿½s */
   unsigned int GetNbChannels()const
   {
         return (m_Channels.size());
@@ -114,16 +124,6 @@ protected:
   ~MultiChannelExtractROI() {};
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
-  /** ExtractImageFilter can produce an image which is a different
-   * resolution than its input image.  As such, ExtractImageFilter
-   * needs to provide an implementation for
-   * GenerateOutputInformation() in order to inform the pipeline
-   * execution model.  The original documentation of this method is
-   * below.
-   *
-   * \sa ProcessObject::GenerateOutputInformaton()  */
-  virtual void GenerateOutputInformation();
-
   /** ExtractImageFilter peut etre implementee comme un filtre multithreaded.
    * \sa ImageToImageFilter::ThreadedGenerateData(),
    *     ImageToImageFilter::GenerateData()  */
@@ -134,12 +134,12 @@ private:
   MultiChannelExtractROI(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
   
-  /** Premier/Dernier canal à traiter [1...] */
+  /** Premier/Dernier canal ï¿½ traiter [1...] */
   unsigned int  m_FirstChannel;
   unsigned int  m_LastChannel;
-  /** Liste des canaux à traiter  [1...] */
+  /** Liste des canaux ï¿½ traiter  [1...] */
   ChannelsType  m_Channels; 
-  /** Liste des canaux qui seront réellement traités [1...] */
+  /** Liste des canaux qui seront rï¿½ellement traitï¿½s [1...] */
   ChannelsType  m_ChannelsWorks;
   /** */
   bool m_ChannelsWorksBool;
