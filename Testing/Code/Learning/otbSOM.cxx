@@ -39,10 +39,10 @@ try
     unsigned int nbIterations= atoi(argv[7]);
     double betaInit = atof(argv[8]);
     double betaEnd= atof(argv[9]);
-    float initValue = atof(argv[10]);
+    double initValue = atof(argv[10]);
     
 
-    typedef float ComponentType;
+    typedef double ComponentType;
     typedef itk::RGBPixel<ComponentType> PixelType;
     typedef itk::Statistics::EuclideanDistance<PixelType> DistanceType;
     typedef otb::SOMMap<PixelType,DistanceType,Dimension> MapType;
@@ -75,6 +75,7 @@ try
     som->SetBetaInit(betaInit);
     som->SetBetaEnd(betaEnd);
     som->SetMaxWeight(initValue);
+    som->SetRandomInit(false);
 
     WriterType::Pointer writer = WriterType::New();
     writer->SetFileName(outputFileName);

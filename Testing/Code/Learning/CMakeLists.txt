@@ -99,7 +99,7 @@ ADD_TEST(leTvSOM ${LEARNING_TESTS}
 	otbSOM
 	${INPUTDATA}/poupees_sub.png
 	${TEMP}/leSOMPoupeesSubOutputMap1.hdr
-	32 32 10 10 5 1.0 0.1 128)
+	32 32 10 10 5 1.0 0.1 0)
 
 # -------            otb::SOMActivationBuilder   -----------------------------	
 
