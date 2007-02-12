@@ -33,9 +33,9 @@ FullResolutionImageWidget<TPixel>
 {
   SizeType size;
   size.Fill(256);
-  m_UpperRightCorner.Fill(0);
+  m_UpperLeftCorner.Fill(0);
   RegionType region;
-  region.SetIndex(m_UpperRightCorner);
+  region.SetIndex(m_UpperLeftCorner);
   region.SetSize(size);
   this->SetViewedRegion(region);
 }
@@ -61,7 +61,7 @@ FullResolutionImageWidget<TPixel>
     }
   else
     {
-      this->GetInput()->Update();
+      // this->GetInput()->Update();
       if(this->GetImageOverlayVisible())
 	{
 	  this->GetInputOverlay()->Update();
@@ -85,12 +85,12 @@ FullResolutionImageWidget<TPixel>
   size[1]=h;
   RegionType region;
   region.SetSize(size);
-  region.SetIndex(m_UpperRightCorner);
+  region.SetIndex(m_UpperLeftCorner);
   region.Crop(this->GetInput()->GetLargestPossibleRegion());
   this->SetViewedRegion(region);
   this->redraw();
-  this->Fl_Gl_Window::resize(region.GetIndex()[0],
-	       region.GetIndex()[1], 
+  this->Fl_Gl_Window::resize(x,
+	       y, 
 	       region.GetSize()[0],
 	       region.GetSize()[1]);
   
@@ -163,9 +163,9 @@ FullResolutionImageWidget<TPixel>
 template <class TPixel>
 void 
 FullResolutionImageWidget<TPixel>
-::SetUpperRightCorner(IndexType index)
+::SetUpperLeftCorner(IndexType index)
 {
-  m_UpperRightCorner=index;
+  m_UpperLeftCorner=index;
   RegionType region = this->GetViewedRegion();
   region.SetIndex(index);
   region.Crop(this->GetInput()->GetLargestPossibleRegion());

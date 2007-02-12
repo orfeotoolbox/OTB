@@ -63,7 +63,7 @@ ZoomableImageWidget<TPixel>
     }
   else
     {
-      this->GetInput()->Update();
+      // this->GetInput()->Update();
       if(this->GetImageOverlayVisible())
 	{
 	  this->GetInputOverlay()->Update();
@@ -169,14 +169,12 @@ ZoomableImageWidget<TPixel>
 
   RegionType region = this->GetViewedRegion();
   
-  IndexType newIndex;
   SizeType newSize;
   RegionType newRegion;
 
   newSize[0] = static_cast<unsigned int>((double)this->w()/zoomFactor);
   newSize[1] = static_cast<unsigned int>((double)this->h()/zoomFactor);
-  otbMsgDebugMacro(<<"SetZoomFactor: newSize ->"<<newSize);
-  otbMsgDebugMacro(<<"SetZoomFactor: newIndex ->"<<newIndex);
+//  otbMsgDebugMacro(<<"SetZoomFactor: newSize ->"<<newSize);
   newRegion.SetIndex(m_ZoomUpperLeftCorner);
   newRegion.SetSize(newSize);
   this->SetViewedRegion(newRegion);
@@ -195,9 +193,9 @@ ZoomableImageWidget<TPixel>
   RegionType newRegion;
 
   size = this->GetViewedRegion().GetSize();
-  otbMsgDebugMacro(<<"SetZoomCenter: Size ->"<<size);
+//  otbMsgDebugMacro(<<"SetZoomCenter: Size ->"<<size);
   
-  otbMsgDebugMacro(<<"SetZoomCenter: newIndex ->"<<index);
+//  otbMsgDebugMacro(<<"SetZoomCenter: newIndex ->"<<index);
   newRegion.SetIndex(index);
   newRegion.SetSize(size);
   this->SetViewedRegion(newRegion);

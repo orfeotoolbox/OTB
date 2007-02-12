@@ -74,7 +74,6 @@ class ZoomableImageWidget
   void SetZoomUpperLeftCorner(IndexType index);
   itkGetMacro(ZoomUpperLeftCorner,IndexType);
 
-
  protected:
   /** Constructor. */
     ZoomableImageWidget();

@@ -63,11 +63,11 @@ class FullResolutionImageWidget
   virtual void resize(int x, int y, int w, int h);
 
   /**
-   * Set upper right corner position in image.
-   * \param index the upper right corner index.
+   * Set upper left corner position in image.
+   * \param index the upper left corner index.
    */
-  void SetUpperRightCorner(IndexType index);
-  itkGetMacro(UpperRightCorner,IndexType);
+  void SetUpperLeftCorner(IndexType index);
+  itkGetMacro(UpperLeftCorner,IndexType);
 
  protected:
   /** Constructor. */
@@ -79,7 +79,7 @@ class FullResolutionImageWidget
     FullResolutionImageWidget(const Self&);// purposely not implemented
     void operator=(const Self&);// purposely not implemented
 
-    IndexType m_UpperRightCorner;
+    IndexType m_UpperLeftCorner;
 };
 } // end namespace otb
 #ifndef OTB_MANUAL_INSTANTIATION

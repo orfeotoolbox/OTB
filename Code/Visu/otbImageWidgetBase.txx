@@ -56,6 +56,8 @@ ImageWidgetBase<TPixel>
   m_ImageOverlay = NULL;
   m_OpenGlImageOverlayBuffer = NULL;
   m_ImageOverlayOpacity = 128;
+  m_MinComponentValues.Fill(0);
+  m_MaxComponentValues.Fill(256);
 }
 /**
  * Destructor.
@@ -249,13 +251,36 @@ ImageWidgetBase<TPixel>
     }
   else
     {
-      //otbMsgDebugMacro(<<"Show");
-      // m_Image->SetRequestedRegion(m_BufferedRegion);
-//       m_Image->Update();
+      //otbMsgDebugMacro(<<"Zoomable widget Show");       
       this->show();
+      //otbMsgDebugMacro(<<"Before redraw.");
       this->redraw();
+      //otbMsgDebugMacro(<<"After redraw.");
     }
 }
+
+template <class TPixel>
+unsigned char
+ImageWidgetBase<TPixel>
+::Normalize(PixelType value, unsigned int channelIndex)
+{
+  if(value>m_MaxComponentValues[channelIndex])
+    {
+      return 255;
+    }
+
+  else if(value<m_MinComponentValues[channelIndex])
+    {
+      return 0;
+    }
+  else
+    {
+      return static_cast<unsigned char>(256*static_cast<double>(value-m_MinComponentValues[channelIndex])
+      /static_cast<double>(m_MaxComponentValues[channelIndex]-m_MinComponentValues[channelIndex]));
+    }
+}
+
+
 /** 
  * Draw the widget 
  */
@@ -268,8 +293,9 @@ ImageWidgetBase<TPixel>
  if(this->UpdateOpenGlBufferedRegionRequested())
     {
       UpdateOpenGlBufferedRegion();
-      // m_Image->SetRequestedRegion(m_BufferedRegion);
-//       m_Image->Update();
+      m_Image->SetRequestedRegion(m_BufferedRegion);
+      m_Image->PropagateRequestedRegion();
+      m_Image->UpdateOutputData();
       RebuildOpenGlBuffer();
     }
  if(m_ImageOverlayVisible && this->UpdateOpenGlImageOverlayBufferedRegionRequested())
@@ -360,20 +386,20 @@ ImageWidgetBase<TPixel>
   unsigned int index = 0;
   for(it.GoToBegin();!it.IsAtEnd();++it)
     {
-      m_OpenGlBuffer[index] = static_cast<unsigned int>(it.Get()[m_RedChannelIndex]);
+      m_OpenGlBuffer[index] = Normalize(it.Get()[m_RedChannelIndex],m_RedChannelIndex);
       if(m_ViewModelIsRGB)
 	{
-	  m_OpenGlBuffer[index+1] = static_cast<unsigned int>(it.Get()[m_GreenChannelIndex]);
-	  m_OpenGlBuffer[index+2] = static_cast<unsigned int>(it.Get()[m_BlueChannelIndex]);
-	  m_OpenGlBuffer[index+3] = 256;
+	  m_OpenGlBuffer[index+1] = Normalize(it.Get()[m_GreenChannelIndex],m_GreenChannelIndex);
+	  m_OpenGlBuffer[index+2] = Normalize(it.Get()[m_BlueChannelIndex],m_BlueChannelIndex);
+	  m_OpenGlBuffer[index+3] = 255;
 	  index+=4;
 	}
       else
 	{
-	  m_OpenGlBuffer[index+1] = static_cast<unsigned int>(it.Get()[m_RedChannelIndex]);
-	  m_OpenGlBuffer[index+2] = static_cast<unsigned int>(it.Get()[m_RedChannelIndex]);
-	  m_OpenGlBuffer[index+3] = 256;
-	  index+=4;
+	  m_OpenGlBuffer[index+1] = Normalize(it.Get()[m_RedChannelIndex],m_RedChannelIndex);
+	  m_OpenGlBuffer[index+2] = Normalize(it.Get()[m_RedChannelIndex],m_RedChannelIndex);
+	  m_OpenGlBuffer[index+3] = 255;
+	  index+=4; 
 	}
     }
 }
@@ -413,9 +439,9 @@ ImageWidgetBase<TPixel>
 	    }
 	  else
 	    {
-	      m_OpenGlImageOverlayBuffer[index] =   static_cast<unsigned int>(it.Get()[0]);
-	      m_OpenGlImageOverlayBuffer[index+1] = static_cast<unsigned int>( it.Get()[1]);
-	      m_OpenGlImageOverlayBuffer[index+2] = static_cast<unsigned int>(it.Get()[2]);
+	      m_OpenGlImageOverlayBuffer[index] =   static_cast<unsigned char>(it.Get()[0]);
+	      m_OpenGlImageOverlayBuffer[index+1] = static_cast<unsigned char>( it.Get()[1]);
+	      m_OpenGlImageOverlayBuffer[index+2] = static_cast<unsigned char>(it.Get()[2]);
 	      m_OpenGlImageOverlayBuffer[index+3] = m_ImageOverlayOpacity;
 	    } 
 	  index+=4;
@@ -425,9 +451,9 @@ ImageWidgetBase<TPixel>
     {
       for(it.GoToBegin();!it.IsAtEnd();++it)
 	{
-	  m_OpenGlImageOverlayBuffer[index] =  static_cast<unsigned int>(it.Get()[0]);
-	  m_OpenGlImageOverlayBuffer[index+1] =static_cast<unsigned int>(it.Get()[1]);
-	  m_OpenGlImageOverlayBuffer[index+2] =static_cast<unsigned int>(it.Get()[2]);
+	  m_OpenGlImageOverlayBuffer[index] =  static_cast<unsigned char>(it.Get()[0]);
+	  m_OpenGlImageOverlayBuffer[index+1] =static_cast<unsigned char>(it.Get()[1]);
+	  m_OpenGlImageOverlayBuffer[index+2] =static_cast<unsigned char>(it.Get()[2]);
 	  m_OpenGlImageOverlayBuffer[index+3] =m_ImageOverlayOpacity;
 	  index+=4;
 	}

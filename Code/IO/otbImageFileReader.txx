@@ -165,15 +165,27 @@ ImageFileReader<TOutputImage>
     ImageRegionType region = output->GetBufferedRegion();
 //THOMAS : PB : le GetImageSizeInBytes s'appuie sur m_Dimension lue, donc dimensions physique,de 
 // l'image (pas celle bufferiséd ans la cas du streaming )
-    char * loadBuffer = 
-      new char[this->m_ImageIO->GetImageSizeInBytes()];
+// JULIEN: fix for the problem mentionned : the componentsize is computed here since ad hoc methods in 
+// itkImageIOBase are protected.
+    unsigned int componentSize = this->m_ImageIO->GetImageSizeInBytes();
+    for(unsigned int i=0;i<this->m_ImageIO->GetNumberOfDimensions();++i)
+      {
+	componentSize = componentSize/this->m_ImageIO->GetDimensions(i);
+      }
 
-    this->m_ImageIO->Read(loadBuffer);
-    
+
+    unsigned int nbBytes = componentSize*region.GetNumberOfPixels();
+    otbMsgDevMacro(<<"NbBytes "<<nbBytes);
+
     otbMsgDevMacro(<< "Buffer conversion required from: "
                      << this->m_ImageIO->GetComponentTypeInfo().name()
                      << " to: "
-                     << typeid(ITK_TYPENAME ConvertPixelTraits::ComponentType).name() << "  ImageSizeInBytes()"<<this->m_ImageIO->GetImageSizeInBytes()<<"  region.GetNumberOfPixels()"<<region.GetNumberOfPixels());
+                     << typeid(ITK_TYPENAME ConvertPixelTraits::ComponentType).name() << "  NbBytes"<<nbBytes<<"  region.GetNumberOfPixels()"<<region.GetNumberOfPixels());
+    char * loadBuffer = new char[nbBytes];
+    
+    this->m_ImageIO->Read(loadBuffer);
+    
+    
 
     this->DoConvertBuffer(loadBuffer, region.GetNumberOfPixels());
 

@@ -51,6 +51,7 @@ class ImageWidgetBase
     /** Template related typedef */
     typedef TPixel     PixelType;
     typedef otb::VectorImage<PixelType,2> ImageType;
+    typedef typename ImageType::PixelType VectorPixelType;
     typedef typename ImageType::Pointer ImagePointerType;
     typedef typename ImageType::SizeType SizeType;
     typedef typename ImageType::IndexType IndexType;
@@ -90,12 +91,19 @@ class ImageWidgetBase
     itkSetMacro(BlackTransparency,bool);
     itkGetMacro(BlackTransparency,bool);
 
-    itkGetMacro(ViewModelIsRGB,bool);
+    itkSetMacro(MaxComponentValues,VectorPixelType);
+    itkGetMacro(MaxComponentValues,VectorPixelType);
 
+    itkSetMacro(MinComponentValues,VectorPixelType);
+    itkGetMacro(MinComponentValues,VectorPixelType);
+
+    itkGetMacro(ViewModelIsRGB,bool);
     
     itkGetMacro(ImageOverlayOpacity,unsigned char);
 
     itkGetObjectMacro(FormList,FormListType);
+
+    itkGetMacro(OpenGlIsotropicZoom,double);
     
     /** Set the input image.
      * \param image The image to view.
@@ -158,12 +166,14 @@ class ImageWidgetBase
     /** Rebuild opengl image overlay buffer */
     virtual void RebuildOpenGlImageOverlayBuffer(void);
    
+    /** Normalization function */
+    unsigned char Normalize(PixelType value, unsigned int channelIndex);
 
     // PURE VIRTUAL METHODS 
 
     // User is not supposed to be allowed to move the zoom in the generic implementation
     itkSetMacro(OpenGlIsotropicZoom,double);
-    itkGetMacro(OpenGlIsotropicZoom,double);
+    
 
     /** Unlarge OpenGlBuffer */
     virtual void UpdateOpenGlBufferedRegion(void){};
@@ -217,7 +227,10 @@ class ImageWidgetBase
      RegionType m_ImageOverlayBufferedRegion;
      /** OpenGl image overlay buffer */
      unsigned char * m_OpenGlImageOverlayBuffer;
-     
+     /** Max value for normalization */
+     VectorPixelType m_MaxComponentValues;
+     /** Min value for normalization */
+     VectorPixelType m_MinComponentValues;
   };
 } // end namespace otb
 
