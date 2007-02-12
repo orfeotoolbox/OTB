@@ -275,7 +275,7 @@ ImageWidgetBase<TPixel>
     }
   else
     {
-      return static_cast<unsigned char>(256*static_cast<double>(value-m_MinComponentValues[channelIndex])
+      return static_cast<unsigned char>(255*static_cast<double>(value-m_MinComponentValues[channelIndex])
       /static_cast<double>(m_MaxComponentValues[channelIndex]-m_MinComponentValues[channelIndex]));
     }
 }
