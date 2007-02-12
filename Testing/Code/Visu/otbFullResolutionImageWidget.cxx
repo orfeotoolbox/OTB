@@ -51,7 +51,7 @@ int otbFullResolutionImageWidget( int argc, char * argv[] )
 	widget->SetViewModelToRGB();
       else
 	widget->SetViewModelToGrayscale();
-      widget->SetUpperRightCorner(index);
+      widget->SetUpperLeftCorner(index);
       widget->Init(0,0,size[0],size[1],"Test Full Resolution Widget");
       widget->redraw();
       window.end();
