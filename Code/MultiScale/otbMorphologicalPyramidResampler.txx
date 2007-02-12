@@ -141,6 +141,7 @@ Resampler<TInputImage, TOuputImage>
   scales[0]=static_cast<double>(inputSize[0]-1)/static_cast<double>(m_Size[0]-1);
   scales[1]=static_cast<double>(inputSize[1]-1)/static_cast<double>(m_Size[1]-1);
   transform->SetParameters(scales);
+  transform->SetCenter(this->GetInput()->GetOrigin());
 
   // Resampling filter set up
   resampler->SetTransform(transform);
