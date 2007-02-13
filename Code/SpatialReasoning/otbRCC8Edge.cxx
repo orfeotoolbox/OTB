@@ -37,4 +37,3 @@ RCC8Edge::PrintSelf( std::ostream& os,itk::Indent indent ) const
      os<<indent<<"RCC8 Value: "<<m_Value<<std::endl;
    }
 } // end namespace otb
-#endif
