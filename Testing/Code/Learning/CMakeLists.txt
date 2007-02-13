@@ -14,6 +14,8 @@ SET(TOL 0.0)
 
 SET(LEARNING_TESTS ${CXX_TEST_PATH}/otbLearningTests)
 
+#EPSILON est different de 0.0 pour les tests multiplateformes avec différentes options de compilation.
+SET(EPSILON 0.0000000001)
 
 
 # -------            otb::SVMModel   ------------------------------
@@ -93,7 +95,7 @@ ADD_TEST(leTuSOMNew ${LEARNING_TESTS}
         otbSOMNew)
 
 ADD_TEST(leTvSOM ${LEARNING_TESTS}  
-        --compare-image ${TOL}
+        --compare-image ${EPSILON}
 	${BASELINE}/leSOMPoupeesSubOutputMap1.hdr
 	${TEMP}/leSOMPoupeesSubOutputMap1.hdr
 	otbSOM
