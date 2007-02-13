@@ -15,8 +15,6 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef _otbRCC8Edge_cxx
-#define _otbRCC8Edge_cxx
 
 #include "otbRCC8Edge.h"
 
