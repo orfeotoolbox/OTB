@@ -15,17 +15,8 @@ SET(TOL 0.0)
 SET(EPS 0.001)
 
 #Tolerance sur diff pixel image
-#Sous Windows EPSILON est different de 0.0
-SET(EPSILON 0.0)
-IF(WIN32)
-  IF(NOT BORLAND)
-    IF(NOT CYGWIN)
-      IF(NOT MINGW)
-        SET(EPSILON 0.0001)
-      ENDIF(NOT MINGW)
-    ENDIF(NOT CYGWIN)
-  ENDIF(NOT BORLAND)
-ENDIF(WIN32)
+#EPSILON est different de 0.0 pour les tests multiplateformes avec différentes options de compilation.
+SET(EPSILON 0.0000000001)
 
 SET(FEATUREEXTRACTION_TESTS ${CXX_TEST_PATH}/otbFeatureExtractionTests)
 
