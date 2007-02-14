@@ -90,6 +90,11 @@ bool ONERAImageIO::CanReadFile( const char* FileNameToRead )
     m_Headerfile.close();
     }
 
+  if( System::IsADirName(filename) == true )
+  {
+       return false;
+  }
+
   const std::string HeaderFileName = System::GetRootName(filename)+".ent";
   const std::string DataFileName = System::GetRootName(filename)+".dat";
 
@@ -119,11 +124,11 @@ bool ONERAImageIO::CanReadFile( const char* FileNameToRead )
   {
         if ( m_ByteOrder == LittleEndian )
         {
-		m_FileByteOrder = BigEndian;
+			m_FileByteOrder = BigEndian;
         }
         else if ( m_ByteOrder == BigEndian ) 
         {
-		m_FileByteOrder = LittleEndian;
+			m_FileByteOrder = LittleEndian;
         }
   }
   // Swap if necessary
