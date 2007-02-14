@@ -57,13 +57,13 @@ int otbImageTest(int argc, char* argv[])
         ReaderType::Pointer reader = ReaderType::New();
  
         reader->SetFileName( inputFilename  );
-	reader->Update();
+	reader->GenerateOutputInformation();
 
 	image = reader->GetOutput();
 	
 	file << "------ IMAGE --------" << std::endl;
 	std::cout << "------ IMAGE --------" << std::endl;
-// Image n'est pas ecrit dans le fichier car des pointeurs sont affichés, donc la valeur dépend de l'instanciation 
+// Image n'est pas ecrit dans le fichier car des pointeurs sont affichï¿½s, donc la valeur dï¿½pend de l'instanciation 
 // -> pour pouvoir faire de tests de non regression sur la sortie ecrite dans le fichier ASCII
 	std::cout << image << std::endl;	
 	std::cout << "---------------------" << std::endl;
