@@ -58,6 +58,19 @@ CommandLineArgumentParseResult
         return ( lString );
 }
 
+std::string 
+CommandLineArgumentParseResult
+::GetInputImage(void) const
+{
+	return (GetParameterString("--InputImage"));
+}
+std::string 
+CommandLineArgumentParseResult
+::GetOutputImage(void) const
+{
+	return (GetParameterString("--OutputImage"));
+}
+
 int  
 CommandLineArgumentParseResult
 ::GetNumberOfParameters(const char *option)
@@ -100,6 +113,20 @@ CommandLineArgumentParser
 {
         AddOption("--help","Help","-h",0,false);
         AddOption("--version","Version","-v",0,false);
+}
+
+
+void 
+CommandLineArgumentParser
+::AddInputImage(void)
+{
+	AddOption("--InputImage","input image file name ","-in",1,true);	
+}
+void 
+CommandLineArgumentParser
+::AddOutputImage(void)
+{
+	AddOption("--OutputImage","output image file name ","-out",1,true);	
 }
 
 void 
@@ -207,7 +234,7 @@ CommandLineArgumentParser
       }
     //Check the option
     m_OptionList[index].Finded = true;
-    // Si le nombre de parametres est prédéfini : 
+    // Si le nombre de parametres est prï¿½dï¿½fini : 
     if (m_OptionList[index].NumberOfParametersFixed == true)
     {
     	// Check if the number of parameters is correct
@@ -230,7 +257,7 @@ CommandLineArgumentParser
       		outResult->AddParameter(m_OptionList[index].CommonName,std::string(argv[i+1]));
       	}
      }
-     // Si le nombre de parametres n'est pas prédéfini, lecture jusqu'a la prochaine option ou fin argv  : 
+     // Si le nombre de parametres n'est pas prï¿½dï¿½fini, lecture jusqu'a la prochaine option ou fin argv  : 
      else
      {
          // Tell the result that the option has been encountered
@@ -261,7 +288,7 @@ CommandLineArgumentParser
     
     }
 
-  // Controle que toutes les options obligatoire sont présentes dans la ligne d'argument
+  // Controle que toutes les options obligatoire sont prï¿½sentes dans la ligne d'argument
   for(unsigned int cpt=0 ; cpt < m_OptionList.size() ; cpt++ )
   {
   	if ( (m_OptionList[cpt].Obligatory == true) && (m_OptionList[cpt].Finded == false) )
@@ -283,7 +310,7 @@ bool
 CommandLineArgumentParser
 ::FindOption(const std::string & option, int & index)
 {
-	//Cherche dans la liste des options installées
+	//Cherche dans la liste des options installï¿½es
 	bool trouve(false);
 	bool continuer(true);
 	unsigned int cpt(0);
@@ -321,7 +348,7 @@ CommandLineArgumentParser
   		if ( largeur > largeurmax ) largeurmax = largeur;
 	}
   	
-  	// Controle que toutes les options obligatoire sont présentes dans la ligne d'argument
+  	// Controle que toutes les options obligatoire sont prï¿½sentes dans la ligne d'argument
   	for(i=0 ; i < m_OptionList.size() ; i++ )
   	{
   		int largeur = m_OptionList[i].CommonName.size() + m_OptionList[i].Synonim.size();
@@ -335,7 +362,7 @@ CommandLineArgumentParser
   		}
   		if ( m_OptionList[i].Obligatory == false ) os <<"]";
   		else os << " ";
-  		//Aligne le texte avec la différence en blanc
+  		//Aligne le texte avec la diffï¿½rence en blanc
   		for (int b=largeur ; b< largeurmax ; b++) os <<" ";
   		os <<   "  :  "<<m_OptionList[i].Description;
   		if (m_OptionList[i].NumberOfParametersFixed == true )
