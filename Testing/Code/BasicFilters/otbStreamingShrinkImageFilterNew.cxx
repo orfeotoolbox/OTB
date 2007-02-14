@@ -27,7 +27,7 @@ int otbStreamingShrinkImageFilterNew( int argc, char * argv[] )
 
       typedef unsigned char PixelType;
       typedef otb::VectorImage<PixelType,Dimension> ImageType;
-      typedef otb::StreamingShrinkImageFilter<ImageType> ShrinkType;
+      typedef otb::StreamingShrinkImageFilter<ImageType,ImageType> ShrinkType;
 
       ShrinkType::Pointer shrink = ShrinkType::New();
     }

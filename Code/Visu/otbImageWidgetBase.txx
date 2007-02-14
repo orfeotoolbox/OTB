@@ -56,8 +56,10 @@ ImageWidgetBase<TPixel>
   m_ImageOverlay = NULL;
   m_OpenGlImageOverlayBuffer = NULL;
   m_ImageOverlayOpacity = 128;
+  m_MinComponentValues.SetSize(1);
+  m_MaxComponentValues.SetSize(1);
   m_MinComponentValues.Fill(0);
-  m_MaxComponentValues.Fill(256);
+  m_MaxComponentValues.Fill(255);
 }
 /**
  * Destructor.
@@ -264,19 +266,29 @@ unsigned char
 ImageWidgetBase<TPixel>
 ::Normalize(PixelType value, unsigned int channelIndex)
 {
-  if(value>m_MaxComponentValues[channelIndex])
+  PixelType max = 255;
+  PixelType min = 0;
+  if(channelIndex<m_MaxComponentValues.GetSize())
+    {
+      max = m_MaxComponentValues[channelIndex];
+    }
+   if(channelIndex<m_MinComponentValues.GetSize())
+    {
+      min = m_MinComponentValues[channelIndex];
+    }
+  if(value>max)
     {
       return 255;
     }
 
-  else if(value<m_MinComponentValues[channelIndex])
+  else if(value<min)
     {
       return 0;
     }
   else
     {
-      return static_cast<unsigned char>(255*static_cast<double>(value-m_MinComponentValues[channelIndex])
-      /static_cast<double>(m_MaxComponentValues[channelIndex]-m_MinComponentValues[channelIndex]));
+      return static_cast<unsigned char>(255*static_cast<double>(value-min)
+      /static_cast<double>(max-min));
     }
 }
 

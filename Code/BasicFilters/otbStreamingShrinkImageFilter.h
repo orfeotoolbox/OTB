@@ -36,14 +36,14 @@ namespace otb
    * For exemple, with a 6000X6000 image and a 10 shrinkFactor, it will read 600 lines of 5990 pixels 
    * instead of the whole image.
    */
-template <class TImage> 
+template <class TInputImage,class TOutputImage> 
 class ITK_EXPORT StreamingShrinkImageFilter
-: public itk::ImageToImageFilter<TImage,TImage>
+: public itk::ImageToImageFilter<TInputImage,TOutputImage>
 {
  public:
   /** Standard typedefs */
   typedef StreamingShrinkImageFilter               Self;
-  typedef itk::ImageToImageFilter<TImage,TImage>   Superclass;
+  typedef itk::ImageToImageFilter<TInputImage,TOutputImage>   Superclass;
   typedef itk::SmartPointer<Self>                  Pointer;
   typedef itk::SmartPointer<const Self>            ConstPointer;
   
@@ -54,8 +54,10 @@ class ITK_EXPORT StreamingShrinkImageFilter
   itkTypeMacro(StreamingShrinkImageFilter,ImageToImageFilter);
   
   /** Template parameter typedefs */
-  typedef TImage ImageType;
-  typedef typename ImageType::Pointer ImagePointerType;
+  typedef TInputImage InputImageType;
+  typedef typename InputImageType::Pointer InputImagePointerType;
+  typedef TOutputImage OutputImageType;
+  typedef typename OutputImageType::Pointer OutputImagePointerType;
   
   /** Shrink factor accessor */
   itkSetMacro(ShrinkFactor,unsigned int);
@@ -66,7 +68,9 @@ class ITK_EXPORT StreamingShrinkImageFilter
    * As such, it must override the GenerateOutputInformation method in order to compute
    * the output size from the input size.
    */
-  void GenerateOutputInformation(void);
+  virtual void GenerateOutputInformation(void);
+
+  virtual void GenerateInputRequestedRegion(void);
   /** Main computation method */
   virtual void UpdateOutputData(itk::DataObject * output);
   

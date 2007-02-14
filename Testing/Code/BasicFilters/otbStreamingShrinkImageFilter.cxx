@@ -34,7 +34,7 @@ int otbStreamingShrinkImageFilter( int argc, char * argv[] )
       typedef otb::VectorImage<PixelType,Dimension> ImageType;
       typedef otb::ImageFileReader<ImageType> ReaderType;
       typedef otb::ImageFileWriter<ImageType> WriterType;
-      typedef otb::StreamingShrinkImageFilter<ImageType> ShrinkType;
+      typedef otb::StreamingShrinkImageFilter<ImageType,ImageType> ShrinkType;
 
       ReaderType::Pointer reader = ReaderType::New();
       ShrinkType::Pointer shrink = ShrinkType::New();

@@ -25,26 +25,26 @@
 namespace otb
 {
 /** Constructor */
-template <class TImage>
-StreamingShrinkImageFilter<TImage>
+template <class TInputImage, class TOutputImage>
+StreamingShrinkImageFilter<TInputImage, TOutputImage>
 ::StreamingShrinkImageFilter()
 {
   // Default shrink factor
   m_ShrinkFactor=10;
 }
 /** Destructor */
-template <class TImage>
-StreamingShrinkImageFilter<TImage>
+template <class TInputImage, class TOutputImage>
+StreamingShrinkImageFilter<TInputImage, TOutputImage>
 ::~StreamingShrinkImageFilter()
 {}
 /** 
- * StreamingShrinkImageFilter produces an ouptut whose size is different from its input.
+ * StreamingShrinkImageFilter produces an output whose size is different from its input.
  * As such, it must override the GenerateOutputInformation method in order to compute
  * the output size from the input size.
  */
-template <class TImage>
+template <class TInputImage, class TOutputImage>
 void
-StreamingShrinkImageFilter<TImage>
+StreamingShrinkImageFilter<TInputImage, TOutputImage>
 ::GenerateOutputInformation(void)
 {
   // call the superclass' implementation of this method
@@ -56,39 +56,61 @@ StreamingShrinkImageFilter<TImage>
 
   // we need to compute the output spacing, the output image size, and the
   // output image start index
-  const typename ImageType::SpacingType&
+  const typename InputImageType::SpacingType&
     inputSpacing = inputPtr->GetSpacing();
-  const typename ImageType::SizeType&   inputSize
+  const typename InputImageType::SizeType&   inputSize
     = inputPtr->GetLargestPossibleRegion().GetSize();
-  const typename ImageType::IndexType&  inputStartIndex
+  const typename InputImageType::IndexType&  inputStartIndex
     = inputPtr->GetLargestPossibleRegion().GetIndex();
-  otbMsgDebugMacro(<<"Input idnex "<<inputStartIndex);
+  otbMsgDebugMacro(<<"Input index "<<inputStartIndex);
   otbMsgDebugMacro(<<"Input size: "<<inputSize);
 
-  typename ImageType::SpacingType      outputSpacing;
-  typename ImageType::SizeType         outputSize;
-  typename ImageType::IndexType        outputStartIndex;
+  typename OutputImageType::SpacingType      outputSpacing;
+  typename OutputImageType::SizeType         outputSize;
+  typename OutputImageType::IndexType        outputStartIndex;
 
-  for (unsigned int i = 0; i < ImageType::ImageDimension; i++)
+  for (unsigned int i = 0; i < OutputImageType::ImageDimension; i++)
     {
       outputSpacing[i] = inputSpacing[i] * static_cast<double>( m_ShrinkFactor);
       outputSize[i] = inputSize[i]/m_ShrinkFactor;
-      outputStartIndex[i] = inputStartIndex[i];
+      //outputStartIndex[i] = inputStartIndex[i];
+      outputStartIndex[i]=0;
     }
   outputPtr->SetSpacing( outputSpacing );
-  typename ImageType::RegionType outputLargestPossibleRegion;
+  typename OutputImageType::RegionType outputLargestPossibleRegion;
   outputLargestPossibleRegion.SetSize( outputSize );
   outputLargestPossibleRegion.SetIndex( outputStartIndex );
-  otbMsgDebugMacro(<<"Output largest possible region: "<<outputLargestPossibleRegion);
+  // otbMsgDebugMacro(<<"Output largest possible region: "<<outputLargestPossibleRegion);
   outputPtr->SetLargestPossibleRegion( outputLargestPossibleRegion );
 }
 
-/** Main computation method */
-template <class TImage>
+template <class TInputImage, class TOutputImage>
 void
-StreamingShrinkImageFilter<TImage>
+StreamingShrinkImageFilter<TInputImage, TOutputImage>
+::GenerateInputRequestedRegion(void)
+{
+  // otbMsgDebugMacro(<<"Call to GenerateInputRequestedRegion");
+  // if(this->GetInput())
+//     {
+      InputImagePointerType inputPtr =  const_cast<InputImageType * >( this->GetInput(0) );
+      // otbMsgDebugMacro(<<"Input largest possible region: "<<inputPtr->GetLargestPossibleRegion());
+      typename InputImageType::IndexType index = inputPtr->GetLargestPossibleRegion().GetIndex();
+      typename InputImageType::SizeType size;
+      size.Fill(0);
+      typename InputImageType::RegionType region;
+      region.SetSize(size);
+      region.SetIndex(index);
+      inputPtr->SetRequestedRegion(region);
+//     }
+}
+
+/** Main computation method */
+template <class TInputImage, class TOutputImage>
+void
+StreamingShrinkImageFilter<TInputImage, TOutputImage>
 ::UpdateOutputData(itk::DataObject *itkNotUsed(output))
 {
+  // otbMsgDebugMacro(<<"Entering UpdateOutputData");
   /**
    * prevent chasing our tail
    */
@@ -120,38 +142,44 @@ StreamingShrinkImageFilter<TImage>
   /**
    * Allocate the output buffer. 
    */
-  ImagePointerType outputPtr = this->GetOutput(0);
-  typename ImageType::RegionType outputRegion = outputPtr->GetRequestedRegion();
+  OutputImagePointerType outputPtr = this->GetOutput(0);
+  typename OutputImageType::RegionType outputRegion = outputPtr->GetRequestedRegion();
   outputPtr->SetBufferedRegion( outputRegion );
   outputPtr->Allocate();
   
   /**
    * Grab the input
    */
-  ImagePointerType inputPtr =  const_cast<ImageType * >( this->GetInput(0) );
+  InputImagePointerType inputPtr =  const_cast<InputImageType * >( this->GetInput(0) );
   
-  typedef itk::ImageRegionIteratorWithIndex<ImageType> IteratorType;
+  // otbMsgDebugMacro(<<"Input Largest possible region: "<<inputPtr->GetLargestPossibleRegion());
+  typename InputImageType::IndexType origin = inputPtr->GetLargestPossibleRegion().GetIndex();
 
-  IteratorType it(outputPtr,outputRegion);
+  typedef itk::ImageRegionIteratorWithIndex<OutputImageType> OutputIteratorType;
+  typedef itk::ImageRegionIteratorWithIndex<InputImageType> InputIteratorType;
+
+  OutputIteratorType it(outputPtr,outputRegion);
   it.GoToBegin();
   
-  typename ImageType::SizeType size = outputRegion.GetSize();
+  typename OutputImageType::SizeType size = outputRegion.GetSize();
 
   for(unsigned int i=0;i<size[1]&&!it.IsAtEnd();++i)
 	{
-	  typename ImageType::IndexType readIndex;
-	  readIndex[0] = 0;
-	  readIndex[1] = i*m_ShrinkFactor;
-	  typename ImageType::SizeType readSize;
+	  typename InputImageType::IndexType readIndex;
+	  readIndex[0] = origin[0];
+	  readIndex[1] = i*m_ShrinkFactor+origin[1];
+	  typename InputImageType::SizeType readSize;
 	  readSize[0]=size[0]*m_ShrinkFactor;
 	  readSize[1]=1;
-	  typename ImageType::RegionType readRegion;
+	  typename InputImageType::RegionType readRegion;
 	  readRegion.SetSize(readSize);
 	  readRegion.SetIndex(readIndex);
+	  // otbMsgDebugMacro(<<"Read region: "<<readRegion);
+//  	  otbMsgDebugMacro(<<"Largest input region: "<<inputPtr->GetLargestPossibleRegion());
 	  inputPtr->SetRequestedRegion(readRegion);
 	  inputPtr->PropagateRequestedRegion();
 	  inputPtr->UpdateOutputData();
-	  IteratorType readIt(inputPtr,readRegion);
+	  InputIteratorType readIt(inputPtr,readRegion);
 	  unsigned int count=0;
 	  for(readIt.GoToBegin();!readIt.IsAtEnd()&&!it.IsAtEnd();++readIt,++count)
 	    {
@@ -191,13 +219,13 @@ StreamingShrinkImageFilter<TImage>
   this->m_Updating = false;
 }
 /** PrintSelf method */
-template <class TImage>
+template <class TInputImage, class TOutputImage>
 void
-StreamingShrinkImageFilter<TImage>
+StreamingShrinkImageFilter<TInputImage, TOutputImage>
 ::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   Superclass::PrintSelf(os,indent);
-  os << indent << "Shrink facotr: " << m_ShrinkFactor
+  os << indent << "Shrink factor: " << m_ShrinkFactor
      << std::endl;
 }
 } // End namespace otb
