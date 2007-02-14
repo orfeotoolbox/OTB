@@ -358,7 +358,11 @@ int RegressionTestAsciiFile(const char * testAsciiFileName, const char * baselin
 
 	std::string diffAsciiFileName(testAsciiFileName);
 	diffAsciiFileName += ".diff.txt" ;
-	std::ofstream fluxfilediff(diffAsciiFileName.c_str());
+	std::ofstream fluxfilediff;
+	if( reportErrors )
+	{
+			fluxfilediff.open(diffAsciiFileName.c_str());
+	}
 	
 	std::string strfiletest;
 	std::string strfileref;
@@ -417,18 +421,21 @@ int RegressionTestAsciiFile(const char * testAsciiFileName, const char * baselin
 				else 
 				  etatCour = ETAT_CHAR;
 				
-				// initialisation de l'état de "référence"
+				// initialisation de l'ï¿½tat de "rï¿½fï¿½rence"
 				if (i==0)
 				  etatPrec=etatCour;
 				
-				// Cas où l'on a un chiffre après des caractères
+				// Cas oï¿½ l'on a un chiffre aprï¿½s des caractï¿½res
 				if ((etatCour==ETAT_NUM)&&(etatPrec==ETAT_CHAR))
 				  {
 				    if ( strCharRef != strCharTest )
 				      {
-					fluxfilediff << "Diff at line " << numLine 
+						if( reportErrors )
+						{
+							fluxfilediff << "Diff at line " << numLine 
 						     << " : " << strCharRef
 						     << " != " << strCharTest << std::endl ;
+						}
 					nbdiff++;
 				      }
 				    
@@ -438,16 +445,19 @@ int RegressionTestAsciiFile(const char * testAsciiFileName, const char * baselin
 				    strNumTest=charTmpTest;
 				    chgt=true;
 				  }
-				// Cas où l'on a un caractère après des chiffres
+				// Cas oï¿½ l'on a un caractï¿½re aprï¿½s des chiffres
 				else if ((etatCour==ETAT_CHAR)&&(etatPrec==ETAT_NUM))
 				  {
 				    
 				    if (fabs(atof(strNumRef.c_str())-atof(strNumTest.c_str())) > epsilon)
 				      {
-					fluxfilediff << "Diff at line " << numLine << " : fabs ( (" 
-						     << strNumRef << ") - (" << strNumTest
-						     << ") ) > " << epsilon << std::endl ;
-					nbdiff++;
+							if( reportErrors )
+							{
+								fluxfilediff << "Diff at line " << numLine << " : fabs ( (" 
+						     		<< strNumRef << ") - (" << strNumTest
+						     		<< ") ) > " << epsilon << std::endl ;
+							}
+							nbdiff++;
 				      }	
 				    
 				    strNumRef="";
@@ -474,7 +484,7 @@ int RegressionTestAsciiFile(const char * testAsciiFileName, const char * baselin
 				i++;
 			      }	
 			    
-			    // Cas le plus simple : chaine de caractere ou valeur numérique entre 2 separateurs
+			    // Cas le plus simple : chaine de caractere ou valeur numï¿½rique entre 2 separateurs
 			    if (!chgt)
 			      {
 				if (isNumeric(strRef))
@@ -482,9 +492,12 @@ int RegressionTestAsciiFile(const char * testAsciiFileName, const char * baselin
 				    
 				    if (fabs(atof(strRef.c_str())-atof(strTest.c_str())) > epsilon)
 				      {
-					fluxfilediff << "Diff at line " << numLine << " : fabs( (" 
-						     << strRef << ") - (" << strTest
-						     << ") ) > " << epsilon << std::endl ;
+				      		if( reportErrors )
+							{
+								fluxfilediff << "Diff at line " << numLine << " : fabs( (" 
+						     		<< strRef << ") - (" << strTest
+						     		<< ") ) > " << epsilon << std::endl ;
+							}
 					nbdiff++;
 				      }
 				  }
@@ -492,9 +505,12 @@ int RegressionTestAsciiFile(const char * testAsciiFileName, const char * baselin
 				  {
 				    if ( strRef != strTest )
 				      {
-					fluxfilediff << "Diff at line " << numLine 
+						if( reportErrors )
+						{
+							fluxfilediff << "Diff at line " << numLine 
 						     << " : " << strRef
 						     << " != " << strTest << std::endl ;
+						}
 					nbdiff++;
 				      }
 				  }
@@ -502,10 +518,12 @@ int RegressionTestAsciiFile(const char * testAsciiFileName, const char * baselin
 			  }
 			else
 			  {
-			    fluxfilediff<<"Pointer address found at line "<<numLine
-			      <<" : "<<strRef
-					<<" -> comparison skipped."<<std::endl;
-			    
+			    	if( reportErrors )
+					{
+			    		fluxfilediff<<"Pointer address found at line "<<numLine
+			      		<<" : "<<strRef
+						<<" -> comparison skipped."<<std::endl;
+					}
 			  }
 		}
 		numLine++;
@@ -513,7 +531,10 @@ int RegressionTestAsciiFile(const char * testAsciiFileName, const char * baselin
 	
 	fluxfiletest.close();
 	fluxfileref.close();
-	fluxfilediff.close();
+	if( reportErrors )
+	{
+		fluxfilediff.close();
+	}
 	
 	if ( nbdiff!=0 && reportErrors)
 	{
@@ -551,7 +572,7 @@ int RegressionTestBinaryFile(const char * testBinaryFileName, const char * basel
     	}
 /*    	if ( feof(fluxfiletest) != feof(fluxfileref) )
     	{ 
-      		fprintf(stderr,"L'un des fichiers n'a pas été lu entièrement\n");
+      		fprintf(stderr,"L'un des fichiers n'a pas ï¿½tï¿½ lu entiï¿½rement\n");
     	}*/
  	fclose(fluxfiletest);
   	fclose(fluxfileref);
