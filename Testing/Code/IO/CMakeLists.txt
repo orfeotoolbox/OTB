@@ -15,7 +15,7 @@ SET(TOL 0.0)
 #Tolerance sur la difference des valeurs numeriques dans le --compare-ascii
 SET(EPS 0.001)
 
-# !!!!!  Pointe sur un exe g�n�r� dans le repertoire Common
+# !!!!!  Pointe sur un exe généré dans le repertoire Common
 SET(COMMON_TESTS ${CXX_TEST_PATH}/otbCommonTests)
 SET(IO_TESTS     ${CXX_TEST_PATH}/otbIOTests)
 
