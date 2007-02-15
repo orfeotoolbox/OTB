@@ -33,22 +33,10 @@
 
 #include "otbGDALImageIO.h"
 #include "otbMacro.h"
-#include "itkPNGImageIO.h"
-#include "itkJPEGImageIO.h"
+#include "otbSystem.h"
 
 #include "itkMetaDataObject.h"
-
-/*#include <sys/types.h>
-#include <dirent.h>
-*/
-
-// ROMAIN : Modification for VC++
-/*#ifdef _MSC_VER 
-#define	strcasecmp stricmp // _MICROSOFT_ VC++
-#endif
-*/
-
-#include "otbSystem.h"
+#include "itkPNGImageIO.h"
 
 namespace otb
 {
@@ -94,19 +82,14 @@ GDALImageIO::~GDALImageIO()
 
 bool GDALImageIO::GetGdalReadImageFileName( const char * filename, std::string & GdalFileName )
 {
-//        DIR *ptr_repertoire;
-//        struct dirent *cr_readdir;
-//        std::string str_debut("DAT");
         std::vector<std::string> listFileSearch;
         listFileSearch.push_back("DAT_01.001");// RADARSAT ou SAR_ERS2
         listFileSearch.push_back("IMAGERY.TIF");//Pour format SPOT5TIF
         listFileSearch.push_back("IMAG_01.DAT");//Pour format SPOT4
         std::string str_FileName;
-//        char str_comp[20];
         bool fic_trouve(false);
 
-        // Si c'est un répertoire, on regarde le contenu pour voir si c'est pas du RADARSAT, ERS
-
+        // Si c'est un repertoire, on regarde le contenu pour voir si c'est pas du RADARSAT, ERS
         std::vector<std::string> listFileFind;
         listFileFind = System::Readdir(std::string (filename));
         if( listFileFind.empty() == false )
@@ -125,33 +108,6 @@ bool GDALImageIO::GetGdalReadImageFileName( const char * filename, std::string &
                         }
                         cpt++;
                 }
-
-/*        ptr_repertoire = opendir(filename);
-        if (ptr_repertoire != NULL)
-        {
-		while ((cr_readdir=readdir(ptr_repertoire))!=NULL && (fic_trouve==false) )
-                {
-			str_FileName = std::string(cr_readdir->d_name);
-                        for(int i = 0 ; i < listFileSearch.size() ; i++)
-                        {
-         			if(str_FileName.compare(listFileSearch[i]) == 0)
-	        		{
-                                         GdalFileName = std::string(filename)+listFileSearch[i];
-                                         fic_trouve=true;
-        			}
-                        }
-		
-                        //strncpy(str_comp,cr_readdir->d_name,str_debut.size());
-                        //strncpy(str_comp,cr_readdir->d_name,str_debut.size());
-			//otbMsgDebugMacro(<<"str_comp : "<<str_comp);
-			//str_comp[str_debut.size()]='\0';  
-                        //if (strcasecmp(str_comp,str_debut.c_str())==0)
-                        //{
-                        //         GdalFileName = std::string(filename)+std::string(cr_readdir->d_name);
-                        //         fic_trouve=true;
-                        //}
-                }
-*/
 	}
         else 
         {
@@ -173,7 +129,6 @@ bool GDALImageIO::GetGdalReadImageFileName( const char * filename, std::string &
         }
 	otbMsgDevMacro(<<"lFileNameGdal : "<<GdalFileName.c_str());
 	otbMsgDevMacro(<<"fic_trouve : "<<fic_trouve);
-//	closedir(ptr_repertoire);
 	return( fic_trouve );
 }
 
@@ -190,25 +145,16 @@ bool GDALImageIO::CanReadFile(const char* file)
     }
         bool lCanRead(false);
 
-        //Traitement particulier sur certain format où l'on préfère utiliser 
-        // Format PNG -> lecture avec ITK (pas GDAL)
-//THOMAS
+        //Traitement particulier sur certain format oï¿½ l'on prï¿½fï¿½re utiliser 
+        // Format PNG -> lecture avec ITK (pas GDAL car certains tests sortent en erreurs)
   	itk::PNGImageIO::Pointer lPNGImageIO = itk::PNGImageIO::New();
         lCanRead = lPNGImageIO->CanReadFile(file);
         if ( lCanRead == true)
         {
                 return false;
-        }
+        } 
 
-//THOMAS - 4 juillet 2006
-  	itk::JPEGImageIO::Pointer lJPEGImageIO = itk::JPEGImageIO::New();
-        lCanRead = lJPEGImageIO->CanReadFile(file);
-        if ( lCanRead == true)
-        {
-                return false;
-        }
-
-        // Regarde si c'est un répertoire
+        // Regarde si c'est un rï¿½pertoire
         std::string lFileNameGdal;
 	otbMsgDevMacro(<<"GDALImageIO::CanReadFile()");
         bool found = GetGdalReadImageFileName(file,lFileNameGdal);
@@ -267,7 +213,7 @@ void GDALImageIO::Read(void* buffer)
         unsigned char * p = static_cast<unsigned char *>(buffer);
         if(p==NULL)
         {
-                itkExceptionMacro(<<"Erreur allocation mémoire");
+                itkExceptionMacro(<<"Erreur allocation mï¿½moire");
                 return;
         }
 
@@ -287,7 +233,7 @@ otbMsgDevMacro( <<" Nb Of Components  : "<<this->GetNumberOfComponents());
         unsigned char* value = new unsigned char[lTailleBuffer];
         if(value==NULL)
         {
-                itkExceptionMacro(<<"Erreur allocation mémoire");
+                itkExceptionMacro(<<"Erreur allocation mï¿½moire");
                 return;
         }
 
@@ -352,7 +298,7 @@ void GDALImageIO::InternalReadImageInformation()
         itkExceptionMacro(<<"GDAl read : empty image file name file.");
     }
   
-  // Recupre le nom réel du fichier a ouvrir
+  // Recupre le nom rï¿½el du fichier a ouvrir
   std::string lFileNameGdal;
   bool found = GetGdalReadImageFileName(m_FileName.c_str(),lFileNameGdal);
   if( found == false )
@@ -379,7 +325,7 @@ void GDALImageIO::InternalReadImageInformation()
        
     if( (m_width==0) || (m_height==0))
       {
-      itkExceptionMacro(<<"La dimension n'est pas définie.");
+      itkExceptionMacro(<<"La dimension n'est pas dï¿½finie.");
       }
     else
       {
@@ -827,7 +773,7 @@ bool GDALImageIO::CanWriteFile( const char* name )
       		return false;
     	}
 
-        //Traitement particulier sur certain format où l'on préfère utiliser 
+        //Traitement particulier sur certain format oï¿½ l'on prï¿½fï¿½re utiliser 
         // Format PNG -> lecture avec ITK (pas GDAL)
 /*  	itk::PNGImageIO::Pointer lPNGImageIO = itk::PNGImageIO::New();
         lCanWrite = lPNGImageIO->CanWriteFile(name);
@@ -872,11 +818,11 @@ void GDALImageIO::Write(const void* buffer)
         int lPremiereLigne   = this->GetIORegion().GetIndex()[1]; // [1... ]
         int lPremiereColonne = this->GetIORegion().GetIndex()[0]; // [1... ]
 
-	// Cas particuliers : on controle que si la région à écrire est de la même dimension que l'image entière,
-	// on commence l'offset à 0 (lorsque que l'on est pas en "Streaming")
+	// Cas particuliers : on controle que si la rï¿½gion ï¿½ ï¿½crire est de la mï¿½me dimension que l'image entiï¿½re,
+	// on commence l'offset ï¿½ 0 (lorsque que l'on est pas en "Streaming")
 	if( (lNbLignes == m_Dimensions[1]) && (lNbColonnes == m_Dimensions[0]))
 	{
-                otbMsgDevMacro(<<"Force l'offset de l'IORegion à 0");
+                otbMsgDevMacro(<<"Force l'offset de l'IORegion ï¿½ 0");
 		lPremiereLigne = 0;
 		lPremiereColonne = 0;
 	}
@@ -885,12 +831,12 @@ otbMsgDevMacro( << "GDALImageIO::Write() IORegion Start["<<this->GetIORegion().G
 
         unsigned long lNbPixels = (unsigned long)(lNbColonnes*lNbLignes);
         unsigned long lTailleBuffer = (unsigned long)(m_NbOctetPixel)*lNbPixels;
-otbMsgDevMacro( <<" TailleBuffer alloué : "<< lTailleBuffer);
+otbMsgDevMacro( <<" TailleBuffer allouï¿½ : "<< lTailleBuffer);
         
         unsigned char* value = new unsigned char[lTailleBuffer];
         if(value==NULL)
         {
-                itkExceptionMacro(<<"Erreur allocation mémoire");
+                itkExceptionMacro(<<"Erreur allocation mï¿½moire");
                 return;
         }
 
@@ -918,7 +864,7 @@ otbMsgDevMacro( <<" TailleBuffer alloué : "<< lTailleBuffer);
         	lCrGdal = m_poBands[nbComponents]->RasterIO(GF_Write,lPremiereColonne,lPremiereLigne,lNbColonnes, lNbLignes, value , lNbColonnes, lNbLignes, m_PxType,0, 0 ) ;
         	if (lCrGdal == CE_Failure)
         	{
-    			itkExceptionMacro(<< "Erreur lors de l'écriture de l'image (format GDAL) " << m_FileName.c_str()<<".");
+    			itkExceptionMacro(<< "Erreur lors de l'ï¿½criture de l'image (format GDAL) " << m_FileName.c_str()<<".");
         	}
         }
 
@@ -1042,7 +988,7 @@ std::string GDALImageIO::TypeConversion(std::string name)
 	std::string extGDAL;
         extension = System::GetExtension(name);
         
-	//Recupérer extension du fichier image
+	//Recupï¿½rer extension du fichier image
 /*	int i=0;
 	while (name[i]!='\0')
 	{
