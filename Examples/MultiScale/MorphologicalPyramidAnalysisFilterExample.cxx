@@ -69,10 +69,7 @@ int main(int argc, char * argv[])
     return EXIT_FAILURE;
     }
 
-
       const char * inputFilename = argv[1];
-      const char * outputFilenamePrefix = "suburb2";
-      const char * outputFilenameSuffix = "png";
       const unsigned int numberOfLevels = atoi(argv[22]);
       const float decimationRatio = atof(argv[23]);
 
