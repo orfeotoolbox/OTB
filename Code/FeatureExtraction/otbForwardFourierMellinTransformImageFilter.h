@@ -23,6 +23,9 @@
 #include "itkLinearInterpolateImageFunction.h"
 #include "itkImageToImageFilter.h"
 #include "itkVnlFFTRealToComplexConjugateImageFilter.h"
+#include "otbLogPolarTransform.h"
+#include "itkResampleImageFilter.h"
+#include "itkImageRegionIteratorWithIndex.h"
 
 namespace otb
 {
@@ -50,22 +53,24 @@ template < class TPixel,
 	   
 class ITK_EXPORT ForwardFourierMellinTransformImageFilter :
     public itk::ImageToImageFilter<Image< TPixel , Dimension >,
-                                   Image< std::complex<TPixel> , Dimension > >
+                                   itk::Image< std::complex<TPixel> , Dimension > >
 {
-public:
+  public:
 
   //typedef TPixel						     PixelType;
   typedef otb::Image< TPixel , Dimension >                           InputImageType;
-  typedef otb::Image< std::complex< TPixel > , Dimension >           OutputImageType;
-
+  /*   typedef otb::Image< std::complex< TPixel > , Dimension >           OutputImageType; */
+  
+  typedef typename itk::VnlFFTRealToComplexConjugateImageFilter<TPixel,Dimension> FourierImageFilterType;
+  typedef typename FourierImageFilterType::OutputImageType OutputImageType;
+  
+  
   /** Standard class typedefs. */
   typedef ForwardFourierMellinTransformImageFilter                    Self;
   typedef itk::ImageToImageFilter< InputImageType, OutputImageType>   Superclass;
   typedef itk::SmartPointer<Self>                                     Pointer;
   typedef itk::SmartPointer<const Self>                               ConstPointer;
   
-
-
   /** Run-time type information (and related methods). */
   itkTypeMacro(	ForwardFourierMellinTransformImageFilter, itk::ImageToImageFilter);
 
@@ -77,6 +82,8 @@ public:
   typedef typename InputImageType::IndexType            IndexType;
   typedef typename InputImageType::Pointer              ImagePointer;
   typedef typename InputImageType::ConstPointer         ImageConstPointer;
+
+  
   
   /** InputImageType typedef support. */
   typedef typename OutputImageType::PixelType            OutputPixelType;
@@ -96,7 +103,14 @@ public:
   typedef typename InterpolatorType::CoordRepType 		CoordRepType;
   typedef typename InterpolatorType::PointType   		PointType;
 
-  typedef typename itk::VnlFFTRealToComplexConjugateImageFilter<PixelType,Dimension> FourierImageFilterType;
+
+  typedef otb::LogPolarTransform<CoordRepType> LogPolarTransformType;
+  typedef typename LogPolarTransformType::Pointer LogPolarTransformPointerType;
+  typedef itk::ResampleImageFilter<InputImageType,InputImageType,CoordRepType> ResampleFilterType;
+  typedef typename ResampleFilterType::Pointer ResampleFilterPointerType;
+  typedef itk::ImageRegionIteratorWithIndex<InputImageType> IteratorType;
+
+
   typedef typename FourierImageFilterType::Pointer 			FourierImageFilterPointer;
   typedef typename FourierImageFilterType::ConstPointer 		FourierImageFilterConstPointer;
 
@@ -112,6 +126,8 @@ public:
   itkSetMacro(DefaultPixelValue, PixelType);
   itkGetMacro(DefaultPixelValue, PixelType); 
 
+  virtual void GenerateOutputInformation(void);
+
   /** Set/Get the Interpolator pointer for the Log-polar resampler  */
   itkSetObjectMacro(Interpolator,InterpolatorType);
   itkGetObjectMacro(Interpolator,InterpolatorType);
@@ -124,12 +140,11 @@ protected:
   /** Main Computation Method */
   void GenerateData();
 
+
   
 private:
   ForwardFourierMellinTransformImageFilter( const Self& ); //purposely not implemented
   void operator=( const Self& ); //purposely not implemented
-
-  FourierImageFilterPointer 	           m_FourierTransform;
 
   /** Sigma for normalization */
   double m_Sigma;
@@ -139,9 +154,22 @@ private:
 
   /** Output pixel default value */
   PixelType m_DefaultPixelValue;
-
+  
   /** Interpolator */
   InterpolatorPointerType m_Interpolator;
+  
+  /** Transform */
+  LogPolarTransformPointerType m_Transform;
+  
+  /** Resampler */
+  ResampleFilterPointerType m_ResampleFilter;
+  
+  /** FFT Filter */
+  FourierImageFilterPointer m_FFTFilter;
+  
+  /** Iterator */
+  IteratorType m_Iterator;
+ 
 };
 
 } // namespace otb

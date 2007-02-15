@@ -19,9 +19,7 @@ PURPOSE.  See the above copyright notices for more information.
 #define _otbForwardFourierMellinTransformImageFilter_txx
 
 #include "otbForwardFourierMellinTransformImageFilter.h"
-#include "itkImageRegionIteratorWithIndex.h"
-#include "otbLogPolarTransform.h"
-#include "itkResampleImageFilter.h"
+#include "itkImageDuplicator.h"
 
 namespace otb
 {
@@ -29,43 +27,60 @@ namespace otb
   ForwardFourierMellinTransformImageFilter<TPixel, TInterpol, Dimension >
   ::ForwardFourierMellinTransformImageFilter()
   {
-    m_FourierTransform = FourierImageFilterType::New();
-    m_Interpolator = InterpolatorType::New();
+   
     m_Sigma = 1.0;
     m_OutputSize.Fill(512); 
+     m_FFTFilter = FourierImageFilterType::New();
+     m_Interpolator = InterpolatorType::New();
+     m_Transform = LogPolarTransformType::New();
+     m_ResampleFilter = ResampleFilterType::New();
+     m_ResampleFilter->SetInterpolator(m_Interpolator);
+     m_ResampleFilter->SetTransform(m_Transform);
   }
+
+ template < class TPixel,class  TInterpol,unsigned int   Dimension >
+ void
+  ForwardFourierMellinTransformImageFilter<TPixel, TInterpol, Dimension >
+ ::GenerateOutputInformation(void)
+ {
+   Superclass::GenerateOutputInformation();
+   
+   OutputImagePointer outputPtr = this->GetOutput();
+
+   if(!outputPtr)
+     {
+       return;
+     }
+   typename OutputImageType::RegionType largestPossibleRegion;
+   typename OutputImageType::IndexType index;
+   index.Fill(0);
+   largestPossibleRegion.SetIndex(index);
+   largestPossibleRegion.SetSize(m_OutputSize);
+   outputPtr->SetLargestPossibleRegion(largestPossibleRegion);
+ }
+
   template < class TPixel,class  TInterpol,unsigned int   Dimension >
   void
   ForwardFourierMellinTransformImageFilter<TPixel, TInterpol, Dimension >
   ::GenerateData()
-  {
-    // some typedefs
-    typedef otb::LogPolarTransform<double> LogPolarTransformType;
-    typedef itk::ResampleImageFilter<InputImageType,InputImageType,double> ResampleFilterType;
-    typedef itk::ImageRegionIteratorWithIndex<InputImageType> IteratorType;
-
-    typename ResampleFilterType::Pointer resampler = ResampleFilterType::New();
-    typename LogPolarTransformType::Pointer transform  = LogPolarTransformType::New();
-    
+  {   
     typename LogPolarTransformType::ParametersType params(4);
     // Center the transform
     params[0]=0.5*static_cast<double>(this->GetInput()->GetLargestPossibleRegion().GetSize()[0]);
     params[1]=0.5*static_cast<double>(this->GetInput()->GetLargestPossibleRegion().GetSize()[1]);
     params[2]=360./m_OutputSize[0];
-    params[3]=log(sqrt(pow(static_cast<double>(this->GetInput()->GetLargestPossibleRegion().GetSize()[0]),2)
-		       +pow(static_cast<double>(this->GetInput()->GetLargestPossibleRegion().GetSize()[1]),2.))/2)/m_OutputSize[1];
-  transform->SetParameters(params);
+    params[3]=vcl_log(vcl_sqrt(vcl_pow(static_cast<double>(this->GetInput()->GetLargestPossibleRegion().GetSize()[0]),2)
+		       +vcl_pow(static_cast<double>(this->GetInput()->GetLargestPossibleRegion().GetSize()[1]),2.))/2)/m_OutputSize[1];
+  m_Transform->SetParameters(params);
   
   // log polar resampling
-  resampler->SetInput(this->GetInput());
-  resampler->SetTransform(transform);
-  resampler->SetInterpolator(m_Interpolator);
-  resampler->SetDefaultPixelValue(m_DefaultPixelValue);
-  resampler->SetSize(m_OutputSize);
-  resampler->Update();
+  m_ResampleFilter->SetInput(this->GetInput());
+  m_ResampleFilter->SetDefaultPixelValue(m_DefaultPixelValue);
+  m_ResampleFilter->SetSize(m_OutputSize);
+  m_ResampleFilter->Update();
 
-  typename InputImageType::Pointer tempImage = resampler->GetOutput();
-  IteratorType it(tempImage,tempImage->GetLargestPossibleRegion());
+  typename InputImageType::Pointer tempImage = m_ResampleFilter->GetOutput();
+  m_Iterator = IteratorType(tempImage,tempImage->GetRequestedRegion());
 
   // Min/max values of the output pixel type AND these values
   // represented as the output type of the interpolator
@@ -74,12 +89,12 @@ namespace otb
 
   // Normalization is specific to FourierMellin convergence conditions, and
   // thus should be implemented here instead of in the resample filter.
-  for(it.GoToBegin();!it.IsAtEnd();++it)
+  for(m_Iterator.GoToBegin();!m_Iterator.IsAtEnd();++m_Iterator)
   {
-    double Rho   = it.GetIndex()[1]*params[3];
+    double Rho   = m_Iterator.GetIndex()[1]*params[3];
     PixelType pixval;
-    double valueTemp = static_cast<double>(it.Get());
-    valueTemp *= exp(m_Sigma * Rho);
+    double valueTemp = static_cast<double>(m_Iterator.Get());
+    valueTemp *= vcl_exp(m_Sigma * Rho);
     valueTemp *=params[3];
     PixelType value = static_cast<PixelType>(valueTemp);
 	    
@@ -95,14 +110,13 @@ namespace otb
       {
 	pixval = static_cast<PixelType>(value);
       }
-    it.Set(pixval);      
+    m_Iterator.Set(pixval);      
   }
-  // Fourrier transform of the output
-  m_FourierTransform->SetInput(tempImage );
-  m_FourierTransform->GraftOutput( this->GetOutput() );
-
-  m_FourierTransform->Update();
-  this->GraftOutput( m_FourierTransform->GetOutput() );
+  m_FFTFilter->SetInput(tempImage );
+  
+  m_FFTFilter->GraftOutput( this->GetOutput() );
+  m_FFTFilter->Update();
+  this->GraftOutput( m_FFTFilter->GetOutput() );  
 }
 /**
  * Standard "PrintSelf" method
