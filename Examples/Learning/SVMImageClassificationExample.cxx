@@ -51,7 +51,7 @@
 // The first thing to do is include the header file for the
 // class. Since the \doxygen{otb}{SVMClassifier} takes
 // \doxygen{itk}{ListSample}s as input, the class
-// \doxygen{itk}{PointSetToListAdaptor} is needed.\\
+// \doxygen{itk}{PointSetToListAdaptor} is needed.
 //
 //
 //  Software Guide : EndLatex 
