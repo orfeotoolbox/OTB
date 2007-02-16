@@ -36,6 +36,7 @@ IF(OTB_USE_EXTERNAL_ITK)
     INCLUDE(${ITK_SOURCE_DIR}/Utilities/itkThirdParty.cmake)
  	INCLUDE(${ITK_SOURCE_DIR}/itkIncludeDirectories.cmake)
 ELSE(OTB_USE_EXTERNAL_ITK)
+        INCLUDE(${OTB_SOURCE_DIR}/Utilities/ITK/Utilities/itkThirdParty.cmake)
  	INCLUDE(${OTB_SOURCE_DIR}/Utilities/ITK/itkIncludeDirectories.cmake)
 ENDIF(OTB_USE_EXTERNAL_ITK)
 
