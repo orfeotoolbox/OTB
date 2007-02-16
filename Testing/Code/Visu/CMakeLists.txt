@@ -52,6 +52,16 @@ ADD_TEST(viTvZoomableImageWidget ${VISU_TESTS}
 	${INPUTDATA}/poupees.png
         )
 
+# -------   otb::ImageViewer  -----------------------------------
+
+ADD_TEST(viTuImageViewer ${VISU_TESTS} 
+        otbImageViewerNew
+        )
+
+ADD_TEST(viTvImageViewer ${VISU_TESTS} 
+        otbImageViewer
+	${INPUTDATA}/couleurs.jpg
+        )
 
 # -------       Fichiers sources CXX -----------------------------------
 SET(BasicVisu_SRCS
@@ -62,12 +72,14 @@ otbFullResolutionImageWidgetNew.cxx
 otbFullResolutionImageWidget.cxx
 otbZoomableImageWidgetNew.cxx
 otbZoomableImageWidget.cxx
+otbImageViewer.cxx
+otbImageViewerNew.cxx
 )
 
 INCLUDE_DIRECTORIES("${OTBTesting_BINARY_DIR}") 
 
 ADD_EXECUTABLE(otbVisuTests otbVisuTests.cxx ${BasicVisu_SRCS})
-TARGET_LINK_LIBRARIES(otbVisuTests OTBVisu OTBIO OTBCommon gdal ITKIO ITKCommon)
+TARGET_LINK_LIBRARIES(otbVisuTests OTBVisu OTBGui OTBIO gdal ITKIO ITKCommon)
 
 
 ENDIF( NOT OTB_DISABLE_CXX_TESTING )
