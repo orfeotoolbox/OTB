@@ -421,28 +421,40 @@ ADD_TEST(feTvExtractSegments ${FEATUREEXTRACTION_TESTS}
 ADD_TEST(feTuForwardFourierMellinImageFilterNew ${FEATUREEXTRACTION_TESTS} 
          otbFourierMellinImageFilterNew)  
 
-ADD_TEST(feTuForwardFourierMellinImageFilterCroix ${FEATUREEXTRACTION_TESTS}  
- --compare-image ${TOL}  ${BASELINE}/feFourierMellinCroixOutput.hdr
-                          ${TEMP}/feFourierMellinCroixOutput.hdr
-        otbFourierMellinImageFilterTestFFT
-        ${INPUTDATA}/TestFFT.hdr
-	${TEMP}/feFourierMellinCroixOutput.hdr
-)
+#ADD_TEST(feTuForwardFourierMellinImageFilterCroix ${FEATUREEXTRACTION_TESTS}  
+# --compare-n-images ${TOL} 2 
+#		    ${BASELINE}/feFourierMellinCroixOutputModulus.hdr
+#		    ${TEMP}/feFourierMellinCroixOutputModulus.hdr
+#		    ${BASELINE}/feFourierMellinCroixOutputPhase.hdr
+#		    ${TEMP}/feFourierMellinCroixOutputPhase.hdr
+#        otbFourierMellinImageFilter
+#        ${INPUTDATA}/TestFFT.hdr
+#	${TEMP}/feFourierMellinCroixOutputModulus.hdr
+#	${TEMP}/feFourierMellinCroixOutputPhase.hdr
+#)
 
-ADD_TEST(feTuForwardFourierMellinImageFilter3Croix ${FEATUREEXTRACTION_TESTS}  
-   --compare-image ${TOL}  ${BASELINE}/feFourierMellin3CroixOutput.hdr
-                          ${TEMP}/feFourierMellin3CroixOutput.hdr
-    otbFourierMellinImageFilterTestFFT
-        ${INPUTDATA}/TestFFT3Croix.hdr
-	${TEMP}/feFourierMellin3CroixOutput.hdr
-)
+#ADD_TEST(feTuForwardFourierMellinImageFilter3Croix ${FEATUREEXTRACTION_TESTS}  
+#   --compare-n-images   ${TOL} 2  
+#			${BASELINE}/feFourierMellin3CroixOutputModulus.hdr
+#                        ${TEMP}/feFourierMellin3CroixOutputModulus.hdr
+#			${BASELINE}/feFourierMellin3CroixOutputPhase.hdr
+#                        ${TEMP}/feFourierMellin3CroixOutputPhase.hdr
+#    otbFourierMellinImageFilter
+#        ${INPUTDATA}/TestFFT3Croix.hdr
+#	${TEMP}/feFourierMellin3CroixOutputModulus.hdr
+#	${TEMP}/feFourierMellin3CroixOutputPhase.hdr
+#)
 
 ADD_TEST(feTvForwardFourierMellinImageFilter ${FEATUREEXTRACTION_TESTS}  
-  --compare-image ${TOL}  ${BASELINE}/feForwardFourierMellinImageFilter.hdr
-                          ${TEMP}/feForwardFourierMellinImageFilter.hdr
+  --compare-n-images ${EPSILON} 2 
+		     ${BASELINE}/feForwardFourierMellinImageFilterReal.hdr
+                     ${TEMP}/feForwardFourierMellinImageFilterReal.hdr
+		     ${BASELINE}/feForwardFourierMellinImageFilterImag.hdr
+                     ${TEMP}/feForwardFourierMellinImageFilterImag.hdr
         otbFourierMellinImageFilter
         ${INPUTDATA}/circle.hdr
-	${TEMP}/feForwardFourierMellinImageFilter.hdr)
+	${TEMP}/feForwardFourierMellinImageFilterReal.hdr
+	${TEMP}/feForwardFourierMellinImageFilterImag.hdr)
 
 # -----------------------------------------------------------------------
 			        

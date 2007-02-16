@@ -30,12 +30,13 @@ namespace otb
    
     m_Sigma = 1.0;
     m_OutputSize.Fill(512); 
-     m_FFTFilter = FourierImageFilterType::New();
-     m_Interpolator = InterpolatorType::New();
-     m_Transform = LogPolarTransformType::New();
-     m_ResampleFilter = ResampleFilterType::New();
-     m_ResampleFilter->SetInterpolator(m_Interpolator);
-     m_ResampleFilter->SetTransform(m_Transform);
+    m_FFTFilter = FourierImageFilterType::New();
+    m_Interpolator = InterpolatorType::New();
+    m_Transform = LogPolarTransformType::New();
+    m_ResampleFilter = ResampleFilterType::New();
+    m_ResampleFilter->SetInterpolator(m_Interpolator);
+    m_ResampleFilter->SetTransform(m_Transform);
+    m_DefaultPixelValue=0;
   }
 
  template < class TPixel,class  TInterpol,unsigned int   Dimension >
