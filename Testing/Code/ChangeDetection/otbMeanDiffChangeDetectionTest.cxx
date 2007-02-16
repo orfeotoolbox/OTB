@@ -16,10 +16,10 @@
 
 =========================================================================*/
 
-#include "itkImageFileReader.h"
-#include "itkImageFileWriter.h"
+#include "otbImageFileReader.h"
+#include "otbImageFileWriter.h"
 #include "itkRescaleIntensityImageFilter.h"
-#include <itkImage.h>
+#include "otbImage.h"
 #include "otbMeanDifferenceImageFilter.h"
 #include "otbCommandProgressUpdate.h"
 
@@ -37,16 +37,16 @@ int otbMeanDiffChangeDetectionTest(int argc, char* argv[] )
   const unsigned int Dimension = 2;
 
   // Declare the types of the images
-  typedef float InternalPixelType;
-  typedef unsigned char OutputPixelType;
-  typedef itk::Image<InternalPixelType, Dimension>  InputImageType1;
-  typedef itk::Image<InternalPixelType, Dimension>  InputImageType2;
-  typedef itk::Image<InternalPixelType, Dimension>  ChangeImageType;
-  typedef itk::Image<OutputPixelType, Dimension>  OutputImageType;
+  typedef double InternalPixelType;
+  typedef double OutputPixelType;
+  typedef otb::Image<InternalPixelType, Dimension>  InputImageType1;
+  typedef otb::Image<InternalPixelType, Dimension>  InputImageType2;
+  typedef otb::Image<InternalPixelType, Dimension>  ChangeImageType;
+  typedef otb::Image<OutputPixelType, Dimension>  OutputImageType;
 
-  typedef itk::ImageFileReader< InputImageType1 >  ReaderType1;
-  typedef itk::ImageFileReader< InputImageType2 >  ReaderType2;
-  typedef itk::ImageFileWriter< OutputImageType >  WriterType;
+  typedef otb::ImageFileReader< InputImageType1 >  ReaderType1;
+  typedef otb::ImageFileReader< InputImageType2 >  ReaderType2;
+  typedef otb::ImageFileWriter< OutputImageType >  WriterType;
   typedef itk::RescaleIntensityImageFilter< ChangeImageType,
                                             OutputImageType > RescalerType; 
 

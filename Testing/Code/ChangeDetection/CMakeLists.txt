@@ -37,13 +37,13 @@ ADD_TEST(cdTvCorrel ${CHANGEDETECTION_TESTS}
 	 )
 
 ADD_TEST(cdTvMeanDiff ${CHANGEDETECTION_TESTS}
-  --compare-image ${TOL}   ${BASELINE}/cdMeanDiffImage.png
-                    ${TEMP}/cdMeanDiffImage.png
+  --compare-image ${TOL}   ${BASELINE}/cdMeanDiffImage.hdr
+			   ${TEMP}/cdMeanDiffImage.hdr
 	otbMeanDiffChangeDetectionTest 
 	 ${INPUTDATA}/GomaAvant.png 
 	 ${INPUTDATA}/GomaApres.png
 	 2 
-	 ${TEMP}/cdMeanDiffImage.png 
+	 ${TEMP}/cdMeanDiffImage.hdr 
 	 )
 
 ADD_TEST(cdTvMeanRatio ${CHANGEDETECTION_TESTS}
