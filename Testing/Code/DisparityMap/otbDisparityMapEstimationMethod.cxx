@@ -38,7 +38,7 @@ try
     const unsigned int winSize = 20;
 
     const unsigned int Dimension=2;
-    typedef unsigned char PixelType;
+    typedef double PixelType;
     typedef otb::Image<PixelType,Dimension> ImageType;
    
     typedef itk::TranslationTransform<double,Dimension> TransformType;
@@ -128,13 +128,16 @@ try
     // Writing output transform parameters
     std::ofstream out;
     out.open(outputFileName,std::ios::out);
+    out.setf(std::ios::fixed);
+    // out.setprecision(10);
+
     PointSetIteratorType it = pointSet->GetPoints()->Begin();
 //     unsigned int idData=0;
     PointDataIteratorType itData = pointSet->GetPointData()->Begin();
     std::cout<<"Point data size: "<<pointSet->GetPointData()->Size()<<std::endl;
     for(;it!=pointSet->GetPoints()->End()
     &&itData!=pointSet->GetPointData()->End()
-;++it,++itData)
+	  ;++it,++itData)
       {
 	out<<"Point "<<it.Value()<<" -> transform parameters: ";
         out<<itData.Value();
