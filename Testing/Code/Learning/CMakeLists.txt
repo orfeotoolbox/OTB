@@ -118,6 +118,22 @@ ADD_TEST(leTvSOMActivationBuilder ${LEARNING_TESTS}
 	${TEMP}/leSOMPoupeesSubActivationMap1.hdr
 	32 32 10 10 5 1.0 0.1 128)
 
+# -------            otb::SOMClassifier   -----------------------------	
+
+ADD_TEST(leTuSOMClassifierNew ${LEARNING_TESTS}  
+        otbSOMClassifierNew)
+
+ADD_TEST(leTvSOMClassifier ${LEARNING_TESTS}  
+        --compare-image ${TOL}
+	${BASELINE}/leSOMPoupeesClassified.hdr
+	${TEMP}/leSOMPoupeesClassified.hdr
+	otbSOMClassifier
+	${INPUTDATA}/poupees_sub.png
+	${BASELINE}/leSOMPoupeesSubOutputMap1.hdr
+	${TEMP}/leSOMPoupeesClassified.hdr
+	)
+
+
 # -----------------------------------------------------------------------
 			        
 
@@ -143,6 +159,8 @@ otbSOMNew.cxx
 otbSOM.cxx
 otbSOMActivationBuilderNew.cxx
 otbSOMActivationBuilder.cxx
+otbSOMClassifierNew.cxx
+otbSOMClassifier.cxx
 )
 
 

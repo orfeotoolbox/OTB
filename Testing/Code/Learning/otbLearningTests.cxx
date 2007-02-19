@@ -47,4 +47,6 @@ REGISTER_TEST(otbSOMNew);
 REGISTER_TEST(otbSOM);
 REGISTER_TEST(otbSOMActivationBuilderNew);
 REGISTER_TEST(otbSOMActivationBuilder);
+REGISTER_TEST(otbSOMClassifierNew);
+REGISTER_TEST(otbSOMClassifier);
 }
