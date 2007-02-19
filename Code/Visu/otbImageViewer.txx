@@ -181,7 +181,7 @@ namespace otb
     m_ImageGeometry = static_cast<double>(size[0])/static_cast<double>(size[1]);
     
     // initiate windows dimensions
-    int wscroll=0;
+    int wscroll=200;
     int hscroll=0;
     int wfull = (size[0]<m_FullMaxInitialSize ? size[0] : m_FullMaxInitialSize);
     int hfull = (size[1]<m_FullMaxInitialSize ? size[1] : m_FullMaxInitialSize);
@@ -335,9 +335,10 @@ namespace otb
 	m_ScrollWidget->SetMinComponentValues(m_MinComponentValue);
 	m_ScrollWidget->SetMaxComponentValues(m_MaxComponentValue);
       }
-
-     m_PixLocWindow= new Fl_Window(wfull+15,hscroll+50,wscroll,20,"Pixel location & values");
-     m_PixLocOutput = new Fl_Output(0,0,wscroll,20,"Pixel location & values");
+    
+    
+    m_PixLocWindow= new Fl_Window(wfull+15,hscroll+50,wscroll,20,"Pixel location & values");
+    m_PixLocOutput = new Fl_Output(0,0,wscroll,20,"Pixel location & values");
      m_PixLocWindow->resizable(m_PixLocOutput);
      m_PixLocOutput->textsize(10);
      m_PixLocOutput->box(FL_EMBOSSED_BOX );
