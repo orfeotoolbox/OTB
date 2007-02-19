@@ -146,6 +146,8 @@ namespace otb
 //     min = (m_MinComponentValue[m_RedChannelIndex]
 // 	   +m_MinComponentValue[m_GreenChannelIndex]
 // 	   +m_MinComponentValue[m_BlueChannelIndex])/3;
+
+    // TO UNCOMMENT TO HAVE THE MIN AND MAX NORMALIZATION FACTOR FOR THE WHOLE SET OF BANDS
 //     otbMsgDebugMacro(<<"Normalization between: "<<m_MinComponentValue<<" and "<<m_MaxComponentValue);  
 //     for(unsigned int i = 1; i<nbComponents;++i)
 //       {
