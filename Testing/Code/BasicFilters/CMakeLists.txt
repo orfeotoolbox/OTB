@@ -11,6 +11,7 @@ SET(TEMP ${OTBTesting_BINARY_DIR}/Temporary)
 
 #Tolerance sur diff pixel image
 SET(TOL 0.0)
+SET(EPSILON 0.0000000001)
 
 SET(BASICFILTERS_TESTS ${CXX_TEST_PATH}/otbBasicFiltersTests)
 
@@ -109,7 +110,7 @@ ADD_TEST(bfTvLogPolarTransform ${BASICFILTERS_TESTS}
 	)
 
 ADD_TEST(bfTvLogPolarTransformResample ${BASICFILTERS_TESTS}  
-  --compare-image ${TOL}  ${BASELINE}/bfLogPolarTransformResampleOutput.hdr
+  --compare-image ${EPSILON}  ${BASELINE}/bfLogPolarTransformResampleOutput.hdr
                           ${TEMP}/bfLogPolarTransformResampleOutput.hdr
         otbLogPolarTransformResample
         ${INPUTDATA}/circle.hdr

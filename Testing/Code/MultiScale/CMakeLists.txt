@@ -10,6 +10,7 @@ SET(TEMP ${OTBTesting_BINARY_DIR}/Temporary)
 
 #Tolerance sur diff pixel image
 SET(TOL 0.0)
+SET(EPSILON 0.00000001)
 
 
 SET(MULTISCALE_TESTS ${CXX_TEST_PATH}/otbMultiScaleTests)
@@ -21,7 +22,7 @@ ADD_TEST(msTuMorphoPyrResamplerNew ${MULTISCALE_TESTS}
          otbMorphologicalPyramidResamplerNew)
 
 ADD_TEST(msTvMorphoPyrResampler ${MULTISCALE_TESTS} 
-  --compare-n-images ${TOL} 2
+  --compare-n-images ${EPSILON} 2
 		   ${BASELINE}/msPyrResampler_IKO_LesHalles_256_2.hdr
 		   ${TEMP}/msPyrResampler_IKO_LesHalles_256_2.hdr
 		   ${BASELINE}/msPyrResampler_IKO_LesHalles_full.hdr
@@ -79,7 +80,7 @@ ADD_TEST(msTuMorphoPyrMRToMSConverterNew ${MULTISCALE_TESTS}
          otbMorphologicalPyramidMRToMSConverterNew)
 
 ADD_TEST(msTvMorphoPyrMRToMSConverter ${MULTISCALE_TESTS} 
-   --compare-n-images ${TOL} 3
+   --compare-n-images ${EPSILON} 3
  		   ${BASELINE}/msPyrMRToMS_IKO_Halles_4_2_sf_full.hdr
  		   ${TEMP}/msPyrMRToMS_IKO_Halles_4_2_sf_full.hdr
 		   ${BASELINE}/msPyrMRToMS_IKO_Halles_4_2_if_full.hdr
