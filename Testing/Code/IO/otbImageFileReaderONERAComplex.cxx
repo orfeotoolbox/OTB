@@ -22,7 +22,8 @@
 
 #include "itkExceptionObject.h"
 #include <iostream>
-#include "itkComplexToModulusImageFilter.h"
+#include "itkComplexToRealImageFilter.h"
+#include "itkComplexToImaginaryImageFilter.h"
 #include "otbImage.h"
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
@@ -34,7 +35,8 @@ int otbImageFileReaderONERAComplex(int argc, char* argv[])
   {
         // Verify the number of parameters in the command line
         const char * inputFilename  = argv[1];
-        const char * outputFilename = argv[2];
+        const char * outputRealFilename = argv[2];
+	const char * outputImagFilename = argv[3];
 
         typedef std::complex<float>  	                        InputPixelType;
         typedef float                             		OutputPixelType;
@@ -61,16 +63,24 @@ int otbImageFileReaderONERAComplex(int argc, char* argv[])
 	extractROIFilter->SetSizeY( 100 );
         extractROIFilter->SetInput( Reader->GetOutput() );        
 
-  	typedef itk::ComplexToModulusImageFilter< 
-                       InputImageType, OutputImageType > ModulusFilterType;
+  	typedef itk::ComplexToRealImageFilter< 
+                       InputImageType, OutputImageType > RealFilterType;
+	typedef itk::ComplexToImaginaryImageFilter< 
+                       InputImageType, OutputImageType > ImagFilterType;
 
-  	ModulusFilterType::Pointer modulusFilter = ModulusFilterType::New();
-  	modulusFilter->SetInput( extractROIFilter->GetOutput() );
+  	RealFilterType::Pointer realFilter = RealFilterType::New();
+  	realFilter->SetInput( extractROIFilter->GetOutput() );
+	ImagFilterType::Pointer imagFilter = ImagFilterType::New();
+  	imagFilter->SetInput( extractROIFilter->GetOutput() );
+	
 
         WriterType::Pointer writer = WriterType::New();
-	
-        writer->SetFileName( outputFilename );        
-        writer->SetInput( modulusFilter->GetOutput() );
+        writer->SetFileName( outputRealFilename );        
+        writer->SetInput( realFilter->GetOutput() );
+        writer->Update(); 
+	writer = WriterType::New();
+        writer->SetFileName( outputImagFilename );        
+        writer->SetInput( imagFilter->GetOutput() );
         writer->Update(); 
   } 
   catch( itk::ExceptionObject & err ) 

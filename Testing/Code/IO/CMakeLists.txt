@@ -415,11 +415,15 @@ ADD_TEST(ioTvONERAImageFileReader ${IO_TESTS}
         ${TEMP}/ioImageFileReaderONERA.hdr )
 
 ADD_TEST(ioTvONERAImageFileReaderComplex ${IO_TESTS} 
-  --compare-image ${TOL}  ${BASELINE}/ioImageFileReaderONERAComplex.hdr
-                      ${TEMP}/ioImageFileReaderONERAComplex.hdr
+  --compare-n-images ${TOL} 2  
+			  ${BASELINE}/ioImageFileReaderONERAComplexReal.hdr
+			  ${TEMP}/ioImageFileReaderONERAComplexReal.hdr
+			  ${BASELINE}/ioImageFileReaderONERAComplexImag.hdr
+			  ${TEMP}/ioImageFileReaderONERAComplexImag.hdr
         otbImageFileReaderONERAComplex
         ${IMAGEDATA}/ONERA/spa3_0215_rad.ent
-        ${TEMP}/ioImageFileReaderONERAComplex.hdr )
+        ${TEMP}/ioImageFileReaderONERAComplexReal.hdr
+	${TEMP}/ioImageFileReaderONERAComplexImag.hdr )
 
 ADD_TEST(ioTvONERAImageFileWriterComplex ${IO_TESTS} 
   --compare-image ${TOL}   ${BASELINE}/ioImageFileReaderONERAComplexWrite.ent
