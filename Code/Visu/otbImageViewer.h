@@ -90,6 +90,8 @@ class ITK_EXPORT ImageViewer
   itkGetMacro(GreenChannelIndex,unsigned int);
   itkSetMacro(BlueChannelIndex,unsigned int);
   itkGetMacro(BlueChannelIndex,unsigned int);
+  itkSetMacro(Label,char *);
+  itkGetMacro(Label,const char *);
  
 
    /** Set the input image */
@@ -152,7 +154,7 @@ protected:
   unsigned int m_RedChannelIndex;
   unsigned int m_GreenChannelIndex;
   unsigned int m_BlueChannelIndex;
-
+  const char *  m_Label;
 };
 
 

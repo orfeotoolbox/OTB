@@ -82,10 +82,13 @@ class ITK_EXPORT ImageViewerZoomWidget
 		m_MousePos[0]=Fl::event_x();
 		m_MousePos[1]=Fl::event_y();
 		IndexType newIndex = this->WindowToImageCoordinates(m_MousePos);
-		std::stringstream oss;
-		oss<<"Location: "<<newIndex<<", Values:  "<<this->GetInput()->GetPixel(newIndex);
-		m_Parent->PrintPixLocVal(oss.str());
-		m_MouseMoveCount=0;
+		if(this->GetInput()->GetBufferedRegion().IsInside(newIndex))
+		  {
+		    std::stringstream oss;
+		    oss<<" Location: "<<newIndex<<", Values:  "<<this->GetInput()->GetPixel(newIndex);
+		    m_Parent->PrintPixLocVal(oss.str());
+		    m_MouseMoveCount=0;
+		  }
 	      }
 	    m_MouseMoveCount++;
 	    return 1;
@@ -112,7 +115,48 @@ class ITK_EXPORT ImageViewerZoomWidget
 	    m_Parent->UpdateZoomWidget();
 	    return 1;
 	  }
-   } 
+case FL_FOCUS:
+	  {
+	  return 1;
+	  }
+	case FL_UNFOCUS:
+	  {
+	    return 1;
+	  }
+	case FL_KEYDOWN:
+	  {
+	    IndexType newIndex = this->GetViewedRegion().GetIndex();
+	    SizeType newSize  = this->GetViewedRegion().GetSize();
+	    newIndex[0]=newIndex[0]+newSize[0]/2;
+	    newIndex[1] = newIndex[1] + newSize[1]/2;
+	    switch(Fl::event_key())
+	      {
+	      case FL_Down:
+		{
+		  newIndex[1] = newIndex[1]+newSize[1]/8;
+		  break;
+		}
+	      case FL_Up:
+		{
+		  newIndex[1] = newIndex[1]-newSize[1]/8;
+		  break;
+		}
+	      case FL_Left:
+		{
+		  newIndex[0] = newIndex[0]-newSize[0]/8;
+		  break;
+		}
+	      case FL_Right:
+		{
+		  newIndex[0] = newIndex[0]+newSize[0]/8;
+		  break;
+		}
+	      }
+	    m_Parent->ChangeZoomViewedRegion(newIndex);
+	    return 1;
+	  }
+	  
+	} 
       return 0; 
     }
   

@@ -54,6 +54,7 @@ namespace otb
     m_ScrollWindow=NULL;
     m_PixLocWindow=NULL;
     m_PixLocOutput=NULL;
+    m_Label="OTB Image viewer";
   }
   /// Destructor
   template <class TPixel>
@@ -171,6 +172,7 @@ namespace otb
       {
 	itkExceptionMacro(<<"No input image !");
       } 
+    std::stringstream oss;
     // Get the image dimension
     typename ImageType::SizeType size = m_InputImage->GetLargestPossibleRegion().GetSize();
     m_ImageGeometry = static_cast<double>(size[0])/static_cast<double>(size[1]);
@@ -182,14 +184,17 @@ namespace otb
     int hfull = (size[1]<m_FullMaxInitialSize ? size[1] : m_FullMaxInitialSize);
 
     // Create full windows
-    m_FullWindow = new Fl_Window(0,0,wfull,hfull,"Full Resolution Window");
+    oss.str("");
+    oss<<m_Label<<" - Full Window";
+    m_FullWindow = new Fl_Window(0,0,wfull,hfull,"");
+    m_FullWindow->copy_label(oss.str().c_str());
     m_FullWidget = FullWidgetType::New();
     m_FullWindow->resizable(m_FullWidget);
     m_FullWidget->SetParent(this);
     m_FullWindow->size_range(0,0,size[0],size[1]);
     m_FullWindow->end();
     m_FullWidget->SetInput(m_InputImage);
-    m_FullWidget->Init(0,0,wfull,hfull,"Full Resolution Window");
+    m_FullWidget->Init(0,0,wfull,hfull,"");
     m_FullWidget->box( FL_EMBOSSED_BOX );
     m_FullWidget->SetFormOverlayVisible(true);
     
@@ -222,14 +227,17 @@ namespace otb
 	m_Shrink->Update();
 	
 	// Create the scroll windows
-	m_ScrollWindow = new Fl_Window(wfull+15,0,wscroll,hscroll,"Scroll Window");
+	oss.str("");
+	oss<<m_Label<<" - Scroll Window";
+	m_ScrollWindow = new Fl_Window(wfull+15,0,wscroll,hscroll,"");
+	m_ScrollWindow->copy_label(oss.str().c_str());
 	m_ScrollWidget = ScrollWidgetType::New();
 	m_ScrollWindow->resizable(m_ScrollWidget);
 	m_ScrollWindow->size_range(wscroll,hscroll,size[0],size[1],0,0,1);
 	m_ScrollWindow->end(); 
 	m_ScrollWidget->SetInput(m_Shrink->GetOutput());
 	m_ScrollWidget->SetParent(this);
-	m_ScrollWidget->Init(0,0,wscroll,hscroll,"Scroll window");
+	m_ScrollWidget->Init(0,0,wscroll,hscroll,oss.str().c_str());
 	m_ScrollWidget->box( FL_EMBOSSED_BOX );
 	m_ScrollWidget->SetFormOverlayVisible(true);
 	
@@ -261,7 +269,8 @@ namespace otb
 	  }
       }
     // Create the zoom window
-    m_ZoomWindow = new Fl_Window(wfull+15,hscroll+45,m_ZoomMaxInitialSize,m_ZoomMaxInitialSize,"Zoom Window");
+    std::string zoomLabel="Zoom Window";
+    m_ZoomWindow = new Fl_Window(wfull+15,hscroll+110,m_ZoomMaxInitialSize,m_ZoomMaxInitialSize,zoomLabel.c_str());
     m_ZoomWidget = ZoomWidgetType::New();
     m_ZoomWidget->SetParent(this);
     m_ZoomWindow->resizable(m_ZoomWidget);
@@ -269,7 +278,7 @@ namespace otb
     m_ZoomWindow->end();
     m_ZoomWidget->SetZoomFactor(4.0);
     m_ZoomWidget->SetInput(m_InputImage);
-    m_ZoomWidget->Init(0,0,m_ZoomMaxInitialSize,m_ZoomMaxInitialSize,"Zoom Window");
+    m_ZoomWidget->Init(0,0,m_ZoomMaxInitialSize,m_ZoomMaxInitialSize,zoomLabel.c_str());
     m_ZoomWidget->box( FL_EMBOSSED_BOX );
     m_ZoomWidget->SetFormOverlayVisible(true);
 
@@ -321,15 +330,16 @@ namespace otb
 	m_ScrollWidget->SetMaxComponentValues(m_MaxComponentValue);
       }
 
-     m_PixLocWindow= new Fl_Window(0,hfull+15,250,30,"Pixel location & values");
-     m_PixLocOutput = new Fl_Output(0,0,250,30,"Pixel location & values");
+     m_PixLocWindow= new Fl_Window(wfull+15,hscroll+50,wscroll,20,"Pixel location & values");
+     m_PixLocOutput = new Fl_Output(0,0,wscroll,20,"Pixel location & values");
      m_PixLocWindow->resizable(m_PixLocOutput);
+     m_PixLocOutput->textsize(10);
      m_PixLocOutput->box(FL_EMBOSSED_BOX );
      m_PixLocWindow->end();
 
+      m_Built=true;
     // Built done
-    m_Built=true;
-    otbMsgDebugMacro(<<"Leaving build method");
+    // otbMsgDebugMacro(<<"Leaving build method");
   }
   /// Set the left image
   template <class TPixel>
@@ -345,25 +355,25 @@ namespace otb
   ImageViewer<TPixel>
   ::Show(void)
   {
-    otbMsgDebugMacro(<<"Entering show method.");
+    // otbMsgDebugMacro(<<"Entering show method.");
     Fl::check();
     if(m_UseScroll)
       {
-	otbMsgDebugMacro(<<"Showing scroll widget.");
+	// otbMsgDebugMacro(<<"Showing scroll widget.");
  	m_ScrollWindow->show();
  	m_ScrollWidget->Show();
       }
-    otbMsgDebugMacro(<<"Showing full widget.");
+    // otbMsgDebugMacro(<<"Showing full widget.");
     m_FullWindow->show();
     m_FullWidget->Show();
-    otbMsgDebugMacro(<<"Showing zoom widget.");
+    // otbMsgDebugMacro(<<"Showing zoom widget.");
     m_ZoomWindow->show();
     m_ZoomWidget->Show();
-    otbMsgDebugMacro(<<"Between show and check");
+    // otbMsgDebugMacro(<<"Between show and check");
     m_PixLocWindow->show();
     m_PixLocOutput->show();
     Fl::check();
-    otbMsgDebugMacro(<<"Leaving Show method.");
+    // otbMsgDebugMacro(<<"Leaving Show method.");
   }
   /// Hide the app
   template <class TPixel>
@@ -380,8 +390,9 @@ namespace otb
     Fl::check();
     UpdateScrollWidget();
     UpdateFullWidget();
-    UpdateZoomWidget();    
+    UpdateZoomWidget();
     Fl::check();
+   
   }
 
   template <class TPixel>
@@ -401,7 +412,7 @@ namespace otb
   {
     std::stringstream oss;
     oss<<"Zoom Window (X"<<m_ZoomWidget->GetOpenGlIsotropicZoom()<<")";
-    m_ZoomWindow->label(oss.str().c_str());
+    m_ZoomWindow->copy_label(oss.str().c_str());
     m_ZoomWindow->redraw();
     m_ZoomWidget->redraw();
   }
