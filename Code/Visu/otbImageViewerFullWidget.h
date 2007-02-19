@@ -24,9 +24,15 @@ PURPOSE.  See the above copyright notices for more information.
 namespace otb
 {
 template <class TPixel> class ImageViewer;
-
-
-template <class TPixel>
+/** 
+ * \brief Custom full image widget.
+ *
+ * This class derives from otb::FullResolutionImageWidget, and implements behaviours specific to the image viewer.
+ *
+ * \sa ImageViewer, FullResolutionImageWidget
+ *
+ */
+ template <class TPixel>
 class ITK_EXPORT ImageViewerFullWidget
   : public FullResolutionImageWidget<TPixel>
 {

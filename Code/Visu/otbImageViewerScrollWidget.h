@@ -28,7 +28,14 @@ namespace otb
 {
 template <class TPixel> class ImageViewer;
 
-
+/** 
+ * \brief Custom scroll image widget.
+ *
+ * This class derives from otb::FixedSizeFullImageWidget, and implements behaviours specific to the image viewer.
+ *
+ * \sa ImageViewer, FixedSizeFullImageWidget
+ *
+ */
 template <class TPixel>
 class ITK_EXPORT ImageViewerScrollWidget
   : public FixedSizeFullImageWidget<TPixel>

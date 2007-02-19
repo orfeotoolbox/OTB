@@ -27,8 +27,14 @@ PURPOSE.  See the above copyright notices for more information.
 namespace otb
 {
 template <class TPixel> class ImageViewer;
-
-
+/** 
+ * \brief Custom scroll image widget.
+ *
+ * This class derives from otb::ZoomableImageWidget, and implements behaviours specific to the image viewer.
+ *
+ * \sa ImageViewer, ZoomableImageWidget
+ *
+ */
 template <class TPixel>
 class ITK_EXPORT ImageViewerZoomWidget
   : public ZoomableImageWidget<TPixel>
