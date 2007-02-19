@@ -55,6 +55,8 @@ namespace otb
     m_PixLocWindow=NULL;
     m_PixLocOutput=NULL;
     m_Label="OTB Image viewer";
+    m_NormalizationFactor = 3.;
+    m_QuicklookRatioCoef = 2;
   }
   /// Destructor
   template <class TPixel>
@@ -127,24 +129,24 @@ namespace otb
     typename CovarianceCalculatorType::OutputType cov = *(calc->GetOutput());
     for(unsigned int i = 0; i<nbComponents;++i)
       {
-	m_MinComponentValue[i] = static_cast<InputPixelType>((calc->GetMean())->GetElement(i)-2.8*vcl_sqrt(cov(i,i)));
-	m_MaxComponentValue[i] = static_cast<InputPixelType>((calc->GetMean())->GetElement(i)+2.8*vcl_sqrt(cov(i,i)));
-	if(m_MinComponentValue[i]<absolutMin[i])
+	m_MinComponentValue[i] = static_cast<InputPixelType>((calc->GetMean())->GetElement(i)-m_NormalizationFactor*vcl_sqrt(cov(i,i)));
+	m_MaxComponentValue[i] = static_cast<InputPixelType>((calc->GetMean())->GetElement(i)+m_NormalizationFactor*vcl_sqrt(cov(i,i)));
+ 	if(m_MinComponentValue[i]<absolutMin[i])
 	  m_MinComponentValue[i]=absolutMin[i];
-	if(m_MaxComponentValue[i]>absolutMax[i])
+ 	if(m_MaxComponentValue[i]>absolutMax[i])
 	  m_MaxComponentValue[i]=absolutMax[i];
       }
     
-   //  InputPixelType min,max;
+    //TO UNCOMMENT TO HAVE THE SAME MEAN NORMALIZATION FACTOR FOR EACH BAND
+
+    // InputPixelType min,max;
 //     max = (m_MaxComponentValue[m_RedChannelIndex]
 // 	   +m_MaxComponentValue[m_GreenChannelIndex]
-// 	   +m_MaxComponentValue[m_BlueChannelIndex])/2;
+// 	   +m_MaxComponentValue[m_BlueChannelIndex])/3;
 //     min = (m_MinComponentValue[m_RedChannelIndex]
 // 	   +m_MinComponentValue[m_GreenChannelIndex]
-// 	   +m_MinComponentValue[m_BlueChannelIndex])/2;
-
-
-    // otbMsgDebugMacro(<<"Normalization between: "<<m_MinComponentValue<<" and "<<m_MaxComponentValue);  
+// 	   +m_MinComponentValue[m_BlueChannelIndex])/3;
+//     otbMsgDebugMacro(<<"Normalization between: "<<m_MinComponentValue<<" and "<<m_MaxComponentValue);  
 //     for(unsigned int i = 1; i<nbComponents;++i)
 //       {
 // 	if(min>m_MinComponentValue[i])
@@ -152,9 +154,10 @@ namespace otb
 // 	if(max<m_MaxComponentValue[i])
 // 	  max=m_MaxComponentValue[i];
 //       }
-
-   //  m_MinComponentValue.Fill(min);
+//     m_MinComponentValue.Fill(min);
 //     m_MaxComponentValue.Fill(max);
+
+   // END
 
     otbMsgDebugMacro(<<"Data min: "<<absolutMin<<", Data max: "<<absolutMax);
     otbMsgDebugMacro(<<"Normalization between: "<<m_MinComponentValue<<" and "<<m_MaxComponentValue);  
@@ -219,7 +222,10 @@ namespace otb
 	  }
 	// Create the quicklook
 	m_Shrink->SetInput(m_InputImage);
-	m_ShrinkFactor = (size[0]/hscroll < size[1]/wscroll ? size[0]/hscroll : size[1]/wscroll)/2;
+	m_ShrinkFactor = static_cast<unsigned int>((size[0]/hscroll < size[1]/wscroll ? 
+						    static_cast<double>(size[0])/static_cast<double>(hscroll)
+						    : static_cast<double>(size[1])/static_cast<double>(wscroll))
+						   /m_QuicklookRatioCoef);
 	otbMsgDebugMacro("Shrink factor: "<<m_ShrinkFactor);
 	m_Shrink->SetShrinkFactor(m_ShrinkFactor);
 	typedef otb::FltkFilterWatcher WatcherType;
@@ -380,7 +386,22 @@ namespace otb
   void 
   ImageViewer<TPixel>
   ::Hide(void)
-  {} 
+  {
+    Fl::check();
+    if(m_UseScroll)
+      {
+	m_ScrollWindow->hide();
+	m_ScrollWidget->hide();
+      }
+    m_FullWindow->hide();
+    m_FullWidget->hide();
+    m_ZoomWindow->hide();
+    m_ZoomWidget->hide();
+    m_PixLocWindow->hide();
+    m_PixLocOutput->hide();
+    Fl::check();
+  } 
+
   /// Update the display
   template <class TPixel>
   void 

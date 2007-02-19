@@ -92,12 +92,18 @@ class ITK_EXPORT ImageViewer
   itkGetMacro(BlueChannelIndex,unsigned int);
   itkSetMacro(Label,char *);
   itkGetMacro(Label,const char *);
+  itkSetMacro(QuicklookRatioCoef,double);
+  itkGetMacro(QuicklookRatioCoef,double);
+  itkSetMacro(NormalizationFactor,double);
+  itkGetMacro(NormalizationFactor,double);
  
 
    /** Set the input image */
   virtual void SetImage(itk::ImageBase<2> * img);
   /** Show the viewer (Update) */
   virtual void Show(void);
+   /** Hide all Image View Windows */
+  virtual void Hide(void);
 
   virtual void ComputeNormalizationFactors(void);
 
@@ -119,8 +125,7 @@ protected:
   ImageViewer();
   ~ImageViewer();
  
-  /** Hide all Image View Windows */
-  virtual void Hide(void);
+ 
  		
  private:
   /// zoom widget component
@@ -154,6 +159,9 @@ protected:
   unsigned int m_RedChannelIndex;
   unsigned int m_GreenChannelIndex;
   unsigned int m_BlueChannelIndex;
+  
+  double       m_QuicklookRatioCoef;
+  double       m_NormalizationFactor;
   const char *  m_Label;
 };
 

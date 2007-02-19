@@ -107,6 +107,11 @@ class ITK_EXPORT ImageViewerScrollWidget
 	  m_MouseMoveCount++;
 	  return 1;
 	  }
+	case FL_HIDE:
+	  {
+	    m_Parent->Hide();
+	    return 1;
+	  }
 	}	
       return 0; 
     }

@@ -141,6 +141,11 @@ class ITK_EXPORT ImageViewerFullWidget
 	    m_Parent->ChangeZoomViewedRegion(newIndex);
 	    return 1;
 	  }
+	case FL_HIDE:
+	  {
+	    m_Parent->Hide();
+	    return 1;
+	  }
 	}	 
   return 0; 
     }  

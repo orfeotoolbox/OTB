@@ -276,18 +276,18 @@ ImageWidgetBase<TPixel>
     {
       min = m_MinComponentValues[channelIndex];
     }
-  if(value>max)
+  if(value>=max)
     {
       return 255;
     }
 
-  else if(value<min)
+  else if(value<=min)
     {
       return 0;
     }
   else
     {
-      return static_cast<unsigned char>(255*static_cast<double>(value-min)
+      return static_cast<unsigned char>(255.*static_cast<double>(value-min)
       /static_cast<double>(max-min));
     }
 }
