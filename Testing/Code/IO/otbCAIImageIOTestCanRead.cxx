@@ -20,7 +20,6 @@
 #pragma warning ( disable : 4786 )
 #endif
 
-//#define MAIN
 #include "otbCAIImageIO.h"
 #include "itkExceptionObject.h"
 #include <iostream>

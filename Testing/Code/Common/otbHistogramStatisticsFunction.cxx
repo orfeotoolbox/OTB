@@ -20,9 +20,6 @@
 #pragma warning ( disable : 4786 )
 #endif
 
-#define MAIN
-
-
 #include "itkHistogram.h"
 #include "otbHistogramStatisticsFunction.h"
 

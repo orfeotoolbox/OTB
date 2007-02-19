@@ -20,9 +20,6 @@
 #pragma warning ( disable : 4786 )
 #endif
 
-#define MAIN
-
-
 #include "itkExceptionObject.h"
 #include "itkImage.h"
 #include "itkImageFileWriter.h"
@@ -42,9 +39,9 @@ int otbLineCorrelationDetectorLinear( int argc, char* argv[] )
         const char * outputFilename1 = argv[2];
 	const char * outputFilename2 = argv[3];
 
-	// Largeur de la ligne à detecter = 2*WidthLine+1
+	// Largeur de la ligne ï¿½ detecter = 2*WidthLine+1
         unsigned int  WidthLine((unsigned int)::atoi(argv[4]));
-        // Longueur de la ligne à detecter = 2*LengthLine+1
+        // Longueur de la ligne ï¿½ detecter = 2*LengthLine+1
         unsigned int  LengthLine((unsigned int)::atoi(argv[5]));
         
         typedef unsigned char                                   InputPixelType;

@@ -20,9 +20,6 @@
 #pragma warning ( disable : 4786 )
 #endif
 
-#define MAIN
-
-
 #include "itkExceptionObject.h"
 #include "itkImage.h"
 #include "itkImageFileWriter.h"
@@ -39,9 +36,9 @@ int otbLineRatioDetector( int argc, char* argv[] )
         const char * inputFilename  = argv[1];
         const char * outputFilename = argv[2];
 
-	// Largeur de la ligne à detecter = 2*WidthLine+1
+	// Largeur de la ligne ï¿½ detecter = 2*WidthLine+1
         unsigned int  WidthLine((unsigned int)::atoi(argv[3]));
-        // Longueur de la ligne à detecter = 2*LengthLine+1
+        // Longueur de la ligne ï¿½ detecter = 2*LengthLine+1
         unsigned int  LengthLine((unsigned int)::atoi(argv[4]));
         
         typedef unsigned char                                   InputPixelType;

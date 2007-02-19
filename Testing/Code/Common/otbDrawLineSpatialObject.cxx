@@ -20,9 +20,6 @@
 #pragma warning ( disable : 4786 )
 #endif
 
-#define MAIN
-
-
 #include "itkExceptionObject.h"
 #include "itkImage.h"
 #include "itkImageFileWriter.h"

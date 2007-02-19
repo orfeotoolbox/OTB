@@ -20,8 +20,6 @@
 #pragma warning ( disable : 4786 )
 #endif
 
-#define MAIN
-
 #include "otbImage.h"
 #include "otbForwardFourierMellinTransformImageFilter.h"
 #include "itkLinearInterpolateImageFunction.h"

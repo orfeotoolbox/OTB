@@ -21,8 +21,6 @@
 #include "otbImage.h"
 #endif
 
-#define MAIN
-
 #include "otbImage.h"
 #include "itkImage.h"
 #include "otbImageFileReader.h"

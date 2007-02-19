@@ -23,7 +23,6 @@
 #include "itkExceptionObject.h"
 
 
-
 #include <iostream>
 
 #include "otbImage.h"
