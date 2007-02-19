@@ -90,11 +90,8 @@ int otbFourierMellinImageFilter(int argc, char* argv[])
 	imaginaryRescaler->SetOutputMinimum(-1);
 	imaginaryRescaler->SetOutputMaximum(1);
 
-
-	std::cout<<vcl_acos(-1)<<std::endl;
-
-        imaginaryWriter->SetInput( imaginaryRescaler->GetOutput() );       
-        imaginaryWriter->Update();
+    imaginaryWriter->SetInput( imaginaryRescaler->GetOutput() );       
+    imaginaryWriter->Update();
 	
     } 
   catch( itk::ExceptionObject & err ) 
