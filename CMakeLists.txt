@@ -96,9 +96,9 @@ LINK_DIRECTORIES( ${GDAL_LIBRARY_DIRS} )
 
 #-----------------------------------------------------------------------------
 # Option for generate Visu tools !!!
-OPTION(OTB_USE_VISU "Generate Visu tools directory. If ON, find OpenGL and FLTK package." ON)
-MARK_AS_ADVANCED(OTB_USE_VISU)
-IF(OTB_USE_VISU)
+OPTION(OTB_USE_VISU_GUI "Generate Gui/Visu tools directory. If ON, find OpenGL and FLTK package." ON)
+MARK_AS_ADVANCED(OTB_USE_VISU_GUI)
+IF(OTB_USE_VISU_GUI)
 
         #-------------------------------
         # Librairie OpenGL
@@ -122,7 +122,7 @@ IF(OTB_USE_VISU)
 	         "Cannot build OTB project without FLTK.  Please set FLTK_DIR or set OTB_USE_VISU to OFF.")
         ENDIF(FLTK_FOUND)
 
-ENDIF(OTB_USE_VISU)
+ENDIF(OTB_USE_VISU_GUI)
 
 
 
