@@ -36,7 +36,7 @@ class ITK_EXPORT List
 {
  public:
   /** Standard typedefs */
-  typedef List<TObject> Self;
+  typedef List Self;
   typedef itk::DataObject Superclass;
   typedef itk::SmartPointer<Self> Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
@@ -194,6 +194,14 @@ class ITK_EXPORT List
        * Copy operator.
        */
       Iterator(const Iterator &it);
+
+	  /** 
+	    * Get the current internal iterator 
+		*/
+	  InternalIteratorType & GetIter(void)
+	  {
+		return(m_Iter);
+	  }
     private:
       // Internal iterator.
       InternalIteratorType m_Iter;

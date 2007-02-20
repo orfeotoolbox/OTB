@@ -707,7 +707,7 @@ namespace otb
   List<TObject>
   ::Erase(Iterator begin, Iterator end)
   {
-    m_InternalContainer.erase(begin.m_Iter,end.m_Iter);
+    m_InternalContainer.erase(begin.GetIter(),end.GetIter());
   }
   /**PrintSelf method */
   template <class TObject>
