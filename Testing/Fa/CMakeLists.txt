@@ -8,14 +8,14 @@ SET(INPUTDATA ${OTB_DATA_ROOT}/Input)
 #Images de teledetection (grosses images )
 SET(IMAGEDATA ${OTB_DATA_ROOT}/LargeInput )
 SET(TEMP ${OTBTesting_BINARY_DIR}/Temporary)
-
+SET(EXAMPLES_DATA ${OTB_SOURCE_DIR}/Examples/Data)
 #Tolerance sur diff pixel image
 SET(TOL 0.0)
 
 # !!!!!  Pointe sur un exe généré dans le repertoire Common
 SET(COMMON_TESTS ${CXX_TEST_PATH}/otbCommonTests)
 SET(IO_TESTS     ${CXX_TEST_PATH}/otbIOTests)
-
+SET(VISU_TESTS   ${CXX_TEST_PATH}/otbVisuTests)
 
 # -------       FAs traitees -----------------------------------
 
@@ -152,10 +152,11 @@ ADD_TEST(FA-00013-io_WriteImageTIFF_bis ${COMMON_TESTS}
          ${TEMP}/FA-00013-io_WriteImageTIFF_sbuv_NB_c1_extrait.tif
          -startX 0 -startY 0 -sizeX 60 -sizeY 488 )
 
-
-
-
-
+# ---  FA 00052 : Floating point exception lecture ROI_QB_MUL_1.png  ---
+ADD_TEST(FA-00052-vi_Floating_Point_Exception ${VISU_TESTS}
+	otbImageViewer
+	${EXAMPLES_DATA}/ROI_QB_MUL_1.png
+         )
 
 # -------       Fin des FAs traitees -----------------------------------
 
