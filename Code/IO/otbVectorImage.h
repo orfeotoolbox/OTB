@@ -38,7 +38,7 @@ namespace otb
  * \brief Creation of an "otb" vector image which contains metadata.
  *
  */
-template <class TPixel, unsigned int VImageDimension=2> 
+template <class TPixel, unsigned int VImageDimension=2, unsigned int foo=0> 
 class ITK_EXPORT VectorImage : public itk::VectorImage<TPixel, VImageDimension>,
 			 public ImageBase
 {

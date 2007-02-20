@@ -27,110 +27,110 @@
 namespace otb
 {
 
-template <class TPixel, unsigned int VImageDimension,  unsigned int toto> 
-Image<TPixel,VImageDimension,  toto>::Image()
+template <class TPixel, unsigned int VImageDimension,  unsigned int foo> 
+Image<TPixel,VImageDimension,  foo>::Image()
 {
 }
 
-template <class TPixel, unsigned int VImageDimension,  unsigned int toto> 
-std::string Image<TPixel, VImageDimension,  toto>::GetProjectionRef( void )
+template <class TPixel, unsigned int VImageDimension,  unsigned int foo> 
+std::string Image<TPixel, VImageDimension,  foo>::GetProjectionRef( void )
 {
    return ( this->ImageBase::GetProjectionRef( this->GetMetaDataDictionary() ) );	
 }
 
-template <class TPixel, unsigned int VImageDimension,  unsigned int toto> 
-std::string Image<TPixel, VImageDimension,  toto>::GetGCPProjection( void )
+template <class TPixel, unsigned int VImageDimension,  unsigned int foo> 
+std::string Image<TPixel, VImageDimension,  foo>::GetGCPProjection( void )
 {
    return ( this->ImageBase::GetGCPProjection( this->GetMetaDataDictionary() ) );	
 }
 
-template <class TPixel, unsigned int VImageDimension,  unsigned int toto>   
-unsigned int Image<TPixel, VImageDimension,  toto>::GetGCPCount( void  ) 
+template <class TPixel, unsigned int VImageDimension,  unsigned int foo>   
+unsigned int Image<TPixel, VImageDimension,  foo>::GetGCPCount( void  ) 
 {
    return ( this->ImageBase::GetGCPCount( this->GetMetaDataDictionary() ) );	
 }
 
-template <class TPixel, unsigned int VImageDimension,  unsigned int toto>   
-OTB_GCP & Image<TPixel, VImageDimension,  toto>::GetGCPs ( unsigned int GCPnum )
+template <class TPixel, unsigned int VImageDimension,  unsigned int foo>   
+OTB_GCP & Image<TPixel, VImageDimension,  foo>::GetGCPs ( unsigned int GCPnum )
 {
    return ( this->ImageBase::GetGCPs( this->GetMetaDataDictionary(), GCPnum ) );	
 }
     
-template <class TPixel, unsigned int VImageDimension,  unsigned int toto>   
-std::string Image<TPixel, VImageDimension,  toto>::GetGCPId( unsigned int GCPnum  ) 
+template <class TPixel, unsigned int VImageDimension,  unsigned int foo>   
+std::string Image<TPixel, VImageDimension,  foo>::GetGCPId( unsigned int GCPnum  ) 
 {
    return ( this->ImageBase::GetGCPId( this->GetMetaDataDictionary(), GCPnum ) );	
 }
   
-template <class TPixel, unsigned int VImageDimension,  unsigned int toto>   
-std::string Image<TPixel, VImageDimension,  toto>::GetGCPInfo( unsigned int GCPnum )
+template <class TPixel, unsigned int VImageDimension,  unsigned int foo>   
+std::string Image<TPixel, VImageDimension,  foo>::GetGCPInfo( unsigned int GCPnum )
 {
    return ( this->ImageBase::GetGCPInfo( this->GetMetaDataDictionary(), GCPnum ) );	
 }
   
-template <class TPixel, unsigned int VImageDimension,  unsigned int toto>   
-double Image<TPixel, VImageDimension,  toto>::GetGCPRow( unsigned int GCPnum ) 
+template <class TPixel, unsigned int VImageDimension,  unsigned int foo>   
+double Image<TPixel, VImageDimension,  foo>::GetGCPRow( unsigned int GCPnum ) 
 {
    return ( this->ImageBase::GetGCPRow( this->GetMetaDataDictionary(), GCPnum ) );	
 }
   
-template <class TPixel, unsigned int VImageDimension,  unsigned int toto>   
-double Image<TPixel, VImageDimension,  toto>::GetGCPCol( unsigned int GCPnum )	
+template <class TPixel, unsigned int VImageDimension,  unsigned int foo>   
+double Image<TPixel, VImageDimension,  foo>::GetGCPCol( unsigned int GCPnum )	
 {
    return ( this->ImageBase::GetGCPCol( this->GetMetaDataDictionary(), GCPnum ) );	
 }
   
-template <class TPixel, unsigned int VImageDimension,  unsigned int toto>   
-double Image<TPixel, VImageDimension,  toto>::GetGCPX( unsigned int GCPnum ) 
+template <class TPixel, unsigned int VImageDimension,  unsigned int foo>   
+double Image<TPixel, VImageDimension,  foo>::GetGCPX( unsigned int GCPnum ) 
 {	
    return ( this->ImageBase::GetGCPX( this->GetMetaDataDictionary(), GCPnum ) );	
 }
  
-template <class TPixel, unsigned int VImageDimension,  unsigned int toto>   
-double Image<TPixel, VImageDimension,  toto>::GetGCPY( unsigned int GCPnum ) 
+template <class TPixel, unsigned int VImageDimension,  unsigned int foo>   
+double Image<TPixel, VImageDimension,  foo>::GetGCPY( unsigned int GCPnum ) 
 {
    return ( this->ImageBase::GetGCPY( this->GetMetaDataDictionary(), GCPnum ) );	
 }
   
-template <class TPixel, unsigned int VImageDimension,  unsigned int toto>   
-double Image<TPixel, VImageDimension,  toto>::GetGCPZ( unsigned int GCPnum ) 
+template <class TPixel, unsigned int VImageDimension,  unsigned int foo>   
+double Image<TPixel, VImageDimension,  foo>::GetGCPZ( unsigned int GCPnum ) 
 {
    return ( this->ImageBase::GetGCPZ( this->GetMetaDataDictionary(), GCPnum ) );	
 }
 
-template <class TPixel, unsigned int VImageDimension,  unsigned int toto>   
-ImageBase::VectorType Image<TPixel, VImageDimension,  toto>::GetGeoTransform( void ) 
+template <class TPixel, unsigned int VImageDimension,  unsigned int foo>   
+ImageBase::VectorType Image<TPixel, VImageDimension,  foo>::GetGeoTransform( void ) 
 {
    return ( this->ImageBase::GetGeoTransform( this->GetMetaDataDictionary() ) );	
 }
 
-template <class TPixel, unsigned int VImageDimension,  unsigned int toto>   
-ImageBase::VectorType Image<TPixel, VImageDimension,  toto>::GetUpperLeftCorner( void )
+template <class TPixel, unsigned int VImageDimension,  unsigned int foo>   
+ImageBase::VectorType Image<TPixel, VImageDimension,  foo>::GetUpperLeftCorner( void )
 {
    return ( this->ImageBase::GetUpperLeftCorner( this->GetMetaDataDictionary() ) );	
 }
 
-template <class TPixel, unsigned int VImageDimension,  unsigned int toto>   
-ImageBase::VectorType Image<TPixel, VImageDimension,  toto>::GetUpperRightCorner( void )
+template <class TPixel, unsigned int VImageDimension,  unsigned int foo>   
+ImageBase::VectorType Image<TPixel, VImageDimension,  foo>::GetUpperRightCorner( void )
 {
    return ( this->ImageBase::GetUpperRightCorner( this->GetMetaDataDictionary() ) );	
 }
 
-template <class TPixel, unsigned int VImageDimension,  unsigned int toto>   
-ImageBase::VectorType Image<TPixel, VImageDimension,  toto>::GetLowerLeftCorner( void )
+template <class TPixel, unsigned int VImageDimension,  unsigned int foo>   
+ImageBase::VectorType Image<TPixel, VImageDimension,  foo>::GetLowerLeftCorner( void )
 {
    return ( this->ImageBase::GetLowerLeftCorner( this->GetMetaDataDictionary() ) );	
 }
 
-template <class TPixel, unsigned int VImageDimension,  unsigned int toto>   
-ImageBase::VectorType Image<TPixel, VImageDimension,  toto>::GetLowerRightCorner( void )
+template <class TPixel, unsigned int VImageDimension,  unsigned int foo>   
+ImageBase::VectorType Image<TPixel, VImageDimension,  foo>::GetLowerRightCorner( void )
 {
    return ( this->ImageBase::GetLowerRightCorner( this->GetMetaDataDictionary() ) );	
 }
 
-template <class TPixel, unsigned int VImageDimension,  unsigned int toto> 
+template <class TPixel, unsigned int VImageDimension, unsigned int foo> 
 void 
-Image<TPixel, VImageDimension,  toto>::PrintSelf(std::ostream& os, itk::Indent indent) const
+Image<TPixel, VImageDimension,  foo>::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   Superclass::PrintSelf(os,indent);
   
