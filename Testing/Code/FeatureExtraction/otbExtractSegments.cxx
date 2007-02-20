@@ -28,6 +28,7 @@
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
 #include "otbExtractSegmentsImageFilter.h"
+#include "itkRescaleIntensityImageFilter.h"
 
 int otbExtractSegments( int argc, char * argv[] )
 {
@@ -48,7 +49,7 @@ int otbExtractSegments( int argc, char * argv[] )
 	float  FillGapsAngularBeam((float)::atof(argv[10]));
         
         typedef double	                                        InputPixelType;
-        typedef unsigned char	   	                        OutputPixelType;
+        typedef double	   	                                OutputPixelType;
         const   unsigned int        	                        Dimension = 2;
 
         typedef otb::Image< InputPixelType,  Dimension >        InputImageType;
@@ -57,6 +58,7 @@ int otbExtractSegments( int argc, char * argv[] )
         typedef otb::ImageFileReader< InputImageType  >         ReaderType1;
         typedef otb::ImageFileReader< InputImageType  >         ReaderType2;
         typedef otb::ImageFileWriter< OutputImageType >         WriterType;
+	typedef itk::RescaleIntensityImageFilter<OutputImageType,OutputImageType> RescalerType;
 
 	
         typedef otb::ExtractSegmentsImageFilter< InputImageType, OutputImageType >   FilterType;
@@ -87,6 +89,10 @@ int otbExtractSegments( int argc, char * argv[] )
         ReaderType1::Pointer reader1 = ReaderType1::New();
         ReaderType2::Pointer reader2 = ReaderType2::New();
         WriterType::Pointer writer = WriterType::New();
+	RescalerType::Pointer rescaler = RescalerType::New();
+
+	rescaler->SetOutputMinimum(0);
+	rescaler->SetOutputMaximum(1);
 
         reader1->SetFileName( inputFilename1  );
         reader2->SetFileName( inputFilename2  );
@@ -94,7 +100,8 @@ int otbExtractSegments( int argc, char * argv[] )
         
         filter->SetInputImage( reader1->GetOutput() );
         filter->SetInputImageDirection( reader2->GetOutput() );
-        writer->SetInput( filter->GetOutput() );
+	rescaler->SetInput(filter->GetOutput());
+        writer->SetInput( rescaler->GetOutput() );
         
         writer->Update();
 

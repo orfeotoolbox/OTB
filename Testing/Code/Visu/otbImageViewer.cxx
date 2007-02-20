@@ -42,11 +42,7 @@ int otbImageViewer( int argc, char * argv[] )
       viewer->SetImage(reader->GetOutput());      
 	
       // build the app
-      otbMsgDebugMacro(<<"Build.");
-      viewer->Build();
-      otbMsgDebugMacro(<<"Show");
       viewer->Show();
-      viewer->Update();
       Fl::check();
     } 
   catch( itk::ExceptionObject & err ) 

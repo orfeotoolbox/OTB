@@ -408,12 +408,12 @@ ADD_TEST(feTuExtractSegmentsNew ${FEATUREEXTRACTION_TESTS}
         otbExtractSegmentsNew)
         
 ADD_TEST(feTvExtractSegments ${FEATUREEXTRACTION_TESTS}  
-  --compare-image ${TOL}  ${BASELINE}/feFiltreExtractSegments_ImageLine.png
-                          ${TEMP}/feFiltreExtractSegments_ImageLine.png
+  --compare-image ${TOL}  ${BASELINE}/feFiltreExtractSegments_ImageLine.hdr
+                          ${TEMP}/feFiltreExtractSegments_ImageLine.hdr
         otbExtractSegments
 	${INPUTDATA}/ImageLine_hd.bsq.hdr
 	${INPUTDATA}/ImageLineDir.bsq.hdr
-	${TEMP}/feFiltreExtractSegments_ImageLine.png
+	${TEMP}/feFiltreExtractSegments_ImageLine.hdr
 	2 0.3 20 20 2 10 0.5)                
 
 # -------            otb::ForwardFourierMellinTransformImageFilter   -------------
