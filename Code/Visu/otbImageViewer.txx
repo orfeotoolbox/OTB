@@ -224,10 +224,21 @@ namespace otb
 	  }
 	// Create the quicklook
 	m_Shrink->SetInput(m_InputImage);
-	m_ShrinkFactor = static_cast<unsigned int>((size[0]/hscroll < size[1]/wscroll ? 
-						    static_cast<double>(size[0])/static_cast<double>(hscroll)
-						    : static_cast<double>(size[1])/static_cast<double>(wscroll))
-						   /m_QuicklookRatioCoef);
+// 	m_ShrinkFactor = static_cast<unsigned int>((size[0]/wscroll < size[1]/hscroll ? 
+// 						    static_cast<double>(size[0])/static_cast<double>(hscroll)
+// 						    : static_cast<double>(size[1])/static_cast<double>(wscroll))
+// 						   /m_QuicklookRatioCoef);
+	if(size[0]/hscroll < size[1]/wscroll)
+	  {
+	    m_ShrinkFactor = static_cast<unsigned int>(vcl_ceil((static_cast<double>(size[0])/static_cast<double>(wscroll))/m_QuicklookRatioCoef));
+	  }
+	else
+	  {
+	    m_ShrinkFactor = static_cast<unsigned int>(vcl_ceil((static_cast<double>(size[1])/static_cast<double>(hscroll))/m_QuicklookRatioCoef));
+	  }
+
+
+
 	otbMsgDebugMacro("Shrink factor: "<<m_ShrinkFactor);
 	m_Shrink->SetShrinkFactor(m_ShrinkFactor);
 	typedef otb::FltkFilterWatcher WatcherType;
