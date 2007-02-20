@@ -31,12 +31,11 @@ namespace otb
  * methods and iterators interfaces.
  */
 template <class TObject>
-class ITK_EXPORT ObjectList
-  : public itk::DataObject
+class ITK_EXPORT ObjectList : public itk::DataObject
 {
  public:
   /** Standard typedefs */
-  typedef ObjectList<TObject> Self;
+  typedef ObjectList Self;
   typedef itk::DataObject Superclass;
   typedef itk::SmartPointer<Self> Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
@@ -110,12 +109,18 @@ class ITK_EXPORT ObjectList
   void Clear(void);
 
   class ConstIterator;
+  class ReverseIterator;
   class ReverseConstIterator;
+  class Iterator;
+  friend class Iterator;
+  friend class ConstIterator;
+  friend class ReverseIterator;
+  friend class ReverseConstIterator;
 
   /** \class Iterator
    *  \brief Iterator of the object list.
    */
-  class Iterator
+  class ITK_EXPORT Iterator
     {
     public:
       friend class ObjectList;
@@ -164,6 +169,14 @@ class ITK_EXPORT ObjectList
        * Copy operator.
        */
       Iterator(const Iterator &it);
+
+	  /** 
+	    * Get the current internal iterator 
+		*/
+	  InternalIteratorType & GetIter(void)
+	  {
+		return(m_Iter);
+	  }
     private:
       // Internal iterator.
       InternalIteratorType m_Iter;
@@ -171,10 +184,12 @@ class ITK_EXPORT ObjectList
   /** \class ConstIterator
    *  \brief ConstIterator of the object list.
    */
-  class ConstIterator
+  class ITK_EXPORT ConstIterator
     {
     public:
-      /** typedef of the internal iterator */
+	  friend class ObjectList;
+      friend class Iterator;
+     /** typedef of the internal iterator */
       typedef typename InternalContainerType::const_iterator InternalConstIteratorType;
       /** Constructor */
       ConstIterator();
@@ -225,9 +240,12 @@ class ITK_EXPORT ObjectList
   /** \class ReverseIterator
    *  \brief ReverseIterator of the object list.
    */
-  class ReverseIterator
+  class ITK_EXPORT ReverseIterator
     {
     public:
+	  friend class ObjectList;
+      friend class Iterator;
+
       friend class ReverseConstIterator;
       /** typedef of the internal iterator */
       typedef typename InternalContainerType::reverse_iterator InternalReverseIteratorType;
@@ -272,9 +290,13 @@ class ITK_EXPORT ObjectList
   /** \class ReverseConstIterator
    *  \brief ReverseConstIterator of the object list.
    */
-  class ReverseConstIterator
+  class ITK_EXPORT ReverseConstIterator
     {
     public:
+	  friend class ObjectList;
+      friend class Iterator;
+      friend class ConstIterator;
+      friend class ReverseIterator;
       /** typedef of the internal iterator */
       typedef typename InternalContainerType::reverse_iterator InternalReverseConstIteratorType;
       /** Constructor */
