@@ -11,6 +11,7 @@ SET(TEMP ${OTBTesting_BINARY_DIR}/Temporary)
 
 #Tolerance sur diff pixel image
 SET(TOL 0.0)
+SET(EPSILON 0.0000000001)
 
 SET(CHANGEDETECTION_TESTS ${CXX_TEST_PATH}/otbChangeDetectionTests)
 
@@ -37,8 +38,9 @@ ADD_TEST(cdTvCorrel ${CHANGEDETECTION_TESTS}
 	 )
 
 ADD_TEST(cdTvMeanDiff ${CHANGEDETECTION_TESTS}
-  --compare-image ${TOL}   ${BASELINE}/cdMeanDiffImage.hdr
-			   ${TEMP}/cdMeanDiffImage.hdr
+  --compare-image ${EPSILON} 
+		  ${BASELINE}/cdMeanDiffImage.hdr
+		  ${TEMP}/cdMeanDiffImage.hdr
 	otbMeanDiffChangeDetectionTest 
 	 ${INPUTDATA}/GomaAvant.png 
 	 ${INPUTDATA}/GomaApres.png
