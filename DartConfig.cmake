@@ -16,13 +16,13 @@ SET (COMPRESS_SUBMISSION ON)
 
 #SET (DROP_SITE_MODE "active")
 
-SET (TRIGGER_SITE "http://${DROP_SITE}/cgi-bin/Submit-Orfeotoolbox-TestingResults.cgi")
+#SET (TRIGGER_SITE "http://${DROP_SITE}/cgi-bin/Submit-Orfeotoolbox-TestingResults.cgi")
 
 # Project Home Page
 SET (PROJECT_URL "http://smsc.cnes.fr/PLEIADES/")
 
 # Dart server configuration 
-SET (ROLLUP_URL "http://${DROP_SITE}/cgi-bin/OrfeotoolboxRollup.cgi")
+#SET (ROLLUP_URL "http://${DROP_SITE}/cgi-bin/OrfeotoolboxRollup.cgi")
 
 #SET (ROLLUP_URL "http://${DROP_SITE}/cgi-bin/insight-rollup-dashboard.sh")
 #SET (ROLLUP_URL "http://${DROP_SITE}/cgi-bin/orfeotoolbox-rollup-dashboard.sh")
