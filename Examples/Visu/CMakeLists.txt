@@ -1,4 +1,4 @@
-PROJECT(FeatureExtraction)
+PROJECT(Visu)
 INCLUDE_REGULAR_EXPRESSION("^.*$")
 
 #ADD_EXECUTABLE(GreyVisuExample GreyVisuExample.cxx )
