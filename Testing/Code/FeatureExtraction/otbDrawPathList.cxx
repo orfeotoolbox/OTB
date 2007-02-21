@@ -21,14 +21,13 @@
 #endif
 
 #include "itkExceptionObject.h"
-#include "itkImage.h"
-#include "itkImageFileWriter.h"
 #include "itkPolyLineParametricPath.h"
 
-#include "otbImageFileReader.h"
+#include "otbImage.h"
 #include "otbPathListSource.h"
 #include "otbImageToPathListAlignFilter.h"
 #include "otbDrawPathListFilter.h"
+#include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
 
 
@@ -44,31 +43,24 @@ int otbDrawPathList( int argc, char * argv[] )
         typedef unsigned char   	                        OutputPixelType;
         const   unsigned int        	                        Dimension = 2;
 
-        typedef itk::Image< InputPixelType,  Dimension >	InputImageType;
-        typedef itk::Image< OutputPixelType, Dimension >        OutputImageType;
+        typedef otb::Image< InputPixelType,  Dimension >	InputImageType;
+        typedef otb::Image< OutputPixelType, Dimension >        OutputImageType;
 
 	typedef itk::PolyLineParametricPath< Dimension >	PathType;
 	typedef PathType::Pointer                               PathPointerType;	
 
         typedef otb::ImageFileReader< InputImageType  >         ReaderType;  
-        typedef itk::ImageFileWriter< OutputImageType >         WriterType;
+        typedef otb::ImageFileWriter< OutputImageType >         WriterType;
 	
-//	typedef otb::ImageToPathListAlignFilter<InputImageType,PathType> ListAlignFilterType;
-//	typedef ListAlignFilterType::OutputPathListType   ListAlignFilterOutputPathListType;	
 	typedef otb::DrawPathListFilter<InputImageType,PathType,OutputImageType> DrawPathListFilterType;
 
         typedef otb::ImageToPathListAlignFilter<InputImageType,PathType>  PathListType;
 
         ReaderType::Pointer reader         = ReaderType::New();
         WriterType::Pointer writer         = WriterType::New();
-//	InputImageType::Pointer  ImageIn   = InputImageType::New();
-//	OutputImageType::Pointer ImageOut  = OutputImageType::New();
 	
 	DrawPathListFilterType::Pointer DrawPath = DrawPathListFilterType::New();
 
-//        typedef itk::PathSource<PathType>  TestType;
-//	TestType::Pointer test = TestType::New();
-	
 	PathListType::Pointer testList = PathListType::New();
 	
         reader->SetFileName( inputFilename  );
