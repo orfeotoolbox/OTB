@@ -52,9 +52,6 @@ public:
   itkTypeMacro(SOMClassifier, itk::ProcessObject);
   itkNewMacro(Self) ;
 
-  /** Output type for GetClassSample method */
-  typedef itk::Statistics::MembershipSample< TSample > OutputType ;
-
   /** typedefs from TSample object */
   typedef TSample SampleType;
   typedef typename SampleType::Pointer SamplePointerType;
