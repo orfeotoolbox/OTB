@@ -1,4 +1,4 @@
-PROJECT(Learning)
+PROJECT(LearningExamples)
 INCLUDE_REGULAR_EXPRESSION("^.*$")
 
 ADD_EXECUTABLE(GenerateTrainingImageExample GenerateTrainingImageExample.cxx )

@@ -1,4 +1,4 @@
-PROJECT(MultiScale)
+PROJECT(MultiScaleExamples)
 INCLUDE_REGULAR_EXPRESSION("^.*$")
 
 ADD_EXECUTABLE(MorphologicalPyramidAnalysisFilterExample MorphologicalPyramidAnalysisFilterExample.cxx )

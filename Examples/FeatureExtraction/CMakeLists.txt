@@ -1,4 +1,4 @@
-PROJECT(FeatureExtraction)
+PROJECT(FeatureExtractionExamples)
 INCLUDE_REGULAR_EXPRESSION("^.*$")
 
 ADD_EXECUTABLE(AlignmentsExample AlignmentsExample.cxx )

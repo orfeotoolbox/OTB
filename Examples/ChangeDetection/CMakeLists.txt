@@ -1,4 +1,4 @@
-PROJECT(FeatureExtraction)
+PROJECT(ChangeDetectionExamples)
 INCLUDE_REGULAR_EXPRESSION("^.*$")
 
 ADD_EXECUTABLE(ChangeDetectionFrameworkExample ChangeDetectionFrameworkExample.cxx )

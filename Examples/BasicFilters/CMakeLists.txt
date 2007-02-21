@@ -1,4 +1,4 @@
-PROJECT(BasicFilters)
+PROJECT(BasicFiltersExamples)
 INCLUDE_REGULAR_EXPRESSION("^.*$")
 
 ADD_EXECUTABLE(LeeImageFilter LeeImageFilter.cxx )

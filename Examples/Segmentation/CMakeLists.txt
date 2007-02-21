@@ -2,7 +2,7 @@
 # Examples on the use of segmentation algorithms
 #
 
-PROJECT(ImageSegmentation)
+PROJECT(ImageSegmentationExamples)
 INCLUDE_REGULAR_EXPRESSION("^.*$")
 
 ADD_EXECUTABLE(ConnectedThresholdImageFilter ConnectedThresholdImageFilter.cxx )
