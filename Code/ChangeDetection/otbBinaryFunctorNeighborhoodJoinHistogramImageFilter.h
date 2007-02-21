@@ -184,7 +184,7 @@ private:
       measure. */
   bool m_UsePaddingValue;
 
-  void Initialize();
+  HistogramType::Pointer ComputeHistogram();
 };
 
 } // end namespace otb

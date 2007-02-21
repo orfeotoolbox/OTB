@@ -76,9 +76,10 @@ BinaryFunctorNeighborhoodJoinHistogramImageFilter<TInputImage1,TInputImage2,TOut
  */
 template <class TInputImage1, class TInputImage2, 
           class TOutputImage, class TFunction  >
-void
 BinaryFunctorNeighborhoodJoinHistogramImageFilter<TInputImage1,TInputImage2,TOutputImage,TFunction>
-::Initialize( ) 
+::HistogramType::Pointer
+BinaryFunctorNeighborhoodJoinHistogramImageFilter<TInputImage1,TInputImage2,TOutputImage,TFunction>
+::ComputeHistogram( ) 
 {
   // Calculate min and max image values in input1 image.
   Input1ImagePointer pInput1Image
@@ -154,9 +155,9 @@ BinaryFunctorNeighborhoodJoinHistogramImageFilter<TInputImage1,TInputImage2,TOut
   input2Region = pInput2Image->GetRequestedRegion();
   Input2IteratorType ti2(pInput2Image, input2Region);
 
-  m_Histogram = HistogramType::New();
+  typename HistogramType::Pointer histogram = HistogramType::New();
     
-  m_Histogram->Initialize(m_HistogramSize, m_LowerBound, m_UpperBound);
+  histogram->Initialize(m_HistogramSize, m_LowerBound, m_UpperBound);
     
   ti1.GoToBegin();
   ti2.GoToBegin();
@@ -169,11 +170,13 @@ BinaryFunctorNeighborhoodJoinHistogramImageFilter<TInputImage1,TInputImage2,TOut
         sample[1] = ti2.Get();
 	if(sample[0]!=itk::NumericTraits<Input1ImagePixelType>::Zero &&
 	   sample[1]!=itk::NumericTraits<Input2ImagePixelType>::Zero)
-	  m_Histogram->IncreaseFrequency(sample, 1);
+	  histogram->IncreaseFrequency(sample, 1);
       
     ++ti1;
     ++ti2;
     }
+
+  return histogram;
 
 }
 
@@ -189,7 +192,10 @@ BinaryFunctorNeighborhoodJoinHistogramImageFilter<TInputImage1, TInputImage2, TO
                         int threadId)
 {
 
-  this->Initialize();
+  //this->Initialize();
+
+  typename HistogramType::Pointer histogram = ComputeHistogram();
+
   //m_Functor->SetHistogram(m_Histogram);
 //  unsigned int i;
   itk::ZeroFluxNeumannBoundaryCondition<TInputImage1> nbc1;
@@ -248,7 +254,7 @@ BinaryFunctorNeighborhoodJoinHistogramImageFilter<TInputImage1, TInputImage2, TO
     while ( ! outputIt.IsAtEnd() )
       {
 
-      outputIt.Set( m_Functor( neighInputIt1, neighInputIt2, m_Histogram ) );
+      outputIt.Set( m_Functor( neighInputIt1, neighInputIt2, histogram ) );
 
       ++neighInputIt1;
       ++neighInputIt2;
