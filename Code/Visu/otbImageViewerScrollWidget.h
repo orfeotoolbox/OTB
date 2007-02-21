@@ -58,13 +58,13 @@ class ITK_EXPORT ImageViewerScrollWidget
   typedef typename Superclass::SizeType SizeType;
 
   typedef ImageViewer<PixelType> ParentType;
-  typedef typename ParentType::Pointer ParentPointerType;
+  typedef ParentType* ParentPointerType;
 
   typedef otb::ImageWidgetBoxForm BoxType;
   typedef BoxType::ColorType ColorType;
   
-  itkSetObjectMacro(Parent,ParentType);
-  itkGetObjectMacro(Parent,ParentType);
+  itkSetMacro(Parent,ParentPointerType);
+  itkGetMacro(Parent,ParentPointerType);
   /** Handle method */
   virtual int handle(int event)
     {

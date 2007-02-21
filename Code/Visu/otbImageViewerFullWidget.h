@@ -55,10 +55,10 @@ class ITK_EXPORT ImageViewerFullWidget
   typedef typename Superclass::ImageType ImageType;
 
   typedef ImageViewer<PixelType> ParentType;
-  typedef typename ParentType::Pointer ParentPointerType;
+  typedef ParentType* ParentPointerType;
   
-  itkSetObjectMacro(Parent,ParentType);
-  itkGetObjectMacro(Parent,ParentType);
+  itkSetMacro(Parent,ParentPointerType);
+  itkGetMacro(Parent,ParentPointerType);
   /** Handle method */
   virtual int  handle(int event)
     {

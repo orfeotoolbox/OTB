@@ -57,10 +57,10 @@ class ITK_EXPORT ImageViewerZoomWidget
   typedef typename Superclass::SizeType SizeType;
 
   typedef ImageViewer<PixelType> ParentType;
-  typedef typename ParentType::Pointer ParentPointerType;
+  typedef ParentType* ParentPointerType;
  
-  itkSetObjectMacro(Parent,ParentType);
-  itkGetObjectMacro(Parent,ParentType);
+  itkSetMacro(Parent,ParentPointerType);
+  itkGetMacro(Parent,ParentPointerType);
   /** Handle method */
   virtual int  handle(int event)
     {
