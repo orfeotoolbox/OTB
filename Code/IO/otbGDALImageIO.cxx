@@ -37,6 +37,7 @@
 
 #include "itkMetaDataObject.h"
 #include "itkPNGImageIO.h"
+#include "itkJPEGImageIO.h"
 
 namespace otb
 {
@@ -136,8 +137,6 @@ bool GDALImageIO::GetGdalReadImageFileName( const char * filename, std::string &
 bool GDALImageIO::CanReadFile(const char* file) 
 {
   // First check the extension
-//  m_currentfile = file;
-  
   if(  file == NULL )
     {
       itkDebugMacro(<<"No filename specified.");
@@ -147,12 +146,18 @@ bool GDALImageIO::CanReadFile(const char* file)
 
         //Traitement particulier sur certain format o� l'on pr�f�re utiliser 
         // Format PNG -> lecture avec ITK (pas GDAL car certains tests sortent en erreurs)
-  	itk::PNGImageIO::Pointer lPNGImageIO = itk::PNGImageIO::New();
+  		itk::PNGImageIO::Pointer lPNGImageIO = itk::PNGImageIO::New();
         lCanRead = lPNGImageIO->CanReadFile(file);
         if ( lCanRead == true)
         {
                 return false;
         } 
+ 		itk::JPEGImageIO::Pointer lJPEGImageIO = itk::JPEGImageIO::New();
+        lCanRead = lJPEGImageIO->CanReadFile(file);
+        if ( lCanRead == true)
+        {
+                return false;
+        }
 
         // Regarde si c'est un r�pertoire
         std::string lFileNameGdal;
@@ -167,7 +172,6 @@ bool GDALImageIO::CanReadFile(const char* file)
         GDALAllRegister();
 
   // Open file with GDAL 
-  
         m_poDataset = (GDALDataset *)GDALOpen(lFileNameGdal.c_str(), GA_ReadOnly );
         if(m_poDataset==NULL)
         {
@@ -184,7 +188,6 @@ bool GDALImageIO::CanReadFile(const char* file)
         }
         else
         {
-// THOMAS
                 delete m_poDataset;
                 m_poDataset = NULL;
 	        otbMsgDevMacro(<<"CanReadFile GDAL");
@@ -341,19 +344,9 @@ void GDALImageIO::InternalReadImageInformation()
    
     otbMsgDevMacro(<<"NbBands : "<<m_NbBands);
     otbMsgDevMacro(<<"Nb of Components : "<<this->GetNumberOfComponents());
-
     
     // Set the number of dimensions (verify for the dim )
-// Modif OTB
-/*    if( m_NbBands > 1 )
-      {
-      this->SetNumberOfDimensions(3);
-      m_Dimensions[2] = m_NbBands;
-      }
-    else
-      this->SetNumberOfDimensions(2);*/
       this->SetNumberOfDimensions(2);
-// Fin Modif OTB
 
     otbMsgDevMacro(<<"Nb of Dimensions : "<<m_NumberOfDimensions);
 
@@ -454,10 +447,6 @@ void GDALImageIO::InternalReadImageInformation()
 
     /******************************************************************/
     // Pixel Type always set to Scalar for GDAL ? maybe also to vector ?
-
-// Modif OTB : 
-//    this->SetPixelType(SCALAR);
-//        this-> SetNumberOfComponents(numComp);
 
 // Modif Patrick: LIRE LES IMAGES COMPLEXES
  	if( GDALDataTypeIsComplex(m_PxType) )
@@ -986,19 +975,10 @@ std::string GDALImageIO::TypeConversion(std::string name)
 {
 	std::string extension;
 	std::string extGDAL;
-        extension = System::GetExtension(name);
-        
-	//Recup�rer extension du fichier image
-/*	int i=0;
-	while (name[i]!='\0')
-	{
-		if (name[i]=='.')
-			extension="";
-		else
-			extension+=name[i];
-		i++;
-	}*/
 	
+	//Recuperer extension du fichier image
+	extension = System::GetExtension(name);
+        
 	if ((extension=="tif")||(extension=="tiff")||(extension=="TIF")||(extension=="TIFF"))
 			extGDAL="GTiff";
 	else if ((extension=="hdr")||(extension=="HDR"))
