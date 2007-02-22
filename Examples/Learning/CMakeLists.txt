@@ -32,6 +32,9 @@ OTBCommon ITKCommon  OTBLearning  gdal)
 ADD_EXECUTABLE(SOMExample SOMExample.cxx )
 TARGET_LINK_LIBRARIES(SOMExample ITKIO OTBIO OTBCommon ITKCommon  OTBLearning  gdal)
 
+ADD_EXECUTABLE(SOMClassifierExample SOMClassifierExample.cxx )
+TARGET_LINK_LIBRARIES(SOMClassifierExample ITKIO OTBIO OTBCommon ITKCommon  OTBLearning  gdal)
+
 
 IF( NOT OTB_DISABLE_CXX_TESTING AND NOT OTB_DISABLE_CXX_EXAMPLES_TESTING )
 

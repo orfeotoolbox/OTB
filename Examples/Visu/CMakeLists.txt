@@ -1,9 +1,6 @@
 PROJECT(VisuExamples)
 INCLUDE_REGULAR_EXPRESSION("^.*$")
 
-#ADD_EXECUTABLE(GreyVisuExample GreyVisuExample.cxx )
-#TARGET_LINK_LIBRARIES(GreyVisuExample OTBVisu OTBIO OTBCommon ITKIO ITKCommon)
-
 ADD_EXECUTABLE(VisuExample1 VisuExample1.cxx )
 TARGET_LINK_LIBRARIES(VisuExample1 OTBVisu OTBGui OTBIO OTBCommon ITKIO ITKCommon)
 

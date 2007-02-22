@@ -19,7 +19,7 @@
 //  Software Guide : BeginCommandLineArgs
 //    INPUTS: {ROI_QB_MUL_1.png} 
 //    OUTPUTS: {ROI_QB_MUL_SOM.png}, {ROI_QB_MUL_SOMACT.png}
-//    8 8 8 8 20 1.0 0.1 128
+//    4 4 4 4 20 1.0 0.1 128
 //  Software Guide : EndCommandLineArgs
 
 //  Software Guide : BeginLatex
@@ -29,8 +29,8 @@
 //
 // We will use the SOM in order to build a color table from an input
 // image. Our input image is coded with $3\times 8$ bits and we would
-// like to code it with only 64 levels. We will use the SOM in order
-// to learn which are the 64 most representative RGB values of the
+// like to code it with only 16 levels. We will use the SOM in order
+// to learn which are the 16 most representative RGB values of the
 // input image and we will assume that this is the optimal color table
 // for the image.
 //
@@ -129,7 +129,7 @@ int main(int argc, char* argv[])
 //
 //  Software Guide : BeginLatex
 // 
-// We can now define the type for the map. The \doxygen{otb}{SOMMap}
+// We can now define the type for the map. The \subdoxygen{otb}{SOMMap}
 // class is templated over the neuron type -- \code{PixelType} here
 // --, the distance type and the number of dimensions. Note that the
 // number of dimensions of the map could be different from the one of
@@ -310,7 +310,7 @@ int main(int argc, char* argv[])
     InterpolatorType::Pointer interpolator = InterpolatorType::New();
     ExpandType::Pointer expand = ExpandType::New();
     expand->SetInput(som->GetOutput());
-    expand->SetExpandFactors( 20 );
+    expand->SetExpandFactors( 40 );
     expand->SetInterpolator( interpolator );
     PixelType pix;
     pix[0]= 255;
