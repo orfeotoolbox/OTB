@@ -58,13 +58,13 @@ class ITK_EXPORT ImageViewerScrollWidget
   typedef typename Superclass::SizeType SizeType;
 
   typedef ImageViewer<PixelType> ParentType;
-  typedef ParentType* ParentPointerType;
+  typedef typename ParentType::Pointer ParentPointerType;
 
   typedef otb::ImageWidgetBoxForm BoxType;
   typedef BoxType::ColorType ColorType;
   
-  itkSetMacro(Parent,ParentPointerType);
-  itkGetMacro(Parent,ParentPointerType);
+  itkSetObjectMacro(Parent,ParentType);
+  itkGetObjectMacro(Parent,ParentType);
   /** Handle method */
   virtual int handle(int event)
     {
@@ -78,10 +78,10 @@ class ITK_EXPORT ImageViewerScrollWidget
 	    clickedIndex[0]=x;
 	    clickedIndex[1]=y;
 	    clickedIndex=this->WindowToImageCoordinates(clickedIndex);
-	    clickedIndex[0]=clickedIndex[0]*m_Parent->GetShrinkFactor();
-	    clickedIndex[1]=clickedIndex[1]*m_Parent->GetShrinkFactor();
-	    m_Parent->ChangeFullViewedRegion(clickedIndex);
-	    m_Parent->ChangeZoomViewedRegion(clickedIndex);
+	    clickedIndex[0]=clickedIndex[0]*GetParent()->GetShrinkFactor();
+	    clickedIndex[1]=clickedIndex[1]*GetParent()->GetShrinkFactor();
+	    GetParent()->ChangeFullViewedRegion(clickedIndex);
+	    GetParent()->ChangeZoomViewedRegion(clickedIndex);
 	    return 1;
 	  }
 	case FL_ENTER:
@@ -92,7 +92,7 @@ class ITK_EXPORT ImageViewerScrollWidget
 	case FL_LEAVE:
 	  {
 	  m_MouseIn = false;
-	  m_Parent->PrintPixLocVal("");
+	  GetParent()->PrintPixLocVal("");
 	  return 1;
 	  }
 	case FL_MOVE:
@@ -104,11 +104,11 @@ class ITK_EXPORT ImageViewerScrollWidget
 		m_MousePos[1]=Fl::event_y();
 		IndexType newIndex = this->WindowToImageCoordinates(m_MousePos);
 		IndexType realIndex;
-		realIndex[0]=newIndex[0]*m_Parent->GetShrinkFactor();
-		realIndex[1]=newIndex[1]*m_Parent->GetShrinkFactor();
+		realIndex[0]=newIndex[0]*GetParent()->GetShrinkFactor();
+		realIndex[1]=newIndex[1]*GetParent()->GetShrinkFactor();
 		std::stringstream oss;
 		oss<<" Location: "<<realIndex<<", Values:  "<<this->GetInput()->GetPixel(newIndex);
-		m_Parent->PrintPixLocVal(oss.str());
+		GetParent()->PrintPixLocVal(oss.str());
 		m_MouseMoveCount=0;
 	      }
 	  m_MouseMoveCount++;
@@ -116,7 +116,7 @@ class ITK_EXPORT ImageViewerScrollWidget
 	  }
 	case FL_HIDE:
 	  {
-	    m_Parent->Hide();
+	    GetParent()->Hide();
 	    return 1;
 	  }
 	}	

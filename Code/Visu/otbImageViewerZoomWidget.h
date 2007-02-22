@@ -57,10 +57,10 @@ class ITK_EXPORT ImageViewerZoomWidget
   typedef typename Superclass::SizeType SizeType;
 
   typedef ImageViewer<PixelType> ParentType;
-  typedef ParentType* ParentPointerType;
+  typedef typename ParentType::Pointer ParentPointerType;
  
-  itkSetMacro(Parent,ParentPointerType);
-  itkGetMacro(Parent,ParentPointerType);
+  itkSetObjectMacro(Parent,ParentType);
+  itkGetObjectMacro(Parent,ParentType);
   /** Handle method */
   virtual int  handle(int event)
     {
@@ -75,8 +75,8 @@ class ITK_EXPORT ImageViewerZoomWidget
 	case FL_LEAVE:
 	  {
 	    m_MouseIn = false;
-	    m_Parent->UpdateZoomWidget();
-	    m_Parent->PrintPixLocVal("");
+	    GetParent()->UpdateZoomWidget();
+	    GetParent()->PrintPixLocVal("");
 	    // otbMsgDebugMacro(<<"Mouse out");
 	    return 1;
 	  }
@@ -92,7 +92,7 @@ class ITK_EXPORT ImageViewerZoomWidget
 		  {
 		    std::stringstream oss;
 		    oss<<" Location: "<<newIndex<<", Values:  "<<this->GetInput()->GetPixel(newIndex);
-		    m_Parent->PrintPixLocVal(oss.str());
+		    GetParent()->PrintPixLocVal(oss.str());
 		    m_MouseMoveCount=0;
 		  }
 	      }
@@ -117,8 +117,8 @@ class ITK_EXPORT ImageViewerZoomWidget
 		    this->SetZoomFactor(1.0);
 		  }
 	      }
-	    m_Parent->UpdateFullWidget(); 
-	    m_Parent->UpdateZoomWidget();
+	    GetParent()->UpdateFullWidget(); 
+	    GetParent()->UpdateZoomWidget();
 	    return 1;
 	  }
 case FL_FOCUS:
@@ -158,7 +158,7 @@ case FL_FOCUS:
 		  break;
 		}
 	      }
-	    m_Parent->ChangeZoomViewedRegion(newIndex);
+	    GetParent()->ChangeZoomViewedRegion(newIndex);
 	    return 1;
 	  }
 	  
@@ -170,8 +170,8 @@ case FL_FOCUS:
   virtual void resize(int x,int y, int w, int h) 
      { 
        Superclass::resize(x,y,w,h); 
-       if(m_Parent->GetBuilt()) 
-	 m_Parent->UpdateFullWidget(); 
+       if(GetParent()->GetBuilt()) 
+	 GetParent()->UpdateFullWidget(); 
      } 
 
 
