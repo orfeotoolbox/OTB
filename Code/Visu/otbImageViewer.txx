@@ -64,7 +64,10 @@ namespace otb
   ::~ImageViewer()
   {
 
-	Hide();
+	if( m_Built == true) 
+	{
+		Hide();
+	}
 
     if (m_FullWindow!=NULL)
     {
