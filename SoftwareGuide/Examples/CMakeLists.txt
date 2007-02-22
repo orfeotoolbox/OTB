@@ -242,7 +242,8 @@ SET( OTB_EXAMPLES_SRCS
   ${OTB_SOURCE_DIR}/Examples/Learning/SVMImageModelEstimatorExample.cxx
   ${OTB_SOURCE_DIR}/Examples/Learning/SVMImageClassificationExample.cxx
   ${OTB_SOURCE_DIR}/Examples/Learning/SVMImageEstimatorClassificationMultiExample.cxx
-  ${OTB_SOURCE_DIR}/Examples/Learning/SOMExample.cxx  
+  ${OTB_SOURCE_DIR}/Examples/Learning/SOMExample.cxx
+  ${OTB_SOURCE_DIR}/Examples/Learning/SOMClassifierExample.cxx    
   ${OTB_SOURCE_DIR}/Examples/Visu/VisuExample1.cxx
   ${OTB_SOURCE_DIR}/Examples/Iterators/ImageLinearIteratorWithIndex.cxx
   ${OTB_SOURCE_DIR}/Examples/Iterators/NeighborhoodIterators2.cxx
