@@ -54,7 +54,7 @@ ADD_TEST(viTvZoomableImageWidget ${VISU_TESTS}
 
 # -------   otb::ImageViewer  -----------------------------------
 
-ADD_TEST(viTuImageViewer ${VISU_TESTS} 
+ADD_TEST(viTuImageViewerNew ${VISU_TESTS} 
         otbImageViewerNew
         )
 
