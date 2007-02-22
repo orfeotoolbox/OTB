@@ -57,13 +57,15 @@ void
 FixedSizeFullImageWidget<TPixel>
 ::Init(int x, int y, int w, int h, const char * l)
 {
+  m_ImageLoaded=false;
+  m_ImageOverlayLoaded=false;
   if(!this->GetInput())
     {
       itkExceptionMacro("No input image!");
     }
   else
     {
-      this->GetInput()->Update();
+      // this->GetInput()->Update();
       this->SetViewedRegion(this->GetInput()->GetLargestPossibleRegion());
       this->label(l);
       this->resize(x, y, w, h);
@@ -139,6 +141,12 @@ bool
 FixedSizeFullImageWidget<TPixel>
 ::UpdateOpenGlImageOverlayBufferedRegionRequested(void)
 {
+  if(this->GetImageOverlayBufferedRegion().GetSize()[0]==0
+     ||this->GetImageOverlayBufferedRegion().GetSize()[1]==0)
+    {
+      m_ImageOverlayLoaded=false;
+    }
+
 if(m_ImageOverlayLoaded)
     {
       

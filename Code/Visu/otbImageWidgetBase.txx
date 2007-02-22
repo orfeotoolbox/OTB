@@ -314,7 +314,7 @@ ImageWidgetBase<TPixel>
     {
       UpdateOpenGlImageOverlayBufferedRegion();
       m_ImageOverlay->SetRequestedRegion(m_BufferedRegion);
-      m_ImageOverlay->Update();
+      m_ImageOverlay->UpdateOutputData();
       RebuildOpenGlImageOverlayBuffer();
     }
 
