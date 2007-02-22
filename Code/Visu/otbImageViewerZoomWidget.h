@@ -57,10 +57,10 @@ class ITK_EXPORT ImageViewerZoomWidget
   typedef typename Superclass::SizeType SizeType;
 
   typedef ImageViewer<PixelType> ParentType;
-  typedef typename ParentType::Pointer ParentPointerType;
+  typedef ParentType* ParentPointerType;
  
-  itkSetObjectMacro(Parent,ParentType);
-  itkGetObjectMacro(Parent,ParentType);
+  itkSetMacro(Parent,ParentPointerType);
+  itkGetMacro(Parent,ParentPointerType);
   /** Handle method */
   virtual int  handle(int event)
     {
@@ -75,8 +75,8 @@ class ITK_EXPORT ImageViewerZoomWidget
 	case FL_LEAVE:
 	  {
 	    m_MouseIn = false;
-	    GetParent()->UpdateZoomWidget();
-	    GetParent()->PrintPixLocVal("");
+	    m_Parent->UpdateZoomWidget();
+	    m_Parent->PrintPixLocVal("");
 	    // otbMsgDebugMacro(<<"Mouse out");
 	    return 1;
 	  }
@@ -92,7 +92,7 @@ class ITK_EXPORT ImageViewerZoomWidget
 		  {
 		    std::stringstream oss;
 		    oss<<" Location: "<<newIndex<<", Values:  "<<this->GetInput()->GetPixel(newIndex);
-		    GetParent()->PrintPixLocVal(oss.str());
+		    m_Parent->PrintPixLocVal(oss.str());
 		    m_MouseMoveCount=0;
 		  }
 	      }
@@ -117,8 +117,8 @@ class ITK_EXPORT ImageViewerZoomWidget
 		    this->SetZoomFactor(1.0);
 		  }
 	      }
-	    GetParent()->UpdateFullWidget(); 
-	    GetParent()->UpdateZoomWidget();
+	    m_Parent->UpdateFullWidget(); 
+	    m_Parent->UpdateZoomWidget();
 	    return 1;
 	  }
 case FL_FOCUS:
@@ -158,7 +158,7 @@ case FL_FOCUS:
 		  break;
 		}
 	      }
-	    GetParent()->ChangeZoomViewedRegion(newIndex);
+	    m_Parent->ChangeZoomViewedRegion(newIndex);
 	    return 1;
 	  }
 	  
@@ -170,8 +170,8 @@ case FL_FOCUS:
   virtual void resize(int x,int y, int w, int h) 
      { 
        Superclass::resize(x,y,w,h); 
-       if(GetParent()->GetBuilt()) 
-	 GetParent()->UpdateFullWidget(); 
+       if(m_Parent->GetBuilt()) 
+	 m_Parent->UpdateFullWidget(); 
      } 
 
 
@@ -191,7 +191,10 @@ case FL_FOCUS:
   /**
    * Destructor.
    */
-  ~ImageViewerZoomWidget(){};
+  ~ImageViewerZoomWidget()
+  {
+  		m_Parent = NULL;
+  }
 
  private:
   ParentPointerType m_Parent;

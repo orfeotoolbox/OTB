@@ -63,16 +63,42 @@ namespace otb
   ImageViewer<TPixel>
   ::~ImageViewer()
   {
+
+	Hide();
+
     if (m_FullWindow!=NULL)
-      delete m_FullWindow;
+    {
+    	m_FullWindow->remove(m_FullWidget);
+      	delete m_FullWindow;
+      	m_FullWindow = NULL;
+    }
+    m_ZoomWidget = NULL;
     if(m_ZoomWindow!=NULL)
-      delete m_ZoomWindow;
+    {
+    	m_ZoomWindow->remove(m_ZoomWidget);
+      	delete m_ZoomWindow;
+      	m_ZoomWindow = NULL;
+    }
+    
     if(m_ScrollWindow!=NULL)
-      delete m_ScrollWindow;
+    {
+		m_ScrollWindow->remove(m_ScrollWidget);
+      	delete m_ScrollWindow;
+      	m_ScrollWindow = NULL;
+    }
+
     if(m_PixLocWindow!=NULL)
+    {
+      m_PixLocWindow->remove(m_PixLocOutput);
       delete m_PixLocWindow;
+      m_PixLocWindow = NULL;
+    }
     if(m_PixLocOutput!=NULL)
+    {
       delete m_PixLocOutput;
+      m_PixLocOutput = NULL;
+    }
+
   }
 
   /// Compute the normalization factor
@@ -414,6 +440,7 @@ namespace otb
     m_PixLocWindow->hide();
     m_PixLocOutput->hide();
     Fl::check();
+
   } 
 
   /// Update the display

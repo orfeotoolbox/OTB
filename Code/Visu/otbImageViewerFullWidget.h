@@ -55,10 +55,10 @@ class ITK_EXPORT ImageViewerFullWidget
   typedef typename Superclass::ImageType ImageType;
 
   typedef ImageViewer<PixelType> ParentType;
-  typedef typename ParentType::Pointer ParentPointerType;
+  typedef ParentType* ParentPointerType;
   
-  itkSetObjectMacro(Parent,ParentType);
-  itkGetObjectMacro(Parent,ParentType);
+  itkSetMacro(Parent,ParentPointerType);
+  itkGetMacro(Parent,ParentPointerType);
   /** Handle method */
   virtual int  handle(int event)
     {
@@ -72,7 +72,7 @@ class ITK_EXPORT ImageViewerFullWidget
 	    clickedIndex[0]=x;
 	    clickedIndex[1]=y;
 	    clickedIndex=this->WindowToImageCoordinates(clickedIndex);
-	  GetParent()->ChangeZoomViewedRegion(clickedIndex);
+	  m_Parent->ChangeZoomViewedRegion(clickedIndex);
 	  return 1;
 	  }
 	case FL_ENTER:
@@ -83,7 +83,7 @@ class ITK_EXPORT ImageViewerFullWidget
 	case FL_LEAVE:
 	  {
 	    m_MouseIn = false;
-	    GetParent()->PrintPixLocVal("");
+	    m_Parent->PrintPixLocVal("");
 	    return 1;
 	}
 	case FL_MOVE:
@@ -99,7 +99,7 @@ class ITK_EXPORT ImageViewerFullWidget
 		    std::stringstream oss;
 		    typename ImageType::PixelType newPixel = this->GetInput()->GetPixel(newIndex);
 		    oss<<" Location: "<<newIndex<<", Values:  "<<newPixel;
-		    GetParent()->PrintPixLocVal(oss.str());
+		    m_Parent->PrintPixLocVal(oss.str());
 		    m_MouseMoveCount=0;
 		  }
 	      }
@@ -143,14 +143,14 @@ class ITK_EXPORT ImageViewerFullWidget
 		  break;
 		}
 	      }
-	    GetParent()->ChangeFullViewedRegion(newIndex);
-	    GetParent()->ChangeZoomViewedRegion(newIndex);
+	    m_Parent->ChangeFullViewedRegion(newIndex);
+	    m_Parent->ChangeZoomViewedRegion(newIndex);
 	    return 1;
 	  }
 	case FL_HIDE:
 	  {
-	    GetParent()->Hide();
-	    return 1;
+	    m_Parent->Hide();
+	    return 0;
 	  }
 	}	 
   return 0; 
@@ -159,8 +159,8 @@ class ITK_EXPORT ImageViewerFullWidget
   virtual void resize(int x,int y, int w, int h)
     {
       Superclass::resize(x,y,w,h);
-      if(GetParent()->GetBuilt()) 
-	GetParent()->UpdateScrollWidget();
+      if(m_Parent->GetBuilt()) 
+	m_Parent->UpdateScrollWidget();
     }
 
  protected:
@@ -177,7 +177,10 @@ class ITK_EXPORT ImageViewerFullWidget
   /**
    * Destructor.
    */
-  ~ImageViewerFullWidget(){};
+  ~ImageViewerFullWidget()
+  {
+  		m_Parent = NULL;
+  }
 
  private:
   ParentPointerType m_Parent;
