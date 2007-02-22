@@ -63,19 +63,12 @@ namespace otb
   ImageViewer<TPixel>
   ::~ImageViewer()
   {
-
-	if( m_Built == true) 
-	{
-		Hide();
-	}
-
     if (m_FullWindow!=NULL)
     {
     	m_FullWindow->remove(m_FullWidget);
       	delete m_FullWindow;
       	m_FullWindow = NULL;
     }
-    m_ZoomWidget = NULL;
     if(m_ZoomWindow!=NULL)
     {
     	m_ZoomWindow->remove(m_ZoomWidget);
