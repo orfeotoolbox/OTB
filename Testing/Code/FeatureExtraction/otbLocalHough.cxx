@@ -63,7 +63,6 @@ int otbLocalHough( int argc, char* argv[] )
         
   	typedef otb::LineSpatialObjectList			LinesListType;
   	LinesListType::Pointer list = LinesListType::New();
-  	
   	        
 	filter->SetRadius( Radius );
 	filter->SetNumberOfLines( NumberOfLines );
@@ -73,10 +72,7 @@ int otbLocalHough( int argc, char* argv[] )
         
         list = filter->GetOutput();
         
-        LinesListType::const_iterator it;
         std::cout<<list->size()<<std::endl;
-/*        for (it=list.begin(); it!=list.end(); it++)
-           std::cout<< (*it) <<std::endl;*/
        
     } 
   catch( itk::ExceptionObject & err ) 
