@@ -35,6 +35,7 @@ REGISTER_TEST(otbMSTARImageIOTestCanRead);
 REGISTER_TEST(otbImageFileReaderMSTAR);
 REGISTER_TEST(otbImageFileReaderTest);
 REGISTER_TEST(otbImageFileWriterTest);
+REGISTER_TEST(otbImageMetadataFileWriterTest);
 REGISTER_TEST(otbVectorImageFileReaderWriterTest);
 REGISTER_TEST(otbImageFileReaderRGBTest);
 REGISTER_TEST(otbImageFileWriterRGBTest);

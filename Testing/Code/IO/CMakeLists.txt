@@ -389,13 +389,17 @@ ADD_TEST(ioTuGDALImageIOCanRead_SPOT4 ${IO_TESTS} otbGDALImageIOTestCanRead
 ADD_TEST(ioTuGDALImageIOCanRead_SPOT5TIF ${IO_TESTS} otbGDALImageIOTestCanRead
         ${INPUTDATA}/poupeesTIF/ )
 
+ADD_TEST(ioTuGDALImageIOCanRead_HFA ${IO_TESTS} otbGDALImageIOTestCanRead
+	${INPUTDATA}/HFAGeoreferenced.img)
+
         
 # WRITER
 
 ADD_TEST(ioTuGDALImageIOCanWrite_TIFF ${IO_TESTS} otbGDALImageIOTestCanWrite
 	${INPUTDATA}/testGDALWriter.tif)
-    
-	
+ADD_TEST(ioTuGDALImageIOCanWrite_HFA ${IO_TESTS} otbGDALImageIOTestCanWrite
+	${INPUTDATA}/HFAGeoreferenced.img)
+
 # CanWrite()
 # ADD_TEST(ioTuCAIImageIOCanWriteBSQ ${IO_TESTS} otbCAIImageIOTestCanWrite 
 #        ${TEMP}/ioCAIImageIOCanWriteBSQ.hd )
@@ -882,6 +886,17 @@ ADD_TEST(ioTvStreamingIFWriterWithFilter ${IO_TESTS}
          )
 
 
+#---------- Metadata writing tests ------------------------
+
+#ADD_TEST(ioTvImageMetadataWriterTest_HFA ${IO_TESTS} 
+#   --compare-ascii ${TOL}   ${BASELINE}/ioTvImageMetadataWriterTest_HFA_out.txt
+#                            ${TEMP}/ioTvImageMetadataWriterTest_HFA_out.txt
+#         otbImageMetadataFileWriterTest
+#         ${INPUTDATA}/HFAGeoreferenced.img
+#	 ${TEMP}/temp.img
+#        ${TEMP}/ioTvImageMetadataWriterTest_HFA_out.txt
+#        )
+// TO BE FIXED
 
 #----------------------------------------------------------------------------------
 # Exemples de tests sur les grosses images
@@ -943,6 +958,7 @@ otbShortImageIOTest.cxx
 otbShortRGBImageIOTest.cxx
 otbIntImageIOTest.cxx
 otbDoubleImageIOTest.cxx
+otbImageMetadataFileWriterTest.cxx
 )
 
 INCLUDE_DIRECTORIES("${OTBTesting_BINARY_DIR}")
