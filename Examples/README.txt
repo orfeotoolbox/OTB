@@ -44,6 +44,8 @@ found in them.
    * ChangeDetection - detecting changes between pairs of images.
 
    * Learning - Support Vector Machine examples.
+   
+   * MultiScale - Multiscale examples.
 
    * Classification - simple examples of image classification.
 
