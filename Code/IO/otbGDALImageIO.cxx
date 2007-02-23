@@ -1088,6 +1088,8 @@ std::string GDALImageIO::TypeConversion(std::string name)
 			extGDAL="GTiff";
 	else if ((extension=="hdr")||(extension=="HDR"))
 			extGDAL="ENVI";
+	else if ((extension=="img")||(extension=="IMG"))
+	  extGDAL="HFA";
 //Pas PNG car BUG !!
 //	else if ((extension=="png")||(extension=="PNG"))
 //			extGDAL="PNG";
