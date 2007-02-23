@@ -86,7 +86,8 @@ OTB_GCP & ImageBase::GetGCPs(MetaDataDictionaryType & dict, unsigned int GCPnum 
   
   if(dict.HasKey(key))
      {
-     itk::ExposeMetaData<OTB_GCP>(dict, key, m_GCP);
+       
+     itk::ExposeMetaData<OTB_GCP>(dict, key,m_GCP);
      }
   return ( m_GCP );	
 	
@@ -102,8 +103,9 @@ std::string ImageBase::GetGCPId(MetaDataDictionaryType & dict, unsigned int GCPn
   
   if(dict.HasKey(key))
      {
-     itk::ExposeMetaData<OTB_GCP>(dict, key, m_GCP);
-     return ( m_GCP.m_Id );
+       OTB_GCP gcp;
+       itk::ExposeMetaData<OTB_GCP>(dict, key, gcp);
+       return ( gcp.m_Id );
      }
   else
      return ("");
@@ -119,8 +121,9 @@ std::string ImageBase::GetGCPInfo(MetaDataDictionaryType & dict, unsigned int GC
   
   if(dict.HasKey(key))
      {
-     itk::ExposeMetaData<OTB_GCP>(dict, key, m_GCP);
-     return ( m_GCP.m_Info );
+       OTB_GCP gcp;
+     itk::ExposeMetaData<OTB_GCP>(dict, key, gcp);
+     return ( gcp.m_Info );
      }
   else
      return ("");
@@ -137,8 +140,9 @@ double ImageBase::GetGCPRow(MetaDataDictionaryType & dict, unsigned int GCPnum )
 
   if(dict.HasKey(key))
      {
-     itk::ExposeMetaData<OTB_GCP>(dict, key, m_GCP);
-     return ( m_GCP.m_GCPRow );
+       OTB_GCP gcp;
+     itk::ExposeMetaData<OTB_GCP>(dict, key, gcp);
+     return ( gcp.m_GCPRow );
      }
   else
      return (0);
@@ -155,8 +159,9 @@ double ImageBase::GetGCPCol(MetaDataDictionaryType & dict, unsigned int GCPnum )
 
   if(dict.HasKey(key))
      {
-     itk::ExposeMetaData<OTB_GCP>(dict, key, m_GCP);
-     return ( m_GCP.m_GCPCol );
+       OTB_GCP gcp;
+     itk::ExposeMetaData<OTB_GCP>(dict, key, gcp);
+     return ( gcp.m_GCPCol );
      }
   else
      return (0);
@@ -172,8 +177,9 @@ double ImageBase::GetGCPX(MetaDataDictionaryType & dict, unsigned int GCPnum )
       
   if(dict.HasKey(key))
      {
-     itk::ExposeMetaData<OTB_GCP>(dict, key, m_GCP);
-     return ( m_GCP.m_GCPX );
+       OTB_GCP gcp;
+     itk::ExposeMetaData<OTB_GCP>(dict, key, gcp);
+     return ( gcp.m_GCPX );
      }
   else
      return (0);
@@ -189,8 +195,9 @@ double ImageBase::GetGCPY(MetaDataDictionaryType & dict, unsigned int GCPnum )
   
   if(dict.HasKey(key))
      {
-     itk::ExposeMetaData<OTB_GCP>(dict, key, m_GCP);
-     return ( m_GCP.m_GCPY );
+       OTB_GCP gcp;
+     itk::ExposeMetaData<OTB_GCP>(dict, key, gcp);
+     return ( gcp.m_GCPY );
      }
   else
      return (0);
@@ -206,8 +213,9 @@ double ImageBase::GetGCPZ(MetaDataDictionaryType & dict, unsigned int GCPnum )
      
   if(dict.HasKey(key))
      {
-     itk::ExposeMetaData<OTB_GCP>(dict, key, m_GCP);
-     return ( m_GCP.m_GCPZ );
+       OTB_GCP gcp;
+     itk::ExposeMetaData<OTB_GCP>(dict, key, gcp);
+     return ( gcp.m_GCPZ );
      }
   else
      return (0);

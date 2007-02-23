@@ -34,6 +34,7 @@
 #include "otbGDALImageIO.h"
 #include "otbMacro.h"
 #include "otbSystem.h"
+#include "otbImageBase.h"
 
 #include "itkMetaDataObject.h"
 #include "itkPNGImageIO.h"
@@ -498,7 +499,7 @@ void GDALImageIO::InternalReadImageInformation()
       
     char** papszMetadata;
     papszMetadata =  m_poDataset->GetMetadata( NULL );
-    
+        
     const char *pszValue;
     
     pszValue = CSLFetchNameValue( papszMetadata, "CEOS_LINE_SPACING_METERS" );
@@ -962,13 +963,117 @@ void GDALImageIO::InternalWriteImageInformation()
 	        m_poBands[i] = m_poDataset->GetRasterBand(i+1);
         }
 
-otbMsgDebugMacro( <<"Driver to write: GDAL - "<<extGDAL);
-otbMsgDebugMacro( <<"         Write file         : "<< m_FileName);
-otbMsgDebugMacro( <<"         GDAL file name     : "<< realFileName);
-otbMsgDebugMacro( <<"         Size               : "<<m_Dimensions[0]<<","<<m_Dimensions[1]);
-otbMsgDebugMacro( <<"         ComponentType      : "<<this->GetComponentType() );
-otbMsgDebugMacro( <<"         NumberOfComponents : "<<this->GetNumberOfComponents());
+	otbMsgDebugMacro( <<"Driver to write: GDAL - "<<extGDAL);
+	otbMsgDebugMacro( <<"         Write file         : "<< m_FileName);
+	otbMsgDebugMacro( <<"         GDAL file name     : "<< realFileName);
+	otbMsgDebugMacro( <<"         Size               : "<<m_Dimensions[0]<<","<<m_Dimensions[1]);
+	otbMsgDebugMacro( <<"         ComponentType      : "<<this->GetComponentType() );
+	otbMsgDebugMacro( <<"         NumberOfComponents : "<<this->GetNumberOfComponents());
+	
+	
+	// JULIEN: ADDING SUPPORT FOR METADATA WRITING.
+	
 
+	/*----------------------------------------------------------------------*/
+	/*-------------------------- METADATA ----------------------------------*/
+	/*----------------------------------------------------------------------*/
+ 
+	// Now initialize the itk dictionary
+	itk::MetaDataDictionary & dico = this->GetMetaDataDictionary();
+      
+    
+	/* -------------------------------------------------------------------- */
+	/*  Set Spacing								*/
+	/* -------------------------------------------------------------------- */    
+      
+	char** papszMetadata;
+	papszMetadata =  m_poDataset->GetMetadata( NULL );
+ 	itk::OStringStream oss;
+	oss.str("");
+	oss<<m_Spacing[0];
+	CSLSetNameValue( papszMetadata, "CEOS_LINE_SPACING_METERS",oss.str().c_str());
+	oss.str("");
+	oss<<m_Spacing[1];
+	CSLSetNameValue( papszMetadata, "CEOS_PIXEL_SPACING_METERS",oss.str().c_str());
+	oss.str("");            	 
+
+/* -------------------------------------------------------------------- */    
+/* Set the projection coordinate system of the image : ProjectionRef	*/
+/* -------------------------------------------------------------------- */
+    
+	if(ImageBase::GetProjectionRef(dico)!="")
+	  {
+	    m_poDataset->SetProjection(ImageBase::GetProjectionRef(dico).c_str());
+	  }
+
+/* -------------------------------------------------------------------- */    
+/* Set the GCPs	                                                        */
+/* -------------------------------------------------------------------- */
+        
+ 
+	if(ImageBase::GetGCPCount(dico)>0)
+	  {
+	    unsigned int gcpCount = ImageBase::GetGCPCount(dico);
+	    GDAL_GCP * gdalGcps = new GDAL_GCP[gcpCount];
+	    
+	    for(unsigned int gcpIndex = 0; gcpIndex < gcpCount;++gcpIndex)
+	      {
+		gdalGcps[gcpIndex].pszId = const_cast<char *>(ImageBase::GetGCPId(dico,gcpIndex).c_str());
+		gdalGcps[gcpIndex].pszInfo = const_cast<char *>(ImageBase::GetGCPInfo(dico,gcpIndex).c_str());
+		gdalGcps[gcpIndex].dfGCPPixel = ImageBase::GetGCPCol(dico,gcpIndex);
+		gdalGcps[gcpIndex].dfGCPLine = ImageBase::GetGCPRow(dico,gcpIndex);
+		gdalGcps[gcpIndex].dfGCPX = ImageBase::GetGCPX(dico,gcpIndex);
+		gdalGcps[gcpIndex].dfGCPY = ImageBase::GetGCPY(dico,gcpIndex);
+		gdalGcps[gcpIndex].dfGCPZ = ImageBase::GetGCPZ(dico,gcpIndex);
+	      }
+	    
+
+	    m_poDataset->SetGCPs(gcpCount,gdalGcps,ImageBase::GetGCPProjection(dico).c_str());
+	    delete [] gdalGcps;
+	  }
+
+/* -------------------------------------------------------------------- */    
+/*  Set the six coefficients of affine geoTtransform			*/
+/* -------------------------------------------------------------------- */
+
+  
+	if(!ImageBase::GetGeoTransform(dico).empty())
+	  {
+	    double * geoTransform = new double[6];
+	    std::vector<double> transformVector = ImageBase::GetGeoTransform(dico);
+
+	    for(unsigned int i=0; i<6;++i)
+	      {
+		geoTransform[i]=transformVector[i];
+	      }
+
+	    m_poDataset->SetGeoTransform(geoTransform);
+	    delete [] geoTransform;
+	  }
+
+/* -------------------------------------------------------------------- */
+/*      Report metadata.                                                */
+/* -------------------------------------------------------------------- */
+
+	std::string svalue="";
+	std::vector<std::string> keys = dico.GetKeys();
+	MetaDataKey key;
+	
+	for (unsigned int itkey=0; itkey<keys.size(); itkey++)
+	  {
+	     if(keys[itkey].compare(0,key.m_MetadataKey.length(),key.m_MetadataKey)==0)
+	       {
+		 itk::ExposeMetaData<std::string>(dico,keys[itkey],svalue);
+		 unsigned int equalityPos = svalue.find_first_of('=');
+		 std::string tag = svalue.substr(0,equalityPos);
+		 std::string value = svalue.substr(equalityPos+1);
+		 otbMsgDevMacro(<<"Metadata: "<<tag<<"="<<value);
+		 m_poDataset->SetMetadataItem(tag.c_str(),value.c_str(),NULL);
+	       }
+	  }
+
+	// END 
+	
 }	
 
 std::string GDALImageIO::TypeConversion(std::string name)

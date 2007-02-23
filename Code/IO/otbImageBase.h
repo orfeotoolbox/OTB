@@ -48,58 +48,58 @@ public:
   
   /** Get the projection coordinate system of the image. */
   
-  std::string GetProjectionRef( MetaDataDictionaryType & dict );
+  static std::string GetProjectionRef( MetaDataDictionaryType & dict );
   virtual std::string GetProjectionRef( void ) = 0;
   
   /** Get the GCP projection coordinates of the image. */
   
-  std::string GetGCPProjection( MetaDataDictionaryType & dict );
+  static std::string GetGCPProjection( MetaDataDictionaryType & dict );
   virtual std::string GetGCPProjection( void ) = 0;
 
-  unsigned int GetGCPCount( MetaDataDictionaryType & dict );
+  static unsigned int GetGCPCount( MetaDataDictionaryType & dict );
   virtual unsigned int GetGCPCount( void ) = 0;
 
   OTB_GCP & GetGCPs(MetaDataDictionaryType & dict, unsigned int GCPnum );
   virtual OTB_GCP & GetGCPs( unsigned int GCPnum ) = 0;
     
-  std::string GetGCPId( MetaDataDictionaryType & dict, unsigned int GCPnum );
+  static std::string GetGCPId( MetaDataDictionaryType & dict, unsigned int GCPnum );
   virtual std::string GetGCPId( unsigned int GCPnum ) = 0;
   
-  std::string GetGCPInfo( MetaDataDictionaryType & dict, unsigned int GCPnum );
+  static std::string GetGCPInfo( MetaDataDictionaryType & dict, unsigned int GCPnum );
   virtual std::string GetGCPInfo( unsigned int GCPnum ) = 0;
   
-  double GetGCPRow( MetaDataDictionaryType & dict, unsigned int GCPnum );
+  static double GetGCPRow( MetaDataDictionaryType & dict, unsigned int GCPnum );
   virtual double GetGCPRow( unsigned int GCPnum ) = 0;
   
-  double GetGCPCol( MetaDataDictionaryType & dict, unsigned int GCPnum );
+  static double GetGCPCol( MetaDataDictionaryType & dict, unsigned int GCPnum );
   virtual double GetGCPCol( unsigned int GCPnum ) = 0;
   
-  double GetGCPX( MetaDataDictionaryType & dict, unsigned int GCPnum );
+  static double GetGCPX( MetaDataDictionaryType & dict, unsigned int GCPnum );
   virtual double GetGCPX( unsigned int GCPnum ) = 0;
   
-  double GetGCPY( MetaDataDictionaryType & dict, unsigned int GCPnum );
+  static double GetGCPY( MetaDataDictionaryType & dict, unsigned int GCPnum );
   virtual double GetGCPY( unsigned int GCPnum ) = 0;
   
-  double GetGCPZ( MetaDataDictionaryType & dict, unsigned int GCPnum );
+  static double GetGCPZ( MetaDataDictionaryType & dict, unsigned int GCPnum );
   virtual double GetGCPZ( unsigned int GCPnum ) = 0;
   
   /** Get the six coefficients of affine geoTtransform. */
    
-  VectorType GetGeoTransform( MetaDataDictionaryType & dict );
+  static VectorType GetGeoTransform( MetaDataDictionaryType & dict );
   virtual VectorType GetGeoTransform( void ) = 0;
  
   /** Get image corners. */  
   
-  VectorType GetUpperLeftCorner( MetaDataDictionaryType & dict );
+  static VectorType GetUpperLeftCorner( MetaDataDictionaryType & dict );
   virtual VectorType GetUpperLeftCorner() = 0; 
   
-  VectorType GetUpperRightCorner( MetaDataDictionaryType & dict );
+  static VectorType GetUpperRightCorner( MetaDataDictionaryType & dict );
   virtual VectorType GetUpperRightCorner() = 0;      
   
-  VectorType GetLowerLeftCorner( MetaDataDictionaryType & dict );
+  static VectorType GetLowerLeftCorner( MetaDataDictionaryType & dict );
   virtual VectorType GetLowerLeftCorner() = 0; 
   
-  VectorType GetLowerRightCorner( MetaDataDictionaryType & dict );
+  static VectorType GetLowerRightCorner( MetaDataDictionaryType & dict );
   virtual VectorType GetLowerRightCorner() = 0; 
   
   void PrintSelf(std::ostream& os, itk::Indent indent, const MetaDataDictionaryType & dict) const;
