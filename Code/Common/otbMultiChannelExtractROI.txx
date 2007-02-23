@@ -138,7 +138,7 @@ MultiChannelExtractROI<TInputPixelType,TOutputPixelType>
         typename Superclass::InputImageConstPointer  inputPtr = this->GetInput();
         typename Superclass::OutputImagePointer outputPtr = this->GetOutput();
 
-        // initialise le nombre de canaux de l'image output (lié aux "channel" sélectionnés)
+        // initialise le nombre de canaux de l'image output (liï¿½ aux "channel" sï¿½lectionnï¿½s)
         if( m_ChannelsWorksBool == false )
         {
                 outputPtr->SetVectorLength(inputPtr->GetVectorLength() );
@@ -146,10 +146,42 @@ MultiChannelExtractROI<TInputPixelType,TOutputPixelType>
         else
         {
                 outputPtr->SetVectorLength( m_ChannelsWorks.size() );
+        		//Control validity channel value
+        		ChannelsType  m_BadChannels;
+        		m_BadChannels.clear();
+        		for(unsigned int i=0 ; i < m_ChannelsWorks.size() ; i++)
+        		{
+        			if( ( m_ChannelsWorks[i] < 1 )||(m_ChannelsWorks[i] > inputPtr->GetVectorLength()) )
+        			{
+        				m_BadChannels.push_back(m_ChannelsWorks[i]);
+        			}
+        		}
+        		if( m_BadChannels.empty() == false )
+        		{
+        			itk::OStringStream oss;
+        			oss << "otb::ExtractImageFilter::GenerateOutputInformation : ";
+        			if( m_BadChannels.size() == 1 )
+        			{
+        				oss << m_BadChannels[0];
+        				oss << "The channel " << m_BadChannels[0] << " is not authorized.";
+        			}
+        			else
+        			{
+        				oss <<  "The channels [ ";
+        				for(unsigned int i=0 ; i < m_BadChannels.size() ; i++)
+        				{
+        					oss << m_BadChannels[i] << " ";
+        				}
+        				oss << "] are not authorized.";
+        			}
+        			oss << " Values must be in [1," << inputPtr->GetVectorLength() << "].";
+ 			     	itkExceptionMacro(<< oss.str().c_str());
+ 			     }
         }
+        
 	outputPtr->SetNumberOfComponentsPerPixel( outputPtr->GetVectorLength() );
 
-        // Appel à la methode de la classe de base
+        // Appel ï¿½ la methode de la classe de base
         Superclass::GenerateOutputInformation();
 
 }
