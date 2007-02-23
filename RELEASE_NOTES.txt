@@ -1,3 +1,22 @@
+OTB-v.1.2.0 - Changes since version 1.0.2
+-----------------------------------------
+
+
+
+- OTB can now been compiled on several new platforms :
+       - SunOS 5.8 (32bits and 64bits).
+
+- Improved robustness of 
+       - the Microsoft Visual Studio .NET 2003 (7.1), .NET 2005 (8.0) 
+       - the Cygwin and MinGW 
+  installation.
+  
+
+- Minor changes needed for the portability of OTB-Applications.
+
+- Bugfixes related to the IO framework on MS Windows platforms.
+
+
 OTB-v.1.0.2 - Changes since version 1.0.1
 -----------------------------------------
 
