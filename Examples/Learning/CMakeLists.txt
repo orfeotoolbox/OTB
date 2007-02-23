@@ -97,6 +97,35 @@ ADD_TEST(SVMImageModelEstimatorExampleTest ${EXE_TESTS}
 )
 
 
+# ------- SOMExampleTest----------
+
+ADD_TEST(SOMExampleTest ${EXE_TESTS}
+	--compare-n-images ${TOL} 2
+	${BASELINE}/ROI_QB_MUL_SOM.png
+	${TEMP}/ROI_QB_MUL_SOM.png
+	${BASELINE}/ROI_QB_MUL_SOMACT.png
+	${TEMP}/ROI_QB_MUL_SOMACT.png
+	SOMExampleTest
+	${INPUTDATA}/ROI_QB_MUL_1.png
+	${TEMP}/ROI_QB_MUL_SOM.png
+	${TEMP}/ROI_QB_MUL_SOMACT.png
+	4 4 4 4 20 1.0 0.1 128
+)
+
+# ------- SOMClassifierExampleTest----------
+
+ADD_TEST(SOMClassifierExampleTest ${EXE_TESTS}
+	--compare-image ${TOL} 
+	${BASELINE}/ROI_QB_MUL_SOMACT.png
+	${TEMP}/ROI_QB_MUL_SOMCLASS.png
+	SOMClassifierExampleTest
+	${INPUTDATA}/ROI_QB_MUL_1.png
+	${INPUTDATA}/ROI_QB_MUL_SOM.png
+	${TEMP}/ROI_QB_MUL_SOMCLASS.png
+)
+
+
+
 INCLUDE_DIRECTORIES("${OTBTesting_BINARY_DIR}")
 
 ADD_EXECUTABLE(otbLearningExamplesTests otbLearningExamplesTests.cxx)
