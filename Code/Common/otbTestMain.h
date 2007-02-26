@@ -335,14 +335,33 @@ bool isNumeric(std::string str)
 
 bool isHexaPointerAddress(std::string str)
 {
-  unsigned int size = str.size();
-  bool result=((str[0]==40)
-	       &&(str[size-1]==41)
-	       &&(str[1]==48)
-	       &&(str[2]==120)
-	       &&(size==11));
-  unsigned int i=3;
-  while(result&&(i<size-1))
+  unsigned int size(0);
+  bool result(false);
+  unsigned int start;
+  //If (0xadresss)
+  if(	(str[0]==40) &&
+  		(str[str.size()-1]==41) &&
+  		(str[1]==48) &&
+  		(str[2]==120) &&
+  		(str.size()==11))
+  {
+  		result = true;
+  		start = 3;
+  		size = str.size() - 1;
+  }
+  //If 0xadresss
+  else if(
+  		(str[0]==48) &&
+  		(str[1]==120) &&
+  		(str.size()==9))
+  {
+  		result = true;
+  		start = 2;
+  		size = str.size();
+  }
+
+  unsigned int i(start);
+  while(result&&(i<size))
     {
       result=result&&isHexaNumber(str[i]);
       ++i;
@@ -407,7 +426,6 @@ int RegressionTestAsciiFile(const char * testAsciiFileName, const char * baselin
 			bool chgt= false;
 			std::string charTmpRef;
 			std::string charTmpTest;
-	
 			unsigned int i=0;
 			if(!isHexaPointerAddress(strRef))
 			  {
