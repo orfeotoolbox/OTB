@@ -896,7 +896,7 @@ ADD_TEST(ioTvStreamingIFWriterWithFilter ${IO_TESTS}
 #	 ${TEMP}/temp.img
 #        ${TEMP}/ioTvImageMetadataWriterTest_HFA_out.txt
 #        )
-// TO BE FIXED
+# TO BE FIXED
 
 #----------------------------------------------------------------------------------
 # Exemples de tests sur les grosses images
