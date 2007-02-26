@@ -61,7 +61,8 @@ int otbImageMetadataFileWriterTest(int argc, char* argv[])
 
  	std::ofstream of;
  	of.open(metadataFilename);
- 	of<<metadataReader->GetOutput();
+	InputImageType::Pointer ptrImage = metadataReader->GetOutput();
+ 	of<<ptrImage;
  	of.close();
   } 
   catch( itk::ExceptionObject & err ) 
