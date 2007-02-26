@@ -889,14 +889,13 @@ ADD_TEST(ioTvStreamingIFWriterWithFilter ${IO_TESTS}
 #---------- Metadata writing tests ------------------------
 
 ADD_TEST(ioTvImageMetadataWriterTest_HFA ${IO_TESTS} 
-#   --compare-ascii ${TOL}   ${BASELINE}/ioTvImageMetadataWriterTest_HFA_out.txt
-#                            ${TEMP}/ioTvImageMetadataWriterTest_HFA_out.txt
-         otbImageMetadataFileWriterTest
-         ${INPUTDATA}/HFAGeoreferenced.img
-	     ${TEMP}/temp.img
-        ${TEMP}/ioTvImageMetadataWriterTest_HFA_out.txt
+   --compare-ascii ${TOL}   ${BASELINE_FILES}/ioImageMetadataWriterTest_HFA_out.txt
+                            ${TEMP}/ioImageMetadataWriterTest_HFA_out.txt
+        otbImageMetadataFileWriterTest
+        ${INPUTDATA}/HFAGeoreferenced.img
+	    ${TEMP}/temp.img
+    	${TEMP}/ioImageMetadataWriterTest_HFA_out.txt
         )
-# TO BE FIXED
 
 #----------------------------------------------------------------------------------
 # Exemples de tests sur les grosses images
