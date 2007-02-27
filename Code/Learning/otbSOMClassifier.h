@@ -31,7 +31,7 @@ namespace otb{
  * of the winner neuron. 
  *
  * Since this classifier differs from the base framework of itk in that it 
- * does not used DecisionRule and Memberships function, it derives from itk::ProcessObject
+ * does not use DecisionRule and Memberships function, it derives from itk::ProcessObject
  * instead of itk::SampleClassifierBase.
  *
  * \sa SOM, SOMMap, SOMActivationBuilder.
