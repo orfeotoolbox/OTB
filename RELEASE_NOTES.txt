@@ -1,7 +1,44 @@
 OTB-v.1.2.0 - Changes since version 1.0.2
 -----------------------------------------
 
+- Added support for ObjectList (ie SmartPointers) and thus support
+  for ImageList.
 
+- Added base classes for image to Images list filters, images list to 
+  image filters, images list to images list filters.
+
+- Added filters for multiscale analysis and synthesis based on the 
+  morphological pyramid algorithm.
+
+- Added automated region-growing multi-scale segmentation algorithm 
+  based on the morphological pyramid analysis.
+
+- Added support for graph representation of RCC8 spatial reasonning 
+  relationships.
+
+- Added filters for atomic RCC8 calculation based on two segmented regions.
+
+- Added filter for multi-scale segmentation to RCC8 graph calculation with 
+  optimisations.
+
+- Added filters for learning, classification and activation map of data sets
+  using Kohonen's self organizing maps.
+
+- Refactoring of the base classes for visualisation.
+
+- Refactoring of the viewer object (and viewer apps). The viewer can now be 
+  used to visualised large remote-sensing images with limited memory occupation.
+
+- Added full support (reading and writing) of the HFA image format (img files).
+
+- Precision for internal calculus has been tuned to double in every filter.
+
+- Bugfixes on metada writing (now works for tif and HFA formats, limited support 
+  envi header file formats due to Gdal limitations).
+
+- Bugfixes on memory management in the Reader.
+
+- Various bugfixes and warning corrections.
 
 - OTB can now been compiled on several new platforms :
        - SunOS 5.8 (32bits and 64bits).
