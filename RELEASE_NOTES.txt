@@ -1,60 +1,80 @@
 OTB-v.1.2.0 - Changes since version 1.0.2
 -----------------------------------------
 
-- Added support for ObjectList (ie SmartPointers) and thus support
-  for ImageList.
+*Platforms:
+	- OTB can now been compiled on several new platforms :
+	  - SunOS 5.8 (32bits and 64bits).
 
-- Added base classes for image to Images list filters, images list to 
-  image filters, images list to images list filters.
+	- Improved robustness of 
+	  - the Microsoft Visual Studio .NET 2003 (7.1), .NET 2005 (8.0) 
+	  - the Cygwin and MinGW installation.
 
-- Added filters for multiscale analysis and synthesis based on the 
-  morphological pyramid algorithm.
+*Common:
 
-- Added automated region-growing multi-scale segmentation algorithm 
-  based on the morphological pyramid analysis.
+	- Various bug fixes and warning corrections.
 
-- Added support for graph representation of RCC8 spatial reasonning 
-  relationships.
+	- Added support for ObjectList (ie SmartPointers) and thus
+          support for ImageList.
 
-- Added filters for atomic RCC8 calculation based on two segmented regions.
+	- Added base classes for image to image list filters, image
+          list to image filters, image list to image list filters.
 
-- Added filter for multi-scale segmentation to RCC8 graph calculation with 
-  optimisations.
+	- Precision for internal calculus has been tuned to double in
+          every filter. 
 
-- Added filters for learning, classification and activation map of data sets
-  using Kohonen's self organizing maps.
+*Multiscale:
 
-- Refactoring of the base classes for visualisation.
+	- Added filters for multiscale analysis and synthesis based on
+          the morphological pyramid algorithm.
 
-- Refactoring of the viewer object (and viewer apps). The viewer can now be 
-  used to visualised large remote-sensing images with limited memory occupation.
+	- Added automated region-growing multiscale segmentation
+          algorithm based on the morphological pyramid analysis.
 
-- Added full support (reading and writing) of the HFA image format (img files).
+*Spatial Reasoning:
 
-- Precision for internal calculus has been tuned to double in every filter.
+	- Added support for graph representation of RCC8 spatial
+           reasoning relationships.
 
-- Bugfixes on metada writing (now works for tif and HFA formats, limited support 
-  envi header file formats due to Gdal limitations).
+	- Added filters for atomic RCC8 computation based on two
+          segmented regions.
 
-- Bugfixes on memory management in the Reader.
+	- Added filter for multiscale segmentation to RCC8 graph
+          calculation with optimisations.
 
-- Various bugfixes and warning corrections.
+*IO:
 
-- OTB can now been compiled on several new platforms :
-       - SunOS 5.8 (32bits and 64bits).
+	- Added full support (reading and writing) of the HFA image
+          format (ERDAS img files).
 
-- Improved robustness of 
-       - the Microsoft Visual Studio .NET 2003 (7.1), .NET 2005 (8.0) 
-       - the Cygwin and MinGW 
-  installation.
+	 - Bug fixes on metada writing (now works for tif and HFA
+           formats, limited support envi header file formats due to
+           Gdal limitations).
 
-- Bugfixes related to the IO framework on MS Windows platforms.
+	- Bug fixes on memory management in the Reader.
+	
+	- Bug fixes related to the IO framework on MS Windows platforms.
+  
+*Learning:
 
-- Minor changes needed for the portability of OTB-Applications.
+	- Added filters for learning, classification and activation
+          map of data sets using Kohonen's self organizing maps.
 
-- Added a viewer application in OTB-Applications.
+*Visualization:
 
-- Added a interactive change detection apllication in OTB-Applications.
+	- Re-factoring of the base classes for visualization.
+
+	- Re-factoring of the viewer object (and viewer apps). The
+          viewer can now be used to visualised large remote-sensing
+          images (Quickbird, Spot5) with limited memory footprint.
+
+
+*Applications:
+
+	- Minor changes needed for the portability of OTB-Applications.
+
+	- Added a viewer application in OTB-Applications.
+
+	- Added a interactive change detection application in OTB-Applications.
 
 
 OTB-v.1.0.2 - Changes since version 1.0.1
