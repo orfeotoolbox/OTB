@@ -79,11 +79,12 @@ SUBDIRS(kwsys)
 
 #-----------------------------------------------------------------------------
 # Install the UseITK.cmake file configured from the top-level.
-IF(NOT ITK_INSTALL_NO_DEVELOPMENT)
-  INSTALL(FILES ${ITK_BINARY_DIR}/Utilities/ITKConfig.cmake
-    DESTINATION ${ITK_INSTALL_PACKAGE_DIR_CM24}
-    COMPONENT Development)
-ENDIF(NOT ITK_INSTALL_NO_DEVELOPMENT)
+#THOMAS
+#IF(NOT ITK_INSTALL_NO_DEVELOPMENT)
+#  INSTALL(FILES ${ITK_BINARY_DIR}/Utilities/ITKConfig.cmake
+#    DESTINATION ${ITK_INSTALL_PACKAGE_DIR_CM24}
+#    COMPONENT Development)
+#ENDIF(NOT ITK_INSTALL_NO_DEVELOPMENT)
 
 #-----------------------------------------------------------------------------
 IF(NOT ITK_INSTALL_NO_DEVELOPMENT)
