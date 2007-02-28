@@ -32,18 +32,6 @@ int generic_otbMultiChannelExtractROI( int argc, char * argv[], const char * inp
 {
   try 
     { 
-//        const char * inputFilename  = argv[1];
-//        const char * outputFilename = argv[2];
-
-
-        typedef otb::Image<short,2> TypeImage;
-        
-        TypeImage::Pointer lima =  TypeImage::New();
-        
-        
-/*        typedef _InputPixelType  	                                InputPixelType;
-        typedef _OutputPixelType  	                                OutputPixelType;
-*/
         typedef otb::MultiChannelExtractROI< InputPixelType, 
                                              OutputPixelType >  ExtractROIFilterType;
 
@@ -142,7 +130,7 @@ int otbMultiChannelExtractROI ( int argc, char * argv[] )
         const char * inputFilename;
         const char * outputFilename;
         int cpt(1);
-        //Si le format n'est pas spécifé, alors celui par defaut
+        //Si le format n'est pas spï¿½cifï¿½, alors celui par defaut
         if( argv[cpt][0] == '-' )
         {
                 linputPixelType = std::string(argv[cpt]);cpt++;
@@ -183,8 +171,8 @@ int otbMultiChannelExtractROI ( int argc, char * argv[] )
         else if (  (linputPixelType=="-uchar")&&(loutputPixelType=="-double") )         return (generic_otbMultiChannelExtractROI< unsigned char, double >( argc,argv,inputFilename,outputFilename) );
         else 
         {       
-                std::cout << " Erreur : le format des images en entrée est mal précisé dans la ligne de commande !!!"<<std::endl;
-                std::cout << "          valeurs autorisées : -uchar, -ushort, -uint, -float, -double"<<std::endl;
+                std::cout << " Erreur : le format des images en entrï¿½e est mal prï¿½cisï¿½ dans la ligne de commande !!!"<<std::endl;
+                std::cout << "          valeurs autorisï¿½es : -uchar, -ushort, -uint, -float, -double"<<std::endl;
                 std::cout << "          valeurs par defaut : -uchar"<<std::endl;
                 return EXIT_FAILURE;
         }
