@@ -346,7 +346,7 @@ whatever you want. Make sure that you have downloaded the source code for:
 \begin{verbatim}
 	./configure --prefix=INSTALL_DIR --with-png=internal --with-libtiff=internal
 	--with-jpeg=internal
-\end{verbatim}]
+\end{verbatim}
 	Then the usual make and make install.
 
 \item Install Fltk
@@ -393,26 +393,29 @@ The maximum physical space a user can allocate depends on his platform. Therefor
 image allocation in OTB is restricted by image dimension, size, pixel type and number 
 of bands.
 
-Fortunately, thanks to the streaming mechanism implemented within OTB's pipeline 
-(actually ITK's), this limitation can be bypassed. The use of the 
-otb::StreamingImageFileWriter at the end of the pipeline, or the itk::StreamingImageFilter 
-at any point of the pipeline will seamlessly break the large, problematic data into small pieces 
-whose allocation is possible. These pieces are processed one afther the other, so that there 
-is not allocation problem anymore.
+Fortunately, thanks to the streaming mechanism implemented within
+OTB's pipeline (actually ITK's), this limitation can be bypassed. The
+use of the \doxygen{otb}{StreamingImageFileWriter} at the end of the pipeline,
+or the \doxygen{itk}{StreamingImageFilter} at any point of the pipeline will
+seamlessly break the large, problematic data into small pieces whose
+allocation is possible. These pieces are processed one afther the
+other, so that there is not allocation problem anymore.
 
 For the streaming to work, all the filters in the pipeline must be streaming capable 
 (this is the case for most of the filter in OTB). The output image format also need to be 
 streamable (not png or jpeg, but tiff or ENVI, for instance).
 
-To help deciding in which case Streaming is useful, to tune the size of the streaming pieces, 
-the OTB development TEAM has added two CMake parameters. The first is named 
-OTB_STREAM_IMAGE_SIZE_TO_ACTIVATE_STREAMING. It represents the size of the image in bytes 
-from which Streaming may be helpful. The second, OTB_STREAM_MAX_SIZE_BUFFER_FOR_STREAMING, 
-specifies the maximum size in bytes a streaming piece should have. It can be used to compute 
-the optimal number of pieces to break the input data into.
+To tune the size of the streaming pieces, the OTB has
+two CMake variables. The first is named
+OTB\_STREAM\_IMAGE\_SIZE\_TO\_ACTIVATE\_STREAMING. It represents the
+minimum size of the image in bytes for which streaming may be helpful. The
+second, OTB\_STREAM\_MAX\_SIZE\_BUFFER\_FOR\_STREAMING, specifies the
+maximum size in bytes a streaming piece should have. It can be used to
+compute the optimal number of pieces to break the input data into.
 
-These two parameters have been used in the OTB-Applications/Utils/ applications, as an example 
-of how they can be used. They can also be tuned by the user to match his specific needs.
+These two parameters have been used in the OTB-Applications/Utils/
+applications. Take this as an example of how they can be used. They
+can also be tuned by the user to match her specific needs.
 
 
 \section{Getting help}
@@ -424,7 +427,7 @@ on the set up and the use of OTB.
 \subsection{Which is the main source of documentation?}
 The main source of documentation is the OTB Software Guide which can
 be downloaded at
-\url{http://smsc.cnes.fr/PLEIADES/OTB/OTBSoftwareGuide-1.0.pdf}. It
+\url{http://smsc.cnes.fr/PLEIADES/OTB/OTBSoftwareGuide-1.2.pdf}. It
 contains tenths of commented examples which should be a good starting
 point for any new OTB user. The code source for these examples is
 distributed with the toolbox. Another information source is the
