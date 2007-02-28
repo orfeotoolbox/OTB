@@ -267,7 +267,7 @@ int main(int argc, char * argv[])
 //
 // Since the synthesis operation is applied on the result of the
 // analysis, the input and the output images should be identical. This
-// is the case as shown in figure \ref{PYR_ANSYN}.
+// is the case as shown in figure \ref{fig:PYR_ANSYN}.
 // \begin{figure}
 // \center
 // \includegraphics[width=0.44\textwidth]{suburb2.eps}

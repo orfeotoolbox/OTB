@@ -134,7 +134,7 @@ int main( int argc, char ** argv )
   // principal window. A mouse click on a pixel of the scroll (respectively, the
   // pricipal window) updates the rectangle prosition and, therefore,
   // the region viewed in the principal (respectively, the zoom)
-  // window. The zoom rate can be modified by using the + and - keys.
+  // window. The zoom rate can be modified by using the mous wheel.
   //
   // Software Guide : EndLatex
 
