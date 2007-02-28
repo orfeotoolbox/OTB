@@ -93,7 +93,6 @@ int generic_otbMultiChannelExtractROI( int argc, char * argv[], const char * inp
 //        reader->Update(); //Necessaire pour connaitre le nombre de canaux dans l'image
         writer->SetFileName( outputFilename );
         extractROIFilter->SetInput( reader->GetOutput() );
-        extractROIFilter->Update(); 
         
         writer->SetInput( extractROIFilter->GetOutput() );
         writer->Update(); 
