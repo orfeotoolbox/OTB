@@ -89,7 +89,8 @@ public:
    * that the IORegion has been set properly. */
   virtual void Write(const void* buffer);
 
-  void SampleImage(void* buffer,int XBegin, int YBegin, int SizeXRead, int SizeYRead, int XSample, int YSample);
+  // JULIEN: NOT USED, NOT IMPLEMENTED
+  // void SampleImage(void* buffer,int XBegin, int YBegin, int SizeXRead, int SizeYRead, int XSample, int YSample);
   
 protected:
   /** Construtor.*/

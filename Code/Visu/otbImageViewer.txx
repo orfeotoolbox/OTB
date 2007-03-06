@@ -383,7 +383,7 @@ namespace otb
   template <class TPixel>
   void
   ImageViewer<TPixel>
-  ::SetImage(itk::ImageBase<2> * img)
+  ::SetImage(ImageType * img)
   {
     m_InputImage = dynamic_cast<ImageType *>( img );
   } 

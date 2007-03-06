@@ -359,6 +359,16 @@ bool isHexaPointerAddress(std::string str)
   		start = 2;
   		size = str.size();
   }
+  // if 01adress
+  else if(
+  		(str[0]==48) &&
+  		(str[1]==49) &&
+  		(str.size()==8))
+  {
+  		result = true;
+  		start = 2;
+  		size = str.size();
+  }
 
   unsigned int i(start);
   while(result&&(i<size))

@@ -270,6 +270,17 @@ SET(OTB_STREAM_MAX_SIZE_BUFFER_FOR_STREAMING 8*2000*10 CACHE STRING "Max size bu
 MARK_AS_ADVANCED(OTB_STREAM_MAX_SIZE_BUFFER_FOR_STREAMING)
 
 
+
+#-----------------------------------------------------------------------------
+# Perform a setup of OTB Wrapping. This will provide CMake options for
+# individual wrapping as well as determine if CableSwig is required. If it is,
+# OTB_NEED_CableSwig will be set. This file also tries to locate CableSwig by
+# searching first in the source tree of OTB, and if that fails, it searches
+# for a binary built of CableSwig.
+#
+INCLUDE(${OTB_SOURCE_DIR}/Wrapping/otbsWrapSetup.cmake)
+
+
 #-----------------------------------------------------------------------------
 # Option for generate Patented examples  !!!
 OPTION(OTB_USE_PATENTED "Build patented examples. ITK must be genereted whith patented option (ITK_USE_PATENTED = ON)." OFF)
@@ -292,6 +303,9 @@ OPTION(BUILD_TESTING "Generer les tests." OFF)
 #-----------------------------------------------------------------------------
 # Dispatch the build into the proper subdirectories.
 SUBDIRS(Utilities Code)
+
+SUBDIRS(Wrapping)
+
 
 IF (BUILD_EXAMPLES)
   SUBDIRS(Examples)

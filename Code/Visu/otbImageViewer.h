@@ -123,7 +123,7 @@ class ITK_EXPORT ImageViewer
  
 
    /** Set the input image */
-  virtual void SetImage(itk::ImageBase<2> * img);
+  virtual void SetImage(ImageType * img);
   /** Show the viewer (Update) */
   virtual void Show(void);
    /** Hide all Image View Windows */
@@ -164,6 +164,9 @@ protected:
   ~ImageViewer();
  
  private:
+  ImageViewer(const Self&); //purposely not implemented
+  void operator=(const Self&); //purposely not implemented
+
   /// zoom widget component
   ZoomWidgetPointerType m_ZoomWidget;
   /// scroll widget component
