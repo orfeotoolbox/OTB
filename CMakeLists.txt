@@ -278,7 +278,7 @@ MARK_AS_ADVANCED(OTB_STREAM_MAX_SIZE_BUFFER_FOR_STREAMING)
 # searching first in the source tree of OTB, and if that fails, it searches
 # for a binary built of CableSwig.
 #
-INCLUDE(${OTB_SOURCE_DIR}/Wrapping/otbsWrapSetup.cmake)
+INCLUDE(${OTB_SOURCE_DIR}/Wrapping/otbWrapSetup.cmake)
 
 
 #-----------------------------------------------------------------------------
