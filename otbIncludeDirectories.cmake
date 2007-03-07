@@ -28,6 +28,13 @@ SET(OTB_INCLUDE_DIRS_BUILD_TREE ${OTB_INCLUDE_DIRS_BUILD_TREE}
 )
 
 #-----------------------------------------------------------------------------
+# Include directories from the ossim build tree
+SET(OTB_INCLUDE_DIRS_BUILD_TREE ${OTB_INCLUDE_DIRS_BUILD_TREE}
+${OTB_BINARY_DIR}/Utilities/OSSIM
+)
+
+
+#-----------------------------------------------------------------------------
 # Include directories from the GDAL build tree.
 SET(OTB_INCLUDE_DIRS_BUILD_TREE ${OTB_INCLUDE_DIRS_BUILD_TREE}
   		${GDAL_INCLUDE_DIRS} )

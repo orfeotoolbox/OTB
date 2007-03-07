@@ -10,7 +10,7 @@ MAKE_DIRECTORY(${OTBTesting_BINARY_DIR}/Temporary)
 
 IF(OTB_BINARY_DIR)
   # We are building inside the tree.
-  SUBDIRS(Code Fa)
+  SUBDIRS(Code Fa Utilities)
 
 ELSE(OTB_BINARY_DIR)
   # We are building as a stand-alone project.
