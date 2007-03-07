@@ -1,0 +1,53 @@
+//*******************************************************************
+// Copyright (C) 2000 ImageLinks Inc. 
+//
+// OSSIM is free software; you can redistribute it and/or
+// modify it under the terms of the GNU General Public License 
+// as published by the Free Software Foundation.
+//
+// This software is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. 
+//
+// You should have received a copy of the GNU General Public License
+// along with this software. If not, write to the Free Software 
+// Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-
+// 1307, USA.
+//
+// See the GPL in the COPYING.GPL file for more details.
+//
+// Author: Garrett Potts (gpotts@imagelinks.com)
+// Description: Rpf support class
+// 
+//********************************************************************
+// $Id: ossimRpfBoundaryRectSectionSubheader.h,v 1.2 2003/06/15 19:01:34 dburken Exp $
+#ifndef ossimRpfBoundaryRectSectionSubheader_HEADER
+#define ossimRpfBoundaryRectSectionSubheader_HEADER
+#include <iostream>
+using namespace std;
+
+#include "base/common/ossimConstants.h" // ossiByteOrder and RPF constants
+#include "base/context/ossimErrorContext.h" // for ossimErrorCode
+
+class ossimRpfBoundaryRectSectionSubheader
+{
+public:
+   friend ostream& operator <<(ostream& out,
+                               const ossimRpfBoundaryRectSectionSubheader &data);
+   ossimRpfBoundaryRectSectionSubheader();
+   virtual ~ossimRpfBoundaryRectSectionSubheader(){}
+
+   ossimErrorCode parseStream(istream& in, ossimByteOrder);
+   virtual void print(ostream& out)const;
+   ossim_uint16 getNumberOfEntries()const{return theNumberOfEntries;}
+   ossim_uint32 getTableOffset()const{return theRectangleTableOffset;}
+   ossim_uint16 getLengthOfEachEntry()const{return theLengthOfEachEntry;}
+
+   void clearFields();
+private:   
+   ossim_uint32 theRectangleTableOffset;
+   ossim_uint16 theNumberOfEntries;
+   ossim_uint16 theLengthOfEachEntry;
+};
+
+#endif

@@ -1,0 +1,141 @@
+//*******************************************************************
+// Copyright (C) 2000 ImageLinks Inc. 
+//
+// OSSIM is free software; you can redistribute it and/or
+// modify it under the terms of the GNU General Public License 
+// as published by the Free Software Foundation.
+//
+// This software is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. 
+//
+// You should have received a copy of the GNU General Public License
+// along with this software. If not, write to the Free Software 
+// Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-
+// 1307, USA.
+//
+// See the GPL in the COPYING.GPL file for more details.
+//
+// Author: Garrett Potts (gpotts@imagelinks)
+// Description:
+//
+//*************************************************************************
+// $Id: ossimGeoAnnotationLineObject.cpp,v 1.9 2004/05/23 17:49:37 dburken Exp $
+#include "ossimGeoAnnotationLineObject.h"
+#include "ossimAnnotationLineObject.h"
+#include "projections/ossimProjection.h"
+
+RTTI_DEF1(ossimGeoAnnotationLineObject, "ossimGeoAnnotationLineObject", ossimGeoAnnotationObject)
+   
+ossimGeoAnnotationLineObject::ossimGeoAnnotationLineObject(const ossimGpt& start,
+                                                           const ossimGpt& end,
+                                                           unsigned char r,
+                                                           unsigned char g,
+                                                           unsigned char b,
+                                                           long thickness)
+   :ossimGeoAnnotationObject(r, g, b, thickness),
+    theProjectedLineObject(NULL),
+    theStart(start),
+    theEnd(end)
+{
+   theProjectedLineObject = new ossimAnnotationLineObject(ossimDpt(0,0),
+                                                          ossimDpt(0,0),
+                                                          r,
+                                                          g,
+                                                          b,
+                                                          thickness);
+}
+
+ossimGeoAnnotationLineObject::ossimGeoAnnotationLineObject(const ossimGeoAnnotationLineObject& rhs)
+   :ossimGeoAnnotationObject(rhs),
+    theProjectedLineObject(rhs.theProjectedLineObject?(ossimAnnotationLineObject*)rhs.theProjectedLineObject->dup():(ossimAnnotationLineObject*)NULL),
+    theStart(rhs.theStart),
+    theEnd(rhs.theEnd)
+{
+   
+}
+
+
+ossimGeoAnnotationLineObject::~ossimGeoAnnotationLineObject()
+{
+   if(theProjectedLineObject)
+   {
+      delete theProjectedLineObject;
+      theProjectedLineObject = NULL;
+   }
+}
+
+void ossimGeoAnnotationLineObject::applyScale(double x, double y)
+{
+   theStart.lond(theStart.lond()*x);
+   theStart.latd(theStart.latd()*y);
+   theEnd.lond(theEnd.lond()*x);
+   theEnd.latd(theEnd.latd()*y);
+
+   if(theProjectedLineObject)
+   {
+      theProjectedLineObject->applyScale(x, y);
+   }
+}
+
+void ossimGeoAnnotationLineObject::transform(ossimProjection* projection)
+{
+   if(projection)
+   {
+      ossimDpt projectedStart;
+      ossimDpt projectedEnd;
+      
+      projection->worldToLineSample(theStart,
+                                    projectedStart);
+      projection->worldToLineSample(theEnd,
+                                    projectedEnd);
+
+      theProjectedLineObject->setLine(projectedStart,
+                                      projectedEnd);
+   }
+}
+
+std::ostream& ossimGeoAnnotationLineObject::print(std::ostream& out)const
+{
+   out << "start ground:     " << theStart << endl;
+   out << "end ground:       " << theEnd   << endl;
+   return out;
+}
+
+void ossimGeoAnnotationLineObject::draw(ossimRgbImage& anImage)const
+{
+   theProjectedLineObject->draw(anImage);
+}
+
+bool ossimGeoAnnotationLineObject::intersects(const ossimDrect& rect)const
+{
+   if(theProjectedLineObject)
+   {
+      return theProjectedLineObject->intersects(rect);
+   }
+
+   return false;
+}
+
+ossimAnnotationObject* ossimGeoAnnotationLineObject::getNewClippedObject(const ossimDrect& rect)const
+{
+   if(intersects(rect))
+   {
+      if(theProjectedLineObject)
+      {
+         return theProjectedLineObject->getNewClippedObject(rect);
+      }
+   }
+   
+   return (ossimAnnotationObject*)NULL;
+}
+
+void ossimGeoAnnotationLineObject::getBoundingRect(ossimDrect& rect)const
+{
+   theProjectedLineObject->getBoundingRect(rect);
+}
+
+void ossimGeoAnnotationLineObject::computeBoundingRect()
+{
+   theProjectedLineObject->computeBoundingRect();
+}

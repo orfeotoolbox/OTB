@@ -23,6 +23,8 @@ SET(OTB_INCLUDE_DIRS_BUILD_TREE ${OTB_INCLUDE_DIRS_BUILD_TREE}
   ${OTB_SOURCE_DIR}/Utilities/BGL
   ${OTB_SOURCE_DIR}/Utilities/BGL/boost
   ${OTB_SOURCE_DIR}/Utilities/otbsvm
+  ${OTB_SOURCE_DIR}/Utilities/OSSIM
+  ${OTB_SOURCE_DIR}/Utilities/OSSIM/ossim_core
 )
 
 #-----------------------------------------------------------------------------

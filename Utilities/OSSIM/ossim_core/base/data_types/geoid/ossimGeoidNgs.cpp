@@ -1,0 +1,272 @@
+//*******************************************************************
+// Copyright (C) 2000 ImageLinks Inc.
+//
+// License:  LGPL
+//
+// See LICENSE.txt file in the top level directory for more details.
+//
+// Author: Garrett Potts
+//
+//*******************************************************************
+//  $Id: ossimGeoidNgs.cpp,v 1.3 2005/11/10 14:15:33 gpotts Exp $
+#include <base/data_types/geoid/ossimGeoidNgs.h>
+
+#include <base/common/ossimCommon.h>
+#include <base/common/ossimConstants.h>
+#include <base/data_types/ossimString.h>
+#include <base/data_types/ossimFilename.h>
+#include <base/data_types/ossimGpt.h>
+#include <base/context/ossimNotifyContext.h>
+#include <base/common/ossimTrace.h>
+#include <base/factory/ossimDatumFactory.h>
+
+
+#include <stdlib.h>  /* standard C general utility library */
+#include <iostream>
+#include <fstream>
+using namespace std;
+
+RTTI_DEF1(ossimGeoidNgs, "ossimGeoidNgs", ossimGeoid)
+
+static ossimTrace traceDebug ("ossimGeoidNgs:debug");
+
+ossimGeoidNgs::ossimGeoidNgs()
+   :theShortName("")
+{
+}
+
+ossimGeoidNgs::ossimGeoidNgs(const ossimFilename& dir,
+                             ossimByteOrder byteOrder)
+{
+   open(dir);
+}
+
+
+bool ossimGeoidNgs::open(const ossimFilename& dir,
+                         ossimByteOrder byteOrder)
+{
+   if (!dir.isDir())
+   {
+      return false;
+   }
+
+   if(dir.isDir())
+   {
+      ossimGeoidNgsHeader h;
+
+      if(dir.dirCat("g2003u01.bin").exists())
+      {
+         theShortName = "geoid2003";
+         addFile(dir.dirCat("g2003u01.bin"), byteOrder);
+      }
+      if(dir.dirCat("g2003u02.bin").exists())
+      {
+         theShortName = "geoid2003";
+         addFile(dir.dirCat("g2003u02.bin"), byteOrder);
+      }
+      if(dir.dirCat("g2003u02.bin").exists())
+      {
+         theShortName = "geoid2003";
+         addFile(dir.dirCat("g2003u02.bin"), byteOrder);
+      }
+      if(dir.dirCat("g2003u02.bin").exists())
+      {
+         theShortName = "geoid2003";
+         addFile(dir.dirCat("g2003u02.bin"), byteOrder);
+      }
+      if(dir.dirCat("g2003u02.bin").exists())
+      {
+         theShortName = "geoid2003";
+         addFile(dir.dirCat("g2003u02.bin"), byteOrder);
+      }
+      if(dir.dirCat("g2003u02.bin").exists())
+      {
+         theShortName = "geoid2003";
+         addFile(dir.dirCat("g2003u02.bin"), byteOrder);
+      }
+
+      if(dir.dirCat("g1999u01.bin").exists())
+      {
+         theShortName = "geoid1999";
+         addFile(dir.dirCat("g1999u01.bin"), byteOrder);
+      }
+      if(dir.dirCat("g1999u02.bin").exists())
+      {
+         theShortName = "geoid1999";
+         addFile(dir.dirCat("g1999u02.bin"), byteOrder);
+      }
+      if(dir.dirCat("g1999u03.bin").exists())
+      {
+         theShortName = "geoid1999";
+         addFile(dir.dirCat("g1999u03.bin"), byteOrder);
+      }
+      if(dir.dirCat("g1999u04.bin").exists())
+      {
+         theShortName = "geoid1999";
+         addFile(dir.dirCat("g1999u04.bin"), byteOrder);
+      }
+      if(dir.dirCat("g1999u05.bin").exists())
+      {
+         theShortName = "geoid1999";
+         addFile(dir.dirCat("g1999u05.bin"), byteOrder);
+      }
+      if(dir.dirCat("g1999u06.bin").exists())
+      {
+         theShortName = "geoid1999";
+         addFile(dir.dirCat("g1999u06.bin"), byteOrder);
+      }
+      if(dir.dirCat("g1999u07.bin").exists())
+      {
+         theShortName = "geoid1999";
+         addFile(dir.dirCat("g1999u07.bin"), byteOrder);
+      }
+      if(dir.dirCat("g1999u08.bin").exists())
+      {
+         theShortName = "geoid1999";
+         addFile(dir.dirCat("g1999u08.bin"), byteOrder);
+      }
+      if(dir.dirCat("g1999a01.bin").exists())
+      {
+         theShortName = "geoid1999";
+         addFile(dir.dirCat("g1999a01.bin"), byteOrder);
+      }
+      if(dir.dirCat("g1999a02.bin").exists())
+      {
+         theShortName = "geoid1999";
+         addFile(dir.dirCat("g1999a02.bin"), byteOrder);
+      }
+      if(dir.dirCat("g1999a03.bin").exists())
+      {
+         theShortName = "geoid1999";
+         addFile(dir.dirCat("g1999a03.bin"), byteOrder);
+      }
+      if(dir.dirCat("g1999a04.bin").exists())
+      {
+         theShortName = "geoid1999";
+         addFile(dir.dirCat("g1999a04.bin"), byteOrder);
+      }
+      if(dir.dirCat("g1999h01.bin"))
+      {
+         theShortName = "geoid1999";
+         addFile(dir.dirCat("g1999h01.bin"), byteOrder);
+      }
+      if(dir.dirCat("g1999p01.bin").exists())
+      {
+         theShortName = "geoid1999";
+         addFile(dir.dirCat("g1999p01.bin"), byteOrder);
+      }
+   }
+   else
+   {
+      addFile(dir, byteOrder);
+   }
+   if (traceDebug())
+   {
+      ossimNotify(ossimNotifyLevel_DEBUG)
+         << "Opened geoid grids from:  " << dir.c_str() << endl;
+   }
+   
+   return true;
+}
+
+ossimGeoidNgs::~ossimGeoidNgs()
+{
+}
+
+
+bool ossimGeoidNgs::addFile(const ossimFilename& file, ossimByteOrder byteOrder)
+{
+   bool result = false;
+   if(file.exists())
+   {
+      ossim_uint32 idx = 0;
+      for(idx = 0; idx < theGridVector.size();++idx)
+      {
+         if(file == theGridVector[idx].filename())
+         {
+            result = true;
+            return result;
+         }
+      }
+      ossimGeoidNgsHeader h;
+      result = h.initialize(file, byteOrder);
+      if(result)
+      {
+         theGridVector.push_back(h);
+      }
+   }
+
+   if(traceDebug())
+   {
+      ossimNotify(ossimNotifyLevel_DEBUG) << "ossimGeoidNgs::addFile: Adding file = " << file << std::endl;
+   }
+   return result;
+}
+
+double ossimGeoidNgs::offsetFromEllipsoid(const ossimGpt& gpt) const
+{
+   ossimGpt savedGpt = gpt;
+   if(ossimDatumFactory::instance()->wgs84())
+   {
+      savedGpt.changeDatum(ossimDatumFactory::instance()->wgs84());
+   }
+   double lat = savedGpt.latd();
+   double lon = savedGpt.lond();
+   fixLatLon(lat, lon);
+   
+   return deltaHeight(lat, lon); 
+}
+
+double ossimGeoidNgs::geoidToEllipsoidHeight(double lat,
+                                             double lon,
+                                             double geoidHeight)
+{
+
+   fixLatLon(lat, lon);
+   double delta = deltaHeight(lat, lon);
+
+   return geoidHeight + delta;
+}
+
+double ossimGeoidNgs::ellipsoidToGeoidHeight(double lat,
+                                      double lon,
+                                      double ellipsoidHeight)
+{
+
+   fixLatLon(lat, lon);
+   double delta = deltaHeight(lat, lon);
+
+   return ellipsoidHeight - delta;
+}
+
+void ossimGeoidNgs::fixLatLon(double &lat, double &lon) const
+{
+   if(lat < 0)
+   {
+      lat += 180;
+   }
+   if(lon < 0)
+   {
+      lon += 360;
+   }
+}
+
+double ossimGeoidNgs::deltaHeight(double lat, double lon)const
+{
+   ossim_uint32 idx = 0;
+   for(idx = 0; idx < theGridVector.size();++idx)
+   {
+      if( theGridVector[idx].pointWithin(lat, lon) )
+      {
+         return theGridVector[idx].getHeightDelta(lat,
+                                                  lon);
+      }
+   }
+
+   return OSSIM_DBL_NAN;
+}
+
+ossimString ossimGeoidNgs::getShortName()const
+{
+   return theShortName;
+}

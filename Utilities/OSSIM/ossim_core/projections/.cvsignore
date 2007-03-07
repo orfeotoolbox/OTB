@@ -1,0 +1,3 @@
+*.d
+.shared_obj
+Makefile
