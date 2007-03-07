@@ -20,6 +20,8 @@
   Portions of this code are covered under the BOOST copyright.
   See LibBoostCopyright.txt for details.
 
+  Portions of this code are covered under the OSSIM copyright.
+  See OSSIMCopyright.txt for details.
 
      This software is distributed WITHOUT ANY WARRANTY; without even 
      the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
