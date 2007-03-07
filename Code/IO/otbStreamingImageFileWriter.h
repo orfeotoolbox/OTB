@@ -18,6 +18,7 @@
 #ifndef __otbStreamingImageFileWriter_h
 #define __otbStreamingImageFileWriter_h
 
+#include "itkMacro.h"
 #include "itkImageIOBase.h"
 #include "itkImageSource.h"
 #include "itkImageToImageFilter.h"
@@ -81,13 +82,26 @@ public:
   typedef itk::ImageRegionSplitter<itkGetStaticConstMacro(InputImageDimension)>  SplitterType;
   typedef typename SplitterType::Pointer RegionSplitterPointer;
   
+  /**  Set buffer memory size (in bytes) use to calculate the number of stream divisions */
+  void SetBufferMemorySize(unsigned long );
+  /**  Set the buffer number of lines use to calculate the number of stream divisions */
+  void SetBufferNumberOfLinesDivisions(unsigned long);
+  /**  The number of stream divisions is calculate by using 
+   * OTB_STREAM_IMAGE_SIZE_TO_ACTIVATE_STREAMING and 
+   * OTB_STREAM_MAX_SIZE_BUFFER_FOR_STREAMING cmake variables.
+   */
+  void SetAutomaticNumberOfStreamDivisions(void);
+
+  /** Return the string to indicate the method use to calculate number of stream divisions. */
+  std::string GetMethodUseToCalculateNumberOfStreamDivisions(void);
+
   /** Set the number of pieces to divide the input.  The upstream pipeline
    * will be executed this many times. */
-  itkSetMacro(NumberOfStreamDivisions,unsigned int);
-
+  void SetNumberOfStreamDivisions(unsigned long);
+  
   /** Get the number of pieces to divide the input. The upstream pipeline
    * will be executed this many times. */
-  itkGetConstReferenceMacro(NumberOfStreamDivisions,unsigned int);
+  unsigned long GetNumberOfStreamDivisions(void);
 
   /** Set the helper class for dividing the input into chunks. */
   itkSetObjectMacro(RegionSplitter, SplitterType);
@@ -133,6 +147,15 @@ public:
   itkGetObjectMacro(ImageIO, itk::ImageIOBase);
   itkGetConstObjectMacro(ImageIO, itk::ImageIOBase);
 
+  /** Type use to define number of divisions */
+  typedef enum
+  { 
+  	SET_NUMBER_OF_STREAM_DIVISIONS = 1,
+  	SET_BUFFER_MEMORY_SIZE = 2,
+  	SET_BUFFER_NUMBER_OF_LINES = 3,
+  	SET_AUTOMATIC_NUMBER_OF_STREAM_DIVISIONS = 4
+  } CalculationDivisionEnumType;
+
 protected:
   StreamingImageFileWriter();
   ~StreamingImageFileWriter();
@@ -144,11 +167,20 @@ protected:
 private:
   StreamingImageFileWriter(const StreamingImageFileWriter&); //purposely not implemented
   void operator=(const StreamingImageFileWriter&); //purposely not implemented
-
-  unsigned int m_NumberOfStreamDivisions;
+  
+  /** This method calculate the number of stream divisions, by using the CalculationDivision type */
+  unsigned long CalculateNumberOfStreamDivisions(void);
+  
+  /** Use to define the method used to calculate number of divisions */ 
+  unsigned long m_BufferMemorySize;
+  unsigned long m_BufferNumberOfLinesDivisions;
+  unsigned long m_NumberOfStreamDivisions;
+  
   RegionSplitterPointer m_RegionSplitter;
-
-
+ 
+  /** Use to determine method of calculation number of divisions */
+  CalculationDivisionEnumType m_CalculationDivision;
+  
   /** ImageFileWriter Parameters */
   std::string        m_FileName;
   

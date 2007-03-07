@@ -24,6 +24,7 @@
 #include "itkObjectFactoryBase.h"
 #include "itkImageFileWriter.h"
 #include "otbMacro.h"
+#include "otbConfigure.h"
 
 namespace otb
 {
@@ -35,9 +36,13 @@ template <class TInputImage>
 StreamingImageFileWriter<TInputImage>
 ::StreamingImageFileWriter()
 {
+  m_BufferMemorySize = 0;
+  m_BufferNumberOfLinesDivisions = 0;
   // default to 10 divisions
-  m_NumberOfStreamDivisions = 10;
-
+  m_NumberOfStreamDivisions = 0;
+  // default to AUTOMATIC_NUMBER_OF_DIVISIONS
+  m_CalculationDivision = SET_AUTOMATIC_NUMBER_OF_STREAM_DIVISIONS;
+  
   // create default region splitter
   m_RegionSplitter = itk::ImageRegionSplitter<InputImageDimension>::New();
 
@@ -53,6 +58,92 @@ template <class TInputImage>
 StreamingImageFileWriter<TInputImage>
 ::~StreamingImageFileWriter()
 {
+}
+
+/**
+ *
+ */
+template <class TInputImage>
+void 
+StreamingImageFileWriter<TInputImage>
+::SetBufferMemorySize(unsigned long memory_size_divisions)
+{
+	m_BufferMemorySize = memory_size_divisions;
+	m_CalculationDivision = SET_BUFFER_MEMORY_SIZE;
+}
+
+/**
+ *
+ */
+template <class TInputImage>
+void 
+StreamingImageFileWriter<TInputImage>
+::SetBufferNumberOfLinesDivisions(unsigned long nb_lines_divisions)
+{
+	m_BufferNumberOfLinesDivisions = nb_lines_divisions;
+	m_CalculationDivision = SET_BUFFER_NUMBER_OF_LINES;
+}
+
+/**
+ *
+ */
+template <class TInputImage>
+void 
+StreamingImageFileWriter<TInputImage>
+::SetNumberOfStreamDivisions(unsigned long nb_divisions)
+{
+	m_NumberOfStreamDivisions = nb_divisions;
+	m_CalculationDivision = SET_NUMBER_OF_STREAM_DIVISIONS;
+}
+
+/**
+ *
+ */
+template <class TInputImage>
+void 
+StreamingImageFileWriter<TInputImage>
+::SetAutomaticNumberOfStreamDivisions(void)
+{
+	m_CalculationDivision = SET_AUTOMATIC_NUMBER_OF_STREAM_DIVISIONS;
+}
+
+/**
+ *
+ */
+template <class TInputImage>
+unsigned long 
+StreamingImageFileWriter<TInputImage>
+::GetNumberOfStreamDivisions(void)
+{
+  		return(CalculateNumberOfStreamDivisions());
+}
+
+/**
+ *
+ */
+template <class TInputImage>
+std::string 
+StreamingImageFileWriter<TInputImage>
+::GetMethodUseToCalculateNumberOfStreamDivisions(void)
+{
+  switch(m_CalculationDivision)
+    {
+    case SET_NUMBER_OF_STREAM_DIVISIONS:
+      return "SET_NUMBER_OF_STREAM_DIVISIONS";
+      break;
+    case SET_BUFFER_MEMORY_SIZE:
+      return "SET_BUFFER_MEMORY_SIZE";
+      break;
+    case SET_BUFFER_NUMBER_OF_LINES:
+      return "SET_BUFFER_NUMBER_OF_LINES";
+      break;
+    case SET_AUTOMATIC_NUMBER_OF_STREAM_DIVISIONS:
+      return "SET_AUTOMATIC_NUMBER_OF_STREAM_DIVISIONS";
+      break;
+    default:
+      return "unknown";
+      break;
+    }
 }
 
 /**
@@ -135,6 +226,132 @@ StreamingImageFileWriter<TInputImage>
     m_UserSpecifiedIORegion = true;
     }
 } 
+
+/**
+ *
+ */
+template<class TInputImage>
+unsigned long 
+StreamingImageFileWriter<TInputImage>
+::CalculateNumberOfStreamDivisions(void)
+{
+	unsigned long numDivisions(0);
+  	OutputImagePointer outputPtr = this->GetOutput(0);
+  	OutputImageRegionType outputRegion = outputPtr->GetRequestedRegion();
+	
+	switch(m_CalculationDivision)
+	{
+		case SET_NUMBER_OF_STREAM_DIVISIONS :
+		{
+  			numDivisions = m_NumberOfStreamDivisions;
+		}
+		break;
+		case SET_BUFFER_MEMORY_SIZE :
+		{
+      		const unsigned long bufferMemorySize = m_BufferMemorySize/8;
+			unsigned long numberColumnsOfRegion = outputRegion.GetSize()[0]; // X dimension
+      		const unsigned long sizeLine = numberColumnsOfRegion * \
+      											outputPtr->GetNumberOfComponentsPerPixel() * \
+      											sizeof(OutputImagePixelType);
+      		unsigned long regionSize = outputRegion.GetSize()[1] * sizeLine;
+      		otbMsgDebugMacro(<<"outputPtr->GetNumberOfComponentsPerPixel()   = "<<outputPtr->GetNumberOfComponentsPerPixel());
+      		otbMsgDebugMacro(<<"sizeof(OutputImagePixelType)                 = "<<sizeof(OutputImagePixelType));
+      		otbMsgDebugMacro(<<"numberColumnsOfRegion                        = "<<numberColumnsOfRegion);
+      		otbMsgDebugMacro(<<"sizeLine                                     = "<<sizeLine);
+      		otbMsgDebugMacro(<<"regionSize                                   = "<<regionSize);
+      		otbMsgDebugMacro(<<"m_BufferMemorySize                           = "<<m_BufferMemorySize);
+      		otbMsgDebugMacro(<<"bufferMemorySize                             = "<<bufferMemorySize);
+
+      		//Active streaming 
+	      	if( regionSize > bufferMemorySize )
+      		{
+      			//The regionSize must be at list equal to the sizeLine 
+      			if( regionSize < sizeLine )
+      			{
+       				otbMsgDebugMacro(<<"Force buffer size.");
+      				regionSize = sizeLine;
+      			}
+      			//Calculate NumberOfStreamDivisions
+				numDivisions = static_cast<unsigned long>(vcl_ceil(static_cast<double>(regionSize)/static_cast<double>(bufferMemorySize)));
+      		}
+      		else
+      		{
+      			//Non streaming
+      			numDivisions = 1;
+      		}
+		}
+		break;
+		case SET_BUFFER_NUMBER_OF_LINES :
+		{
+			if( m_BufferNumberOfLinesDivisions < 1 )
+			{
+				itkExceptionMacro(<<"Buffer number of lines division must be greater than 0 !");
+			}
+			/* Calculate number of split */
+			unsigned long numberLinesOfRegion = outputRegion.GetSize()[1]; // Y dimension
+			if( numberLinesOfRegion > m_BufferNumberOfLinesDivisions )
+			{
+				numDivisions = static_cast<unsigned long>(vcl_ceil(static_cast<double>(numberLinesOfRegion)/static_cast<double>(m_BufferNumberOfLinesDivisions)));
+			}
+			else
+			{
+      			//Non streaming
+				numDivisions = 1;
+			}
+		}
+		break;
+		case SET_AUTOMATIC_NUMBER_OF_STREAM_DIVISIONS :
+		{
+      		const unsigned long streamMaxSizeBufferForStreamingBytes = OTB_STREAM_MAX_SIZE_BUFFER_FOR_STREAMING;
+      	    const unsigned long streamImageSizeToActivateStreamingBytes = OTB_STREAM_IMAGE_SIZE_TO_ACTIVATE_STREAMING;
+      		//Convert in octet unit
+      		unsigned long streamMaxSizeBufferForStreaming = streamMaxSizeBufferForStreamingBytes/8;
+      	    const unsigned long streamImageSizeToActivateStreaming = streamImageSizeToActivateStreamingBytes/8;
+      	    
+			unsigned long numberColumnsOfRegion = outputRegion.GetSize()[0]; // X dimension
+      		const unsigned long sizeLine = numberColumnsOfRegion * \
+      											outputPtr->GetNumberOfComponentsPerPixel() * \
+      											sizeof(OutputImagePixelType);
+      		const unsigned long regionSize = outputRegion.GetSize()[1] * sizeLine;
+      		otbMsgDebugMacro(<<"streamImageSizeToActivateStreaming in Bytes  = "<<streamImageSizeToActivateStreamingBytes);
+      		otbMsgDebugMacro(<<"streamMaxSizeBufferForStreaming in Bytes     = "<<streamMaxSizeBufferForStreamingBytes);
+      		otbMsgDebugMacro(<<"streamImageSizeToActivateStreaming           = "<<streamImageSizeToActivateStreaming);
+      		otbMsgDebugMacro(<<"streamMaxSizeBufferForStreaming              = "<<streamMaxSizeBufferForStreaming);
+      		otbMsgDebugMacro(<<"outputPtr->GetNumberOfComponentsPerPixel()   = "<<outputPtr->GetNumberOfComponentsPerPixel());
+      		otbMsgDebugMacro(<<"sizeof(OutputImagePixelType)                 = "<<sizeof(OutputImagePixelType));
+      		otbMsgDebugMacro(<<"numberColumnsOfRegion                        = "<<numberColumnsOfRegion);
+      		otbMsgDebugMacro(<<"sizeLine                                     = "<<sizeLine);
+      		otbMsgDebugMacro(<<"regionSize                                   = "<<regionSize);
+
+      		//Active streaming 
+	      	if( regionSize > streamImageSizeToActivateStreaming )
+      		{
+      			//On s'assure que la taille du bandeau fait au moins une ligne de l'image
+      			if( streamMaxSizeBufferForStreaming < sizeLine )
+      			{
+       				otbMsgDebugMacro(<<"Force buffer size.");
+      				streamMaxSizeBufferForStreaming = sizeLine;
+      			}
+   				otbMsgDebugMacro(<<"Buffer size : "<<streamMaxSizeBufferForStreaming);
+      			//Calculate NumberOfStreamDivisions
+				numDivisions = static_cast<unsigned long>(vcl_ceil(static_cast<double>(regionSize)/static_cast<double>(streamMaxSizeBufferForStreaming)));
+      		}
+      		else
+      		{
+      			//Non streaming
+      			numDivisions = 1;
+      		}
+		}
+		break;
+		default :
+			itkExceptionMacro(<<"Method use to calculate number of stream divisions is not set !");
+		break;
+	}
+    if( numDivisions == 0) numDivisions = 1;
+	otbMsgDebugMacro(<<" -> Resume : method : "<<GetMethodUseToCalculateNumberOfStreamDivisions()<<"\n -> Number of divisions = "<<numDivisions);
+	return(numDivisions);
+}
+
 
 /**
  *
@@ -267,10 +484,8 @@ StreamingImageFileWriter<TInputImage>
    */
   unsigned int numDivisions, numDivisionsFromSplitter;
 
-  numDivisions = m_NumberOfStreamDivisions;
-  numDivisionsFromSplitter
-    = m_RegionSplitter
-    ->GetNumberOfSplits(outputRegion, m_NumberOfStreamDivisions);
+  numDivisions = static_cast<unsigned int>(CalculateNumberOfStreamDivisions());
+  numDivisionsFromSplitter = m_RegionSplitter->GetNumberOfSplits(outputRegion, numDivisions);
   if (numDivisionsFromSplitter < numDivisions)
     {
     numDivisions = numDivisionsFromSplitter;
@@ -290,7 +505,7 @@ StreamingImageFileWriter<TInputImage>
 
 
 
-  // On s'appuie sur 'outputPtr' pour déterminer les initialiser le 'm_ImageIO'
+  // On s'appuie sur 'outputPtr' pour dï¿½terminer les initialiser le 'm_ImageIO'
   // Setup the ImageIO
   //
   m_ImageIO->SetNumberOfDimensions(TInputImage::ImageDimension);

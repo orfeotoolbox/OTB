@@ -49,6 +49,7 @@ REGISTER_TEST(otbImageFileWriterStreamingONERAComplex);
 REGISTER_TEST(otbStreamingImageFilterTest);
 REGISTER_TEST(otbStreamingImageFileWriterTest);
 REGISTER_TEST(otbStreamingImageFileWriterWithFilterTest);
+REGISTER_TEST(otbStreamingImageFileWriterTestCalculateNumberOfDivisions);
 REGISTER_TEST(otbVectorImageTest);
 
 REGISTER_TEST(otbShortImageIOTest);
