@@ -1,0 +1,125 @@
+/*  $Id: ossimConfig.h.in,v 1.23 2005/11/09 19:30:09 gpotts Exp $ */
+#ifndef ossimConfig_HEADER
+#define ossimConfig_HEADER
+
+/* Define if you have dirent.h.  */
+#cmakedefine CMAKE_HAVE_DIRENT_H
+#ifdef CMAKE_HAVE_DIRENT_H
+#define HAVE_DIRENT_H 1
+#else
+#define HAVE_DIRENT_H 0
+#endif
+
+/* Define as 1 if you have unistd.h.  */
+#cmakedefine CMAKE_HAVE_UNISTD_H
+#ifdef CMAKE_HAVE_UNISTD_H 
+#define HAVE_UNISTD_H 1
+#else
+#define HAVE_UNISTD_H 0
+#endif
+
+/* Define as 1 if you have getopt.h.  */
+#cmakedefine CMAKE_HAVE_GETOPT_H
+#ifdef CMAKE_HAVE_GETOPT_H 
+#define HAVE_GETOPT_H 1
+#else
+#define HAVE_GETOPT_H 0
+#endif
+
+/* Define as 1 if you have fcntl.h.  */
+#cmakedefine CMAKE_HAVE_FCNTL_H
+#ifdef CMAKE_HAVE_FCNTL_H
+#define HAVE_FCNTL_H 1
+#else
+#define HAVE_FCNTL_H 0
+#endif
+
+/* Define as 1 if you have dbmalloc.h.  */
+#cmakedefine CMAKE_HAVE_DBMALLOC_H
+#ifdef CMAKE_HAVE_DBMALLOC_H
+#define HAVE_DBMALLOC_H 1
+#else
+#define  HAVE_DBMALLOC_H 0
+#endif
+
+/* Define as 1 if you have malloc.h.  */
+#cmakedefine CMAKE_HAVE_MALLOC_H
+#ifdef CMAKE_HAVE_MALLOC_H
+#define HAVE_MALLOC_H 1
+#else
+#define HAVE_MALLOC_H 0
+
+#endif
+
+/* Define as 1 if you have dlfcn.h. */
+#cmakedefine CMAKE_HAVE_DLFCN_H
+#ifdef CMAKE_HAVE_DLFCN_H
+#define HAVE_DLFCN_H 1
+#else 
+#define HAVE_DLFCN_H 0
+#endif
+
+/* Define if you have support for large (64 bit size) files */
+#define HAVE_LARGEFILE_SUPPORT 0
+
+/* Define to "1" if you have libz installed, "0" if not. */
+#define OSSIM_HAS_LIBZ 0
+
+/* Define to "1" if you have MPI(lam/mpi), "0" if not. */
+#define OSSIM_HAS_MPI 0
+
+/* Define to "1" if you have FREETYPE, "0" if not. */
+#define OSSIM_HAS_FREETYPE 0
+
+/* Define to "1" if you have GEOTIFF, "0" if not. */
+#define OSSIM_HAS_GEOTIFF 0
+
+/* Define to "1" if you have OpenThreads for mutex support, "0" if not. */
+#define OSSIM_HAS_OPEN_THREADS 0
+
+/* Enable cvs id strings for use with "ident" application. */
+#define OSSIM_ID_ENABLED 1
+
+/* Enable dynamic library support for plugins.
+ * Usually set to 0 for static applications.
+ */
+#define OSSIM_DYNAMIC_ENABLED 1
+
+/* Define to the correct byte sizes.  
+ * If not available define to 0 so OSSIM uses the defaults
+ */
+#define OSSIM_SIZEOF_FLOAT      0
+#define OSSIM_SIZEOF_DOUBLE     0
+#define OSSIM_SIZEOF_LONG_LONG  0
+#define OSSIM_SIZEOF_LONG_INT   0
+#define OSSIM_SIZEOF_INT        0
+#define OSSIM_SIZEOF_SHORT_INT  0
+
+/* These are OS specific defines */
+#define __OSSIM_LINUX__ 0
+#define __OSSIM_DARWIN__ 0
+#define __OSSIM_ALPHA__ 0
+#define __OSSIM_SGI__ 0
+#define __OSSIM_SUN__ 0
+#define __OSSIM_SUNOS__ 0
+#define __OSSIM_SOLARIS__ 0
+#define __OSSIM_FREEBSD__ 0
+#define __OSSIM_BSD__ 0
+#define __OSSIM_OPENBSD__ 0
+#define __OSSIM_NETBSD__ 0
+#define __OSSIM_OSF__ 0
+#define __OSSIM_SYSV__ 0
+#define __OSSIM_AIX__ 0
+#define __OSSIM_DOS__ 0
+#define __OSSIM_POWERPC__ 0
+#define __OSSIM_BEOS__ 0
+#define __OSSIM_SVR4__ 0
+#define __OSSIM_EMX__ 0
+#define __OSSIM_CYGWIN__ 0
+
+#define OSSIM_MAJOR_VERSION_NUMBER @OSSIM_MAJOR_VERSION_NUMBER@
+#define OSSIM_MINOR_VERSION_NUMBER @OSSIM_MINOR_VERSION_NUMBER@
+#define OSSIM_RELEASE_NUMBER @OSSIM_RELEASE_NUMBER@
+#define OSSIM_VERSION @OSSIM_VERSION@
+
+#endif /* End of "#ifndef ossimConfig_HEADER" */
