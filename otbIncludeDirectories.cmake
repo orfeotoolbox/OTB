@@ -23,14 +23,13 @@ SET(OTB_INCLUDE_DIRS_BUILD_TREE ${OTB_INCLUDE_DIRS_BUILD_TREE}
   ${OTB_SOURCE_DIR}/Utilities/BGL
   ${OTB_SOURCE_DIR}/Utilities/BGL/boost
   ${OTB_SOURCE_DIR}/Utilities/otbsvm
-  ${OTB_SOURCE_DIR}/Utilities/OSSIM
-  ${OTB_SOURCE_DIR}/Utilities/OSSIM/ossim_core
+  ${OTB_SOURCE_DIR}/Utilities/OSSIM/include
 )
 
 #-----------------------------------------------------------------------------
 # Include directories from the ossim build tree
 SET(OTB_INCLUDE_DIRS_BUILD_TREE ${OTB_INCLUDE_DIRS_BUILD_TREE}
-${OTB_BINARY_DIR}/Utilities/OSSIM
+${OTB_BINARY_DIR}/Utilities/OSSIM/include
 )
 
 
