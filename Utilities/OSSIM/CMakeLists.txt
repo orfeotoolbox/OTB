@@ -10,6 +10,6 @@ CHECK_INCLUDE_FILES("malloc.h" CMAKE_HAVE_MALLOC_H)
 CHECK_INCLUDE_FILES("dlfcn.h" CMAKE_HAVE_DLFCN_H)
 
 SET(OSSIM_HAS_OPEN_THREADS 0)
-CONFIGURE_FILE(${OTB_SOURCE_DIR}/Utilities/OSSIM/ossimConfig.h.in
-	       ${OTB_BINARY_DIR}/Utilities/OSSIM/ossimConfig.h)
-SUBDIRS(ossim_core)
+CONFIGURE_FILE(${OTB_SOURCE_DIR}/Utilities/OSSIM/include/ossim/ossimConfig.h.in
+	       ${OTB_BINARY_DIR}/Utilities/OSSIM/include/ossim/ossimConfig.h)
+SUBDIRS(src include)
