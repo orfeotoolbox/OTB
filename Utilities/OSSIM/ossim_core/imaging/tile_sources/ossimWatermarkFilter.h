@@ -163,7 +163,7 @@ public:
    void getModeList(vector<ossimString>& list) const;
 
    /** @return theMode */
-   ossimWatermarkFilter::WatermarkMode getMode() const;
+   WatermarkMode getMode() const;
 
    /** @return theMode as a string like "upper_left". */
    ossimString getModeString() const;

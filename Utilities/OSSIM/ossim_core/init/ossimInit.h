@@ -60,11 +60,11 @@ public:
     * the command-line arguments. Every OSSIM application should have the
     * following line early in the main module:
     *
-    *   ossimInit::initialize(argc, argv);
+    *   initialize(argc, argv);
     *
     * OR
     *
-    *   ossimInit::instance()->initialize(argc, argv);
+    *   instance()->initialize(argc, argv);
     *
     * The two forms are functionally identical. Pick the latter form if you
     * like to type. The argv command line options are parsed and may be

@@ -30,7 +30,7 @@ public:
                                 const ossimDpt& pointRadius=ossimDpt(1,1),
                                 int   thickness=0,
 				bool enabledFlag = true);
-  ossimVpfAnnotationFeatureInfo::~ossimVpfAnnotationFeatureInfo();
+  ~ossimVpfAnnotationFeatureInfo();
 
   void setCoverage(const ossimVpfCoverage& coverage)
   {

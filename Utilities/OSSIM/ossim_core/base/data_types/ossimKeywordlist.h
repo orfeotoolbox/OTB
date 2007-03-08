@@ -357,8 +357,8 @@ public:
     */
    ossim_uint32 getSize()const;
 
-   const ossimKeywordlist::KeywordMap& getMap()const;
-   ossimKeywordlist::KeywordMap& getMap();
+   const KeywordMap& getMap()const;
+   KeywordMap& getMap();
    void downcaseKeywords();
    void upcaseKeywords();
 private:

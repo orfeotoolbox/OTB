@@ -64,7 +64,7 @@ public:
     *
     *  If I want all ossimImageSource objects then I call:
     *
-    *  ossimObjectFactoryRegistry::instance()->getTypeNameList(l,
+    *  instance()->getTypeNameList(l,
     *                                                          "ossimImageSource");
     */ 
    virtual void getTypeNameList(std::vector<ossimString>& typeList,

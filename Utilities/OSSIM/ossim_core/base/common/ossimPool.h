@@ -59,7 +59,7 @@ class ossimPool
          catch(std::bad_alloc)
          {
             ossimNotify(ossimNotifyLevel_FATAL)
-               << "FATAL ossimPool::ossimPool(): Bad allocation" << endl;
+               << "FATAL ossimPool(): Bad allocation" << endl;
          }
       }
    }

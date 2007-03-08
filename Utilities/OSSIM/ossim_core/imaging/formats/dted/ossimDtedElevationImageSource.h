@@ -114,7 +114,7 @@ public:
    /**
     * @return Resampler type.
     */
-   ossimDtedElevationImageSource::ResamplerType getResamplerType() const;
+   ResamplerType getResamplerType() const;
    
 
 private:

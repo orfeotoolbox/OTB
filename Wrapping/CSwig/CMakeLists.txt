@@ -298,9 +298,9 @@ SET(SWIG_INC
   ${OTB_TOP}/Wrapping/CSwig/BasicFiltersB
   ${OTB_TOP}/Wrapping/CSwig/IO
   ${OTB_TOP}/Wrapping/CSwig/Algorithms
-  ${OTB_TOP}/Wrapping/CSwig/otbIO
   ${OTB_TOP}/Wrapping/CSwig/otbCommon
-   ${OTB_TOP}/Wrapping/CSwig/otbVisu
+  ${OTB_TOP}/Wrapping/CSwig/otbIO
+  ${OTB_TOP}/Wrapping/CSwig/otbVisu
   )
 ADD_DEFINITIONS(-DSWIG_GLOBAL)
 
@@ -311,10 +311,10 @@ Numerics
 BasicFiltersA BasicFiltersB 
 IO 
 Algorithms
-otbIO
 otbCommon
+otbIO
 otbVisu
-  )
+)
 SUBDIRS(SwigRuntime ${OTB_KITS} Tests)
 IF(OTB_CSWIG_JAVA)
   SUBDIRS(Java)

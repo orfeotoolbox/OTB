@@ -134,10 +134,10 @@ public:
    ossim_float64 getTargetValue()      const;
    ossim_float64 getReplacementValue() const;
    ossim_float64 getClampValue() const;
-   ossimPixelFlipper::ReplacementMode getReplacementMode()  const;
+   ReplacementMode getReplacementMode()  const;
    ossimString getReplacementModeString() const;
    ossimString getClipModeString() const;
-   ossimPixelFlipper::ClipMode getClipMode() const;
+   ClipMode getClipMode() const;
 
    virtual ossimRefPtr<ossimProperty> getProperty(const ossimString& name)const;
    virtual void setProperty(ossimRefPtr<ossimProperty> property);

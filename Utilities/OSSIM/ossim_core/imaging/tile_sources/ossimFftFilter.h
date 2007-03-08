@@ -43,7 +43,7 @@ public:
    */ 
    virtual double getNullPixelValue(ossim_uint32 band=0)const;
    
-   virtual ossimScalarType ossimFftFilter::getOutputScalarType() const;
+   virtual ossimScalarType getOutputScalarType() const;
    
    void setForward();
    void setInverse();

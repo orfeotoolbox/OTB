@@ -249,7 +249,7 @@ public:
          create(boundingRect, ulShift, urShift, lrShift, llShift);
       }
 
-   ossimQuadTreeWarp::ossimQuadTreeWarp(const ossimQuadTreeWarp& rhs);
+   ossimQuadTreeWarp(const ossimQuadTreeWarp& rhs);
    virtual ossimObject* dup()const
       {
          return new ossimQuadTreeWarp(*this);

@@ -67,7 +67,7 @@ public:
    virtual void setRect(const ossimIrect& rect);
    virtual void setRect(const ossimIrect& rect,
                         const ossimIpt& tileSize);
-   void ossimFixedTileCache::keepTilesWithinRect(const ossimIrect& rect);
+   void keepTilesWithinRect(const ossimIrect& rect);
    virtual ossimRefPtr<ossimImageData> addTile(ossimRefPtr<ossimImageData> imageData);
    virtual ossimRefPtr<ossimImageData> getTile(ossim_int32 id);
    virtual ossimRefPtr<ossimImageData> getTile(const ossimIpt& origin)

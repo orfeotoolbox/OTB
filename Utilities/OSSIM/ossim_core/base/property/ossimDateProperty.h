@@ -18,7 +18,7 @@ public:
    const ossimLocalTm& getDate()const;
    virtual bool setValue(const ossimString& value);
    virtual void valueToString(ossimString& valueResult)const;
-   virtual const ossimProperty& ossimDateProperty::assign(const ossimProperty& rhs);
+   virtual const ossimProperty& assign(const ossimProperty& rhs);
    
 protected:
    ossimLocalTm theValue;
