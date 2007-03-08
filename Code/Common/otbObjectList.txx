@@ -153,6 +153,8 @@ namespace otb
     m_InternalContainer.clear();
   }
 
+
+
   /**
    * Get an Iterator that points to the beginning of the container.
    * \return The iterator.
