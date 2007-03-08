@@ -84,8 +84,10 @@ public:
   
   /**  Set buffer memory size (in bytes) use to calculate the number of stream divisions */
   void SetBufferMemorySize(unsigned long );
+ 
   /**  Set the buffer number of lines use to calculate the number of stream divisions */
   void SetBufferNumberOfLinesDivisions(unsigned long);
+ 
   /**  The number of stream divisions is calculate by using 
    * OTB_STREAM_IMAGE_SIZE_TO_ACTIVATE_STREAMING and 
    * OTB_STREAM_MAX_SIZE_BUFFER_FOR_STREAMING cmake variables.
