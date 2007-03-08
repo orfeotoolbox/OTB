@@ -176,7 +176,12 @@ whatever you want. Make sure that you have downloaded the source code for:
       make
       make install
   \end{verbatim}
-      
+
+It seems to be a bug in the GDAL install procedure: if you are installing it without root privileges, even if your \texttt{INSTALL\_DIR} is a directory for which you have the write permissions, GDAL tries to copy the python bindings together with the Python site packages, which are usually somewhere in /usr/lib.
+
+Actually, since this is the last step in the GDAL install procedure, when you get the error message, the GDAL libs and header files are already installed, so you can safely ignore the error.
+
+The \texttt{--without-python} option passed to the \texttt{configure} step avoids this. However, some users may want to have Python bindings, so recommending this option for the install may not be OK for everybody. 
 
 \item Install CMake
   \begin{verbatim}
