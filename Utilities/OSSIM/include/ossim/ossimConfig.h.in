@@ -59,8 +59,11 @@
 #define HAVE_DLFCN_H 0
 #endif
 
+#if 0
+/// Commented since ti seems not to be used
 /* Define if you have support for large (64 bit size) files */
 #define HAVE_LARGEFILE_SUPPORT 0
+#endif
 
 /* Define to "1" if you have libz installed, "0" if not. */
 #define OSSIM_HAS_LIBZ 0
@@ -83,7 +86,7 @@
 /* Enable dynamic library support for plugins.
  * Usually set to 0 for static applications.
  */
-#define OSSIM_DYNAMIC_ENABLED 1
+#define OSSIM_DYNAMIC_ENABLED 0
 
 /* Define to the correct byte sizes.  
  * If not available define to 0 so OSSIM uses the defaults
@@ -117,9 +120,10 @@
 #define __OSSIM_EMX__ 0
 #define __OSSIM_CYGWIN__ 0
 
+#if 0
 #define OSSIM_MAJOR_VERSION_NUMBER @OSSIM_MAJOR_VERSION_NUMBER@
 #define OSSIM_MINOR_VERSION_NUMBER @OSSIM_MINOR_VERSION_NUMBER@
 #define OSSIM_RELEASE_NUMBER @OSSIM_RELEASE_NUMBER@
 #define OSSIM_VERSION @OSSIM_VERSION@
-
+#endif
 #endif /* End of "#ifndef ossimConfig_HEADER" */
