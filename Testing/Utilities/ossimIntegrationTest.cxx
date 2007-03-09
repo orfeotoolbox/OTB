@@ -15,29 +15,29 @@
 #include <iostream>
 #include <iterator>
 
-#include "base/data_types/ossimFilename.h"
-#include "base/data_types/ossimString.h"
-#include "imaging/factory/ossimImageHandlerRegistry.h"
-#include "imaging/formats/ossimImageHandler.h"
-#include "imaging/formats/ossimImageFileWriter.h"
-#include "imaging/factory/ossimImageWriterFactoryRegistry.h"
+#include "base/ossimFilename.h"
+#include "base/ossimString.h"
+#include "imaging/ossimImageHandlerRegistry.h"
+#include "imaging/ossimImageHandler.h"
+#include "imaging/ossimImageFileWriter.h"
+#include "imaging/ossimImageWriterFactoryRegistry.h"
 
 // this is an ossim ground point and has a lat, lon, and datum
 // associated with it.
-#include "base/data_types/ossimGpt.h"
+#include "base/ossimGpt.h"
 
 // Base class for accessing projection parameters.
-#include "projections/ossimProjection.h"
+#include "projection/ossimProjection.h"
 
 // the projection used in the reprojection
-#include "projections/map_projections/ossimUtmProjection.h"
+#include "projection/ossimUtmProjection.h"
 
 // used to instantiate a projector
-#include "projections/factory/ossimProjectionFactoryRegistry.h"
+#include "projection/ossimProjectionFactoryRegistry.h"
 
 
 // The heart of the OSSIM resampling process for reprojecting imagery
-#include "imaging/tile_sources/ossimImageRenderer.h"
+#include "imaging/ossimImageRenderer.h"
 
 // this is the most important class and is called as the first line of all applications.
 // without this alll the important factories are not created.
