@@ -19,7 +19,7 @@
 #ifndef ossimTiffTileSource_HEADER
 #define ossimTiffTileSource_HEADER
 
-#include <tiffio.h>
+#include <itk_tiff.h>
 
 #include <ossim/imaging/ossimImageHandler.h>
 #include <ossim/base/ossimIrect.h>

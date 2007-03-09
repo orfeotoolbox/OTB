@@ -11,7 +11,7 @@
 #include <algorithm>
 #include <sstream>
 #include <iomanip>
-#include <tiffio.h>
+#include <itk_tiff.h>
 #include <ossim/imaging/ossimNitfWriter.h>
 #include <ossim/base/ossimDate.h>
 #include <ossim/base/ossimPreferences.h>

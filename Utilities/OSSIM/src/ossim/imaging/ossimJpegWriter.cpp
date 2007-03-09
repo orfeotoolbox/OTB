@@ -19,7 +19,7 @@ extern "C"
 #    define XMD_H
 #  endif
 #endif
-#include <jpeglib.h>
+#include <itkjpeg/8/jpeglib.h>
 }
 
 #include <ossim/imaging/ossimJpegWriter.h>

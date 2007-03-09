@@ -32,6 +32,6 @@ ${ossim_plugin_SRCS}
 ${ossim_init_SRCS}
 ${ossim_kbool_SRCS}
 )
-TARGET_LINK_LIBRARIES(ossim gdal)
+TARGET_LINK_LIBRARIES(ossim ${ITK_TIFF_LIBRARIES} itkjpeg8 itkjpeg12 itkjpeg16)
 INSTALL_TARGETS(/lib/otb/ ossim)
 INSTALL_FILES(/include/otb/Utilities/OSSIM/include/ "\\.h$" ${ossim_kbool_HRDS})

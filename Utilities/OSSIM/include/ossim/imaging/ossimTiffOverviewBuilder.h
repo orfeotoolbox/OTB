@@ -20,7 +20,7 @@
 #include <ossim/imaging/ossimOverviewBuilderBase.h>
 #include <ossim/imaging/ossimFilterResampler.h>
 
-#include <tiffio.h>
+#include <itk_tiff.h>
 
 class ossimImageHandler;
 class ossimFilename;

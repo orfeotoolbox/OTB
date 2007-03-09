@@ -11,7 +11,7 @@
 //  $Id: ossimImageFileWriter.cpp 10419 2007-02-04 15:59:11Z dburken $
 
 
-#include <tiff.h> /* for tiff compression defines */
+#include <itk_tiff.h> /* for tiff compression defines */
 
 #include <ossim/ossimConfig.h>
 #include <ossim/imaging/ossimImageFileWriter.h>

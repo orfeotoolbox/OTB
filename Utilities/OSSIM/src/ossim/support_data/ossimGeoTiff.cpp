@@ -17,7 +17,7 @@
 // $Id: ossimGeoTiff.cpp 9218 2006-06-30 22:07:40Z dburken $
 
 
-#include <tiffio.h>
+#include <itk_tiff.h>
 #include <string.h>
 #include <fstream>
 #include <iomanip>
