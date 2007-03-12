@@ -290,6 +290,11 @@ ADD_TEST(coTvConcatenateVectorImageFilter ${COMMON_TESTS}
 	 ${TEMP}/coConcatenateVectorImageFilterOutput1.hdr
 )
 
+# -------            otb::ImageToPathFilterNew  -------------------------------------------
+ADD_TEST(coTuImageToPathFilterNew ${COMMON_TESTS} 
+         otbImageToPathFilterNew)  
+
+
          
 # -------       Fichiers sources CXX -----------------------------------
 SET(BasicCommon_SRCS
@@ -326,6 +331,7 @@ otbListNew.cxx
 otbList.cxx
 otbConcatenateVectorImageFilterNew.cxx
 otbConcatenateVectorImageFilter.cxx
+otbImageToPathFilterNew.cxx
 )
 
 
