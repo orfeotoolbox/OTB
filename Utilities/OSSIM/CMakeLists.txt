@@ -20,14 +20,40 @@ IF(WIN32)
   ENDIF(NOT BORLAND)
 ENDIF(WIN32)
 
+# itkjpeg headers are not generated and put into the inculde dir automatically. 
+# Therefore we have to do it ourselves.
 
-# Where to find the tiffio.h, tiff.h and jpeglib.h
-#IF(OTB_USE_EXTERNAL_ITK)
-#INCLUDE_DIRECTORIES(${ITK_SOURCE_DIR}/Utilities/itktiff)
-#INCLUDE_DIRECTORIES(${ITK_SOURCE_DIR}/Utilities/itkjpeg)
-#ELSE (OTB_USE_EXTERNAL_ITK)
-#INCLUDE_DIRECTORIES(${OTB_SOURCE_DIR}/Utilities/ITK/Utilities/itktiff)
-#INCLUDE_DIRECTORIES(${OTB_SOURCE_DIR}/Utilities/ITK/Utilities/itkjpeg)
+IF(OTB_USE_EXTERNAL_ITK)
+CONFIGURE_FILE(${OTB_SOURCE_DIR}/Utilities/ITK/Utilities/itkjpeg/.NoDartCoverage
+               ${OTB_BINARY_DIR}/Utilities/ITK/Utilities/itkjpeg/.NoDartCoverage)
+CONFIGURE_FILE(${OTB_SOURCE_DIR}/Utilities/ITK/Utilities/itkjpeg/jpegDllConfig.h.in
+               ${OTB_BINARY_DIR}/Utilities/ITK/Utilities/itkjpeg/jpegDllConfig.h)
+FOREACH(bits 8 12 16)
+SET(CMAKE_BITS_IN_JSAMPLE ${bits})
+  CONFIGURE_FILE(${OTB_SOURCE_DIR}/Utilities/ITK/Utilities/itkjpeg/jmorecfg.h.in
+                 ${OTB_BINARY_DIR}/Utilities/ITK/Utilities/itkjpeg/${bits}/jmorecfg.h @ONLY
+IMMEDIATE)
+SET(BITS_TYPE_JPEG_MANGLE_NAME "itkjpeg/mangle_jpeg${bits}bits.h")
+CONFIGURE_FILE(${OTB_SOURCE_DIR}/Utilities/ITK/Utilities/itkjpeg/jconfig.h.in
+                 ${OTB_BINARY_DIR}/Utilities/ITK/Utilities/itkjpeg/${bits}/jconfig.h
+@ONLY
+IMMEDIATE)
+CONFIGURE_FILE(${OTB_SOURCE_DIR}/Utilities/ITK/Utilities/itkjpeg/jpeglib.h
+                 ${OTB_BINARY_DIR}/Utilities/ITK/Utilities/itkjpeg/${bits}/jpeglib.h
+@ONLY
+IMMEDIATE)
+CONFIGURE_FILE(${OTB_SOURCE_DIR}/Utilities/ITK/Utilities/itkjpeg/jerror.h
+                 ${OTB_BINARY_DIR}/Utilities/ITK/Utilities/itkjpeg/${bits}/jerror.h
+@ONLY
+IMMEDIATE)
+CONFIGURE_FILE(${OTB_SOURCE_DIR}/Utilities/ITK/Utilities/itkjpeg/jinclude.h
+                 ${OTB_BINARY_DIR}/Utilities/ITK/Utilities/itkjpeg/${bits}/jinclude.h
+@ONLY
+IMMEDIATE)
+ENDFOREACH(bits)
+INCLUDE_DIRECTORIES(${OTB_SOURCE_DIR}/Utilities/ITK/Utilities)
+INCLUDE_DIRECTORIES(${OTB_BINARY_DIR}/Utilities/ITK/Utilities)
+ENDIF(OTB_USE_EXTERNAL_ITK)
 
 
 CONFIGURE_FILE(${OTB_SOURCE_DIR}/Utilities/OSSIM/include/ossim/ossimConfig.h.in
