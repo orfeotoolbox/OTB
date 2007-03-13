@@ -5,5 +5,15 @@ FILE(GLOB OTBSpatialReasoning_SRCS "*.cxx" )
 ADD_LIBRARY(OTBSpatialReasoning ${OTBSpatialReasoning_SRCS})
 TARGET_LINK_LIBRARIES (OTBSpatialReasoning ITKCommon)
 
-INSTALL_TARGETS(/lib/otb OTBSpatialReasoning )
-INSTALL_FILES(/include/otb/SpatialReasoning "(\\.h|\\.txx)$")
+INSTALL(TARGETS OTBSpatialReasoning
+RUNTIME DESTINATION ${OTB_INSTALL_BIN_DIR} COMPONENT RuntimeLibraries
+LIBRARY DESTINATION ${OTB_INSTALL_LIB_DIR} COMPONENT RuntimeLibraries
+ARCHIVE DESTINATION ${OTB_INSTALL_LIB_DIR} COMPONENT Development)
+
+FILE(GLOB __files1 "${CMAKE_CURRENT_SOURCE_DIR}/*.h")
+FILE(GLOB __files2 "${CMAKE_CURRENT_SOURCE_DIR}/*.txx")
+
+INSTALL(FILES ${__files1} ${__files2}
+    DESTINATION ${OTB_INSTALL_INCLUDE_DIR}/SpatialReasoning
+    COMPONENT Development)
+

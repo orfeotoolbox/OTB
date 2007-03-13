@@ -6,5 +6,14 @@ FILE(GLOB OTBFeatureExtraction_SRCS "*.cxx" )
 ADD_LIBRARY(OTBFeatureExtraction ${OTBFeatureExtraction_SRCS})
 TARGET_LINK_LIBRARIES (OTBFeatureExtraction OTBCommon OTBIO ITKCommon ITKIO ITKAlgorithms)
 
-INSTALL_TARGETS(/lib/otb OTBFeatureExtraction )
-INSTALL_FILES(/include/otb/FeatureExtraction "(\\.h|\\.txx)$")
+INSTALL(TARGETS OTBFeatureExtraction
+RUNTIME DESTINATION ${OTB_INSTALL_BIN_DIR} COMPONENT RuntimeLibraries
+LIBRARY DESTINATION ${OTB_INSTALL_LIB_DIR} COMPONENT RuntimeLibraries
+ARCHIVE DESTINATION ${OTB_INSTALL_LIB_DIR} COMPONENT Development)
+
+FILE(GLOB __files1 "${CMAKE_CURRENT_SOURCE_DIR}/*.h")
+FILE(GLOB __files2 "${CMAKE_CURRENT_SOURCE_DIR}/*.txx")
+
+INSTALL(FILES ${__files1} ${__files2}
+    DESTINATION ${OTB_INSTALL_INCLUDE_DIR}/FeatureExtraction
+    COMPONENT Development)

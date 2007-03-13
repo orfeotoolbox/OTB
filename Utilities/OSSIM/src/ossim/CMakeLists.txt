@@ -5,7 +5,6 @@ FILE(GLOB_RECURSE ossim_base_SRCS "base/*.cpp" "base/*.c")
 FILE(GLOB_RECURSE ossim_elevation_SRCS "elevation/*.cpp" "elevation/*.c")
 FILE(GLOB_RECURSE ossim_font_SRCS "font/*.cpp" "font/*.c")
 FILE(GLOB_RECURSE ossim_imaging_SRCS "imaging/*.cpp" "imaging/*.c")
-#FILE(GLOB_RECURSE ossim_libpolyclip_SRCS "libpolyclip/*.cpp" "libpolyclip/*.c")
 FILE(GLOB_RECURSE ossim_matrix_SRCS "matrix/*.cpp" "matrix/*.c")
 FILE(GLOB_RECURSE ossim_parallel_SRCS "parallel/*.cpp" "parallel/*.c")
 FILE(GLOB_RECURSE ossim_projection_SRCS "projection/*.cpp" "projection/*.c")
@@ -47,4 +46,9 @@ ENDIF(WIN32)
 
 ADD_LIBRARY(ossim ${OSSIM_SRCS})
 TARGET_LINK_LIBRARIES(ossim itktiff itkjpeg8 itkjpeg12 itkjpeg16)
-INSTALL_TARGETS(/lib/otb/ ossim)
+
+INSTALL(TARGETS ossim
+RUNTIME DESTINATION ${OTB_INSTALL_BIN_DIR} COMPONENT RuntimeLibraries
+LIBRARY DESTINATION ${OTB_INSTALL_LIB_DIR} COMPONENT RuntimeLibraries
+ARCHIVE DESTINATION ${OTB_INSTALL_LIB_DIR} COMPONENT Development)
+

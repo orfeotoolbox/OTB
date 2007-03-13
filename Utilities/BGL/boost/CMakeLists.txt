@@ -1,18 +1,7 @@
+FILE(GLOB_RECURSE __files1 "${CMAKE_CURRENT_SOURCE_DIR}/*.h")
+FILE(GLOB_RECURSE __files2 "${CMAKE_CURRENT_SOURCE_DIR}/*.txx")
+FILE(GLOB_RECURSE __files3 "${CMAKE_CURRENT_SOURCE_DIR}/*.hpp")
 
-
-INSTALL_FILES(/include/otb/Utilities/BGL/boost "(\\.hpp|\\.h|\\.txx)$")
-INSTALL_FILES(/include/otb/Utilities/BGL/boost/bind "(\\.hpp|\\.h|\\.txx)$")
-INSTALL_FILES(/include/otb/Utilities/BGL/boost/config "(\\.hpp|\\.h|\\.txx)$")
-INSTALL_FILES(/include/otb/Utilities/BGL/boost/detail "(\\.hpp|\\.h|\\.txx)$")
-INSTALL_FILES(/include/otb/Utilities/BGL/boost/function "(\\.hpp|\\.h|\\.txx)$")
-INSTALL_FILES(/include/otb/Utilities/BGL/boost/functional "(\\.hpp|\\.h|\\.txx)$")
-INSTALL_FILES(/include/otb/Utilities/BGL/boost/graph "(\\.hpp|\\.h|\\.txx)$")
-INSTALL_FILES(/include/otb/Utilities/BGL/boost/iterator "(\\.hpp|\\.h|\\.txx)$")
-INSTALL_FILES(/include/otb/Utilities/BGL/boost/mpl "(\\.hpp|\\.h|\\.txx)$")
-INSTALL_FILES(/include/otb/Utilities/BGL/boost/optional "(\\.hpp|\\.h|\\.txx)$")
-INSTALL_FILES(/include/otb/Utilities/BGL/boost/pending "(\\.hpp|\\.h|\\.txx)$")
-INSTALL_FILES(/include/otb/Utilities/BGL/boost/preprocessor "(\\.hpp|\\.h|\\.txx)$")
-INSTALL_FILES(/include/otb/Utilities/BGL/boost/spirit "(\\.hpp|\\.h|\\.txx)$")
-INSTALL_FILES(/include/otb/Utilities/BGL/boost/tuple "(\\.hpp|\\.h|\\.txx)$")
-INSTALL_FILES(/include/otb/Utilities/BGL/boost/type_traits "(\\.hpp|\\.h|\\.txx)$")
-INSTALL_FILES(/include/otb/Utilities/BGL/boost/utility"(\\.hpp|\\.h|\\.txx)$")
+INSTALL(FILES ${__files1} ${__files2} ${__files3}
+    DESTINATION ${OTB_INSTALL_INCLUDE_DIR}/Utilities/BGL/boost
+    COMPONENT Development)
