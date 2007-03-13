@@ -58,10 +58,27 @@ ADD_TEST(viTuImageViewerNew ${VISU_TESTS}
         otbImageViewerNew
         )
 
-ADD_TEST(viTvImageViewer ${VISU_TESTS} 
+ADD_TEST(viTvImageViewerWithOtbVectorImage ${VISU_TESTS} 
         otbImageViewer
 	${INPUTDATA}/couleurs.jpg
         )
+
+ADD_TEST(viTvImageViewerWithLargeOtbVectorImage ${VISU_TESTS} 
+        otbImageViewer
+	${IMAGEDATA}/TOULOUSE/QuickBird/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF
+        )
+
+
+ADD_TEST(viTvImageViewerWithOtbImage ${VISU_TESTS} 
+        otbImageViewerWithOtbImage
+	${INPUTDATA}/ROI_IKO_PAN_LesHalles.tif
+        )
+
+ADD_TEST(viTvImageViewerWithLargeOtbImage ${VISU_TESTS} 
+        otbImageViewerWithOtbImage
+	${IMAGEDATA}/TOULOUSE/QuickBird/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF
+        )
+
 
 # -------       Fichiers sources CXX -----------------------------------
 SET(BasicVisu_SRCS
@@ -73,6 +90,7 @@ otbFullResolutionImageWidget.cxx
 otbZoomableImageWidgetNew.cxx
 otbZoomableImageWidget.cxx
 otbImageViewer.cxx
+otbImageViewerWithOtbImage.cxx
 otbImageViewerNew.cxx
 )
 

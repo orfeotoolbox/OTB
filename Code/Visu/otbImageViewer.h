@@ -29,6 +29,8 @@ PURPOSE.  See the above copyright notices for more information.
 #include "itkCovarianceCalculator.h"
 #include "itkMacro.h"
 #include <FL/Fl_Output.H>
+#include "otbImage.h"
+#include "otbImageToVectorImageCastFilter.h"
 
 
 namespace otb
@@ -89,6 +91,14 @@ class ITK_EXPORT ImageViewer
   typedef typename ScrollWidgetType::Pointer ScrollWidgetPointerType;
   typedef typename ZoomWidgetType::Pointer ZoomWidgetPointerType;
   typedef typename FullWidgetType::Pointer FullWidgetPointerType;
+  itkStaticConstMacro(ImageDimension,unsigned int,ImageType::ImageDimension);
+
+  /// Support for conversion from otb::Image to otb::VectorImage
+  typedef typename PixelType::ValueType ValueType;
+  typedef otb::Image<ValueType,ImageDimension> SingleImageType;
+  typedef typename SingleImageType::Pointer SingleImagePointerType;
+  typedef otb::ImageToVectorImageCastFilter<SingleImageType,ImageType> VectorCastFilterType;
+  typedef typename VectorCastFilterType::Pointer VectorCastFilterPointerType;
 
   /// Input image types
   typedef itk::Vector<InputPixelType,3> MeasurementVectorType;
@@ -121,9 +131,12 @@ class ITK_EXPORT ImageViewer
   itkSetMacro(NormalizationFactor,double);
   itkGetMacro(NormalizationFactor,double);
  
-
-   /** Set the input image */
+  /** Set the input image (VectorImage version) */
   virtual void SetImage(ImageType * img);
+
+  /** Set the input image (Image version) */
+  virtual void SetImage(SingleImageType * img);
+  
   /** Show the viewer (Update) */
   virtual void Show(void);
    /** Hide all Image View Windows */
@@ -216,6 +229,10 @@ protected:
   double       m_NormalizationFactor;
   /// Label to be shown in th full and scroll windows headers.
   const char *  m_Label;
+
+  /// Converter from otb::Image to otb::VectorImage
+  VectorCastFilterPointerType m_VectorCastFilter;
+
 };
 
 

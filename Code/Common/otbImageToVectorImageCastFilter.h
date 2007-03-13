@@ -29,7 +29,7 @@ namespace Functor
       class VectorCast
       {
       public:
-	typedef itk::VariableLengthVector<TOutput> VectorOutputType;
+	typedef typename TOutput::ValueType OutputValueType;
 	VectorCast() {};
 	~VectorCast(){};
 
@@ -41,11 +41,11 @@ namespace Functor
 	  {
 	    return(*this != other);
 	  }
-	inline VectorOutputType operator () (const TInput & A)
+	inline TOutput operator () (const TInput & A)
 	  {
-	    VectorOutputType output;
+	    TOutput output;
 	    output.SetSize(1);
-	    output[0] = static_cast<TOutput>(A);
+	    output[0] = static_cast<OutputValueType>(A);
 	    return output;
 	  }
       };
@@ -59,13 +59,13 @@ namespace Functor
 template <class TInputImage, class TOutputVectorImage>
 class ITK_EXPORT ImageToVectorImageCastFilter
   : public itk::UnaryFunctorImageFilter<TInputImage, TOutputVectorImage,
-  Functor::VectorCast<typename TInputImage::PixelType, typename TOutputVectorImage::ValueType> >
+  Functor::VectorCast<typename TInputImage::PixelType, typename TOutputVectorImage::PixelType> >
   {
   public: 
     /// Standard class typedefs
     typedef ImageToVectorImageCastFilter Self;
     typedef itk::UnaryFunctorImageFilter<TInputImage, TOutputVectorImage, Functor::VectorCast<typename TInputImage::PixelType,
-      typename TOutputVectorImage::ValueType> > Superclass;
+      typename TOutputVectorImage::PixelType> > Superclass;
     typedef itk::SmartPointer<Self> Pointer;
     typedef itk::SmartPointer<const Self> ConstPointer;
     
@@ -80,11 +80,22 @@ class ITK_EXPORT ImageToVectorImageCastFilter
     ImageToVectorImageCastFilter() {}
     /// Detructor
     virtual ~ImageToVectorImageCastFilter() {}
-    /// Additionnal output allocation
-    virtual void AllocateOutputs(void)
+    /// Additionnal output information for allocation
+    virtual void GenerateOutputInformation(void)
       {
+	Superclass::GenerateOutputInformation();
 	this->GetOutput()->SetNumberOfComponentsPerPixel(1);
-	Superclass::AllocateOutputs();
+      }
+    /// Copy output requested region to input requested region
+    virtual void GenerateInputRequestedRegion(void)
+      {
+	if(this->GetInput())
+	  {
+	    typename TInputImage::Pointer input = const_cast<TInputImage *>(this->GetInput());
+	    typename TInputImage::RegionType inputRegion;
+	    this->CallCopyOutputRegionToInputRegion(inputRegion,this->GetOutput()->GetRequestedRegion());
+	    input->SetRequestedRegion(inputRegion);
+	  }
       }
 
   private:

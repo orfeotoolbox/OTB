@@ -57,6 +57,7 @@ namespace otb
     m_Label="OTB Image viewer";
     m_NormalizationFactor = 3.;
     m_QuicklookRatioCoef = 2;
+    m_VectorCastFilter = NULL;
   }
   /// Destructor
   template <class TPixel>
@@ -379,7 +380,7 @@ namespace otb
     // Built done
     // otbMsgDebugMacro(<<"Leaving build method");
   }
-  /// Set the left image
+  /// Set the image (VectorImage version)
   template <class TPixel>
   void
   ImageViewer<TPixel>
@@ -387,6 +388,20 @@ namespace otb
   {
     m_InputImage = dynamic_cast<ImageType *>( img );
   } 
+
+  /// Set the image (Image version)
+  template <class TPixel>
+  void
+  ImageViewer<TPixel>
+  ::SetImage(SingleImageType * img)
+  {
+    m_VectorCastFilter = VectorCastFilterType::New();
+    m_VectorCastFilter->SetInput(img);
+    m_VectorCastFilter->UpdateOutputInformation();
+    m_InputImage = m_VectorCastFilter->GetOutput();
+    
+  } 
+
   /// Show the app
   template <class TPixel>
   void 
