@@ -25,6 +25,13 @@ namespace otb
 {
 namespace Functor
   {
+    /**
+     * \class VectorCast
+     * \brief This functor can be used to convert scalar value to VariableLengthVector with another precision
+     *  a size of 1.
+     * \ingroup Functor
+     * 
+     */
     template <class TInput, class TOutput>
       class VectorCast
       {
