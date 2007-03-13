@@ -29,22 +29,22 @@ namespace otb
 {
 
 /** \class HarrisImageFilter
- *   \brief This filter performs the computation of the Harris measure as followed.
- *
- * The derivative computation is performed by a
- * convolution with the derivative of a Gaussian kernel of
- * variance $\sigma_D$ (derivation scale) and
- * the smoothing of the image is performed by convolving with a
- * Gaussian kernel of variance $\sigma_I$ (integration
- * scale). This allows the computation of the following matrix:
- * \begin{equation}
- * \mu(\mathbf{x},\sigma_I,\sigma_D) = \sigma_D^2 g(\sigma_I)\star
- * \left[\begin{array}{cc} L_x^2(\mathbf{x},\sigma_D) &
- * L_xL_y^2(\mathbf{x},\sigma_D)\\ L_xL_y^2(\mathbf{x},\sigma_D)&
- * L_y^2(\mathbf{x},\sigma_D) \end{array}\right] \end{equation}
- * The output of the detector is $$det(\mu) - \alpha trace^2(\mu)$$.
- *
- * The interest points can then be extracted with a thresholding filter.
+   \brief This filter performs the computation of the Harris measure as followed.
+
+The derivative computation is performed by a
+convolution with the derivative of a Gaussian kernel of
+variance \f$\sigma_D\f$ (derivation scale) and
+the smoothing of the image is performed by convolving with a
+Gaussian kernel of variance \f$\sigma_I\f$ (integration
+scale). This allows the computation of the following matrix:
+\f[
+\mu(\mathbf{x},\sigma_I,\sigma_D) = \sigma_D^2 g(\sigma_I)\star
+\left[\begin{array}{cc} L_x^2(\mathbf{x},\sigma_D) &
+L_xL_y^2(\mathbf{x},\sigma_D)\\ L_xL_y^2(\mathbf{x},\sigma_D)&
+L_y^2(\mathbf{x},\sigma_D) \end{array}\right] \f]
+The output of the detector is \f$[det(\mu) - \alpha trace^2(\mu)\f$.
+
+The interest points can then be extracted with a thresholding filter.
  *
  */
 

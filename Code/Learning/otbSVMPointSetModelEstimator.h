@@ -26,7 +26,9 @@
 namespace otb
 {
 
-/** \class SVMPointSetModelEstimator \brief Class for SVM model
+/** \class SVMPointSetModelEstimator
+
+ * \brief Class for SVM model
  * estimation from PointSets used for classification.
  * 
  *

@@ -35,16 +35,17 @@ namespace otb
 {
 
 /** \class LineDetectorImageFilterBase
+ *
  * \brief Base class for line detector filters.
  *
  * This is the base class for the hierarchy of line detector
  * filters. Line detectors work by detecting 2 parallel edges for
  * a given set of directions. This class implements the
- * \code{ThreadedGenerateData()} method which, for every pixel and for
+ * ThreadedGenerateData"()" method which, for every pixel and for
  * every direction, builds three sets of pixels (left, center and
  * right with respect to the reference direction). The
- * \code{ThreadedGenerateData()} method calls the virtual
- * \code{ComputeMeasure()} method which implements the detection. This
+ * ThreadedGenerateData"()" method calls the virtual
+ * ComputeMeasure"()" method which implements the detection. This
  * method should be overloaded by each specific line detector.
  * 
  * The output is an image of intensity of detection and an image of
@@ -75,7 +76,7 @@ public:
   typedef itk::SmartPointer<Self> Pointer;
   typedef itk::SmartPointer<const Self>  ConstPointer;
 
-  /** Method for management of the "object factory". */
+  /** Method for management of the object factory. */
   itkNewMacro(Self);
 
   /** Return the name of the class. */
@@ -147,10 +148,11 @@ protected:
    * Thus, the ThreadedGenerateData() method is called for each thread process. 
    * The data image are allocated automatically by the mother class by calling the 
    * ThreadedGenerateData() method. ThreadedGenerateData can only write the portion 
-   * of the image specified by the parameter "outputRegionForThread" 
+   * of the image specified by the parameter outputRegionForThread 
    *
-   * \sa ImageToImageFilter::ThreadedGenerateData(),
-   *     ImageToImageFilter::GenerateData() */
+   * \sa ImageToImageFilter::ThreadedGenerateData()
+   * \sa    ImageToImageFilter::GenerateData()
+*/
   void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread,
                             int threadId );
 

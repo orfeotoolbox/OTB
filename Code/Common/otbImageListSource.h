@@ -24,7 +24,9 @@ PURPOSE.  See the above copyright notices for more information.
 namespace otb
 {
 /** \class ImageListSource
+ *
  *  \brief Base class for all the filters producing an otbImageList
+ *
  * \ingroup DataSources
  * \ingroup Images
  * \ingroup Lists

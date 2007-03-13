@@ -26,7 +26,9 @@
 namespace otb
 {
 
-/** \class SVMSampleListModelEstimator \brief Class for SVM model
+/** \class SVMSampleListModelEstimator
+
+ * \brief Class for SVM model
  * estimation from SampleLists used for classification.
  * 
  *

@@ -26,20 +26,20 @@ namespace otb
 {
 
 /** \class FrostImageFilter
- * \brief Applique un filtre de débruitage sur une image.
+ * \brief Anti-speckle image filter
  *
- * Il utilise un noyau de convolution ayant une forme exponetielle décroissante.
- * 
- * La sortie du filtre pour le pixel p est de la forme:
+ * Uses a negative exponential convolution kernel.
+ * The output of the filter for pixel p is:
  *      \f$ \hat I_{s}=\sum_{p\in\eta_{p}} m_{p}I_{p} \f$ 
  *
- * où :   \f$ m_{p}=\frac{KC_{s}^{2}\exp(-KC_{s}^{2}d_{s,p})}{\sum_{p\in\eta_{p}} KC_{s}^{2}\exp(-KC_{s}^{2}d_{s,p})} \f$
- *    et  \f$ d_{s,p}=\sqrt{(i-i_{p})^2+(j-j_{p})^2} \f$
+ * where :   \f$ m_{p}=\frac{KC_{s}^{2}\exp(-KC_{s}^{2}d_{s,p})}{\sum_{p\in\eta_{p}} KC_{s}^{2}\exp(-KC_{s}^{2}d_{s,p})} \f$
+ *    and  \f$ d_{s,p}=\sqrt{(i-i_{p})^2+(j-j_{p})^2} \f$
  *
- * \f$ K \f$     : le facteur de décroissance du filtre
- * \f$ (i,j)\f$ : les coordonnées du point à considérer et compris dans la zone définie par \f$ \eta_{s} \f$ 
- * \f$ (i_{p},j_{p})\f$ :les coordonnées des point appartenant à la zone \f$ \eta_{p} \subset \eta_{s} \f$
- * \f$ C_{s}\f$ : le coefficient de varation calculé sur \f$ \eta_{p}\f$ 
+ * \f$ K \f$     : the decrease coefficient
+ * \f$ (i,j)\f$ : the coordinates of the pixel inside the region
+ * defined by \f$ \eta_{s} \f$ 
+ * \f$ (i_{p},j_{p})\f$ : the coordinates of the pixels belonging to \f$ \eta_{p} \subset \eta_{s} \f$
+ * \f$ C_{s}\f$ : the variation coefficient computed over \f$ \eta_{p}\f$ 
  * 
  */
 

@@ -33,7 +33,7 @@ namespace otb
    * the strip of the input image needed to build a line of the output image. In this strip, 
    * the pixel are directly selected and passed to the output image. 
    *
-   * For exemple, with a 6000X6000 image and a 10 shrinkFactor, it will read 600 lines of 5990 pixels 
+   * For example, with a 6000X6000 image and a 10 shrinkFactor, it will read 600 lines of 5990 pixels 
    * instead of the whole image.
    */
 template <class TInputImage,class TOutputImage> 
