@@ -457,8 +457,29 @@ ADD_TEST(feTvForwardFourierMellinImageFilter ${FEATUREEXTRACTION_TESTS}
 	${TEMP}/feForwardFourierMellinImageFilterImag.hdr)
 
 # -----------------------------------------------------------------------
-			        
+# -------            otb::ImageToEdgePathFilter   -------------
 
+ADD_TEST(feTuImageToEdgePathFilterNew ${FEATUREEXTRACTION_TESTS} 
+         otbImageToEdgePathFilterNew) 
+
+ADD_TEST(feTvImageToEdgePathFilter ${FEATUREEXTRACTION_TESTS}  
+  --compare-image ${EPSILON}
+		     ${BASELINE}/feImageToEdgePathFilter_rcc8_mire4.png
+             ${TEMP}/feImageToEdgePathFilter_rcc8_mire4.png
+        otbImageToEdgePathFilter
+        ${INPUTDATA}/rcc8_mire4.png
+        ${TEMP}/feImageToEdgePathFilter_rcc8_mire4.png
+        255
+        )
+ADD_TEST(feTvImageToEdgePathFilterBis ${FEATUREEXTRACTION_TESTS}  
+  --compare-image ${EPSILON}
+		     ${BASELINE}/feImageToEdgePathFilter_maskrom.png
+             ${TEMP}/feImageToEdgePathFilter_maskrom.png
+        otbImageToEdgePathFilter
+        ${INPUTDATA}/maskrom.png
+        ${TEMP}/feImageToEdgePathFilter_maskrom.png
+        0
+        )
 
 # A enrichir
 SET(BasicFeatureExtraction_SRCS
@@ -512,6 +533,8 @@ otbExtractSegments.cxx
 otbFourierMellinImageFilterNew.cxx
 otbFourierMellinImageFilterTestFFT.cxx
 otbFourierMellinImageFilter.cxx
+otbImageToEdgePathFilterNew.cxx
+otbImageToEdgePathFilter.cxx
 )
 
 
