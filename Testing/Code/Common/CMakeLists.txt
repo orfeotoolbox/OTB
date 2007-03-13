@@ -275,7 +275,7 @@ ADD_TEST(coTuImageToImageListFilterNew ${COMMON_TESTS}
 ADD_TEST(coTvImageListToImageListFilterNew ${COMMON_TESTS} 
          otbImageListToImageListFilterNew) 
 
-# -------            otb::ConcatenateVectorImageAdaptor  -------------------------------------------
+# -------            otb::ConcatenateVectorImageFilter  -------------------------------------------
 
 ADD_TEST(coTuConcatenateVectorImageFilterNew ${COMMON_TESTS} 
          otbConcatenateVectorImageFilterNew)  
@@ -290,10 +290,22 @@ ADD_TEST(coTvConcatenateVectorImageFilter ${COMMON_TESTS}
 	 ${TEMP}/coConcatenateVectorImageFilterOutput1.hdr
 )
 
+#------------    otbImageToVectorImageCastFilter --------------------------------
+
+ADD_TEST(coTuImageToVectorImageCastFilter ${COMMON_TESTS}
+	otbImageToVectorImageCastFilterNew)
+
+ADD_TEST(coTvImageToVectorImageCastFilter ${COMMON_TESTS}
+--compare-image ${TOL}
+		${INPUTDATA}/poupees.hdr
+		${TEMP}/coVectorImageAdaptorOutput.hdr
+		otbImageToVectorImageCastFilter
+		${INPUTDATA}/poupees.hdr
+		${TEMP}/coVectorImageAdaptorOutput.hdr
+)
 # -------            otb::ImageToPathFilterNew  -------------------------------------------
 ADD_TEST(coTuImageToPathFilterNew ${COMMON_TESTS} 
          otbImageToPathFilterNew)  
-
 
          
 # -------       Fichiers sources CXX -----------------------------------
@@ -331,6 +343,8 @@ otbListNew.cxx
 otbList.cxx
 otbConcatenateVectorImageFilterNew.cxx
 otbConcatenateVectorImageFilter.cxx
+otbImageToVectorImageCastFilterNew.cxx
+otbImageToVectorImageCastFilter.cxx
 otbImageToPathFilterNew.cxx
 )
 
