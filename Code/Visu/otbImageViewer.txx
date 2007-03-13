@@ -432,6 +432,18 @@ namespace otb
     Fl::check();
     // otbMsgDebugMacro(<<"Leaving Show method.");
   }
+  /** This is a helper class that performs a Show() and Fl::run() in order to ease 
+      the use of the class for example in wrappings.*/
+  template <class TPixel>
+  int
+  ImageViewer<TPixel>
+  ::FlRun(void)
+  {
+    this->Show();
+    return Fl::run();
+  }
+
+
   /// Hide the app
   template <class TPixel>
   void 

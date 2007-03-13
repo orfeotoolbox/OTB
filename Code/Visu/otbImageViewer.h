@@ -171,6 +171,12 @@ class ITK_EXPORT ImageViewer
   /** Display pixel information */
   virtual void PrintPixLocVal(std::string str);
 
+  /** This is a helper class that performs a Show() and Fl::run() in order to ease 
+   *  the use of the class for example in wrappings.
+   * \return The return code from fltk.
+   */
+  int FlRun(void);
+
 protected:
   // Constructor and destructor
   ImageViewer();
