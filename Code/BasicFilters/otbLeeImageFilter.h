@@ -26,13 +26,14 @@ namespace otb
 {
 
 /** \class LeeImageFilter
- * \brief Applique un filtre de d�bruitage sur une image.
+ * \brief Anti-speckle image filter
  *
- * Ce filtre correspond au filtre Anti-Speckle de LEE :
+ * This class implements Lee's filter for despeckleing of SAR images.
  *
- *	R = E[I] + b(I-E[I]) avec 	b  = C²r / ( C²r + C²v )
- *					Cv = 1 / sqrt(L)  avec L le nombre de vues
- *					Cr = sqrt(Var(I)) / E[I] avec Var(I) = E[I²] - E[I]²
+ *	\f[R = E[I] + b(I-E[I]) \f] with 	\f[b  = C^2_r / ( C^2_r + C^2_v )\f]
+ *					C_v = frac{1}{\sqrt{L}}  with
+ *	\f[L\f] the number of looks and
+ *					\f[C_r = \frac{sqrt{Var(I)}}{E[I]} \f] with \f[Var(I) = E[I^2] - E[I]^2\f]
  *
  */
 
