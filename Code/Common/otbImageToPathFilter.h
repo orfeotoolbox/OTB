@@ -24,32 +24,32 @@ namespace otb
 {
 /**
  * \class ImageToPathFilter
- * \brief Classe de base base pour les filtres prenant une entr�e de type
- * \doxygen{itk}{Image} et renvoyant une sortie de type \doxygen{itk}{Path}.
+ * \brief Base class for filters taking an image as input, and producing an
+ * output of type \doxygen{itk}{Path}. 
  */
 template <class TInputImage, class TOutputPath>
 class ITK_EXPORT ImageToPathFilter
   : public itk::PathSource<TOutputPath>
 {
 public:
-  ///Typedefs standards
+  /// Standard class typedefs
   typedef ImageToPathFilter             Self;
   typedef itk::PathSource<TOutputPath>  Superclass;
   typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
   typedef itk::ProcessObject            ProcessObjectType;
-  /// Constructeur "objectFactory"
+  /// Method for creation through the object factory
   itkNewMacro(Self);
-  /// Informations � l'ex�cution
+  /// Runtime information
   itkTypeMacro(PathToImageFilter,PathSource);
-  /// typedefs relatifs aux param�tres du template
+  /// template parameters typedefs
   typedef          TInputImage             InputImageType;
   typedef typename InputImageType::Pointer InputImagePointerType;
   typedef          TOutputPath             OutputPathType;
   typedef typename OutputPathType::Pointer OutputPathPointerType;
-  ///Dimension de l'image d'entr�e
+  /// Input image dimension
   itkStaticConstMacro(InputImageDimension, unsigned int, TInputImage::ImageDimension);
-  ///Entr�e du pipeline
+  /// Input image Setters and getters
   virtual void SetInput(const InputImageType * Image);
   const InputImageType * GetInput(void);
 
@@ -62,7 +62,7 @@ private:
   ImageToPathFilter(const Self&);
   void operator=(const Self&);
 };
-}//Fin de l'espace de nom otb
+}// end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
 #include "otbImageToPathFilter.txx"

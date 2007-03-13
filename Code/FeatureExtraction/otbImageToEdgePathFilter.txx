@@ -1,10 +1,18 @@
 /*=========================================================================
 
-  Programme :   OTB (ORFEO ToolBox)
-  Auteurs   :   CNES Stage - MICHEL J.
-  Language  :   C++
-  Date      :   2 aout 2006
-  Version   :   $Revision$
+  Program:   ORFEO Toolbox
+  Language:  C++
+  Date:      $Date$
+  Version:   $Revision$
+
+
+  Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
+  See OTBCopyright.txt for details.
+
+
+     This software is distributed WITHOUT ANY WARRANTY; without even 
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
 #ifndef _otbImageToEdgePathFilter_txx
@@ -19,7 +27,7 @@
 namespace otb
 {
 /*
- * Constructeur
+ * Constructor.
  */
 template <class TInputImage, class TOutputPath>
 ImageToEdgePathFilter<TInputImage, TOutputPath>
@@ -28,7 +36,7 @@ ImageToEdgePathFilter<TInputImage, TOutputPath>
 	m_ForegroundValue = PixelType(255);
 }
 /**
- * Methode impl�mentant le calcul du chemin
+ * Main computation method.
  */
 template <class TInputImage, class TOutputPath>
 void
@@ -51,8 +59,7 @@ ImageToEdgePathFilter<TInputImage, TOutputPath>
   typedef itk::ConstShapedNeighborhoodIterator<InputImageType> IteratorType;
   typedef itk::ImageRegionConstIteratorWithIndex<InputImageType> LinearIteratorType;
 
-  // Ajout de bords noirs d'�paisseur 1 � l'image pour d�tecter correctement
-  // les regions aux bords
+  // Padding to deal with near the border objects.
   typename PadFilterType::Pointer pad = PadFilterType::New();
   pad->SetInput(inputImage);
   pad->SetConstant(initPadConstant);
@@ -60,8 +67,7 @@ ImageToEdgePathFilter<TInputImage, TOutputPath>
   pad->SetPadUpperBound(padSize);
   pad->SetPadLowerBound(padSize);
   pad->Update();
-  // Parcours de l'image du bord jusqu'� trouver un premier pixel
-  // blanc qui sera le point de d�part du Path
+  // Iterate on the image to get a starting point
   LinearIteratorType linIter(pad->GetOutput(),pad->GetOutput()->GetLargestPossibleRegion());
   linIter.GoToBegin();
   bool flag = true;
@@ -79,7 +85,7 @@ ImageToEdgePathFilter<TInputImage, TOutputPath>
   typename InputImageType::IndexType start = linIter.GetIndex();
   outputPath->AddVertex(start);
   
-  // D�finition du voisinnage utilis� dans la recherche du chemin
+  // Neighborhood definition
   typename IteratorType::RadiusType radius;
   radius.Fill(1);
   IteratorType it(radius, pad->GetOutput(),pad->GetOutput()->GetLargestPossibleRegion());
@@ -102,8 +108,7 @@ ImageToEdgePathFilter<TInputImage, TOutputPath>
   it.ActivateOffset(RIGHTDOWN);
   it.ActivateOffset(LEFTUP);
   it.ActivateOffset(LEFTDOWN);
-  // Le vecteur de rotation permet de parcourir le voisinage
-  // dans le sens anti-trigonom�trique 
+  // The rotation vector allows to get the clock-wise next pixel
   std::vector<typename IteratorType::OffsetType> rotation;
   rotation.push_back(RIGHT);
   rotation.push_back(RIGHTDOWN);
@@ -113,84 +118,71 @@ ImageToEdgePathFilter<TInputImage, TOutputPath>
   rotation.push_back(LEFTUP);
   rotation.push_back(UP);
   rotation.push_back(RIGHTUP);
-  // On initialise le point de d�part de l'it�rateur
+  // Set up the iterator
   it.SetLocation(start);
   otbMsgDebugMacro(<<"START: "<<start);
-  // Flag permet d'arr�ter l'algorithme
+  // stopping flag
   flag = true;
   int nbMove=0;
-  // nextStart permet d'indiquer � l'algorithme le point de
-  // d�part de la rotation du voisinage pour rechercher le prochain
-  // point du contour  
+  // nexstart gives a clue of where to begin searching in next step of the search
   int nextStart=0;
-  // Tant que la recherche n'est pas termin�e
+  // While the search has not eended
   while(flag)
     {
-    // move permet de parcourir le voisinage de mani�re circulaire
+    // move is used to walk the neighnorhood clock-wise
     int move = nextStart;
-    // edgeFound indique si l'on a rencontr� le contour dans la
-    // recherche circulaire
+    // edgeFound indicate that the edge has been found.
     bool EdgeFound = false;
-    // LastWasPositive indique l'�tat du dernier pixel du voisinage examin�
-    //Init value
+    // LastWasPositive indicate wether the previous pixel belong to the object or not
     bool LastWasPositive(false);
-    // Tant que l'on n'a pas visit� tout le voisinage et que le
-    // contour n'a pas �t� rencontr�
+    // While unexplored pixels remain and no edge was found
     while((move<nextStart+8)&&(!EdgeFound))
       {
-      otbMsgDebugMacro(<<"SEARCH: "<<move%8<<" "<<it.GetPixel(rotation[move%8])<<" LAST: "<<LastWasPositive);
-      // Si le dernier pixel parcouru �tait en dehors de la
-      // r�gion et que le pixel courant est dans la r�gion
+      otbMsgDevMacro(<<"SEARCH: "<<move%8<<" "<<it.GetPixel(rotation[move%8])<<" LAST: "<<LastWasPositive);
+      // If last pixel was not in the object and the current is, we have found the edge
       if((!LastWasPositive) && (it.GetPixel(rotation[move%8]) == m_ForegroundValue) )
 	{
-	// Alors on a rencontr� le contour
 	EdgeFound=true;
 	}
       else
 	{
-	// Sinon on met � jour l'�tat du dernier pixel parcouru
-	// et passe au pixel suivant dans la rotation du voisinage
+	//  Else goes on 
 	LastWasPositive=(it.GetPixel(rotation[move%8]) == m_ForegroundValue);
 	move++;
 	}
       }
-    // Une fois la recherche du point suivant termin�
-    // Si on a trouv� un nouveau point du contour
+    // Once the search has been completed, if an edge pixel was found
     if(EdgeFound)
       {
-      // On met � jour le path
+      // Update the output path
       it+=rotation[move%8];
       nextStart=(move+5)%8;
       outputPath->AddVertex(it.GetIndex(CENTER));
       otbMsgDebugMacro(<<it.GetIndex(CENTER));
-      // Si ce nouveau point est situ� sur le point de d�part
-      // et que l'algorithme a effectu� un nombre suffisant de
-      // mouvements (il n'est pas � son point de d�part)
+      // If we came back to our start point after a sufficient number of moves
       if((it.GetIndex(CENTER)==start)&&(nbMove>=2))
 	{
-	// La recherche est termin�e
+	// search end
         flag=false;
 	}
       else
 	{
-	//Sinon
+	// else
         for(int i=0;i<8;i++)
 	  {
-	  // Si un des pixels du voisinage du point courant correspond
-	  // au point de d�part
+	  // If we came back near our starting pointer after a sufficient number of moves
 	  if((it.GetIndex(rotation[i])==start)&&(nbMove>=2))
 	    {
-	    // la recherche est termin�e
+	    // search end
             flag=false;
 	    }
 	  }
 	}
       }
-      //Sinon
+      // else 
       else
       {
-      // La recherche est termin�e, aucun pixel ne peut �tre
-      // ajout� au contour.
+      // search ended, no pixel can be added to the edge path.
       flag=false;
       }
     nbMove++;
@@ -204,6 +196,6 @@ ImageToEdgePathFilter<TInputImage, TOutputPath>
   Superclass::PrintSelf(os,indent);
   os << "Foreground value : "<<m_ForegroundValue<<std::endl;
 }
-} // Fin de l'espace de nom otb
+} // end namespace otb
 
 #endif

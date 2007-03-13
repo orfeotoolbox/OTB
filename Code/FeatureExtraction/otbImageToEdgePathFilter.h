@@ -23,52 +23,49 @@
 namespace otb {
 /**
  * \class ImageToEdgePathFilter
- * \brief Calcule au niveau pixel le contour d'une image binaire sous
- *la forme d'un \doxygen{itk}{Path}.
+ * \brief This filter compute the closed edge path of  a labelled object
+ *  in an image (for example coming from a segmentation filter). Its output
+ * is a \doxygen{itk}{Path}.
  *
- *L'image en entr�e est surmont�e d'une bordure noire en
- *utilisant le filtre \doxygen{itk}{ConstantPadImageFilter}, afin de
- *d�tecter correctment les contours d'une r�gion situ�e au bord de
- *l'image.
+ * The input image is first surrounded by a 1 pixel wide border-line using the
+ * \doxygen{itk}{ConstantPadImageFilter} in order to deal with stuck-to-the-border
+ * objects. The padding constant is chosen as regard to the ForegroundValue (label of
+ * the object) to avoid confusion on foreground and background values.
  *
- *Le filtrage se fait en deux �tapes : tout d'abord, une recherche
- *lin�aire est faite pour obtenir un pixel du contour qui servira
- *de point de d�part. A partir de ce pixel, le voisinage
- *(d�fini par un \doxygen{itk}{ConstShapedNeighborhoodIterator}) de
- *ce pixel est explor� dans le sens anti-trigonom�trique, en
- *partant du pixel suivant directement le dernier pixel ajout� au
- *contour. Une fois un pixel noir d�tect�, le prochain pixel
- *blanc dans cette recherche appartiendra n�cessairement � la
- *fronti�re, et sera ajout� au contour.
+ * The edge computation is divided into two steps. 
  *
- *Ce processus est it�r� jusqu'� ce que l'on revienne dans le
- *voisinage du point de d�part apr�s un nombre suffisant de
- *mouvements (ici 2). Dans le cas o� l'on ne trouve pas de
- *pixel permettant de terminer la cha�ne, l'algorithme termine.
- *
- *En cas d'objet lin�aire (contour ouvert) dans l'image binaire,
- *l'algorithme fera un aller-retour le long de l'objet jusqu'�
- *retomber sur son point de d�part. Il est alors possible que
- *certains pixels appartiennent deux fois au contour.
- *
- * \sa ImageToPathFilter
+ * First, a linear search is perfomed to detect a first pixel belonging to the edge of
+ * the object.
+ * 
+ * From that pixel and until the algorithm comes back to this position, the neighborhood
+ * is iteratively and clock-wise searched to detect the next pixel in the edge. 
+ * 
+ * In case of linear object (in fact open edge), the algorithm will walk the object twice in
+ * opposite directions, thus producing an edge with a null surface and twice the length of the
+ * object as perimeter.
+ * 
+ * This leads to consistant result for geometric descriptors (for instance compacity).
+ * \sa ImageToPathFilter 
  */
+
+
 template <class TInputImage, class TOutputPath>
 class ITK_EXPORT ImageToEdgePathFilter
   : public ImageToPathFilter<TInputImage, TOutputPath>
 {
 public:
-  /** typedefs standards */
+  /** standards typedefs */
   typedef ImageToEdgePathFilter                 Self;
   typedef ImageToPathFilter<TInputImage, TOutputPath> Superclass;
   typedef itk::SmartPointer<Self>                     Pointer;
   typedef itk::SmartPointer<const Self>               ConstPointer;
 
-  /** Cr�ation */
+  /// Creation througth the object factory
   itkNewMacro(Self);
+  /// Runtime information
   itkTypeMacro(ImageToEdgePathFilter,ImageToPathFilter);
 
-  /** Definition des types parametres */
+  /// Template parameters typedef
   typedef typename Superclass::InputImageType        InputImageType;
   typedef typename Superclass::InputImagePointerType InputImagePointerType;
   typedef typename Superclass::OutputPathType        OutputPathType;
@@ -84,7 +81,7 @@ protected:
   ImageToEdgePathFilter();
   virtual ~ImageToEdgePathFilter(){};
   virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
-  virtual void GenerateOutputInformation() {}; // Ne fait rien
+  virtual void GenerateOutputInformation() {}; //does nothing
   virtual void GenerateData();
 
 private:
@@ -94,7 +91,7 @@ private:
   PixelType m_ForegroundValue; 
 };
 
-} //Fin de l'espace de nom otb
+} // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
 #include "otbImageToEdgePathFilter.txx"

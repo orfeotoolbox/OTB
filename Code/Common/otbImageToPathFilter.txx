@@ -23,17 +23,16 @@ PURPOSE.  See the above copyright notices for more information.
 namespace otb
 {
 /**
- * Constructeur
+ * Constructor.
  */
 template <class TInputImage, class TOutputPath>
 ImageToPathFilter<TInputImage, TOutputPath>
 ::ImageToPathFilter()
 {
-  // Peut etre modifie par les sous-classes
   this->SetNumberOfRequiredInputs(1);
 }
 /**
- * Methode Set pour l'image en entree
+ * Input image setter.
  */
 template <class TInputImage, class TOutputPath>
 void
@@ -43,7 +42,7 @@ ImageToPathFilter<TInputImage, TOutputPath>
   this->ProcessObjectType::SetNthInput(0,const_cast<InputImageType *>(image));
 }
 /**
- * Methode Get pour l'image en entree
+ * Input image getter.
  */
 template <class TInputImage, class TOutputPath>
 const typename ImageToPathFilter<TInputImage, TOutputPath>::InputImageType *
@@ -53,7 +52,7 @@ ImageToPathFilter<TInputImage, TOutputPath>
   return static_cast<const TInputImage *>(this->ProcessObjectType::GetInput(0));
 }
 /**
- * Methode PrintSelf
+ * PrintSelf Method.
  */
 template <class TInputImage, class TOutputPath>
 void
@@ -62,6 +61,6 @@ ImageToPathFilter<TInputImage,TOutputPath>
 {
   Superclass::PrintSelf(os, indent);
 }
-}//Fin de l'espace de nom otb
+}// end namespace otb
 
 #endif
