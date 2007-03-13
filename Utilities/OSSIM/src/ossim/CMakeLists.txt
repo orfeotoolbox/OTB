@@ -15,13 +15,13 @@ FILE(GLOB_RECURSE ossim_vpfutil_SRCS "vpfutil/*.cpp" "vpfutil/*.c")
 FILE(GLOB_RECURSE ossim_plugin_SRCS "plugin/*.cpp" "plugin/*.c")
 FILE(GLOB_RECURSE ossim_init_SRCS "init/*.cpp" "init/*.c")
 FILE(GLOB_RECURSE ossim_kbool_SRCS "kbool/*.cpp" "kbool/*.c")
+FILE(GLOB_RECURSE ossim_dll_main_SRCS "dll_main/*.cpp")
 
-ADD_LIBRARY(ossim 
+SET(OSSIM_SRCS
 ${ossim_base_SRCS}
 ${ossim_elevation_SRCS}
 ${ossim_font_SRCS}
 ${ossim_imaging_SRCS}
-#${ossim_libpolyclip_SRCS}
 ${ossim_matrix_SRCS}
 ${ossim_parallel_SRCS}
 ${ossim_projection_SRCS}
@@ -32,6 +32,20 @@ ${ossim_plugin_SRCS}
 ${ossim_init_SRCS}
 ${ossim_kbool_SRCS}
 )
+
+
+IF(WIN32)
+  IF(NOT BORLAND)
+    IF(NOT CYGWIN)
+      IF(NOT MINGW)
+ 	SET(OSSIM_SRCS ${OSSIM_SRCS} ${ossim_dll_main_SRCS})          
+      ENDIF(NOT MINGW)
+    ENDIF(NOT CYGWIN)
+  ENDIF(NOT BORLAND)
+ENDIF(WIN32)
+
+
+ADD_LIBRARY(ossim ${OSSIM_SRCS})
 TARGET_LINK_LIBRARIES(ossim itktiff itkjpeg8 itkjpeg12 itkjpeg16)
 INSTALL_TARGETS(/lib/otb/ ossim)
 INSTALL_FILES(/include/otb/Utilities/OSSIM/include/ "\\.h$" ${ossim_kbool_HRDS})

@@ -41,10 +41,10 @@ extern "C" {
 /**
  * DLL IMPORT/EXORT SECTION
  */
-#if defined(__MINGW32__) || defined(__CYGWIN__) || defined(_MSC_VER) || defined(__VISUALC__) || defined(__BORLANDC__) || defined(__WATCOMC__)
+#if (defined(__MINGW32__) || defined(__CYGWIN__) || defined(_MSC_VER) || defined(__VISUALC__) || defined(__BORLANDC__) || defined(__WATCOMC__)) && defined(OTBDLL)
 #  define OSSIMEXPORT __declspec(dllexport)
 #  define OSSIMIMPORT __declspec(dllimport)
-#  ifdef OSSIMMAKINGDLL
+#  ifdef ossim_EXPORTS
 #    define OSSIMDLLEXPORT OSSIMEXPORT
 #    define OSSIM_DLL       OSSIMEXPORT
 #    define OSSIMDLLEXPORT_DATA(type) OSSIMEXPORT type
