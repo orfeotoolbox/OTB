@@ -1,3 +1,33 @@
+OTB-v.1.2.1 - Changes since version 1.2.0
+-----------------------------------------
+
+*IO:
+	- Improved support of meta data handling in pipeline execution.
+
+*BasicFilters:
+    - Added a cast filter otb::ImageToVectorImageCastFilter to convert 
+          otb::Image (templated with scalar pixel types) to mono-channel otb::VectorImage.
+
+*FeatureExtraction:
+    - Added a contour extraction filter.
+
+*Visualization:
+    - Viewer accepts now otb::Image (templated with scalar pixel types) 
+          as well as otb::VectorImage.
+    - Added FlRun() method to the Viewer, which execute Show() method from 
+          the Viewer followed by the Fl::run() method from FLTK.
+
+*Platforms:
+	- Minor correction of otb::ObjectList and otb::List in order to support 
+	      visual 7.0 compiler.
+
+*Experimental:
+    - Support for python binding compilation including itk binding 
+          templated with OTB images, OTB IO and OTB Image viewer.
+    - OSSIM has been integrated in the OTB Utilities directory to 
+          prepare its future use in new geometric features. 
+
+
 OTB-v.1.2.0 - Changes since version 1.0.2
 -----------------------------------------
 
