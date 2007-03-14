@@ -144,6 +144,9 @@ public:
   virtual VectorType GetUpperRightCorner( void );
   virtual VectorType GetLowerLeftCorner( void );
   virtual VectorType GetLowerRightCorner( void );
+
+  /// Copy metadata from a DataObject
+  virtual void CopyInformation(const itk::DataObject *);
   
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
 

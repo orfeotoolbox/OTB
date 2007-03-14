@@ -178,6 +178,9 @@ protected:
   Image();
   virtual ~Image(){};
 
+/// Copy metadata from a DataObject
+virtual void CopyInformation(const itk::DataObject *);
+
 private:
   Image(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented

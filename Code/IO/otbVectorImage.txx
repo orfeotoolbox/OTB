@@ -131,6 +131,15 @@ ImageBase::VectorType VectorImage<TPixel, VImageDimension, foo>::GetLowerRightCo
 
 template <class TPixel, unsigned int VImageDimension, unsigned int foo> 
 void 
+VectorImage<TPixel, VImageDimension,  foo>
+::CopyInformation(const itk::DataObject * data)
+{
+  Superclass::CopyInformation(data);
+  this->itk::Object::SetMetaDataDictionary(data->GetMetaDataDictionary());
+}
+
+template <class TPixel, unsigned int VImageDimension, unsigned int foo> 
+void 
 VectorImage<TPixel, VImageDimension, foo>::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   Superclass::PrintSelf(os,indent);

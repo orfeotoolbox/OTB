@@ -530,10 +530,7 @@ StreamingImageFileWriter<TInputImage>
     }
 
   m_ImageIO->SetUseCompression(m_UseCompression);
-  if( m_UseInputMetaDataDictionary )
-    {
-    m_ImageIO->SetMetaDataDictionary(outputPtr->GetMetaDataDictionary());
-    }
+  m_ImageIO->SetMetaDataDictionary(inputPtr->GetMetaDataDictionary());
 
 
    /** Create Image file */
