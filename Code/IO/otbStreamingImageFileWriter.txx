@@ -461,16 +461,6 @@ StreamingImageFileWriter<TInputImage>
   /** End of Prepare ImageIO  : create ImageFactory */
 
 
-  /** Control if the ImageIO is CanStreamWrite */
-    if( m_ImageIO->CanStreamWrite() == false )
-    {
-        itk::OStringStream msg;
-        msg << "The ImageFactory selected for the this image file <"<<m_FileName.c_str()<<"> is not StreamWrite "<< std::endl;
-        msg << m_ImageIO<< std::endl;
-        itkExceptionMacro(<<msg.str().c_str());
-    }
-
-
   /**
    * Grab the input
    */
@@ -484,11 +474,20 @@ StreamingImageFileWriter<TInputImage>
    */
   unsigned int numDivisions, numDivisionsFromSplitter;
 
-  numDivisions = static_cast<unsigned int>(CalculateNumberOfStreamDivisions());
-  numDivisionsFromSplitter = m_RegionSplitter->GetNumberOfSplits(outputRegion, numDivisions);
-  if (numDivisionsFromSplitter < numDivisions)
+  /** Control if the ImageIO is CanStreamWrite */
+    if( m_ImageIO->CanStreamWrite() == false )
     {
-    numDivisions = numDivisionsFromSplitter;
+        otbMsgDebugMacro(<<"WARNING : The ImageFactory selected for the this image file <"<<m_FileName.c_str()<<"> is not StreamWrite. So, the streaming method is not use.");
+        numDivisions = 1;
+    }
+    else
+    {
+  		numDivisions = static_cast<unsigned int>(CalculateNumberOfStreamDivisions());
+  		numDivisionsFromSplitter = m_RegionSplitter->GetNumberOfSplits(outputRegion, numDivisions);
+  		if (numDivisionsFromSplitter < numDivisions)
+    	{
+    		numDivisions = numDivisionsFromSplitter;
+    	}
     }
   
   /**
@@ -498,12 +497,6 @@ StreamingImageFileWriter<TInputImage>
   InputImageRegionType streamRegion;
   streamRegion = m_RegionSplitter->GetSplit(0, numDivisions,
                                               outputRegion);
-
-  // Allocation du bandeau
-//  outputPtr->SetBufferedRegion( streamRegion );
-//  outputPtr->Allocate();
-
-
 
   // On s'appuie sur 'outputPtr' pour d�terminer les initialiser le 'm_ImageIO'
   // Setup the ImageIO
