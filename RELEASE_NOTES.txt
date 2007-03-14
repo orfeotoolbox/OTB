@@ -2,14 +2,14 @@ OTB-v.1.2.1 - Changes since version 1.2.0
 -----------------------------------------
 
 *IO:
-	- Improved support of meta data handling in pipeline execution.
+	- Improved support of geographic meta data handling in pipeline execution.
 
 *BasicFilters:
     - Added a cast filter otb::ImageToVectorImageCastFilter to convert 
           otb::Image (templated with scalar pixel types) to mono-channel otb::VectorImage.
 
 *FeatureExtraction:
-    - Added a contour extraction filter.
+    - Added a contour extraction filter otb::ImageToEdgePathFilter.
 
 *Visualization:
     - Viewer accepts now otb::Image (templated with scalar pixel types) 
