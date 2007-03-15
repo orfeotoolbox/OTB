@@ -174,12 +174,13 @@ public:
   
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
+/// Copy metadata from a DataObject
+virtual void CopyInformation(const itk::DataObject *);
+
 protected:
   Image();
   virtual ~Image(){};
 
-/// Copy metadata from a DataObject
-virtual void CopyInformation(const itk::DataObject *);
 
 private:
   Image(const Self&); //purposely not implemented
