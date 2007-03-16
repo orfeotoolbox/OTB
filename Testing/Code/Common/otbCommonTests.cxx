@@ -62,4 +62,5 @@ REGISTER_TEST(otbConcatenateVectorImageFilter);
 REGISTER_TEST(otbImageToVectorImageCastFilterNew);
 REGISTER_TEST(otbImageToVectorImageCastFilter);
 REGISTER_TEST(otbImageToPathFilterNew);
+REGISTER_TEST(otbSpatialObjectSourceNew);
 }
