@@ -46,4 +46,6 @@ REGISTER_TEST(otbInverseLogPolarTransform);
 REGISTER_TEST(otbInverseLogPolarTransformResample);
 REGISTER_TEST(otbStreamingShrinkImageFilterNew);
 REGISTER_TEST(otbStreamingShrinkImageFilter);
+REGISTER_TEST(otbSpatialObjectToImageDrawingFilterNew);
+REGISTER_TEST(otbSpatialObjectToImageDrawingFilter);
 }

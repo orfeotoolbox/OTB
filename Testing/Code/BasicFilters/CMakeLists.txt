@@ -167,6 +167,22 @@ ADD_TEST(bfTvStreamingShrinkImageFilterQBMUL ${BASICFILTERS_TESTS}
 	20
 )
 
+# -------            otb::SpatialObjectToImageDrawingFilter   ----------------------------
+
+  ADD_TEST(bfTuSpatialObjectToImageDrawingFilterNew ${BASICFILTERS_TESTS}  
+         otbSpatialObjectToImageDrawingFilterNew)
+
+
+ ADD_TEST(bfTvSpatialObjectToImageDrawingFilterWithoutInputImage ${BASICFILTERS_TESTS}  
+ --compare-image ${TOL}
+		${BASELINE}/bfTvSpatialObjectDrawingNoInput.png
+		${TEMP}/bfTvSpatialObjectDrawingNoInput.png
+	otbSpatialObjectToImageDrawingFilter
+	${TEMP}/bfTvSpatialObjectDrawingNoInput.png
+	100
+	50
+)
+
 # A enrichir
 SET(BasicFilters_SRCS
 otbLeeFilter.cxx
@@ -188,6 +204,8 @@ otbInverseLogPolarTransform.cxx
 otbInverseLogPolarTransformResample.cxx
 otbStreamingShrinkImageFilterNew.cxx
 otbStreamingShrinkImageFilter.cxx
+otbSpatialObjectToImageDrawingFilterNew.cxx
+otbSpatialObjectToImageDrawingFilter.cxx
 )
 
 
