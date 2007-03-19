@@ -925,15 +925,6 @@ ADD_TEST(ioTvStreamingImageFileWriterCalculateNumberOfDivisions_BUFFER_NUMBER_OF
          1000
          )
 
-
-
-
-
-
-
-
-
-
 ADD_TEST(ioTvStreamingIFWriterWithFilter ${IO_TESTS} 
    --compare-image ${TOL}   ${BASELINE}/ioStreamingImageFileWriterWithFilter_1_100.hdr
                             ${TEMP}/ioStreamingImageFileWriterWithFilter_1_100.hdr
@@ -957,6 +948,11 @@ ADD_TEST(ioTvImageMetadataWriterTest_HFA ${IO_TESTS}
     	${TEMP}/ioImageMetadataWriterTest_HFA_out.txt
         )
 
+# -------            otb::DXFToSpatialObjectGroupFilter -------------------------------------------
+ADD_TEST(coTuDXFToSpatialObjectGroupFilterNew ${IO_TESTS} 
+         otbDXFToSpatialObjectGroupFilterNew)  
+
+
 #----------------------------------------------------------------------------------
 # Exemples de tests sur les grosses images
 # Tests non lanc�s pour raison taille des fichiers produits
@@ -974,14 +970,6 @@ ADD_TEST(ioTvImageMetadataWriterTest_HFA ${IO_TESTS}
 #                 1000 # NbDivisionsStreaming
 #                 )
 #----------------------------------------------------------------------------------
-
-
-
-
-
-
-
-
 
 
         
@@ -1019,12 +1007,13 @@ otbIntImageIOTest.cxx
 otbDoubleImageIOTest.cxx
 otbImageMetadataFileWriterTest.cxx
 otbStreamingImageFileWriterTestCalculateNumberOfDivisions.cxx
+otbDXFToSpatialObjectGroupFilterNew.cxx
 )
 
 INCLUDE_DIRECTORIES("${OTBTesting_BINARY_DIR}")
 
 ADD_EXECUTABLE(otbIOTests otbIOTests.cxx ${BasicIO_SRCS})
-TARGET_LINK_LIBRARIES(otbIOTests OTBIO OTBCommon  gdal ITKIO ITKCommon)
+TARGET_LINK_LIBRARIES(otbIOTests OTBIO OTBCommon  gdal ITKIO ITKCommon dxf)
 
 ENDIF( NOT OTB_DISABLE_CXX_TESTING )
 

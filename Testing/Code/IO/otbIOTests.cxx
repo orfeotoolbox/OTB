@@ -63,4 +63,5 @@ REGISTER_TEST(otbLUMImageIOTestCanWrite);
 REGISTER_TEST(otbBSQImageIOTestCanRead);
 REGISTER_TEST(otbBSQImageIOTestCanWrite);
 
+REGISTER_TEST(otbDXFToSpatialObjectGroupFilterNew);
 }

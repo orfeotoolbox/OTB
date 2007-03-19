@@ -26,6 +26,7 @@ SET(OTB_INCLUDE_DIRS_BUILD_TREE ${OTB_INCLUDE_DIRS_BUILD_TREE}
   ${OTB_SOURCE_DIR}/Utilities/OSSIM
   ${OTB_SOURCE_DIR}/Utilities/OSSIM/include
   ${OTB_SOURCE_DIR}/Utilities/OSSIM/include/ossim
+  ${OTB_SOURCE_DIR}/Utilities/dxflib
 )
 
 #-----------------------------------------------------------------------------

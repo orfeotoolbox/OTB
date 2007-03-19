@@ -311,6 +311,15 @@ ADD_TEST(coTuImageToPathFilterNew ${COMMON_TESTS}
 ADD_TEST(coTuSpatialObjectSourceNew ${COMMON_TESTS} 
          otbSpatialObjectSourceNew)  
 
+# -------            otb::LineSpatialObject  -------------------------------------------
+ADD_TEST(coTuLineSpatialObjectNew ${COMMON_TESTS} 
+         otbLineSpatialObjectNew)  
+
+# -------            otb::ArcSpatialObject -------------------------------------------
+ADD_TEST(coTuArcSpatialObjectNew ${COMMON_TESTS} 
+         otbArcSpatialObjectNew)  
+
+
 # -------       Fichiers sources CXX -----------------------------------
 SET(BasicCommon_SRCS
 otbSystemTest.cxx
@@ -350,6 +359,8 @@ otbImageToVectorImageCastFilterNew.cxx
 otbImageToVectorImageCastFilter.cxx
 otbImageToPathFilterNew.cxx
 otbSpatialObjectSourceNew.cxx
+otbLineSpatialObjectNew.cxx
+otbArcSpatialObjectNew.cxx
 )
 
 
