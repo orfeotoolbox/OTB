@@ -76,11 +76,11 @@ int otbSpatialObjectDXFReader(int argc, char * argv[])
 	    }
 	  
 	  ImageType::SizeType size;
-	  size[0]=1000;
-	  size[1]=1000;
+	  size[0]=100;
+	  size[1]=100;
 	  imageGenerator->SetSize(size);	
 	  ImageType::PointType origin;
-	  origin[0]=  minimum[0]; 
+	  origin[0]= minimum[0]; 
 	  origin[1]= minimum[1];
 	  imageGenerator->SetOrigin(origin);
 	  
@@ -94,7 +94,8 @@ int otbSpatialObjectDXFReader(int argc, char * argv[])
 	  spacing[1]=(maximum[1]-origin[1])/size[1];			
 	  imageGenerator->SetSpacing(spacing);    
 	  
-	  
+	  std::cout<<"Minimum: "<<minimum[0]<<", "<<minimum[1]<<std::endl;
+	  std::cout<<"Maximum: "<<maximum[0]<<", "<<maximum[1]<<std::endl;
 	  std::cout<<"Origin: "<<origin<<std::endl;
 	  std::cout<<"Spacing: "<<spacing << std::endl;
 

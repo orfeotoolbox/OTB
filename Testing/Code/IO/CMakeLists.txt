@@ -949,18 +949,21 @@ ADD_TEST(ioTvImageMetadataWriterTest_HFA ${IO_TESTS}
         )
 
 # -------            otb::DXFToSpatialObjectGroupFilter -------------------------------------------
-ADD_TEST(coTuDXFToSpatialObjectGroupFilterNew ${IO_TESTS} 
+ADD_TEST(ioTuDXFToSpatialObjectGroupFilterNew ${IO_TESTS} 
          otbDXFToSpatialObjectGroupFilterNew)  
 
 
 # -------            otb::SpatialObjectDXFReader -------------------------------------------
-ADD_TEST(coTuSpatialObjectDXFReaderNew ${IO_TESTS} 
+ADD_TEST(ioTuSpatialObjectDXFReaderNew ${IO_TESTS} 
          otbSpatialObjectDXFReaderNew)
 
-ADD_TEST(coTvSpatialObjectDXFReader ${IO_TESTS} 
+ADD_TEST(ioTvSpatialObjectDXFReader ${IO_TESTS} 
+--compare-image ${TOL} 
+	 ${BASELINE}/ioTvSpatialObjectDXFReaderOutput.png
+	 ${TEMP}/ioTvSpatialObjectDXFReaderOutput.png
          otbSpatialObjectDXFReader
 	 ${INPUTDATA}/test.dxf
-	 ${TMP}/coTvSpatialObjectDXFReaderOutput.png)
+	 ${TEMP}/ioTvSpatialObjectDXFReaderOutput.png)
 
 #----------------------------------------------------------------------------------
 # Exemples de tests sur les grosses images

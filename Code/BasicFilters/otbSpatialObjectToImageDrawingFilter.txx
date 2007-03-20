@@ -34,7 +34,7 @@ namespace otb
     m_Size.Fill(0);
     m_Spacing.Fill(1);
     m_Origin.Fill(0);
-    m_InsideValue = 0;
+    m_InsideValue = 255;
     m_OutsideValue = 0;
     m_UseObjectValue = false;
     m_OriginSpecified = false;
@@ -266,6 +266,7 @@ SpatialObjectToImageDrawingFilter<TInputSpatialObject,TOutputImage>
   OutputImage->SetSpacing(this->m_Spacing);         // set spacing
   OutputImage->SetOrigin(m_Origin);  //   and origin
   OutputImage->Allocate();   // allocate the image
+  OutputImage->FillBuffer(m_OutsideValue);
   typedef itk::ImageRegionIteratorWithIndex<OutputImageType> myIteratorType;
   myIteratorType it(OutputImage,region);
   PointType point;
@@ -281,12 +282,13 @@ SpatialObjectToImageDrawingFilter<TInputSpatialObject,TOutputImage>
 	  point[i]=(int) (it.GetIndex()[i]*m_Spacing[i])+m_Origin[i];
 	}
       double val =0;
-      
-      InputObject->ValueAt(point,val,99999);
-      if( val)
+      if(InputObject->IsInside(point,9999,""))
 	{
+
+	  // otbMsgDebugMacro(<<it.GetIndex()<<" is inside");
 	  if(m_UseObjectValue)
 	    {
+	       InputObject->ValueAt(point,val,99999);
 	      it.Set(static_cast<ValueType>(val));
 	    }
 	  else
@@ -296,6 +298,7 @@ SpatialObjectToImageDrawingFilter<TInputSpatialObject,TOutputImage>
 	}
       else
 	{
+	   // otbMsgDebugMacro(<<it.GetIndex()<<" is outside");
 	  it.Set(m_OutsideValue);
 	}
       ++it;

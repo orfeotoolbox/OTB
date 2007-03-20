@@ -53,7 +53,7 @@ typename LineSpatialObject< VDimension > ::PointListType &
 LineSpatialObject< VDimension >
 ::GetPoints()
 {
-  itkDebugMacro( "Getting LinePoint list" );
+  otbMsgDevMacro( "Getting LinePoint list" );
   return m_Points;
 }
 
@@ -98,7 +98,7 @@ bool
 LineSpatialObject< VDimension >
 ::ComputeLocalBoundingBox() const
 {
-  otbDebugMacro( "Computing tube bounding box" );
+  otbMsgDevMacro( "Computing tube bounding box" );
   if( this->GetBoundingBoxChildrenName().empty()
         || strstr(typeid(Self).name(), this->GetBoundingBoxChildrenName().c_str()) )
       {
@@ -201,7 +201,7 @@ bool
 LineSpatialObject< VDimension >
 ::IsInside( const PointType & point, unsigned int depth, char * name ) const
 {
-  otbDebugMacro( "Checking the point [" << point << "] is on the Line" );
+  otbMsgDevMacro( "Checking the point [" << point << "] is on the Line" );
 
   if(name == NULL)
     {
@@ -227,7 +227,7 @@ bool
 LineSpatialObject< VDimension >
 ::IsEvaluableAt( const PointType & point, unsigned int depth, char * name ) const
 {
-  otbDebugMacro( "Checking if the tube is evaluable at " << point );
+  otbMsgDevMacro( "Checking if the tube is evaluable at " << point );
   return IsInside(point, depth, name);
 }
 
@@ -241,7 +241,7 @@ LineSpatialObject< VDimension >
 ::ValueAt( const PointType & point, double & value, unsigned int depth,
            char * name ) const
 {
-  otbDebugMacro( "Getting the value of the tube at " << point );
+  otbMsgDevMacro( "Getting the value of the tube at " << point );
 
   if( IsInside(point, 0, name) )
     {
