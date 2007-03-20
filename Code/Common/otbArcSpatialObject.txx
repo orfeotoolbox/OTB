@@ -20,7 +20,7 @@ PURPOSE.  See the above copyright notices for more information.
 
 #include "otbArcSpatialObject.h"
 
-#define M_PI 4*vcl_atan(1)
+#define M_PI 4*vcl_atan(1.)
 
 namespace otb
 {
@@ -72,7 +72,7 @@ ArcSpatialObject< VDimension >
         double angle;
         if(transformedPoint[0]!=0)
         {
-                angle=vcl_atan(transformedPoint[1]/transformedPoint[0])*180/M_PI);
+                angle=vcl_atan(transformedPoint[1]/transformedPoint[0])*180/M_PI;
         }
         else if(transformedPoint[1]>0)
                 {
@@ -146,8 +146,7 @@ ArcSpatialObject< VDimension >
     PointType pntB;
         PointType pntC;
         PointType pntD;
-
-    unsigned int i;
+        
         double alpha,longueur,largeur;
         alpha=(m_Angle2-m_Angle1) ; //différence entre les deux angles.
 
