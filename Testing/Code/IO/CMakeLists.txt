@@ -953,6 +953,15 @@ ADD_TEST(coTuDXFToSpatialObjectGroupFilterNew ${IO_TESTS}
          otbDXFToSpatialObjectGroupFilterNew)  
 
 
+# -------            otb::SpatialObjectDXFReader -------------------------------------------
+ADD_TEST(coTuSpatialObjectDXFReaderNew ${IO_TESTS} 
+         otbSpatialObjectDXFReaderNew)
+
+ADD_TEST(coTvSpatialObjectDXFReader ${IO_TESTS} 
+         otbSpatialObjectDXFReader
+	 ${INPUTDATA}/test.dxf
+	 ${TMP}/coTvSpatialObjectDXFReaderOutput.png)
+
 #----------------------------------------------------------------------------------
 # Exemples de tests sur les grosses images
 # Tests non lanc�s pour raison taille des fichiers produits
@@ -1008,6 +1017,8 @@ otbDoubleImageIOTest.cxx
 otbImageMetadataFileWriterTest.cxx
 otbStreamingImageFileWriterTestCalculateNumberOfDivisions.cxx
 otbDXFToSpatialObjectGroupFilterNew.cxx
+otbSpatialObjectDXFReaderNew.cxx
+otbSpatialObjectDXFReader.cxx
 )
 
 INCLUDE_DIRECTORIES("${OTBTesting_BINARY_DIR}")

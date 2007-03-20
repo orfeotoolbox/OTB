@@ -53,7 +53,7 @@ class ITK_EXPORT SpatialObjectSource
 
   /** 
    * Get the output spatial object.
-   * \return The outptu spatial object.
+   * \return The output spatial object.
    */
   virtual SpatialObjectType * GetOutput(void);
 
@@ -62,6 +62,8 @@ class ITK_EXPORT SpatialObjectSource
   SpatialObjectSource();
   /** Destructor */
   ~SpatialObjectSource() {}
+  /** Main computation method */
+  virtual void GenerateData(void) {};
   /** PrintSelf method */
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
