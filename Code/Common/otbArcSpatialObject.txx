@@ -20,7 +20,7 @@ PURPOSE.  See the above copyright notices for more information.
 
 #include "otbArcSpatialObject.h"
 
-#define M_PI 4*vcl_atan(1.)
+#define PI 4*vcl_atan(1.)
 
 namespace otb
 {
@@ -72,7 +72,7 @@ ArcSpatialObject< VDimension >
         double angle;
         if(transformedPoint[0]!=0)
         {
-                angle=vcl_atan(transformedPoint[1]/transformedPoint[0])*180/M_PI;
+                angle=vcl_atan(transformedPoint[1]/transformedPoint[0])*180/PI;
         }
         else if(transformedPoint[1]>0)
                 {
@@ -152,13 +152,13 @@ ArcSpatialObject< VDimension >
 
         if (alpha<=180)
                 {
-                pntA[0]=m_Radius*vcl_cos(m_Angle1*M_PI/180);
-                pntA[1]=m_Radius*vcl_sin(m_Angle1*M_PI/180);
-                pntB[0]=m_Radius*vcl_cos(m_Angle2*M_PI/180);
-                pntB[1]=m_Radius*vcl_sin(m_Angle2*M_PI/180);
+                pntA[0]=m_Radius*vcl_cos(m_Angle1*PI/180);
+                pntA[1]=m_Radius*vcl_sin(m_Angle1*PI/180);
+                pntB[0]=m_Radius*vcl_cos(m_Angle2*PI/180);
+                pntB[1]=m_Radius*vcl_sin(m_Angle2*PI/180);
 
                 longueur=vcl_sqrt((pntB[0]-pntA[0])*(pntB[0]-pntA[0])+(pntB[1]-pntA[1])*(pntB[1]-pntA[1]));
-                largeur=m_Radius*(1-vcl_cos((alpha/2)*M_PI/180));
+                largeur=m_Radius*(1-vcl_cos((alpha/2)*PI/180));
                 pntC[0]=pntB[0]+largeur*(pntB[1]-pntA[1])/longueur;
                 pntC[1]=pntB[1]-largeur*(pntB[0]-pntA[0])/longueur;
                 pntD[0]=pntA[0]+largeur*(pntB[1]-pntA[1])/longueur;
@@ -166,16 +166,16 @@ ArcSpatialObject< VDimension >
         }
         else
                 {
-                pntA[0]=m_Radius*vcl_cos(m_Angle1*M_PI/180);
-                pntA[1]=m_Radius*vcl_sin(m_Angle1*M_PI/180);
-                pntB[0]=m_Radius*vcl_cos(m_Angle2*M_PI/180);
-                pntB[1]=m_Radius*vcl_sin(m_Angle2*M_PI/180);
+                pntA[0]=m_Radius*vcl_cos(m_Angle1*PI/180);
+                pntA[1]=m_Radius*vcl_sin(m_Angle1*PI/180);
+                pntB[0]=m_Radius*vcl_cos(m_Angle2*PI/180);
+                pntB[1]=m_Radius*vcl_sin(m_Angle2*PI/180);
                 longueur=vcl_sqrt((pntB[0]-pntA[0])*(pntB[0]-pntA[0])+(pntB[1]-pntA[1])*(pntB[1]-pntA[1]));
-                largeur=m_Radius*(1-vcl_cos((alpha/2)*M_PI/180));
-                pntA[0]=(m_Radius/2)*(vcl_cos(m_Angle1*M_PI/180)+vcl_cos(m_Angle2*M_PI/180))-(m_Radius*m_Radius/longueur)*(vcl_cos(m_Angle1*M_PI/180)-vcl_cos(m_Angle2*M_PI/180));
-                pntA[1]=(m_Radius/2)*(vcl_sin(m_Angle1*M_PI/180)+vcl_sin(m_Angle2*M_PI/180))-(m_Radius*m_Radius/longueur)*(vcl_sin(m_Angle1*M_PI/180)-vcl_sin(m_Angle2*M_PI/180));
-                pntB[0]=(m_Radius/2)*(vcl_cos(m_Angle1*M_PI/180)+vcl_cos(m_Angle2*M_PI/180))+(m_Radius*m_Radius/longueur)*(vcl_cos(m_Angle1*M_PI/180)-vcl_cos(m_Angle2*M_PI/180));
-                pntB[1]=(m_Radius/2)*(vcl_sin(m_Angle1*M_PI/180)+vcl_sin(m_Angle2*M_PI/180))+(m_Radius*m_Radius/longueur)*(vcl_sin(m_Angle1*M_PI/180)-vcl_sin(m_Angle2*M_PI/180));
+                largeur=m_Radius*(1-vcl_cos((alpha/2)*PI/180));
+                pntA[0]=(m_Radius/2)*(vcl_cos(m_Angle1*PI/180)+vcl_cos(m_Angle2*PI/180))-(m_Radius*m_Radius/longueur)*(vcl_cos(m_Angle1*PI/180)-vcl_cos(m_Angle2*PI/180));
+                pntA[1]=(m_Radius/2)*(vcl_sin(m_Angle1*PI/180)+vcl_sin(m_Angle2*PI/180))-(m_Radius*m_Radius/longueur)*(vcl_sin(m_Angle1*PI/180)-vcl_sin(m_Angle2*PI/180));
+                pntB[0]=(m_Radius/2)*(vcl_cos(m_Angle1*PI/180)+vcl_cos(m_Angle2*PI/180))+(m_Radius*m_Radius/longueur)*(vcl_cos(m_Angle1*PI/180)-vcl_cos(m_Angle2*PI/180));
+                pntB[1]=(m_Radius/2)*(vcl_sin(m_Angle1*PI/180)+vcl_sin(m_Angle2*PI/180))+(m_Radius*m_Radius/longueur)*(vcl_sin(m_Angle1*PI/180)-vcl_sin(m_Angle2*PI/180));
                 pntC[0]=pntB[0]-(largeur/(2*m_Radius))*(pntB[1]-pntA[1]);
                 pntC[1]=pntB[1]+(largeur/(2*m_Radius))*(pntB[0]-pntA[0]);
                 pntD[0]=pntA[0]-(largeur/(2*m_Radius))*(pntB[1]-pntA[1]);
