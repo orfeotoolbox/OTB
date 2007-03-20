@@ -20,7 +20,7 @@ PURPOSE.  See the above copyright notices for more information.
 
 #include "otbArcSpatialObject.h"
 
-#define pi 4*vcl_atan(1);
+#define M_PI 4*vcl_atan(1);
 
 namespace otb
 {
