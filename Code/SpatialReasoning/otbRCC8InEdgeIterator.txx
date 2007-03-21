@@ -47,7 +47,7 @@ namespace otb
    */
   template <class TGraph>
   RCC8InEdgeIterator<TGraph>
-  ::RCC8InEdgeIterator(VertexDescriptorType vertex,TGraph * graph) 
+  ::RCC8InEdgeIterator(VertexDescriptorType vertex,GraphType * graph) 
   {
     m_Graph=graph;
     m_VertexIndex=vertex;

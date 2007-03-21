@@ -34,12 +34,10 @@ namespace otb
  *
  * This class implements a composite filter that generate an image of segments
  * primitives. It combines four filters : 
- * \begin{itemize}
- *   \item otb::PixelSuppressionByDirectionImageFilter
- *   \item otb::LocalHoughFilter
- *   \item otb::FillGapsFilter
- *   \item otb::DrawLineSpatialObjectListFilter
- * \end{itemize}
+ *   - otb::PixelSuppressionByDirectionImageFilter
+ *   - otb::LocalHoughFilter
+ *   - otb::FillGapsFilter
+ *   - otb::DrawLineSpatialObjectListFilter
  *
  */
 

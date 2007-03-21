@@ -37,7 +37,7 @@ ImageToPathFilter<TInputImage, TOutputPath>
 template <class TInputImage, class TOutputPath>
 void
 ImageToPathFilter<TInputImage, TOutputPath>
-::SetInput(const TInputImage * image)
+::SetInput(const InputImageType * image)
 {
   this->ProcessObjectType::SetNthInput(0,const_cast<InputImageType *>(image));
 }

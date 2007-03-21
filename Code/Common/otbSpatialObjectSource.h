@@ -18,6 +18,7 @@ PURPOSE.  See the above copyright notices for more information.
 #ifndef _otbSpatialObjectSource_h
 #define _otbSpatialObjectSource_h
 
+#include "otbMacro.h"
 #include "itkProcessObject.h"
 
 namespace otb
@@ -42,7 +43,7 @@ class ITK_EXPORT SpatialObjectSource
   itkNewMacro(Self);
 
   /** Runtime information */
-  itkTypeMacro(SpatialObjectSource,ProcessObject);
+  itkTypeMacro(SpatialObjectSource,itk::ProcessObject);
 
   /** Template parameters typedefs */
   typedef TSpatialObject SpatialObjectType;
@@ -56,16 +57,15 @@ class ITK_EXPORT SpatialObjectSource
    * \return The output spatial object.
    */
   virtual SpatialObjectType * GetOutput(void);
+  
 
  protected:
   /** Constructor */
   SpatialObjectSource();
   /** Destructor */
-  ~SpatialObjectSource() {}
-  /** Main computation method */
-  virtual void GenerateData(void) {};
+  virtual ~SpatialObjectSource() {}
   /** PrintSelf method */
-  void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
 private:
   SpatialObjectSource(const Self&);//purposely not implemented

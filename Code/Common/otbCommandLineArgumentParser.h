@@ -28,7 +28,6 @@
 #include <string>
 #include <map>
 
-//#include "itkIndent.h"
 #include "itkProcessObject.h"
 #include "otbMacro.h"
 
@@ -40,7 +39,7 @@ namespace otb
 
 /**
  * \class CommandLineArgumentParseResult
- * \brief Objet retourn� par lCommandLineArgumentParser
+ * \brief Object returned by CommandLineArgumentParser
  * \see CommandLineArgumentParser
  */
 class ITK_EXPORT CommandLineArgumentParseResult : public itk::ProcessObject
@@ -83,16 +82,7 @@ public:
   otbGetParameterMacro(Float,float);
   otbGetParameterMacro(Double,double);
 
-/*
-  short                 GetParameterShort(const char *option, unsigned int number=0) const;
-  unsigned short        GetParameterUShort(const char *option, unsigned int number=0) const;
-  int                   GetParameterInt(const char *option, unsigned int number=0) const;
-  unsigned int          GetParameterUInt(const char *option, unsigned int number=0) const;
-  long                  GetParameterLong(const char *option, unsigned int number=0) const;
-  unsigned long         GetParameterULong(const char *option, unsigned int number=0) const;
-  float                 GetParameterFloat(const char *option, unsigned int number=0) const;
-  double                GetParameterDouble(const char *option, unsigned int number=0) const;
-*/
+
   std::string           GetParameterString(const char *option, unsigned int number=0) const;
 
   std::string           GetInputImage(void) const;
@@ -112,7 +102,7 @@ private:
   typedef std::map< std::string, ParameterArrayType > OptionMapType;
 
   void Clear();
-  void AddOption(const std::string &option/*, int nParms*/);
+  void AddOption(const std::string &option);
   void AddParameter(const std::string &option, const std::string &parameter);
 
   OptionMapType m_OptionMap;
@@ -122,23 +112,26 @@ private:
 
 /**
  * \class CommandLineArgumentParser
- * \brief Utilis� pour parser une ligne de commande contenant des arguments et la traduit en liste de param�tres.
+ * \brief Utility to Parse command line argument.
  * Usage:
+ *   - Initialize the parser:
  * \code
- *    // Initialise le parser
+ *    // Initialize the parser
  *    CommandLineArgumentParser parser;
  *    parser.AddOption("-f",1);
  *    parser.AddSynonim("-f","--filename");
  *    parser.AddOption("-v",0);
  *    parser.AddSynonim("-v","--verbose");
- *
- *    // Utilise le parser
+ * \endcode
+ *  - Use the parser:
+ * \code
  *    CommandLineArgumentParseResult result;
- *    if(parser.TryParseCommandLine(argc,argv,result)) {
+ *    if(parser.TryParseCommandLine(argc,argv,result))
  *       if(result.IsOptionPresent("-f"))
- *          cout << "Filename " << result.GetOptionParameter("-f") << endl;
- *       ...
- *    } 
+ *         {
+ *           cout << "Filename " << result.GetOptionParameter("-f") << endl;    
+ *           ...
+ *         }
  * \endcode      
  */
 class ITK_EXPORT CommandLineArgumentParser : public itk::ProcessObject
@@ -159,10 +152,10 @@ public:
   
   /** Add an option with 0 or more parameters (words that follow it) */
 //  void AddOption(const char *name, const int nParameters, const char * comment);
-  // Au moins une valeur
+  // at least one value
 
   void AddOption(const char *name, const  char * comment, char *synonim = NULL, int nParameters = 1, bool obligatory =true);
-  // Si -1, alors on ne connait pas le nombre de parametres � l'avance.
+  // if -1 we do not know the number of parameters
   void AddOptionNParams(const char *name, const char * comment, char *synonim = NULL, bool obligatory =true);
   
   /** Add a different string that envokes the same option (--file and -f) */  
@@ -190,15 +183,14 @@ private:
 
   typedef struct 
     {
-    std::string CommonName;             //Nom identifiant cette option
-    std::string Description;            //Description de l'option
-    std::string Synonim;                //Chaine synonim = raccourci
-    bool NumberOfParametersFixed;       //Precise si le nombre de valeurs attendues est connu
-    int NumberOfParameters;	        //Nombre de valeurs pour cette option
-    bool Obligatory;                    //Precise si l'option est obligatoire
-    bool Finded;                        //Precise si l'option a �t� trouv�e dans la ligne de commande
+    std::string CommonName;             // option name
+    std::string Description;            // option description
+    std::string Synonim;                // shortcut
+    bool NumberOfParametersFixed;       // required number of values
+      int NumberOfParameters;	        // number of values
+    bool Obligatory;                    // is the option mandatory ?
+    bool Finded;                        // check if the option is present
     } OptionType;
-//  typedef std::map< std::string, OptionType> OptionMapType;
   typedef std::vector< OptionType> ListOptionType;
   
   ListOptionType m_OptionList;

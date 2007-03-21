@@ -116,7 +116,7 @@ public:
    * or ThreadedGenerateData() method.  Instead, all the work is done
    * in UpdateOutputData() since it must update a little, execute a little,
    * update some more, execute some more, etc. */
-  virtual void UpdateOutputData(itk::DataObject *output);
+  virtual void UpdateOutputData(itk::DataObject *itkNotUsed(output));
 
 
   /** ImageFileWriter Methods */

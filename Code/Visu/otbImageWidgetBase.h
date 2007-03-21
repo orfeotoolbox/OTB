@@ -124,7 +124,7 @@ class ImageWidgetBase
     ImageType * GetInputOverlay(void);
 
     /** Set the input overlay form list.
-     * \param image The form list to view.
+     * \param formList The form list to view.
      */
     void SetFormListOverlay(FormListType* formList);
     /**

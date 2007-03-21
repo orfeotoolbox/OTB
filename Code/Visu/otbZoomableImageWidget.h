@@ -69,7 +69,7 @@ class ZoomableImageWidget
   void SetZoomFactor(double zoomFactor);
   /**
    * Set a new center for the viewed region.
-   * \param The center of the view region.
+   * \param index The upper left corner of the viewed region.
    */
   void SetZoomUpperLeftCorner(IndexType index);
   itkGetMacro(ZoomUpperLeftCorner,IndexType);

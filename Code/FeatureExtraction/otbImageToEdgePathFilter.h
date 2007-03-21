@@ -25,10 +25,10 @@ namespace otb {
  * \class ImageToEdgePathFilter
  * \brief This filter compute the closed edge path of  a labelled object
  *  in an image (for example coming from a segmentation filter). Its output
- * is a \doxygen{itk}{Path}.
+ * is a Path.
  *
  * The input image is first surrounded by a 1 pixel wide border-line using the
- * \doxygen{itk}{ConstantPadImageFilter} in order to deal with stuck-to-the-border
+ * ConstantPadImageFilter in order to deal with stuck-to-the-border
  * objects. The padding constant is chosen as regard to the ForegroundValue (label of
  * the object) to avoid confusion on foreground and background values.
  *

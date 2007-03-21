@@ -103,7 +103,7 @@ public:
    * Add an edge in the graph.
    * \param index1 The index of the source vertex. 
    * \param index2 The index of the target vertex.
-   * \param edge The edge.
+   * \param r The RCC8 value.
    */
   void AddEdge(unsigned int index1, unsigned int index2, RCC8ValueType r);
   /**

@@ -38,21 +38,21 @@ namespace otb
  * We define a square region of size 2n+1 that we devided in two regions.
  *
  * The response of the edge detector between two regions 1 and 2 in
- * one direction \theta_{i} is:
- *	\[R(\theta_{i}) = 1 - \min (\fract{\mu_{1}}{\mu_{2}};\fract{\mu_{2}}{\mu_{1}}) \]
- * where \mu_{1} and  \mu_{2} are the mean of regions 1 and 2.
+ * one direction \f$ \theta_{i} \f$ is:
+ *	\f[R(\theta_{i}) = 1 - \min (\frac{\mu_{1}}{\mu_{2}};\frac{\mu_{2}}{\mu_{1}}) \f]
+ * where \f$ \mu_{1} \f$ and  \f$ \mu_{2} \f$ are the mean of regions 1 and 2.
  *
  * The intensity of contour is calculated in four directions 
  * vertical , diagonal 1, horizontal and diagonal 2.   
  * 
  * The output is an image of intensity of the detection of contour R, the
- * maximum response of the ratio edge detector of R(\theta_{i}:
- *	\[R = \max ( R(\theta_{i}) ) \]
+ * maximum response of the ratio edge detector of \f$ R(\theta_{i}) \f$ :
+ *	\f[R = \max ( R(\theta_{i}) ) \f]
  *
  * An image of the direction of contours can also be determined by this filter:
- * 	\[D = \fract{\sum_{i=1}^{4} s_{i}\theta_{i}R(\theta_{i})}{\sum_{i=1}^{4} R(\theta_{i}}  \]
- * where  \[if \mu_{1}>\mu_{2} s_{i}=+1 \]
- * \[else if \mu_{1}<\mu_{2} s_{i}=-1 \]
+ * 	\f[D = \frac{\sum_{i=1}^{4} s_{i}\theta_{i}R(\theta_{i})}{\sum_{i=1}^{4} R(\theta_{i}}  \f]
+ * where if  \f[ \mu_{1}>\mu_{2} s_{i}=+1 \f]
+ * else if \f[ \mu_{1}<\mu_{2} s_{i}=-1 \f]
  *  
  */
 

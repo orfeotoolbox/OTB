@@ -74,7 +74,7 @@ public:
 
   /** Set/Get the image input of this process object.  */
   virtual void SetInput( const InputSpatialObjectType *object);
-  virtual void SetInput( unsigned int, const InputSpatialObjectType * object);
+  virtual void SetInput( unsigned int index, const InputSpatialObjectType * object);
   const InputSpatialObjectType * GetInput(void);
   const InputSpatialObjectType * GetInput(unsigned int idx);
 

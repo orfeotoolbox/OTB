@@ -29,9 +29,8 @@ template <class TSpatialObject>
 SpatialObjectSource<TSpatialObject>
 ::SpatialObjectSource()
 {
-  SpatialObjectPointerType output = SpatialObjectType::New();
   this->Superclass::SetNumberOfRequiredOutputs(1);
-  this->Superclass::SetNthOutput(0,output.GetPointer());
+  this->Superclass::SetNthOutput(0,TSpatialObject::New().GetPointer());
 }
 /**
  * Get the output image list
@@ -44,7 +43,7 @@ SpatialObjectSource<TSpatialObject>
 {
   if(this->GetNumberOfOutputs()<1)
     {
-    return 0;
+      return 0;
     }
   return static_cast<SpatialObjectType *> (this->ProcessObject::GetOutput(0));
 }

@@ -28,11 +28,10 @@ namespace otb
 {
   
 /** \class PathListSource
- *  \brief Classe de base de tous les traitements ayant pour sortie des données PathList.
+ * \brief Base class for filters with a PathList output type.  
  *
- * PathListSource est la classe de base pour tous traitements ayant pour 
- * données du PathList. Cette classe défini la méthode du GetOutput()
- * qui retourne un pointeur à la sortie du PathList.
+ * PathListSource is the base class for all filters producing a PathList.
+ * This class defines the GetOutput().
  *
  * \ingroup DataSources
  * \ingroup Paths
@@ -70,8 +69,6 @@ public:
 	return (ptr);
   }
   
-//  virtual DataObjectPointer MakeOutput(unsigned int idx);
-
 protected:
   PathListSource();
   virtual ~PathListSource() {}

@@ -72,7 +72,7 @@ class ITK_EXPORT StreamingShrinkImageFilter
 
   virtual void GenerateInputRequestedRegion(void);
   /** Main computation method */
-  virtual void UpdateOutputData(itk::DataObject * output);
+  virtual void UpdateOutputData(itk::DataObject *itkNotUsed(output));
   
  protected:
   /** Constructor */

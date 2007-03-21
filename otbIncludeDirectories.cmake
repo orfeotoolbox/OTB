@@ -44,11 +44,17 @@ SET(OTB_INCLUDE_DIRS_BUILD_TREE ${OTB_INCLUDE_DIRS_BUILD_TREE}
 #-----------------------------------------------------------------------------
 # Include directories from the ITK build tree.e
 IF(OTB_USE_EXTERNAL_ITK)
-    INCLUDE(${ITK_SOURCE_DIR}/Utilities/itkThirdParty.cmake)
+        INCLUDE(${ITK_SOURCE_DIR}/Utilities/itkThirdParty.cmake)
  	INCLUDE(${ITK_SOURCE_DIR}/itkIncludeDirectories.cmake)
+	SET(OTB_INCLUDE_DIRS_BUILD_TREE ${OTB_INCLUDE_DIRS_BUILD_TREE}
+	${ITK_SOURCE_DIR}/Utilities/vxl/v3p/netlib
+ 	${ITK_SOURCE_DIR}/Utilities/vxl/v3p/netlib/opt)
 ELSE(OTB_USE_EXTERNAL_ITK)
         INCLUDE(${OTB_SOURCE_DIR}/Utilities/ITK/Utilities/itkThirdParty.cmake)
  	INCLUDE(${OTB_SOURCE_DIR}/Utilities/ITK/itkIncludeDirectories.cmake)
+	SET(OTB_INCLUDE_DIRS_BUILD_TREE ${OTB_INCLUDE_DIRS_BUILD_TREE}
+	${OTB_SOURCE_DIR}/Utilities/ITK/Utilities/vxl/v3p/netlib
+	${OTB_SOURCE_DIR}/Utilities/ITK/Utilities/vxl/v3p/netlib/opt)
 ENDIF(OTB_USE_EXTERNAL_ITK)
 
 

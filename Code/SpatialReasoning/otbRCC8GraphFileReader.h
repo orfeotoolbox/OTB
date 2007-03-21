@@ -91,12 +91,12 @@ protected:
   virtual void GenerateData();
   /**
    * Parse edge informations from a given line.
-   * \param The line to parse.
+   * \param line The line to parse.
    */
   void ParseEdge(std::string line);
   /**
    * Parse vertex informations from a given line.
-   * \param The line to parse.
+   * \param line The line to parse.
    */
   void  ParseVertex(std::string line);
   /** PrintSelf method */

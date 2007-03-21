@@ -73,7 +73,7 @@ class ITK_EXPORT SOMMap
   typedef typename Superclass::PointType PointType;
   /**
    * Get The index of the winning neuron for a sample.
-   * \param the sample.
+   * \param sample the sample.
    * \return The index of the winning neuron.
    */
   IndexType GetWinner(const NeuronType& sample);

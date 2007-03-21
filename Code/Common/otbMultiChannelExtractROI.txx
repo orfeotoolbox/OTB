@@ -35,7 +35,6 @@ namespace otb
  */
 template<class TInputPixelType, class TOutputPixelType>
 MultiChannelExtractROI<TInputPixelType,TOutputPixelType>
-//::MultiChannelExtractROI() :    ExtractROIBase< itk::VectorImage<TInputPixelType,2> , itk::VectorImage<TOutputPixelType,2> >(),
 ::MultiChannelExtractROI() :    ExtractROIBase< VectorImage<TInputPixelType,2> , VectorImage<TOutputPixelType,2> >(),
                                 m_FirstChannel(0),
                                 m_LastChannel(0),
@@ -97,25 +96,25 @@ void
 MultiChannelExtractROI<TInputPixelType,TOutputPixelType>
 ::GenerateOutputInformation()
 {
-        // Analyse des canuax a traiter
+        // Analyse of channels to process
         ChannelsType Channels;
         if( m_Channels.empty() == false )
         {
                 m_ChannelsWorks = m_Channels;
         }
-        // Si l'utilisateur a defini l'une de ces bornes, on les prend en compte
+        // If the user did define one of these limits, take them into account
         if ( (m_LastChannel != 0) && (m_FirstChannel != 0) )
         {
                 if ((m_FirstChannel == 0) || (m_LastChannel == 0))
                 {
                         itkExceptionMacro(<< "otb::ExtractImageFilter::GenerateOutputInformation "
-                      << "les canaux a traiter doivent etre dans l'intervalle [1...] "
+                      << "Channels must reside into [1...] "
                       << typeid(itk::ImageBase<InputImageDimension>*).name() );
                 }
                 if ( m_FirstChannel > m_LastChannel )
                 {
                         itkExceptionMacro(<< "otb::ExtractImageFilter::GenerateOutputInformation "
-                      << "le canal specifie par la methode 'SetFirstChannel' est plus grand que le canal specifie par la methode 'SetLastChannel'"
+                      << "FirstChannel is greater than LastChannel"
                       << typeid(itk::ImageBase<InputImageDimension>*).name() );
                 }
                 
@@ -125,7 +124,7 @@ MultiChannelExtractROI<TInputPixelType,TOutputPixelType>
                 }
         }
         
-        // Si aucun canal n'a ete precise, alors tous les canaux sont traites
+        // by default, process all channels
         if( m_ChannelsWorks.empty() == true )
         {
                 m_ChannelsWorksBool = false;
@@ -138,7 +137,7 @@ MultiChannelExtractROI<TInputPixelType,TOutputPixelType>
         typename Superclass::InputImageConstPointer  inputPtr = this->GetInput();
         typename Superclass::OutputImagePointer outputPtr = this->GetOutput();
 
-        // initialise le nombre de canaux de l'image output (li� aux "channel" s�lectionn�s)
+        // initialize the number of channels of the output image
         if( m_ChannelsWorksBool == false )
         {
                 outputPtr->SetVectorLength(inputPtr->GetVectorLength() );
@@ -181,7 +180,7 @@ MultiChannelExtractROI<TInputPixelType,TOutputPixelType>
         
 	outputPtr->SetNumberOfComponentsPerPixel( outputPtr->GetVectorLength() );
 
-        // Appel � la methode de la classe de base
+        // Call to the superclass implementation
         Superclass::GenerateOutputInformation();
 
 }
@@ -213,7 +212,7 @@ MultiChannelExtractROI<TInputPixelType,TOutputPixelType>
   OutputIterator outIt(outputPtr, outputRegionForThread);
   InputIterator inIt(inputPtr, inputRegionForThread);
 
-  // Si traitement classique
+  // if default behaviour
   if ( m_ChannelsWorksBool == false )
   {
         // walk the output region, and sample the input image
@@ -225,10 +224,10 @@ MultiChannelExtractROI<TInputPixelType,TOutputPixelType>
                 progress.CompletedPixel();
         }
   }
-  // Traitement particulier des canaux 
+  // Specific behaviour
   else
   {
-        // Parcours des canaux a traiter
+        // for each channel to process
         unsigned int channelIn(0);
         unsigned int channelOut(0);
         unsigned int nbChannels(0);

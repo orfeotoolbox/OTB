@@ -66,7 +66,7 @@ public:
   /** Set the point set output of this process object. This call is slated
    * to be removed from ITK. You should GraftOutput() and possible
    * DataObject::DisconnectPipeline() to properly change the output. */
-  void SetOutput(TOutputPointSet *output);
+  void SetOutput(OutputPointSetType *output);
 
   /** Graft the specified DataObject onto this ProcessObject's output.
    * This method grabs a handle to the specified DataObject's bulk

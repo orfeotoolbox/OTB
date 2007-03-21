@@ -71,7 +71,7 @@ Resampler<TInputImage, TOuputImage>
 template <class TInputImage,class TOuputImage>
 void
 Resampler<TInputImage, TOuputImage>
-::EnlargeOutputRequestedRegion(itk::DataObject *)
+::EnlargeOutputRequestedRegion(itk::DataObject *itkNotUsed(output))
 {
   this->GetOutput()->SetRequestedRegion( this->GetOutput()->GetLargestPossibleRegion());
 }

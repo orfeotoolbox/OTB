@@ -64,7 +64,7 @@ namespace otb
   template <class TInputSpatialObject, class TOutputImage>
   void
   SpatialObjectToImageDrawingFilter<TInputSpatialObject,TOutputImage>
-  ::SetInput( unsigned int index, const TInputSpatialObject * object )
+  ::SetInput( unsigned int index, const InputSpatialObjectType * object )
   {
     // Process object is not const-correct so the const_cast is required here
     this->itk::ProcessObject::SetNthInput(index,

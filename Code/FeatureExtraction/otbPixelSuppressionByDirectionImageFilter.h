@@ -36,8 +36,8 @@ namespace otb
  *
  * This class implements an image filter which detects isolated pixels
  * that have little chance of belonging to a raod and performs a pixel
- * supression. For each pixel kept with direction \theta_{i}, we look
- * for other pixels with a direction close to \theta_i in an angular
+ * supression. For each pixel kept with direction \f$ \theta_{i} \f$, we look
+ * for other pixels with a direction close to \f$ \theta_i \f$ in an angular
  * beam around it. If none is found, the pixel is suppressed.
  *
  * This filter is the first step to generate an image of segments

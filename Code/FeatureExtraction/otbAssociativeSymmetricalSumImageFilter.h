@@ -29,9 +29,9 @@ namespace otb
  * This class implements a fusion of the output images of
  * otb::LineRatioDetector and otb::LineCorrelationDetector
  *
- * The assaciative symmetrical sum \sigma(x,y) is used to merge information from the 
+ * The assaciative symmetrical sum \f$ \sigma(x,y) \f$ is used to merge information from the 
  * two detectors:
- 	\[ \sigma(x,y)=\fract{xy}{1-x-y+2xy} with x,y \in [0,1].]
+ 	\f[ \sigma(x,y)=\frac{xy}{1-x-y+2xy} \f] with \f$ x,y \in [0,1] \f$.
  * 
  * 
  */

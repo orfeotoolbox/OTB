@@ -27,8 +27,6 @@ namespace otb
 /** \class ArcSpatialObject
  *  \brief 
  *
- * \ingroup 
- * \ingroup
  */
 template <unsigned int VDimension = 2>
 class ITK_EXPORT ArcSpatialObject

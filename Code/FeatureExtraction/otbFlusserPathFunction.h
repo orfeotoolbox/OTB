@@ -24,7 +24,7 @@ namespace otb
 {
 
 /**
- * \class FlusserImageFunction
+ * \class FlusserPathFunction
  * \brief Calculate the Flusser's invariant parameters.
  *
  * Calculate the Flusser's invariant over a path and defined as:

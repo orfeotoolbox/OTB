@@ -48,7 +48,7 @@ public:
   {}
 };
 /**
- * \Class RCC8GraphFileWriter 
+ * \class RCC8GraphFileWriter 
  * \brief This class writes a RCC8 Graph to a dot file (graphviz file format).
  * 
  * The writer first loops on the vertices of the graph, getting the property map 

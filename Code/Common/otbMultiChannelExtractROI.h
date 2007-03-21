@@ -29,25 +29,22 @@ namespace otb
 {
 
 /** \class MultiChannelExtractROI
- * \brief Extrait une partie d'une image d'une image multi-canal.
+ * \brief Extract a spatial or spectral subset of a multi-channel image.
  *
- * Il est possible d'extraire tous les canaux de l'image ou seulement ceux pr�cis�s par l'utilisateur.
- * La m�thode SetChannel permet de s�lectionner un canal (une liste est incr�ment�e).
- * Les m�thodes SetFirstChannel/SetLastChannel permettent de d�finir une liste de canaux, d�finit par cet intervalle.
- * \note Si aucun canal n'est sp�cifi� par l'utilisateur, alors tous les canaux de l'image d'entr�e sont trait�s
- * \note Ces classe est param�tr�e par le type de pixel des images d'entr�e et de sortie. Les images manipul�es dans cette classe 
- * sont de type "itk::VectorImage".
+ * It is possible to extract all the channels from the input image or only those specified by the user.
+ * The SetChannel() method allows to select one channel.
+ * The SetFirstChannel() and SetLastChannel() methods allow the user to define a list of channels.
  *
+ * \note If no channels are specified, then all channels from the input image are selected.
+ * \note The image manipulated inside this class are of type otb::VectorImage.
  */
 template <class TInputPixelType, class TOutputPixelType>
 class ITK_EXPORT MultiChannelExtractROI:
-//    public ExtractROIBase< itk::VectorImage<TInputPixelType,2> , itk::VectorImage<TOutputPixelType,2> >
     public ExtractROIBase< VectorImage<TInputPixelType,2> , VectorImage<TOutputPixelType,2> >
 {
 public:
   /** Standard class typedefs. */
   typedef MultiChannelExtractROI                Self;
-//  typedef ExtractROIBase< itk::VectorImage<TInputPixelType,2> , itk::VectorImage<TOutputPixelType,2> > Superclass;
   typedef ExtractROIBase< VectorImage<TInputPixelType,2> , VectorImage<TOutputPixelType,2> > Superclass;
   typedef itk::SmartPointer<Self>               Pointer;
   typedef itk::SmartPointer<const Self>         ConstPointer;
@@ -97,20 +94,22 @@ public:
   /** Typedef Liste des canaux */
   typedef typename std::vector<unsigned int> ChannelsType;
 
-  /** Renvoie la liste des canaux trait�s */
+  /** \return The list of processed channels */
   ChannelsType GetChannels()const
   {
         return (m_Channels);
   }
-  /** Renvoie le nombre de canaux trait�s */
+  /** \return The number of processed channels */
   unsigned int GetNbChannels()const
   {
         return (m_Channels.size());
   }
   
-  /** Selectionne un canal a traiter */
+  /** Select a channel to process
+   \param channel The channel to process */
   void SetChannel(unsigned int channel);
-  /** Annule la selection des canaux */
+  
+  /** Clear channels selection */
   void ClearChannels(void);
 
   /** ImageDimension enumeration */
@@ -124,7 +123,7 @@ protected:
   ~MultiChannelExtractROI() {};
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
-  /** ExtractImageFilter peut etre implementee comme un filtre multithreaded.
+  /** ExtractImageFilter can be implemented as a  multithreaded filter.
    * \sa ImageToImageFilter::ThreadedGenerateData(),
    *     ImageToImageFilter::GenerateData()  */
   void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread,
@@ -134,12 +133,12 @@ private:
   MultiChannelExtractROI(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
   
-  /** Premier/Dernier canal � traiter [1...] */
+  /** First/ last channel to process [1...] */
   unsigned int  m_FirstChannel;
   unsigned int  m_LastChannel;
-  /** Liste des canaux � traiter  [1...] */
+  /** List of channels to process  [1...] */
   ChannelsType  m_Channels; 
-  /** Liste des canaux qui seront r�ellement trait�s [1...] */
+  /** List of channels actually being processed [1...] */
   ChannelsType  m_ChannelsWorks;
   /** */
   bool m_ChannelsWorksBool;
