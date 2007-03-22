@@ -29,31 +29,43 @@ namespace otb
 /**
  * Constructor
  */
-template <unsigned int VDimension>
-SpatialObjectDXFReader<VDimension>
+template <class TSpatialObject>
+SpatialObjectDXFReader<TSpatialObject>
 ::SpatialObjectDXFReader()
 {
   m_FileName = "";
   m_LayerName="";
+  // this->itk::ProcessObject::ReleaseDataBeforeUpdateFlagOff();
+  this->GetOutput()->ReleaseData();
+  this->ResetPipeline();
 }
 /**
  * Destructor
  */
-template <unsigned int VDimension>
-SpatialObjectDXFReader<VDimension>
+template <class TSpatialObject>
+SpatialObjectDXFReader<TSpatialObject>
 ::~SpatialObjectDXFReader()
 {}
+
+template <class TSpatialObject>
+void
+SpatialObjectDXFReader<TSpatialObject>
+::SetFileName(char * filename)
+{
+  m_FileName = filename;
+  this->Modified();
+}
 /**
  * Main computation method
  */
-template <unsigned int VDimension>
+template <class TSpatialObject>
 void
-SpatialObjectDXFReader<VDimension>
+SpatialObjectDXFReader<TSpatialObject>
 ::GenerateData()
 {
-  otbMsgDebugMacro(<<"Entering GenerateData()");
+  std::cout<<"Entering GenerateData()"<<std::endl;
   GroupSpatialObjectType * ptr = this->GetOutput();
-  typedef otb::DXFToSpatialObjectGroupFilter<VDimension> CreationFilter;
+  typedef otb::DXFToSpatialObjectGroupFilter<TSpatialObject> CreationFilter;
   typename CreationFilter::Pointer creationClass = CreationFilter::New();
   if (m_LayerName.size()>0)
     {
@@ -61,10 +73,20 @@ SpatialObjectDXFReader<VDimension>
     }
   DL_Dxf dxf;
   dxf.in(m_FileName, creationClass);
-  creationClass->GenerateData();
-  otbMsgDebugMacro(<<" from inside class: "<<creationClass->GetOutput()->GetNumberOfChildren());
-  this->SetNthOutput(0,static_cast<GroupSpatialObjectType *>(creationClass->GetOutput()));
+  GroupSpatialObjectType * group = creationClass->GetOutput();
+  group->Update();
+  otbMsgDebugMacro(<<" from inside class: "<<group->GetNumberOfChildren());
+  this->SetNthOutput(0,group);
 }
+
+template <class TSpatialObject>
+void
+SpatialObjectDXFReader<TSpatialObject>
+::Update(void)
+{
+  this->GenerateData();
+}
+
 } //namespace otb
 
 #endif

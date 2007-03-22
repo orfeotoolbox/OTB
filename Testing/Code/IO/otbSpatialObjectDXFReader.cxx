@@ -25,17 +25,15 @@ int otbSpatialObjectDXFReader(int argc, char * argv[])
 {
   try
     {
-      std::cout<<"Entering main"<<std::endl;
       const unsigned int Dimension = 2;
       char * inputFilename = argv[1];
       char * outputFilename = argv[2];
 
       typedef unsigned char PixelType;
-
+      typedef itk::GroupSpatialObject<Dimension> GroupType;
       typedef otb::Image<PixelType,Dimension> ImageType;
       typedef otb::ImageFileWriter<ImageType> WriterType;
-      typedef otb::SpatialObjectDXFReader<Dimension> SpatialObjectDXFReaderType;
-      typedef SpatialObjectDXFReaderType::GroupSpatialObjectType GroupType;
+      typedef otb::SpatialObjectDXFReader<GroupType> SpatialObjectDXFReaderType;
       typedef otb::SpatialObjectToImageDrawingFilter<GroupType,ImageType> SpatialObjectToImageDrawingFilterType;
 
       // Instantiating object
@@ -45,11 +43,10 @@ int otbSpatialObjectDXFReader(int argc, char * argv[])
 
       reader->SetFileName(inputFilename);
       //reader->SetLayerName("TOIT");
-      reader->GenerateData();
-      GroupType::Pointer group = reader->GetOutput();
-
-      std::cout<<"DXF file read."<<std::endl;
-      std::cout<<"Number of children: "<<group->GetNumberOfChildren()<<std::endl;
+      
+     
+      reader->Update();
+       GroupType::Pointer group = reader->GetOutput();
 
       if(group->GetNumberOfChildren() != 0)
 	{

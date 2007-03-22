@@ -25,21 +25,22 @@ namespace otb
   /**
    * Constructor.
    */
-  template <unsigned int VDimension>
-  DXFToSpatialObjectGroupFilter<VDimension>
+  template <class TSpatialObject>
+  DXFToSpatialObjectGroupFilter<TSpatialObject>
   ::DXFToSpatialObjectGroupFilter()
   {
     m_CurrentObjectType=0;
     m_PointList.clear();
     m_layer="";
     layerspecified=false;
+    this->SetNumberOfRequiredOutputs(0);
   }
   /**
    * Set the layer to read
    */
-  template <unsigned int VDimension>
+  template <class TSpatialObject>
   void
-  DXFToSpatialObjectGroupFilter<VDimension>
+  DXFToSpatialObjectGroupFilter<TSpatialObject>
   ::SetLayer(const char* layer) {
     m_layer=layer;
     layerspecified=true;
@@ -47,9 +48,9 @@ namespace otb
   /**
    * Sample implementation of the method which handles layers.
    */
-  template <unsigned int VDimension>
+  template <class TSpatialObject>
   void
-  DXFToSpatialObjectGroupFilter<VDimension>
+  DXFToSpatialObjectGroupFilter<TSpatialObject>
   ::addLayer(const DL_LayerData& data) 
   {  
     GroupPointer grpPtr = this->GetOutput();
@@ -80,9 +81,9 @@ namespace otb
   /**
    * Sample implementation of the method which handles point entities.
    */
-  template <unsigned int VDimension>
+  template <class TSpatialObject>
   void
-  DXFToSpatialObjectGroupFilter<VDimension>
+  DXFToSpatialObjectGroupFilter<TSpatialObject>
   ::addPoint(const DL_PointData& data) 
   {
     GroupPointer grpPtr = this->GetOutput();
@@ -128,9 +129,9 @@ namespace otb
   /**
    * Sample implementation of the method which handles line entities.
    */
-  template <unsigned int VDimension>
+  template <class TSpatialObject>
   void
-  DXFToSpatialObjectGroupFilter<VDimension>
+  DXFToSpatialObjectGroupFilter<TSpatialObject>
   ::addLine(const DL_LineData& data) 
   {
     GroupPointer grpPtr = this->GetOutput();
@@ -180,9 +181,9 @@ namespace otb
   /**
    * Sample implementation of the method which handles 3DFace entities.
    */
-  template <unsigned int VDimension>
+  template <class TSpatialObject>
   void
-  DXFToSpatialObjectGroupFilter<VDimension>
+  DXFToSpatialObjectGroupFilter<TSpatialObject>
   ::add3DFace(const DL_3DFaceData& data) 
   {
     GroupPointer grpPtr = this->GetOutput();
@@ -240,9 +241,9 @@ namespace otb
   /**
    * Sample implementation of the method which handles arc entities.
    */
-  template <unsigned int VDimension>
+  template <class TSpatialObject>
   void
-  DXFToSpatialObjectGroupFilter<VDimension>
+  DXFToSpatialObjectGroupFilter<TSpatialObject>
   ::addArc(const DL_ArcData& data) 
   {
     GroupPointer grpPtr = this->GetOutput();
@@ -275,9 +276,9 @@ namespace otb
   /**
    * Sample implementation of the method which handles circle entities.
    */
-  template <unsigned int VDimension>
+  template <class TSpatialObject>
   void
-  DXFToSpatialObjectGroupFilter<VDimension>
+  DXFToSpatialObjectGroupFilter<TSpatialObject>
   ::addCircle(const DL_CircleData& data) 
   {
     GroupPointer grpPtr = this->GetOutput();
@@ -304,10 +305,10 @@ namespace otb
     m_CurrentObjectType=4;
     EllipsePointer ellipse=EllipseType::New();
     ellipse->SetRadius(data.radius);
-    double offset[VDimension];
+    double offset[TSpatialObject::ObjectDimension];
     offset[ 0 ] = data.cx;
     offset[ 1 ] = data.cy;
-    if (VDimension==3)
+    if (TSpatialObject::ObjectDimension==3)
       {
         offset[ 2 ] = data.cz;
       }
@@ -331,9 +332,9 @@ namespace otb
   /**
    * Sample implementation of the method which handles polyline entities.
    */
-  template <unsigned int VDimension>
+  template <class TSpatialObject>
   void
-  DXFToSpatialObjectGroupFilter<VDimension>
+  DXFToSpatialObjectGroupFilter<TSpatialObject>
   ::addPolyline(const DL_PolylineData& data) 
   {
     GroupPointer grpPtr = this->GetOutput();
@@ -376,9 +377,9 @@ namespace otb
   /**
    * Sample implementation of the method which handles vertices.
    */
-  template <unsigned int VDimension>
+  template <class TSpatialObject>
   void
-  DXFToSpatialObjectGroupFilter<VDimension>
+  DXFToSpatialObjectGroupFilter<TSpatialObject>
   ::addVertex(const DL_VertexData& data) 
   {
     GroupPointer grpPtr = this->GetOutput();
@@ -393,9 +394,9 @@ namespace otb
     
   }
 
-  template <unsigned int VDimension>
+  template <class TSpatialObject>
   void
-  DXFToSpatialObjectGroupFilter<VDimension>
+  DXFToSpatialObjectGroupFilter<TSpatialObject>
   ::GenerateData() 
   {
     GroupPointer grpPtr = this->GetOutput();
@@ -420,9 +421,18 @@ namespace otb
 	  grpPtr->AddSpatialObject(m_CurrentPolyLine);
       }
   }
-template <unsigned int VDimension>
+
+template <class TSpatialObject>
+  void
+  DXFToSpatialObjectGroupFilter<TSpatialObject>
+  ::Update() 
+  {
+    this->GenerateData();
+  }
+
+template <class TSpatialObject>
 void
-DXFToSpatialObjectGroupFilter<VDimension>
+DXFToSpatialObjectGroupFilter<TSpatialObject>
 ::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   Superclass::PrintSelf(os, indent);

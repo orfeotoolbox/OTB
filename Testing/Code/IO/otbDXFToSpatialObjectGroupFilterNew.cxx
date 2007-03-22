@@ -18,13 +18,15 @@
 #include "itkExceptionObject.h"
 
 #include "otbDXFToSpatialObjectGroupFilter.h"
+#include "itkGroupSpatialObject.h"
 
 int otbDXFToSpatialObjectGroupFilterNew(int argc, char * argv[])
 {
   try
     {
       const unsigned int Dimension = 2;
-      typedef otb::DXFToSpatialObjectGroupFilter<Dimension> DXFToSpatialObjectGroupFilterType;
+      typedef itk::GroupSpatialObject<Dimension> GroupType;
+      typedef otb::DXFToSpatialObjectGroupFilter<GroupType> DXFToSpatialObjectGroupFilterType;
 
       // Instantiating object
       DXFToSpatialObjectGroupFilterType::Pointer object = DXFToSpatialObjectGroupFilterType::New();

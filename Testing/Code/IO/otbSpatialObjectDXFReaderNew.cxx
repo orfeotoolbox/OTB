@@ -19,11 +19,14 @@
 
 #include "otbSpatialObjectDXFReader.h"
 
+
 int otbSpatialObjectDXFReaderNew(int argc, char * argv[])
 {
   try
     {
-      typedef otb::SpatialObjectDXFReader<3> SpatialObjectDXFReaderType;
+      const unsigned int Dimension = 2;
+      typedef itk::GroupSpatialObject<Dimension> GroupType;
+      typedef otb::SpatialObjectDXFReader<GroupType> SpatialObjectDXFReaderType;
 
       // Instantiating object
       SpatialObjectDXFReaderType::Pointer object = SpatialObjectDXFReaderType::New();

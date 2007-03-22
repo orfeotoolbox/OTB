@@ -23,8 +23,6 @@ PURPOSE.  See the above copyright notices for more information.
 #include "otbSpatialObjectSource.h"
 
 #include "itkEllipseSpatialObject.h"
-/* #include <iostream> */
-/* #include <stdio.h> */
 #include "itkGroupSpatialObject.h"
 #include "itkSpatialObjectPoint.h"
 #include "itkLandmarkSpatialObject.h"
@@ -39,14 +37,14 @@ namespace otb
    *  \brief
    *
    */
-template <unsigned int VDimension = 3>
+template <class TSpatialObject>
 class ITK_EXPORT DXFToSpatialObjectGroupFilter 
-  : public DL_CreationAdapter, public SpatialObjectSource< itk::GroupSpatialObject<VDimension> >
+  : public DL_CreationAdapter, public SpatialObjectSource<TSpatialObject>
 {
   public:
   /** Standard typedefs */
   typedef DXFToSpatialObjectGroupFilter                              Self;
-  typedef SpatialObjectSource< itk::GroupSpatialObject<VDimension> > Superclass;
+  typedef SpatialObjectSource< TSpatialObject > Superclass;
   typedef itk::SmartPointer<Self>                                    Pointer;
   typedef itk::SmartPointer<const Self>                              ConstPointer;
   	
@@ -57,19 +55,19 @@ class ITK_EXPORT DXFToSpatialObjectGroupFilter
   itkTypeMacro(SpatialObjectReader,SpatialObjectSource);
 
   /** Spatial objects typedefs */
-  typedef itk::GroupSpatialObject<VDimension>       GroupSpatialObjectType;
+  typedef TSpatialObject                            GroupSpatialObjectType;
   typedef typename GroupSpatialObjectType::Pointer  GroupPointer;		
-  typedef itk::SpatialObjectPoint<VDimension>       PointType;
-  typedef itk::LandmarkSpatialObject<VDimension>    LandmarkType;
+  typedef itk::SpatialObjectPoint<TSpatialObject::ObjectDimension>       PointType;
+  typedef itk::LandmarkSpatialObject<TSpatialObject::ObjectDimension>    LandmarkType;
   typedef typename LandmarkType::Pointer            LandmarkPointer;
   typedef typename  LandmarkType::PointListType     LandmarkListType;
-  typedef LineSpatialObject<VDimension>             LineType;
+  typedef LineSpatialObject<TSpatialObject::ObjectDimension>             LineType;
   typedef typename LineType::Pointer                LinePointer;
-  typedef itk::LineSpatialObjectPoint<VDimension>   LinePointType;
+  typedef itk::LineSpatialObjectPoint<TSpatialObject::ObjectDimension>   LinePointType;
   typedef typename LineType::PointListType          LineListType;
-  typedef otb::ArcSpatialObject<VDimension>         ArcType;
+  typedef otb::ArcSpatialObject<TSpatialObject::ObjectDimension>         ArcType;
   typedef typename ArcType::Pointer                 ArcPointer;
-  typedef itk::EllipseSpatialObject<VDimension>     EllipseType;
+  typedef itk::EllipseSpatialObject<TSpatialObject::ObjectDimension>     EllipseType;
   typedef typename EllipseType::Pointer             EllipsePointer;
   typedef std::vector< LinePointType >              PointListType;
   
@@ -83,16 +81,19 @@ class ITK_EXPORT DXFToSpatialObjectGroupFilter
   virtual void addPolyline(const DL_PolylineData& data);
   virtual void addVertex(const DL_VertexData& data);
   virtual void SetLayer(const char* layer);
-  
-   /** Main computation method */
-  void GenerateData(void);
 
+  /** Workaround while waiting for the SpatialObject bug to be fixed */
+  virtual void Update(void);
+  
   protected:
   /** Constructor */
   DXFToSpatialObjectGroupFilter();
   /** Destructor */
   virtual ~DXFToSpatialObjectGroupFilter() {}  
- 
+  
+  /** Main computation method */
+  virtual void GenerateData(void);
+  
   /** PrintSelf method */
   virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
   

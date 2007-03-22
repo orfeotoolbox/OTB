@@ -25,15 +25,15 @@ namespace otb
 {
   /** \class SpatialObjectDXFReader
    *  \brief
-   *  \ingroups
+   *  \ingroup ObjectSource
    */
-template <unsigned int VDimension = 2>
+template <class TSpatialObject>
 class ITK_EXPORT SpatialObjectDXFReader 
-  : public SpatialObjectSource< itk::GroupSpatialObject<VDimension> >
+  : public SpatialObjectSource< TSpatialObject >
 {
  public:
   typedef SpatialObjectDXFReader Self;
-  typedef SpatialObjectSource< itk::GroupSpatialObject<VDimension> > Superclass;
+  typedef SpatialObjectSource<TSpatialObject> Superclass;
   typedef itk::SmartPointer<Self> Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
  		
@@ -44,11 +44,11 @@ class ITK_EXPORT SpatialObjectDXFReader
   itkTypeMacro(SpatialObjectDXFReader, SpatialObjectSource);
   
  /** Superclass Typedefs */
- typedef typename Superclass::SpatialObjectType GroupSpatialObjectType;
+ typedef TSpatialObject GroupSpatialObjectType;
  typedef typename GroupSpatialObjectType::Pointer GroupSpatialObjectPointerType;
  
   /** Set the filename  */
-  itkSetStringMacro(FileName);
+  void SetFileName(char * filename);
   
   /** Get the filename */
   itkGetStringMacro(FileName);
@@ -58,19 +58,19 @@ class ITK_EXPORT SpatialObjectDXFReader
  
  /** Get The layer name */
  itkGetStringMacro(LayerName);
+
+ /** Workaround while waiting for the SpatialObject bug to be fixed */
+ virtual void Update(void);
   
-
-  /** Main computation method */
- void GenerateData(void);
-
  protected: 
  /** Constructor */
   SpatialObjectDXFReader();
  /** Destructor */
-  virtual ~SpatialObjectDXFReader();
+  ~SpatialObjectDXFReader();
+  /** Main computation method */
+  virtual void GenerateData();
 
-
-  private:
+ private:
   SpatialObjectDXFReader(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
   
