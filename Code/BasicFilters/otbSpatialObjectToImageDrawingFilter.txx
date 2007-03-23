@@ -274,35 +274,73 @@ SpatialObjectToImageDrawingFilter<TInputSpatialObject,TOutputImage>
   otbMsgDebugMacro(<<"origin: "<<m_Origin<<" size: "<<m_Size<<" spacing: "<<m_Spacing);
 
 
-  while(!it.IsAtEnd())
+ while(!it.IsAtEnd())
     {
-      // ValueAt requires the point to be in physical coordinate i.e
-      for(unsigned int i=0;i<ObjectDimension;i++)
-	{
-	  point[i]=(int) (it.GetIndex()[i]*m_Spacing[i])+m_Origin[i];
-	}
-      double val =0;
-      if(InputObject->IsInside(point,9999,""))
-	{
 
-	  // otbMsgDebugMacro(<<it.GetIndex()<<" is inside");
+    // ValueAt requires the point to be in physical coordinate i.e
+    for(unsigned int i=0;i<ObjectDimension;i++)
+      {
+      point[i]=(int) (it.GetIndex()[i]*m_Spacing[i])+m_Origin[i];
+      }
+    double val =0;
+
+    InputObject->ValueAt(point,val,99999);
+    if(   m_InsideValue != 0
+          ||  m_OutsideValue != 0 )
+      {
+      if( val)
+        {
+	  otbMsgDebugMacro(<<it.GetIndex()<<" is inside");
 	  if(m_UseObjectValue)
 	    {
-	       InputObject->ValueAt(point,val,99999);
 	      it.Set(static_cast<ValueType>(val));
 	    }
 	  else
 	    {
 	      it.Set(m_InsideValue);
 	    }
-	}
+        }
       else
-	{
-	   // otbMsgDebugMacro(<<it.GetIndex()<<" is outside");
+        {
 	  it.Set(m_OutsideValue);
-	}
-      ++it;
+        }
+      }
+    else
+      {
+	it.Set(static_cast<ValueType>(val));
+      }
+    ++it;
     }
+
+//   while(!it.IsAtEnd())
+//     {
+//       // ValueAt requires the point to be in physical coordinate i.e
+//       for(unsigned int i=0;i<ObjectDimension;i++)
+// 	{
+// 	  point[i]=(int) (it.GetIndex()[i]*m_Spacing[i])+m_Origin[i];
+// 	}
+//       double val =0;
+//       if(InputObject->IsInside(point,m_ChildrenDepth,""))
+// 	{
+
+// 	  otbMsgDebugMacro(<<it.GetIndex()<<" is inside");
+// 	  if(m_UseObjectValue)
+// 	    {
+// 	       InputObject->ValueAt(point,val,m_ChildrenDepth);
+// 	      it.Set(static_cast<ValueType>(val));
+// 	    }
+// 	  else
+// 	    {
+// 	      it.Set(m_InsideValue);
+// 	    }
+// 	}
+//       else
+// 	{
+// 	   // otbMsgDebugMacro(<<it.GetIndex()<<" is outside");
+// 	  it.Set(m_OutsideValue);
+// 	}
+//       ++it;
+//     }
   
   itkDebugMacro(<< "SpatialObjectToImageDrawingFilter::Update() finished");
 } // end update function

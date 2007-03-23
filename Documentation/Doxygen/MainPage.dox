@@ -1,0 +1,40 @@
+/**
+ *
+ * \mainpage  Orfeo Toolbox
+ *
+ * <div align="center"><img src="logoVectoriel.png" alt="logoVectoriel.png"></div>
+ *
+ * \section intro Introduction
+ *
+ * Welcome to CNES' ORFEO Toolbox (OTB). OTB is an open-source sofware
+ * system developped in the framework of the ORFEO Accompaniment
+ *  Program. 
+ *
+ * \section homepage Home Page
+ *
+ * The Home Page of the ORFEO Toolbox can be found at:
+ *
+ * http://smsc.cnes.fr/PLEIADES/lien3_vm.htm 
+ *
+ * The OTB software guide can be downloaded here:
+ *
+ * More information about the ORFEO Program is available here:
+ *
+ * http://orfeo-toolbox.sourceforge.net/Docs/OTBSoftwareGuide.pdf
+ *
+ * The OTB users mailing list is located here:
+ *
+ * http://groups.google.com/group/otb-users
+ *
+ * http://smsc.cnes.fr/PLEIADES/A_prog_accomp.htm
+ *
+ * \section howto How to use this documentation
+ *
+ * This documentation describes the API of the toolbox. The Modules
+ * link presents a hierarchy of classes organized according to their
+ * functionality. The Related Pages link presents design details, in
+ * particular the use of the data pipeline model and the philosophy of
+ * iterators.
+ *
+ */
+
