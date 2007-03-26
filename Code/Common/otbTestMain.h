@@ -56,6 +56,7 @@ std::map<std::string,int> RegressionTestBaselines (char *);
 int RegressionTestImage (const char *, const char *, int, const double);
 int RegressionTestBinaryFile(const char *, const char *, int);
 int RegressionTestAsciiFile(const char *, const char *, int, const double);
+int RegressionTestMetaData(const char *, const char *,int,const double);
 
 void RegisterTests();
 void PrintAvailableTests()
@@ -79,6 +80,8 @@ int main(int ac, char* av[] )
   char *testFilenameBinary = NULL;
   char *baselineFilenameAscii = NULL;
   char *testFilenameAscii = NULL;
+  std::vector<std::string> baselineFilenamesMetaData;
+   std::vector<std::string> testFilenamesMetaData;
   // vector if image filenames to compare
   std::vector<std::string> baseLineFilenamesImage;
   std::vector<std::string> testFilenamesImage;
@@ -135,6 +138,16 @@ int main(int ac, char* av[] )
       testFilenamesImage.push_back(av[4]);
       av += 4;
       ac -= 4;
+      }
+    if (strcmp(av[1], "--compare-metadata") == 0)
+      {
+	lToleranceDiffPixelImage = (double)(::atof(av[2]));
+	baselineFilenamesMetaData.reserve(1);
+	testFilenamesMetaData.reserve(1);
+	baselineFilenamesMetaData.push_back(av[3]);
+	testFilenamesMetaData.push_back(av[4]);
+	av += 4;
+	ac -= 4;
       }
     else if(strcmp(av[1], "--compare-n-images") == 0)
       {
@@ -214,6 +227,38 @@ otbMsgDebugMacro(<<"----------------     DEBUT Controle NON-REGRESION  ---------
 	      result += baseline->second;
 	    }
         }
+
+      // Non-regression testing on metadata.
+      if ((baselineFilenamesMetaData.size()>0) && (testFilenamesMetaData.size()>0))
+        {
+	  // Creates iterators on baseline filenames vector and test filenames vector
+	  std::vector<std::string>::iterator itBaselineFilenames = baselineFilenamesMetaData.begin();
+	  std::vector<std::string>::iterator itTestFilenames = testFilenamesMetaData.begin();
+	  // For each couple of baseline and test file, do the comparison
+	  for(;(itBaselineFilenames != baselineFilenamesMetaData.end())
+		&&(itTestFilenames != testFilenamesMetaData.end());
+	      ++itBaselineFilenames,++itTestFilenames)
+	    {
+	      std::string baselineFilenameImage = (*itBaselineFilenames);
+	      std::string testFilenameImage = (*itTestFilenames);
+
+	      std::map<std::string,int> baselines = RegressionTestBaselines(const_cast<char*>(baselineFilenameImage.c_str()));
+	      std::map<std::string,int>::iterator baseline = baselines.begin();
+	      baseline->second = RegressionTestMetaData(testFilenameImage.c_str(),
+							 (baseline->first).c_str(),
+							 0,
+							 lToleranceDiffPixelImage);
+		 /*  if (baseline->second != 0) */
+/* 		    { */
+/* 		    baseline->second = RegressionTestMetaData(testFilenameImage.c_str(), */
+/* 							 (baseline->first).c_str(), */
+/* 							 1, */
+/* 							 lToleranceDiffPixelImage); */
+/* 		} */
+	      result += baseline->second;
+	    }
+        }
+
       // Test de non regression sur des fichiers ascii
       if (baselineFilenameAscii && testFilenameAscii)
         {
@@ -377,6 +422,29 @@ bool isHexaPointerAddress(std::string str)
       ++i;
     }
   return result;
+}
+
+std::string VectorToString(otb::ImageBase::VectorType vector)
+{
+  otb::StringStream oss;
+  oss.str("");
+  otb::ImageBase::VectorType::iterator it = vector.begin();
+  oss<<"[";
+  while(it!=vector.end())
+    {
+      oss<<(*it);
+      ++it;
+      if(it==vector.end())
+	{
+	  oss<<"]";
+	  break;
+	}
+      else
+	{
+	  oss<<", ";
+	}
+    }
+  return oss.str();
 }
 
 int RegressionTestAsciiFile(const char * testAsciiFileName, const char * baselineAsciiFileName, int reportErrors, const double epsilon)
@@ -794,6 +862,218 @@ int RegressionTestImage (const char *testImageFilename, const char *baselineImag
 
     }
   return (status != 0) ? 1 : 0;
+}
+
+int RegressionTestMetaData (const char *testImageFilename, const char *baselineImageFilename, int reportErrors, const double toleranceDiffPixelImage)
+{
+  // Use the factory mechanism to read the test and baseline files and convert them to double
+  typedef otb::Image<double,ITK_TEST_DIMENSION_MAX> ImageType;
+  typedef otb::ImageFileReader<ImageType> ReaderType;
+
+  // Read the baseline file
+  ReaderType::Pointer baselineReader = ReaderType::New();
+    baselineReader->SetFileName(baselineImageFilename);
+  try
+    {
+    baselineReader->GenerateOutputInformation();
+    }
+  catch (itk::ExceptionObject& e)
+    {
+    std::cerr << "Exception detected while reading " << baselineImageFilename << " : "  << e.GetDescription();
+    return 1000;
+    }
+
+   // Read the baseline file
+  ReaderType::Pointer testReader = ReaderType::New();
+    testReader->SetFileName(testImageFilename);
+  try
+    {
+    testReader->GenerateOutputInformation();
+    }
+  catch (itk::ExceptionObject& e)
+    {
+    std::cerr << "Exception detected while reading " << baselineImageFilename << " : "  << e.GetDescription();
+    return 1000;
+    }
+
+  unsigned int errcount = 0;
+  // The sizes of the baseline and test image must match
+  ImageType::SizeType baselineSize;
+    baselineSize = baselineReader->GetOutput()->GetLargestPossibleRegion().GetSize();
+  ImageType::SizeType testSize;
+    testSize = testReader->GetOutput()->GetLargestPossibleRegion().GetSize();
+  
+  if (baselineSize != testSize)
+    {
+    std::cerr << "The size of the Baseline image and Test image do not match!" << std::endl;
+    std::cerr << "Baseline image: " << baselineImageFilename
+              << " has size " << baselineSize << std::endl;
+    std::cerr << "Test image:     " << testImageFilename
+              << " has size " << testSize << std::endl;
+    errcount++;
+    }
+  ImageType::Pointer blImPtr = baselineReader->GetOutput();
+  ImageType::Pointer testImPtr = testReader->GetOutput();
+  
+  // test orgin
+  if(blImPtr->GetOrigin()!=testImPtr->GetOrigin())
+    {
+      std::cerr << "The origin of the Baseline image and Test image do not match!" << std::endl;
+      std::cerr << "Baseline image: " << baselineImageFilename
+		<< " has origin " << blImPtr->GetOrigin() << std::endl;
+      std::cerr << "Test image:     " << testImageFilename
+		<< " has origin "<< testImPtr->GetOrigin() << std::endl;
+      errcount++;
+    }
+
+  // test spacing
+  if(blImPtr->GetSpacing()!=testImPtr->GetSpacing())
+    {
+      std::cerr << "The spacing of the Baseline image and Test image do not match!" << std::endl;
+      std::cerr << "Baseline image: " << baselineImageFilename
+		<< " has origin " << blImPtr->GetSpacing() << std::endl;
+      std::cerr << "Test image:     " << testImageFilename
+		<< " has origin "<< testImPtr->GetSpacing() << std::endl;
+      errcount++;
+    }
+
+  // test projection reference
+  if(blImPtr->GetProjectionRef().compare(testImPtr->GetProjectionRef())!=0)
+    {
+      std::cerr << "The projection reference of the Baseline image and Test image do not match!" << std::endl;
+      std::cerr << "Baseline image: " << baselineImageFilename
+		<< " has projection reference " << blImPtr->GetProjectionRef() << std::endl;
+      std::cerr << "Test image:     " << testImageFilename
+		<< " has projection reference " << testImPtr->GetProjectionRef() << std::endl;
+      errcount++;
+    }
+  
+  // test Geographic transform
+  if(blImPtr->GetGeoTransform()!=testImPtr->GetGeoTransform())
+    {
+      std::cerr << "The geographic transform of the Baseline image and Test image do not match!" << std::endl;
+      std::cerr << "Baseline image: " << baselineImageFilename
+			<< " has geographic transform " << VectorToString(blImPtr->GetGeoTransform()) << std::endl;
+      std::cerr << "Test image:     " << testImageFilename
+		<< " has geographic transform " << VectorToString(testImPtr->GetGeoTransform()) << std::endl;
+      errcount++;
+    }
+
+// test upper left corner
+  if(blImPtr->GetUpperLeftCorner()!=testImPtr->GetUpperLeftCorner())
+    {
+      std::cerr << "The upper left corner of the Baseline image and Test image do not match!" << std::endl;
+      std::cerr << "Baseline image: " << baselineImageFilename
+		<< " has upper left corner " << VectorToString(blImPtr->GetUpperLeftCorner()) << std::endl;
+      std::cerr << "Test image:     " << testImageFilename
+		<< " has upper left corner " <<VectorToString( testImPtr->GetUpperLeftCorner()) << std::endl;
+      errcount++;
+    }
+
+// test upper right corner
+  if(blImPtr->GetUpperRightCorner()!=testImPtr->GetUpperRightCorner())
+    {
+      std::cerr << "The upper right corner of the Baseline image and Test image do not match!" << std::endl;
+      std::cerr << "Baseline image: " << baselineImageFilename
+		<< " has upper right corner " <<VectorToString( blImPtr->GetUpperRightCorner()) << std::endl;
+      std::cerr << "Test image:     " << testImageFilename
+		<< " has upper right corner " << VectorToString(testImPtr->GetUpperRightCorner()) << std::endl;
+      errcount++;
+    }
+
+// test lower left corner
+  if(blImPtr->GetLowerLeftCorner()!=testImPtr->GetLowerLeftCorner())
+    {
+      std::cerr << "The lower left corner  of the Baseline image and Test image do not match!" << std::endl;
+      std::cerr << "Baseline image: " << baselineImageFilename
+		<< " has lower left corner " << VectorToString(blImPtr->GetLowerLeftCorner()) << std::endl;
+      std::cerr << "Test image:     " << testImageFilename
+		<< " has lower left corner " << VectorToString(testImPtr->GetLowerLeftCorner()) << std::endl;
+      errcount++;
+    }
+
+  // test lower right corner
+  if(blImPtr->GetLowerRightCorner()!=testImPtr->GetLowerRightCorner())
+    {
+      std::cerr << "The lower right of the Baseline image and Test image do not match!" << std::endl;
+      std::cerr << "Baseline image: " << baselineImageFilename
+		<< " has lower right corner " << VectorToString(blImPtr->GetLowerRightCorner()) << std::endl;
+      std::cerr << "Test image:     " << testImageFilename
+		<< " has lower right corner " << VectorToString(testImPtr->GetLowerRightCorner()) << std::endl;
+      errcount++;
+    }
+
+  // test gcp projection
+  if(blImPtr->GetGCPProjection().compare(testImPtr->GetGCPProjection())!=0)
+    {
+      std::cerr << "The gcp projection of the Baseline image and Test image do not match!" << std::endl;
+      std::cerr << "Baseline image: " << baselineImageFilename
+		<< " has gcp projection " << blImPtr->GetGCPProjection() << std::endl;
+      std::cerr << "Test image:     " << testImageFilename
+		<< " has gcp projection " << testImPtr->GetGCPProjection() << std::endl;
+      errcount++;
+    }
+
+  
+  // test gcp count
+  if(blImPtr->GetGCPCount()!=testImPtr->GetGCPCount())
+    {
+      std::cerr << "The gcp count of the Baseline image and Test image do not match!" << std::endl;
+      std::cerr << "Baseline image: " << baselineImageFilename
+		<< " has gcp count " << blImPtr->GetGCPCount() << std::endl;
+      std::cerr << "Test image:     " << testImageFilename
+		<< " has gcp count " << testImPtr->GetGCPCount() << std::endl;
+      errcount++;
+    }
+  else 
+    {
+      for(unsigned int i=0;i<blImPtr->GetGCPCount();++i)
+	{
+	  if((blImPtr->GetGCPId(i).compare(testImPtr->GetGCPId(i))!=0)
+	     ||(blImPtr->GetGCPInfo(i).compare(testImPtr->GetGCPInfo(i))!=0)
+	     ||(blImPtr->GetGCPRow(i)!=testImPtr->GetGCPRow(i))
+	     ||(blImPtr->GetGCPCol(i)!=testImPtr->GetGCPCol(i))
+	     ||(blImPtr->GetGCPX(i)!=testImPtr->GetGCPX(i))
+	     ||(blImPtr->GetGCPY(i)!=testImPtr->GetGCPY(i))
+	     ||(blImPtr->GetGCPZ(i)!=testImPtr->GetGCPZ(i)))
+	    {
+	      std::cerr << "The GCP number "<<i<<" of the Baseline image and Test image do not match!" << std::endl;
+	      std::cerr << "Baseline image: " << baselineImageFilename
+			<< " has gcp number "<<i<<" ("
+			<<"id: "<<blImPtr->GetGCPId(i)<<", "
+			<<"info: "<<blImPtr->GetGCPInfo(i)<<", "
+			<<"row: "<<blImPtr->GetGCPRow(i)<<", "
+			<<"col: "<<blImPtr->GetGCPCol(i)<<", "
+			<<"X: "<<blImPtr->GetGCPX(i)<<", "
+			<<"Y: "<<blImPtr->GetGCPY(i)<<", "
+			<<"Z: "<<blImPtr->GetGCPZ(i)<<")"<<std::endl;
+	      std::cerr << "Test image:     " << testImageFilename
+			<< " has gcp  number "<<i<<" ("
+			<<"id: "<<testImPtr->GetGCPId(i)<<", "
+			<<"info: "<<testImPtr->GetGCPInfo(i)<<", "
+			<<"row: "<<testImPtr->GetGCPRow(i)<<", "
+			<<"col: "<<testImPtr->GetGCPCol(i)<<", "
+			<<"X: "<<testImPtr->GetGCPX(i)<<", "
+			<<"Y: "<<testImPtr->GetGCPY(i)<<", "
+			<<"Z: "<<testImPtr->GetGCPZ(i)<<")"<<std::endl;
+	      errcount++;
+	    }
+	}
+    }
+  if(errcount>0)
+    {
+      std::cout << "<DartMeasurementFile name=\"TestImage\" type=\"image/png\">";
+      std::cout << testImageFilename;
+      std::cout << "</DartMeasurementFile>" << std::endl;
+      std::cout << "<DartMeasurementFile name=\"BaselineImage\" type=\"image/png\">";
+      std::cout << baselineImageFilename;
+      std::cout << "</DartMeasurementFile>" << std::endl;
+      std::cout << "<DartMeasurement name=\"ImageError\" type=\"numeric/double\">";
+      std::cout << errcount;
+      std::cout <<  "</DartMeasurement>" << std::endl;
+    }
+  return errcount;
+
 }
 
 //

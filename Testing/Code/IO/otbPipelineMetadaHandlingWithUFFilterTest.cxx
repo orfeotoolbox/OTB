@@ -20,14 +20,14 @@
 #pragma warning ( disable : 4786 )
 #endif
 
-#include "otbVectorImage.h"
+#include "otbImage.h"
 #include "itkExceptionObject.h"
 #include <iostream>
-
+#include "itkRescaleIntensityImageFilter.h"
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
 
-int otbImageMetadataFileWriterTest(int argc, char* argv[])
+int otbPipelineMetadataHandlingWithUFFilterTest(int argc, char* argv[])
 {
   try
   {
@@ -35,23 +35,26 @@ int otbImageMetadataFileWriterTest(int argc, char* argv[])
         const char * inputFilename  = argv[1];
         const char * outputFilename = argv[2];
 
-        typedef unsigned char  	                                InputPixelType;
-        typedef unsigned char  	                                OutputPixelType;
+        typedef double  	                                InputPixelType;
+        typedef double  	                                OutputPixelType;
         const   unsigned int        	                        Dimension = 2;
 
-        typedef otb::VectorImage< InputPixelType,  Dimension >        InputImageType;
-        typedef otb::VectorImage< OutputPixelType, Dimension >        OutputImageType;
+        typedef otb::Image< InputPixelType,  Dimension >        InputImageType;
+        typedef otb::Image< OutputPixelType, Dimension >        OutputImageType;
 
         typedef otb::ImageFileReader< InputImageType  >         ReaderType;
         typedef otb::ImageFileWriter< OutputImageType >         WriterType;
+	typedef itk::RescaleIntensityImageFilter<InputImageType,OutputImageType> FilterType;
 
         ReaderType::Pointer reader = ReaderType::New();
         WriterType::Pointer writer = WriterType::New();
- 
+	FilterType::Pointer filter = FilterType::New();
+
         reader->SetFileName( inputFilename  );
         writer->SetFileName( outputFilename );
         
-        writer->SetInput( reader->GetOutput() );
+	filter->SetInput(reader->GetOutput());
+        writer->SetInput( filter->GetOutput() );
         writer->Update(); 
   } 
   catch( itk::ExceptionObject & err ) 

@@ -940,12 +940,94 @@ ADD_TEST(ioTvStreamingIFWriterWithFilter ${IO_TESTS}
 #---------- Metadata writing tests ------------------------
 
 ADD_TEST(ioTvImageMetadataWriterTest_HFA ${IO_TESTS} 
-   --compare-ascii ${TOL}   ${BASELINE_FILES}/ioImageMetadataWriterTest_HFA_out.txt
-                            ${TEMP}/ioImageMetadataWriterTest_HFA_out.txt
+   --compare-metadata ${TOL}   
+		      ${INPUTDATA}/HFAGeoreferenced.img
+		      ${TEMP}/temp.img
         otbImageMetadataFileWriterTest
         ${INPUTDATA}/HFAGeoreferenced.img
-	    ${TEMP}/temp.img
-    	${TEMP}/ioImageMetadataWriterTest_HFA_out.txt
+	${TEMP}/temp.img
+        )
+
+ADD_TEST(ioTvImageMetadataWriterTest_TIF ${IO_TESTS} 
+   --compare-metadata ${TOL}   
+		      ${INPUTDATA}/spot5SubWithGcps.tif
+		      ${TEMP}/temp.tif
+        otbImageMetadataFileWriterTest
+        ${INPUTDATA}/spot5SubWithGcps.tif
+	${TEMP}/temp.tif
+        )
+
+ADD_TEST(ioTvImageMetadataWriterTest_HFA2TIFF ${IO_TESTS} 
+   --compare-metadata ${TOL}   
+		      ${INPUTDATA}/HFAGeoreferenced.img
+		      ${TEMP}/temp.tif
+        otbImageMetadataFileWriterTest
+        ${INPUTDATA}/HFAGeoreferenced.img
+	${TEMP}/temp.tif
+        )
+
+ADD_TEST(ioTvImageMetadataWriterTest_TIFF2HFA ${IO_TESTS} 
+   --compare-metadata ${TOL}   
+		      ${INPUTDATA}/spot5SubWithGcps.tif
+		      ${TEMP}/temp.img
+        otbImageMetadataFileWriterTest
+        ${INPUTDATA}/spot5SubWithGcps.tif
+	${TEMP}/temp.img
+        )
+
+
+ADD_TEST(ioTvImageMetadataStreamingWriterTest_HFA ${IO_TESTS} 
+   --compare-metadata ${TOL}   
+		      ${INPUTDATA}/HFAGeoreferenced.img
+		      ${TEMP}/temp.img
+        otbImageMetadataStreamingFileWriterTest
+        ${INPUTDATA}/HFAGeoreferenced.img
+	${TEMP}/temp.img
+        )
+
+ADD_TEST(ioTvImageMetadataStreamingWriterTest_TIF ${IO_TESTS} 
+   --compare-metadata ${TOL}   
+		      ${INPUTDATA}/spot5SubWithGcps.tif
+		      ${TEMP}/temp.tif
+        otbImageMetadataStreamingFileWriterTest
+        ${INPUTDATA}/spot5SubWithGcps.tif
+	${TEMP}/temp.tif
+        )
+
+ADD_TEST(ioTvImageMetadataStreamingWriterTest_HFA2TIFF ${IO_TESTS} 
+   --compare-metadata ${TOL}   
+		      ${INPUTDATA}/HFAGeoreferenced.img
+		      ${TEMP}/temp.tif
+        otbImageMetadataStreamingFileWriterTest
+        ${INPUTDATA}/HFAGeoreferenced.img
+	${TEMP}/temp.tif
+        )
+
+ADD_TEST(ioTvImageMetadataStreamingWriterTest_TIFF2HFA ${IO_TESTS} 
+   --compare-metadata ${TOL}   
+		      ${INPUTDATA}/spot5SubWithGcps.tif
+		      ${TEMP}/temp.img
+        otbImageMetadataStreamingFileWriterTest
+        ${INPUTDATA}/spot5SubWithGcps.tif
+	${TEMP}/temp.img
+        )
+
+ADD_TEST(ioTvPipelineMetadataHandlingTest ${IO_TESTS} 
+   --compare-metadata ${TOL}   
+		      ${INPUTDATA}/HFAGeoreferenced.img
+		      ${TEMP}/temp.img
+        otbPipelineMetadataHandlingTest
+        ${INPUTDATA}/HFAGeoreferenced.img
+	${TEMP}/temp.img
+        )
+
+ADD_TEST(ioTvPipelineMetadataHandlingWithUFFilterTest ${IO_TESTS} 
+   --compare-metadata ${TOL}   
+		      ${INPUTDATA}/HFAGeoreferenced.img
+		      ${TEMP}/temp.img
+        otbPipelineMetadataHandlingWithUFFilterTest
+        ${INPUTDATA}/HFAGeoreferenced.img
+	${TEMP}/temp.img
         )
 
 # -------            otb::DXFToSpatialObjectGroupFilter -------------------------------------------
@@ -1022,6 +1104,9 @@ otbShortRGBImageIOTest.cxx
 otbIntImageIOTest.cxx
 otbDoubleImageIOTest.cxx
 otbImageMetadataFileWriterTest.cxx
+otbImageMetadataStreamingFileWriterTest.cxx
+otbPipelineMetadataHandlingTest.cxx
+otbPipelineMetadaHandlingWithUFFilterTest.cxx
 otbStreamingImageFileWriterTestCalculateNumberOfDivisions.cxx
 otbDXFToSpatialObjectGroupFilterNew.cxx
 otbSpatialObjectDXFReaderNew.cxx

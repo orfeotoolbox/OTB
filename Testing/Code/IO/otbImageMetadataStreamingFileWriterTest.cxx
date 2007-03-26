@@ -25,9 +25,9 @@
 #include <iostream>
 
 #include "otbImageFileReader.h"
-#include "otbImageFileWriter.h"
+#include "otbStreamingImageFileWriter.h"
 
-int otbImageMetadataFileWriterTest(int argc, char* argv[])
+int otbImageMetadataStreamingFileWriterTest(int argc, char* argv[])
 {
   try
   {
@@ -43,7 +43,7 @@ int otbImageMetadataFileWriterTest(int argc, char* argv[])
         typedef otb::VectorImage< OutputPixelType, Dimension >        OutputImageType;
 
         typedef otb::ImageFileReader< InputImageType  >         ReaderType;
-        typedef otb::ImageFileWriter< OutputImageType >         WriterType;
+        typedef otb::StreamingImageFileWriter< OutputImageType >         WriterType;
 
         ReaderType::Pointer reader = ReaderType::New();
         WriterType::Pointer writer = WriterType::New();

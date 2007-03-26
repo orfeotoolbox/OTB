@@ -36,6 +36,7 @@ REGISTER_TEST(otbImageFileReaderMSTAR);
 REGISTER_TEST(otbImageFileReaderTest);
 REGISTER_TEST(otbImageFileWriterTest);
 REGISTER_TEST(otbImageMetadataFileWriterTest);
+REGISTER_TEST(otbImageMetadataStreamingFileWriterTest);
 REGISTER_TEST(otbVectorImageFileReaderWriterTest);
 REGISTER_TEST(otbImageFileReaderRGBTest);
 REGISTER_TEST(otbImageFileWriterRGBTest);
@@ -49,6 +50,8 @@ REGISTER_TEST(otbImageFileWriterStreamingONERAComplex);
 REGISTER_TEST(otbStreamingImageFilterTest);
 REGISTER_TEST(otbStreamingImageFileWriterTest);
 REGISTER_TEST(otbStreamingImageFileWriterWithFilterTest);
+REGISTER_TEST(otbPipelineMetadataHandlingTest);
+REGISTER_TEST(otbPipelineMetadataHandlingWithUFFilterTest);
 REGISTER_TEST(otbStreamingImageFileWriterTestCalculateNumberOfDivisions);
 REGISTER_TEST(otbVectorImageTest);
 
