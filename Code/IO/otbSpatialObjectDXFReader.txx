@@ -22,7 +22,10 @@ PURPOSE.  See the above copyright notices for more information.
 #include "otbDXFToSpatialObjectGroupFilter.h"
 #include "dl_dxf.h"
 #include "dl_creationadapter.h"
-
+#include "itksys/SystemTools.hxx"
+#include "otbMacro.h"
+#include "otbSystem.h"
+#include "otbImageFileReader.h"
 
 namespace otb
 {
@@ -55,6 +58,51 @@ SpatialObjectDXFReader<TSpatialObject>
   m_FileName = filename;
   this->Modified();
 }
+ /** Test whether the given filename exist and it is readable,
+      this is intended to be called before attempting to use 
+      ImageIO classes for actually reading the file. If the file
+      doesn't exist or it is not readable, and exception with an
+      approriate message will be thrown. */
+template <class TSpatialObject>
+void
+SpatialObjectDXFReader<TSpatialObject>
+::TestFileExistanceAndReadability()
+{
+    // Test if the file exists.
+    if( ! itksys::SystemTools::FileExists( this->m_FileName.c_str() ) )
+      {
+      itk::ImageFileReaderException e(__FILE__, __LINE__);
+      itk::OStringStream msg;
+      msg <<"The file doesn't exists. "
+          << std::endl << "Filename = " << this->m_FileName
+          << std::endl;
+      e.SetDescription(msg.str().c_str());
+      throw e;
+      return;
+      }
+
+    // Test if the file can be open for reading access.
+    //Only if m_FileName speciy a filname (not a dirname)
+    if( System::IsAFileName( this->m_FileName ) == true )
+    {
+        std::ifstream readTester;
+        readTester.open( this->m_FileName.c_str() );
+        if( readTester.fail() )
+        {
+                readTester.close();
+                itk::OStringStream msg;
+                msg <<"The file couldn't be opened for reading. "
+                        << std::endl << "Filename: " << this->m_FileName
+                        << std::endl;
+                itk::ImageFileReaderException e(__FILE__, __LINE__,msg.str().c_str(),ITK_LOCATION);
+                throw e;
+                return;
+
+        }
+        readTester.close();
+    }
+}
+
 /**
  * Main computation method
  */
@@ -63,7 +111,7 @@ void
 SpatialObjectDXFReader<TSpatialObject>
 ::GenerateData()
 {
-  std::cout<<"Entering GenerateData()"<<std::endl;
+  TestFileExistanceAndReadability();
   GroupSpatialObjectType * ptr = this->GetOutput();
   typedef otb::DXFToSpatialObjectGroupFilter<TSpatialObject> CreationFilter;
   typename CreationFilter::Pointer creationClass = CreationFilter::New();
@@ -75,7 +123,6 @@ SpatialObjectDXFReader<TSpatialObject>
   dxf.in(m_FileName, creationClass);
   GroupSpatialObjectType * group = creationClass->GetOutput();
   group->Update();
-  otbMsgDebugMacro(<<" from inside class: "<<group->GetNumberOfChildren());
   this->SetNthOutput(0,group);
 }
 

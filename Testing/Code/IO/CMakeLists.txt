@@ -962,8 +962,12 @@ ADD_TEST(ioTvSpatialObjectDXFReader ${IO_TESTS}
 	 ${BASELINE}/ioTvSpatialObjectDXFReaderOutput.png
 	 ${TEMP}/ioTvSpatialObjectDXFReaderOutput.png
          otbSpatialObjectDXFReader
-	 ${INPUTDATA}/test.dxf
-	 ${TEMP}/ioTvSpatialObjectDXFReaderOutput.png)
+	 ${INPUTDATA}/Lardenne.dxf
+	 ${TEMP}/ioTvSpatialObjectDXFReaderOutput.png
+	 TOIT
+	 50
+)
+	 
 
 #----------------------------------------------------------------------------------
 # Exemples de tests sur les grosses images
