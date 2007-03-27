@@ -41,23 +41,24 @@ int otbImportGeoInformationImageFilter(int argc, char * argv[])
       WriterType::Pointer writer = WriterType::New();
       ImportGeoInformationImageFilterType::Pointer import = ImportGeoInformationImageFilterType::New();
       
-      ImageType::IndexType index;
-      index.Fill(25);
+      
       reader->SetFileName(infname);
       reader->GenerateOutputInformation();
-      reader->Update();
-      std::cout<<"import input: "<<reader->GetOutput()<<std::endl;
-      std::cout<<"import input: "<<reader->GetOutput()->GetPixel(index)<<std::endl;
+      ImageType::IndexType index;
+      index.Fill(0);
+      ImageType::RegionType region;
+      region.SetIndex(index);
+      region.SetSize(reader->GetOutput()->GetLargestPossibleRegion().GetSize());
       ImageType::Pointer black = ImageType::New();
-      black->SetRegions(reader->GetOutput()->GetLargestPossibleRegion());
+      black->SetRegions(region);
       black->Allocate();
-      black->FillBuffer(0);
+      black->FillBuffer(128);
       std::cout<<"black: " <<black->GetLargestPossibleRegion()<<std::endl;
       
-      import->SetInput(reader->GetOutput());
+      import->SetInput(black);
       import->SetSource(reader->GetOutput());
-      import->Update();
-      std::cout<<"import output: "<<import->GetOutput()<<std::endl;
+     //  import->Update();
+//       std::cout<<"import output: "<<import->GetOutput()<<std::endl;
       
 
       writer->SetFileName(outfname);
