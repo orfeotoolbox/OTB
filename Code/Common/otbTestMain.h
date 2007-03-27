@@ -1060,18 +1060,18 @@ int RegressionTestMetaData (const char *testImageFilename, const char *baselineI
 	    }
 	}
     }
-  if(errcount>0)
-    {
-      std::cout << "<DartMeasurementFile name=\"TestImage\" type=\"image/png\">";
-      std::cout << testImageFilename;
-      std::cout << "</DartMeasurementFile>" << std::endl;
-      std::cout << "<DartMeasurementFile name=\"BaselineImage\" type=\"image/png\">";
-      std::cout << baselineImageFilename;
-      std::cout << "</DartMeasurementFile>" << std::endl;
-      std::cout << "<DartMeasurement name=\"ImageError\" type=\"numeric/double\">";
-      std::cout << errcount;
-      std::cout <<  "</DartMeasurement>" << std::endl;
-    }
+/*   if(errcount>0) */
+/*     { */
+/*       std::cout << "<DartMeasurementFile name=\"TestImage\" type=\"image/png\">"; */
+/*       std::cout << testImageFilename; */
+/*       std::cout << "</DartMeasurementFile>" << std::endl; */
+/*       std::cout << "<DartMeasurementFile name=\"BaselineImage\" type=\"image/png\">"; */
+/*       std::cout << baselineImageFilename; */
+/*       std::cout << "</DartMeasurementFile>" << std::endl; */
+/*       std::cout << "<DartMeasurement name=\"ImageError\" type=\"numeric/double\">"; */
+/*       std::cout << errcount; */
+/*       std::cout <<  "</DartMeasurement>" << std::endl; */
+/*     } */
   return errcount;
 
 }
