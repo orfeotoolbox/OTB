@@ -48,4 +48,6 @@ REGISTER_TEST(otbStreamingShrinkImageFilterNew);
 REGISTER_TEST(otbStreamingShrinkImageFilter);
 REGISTER_TEST(otbSpatialObjectToImageDrawingFilterNew);
 REGISTER_TEST(otbSpatialObjectToImageDrawingFilter);
+REGISTER_TEST(otbImportGeoInformationImageFilterNew);
+REGISTER_TEST(otbImportGeoInformationImageFilter);
 }

@@ -183,6 +183,21 @@ ADD_TEST(bfTvStreamingShrinkImageFilterQBMUL ${BASICFILTERS_TESTS}
 	50
 )
 
+# -------            otb::ImportGeoInformationImageFilter   ----------------------------
+
+  ADD_TEST(bfTuImportGeoInformationImageFilterNew ${BASICFILTERS_TESTS}  
+         otbImportGeoInformationImageFilterNew)
+
+
+ ADD_TEST(bfTvImportGeoInformationImageFilter ${BASICFILTERS_TESTS}  
+ --compare-metadata ${TOL}
+		    ${INPUTDATA}/HFAGeoreferenced.img
+		    ${TEMP}/bfTvImportGeoInformationOutput.img
+	otbImportGeoInformationImageFilter
+		    ${INPUTDATA}/HFAGeoreferenced.img
+	            ${TEMP}/bfTvImportGeoInformationOutput.img
+)
+
 # A enrichir
 SET(BasicFilters_SRCS
 otbLeeFilter.cxx
@@ -206,6 +221,8 @@ otbStreamingShrinkImageFilterNew.cxx
 otbStreamingShrinkImageFilter.cxx
 otbSpatialObjectToImageDrawingFilterNew.cxx
 otbSpatialObjectToImageDrawingFilter.cxx
+otbImportGeoInformationImageFilterNew.cxx
+otbImportGeoInformationImageFilter.cxx
 )
 
 
