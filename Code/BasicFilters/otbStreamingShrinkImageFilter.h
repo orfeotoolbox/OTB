@@ -83,6 +83,9 @@ class ITK_EXPORT StreamingShrinkImageFilter
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
   
  private:
+  StreamingShrinkImageFilter(const Self&); //purposely not implemented
+  void operator=(const Self&); //purposely not implemented
+
   /** The shrink factor */
   unsigned int m_ShrinkFactor;
 
