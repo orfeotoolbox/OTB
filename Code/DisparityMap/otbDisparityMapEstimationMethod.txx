@@ -96,17 +96,18 @@ DisparityMapEstimationMethod<TFixedImage,TMovingImage,TPointSet>
     movingExtractor->SetInput(moving);
     
     // Fixed extractor setup
-    fixedExtractor->SetStartX(static_cast<unsigned int>(p[0]-m_ExploSize[0]));
-    fixedExtractor->SetStartY(static_cast<unsigned int>(p[1]-m_ExploSize[1]));
+    fixedExtractor->SetStartX(static_cast<unsigned int>(p[0]-m_ExploSize[0]-m_WinSize[0]/2));
+    fixedExtractor->SetStartY(static_cast<unsigned int>(p[1]-m_ExploSize[1]-m_WinSize[1]/2));
     fixedExtractor->SetSizeX(2*m_ExploSize[0]+m_WinSize[0]);
     fixedExtractor->SetSizeY(2*m_ExploSize[1]+m_WinSize[1]);
-    
+    otbMsgDebugMacro(<<"Point id: "<<dataId);
+    otbMsgDebugMacro(<<"Fixed region: origin("<<p[0]-m_ExploSize[0]-m_WinSize[0]/2<<", "<<p[1]-m_ExploSize[1]-m_WinSize[1]/2<<") size("<<2*m_ExploSize[0]+m_WinSize[0]<<", "<<2*m_ExploSize[1]+m_WinSize[1]<<")");
     // Moving extractor setup
     movingExtractor->SetStartX(static_cast<unsigned int>(p[0]-m_WinSize[0]/2));
     movingExtractor->SetStartY(static_cast<unsigned int>(p[1]-m_WinSize[1]/2));
     movingExtractor->SetSizeX(m_WinSize[0]);
     movingExtractor->SetSizeY(m_WinSize[1]);
-    
+    otbMsgDebugMacro(<<"Moving region: origin("<<p[0]-m_WinSize[0]/2<<", "<<p[1]-m_WinSize[1]/2<<") size("<<m_WinSize[0]<<", "<<m_WinSize[1]<<")");
     // update the extractors
     fixedExtractor->Update();
     movingExtractor->Update();
@@ -124,16 +125,29 @@ DisparityMapEstimationMethod<TFixedImage,TMovingImage,TPointSet>
     
     // initial transform parameters setup
     registration->SetInitialTransformParameters( m_InitialTransformParameters);
+    m_Interpolator->SetInputImage(movingExtractor->GetOutput());
     
     // Perform the registration
     registration->StartRegistration(); 
     
     // Retrieve the final parameters
     ParametersType finalParameters = registration->GetLastTransformParameters();
-    
+    double value = m_Optimizer->GetValue(registration->GetLastTransformParameters());
+    otbMsgDebugMacro(<<"Metric value: "<<value);
+    otbMsgDebugMacro(<<"Final parameters: "<<finalParameters);
+
+    ParametersType data(finalParameters.GetSize()+1);
+
+    data[0] = value;
+
+    for(unsigned int i = 1;i<=finalParameters.GetSize();++i)
+      {
+	data[i] = finalParameters[i-1];
+      }
+
     // Set the parameters value in the point set data container.
     output->SetPoint(dataId,p);
-    output->SetPointData(dataId,finalParameters);
+    output->SetPointData(dataId,data);
     // otbMsgDevMacro(<<"Point "<<dataId<<": "<<finalParameters);
     ++pointIterator;// advance to next point
     ++dataId;
