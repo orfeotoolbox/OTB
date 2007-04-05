@@ -32,11 +32,17 @@ ADD_TEST(dmTvDisparityMapEstimationMethod ${DISPARITYMAP_TESTS}
 		   20 20
 )
 
+# -------            otb::PointSetToDeformationFieldGenerator   ----------
+
+ADD_TEST(dmTuPointSetToDeformationFieldGeneratorNew ${DISPARITYMAP_TESTS} 
+	 otbPointSetToDeformationFieldGeneratorNew)
+
 
 # -------       Fichiers sources CXX -----------------------------------
 SET(BasicDisparityMap_SRCS
 otbDisparityMapEstimationMethodNew.cxx
 otbDisparityMapEstimationMethod.cxx
+otbPointSetToDeformationFieldGeneratorNew.cxx
 )
 
 INCLUDE_DIRECTORIES("${OTBTesting_BINARY_DIR}")

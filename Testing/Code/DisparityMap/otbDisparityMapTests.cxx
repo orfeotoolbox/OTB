@@ -28,4 +28,5 @@ void RegisterTests()
 {
 REGISTER_TEST(otbDisparityMapEstimationMethodNew);
 REGISTER_TEST(otbDisparityMapEstimationMethod);
+REGISTER_TEST(otbPointSetToDeformationFieldGeneratorNew);
 }

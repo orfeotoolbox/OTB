@@ -37,6 +37,12 @@ namespace otb
    *  are stored in the ouptut point set associated data. Optimizer, metric,
    *  interpolator and transform fixed parameters have to be set by the user.
    *
+   *  This filters returns the pointset enriched with a set of value as PointData, in order of apparition :
+   *  - The final metric value,
+   *  - The column deformation value,
+   *  - The row deformation value,
+   *  - The final estimated parameters of the transform.
+   *
    *  This classs is derived form the MAECENAS code provided by Jordi Inglada, 
    *  from Cnes.
    */
@@ -129,11 +135,11 @@ class ITK_EXPORT DisparityMapEstimationMethod
   itkSetObjectMacro(Interpolator,InterpolatorType);
   itkGetObjectMacro(Interpolator,InterpolatorType);
 
-  /** Set/Get the window size */
+  /** Set/Get the window radius */
   itkSetMacro(WinSize,SizeType);
   itkGetMacro(WinSize,SizeType);
 
-  /** Set/Get the exploration area size */
+  /** Set/Get the exploration area radius */
   itkSetMacro(ExploSize,SizeType);
   itkGetMacro(ExploSize,SizeType);
 

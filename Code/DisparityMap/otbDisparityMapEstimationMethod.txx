@@ -96,18 +96,18 @@ DisparityMapEstimationMethod<TFixedImage,TMovingImage,TPointSet>
     movingExtractor->SetInput(moving);
     
     // Fixed extractor setup
-    fixedExtractor->SetStartX(static_cast<unsigned int>(p[0]-m_ExploSize[0]-m_WinSize[0]/2));
-    fixedExtractor->SetStartY(static_cast<unsigned int>(p[1]-m_ExploSize[1]-m_WinSize[1]/2));
-    fixedExtractor->SetSizeX(2*m_ExploSize[0]+m_WinSize[0]);
-    fixedExtractor->SetSizeY(2*m_ExploSize[1]+m_WinSize[1]);
+    fixedExtractor->SetStartX(static_cast<unsigned int>(p[0]-m_ExploSize[0]));
+    fixedExtractor->SetStartY(static_cast<unsigned int>(p[1]-m_ExploSize[1]));
+    fixedExtractor->SetSizeX(2*m_ExploSize[0]+1);
+    fixedExtractor->SetSizeY(2*m_ExploSize[1]+1);
     otbMsgDebugMacro(<<"Point id: "<<dataId);
-    otbMsgDebugMacro(<<"Fixed region: origin("<<p[0]-m_ExploSize[0]-m_WinSize[0]/2<<", "<<p[1]-m_ExploSize[1]-m_WinSize[1]/2<<") size("<<2*m_ExploSize[0]+m_WinSize[0]<<", "<<2*m_ExploSize[1]+m_WinSize[1]<<")");
+    otbMsgDebugMacro(<<"Fixed region: origin("<<p[0]-m_ExploSize[0]<<", "<<p[1]-m_ExploSize[1]<<") size("<<2*m_ExploSize[0]+1<<", "<<2*m_ExploSize[1]+1<<")");
     // Moving extractor setup
-    movingExtractor->SetStartX(static_cast<unsigned int>(p[0]-m_WinSize[0]/2));
-    movingExtractor->SetStartY(static_cast<unsigned int>(p[1]-m_WinSize[1]/2));
-    movingExtractor->SetSizeX(m_WinSize[0]);
-    movingExtractor->SetSizeY(m_WinSize[1]);
-    otbMsgDebugMacro(<<"Moving region: origin("<<p[0]-m_WinSize[0]/2<<", "<<p[1]-m_WinSize[1]/2<<") size("<<m_WinSize[0]<<", "<<m_WinSize[1]<<")");
+    movingExtractor->SetStartX(static_cast<unsigned int>(p[0]-m_WinSize[0]));
+    movingExtractor->SetStartY(static_cast<unsigned int>(p[1]-m_WinSize[1]));
+    movingExtractor->SetSizeX(2*m_WinSize[0]+1);
+    movingExtractor->SetSizeY(2*m_WinSize[1]+1);
+    otbMsgDebugMacro(<<"Moving region: origin("<<p[0]-m_WinSize[0]<<", "<<p[1]-m_WinSize[1]<<") size("<<2*m_WinSize[0]+1<<", "<<2*m_WinSize[1]+1<<")");
     // update the extractors
     fixedExtractor->Update();
     movingExtractor->Update();
@@ -133,16 +133,30 @@ DisparityMapEstimationMethod<TFixedImage,TMovingImage,TPointSet>
     // Retrieve the final parameters
     ParametersType finalParameters = registration->GetLastTransformParameters();
     double value = m_Optimizer->GetValue(registration->GetLastTransformParameters());
+
+    // Computing moving image point
+    typename FixedImageType::PointType inputPoint,outputPoint;
+    
+    // ensure that we have the right coord rep type
+    inputPoint[0] = static_cast<double>(p[0]);
+    inputPoint[1] = static_cast<double>(p[1]);
+
+    m_Transform->SetParameters(finalParameters);
+    outputPoint = m_Transform->TransformPoint(inputPoint);
+
     otbMsgDebugMacro(<<"Metric value: "<<value);
+    otbMsgDebugMacro(<<"Deformation: ("<<outputPoint[0]-inputPoint[0]<<", "<<outputPoint[1]-inputPoint[1]<<")");
     otbMsgDebugMacro(<<"Final parameters: "<<finalParameters);
 
-    ParametersType data(finalParameters.GetSize()+1);
+    ParametersType data(finalParameters.GetSize()+3);
 
     data[0] = value;
+    data[1] = outputPoint[0]-inputPoint[0];
+    data[2] = outputPoint[1]-inputPoint[1];
 
-    for(unsigned int i = 1;i<=finalParameters.GetSize();++i)
+    for(unsigned int i = 0;i<finalParameters.GetSize();++i)
       {
-	data[i] = finalParameters[i-1];
+	data[i+3] = finalParameters[i];
       }
 
     // Set the parameters value in the point set data container.
