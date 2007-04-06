@@ -37,12 +37,26 @@ ADD_TEST(dmTvDisparityMapEstimationMethod ${DISPARITYMAP_TESTS}
 ADD_TEST(dmTuPointSetToDeformationFieldGeneratorNew ${DISPARITYMAP_TESTS} 
 	 otbPointSetToDeformationFieldGeneratorNew)
 
+# -------            otb::NearestPointDeformationFieldGenerator   ----------
+
+ADD_TEST(dmTuNearestPointDeformationFieldGeneratorNew ${DISPARITYMAP_TESTS} 
+	 otbNearestPointDeformationFieldGeneratorNew)
+
+ADD_TEST(dmTvNearestPointDeformationFieldGenerator ${DISPARITYMAP_TESTS} 
+              --compare-image ${TOL}
+		${BASELINE}/dmTvNearestPointDeformationField.hdr
+		${TEMP}/dmTvNearestPointDeformationField.hdr	
+	 otbNearestPointDeformationFieldGenerator
+	 ${TEMP}/dmTvNearestPointDeformationField.hdr
+)
 
 # -------       Fichiers sources CXX -----------------------------------
 SET(BasicDisparityMap_SRCS
 otbDisparityMapEstimationMethodNew.cxx
 otbDisparityMapEstimationMethod.cxx
 otbPointSetToDeformationFieldGeneratorNew.cxx
+otbNearestPointDeformationFieldGeneratorNew.cxx
+otbNearestPointDeformationFieldGenerator.cxx
 )
 
 INCLUDE_DIRECTORIES("${OTBTesting_BINARY_DIR}")

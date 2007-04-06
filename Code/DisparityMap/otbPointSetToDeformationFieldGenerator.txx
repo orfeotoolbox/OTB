@@ -19,6 +19,7 @@ PURPOSE.  See the above copyright notices for more information.
 #define _otbPointSetToDeformationFieldGenerator_txx
 
 #include "otbPointSetToDeformationFieldGenerator.h"
+#include "otbMacro.h"
 
 namespace otb
 {
@@ -35,6 +36,7 @@ PointSetToDeformationFieldGenerator<TPointSet, TDeformationField>
   m_OutputSpacing.Fill(1.);
   m_OutputOrigin.Fill(0.);
   m_DefaultValue = 0;
+ //  m_NearestPoints = PointSetType::New();
 }
 /**
  * Set the pointset containing the disparity.
@@ -45,7 +47,7 @@ void
 PointSetToDeformationFieldGenerator<TPointSet, TDeformationField>
 ::SetPointSet(const TPointSet * pointset)
 {
-  this->itk::ProcessObject::SetNthInput(1,const_cast<PointSetType *>(pointset));
+  this->itk::ProcessObject::SetNthInput(0,const_cast<PointSetType *>(pointset));
 }
 /**
  * Get the pointset containing the disparity.
@@ -56,7 +58,7 @@ const TPointSet *
 PointSetToDeformationFieldGenerator<TPointSet, TDeformationField>
 ::GetPointSet(void)
 {
-  return static_cast<const PointSetType *>(this->itk::ProcessObject::GetInput(1));
+  return static_cast<const PointSetType *>(this->itk::ProcessObject::GetInput(0));
 }
 /** Generate output information */
 template <class TPointSet, class TDeformationField>
@@ -70,22 +72,23 @@ PointSetToDeformationFieldGenerator<TPointSet, TDeformationField>
   IndexType index;
   index.Fill(0);
   largest.SetIndex(index);
-  outputPtr->SetLargestPossibleRegion(largest);
+  outputPtr->SetRegions(largest);
   outputPtr->SetSpacing(m_OutputSpacing);
   outputPtr->SetOrigin(m_OutputOrigin);
   // Force the deformation field to have vector pixel of size 2.
   outputPtr->SetNumberOfComponentsPerPixel(2);
 }
 /**
- * Get the n nearest point in point set
+ * Generate the n nearest point in point set
  *  \param index The index of the pixel to compute.
  *  \param n The number of nearest point to seek.
- *  \return The pointset containing the n nearest point to this pixel, ordered from nearest to most far.
+ *  \return A vector containing the index of the nearest point from nearest to most far. 
  */
 template <class TPointSet, class TDeformationField>
-TPointSet * 
+typename PointSetToDeformationFieldGenerator<TPointSet, TDeformationField>
+::IndexVectorType
 PointSetToDeformationFieldGenerator<TPointSet, TDeformationField>
-::GetNNearestPointInPointSet(IndexType index, unsigned int n)
+::GenerateNearestValidPointsPointSet(IndexType index, unsigned int n)
 {
   typedef Functor::DistanceComparisonFunctor ComparisonFunctorType;
   DistanceVectorType distanceVector;
@@ -102,26 +105,26 @@ PointSetToDeformationFieldGenerator<TPointSet, TDeformationField>
       PointType p;
       p[0]=it.Value()[0];
       p[1]=it.Value()[1];
-      if(vcl_abs(this->GetPointSet()->GetPointData()->GetElement(i)[1])>=m_MetricThreshold)
+      if(vcl_abs(this->GetPointSet()->GetPointData()->GetElement(j)[0])>=m_MetricThreshold)
 	{
 	  distanceVector.push_back(EuclideanDistance(index,p));
 	  sortVector.push_back(i);
+	  indexVector.push_back(j);
 	  ++i;
-	  indexVector.push_back(j);	   
 	}
       ++j;
     }
   
   ComparisonFunctorType comp;
   comp.SetDistanceVector(distanceVector);
-  sort(indexVector.begin(),indexVector.end(),comp);
-
-  PointSetPointerType output = PointSetType::New();
+  sort(sortVector.begin(),sortVector.end(),comp);
+  
+  // building output vector
   unsigned int nbElements = (n<indexVector.size() ? n : indexVector.size());
+  IndexVectorType output;
   for(i=0;i<nbElements;i++)
     {
-      output->SetPoint(i,this->GetPointSet()->GetPoints()->GetElement(indexVector[sortVector[i]]));
-      output->SetPointData(i,this->GetPointSet()->GetPointData()->GetElement(sortVector[indexVector[i]]));
+      output.push_back(indexVector[sortVector[i]]);
     }
   return output;
 }
