@@ -132,12 +132,13 @@ protected:
    */
   IndexVectorType GenerateNearestValidPointsPointSet(IndexType index, unsigned int n = 1);
 
+  /** Euclidean distance of point to index */
+  double EuclideanDistance(IndexType index, PointType p);
+
 private:
   PointSetToDeformationFieldGenerator(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
-
-  /** Euclidean distance of point to index */
-  double EuclideanDistance(IndexType index, PointType p);
+  
   /**
    * The threshold of metric value.
    */

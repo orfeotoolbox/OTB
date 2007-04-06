@@ -31,4 +31,8 @@ REGISTER_TEST(otbDisparityMapEstimationMethod);
 REGISTER_TEST(otbPointSetToDeformationFieldGeneratorNew);
 REGISTER_TEST(otbNearestPointDeformationFieldGeneratorNew);
 REGISTER_TEST(otbNearestPointDeformationFieldGenerator);
+REGISTER_TEST(otbNNearestPointsLinearInterpolateDeformationFieldGeneratorNew);
+REGISTER_TEST(otbNNearestPointsLinearInterpolateDeformationFieldGenerator);
+REGISTER_TEST(otbBSplinesInterpolateDeformationFieldGeneratorNew);
+REGISTER_TEST(otbBSplinesInterpolateDeformationFieldGenerator);
 }

@@ -50,6 +50,33 @@ ADD_TEST(dmTvNearestPointDeformationFieldGenerator ${DISPARITYMAP_TESTS}
 	 ${TEMP}/dmTvNearestPointDeformationField.hdr
 )
 
+# -------  otb::NNearestPointsLinearInterpolateDeformationFieldGenerator   ----------
+
+ADD_TEST(dmTuNNearestPointsLinearInterpolateDeformationFieldGeneratorNew ${DISPARITYMAP_TESTS} 
+	 otbNNearestPointsLinearInterpolateDeformationFieldGeneratorNew)
+
+ADD_TEST(dmTvNNearestPointsLinearInterpolateDeformationFieldGenerator ${DISPARITYMAP_TESTS} 
+              --compare-image ${TOL}
+		${BASELINE}/dmTvNNearestPointsLinearInterpolateDeformationField.hdr
+		${TEMP}/dmTvNNearestPointsLinearInterpolateDeformationField.hdr	
+	 otbNNearestPointsLinearInterpolateDeformationFieldGenerator
+	 ${TEMP}/dmTvNNearestPointsLinearInterpolateDeformationField.hdr
+)
+
+
+# -------  otb::BSplinesInterpolateDeformationFieldGenerator   ----------
+
+ADD_TEST(dmTuBSplinesInterpolateDeformationFieldGeneratorNew ${DISPARITYMAP_TESTS} 
+	 otbNNearestPointsLinearInterpolateDeformationFieldGeneratorNew)
+
+ADD_TEST(dmTvBSplinesInterpolateDeformationFieldGenerator ${DISPARITYMAP_TESTS} 
+              --compare-image ${TOL}
+		${BASELINE}/dmTvBSplinesInterpolateDeformationField.hdr
+		${TEMP}/dmTvBSplinesInterpolateDeformationField.hdr	
+	 otbBSplinesInterpolateDeformationFieldGenerator
+	 ${TEMP}/dmTvBSplinesInterpolateDeformationField.hdr
+)
+
 # -------       Fichiers sources CXX -----------------------------------
 SET(BasicDisparityMap_SRCS
 otbDisparityMapEstimationMethodNew.cxx
@@ -57,6 +84,11 @@ otbDisparityMapEstimationMethod.cxx
 otbPointSetToDeformationFieldGeneratorNew.cxx
 otbNearestPointDeformationFieldGeneratorNew.cxx
 otbNearestPointDeformationFieldGenerator.cxx
+otbNNearestPointsLinearInterpolateDeformationFieldGeneratorNew.cxx
+otbNNearestPointsLinearInterpolateDeformationFieldGenerator.cxx
+otbBSplinesInterpolateDeformationFieldGeneratorNew.cxx
+otbBSplinesInterpolateDeformationFieldGenerator.cxx
+
 )
 
 INCLUDE_DIRECTORIES("${OTBTesting_BINARY_DIR}")
