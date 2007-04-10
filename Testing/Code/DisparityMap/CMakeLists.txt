@@ -78,13 +78,13 @@ ADD_TEST(dmTvBSplinesInterpolateDeformationFieldGenerator ${DISPARITYMAP_TESTS}
 )
 
 
-# -------            otb::PointSetToDeformationFieldGenerator   ----------
+# -------            otb::PointSetWithTransformToDeformationFieldGenerator   ----------
 
 ADD_TEST(dmTuPointSetWithTransformToDeformationFieldGeneratorNew ${DISPARITYMAP_TESTS} 
 	 otbPointSetWithTransformToDeformationFieldGeneratorNew)
 
 
-# -------            otb::NearestPointDeformationFieldGenerator   ----------
+# -------            otb::NearestTransformDeformationFieldGenerator   ----------
 
 ADD_TEST(dmTuNearestTransformDeformationFieldGeneratorNew ${DISPARITYMAP_TESTS} 
 	 otbNearestTransformDeformationFieldGeneratorNew)
@@ -96,6 +96,21 @@ ADD_TEST(dmTvNearestTransformDeformationFieldGenerator ${DISPARITYMAP_TESTS}
 	 otbNearestTransformDeformationFieldGenerator
 	 ${TEMP}/dmTvNearestTransformDeformationField.hdr
 )
+
+
+# -------  otb::NNearestTransformsLinearInterpolateDeformationFieldGenerator   ----------
+
+ADD_TEST(dmTuNNearestTransformsLinearInterpolateDeformationFieldGeneratorNew ${DISPARITYMAP_TESTS} 
+	 otbNNearestTransformsLinearInterpolateDeformationFieldGeneratorNew)
+
+ADD_TEST(dmTvNNearestTransformsLinearInterpolateDeformationFieldGenerator ${DISPARITYMAP_TESTS} 
+              --compare-image ${TOL}
+		${BASELINE}/dmTvNNearestTransformsLinearInterpolateDeformationField.hdr
+		${TEMP}/dmTvNNearestTransformsLinearInterpolateDeformationField.hdr	
+	 otbNNearestTransformsLinearInterpolateDeformationFieldGenerator
+	 ${TEMP}/dmTvNNearestTransformsLinearInterpolateDeformationField.hdr
+)
+
 
 # -------       Fichiers sources CXX -----------------------------------
 SET(BasicDisparityMap_SRCS
@@ -111,6 +126,8 @@ otbBSplinesInterpolateDeformationFieldGenerator.cxx
 otbPointSetWithTransformToDeformationFieldGeneratorNew.cxx
 otbNearestTransformDeformationFieldGeneratorNew.cxx
 otbNearestTransformDeformationFieldGenerator.cxx
+otbNNearestTransformsLinearInterpolateDeformationFieldGeneratorNew.cxx
+otbNNearestTransformsLinearInterpolateDeformationFieldGenerator.cxx
 )
 
 INCLUDE_DIRECTORIES("${OTBTesting_BINARY_DIR}")

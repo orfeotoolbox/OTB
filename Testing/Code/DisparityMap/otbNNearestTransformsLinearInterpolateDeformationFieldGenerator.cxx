@@ -18,11 +18,11 @@
 #include "itkExceptionObject.h"
 #include "itkPointSet.h"
 #include "otbVectorImage.h"
-#include "otbNearestTransformDeformationFieldGenerator.h"
+#include "otbNNearestTransformsLinearInterpolateDeformationFieldGenerator.h"
 #include "otbImageFileWriter.h"
 #include "itkEuler2DTransform.h"
 
-int otbNearestTransformDeformationFieldGenerator(int argc, char * argv[])
+int otbNNearestTransformsLinearInterpolateDeformationFieldGenerator(int argc, char * argv[])
 {
   try
     {
@@ -33,9 +33,9 @@ int otbNearestTransformDeformationFieldGenerator(int argc, char * argv[])
       typedef itk::Array<double> ParamType;
       typedef itk::PointSet<ParamType,Dimension> PointSetType;
       typedef PointSetType::PointType PointType;
-      typedef otb::NearestTransformDeformationFieldGenerator<PointSetType,ImageType> FilterType;
+      typedef otb::NNearestTransformsLinearInterpolateDeformationFieldGenerator<PointSetType,ImageType> FilterType;
       typedef otb::ImageFileWriter<ImageType> WriterType;
-      typedef itk::Euler2DTransform<double> TransformType;      
+      typedef itk::Euler2DTransform<double> TransformType;   
 
       ImageType::SizeType size;
       size.Fill(100);
@@ -89,6 +89,7 @@ int otbNearestTransformDeformationFieldGenerator(int argc, char * argv[])
       pd5[3] = -5;
       pd5[4] = -5; 
       pd5[5] = -0.001769;
+     
 
       ps->SetPoint(0,p1);
       ps->SetPointData(0,pd1);
@@ -101,22 +102,21 @@ int otbNearestTransformDeformationFieldGenerator(int argc, char * argv[])
       ps->SetPoint(4,p5);
       ps->SetPointData(4,pd5);
 
-
       TransformType::Pointer transform = TransformType::New();
       transform->SetCenter(center);
       
-
       // Instantiating object
       FilterType::Pointer filter = FilterType::New();
       filter->SetOutputSize(size);
       filter->SetMetricThreshold(thresh);
+      filter->SetNumberOfPoints(5);
       filter->SetPointSet(ps);
       filter->SetTransform(transform);
 
       WriterType::Pointer writer = WriterType::New();
       writer->SetInput(filter->GetOutput());
       writer->SetFileName(outfname);
-      writer->Update();
+      writer->Update();      
     }
 
   catch( itk::ExceptionObject & err ) 
