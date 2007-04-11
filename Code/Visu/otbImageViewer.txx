@@ -258,7 +258,7 @@ namespace otb
 
 
 
-	otbMsgDebugMacro("Shrink factor: "<<m_ShrinkFactor);
+	otbMsgDebugMacro(<<"Shrink factor: "<<m_ShrinkFactor);
 	m_Shrink->SetShrinkFactor(m_ShrinkFactor);
 	typedef otb::FltkFilterWatcher WatcherType;
 	WatcherType watcher(m_Shrink,wfull-200,hfull/2,200,20, "Generating Quicklook ...");
