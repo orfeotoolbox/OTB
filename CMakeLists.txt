@@ -44,6 +44,12 @@ ELSE("${CMAKE_MAJOR_VERSION}.${CMAKE_MINOR_VERSION}" MATCHES "^1\\.8$")
   MARK_AS_ADVANCED(CLEAR CMAKE_BACKWARDS_COMPATIBILITY)
 ENDIF("${CMAKE_MAJOR_VERSION}.${CMAKE_MINOR_VERSION}" MATCHES "^1\\.8$")
 
+#-----------------------------------------------------------------------------
+# OTB option to access large file (> 4Go).
+ADD_DEFINITIONS(
+	-D_LARGEFILE_SOURCE
+	-D_LARGEFILE64_SOURCE
+	)
 
 #-----------------------------------------------------------------------------
 # OTB version number.  An even minor number corresponds to releases.
