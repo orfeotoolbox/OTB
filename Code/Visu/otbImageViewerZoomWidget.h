@@ -90,7 +90,7 @@ class ITK_EXPORT ImageViewerZoomWidget
 		IndexType newIndex = this->WindowToImageCoordinates(m_MousePos);
 		if(this->GetInput()->GetBufferedRegion().IsInside(newIndex))
 		  {
-		    std::stringstream oss;
+		    itk::OStringStream oss;
 		    oss<<" Location: "<<newIndex<<", Values:  "<<this->GetInput()->GetPixel(newIndex);
 		    m_Parent->PrintPixLocVal(oss.str());
 		    m_MouseMoveCount=0;

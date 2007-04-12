@@ -106,7 +106,7 @@ class ITK_EXPORT ImageViewerScrollWidget
 		IndexType realIndex;
 		realIndex[0]=newIndex[0]*m_Parent->GetShrinkFactor();
 		realIndex[1]=newIndex[1]*m_Parent->GetShrinkFactor();
-		std::stringstream oss;
+		itk::OStringStream oss;
 		oss<<" Location: "<<realIndex<<", Values:  "<<this->GetInput()->GetPixel(newIndex);
 		m_Parent->PrintPixLocVal(oss.str());
 		m_MouseMoveCount=0;

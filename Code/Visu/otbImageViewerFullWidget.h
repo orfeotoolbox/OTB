@@ -96,7 +96,7 @@ class ITK_EXPORT ImageViewerFullWidget
 		IndexType newIndex = this->WindowToImageCoordinates(m_MousePos);
 		if(this->GetInput()->GetBufferedRegion().IsInside(newIndex))
 		  {
-		    std::stringstream oss;
+		    itk::OStringStream oss;
 		    typename ImageType::PixelType newPixel = this->GetInput()->GetPixel(newIndex);
 		    oss<<" Location: "<<newIndex<<", Values:  "<<newPixel;
 		    m_Parent->PrintPixLocVal(oss.str());

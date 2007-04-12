@@ -200,7 +200,7 @@ namespace otb
       {
 	itkExceptionMacro(<<"No input image !");
       } 
-    std::stringstream oss;
+    itk::OStringStream oss;
     // Get the image dimension
     typename ImageType::SizeType size = m_InputImage->GetLargestPossibleRegion().GetSize();
     m_ImageGeometry = static_cast<double>(size[0])/static_cast<double>(size[1]);
@@ -495,7 +495,7 @@ namespace otb
   ImageViewer<TPixel>
   ::UpdateZoomWidget(void)
   {
-    std::stringstream oss;
+    itk::OStringStream oss;
     oss<<"Zoom Window (X"<<m_ZoomWidget->GetOpenGlIsotropicZoom()<<")";
     m_ZoomWindow->copy_label(oss.str().c_str());
     m_ZoomWindow->redraw();
