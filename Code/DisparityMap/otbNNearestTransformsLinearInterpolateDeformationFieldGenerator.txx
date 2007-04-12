@@ -72,8 +72,8 @@ NNearestTransformsLinearInterpolateDeformationFieldGenerator<TPointSet, TDeforma
 	  
 	  outputPtr->TransformIndexToPhysicalPoint(it.GetIndex(),sourcePoint);
 	  targetPoint = this->GetTransform()->TransformPoint(sourcePoint);
-	  xdeformation += (targetPoint[0]-sourcePoint[0])/distance;
-	  ydeformation += (targetPoint[1]-sourcePoint[1]) /distance;
+	  xdeformation += (sourcePoint[0]-targetPoint[0])/distance;
+	  ydeformation += (sourcePoint[1]-targetPoint[1]) /distance;
 	  normalization+=1/distance;	      
 	}
 

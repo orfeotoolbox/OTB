@@ -55,8 +55,8 @@ NearestTransformDeformationFieldGenerator<TPointSet, TDeformationField>
 	  
 	  outputPtr->TransformIndexToPhysicalPoint(it.GetIndex(),sourcePoint);
 	  targetPoint = this->GetTransform()->TransformPoint(sourcePoint);
- 	  pixel[0] = static_cast<ValueType>(targetPoint[0]-sourcePoint[0]);
- 	  pixel[1] = static_cast<ValueType>(targetPoint[1]-sourcePoint[1]);
+ 	  pixel[0] = static_cast<ValueType>(sourcePoint[0]-targetPoint[0]);
+ 	  pixel[1] = static_cast<ValueType>(sourcePoint[1]-targetPoint[1]);
  	}
        else
  	{
