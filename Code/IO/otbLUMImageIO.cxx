@@ -129,16 +129,16 @@ otbMsgDevMacro( <<" Dimensions de l'image  : "<<m_Dimensions[0]<<","<<m_Dimensio
 otbMsgDevMacro( <<" Region lue (IORegion)  : "<<this->GetIORegion());
 otbMsgDevMacro( <<" Nb Of Components       : "<<this->GetNumberOfComponents());
 
-        unsigned long headerLength = this->GetComponentSize() * m_Dimensions[0];
-        unsigned long numberOfBytesPerLines = headerLength;
-        unsigned long offset;
-        unsigned long numberOfBytesToBeRead = this->GetComponentSize() * lNbColonnes;
-        unsigned long numberOfBytesRead;        
-        unsigned long cpt = 0;
+        std::streamoff headerLength = static_cast<std::streamoff>(this->GetComponentSize() * m_Dimensions[0]);
+        std::streamoff numberOfBytesPerLines = headerLength;
+        std::streamoff offset;
+        std::streamsize numberOfBytesToBeRead = static_cast<std::streamsize>(this->GetComponentSize() * lNbColonnes);
+        std::streamsize numberOfBytesRead;        
+        std::streamsize cpt = 0;
         for(int LineNo = lPremiereLigne;LineNo <lPremiereLigne + lNbLignes; LineNo++ )
         {
-	        offset  =  headerLength + numberOfBytesPerLines * LineNo;
-	        offset +=  this->GetComponentSize() * lPremiereColonne;
+	        offset  =  headerLength + numberOfBytesPerLines * static_cast<std::streamoff>(LineNo);
+	        offset +=  static_cast<std::streamoff>(this->GetComponentSize() * lPremiereColonne);
   	        m_File.seekg(offset, std::ios::beg);
                 m_File.read( static_cast<char *>( p + cpt ), numberOfBytesToBeRead );
     	        numberOfBytesRead = m_File.gcount();
@@ -327,16 +327,16 @@ void LUMImageIO::Write(const void* buffer)
   	        m_FlagWriteImageInformation = false;
         }
 
-        unsigned int lNbLignes   = this->GetIORegion().GetSize()[1];
-        unsigned int lNbColonnes = this->GetIORegion().GetSize()[0];
-        unsigned int lPremiereLigne   = this->GetIORegion().GetIndex()[1] ; // [1... ]
+        unsigned long lNbLignes   = this->GetIORegion().GetSize()[1];
+        unsigned long lNbColonnes = this->GetIORegion().GetSize()[0];
+        unsigned long lPremiereLigne   = this->GetIORegion().GetIndex()[1] ; // [1... ]
         int lPremiereColonne = this->GetIORegion().GetIndex()[0] ; // [1... ]
 
-	// Cas particuliers : on controle que si la région à écrire est de la même dimension que l'image entière,
-	// on commence l'offset à 0 (lorsque que l'on est pas en "Streaming")
+	// Cas particuliers : on controle que si la rï¿½gion ï¿½ ï¿½crire est de la mï¿½me dimension que l'image entiï¿½re,
+	// on commence l'offset ï¿½ 0 (lorsque que l'on est pas en "Streaming")
 	if( (lNbLignes == m_Dimensions[1]) && (lNbColonnes == m_Dimensions[0]))
 	{
-                otbMsgDevMacro(<<"Force l'offset de l'IORegion à 0");
+                otbMsgDevMacro(<<"Force l'offset de l'IORegion ï¿½ 0");
 		lPremiereLigne = 0;
 		lPremiereColonne = 0;
 	}
@@ -347,21 +347,21 @@ otbMsgDevMacro( <<" Region lue (IORegion)  : "<<this->GetIORegion());
 otbMsgDevMacro( <<" Nb Of Components       : "<<this->GetNumberOfComponents());
 otbMsgDevMacro( <<" GetComponentSize       : "<<this->GetComponentSize());
 
-        unsigned long numberOfBytesPerLines = this->GetComponentSize() * m_Dimensions[0];
-        unsigned long headerLength = numberOfBytesPerLines;
-        unsigned long offset;
-        unsigned long numberOfBytesToBeWrite = this->GetComponentSize() * lNbColonnes;
-        unsigned long cpt = 0;
+        std::streamoff numberOfBytesPerLines = this->GetComponentSize() * m_Dimensions[0];
+        std::streamoff headerLength = numberOfBytesPerLines;
+        std::streamoff offset;
+        std::streamsize numberOfBytesToBeWrite = this->GetComponentSize() * lNbColonnes;
+        std::streamsize cpt = 0;
 
         const char * p = static_cast<const char *>(buffer);
  
-        for(unsigned int LineNo = lPremiereLigne;LineNo <lPremiereLigne + lNbLignes; LineNo++ )
+        for(unsigned long LineNo = lPremiereLigne;LineNo <lPremiereLigne + lNbLignes; LineNo++ )
         {
-	        offset  =  headerLength + numberOfBytesPerLines * LineNo;
-	        offset +=  this->GetComponentSize() * lPremiereColonne;
+	        offset  =  headerLength + numberOfBytesPerLines * static_cast<std::streamoff>(LineNo);
+	        offset +=  static_cast<std::streamoff>(this->GetComponentSize() * lPremiereColonne);
   	        m_File.seekp(offset, std::ios::beg);
-                m_File.write( static_cast<const char *>( p + cpt ), numberOfBytesToBeWrite );
-                cpt += numberOfBytesToBeWrite;
+            m_File.write( static_cast<const char *>( p + cpt ), numberOfBytesToBeWrite );
+            cpt += numberOfBytesToBeWrite;
         }
 }
 
@@ -392,7 +392,7 @@ void LUMImageIO::WriteImageInformation()
         } 
 
         //Writing header information
-        unsigned long headerLength = this->GetComponentSize() * m_Dimensions[0];
+        std::streamsize headerLength = static_cast<std::streamsize>(this->GetComponentSize() * m_Dimensions[0]);
 
         m_File.seekp(0, std::ios::beg );
         char* value = new char[headerLength];
@@ -402,6 +402,7 @@ void LUMImageIO::WriteImageInformation()
                 m_File.write(value,headerLength);
         }
         delete [] value;
+        value = NULL;
         //Set m_TypeLum
         if( 0 ) {}
         otbSetTypeLumMacro( CHAR,   "08BI", "08LI")

@@ -26,6 +26,10 @@
 
 #include "otbSystem.h"
 
+#include <fstream>
+#include <iostream>
+
+
 namespace otb
 {
 
@@ -124,11 +128,11 @@ otbMsgDevMacro( <<" Dimensions de l'image  : "<<m_Dimensions[0]<<","<<m_Dimensio
 otbMsgDevMacro( <<" Region lue (IORegion)  : "<<this->GetIORegion());
 otbMsgDevMacro( <<" Nb Of Components       : "<<this->GetNumberOfComponents());
 
-        unsigned long headerLength = 0;
-        unsigned long numberOfBytesPerLines = this->GetComponentSize() * m_Dimensions[0];
-        unsigned long offset;
-        unsigned long numberOfBytesToBeRead = this->GetComponentSize() * lNbColonnes;
-        unsigned long numberOfBytesRead;        
+        std::streamoff  headerLength(0);
+        std::streamoff  numberOfBytesPerLines = static_cast<std::streamoff>(this->GetComponentSize() * m_Dimensions[0]);
+        std::streamoff  offset;
+        std::streamsize numberOfBytesToBeRead = this->GetComponentSize() * lNbColonnes;
+        std::streamsize numberOfBytesRead;        
         unsigned long cpt = 0;
 
         // Update the step variable
@@ -141,14 +145,22 @@ otbMsgDevMacro( <<" Nb Of Components       : "<<this->GetNumberOfComponents());
                 return;
         }
 
+otbMsgDevMacro( <<" sizeof(streamsize)    : "<<sizeof(std::streamsize));
+otbMsgDevMacro( <<" sizeof(streampos)     : "<<sizeof(std::streampos));
+otbMsgDevMacro( <<" sizeof(streamoff)     : "<<sizeof(std::streamoff));
+otbMsgDevMacro( <<" sizeof(std::ios::beg) : "<<sizeof(std::ios::beg));
+otbMsgDevMacro( <<" sizeof(size_t)        : "<<sizeof(size_t));
+otbMsgDevMacro( <<" sizeof(unsigned long) : "<<sizeof(unsigned long));
+
+
         for (unsigned int nbComponents = 0 ; nbComponents < this->GetNumberOfComponents() ; nbComponents++)
         {
                 cpt = (unsigned long )(nbComponents)* (unsigned long)(this->GetComponentSize());
                 //Read region of the channel
                 for(int LineNo = lPremiereLigne;LineNo <lPremiereLigne + lNbLignes; LineNo++ )
                 {
-	                offset  =  headerLength + numberOfBytesPerLines * LineNo;
-        	        offset +=  this->GetComponentSize() * lPremiereColonne;
+	                offset  =  headerLength + numberOfBytesPerLines * static_cast<std::streamoff>(LineNo);
+        	        offset +=  static_cast<std::streamoff>(this->GetComponentSize() * lPremiereColonne);
   	                m_ChannelsFile[nbComponents].seekg(offset, std::ios::beg);
                         //Read a line
                         m_ChannelsFile[nbComponents].read( static_cast<char *>( value ), numberOfBytesToBeRead );
@@ -164,7 +176,7 @@ otbMsgDevMacro( <<" Nb Of Components       : "<<this->GetNumberOfComponents());
                         }
 //                        cpt = (unsigned long )(nbComponents)* (unsigned long)(this->GetComponentSize()) + numberOfBytesToBeRead * this->GetNumberOfComponents() * LineNo;
 //                        cpt = (unsigned long )(nbComponents)* (unsigned long)(this->GetComponentSize()) + numberOfBytesToBeRead * this->GetNumberOfComponents();
-                        for ( unsigned long  i=0 ; i < numberOfBytesToBeRead ; i = i+this->GetComponentSize() )
+                        for ( std::streamsize  i=0 ; i < numberOfBytesToBeRead ; i = i+static_cast<std::streamsize>(this->GetComponentSize()) )
                         {
                                 memcpy((void*)(&(p[cpt])),(const void*)(&(value[i])),(size_t)(this->GetComponentSize()));
                                 cpt += step;
@@ -456,11 +468,11 @@ void BSQImageIO::Write(const void* buffer)
         int lPremiereLigne   = this->GetIORegion().GetIndex()[1] ; // [1... ]
         int lPremiereColonne = this->GetIORegion().GetIndex()[0] ; // [1... ]
 
-	// Cas particuliers : on controle que si la région à écrire est de la même dimension que l'image entière,
-	// on commence l'offset à 0 (lorsque que l'on est pas en "Streaming")
+	// Cas particuliers : on controle que si la rï¿½gion ï¿½ ï¿½crire est de la mï¿½me dimension que l'image entiï¿½re,
+	// on commence l'offset ï¿½ 0 (lorsque que l'on est pas en "Streaming")
 	if( (lNbLignes == m_Dimensions[1]) && (lNbColonnes == m_Dimensions[0]))
 	{
-                otbMsgDevMacro(<<"Force l'offset de l'IORegion à 0");
+                otbMsgDevMacro(<<"Force l'offset de l'IORegion ï¿½ 0");
 		lPremiereLigne = 0;
 		lPremiereColonne = 0;
 	}
@@ -471,10 +483,10 @@ otbMsgDevMacro( <<" Region lue (IORegion)  : "<<this->GetIORegion());
 otbMsgDevMacro( <<" Nb Of Components       : "<<this->GetNumberOfComponents());
 otbMsgDevMacro( <<" GetComponentSize       : "<<this->GetComponentSize());
 
-        unsigned long headerLength = 0;
-        unsigned long numberOfBytesPerLines = this->GetComponentSize() * m_Dimensions[0];
-        unsigned long numberOfBytesToBeWrite = this->GetComponentSize() * lNbColonnes;
-        unsigned long offset = 0;
+        std::streamoff headerLength(0);
+        std::streamoff  numberOfBytesPerLines = static_cast<std::streamoff>(this->GetComponentSize() * m_Dimensions[0]);
+        std::streamsize numberOfBytesToBeWrite = static_cast<std::streamsize>(this->GetComponentSize() * lNbColonnes);
+        std::streamoff offset = 0;
         unsigned long cpt = 0;
 
         // Update the step variable
@@ -494,14 +506,14 @@ otbMsgDevMacro( <<" GetComponentSize       : "<<this->GetComponentSize());
                 //Read region of the channel
                 for(unsigned int LineNo = lPremiereLigne;LineNo <lPremiereLigne + lNbLignes; LineNo++ )
                 {
-                        for ( unsigned long  i=0 ; i < numberOfBytesToBeWrite ; i = i+this->GetComponentSize() )
+                        for ( std::streamsize  i=0 ; i < numberOfBytesToBeWrite ; i = i+static_cast<std::streamsize>(this->GetComponentSize()) )
                         {
                                 memcpy((void*)(&(value[i])),(const void*)(&(p[cpt])),(size_t)(this->GetComponentSize()));
                                 cpt += step;
                         }
 
-	                offset  =  headerLength + numberOfBytesPerLines * LineNo;
-        	        offset +=  this->GetComponentSize() * lPremiereColonne;
+	                offset  =  headerLength + numberOfBytesPerLines * static_cast<std::streamoff>(LineNo);
+        	        offset +=  static_cast<std::streamoff>(this->GetComponentSize() * lPremiereColonne);
   	                m_ChannelsFile[nbComponents].seekp(offset, std::ios::beg);
                         //Write a line
                         m_ChannelsFile[nbComponents].write( static_cast<char *>( value ), numberOfBytesToBeWrite );

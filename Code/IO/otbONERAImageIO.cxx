@@ -192,19 +192,19 @@ otbMsgDevMacro( <<" Nb Of Components  : "<<this->GetNumberOfComponents());
     itkExceptionMacro(<< "Cannot read requested file");
     }
 
-  unsigned long numberOfBytesPerLines = 2 * m_width * m_NbOctetPixel;
-  unsigned long headerLength = ONERA_HEADER_LENGTH + numberOfBytesPerLines;
-  unsigned long offset;
-  unsigned long numberOfBytesToBeRead = 2 * m_NbOctetPixel *lNbColonnes;
-  unsigned long numberOfBytesRead;        
+  std::streamoff numberOfBytesPerLines = static_cast<std::streamoff>(2 * m_width * m_NbOctetPixel);
+  std::streamoff headerLength = ONERA_HEADER_LENGTH + numberOfBytesPerLines;
+  std::streamoff offset;
+  std::streamsize numberOfBytesToBeRead = 2 * m_NbOctetPixel *lNbColonnes;
+  std::streamsize numberOfBytesRead;        
 
   char* value = new char[numberOfBytesToBeRead];
-  unsigned long cpt = 0;
+  std::streamsize cpt = 0;
  
   for(int LineNo = lPremiereLigne;LineNo <lPremiereLigne + lNbLignes; LineNo++ )
     {
-	offset  =  headerLength + numberOfBytesPerLines * LineNo;
-	offset +=  m_NbOctetPixel * lPremiereColonne;
+	offset  =  headerLength + numberOfBytesPerLines * static_cast<std::streamoff>(LineNo);
+	offset +=  static_cast<std::streamoff>(m_NbOctetPixel * lPremiereColonne);
   	m_Datafile.seekg(offset, std::ios::beg);
         m_Datafile.read( static_cast<char *>( value ), numberOfBytesToBeRead );
     	numberOfBytesRead = m_Datafile.gcount();
@@ -235,6 +235,7 @@ otbMsgDevMacro( <<" Nb Of Components  : "<<this->GetNumberOfComponents());
     
 
   delete [] value;
+  value = NULL;
     
 }
 
@@ -508,9 +509,9 @@ otbMsgDevMacro( <<" Nb Of Components  : "<<this->GetNumberOfComponents());
 		lPremiereColonne = 0;
 	}
 
-  unsigned long numberOfBytesPerLines = step * lNbColonnes * m_NbOctetPixel;
-  unsigned long headerLength = ONERA_HEADER_LENGTH + numberOfBytesPerLines;
-  unsigned long offset;
+  std::streamsize numberOfBytesPerLines = step * lNbColonnes * m_NbOctetPixel;
+  std::streamoff headerLength = ONERA_HEADER_LENGTH + numberOfBytesPerLines;
+  std::streamoff offset;
   unsigned long numberOfBytesRegion = step * m_NbOctetPixel *lNbColonnes *lNbLignes;
 
   char *tempmemory = new char[numberOfBytesRegion];
@@ -520,13 +521,14 @@ otbMsgDevMacro( <<" Nb Of Components  : "<<this->GetNumberOfComponents());
     {
 	char* value = tempmemory + numberOfBytesPerLines * (LineNo - lPremiereLigne);
 
-	offset  =  headerLength + numberOfBytesPerLines * LineNo;
-	offset +=  m_NbOctetPixel * lPremiereColonne;
+	offset  =  headerLength + static_cast<std::streamoff>(numberOfBytesPerLines) * static_cast<std::streamoff>(LineNo);
+	offset +=  static_cast<std::streamoff>(m_NbOctetPixel * lPremiereColonne);
   	m_Datafile.seekp(offset, std::ios::beg);
 	m_Datafile.write( static_cast<char *>( value ), numberOfBytesPerLines );
     }
 
   delete [] tempmemory;
+  tempmemory = NULL;
 }
 
 void ONERAImageIO::WriteImageInformation()
