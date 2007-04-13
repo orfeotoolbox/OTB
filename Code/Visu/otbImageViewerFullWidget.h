@@ -99,7 +99,8 @@ class ITK_EXPORT ImageViewerFullWidget
 		    itk::OStringStream oss;
 		    typename ImageType::PixelType newPixel = this->GetInput()->GetPixel(newIndex);
 		    oss<<" Location: "<<newIndex<<", Values:  "<<newPixel;
-		    m_Parent->PrintPixLocVal(oss.str());
+		    std::string str(oss.str());
+		    m_Parent->PrintPixLocVal(str);
 		    m_MouseMoveCount=0;
 		  }
 	      }

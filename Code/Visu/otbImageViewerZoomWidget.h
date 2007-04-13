@@ -92,7 +92,8 @@ class ITK_EXPORT ImageViewerZoomWidget
 		  {
 		    itk::OStringStream oss;
 		    oss<<" Location: "<<newIndex<<", Values:  "<<this->GetInput()->GetPixel(newIndex);
-		    m_Parent->PrintPixLocVal(oss.str());
+		    std::string str(oss.str());
+		    m_Parent->PrintPixLocVal(str);
 		    m_MouseMoveCount=0;
 		  }
 	      }

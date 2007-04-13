@@ -307,8 +307,9 @@ namespace otb
 	  }
       }
     // Create the zoom window
-    std::string zoomLabel="Zoom Window";
-    m_ZoomWindow = new Fl_Window(wfull+15,hscroll+110,m_ZoomMaxInitialSize,m_ZoomMaxInitialSize,zoomLabel.c_str());
+    std::string zoomLabel="Zoom Window (X4)";
+    m_ZoomWindow = new Fl_Window(wfull+15,hscroll+110,m_ZoomMaxInitialSize,m_ZoomMaxInitialSize,"");
+    m_ZoomWindow->copy_label(zoomLabel.c_str());
     m_ZoomWidget = ZoomWidgetType::New();
     m_ZoomWidget->SetParent(this);
     m_ZoomWindow->resizable(m_ZoomWidget);
@@ -316,7 +317,7 @@ namespace otb
     m_ZoomWindow->end();
     m_ZoomWidget->SetZoomFactor(4.0);
     m_ZoomWidget->SetInput(m_InputImage);
-    m_ZoomWidget->Init(0,0,m_ZoomMaxInitialSize,m_ZoomMaxInitialSize,zoomLabel.c_str());
+    m_ZoomWidget->Init(0,0,m_ZoomMaxInitialSize,m_ZoomMaxInitialSize,"");
     m_ZoomWidget->box( FL_EMBOSSED_BOX );
     m_ZoomWidget->SetFormOverlayVisible(true);
 
