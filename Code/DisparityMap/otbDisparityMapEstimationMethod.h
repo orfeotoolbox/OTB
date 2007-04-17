@@ -107,18 +107,6 @@ class ITK_EXPORT DisparityMapEstimationMethod
   /** Smart Pointer type to a DataObject. */
   typedef typename itk::DataObject::Pointer DataObjectPointer;
 
-  /** Set/Get the Fixed image. */
-  itkSetObjectMacro(FixedImage,FixedImageType);
-  itkGetObjectMacro(FixedImage,FixedImageType); 
-
-  /** Set/Get the Moving image. */
-  itkSetObjectMacro(MovingImage,MovingImageType);
-  itkGetObjectMacro(MovingImage,MovingImageType);
-
-  /** Set/Get the points set. */
-  itkSetObjectMacro(PointSet,PointSetType);
-  itkGetObjectMacro(PointSet,PointSetType);
-
   /** Set/Get the Optimizer. */
   itkSetObjectMacro(Optimizer,OptimizerType);
   itkGetObjectMacro(Optimizer,OptimizerType);
@@ -146,6 +134,42 @@ class ITK_EXPORT DisparityMapEstimationMethod
   /** Set/Get the initial transformation parameters. */
   itkSetMacro(InitialTransformParameters,ParametersType);
   itkGetConstReferenceMacro(InitialTransformParameters,ParametersType);
+
+  /**
+   * Set the source pointset.
+   * \param pointset The source pointset.
+   */
+  void SetPointSet(const TPointSet * pointset);
+  /**
+   * Get the source pointset.
+   * \return The source pointset.
+   */
+   const TPointSet * GetPointSet(void);
+
+   /**
+    * Set the fixed image.
+    * \param image The fixed image.
+    **/
+   void SetFixedImage(const TFixedImage * image);
+
+   /**
+    * Get the fixed image.
+    * \return The fixed image.
+    **/
+   const TFixedImage * GetFixedImage(void);
+
+   /**
+    * Set the moving image.
+    * \param image The mobing image.
+    **/
+   void SetMovingImage(const TMovingImage * image);
+
+   /**
+    * Get the fixed image.
+    * \return The fixed image.
+    **/
+   const TMovingImage * GetMovingImage(void);
+
 
 protected:
   /**
@@ -184,18 +208,6 @@ private:
    * The interpolator used for local registration.
    */
   InterpolatorPointerType m_Interpolator;
-  /**
-   * The input point set.
-   */
-  PointSetPointerType     m_PointSet;
-  /**
-   * The moving image.
-   */
-  MovingImagePointerType  m_MovingImage;
-  /**
-   * The fixed image.
-   */
-  FixedImagePointerType   m_FixedImage;
   /**
    * The initial transform parameters.
    */

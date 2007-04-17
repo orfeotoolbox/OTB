@@ -32,10 +32,10 @@ template < typename TFixedImage, typename TMovingImage, class TPointSet >
 DisparityMapEstimationMethod<TFixedImage,TMovingImage,TPointSet>
 ::DisparityMapEstimationMethod()
 {
-  this->SetNumberOfRequiredInputs(0);
-  this->SetNumberOfRequiredOutputs(1);
-  m_FixedImage   = 0; // has to be provided by the user.
-  m_MovingImage  = 0; // has to be provided by the user.
+  this->SetNumberOfRequiredInputs(3);
+  //this->SetNumberOfRequiredOutputs(1);
+  // this->SetReleaseDataFlag(false);
+  this->SetReleaseDataBeforeUpdateFlag(false);
   m_Transform    = 0; // has to be provided by the user.
   m_Interpolator = 0; // has to be provided by the user.
   m_Metric       = 0; // has to be provided by the user.
@@ -48,34 +48,101 @@ DisparityMapEstimationMethod<TFixedImage,TMovingImage,TPointSet>
 /*
  * Destructor.
  */
-template < typename TFixedImage, typename TMovingImage, class TPointSet >
+template < class TFixedImage, class TMovingImage, class TPointSet >
 DisparityMapEstimationMethod<TFixedImage,TMovingImage,TPointSet>
 ::~DisparityMapEstimationMethod()
 {}
 /**
- * Main computation method.
- *
+ * Set the source pointset.
+ * \param pointset The source pointset.
  */
-template < typename TFixedImage, typename TMovingImage, class TPointSet >
+template < class TFixedImage, class TMovingImage, class TPointSet >
+void
+DisparityMapEstimationMethod<TFixedImage,TMovingImage,TPointSet>
+::SetPointSet(const TPointSet * pointset)
+{
+  this->itk::ProcessObject::SetNthInput(0,const_cast<PointSetType *>(pointset));
+}
+/**
+ * Get the source pointset.
+ * \return The source pointset.
+ */
+template < class TFixedImage, class TMovingImage, class TPointSet >
+const TPointSet *
+DisparityMapEstimationMethod<TFixedImage,TMovingImage,TPointSet>
+::GetPointSet(void)
+{
+  return static_cast<const PointSetType *>(this->itk::ProcessObject::GetInput(0));
+}
+/**
+ * Set the fixed image.
+ * \param image The fixed image.
+ **/
+template < class TFixedImage, class TMovingImage, class TPointSet >
+void
+DisparityMapEstimationMethod<TFixedImage,TMovingImage,TPointSet>
+::SetFixedImage(const TFixedImage * image)
+{
+  this->itk::ProcessObject::SetNthInput(1,const_cast<FixedImageType *>(image));
+}
+/**
+ * Get the fixed image.
+ * \return The fixed image.
+ **/
+template < class TFixedImage, class TMovingImage, class TPointSet >
+const TFixedImage *
+DisparityMapEstimationMethod<TFixedImage,TMovingImage,TPointSet>
+::GetFixedImage(void)
+{
+  return static_cast<const FixedImageType *>(this->itk::ProcessObject::GetInput(1));
+}
+/**
+ * Set the moving image.
+ * \param image The mobing image.
+ **/
+template < class TFixedImage, class TMovingImage, class TPointSet >
+void
+DisparityMapEstimationMethod<TFixedImage,TMovingImage,TPointSet>
+::SetMovingImage(const TMovingImage * image)
+{
+  this->itk::ProcessObject::SetNthInput(2,const_cast<MovingImageType *>(image));
+}
+ /**
+  * Get the fixed image.
+  * \return The fixed image.
+  **/
+template < class TFixedImage, class TMovingImage, class TPointSet >
+const TMovingImage *
+DisparityMapEstimationMethod<TFixedImage,TMovingImage,TPointSet>
+::GetMovingImage(void)
+{
+  return static_cast<const MovingImageType *>(this->itk::ProcessObject::GetInput(2));
+}
+
+
+/**
+ * Main computation method.
+ */
+template < class TFixedImage, class TMovingImage, class TPointSet >
 void
 DisparityMapEstimationMethod<TFixedImage,TMovingImage,TPointSet>
 ::GenerateData(void)
 {
   // inputs pointers
-  FixedImagePointerType fixed = this->GetFixedImage();
-  MovingImagePointerType moving = this->GetMovingImage();
-  PointSetPointerType pointSet = this->GetPointSet();
+  const FixedImageType * fixed = this->GetFixedImage();
+  const MovingImageType * moving = this->GetMovingImage();
+  const PointSetType * pointSet = this->GetPointSet();
   PointSetType* output = this->GetOutput();
   
   // Typedefs 
   typedef typename PointSetType::PointsContainer PointsContainer;
-  typedef typename PointsContainer::Iterator PointsIterator;
+  typedef typename PointsContainer::ConstIterator PointsIterator;
   typedef itk::ImageRegistrationMethod<FixedImageType,MovingImageType> RegistrationType;
   typedef otb::ExtractROI<FixedPixelType,FixedPixelType> FixedExtractType;
   typedef otb::ExtractROI<MovingPixelType,MovingPixelType> MovingExtractType;
 
   // points retrieving
-  typename PointsContainer::Pointer points = m_PointSet->GetPoints();
+  typename PointsContainer::ConstPointer points = pointSet->GetPoints();
 
   // Iterator set up 
   PointsIterator  pointIterator = points->Begin();
@@ -167,7 +234,7 @@ DisparityMapEstimationMethod<TFixedImage,TMovingImage,TPointSet>
     ++dataId;
     }
 }
-template < typename TFixedImage, typename TMovingImage, class TPointSet >
+template < class TFixedImage, class TMovingImage, class TPointSet >
 void
 DisparityMapEstimationMethod<TFixedImage,TMovingImage,TPointSet>
 ::PrintSelf(std::ostream& os, itk::Indent indent) const

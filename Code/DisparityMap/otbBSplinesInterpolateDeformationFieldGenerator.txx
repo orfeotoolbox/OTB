@@ -102,8 +102,8 @@ BSplinesInterpolateDeformationFieldGenerator<TPointSet, TDeformationField>
       inPixel = inIt.Get();
       PixelType outPixel;
       outPixel.SetSize(2);
-      outPixel[0]=inPixel[0];
-      outPixel[1]=inPixel[1];
+      outPixel[0]=-inPixel[0];
+      outPixel[1]=-inPixel[1];
       outIt.Set(outPixel);
     }
 }
