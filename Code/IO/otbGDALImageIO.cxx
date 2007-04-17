@@ -40,6 +40,9 @@
 #include "itkPNGImageIO.h"
 #include "itkJPEGImageIO.h"
 
+#include <iostream>
+#include <fstream>
+
 namespace otb
 {
 
@@ -212,8 +215,7 @@ void GDALImageIO::ReadVolume(void*)
 // Read image with GDAL
 void GDALImageIO::Read(void* buffer)
 {
-
-        unsigned long step = this->GetNumberOfComponents();
+        std::streamoff step = static_cast<std::streamoff>(this->GetNumberOfComponents());
         unsigned char * p = static_cast<unsigned char *>(buffer);
         if(p==NULL)
         {
@@ -231,9 +233,21 @@ otbMsgDevMacro( <<" Dimensions de l'image  : "<<m_Dimensions[0]<<","<<m_Dimensio
 otbMsgDevMacro( <<" Region lue (IORegion)  : "<<this->GetIORegion());
 otbMsgDevMacro( <<" Nb Of Components  : "<<this->GetNumberOfComponents());
 
-        unsigned long lNbPixels = (unsigned long)(lNbColonnes*lNbLignes);
+        std::streamoff lNbPixels = (static_cast<std::streamoff>(lNbColonnes))*(static_cast<std::streamoff>(lNbLignes));
+		std::streamoff lTailleBuffer = static_cast<std::streamoff>(m_NbOctetPixel)*lNbPixels;
 
-	unsigned long lTailleBuffer = (unsigned long)(m_NbOctetPixel)*lNbPixels;
+otbMsgDevMacro( <<" Allocation buff tempon taille : "<<lNbPixels<<"*"<<m_NbOctetPixel<<" (NbOctetPixel) = "<<lTailleBuffer);
+otbMsgDevMacro( <<" sizeof(streamsize)    : "<<sizeof(std::streamsize));
+otbMsgDevMacro( <<" sizeof(streampos)     : "<<sizeof(std::streampos));
+otbMsgDevMacro( <<" sizeof(streamoff)     : "<<sizeof(std::streamoff));
+otbMsgDevMacro( <<" sizeof(std::ios::beg) : "<<sizeof(std::ios::beg));
+otbMsgDevMacro( <<" sizeof(size_t)        : "<<sizeof(size_t));
+//otbMsgDevMacro( <<" sizeof(pos_type)      : "<<sizeof(pos_type));
+//otbMsgDevMacro( <<" sizeof(off_type)      : "<<sizeof(off_type));
+otbMsgDevMacro( <<" sizeof(unsigned long) : "<<sizeof(unsigned long));
+
+
+
         unsigned char* value = new unsigned char[lTailleBuffer];
         if(value==NULL)
         {
@@ -243,28 +257,28 @@ otbMsgDevMacro( <<" Nb Of Components  : "<<this->GetNumberOfComponents());
 
 
         CPLErr lCrGdal;
-        unsigned long cpt(0);
+        std::streamoff cpt(0);
 	
   	if( GDALDataTypeIsComplex(m_PxType) )
 	{
-		otbMsgDevMacro( << " GDALDataTypeIsComplex begin ");
-		lCrGdal = m_poBands[0]->RasterIO( GF_Read,lPremiereColonne,lPremiereLigne,lNbColonnes, lNbLignes, value , lNbColonnes, lNbLignes, m_PxType,0, 0 );
+			otbMsgDevMacro( << " GDALDataTypeIsComplex begin ");
+			lCrGdal = m_poBands[0]->RasterIO( GF_Read,lPremiereColonne,lPremiereLigne,lNbColonnes, lNbLignes, value , lNbColonnes, lNbLignes, m_PxType,0, 0 );
 
-		if (lCrGdal == CE_Failure)
-                {
+			if (lCrGdal == CE_Failure)
+            {
     	        	itkExceptionMacro(<< "Erreur lors de la lecture de l'image (format GDAL) " << m_FileName.c_str()<<".");
-                }
-		cpt = 0;
-                for ( unsigned long  i=0 ; i < lTailleBuffer ; i = i+m_NbOctetPixel )
-                {
-                        memcpy((void*)(&(p[cpt])),(const void*)(&(value[i])),(size_t)(m_NbOctetPixel));		       
-		        cpt += m_NbOctetPixel;
-                }		
+            }
+			cpt = 0;
+            for ( std::streamoff  i=0 ; i < lTailleBuffer ; i = i+static_cast<std::streamoff>(m_NbOctetPixel) )
+            {
+                memcpy((void*)(&(p[cpt])),(const void*)(&(value[i])),(size_t)(m_NbOctetPixel));		       
+		    	cpt += static_cast<std::streamoff>(m_NbOctetPixel);
+            }		
 	}
 	else
 	{
         	// Mise a jour du step
-        	step = step * (unsigned long)(m_NbOctetPixel);
+        	step = step * static_cast<std::streamoff>(m_NbOctetPixel);
 
         	for (unsigned int nbComponents = 0 ; nbComponents < this->GetNumberOfComponents() ; nbComponents++)
         	{
@@ -274,8 +288,8 @@ otbMsgDevMacro( <<" Nb Of Components  : "<<this->GetNumberOfComponents());
     	        		itkExceptionMacro(<< "Erreur lors de la lecture de l'image (format GDAL) " << m_FileName.c_str()<<".");
                 	}
                 	// Recopie dans le buffer                 
-                	cpt = (unsigned long )(nbComponents)* (unsigned long)(m_NbOctetPixel);
-                	for ( unsigned long  i=0 ; i < lTailleBuffer ; i = i+m_NbOctetPixel )
+                	cpt = static_cast<std::streamoff>(nbComponents)*static_cast<std::streamoff>(m_NbOctetPixel);
+                	for ( std::streamoff  i=0 ; i < lTailleBuffer ; i = i+static_cast<std::streamoff>(m_NbOctetPixel) )
                 	{
                         	memcpy((void*)(&(p[cpt])),(const void*)(&(value[i])),(size_t)(m_NbOctetPixel));
                         	cpt += step;
@@ -284,6 +298,7 @@ otbMsgDevMacro( <<" Nb Of Components  : "<<this->GetNumberOfComponents());
 	}
 	
         delete [] value;
+        value = NULL;
 otbMsgDevMacro( << "GDALImageIO::Read() terminee");
 }
 
@@ -792,11 +807,9 @@ void GDALImageIO::Write(const void* buffer)
                 m_FlagWriteImageInformation = false;
         }
 
-	unsigned long step = this->GetNumberOfComponents();
-	//unsigned long step = m_NbBands;
+		std::streamoff step = static_cast<std::streamoff>(this->GetNumberOfComponents());
         const unsigned char *p = static_cast<const unsigned char *>(buffer);
-        unsigned long cpt(0);
-        
+        std::streamoff cpt(0);
         if(p==NULL)
         {
                 itkExceptionMacro(<<"GDAL : Bad alloc");
@@ -819,8 +832,8 @@ void GDALImageIO::Write(const void* buffer)
 
 otbMsgDevMacro( << "GDALImageIO::Write() IORegion Start["<<this->GetIORegion().GetIndex()[0]<<","<<this->GetIORegion().GetIndex()[1]<<"] Size ["<<this->GetIORegion().GetSize()[0]<<","<<this->GetIORegion().GetSize()[1]<<"] on Image size ["<<m_Dimensions[0]<<","<<m_Dimensions[1]<<"]");
 
-        unsigned long lNbPixels = (unsigned long)(lNbColonnes*lNbLignes);
-        unsigned long lTailleBuffer = (unsigned long)(m_NbOctetPixel)*lNbPixels;
+        std::streamoff lNbPixels = static_cast<std::streamoff>(lNbColonnes)*static_cast<std::streamoff>(lNbLignes);
+        std::streamoff lTailleBuffer = static_cast<std::streamoff>(m_NbOctetPixel)*lNbPixels;
 otbMsgDevMacro( <<" TailleBuffer allou� : "<< lTailleBuffer);
         
         unsigned char* value = new unsigned char[lTailleBuffer];
@@ -831,16 +844,16 @@ otbMsgDevMacro( <<" TailleBuffer allou� : "<< lTailleBuffer);
         }
 
         // Mise a jour du step
-        step = step * (unsigned long)(m_NbOctetPixel);
+        step = step * static_cast<std::streamoff>(m_NbOctetPixel);
 
         CPLErr lCrGdal;
         
  
         for (unsigned int nbComponents = 0 ; nbComponents < this->GetNumberOfComponents() ; nbComponents++)
         {
-	        cpt = (unsigned long )(nbComponents)* (unsigned long)(m_NbOctetPixel);
+	        cpt = static_cast<std::streamoff>(nbComponents)* static_cast<std::streamoff>(m_NbOctetPixel);
      
-        	for ( unsigned long  i=0 ; i < lTailleBuffer ; i = i+m_NbOctetPixel )
+        	for ( std::streamoff i=0 ; i < lTailleBuffer ; i = i+static_cast<std::streamoff>(m_NbOctetPixel) )
         	{
 	                memcpy((void*)(&(value[i])),(const void*)(&(p[cpt])),(size_t)(m_NbOctetPixel));
                         cpt += step;
@@ -859,6 +872,7 @@ otbMsgDevMacro( <<" TailleBuffer allou� : "<< lTailleBuffer);
         }
 
         delete [] value;
+        value = NULL;
 	otbMsgDevMacro( << "GDALImageIO::Write() terminee");
 
 }
