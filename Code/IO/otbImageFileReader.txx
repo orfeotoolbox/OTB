@@ -164,17 +164,24 @@ ImageFileReader<TOutputImage>
     // regardles of the actual type of the pixels.
     ImageRegionType region = output->GetBufferedRegion();
 //THOMAS : PB : le GetImageSizeInBytes s'appuie sur m_Dimension lue, donc dimensions physique,de 
-// l'image (pas celle bufferiséd ans la cas du streaming )
+// l'image (pas celle bufferisï¿½d ans la cas du streaming )
 // JULIEN: fix for the problem mentionned : the componentsize is computed here since ad hoc methods in 
 // itkImageIOBase are protected.
-    unsigned int componentSize = this->m_ImageIO->GetImageSizeInBytes();
-    for(unsigned int i=0;i<this->m_ImageIO->GetNumberOfDimensions();++i)
+//THOMAS : PB with big file : "unsigned int" is not adapted. We use streamoff type.
+//    unsigned int componentSize = this->m_ImageIO->GetImageSizeInBytes();
+    std::streamoff componentSize;
+    componentSize = static_cast<std::streamoff>(this->m_ImageIO->GetImageSizeInPixels());
+    componentSize = componentSize * static_cast<std::streamoff>(this->m_ImageIO->GetNumberOfComponents());
+// PB : the GetComponentSize() method of the itkImageIOBase  class is protected. 
+// duplicated this method in this class (very BAD)
+    componentSize = componentSize * static_cast<std::streamoff>(this->GetComponentSize());
+	
+    for(std::streamoff i=0;i<static_cast<std::streamoff>(this->m_ImageIO->GetNumberOfDimensions());++i)
       {
-	componentSize = componentSize/this->m_ImageIO->GetDimensions(i);
+	componentSize = componentSize/static_cast<std::streamoff>(this->m_ImageIO->GetDimensions(i));
       }
 
-
-    unsigned int nbBytes = componentSize*region.GetNumberOfPixels();
+    std::streamoff nbBytes = componentSize*static_cast<std::streamoff>(region.GetNumberOfPixels());
     otbMsgDevMacro(<<"NbBytes "<<nbBytes);
 
     otbMsgDevMacro(<< "Buffer conversion required from: "
@@ -193,6 +200,40 @@ ImageFileReader<TOutputImage>
     }
 }
 
+template <class TOutputImage>
+unsigned int 
+ImageFileReader<TOutputImage>
+::GetComponentSize() const
+{
+  switch(this->m_ImageIO->GetComponentType())
+    {
+    case itk::ImageIOBase::UCHAR:
+      return sizeof(unsigned char);
+    case itk::ImageIOBase::CHAR:
+      return sizeof(char);
+    case itk::ImageIOBase::USHORT:
+      return sizeof(unsigned short);
+    case itk::ImageIOBase::SHORT:
+      return sizeof(short);
+    case itk::ImageIOBase::UINT:
+      return sizeof(unsigned int);
+    case itk::ImageIOBase::INT:
+      return sizeof(int);
+    case itk::ImageIOBase::ULONG:
+      return sizeof(unsigned long);
+    case itk::ImageIOBase::LONG:
+      return sizeof(long);
+    case itk::ImageIOBase::FLOAT:
+      return sizeof(float);
+    case itk::ImageIOBase::DOUBLE:
+      return sizeof(double);
+    case itk::ImageIOBase::UNKNOWNCOMPONENTTYPE:
+    default:
+      itkExceptionMacro ("Unknown component type: " << this->m_ImageIO->GetComponentType());
+    }
+
+  return 0;
+}
 
 template <class TOutputImage>
 void

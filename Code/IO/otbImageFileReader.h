@@ -82,7 +82,6 @@ protected:
   ImageFileReader();
   ~ImageFileReader();
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
-
   
 private:
   /** Test whether the given filename exist and it is readable,
@@ -91,6 +90,10 @@ private:
       doesn't exist or it is not readable, and exception with an
       approriate message will be thrown. */
   void TestFileExistanceAndReadability();
+  
+  /** Copy of the GetComponentSize() method of the itk::ImageIOBase.
+      We need this value to calculate buffer size. */
+  virtual unsigned int GetComponentSize() const;
 
   ImageFileReader(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
