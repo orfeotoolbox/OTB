@@ -1091,6 +1091,7 @@ otbMultiToMonoChannelExtractROISAR.cxx
 otbImageFileReaderERS.cxx
 otbStreamingImageFilterTest.cxx
 otbStreamingImageFileWriterTest.cxx
+otbStreamingShortImageFileWriterTest.cxx
 otbStreamingImageFileWriterWithFilterTest.cxx
 otbImageTest.cxx
 otbVectorImageTest.cxx

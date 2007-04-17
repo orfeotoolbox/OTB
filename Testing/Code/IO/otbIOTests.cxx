@@ -49,6 +49,7 @@ REGISTER_TEST(otbImageFileWriterONERAComplex);
 REGISTER_TEST(otbImageFileWriterStreamingONERAComplex);
 REGISTER_TEST(otbStreamingImageFilterTest);
 REGISTER_TEST(otbStreamingImageFileWriterTest);
+REGISTER_TEST(otbStreamingShortImageFileWriterTest);
 REGISTER_TEST(otbStreamingImageFileWriterWithFilterTest);
 REGISTER_TEST(otbPipelineMetadataHandlingTest);
 REGISTER_TEST(otbPipelineMetadataHandlingWithUFFilterTest);
