@@ -169,19 +169,12 @@ ImageFileReader<TOutputImage>
 // itkImageIOBase are protected.
 //THOMAS : PB with big file : "unsigned int" is not adapted. We use streamoff type.
 //    unsigned int componentSize = this->m_ImageIO->GetImageSizeInBytes();
-    std::streamoff componentSize;
-    componentSize = static_cast<std::streamoff>(this->m_ImageIO->GetImageSizeInPixels());
-    componentSize = componentSize * static_cast<std::streamoff>(this->m_ImageIO->GetNumberOfComponents());
+/*    componentSize = static_cast<std::streamoff>(this->m_ImageIO->GetImageSizeInPixels());
+    componentSize = componentSize * static_cast<std::streamoff>(this->m_ImageIO->GetNumberOfComponents()); */
 // PB : the GetComponentSize() method of the itkImageIOBase  class is protected. 
 // duplicated this method in this class (very BAD)
-    componentSize = componentSize * static_cast<std::streamoff>(this->GetComponentSize());
 	
-    for(std::streamoff i=0;i<static_cast<std::streamoff>(this->m_ImageIO->GetNumberOfDimensions());++i)
-      {
-	componentSize = componentSize/static_cast<std::streamoff>(this->m_ImageIO->GetDimensions(i));
-      }
-
-    std::streamoff nbBytes = componentSize*static_cast<std::streamoff>(region.GetNumberOfPixels());
+    std::streamoff nbBytes = static_cast<std::streamoff>(this->GetComponentSize())*static_cast<std::streamoff>(region.GetNumberOfPixels());
     otbMsgDevMacro(<<"NbBytes "<<nbBytes);
 
     otbMsgDevMacro(<< "Buffer conversion required from: "
@@ -191,8 +184,6 @@ ImageFileReader<TOutputImage>
     char * loadBuffer = new char[nbBytes];
     
     this->m_ImageIO->Read(loadBuffer);
-    
-    
 
     this->DoConvertBuffer(loadBuffer, region.GetNumberOfPixels());
 
