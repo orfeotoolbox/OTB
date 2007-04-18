@@ -41,14 +41,14 @@ namespace otb
 /**
  *
  */
-template <class TInputImage, class TOutputImage>
-TouziEdgeDetectorImageFilter<TInputImage, TOutputImage>::TouziEdgeDetectorImageFilter()
+template <class TInputImage, class TOutputImage, class TOutputImageDirection >
+TouziEdgeDetectorImageFilter<TInputImage, TOutputImage, TOutputImageDirection>::TouziEdgeDetectorImageFilter()
 {
   m_Radius.Fill(1);
 }
 
-template <class TInputImage, class TOutputImage>
-void TouziEdgeDetectorImageFilter<TInputImage, TOutputImage>::GenerateInputRequestedRegion() throw (itk::InvalidRequestedRegionError)
+template <class TInputImage, class TOutputImage, class TOutputImageDirection >
+void TouziEdgeDetectorImageFilter<TInputImage, TOutputImage, TOutputImageDirection>::GenerateInputRequestedRegion() throw (itk::InvalidRequestedRegionError)
 {
   // call the superclass' implementation of this method
   Superclass::GenerateInputRequestedRegion();
@@ -101,38 +101,29 @@ void TouziEdgeDetectorImageFilter<TInputImage, TOutputImage>::GenerateInputReque
  * InterpolatorType::SetInputImage is not thread-safe and hence
  * has to be set up before ThreadedGenerateData
  */
-template <class TInputImage, class TOutputImage>
+template <class TInputImage, class TOutputImage, class TOutputImageDirection >
 void 
-TouziEdgeDetectorImageFilter<TInputImage,TOutputImage>
+TouziEdgeDetectorImageFilter<TInputImage, TOutputImage, TOutputImageDirection>
 ::BeforeThreadedGenerateData()
 {
 
-  typename OutputImageType::RegionType region;    
+  typename OutputImageDirectionType::RegionType region;    
   typename OutputImageType::Pointer     output = this->GetOutput();
 
-  m_DirectionOuputImage = OutputImageType::New();
+  OutputImageDirectionType * direction = this->GetOutputDirection();
 
   region.SetSize(output->GetLargestPossibleRegion().GetSize());
   region.SetIndex(output->GetLargestPossibleRegion().GetIndex());
-  m_DirectionOuputImage->SetRegions( region );
-  m_DirectionOuputImage->SetOrigin(output->GetOrigin());
-  m_DirectionOuputImage->SetSpacing(output->GetSpacing());
-  m_DirectionOuputImage->Allocate();
+  direction->SetRegions( region );
+  direction->SetOrigin(output->GetOrigin());
+  direction->SetSpacing(output->GetSpacing());
+  direction->Allocate();
 
 }
 
-template <class TInputImage, class TOutputImage>
-const typename TouziEdgeDetectorImageFilter<TInputImage,TOutputImage>::OutputImageType *
-TouziEdgeDetectorImageFilter<TInputImage,TOutputImage>
-::GetOutputDirections()
-{
-	this->Update();
-	return 	static_cast< const OutputImageType *> (m_DirectionOuputImage);
-}
-
-
-template< class TInputImage, class TOutputImage>
-void TouziEdgeDetectorImageFilter< TInputImage, TOutputImage>
+template <class TInputImage, class TOutputImage, class TOutputImageDirection >
+void 
+TouziEdgeDetectorImageFilter<TInputImage, TOutputImage, TOutputImageDirection>
 ::ThreadedGenerateData(	
 			const 	OutputImageRegionType& 		outputRegionForThread,
                        	int 	threadId
@@ -148,7 +139,7 @@ void TouziEdgeDetectorImageFilter< TInputImage, TOutputImage>
   // Allocate output
   typename OutputImageType::Pointer     output = this->GetOutput();
   typename InputImageType::ConstPointer input  = this->GetInput();
-  typename OutputImageType::Pointer     outputDir = m_DirectionOuputImage;
+  typename OutputImageDirectionType::Pointer     outputDir = this->GetOutputDirection();
     
   // Find the data-set boundary "faces"
   typename itk::NeighborhoodAlgorithm::ImageBoundaryFacesCalculator<InputImageType>::FaceListType 		faceList;
@@ -214,7 +205,7 @@ void TouziEdgeDetectorImageFilter< TInputImage, TOutputImage>
     unsigned int neighborhoodSize = bit.Size();
       
     it = itk::ImageRegionIterator<OutputImageType>(output, *fit);
-    it_dir = itk::ImageRegionIterator<OutputImageType>(outputDir, *fit);
+    it_dir = itk::ImageRegionIterator<OutputImageDirectionType>(outputDir, *fit);
     
     bit.OverrideBoundaryCondition(&nbc);
     bit.GoToBegin();
@@ -318,7 +309,7 @@ void TouziEdgeDetectorImageFilter< TInputImage, TOutputImage>
 
       
       // Assignment of this value to the "outputdir" pixel
-      it_dir.Set( static_cast<OutputPixelType>(Dir_contour) );
+      it_dir.Set( static_cast<OutputPixelDirectionType>(Dir_contour) );
                      
       ++bit;
       ++it;
@@ -333,9 +324,10 @@ void TouziEdgeDetectorImageFilter< TInputImage, TOutputImage>
 /**
  * Standard "PrintSelf" method
  */
-template <class TInputImage, class TOutput>
+template <class TInputImage, class TOutputImage, class TOutputImageDirection >
 void 
-TouziEdgeDetectorImageFilter<TInputImage, TOutput>::PrintSelf(std::ostream& os, itk::Indent indent) const
+TouziEdgeDetectorImageFilter<TInputImage, TOutputImage, TOutputImageDirection>
+::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   Superclass::PrintSelf( os, indent );
   os << indent << "Radius: " << m_Radius << std::endl;

@@ -48,13 +48,9 @@ public:
   				unsigned int,
                       		TOutputImage::ImageDimension);
 
-  typedef TInputImage InputImageType;
-  typedef TInputImageDirection InputImageDirectionType;
-  typedef TOutputImage OutputImageType;
-
   /** typedef for the classes standards. */
   typedef ModulusAndDirectionImageToImageFilter Self;
-  typedef itk::ImageToImageFilter< InputImageType, OutputImageType> Superclass;
+  typedef itk::ImageToImageFilter< TInputImage, TOutputImage> Superclass;
   typedef itk::SmartPointer<Self> Pointer;
   typedef itk::SmartPointer<const Self>  ConstPointer;
 
@@ -63,7 +59,10 @@ public:
 
   /** Return the name of the class. */
   itkTypeMacro(ModulusAndDirectionImageToImageFilter, itk::ImageToImageFilter);
- 
+
+  typedef typename Superclass::InputImageType 	InputImageType;
+  typedef TInputImageDirection 				    InputImageDirectionType;
+  typedef typename Superclass::OutputImageType	OutputImageType;
  
   /** Set/Get the image input of this process object.  */
   virtual void SetInput( const InputImageType *input);

@@ -48,13 +48,9 @@ public:
   				unsigned int,
                       		TOutputImage::ImageDimension);
 
-  typedef TInputImage InputImageType;
-  typedef TOutputImage OutputImageType;
-  typedef TOutputImageDirection OutputImageDirectionType;
-
   /** typedef for the classes standards. */
   typedef ImageToModulusAndDirectionImageFilter Self;
-  typedef itk::ImageToImageFilter< InputImageType, OutputImageType> Superclass;
+  typedef itk::ImageToImageFilter< TInputImage, TOutputImage > Superclass;
   typedef itk::SmartPointer<Self> Pointer;
   typedef itk::SmartPointer<const Self>  ConstPointer;
 
@@ -63,12 +59,32 @@ public:
 
   /** Return the name of the class. */
   itkTypeMacro(ImageToModulusAndDirectionImageFilter, itk::ImageToImageFilter);
- 
-  /** Return the output image modulus */  
-  const OutputImageType * GetOutput();
 
+  typedef typename Superclass::InputImageType 	InputImageType;
+  typedef typename Superclass::OutputImageType	OutputImageType;
+  typedef TOutputImageDirection 				OutputImageDirectionType;
+
+
+
+  typedef typename InputImageType::Pointer        InputImagePointer;
+  typedef typename InputImageType::ConstPointer   InputImageConstPointer;
+  typedef typename InputImageType::RegionType     InputImageRegionType; 
+  typedef typename OutputImageType::Pointer       OutputImagePointer;
+  typedef typename OutputImageType::ConstPointer  OutputImageConstPointer;
+  typedef typename OutputImageType::RegionType    OutputImageRegionType; 
+ 
+  /** Return the const output image modulus */  
+  const OutputImageType * GetOutput() const;
+
+  /** Return the output image modulus */  
+  OutputImageType * GetOutput();
+
+  /** Return the const output image direction */  
+  const OutputImageDirectionType * GetOutputDirection() const;
   /** Return the output image direction */  
-  const OutputImageDirectionType * GetOutputDirection();
+  OutputImageDirectionType * GetOutputDirection();
+
+  virtual void GenerateInputRequestedRegion();
 
 protected:
   ImageToModulusAndDirectionImageFilter();

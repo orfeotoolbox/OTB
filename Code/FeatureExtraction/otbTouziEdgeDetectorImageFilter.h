@@ -18,7 +18,7 @@
 #ifndef __otbTouziEdgeDetectorImageFilter_h
 #define __otbTouziEdgeDetectorImageFilter_h
 
-#include "itkImageToImageFilter.h"
+#include "otbImageToModulusAndDirectionImageFilter.h"
 #include "otbImage.h"
 #include "itkNumericTraits.h"
 
@@ -56,8 +56,8 @@ namespace otb
  *  
  */
 
-template <class TInputImage, class TOutputImage>
-class  ITK_EXPORT TouziEdgeDetectorImageFilter :  public itk::ImageToImageFilter< TInputImage, TOutputImage >
+template <class TInputImage, class TOutputImage, class TOutputImageDirection = TOutputImage >
+class  ITK_EXPORT TouziEdgeDetectorImageFilter :  public ImageToModulusAndDirectionImageFilter< TInputImage, TOutputImage, TOutputImageDirection >
 {
 public:
   /** 	Extrait les dimensions aussi bien des images 
@@ -69,37 +69,31 @@ public:
   				unsigned int,
                       		TOutputImage::ImageDimension);
 
-  /** "typedef" pour simplifier la définition et la déclaration de variables. */
-  typedef TInputImage InputImageType;
-  typedef TOutputImage OutputImageType;
-
-  /** "typedef" pour les classes standards. */
+  /** typedef for the classes standards. */
   typedef TouziEdgeDetectorImageFilter Self;
-  typedef itk::ImageToImageFilter< InputImageType, OutputImageType> Superclass;
+  typedef ImageToModulusAndDirectionImageFilter< TInputImage, TOutputImage, TOutputImageDirection> Superclass;
   typedef itk::SmartPointer<Self> Pointer;
   typedef itk::SmartPointer<const Self>  ConstPointer;
 
-  /** Methode pour la gestion "object factory". */
+  /** Method for management of the object factory. */
   itkNewMacro(Self);
 
-  /** Retourne le nom de la classe. */
-  itkTypeMacro(TouziEdgeDetectorImageFilter, itk::ImageToImageFilter);
-  
-  /** Définition des images supportées. */
-  typedef typename InputImageType::PixelType InputPixelType;
-  typedef typename OutputImageType::PixelType OutputPixelType;
+  /** Return the name of the class. */
+  itkTypeMacro(TouziEdgeDetectorImageFilter, ImageToModulusAndDirectionImageFilter);
 
-  
-  typedef typename InputImageType::RegionType InputImageRegionType;
-  typedef typename OutputImageType::RegionType OutputImageRegionType;
+  /** "typedef" pour simplifier la définition et la déclaration de variables. */
+  typedef typename Superclass::InputImageType InputImageType;
+  typedef typename Superclass::OutputImageType OutputImageType;
+  typedef typename Superclass::OutputImageDirectionType OutputImageDirectionType;
 
-  /** "typedef" définissant la taille d'une image. */
   typedef typename InputImageType::SizeType SizeType;
+  typedef typename OutputImageType::RegionType OutputImageRegionType;
+  typedef typename OutputImageType::PixelType OutputPixelType;
+  typedef typename OutputImageDirectionType::PixelType OutputPixelDirectionType;
+  
 
-  /** Positionne le rayon définissant le voisinage utilisé pour le calcul du filtre. */
+  /** Set/Get radius methods */
   itkSetMacro(Radius, SizeType);
-
-  /** Récupère le rayon définissant le voisinage utilisé pour le calcul du filtre. */
   itkGetConstReferenceMacro(Radius, SizeType);
  
 
@@ -108,8 +102,6 @@ public:
    *
    * \sa ImageToImageFilter::GenerateInputRequestedRegion() */
   virtual void GenerateInputRequestedRegion() throw(itk::InvalidRequestedRegionError);
-
-  const OutputImageType * GetOutputDirections();
   
 protected:
   TouziEdgeDetectorImageFilter();
@@ -136,10 +128,8 @@ private:
   /** Déclaration du rayon */
   SizeType m_Radius;
   
-  typename OutputImageType::Pointer m_DirectionOuputImage;
-  
-
 };
+
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION

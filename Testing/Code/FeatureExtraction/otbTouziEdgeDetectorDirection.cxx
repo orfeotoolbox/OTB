@@ -66,7 +66,7 @@ int otbTouziEdgeDetectorDirection( int argc, char* argv[] )
         writer->SetFileName( outputFilename );
         
         filtreTouzi->SetInput( reader->GetOutput() );
-        writer->SetInput( filtreTouzi->GetOutputDirections() );
+        writer->SetInput( filtreTouzi->GetOutputDirection() );
         
         writer->Update();
 
