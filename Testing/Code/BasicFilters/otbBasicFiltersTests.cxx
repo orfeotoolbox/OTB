@@ -50,4 +50,6 @@ REGISTER_TEST(otbSpatialObjectToImageDrawingFilterNew);
 REGISTER_TEST(otbSpatialObjectToImageDrawingFilter);
 REGISTER_TEST(otbImportGeoInformationImageFilterNew);
 REGISTER_TEST(otbImportGeoInformationImageFilter);
+REGISTER_TEST(otbSpectralAngleDistanceImageFilterNew);
+REGISTER_TEST(otbSpectralAngleDistanceImageFilter);
 }

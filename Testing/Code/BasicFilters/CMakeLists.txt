@@ -198,6 +198,22 @@ ADD_TEST(bfTvStreamingShrinkImageFilterQBMUL ${BASICFILTERS_TESTS}
 	            ${TEMP}/bfTvImportGeoInformationOutput.img
 )
 
+# -------            otb::SpectralAngleDistanceImageFilter   ----------------------------
+
+  ADD_TEST(bfTuSpectralAngleDistanceImageFilterNew ${BASICFILTERS_TESTS}  
+         otbSpectralAngleDistanceImageFilterNew)
+
+
+ ADD_TEST(bfTvSpectralAngleDistanceImageFilter ${BASICFILTERS_TESTS} 
+		--compare-image ${TOL}
+		    ${BASELINE}/bfTvSpectralAngleDistanceOutput.hdr
+		    ${TEMP}/bfTvSpectralAngleDistanceOutput.hdr
+		    otbSpectralAngleDistanceImageFilter
+		    ${INPUTDATA}/poupees.jpg
+	            ${TEMP}/bfTvSpectralAngleDistanceOutput.hdr
+		    210 432
+)
+
 # A enrichir
 SET(BasicFilters_SRCS
 otbLeeFilter.cxx
@@ -223,6 +239,8 @@ otbSpatialObjectToImageDrawingFilterNew.cxx
 otbSpatialObjectToImageDrawingFilter.cxx
 otbImportGeoInformationImageFilterNew.cxx
 otbImportGeoInformationImageFilter.cxx
+otbSpectralAngleDistanceImageFilterNew.cxx
+otbSpectralAngleDistanceImageFilter.cxx
 )
 
 
