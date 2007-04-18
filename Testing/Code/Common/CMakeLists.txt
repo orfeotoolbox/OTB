@@ -319,6 +319,9 @@ ADD_TEST(coTuLineSpatialObjectNew ${COMMON_TESTS}
 ADD_TEST(coTuArcSpatialObjectNew ${COMMON_TESTS} 
          otbArcSpatialObjectNew)  
 
+# -------  otb::PathListToPathListFilter -------------------------------------------
+ADD_TEST(coTuPathListToPathListFilterNew ${COMMON_TESTS} 
+         otbPathListToPathListFilterNew)  
 
 # -------       Fichiers sources CXX -----------------------------------
 SET(BasicCommon_SRCS
@@ -361,6 +364,7 @@ otbImageToPathFilterNew.cxx
 otbSpatialObjectSourceNew.cxx
 otbLineSpatialObjectNew.cxx
 otbArcSpatialObjectNew.cxx
+otbPathListToPathListFilterNew.cxx
 )
 
 

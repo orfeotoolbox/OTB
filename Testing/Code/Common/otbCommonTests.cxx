@@ -65,4 +65,5 @@ REGISTER_TEST(otbImageToPathFilterNew);
 REGISTER_TEST(otbSpatialObjectSourceNew);
 REGISTER_TEST(otbLineSpatialObjectNew);
 REGISTER_TEST(otbArcSpatialObjectNew);
+REGISTER_TEST(otbPathListToPathListFilterNew);
 }
