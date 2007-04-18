@@ -16,7 +16,7 @@ SET(EPS 0.001)
 
 #Tolerance sur diff pixel image
 #EPSILON est different de 0.0 pour les tests multiplateformes avec différentes options de compilation.
-SET(EPSILON 0.0000000001)
+SET(EPSILON 0.00000001)
 
 SET(FEATUREEXTRACTION_TESTS ${CXX_TEST_PATH}/otbFeatureExtractionTests)
 
