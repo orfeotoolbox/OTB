@@ -77,7 +77,7 @@ int otbDrawPathAlign( int argc, char * argv[] )
 	testList->Update(); 
 	
 	OutputPathListType * sortiePath = testList->GetOutput();
-	int nbPath = sortiePath->size();
+	int nbPath = sortiePath->Size();
 	std::cout << "NbPath: " << nbPath << std::endl;
 	
 	InputImageType::ConstPointer imageIn   = reader->GetOutput();
@@ -89,7 +89,7 @@ int otbDrawPathAlign( int argc, char * argv[] )
 	OutputImageType::Pointer  imageOut  = OutputImageType::New();
 	    
 	DrawPath->SetImageInput( imageIn    );
-	DrawPath->SetPathInput(  (*sortiePath)[i]);
+	DrawPath->SetPathInput( sortiePath->GetNthElement(i));
 	imageOut = DrawPath->GetOutput();
 	imageOut->Update();
 	

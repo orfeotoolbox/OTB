@@ -15,14 +15,11 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-
 #ifndef _otbPathListSource_h
 #define _otbPathListSource_h
 
-#include "itkPathSource.h"
-
-#include <list>
-#include <vector>
+#include "itkProcessObject.h"
+#include "otbObjectList.h"
 
 namespace otb
 {
@@ -39,12 +36,12 @@ namespace otb
  */
 
 template <class TOutputPath >
-class ITK_EXPORT PathListSource : public itk::PathSource< TOutputPath >
+  class ITK_EXPORT PathListSource : public itk::ProcessObject
 {
 public:
   /** Standard class typedefs. */
   typedef PathListSource                 Self;
-  typedef itk::PathSource<TOutputPath>   Superclass;
+  typedef itk::ProcessObject             Superclass;
   typedef itk::SmartPointer<Self>        Pointer;
   typedef itk::SmartPointer<const Self>  ConstPointer;
     
@@ -52,30 +49,23 @@ public:
   itkNewMacro(Self);
   
   /** Run-time type information (and related methods). */
-  itkTypeMacro(PathListSource,itk::PathSource);
+  itkTypeMacro(PathListSource,itk::ProcessObject);
   
   /** Some convenient typedefs. */
   
-  typedef TOutputPath                                   	OutputPathType;
-  typedef typename OutputPathType::Pointer                      OutputPathPointerType;
-  typedef std::vector< OutputPathPointerType >   		OutputPathListType;
+  typedef TOutputPath                               OutputPathType;
+  typedef typename OutputPathType::Pointer          OutputPathPointerType;
+  typedef otb::ObjectList<OutputPathType>           OutputPathListType;
+  typedef typename OutputPathListType::Pointer      OutputPathListPointerType;
+  typedef typename OutputPathListType::ConstPointer OutputPathListConstPointerType;
+  
+  /** Overiding of the GetOutput() method */
+  OutputPathListType * GetOutput(void);
 
-  typedef OutputPathListType *                         OutputPathListPointerType;
-  typedef const OutputPathListType *                   OutputPathListConstPointerType;
-  
-  OutputPathListType * GetOutput(void)
-  {
-  	OutputPathListType * ptr = ( & (this->m_ListPath) );
-	return (ptr);
-  }
-  
 protected:
   PathListSource();
   virtual ~PathListSource() {}
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
-  
-//  OutputPathListPointer m_ListPath;
-  OutputPathListType m_ListPath;
     
 private:
   PathListSource(const Self&); //purposely not implemented

@@ -101,11 +101,11 @@ int otbAlignImageToPath( int argc, char * argv[] )
 	VertexType cindex;
 	double x1,y1,x2,y2;
 	  
-	int nbPath = sortiePath->size();
+	int nbPath = sortiePath->Size();
 	printf("NbSegment: %d\n",nbPath);
 	fprintf(file,"Nb Segment: %d\n",nbPath);
 	for (int i =0 ; i<nbPath ;i++){
-	   vertexList = (*sortiePath)[i]->GetVertexList();
+	   vertexList = sortiePath->GetNthElement(i)->GetVertexList();
 	   cindex = vertexList->GetElement(0);
 	   x1 = cindex[0];
 	   y1 = cindex[1];

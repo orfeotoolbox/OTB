@@ -85,7 +85,7 @@ int otbDrawPathListTracerLignes( int argc, char * argv[] )
 	image->TransformPhysicalPointToContinuousIndex(pos,cindex);
         pathElt1->AddVertex(cindex);
     
-        path->push_back(pathElt1);
+        path->PushBack(pathElt1);
 	
         /*2eme Segment*/	
 	PathType::Pointer pathElt2 = PathType::New();
@@ -99,7 +99,7 @@ int otbDrawPathListTracerLignes( int argc, char * argv[] )
 	image->TransformPhysicalPointToContinuousIndex(pos,cindex);
         pathElt2->AddVertex(cindex);
     
-        path->push_back(pathElt2);
+        path->PushBack(pathElt2);
 
         /*3eme Segment*/	
 	PathType::Pointer pathElt3 = PathType::New();
@@ -113,7 +113,7 @@ int otbDrawPathListTracerLignes( int argc, char * argv[] )
 	image->TransformPhysicalPointToContinuousIndex(pos,cindex);
         pathElt3->AddVertex(cindex);
     
-        path->push_back(pathElt3);
+        path->PushBack(pathElt3);
 
         /*4eme Segment*/	
 	PathType::Pointer pathElt4 = PathType::New();
@@ -128,7 +128,7 @@ int otbDrawPathListTracerLignes( int argc, char * argv[] )
 	image->TransformPhysicalPointToContinuousIndex(pos,cindex);
         pathElt4->AddVertex(cindex);
     
-        path->push_back(pathElt4);
+        path->PushBack(pathElt4);
 
         /*5eme Segment*/	
 	PathType::Pointer pathElt5 = PathType::New();
@@ -142,7 +142,7 @@ int otbDrawPathListTracerLignes( int argc, char * argv[] )
 	image->TransformPhysicalPointToContinuousIndex(pos,cindex);
         pathElt5->AddVertex(cindex);
     
-        path->push_back(pathElt5);
+        path->PushBack(pathElt5);
 		
         /*6eme Segment*/	
 	PathType::Pointer pathElt6 = PathType::New();
@@ -157,7 +157,7 @@ int otbDrawPathListTracerLignes( int argc, char * argv[] )
 	image->TransformPhysicalPointToContinuousIndex(pos,cindex);
         pathElt6->AddVertex(cindex);
     
-        path->push_back(pathElt6);
+        path->PushBack(pathElt6);
 
 
 	

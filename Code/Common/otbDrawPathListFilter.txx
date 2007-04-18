@@ -185,13 +185,13 @@ DrawPathListFilter<TInputImage,TInputPath,TOutputImage>
      outputIt.Set( inputIt.Get() );
     }
     
-  int nbPath = InputPath->size();
+  int nbPath = InputPath->Size();
   
   otbMsgDevMacro( <<"nbPath: " <<nbPath);
  
   for(int i =0 ; i<nbPath ;i++)
      {
-     vertexList = (*InputPath)[i]->GetVertexList();
+     vertexList = InputPath->GetNthElement(i)->GetVertexList();
      cindex = vertexList->GetElement(0);
      RealType x1 = cindex[0];
      RealType y1 = cindex[1];

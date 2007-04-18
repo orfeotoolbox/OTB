@@ -528,8 +528,8 @@ ImageToPathListAlignFilter<TInputImage,TOutputPath>
   seglist.resize(5*iseglist);
 
   /* build segments list */
-  OutputPath->clear();
-//  OutputPath->resize(iseglist);
+  OutputPath->Clear();
+//  OutputPath->Resize(iseglist);
   
   typedef typename OutputPathType::ContinuousIndexType ContinuousIndexType;
   typename InputImageType::PointType point;
@@ -548,7 +548,7 @@ ImageToPathListAlignFilter<TInputImage,TOutputPath>
     cindex[1] = seglist[i*5+3];
     path->AddVertex(cindex);
     
-    OutputPath->push_back(path);
+    OutputPath->PushBack(path);
   }
   itkDebugMacro(<< "ImageToPathListAlignFilter::GenerateData() finished");
 
