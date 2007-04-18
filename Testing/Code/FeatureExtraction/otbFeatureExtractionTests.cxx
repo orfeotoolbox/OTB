@@ -79,4 +79,5 @@ REGISTER_TEST(otbFourierMellinImageFilterTestFFT);
 REGISTER_TEST(otbFourierMellinImageFilter);
 REGISTER_TEST(otbImageToEdgePathFilterNew);
 REGISTER_TEST(otbImageToEdgePathFilter);
+REGISTER_TEST(otbModulusAndDirectionImageFiltersNew);
 }
