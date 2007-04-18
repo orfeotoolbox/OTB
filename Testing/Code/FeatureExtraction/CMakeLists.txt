@@ -401,7 +401,13 @@ ADD_TEST(feTuFillGapsFilterNew ${FEATUREEXTRACTION_TESTS}
 #	${INPUTDATA}/vide.png
 #	${TEMP}/feFillGaps.png)
 
-        
+# -------            otb::ImageToModulusAndDirectionImageFilter   ------------------------------
+# -------            otb::ModulusAndDirectionImageToImageFilter   ------------------------------
+
+ADD_TEST(feTuModulusAndDirectionImageFiltersNew ${FEATUREEXTRACTION_TESTS}  
+        otbModulusAndDirectionImageFiltersNew)
+
+       
 # -------            otb::ExtractSegments   ------------------------------
 
 ADD_TEST(feTuExtractSegmentsNew ${FEATUREEXTRACTION_TESTS}  
@@ -535,6 +541,7 @@ otbFourierMellinImageFilterTestFFT.cxx
 otbFourierMellinImageFilter.cxx
 otbImageToEdgePathFilterNew.cxx
 otbImageToEdgePathFilter.cxx
+otbModulusAndDirectionImageFiltersNew.cxx
 )
 
 
@@ -542,6 +549,9 @@ INCLUDE_DIRECTORIES("${OTBTesting_BINARY_DIR}")
 
 ADD_EXECUTABLE(otbFeatureExtractionTests otbFeatureExtractionTests.cxx ${BasicFeatureExtraction_SRCS})
 TARGET_LINK_LIBRARIES(otbFeatureExtractionTests  OTBFeatureExtraction OTBCommon OTBIO gdal ITKIO ITKCommon ITKAlgorithms)
+
+# ADD_EXECUTABLE(roadDetect roadDetect.cxx)
+# TARGET_LINK_LIBRARIES(roadDetect  OTBFeatureExtraction OTBCommon OTBIO gdal ITKIO ITKCommon ITKBasicFilters ITKAlgorithms)
 
 
 ENDIF( NOT OTB_DISABLE_CXX_TESTING )
