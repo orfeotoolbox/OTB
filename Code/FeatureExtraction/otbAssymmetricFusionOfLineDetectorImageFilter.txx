@@ -27,13 +27,10 @@ namespace otb
 /**
  *
  */
-template <class TInputImage, class TOutputImage, class InterpolatorType>
-AssymmetricFusionOfLineDetectorImageFilter<TInputImage, TOutputImage, InterpolatorType>
+template <class TInputImage, class TOutputImage, class TOutputImageDirection, class TInterpolator>
+AssymmetricFusionOfLineDetectorImageFilter<TInputImage, TOutputImage, TOutputImageDirection, TInterpolator>
 ::AssymmetricFusionOfLineDetectorImageFilter()
 {
-  this->m_LengthLine = 1;
-  this->m_WidthLine = 0;
-
   this->m_Radius.Fill(1);
   this->m_LengthLine = 1;
   this->m_WidthLine = 0;
@@ -43,9 +40,9 @@ AssymmetricFusionOfLineDetectorImageFilter<TInputImage, TOutputImage, Interpolat
   m_AssSymSum         = AssSymSumType::New();
 }
 
-template <class TInputImage, class TOutputImage, class InterpolatorType>
+template <class TInputImage, class TOutputImage, class TOutputImageDirection, class TInterpolator>
 void
-AssymmetricFusionOfLineDetectorImageFilter<TInputImage, TOutputImage, InterpolatorType>
+AssymmetricFusionOfLineDetectorImageFilter<TInputImage, TOutputImage, TOutputImageDirection, TInterpolator>
 ::GenerateData()
 {
   m_LineRatio->SetInput( this->GetInput() );
@@ -68,15 +65,12 @@ AssymmetricFusionOfLineDetectorImageFilter<TInputImage, TOutputImage, Interpolat
 /**
  * Standard "PrintSelf" method
  */
-template <class TInputImage, class TOutput, class InterpolatorType>
+template <class TInputImage, class TOutputImage, class TOutputImageDirection, class TInterpolator>
 void 
-AssymmetricFusionOfLineDetectorImageFilter<TInputImage, TOutput, InterpolatorType>
+AssymmetricFusionOfLineDetectorImageFilter<TInputImage, TOutputImage, TOutputImageDirection, TInterpolator>
 ::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   Superclass::PrintSelf( os, indent );
-  os << indent << "Length: " << this->m_LengthLine << std::endl;
-  os << indent << "Width: " << this->m_WidthLine << std::endl;
-  
 }
 
 

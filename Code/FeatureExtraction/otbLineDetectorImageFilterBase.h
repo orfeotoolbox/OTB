@@ -20,7 +20,7 @@
 
 #include "itkNearestNeighborInterpolateImageFunction.h"
 #include "itkLinearInterpolateImageFunction.h"
-#include "itkImageToImageFilter.h"
+#include "otbImageToModulusAndDirectionImageFilter.h"
 #include "otbImage.h"
 #include "itkNumericTraits.h"
 
@@ -55,8 +55,9 @@ namespace otb
 
 template <class TInputImage, 
 	  class TOutputImage,
-	  class InterpolatorType = itk::LinearInterpolateImageFunction<TInputImage> >
-class ITK_EXPORT LineDetectorImageFilterBase :  public itk::ImageToImageFilter< TInputImage, TOutputImage >
+	  class TOutputImageDirection = TOutputImage, 
+	  class TInterpolator = itk::LinearInterpolateImageFunction<TInputImage> >
+class ITK_EXPORT LineDetectorImageFilterBase :  public ImageToModulusAndDirectionImageFilter< TInputImage, TOutputImage, TOutputImageDirection >
 {
 public:
   /** 	Extract dimensions as well of the images of entry of exit. */
@@ -67,12 +68,9 @@ public:
   				unsigned int,
                       		TOutputImage::ImageDimension);
 
-  typedef TInputImage InputImageType;
-  typedef TOutputImage OutputImageType;
-
   /** typedef for the classes standards. */
   typedef LineDetectorImageFilterBase Self;
-  typedef itk::ImageToImageFilter< InputImageType, OutputImageType> Superclass;
+  typedef ImageToModulusAndDirectionImageFilter< TInputImage, TOutputImage, TOutputImageDirection > Superclass;
   typedef itk::SmartPointer<Self> Pointer;
   typedef itk::SmartPointer<const Self>  ConstPointer;
 
@@ -80,8 +78,13 @@ public:
   itkNewMacro(Self);
 
   /** Return the name of the class. */
-  itkTypeMacro(LineDetectorImageFilterBase, itk::ImageToImageFilter);
+  itkTypeMacro(LineDetectorImageFilterBase, ImageToModulusAndDirectionImageFilter);
 
+  typedef typename Superclass::InputImageType 				InputImageType;
+  typedef typename Superclass::OutputImageType				OutputImageType;
+  typedef typename Superclass::OutputImageDirectionType 	OutputImageDirectionType;
+  typedef TInterpolator 									InterpolatorType;
+  
   /** Typedefs to describe and access Interpolator */
   typedef typename InterpolatorType::Pointer InterpolatorPointer;
   typedef typename InterpolatorType::CoordRepType CoordRepType;
@@ -134,8 +137,6 @@ public:
 
   
   virtual void GenerateInputRequestedRegion() throw(itk::InvalidRequestedRegionError);
-  
-  OutputImageType * GetOutputDirection();
 
 protected:
   LineDetectorImageFilterBase();
@@ -170,8 +171,6 @@ protected:
   /** Size of the facelist*/
   SizeType m_FaceList;
   
-  OutputImagePointerType m_OutputDirection;
-
   OutputPixelType m_Threshold;
 
   unsigned int m_NumberOfDirections;

@@ -51,12 +51,13 @@ int otbLineRatioDetectorLinear( int argc, char* argv[] )
 
         typedef itk::Image< InputPixelType,  Dimension >        InputImageType;
         typedef itk::Image< OutputPixelType, Dimension >        OutputImageType;
+        typedef itk::Image< OutputPixelType, Dimension >        OutputImageDirectionType;
 
         typedef otb::ImageFileReader< InputImageType  >         ReaderType;
         typedef otb::ImageFileWriter< OutputImageType >         WriterType;
 
         typedef itk::LinearInterpolateImageFunction< InputImageType, double >	InterpolatorType;
-        typedef otb::LineRatioDetectorImageFilter< InputImageType, OutputImageType, InterpolatorType >   FilterType;
+        typedef otb::LineRatioDetectorImageFilter< InputImageType, OutputImageType,  OutputImageDirectionType, InterpolatorType >   FilterType;
 	
         FilterType::Pointer FilterLineRatio = FilterType::New();
         

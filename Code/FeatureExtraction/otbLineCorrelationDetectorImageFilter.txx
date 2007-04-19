@@ -40,8 +40,9 @@ namespace otb
 /**
  *
  */
-template <class TInputImage, class TOutputImage, class InterpolatorType >
-LineCorrelationDetectorImageFilter<TInputImage, TOutputImage, InterpolatorType>::LineCorrelationDetectorImageFilter()
+template <class TInputImage, class TOutputImage, class TOutputImageDirection, class TInterpolator>
+LineCorrelationDetectorImageFilter<TInputImage, TOutputImage, TOutputImageDirection, TInterpolator>
+::LineCorrelationDetectorImageFilter()
 {
   this->m_Radius.Fill(1);
   this->m_LengthLine = 1;
@@ -49,8 +50,10 @@ LineCorrelationDetectorImageFilter<TInputImage, TOutputImage, InterpolatorType>:
   this->m_FaceList.Fill(0);
 }
 
-template <class TInputImage, class TOutputImage, class InterpolatorType>
-double LineCorrelationDetectorImageFilter<TInputImage, TOutputImage, InterpolatorType>::ComputeMeasure(std::vector<double>* m1, std::vector<double>* m2, std::vector<double>* m3)
+template <class TInputImage, class TOutputImage, class TOutputImageDirection, class TInterpolator>
+double 
+LineCorrelationDetectorImageFilter<TInputImage, TOutputImage, TOutputImageDirection, TInterpolator>
+::ComputeMeasure(std::vector<double>* m1, std::vector<double>* m2, std::vector<double>* m3)
 {
 
 
@@ -172,14 +175,12 @@ double LineCorrelationDetectorImageFilter<TInputImage, TOutputImage, Interpolato
 /**
  * Standard "PrintSelf" method
  */
-template <class TInputImage, class TOutput, class InterpolatorType>
+template <class TInputImage, class TOutputImage, class TOutputImageDirection, class TInterpolator>
 void 
-LineCorrelationDetectorImageFilter<TInputImage, TOutput, InterpolatorType>::PrintSelf(std::ostream& os, itk::Indent indent) const
+LineCorrelationDetectorImageFilter<TInputImage, TOutputImage, TOutputImageDirection, TInterpolator>
+::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   Superclass::PrintSelf( os, indent );
-  os << indent << "Length: " << this->m_LengthLine << std::endl;
-  os << indent << "Width: " << this->m_WidthLine << std::endl;
-  
 }
 
 

@@ -36,9 +36,9 @@ int otbLineRatioDetector( int argc, char* argv[] )
         const char * inputFilename  = argv[1];
         const char * outputFilename = argv[2];
 
-	// Largeur de la ligne � detecter = 2*WidthLine+1
+	// Largeur de la ligne a detecter = 2*WidthLine+1
         unsigned int  WidthLine((unsigned int)::atoi(argv[3]));
-        // Longueur de la ligne � detecter = 2*LengthLine+1
+        // Longueur de la ligne a detecter = 2*LengthLine+1
         unsigned int  LengthLine((unsigned int)::atoi(argv[4]));
         
         typedef unsigned char                                   InputPixelType;

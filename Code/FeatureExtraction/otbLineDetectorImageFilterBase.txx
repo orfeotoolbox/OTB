@@ -43,8 +43,9 @@ namespace otb
 /**
  *
  */
-template <class TInputImage, class TOutputImage, class InterpolatorType >
-LineDetectorImageFilterBase<TInputImage, TOutputImage, InterpolatorType>::LineDetectorImageFilterBase()
+template <class TInputImage, class TOutputImage, class TOutputImageDirection, class InterpolatorType >
+LineDetectorImageFilterBase<TInputImage, TOutputImage, TOutputImageDirection, InterpolatorType>
+::LineDetectorImageFilterBase()
 {
   this->SetNumberOfOutputs(2);
   this->SetNumberOfRequiredOutputs(1);
@@ -54,12 +55,15 @@ LineDetectorImageFilterBase<TInputImage, TOutputImage, InterpolatorType>::LineDe
   m_Threshold = 0;
   m_NumberOfDirections = 4;
   m_FaceList.Fill(0);
-  this->SetNthOutput(0,OutputImageType::New());
-  this->SetNthOutput(1,OutputImageType::New());
+// THOMAS : donc contructeur de base
+//  this->SetNthOutput(0,OutputImageType::New());
+//  this->SetNthOutput(1,OutputImageType::New());
 }
 
-template <class TInputImage, class TOutputImage, class InterpolatorType>
-void LineDetectorImageFilterBase<TInputImage, TOutputImage, InterpolatorType>::GenerateInputRequestedRegion() throw (itk::InvalidRequestedRegionError)
+template <class TInputImage, class TOutputImage, class TOutputImageDirection, class InterpolatorType >
+void
+LineDetectorImageFilterBase<TInputImage, TOutputImage, TOutputImageDirection, InterpolatorType>
+::GenerateInputRequestedRegion() throw (itk::InvalidRequestedRegionError)
 {
   // call the superclass' implementation of this method
   Superclass::GenerateInputRequestedRegion();
@@ -123,9 +127,9 @@ void LineDetectorImageFilterBase<TInputImage, TOutputImage, InterpolatorType>::G
  * InterpolatorType::SetInputImage is not thread-safe and hence
  * has to be set up before ThreadedGenerateData
  */
-template <class TInputImage, class TOutputImage, class InterpolatorType>
+template <class TInputImage, class TOutputImage, class TOutputImageDirection, class InterpolatorType >
 void 
-LineDetectorImageFilterBase< TInputImage, TOutputImage, InterpolatorType>
+LineDetectorImageFilterBase<TInputImage, TOutputImage, TOutputImageDirection, InterpolatorType>
 ::BeforeThreadedGenerateData()
 {  
   typename OutputImageType::Pointer     output = this->GetOutput();
@@ -134,16 +138,9 @@ LineDetectorImageFilterBase< TInputImage, TOutputImage, InterpolatorType>
   outputDirection->FillBuffer(0);
 }
 
-template <class TInputImage, class TOutputImage, class InterpolatorType>
-typename LineDetectorImageFilterBase< TInputImage, TOutputImage, InterpolatorType>::OutputImageType *
-LineDetectorImageFilterBase< TInputImage, TOutputImage, InterpolatorType>
-::GetOutputDirection()
-{
-  return static_cast<OutputImageType *> (this->GetOutput(1));
-}
-
-template< class TInputImage, class TOutputImage, class InterpolatorType>
-void LineDetectorImageFilterBase< TInputImage, TOutputImage, InterpolatorType>
+template <class TInputImage, class TOutputImage, class TOutputImageDirection, class InterpolatorType >
+void
+LineDetectorImageFilterBase<TInputImage, TOutputImage, TOutputImageDirection, InterpolatorType>
 ::ThreadedGenerateData(	
 			const 	OutputImageRegionType& 		outputRegionForThread,
                        	int 	threadId
@@ -409,8 +406,10 @@ void LineDetectorImageFilterBase< TInputImage, TOutputImage, InterpolatorType>
 	delete[] Theta;
 }
 
-template <class TInputImage, class TOutput, class InterpolatorType>
-double LineDetectorImageFilterBase<TInputImage, TOutput, InterpolatorType>::ComputeMeasure(std::vector<double>* m1, std::vector<double>* m2, std::vector<double>* m3)
+template <class TInputImage, class TOutputImage, class TOutputImageDirection, class InterpolatorType >
+double
+LineDetectorImageFilterBase<TInputImage, TOutputImage, TOutputImageDirection, InterpolatorType>
+::ComputeMeasure(std::vector<double>* m1, std::vector<double>* m2, std::vector<double>* m3)
 {
   return 0;
 }
@@ -418,9 +417,10 @@ double LineDetectorImageFilterBase<TInputImage, TOutput, InterpolatorType>::Comp
 /**
  * Standard "PrintSelf" method
  */
-template <class TInputImage, class TOutput, class InterpolatorType>
+template <class TInputImage, class TOutputImage, class TOutputImageDirection, class InterpolatorType >
 void 
-LineDetectorImageFilterBase<TInputImage, TOutput, InterpolatorType>::PrintSelf(std::ostream& os, itk::Indent indent) const
+LineDetectorImageFilterBase<TInputImage, TOutputImage, TOutputImageDirection, InterpolatorType>
+::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   Superclass::PrintSelf( os, indent );
   os << indent << "Length: " << m_LengthLine << std::endl;
@@ -428,8 +428,6 @@ LineDetectorImageFilterBase<TInputImage, TOutput, InterpolatorType>::PrintSelf(s
   
 }
 
-
 } // end namespace otb
-
 
 #endif

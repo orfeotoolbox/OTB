@@ -41,8 +41,9 @@ namespace otb
 /**
  *
  */
-template <class TInputImage, class TOutputImage, class InterpolatorType >
-LineRatioDetectorImageFilter<TInputImage, TOutputImage, InterpolatorType>::LineRatioDetectorImageFilter()
+template <class TInputImage, class TOutputImage, class TOutputImageDirection, class TInterpolator >
+LineRatioDetectorImageFilter< TInputImage, TOutputImage, TOutputImageDirection, TInterpolator >
+::LineRatioDetectorImageFilter()
 {
   this->m_Radius.Fill(1);
   this->m_LengthLine = 1;
@@ -50,8 +51,10 @@ LineRatioDetectorImageFilter<TInputImage, TOutputImage, InterpolatorType>::LineR
   this->m_FaceList.Fill(0);
 }
 
-template <class TInputImage, class TOutputImage, class InterpolatorType>
-double LineRatioDetectorImageFilter<TInputImage, TOutputImage, InterpolatorType>::ComputeMeasure(std::vector<double>* m1, std::vector<double>* m2, std::vector<double>* m3)
+template <class TInputImage, class TOutputImage, class TOutputImageDirection, class TInterpolator >
+double 
+LineRatioDetectorImageFilter< TInputImage, TOutputImage, TOutputImageDirection, TInterpolator >
+::ComputeMeasure(std::vector<double>* m1, std::vector<double>* m2, std::vector<double>* m3)
 {
   
   double M1 = 0.0;
@@ -108,19 +111,16 @@ double LineRatioDetectorImageFilter<TInputImage, TOutputImage, InterpolatorType>
 }
 
 
-
-
 /**
  * Standard "PrintSelf" method
  */
-template <class TInputImage, class TOutput, class InterpolatorType>
+template <class TInputImage, class TOutputImage, class TOutputImageDirection, class TInterpolator >
 void 
-LineRatioDetectorImageFilter<TInputImage, TOutput, InterpolatorType>::PrintSelf(std::ostream& os, itk::Indent indent) const
+LineRatioDetectorImageFilter< TInputImage, TOutputImage, TOutputImageDirection, TInterpolator >
+::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   Superclass::PrintSelf( os, indent );
-  os << indent << "Length: " << this->m_LengthLine << std::endl;
-  os << indent << "Width: " << this->m_WidthLine << std::endl;
-  
+ 
 }
 
 
