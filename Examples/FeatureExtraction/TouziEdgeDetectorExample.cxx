@@ -247,7 +247,7 @@ int main( int argc, char * argv[] )
 
   writer->SetFileName( argv[3] );
   // Software Guide : BeginCodeSnippet
-  rescaler->SetInput( filter->GetOutputDirections() );
+  rescaler->SetInput( filter->GetOutputDirection() );
   writer->SetInput( rescaler->GetOutput() );
   writer->Update();
   // Software Guide : EndCodeSnippet

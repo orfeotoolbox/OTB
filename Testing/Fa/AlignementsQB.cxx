@@ -103,7 +103,7 @@ int main( int argc, char ** argv )
   
   ListType* listePaths = alignFilter->GetOutput();
 
-  ListType::iterator listIt = listePaths->begin();
+  ListType::Iterator listIt = listePaths->Begin();
 
   BackgroundImageType::Pointer backgroundImage = roiFilter->GetOutput();
 
@@ -111,11 +111,11 @@ int main( int argc, char ** argv )
 
   unsigned int color = 0;
   
-  while( listIt != listePaths->end())
+  while( listIt != listePaths->End())
     {
 
     drawPathFilter->SetImageInput( backgroundImage );
-    drawPathFilter->SetPathInput( *(listIt) );
+    drawPathFilter->SetPathInput(listIt.Get());
     //drawPathFilter->SetPathValue( color );
 
     drawPathFilter->Update();

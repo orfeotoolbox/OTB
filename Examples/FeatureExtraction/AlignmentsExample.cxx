@@ -172,7 +172,7 @@ int main( int argc, char *argv[] )
   
   ListType* pathList = alignFilter->GetOutput();
 
-  ListType::iterator listIt = pathList->begin();
+  ListType::Iterator listIt = pathList->Begin();
 
   // Software Guide : EndCodeSnippet
 
@@ -194,11 +194,11 @@ int main( int argc, char *argv[] )
   //  Software Guide : EndLatex
   
   // Software Guide : BeginCodeSnippet
-  while( listIt != pathList->end())
+  while( listIt != pathList->End())
     {
 
     drawPathFilter->SetImageInput( backgroundImage );
-    drawPathFilter->SetPathInput( *(listIt) );
+    drawPathFilter->SetPathInput( listIt.Get() );
 
     drawPathFilter->SetValue( itk::NumericTraits<OutputPixelType>::max() );
     drawPathFilter->Update();

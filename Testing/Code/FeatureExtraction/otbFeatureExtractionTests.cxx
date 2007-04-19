@@ -80,4 +80,6 @@ REGISTER_TEST(otbFourierMellinImageFilter);
 REGISTER_TEST(otbImageToEdgePathFilterNew);
 REGISTER_TEST(otbImageToEdgePathFilter);
 REGISTER_TEST(otbModulusAndDirectionImageFiltersNew);
+REGISTER_TEST(otbNeighborhoodScalarProductFilterNew);
+REGISTER_TEST(otbNeighborhoodScalarProductFilter);
 }

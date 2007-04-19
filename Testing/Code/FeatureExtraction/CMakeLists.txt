@@ -486,6 +486,24 @@ ADD_TEST(feTvImageToEdgePathFilterBis ${FEATUREEXTRACTION_TESTS}
         ${TEMP}/feImageToEdgePathFilter_maskrom.png
         0
         )
+# -------            otb::NeighborhoodScalarProductFilter   -------------
+
+
+ADD_TEST(feTuNeighborhoodScalarProductFilterNew ${FEATUREEXTRACTION_TESTS} 
+         otbNeighborhoodScalarProductFilterNew) 
+
+ADD_TEST(feTvNeighborhoodScalarProductFilter ${FEATUREEXTRACTION_TESTS}  
+#  --compare-n-images ${EPSILON} 2
+#		      ${BASELINE}/feTvNeigborhoodScalarProductModulusOutput.hdr
+#		      ${TEMP}/feTvNeigborhoodScalarProductModulusOutput.hdr
+#		      ${BASELINE}/feTvNeigborhoodScalarProductDirectionOutput.hdr
+#		      ${TEMP}/feTvNeigborhoodScalarProductDirectionOutput.hdr
+        otbNeighborhoodScalarProductFilter
+        ${INPUTDATA}/Line.png
+        ${TEMP}/feTvNeigborhoodScalarProductModulusOutput.hdr
+	${TEMP}/feTvNeigborhoodScalarProductDirectionOutput.hdr
+        1.0
+        )
 
 # A enrichir
 SET(BasicFeatureExtraction_SRCS
@@ -542,6 +560,8 @@ otbFourierMellinImageFilter.cxx
 otbImageToEdgePathFilterNew.cxx
 otbImageToEdgePathFilter.cxx
 otbModulusAndDirectionImageFiltersNew.cxx
+otbNeighborhoodScalarProductFilterNew.cxx
+otbNeighborhoodScalarProductFilter.cxx
 )
 
 
