@@ -126,7 +126,7 @@ BinaryFunctorNeighborhoodImageFilter<TInputImage1, TInputImage2, TOutputImage, T
     { 
     neighInputIt1 = itk::ConstNeighborhoodIterator<TInputImage1>(r1, inputPtr1, *fit1);
     neighInputIt2 = itk::ConstNeighborhoodIterator<TInputImage2>(r1, inputPtr2, *fit2);
-    outputIt = itk::ImageRegionIterator<TOutputImage>(outputPtr, outputRegionForThread);
+    // outputIt = itk::ImageRegionIterator<TOutputImage>(outputPtr, outputRegionForThread);
       
     outputIt = itk::ImageRegionIterator<TOutputImage>(outputPtr, *fit1);
     neighInputIt1.OverrideBoundaryCondition(&nbc1);

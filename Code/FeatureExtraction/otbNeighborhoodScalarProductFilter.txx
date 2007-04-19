@@ -72,8 +72,8 @@ NeighborhoodScalarProductFilter<TInputImage,TOutputModulus,TOutputDirection>
   for (fit=faceList.begin(); fit != faceList.end(); ++fit)
     { 
       NeighborhoodIteratorType neighInputIt(r, inputPtr, *fit);
-      OutputIteratorType outputIt(outputPtr,outputRegionForThread);
-      OutputDirectionIteratorType outputDirIt(outputDirPtr,outputRegionForThread);
+      OutputIteratorType outputIt(outputPtr,*fit);
+      OutputDirectionIteratorType outputDirIt(outputDirPtr,*fit);
       neighInputIt.GoToBegin();
       outputIt.GoToBegin();
       outputDirIt.GoToBegin();
@@ -122,7 +122,7 @@ NeighborhoodScalarProductFilter<TInputImage,TOutputModulus,TOutputDirection>
 	    InputPixelType pixel2 = neighInputIt.GetPixel(offset2);
 	    
 	    // Compute the scalar product
-	    scalarCurrentValue = - (pixel1[0]*pixel2[0]+pixel1[1]*pixel2[1]);
+	    scalarCurrentValue = -(pixel1[0]*pixel2[0]+pixel1[1]*pixel2[1]);
 	    
 	    // If the value is upper than the current max value
 	    if (scalarCurrentValue > scalarMaxValue)

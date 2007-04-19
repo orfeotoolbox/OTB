@@ -493,11 +493,11 @@ ADD_TEST(feTuNeighborhoodScalarProductFilterNew ${FEATUREEXTRACTION_TESTS}
          otbNeighborhoodScalarProductFilterNew) 
 
 ADD_TEST(feTvNeighborhoodScalarProductFilter ${FEATUREEXTRACTION_TESTS}  
-#  --compare-n-images ${EPSILON} 2
-#		      ${BASELINE}/feTvNeigborhoodScalarProductModulusOutput.hdr
-#		      ${TEMP}/feTvNeigborhoodScalarProductModulusOutput.hdr
-#		      ${BASELINE}/feTvNeigborhoodScalarProductDirectionOutput.hdr
-#		      ${TEMP}/feTvNeigborhoodScalarProductDirectionOutput.hdr
+  --compare-n-images ${EPSILON} 2
+		      ${BASELINE}/feTvNeigborhoodScalarProductModulusOutput.hdr
+		      ${TEMP}/feTvNeigborhoodScalarProductModulusOutput.hdr
+		      ${BASELINE}/feTvNeigborhoodScalarProductDirectionOutput.hdr
+		      ${TEMP}/feTvNeigborhoodScalarProductDirectionOutput.hdr
         otbNeighborhoodScalarProductFilter
         ${INPUTDATA}/Line.png
         ${TEMP}/feTvNeigborhoodScalarProductModulusOutput.hdr

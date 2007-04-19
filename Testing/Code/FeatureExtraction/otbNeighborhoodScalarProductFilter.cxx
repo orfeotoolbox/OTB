@@ -40,6 +40,7 @@ int otbNeighborhoodScalarProductFilter(int argc, char * argv[])
       typedef otb::NeighborhoodScalarProductFilter<VectorImageType,ImageType,ImageType> FilterType;
       typedef otb::ImageFileReader<ImageType> ReaderType;
       typedef otb::ImageFileWriter<ImageType> WriterType;
+      typedef otb::ImageFileWriter<VectorImageType> TempWriter;
       typedef itk::GradientRecursiveGaussianImageFilter<ImageType,VectorImageType> GradientFilterType;
       
 
@@ -60,6 +61,11 @@ int otbNeighborhoodScalarProductFilter(int argc, char * argv[])
       writer->SetFileName(diroutfname);
       writer->SetInput(filter->GetOutputDirection());
       writer->Update();
+
+      TempWriter::Pointer tmpwriter = TempWriter::New();
+      tmpwriter->SetInput(gradient->GetOutput());
+      tmpwriter->SetFileName("gradient.hdr");
+      tmpwriter->Update();
     }
 
   catch( itk::ExceptionObject & err ) 
