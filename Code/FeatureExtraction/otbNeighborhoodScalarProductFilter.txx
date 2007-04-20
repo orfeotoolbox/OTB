@@ -18,6 +18,10 @@ PURPOSE.  See the above copyright notices for more information.
 #ifndef _otbNeighborhoodScalarProduct_txx
 #define _otbNeighborhoodScalarProduct_txx
 
+#ifndef M_PI
+#define M_PI vcl_acos(-1.0)
+#endif
+
 #include "otbNeighborhoodScalarProductFilter.h"
 #include "itkImageRegionIterator.h"
 #include "itkConstNeighborhoodIterator.h"
