@@ -45,7 +45,7 @@ class ITK_EXPORT PathListToPathListFilter
   /** Template parameters typedefs */
   typedef TInputPath InputPathType;
   typedef typename InputPathType::Pointer InputPathPointerType;
-  typedef otb::ObjectList<InputPathPointerType> InputPathListType;
+  typedef otb::ObjectList<InputPathType> InputPathListType;
   typedef typename InputPathListType::Pointer InputPathListPointerType;
   typedef typename InputPathListType::ConstPointer InputPathListConstPointerType;
   /** 
