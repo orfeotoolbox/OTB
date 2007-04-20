@@ -18,6 +18,10 @@ PURPOSE.  See the above copyright notices for more information.
 #ifndef _otbSpectralAngleDistanceImageFilter_txx
 #define _otbSpectralAngleDistanceImageFilter_txx
 
+#ifndef M_PI
+#define M_PI vcl_acos(-1.0)
+#endif
+
 #include "otbSpectralAngleDistanceImageFilter.h"
 #include "itkImageRegionIterator.h"
 #include "itkImageRegionConstIterator.h"
