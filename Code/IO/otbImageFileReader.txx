@@ -174,7 +174,7 @@ ImageFileReader<TOutputImage>
 // PB : the GetComponentSize() method of the itkImageIOBase  class is protected. 
 // duplicated this method in this class (very BAD)
 	
-    std::streamoff nbBytes = static_cast<std::streamoff>(this->GetComponentSize())*static_cast<std::streamoff>(region.GetNumberOfPixels());
+    std::streamoff nbBytes = static_cast<std::streamoff>(this->GetComponentSize())*static_cast<std::streamoff>(region.GetNumberOfPixels())*static_cast<std::streamoff>(this->GetNumberOfComponentsPerPixel());
     otbMsgDevMacro(<<"NbBytes "<<nbBytes);
 
     otbMsgDevMacro(<< "Buffer conversion required from: "
