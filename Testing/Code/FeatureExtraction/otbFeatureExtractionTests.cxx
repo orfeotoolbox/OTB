@@ -82,4 +82,10 @@ REGISTER_TEST(otbImageToEdgePathFilter);
 REGISTER_TEST(otbModulusAndDirectionImageFiltersNew);
 REGISTER_TEST(otbNeighborhoodScalarProductFilterNew);
 REGISTER_TEST(otbNeighborhoodScalarProductFilter);
+REGISTER_TEST(otbRemoveIsolatedByDirectionFilterNew);
+REGISTER_TEST(otbRemoveIsolatedByDirectionFilter);
+REGISTER_TEST(otbRemoveWrongDirectionFilterNew);
+REGISTER_TEST(otbRemoveWrongDirectionFilter);
+REGISTER_TEST(otbNonMaxRemovalByDirectionFilterNew);
+REGISTER_TEST(otbNonMaxRemovalByDirectionFilter);
 }

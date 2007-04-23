@@ -499,11 +499,57 @@ ADD_TEST(feTvNeighborhoodScalarProductFilter ${FEATUREEXTRACTION_TESTS}
 		      ${BASELINE}/feTvNeigborhoodScalarProductDirectionOutput.hdr
 		      ${TEMP}/feTvNeigborhoodScalarProductDirectionOutput.hdr
         otbNeighborhoodScalarProductFilter
-        ${INPUTDATA}/Line.png
+        ${INPUTDATA}/InputForRoadDetection.tif
         ${TEMP}/feTvNeigborhoodScalarProductModulusOutput.hdr
 	${TEMP}/feTvNeigborhoodScalarProductDirectionOutput.hdr
         1.0
         )
+
+# -------            otb::RemoveIsolatedByDirectionFilter   -------------
+
+ADD_TEST(feTuRemoveIsolatedByDirectionFilterNew ${FEATUREEXTRACTION_TESTS} 
+         otbRemoveIsolatedByDirectionFilterNew) 
+
+ADD_TEST(feTvRemoveIsolatedByDirectionFilter ${FEATUREEXTRACTION_TESTS}  
+  --compare-image ${EPSILON}
+		      ${BASELINE}/feTvRemoveIsolatedByDirectionOutput.hdr
+		      ${TEMP}/feTvRemoveIsolatedByDirectionOutput.hdr
+        otbRemoveIsolatedByDirectionFilter
+       ${BASELINE}/feTvNeigborhoodScalarProductModulusOutput.hdr
+       ${BASELINE}/feTvNeigborhoodScalarProductDirectionOutput.hdr
+       ${TEMP}/feTvRemoveIsolatedByDirectionOutput.hdr
+        )
+
+# -------            otb::RemoveWrongDirectionFilter   -------------
+
+ADD_TEST(feTuRemoveWrongDirectionFilterNew ${FEATUREEXTRACTION_TESTS} 
+         otbRemoveWrongDirectionFilterNew) 
+
+ADD_TEST(feTvRemoveWrongDirectionFilter ${FEATUREEXTRACTION_TESTS}  
+  --compare-image ${EPSILON}
+		      ${BASELINE}/feTvRemoveWrongDirectionOutput.hdr
+		      ${TEMP}/feTvRemoveWrongDirectionOutput.hdr
+        otbRemoveWrongDirectionFilter
+       ${BASELINE}/feTvNeigborhoodScalarProductModulusOutput.hdr
+       ${BASELINE}/feTvNeigborhoodScalarProductDirectionOutput.hdr
+       ${TEMP}/feTvRemoveWrongDirectionOutput.hdr
+        )
+
+# -------            otb::NonMaxRemovalByDirectionFilter   -------------
+
+ADD_TEST(feTuNonMaxRemovalByDirectionFilterNew ${FEATUREEXTRACTION_TESTS} 
+         otbNonMaxRemovalByDirectionFilterNew) 
+
+ADD_TEST(feTvNonMaxRemovalByDirectionFilter ${FEATUREEXTRACTION_TESTS}  
+  --compare-image ${EPSILON}
+		      ${BASELINE}/feTvNonMaxRemovalByDirectionOutput.hdr
+		      ${TEMP}/feTvNonMaxRemovalByDirectionOutput.hdr
+        otbNonMaxRemovalByDirectionFilter
+       ${BASELINE}/feTvNeigborhoodScalarProductModulusOutput.hdr
+       ${BASELINE}/feTvNeigborhoodScalarProductDirectionOutput.hdr
+       ${TEMP}/feTvNonMaxRemovalByDirectionOutput.hdr
+        )
+
 
 # A enrichir
 SET(BasicFeatureExtraction_SRCS
@@ -562,6 +608,12 @@ otbImageToEdgePathFilter.cxx
 otbModulusAndDirectionImageFiltersNew.cxx
 otbNeighborhoodScalarProductFilterNew.cxx
 otbNeighborhoodScalarProductFilter.cxx
+otbRemoveIsolatedByDirectionFilterNew.cxx
+otbRemoveIsolatedByDirectionFilter.cxx
+otbRemoveWrongDirectionFilterNew.cxx
+otbRemoveWrongDirectionFilter.cxx
+otbNonMaxRemovalByDirectionFilterNew.cxx
+otbNonMaxRemovalByDirectionFilter.cxx
 )
 
 
