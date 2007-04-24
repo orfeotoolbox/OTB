@@ -323,6 +323,42 @@ ADD_TEST(coTuArcSpatialObjectNew ${COMMON_TESTS}
 ADD_TEST(coTuPathListToPathListFilterNew ${COMMON_TESTS} 
          otbPathListToPathListFilterNew)  
 
+# -------  otb::PolyLineParametricPathWithValue -------------------------------------------
+ADD_TEST(coTuPolyLineParametricPathWithValueNew ${COMMON_TESTS} 
+         otbPolyLineParametricPathWithValueNew)  
+
+# -------  otb::DrawPathListFilter -------------------------------------------
+
+ADD_TEST(coTuDrawPathListFilterNew ${COMMON_TESTS} 
+         otbDrawPathListFilterNew)  
+
+ADD_TEST(coTvDrawPathListFilter ${COMMON_TESTS}
+--compare-image ${TOL}
+		${BASELINE}/coTvDrawPathListFilterOutput.png
+		${TEMP}/coTvDrawPathListFilterOutput.png
+		otbDrawPathListFilter
+		512 512 20
+		${TEMP}/coTvDrawPathListFilterOutput.png
+)
+ADD_TEST(coTvDrawPathListFilterSingle ${COMMON_TESTS}
+--compare-image ${TOL}
+		${BASELINE}/coTvDrawPathListFilterSingleOutput.png
+		${TEMP}/coTvDrawPathListFilterSingleOutput.png
+		otbDrawPathListFilterSingle
+		512 512 20	
+		${TEMP}/coTvDrawPathListFilterSingleOutput.png
+)
+
+ADD_TEST(coTvDrawPathListFilterWithValue ${COMMON_TESTS}
+--compare-image ${TOL}
+		${BASELINE}/coTvDrawPathListFilterWithValueOutput.png
+		${TEMP}/coTvDrawPathListFilterWithValueOutput.png
+		otbDrawPathListFilterWithValue
+		512 512 20	
+		${TEMP}/coTvDrawPathListFilterWithValueOutput.png
+)
+
+
 # -------       Fichiers sources CXX -----------------------------------
 SET(BasicCommon_SRCS
 otbSystemTest.cxx
@@ -365,6 +401,11 @@ otbSpatialObjectSourceNew.cxx
 otbLineSpatialObjectNew.cxx
 otbArcSpatialObjectNew.cxx
 otbPathListToPathListFilterNew.cxx
+otbDrawPathListFilterNew.cxx
+otbDrawPathListFilter.cxx
+otbDrawPathListFilterSingle.cxx
+otbDrawPathListFilterWithValue.cxx
+otbPolyLineParametricPathWithValueNew.cxx
 )
 
 

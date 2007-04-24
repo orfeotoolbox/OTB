@@ -18,27 +18,42 @@
 #ifndef __otbDrawPathListFilter_h
 #define __otbDrawPathListFilter_h
 
-#include "otbPathListSource.h"
-#include "itkImageSource.h"
+#include "itkImageToImageFilter.h"
 #include "itkConceptChecking.h"
+#include "otbObjectList.h"
 
 namespace otb
 {
 /** \class DrawPathListFilter
- * \brief Classe de base pour inserer dans une image les segments de lignes dans une image. 
+ * \brief This class can be used to draw Path on an image.
  *
+ * This filter first copy the input image to the output, with default casting operators.
+ * It then uses itk::LineIterator to draw each segment of each PolyLine. This iterator uses
+ * the general Bresenham algorithm known to be efficient in segment drawing.
  * 
+ * Please note that the method SetInputPath accepts two types of input. The first is of type
+ * otb::ObjectList<TInputPath>. The second is of type TInputPath* and is provided for convenience only.
+ * In this case the path is simply added to a new otb::ObjectList<TInputPath> and passed to the conventional
+ * method.
+ *
+ * If the UsePathInternalValue is toggled, the filter check if the metadata dictionnary of the input path has a "Value" key.
+ * If it is the case, it will use this value to draw the Path instead of the default value. If not, it will use the default
+ * value.
+ * 
+ * \sa PolyLineParametricPathWithValue
+ * \sa MetaDataDictionary
+ *
  * \ingroup PathListFilters
  * \ingroup PathLists
  */
 
 template <class TInputImage, class TInputPath,class TOutputImage>
-class ITK_EXPORT DrawPathListFilter : public PathListSource<TInputPath> 
+class ITK_EXPORT DrawPathListFilter : public itk::ImageToImageFilter<TInputImage,TOutputImage> 
 {
 public:
   /** Standard class typedefs. */
   typedef DrawPathListFilter                Self;
-  typedef PathListSource<TInputPath>	    Superclass;
+  typedef itk::ImageToImageFilter<TInputImage,TOutputImage>    Superclass;
   typedef itk::SmartPointer<Self>           Pointer;
   typedef itk::SmartPointer<const Self>     ConstPointer;
 
@@ -46,7 +61,7 @@ public:
   itkNewMacro(Self);
   
   /** Run-time type information (and related methods). */
-  itkTypeMacro(DrawPathListFilter, PathListSource);
+  itkTypeMacro(DrawPathListFilter,ImageToImageFilter);
 
   /** Some convenient typedefs. */
   typedef          TInputImage                    InputImageType;
@@ -57,12 +72,12 @@ public:
   typedef typename InputImageType::SizeType       InputImageSizeType;                 
   typedef typename InputImageType::ValueType      InputImageValueType;  
 
-  typedef typename Superclass::OutputPathType                  InputPathType;
-  typedef typename Superclass::OutputPathListType              InputPathListType;
-  typedef typename Superclass::OutputPathListPointerType       InputPathListPointerType;
-  typedef typename Superclass::OutputPathListConstPointerType  InputPathListConstPointerType;
-
-
+  typedef TInputPath InputPathType;
+  typedef typename InputPathType::Pointer InputPathPointerType;
+  typedef otb::ObjectList<InputPathType> InputPathListType;
+  typedef typename InputPathListType::ConstPointer InputPathListConstPointerType;
+  typedef typename InputPathListType::Pointer InputPathListPointerType;
+  
   typedef          TOutputImage                    OutputImageType;
   typedef typename OutputImageType::Pointer        OutputImagePointerType;
   typedef typename OutputImageType::ConstPointer   OutputImageConstPointerType;
@@ -74,37 +89,36 @@ public:
 
   typedef itk::ProcessObject ProcessObjectType;
 
+  itkGetMacro(UseInternalPathValue,bool);
+  itkSetMacro(UseInternalPathValue,bool);
+  itkBooleanMacro(UseInternalPathValue);
+
   /** ImageDimension constants */
   itkStaticConstMacro(InputImageDimension, unsigned int,
                       TInputImage::ImageDimension);
   
-  /** Set/Get the image input of this process object. */
-  virtual void SetImageInput(const InputImageType *image);
-  const InputImageType * GetImageInput(void);
-  
   /** Set/Get the path input of this process object. */
-  virtual void SetPathInput(InputPathListType *path);
-  InputPathListType * GetPathInput(void);
-
-  /** Get the image output of this process object. */
-  virtual void SetImageOutput(OutputImageType *image);
-  OutputImageType * GetImageOutput(void);
+  virtual void SetInputPath(InputPathListType *path);
+  InputPathListType * GetInputPath(void);
+  virtual void SetInputPath(InputPathType * path);
   
 protected:
+  /** Constructor */
   DrawPathListFilter();
+  /** Desctructor */
   virtual ~DrawPathListFilter() {};
-
+  /** Printself method */
   virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;  
+  /** Main computation method */
   virtual void GenerateData();
   
 private:
   DrawPathListFilter(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
-  OutputImagePixelType m_PathValue;
-  
-  
-  InputPathListType * m_PathList;
-  
+  /** Default value to draw */
+  OutputImagePixelType m_PathValue; 
+  /** If set to true, the algorithm try to use path internal metadatadictionnary value */
+  bool m_UseInternalPathValue;
 };
 
 } // end namespace otb
