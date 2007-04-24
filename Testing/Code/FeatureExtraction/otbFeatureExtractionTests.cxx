@@ -28,8 +28,6 @@
 void RegisterTests()
 {
 REGISTER_TEST(otbAlignImageToPath);
-REGISTER_TEST(otbDrawPathList);
-REGISTER_TEST(otbDrawPathListTracerLignes);
 REGISTER_TEST(otbDrawPathDessinCarre);
 REGISTER_TEST(otbDrawPathAlign);
 REGISTER_TEST(otbComplexMomentImage);

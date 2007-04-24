@@ -29,27 +29,6 @@ ADD_TEST(feTvAlignMV2ITK ${FEATUREEXTRACTION_TESTS}
 
 # -------            otb::Draw   ------------------------------
 		
-ADD_TEST(feTvDrawSegmentIntoImage ${FEATUREEXTRACTION_TESTS}  
-  --compare-image ${TOL}  ${BASELINE}/feDrawPathIntoPoupees.png
-                          ${TEMP}/feDrawPathIntoPoupees.png
-        otbDrawPathList
-	${INPUTDATA}/poupees.hdr
-	${TEMP}/feDrawPathIntoPoupees.png)
-
-ADD_TEST(feTvDrawSegmentIntoImageLine ${FEATUREEXTRACTION_TESTS}  
-  --compare-image ${TOL}  ${BASELINE}/feDrawDeuxLignes.png
-                          ${TEMP}/feDrawDeuxLignes.png
-        otbDrawPathListTracerLignes
-	${INPUTDATA}/DeuxTraits.png
-	${TEMP}/feDrawDeuxLignes.png)
-
-ADD_TEST(feTvDrawSegmentIntoImage ${FEATUREEXTRACTION_TESTS}  
-  --compare-image ${TOL}  ${BASELINE}/feDrawPathIntoDeuxTraits.png
-                          ${TEMP}/feDrawPathIntoDeuxTraits.png
-        otbDrawPathList
-	${INPUTDATA}/DeuxTraits.png
-	${TEMP}/feDrawPathIntoDeuxTraits.png)
-
 ADD_TEST(feTvDrawPathTestCarre ${FEATUREEXTRACTION_TESTS}  
   --compare-image ${TOL}  ${BASELINE}/feDrawPathDessinCarre.png
                           ${TEMP}/feDrawPathDessinCarre.png
@@ -554,8 +533,6 @@ ADD_TEST(feTvNonMaxRemovalByDirectionFilter ${FEATUREEXTRACTION_TESTS}
 # A enrichir
 SET(BasicFeatureExtraction_SRCS
 otbAlignImageToPath.cxx
-otbDrawPathList.cxx
-otbDrawPathListTracerLignes.cxx
 otbDrawPath.cxx
 otbDrawPathAlign.cxx
 otbComplexMomentImage.cxx
