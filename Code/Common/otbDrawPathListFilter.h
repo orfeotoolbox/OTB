@@ -99,7 +99,7 @@ public:
   
   /** Set/Get the path input of this process object. */
   virtual void SetInputPath(InputPathListType *path);
-  InputPathListType * GetInputPath(void);
+  const InputPathListType * GetInputPath(void);
   virtual void SetInputPath(InputPathType * path);
   
 protected:

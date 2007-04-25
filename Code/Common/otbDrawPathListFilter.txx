@@ -62,7 +62,7 @@ DrawPathListFilter<TInputImage,TInputPath,TOutputImage>
 }
 
 template <class TInputImage, class TInputPath,class TOutputImage>
-typename DrawPathListFilter<TInputImage,TInputPath,TOutputImage>::InputPathListType *
+const typename DrawPathListFilter<TInputImage,TInputPath,TOutputImage>::InputPathListType *
 DrawPathListFilter<TInputImage,TInputPath,TOutputImage>
 ::GetInputPath(void)
 {
