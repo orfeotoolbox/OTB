@@ -81,7 +81,7 @@ const typename ModulusAndDirectionImageToImageFilter<TInputImage, TInputImageDir
 ModulusAndDirectionImageToImageFilter<TInputImage, TInputImageDirection, TOutputImage>::
 GetInputDirection(void)
 {
-  if (this->GetNumberOfInputs() < 1)
+  if (this->GetNumberOfInputs() < 2)
     {
     return 0;
     }
