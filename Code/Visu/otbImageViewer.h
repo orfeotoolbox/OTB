@@ -169,7 +169,10 @@ class ITK_EXPORT ImageViewer
   virtual RegionType ComputeConstrainedRegion(RegionType smallRegion, RegionType bigRegion);
 
   /** Display pixel information */
-  virtual void PrintPixLocVal(std::string str);
+  virtual void PrintPixLocVal(IndexType index, PixelType pixel);
+
+  /** Clear pixel information */
+  virtual void ClearPixLocVal(void);
 
   /** This is a helper class that performs a Show() and Fl::run() in order to ease 
    *  the use of the class for example in wrappings.

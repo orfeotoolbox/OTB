@@ -76,7 +76,7 @@ class ITK_EXPORT ImageViewerZoomWidget
 	  {
 	    m_MouseIn = false;
 	    m_Parent->UpdateZoomWidget();
-	    m_Parent->PrintPixLocVal("");
+	    m_Parent->ClearPixLocVal();
 	    // otbMsgDebugMacro(<<"Mouse out");
 	    return 1;
 	  }
@@ -90,10 +90,7 @@ class ITK_EXPORT ImageViewerZoomWidget
 		IndexType newIndex = this->WindowToImageCoordinates(m_MousePos);
 		if(this->GetInput()->GetBufferedRegion().IsInside(newIndex))
 		  {
-		    itk::OStringStream oss;
-		    oss<<" Location: "<<newIndex<<", Values:  "<<this->GetInput()->GetPixel(newIndex);
-		    std::string str(oss.str());
-		    m_Parent->PrintPixLocVal(str);
+		    m_Parent->PrintPixLocVal(newIndex,this->GetInput()->GetPixel(newIndex));
 		    m_MouseMoveCount=0;
 		  }
 	      }

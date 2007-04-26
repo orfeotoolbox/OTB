@@ -83,7 +83,7 @@ class ITK_EXPORT ImageViewerFullWidget
 	case FL_LEAVE:
 	  {
 	    m_MouseIn = false;
-	    m_Parent->PrintPixLocVal("");
+	    m_Parent->ClearPixLocVal();
 	    return 1;
 	}
 	case FL_MOVE:
@@ -96,11 +96,9 @@ class ITK_EXPORT ImageViewerFullWidget
 		IndexType newIndex = this->WindowToImageCoordinates(m_MousePos);
 		if(this->GetInput()->GetBufferedRegion().IsInside(newIndex))
 		  {
-		    itk::OStringStream oss;
+		   
 		    typename ImageType::PixelType newPixel = this->GetInput()->GetPixel(newIndex);
-		    oss<<" Location: "<<newIndex<<", Values:  "<<newPixel;
-		    std::string str(oss.str());
-		    m_Parent->PrintPixLocVal(str);
+		    m_Parent->PrintPixLocVal(newIndex,newPixel);
 		    m_MouseMoveCount=0;
 		  }
 	      }

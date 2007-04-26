@@ -92,7 +92,7 @@ class ITK_EXPORT ImageViewerScrollWidget
 	case FL_LEAVE:
 	  {
 	  m_MouseIn = false;
-	  m_Parent->PrintPixLocVal("");
+	  m_Parent->ClearPixLocVal();
 	  return 1;
 	  }
 	case FL_MOVE:
@@ -106,10 +106,7 @@ class ITK_EXPORT ImageViewerScrollWidget
 		IndexType realIndex;
 		realIndex[0]=newIndex[0]*m_Parent->GetShrinkFactor();
 		realIndex[1]=newIndex[1]*m_Parent->GetShrinkFactor();
-		itk::OStringStream oss;
-		oss<<" Location: "<<realIndex<<", Values:  "<<this->GetInput()->GetPixel(newIndex);
-		std::string str(oss.str());
-		m_Parent->PrintPixLocVal(str);
+		m_Parent->PrintPixLocVal(realIndex,this->GetInput()->GetPixel(newIndex));
 		m_MouseMoveCount=0;
 	      }
 	  m_MouseMoveCount++;

@@ -484,12 +484,28 @@ namespace otb
   template <class TPixel>
   void 
   ImageViewer<TPixel>
-  ::PrintPixLocVal(std::string str)
+  ::PrintPixLocVal(IndexType index, PixelType pixel)
   {
-    m_PixLocOutput->value(str.c_str());
+    itk::OStringStream oss;
+    oss<<"Location: "<<index<<", values: "<<pixel;
+    if(oss.good())
+      {
+	m_PixLocOutput->value(oss.str().c_str());
+	m_PixLocOutput->redraw();
+	Fl::check();
+      }
+  }
+
+ template <class TPixel>
+  void 
+  ImageViewer<TPixel>
+  ::ClearPixLocVal(void)
+  {
+    m_PixLocOutput->value("");
     m_PixLocOutput->redraw();
     Fl::check();
   }
+  
 
  template <class TPixel>
   void 
@@ -498,7 +514,10 @@ namespace otb
   {
     itk::OStringStream oss;
     oss<<"Zoom Window (X"<<m_ZoomWidget->GetOpenGlIsotropicZoom()<<")";
-    m_ZoomWindow->copy_label(oss.str().c_str());
+    if(oss.good())
+      {
+	m_ZoomWindow->copy_label(oss.str().c_str());
+      }
     m_ZoomWindow->redraw();
     m_ZoomWidget->redraw();
   }
@@ -594,12 +613,9 @@ template <class TPixel>
   newIndex[0]=clickedIndex[0]-region.GetSize()[0]/2;
   newIndex[1]=clickedIndex[1]-region.GetSize()[1]/2;
   
- 
   region.SetIndex(newIndex);
-  otbMsgDebugMacro(<<"New region: "<<region);
 
   RegionType newRegion = ComputeConstrainedRegion(region,m_InputImage->GetLargestPossibleRegion());
-  otbMsgDebugMacro(<<"Constrained region: "<<newRegion);
   m_FullWidget->SetUpperLeftCorner(newRegion.GetIndex());
   this->UpdateScrollWidget();
 }
