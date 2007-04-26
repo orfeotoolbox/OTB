@@ -17,12 +17,12 @@
 =========================================================================*/
 #include "itkExceptionObject.h"
 
-#include "otbDrawPathListFilter.h"
+#include "otbDrawPathFilter.h"
 #include "otbImageFileWriter.h"
 #include "otbImage.h"
 #include "itkPolyLineParametricPath.h"
 
-int otbDrawPathListFilterSingle(int argc, char * argv[])
+int otbDrawPathFilter(int argc, char * argv[])
 {
   try
     {
@@ -41,7 +41,7 @@ int otbDrawPathListFilterSingle(int argc, char * argv[])
       typedef otb::Image<PixelType,Dimension> ImageType;
       typedef itk::PolyLineParametricPath<Dimension> PathType;
       typedef PathType::VertexType VertexType;
-      typedef otb::DrawPathListFilter<ImageType, PathType, ImageType> DrawPathListFilterType;
+      typedef otb::DrawPathFilter<ImageType, PathType, ImageType> DrawPathFilterType;
       typedef otb::ImageFileWriter<ImageType> WriterType;
 
       ImageType::SizeType size;
@@ -80,9 +80,9 @@ int otbDrawPathListFilterSingle(int argc, char * argv[])
 	  path->AddVertex(vertex2);
 	}
 
-      DrawPathListFilterType::Pointer filter = DrawPathListFilterType::New();
-      filter->SetInput(image);
-      filter->SetInputPath(path);
+      DrawPathFilterType::Pointer filter = DrawPathFilterType::New();
+      filter->SetImageInput(image);
+      filter->SetPathInput(path);
 
       WriterType::Pointer writer = WriterType::New();
       writer->SetInput(filter->GetOutput());

@@ -50,17 +50,6 @@ DrawPathListFilter<TInputImage,TInputPath,TOutputImage>
   this->ProcessObjectType::SetNthInput(1,const_cast<InputPathListType *>(path));
 }
 
-
-template <class TInputImage, class TInputPath,class TOutputImage>
-void
-DrawPathListFilter<TInputImage,TInputPath,TOutputImage>
-::SetInputPath( InputPathType * path)
-{
-  InputPathListPointerType list = InputPathListType::New();
-  list->PushBack(path);
-  this->ProcessObjectType::SetNthInput(1,static_cast<InputPathListType *>(list));
-}
-
 template <class TInputImage, class TInputPath,class TOutputImage>
 const typename DrawPathListFilter<TInputImage,TInputPath,TOutputImage>::InputPathListType *
 DrawPathListFilter<TInputImage,TInputPath,TOutputImage>

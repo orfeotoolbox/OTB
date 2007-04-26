@@ -25,17 +25,12 @@
 namespace otb
 {
 /** \class DrawPathListFilter
- * \brief This class can be used to draw Path on an image.
+ * \brief This class can be used to draw a list of path on an image.
  *
  * This filter first copy the input image to the output, with default casting operators.
  * It then uses itk::LineIterator to draw each segment of each PolyLine. This iterator uses
  * the general Bresenham algorithm known to be efficient in segment drawing.
  * 
- * Please note that the method SetInputPath accepts two types of input. The first is of type
- * otb::ObjectList<TInputPath>. The second is of type TInputPath* and is provided for convenience only.
- * In this case the path is simply added to a new otb::ObjectList<TInputPath> and passed to the conventional
- * method.
- *
  * If the UsePathInternalValue is toggled, the filter check if the metadata dictionnary of the input path has a "Value" key.
  * If it is the case, it will use this value to draw the Path instead of the default value. If not, it will use the default
  * value.
@@ -103,7 +98,6 @@ public:
   /** Set/Get the path input of this process object. */
   virtual void SetInputPath(InputPathListType *path);
   const InputPathListType * GetInputPath(void);
-  virtual void SetInputPath(InputPathType * path);
   
 protected:
   /** Constructor */

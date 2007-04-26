@@ -20,160 +20,44 @@
 #define __otbDrawPathFilter_txx
 
 #include "otbDrawPathFilter.h"
-#include "itkImageIteratorWithIndex.h"
-#include "itkImageConstIteratorWithIndex.h"
-#include "itkImageIteratorWithIndex.h"
-#include "itkImageRegionIteratorWithIndex.h"
-#include "itkImageRegionConstIteratorWithIndex.h"
+#include "otbDrawPathListFilter.h"
 
 namespace otb
 {
-
 /**
- *
+ * Constructor
  */
 template <class TInputImage, class TInputPath,class TOutputImage>
 DrawPathFilter<TInputImage,TInputPath,TOutputImage>
 ::DrawPathFilter()
 {
-  m_Value = static_cast<OutputImagePixelType>(250.0);
+  m_Value = static_cast<OutputImagePixelType>(255.0);
 }
-
-
+/**
+ * Main computation method.
+ */
 template <class TInputImage, class TInputPath,class TOutputImage>
 void
 DrawPathFilter<TInputImage,TInputPath,TOutputImage>
 ::GenerateData(void)
 {  
-  typedef typename InputPathType::ContinuousIndexType               VertexType;
-  typedef itk::VectorContainer< unsigned,VertexType >               VertexListType;
-  typedef typename VertexListType::ConstPointer                     VertexListTypePointer;
-  typedef double                                                     RealType;
+  typedef otb::DrawPathListFilter<TInputImage,TInputPath,TOutputImage> DrawListFilterType;
+  typedef typename DrawListFilterType::InputPathListType PathListType;
+  typename PathListType::Pointer list = PathListType::New();
+  InputPathPointer path = const_cast<TInputPath*>(this->GetPathInput());
+  list->PushBack(path);
   
-  typedef itk::ImageRegionIteratorWithIndex< OutputImageType > OutputIteratorType; 
-  typedef itk::ImageRegionConstIteratorWithIndex< InputImageType >  InputIteratorType; 
+  typename DrawListFilterType::Pointer drawer = DrawListFilterType::New();
+  drawer->SetInput(this->GetImageInput());
+  drawer->SetInputPath(list);
+  drawer->SetPathValue(m_Value);
 
-  InputImageConstPointer               InputImage   = this->GetImageInput();
-  InputPathConstPointer                InputPath    = this->GetPathInput();
-  OutputImagePointer                   OutputImage  = this->GetOutput();
-
-  typename OutputImageType::RegionType region;
-  
-  region.SetSize(InputImage->GetLargestPossibleRegion().GetSize());
-  region.SetIndex(InputImage->GetLargestPossibleRegion().GetIndex());
-  OutputImage->SetRegions( region );
-  OutputImage->SetOrigin(InputImage->GetOrigin());
-  OutputImage->SetSpacing(InputImage->GetSpacing());
-  OutputImage->Allocate();
-
-  OutputIteratorType    outputIt( OutputImage, OutputImage->GetRequestedRegion() );
-  InputIteratorType     inputIt(  InputImage,  OutputImage->GetRequestedRegion() );
-
-  outputIt.GoToBegin();
-  inputIt.GoToBegin();
-
-  for ( outputIt.GoToBegin(); !outputIt.IsAtEnd(); ++outputIt,++inputIt)
-    {
-     outputIt.Set( static_cast<OutputImagePixelType>( inputIt.Get() ) );
-    }
-
-  typename InputImageType::SizeType    Taille;
-  typename OutputImageType::IndexType  IndexOut;
-  VertexListTypePointer                vertexList;
-  VertexType                           cindex;
-  int                                  nbPath;
-  
-  Taille = InputImage->GetLargestPossibleRegion().GetSize();
-  vertexList = InputPath->GetVertexList();
-  nbPath = vertexList->Size();
-    
-  if(nbPath >1)
-   {
-   for(int i =0 ; i<nbPath-1 ;i++)
-     {
-     cindex = vertexList->GetElement(i);
-     RealType x1 = cindex[0];
-     RealType y1 = cindex[1];
-     cindex = vertexList->GetElement(i+1);
-     RealType x2 = cindex[0];
-     RealType y2 = cindex[1];
-     
-	 RealType DeltaX = fabs(x1-x2);
-     RealType DeltaY = fabs(y1-y2);
-
-     // Modifs pour compil sous VC++
-	 //RealType Xmin   = std::min( x1 , x2 );
-     //RealType Xmax   = std::max( x1 , x2 );
-     //RealType Ymin   = std::min( y1 , y2 );
-     //RealType Ymax   = std::max( y1 , y2 );
-
-	 RealType Xmin = x1<x2 ? x1 : x2 ;
-	 RealType Xmax = x1>x2 ? x1 : x2 ;
-	 RealType Ymin = y1<y2 ? y1 : y2 ;
-	 RealType Ymax = y1>y2 ? y1 : y2 ;
-          
-     if(DeltaX>0 && DeltaY>0)
-       {
-       if(DeltaX>DeltaY)
-         {
-	 RealType Alpha = (y2-y1) / (x2-x1) ;
-	 for(RealType j = Xmin; j<=Xmax;j++)
-	    {
-	    IndexOut[0] = static_cast<int>(j) ;
-	    IndexOut[1] = static_cast<int>(Alpha * (j-x1) + y1) ;
-	    if(IndexOut[0]>=0 && IndexOut[0]<(int)Taille[0] && 
-	       IndexOut[1]>=0 && IndexOut[1]<(int)Taille[1])
-	          OutputImage->SetPixel(IndexOut,m_Value);
-	    }
-	 }
-         else
-	 {
-	 RealType Alpha = (x2-x1) / (y2-y1) ;
-	 for(RealType j = Ymin; j<=Ymax;j++)
-	    {
-	    IndexOut[0] = static_cast<int>(Alpha * (j-y1) + x1) ;
-	    IndexOut[1] = static_cast<int>(j);
-	    if(IndexOut[0]>=0 && IndexOut[0]<(int)Taille[0] && 
-	       IndexOut[1]>=0 && IndexOut[1]<(int)Taille[1])
-	          OutputImage->SetPixel(IndexOut,m_Value);
-	    }
-	 
-	 }
-       }
-       else
-       {
-       if(DeltaX>0.)
-         {
-	 IndexOut[1] = static_cast<int>(Ymin); 
-	 for(RealType j = Xmin; j<=Xmax;j++)
-	   {
-	   IndexOut[0]=static_cast<int>(j);
-	   if(IndexOut[0]>=0 && IndexOut[0]<(int)Taille[0] && 
-	      IndexOut[1]>=0 && IndexOut[1]<(int)Taille[1])
-	          OutputImage->SetPixel(IndexOut,m_Value);
-	  
-	   }
-	 }
-	 else
-	 {
-	 IndexOut[0] = static_cast<int>(Xmin); 
-	 
-	 for(RealType j = Ymin; j<=Ymax;j++)
-	   {
-	   IndexOut[1]=static_cast<int>(j);
-	   if( (IndexOut[0]>=0) && (IndexOut[0]<(int)Taille[0]) && 
-	      (IndexOut[1]>=0) && (IndexOut[1]<(int)Taille[1]))
-	          OutputImage->SetPixel(IndexOut,m_Value);
-	   }
-	 }
-       }         
-     } // FOR loop
-    } // IF loop
+  drawer->GraftOutput(this->GetOutput());
+  drawer->Update();
+  this->GraftOutput(drawer->GetOutput());
 }
-
-  
 /**
- *
+ * Printself Method
  */
 template <class TInputImage, class TInputPath,class TOutputImage>
 void
@@ -183,8 +67,6 @@ DrawPathFilter<TInputImage,TInputPath,TOutputImage>
   Superclass::PrintSelf(os, indent);
   os << indent << "Path Value: " << m_Value << std::endl;
 }
-
-
 } // end namespace otb
 
 #endif

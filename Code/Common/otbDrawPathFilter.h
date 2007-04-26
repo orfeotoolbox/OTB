@@ -23,9 +23,16 @@
 namespace otb
 {
 /** \class DrawPathFilter
- * \brief Classe de base pour inserer dans une image des segments de lignes. 
+ * \brief This class can be used to draw a single path on an image.
  *
- * 
+ * It encapsulates the use of the otb::DrawPathListFilter by internally creating
+ * an otb::ObjectList<TInputPath> of size one and passing it to a DrawPathListFilter.
+ *
+ * Please note that iterating this filter to draw several path is NOT efficient. If you
+ * have several path to draw, consider using the otb::DrawPathListFilter.
+ *
+ * \sa DrawPathListFilter
+ *
  * \ingroup PathFilters
  * \ingroup ImageFilters
  */
@@ -83,9 +90,6 @@ private:
   void operator=(const Self&); //purposely not implemented
 
   OutputImagePixelType m_Value;
-
-  
-  
 };
 
 } // end namespace otb
