@@ -478,10 +478,10 @@ ADD_TEST(feTvNeighborhoodScalarProductFilter ${FEATUREEXTRACTION_TESTS}
 		      ${BASELINE}/feTvNeigborhoodScalarProductDirectionOutput.hdr
 		      ${TEMP}/feTvNeigborhoodScalarProductDirectionOutput.hdr
         otbNeighborhoodScalarProductFilter
-        ${INPUTDATA}/InputForRoadDetection.tif
+        ${BASELINE}/bfTvSpectralAngleDistanceOutput.hdr
         ${TEMP}/feTvNeigborhoodScalarProductModulusOutput.hdr
 	${TEMP}/feTvNeigborhoodScalarProductDirectionOutput.hdr
-        1.0
+        2.0
         )
 
 # -------            otb::RemoveIsolatedByDirectionFilter   -------------
@@ -509,7 +509,7 @@ ADD_TEST(feTvRemoveWrongDirectionFilter ${FEATUREEXTRACTION_TESTS}
 		      ${BASELINE}/feTvRemoveWrongDirectionOutput.hdr
 		      ${TEMP}/feTvRemoveWrongDirectionOutput.hdr
         otbRemoveWrongDirectionFilter
-       ${BASELINE}/feTvNeigborhoodScalarProductModulusOutput.hdr
+       ${BASELINE}/feTvRemoveIsolatedByDirectionOutput.hdr
        ${BASELINE}/feTvNeigborhoodScalarProductDirectionOutput.hdr
        ${TEMP}/feTvRemoveWrongDirectionOutput.hdr
         )
@@ -524,7 +524,7 @@ ADD_TEST(feTvNonMaxRemovalByDirectionFilter ${FEATUREEXTRACTION_TESTS}
 		      ${BASELINE}/feTvNonMaxRemovalByDirectionOutput.hdr
 		      ${TEMP}/feTvNonMaxRemovalByDirectionOutput.hdr
         otbNonMaxRemovalByDirectionFilter
-       ${BASELINE}/feTvNeigborhoodScalarProductModulusOutput.hdr
+       ${BASELINE}/feTvRemoveWrongDirectionOutput.hdr
        ${BASELINE}/feTvNeigborhoodScalarProductDirectionOutput.hdr
        ${TEMP}/feTvNonMaxRemovalByDirectionOutput.hdr
         )
@@ -534,7 +534,7 @@ ADD_TEST(feTvNonMaxRemovalByDirectionFilter ${FEATUREEXTRACTION_TESTS}
 ADD_TEST(feTuVectorizationPathListFilterNew ${FEATUREEXTRACTION_TESTS} 
          otbVectorizationPathListFilterNew) 
 
-ADD_TEST(feTvVectorizationPathListFilter ${FEATUREEXTRACTION_TESTS}  
+ADD_TEST(feTvVectorizationPathListFilterAsciiOutput ${FEATUREEXTRACTION_TESTS}  
 --compare-ascii ${EPS}  
 		${BASELINE_FILES}/feTvVectorizationPathListOutput.txt
 		${TEMP}/feTvVectorizationPathListOutput.txt
@@ -542,9 +542,21 @@ ADD_TEST(feTvVectorizationPathListFilter ${FEATUREEXTRACTION_TESTS}
        ${BASELINE}/feTvNonMaxRemovalByDirectionOutput.hdr
        ${BASELINE}/feTvNeigborhoodScalarProductDirectionOutput.hdr
        ${TEMP}/feTvVectorizationPathListOutput.txt
+       ${TEMP}/feTvVectorizationPathListOutput.png
+       0.0005
         )
 
-
+ADD_TEST(feTvVectorizationPathListFilterImageOutput ${FEATUREEXTRACTION_TESTS}  
+--compare-image ${EPSILON}
+		${BASELINE}/feTvVectorizationPathListOutput.png
+		${TEMP}/feTvVectorizationPathListOutput.png
+        otbVectorizationPathListFilter
+       ${BASELINE}/feTvNonMaxRemovalByDirectionOutput.hdr
+       ${BASELINE}/feTvNeigborhoodScalarProductDirectionOutput.hdr
+       ${TEMP}/feTvVectorizationPathListOutput.txt
+       ${TEMP}/feTvVectorizationPathListOutput.png
+       0.0005
+        )
 
 # A enrichir
 SET(BasicFeatureExtraction_SRCS

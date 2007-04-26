@@ -92,6 +92,9 @@ public:
   itkGetMacro(UseInternalPathValue,bool);
   itkSetMacro(UseInternalPathValue,bool);
   itkBooleanMacro(UseInternalPathValue);
+  
+  itkSetMacro(PathValue,OutputImagePixelType);
+  itkGetMacro(PathValue,OutputImagePixelType);
 
   /** ImageDimension constants */
   itkStaticConstMacro(InputImageDimension, unsigned int,

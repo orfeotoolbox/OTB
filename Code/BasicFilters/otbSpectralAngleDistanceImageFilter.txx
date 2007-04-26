@@ -94,8 +94,8 @@ SpectralAngleDistanceImageFilter<TInputImage,TOutputImage>
 	}
       // Spectral angle normalisation
       dist = dist/(M_PI/2);
-   //ponderation par un carre
-   dist = sqrt(dist)*255;
+   //square ponderation
+   dist = sqrt(dist);
    outputIt.Set(static_cast<OutputPixelType>(dist));
     ++inputIt;
     ++outputIt;
