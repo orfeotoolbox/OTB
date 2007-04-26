@@ -478,7 +478,7 @@ ADD_TEST(feTvNeighborhoodScalarProductFilter ${FEATUREEXTRACTION_TESTS}
 		      ${BASELINE}/feTvNeigborhoodScalarProductDirectionOutput.hdr
 		      ${TEMP}/feTvNeigborhoodScalarProductDirectionOutput.hdr
         otbNeighborhoodScalarProductFilter
-        ${BASELINE}/bfTvSpectralAngleDistanceOutput.hdr
+        ${INPUTDATA}/InputForRoadDetection_SpectralAngle.hdr
         ${TEMP}/feTvNeigborhoodScalarProductModulusOutput.hdr
 	${TEMP}/feTvNeigborhoodScalarProductDirectionOutput.hdr
         2.0
@@ -494,8 +494,8 @@ ADD_TEST(feTvRemoveIsolatedByDirectionFilter ${FEATUREEXTRACTION_TESTS}
 		      ${BASELINE}/feTvRemoveIsolatedByDirectionOutput.hdr
 		      ${TEMP}/feTvRemoveIsolatedByDirectionOutput.hdr
         otbRemoveIsolatedByDirectionFilter
-       ${BASELINE}/feTvNeigborhoodScalarProductModulusOutput.hdr
-       ${BASELINE}/feTvNeigborhoodScalarProductDirectionOutput.hdr
+       ${INPUTDATA}/InputForRoadDetectionScalarProductMod.hdr
+       ${INPUTDATA}/InputForRoadDetectionScalarProductDir.hdr
        ${TEMP}/feTvRemoveIsolatedByDirectionOutput.hdr
         )
 
@@ -509,8 +509,8 @@ ADD_TEST(feTvRemoveWrongDirectionFilter ${FEATUREEXTRACTION_TESTS}
 		      ${BASELINE}/feTvRemoveWrongDirectionOutput.hdr
 		      ${TEMP}/feTvRemoveWrongDirectionOutput.hdr
         otbRemoveWrongDirectionFilter
-       ${BASELINE}/feTvRemoveIsolatedByDirectionOutput.hdr
-       ${BASELINE}/feTvNeigborhoodScalarProductDirectionOutput.hdr
+       ${INPUTDATA}/InputForRoadDetection_IsolatedRem.hdr
+       ${INPUTDATA}/InputForRoadDetectionScalarProductDir.hdr
        ${TEMP}/feTvRemoveWrongDirectionOutput.hdr
         )
 
@@ -524,8 +524,8 @@ ADD_TEST(feTvNonMaxRemovalByDirectionFilter ${FEATUREEXTRACTION_TESTS}
 		      ${BASELINE}/feTvNonMaxRemovalByDirectionOutput.hdr
 		      ${TEMP}/feTvNonMaxRemovalByDirectionOutput.hdr
         otbNonMaxRemovalByDirectionFilter
-       ${BASELINE}/feTvRemoveWrongDirectionOutput.hdr
-       ${BASELINE}/feTvNeigborhoodScalarProductDirectionOutput.hdr
+       ${INPUTDATA}/InputForRoadDetection_WrongRem.hdr
+       ${INPUTDATA}/InputForRoadDetectionScalarProductDir.hdr
        ${TEMP}/feTvNonMaxRemovalByDirectionOutput.hdr
         )
 
@@ -539,8 +539,8 @@ ADD_TEST(feTvVectorizationPathListFilterAsciiOutput ${FEATUREEXTRACTION_TESTS}
 		${BASELINE_FILES}/feTvVectorizationPathListOutput.txt
 		${TEMP}/feTvVectorizationPathListOutput.txt
         otbVectorizationPathListFilter
-       ${BASELINE}/feTvNonMaxRemovalByDirectionOutput.hdr
-       ${BASELINE}/feTvNeigborhoodScalarProductDirectionOutput.hdr
+       ${INPUTDATA}/InputForRoadDetection_NonMaxRem.hdr
+       ${INPUTDATA}/InputForRoadDetectionScalarProductDir.hdr
        ${TEMP}/feTvVectorizationPathListOutput.txt
        ${TEMP}/feTvVectorizationPathListOutput.png
        0.0005
@@ -551,8 +551,8 @@ ADD_TEST(feTvVectorizationPathListFilterImageOutput ${FEATUREEXTRACTION_TESTS}
 		${BASELINE}/feTvVectorizationPathListOutput.png
 		${TEMP}/feTvVectorizationPathListOutput.png
         otbVectorizationPathListFilter
-       ${BASELINE}/feTvNonMaxRemovalByDirectionOutput.hdr
-       ${BASELINE}/feTvNeigborhoodScalarProductDirectionOutput.hdr
+       ${INPUTDATA}/InputForRoadDetection_NonMaxRem.hdr
+       ${INPUTDATA}/InputForRoadDetectionScalarProductDir.hdr
        ${TEMP}/feTvVectorizationPathListOutput.txt
        ${TEMP}/feTvVectorizationPathListOutput.png
        0.0005
