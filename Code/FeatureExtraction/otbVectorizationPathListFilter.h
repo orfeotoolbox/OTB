@@ -29,10 +29,15 @@ PURPOSE.  See the above copyright notices for more information.
 namespace otb
 {
 /** \class VectorizationPathListFilter
- *  \brief 
+ *  \brief This filter performs a vectorization from a line detector modulus and direction outputs.
  *
- * \ingroup 
- * \ingroup
+ *  The output of this filter is an otb::ObjectList<TOutputPath>.
+ *
+ *  This filter performs vectorization at non-grid position by using the barycenter of the few pixels with
+ *  non-null intensity in the given direction. A threshold can be set to tune the sensibility of the first point
+ *  detection. Path with less than three vertices are not kept by the filter.
+ *
+ * \ingroup PathListSource
  */
 template <class TInputModulus, class TInputDirection, class TOutputPath>
 class ITK_EXPORT VectorizationPathListFilter
