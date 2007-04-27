@@ -76,7 +76,7 @@ SpectralAngleDistanceImageFilter<TInputImage,TOutputImage>
       double normProd1=0.0;
       double normProd2=0.0;
       InputPixelType pixel = inputIt.Get();
-      for (int i=0; i<pixel.Size(); i++)
+      for (unsigned int i=0; i<pixel.Size(); i++)
 	{
 	  scalarProd += pixel[i]*m_ReferencePixel[i];
 	  normProd1 += pixel[i]*pixel[i];

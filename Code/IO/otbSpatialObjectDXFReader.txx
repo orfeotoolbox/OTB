@@ -112,7 +112,6 @@ SpatialObjectDXFReader<TSpatialObject>
 ::GenerateData()
 {
   TestFileExistanceAndReadability();
-  GroupSpatialObjectType * ptr = this->GetOutput();
   typedef otb::DXFToSpatialObjectGroupFilter<TSpatialObject> CreationFilter;
   typename CreationFilter::Pointer creationClass = CreationFilter::New();
   if (m_LayerName.size()>0)

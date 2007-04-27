@@ -44,6 +44,7 @@ namespace Functor
 	  {
 	    if (itA.GetCenterPixel() != 0) 
 	      {
+		TOutput resp = 0;
 		typename TInput1::OffsetType offset1,offset2;
 		int neighborhoodNumber;
 		if (itB.GetCenterPixel() > 0)
@@ -84,13 +85,10 @@ namespace Functor
 		if ((itA.GetCenterPixel() > itA.GetPixel(offset1)) 
 		    && (itA.GetCenterPixel() > itA.GetPixel(offset2))) 
 		  {
-		    return itA.GetCenterPixel();
-		  }
-		else
-		  {
-		    return 0;
+		    resp =  itA.GetCenterPixel();
 		  }
 	      }
+	    return resp;
 	  }
       };
   }
