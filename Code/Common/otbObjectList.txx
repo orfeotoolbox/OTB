@@ -263,6 +263,18 @@ namespace otb
   {
     m_InternalContainer.erase(begin.GetIter(),end.GetIter());
   }
+  /**
+   * Erase loc element.
+   * \param loc Iterator pointing on object to erase.
+   */
+  template <class TObject>
+  void
+  ObjectList<TObject>
+  ::Erase(Iterator loc)
+  {
+    m_InternalContainer.erase(loc.GetIter());
+  }
+  
   /**PrintSelf method */
   template <class TObject>
   void 

@@ -488,6 +488,12 @@ public:
    */
   void Erase(Iterator begin, Iterator end);
 
+  /**
+   * Erase loc element.
+   * \param loc Iterator pointing on object to erase.
+   */
+  void Erase(Iterator loc);
+
 protected:
   /** Constructor */
   ObjectList();
