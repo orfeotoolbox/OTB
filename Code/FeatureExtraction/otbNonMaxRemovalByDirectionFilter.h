@@ -42,9 +42,9 @@ namespace Functor
 	~NonMaxRemovalByDirectionFunctor() {};
 	inline TOutput operator()(const TInput1 & itA, const TInput2 &itB)
 	  {
+	    TOutput resp = 0;
 	    if (itA.GetCenterPixel() != 0) 
 	      {
-		TOutput resp = 0;
 		typename TInput1::OffsetType offset1,offset2;
 		int neighborhoodNumber;
 		if (itB.GetCenterPixel() > 0)
