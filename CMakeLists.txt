@@ -122,7 +122,8 @@ IF(OTB_USE_VISU_GUI)
 
         FIND_PACKAGE(FLTK)
         IF(FLTK_FOUND)
-           INCLUDE_DIRECTORIES(${FLTK_INCLUDE_DIR})
+           INCLUDE_DIRECTORIES(${FLTK_INCLUDE_DIRS})
+	   LINK_DIRECTORIES(${FLTK_LIBRARY_DIRS})
         ELSE(FLTK_FOUND)
            MESSAGE(FATAL_ERROR
 	         "Cannot build OTB project without FLTK.  Please set FLTK_DIR or set OTB_USE_VISU to OFF.")
