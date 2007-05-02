@@ -25,14 +25,14 @@ namespace otb
 /** \class PathListToPathListFilter
  *  \brief Base class for filter taking a PathList as input a returning a PathList.
  */
-template <class TInputPath,class TOutputPath>
+template <class TPath>
 class ITK_EXPORT PathListToPathListFilter
-  : public PathListSource<TOutputPath>
+  : public PathListSource<TPath>
 {
  public:
   /** Standard typedefs */
   typedef PathListToPathListFilter      Self;
-  typedef PathListSource<TOutputPath>   Superclass;
+  typedef PathListSource<TPath>         Superclass;
   typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
   
@@ -43,21 +43,21 @@ class ITK_EXPORT PathListToPathListFilter
   itkTypeMacro(PathListToPathListFilter, PathListSource);
   
   /** Template parameters typedefs */
-  typedef TInputPath InputPathType;
-  typedef typename InputPathType::Pointer InputPathPointerType;
-  typedef otb::ObjectList<InputPathType> InputPathListType;
-  typedef typename InputPathListType::Pointer InputPathListPointerType;
-  typedef typename InputPathListType::ConstPointer InputPathListConstPointerType;
+  typedef typename Superclass::OutputPathType PathType;
+  typedef typename Superclass::OutputPathListType PathListType;
+  typedef typename PathType::Pointer PathPointerType;
+  typedef typename PathListType::Pointer PathListPointerType;
+  typedef typename PathListType::ConstPointer PathListConstPointerType;
   /** 
    * Set the input path list.
    * \param pathList The input path list.
    */
-  void SetInput( const InputPathListType * pathList);
+  void SetInput( const PathListType * pathList);
   /**
    * Get the input path list.
    * \return the input path list.
    */
-  const InputPathListType * GetInput(void);
+  const PathListType * GetInput(void);
 
 protected:
   /** Constructor */
