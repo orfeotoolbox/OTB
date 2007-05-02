@@ -22,7 +22,6 @@ INCLUDE_DIRECTORIES(BEFORE ${OTB_INCLUDE_DIRS})
 
 # Add link directories needed to use OTB.
 LINK_DIRECTORIES(${OTB_LIBRARY_DIRS})
-MESSAGE(${OTB_LIBRARY_DIRS})
 
 # Load settings fro the system VXL with which OTB was built, if any.
 IF(OTB_USE_SYSTEM_VXL)
