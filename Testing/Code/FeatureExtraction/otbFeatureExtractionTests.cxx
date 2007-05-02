@@ -88,4 +88,6 @@ REGISTER_TEST(otbNonMaxRemovalByDirectionFilterNew);
 REGISTER_TEST(otbNonMaxRemovalByDirectionFilter);
 REGISTER_TEST(otbVectorizationPathListFilterNew);
 REGISTER_TEST(otbVectorizationPathListFilter);
+REGISTER_TEST(otbBreakAngularPathListFilterNew);
+REGISTER_TEST(otbBreakAngularPathListFilter);
 }

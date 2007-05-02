@@ -558,6 +558,24 @@ ADD_TEST(feTvVectorizationPathListFilterImageOutput ${FEATUREEXTRACTION_TESTS}
        0.0005
         )
 
+# -------            otb::BreakAngularPathListFilter   -------------
+
+ADD_TEST(feTuBreakAngularPathListFilterNew ${FEATUREEXTRACTION_TESTS} 
+         otbBreakAngularPathListFilterNew) 
+
+ADD_TEST(feTvBreakAngularPathListFilter ${FEATUREEXTRACTION_TESTS} 
+         otbBreakAngularPathListFilter
+         ${TEMP}/feTvBreakAngularPathListOutput.txt
+         50
+         1 1  5 1  7 1  11 1  21 1  31 1 |
+         1 1  5 1  7 1  11 1  21 11  31 11 |
+         1 1  5 1  7 1  11 1  21 11  31 11 41 11  |
+         1 1  5 1  7 1  11 1  21 11  31 11 41 11 58 11 70 11
+         ) 
+         
+
+
+
 # A enrichir
 SET(BasicFeatureExtraction_SRCS
 otbAlignImageToPath.cxx
@@ -621,6 +639,8 @@ otbNonMaxRemovalByDirectionFilterNew.cxx
 otbNonMaxRemovalByDirectionFilter.cxx
 otbVectorizationPathListFilterNew.cxx
 otbVectorizationPathListFilter.cxx
+otbBreakAngularPathListFilterNew.cxx
+otbBreakAngularPathListFilter.cxx
 )
 
 
