@@ -564,8 +564,10 @@ ADD_TEST(feTuBreakAngularPathListFilterNew ${FEATUREEXTRACTION_TESTS}
          otbBreakAngularPathListFilterNew) 
 
 ADD_TEST(feTvBreakAngularPathListFilter ${FEATUREEXTRACTION_TESTS} 
+#--compare-ascii ${TOL}  ${BASELINE_FILES}/feTvBreakAngularPathListOutput_50.txt
+#         				${TEMP}/feTvBreakAngularPathListOutput_50.txt
          otbBreakAngularPathListFilter
-         ${TEMP}/feTvBreakAngularPathListOutput.txt
+         ${TEMP}/feTvBreakAngularPathListOutput_50.txt
          50
          1 1  5 1  7 1  11 1  21 1  31 1 |
          1 1  5 1  7 1  11 1  21 11  31 11 |
