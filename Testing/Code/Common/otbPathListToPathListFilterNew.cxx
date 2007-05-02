@@ -26,7 +26,7 @@ int otbPathListToPathListFilterNew(int argc, char * argv[])
     {
       const unsigned int Dimension = 2;
       typedef itk::PolyLineParametricPath<Dimension> PathType;
-      typedef otb::PathListToPathListFilter<PathType,PathType> FilterType;
+      typedef otb::PathListToPathListFilter<PathType> FilterType;
 
       // Instantiating object
       FilterType::Pointer filter = FilterType::New();
