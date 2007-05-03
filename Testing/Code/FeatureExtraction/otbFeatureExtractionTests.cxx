@@ -94,4 +94,5 @@ REGISTER_TEST(otbBreakAngularPathListFilterNew);
 REGISTER_TEST(otbBreakAngularPathListFilter);
 REGISTER_TEST(otbRemoveTortuousPathFilterNew);
 REGISTER_TEST(otbRemoveTortuousPathFilter);
+REGISTER_TEST(otbLinkPathListFilterNew);
 }
