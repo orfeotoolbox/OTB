@@ -27,14 +27,22 @@ int otbBreakAngularPathListFilter(int argc, char * argv[])
   try
     {
       const char * outfname = argv[1];
-      const double maxAngular(static_cast<double>(::atof(argv[2])));
       
       typedef std::vector<double> PointsVectorType;
       typedef std::vector< PointsVectorType > PointsMatrixType;
       PointsMatrixType MatricePoints;
       PointsVectorType ListPoints;
+      PointsVectorType ListMaxAngle;
 
-      int cpt = 3;
+      int cpt = 2;
+
+      ListMaxAngle.clear();
+      while ( argv[cpt][0] != '|' )
+      {
+      	ListMaxAngle.push_back(static_cast<double>(::atof(argv[cpt])));
+        cpt++;
+      }
+      cpt++;
       ListPoints.clear();
       
       while ( argv[cpt] != NULL )
@@ -43,7 +51,7 @@ int otbBreakAngularPathListFilter(int argc, char * argv[])
         {
                 if( (ListPoints.size()%2) != 0 )
                 {
-                        itkGenericExceptionMacro(<<"Il manque une coordonnée d'un point dans la liste des parametres !");
+                        itkGenericExceptionMacro(<<"Il manque une coordonnee d'un point dans la liste des parametres !");
                 }
                 MatricePoints.push_back(ListPoints);
                 ListPoints.clear();
@@ -87,10 +95,18 @@ int otbBreakAngularPathListFilter(int argc, char * argv[])
 
       // Instantiating object
       BreakAngularPathListFilterType::Pointer breakAngularFilter = BreakAngularPathListFilterType::New();
-
       breakAngularFilter->SetInput(InputPathList);
-      breakAngularFilter->SetMaxAngle(maxAngular*vcl_acos(-1.0)/180.);
+
+      std::ofstream file;
+      file.open(outfname);
+
+      for(PointsVectorType::iterator itAngle=ListMaxAngle.begin() ; itAngle != ListMaxAngle.end() ; ++itAngle)
+      {
+
+
+      breakAngularFilter->SetMaxAngle((*itAngle)*vcl_acos(-1.0)/180.);
       breakAngularFilter->Update();
+      		
 
       PathListType::Pointer OutputPathList = breakAngularFilter->GetOutput();
 
@@ -98,12 +114,11 @@ int otbBreakAngularPathListFilter(int argc, char * argv[])
       typedef PathType::VertexListType VertexListType;
       typedef VertexListType::ConstIterator VertexIteratorType;
 
-      std::ofstream file;
-      file.open(outfname);
       unsigned int counter = 1;
       PathListIteratorType pathListIt = InputPathList->Begin();
         
-      file<<"MAX ANGULAR :"<<breakAngularFilter->GetMaxAngle()<< "("<<maxAngular<<" deg.)"<<std::endl;
+      file<<"--------------------------------------------------------------------------"<<std::endl;
+      file<<"MAX ANGULAR :"<<breakAngularFilter->GetMaxAngle()<< "("<<(*itAngle)<<" deg.)"<<std::endl;
       file<<"INPUT list of Path "<<": "<<std::endl;
       while(pathListIt!=InputPathList->End())
 	{
@@ -143,6 +158,8 @@ int otbBreakAngularPathListFilter(int argc, char * argv[])
 	  ++pathListIt;
 	  ++counter;
 	}
+	
+      } //Enf for angle
       file.close();
 
     }

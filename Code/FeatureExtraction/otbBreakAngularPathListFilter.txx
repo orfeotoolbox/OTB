@@ -21,6 +21,10 @@ PURPOSE.  See the above copyright notices for more information.
 #include "otbBreakAngularPathListFilter.h"
 #include "vcl_cmath.h"
 
+#ifndef M_PI
+#define M_PI 3.14159265358979323846
+#endif
+
 namespace otb
 {
 /**
@@ -65,10 +69,12 @@ BreakAngularPathListFilter<TPath>
                                
                                 alpha1 = vcl_atan2((pixel1[1]-pixel2[1]),(pixel1[0]-pixel2[0]));
                                 alpha2 = vcl_atan2((pixel2[1]-pixel3[1]),(pixel2[0]-pixel3[0]));
+								alpha1 = (alpha1 >= 0)?alpha1:(alpha1+2.*M_PI);
+					            alpha2 = (alpha2 >= 0)?alpha2:(alpha2+2.*M_PI);
                                 if (vcl_abs(alpha1-alpha2) > maxAngle)
                                 {
                                         // Add Pixel 2
-                                        newPath->AddVertex(pixel3);
+                                        newPath->AddVertex(pixel2);
                                         //Create new PathType in the out path list
                                         outputPathList->PushBack(newPath);
                                         // Reinit
