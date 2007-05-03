@@ -585,17 +585,20 @@ ADD_TEST(feTuBreakAngularPathListFilterNew ${FEATUREEXTRACTION_TESTS}
          otbBreakAngularPathListFilterNew) 
 
 ADD_TEST(feTvBreakAngularPathListFilter ${FEATUREEXTRACTION_TESTS} 
-#--compare-ascii ${TOL}  ${BASELINE_FILES}/feTvBreakAngularPathListOutput_50.txt
-#         				${TEMP}/feTvBreakAngularPathListOutput_50.txt
+--compare-ascii ${TOL}  ${BASELINE_FILES}/feBreakAngularPathListOutput.txt
+         				${TEMP}/feBreakAngularPathListOutput.txt
          otbBreakAngularPathListFilter
-         ${TEMP}/feTvBreakAngularPathListOutput_50.txt
-         50
+         ${TEMP}/feBreakAngularPathListOutput.txt
+         10 20 30 50 90 140 180 |
          1 1  5 1  7 1  11 1  21 1  31 1 |
          1 1  5 1  7 1  11 1  21 11  31 11 |
          1 1  5 1  7 1  11 1  21 11  31 11 41 11  |
-         1 1  5 1  7 1  11 1  21 11  31 11 41 11 58 11 70 11
+         1 1  5 1  7 1  11 1  21 11  31 11 41 11 58 11 70 11 |
+         1 11  5 11  7 11  11 11  21 1  31 1 41 1 |
+         1 1  5 1  7 1  11 1  21 11  31 21 41 31  |
+         1 1  5 1  5 11  5 21 |
+         1 1  31 1 41 1  
          ) 
-
 
 ADD_TEST(feTuRemoveTortuousPathFilterNew ${FEATUREEXTRACTION_TESTS} 
          otbRemoveTortuousPathFilterNew) 

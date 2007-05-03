@@ -51,7 +51,7 @@ int otbBreakAngularPathListFilter(int argc, char * argv[])
         {
                 if( (ListPoints.size()%2) != 0 )
                 {
-                        itkGenericExceptionMacro(<<"Il manque une coordonnee d'un point dans la liste des parametres !");
+                        itkGenericExceptionMacro(<<"Missing point in parameters !");
                 }
                 MatricePoints.push_back(ListPoints);
                 ListPoints.clear();
