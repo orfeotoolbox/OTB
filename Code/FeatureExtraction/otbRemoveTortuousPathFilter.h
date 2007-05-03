@@ -23,10 +23,13 @@ PURPOSE.  See the above copyright notices for more information.
 namespace otb
 {
 /** \class RemoveTortuousPathFilter
- *  \brief 
- * 
- * \ingroup 
- * \ingroup
+ *  \brief This filter remove path considered as tortuous.
+ *
+ *  A path is considered to be tortuous if the mean distance between each consecutive vertices
+ *  is lower than the user provided threshold.
+ *
+ * \sa BreakAngularPathListFilter
+ * \sa SimplifyPathFilter
  */
 template <class TPath>
 class ITK_EXPORT RemoveTortuousPathFilter
