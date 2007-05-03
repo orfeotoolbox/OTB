@@ -558,6 +558,36 @@ ADD_TEST(feTvVectorizationPathListFilterImageOutput ${FEATUREEXTRACTION_TESTS}
        0.0005
         )
 
+# -------            otb::SimplifyPathFilter   -------------
+
+#ADD_TEST(feTuSimplifyPathFilterNew ${FEATUREEXTRACTION_TESTS} 
+#         otbSimplifyPathFilterNew) 
+
+#ADD_TEST(feTvSimplifyPathFilterAsciiOutput ${FEATUREEXTRACTION_TESTS}  
+#--compare-ascii ${EPS}  
+#		${BASELINE_FILES}/feTvSimplifyPathOutput.txt
+#		${TEMP}/feTvSimplifyPathOutput.txt
+#        otbSimplifyPathFilter
+#       ${INPUTDATA}/InputForRoadDetection_NonMaxRem.hdr
+#       ${INPUTDATA}/InputForRoadDetectionScalarProductDir.hdr
+#       ${TEMP}/feTvSimplifyPathOutput.txt
+#       ${TEMP}/feTvSimplifyPathOutput.png
+#       0.0005
+#        )
+
+#ADD_TEST(feTvSimplifyPathFilterImageOutput ${FEATUREEXTRACTION_TESTS}  
+#--compare-image ${EPSILON}
+#		${BASELINE}/feTvSimplifyPathOutput.png
+#		${TEMP}/feTvSimplifyPathOutput.png
+#        otbSimplifyPathFilter
+#       ${INPUTDATA}/InputForRoadDetection_NonMaxRem.hdr
+#       ${INPUTDATA}/InputForRoadDetectionScalarProductDir.hdr
+#       ${TEMP}/feTvSimplifyPathOutput.txt
+#       ${TEMP}/feTvSimplifyPathOutput.png
+#       0.0005
+#        )
+
+
 # -------            otb::BreakAngularPathListFilter   -------------
 
 ADD_TEST(feTuBreakAngularPathListFilterNew ${FEATUREEXTRACTION_TESTS} 
@@ -575,9 +605,6 @@ ADD_TEST(feTvBreakAngularPathListFilter ${FEATUREEXTRACTION_TESTS}
          1 1  5 1  7 1  11 1  21 11  31 11 41 11 58 11 70 11
          ) 
          
-
-
-
 # A enrichir
 SET(BasicFeatureExtraction_SRCS
 otbAlignImageToPath.cxx
@@ -641,6 +668,8 @@ otbNonMaxRemovalByDirectionFilterNew.cxx
 otbNonMaxRemovalByDirectionFilter.cxx
 otbVectorizationPathListFilterNew.cxx
 otbVectorizationPathListFilter.cxx
+#otbSimplifyPathFilterNew.cxx
+#otbSimplifyPathFilter.cxx
 otbBreakAngularPathListFilterNew.cxx
 otbBreakAngularPathListFilter.cxx
 )
