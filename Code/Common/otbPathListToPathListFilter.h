@@ -48,6 +48,11 @@ class ITK_EXPORT PathListToPathListFilter
   typedef typename PathType::Pointer PathPointerType;
   typedef typename PathListType::Pointer PathListPointerType;
   typedef typename PathListType::ConstPointer PathListConstPointerType;
+  typedef typename Superclass::OutputPathType OutputPathType;
+  typedef typename Superclass::OutputPathPointerType OutputPathPointerType;
+  typedef typename Superclass::OutputPathListType OutputPathListType;
+  typedef typename Superclass::OutputPathListPointerType OutputPathListPointerType;
+  typedef typename Superclass::OutputPathListConstPointerType OutputPathListConstPointerType;
   /** 
    * Set the input path list.
    * \param pathList The input path list.
