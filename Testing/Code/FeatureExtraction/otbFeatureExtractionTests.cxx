@@ -92,4 +92,6 @@ REGISTER_TEST(otbSimplifyPathFilterNew);
 REGISTER_TEST(otbSimplifyPathFilter);
 REGISTER_TEST(otbBreakAngularPathListFilterNew);
 REGISTER_TEST(otbBreakAngularPathListFilter);
+REGISTER_TEST(otbRemoveTortuousPathFilterNew);
+REGISTER_TEST(otbRemoveTortuousPathFilter);
 }

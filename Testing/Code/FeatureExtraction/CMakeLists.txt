@@ -564,9 +564,9 @@ ADD_TEST(feTuSimplifyPathFilterNew ${FEATUREEXTRACTION_TESTS}
          otbSimplifyPathFilterNew) 
 
 ADD_TEST(feTvSimplifyPathFilter ${FEATUREEXTRACTION_TESTS}  
-#--compare-ascii ${EPS}  
-#		${BASELINE_FILES}/feTvSimplifyPathOutput.txt
-#		${TEMP}/feTvSimplifyPathOutput.txt
+--compare-ascii ${EPS}  
+		${BASELINE_FILES}/feTvSimplifyPathOutput.txt
+		${TEMP}/feTvSimplifyPathOutput.txt
         otbSimplifyPathFilter
 	${TEMP}/feTvSimplifyPathOutput.txt
          1.0
@@ -595,6 +595,23 @@ ADD_TEST(feTvBreakAngularPathListFilter ${FEATUREEXTRACTION_TESTS}
          1 1  5 1  7 1  11 1  21 11  31 11 41 11  |
          1 1  5 1  7 1  11 1  21 11  31 11 41 11 58 11 70 11
          ) 
+
+
+ADD_TEST(feTuRemoveTortuousPathFilterNew ${FEATUREEXTRACTION_TESTS} 
+         otbRemoveTortuousPathFilterNew) 
+
+ADD_TEST(feTvRemoveTortuousPathFilter ${FEATUREEXTRACTION_TESTS}  
+--compare-ascii ${EPS}  
+		${BASELINE_FILES}/feTvRemoveTortuousPathOutput.txt
+		${TEMP}/feTvRemoveTortuousPathOutput.txt
+        otbRemoveTortuousPathFilter
+	${TEMP}/feTvRemoveTortuousPathOutput.txt
+         10.0
+         1 1   1 11  | 
+         1 1   5  1  7  1  11  1  |
+         1 1   7  7 21 21  31 31 41 41 |
+         1 1   5  1  7  1  11  1  21 11  31 11 41 11 58 11 70 11
+        )
          
 # A enrichir
 SET(BasicFeatureExtraction_SRCS
@@ -663,6 +680,8 @@ otbSimplifyPathFilterNew.cxx
 otbSimplifyPathFilter.cxx
 otbBreakAngularPathListFilterNew.cxx
 otbBreakAngularPathListFilter.cxx
+otbRemoveTortuousPathFilterNew.cxx
+otbRemoveTortuousPathFilter.cxx
 )
 
 
