@@ -618,10 +618,31 @@ ADD_TEST(feTvRemoveTortuousPathFilter ${FEATUREEXTRACTION_TESTS}
          1 1   5  1  7  1  11  1  21 11  31 11 41 11 58 11 70 11
         )
 
-# -------            otb::LinkPathListFilter   -------------
+# -------            otb::LinkPathFilter   -------------
 
-ADD_TEST(feTuLinkPathListFilterNew ${FEATUREEXTRACTION_TESTS} 
-         otbLinkPathListFilterNew) 
+ADD_TEST(feTuLinkPathFilterNew ${FEATUREEXTRACTION_TESTS} 
+         otbLinkPathFilterNew) 
+
+ADD_TEST(feTvLinkPathFilter ${FEATUREEXTRACTION_TESTS}  
+--compare-ascii ${EPS}  
+		${BASELINE_FILES}/feTvLinkPathOutput.txt
+		${TEMP}/feTvLinkPathOutput.txt
+        otbLinkPathFilter
+	${TEMP}/feTvLinkPathOutput.txt
+         30  40
+	  1 1 51 1 |
+	 61 1 91 1 |
+	111 11 211 11 |
+	  1 51 51 51 |
+	 71 71 71 91 |
+	 71 131 71 201 |
+	 141 111 101 111 |
+	 151 111 191 111 |
+	 111  71 141  71 |
+	 181  71 151  71 |
+	  11 131  11 101 |
+	  11 171  11 141 
+        )
          
 # A enrichir
 SET(BasicFeatureExtraction_SRCS
@@ -692,7 +713,8 @@ otbBreakAngularPathListFilterNew.cxx
 otbBreakAngularPathListFilter.cxx
 otbRemoveTortuousPathFilterNew.cxx
 otbRemoveTortuousPathFilter.cxx
-otbLinkPathListFilterNew.cxx
+otbLinkPathFilterNew.cxx
+otbLinkPathFilter.cxx
 )
 
 
