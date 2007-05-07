@@ -110,11 +110,10 @@ RoadExtractionFilter<TInputImage, TOutputPath>
  
   m_SecondRemoveTortuousPathFilter->SetInput(m_SecondSimplifyPathFilter->GetOutput());
 
-/*
- *   m_SecondRemoveTortuousPathFilter->GraftOutput(this->GetOutput());
+  m_SecondRemoveTortuousPathFilter->GraftOutput(this->GetOutput());
   m_SecondRemoveTortuousPathFilter->Update();
   this->GraftOutput(m_SecondRemoveTortuousPathFilter->GetOutput());
-*/
+
 }
 /**
  * PrintSelf method
@@ -125,6 +124,12 @@ RoadExtractionFilter<TInputImage, TOutputPath>
 ::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   Superclass::PrintSelf(os,indent);
+  os << indent << "m_ReferencePixel: "<< m_ReferencePixel << std::endl;
+  os << indent << "m_Sigma: "<< m_Sigma << std::endl;
+  os << indent << "m_AmplitudeThreshold: "<< m_AmplitudeThreshold << std::endl;
+  os << indent << "m_Tolerance: "<< m_Tolerance << std::endl;
+  os << indent << "m_MaxAngle: "<< m_MaxAngle << std::endl;
+  os << indent << "m_MeanDistanceThreshold: "<< m_MeanDistanceThreshold << std::endl;
 
 }
 } // End namespace MorphologicalPyramid

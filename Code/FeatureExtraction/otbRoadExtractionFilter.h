@@ -196,7 +196,6 @@ template <class TInputImage, class TOutputPath>
   /** Tolerance for segment consistency (tolerance in terms of distance) (use by RemoveTortuousPathFilter)*/
   MeanDistanceThresholdType m_MeanDistanceThreshold;
 
-
   };
 
 }// End namespace otb

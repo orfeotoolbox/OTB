@@ -650,7 +650,16 @@ ADD_TEST(feTuRoadExtractionFilterNew ${FEATUREEXTRACTION_TESTS}
          otbRoadExtractionFilterNew) 
 
 ADD_TEST(feTvRoadExtractionFilter ${FEATUREEXTRACTION_TESTS} 
-         otbRoadExtractionFilter) 
+         otbRoadExtractionFilter
+		 ${INPUTDATA}/InputForRoadDetection_IsolatedRem.tif
+         232 198  # ReferencePixel
+         3.0      # Sigma
+         0.0005   # AmplitudeThreshold
+         1.0      # Tolerance
+         22.5     # (degre) MaxAngle (3.14159265358979323846/8.)
+         1.0      # MeanDistanceThreshold 
+         ${TEMP}/feTvOutputRoadDetection.tif
+         ) 
 
          
 # A enrichir
