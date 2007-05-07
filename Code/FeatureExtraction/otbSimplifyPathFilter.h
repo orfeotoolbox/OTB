@@ -71,9 +71,11 @@ class ITK_EXPORT SimplifyPathFilter
   typedef typename VertexListType::Iterator VertexListIteratorType;
   typedef typename VertexListType::ConstIterator VertexListConstIteratorType;
   typedef typename PathType::VertexType VertexType;
+  
+  typedef double ToleranceType;  
 
-  itkGetMacro(Tolerance,double);
-  itkSetMacro(Tolerance,double);
+  itkGetMacro(Tolerance,ToleranceType);
+  itkSetMacro(Tolerance,ToleranceType);
 
 protected:
   /** Constructor */
@@ -97,7 +99,7 @@ private:
   void operator=(const Self&); //purposely not implemented
 
   //// Tolerance for segment consistency (tolerance in terms of distance)
-  double m_Tolerance;
+  ToleranceType m_Tolerance;
 };
 }// End namespace otb
 #ifndef OTB_MANUAL_INSTANTIATION

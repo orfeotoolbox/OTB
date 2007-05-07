@@ -90,7 +90,7 @@ LinkPathFilter<TPath>
 		      ++vTargetIt;
 		      VertexType v4 = vTargetIt.Value();
 		      double tmpDistance = vcl_sqrt(vcl_pow(v2[0]-v3[0],2)+vcl_pow(v2[1]-v3[1],2));
-		      if((tmpDistance<m_DistanceThreshold) && ((!found)||(tmpDistance<distance)))
+		      if((tmpDistance<static_cast<double>(m_DistanceThreshold)) && ((!found)||(tmpDistance<distance)))
 			{
 			  if(VerifyAngularCondition(v1,v2,v3,v4))
 			    {
@@ -114,7 +114,7 @@ LinkPathFilter<TPath>
 		      v4 = vTargetIt.Value();
 		      tmpDistance = vcl_sqrt(vcl_pow(v2[0]-v3[0],2)+vcl_pow(v2[1]-v3[1],2));
 		      
-		      if((tmpDistance<m_DistanceThreshold) && ((!found)||(tmpDistance<distance)))
+		      if((tmpDistance<static_cast<double>(m_DistanceThreshold)) && ((!found)||(tmpDistance<distance)))
 			{
 			  if(VerifyAngularCondition(v1,v2,v3,v4))
 			    {
@@ -137,7 +137,7 @@ LinkPathFilter<TPath>
 		      v1 = vSourceIt.Value();
 		      tmpDistance = vcl_sqrt(vcl_pow(v2[0]-v3[0],2)+vcl_pow(v2[1]-v3[1],2));
 		      
-		      if((tmpDistance<m_DistanceThreshold) && ((!found)||(tmpDistance<distance)))
+		      if((tmpDistance<static_cast<double>(m_DistanceThreshold)) && ((!found)||(tmpDistance<distance)))
 			{
 			  if(VerifyAngularCondition(v1,v2,v3,v4))
 			    {
@@ -159,7 +159,7 @@ LinkPathFilter<TPath>
 		      ++vTargetIt;
 		      v4 = vTargetIt.Value();
 		      tmpDistance = vcl_sqrt(vcl_pow(v2[0]-v3[0],2)+vcl_pow(v2[1]-v3[1],2));
- 		      if((tmpDistance<m_DistanceThreshold) && ((!found)||(tmpDistance<distance)))
+ 		      if((tmpDistance<static_cast<double>(m_DistanceThreshold)) && ((!found)||(tmpDistance<distance)))
 			{
 			  if(VerifyAngularCondition(v1,v2,v3,v4))
 			    {
@@ -233,9 +233,9 @@ LinkPathFilter<TPath>
   alpha2 = (alpha2 >= 0)?alpha2:(alpha2+2.*M_PI);
   alpha3 = (alpha3 >= 0)?alpha3:(alpha3+2.*M_PI);
    
-  bool resp = (vcl_abs(alpha1-alpha2) < m_AngularThreshold)
-    && (vcl_abs(alpha1-alpha3) < m_AngularThreshold)
-    &&(vcl_abs(alpha2-alpha3) <m_AngularThreshold );
+  bool resp = (vcl_abs(alpha1-alpha2) < static_cast<double>(m_AngularThreshold))
+    && (vcl_abs(alpha1-alpha3) < static_cast<double>(m_AngularThreshold))
+    &&(vcl_abs(alpha2-alpha3) <static_cast<double>(m_AngularThreshold ));
   return resp;
 }
 /**

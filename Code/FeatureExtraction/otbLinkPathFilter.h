@@ -61,11 +61,12 @@ class ITK_EXPORT LinkPathFilter
   typedef typename PathType::VertexType VertexType;
   typedef typename PathType::VertexListType VertexListType;
   typedef typename VertexListType::ConstIterator VertexIteratorType;
+  typedef double 								RealType;
   
-  itkSetMacro(AngularThreshold,double);
-  itkGetMacro(AngularThreshold,double);
-  itkSetMacro(DistanceThreshold,double);
-  itkGetMacro(DistanceThreshold,double);
+  itkSetMacro(AngularThreshold,RealType);
+  itkGetMacro(AngularThreshold,RealType);
+  itkSetMacro(DistanceThreshold,RealType);
+  itkGetMacro(DistanceThreshold,RealType);
 
 protected:
   /** Constructor */
@@ -101,8 +102,8 @@ private:
   LinkPathFilter(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
 
-  double m_AngularThreshold;
-  double m_DistanceThreshold;
+  RealType m_AngularThreshold;
+  RealType m_DistanceThreshold;
   
 };
 }// End namespace otb

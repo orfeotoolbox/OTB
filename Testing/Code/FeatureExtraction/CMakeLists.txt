@@ -643,6 +643,15 @@ ADD_TEST(feTvLinkPathFilter ${FEATUREEXTRACTION_TESTS}
 	  11 131  11 101 |
 	  11 171  11 141 
         )
+
+# -------            otb::RoadExtractionFilter   -------------
+
+ADD_TEST(feTuRoadExtractionFilterNew ${FEATUREEXTRACTION_TESTS} 
+         otbRoadExtractionFilterNew) 
+
+ADD_TEST(feTvRoadExtractionFilter ${FEATUREEXTRACTION_TESTS} 
+         otbRoadExtractionFilter) 
+
          
 # A enrichir
 SET(BasicFeatureExtraction_SRCS
@@ -715,6 +724,8 @@ otbRemoveTortuousPathFilterNew.cxx
 otbRemoveTortuousPathFilter.cxx
 otbLinkPathFilterNew.cxx
 otbLinkPathFilter.cxx
+otbRoadExtractionFilterNew.cxx
+otbRoadExtractionFilter.cxx
 )
 
 

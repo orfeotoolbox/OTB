@@ -49,9 +49,11 @@ class ITK_EXPORT BreakAngularPathListFilter
   typedef typename Superclass::PathPointerType  PathPointerType;
   typedef typename PathListType::Pointer        PathListPointerType;
   
-  /** Set/Get max angle methods */
-  itkSetMacro(MaxAngle,double);
-  itkGetConstMacro(MaxAngle,double);
+  typedef double MaxAngleType;  
+  
+  /** Set/Get the max angle */
+  itkSetMacro(MaxAngle,MaxAngleType);
+  itkGetConstMacro(MaxAngle,MaxAngleType);
 
 protected:
   /** Constructor */
@@ -68,10 +70,10 @@ private:
   void operator=(const Self&); //purposely not implemented
 
   /** Calculate break angular for a path */
-  void BreakAngularPath(const double maxAngle, const PathPointerType inputPath, PathListPointerType outputPathList );
+  void BreakAngularPath(const MaxAngleType maxAngle, const PathPointerType inputPath, PathListPointerType outputPathList );
 
   /** Max angle value */
-  double m_MaxAngle;
+  MaxAngleType m_MaxAngle;
   
 };
 }// End namespace otb

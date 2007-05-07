@@ -68,7 +68,7 @@ namespace otb
       {
 	double distsq = vcl_pow(a*segmentIt.Value()[0] + b * segmentIt.Value()[1] + c,2)/(vcl_pow(a,2)+vcl_pow(b,2));
 	// otbMsgDevMacro(<< "Testing segment: (" << segmentIt.Value()[0] << "," << segmentIt.Value()[1] << "=>" << distsq << ") ");
-	if (distsq > m_Tolerance) 
+	if (distsq > static_cast<double>(m_Tolerance) ) 
 	  {
 	    resp = false;
 	  }

@@ -96,4 +96,6 @@ REGISTER_TEST(otbRemoveTortuousPathFilterNew);
 REGISTER_TEST(otbRemoveTortuousPathFilter);
 REGISTER_TEST(otbLinkPathFilterNew);
 REGISTER_TEST(otbLinkPathFilter);
+REGISTER_TEST(otbRoadExtractionFilterNew);
+REGISTER_TEST(otbRoadExtractionFilter);
 }

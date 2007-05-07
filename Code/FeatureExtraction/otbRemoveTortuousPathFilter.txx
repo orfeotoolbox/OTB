@@ -72,7 +72,7 @@ namespace otb
     PathIteratorType inputIt = inputPtr->Begin();
     while(inputIt != inputPtr->End())
       {
-	if(this->ComputeMeanDistanceBetweenVertices(inputIt.Get())>=m_MeanDistanceThreshold)
+	if(this->ComputeMeanDistanceBetweenVertices(inputIt.Get())>=static_cast<double>(m_MeanDistanceThreshold))
 	{
 	  outputPtr->PushBack(inputIt.Get());
 	}
@@ -88,6 +88,7 @@ namespace otb
   ::PrintSelf(std::ostream& os, itk::Indent indent) const
   {
     Superclass::PrintSelf(os, indent);
+    os << indent << "MeanDistanceThreshold value: "<<m_MeanDistanceThreshold<<std::endl;
   }
 } // End namespace otb
 #endif

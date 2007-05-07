@@ -62,8 +62,10 @@ class ITK_EXPORT RemoveTortuousPathFilter
   typedef typename VertexListType::ConstIterator VertexListConstIteratorType;
   typedef typename PathType::VertexType VertexType;
 
-  itkGetMacro(MeanDistanceThreshold,double);
-  itkSetMacro(MeanDistanceThreshold,double);
+  typedef double MeanDistanceThresholdType;
+  
+  itkGetMacro(MeanDistanceThreshold,MeanDistanceThresholdType);
+  itkSetMacro(MeanDistanceThreshold,MeanDistanceThresholdType);
 
 protected:
   /** Constructor */
@@ -86,7 +88,7 @@ protected:
   void operator=(const Self&); //purposely not implemented
 
   //// Tolerance for segment consistency (tolerance in terms of distance)
-  double m_MeanDistanceThreshold;
+  MeanDistanceThresholdType m_MeanDistanceThreshold;
 };
 }// End namespace otb
 #ifndef OTB_MANUAL_INSTANTIATION
