@@ -30,23 +30,81 @@ template<class TOutputPath>
 PathListSource<TOutputPath>
 ::PathListSource()
 {
+  OutputPathListPointerType output
+    = static_cast<OutputPathListType*>(this->MakeOutput(0).GetPointer()); 
+
   this->Superclass::SetNumberOfRequiredOutputs(1);
-  this->Superclass::SetNthOutput(0,ObjectList<TOutputPath>::New().GetPointer());
+  this->Superclass::SetNthOutput(0,output.GetPointer());
 }
 /**
- * Get the output path list
- * \return The output path list
+ * 
+ */
+template<class TOutputPath>
+void
+PathListSource<TOutputPath>
+::GraftOutput(OutputPathListType *graft)
+{
+  this->GraftNthOutput(0, graft);
+}
+
+/**
+ * 
+ */
+template<class TOutputPath>
+void
+PathListSource<TOutputPath>
+::GraftNthOutput(unsigned int idx, OutputPathListType *graft)
+{
+  if (idx < this->GetNumberOfOutputs())
+    {
+    OutputPathListType * output = this->GetOutput(idx);
+
+    if (output && graft)
+      {
+      // Paths do not have a generic pointer to their bulk data
+      itkWarningMacro( << "Warning:  GraftNthOutput() is broken" );
+      }
+    }
+}
+
+/**
+ *
+ */
+template<class TOutputPath>
+typename PathListSource<TOutputPath>::DataObjectPointer
+PathListSource<TOutputPath>
+::MakeOutput(unsigned int)
+{
+  return (static_cast<itk::DataObject*>(OutputPathListType::New()));
+}
+
+/**
+ *
  */
 template<class TOutputPath>
 typename PathListSource<TOutputPath>::OutputPathListType *
 PathListSource<TOutputPath>
 ::GetOutput(void)
 {
-  if(this->GetNumberOfOutputs()<1)
+  if (this->GetNumberOfOutputs() < 1)
     {
     return 0;
     }
-  return static_cast<OutputPathListType *> (this->ProcessObject::GetOutput(0));
+  
+  return static_cast<OutputPathListType*>
+                     (this->Superclass::GetOutput(0));
+}
+  
+/**
+ *
+ */
+template<class TOutputPath>
+typename PathListSource<TOutputPath>::OutputPathListType *
+PathListSource<TOutputPath>
+::GetOutput(unsigned int idx)
+{
+  return static_cast<OutputPathListType*>
+                     (this->Superclass::GetOutput(idx));
 }
 
 template<class TOutputPath>
