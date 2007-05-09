@@ -28,7 +28,7 @@ namespace otb
  * \brief This class can be used to draw a list of path on an image.
  *
  * This filter first copy the input image to the output, with default casting operators.
- * It then uses itk::LineIterator to draw each segment of each PolyLine. This iterator uses
+ * It then uses the otb::PolyLineImageIterator to draw each polyline. This iterator uses
  * the general Bresenham algorithm known to be efficient in segment drawing.
  * 
  * If the UsePathInternalValue is toggled, the filter check if the metadata dictionnary of the input path has a "Value" key.

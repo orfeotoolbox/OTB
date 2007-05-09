@@ -23,7 +23,7 @@
 
 #include "itkImageRegionIterator.h"
 #include "itkImageRegionConstIterator.h"
-#include "itkLineIterator.h"
+#include "otbPolyLineImageIterator.h"
 #include "itkMetaDataObject.h"
 
 namespace otb
@@ -80,9 +80,7 @@ DrawPathListFilter<TInputImage,TInputPath,TOutputImage>
   typedef itk::ImageRegionIterator<OutputImageType> OutputIteratorType;
   typedef itk::ImageRegionConstIterator<InputImageType> InputIteratorType;
   typedef typename InputPathListType::ConstIterator PathListIteratorType;
-  typedef itk::LineIterator<OutputImageType> LineIteratorType;
-  typedef typename InputPathType::VertexListType VertexListType;
-  typedef typename VertexListType::ConstIterator VertexIteratorType;
+  typedef PolyLineImageIterator<OutputImageType,InputPathType> PolyLineIteratorType;
 
   OutputIteratorType outIt(outputPtr,outputPtr->GetLargestPossibleRegion());
   InputIteratorType inIt(inputPtr,inputPtr->GetLargestPossibleRegion());
@@ -94,12 +92,11 @@ DrawPathListFilter<TInputImage,TInputPath,TOutputImage>
       outIt.Set(static_cast<OutputImagePixelType>(inIt.Get()));
     }
   
-  // Then we use itk::LineIterator to draw polylines
-  OutputImageIndexType source, target;
-  VertexIteratorType vertexIt;
-  OutputImagePixelType value;
+  // Then we use otb::PolyLineImageIterator to draw polylines
+
   for(PathListIteratorType plIt = pathListPtr->Begin(); plIt!=pathListPtr->End();++plIt)
     {
+      OutputImagePixelType value;
       if(m_UseInternalPathValue && plIt.Get()->GetMetaDataDictionary().HasKey("Value"))
 	{
 	  itk::ExposeMetaData<OutputImagePixelType>(plIt.Get()->GetMetaDataDictionary(),"Value",value);
@@ -108,23 +105,11 @@ DrawPathListFilter<TInputImage,TInputPath,TOutputImage>
 	{
 	  value = static_cast<OutputImagePixelType>(m_PathValue);
 	}
-       vertexIt = plIt.Get()->GetVertexList()->Begin();
-       source[0] = static_cast<unsigned int>( (vertexIt.Value())[0]);
-       source[1] = static_cast<unsigned int>( (vertexIt.Value())[1]);
-      ++vertexIt;
-      while(vertexIt!=plIt.Get()->GetVertexList()->End())
+      PolyLineIteratorType imageIt(outputPtr,plIt.Get());
+      
+      for(imageIt.GoToBegin();!imageIt.IsAtEnd();++imageIt)
 	{
-	  target[0]=static_cast<unsigned int>((vertexIt.Value())[0]);
-	  target[1]=static_cast<unsigned int>((vertexIt.Value())[1]);
-	  LineIteratorType lineIt(outputPtr,source,target);
-	  lineIt.GoToBegin();
-	  while(!lineIt.IsAtEnd())
-	    {
-	      lineIt.Set(value);
-	      ++lineIt;
-	    }
-	  source=target;
-	  ++vertexIt;
+	  imageIt.Set(value);
 	}
     }
 }
