@@ -24,6 +24,7 @@
 #include "otbDrawPathListFilter.h"
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
+#include "otbPolyLineParametricPathWithValue.h"
 
 int otbRoadExtractionFilter(int argc, char * argv[])
 {
@@ -33,7 +34,8 @@ int otbRoadExtractionFilter(int argc, char * argv[])
       typedef otb::VectorImage<double,Dimension> InputImageType;
       typedef otb::Image<unsigned char,Dimension> OutputImageType;
       typedef itk::PolyLineParametricPath<Dimension> PathType;
-      
+//	  typedef otb::PolyLineParametricPathWithValue<double,Dimension> PathType;
+            
       typedef otb::ImageFileReader<InputImageType> ReaderType;
       typedef otb::ImageFileWriter<OutputImageType> WriterType;
       typedef otb::RoadExtractionFilter<InputImageType,PathType> RoadExtractionFilterType;
@@ -48,16 +50,21 @@ int otbRoadExtractionFilter(int argc, char * argv[])
       }
 	  //Parameters
 	  const char * inputFileName(argv[1]);
+	  const char * outputFileName(argv[2]);
 	  InputPixelType ReferencePixel;
-	  ReferencePixel.Reserve(2);
-	  ReferencePixel.SetElement(0,::atof(argv[2]));
-	  ReferencePixel.SetElement(1,::atof(argv[3]));
-      const double Sigma = ::atof(argv[4]);
-      const double AmplitudeThreshold = ::atof(argv[5]);
-      const double Tolerance = ::atof(argv[6]);
-      const double MaxAngle = ((vcl_acos(-1.)*::atof(argv[7]))/180.);
-      const double MeanDistanceThreshold  = ::atof(argv[8]);
-	  const char * outputFileName(argv[9]);
+	  ReferencePixel.Reserve(4);
+	  ReferencePixel.SetElement(0,::atof(argv[3]));
+	  ReferencePixel.SetElement(1,::atof(argv[4]));
+	  ReferencePixel.SetElement(2,::atof(argv[5]));
+	  ReferencePixel.SetElement(3,::atof(argv[6]));
+      const double Sigma = ::atof(argv[7]);
+      const double AmplitudeThreshold = ::atof(argv[8]);
+      const double Tolerance = ::atof(argv[9]);
+      const double MaxAngle = ((vcl_acos(-1.)*::atof(argv[10]))/180.);
+      const double FirstMeanDistanceThreshold  = ::atof(argv[11]);
+      const double SecondMeanDistanceThreshold  = ::atof(argv[12]);
+      const double LinkAngularThreshold = ::atof(argv[13]);
+      const double LinkDistanceThreshold  = ::atof(argv[14]);
 	  
       // Instantiating object
       ReaderType::Pointer reader = ReaderType::New();
@@ -74,7 +81,10 @@ int otbRoadExtractionFilter(int argc, char * argv[])
       roadExtraction->SetAmplitudeThreshold(AmplitudeThreshold);
       roadExtraction->SetTolerance(Tolerance);
       roadExtraction->SetMaxAngle(MaxAngle);
-      roadExtraction->SetMeanDistanceThreshold(MeanDistanceThreshold);
+      roadExtraction->SetFirstMeanDistanceThreshold(FirstMeanDistanceThreshold);
+      roadExtraction->SetSecondMeanDistanceThreshold(SecondMeanDistanceThreshold);
+      roadExtraction->SetAngularThreshold(LinkAngularThreshold);
+      roadExtraction->SetDistanceThreshold(LinkDistanceThreshold);
 
 	  std::cout << " RoadExtraction instance value: " << roadExtraction <<std::endl; 
       //Provisoire pour debug.....
@@ -101,7 +111,8 @@ int otbRoadExtractionFilter(int argc, char * argv[])
 	  std::cout << "LIstPath : Size() = "<<listPath->Size()<<std::endl;
 
       draw->SetInput(image);
-      draw->SetPathValue(255);
+      //Use internal value of path
+      draw->UseInternalPathValueOn();
       draw->SetInputPath(roadExtraction->GetOutput());
 
       writer->SetFileName(outputFileName);

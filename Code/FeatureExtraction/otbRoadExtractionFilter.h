@@ -21,6 +21,8 @@ PURPOSE.  See the above copyright notices for more information.
 #include "itkCovariantVector.h"
 #include "itkGradientRecursiveGaussianImageFilter.h"
 
+#include "otbImage.h"
+#include "otbVectorImage.h"
 #include "otbImageToPathListFilter.h"
 #include "otbSpectralAngleDistanceImageFilter.h"
 #include "otbNeighborhoodScalarProductFilter.h"
@@ -32,6 +34,7 @@ PURPOSE.  See the above copyright notices for more information.
 #include "otbLinkPathFilter.h"
 #include "otbRemoveIsolatedByDirectionFilter.h"
 #include "otbRemoveWrongDirectionFilter.h"
+#include "otbLikehoodPathFilter.h"
 
 namespace otb
 {
@@ -50,6 +53,7 @@ namespace otb
  * \sa BreakAngularPathListFilter
  * \sa RemoveTortuousPathFilter
  * \sa LinkPathListFilter
+ * \sa LikehoodPathFilter
  */
 template <class TInputImage, class TOutputPath>
   class ITK_EXPORT RoadExtractionFilter
@@ -119,6 +123,7 @@ template <class TInputImage, class TOutputPath>
     typedef BreakAngularPathListFilter<OutputPathType>          BreakAngularPathListFilterType;
     typedef RemoveTortuousPathFilter<OutputPathType>            RemoveTortuousPathFilterType;
     typedef LinkPathFilter<OutputPathType>                  	LinkPathFilterType;
+    typedef LikehoodPathFilter<OutputPathType, ModulusType>		LikehoodPathFilterType;
     
     /** Template parameters typedefs for internals filters */
     typedef typename GradientFilterType::RealType SigmaType;
@@ -126,6 +131,7 @@ template <class TInputImage, class TOutputPath>
     typedef typename SimplifyPathFilterType::ToleranceType ToleranceType;
     typedef typename BreakAngularPathListFilterType::MaxAngleType MaxAngleType;
     typedef typename RemoveTortuousPathFilterType::MeanDistanceThresholdType MeanDistanceThresholdType; 
+    typedef typename LinkPathFilterType::RealType LinkRealType;
      
   /** Get/Set the reference pixel (use by the SpectralAngleDistanceImageFilter)*/
   itkGetConstReferenceMacro(ReferencePixel,InputPixelType);
@@ -148,8 +154,17 @@ template <class TInputImage, class TOutputPath>
   itkGetConstMacro(MaxAngle,MaxAngleType);
 
   /** Get/Set the tolerance for segment consistency (tolerance in terms of distance) (use by RemoveTortuousPathFilter)*/
-  itkGetMacro(MeanDistanceThreshold,MeanDistanceThresholdType);
-  itkSetMacro(MeanDistanceThreshold,MeanDistanceThresholdType);
+  itkGetMacro(FirstMeanDistanceThreshold,MeanDistanceThresholdType);
+  itkSetMacro(FirstMeanDistanceThreshold,MeanDistanceThresholdType);
+  itkGetMacro(SecondMeanDistanceThreshold,MeanDistanceThresholdType);
+  itkSetMacro(SecondMeanDistanceThreshold,MeanDistanceThresholdType);
+ 
+  /** Get/Set the angular threshold (use by LinkPathFilter)*/
+  itkSetMacro(AngularThreshold,LinkRealType);
+  itkGetMacro(AngularThreshold,LinkRealType);
+  /** Get/Set the distance threshold (use by LinkPathFilter)*/
+  itkSetMacro(DistanceThreshold,LinkRealType);
+  itkGetMacro(DistanceThreshold,LinkRealType);
   
   
   protected:
@@ -181,6 +196,7 @@ template <class TInputImage, class TOutputPath>
     typename RemoveTortuousPathFilterType::Pointer              m_FirstRemoveTortuousPathFilter;
     typename RemoveTortuousPathFilterType::Pointer              m_SecondRemoveTortuousPathFilter;
     typename LinkPathFilterType::Pointer                    	m_LinkPathFilter;
+    typename LikehoodPathFilterType::Pointer 					m_LikehoodPathFilter;
 
 
   /** The reference pixel (use by the SpectralAngleDistanceImageFilter)*/
@@ -194,7 +210,12 @@ template <class TInputImage, class TOutputPath>
   /** Max angle (use bye the BreakAngularPathListFilter)*/
   MaxAngleType m_MaxAngle;
   /** Tolerance for segment consistency (tolerance in terms of distance) (use by RemoveTortuousPathFilter)*/
-  MeanDistanceThresholdType m_MeanDistanceThreshold;
+  MeanDistanceThresholdType m_FirstMeanDistanceThreshold;
+  MeanDistanceThresholdType m_SecondMeanDistanceThreshold;
+  /** The angular threshold (use by LinkPathFilter) */
+  LinkRealType m_AngularThreshold;
+  /** The distance threshold (use by LinkPathFilter) */
+  LinkRealType m_DistanceThreshold;
 
   };
 

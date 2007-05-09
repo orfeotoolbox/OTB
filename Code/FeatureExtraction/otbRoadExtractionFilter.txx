@@ -48,7 +48,7 @@ RoadExtractionFilter<TInputImage, TOutputPath>
         m_FirstRemoveTortuousPathFilter = RemoveTortuousPathFilterType::New();
         m_SecondRemoveTortuousPathFilter = RemoveTortuousPathFilterType::New();
         m_LinkPathFilter = LinkPathFilterType::New();
-
+        m_LikehoodPathFilter = LikehoodPathFilterType::New();
 
 }
 
@@ -99,18 +99,24 @@ RoadExtractionFilter<TInputImage, TOutputPath>
   m_BreakAngularPathListFilter->SetMaxAngle(m_MaxAngle);
   
   m_FirstRemoveTortuousPathFilter->SetInput(m_BreakAngularPathListFilter->GetOutput());
-  m_FirstRemoveTortuousPathFilter->SetMeanDistanceThreshold(m_MeanDistanceThreshold);
+  m_FirstRemoveTortuousPathFilter->SetMeanDistanceThreshold(m_FirstMeanDistanceThreshold);
   
   m_LinkPathFilter->SetInput(m_FirstRemoveTortuousPathFilter->GetOutput());
+  m_LinkPathFilter->SetAngularThreshold(m_AngularThreshold);
+  m_LinkPathFilter->SetDistanceThreshold(m_DistanceThreshold);
  
   m_SecondSimplifyPathFilter->SetInput(m_LinkPathFilter->GetOutput());
   m_SecondSimplifyPathFilter->SetTolerance(m_Tolerance);
  
   m_SecondRemoveTortuousPathFilter->SetInput(m_SecondSimplifyPathFilter->GetOutput());
+  m_SecondRemoveTortuousPathFilter->SetMeanDistanceThreshold(m_SecondMeanDistanceThreshold);
 
-  m_SecondRemoveTortuousPathFilter->GraftOutput(this->GetOutput());
-  m_SecondRemoveTortuousPathFilter->Update();
-  this->GraftOutput(m_SecondRemoveTortuousPathFilter->GetOutput());
+  m_LikehoodPathFilter->SetInput(m_SecondRemoveTortuousPathFilter->GetOutput());
+  m_LikehoodPathFilter->SetInputImage(m_NonMaxRemovalByDirectionFilter->GetOutput());
+  
+  m_LikehoodPathFilter->GraftOutput(this->GetOutput());
+  m_LikehoodPathFilter->Update();
+  this->GraftOutput(m_LikehoodPathFilter->GetOutput());
 
 }
 /**
@@ -127,7 +133,10 @@ RoadExtractionFilter<TInputImage, TOutputPath>
   os << indent << "m_AmplitudeThreshold: "<< m_AmplitudeThreshold << std::endl;
   os << indent << "m_Tolerance: "<< m_Tolerance << std::endl;
   os << indent << "m_MaxAngle: "<< m_MaxAngle << std::endl;
-  os << indent << "m_MeanDistanceThreshold: "<< m_MeanDistanceThreshold << std::endl;
+  os << indent << "m_FirstMeanDistanceThreshold: "<< m_FirstMeanDistanceThreshold << std::endl;
+  os << indent << "m_SecondMeanDistanceThreshold: "<< m_SecondMeanDistanceThreshold << std::endl;
+  os << indent << "m_DistanceThreshold: "<<m_DistanceThreshold<< std::endl;
+  os << indent << "m_AngularThreshold: "<<m_AngularThreshold<< std::endl;
 
 }
 } // End namespace otb

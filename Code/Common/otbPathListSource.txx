@@ -55,7 +55,7 @@ void
 PathListSource<TOutputPath>
 ::GraftNthOutput(unsigned int idx, OutputPathListType *graft)
 {
-  if (idx < this->GetNumberOfOutputs())
+/*  if (idx < this->GetNumberOfOutputs())
     {
     OutputPathListType * output = this->GetOutput(idx);
 
@@ -65,6 +65,24 @@ PathListSource<TOutputPath>
       itkWarningMacro( << "Warning:  GraftNthOutput() is broken" );
       }
     }
+*/
+  if ( idx >= this->GetNumberOfOutputs() )
+    {
+    itkExceptionMacro(<<"Requested to graft output " << idx <<
+        " but this filter only has " << this->GetNumberOfOutputs() << " Outputs.");
+    }
+
+  if ( !graft )
+    {
+    itkExceptionMacro(<<"Requested to graft output that is a NULL pointer" );
+    }
+
+  OutputPathListType * output = this->GetOutput( idx );
+
+  // Call Graft on the Mesh in order to copy meta-information, and containers.
+//  output->Graft( graft );
+  output = graft;
+  
 }
 
 /**
