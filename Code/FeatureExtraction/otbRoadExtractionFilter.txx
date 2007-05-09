@@ -25,8 +25,6 @@
 
 namespace otb
 {
-namespace MorphologicalPyramid
-{
 /**
  * Constructor
  */
@@ -132,6 +130,5 @@ RoadExtractionFilter<TInputImage, TOutputPath>
   os << indent << "m_MeanDistanceThreshold: "<< m_MeanDistanceThreshold << std::endl;
 
 }
-} // End namespace MorphologicalPyramid
 } // End namespace otb
 #endif
