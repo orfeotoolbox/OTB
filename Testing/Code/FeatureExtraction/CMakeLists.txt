@@ -481,7 +481,7 @@ ADD_TEST(feTvNeighborhoodScalarProductFilter ${FEATUREEXTRACTION_TESTS}
         ${INPUTDATA}/InputForRoadDetection_SpectralAngle.hdr
         ${TEMP}/feTvNeigborhoodScalarProductModulusOutput.hdr
 	${TEMP}/feTvNeigborhoodScalarProductDirectionOutput.hdr
-        2.0
+        1.0
         )
 
 # -------            otb::RemoveIsolatedByDirectionFilter   -------------
@@ -555,7 +555,7 @@ ADD_TEST(feTvVectorizationPathListFilterImageOutput ${FEATUREEXTRACTION_TESTS}
        ${INPUTDATA}/InputForRoadDetectionScalarProductDir.hdr
        ${TEMP}/feTvVectorizationPathListOutput.txt
        ${TEMP}/feTvVectorizationPathListOutput.png
-       0.0005
+       0.0001
         )
 
 # -------            otb::SimplifyPathFilter   -------------

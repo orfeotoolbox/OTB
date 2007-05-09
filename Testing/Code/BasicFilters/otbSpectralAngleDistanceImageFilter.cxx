@@ -42,13 +42,16 @@ int otbSpectralAngleDistanceImageFilter(int argc, char * argv[])
       reader->SetFileName(argv[1]);
       writer->SetFileName(argv[2]);
       
-      InputImageType::IndexType refPixelIndex;
-      refPixelIndex[0]=atoi(argv[3]);
-      refPixelIndex[1]=atoi(argv[4]);
+      InputImageType::PixelType refPixel;
       
       reader->Update();
+      refPixel.SetSize(reader->GetOutput()->GetNumberOfComponentsPerPixel());
+      for(unsigned int i = 0; i<reader->GetOutput()->GetNumberOfComponentsPerPixel();++i)
+	{
+	  refPixel[i]=atoi(argv[3+i]);
+	}
       filter->SetInput(reader->GetOutput());
-      filter->SetReferencePixel(reader->GetOutput()->GetPixel(refPixelIndex));
+      filter->SetReferencePixel(refPixel);
 
       writer->SetInput(filter->GetOutput());
 

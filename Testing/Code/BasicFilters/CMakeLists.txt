@@ -209,9 +209,9 @@ ADD_TEST(bfTvStreamingShrinkImageFilterQBMUL ${BASICFILTERS_TESTS}
 		    ${BASELINE}/bfTvSpectralAngleDistanceOutput.hdr
 		    ${TEMP}/bfTvSpectralAngleDistanceOutput.hdr
 		    otbSpectralAngleDistanceImageFilter
-		    ${INPUTDATA}/InputForRoadDetection.tif
+		    ${INPUTDATA}/qb_RoadExtract.img.hdr
 	            ${TEMP}/bfTvSpectralAngleDistanceOutput.hdr
-		    232 198
+		    337 557 432 859
 )
 
 # A enrichir
