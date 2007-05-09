@@ -25,10 +25,11 @@ PURPOSE.  See the above copyright notices for more information.
 namespace otb
 {
 /** \class PolyLineParametricPathWithValue
- *  \brief 
- *
- * \ingroup 
- * \ingroup
+ *  \brief This class implement a PolyLineParametricPath for which a value can be set.
+ * The value is stored in the itk::MetaDataDictionary.
+ * The precision of the value can be set.
+ * 
+ * \sa itk::PolyLineParametricPath.
  */
 template < class TValue,unsigned int VDimension=2>
 class ITK_EXPORT PolyLineParametricPathWithValue
@@ -60,16 +61,17 @@ class ITK_EXPORT PolyLineParametricPathWithValue
 
  ValueType GetValue(void)
  {
+    ValueType resp;
    itk::MetaDataDictionary & dict = this->GetMetaDataDictionary();
    if(dict.HasKey(m_Key))
    {
-     ValueType resp;
      itk::ExposeMetaData<ValueType>(dict,m_Key,resp);
    }
    else
    {
      itkGenericExceptionMacro(<<"Key "<<m_Key<<" not found in metadata dictionary !");
    }
+   return resp;
  }
 
 protected:

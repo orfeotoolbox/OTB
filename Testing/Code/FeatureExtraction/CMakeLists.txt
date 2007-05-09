@@ -576,9 +576,6 @@ ADD_TEST(feTvSimplifyPathFilter ${FEATUREEXTRACTION_TESTS}
          1 1   5  1  7  1  11  1  21 11  31 11 41 11 58 11 70 11
         )
 
-
-
-
 # -------            otb::BreakAngularPathListFilter   -------------
 
 ADD_TEST(feTuBreakAngularPathListFilterNew ${FEATUREEXTRACTION_TESTS} 
@@ -643,6 +640,24 @@ ADD_TEST(feTvLinkPathFilter ${FEATUREEXTRACTION_TESTS}
 	  11 131  11 101 |
 	  11 171  11 141 
         )
+
+# -------            otb::LikehoodPathFilter   -------------
+
+ADD_TEST(feTuLikehoodPathFilterNew ${FEATUREEXTRACTION_TESTS} 
+         otbLikehoodPathFilterNew) 
+
+ADD_TEST(feTvLikehoodPathFilter ${FEATUREEXTRACTION_TESTS}  
+--compare-ascii ${EPS}  
+		${BASELINE_FILES}/feTvLikehoodPathOutput.txt
+		${TEMP}/feTvLikehoodPathOutput.txt
+        otbLikehoodPathFilter
+	${INPUTDATA}/InputForRoadDetection_NonMaxRem.hdr
+	${TEMP}/feTvLikehoodPathOutput.txt
+	157 335 204 376 |
+	21 305 35 308 77 354 85 358 |
+	73 160 126 173 
+        )
+
 
 # -------            otb::RoadExtractionFilter   -------------
 
@@ -733,6 +748,8 @@ otbRemoveTortuousPathFilterNew.cxx
 otbRemoveTortuousPathFilter.cxx
 otbLinkPathFilterNew.cxx
 otbLinkPathFilter.cxx
+otbLikehoodPathFilterNew.cxx
+otbLikehoodPathFilter.cxx
 otbRoadExtractionFilterNew.cxx
 otbRoadExtractionFilter.cxx
 )
