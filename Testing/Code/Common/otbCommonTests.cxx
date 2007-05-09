@@ -70,6 +70,7 @@ REGISTER_TEST(otbDrawPathListFilterNew);
 REGISTER_TEST(otbDrawPathListFilter);
 REGISTER_TEST(otbDrawPathListFilterWithValue);
 REGISTER_TEST(otbPolyLineParametricPathWithValueNew);
+REGISTER_TEST(otbPolyLineImageIterator);
 REGISTER_TEST(otbDrawPathFilterNew);
 REGISTER_TEST(otbDrawPathFilter);
 }

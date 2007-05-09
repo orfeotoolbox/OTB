@@ -303,6 +303,7 @@ ADD_TEST(coTvImageToVectorImageCastFilter ${COMMON_TESTS}
 		${INPUTDATA}/poupees.hdr
 		${TEMP}/coVectorImageAdaptorOutput.hdr
 )
+
 # -------            otb::ImageToPathFilterNew  -------------------------------------------
 ADD_TEST(coTuImageToPathFilterNew ${COMMON_TESTS} 
          otbImageToPathFilterNew)  
@@ -326,6 +327,19 @@ ADD_TEST(coTuPathListToPathListFilterNew ${COMMON_TESTS}
 # -------  otb::PolyLineParametricPathWithValue -------------------------------------------
 ADD_TEST(coTuPolyLineParametricPathWithValueNew ${COMMON_TESTS} 
          otbPolyLineParametricPathWithValueNew)  
+
+
+#-------- otb::PolyLineImageIterator -----------------------------------------
+
+ ADD_TEST(coTuPolyLineImageIterator ${COMMON_TESTS} 
+--compare-image ${TOL}
+		${BASELINE}/coTvPolyLineImageIterator.png
+		${TEMP}/coTvPolyLineImageIterator.png
+         otbPolyLineImageIterator
+		512 512 20
+		${TEMP}/coTvPolyLineImageIterator.png
+)
+
 
 # -------  otb::DrawPathListFilter -------------------------------------------
 
@@ -407,6 +421,7 @@ otbSpatialObjectSourceNew.cxx
 otbLineSpatialObjectNew.cxx
 otbArcSpatialObjectNew.cxx
 otbPathListToPathListFilterNew.cxx
+otbPolyLineImageIterator.cxx
 otbDrawPathFilterNew.cxx
 otbDrawPathFilter.cxx
 otbDrawPathListFilterNew.cxx
