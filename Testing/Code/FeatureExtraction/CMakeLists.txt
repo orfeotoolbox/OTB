@@ -620,6 +620,7 @@ ADD_TEST(feTvRemoveTortuousPathFilter ${FEATUREEXTRACTION_TESTS}
 ADD_TEST(feTuLinkPathFilterNew ${FEATUREEXTRACTION_TESTS} 
          otbLinkPathFilterNew) 
 
+
 ADD_TEST(feTvLinkPathFilter ${FEATUREEXTRACTION_TESTS}  
 --compare-ascii ${EPS}  
 		${BASELINE_FILES}/feTvLinkPathOutput.txt
@@ -666,14 +667,17 @@ ADD_TEST(feTuRoadExtractionFilterNew ${FEATUREEXTRACTION_TESTS}
 
 ADD_TEST(feTvRoadExtractionFilter ${FEATUREEXTRACTION_TESTS} 
          otbRoadExtractionFilter
-		 ${INPUTDATA}/InputForRoadDetection_IsolatedRem.tif
-         232 198  # ReferencePixel
+		 ${INPUTDATA}/qb_RoadExtract.img.hdr
+         ${TEMP}/feTvOutputRoadDetection.hdr
+         337 557 432 859  # ReferencePixel
          3.0      # Sigma
          0.0005   # AmplitudeThreshold
          1.0      # Tolerance
          22.5     # (degre) MaxAngle (3.14159265358979323846/8.)
-         1.0      # MeanDistanceThreshold 
-         ${TEMP}/feTvOutputRoadDetection.tif
+         1.0      # FirstMeanDistanceThreshold 
+         1.0      # SecondMeanDistanceThreshold 
+         12.	  # DistanceThreshold for LinkPathFiler
+         22.5	  # AngularThreshold for LinkPathFiler
          ) 
 
          
