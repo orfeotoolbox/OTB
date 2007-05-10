@@ -20,8 +20,7 @@
 
 #include "otbRoadExtractionFilter.h"
 
-
-
+#include "vcl_cmath.h"
 
 namespace otb
 {
@@ -42,13 +41,53 @@ RoadExtractionFilter<TInputImage, TOutputPath>
         m_RemoveWrongDirectionFilter = RemoveWrongDirectionFilterType::New();
         m_NonMaxRemovalByDirectionFilter = NonMaxRemovalByDirectionFilterType::New();
         m_VectorizationPathListFilter = VectorizationPathListFilterType::New();
-        m_FirstSimplifyPathFilter = SimplifyPathFilterType::New();
-        m_SecondSimplifyPathFilter = SimplifyPathFilterType::New();
+        m_FirstSimplifyPathListFilter = SimplifyPathListFilterType::New();
+        m_SecondSimplifyPathListFilter = SimplifyPathListFilterType::New();
         m_BreakAngularPathListFilter = BreakAngularPathListFilterType::New();
-        m_FirstRemoveTortuousPathFilter = RemoveTortuousPathFilterType::New();
-        m_SecondRemoveTortuousPathFilter = RemoveTortuousPathFilterType::New();
-        m_LinkPathFilter = LinkPathFilterType::New();
-        m_LikehoodPathFilter = LikehoodPathFilterType::New();
+        m_FirstRemoveTortuousPathListFilter = RemoveTortuousPathListFilterType::New();
+        m_SecondRemoveTortuousPathListFilter = RemoveTortuousPathListFilterType::New();
+        m_LinkPathListFilter = LinkPathListFilterType::New();
+        m_LikehoodPathListFilter = LikehoodPathListFilterType::New();
+        
+        /** Amplitude threshold to start following a path (use by the VectorizationPathListFilter)*/
+        m_AmplitudeThreshold = static_cast<AmplitudeThresholdType>(1.);
+        /** Tolerance for segment consistency (tolerance in terms of distance) (use by the SimplifyPathFilter)*/
+        m_Tolerance = static_cast<ToleranceType>(1.);
+        /** Max angle (use bye the BreakAngularPathListFilter)*/
+        m_MaxAngle = static_cast<MaxAngleType>(M_PI/8.);
+        /** Tolerance for segment consistency (tolerance in terms of distance) (use by RemoveTortuousPathFilter)*/
+        m_FirstMeanDistanceThreshold = static_cast<MeanDistanceThresholdType>(1.);
+        m_SecondMeanDistanceThreshold = static_cast<MeanDistanceThresholdType>(10.);
+        /** The angular threshold (use by LinkPathFilter) */
+        m_AngularThreshold = static_cast<LinkRealType>(M_PI/8.);
+
+        /** The distance threshold (use by LinkPathFilter) */
+        m_DistanceThreshold = 25.;
+
+        /** Alpha value */
+        /** Use to calculate the sigma value use by the GradientRecursiveGaussianImageFilter */
+        m_Alpha = 0.;
+        
+        /** Resolution of the image */
+        m_Resolution = 1.;
+}
+/**
+ * Prepare main computation method
+ */
+template <class TInputImage,class TOutputPath>
+void
+RoadExtractionFilter<TInputImage, TOutputPath>
+::BeforeGenerateData()
+{
+  /** Calculation of resolution value */
+  typename InputImageType::SpacingType spacing = this->GetInput()->GetSpacing();
+  // Getting x Spacing for the resolution
+  m_Resolution = static_cast<double>(spacing[0]);
+  if( m_Resolution == 0. )
+  {
+        itkWarningMacro(<< "The image spacing is zero. So the resolution used in the filter is forced to 1.");
+        m_Resolution = 1.;
+  }
 
 }
 
@@ -68,14 +107,13 @@ RoadExtractionFilter<TInputImage, TOutputPath>
   //// Algorithm for extract roads //////
   ///////////////////////////////////////
 
-  // Pipeline connection
-  
   // 
   m_SpectralAngleDistanceImageFilter->SetInput(inputImage);
   m_SpectralAngleDistanceImageFilter->SetReferencePixel(m_ReferencePixel);
   
   m_GradientFilter->SetInput(m_SpectralAngleDistanceImageFilter->GetOutput());
-  m_GradientFilter->SetSigma(m_Sigma);
+  /** Sigma calculated with the alpha and image resolution parameters */
+  m_GradientFilter->SetSigma(static_cast<SigmaType>(m_Alpha * (1.2/m_Resolution + 1.) ));
   
   m_NeighborhoodScalarProductFilter->SetInput(m_GradientFilter->GetOutput());
   
@@ -92,31 +130,31 @@ RoadExtractionFilter<TInputImage, TOutputPath>
   m_VectorizationPathListFilter->SetInputDirection(m_NeighborhoodScalarProductFilter->GetOutputDirection());
   m_VectorizationPathListFilter->SetAmplitudeThreshold(m_AmplitudeThreshold);
   
-  m_FirstSimplifyPathFilter->SetInput(m_VectorizationPathListFilter->GetOutput());
-  m_FirstSimplifyPathFilter->SetTolerance(m_Tolerance);
+  m_FirstSimplifyPathListFilter->SetInput(m_VectorizationPathListFilter->GetOutput());
+  m_FirstSimplifyPathListFilter->SetTolerance(m_Tolerance);
   
-  m_BreakAngularPathListFilter->SetInput(m_FirstSimplifyPathFilter->GetOutput());
+  m_BreakAngularPathListFilter->SetInput(m_FirstSimplifyPathListFilter->GetOutput());
   m_BreakAngularPathListFilter->SetMaxAngle(m_MaxAngle);
   
-  m_FirstRemoveTortuousPathFilter->SetInput(m_BreakAngularPathListFilter->GetOutput());
-  m_FirstRemoveTortuousPathFilter->SetMeanDistanceThreshold(m_FirstMeanDistanceThreshold);
+  m_FirstRemoveTortuousPathListFilter->SetInput(m_BreakAngularPathListFilter->GetOutput());
+  m_FirstRemoveTortuousPathListFilter->SetMeanDistanceThreshold(m_FirstMeanDistanceThreshold);
   
-  m_LinkPathFilter->SetInput(m_FirstRemoveTortuousPathFilter->GetOutput());
-  m_LinkPathFilter->SetAngularThreshold(m_AngularThreshold);
-  m_LinkPathFilter->SetDistanceThreshold(m_DistanceThreshold);
+  m_LinkPathListFilter->SetInput(m_FirstRemoveTortuousPathListFilter->GetOutput());
+  m_LinkPathListFilter->SetAngularThreshold(m_AngularThreshold);
+  m_LinkPathListFilter->SetDistanceThreshold( static_cast<LinkRealType>(m_DistanceThreshold/m_Resolution) );
  
-  m_SecondSimplifyPathFilter->SetInput(m_LinkPathFilter->GetOutput());
-  m_SecondSimplifyPathFilter->SetTolerance(m_Tolerance);
+  m_SecondSimplifyPathListFilter->SetInput(m_LinkPathListFilter->GetOutput());
+  m_SecondSimplifyPathListFilter->SetTolerance(m_Tolerance);
  
-  m_SecondRemoveTortuousPathFilter->SetInput(m_SecondSimplifyPathFilter->GetOutput());
-  m_SecondRemoveTortuousPathFilter->SetMeanDistanceThreshold(m_SecondMeanDistanceThreshold);
+  m_SecondRemoveTortuousPathListFilter->SetInput(m_SecondSimplifyPathListFilter->GetOutput());
+  m_SecondRemoveTortuousPathListFilter->SetMeanDistanceThreshold(m_SecondMeanDistanceThreshold);
 
-  m_LikehoodPathFilter->SetInput(m_SecondRemoveTortuousPathFilter->GetOutput());
-  m_LikehoodPathFilter->SetInputImage(m_NonMaxRemovalByDirectionFilter->GetOutput());
+  m_LikehoodPathListFilter->SetInput(m_SecondRemoveTortuousPathListFilter->GetOutput());
+  m_LikehoodPathListFilter->SetInputImage(m_NonMaxRemovalByDirectionFilter->GetOutput());
   
-  m_LikehoodPathFilter->GraftOutput(this->GetOutput());
-  m_LikehoodPathFilter->Update();
-  this->GraftOutput(m_LikehoodPathFilter->GetOutput());
+  m_LikehoodPathListFilter->GraftOutput(this->GetOutput());
+  m_LikehoodPathListFilter->Update();
+  this->GraftOutput(m_LikehoodPathListFilter->GetOutput());
 
 }
 /**
@@ -128,8 +166,9 @@ RoadExtractionFilter<TInputImage, TOutputPath>
 ::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   Superclass::PrintSelf(os,indent);
+  os << indent << "m_Alpha:"<< m_Alpha << std::endl;
+  os << indent << "m_Resolution:"<< m_Resolution << std::endl;
   os << indent << "m_ReferencePixel: "<< m_ReferencePixel << std::endl;
-  os << indent << "m_Sigma: "<< m_Sigma << std::endl;
   os << indent << "m_AmplitudeThreshold: "<< m_AmplitudeThreshold << std::endl;
   os << indent << "m_Tolerance: "<< m_Tolerance << std::endl;
   os << indent << "m_MaxAngle: "<< m_MaxAngle << std::endl;

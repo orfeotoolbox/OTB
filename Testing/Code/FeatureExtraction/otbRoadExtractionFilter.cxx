@@ -57,7 +57,7 @@ int otbRoadExtractionFilter(int argc, char * argv[])
 	  ReferencePixel.SetElement(1,::atof(argv[4]));
 	  ReferencePixel.SetElement(2,::atof(argv[5]));
 	  ReferencePixel.SetElement(3,::atof(argv[6]));
-      const double Sigma = ::atof(argv[7]);
+      const double Alpha = ::atof(argv[7]);
       const double AmplitudeThreshold = ::atof(argv[8]);
       const double Tolerance = ::atof(argv[9]);
       const double MaxAngle = ((vcl_acos(-1.)*::atof(argv[10]))/180.);
@@ -77,7 +77,7 @@ int otbRoadExtractionFilter(int argc, char * argv[])
       
       roadExtraction->SetInput(reader->GetOutput());
       roadExtraction->SetReferencePixel(ReferencePixel);
-      roadExtraction->SetSigma(Sigma);
+      roadExtraction->SetAlpha(Alpha);
       roadExtraction->SetAmplitudeThreshold(AmplitudeThreshold);
       roadExtraction->SetTolerance(Tolerance);
       roadExtraction->SetMaxAngle(MaxAngle);
