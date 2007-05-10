@@ -17,19 +17,19 @@
 =========================================================================*/
 #include "itkExceptionObject.h"
 
-#include "otbSimplifyPathFilter.h"
+#include "otbSimplifyPathListFilter.h"
 #include "itkPolyLineParametricPath.h"
 
-int otbSimplifyPathFilterNew(int argc, char * argv[])
+int otbSimplifyPathListFilterNew(int argc, char * argv[])
 {
   try
     {
       const unsigned int Dimension =2;
       typedef itk::PolyLineParametricPath<Dimension> PathType;
-      typedef otb::SimplifyPathFilter<PathType> SimplifyPathFilterType;
+      typedef otb::SimplifyPathListFilter<PathType> SimplifyPathListFilterType;
       
       // Instantiating object
-      SimplifyPathFilterType::Pointer object = SimplifyPathFilterType::New();
+      SimplifyPathListFilterType::Pointer object = SimplifyPathListFilterType::New();
     }
 
   catch( itk::ExceptionObject & err ) 

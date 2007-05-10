@@ -17,11 +17,11 @@
 =========================================================================*/
 #include "itkExceptionObject.h"
 
-#include "otbSimplifyPathFilter.h"
+#include "otbSimplifyPathListFilter.h"
 #include "itkPolyLineParametricPath.h"
 #include <fstream>
 
-int otbSimplifyPathFilter(int argc, char * argv[])
+int otbSimplifyPathListFilter(int argc, char * argv[])
 {
   try
     {
@@ -57,8 +57,8 @@ int otbSimplifyPathFilter(int argc, char * argv[])
            
       const unsigned int Dimension = 2;
       typedef itk::PolyLineParametricPath<Dimension> PathType;
-      typedef otb::SimplifyPathFilter<PathType> SimplifyPathFilterType;
-      typedef SimplifyPathFilterType::PathListType PathListType;
+      typedef otb::SimplifyPathListFilter<PathType> SimplifyPathListFilterType;
+      typedef SimplifyPathListFilterType::PathListType PathListType;
       PathType::ContinuousIndexType cindex;
       
       
@@ -81,7 +81,7 @@ int otbSimplifyPathFilter(int argc, char * argv[])
                 InputPathList->PushBack(path);
         }
       // Instantiating object
-      SimplifyPathFilterType::Pointer simplifyFilter = SimplifyPathFilterType::New();
+      SimplifyPathListFilterType::Pointer simplifyFilter = SimplifyPathListFilterType::New();
 
       simplifyFilter->SetInput(InputPathList);
       simplifyFilter->SetTolerance(tolerance);

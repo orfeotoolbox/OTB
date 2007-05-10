@@ -17,13 +17,13 @@
 =========================================================================*/
 #include "itkExceptionObject.h"
 
-#include "otbLikehoodPathFilter.h"
+#include "otbLikehoodPathListFilter.h"
 #include "otbPolyLineParametricPathWithValue.h"
 #include "otbImage.h"
 #include "otbImageFileReader.h"
 #include <fstream>
 
-int otbLikehoodPathFilter(int argc, char * argv[])
+int otbLikehoodPathListFilter(int argc, char * argv[])
 {
   
   std::cout<<std::endl;
@@ -65,8 +65,8 @@ int otbLikehoodPathFilter(int argc, char * argv[])
       typedef otb::Image<PixelType,Dimension> ImageType;
       typedef otb::ImageFileReader<ImageType> ReaderType;
       typedef otb::PolyLineParametricPathWithValue<double,Dimension> PathType;
-      typedef otb::LikehoodPathFilter<PathType,ImageType> LikehoodPathFilterType;
-      typedef LikehoodPathFilterType::PathListType PathListType;
+      typedef otb::LikehoodPathListFilter<PathType,ImageType> LikehoodPathListFilterType;
+      typedef LikehoodPathListFilterType::PathListType PathListType;
       PathType::ContinuousIndexType cindex;
       
       
@@ -90,7 +90,7 @@ int otbLikehoodPathFilter(int argc, char * argv[])
         }
 
 	//Instantiating object
-      LikehoodPathFilterType::Pointer filter = LikehoodPathFilterType::New();
+      LikehoodPathListFilterType::Pointer filter = LikehoodPathListFilterType::New();
       ReaderType::Pointer reader = ReaderType::New();
       reader->SetFileName(infname);
       reader->Update();

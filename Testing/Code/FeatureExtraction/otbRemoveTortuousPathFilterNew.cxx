@@ -17,19 +17,19 @@
 =========================================================================*/
 #include "itkExceptionObject.h"
 
-#include "otbRemoveTortuousPathFilter.h"
+#include "otbRemoveTortuousPathListFilter.h"
 #include "itkPolyLineParametricPath.h"
 
-int otbRemoveTortuousPathFilterNew(int argc, char * argv[])
+int otbRemoveTortuousPathListFilterNew(int argc, char * argv[])
 {
   try
     {
       const unsigned int Dimension =2;
       typedef itk::PolyLineParametricPath<Dimension> PathType;
-      typedef otb::RemoveTortuousPathFilter<PathType> RemoveTortuousPathFilterType;
+      typedef otb::RemoveTortuousPathListFilter<PathType> RemoveTortuousPathListFilterType;
       
       // Instantiating object
-      RemoveTortuousPathFilterType::Pointer object = RemoveTortuousPathFilterType::New();
+      RemoveTortuousPathListFilterType::Pointer object = RemoveTortuousPathListFilterType::New();
     }
 
   catch( itk::ExceptionObject & err ) 

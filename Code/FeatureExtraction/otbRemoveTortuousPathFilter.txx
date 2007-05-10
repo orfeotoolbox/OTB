@@ -15,10 +15,10 @@ the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
 PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef _otbRemoveTortuousPathFilter_txx
-#define _otbRemoveTortuousPathFilter_txx
+#ifndef _otbRemoveTortuousPathListFilter_txx
+#define _otbRemoveTortuousPathListFilter_txx
 
-#include "otbRemoveTortuousPathFilter.h"
+#include "otbRemoveTortuousPathListFilter.h"
 #include "otbMacro.h"
 #include "vnl/vnl_math.h"
 
@@ -28,14 +28,14 @@ namespace otb
    * Constructor
    */
   template <class TPath>
-  RemoveTortuousPathFilter<TPath>
-  ::RemoveTortuousPathFilter()
+  RemoveTortuousPathListFilter<TPath>
+  ::RemoveTortuousPathListFilter()
   {
     m_MeanDistanceThreshold = 1.0;
   }
   template <class TPath>
   double 
-  RemoveTortuousPathFilter<TPath>
+  RemoveTortuousPathListFilter<TPath>
   ::ComputeMeanDistanceBetweenVertices(PathPointerType path)
   {
     double resp = 0.0;
@@ -58,7 +58,7 @@ namespace otb
   }
   template <class TPath>
   void
-  RemoveTortuousPathFilter<TPath>
+  RemoveTortuousPathListFilter<TPath>
   ::GenerateData(void)
   {
    // input/output wiring
@@ -84,7 +84,7 @@ namespace otb
    */
   template <class TPath>
   void
-  RemoveTortuousPathFilter<TPath>
+  RemoveTortuousPathListFilter<TPath>
   ::PrintSelf(std::ostream& os, itk::Indent indent) const
   {
     Superclass::PrintSelf(os, indent);

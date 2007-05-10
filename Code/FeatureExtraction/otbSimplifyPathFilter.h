@@ -15,14 +15,14 @@ the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
 PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef _otbSimplifyPathFilter_h
-#define _otbSimplifyPathFilter_h
+#ifndef _otbSimplifyPathListFilter_h
+#define _otbSimplifyPathListFilter_h
 
 #include "otbPathListToPathListFilter.h"
 
 namespace otb
 {
-/** \class SimplifyPathFilter
+/** \class SimplifyPathListFilter
  *  \brief This filter performs a simplification of the path in the input list.
  * 
  *  It reduces the number of vertices in each path, according to a tolerance criterion. It aims at 
@@ -43,12 +43,12 @@ namespace otb
  * \sa RemoveTortuousPathFilter.
  */
 template <class TPath>
-class ITK_EXPORT SimplifyPathFilter
+class ITK_EXPORT SimplifyPathListFilter
   : public PathListToPathListFilter<TPath>
 {
  public:
   /** Standard typedefs */
-  typedef SimplifyPathFilter                         Self;
+  typedef SimplifyPathListFilter                         Self;
   typedef PathListToPathListFilter<TPath> Superclass;
   typedef itk::SmartPointer<Self>                    Pointer;
   typedef itk::SmartPointer<const Self>              ConstPointer;
@@ -57,7 +57,7 @@ class ITK_EXPORT SimplifyPathFilter
   itkNewMacro(Self);
   
   /** Creation through object factory macro */
-  itkTypeMacro(SimplifyPathFilter, PathListToPathList);
+  itkTypeMacro(SimplifyPathListFilter, PathListToPathList);
   
   /** Derived typedefs */
   typedef typename Superclass::OutputPathType PathType;
@@ -79,9 +79,9 @@ class ITK_EXPORT SimplifyPathFilter
 
 protected:
   /** Constructor */
-  SimplifyPathFilter();
+  SimplifyPathListFilter();
   /** Destructor */
-  virtual ~SimplifyPathFilter() {};
+  virtual ~SimplifyPathListFilter() {};
  /**PrintSelf method */
   virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
   /** Main computation method */
@@ -95,7 +95,7 @@ protected:
    */
   virtual bool TestPathConsistency(VertexListConstPointerType vertexList, VertexListConstIteratorType begin, VertexListConstIteratorType end);
 private:
-  SimplifyPathFilter(const Self&); //purposely not implemented
+  SimplifyPathListFilter(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
 
   //// Tolerance for segment consistency (tolerance in terms of distance)
@@ -103,7 +103,7 @@ private:
 };
 }// End namespace otb
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbSimplifyPathFilter.txx"
+#include "otbSimplifyPathListFilter.txx"
 #endif
 
 #endif

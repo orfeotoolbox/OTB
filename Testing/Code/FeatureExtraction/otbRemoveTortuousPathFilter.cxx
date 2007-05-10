@@ -17,11 +17,11 @@
 =========================================================================*/
 #include "itkExceptionObject.h"
 
-#include "otbRemoveTortuousPathFilter.h"
+#include "otbRemoveTortuousPathListFilter.h"
 #include "itkPolyLineParametricPath.h"
 #include <fstream>
 
-int otbRemoveTortuousPathFilter(int argc, char * argv[])
+int otbRemoveTortuousPathListFilter(int argc, char * argv[])
 {
   try
     {
@@ -57,8 +57,8 @@ int otbRemoveTortuousPathFilter(int argc, char * argv[])
            
       const unsigned int Dimension = 2;
       typedef itk::PolyLineParametricPath<Dimension> PathType;
-      typedef otb::RemoveTortuousPathFilter<PathType> RemoveTortuousPathFilterType;
-      typedef RemoveTortuousPathFilterType::PathListType PathListType;
+      typedef otb::RemoveTortuousPathListFilter<PathType> RemoveTortuousPathListFilterType;
+      typedef RemoveTortuousPathListFilterType::PathListType PathListType;
       PathType::ContinuousIndexType cindex;
       
       
@@ -81,7 +81,7 @@ int otbRemoveTortuousPathFilter(int argc, char * argv[])
                 InputPathList->PushBack(path);
         }
       // Instantiating object
-      RemoveTortuousPathFilterType::Pointer filter = RemoveTortuousPathFilterType::New();
+      RemoveTortuousPathListFilterType::Pointer filter = RemoveTortuousPathListFilterType::New();
 
       filter->SetInput(InputPathList);
       filter->SetMeanDistanceThreshold(threshold);

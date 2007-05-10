@@ -15,10 +15,10 @@ the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
 PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef _otbSimplifyPathFilter_txx
-#define _otbSimplifyPathFilter_txx
+#ifndef _otbSimplifyPathListFilter_txx
+#define _otbSimplifyPathListFilter_txx
 
-#include "otbSimplifyPathFilter.h"
+#include "otbSimplifyPathListFilter.h"
 #include "otbMacro.h"
 #include "vnl/vnl_math.h"
 
@@ -28,8 +28,8 @@ namespace otb
    * Constructor
    */
   template <class TPath>
-  SimplifyPathFilter<TPath>
-  ::SimplifyPathFilter()
+  SimplifyPathListFilter<TPath>
+  ::SimplifyPathListFilter()
   {
     m_Tolerance = 1.0;
   }
@@ -42,7 +42,7 @@ namespace otb
    */
   template <class TPath>
   bool 
-  SimplifyPathFilter<TPath>
+  SimplifyPathListFilter<TPath>
   ::TestPathConsistency(VertexListConstPointerType vertexList, VertexListConstIteratorType begin, VertexListConstIteratorType end)
   {
     bool resp = true;
@@ -78,7 +78,7 @@ namespace otb
   }
   template <class TPath>
   void
-  SimplifyPathFilter<TPath>
+  SimplifyPathListFilter<TPath>
   ::GenerateData(void)
   {
     // input/output wiring
@@ -126,7 +126,7 @@ namespace otb
    */
   template <class TPath>
   void
-  SimplifyPathFilter<TPath>
+  SimplifyPathListFilter<TPath>
   ::PrintSelf(std::ostream& os, itk::Indent indent) const
   {
     Superclass::PrintSelf(os, indent);

@@ -15,24 +15,24 @@ the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
 PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef _otbLikehoodPathFilter_h
-#define _otbLikehoodPathFilter_h
+#ifndef _otbLikehoodPathListFilter_h
+#define _otbLikehoodPathListFilter_h
 
 #include "otbPathListToPathListFilter.h"
 #include "otbMacro.h"
 
 namespace otb
 {
-/** \class LikehoodPathFilter
+/** \class LikehoodPathListFilter
  *  \brief 
  */
 template <class TPath, class TImage>
-class ITK_EXPORT LikehoodPathFilter
+class ITK_EXPORT LikehoodPathListFilter
   : public PathListToPathListFilter<TPath>
 {
  public:
   /** Standard typedefs */
-  typedef LikehoodPathFilter                    Self;
+  typedef LikehoodPathListFilter                    Self;
   typedef PathListToPathListFilter<TPath>       Superclass;
   typedef itk::SmartPointer<Self>               Pointer;
   typedef itk::SmartPointer<const Self>         ConstPointer;
@@ -41,7 +41,7 @@ class ITK_EXPORT LikehoodPathFilter
   itkNewMacro(Self);
   
   /** Creation through object factory macro */
-  itkTypeMacro(LikehoodPathFilter, PathListToPathListFilter);
+  itkTypeMacro(LikehoodPathListFilter, PathListToPathListFilter);
   
   /** Template parameters typedefs */
   typedef typename Superclass::PathType         PathType;
@@ -72,23 +72,23 @@ class ITK_EXPORT LikehoodPathFilter
 
 protected:
   /** Constructor */
-  LikehoodPathFilter();
+  LikehoodPathListFilter();
   /** Destructor */
-  virtual ~LikehoodPathFilter() {};
+  virtual ~LikehoodPathListFilter() {};
   /** GenerateData method */
   virtual void GenerateData();
   /** PrintSelf method */
   virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
 private:
-  LikehoodPathFilter(const Self&); //purposely not implemented
+  LikehoodPathListFilter(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
 
   std::string m_Key;
 };
 }// End namespace otb
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbLikehoodPathFilter.txx"
+#include "otbLikehoodPathListFilter.txx"
 #endif
 
 #endif

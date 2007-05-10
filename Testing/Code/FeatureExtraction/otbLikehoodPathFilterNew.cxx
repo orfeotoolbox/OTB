@@ -17,11 +17,11 @@
 =========================================================================*/
 #include "itkExceptionObject.h"
 
-#include "otbLikehoodPathFilter.h"
+#include "otbLikehoodPathListFilter.h"
 #include "otbPolyLineParametricPathWithValue.h"
 #include "otbImage.h"
 
-int otbLikehoodPathFilterNew(int argc, char * argv[])
+int otbLikehoodPathListFilterNew(int argc, char * argv[])
 {
   try
     {
@@ -29,10 +29,10 @@ int otbLikehoodPathFilterNew(int argc, char * argv[])
       typedef double PixelType;
       typedef otb::Image<PixelType,Dimension> ImageType;
       typedef otb::PolyLineParametricPathWithValue<double,Dimension> PathType;
-      typedef otb::LikehoodPathFilter<PathType,ImageType> LinkPathFilterType;
+      typedef otb::LikehoodPathListFilter<PathType,ImageType> LinkPathListFilterType;
       
       // Instantiating object
-      LinkPathFilterType::Pointer object = LinkPathFilterType::New();
+      LinkPathListFilterType::Pointer object = LinkPathListFilterType::New();
     }
 
   catch( itk::ExceptionObject & err ) 

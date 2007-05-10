@@ -15,14 +15,14 @@ the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
 PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef _otbRemoveTortuousPathFilter_h
-#define _otbRemoveTortuousPathFilter_h
+#ifndef _otbRemoveTortuousPathListFilter_h
+#define _otbRemoveTortuousPathListFilter_h
 
 #include "otbPathListToPathListFilter.h"
 
 namespace otb
 {
-/** \class RemoveTortuousPathFilter
+/** \class RemoveTortuousPathListFilter
  *  \brief This filter remove path considered as tortuous.
  *
  *  A path is considered to be tortuous if the mean distance between each consecutive vertices
@@ -32,12 +32,12 @@ namespace otb
  * \sa SimplifyPathFilter
  */
 template <class TPath>
-class ITK_EXPORT RemoveTortuousPathFilter
+class ITK_EXPORT RemoveTortuousPathListFilter
   : public PathListToPathListFilter<TPath>
 {
  public:
   /** Standard typedefs */
-  typedef RemoveTortuousPathFilter                         Self;
+  typedef RemoveTortuousPathListFilter                         Self;
   typedef PathListToPathListFilter<TPath> Superclass;
   typedef itk::SmartPointer<Self>                    Pointer;
   typedef itk::SmartPointer<const Self>              ConstPointer;
@@ -46,7 +46,7 @@ class ITK_EXPORT RemoveTortuousPathFilter
   itkNewMacro(Self);
   
   /** Creation through object factory macro */
-  itkTypeMacro(RemoveTortuousPathFilter, PathListToPathList);
+  itkTypeMacro(RemoveTortuousPathListFilter, PathListToPathList);
   
   /** Derived typedefs */
   typedef typename Superclass::OutputPathType PathType;
@@ -69,9 +69,9 @@ class ITK_EXPORT RemoveTortuousPathFilter
 
 protected:
   /** Constructor */
-  RemoveTortuousPathFilter();
+  RemoveTortuousPathListFilter();
   /** Destructor */
-  virtual ~RemoveTortuousPathFilter() {};
+  virtual ~RemoveTortuousPathListFilter() {};
  /**PrintSelf method */
   virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
   /** Main computation method */
@@ -84,7 +84,7 @@ protected:
   virtual double ComputeMeanDistanceBetweenVertices(PathPointerType path);
 
  private:
-  RemoveTortuousPathFilter(const Self&); //purposely not implemented
+  RemoveTortuousPathListFilter(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
 
   //// Tolerance for segment consistency (tolerance in terms of distance)
@@ -92,7 +92,7 @@ protected:
 };
 }// End namespace otb
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbRemoveTortuousPathFilter.txx"
+#include "otbRemoveTortuousPathListFilter.txx"
 #endif
 
 #endif

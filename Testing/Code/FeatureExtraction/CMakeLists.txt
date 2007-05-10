@@ -560,14 +560,14 @@ ADD_TEST(feTvVectorizationPathListFilterImageOutput ${FEATUREEXTRACTION_TESTS}
 
 # -------            otb::SimplifyPathFilter   -------------
 
-ADD_TEST(feTuSimplifyPathFilterNew ${FEATUREEXTRACTION_TESTS} 
-         otbSimplifyPathFilterNew) 
+ADD_TEST(feTuSimplifyPathListFilterNew ${FEATUREEXTRACTION_TESTS} 
+         otbSimplifyPathListFilterNew) 
 
-ADD_TEST(feTvSimplifyPathFilter ${FEATUREEXTRACTION_TESTS}  
+ADD_TEST(feTvSimplifyPathListFilter ${FEATUREEXTRACTION_TESTS}  
 --compare-ascii ${EPS}  
 		${BASELINE_FILES}/feTvSimplifyPathOutput.txt
 		${TEMP}/feTvSimplifyPathOutput.txt
-        otbSimplifyPathFilter
+        otbSimplifyPathListFilter
 	${TEMP}/feTvSimplifyPathOutput.txt
          1.0
          1 1   5  1  7  1  11  1  21  1  31  1 |
@@ -597,16 +597,16 @@ ADD_TEST(feTvBreakAngularPathListFilter ${FEATUREEXTRACTION_TESTS}
          1 1  31 1 41 1  
          ) 
 
-# -------            otb::RemoveTortuousPathFilter   -------------
+# -------            otb::RemoveTortuousPathListFilter   -------------
 
-ADD_TEST(feTuRemoveTortuousPathFilterNew ${FEATUREEXTRACTION_TESTS} 
-         otbRemoveTortuousPathFilterNew) 
+ADD_TEST(feTuRemoveTortuousPathListFilterNew ${FEATUREEXTRACTION_TESTS} 
+         otbRemoveTortuousPathListFilterNew) 
 
-ADD_TEST(feTvRemoveTortuousPathFilter ${FEATUREEXTRACTION_TESTS}  
+ADD_TEST(feTvRemoveTortuousPathListFilter ${FEATUREEXTRACTION_TESTS}  
 --compare-ascii ${EPS}  
 		${BASELINE_FILES}/feTvRemoveTortuousPathOutput.txt
 		${TEMP}/feTvRemoveTortuousPathOutput.txt
-        otbRemoveTortuousPathFilter
+        otbRemoveTortuousPathListFilter
 	${TEMP}/feTvRemoveTortuousPathOutput.txt
          10.0
          1 1   1 11  | 
@@ -615,17 +615,17 @@ ADD_TEST(feTvRemoveTortuousPathFilter ${FEATUREEXTRACTION_TESTS}
          1 1   5  1  7  1  11  1  21 11  31 11 41 11 58 11 70 11
         )
 
-# -------            otb::LinkPathFilter   -------------
+# -------            otb::LinkPathListFilter   -------------
 
-ADD_TEST(feTuLinkPathFilterNew ${FEATUREEXTRACTION_TESTS} 
-         otbLinkPathFilterNew) 
+ADD_TEST(feTuLinkPathListFilterNew ${FEATUREEXTRACTION_TESTS} 
+         otbLinkPathListFilterNew) 
 
 
-ADD_TEST(feTvLinkPathFilter ${FEATUREEXTRACTION_TESTS}  
+ADD_TEST(feTvLinkPathListFilter ${FEATUREEXTRACTION_TESTS}  
 --compare-ascii ${EPS}  
 		${BASELINE_FILES}/feTvLinkPathOutput.txt
 		${TEMP}/feTvLinkPathOutput.txt
-        otbLinkPathFilter
+        otbLinkPathListFilter
 	${TEMP}/feTvLinkPathOutput.txt
          30  40
 	  1 1 51 1 |
@@ -642,16 +642,16 @@ ADD_TEST(feTvLinkPathFilter ${FEATUREEXTRACTION_TESTS}
 	  11 171  11 141 
         )
 
-# -------            otb::LikehoodPathFilter   -------------
+# -------            otb::LikehoodPathListFilter   -------------
 
-ADD_TEST(feTuLikehoodPathFilterNew ${FEATUREEXTRACTION_TESTS} 
-         otbLikehoodPathFilterNew) 
+ADD_TEST(feTuLikehoodPathListFilterNew ${FEATUREEXTRACTION_TESTS} 
+         otbLikehoodPathListFilterNew) 
 
-ADD_TEST(feTvLikehoodPathFilter ${FEATUREEXTRACTION_TESTS}  
+ADD_TEST(feTvLikehoodPathListFilter ${FEATUREEXTRACTION_TESTS}  
 --compare-ascii ${EPS}  
 		${BASELINE_FILES}/feTvLikehoodPathOutput.txt
 		${TEMP}/feTvLikehoodPathOutput.txt
-        otbLikehoodPathFilter
+        otbLikehoodPathListFilter
 	${INPUTDATA}/InputForRoadDetection_NonMaxRem.hdr
 	${TEMP}/feTvLikehoodPathOutput.txt
 	157 335 204 376 |
@@ -744,16 +744,16 @@ otbNonMaxRemovalByDirectionFilterNew.cxx
 otbNonMaxRemovalByDirectionFilter.cxx
 otbVectorizationPathListFilterNew.cxx
 otbVectorizationPathListFilter.cxx
-otbSimplifyPathFilterNew.cxx
-otbSimplifyPathFilter.cxx
+otbSimplifyPathListFilterNew.cxx
+otbSimplifyPathListFilter.cxx
 otbBreakAngularPathListFilterNew.cxx
 otbBreakAngularPathListFilter.cxx
-otbRemoveTortuousPathFilterNew.cxx
-otbRemoveTortuousPathFilter.cxx
-otbLinkPathFilterNew.cxx
-otbLinkPathFilter.cxx
-otbLikehoodPathFilterNew.cxx
-otbLikehoodPathFilter.cxx
+otbRemoveTortuousPathListFilterNew.cxx
+otbRemoveTortuousPathListFilter.cxx
+otbLinkPathListFilterNew.cxx
+otbLinkPathListFilter.cxx
+otbLikehoodPathListFilterNew.cxx
+otbLikehoodPathListFilter.cxx
 otbRoadExtractionFilterNew.cxx
 otbRoadExtractionFilter.cxx
 )

@@ -15,15 +15,15 @@ the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
 PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef _otbLinkPathFilter_h
-#define _otbLinkPathFilter_h
+#ifndef _otbLinkPathListFilter_h
+#define _otbLinkPathListFilter_h
 
 #include "otbPathListToPathListFilter.h"
 #include "otbMacro.h"
 
 namespace otb
 {
-/** \class LinkPathFilter
+/** \class LinkPathListFilter
  *  \brief This filters link path from the input path list according to distance and angular criterions.
  *  
  *  This filter examines both ends of each path to link and is able to link several path into one single path.
@@ -36,12 +36,12 @@ namespace otb
  *  This filter is part of the road extraction framework.
  */
 template <class TPath>
-class ITK_EXPORT LinkPathFilter
+class ITK_EXPORT LinkPathListFilter
   : public PathListToPathListFilter<TPath>
 {
  public:
   /** Standard typedefs */
-  typedef LinkPathFilter            Self;
+  typedef LinkPathListFilter            Self;
   typedef PathListToPathListFilter<TPath>       Superclass;
   typedef itk::SmartPointer<Self>               Pointer;
   typedef itk::SmartPointer<const Self>         ConstPointer;
@@ -50,7 +50,7 @@ class ITK_EXPORT LinkPathFilter
   itkNewMacro(Self);
   
   /** Creation through object factory macro */
-  itkTypeMacro(LinkPathFilter, PathListToPathListFilter);
+  itkTypeMacro(LinkPathListFilter, PathListToPathListFilter);
   
   /** Template parameters typedefs */
   typedef typename Superclass::PathType         PathType;
@@ -70,9 +70,9 @@ class ITK_EXPORT LinkPathFilter
 
 protected:
   /** Constructor */
-  LinkPathFilter();
+  LinkPathListFilter();
   /** Destructor */
-  virtual ~LinkPathFilter() {};
+  virtual ~LinkPathListFilter() {};
   /** GenerateData method */
   virtual void GenerateData();
   /** PrintSelf method */
@@ -99,7 +99,7 @@ protected:
   PathPointerType LinkPath(PathPointerType p1,bool revert1, PathPointerType p2, bool revert2);
 
 private:
-  LinkPathFilter(const Self&); //purposely not implemented
+  LinkPathListFilter(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
 
   RealType m_AngularThreshold;
@@ -108,7 +108,7 @@ private:
 };
 }// End namespace otb
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbLinkPathFilter.txx"
+#include "otbLinkPathListFilter.txx"
 #endif
 
 #endif

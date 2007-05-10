@@ -15,10 +15,10 @@ the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
 PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef _otbLikehoodPathFilter_txx
-#define _otbLikehoodPathFilter_txx
+#ifndef _otbLikehoodPathListFilter_txx
+#define _otbLikehoodPathListFilter_txx
 
-#include "otbLikehoodPathFilter.h"
+#include "otbLikehoodPathListFilter.h"
 #include "otbPolyLineImageConstIterator.h"
 #include "itkMetaDataObject.h"
 #include "otbMacro.h"
@@ -29,8 +29,8 @@ namespace otb
  * Constructor
  */
 template <class TPath, class TImage>
-LikehoodPathFilter<TPath, TImage>
-::LikehoodPathFilter()
+LikehoodPathListFilter<TPath, TImage>
+::LikehoodPathListFilter()
 {
   m_Key = "Value";
   this->SetNumberOfRequiredInputs(2);
@@ -38,15 +38,15 @@ LikehoodPathFilter<TPath, TImage>
 }
 template <class TPath, class TImage>
 void
-LikehoodPathFilter<TPath, TImage>
+LikehoodPathListFilter<TPath, TImage>
 ::SetInputImage(const ImageType * image)
 {
   this->itk::ProcessObject::SetNthInput(1,const_cast<ImageType *>(image));
 }
 template <class TPath, class TImage>
-const typename LikehoodPathFilter<TPath, TImage>
+const typename LikehoodPathListFilter<TPath, TImage>
 ::ImageType *
-LikehoodPathFilter<TPath, TImage>
+LikehoodPathListFilter<TPath, TImage>
 ::GetInputImage(void)
 {
   if(this->GetNumberOfInputs()<1)
@@ -58,7 +58,7 @@ LikehoodPathFilter<TPath, TImage>
 
 template <class TPath, class TImage>
 void
-LikehoodPathFilter<TPath, TImage>
+LikehoodPathListFilter<TPath, TImage>
 ::GenerateData()
 {
   // I/O wiring
@@ -88,7 +88,7 @@ LikehoodPathFilter<TPath, TImage>
  */
 template <class TPath, class TImage>
 void
-LikehoodPathFilter<TPath, TImage>
+LikehoodPathListFilter<TPath, TImage>
 ::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   Superclass::PrintSelf(os, indent);

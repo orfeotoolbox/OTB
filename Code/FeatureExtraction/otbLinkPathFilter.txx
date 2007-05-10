@@ -15,10 +15,10 @@ the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
 PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef _otbLinkPathFilter_txx
-#define _otbLinkPathFilter_txx
+#ifndef _otbLinkPathListFilter_txx
+#define _otbLinkPathListFilter_txx
 
-#include "otbLinkPathFilter.h"
+#include "otbLinkPathListFilter.h"
 #include "vcl_cmath.h" 
 
 namespace otb
@@ -27,8 +27,8 @@ namespace otb
  * Constructor
  */
 template <class TPath>
-LinkPathFilter<TPath>
-::LinkPathFilter()
+LinkPathListFilter<TPath>
+::LinkPathListFilter()
 {
   m_DistanceThreshold = 10.;
   m_AngularThreshold = 3.14;
@@ -36,7 +36,7 @@ LinkPathFilter<TPath>
 
 template <class TPath>
 void
-LinkPathFilter<TPath>
+LinkPathListFilter<TPath>
 ::GenerateData()
 {
   // IO
@@ -222,7 +222,7 @@ LinkPathFilter<TPath>
  **/
 template <class TPath>
 bool
-LinkPathFilter<TPath>
+LinkPathListFilter<TPath>
 ::VerifyAngularCondition(VertexType v1, VertexType v2, VertexType v3, VertexType v4)
 {
   double alpha1 = vcl_atan2((v2[1]-v1[1]),(v2[0]-v1[0]));
@@ -247,9 +247,9 @@ LinkPathFilter<TPath>
  * \return the linked path.
  */
 template <class TPath>
-typename LinkPathFilter<TPath>
+typename LinkPathListFilter<TPath>
 ::PathPointerType 
-LinkPathFilter<TPath>
+LinkPathListFilter<TPath>
 ::LinkPath(PathPointerType p1, bool revert1 , PathPointerType p2, bool revert2)
 {
   PathPointerType resp = PathType::New();
@@ -295,7 +295,7 @@ LinkPathFilter<TPath>
  */
 template <class TPath>
 void
-LinkPathFilter<TPath>
+LinkPathListFilter<TPath>
 ::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   Superclass::PrintSelf(os, indent);

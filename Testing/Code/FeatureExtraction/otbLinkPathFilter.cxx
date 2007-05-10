@@ -17,11 +17,11 @@
 =========================================================================*/
 #include "itkExceptionObject.h"
 
-#include "otbLinkPathFilter.h"
+#include "otbLinkPathListFilter.h"
 #include "itkPolyLineParametricPath.h"
 #include <fstream>
 
-int otbLinkPathFilter(int argc, char * argv[])
+int otbLinkPathListFilter(int argc, char * argv[])
 {
   
   std::cout<<std::endl;
@@ -61,8 +61,8 @@ int otbLinkPathFilter(int argc, char * argv[])
            
       const unsigned int Dimension = 2;
       typedef itk::PolyLineParametricPath<Dimension> PathType;
-      typedef otb::LinkPathFilter<PathType> LinkPathFilterType;
-      typedef LinkPathFilterType::PathListType PathListType;
+      typedef otb::LinkPathListFilter<PathType> LinkPathListFilterType;
+      typedef LinkPathListFilterType::PathListType PathListType;
       PathType::ContinuousIndexType cindex;
       
       
@@ -85,7 +85,7 @@ int otbLinkPathFilter(int argc, char * argv[])
                 InputPathList->PushBack(path);
         }
 	//Instantiating object
-      LinkPathFilterType::Pointer filter = LinkPathFilterType::New();
+      LinkPathListFilterType::Pointer filter = LinkPathListFilterType::New();
 
       filter->SetInput(InputPathList);
       filter->SetDistanceThreshold(distance);
