@@ -28,14 +28,13 @@ namespace otb
 {
 
 /** \class MultiToMonoChannelExtractROI
- * \brief Extrait une partie d'un seul canal, d'une image multi-canal.
+ * \brief Extract a mono channel part of a multi-channel image.
  *
- * Il est possible d'extraire tous les canaux de l'image ou seulement ceux précisés par l'utilisateur.
- * La méthode SetChannel permet de sélectionner le canal à traiter.
- * \note Si aucun canal n'est spécifié par l'utilisateur, alors le premier canal est traité.
- * \note Ces classe est paramétré par le type de pixel des images d'entrée et de sortie. 
- * L'image d'entrée est une image de type "itk::VectorImage". L'image produite en sortie est de type "itk::Image".
- *
+ * This filter either all channels or only those specified by the user.
+ * The SetChannel method allows to select the channels to process.
+ * \note If nothing is specified, only the first channel is processed.
+ * \note This class is templated over the pixel types of the input and output images.
+ * The input image has to be an itk::VectorImage, whereas the output image has to be an otb::Image.
  */
 template <class TInputPixelType, class TOutputPixelType>
 class ITK_EXPORT MultiToMonoChannelExtractROI:
@@ -112,7 +111,7 @@ private:
   MultiToMonoChannelExtractROI(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
   
-  /** Canal à traiter  [1...] */
+  /** Channel to process [1...] */
   unsigned int  m_Channel;
 };
 
