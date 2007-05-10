@@ -61,12 +61,12 @@ try
       {
 	PointType p = transform->TransformPoint(*it);
 	PointType pprime;
-	double rho = sqrt((*it)[0]*(*it)[0]+(*it)[1]*(*it)[1]);
+	double rho = vcl_sqrt((*it)[0]*(*it)[0]+(*it)[1]*(*it)[1]);
 
 	if(rho>0)
 	  {
-	    pprime[0]=(1/angularStep)*asin((*it)[1]/rho);
-	    pprime[0]=pprime[0]*(180/acos(-1.0));
+	    pprime[0]=(1/angularStep)*vcl_asin((*it)[1]/rho);
+	    pprime[0]=pprime[0]*(180/vcl_acos(-1.0));
 	    // Deplacing the range to [0,90], [270,360]
 	    pprime[0]= pprime[0]>0 ? pprime[0] : pprime[0]+360;
 	    // Avoiding asin indetermination
@@ -74,7 +74,7 @@ try
 	      {
 	    pprime[0]=pprime[0]<90 ? pprime[0]+90 : pprime[0]-90;
 	      }
-	    pprime[1]=(1/radialStep)*log(rho);
+	    pprime[1]=(1/radialStep)*vcl_log(rho);
 	  }
 	else 
 	  {

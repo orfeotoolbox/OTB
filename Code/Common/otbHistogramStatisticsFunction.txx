@@ -90,7 +90,7 @@ HistogramStatisticsFunction< TInputHistogram, TOutput>
     Proba /= static_cast<RealType>(globalFrequency); 
     if(Proba !=0.0)   
       {
-      entropy -=  Proba * log(Proba);
+      entropy -=  Proba * vcl_log(Proba);
       } 
     ++iter ;
     }

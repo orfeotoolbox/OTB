@@ -19,7 +19,7 @@ PURPOSE.  See the above copyright notices for more information.
 #define _otbLinkPathFilter_txx
 
 #include "otbLinkPathFilter.h"
-#include "vnl/vnl_math.h"
+#include "vcl_cmath.h" 
 
 namespace otb
 {

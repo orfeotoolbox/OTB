@@ -28,11 +28,8 @@
 #include "itkNeighborhoodAlgorithm.h"
 #include "itkZeroFluxNeumannBoundaryCondition.h"
 #include "itkProgressReporter.h"
-#include <math.h>
 
-#ifndef M_PI
-#define M_PI 3.14159265358979323846
-#endif
+#include "vcl_cmath.h" 
 
 namespace otb
 {
@@ -100,13 +97,13 @@ LineCorrelationDetectorImageFilter<TInputImage, TOutputImage, TOutputImageDirect
   while( m1It!=m1End && m2It!=m2End && m3It!=m3End )
     {
 
-    sigma1 += pow((*m1It)-M1,2);
+    sigma1 += vcl_pow((*m1It)-M1,2);
     ++m1It;
 
-    sigma2 += pow((*m2It)-M2,2);
+    sigma2 += vcl_pow((*m2It)-M2,2);
     ++m2It;
 
-    sigma3 += pow((*m3It)-M3,2);
+    sigma3 += vcl_pow((*m3It)-M3,2);
     ++m3It;
 
 
@@ -117,9 +114,9 @@ LineCorrelationDetectorImageFilter<TInputImage, TOutputImage, TOutputImageDirect
   sigma3 /= m3->size();
 
   // Actually, we use the variance
-/*  sigma1 = sqrt(sigma1);
-  sigma2 = sqrt(sigma2);
-  sigma3 = sqrt(sigma3);
+/*  sigma1 = vcl_sqrt(sigma1);
+  sigma2 = vcl_sqrt(sigma2);
+  sigma3 = vcl_sqrt(sigma3);
   */
   
 
@@ -135,10 +132,10 @@ LineCorrelationDetectorImageFilter<TInputImage, TOutputImage, TOutputImageDirect
   // rho12
   if ( M2 != 0. )
     {
-    d1 = sigma1/pow(M2,2)*m1->size();
-    d2 = sigma2/pow(M2,2)*m2->size();
+    d1 = sigma1/vcl_pow(M2,2)*m1->size();
+    d2 = sigma2/vcl_pow(M2,2)*m2->size();
     
-    d3 = pow(((M1/M2)-1.),2)*(m1->size()*m2->size());
+    d3 = vcl_pow(((M1/M2)-1.),2)*(m1->size()*m2->size());
   
         if ( ( d3 != 0. ) )
           rho12 = static_cast<double>( 1. / ( 1. + ( (m1->size()*m2->size())*(d1+d2)/d3 ) ) );
@@ -148,10 +145,10 @@ LineCorrelationDetectorImageFilter<TInputImage, TOutputImage, TOutputImageDirect
     }
   if ( M3 != 0. )
     {
-    d1 = sigma1/pow(M3,2)*m1->size();
-    d2 = sigma3/pow(M3,2)*m2->size();
+    d1 = sigma1/vcl_pow(M3,2)*m1->size();
+    d2 = sigma3/vcl_pow(M3,2)*m2->size();
     
-    d3 = pow(((M1/M3)-1.),2)*(m1->size()*m2->size());
+    d3 = vcl_pow(((M1/M3)-1.),2)*(m1->size()*m2->size());
   
         if ( ( d3 != 0. ) )
           rho13 = static_cast<double>( 1. / ( 1. + ( (m1->size()*m2->size())*(d1+d2)/d3 ) ) );
@@ -160,8 +157,8 @@ LineCorrelationDetectorImageFilter<TInputImage, TOutputImage, TOutputImageDirect
 
     }
 
-	rho12 = sqrt(rho12);
-	rho13 = sqrt(rho13);
+	rho12 = vcl_sqrt(rho12);
+	rho13 = vcl_sqrt(rho13);
          
 	// Determination of the minimum intensity of detection between R12 et R13
 	return static_cast<double>( MIN( rho12, rho13 ) );

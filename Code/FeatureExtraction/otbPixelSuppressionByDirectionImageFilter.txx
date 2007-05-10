@@ -29,11 +29,8 @@
 #include "itkConstantBoundaryCondition.h"
 #include "itkOffset.h"
 #include "itkProgressReporter.h"
-#include <math.h>
 
-#ifndef M_PI
-#define M_PI 3.14159265358979323846
-#endif
+#include "vcl_cmath.h" 
 
 namespace otb
 {
@@ -248,7 +245,7 @@ void PixelSuppressionByDirectionImageFilter< TInputImage, TOutputImage>::Threade
         if (( x == 0 ) && ( y == 0 )) 
            continue;
 
-	Thetaxtyt = atan2( static_cast<double>(y), static_cast<double>(x) ); //result is [-PI,PI]
+	Thetaxtyt = vcl_atan2( static_cast<double>(y), static_cast<double>(x) ); //result is [-PI,PI]
 	while(Thetaxtyt < 0)
 	  Thetaxtyt = M_PI + Thetaxtyt; // Theta is now [0,PI] as is
 					// the result of detectors
@@ -256,13 +253,13 @@ void PixelSuppressionByDirectionImageFilter< TInputImage, TOutputImage>::Threade
 	  Thetaxtyt = Thetaxtyt-M_PI; // Theta is now [-PI/2,PI/2]
 
 
-	if( (fabs(cos(Thetaxtyt-ThetaXcYc)) >= cos(m_AngularBeam)) // this
+	if( (vcl_abs(vcl_cos(Thetaxtyt-ThetaXcYc)) >= vcl_cos(m_AngularBeam)) // this
 								   // pixel
 								   // is
 								   // in
 								   // the
 								   // angular beam
-	    && (fabs(cos(bit.GetPixel(off)-ThetaXcYc)) >= cos(m_AngularBeam)) ) //and
+	    && (vcl_abs(vcl_cos(bit.GetPixel(off)-ThetaXcYc)) >= vcl_cos(m_AngularBeam)) ) //and
 										//its
 										//direction
 										//is

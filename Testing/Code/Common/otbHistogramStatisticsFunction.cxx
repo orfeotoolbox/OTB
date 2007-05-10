@@ -65,7 +65,7 @@ int otbHistogramStatisticsFunction(int argc, char* argv[])
   Entropy = HistogramStatisticsFunction->GetEntropy()[0];
   std::cout << "Entropy 1 : " << Entropy << std::endl;
  
-  if(fabs(Entropy-log(static_cast<double>(NbOfBins)))>0.00001 ) 
+  if(vcl_abs(Entropy-vcl_log(static_cast<double>(NbOfBins)))>0.00001 ) 
   {
   	std::cout << "Error in entropy estimation" << std::endl;
 	return EXIT_FAILURE;

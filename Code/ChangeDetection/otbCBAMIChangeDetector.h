@@ -87,7 +87,7 @@ public:
     normalizeInPlace(vecA);
     normalizeInPlace(vecB);
 
-    return static_cast<TOutput>( - log(PhiMI(vecA, vecB)+epsilon) );
+    return static_cast<TOutput>( - vcl_log(PhiMI(vecA, vecB)+epsilon) );
   }
 
 protected:
@@ -111,14 +111,14 @@ protected:
   
     for( itx = vx.begin(); itx < vx.end(); itx++)
       {
-      Vx  += pow((*itx)-Ex,2.0);
+      Vx  += vcl_pow((*itx)-Ex,2.0);
       }
 
     Vx /= (vx.size());
 
     for( itx = vx.begin(); itx < vx.end(); itx++)
       {
-      (*itx) = ((*itx)-Ex)/sqrt(Vx);
+      (*itx) = ((*itx)-Ex)/vcl_sqrt(Vx);
       }
 
     
@@ -282,13 +282,13 @@ protected:
       for( itj = donnees.begin(); itj < donnees.end(); itj++ )
 	{
 	if(iti != itj)
-	  termeR += pow(Rxy((*iti),(*itj)),2.0);
+	  termeR += vcl_pow(Rxy((*iti),(*itj)),2.0);
 
 	for( itk = donnees.begin(); itk < donnees.end(); itk++ )
 	  for( itl = donnees.begin(); itl < donnees.end(); itl++ )
 	    {
 	    if((iti != itj) || (iti != itk) || (iti != itl))
-	      termeQ += pow( Qxijkl((*iti),(*itj),(*itk),(*itl)),2.0);
+	      termeQ += vcl_pow( Qxijkl((*iti),(*itj),(*itk),(*itl)),2.0);
 	    }
 	}
   

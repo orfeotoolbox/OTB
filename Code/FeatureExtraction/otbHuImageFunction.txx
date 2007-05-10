@@ -101,7 +101,7 @@ HuImageFunction<TInput,TOutput,TPrecision,TCoordRep>
 	function->SetQ(2);
 	C02 = function->EvaluateAtIndex( index );
 
-	HuValue = std::abs( C20 * C02 ) ;
+	HuValue = vcl_abs( C20 * C02 ) ;
 
 	}
 	break;
@@ -115,7 +115,7 @@ HuImageFunction<TInput,TOutput,TPrecision,TCoordRep>
 	function->SetQ(3);
 	C03 = function->EvaluateAtIndex( index );
 
-	HuValue = std::abs( C30 * C03 );
+	HuValue = vcl_abs( C30 * C03 );
 	}
 	break;
     case 4:
@@ -128,7 +128,7 @@ HuImageFunction<TInput,TOutput,TPrecision,TCoordRep>
 	function->SetQ(2);
 	C12 = function->EvaluateAtIndex( index );
 
-	HuValue = std::abs( C21 * C12 );
+	HuValue = vcl_abs( C21 * C12 );
 	}	
 	break;
 
@@ -142,7 +142,7 @@ HuImageFunction<TInput,TOutput,TPrecision,TCoordRep>
 	function->SetQ(2);
 	C12 = function->EvaluateAtIndex( index );
 
-	HuValueComplex = C30 * std::pow(C12,3) ;
+	HuValueComplex = C30 * vcl_pow(C12,3) ;
 	HuValue = HuValueComplex.real();       
 	}	
 	break;
@@ -157,7 +157,7 @@ HuImageFunction<TInput,TOutput,TPrecision,TCoordRep>
 	function->SetQ(2);
 	C12 = function->EvaluateAtIndex( index );
 
-	HuValueComplex = C20 * std::pow( C12 ,2 );
+	HuValueComplex = C20 * vcl_pow( C12 ,2 );
 	HuValue = HuValueComplex.real();         
 	}	
 	break;
@@ -172,7 +172,7 @@ HuImageFunction<TInput,TOutput,TPrecision,TCoordRep>
 	function->SetQ(2);
 	C12 = function->EvaluateAtIndex( index );
 
-	HuValueComplex = C30 * std::pow( C12 , 3);
+	HuValueComplex = C30 * vcl_pow( C12 , 3);
 	HuValue = HuValueComplex.imag();         
 	}	
 	break;

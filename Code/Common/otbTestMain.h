@@ -545,11 +545,11 @@ int RegressionTestAsciiFile(const char * testAsciiFileName, const char * baselin
 				else if ((etatCour==ETAT_CHAR)&&(etatPrec==ETAT_NUM))
 				  {
 				    
-				    if (fabs(atof(strNumRef.c_str())-atof(strNumTest.c_str())) > epsilon)
+				    if (vcl_abs(atof(strNumRef.c_str())-atof(strNumTest.c_str())) > epsilon)
 				      {
 							if( reportErrors )
 							{
-								fluxfilediff << "Diff at line " << numLine << " : fabs ( (" 
+								fluxfilediff << "Diff at line " << numLine << " : vcl_abs ( (" 
 						     		<< strNumRef << ") - (" << strNumTest
 						     		<< ") ) > " << epsilon << std::endl ;
 							}
@@ -586,11 +586,11 @@ int RegressionTestAsciiFile(const char * testAsciiFileName, const char * baselin
 				if (isNumeric(strRef))
 				  {
 				    
-				    if (fabs(atof(strRef.c_str())-atof(strTest.c_str())) > epsilon)
+				    if (vcl_abs(atof(strRef.c_str())-atof(strTest.c_str())) > epsilon)
 				      {
 				      		if( reportErrors )
 							{
-								fluxfilediff << "Diff at line " << numLine << " : fabs( (" 
+								fluxfilediff << "Diff at line " << numLine << " : vcl_abs( (" 
 						     		<< strRef << ") - (" << strTest
 						     		<< ") ) > " << epsilon << std::endl ;
 							}

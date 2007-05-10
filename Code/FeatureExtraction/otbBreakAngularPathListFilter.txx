@@ -21,10 +21,6 @@ PURPOSE.  See the above copyright notices for more information.
 #include "otbBreakAngularPathListFilter.h"
 #include "vcl_cmath.h"
 
-#ifndef M_PI
-#define M_PI 3.14159265358979323846
-#endif
-
 namespace otb
 {
 /**

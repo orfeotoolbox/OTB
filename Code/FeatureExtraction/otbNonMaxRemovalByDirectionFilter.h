@@ -21,9 +21,7 @@ PURPOSE.  See the above copyright notices for more information.
 #include "otbModulusAndDirectionImageToImageFilter.h"
 #include "otbBinaryFunctorNeighborhoodImageFilter.h"
 
-#ifndef M_PI
-#define M_PI vcl_acos(-1.0)
-#endif 
+#include "vcl_cmath.h" 
 
 namespace otb
 {

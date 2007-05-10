@@ -86,7 +86,7 @@ FlusserPathFunction<TInputPath, TOutput, TPrecision >
 	function->SetQ(2);
 	C12 = function->Evaluate(  );
 
-	FlusserValue = std::abs( C21 * C12 ) ;
+	FlusserValue = vcl_abs( C21 * C12 ) ;
 	}
 	break;
     case 3:
@@ -98,7 +98,7 @@ FlusserPathFunction<TInputPath, TOutput, TPrecision >
 	function->SetP(1);
 	function->SetQ(2);
 	C12 = function->Evaluate( );
-	FlusserValueComplex = C20 * std::pow(C12,2);
+	FlusserValueComplex = C20 * vcl_pow(C12,2);
 	FlusserValue = FlusserValueComplex.real();
 	}
 	break;
@@ -111,7 +111,7 @@ FlusserPathFunction<TInputPath, TOutput, TPrecision >
 	function->SetP(1);
 	function->SetQ(2);
 	C12 = function->Evaluate( );
-	FlusserValueComplex = C20 * std::pow(C12,2);
+	FlusserValueComplex = C20 * vcl_pow(C12,2);
 	FlusserValue = FlusserValueComplex.imag();
 	}
 	break;
@@ -125,7 +125,7 @@ FlusserPathFunction<TInputPath, TOutput, TPrecision >
 	function->SetQ(2);
 	C12 = function->Evaluate( );
 
-	FlusserValueComplex = C30 * std::pow(C12,3) ;
+	FlusserValueComplex = C30 * vcl_pow(C12,3) ;
 	FlusserValue = FlusserValueComplex.real();       
 	}	
 	break;
@@ -139,7 +139,7 @@ FlusserPathFunction<TInputPath, TOutput, TPrecision >
 	function->SetQ(2);
 	C12 = function->Evaluate( );
 
-	FlusserValueComplex = C30 * std::pow(C12,3) ;
+	FlusserValueComplex = C30 * vcl_pow(C12,3) ;
 	FlusserValue = FlusserValueComplex.real();       
 	}	
 	break;
@@ -161,7 +161,7 @@ FlusserPathFunction<TInputPath, TOutput, TPrecision >
 	function->SetP(1);
 	function->SetQ(2);
 	C12 = function->Evaluate( );
-	FlusserValueComplex = C31 * std::pow(C12,2);
+	FlusserValueComplex = C31 * vcl_pow(C12,2);
 	FlusserValue = FlusserValueComplex.real();
 	}
 	break;
@@ -174,7 +174,7 @@ FlusserPathFunction<TInputPath, TOutput, TPrecision >
 	function->SetP(1);
 	function->SetQ(2);
 	C12 = function->Evaluate( );
-	FlusserValueComplex = C31 * std::pow(C12,2);
+	FlusserValueComplex = C31 * vcl_pow(C12,2);
 	FlusserValue = FlusserValueComplex.imag();
 	}
 	break;
@@ -187,7 +187,7 @@ FlusserPathFunction<TInputPath, TOutput, TPrecision >
 	function->SetP(1);
 	function->SetQ(2);
 	C12 = function->Evaluate( );
-	FlusserValueComplex = C40 * std::pow(C12,4);
+	FlusserValueComplex = C40 * vcl_pow(C12,4);
 	FlusserValue = FlusserValueComplex.real();
 	}
 	break;
@@ -200,7 +200,7 @@ FlusserPathFunction<TInputPath, TOutput, TPrecision >
 	function->SetP(1);
 	function->SetQ(2);
 	C12 = function->Evaluate( );
-	FlusserValueComplex = C40 * std::pow(C12,4);
+	FlusserValueComplex = C40 * vcl_pow(C12,4);
 	FlusserValue = FlusserValueComplex.imag();
 	}
 	break;

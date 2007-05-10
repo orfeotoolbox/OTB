@@ -30,12 +30,9 @@
 #include "itkNeighborhoodAlgorithm.h"
 #include "itkZeroFluxNeumannBoundaryCondition.h"
 #include "itkProgressReporter.h"
-#include <math.h>
 #include "otbMacro.h"
 
-#ifndef M_PI
-#define M_PI 3.14159265358979323846
-#endif
+#include "vcl_cmath.h" 
 
 namespace otb
 {
@@ -87,7 +84,7 @@ LineDetectorImageFilterBase<TInputImage, TOutputImage, TOutputImageDirection, In
   m_Radius[0] = 2*m_LengthLine+1 ;
 
   // Define the size of the facelist by taking into account the rotation of the region
-  m_FaceList[0] = static_cast<unsigned int>( sqrt( static_cast<double>((m_Radius[0]*m_Radius[0]) + (m_Radius[1]*m_Radius[1]) ) ) + 1 );
+  m_FaceList[0] = static_cast<unsigned int>( vcl_sqrt( static_cast<double>((m_Radius[0]*m_Radius[0]) + (m_Radius[1]*m_Radius[1]) ) ) + 1 );
   m_FaceList[1] = m_FaceList[0];
   
   otbMsgDevMacro( << "Radius   : "<<m_Radius[0]<<" "<<m_Radius[1]);
@@ -338,8 +335,8 @@ LineDetectorImageFilterBase<TInputImage, TOutputImage, TOutputImageDirection, In
           {      
 	  //ROTATION( (X-Xc), (Y-Yc), Theta[dir], xout, yout);
 
-	  xout = (X-Xc)*cos(Theta[dir]) - (Y-Yc)*sin(Theta[dir]);
-	  yout = (X-Xc)*sin(Theta[dir]) + (Y-Yc)*cos(Theta[dir]);
+	  xout = (X-Xc)*vcl_cos(Theta[dir]) - (Y-Yc)*vcl_sin(Theta[dir]);
+	  yout = (X-Xc)*vcl_sin(Theta[dir]) + (Y-Yc)*vcl_cos(Theta[dir]);
   
 	  Index[0] = static_cast<CoordRepType>(xout + Xc);
 	  Index[1] = static_cast<CoordRepType>(yout + Yc);

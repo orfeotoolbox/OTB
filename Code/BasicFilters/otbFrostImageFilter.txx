@@ -168,13 +168,13 @@ void FrostImageFilter< TInputImage, TOutputImage>::ThreadedGenerateData(
       	{	
        	for (double y = -rad_y; y <= rad_y; y++)
 		{
-		double Dist = double(sqrt(x*x+y*y));
+		double Dist = double(vcl_sqrt(x*x+y*y));
 		off[0]= static_cast<int>(x);
 		off[1]= static_cast<int>(y);
 //		i = (unsigned int)((y+rad_y)*(2*rad_y+1)+(x+rad_x));
 		dPixel= static_cast<double>( bit.GetPixel(off));
 //		dPixel= static_cast<double>( bit.GetPixel(i));
-		CoefFiltre = Alpha * exp(-Alpha *Dist);
+		CoefFiltre = Alpha * vcl_exp(-Alpha *Dist);
 		NormFiltre  = NormFiltre  + CoefFiltre;
 		FrostFiltre = FrostFiltre + (CoefFiltre * dPixel);
 		}

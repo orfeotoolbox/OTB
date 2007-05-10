@@ -27,10 +27,7 @@
 #include "itkImageLinearConstIteratorWithIndex.h"
 #include "itkImageLinearIteratorWithIndex.h"
 
-#ifndef M_PI
-#define M_PI 3.14159265358979323846
-#endif
-
+#include "vcl_cmath.h" 
 
 namespace otb
 {
@@ -305,7 +302,7 @@ ImageToPathListAlignFilter<TInputImage,TOutputPath>
       
       if (norm <=threshold)
          m_AngleImage->SetPixel(adr,static_cast<RealType>(-1000.0));
-         else m_AngleImage->SetPixel(adr,static_cast<RealType>(atan2(gx,-gy)));
+         else m_AngleImage->SetPixel(adr,static_cast<RealType>(vcl_atan2(gx,-gy)));
     }
 }
 
@@ -346,12 +343,12 @@ ImageToPathListAlignFilter<TInputImage,TOutputPath>
   Taille = InputImage->GetLargestPossibleRegion().GetSize();
   nx = Taille[0];
   ny = Taille[1];
-  max_nfa = pow(10.0,-(m_Eps));
+  max_nfa = vcl_pow(10.0,-(m_Eps));
     
 //  typename InputImageType::IndexType adr;
 
   /*** maximal length for a line */
-  n = (int)ceil(hypot((double)nx,(double)ny))+1;
+  n = (int)vcl_ceil(hypot((double)nx,(double)ny))+1;
 
   /*** compute angle map of u ***/
   RealImageTypePointer lAngleImagePointer = RealImageType::New();
@@ -403,8 +400,8 @@ ImageToPathListAlignFilter<TInputImage,TOutputPath>
       printf(".");
       fflush(stdout);
       theta = theta0 + (float)(itheta)*dtheta;
-      dx = (float)cos((double)theta);
-      dy = (float)sin((double)theta);
+      dx = (float)vcl_cos((double)theta);
+      dy = (float)vcl_sin((double)theta);
       
       /*** third loop : start positions ***/
       for (pos=0;pos<posmax;pos++) {

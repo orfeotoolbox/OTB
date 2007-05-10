@@ -74,7 +74,7 @@ int otbMultiplyByScalarImageFilterTest( int argc, char * argv[] )
         InputIteratorType it( inputImage, inputImage->GetBufferedRegion() );
 
         // Initialize the content of Image A
-       const double pi    = atan( 1.0 ) * 4.0;
+       const double pi    = vcl_atan( 1.0 ) * 4.0;
        const double value = pi / 6.0;
        std::cout << "Content of the Input " << std::endl;
        it.GoToBegin();
@@ -100,8 +100,6 @@ int otbMultiplyByScalarImageFilterTest( int argc, char * argv[] )
        // Execute the filter
        filter->SetCoef(10.);
        filter->Update();
-//       filter->SetFunctor(filter->GetFunctor()); // ??
-
 
        // Create an iterator for going through the image output
        OutputIteratorType ot(outputImage, outputImage->GetRequestedRegion());
@@ -118,7 +116,7 @@ int otbMultiplyByScalarImageFilterTest( int argc, char * argv[] )
               const InputImageType::PixelType  input  = it.Get();
               const OutputImageType::PixelType output = ot.Get();
               const OutputImageType::PixelType multiplyByScal  = 10.0* input;
-              if( fabs( multiplyByScal - output ) > epsilon )
+              if( vcl_abs( multiplyByScal - output ) > epsilon )
                  {
                   std::cerr << "Error in otbMultiplyScalarImageFilterTest " << std::endl;
                   std::cerr << " 10.0 * " << input << ") = " << multiplyByScal << std::endl;

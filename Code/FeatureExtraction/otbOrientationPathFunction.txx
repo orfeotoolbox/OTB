@@ -21,6 +21,7 @@
 #include "otbPathFunction.h"
 #include "itkNumericTraits.h"
 #include "otbMacro.h"
+#include "vcl_cmath.h"
 
 namespace otb
 {
@@ -61,7 +62,7 @@ OrientationPathFunction<TInputPath,TOutput>
        RealType x2 = cindex[0];
        RealType y2 = cindex[1];
               
-       Theta = atan2(y2-y1,x2-x1);
+       Theta = vcl_atan2(y2-y1,x2-x1);
      } // IF loop
      else
      {

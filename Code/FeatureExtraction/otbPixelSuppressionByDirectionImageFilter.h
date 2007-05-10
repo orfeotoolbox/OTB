@@ -23,8 +23,8 @@
 #include "itkNumericTraits.h"
 
 #define TRANSITION_MATRIX(_x,_y,_theta,_xout,_yout) \
-    (_xout) = (_x)*cos(_theta) + (_y)*sin(_theta); \
-    (_yout) = - (_x)*sin(_theta) + (_y)*cos(_theta)
+    (_xout) = (_x)*vcl_cos(_theta) + (_y)*vcl_sin(_theta); \
+    (_yout) = - (_x)*vcl_sin(_theta) + (_y)*vcl_cos(_theta)
     
 
 namespace otb

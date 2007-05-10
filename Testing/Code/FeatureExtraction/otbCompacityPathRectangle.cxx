@@ -74,7 +74,7 @@ int otbCompacityPathRectangle( int argc, char * argv[] )
 	std::cout << "Compacity result: " << Result <<std::endl;
 
 	RealType Error;
-	Error = fabs(Result - static_cast<RealType>(acos(-1.0) * A*B / (A+B) / (A+B)) );
+	Error = vcl_abs(Result - static_cast<RealType>(vcl_acos(-1.0) * A*B / (A+B) / (A+B)) );
 	
 	if(  Error > 1.E-9)
 	{

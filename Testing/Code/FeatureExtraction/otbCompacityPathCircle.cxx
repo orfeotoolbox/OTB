@@ -47,7 +47,7 @@ int otbCompacityPathCircle( int argc, char * argv[] )
         RealType    deltaTheta;
         RealType    Rho = 100.0;
 	
-        deltaTheta = 2.* acos(-1.0) / static_cast<RealType>(NbOfPoints);
+        deltaTheta = 2.* vcl_acos(-1.0) / static_cast<RealType>(NbOfPoints);
 	
  	pathElt->Initialize();
         
@@ -55,8 +55,8 @@ int otbCompacityPathCircle( int argc, char * argv[] )
 	{
 	     RealType Theta = deltaTheta * static_cast<RealType>(noTheta);
 	
-            cindex[0]= (Rho * cos(Theta) );
-            cindex[1]= (Rho * sin(Theta) );
+            cindex[0]= (Rho * vcl_cos(Theta) );
+            cindex[1]= (Rho * vcl_sin(Theta) );
             pathElt->AddVertex(cindex);	
 	}
 
@@ -67,7 +67,7 @@ int otbCompacityPathCircle( int argc, char * argv[] )
 	std::cout << "Compacity result: " << Result <<std::endl;
 
 	RealType Error;
-	Error = fabs(Result - static_cast<RealType>(1.0) );
+	Error = vcl_abs(Result - static_cast<RealType>(1.0) );
 	
 	if(  Error > 1.E-5)
 	{

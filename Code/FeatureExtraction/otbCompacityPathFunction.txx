@@ -21,6 +21,7 @@
 #include "otbPathFunction.h"
 #include "itkNumericTraits.h"
 #include "otbMacro.h"
+#include "vcl_cmath.h"
 
 namespace otb
 {
@@ -76,7 +77,7 @@ CompacityPathFunction<TInputPath,TOutput>
        
        RealType Norm;
        
-       Norm  = sqrt((x2-x1)*(x2-x1) + (y2-y1)*(y2-y1) );
+       Norm  = vcl_sqrt((x2-x1)*(x2-x1) + (y2-y1)*(y2-y1) );
        
        Perimeter += Norm;
 	 

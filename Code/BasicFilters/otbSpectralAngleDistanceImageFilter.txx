@@ -18,15 +18,13 @@ PURPOSE.  See the above copyright notices for more information.
 #ifndef _otbSpectralAngleDistanceImageFilter_txx
 #define _otbSpectralAngleDistanceImageFilter_txx
 
-#ifndef M_PI
-#define M_PI vcl_acos(-1.0)
-#endif
-
 #include "otbSpectralAngleDistanceImageFilter.h"
 #include "itkImageRegionIterator.h"
 #include "itkImageRegionConstIterator.h"
 #include "itkProgressReporter.h"
 #include "otbMacro.h"
+
+#include "vcl_cmath.h" 
 
 namespace otb
 {
@@ -95,7 +93,7 @@ SpectralAngleDistanceImageFilter<TInputImage,TOutputImage>
       // Spectral angle normalisation
       dist = dist/(M_PI/2);
    //square ponderation
-   dist = sqrt(dist);
+   dist = vcl_sqrt(dist);
    outputIt.Set(static_cast<OutputPixelType>(dist));
     ++inputIt;
     ++outputIt;

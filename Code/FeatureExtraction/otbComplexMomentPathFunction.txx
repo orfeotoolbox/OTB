@@ -116,13 +116,13 @@ ComplexMomentPathFunction<TInputPath,TOutput,TPrecision>
        PrecisionType Theta;
        PrecisionType Norm;
        
-       Theta = atan2(y2-y1,x2-x1);
-       Norm  = sqrt((x2-x1)*(x2-x1) + (y2-y1)*(y2-y1) );
+       Theta = vcl_atan2(y2-y1,x2-x1);
+       Norm  = vcl_sqrt((x2-x1)*(x2-x1) + (y2-y1)*(y2-y1) );
 
        for(RealType k = 0 ; k <=Norm ; k+=m_Step)
          {
-	 IndexOut[0] = x1 + k * cos(Theta);
-	 IndexOut[1] = y1 + k * sin(Theta);
+	 IndexOut[0] = x1 + k * vcl_cos(Theta);
+	 IndexOut[1] = y1 + k * vcl_sin(Theta);
 	 
 	 Value += EvaluateComplexMomentAtIndex(IndexOut );
 	 }

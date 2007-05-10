@@ -65,12 +65,12 @@ try
 	    
 	    PointType pprime;
 	    
-	      double theta = (*it)[0]*angularStep*acos(-1.0)/180.0;
+	      double theta = (*it)[0]*angularStep*vcl_acos(-1.0)/180.0;
 	      double logRho   = (*it)[1]*radialStep;
 	   
 	    file <<"Rho: "<<logRho<<", Theta: "<<theta<<std::endl;
-	    pprime[0]=exp(logRho) * cos(theta);
-	    pprime[1]=exp(logRho) * sin(theta);
+	    pprime[0]=vcl_exp(logRho) * vcl_cos(theta);
+	    pprime[1]=vcl_exp(logRho) * vcl_sin(theta);
 
 	    file <<"Original Point: "<<(*it)<<", Reference point: "<<pprime<<", Transformed point: "<<p<<std::endl<<std::endl;
 	  }

@@ -130,7 +130,7 @@ void LeeImageFilter< TInputImage, TOutputImage>::ThreadedGenerateData(
 //  dPixel = this->getNbVues();
   dPixel = m_NbLooks;
   //Calcul du rapport
-  Cv2 = 1./(sqrt(dPixel));
+  Cv2 = 1./(vcl_sqrt(dPixel));
   Cv2 = Cv2*Cv2;
 
   // Process each of the boundary faces.  These are N-d regions which border

@@ -60,7 +60,7 @@ LinePointResearch(LineIterator itLines, InputImageType *image, IndexType origin)
    v[0] = u[0]-(*itPoints).GetPosition()[0];
    v[1] = u[1]-(*itPoints).GetPosition()[1];
 	
-   double norm = sqrt(v[0]*v[0]+v[1]*v[1]);
+   double norm = vcl_sqrt(v[0]*v[0]+v[1]*v[1]);
    v[0] /= norm;
    v[1] /= norm;
 
@@ -77,7 +77,7 @@ LinePointResearch(LineIterator itLines, InputImageType *image, IndexType origin)
 	
    // The diagonal is the largest distance between two edges of image	
    itk::Size<2> size = region.GetSize();
-   float diag = sqrt((float)( size[0]*size[0] + size[1]*size[1] ));
+   float diag = vcl_sqrt((float)( size[0]*size[0] + size[1]*size[1] ));
 		    
    // Loop on the largest distance to be sure to cover all the image 
    // whatever the position of the origin u	
