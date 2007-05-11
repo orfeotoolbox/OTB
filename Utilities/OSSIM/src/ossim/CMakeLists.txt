@@ -36,11 +36,9 @@ ADD_LIBRARY(ossimElevation ${ossim_elevation_SRCS})
 TARGET_LINK_LIBRARIES(ossimElevation ossimSupportData)
 ADD_LIBRARY(ossimProjection ${ossim_projection_SRCS})
 TARGET_LINK_LIBRARIES(ossimProjection ossimElevation)
-ADD_LIBRARY(ossimImaging ${ossim_imaging_SRCS})
+ADD_LIBRARY(ossimImaging ${ossim_imaging_SRCS} ${ossim_parallel_SRCS})
 TARGET_LINK_LIBRARIES(ossimImaging ossimProjection itktiff itkjpeg8 itkjpeg12
 itkjpeg16)
-ADD_LIBRARY(ossimParallel ${ossim_parallel_SRCS})
-TARGET_LINK_LIBRARIES(ossimParallel ossimImaging)
 
 IF(WIN32)
   IF(NOT BORLAND)
@@ -54,7 +52,7 @@ ENDIF(WIN32)
 
 
 ADD_LIBRARY(ossim ${ossim_init_SRCS})
-TARGET_LINK_LIBRARIES(ossim ossimParallel)
+TARGET_LINK_LIBRARIES(ossim ossimImaging)
 
 
 #SET(OSSIM_SRCS
