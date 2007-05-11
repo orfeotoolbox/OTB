@@ -9,7 +9,7 @@ CHECK_INCLUDE_FILE("dbmalloc.h" CMAKE_HAVE_DBMALLOC_H)
 CHECK_INCLUDE_FILE("malloc.h" CMAKE_HAVE_MALLOC_H)
 CHECK_INCLUDE_FILE("dlfcn.h" CMAKE_HAVE_DLFCN_H)
 
-# itkjpeg headers are not generated and put into the inculde dir automatically. 
+# itkjpeg headers are not generated and put into the include dir automatically. 
 # Therefore we have to do it ourselves.
 
 IF(OTB_USE_EXTERNAL_ITK)
