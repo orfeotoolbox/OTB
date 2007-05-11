@@ -19,7 +19,7 @@ PURPOSE.  See the above copyright notices for more information.
 #define _otbBreakAngularPathListFilter_txx
 
 #include "otbBreakAngularPathListFilter.h"
-#include "vcl_cmath.h"
+#include "otbMath.h"
 
 namespace otb
 {

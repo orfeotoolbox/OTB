@@ -20,8 +20,7 @@ PURPOSE.  See the above copyright notices for more information.
 
 #include "otbVectorizationPathListFilter.h"
 #include "otbMacro.h"
-
-#include "vcl_cmath.h" 
+#include "otbMath.h" 
 
 namespace otb
 {

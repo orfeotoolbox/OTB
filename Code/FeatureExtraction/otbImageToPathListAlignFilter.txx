@@ -26,8 +26,7 @@
 #include "itkNumericTraits.h"
 #include "itkImageLinearConstIteratorWithIndex.h"
 #include "itkImageLinearIteratorWithIndex.h"
-
-#include "vcl_cmath.h" 
+#include "otbMath.h" 
 
 namespace otb
 {

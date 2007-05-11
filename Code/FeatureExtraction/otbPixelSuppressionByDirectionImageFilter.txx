@@ -29,8 +29,7 @@
 #include "itkConstantBoundaryCondition.h"
 #include "itkOffset.h"
 #include "itkProgressReporter.h"
-
-#include "vcl_cmath.h" 
+#include "otbMath.h" 
 
 namespace otb
 {

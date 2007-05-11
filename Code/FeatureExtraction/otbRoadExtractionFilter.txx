@@ -19,8 +19,7 @@
 #define _otbRoadExtractionFilter_txx
 
 #include "otbRoadExtractionFilter.h"
-
-#include "vcl_cmath.h"
+#include "otbMath.h"
 
 namespace otb
 {

@@ -21,7 +21,7 @@ PURPOSE.  See the above copyright notices for more information.
 #include "otbModulusAndDirectionImageToImageFilter.h"
 #include "otbBinaryFunctorNeighborhoodImageFilter.h"
 
-#include "vcl_cmath.h" 
+#include "otbMath.h" 
 
 namespace otb
 {

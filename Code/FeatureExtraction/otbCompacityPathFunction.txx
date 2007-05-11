@@ -21,7 +21,7 @@
 #include "otbPathFunction.h"
 #include "itkNumericTraits.h"
 #include "otbMacro.h"
-#include "vcl_cmath.h"
+#include "otbMath.h"
 
 namespace otb
 {

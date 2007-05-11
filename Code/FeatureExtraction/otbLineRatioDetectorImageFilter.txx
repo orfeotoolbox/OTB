@@ -29,8 +29,7 @@
 #include "itkNeighborhoodAlgorithm.h"
 #include "itkZeroFluxNeumannBoundaryCondition.h"
 #include "itkProgressReporter.h"
-
-#include "vcl_cmath.h" 
+#include "otbMath.h" 
 
 namespace otb
 {

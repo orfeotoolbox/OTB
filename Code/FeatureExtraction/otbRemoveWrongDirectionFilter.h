@@ -20,8 +20,7 @@ PURPOSE.  See the above copyright notices for more information.
 
 #include "otbModulusAndDirectionImageToImageFilter.h"
 #include "itkBinaryFunctorImageFilter.h"
-
-#include "vcl_cmath.h" 
+#include "otbMath.h" 
 
 namespace otb
 {
