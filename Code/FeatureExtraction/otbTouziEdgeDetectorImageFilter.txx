@@ -160,8 +160,8 @@ TouziEdgeDetectorImageFilter<TInputImage, TOutputImage, TOutputImageDirection>
   double Theta[NB_DIR];
   
   Theta[0] = 0.;
-  Theta[1] = M_PI / 4. ;
-  Theta[2] = M_PI / 2. ;
+  Theta[1] = M_PI_4 ;
+  Theta[2] = M_PI_2 ;
   Theta[3] = 3*M_PI / 4. ;
   
 
