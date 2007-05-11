@@ -18,7 +18,7 @@
 #include "itkExceptionObject.h"
 
 #include "otbSpatialObjectDXFReader.h"
-
+#include "itkGroupSpatialObject.h"
 
 int otbSpatialObjectDXFReaderNew(int argc, char * argv[])
 {
