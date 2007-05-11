@@ -33,7 +33,7 @@
 
 #include "vcl_cmath.h"
 
-/** Define constants if not define in the "vcl_cmath.h"
+/** Define constants if not define in the "vcl_cmath.h" */
 
 /* Some useful constants.  */
 #ifndef M_E
