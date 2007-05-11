@@ -20,8 +20,7 @@
 #pragma warning ( disable : 4786 )
 #endif
 
-#include <math.h>
-
+#include "otbMath.h"
 #include "otbOrientationPathFunction.h"
 #include "itkPolyLineParametricPath.h"
 #include "itkExceptionObject.h"
@@ -40,7 +39,7 @@ int otbOrientationPath( int argc, char * argv[] )
 	PathType::ContinuousIndexType cindex;
 	PathType::Pointer pathElt = PathType::New();
 
-        Theta *= vcl_acos(-1.0)/180.;
+        Theta *= M_PI/180.;
 	
  	pathElt->Initialize();
 

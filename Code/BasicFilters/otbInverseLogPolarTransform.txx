@@ -20,6 +20,7 @@
 
 #include "otbInverseLogPolarTransform.h"
 #include "otbMacro.h"
+#include "otbMath.h"
 
 namespace otb
 {
@@ -96,7 +97,7 @@ typename InverseLogPolarTransform<TScalarType>
     {
       result[0]=(1/m_Scale[0])*vcl_asin((point[1]-m_Center[1])/rho);
       // degree conversion
-      result[0]=result[0]*(180/vcl_acos(-1.0));
+      result[0]=result[0]*(180/M_PI);
       // Deplacing the range to [0,90], [270,360]
       result[0]= result[0]>0 ? result[0] : result[0]+360;
       // Avoiding asin indetermination
@@ -132,7 +133,7 @@ InverseLogPolarTransform<TScalarType>
     {
       result[0]=(1/m_Scale[0])*vcl_asin((vector[1]-m_Center[1])/rho);
       // degree conversion
-      result[0]=result[0]*(180/vcl_acos(-1.0));
+      result[0]=result[0]*(180/M_PI);
       // Deplacing the range to [0,90], [270,360]
       result[0]= result[0]>0 ? result[0] : result[0]+360;
       // Avoiding asin indetermination
@@ -168,7 +169,7 @@ InverseLogPolarTransform<TScalarType>
     {
       result[0]=(1/m_Scale[0])*vcl_asin((vector[1]-m_Center[1])/rho);
       // degree conversion
-      result[0]=result[0]*(180/vcl_acos(-1.0));
+      result[0]=result[0]*(180/M_PI);
       // Deplacing the range to [0,90], [270,360]
       result[0]= result[0]>0 ? result[0] : result[0]+360;
       // Avoiding vcl_asin indetermination

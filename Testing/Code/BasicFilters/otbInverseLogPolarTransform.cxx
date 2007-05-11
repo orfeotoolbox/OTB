@@ -18,6 +18,7 @@
 #include "otbInverseLogPolarTransform.h"
 #include "otbMacro.h"
 #include <fstream>
+#include "otbMath.h"
 
 int otbInverseLogPolarTransform(int argc, char* argv[])
 {
@@ -66,7 +67,7 @@ try
 	if(rho>0)
 	  {
 	    pprime[0]=(1/angularStep)*vcl_asin((*it)[1]/rho);
-	    pprime[0]=pprime[0]*(180/vcl_acos(-1.0));
+	    pprime[0]=pprime[0]*(180/M_PI);
 	    // Deplacing the range to [0,90], [270,360]
 	    pprime[0]= pprime[0]>0 ? pprime[0] : pprime[0]+360;
 	    // Avoiding asin indetermination

@@ -25,6 +25,7 @@
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
 #include "otbPolyLineParametricPathWithValue.h"
+#include "otbMath.h"
 
 int otbRoadExtractionFilter(int argc, char * argv[])
 {
@@ -60,7 +61,7 @@ int otbRoadExtractionFilter(int argc, char * argv[])
       const double Alpha = ::atof(argv[7]);
       const double AmplitudeThreshold = ::atof(argv[8]);
       const double Tolerance = ::atof(argv[9]);
-      const double MaxAngle = ((vcl_acos(-1.)*::atof(argv[10]))/180.);
+      const double MaxAngle = ((M_PI*::atof(argv[10]))/180.);
       const double FirstMeanDistanceThreshold  = ::atof(argv[11]);
       const double SecondMeanDistanceThreshold  = ::atof(argv[12]);
       const double LinkAngularThreshold = ::atof(argv[13]);

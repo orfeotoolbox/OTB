@@ -20,6 +20,7 @@
 #include "otbLinkPathListFilter.h"
 #include "itkPolyLineParametricPath.h"
 #include <fstream>
+#include "otbMath.h"
 
 int otbLinkPathListFilter(int argc, char * argv[])
 {
@@ -30,7 +31,7 @@ int otbLinkPathListFilter(int argc, char * argv[])
     {
       const char * outfname = argv[1];
       const double distance = atof(argv[2]);
-      const double angle = atof(argv[3])*vcl_acos(-1.0)/180.;
+      const double angle = ::atof(argv[3])*M_PI/180.;
       
       typedef std::vector<double> PointsVectorType;
       typedef std::vector< PointsVectorType > PointsMatrixType;
@@ -106,7 +107,7 @@ int otbLinkPathListFilter(int argc, char * argv[])
       PathListIteratorType pathListIt = InputPathList->Begin();
         
       file<<"Maximum distance threshold: "<<filter->GetDistanceThreshold()<< " ("<<distance<<")"<<std::endl;
-      file<<"Maximum angle threshold: "<<filter->GetAngularThreshold()<< " ("<<angle*180/vcl_acos(-1)<<")"<<std::endl;
+      file<<"Maximum angle threshold: "<<filter->GetAngularThreshold()<< " ("<<angle*180/M_PI<<")"<<std::endl;
       file<<"INPUT list of Path "<<": "<<std::endl;
       while(pathListIt!=InputPathList->End())
 	{

@@ -18,6 +18,7 @@
 #include "otbLogPolarTransform.h"
 #include "itkPoint.h"
 #include "otbMacro.h"
+#include "otbMath.h"
 #include <fstream>
 
 int otbLogPolarTransform(int argc, char* argv[])
@@ -65,7 +66,7 @@ try
 	    
 	    PointType pprime;
 	    
-	      double theta = (*it)[0]*angularStep*vcl_acos(-1.0)/180.0;
+	      double theta = (*it)[0]*angularStep*M_PI/180.0;
 	      double logRho   = (*it)[1]*radialStep;
 	   
 	    file <<"Rho: "<<logRho<<", Theta: "<<theta<<std::endl;

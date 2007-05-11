@@ -23,6 +23,7 @@
 #include "otbCompacityPathFunction.h"
 #include "itkPolyLineParametricPath.h"
 #include "itkExceptionObject.h"
+#include "otbMath.h"
 
 int otbCompacityPathCircle( int argc, char * argv[] )
 {
@@ -47,7 +48,7 @@ int otbCompacityPathCircle( int argc, char * argv[] )
         RealType    deltaTheta;
         RealType    Rho = 100.0;
 	
-        deltaTheta = 2.* vcl_acos(-1.0) / static_cast<RealType>(NbOfPoints);
+        deltaTheta = 2.* M_PI / static_cast<RealType>(NbOfPoints);
 	
  	pathElt->Initialize();
         

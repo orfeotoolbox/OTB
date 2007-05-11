@@ -23,6 +23,7 @@
 #include "otbCompacityPathFunction.h"
 #include "itkPolyLineParametricPath.h"
 #include "itkExceptionObject.h"
+#include "otbMath.h"
 
 int otbCompacityPathSquare( int argc, char * argv[] )
 {
@@ -68,7 +69,7 @@ int otbCompacityPathSquare( int argc, char * argv[] )
 	std::cout << "Compacity result: " << Result <<std::endl;
 
 	RealType Error;
-	Error = vcl_abs(Result - static_cast<RealType>(vcl_acos(-1.0)/4.) );
+	Error = vcl_abs(Result - static_cast<RealType>(M_PI_4) );
 	
 	if(  Error > 1.E-9)
 	{

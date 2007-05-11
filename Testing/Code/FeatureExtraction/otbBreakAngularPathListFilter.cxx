@@ -21,6 +21,7 @@
 #include "itkPolyLineParametricPath.h"
 #include <fstream>
 #include <vector>
+#include "otbMath.h"
 
 int otbBreakAngularPathListFilter(int argc, char * argv[])
 {
@@ -104,7 +105,7 @@ int otbBreakAngularPathListFilter(int argc, char * argv[])
       {
 
 
-      breakAngularFilter->SetMaxAngle((*itAngle)*vcl_acos(-1.0)/180.);
+      breakAngularFilter->SetMaxAngle((*itAngle)*M_PI/180.);
       breakAngularFilter->Update();
       		
 
