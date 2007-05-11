@@ -37,7 +37,8 @@ TARGET_LINK_LIBRARIES(ossimElevation ossimSupportData)
 ADD_LIBRARY(ossimProjection ${ossim_projection_SRCS})
 TARGET_LINK_LIBRARIES(ossimProjection ossimElevation)
 ADD_LIBRARY(ossimImaging ${ossim_imaging_SRCS})
-TARGET_LINK_LIBRARIES(ossimImaging ossimProjection)
+TARGET_LINK_LIBRARIES(ossimImaging ossimProjection itktiff itkjpeg8 itkjpeg12
+itkjpeg16)
 ADD_LIBRARY(ossimParallel ${ossim_parallel_SRCS})
 TARGET_LINK_LIBRARIES(ossimParallel ossimImaging)
 
