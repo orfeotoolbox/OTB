@@ -366,7 +366,7 @@ ADD_TEST(coTvDrawPathListFilterWithValue ${COMMON_TESTS}
 
 # -------  otb::DrawListFilter -------------------------------------------
 
-ADD_TEST(coTvDrawPatFilterNew ${COMMON_TESTS}
+ADD_TEST(coTuDrawPatFilterNew ${COMMON_TESTS}
 otbDrawPathFilterNew
 )
 
@@ -378,6 +378,7 @@ ADD_TEST(coTvDrawPatFilter ${COMMON_TESTS}
 		512 512 20	
 		${TEMP}/coTvDrawPathFilterOutput.png
 )
+
 
 # -------       Fichiers sources CXX -----------------------------------
 SET(BasicCommon_SRCS
