@@ -364,7 +364,7 @@ ADD_TEST(coTvDrawPathListFilterWithValue ${COMMON_TESTS}
 		${TEMP}/coTvDrawPathListFilterWithValueOutput.png
 )
 
-# -------  otb::DrawListFilter -------------------------------------------
+# -------  otb::DrawPathFilter -------------------------------------------
 
 ADD_TEST(coTuDrawPatFilterNew ${COMMON_TESTS}
 otbDrawPathFilterNew

@@ -78,14 +78,14 @@ int otbDrawPathDessinCarre( int argc, char * argv[] )
         VertexList->AddVertex(cindex);
         
 	/*2eme Segment*/	
-        pos[0]=130;
+        pos[0]=90;
         pos[1]=130;
 	image->TransformPhysicalPointToContinuousIndex(pos,cindex);
         VertexList->AddVertex(cindex);
 
 
         /*3eme Segment*/	
-        pos[0]=130;
+        pos[0]=90;
         pos[1]= 30;
 	image->TransformPhysicalPointToContinuousIndex(pos,cindex);
         VertexList->AddVertex(cindex);

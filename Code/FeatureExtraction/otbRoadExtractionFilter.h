@@ -25,6 +25,7 @@ PURPOSE.  See the above copyright notices for more information.
 #include "otbVectorImage.h"
 #include "otbImageToPathListFilter.h"
 #include "otbSpectralAngleDistanceImageFilter.h"
+#include "itkSqrtImageFilter.h"
 #include "otbNeighborhoodScalarProductFilter.h"
 #include "otbNonMaxRemovalByDirectionFilter.h"
 #include "otbVectorizationPathListFilter.h"
@@ -43,6 +44,7 @@ namespace otb
  * \brief This class performs the extraction of roads from an image.
  * 
  * \sa SpectralAngleDistanceImageFilter
+ * \sa itk::SqrtImageFilter
  * \sa itk::GradientRecursiveGaussianImageFilter
  * \sa NeighborhoodScalarProductFilter
  * \sa RemoveIsolatedByDirectionFilter
@@ -89,6 +91,10 @@ template <class TInputImage, class TOutputPath>
     typedef SpectralAngleDistanceImageFilter<
                         InputImageType,
                         SpectralAngleType>                      SpectralAngleDistanceImageFilterType;
+
+    typedef itk::SqrtImageFilter<
+                        SpectralAngleType,
+                        SpectralAngleType>                      SquareRootImageFilterType;
 
     typedef itk::GradientRecursiveGaussianImageFilter<
                         SpectralAngleType,
@@ -188,6 +194,7 @@ template <class TInputImage, class TOutputPath>
 
     /** SpectralAngleDistanceImageFilter use by the composite filter */
     typename SpectralAngleDistanceImageFilterType::Pointer      m_SpectralAngleDistanceImageFilter;
+    typename SquareRootImageFilterType::Pointer                 m_SquareRootImageFilter;
     typename GradientFilterType::Pointer                        m_GradientFilter;
     typename NeighborhoodScalarProductFilterType::Pointer       m_NeighborhoodScalarProductFilter;
     typename RemoveIsolatedByDirectionFilterType::Pointer       m_RemoveIsolatedByDirectionFilter;

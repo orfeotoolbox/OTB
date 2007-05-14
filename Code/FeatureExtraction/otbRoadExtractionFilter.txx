@@ -34,6 +34,7 @@ RoadExtractionFilter<TInputImage, TOutputPath>
         this->SetNumberOfRequiredOutputs(1);
 
         m_SpectralAngleDistanceImageFilter = SpectralAngleDistanceImageFilterType::New();
+	m_SquareRootImageFilter = SquareRootImageFilterType::New();
         m_GradientFilter = GradientFilterType::New();
         m_NeighborhoodScalarProductFilter = NeighborhoodScalarProductFilterType::New();
         m_RemoveIsolatedByDirectionFilter = RemoveIsolatedByDirectionFilterType::New();
@@ -109,8 +110,10 @@ RoadExtractionFilter<TInputImage, TOutputPath>
   // 
   m_SpectralAngleDistanceImageFilter->SetInput(inputImage);
   m_SpectralAngleDistanceImageFilter->SetReferencePixel(m_ReferencePixel);
+
+  m_SquareRootImageFilter->SetInput(m_SpectralAngleDistanceImageFilter->GetOutput());
   
-  m_GradientFilter->SetInput(m_SpectralAngleDistanceImageFilter->GetOutput());
+  m_GradientFilter->SetInput(m_SquareRootImageFilter->GetOutput());
   /** Sigma calculated with the alpha and image resolution parameters */
   m_GradientFilter->SetSigma(static_cast<SigmaType>(m_Alpha * (1.2/m_Resolution + 1.) ));
   
