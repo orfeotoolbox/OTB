@@ -103,6 +103,7 @@ void
 PolyLineImageConstIterator<TImage,TPath>
 ::operator++()
 {
+ //  otbMsgDebugMacro(<<this->GetIndex());
   ++m_InternalImageIterator;
   if(m_InternalImageIterator.IsAtEnd())
     {
@@ -113,6 +114,7 @@ PolyLineImageConstIterator<TImage,TPath>
 	    {
 	      source[i] = static_cast<unsigned int>(m_InternalVertexIterator.Value()[i]);
 	    }
+	  // otbMsgDebugMacro(<<"Source: "<<source);
 	  ++m_InternalVertexIterator;	  
 	  if(m_InternalVertexIterator!=m_Path->GetVertexList()->End())
 	    {
@@ -121,6 +123,7 @@ PolyLineImageConstIterator<TImage,TPath>
 		{
 		  target[i] = static_cast<unsigned int>(m_InternalVertexIterator.Value()[i]);
 		}
+	      // otbMsgDebugMacro(<<"Target: "<<target);
 	      m_InternalImageIterator = InternalImageIteratorType(const_cast<ImageType *>(m_Image.GetPointer()),source,target);      
 	      ++m_InternalImageIterator;
 	    }
