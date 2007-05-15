@@ -205,7 +205,7 @@ ADD_TEST(bfTvStreamingShrinkImageFilterQBMUL ${BASICFILTERS_TESTS}
 
 
  ADD_TEST(bfTvSpectralAngleDistanceImageFilter ${BASICFILTERS_TESTS} 
-		--compare-image ${TOL}
+		--compare-image ${EPSILON}
 		    ${BASELINE}/bfTvSpectralAngleDistanceOutput.hdr
 		    ${TEMP}/bfTvSpectralAngleDistanceOutput.hdr
 		    otbSpectralAngleDistanceImageFilter
