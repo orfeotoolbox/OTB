@@ -25,7 +25,7 @@
 #endif
 
 //  Software Guide : BeginCommandLineArgs
-//  INPUTS: {qb_extract.tif}
+//  INPUTS: {qb_ExtractRoad.tif}
 //  OUTPUTS: {qb_extractSegmentExtractionBySteps.png}
 //  320 506 367 790 
 //  Software Guide : EndCommandLineArgs
