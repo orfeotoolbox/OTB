@@ -27,6 +27,7 @@ SET(OTB_INCLUDE_DIRS_BUILD_TREE ${OTB_INCLUDE_DIRS_BUILD_TREE}
   ${OTB_SOURCE_DIR}/Utilities/OSSIM/include
   ${OTB_SOURCE_DIR}/Utilities/OSSIM/include/ossim
   ${OTB_SOURCE_DIR}/Utilities/dxflib
+  ${OTB_SOURCE_DIR}/Utilities/InsightJournal
 )
 
 #-----------------------------------------------------------------------------
@@ -101,6 +102,7 @@ SET(OTB_INCLUDE_DIRS_INSTALL_TREE ${OTB_INCLUDE_DIRS_INSTALL_TREE}
   ${OTB_INSTALL_INCLUDE_DIR}/Utilities/BGL
   ${OTB_INSTALL_INCLUDE_DIR}/Utilities/BGL/boost
   ${OTB_INSTALL_INCLUDE_DIR}/Utilities/otbsvm
+  ${OTB_INSTALL_INCLUDE_DIR}/Utilities/InsightJournal
 )
 
 SET(OTB_INCLUDE_DIRS_INSTALL_TREE ${OTB_INCLUDE_DIRS_INSTALL_TREE}

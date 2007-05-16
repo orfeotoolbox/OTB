@@ -50,7 +50,7 @@ void printOutputTypes();
 ossimProjection* newUtmView(const ossimGpt& centerGround,
                             const ossimDpt& metersPerPixel);
 
-int main(int argc, char* argv[])
+int ossimIntegrationTest(int argc, char* argv[])
 {
    ossimInit::instance()->initialize(argc, argv);
 
@@ -163,7 +163,7 @@ ossimProjection* newUtmView(const ossimGpt& centerGround,
    ossimUtmProjection* utm = new ossimUtmProjection;
 
    // we will make it a square pixel in meters
-   double averageGsd = (metersPerPixel.x + metersPerPixel.y)*.5;
+   //double averageGsd = (metersPerPixel.x + metersPerPixel.y)*.5;
    utm->setZone(centerGround);
    utm->setMetersPerPixel(ossimDpt(metersPerPixel));
 
