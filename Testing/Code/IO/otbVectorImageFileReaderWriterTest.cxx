@@ -21,7 +21,7 @@
 #endif
 
 
-#include "itkVectorImage.h"
+#include "otbVectorImage.h"
 #include "itkExceptionObject.h"
 #include <iostream>
 
@@ -40,8 +40,8 @@ int otbVectorImageFileReaderWriterTest(int argc, char* argv[])
         typedef double  	                                OutputPixelType;
         const   unsigned int        	                        Dimension = 2;
 
-        typedef itk::VectorImage< InputPixelType,  Dimension >        InputImageType;
-        typedef itk::VectorImage< OutputPixelType, Dimension >        OutputImageType;
+        typedef otb::VectorImage< InputPixelType,  Dimension >        InputImageType;
+        typedef otb::VectorImage< OutputPixelType, Dimension >        OutputImageType;
 
         typedef otb::ImageFileReader< InputImageType  >         ReaderType;
         typedef otb::ImageFileWriter< OutputImageType >         WriterType;

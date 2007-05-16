@@ -839,7 +839,7 @@ ADD_TEST(ioTvVectorImageFileReaderWriterTest ${IO_TESTS}
 #		    ${BASELINE_FILES}/
 #                   ${TEMP}/
         otbVectorImageFileReaderWriterTest
-        ${IMAGEDATA}/qb_RoadExtract.img.hdr
+        ${INPUTDATA}/qb_RoadExtract.img.hdr
         ${TEMP}/ioTvVectorImageFileReaderWriterTest.hdr
 )
 
