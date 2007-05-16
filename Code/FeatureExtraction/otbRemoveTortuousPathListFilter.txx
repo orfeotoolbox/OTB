@@ -52,7 +52,7 @@ namespace otb
 
     double nbVertices = static_cast<double>(path->GetVertexList()->Size());
     resp = resp / (nbVertices-1);
-    otbMsgDevMacro(<<"Mean distance: "<<resp);
+    // otbMsgDevMacro(<<"Mean distance: "<<resp);
     return resp;
 
   }

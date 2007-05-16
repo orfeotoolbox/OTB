@@ -99,12 +99,12 @@ void
 RoadExtractionFilter<TInputImage, TOutputPath>
 ::GenerateData()
 {
-  // Input images pointers
-  typename InputImageType::ConstPointer inputImage     = this->GetInput();
-  typename OutputPathListType::Pointer outputPathList  = this->GetOutput();
+  // // Input images pointers
+   typename InputImageType::ConstPointer inputImage     = this->GetInput();
+   typename OutputPathListType::Pointer outputPathList  = this->GetOutput();
 
   ///////////////////////////////////////
-  //// Algorithm for extract roads //////
+  //// Algorithm for road extraction ////
   ///////////////////////////////////////
 
   // 
@@ -140,24 +140,32 @@ RoadExtractionFilter<TInputImage, TOutputPath>
   
   m_FirstRemoveTortuousPathListFilter->SetInput(m_BreakAngularPathListFilter->GetOutput());
   m_FirstRemoveTortuousPathListFilter->SetMeanDistanceThreshold(m_FirstMeanDistanceThreshold);
-  
+
   m_LinkPathListFilter->SetInput(m_FirstRemoveTortuousPathListFilter->GetOutput());
   m_LinkPathListFilter->SetAngularThreshold(m_AngularThreshold);
   m_LinkPathListFilter->SetDistanceThreshold( static_cast<LinkRealType>(m_DistanceThreshold/m_Resolution) );
- 
+
   m_SecondSimplifyPathListFilter->SetInput(m_LinkPathListFilter->GetOutput());
   m_SecondSimplifyPathListFilter->SetTolerance(m_Tolerance);
  
   m_SecondRemoveTortuousPathListFilter->SetInput(m_SecondSimplifyPathListFilter->GetOutput());
   m_SecondRemoveTortuousPathListFilter->SetMeanDistanceThreshold(m_SecondMeanDistanceThreshold);
-
+  
   m_LikehoodPathListFilter->SetInput(m_SecondRemoveTortuousPathListFilter->GetOutput());
   m_LikehoodPathListFilter->SetInputImage(m_NonMaxRemovalByDirectionFilter->GetOutput());
   
-  m_LikehoodPathListFilter->GraftOutput(this->GetOutput());
+  // Graft output seems to be broken for PolylineParametricPath
+  // So we use update, and copy the path to the output path list.
+  // m_LikehoodPathListFilter->GraftOutput(this->GetOutput());
   m_LikehoodPathListFilter->Update();
-  this->GraftOutput(m_LikehoodPathListFilter->GetOutput());
-
+  // outputPathList =  m_LikehoodPathListFilter->GetOutput();
+    for(typename LikehoodPathListFilterType::PathListType::ConstIterator it 
+	  = m_LikehoodPathListFilter->GetOutput()->Begin();
+      it!=m_LikehoodPathListFilter->GetOutput()->End();
+      ++it)
+    {
+      outputPathList->PushBack(it.Get());
+    }
 }
 /**
  * PrintSelf method

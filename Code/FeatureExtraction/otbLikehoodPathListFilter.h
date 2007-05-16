@@ -32,7 +32,7 @@ class ITK_EXPORT LikehoodPathListFilter
 {
  public:
   /** Standard typedefs */
-  typedef LikehoodPathListFilter                    Self;
+  typedef LikehoodPathListFilter                Self;
   typedef PathListToPathListFilter<TPath>       Superclass;
   typedef itk::SmartPointer<Self>               Pointer;
   typedef itk::SmartPointer<const Self>         ConstPointer;

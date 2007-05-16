@@ -78,7 +78,7 @@ LinkPathListFilter<TPath>
 		{
 		  if(!eraseFlagVector[index2])
 		    {
-		      otbMsgDevMacro(<<"Examining links between path "<<index1<<" and path "<<index2);
+		      //otbMsgDevMacro(<<"Examining links between path "<<index1<<" and path "<<index2);
 		      // Examining end of path1 with beginning of path2
 		      VertexIteratorType vSourceIt = outputIt1.Get()->GetVertexList()->End();
 		      VertexIteratorType vTargetIt = outputIt2.Get()->GetVertexList()->Begin();
@@ -95,7 +95,7 @@ LinkPathListFilter<TPath>
 			  if(VerifyAngularCondition(v1,v2,v3,v4))
 			    {
 			      // we found a better candidate
-			      otbMsgDevMacro(<<"Link between end of path "<<index1<<" and beginning of path "<<index2<<" is currently the best choice");
+			      //otbMsgDevMacro(<<"Link between end of path "<<index1<<" and beginning of path "<<index2<<" is currently the best choice");
 			      distance = tmpDistance;
 			      pathToLinkIndex = index2;
 			      revert1 = false;
@@ -119,7 +119,7 @@ LinkPathListFilter<TPath>
 			  if(VerifyAngularCondition(v1,v2,v3,v4))
 			    {
 			      // we found a better candidate
-			      otbMsgDevMacro(<<"Link between end of path "<<index1<<" and end of path "<<index2<<" is currently the best choice");
+			      //otbMsgDevMacro(<<"Link between end of path "<<index1<<" and end of path "<<index2<<" is currently the best choice");
 			      distance = tmpDistance;
 			      pathToLinkIndex = index2;
 			      revert1 = false;
@@ -142,7 +142,7 @@ LinkPathListFilter<TPath>
 			  if(VerifyAngularCondition(v1,v2,v3,v4))
 			    {
 			      // we found a better candidate
-			      otbMsgDevMacro(<<"Link between beginning of path "<<index1<<" and end of path "<<index2<<" is currently the best choice");
+			      //otbMsgDevMacro(<<"Link between beginning of path "<<index1<<" and end of path "<<index2<<" is currently the best choice");
 			      distance = tmpDistance;
 			      pathToLinkIndex = index2;
 			      revert1 = true;
@@ -164,7 +164,7 @@ LinkPathListFilter<TPath>
 			  if(VerifyAngularCondition(v1,v2,v3,v4))
 			    {
 			      // we found a better candidate
-			      otbMsgDevMacro(<<"Link between beginning of path "<<index1<<" and beginning of path "<<index2<<" is currently the best choice");
+			      //otbMsgDevMacro(<<"Link between beginning of path "<<index1<<" and beginning of path "<<index2<<" is currently the best choice");
 			      distance = tmpDistance;
 			      pathToLinkIndex = index2;
 			      revert1 = true;
@@ -181,7 +181,7 @@ LinkPathListFilter<TPath>
 		}
 	      if(found)
 		{
-		  otbMsgDevMacro(<<"Search ended, merging path "<<index1<<" and path "<<pathToLinkIndex);
+		  //otbMsgDevMacro(<<"Search ended, merging path "<<index1<<" and path "<<pathToLinkIndex);
 		  // an appropriate path was found
 		  outputIt2 = outputPtr->Begin() + pathToLinkIndex;
 		  PathPointerType newPath = this->LinkPath(outputIt1.Get(),revert1,outputIt2.Get(),revert2);	  

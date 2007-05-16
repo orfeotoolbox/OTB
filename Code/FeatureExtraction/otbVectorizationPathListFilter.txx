@@ -134,7 +134,9 @@ namespace otb
 		if(flagReverse==0)
 		  {
 		    flagIt.Set(true);
-		    otbMsgDevMacro(<<"Adding new vertex: "<<vertex);
+
+		   //  otbMsgDebugMacro(<<"Adding new vertex: "<<vertex);
+
 		    pathTempDirect->AddVertex(vertex);
 		  }
 		flagFinish = false;
@@ -166,12 +168,15 @@ namespace otb
 			modPtr->TransformPhysicalPointToContinuousIndex(point,vertex);
 			if(flagReverse == 0)
 			  {
-			    otbMsgDevMacro(<<"Adding new vertex: "<<vertex);
+			    // otbMsgDebugMacro(<<"Adding new vertex: "<<vertex);
+
 			    pathTempDirect->AddVertex(vertex);
 			  }
 			else
 			  {
-			    otbMsgDevMacro(<<"Adding new vertex: "<<vertex);
+
+			    // otbMsgDebugMacro(<<"Adding new vertex: "<<vertex);
+
 			    pathTempReverse->AddVertex(vertex);
 			  }
 			// flag the pixel use
@@ -230,7 +235,9 @@ namespace otb
 	      ++vertexDirectIt;
 	      ++numberVertex;
 	    }	
-	    otbMsgDevMacro(<<"Path number of vertices: "<<numberVertex);
+
+	    // otbMsgDebugMacro(<<"Path number of vertices: "<<numberVertex);
+
 	    if (numberVertex > 3) {
 	      outPtr->PushBack(path);
 	    }

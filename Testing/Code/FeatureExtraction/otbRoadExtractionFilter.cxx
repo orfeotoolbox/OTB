@@ -33,9 +33,8 @@ int otbRoadExtractionFilter(int argc, char * argv[])
     {
       const unsigned int Dimension = 2;
       typedef otb::VectorImage<double,Dimension> InputImageType;
-      typedef otb::Image<unsigned char,Dimension> OutputImageType;
-      typedef itk::PolyLineParametricPath<Dimension> PathType;
-//	  typedef otb::PolyLineParametricPathWithValue<double,Dimension> PathType;
+      typedef otb::Image<double,Dimension> OutputImageType;
+      typedef otb::PolyLineParametricPathWithValue<double,Dimension> PathType;
             
       typedef otb::ImageFileReader<InputImageType> ReaderType;
       typedef otb::ImageFileWriter<OutputImageType> WriterType;
@@ -43,21 +42,16 @@ int otbRoadExtractionFilter(int argc, char * argv[])
       typedef RoadExtractionFilterType::OutputPathListType OutputPathListType;
       typedef RoadExtractionFilterType::InputPixelType InputPixelType;
       typedef otb::DrawPathListFilter<OutputImageType, PathType, OutputImageType> DrawPathFilterType;
-	  int cpt = 0;
-      while ( argv[cpt] != NULL)
-      {
-   			std::cout << cpt <<": "<<argv[cpt]<<std::endl;
-   			cpt++; 	
-      }
+
 	  //Parameters
-	  const char * inputFileName(argv[1]);
-	  const char * outputFileName(argv[2]);
-	  InputPixelType ReferencePixel;
-	  ReferencePixel.Reserve(4);
-	  ReferencePixel.SetElement(0,::atof(argv[3]));
-	  ReferencePixel.SetElement(1,::atof(argv[4]));
-	  ReferencePixel.SetElement(2,::atof(argv[5]));
-	  ReferencePixel.SetElement(3,::atof(argv[6]));
+      const char * inputFileName(argv[1]);
+      const char * outputFileName(argv[2]);
+      InputPixelType ReferencePixel;
+      ReferencePixel.Reserve(4);
+      ReferencePixel.SetElement(0,::atof(argv[3]));
+      ReferencePixel.SetElement(1,::atof(argv[4]));
+      ReferencePixel.SetElement(2,::atof(argv[5]));
+      ReferencePixel.SetElement(3,::atof(argv[6]));
       const double Alpha = ::atof(argv[7]);
       const double AmplitudeThreshold = ::atof(argv[8]);
       const double Tolerance = ::atof(argv[9]);
@@ -87,29 +81,15 @@ int otbRoadExtractionFilter(int argc, char * argv[])
       roadExtraction->SetAngularThreshold(LinkAngularThreshold);
       roadExtraction->SetDistanceThreshold(LinkDistanceThreshold);
 
-	  std::cout << " RoadExtraction instance value: " << roadExtraction <<std::endl; 
-      //Provisoire pour debug.....
-//      roadExtraction->Update();
-//	  std::cout << " RoadExtraction after update instance value: " << roadExtraction <<std::endl; 
 
       reader->GenerateOutputInformation();
-      std::cout << reader->GetOutput()->GetLargestPossibleRegion();
-
-/*      OutputImageType::SizeType size;
-      size[0] = sizex;
-      size[1] = sizey;
-      OutputImageType::IndexType index;
-      index.Fill(0);
-      OutputImageType::RegionType region;
-      region.SetSize(size);
-      region.SetIndex(index);*/
       OutputImageType::Pointer image = OutputImageType::New();
       image->SetRegions(reader->GetOutput()->GetLargestPossibleRegion());
       image->Allocate();
       image->FillBuffer(0);
 
-	  OutputPathListType * listPath = roadExtraction->GetOutput();
-	  std::cout << "LIstPath : Size() = "<<listPath->Size()<<std::endl;
+      OutputPathListType * listPath = roadExtraction->GetOutput();
+      std::cout << "ListPath : Size() = "<<listPath->Size()<<std::endl;
 
       draw->SetInput(image);
       //Use internal value of path
@@ -118,8 +98,7 @@ int otbRoadExtractionFilter(int argc, char * argv[])
 
       writer->SetFileName(outputFileName);
       writer->SetInput(draw->GetOutput());
-      writer->Update();
-      
+      writer->Update();    
     }
 
   catch( itk::ExceptionObject & err ) 
