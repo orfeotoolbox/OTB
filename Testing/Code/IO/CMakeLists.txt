@@ -835,9 +835,9 @@ ADD_TEST(ioTuOtbVectorImageTestSpot5 ${IO_TESTS}
 
 # ---  otb::VectorImageReadWriteTest  ---
 ADD_TEST(ioTvVectorImageFileReaderWriterTest ${IO_TESTS} 
-#   --compare-image ${EPS}  
-#		    ${BASELINE_FILES}/
-#                   ${TEMP}/
+   --compare-image ${TOL}  
+		   ${INPUTDATA}/qb_RoadExtract.img.hdr
+                   ${TEMP}/ioTvVectorImageFileReaderWriterTest.hdr
         otbVectorImageFileReaderWriterTest
         ${INPUTDATA}/qb_RoadExtract.img.hdr
         ${TEMP}/ioTvVectorImageFileReaderWriterTest.hdr
