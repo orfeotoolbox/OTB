@@ -47,6 +47,11 @@ ADD_EXECUTABLE(ExtractSegmentsExample
 ExtractSegmentsExample.cxx)
 TARGET_LINK_LIBRARIES(ExtractSegmentsExample OTBFeatureExtraction OTBCommon OTBIO ITKCommon ITKIO)
 
+ADD_EXECUTABLE(ExtractRoadByStepsExample ExtractRoadByStepsExample.cxx)
+TARGET_LINK_LIBRARIES(ExtractRoadByStepsExample OTBIO OTBCommon OTBFeatureExtraction
+ITKCommon ITKBasicFilters)
+
+
 IF( NOT OTB_DISABLE_CXX_TESTING AND NOT OTB_DISABLE_CXX_EXAMPLES_TESTING )
 
 SET(BASELINE ${OTB_DATA_ROOT}/Baseline/Examples/FeatureExtraction)
@@ -173,6 +178,17 @@ ADD_TEST(AlignmentsExampleTest ${EXE_TESTS}
 	AlignmentsExampleTest
 	${INPUTDATA}/QB_Suburb.png
 	${TEMP}/QB_SuburbAlign.png
+)
+
+
+ADD_TEST(ExtractRoadByStepsExampleTest ${EXE_TESTS}
+        --compare-image ${TOL}
+        ${BASELINE}/
+        ${TEMP}/
+        ExtractRoadByStepsExampleTest
+        ${INPUTDATA}/qb_RoadExtract.img.hdr
+        ${TEMP}/ExtractRoadByStepsExampleOutput.png
+	337 557 432 859 0.00005 1.0
 )
 
 

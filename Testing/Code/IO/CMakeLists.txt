@@ -833,6 +833,17 @@ ADD_TEST(ioTuOtbVectorImageTestSpot5 ${IO_TESTS}
         
 
 
+# ---  otb::VectorImageReadWriteTest  ---
+ADD_TEST(ioTvVectorImageFileReaderWriterTest ${IO_TESTS} 
+#   --compare-image ${EPS}  
+#		    ${BASELINE_FILES}/
+#                   ${TEMP}/
+        otbVectorImageFileReaderWriterTest
+        ${IMAGEDATA}/qb_RoadExtract.img.hdr
+        ${TEMP}/ioTvVectorImageFileReaderWriterTest.hdr
+)
+
+
 # ---  STREAMING : GDAL  ---
 ADD_TEST(ioTvStreamingImageFilterGDAL_ENVI ${IO_TESTS} 
 #   --compare-image ${TOL} ${TEMP}/ioStreamingImageFilterTestCDAL_ENVI.png

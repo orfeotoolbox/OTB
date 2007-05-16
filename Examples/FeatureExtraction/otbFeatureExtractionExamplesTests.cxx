@@ -34,6 +34,7 @@ REGISTER_TEST(AssymmetricFusionOfLineDetectorExampleTest);
 REGISTER_TEST(ExtractSegmentsExampleTest);
 REGISTER_TEST(RatioLineDetectorExampleTest);
 REGISTER_TEST(AlignmentsExampleTest);
+REGISTER_TEST(ExtractRoadByStepsExampleTest);
 }
 
 #undef main
@@ -71,4 +72,8 @@ REGISTER_TEST(AlignmentsExampleTest);
 #undef main
 #define main AlignmentsExampleTest
 #include "AlignmentsExample.cxx"
+
+#undef main
+#define main ExtractRoadsByStepsExampleTest
+#include "ExtractRoadByStepsExample.cxx"
 
