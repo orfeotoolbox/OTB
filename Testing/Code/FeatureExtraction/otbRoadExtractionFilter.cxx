@@ -58,7 +58,7 @@ int otbRoadExtractionFilter(int argc, char * argv[])
       const double MaxAngle = ((M_PI*::atof(argv[10]))/180.);
       const double FirstMeanDistanceThreshold  = ::atof(argv[11]);
       const double SecondMeanDistanceThreshold  = ::atof(argv[12]);
-      const double LinkAngularThreshold = ::atof(argv[13]);
+      const double LinkAngularThreshold = ((M_PI*::atof(argv[13]))/180.);
       const double LinkDistanceThreshold  = ::atof(argv[14]);
 	  
       // Instantiating object
