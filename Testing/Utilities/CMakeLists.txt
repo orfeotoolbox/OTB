@@ -10,6 +10,7 @@ SET(TEMP ${OTBTesting_BINARY_DIR}/Temporary)
 
 #Tolerance sur diff pixel image
 SET(TOL 0.0)
+SET(EPSILON 0.00000000001)
 
 
 SET(UTILITIES_TESTS ${CXX_TEST_PATH}/otbUtilitiesTests)
@@ -21,7 +22,7 @@ ossimIntegrationTest
 )
 
 ADD_TEST(utIjBSplineScatteredDataPointSetToImageFilterTest ${UTILITIES_TESTS}
---compare-image ${TOL}
+--compare-image ${EPSILON}
 		${BASELINE}/ijBSplineScatteredDataPointSetToImageFilterTestOutput.hdr
 		${TEMP}/ijBSplineScatteredDataPointSetToImageFilterTestOutput.hdr
 		ijBSplineScatteredDataPointSetToImageFilterTest

@@ -18,7 +18,7 @@ int ijBSplineScatteredDataPointSetToImageFilterTest( int argc, char *argv[] )
 
   typedef int PixelType;
   typedef otb::Image<PixelType, ParametricDimension> InputImageType;
-  typedef float RealType;
+  typedef double RealType;
   typedef itk::Vector<RealType, DataDimension> VectorType;
   typedef otb::Image<VectorType, ParametricDimension> VectorImageType;
   typedef itk::PointSet
