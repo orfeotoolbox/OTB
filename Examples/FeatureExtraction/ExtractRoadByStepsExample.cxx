@@ -72,7 +72,7 @@
 
 
 //  Software Guide : BeginCommandLineArgs
-//    INPUTS: {qb_RoadExtract.img.hdr}
+//    INPUTS: {qb_RoadExtract.tif}
 //    OUTPUTS: {ExtractRoadByStepsExampleOutput.png}
 //    337 557 432 859 0.00005 1.0
 //  Software Guide : EndCommandLineArgs

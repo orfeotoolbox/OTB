@@ -74,6 +74,6 @@ REGISTER_TEST(ExtractRoadByStepsExampleTest);
 #include "AlignmentsExample.cxx"
 
 #undef main
-#define main ExtractRoadsByStepsExampleTest
+#define main ExtractRoadByStepsExampleTest
 #include "ExtractRoadByStepsExample.cxx"
 

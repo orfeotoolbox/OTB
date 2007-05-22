@@ -183,10 +183,10 @@ ADD_TEST(AlignmentsExampleTest ${EXE_TESTS}
 
 ADD_TEST(ExtractRoadByStepsExampleTest ${EXE_TESTS}
         --compare-image ${TOL}
-        ${BASELINE}/
-        ${TEMP}/
+        ${BASELINE}/ExtractRoadByStepsExampleOutput.png
+        ${TEMP}/ExtractRoadByStepsExampleOutput.png
         ExtractRoadByStepsExampleTest
-        ${INPUTDATA}/qb_RoadExtract.img.hdr
+        ${INPUTDATA}/qb_RoadExtract.tif
         ${TEMP}/ExtractRoadByStepsExampleOutput.png
 	337 557 432 859 0.00005 1.0
 )
