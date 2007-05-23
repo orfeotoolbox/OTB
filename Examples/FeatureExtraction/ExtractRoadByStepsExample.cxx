@@ -60,6 +60,7 @@
 #include "otbMultiToMonoChannelExtractROI.h"
 #include "itkRescaleIntensityImageFilter.h"
 #include "itkSqrtImageFilter.h"
+#include "itkVectorRescaleIntensityImageFilter.h"
 
 // Software Guide : EndCodeSnippet
 
@@ -69,7 +70,7 @@
 #include "otbPolyLineParametricPathWithValue.h"
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
-
+#include "otbMultiChannelExtractROI.h"
 
 //  Software Guide : BeginCommandLineArgs
 //    INPUTS: {qb_RoadExtract.tif}
@@ -86,19 +87,35 @@ int main( int argc, char * argv[] )
   typedef otb::Image<PixelType, Dimension> InternalImageType;
   typedef otb::VectorImage<PixelType, Dimension> MultiSpectralImageType;
   typedef otb::Image<unsigned char, Dimension> OutputImageType;
-
   typedef otb::Image<VectorPixelType, Dimension > VectorImageType;
 
   typedef otb::PolyLineParametricPathWithValue< double, Dimension >       PathType;
   
-  
+  typedef otb::ImageFileWriter<OutputImageType> FileWriterType;
   typedef otb::ImageFileReader< MultiSpectralImageType > MultispectralReaderType;
+
   MultispectralReaderType::Pointer multispectralReader =  MultispectralReaderType::New();
   multispectralReader->SetFileName(argv[1]);
-  
-  typedef otb::ImageFileWriter< OutputImageType > FileWriterType;
-  FileWriterType::Pointer writer =  FileWriterType::New();
-  
+
+  /// Create an 3 band image for the software guide 
+  typedef itk::Vector<double,4> InPType;
+  typedef itk::Vector<unsigned short, 3> OutPType;
+  typedef otb::Image<OutPType,2> InImType;
+  typedef otb::Image<OutPType,2> OutImType;
+  typedef otb::ImageFileReader<InImType> ReadType;
+ //  typedef itk::VectorRescaleIntensityImageFilter<InImType,OutImType> RescType;
+  typedef otb::ImageFileWriter<OutImType> WriteType;
+
+  ReadType::Pointer r = ReadType::New();
+  // RescType::Pointer f = RescType::New();
+  WriteType::Pointer w = WriteType::New();
+  r->SetFileName(argv[1]);
+ //  f->SetInput(r->GetOutput());
+//   f->SetOutputMaximumMagnitude(511);
+  w->SetFileName("qb_ExtractRoad_pretty.png");
+  w->SetInput(r->GetOutput());
+  w->Update();
+
   // NB: There might be a better way to pass this parameter (coordinate of the reference ?)
   // plan combination with the viewer
   // possibility to give 2 parameters (just in future use)
@@ -342,6 +359,7 @@ int main( int argc, char * argv[] )
   //  Software Guide : EndLatex 
   
   // Software Guide : BeginCodeSnippet
+  FileWriterType::Pointer writer = FileWriterType::New();
   writer->SetInput( drawPathListFilter->GetOutput() );
   writer->SetFileName( argv[2] );
   writer->Update();
