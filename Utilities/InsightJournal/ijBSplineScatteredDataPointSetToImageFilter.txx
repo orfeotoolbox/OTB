@@ -360,7 +360,7 @@ BSplineScatteredDataPointSetToImageFilter<TInputPointSet, TOutputImage>
       for ( unsigned int j = 0; j < ImageDimension; j++ )
         {
         tmp[j] = idx[j] + off[j];
-        if ( tmp[j] >= NumberOfNewControlPoints[j] && !this->m_CloseDimension[j] )
+        if ( tmp[j] >= static_cast<int>(NumberOfNewControlPoints[j]) && !this->m_CloseDimension[j] )
           {
              OutOfBoundary = true;
              break;
@@ -375,7 +375,7 @@ BSplineScatteredDataPointSetToImageFilter<TInputPointSet, TOutputImage>
         continue;
         }      
  
-      for ( unsigned int j = 0; j < N; j++ )
+      for ( int j = 0; j < N; j++ )
         {
         off_Psi = this->IndexToSubscript( j, size_Psi );
 
@@ -383,7 +383,7 @@ BSplineScatteredDataPointSetToImageFilter<TInputPointSet, TOutputImage>
         for ( unsigned int k = 0; k < ImageDimension; k++ )
           {
           tmp_Psi[k] = idx_Psi[k] + off_Psi[k];
-          if ( tmp_Psi[k] >= this->m_CurrentNumberOfControlPoints[k] 
+          if ( tmp_Psi[k] >= static_cast<int>(this->m_CurrentNumberOfControlPoints[k]) 
                   && !this->m_CloseDimension[k] )
             {
             OutOfBoundary = true;

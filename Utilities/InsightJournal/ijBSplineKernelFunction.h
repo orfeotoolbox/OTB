@@ -83,7 +83,7 @@ public:
       {
       which = static_cast< int>( absValue );
       }
-    if ( which < this->m_BSplineShapeFunctions.rows() )
+    if ( which < static_cast<int>(this->m_BSplineShapeFunctions.rows()) )
       {
       return PolynomialType( 
         this->m_BSplineShapeFunctions.get_row( which ) ).evaluate( absValue );

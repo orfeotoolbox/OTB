@@ -113,6 +113,19 @@ ADD_TEST(dmTvNNearestTransformsLinearInterpolateDeformationFieldGenerator ${DISP
 	 ${TEMP}/dmTvNNearestTransformsLinearInterpolateDeformationField.hdr
 )
 
+# -------  otb::BSplinesInterpolateTransformDeformationFieldGenerator ----------
+
+ADD_TEST(dmTuBSplinesInterpolateTransformDeformationFieldGeneratorNew ${DISPARITYMAP_TESTS} 
+	 otbBSplinesInterpolateTransformDeformationFieldGeneratorNew)
+
+ADD_TEST(dmTvBSplinesInterpolateTransformDeformationFieldGenerator ${DISPARITYMAP_TESTS} 
+              --compare-image ${EPSILON}
+		${BASELINE}/dmTvBSplinesInterpolateTransformDeformationFieldGenerator.hdr
+		${TEMP}/dmTvBSplinesInterpolateTransformDeformationFieldGenerator.hdr	
+	 otbBSplinesInterpolateTransformDeformationFieldGenerator
+	 ${TEMP}/dmTvBSplinesInterpolateTransformDeformationFieldGenerator.hdr
+)
+
 # -------  Additional tests for deformation fields estimation   ----------
 
 ADD_TEST(dmTvTranslationDeformationFieldEstimation ${DISPARITYMAP_TESTS} 
@@ -249,11 +262,13 @@ otbNNearestTransformsLinearInterpolateDeformationFieldGenerator.cxx
 otbTranslationDeformationFieldEstimation.cxx
 otbEuler2DDeformationFieldEstimation.cxx
 otbCenteredRigidDeformationFieldEstimation.cxx
+otbBSplinesInterpolateTransformDeformationFieldGeneratorNew.cxx
+otbBSplinesInterpolateTransformDeformationFieldGenerator.cxx
 )
 
 INCLUDE_DIRECTORIES("${OTBTesting_BINARY_DIR}")
 
 ADD_EXECUTABLE(otbDisparityMapTests otbDisparityMapTests.cxx ${BasicDisparityMap_SRCS})
-TARGET_LINK_LIBRARIES(otbDisparityMapTests OTBIO OTBDisparityMap gdal ITKIO ITKAlgorithms ITKStatistics ITKCommon)
+TARGET_LINK_LIBRARIES(otbDisparityMapTests OTBIO OTBDisparityMap gdal ITKIO ITKAlgorithms ITKStatistics ITKCommon ITKNumerics itkvnl)
 
 ENDIF( NOT OTB_DISABLE_CXX_TESTING )
