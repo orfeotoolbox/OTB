@@ -33,6 +33,7 @@
 #include "otbBSplinesInterpolateDeformationFieldGenerator.h"
 #include "otbNearestTransformDeformationFieldGenerator.h"
 #include "otbNNearestTransformsLinearInterpolateDeformationFieldGenerator.h"
+#include "otbBSplinesInterpolateTransformDeformationFieldGenerator.h"
 
 
 int otbEuler2DDeformationFieldEstimation(int argc, char* argv[])
@@ -110,6 +111,7 @@ try
     typedef otb::BSplinesInterpolateDeformationFieldGenerator<PointSetType,DeformationFieldType> BSplinesGeneratorType;
     typedef otb::NearestTransformDeformationFieldGenerator<PointSetType,DeformationFieldType> NearestTransformGeneratorType;
     typedef otb::NNearestTransformsLinearInterpolateDeformationFieldGenerator<PointSetType,DeformationFieldType> NNearestTransformGeneratorType;
+    typedef otb::BSplinesInterpolateTransformDeformationFieldGenerator<PointSetType,DeformationFieldType> BSplinesTransformGeneratorType;
 
     // Warper
     typedef itk::WarpImageFilter<ImageType,ImageType,DeformationFieldType> ImageWarperType;
@@ -364,6 +366,42 @@ try
     
     oss.str("");
     oss<<outputFileNamePrefix<<"_nnt_oi.tif";
+    writer->SetFileName(oss.str().c_str());
+    writer->SetInput(rescaler->GetOutput());
+    writer->Update();
+
+//3.e Transforms deformation field spline interpolation generator
+    writer = WriterType::New();
+    dfwriter = DeformationFieldWriterType::New();
+    warper = ImageWarperType::New();
+    rescaler = RescalerType::New();
+
+    BSplinesTransformGeneratorType::Pointer generator6 = BSplinesTransformGeneratorType::New();
+    generator6->SetPointSet(dmestimator->GetOutput());
+    generator6->SetOutputOrigin(fixedReader->GetOutput()->GetOrigin());
+    generator6->SetOutputSpacing(fixedReader->GetOutput()->GetSpacing());
+    generator6->SetOutputSize(fixedReader->GetOutput()->GetLargestPossibleRegion().GetSize());
+    generator6->SetMetricThreshold(metricThreshold);
+    generator6->SetTransform(transform);
+    generator6->SetSplineOrder(4);
+    generator6->SetNumberOfControlPoints(5);
+
+
+    warper->SetInput(fixedReader->GetOutput());
+    warper->SetDeformationField(generator6->GetOutput());
+    rescaler->SetInput(warper->GetOutput());
+    rescaler->SetOutputMaximum(255);
+    rescaler->SetOutputMinimum(0);
+    rescaler->Update();
+
+    oss.str("");
+    oss<<outputFileNamePrefix<<"_bst_df.hdr";
+    dfwriter->SetFileName(oss.str().c_str());
+    dfwriter->SetInput(generator6->GetOutput());
+    dfwriter->Update();
+    
+    oss.str("");
+    oss<<outputFileNamePrefix<<"_bst_oi.tif";
     writer->SetFileName(oss.str().c_str());
     writer->SetInput(rescaler->GetOutput());
     writer->Update();
