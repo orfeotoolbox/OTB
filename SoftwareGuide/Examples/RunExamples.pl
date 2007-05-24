@@ -76,13 +76,13 @@ my $includegraphicstag = 'includegraphics';
 $numArgs = $#ARGV + 1;
 if( $numArgs < 5 )
   {
-  print "Usage arguments: \n".
-  "  Name of the .cxx/.txx file (with extenstion).\n".
-  "  ITKExecsDirectoryPath \n".
-  "  Cmake file to be generated\n".
-  "  Name of the TEX file generated, so dependencies can be specified\n".
-  "  Ouput folder to store generated images\n".
-  "  Double Colon separated list of possible include directories for input images\n".
+      print "Usage arguments: \n";
+      print "  Name of the .cxx/.txx file (with extenstion).\n";
+      print "  OTBExecsDirectoryPath \n";
+      print "  Cmake file to be generated\n";
+      print "  Name of the TEX file generated, so dependencies can be specified\n";
+      print "  Ouput folder to store generated images\n";
+      print "  Double Colon separated list of possible include directories for input images\n";
   die;
   }
 

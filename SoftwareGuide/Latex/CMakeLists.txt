@@ -96,7 +96,7 @@ ENDFOREACH( file )
 
 SET( ITK_EXAMPLES_TEX_SRCS_NAMES 
 #  Bonjour.cxx
-  Test.cxx
+#  Test.cxx
   MeanImageFilter.tex
   )
 

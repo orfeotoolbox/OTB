@@ -13,7 +13,7 @@ PROJECT(Examples C)
 MACRO(RUN_EXAMPLE EXECUTABLE OUTPUT_IMG SOURCE_FILE)
   ADD_CUSTOM_COMMAND(
       OUTPUT      "${SoftwareGuide_BINARY_DIR}/Art/Generated/${OUTPUT_IMG}"
-      COMMAND     "${OTB_EXECUTABLES_DIR}/${EXECUTABLE}" 
+      COMMAND     "${OTB_DIR}/bin/${EXECUTABLE}" 
       ARGS        ${ARGN}
       DEPENDS     ${RUN_EXAMPLES_SCRIPT} ${SOURCE_FILE} ${GENERATED_FIGURE_DEPS}
   )
@@ -213,6 +213,8 @@ SET( OTB_EXAMPLES_SRCS
   ${OTB_SOURCE_DIR}/Examples/FeatureExtraction/ComplexMomentPathExample.cxx
   ${OTB_SOURCE_DIR}/Examples/FeatureExtraction/HuMomentImageExample.cxx
   ${OTB_SOURCE_DIR}/Examples/FeatureExtraction/FlusserMomentImageExample.cxx
+  ${OTB_SOURCE_DIR}/Examples/FeatureExtraction/ExtractRoadByStepsExample.cxx
+  ${OTB_SOURCE_DIR}/Examples/FeatureExtraction/ExtractRoadExample.cxx
   ${OTB_SOURCE_DIR}/Examples/Segmentation/ConnectedThresholdImageFilter.cxx
   ${OTB_SOURCE_DIR}/Examples/Segmentation/OtsuThresholdImageFilter.cxx
   ${OTB_SOURCE_DIR}/Examples/Segmentation/OtsuMultipleThresholdImageFilter.cxx
@@ -309,12 +311,14 @@ IF( BUILD_FIGURES )
       SET( ExampleCmakeFile "${Examples_BINARY_DIR}/${EXAMPLE_FILE_BASE}.cmake")
       GET_FILENAME_COMPONENT(TEX_FILE ${example} NAME_WE)
       SET(TEX_FILE ${SoftwareGuide_BINARY_DIR}/Examples/${TEX_FILE}.tex)    
-      EXEC_PROGRAM(${PERL_EXECUTABLE} "${SoftwareGuide_BINARY_DIR}/Art/Generated"
-        ${Examples_BINARY_DIR}
+      EXEC_PROGRAM(${PERL_EXECUTABLE} 
+#"${SoftwareGuide_BINARY_DIR}/Art/Generated" ${Examples_BINARY_DIR}
 #THOMAS
-        ARGS      ${RUN_EXAMPLES_SCRIPT} ${example} ${OTB_EXECUTABLES_DIR} "${OTB_DATA_PATHS}" ${ExampleCmakeFile} ${TEX_FILE} ${GeneratedFolder}
+#        ARGS      ${RUN_EXAMPLES_SCRIPT} ${example} ${OTB_EXECUTABLES_DIR} "${OTB_DATA_PATHS}" ${ExampleCmakeFile} ${TEX_FILE} ${GeneratedFolder}
 #        ARGS      ${RUN_EXAMPLES_SCRIPT} ${example} ${OTB_EXECUTABLES_DIR} "${OTB_DATA_PATHS}" ${ExampleCmakeFile} ${TEX_FILE} ${GeneratedFolder} ${OTB_DATA_PATHS}
+	ARGS       ${RUN_EXAMPLES_SCRIPT} ${example} ${OTB_DIR}/bin ${OTB_DATA_PATHS} ${ExampleCmakeFile} ${TEX_FILE} ${GeneratedFolder}
       ) 
+      # MESSAGE( ARGS ${RUN_EXAMPLES_SCRIPT} ${example} ${OTB_EXECUTABLES_DIR} ${OTB_DATA_PATHS} ${ExampleCmakeFile} ${TEX_FILE} ${GeneratedFolder})
       # Include each of the generated .cmake files in dependencies list
       # only if the file is generated (if it has command line tags)
       INCLUDE(${ExampleCmakeFile} OPTIONAL)
