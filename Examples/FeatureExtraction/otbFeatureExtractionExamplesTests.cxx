@@ -35,6 +35,7 @@ REGISTER_TEST(ExtractSegmentsExampleTest);
 REGISTER_TEST(RatioLineDetectorExampleTest);
 REGISTER_TEST(AlignmentsExampleTest);
 REGISTER_TEST(ExtractRoadByStepsExampleTest);
+REGISTER_TEST(ExtractRoadExampleTest);
 }
 
 #undef main
@@ -77,3 +78,6 @@ REGISTER_TEST(ExtractRoadByStepsExampleTest);
 #define main ExtractRoadByStepsExampleTest
 #include "ExtractRoadByStepsExample.cxx"
 
+#undef main
+#define main ExtractRoadExampleTest
+#include "ExtractRoadExample.cxx"

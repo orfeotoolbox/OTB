@@ -5,7 +5,6 @@ ADD_EXECUTABLE(AlignmentsExample AlignmentsExample.cxx )
 TARGET_LINK_LIBRARIES(AlignmentsExample OTBFeatureExtraction OTBCommon OTBIO ITKCommon
 ITKIO)
 
-
 ADD_EXECUTABLE(TouziEdgeDetectorExample TouziEdgeDetectorExample.cxx )
 TARGET_LINK_LIBRARIES(TouziEdgeDetectorExample OTBFeatureExtraction OTBCommon OTBIO ITKCommon ITKIO)
 
@@ -42,7 +41,6 @@ ADD_EXECUTABLE(ExtractSegmentsByStepsExample
 ExtractSegmentsByStepsExample.cxx)
 TARGET_LINK_LIBRARIES(ExtractSegmentsByStepsExample OTBFeatureExtraction OTBCommon OTBIO ITKCommon ITKIO)
 
-
 ADD_EXECUTABLE(ExtractSegmentsExample
 ExtractSegmentsExample.cxx)
 TARGET_LINK_LIBRARIES(ExtractSegmentsExample OTBFeatureExtraction OTBCommon OTBIO ITKCommon ITKIO)
@@ -51,6 +49,9 @@ ADD_EXECUTABLE(ExtractRoadByStepsExample ExtractRoadByStepsExample.cxx)
 TARGET_LINK_LIBRARIES(ExtractRoadByStepsExample OTBIO OTBCommon OTBFeatureExtraction
 ITKCommon ITKBasicFilters)
 
+ADD_EXECUTABLE(ExtractRoadExample ExtractRoadExample.cxx)
+TARGET_LINK_LIBRARIES(ExtractRoadExample OTBIO OTBCommon OTBFeatureExtraction
+ITKCommon ITKBasicFilters)
 
 IF( NOT OTB_DISABLE_CXX_TESTING AND NOT OTB_DISABLE_CXX_EXAMPLES_TESTING )
 
@@ -180,6 +181,8 @@ ADD_TEST(AlignmentsExampleTest ${EXE_TESTS}
 	${TEMP}/QB_SuburbAlign.png
 )
 
+# ------- RoadExtractionExamplesTest----------
+
 
 ADD_TEST(ExtractRoadByStepsExampleTest ${EXE_TESTS}
         --compare-image ${TOL}
@@ -191,6 +194,16 @@ ADD_TEST(ExtractRoadByStepsExampleTest ${EXE_TESTS}
 	337 557 432 859 0.00005 1.0
 )
 
+
+ADD_TEST(ExtractRoadExampleTest ${EXE_TESTS}
+        --compare-image ${TOL}
+        ${BASELINE}/ExtractRoadExampleOutput.png
+        ${TEMP}/ExtractRoadExampleOutput.png
+        ExtractRoadExampleTest
+        ${INPUTDATA}/qb_RoadExtract.tif
+        ${TEMP}/ExtractRoadExampleOutput.png
+	337 557 432 859 1.0 0.00005 1.0 0.39269 1.0 10.0 25.
+)
 
 INCLUDE_DIRECTORIES("${OTBTesting_BINARY_DIR}")
 

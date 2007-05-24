@@ -364,6 +364,23 @@ int main( int argc, char * argv[] )
   writer->SetFileName( argv[2] );
   writer->Update();
   // Software Guide : EndCodeSnippet
+
+  // Software Guide : BeginLatex
+  //
+  // Figure~\ref{fig:ROADEXTRACTIONBYSTEPS} shows the result of applying
+  // the road extraction by steps to a fusionned Quickbird image.
+  // \begin{figure}
+  // \center
+  // \includegraphics[width=0.25\textwidth]{qb_ExtractRoad_pretty.eps}
+  // \includegraphics[width=0.25\textwidth]{ExtractRoadByStepsOutput.eps}
+  // \itkcaption[Road extraction filter application]{Result of applying
+  // the road extraction by steps pipeline to a fusionned Quickbird
+  // image. From left to right : original image, extracted road with their
+  // likehood values.}  
+  // \label{fig:ROADEXTRACTIONBYSTEPS} 
+  // \end{figure}
+  //
+  // Software Guide : EndLatex
   
   return EXIT_SUCCESS;
 }

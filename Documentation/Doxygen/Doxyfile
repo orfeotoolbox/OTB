@@ -417,7 +417,7 @@ WARN_LOGFILE           =
 # directories like "/usr/src/myproject". Separate the files or directories 
 # with spaces.
 
-INPUT                  = "../../Code" "../Doxygen"  "../../Utilities/ITK/Code" 
+INPUT                  = "../../Code" "../Doxygen"  "../../Utilities/ITK/Code" "../../Utilities/InsightJournal/" 
 
 # If the value of the INPUT tag contains directories, you can use the 
 # FILE_PATTERNS tag to specify one or more wildcard pattern (like *.cpp 
