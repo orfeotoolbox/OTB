@@ -43,6 +43,9 @@ TARGET_LINK_LIBRARIES(ExtractROI OTBCommon OTBIO ITKCommon ITKIO)
 ADD_EXECUTABLE(MetadataExample MetadataExample.cxx )
 TARGET_LINK_LIBRARIES(MetadataExample OTBCommon OTBIO ITKCommon ITKIO)
 
+ADD_EXECUTABLE(DXFReaderExample DXFReaderExample.cxx )
+TARGET_LINK_LIBRARIES(DXFReaderExample OTBCommon OTBIO ITKCommon ITKIO dxf)
+
 
 #ADD_EXECUTABLE(ImageReadExportVTK ImageReadExportVTK.cxx )
 #TARGET_LINK_LIBRARIES(ImageReadExportVTK ITKCommon ITKIO)
