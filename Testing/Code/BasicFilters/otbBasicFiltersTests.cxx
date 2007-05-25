@@ -52,4 +52,6 @@ REGISTER_TEST(otbImportGeoInformationImageFilterNew);
 REGISTER_TEST(otbImportGeoInformationImageFilter);
 REGISTER_TEST(otbSpectralAngleDistanceImageFilterNew);
 REGISTER_TEST(otbSpectralAngleDistanceImageFilter);
+REGISTER_TEST(otbVectorRescaleIntensityImageFilterNew);
+REGISTER_TEST(otbVectorRescaleIntensityImageFilter);
 }

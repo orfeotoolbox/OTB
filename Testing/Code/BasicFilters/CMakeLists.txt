@@ -214,6 +214,23 @@ ADD_TEST(bfTvStreamingShrinkImageFilterQBMUL ${BASICFILTERS_TESTS}
 		    337 557 432 859
 )
 
+
+# -------            otb::VectorRescaleIntensityImageFilter   ----------------------------
+
+ADD_TEST(bfTuVectorRescaleIntensityImageFilterNew ${BASICFILTERS_TESTS}  
+         otbVectorRescaleIntensityImageFilterNew)
+
+
+ADD_TEST(bfTVectorRescaleIntensityImageFilter ${BASICFILTERS_TESTS} 
+		--compare-image ${EPSILON}
+		    ${BASELINE}/bfTvVectorRescaleIntensityOutput.png
+		    ${TEMP}/bfTvVectorRescaleIntensityOutput.png
+		    otbVectorRescaleIntensityImageFilter
+		    ${INPUTDATA}/qb_RoadExtract.img.hdr
+	            ${TEMP}/bfTvVectorRescaleIntensityOutput.png
+		    0 255
+)
+
 # A enrichir
 SET(BasicFilters_SRCS
 otbLeeFilter.cxx
@@ -241,6 +258,8 @@ otbImportGeoInformationImageFilterNew.cxx
 otbImportGeoInformationImageFilter.cxx
 otbSpectralAngleDistanceImageFilterNew.cxx
 otbSpectralAngleDistanceImageFilter.cxx
+otbVectorRescaleIntensityImageFilterNew.cxx
+otbVectorRescaleIntensityImageFilter.cxx
 )
 
 
