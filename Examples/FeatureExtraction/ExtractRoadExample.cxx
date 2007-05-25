@@ -32,9 +32,14 @@
 
 // Software Guide : BeginLatex
 //
+// The easiest way to use the road extraction filter provided by OTB is to use the composite
+// filter. If a modification in the pipeline is required to adapt to a particular situation, 
+// the step by step example, described in the next section can be adapted.
+//
 // This example demonstrates the use of the \doxygen{otb}{RoadExtractionFilter}.
 // This filter is a composite filter achieving road extraction according to the algorithm 
-// proposed by E. Christophe and J. Inglada !TODO: reference here!. 
+// adapted by E. Christophe and J. Inglada \cite{Christophe2007} from an original method 
+// proposed in \cite{Lacroix1998}.
 //
 // The first step toward the use of this filter is the inclusion of the proper header files.
 //
@@ -73,7 +78,7 @@ int main( int argc, char * argv[] )
    // Software Guide : BeginLatex
    //
    // Then we must decide what pixel type to use for the image. We choose to do 
-   // All the computation in floating point precision and rescale the results 
+   // all the computation in floating point precision and rescale the results 
    // between 0 and 255 in order to export PNG images.
    //
    // Software Guide : EndLatex
@@ -88,7 +93,8 @@ int main( int argc, char * argv[] )
    //  Software Guide : BeginLatex
    //
    //  The images are defined using the pixel type and the dimension. Please note that
-   //  the doxygen{otb}{RoadExtractionFilter} needs an \doxygen{otb}{VectorImage} as input.
+   //  the doxygen{otb}{RoadExtractionFilter} needs an \doxygen{otb}{VectorImage} as input
+   //  to handle multispectral images.
    //
    //  Software Guide : EndLatex 
 
@@ -102,9 +108,9 @@ int main( int argc, char * argv[] )
 
    //  Software Guide : BeginLatex
    //
-   // We then define the type of the polyline that the filter produces. We use the 
+   // We define the type of the polyline that the filter produces. We use the 
    // \doxygen{otb}{PolyLineParametricPathWithValue}, which allows the filter to produce
-   // a likehood value along with each polyline. The filter is of course able to produce
+   // a likehood value along with each polyline. The filter is able to produce
    // \doxygen{itk}{PolyLineParametricPath} as well.
    //
    //  Software Guide : EndLatex 
@@ -118,7 +124,7 @@ int main( int argc, char * argv[] )
    // Software Guide : BeginLatex
    // 
    // Now we can define the \doxygen{otb}{RoadExtractionFilter} that takes a multi-spectral
-   // image as input and produce a list of polyline.
+   // image as input and produces a list of polylines.
    //
    // Software Guide : EndLatex
 
@@ -130,8 +136,8 @@ int main( int argc, char * argv[] )
    
    // Software Guide : BeginLatex
    //
-   // We also define an \doxygen{otb}{DrawPathListFilter}, which will help us drawing the output 
-   // polylines to an image, taking their likehood values into account.
+   // We also define an \doxygen{otb}{DrawPathListFilter} to draw the output 
+   // polylines on an image, taking their likehood values into account.
    //
    // Software Guide : EndLatex
 
@@ -224,7 +230,7 @@ int main( int argc, char * argv[] )
    // Software Guide : BeginLatex
    //
    // We must also set the  alpha parameter of the filter which allows us to tune the width of the roads 
-   // we want to extract. Typical value is $1.0$.
+   // we want to extract. Typical value is $1.0$ and should be working in most situations.
    //
    // Software Guide : EndLatex
 
@@ -235,6 +241,9 @@ int main( int argc, char * argv[] )
    // Software Guide : EndCodeSnippet
 
    // Software Guide : BeginLatex
+   //
+   // All other parameter should not influence the results too much in most situation and can 
+   // be kept at a default value.
    //
    // The amplitude threshold parameter tunes the sensitivity of the vectorization step. A typical
    // value is $5 \cdot 10^{-5}$.
