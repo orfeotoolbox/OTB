@@ -39,6 +39,7 @@
 
 // Software Guide : BeginCodeSnippet
 
+#include "otbPolyLineParametricPathWithValue.h"
 #include "otbSpectralAngleDistanceImageFilter.h"
 #include "itkGradientRecursiveGaussianImageFilter.h"
 #include "otbNeighborhoodScalarProductFilter.h"
@@ -56,17 +57,16 @@
 #include "otbMultiToMonoChannelExtractROI.h"
 #include "itkRescaleIntensityImageFilter.h"
 #include "itkSqrtImageFilter.h"
-#include "itkVectorRescaleIntensityImageFilter.h"
-
 // Software Guide : EndCodeSnippet
 
 #include "itkCovariantVector.h"
 #include "otbImage.h"
 #include "otbVectorImage.h"
-#include "otbPolyLineParametricPathWithValue.h"
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
 #include "otbMultiChannelExtractROI.h"
+#include "otbVectorRescaleIntensityImageFilter.h"
+
 
 //  Software Guide : BeginCommandLineArgs
 //    INPUTS: {qb_RoadExtract.tif}
@@ -93,25 +93,41 @@ int main( int argc, char * argv[] )
   MultispectralReaderType::Pointer multispectralReader =  MultispectralReaderType::New();
   multispectralReader->SetFileName(argv[1]);
 
-  // Create a 3 band image for the software guide 
-  typedef itk::Vector<double,4> InPType;
-  typedef itk::Vector<unsigned short, 3> OutPType;
-  typedef otb::Image<OutPType,2> InImType;
-  typedef otb::Image<OutPType,2> OutImType;
-  typedef otb::ImageFileReader<InImType> ReadType;
- //  typedef itk::VectorRescaleIntensityImageFilter<InImType,OutImType> RescType;
-  typedef otb::ImageFileWriter<OutImType> WriteType;
+  /// Create an 3 band image for the software guide 
+  typedef otb::VectorImage<unsigned char, Dimension> OutputVectorImageType;
+  typedef otb::ImageFileWriter<OutputVectorImageType> VectorWriterType;
+  typedef otb::VectorRescaleIntensityImageFilter<MultiSpectralImageType,OutputVectorImageType> VectorRescalerType;
+  typedef otb::MultiChannelExtractROI<unsigned char,unsigned char> ChannelExtractorType;
+    
+  multispectralReader->GenerateOutputInformation();
+  
+  OutputVectorImageType::PixelType minimum,maximum;
+  minimum.SetSize(multispectralReader->GetOutput()->GetNumberOfComponentsPerPixel());
+  maximum.SetSize(multispectralReader->GetOutput()->GetNumberOfComponentsPerPixel());
+  minimum.Fill(0);
+  maximum.Fill(255);
+  
+  VectorRescalerType::Pointer vr = VectorRescalerType::New();
+  vr->SetInput(multispectralReader->GetOutput());
+  vr->SetOutputMinimum(minimum);
+  vr->SetOutputMaximum(maximum);
+  vr->SetClampThreshold(0.01);
+  
+  ChannelExtractorType::Pointer selecter = ChannelExtractorType::New();
+  selecter->SetInput(vr->GetOutput());
+  selecter->SetExtractionRegion(multispectralReader->GetOutput()->GetLargestPossibleRegion());
+  selecter->SetChannel(1);
+  selecter->SetChannel(2);
+  selecter->SetChannel(3);
+  
+  VectorWriterType::Pointer vectWriter = VectorWriterType::New();
+  vectWriter->SetFileName(argv[3]);
+  vectWriter->SetInput(selecter->GetOutput());
+  vectWriter->Update();
 
-  ReadType::Pointer r = ReadType::New();
-  // RescType::Pointer f = RescType::New();
-  WriteType::Pointer w = WriteType::New();
-  r->SetFileName(argv[1]);
- //  f->SetInput(r->GetOutput());
-//   f->SetOutputMaximumMagnitude(511);
-  w->SetFileName(argv[3]);
-  w->SetInput(r->GetOutput());
-  w->Update();
-
+  // NB: There might be a better way to pass this parameter (coordinate of the reference ?)
+  // plan combination with the viewer
+  // possibility to give 2 parameters (just in future use)
   MultiSpectralImageType::PixelType pixelRef;
   pixelRef.SetSize(4);
   pixelRef[0]=atoi(argv[4]);
@@ -135,7 +151,7 @@ int main( int argc, char * argv[] )
   // \label{fig:RoadExtractionSpectralAngleDiagram}
   // \end{figure}
   //
-
+  //
   //
   //  Software Guide : EndLatex
   
@@ -387,4 +403,3 @@ int main( int argc, char * argv[] )
   
   return EXIT_SUCCESS;
 }
-
