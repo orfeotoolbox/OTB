@@ -328,7 +328,6 @@ int main( int argc, char * argv[] )
   //
   //  Software Guide : EndLatex
   
-  //NB: check if PathListWithValue is correct according to conventions
   // Software Guide : BeginCodeSnippet
   typedef otb::LikehoodPathListFilter<PathType,InternalImageType> PathListToPathListWithValueType;
   PathListToPathListWithValueType::Pointer pathListConverter = PathListToPathListWithValueType::New();
