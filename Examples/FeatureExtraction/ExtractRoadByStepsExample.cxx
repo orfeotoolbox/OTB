@@ -28,9 +28,10 @@
 // Software Guide : BeginLatex
 //
 // This example illustrates the detail of the \doxygen{otb}{RoadExtractionFilter}. 
-// This filter is a composite filter including all the steps below. Individual 
-// filters can be replaced to design a road detector targeted at SAR images for 
-// example.
+// This filter, describeb in the previous section,  is a composite filter including 
+// all the steps below. Individual filters can be replaced to design a road detector
+// targeted at SAR images for example.
+
 //
 // The first step required to use this filter is to include header files. 
 //
@@ -92,7 +93,7 @@ int main( int argc, char * argv[] )
   MultispectralReaderType::Pointer multispectralReader =  MultispectralReaderType::New();
   multispectralReader->SetFileName(argv[1]);
 
-  /// Create an 3 band image for the software guide 
+  // Create a 3 band image for the software guide 
   typedef itk::Vector<double,4> InPType;
   typedef itk::Vector<unsigned short, 3> OutPType;
   typedef otb::Image<OutPType,2> InImType;
@@ -111,9 +112,6 @@ int main( int argc, char * argv[] )
   w->SetInput(r->GetOutput());
   w->Update();
 
-  // NB: There might be a better way to pass this parameter (coordinate of the reference ?)
-  // plan combination with the viewer
-  // possibility to give 2 parameters (just in future use)
   MultiSpectralImageType::PixelType pixelRef;
   pixelRef.SetSize(4);
   pixelRef[0]=atoi(argv[4]);
@@ -126,8 +124,18 @@ int main( int argc, char * argv[] )
   //  Software Guide : BeginLatex
   //
   //  The spectral angle is used to compute a grayscale images from the 
-  //  multispectral original image. Pixels corresponding to roads are in 
+  //  multispectral original image. The spectral angle is illustrated on
+  // \ref{fig:RoadExtractionSpectralAngleDiagram} Pixels corresponding to roads are in 
   //  darker color.
+  //
+  // \begin{figure}
+  // \center
+  // \includegraphics[width=0.44\textwidth]{RoadExtractionSpectralAngleDiagram.eps}
+  // \itkcaption[Spectral Angle]{Illustration of the spectral angle for a three-band image.}
+  // \label{fig:RoadExtractionSpectralAngleDiagram}
+  // \end{figure}
+  //
+
   //
   //  Software Guide : EndLatex
   
