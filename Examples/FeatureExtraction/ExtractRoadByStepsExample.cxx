@@ -146,7 +146,7 @@ int main( int argc, char * argv[] )
   //
   // \begin{figure}
   // \center
-  // \includegraphics[width=0.44\textwidth]{RoadExtractionSpectralAngleDiagram.eps}
+  // \includegraphics[width=0.40\textwidth]{RoadExtractionSpectralAngleDiagram.eps}
   // \itkcaption[Spectral Angle]{Illustration of the spectral angle for a three-band image.}
   // \label{fig:RoadExtractionSpectralAngleDiagram}
   // \end{figure}
