@@ -85,15 +85,20 @@ int main(int argc, char * argv[])
       typedef otb::Image<PixelType,Dimension> ImageType;
       typedef otb::Image<OutputPixelType,Dimension> OutputImageType;
       typedef otb::ImageFileWriter<OutputImageType> WriterType;
-      typedef otb::SpatialObjectDXFReader<GroupType> SpatialObjectDXFReaderType;
-      typedef otb::SpatialObjectToImageDrawingFilter<GroupType,ImageType> SpatialObjectToImageDrawingFilterType;
-      typedef itk::RescaleIntensityImageFilter< ImageType, OutputImageType >     CastFilterType;
+      typedef otb::SpatialObjectDXFReader<GroupType>
+	                                  SpatialObjectDXFReaderType;
+      typedef otb::SpatialObjectToImageDrawingFilter<GroupType,ImageType>
+	                       SpatialObjectToImageDrawingFilterType;
+      typedef itk::RescaleIntensityImageFilter< ImageType,
+                                       OutputImageType >     CastFilterType;
       typedef itk::SpatialObject<Dimension> SpatialObjectType;
 
 
       // Instantiating object
-      SpatialObjectDXFReaderType::Pointer reader = SpatialObjectDXFReaderType::New();
-      SpatialObjectToImageDrawingFilterType::Pointer imageGenerator = SpatialObjectToImageDrawingFilterType::New();
+      SpatialObjectDXFReaderType::Pointer reader =
+	                                   SpatialObjectDXFReaderType::New();
+      SpatialObjectToImageDrawingFilterType::Pointer imageGenerator =
+	                        SpatialObjectToImageDrawingFilterType::New();
       WriterType::Pointer writer = WriterType::New();
       CastFilterType::Pointer castFilter = CastFilterType::New();
 // Software Guide : EndCodeSnippet
@@ -110,7 +115,7 @@ int main(int argc, char * argv[])
       reader->SetFileName(inputFilename);
       reader->SetLayerName(argv[2]);
       writer->SetFileName(outputFilename);
-	  const unsigned int outputSize = atoi(argv[3]);
+      const unsigned int outputSize = atoi(argv[3]);
 // Software Guide : EndCodeSnippet
      
 
