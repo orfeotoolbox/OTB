@@ -24,18 +24,13 @@
 #define ITK_LEAN_AND_MEAN
 #endif
 
-//  Software Guide : BeginCommandLineArgs
-//  INPUTS: {qb_ExtractRoad.tif}
-//  OUTPUTS: {qb_extractSegmentExtractionBySteps.png}
-//  320 506 367 790 
-//  Software Guide : EndCommandLineArgs
 
 // Software Guide : BeginLatex
 //
 // This example illustrates the detail of the \doxygen{otb}{RoadExtractionFilter}. 
-// This filter, describeb in the previous section,  is a composite filter including 
-// all the steps below. Individual filters can be replaced to design a road detector
-// targeted at SAR images for example.
+// This filter is a composite filter including all the steps below. Individual 
+// filters can be replaced to design a road detector targeted at SAR images for 
+// example.
 //
 // The first step required to use this filter is to include header files. 
 //
@@ -74,7 +69,7 @@
 
 //  Software Guide : BeginCommandLineArgs
 //    INPUTS: {qb_RoadExtract.tif}
-//    OUTPUTS: {ExtractRoadByStepsExampleOutput.png}
+//    OUTPUTS: {ExtractRoadByStepsExampleOutput.png}, {qb_ExtractRoad_pretty.png}
 //    337 557 432 859 0.00005 1.0
 //  Software Guide : EndCommandLineArgs
 
@@ -97,7 +92,7 @@ int main( int argc, char * argv[] )
   MultispectralReaderType::Pointer multispectralReader =  MultispectralReaderType::New();
   multispectralReader->SetFileName(argv[1]);
 
-  /// Create a 3 band image for the software guide 
+  /// Create an 3 band image for the software guide 
   typedef itk::Vector<double,4> InPType;
   typedef itk::Vector<unsigned short, 3> OutPType;
   typedef otb::Image<OutPType,2> InImType;
@@ -112,32 +107,27 @@ int main( int argc, char * argv[] )
   r->SetFileName(argv[1]);
  //  f->SetInput(r->GetOutput());
 //   f->SetOutputMaximumMagnitude(511);
-  w->SetFileName("qb_ExtractRoad_pretty.png");
+  w->SetFileName(argv[3]);
   w->SetInput(r->GetOutput());
   w->Update();
 
+  // NB: There might be a better way to pass this parameter (coordinate of the reference ?)
+  // plan combination with the viewer
+  // possibility to give 2 parameters (just in future use)
   MultiSpectralImageType::PixelType pixelRef;
   pixelRef.SetSize(4);
-  pixelRef[0]=atoi(argv[3]);
-  pixelRef[1]=atoi(argv[4]);
-  pixelRef[2]=atoi(argv[5]); 
-  pixelRef[3]=atoi(argv[6]);
+  pixelRef[0]=atoi(argv[4]);
+  pixelRef[1]=atoi(argv[5]);
+  pixelRef[2]=atoi(argv[6]); 
+  pixelRef[3]=atoi(argv[7]);
   
   double resolution = 0.6; //to get directly from metadata ?
-  double alpha = atof(argv[8]);
+  double alpha = atof(argv[9]);
   //  Software Guide : BeginLatex
   //
   //  The spectral angle is used to compute a grayscale images from the 
-  //  multispectral original image. The spectral angle is illustrated on
-  // \ref{fig:RoadExtractionSpectralAngleDiagram} Pixels corresponding to roads are in 
+  //  multispectral original image. Pixels corresponding to roads are in 
   //  darker color.
-  //
-  // \begin{figure}
-  // \center
-  // \includegraphics[width=0.44\textwidth]{RoadExtractionSpectralAngleDiagram.eps}
-  // \itkcaption[Spectral Angle]{Illustration of the spectral angle for a three-band image.}
-  // \label{fig:RoadExtractionSpectralAngleDiagram}
-  // \end{figure}
   //
   //  Software Guide : EndLatex
   
@@ -259,7 +249,7 @@ int main( int argc, char * argv[] )
   VectorizationFilterType::Pointer vectorizationFilter = VectorizationFilterType::New();
   vectorizationFilter->SetInput(nonMaxRemovalByDirectionFilter->GetOutput());
   vectorizationFilter->SetInputDirection(scalarFilter->GetOutputDirection());
-  vectorizationFilter->SetAmplitudeThreshold(atof(argv[7]));
+  vectorizationFilter->SetAmplitudeThreshold(atof(argv[8]));
   // Software Guide : EndCodeSnippet
       
   
@@ -377,7 +367,7 @@ int main( int argc, char * argv[] )
   // \begin{figure}
   // \center
   // \includegraphics[width=0.25\textwidth]{qb_ExtractRoad_pretty.eps}
-  // \includegraphics[width=0.25\textwidth]{ExtractRoadByStepsOutput.eps}
+  // \includegraphics[width=0.25\textwidth]{ExtractRoadByStepsExampleOutput.eps}
   // \itkcaption[Road extraction filter application]{Result of applying
   // the road extraction by steps pipeline to a fusionned Quickbird
   // image. From left to right : original image, extracted road with their

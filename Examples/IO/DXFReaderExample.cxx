@@ -17,7 +17,8 @@
 =========================================================================*/
 
 //  Software Guide : BeginCommandLineArgs
-//  INPUTS: {Lalande.dxf} TOIT 1000
+//  INPUTS: {Lalande.dxf}
+//  TOIT 1000
 //  OUTPUTS: {lalande.png}
 //  Software Guide : EndCommandLineArgs
 
@@ -220,7 +221,7 @@ int main(int argc, char * argv[])
 //
 //  Figure \ref{fig:lalande} 
 //  represents Spatial Objects extracted from a DXF file.
-  
+// Software Guide : EndLatex  
   
   return EXIT_SUCCESS;
 }
