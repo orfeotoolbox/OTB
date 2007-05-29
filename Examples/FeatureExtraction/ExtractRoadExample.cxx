@@ -163,7 +163,7 @@ int main( int argc, char * argv[] )
 
    //  Software Guide : BeginLatex
    //
-   //  An \doxygen{ImageFileReader} class is also instantiated in order to read
+   //  An \doxygen{otb::ImageFileReader} class is also instantiated in order to read
    //  image data from a file. 
    //
    //  Software Guide : EndLatex 
@@ -176,7 +176,7 @@ int main( int argc, char * argv[] )
 
    //  Software Guide : BeginLatex
    //  
-   // An \doxygen{ImageFileWriter} is instantiated in order to write the
+   // An \doxygen{otb::ImageFileWriter} is instantiated in order to write the
    // output image to a file.
    //
    //  Software Guide : EndLatex 
@@ -208,8 +208,8 @@ int main( int argc, char * argv[] )
    
    // Software Guide : BeginLatex
    //
-   // The \doxygen{RoadExtractionFilter} needs to have a reference pixel 
-   // corresponding to the color likely to represent a road. This is done 
+   // The \doxygen{otb::RoadExtractionFilter} needs to have a reference pixel 
+   // corresponding to the spectral content likely to represent a road. This is done 
    // by passing a pixel to the filter. Here we suppose that the input image 
    // has four spectral bands.
    //
@@ -243,7 +243,7 @@ int main( int argc, char * argv[] )
    // Software Guide : BeginLatex
    //
    // All other parameter should not influence the results too much in most situation and can 
-   // be kept at a default value.
+   // be kept at the default value.
    //
    // The amplitude threshold parameter tunes the sensitivity of the vectorization step. A typical
    // value is $5 \cdot 10^{-5}$.
@@ -271,7 +271,7 @@ int main( int argc, char * argv[] )
 
    // Software Guide : BeginLatex
    //
-   // Roads are not likely to have sharp angle. Therefore we set the max angle parameter,
+   // Roads are not likely to have sharp turns. Therefore we set the max angle parameter,
    // as well as the link angular threshold. The value is typicaly $\frac{\pi}{8}$.
    //
    // Software Guide : EndLatex
@@ -285,7 +285,7 @@ int main( int argc, char * argv[] )
     
     // Software Guide : BeginLatex
     //
-    // The doxygen{RoadExtractionFilter} performs two odd path removing operations at different stage of
+    // The \doxygen{otb::RoadExtractionFilter} performs two odd path removing operations at different stage of
     // its execution. The first mean distance threshold and the second mean distance threshold set their criterion
     // for removal. Path are removed if their mean distance between nodes is to small, since such path coming
     // from previous filters are likely to be tortuous. The first removal operation as a typical mean distance 
@@ -302,11 +302,11 @@ int main( int argc, char * argv[] )
 
     // Software Guide : BeginLatex
     //
-    // The \doxygen{RoadExtractionFilter} is able to link path whose ends are near 
+    // The \doxygen{otb::RoadExtractionFilter} is able to link path whose ends are near 
     // according to an euclidean distance criterion. The threshold for this distance
     // to link a path is the distance threshold parameter. A typical value is $25$.
     //
-    // Software Guide : End Latex
+    // Software Guide : EndLatex
 
     // Software Guide : BeginCodeSnippet
     
@@ -317,7 +317,7 @@ int main( int argc, char * argv[] )
      // Software Guide : BeginLatex
      //
      // We will now create a black background image to draw the resulting polyline on.
-     // To achieve this we need to now the size of our input image. Therefore we trigger the
+     // To achieve this we need to know the size of our input image. Therefore we trigger the
      // \code{GenerateOutputInformation()} of the reader.
      //
      // Software Guide : EndLatex
@@ -334,7 +334,7 @@ int main( int argc, char * argv[] )
      
      // Software Guide  : BeginLatex
      //
-     // We tell the \doxygen{DrawPathListFilter} to try to use the likehood value
+     // We tell the \doxygen{otb::DrawPathListFilter} to try to use the likehood value
      // embedded within the polyline as a value for drawing this polyline if possible.
      //
      // Software Guide : EndLatex
@@ -348,7 +348,7 @@ int main( int argc, char * argv[] )
      //  Software Guide : BeginLatex
      //
      //  The \code{itk::RescaleIntensityImageFilter} needs to know which
-     //  is the minimu and maximum values of the output generated
+     //  is the minimum and maximum values of the output generated
      //  image. Those can be chosen in a generic way by using the
      //  \code{NumericTraits} functions, since they are templated over
      //  the pixel type.
