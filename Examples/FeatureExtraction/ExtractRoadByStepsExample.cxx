@@ -27,17 +27,12 @@
 
 // Software Guide : BeginLatex
 //
-// This example illustrates the detail of the \doxygen{otb}{RoadExtractionFilter}. 
-// This filter, describeb in the previous section,  is a composite filter including 
+// This example illustrates the details of the \doxygen{otb}{RoadExtractionFilter}. 
+// This filter, described in the previous section,  is a composite filter that includes 
 // all the steps below. Individual filters can be replaced to design a road detector
 // targeted at SAR images for example.
-
-//
-// The first step required to use this filter is to include header files. 
 //
 // Software Guide : EndLatex 
-
-// Software Guide : BeginCodeSnippet
 
 #include "otbPolyLineParametricPathWithValue.h"
 #include "otbSpectralAngleDistanceImageFilter.h"
@@ -57,7 +52,6 @@
 #include "otbMultiToMonoChannelExtractROI.h"
 #include "itkRescaleIntensityImageFilter.h"
 #include "itkSqrtImageFilter.h"
-// Software Guide : EndCodeSnippet
 
 #include "itkCovariantVector.h"
 #include "otbImage.h"
@@ -93,7 +87,7 @@ int main( int argc, char * argv[] )
   MultispectralReaderType::Pointer multispectralReader =  MultispectralReaderType::New();
   multispectralReader->SetFileName(argv[1]);
 
-  /// Create an 3 band image for the software guide 
+  // Create an 3 band image for the software guide 
   typedef otb::VectorImage<unsigned char, Dimension> OutputVectorImageType;
   typedef otb::ImageFileWriter<OutputVectorImageType> VectorWriterType;
   typedef otb::VectorRescaleIntensityImageFilter<MultiSpectralImageType,OutputVectorImageType> VectorRescalerType;
@@ -125,9 +119,6 @@ int main( int argc, char * argv[] )
   vectWriter->SetInput(selecter->GetOutput());
   vectWriter->Update();
 
-  // NB: There might be a better way to pass this parameter (coordinate of the reference ?)
-  // plan combination with the viewer
-  // possibility to give 2 parameters (just in future use)
   MultiSpectralImageType::PixelType pixelRef;
   pixelRef.SetSize(4);
   pixelRef[0]=atoi(argv[4]);
@@ -135,19 +126,20 @@ int main( int argc, char * argv[] )
   pixelRef[2]=atoi(argv[6]); 
   pixelRef[3]=atoi(argv[7]);
   
-  double resolution = 0.6; //to get directly from metadata ?
+  double resolution = 0.6; //to get directly from metadata
   double alpha = atof(argv[9]);
+  
   //  Software Guide : BeginLatex
   //
-  //  The spectral angle is used to compute a grayscale images from the 
-  //  multispectral original image. The spectral angle is illustrated on
-  // \ref{fig:RoadExtractionSpectralAngleDiagram} Pixels corresponding to roads are in 
+  //  The spectral angle is used to compute a grayscale image from the 
+  //  multispectral original image using \doxygen{otb::SpectralAngleDistanceImageFilter}. The spectral angle is illustrated on
+  // Figure~\ref{fig:RoadExtractionSpectralAngleDiagram}. Pixels corresponding to roads are in 
   //  darker color.
   //
   // \begin{figure}
   // \center
   // \includegraphics[width=0.40\textwidth]{RoadExtractionSpectralAngleDiagram.eps}
-  // \itkcaption[Spectral Angle]{Illustration of the spectral angle for a three-band image.}
+  // \itkcaption[Spectral Angle]{Illustration of the spectral angle for one pixel of a three-band image. One of the vector is the reference pixel and the other is the current pixel.}
   // \label{fig:RoadExtractionSpectralAngleDiagram}
   // \end{figure}
   //
@@ -166,7 +158,7 @@ int main( int argc, char * argv[] )
   //  Software Guide : BeginLatex
   //
   //  A square root is applied to the spectral angle image in order to enhance contrast between 
-  //  darker pixels (which are pixels of interest).
+  //  darker pixels (which are pixels of interest) with \doxygen{itk::SqrtImageFilter}.
   //
   //  Software Guide : EndLatex
   
@@ -179,7 +171,8 @@ int main( int argc, char * argv[] )
 
   //  Software Guide : BeginLatex
   //
-  //  Use the Gaussian gradient filter
+  //  Use the Gaussian gradient filter compute the gradient direction and intensity
+  // (\doxygen{itk::GradientRecursiveGaussianImageFilter}).
   //
   //  Software Guide : EndLatex
   
@@ -195,17 +188,12 @@ int main( int argc, char * argv[] )
   //  Software Guide : BeginLatex
   //
   //  Compute the scalar product of the neighboring pixels and keep the
-  //  minimum value and the direction. This is the line detector described 
+  //  minimum value and the direction with \doxygen{otb::NeighborhoodScalarProductFilter}. 
+  // This is the line detector described 
   //  in \cite{Lacroix1998}.
   //
   //  Software Guide : EndLatex 
   
-  //**** NB: One or two output ?****
-  // -> two output, the direction image type can be different
-  // make sure OTB convention are respected, especially for the direction notation
-  
-  
-  //                                             input            output        outputdir
   // Software Guide : BeginCodeSnippet
   typedef otb::NeighborhoodScalarProductFilter<VectorImageType,InternalImageType,InternalImageType> NeighborhoodScalarProductType;
   NeighborhoodScalarProductType::Pointer scalarFilter = NeighborhoodScalarProductType::New();
@@ -215,12 +203,13 @@ int main( int argc, char * argv[] )
   
   //  Software Guide : BeginLatex
   //
-  //  The resulting image is passed to a filter to remove the pixel 
+  //  The resulting image is passed to the \doxygen{otb::RemoveIsolatedByDirectionFilter} 
+  // filter to remove pixels 
   //  with no neighbor having the same direction.
   //
   //  Software Guide : EndLatex 
 
-  //                                              input         inputdir        output
+
   // Software Guide : BeginCodeSnippet
   typedef otb::RemoveIsolatedByDirectionFilter<InternalImageType,InternalImageType,InternalImageType> RemoveIsolatedByDirectionType;
   RemoveIsolatedByDirectionType::Pointer removeIsolatedByDirectionFilter = RemoveIsolatedByDirectionType::New();
@@ -231,13 +220,12 @@ int main( int argc, char * argv[] )
   
   //  Software Guide : BeginLatex
   //
-  //  We now remove pixels having a direction corresponding to bright lines 
-  //  as we know that after the spectral angle, roads are in darker color.
+  //  We remove pixels having a direction corresponding to bright lines 
+  //  as we know that after the spectral angle, roads are in darker color
+  //  with the \doxygen{otb::RemoveWrongDirectionFilter} filter.
   //
   //  Software Guide : EndLatex  
   
-  // NB: Name can be change according to the conventional values (RemoveNegative ? Positive ?)
-  //                                              input         inputdir        output
   // Software Guide : BeginCodeSnippet
   typedef otb::RemoveWrongDirectionFilter<InternalImageType,InternalImageType,InternalImageType> RemoveWrongDirectionType;
   RemoveWrongDirectionType::Pointer removeWrongDirectionFilter = RemoveWrongDirectionType::New();
@@ -248,12 +236,11 @@ int main( int argc, char * argv[] )
   
   //  Software Guide : BeginLatex
   //
-  //  We now remove pixels which are not maximum on the direction 
-  //  perpendicular to the road direction.
+  //  We remove pixels which are not maximum on the direction 
+  //  perpendicular to the road direction with the \doxygen{otb::NonMaxRemovalByDirectionFilter}.
   //
   //  Software Guide : EndLatex
   
-  //                                              input         inputdir        output  
   // Software Guide : BeginCodeSnippet
   typedef otb::NonMaxRemovalByDirectionFilter<InternalImageType,InternalImageType,InternalImageType> NonMaxRemovalByDirectionType;
   NonMaxRemovalByDirectionType::Pointer nonMaxRemovalByDirectionFilter = NonMaxRemovalByDirectionType::New();
@@ -264,7 +251,7 @@ int main( int argc, char * argv[] )
   
   //  Software Guide : BeginLatex
   //
-  //  Extracted road are vectorized into polylines
+  //  Extracted road are vectorized into polylines with \doxygen{otb::VectorizationPathListFilter}.
   //
   //  Software Guide : EndLatex
   
@@ -280,26 +267,24 @@ int main( int argc, char * argv[] )
   //  Software Guide : BeginLatex
   //
   //  However, this vectorization is too simple and need to be refined 
-  //  to be usable. First, we remove all aligned points to make one segment.
+  //  to be usable. First, we remove all aligned points to make one segment with 
+  // \doxygen{otb::SimplifyPathListFilter}.
   //  Then we break the polylines which have sharp angles as they are probably
-  //  not road. Finally we remove path which are too short.
+  //  not road with \doxygen{otb::BreakAngularPathListFilter}. 
+  // Finally we remove path which are too short with \doxygen{otb::RemoveTortuousPathListFilter}.
   //
   //  Software Guide : EndLatex
   
-  //NB: This filter works on one path at a time. Possibly better to work on PathType individually ?
-  // but we must have a simple way to simplify the full list
   // Software Guide : BeginCodeSnippet
   typedef otb::SimplifyPathListFilter<PathType> SimplifyPathType;
   SimplifyPathType::Pointer simplifyPathListFilter = SimplifyPathType::New();
   simplifyPathListFilter->SetTolerance(1.0);
   simplifyPathListFilter->SetInput(vectorizationFilter->GetOutput());
     
-  //NB: This filter need the full list (adding the new created path at the end). 
   typedef otb::BreakAngularPathListFilter<PathType> BreakAngularPathType;
   BreakAngularPathType::Pointer breakAngularPathListFilter = BreakAngularPathType::New();
   breakAngularPathListFilter->SetMaxAngle(M_PI/8.);
   breakAngularPathListFilter->SetInput(simplifyPathListFilter->GetOutput());
-  
   
   typedef otb::RemoveTortuousPathListFilter<PathType> RemoveTortuousPathType;
   RemoveTortuousPathType::Pointer removeTortuousPathListFilter = RemoveTortuousPathType::New();
@@ -309,9 +294,10 @@ int main( int argc, char * argv[] )
     
   //  Software Guide : BeginLatex
   //
-  //  Polylines within a certain range are linked to try to fill gaps due to 
-  //  occultations by vehicules, trees, etc. before simplifying polylines and 
-  //  removing the shorteest ones.
+  //  Polylines within a certain range are linked (\doxygen{otb::LinkPathListFilter}) to 
+  //  try to fill gaps due to occultations by vehicules, trees, etc. before simplifying 
+  //  polylines (\doxygen{otb::SimplifyPathListFilter}) and 
+  //  removing the shortest ones with \doxygen{otb::RemoveTortuousPathListFilter}.
   //
   //  Software Guide : EndLatex
   
@@ -336,8 +322,9 @@ int main( int argc, char * argv[] )
   //  Software Guide : BeginLatex
   //
   //  A value can be associated with each polyline according to pixel values 
-  // under the polyline. A higher value will mean a higher likelihood to be 
-  // a road. Polylines are drawn on the original image.
+  // under the polyline with \doxygen{otb::LikehoodPathListFilter}. A higher value 
+  // will mean a higher likelihood to be 
+  // a road. Polylines are drawn on the original image with \doxygen{otb::DrawPathListFilter}.
   //
   //  Software Guide : EndLatex
   
