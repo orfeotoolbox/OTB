@@ -101,7 +101,7 @@ bool
 ArcSpatialObject< VDimension >
 ::IsInside( const PointType & point, unsigned int depth, char * name ) const
 {
-  itkDebugMacro( "Checking the point [" << point << "] is inside the Arc" );
+ //  itkDebugMacro( "Checking the point [" << point << "] is inside the Arc" );
 
   if(name == NULL)
     {
@@ -205,7 +205,7 @@ bool
 ArcSpatialObject< VDimension >
 ::IsEvaluableAt( const PointType & point, unsigned int depth, char * name ) const
 {
-  itkDebugMacro( "Checking if the arc is evaluable at " << point );
+  // itkDebugMacro( "Checking if the arc is evaluable at " << point );
   return IsInside(point, depth, name);
 }
 /** 
@@ -217,7 +217,7 @@ ArcSpatialObject< VDimension >
 ::ValueAt( const PointType & point, double & value, unsigned int depth,
            char * name ) const
 {
-  itkDebugMacro( "Getting the value of the arc at " << point );
+  // itkDebugMacro( "Getting the value of the arc at " << point );
   if( IsInside(point, 0, name) )
     {
     value = this->GetDefaultInsideValue();

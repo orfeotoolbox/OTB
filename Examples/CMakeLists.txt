@@ -12,6 +12,7 @@ SUBDIRS(
   Segmentation
   Iterators
   MultiScale
+  DisparityMap
 )
 
 IF(OTB_USE_VISU)
