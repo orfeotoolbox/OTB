@@ -552,7 +552,7 @@ int main (int argc, char* argv[])
   // \includegraphics[width=0.40\textwidth]{ROI_IKO_PAN_LesHalles.eps}
   // \includegraphics[width=0.40\textwidth]{ROI_IKO_PAN_LesHalles_warped.eps}
   // \includegraphics[width=0.40\textwidth]{deformationFieldOutput.eps}
-  // \includegraphics[width=0.40\textwidth]{resampledFixedOutput}
+  // \includegraphics[width=0.40\textwidth]{resampledFixedOutput.eps}
   // \itkcaption[Deformation field and resampling from disparity map estimation]{From left
   // to right and top to bottom: fixed input image, moving image with a sinusoid deformation, 
   // estimated deformation field in the horizontal direction, resampled fixed image.}
