@@ -43,6 +43,18 @@ namespace otb
  * \class RoadExtractionFilter
  * \brief This class performs the extraction of roads from an image.
  * 
+ * This composite filter implement a fast and robust road extraction
+ * for high resolution satellite images. The algorithm uses all spectral
+ * bands based on the spectral angle with a reference pixel. The line 
+ * detection done using a Gaussian gradient with a scalar product to find
+ * the road directions. Finally, extracted roads are vectorized and 
+ * processed to improve the results: remove some occultations and false 
+ * detections.
+ *
+ * This filter is fast as the detection typically takes 3 seconds for a 
+ * 1000 \f$ \times \f$ 1000 images with four spectral bands. Results can be
+ * used as initialization for more complex algorithms.
+ *
  * \sa SpectralAngleDistanceImageFilter
  * \sa itk::SqrtImageFilter
  * \sa itk::GradientRecursiveGaussianImageFilter
