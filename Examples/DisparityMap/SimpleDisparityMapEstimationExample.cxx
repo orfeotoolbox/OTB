@@ -97,7 +97,7 @@ int main (int argc, char* argv[])
   //  Software Guide : BeginLatex
   //
   //  The images are defined using the pixel type and the dimension. Please note that
-  //  the doxygen{otb}{NearestPointDeformationFieldGenerator} generates a 
+  //  the \doxygen{otb}{NearestPointDeformationFieldGenerator} generates a 
   //  \doxygen{otb}{VectorImage} to represent the deformation field in both 
   //  image directions.
   //
@@ -315,7 +315,7 @@ int main (int argc, char* argv[])
  
   // Software Guide : BeginLatex
   //
-  // The initial transform paramters can be set via the \code{SetIntialTransformParameters()} method.
+  // The initial transform parameters can be set via the \code{SetIntialTransformParameters()} method.
   // In our case, we simply fill the parameter array with null values.
   //
   // Software Guide : EndLatex
@@ -347,7 +347,7 @@ int main (int argc, char* argv[])
   // Software Guide : BeginLatex
   // 
   // Once the estimation has been performed by the \doxygen{otb}{DisparityMapEstimationMethod}, one can generate
-  // the associated deformation field (that mean translation in first and second image direction).
+  // the associated deformation field (that means translation in first and second image direction).
   // It will be represented as a \doxygen{otb}{VectorImage}. 
   //
   // Software Guide : EndLatex
@@ -412,8 +412,8 @@ int main (int argc, char* argv[])
   // Software Guide : BeginLatex
   //
   // The local registration process can lead to wrong deformation values and transform parameters. To Select only
-  // points in point set for which the registration process was succesfull, one can set a threshold on the final metric
-  // value : point for which the absolute final metric value reside below this threshold will be discarded. This
+  // points in point set for which the registration process was succesful, one can set a threshold on the final metric
+  // value : points for which the absolute final metric value is below this threshold will be discarded. This
   // threshold can be set with the \code{SetMetricThreshold()} method.
   //
   // Software Guide : EndLatex
