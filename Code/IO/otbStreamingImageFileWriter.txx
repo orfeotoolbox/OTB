@@ -477,7 +477,7 @@ StreamingImageFileWriter<TInputImage>
   /** Control if the ImageIO is CanStreamWrite */
     if( m_ImageIO->CanStreamWrite() == false )
     {
-        otbMsgDebugMacro(<<"WARNING : The ImageFactory selected for the this image file <"<<m_FileName.c_str()<<"> is not StreamWrite. So, the streaming method is not use.");
+        otbMsgDebugMacro(<<"WARNING : The ImageFactory selected for the image file <"<<m_FileName.c_str()<<"> is not StreamWrite. So, the streaming method is not use.");
         numDivisions = 1;
     }
     else
