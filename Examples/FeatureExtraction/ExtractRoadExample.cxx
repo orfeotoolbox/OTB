@@ -60,6 +60,10 @@
 #include "itkRescaleIntensityImageFilter.h"
 #include "otbMath.h"
 
+#include "itkInvertIntensityImageFilter.h"
+#include "itkGrayscaleDilateImageFilter.h"
+#include "itkBinaryBallStructuringElement.h"
+
 
 int main( int argc, char * argv[] )
 {
@@ -370,30 +374,49 @@ int main( int argc, char * argv[] )
      //
      // Software Guide : EndLatex
      
-     writer->SetFileName(argv[2]);
-
      // Software Guide : BeginCodeSnippet
 
      roadExtractionFilter->SetInput(reader->GetOutput());
      drawingFilter->SetInput(blackBackground);
      drawingFilter->SetInputPath(roadExtractionFilter->GetOutput());
      rescaleFilter->SetInput(drawingFilter->GetOutput());
-     writer->SetInput(rescaleFilter->GetOutput());
+    
 
      // Software Guide : EndCodeSnippet
      
      // Software Guide : BeginLatex
      //
      // The update of the pipeline is triggered by the \code{Update()} method 
-     // of the writing filter.
+     // of the rescale intensity filter.
      //
      // Software Guide : EndLatex
 
      //  Software Guide : BeginCodeSnippet 
   
-     writer->Update();      
+     rescaleFilter->Update();      
      
      // Software Guide : EndCodeSnippet
+
+     // output image enhancement
+     typedef itk::BinaryBallStructuringElement<OutputPixelType,Dimension> StructuringElementType;
+     typedef itk::GrayscaleDilateImageFilter<OutputImageType,OutputImageType,StructuringElementType> DilateFilterType;
+     typedef itk::InvertIntensityImageFilter<OutputImageType,OutputImageType> InvertFilterType;
+
+     StructuringElementType se;
+     se.SetRadius(1);
+     se.CreateStructuringElement();
+
+     DilateFilterType::Pointer dilater = DilateFilterType::New();
+
+     dilater->SetInput(rescaleFilter->GetOutput());
+     dilater->SetKernel(se);
+
+     InvertFilterType::Pointer invertFilter = InvertFilterType::New();
+     invertFilter->SetInput(dilater->GetOutput());
+
+     writer->SetFileName(argv[2]);
+     writer->SetInput(invertFilter->GetOutput());
+     writer->Update();
      
      // Software Guide : BeginLatex
      //
@@ -401,8 +424,8 @@ int main( int argc, char * argv[] )
      // the road extraction filter to a fusionned Quickbird image.
      // \begin{figure}
      // \center
-     // \includegraphics[width=0.25\textwidth]{qb_ExtractRoad_pretty.eps}
-     // \includegraphics[width=0.25\textwidth]{ExtractRoadOutput.eps}
+     // \includegraphics[width=0.44\textwidth]{qb_ExtractRoad_pretty.eps}
+     // \includegraphics[width=0.44\textwidth]{ExtractRoadOutput.eps}
      // \itkcaption[Road extraction filter application]{Result of applying
      // the \doxygen{otb}{RoadExtractionFilter} to a fusionned Quickbird
      // image. From left to right : original image, extracted road with their

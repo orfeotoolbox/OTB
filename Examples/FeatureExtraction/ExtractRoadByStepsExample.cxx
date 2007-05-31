@@ -188,7 +188,7 @@ int main( int argc, char * argv[] )
   // Software Guide : BeginCodeSnippet
   double sigma = alpha*(1.2/resolution+1);
   typedef itk::GradientRecursiveGaussianImageFilter<InternalImageType, 
-                                                    VectorImageType> GradientFilterType;
+               VectorImageType> GradientFilterType;
   GradientFilterType::Pointer gradientFilter = GradientFilterType::New();
   gradientFilter->SetSigma(sigma);
   gradientFilter->SetInput(sqrtFilter->GetOutput());
@@ -207,7 +207,8 @@ int main( int argc, char * argv[] )
   // Software Guide : BeginCodeSnippet
   typedef otb::NeighborhoodScalarProductFilter<VectorImageType,
                InternalImageType,InternalImageType> NeighborhoodScalarProductType;
-  NeighborhoodScalarProductType::Pointer scalarFilter = NeighborhoodScalarProductType::New();
+  NeighborhoodScalarProductType::Pointer scalarFilter 
+    = NeighborhoodScalarProductType::New();
   scalarFilter->SetInput(gradientFilter->GetOutput());
 
   // Software Guide : EndCodeSnippet
@@ -227,7 +228,8 @@ int main( int argc, char * argv[] )
   RemoveIsolatedByDirectionType::Pointer removeIsolatedByDirectionFilter 
                                  = RemoveIsolatedByDirectionType::New();
   removeIsolatedByDirectionFilter->SetInput(scalarFilter->GetOutput());
-  removeIsolatedByDirectionFilter->SetInputDirection(scalarFilter->GetOutputDirection());
+  removeIsolatedByDirectionFilter
+    ->SetInputDirection(scalarFilter->GetOutputDirection());
 
   // Software Guide : EndCodeSnippet
   
@@ -242,7 +244,8 @@ int main( int argc, char * argv[] )
   // Software Guide : BeginCodeSnippet
   typedef otb::RemoveWrongDirectionFilter<InternalImageType,
                InternalImageType,InternalImageType> RemoveWrongDirectionType;
-  RemoveWrongDirectionType::Pointer removeWrongDirectionFilter = RemoveWrongDirectionType::New();
+  RemoveWrongDirectionType::Pointer removeWrongDirectionFilter 
+    = RemoveWrongDirectionType::New();
   removeWrongDirectionFilter->SetInput(removeIsolatedByDirectionFilter->GetOutput());
   removeWrongDirectionFilter->SetInputDirection(scalarFilter->GetOutputDirection());
 
@@ -261,7 +264,8 @@ int main( int argc, char * argv[] )
   NonMaxRemovalByDirectionType::Pointer nonMaxRemovalByDirectionFilter 
                                 = NonMaxRemovalByDirectionType::New();
   nonMaxRemovalByDirectionFilter->SetInput(removeWrongDirectionFilter->GetOutput());
-  nonMaxRemovalByDirectionFilter->SetInputDirection(scalarFilter->GetOutputDirection());
+  nonMaxRemovalByDirectionFilter
+    ->SetInputDirection(scalarFilter->GetOutputDirection());
 
   // Software Guide : EndCodeSnippet
   
@@ -274,7 +278,8 @@ int main( int argc, char * argv[] )
   // Software Guide : BeginCodeSnippet
   typedef otb::VectorizationPathListFilter<InternalImageType,
                InternalImageType,PathType> VectorizationFilterType;
-  VectorizationFilterType::Pointer vectorizationFilter = VectorizationFilterType::New();
+  VectorizationFilterType::Pointer vectorizationFilter 
+    = VectorizationFilterType::New();
   vectorizationFilter->SetInput(nonMaxRemovalByDirectionFilter->GetOutput());
   vectorizationFilter->SetInputDirection(scalarFilter->GetOutputDirection());
   vectorizationFilter->SetAmplitudeThreshold(atof(argv[8]));
@@ -299,7 +304,8 @@ int main( int argc, char * argv[] )
   simplifyPathListFilter->SetInput(vectorizationFilter->GetOutput());
     
   typedef otb::BreakAngularPathListFilter<PathType> BreakAngularPathType;
-  BreakAngularPathType::Pointer breakAngularPathListFilter = BreakAngularPathType::New();
+  BreakAngularPathType::Pointer breakAngularPathListFilter 
+    = BreakAngularPathType::New();
   breakAngularPathListFilter->SetMaxAngle(M_PI/8.);
   breakAngularPathListFilter->SetInput(simplifyPathListFilter->GetOutput());
   
@@ -323,7 +329,7 @@ int main( int argc, char * argv[] )
   // Software Guide : BeginCodeSnippet
   typedef otb::LinkPathListFilter<PathType> LinkPathType;
   LinkPathType::Pointer linkPathListFilter = LinkPathType::New();
-  linkPathListFilter->SetDistanceThreshold(25.0/resolution);//research area of 25 m
+  linkPathListFilter->SetDistanceThreshold(25.0/resolution);
   linkPathListFilter->SetAngularThreshold(M_PI/8);
   linkPathListFilter->SetInput(removeTortuousPathListFilter->GetOutput());
   
@@ -366,7 +372,8 @@ int main( int argc, char * argv[] )
   // Software Guide : BeginCodeSnippet
 
   InternalImageType::Pointer output = InternalImageType::New();
-  output->SetRegions(multispectralReader->GetOutput()->GetLargestPossibleRegion());
+  output->SetRegions(multispectralReader->GetOutput()
+		     ->GetLargestPossibleRegion());
   output->Allocate();
   output->FillBuffer(0.0);
   
