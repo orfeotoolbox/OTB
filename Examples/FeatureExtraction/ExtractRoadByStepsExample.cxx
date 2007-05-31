@@ -15,7 +15,6 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-
 #if defined(_MSC_VER)
 #pragma warning ( disable : 4786 )
 #endif
@@ -60,7 +59,15 @@
 #include "otbImageFileWriter.h"
 #include "otbMultiChannelExtractROI.h"
 #include "otbVectorRescaleIntensityImageFilter.h"
-
+#include "itkAddImageFilter.h"
+#include "itkSubtractImageFilter.h"
+#include "itkRGBPixel.h"
+#include "itkComposeRGBImageFilter.h"
+#include "itkThresholdImageFilter.h"
+#include "itkSigmoidImageFilter.h"
+#include "itkThresholdImageFilter.h"
+#include "itkBinaryBallStructuringElement.h"
+#include "itkGrayscaleDilateImageFilter.h"
 
 //  Software Guide : BeginCommandLineArgs
 //    INPUTS: {qb_RoadExtract.tif}
@@ -73,24 +80,25 @@ int main( int argc, char * argv[] )
   
   const unsigned int Dimension = 2;
   typedef double PixelType;
+  typedef unsigned char OutputPixelType;
   typedef itk::CovariantVector<PixelType,Dimension> VectorPixelType;
   typedef otb::Image<PixelType, Dimension> InternalImageType;
   typedef otb::VectorImage<PixelType, Dimension> MultiSpectralImageType;
-  typedef otb::Image<unsigned char, Dimension> OutputImageType;
+  typedef otb::Image<OutputPixelType, Dimension> OutputImageType;
   typedef otb::Image<VectorPixelType, Dimension > VectorImageType;
 
   typedef otb::PolyLineParametricPathWithValue< double, Dimension >       PathType;
   
-  typedef otb::ImageFileWriter<OutputImageType> FileWriterType;
   typedef otb::ImageFileReader< MultiSpectralImageType > MultispectralReaderType;
 
   MultispectralReaderType::Pointer multispectralReader =  MultispectralReaderType::New();
   multispectralReader->SetFileName(argv[1]);
 
   // Create an 3 band image for the software guide 
-  typedef otb::VectorImage<unsigned char, Dimension> OutputVectorImageType;
+  typedef otb::VectorImage<OutputPixelType, Dimension> OutputVectorImageType;
   typedef otb::ImageFileWriter<OutputVectorImageType> VectorWriterType;
-  typedef otb::VectorRescaleIntensityImageFilter<MultiSpectralImageType,OutputVectorImageType> VectorRescalerType;
+  typedef otb::VectorRescaleIntensityImageFilter<MultiSpectralImageType,
+                                                 OutputVectorImageType> VectorRescalerType;
   typedef otb::MultiChannelExtractROI<unsigned char,unsigned char> ChannelExtractorType;
     
   multispectralReader->GenerateOutputInformation();
@@ -148,7 +156,8 @@ int main( int argc, char * argv[] )
   //  Software Guide : EndLatex
   
   // Software Guide : BeginCodeSnippet
-  typedef otb::SpectralAngleDistanceImageFilter<MultiSpectralImageType,InternalImageType> SAFilterType;
+  typedef otb::SpectralAngleDistanceImageFilter<MultiSpectralImageType,
+                                                InternalImageType> SAFilterType;
   SAFilterType::Pointer saFilter = SAFilterType::New();
   saFilter->SetReferencePixel(pixelRef);
   saFilter->SetInput(multispectralReader->GetOutput());
@@ -178,7 +187,8 @@ int main( int argc, char * argv[] )
   
   // Software Guide : BeginCodeSnippet
   double sigma = alpha*(1.2/resolution+1);
-  typedef itk::GradientRecursiveGaussianImageFilter< InternalImageType, VectorImageType > GradientFilterType;
+  typedef itk::GradientRecursiveGaussianImageFilter<InternalImageType, 
+                                                    VectorImageType> GradientFilterType;
   GradientFilterType::Pointer gradientFilter = GradientFilterType::New();
   gradientFilter->SetSigma(sigma);
   gradientFilter->SetInput(sqrtFilter->GetOutput());
@@ -195,7 +205,8 @@ int main( int argc, char * argv[] )
   //  Software Guide : EndLatex 
   
   // Software Guide : BeginCodeSnippet
-  typedef otb::NeighborhoodScalarProductFilter<VectorImageType,InternalImageType,InternalImageType> NeighborhoodScalarProductType;
+  typedef otb::NeighborhoodScalarProductFilter<VectorImageType,
+               InternalImageType,InternalImageType> NeighborhoodScalarProductType;
   NeighborhoodScalarProductType::Pointer scalarFilter = NeighborhoodScalarProductType::New();
   scalarFilter->SetInput(gradientFilter->GetOutput());
 
@@ -211,8 +222,10 @@ int main( int argc, char * argv[] )
 
 
   // Software Guide : BeginCodeSnippet
-  typedef otb::RemoveIsolatedByDirectionFilter<InternalImageType,InternalImageType,InternalImageType> RemoveIsolatedByDirectionType;
-  RemoveIsolatedByDirectionType::Pointer removeIsolatedByDirectionFilter = RemoveIsolatedByDirectionType::New();
+  typedef otb::RemoveIsolatedByDirectionFilter<InternalImageType,
+               InternalImageType,InternalImageType> RemoveIsolatedByDirectionType;
+  RemoveIsolatedByDirectionType::Pointer removeIsolatedByDirectionFilter 
+                                 = RemoveIsolatedByDirectionType::New();
   removeIsolatedByDirectionFilter->SetInput(scalarFilter->GetOutput());
   removeIsolatedByDirectionFilter->SetInputDirection(scalarFilter->GetOutputDirection());
 
@@ -227,7 +240,8 @@ int main( int argc, char * argv[] )
   //  Software Guide : EndLatex  
   
   // Software Guide : BeginCodeSnippet
-  typedef otb::RemoveWrongDirectionFilter<InternalImageType,InternalImageType,InternalImageType> RemoveWrongDirectionType;
+  typedef otb::RemoveWrongDirectionFilter<InternalImageType,
+               InternalImageType,InternalImageType> RemoveWrongDirectionType;
   RemoveWrongDirectionType::Pointer removeWrongDirectionFilter = RemoveWrongDirectionType::New();
   removeWrongDirectionFilter->SetInput(removeIsolatedByDirectionFilter->GetOutput());
   removeWrongDirectionFilter->SetInputDirection(scalarFilter->GetOutputDirection());
@@ -242,8 +256,10 @@ int main( int argc, char * argv[] )
   //  Software Guide : EndLatex
   
   // Software Guide : BeginCodeSnippet
-  typedef otb::NonMaxRemovalByDirectionFilter<InternalImageType,InternalImageType,InternalImageType> NonMaxRemovalByDirectionType;
-  NonMaxRemovalByDirectionType::Pointer nonMaxRemovalByDirectionFilter = NonMaxRemovalByDirectionType::New();
+  typedef otb::NonMaxRemovalByDirectionFilter<InternalImageType,
+               InternalImageType,InternalImageType> NonMaxRemovalByDirectionType;
+  NonMaxRemovalByDirectionType::Pointer nonMaxRemovalByDirectionFilter 
+                                = NonMaxRemovalByDirectionType::New();
   nonMaxRemovalByDirectionFilter->SetInput(removeWrongDirectionFilter->GetOutput());
   nonMaxRemovalByDirectionFilter->SetInputDirection(scalarFilter->GetOutputDirection());
 
@@ -256,7 +272,8 @@ int main( int argc, char * argv[] )
   //  Software Guide : EndLatex
   
   // Software Guide : BeginCodeSnippet
-  typedef otb::VectorizationPathListFilter<InternalImageType,InternalImageType,PathType> VectorizationFilterType;
+  typedef otb::VectorizationPathListFilter<InternalImageType,
+               InternalImageType,PathType> VectorizationFilterType;
   VectorizationFilterType::Pointer vectorizationFilter = VectorizationFilterType::New();
   vectorizationFilter->SetInput(nonMaxRemovalByDirectionFilter->GetOutput());
   vectorizationFilter->SetInputDirection(scalarFilter->GetOutputDirection());
@@ -287,7 +304,8 @@ int main( int argc, char * argv[] )
   breakAngularPathListFilter->SetInput(simplifyPathListFilter->GetOutput());
   
   typedef otb::RemoveTortuousPathListFilter<PathType> RemoveTortuousPathType;
-  RemoveTortuousPathType::Pointer removeTortuousPathListFilter = RemoveTortuousPathType::New();
+  RemoveTortuousPathType::Pointer removeTortuousPathListFilter 
+                          = RemoveTortuousPathType::New();
   removeTortuousPathListFilter->SetMeanDistanceThreshold(1.0);
   removeTortuousPathListFilter->SetInput(breakAngularPathListFilter->GetOutput());
   // Software Guide : EndCodeSnippet
@@ -313,7 +331,8 @@ int main( int argc, char * argv[] )
   simplifyPathListFilter2->SetTolerance(1.0);
   simplifyPathListFilter2->SetInput(linkPathListFilter->GetOutput());
   
-  RemoveTortuousPathType::Pointer removeTortuousPathListFilter2 = RemoveTortuousPathType::New();
+  RemoveTortuousPathType::Pointer removeTortuousPathListFilter2 
+                          = RemoveTortuousPathType::New();
   removeTortuousPathListFilter2->SetMeanDistanceThreshold(10.0);
   removeTortuousPathListFilter2->SetInput(simplifyPathListFilter2->GetOutput());
   // Software Guide : EndCodeSnippet
@@ -323,61 +342,177 @@ int main( int argc, char * argv[] )
   //
   //  A value can be associated with each polyline according to pixel values 
   // under the polyline with \doxygen{otb::LikehoodPathListFilter}. A higher value 
-  // will mean a higher likelihood to be 
-  // a road. Polylines are drawn on the original image with \doxygen{otb::DrawPathListFilter}.
+  // will mean a higher likelihood to be a road.
   //
   //  Software Guide : EndLatex
   
   // Software Guide : BeginCodeSnippet
-  typedef otb::LikehoodPathListFilter<PathType,InternalImageType> PathListToPathListWithValueType;
-  PathListToPathListWithValueType::Pointer pathListConverter = PathListToPathListWithValueType::New();
+
+  typedef otb::LikehoodPathListFilter<PathType,
+               InternalImageType> PathListToPathListWithValueType;
+  PathListToPathListWithValueType::Pointer pathListConverter 
+                = PathListToPathListWithValueType::New();
   pathListConverter->SetInput(removeTortuousPathListFilter2->GetOutput());
   pathListConverter->SetInputImage(nonMaxRemovalByDirectionFilter->GetOutput());
-  
-  typedef otb::MultiToMonoChannelExtractROI<PixelType,PixelType> ChannelExtractionFilterType;
-  ChannelExtractionFilterType::Pointer channelExtractor = ChannelExtractionFilterType::New();
-  channelExtractor->SetInput(multispectralReader->GetOutput());
-  
-  typedef itk::RescaleIntensityImageFilter<InternalImageType,InternalImageType> RescalerType;
-  RescalerType::Pointer rescaler = RescalerType::New();
-  rescaler->SetOutputMaximum(255);
-  rescaler->SetOutputMinimum(0);
-  rescaler->SetInput(channelExtractor->GetOutput());
 
-  typedef otb::DrawPathListFilter<InternalImageType, PathType, OutputImageType> DrawPathType;
-  DrawPathType::Pointer drawPathListFilter = DrawPathType::New();
-  drawPathListFilter->SetInput(rescaler->GetOutput());
-  drawPathListFilter->SetInputPath(pathListConverter->GetOutput());
-  drawPathListFilter->SetPathValue(255);
-  // Software Guide : EndCodeSnippet
-  
-  
-  //  Software Guide : BeginLatex
-  //
-  //  The filter is executed by invoking the \code{Update()} method. If the
-  //  filter is part of a larger image processing pipeline, calling
-  //  \code{Update()} on a downstream filter will also trigger update of this
-  //  filter.
-  //
-  //  Extracted roads are drawn on the original image and output to a file.
-  //
-  //  Software Guide : EndLatex 
-  
-  // Software Guide : BeginCodeSnippet
-  FileWriterType::Pointer writer = FileWriterType::New();
-  writer->SetInput( drawPathListFilter->GetOutput() );
-  writer->SetFileName( argv[2] );
-  writer->Update();
   // Software Guide : EndCodeSnippet
 
   // Software Guide : BeginLatex
   //
+  // A black background image is built to draw the path on.
+  //
+  // Software Guide : EndLatex
+
+  // Software Guide : BeginCodeSnippet
+
+  InternalImageType::Pointer output = InternalImageType::New();
+  output->SetRegions(multispectralReader->GetOutput()->GetLargestPossibleRegion());
+  output->Allocate();
+  output->FillBuffer(0.0);
+  
+  // Software Guide : EndCodeSnippet
+ 
+
+  // Software Guide : BeginLatex
+  //
+  // Polylines are drawn on a black background image with \doxygen{otb::DrawPathListFilter}. 
+  // The \code{SetUseIternalValues()} tell the drawing filter to draw the path with its likehood
+  // value.
+  //
+  // Software Guide : EndLatex
+  
+  // Software Guide : BeginCodeSnippet
+  
+  typedef otb::DrawPathListFilter<InternalImageType, PathType, 
+               InternalImageType> DrawPathType;
+  DrawPathType::Pointer drawPathListFilter = DrawPathType::New();
+  drawPathListFilter->SetInput(output);
+  drawPathListFilter->SetInputPath(pathListConverter->GetOutput());
+  drawPathListFilter->SetUseInternalPathValue(true);
+  
+  // Software Guide : EndCodeSnippet
+
+  // Software Guide : BeginLatex
+  //
+  // The output from the drawing filter contains very small values (likehood values). Therefore
+  // the image has to be rescaled to be viewed. The whole pipeline is executed by invoking 
+  // the \code{Update()} method on this last filter.
+  //
+  // Software Guide : EndLatex
+  
+  // Software Guide : BeginCodeSnippet
+  
+  typedef itk::RescaleIntensityImageFilter<InternalImageType,
+               InternalImageType> RescalerType;
+  RescalerType::Pointer rescaler = RescalerType::New();
+  rescaler->SetOutputMaximum(255);
+  rescaler->SetOutputMinimum(0);
+  rescaler->SetInput(drawPathListFilter->GetOutput());
+  rescaler->Update();
+
+  // Software Guide : EndCodeSnippet
+
+
+  // this small piece of code aims at producing a pretty RGB png result image.
+  typedef otb::MultiToMonoChannelExtractROI<OutputPixelType,PixelType> ChannelExtractionFilterType;
+  typedef itk::AddImageFilter<InternalImageType,InternalImageType,InternalImageType> AddFilterType;
+  typedef itk::SubtractImageFilter<InternalImageType,InternalImageType,InternalImageType> SubtractFilterType;
+  typedef itk::ThresholdImageFilter<InternalImageType> ThresholdFilterType;
+  typedef itk::RGBPixel<OutputPixelType> RGBPixelType;
+  typedef otb::Image<RGBPixelType,Dimension> RGBImageType;
+  typedef itk::ComposeRGBImageFilter<InternalImageType,RGBImageType> ComposeRGBFilterType;
+  typedef otb::ImageFileWriter<RGBImageType> RGBWriterType;
+  typedef itk::BinaryBallStructuringElement<PixelType,Dimension> StructuringElementType;
+  typedef itk::GrayscaleDilateImageFilter<InternalImageType,InternalImageType,StructuringElementType> DilateFilterType;
+
+  StructuringElementType se;
+  se.SetRadius(1);
+  se.CreateStructuringElement();
+
+  // Filters definitions
+  ChannelExtractionFilterType::Pointer channelExtractor1 = ChannelExtractionFilterType::New();
+  ChannelExtractionFilterType::Pointer channelExtractor2 = ChannelExtractionFilterType::New();
+  ChannelExtractionFilterType::Pointer channelExtractor3 = ChannelExtractionFilterType::New();  
+  
+  AddFilterType::Pointer addFilter = AddFilterType::New();
+  SubtractFilterType::Pointer subtract2 = SubtractFilterType::New();
+  SubtractFilterType::Pointer subtract3 = SubtractFilterType::New();
+  ThresholdFilterType::Pointer threshold11 = ThresholdFilterType::New();
+  ThresholdFilterType::Pointer threshold21 = ThresholdFilterType::New();
+  ThresholdFilterType::Pointer threshold31 = ThresholdFilterType::New();
+  ThresholdFilterType::Pointer threshold12 = ThresholdFilterType::New();
+  ThresholdFilterType::Pointer threshold22 = ThresholdFilterType::New();
+  ThresholdFilterType::Pointer threshold32 = ThresholdFilterType::New();
+
+  ComposeRGBFilterType::Pointer composer = ComposeRGBFilterType::New();
+  RGBWriterType::Pointer writer = RGBWriterType::New();
+  
+  DilateFilterType::Pointer dilater = DilateFilterType::New();
+
+  dilater->SetInput(rescaler->GetOutput());
+  dilater->SetKernel(se);
+
+  // Extract each channel
+  channelExtractor1->SetInput(vr->GetOutput());
+  channelExtractor2->SetInput(vr->GetOutput());
+  channelExtractor3->SetInput(vr->GetOutput());
+
+  channelExtractor1->SetChannel(1);
+  channelExtractor2->SetChannel(2);
+  channelExtractor3->SetChannel(3);
+
+  // Add the path to the red component
+  addFilter->SetInput1(channelExtractor1->GetOutput());
+  addFilter->SetInput2(dilater->GetOutput());  
+  
+  subtract2->SetInput1(channelExtractor2->GetOutput());
+  subtract2->SetInput2(dilater->GetOutput());
+  subtract3->SetInput1(channelExtractor3->GetOutput());
+  subtract3->SetInput2(dilater->GetOutput());
+
+  // Threshold outside the [0,255] range
+
+  threshold11->SetInput(addFilter->GetOutput());
+  threshold11->ThresholdBelow(0);
+  threshold11->SetOutsideValue(0);
+  threshold12->SetInput(threshold11->GetOutput());
+  threshold12->ThresholdAbove(255);
+  threshold12->SetOutsideValue(255);
+
+  threshold21->SetInput(subtract2->GetOutput());
+  threshold21->ThresholdBelow(0);
+  threshold21->SetOutsideValue(0);
+  threshold22->SetInput(threshold21->GetOutput());
+  threshold22->ThresholdAbove(255);
+  threshold22->SetOutsideValue(255);
+
+  threshold31->SetInput(subtract3->GetOutput());
+  threshold31->ThresholdBelow(0);
+  threshold31->SetOutsideValue(0);
+  threshold32->SetInput(threshold31->GetOutput());
+  threshold32->ThresholdAbove(255);
+  threshold32->SetOutsideValue(255);
+  
+  
+  // Compose the output image
+  composer->SetInput1(threshold12->GetOutput());
+  composer->SetInput2(threshold22->GetOutput());
+  composer->SetInput3(threshold32->GetOutput());
+  
+  // Write the new rgb image
+  writer->SetInput( composer->GetOutput() );
+  writer->SetFileName( argv[2] );
+  writer->Update(); 
+
+  // Software Guide : BeginLatex
+  //
   // Figure~\ref{fig:ROADEXTRACTIONBYSTEPS} shows the result of applying
-  // the road extraction by steps to a fusionned Quickbird image.
+  // the road extraction by steps to a fusionned Quickbird image. The result image
+  // is a RGB composition showing the extracted path in red.
   // \begin{figure}
   // \center
-  // \includegraphics[width=0.25\textwidth]{qb_ExtractRoad_pretty.eps}
-  // \includegraphics[width=0.25\textwidth]{ExtractRoadByStepsExampleOutput.eps}
+  // \includegraphics[width=0.44\textwidth]{qb_ExtractRoad_pretty.eps}
+  // \includegraphics[width=0.44\textwidth]{ExtractRoadByStepsExampleOutput.eps}
   // \itkcaption[Road extraction filter application]{Result of applying
   // the road extraction by steps pipeline to a fusionned Quickbird
   // image. From left to right : original image, extracted road with their

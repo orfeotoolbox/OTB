@@ -130,7 +130,8 @@ int main( int argc, char * argv[] )
 
    // Software Guide : BeginCodeSnippet
    
-   typedef otb::RoadExtractionFilter<InputVectorImageType,PathType> RoadExtractionFilterType;
+   typedef otb::RoadExtractionFilter<InputVectorImageType,
+                                     PathType> RoadExtractionFilterType;
    
    // Software Guide : EndCodeSnippet
    
@@ -143,7 +144,8 @@ int main( int argc, char * argv[] )
 
    // Software Guide : BeginCodeSnippet
 
-   typedef otb::DrawPathListFilter<InputImageType, PathType, InputImageType> DrawPathFilterType;
+   typedef otb::DrawPathListFilter<InputImageType, PathType, 
+                                   InputImageType> DrawPathFilterType;
    
    // Software Guide : EndCodeSnippet
 
@@ -157,7 +159,8 @@ int main( int argc, char * argv[] )
    
    // Software Guide : BeginCodeSnippet
 
-   typedef itk::RescaleIntensityImageFilter< InputImageType,OutputImageType > RescalerType; 
+   typedef itk::RescaleIntensityImageFilter<InputImageType,
+                                            OutputImageType> RescalerType; 
 
    // Software Guide : EndCodeSnippet
 
@@ -197,9 +200,10 @@ int main( int argc, char * argv[] )
    // Software Guide : BeginCodeSnippet
 
    ReaderType::Pointer reader = ReaderType::New();
-   RoadExtractionFilterType::Pointer roadExtractionFilter = RoadExtractionFilterType::New();
+   RoadExtractionFilterType::Pointer roadExtractionFilter 
+     = RoadExtractionFilterType::New();
    DrawPathFilterType::Pointer drawingFilter = DrawPathFilterType::New();
-   RescalerType::Pointer rescalingFilter = RescalerType::New();
+   RescalerType::Pointer rescaleFilter = RescalerType::New();
    WriterType::Pointer writer = WriterType::New();
 
    // Software Guide : EndCodeSnippet
@@ -356,8 +360,8 @@ int main( int argc, char * argv[] )
      //  Software Guide : EndLatex 
 
      // Software Guide : BeginCodeSnippet  
-     rescalingFilter->SetOutputMinimum( itk::NumericTraits< OutputPixelType >::min() );
-     rescalingFilter->SetOutputMaximum( itk::NumericTraits< OutputPixelType >::max() );
+     rescaleFilter->SetOutputMinimum(itk::NumericTraits< OutputPixelType >::min());
+     rescaleFilter->SetOutputMaximum(itk::NumericTraits< OutputPixelType >::max());
      // Software Guide : EndCodeSnippet
 
      // Software Guide : BeginLatex
