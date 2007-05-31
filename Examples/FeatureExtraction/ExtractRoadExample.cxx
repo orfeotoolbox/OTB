@@ -377,8 +377,8 @@ int main( int argc, char * argv[] )
      roadExtractionFilter->SetInput(reader->GetOutput());
      drawingFilter->SetInput(blackBackground);
      drawingFilter->SetInputPath(roadExtractionFilter->GetOutput());
-     rescalingFilter->SetInput(drawingFilter->GetOutput());
-     writer->SetInput(rescalingFilter->GetOutput());
+     rescaleFilter->SetInput(drawingFilter->GetOutput());
+     writer->SetInput(rescaleFilter->GetOutput());
 
      // Software Guide : EndCodeSnippet
      
