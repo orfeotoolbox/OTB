@@ -69,8 +69,9 @@ ADD_TEST(cdTvLHMI ${CHANGEDETECTION_TESTS}
 	 )
 
 ADD_TEST(cdTvJHMI ${CHANGEDETECTION_TESTS}
-  --compare-image ${TOL}   ${BASELINE}/cdJHMIImage.png
-                    ${TEMP}/cdJHMIImage.png
+  --compare-image ${TOL}   
+		  ${BASELINE}/cdJHMIImage.png
+                  ${TEMP}/cdJHMIImage.png
 	otbJHMIChangeDetectionTest 
 	 ${INPUTDATA}/GomaAvant.png 
 	 ${INPUTDATA}/GomaApres.png
@@ -78,6 +79,18 @@ ADD_TEST(cdTvJHMI ${CHANGEDETECTION_TESTS}
 	 ${TEMP}/cdJHMIImage.png 
 	 )
 
+ADD_TEST(cdTuKullbackLeiblerDistanceImageFilterNew ${CHANGEDETECTION_TESTS}
+         otbKullbackLeiblerDistanceImageFilterNew)
+
+ADD_TEST(cdTvKullbackLeiblerDistanceImageFilter ${CHANGEDETECTION_TESTS}
+         --compare-image ${EPSILON}
+			 ${BASELINE}/cdTVKullbackLeiblerDistanceImageFilterOutput.hdr
+			 ${TEMP}/cdTVKullbackLeiblerDistanceImageFilterOutput.hdr
+	 otbKullbackLeiblerDistanceImageFilter
+			${INPUTDATA}/GomaAvant.png 
+			${INPUTDATA}/GomaApres.png
+			${TEMP}/cdTVKullbackLeiblerDistanceImageFilterOutput.hdr
+			35)
 
 
 # -------       Fichiers sources CXX -----------------------------------
@@ -88,6 +101,8 @@ otbMeanDiffChangeDetectionTest.cxx
 otbMeanRatioChangeDetectionTest.cxx
 otbLHMIChangeDetectionTest.cxx
 otbJHMIChangeDetectionTest.cxx
+otbKullbackLeiblerDistanceImageFilterNew.cxx
+otbKullbackLeiblerDistanceImageFilter.cxx
 )
 
 
