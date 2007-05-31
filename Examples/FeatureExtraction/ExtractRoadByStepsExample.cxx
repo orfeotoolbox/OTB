@@ -140,7 +140,7 @@ int main( int argc, char * argv[] )
   //  Software Guide : BeginLatex
   //
   //  The spectral angle is used to compute a grayscale image from the 
-  //  multispectral original image using \doxygen{otb::SpectralAngleDistanceImageFilter}. The spectral angle is illustrated on
+  //  multispectral original image using \doxygen{otb}{SpectralAngleDistanceImageFilter}. The spectral angle is illustrated on
   // Figure~\ref{fig:RoadExtractionSpectralAngleDiagram}. Pixels corresponding to roads are in 
   //  darker color.
   //
@@ -167,7 +167,7 @@ int main( int argc, char * argv[] )
   //  Software Guide : BeginLatex
   //
   //  A square root is applied to the spectral angle image in order to enhance contrast between 
-  //  darker pixels (which are pixels of interest) with \doxygen{itk::SqrtImageFilter}.
+  //  darker pixels (which are pixels of interest) with \doxygen{itk}{SqrtImageFilter}.
   //
   //  Software Guide : EndLatex
   
@@ -181,7 +181,7 @@ int main( int argc, char * argv[] )
   //  Software Guide : BeginLatex
   //
   //  Use the Gaussian gradient filter compute the gradient direction and intensity
-  // (\doxygen{itk::GradientRecursiveGaussianImageFilter}).
+  // (\doxygen{itk}{GradientRecursiveGaussianImageFilter}).
   //
   //  Software Guide : EndLatex
   
@@ -198,7 +198,7 @@ int main( int argc, char * argv[] )
   //  Software Guide : BeginLatex
   //
   //  Compute the scalar product of the neighboring pixels and keep the
-  //  minimum value and the direction with \doxygen{otb::NeighborhoodScalarProductFilter}. 
+  //  minimum value and the direction with \doxygen{otb}{NeighborhoodScalarProductFilter}. 
   // This is the line detector described 
   //  in \cite{Lacroix1998}.
   //
@@ -214,7 +214,7 @@ int main( int argc, char * argv[] )
   
   //  Software Guide : BeginLatex
   //
-  //  The resulting image is passed to the \doxygen{otb::RemoveIsolatedByDirectionFilter} 
+  //  The resulting image is passed to the \doxygen{otb}{RemoveIsolatedByDirectionFilter} 
   // filter to remove pixels 
   //  with no neighbor having the same direction.
   //
@@ -251,7 +251,7 @@ int main( int argc, char * argv[] )
   //  Software Guide : BeginLatex
   //
   //  We remove pixels which are not maximum on the direction 
-  //  perpendicular to the road direction with the \doxygen{otb::NonMaxRemovalByDirectionFilter}.
+  //  perpendicular to the road direction with the \doxygen{otb}{NonMaxRemovalByDirectionFilter}.
   //
   //  Software Guide : EndLatex
   
@@ -288,7 +288,7 @@ int main( int argc, char * argv[] )
   // \doxygen{otb::SimplifyPathListFilter}.
   //  Then we break the polylines which have sharp angles as they are probably
   //  not road with \doxygen{otb::BreakAngularPathListFilter}. 
-  // Finally we remove path which are too short with \doxygen{otb::RemoveTortuousPathListFilter}.
+  // Finally we remove path which are too short with \doxygen{otb}{RemoveTortuousPathListFilter}.
   //
   //  Software Guide : EndLatex
   
@@ -312,10 +312,10 @@ int main( int argc, char * argv[] )
     
   //  Software Guide : BeginLatex
   //
-  //  Polylines within a certain range are linked (\doxygen{otb::LinkPathListFilter}) to 
+  //  Polylines within a certain range are linked (\doxygen{otb}{LinkPathListFilter}) to 
   //  try to fill gaps due to occultations by vehicules, trees, etc. before simplifying 
   //  polylines (\doxygen{otb::SimplifyPathListFilter}) and 
-  //  removing the shortest ones with \doxygen{otb::RemoveTortuousPathListFilter}.
+  //  removing the shortest ones with \doxygen{otb}{RemoveTortuousPathListFilter}.
   //
   //  Software Guide : EndLatex
   
@@ -341,7 +341,7 @@ int main( int argc, char * argv[] )
   //  Software Guide : BeginLatex
   //
   //  A value can be associated with each polyline according to pixel values 
-  // under the polyline with \doxygen{otb::LikehoodPathListFilter}. A higher value 
+  // under the polyline with \doxygen{otb}{LikehoodPathListFilter}. A higher value 
   // will mean a higher likelihood to be a road.
   //
   //  Software Guide : EndLatex
@@ -375,7 +375,7 @@ int main( int argc, char * argv[] )
 
   // Software Guide : BeginLatex
   //
-  // Polylines are drawn on a black background image with \doxygen{otb::DrawPathListFilter}. 
+  // Polylines are drawn on a black background image with \doxygen{otb}{DrawPathListFilter}. 
   // The \code{SetUseIternalValues()} tell the drawing filter to draw the path with its likehood
   // value.
   //
