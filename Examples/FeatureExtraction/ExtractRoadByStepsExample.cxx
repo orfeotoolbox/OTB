@@ -235,7 +235,7 @@ int main( int argc, char * argv[] )
   //
   //  We remove pixels having a direction corresponding to bright lines 
   //  as we know that after the spectral angle, roads are in darker color
-  //  with the \doxygen{otb::RemoveWrongDirectionFilter} filter.
+  //  with the \doxygen{otb}{RemoveWrongDirectionFilter} filter.
   //
   //  Software Guide : EndLatex  
   
@@ -267,7 +267,7 @@ int main( int argc, char * argv[] )
   
   //  Software Guide : BeginLatex
   //
-  //  Extracted road are vectorized into polylines with \doxygen{otb::VectorizationPathListFilter}.
+  //  Extracted road are vectorized into polylines with \doxygen{otb}{VectorizationPathListFilter}.
   //
   //  Software Guide : EndLatex
   
@@ -285,9 +285,9 @@ int main( int argc, char * argv[] )
   //
   //  However, this vectorization is too simple and need to be refined 
   //  to be usable. First, we remove all aligned points to make one segment with 
-  // \doxygen{otb::SimplifyPathListFilter}.
+  // \doxygen{otb}{SimplifyPathListFilter}.
   //  Then we break the polylines which have sharp angles as they are probably
-  //  not road with \doxygen{otb::BreakAngularPathListFilter}. 
+  //  not road with \doxygen{otb}{BreakAngularPathListFilter}. 
   // Finally we remove path which are too short with \doxygen{otb}{RemoveTortuousPathListFilter}.
   //
   //  Software Guide : EndLatex
@@ -314,7 +314,7 @@ int main( int argc, char * argv[] )
   //
   //  Polylines within a certain range are linked (\doxygen{otb}{LinkPathListFilter}) to 
   //  try to fill gaps due to occultations by vehicules, trees, etc. before simplifying 
-  //  polylines (\doxygen{otb::SimplifyPathListFilter}) and 
+  //  polylines (\doxygen{otb}{SimplifyPathListFilter}) and 
   //  removing the shortest ones with \doxygen{otb}{RemoveTortuousPathListFilter}.
   //
   //  Software Guide : EndLatex
