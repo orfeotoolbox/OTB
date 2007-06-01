@@ -19,6 +19,9 @@ TARGET_LINK_LIBRARIES(LHMIChDet OTBIO OTBCommon gdal ITKCommon ITKIO ITKStatisti
 ADD_EXECUTABLE(JHMIChDet JHMIChDet.cxx)
 TARGET_LINK_LIBRARIES(JHMIChDet OTBIO OTBCommon gdal ITKCommon ITKIO ITKStatistics)
 
+ADD_EXECUTABLE(KullbackLeiblerDistanceChDet KullbackLeiblerDistanceChDet.cxx)
+TARGET_LINK_LIBRARIES(KullbackLeiblerDistanceChDet OTBIO OTBCommon gdal ITKCommon ITKIO ITKStatistics)
+
 
 IF( NOT OTB_DISABLE_CXX_TESTING AND NOT OTB_DISABLE_CXX_EXAMPLES_TESTING)
 
@@ -71,6 +74,18 @@ ADD_TEST(RatioChDetTest ${EXE_TESTS}
     3
 )
 
+# ------- KullbackLeiblerDistanceChDetTest----------
+
+ADD_TEST(KullbackLeiblerDistanceChDetTest ${EXE_TESTS}
+	--compare-n-images ${TOL} 1
+	${BASELINE}/KullbackLeiblerDistanceChDetTest.png
+	${TEMP}/KullbackLeiblerDistanceChDet.png
+	KullbackLeiblerDistanceChDetTest
+	${INPUTDATA}/GomaAvant.png
+	${INPUTDATA}/GomaApres.png
+	${TEMP}/KullbackLeiblerDistanceChDetTest.png
+    35
+)
 
 INCLUDE_DIRECTORIES("${OTBTesting_BINARY_DIR}")
 

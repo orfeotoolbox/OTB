@@ -92,6 +92,19 @@ ADD_TEST(cdTvKullbackLeiblerDistanceImageFilter ${CHANGEDETECTION_TESTS}
 			${TEMP}/cdTVKullbackLeiblerDistanceImageFilterOutput.hdr
 			35)
 
+ADD_TEST(cdTuKullbackLeiblerProfileImageFilterNew ${CHANGEDETECTION_TESTS}
+         otbKullbackLeiblerProfileImageFilterNew)
+
+ADD_TEST(cdTvKullbackLeiblerProfileImageFilter ${CHANGEDETECTION_TESTS}
+         --compare-image ${EPSILON}
+			 ${BASELINE}/cdTVKullbackLeiblerProfileImageFilterOutput.hdr
+			 ${TEMP}/cdTVKullbackLeiblerProfileImageFilterOutput.hdr
+	 otbKullbackLeiblerProfileImageFilter
+			${INPUTDATA}/GomaAvant.png 
+			${INPUTDATA}/GomaApres.png
+			${TEMP}/cdTVKullbackLeiblerProfileImageFilterOutput.hdr
+			5 51)
+
 
 # -------       Fichiers sources CXX -----------------------------------
 SET(BasicChangeDetection_SRCS
@@ -103,6 +116,8 @@ otbLHMIChangeDetectionTest.cxx
 otbJHMIChangeDetectionTest.cxx
 otbKullbackLeiblerDistanceImageFilterNew.cxx
 otbKullbackLeiblerDistanceImageFilter.cxx
+otbKullbackLeiblerProfileImageFilterNew.cxx
+otbKullbackLeiblerProfileImageFilter.cxx
 )
 
 

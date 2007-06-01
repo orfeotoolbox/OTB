@@ -19,6 +19,7 @@
 #define __otbKullbackLeiblerDistanceImageFilter_txx
 
 #include "otbKullbackLeiblerDistanceImageFilter.h"
+#include "otbMacro.h"
 
 
 /* *******************************************************************
@@ -118,7 +119,7 @@ CumulantsForEdgeworth<TInput>
 	
 	if ( fMu2 <= 0.0 )
 	{
-		std::cerr << "Potential NAN detected in " << __PRETTY_FUNCTION__ << "\n";
+		otbMsgDebugMacro( << "Potential NAN detected in function MakeSumAndMoments.");
 		fMu3 = 0.0;
 		fMu4 = 4.0;
 		return 1;

@@ -34,4 +34,6 @@ REGISTER_TEST(otbLHMIChangeDetectionTest );
 REGISTER_TEST(otbJHMIChangeDetectionTest );
 REGISTER_TEST(otbKullbackLeiblerDistanceImageFilterNew);
 REGISTER_TEST(otbKullbackLeiblerDistanceImageFilter);
+REGISTER_TEST(otbKullbackLeiblerProfileImageFilterNew);
+REGISTER_TEST(otbKullbackLeiblerProfileImageFilter);
 }

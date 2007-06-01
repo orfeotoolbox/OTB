@@ -133,7 +133,8 @@ int main (int argc, char* argv[])
 
   // Software Guide : BeginCodeSnippet
 
-  typedef itk::NormalizedCorrelationImageToImageMetric<ImageType,ImageType> MetricType;
+  typedef itk::NormalizedCorrelationImageToImageMetric<ImageType,
+               ImageType> MetricType;
 
   // Software Guide : EndCodeSnippet
 
@@ -148,7 +149,8 @@ int main (int argc, char* argv[])
   
   typedef itk::Function::HammingWindowFunction<3> WindowFunctionType;
   typedef itk::ZeroFluxNeumannBoundaryCondition<ImageType> ConditionType;
-  typedef itk::WindowedSincInterpolateImageFunction<ImageType,3,WindowFunctionType,ConditionType ,double> InterpolatorType;
+  typedef itk::WindowedSincInterpolateImageFunction<ImageType,3,
+               WindowFunctionType,ConditionType ,double> InterpolatorType;
 
   // Software Guide : EndCodeSnippet
 
@@ -191,7 +193,8 @@ int main (int argc, char* argv[])
 
   // Software Guide : BeginCodeSnippet
 
-  typedef otb::DisparityMapEstimationMethod<ImageType,ImageType,PointSetType> DMEstimationType;
+  typedef otb::DisparityMapEstimationMethod<ImageType,
+               ImageType,PointSetType> DMEstimationType;
 
   // Software Guide : EndCodeSnippet
 
@@ -233,9 +236,12 @@ int main (int argc, char* argv[])
 
   // Software Guide : BeginCodeSnippet
 
-  ImageType::SizeType fixedSize = fixedReader->GetOutput()->GetLargestPossibleRegion().GetSize();
-  unsigned int NumberOfXNodes = (fixedSize[0]-2*atoi(argv[6])-1)/atoi(argv[5]);
-  unsigned int NumberOfYNodes = (fixedSize[1]-2*atoi(argv[6])-1)/atoi(argv[5]);
+  ImageType::SizeType fixedSize = 
+    fixedReader->GetOutput()->GetLargestPossibleRegion().GetSize();
+  unsigned int NumberOfXNodes = (fixedSize[0]-2*atoi(argv[6])-1)
+    /atoi(argv[5]);
+  unsigned int NumberOfYNodes = (fixedSize[1]-2*atoi(argv[6])-1)
+    /atoi(argv[5]);
 
   ImageType::IndexType firstNodeIndex;
   firstNodeIndex[0] = atoi(argv[6]);
@@ -254,7 +260,7 @@ int main (int argc, char* argv[])
 	  nodes->SetPoint( nodeCounter++,p);
 	}
     }
-  // Software Guide : EnCodeSnippet
+  // Software Guide : EndCodeSnippet
 
   // Software Guide : BeginLatex
   // 
@@ -322,7 +328,8 @@ int main (int argc, char* argv[])
 
   // Software Guide : BeginCodeSnippet
 
-  DMEstimationType::ParametersType initialParameters(transform->GetNumberOfParameters() );
+  DMEstimationType::ParametersType 
+    initialParameters(transform->GetNumberOfParameters() );
   initialParameters[0] = 0.0; 
   initialParameters[1] = 0.0;
   dmestimator->SetInitialTransformParameters(initialParameters);
@@ -367,7 +374,8 @@ int main (int argc, char* argv[])
 
   // Software Guide : BeginCodeSnippet
 
-  typedef otb::NearestPointDeformationFieldGenerator<PointSetType,DeformationFieldType> GeneratorType;
+  typedef otb::NearestPointDeformationFieldGenerator<PointSetType,
+               DeformationFieldType> GeneratorType;
 
   // Software GUide : EndCodeSnippet
 
@@ -405,7 +413,8 @@ int main (int argc, char* argv[])
 
   generator->SetOutputOrigin(fixedReader->GetOutput()->GetOrigin());
   generator->SetOutputSpacing(fixedReader->GetOutput()->GetSpacing());
-  generator->SetOutputSize(fixedReader->GetOutput()->GetLargestPossibleRegion().GetSize());
+  generator->SetOutputSize(fixedReader->GetOutput()
+			   ->GetLargestPossibleRegion().GetSize());
     
   // Software Guide : EndCodeSnippet
 
@@ -446,7 +455,8 @@ int main (int argc, char* argv[])
 
   // Software Guide :  BeginCodeSnippet
 
-  typedef itk::WarpImageFilter<ImageType,ImageType,DeformationFieldType> ImageWarperType;
+  typedef itk::WarpImageFilter<ImageType,ImageType,
+               DeformationFieldType> ImageWarperType;
 
   // Software Guide : EndCodeSnippet
 
@@ -484,7 +494,8 @@ int main (int argc, char* argv[])
 
   // Software Guide : BeginCodeSnippet
 
-  typedef itk::RescaleIntensityImageFilter<ImageType,OutputImageType> RescalerType;
+  typedef itk::RescaleIntensityImageFilter<ImageType,
+               OutputImageType> RescalerType;
   
   RescalerType::Pointer outputRescaler = RescalerType::New();
   outputRescaler->SetInput(warper->GetOutput());
@@ -520,9 +531,11 @@ int main (int argc, char* argv[])
 
   // Software Guide : BeginCodeSnippet
 
-  typedef otb::MultiToMonoChannelExtractROI<PixelType,PixelType> ChannelExtractionFilterType;
+  typedef otb::MultiToMonoChannelExtractROI<PixelType,
+               PixelType> ChannelExtractionFilterType;
   
-  ChannelExtractionFilterType::Pointer channelExtractor = ChannelExtractionFilterType::New();
+  ChannelExtractionFilterType::Pointer channelExtractor 
+    = ChannelExtractionFilterType::New();
 
   channelExtractor->SetInput(generator->GetOutput());
   channelExtractor->SetChannel(1);
@@ -560,8 +573,6 @@ int main (int argc, char* argv[])
   // \end{figure}
   //
   // Software Guide : EndLatex
-
-
 
   return EXIT_SUCCESS;
 }

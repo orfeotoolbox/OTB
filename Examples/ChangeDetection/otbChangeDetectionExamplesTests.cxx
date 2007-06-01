@@ -28,6 +28,7 @@ void RegisterTests()
 REGISTER_TEST(CorrelChDetTest);
 REGISTER_TEST(DiffChDetTest);
 REGISTER_TEST(RatioChDetTest);
+REGISTER_TEST(KullbackLeiblerDistanceChDetTest);
 }
 
 #undef main
@@ -42,3 +43,6 @@ REGISTER_TEST(RatioChDetTest);
 #define main RatioChDetTest
 #include "RatioChDet.cxx"
 
+#undef main
+#define main KullbackLeiblerDistanceChDetTest
+#include "KullbackLeiblerDistanceChDet.cxx"

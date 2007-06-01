@@ -137,7 +137,7 @@ class ITK_EXPORT KullbackLeiblerDistanceImageFilter :
 
 };
 
-#ifndef ITK_MANUAL_INSTANTIATION
+#ifndef OTB_MANUAL_INSTANTIATION
 #include "otbKullbackLeiblerDistanceImageFilter.txx"
 #endif
 
