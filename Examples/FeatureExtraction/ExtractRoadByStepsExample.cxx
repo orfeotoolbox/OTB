@@ -518,7 +518,7 @@ int main( int argc, char * argv[] )
 
   // Software Guide : BeginLatex
   //
-  // Figure~\ref{fig:ROADEXTRACTIONBYSTEPS} and \ref{fig:ROADEXTRACTIONBYSTEPS2} 
+  // Figures~\ref{fig:ROADEXTRACTIONBYSTEPS} and \ref{fig:ROADEXTRACTIONBYSTEPS2} 
   // show the result of applying
   // the road extraction by steps to a fusionned Quickbird image. The result image
   // is a RGB composition showing the extracted path in red. Full processing took 
