@@ -522,7 +522,7 @@ int main( int argc, char * argv[] )
   // show the result of applying
   // the road extraction by steps to a fusionned Quickbird image. The result image
   // is a RGB composition showing the extracted path in red. Full processing took 
-  // about 3 seconds for each image. On 
+  // about 3 seconds for each image.
   //
   // \begin{figure}
   // \center
