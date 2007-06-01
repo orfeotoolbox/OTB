@@ -156,7 +156,7 @@ int main( int argc, char * argv[] )
    // Software Guide : BeginLatex
    //  
    // The intensity rescaling of the results will be carried out by the
-   // \code{itk::RescaleIntensityImageFilter} which is templated by the
+   // \doxygen{itk}{RescaleIntensityImageFilter} which is templated by the
    // input and output image types.
    //
    //  Software Guide : EndLatex 
@@ -170,7 +170,7 @@ int main( int argc, char * argv[] )
 
    //  Software Guide : BeginLatex
    //
-   //  An \doxygen{otb::ImageFileReader} class is also instantiated in order to read
+   //  An \doxygen{otb}{ImageFileReader} class is also instantiated in order to read
    //  image data from a file. 
    //
    //  Software Guide : EndLatex 
@@ -183,7 +183,7 @@ int main( int argc, char * argv[] )
 
    //  Software Guide : BeginLatex
    //  
-   // An \doxygen{otb::ImageFileWriter} is instantiated in order to write the
+   // An \doxygen{otb}{ImageFileWriter} is instantiated in order to write the
    // output image to a file.
    //
    //  Software Guide : EndLatex 
@@ -216,7 +216,7 @@ int main( int argc, char * argv[] )
    
    // Software Guide : BeginLatex
    //
-   // The \doxygen{otb::RoadExtractionFilter} needs to have a reference pixel 
+   // The \doxygen{otb}{RoadExtractionFilter} needs to have a reference pixel 
    // corresponding to the spectral content likely to represent a road. This is done 
    // by passing a pixel to the filter. Here we suppose that the input image 
    // has four spectral bands.
@@ -293,7 +293,7 @@ int main( int argc, char * argv[] )
     
     // Software Guide : BeginLatex
     //
-    // The \doxygen{otb::RoadExtractionFilter} performs two odd path removing operations at different stage of
+    // The \doxygen{otb}{RoadExtractionFilter} performs two odd path removing operations at different stage of
     // its execution. The first mean distance threshold and the second mean distance threshold set their criterion
     // for removal. Path are removed if their mean distance between nodes is to small, since such path coming
     // from previous filters are likely to be tortuous. The first removal operation as a typical mean distance 
@@ -310,7 +310,7 @@ int main( int argc, char * argv[] )
 
     // Software Guide : BeginLatex
     //
-    // The \doxygen{otb::RoadExtractionFilter} is able to link path whose ends are near 
+    // The \doxygen{otb}{RoadExtractionFilter} is able to link path whose ends are near 
     // according to an euclidean distance criterion. The threshold for this distance
     // to link a path is the distance threshold parameter. A typical value is $25$.
     //
@@ -342,7 +342,7 @@ int main( int argc, char * argv[] )
      
      // Software Guide  : BeginLatex
      //
-     // We tell the \doxygen{otb::DrawPathListFilter} to try to use the likehood value
+     // We tell the \doxygen{otb}{DrawPathListFilter} to try to use the likehood value
      // embedded within the polyline as a value for drawing this polyline if possible.
      //
      // Software Guide : EndLatex
