@@ -29,12 +29,12 @@
 // between pairs of images, according to a range of window size.
 // This example is very similar, in its principle, to all of the change 
 // detection examples, especially the distance between distribution one
-// (section~\ref{sec:KullbackLeiblerDistance} which uses a fixed window size.
+// (section~\ref{sec:KullbackLeiblerDistance}) which uses a fixed window size.
 // 
 // The main differences are: 
 // \begin{enumerate}
 // \item a set of window range instead of a fixed size of window;
-// \item an output of type \doxygen[otb}{VectorImage}.
+// \item an output of type \doxygen{otb}{VectorImage}.
 // \end{enumerate}
 // Then, the program begins with the \doxygen{otb}{VectorImage} and the 
 // \doxygen{otb}{KullbackLeiblerProfileImageFilter} header files in complements
@@ -49,13 +49,10 @@
 
 //  Software Guide : BeginCodeSnippet
 #include "otbVectorImage.h"
+#include "otbKullbackLeiblerProfileImageFilter.h"
 //  Software Guide : EndCodeSnippet
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
-//  Software Guide : BeginCodeSnippet
-#include "otbKullbackLeiblerProfileImageFilter.h"
-//  Software Guide : EndCodeSnippet
-
 
 int main(int argc, char * argv[])
 {
@@ -93,7 +90,8 @@ int main(int argc, char * argv[])
       //  Software Guide : BeginCodeSnippet
       typedef otb::Image<PixelType,Dimension> ImageType;
       typedef otb::VectorImage<PixelType,Dimension> VectorImageType;
-      typedef otb::KullbackLeiblerProfileImageFilter<ImageType,ImageType,VectorImageType> FilterType;
+      typedef otb::KullbackLeiblerProfileImageFilter<ImageType,
+	           ImageType,VectorImageType> FilterType;
       //  Software Guide : EndCodeSnippet
       
       typedef otb::VectorImage<OutPixelType,Dimension> OutVectorImageType;

@@ -45,7 +45,7 @@
 //            \right) \\
 //        - 10 \frac{\kappa_{X_1;3} \kappa_{X_2;3} 
 //                        \left( \kappa_{X_1;1} - \kappa_{X_2;1} \right)
-//                        \left( \kappa_{X_1;2} - \kappa_{X_2;2} \right)}{\kappa_{X_2;2}^6} 
+//                        \left( \kappa_{X_1;2} - \kappa_{X_2;2} \right)}{\kappa_{X_2;2}^6} \qquad
 // \end{multline}
 // where
 // \begin{align*}
@@ -122,7 +122,8 @@ int main(int argc, char * argv[])
       //  Software Guide : EndLatex 
 
       //  Software Guide : BeginCodeSnippet
-      typedef otb::KullbackLeiblerDistanceImageFilter<ImageType,ImageType,ImageType> FilterType;
+      typedef otb::KullbackLeiblerDistanceImageFilter<ImageType,
+	           ImageType,ImageType> FilterType;
       //  Software Guide : EndCodeSnippet
 
       //  Software Guide : BeginLatex
