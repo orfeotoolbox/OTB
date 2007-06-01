@@ -27,24 +27,15 @@
 // \doxygen{otb}{KullbackLeiblerDistanceImageFilter} for detecting changes
 // between pairs of images. This filter computes the Kullback-Leibler 
 // distance between probability density functions (pdfs).
-// In the neighborhood of each pixel of the pair of images $I_1$ and $I_2$ 
-// to be compared, the distance between local pdfs $f_1$ and $f_2$ of random 
-// variables $X_1$ and $X_2$ is evaluated by:
-// \begin{align}
-//   {\cal K}(X_1,X_2) &= K(X_1|X_2) + K(X_2|X_1) \\
-//   \text{with} \qquad
-//   K(X_j | X_i) &= \int_{\mathbbm{R}} 
-//        \log \frac{f_{X_i}(x)}{f_{X_j}(x)} f_{X_i}(x) dx,\qquad i,j=1,2.
-// \end{align}
-// Instead of estimating pdfs $f_1$ and $f_2$ by using an histogram technique,
-// moments, up to order 4, are estimated to perform an Edgeworth development 
-// of $f_1$ and $f_2$. Then, the Kullback-Leibler distance is evaluated by an
-// cumulant-based approximation:
+// In fact, the Kullback-Leibler distance is itself approximated through
+// a cumulant-based expansion, since the pdfs are approximated through an 
+// Egdeworth series.
+// The Kullback-Leibler distance is evaluated by: 
 // \begin{multline}\label{eqKLapprox1D}
 //    K_{\text{Edgeworth}}(X_1 | X_2) = \frac{1}{12} \frac{\kappa_{X_1;3}^2}{\kappa_{X_1;2}^2}
 //        + \frac{1}{2} \left( \log \frac{\kappa_{X_2;2}}{\kappa_{X_1;2}}
-//                                -1+\frac{1}{\kappa_{X_2;2}} 
-//                                    \left( \kappa_{X_1;1} - \kappa_{X_2;1} +  \kappa_{X_1;2}^{1/2} \right)^2
+//                             -1+\frac{1}{\kappa_{X_2;2}} 
+//                             \left( \kappa_{X_1;1} - \kappa_{X_2;1} +  \kappa_{X_1;2}^{1/2} \right)^2
 //                        \right) \\
 //        - \left( \kappa_{X_2;3} \frac{a_1}{6} + \kappa_{X_2;4} \frac{a_2}{24}
 //            + \kappa_{X_2;3}^2 \frac{a_3}{72} \right) 
@@ -72,12 +63,13 @@
 // $\kappa_{X_i;1}$, $\kappa_{X_i;2}$, $\kappa_{X_i;3}$ and $\kappa_{X_i;4}$  
 // are the cumulants up to order 4 of the random variable $X_i$ ($i=1,2$).
 // This example will use the images shown in
-// figure ~\ref{fig:RATCHDETINIM}. These correspond to 2 Radarsat fine
+// figure~\ref{fig:RATCHDETINIM}. These correspond to 2 Radarsat fine
 // mode acquisitions before and after a lava flow resulting from a
 // volcanic eruption.
 //
 // The program itself is very similar to the ratio of mean detector, 
-// implemented in \doxygen{otb}{MeanRatioImageFilter}. Nevertheless 
+// implemented in \doxygen{otb}{MeanRatioImageFilter}, *
+// in section~\ref{sec:RatioOfMeans}. Nevertheless 
 // the corresponding header file has to be used instead.
 //
 // Software Guide : EndLatex
@@ -151,7 +143,7 @@ int main(int argc, char * argv[])
 
       //  Software Guide : BeginLatex
       //
-      //  The only parametter for this change detector is the radius of
+      //  The only parameter for this change detector is the radius of
       //  the window used for computing the cumulants.
       // 
       //  Software Guide : EndLatex 
@@ -215,3 +207,4 @@ int main(int argc, char * argv[])
 
   return EXIT_SUCCESS;
 }
+

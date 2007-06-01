@@ -129,6 +129,12 @@ protected:
   virtual void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread,
                             int threadId );
 
+  /**
+   * Since the number of components per pixel depends on the radius range, one must reimplement
+   * this method to set the proper number of component on the filter output.
+   */
+  virtual void GenerateOutputInformation(void);
+
   RadiusSizeType m_Radius;
   
 private:

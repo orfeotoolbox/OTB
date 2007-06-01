@@ -29,6 +29,7 @@ REGISTER_TEST(CorrelChDetTest);
 REGISTER_TEST(DiffChDetTest);
 REGISTER_TEST(RatioChDetTest);
 REGISTER_TEST(KullbackLeiblerDistanceChDetTest);
+REGISTER_TEST(KullbackLeiblerProfileChDetTest);
 }
 
 #undef main
@@ -46,3 +47,7 @@ REGISTER_TEST(KullbackLeiblerDistanceChDetTest);
 #undef main
 #define main KullbackLeiblerDistanceChDetTest
 #include "KullbackLeiblerDistanceChDet.cxx"
+
+#undef main
+#define main KullbackLeiblerProfileChDetTest
+#include "KullbackLeiblerProfileChDet.cxx"

@@ -1,3 +1,75 @@
+OTB-v.1.4.0 - Changes since version 1.2.1
+-----------------------------------------
+
+*IO:
+
+	- Added the LineSpatialObject class.
+
+	- Added the ArcSpatialObject class.
+
+	- Added a DXF file reader to read spatial objects from DXF files.
+
+*Common:
+
+	- Added a PolylineParametricPathWithValue class, to store a likehood value along with
+	  a polyline.
+
+	- DrawPathFilter and DrawPathListFilter can now use the internal likehood values of the path
+	  (if present) as a value to draw the path. 
+
+	- Improved performances of the DrawPathFilter and DrawPathListFilter.
+
+	- Added the base class otbBinaryFunctorNeighborhoodVectorImageFilter (see ChangeDetection)
+
+*BasicFilters:
+
+	- Added the ImportGeoInformationImageFilter providing a workaround for metadata handling
+	  in pipeline execution.
+
+	- Added a VectorRescaleIntensityImageFilter, which rescale a vector image on a per-band basis, 
+	  clamping a user-defined percent of the pixels lowest and highest values.
+
+	- Added a filter to compute spectral angle distance image with respect to a reference pixel.
+ 	
+*FeatureExtraction:
+
+	- Added a set of image and path filters to perform road extraction.
+
+	- Added a composite filter to perform road extraction.
+
+* ChangeDetection:
+  
+        - Added the Kullback-Leibler distance change detector with optimized algorithm.
+
+	- Added a Kullback-Leibler multi-scale change profile image filter with optimized algorithm.
+
+* DisparityMap:
+        
+	- Added the DisparityMapEstimationMethod, performing local disparity estimation with respect
+	  to a given transform using the ITK registration framework.
+
+	- Added several method for deformation field estimation from the estimated disparity map
+	  (represented as a pointset with associated point data).
+
+*Documentation:
+
+	- Corrected several warning and french comments in doxygen.
+
+*Utilities:
+
+	- Split of the OSSIM lib to support compilation on the mingw platform.
+
+	- DXFlib integration.
+
+	- InsightJournal code integration : ScatteredDataPointSetImageFilter.
+
+*Platforms: 
+
+	- Corrected runtime errors of the interactive change detection application under cygwin.
+	
+	- Workaround for ImageViewer on very specific mandrake version.
+
+
 OTB-v.1.2.1 - Changes since version 1.2.0
 -----------------------------------------
 

@@ -338,6 +338,23 @@ namespace Functor {
 		MakeMultiscaleProfile();
 	}
 
+        template< class TInput1, class TInput2, class TOutput >
+	unsigned char
+	KullbackLeiblerProfile<TInput1,TInput2,TOutput>
+	::GetRadiusMin(void)
+	{
+	  return m_RadiusMin;
+	}
+  
+        template< class TInput1, class TInput2, class TOutput >
+	unsigned char
+	KullbackLeiblerProfile<TInput1,TInput2,TOutput>
+	::GetRadiusMax(void)
+	{
+	  return m_RadiusMax;
+	}
+  
+
 /* ====== Make the set of masks to play the increase in window size == */
 
 	template< class TInput1, class TInput2, class TOutput >

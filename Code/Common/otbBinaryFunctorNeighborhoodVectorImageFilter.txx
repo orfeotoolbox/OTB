@@ -75,12 +75,27 @@ template <class TInputImage1, class TInputImage2,
           class TOutputImage, class TFunction  >
 void
 BinaryFunctorNeighborhoodVectorImageFilter<TInputImage1,TInputImage2,TOutputImage,TFunction>
-::SetRadius ( const unsigned char & min, const unsigned char & max )
+::SetRadius( const unsigned char & min, const unsigned char & max )
 {
 	this->SetRadius( max );
 	GetFunctor().SetRadius( min, max );
 }
 
+/**
+ * Generate the output information
+ */
+template <class TInputImage1, class TInputImage2, class TOutputImage, class TFunction >
+void
+BinaryFunctorNeighborhoodVectorImageFilter<TInputImage1, TInputImage2, TOutputImage, TFunction>
+::GenerateOutputInformation(void)
+{
+  Superclass::GenerateOutputInformation();
+
+  int nbComponents = static_cast<int>(m_Functor.GetRadiusMax())+1
+    - static_cast<int>(m_Functor.GetRadiusMin());
+
+  this->GetOutput()->SetNumberOfComponentsPerPixel(nbComponents);
+}
 
 /**
  * ThreadedGenerateData Performs the neighborhood-wise operation

@@ -82,6 +82,8 @@ namespace Functor {
 			virtual ~KullbackLeiblerProfile () { }
 			// Gives the radius min and max of neighborhood
 			void SetRadius ( const unsigned char & min, const unsigned char & max );
+			unsigned char GetRadiusMin(void);
+			unsigned char GetRadiusMax(void);
 			// Gives the size of the profile
 			int	GetNumberOfComponentsPerPixel() const { return m_mask.size(); }
 			// functor	
