@@ -74,6 +74,11 @@
 //    OUTPUTS: {ExtractRoadByStepsExampleOutput.png}, {qb_ExtractRoad_pretty.png}
 //    337 557 432 859 0.00005 1.0
 //  Software Guide : EndCommandLineArgs
+//  Software Guide : BeginCommandLineArgs
+//    INPUTS: {qb_RoadExtract2.tif}
+//    OUTPUTS: {ExtractRoadByStepsExampleOutput2.png}, {qb_ExtractRoad_pretty2.png}
+//    228 316 207 282 0.00005 1.0
+//  Software Guide : EndCommandLineArgs
 
 int main( int argc, char * argv[] )
 {
@@ -513,9 +518,12 @@ int main( int argc, char * argv[] )
 
   // Software Guide : BeginLatex
   //
-  // Figure~\ref{fig:ROADEXTRACTIONBYSTEPS} shows the result of applying
+  // Figure~\ref{fig:ROADEXTRACTIONBYSTEPS} and \ref{fig:ROADEXTRACTIONBYSTEPS2} 
+  // show the result of applying
   // the road extraction by steps to a fusionned Quickbird image. The result image
-  // is a RGB composition showing the extracted path in red.
+  // is a RGB composition showing the extracted path in red. Full processing took 
+  // about 3 seconds for each image. On 
+  //
   // \begin{figure}
   // \center
   // \includegraphics[width=0.44\textwidth]{qb_ExtractRoad_pretty.eps}
@@ -527,6 +535,16 @@ int main( int argc, char * argv[] )
   // \label{fig:ROADEXTRACTIONBYSTEPS} 
   // \end{figure}
   //
+  // \begin{figure}
+  // \center
+  // \includegraphics[width=0.44\textwidth]{qb_ExtractRoad_pretty2.eps}
+  // \includegraphics[width=0.44\textwidth]{ExtractRoadByStepsExampleOutput2.eps}
+  // \itkcaption[Road extraction filter application]{Result of applying
+  // the road extraction by steps pipeline to a fusionned Quickbird
+  // image. From left to right : original image, extracted road with their
+  // likehood values.}  
+  // \label{fig:ROADEXTRACTIONBYSTEPS2} 
+  // \end{figure}
   // Software Guide : EndLatex
   
   return EXIT_SUCCESS;
