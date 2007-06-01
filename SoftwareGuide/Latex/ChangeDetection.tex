@@ -16,7 +16,7 @@ of applications:
   damages caused by natural or industrial disasters.
 \end{itemize}
 
-From the point of view of the observed phenomena, one can distinguish
+>From the point of view of the observed phenomena, one can distinguish
 2 types of changes whose nature is rather different: the abrupt
 changes and the progressive changes, which can eventually be
 periodic. From the data point of view, one can have:
@@ -48,7 +48,7 @@ periodic. From the data point of view, one can have:
 	 
        \end{itemize}
 
-From this classification of the different types of problems, one can
+>From this classification of the different types of problems, one can
 infer 4 cases for which one can look for algorithms as a function of
 the available data:
 \begin{enumerate}
@@ -93,7 +93,7 @@ As it has been shown in recent review works
 methods exist, but most of them have been developed for optical and
 infrared sensors. Only a few recent works on change detection with
 radar images exist
-\cite{Stabel02,Bruzzone02b,Onana_2003,Inglada03,Derrode03,Bazi05}.
+\cite{Stabel02,Bruzzone02b,Onana_2003,Inglada03,Derrode03,Bazi05,Inglada07}.
 However, the intrinsic limits of passive sensors, mainly related to
 their dependence on meteorological and illumination conditions, impose
 severe constraints for operational applications. The principal
@@ -190,9 +190,44 @@ expression is actually used:
 \input{RatioChDet}
 
 
-
 \section{Statistical Detectors}
 \label{sec:StatisticalDetectors}
+
+\subsection{Distance between local distribution}
+\label{sec:KullbackLeiblerDistance}
+
+This detector is similar to the ratio of means detector (seen in the 
+previous section page~\pageref{sec:RatioOfMeans}). Nevertheless, 
+instead of the comparison of means, the comparison is perform to
+the complete distribution of the two Random Variables (RVs)~\cite{Inglada03}.
+
+The detector is based on the Kullback-Leibler distance between probability 
+density functions (pdfs). In the neighborhood of each pixel of the pair 
+of images $I_1$ and $I_2$ to be compared, the distance between local pdfs 
+$f_1$ and $f_2$ of RVs $X_1$ and $X_2$ is evaluated by:
+\begin{align}
+  {\cal K}(X_1,X_2) &= K(X_1|X_2) + K(X_2|X_1) \\
+  \text{with} \qquad
+  K(X_j | X_i) &= \int_{\mathbbm{R}} 
+      \log \frac{f_{X_i}(x)}{f_{X_j}(x)} f_{X_i}(x) dx,\qquad i,j=1,2.
+\end{align}
+In order to reduce the computational time, the local pdfs $f_1$ and $f_2$ 
+are not estimated through histogram computations but rather by a cumulant
+expansion, namely the Edgeworth expansion, with is based on the 
+cumulants of the RVs:
+\begin{equation}\label{eqEdgeworthExpansion}
+f_X(x) = \left( 1 + \frac{\kappa_{X;3}}{6} H_3(x) 
+					+ \frac{\kappa_{X;4}}{24} H_4(x)
+					+ \frac{\kappa_{X;5}}{120} H_5(x)
+					+ \frac{\kappa_{X;6}+10 \kappa_{X;3}^2}{720} H_6(x) \right) {\cal G}_X(x).
+\end{equation}
+In eq.~\eqref{eqEdgeworthExpansion}, ${\cal G}_X$ stands for the Gaussian pdf
+which has the same mean and variance as the RV $X$. The $\kappa_{X;k}$
+coefficients are the cumulants of order $k$, and $H_k(x)$ are the 
+Chebyshev-Hermite polynomial of order $k$ (see~\cite{Inglada07} for deeper
+explanations).
+
+\input{KullbackLeiblerDistanceChDet}
 
 \subsection{Local Correlation}
 \label{sec:LocalCorrelation}
@@ -337,6 +372,45 @@ illumination changes.
 %%  the cumulants are computed in the neighborhood if the pixel of
 %%  coordinates $(i,j)$.
 
+
+\section{Multi-Scale Detectors}
+\label{sec:MultiScaleDetectors}
+
+\subsection{Kullback-Leibler Distance between distributions}
+\label{sec:KullbackLeiblerProfile}
+
+This technique is an extension of the distance between distribution 
+change detector presented in section~\ref{sec:KullbackLeiblerDistance}.
+Since this kind of detector is based on cumulants estimations through
+a sliding window, the idea is just to upgrade the estimation of the cumulants
+by considering new sample as soon as the sliding window is increasing in size.
+
+Let's consider the following problem: how to update the moments when a
+$N+1^{th}$ observation $x_{N+1}$ is added to a set of observations $\{x_1, x_2, \ldots,
+x_N\}$ already considered.
+The evolution of the central moments may be characterized by:
+\begin{align}\label{eqMomentN}
+	\mu_{1,[N]} & = \frac{1}{N} s_{1,[N]} \\
+	\mu_{r,[N]} & = \frac{1}{N} \sum_{\ell = 0}^r \binom{r}{\ell} 
+									\left( -\mu_{1,[N]} \right)^{r-\ell}
+									s_{\ell,[N]}, \notag
+\end{align}
+where the
+notation $s_{r,[N]} = \sum_{i=1}^N x_i^r$ has been used.
+Then, Edgeworth series is updated also by transforming moments to
+cumulants by using:
+\begin{equation}\label{eqCumsMoms}
+  \begin{split}
+\kappa_{X;1} &= \mu_{X;1}\\
+\kappa_{X;2} &= \mu_{X;2}-\mu_{X;1}^2\\
+\kappa_{X;3} &= \mu_{X;3} - 3\mu_{X;2} \mu_{X;1} + 2\mu_{X;1}^3\\
+\kappa_{X;4} &= \mu_{X;4} - 4\mu_{X;3} \mu_{X;1} - 3\mu_{X;2}^2 + 12 \mu_{X;2} \mu_{X;1}^2 - 6\mu_{X;1}^4.
+  \end{split}
+\end{equation}
+It yields a set of images that represent the change measure according to an
+increasing size of the analysis window.
+
+\input{KullbackLeiblerProfileChDet}
 
 
 
