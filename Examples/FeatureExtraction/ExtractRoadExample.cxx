@@ -97,7 +97,7 @@ int main( int argc, char * argv[] )
    //  Software Guide : BeginLatex
    //
    //  The images are defined using the pixel type and the dimension. Please note that
-   //  the doxygen{otb}{RoadExtractionFilter} needs an \doxygen{otb}{VectorImage} as input
+   //  the \doxygen{otb}{RoadExtractionFilter} needs an \doxygen{otb}{VectorImage} as input
    //  to handle multispectral images.
    //
    //  Software Guide : EndLatex 
@@ -171,25 +171,14 @@ int main( int argc, char * argv[] )
    //  Software Guide : BeginLatex
    //
    //  An \doxygen{otb}{ImageFileReader} class is also instantiated in order to read
-   //  image data from a file. 
+   //  image data from a file. Then, an \doxygen{otb}{ImageFileWriter} is instantiated in order //  to write the output image to a file.
    //
    //  Software Guide : EndLatex 
    
-   // Software Guide : BeginCodeSnippet
-   
-   typedef otb::ImageFileReader<InputVectorImageType> ReaderType;
-
-   // Software Guide : EndCodeSnippet
-
-   //  Software Guide : BeginLatex
-   //  
-   // An \doxygen{otb}{ImageFileWriter} is instantiated in order to write the
-   // output image to a file.
-   //
-   //  Software Guide : EndLatex 
    
    // Software Guide : BeginCodeSnippet
    
+   typedef otb::ImageFileReader<InputVectorImageType> ReaderType; 
    typedef otb::ImageFileWriter<OutputImageType> WriterType;
 
    // Software Guide : EndCodeSnippet
@@ -429,7 +418,7 @@ int main( int argc, char * argv[] )
      // \itkcaption[Road extraction filter application]{Result of applying
      // the \doxygen{otb}{RoadExtractionFilter} to a fusionned Quickbird
      // image. From left to right : original image, extracted road with their
-     // likehood values.}  
+     // likehood values (color are inverted for display).}  
      // \label{fig:ROADEXTRACTION_FILTER} 
      // \end{figure}
      //
