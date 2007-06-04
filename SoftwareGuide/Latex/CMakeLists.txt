@@ -83,7 +83,7 @@ SET( Tex_SRCS
   Transforms.tex
   Visualization.tex
   Wrapping.tex
-  WatershedSegmentation.tex
+  Watersheds.tex
 )
 
 FOREACH( file ${Tex_SRCS})

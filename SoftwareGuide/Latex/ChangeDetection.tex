@@ -193,12 +193,12 @@ expression is actually used:
 \section{Statistical Detectors}
 \label{sec:StatisticalDetectors}
 
-\subsection{Distance between local distribution}
+\subsection{Distance between local distributions}
 \label{sec:KullbackLeiblerDistance}
 
 This detector is similar to the ratio of means detector (seen in the 
 previous section page~\pageref{sec:RatioOfMeans}). Nevertheless, 
-instead of the comparison of means, the comparison is perform to
+instead of the comparison of means, the comparison is performed to
 the complete distribution of the two Random Variables (RVs)~\cite{Inglada03}.
 
 The detector is based on the Kullback-Leibler distance between probability 
@@ -224,7 +224,7 @@ f_X(x) = \left( 1 + \frac{\kappa_{X;3}}{6} H_3(x)
 In eq.~\eqref{eqEdgeworthExpansion}, ${\cal G}_X$ stands for the Gaussian pdf
 which has the same mean and variance as the RV $X$. The $\kappa_{X;k}$
 coefficients are the cumulants of order $k$, and $H_k(x)$ are the 
-Chebyshev-Hermite polynomial of order $k$ (see~\cite{Inglada07} for deeper
+Chebyshev-Hermite polynomials of order $k$ (see~\cite{Inglada07} for deeper
 explanations).
 
 \input{KullbackLeiblerDistanceChDet}
@@ -379,11 +379,11 @@ illumination changes.
 \subsection{Kullback-Leibler Distance between distributions}
 \label{sec:KullbackLeiblerProfile}
 
-This technique is an extension of the distance between distribution 
+This technique is an extension of the distance between distributions 
 change detector presented in section~\ref{sec:KullbackLeiblerDistance}.
 Since this kind of detector is based on cumulants estimations through
 a sliding window, the idea is just to upgrade the estimation of the cumulants
-by considering new sample as soon as the sliding window is increasing in size.
+by considering new samples as soon as the sliding window is increasing in size.
 
 Let's consider the following problem: how to update the moments when a
 $N+1^{th}$ observation $x_{N+1}$ is added to a set of observations $\{x_1, x_2, \ldots,
