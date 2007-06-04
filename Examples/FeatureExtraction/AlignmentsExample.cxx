@@ -27,6 +27,7 @@
 //  Software Guide : BeginCommandLineArgs
 //    INPUTS: {QB_Suburb.png}
 //    OUTPUTS: {QB_SuburbAlign.png}
+//    2
 //  Software Guide : EndCommandLineArgs
 
 // Software Guide : BeginLatex
@@ -75,10 +76,10 @@
 
 int main( int argc, char *argv[] )
 {
-  if(argc!=3)
+  if(argc!=4)
     {
 
-    std::cout << "Usage : " << argv[0] << " inputImage outputImage" << std::endl;
+    std::cout << "Usage : " << argv[0] << " inputImage outputImage epsilon" << std::endl;
     return EXIT_FAILURE;
     
     }
@@ -141,7 +142,7 @@ int main( int argc, char *argv[] )
   //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  alignFilter->SetEps( 5 );
+  alignFilter->SetEps( atoi(argv[3]) );
   // Software Guide : EndCodeSnippet
   
   alignFilter->Update();
@@ -159,7 +160,7 @@ int main( int argc, char *argv[] )
   typedef otb::DrawPathFilter< InputImageType, PathType,
                                    OutputImageType >  DrawPathFilterType;
 
-  DrawPathFilterType::Pointer drawPathFilter = DrawPathFilterType::New();
+
   // Software Guide : EndCodeSnippet
   //  Software Guide : BeginLatex
   // We will now go through the list of detected paths and feed them
@@ -197,6 +198,7 @@ int main( int argc, char *argv[] )
   while( listIt != pathList->End())
     {
 
+    DrawPathFilterType::Pointer drawPathFilter = DrawPathFilterType::New();
     drawPathFilter->SetImageInput( backgroundImage );
     drawPathFilter->SetPathInput( listIt.Get() );
 
@@ -209,7 +211,7 @@ int main( int argc, char *argv[] )
 
     }
     
-  writer->SetInput( drawPathFilter->GetOutput() );
+  writer->SetInput( backgroundImage );
   // Software Guide : EndCodeSnippet
   
   writer->Update();

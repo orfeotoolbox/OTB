@@ -179,6 +179,7 @@ ADD_TEST(AlignmentsExampleTest ${EXE_TESTS}
 	AlignmentsExampleTest
 	${INPUTDATA}/QB_Suburb.png
 	${TEMP}/QB_SuburbAlign.png
+	5
 )
 
 # ------- RoadExtractionExamplesTest----------
