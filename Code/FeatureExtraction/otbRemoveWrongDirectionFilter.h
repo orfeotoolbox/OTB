@@ -54,8 +54,10 @@ namespace Functor
  *  \brief This filter removes (sets to null intensity) pixels with wrong direction.
  *
  *  This filter is part of the road extraction framework. By using the Spectral Angle filter,
- *  we can assume that the direction of a road on our scalar product image is positive (greater than \$f \pi/8 \$f).
- *  Therefore in the input modulus and direction images, pixels whose direction is lower than this threshold are supressed
+ *  we can assume that the direction of a road on our scalar product image is positive (greater 
+ *  than \f$ \pi/8 \f$).
+ *  Therefore in the input modulus and direction images, pixels whose direction is lower than
+ *  this threshold are supressed
  *  (in fact, their intensity is set to 0).
  *
  * \sa NeighborhoodScalarProductFilter
