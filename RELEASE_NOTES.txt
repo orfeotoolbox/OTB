@@ -11,10 +11,10 @@ OTB-v.1.4.0 - Changes since version 1.2.1
 
 *Common:
 
-	- Added a PolylineParametricPathWithValue class, to store a likehood value along with
+	- Added a PolylineParametricPathWithValue class, to store a scalar value along with
 	  a polyline.
 
-	- DrawPathFilter and DrawPathListFilter can now use the internal likehood values of the path
+	- DrawPathFilter and DrawPathListFilter can now use the internal scalar values of the path
 	  (if present) as a value to draw the path. 
 
 	- Improved performances of the DrawPathFilter and DrawPathListFilter.
@@ -26,7 +26,7 @@ OTB-v.1.4.0 - Changes since version 1.2.1
 	- Added the ImportGeoInformationImageFilter providing a workaround for metadata handling
 	  in pipeline execution.
 
-	- Added a VectorRescaleIntensityImageFilter, which rescale a vector image on a per-band basis, 
+	- Added a VectorRescaleIntensityImageFilter, which rescales a vector image on a per-band basis, 
 	  clamping a user-defined percent of the pixels lowest and highest values.
 
 	- Added a filter to compute spectral angle distance image with respect to a reference pixel.
@@ -48,12 +48,12 @@ OTB-v.1.4.0 - Changes since version 1.2.1
 	- Added the DisparityMapEstimationMethod, performing local disparity estimation with respect
 	  to a given transform using the ITK registration framework.
 
-	- Added several method for deformation field estimation from the estimated disparity map
+	- Added several methods for deformation field estimation from the estimated disparity map
 	  (represented as a pointset with associated point data).
 
 *Documentation:
 
-	- Corrected several warning and french comments in doxygen.
+	- Corrected several warning and French comments in doxygen.
 
 *Utilities:
 
