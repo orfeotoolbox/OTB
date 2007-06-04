@@ -21,6 +21,7 @@
 #include <vector>
 
 #include "otbKullbackLeiblerProfileImageFilter.h" 
+#include "otbMath.h"
 
 /* *******************************************************************
 *	Classe CumulantsForEdgeworthProfile 
@@ -109,7 +110,7 @@ CumulantsForEdgeworthProfile<TInput>
 			- tilde_cum3_2 * ( c6 - 6.0 * c4 / cum2 + 9.0 * c2 / tilde_cum2_2 ) / 72.0
 			- 10.0 * cum3 * tilde_cum3 * ( cum1 - tilde_cum1 ) * ( cum2 - tilde_cum2 ) / tilde_cum2_6;
 
-	if ( isnan( resu ) || resu > 1e3 )
+	if ( vnl_math_isnan( resu ) || resu > 1e3 )
 		resu = 1e3;
 
 	return resu < 0.0 ? 0.0 : resu;
@@ -214,7 +215,7 @@ CumulantsForEdgeworthProfile<TInput>
 	mu3 /= fSum0;
 	mu4 /= fSum0;
 	
-	if ( isnan( mu3 ) || isnan( mu4 ) )
+	if ( vnl_math_isnan( mu3 ) || vnl_math_isnan( mu4 ) )
 		return 1;
 
 	fMu[0][0] = mu1;
