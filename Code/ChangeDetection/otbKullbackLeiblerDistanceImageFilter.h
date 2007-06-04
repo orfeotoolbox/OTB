@@ -114,7 +114,7 @@ class ITK_EXPORT KullbackLeiblerDistanceImageFilter :
 	public:
 		/** Standard class typedefs. */
 		typedef KullbackLeiblerDistanceImageFilter Self;
-		typedef typename BinaryFunctorNeighborhoodImageFilter<
+		typedef BinaryFunctorNeighborhoodImageFilter<
 								TInputImage1,TInputImage2,TOutputImage, 
 								Functor::KullbackLeiblerDistance< 
 									typename itk::ConstNeighborhoodIterator<TInputImage1>,

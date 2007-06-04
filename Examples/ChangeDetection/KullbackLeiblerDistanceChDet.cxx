@@ -29,7 +29,7 @@
 // distance between probability density functions (pdfs).
 // In fact, the Kullback-Leibler distance is itself approximated through
 // a cumulant-based expansion, since the pdfs are approximated through an 
-// Egdeworth series.
+// Edgeworth series.
 // The Kullback-Leibler distance is evaluated by: 
 // \begin{multline}\label{eqKLapprox1D}
 //    K_{\text{Edgeworth}}(X_1 | X_2) = \frac{1}{12} \frac{\kappa_{X_1;3}^2}{\kappa_{X_1;2}^2}
@@ -67,8 +67,8 @@
 // mode acquisitions before and after a lava flow resulting from a
 // volcanic eruption.
 //
-// The program itself is very similar to the ratio of mean detector, 
-// implemented in \doxygen{otb}{MeanRatioImageFilter}, *
+// The program itself is very similar to the ratio of means detector, 
+// implemented in \doxygen{otb}{MeanRatioImageFilter}, 
 // in section~\ref{sec:RatioOfMeans}. Nevertheless 
 // the corresponding header file has to be used instead.
 //
@@ -115,9 +115,9 @@ int main(int argc, char * argv[])
       //  The \doxygen{otb}{KullbackLeiblerDistanceImageFilter} is templated over
       //  the types of the two input images and the type of the generated change
       //  image, in a similar way as the \doxygen{otb}{MeanRatioImageFilter}. It is
-      //  the only line to be change from the ratio of mean change detection
+      //  the only line to be changed from the ratio of means change detection
       //  example to perform a change detection through a distance between
-      //  distribution...
+      //  distributions...
       // 
       //  Software Guide : EndLatex 
 
@@ -129,7 +129,7 @@ int main(int argc, char * argv[])
       //  Software Guide : BeginLatex
       //
       //  The different elements of the pipeline can now be instantiated. Follow the 
-      //  ratio of mean change detector example.
+      //  ratio of means change detector example.
       // 
       //  Software Guide : EndLatex 
 

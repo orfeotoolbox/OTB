@@ -26,7 +26,7 @@
 //  Software Guide : BeginCommandLineArgs
 //    INPUTS: {ROI_IKO_PAN_LesHalles.tif}, {ROI_IKO_PAN_LesHalles_warped.tif}
 //    OUTPUTS: {deformationFieldOutput.png},{resampledFixedOutput.png}
-//    25 15 10 10 250 0.9
+//    100 10 15 10 10 250 0.9
 //  Software Guide : EndCommandLineArgs
 
 // Software Guide : BeginLatex
@@ -66,7 +66,7 @@
 
 int main (int argc, char* argv[])
 {
-  if(argc!= 11)
+  if(argc!= 12)
     {
       std::cerr <<"Usage: "<<argv[0];
       std::cerr<<"fixedFileName movingFileName fieldOutName imageOutName ";
@@ -241,11 +241,11 @@ int main (int argc, char* argv[])
   unsigned int NumberOfXNodes = (fixedSize[0]-2*atoi(argv[6])-1)
     /atoi(argv[5]);
   unsigned int NumberOfYNodes = (fixedSize[1]-2*atoi(argv[6])-1)
-    /atoi(argv[5]);
+    /atoi(argv[6]);
 
   ImageType::IndexType firstNodeIndex;
-  firstNodeIndex[0] = atoi(argv[6]);
-  firstNodeIndex[1] = atoi(argv[6]);
+  firstNodeIndex[0] = atoi(argv[7]);
+  firstNodeIndex[1] = atoi(argv[7]);
   
   PointSetType::Pointer  nodes = PointSetType::New();
   unsigned int nodeCounter = 0;
@@ -256,7 +256,7 @@ int main (int argc, char* argv[])
 	{
 	  PointType p;
 	  p[0] = firstNodeIndex[0]+x*atoi(argv[5]);
-	  p[1] = firstNodeIndex[1]+y*atoi(argv[5]);
+	  p[1] = firstNodeIndex[1]+y*atoi(argv[6]);
 	  nodes->SetPoint( nodeCounter++,p);
 	}
     }
@@ -275,8 +275,8 @@ int main (int argc, char* argv[])
 
   OptimizerType::Pointer optimizer = OptimizerType::New();
   optimizer->MinimizeOn();
-  optimizer->SetLearningRate(atof(argv[8]));
-  optimizer->SetNumberOfIterations(atoi(argv[9]));
+  optimizer->SetLearningRate(atof(argv[9]));
+  optimizer->SetNumberOfIterations(atoi(argv[10]));
 
   InterpolatorType::Pointer interpolator = InterpolatorType::New();
 
@@ -429,7 +429,7 @@ int main (int argc, char* argv[])
 
   // Software Guide : BeginCodeSnippet
 
-  generator->SetMetricThreshold(atof(argv[10]));
+  generator->SetMetricThreshold(atof(argv[11]));
 
   // Software Guide : EndCodeSnippet
 

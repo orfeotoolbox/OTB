@@ -28,7 +28,7 @@
 // \doxygen{otb}{KullbackLeiblerProfileImageFilter} for detecting changes
 // between pairs of images, according to a range of window size.
 // This example is very similar, in its principle, to all of the change 
-// detection examples, especially the distance between distribution one
+// detection examples, especially the distance between distributions one
 // (section~\ref{sec:KullbackLeiblerDistance}) which uses a fixed window size.
 // 
 // The main differences are: 
@@ -37,7 +37,7 @@
 // \item an output of type \doxygen{otb}{VectorImage}.
 // \end{enumerate}
 // Then, the program begins with the \doxygen{otb}{VectorImage} and the 
-// \doxygen{otb}{KullbackLeiblerProfileImageFilter} header files in complements
+// \doxygen{otb}{KullbackLeiblerProfileImageFilter} header files in addition
 // to those already details in the \doxygen{otb}{MeanRatioImageFilter} example.
 //
 // Software Guide : EndLatex
@@ -82,7 +82,7 @@ int main(int argc, char * argv[])
       //
       //  The \doxygen{otb}{KullbackLeiblerProfileImageFilter} is templated over
       //  the types of the two input images and the type of the generated change
-      //  image (which is now of multi-component), in a similar way as the 
+      //  image (which is now of multi-components), in a similar way as the 
       //  \doxygen{otb}{KullbackLeiblerDistanceImageFilter}. 
       // 
       //  Software Guide : EndLatex 
@@ -109,13 +109,13 @@ int main(int argc, char * argv[])
       //  Software Guide : BeginLatex
       //
       //  The different elements of the pipeline can now be instantiated in the 
-      //  same way as the ratio of mean change detector example.
+      //  same way as the ratio of means change detector example.
       //  
       //  Two parameters are now required to give the minimum and the maximum size 
       //  of the analysis window. The program will begin by performing change
       //  detection through the smaller window size and then applying moments update
       //  of eq.~\eqref{eqMomentN} by incrementing the radius of the analysis window
-      //  (i.e. add a ring of width 1 pixel arround the current neightborhood shape).
+      //  (i.e. add a ring of width 1 pixel around the current neightborhood shape).
       //  The process is applied until the larger window size is reached.
       //  
       //  Software Guide : EndLatex 

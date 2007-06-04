@@ -30,7 +30,7 @@ ADD_TEST(ExtractRoadByStepsExampleTest ${EXE_TESTS}
  ${INPUTDATA}/ROI_IKO_PAN_LesHalles_warped.tif
  ${TEMP}/deformationFieldOutput.png
  ${TEMP}/resampledFixedOutput.png 
- 25 15 10 10 250 0.9
+ 100 10 15 10 10 250 0.9
 )
 
 
