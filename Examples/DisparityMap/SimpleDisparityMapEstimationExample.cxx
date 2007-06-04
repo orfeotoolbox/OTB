@@ -25,7 +25,7 @@
 
 //  Software Guide : BeginCommandLineArgs
 //    INPUTS: {ROI_IKO_PAN_LesHalles.tif}, {ROI_IKO_PAN_LesHalles_warped.tif}
-//    OUTPUTS: {deformationFieldOutput.png},{resampledFixedOutput.png}
+//    OUTPUTS: {deformationFieldOutput.png},{resampledMovingOutput.png}
 //    100 10 15 10 10 250 0.9
 //  Software Guide : EndCommandLineArgs
 
@@ -481,7 +481,7 @@ int main (int argc, char* argv[])
 
   // Software Guide : BeginCodeSnippet
 
-  warper->SetInput(fixedReader->GetOutput());
+  warper->SetInput(movingReader->GetOutput());
   warper->SetDeformationField(generator->GetOutput());
 
   // Software Guide : EndCodeSnippet
@@ -565,10 +565,10 @@ int main (int argc, char* argv[])
   // \includegraphics[width=0.40\textwidth]{ROI_IKO_PAN_LesHalles.eps}
   // \includegraphics[width=0.40\textwidth]{ROI_IKO_PAN_LesHalles_warped.eps}
   // \includegraphics[width=0.40\textwidth]{deformationFieldOutput.eps}
-  // \includegraphics[width=0.40\textwidth]{resampledFixedOutput.eps}
+  // \includegraphics[width=0.40\textwidth]{resampledMovingOutput.eps}
   // \itkcaption[Deformation field and resampling from disparity map estimation]{From left
   // to right and top to bottom: fixed input image, moving image with a sinusoid deformation, 
-  // estimated deformation field in the horizontal direction, resampled fixed image.}
+  // estimated deformation field in the horizontal direction, resampled moving image.}
   // \label{fig:SIMPLEDISPARITYMAPESTIMATIONOUTPUT}
   // \end{figure}
   //

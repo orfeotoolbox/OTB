@@ -45,8 +45,8 @@ NearestPointDeformationFieldGenerator<TPointSet, TDeformationField>
        PixelType p(2);
        if(indexVector.size()>=1)
  	{
- 	  p[0] = -static_cast<ValueType>(this->GetPointSet()->GetPointData()->GetElement(indexVector[0])[1]);
- 	  p[1] = -static_cast<ValueType>(this->GetPointSet()->GetPointData()->GetElement(indexVector[0])[2]);
+ 	  p[0] = static_cast<ValueType>(this->GetPointSet()->GetPointData()->GetElement(indexVector[0])[1]);
+ 	  p[1] = static_cast<ValueType>(this->GetPointSet()->GetPointData()->GetElement(indexVector[0])[2]);
  	}
        else
  	{

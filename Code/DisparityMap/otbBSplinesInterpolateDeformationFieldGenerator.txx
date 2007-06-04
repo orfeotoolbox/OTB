@@ -65,8 +65,8 @@ BSplinesInterpolateDeformationFieldGenerator<TPointSet, TDeformationField>
 	  typename PointSetType::PointType p = pointIterator.Value();   // access the point
 	  sourcePoint[0] = p[0];
 	  sourcePoint[1] = p[1];
-	  targetPoint[0] = p[0] + valueAndDeformations[1];
-	  targetPoint[1] = p[1] + valueAndDeformations[2];
+	  targetPoint[0] = p[0] - valueAndDeformations[1];
+	  targetPoint[1] = p[1] - valueAndDeformations[2];
 	  otbMsgDebugMacro(<<"Adding landmark "<<pointId<<", source point: "<<sourcePoint<<", targetpoint: "<<targetPoint);
 	  sourceLandmarks->InsertElement( pointId, sourcePoint );
 	  targetLandmarks->InsertElement( pointId, targetPoint );

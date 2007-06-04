@@ -19,17 +19,17 @@ SET(TOL 0.0)
 # ------- SimpleDisparityMapEstimationExampleTest ----------
 
 
-ADD_TEST(ExtractRoadByStepsExampleTest ${EXE_TESTS}
+ADD_TEST(SimpleDisparityMapEstimationExampleTest ${EXE_TESTS}
  --compare-n-images ${TOL} 2
  ${BASELINE}/deformationFieldOutput.png
  ${TEMP}/deformationFieldOutput.png
- ${BASELINE}/resampledFixedOutput.png
+ ${BASELINE}/resampledMovingOutput.png
  ${TEMP}/resampledFixedOutput.png
  SimpleDisparityMapEstimationExampleTest
  ${INPUTDATA}/ROI_IKO_PAN_LesHalles.tif
  ${INPUTDATA}/ROI_IKO_PAN_LesHalles_warped.tif
  ${TEMP}/deformationFieldOutput.png
- ${TEMP}/resampledFixedOutput.png 
+ ${TEMP}/resampledMovingOutput.png 
  100 10 15 10 10 250 0.9
 )
 

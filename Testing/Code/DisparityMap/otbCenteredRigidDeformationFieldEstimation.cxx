@@ -215,7 +215,7 @@ try
     generator1->SetOutputSize(fixedReader->GetOutput()->GetLargestPossibleRegion().GetSize());
     generator1->SetMetricThreshold(metricThreshold);
 
-    warper->SetInput(fixedReader->GetOutput());
+    warper->SetInput(movingReader->GetOutput());
     warper->SetDeformationField(generator1->GetOutput());
     rescaler->SetInput(warper->GetOutput());
     rescaler->SetOutputMaximum(255);
@@ -249,7 +249,7 @@ try
     generator2->SetNumberOfPoints(nbPointsToInterpolate);
    
 
-    warper->SetInput(fixedReader->GetOutput());
+    warper->SetInput(movingReader->GetOutput());
     warper->SetDeformationField(generator2->GetOutput());
     rescaler->SetInput(warper->GetOutput());
     rescaler->SetOutputMaximum(255);
@@ -282,7 +282,7 @@ try
     generator3->SetMetricThreshold(metricThreshold);
    
 
-    warper->SetInput(fixedReader->GetOutput());
+    warper->SetInput(movingReader->GetOutput());
     warper->SetDeformationField(generator3->GetOutput());
     rescaler->SetInput(warper->GetOutput());
     rescaler->SetOutputMaximum(255);
@@ -315,7 +315,7 @@ try
     generator4->SetMetricThreshold(metricThreshold);
     generator4->SetTransform(transform);
 
-    warper->SetInput(fixedReader->GetOutput());
+    warper->SetInput(movingReader->GetOutput());
     warper->SetDeformationField(generator4->GetOutput());
     rescaler->SetInput(warper->GetOutput());
     rescaler->SetOutputMaximum(255);
@@ -349,7 +349,7 @@ try
     generator5->SetTransform(transform);
     generator5->SetNumberOfPoints(nbPointsToInterpolate);
 
-    warper->SetInput(fixedReader->GetOutput());
+    warper->SetInput(movingReader->GetOutput());
     warper->SetDeformationField(generator5->GetOutput());
     rescaler->SetInput(warper->GetOutput());
     rescaler->SetOutputMaximum(255);
@@ -385,7 +385,7 @@ try
     generator6->SetNumberOfControlPoints(5);
 
 
-    warper->SetInput(fixedReader->GetOutput());
+    warper->SetInput(movingReader->GetOutput());
     warper->SetDeformationField(generator6->GetOutput());
     rescaler->SetInput(warper->GetOutput());
     rescaler->SetOutputMaximum(255);

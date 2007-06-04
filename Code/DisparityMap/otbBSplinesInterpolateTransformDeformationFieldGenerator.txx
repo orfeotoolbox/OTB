@@ -142,8 +142,8 @@ BSplinesInterpolateTransformDeformationFieldGenerator<TPointSet, TDeformationFie
 	  // And the deformation
 	  PixelType pixel;
 	  pixel.SetSize(2);
-	  pixel[0] = static_cast<ValueType>(sourcePoint[0]-targetPoint[0]);
- 	  pixel[1] = static_cast<ValueType>(sourcePoint[1]-targetPoint[1]);
+	  pixel[0] = static_cast<ValueType>(targetPoint[0]-sourcePoint[0]);
+ 	  pixel[1] = static_cast<ValueType>(targetPoint[1]-sourcePoint[1]);
 	  outIt.Set(pixel);
 	}
     }

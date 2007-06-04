@@ -68,8 +68,8 @@ NNearestPointsLinearInterpolateDeformationFieldGenerator<TPointSet, TDeformation
 
       if(normalization>0)
 	{
- 	  pixel[0] = static_cast<ValueType>(-xdeformation/normalization);
- 	  pixel[1] = static_cast<ValueType>(-ydeformation/normalization);
+ 	  pixel[0] = static_cast<ValueType>(xdeformation/normalization);
+ 	  pixel[1] = static_cast<ValueType>(ydeformation/normalization);
  	}
        else
  	{
