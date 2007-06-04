@@ -30,6 +30,9 @@ namespace Functor {
   /** \class VectorAffineTransform
    *  \brief This functor performs a per band linear transform of its input.
    *  
+   *  Values upper than InputMaximum or lower than InputMinimum are clamped to OutputMaximum
+   *  respectively OutputMinimum values.
+   *
    *  TInput and TOutput type are supposed to be of type itk::VariableLengthVector.
    *
    */ 
@@ -156,7 +159,13 @@ namespace Functor {
 
 
 /** \class VectorRescaleIntensityImageFilter
- *  \brief
+ *  \brief This filter performs a rescaling of a vector image on a per band basis.
+ *
+ * This filter rescales each band to match the [OutputMinimum,OutputMaximum] range.
+ * In order to avoid odd values to alter the intensity extent, one can set a clamp percentage.
+ * 
+ * Values lower than the first quantile of this percentage are set to the OutputMinimum.
+ * Values upper than the last quantile of this percentage are set to the OutputMaximum.
  *
  *  \ingroup IntensityImageFilters
  *  \ingroup MultiThreaded

@@ -24,7 +24,8 @@ PURPOSE.  See the above copyright notices for more information.
 namespace otb
 {
   /** \class SpatialObjectDXFReader
-   *  \brief
+   *  \brief This class reads the DXF file format to SpatialObjects.
+   *
    *  \ingroup ObjectSource
    */
 template <class TSpatialObject>
