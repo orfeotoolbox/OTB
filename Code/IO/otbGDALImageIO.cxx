@@ -219,7 +219,7 @@ void GDALImageIO::Read(void* buffer)
         unsigned char * p = static_cast<unsigned char *>(buffer);
         if(p==NULL)
         {
-                itkExceptionMacro(<<"Erreur allocation m�moire");
+                itkExceptionMacro(<<"Memory allocation error");
                 return;
         }
 
@@ -229,8 +229,8 @@ void GDALImageIO::Read(void* buffer)
         int lPremiereColonne = this->GetIORegion().GetIndex()[0]; // [1... ]
 
 otbMsgDevMacro( <<" GDALImageIO::Read()  ");
-otbMsgDevMacro( <<" Dimensions de l'image  : "<<m_Dimensions[0]<<","<<m_Dimensions[1]);
-otbMsgDevMacro( <<" Region lue (IORegion)  : "<<this->GetIORegion());
+otbMsgDevMacro( <<" Image size  : "<<m_Dimensions[0]<<","<<m_Dimensions[1]);
+otbMsgDevMacro( <<" Region read (IORegion)  : "<<this->GetIORegion());
 otbMsgDevMacro( <<" Nb Of Components  : "<<this->GetNumberOfComponents());
 
         std::streamoff lNbPixels = (static_cast<std::streamoff>(lNbColonnes))*(static_cast<std::streamoff>(lNbLignes));
@@ -251,7 +251,7 @@ otbMsgDevMacro( <<" sizeof(unsigned long) : "<<sizeof(unsigned long));
         unsigned char* value = new unsigned char[lTailleBuffer];
         if(value==NULL)
         {
-                itkExceptionMacro(<<"Erreur allocation m�moire");
+          itkExceptionMacro(<<"Memory allocation error");
                 return;
         }
 
@@ -266,7 +266,7 @@ otbMsgDevMacro( <<" sizeof(unsigned long) : "<<sizeof(unsigned long));
 
 			if (lCrGdal == CE_Failure)
             {
-    	        	itkExceptionMacro(<< "Erreur lors de la lecture de l'image (format GDAL) " << m_FileName.c_str()<<".");
+    	        	itkExceptionMacro(<< "Error while reading image (GDAL format) " << m_FileName.c_str()<<".");
             }
 			cpt = 0;
             for ( std::streamoff  i=0 ; i < lTailleBuffer ; i = i+static_cast<std::streamoff>(m_NbOctetPixel) )
@@ -285,7 +285,7 @@ otbMsgDevMacro( <<" sizeof(unsigned long) : "<<sizeof(unsigned long));
 			lCrGdal = m_poBands[nbComponents]->RasterIO( GF_Read,lPremiereColonne,lPremiereLigne,lNbColonnes, lNbLignes, value , lNbColonnes, lNbLignes, m_PxType,0, 0 ) ;
 			if (lCrGdal == CE_Failure)
                 	{
-    	        		itkExceptionMacro(<< "Erreur lors de la lecture de l'image (format GDAL) " << m_FileName.c_str()<<".");
+                          itkExceptionMacro(<< "Error while reading image (GDAL format) " << m_FileName.c_str()<<".");
                 	}
                 	// Recopie dans le buffer                 
                 	cpt = static_cast<std::streamoff>(nbComponents)*static_cast<std::streamoff>(m_NbOctetPixel);
@@ -299,7 +299,7 @@ otbMsgDevMacro( <<" sizeof(unsigned long) : "<<sizeof(unsigned long));
 	
         delete [] value;
         value = NULL;
-otbMsgDevMacro( << "GDALImageIO::Read() terminee");
+otbMsgDevMacro( << "GDALImageIO::Read() completed");
 }
 
 void GDALImageIO::ReadImageInformation()
@@ -344,7 +344,7 @@ void GDALImageIO::InternalReadImageInformation()
        
     if( (m_width==0) || (m_height==0))
       {
-      itkExceptionMacro(<<"La dimension n'est pas d�finie.");
+      itkExceptionMacro(<<"Dimension is undefined.");
       }
     else
       {
@@ -825,7 +825,7 @@ void GDALImageIO::Write(const void* buffer)
 	// on commence l'offset � 0 (lorsque que l'on est pas en "Streaming")
 	if( (lNbLignes == m_Dimensions[1]) && (lNbColonnes == m_Dimensions[0]))
 	{
-                otbMsgDevMacro(<<"Force l'offset de l'IORegion � 0");
+                otbMsgDevMacro(<<"Forcing IORegion offset at 0");
 		lPremiereLigne = 0;
 		lPremiereColonne = 0;
 	}
@@ -839,7 +839,7 @@ otbMsgDevMacro( <<" TailleBuffer allou� : "<< lTailleBuffer);
         unsigned char* value = new unsigned char[lTailleBuffer];
         if(value==NULL)
         {
-                itkExceptionMacro(<<"Erreur allocation m�moire");
+                itkExceptionMacro(<<"Memory allocation error");
                 return;
         }
 
@@ -867,7 +867,7 @@ otbMsgDevMacro( <<" TailleBuffer allou� : "<< lTailleBuffer);
         	lCrGdal = m_poBands[nbComponents]->RasterIO(GF_Write,lPremiereColonne,lPremiereLigne,lNbColonnes, lNbLignes, value , lNbColonnes, lNbLignes, m_PxType,0, 0 ) ;
         	if (lCrGdal == CE_Failure)
         	{
-    			itkExceptionMacro(<< "Erreur lors de l'�criture de l'image (format GDAL) " << m_FileName.c_str()<<".");
+    			itkExceptionMacro(<< "Error while writing image (GDAL format) " << m_FileName.c_str()<<".");
         	}
         }
 
