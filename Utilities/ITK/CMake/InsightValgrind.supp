@@ -1,0 +1,323 @@
+{
+   Some Error from the itk::MultiThreader::DispatchSingleMethodThread
+   Memcheck:Leak
+   fun:calloc
+   fun:_dl_allocate_tls
+   fun:pthread_create@@GLIBC_2.1
+   fun:_ZN3itk13MultiThreader26DispatchSingleMethodThreadEPNS0_16ThreadInfoStructE
+}
+{
+  Some Error from the itk::MultiThreader::SingleMethodExecute
+  Memcheck:Leak
+  fun:calloc
+  obj:/lib/ld-2.3.?.so
+  fun:_dl_allocate_tls
+  fun:allocate_stack
+  fun:pthread_create@@GLIBC_2.1
+  fun:_ZN3itk13MultiThreader26DispatchSingleMethodThreadEPNS0_16ThreadInfoStructE
+}
+{
+  Error2
+  Memcheck:Free
+  fun:calloc
+  obj:*/ld-2.3.?.so
+  fun:_dl_allocate_tls
+  fun:allocate_stack
+  fun:pthread_create@@GLIBC_2.1
+  fun:_ZN3itk13MultiThreader19SingleMethodExecuteEv
+  fun:_ZN3itk11ImageSourceINS_5ImageIfLj3EEEE12GenerateDataEv
+}
+
+{
+   <itk::MultiThreader::SpawnThread>
+   Memcheck:Leak
+   fun:calloc
+   fun:_dl_allocate_tls
+   fun:pthread_create@@GLIBC_2.1
+   fun:_ZN3itk13MultiThreader11SpawnThreadEPFPvS1_ES1_
+}
+
+{
+  lib/ld conditional jump errors
+  Memcheck:Cond
+  obj:*/ld-2.3.?.so
+  obj:*/ld-2.3.?.so
+  obj:*/ld-2.3.?.so
+}
+{
+  CrazyTclError1
+  Memcheck:Leak
+  fun:calloc
+  obj:/usr/lib/libtcl8.4.so.0
+  fun:TclpAlloc
+  fun:Tcl_Alloc
+  fun:Tcl_MutexLock
+  fun:TclInitObjSubsystem
+  fun:TclInitSubsystems
+  fun:Tcl_FindExecutable
+  fun:Tcl_Main
+}
+{
+  CrazyTclError2
+  Memcheck:Leak
+  fun:calloc
+  obj:/lib/ld-2.3.?.so
+  fun:_dl_allocate_tls
+  fun:allocate_stack
+  fun:pthread_create@@GLIBC_2.1
+  fun:TclpThreadCreate  
+  fun:Tcl_InitNotifier
+  fun:TclInitNotifier
+  fun:TclInitSubsystems
+  fun:Tcl_FindExecutable
+  fun:Tcl_Main
+  fun:main
+}
+
+{
+  CrazyTclError3
+  Memcheck:Leak
+  fun:realloc
+  fun:TclpRealloc
+  fun:Tcl_Realloc
+  fun:Tcl_SetObjLength
+  obj:/usr/lib/libtcl8.4.so.0
+  obj:/usr/lib/libtcl8.4.so.0
+  fun:Tcl_FSEvalFile
+  fun:Tcl_Main 
+}
+
+{
+  CrazyTclError4
+  Memcheck:Leak
+  fun:malloc
+  obj:/usr/lib/libtcl8.4.so.0
+  fun:TclpAlloc
+  fun:Tcl_Alloc
+  obj:/usr/lib/libtcl8.4.so.0
+  obj:/usr/lib/libtcl8.4.so.0
+  obj:/usr/lib/libtcl8.4.so.0
+  fun:Tcl_GetsObj
+  fun:Tcl_Gets
+  obj:/usr/lib/libtcl8.4.so.0
+  fun:Tcl_SetSystemEncoding 
+  fun:TclpSetInitialEncodings
+  obj:/usr/lib/libtcl8.4.so.0
+  fun:Tcl_FindExecutable 
+  fun:Tcl_Main 
+}
+
+{ 
+  CrazyTclError5
+  Memcheck:Leak
+  fun:malloc
+  obj:/usr/lib/libtcl8.4.so.0
+  fun:TclpAlloc 
+  fun:Tcl_Alloc 
+  fun:Tcl_MutexLock
+  fun:TclInitObjSubsystem 
+  fun:TclInitSubsystems 
+  fun:Tcl_FindExecutable 
+  fun:Tcl_Main 
+}
+
+{
+  CrazyTclError6
+  Memcheck:Leak
+  fun:malloc 
+  fun:TclThreadAllocObj 
+  fun:Tcl_NewObj 
+  fun:TclpInitLibraryPath 
+  obj:/usr/lib/libtcl8.4.so.0
+  fun:Tcl_FindExecutable 
+  fun:Tcl_Main 
+}
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:malloc
+   fun:__cxa_get_globals
+   fun:_ZSt18uncaught_exceptionv
+   fun:_ZStlsISt11char_traitsIcEERSt13basic_ostreamIcT_ES5_PKc
+   fun:_Z63itkGreyLevelCooccurrenceMatrixTextureCoefficientsCalculatorTestiPPc
+   fun:main
+}
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:calloc
+   obj:/lib/ld-2.3.?.so
+   fun:_dl_allocate_tls
+   fun:allocate_stack
+   fun:pthread_create@@GLIBC_2.1
+   fun:_ZN3itk13MultiThreader19SingleMethodExecuteEv
+   fun:_ZN3itk11ImageSourceINS_5ImageIdLj6EEEE12GenerateDataEv
+   fun:_ZN3itk13ProcessObject16UpdateOutputDataEPNS_10DataObjectE
+}
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:malloc
+   fun:__cxa_get_globals
+   fun:_ZSt18uncaught_exceptionv
+   fun:_ZStlsISt11char_traitsIcEERSt13basic_ostreamIcT_ES5_PKc
+   fun:_ZN3itk12OutputWindow11DisplayTextEPKc
+}
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:malloc
+   fun:__cxa_get_globals
+   fun:__cxa_throw
+}
+{
+   ostream stuff
+   Memcheck:Leak
+   fun:malloc
+   fun:__cxa_get_globals
+   fun:_ZSt18uncaught_exceptionv
+   fun:_ZStlsISt11char_traitsIcEERSt13basic_ostreamIcT_ES5_PKc
+}
+{
+   ostream stuff
+   Memcheck:Leak
+   fun:malloc
+   fun:__cxa_get_globals
+   fun:_ZSt18uncaught_exceptionv
+   fun:_ZNSolsEm
+   fun:_ZNSolsEj
+}
+{
+   basic_ostream From cumulative gaussian optimizer
+   Memcheck:Leak
+   fun:malloc
+   fun:__cxa_get_globals
+   fun:_ZSt18uncaught_exceptionv
+   fun:_ZStlsISt11char_traitsIcEERSt13basic_ostreamIcT_ES5_PKc
+}
+{
+   ostream stuff
+   Memcheck:Value4
+   obj:/usr/lib/libstdc++.so.6.0.3
+   fun:_ZNKSt7num_putIcSt19ostreambuf_iteratorIcSt11char_traitsIcEEE13_M_insert_intImEES3_S3_RSt8ios_basecT_
+   fun:_ZNKSt7num_putIcSt19ostreambuf_iteratorIcSt11char_traitsIcEEE6do_putES3_RSt8ios_basecm
+   fun:_ZNSolsEm
+}
+{
+   ostream stuff
+   Memcheck:Value8
+   fun:vfprintf
+   fun:vsnprintf
+   fun:snprintf
+   obj:/usr/lib/libstdc++.so.6.0.3
+   fun:_ZNKSt7num_putIcSt19ostreambuf_iteratorIcSt11char_traitsIcEEE15_M_insert_floatIdEES3_S3_RSt8ios_baseccT_
+}
+{
+   itkThreadLoggerTest 1
+   Memcheck:Leak
+   fun:calloc
+   obj:/lib/ld-2.3.?.so
+   fun:_dl_allocate_tls
+   fun:allocate_stack
+   fun:pthread_create@@GLIBC_2.1
+   fun:_ZN3itk13MultiThreader11SpawnThreadEPFPvS1_ES1_
+   fun:_ZN3itk12ThreadLoggerC1Ev
+   fun:_ZN3itk12ThreadLogger3NewEv
+   fun:_Z19itkThreadLoggerTestiPPc
+   fun:main
+}
+{
+   itkThreadLoggerTest 1
+   Memcheck:Leak
+   fun:calloc
+   fun:_dl_allocate_tls
+   fun:pthread_create@@GLIBC_2.1
+   fun:_ZN3itk13MultiThreader11SpawnThreadEPFPvS1_ES1_
+   fun:_ZN3itk12ThreadLoggerC1Ev
+   fun:_ZN3itk12ThreadLogger3NewEv
+}
+{
+   itkCommonPrintTest 
+   Memcheck:Cond
+   obj:/usr/lib/libstdc++.so.6.0.3
+   fun:_ZNKSt7num_putIcSt19ostreambuf_iteratorIcSt11char_traitsIcEEE13_M_insert_intImEES3_S3_RSt8ios_basecT_
+   fun:_ZNKSt7num_putIcSt19ostreambuf_iteratorIcSt11char_traitsIcEEE6do_putES3_RSt8ios_basecPKv
+   fun:_ZNSolsEPKv
+   fun:_ZNK3itk21KLMSegmentationBorder9PrintSelfERSoNS_6IndentE
+   fun:_ZNK3itk11LightObject5PrintERSoNS_6IndentE
+   fun:_ZNK3itk12SmartPointerINS_21KLMSegmentationBorderEE5PrintERSo
+   fun:_ZN3itklsINS_21KLMSegmentationBorderEEERSoS2_NS_12SmartPointerIT_EE
+   fun:_Z18itkCommonPrintTestiPPc
+   fun:main
+}
+{
+   itkCommonPrintTest   
+   Memcheck:Value4
+   obj:/usr/lib/libstdc++.so.6.0.3
+   fun:_ZNKSt7num_putIcSt19ostreambuf_iteratorIcSt11char_traitsIcEEE13_M_insert_intImEES3_S3_RSt8ios_basecT_
+   fun:_ZNKSt7num_putIcSt19ostreambuf_iteratorIcSt11char_traitsIcEEE6do_putES3_RSt8ios_basecPKv
+   fun:_ZNSolsEPKv
+   fun:_ZNK3itk21KLMSegmentationBorder9PrintSelfERSoNS_6IndentE
+   fun:_ZNK3itk11LightObject5PrintERSoNS_6IndentE
+   fun:_ZNK3itk12SmartPointerINS_21KLMSegmentationBorderEE5PrintERSo
+   fun:_ZN3itklsINS_21KLMSegmentationBorderEEERSoS2_NS_12SmartPointerIT_EE
+   fun:_Z18itkCommonPrintTestiPPc
+   fun:main
+}
+{
+   Below block is after changes to Multithreader, Aug 05 
+   Memcheck:Leak
+   fun:calloc
+   obj:/lib/ld-2.3.?.so
+   fun:_dl_allocate_tls
+   fun:allocate_stack
+   fun:pthread_create@@GLIBC_2.1
+   fun:_ZN3itk13MultiThreader26DispatchSingleMethodThreadEPNS0_16ThreadInfoStructE
+}
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:calloc
+   obj:/lib/ld-2.3.?.so
+   fun:_dl_allocate_tls
+   fun:pthread_create@@GLIBC_2.1
+   fun:_ZN3itk13MultiThreader26DispatchSingleMethodThreadEPNS0_16ThreadInfoStructE
+   fun:_ZN3itk13MultiThreader19SingleMethodExecuteEv
+   fun:_ZN3itk11ImageSourceINS_5ImageIfLj2EEEE12GenerateDataEv
+   fun:_ZN3itk13ProcessObject16UpdateOutputDataEPNS_10DataObjectE
+   fun:_ZN3itk10DataObject16UpdateOutputDataEv
+}
+{
+   <insert a suppression name here>
+   Memcheck:Leak
+   fun:calloc
+   obj:/lib/ld-2.3.?.so
+   fun:_dl_allocate_tls
+   fun:pthread_create@@GLIBC_2.1
+   fun:_ZN3itk13MultiThreader26DispatchSingleMethodThreadEPNS0_16ThreadInfoStructE
+   fun:_ZN3itk13MultiThreader19SingleMethodExecuteEv
+}
+{
+   Exception allocation
+   Memcheck:Leak
+   fun:malloc
+   fun:__cxa_get_globals
+   fun:__cxa_allocate_exception
+}
+{
+   Exception allocation
+   Memcheck:Leak
+   fun:malloc
+   fun:__cxa_get_globals
+   fun:__cxa_allocate_exception
+}
+{
+  index(strchr.S)
+  Memcheck:Cond
+  fun:index
+}
+{
+  /lib/libz
+  Memcheck:Cond
+  obj:*/libz.so.1.2.3
+}
