@@ -55,7 +55,7 @@ SET(OTB_INCLUDE_DIRS_CONFIG
 # Link directories.
 SET(OTB_LIBRARY_DIRS_CONFIG ${CMAKE_INSTALL_PREFIX}/lib/otb)
 
-SET(OTB_LIBRARY_DIRS_CONFIG ${OTB_LIBRARY_DIRS_CONFIG} ${GDAL_LIBRARY_DIRS} ${ITK_LIBRARY_DIRS} )
+SET(OTB_LIBRARY_DIRS_CONFIG ${OTB_LIBRARY_DIRS_CONFIG} ${GDAL_LIBRARY_DIRS} ${ITK_LIBRARY_DIRS} ${FLTK_LIBRARY_DIRS})
 
 #-----------------------------------------------------------------------------
 # Configure OTBConfig.cmake for the install tree.

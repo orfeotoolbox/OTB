@@ -51,6 +51,9 @@ IF(OTB_USE_EXTERNAL_ITK)
 	${ITK_SOURCE_DIR}/Utilities/vxl/v3p/netlib
  	${ITK_SOURCE_DIR}/Utilities/vxl/v3p/netlib/opt)
 ELSE(OTB_USE_EXTERNAL_ITK)
+	IF(NOT ITK_INSTALL_INCLUDE_DIR)
+  		SET(ITK_INSTALL_INCLUDE_DIR "/include/otb/Utilities/ITK")
+	ENDIF(NOT ITK_INSTALL_INCLUDE_DIR)
         INCLUDE(${OTB_SOURCE_DIR}/Utilities/ITK/Utilities/itkThirdParty.cmake)
  	INCLUDE(${OTB_SOURCE_DIR}/Utilities/ITK/itkIncludeDirectories.cmake)
 	SET(OTB_INCLUDE_DIRS_BUILD_TREE ${OTB_INCLUDE_DIRS_BUILD_TREE}
