@@ -2,8 +2,9 @@ OTB-v.1.4.1 - Changes since version 1.4.0
 -----------------------------------------
 
 *Platforms: 
-    - Minor correction of main ./CMakeLists.txt to support users applications using OTB 
-      install directorie which has generated with internal ITK.
+
+	- Minor corrections of main ./CMakeLists.txt to support users applications using OTB 
+	install directory when using internal ITK.
 
 OTB-v.1.4.0 - Changes since version 1.2.1
 -----------------------------------------
