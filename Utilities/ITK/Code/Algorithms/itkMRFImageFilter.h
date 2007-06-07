@@ -93,7 +93,7 @@ namespace itk
  *  \end{tabular} &
  *  \begin{tabular}{|c|c|c|}
  *   1.3 & 1.3 & 1.3 \\
- *   1.5 & 1.5 & 1.3 \\
+ *   1.3 & 1.5 & 1.3 \\
  *   1.3 & 1.3 & 1.3 \\
  *  \end{tabular} \\
  * \end{tabular}\f]
