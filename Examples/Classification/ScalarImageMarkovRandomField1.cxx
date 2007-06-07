@@ -304,20 +304,6 @@ int main( int argc, char * argv [] )
   meanDistance /= numberOfClasses;
 // Software Guide : EndCodeSnippet
 
-// Software Guide : BeginLatex
-//
-// We set the Smoothing factor. This factor will multiply the weights that
-// define the influence of neighbors on the classification of a given pixel.
-// The higher the value, the more uniform will be the regions resulting from
-// the classification refinement.
-// 
-// Software Guide : EndLatex 
- 
-// Software Guide : BeginCodeSnippet
-  mrfFilter->SetSmoothingFactor( smoothingFactor );
-// Software Guide : EndCodeSnippet
-
-
 
 // Software Guide : BeginLatex
 //
