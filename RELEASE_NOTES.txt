@@ -1,3 +1,10 @@
+OTB-v.1.4.1 - Changes since version 1.4.0
+-----------------------------------------
+
+*Platforms: 
+    - Minor correction of main ./CMakeLists.txt to support users applications using OTB 
+      install directorie which has generated with internal ITK.
+
 OTB-v.1.4.0 - Changes since version 1.2.1
 -----------------------------------------
 
@@ -39,11 +46,11 @@ OTB-v.1.4.0 - Changes since version 1.2.1
 
 * ChangeDetection:
   
-        - Added the Kullback-Leibler distance change detector with optimized algorithm.
+    - Added the Kullback-Leibler distance change detector with optimized algorithm.
 
 	- Added a Kullback-Leibler multi-scale change profile image filter with optimized algorithm.
 
-* DisparityMap:
+*DisparityMap:
         
 	- Added the DisparityMapEstimationMethod, performing local disparity estimation with respect
 	  to a given transform using the ITK registration framework.
