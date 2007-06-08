@@ -231,6 +231,69 @@ ADD_TEST(bfTVectorRescaleIntensityImageFilter ${BASICFILTERS_TESTS}
 		    0 255
 )
 
+# -------            otb::VectorImageToImageListFilter   ----------------------------
+
+ADD_TEST(bfTuVectorImageToImageListFilterNew ${BASICFILTERS_TESTS}  
+         otbVectorImageToImageListFilterNew)
+
+
+ADD_TEST(bfTvVectorImageToImageListFilter ${BASICFILTERS_TESTS} 
+		--compare-n-images ${EPSILON} 3
+		    ${BASELINE}/bfTvVectorImageToImageListFilterBand1.png
+		    ${TEMP}/bfTvVectorImageToImageListFilterBand1.png
+		    ${BASELINE}/bfTvVectorImageToImageListFilterBand2.png
+		    ${TEMP}/bfTvVectorImageToImageListFilterBand2.png
+		    ${BASELINE}/bfTvVectorImageToImageListFilterBand3.png
+		    ${TEMP}/bfTvVectorImageToImageListFilterBand3.png
+		    otbVectorImageToImageListFilter
+		    ${INPUTDATA}/poupees.png
+	            ${TEMP}/bfTvVectorImageToImageListFilterBand1.png
+		    ${TEMP}/bfTvVectorImageToImageListFilterBand2.png
+		    ${TEMP}/bfTvVectorImageToImageListFilterBand3.png
+)
+
+
+# -------            otb::ImageListToVectorImageFilter   ----------------------------
+
+#ADD_TEST(bfTuImageListToVectorImageFilterNew ${BASICFILTERS_TESTS}  
+#         otbImageListToVectorImageFilterNew)
+
+
+#ADD_TEST(bfTvImageListToVectorImageFilter ${BASICFILTERS_TESTS} 
+#		--compare-image ${EPSILON} 
+#		    ${BASELINE}/bfTvImageListToVectorImageFilter.png
+#		    ${TEMP}/bfTvImageListToVectorImageFilter.png
+#		    otbImageListToVectorImageFilter
+#	            ${INPUTDATA}/poupees.c1
+#		    ${INPUTDATA}/poupees.c2
+#		    ${INPUTDATA}/poupees.c3
+#		    ${TEMP}/bfTvImageListToVectorImageFilter.png
+#)
+
+
+# -------            otb::ImageListToImageListApplyFilter   ----------------------------
+
+#ADD_TEST(bfTuImageListToImageListApplyFilterNew ${BASICFILTERS_TESTS}  
+#         otbImageListToImageListApplyFilterNew)
+
+
+#ADD_TEST(bfTvImageListToImageListApplyFilter ${BASICFILTERS_TESTS} 
+#		--compare-n-images ${EPSILON} 3
+#		    ${BASELINE}/bfTvImageListToImageListApplyFilterBand1.png
+#		    ${TEMP}/bfTvImageListToImageListApplyFilterBand1.png
+#		    ${BASELINE}/bfTvImageListToImageListApplyFilterBand2.png
+#		    ${TEMP}/bfTvImageListToImageListApplyFilterBand2.png
+#		    ${BASELINE}/bfTvImageListToImageListApplyFilterBand3.png
+#		    ${TEMP}/bfTvImageListToImageListApplyFilterBand3.png
+#		    otbImageListToImageListApplyFilter
+#	            ${INPUTDATA}/poupees.c1
+#		    ${INPUTDATA}/poupees.c2
+#		    ${INPUTDATA}/poupees.c3
+#		    ${TEMP}/bfTvImageListToImageListApplyFilterBand1.png
+#		    ${TEMP}/bfTvImageListToImageListApplyFilterBand2.png
+#		    ${TEMP}/bfTvImageListToImageListApplyFilterBand3.png
+#)
+
 # A enrichir
 SET(BasicFilters_SRCS
 otbLeeFilter.cxx
@@ -260,6 +323,12 @@ otbSpectralAngleDistanceImageFilterNew.cxx
 otbSpectralAngleDistanceImageFilter.cxx
 otbVectorRescaleIntensityImageFilterNew.cxx
 otbVectorRescaleIntensityImageFilter.cxx
+otbVectorImageToImageListFilterNew.cxx
+otbVectorImageToImageListFilter.cxx
+#otbImageListToVectorImageFilterNew.cxx
+#otbImageListToVectorImageFilter.cxx
+#otbImageListToImageListApplyFilterNew.cxx
+#otbImageListToImageListApplyFilter.cxx
 )
 
 
