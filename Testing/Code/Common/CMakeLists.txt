@@ -270,6 +270,11 @@ ADD_TEST(coTuImageListSourceNew ${COMMON_TESTS}
 ADD_TEST(coTuImageToImageListFilterNew ${COMMON_TESTS} 
          otbImageToImageListFilterNew) 
 
+# -------            otb::ImageListToImageFilter   -------------------------------------------
+
+ADD_TEST(coTuImageListToImageFilterNew ${COMMON_TESTS} 
+         otbImageListToImageFilterNew) 
+
 # -------            otb::ImageListToImageListFilter   -------------------------------------------
 
 ADD_TEST(coTvImageListToImageListFilterNew ${COMMON_TESTS} 
@@ -410,6 +415,7 @@ otbImageListNew.cxx
 otbImageList.cxx
 otbImageListSourceNew.cxx
 otbImageToImageListFilterNew.cxx
+otbImageListToImageFilterNew.cxx
 otbImageListToImageListFilterNew.cxx
 otbListNew.cxx
 otbList.cxx
