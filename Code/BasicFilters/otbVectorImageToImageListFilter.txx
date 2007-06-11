@@ -62,9 +62,16 @@ VectorImageToImageListFilter<TVectorImageType,TImageList>
       for(typename std::vector<OutputIteratorType>::iterator it = outputIteratorList.begin();
 	  it!=outputIteratorList.end();++it)
 	{
-	  (*it).Set(static_cast<typename OutputImageType::PixelType>(inputIt.Get()[counter]));
-	  ++(*it);
-	  ++counter;
+	  if(!(*it).IsAtEnd())
+	    {
+	      (*it).Set(static_cast<typename OutputImageType::PixelType>(inputIt.Get()[counter]));
+	      ++(*it);
+	      ++counter;
+	    }
+	  else
+	    {
+	      itkGenericExceptionMacro("End of image !");
+	    }
 	}
       ++inputIt;
     }

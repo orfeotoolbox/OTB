@@ -55,6 +55,14 @@ class ITK_EXPORT ImageList
     typedef typename Superclass::ReverseIterator ReverseIterator;
     typedef typename Superclass::ReverseConstIterator ReverseConstIterator;
 
+    /**
+     * Update images in the list.
+     */
+    virtual void UpdateOutputInformation(void);
+    virtual void PropagateRequestedRegion(void) throw (itk::InvalidRequestedRegionError);
+    virtual void UpdateOutputData(void);
+    
+    
   protected:
     /** Constructor */
     ImageList(){};
@@ -72,5 +80,8 @@ class ITK_EXPORT ImageList
   };
 } // End namespace otb
 
+#ifndef OTB_MANUAL_INSTANTIATION
+#include "otbImageList.txx"
+#endif
 
 #endif
