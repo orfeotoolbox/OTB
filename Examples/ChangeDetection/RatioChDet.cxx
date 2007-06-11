@@ -159,7 +159,7 @@ int main(int argc, char* argv[] )
   const char * outputFilename = argv[3];
   //  Software Guide : BeginLatex
   //
-  //  We set the parametters of the different elements of the pipeline.
+  //  We set the parameters of the different elements of the pipeline.
   // 
   //  Software Guide : EndLatex 
 
@@ -173,7 +173,7 @@ int main(int argc, char* argv[] )
   
   //  Software Guide : BeginLatex
   //
-  //  The only parametter for this change detector is the radius of
+  //  The only parameter for this change detector is the radius of
   //  the window used for computing the mean of the intensities.
   // 
   //  Software Guide : EndLatex 

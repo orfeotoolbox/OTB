@@ -35,7 +35,7 @@
 // the neighborhood of each pixel of the input images. 
 //
 // The first step required to build a change detection filter is to
-// include the header of the paren class. 
+// include the header of the parent class. 
 //
 // Software Guide : EndLatex 
 
@@ -60,7 +60,7 @@
 // which overload the \code{()} operator. This allows to use them with
 // the same syntax as C/C++ functions.
 //
-// Since the change detectors operate on neighborhoods, the functor
+// Since change detectors operate on neighborhoods, the functor
 // call will take 2 arguments which are
 // \doxygen{itk}{ConstNeighborhoodIterator}s. 
 //
