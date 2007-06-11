@@ -23,7 +23,13 @@ PURPOSE.  See the above copyright notices for more information.
 namespace otb
 {
 /** \class ImageListToVectorImageFilter
- *  \brief 
+ *  \brief Converts an ImageList to a VectorImage.
+ *
+ * The output VectorImage has n band, where n is the number of images in the image list.
+ * 
+ * This filter assumes that the images in the input ImageList have all the same size.
+ *
+ * Casting is done through standard cast operation.
  *
  * \ingroup Streamed
  */
