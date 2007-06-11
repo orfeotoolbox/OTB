@@ -1,3 +1,9 @@
+#
+# Current inforamtions:
+# Version 2.84 released on April Fools' day, 2007.
+# Download site : http://www.csie.ntu.edu.tw/~cjlin/libsvm/
+#
+
 PROJECT(OTBSVM)
 
 # source files for zlib

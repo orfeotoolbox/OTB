@@ -1,20 +1,3 @@
-/*=========================================================================
-
-  Program:   ORFEO Toolbox
-  Language:  C++
-  Date:      $Date$
-  Version:   $Revision$
-
-
-  Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
-  See OTBCopyright.txt for details.
-
-
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
-     PURPOSE.  See the above copyright notices for more information.
-
-=========================================================================*/
 #ifndef _LIBSVM_H
 #define _LIBSVM_H
 
@@ -36,13 +19,13 @@ struct svm_problem
 };
 
 enum { C_SVC, NU_SVC, ONE_CLASS, EPSILON_SVR, NU_SVR };	/* svm_type */
-enum { LINEAR, POLY, RBF, SIGMOID };	/* kernel_type */
+enum { LINEAR, POLY, RBF, SIGMOID, PRECOMPUTED }; /* kernel_type */
 
 struct svm_parameter
 {
 	int svm_type;
 	int kernel_type;
-	double degree;	/* for poly */
+	int degree;	/* for poly */
 	double gamma;	/* for poly/rbf/sigmoid */
 	double coef0;	/* for poly/sigmoid */
 
@@ -59,27 +42,29 @@ struct svm_parameter
 	int probability; /* do probability estimates */
 };
 
+//
+// svm_model
+//
 struct svm_model
 {
 	svm_parameter param;	// parameter
 	int nr_class;		// number of classes, = 2 in regression/one class svm
 	int l;			// total #SV
 	svm_node **SV;		// SVs (SV[l])
-	double **sv_coef;	// coefficients for SVs in decision functions (sv_coef[n-1][l])
-	double *rho;		// constants in decision functions (rho[n*(n-1)/2])
+	double **sv_coef;	// coefficients for SVs in decision functions (sv_coef[k-1][l])
+	double *rho;		// constants in decision functions (rho[k*(k-1)/2])
 	double *probA;          // pariwise probability information
 	double *probB;
 
 	// for classification only
 
-	int *label;		// label of each class (label[n])
-	int *nSV;		// number of SVs for each class (nSV[n])
-				// nSV[0] + nSV[1] + ... + nSV[n-1] = l
+	int *label;		// label of each class (label[k])
+	int *nSV;		// number of SVs for each class (nSV[k])
+				// nSV[0] + nSV[1] + ... + nSV[k-1] = l
 	// XXX
 	int free_sv;		// 1 if svm_model is created by svm_load_model
 				// 0 if svm_model is created by svm_train
 };
-
 
 struct svm_model *svm_train(const struct svm_problem *prob, const struct svm_parameter *param);
 void svm_cross_validation(const struct svm_problem *prob, const struct svm_parameter *param, int nr_fold, double *target);

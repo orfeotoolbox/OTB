@@ -120,14 +120,14 @@ public:
   /** Set the degree of the polynomial kernel */
   void SetPolynomialKernelDegree(int degree)
   {
-    param.degree = static_cast<double>(degree);
+    param.degree = degree;
   }
 
 
   /** Get the degree of the polynomial kernel */
   int GetPolynomialKernelDegree(void)
   {
-    return static_cast<int>(param.degree);
+    return param.degree;
   }
 
   /** Set the gamma parameter for poly/rbf/sigmoid kernels */
