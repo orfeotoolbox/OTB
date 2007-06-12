@@ -52,12 +52,18 @@ class ITK_EXPORT VectorImageToImageListFilter
   
   /** Template parameters typedefs */
   typedef TVectorImageType InputVectorImageType;
-  typedef typename InputVectorImageType::ConstPointer InputVectorImageConstPointerType;
+  typedef typename InputVectorImageType::Pointer InputVectorImagePointerType;
   typedef TImageList OutputImageListType;
   typedef typename OutputImageListType::Pointer OutputImageListPointerType;
   typedef typename OutputImageListType::ImageType OutputImageType;
   typedef typename OutputImageType::Pointer OutputImagePointerType;
  
+  /** Generate the input requested region from the first element in the list. */
+  virtual void GenerateInputRequestedRegion(void);
+  
+  /** Generate the output information by building the output list. */
+  virtual void GenerateOutputInformation(void);
+
 protected:
 
   /** Main computation method */

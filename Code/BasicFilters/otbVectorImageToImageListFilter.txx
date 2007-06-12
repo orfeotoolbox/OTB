@@ -26,6 +26,43 @@ PURPOSE.  See the above copyright notices for more information.
 
 namespace otb
 {
+/** Generate the input requested region from the first element in the list. */
+template <class TVectorImageType, class TImageList>
+void
+VectorImageToImageListFilter<TVectorImageType,TImageList>
+::GenerateOutputInformation(void)
+{
+  OutputImageListPointerType outputPtr = this->GetOutput();
+  InputVectorImagePointerType inputPtr = this->GetInput();
+
+  if(inputPtr)
+    {
+      for(unsigned int i=0;i<inputPtr->GetNumberOfComponentsPerPixel();++i)
+	{
+	 typename  OutputImageType::Pointer tmpImagePtr = OutputImageType::New();
+	 tmpImagePtr->CopyInformation(inputPtr);
+	 tmpImagePtr->SetRegions(inputPtr->GetLargestPossibleRegion());
+	 outputPtr->PushBack(tmpImagePtr);   
+	}
+    }
+}
+/** Generate the output information by building the output list. */
+template <class TVectorImageType, class TImageList>
+void
+VectorImageToImageListFilter<TVectorImageType,TImageList>
+::GenerateInputRequestedRegion(void)
+{
+  OutputImageListPointerType outputPtr = this->GetOutput();
+  InputVectorImagePointerType inputPtr = this->GetInput();
+  
+  if(inputPtr)
+    {
+      if(outputPtr->Size()>0)
+	{
+	  inputPtr->SetRequestedRegion(outputPtr->GetNthElement(0)->GetRequestedRegion());
+	}
+    }
+}
 /**
  * Main computation method
  */
@@ -34,9 +71,8 @@ void
 VectorImageToImageListFilter<TVectorImageType,TImageList>
 ::GenerateData(void)
 {
-
   OutputImageListPointerType outputPtr = this->GetOutput();
-  InputVectorImageConstPointerType inputPtr = this->GetInput();
+  InputVectorImagePointerType inputPtr = this->GetInput();
 
   typedef itk::ImageRegionConstIterator<InputVectorImageType> InputIteratorType;
   typedef itk::ImageRegionIterator<OutputImageType> OutputIteratorType;
@@ -45,13 +81,11 @@ VectorImageToImageListFilter<TVectorImageType,TImageList>
   
   std::vector<OutputIteratorType> outputIteratorList;
   
-  for(unsigned int i = 0;i<inputPtr->GetNumberOfComponentsPerPixel();++i)
+ typename OutputImageListType::ConstIterator outputListIt = outputPtr->Begin();
+  for(;outputListIt!=outputPtr->End();++outputListIt)
     {
-      typename OutputImageType::Pointer tmpImagePtr = OutputImageType::New();
-      tmpImagePtr->SetRegions(inputPtr->GetRequestedRegion());
-      tmpImagePtr->Allocate();
-      outputPtr->PushBack(tmpImagePtr);
-      outputIteratorList.push_back(OutputIteratorType(outputPtr->Back(),inputPtr->GetRequestedRegion()));
+      outputListIt.Get()->Allocate();
+      outputIteratorList.push_back(OutputIteratorType(outputListIt.Get(),outputListIt.Get()->GetRequestedRegion()));
       outputIteratorList.back().GoToBegin();
     }
 

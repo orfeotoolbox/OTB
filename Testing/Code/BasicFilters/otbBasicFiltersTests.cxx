@@ -60,4 +60,7 @@ REGISTER_TEST(otbImageListToVectorImageFilterNew);
 REGISTER_TEST(otbImageListToVectorImageFilter);
 REGISTER_TEST(otbImageListToImageListApplyFilterNew);
 REGISTER_TEST(otbImageListToImageListApplyFilter);
+REGISTER_TEST(otbPerBandVectorImageFilterNew);
+REGISTER_TEST(otbPerBandVectorImageFilterWithMeanFilter);
+REGISTER_TEST(otbPerBandVectorImageFilterWithSobelFilter);
 }

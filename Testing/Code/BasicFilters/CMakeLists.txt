@@ -294,6 +294,28 @@ ADD_TEST(bfTvImageListToImageListApplyFilter ${BASICFILTERS_TESTS}
 		    ${TEMP}/bfTvImageListToImageListApplyFilterBand3.png
 )
 
+# -------            otb::PerBandVectorImageFilter   ----------------------------
+
+ADD_TEST(bfTuPerBandVectorImageFilterNew ${BASICFILTERS_TESTS}  
+         otbPerBandVectorImageFilterNew)
+
+ADD_TEST(bfTvPerBandVectorImageFilterWithMeanFilter ${BASICFILTERS_TESTS}
+	--compare-image ${EPSILON}
+			${BASELINE}/bfTvPerBandVectorImageFilterWithMeanFilterOutput.hdr
+			${TEMP}/bfTvPerBandVectorImageFilterWithMeanFilterOutput.hdr			
+	otbPerBandVectorImageFilterWithMeanFilter
+			${INPUTDATA}/poupees.png
+			${TEMP}/bfTvPerBandVectorImageFilterWithMeanFilterOutput.hdr
+)
+
+ADD_TEST(bfTvPerBandVectorImageFilterWithSobelFilter ${BASICFILTERS_TESTS}
+	--compare-image ${EPSILON}
+			${BASELINE}/bfTvPerBandVectorImageFilterWithSobelFilterOutput.hdr
+			${TEMP}/bfTvPerBandVectorImageFilterWithSobelFilterOutput.hdr			
+	otbPerBandVectorImageFilterWithSobelFilter
+			${INPUTDATA}/poupees.png
+			${TEMP}/bfTvPerBandVectorImageFilterWithSobelFilterOutput.hdr
+)
 # A enrichir
 SET(BasicFilters_SRCS
 otbLeeFilter.cxx
@@ -329,6 +351,9 @@ otbImageListToVectorImageFilterNew.cxx
 otbImageListToVectorImageFilter.cxx
 otbImageListToImageListApplyFilterNew.cxx
 otbImageListToImageListApplyFilter.cxx
+otbPerBandVectorImageFilterNew.cxx
+otbPerBandVectorImageFilterWithMeanFilter.cxx
+otbPerBandVectorImageFilterWithSobelFilter.cxx
 )
 
 

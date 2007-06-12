@@ -24,10 +24,20 @@ PURPOSE.  See the above copyright notices for more information.
 namespace otb
 {
 /** \class ImageListToImageListApplyFilter
- *  \brief 
+ *  \brief This filter applies the filter given as template to the input image list.
  *
- * \ingroup 
- * \ingroup
+ *  It produces one output image in the output list for one input image in the output list.
+ * 
+ *  It uses the given filter methods to generate output information and input requested region.
+ *
+ *  The filter can be set up via the GetFilter() accessor.
+ * 
+ *  It also support streaming when the templated filter support it.
+ *
+ *  No type checking is done : it is up to the user to check the adequation between the input images,
+ *  output images and filter IO types.
+ *
+ * \ingroup Streamed
  */
 template <class TInputImageList, class TOutputImageList, class TFilter>
 class ITK_EXPORT ImageListToImageListApplyFilter
