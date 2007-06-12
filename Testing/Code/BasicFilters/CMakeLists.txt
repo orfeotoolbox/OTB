@@ -273,26 +273,26 @@ ADD_TEST(bfTvImageListToVectorImageFilter ${BASICFILTERS_TESTS}
 
 # -------            otb::ImageListToImageListApplyFilter   ----------------------------
 
-#ADD_TEST(bfTuImageListToImageListApplyFilterNew ${BASICFILTERS_TESTS}  
-#         otbImageListToImageListApplyFilterNew)
+ADD_TEST(bfTuImageListToImageListApplyFilterNew ${BASICFILTERS_TESTS}  
+         otbImageListToImageListApplyFilterNew)
 
 
-#ADD_TEST(bfTvImageListToImageListApplyFilter ${BASICFILTERS_TESTS} 
-#		--compare-n-images ${EPSILON} 3
-#		    ${BASELINE}/bfTvImageListToImageListApplyFilterBand1.png
-#		    ${TEMP}/bfTvImageListToImageListApplyFilterBand1.png
-#		    ${BASELINE}/bfTvImageListToImageListApplyFilterBand2.png
-#		    ${TEMP}/bfTvImageListToImageListApplyFilterBand2.png
-#		    ${BASELINE}/bfTvImageListToImageListApplyFilterBand3.png
-#		    ${TEMP}/bfTvImageListToImageListApplyFilterBand3.png
-#		    otbImageListToImageListApplyFilter
-#	            ${INPUTDATA}/poupees.c1
-#		    ${INPUTDATA}/poupees.c2
-#		    ${INPUTDATA}/poupees.c3
-#		    ${TEMP}/bfTvImageListToImageListApplyFilterBand1.png
-#		    ${TEMP}/bfTvImageListToImageListApplyFilterBand2.png
-#		    ${TEMP}/bfTvImageListToImageListApplyFilterBand3.png
-#)
+ADD_TEST(bfTvImageListToImageListApplyFilter ${BASICFILTERS_TESTS} 
+		--compare-n-images ${EPSILON} 3
+		    ${BASELINE}/bfTvImageListToImageListApplyFilterBand1.png
+		    ${TEMP}/bfTvImageListToImageListApplyFilterBand1.png
+		    ${BASELINE}/bfTvImageListToImageListApplyFilterBand2.png
+		    ${TEMP}/bfTvImageListToImageListApplyFilterBand2.png
+		    ${BASELINE}/bfTvImageListToImageListApplyFilterBand3.png
+		    ${TEMP}/bfTvImageListToImageListApplyFilterBand3.png
+		    otbImageListToImageListApplyFilter
+	            ${INPUTDATA}/poupees.c1
+		    ${INPUTDATA}/poupees.c2
+		    ${INPUTDATA}/poupees.c3
+		    ${TEMP}/bfTvImageListToImageListApplyFilterBand1.png
+		    ${TEMP}/bfTvImageListToImageListApplyFilterBand2.png
+		    ${TEMP}/bfTvImageListToImageListApplyFilterBand3.png
+)
 
 # A enrichir
 SET(BasicFilters_SRCS
@@ -327,8 +327,8 @@ otbVectorImageToImageListFilterNew.cxx
 otbVectorImageToImageListFilter.cxx
 otbImageListToVectorImageFilterNew.cxx
 otbImageListToVectorImageFilter.cxx
-#otbImageListToImageListApplyFilterNew.cxx
-#otbImageListToImageListApplyFilter.cxx
+otbImageListToImageListApplyFilterNew.cxx
+otbImageListToImageListApplyFilter.cxx
 )
 
 

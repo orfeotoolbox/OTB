@@ -81,7 +81,10 @@ ImageList<TImage>
   Superclass::UpdateOutputInformation();
   for(ConstIterator it = this->Begin(); it!=this->End();++it)
     {
-      it.Get()->GetSource()->UpdateOutputInformation();
+      if(it.Get()->GetSource())
+	{
+	  it.Get()->GetSource()->UpdateOutputInformation();
+	}
     }
 }
 

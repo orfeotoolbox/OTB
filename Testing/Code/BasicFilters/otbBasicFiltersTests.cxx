@@ -58,6 +58,6 @@ REGISTER_TEST(otbVectorImageToImageListFilterNew);
 REGISTER_TEST(otbVectorImageToImageListFilter);
 REGISTER_TEST(otbImageListToVectorImageFilterNew);
 REGISTER_TEST(otbImageListToVectorImageFilter);
-//REGISTER_TEST(otbImageListToVectorImageApplyFilterNew);
-//REGISTER_TEST(otbImageListToVectorImageApplyFilter);
+REGISTER_TEST(otbImageListToImageListApplyFilterNew);
+REGISTER_TEST(otbImageListToImageListApplyFilter);
 }
