@@ -58,6 +58,10 @@ namespace otb
     m_NormalizationFactor = 3.;
     m_QuicklookRatioCoef = 2;
     m_VectorCastFilter = NULL;
+    m_LinkedViewerList = ViewerListType::New();
+    m_Updating = false;
+
+
   }
   /// Destructor
   template <class TPixel>
@@ -604,10 +608,11 @@ ImageViewer<TPixel>
 }
 
 template <class TPixel>
-  void 
-  ImageViewer<TPixel>
+void 
+ImageViewer<TPixel>
 ::ChangeFullViewedRegion(IndexType clickedIndex)
 {
+  m_Updating = true;
   RegionType region = m_FullWidget->GetViewedRegion();
   IndexType newIndex;
   newIndex[0]=clickedIndex[0]-region.GetSize()[0]/2;
@@ -618,6 +623,23 @@ template <class TPixel>
   RegionType newRegion = ComputeConstrainedRegion(region,m_InputImage->GetLargestPossibleRegion());
   m_FullWidget->SetUpperLeftCorner(newRegion.GetIndex());
   this->UpdateScrollWidget();
+
+  typename ViewerListType::Iterator linkedIt = m_LinkedViewerList->Begin();
+  typename OffsetListType::iterator offIt = m_LinkedViewerOffsetList.begin();
+  
+  while(linkedIt!=m_LinkedViewerList->End()&&offIt!=m_LinkedViewerOffsetList.end())
+    {
+      if(!linkedIt.Get()->GetUpdating())
+	{
+	  IndexType linkedIndex;
+	  linkedIndex[0] = clickedIndex[0]+(*offIt)[0];
+	  linkedIndex[1] = clickedIndex[1]+(*offIt)[1];
+	  linkedIt.Get()->ChangeFullViewedRegion(linkedIndex);
+	}
+      ++offIt;
+      ++linkedIt;			    
+    }
+  m_Updating = false;
 }
 
 template <class TPixel>
@@ -625,6 +647,7 @@ template <class TPixel>
   ImageViewer<TPixel>
 ::ChangeZoomViewedRegion(IndexType clickedIndex)
 {
+  m_Updating = true;
   RegionType region = m_ZoomWidget->GetViewedRegion();
   IndexType newIndex;
   newIndex[0]=clickedIndex[0]-region.GetSize()[0]/2;
@@ -635,7 +658,127 @@ template <class TPixel>
   m_ZoomWidget->SetZoomUpperLeftCorner(newRegion.GetIndex());
   m_ZoomWidget->redraw();
   this->UpdateFullWidget();
+
+  typename ViewerListType::Iterator linkedIt = m_LinkedViewerList->Begin();
+  typename OffsetListType::iterator offIt = m_LinkedViewerOffsetList.begin();
+  
+  while(linkedIt!=m_LinkedViewerList->End()&&offIt!=m_LinkedViewerOffsetList.end())
+    {
+      if(!linkedIt.Get()->GetUpdating())
+	{
+	  IndexType linkedIndex;
+	  linkedIndex[0] = clickedIndex[0]+(*offIt)[0];
+	  linkedIndex[1] = clickedIndex[1]+(*offIt)[1];
+	  linkedIt.Get()->ChangeZoomViewedRegion(linkedIndex);
+	}
+      ++offIt;
+      ++linkedIt;			    
+    }
+  m_Updating = false; 
 }
+
+template <class TPixel>
+void 
+ImageViewer<TPixel>
+::Link(Self * viewer, OffsetType offset, bool backwardLinkFlag)
+{
+  // Search if this viewer is already linked
+  typename ViewerListType::Iterator it = m_LinkedViewerList->Begin();
+  while(it!=m_LinkedViewerList->End())
+    {
+      if(it.Get()==viewer)
+	{
+	  itkGenericExceptionMacro(<<"This viewer is already linked !");
+	}
+    }
+  // If not, add it with its offset
+  m_LinkedViewerList->PushBack(viewer);
+  m_LinkedViewerOffsetList.push_back(offset);
+  
+  // If backward link flag is set, add the backward link
+  if(backwardLinkFlag)
+    {
+      OffsetType invertOffset;
+      invertOffset[0]=-offset[0];
+      invertOffset[1]=-offset[1];
+      viewer->Link(this,invertOffset,false);
+    }
+}
+
+template <class TPixel>
+void 
+ImageViewer<TPixel>
+::Link(Self * viewer, OffsetType offset)
+{
+  this->Link(viewer,offset,true);
+}
+
+template <class TPixel>
+void 
+ImageViewer<TPixel>
+::Link(Self * viewer)
+{
+  OffsetType offset;
+  offset.Fill(0);
+  this->Link(viewer,offset,true);
+}
+
+template <class TPixel>
+void 
+ImageViewer<TPixel>
+::Unlink(Self * viewer,bool backwardLinkFlag)
+{
+  unsigned int counter = 0;
+  bool found = false;
+  // Search the given viewer in the linked list
+  typename ViewerListType::Iterator it = m_LinkedViewerList->Begin();
+  while(!found&&it!=m_LinkedViewerList->End())
+    {
+      if(it.Get()==viewer)
+	{
+	  found = true;
+	}
+      else
+	{
+	  ++counter;
+	}
+      ++it;
+    }
+  
+  // If found, erase
+  m_LinkedViewerList->Erase(counter);
+  m_LinkedViewerOffsetList.erase(m_LinkedViewerOffsetList.begin()+counter);
+
+  // If backward link flag is set, remove the backward link
+  if(backwardLinkFlag)
+    {
+      viewer->Unlink(this,false);
+    }
+}
+template <class TPixel>
+void 
+ImageViewer<TPixel>
+::Unlink(Self * viewer)
+{
+  this->Unlink(viewer,true);
+}
+
+
+template<class TPixel>
+void
+ImageViewer<TPixel>
+::ClearLinks(void)
+{
+  typename ViewerListType::Iterator it = m_LinkedViewerList->Begin();
+  while(it!=m_LinkedViewerList->End())
+    {
+      it.Get()->Unlink(this,false);
+      ++it;
+    }
+  m_LinkedViewerList->Clear();
+  m_LinkedViewerOffsetList.clear();
+}
+
 } // end namespace otb
 #endif
 

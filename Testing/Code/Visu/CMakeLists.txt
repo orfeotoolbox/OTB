@@ -84,6 +84,11 @@ ADD_TEST(viTvImageViewerWithMultiBandFilter ${VISU_TESTS}
 	${INPUTDATA}/couleurs.jpg
         )
 
+ADD_TEST(viTvDoubleImageViewerWithLink ${VISU_TESTS} 
+        otbDoubleImageViewerWithLink
+	${INPUTDATA}/couleurs.jpg
+	${INPUTDATA}/couleurs.jpg
+        )
 
 # -------       Fichiers sources CXX -----------------------------------
 SET(BasicVisu_SRCS
@@ -98,6 +103,7 @@ otbImageViewer.cxx
 otbImageViewerWithOtbImage.cxx
 otbImageViewerWithMultiBandFilter.cxx
 otbImageViewerNew.cxx
+otbDoubleImageViewerWithLink.cxx
 )
 
 INCLUDE_DIRECTORIES("${OTBTesting_BINARY_DIR}") 

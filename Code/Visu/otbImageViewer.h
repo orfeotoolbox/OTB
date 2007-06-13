@@ -26,6 +26,7 @@ PURPOSE.  See the above copyright notices for more information.
 #include "otbStreamingShrinkImageFilter.h"
 #include "otbImageWidgetBoxForm.h"
 #include "itkListSample.h"
+#include "otbObjectList.h"
 #include "itkCovarianceCalculator.h"
 #include "itkMacro.h"
 #include <FL/Fl_Output.H>
@@ -87,6 +88,7 @@ class ITK_EXPORT ImageViewer
   typedef typename ImageType::SizeType SizeType;
   typedef typename ImageType::PixelType PixelType;
   typedef typename ImageType::RegionType RegionType;
+  typedef typename ImageType::OffsetType OffsetType;
   typedef typename ScrollWidgetType::VectorPixelType VectorPixelType;
   typedef typename ScrollWidgetType::Pointer ScrollWidgetPointerType;
   typedef typename ZoomWidgetType::Pointer ZoomWidgetPointerType;
@@ -114,7 +116,13 @@ class ITK_EXPORT ImageViewer
   typedef typename BoxType::Pointer BoxPointerType;
   typedef typename BoxType::ColorType ColorType;
   
-  
+  /// List of linked viewer typedef
+  typedef otb::ObjectList<Self> ViewerListType;
+  typedef typename ViewerListType::Pointer ViewerListPointerType;
+
+  /// Linked viewer offset list
+  typedef std::vector<OffsetType> OffsetListType;
+
   /// Accessors
   itkGetMacro(Built,bool);
   itkGetMacro(ShrinkFactor,unsigned int);
@@ -130,6 +138,7 @@ class ITK_EXPORT ImageViewer
   itkGetMacro(QuicklookRatioCoef,double);
   itkSetMacro(NormalizationFactor,double);
   itkGetMacro(NormalizationFactor,double);
+  itkGetMacro(Updating,bool);
  
   /** Set the input image (VectorImage version) */
   virtual void SetImage(ImageType * img);
@@ -160,9 +169,14 @@ class ITK_EXPORT ImageViewer
   /** Update the ZoomWidget */
   virtual void UpdateZoomWidget(void);
 
-  /** Change the ZoomViewedRegion */
+  /** Change the ZoomViewedRegion 
+   * \param clickedIndex The new center of the region
+   **/
   virtual void ChangeZoomViewedRegion(IndexType clickedIndex);
-  /** Change the Full Viewed region */
+  /** 
+   * Change the Full Viewed region 
+   * \param clickedIndex The new center of the region
+   */
   virtual void ChangeFullViewedRegion(IndexType clickedIndex);
 
   /** Compute the constrained region */
@@ -178,9 +192,49 @@ class ITK_EXPORT ImageViewer
    *  the use of the class for example in wrappings.
    * \return The return code from fltk.
    */
-  int FlRun(void);
+  int FlRun(void);  
+  /**
+   * Link this viewer with the given viewer.
+   * \param viewer The viewer to link with.
+   */
+  virtual void Link(Self * viewer);
+  /**
+   * Link this viewer with the given viewer.
+   * \param viewer The viewer to link with.
+   * \param offset Offset between two viewers
+   */
+  virtual void Link(Self * viewer, OffsetType offset);
+
+  /**
+   * Unlink this viewer with the given viewer.
+   * \param viewer The viewer to link with
+   */
+  virtual void Unlink(Self * viewer);
+
+  /**
+   * Clear all the links of the current viewer.
+   */
+  virtual void ClearLinks(void);
 
 protected:
+
+   /**
+   * Link this viewer with the given viewer.
+   * \param viewer The viewer to link with
+   * \param offset Offset between two viewers
+   * \param backwardLinkFlag Link back to this viewer.
+   */
+  virtual void Link(Self * viewer, OffsetType offset, bool backwardLinkFlag);
+
+  /**
+   * Unlink this viewer with the given viewer.
+   * \param viewer The viewer to link with.
+   * \param backwardLinkFlag Link back to this viewer.
+   */
+  virtual void Unlink(Self * viewer,bool backwardLinkFlag);
+
+
+
   // Constructor and destructor
   ImageViewer();
   ~ImageViewer();
@@ -242,6 +296,13 @@ protected:
   /// Converter from otb::Image to otb::VectorImage
   VectorCastFilterPointerType m_VectorCastFilter;
 
+  /// Wether the viewer is updating or not
+  bool m_Updating;
+
+  /// The list of viewer with which this viewer is linked
+  ViewerListPointerType m_LinkedViewerList;
+
+  OffsetListType m_LinkedViewerOffsetList;
 };
 
 
