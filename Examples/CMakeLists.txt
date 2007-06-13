@@ -13,6 +13,7 @@ SUBDIRS(
   Iterators
   MultiScale
   DisparityMap
+  Registration
 )
 
 IF(OTB_USE_VISU)
