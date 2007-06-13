@@ -35,5 +35,6 @@ REGISTER_TEST(otbZoomableImageWidgetNew);
 REGISTER_TEST(otbZoomableImageWidget); 
 REGISTER_TEST(otbImageViewer);
 REGISTER_TEST(otbImageViewerWithOtbImage);
+REGISTER_TEST(otbImageViewerWithMultiBandFilter);
 REGISTER_TEST(otbImageViewerNew);
 }

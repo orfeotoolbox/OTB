@@ -60,7 +60,7 @@ class ITK_EXPORT ImageListToImageListApplyFilter
   
   /** Template parameters typedefs */
   typedef TInputImageList InputImageListType;
-  typedef typename InputImageListType::ConstPointer InputImageListConstPointerType;
+  typedef typename InputImageListType::Pointer InputImageListPointerType;
   typedef typename InputImageListType::ImageType InputImageType;
   typedef TOutputImageList OutputImageListType;
   typedef typename OutputImageListType::Pointer OutputImageListPointerType;

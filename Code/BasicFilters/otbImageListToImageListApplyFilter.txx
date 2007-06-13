@@ -40,21 +40,36 @@ ImageListToImageListApplyFilter<TInputImageList,TOutputImageList,TFilter>
 ::GenerateOutputInformation()
 {
   // Retrieving input/output pointers
-  InputImageListConstPointerType inputPtr = this->GetInput();
+  InputImageListPointerType inputPtr = this->GetInput();
   OutputImageListPointerType outputPtr = this->GetOutput();
   if(outputPtr)
     {
+      if(outputPtr->Size()!=inputPtr->Size())
+	{
+	  // in this case, clear the list
+	  outputPtr->Clear();
+	  typename InputImageListType::ConstIterator inputListIt = inputPtr->Begin();
+	  while(inputListIt!=inputPtr->End())
+	    {
+	      outputPtr->PushBack(OutputImageType::New());
+	      ++inputListIt;
+	    }
+	}
+
       // For each input image
       typename InputImageListType::ConstIterator inputListIt = inputPtr->Begin();
-      while(inputListIt!=inputPtr->End())
+      typename OutputImageListType::Iterator outputListIt = outputPtr->Begin();
+
+      while(inputListIt!=inputPtr->End()&&outputListIt!=outputPtr->End())
 	{
 	  // Create the output image and set its information
-	  outputPtr->PushBack(OutputImageType::New());
+	  
 	  m_Filter->SetInput(inputListIt.Get());
 	  m_Filter->UpdateOutputInformation();
-	  outputPtr->Back()->CopyInformation(m_Filter->GetOutput(m_OutputIndex));
-	  outputPtr->Back()->SetRegions(m_Filter->GetOutput(m_OutputIndex)->GetLargestPossibleRegion());
+	  outputListIt.Get()->CopyInformation(m_Filter->GetOutput(m_OutputIndex));
+	  outputListIt.Get()->SetLargestPossibleRegion(m_Filter->GetOutput(m_OutputIndex)->GetLargestPossibleRegion());
 	  ++inputListIt;
+	  ++outputListIt;
 	}
     }
 }
@@ -65,7 +80,7 @@ ImageListToImageListApplyFilter<TInputImageList,TOutputImageList,TFilter>
 ::GenerateInputRequestedRegion()
 {
    // Retrieving input/output pointers
-  InputImageListConstPointerType inputPtr = this->GetInput();
+  InputImageListPointerType inputPtr = this->GetInput();
   OutputImageListPointerType outputPtr = this->GetOutput();
 
   // For each input image and corresponding output image
@@ -89,7 +104,7 @@ ImageListToImageListApplyFilter<TInputImageList,TOutputImageList,TFilter>
 ::GenerateData()
 {
   // Retrieving input/output pointers
-  InputImageListConstPointerType inputPtr = this->GetInput();
+  InputImageListPointerType inputPtr = this->GetInput();
   OutputImageListPointerType outputPtr = this->GetOutput();
 
   // For each input image and corresponding output image

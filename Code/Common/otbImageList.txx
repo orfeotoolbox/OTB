@@ -18,6 +18,8 @@ PURPOSE.  See the above copyright notices for more information.
 #ifndef _otbImageList_txx
 #define _otbImageList_txx
 
+#include "otbMacro.h"
+
 namespace otb
 {
 
@@ -78,7 +80,13 @@ void
 ImageList<TImage>
 ::UpdateOutputInformation()
 {
+//   otbMsgDebugMacro(<<"ImageList: Call to UpdateOutputInformation()");
   Superclass::UpdateOutputInformation();
+  
+  if(this->GetSource())
+    {
+      this->GetSource()->UpdateOutputInformation();
+    }
   for(ConstIterator it = this->Begin(); it!=this->End();++it)
     {
       if(it.Get()->GetSource())

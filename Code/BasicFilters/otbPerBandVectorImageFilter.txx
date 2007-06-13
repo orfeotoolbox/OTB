@@ -29,56 +29,41 @@ template <class TInputImage, class TOutputImage, class TFilter>
 PerBandVectorImageFilter<TInputImage,TOutputImage,TFilter>
 ::PerBandVectorImageFilter()
 {
-  m_DecompositionFilter = DecompositionFilterType::New();
-  m_ProcessingFilter = ProcessingFilterType::New();
-  m_RecompositionFilter = RecompositionFilterType::New();
+  m_Filter = FilterType::New();
+  m_OutputIndex = 0;
 }
-/**
- * Set the processing filter. This method is provided to allow the setting up of the filter.
- * \param filter The filter to use.
- */
+
 template <class TInputImage, class TOutputImage, class TFilter>
 void
 PerBandVectorImageFilter<TInputImage,TOutputImage,TFilter>
-::SetFilter(FilterType * filter)
+::GenerateOutputInformation()
 {
-  m_ProcessingFilter->SetFilter(filter);
+  if(this->GetInput())
+    {
+      // Create a false monoband image
+      typename InputImageType::Pointer dummyInputImage = InputImageType::New();
+      dummyInputImage->CopyInformation(this->GetInput());
+      dummyInputImage->SetNumberOfComponentsPerPixel(1);
+      m_Filter->SetInput(dummyInputImage);
+      m_Filter->UpdateOutputInformation();
+      this->GetOutput()->CopyInformation(m_Filter->GetOutput(m_OutputIndex));
+      this->GetOutput()->SetNumberOfComponentsPerPixel(this->GetInput()->GetNumberOfComponentsPerPixel());
+    }
 }
-/**
- * Get the processing filter. This method is provided to allow the setting of the filter.
- * \return The filter used.
- */
-template <class TInputImage, class TOutputImage, class TFilter>
-typename PerBandVectorImageFilter<TInputImage,TOutputImage,TFilter>
-::FilterType *
-PerBandVectorImageFilter<TInputImage,TOutputImage,TFilter>
-::GetFilter()
-{
-  return m_ProcessingFilter->GetFilter();
-}
-/**
- * Set the index of the output of the filter from which to recompose the vector image.
- * Default is 0.
- * \param index The index of the output of the filter to use.
- */
+
 template <class TInputImage, class TOutputImage, class TFilter>
 void
 PerBandVectorImageFilter<TInputImage,TOutputImage,TFilter>
-::SetOutputIndex(unsigned int index)
+::GenerateInputRequestedRegion()
 {
-  m_ProcessingFilter->SetOutputIndex(index);
-}
-/**
- * Get the index of the output of the filter from which the vector image is recomposed.
- * Default is 0.
- * \return The index of the output of the filter used.
- */
-template <class TInputImage, class TOutputImage, class TFilter>
-unsigned int
-PerBandVectorImageFilter<TInputImage,TOutputImage,TFilter>
-::GetOutputIndex()
-{
-  return m_ProcessingFilter->GetOutputIndex();
+  InputVectorImageType * inputPtr = const_cast<InputVectorImageType *>(this->GetInput());
+  typename InputImageType::Pointer dummyInputImage = InputImageType::New();
+  dummyInputImage->CopyInformation(this->GetInput());
+  dummyInputImage->SetNumberOfComponentsPerPixel(1);
+  m_Filter->SetInput(dummyInputImage);
+  m_Filter->GetOutput(m_OutputIndex)->SetRequestedRegion(this->GetOutput()->GetRequestedRegion());
+  m_Filter->GenerateInputRequestedRegion();
+  inputPtr->SetRequestedRegion(m_Filter->GetInput()->GetRequestedRegion());
 }
 /**
  * Main computation method
@@ -88,15 +73,25 @@ void
 PerBandVectorImageFilter<TInputImage,TOutputImage,TFilter>
 ::GenerateData()
 {
-  m_DecompositionFilter->SetInput(this->GetInput());
-  m_ProcessingFilter->SetInput(m_DecompositionFilter->GetOutput());
-  m_RecompositionFilter->SetInput(m_ProcessingFilter->GetOutput());
+  InputVectorImageType * inputPtr = const_cast<InputVectorImageType *>(this->GetInput());
+  OutputVectorImagePointerType outputPtr =  this->GetOutput();
+  DecompositionFilterPointerType decomposer = DecompositionFilterType::New();
+  ProcessingFilterPointerType processor = ProcessingFilterType::New();
+  RecompositionFilterPointerType recomposer = RecompositionFilterType::New();
 
-  m_RecompositionFilter->GraftOutput(this->GetOutput());
-  m_RecompositionFilter->Update();
-  this->GraftOutput(m_RecompositionFilter->GetOutput());
+  inputPtr->UpdateOutputData();
+
+  decomposer->SetInput(this->GetInput());
+  processor->SetInput(decomposer->GetOutput());
+  processor->SetFilter(m_Filter);
+  processor->SetOutputIndex(m_OutputIndex);
+  recomposer->SetInput(processor->GetOutput());
+  recomposer->GetOutput()->SetRequestedRegion(this->GetOutput()->GetRequestedRegion());
+
+  recomposer->GraftOutput(this->GetOutput());
+  recomposer->Update();
+  this->GraftOutput(recomposer->GetOutput());
 }
-
 /**
  * PrintSelf Method
  */

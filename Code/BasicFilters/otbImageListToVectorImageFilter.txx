@@ -40,7 +40,7 @@ ImageListToVectorImageFilter<TImageList,TVectorImage>
 	{
 	  this->GetOutput()->CopyInformation(this->GetInput()->GetNthElement(0));
 	  this->GetOutput()->SetNumberOfComponentsPerPixel(this->GetInput()->Size());
-	  this->GetOutput()->SetRegions(this->GetInput()->GetNthElement(0)->GetLargestPossibleRegion());
+	  this->GetOutput()->SetLargestPossibleRegion(this->GetInput()->GetNthElement(0)->GetLargestPossibleRegion());
 	}
     }
 }
@@ -68,7 +68,7 @@ void
 ImageListToVectorImageFilter<TImageList,TVectorImage>
 ::GenerateData(void)
 {
-
+  
   InputImageListPointerType inputPtr = this->GetInput();
   OutputVectorImagePointerType outputPtr = this->GetOutput();
 
@@ -76,6 +76,7 @@ ImageListToVectorImageFilter<TImageList,TVectorImage>
   typename OutputVectorImageType::PixelType black;
   black.SetSize(inputPtr->Size());
   black.Fill(0);
+  outputPtr->SetBufferedRegion(outputPtr->GetRequestedRegion());
   outputPtr->Allocate();
   outputPtr->FillBuffer(black);
 

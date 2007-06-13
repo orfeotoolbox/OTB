@@ -19,8 +19,8 @@ PURPOSE.  See the above copyright notices for more information.
 #define _otbVectorImageToImageListFilter_txx
 
 #include "otbVectorImageToImageListFilter.h"
-#include "itkImageRegionIterator.h"
-#include "itkImageRegionConstIterator.h"
+#include "itkImageRegionIteratorWithIndex.h"
+#include "itkImageRegionConstIteratorWithIndex.h"
 #include <vector>
 #include "otbMacro.h"
 
@@ -37,12 +37,22 @@ VectorImageToImageListFilter<TVectorImageType,TImageList>
 
   if(inputPtr)
     {
+      if(outputPtr->Size()!=inputPtr->GetNumberOfComponentsPerPixel())
+	{
+	  // if the number of components does not match, clear the list
+	  outputPtr->Clear();
+	  for(unsigned int i=0;i<inputPtr->GetNumberOfComponentsPerPixel();++i)
+	    {
+	      typename  OutputImageType::Pointer tmpImagePtr = OutputImageType::New();
+	      outputPtr->PushBack(tmpImagePtr);
+	    }
+	}
       for(unsigned int i=0;i<inputPtr->GetNumberOfComponentsPerPixel();++i)
 	{
-	 typename  OutputImageType::Pointer tmpImagePtr = OutputImageType::New();
-	 tmpImagePtr->CopyInformation(inputPtr);
-	 tmpImagePtr->SetRegions(inputPtr->GetLargestPossibleRegion());
-	 outputPtr->PushBack(tmpImagePtr);   
+	  typename  OutputImageType::Pointer tmpImagePtr = outputPtr->GetNthElement(i);
+	  tmpImagePtr->CopyInformation(inputPtr);
+	  tmpImagePtr->SetLargestPossibleRegion(inputPtr->GetLargestPossibleRegion());
+	  tmpImagePtr->SetRequestedRegion(inputPtr->GetLargestPossibleRegion());
 	}
     }
 }
@@ -71,11 +81,12 @@ void
 VectorImageToImageListFilter<TVectorImageType,TImageList>
 ::GenerateData(void)
 {
+  
   OutputImageListPointerType outputPtr = this->GetOutput();
   InputVectorImagePointerType inputPtr = this->GetInput();
 
-  typedef itk::ImageRegionConstIterator<InputVectorImageType> InputIteratorType;
-  typedef itk::ImageRegionIterator<OutputImageType> OutputIteratorType;
+  typedef itk::ImageRegionConstIteratorWithIndex<InputVectorImageType> InputIteratorType;
+  typedef itk::ImageRegionIteratorWithIndex<OutputImageType> OutputIteratorType;
 
   InputIteratorType inputIt(inputPtr,inputPtr->GetRequestedRegion());
   
@@ -84,6 +95,7 @@ VectorImageToImageListFilter<TVectorImageType,TImageList>
  typename OutputImageListType::ConstIterator outputListIt = outputPtr->Begin();
   for(;outputListIt!=outputPtr->End();++outputListIt)
     {
+      outputListIt.Get()->SetBufferedRegion(outputListIt.Get()->GetRequestedRegion());
       outputListIt.Get()->Allocate();
       outputIteratorList.push_back(OutputIteratorType(outputListIt.Get(),outputListIt.Get()->GetRequestedRegion()));
       outputIteratorList.back().GoToBegin();
@@ -104,7 +116,7 @@ VectorImageToImageListFilter<TVectorImageType,TImageList>
 	    }
 	  else
 	    {
-	      itkGenericExceptionMacro("End of image !");
+	      itkGenericExceptionMacro("End of image for band "<<counter<<" at index "<<(*it).GetIndex()<<" !");
 	    }
 	}
       ++inputIt;

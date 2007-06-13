@@ -82,30 +82,17 @@ class ITK_EXPORT PerBandVectorImageFilter
   typedef ImageListToVectorImageFilter<OutputImageListType,OutputVectorImageType> RecompositionFilterType;
   typedef typename RecompositionFilterType::Pointer RecompositionFilterPointerType;
 
-  /**
-   * Set the processing filter. This method is provided to allow the setting up of the filter.
-   * \param filter The filter to use.
-   */
-  void SetFilter(FilterType * filter);
-  /**
-   * Get the processing filter. This method is provided to allow the setting of the filter.
-   * \return The filter used.
-   */
-  FilterType * GetFilter(void);
+  /// Accessors
+  itkSetObjectMacro(Filter,FilterType);
+  itkGetObjectMacro(Filter,FilterType);
 
-  /**
-   * Set the index of the output of the filter from which to recompose the vector image.
-   * Default is 0.
-   * \param index The index of the output of the filter to use.
-   */
-  void SetOutputIndex(unsigned int index);
-  /**
-   * Get the index of the output of the filter from which the vector image is recomposed.
-   * Default is 0.
-   * \return The index of the output of the filter used.
-   */
-  unsigned int GetOutputIndex(void);
+  itkSetMacro(OutputIndex,unsigned int);
+  itkGetMacro(OutputIndex,unsigned int);
   
+
+  virtual void GenerateInputRequestedRegion(void);
+  virtual void GenerateOutputInformation(void);
+
 protected:
   /** Main computation method */
   virtual void GenerateData(void);
@@ -119,13 +106,12 @@ protected:
 private:
   PerBandVectorImageFilter(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
-  /// Splits VectorImage to ImageList
-  DecompositionFilterPointerType m_DecompositionFilter;
-  /// Processes the ImageList
-  ProcessingFilterPointerType m_ProcessingFilter;
-  /// Recompose the VectorImage
-  RecompositionFilterPointerType m_RecompositionFilter;
-
+ 
+  /// The processing filter
+  FilterPointerType m_Filter;
+  
+  /// The index of the output of the filter to gather
+  unsigned m_OutputIndex;
 };
 }// End namespace otb
 #ifndef OTB_MANUAL_INSTANTIATION

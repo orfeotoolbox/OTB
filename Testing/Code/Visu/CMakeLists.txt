@@ -79,6 +79,11 @@ ADD_TEST(viTvImageViewerWithLargeOtbImage ${VISU_TESTS}
 	${IMAGEDATA}/TOULOUSE/QuickBird/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF
         )
 
+ADD_TEST(viTvImageViewerWithMultiBandFilter ${VISU_TESTS} 
+        otbImageViewerWithMultiBandFilter
+	${INPUTDATA}/couleurs.jpg
+        )
+
 
 # -------       Fichiers sources CXX -----------------------------------
 SET(BasicVisu_SRCS
@@ -91,6 +96,7 @@ otbZoomableImageWidgetNew.cxx
 otbZoomableImageWidget.cxx
 otbImageViewer.cxx
 otbImageViewerWithOtbImage.cxx
+otbImageViewerWithMultiBandFilter.cxx
 otbImageViewerNew.cxx
 )
 
