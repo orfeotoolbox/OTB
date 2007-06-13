@@ -244,7 +244,7 @@ LINK_DIRECTORIES(.)
 
 #-----------------------------------------------------------------------------
 # OTB build configuration options.
-OPTION(BUILD_SHARED_LIBS "Generer les libraires de l'OTB en dynamique." OFF)
+OPTION(BUILD_SHARED_LIBS "Build OTB with shared libraries." OFF)
 SET(OTB_BUILD_SHARED_LIBS ${BUILD_SHARED_LIBS})
 
 # Options for building some of the most common core templates explicitly only
@@ -257,7 +257,7 @@ ENDIF( OTB_EXPLICIT_INSTANTIATION )
 
 #-----------------------------------------------------------------------------
 # Option for display all developpment message !!!
-OPTION(OTB_SHOW_ALL_MSG_DEBUG "OTB-Developers : Show all messages (debug, dev, etc...) use only for otb developers." OFF)
+OPTION(OTB_SHOW_ALL_MSG_DEBUG "OTB developers : Show all messages (debug, dev, etc...) use only for otb developers." OFF)
 MARK_AS_ADVANCED(OTB_SHOW_ALL_MSG_DEBUG)
 IF( OTB_SHOW_ALL_MSG_DEBUG )
  ADD_DEFINITIONS(-DOTB_ACTIVE_MSG_DEV_MACRO)
@@ -304,8 +304,8 @@ IF(WIN32)
 ENDIF(WIN32)
 
 
-OPTION(BUILD_EXAMPLES "Generer les exemples." OFF)
-OPTION(BUILD_TESTING "Generer les tests." OFF)
+OPTION(BUILD_EXAMPLES "Build the Examples directory." OFF)
+OPTION(BUILD_TESTING "Build testing." OFF)
 
 #-----------------------------------------------------------------------------
 # Dispatch the build into the proper subdirectories.
