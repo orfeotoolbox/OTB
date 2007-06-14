@@ -25,6 +25,8 @@ PURPOSE.  See the above copyright notices for more information.
 #include "itkMacro.h"
 #include <sstream>
 #include "itkImageRegionIterator.h"
+#include "itkListSampleToHistogramGenerator.h"
+#include "itkListSample.h"
 
 namespace otb
 {
@@ -55,7 +57,7 @@ namespace otb
     m_PixLocWindow=NULL;
     m_PixLocOutput=NULL;
     m_Label="OTB Image viewer";
-    m_NormalizationFactor = 3.;
+    m_NormalizationFactor = 0.02;
     m_QuicklookRatioCoef = 2;
     m_VectorCastFilter = NULL;
     m_LinkedViewerList = ViewerListType::New();
@@ -108,62 +110,127 @@ namespace otb
   ImageViewer<TPixel>
   ::ComputeNormalizationFactors(void)
   {
-    typedef itk::ImageRegionIterator<ImageType> IteratorType;
-    typename ListSampleType::Pointer listSample = ListSampleType::New();
-    unsigned int nbComponents = m_InputImage->GetNumberOfComponentsPerPixel();
-    listSample->SetMeasurementVectorSize(nbComponents);
-    m_MinComponentValue.SetSize(nbComponents);
-    m_MaxComponentValue.SetSize(nbComponents);
-    VectorPixelType absolutMax;
-    VectorPixelType absolutMin;
-    absolutMax.SetSize(nbComponents);
-    absolutMin.SetSize(nbComponents);
-    absolutMax.Fill(0);
-    absolutMin.Fill(0);
-    IteratorType it;
-    // if scroll is activated, compute the factors from the quicklook
-    if(m_UseScroll)
-      {
-	it = IteratorType(m_Shrink->GetOutput(),m_Shrink->GetOutput()->GetLargestPossibleRegion());
-	it.GoToBegin();
-      }
-    // else, compute the factors from the full viewed region
-    else
-      {
-	m_InputImage->SetRequestedRegion(m_FullWidget->GetViewedRegion());
-	m_InputImage->PropagateRequestedRegion();
-	m_InputImage->UpdateOutputData();
-	it = IteratorType(m_InputImage,m_FullWidget->GetViewedRegion());
-	it.GoToBegin();
-      }
-    while(!it.IsAtEnd())
-      {
-	listSample->PushBack(it.Get()); 
-	for(unsigned int i = 0; i<nbComponents;++i)
-	  {
-	    if(it.Get()[i]>absolutMax[i])
-	      absolutMax[i]=it.Get()[i];
-	    if(it.Get()[i]<absolutMin[i])
-	      absolutMin[i]=it.Get()[i];
-	  } 
-	++it;
-      }
-    otbMsgDebugMacro(<<"Sample list generated.");	       
-    typename CovarianceCalculatorType::Pointer calc = CovarianceCalculatorType::New();
-    calc->SetInputSample(listSample);
-    calc->Update();
-    otbMsgDebugMacro(<<"Statistics computed.");
-    typename CovarianceCalculatorType::OutputType cov = *(calc->GetOutput());
-    for(unsigned int i = 0; i<nbComponents;++i)
-      {
-	m_MinComponentValue[i] = static_cast<InputPixelType>((calc->GetMean())->GetElement(i)-m_NormalizationFactor*vcl_sqrt(cov(i,i)));
-	m_MaxComponentValue[i] = static_cast<InputPixelType>((calc->GetMean())->GetElement(i)+m_NormalizationFactor*vcl_sqrt(cov(i,i)));
- 	if(m_MinComponentValue[i]<absolutMin[i])
-	  m_MinComponentValue[i]=absolutMin[i];
- 	if(m_MaxComponentValue[i]>absolutMax[i])
-	  m_MaxComponentValue[i]=absolutMax[i];
-      }
-    
+
+typedef itk::ImageRegionConstIterator< ImageType >  InputIteratorType;
+  typedef itk::Vector<typename ImageType::ValueType,1> MeasurementVectorType;
+  typedef itk::Statistics::ListSample<MeasurementVectorType> ListSampleType;
+  typedef float HistogramMeasurementType;
+  typedef itk::Statistics::ListSampleToHistogramGenerator<ListSampleType,HistogramMeasurementType,
+    itk::Statistics::DenseFrequencyContainer,1> HistogramGeneratorType;
+
+  typedef otb::ObjectList<ListSampleType> ListSampleListType;
+
+
+ 
+  m_MinComponentValue.SetSize(m_Shrink->GetOutput()->GetNumberOfComponentsPerPixel());
+  m_MaxComponentValue.SetSize(m_Shrink->GetOutput()->GetNumberOfComponentsPerPixel());
+  typename ListSampleListType::Pointer sl =  ListSampleListType::New();
+  
+  sl->Reserve(m_Shrink->GetOutput()->GetNumberOfComponentsPerPixel());
+
+  for(unsigned int i = 0;i<m_MaxComponentValue.GetSize();++i)
+    {
+      sl->PushBack(ListSampleType::New());
+    }
+  InputIteratorType it;
+  // if scroll is activated, compute the factors from the quicklook
+  if(m_UseScroll)
+    {
+      it = InputIteratorType(m_Shrink->GetOutput(),m_Shrink->GetOutput()->GetLargestPossibleRegion());
+      it.GoToBegin();
+    }
+  // else, compute the factors from the full viewed region
+  else
+    {
+      m_InputImage->SetRequestedRegion(m_FullWidget->GetViewedRegion());
+      m_InputImage->PropagateRequestedRegion();
+      m_InputImage->UpdateOutputData();
+      it = InputIteratorType(m_InputImage,m_FullWidget->GetViewedRegion());
+    }
+  it.GoToBegin();
+  
+  while( !it.IsAtEnd() )
+    {
+      PixelType pixel = it.Get();
+      for(unsigned int i = 0;i<m_MaxComponentValue.GetSize();++i)
+	{
+	  sl->GetNthElement(i)->PushBack(pixel[i]);
+	}
+      ++it;
+    }
+
+  for(unsigned int i = 0;i<m_MaxComponentValue.GetSize();++i)
+    {
+      typename HistogramGeneratorType::Pointer generator = HistogramGeneratorType::New();
+      generator->SetListSample(sl->GetNthElement(i));
+      typename HistogramGeneratorType::HistogramType::SizeType size;
+      size.Fill(static_cast<unsigned int>(vcl_ceil(1/m_NormalizationFactor)*10));
+      generator->SetNumberOfBins(size);
+      generator->Update();
+      m_MinComponentValue[i]=static_cast<typename ImageType::ValueType>(generator->GetOutput()->Quantile(0,m_NormalizationFactor));
+      m_MaxComponentValue[i]=static_cast<typename ImageType::ValueType>(generator->GetOutput()->Quantile(0,1-m_NormalizationFactor));
+    }
+    // TO UNCOMMENT FOR BIASED BUT FAST NORMALISATION
+
+    // typedef itk::ImageRegionIterator<ImageType> IteratorType;
+//     typename ListSampleType::Pointer listSample = ListSampleType::New();
+//     unsigned int nbComponents = m_InputImage->GetNumberOfComponentsPerPixel();
+//     listSample->SetMeasurementVectorSize(nbComponents);
+//     m_MinComponentValue.SetSize(nbComponents);
+//     m_MaxComponentValue.SetSize(nbComponents);
+//     VectorPixelType absolutMax;
+//     VectorPixelType absolutMin;
+//     absolutMax.SetSize(nbComponents);
+//     absolutMin.SetSize(nbComponents);
+//     absolutMax.Fill(0);
+//     absolutMin.Fill(0);
+//     IteratorType it;
+//     // if scroll is activated, compute the factors from the quicklook
+//     if(m_UseScroll)
+//       {
+// 	it = IteratorType(m_Shrink->GetOutput(),m_Shrink->GetOutput()->GetLargestPossibleRegion());
+// 	it.GoToBegin();
+//       }
+//     // else, compute the factors from the full viewed region
+//     else
+//       {
+// 	m_InputImage->SetRequestedRegion(m_FullWidget->GetViewedRegion());
+// 	m_InputImage->PropagateRequestedRegion();
+// 	m_InputImage->UpdateOutputData();
+// 	it = IteratorType(m_InputImage,m_FullWidget->GetViewedRegion());
+// 	it.GoToBegin();
+//       }
+//     while(!it.IsAtEnd())
+//       {
+// 	listSample->PushBack(it.Get()); 
+// 	for(unsigned int i = 0; i<nbComponents;++i)
+// 	  {
+// 	    if(it.Get()[i]>absolutMax[i])
+// 	      absolutMax[i]=it.Get()[i];
+// 	    if(it.Get()[i]<absolutMin[i])
+// 	      absolutMin[i]=it.Get()[i];
+// 	  } 
+// 	++it;
+//       }
+//     otbMsgDebugMacro(<<"Sample list generated.");	       
+//     typename CovarianceCalculatorType::Pointer calc = CovarianceCalculatorType::New();
+//     calc->SetInputSample(listSample);&
+//     calc->Update();
+//     otbMsgDebugMacro(<<"Statistics computed.");
+//     typename CovarianceCalculatorType::OutputType cov = *(calc->GetOutput());
+//     for(unsigned int i = 0; i<nbComponents;++i)
+//       {
+// 	m_MinComponentValue[i] = static_cast<InputPixelType>((calc->GetMean())->GetElement(i)-m_NormalizationFactor*vcl_sqrt(cov(i,i)));
+// 	m_MaxComponentValue[i] = static_cast<InputPixelType>((calc->GetMean())->GetElement(i)+m_NormalizationFactor*vcl_sqrt(cov(i,i)));
+//  	if(m_MinComponentValue[i]<absolutMin[i])
+// 	  m_MinComponentValue[i]=absolutMin[i];
+//  	if(m_MaxComponentValue[i]>absolutMax[i])
+// 	  m_MaxComponentValue[i]=absolutMax[i];
+//      }
+ 
+    // END
+
+   
     //TO UNCOMMENT TO HAVE THE SAME MEAN NORMALIZATION FACTOR FOR EACH BAND
 
     // InputPixelType min,max;
@@ -188,7 +255,7 @@ namespace otb
 
    // END
 
-    otbMsgDebugMacro(<<"Data min: "<<absolutMin<<", Data max: "<<absolutMax);
+//     otbMsgDebugMacro(<<"Data min: "<<absolutMin<<", Data max: "<<absolutMax);
     otbMsgDebugMacro(<<"Normalization between: "<<m_MinComponentValue<<" and "<<m_MaxComponentValue);  
   }
   
