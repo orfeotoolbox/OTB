@@ -316,6 +316,22 @@ ADD_TEST(bfTvPerBandVectorImageFilterWithSobelFilter ${BASICFILTERS_TESTS}
 			${INPUTDATA}/poupees.png
 			${TEMP}/bfTvPerBandVectorImageFilterWithSobelFilterOutput.hdr
 )
+
+
+# -------            otb::PerStreamingStatisticsImageFilter   ----------------------------
+
+ADD_TEST(bfTuStreamingStatisticsImageFilterNew ${BASICFILTERS_TESTS}  
+         otbStreamingStatisticsImageFilterNew)
+
+ADD_TEST(bfTvStreamingStatisticsImageFilter ${BASICFILTERS_TESTS}  
+	--compare-ascii ${TOL}
+ 		   ${BASELINE_FILES}/bfStreamingStatisticsImageFilterResults.txt
+ 		   ${TEMP}/bfStreamingStatisticsImageFilterResults.txt
+         otbStreamingStatisticsImageFilter
+		${IMAGEDATA}/TOULOUSE/QuickBird/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF
+		${TEMP}/bfStreamingStatisticsImageFilterResults.txt)
+
+
 # A enrichir
 SET(BasicFilters_SRCS
 otbLeeFilter.cxx
@@ -354,6 +370,8 @@ otbImageListToImageListApplyFilter.cxx
 otbPerBandVectorImageFilterNew.cxx
 otbPerBandVectorImageFilterWithMeanFilter.cxx
 otbPerBandVectorImageFilterWithSobelFilter.cxx
+otbStreamingStatisticsImageFilterNew.cxx
+otbStreamingStatisticsImageFilter.cxx
 )
 
 

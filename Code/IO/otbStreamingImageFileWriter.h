@@ -23,6 +23,7 @@
 #include "itkImageSource.h"
 #include "itkImageToImageFilter.h"
 #include "itkImageRegionSplitter.h"
+#include "otbStreamingTraits.h"
 
 namespace otb
 {
@@ -73,6 +74,9 @@ public:
   typedef typename OutputImageType::RegionType OutputImageRegionType; 
   typedef typename OutputImageType::PixelType OutputImagePixelType; 
   typedef typename Superclass::DataObjectPointer DataObjectPointer;
+
+  /** Streaming traits helper typedef */
+  typedef StreamingTraits<InputImageType> StreamingTraitsType;
 
   /** Dimension of input image. */
   itkStaticConstMacro(InputImageDimension, unsigned int,
@@ -150,13 +154,7 @@ public:
   itkGetConstObjectMacro(ImageIO, itk::ImageIOBase);
 
   /** Type use to define number of divisions */
-  typedef enum
-  { 
-  	SET_NUMBER_OF_STREAM_DIVISIONS = 1,
-  	SET_BUFFER_MEMORY_SIZE = 2,
-  	SET_BUFFER_NUMBER_OF_LINES = 3,
-  	SET_AUTOMATIC_NUMBER_OF_STREAM_DIVISIONS = 4
-  } CalculationDivisionEnumType;
+  typedef StreamingMode CalculationDivisionEnumType;
 
 protected:
   StreamingImageFileWriter();
