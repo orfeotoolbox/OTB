@@ -363,19 +363,6 @@ typedef itk::ImageRegionConstIterator< ImageType >  InputIteratorType;
 	box->SetIndex(scrollBoxIndex);
 	box->SetColor(m_Color);
 	m_ScrollWidget->GetFormList()->PushBack(box);
-	
-	// Set the view model
-	if(m_InputImage->GetNumberOfComponentsPerPixel()<=2)
-	  {
-		m_ScrollWidget->SetViewModelToGrayscale();
-		 m_ScrollWidget->SetRedChannelIndex(m_RedChannelIndex);
-	  }
-	else
-	  {
-	    m_ScrollWidget->SetRedChannelIndex(m_RedChannelIndex);
-	    m_ScrollWidget->SetGreenChannelIndex(m_GreenChannelIndex);
-	    m_ScrollWidget->SetBlueChannelIndex(m_BlueChannelIndex);
-	  }
       }
     // Create the zoom window
     std::string zoomLabel="Zoom Window (X4)";
@@ -404,27 +391,6 @@ typedef itk::ImageRegionConstIterator< ImageType >  InputIteratorType;
     zoomBox->SetSize(zoomBoxSize);
     zoomBox->SetColor(m_Color);
     m_FullWidget->GetFormList()->PushBack(zoomBox);
-
-    // Set the view model
-    if(m_InputImage->GetNumberOfComponentsPerPixel()<=2)
-      {
-	m_FullWidget->SetViewModelToGrayscale();
-	m_ZoomWidget->SetViewModelToGrayscale();
-	otbMsgDebugMacro(<<"View model set to grayscale. Channel: "<<m_RedChannelIndex);
-	m_ZoomWidget->SetRedChannelIndex(m_RedChannelIndex);
-	m_FullWidget->SetRedChannelIndex(m_RedChannelIndex);
-      }
-    else
-      {
-	otbMsgDebugMacro(<<"View model set to RGB Composition.  R: "<<m_RedChannelIndex<<", G: "<<m_GreenChannelIndex<<", B: "<<m_BlueChannelIndex);
-	m_ZoomWidget->SetRedChannelIndex(m_RedChannelIndex);
-	m_ZoomWidget->SetGreenChannelIndex(m_GreenChannelIndex);
-	m_ZoomWidget->SetBlueChannelIndex(m_BlueChannelIndex);
-	m_FullWidget->SetRedChannelIndex(m_RedChannelIndex);
-	m_FullWidget->SetGreenChannelIndex(m_GreenChannelIndex);
-	m_FullWidget->SetBlueChannelIndex(m_BlueChannelIndex);
-
-      }
  
     // Compute the normalization factors
     ComputeNormalizationFactors();
@@ -448,6 +414,9 @@ typedef itk::ImageRegionConstIterator< ImageType >  InputIteratorType;
      m_PixLocOutput->box(FL_EMBOSSED_BOX );
      m_PixLocWindow->end();
 
+
+     InitializeViewModel();
+    
       m_Built=true;
     // Built done
     // otbMsgDebugMacro(<<"Leaving build method");
@@ -631,6 +600,7 @@ typedef itk::ImageRegionConstIterator< ImageType >  InputIteratorType;
 	box->SetColor(m_Color);
 	m_ScrollWidget->GetFormList()->SetNthElement(0,box);
 	m_ScrollWidget->redraw();
+	m_FullWidget->redraw();
       }
   }
 
@@ -757,6 +727,7 @@ ImageViewer<TPixel>
 	{
 	  itkGenericExceptionMacro(<<"This viewer is already linked !");
 	}
+      ++it;
     }
   // If not, add it with its offset
   m_LinkedViewerList->PushBack(viewer);
@@ -831,6 +802,25 @@ ImageViewer<TPixel>
 }
 
 
+template <class TPixel>
+int
+ImageViewer<TPixel>
+::IsLinkedTo(Self * viewer)
+{
+  int counter = 0;
+  typename ViewerListType::Iterator it = m_LinkedViewerList->Begin();
+  while(it!=m_LinkedViewerList->End())
+    {
+      if(it.Get()==viewer)
+	{
+	  return counter;
+	}
+      ++counter;
+      ++it;
+    }
+  return -1;
+}
+
 template<class TPixel>
 void
 ImageViewer<TPixel>
@@ -844,6 +834,99 @@ ImageViewer<TPixel>
     }
   m_LinkedViewerList->Clear();
   m_LinkedViewerOffsetList.clear();
+}
+
+template<class TPixel>
+typename ImageViewer<TPixel>
+::OffsetType
+ImageViewer<TPixel>
+::GetOffset(int index)
+{
+  return m_LinkedViewerOffsetList[index];
+}
+
+template<class TPixel>
+bool
+ImageViewer<TPixel>
+::GetViewModelIsRGB()
+{
+  return m_FullWidget->GetViewModelIsRGB();
+}
+
+template<class TPixel>
+bool
+ImageViewer<TPixel>
+::IsRGBViewModelAllowed()
+{
+  return (m_InputImage->GetNumberOfComponentsPerPixel()>2);
+}
+
+template<class TPixel>
+void
+ImageViewer<TPixel>
+::SetViewModelIsRGB(bool flag)
+{
+  if(flag)
+    {
+      if(IsRGBViewModelAllowed())
+	{
+	  if(m_UseScroll)
+	    {
+	      m_ScrollWidget->SetViewModelToRGB();
+	      m_ScrollWidget->SetRedChannelIndex(m_RedChannelIndex);
+	      m_ScrollWidget->SetGreenChannelIndex(m_GreenChannelIndex);
+	      m_ScrollWidget->SetBlueChannelIndex(m_BlueChannelIndex);
+	    }
+	  m_FullWidget->SetViewModelToRGB();
+	  m_ZoomWidget->SetViewModelToRGB();
+	  m_ZoomWidget->SetRedChannelIndex(m_RedChannelIndex);
+	  m_ZoomWidget->SetGreenChannelIndex(m_GreenChannelIndex);
+	  m_ZoomWidget->SetBlueChannelIndex(m_BlueChannelIndex);
+	  m_FullWidget->SetRedChannelIndex(m_RedChannelIndex);
+	  m_FullWidget->SetGreenChannelIndex(m_GreenChannelIndex);
+	  m_FullWidget->SetBlueChannelIndex(m_BlueChannelIndex);
+	}
+    }
+  else
+    {
+	  if(m_UseScroll)
+	    {
+	      m_ScrollWidget->SetViewModelToGrayscale();
+	      m_ScrollWidget->SetRedChannelIndex(m_RedChannelIndex);
+	    }
+	  m_FullWidget->SetViewModelToGrayscale();
+	  m_ZoomWidget->SetViewModelToGrayscale();
+	  m_ZoomWidget->SetRedChannelIndex(m_RedChannelIndex);
+	  m_FullWidget->SetRedChannelIndex(m_RedChannelIndex);
+    }
+}
+
+template<class TPixel>
+void
+ImageViewer<TPixel>
+::InitializeViewModel(void)
+{
+   if(this->IsRGBViewModelAllowed())
+       {
+	 this->SetViewModelIsRGB(true);
+       }
+     else
+       {
+	 this->SetViewModelIsRGB(false);
+       }
+}
+
+template<class TPixel>
+void
+ImageViewer<TPixel>
+::Reset(void)
+{
+  m_FullWidget->Reset();
+  m_ZoomWidget->Reset();
+  if(m_UseScroll)
+    {
+      m_ScrollWidget->Reset();
+    }
 }
 
 } // end namespace otb

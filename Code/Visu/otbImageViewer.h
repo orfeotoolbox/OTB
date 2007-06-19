@@ -139,6 +139,9 @@ class ITK_EXPORT ImageViewer
   itkSetMacro(NormalizationFactor,double);
   itkGetMacro(NormalizationFactor,double);
   itkGetMacro(Updating,bool);
+  itkGetMacro(UseScroll,bool);
+  itkGetConstReferenceMacro(MinComponentValue,VectorPixelType);
+  itkGetConstReferenceMacro(MaxComponentValue,VectorPixelType);
  
   /** Set the input image (VectorImage version) */
   virtual void SetImage(ImageType * img);
@@ -210,11 +213,48 @@ class ITK_EXPORT ImageViewer
    * \param viewer The viewer to link with
    */
   virtual void Unlink(Self * viewer);
+  /**
+   * Return the internal index if the viewers are linked
+   * \param viewer the viewer to ask
+   * \return -1 if the viewer are not linked
+   */
+  virtual int IsLinkedTo(Self * viewer);
+  /**
+   * Return the offset associated with the linked viewer at the internal index.
+   * \param index the internal index
+   * \return the Offset
+   */
+  virtual OffsetType GetOffset(int index);
 
   /**
    * Clear all the links of the current viewer.
    */
   virtual void ClearLinks(void);
+
+  /**
+   * \return true if view model is RGB
+   */
+  virtual bool GetViewModelIsRGB(void);
+  /**
+   * \return true if the rgb view model is allowed
+   */
+  virtual bool IsRGBViewModelAllowed(void);
+
+  /**
+   * Set the view model
+   * \param flag True to turn on RGB view model
+   */
+  virtual void SetViewModelIsRGB(bool flag);
+
+  /**
+   * Initialize view model
+   */
+  virtual void InitializeViewModel(void);
+
+  /**
+   * Force opengl buffers reset
+   */
+  virtual void Reset(void);
 
 protected:
 
@@ -231,9 +271,7 @@ protected:
    * \param viewer The viewer to link with.
    * \param backwardLinkFlag Link back to this viewer.
    */
-  virtual void Unlink(Self * viewer,bool backwardLinkFlag);
-
-
+  virtual void Unlink(Self * viewer,bool backwardLinkFlag);  
 
   // Constructor and destructor
   ImageViewer();

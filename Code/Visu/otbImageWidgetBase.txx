@@ -90,6 +90,10 @@ ImageWidgetBase<TPixel>
   int w = this->w();
   int h = this->h();
   const char * label = this->label();
+  SizeType size;
+  size.Fill(0);
+  RegionType region;
+  m_BufferedRegion.SetSize(size);
   Init(x,y,w,h,label);
 }
 
