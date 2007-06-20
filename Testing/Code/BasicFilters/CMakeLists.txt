@@ -318,7 +318,7 @@ ADD_TEST(bfTvPerBandVectorImageFilterWithSobelFilter ${BASICFILTERS_TESTS}
 )
 
 
-# -------            otb::PerStreamingStatisticsImageFilter   ----------------------------
+# -------            otb::StreamingStatisticsImageFilter   ----------------------------
 
 ADD_TEST(bfTuStreamingStatisticsImageFilterNew ${BASICFILTERS_TESTS}  
          otbStreamingStatisticsImageFilterNew)
@@ -331,6 +331,19 @@ ADD_TEST(bfTvStreamingStatisticsImageFilter ${BASICFILTERS_TESTS}
 		${IMAGEDATA}/TOULOUSE/QuickBird/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF
 		${TEMP}/bfStreamingStatisticsImageFilterResults.txt)
 
+# -------            otb::VectorImageTo3DScalarImageFilter   ----------------------------
+
+ADD_TEST(bfTuVectorImageTo3DScalarImageFilterNew ${BASICFILTERS_TESTS}  
+         otbVectorImageTo3DScalarImageFilterNew)
+
+ADD_TEST(bfTvVectorImageTo3DScalarImageFilter ${BASICFILTERS_TESTS}  
+	--compare-image ${TOL}
+ 		   ${BASELINE}/bfTvVectorImageTo3DScalarImageFilterOutput.png
+ 		   ${TEMP}/bfTvVectorImageTo3DScalarImageFilterOutput.png
+         otbVectorImageTo3DScalarImageFilter
+		${INPUTDATA}/poupees.png
+		${TEMP}/bfTvVectorImageTo3DScalarImageFilterOutput.png
+)
 
 # A enrichir
 SET(BasicFilters_SRCS
@@ -372,6 +385,8 @@ otbPerBandVectorImageFilterWithMeanFilter.cxx
 otbPerBandVectorImageFilterWithSobelFilter.cxx
 otbStreamingStatisticsImageFilterNew.cxx
 otbStreamingStatisticsImageFilter.cxx
+otbVectorImageTo3DScalarImageFilterNew.cxx
+otbVectorImageTo3DScalarImageFilter.cxx
 )
 
 

@@ -65,4 +65,6 @@ REGISTER_TEST(otbPerBandVectorImageFilterWithMeanFilter);
 REGISTER_TEST(otbPerBandVectorImageFilterWithSobelFilter);
 REGISTER_TEST(otbStreamingStatisticsImageFilterNew);
 REGISTER_TEST(otbStreamingStatisticsImageFilter);
+REGISTER_TEST(otbVectorImageTo3DScalarImageFilterNew);
+REGISTER_TEST(otbVectorImageTo3DScalarImageFilter);
 }
