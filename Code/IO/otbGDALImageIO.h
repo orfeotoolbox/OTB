@@ -156,7 +156,7 @@ private:
   std::string TypeConversion(std::string name);
 
   /** GDAL parameters. */
-  GDALDriver * m_hDriver;
+  GDALDriver*  m_hDriver;
   GDALDataset* m_poDataset;
   GDALRasterBand** m_poBands;
   GDALDataType m_PxType;

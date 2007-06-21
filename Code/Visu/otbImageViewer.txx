@@ -122,11 +122,11 @@ typedef itk::ImageRegionConstIterator< ImageType >  InputIteratorType;
 
 
  
-  m_MinComponentValue.SetSize(m_Shrink->GetOutput()->GetNumberOfComponentsPerPixel());
-  m_MaxComponentValue.SetSize(m_Shrink->GetOutput()->GetNumberOfComponentsPerPixel());
+  m_MinComponentValue.SetSize(m_InputImage->GetNumberOfComponentsPerPixel());
+  m_MaxComponentValue.SetSize(m_InputImage->GetNumberOfComponentsPerPixel());
   typename ListSampleListType::Pointer sl =  ListSampleListType::New();
   
-  sl->Reserve(m_Shrink->GetOutput()->GetNumberOfComponentsPerPixel());
+  sl->Reserve(m_InputImage->GetNumberOfComponentsPerPixel());
 
   for(unsigned int i = 0;i<m_MaxComponentValue.GetSize();++i)
     {
@@ -145,9 +145,10 @@ typedef itk::ImageRegionConstIterator< ImageType >  InputIteratorType;
       m_InputImage->SetRequestedRegion(m_FullWidget->GetViewedRegion());
       m_InputImage->PropagateRequestedRegion();
       m_InputImage->UpdateOutputData();
-      it = InputIteratorType(m_InputImage,m_FullWidget->GetViewedRegion());
+      it = InputIteratorType(m_InputImage,m_InputImage->GetRequestedRegion());
+      it.GoToBegin();
     }
-  it.GoToBegin();
+  
   
   while( !it.IsAtEnd() )
     {

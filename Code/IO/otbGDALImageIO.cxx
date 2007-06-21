@@ -69,7 +69,7 @@ GDALImageIO::GDALImageIO()
   m_currentfile = NULL;
   m_poBands     = NULL;
   m_hDriver     = NULL;
-  m_poDataset = NULL;
+  m_poDataset   = NULL;
   
   m_NbBands = 0;
   m_FlagWriteImageInformation = true;
@@ -80,8 +80,20 @@ GDALImageIO::~GDALImageIO()
 {
 //THOMAS
 //	if( m_hDriver != NULL ) GDALClose( m_hDriver ); //Ne pas le faire  sinon SegFault !!!!
-        if( m_poDataset != NULL ) delete m_poDataset;
-        if( m_poBands != NULL ) delete [] m_poBands;
+//         if( m_poBands != NULL ) delete [] m_poBands;
+// 	if( m_poDataset != NULL ) delete m_poDataset;
+ 
+   if(m_poDataset != NULL)
+     {
+       
+       delete m_poDataset;
+       m_poDataset = NULL;
+     }
+   if(m_poBands != NULL)
+     {
+       delete [] m_poBands;
+     }
+  GDALDestroyDriverManager();
 }
 
 
@@ -176,7 +188,7 @@ bool GDALImageIO::CanReadFile(const char* file)
         GDALAllRegister();
 
   // Open file with GDAL 
-        m_poDataset = (GDALDataset *)GDALOpen(lFileNameGdal.c_str(), GA_ReadOnly );
+        m_poDataset = static_cast<GDALDataset *>(GDALOpen(lFileNameGdal.c_str(), GA_ReadOnly ));
         if(m_poDataset==NULL)
         {
                 fprintf( stderr,
@@ -329,18 +341,23 @@ void GDALImageIO::InternalReadImageInformation()
   GDALAllRegister();
   
   // Get Dataset 
-  m_poDataset = (GDALDataset *) GDALOpen(lFileNameGdal.c_str(), GA_ReadOnly );
+  if(m_poDataset != NULL)
+    {
+      delete m_poDataset;
+      m_poDataset = NULL;
+    }
+  m_poDataset = static_cast<GDALDataset *>( GDALOpen(lFileNameGdal.c_str(), GA_ReadOnly ));
   if(m_poDataset==NULL)
     {
-    itkExceptionMacro(<<"Le dataset du fichier GDAL est null.");
+    itkExceptionMacro(<<"Gdal dataset is null.");
     return;
     }
   
   else
     {
     // Get image dimensions
-    m_width = m_poDataset->GetRasterXSize();
-    m_height = m_poDataset->GetRasterYSize();
+      m_width = m_poDataset->GetRasterXSize();
+      m_height = m_poDataset->GetRasterYSize();
        
     if( (m_width==0) || (m_height==0))
       {
@@ -353,7 +370,7 @@ void GDALImageIO::InternalReadImageInformation()
       m_Dimensions[1] = m_height;
       otbMsgDevMacro(<<"Get Dimensions : x="<<m_Dimensions[0]<<" & y="<<m_Dimensions[1]);
       }
-
+    
     // Get Number of Bands
     m_NbBands = m_poDataset->GetRasterCount();
     this->SetNumberOfComponents(m_NbBands);
@@ -370,7 +387,7 @@ void GDALImageIO::InternalReadImageInformation()
     this->SetFileTypeToBinary();
     
    // Get all the Bands
-    m_poBands = new GDALRasterBand* [m_NbBands];
+    m_poBands = new GDALRasterBand * [m_NbBands];
     if(m_poBands==NULL)
       {
       itkExceptionMacro(<<"Erreur d'allocation memoire du 'rasterBands'");
@@ -532,7 +549,7 @@ void GDALImageIO::InternalReadImageInformation()
     /* -------------------------------------------------------------------- */
     GDALDriverH		hDriver;
     
-    hDriver = GDALGetDatasetDriver( m_poDataset );
+    hDriver = m_poDataset->GetDriver();
             
     itk::EncapsulateMetaData<std::string>(dico, MetaDataKey::m_DriverShortNameKey, 
             	static_cast<std::string>( GDALGetDriverShortName( hDriver ) ) );        
@@ -645,7 +662,7 @@ void GDALImageIO::InternalReadImageInformation()
 /*      Report metadata.                                                */
 /* -------------------------------------------------------------------- */
 
-    papszMetadata = GDALGetMetadata( m_poDataset, NULL );
+    papszMetadata = m_poDataset->GetMetadata(NULL);
     if( CSLCount(papszMetadata) > 0 )
     {
         std::string key;
@@ -665,7 +682,7 @@ void GDALImageIO::InternalReadImageInformation()
 /*      Report subdatasets.                                             */
 /* -------------------------------------------------------------------- */
 
-    papszMetadata = GDALGetMetadata( m_poDataset, "SUBDATASETS" );
+    papszMetadata = m_poDataset->GetMetadata("SUBDATASETS");
     if( CSLCount(papszMetadata) > 0 )
     {
         std::string key;
@@ -725,22 +742,18 @@ void GDALImageIO::InternalReadImageInformation()
 /* Color Table								*/
 /* -------------------------------------------------------------------- */ 
 
-   for(int iBand = 0; iBand < GDALGetRasterCount( m_poDataset ); iBand++ )
+   for(int iBand = 0; iBand <m_poDataset->GetRasterCount(); iBand++ )
     {
       GDALColorTableH	hTable;
       GDALRasterBandH	hBand;
-      
-      hBand = GDALGetRasterBand( m_poDataset, iBand+1 );
-        
-      if( GDALGetRasterColorInterpretation(hBand) == GCI_PaletteIndex 
-            && (hTable = GDALGetRasterColorTable( hBand )) != NULL )
-        {
-            
-            unsigned int ColorEntryCount = GDALGetColorEntryCount( hTable );        
-            
-            itk::EncapsulateMetaData<std::string>(dico, MetaDataKey::m_ColorTableNameKey, 
-            	static_cast<std::string>( GDALGetPaletteInterpretationName( 
-            				GDALGetPaletteInterpretation( hTable ) ) ) );    
+      hBand=GDALGetRasterBand(m_poDataset,iBand+1);
+      if(GDALGetRasterColorInterpretation(hBand)==GCI_PaletteIndex&&(hTable=GDALGetRasterColorTable(hBand))!=NULL)
+	{
+	  unsigned int ColorEntryCount=GDALGetColorEntryCount(hTable);    
+	  
+	  itk::EncapsulateMetaData<std::string>(dico, MetaDataKey::m_ColorTableNameKey, 
+					    static_cast<std::string>( GDALGetPaletteInterpretationName( 
+												       GDALGetPaletteInterpretation( hTable ) ) ) );    
             				    
             itk::EncapsulateMetaData<unsigned int>(dico, MetaDataKey::m_ColorEntryCountKey, ColorEntryCount);        
 
@@ -761,12 +774,11 @@ void GDALImageIO::InternalReadImageInformation()
             }
         } 
       }        
-otbMsgDebugMacro( <<"Driver to read: GDAL");
-otbMsgDebugMacro( <<"         Read  file         : "<< m_FileName);
-otbMsgDebugMacro( <<"         Size               : "<<m_Dimensions[0]<<","<<m_Dimensions[1]);
-otbMsgDebugMacro( <<"         ComponentType      : "<<this->GetComponentType() );
-otbMsgDebugMacro( <<"         NumberOfComponents : "<<this->GetNumberOfComponents());
-
+   otbMsgDebugMacro( <<"Driver to read: GDAL");
+   otbMsgDebugMacro( <<"         Read  file         : "<< m_FileName);
+   otbMsgDebugMacro( <<"         Size               : "<<m_Dimensions[0]<<","<<m_Dimensions[1]);
+   otbMsgDebugMacro( <<"         ComponentType      : "<<this->GetComponentType() );
+   otbMsgDebugMacro( <<"         NumberOfComponents : "<<this->GetNumberOfComponents());
 }
 
 bool GDALImageIO::CanWriteFile( const char* name )
@@ -959,7 +971,13 @@ void GDALImageIO::InternalWriteImageInformation()
    	        itkExceptionMacro(<< "GDAL Writing failed : Driver not reconized");
         }
         std::string realFileName = GetGdalWriteImageFileName(extGDAL, m_FileName);
-        m_poDataset = m_hDriver->Create( realFileName.c_str(), m_Dimensions[0],m_Dimensions[1],m_NbBands,m_PxType, papszOptions );
+        
+	if(m_poDataset != NULL)
+	  {
+	    delete m_poDataset;
+	    m_poDataset = NULL;
+	  }
+	m_poDataset = m_hDriver->Create( realFileName.c_str(), m_Dimensions[0],m_Dimensions[1],m_NbBands,m_PxType, papszOptions );
         if (m_poDataset == NULL)
         {
    	        itkExceptionMacro(<< "GDAL Writing failed : Impossible to create the image file name '"<<realFileName.c_str()<<"'.");
