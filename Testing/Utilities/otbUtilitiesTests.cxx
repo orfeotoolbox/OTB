@@ -28,4 +28,7 @@ void RegisterTests()
 {
 REGISTER_TEST(ossimIntegrationTest);
 REGISTER_TEST(ijBSplineScatteredDataPointSetToImageFilterTest);
+REGISTER_TEST(svmGenericKernelFunctor);
+REGISTER_TEST(svmTest);
+REGISTER_TEST(svmGenericKernelTest);
 }

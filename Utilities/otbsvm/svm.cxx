@@ -1,20 +1,6 @@
-/*=========================================================================
+//OTB's modifications
+#include <iostream>
 
-  Program:   ORFEO Toolbox
-  Language:  C++
-  Date:      $Date$
-  Version:   $Revision$
-
-
-  Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
-  See OTBCopyright.txt for details.
-
-
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
-     PURPOSE.  See the above copyright notices for more information.
-
-=========================================================================*/
 #include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -23,8 +9,6 @@
 #include <string.h>
 #include <stdarg.h>
 #include "svm.h"
-#include "otbMacro.h"
-
 typedef float Qfloat;
 typedef signed char schar;
 #ifndef min
@@ -225,9 +209,12 @@ public:
 		swap(x[i],x[j]);
 		if(x_square) swap(x_square[i],x_square[j]);
 	}
+
 protected:
 
-	double (Kernel::*kernel_function)(int i, int j) const;
+//OTB's modifications
+	double (Kernel::*kernel_function)(int i, int j, const svm_parameter& param) const;
+        const svm_parameter& m_param;
 
 private:
 	const svm_node **x;
@@ -240,30 +227,40 @@ private:
 	const double coef0;
 
 	static double dot(const svm_node *px, const svm_node *py);
-	double kernel_linear(int i, int j) const
+	double kernel_linear(int i, int j, const svm_parameter& param) const
 	{
 		return dot(x[i],x[j]);
 	}
-	double kernel_poly(int i, int j) const
+	double kernel_poly(int i, int j, const svm_parameter& param) const
 	{
 		return powi(gamma*dot(x[i],x[j])+coef0,degree);
 	}
-	double kernel_rbf(int i, int j) const
+	double kernel_rbf(int i, int j, const svm_parameter& param) const
 	{
 		return exp(-gamma*(x_square[i]+x_square[j]-2*dot(x[i],x[j])));
 	}
-	double kernel_sigmoid(int i, int j) const
+	double kernel_sigmoid(int i, int j, const svm_parameter& param) const
 	{
 		return tanh(gamma*dot(x[i],x[j])+coef0);
 	}
-	double kernel_precomputed(int i, int j) const
+	double kernel_precomputed(int i, int j, const svm_parameter& param) const
 	{
 		return x[i][(int)(x[j][0].value)].value;
+	}
+//OTB's modifications
+	double kernel_generic(int i, int j, const svm_parameter& param) const
+	{
+                if( param.kernel_generic == NULL )
+                {
+                        itkGenericExceptionMacro( << "Generic Kernel is not initialiszed !");
+                }
+		return (param.kernel_generic->Evaluate(x[i],x[j],param));
 	}
 };
 
 Kernel::Kernel(int l, svm_node * const * x_, const svm_parameter& param)
-:kernel_type(param.kernel_type), degree(param.degree),
+//OTB's modifications
+:m_param(param),kernel_type(param.kernel_type), degree(param.degree),
  gamma(param.gamma), coef0(param.coef0)
 {
 	switch(kernel_type)
@@ -283,6 +280,11 @@ Kernel::Kernel(int l, svm_node * const * x_, const svm_parameter& param)
 		case PRECOMPUTED:
 			kernel_function = &Kernel::kernel_precomputed;
 			break;
+//OTB's modifications
+		case GENERIC:
+			kernel_function = &Kernel::kernel_generic;
+			break;
+                        
 	}
 
 	clone(x,x_,l);
@@ -379,6 +381,9 @@ double Kernel::k_function(const svm_node *x, const svm_node *y,
 			return tanh(param.gamma*dot(x,y)+param.coef0);
 		case PRECOMPUTED:  //x: test (validation), y: SV
 			return x[(int)(y->value)].value;
+//OTB's modifications
+		case GENERIC:
+		        return (param.kernel_generic->Evaluate(x,y,param));
 		default:
 			return 0;	/* Unreachable */
 	}
@@ -1283,7 +1288,7 @@ public:
 		cache = new Cache(prob.l,(long int)(param.cache_size*(1<<20)));
 		QD = new Qfloat[prob.l];
 		for(int i=0;i<prob.l;i++)
-			QD[i]= (Qfloat)(this->*kernel_function)(i,i);
+			QD[i]= (Qfloat)(this->*kernel_function)(i,i,this->m_param);
 	}
 	
 	Qfloat *get_Q(int i, int len) const
@@ -1293,7 +1298,7 @@ public:
 		if((start = cache->get_data(i,&data,len)) < len)
 		{
 			for(int j=start;j<len;j++)
-				data[j] = (Qfloat)(y[i]*y[j]*(this->*kernel_function)(i,j));
+				data[j] = (Qfloat)(y[i]*y[j]*(this->*kernel_function)(i,j,this->m_param));
 		}
 		return data;
 	}
@@ -1332,7 +1337,8 @@ public:
 		cache = new Cache(prob.l,(long int)(param.cache_size*(1<<20)));
 		QD = new Qfloat[prob.l];
 		for(int i=0;i<prob.l;i++)
-			QD[i]= (Qfloat)(this->*kernel_function)(i,i);
+//OTB's modifications
+			QD[i]= (Qfloat)(this->*kernel_function)(i,i,this->m_param);
 	}
 	
 	Qfloat *get_Q(int i, int len) const
@@ -1341,8 +1347,9 @@ public:
 		int start;
 		if((start = cache->get_data(i,&data,len)) < len)
 		{
+//OTB's modifications
 			for(int j=start;j<len;j++)
-				data[j] = (Qfloat)(this->*kernel_function)(i,j);
+				data[j] = (Qfloat)(this->*kernel_function)(i,j,this->m_param);
 		}
 		return data;
 	}
@@ -1386,7 +1393,8 @@ public:
 			sign[k+l] = -1;
 			index[k] = k;
 			index[k+l] = k;
-			QD[k]= (Qfloat)(this->*kernel_function)(k,k);
+//OTB's modifications
+			QD[k]= (Qfloat)(this->*kernel_function)(k,k,this->m_param);
 			QD[k+l]=QD[k];
 		}
 		buffer[0] = new Qfloat[2*l];
@@ -1408,7 +1416,8 @@ public:
 		if(cache->get_data(real_i,&data,l) < l)
 		{
 			for(int j=0;j<l;j++)
-				data[j] = (Qfloat)(this->*kernel_function)(real_i,j);
+//OTB's modifications
+				data[j] = (Qfloat)(this->*kernel_function)(real_i,j,this->m_param);
 		}
 
 		// reorder and copy
@@ -2157,10 +2166,8 @@ svm_model *svm_train(const svm_problem *prob, const svm_parameter *param)
 				if(param->weight_label[i] == label[j])
 					break;
 			if(j == nr_class)
-                        {
-				otbMsgDevMacro(  <<"warning: class label "<<param->weight_label[i]<<" specified in weight is not found\n" );
-			}
-                        else
+				fprintf(stderr,"warning: class label %d specified in weight is not found\n", param->weight_label[i]);
+			else
 				weighted_C[j] *= param->weight[i];
 		}
 
@@ -2610,7 +2617,8 @@ const char *svm_type_table[] =
 
 const char *kernel_type_table[]=
 {
-	"linear","polynomial","rbf","sigmoid","precomputed",NULL
+//OTB's modifications
+	"linear","polynomial","rbf","sigmoid","precomputed","generic",NULL
 };
 
 int svm_save_model(const char *model_file_name, const svm_model *model)
@@ -2622,6 +2630,23 @@ int svm_save_model(const char *model_file_name, const svm_model *model)
 
 	fprintf(fp,"svm_type %s\n", svm_type_table[param.svm_type]);
 	fprintf(fp,"kernel_type %s\n", kernel_type_table[param.kernel_type]);
+
+//OTB's modifications
+        if( param.kernel_type == GENERIC )
+        {
+                if( param.kernel_generic == NULL )
+                {
+	                fprintf(stderr,"generic kernel functor is not initialized\n");
+                        return -1;
+                }
+                //Load generic parameters
+                int cr = param.kernel_generic->save_parameters(&fp,"generic_kernel_parameters");
+                if( cr != 0 )
+                {
+	                fprintf(stderr,"error while saving generic kernel parameters to the file %s.\n",model_file_name);
+                }
+        }
+        
 
 	if(param.kernel_type == POLY)
 		fprintf(fp,"degree %d\n", param.degree);
@@ -2700,7 +2725,7 @@ int svm_save_model(const char *model_file_name, const svm_model *model)
 	else return 0;
 }
 
-svm_model *svm_load_model(const char *model_file_name)
+svm_model *svm_load_model(const char *model_file_name, /*otb::*/GenericKernelFunctorBase * generic_kernel_functor)
 {
 	FILE *fp = fopen(model_file_name,"rb");
 	if(fp==NULL) return NULL;
@@ -2734,7 +2759,7 @@ svm_model *svm_load_model(const char *model_file_name)
 			}
 			if(svm_type_table[i] == NULL)
 			{
-				otbMsgDevMacro(  <<"unknown svm type.\n");
+				fprintf(stderr,"unknown svm type.\n");
 				free(model->rho);
 				free(model->label);
 				free(model->nSV);
@@ -2756,7 +2781,7 @@ svm_model *svm_load_model(const char *model_file_name)
 			}
 			if(kernel_type_table[i] == NULL)
 			{
-				otbMsgDevMacro(  <<"unknown kernel function.\n");
+				fprintf(stderr,"unknown kernel function.\n");
 				free(model->rho);
 				free(model->label);
 				free(model->nSV);
@@ -2818,9 +2843,33 @@ svm_model *svm_load_model(const char *model_file_name)
 			}
 			break;
 		}
+//OTB's modifications
+		else if(strcmp(cmd,"generic_kernel_parameters")==0)
+		{
+                        if( param.kernel_type == GENERIC )
+                        {
+                                if( generic_kernel_functor == NULL )
+                                {
+			                fprintf(stderr,"generic kernel functor is not initialized\n",cmd);
+                                        return NULL;
+                                }
+                                param.kernel_generic = generic_kernel_functor;
+                                //Load generic parameters
+                                int cr = param.kernel_generic->load_parameters(&fp);
+                                if( cr != 0 )
+                                {
+			                fprintf(stderr,"error while loading generic kernel parameters from the file %s.\n",model_file_name);
+                                }
+                        }
+                        else
+                        {
+                                //Read the generic_kernel_parameters line
+			        fgets(cmd,80,fp);
+                        }
+                }
 		else
 		{
-			otbMsgDevMacro(  <<"unknown text in model file: ["<<cmd<<"]\n");
+			fprintf(stderr,"unknown text in model file: [%s]\n",cmd);
 			free(model->rho);
 			free(model->label);
 			free(model->nSV);
@@ -2828,7 +2877,6 @@ svm_model *svm_load_model(const char *model_file_name)
 			return NULL;
 		}
 	}
-
 	// read sv_coef and SV
 
 	int elements = 0;
@@ -2930,8 +2978,15 @@ const char *svm_check_parameter(const svm_problem *prob, const svm_parameter *pa
 	   kernel_type != POLY &&
 	   kernel_type != RBF &&
 	   kernel_type != SIGMOID &&
-	   kernel_type != PRECOMPUTED)
+	   kernel_type != PRECOMPUTED &&
+//OTB's modifications
+	   kernel_type != GENERIC)
 		return "unknown kernel type";
+        if ( kernel_type == GENERIC )
+        {
+                if( param->kernel_generic == NULL )
+                        return "Generic kernel functor not initialized";
+        }
 
 	if(param->degree < 0)
 		return "degree of polynomial kernel < 0";
@@ -3036,3 +3091,63 @@ int svm_check_probability_model(const svm_model *model)
 		((model->param.svm_type == EPSILON_SVR || model->param.svm_type == NU_SVR) &&
 		 model->probA!=NULL);
 }
+
+
+//OTB's modifications
+// Methods of GenericKernelFunctorBase class
+/*
+namespace otb
+{
+*/
+int
+GenericKernelFunctorBase::
+load_parameters(FILE ** pfile)
+{
+      int NbParams(0);
+      char keyword[81];
+      char value[81];
+      // Read number of parameters
+      fscanf(*pfile,"%d",&NbParams);
+//      if( NbParams == 0 ) return -1;
+      for ( int cpt=0 ; cpt < NbParams ; cpt++)
+      {
+              fscanf(*pfile,"%80s",keyword);
+              fscanf(*pfile,"%80s",value);
+              m_MapParameters[std::string(keyword)] = std::string(value);
+      }
+      return 0;
+}
+int
+GenericKernelFunctorBase::
+save_parameters(FILE ** pfile, const char * generic_kernel_parameters_keyword)const
+{
+      MapConstIterator iter=m_MapParameters.begin();
+      std::string line(generic_kernel_parameters_keyword);
+      std::string strNbParams;      
+      ::otb::StringStream flux; 
+      flux << m_MapParameters.size();            
+      flux >> strNbParams;          
+      line = line + " " + strNbParams;
+      while( iter != m_MapParameters.end() )
+      {
+              line = line + "   " + iter->first + " " + iter->second;
+              ++iter;
+      }
+      fprintf(*pfile,"%s\n", line.c_str());
+      return 0;
+}
+
+void 
+GenericKernelFunctorBase::
+print_parameters(void)const
+{
+      MapConstIterator iter=m_MapParameters.begin();
+      std::cout << "Print generic kernel parameters: "<<m_MapParameters.size()<<std::endl;
+      while( iter != m_MapParameters.end() )
+      {
+              std::cout << "  "<<iter->first <<"  "<<iter->second<<std::endl;
+              ++iter;
+      }
+}
+
+//} // namespace otb

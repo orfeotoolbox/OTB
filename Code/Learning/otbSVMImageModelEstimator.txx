@@ -43,6 +43,7 @@ SVMImageModelEstimator<TInputImage, TTrainingImage>
 	this->param.degree = 3;
 	this->param.gamma = 0;	// 1/k
 	this->param.coef0 = 0;
+        this->param.kernel_generic = NULL;
 	this->param.nu = 0.5;
 	this->param.cache_size = 40;
 	this->param.C = 1;

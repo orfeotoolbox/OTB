@@ -30,10 +30,26 @@ ADD_TEST(leTuSVMModelLoad ${LEARNING_TESTS}
         otbSVMModelLoad
 	${INPUTDATA}/svm_model)
 
-ADD_TEST(leTuSVMModelLoadSave ${LEARNING_TESTS}  
+ADD_TEST(leTvSVMModelLoadSave ${LEARNING_TESTS}
+--compare-ascii ${TOL}  ${INPUTDATA}/svm_model
+                        ${TEMP}/svmmodel_test
         otbSVMModelLoadSave
 	${INPUTDATA}/svm_model
 	${TEMP}/svmmodel_test)		
+
+ADD_TEST(leTvSVMModelWithGenericKeywordKernelLoadSave ${LEARNING_TESTS}  
+--compare-ascii ${TOL}  ${BASELINE_FILES}/leTvsvmmodel_image_generic_version_test
+                        ${TEMP}/leTvsvmmodel_image_generic_version_test
+        otbSVMModelGenericKernelLoadSave
+	${INPUTDATA}/svm_model_image_generic_version
+	${TEMP}/leTvsvmmodel_image_generic_version_test)		
+
+ADD_TEST(leTvSVMModelKernelTypeGenericLoadSave ${LEARNING_TESTS}  
+--compare-ascii ${TOL}  ${INPUTDATA}/svm_model_image_generic_kernel
+                        ${TEMP}/leTvsvmmodel_image_generic_kernel_test
+        otbSVMModelGenericKernelLoadSave
+	${INPUTDATA}/svm_model_image_generic_kernel
+	${TEMP}/leTvsvmmodel_image_generic_kernel_test)		
 
 # -------            otb::SVMembershipFunction   --------------------
 
@@ -49,11 +65,13 @@ ADD_TEST(leTuSVMModelLoadSave ${LEARNING_TESTS}
 ADD_TEST(leTuSVMImageModelEstimatorNew ${LEARNING_TESTS}  
         otbSVMImageModelEstimatorNew)
 
-ADD_TEST(leTuSVMImageModelEstimatorTrain ${LEARNING_TESTS}  
+ADD_TEST(leTuSVMImageModelEstimatorTrain ${LEARNING_TESTS}
+--compare-ascii ${TOL}  ${BASELINE_FILES}/leTvsvm_model_image 
+                        ${TEMP}/leTvsvm_model_image 
         otbSVMImageModelEstimatorTrain
 	${INPUTDATA}/ROI_QB_MUL_4.tif
 	${INPUTDATA}/ROI_QB_MUL_4_train.c1.hdr
-	${TEMP}/svm_model_image)
+	${TEMP}/leTvsvm_model_image)
 
 # -------            otb::SVMPointSetModelEstimator   --------------------		
 
@@ -61,8 +79,10 @@ ADD_TEST(leTuSVMPointSetModelEstimatorNew ${LEARNING_TESTS}
         otbSVMPointSetModelEstimatorNew)
 
 ADD_TEST(leTuSVMPointSetModelEstimatorTrain ${LEARNING_TESTS}  
+--compare-ascii ${TOL}  ${BASELINE_FILES}/leTvsvm_model_pointset 
+                        ${TEMP}/leTvsvm_model_pointset 
         otbSVMPointSetModelEstimatorTrain
-	${TEMP}/svm_model_pointset)
+	${TEMP}/leTvsvm_model_pointset)
 	
 	
 # -------            otb::SVMClassifier   -----------------------------	
@@ -75,6 +95,16 @@ ADD_TEST(leTuSVMClassifierImage ${LEARNING_TESTS}
 	${INPUTDATA}/ROI_QB_MUL_4.tif
 	${INPUTDATA}/svm_model_image
 	${TEMP}/svm_classified_image.png)
+
+ADD_TEST(leTuSVMClassifierImageWithGenericKernalLinear ${LEARNING_TESTS}  
+--compare-image ${TOL}  ${TEMP}/svm_classified_image.png
+                        ${TEMP}/svm_classified_image_with_generic_kernel_linear.png
+        otbSVMClassifierImage
+	${INPUTDATA}/ROI_QB_MUL_4.tif
+	${INPUTDATA}/svm_model_image_generic_linear
+	${TEMP}/svm_classified_image_with_generic_kernel_linear.png)
+
+
 
 ADD_TEST(leTuSVMClassifierPointSet ${LEARNING_TESTS}  
         otbSVMClassifierPointSet
@@ -144,6 +174,7 @@ otbSVMModelNew.cxx
 otbSVMModelAllocateProblem.cxx
 otbSVMModelLoad.cxx
 otbSVMModelLoadSave.cxx
+otbSVMModelGenericKernelLoadSave.cxx
 #otbSVMMembershipFunctionNew.cxx
 #otbSVMMembershipFunctionLoadModel.cxx
 otbSVMImageModelEstimatorNew.cxx

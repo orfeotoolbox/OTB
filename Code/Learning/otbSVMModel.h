@@ -20,10 +20,10 @@
 
 #include "itkDataObject.h"
 
-extern "C"
-{
+//extern "C"
+//{
 #include "svm.h"
-}
+//}
 
 #define Malloc(type,n) (type *)malloc((n)*sizeof(type))
 
@@ -173,6 +173,16 @@ public:
     return m_Model->nr_class;
   }
 
+  /** Get/Set methods for generic kernel functor */
+  virtual GenericKernelFunctorBase * GetKernelFunctor(void)const
+  {
+        return m_GenericKernelFunctor;
+  }
+  virtual void SetKernelFunctor(GenericKernelFunctorBase* pGenericKernelFunctor)
+  {
+        m_GenericKernelFunctor = pGenericKernelFunctor;
+        this->Modified();
+  }
 
 protected:
   SVMModel();
@@ -198,6 +208,8 @@ private:
   struct svm_problem m_Problem;
   struct svm_node* x_space;
 
+  /** Pointer to generic kernel functor */
+  GenericKernelFunctorBase * m_GenericKernelFunctor;
 
 }; // class SVMModel
 

@@ -6,12 +6,13 @@
 
 PROJECT(OTBSVM)
 
-# source files for zlib
+# source files for otbsvm
 SET(OTBSVM_SRCS
 svm.cxx 
 )
 
 ADD_LIBRARY(otbsvm ${OTBSVM_SRCS})
+TARGET_LINK_LIBRARIES (otbsvm ITKCommon)
 
 
 INSTALL(TARGETS otbsvm

@@ -42,6 +42,46 @@
 #include "itkImageRegionIterator.h"
 #include "itkRescaleIntensityImageFilter.h"
 
+namespace otb
+{
+
+class Linear : public GenericKernelFunctorBase
+{
+public:
+  Linear(): GenericKernelFunctorBase() {};
+  virtual ~Linear() {};
+  
+  virtual double Evaluate(const svm_node *x, const svm_node *y, const svm_parameter& param)const
+    {
+      return dot(x,y);
+    }
+
+
+   static double dot(const svm_node *px, const svm_node *py)
+   {
+	double sum = 0;
+	while(px->index != -1 && py->index != -1)
+	{
+		if(px->index == py->index)
+		{
+			sum += px->value * py->value;
+			++px;
+			++py;
+		}
+		else
+		{
+			if(px->index > py->index)
+				++py;
+			else
+				++px;
+		}			
+	}
+	return sum;
+    }
+
+};
+
+}
 
 
 int otbSVMClassifierImage(int argc, char* argv[] )
@@ -61,8 +101,6 @@ int otbSVMClassifierImage(int argc, char* argv[] )
     const char * imageFilename  = argv[1];
     const char * modelFilename  = argv[2];
     const char * outputFilename = argv[3];
-       
-
 
     /** Read the input image and build the sample */
 
@@ -101,6 +139,10 @@ int otbSVMClassifierImage(int argc, char* argv[] )
     typedef otb::SVMModel< InputPixelType, LabelPixelType > ModelType;
 
     ModelType::Pointer model = ModelType::New();
+
+    
+    otb::Linear lFunctor;
+    model->SetKernelFunctor(&lFunctor);
 
     model->LoadModel( modelFilename );
 

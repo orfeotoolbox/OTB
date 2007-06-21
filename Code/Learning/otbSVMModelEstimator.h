@@ -248,6 +248,17 @@ public:
 
   void Update();
   
+  /** Get/Set methods for generic kernel functor */
+  virtual GenericKernelFunctorBase * GetKernelFunctor(void)const
+  {
+        return m_Model->GetKernelFunctor();
+  }
+  virtual void SetKernelFunctor(GenericKernelFunctorBase* pGenericKernelFunctor)
+  {
+        m_Model->SetKernelFunctor(pGenericKernelFunctor);
+        this->Modified();
+  }
+
 protected: 
   SVMModelEstimator();
   ~SVMModelEstimator();
@@ -289,8 +300,6 @@ protected:
 private:
   SVMModelEstimator(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
-
-
 
 }; // class SVMModelEstimator
 

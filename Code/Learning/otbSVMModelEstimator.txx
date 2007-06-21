@@ -42,6 +42,7 @@ m_NumberOfClasses( 0 )
 	param.degree = 3;
 	param.gamma = 0;	// 1/k
 	param.coef0 = 0;
+        param.kernel_generic = NULL;
 	param.nu = 0.5;
 	param.cache_size = 40;
 	param.C = 1;
@@ -52,6 +53,8 @@ m_NumberOfClasses( 0 )
 	param.nr_weight = 0;
 	param.weight_label = NULL;
 	param.weight = NULL;
+        
+        
 
   //cross_validation = 0;
 }

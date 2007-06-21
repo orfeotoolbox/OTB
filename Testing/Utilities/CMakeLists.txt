@@ -30,17 +30,52 @@ ADD_TEST(utIjBSplineScatteredDataPointSetToImageFilterTest ${UTILITIES_TESTS}
 		${TEMP}/ijBSplineScatteredDataPointSetToImageFilterTestOutput.hdr
 )
 
+# -------            lib otbsvm   ------------------------------
+
+ADD_TEST(utTuSvmKernelFunctorTest ${UTILITIES_TESTS}
+                svmGenericKernelFunctor
+)
+
+ADD_TEST(utTvSvmTest ${UTILITIES_TESTS}
+--compare-ascii 0 ${INPUTDATA}/svm_model
+                ${TEMP}/svm_model_test
+                svmTest
+                ${INPUTDATA}/svm_model
+                ${TEMP}/svm_model_test
+)
+
+ADD_TEST(utTvSvmTestNewVersionFileGenericModelTest ${UTILITIES_TESTS}
+--compare-ascii 0 ${BASELINE_FILES}/utTvsvm_model_image_generic_version_test
+                ${TEMP}/utTvsvm_model_image_generic_version_test
+                svmTest
+                ${INPUTDATA}/svm_model_image_generic_version
+                ${TEMP}/utTvsvm_model_image_generic_version_test
+)
+
+ADD_TEST(utTvSvmTestGenericModelTest ${UTILITIES_TESTS}
+--compare-ascii 0 ${INPUTDATA}/svm_model_image_generic_kernel
+                ${TEMP}/svm_model_image_generic_kernel_test
+                svmGenericKernelTest
+                ${INPUTDATA}/svm_model_image_generic_kernel
+                ${TEMP}/svm_model_image_generic_kernel_test
+)
+
+
+
 
 # -------       Fichiers sources CXX -----------------------------------
 SET(UtilitiesTests_SRCS
 ossimIntegrationTest.cxx
 ijBSplineScatteredDataPointSetToImageFilterTest.cxx
+svmGenericKernelFunctor.cxx
+svmTest.cxx
+svmGenericKernelTest.cxx
 )
 
 INCLUDE_DIRECTORIES("${OTBTesting_BINARY_DIR}")
 
 ADD_EXECUTABLE(otbUtilitiesTests otbUtilitiesTests.cxx ${UtilitiesTests_SRCS})
-TARGET_LINK_LIBRARIES(otbUtilitiesTests OTBIO OTBCommon gdal ITKIO ITKAlgorithms ITKStatistics ITKCommon ossim)
+TARGET_LINK_LIBRARIES(otbUtilitiesTests OTBIO OTBCommon gdal ITKIO ITKAlgorithms ITKStatistics ITKCommon ossim otbsvm)
 
 
 ENDIF( NOT OTB_DISABLE_CXX_TESTING )
