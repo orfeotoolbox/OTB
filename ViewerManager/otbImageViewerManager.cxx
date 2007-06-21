@@ -26,6 +26,11 @@ int main(int argc, char* argv[])
   ManagerType::Pointer manager = ManagerType::New();
   manager->Show();
 
+  for(int i = 1; i<argc;++i)
+    {
+      manager->OpenImage(argv[i]);
+      Fl::check();
+    }
   return Fl::run();
     } 
   catch( itk::ExceptionObject & err ) 
