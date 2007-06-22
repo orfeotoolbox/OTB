@@ -110,7 +110,7 @@ public:
 // templated over the 2 input image types, the output image type and
 // the functor used to perform the change detection operation.
 //
-// Inside the class only a few \code{typedefs} and the constructors
+// Inside the class only a few \code{typedef}s and the constructors
 // and destructors have to be declared.
 //
 // Software Guide : EndLatex
