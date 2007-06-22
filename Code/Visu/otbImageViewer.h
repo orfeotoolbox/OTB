@@ -149,6 +149,9 @@ class ITK_EXPORT ImageViewer
   /** Set the input image (Image version) */
   virtual void SetImage(SingleImageType * img);
   
+  /** Get the shrinked image if scroll is activated and else the input image */
+  virtual ImageType * GetShrinkedImage(void);
+
   /** Show the viewer (Update) */
   virtual void Show(void);
    /** Hide all Image View Windows */

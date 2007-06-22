@@ -431,6 +431,21 @@ typedef itk::ImageRegionConstIterator< ImageType >  InputIteratorType;
     m_InputImage = dynamic_cast<ImageType *>( img );
   } 
 
+   template <class TPixel>
+   typename ImageViewer<TPixel>
+   ::ImageType *
+   ImageViewer<TPixel>
+   ::GetShrinkedImage(void)
+   {
+     if(m_UseScroll)
+       {
+	 return m_Shrink->GetOutput();
+       }
+     else
+       {
+	 return m_InputImage;
+       }
+   }
   /// Set the image (Image version)
   template <class TPixel>
   void
