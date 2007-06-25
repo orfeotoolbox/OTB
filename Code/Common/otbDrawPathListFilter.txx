@@ -37,7 +37,7 @@ DrawPathListFilter<TInputImage,TInputPath,TOutputImage>
 {
   this->SetNumberOfRequiredInputs(2);
   this->SetNumberOfRequiredOutputs(1);
-  m_PathValue = static_cast<OutputImagePixelType>(255.0); 
+  m_PathValue = static_cast<OutputImagePixelType>(255); 
   m_UseInternalPathValue = false;
 }
 
@@ -74,7 +74,7 @@ DrawPathListFilter<TInputImage,TInputPath,TOutputImage>
   InputPathListConstPointerType pathListPtr = this->GetInputPath();
   outputPtr->SetRegions(inputPtr->GetLargestPossibleRegion());
   outputPtr->Allocate();
-  outputPtr->FillBuffer(0);
+  outputPtr->FillBuffer(static_cast<OutputImagePixelType>(0));
 
   // First, we copy input to output
   typedef itk::ImageRegionIterator<OutputImageType> OutputIteratorType;
