@@ -26,7 +26,7 @@
 #include "itkMetaDataObject.h"
 
 #include "otbImageBase.h"
-
+#include "otbImageKeywordlist.h"
 
 namespace otb
 {
@@ -286,6 +286,7 @@ ImageBase::PrintSelf(std::ostream& os, itk::Indent indent, const MetaDataDiction
   VectorType vvalue;
   double dvalue;
   OTB_GCP gcpvalue;
+  ImageKeywordlist ossimvalue;
   unsigned int i ;
   
   // Copy of the const metadata dictionary in a metadata dictionary to be used
@@ -331,9 +332,15 @@ ImageBase::PrintSelf(std::ostream& os, itk::Indent indent, const MetaDataDiction
            
            os << indent << "---> " << keys[itkey] << std::endl;
            gcpvalue.Print(os);
-           
            break;                            	
-        }
+		case MetaDataKey::TOSSIMKEYWORDLIST:
+		   itk::ExposeMetaData<ImageKeywordlist>(dict2, keys[itkey], ossimvalue);
+        
+		   os << indent << "---> " << keys[itkey] << std::endl;
+		   ossimvalue.Print(os);
+		   // ossimvalue.Print(os);
+		   break;
+		}
 
      }
   

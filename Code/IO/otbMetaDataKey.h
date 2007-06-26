@@ -68,12 +68,16 @@ public:
   static const std::string m_ColorEntryCountKey;
   static const std::string m_ColorEntryAsRGBKey;
 
+  static const std::string m_OSSIMKeywordlistKey;
+  static const std::string m_OSSIMKeywordlistDelimiterKey;
+
   enum  KeyType {
   	TSTRING,
   	TENTIER,
 	TDOUBLE,
 	TOTB_GCP,
-	TVECTOR
+	TVECTOR,
+	TOSSIMKEYWORDLIST,
   };
   /*
   typedef struct 

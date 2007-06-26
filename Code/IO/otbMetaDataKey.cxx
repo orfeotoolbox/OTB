@@ -51,6 +51,9 @@ const std::string MetaDataKey::m_ColorTableNameKey = "ColorTableName";
 const std::string MetaDataKey::m_ColorEntryCountKey = "ColorEntryCount";
 const std::string MetaDataKey::m_ColorEntryAsRGBKey = "ColorEntryAsRGB";
 
+const std::string MetaDataKey::m_OSSIMKeywordlistKey = "OSSIMKeywordlist";
+const std::string MetaDataKey::m_OSSIMKeywordlistDelimiterKey = "OSSIMKeywordlistDelimiter";
+
 /*const MetaDataKey::KeyTypeDef Types[] = 
   {
   	{MetaDataKey::m_DriverShortNameKey, 		MetaDataKey::TSTRING},
@@ -87,9 +90,11 @@ const MetaDataKey::KeyTypeDef Types[] =
 	MetaDataKey::KeyTypeDef(MetaDataKey::m_LowerRightCornerKey,    	MetaDataKey::TVECTOR),
 	MetaDataKey::KeyTypeDef(MetaDataKey::m_ColorTableNameKey,    	MetaDataKey::TSTRING),
 	MetaDataKey::KeyTypeDef(MetaDataKey::m_ColorEntryCountKey,   	MetaDataKey::TENTIER),
-	MetaDataKey::KeyTypeDef(MetaDataKey::m_ColorEntryAsRGBKey,    	MetaDataKey::TVECTOR)
-	
+	MetaDataKey::KeyTypeDef(MetaDataKey::m_ColorEntryAsRGBKey,    	MetaDataKey::TVECTOR),
+	MetaDataKey::KeyTypeDef(MetaDataKey::m_OSSIMKeywordlistKey,		MetaDataKey::TOSSIMKEYWORDLIST),
+	MetaDataKey::KeyTypeDef(MetaDataKey::m_OSSIMKeywordlistDelimiterKey,MetaDataKey::TSTRING)
   };
+  
   
 MetaDataKey::KeyType MetaDataKey::GetKeyType(std::string name)
 {

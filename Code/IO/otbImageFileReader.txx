@@ -24,10 +24,18 @@
 #include "itkImageRegion.h"
 #include "itkPixelTraits.h"
 #include "itkVectorImage.h"
+#include "itkMetaDataObject.h"
 
 #include "otbMacro.h"
 #include "otbSystem.h"
 #include "otbImageIOFactory.h"
+#include "otbMetaDataKey.h"
+#include "otbImageKeywordlist.h"
+
+#include "imaging/ossimImageHandlerRegistry.h"
+#include "imaging/ossimImageHandler.h"
+#include "init/ossimInit.h"
+#include "base/ossimKeywordlist.h"
 
 #include <itksys/SystemTools.hxx>
 #include <fstream>
@@ -366,6 +374,68 @@ ImageFileReader<TOutputImage>
   output->SetOrigin( origin );       // Set the image origin
   output->SetDirection( direction ); // Set the image direction cosines
 
+  // Trying to read ossim MetaData
+  
+  // Itinialize ossim environment
+  ossimImageHandler* handler = ossimImageHandlerRegistry::instance()->open(ossimFilename(this->m_FileName.c_str()));
+  
+
+  if (!handler)
+  {
+  	  otbMsgDebugMacro( <<"OSSIM Open Image FAILED ! ");
+  }
+
+  else
+  {
+	  ossimKeywordlist geom_kwl, tmp_kwl, tmp_kwl2;// = new ossimKeywordlist();
+  
+	  // Read OSSIM Keyword List
+	  bool hasMetaData = handler->getImageGeometry(geom_kwl);
+	  otbMsgDebugMacro( << " AVANT *geom_kwl : "<<geom_kwl<<std::endl);
+
+	  if (!hasMetaData)
+	  {
+	  	  otbMsgDebugMacro( <<"OSSIM MetaData not present ! ");
+	  }
+	  else
+	  {
+	  	  
+		  otbMsgDebugMacro( <<"Image keyword lists are :" << std::endl << geom_kwl);
+		  
+	      // Update otb Keywordlist
+		  ImageKeywordlist otb_kwl;
+		  otb_kwl.SetKeywordlist( geom_kwl );
+		  
+	  	  // Update itk MetaData Dictionnary
+//		  otbMsgDebugMacro( <<"Start update ITK Dictionnary ? ");
+		  
+		  otb_kwl.convertToOSSIMKeywordlist(tmp_kwl);
+
+		  itk::MetaDataDictionary& dico = this->m_ImageIO->GetMetaDataDictionary();
+  
+//		  otbMsgDebugMacro( <<"Before write ITK Dictionnary ? ");
+	  	  itk::EncapsulateMetaData< ImageKeywordlist >(dico,
+	  											 MetaDataKey::m_OSSIMKeywordlistKey,
+												 otb_kwl);
+												 
+//		  otbMsgDebugMacro( <<"After write ITK Dictionnary ? ");
+//		  itk::ExposeMetaData< ImageKeywordlist >(dico,
+//	  											 MetaDataKey::m_OSSIMKeywordlistKey,
+//												 otb_tmp);
+//		  otbMsgDebugMacro( <<"After read ITK Dictionnary ? ");
+		  
+//		  otb_tmp.convertToOSSIMKeywordlist(tmp_kwl2);
+//		  otbMsgDebugMacro( << " DEBUT THOMAS : Ossim key word list copy : "<<tmp_kwl2<<std::endl);
+
+		 // otbMsgDebugMacro( <<"Image keyword lists in dictionnary are :" << std::endl << geom_tmp);
+		  
+	  }
+	  // Free memory
+	  otbMsgDebugMacro( <<"OSSIM Free Memory ? ");
+	  delete handler;  		
+	  otbMsgDebugMacro( <<"OSSIM Free Memory OK ! ");
+  }
+  
   //Copy MetaDataDictionary from instantiated reader to output image.
   output->SetMetaDataDictionary(this->m_ImageIO->GetMetaDataDictionary());
   this->SetMetaDataDictionary(this->m_ImageIO->GetMetaDataDictionary());
