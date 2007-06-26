@@ -40,8 +40,8 @@ TARGET_LINK_LIBRARIES(ImageRegistration2 OTBCommon OTBIO ITKNumerics ITKIO)
 # TARGET_LINK_LIBRARIES(ImageRegistration9 ITKNumerics ITKIO)
 
 
-#   ADD_EXECUTABLE(ImageRegistration5 ImageRegistration5.cxx )
-#   TARGET_LINK_LIBRARIES(ImageRegistration5 ITKNumerics ITKIO)
+ADD_EXECUTABLE(ImageRegistration5 ImageRegistration5.cxx )
+TARGET_LINK_LIBRARIES(ImageRegistration5 OTBCommon OTBIO ITKNumerics ITKIO)
 
 #   ADD_EXECUTABLE(ImageRegistration10 ImageRegistration10.cxx )
 #   TARGET_LINK_LIBRARIES(ImageRegistration10 ITKNumerics ITKIO)
