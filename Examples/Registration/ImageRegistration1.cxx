@@ -530,12 +530,12 @@ int main( int argc, char *argv[] )
   //  \code{Examples/Data}:
   //  
   //  \begin{itemize}
-  //  \item \code{BrainProtonDensitySliceBorder20.png} 
-  //  \item \code{BrainProtonDensitySliceShifted13x17y.png}
+  //  \item \code{QB\_Suburb.png} 
+  //  \item \code{QB\_Suburb13x17y.png}
   //  \end{itemize}
   //
   //  The second image is the result of intentionally translating the first
-  //  image by $(13,17)$ millimeters. Both images have unit-spacing and
+  //  image by $(13,17)$ pixels. Both images have unit-spacing and
   //  are shown in Figure \ref{fig:FixedMovingImageRegistration1}. The
   //  registration takes 18 iterations and the resulting transform parameters are:
   //

@@ -22,12 +22,12 @@
 
 
 //  Software Guide : BeginCommandLineArgs
-//    INPUTS: {RamsesRoiSmall.png}
-//    INPUTS: {ADS40RoiSmall.png}
-//    OUTPUTS: {ImageRegistration2Output.png}
-//    OUTPUTS: {ImageRegistration2CheckerboardBefore.png}
-//    OUTPUTS: {ImageRegistration2CheckerboardAfter.png}
+//    INPUTS: {RamsesROISmall.png}, {ADS40RoiSmall.png}
+//    OUTPUTS: {ImageRegistration2Output.png}, {ImageRegistration2CheckerboardBefore.png}, {ImageRegistration2CheckerboardAfter.png}
 //  Software Guide : EndCommandLineArgs
+
+
+
 
 // Software Guide : BeginLatex
 //
@@ -474,13 +474,13 @@ int main( int argc, char *argv[] )
   //  \code{Examples/Data}:
   //  
   //  \begin{itemize}
-  //  \item \code{RamsesRoiSmall.png} 
+  //  \item \code{RamsesROISmall.png} 
   //  \item \code{ADS40RoiSmall.png}
   //  \end{itemize}
   //
   //  \begin{figure}
   //  \center
-  //  \includegraphics[width=0.44\textwidth]{RamsesRoiSmall.eps}
+  //  \includegraphics[width=0.44\textwidth]{RamsesROISmall.eps}
   //  \includegraphics[width=0.44\textwidth]{ADS40RoiSmall.eps}
   //  \itkcaption[Multi-Modality Registration Inputs]{A SAR image
   //  (fixed image) and an aerial
@@ -569,7 +569,7 @@ int main( int argc, char *argv[] )
     }
 
 
-  // oftware Guide : BeginLatexS 
+  // Software Guide : BeginLatex 
   // 
   // \begin{figure}
   // \center
@@ -589,95 +589,6 @@ int main( int argc, char *argv[] )
   //
   //  Software Guide : EndLatex 
 
-  //  Software Guide : BeginLatex
-  //  
-  // \begin{figure}
-  // \center
-  // \includegraphics[width=0.44\textwidth]{ImageRegistration2TraceTranslations.eps}
-  // \includegraphics[width=0.44\textwidth]{ImageRegistration2TraceTranslations2.eps}
-  // \itkcaption[Multi-Modality Registration plot of translations]{Sequence of
-  // translations during the registration process. On the left are iterations 0 to
-  // 200. On the right are iterations 150 to 200.}
-  // \label{fig:ImageRegistration2TraceTranslations}
-  // \end{figure}
-  //
-  //  Figure \ref{fig:ImageRegistration2TraceTranslations} shows the sequence
-  //  of translations followed by the optimizer as it searched the parameter
-  //  space. The left plot shows iterations $0$ to $200$ while the right
-  //  figure zooms into iterations $150$ to $200$. The area covered by the
-  //  right figure has been highlighted by a rectangle in the left image.  It
-  //  can be seen that after a certain number of iterations the optimizer
-  //  oscillates within one or two pixels of the true solution.  At this
-  //  point it is clear that more iterations will not help. Instead it is
-  //  time to modify some of the parameters of the registration process, for
-  //  example, reducing the learning rate of the optimizer and continuing the
-  //  registration so that smaller steps are taken.
-  //
-  // \begin{figure}
-  // \center
-  // \includegraphics[width=0.44\textwidth]{ImageRegistration2TraceMetric.eps}
-  // \includegraphics[width=0.44\textwidth]{ImageRegistration2TraceMetric2.eps}
-  // \itkcaption[Multi-Modality Registration plot of metrics]{The sequence of metric
-  // values produced during the registration process. On the left are
-  // iterations 0 to 200. On the right are iterations 150 to 200.}
-  // \label{fig:ImageRegistration2TraceMetric}
-  // \end{figure}
-  //
-  //  Figure \ref{fig:ImageRegistration2TraceMetric} shows the sequence of
-  //  metric values computed as the optimizer searched the parameter space.
-  //  The left plot shows values when iterations are extended from $0$ to
-  //  $200$ while the right figure zooms into iterations $150$ to $200$.  The
-  //  fluctuations in the metric value are due to the stochastic nature in
-  //  which the measure is computed. At each call of \code{GetValue()}, two
-  //  new sets of intensity samples are randomly taken from the image to
-  //  compute the density and entropy estimates.  Even with the fluctuations,
-  //  the measure initially increases overall with the number of iterations.
-  //  After about 150 iterations, the metric value merely oscillates without further
-  //  noticeable convergence.  The trace plots in Figure
-  //  \ref{fig:ImageRegistration2TraceMetric} highlight one of the
-  //  difficulties associated with this particular metric: the stochastic
-  //  oscillations make it difficult to determine convergence and limit the
-  //  use of more sophisticated optimization methods. As explained above,
-  //  the reduction of the learning rate as the registration progresses is
-  //  very important in order to get precise results.
-  //
-  //  This example shows the importance of tracking the evolution of the
-  //  registration method in order to obtain insight into the characteristics
-  //  of the particular problem at hand and the components being used.  The
-  //  behavior revealed by these plots usually helps to identify possible
-  //  improvements in the setup of the registration parameters.
-  //
-  //  The plots in Figures~\ref{fig:ImageRegistration2TraceTranslations}
-  //  and~\ref{fig:ImageRegistration2TraceMetric} were generated using
-  //  Gnuplot\footnote{\url{http://www.gnuplot.info/}}.  The scripts used for
-  //  this purpose are available in the \code{InsightDocuments} CVS module
-  //  under the directory
-  //
-  //  ~\code{InsightDocuments/SoftwareGuide/Art}
-  //
-  //  Data for the plots was taken directly from the output that the
-  //  Command/Observer in this example prints out to the console. The output
-  //  was processed with the UNIX editor
-  //  \code{sed}\footnote{\url{http://www.gnu.org/software/sed/sed.html}} in
-  //  order to remove commas and brackets that were confusing for Gnuplot's
-  //  parser. Both the shell script for running \code{sed} and for running
-  //  {Gnuplot} are available in the directory indicated above. You may find
-  //  useful to run them in order to verify the results presented here, and to
-  //  eventually modify them for profiling your own registrations.
-  //
-  //  \index{Open Science}
-  //
-  //  Open Science is not just an abstract concept. Open Science is something
-  //  to be practiced every day with the simple gesture of sharing information
-  //  with your peers, and by providing all the tools that they need for
-  //  replicating the results that you are reporting. In Open Science, the only
-  //  bad results are those that can not be
-  //  replicated\footnote{\url{http://science.creativecommons.org/}}. Science
-  //  is dead when people blindly trust authorities~\footnote{For example:
-  //  Reviewers of Scientific Journals.} instead of verifying their statements
-  //  by performing their own experiments ~\cite{Popper1971,Popper2002}.
-  //
-  // Software uid Ge : ndLateEx 
 
   return 0;
 }
