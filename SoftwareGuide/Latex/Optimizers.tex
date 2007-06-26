@@ -1,0 +1,162 @@
+
+\index{itk::Optimizer}
+\index{itk::Single\-Valued\-NonLinear\-Optimizer}
+
+
+\begin{figure}
+\center
+\includegraphics[width=\textheight,angle=90]{OptimizersHierarchy.eps}
+\itkcaption[Class diagram of the Optimizer hierarchy]{Class diagram of the
+optimizers hierarchy.}
+\label{fig:OptimizersHierarchy}
+\end{figure}
+
+Optimization algorithms are encapsulated as \doxygen{itk}{Optimizer} objects
+within OTB. Optimizers are generic and can be used for applications other than
+registration.  Within the registration framework, subclasses of
+\doxygen{itk}{SingleValuedNonLinearOptimizer} are used to optimize the metric
+criterion with respect to the transform parameters.
+
+\index{itk::Optimizer!SetInitialPosition()}
+\index{itk::Optimizer!StartOptimization()}
+\index{itk::Optimizer!GetCurrentPosition()}
+
+The basic input to an optimizer is a cost function object. In the context
+of registration, \doxygen{itk}{ImageToImageMetric} classes provides this functionality.
+The initial parameters are set using \code{SetInitialPosition()} and
+the optimization algorithm is invoked by \code{StartOptimization()}.
+Once the optimization has finished, the final parameters can be obtained
+using \code{GetCurrentPosition()}.
+
+\index{itk::Optimizer!SetScales()}
+Some optimizers also allow rescaling of their individual parameters. This is
+convenient for normalizing parameters spaces where some parameters have
+different dynamic ranges. For example, the first parameter of
+\doxygen{itk}{Euler2DTransform} represents an angle while the last two parameters
+represent translations. A unit change in angle has a much greater impact on an
+image than a unit change in translation. This difference in scale appears as
+long narrow valleys in the search space making the optimization problem more
+difficult. Rescaling the translation parameters can help to fix this problem.
+Scales are represented as an \doxygen{itk}{Array} of doubles and set defined using
+\code{SetScales()}.
+
+There are two main types of optimizers in OTB. In the first type we find
+optimizers that are suitable for dealing with cost functions that return a
+single value. These are indeed the most common type of cost functions, and are
+known as \emph{Single Valued} functions, therefore the corresponding optimizers
+are known as \emph{Single Valued} optimizers. The second type of optimizers are
+those suitable for managing cost functions that return multiple values at each
+evaluation. These cost functions are common in model-fitting problems and are
+known as \emph{Multi Valued} or \emph{Multivariate} functions.  The
+corresponding optimizers are therefore called \emph{MultipleValued} optimizers
+in OTB.
+
+The \doxygen{itk}{SingleValuedNonLinearOptimizer} is the base class for the first
+type of optimizers while the \doxygen{itk}{MultipleValuedNonLinearOptimizer} is the
+base class for the second type of optimizers.
+
+The types of single valued optimizer currently available in OTB are:
+
+\index{itk::Amoeba\-Optimizer}
+\index{itk::Conjugate\-Gradient\-Optimizer}
+\index{itk::Gradient\-Descent\-Optimizer}
+\index{itk::Quaternion\-Rigid\-Transform\-Gradient\-Descent\-Optimizer}
+\index{itk::LBFGS\-Optimizer}
+\index{itk::LBFGSB\-Optimizer}
+\index{itk::One\-Plus\-One\-Evolutionary\-Optimizer}
+\index{itk::Powell\-Optimizer}
+\index{itk::Regular\-Step\-Gradient\-Descent\-Optimizer}
+\index{itk::SPSA\-Optimizer}
+\index{itk::Versor\-Transform\-Optimizer}
+\index{itk::Versor\-Rigid3D\-Transform\-Optimizer}
+\index{itk::Levenberg\-Marquardt\-Optimizer}
+
+\begin{itemize}
+
+\item \textbf{Amoeba}: Nelder-Meade downhill simplex.  This optimizer is
+actually implemented in the \code{vxl/vnl} numerics toolkit.  The ITK class
+\doxygen{itk}{AmoebaOptimizer} is merely an adaptor class.
+
+\item \textbf{Conjugate Gradient}: Fletcher-Reeves form 
+of the conjugate gradient with or without preconditioning
+(\doxygen{itk}{ConjugateGradientOptimizer}). It is also an adaptor to an optimizer in
+\code{vnl}.
+
+\item \textbf{Gradient Descent}: Advances parameters in the direction of the
+gradient where the step size is governed by a learning rate
+(\doxygen{itk}{GradientDescentOptimizer}). 
+
+\item \textbf{Quaternion Rigid Transform Gradient Descent}: A specialized
+version of GradientDescentOptimizer for QuaternionRigidTransform parameters,
+where the parameters representing the quaternion are normalized to a magnitude
+of one at each iteration to represent a pure rotation
+(\doxygen{itk}{QuaternionRigidTransformGradientDescent}).
+
+\item \textbf{LBFGS}: Limited memory Broyden, Fletcher, Goldfarb
+and Shannon minimization. It is an adaptor to an optimizer in \code{vnl}
+(\doxygen{itk}{LBFGSOptimizer}).
+
+\item \textbf{LBFGSB}: A modified version of the LBFGS optimizer that allows to
+specify bounds for the parameters in the search space.  It is an adaptor to an
+optimizer in \code{netlib}. Details on this optimizer can be found
+in~\cite{Byrd1995,Zhu1997} (\doxygen{itk}{LBFGSBOptimizer}).
+
+\item \textbf{One Plus One Evolutionary}: Strategy that simulates the
+biological evolution of a set of samples in the search space (\doxygen{itk}{OnePlusOneEvolutionaryOptimizer.}). Details on this optimizer can be
+found in~\cite{Styner2000}.
+
+\item \textbf{Regular Step Gradient Descent}: Advances parameters in the
+direction of the gradient where a bipartition scheme is used to compute
+the step size (\doxygen{itk}{RegularStepGradientDescentOptimizer}). 
+
+\item \textbf{Powell Optimizer}: Powell optimization method.  For an
+N-dimensional parameter space, each iteration minimizes(maximizes) the function
+in N (initially orthogonal) directions. This optimizer is described
+in~\cite{Press1992}.  (\doxygen{itk}{PowellOptimizer}).
+
+\item \textbf{SPSA Optimizer}: Simultaneous Perturbation Stochastic
+Approximation Method. This optimizer is described in
+\url{http://www.jhuapl.edu/SPSA} and in~\cite{Spall1998}.
+(\doxygen{itk}{SPSAOptimizer}). 
+
+\item \textbf{Versor Transform Optimizer}: A specialized version of the 
+RegularStepGradientDescentOptimizer for VersorTransform
+parameters, where the current rotation is composed with the gradient rotation
+to produce the new rotation versor. It follows the definition of versor
+gradients defined by Hamilton~\cite{Hamilton1866}
+(\doxygen{itk}{VersorTransformOptimizer}).
+
+\item \textbf{Versor Rigid3D Transform Optimizer}: A specialized version of the
+RegularStepGradientDescentOptimizer for VersorRigid3DTransform parameters,
+where the current rotation is composed with the gradient rotation to produce
+the new rotation versor. The translational part of the transform parameters are
+updated as usually done in a vector space.
+(\doxygen{itk}{VersorRigid3DTransformOptimizer}).
+
+
+\end{itemize}
+
+A parallel hierarchy exists for optimizing multiple-valued cost functions. The
+base optimizer in this branch of the hierarchy is the
+\doxygen{itk}{MultipleValuedNonLinearOptimizer} whose only current derived class
+is:
+
+\begin{itemize}
+
+\item \textbf{Levenberg Marquardt}: Non-linear least squares minimization.
+Adapted to an optimizer in \code{vnl} (\doxygen{itk}{LevenbergMarquardtOptimizer}).
+This optimizer is described in~\cite{Press1992}.
+
+\end{itemize}
+
+
+Figure \ref{fig:OptimizersHierarchy} illustrates the full class hierarchy of
+optimizers in OTB. Optimizers in the lower right corner are adaptor classes
+to optimizers existing in the \code{vxl/vnl} numerics toolkit. The optimizers
+interact with the \doxygen{itk}{CostFunction} class. In the registration framework
+this cost function is reimplemented in the form of ImageToImageMetric.
+
+
+
+
+
