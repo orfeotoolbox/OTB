@@ -20,6 +20,9 @@ INCLUDE_REGULAR_EXPRESSION("^.*$")
 ADD_EXECUTABLE(ImageRegistration1 ImageRegistration1.cxx )
 TARGET_LINK_LIBRARIES(ImageRegistration1 OTBCommon OTBIO ITKNumerics ITKIO)
 
+ADD_EXECUTABLE(ImageRegistration2 ImageRegistration2.cxx )
+TARGET_LINK_LIBRARIES(ImageRegistration2 OTBCommon OTBIO ITKNumerics ITKIO)
+
 
 # ADD_EXECUTABLE(ImageRegistration3 ImageRegistration3.cxx )
 # TARGET_LINK_LIBRARIES(ImageRegistration3 ITKNumerics ITKIO)
