@@ -69,118 +69,115 @@ into the physical space of the moving image.}
 \end{figure}
 
 
-%% This section presents a discussion on the two most common difficulties that
-%% users encounter when they start using the ITK registration framework. They are,
-%% in order of difficulty
+This section presents a discussion on the two most common difficulties that
+users encounter when they start using the ITK registration framework. They are,
+in order of difficulty
 
-%% \begin{itemize}
-%% \item The direction of the Transform mapping
-%% \item The fact that registration is done in physical coordinates
-%% \end{itemize}
+\begin{itemize}
+\item The direction of the Transform mapping
+\item The fact that registration is done in physical coordinates
+\end{itemize}
 
-%% Probably the reason why these two topics tend to create confusion is that they
-%% are implemented in different ways in other systems and therefore users tend to
-%% have different expectations regarding how things should work in ITK. The
-%% situation is further complicated by the fact that most people describe image
-%% operations as if they were manually performed in a picture in paper.
+Probably the reason why these two topics tend to create confusion is that they
+are implemented in different ways in other systems and therefore users tend to
+have different expectations regarding how things should work in OTB. The
+situation is further complicated by the fact that most people describe image
+operations as if they were manually performed in a picture in paper.
 
-%% \subsection{Direction of the Transform Mapping}
-%% \label{sec:DirectionOfTheTransformMapping}
+\subsection{Direction of the Transform Mapping}
+\label{sec:DirectionOfTheTransformMapping}
 
-%% The Transform that is optimized in the ITK registration framework is the one
-%% that maps points from the physical space of the fixed image into the physical
-%% space of the moving image. This is illustrated in
-%% Figure~\ref{fig:ImageRegistrationCoordinateSystemsDiagram}. This implies that
-%% the Transform will accept as input points from the fixed image and it will
-%% compute the coordinates of the analogous points in the moving image. What tends
-%% to create confusion is the fact that when the Transform shifts a point on the
-%% \textbf{positive} X direction, the visual effect of this mapping, once the
-%% moving image is resampled, is equivalent to {\em manually shifting} the moving
-%% image along the \textbf{negative} X direction. In the same way, when the
-%% Transform applies a \textbf{clock-wise} rotation to the fixed image points, the
-%% visual effect of this mapping once the moving image has been resampled is
-%% equivalent to {\em manually rotating} the moving image
-%% \textbf{counter-clock-wise}. 
+The Transform that is optimized in the ITK registration framework is the one
+that maps points from the physical space of the fixed image into the physical
+space of the moving image. This is illustrated in
+Figure~\ref{fig:ImageRegistrationCoordinateSystemsDiagram}. This implies that
+the Transform will accept as input points from the fixed image and it will
+compute the coordinates of the analogous points in the moving image. What tends
+to create confusion is the fact that when the Transform shifts a point on the
+\textbf{positive} X direction, the visual effect of this mapping, once the
+moving image is resampled, is equivalent to {\em manually shifting} the moving
+image along the \textbf{negative} X direction. In the same way, when the
+Transform applies a \textbf{clock-wise} rotation to the fixed image points, the
+visual effect of this mapping once the moving image has been resampled is
+equivalent to {\em manually rotating} the moving image
+\textbf{counter-clock-wise}. 
 
-%% The reason why this direction of mapping has been chosen for the ITK
-%% implementation of the registration framework is that this is the direction that
-%% better fits the fact that the moving image is expected to be resampled using
-%% the grid of the fixed image. The nature of the resampling process is such that
-%% an algorithm must go through every pixel of the {\em fixed} image and compute
-%% the intensity that should be assigned to this pixel from the mapping of the
-%% {\em moving} image. This computation involves taking the integral coordinates
-%% of the pixel in the image grid, usually called the ``(i,j)'' coordinates,
-%% mapping them into the physical space of the fixed image (transform \textbf{T1}
-%% in Figure~\ref{fig:ImageRegistrationCoordinateSystemsDiagram}), mapping those
-%% physical coordinates into the physical space of the moving image (Transform to
-%% be optimized), then mapping the physical coordinates of the moving image in to
-%% the integral coordinates of the discrete grid of the moving image (transform
-%% \textbf{T2} in the figure), where the value of the pixel intensity will be
-%% computed by interpolation. 
+The reason why this direction of mapping has been chosen for the ITK
+implementation of the registration framework is that this is the direction that
+better fits the fact that the moving image is expected to be resampled using
+the grid of the fixed image. The nature of the resampling process is such that
+an algorithm must go through every pixel of the {\em fixed} image and compute
+the intensity that should be assigned to this pixel from the mapping of the
+{\em moving} image. This computation involves taking the integral coordinates
+of the pixel in the image grid, usually called the ``(i,j)'' coordinates,
+mapping them into the physical space of the fixed image (transform \textbf{T1}
+in Figure~\ref{fig:ImageRegistrationCoordinateSystemsDiagram}), mapping those
+physical coordinates into the physical space of the moving image (Transform to
+be optimized), then mapping the physical coordinates of the moving image in to
+the integral coordinates of the discrete grid of the moving image (transform
+\textbf{T2} in the figure), where the value of the pixel intensity will be
+computed by interpolation. 
 
-%% If we have used the Transform that maps coordinates from the moving image
-%% physical space into the fixed image physical space, then the resampling process
-%% could not guarantee that every pixel in the grid of the fixed image was going
-%% to receive one and only one value. In other words, the resampling will have
-%% resulted in an image with holes and with redundant or overlapped pixel values.
+If we have used the Transform that maps coordinates from the moving image
+physical space into the fixed image physical space, then the resampling process
+could not guarantee that every pixel in the grid of the fixed image was going
+to receive one and only one value. In other words, the resampling will have
+resulted in an image with holes and with redundant or overlapped pixel values.
 
-%% As you have seen in the previous examples, and you will corroborate in the
-%% remaining examples in this chapter, the Transform computed by the registration
-%% framework is the Transform that can be used directly in the resampling filter
-%% in order to map the moving image into the discrete grid of the fixed image.
+As you have seen in the previous examples, and you will corroborate in the
+remaining examples in this chapter, the Transform computed by the registration
+framework is the Transform that can be used directly in the resampling filter
+in order to map the moving image into the discrete grid of the fixed image.
 
-%% There are exceptional cases in which the transform that you want is actually
-%% the inverse transform of the one computed by the ITK registration framework.
-%% Only in those cases you may have to recur to invoking the \code{GetInverse()}
-%% method that most transform offer.  Make sure that before you consider following
-%% that dark path, you interact with the examples of resampling illustrated in
-%% section~\ref{sec:GeometricalTransformationFilters} in order to get familiar
-%% with the correct interpretation of the transforms.
+There are exceptional cases in which the transform that you want is actually
+the inverse transform of the one computed by the ITK registration framework.
+Only in those cases you may have to recur to invoking the \code{GetInverse()}
+method that most transforms offer. Make sure that before you consider following
+that dark path, you interact with the examples of resampling illustrated in
+section~\ref{sec:GeometricalTransformationFilters} in order to get familiar
+with the correct interpretation of the transforms.
 
 
-%% \subsection{Registration is done in physical space}
-%% \label{sec:RegistrationIsDoneInPhysicalSpace}
+\subsection{Registration is done in physical space}
+\label{sec:RegistrationIsDoneInPhysicalSpace}
 
-%% The second common difficulty that users encounter with the ITK registration
-%% framework is related to the fact that ITK performs registration in the context
-%% of physical space and not in the discrete space of the image grid.
-%% Figure~\ref{fig:ImageRegistrationCoordinateSystemsDiagram} show this concept by
-%% crossing the transform that goes between the two image grids. One important
-%% consequence of this fact is that having the correct image origin and image
-%% pixel size is fundamental for the success of the registration process in ITK.
-%% Users must make sure that they provide correct values for the origin and
-%% spacing of both the fixed and moving images.
+The second common difficulty that users encounter with the ITK registration
+framework is related to the fact that ITK performs registration in the context
+of physical space and not in the discrete space of the image grid.
+Figure~\ref{fig:ImageRegistrationCoordinateSystemsDiagram} show this concept by
+crossing the transform that goes between the two image grids. One important
+consequence of this fact is that having the correct image origin and image
+pixel size is fundamental for the success of the registration process in ITK.
+Users must make sure that they provide correct values for the origin and
+spacing of both the fixed and moving images.
 
-%% A typical case that helps to understand this issue, is to consider the
-%% registration of two images where one has a pixel size different from the other.
-%% For example, a PET\footnote{Positron Emission Tomography} image and a
-%% CT\footnote{Computer Tomography in X-rays} image. Typically a CT image will
-%% have a pixel size in the order of 1 millimeter, while a PET image will have a
-%% pixel size in the order of 5 millimeters to 1 centimeter. Therefore, the CT
-%% will need about 500 pixels in order to cover the extent across a human brain, while
-%% the PET image will only have about 50 pixels for covering the same physical
-%% extent of a human brain. 
+A typical case that helps to understand this issue, is to consider the
+registration of two images where one has a pixel size different from the other.
+For example, a SPOt 5 image and a
+QuickBird image. Typically a Quickbird image will
+have a pixel size in the order of 0.6 m, while a SPOT 5 image will have a
+pixel size of 2.5 m.
 
-%% A user performing registration between a PET image and a CT image may be
-%% naively expecting that because the PET image has less pixels, a {\em scaling}
-%% factor is required in the Transform in order to map this image into the CT
-%% image. At that point, this person is attempting to interpret the registration
-%% process directly between the two image grids, or in {\em pixel space}. What ITK
-%% will do in this case is to take into account the pixel size that the user has
-%% provided and it will use that pixel size in order to compute a scaling factor
-%% for Transforms {\em T1} and {\em T2} in
-%% Figure~\ref{fig:ImageRegistrationCoordinateSystemsDiagram}. Since these two
-%% transforms take care of the required scaling factor, the spatial Transform to
-%% be computed during the registration process does not need to be concerned about
-%% such scaling. The transform that ITK is computing is the one that will
-%% physically map the brain from the moving image into the brain of the fixed
-%% image.
+A user performing registration between a SPOT 5 image and a Quickbird image may be
+naively expecting that because the SPOT 5 image has less pixels, a {\em scaling}
+factor is required in the Transform in order to map this image into the Quickbird
+image. At that point, this person is attempting to interpret the registration
+process directly between the two image grids, or in {\em pixel space}. What ITK
+will do in this case is to take into account the pixel size that the user has
+provided and it will use that pixel size in order to compute a scaling factor
+for Transforms {\em T1} and {\em T2} in
+Figure~\ref{fig:ImageRegistrationCoordinateSystemsDiagram}. Since these two
+transforms take care of the required scaling factor, the spatial Transform to
+be computed during the registration process does not need to be concerned about
+such scaling. The transform that ITK is computing is the one that will
+physically map the landscape the moving image into the landscape of the fixed
+image.
 
-%% In order to better understand this concepts, it is very useful to draw sketches
-%% of the fixed and moving image {\em at scale} in the same physical coordinate
-%% system. That is the geometrical configuration that the ITK registration
-%% framework uses as context. Keeping this in mind helps a lot for interpreting
-%% correctly the results of a registration process performed with ITK.
+In order to better understand this concepts, it is very useful to draw sketches
+of the fixed and moving image {\em at scale} in the same physical coordinate
+system. That is the geometrical configuration that the ITK registration
+framework uses as context. Keeping this in mind helps a lot for interpreting
+correctly the results of a registration process performed with ITK.
 
 %% \section{Monitoring Registration}
 %% \label{sec:MonitoringImageRegistration}
@@ -204,7 +201,7 @@ overcoming the difficulties of multi-modality registration.
 The concept of Mutual Information is derived from Information Theory and its
 application to image registration has been proposed in different forms by
 different groups \cite{Collignon1995,Maes97,Viola1997}, a more detailed review
-can be found in \cite{Hajnal2001,Pluim2003}. The OTB, through ITK, currently
+can be found in \cite{ingtgrs04}. The OTB, through ITK, currently
 provides five different implementations of Mutual Information metrics (see
 section \ref{sec:Metrics} for details). The following example illustrates the
 practical use of some of these metrics.
