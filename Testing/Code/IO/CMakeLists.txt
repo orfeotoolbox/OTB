@@ -1060,7 +1060,19 @@ ADD_TEST(ioTvSpatialObjectDXFReader ${IO_TESTS}
 	 TOIT
 	 50
 )
-	 
+
+# -------     Test pour la lecture des métadonnées OSSIM  ------------------------
+
+# ---  Quickbird Metadata ---
+ADD_TEST(ioTuOSSIMImageMetaDataReader ${IO_TESTS} 
+   --compare-ascii ${EPS}   ${BASELINE_FILES}/prTuOSSIMImageMetaDataReader.txt
+                     ${TEMP}/prTuOSSIMImageMetaDataReader.txt
+         otbOSSIMImageMetaDataReaderTest
+         ${IMAGEDATA}/TOULOUSE/QuickBird/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF
+		 ${TEMP}/prTuOSSIMImageMetaDataReader.txt)
+
+ 
+ 
 
 #----------------------------------------------------------------------------------
 # Exemples de tests sur les grosses images
@@ -1123,6 +1135,7 @@ otbStreamingImageFileWriterTestCalculateNumberOfDivisions.cxx
 otbDXFToSpatialObjectGroupFilterNew.cxx
 otbSpatialObjectDXFReaderNew.cxx
 otbSpatialObjectDXFReader.cxx
+otbOSSIMImageMetaDataReaderTest.cxx
 )
 
 INCLUDE_DIRECTORIES("${OTBTesting_BINARY_DIR}")
