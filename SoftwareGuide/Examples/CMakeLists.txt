@@ -202,6 +202,8 @@ SET( OTB_EXAMPLES_SRCS
   ${OTB_SOURCE_DIR}/Examples/Filtering/MathematicalMorphologyGrayscaleFilters.cxx
   ${OTB_SOURCE_DIR}/Examples/BasicFilters/LeeImageFilter.cxx
   ${OTB_SOURCE_DIR}/Examples/Registration/ImageRegistration1.cxx
+  ${OTB_SOURCE_DIR}/Examples/Registration/ImageRegistration2.cxx
+  ${OTB_SOURCE_DIR}/Examples/Registration/ImageRegistration5.cxx
   ${OTB_SOURCE_DIR}/Examples/DisparityMap/SimpleDisparityMapEstimationExample.cxx
   ${OTB_SOURCE_DIR}/Examples/FeatureExtraction/AlignmentsExample.cxx
   ${OTB_SOURCE_DIR}/Examples/FeatureExtraction/RatioLineDetectorExample.cxx

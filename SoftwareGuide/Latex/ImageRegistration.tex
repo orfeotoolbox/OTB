@@ -190,30 +190,28 @@ into the physical space of the moving image.}
 
 
 
-%% \section{Multi-Modality Registration}
-%% \label{sec:MultiModalityRegistration}
+\section{Multi-Modality Registration}
+\label{sec:MultiModalityRegistration}
 
-%% Some of the most challenging cases of image registration arise when images of
-%% different modalities are involved. In such cases, metrics based on direct
-%% comparison of gray levels are not applicable. It has been extensively shown
-%% that metrics based on the evaluation of mutual information are well suited for
-%% overcoming the difficulties of multi-modality registration.
+Some of the most challenging cases of image registration arise when images of
+different modalities are involved. In such cases, metrics based on direct
+comparison of gray levels are not applicable. It has been extensively shown
+that metrics based on the evaluation of mutual information are well suited for
+overcoming the difficulties of multi-modality registration.
 
-%% \index{itk::Image\-Registration\-Method!Multi-Modality}
+\index{itk::Image\-Registration\-Method!Multi-Modality}
 
-%% The concept of Mutual Information is derived from Information Theory and its
-%% application to image registration has been proposed in different forms by
-%% different groups \cite{Collignon1995,Maes97,Viola1997}, a more detailed review
-%% can be found in \cite{Hajnal2001,Pluim2003}. The Insight Toolkit currently
-%% provides five different implementations of Mutual Information metrics (see
-%% section \ref{sec:Metrics} for details). The following examples illustrate the
-%% practical use of some of these metrics.
+The concept of Mutual Information is derived from Information Theory and its
+application to image registration has been proposed in different forms by
+different groups \cite{Collignon1995,Maes97,Viola1997}, a more detailed review
+can be found in \cite{Hajnal2001,Pluim2003}. The OTB, through ITK, currently
+provides five different implementations of Mutual Information metrics (see
+section \ref{sec:Metrics} for details). The following example illustrates the
+practical use of some of these metrics.
 
-%% \subsection{Viola-Wells Mutual Information}
-%% \label{sec:MultiModalityRegistrationViolaWells}
-%% \ifitkFullVersion
-%% \input{ImageRegistration2.tex}
-%% \fi
+\subsection{Viola-Wells Mutual Information}
+\label{sec:MultiModalityRegistrationViolaWells}
+\input{ImageRegistration2.tex}
 
 %% \subsection{Mattes Mutual Information}
 %% \label{sec:MultiModalityRegistrationMattes}
@@ -229,16 +227,16 @@ into the physical space of the moving image.}
 %% \fi
 
 
-%% \section{ Centered Transforms }
+\section{ Centered Transforms }
 
-%% The ITK image coordinate origin is typically located in one of the image
-%% corners (see section ~\ref{sec:DefiningImageOriginAndSpacing} for details).
-%% This results in counter-intuitive transform behavior when rotations and scaling
-%% are involved. Users tend to assume that rotations and scaling are performed
-%% around a fixed point at the center of the image.  In order to compensate for
-%% this difference in natural interpretation, the concept of \emph{centered}
-%% transforms have been introduced into the toolkit. The following sections
-%% describe the main characteristics of such transforms.
+The OTB/ITK image coordinate origin is typically located in one of the image
+corners (see section ~\ref{sec:DefiningImageOriginAndSpacing} for details).
+This results in counter-intuitive transform behavior when rotations and scaling
+are involved. Users tend to assume that rotations and scaling are performed
+around a fixed point at the center of the image.  In order to compensate for
+this difference in natural interpretation, the concept of \emph{centered}
+transforms have been introduced into the toolkit. The following sections
+describe the main characteristics of such transforms.
 
 %% The introduction of the centered transforms in the Insight Toolkit reflects the
 %% dynamic nature of a software library when it evolves in harmony with the
@@ -268,11 +266,11 @@ into the physical space of the moving image.}
 %% that flourishes when Evolution is in action~\cite{Darwin1999}.
 
 
-%% \subsection{Rigid Registration in 2D}
-%% \label{sec:RigidRegistrationIn2D}
-%% \ifitkFullVersion
-%% \input{ImageRegistration5.tex}
-%% \fi
+\subsection{Rigid Registration in 2D}
+\label{sec:RigidRegistrationIn2D}
+\ifitkFullVersion
+\input{ImageRegistration5.tex}
+\fi
 
 %% \subsection{Initializing with Image Moments}
 %% \label{sec:InitializingRegistrationWithMoments}
