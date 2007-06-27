@@ -29,9 +29,9 @@
 // In this example, we present OTB's implementation of SEM, through the class 
 // \doxygen{otb}{SEMClassifier}. This class performs a stochastic version 
 // of the EM algorithm, but instead of inheriting from 
-// \doxygem{itk}{ExpectationMaximizationMixtureModelEstimator}, we choosed to
+// \doxygen{itk}{ExpectationMaximizationMixtureModelEstimator}, we choosed to
 // inherit from \subdoxygen{itk}{Statistics}{ListSample< TSample >}, 
-// in the same way as \doxygem{otb}{SVMClassifier}. 
+// in the same way as \doxygen{otb}{SVMClassifier}. 
 //
 // The program begins with \doxygen{otb}{VectorImage} and outputs 
 // \doxygen{itb}{Image}. Then appropriate header files have to be included:
@@ -217,7 +217,7 @@ int main ( int argc, char * argv[] )
 // \begin{figure}
 //  \center
 //  \includegraphics[width=0.35\textwidth]{SEMClassif.eps}
-//  \itkcpation[SEM Classification results]{SEM Classification results.}
+//  \itkcaption[SEM Classification results]{SEM Classification results.}
 //  \label{fig:RESSEMCLASSIF}
 // \end{figure}
 //
