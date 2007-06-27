@@ -230,11 +230,11 @@ int main ( int argc, char * argv[] )
 
 //  Software Guide : BeginLatex
 // 
-// Figure \ref{fig::RESSEMCLASSIF} show the result of the SEM segmentation 
+// Figure \ref{fig:RESSEMCLASSIF} shows the result of the SEM segmentation 
 // with 4 different classes and a contextual neighborhood of 3 pixels.
 // \begin{figure}
 //  \center
-//  \includegraphics[width=0.35\textwidth]{SEMClassif.eps}
+//  \includegraphics[width=0.6\textwidth]{SEMClassif.eps}
 //  \itkcaption[SEM Classification results]{SEM Classification results.}
 //  \label{fig:RESSEMCLASSIF}
 // \end{figure}
