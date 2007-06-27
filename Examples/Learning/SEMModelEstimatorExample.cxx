@@ -40,15 +40,16 @@
 
 #include <iostream>
 
-#include <itkListSample.h>
-#include <itkVector.h>
-#include <itkVariableLengthVector.h>
+#include "itkListSample.h"
+#include "itkVector.h"
+#include "itkVariableLengthVector.h"
+#include "itkRescaleIntensityImageFilter.h"
 
 //  Software Guide : BeginCodeSnippet
-#include <otbImage.h>
-#include <otbVectorImage.h>
-#include <otbImageFileReader.h>
-#include <otbImageFileWriter.h>
+#include "otbImage.h"
+#include "otbVectorImage.h"
+#include "otbImageFileReader.h"
+#include "otbImageFileWriter.h"
 //  Software Guide : EndCodeSnippet
 
 // Software Guide : BeginLatex
@@ -201,12 +202,29 @@ int main ( int argc, char * argv[] )
 // \subdoxygen{itk}{Statistics}{MembershipSample< SampleType >} as it is the 
 // case for the \doxygen{otb}{SVMClassifier}. But when using 
 // \code{GetOutputImage} the output is directly an Image.
-//  Software Guide : EndLatex 
+//
+// Only for visualization purposes, we choose to rescale the image of
+// classes before sving it to a file. We will use the
+// \doxygen{itk}{RescaleIntensityImageFilter} for this purpose.
+//
+// Software Guide : EndLatex
+    
+
 
 //  Software Guide : BeginCodeSnippet
+    typedef itk::RescaleIntensityImageFilter< OutputImageType,
+      OutputImageType > RescalerType;
+
+    RescalerType::Pointer rescaler = RescalerType::New();
+    
+    rescaler->SetOutputMinimum( itk::NumericTraits< unsigned char >::min());
+    rescaler->SetOutputMaximum( itk::NumericTraits< unsigned char >::max());
+
+    rescaler->SetInput( classifier->GetOutputImage() );
+
     WriterType::Pointer writer = WriterType::New();
     writer->SetFileName( fileNameOut );
-    writer->SetInput( classifier->GetOutputImage() );
+    writer->SetInput( rescaler->GetOutput() );
     writer->Update();
 //  Software Guide : EndCodeSnippet
 
