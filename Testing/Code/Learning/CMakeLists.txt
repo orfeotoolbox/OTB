@@ -163,6 +163,10 @@ ADD_TEST(leTvSOMClassifier ${LEARNING_TESTS}
 	${TEMP}/leSOMPoupeesClassified.hdr
 	)
 
+# -------            otb::SEMClassifier   -----------------------------	
+
+ADD_TEST(leTuSEMClassifierNew ${LEARNING_TESTS}  
+        otbSEMClassifierNew)
 
 # -----------------------------------------------------------------------
 			        
@@ -192,6 +196,7 @@ otbSOMActivationBuilderNew.cxx
 otbSOMActivationBuilder.cxx
 otbSOMClassifierNew.cxx
 otbSOMClassifier.cxx
+otbSEMClassifierNew.cxx
 )
 
 

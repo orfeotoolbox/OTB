@@ -31,6 +31,7 @@ REGISTER_TEST(GenerateTrainingImageExampleTest);
 REGISTER_TEST(SVMImageModelEstimatorExampleTest);
 REGISTER_TEST(SOMExampleTest);
 REGISTER_TEST(SOMClassifierExampleTest);
+REGISTER_TEST(SEMModelEstimatorExampleTest);
 }
 
 #undef main
@@ -57,5 +58,9 @@ REGISTER_TEST(SOMClassifierExampleTest);
 #undef main
 #define main SOMClassifierExampleTest
 #include "SOMClassifierExample.cxx"
+
+#undef main
+#define main SEMModelEstimatorExampleTest
+#include "SEMModelEstimatorExample.cxx"
 
 

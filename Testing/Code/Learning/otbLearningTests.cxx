@@ -50,4 +50,5 @@ REGISTER_TEST(otbSOMActivationBuilderNew);
 REGISTER_TEST(otbSOMActivationBuilder);
 REGISTER_TEST(otbSOMClassifierNew);
 REGISTER_TEST(otbSOMClassifier);
+REGISTER_TEST(otbSEMClassifierNew);
 }

@@ -35,6 +35,9 @@ TARGET_LINK_LIBRARIES(SOMExample ITKIO OTBIO OTBCommon ITKCommon  OTBLearning  g
 ADD_EXECUTABLE(SOMClassifierExample SOMClassifierExample.cxx )
 TARGET_LINK_LIBRARIES(SOMClassifierExample ITKIO OTBIO OTBCommon ITKCommon  OTBLearning  gdal)
 
+ADD_EXECUTABLE(SEMModelEstimatorExample SEMModelEstimatorExample.cxx )
+TARGET_LINK_LIBRARIES(SEMModelEstimatorExample ITKIO OTBIO OTBCommon ITKCommon  OTBLearning  gdal)
+
 
 IF( NOT OTB_DISABLE_CXX_TESTING AND NOT OTB_DISABLE_CXX_EXAMPLES_TESTING )
 
@@ -122,6 +125,18 @@ ADD_TEST(SOMClassifierExampleTest ${EXE_TESTS}
 	${INPUTDATA}/ROI_QB_MUL_1.png
 	${INPUTDATA}/ROI_QB_MUL_SOM.png
 	${TEMP}/ROI_QB_MUL_SOMCLASS.png
+)
+
+# ------- SEMModelEstimatorExampleTest----------
+
+ADD_TEST(SEMModelEstimatorExampleTest ${EXE_TESTS}
+#	--compare-image ${TOL} 
+#	${BASELINE}/ROI_QB_MUL_SEMMODEL_ESTIMATOR.png
+#	${TEMP}/ROI_QB_MUL_SEMMODEL_ESTIMATOR.png
+	SEMModelEstimatorExampleTest
+	${INPUTDATA}/ROI_QB_MUL_1.tif
+	${TEMP}/ROI_QB_MUL_SEMMODEL_ESTIMATOR.png
+        4 40 5
 )
 
 
