@@ -172,7 +172,7 @@ namespace otb
     //                      Main loop                         //
     //--------------------------------------------------------//
     // While the number of iterations is not reached
-    otbMsgDebugMacro(<<"Entering main loop");
+    otbMsgDevMacro(<<"Entering main loop");
     while(i<this->GetNumberOfLevels())
       {
 
@@ -193,18 +193,18 @@ namespace otb
 	subtract1->SetInput1(max->GetOutput());
 	subtract1->SetInput2(morphoFilter->GetOutput());
 	subtract1->Update();
-	otbMsgDebugMacro(<<"MorphologicalPyramidAnalysisFilter: subtract1 OK "<<subtract1->GetOutput()->GetLargestPossibleRegion().GetSize());
+	otbMsgDevMacro(<<"MorphologicalPyramidAnalysisFilter: subtract1 OK "<<subtract1->GetOutput()->GetLargestPossibleRegion().GetSize());
 	supFilter->PushBack(subtract1->GetOutput());
-	otbMsgDebugMacro("MorphologicalPyramidAnalysisFilter: step "<<i<<" - Image appended to SupFilter");
+	otbMsgDevMacro("MorphologicalPyramidAnalysisFilter: step "<<i<<" - Image appended to SupFilter");
 
 	// InfFilter detail image computation
 	subtract2 = SubtractFilterType::New();
 	subtract2->SetInput1(max->GetOutput());
 	subtract2->SetInput2(currentImage);
 	subtract2->Update();
-	otbMsgDebugMacro(<<"MorphologicalPyramidAnalysisFilter: subtract2 OK "<<subtract2->GetOutput()->GetLargestPossibleRegion().GetSize());
+	otbMsgDevMacro(<<"MorphologicalPyramidAnalysisFilter: subtract2 OK "<<subtract2->GetOutput()->GetLargestPossibleRegion().GetSize());
 	infFilter->PushBack(subtract2->GetOutput());
-	otbMsgDebugMacro("MorphologicalPyramidAnalysisFilter: step "<<i<<" - Image appended to InfFilter");
+	otbMsgDevMacro("MorphologicalPyramidAnalysisFilter: step "<<i<<" - Image appended to InfFilter");
 	
 	// New  Size
 	size = morphoFilter->GetOutput()->GetLargestPossibleRegion().GetSize();
@@ -214,7 +214,7 @@ namespace otb
 	    // As we knwow that our values will always be positive ones, we can simulate round by ceil(value+0.5)
 	    size[j]=static_cast<unsigned int>(vcl_ceil((static_cast<double>(sizeTmp)/this->GetDecimationRatio())+0.5));
 	  }
-	otbMsgDebugMacro(<<"New size: "<<size);
+	otbMsgDevMacro(<<"New size: "<<size);
     
 	// Image subsampling 
 	// Current image becomes the newly subsampled image
@@ -224,7 +224,7 @@ namespace otb
 	resampler1->Update();
 	currentImage=resampler1->GetOutput();
 	
-	otbMsgDebugMacro(<<"MorphologicalPyramidAnalysisFilter: DownSampling OK "<<currentImage->GetLargestPossibleRegion().GetSize());
+	otbMsgDevMacro(<<"MorphologicalPyramidAnalysisFilter: DownSampling OK "<<currentImage->GetLargestPossibleRegion().GetSize());
 	// New current image is appeneded to the output list
 	OutputImageList->PushBack(currentImage);
 
@@ -234,36 +234,36 @@ namespace otb
 	resampler2->SetSize(morphoFilter->GetOutput()->GetLargestPossibleRegion().GetSize());
 	resampler2->Update();
 
-	otbMsgDebugMacro(<<"MorphologicalPyramidAnalysisFilter: UpSampling OK "<<resampler2->GetOutput()->GetLargestPossibleRegion().GetSize());
+	otbMsgDevMacro(<<"MorphologicalPyramidAnalysisFilter: UpSampling OK "<<resampler2->GetOutput()->GetLargestPossibleRegion().GetSize());
 	// Computation of the details lost in the subsampling operation
 	max=MaxFilterType::New();
 	max->SetInput1(morphoFilter->GetOutput());
 	max->SetInput2(resampler2->GetOutput());
 	max->Update();
-	otbMsgDebugMacro(<<"MorphologicalPyramidAnalysisFilter: Max OK "<<max->GetOutput()->GetLargestPossibleRegion().GetSize());
+	otbMsgDevMacro(<<"MorphologicalPyramidAnalysisFilter: Max OK "<<max->GetOutput()->GetLargestPossibleRegion().GetSize());
 
 	// InfDeci detail image computation
 	subtract4 = SubtractFilterType::New();
 	subtract4->SetInput1(max->GetOutput());
 	subtract4->SetInput2(morphoFilter->GetOutput());
 	subtract4->Update();
-	otbMsgDebugMacro(<<"MorphologicalPyramidAnalysisFilter: subtract4 OK "<<subtract4->GetOutput()->GetLargestPossibleRegion().GetSize());
+	otbMsgDevMacro(<<"MorphologicalPyramidAnalysisFilter: subtract4 OK "<<subtract4->GetOutput()->GetLargestPossibleRegion().GetSize());
 	infDeci->PushBack(subtract4->GetOutput());
-	otbMsgDebugMacro("MorphologicalPyramidAnalysisFilter: step "<<i<<" - Image appended to InfDeci");
+	otbMsgDevMacro("MorphologicalPyramidAnalysisFilter: step "<<i<<" - Image appended to InfDeci");
 
 	// SupDeci detail image computation
 	subtract3 = SubtractFilterType::New();
 	subtract3->SetInput1(max->GetOutput());
 	subtract3->SetInput2(resampler2->GetOutput());
 	subtract3->Update();
-	otbMsgDebugMacro(<<"MorphologicalPyramidAnalysisFilter: subtract3 OK "<<subtract3->GetOutput()->GetLargestPossibleRegion().GetSize());
+	otbMsgDevMacro(<<"MorphologicalPyramidAnalysisFilter: subtract3 OK "<<subtract3->GetOutput()->GetLargestPossibleRegion().GetSize());
 	supDeci->PushBack(subtract3->GetOutput());
-	otbMsgDebugMacro("MorphologicalPyramidAnalysisFilter: step "<<i<<" - Image appended to SupDeci");
+	otbMsgDevMacro("MorphologicalPyramidAnalysisFilter: step "<<i<<" - Image appended to SupDeci");
 
 	// Iteration ounter incrementation
 	i++;
       }
-    otbMsgDebugMacro(<<"Exiting main loop");
+    otbMsgDevMacro(<<"Exiting main loop");
   }
   /**
    * PrintSelf method

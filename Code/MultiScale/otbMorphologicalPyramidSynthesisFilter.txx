@@ -145,7 +145,7 @@ void
 MorphologicalPyramidSynthesisFilter<TInputImage,TOutputImage>
 ::GenerateData(void)
 {
-  otbMsgDebugMacro(<<"MorphologicalPyramidSynthesisFilter : Entering main method.");
+  otbMsgDevMacro(<<"MorphologicalPyramidSynthesisFilter : Entering main method.");
   // Input image pointer
   InputImageListType * supFilter = this->GetSupFilter();
   InputImageListType * infFilter = this->GetInfFilter();
@@ -187,7 +187,7 @@ MorphologicalPyramidSynthesisFilter<TInputImage,TOutputImage>
       size.push_back(it.Get()->GetLargestPossibleRegion().GetSize());
       ++it;
     }
-  otbMsgDebugMacro(<<"MorphologicalPyramidSynthesisFilter : Size vector computation OK");
+  otbMsgDevMacro(<<"MorphologicalPyramidSynthesisFilter : Size vector computation OK");
 
   // Iterators definition  
   ImageListReverseIterator itinfFilter = infFilter->ReverseBegin();
@@ -213,7 +213,7 @@ MorphologicalPyramidSynthesisFilter<TInputImage,TOutputImage>
     resampler->SetSize(*itSize);
     resampler->SetInput(currentImage);
     resampler->Update();
-    otbMsgDebugMacro(<<"MorphologicalPyramidSynthesisFilter: step "<<i<<" Upsampling OK");
+    otbMsgDevMacro(<<"MorphologicalPyramidSynthesisFilter: step "<<i<<" Upsampling OK");
     // Adding *sup details from current level
     add1= AddFilterType::New();
     add1->SetInput1(resampler->GetOutput());
@@ -230,7 +230,7 @@ MorphologicalPyramidSynthesisFilter<TInputImage,TOutputImage>
     subtract2->SetInput1(subtract1->GetOutput());
     subtract2->SetInput2(itinfDeci.Get());
     subtract2->Update();
-    otbMsgDebugMacro(<<"MorphologicalPyramidSynthesisFilter: step "<<i<<" Details addition OK");
+    otbMsgDevMacro(<<"MorphologicalPyramidSynthesisFilter: step "<<i<<" Details addition OK");
     
     
     // Updating current image
@@ -244,7 +244,7 @@ MorphologicalPyramidSynthesisFilter<TInputImage,TOutputImage>
     ++itinfDeci;
     ++itSize;
     } 
-  otbMsgDebugMacro(<<"MorphologicalPyramidSynthesisFilter: Exiting main method.");
+  otbMsgDevMacro(<<"MorphologicalPyramidSynthesisFilter: Exiting main method.");
   }
 /**
  * PrintSelf method

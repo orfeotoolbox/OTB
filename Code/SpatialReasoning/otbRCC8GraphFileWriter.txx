@@ -91,7 +91,7 @@ RCC8GraphFileWriter<TInputGraph>
 {
   InputGraphType * input = this->GetInput();
 
-  itkDebugMacro( <<"Writing a RCC8Graph file" );
+  itkDevMacro( <<"Writing a RCC8Graph file" );
 
   // Make sure input is available
   if ( input == 0 )
@@ -120,7 +120,7 @@ void
 RCC8GraphFileWriter<TInputGraph>
 ::GenerateData()
 { 
-  otbMsgDebugMacro(<<"RCC8GraphFileWriter: GenerateData call");
+  otbMsgDevMacro(<<"RCC8GraphFileWriter: GenerateData call");
   // input graph pointer
   InputGraphPointerType input = this->GetInput();
   
@@ -211,7 +211,7 @@ RCC8GraphFileWriter<TInputGraph>
 ::WriteEdge(std::ofstream& of,VertexDescriptorType source,
 		 VertexDescriptorType target, RCC8ValueType value)
 {
-  otbMsgDebugMacro(<<"RCC8GraphFileWriter: WriteEdge call: "<<source<<" "<<target<<" "<<value);
+  otbMsgDevMacro(<<"RCC8GraphFileWriter: WriteEdge call: "<<source<<" "<<target<<" "<<value);
   of<<source<<" -> "<<target<<" ";
   of<<"[Value=\""<<value<<"\"];";
   of<<std::endl;
@@ -231,7 +231,7 @@ RCC8GraphFileWriter<TInputGraph>
   typedef typename VertexType::AttributesMapType AttributesMapType;
   typedef typename AttributesMapType::iterator IteratorType;
   AttributesMapType attr = vertex->GetAttributesMap();
-  otbMsgDebugMacro(<<"RCC8GraphFileWriter: WriteVertex call: "<<index);
+  otbMsgDevMacro(<<"RCC8GraphFileWriter: WriteVertex call: "<<index);
   of<<index<<" [";
   IteratorType it = attr.begin();
   while(it!=attr.end())

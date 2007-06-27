@@ -256,10 +256,10 @@ namespace otb
 
       // Full resolution size
       typename InputImageType::SizeType frsize = supFilter->Front()->GetLargestPossibleRegion().GetSize();
-      otbMsgDebugMacro(<<"MRToMSConverter: Full resolution size: "<<frsize);
+      otbMsgDevMacro(<<"MRToMSConverter: Full resolution size: "<<frsize);
       
       // SupFilter resampling
-      otbMsgDebugMacro(<<"MRToMSConverter: SupFilter resampling.");
+      otbMsgDevMacro(<<"MRToMSConverter: SupFilter resampling.");
       InputImageListIteratorType it = supFilter->Begin();
       // The first image does not need any resampling
       supFilterFullResolution->PushBack(it.Get());
@@ -272,7 +272,7 @@ namespace otb
 	  resampler->Update();
 	  supFilterFullResolution->PushBack(resampler->GetOutput());
 	}
-      otbMsgDebugMacro(<<"MRToMSConverter: InfFilter resampling.");
+      otbMsgDevMacro(<<"MRToMSConverter: InfFilter resampling.");
       // InfFilter resampling
       it = infFilter->Begin();
       // The first image does not need any resampling
@@ -289,7 +289,7 @@ namespace otb
 
       if(inputList)
 	{
-	  otbMsgDebugMacro(<<"MRToMSConverter: Optional inputList resampling.");
+	  otbMsgDevMacro(<<"MRToMSConverter: Optional inputList resampling.");
 	  // Analyse image resampling
 	  it = inputList->Begin();
 	  // The first image does not need any resampling
@@ -307,7 +307,7 @@ namespace otb
 
       if(supDeci)
 	{
-	  otbMsgDebugMacro(<<"MRToMSConverter: Optional supDeci resampling.");
+	  otbMsgDevMacro(<<"MRToMSConverter: Optional supDeci resampling.");
 	  // SupDeci resampling
 	  it = supDeci->Begin();
 	  // The first image does not need any resampling
@@ -325,7 +325,7 @@ namespace otb
 
       if(infDeci)
 	{
-	  otbMsgDebugMacro(<<"MRToMSConverter: Optional infDeci resampling.");
+	  otbMsgDevMacro(<<"MRToMSConverter: Optional infDeci resampling.");
 	  // InfDeci resampling
 	  it = infDeci->Begin();
 	  // The first image does not need any resampling

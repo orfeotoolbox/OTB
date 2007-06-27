@@ -141,7 +141,7 @@ MorphologicalPyramidSegmentationFilter<TInputImage,TOutputImage>
 {
   // Reference image pointer
   InputImagePointerType referenceImage = this->GetReferenceImage();
-  otbMsgDebugMacro("SegmentationFilter: reference image size: "<<referenceImage->GetLargestPossibleRegion().GetSize());
+  otbMsgDevMacro("SegmentationFilter: reference image size: "<<referenceImage->GetLargestPossibleRegion().GetSize());
 
   // Output images list pointer
   OutputImageListPointerType outputList = this->GetOutput();

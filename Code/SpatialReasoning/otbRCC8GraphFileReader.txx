@@ -62,7 +62,7 @@ RCC8GraphFileReader<TOutputGraph>
   typename std::string::size_type pos4 = line.find_first_of("\"",0);
   typename std::string::size_type pos5 = line.find_first_of("\" ",pos4+1);
   RCC8ValueType value =static_cast<RCC8ValueType>(atoi(line.substr(pos4+1,pos5-pos4-1).c_str()));
-  otbMsgDebugMacro(<<"RCC8GraphFileReader: Edge line parsed: "<<source<<" -> "
+  otbMsgDevMacro(<<"RCC8GraphFileReader: Edge line parsed: "<<source<<" -> "
 		   <<target<<" "<<value);
   this->GetOutput()->AddEdge(source,target,value);
 }
@@ -78,7 +78,7 @@ RCC8GraphFileReader<TOutputGraph>
   typename VertexType::AttributesMapType attr;
   typename std::string::size_type pos = line.find_first_of(" ",0);
   unsigned int index = atoi(line.substr(0,pos).c_str());
-  otbMsgDebugMacro(<<"RCC8GraphFileReader: Vertex index: "<<index);
+  otbMsgDevMacro(<<"RCC8GraphFileReader: Vertex index: "<<index);
   typename std::string::size_type midPos, nextPos;
 
   midPos=line.find_first_of("\"",pos+2);
@@ -89,7 +89,7 @@ RCC8GraphFileReader<TOutputGraph>
     key = line.substr(pos+2,midPos-pos-3);
     value = line.substr(midPos+1,nextPos-midPos-1);
     attr[key]=value;
-    otbMsgDebugMacro(<<"RCC8GraphFileReader: Vertex attribute: "<<key<<" "<<value);
+    otbMsgDevMacro(<<"RCC8GraphFileReader: Vertex attribute: "<<key<<" "<<value);
     pos=nextPos;
     midPos=line.find_first_of("\"",pos+2);
     nextPos=line.find_first_of("\"",midPos+1);
