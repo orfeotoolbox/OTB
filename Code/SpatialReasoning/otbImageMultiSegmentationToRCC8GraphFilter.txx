@@ -24,6 +24,7 @@
 #include "otbRCC8VertexIterator.h"
 #include "otbRCC8InEdgeIterator.h"
 #include "otbRCC8OutEdgeIterator.h"
+#include "itkProgressReporter.h"
 
 namespace otb
 {
@@ -43,12 +44,45 @@ template <class TInputImage, class TOutputGraph>
 ImageMultiSegmentationToRCC8GraphFilter<TInputImage, TOutputGraph>
 ::~ImageMultiSegmentationToRCC8GraphFilter()
 {}
+
+
+template <class TInputImage, class TOutputGraph>
+unsigned int
+ImageMultiSegmentationToRCC8GraphFilter<TInputImage, TOutputGraph>
+::GetRelationsCount(RCC8ValueType val)
+{
+  return m_Accumulator[val];
+}
+
+
+template <class TInputImage, class TOutputGraph>
+unsigned int
+ImageMultiSegmentationToRCC8GraphFilter<TInputImage, TOutputGraph>
+::GetNumberOfRelations()
+{
+  unsigned int result = 0;
+  for(unsigned int i = 0;i<8;++i)
+    {
+      result+=m_Accumulator[i];
+
+    }
+  return result;
+}
 template <class TInputImage, class TOutputGraph>
 typename ImageMultiSegmentationToRCC8GraphFilter<TInputImage, TOutputGraph>
 ::KnowledgeStateType
 ImageMultiSegmentationToRCC8GraphFilter<TInputImage, TOutputGraph>
 ::GetKnowledge(RCC8ValueType r1, RCC8ValueType r2)
 {
+  m_Accumulator[0]=0;
+  m_Accumulator[1]=0;
+  m_Accumulator[2]=0;
+  m_Accumulator[3]=0;
+  m_Accumulator[4]=0;
+  m_Accumulator[5]=0;
+  m_Accumulator[6]=0;
+  m_Accumulator[7]=0;
+  
   // otbMsgDebugMacro(<<"RCC8GraphFilter: entering GetKnowledge method.");
   // This is the RCC8 composition table
  const int knowledge[8][8]
@@ -118,6 +152,7 @@ ImageMultiSegmentationToRCC8GraphFilter<TInputImage, TOutputGraph>
   // Vertex indexes
   unsigned int vertexIndex = 0;
   unsigned int segmentationImageIndex = 0;
+  unsigned int nbVertices = 0;
 
   // For each segmentation image
   for(ConstListIteratorType it = segList->Begin();it!=segList->End();++it)
@@ -130,6 +165,9 @@ ImageMultiSegmentationToRCC8GraphFilter<TInputImage, TOutputGraph>
       otbMsgDebugMacro(<<"Number of objects in image "<<segmentationImageIndex<<": "
 	       <<minMax->GetMaximum());
       
+      // Add the image to the segmentation image list of the output graph
+      graph->GetSegmentationImageList()->PushBack(it.Get());
+
       // then for each region of the images
       for(PixelType label=1; label<=maxLabelVector.back();++label)
 	{
@@ -141,9 +179,12 @@ ImageMultiSegmentationToRCC8GraphFilter<TInputImage, TOutputGraph>
 	  // Put it in the graph
 	  graph->SetVertex(vertexIndex,vertex);
 	  vertexIndex++;
+	  ++nbVertices;
 	}
       segmentationImageIndex++;
     }
+
+  itk::ProgressReporter progress(this,0,nbVertices*nbVertices);
 
   VertexIteratorType vIt1(graph);
   VertexIteratorType vIt2(graph);
@@ -239,14 +280,18 @@ ImageMultiSegmentationToRCC8GraphFilter<TInputImage, TOutputGraph>
 		  calc->Update();
 		  value=calc->GetValue();
 		}
+	      m_Accumulator[value]+=1;
+	      m_Accumulator[invert[value]]+=1;
 	      // If the vertices are connected
 	      if(value>OTB_RCC8_DC)
 		{
 		  // Add the edge to the graph.
-		  otbMsgDebugMacro(<<"Adding edge: "<<vIt1.GetIndex()<<" -> "<<vIt2.GetIndex()<<": "<<value);
+		  otbMsgDevMacro(<<"Adding edge: "<<vIt1.GetIndex()<<" -> "<<vIt2.GetIndex()<<": "<<value);
 		  graph->AddEdge(vIt1.GetIndex(),vIt2.GetIndex(),value);
 		}
 	    }
+	  progress.CompletedPixel();
+	  progress.CompletedPixel();
 	}
     }
 }

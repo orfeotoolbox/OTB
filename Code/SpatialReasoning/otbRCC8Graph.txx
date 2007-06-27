@@ -23,20 +23,21 @@ namespace otb
   /** 
    * Constructor 
    */
-  template <class TVertex>
-  RCC8Graph<TVertex>
+  template <class TVertex, class TSegmentationImage>
+  RCC8Graph<TVertex, TSegmentationImage>
   ::RCC8Graph()
   {
     m_NumberOfVertices = 0;
+    m_SegmentationImageList = SegmentationImageListType::New();
   };
   /**
    * since the number of vertices is mandatory to instantiate the
    * internal boost representation, the build method has to be called
    * once this parameter is set.
    */
-  template <class TVertex>
+  template <class TVertex, class TSegmentationImage>
   void 
-  RCC8Graph<TVertex>
+  RCC8Graph<TVertex, TSegmentationImage>
   ::Build(void)
   {
     this->Initialize(m_NumberOfVertices-1);
@@ -45,9 +46,9 @@ namespace otb
    * Initialize a range of vertex.
    * \param num The index of the last vertices to intialize.
    */
-  template <class TVertex>
+  template <class TVertex, class TSegmentationImage>
   void 
-  RCC8Graph<TVertex>
+  RCC8Graph<TVertex, TSegmentationImage>
   ::Initialize( unsigned int num)
   {
     for(unsigned int i = boost::num_vertices(m_Graph); i<=num;i++)
@@ -62,9 +63,9 @@ namespace otb
    * \param index The index of the vertex in the graph.
    * \param vertex The vertex to set.
    */
-  template<class TVertex>
+  template<class TVertex, class TSegmentationImage>
   void
-  RCC8Graph<TVertex>
+  RCC8Graph<TVertex, TSegmentationImage>
   ::SetVertex(unsigned int index, VertexPointerType vertex)
   {
     if(index>=m_NumberOfVertices)
@@ -80,10 +81,10 @@ namespace otb
    * \param index The index of the vertex in the graph
    * \return The vertex.
    */
-  template <class TVertex>
-  typename RCC8Graph<TVertex>
+  template <class TVertex, class TSegmentationImage>
+  typename RCC8Graph<TVertex, TSegmentationImage>
   ::VertexPointerType
-  RCC8Graph<TVertex>
+  RCC8Graph<TVertex, TSegmentationImage>
   ::GetVertex(unsigned int index)
   {
     VertexDescriptorType v = *boost::vertices(m_Graph).first;
@@ -95,9 +96,9 @@ namespace otb
    * \param index2 The index of the target vertex.
    * \param r The rcc8 value associated to the edge.
    */
-  template <class TVertex>
+  template <class TVertex, class TSegmentationImage>
   void
-  RCC8Graph<TVertex>
+  RCC8Graph<TVertex, TSegmentationImage>
   ::AddEdge(unsigned int index1, unsigned int index2, RCC8ValueType r)
   {
     EdgeDescriptorType e = boost::add_edge(index1,index2,m_Graph).first;
@@ -109,19 +110,30 @@ namespace otb
    * Get number of edges
    * /return The number of edges.
    */
-  template <class TVertex>
+  template <class TVertex, class TSegmentationImage>
   unsigned int
-  RCC8Graph<TVertex>
+  RCC8Graph<TVertex, TSegmentationImage>
   ::GetNumberOfEdges(void)
   {
     return num_edges(m_Graph);
   }
   /**
+   * Get the number of segmentation images
+   * \return the number of segmentation images
+   */
+  template <class TVertex, class TSegmentationImage>
+  unsigned int
+  RCC8Graph<TVertex, TSegmentationImage>
+  ::GetNumberOfSegmentationImages(void)
+  {
+    return m_SegmentationImageList->Size();
+  }
+  /**
    * PrintSelf method
    */
-  template <class TVertex>
+  template <class TVertex, class TSegmentationImage>
   void
-  RCC8Graph<TVertex>
+  RCC8Graph<TVertex, TSegmentationImage>
   ::PrintSelf( std::ostream& os,itk::Indent indent ) const
   {
     Superclass::PrintSelf(os,indent);

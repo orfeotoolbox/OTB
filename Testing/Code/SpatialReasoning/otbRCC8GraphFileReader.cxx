@@ -39,11 +39,17 @@ try
     // Instantiation
     RCC8GraphFileReaderType::Pointer rcc8GraphReader = RCC8GraphFileReaderType::New();
     rcc8GraphReader->SetFileName(inputFilename);
+
+    // disabling image reading
+    rcc8GraphReader->SetReadSegmentationImages(false);
+
     rcc8GraphReader->Update();
     
     // Getting the output graph
     RCC8GraphType::Pointer graph = rcc8GraphReader->GetOutput();
+
     
+
     // Checking vertices
     VertexIteratorType vIt(graph);
     unsigned int count = 0;

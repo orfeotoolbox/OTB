@@ -35,6 +35,8 @@ RCC8GraphFileWriter<TInputGraph>
 {
   this->SetNumberOfRequiredInputs(1);
   m_FileName = "";
+  m_ImageExtension = ".tif";
+  m_WriteSegmentationImages = true;
 }
 /**
  * Destructor
@@ -148,10 +150,16 @@ RCC8GraphFileWriter<TInputGraph>
   out<<"digraph G {"<<std::endl;
 
   // For each vertex in the graph
+  unsigned int maxSegImageIndex = 0;
+
   VertexIteratorType vIt(input);
   for(vIt.GoToBegin();!vIt.IsAtEnd();++vIt)
     {
       this->WriteVertex(out,vIt.GetIndex(),vIt.Get());
+      if(maxSegImageIndex<vIt.Get()->GetSegmentationImageIndex())
+	{
+	  maxSegImageIndex = vIt.Get()->GetSegmentationImageIndex();
+	}
     }
 
   // For each edge in the graph
@@ -168,6 +176,27 @@ RCC8GraphFileWriter<TInputGraph>
 
   // Close the file
   out.close();
+
+  // Write the segmentation images 
+  if(m_WriteSegmentationImages)
+    {
+
+      std::string prefix = m_FileName.substr(0,m_FileName.length()-5);
+      
+      itk::OStringStream oss;
+
+      // then read the images
+      for(unsigned int i=1;i<=2*(maxSegImageIndex+1);++i)
+	{
+	  oss.str("");
+	  oss<<prefix<<i<<m_ImageExtension;
+	  
+	  SegmentationImageWriterPointerType writer = SegmentationImageWriterType::New();
+	  writer->SetFileName(oss.str().c_str());
+	  writer->SetInput(this->GetInput()->GetSegmentationImageList()->GetNthElement(i-1));
+	  writer->Update();
+	}
+    }
 }
 /**
  * Write an edge to file.

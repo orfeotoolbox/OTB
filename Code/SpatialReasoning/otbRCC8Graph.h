@@ -22,6 +22,9 @@
 #include <boost/graph/graph_traits.hpp>
 #include <boost/graph/adjacency_list.hpp>
 
+#include "otbImage.h"
+#include "otbImageList.h"
+
 namespace otb
 {
 /**
@@ -45,11 +48,11 @@ namespace otb
  * applications, one should provide a patch for this class including
  * the new functionnalities, for consistency reason.
  */
-template <class TVertex>  
+template <class TVertex, class TSegmentationImage = Image< typename TVertex::LabelType,2> >  
 class ITK_EXPORT RCC8Graph  :
     public itk::DataObject
 {
-public:
+  public:
   /** Standard class typedefs. */
   typedef RCC8Graph                              Self;
   typedef itk::DataObject                        Superclass;
@@ -73,9 +76,21 @@ public:
   /** Edges and vertices descriptors typedefs (boost objects)*/
   typedef typename InternalGraphType::vertex_descriptor  VertexDescriptorType;
   typedef typename InternalGraphType::edge_descriptor    EdgeDescriptorType;
+
+  /** Segmentation images typedef */
+  typedef TSegmentationImage SegmentationImageType;
+  typedef typename SegmentationImageType::Pointer SegmentationImagePointerType;
+  typedef ImageList<SegmentationImageType> SegmentationImageListType;
+  typedef typename SegmentationImageListType::Pointer SegmentationImageListPointerType;
+
   /** Getters and Setters for the number of vertices */
   itkSetMacro(NumberOfVertices,unsigned int);
   itkGetConstReferenceMacro(NumberOfVertices,unsigned int);
+
+  /** Get and set the internal image list */
+  itkSetObjectMacro(SegmentationImageList,SegmentationImageListType);
+  itkGetObjectMacro(SegmentationImageList,SegmentationImageListType);
+  
   /**
    *  Return the internal boost graph object.
    *  \return The internal boost graph object
@@ -111,6 +126,11 @@ public:
    * /return The number of edges.
    */
   unsigned int GetNumberOfEdges(void);
+  /**
+   * Get the number of segmentation images
+   * \return the number of segmentation images
+   */
+  unsigned int GetNumberOfSegmentationImages(void);
 protected:
   /** Constructor */
   RCC8Graph();
@@ -130,6 +150,8 @@ private:
   unsigned int m_NumberOfVertices;
   /** Internal representation using the boost graph library */
   InternalGraphType m_Graph;
+  /** The segmentation image list associated with the graph */
+  SegmentationImageListPointerType m_SegmentationImageList;
 };
 } // end namespace otb
 

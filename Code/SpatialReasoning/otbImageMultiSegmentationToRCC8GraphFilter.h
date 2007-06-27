@@ -61,6 +61,19 @@ public:
   /** Toogle optimisation flag */
   itkBooleanMacro(Optimisation);
   itkSetMacro(Optimisation,bool);
+  
+  /**
+   * Get the number of occurences of the given value
+   * \val The value.
+   */
+  unsigned int GetRelationsCount(RCC8ValueType val);
+
+  /** 
+   * Get number of relations
+   * \return The number of relations.
+   */
+  unsigned int GetNumberOfRelations(void);
+
 protected:
   /** Constructor */
   ImageMultiSegmentationToRCC8GraphFilter();
@@ -81,6 +94,8 @@ protected:
 private:
   /** Optimisation flag */
   bool m_Optimisation;
+  unsigned int m_Accumulator[8];
+
 };
 } // End namespace otb
 

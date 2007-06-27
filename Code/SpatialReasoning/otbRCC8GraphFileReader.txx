@@ -19,6 +19,7 @@
 #define __otbRCC8GraphFileReader_txx
 
 #include "otbRCC8GraphFileReader.h"
+#include "otbRCC8VertexIterator.h"
 #include "otbMacro.h"
 #include <fstream>
 #include <iostream>
@@ -33,6 +34,8 @@ RCC8GraphFileReader<TOutputGraph>
 ::RCC8GraphFileReader()
 {
   m_FileName="";
+  m_ImageExtension=".tif";
+  m_ReadSegmentationImages = true;
 }
 /**
  * Destructor
@@ -138,6 +141,38 @@ RCC8GraphFileReader<TOutputGraph>
 	}
     }
   fin.close();
+
+  // if the reading of the segmentation images is enabled
+  if(m_ReadSegmentationImages)
+    {
+      unsigned int nImages = 0;
+      // first find the number of segmentation images to look for
+      RCC8VertexIterator<OutputGraphType> it(this->GetOutput());
+      for(it.GoToBegin();!it.IsAtEnd();++it)
+	{
+	  if(nImages<it.Get()->GetSegmentationImageIndex())
+	    {
+	      nImages=it.Get()->GetSegmentationImageIndex();
+	    }
+	}
+      nImages = 2*(nImages+1);
+      std::string prefix = m_FileName.substr(0,m_FileName.length()-5);
+      
+      itk::OStringStream oss;
+
+      // then read the images
+      for(unsigned int i=1;i<=nImages;++i)
+	{
+	  oss.str("");
+	  oss<<prefix<<i<<m_ImageExtension;
+	  
+	  SegmentationImageReaderPointerType reader = SegmentationImageReaderType::New();
+	  reader->SetFileName(oss.str().c_str());
+	  // may be supressed
+	  reader->Update();
+	  this->GetOutput()->GetSegmentationImageList()->PushBack(reader->GetOutput());
+	}
+    }
 }
 /**
  * PrintSelf method

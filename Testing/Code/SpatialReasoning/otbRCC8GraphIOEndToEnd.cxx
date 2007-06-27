@@ -36,9 +36,11 @@ try
     // End to end test
     RCC8GraphFileReaderType::Pointer rcc8GraphReader = RCC8GraphFileReaderType::New();
     rcc8GraphReader->SetFileName(inputFilename);
+    rcc8GraphReader->SetReadSegmentationImages(false);
     RCC8GraphFileWriterType::Pointer rcc8GraphWriter = RCC8GraphFileWriterType::New();
     rcc8GraphWriter->SetInput(rcc8GraphReader->GetOutput());
     rcc8GraphWriter->SetFileName(outputFilename);
+    rcc8GraphWriter->SetWriteSegmentationImages(false);
     rcc8GraphWriter->Update();
   }
 catch( itk::ExceptionObject & err ) 

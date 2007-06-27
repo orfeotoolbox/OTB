@@ -21,6 +21,7 @@
 #include "itkProcessObject.h"
 #include "itkExceptionObject.h"
 #include "otbRCC8Graph.h"
+#include "otbImageFileWriter.h"
 
 namespace otb
 {
@@ -82,10 +83,23 @@ public:
   typedef typename InputGraphType::VertexDescriptorType VertexDescriptorType;
   typedef typename InputGraphType::RCC8ValueType RCC8ValueType;
   typedef typename VertexType::AttributesMapType AttributesMapType;
+  typedef typename InputGraphType::SegmentationImageType SegmentationImageType;
+  typedef typename SegmentationImageType::Pointer SegmentationImagePointerType;
+  typedef ImageFileWriter<SegmentationImageType> SegmentationImageWriterType;
+  typedef typename SegmentationImageWriterType::Pointer SegmentationImageWriterPointerType;
+
   /** Set the filename */
   itkSetStringMacro(FileName);
   /** Get the filename */
   itkGetStringMacro(FileName);
+  /** Set the segmentation images suffix */
+  itkSetStringMacro(ImageExtension);
+  /** Get the segmentation images suffix */
+  itkGetStringMacro(ImageExtension);
+  /** Wether to write segmentation images or not */
+  itkSetMacro(WriteSegmentationImages,bool);
+  itkGetMacro(WriteSegmentationImages,bool);
+  itkBooleanMacro(WriteSegmentationImages);
   /**
    * Set the input graph.
    * \param inputGraph The graph to write.
@@ -140,6 +154,10 @@ protected:
 private:
   /** Filename of the graph file to write */
   std::string m_FileName;
+  /** Wether to write segmentation images or not */
+  bool m_WriteSegmentationImages;
+  /** The segmentation images suffix */
+  std::string m_ImageExtension;
 };
 } // namespace otb
 

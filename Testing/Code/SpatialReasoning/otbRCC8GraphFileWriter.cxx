@@ -72,6 +72,7 @@ try
       = RCC8GraphFileWriterType::New();
     rcc8GraphWriter->SetFileName(outputFile);
     rcc8GraphWriter->SetInput(rcc8Graph);
+    rcc8GraphWriter->SetWriteSegmentationImages(false);
     rcc8GraphWriter->Update();
   }
 catch( itk::ExceptionObject & err ) 
