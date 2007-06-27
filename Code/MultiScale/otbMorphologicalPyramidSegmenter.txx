@@ -31,6 +31,7 @@
 #include "itkRescaleIntensityImageFilter.h"
 #include "otbThresholdImageToPointSetFilter.h"
 #include "itkScalarImageToHistogramGenerator.h"
+#include "itkMinimumMaximumImageCalculator.h"
 
 namespace otb
 {
@@ -152,7 +153,7 @@ Segmenter<TInputImage, TOuputImage>
   typedef itk::InvertIntensityImageFilter<InputImageType,InputImageType> InvertFilterType;
   typedef itk::MultiplyImageFilter<FloatImageType,FloatImageType,FloatImageType> MultiplyFilterType;
   typedef itk::CastImageFilter<InputImageType,FloatImageType> CastImageFilterType;
-  typedef itk::RescaleIntensityImageFilter<FloatImageType,InputImageType> RescaleFilterType;
+  typedef itk::MinimumMaximumImageCalculator<InputImageType> MinMaxCalculatorType;
 
   //Typedefs for seeds extraction
   typedef itk::PointSet<InputPixelType,InputImageType::ImageDimension> PointSetType;
@@ -179,15 +180,21 @@ Segmenter<TInputImage, TOuputImage>
   typename CastImageFilterType::Pointer cast1 = CastImageFilterType::New();
   typename CastImageFilterType::Pointer cast2 = CastImageFilterType::New();
   typename MultiplyFilterType::Pointer mult = MultiplyFilterType::New();
-  typename RescaleFilterType::Pointer rescaler = RescaleFilterType::New();
+  typename MinMaxCalculatorType::Pointer minMax =  MinMaxCalculatorType::New();
 
   // Pipeline connection
   cast1->SetInput(details);
+
+  minMax->SetImage(original);
+  minMax->ComputeMaximum();
+  
+
   // If we want to segment darker detail, the original image must have its itensity inverted
   if(m_SegmentDarkDetailsBool)
     {
       invert = InvertFilterType::New();
       invert->SetInput(original);
+      invert->SetMaximum(minMax->GetMaximum());
       cast2->SetInput(invert->GetOutput());
     }
   else
@@ -196,11 +203,7 @@ Segmenter<TInputImage, TOuputImage>
     }
   mult->SetInput1(cast1->GetOutput());
   mult->SetInput2(cast2->GetOutput());
-  rescaler->SetInput(mult->GetOutput());
-  rescaler->SetOutputMinimum(0);
-  rescaler->SetOutputMaximum(255);
-  rescaler->Update();
-  
+  mult->Update();
 
   /////////////////////////////////////
   //// Thresholds computation /////////
@@ -218,7 +221,7 @@ Segmenter<TInputImage, TOuputImage>
 
   // Segmentation Threshold is computed from the quantile
   histogram = HistGeneratorType::New();
-  histogram->SetInput(rescaler->GetOutput());
+  histogram->SetInput(mult->GetOutput());
   histogram->SetNumberOfBins(255);
   histogram->SetMarginalScale(10.0);
   histogram->Compute();
@@ -247,13 +250,13 @@ Segmenter<TInputImage, TOuputImage>
   //Passing seeds to the connected filter
   connectedThreshold = ConnectedFilterType::New();
   connectedThreshold->ClearSeeds();
-  connectedThreshold->SetInput(rescaler->GetOutput());
+  connectedThreshold->SetInput(mult->GetOutput());
   PointSetIteratorType it = pointSetFilter->GetOutput()->GetPoints()->Begin();
   while(it!=pointSetFilter->GetOutput()->GetPoints()->End())
     {
       typename OutputImageType::IndexType index;
-      index[0]=static_cast<long int>(it.Value()[0]*(rescaler->GetOutput()->GetSpacing()[0]));
-      index[1]=static_cast<long int>(it.Value()[1]*(rescaler->GetOutput()->GetSpacing()[1]));
+      index[0]=static_cast<long int>(it.Value()[0]*(mult->GetOutput()->GetSpacing()[0]));
+      index[1]=static_cast<long int>(it.Value()[1]*(mult->GetOutput()->GetSpacing()[1]));
       connectedThreshold->AddSeed(index);
       it++;
     }
@@ -276,8 +279,8 @@ Segmenter<TInputImage, TOuputImage>
   OutputPixelType num = 0;
   if(relabeler->GetNumberOfObjects()==1)
     {
-      unsigned int surface = rescaler->GetOutput()->GetLargestPossibleRegion().GetSize()[0]
-	*rescaler->GetOutput()->GetLargestPossibleRegion().GetSize()[1];
+      unsigned int surface = mult->GetOutput()->GetLargestPossibleRegion().GetSize()[0]
+	*mult->GetOutput()->GetLargestPossibleRegion().GetSize()[1];
       if(relabeler->GetSizeOfObjectsInPixels()[0]==surface)
 	{
 	  num = 0;

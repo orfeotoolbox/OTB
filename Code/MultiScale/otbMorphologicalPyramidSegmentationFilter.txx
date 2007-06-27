@@ -24,6 +24,7 @@ PURPOSE.  See the above copyright notices for more information.
 #include "otbMorphologicalPyramidSegmenter.h"
 #include "otbMacro.h"
 
+
 namespace otb
 {
 /**
@@ -188,6 +189,7 @@ MorphologicalPyramidSegmentationFilter<TInputImage,TOutputImage>
       segmenter->SetConnectedThresholdQuantile(m_ConnectedThresholdQuantile);
       segmenter->SetOriginalImage(referenceImage);
       segmenter->SetSegmentDarkDetailsBool(true);
+      
       segmenter->SetDetailsImage(it.Get());
       segmenter->Update();
       m_NumberOfObjectsVector.push_back(segmenter->GetNumberOfObjects());
