@@ -81,8 +81,8 @@ int main ( int argc, char * argv[] )
 
 // Software Guide : BeginLatex
 //
-// Input/Ouput image type are define in a classical way. 
-// In fact, a \subdoxygen{itk}{VariableLengthVector} is to be 
+// Input/Ouput images type are define in a classical way. 
+// In fact, a \doxygen{itk}{VariableLengthVector} is to be 
 // considered for the templated \code{MeasurementVectorType}, which 
 // will be used in the \code{ListSample} interface.
 //
@@ -112,7 +112,7 @@ int main ( int argc, char * argv[] )
 
 //  Software Guide : BeginLatex
 // 
-// Once the input image is opened, the classifier may be initalised by
+// Once the input image is opened, the classifier may be initialised by
 // \code{SmartPointer}.
 // 
 //  Software Guide : EndLatex 
