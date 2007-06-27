@@ -151,7 +151,7 @@ Segmenter<TInputImage, TOuputImage>
   typedef double FloatPixelType;
   typedef otb::Image<FloatPixelType,InputImageType::ImageDimension> FloatImageType;
   typedef itk::InvertIntensityImageFilter<InputImageType,InputImageType> InvertFilterType;
-  typedef itk::MultiplyImageFilter<FloatImageType,FloatImageType,FloatImageType> MultiplyFilterType;
+  typedef itk::MultiplyImageFilter<FloatImageType,FloatImageType,InputImageType> MultiplyFilterType;
   typedef itk::CastImageFilter<InputImageType,FloatImageType> CastImageFilterType;
   typedef itk::MinimumMaximumImageCalculator<InputImageType> MinMaxCalculatorType;
 
