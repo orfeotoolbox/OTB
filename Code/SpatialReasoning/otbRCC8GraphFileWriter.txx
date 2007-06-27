@@ -91,7 +91,7 @@ RCC8GraphFileWriter<TInputGraph>
 {
   InputGraphType * input = this->GetInput();
 
-  itkDevMacro( <<"Writing a RCC8Graph file" );
+  itkDebugMacro( <<"Writing a RCC8Graph file" );
 
   // Make sure input is available
   if ( input == 0 )
