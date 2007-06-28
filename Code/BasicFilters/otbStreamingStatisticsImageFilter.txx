@@ -273,8 +273,8 @@ StreamingStatisticsImageFilter<TInputImage>
   m_ThreadMin.Fill(itk::NumericTraits<PixelType>::max());
   m_ThreadMax.Fill(itk::NumericTraits<PixelType>::NonpositiveMin());
 
-  //otbMsgDebugMacro(<<"BeforeThreadedGenerateData() - output requested region: "<<this->GetOutput()->GetRequestedRegion());
-  otbMsgDebugMacro(<<"Leaving BeforeThreadedGenerateData() - nb threads: "<<numberOfThreads);
+  otbMsgDevMacro(<<"BeforeThreadedGenerateData() - output requested region: "<<this->GetOutput()->GetRequestedRegion());
+  otbMsgDevMacro(<<"Leaving BeforeThreadedGenerateData() - nb threads: "<<numberOfThreads);
 }
 
 template<class TInputImage>
@@ -362,6 +362,10 @@ StreamingStatisticsImageFilter<TInputImage>
 				       m_BufferMemorySize,
 				       m_BufferNumberOfLinesDivisions)); 
   
+  otbMsgDebugMacro(<<"ThreadedGenerateData() - thread "<<threadId <<" - Thread region: "<<outputRegionForThread);
+  otbMsgDebugMacro(<<"ThreadedGenerateData() - thread "<<threadId<<" - Streaming configuration: "<<m_StreamingMode<<" "<<m_NumberOfStreamDivisions<<" "<<m_BufferMemorySize<<" "<<m_BufferNumberOfLinesDivisions);
+  otbMsgDebugMacro(<<"ThreadedGenerateData() - thread "<<threadId <<" - nb of divisions from StreamingTraits: "<<numDivisions);
+  
   SplitterPointer regionSplitter = SplitterType::New();
   unsigned int numDivisionsFromSplitter = regionSplitter->GetNumberOfSplits(outputRegionForThread, numDivisions);
   if (numDivisionsFromSplitter < numDivisions)
@@ -386,6 +390,7 @@ StreamingStatisticsImageFilter<TInputImage>
       //otbMsgDebugMacro(<<"ThreadedGenerateData() - piece region: "<<streamRegion);
       
       inputPtr->SetRequestedRegion(streamRegion);
+      otbMsgDebugMacro(<<"ThreadedGenerateData() - thread "<<threadId <<" - streaming region: "<<streamRegion);
       inputPtr->PropagateRequestedRegion();
       inputPtr->UpdateOutputData();
       
