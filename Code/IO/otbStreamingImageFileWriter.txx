@@ -70,6 +70,7 @@ StreamingImageFileWriter<TInputImage>
 {
 	m_BufferMemorySize = memory_size_divisions;
 	m_CalculationDivision = SET_BUFFER_MEMORY_SIZE;
+        this->Modified();
 }
 
 /**
@@ -82,6 +83,7 @@ StreamingImageFileWriter<TInputImage>
 {
 	m_BufferNumberOfLinesDivisions = nb_lines_divisions;
 	m_CalculationDivision = SET_BUFFER_NUMBER_OF_LINES;
+        this->Modified();
 }
 
 /**
@@ -94,6 +96,7 @@ StreamingImageFileWriter<TInputImage>
 {
 	m_NumberOfStreamDivisions = nb_divisions;
 	m_CalculationDivision = SET_NUMBER_OF_STREAM_DIVISIONS;
+        this->Modified();
 }
 
 /**
@@ -105,6 +108,7 @@ StreamingImageFileWriter<TInputImage>
 ::SetAutomaticNumberOfStreamDivisions(void)
 {
 	m_CalculationDivision = SET_AUTOMATIC_NUMBER_OF_STREAM_DIVISIONS;
+        this->Modified();
 }
 
 /**
