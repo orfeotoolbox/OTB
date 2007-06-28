@@ -1,8 +1,5 @@
-PROJECT(ImageRegistration)
+PROJECT(ImageRegistrationExamples)
 INCLUDE_REGULAR_EXPRESSION("^.*$")
-
-#SET(BASELINE ${ITK_DATA_ROOT}/Baseline/Registration)
-#SET(TEMP ${ITK_BINARY_DIR}/Testing/Temporary)
 
 # SET(REGISTRATION_EXAMPLES ${CXX_TEST_PATH}/RegistrationExamples)
 # SET(REGISTRATION_EXAMPLESO ${CXX_TEST_PATH}/RegistrationExamplesO)
@@ -499,5 +496,70 @@ TARGET_LINK_LIBRARIES(ImageRegistration5 OTBCommon OTBIO ITKNumerics ITKIO)
 # TARGET_LINK_LIBRARIES(RegistrationExamples9 ITKAlgorithms ITKFEM ITKStatistics ITKIO ITKBasicFilters ITKCommon)
 
 
-# ENDIF( NOT ITK_DISABLE_CXX_TESTING )
+
+IF( NOT OTB_DISABLE_CXX_TESTING AND NOT OTB_DISABLE_CXX_EXAMPLES_TESTING )
+
+SET(BASELINE ${OTB_DATA_ROOT}/Baseline/Examples/Registration)
+
+SET(INPUTDATA ${OTB_SOURCE_DIR}/Examples/Data)
+SET(TEMP ${OTB_BINARY_DIR}/Testing/Temporary)
+
+SET(EXE_TESTS ${CXX_TEST_PATH}/otbRegistrationExamplesTests)
+
+SET(TOL 0.0)
+
+ADD_TEST(ImageRegistration1ExampleTest ${EXE_TESTS}
+        --compare-image ${TOL}
+        ${BASELINE}/ImageRegistration1Output.png
+        ${TEMP}/ImageRegistration1Output.png
+	ImageRegistration1ExampleTest
+	${INPUTDATA}/QB_Suburb.png
+        ${INPUTDATA}/QB_Suburb13x17y.png
+	${TEMP}/ImageRegistration1Output.png
+	${TEMP}/ImageRegistration1DifferenceAfter.png
+        ${TEMP}/ImageRegistration1DifferenceBefore.png
+)
+
+ADD_TEST(ImageRegistration2ExampleTest ${EXE_TESTS}
+        --compare-image ${TOL} 
+        ${BASELINE}/ImageRegistration2Output.png
+        ${TEMP}/ImageRegistration2Output.png
+	ImageRegistration2ExampleTest
+	${INPUTDATA}/RamsesROISmall.png
+        ${INPUTDATA}/ADS40RoiSmall.png
+	${TEMP}/ImageRegistration2Output.png
+	${TEMP}/ImageRegistration2CheckerboardBefore.png
+        ${TEMP}/ImageRegistration2CheckerboardAfter.png
+)
+
+ADD_TEST(ImageRegistration5Cas1ExampleTest ${EXE_TESTS}
+        --compare-image ${TOL}
+        ${BASELINE}/ImageRegistration5Output1.png
+        ${TEMP}/ImageRegistration5Output1.png
+	ImageRegistration5ExampleTest
+	${INPUTDATA}/QB_Suburb.png
+        ${INPUTDATA}/QB_SuburbRotated10.png
+	${TEMP}/ImageRegistration5Output1.png
+	${TEMP}/ImageRegistration5DifferenceAfter1.png
+        ${TEMP}/ImageRegistration5DifferenceBefore1.png
+)
+ADD_TEST(ImageRegistration5Cas2ExampleTest ${EXE_TESTS}
+        --compare-image ${TOL}
+        ${BASELINE}/ImageRegistration5Output2.png
+        ${TEMP}/ImageRegistration5Output2.png
+	ImageRegistration5ExampleTest
+	${INPUTDATA}/QB_Suburb.png
+        ${INPUTDATA}/QB_SuburbR10X13Y17.png
+	${TEMP}/ImageRegistration5Output2.png
+	${TEMP}/ImageRegistration5DifferenceAfter2.png
+        ${TEMP}/ImageRegistration5DifferenceBefore2.png
+)
+
+
+INCLUDE_DIRECTORIES("${OTBTesting_BINARY_DIR}")
+
+ADD_EXECUTABLE(otbRegistrationExamplesTests otbRegistrationExamplesTests.cxx)
+TARGET_LINK_LIBRARIES(otbRegistrationExamplesTests gdal ITKIO ITKAlgorithms ITKStatistics ITKNumerics ITKCommon OTBBasicFilters OTBCommon OTBDisparityMap OTBIO OTBSpatialReasoning OTBChangeDetection OTBFeatureExtraction  OTBLearning  OTBMultiScale)
+
+ENDIF( NOT OTB_DISABLE_CXX_TESTING AND NOT OTB_DISABLE_CXX_EXAMPLES_TESTING )
 
