@@ -155,8 +155,8 @@ RCC8GraphFileReader<TOutputGraph>
 	      nImages=it.Get()->GetSegmentationImageIndex();
 	    }
 	}
-      nImages = 2*(nImages+1);
-      std::string prefix = m_FileName.substr(0,m_FileName.length()-5);
+      nImages = nImages+1;
+      std::string prefix = m_FileName.substr(0,m_FileName.length()-4);
       
       itk::OStringStream oss;
 

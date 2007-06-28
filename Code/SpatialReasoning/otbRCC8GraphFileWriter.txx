@@ -181,12 +181,12 @@ RCC8GraphFileWriter<TInputGraph>
   if(m_WriteSegmentationImages)
     {
 
-      std::string prefix = m_FileName.substr(0,m_FileName.length()-5);
+      std::string prefix = m_FileName.substr(0,m_FileName.length()-4);
       
       itk::OStringStream oss;
 
       // then read the images
-      for(unsigned int i=1;i<=2*(maxSegImageIndex+1);++i)
+      for(unsigned int i=1;i<=maxSegImageIndex+1;++i)
 	{
 	  oss.str("");
 	  oss<<prefix<<i<<m_ImageExtension;
