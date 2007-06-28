@@ -1065,11 +1065,11 @@ ADD_TEST(ioTvSpatialObjectDXFReader ${IO_TESTS}
 
 # ---  Quickbird Metadata ---
 ADD_TEST(ioTuOSSIMImageMetaDataReader ${IO_TESTS} 
-   --compare-ascii ${EPS}   ${BASELINE_FILES}/prTuOSSIMImageMetaDataReader.txt
-                     ${TEMP}/prTuOSSIMImageMetaDataReader.txt
+   --compare-ascii ${EPS}   ${BASELINE_FILES}/ioTuOSSIMImageMetaDataReader.txt
+                     ${TEMP}/ioTuOSSIMImageMetaDataReader.txt
          otbOSSIMImageMetaDataReaderTest
          ${IMAGEDATA}/TOULOUSE/QuickBird/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF
-		 ${TEMP}/prTuOSSIMImageMetaDataReader.txt)
+		 ${TEMP}/ioTuOSSIMImageMetaDataReader.txt)
 
  
  
