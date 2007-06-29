@@ -1,4 +1,4 @@
-SUBDIRS(Common BasicFilters IO ChangeDetection FeatureExtraction Learning MultiScale DisparityMap SpatialReasoning) 
+SUBDIRS(Common BasicFilters IO ChangeDetection FeatureExtraction Learning MultiScale DisparityMap SpatialReasoning Projections) 
 
 IF(OTB_USE_VISU_GUI)
         SUBDIRS(Visu Gui)

@@ -13,37 +13,40 @@ FILE(GLOB_RECURSE ossim_init_SRCS "init/*.cpp" "init/*.c")
 FILE(GLOB_RECURSE ossim_kbool_SRCS "kbool/*.cpp" "kbool/*.c")
 FILE(GLOB_RECURSE ossim_dll_main_SRCS "dll_main/*.cpp")
 
-ADD_LIBRARY(ossimKBool ${ossim_kbool_SRCS})
+ADD_LIBRARY(otbossimKBool ${ossim_kbool_SRCS})
 
-ADD_LIBRARY(ossimMatrix ${ossim_matrix_SRCS})
-TARGET_LINK_LIBRARIES(ossimMatrix ossimKBool)
+ADD_LIBRARY(otbossimMatrix ${ossim_matrix_SRCS})
+TARGET_LINK_LIBRARIES(otbossimMatrix otbossimKBool)
 
-ADD_LIBRARY(ossimBase ${ossim_base_SRCS})
-TARGET_LINK_LIBRARIES(ossimBase ossimMatrix)
+ADD_LIBRARY(otbossimBase ${ossim_base_SRCS})
+TARGET_LINK_LIBRARIES(otbossimBase otbossimMatrix)
 
-ADD_LIBRARY(ossimPlugin ${ossim_plugin_SRCS})
-TARGET_LINK_LIBRARIES(ossimPlugin ossimBase)
+ADD_LIBRARY(otbossimPlugin ${ossim_plugin_SRCS})
+TARGET_LINK_LIBRARIES(otbossimPlugin otbossimBase)
 
-ADD_LIBRARY(ossimFont ${ossim_font_SRCS})
-TARGET_LINK_LIBRARIES(ossimFont ossimPlugin)
+ADD_LIBRARY(otbossimFont ${ossim_font_SRCS})
+TARGET_LINK_LIBRARIES(otbossimFont otbossimPlugin)
 
-ADD_LIBRARY(ossimVpfUtil ${ossim_vpfutil_SRCS})
-TARGET_LINK_LIBRARIES(ossimVpfUtil ossimFont)
+ADD_LIBRARY(otbossimVpfUtil ${ossim_vpfutil_SRCS})
+TARGET_LINK_LIBRARIES(otbossimVpfUtil otbossimFont)
 
-ADD_LIBRARY(ossimVec ${ossim_vec_SRCS})
-TARGET_LINK_LIBRARIES(ossimVec ossimVpfUtil)
+ADD_LIBRARY(otbossimVec ${ossim_vec_SRCS})
+TARGET_LINK_LIBRARIES(otbossimVec otbossimVpfUtil)
 
-ADD_LIBRARY(ossimSupportData ${ossim_support_data_SRCS})
-TARGET_LINK_LIBRARIES(ossimSupportData ossimVec)
+ADD_LIBRARY(otbossimSupportData ${ossim_support_data_SRCS})
+TARGET_LINK_LIBRARIES(otbossimSupportData otbossimVec)
 
-ADD_LIBRARY(ossimElevation ${ossim_elevation_SRCS})
-TARGET_LINK_LIBRARIES(ossimElevation ossimSupportData)
+ADD_LIBRARY(otbossimElevation ${ossim_elevation_SRCS})
+TARGET_LINK_LIBRARIES(otbossimElevation otbossimSupportData)
 
-ADD_LIBRARY(ossimProjection ${ossim_projection_SRCS})
-TARGET_LINK_LIBRARIES(ossimProjection ossimElevation)
+#ADD_LIBRARY(otbossimProjection ${ossim_projection_SRCS})
+#TARGET_LINK_LIBRARIES(otbossimProjection otbossimElevation)
 
-ADD_LIBRARY(ossimImaging ${ossim_imaging_SRCS} ${ossim_parallel_SRCS})
-TARGET_LINK_LIBRARIES(ossimImaging ossimProjection itktiff itkjpeg8 itkjpeg12 itkjpeg16)
+#ADD_LIBRARY(otbossimImaging ${ossim_imaging_SRCS} ${ossim_parallel_SRCS})
+#TARGET_LINK_LIBRARIES(otbossimImaging otbossimProjection itktiff itkjpeg8 itkjpeg12 itkjpeg16)
+
+ADD_LIBRARY(otbossimProjectionImaging ${ossim_imaging_SRCS} ${ossim_projection_SRCS} ${ossim_parallel_SRCS})
+TARGET_LINK_LIBRARIES(otbossimProjectionImaging otbossimElevation itktiff itkjpeg8 itkjpeg12 itkjpeg16)
 
 
 IF(WIN32)
@@ -56,65 +59,71 @@ IF(WIN32)
   ENDIF(NOT BORLAND)
 ENDIF(WIN32)
 
-ADD_LIBRARY(ossim ${ossim_init_SRCS})
-TARGET_LINK_LIBRARIES(ossim ossimImaging)
+ADD_LIBRARY(otbossim ${ossim_init_SRCS})
+TARGET_LINK_LIBRARIES(otbossim otbossimProjectionImaging)
+#TARGET_LINK_LIBRARIES(ossim ossimImaging)
 
-INSTALL(TARGETS ossimKBool
+INSTALL(TARGETS otbossimKBool
 RUNTIME DESTINATION ${OTB_INSTALL_BIN_DIR} COMPONENT RuntimeLibraries
 LIBRARY DESTINATION ${OTB_INSTALL_LIB_DIR} COMPONENT RuntimeLibraries
 ARCHIVE DESTINATION ${OTB_INSTALL_LIB_DIR} COMPONENT Development)
 
-INSTALL(TARGETS ossimMatrix
+INSTALL(TARGETS otbossimMatrix
 RUNTIME DESTINATION ${OTB_INSTALL_BIN_DIR} COMPONENT RuntimeLibraries
 LIBRARY DESTINATION ${OTB_INSTALL_LIB_DIR} COMPONENT RuntimeLibraries
 ARCHIVE DESTINATION ${OTB_INSTALL_LIB_DIR} COMPONENT Development)
 
-INSTALL(TARGETS ossimBase
+INSTALL(TARGETS otbossimBase
 RUNTIME DESTINATION ${OTB_INSTALL_BIN_DIR} COMPONENT RuntimeLibraries
 LIBRARY DESTINATION ${OTB_INSTALL_LIB_DIR} COMPONENT RuntimeLibraries
 ARCHIVE DESTINATION ${OTB_INSTALL_LIB_DIR} COMPONENT Development)
 
-INSTALL(TARGETS ossimPlugin
+INSTALL(TARGETS otbossimPlugin
 RUNTIME DESTINATION ${OTB_INSTALL_BIN_DIR} COMPONENT RuntimeLibraries
 LIBRARY DESTINATION ${OTB_INSTALL_LIB_DIR} COMPONENT RuntimeLibraries
 ARCHIVE DESTINATION ${OTB_INSTALL_LIB_DIR} COMPONENT Development)
 
-INSTALL(TARGETS ossimFont
+INSTALL(TARGETS otbossimFont
 RUNTIME DESTINATION ${OTB_INSTALL_BIN_DIR} COMPONENT RuntimeLibraries
 LIBRARY DESTINATION ${OTB_INSTALL_LIB_DIR} COMPONENT RuntimeLibraries
 ARCHIVE DESTINATION ${OTB_INSTALL_LIB_DIR} COMPONENT Development)
 
-INSTALL(TARGETS ossimVpfUtil
+INSTALL(TARGETS otbossimVpfUtil
 RUNTIME DESTINATION ${OTB_INSTALL_BIN_DIR} COMPONENT RuntimeLibraries
 LIBRARY DESTINATION ${OTB_INSTALL_LIB_DIR} COMPONENT RuntimeLibraries
 ARCHIVE DESTINATION ${OTB_INSTALL_LIB_DIR} COMPONENT Development)
 
-INSTALL(TARGETS ossimVec
+INSTALL(TARGETS otbossimVec
 RUNTIME DESTINATION ${OTB_INSTALL_BIN_DIR} COMPONENT RuntimeLibraries
 LIBRARY DESTINATION ${OTB_INSTALL_LIB_DIR} COMPONENT RuntimeLibraries
 ARCHIVE DESTINATION ${OTB_INSTALL_LIB_DIR} COMPONENT Development)
 
-INSTALL(TARGETS ossimSupportData
+INSTALL(TARGETS otbossimSupportData
 RUNTIME DESTINATION ${OTB_INSTALL_BIN_DIR} COMPONENT RuntimeLibraries
 LIBRARY DESTINATION ${OTB_INSTALL_LIB_DIR} COMPONENT RuntimeLibraries
 ARCHIVE DESTINATION ${OTB_INSTALL_LIB_DIR} COMPONENT Development)
 
-INSTALL(TARGETS ossimElevation
+INSTALL(TARGETS otbossimElevation
 RUNTIME DESTINATION ${OTB_INSTALL_BIN_DIR} COMPONENT RuntimeLibraries
 LIBRARY DESTINATION ${OTB_INSTALL_LIB_DIR} COMPONENT RuntimeLibraries
 ARCHIVE DESTINATION ${OTB_INSTALL_LIB_DIR} COMPONENT Development)
 
-INSTALL(TARGETS ossimProjection
+#INSTALL(TARGETS otbossimProjection
+#RUNTIME DESTINATION ${OTB_INSTALL_BIN_DIR} COMPONENT RuntimeLibraries
+#LIBRARY DESTINATION ${OTB_INSTALL_LIB_DIR} COMPONENT RuntimeLibraries
+#ARCHIVE DESTINATION ${OTB_INSTALL_LIB_DIR} COMPONENT Development)
+
+#INSTALL(TARGETS otbossimImaging
+#RUNTIME DESTINATION ${OTB_INSTALL_BIN_DIR} COMPONENT RuntimeLibraries
+#LIBRARY DESTINATION ${OTB_INSTALL_LIB_DIR} COMPONENT RuntimeLibraries
+#ARCHIVE DESTINATION ${OTB_INSTALL_LIB_DIR} COMPONENT Development)
+
+INSTALL(TARGETS otbossimProjectionImaging
 RUNTIME DESTINATION ${OTB_INSTALL_BIN_DIR} COMPONENT RuntimeLibraries
 LIBRARY DESTINATION ${OTB_INSTALL_LIB_DIR} COMPONENT RuntimeLibraries
 ARCHIVE DESTINATION ${OTB_INSTALL_LIB_DIR} COMPONENT Development)
 
-INSTALL(TARGETS ossimImaging
-RUNTIME DESTINATION ${OTB_INSTALL_BIN_DIR} COMPONENT RuntimeLibraries
-LIBRARY DESTINATION ${OTB_INSTALL_LIB_DIR} COMPONENT RuntimeLibraries
-ARCHIVE DESTINATION ${OTB_INSTALL_LIB_DIR} COMPONENT Development)
-
-INSTALL(TARGETS ossim
+INSTALL(TARGETS otbossim
 RUNTIME DESTINATION ${OTB_INSTALL_BIN_DIR} COMPONENT RuntimeLibraries
 LIBRARY DESTINATION ${OTB_INSTALL_LIB_DIR} COMPONENT RuntimeLibraries
 ARCHIVE DESTINATION ${OTB_INSTALL_LIB_DIR} COMPONENT Development)
