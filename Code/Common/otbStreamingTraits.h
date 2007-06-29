@@ -181,7 +181,7 @@ class ITK_EXPORT StreamingTraits
 		break;
 	}
     if( numDivisions == 0) numDivisions = 1;
-	otbMsgDevMacro(<<" -> Resume : method : "<<GetMethodUseToCalculateNumberOfStreamDivisions()<<"\n -> Number of divisions = "<<numDivisions);
+	otbMsgDevMacro(<<" -> Resume : method : "<<mode<<"\n -> Number of divisions = "<<numDivisions);
 	return(numDivisions);
 
 
