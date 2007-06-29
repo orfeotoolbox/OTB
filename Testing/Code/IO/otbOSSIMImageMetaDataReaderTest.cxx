@@ -71,10 +71,7 @@ int otbOSSIMImageMetaDataReaderTest (int argc, char* argv[])
 		ossimKeywordlist ossim_kwl;
 		otb_tmp.convertToOSSIMKeywordlist(ossim_kwl);
 		
-		otbMsgDebugMacro( <<"Dans EXE ");
-		otbMsgDebugMacro( << " -> Ossim key word list copy : "<<ossim_kwl<<std::endl);
-  		otbMsgDebugMacro( <<"FIN ");
-		
+		std::cout << " -> Ossim key word list copy : "<<ossim_kwl<<std::endl;
 		
 		std::ofstream file;
 		file.open(outputAsciiFilename);
