@@ -122,7 +122,7 @@ CumulantsForEdgeworth<TInput>
 	
 	if ( fMu2 <= 0.0 )
 	{
-		otbMsgDebugMacro( << "Potential NAN detected in function MakeSumAndMoments.");
+		otbGenericMsgDebugMacro( << "Potential NAN detected in function MakeSumAndMoments.");
 		fMu3 = 0.0;
 		fMu4 = 4.0;
 		return 1;
