@@ -58,16 +58,17 @@
 #if defined(OTB_LEAN_AND_MEAN) || defined(__BORLANDC__)
 #define otbGenericMsgDebugMacro(x)
 #else
-#define otbGenericMsgDebugMacro(x) \
-#ifndef NDEBUG \  	
-  {  
-  	if ( ::itk::Object::GetGlobalWarningDisplay())   \
-    { ::itk::OStringStream itkmsg; \
-      itkmsg << " Msg Debug: " x << "\n"; \
-      ::itk::OutputWindowDisplayDebugText(itkmsg.str().c_str());} \
-} \
-#endif 
-
+  #ifndef NDEBUG
+    #define otbGenericMsgDebugMacro(x) \
+    {  \
+     	if ( ::itk::Object::GetGlobalWarningDisplay())   \
+        { ::itk::OStringStream itkmsg; \
+          itkmsg << " Generic Msg Debug: " x << "\n"; \
+          ::itk::OutputWindowDisplayDebugText(itkmsg.str().c_str());} \
+	}
+  #else
+    #define otbGenericMsgDebugMacro(x)
+  #endif 
 #endif
 
 #if defined(OTB_LEAN_AND_MEAN) || defined(__BORLANDC__)
