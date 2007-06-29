@@ -195,7 +195,7 @@ int main(int ac, char* av[] )
       if (result!=0)
        	itkGenericExceptionMacro(<<"Bad function return, no regresion test !");
             
-otbMsgDebugMacro(<<"----------------     DEBUT Controle NON-REGRESION  ------------------- ");
+otbGenericMsgDebugMacro(<<"----------------     DEBUT Controle NON-REGRESION  ------------------- ");
       // Make a list of possible baselines
       // Test de non regression sur des images
       if ((baseLineFilenamesImage.size()>0) && (testFilenamesImage.size()>0))
@@ -299,7 +299,7 @@ otbMsgDebugMacro(<<"----------------     DEBUT Controle NON-REGRESION  ---------
         result += baseline->second;
         }
 
-otbMsgDebugMacro(<<"----------------     FIN Controle NON-REGRESION  ------------------- ");
+otbGenericMsgDebugMacro(<<"----------------     FIN Controle NON-REGRESION  ------------------- ");
 
       }
     catch(const itk::ExceptionObject& e)
@@ -734,7 +734,7 @@ int RegressionTestImage (const char *testImageFilename, const char *baselineImag
     }
 
 
-    otbMsgDebugMacro(<< "RegressionTestImage DifferenceThreshold : "<<toleranceDiffPixelImage);
+    otbGenericMsgDebugMacro(<< "RegressionTestImage DifferenceThreshold : "<<toleranceDiffPixelImage);
   // Now compare the two images
   typedef itk::DifferenceImageFilter<ImageType,ImageType> DiffType;
   DiffType::Pointer diff = DiffType::New();
@@ -745,7 +745,7 @@ int RegressionTestImage (const char *testImageFilename, const char *baselineImag
 
   double status = diff->GetTotalDifference();
 
-    otbMsgDebugMacro(<< "Status diff->GetTotalDifference : "<<status);
+    otbGenericMsgDebugMacro(<< "Status diff->GetTotalDifference : "<<status);
   // if there are discrepencies, create an diff image
   if (status && reportErrors)
     {
