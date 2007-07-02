@@ -1,6 +1,17 @@
 # $Id$
 
-SUBDIRS(Common IO BasicFilters FeatureExtraction ChangeDetection Learning MultiScale DisparityMap SpatialReasoning Projections)
+SUBDIRS(
+Common 
+IO 
+BasicFilters 
+FeatureExtraction 
+ChangeDetection 
+Learning 
+MultiScale 
+DisparityMap 
+SpatialReasoning
+Projections
+)
 
 IF(OTB_USE_VISU_GUI)
         SUBDIRS(Visu Gui)

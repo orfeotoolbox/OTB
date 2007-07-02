@@ -1071,7 +1071,12 @@ ADD_TEST(ioTuOSSIMImageMetaDataReader ${IO_TESTS}
          ${IMAGEDATA}/TOULOUSE/QuickBird/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF
 		 ${TEMP}/ioTuOSSIMImageMetaDataReader.txt)
 
- 
+# ---  otb::DEMReader ---
+ADD_TEST(ioTuDEMReaderNew ${IO_TESTS} otbDEMReaderNew )
+
+# ---  otb::ImageGeometryHandler ---
+ADD_TEST(ioTuImageGeometryHandlerNew ${IO_TESTS} otbImageGeometryHandlerNew )
+
  
 
 #----------------------------------------------------------------------------------
@@ -1136,6 +1141,8 @@ otbDXFToSpatialObjectGroupFilterNew.cxx
 otbSpatialObjectDXFReaderNew.cxx
 otbSpatialObjectDXFReader.cxx
 otbOSSIMImageMetaDataReaderTest.cxx
+otbDEMReaderNew.cxx
+otbImageGeometryHandlerNew.cxx
 )
 
 INCLUDE_DIRECTORIES("${OTBTesting_BINARY_DIR}")
