@@ -13,9 +13,9 @@ public:
   LinearKernelFunctor(): GenericKernelFunctorBase() {};
   virtual ~LinearKernelFunctor() {};
   
-  virtual double Evaluate(const svm_node *x, const svm_node *y, const svm_parameter& param)const
+  virtual double operator()(const svm_node *x, const svm_node *y, const svm_parameter& param)const
     {
-      return 0.;
+      return this->dot(x,y);
     }
 };
 
