@@ -3130,7 +3130,7 @@ save_parameters(FILE ** pfile, const char * generic_kernel_parameters_keyword)co
       ::otb::StringStream flux; 
       flux << m_MapParameters.size();            
       flux >> strNbParams;          
-      line = line + " " + m_Name + strNbParams;
+      line = line + " " + m_Name + " " + strNbParams;
       while( iter != m_MapParameters.end() )
       {
               line = line + "   " + iter->first + " " + iter->second;
