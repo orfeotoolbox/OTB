@@ -1,4 +1,4 @@
-PROJECT(OSSIM)
+PROJECT(otbossim)
 
 INCLUDE(CheckIncludeFile)
 CHECK_INCLUDE_FILE("dirent.h" CMAKE_HAVE_DIRENT_H)
@@ -45,6 +45,6 @@ INCLUDE_DIRECTORIES(${OTB_BINARY_DIR}/Utilities/ITK/Utilities)
 ENDIF(OTB_USE_EXTERNAL_ITK)
 
 
-CONFIGURE_FILE(${OTB_SOURCE_DIR}/Utilities/OSSIM/include/ossim/ossimConfig.h.in
-	       ${OTB_BINARY_DIR}/Utilities/OSSIM/include/ossim/ossimConfig.h)
+CONFIGURE_FILE(${OTB_SOURCE_DIR}/Utilities/otbossim/include/ossim/ossimConfig.h.in
+	       ${OTB_BINARY_DIR}/Utilities/otbossim/include/ossim/ossimConfig.h)
 SUBDIRS(src include)

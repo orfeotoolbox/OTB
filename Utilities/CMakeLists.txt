@@ -4,7 +4,7 @@ IF(NOT OTB_USE_EXTERNAL_ITK)
 	SUBDIRS( ITK )
 ENDIF(NOT OTB_USE_EXTERNAL_ITK)
 
-SUBDIRS(BGL otbsvm dxflib InsightJournal OSSIM)
+SUBDIRS(BGL otbsvm dxflib InsightJournal otbossim)
 
 IF(BUILD_TESTING)
         SUBDIRS( Dart )
