@@ -36,7 +36,7 @@ SVMModel< TInputPixel, TLabel >::SVMModel()
   m_Model = Malloc(svm_model,1);
 
   m_Problem.l = 0;
-  otbMsgDebugMacro(  << "SVMModel::SVMModel - m_Problem.l = " <<  m_Problem.l );
+  otbMsgDevMacro(  << "SVMModel::SVMModel - m_Problem.l = " <<  m_Problem.l );
   m_Problem.y = new double[1];
   m_Problem.x = new struct svm_node*[1];
   x_space = new struct svm_node[1];
@@ -48,18 +48,17 @@ template <class TInputPixel, class TLabel >
 SVMModel<TInputPixel, TLabel>::~SVMModel()
 {
 // FIXME: pbs. when deleting de problem ....
-  otbMsgDebugMacro(  << "SVMModel destructor" );
+  otbMsgDevMacro(  << "SVMModel destructor" );
 
   /*
   delete [] m_Problem.y;//free(m_Problem.y);
-  otbMsgDebugMacro(  << "SVMModel destructor - y done" );
+  otbMsgDevMacro(  << "SVMModel destructor - y done" );
   delete [] m_Problem.x; //free(m_Problem.x);
-  otbMsgDebugMacro(  << "SVMModel destructor - x done" );
+  otbMsgDevMacro(  << "SVMModel destructor - x done" );
   delete [] x_space;//
-  otbMsgDebugMacro(  << "SVMModel destructor - x_space done" );
+  otbMsgDevMacro(  << "SVMModel destructor - x_space done" );
   //free(x_space);
 */
-
 
   //svm_destroy_model(m_Model);
 
@@ -70,24 +69,24 @@ void
 SVMModel<TInputPixel, TLabel>
 ::AllocateProblem(int l, long int elements)
   {
-    otbMsgDebugMacro(  << "SVMModel::AllocateProblem - enter" );
-    otbMsgDebugMacro(  << "SVMModel::AllocateProblem - l = " << l );
-    otbMsgDebugMacro(  << "SVMModel::AllocateProblem - elements = " << elements );
-    otbMsgDebugMacro(  << "SVMModel::AllocateProblem - m_Problem.l = " << m_Problem.l );
+    otbMsgDevMacro(  << "SVMModel::AllocateProblem - enter" );
+    otbMsgDevMacro(  << "SVMModel::AllocateProblem - l = " << l );
+    otbMsgDevMacro(  << "SVMModel::AllocateProblem - elements = " << elements );
+    otbMsgDevMacro(  << "SVMModel::AllocateProblem - m_Problem.l = " << m_Problem.l );
     m_Problem.l = l;
-    otbMsgDebugMacro(  << "SVMModel::AllocateProblem - m_Problem.l = " <<  m_Problem.l );
-    otbMsgDebugMacro(  << "SVMModel::AllocateProblem - l done" );
+    otbMsgDevMacro(  << "SVMModel::AllocateProblem - m_Problem.l = " <<  m_Problem.l );
+    otbMsgDevMacro(  << "SVMModel::AllocateProblem - l done" );
     delete [] m_Problem.y;
     m_Problem.y = new double[l];//Malloc(double,l);
-    otbMsgDebugMacro(  << "SVMModel::AllocateProblem - y done" );
+    otbMsgDevMacro(  << "SVMModel::AllocateProblem - y done" );
     delete [] m_Problem.x;
     m_Problem.x = new struct svm_node*[l];//Malloc(struct svm_node* ,l);
-    otbMsgDebugMacro(  << "SVMModel::AllocateProblem - x done" );
+    otbMsgDevMacro(  << "SVMModel::AllocateProblem - x done" );
     delete [] x_space;
     x_space = new struct svm_node[elements];
     //free(x_space);
     //x_space = Malloc(struct svm_node,elements);
-    //otbMsgDebugMacro(  << "SVMModel::AllocateProblem - x_space done" );
+    //otbMsgDevMacro(  << "SVMModel::AllocateProblem - x_space done" );
 
   }
 
@@ -97,11 +96,11 @@ void
 SVMModel<TInputPixel, TLabel>
 ::SetModel(struct svm_model* aModel)
   {
-    otbMsgDebugMacro(  << "SVMModel::SetModel - enter");
+    otbMsgDevMacro(  << "SVMModel::SetModel - enter");
     //svm_destroy_model(m_Model);
-    otbMsgDebugMacro(  << "SVMModel::SetModel - destroyed" );
+    otbMsgDevMacro(  << "SVMModel::SetModel - destroyed" );
     m_Model = aModel;
-    otbMsgDebugMacro(  << "SVMModel::SetModel - out" );
+    otbMsgDevMacro(  << "SVMModel::SetModel - out" );
   }
 
 
@@ -112,14 +111,14 @@ SVMModel<TInputPixel, TLabel>
   {
     return m_Problem;
     
-//     otbMsgDebugMacro(  << "SVMModel::GetProblem - enter" );
+//     otbMsgDevMacro(  << "SVMModel::GetProblem - enter" );
 //     aProblem.l = m_Problem.l;
 //     aProblem.y = m_Problem.y;
 //     aProblem.x = m_Problem.x;
 
-//     otbMsgDebugMacro(  << "SVMModel::GetProblem - x_space " << x_space );
+//     otbMsgDevMacro(  << "SVMModel::GetProblem - x_space " << x_space );
 // //    aNode = x_space;
-//     otbMsgDebugMacro(  << "SVMModel::GetProblem - out" );
+//     otbMsgDevMacro(  << "SVMModel::GetProblem - out" );
 //     return x_space;
   }
 
