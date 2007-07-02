@@ -73,4 +73,7 @@ REGISTER_TEST(otbSpatialObjectDXFReaderNew);
 REGISTER_TEST(otbSpatialObjectDXFReader);
 
 REGISTER_TEST(otbOSSIMImageMetaDataReaderTest);
+
+REGISTER_TEST(otbDEMReaderNew);
+REGISTER_TEST(otbImageGeometryHandlerNew);
 }
