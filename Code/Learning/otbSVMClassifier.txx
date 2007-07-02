@@ -286,7 +286,7 @@ SVMClassifier< TSample, TLabel >
 //       otbMsgDebugMacro(  << "-------------------" );
 	
       }
-
+    x[i].index = -1;
 
     // otbMsgDebugMacro(  << "Starting prediction" );
 
