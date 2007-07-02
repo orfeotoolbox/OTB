@@ -24,9 +24,9 @@ SET(OTB_INCLUDE_DIRS_BUILD_TREE ${OTB_INCLUDE_DIRS_BUILD_TREE}
   ${OTB_SOURCE_DIR}/Utilities/BGL
   ${OTB_SOURCE_DIR}/Utilities/BGL/boost
   ${OTB_SOURCE_DIR}/Utilities/otbsvm
-  ${OTB_SOURCE_DIR}/Utilities/OSSIM
-  ${OTB_SOURCE_DIR}/Utilities/OSSIM/include
-  ${OTB_SOURCE_DIR}/Utilities/OSSIM/include/ossim
+  ${OTB_SOURCE_DIR}/Utilities/otbossim
+  ${OTB_SOURCE_DIR}/Utilities/otbossim/include
+  ${OTB_SOURCE_DIR}/Utilities/otbossim/include/ossim
   ${OTB_SOURCE_DIR}/Utilities/dxflib
   ${OTB_SOURCE_DIR}/Utilities/InsightJournal
 )
@@ -34,7 +34,7 @@ SET(OTB_INCLUDE_DIRS_BUILD_TREE ${OTB_INCLUDE_DIRS_BUILD_TREE}
 #-----------------------------------------------------------------------------
 # Include directories from the ossim build tree
 SET(OTB_INCLUDE_DIRS_BUILD_TREE ${OTB_INCLUDE_DIRS_BUILD_TREE}
-${OTB_BINARY_DIR}/Utilities/OSSIM/include
+${OTB_BINARY_DIR}/Utilities/otbossim/include
 )
 
 
@@ -101,11 +101,13 @@ SET(OTB_INCLUDE_DIRS_INSTALL_TREE ${OTB_INCLUDE_DIRS_INSTALL_TREE}
   ${OTB_INSTALL_INCLUDE_DIR}/DisparityMap
   ${OTB_INSTALL_INCLUDE_DIR}/Visu
   ${OTB_INSTALL_INCLUDE_DIR}/Gui
+  ${OTB_INSTALL_INCLUDE_DIR}/Projections
   ${OTB_INSTALL_INCLUDE_DIR}/Utilities
   ${OTB_INSTALL_INCLUDE_DIR}/Utilities/ITK
   ${OTB_INSTALL_INCLUDE_DIR}/Utilities/BGL
   ${OTB_INSTALL_INCLUDE_DIR}/Utilities/BGL/boost
   ${OTB_INSTALL_INCLUDE_DIR}/Utilities/otbsvm
+  ${OTB_INSTALL_INCLUDE_DIR}/Utilities/otbossim
   ${OTB_INSTALL_INCLUDE_DIR}/Utilities/InsightJournal
 )
 
