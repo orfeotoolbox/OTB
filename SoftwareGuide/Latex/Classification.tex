@@ -98,7 +98,44 @@ The energy function minimization is done using the iterated conditional modes
 \input{ScalarImageMarkovRandomField1.tex}
 \fi 
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Statistical Segmentations}
+\label{sec:StatisticalSegmentations}
 
+\subsection{Random Markov Fields}
+
+\subsection{Stochastic Expectation Maximization}
+\label{sec:SEM}
+
+The Stochastic Expectation Maximization (SEM) approach is a stochastic 
+version of the EM mixture estimation seen on
+section~\ref{sec:ExpectationMaximizationMixtureModelEstimation}. It has been 
+introduced by \cite{CeDi95} to prevent convergence of the EM approach from
+local minima. It avoids the analytical maximization issued by integrating a
+stochastic sampling procedure in the estimation process. It induces an almost
+sure (a.s.) convergence to the algorithm.
+
+From the initial two step formulation of the EM mixture estimation, the SEM
+may be decomposed into 3 steps:
+\begin{enumerate}
+\item \textbf{E-step}, calculates the expected membership values for each 
+measurement vector to each classes.
+\item \textbf{S-step}, performs a stochastic sampling of the membership vector
+to each classes, according to the membership values computed in the E-step.
+\item \textbf{M-step}, updates the parameters of the membership probabilities
+(parameters to be defined through the class
+\subdoxygen{itk}{Statistics}{ModelComponentBase} and its inherited classes).
+\end{enumerate}
+The implementation of the SEM has been turned to a contextual SEM in the sense
+where the evaluation of the membership parameters is conditioned to
+membership values of the spatial neighborhood of each pixels.
+
+\ifitkFullVersion 
+\input{SEMModelEstimatorExample.tex}
+\fi
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \section{Support Vector Machines}
 \label{sec:SupportVectorMachines}
@@ -224,6 +261,75 @@ class which is most often selected by the whole set of SVM.
 \label{sec:ImageClassification}
 \input{SVMImageClassificationExample}
 \input{SVMImageEstimatorClassificationMultiExample}
+\subsection{Generic Kernel SVM}
+
+OTB has developed a specific interface for user-defined kernels. A function
+$k(\cdot,\cdot)$ is considered to be a kernel when:
+\begin{align}\label{eqMercer}
+        \forall g(\cdot) \in {\cal L}^2(\mathbbm{R}^n) \quad & \text{so 
+that} \quad
+        \int g(\boldsymbol{x})^2 d\boldsymbol{x} \text{ be finite,} \\
+        & \text{then} \quad \int k(\boldsymbol{x},\boldsymbol{y}) \, 
+g(\boldsymbol{x})
+        \, g(\boldsymbol{y}) \, d\boldsymbol{x} d\boldsymbol{y} \geqslant 0,
+        \notag
+\end{align}
+which is known as the {\em Mercer condition\/}.
+
+When defined through the OTB, a kernel is a class that inherits from
+\code{GenericKernelFunctorBase}. Several virtual functions have to 
+be overloaded:
+\begin{itemize}
+\item The \code{Evaluate} function, which implements the behavior of the 
+kernel
+itself. For instance, the classical linear kernel could be re-implemented
+with:
+\begin{verbatim}
+        double
+        MyOwnNewKernel
+        ::Evaluate ( const svm_node * x, const svm_node * y,
+                     const svm_parameter & param ) const
+        {
+                return this->dot(x,y);
+        }
+\end{verbatim}
+This simple example shows that the classical dot product is already 
+implemented
+into \subdoxygen{otb}{GenericKernelFunctorBase}{dot()} as a protected
+function.
+\item The \code{Update()} function which synchronizes local variables and 
+their
+integration into the initial SVM procedure. The following examples will show
+the way to use it.
+\end{itemize}
+
+Some pre-defined generic kernels have already been implemented in OTB:
+\begin{itemize}
+\item \doxygen{otb}{MixturePolyRBFKernelFunctor} which implements a 
+linear mixture
+of a polynomial and a RBF kernel;
+\item \doxygen{otb}{NonGaussianRBFKernelFunctor} which implements a non
+gaussian RBF kernel;
+\item \doxygen{otb}{SpectralAngleKernelFunctor}, a kernel that integrates
+the Spectral Angle, instead of the Euclidean distance, into an inverse 
+multiquadric kernel.
+This kernel may be appropriated when using multispectral data.
+\item \doxygen{otb}{ChangeProfileKernelFunctor}, a kernel which is
+dedicated to the supervized classification of the multiscale change profile
+presented in section \ref{sec:KullbackLeiblerProfile}.
+\end{itemize}
+
+\subsubsection{Learning with User Defined Kernels}
+\label{sec:Learningwithuserdefinedkernel}
+\ifitkFullVersion
+\input{SVMGenericKernelImageModelEstimatorExample.tex}
+\fi
+
+\subsubsection{Classification with user defined kernel}
+
+\ifitkFullVersion
+\input{SVMGenericKernelImageClassificationExample.tex}
+\fi
 
 \section{Kohonen's Self Organizing Map}
 \label{sec:SOM}
