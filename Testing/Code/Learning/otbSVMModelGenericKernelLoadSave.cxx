@@ -35,34 +35,10 @@ public:
   LinearKernelFunctor(): GenericKernelFunctorBase() {};
   virtual ~LinearKernelFunctor() {};
   
-  virtual double Evaluate(const svm_node *x, const svm_node *y, const svm_parameter& param)const
+  virtual double operator()(const svm_node *x, const svm_node *y, const svm_parameter& param)const
     {
-      return dot(x,y);
+      return this->dot(x,y);
     }
-
-
-   static double dot(const svm_node *px, const svm_node *py)
-   {
-	double sum = 0;
-	while(px->index != -1 && py->index != -1)
-	{
-		if(px->index == py->index)
-		{
-			sum += px->value * py->value;
-			++px;
-			++py;
-		}
-		else
-		{
-			if(px->index > py->index)
-				++py;
-			else
-				++px;
-		}			
-	}
-	return sum;
-    }
-
 };
 
 }
