@@ -254,7 +254,7 @@ private:
                 {
                         itkGenericExceptionMacro( << "Generic Kernel is not initialiszed !");
                 }
-		return (param.kernel_generic->Evaluate(x[i],x[j],param));
+		return ((*param.kernel_generic)(x[i],x[j],param));
 	}
 };
 
@@ -383,7 +383,7 @@ double Kernel::k_function(const svm_node *x, const svm_node *y,
 			return x[(int)(y->value)].value;
 //OTB's modifications
 		case GENERIC:
-		        return (param.kernel_generic->Evaluate(x,y,param));
+		        return ((*param.kernel_generic)(x,y,param));
 		default:
 			return 0;	/* Unreachable */
 	}
@@ -3106,6 +3106,9 @@ load_parameters(FILE ** pfile)
       int NbParams(0);
       char keyword[81];
       char value[81];
+      // Read functor name
+      fscanf(*pfile,"%80s",keyword);
+      m_Name = std::string(keyword);
       // Read number of parameters
       fscanf(*pfile,"%d",&NbParams);
 //      if( NbParams == 0 ) return -1;
@@ -3127,7 +3130,7 @@ save_parameters(FILE ** pfile, const char * generic_kernel_parameters_keyword)co
       ::otb::StringStream flux; 
       flux << m_MapParameters.size();            
       flux >> strNbParams;          
-      line = line + " " + strNbParams;
+      line = line + " " + m_Name + strNbParams;
       while( iter != m_MapParameters.end() )
       {
               line = line + "   " + iter->first + " " + iter->second;
@@ -3148,6 +3151,30 @@ print_parameters(void)const
               std::cout << "  "<<iter->first <<"  "<<iter->second<<std::endl;
               ++iter;
       }
+}
+
+double 
+GenericKernelFunctorBase::
+dot(const svm_node *px, const svm_node *py)const
+{
+	double sum = 0;
+	while(px->index != -1 && py->index != -1)
+	{
+		if(px->index == py->index)
+		{
+			sum += px->value * py->value;
+			++px;
+			++py;
+		}
+		else
+		{
+			if(px->index > py->index)
+				++py;
+			else
+				++px;
+		}			
+	}
+	return sum;
 }
 
 //} // namespace otb

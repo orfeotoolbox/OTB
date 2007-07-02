@@ -115,7 +115,7 @@ namespace otb
 class GenericKernelFunctorBase
 {
 public:
-  GenericKernelFunctorBase() {};
+  GenericKernelFunctorBase() : m_Name("FunctorName") {};
   virtual ~GenericKernelFunctorBase() {};
 
 
@@ -182,10 +182,10 @@ public:
   otbSetValueMacro(Double,double);
 */
    
-  virtual double Evaluate(const svm_node *x, const svm_node *y, const svm_parameter& param)const // = 0
+  virtual double operator()(const svm_node *x, const svm_node *y, const svm_parameter& param)const // = 0
     {
       itkGenericExceptionMacro(<<"Kernel functor not definied (Null)");
-      return 0.;
+      return static_cast<double>(0.);
     }
     
   virtual int load_parameters(FILE ** pfile);
@@ -193,7 +193,13 @@ public:
   virtual int save_parameters(FILE ** pfile, const char * generic_kernel_parameters_keyword)const;
 
   virtual void print_parameters(void)const;
+  
+  virtual void Update(void){ }
 
+  virtual double dot(const svm_node *px, const svm_node *py)const;
+  
+  virtual void SetName(const std::string & name ) { m_Name = name;}
+  virtual std::string GetName(void) { return m_Name;}
 
 private:
 
@@ -203,6 +209,9 @@ private:
 
     /** Kernel functor parameters */
     MapType m_MapParameters;
+    
+    /** Functor label name */
+    std::string m_Name;
     
 };
 
