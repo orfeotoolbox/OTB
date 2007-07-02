@@ -38,7 +38,7 @@ public:
 	 * Variable to be instanciated (through \code{SetValue}) are:
 	 * Mixture (def=0.5), GammaPoly (def=1.0), CoefPoly (def=1.0),
 	 * DegreePoly (def=2), GammaRBF (def=1.0) */
-	double Evaluate ( const svm_node * x, const svm_node * y,
+	double operator() ( const svm_node * x, const svm_node * y,
 						const svm_parameter & param ) const;
 
 	MixturePolyRBFKernelFunctor ();

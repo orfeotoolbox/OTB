@@ -41,7 +41,7 @@ public:
 	 * to be fixed through \code{SetValue} with keywords: Gamma (def 1.0),
 	 * Coef (def 1.0) and Degree (def 1.0).
 	 */
-	double Evaluate ( const svm_node * x, const svm_node * y,
+	double operator() ( const svm_node * x, const svm_node * y,
 						const svm_parameter & param ) const;
 
 	ChangeProfileKernelFunctor ();

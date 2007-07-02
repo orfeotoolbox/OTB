@@ -40,7 +40,7 @@ public:
 	 * Variables to be instanciated (through \code{SetValue}) are:
 	 * Alpha (def=1), Beta (def=2) and Gamma (def 1.0).
 	 * */
-	double Evaluate ( const svm_node * x, const svm_node * y,
+	double operator() ( const svm_node * x, const svm_node * y,
 						const svm_parameter & param ) const;
 	
 	NonGaussianRBFKernelFunctor ();

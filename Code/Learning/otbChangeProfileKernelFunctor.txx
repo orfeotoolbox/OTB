@@ -49,7 +49,7 @@ ChangeProfileKernelFunctor
 
 double
 ChangeProfileKernelFunctor
-::Evaluate ( const svm_node * x, const svm_node * y,
+::operator() ( const svm_node * x, const svm_node * y,
 				const svm_parameter & param ) const
 {
 	double theMax = 0.0;

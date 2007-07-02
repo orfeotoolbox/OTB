@@ -41,7 +41,7 @@ NonGaussianRBFKernelFunctor
 
 double
 NonGaussianRBFKernelFunctor
-::Evaluate ( const svm_node * x, const svm_node * y,
+::operator() ( const svm_node * x, const svm_node * y,
 				const svm_parameter & param ) const
 {
 	double pr_x, pr_y, diff, sum = 0.0;

@@ -46,7 +46,7 @@ MixturePolyRBFKernelFunctor
 
 double
 MixturePolyRBFKernelFunctor
-::Evaluate ( const svm_node * x, const svm_node * y,
+::operator() ( const svm_node * x, const svm_node * y,
 				const svm_parameter & param ) const
 {
 	double kernel_poly = 0.0;

@@ -45,7 +45,7 @@ SpectralAngleKernelFunctor
 
 double 
 SpectralAngleKernelFunctor
-::Evaluate ( const svm_node * x, const svm_node * y,
+::operator()( const svm_node * x, const svm_node * y,
 				const svm_parameter & param ) const
 {
 	double mq = m_Coef + SAM( x, y );

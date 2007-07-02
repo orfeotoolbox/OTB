@@ -40,7 +40,7 @@ public:
 	 * The only parameter $c_0$ is to be fixed by the \code{SetValue}
 	 * interface with keyword Coef (def 2.0).
 	 */
-	double Evaluate ( const svm_node * x, const svm_node * y,
+	double operator() ( const svm_node * x, const svm_node * y,
 						const svm_parameter & param ) const;
 
 	SpectralAngleKernelFunctor ();
