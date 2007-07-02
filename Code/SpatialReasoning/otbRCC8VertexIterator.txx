@@ -66,6 +66,17 @@ namespace otb
     return (*(m_Graph->GetGraph()))[*m_Iter];
   }
   /**
+   * Set the current vertex.
+   * \param vertex The vertex to set.
+   */
+  template <class TGraph>
+  void
+  RCC8VertexIterator<TGraph>
+  ::Set(VertexPointerType vertex)
+  {
+    (*(m_Graph->GetGraph()))[*m_Iter]=vertex;
+  }
+  /**
    * Get the current vertex index.
    * \return The current vertex index.
    */

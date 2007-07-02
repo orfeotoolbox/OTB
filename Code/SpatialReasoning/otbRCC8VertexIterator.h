@@ -55,6 +55,11 @@ class ITK_EXPORT RCC8VertexIterator
    */
   VertexPointerType Get(void);
   /**
+   * Set the current vertex.
+   * \param vertex The vertex to set.
+   */
+  void Set(VertexPointerType vertex);
+  /**
    * Get the current vertex index.
    * \return The current vertex index.
    */
