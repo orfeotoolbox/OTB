@@ -211,7 +211,8 @@ int main( int argc, char *argv[])
     cReader->SetFileName( inputImageFileName  );
 
     cReader->Update();
-    
+
+// Software Guide : EndCodeSnippet    
     // Software Guide : BeginLatex
 //
 // The image has now to be transformed to a sample which
