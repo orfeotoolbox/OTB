@@ -204,7 +204,7 @@ int main(int argc, char* argv[] )
 		ResamplingFilter->SetInput( extractROIFilter->GetOutput() );
 		ResamplingFilter->SetShrinkFactor( Ratio );
 		ResamplingFilter->GenerateOutputInformation();
-		otbMsgDebugMacro(<<ResamplingFilter->GetOutput()->GetLargestPossibleRegion());
+		otbGenericMsgDebugMacro(<<ResamplingFilter->GetOutput()->GetLargestPossibleRegion());
 		//ResamplingFilter->Update();
  	 	writer->SetInput(ResamplingFilter->GetOutput() );
 		writer->Update();
