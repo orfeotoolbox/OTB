@@ -55,6 +55,7 @@ public:
   typedef itk::WeakPointer<const Self>  ConstWeakPointer;
   
   typedef ImageBase::VectorType	VectorType;	
+  typedef ImageBase::ImageKeywordlistType	ImageKeywordlistType;	
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
@@ -172,6 +173,9 @@ public:
   virtual VectorType GetLowerLeftCorner( void );
   virtual VectorType GetLowerRightCorner( void );
   
+  /** Get image keyword list */
+  virtual ImageKeywordlistType GetImageKeywordlist(void);
+
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
 /// Copy metadata from a DataObject

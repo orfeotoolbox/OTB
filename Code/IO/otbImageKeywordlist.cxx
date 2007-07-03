@@ -50,13 +50,10 @@ void
 ImageKeywordlist::
 Print(std::ostream& os) const
 {
-//  Superclass::PrintSelf(os, indent);
 	ossimKeywordlist kwl;
 	convertToOSSIMKeywordlist(kwl);
 	os << " Ossim Keyword list:"<<std::endl; 
 	os << kwl ;
-//	os << m_Keywordlist << std::endl;
-//	writeToStream
 }
 
 void 

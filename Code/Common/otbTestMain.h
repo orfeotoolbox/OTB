@@ -78,13 +78,13 @@ int main(int ac, char* av[] )
   double lEpsilon(0);
   char *baselineFilenameBinary = NULL;
   char *testFilenameBinary = NULL;
-  char *baselineFilenameAscii = NULL;
-  char *testFilenameAscii = NULL;
   std::vector<std::string> baselineFilenamesMetaData;
    std::vector<std::string> testFilenamesMetaData;
   // vector if image filenames to compare
   std::vector<std::string> baseLineFilenamesImage;
   std::vector<std::string> testFilenamesImage;
+  std::vector<std::string> baseLineFilenamesAscii;
+  std::vector<std::string> testFilenamesAscii;
 
 
 // On some sgi machines, threads and stl don't mix.
@@ -139,16 +139,6 @@ int main(int ac, char* av[] )
       av += 4;
       ac -= 4;
       }
-    if (strcmp(av[1], "--compare-metadata") == 0)
-      {
-	lToleranceDiffPixelImage = (double)(::atof(av[2]));
-	baselineFilenamesMetaData.reserve(1);
-	testFilenamesMetaData.reserve(1);
-	baselineFilenamesMetaData.push_back(av[3]);
-	testFilenamesMetaData.push_back(av[4]);
-	av += 4;
-	ac -= 4;
-      }
     else if(strcmp(av[1], "--compare-n-images") == 0)
       {
 	lToleranceDiffPixelImage = (double)(::atof(av[2]));
@@ -167,18 +157,46 @@ int main(int ac, char* av[] )
       }
     else if (strcmp(av[1], "--compare-binary") == 0)
       {
-      baselineFilenameBinary = av[2];
-      testFilenameBinary = av[3];
-      av += 3;
-      ac -= 3;
+        baselineFilenameBinary = av[2];
+        testFilenameBinary = av[3];
+        av += 3;
+        ac -= 3;
       }
     else if (strcmp(av[1], "--compare-ascii") == 0)
       {
-      lEpsilon = (double)(::atof(av[2]));	
-      baselineFilenameAscii = av[3];
-      testFilenameAscii = av[4];
-      av += 4;
-      ac -= 4;
+        lEpsilon = (double)(::atof(av[2]));	
+        baseLineFilenamesAscii.reserve(1);
+        testFilenamesAscii.reserve(1);
+        baseLineFilenamesAscii.push_back(av[3]);
+        testFilenamesAscii.push_back(av[4]);
+        av += 4;
+        ac -= 4;
+      }
+    else if (strcmp(av[1], "--compare-n-ascii") == 0)
+      {
+        lEpsilon = (double)(::atof(av[2]));	
+        // Number of comparisons to do
+        unsigned int nbComparisons=(unsigned int)(::atoi(av[3]));
+        baseLineFilenamesAscii.reserve(nbComparisons);
+        testFilenamesAscii.reserve(nbComparisons);
+        // Retrieve all the file names
+        for(unsigned int i = 0; i<nbComparisons;i++)
+        {
+          baseLineFilenamesAscii.push_back(av[4+2*i]);
+          testFilenamesAscii.push_back(av[5+2*i]);
+        }
+        av+=3+2*nbComparisons;
+        ac-=3+2*nbComparisons;
+      }
+    else if (strcmp(av[1], "--compare-metadata") == 0)
+      {
+	lToleranceDiffPixelImage = (double)(::atof(av[2]));
+	baselineFilenamesMetaData.reserve(1);
+	testFilenamesMetaData.reserve(1);
+	baselineFilenamesMetaData.push_back(av[3]);
+	testFilenamesMetaData.push_back(av[4]);
+	av += 4;
+	ac -= 4;
       }
     testToRun = av[1];
     }
@@ -260,6 +278,36 @@ otbGenericMsgDebugMacro(<<"----------------     DEBUT Controle NON-REGRESION  --
         }
 
       // Test de non regression sur des fichiers ascii
+      if ((baseLineFilenamesAscii.size()>0) && (testFilenamesAscii.size()>0))
+        {
+	  // Creates iterators on baseline filenames vector and test filenames vector
+	  std::vector<std::string>::iterator itBaselineFilenames = baseLineFilenamesAscii.begin();
+	  std::vector<std::string>::iterator itTestFilenames = testFilenamesAscii.begin();
+	  // For each couple of baseline and test file, do the comparison
+	  for(;(itBaselineFilenames != baseLineFilenamesAscii.end())
+		&&(itTestFilenames != testFilenamesAscii.end());
+	      ++itBaselineFilenames,++itTestFilenames)
+	    {
+	      std::string baselineFilenameAscii = (*itBaselineFilenames);
+	      std::string testFilenameAscii = (*itTestFilenames);
+
+	      std::map<std::string,int> baselines = RegressionTestBaselines(const_cast<char*>(baselineFilenameAscii.c_str()));
+	      std::map<std::string,int>::iterator baseline = baselines.begin();
+	      baseline->second = RegressionTestAsciiFile(testFilenameAscii.c_str(),
+							 (baseline->first).c_str(),
+							 0,
+							 lToleranceDiffPixelImage);
+		  if (baseline->second != 0)
+		    {
+		    baseline->second = RegressionTestAsciiFile(testFilenameAscii.c_str(),
+							 (baseline->first).c_str(),
+							 1,
+							 lToleranceDiffPixelImage);
+		}
+	      result += baseline->second;
+	    }
+        }
+/*
       if (baselineFilenameAscii && testFilenameAscii)
         {
         
@@ -279,7 +327,7 @@ otbGenericMsgDebugMacro(<<"----------------     DEBUT Controle NON-REGRESION  --
             }
         result += baseline->second;
         }
-
+*/
       // Test de non regression sur des fichiers binaires
       if (baselineFilenameBinary && testFilenameBinary)
         {

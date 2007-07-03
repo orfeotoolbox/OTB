@@ -51,6 +51,7 @@ public:
   typedef itk::SmartPointer<const Self>  ConstPointer;
   
   typedef ImageBase::VectorType	VectorType;	
+  typedef ImageBase::ImageKeywordlistType	ImageKeywordlistType;	
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
@@ -144,6 +145,9 @@ public:
   virtual VectorType GetUpperRightCorner( void );
   virtual VectorType GetLowerLeftCorner( void );
   virtual VectorType GetLowerRightCorner( void );
+
+  /** Get image keyword list */
+  virtual ImageKeywordlistType GetImageKeywordlist(void);
 
   /// Copy metadata from a DataObject
   virtual void CopyInformation(const itk::DataObject *);

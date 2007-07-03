@@ -276,6 +276,17 @@ ImageBase::VectorType ImageBase::GetLowerRightCorner( MetaDataDictionaryType & d
    return ( LowerRightCorner );
 }   
 
+ImageBase::ImageKeywordlistType ImageBase::GetImageKeywordlist( MetaDataDictionaryType & dict )
+{
+  ImageKeywordlistType ImageKeywordlist;
+  
+  if(dict.HasKey(MetaDataKey::m_OSSIMKeywordlistKey))
+     {
+     itk::ExposeMetaData<ImageKeywordlistType>(dict, MetaDataKey::m_OSSIMKeywordlistKey, ImageKeywordlist);     
+     }
+   return ( ImageKeywordlist );
+}   
+
 void
 ImageBase::PrintSelf(std::ostream& os, itk::Indent indent, const MetaDataDictionaryType & dict) const
 { 

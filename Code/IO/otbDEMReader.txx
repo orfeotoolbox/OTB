@@ -19,6 +19,7 @@
 #define __otbDEMReader_txx
 
 #include "otbDEMReader.h"
+#include "otbMacro.h"
 
 namespace otb
 {
@@ -26,7 +27,7 @@ namespace otb
 /*    CONSTRUCTEURS & DESTRUCTEURS    */
 /**************************************/ 
 
-// Constructeur par défault
+// Constructeur par dï¿½fault
   template<class TDEMImage> DEMReader<TDEMImage>::DEMReader()
 	{
   	m_ElevManager=ossimElevManager::instance();
@@ -49,7 +50,7 @@ delete m_ElevManager;
 /**************************************/
 /*            METHODES                */
 /**************************************/ 
-///Méthode pour spécifier un dossier contenant des DEM 
+///Mï¿½thode pour spï¿½cifier un dossier contenant des DEM 
 template<class TDEMImage> bool DEMReader<TDEMImage>::OpenDEMDirectory(char* &DEMDirectory)
 {
 ossimFilename ossimDEMDir;
@@ -62,7 +63,7 @@ result= true;
 return result;
 }
 
-///Méthode pour calculer l'altitude d'un point géographique
+///Mï¿½thode pour calculer l'altitude d'un point gï¿½ographique
 template<class TDEMImage> double DEMReader<TDEMImage>::GetHeightAboveMSL(const PointType& worldPoint)
 {
 float height;
@@ -73,14 +74,14 @@ height=m_ElevManager->getHeightAboveMSL(ossimWorldPoint);
 return height;
 }
 
-///Méthode SetSpacing
+///Mï¿½thode SetSpacing
 template<class TDEMImage> void DEMReader<TDEMImage>::SetSpacing( const double* spacing)
 { 
 SpacingType s(spacing);
 this->SetSpacing(s);
 }
 
-///Méthode GenerateOutputInformation
+///Mï¿½thode GenerateOutputInformation
 template <class TDEMImage> void DEMReader<TDEMImage>::GenerateOutputInformation()
 {
 
@@ -99,7 +100,7 @@ template <class TDEMImage> void DEMReader<TDEMImage>::GenerateOutputInformation(
 	size[0]=int (abs(((m_Lr[0]-m_Ul[0])/m_Spacing[0]))+1.5);
 	size[1]=int (abs(((m_Lr[1]-m_Ul[1])/m_Spacing[1]))+1.5);
 
-//On spécifie les paramètres de la région
+//On spï¿½cifie les paramï¿½tres de la rï¿½gion
    OutputImageRegionType largestPossibleRegion;
    largestPossibleRegion.SetSize( size );
    largestPossibleRegion.SetIndex( start );
@@ -109,7 +110,7 @@ template <class TDEMImage> void DEMReader<TDEMImage>::GenerateOutputInformation(
    output->SetOrigin(m_Ul);
 }//Fin GenerateOutputInformation
 
-///Méthode GenerateData
+///Mï¿½thode GenerateData
 template <class TDEMImage> void  DEMReader<TDEMImage>::GenerateData()
 {
 DEMImagePointerType  m_DEMImage = this->GetOutput();
@@ -124,7 +125,7 @@ ImageIteratorType outIt = ImageIteratorType(m_DEMImage,m_DEMImage->GetRequestedR
 // Walk the output image, evaluating the height at each pixel
 IndexType 			currentindex;
 PointType 			phyPoint;
-float 				height;
+double				height;
 for (outIt.GoToBegin(); !outIt.IsAtEnd(); ++outIt)
 {
  currentindex=outIt.GetIndex();
@@ -133,10 +134,10 @@ for (outIt.GoToBegin(); !outIt.IsAtEnd(); ++outIt)
  ossimWorldPoint.lat=phyPoint[0];
  ossimWorldPoint.lon=phyPoint[1];
  height=m_ElevManager->getHeightAboveMSL(ossimWorldPoint); //Calcul de l'altitude
- std::cout <<height<<endl;
- if (height>-32768) //On teste si les fichiers MNT recouvre la zone géographique demandée (-32768 = theNullHeightValue)
- {m_DEMImage->SetPixel(currentindex, height);} //On remplit l'image
- else {m_DEMImage->SetPixel(currentindex, 0);}
+ otbMsgDebugMacro(<<" HeightAboveMSL: "<<height);
+ if (height>-static_cast<double>(32768)) //On teste si les fichiers MNT recouvre la zone gï¿½ographique demandï¿½e (-32768 = theNullHeightValue)
+ {m_DEMImage->SetPixel(currentindex, static_cast<PixelType>(height) );} //On remplit l'image
+ else {m_DEMImage->SetPixel(currentindex, static_cast<PixelType>(0) );}
 }
 }//fin GenerateData
 

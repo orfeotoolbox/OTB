@@ -128,6 +128,13 @@ ImageBase::VectorType Image<TPixel, VImageDimension,  foo>::GetLowerRightCorner(
    return ( ImageBase::GetLowerRightCorner( this->GetMetaDataDictionary() ) );	
 }
 
+template <class TPixel, unsigned int VImageDimension, unsigned int foo>   
+ImageBase::ImageKeywordlistType Image<TPixel, VImageDimension, foo>::GetImageKeywordlist( void )
+{
+   return ( ImageBase::GetImageKeywordlist( this->GetMetaDataDictionary() ) );	
+}
+
+
 template <class TPixel, unsigned int VImageDimension, unsigned int foo> 
 void 
 Image<TPixel, VImageDimension,  foo>

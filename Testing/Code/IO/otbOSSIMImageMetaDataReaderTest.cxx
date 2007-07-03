@@ -26,11 +26,10 @@
 #include <iostream>
 
 #include "otbImage.h"
+#include "otbVectorImage.h"
 
 #include "otbImageFileReader.h"
-#include "otbStreamingImageFileWriter.h"
 #include "otbImageKeywordlist.h"
-#include "otbMetaDataKey.h"
 
 int otbOSSIMImageMetaDataReaderTest (int argc, char* argv[])
 {
@@ -39,52 +38,68 @@ int otbOSSIMImageMetaDataReaderTest (int argc, char* argv[])
 		
         // Verify the number of parameters in the command line
         const char * inputFilename  = argv[1];
-		const char * outputAsciiFilename  = argv[2];
-        //const char * outputFilename = argv[2];
-       
+	const char * outputAsciiFilenameOtbImage  = argv[2];
+	const char * outputAsciiFilenameOtbVectorImage  = argv[3];
 
-        typedef unsigned char  	                                InputPixelType;
-        typedef unsigned char  	                                OutputPixelType;
-        const   unsigned int        	                        Dimension = 2;
+    typedef unsigned char  	                                InputPixelType;
+    typedef unsigned char  	                                OutputPixelType;
+    const   unsigned int        	                        Dimension = 2;
 
-        typedef otb::Image< InputPixelType,  Dimension >        InputImageType;
-        typedef otb::Image< OutputPixelType, Dimension >        OutputImageType;
+    typedef otb::Image< InputPixelType,  Dimension >        InputImageType;
+    typedef otb::ImageFileReader< InputImageType  >         ImageReaderType;
 
-        typedef otb::ImageFileReader< InputImageType  >         ReaderType;
-        typedef otb::StreamingImageFileWriter< OutputImageType> StreamingWriterType;
+    ImageReaderType::Pointer image_reader = ImageReaderType::New();
+    image_reader->SetFileName( inputFilename  );
 
-        ReaderType::Pointer reader = ReaderType::New();
-        reader->SetFileName( inputFilename  );
-		//reader->GenerateOutputInformation();
+	typedef itk::BinaryMedianImageFilter<InputImageType,InputImageType>  MedianFilterType;
+	MedianFilterType::Pointer image_medianFilter = MedianFilterType::New();
 	
-		typedef itk::BinaryMedianImageFilter<InputImageType,OutputImageType>  MedianFilterType;
-		MedianFilterType::Pointer medianFilter = MedianFilterType::New();
-		
-		medianFilter->SetInput(reader->GetOutput());
-//		medianFilter->GenerateOutputInformation();
-		medianFilter->GetOutput()->UpdateOutputInformation();
+	
+	image_medianFilter->SetInput(image_reader->GetOutput());
+	image_medianFilter->GetOutput()->UpdateOutputInformation();
 
-  		otb::ImageKeywordlist otb_tmp;
-		itk::ExposeMetaData< otb::ImageKeywordlist >(medianFilter->GetOutput()->GetMetaDataDictionary(),
-	  											 otb::MetaDataKey::m_OSSIMKeywordlistKey,
-												 otb_tmp);
-		ossimKeywordlist ossim_kwl;
-		otb_tmp.convertToOSSIMKeywordlist(ossim_kwl);
-		
-		std::cout << " -> Ossim key word list copy : "<<ossim_kwl<<std::endl;
-		
-		std::ofstream file;
-		file.open(outputAsciiFilename);
-		file << "--- OSSIM KEYWORDLIST ---" << std::endl;
-		file << ossim_kwl;
-		file.close();
-// ../../../bin/thomas ~/ORFEO-TOOLBOX/otb/OTB-Data/LargeInput/TOULOUSE/QuickBird/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF
-/*        StreamingWriterType::Pointer writer = StreamingWriterType::New();
-        writer->SetFileName( outputFilename );
-        writer->SetNumberOfStreamDivisions( 10 );
-        writer->SetInput( reader->GetOutput() );
-        writer->Update(); 
-  */      
+  	otb::ImageKeywordlist otb_tmp_image;
+/*	itk::ExposeMetaData< otb::ImageKeywordlist >(image_medianFilter->GetOutput()->GetMetaDataDictionary(),
+											 otb::MetaDataKey::m_OSSIMKeywordlistKey,
+											 otb_tmp_image);*/
+
+	otb_tmp_image = image_reader->GetOutput()->GetImageKeywordlist();
+
+	ossimKeywordlist ossim_kwl_image;
+	otb_tmp_image.convertToOSSIMKeywordlist(ossim_kwl_image);
+	
+	std::cout << " -> otbImage Ossim key word list copy : "<<ossim_kwl_image<<std::endl;
+	
+	std::ofstream file;
+	file.open(outputAsciiFilenameOtbImage);
+	file << "--- OSSIM KEYWORDLIST ---" << std::endl;
+	file << ossim_kwl_image;
+	file.close();
+
+    typedef otb::VectorImage< InputPixelType,  Dimension >  InputVectorImageType;
+    typedef otb::ImageFileReader< InputVectorImageType  >   VectorImageReaderType;
+
+    VectorImageReaderType::Pointer vector_image_reader = VectorImageReaderType::New();
+    vector_image_reader->SetFileName( inputFilename  );
+	vector_image_reader->GenerateOutputInformation ();
+
+/*	itk::ExposeMetaData< otb::ImageKeywordlist >(vector_image_reader->GetOutput()->GetMetaDataDictionary(),
+											 otb::MetaDataKey::m_OSSIMKeywordlistKey,
+											 otb_tmp_vector_image);*/
+  	otb::ImageKeywordlist otb_tmp_vector_image;
+	otb_tmp_vector_image = vector_image_reader->GetOutput()->GetImageKeywordlist();
+
+	ossimKeywordlist ossim_kwl_vector_image;
+	otb_tmp_vector_image.convertToOSSIMKeywordlist(ossim_kwl_vector_image);
+	
+	std::cout << " -> otbVectorImage Ossim key word list copy : "<<ossim_kwl_vector_image<<std::endl;
+	
+//	std::ofstream file;
+	file.open(outputAsciiFilenameOtbVectorImage);
+	file << "--- OSSIM KEYWORDLIST ---" << std::endl;
+	file << ossim_kwl_vector_image;
+	file.close();
+
   } 
   catch( itk::ExceptionObject & err ) 
   { 

@@ -25,6 +25,7 @@
 #include "itkMetaDataDictionary.h"
 
 #include "otbMetaDataKey.h"
+#include "otbImageKeywordlist.h"
 
 #include <iostream>
 #include <string>
@@ -45,6 +46,8 @@ public:
   typedef itk::MetaDataDictionary 	MetaDataDictionaryType;  
   
   typedef MetaDataKey::VectorType	VectorType;
+  
+  typedef ImageKeywordlist              ImageKeywordlistType;
   
   /** Get the projection coordinate system of the image. */
   
@@ -101,6 +104,10 @@ public:
   
   static VectorType GetLowerRightCorner( MetaDataDictionaryType & dict );
   virtual VectorType GetLowerRightCorner() = 0; 
+  
+  /** Get the ImageKeywordlist */
+  static ImageKeywordlistType GetImageKeywordlist( MetaDataDictionaryType & dict );
+  virtual ImageKeywordlistType GetImageKeywordlist() = 0; 
   
   void PrintSelf(std::ostream& os, itk::Indent indent, const MetaDataDictionaryType & dict) const;
                  

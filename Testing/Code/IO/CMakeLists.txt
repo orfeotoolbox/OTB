@@ -1064,15 +1064,27 @@ ADD_TEST(ioTvSpatialObjectDXFReader ${IO_TESTS}
 # -------     Test pour la lecture des métadonnées OSSIM  ------------------------
 
 # ---  Quickbird Metadata ---
-ADD_TEST(ioTuOSSIMImageMetaDataReader ${IO_TESTS} 
-   --compare-ascii ${EPS}   ${BASELINE_FILES}/ioTuOSSIMImageMetaDataReader.txt
-                     ${TEMP}/ioTuOSSIMImageMetaDataReader.txt
+ADD_TEST(ioTvOSSIMImageMetaDataReader ${IO_TESTS} 
+   --compare-n-ascii ${EPS} 2           ${BASELINE_FILES}/ioOSSIMImageMetaDataReader.txt
+                                        ${TEMP}/ioOSSIMImageMetaDataReader.txt
+                                        ${BASELINE_FILES}/ioOSSIMImageMetaDataReader.txt
+                                        ${TEMP}/ioOSSIMVectorImageMetaDataReader.txt
          otbOSSIMImageMetaDataReaderTest
          ${IMAGEDATA}/TOULOUSE/QuickBird/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF
-		 ${TEMP}/ioTuOSSIMImageMetaDataReader.txt)
+	 ${TEMP}/ioOSSIMImageMetaDataReader.txt
+	 ${TEMP}/ioOSSIMVectorImageMetaDataReader.txt
+         )
 
 # ---  otb::DEMReader ---
 ADD_TEST(ioTuDEMReaderNew ${IO_TESTS} otbDEMReaderNew )
+
+ADD_TEST(ioTvDEMReader ${IO_TESTS} 
+--compare-ascii ${TOL} 	${BASELINE_FILES}/ioDEMGetHeightAboveMSL.txt
+                        ${TEMP}/ioDEMGetHeightAboveMSL.txt
+        otbDEMReader
+        ${INPUTDATA}/DEM/srtm_directory
+        ${TEMP}/ioDEMGetHeightAboveMSL.txt
+        )
 
 # ---  otb::ImageGeometryHandler ---
 ADD_TEST(ioTuImageGeometryHandlerNew ${IO_TESTS} otbImageGeometryHandlerNew )
@@ -1142,6 +1154,7 @@ otbSpatialObjectDXFReaderNew.cxx
 otbSpatialObjectDXFReader.cxx
 otbOSSIMImageMetaDataReaderTest.cxx
 otbDEMReaderNew.cxx
+otbDEMReader.cxx
 otbImageGeometryHandlerNew.cxx
 )
 
