@@ -39,7 +39,7 @@ template < class TScalarType,
            unsigned int NParametersDimensions >
 ForwardSensorModel< TScalarType,NInputDimensions,NOutputDimensions,NParametersDimensions>
 ::ForwardSensorModel():
-   Superclass(OutputSpaceDimension, ParametersDimension)
+Superclass(OutputSpaceDimension, ParametersDimension)
 {
  m_Model = NULL;
 }

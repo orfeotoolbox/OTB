@@ -27,15 +27,15 @@ namespace otb
 /**************************************/ 
 
 // Constructeur par défault
-  template<class TInputMapProjection, class TOutputMapProjection, class TScalarType, unsigned int NInputDimensions, unsigned int NOutputDimensions>
-  Composite<TInputMapProjection, TOutputMapProjection, TScalarType, NInputDimensions, NOutputDimensions>::Composite()
+template<class TInputMapProjection, class TOutputMapProjection, class TScalarType, unsigned int NInputDimensions, unsigned int NOutputDimensions>
+Composite<TInputMapProjection, TOutputMapProjection, TScalarType, NInputDimensions, NOutputDimensions>::Composite()
 : Superclass(SpaceDimension,ParametersDimension)
 {
 }
   
 // Destructeur 
 template<class TInputMapProjection, class TOutputMapProjection, class TScalarType, unsigned int NInputDimensions, unsigned int NOutputDimensions>
- Composite<TInputMapProjection, TOutputMapProjection, TScalarType, NInputDimensions, NOutputDimensions>::~Composite()
+Composite<TInputMapProjection, TOutputMapProjection, TScalarType, NInputDimensions, NOutputDimensions>::~Composite()
 {
 }
 

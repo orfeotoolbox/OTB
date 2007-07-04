@@ -29,7 +29,7 @@ namespace otb
 // Constructeur par défault
 template<class TOssimMapProjection, class TScalarType, unsigned int NInputDimensions, unsigned int NOutputDimensions>
 MapProjection<TOssimMapProjection, TScalarType, NInputDimensions, NOutputDimensions>::MapProjection()
-//: Superclass(SpaceDimension,ParametersDimension)
+: Superclass(SpaceDimension,ParametersDimension)
 {
  m_MapProjection =  new OssimMapProjectionType();
 }

@@ -30,4 +30,7 @@ void RegisterTests()
 REGISTER_TEST(otbProjectionBaseNew);
 REGISTER_TEST(otbMapProjectionsNew);
 REGISTER_TEST(otbSensorModelsNew);
+REGISTER_TEST(otbRegionProjection);
+REGISTER_TEST(otbSensorImageToCarto);
+REGISTER_TEST(otbSensorImageDEMToCarto);
 }
