@@ -22,16 +22,16 @@ ADD_TEST(prTuMapProjectionsNew ${PROJECTIONS_TESTS}  otbMapProjectionsNew )
 
 ADD_TEST(prTuSensorModelsNew ${PROJECTIONS_TESTS}  otbSensorModelsNew )
 
-ADD_TEST(prTvRegionProjectionCevennes ${PROJECTIONS_TESTS}  
-        otbRegionProjection
-        ${IMAGEDATA}/CEVENNES/06FEB12104912-P1BS-005533998070_01_P001.TIF
-        ${TEMP}/RegionProjectionCevennes.png
-        44.08
-        3.7
-        2000
-        2000
-        200
-        )
+#   ADD_TEST(prTvRegionProjectionCevennes ${PROJECTIONS_TESTS}  
+#           otbRegionProjection
+#           ${IMAGEDATA}/CEVENNES/06FEB12104912-P1BS-005533998070_01_P001.TIF
+#           ${TEMP}/RegionProjectionCevennes.png
+#           44.08
+#           3.7
+#           2000
+#           2000
+#           200
+#           )
 
 ADD_TEST(prTvRegionProjectionStGilles ${PROJECTIONS_TESTS}  
         otbRegionProjection
@@ -44,16 +44,16 @@ ADD_TEST(prTvRegionProjectionStGilles ${PROJECTIONS_TESTS}
         500
         )
 
-ADD_TEST(prTvSensorImageToCartoCevennes ${PROJECTIONS_TESTS}  
-        otbSensorImageToCarto
-        ${IMAGEDATA}/CEVENNES/06FEB12104912-P1BS-005533998070_01_P001.TIF
-        ${TEMP}/SensorImageToCartoCevennes_UTM.png
-        556046 
-        4.881e+06 
-        2000 
-        2000 
-        220
-        )
+#   ADD_TEST(prTvSensorImageToCartoCevennes ${PROJECTIONS_TESTS}  
+#           otbSensorImageToCarto
+#           ${IMAGEDATA}/CEVENNES/06FEB12104912-P1BS-005533998070_01_P001.TIF
+#           ${TEMP}/SensorImageToCartoCevennes_UTM.png
+#           556046 
+#           4.881e+06 
+#           2000 
+#           2000 
+#           220
+#           )
 
 ADD_TEST(prTvSensorImageToCartoStGilles ${PROJECTIONS_TESTS}  
         otbSensorImageToCarto
@@ -66,18 +66,18 @@ ADD_TEST(prTvSensorImageToCartoStGilles ${PROJECTIONS_TESTS}
         500
         )
 
-ADD_TEST(prTvSensorImageDEMToCartoCevennes ${PROJECTIONS_TESTS}  
-        otbSensorImageDEMToCarto
-        ${IMAGEDATA}/CEVENNES/06FEB12104912-P1BS-005533998070_01_P001.TIF
-        ${TEMP}/SensorImageDEMToCartoCevennes_UTM_DEM.png
-        556046 
-        4.881e+06 
-        2000 
-        2000 
-        200 
-        ${INPUTDATA}/DEM/srtm_directory/ 
-        ${TEMP}/SensorImageDEMToCartoCevennes.hdr
-        )
+#   ADD_TEST(prTvSensorImageDEMToCartoCevennes ${PROJECTIONS_TESTS}  
+#           otbSensorImageDEMToCarto
+#           ${IMAGEDATA}/CEVENNES/06FEB12104912-P1BS-005533998070_01_P001.TIF
+#           ${TEMP}/SensorImageDEMToCartoCevennes_UTM_DEM.png
+#           556046 
+#           4.881e+06 
+#           2000 
+#           2000 
+#           200 
+#           ${INPUTDATA}/DEM/srtm_directory/ 
+#           ${TEMP}/SensorImageDEMToCartoCevennes.hdr
+#           )
 
 
 ADD_TEST(prTvSensorImageDEMToCartoStGilles ${PROJECTIONS_TESTS}  
