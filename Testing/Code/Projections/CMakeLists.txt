@@ -22,6 +22,40 @@ ADD_TEST(prTuMapProjectionsNew ${PROJECTIONS_TESTS}  otbMapProjectionsNew )
 
 ADD_TEST(prTuSensorModelsNew ${PROJECTIONS_TESTS}  otbSensorModelsNew )
 
+
+
+ADD_TEST(prTvTestCreateProjectionWithOSSIM_Toulouse ${PROJECTIONS_TESTS}  
+        otbCreateProjectionWithOSSIM
+        ${IMAGEDATA}/TOULOUSE/QuickBird/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF
+        )
+
+ADD_TEST(prTvTestCreateProjectionWithOSSIM_Cevennes ${PROJECTIONS_TESTS}  
+        otbCreateProjectionWithOSSIM
+        ${IMAGEDATA}/CEVENNES/06FEB12104912-P1BS-005533998070_01_P001.TIF
+        )
+
+
+ADD_TEST(prTvTestCreateProjectionWithOTB_Toulouse ${PROJECTIONS_TESTS}  
+        otbCreateProjectionWithOTB
+        ${IMAGEDATA}/TOULOUSE/QuickBird/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF
+        )
+
+ADD_TEST(prTvTestCreateProjectionWithOTB_Cevennes ${PROJECTIONS_TESTS}  
+        otbCreateProjectionWithOTB
+        ${IMAGEDATA}/CEVENNES/06FEB12104912-P1BS-005533998070_01_P001.TIF
+        )
+
+ADD_TEST(prTvRegionProjectionToulouse ${PROJECTIONS_TESTS}  
+        otbRegionProjection
+        ${IMAGEDATA}/TOULOUSE/QuickBird/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF
+        ${TEMP}/RegionProjectionToulouse.png
+        44.08
+        3.7
+        2000
+        2000
+        200
+        )
+
 ADD_TEST(prTvRegionProjectionCevennes ${PROJECTIONS_TESTS}  
         otbRegionProjection
         ${IMAGEDATA}/CEVENNES/06FEB12104912-P1BS-005533998070_01_P001.TIF
@@ -99,6 +133,8 @@ SET(Projections_SRCS
 otbProjectionBaseNew.cxx
 otbMapProjectionsNew.cxx
 otbSensorModelsNew.cxx
+otbCreateProjectionWithOSSIM.cxx
+otbCreateProjectionWithOTB.cxx
 otbRegionProjection.cxx
 otbSensorImageToCarto.cxx
 otbSensorImageDEMToCarto.cxx
