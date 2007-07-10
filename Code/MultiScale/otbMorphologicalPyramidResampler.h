@@ -92,7 +92,7 @@ namespace otb
     } // End namespace MorphologicalPyramid
 }// End namespace otb
 
-#ifndef ITK_MANUAL_INSTANTIATION
+#ifndef OTB_MANUAL_INSTANTIATION
 #include "otbMorphologicalPyramidResampler.txx"
 #endif
 

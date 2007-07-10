@@ -136,7 +136,7 @@ private:
 
 } // end namespace otb
 
-#ifndef ITK_MANUAL_INSTANTIATION
+#ifndef OTB_MANUAL_INSTANTIATION
 #include "otbBinaryFunctorNeighborhoodImageFilter.txx"
 #endif
 

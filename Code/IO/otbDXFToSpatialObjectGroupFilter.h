@@ -108,7 +108,7 @@ class ITK_EXPORT DXFToSpatialObjectGroupFilter
   bool layerspecified;
 };
 }
-#ifndef ITK_MANUAL_INSTANTIATION
+#ifndef OTB_MANUAL_INSTANTIATION
 #include "otbDXFToSpatialObjectGroupFilter.txx"
 #endif
 

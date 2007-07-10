@@ -154,7 +154,7 @@ protected:
 } // end of namespace Statistics 
 } // end of namespace otb 
 
-#ifndef ITK_MANUAL_INSTANTIATION
+#ifndef OTB_MANUAL_INSTANTIATION
 #include "otbModelComponentBase.txx"
 #endif
 

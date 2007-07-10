@@ -208,7 +208,7 @@ private:
 
 } // end of namespace 
 
-#ifndef ITK_MANUAL_INSTANTIATION
+#ifndef OTB_MANUAL_INSTANTIATION
 #include "otbSEMClassifier.txx"
 #endif
 

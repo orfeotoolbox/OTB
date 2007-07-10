@@ -58,7 +58,7 @@ protected:
 
 } // end of namespace otb
 
-#ifndef ITK_MANUAL_INSTANTIATION
+#ifndef OTB_MANUAL_INSTANTIATION
 #include "otbNonGaussianRBFKernelFunctor.txx"
 #endif
 

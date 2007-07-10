@@ -18,11 +18,12 @@
 /*!
  *
  * PURPOSE:
- *2 méthodes nécessaires pour l'ortho (au niveau de l'instanciation des modèles de capteurs).
+ *2 mï¿½thodes nï¿½cessaires pour l'ortho (au niveau de l'instanciation des modï¿½les de capteurs).
  * 
  * 
  */
 #include "otbImageGeometryHandler.h"
+#include "otbMacro.h"
 
 namespace otb
 
@@ -30,7 +31,7 @@ namespace otb
       /*     Constructeurs       */
       /***************************/
       
-// Constructeur par défault
+// Constructeur par dï¿½fault
 ImageGeometryHandler::ImageGeometryHandler()
 {
 //handler = new ImageGeometryHandler();
@@ -55,25 +56,25 @@ delete handler;
 }
       
       /***************************/
-      /*     Méthodes            */
+      /*     Mï¿½thodes            */
       /***************************/
-//Ouvrir le fichier: On spécifie le nom de l'image en paramètres
-//Encapsulation de la méthode "open"
+//Ouvrir le fichier: On spï¿½cifie le nom de l'image en paramï¿½tres
+//Encapsulation de la mï¿½thode "open"
 void ImageGeometryHandler::SetFileName(char *src)
 {
-std::cout << "Creation handler " << std::endl; std::cout.flush();
- handler = ossimImageHandlerRegistry::instance()->open(ossimFilename(src));
-      if(!handler)
-      {
-         cout << "Unable to open input image: " << src << endl;
-      }
+	otbDebugMacro(<<"Creation handler... ");
+ 	handler = ossimImageHandlerRegistry::instance()->open(ossimFilename(src));
+    if(!handler)
+    {
+		itkExceptionMacro(<< "Unable to open input image: " << src);
+    }
 }
         
-// Récupération de la géométrie de l'image: 
-//Encapsulation de la méthode "getImageGeometry"
+// Rï¿½cupï¿½ration de la gï¿½omï¿½trie de l'image: 
+//Encapsulation de la mï¿½thode "getImageGeometry"
 ossimKeywordlist ImageGeometryHandler::GetGeometryKeywordlist()
 {
-std::cout << "Get geometry handler " << std::endl; std::cout.flush();
+otbDebugMacro( << "Get geometry handler " );
 handler->getImageGeometry(m_geom_kwl);
 return m_geom_kwl;
 }    
