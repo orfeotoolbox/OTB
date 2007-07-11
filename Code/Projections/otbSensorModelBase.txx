@@ -61,8 +61,8 @@ SensorModelBase< TScalarType,NInputDimensions,NOutputDimensions,NParametersDimen
 {
         if( m_Model != NULL)
         {
-//                 delete m_Model;
-//                 m_Model = NULL;
+                 delete m_Model;
+                 m_Model = NULL;
         }
 }
 
@@ -134,18 +134,12 @@ SensorModelBase< TScalarType,NInputDimensions,NOutputDimensions,NParametersDimen
 {
         ossimKeywordlist geom;
         
-        otbMsgDebugMacro(<<"CreateProjection(): ossimKeywordlist: "<<geom);
+        otbMsgDevMacro(<<"CreateProjection(): ossimKeywordlist: "<<geom);
         image_kwl.convertToOSSIMKeywordlist(geom);
         m_Model = ossimProjectionFactoryRegistry::instance()->createProjection(geom);
         if( m_Model == NULL)
         {
                 itkExceptionMacro(<<"Invalid Model pointer m_Model == NULL !\n The ossim keywordlist is bad!");
-        }
-        ossimRefPtr<ossimProjection> ptrModel = m_Model;
-        if( ptrModel.valid() == false)
-        {
-                otbDebugMacro(<<"CreateProjection(): ptrModel.valid() == false");
-                itkExceptionMacro(<<"Invalid Model pointer m_Model.valid() == false\n The ossim keywordlist is bad!");
         }
 }
 
