@@ -291,18 +291,18 @@ for (outputIt.GoToBegin(); !outputIt.IsAtEnd(); ++outputIt)
 currentindex=outputIt.GetIndex();
 //On le transforme en Point physique
 outputimage->TransformIndexToPhysicalPoint(currentindex, outputpoint);
-      otbGenericMsgDebugMacro(<< "Pour l'Index N°:(" << currentindex[0]<< ","<< currentindex[1] << ")"<<  std::endl
+      otbMsgDevMacro(<< "Pour l'Index N°:(" << currentindex[0]<< ","<< currentindex[1] << ")"<<  std::endl
                 << "Le point physique correspondant est: ("<<  outputpoint[0]<< ","<<  outputpoint[1]<< ")"); 
 
 //On applique la projection:
 geoPoint= utmprojection->Inverse(outputpoint);	
-otbGenericMsgDebugMacro(<< "Le point géographique correspondant est: ("<<  geoPoint[0]<< ","<<  geoPoint[1]<< ")"); 	
+otbMsgDevMacro(<< "Le point géographique correspondant est: ("<<  geoPoint[0]<< ","<<  geoPoint[1]<< ")"); 	
 //On calcule les coordonnées pixeliques sur l'image capteur
 inputpoint = model->TransformPoint(geoPoint);
-  otbGenericMsgDebugMacro(<< "Les coordonnées en pixel sur l'image capteur correspondant à ce point sont:" << std::endl
+  otbMsgDevMacro(<< "Les coordonnées en pixel sur l'image capteur correspondant à ce point sont:" << std::endl
                << inputpoint[0] << ","<< inputpoint[1] );
 inputimage->TransformPhysicalPointToIndex(inputpoint,pixelindex);
-    otbGenericMsgDebugMacro(<< "L'index correspondant à ce point est:" << std::endl
+    otbMsgDevMacro(<< "L'index correspondant à ce point est:" << std::endl
                  << pixelindex[0] << ","<< pixelindex[1] );
 
 /**On stocke les pixel index dans un tableau pixelindexarray**/
@@ -314,7 +314,7 @@ inputimage->TransformPhysicalPointToIndex(inputpoint,pixelindex);
 /**On stocke les pixel index dans un tableau currentindexarray**/
  currentIndexArray[It]=currentindex[0];
  currentIndexArray[It+1]=currentindex[1];
-otbGenericMsgDebugMacro(<< "La valeur stockée" << std::endl
+otbMsgDevMacro(<< "La valeur stockée" << std::endl
           << pixelIndexArray[It] <<  "," << pixelIndexArray[It+1]);
  It=It+2;
 }//Fin boucle: on a stocké tous les index qui nous interesse
@@ -380,7 +380,7 @@ currentindexbis[1]= currentIndexArray[2*k+1];
 if (interpolator->IsInsideBuffer(pixelindexbis))
 {pixelvalue=int(interpolator->EvaluateAtIndex(pixelindexbis));}
 else {pixelvalue=0;}
-otbGenericMsgDebugMacro(<< "La valeur du pixel est:" << std::endl
+otbMsgDevMacro(<< "La valeur du pixel est:" << std::endl
            << float(pixelvalue) );
 outputimage->SetPixel(currentindexbis,pixelvalue);
  }

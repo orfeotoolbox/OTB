@@ -105,10 +105,10 @@ ImageType::RegionType			 region;
 region.SetSize(size);
 region.SetIndex(start);
 
-outputimage-> SetOrigin(origin);
-outputimage-> SetRegions(region);
+outputimage->SetOrigin(origin);
+outputimage->SetRegions(region);
 outputimage->SetSpacing(spacing);
-outputimage-> Allocate();     //Notre image de sortie est cr��e.
+outputimage->Allocate();     //Notre image de sortie est cr��e.
 otbGenericMsgDebugMacro(<< "Output image created!! " ); 
 
 /********************************************************/
@@ -121,6 +121,8 @@ reader->SetFileName(argv[1]);
 
 //Read meta data (ossimKeywordlist)
 reader->GenerateOutputInformation();
+
+otbGenericMsgDebugMacro(<< "Original input imagine spacing: "<<reader->GetOutput()->GetSpacing() ); 
 
 /******************************/
 /*  Cr�ation de mon handler   */
@@ -209,8 +211,10 @@ otbGenericMsgDebugMacro(<< "extractorwriter created" );
 
 typedef itk::RescaleIntensityImageFilter<ImageType,CharImageType>  RescalerType;
 RescalerType::Pointer	                 rescaler=RescalerType::New();
-rescaler->SetOutputMinimum(50);
-rescaler->SetOutputMaximum(500);
+//rescaler->SetOutputMinimum(50);
+//rescaler->SetOutputMaximum(500);
+rescaler->SetOutputMinimum(10);
+rescaler->SetOutputMaximum(255);
 otbGenericMsgDebugMacro(<< "rescaler created" ); 
 
 
@@ -271,27 +275,27 @@ for (outputIt.GoToBegin(); !outputIt.IsAtEnd(); ++outputIt)
 currentindex=outputIt.GetIndex();
 //On le transforme en Point physique
 outputimage->TransformIndexToPhysicalPoint(currentindex, outputpoint);
-      otbGenericMsgDebugMacro(<< "Pour l'Index Ncurrent:(" << currentindex[0]<< ","<< currentindex[1] << ")"<<  std::endl
+      otbMsgDevMacro(<< "Pour l'Index Ncurrent:(" << currentindex[0]<< ","<< currentindex[1] << ")"<<  std::endl
                 << "Le point physique correspondant est: ("<<  outputpoint[0]<< ","<<  outputpoint[1]<< ")"); 
 
 //On calcule les coordonn�es pixeliques sur l'image capteur
 inputpoint = model->TransformPoint(outputpoint);
-  otbGenericMsgDebugMacro(<< "Les coordonnees en pixel sur l'image capteur correspondant a ce point sont:" << std::endl
+  otbMsgDevMacro(<< "Les coordonnees en pixel sur l'image capteur correspondant a ce point sont:" << std::endl
                << inputpoint[0] << ","<< inputpoint[1] );
 inputimage->TransformPhysicalPointToIndex(inputpoint,pixelindex);
-    otbGenericMsgDebugMacro(<< "L'index correspondant a ce point est:" << std::endl
+    otbMsgDevMacro(<< "L'index correspondant a ce point est:" << std::endl
                  << pixelindex[0] << ","<< pixelindex[1] );
 
 /**On stocke les pixel index dans un tableau pixelindexarray**/
  pixelIndexArray[It]=pixelindex[0];
  pixelIndexArray[It+1]=pixelindex[1];
-//otbGenericMsgDebugMacro(<< "La valeur stock�e" << std::endl
+//otbMsgDevMacro(<< "La valeur stock�e" << std::endl
 //          << pixelIndexArray[It] <<  "," << pixelIndexArray[It+1] <<std::endl;
 
 /**On stocke les pixel index dans un tableau currentindexarray**/
  currentIndexArray[It]=currentindex[0];
  currentIndexArray[It+1]=currentindex[1];
-otbGenericMsgDebugMacro(<< "La valeur stockee" << std::endl
+otbMsgDevMacro(<< "La valeur stockee" << std::endl
           << pixelIndexArray[It] <<  "," << pixelIndexArray[It+1] );
  It=It+2;
 }//Fin boucle: on a stock� tous les index qui nous interesse
@@ -362,7 +366,7 @@ currentindexbis[1]= currentIndexArray[2*k+1];
 if (interpolator->IsInsideBuffer(pixelindexbis))
 {pixelvalue=int (interpolator->EvaluateAtIndex(pixelindexbis));}
 else {pixelvalue=0;}
-otbGenericMsgDebugMacro(<< "La valeur du pixel est:" << std::endl
+otbMsgDevMacro(<< "La valeur du pixel est:" << std::endl
            << float(pixelvalue) );
 outputimage->SetPixel(currentindexbis,pixelvalue);
  }

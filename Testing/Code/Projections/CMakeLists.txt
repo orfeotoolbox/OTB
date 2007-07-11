@@ -22,8 +22,6 @@ ADD_TEST(prTuMapProjectionsNew ${PROJECTIONS_TESTS}  otbMapProjectionsNew )
 
 ADD_TEST(prTuSensorModelsNew ${PROJECTIONS_TESTS}  otbSensorModelsNew )
 
-
-
 ADD_TEST(prTvTestCreateProjectionWithOSSIM_Toulouse ${PROJECTIONS_TESTS}  
         otbCreateProjectionWithOSSIM
         ${IMAGEDATA}/TOULOUSE/QuickBird/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF
@@ -53,6 +51,7 @@ ADD_TEST(prTvTestCreateInverseForwardSensorModel_Cevennes ${PROJECTIONS_TESTS}
         otbCreateInverseForwardSensorModel
         ${IMAGEDATA}/CEVENNES/06FEB12104912-P1BS-005533998070_01_P001.TIF
         )
+
 
 ADD_TEST(prTvRegionProjectionToulouse ${PROJECTIONS_TESTS}  
         otbRegionProjection
@@ -88,7 +87,7 @@ ADD_TEST(prTvRegionProjectionResamplerToulouse ${PROJECTIONS_TESTS}
 
 #   ADD_TEST(prTvSensorImageToCartoCevennes ${PROJECTIONS_TESTS}  
 #           otbSensorImageToCarto
-#        ${IMAGEDATA}/CEVENNES/06FEB12104912-P1BS-005533998070_01_P001.TIF
+#           ${IMAGEDATA}/CEVENNES/06FEB12104912-P1BS-005533998070_01_P001.TIF
 #           ${TEMP}/SensorImageToCartoCevennes_UTM.png
 #           556046 
 #           4.881e+06 
