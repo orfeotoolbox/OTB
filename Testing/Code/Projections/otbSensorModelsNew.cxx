@@ -23,6 +23,7 @@
 #include "itkImage.h"
 #include <iostream>
 
+#include "otbSensorModelBase.h"
 #include "otbForwardSensorModel.h"
 #include "otbInverseSensorModel.h"
 
@@ -30,6 +31,9 @@ int otbSensorModelsNew( int argc, char* argv[] )
 {
   try 
     {        
+        typedef otb::SensorModelBase<double> SensorModelBaseType;
+        SensorModelBaseType::Pointer lSensorModelBase = SensorModelBaseType::New();
+
         typedef otb::InverseSensorModel<double> InverseSensorModelType;
         InverseSensorModelType::Pointer lInverseSensorModel = InverseSensorModelType::New();
 

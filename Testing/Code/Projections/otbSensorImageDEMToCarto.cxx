@@ -268,7 +268,7 @@ otbGenericMsgDebugMacro(<< "Le point géographique correspondant est: ("<<  geoPo
 height=otbElevManager->GetHeightAboveMSL(geoPoint); 
 
 //On calcule les coordonnées pixeliques sur l'image capteur
-inputpoint = model->InverseTransformPoint(geoPoint, height);
+inputpoint = model->TransformPoint(geoPoint, height);
 otbGenericMsgDebugMacro(<< "Les coordonnées en pixel sur l'image capteur correspondant à ce point sont:" << std::endl
           << inputpoint[0] << ","<< inputpoint[1] );
 inputimage->TransformPhysicalPointToIndex(inputpoint,pixelindex);
@@ -402,6 +402,11 @@ return EXIT_FAILURE;
     { 
     std::cout << "Exception itk::ExceptionObject levee !" << std::endl; 
     std::cout << err << std::endl; 
+    return EXIT_FAILURE;
+    } 
+  catch( std::bad_alloc & err ) 
+    { 
+    std::cout << "Exception bad_alloc : "<<(char*)err.what()<< std::endl; 
     return EXIT_FAILURE;
     } 
   catch( ... ) 

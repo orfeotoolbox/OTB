@@ -18,19 +18,8 @@
 #ifndef __otbInverseSensorModel_h
 #define __otbInverseSensorModel_h
 
-#include <sstream>
-#include <stdio.h>
-#include <iostream>
-#include "itkExceptionObject.h"
-#include "itkTransform.h"
-#include "itkExceptionObject.h"
+#include "otbSensorModelBase.h"
 #include "itkMacro.h"
-#include "projection/ossimSensorModelFactory.h"
-#include "projection/ossimProjection.h"
-#include "projection/ossimProjectionFactoryRegistry.h"
-#include "base/ossimKeywordlist.h"
-#include "imaging/ossimImageHandlerRegistry.h"
-#include "imaging/ossimImageHandler.h"
 #include "itkSmartPointer.h"
 #include "itkObject.h"
 
@@ -43,9 +32,10 @@ template <class TScalarType,
           unsigned int NInputDimensions=2,
           unsigned int NOutputDimensions=2,
           unsigned int NParametersDimensions=3>
-class ITK_EXPORT InverseSensorModel : public itk::Transform<TScalarType,          
+class ITK_EXPORT InverseSensorModel : public SensorModelBase<TScalarType,          
 			                                    NInputDimensions,  
-			                                    NOutputDimensions> 
+			                                    NOutputDimensions,
+                                                            NParametersDimensions>
 {
 public :
 
@@ -53,41 +43,35 @@ public :
 /*  Déclaration des types utilisés:       */
 /******************************************/
   typedef InverseSensorModel                                  Self;
-  typedef itk::Transform< TScalarType,
+  typedef SensorModelBase< TScalarType,
                    NInputDimensions,
-                   NOutputDimensions >                        Superclass;
+                   NOutputDimensions,
+                   NParametersDimensions >                    Superclass;
   typedef itk::SmartPointer<Self>                    	      Pointer;
   typedef itk::SmartPointer<const Self>              	      ConstPointer;
 
-itkTypeMacro( InverseSensorModel, Transform );
-itkNewMacro( Self );
+  itkTypeMacro( InverseSensorModel, SensorModelBase );
+  itkNewMacro( Self );
 
-  typedef itk::Point<TScalarType, NInputDimensions >          InputPointType;
-  typedef itk::Point<TScalarType, NOutputDimensions >         OutputPointType;      
+  typedef typename Superclass::InputPointType            InputPointType;
+  typedef typename Superclass::OutputPointType           OutputPointType;      
 	       
   itkStaticConstMacro(InputSpaceDimension, unsigned int, NInputDimensions);
   itkStaticConstMacro(OutputSpaceDimension, unsigned int, NOutputDimensions);
   itkStaticConstMacro(ParametersDimension, unsigned int, NParametersDimensions); //A voir!!
 	         
-/******************************************/
-/*        Déclaration des méthodes:       */
-/******************************************/	    
-//Pour lire les kwl.                                  
-ossimKeywordlist    GetImageGeometryKeywordlist(char *src);	  
-//Pour construire le modèle.
-void                SetImageGeometry(ossimKeywordlist &geom_kwl);
-// Pour projeter un point géo sur l'image en géométrie capteur.
-OutputPointType     InverseTransformPoint(const InputPointType &point) const;
-// Pour projeter un point géo connaissant son altitude.
-OutputPointType     InverseTransformPoint(const InputPointType &point, double height) const;
+  // Pour projeter un point géo sur l'image en géométrie capteur.
+  OutputPointType     TransformPoint(const InputPointType &point) const;
+  // Pour projeter un point géo connaissant son altitude.
+  OutputPointType     TransformPoint(const InputPointType &point, double height) const;
 
 protected:
-InverseSensorModel(); 
-virtual ~InverseSensorModel();
+  InverseSensorModel(); 
+  virtual ~InverseSensorModel();
 
-//Variables protégés:
-ossimKeywordlist m_geom_kwl;
-ossimProjection* m_Model;
+  /** PrintSelf method */
+  void PrintSelf(std::ostream& os, itk::Indent indent) const;
+
 };
 
 }//Fin header

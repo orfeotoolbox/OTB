@@ -18,22 +18,10 @@
 #ifndef __otbForwardSensorModel_h
 #define __otbForwardSensorModel_h
 
-#include <sstream>
-#include <stdio.h>
-#include <iostream>
-#include "itkExceptionObject.h"
-#include "itkTransform.h"
-#include "itkExceptionObject.h"
+#include "otbSensorModelBase.h"
 #include "itkMacro.h"
-#include "projection/ossimSensorModelFactory.h"
-#include "projection/ossimProjection.h"
-#include "projection/ossimProjectionFactoryRegistry.h"
-#include "base/ossimKeywordlist.h"
-#include "imaging/ossimImageHandlerRegistry.h"
-#include "imaging/ossimImageHandler.h"
 #include "itkSmartPointer.h"
 #include "itkObject.h"
-
 
 namespace otb
 {
@@ -45,9 +33,10 @@ template <class TScalarType,
           unsigned int NInputDimensions=2,
           unsigned int NOutputDimensions=2,
           unsigned int NParametersDimensions=3>
-class ITK_EXPORT ForwardSensorModel : public itk::Transform<TScalarType,          
+class ITK_EXPORT ForwardSensorModel : public SensorModelBase<TScalarType,          
 			                                    NInputDimensions,  
-			                                    NOutputDimensions> 
+			                                    NOutputDimensions,
+                                                            NParametersDimensions> 
 {
 public :
 
@@ -55,39 +44,33 @@ public :
 /*  Déclaration des types utilisés:       */
 /******************************************/
   typedef ForwardSensorModel                                  Self;
-  typedef itk::Transform< TScalarType,
+  typedef SensorModelBase< TScalarType,
                    NInputDimensions,
-                   NOutputDimensions >                        Superclass;
+                   NOutputDimensions,
+                   NParametersDimensions >                    Superclass;
   typedef itk::SmartPointer<Self>                    	      Pointer;
   typedef itk::SmartPointer<const Self>              	      ConstPointer;
 
-itkTypeMacro( ForwardSensorModel, Transform );
-itkNewMacro( Self );
+  itkTypeMacro( ForwardSensorModel, SensorModelBase );
+  itkNewMacro( Self );
 
-  typedef itk::Point<TScalarType, NInputDimensions >          InputPointType;
-  typedef itk::Point<TScalarType, NOutputDimensions >         OutputPointType;      
+  typedef typename Superclass::InputPointType            InputPointType;
+  typedef typename Superclass::OutputPointType           OutputPointType;      
 	       
   itkStaticConstMacro(InputSpaceDimension, unsigned int, NInputDimensions);
   itkStaticConstMacro(OutputSpaceDimension, unsigned int, NOutputDimensions);
   itkStaticConstMacro(ParametersDimension, unsigned int, NParametersDimensions); //A voir!!
 	         
-/******************************************/
-/*        Déclaration des méthodes:       */
-/******************************************/	    
-//Pour lire les kwl.                                  
-ossimKeywordlist    GetImageGeometryKeywordlist(char *src);	  
-//Pour construire le modèle.
-void                SetImageGeometry(ossimKeywordlist &geom_kwl);
-// Pour projeter le point au sol.
-OutputPointType     TransformPoint(const InputPointType &point) const;
+  /** Projection point */
+  OutputPointType TransformPoint(const InputPointType &point) const;
 
 protected:
-ForwardSensorModel(); 
-virtual ~ForwardSensorModel();
+  ForwardSensorModel(); 
+  virtual ~ForwardSensorModel();
 
-//Variables protégés:
-ossimKeywordlist m_geom_kwl;
-ossimProjection* m_Model;
+  /** PrintSelf method */
+  void PrintSelf(std::ostream& os, itk::Indent indent) const;
+
 };
 
 }//Fin header

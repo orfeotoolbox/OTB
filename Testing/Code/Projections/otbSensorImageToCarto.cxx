@@ -115,16 +115,45 @@ ossimKeywordlist geom_kwl;
       otbGenericMsgDebugMacro(<< "Handler created " ); 
       handler->SetFileName(argv[1]);
       geom_kwl=handler->GetGeometryKeywordlist();
-//std::cout << geom_kwl << std::endl; 
+std::cout << geom_kwl << std::endl; 
 
 /********************************************************/
 /*   Création de notre modèle en fonction de l'image    */
 /********************************************************/
+typedef otb::ImageFileReader<ImageType>  ReaderType;
+ReaderType::Pointer	                 reader=ReaderType::New();
+//ReaderType::Pointer	                 reader1=ReaderType::New();
+reader->SetFileName(argv[1]);
+reader->GenerateOutputInformation();
+
+
+
+
+  	otb::ImageKeywordlist otb_tmp_image;
+/*	itk::ExposeMetaData< otb::ImageKeywordlist >(image_medianFilter->GetOutput()->GetMetaDataDictionary(),
+											 otb::MetaDataKey::m_OSSIMKeywordlistKey,
+											 otb_tmp_image);*/
+
+	otb_tmp_image = reader->GetOutput()->GetImageKeywordlist();
+
+	ossimKeywordlist ossim_kwl_image;
+	otb_tmp_image.convertToOSSIMKeywordlist(ossim_kwl_image);
+std::cout << "	ossim_kwl_image: "<<ossim_kwl_image<<std::endl;
+
+ossimRefPtr<ossimProjection> toto = ossimProjectionFactoryRegistry::instance()->createProjection(ossim_kwl_image);
+if( toto.valid() == false)
+{
+//        itkGenericExceptionMacro(<<"Invalid Model pointer !");
+        otbGenericMsgDebugMacro(<<"Invalid Model pointer !");
+}
+
+
+
 
       typedef otb::InverseSensorModel<double>  ModelType;
       ModelType::Pointer   model= ModelType::New();
       otbGenericMsgDebugMacro(<< "Model set geometry " ); 
-      model->SetImageGeometry(geom_kwl); //Notre modèle est créé à ce niveau.
+      model->SetImageGeometry(ossim_kwl_image); //Notre modèle est créé à ce niveau.
          if(!model)
       {
        otbGenericMsgDebugMacro(<< "Unable to create a model");
@@ -138,10 +167,6 @@ ossimKeywordlist geom_kwl;
 /*                  Création d'un reader                */
 /********************************************************/
 
-typedef otb::ImageFileReader<ImageType>  ReaderType;
-ReaderType::Pointer	                 reader=ReaderType::New();
-//ReaderType::Pointer	                 reader1=ReaderType::New();
-reader->SetFileName(argv[1]);
 //reader1->SetFileName(argv[2]);
 //ImageType::Pointer 	  	         image = reader1->GetOutput();
 //reader->Update();
@@ -273,7 +298,7 @@ outputimage->TransformIndexToPhysicalPoint(currentindex, outputpoint);
 geoPoint= utmprojection->Inverse(outputpoint);	
 otbGenericMsgDebugMacro(<< "Le point géographique correspondant est: ("<<  geoPoint[0]<< ","<<  geoPoint[1]<< ")"); 	
 //On calcule les coordonnées pixeliques sur l'image capteur
-inputpoint = model->InverseTransformPoint(geoPoint);
+inputpoint = model->TransformPoint(geoPoint);
   otbGenericMsgDebugMacro(<< "Les coordonnées en pixel sur l'image capteur correspondant à ce point sont:" << std::endl
                << inputpoint[0] << ","<< inputpoint[1] );
 inputimage->TransformPhysicalPointToIndex(inputpoint,pixelindex);
@@ -379,6 +404,11 @@ otbGenericMsgDebugMacro(<< "Outputimage created" );
     { 
     std::cout << "Exception itk::ExceptionObject levee !" << std::endl; 
     std::cout << err << std::endl; 
+    return EXIT_FAILURE;
+    } 
+  catch( std::bad_alloc & err ) 
+    { 
+    std::cout << "Exception bad_alloc : "<<(char*)err.what()<< std::endl; 
     return EXIT_FAILURE;
     } 
   catch( ... ) 

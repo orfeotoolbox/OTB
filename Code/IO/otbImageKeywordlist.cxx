@@ -48,19 +48,33 @@ operator=(const Self& p)
 
 void 
 ImageKeywordlist::
-Print(std::ostream& os) const
+convertToOSSIMKeywordlist(ossimKeywordlist& kwl) const
 {
-	ossimKeywordlist kwl;
-	convertToOSSIMKeywordlist(kwl);
-	os << " Ossim Keyword list:"<<std::endl; 
-	os << kwl ;
+	kwl.getMap() = m_Keywordlist;
 }
 
 void 
 ImageKeywordlist::
-convertToOSSIMKeywordlist(ossimKeywordlist& kwl) const
+Print(std::ostream& os, itk::Indent indent) const
 {
-	kwl.getMap() = m_Keywordlist;
+  this->PrintSelf(os, indent.GetNextIndent());
+}
+
+void
+ImageKeywordlist::
+PrintSelf(std::ostream& os, itk::Indent indent) const
+{
+  ossimKeywordlist kwl;
+  convertToOSSIMKeywordlist(kwl);
+  os << indent << " Ossim Keyword list:"<<std::endl; 
+  os << indent << kwl ;
+}
+
+std::ostream & 
+operator<<(std::ostream &os, const ImageKeywordlist &kwl)
+{
+  kwl.Print(os);
+  return os;
 }
 
 

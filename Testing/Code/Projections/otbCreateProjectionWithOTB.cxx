@@ -120,6 +120,11 @@ int otbCreateProjectionWithOTB( int argc, char* argv[] )
     std::cout << err << std::endl; 
     return EXIT_FAILURE;
     } 
+  catch( std::bad_alloc & err ) 
+    { 
+    std::cout << "Exception bad_alloc : "<<(char*)err.what()<< std::endl; 
+    return EXIT_FAILURE;
+    } 
   catch( ... ) 
     { 
     std::cout << "Exception levee inconnue !" << std::endl; 

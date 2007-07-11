@@ -18,12 +18,9 @@
 #ifndef __otbImageKeywordlist_h
 #define __otbImageKeywordlist_h
 
+#include <iostream>
 #include "itkObject.h"
 #include "itkObjectFactory.h"
-//#include "itkSize.h"
-//#include "itkImageRegion.h"
-//#include "itkDefaultConvertPixelTraits.h"
-
 #include "base/ossimString.h"
 #include "base/ossimKeywordlist.h"
 
@@ -53,17 +50,29 @@ public:
   { 
   	m_Keywordlist = kwl.getMap();
   }
+
+  void Clear(void)
+  { 
+  	m_Keywordlist.clear();
+  }
   
   virtual void convertToOSSIMKeywordlist(ossimKeywordlist& kwl) const;
+
+  virtual void Print(std::ostream& os, itk::Indent indent=0) const;
 
   ImageKeywordlist() ;
   virtual ~ImageKeywordlist() ;
 
-  void Print(std::ostream& os) const ;
-  
   ImageKeywordlist(const Self&);
   void operator=(const Self&);
   
+protected:
+  /** Methods invoked by Print() to print information about the object
+   * Typically not called by the user (use Print()
+   * instead) but used in the hierarchical print process to combine the
+   * output of several classes.  */
+  virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
+
 private:
 
   /** Geo informations are in this map */
@@ -75,6 +84,7 @@ private:
   
 };
 
+ITK_EXPORT std::ostream & operator<<(std::ostream &os, const ImageKeywordlist &kwl);
 
 } //namespace otb
 

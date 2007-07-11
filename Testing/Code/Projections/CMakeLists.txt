@@ -45,88 +45,73 @@ ADD_TEST(prTvTestCreateProjectionWithOTB_Cevennes ${PROJECTIONS_TESTS}
         ${IMAGEDATA}/CEVENNES/06FEB12104912-P1BS-005533998070_01_P001.TIF
         )
 
+ADD_TEST(prTvTestCreateInverseForwardSensorModel_Toulouse ${PROJECTIONS_TESTS}  
+        otbCreateInverseForwardSensorModel
+        ${IMAGEDATA}/TOULOUSE/QuickBird/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF
+        )
+ADD_TEST(prTvTestCreateInverseForwardSensorModel_Cevennes ${PROJECTIONS_TESTS}  
+        otbCreateInverseForwardSensorModel
+        ${IMAGEDATA}/CEVENNES/06FEB12104912-P1BS-005533998070_01_P001.TIF
+        )
+
 ADD_TEST(prTvRegionProjectionToulouse ${PROJECTIONS_TESTS}  
         otbRegionProjection
         ${IMAGEDATA}/TOULOUSE/QuickBird/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF
         ${TEMP}/RegionProjectionToulouse.png
-        44.08
-        3.7
-        2000
-        2000
-        200
+        43.60 1.44 # Coordonnées Lat/Long du Capitole Toulouse
+        500
+        500
+        10
         )
 
-ADD_TEST(prTvRegionProjectionCevennes ${PROJECTIONS_TESTS}  
-        otbRegionProjection
-        ${IMAGEDATA}/CEVENNES/06FEB12104912-P1BS-005533998070_01_P001.TIF
-        ${TEMP}/RegionProjectionCevennes.png
-        44.08
-        3.7
-        2000
-        2000
-        200
+ADD_TEST(prTvRegionProjectionResamplerToulouse ${PROJECTIONS_TESTS}  
+        otbRegionProjectionResampler
+        ${IMAGEDATA}/TOULOUSE/QuickBird/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF
+        ${TEMP}/RegionProjectionResamplerToulouse.hdr
+        43.60 1.44 # Coordonnées Lat/Long du Capitole Toulouse
+        500
+        500
+        10
         )
 
-#   ADD_TEST(prTvRegionProjectionStGilles ${PROJECTIONS_TESTS}  
+#   ADD_TEST(prTvRegionProjectionCevennes ${PROJECTIONS_TESTS}  
 #           otbRegionProjection
-#           ${IMAGEDATA}/STGILLES/06FEB04105916-P1BS-005533998010_01_P002.TIF
-#           ${TEMP}/RegionProjectionStGilles.png
-#           43.60
-#           4.33
+#           ${IMAGEDATA}/CEVENNES/06FEB12104912-P1BS-005533998070_01_P001.TIF
+#           ${TEMP}/RegionProjectionCevennes.png
+#           44.08
+#           3.7
 #           2000
 #           2000
-#           500
+#           200
 #           )
 
-ADD_TEST(prTvSensorImageToCartoCevennes ${PROJECTIONS_TESTS}  
-        otbSensorImageToCarto
-         ${IMAGEDATA}/TOULOUSE/QuickBird/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF
-#        ${IMAGEDATA}/CEVENNES/06FEB12104912-P1BS-005533998070_01_P001.TIF
-        ${TEMP}/SensorImageToCartoCevennes_UTM.png
-        556046 
-        4.881e+06 
-        2000 
-        2000 
-        220
-        )
 
-#   ADD_TEST(prTvSensorImageToCartoStGilles ${PROJECTIONS_TESTS}  
+#   ADD_TEST(prTvSensorImageToCartoCevennes ${PROJECTIONS_TESTS}  
 #           otbSensorImageToCarto
-#           ${IMAGEDATA}/STGILLES/06FEB04105916-P1BS-005533998010_01_P002.TIF
-#           ${TEMP}/SensorImageToCartoStGilles_UTM.png
-#           607346 
-#           4.82831e+06 
+#        ${IMAGEDATA}/CEVENNES/06FEB12104912-P1BS-005533998070_01_P001.TIF
+#           ${TEMP}/SensorImageToCartoCevennes_UTM.png
+#           556046 
+#           4.881e+06 
 #           2000 
 #           2000 
-#           500
+#           220
 #           )
 
-ADD_TEST(prTvSensorImageDEMToCartoCevennes ${PROJECTIONS_TESTS}  
-        otbSensorImageDEMToCarto
-        ${IMAGEDATA}/CEVENNES/06FEB12104912-P1BS-005533998070_01_P001.TIF
-        ${TEMP}/SensorImageDEMToCartoCevennes_UTM_DEM.png
-        556046 
-        4.881e+06 
-        2000 
-        2000 
-        200 
-        ${INPUTDATA}/DEM/srtm_directory/ 
-        ${TEMP}/SensorImageDEMToCartoCevennes.hdr
-        )
 
-
-#   ADD_TEST(prTvSensorImageDEMToCartoStGilles ${PROJECTIONS_TESTS}  
+#   ADD_TEST(prTvSensorImageDEMToCartoCevennes ${PROJECTIONS_TESTS}  
 #           otbSensorImageDEMToCarto
-#           ${IMAGEDATA}/STGILLES/06FEB04105916-P1BS-005533998010_01_P002.TIF
-#           ${TEMP}/prSensorImageDEMToCartoStGilles_UTM_DEM.png
-#           607346 
-#           4.82831e+06 
+#           ${IMAGEDATA}/CEVENNES/06FEB12104912-P1BS-005533998070_01_P001.TIF
+#           ${TEMP}/SensorImageDEMToCartoCevennes_UTM_DEM.png
+#           556046 
+#           4.881e+06 
 #           2000 
 #           2000 
-#           500 
+#           200 
 #           ${INPUTDATA}/DEM/srtm_directory/ 
-#          ${TEMP}/prSensorImageDEMToCartoStGilles.hdr
-#          )
+#           ${TEMP}/SensorImageDEMToCartoCevennes.hdr
+#           )
+
+
 
 
 SET(Projections_SRCS
@@ -135,7 +120,9 @@ otbMapProjectionsNew.cxx
 otbSensorModelsNew.cxx
 otbCreateProjectionWithOSSIM.cxx
 otbCreateProjectionWithOTB.cxx
+otbCreateInverseForwardSensorModel.cxx
 otbRegionProjection.cxx
+otbRegionProjectionResampler.cxx
 otbSensorImageToCarto.cxx
 otbSensorImageDEMToCarto.cxx
 )

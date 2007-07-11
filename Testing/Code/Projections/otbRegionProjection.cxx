@@ -137,7 +137,7 @@ otb::ImageKeywordlist otb_image_keywordlist = reader->GetOutput()->GetImageKeywo
 ossimKeywordlist geom_kwl;
 otb_image_keywordlist.convertToOSSIMKeywordlist(geom_kwl);
 
-otbGenericMsgDebugMacro(<< geom_kwl ); 
+otbGenericMsgDebugMacro(<< "ossimKeywordlist: "<<geom_kwl ); 
 
 /********************************************************/
 /*   Cr�ation de notre mod�le en fonction de l'image    */
@@ -271,15 +271,15 @@ for (outputIt.GoToBegin(); !outputIt.IsAtEnd(); ++outputIt)
 currentindex=outputIt.GetIndex();
 //On le transforme en Point physique
 outputimage->TransformIndexToPhysicalPoint(currentindex, outputpoint);
-      otbGenericMsgDebugMacro(<< "Pour l'Index N�:(" << currentindex[0]<< ","<< currentindex[1] << ")"<<  std::endl
+      otbGenericMsgDebugMacro(<< "Pour l'Index Ncurrent:(" << currentindex[0]<< ","<< currentindex[1] << ")"<<  std::endl
                 << "Le point physique correspondant est: ("<<  outputpoint[0]<< ","<<  outputpoint[1]<< ")"); 
 
 //On calcule les coordonn�es pixeliques sur l'image capteur
-inputpoint = model->InverseTransformPoint(outputpoint);
-  otbGenericMsgDebugMacro(<< "Les coordonn�es en pixel sur l'image capteur correspondant � ce point sont:" << std::endl
+inputpoint = model->TransformPoint(outputpoint);
+  otbGenericMsgDebugMacro(<< "Les coordonnees en pixel sur l'image capteur correspondant a ce point sont:" << std::endl
                << inputpoint[0] << ","<< inputpoint[1] );
 inputimage->TransformPhysicalPointToIndex(inputpoint,pixelindex);
-    otbGenericMsgDebugMacro(<< "L'index correspondant � ce point est:" << std::endl
+    otbGenericMsgDebugMacro(<< "L'index correspondant a ce point est:" << std::endl
                  << pixelindex[0] << ","<< pixelindex[1] );
 
 /**On stocke les pixel index dans un tableau pixelindexarray**/
@@ -291,7 +291,7 @@ inputimage->TransformPhysicalPointToIndex(inputpoint,pixelindex);
 /**On stocke les pixel index dans un tableau currentindexarray**/
  currentIndexArray[It]=currentindex[0];
  currentIndexArray[It+1]=currentindex[1];
-otbGenericMsgDebugMacro(<< "La valeur stock�e" << std::endl
+otbGenericMsgDebugMacro(<< "La valeur stockee" << std::endl
           << pixelIndexArray[It] <<  "," << pixelIndexArray[It+1] );
  It=It+2;
 }//Fin boucle: on a stock� tous les index qui nous interesse
@@ -303,6 +303,11 @@ min_x=pixelIndexArray[0];
 max_y=pixelIndexArray[1];
 min_y=pixelIndexArray[1];
  
+ otbGenericMsgDebugMacro(<< "max_x=" << max_x<< std::endl
+           << "max_y=" << max_y<< std::endl
+	   << "min_x=" << min_x<< std::endl
+	   << "min_y=" << min_y);
+
  	for (j=0;j<It;j++)
  	{
  		if(j%2==0 && pixelIndexArray[j]>max_x){max_x=pixelIndexArray[j];}
@@ -310,8 +315,8 @@ min_y=pixelIndexArray[1];
  		if(j%2!=0 && pixelIndexArray[j]>max_y){max_y=pixelIndexArray[j];}
  		if(j%2!=0 && pixelIndexArray[j]<min_y){min_y=pixelIndexArray[j];}
  	}//Fin while
-	
- otbGenericMsgDebugMacro(<< "max_x=" << max_x<< std::endl
+
+ otbGenericMsgDebugMacro(<< "Mise a jour des max ...\nmax_x=" << max_x<< std::endl
            << "max_y=" << max_y<< std::endl
 	   << "min_x=" << min_x<< std::endl
 	   << "min_y=" << min_y);
@@ -385,6 +390,11 @@ otbGenericMsgDebugMacro(<< "Outputimage created" );
     { 
     std::cout << "Exception itk::ExceptionObject levee !" << std::endl; 
     std::cout << err << std::endl; 
+    return EXIT_FAILURE;
+    } 
+  catch( std::bad_alloc & err ) 
+    { 
+    std::cout << "Exception bad_alloc : "<<(char*)err.what()<< std::endl; 
     return EXIT_FAILURE;
     } 
   catch( ... ) 
