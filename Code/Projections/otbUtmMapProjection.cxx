@@ -19,56 +19,63 @@
 #include "otbUtmMapProjection.h"
 
 namespace otb
-{ /************************************/
-  /*          Constructeurs           */
-  /************************************/
-  
-// Constructeur par défault
-  UtmMapProjection::UtmMapProjection()
+{ 
+
+UtmMapProjection
+::UtmMapProjection()
 {
- m_utmprojection = new ossimUtmProjection();
+	m_utmprojection = new ossimUtmProjection();
 }
 
-// Destructeur 
- UtmMapProjection::~UtmMapProjection()
+UtmMapProjection
+::~UtmMapProjection()
 {
-delete m_utmprojection;
+	delete m_utmprojection;
 }
 
-/******************************************/
-/*        Déclaration des méthodes:       */
-/******************************************/
 ///Instanciation de UtmProjection avec une zone (2 méthodes)
-void    UtmMapProjection::SetZone(long zone)
+void UtmMapProjection
+::SetZone(long zone)
 {
-delete m_utmprojection;
-m_utmprojection= new ossimUtmProjection(zone);
+	delete m_utmprojection;
+	m_utmprojection= new ossimUtmProjection(zone);
 }
 
-void    UtmMapProjection::SetZone(const InputPointType &ground) 
-{ossimGpt ossimGround;
-ossimGround.lon=ground[0];
-ossimGround.lat=ground[1];
-m_utmprojection->setZone(ossimGround);
-}
-///Spécification de l' hémisphère
-void    UtmMapProjection::SetHemisphere(char hemisphere) 
+void UtmMapProjection
+::SetZone(const InputPointType &ground) 
 {
-m_utmprojection->setHemisphere(hemisphere);
+	ossimGpt ossimGround;
+	ossimGround.lon=ground[0];
+	ossimGround.lat=ground[1];
+	m_utmprojection->setZone(ossimGround);
+}
+
+///Spécification de l' hémisphère
+void UtmMapProjection
+::SetHemisphere(char hemisphere) 
+{
+	m_utmprojection->setHemisphere(hemisphere);
 }
 
 ///Récupérer la Zone
-long UtmMapProjection::GetZone()
-{long zone;
-zone=m_utmprojection->getZone();
-return zone;
+long UtmMapProjection
+::GetZone()
+{
+	long zone;
+	zone=m_utmprojection->getZone();
+	
+	return zone;
 }
 
 ///Récupérer l'hémisphère
-const char UtmMapProjection::GetHemisphere() const
-{ char hemisphere=0;
-hemisphere=m_utmprojection->getHemisphere();
-return hemisphere;
+const char UtmMapProjection
+::GetHemisphere() const
+{
+	char hemisphere=0;
+	hemisphere=m_utmprojection->getHemisphere();
+	
+	return hemisphere;
 }
-}//fin namespace
+
+} // namespace otb
 

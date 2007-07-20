@@ -24,50 +24,52 @@
 
 namespace otb
 { 
-//Cette classe hérite de otb::MapProjection
+
 class ITK_EXPORT UtmMapProjection : public MapProjection<ossimUtmProjection> 
 {
 public :
 
-/******************************************/
-/*  Déclaration des types utilisés:       */
-/******************************************/
-  typedef UtmMapProjection                                    Self;
-  typedef MapProjection<ossimUtmProjection>                   Superclass;
+  /** Standard class typedefs. */
+  typedef UtmMapProjection                                  Self;
+  typedef MapProjection<ossimUtmProjection>                 Superclass;
   typedef itk::SmartPointer<Self>                    	      Pointer;
   typedef itk::SmartPointer<const Self>              	      ConstPointer;
 
-itkTypeMacro( UtmMapProjection, MapProjection );
-itkNewMacro( Self );
-	  
-typedef Superclass::ScalarType  ScalarType;
+	typedef Superclass::ScalarType 														ScalarType;
+	typedef itk::Point<ScalarType,2>   	      								InputPointType;
+	typedef itk::Point<ScalarType,2>  	      								OutputPointType;     
 
-/*typedef itk::Point<TScalarType,NInputDimensions >   	      InputPointType;
-typedef itk::Point<TScalarType,NOutputDimensions >  	      OutputPointType; */     
-typedef itk::Point<ScalarType,2>   	      InputPointType;
-typedef itk::Point<ScalarType,2>  	      OutputPointType;     
-        
-/******************************************/
-/*        Déclaration des méthodes:       */
-/******************************************/	    
-void SetZone(long zone);
+	/** Method for creation through the object factory. */
+	itkNewMacro( Self );
 
-void SetZone(const InputPointType &ground); 
+	/** Run-time type information (and related methods). */
+	itkTypeMacro( UtmMapProjection, MapProjection );
 
-void SetHemisphere(char hemisphere);
+	void SetZone(long zone);
 
-long GetZone();
+	void SetZone(const InputPointType &ground); 
 
-const char GetHemisphere() const;
+	void SetHemisphere(char hemisphere);
+
+	long GetZone();
+
+	const char GetHemisphere() const;
+	
 protected:
-UtmMapProjection(); 
-virtual ~UtmMapProjection();
 
-//Variables protégés:
-ossimUtmProjection* m_utmprojection;
+	UtmMapProjection(); 
+	virtual ~UtmMapProjection();
+
+	ossimUtmProjection* m_utmprojection;
+
+private:
+	
+  UtmMapProjection(const Self&); //purposely not implemented
+  void operator=(const Self&); //purposely not implemented
+ 	
 };
 
-}//Fin header
+} // namespace otb
 
 
 #endif

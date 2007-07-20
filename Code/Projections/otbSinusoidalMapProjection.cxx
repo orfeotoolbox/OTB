@@ -19,54 +19,59 @@
 #include "otbSinusoidalMapProjection.h"
 
 namespace otb
-{ /************************************/
-  /*          Constructeurs           */
-  /************************************/
-  
-// Constructeur par défault
-  SinusoidalMapProjection::SinusoidalMapProjection()
+{ 
+
+SinusoidalMapProjection
+::SinusoidalMapProjection()
 {
- m_SinusoidalProjection = new ossimSinusoidalProjection();
+	m_SinusoidalProjection = new ossimSinusoidalProjection();
 }
 
-// Destructeur 
- SinusoidalMapProjection::~SinusoidalMapProjection()
+
+SinusoidalMapProjection
+::~SinusoidalMapProjection()
 {
-delete m_SinusoidalProjection;
+	delete m_SinusoidalProjection;
 }
-/******************************************/
-/*        Déclaration des méthodes:       */
-/******************************************/
+
 ///Spécification du false easting
-void    SinusoidalMapProjection::SetFalseEasting(double falseEasting) 
+void SinusoidalMapProjection
+::SetFalseEasting(double falseEasting) 
 {
-m_SinusoidalProjection->setFalseEasting(falseEasting);
+	m_SinusoidalProjection->setFalseEasting(falseEasting);
 }
 
 ///Spécification du false Northing
-void    SinusoidalMapProjection::SetFalseNorthing(double falseNorthing) 
+void SinusoidalMapProjection
+::SetFalseNorthing(double falseNorthing) 
 {
-m_SinusoidalProjection->setFalseNorthing(falseNorthing);
+	m_SinusoidalProjection->setFalseNorthing(falseNorthing);
 }
 
 ///Instanciation avec les paramètres par défaut
-void    SinusoidalMapProjection::SetDefaults() 
+void SinusoidalMapProjection
+::SetDefaults() 
 {
-m_SinusoidalProjection->setDefaults();
+	m_SinusoidalProjection->setDefaults();
 }
 
 ///Méthode pour récupérer le FalseNorthing(pour éviter les coordonnées négatives)
- double SinusoidalMapProjection::GetFalseNorthing() const
+double SinusoidalMapProjection
+::GetFalseNorthing() const
 {
-double falseNorthing=m_SinusoidalProjection->getFalseNorthing();
-return falseNorthing;
+	double falseNorthing=m_SinusoidalProjection->getFalseNorthing();
+	
+	return falseNorthing;
 }
 
 ///Méthode pour récupérer le FalseEasting(pour éviter les coordonnées négatives)
-double SinusoidalMapProjection::GetFalseEasting() const
+double SinusoidalMapProjection
+::GetFalseEasting() const
 {
-double falseEasting=m_SinusoidalProjection->getFalseEasting();
-return falseEasting;
+	double falseEasting=m_SinusoidalProjection->getFalseEasting();
+	
+	return falseEasting;
 }
-}//fin namespace
+
+} // namespace otb
 

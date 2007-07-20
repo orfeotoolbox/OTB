@@ -15,6 +15,7 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
+
 /** Eckert4MapProjection.cxx
 Définition des méthodes propres à Eckert4MapProjection.
 **/
@@ -22,55 +23,57 @@ Définition des méthodes propres à Eckert4MapProjection.
 #include "otbEckert4MapProjection.h"
 
 namespace otb
-{ /************************************/
-  /*          Constructeurs           */
-  /************************************/
-  
-// Constructeur par défault
-Eckert4MapProjection::Eckert4MapProjection()
+{ 
+
+Eckert4MapProjection
+::Eckert4MapProjection()
 {
- m_Eckert4Projection = new ossimEckert4Projection();
+	m_Eckert4Projection = new ossimEckert4Projection();
 }
 
-// Destructeur 
- Eckert4MapProjection::~Eckert4MapProjection()
+
+Eckert4MapProjection
+::~Eckert4MapProjection()
 {
-delete m_Eckert4Projection;
+	delete m_Eckert4Projection;
 }
-/******************************************/
-/*        Déclaration des méthodes:       */
-/******************************************/
+
 ///Spécification du false easting
-void    Eckert4MapProjection::SetFalseEasting(double falseEasting) 
+void Eckert4MapProjection
+::SetFalseEasting(double falseEasting) 
 {
-m_Eckert4Projection->setFalseEasting(falseEasting);
+	m_Eckert4Projection->setFalseEasting(falseEasting);
 }
 
 ///Spécification du false Northing
-void    Eckert4MapProjection::SetFalseNorthing(double falseNorthing) 
+void Eckert4MapProjection
+::SetFalseNorthing(double falseNorthing) 
 {
-m_Eckert4Projection->setFalseNorthing(falseNorthing);
+	m_Eckert4Projection->setFalseNorthing(falseNorthing);
 }
 
 ///Instanciation avec les paramètres par défaut
-void    Eckert4MapProjection::SetDefaults() 
+void Eckert4MapProjection
+	::SetDefaults() 
 {
 m_Eckert4Projection->setDefaults();
 }
 
 ///Méthode pour récupérer le FalseNorthing(pour éviter les coordonnées négatives)
- double Eckert4MapProjection::GetFalseNorthing() const
+double Eckert4MapProjection
+::GetFalseNorthing() const
 {
-double falseNorthing=m_Eckert4Projection->getFalseNorthing();
-return falseNorthing;
+	double falseNorthing=m_Eckert4Projection->getFalseNorthing();
+	return falseNorthing;
 }
 
 ///Méthode pour récupérer le FalseEasting(pour éviter les coordonnées négatives)
-double Eckert4MapProjection::GetFalseEasting() const
+double Eckert4MapProjection
+::GetFalseEasting() const
 {
-double falseEasting=m_Eckert4Projection->getFalseEasting();
-return falseEasting;
+	double falseEasting=m_Eckert4Projection->getFalseEasting();
+	return falseEasting;
 }
 
-}//fin namespace
+} // namespace otb
 

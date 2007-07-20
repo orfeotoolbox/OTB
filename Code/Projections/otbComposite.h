@@ -28,72 +28,79 @@
 namespace otb
 {
 
-//On définit le template avec un type générique.
-const unsigned int NInputDimensions = 2;
-const unsigned int NOutputDimensions = 2;
-typedef double TScalarType;
 
-/**Template otbComposite.txx
-* Cette classe permet de passer d'une MapProjection à une autre en passant par un point géographique. 
-* Ceci pour éviter TOUTES les combinaisons possibles de passage d'une proj. carto à une autre.
-* Template: Pour vérifier les types.
-**/
-template <
-class TInputMapProjection, 
-class TOutputMapProjection,
-class TScalarType=double, 
-unsigned int NInputDimensions=2,
-unsigned int NOutputDimensions=2>
-class ITK_EXPORT Composite: public itk::Transform<
-TScalarType,         // Data type for scalars 
-NInputDimensions,  // Number of dimensions in the input space
-NOutputDimensions> // Number of dimensions in the output space
+/** \class Composite
+
+ * \brief Class for switching from a Map Projection coordinates to other Map Projection coordinates.
+ * It converts MapProjection1 coordinates to MapProjection2 coordinates by using MapProjection methods.
+ * It takes a point in input.
+ * (X_1, Y_1) -> (lat, lon) -> (X_2, Y_2)
+ * \ingroup Transform 
+ */
+template <class TInputMapProjection,
+					class TOutputMapProjection,
+					class TScalarType=double, 
+					unsigned int NInputDimensions=2,
+					unsigned int NOutputDimensions=2>
+class ITK_EXPORT Composite: public itk::Transform<TScalarType,       // Data type for scalars 
+																									NInputDimensions,  // Number of dimensions in the input space
+																									NOutputDimensions> // Number of dimensions in the output space
 {
 public :
   
-//Déclaration des types utilisés:
 
+	/** Standard class typedefs */
   typedef itk::Transform< TScalarType,
-                   NInputDimensions,
-                   NOutputDimensions >                        Superclass;
-  typedef Composite                                	          Self;
-  typedef itk::SmartPointer<Self>                    	      Pointer;
-  typedef itk::SmartPointer<const Self>              	      ConstPointer;
-  typedef TInputMapProjection                                 InputMapProjectionType;
-  typedef TOutputMapProjection                                OutputMapProjectionType;
-  
-itkTypeMacro( Composite, itk::Transform );
-itkNewMacro( Self );
+                  				NInputDimensions,
+				                  NOutputDimensions >  				Superclass;
+  typedef Composite                            				Self;
+  typedef itk::SmartPointer<Self>              				Pointer;
+  typedef itk::SmartPointer<const Self>        				ConstPointer;
 
-   itkStaticConstMacro(InputSpaceDimension, unsigned int, NInputDimensions);
-   itkStaticConstMacro(OutputSpaceDimension, unsigned int, NOutputDimensions);
-   itkStaticConstMacro(SpaceDimension, unsigned int, NInputDimensions);
-   itkStaticConstMacro(ParametersDimension, unsigned int,NInputDimensions*(NInputDimensions+1));
+  typedef TInputMapProjection                  				InputMapProjectionType;
+  typedef TOutputMapProjection                 				OutputMapProjectionType;
+  typedef itk::Point<TScalarType,NInputDimensions >   InputPointType;
+  typedef itk::Point<TScalarType,NOutputDimensions >  OutputPointType;        
+	
 
-  typedef itk::Point<TScalarType,NInputDimensions >   	      InputPointType;
-  typedef itk::Point<TScalarType,NOutputDimensions >  	      OutputPointType;        
-	                                      
-//Déclaration des méthodes:
-itkSetObjectMacro(InputMapProjection,InputMapProjectionType); // SetMacro pour la 1è MapProjection
 
-itkSetObjectMacro(OutputMapProjection,OutputMapProjectionType); // SetMacro pour la 2è MapProjection
+	/** Method for creation through the object factory. */
+	itkNewMacro( Self );
+	
+	/** Run-time type information (and related methods). */
+	itkTypeMacro( Composite, itk::Transform );
+	
+  itkStaticConstMacro(InputSpaceDimension, unsigned int, NInputDimensions);
+  itkStaticConstMacro(OutputSpaceDimension, unsigned int, NOutputDimensions);
+  itkStaticConstMacro(SpaceDimension, unsigned int, NInputDimensions);
+  itkStaticConstMacro(ParametersDimension, unsigned int,NInputDimensions*(NInputDimensions+1));
 
-// itkGetObjectMacro(InputMapProjection,InputMapProjectionType);
-//  
-// itkGetObjectMacro(OutputMapProjection,OutputMapProjectionType);
+	/** Set MapProjection1. */  
+	itkSetObjectMacro(InputMapProjection,InputMapProjectionType); 
+	
+	/** Set MapProjection2. */ 
+	itkSetObjectMacro(OutputMapProjection,OutputMapProjectionType);
 
-OutputPointType ComputeProjection1ToProjection2(const InputPointType &point1);
+	/** Compute MapProjection1 coordinates to MapProjection2 coordinates. */ 
+	OutputPointType ComputeProjection1ToProjection2(const InputPointType &point1);
 
-InputPointType ComputeProjection2ToProjection1(const OutputPointType &point2);
+	/** Compute MapProjection1 coordinates to MapProjection2 coordinates. */ 
+	InputPointType ComputeProjection2ToProjection1(const OutputPointType &point2);
 
 protected:
-Composite();
-~Composite();
-
-TInputMapProjection* m_InputMapProjection;
-TOutputMapProjection* m_OutputMapProjection;  
+	Composite();
+	~Composite();
+	
+	TInputMapProjection* m_InputMapProjection;
+	TOutputMapProjection* m_OutputMapProjection;  
+	
+private:
+  Composite(const Self&); //purposely not implemented
+  void operator=(const Self&); //purposely not implemented
+	
 };
-}//Fin header
+
+} // namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
 #include "otbComposite.txx"

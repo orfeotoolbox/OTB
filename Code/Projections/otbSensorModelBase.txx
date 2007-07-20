@@ -36,11 +36,8 @@
 #include "imaging/ossimImageHandler.h"
 
 namespace otb
-{ /************************************/
-  /*          Constructeurs           */
-  /************************************/
-  
-// Constructeur par défault
+{ 
+
 template < class TScalarType,
            unsigned int NInputDimensions,
            unsigned int NOutputDimensions,
@@ -48,10 +45,10 @@ template < class TScalarType,
 SensorModelBase< TScalarType,NInputDimensions,NOutputDimensions,NParametersDimensions>
 ::SensorModelBase(): Superclass(OutputSpaceDimension, ParametersDimension)
 {
-        m_Model = NULL;
+	m_Model = NULL;
 }
 
-// Destructeur 
+
 template < class TScalarType,
            unsigned int NInputDimensions,
            unsigned int NOutputDimensions,
@@ -59,16 +56,13 @@ template < class TScalarType,
 SensorModelBase< TScalarType,NInputDimensions,NOutputDimensions,NParametersDimensions>
 ::~SensorModelBase()
 {
-        if( m_Model != NULL)
-        {
-                 delete m_Model;
-                 m_Model = NULL;
-        }
+	if( m_Model != NULL)
+	{
+		delete m_Model;
+		m_Model = NULL;
+	}
 }
 
-/******************************************/
-/*        Déclaration des méthodes:       */
-/******************************************/
 
 /// Méthode GetGeometryKeywordlist
 template < class TScalarType,
@@ -79,8 +73,9 @@ ImageKeywordlist &
 SensorModelBase< TScalarType,NInputDimensions,NOutputDimensions,NParametersDimensions>
 ::GetImageGeometryKeywordlist(void)const
 {
-        return m_ImageKeywordlist;
+	return m_ImageKeywordlist;
 }
+
 /// Méthode GetGeometryKeywordlist
 template < class TScalarType,
            unsigned int NInputDimensions,
@@ -90,9 +85,10 @@ ossimKeywordlist
 SensorModelBase< TScalarType,NInputDimensions,NOutputDimensions,NParametersDimensions>
 ::GetOssimKeywordlist(void)
 {
-       ossimKeywordlist geom;
-       m_ImageKeywordlist.convertToOSSIMKeywordlist(geom);
-       return geom;
+	ossimKeywordlist geom;
+	m_ImageKeywordlist.convertToOSSIMKeywordlist(geom);
+  
+	return geom;
 }
 
 /* Set the Imagekeywordlist and affect the ossim projection ( m_Model) */
@@ -104,8 +100,8 @@ void
 SensorModelBase< TScalarType,NInputDimensions,NOutputDimensions,NParametersDimensions>
 ::SetImageGeometry(ImageKeywordlist image_kwl)
 {
-        m_ImageKeywordlist = image_kwl;
-        CreateProjection(m_ImageKeywordlist);
+	m_ImageKeywordlist = image_kwl;
+  CreateProjection(m_ImageKeywordlist);
 }
 
 /* Set the Imagekeywordlist and affect the ossim projection ( m_Model) */
@@ -117,9 +113,9 @@ void
 SensorModelBase< TScalarType,NInputDimensions,NOutputDimensions,NParametersDimensions>
 ::SetImageGeometry(ossimKeywordlist & geom_kwl)
 {
-        m_ImageKeywordlist.Clear();
-        m_ImageKeywordlist.SetKeywordlist(geom_kwl);
-        CreateProjection(m_ImageKeywordlist);
+	m_ImageKeywordlist.Clear();
+	m_ImageKeywordlist.SetKeywordlist(geom_kwl);
+	CreateProjection(m_ImageKeywordlist);
 }
 
 
@@ -132,15 +128,15 @@ void
 SensorModelBase< TScalarType,NInputDimensions,NOutputDimensions,NParametersDimensions>
 ::CreateProjection(const ImageKeywordlist & image_kwl)
 {
-        ossimKeywordlist geom;
+	ossimKeywordlist geom;
         
-        otbMsgDevMacro(<<"CreateProjection(): ossimKeywordlist: "<<geom);
-        image_kwl.convertToOSSIMKeywordlist(geom);
-        m_Model = ossimProjectionFactoryRegistry::instance()->createProjection(geom);
-        if( m_Model == NULL)
-        {
-                itkExceptionMacro(<<"Invalid Model pointer m_Model == NULL !\n The ossim keywordlist is bad!");
-        }
+	otbMsgDevMacro(<<"CreateProjection(): ossimKeywordlist: "<<geom);
+	image_kwl.convertToOSSIMKeywordlist(geom);
+	m_Model = ossimProjectionFactoryRegistry::instance()->createProjection(geom);
+	if( m_Model == NULL)
+	{
+		itkExceptionMacro(<<"Invalid Model pointer m_Model == NULL !\n The ossim keywordlist is bad!");
+	}
 }
 
 /**
@@ -159,7 +155,7 @@ SensorModelBase< TScalarType,NInputDimensions,NOutputDimensions,NParametersDimen
   os << indent << "Keywordlist: " << m_ImageKeywordlist << std::endl;
 }
 
-}//fin namespace
+} // namespace otb
 
 #endif
 

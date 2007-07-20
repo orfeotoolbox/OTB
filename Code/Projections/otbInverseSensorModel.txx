@@ -19,21 +19,13 @@
 #define __otbInverseSensorModel_txx
 
 
-/**InverseSensorModel.cxx
-*  Purpose:
-*  Cette classe permet de projeter un point au sol en un point sur un point sur l'image capteur.
-*  (lat,lon) -> (i,j) ou (lat,lon,h) -> (i,j)
-**/
 #include "otbInverseSensorModel.h"
 #include "itkExceptionObject.h"
 #include "otbMacro.h"
 
 namespace otb
-{ /************************************/
-  /*          Constructeurs           */
-  /************************************/
-  
-// Constructeur par défault
+{ 
+
 template < class TScalarType,
            unsigned int NInputDimensions,
            unsigned int NOutputDimensions,
@@ -43,7 +35,6 @@ InverseSensorModel< TScalarType,NInputDimensions,NOutputDimensions,NParametersDi
 {
 }
 
-// Destructeur 
 template < class TScalarType,
            unsigned int NInputDimensions,
            unsigned int NOutputDimensions,
@@ -63,27 +54,29 @@ typename InverseSensorModel< TScalarType,NInputDimensions,NOutputDimensions,NPar
 InverseSensorModel< TScalarType,NInputDimensions,NOutputDimensions,NParametersDimensions>
 ::TransformPoint(const InputPointType &point) const
 {
-        //On transforme le type "itk::point" en type "ossim::ossimGpt" 
-    
-        ossimGpt ossimGPoint(point[0], point[1]);
-  
-        //On calcule 
-        ossimDpt ossimDPoint;
 
-        if( this->m_Model == NULL)
-        {
-                itkExceptionMacro(<<"TransformPoint(): Invalid Model pointer m_Model == NULL !");
-        }
-        this->m_Model->worldToLineSample(ossimGPoint, ossimDPoint);
+	//On transforme le type "itk::point" en type "ossim::ossimGpt" 
+  ossimGpt ossimGPoint(point[0], point[1]);
   
-        //On stocke le resultat dans un "OutputPointType"  
-        OutputPointType outputPoint;
-        outputPoint[0]=ossimDPoint.x;
-        outputPoint[1]=ossimDPoint.y;
-        return outputPoint;
+  //On calcule 
+  ossimDpt ossimDPoint;
+
+  if( this->m_Model == NULL)
+  {
+  	itkExceptionMacro(<<"TransformPoint(): Invalid Model pointer m_Model == NULL !");
+  }
+  
+	this->m_Model->worldToLineSample(ossimGPoint, ossimDPoint);
+  
+  //On stocke le resultat dans un "OutputPointType"  
+  OutputPointType outputPoint;
+  outputPoint[0]=ossimDPoint.x;
+  outputPoint[1]=ossimDPoint.y;
+  
+	return outputPoint;
 }
   
-  ///Méthode InverseTransformPoint en tenant compte de l'altitude:
+///Méthode InverseTransformPoint en tenant compte de l'altitude:
 template < class TScalarType,
            unsigned int NInputDimensions,
            unsigned int NOutputDimensions,
@@ -91,24 +84,25 @@ template < class TScalarType,
 typename InverseSensorModel< TScalarType,NInputDimensions,NOutputDimensions,NParametersDimensions>::OutputPointType 
 InverseSensorModel< TScalarType,NInputDimensions,NOutputDimensions,NParametersDimensions>
 ::TransformPoint(const InputPointType &point, double height) const
-  {
-        //On transforme le type "itk::point" en type "ossim::ossimGpt" 
-        ossimGpt ossimGPoint(point[0], point[1], height);
+{
+	//On transforme le type "itk::point" en type "ossim::ossimGpt" 
+  ossimGpt ossimGPoint(point[0], point[1], height);
   
-        //On calcule 
-        ossimDpt ossimDPoint;
+  //On calcule 
+  ossimDpt ossimDPoint;
 
-        if( this->m_Model == NULL)
-        {
-                itkExceptionMacro(<<"TransformPoint(): Invalid Model pointer m_Model == NULL !");
-        }
-        this->m_Model->worldToLineSample(ossimGPoint, ossimDPoint); //"worldToLineSample" appelle la méthode "lineSampleHeightToWorld" pour prendre en compte l'élévation. 
+  if( this->m_Model == NULL)
+  {
+  	itkExceptionMacro(<<"TransformPoint(): Invalid Model pointer m_Model == NULL !");
+  }
+  this->m_Model->worldToLineSample(ossimGPoint, ossimDPoint); //"worldToLineSample" appelle la méthode "lineSampleHeightToWorld" pour prendre en compte l'élévation. 
   
-        //On stocke le resultat dans un "OutputPointType"  
-        OutputPointType outputPoint;
-        outputPoint[0]=ossimDPoint.x;
-        outputPoint[1]=ossimDPoint.y;
-        return outputPoint;
+  //On stocke le resultat dans un "OutputPointType"  
+  OutputPointType outputPoint;
+  outputPoint[0]=ossimDPoint.x;
+  outputPoint[1]=ossimDPoint.y;
+  
+	return outputPoint;
 }
 
 template < class TScalarType,
@@ -122,7 +116,7 @@ InverseSensorModel< TScalarType,NInputDimensions,NOutputDimensions,NParametersDi
   Superclass::PrintSelf(os,indent);
 }
 
-}//fin namespace
+} // namespace otb
 
 #endif
 

@@ -24,61 +24,59 @@
 
 namespace otb
 {
-//Cette classe hérite de otb::MapProjection
+
 class ITK_EXPORT LambertConformalConicMapProjection : public MapProjection<ossimLambertConformalConicProjection> 
 {
 public :
 
-/******************************************/
-/*  Déclaration des types utilisés:       */
-/******************************************/
-  typedef LambertConformalConicMapProjection                            Self;
-  typedef MapProjection<ossimLambertConformalConicProjection>      Superclass;
+  /** Standard class typedefs. */
+  typedef LambertConformalConicMapProjection                        Self;
+  typedef MapProjection<ossimLambertConformalConicProjection>       Superclass;
   typedef itk::SmartPointer<Self>                    	      		  	Pointer;
   typedef itk::SmartPointer<const Self>              	      		  	ConstPointer;
 
-itkTypeMacro( LambertConformalConicMapProjection, MapProjection );
-itkNewMacro( Self );
-	  
-typedef Superclass::ScalarType  ScalarType;
+	typedef Superclass::ScalarType  																	ScalarType;
+	typedef itk::Point<ScalarType,2 >   	      											InputPointType;
+	typedef itk::Point<ScalarType,2 >  	      												OutputPointType;
 
-// typedef itk::Point<TScalarType,NInputDimensions >   	      InputPointType;
-// typedef itk::Point<TScalarType,NOutputDimensions >  	      OutputPointType;  
-typedef itk::Point<ScalarType,2 >   	      InputPointType;
-typedef itk::Point<ScalarType,2 >  	      OutputPointType;      
-/******************************************/
-/*        Déclaration des méthodes:       */
-/******************************************/	    
-void SetStandardParallel1 (double degree);
+	/** Method for creation through the object factory. */
+	itkNewMacro( Self );
 
-void SetStandardParallel2 (double degree);
+	/** Run-time type information (and related methods). */
+	itkTypeMacro( LambertConformalConicMapProjection, MapProjection );
+      
+	void SetStandardParallel1 (double degree);
 
-void SetStandardParallels (double parallel1Degree,double parallel2Degree);
+	void SetStandardParallel2 (double degree);
 
-void SetFalseEasting(double falseEasting);
+	void SetStandardParallels (double parallel1Degree,double parallel2Degree);
 
-void SetFalseNorthing(double falseNorthing);
+	void SetFalseEasting(double falseEasting);
 
-double GetFalseNorthing() const;
+	void SetFalseNorthing(double falseNorthing);
 
-double GetFalseEasting() const;
+	double GetFalseNorthing() const;
 
-void SetParameters(double parallel1Degree,double parallel2Degree,double falseEasting,double falseNorthing);
+	double GetFalseEasting() const;
 
-void SetDefaults();
+	void SetParameters(double parallel1Degree,double parallel2Degree,double falseEasting,double falseNorthing);
+
+	void SetDefaults();
 
 protected:
-LambertConformalConicMapProjection(); 
-virtual ~LambertConformalConicMapProjection();
 
-//Variables protégés:
-ossimLambertConformalConicProjection* m_LambertConformalConicProjection;
+	LambertConformalConicMapProjection(); 
+	virtual ~LambertConformalConicMapProjection();
+
+	ossimLambertConformalConicProjection* m_LambertConformalConicProjection;
+	
+private :
+
+  LambertConformalConicMapProjection(const Self&); //purposely not implemented
+  void operator=(const Self&); //purposely not implemented
 };
 
-}//Fin header
+} // namespace otb
 
-/*#ifndef OTB_MANUAL_INSTANTIATION
-#include "otbLambertConformalConicMapProjection.cxx"
-#endif*/
 
 #endif

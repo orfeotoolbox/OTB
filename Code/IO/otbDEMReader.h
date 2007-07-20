@@ -30,21 +30,21 @@
 
 namespace otb
 {
-/**OtbDEMReader header**/
-/**Le but de cette classe est de pouvoir créer une image représentant
-*  un MNT pour une région spécifiée (coin haut gauche + coin bas droit + spacing).
-*  Cette classe s'appuie sur ossimElevManager. 
-*  MNT supporté: DTED et SRTM. et pour les autres plus personnalisés???
-*  
-*  Il est à noter que si la résolution demandée est supérieure à celle des fichiers MNT utilisés, 
-*  ossimElevManager fait une interpolation bilinéaire.
-**/
+/** \class DEMReader
+ *
+ * \brief Class for Reading a DEM data
+ *
+ * This class is based on ossimElevManager. It takes in input the UL and LR geographic coordinates and the spacing.
+ * Handle DTED and SRTM formats.
+ * \ingroup Images
+ *
+ */
 template <class TDEMImage>
 class ITK_EXPORT DEMReader: 
 public itk::ImageSource<Image<typename TDEMImage::PixelType,2, 0> >
 {
 public :
-//Déclaration des types utilisés:
+/** Standard class typedefs. */
   typedef itk::Indent														Indent;
   typedef TDEMImage					      									DEMImageType;
   typedef typename DEMImageType::Pointer									DEMImagePointerType;
@@ -64,45 +64,49 @@ public :
   typedef typename Superclass::OutputImageRegionType 				        OutputImageRegionType;
   typedef itk::ImageRegionIteratorWithIndex< Image<PixelType,2, 0> >      	ImageIteratorType;
   
+	/** Method for creation through the object factory. */
   itkNewMacro(Self);
   
+	/** Run-time type information (and related methods). */
   itkTypeMacro(DEMReader,ImageSource);
   	                                      
-//Déclaration des méthodes:
-itkSetMacro(Spacing,SpacingType);    //Pour fixer le spacing
+	/** Set the spacing. */
+	itkSetMacro(Spacing,SpacingType);   
+	itkGetConstReferenceMacro(Spacing,SpacingType);
+	
+	/** Set the Upper Left coordinates. */
+	itkSetMacro(Ul,PointType);
+	itkGetConstReferenceMacro(Ul,PointType);
 
-itkGetConstReferenceMacro(Spacing,SpacingType);
+	/** Set the Lower Right coordinates. */
+	itkSetMacro(Lr,PointType);
+	itkGetConstReferenceMacro(Lr,PointType);
 
-itkSetMacro(Ul,PointType);           //Pour donner les coord géo du coin haut gauche
+  /** Set the spacing. */    
+	void SetSpacing(const double* spacing); 
 
-itkGetConstReferenceMacro(Ul,PointType);
+	/** Try to open the DEM directory. */
+	bool OpenDEMDirectory(char* &DEMDirectory);         
 
-itkSetMacro(Lr,PointType);           //Pour donner les coord géo du coin bas droit
-
-itkGetConstReferenceMacro(Lr,PointType);
-
-void SetSpacing(const double* spacing);       //Pour fixer le spacing
-
-bool OpenDEMDirectory(char* &DEMDirectory);         //Pour lui donner le nom du repertoire contenant les fichiers MNT.
-
-virtual double GetHeightAboveMSL(const PointType& worldPoint);      //Pour avoir l'élévation par rapport au niveau moyen de la mer.
+	/** Compute the height above MSL(Mean Sea Level) of the point. */
+	virtual double GetHeightAboveMSL(const PointType& worldPoint);     
 
 protected:
-DEMReader();
-~DEMReader();
+	DEMReader();
+	~DEMReader();
 
-//Méthodes pour assurer la pipeline
-void PrintSelf(std::ostream& os, Indent indent) const;
-void GenerateData();
-virtual void GenerateOutputInformation();
+	void PrintSelf(std::ostream& os, Indent indent) const;
+	void GenerateData();
+	virtual void GenerateOutputInformation();
 
-ossimElevManager* m_ElevManager;
-//DEMImagePointerType  m_DEMImage;
-SpacingType m_Spacing;
-PointType m_Ul;
-PointType m_Lr;
+	ossimElevManager* m_ElevManager;
+	//DEMImagePointerType  m_DEMImage;
+	SpacingType m_Spacing;
+	PointType m_Ul;
+	PointType m_Lr;
 };
-}//Fin header
+
+} // namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
 #include "otbDEMReader.txx"

@@ -24,49 +24,52 @@
 
 namespace otb
 {
-//Cette classe hérite de otb::MapProjection
+
+
 class ITK_EXPORT Eckert4MapProjection : public MapProjection<ossimEckert4Projection> 
 {
 public :
 
-/******************************************/
-/*  Déclaration des types utilisés:       */
-/******************************************/
-  typedef Eckert4MapProjection                                    Self;
-  typedef MapProjection<ossimEckert4Projection>                   Superclass;
+	/** Standard class typedefs. */
+  typedef Eckert4MapProjection                                  Self;
+  typedef MapProjection<ossimEckert4Projection>                 Superclass;
   typedef itk::SmartPointer<Self>                    	      	  Pointer;
   typedef itk::SmartPointer<const Self>              	      	  ConstPointer;
 
-itkTypeMacro( Eckert4MapProjection, MapProjection );
-itkNewMacro( Self );
-	  
-  typedef Superclass::ScalarType ScalarType;
-/*typedef itk::Point<TScalarType,NInputDimensions >   	      InputPointType;
-typedef itk::Point<TScalarType,NOutputDimensions >  	      OutputPointType; */ 
-      
-typedef itk::Point<ScalarType,2 >   	      InputPointType;
-typedef itk::Point<ScalarType,2 >  	      OutputPointType; 
-/******************************************/
-/*        Déclaration des méthodes:       */
-/******************************************/	    
-void SetFalseEasting(double falseEasting);
+  typedef Superclass::ScalarType 																ScalarType;
+	typedef itk::Point<ScalarType,2 >   	      									InputPointType;
+	typedef itk::Point<ScalarType,2 >  	      										OutputPointType; 
 
-void SetFalseNorthing(double falseNorthing);
+  /** Method for creation through the object factory. */
+	itkNewMacro( Self );
+	
+	/** Run-time type information (and related methods). */
+	itkTypeMacro( Eckert4MapProjection, MapProjection );
 
-double GetFalseNorthing() const;
+	void SetFalseEasting(double falseEasting);
 
-double GetFalseEasting() const;
+	void SetFalseNorthing(double falseNorthing);
 
-void SetDefaults();
+	double GetFalseNorthing() const;
 
-protected:
-Eckert4MapProjection(); 
-virtual ~Eckert4MapProjection();
+	double GetFalseEasting() const;
 
-//Variables protégés:
-ossimEckert4Projection* m_Eckert4Projection;
+	void SetDefaults();
+
+protected :
+	
+	Eckert4MapProjection(); 
+	virtual ~Eckert4MapProjection();
+
+	ossimEckert4Projection* m_Eckert4Projection;
+
+private :
+	
+  Eckert4MapProjection(const Self&); //purposely not implemented
+  void operator=(const Self&); //purposely not implemented
+
 };
 
-}//Fin header
+} // namespace otb
 
 #endif

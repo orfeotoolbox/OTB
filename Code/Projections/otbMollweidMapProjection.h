@@ -24,54 +24,52 @@
 
 namespace otb
 {
-//Cette classe hérite de otb::MapProjection
+
 class ITK_EXPORT MollweidMapProjection : public MapProjection<ossimMollweidProjection> 
 {
 public :
 
-/******************************************/
-/*  Déclaration des types utilisés:       */
-/******************************************/
-  typedef MollweidMapProjection                                   Self;
-  typedef MapProjection<ossimMollweidProjection>                  Superclass;
+	/** Standard class typedefs. */
+	typedef MollweidMapProjection                                 Self;
+  typedef MapProjection<ossimMollweidProjection>                Superclass;
   typedef itk::SmartPointer<Self>                    	      	  Pointer;
   typedef itk::SmartPointer<const Self>              	      	  ConstPointer;
 
-itkTypeMacro( MollweidMapProjection, MapProjection );
-itkNewMacro( Self );
-	  
-/*typedef itk::Point<TScalarType,NInputDimensions >   	      InputPointType;
-typedef itk::Point<TScalarType,NOutputDimensions >  	      OutputPointType; */ 
+	typedef Superclass::ScalarType  															ScalarType;
+	typedef itk::Point<ScalarType,2 >   	      									InputPointType;
+	typedef itk::Point<ScalarType,2 >  	      										OutputPointType;      
 
-typedef Superclass::ScalarType  ScalarType;
+	/** Method for creation through the object factory. */
+	itkNewMacro(Self);
 
-typedef itk::Point<ScalarType,2 >   	      InputPointType;
-typedef itk::Point<ScalarType,2 >  	      OutputPointType;      
-/******************************************/
-/*        Déclaration des méthodes:       */
-/******************************************/	    
-void SetFalseEasting(double falseEasting);
+	/** Run-time type information (and related methods). */
+	itkTypeMacro( MollweidMapProjection, MapProjection );
 
-void SetFalseNorthing(double falseNorthing);
+	void SetFalseEasting(double falseEasting);
 
-double GetFalseNorthing() const;
+	void SetFalseNorthing(double falseNorthing);
 
-double GetFalseEasting() const;
+	double GetFalseNorthing() const;
 
-void SetDefaults();
+	double GetFalseEasting() const;
+
+	void SetDefaults();
 
 protected:
-MollweidMapProjection(); 
-virtual ~MollweidMapProjection();
 
-//Variables protégés:
-ossimMollweidProjection* m_MollweidProjection;
+	MollweidMapProjection(); 
+	virtual ~MollweidMapProjection();
+
+	ossimMollweidProjection* m_MollweidProjection;
+
+private :
+	
+  MollweidMapProjection(const Self&); //purposely not implemented
+  void operator=(const Self&); //purposely not implemented
+	
 };
 
-}//Fin header
+} // namespace otb
 
-/*#ifndef OTB_MANUAL_INSTANTIATION
-#include "otbMollweidMapProjection.cxx"
-#endif*/
 
 #endif

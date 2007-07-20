@@ -19,54 +19,58 @@
 #include "otbMollweidMapProjection.h"
 
 namespace otb
-{ /************************************/
-  /*          Constructeurs           */
-  /************************************/
-  
-// Constructeur par défault
-  MollweidMapProjection::MollweidMapProjection()
+{ 
+
+MollweidMapProjection
+::MollweidMapProjection()
 {
- m_MollweidProjection = new ossimMollweidProjection();
+	m_MollweidProjection = new ossimMollweidProjection();
 }
 
-// Destructeur 
- MollweidMapProjection::~MollweidMapProjection()
+MollweidMapProjection
+::~MollweidMapProjection()
 {
-delete m_MollweidProjection;
+	delete m_MollweidProjection;
 }
-/******************************************/
-/*        Déclaration des méthodes:       */
-/******************************************/
+
 ///Spécification du false easting
-void    MollweidMapProjection::SetFalseEasting(double falseEasting) 
+void MollweidMapProjection
+::SetFalseEasting(double falseEasting) 
 {
-m_MollweidProjection->setFalseEasting(falseEasting);
+	m_MollweidProjection->setFalseEasting(falseEasting);
 }
 
 ///Spécification du false Northing
-void    MollweidMapProjection::SetFalseNorthing(double falseNorthing) 
+void MollweidMapProjection
+::SetFalseNorthing(double falseNorthing) 
 {
-m_MollweidProjection->setFalseNorthing(falseNorthing);
+	m_MollweidProjection->setFalseNorthing(falseNorthing);
 }
 
 ///Instanciation avec les paramètres par défaut
-void    MollweidMapProjection::SetDefaults() 
+void MollweidMapProjection
+::SetDefaults() 
 {
-m_MollweidProjection->setDefaults();
+	m_MollweidProjection->setDefaults();
 }
 
 ///Méthode pour récupérer le FalseNorthing(pour éviter les coordonnées négatives)
- double MollweidMapProjection::GetFalseNorthing() const
+double MollweidMapProjection
+::GetFalseNorthing() const
 {
-double falseNorthing=m_MollweidProjection->getFalseNorthing();
-return falseNorthing;
+	double falseNorthing=m_MollweidProjection->getFalseNorthing();
+	
+	return falseNorthing;
 }
 
 ///Méthode pour récupérer le FalseEasting(pour éviter les coordonnées négatives)
-double MollweidMapProjection::GetFalseEasting() const
+double MollweidMapProjection
+::GetFalseEasting() const
 {
-double falseEasting=m_MollweidProjection->getFalseEasting();
-return falseEasting;
+	double falseEasting=m_MollweidProjection->getFalseEasting();
+	
+	return falseEasting;
 }
-}//fin namespace
+
+} // namespace otb
 

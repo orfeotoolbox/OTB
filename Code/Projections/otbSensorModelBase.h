@@ -29,8 +29,7 @@
 
 namespace otb
 {
-//On définit le template avec un type générique.
-//Cette classe hérite de itk::Transform
+
 template <class TScalarType,
           unsigned int NInputDimensions=2,
           unsigned int NOutputDimensions=2,
@@ -40,23 +39,23 @@ class ITK_EXPORT SensorModelBase : public itk::Transform<TScalarType,
 			                                    NOutputDimensions> 
 {
 public :
-
-/******************************************/
-/*  Déclaration des types utilisés:       */
-/******************************************/
-  typedef SensorModelBase                               Self;
+  /** Standard class typedefs. */
+  typedef SensorModelBase                             Self;
   typedef itk::Transform< TScalarType,
                    NInputDimensions,
-                   NOutputDimensions >                  Superclass;
+                   NOutputDimensions >                Superclass;
   typedef itk::SmartPointer<Self>                    	Pointer;
   typedef itk::SmartPointer<const Self>              	ConstPointer;
 
-  itkTypeMacro( SensorModelBase, Transform );
-  itkNewMacro( Self );
-
   typedef itk::Point<TScalarType, NInputDimensions >          InputPointType;
   typedef itk::Point<TScalarType, NOutputDimensions >         OutputPointType;      
-	       
+
+	/** Method for creation through the object factory. */
+	itkNewMacro( Self );
+	
+	/** Run-time type information (and related methods). */
+  itkTypeMacro( SensorModelBase, Transform );
+ 	       
   itkStaticConstMacro(InputSpaceDimension, unsigned int, NInputDimensions);
   itkStaticConstMacro(OutputSpaceDimension, unsigned int, NOutputDimensions);
   itkStaticConstMacro(ParametersDimension, unsigned int, NParametersDimensions); //A voir!!
@@ -73,6 +72,7 @@ public :
   virtual void SetImageGeometry(ossimKeywordlist &geom_kwl);
 
 protected:
+ 
   SensorModelBase(); 
   virtual ~SensorModelBase();
 
@@ -86,9 +86,15 @@ protected:
   ImageKeywordlist m_ImageKeywordlist;
   /** Pointer on an ossim projection (created with the keywordlist) */
   ossimProjection * m_Model;
+	
+private :
+
+  SensorModelBase(const Self&); //purposely not implemented
+  void operator=(const Self&); //purposely not implemented
+	
 };
 
-}//Fin header
+} // namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
 #include "otbSensorModelBase.txx"

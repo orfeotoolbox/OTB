@@ -91,5 +91,6 @@ typedef MapProjection<ossimUpsProjection> UpsProjection;
 //typedef MapProjection<ossimUtmProjection> UtmProjection;
 typedef UtmMapProjection UtmProjection;
 typedef MapProjection<ossimVanDerGrintenProjection> VanDerGrintenProjection;
+
 }//namespace otb
 #endif

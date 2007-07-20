@@ -24,48 +24,52 @@
 
 namespace otb
 {
-//Cette classe hérite de otb::MapProjection
+
+
 class ITK_EXPORT SinusoidalMapProjection : public otb::MapProjection<ossimSinusoidalProjection> 
 {
 public :
 
-/******************************************/
-/*  Déclaration des types utilisés:       */
-/******************************************/
-  typedef SinusoidalMapProjection                                    Self;
-  typedef otb::MapProjection<ossimSinusoidalProjection>              Superclass;
-  typedef itk::SmartPointer<Self>                    	      	  Pointer;
-  typedef itk::SmartPointer<const Self>              	      	  ConstPointer;
+  /** Standard class typedefs. */
+  typedef SinusoidalMapProjection                          Self;
+  typedef otb::MapProjection<ossimSinusoidalProjection>    Superclass;
+  typedef itk::SmartPointer<Self>                    	     Pointer;
+  typedef itk::SmartPointer<const Self>              	     ConstPointer;
 
-itkTypeMacro( SinusoidalMapProjection, MapProjection );
-itkNewMacro( Self );
-	  
-typedef Superclass::ScalarType  ScalarType;
-/*typedef itk::Point<TScalarType,NInputDimensions >   	      InputPointType;
-typedef itk::Point<TScalarType,NOutputDimensions >  	      OutputPointType; */   
-typedef itk::Point<ScalarType,2>   	      InputPointType;
-typedef itk::Point<ScalarType,2>  	      OutputPointType;     
-/******************************************/
-/*        Déclaration des méthodes:       */
-/******************************************/	    
-void SetFalseEasting(double falseEasting);
+	typedef Superclass::ScalarType  												 ScalarType;
+	typedef itk::Point<ScalarType,2>   	      							 InputPointType;
+	typedef itk::Point<ScalarType,2>  	      							 OutputPointType;     
 
-void SetFalseNorthing(double falseNorthing);
+	/** Method for creation through the object factory. */
+	itkNewMacro( Self );
 
-double GetFalseNorthing() const;
+	/** Run-time type information (and related methods). */
+	itkTypeMacro( SinusoidalMapProjection, MapProjection );
 
-double GetFalseEasting() const;
+	void SetFalseEasting(double falseEasting);
 
-void SetDefaults();
+	void SetFalseNorthing(double falseNorthing);
+
+	double GetFalseNorthing() const;
+
+	double GetFalseEasting() const;
+
+	void SetDefaults();
 
 protected:
-SinusoidalMapProjection(); 
-virtual ~SinusoidalMapProjection();
 
-//Variables protégés:
-ossimSinusoidalProjection* m_SinusoidalProjection;
+	SinusoidalMapProjection(); 
+	virtual ~SinusoidalMapProjection();
+	
+	ossimSinusoidalProjection* m_SinusoidalProjection;
+	
+private :
+
+  SinusoidalMapProjection(const Self&); //purposely not implemented
+  void operator=(const Self&); //purposely not implemented
+
 };
 
-}//Fin header
+} // namespace otb
 
 #endif

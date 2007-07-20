@@ -24,61 +24,59 @@
 
 namespace otb
 {
-//Cette classe hérite de otb::MapProjection
+
 class ITK_EXPORT TransMercatorMapProjection : public MapProjection<ossimTransMercatorProjection> 
 {
 public :
 
-/******************************************/
-/*  Déclaration des types utilisés:       */
-/******************************************/
-  typedef TransMercatorMapProjection                              Self;
-  typedef MapProjection<ossimTransMercatorProjection>             Superclass;
+  /** Standard class typedefs. */
+ 	typedef TransMercatorMapProjection                            Self;
+  typedef MapProjection<ossimTransMercatorProjection>           Superclass;
   typedef itk::SmartPointer<Self>                    	      	  Pointer;
   typedef itk::SmartPointer<const Self>              	      	  ConstPointer;
 
-itkTypeMacro( TransMercatorMapProjection, MapProjection );
-itkNewMacro( Self );
-	  
-typedef Superclass::ScalarType  ScalarType;
-/*typedef itk::Point<TScalarType,NInputDimensions >   	      InputPointType;
-typedef itk::Point<TScalarType,NOutputDimensions >  	      OutputPointType; */   
-typedef itk::Point<ScalarType,2>   	      InputPointType;
-typedef itk::Point<ScalarType,2>  	      OutputPointType;     
+	typedef Superclass::ScalarType  															ScalarType;
+	typedef itk::Point<ScalarType,2>   	      										InputPointType;
+	typedef itk::Point<ScalarType,2>  	      										OutputPointType;     
 
-/******************************************/
-/*        Déclaration des méthodes:       */
-/******************************************/	
-void SetEllipsoid();
+	/** Method for creation through the object factory. */
+	itkNewMacro( Self );
+
+	/** Run-time type information (and related methods). */
+	itkTypeMacro( TransMercatorMapProjection, MapProjection );
+	
+	void SetEllipsoid();
     
-void SetFalseEasting(double falseEasting);
+	void SetFalseEasting(double falseEasting);
 
-void SetFalseNorthing(double falseNorthing);
+	void SetFalseNorthing(double falseNorthing);
 
-void SetScaleFactor(double scaleFactor);
+	void SetScaleFactor(double scaleFactor);
 
-void SetParameters(double falseEasting,double falseNorthing, double scaleFactor);
+	void SetParameters(double falseEasting,double falseNorthing, double scaleFactor);
 
-void SetDefaults();
+	void SetDefaults();
 
-double GetFalseNorthing() const;
+	double GetFalseNorthing() const;
+	
+	double GetFalseEasting() const;
 
-double GetFalseEasting() const;
-
-double GetScaleFactor() const;
+	double GetScaleFactor() const;
 
 protected:
-TransMercatorMapProjection(); 
-virtual ~TransMercatorMapProjection();
 
-//Variables protégés:
-ossimTransMercatorProjection* m_TransMercatorProjection;
+	TransMercatorMapProjection(); 
+	virtual ~TransMercatorMapProjection();
+
+	ossimTransMercatorProjection* m_TransMercatorProjection;
+	
+private :
+
+  TransMercatorMapProjection(const Self&); //purposely not implemented
+  void operator=(const Self&); //purposely not implemented
+ 	
 };
 
-}//Fin header
-
-/*#ifndef OTB_MANUAL_INSTANTIATION
-#include "otbTransMercatorMapProjection.cxx"
-#endif*/
+} // namespace otb
 
 #endif

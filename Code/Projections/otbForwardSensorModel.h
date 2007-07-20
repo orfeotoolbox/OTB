@@ -25,43 +25,54 @@
 
 namespace otb
 {
-/**otbForwardSensorModel.h
-*  Cette classe encapsule quelques méthodes de ossimProjectionFactoryRegistry et ossimProjection.
-**/
-//Cette classe hérite de itk::Transform
+
+/** \class ForwardSensorModel
+
+ * \brief Class for direct sensor models 
+ *
+ * Based to ossimProjectionFactoryRegistry and ossimProjection methods.
+ * It takes in input an index and compute the world coordinates.
+ * (i,j,h) -> (lat,lon).
+ * Notice that the elevation h is optional. 
+ *
+ * \ingroup Transform 
+ */
+ 
 template <class TScalarType,
           unsigned int NInputDimensions=2,
           unsigned int NOutputDimensions=2,
           unsigned int NParametersDimensions=3>
 class ITK_EXPORT ForwardSensorModel : public SensorModelBase<TScalarType,          
-			                                    NInputDimensions,  
-			                                    NOutputDimensions,
-                                                            NParametersDimensions> 
+			                                    									 NInputDimensions,  
+										                                         NOutputDimensions,
+                                                             NParametersDimensions> 
 {
+
 public :
 
-/******************************************/
-/*  Déclaration des types utilisés:       */
-/******************************************/
-  typedef ForwardSensorModel                                  Self;
+	/** Standard class typedefs. */
+  typedef ForwardSensorModel                             Self;
   typedef SensorModelBase< TScalarType,
-                   NInputDimensions,
-                   NOutputDimensions,
-                   NParametersDimensions >                    Superclass;
-  typedef itk::SmartPointer<Self>                    	      Pointer;
-  typedef itk::SmartPointer<const Self>              	      ConstPointer;
-
-  itkTypeMacro( ForwardSensorModel, SensorModelBase );
-  itkNewMacro( Self );
+                   				 NInputDimensions,
+                   				 NOutputDimensions,
+                   				 NParametersDimensions >       Superclass;
+  typedef itk::SmartPointer<Self>                    	   Pointer;
+  typedef itk::SmartPointer<const Self>              	   ConstPointer;
 
   typedef typename Superclass::InputPointType            InputPointType;
   typedef typename Superclass::OutputPointType           OutputPointType;      
+  
+	/** Method for creation through the object factory. */
+  itkNewMacro( Self );
+	
+	/** Run-time type information (and related methods). */
+	itkTypeMacro( ForwardSensorModel, SensorModelBase );
 	       
   itkStaticConstMacro(InputSpaceDimension, unsigned int, NInputDimensions);
   itkStaticConstMacro(OutputSpaceDimension, unsigned int, NOutputDimensions);
   itkStaticConstMacro(ParametersDimension, unsigned int, NParametersDimensions); //A voir!!
 	         
-  /** Projection point */
+  /** Compute the world coordinates. */ 
   OutputPointType TransformPoint(const InputPointType &point) const;
 
 protected:
@@ -70,10 +81,15 @@ protected:
 
   /** PrintSelf method */
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
+	
+private :
 
+	ForwardSensorModel(const Self&); //purposely not implemented
+  void operator=(const Self&); //purposely not implemented
 };
 
-}//Fin header
+
+} // namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
 #include "otbForwardSensorModel.txx"

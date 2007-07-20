@@ -22,48 +22,54 @@
 
 namespace otb
 {
-/**************************************/
-/*    CONSTRUCTEURS & DESTRUCTEURS    */
-/**************************************/ 
 
-// Constructeur par défault
 template<class TInputMapProjection, class TOutputMapProjection, class TScalarType, unsigned int NInputDimensions, unsigned int NOutputDimensions>
-Composite<TInputMapProjection, TOutputMapProjection, TScalarType, NInputDimensions, NOutputDimensions>::Composite()
+Composite<TInputMapProjection, TOutputMapProjection, TScalarType, NInputDimensions, NOutputDimensions>
+::Composite()
 : Superclass(SpaceDimension,ParametersDimension)
 {
 }
   
-// Destructeur 
 template<class TInputMapProjection, class TOutputMapProjection, class TScalarType, unsigned int NInputDimensions, unsigned int NOutputDimensions>
-Composite<TInputMapProjection, TOutputMapProjection, TScalarType, NInputDimensions, NOutputDimensions>::~Composite()
+Composite<TInputMapProjection, TOutputMapProjection, TScalarType, NInputDimensions, NOutputDimensions>
+::~Composite()
 {
 }
 
-/**************************************/
-/*            METHODES                */
-/**************************************/ 
 ///Méthode pour passer de la projection 1 à la projection 2
 template<class TInputMapProjection, class TOutputMapProjection, class TScalarType, unsigned int NInputDimensions, unsigned int NOutputDimensions> 
 typename Composite<TInputMapProjection, TOutputMapProjection, TScalarType, NInputDimensions, NOutputDimensions>::OutputPointType 
 Composite<TInputMapProjection, TOutputMapProjection, TScalarType, NInputDimensions, NOutputDimensions>::ComputeProjection1ToProjection2(const InputPointType &point1)
-{InputPointType geopoint;
-geopoint=m_InputMapProjection->Inverse(point1); //On projette le point en (lat,lon) 
-OutputPointType point2;
-point2=m_OutputMapProjection->Forward(geopoint); //Puis on le reprojette en coord carto.
-return point2;
+{
+	InputPointType geopoint;
+	OutputPointType point2;	
+	
+	//On projette le point en (lat,lon) 
+	geopoint=m_InputMapProjection->Inverse(point1); 
+	//Puis on le reprojette en coord carto.
+	point2=m_OutputMapProjection->Forward(geopoint); 
+
+	return point2;
 }
 
 ///Méthode pour passer de la projection 2 à la projection 1
 template<class TInputMapProjection, class TOutputMapProjection, class TScalarType, unsigned int NInputDimensions, unsigned int NOutputDimensions> 
 typename Composite<TInputMapProjection, TOutputMapProjection, TScalarType, NInputDimensions, NOutputDimensions>::InputPointType 
 Composite<TInputMapProjection, TOutputMapProjection, TScalarType, NInputDimensions, NOutputDimensions>::ComputeProjection2ToProjection1(const OutputPointType &point2)
-{OutputPointType geopoint;
-geopoint=m_OutputMapProjection->Inverse(point2);//On projette le point en (lat,lon) 
-InputPointType point1;
-point1=m_InputMapProjection->Forward(geopoint);//Puis on le reprojette en coord carto.
-return point1;
+{
+
+	OutputPointType geopoint;
+	InputPointType point1;
+
+	//On projette le point en (lat,lon) 
+	geopoint=m_OutputMapProjection->Inverse(point2);
+	//Puis on le reprojette en coord carto.
+	point1=m_InputMapProjection->Forward(geopoint);
+	
+	return point1;
 }
-}//fin namespace
+
+} // namespace otb
 
 #endif
 
