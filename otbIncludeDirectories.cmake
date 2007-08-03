@@ -108,6 +108,8 @@ SET(OTB_INCLUDE_DIRS_INSTALL_TREE ${OTB_INCLUDE_DIRS_INSTALL_TREE}
   ${OTB_INSTALL_INCLUDE_DIR}/Utilities/BGL/boost
   ${OTB_INSTALL_INCLUDE_DIR}/Utilities/otbsvm
   ${OTB_INSTALL_INCLUDE_DIR}/Utilities/otbossim
+  ${OTB_INSTALL_INCLUDE_DIR}/Utilities/otbossim/include
+  ${OTB_INSTALL_INCLUDE_DIR}/Utilities/otbossim/include/ossim
   ${OTB_INSTALL_INCLUDE_DIR}/Utilities/InsightJournal
 )
 
