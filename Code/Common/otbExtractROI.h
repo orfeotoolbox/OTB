@@ -26,11 +26,11 @@ namespace otb
 {
 
 /** \class ExtractROI
- * \brief Extrait une partie d'une image mono-canal.
+ * \brief Extract a subset of a mono-channel image.
  *
- * Le Pixel peut etre de type simple ou alors un itk::RGBPixel, etc.
- * \note Ces classe est paramétrée par le type de pixel des images d'entrée et de sortie. Les images manipulées dans cette classe 
- * sont de type "itk::Image".
+ * Pixel can be of a simple type or an itk::RGBPixel, etc.
+ * \note Parameter to this class are the input pixel type and the output
+ * pixel type.
  *
  */
 template <class TInputPixel, class TOutputPixel>

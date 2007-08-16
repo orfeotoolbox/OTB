@@ -61,7 +61,7 @@ void
 ExtractROI<TInputPixel, TOutputPixel>
 ::GenerateOutputInformation()
 {
-        // Appel à la methode de la classe de base
+        // Call to the base class method
         Superclass::GenerateOutputInformation();
 }
 
