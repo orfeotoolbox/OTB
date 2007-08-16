@@ -26,6 +26,8 @@
 #include "itkArray.h"
 #include "itkSimpleDataObjectDecorator.h"
 #include "otbStreamingTraits.h"
+// #include "itkImageRegionNonUniformMultidimensionalSplitter.h"
+// #include "itkImageRegionMultidimensionalSplitter.h"
 #include "itkImageRegionSplitter.h"
 
 namespace otb {
@@ -77,6 +79,11 @@ public:
   typedef StreamingTraits<TInputImage> StreamingTraitsType;
   typedef StreamingMode StreamingModeType;
   
+  
+  itkStaticConstMacro(InputImageDimension, unsigned int,
+                       TInputImage::ImageDimension);
+
+//   typedef itk::ImageRegionNonUniformMultidimensionalSplitter<itkGetStaticConstMacro(InputImageDimension)>  SplitterType;
   typedef itk::ImageRegionSplitter<itkGetStaticConstMacro(InputImageDimension)>  SplitterType;
   typedef typename SplitterType::Pointer SplitterPointer;
   
@@ -89,6 +96,9 @@ public:
   itkGetMacro(NumberOfStreamDivisions,unsigned long);
   itkSetMacro(StreamingMode,StreamingModeType);
   itkGetMacro(StreamingMode,StreamingModeType);
+  
+  itkSetObjectMacro(RegionSplitter, SplitterType);
+  itkGetObjectMacro(RegionSplitter, SplitterType);
 
   /** Image related typedefs. */
   itkStaticConstMacro(ImageDimension, unsigned int,
@@ -185,6 +195,8 @@ private:
   unsigned long m_BufferMemorySize;
   unsigned long m_BufferNumberOfLinesDivisions;
   unsigned long m_NumberOfStreamDivisions;
+  
+  SplitterPointer m_RegionSplitter;
   
  /** Use to determine method of calculation number of divisions */
  StreamingModeType  m_StreamingMode;

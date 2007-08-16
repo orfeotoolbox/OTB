@@ -66,6 +66,9 @@ StreamingStatisticsImageFilter<TInputImage>
   m_NumberOfStreamDivisions = 0;
   // default to AUTOMATIC_NUMBER_OF_DIVISIONS
   m_StreamingMode = SET_AUTOMATIC_NUMBER_OF_STREAM_DIVISIONS;
+  
+  // create default region splitter
+  m_RegionSplitter = itk::ImageRegionSplitter<InputImageDimension>::New();
 }
 
 
@@ -366,8 +369,8 @@ StreamingStatisticsImageFilter<TInputImage>
   otbMsgDebugMacro(<<"ThreadedGenerateData() - thread "<<threadId<<" - Streaming configuration: "<<m_StreamingMode<<" "<<m_NumberOfStreamDivisions<<" "<<m_BufferMemorySize<<" "<<m_BufferNumberOfLinesDivisions);
   otbMsgDebugMacro(<<"ThreadedGenerateData() - thread "<<threadId <<" - nb of divisions from StreamingTraits: "<<numDivisions);
   
-  SplitterPointer regionSplitter = SplitterType::New();
-  unsigned int numDivisionsFromSplitter = regionSplitter->GetNumberOfSplits(outputRegionForThread, numDivisions);
+//   SplitterPointer m_RegionSplitter = SplitterType::New();
+  unsigned int numDivisionsFromSplitter = m_RegionSplitter->GetNumberOfSplits(outputRegionForThread, numDivisions);
   if (numDivisionsFromSplitter < numDivisions)
     {
       numDivisions = numDivisionsFromSplitter;
@@ -386,7 +389,7 @@ StreamingStatisticsImageFilter<TInputImage>
        piece++)
     {
       //otbMsgDebugMacro(<<"ThreadedGenerateData() - processing piece: "<<piece<<"/"<<numDivisions);
-      RegionType streamRegion = regionSplitter->GetSplit(piece,numDivisions,outputRegionForThread);
+      RegionType streamRegion = m_RegionSplitter->GetSplit(piece,numDivisions,outputRegionForThread);
       //otbMsgDebugMacro(<<"ThreadedGenerateData() - piece region: "<<streamRegion);
       
       inputPtr->SetRequestedRegion(streamRegion);
