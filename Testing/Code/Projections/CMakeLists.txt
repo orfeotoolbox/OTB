@@ -57,7 +57,7 @@ ADD_TEST(prTvRegionProjectionToulouse ${PROJECTIONS_TESTS}
         otbRegionProjection
         ${IMAGEDATA}/TOULOUSE/QuickBird/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF
         ${TEMP}/RegionProjectionToulouse.png
-        43.60 1.44 # Coordonnées Lat/Long du Capitole Toulouse
+        43.60 1.44 # Coordonnï¿½es Lat/Long du Capitole Toulouse
         500
         500
         10
@@ -67,10 +67,10 @@ ADD_TEST(prTvRegionProjectionResamplerToulouse ${PROJECTIONS_TESTS}
         otbRegionProjectionResampler
         ${IMAGEDATA}/TOULOUSE/QuickBird/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF
         ${TEMP}/RegionProjectionResamplerToulouse.hdr
-        43.60 1.44 # Coordonnées Lat/Long du Capitole Toulouse
-        500
-        500
-        10
+        43.60 1.44 # Coordonnï¿½es Lat/Long du Capitole Toulouse
+        2000
+        2000
+        200
         )
 
 #   ADD_TEST(prTvRegionProjectionCevennes ${PROJECTIONS_TESTS}  
