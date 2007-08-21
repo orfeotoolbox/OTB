@@ -11,6 +11,7 @@ MultiScale
 DisparityMap 
 SpatialReasoning
 Projections
+Radiometry
 )
 
 IF(OTB_USE_VISU_GUI)
