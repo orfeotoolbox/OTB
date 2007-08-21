@@ -142,16 +142,39 @@ ADD_TEST(raTvMSAVI_MultiChannelRAndNIRVegetationIndexImageFilter ${RADIOMETRY_TE
 	)
 
 
+# -------            otb::RAndBAndNIRVegetationIndexImageFilter   ------------------------------
+
+ADD_TEST(raTuRAndBAndNIRVegetationIndexImageFilterNew ${RADIOMETRY_TESTS}  
+        otbRAndBAndNIRVegetationIndexImageFilterNew )
 
 
+ADD_TEST(raTvARVI_RAndBAndNIRVegetationIndexImageFilter ${RADIOMETRY_TESTS}  
+  --compare-image ${TOL}   ${BASELINE}/raRAndBAndNIRVegetationIndex_ARVI_poupees_subc1c2c3.tif
+                    ${TEMP}/raRAndBAndNIRVegetationIndex_ARVI_poupees_subc1c2c3.tif
+        otbRAndBAndNIRVegetationIndexImageFilter
+        ARVI
+	${INPUTDATA}/poupees_sub_c1.png
+	${INPUTDATA}/poupees_sub_c2.png
+	${INPUTDATA}/poupees_sub_c3.png
+	${TEMP}/raRAndBAndNIRVegetationIndex_ARVI_poupees_subc1c2c3.tif 
+        0.6 # Gamma parameter
+	)
 
+# -------            otb::MultiChannelRAndBAndNIRVegetationIndexImageFilter   ------------------------------
 
+ADD_TEST(raTuMultiChannelRAndBAndNIRVegetationIndexImageFilterNew ${RADIOMETRY_TESTS}  
+        otbMultiChannelRAndBAndNIRVegetationIndexImageFilterNew )
 
-
-
-
-
-
+ADD_TEST(raTvARVI_MultiChannelRAndBAndNIRVegetationIndexImageFilter ${RADIOMETRY_TESTS}  
+  --compare-image ${TOL}   ${BASELINE}/raRAndBAndNIRVegetationIndex_ARVI_poupees_subc1c2c3.tif
+                    ${TEMP}/raMultiChannelRAndBAndNIRVegetationIndex_ARVI_poupees_subc1c2c3.tif
+        otbMultiChannelRAndBAndNIRVegetationIndexImageFilter
+        ARVI
+	${INPUTDATA}/poupees_sub.png
+	${TEMP}/raMultiChannelRAndBAndNIRVegetationIndex_ARVI_poupees_subc1c2c3.tif 
+	1 2 3
+        0.6 # Gamma parameter
+	)
         
         
 
@@ -163,6 +186,10 @@ otbSetASetBRAndNIRVegetationIndexImageFilter.cxx
 otbMultiChannelRAndNIRVegetationIndexImageFilterNew.cxx
 otbMultiChannelRAndNIRVegetationIndexImageFilter.cxx
 otbSetASetBMultiChannelRAndNIRVegetationIndexImageFilter.cxx
+otbRAndBAndNIRVegetationIndexImageFilterNew.cxx
+otbRAndBAndNIRVegetationIndexImageFilter.cxx
+otbMultiChannelRAndBAndNIRVegetationIndexImageFilterNew.cxx
+otbMultiChannelRAndBAndNIRVegetationIndexImageFilter.cxx
 )
 
 

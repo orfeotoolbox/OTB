@@ -48,7 +48,7 @@ RAndNIRVegetationIndexImageFilter<TInputImageR,TInputImageNIR,TOutputImage,TFunc
 ::SetInputR( const TInputImageR * image1 ) 
 {
   // Process object is not const-correct so the const casting is required.
-  SetNthInput(0, const_cast<TInputImageR *>( image1 ));
+  SetInput1( image1 );
 }
 
 
@@ -62,7 +62,8 @@ RAndNIRVegetationIndexImageFilter<TInputImageR,TInputImageNIR,TOutputImage,TFunc
 ::SetInputNIR( const TInputImageNIR * image2 ) 
 {
   // Process object is not const-correct so the const casting is required.
-  SetNthInput(1, const_cast<TInputImageNIR *>( image2 ));
+//  SetNthInput(1, const_cast<TInputImageNIR *>( image2 ));
+  SetInput2( image2 );
 }
 
 
