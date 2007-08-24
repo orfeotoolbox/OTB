@@ -1,0 +1,15 @@
+libf2c
+- NO cp f2c.h0 f2c.h
+- cp sysdep1.h0 sysdep1.h
+- cp signal1.h0 signal1.h
+- change header inclusion "f2c.h" by "otb_6S_f2c.h" in all files *.c
+- omit c files : ftell64_.c pow_qq.c qbitbits.c qbitshft.c signbit.c
+
+- ITK vxl/v3p/netlib/ 
+    - cp v3p_f2c_mangle.h    otb_6S_f2c_mangle.h
+    - cp v3p_f2c_unmangle.h  otb_6S_f2c_unmangle.h
+    - cp v3p_f2c_original.h  otb_6S_f2c_original.h
+    - cp v3p_f2c.h           otb_6S_f2c.h
+
+To do : replace pow_dd(), etc... methods by vcl_pow(), etc.... us ITK vcl (#define pow_dd vcl_pow, ...) 
+
