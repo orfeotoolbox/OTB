@@ -60,6 +60,13 @@ ADD_TEST(utTvSvmTestGenericModelTest ${UTILITIES_TESTS}
                 ${TEMP}/svm_model_image_generic_kernel_test
 )
 
+# -------            lib otbsvm   ------------------------------
+
+# The file is not read. It a screen user scan. main.exe < 132.149.107.66.wloip20967.INP
+#ADD_TEST(utTv6SMainTest ${UTILITIES_TESTS}
+#                SIXSMainTest
+#                ${INPUTDATA}/132.149.107.66.wloip20967.INP
+#)
 
 
 
@@ -70,12 +77,16 @@ ijBSplineScatteredDataPointSetToImageFilterTest.cxx
 svmGenericKernelFunctor.cxx
 svmTest.cxx
 svmGenericKernelTest.cxx
+6SMainTest.cxx
 )
 
 INCLUDE_DIRECTORIES("${OTBTesting_BINARY_DIR}")
 
 ADD_EXECUTABLE(otbUtilitiesTests otbUtilitiesTests.cxx ${UtilitiesTests_SRCS})
-TARGET_LINK_LIBRARIES(otbUtilitiesTests OTBIO OTBCommon gdal ITKIO ITKAlgorithms ITKStatistics ITKCommon otbossim otbsvm)
+TARGET_LINK_LIBRARIES(otbUtilitiesTests OTBIO OTBCommon gdal ITKIO ITKAlgorithms ITKStatistics ITKCommon otbossim otbsvm otb6S)
+IF(UNIX)
+    TARGET_LINK_LIBRARIES (otbUtilitiesTests m)
+ENDIF(UNIX)
 
 
 ENDIF( NOT OTB_DISABLE_CXX_TESTING )
