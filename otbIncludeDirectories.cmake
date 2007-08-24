@@ -30,6 +30,9 @@ SET(OTB_INCLUDE_DIRS_BUILD_TREE ${OTB_INCLUDE_DIRS_BUILD_TREE}
   ${OTB_SOURCE_DIR}/Utilities/otbossim/include/ossim
   ${OTB_SOURCE_DIR}/Utilities/dxflib
   ${OTB_SOURCE_DIR}/Utilities/InsightJournal
+  ${OTB_SOURCE_DIR}/Utilities/otb6S
+  ${OTB_SOURCE_DIR}/Utilities/otb6S/6SV1.0B
+  ${OTB_SOURCE_DIR}/Utilities/otb6S/libf2c
 )
 
 #-----------------------------------------------------------------------------
@@ -113,6 +116,9 @@ SET(OTB_INCLUDE_DIRS_INSTALL_TREE ${OTB_INCLUDE_DIRS_INSTALL_TREE}
   ${OTB_INSTALL_INCLUDE_DIR}/Utilities/otbossim/include
   ${OTB_INSTALL_INCLUDE_DIR}/Utilities/otbossim/include/ossim
   ${OTB_INSTALL_INCLUDE_DIR}/Utilities/InsightJournal
+  ${OTB_INSTALL_INCLUDE_DIR}/Utilities/otb6S
+  ${OTB_INSTALL_INCLUDE_DIR}/Utilities/otb6S/6SV1.0B
+  ${OTB_INSTALL_INCLUDE_DIR}/Utilities/otb6S/libf2c
 )
 
 SET(OTB_INCLUDE_DIRS_INSTALL_TREE ${OTB_INCLUDE_DIRS_INSTALL_TREE}
