@@ -1,0 +1,2 @@
+extern int splie2_(real *x2a, real *ya, integer *m, integer *n, real *y2a);
+/*:ref: spline_ 14 6 6 6 4 6 6 6 */

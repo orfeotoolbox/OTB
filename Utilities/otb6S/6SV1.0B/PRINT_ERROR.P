@@ -1,0 +1,2 @@
+extern int print_error__(char *tex, ftnlen tex_len);
+/* comlen sixs_ier__ 8 */

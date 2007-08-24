@@ -1,0 +1,17 @@
+
+/* OTB patches: replace "f2c.h" by "otb_6S_f2c.h" */
+/*#include "f2c.h"*/
+#include "otb_6S_f2c.h"
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+struct {
+    real ex[80]	/* was [4][20] */, sc[80]	/* was [4][20] */, asy[80]	
+	    /* was [4][20] */, vi[4];
+} sixs_coef__;
+
+#ifdef __cplusplus
+}
+#endif
