@@ -1,0 +1,4 @@
+extern int oceaalbe_(real *pws, real *paw, real *xsal, real *pcl, real *pwl, real *brdfalbe);
+/*:ref: indwat_ 14 4 6 6 6 6 */
+/*:ref: morcasiwat_ 14 3 6 6 6 */
+/*:ref: glitalbe_ 14 5 6 6 6 6 6 */

@@ -1,0 +1,2 @@
+extern int hapkalbe_(real *om, real *af, real *s0, real *h__, real *brdfalb);
+/*:ref: gauss_ 14 5 6 6 6 6 4 */

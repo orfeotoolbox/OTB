@@ -1,0 +1,3 @@
+extern int posspo_(integer *month, integer *jday, real *tu, real *xlon, real *xlat, real *asol, real *phi0, real *avis, real *phiv);
+/* comlen sixs_ier__ 8 */
+/*:ref: possol_ 14 7 4 4 6 6 6 6 6 */

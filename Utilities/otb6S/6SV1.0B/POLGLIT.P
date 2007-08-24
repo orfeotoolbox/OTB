@@ -1,0 +1,2 @@
+extern int polglit_(real *xts, real *xtv, real *phi, real *wspd, real *azw, real *ropq, real *ropu);
+extern int pfresnel_(real *nr, real *ni, real *coschi, real *sinchi, real *r1, real *r2);

@@ -1,0 +1,4 @@
+extern int interp_(integer *iaer, integer *idatmp, real *wl, real *taer55, real *taer55p, real *xmud, real *romix, real *rorayl, real *roaero, real *phaa, real *phar, real *rqmix, real *rqrayl, real *rqaero, real *qhaa, real *qhar, real *rumix, real *rurayl, real *ruaero, real *uhaa, real *uhar, real *tsca, real *tray, real *trayp, real *taer, real *taerp, real *dtott, real *utott, real *astot, real *asray, real *asaer, real *utotr, real *utota, real *dtotr, real *dtota, integer *ipol, real *roatm_fi__, real *romix_fi__, real *rorayl_fi__, integer *nfi, real *roluts, real *rolut, real *rolutsq, real *rolutq, real *rolutsu, real *rolutu, integer *nfilut);
+/* comlen sixs_aer__ 480 */
+/* comlen sixs_disc__ 2160 */
+/* comlen sixs_del__ 8 */

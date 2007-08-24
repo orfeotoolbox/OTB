@@ -1,0 +1,1 @@
+extern int chand_(real *xphi, real *xmuv, real *xmus, real *xtau, real *xrray);

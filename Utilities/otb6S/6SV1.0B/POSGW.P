@@ -1,0 +1,4 @@
+extern int posgw_(integer *month, integer *jday, real *tu, integer *nc, integer *nl, real *asol, real *phi0, real *avis, real *phiv, real *xlon, real *xlat);
+/* comlen sixs_ier__ 8 */
+/*:ref: print_error__ 14 2 13 124 */
+/*:ref: possol_ 14 7 4 4 6 6 6 6 6 */

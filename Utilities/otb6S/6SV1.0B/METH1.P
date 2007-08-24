@@ -1,0 +1,1 @@
+extern int meth1_(real *a, integer *inu);

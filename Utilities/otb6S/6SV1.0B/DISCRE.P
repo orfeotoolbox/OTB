@@ -1,0 +1,2 @@
+extern int discre_(doublereal *ta, doublereal *ha, doublereal *tr, doublereal *hr, integer *it, integer *nt, doublereal *yy, doublereal *dd, doublereal *ppp2, doublereal *ppp1, doublereal *zx);
+/*:ref: print_error__ 14 2 13 124 */

@@ -1,0 +1,10 @@
+extern int iapibrdf_(integer *pild, real *pxlt, real *prl, real *ptl, real *prs, integer *pihs, real *pc, integer *mu, integer *np, real *rm, real *rp, real *brdfint);
+/* comlen sixs_ier__ 8 */
+/* comlen gauss_m__ 164 */
+/* comlen p_ 24 */
+/* comlen ld_ 16 */
+/* comlen ro_ 12 */
+/*:ref: lad_ 14 0 */
+/*:ref: gauleg_ 14 5 6 6 6 6 4 */
+/*:ref: solve_ 14 1 6 */
+/*:ref: ro_1__ 6 4 6 6 6 6 */

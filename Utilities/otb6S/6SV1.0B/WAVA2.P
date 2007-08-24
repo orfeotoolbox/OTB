@@ -1,0 +1,1 @@
+extern int wava2_(real *a, integer *inu);

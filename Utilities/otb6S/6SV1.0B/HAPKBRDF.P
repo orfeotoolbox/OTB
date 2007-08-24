@@ -1,0 +1,1 @@
+extern int hapkbrdf_(real *om, real *af, real *s0, real *h__, integer *mu, integer *np, real *rm, real *rp, real *brdfint);

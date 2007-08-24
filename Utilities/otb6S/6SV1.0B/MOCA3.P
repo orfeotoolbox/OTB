@@ -1,0 +1,1 @@
+extern int moca3_(real *a, integer *inu);

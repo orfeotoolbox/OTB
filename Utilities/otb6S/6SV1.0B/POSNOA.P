@@ -1,0 +1,3 @@
+extern int posnoa_(integer *month, integer *jday, real *tu, integer *nc, real *xlonan, real *hna, real *campm, real *asol, real *phi0, real *avis, real *phiv, real *xlon, real *xlat);
+/* comlen sixs_ier__ 8 */
+/*:ref: possol_ 14 7 4 4 6 6 6 6 6 */

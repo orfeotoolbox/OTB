@@ -1,0 +1,2 @@
+extern int waltalbe_(real *a, real *ap, real *b, real *c__, real *brdfalb);
+/*:ref: gauss_ 14 5 6 6 6 6 4 */

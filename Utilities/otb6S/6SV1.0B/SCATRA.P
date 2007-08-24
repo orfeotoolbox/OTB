@@ -1,0 +1,3 @@
+extern int scatra_(integer *iaer_prof__, real *taer, real *taerp, real *tray, real *trayp, real *piza, real *palt, integer *nt, integer *mu, real *rm, real *gb, real *xmus, real *xmuv, real *ddirtt, real *ddiftt, real *udirtt, real *udiftt, real *sphalbt, real *ddirtr, real *ddiftr, real *udirtr, real *udiftr, real *sphalbr, real *ddirta, real *ddifta, real *udirta, real *udifta, real *sphalba);
+/*:ref: csalbr_ 14 2 6 6 */
+/*:ref: iso_ 14 12 4 6 6 6 6 6 6 4 4 6 6 6 */

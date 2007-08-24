@@ -1,0 +1,2 @@
+extern int roujalbe_(real *k0, real *k1, real *k2, real *brdfalb);
+/*:ref: gauss_ 14 5 6 6 6 6 4 */

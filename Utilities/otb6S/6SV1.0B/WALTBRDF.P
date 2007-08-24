@@ -1,0 +1,1 @@
+extern int waltbrdf_(real *a, real *ap, real *b, real *c__, integer *mu, integer *np, real *rm, real *rp, real *brdfint);
