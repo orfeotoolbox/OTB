@@ -7,9 +7,9 @@
 extern "C" {
 #endif
 
-/* OTB patches: replace "f2c.h" by "otb_6S_f2c.h" */
+/* OTB patches: replace "f2c.h" by "otb_6S.h" */
 /*#include "f2c.h"*/
-#include "otb_6S_f2c.h"
+#include "otb_6S.h"
 
 /*<       subroutine gauss(x1,x2,x,w,n) >*/
 /* Subroutine */ int gauss_(real *x1, real *x2, real *x, real *w, integer *n)

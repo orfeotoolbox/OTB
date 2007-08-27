@@ -1,3 +1,9 @@
+/* OTB Modifications */
+#include "otb_6S_f2c.h"
+#undef abs
+#undef min
+#undef max
+
 #include "stdio.h"
 #include "signal.h"
 

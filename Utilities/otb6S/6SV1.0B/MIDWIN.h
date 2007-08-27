@@ -1,3 +1,3 @@
-extern int v3p_netlib_midwin_(
+extern int otb_6s_midwin_(
   
   );

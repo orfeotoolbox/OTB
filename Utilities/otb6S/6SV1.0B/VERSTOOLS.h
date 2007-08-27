@@ -1,7 +1,7 @@
-extern v3p_netlib_E_f v3p_netlib_mvbp1_(
-  v3p_netlib_integer *option,
-  v3p_netlib_real *angles,
-  v3p_netlib_real *optics,
-  v3p_netlib_real *struct__,
-  v3p_netlib_integer *error
+extern otb_6s_E_f otb_6s_mvbp1_(
+  otb_6s_integer *option,
+  otb_6s_real *angles,
+  otb_6s_real *optics,
+  otb_6s_real *struct__,
+  otb_6s_integer *error
   );

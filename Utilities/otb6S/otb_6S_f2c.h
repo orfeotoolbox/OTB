@@ -14,18 +14,6 @@
 # endif
 #endif
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-#include "otb_6S_f2c_original.h"
-/* #include "libf2c-Vweb/f2ch.add" */
-#ifdef __cplusplus
-}
-#endif
-
-
-#if 0
-
 
 /* Mangle the f2c symbols and types to have a otb_6S prefix.  */
 #include "otb_6S_f2c_mangle.h"
@@ -61,9 +49,12 @@ double r_imag(complex *z);
 double r_sign(real *a, real *b);
 /* OTB modifications */
 /* int s_copy(char *a, char *b, ftnlen la, ftnlen lb); */
-void s_copy(register char *a, register char *b, ftnlen la, ftnlen lb)
+void s_copy(register char *a, register char *b, ftnlen la, ftnlen lb);
+
 integer s_cmp(char *a0, char *b0, ftnlen la, ftnlen lb);
-int s_cat(char *lp, char **rpp, integer *rnp, integer* np, ftnlen ll);
+/* OTB modifications */
+/*int s_cat(char *lp, char **rpp, integer *rnp, integer* np, ftnlen ll);*/
+void s_cat(char *lp, char **rpp, integer *rnp, integer* np, ftnlen ll);
 double z_abs(doublecomplex *z);
 void z_div(doublecomplex *c, doublecomplex *a, doublecomplex *b);
 void z_sqrt(doublecomplex *r, doublecomplex *z);
@@ -91,7 +82,5 @@ void z_sqrt(doublecomplex *r, doublecomplex *z);
 # undef F2C_proc_par_types
 # include "otb_6S_f2c_unmangle.h"
 #endif
-
-#endif /* #if 0*/
 
 #endif

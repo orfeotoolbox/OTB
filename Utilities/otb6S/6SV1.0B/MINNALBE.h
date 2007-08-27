@@ -1,5 +1,5 @@
-extern int v3p_netlib_minnalbe_(
-  v3p_netlib_real *par1,
-  v3p_netlib_real *par2,
-  v3p_netlib_real *brdfalb
+extern int otb_6s_minnalbe_(
+  otb_6s_real *par1,
+  otb_6s_real *par2,
+  otb_6s_real *brdfalb
   );

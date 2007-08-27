@@ -1,5 +1,5 @@
-extern int v3p_netlib_varsol_(
-  v3p_netlib_integer *jday,
-  v3p_netlib_integer *month,
-  v3p_netlib_real *dsol
+extern int otb_6s_varsol_(
+  otb_6s_integer *jday,
+  otb_6s_integer *month,
+  otb_6s_real *dsol
   );

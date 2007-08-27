@@ -1,7 +1,7 @@
-extern int v3p_netlib_gauss_(
-  v3p_netlib_real *x1,
-  v3p_netlib_real *x2,
-  v3p_netlib_real *x,
-  v3p_netlib_real *w,
-  v3p_netlib_integer *n
+extern int otb_6s_gauss_(
+  otb_6s_real *x1,
+  otb_6s_real *x2,
+  otb_6s_real *x,
+  otb_6s_real *w,
+  otb_6s_integer *n
   );

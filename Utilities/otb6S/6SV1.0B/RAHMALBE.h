@@ -1,6 +1,6 @@
-extern int v3p_netlib_rahmalbe_(
-  v3p_netlib_real *rho0,
-  v3p_netlib_real *af,
-  v3p_netlib_real *xk,
-  v3p_netlib_real *brdfalb
+extern int otb_6s_rahmalbe_(
+  otb_6s_real *rho0,
+  otb_6s_real *af,
+  otb_6s_real *xk,
+  otb_6s_real *brdfalb
   );

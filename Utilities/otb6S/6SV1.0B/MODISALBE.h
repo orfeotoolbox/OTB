@@ -1,6 +1,6 @@
-extern int v3p_netlib_modisalbe_(
-  v3p_netlib_real *p1,
-  v3p_netlib_real *p2,
-  v3p_netlib_real *p3,
-  v3p_netlib_real *brdfalb
+extern int otb_6s_modisalbe_(
+  otb_6s_real *p1,
+  otb_6s_real *p2,
+  otb_6s_real *p3,
+  otb_6s_real *brdfalb
   );

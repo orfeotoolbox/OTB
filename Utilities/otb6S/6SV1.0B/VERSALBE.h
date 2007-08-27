@@ -1,6 +1,6 @@
-extern int v3p_netlib_versalbe_(
-  v3p_netlib_integer *option,
-  v3p_netlib_real *optics,
-  v3p_netlib_real *struct__,
-  v3p_netlib_real *brdfalb
+extern int otb_6s_versalbe_(
+  otb_6s_integer *option,
+  otb_6s_real *optics,
+  otb_6s_real *struct__,
+  otb_6s_real *brdfalb
   );

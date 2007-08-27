@@ -1,4 +1,4 @@
-extern int v3p_netlib_odrayl_(
-  v3p_netlib_real *wl,
-  v3p_netlib_real *tray
+extern int otb_6s_odrayl_(
+  otb_6s_real *wl,
+  otb_6s_real *tray
   );

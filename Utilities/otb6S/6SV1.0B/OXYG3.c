@@ -7,9 +7,9 @@
 extern "C" {
 #endif
 
-/* OTB patches: replace "f2c.h" by "otb_6S_f2c.h" */
+/* OTB patches: replace "f2c.h" by "otb_6S.h" */
 /*#include "f2c.h"*/
-#include "otb_6S_f2c.h"
+#include "otb_6S.h"
 
 /*<       subroutine    oxyg3(a,inu) >*/
 /* Subroutine */ int oxyg3_(real *a, integer *inu)

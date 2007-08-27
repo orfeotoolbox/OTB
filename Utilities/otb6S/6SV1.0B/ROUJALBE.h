@@ -1,6 +1,6 @@
-extern int v3p_netlib_roujalbe_(
-  v3p_netlib_real *k0,
-  v3p_netlib_real *k1,
-  v3p_netlib_real *k2,
-  v3p_netlib_real *brdfalb
+extern int otb_6s_roujalbe_(
+  otb_6s_real *k0,
+  otb_6s_real *k1,
+  otb_6s_real *k2,
+  otb_6s_real *brdfalb
   );

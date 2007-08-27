@@ -1,8 +1,8 @@
-extern int v3p_netlib_minnbrdf_(
-  v3p_netlib_real *par1,
-  v3p_netlib_real *par2,
-  v3p_netlib_integer *mu,
-  v3p_netlib_integer *np,
-  v3p_netlib_real *rm,
-  v3p_netlib_real *brdfint
+extern int otb_6s_minnbrdf_(
+  otb_6s_real *par1,
+  otb_6s_real *par2,
+  otb_6s_integer *mu,
+  otb_6s_integer *np,
+  otb_6s_real *rm,
+  otb_6s_real *brdfint
   );

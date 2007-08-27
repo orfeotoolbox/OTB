@@ -1,4 +1,4 @@
-extern int v3p_netlib_dica1_(
-  v3p_netlib_real *a,
-  v3p_netlib_integer *inu
+extern int otb_6s_dica1_(
+  otb_6s_real *a,
+  otb_6s_integer *inu
   );

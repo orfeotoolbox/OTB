@@ -1,3 +1,3 @@
-extern int v3p_netlib_bbm_(
+extern int otb_6s_bbm_(
   
   );

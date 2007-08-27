@@ -1,4 +1,4 @@
-extern int v3p_netlib_solirr_(
-  v3p_netlib_real *wl,
-  v3p_netlib_real *swl
+extern int otb_6s_solirr_(
+  otb_6s_real *wl,
+  otb_6s_real *swl
   );

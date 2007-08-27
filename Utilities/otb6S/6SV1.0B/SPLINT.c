@@ -7,9 +7,9 @@
 extern "C" {
 #endif
 
-/* OTB patches: replace "f2c.h" by "otb_6S_f2c.h" */
+/* OTB patches: replace "f2c.h" by "otb_6S.h" */
 /*#include "f2c.h"*/
-#include "otb_6S_f2c.h"
+#include "otb_6S.h"
 
 /*<       subroutine splint(xa,ya,y2a,n,x,y) >*/
 /* Subroutine */ int splint_(real *xa, real *ya, real *y2a, integer *n, real *

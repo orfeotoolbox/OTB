@@ -1,3 +1,3 @@
-extern int v3p_netlib_hrv_(
-  v3p_netlib_integer *iwa
+extern int otb_6s_hrv_(
+  otb_6s_integer *iwa
   );

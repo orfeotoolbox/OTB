@@ -1,3 +1,3 @@
-extern int v3p_netlib_vegeta_(
-  v3p_netlib_real *r__
+extern int otb_6s_vegeta_(
+  otb_6s_real *r__
   );

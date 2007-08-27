@@ -1,3 +1,3 @@
-extern int v3p_netlib_us62_(
+extern int otb_6s_us62_(
   
   );

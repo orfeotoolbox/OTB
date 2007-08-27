@@ -1,3 +1,3 @@
-extern int v3p_netlib_clearw_(
-  v3p_netlib_real *r__
+extern int otb_6s_clearw_(
+  otb_6s_real *r__
   );

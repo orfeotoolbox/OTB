@@ -1,9 +1,9 @@
-extern int v3p_netlib_aeroso_(
-  v3p_netlib_integer *iaer,
-  v3p_netlib_real *co,
-  v3p_netlib_real *xmud,
-  v3p_netlib_real *wldis,
+extern int otb_6s_aeroso_(
+  otb_6s_integer *iaer,
+  otb_6s_real *co,
+  otb_6s_real *xmud,
+  otb_6s_real *wldis,
   char *file,
-  v3p_netlib_integer *ipol,
-  v3p_netlib_ftnlen file_len
+  otb_6s_integer *ipol,
+  otb_6s_ftnlen file_len
   );

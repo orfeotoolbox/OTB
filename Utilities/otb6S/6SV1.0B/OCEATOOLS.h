@@ -1,35 +1,35 @@
-extern int v3p_netlib_morcasiwat_(
-  v3p_netlib_real *wl,
-  v3p_netlib_real *c__,
-  v3p_netlib_real *r2
+extern int otb_6s_morcasiwat_(
+  otb_6s_real *wl,
+  otb_6s_real *c__,
+  otb_6s_real *r2
   );
-extern int v3p_netlib_indwat_(
-  v3p_netlib_real *wl,
-  v3p_netlib_real *xsal,
-  v3p_netlib_real *nr,
-  v3p_netlib_real *ni
+extern int otb_6s_indwat_(
+  otb_6s_real *wl,
+  otb_6s_real *xsal,
+  otb_6s_real *nr,
+  otb_6s_real *ni
   );
-extern int v3p_netlib_sunglint_(
-  v3p_netlib_real *wspd,
-  v3p_netlib_real *nr,
-  v3p_netlib_real *ni,
-  v3p_netlib_real *azw,
-  v3p_netlib_real *ts,
-  v3p_netlib_real *tv,
-  v3p_netlib_real *fi,
-  v3p_netlib_real *rog
+extern int otb_6s_sunglint_(
+  otb_6s_real *wspd,
+  otb_6s_real *nr,
+  otb_6s_real *ni,
+  otb_6s_real *azw,
+  otb_6s_real *ts,
+  otb_6s_real *tv,
+  otb_6s_real *fi,
+  otb_6s_real *rog
   );
-extern int v3p_netlib_fresnel_(
-  v3p_netlib_real *nr,
-  v3p_netlib_real *ni,
-  v3p_netlib_real *coschi,
-  v3p_netlib_real *sinchi,
-  v3p_netlib_real *r1
+extern int otb_6s_fresnel_(
+  otb_6s_real *nr,
+  otb_6s_real *ni,
+  otb_6s_real *coschi,
+  otb_6s_real *sinchi,
+  otb_6s_real *r1
   );
-extern int v3p_netlib_glitalbe_(
-  v3p_netlib_real *wspd,
-  v3p_netlib_real *nr,
-  v3p_netlib_real *ni,
-  v3p_netlib_real *azw,
-  v3p_netlib_real *rge
+extern int otb_6s_glitalbe_(
+  otb_6s_real *wspd,
+  otb_6s_real *nr,
+  otb_6s_real *ni,
+  otb_6s_real *azw,
+  otb_6s_real *rge
   );

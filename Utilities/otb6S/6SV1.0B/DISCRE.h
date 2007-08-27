@@ -1,13 +1,13 @@
-extern int v3p_netlib_discre_(
-  v3p_netlib_doublereal *ta,
-  v3p_netlib_doublereal *ha,
-  v3p_netlib_doublereal *tr,
-  v3p_netlib_doublereal *hr,
-  v3p_netlib_integer *it,
-  v3p_netlib_integer *nt,
-  v3p_netlib_doublereal *yy,
-  v3p_netlib_doublereal *dd,
-  v3p_netlib_doublereal *ppp2,
-  v3p_netlib_doublereal *ppp1,
-  v3p_netlib_doublereal *zx
+extern int otb_6s_discre_(
+  otb_6s_doublereal *ta,
+  otb_6s_doublereal *ha,
+  otb_6s_doublereal *tr,
+  otb_6s_doublereal *hr,
+  otb_6s_integer *it,
+  otb_6s_integer *nt,
+  otb_6s_doublereal *yy,
+  otb_6s_doublereal *dd,
+  otb_6s_doublereal *ppp2,
+  otb_6s_doublereal *ppp1,
+  otb_6s_doublereal *zx
   );

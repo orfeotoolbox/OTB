@@ -1,65 +1,65 @@
-extern int v3p_netlib_msrm_(
+extern int otb_6s_msrm_(
   
   );
-extern int v3p_netlib_akd_(
+extern int otb_6s_akd_(
   
   );
-extern int v3p_netlib_biz_(
+extern int otb_6s_biz_(
   
   );
-extern int v3p_netlib_difr92_(
+extern int otb_6s_difr92_(
   
   );
-extern int v3p_netlib_glak_(
-  v3p_netlib_doublereal *glth,
-  v3p_netlib_doublereal *th
+extern int otb_6s_glak_(
+  otb_6s_doublereal *glth,
+  otb_6s_doublereal *th
   );
-extern int v3p_netlib_gmf_(
-  v3p_netlib_doublereal *gf
+extern int otb_6s_gmf_(
+  otb_6s_doublereal *gf
   );
-extern int v3p_netlib_soil_(
+extern int otb_6s_soil_(
   
   );
-extern int v3p_netlib_soilspec_(
+extern int otb_6s_soilspec_(
   
   );
-extern int v3p_netlib_gmd92_(
+extern int otb_6s_gmd92_(
   
   );
-extern int v3p_netlib_leaf_(
+extern int otb_6s_leaf_(
   
   );
-extern int v3p_netlib_s13aaf_(
+extern int otb_6s_s13aaf_(
   
   );
-extern int v3p_netlib_tav_(
+extern int otb_6s_tav_(
   
   );
-extern int v3p_netlib_valeur_(
+extern int otb_6s_valeur_(
   
   );
-extern int v3p_netlib_dakg_(
-  v3p_netlib_doublereal *u,
-  v3p_netlib_doublereal *a,
-  v3p_netlib_integer *nq
+extern int otb_6s_dakg_(
+  otb_6s_doublereal *u,
+  otb_6s_doublereal *a,
+  otb_6s_integer *nq
   );
-extern int v3p_netlib_akbrdf_(
-  v3p_netlib_real *eei,
-  v3p_netlib_real *thmi,
-  v3p_netlib_real *uli,
-  v3p_netlib_real *sli,
-  v3p_netlib_real *rsl1i,
-  v3p_netlib_real *wlmoy,
-  v3p_netlib_real *rnci,
-  v3p_netlib_real *cabi,
-  v3p_netlib_real *cwi,
-  v3p_netlib_real *vaii,
-  v3p_netlib_integer *mu,
-  v3p_netlib_integer *np,
-  v3p_netlib_real *rm,
-  v3p_netlib_real *rp,
-  v3p_netlib_real *brdfint
+extern int otb_6s_akbrdf_(
+  otb_6s_real *eei,
+  otb_6s_real *thmi,
+  otb_6s_real *uli,
+  otb_6s_real *sli,
+  otb_6s_real *rsl1i,
+  otb_6s_real *wlmoy,
+  otb_6s_real *rnci,
+  otb_6s_real *cabi,
+  otb_6s_real *cwi,
+  otb_6s_real *vaii,
+  otb_6s_integer *mu,
+  otb_6s_integer *np,
+  otb_6s_real *rm,
+  otb_6s_real *rp,
+  otb_6s_real *brdfint
   );
-extern int v3p_netlib_akalbe_(
-  v3p_netlib_real *albbrdf
+extern int otb_6s_akalbe_(
+  otb_6s_real *albbrdf
   );

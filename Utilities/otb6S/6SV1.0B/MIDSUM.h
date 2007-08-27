@@ -1,3 +1,3 @@
-extern int v3p_netlib_midsum_(
+extern int otb_6s_midsum_(
   
   );

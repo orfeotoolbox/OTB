@@ -1,4 +1,4 @@
-extern int v3p_netlib_moca1_(
-  v3p_netlib_real *a,
-  v3p_netlib_integer *inu
+extern int otb_6s_moca1_(
+  otb_6s_real *a,
+  otb_6s_integer *inu
   );

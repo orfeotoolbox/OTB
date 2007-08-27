@@ -7,9 +7,9 @@
 extern "C" {
 #endif
 
-/* OTB patches: replace "f2c.h" by "otb_6S_f2c.h" */
+/* OTB patches: replace "f2c.h" by "otb_6S.h" */
 /*#include "f2c.h"*/
-#include "otb_6S_f2c.h"
+#include "otb_6S.h"
 
 /*<    >*/
 /* Subroutine */ int modisalbe_(real *p1, real *p2, real *p3, real *brdfalb)
