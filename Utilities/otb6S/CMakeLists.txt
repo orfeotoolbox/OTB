@@ -11,7 +11,7 @@ INCLUDE_DIRECTORIES(${OTB6S_SOURCE_DIR})
 
 # Inform header files they are being included from a source inside the
 # otb_6S library.
-#ADD_DEFINITIONS(-DOTB_6S_SRC)
+ADD_DEFINITIONS(-DOTB_6S_SRC)
 
 # On Microsoft Visual
 IF(WIN32)
@@ -37,6 +37,10 @@ FILE(GLOB OTB6S_SRCS "6SV1.0B/*.c" )
 # source files for libf2c
 # Not use itkf2c because uncomplete for link 6S main exectuable
 FILE(GLOB LIBF2C_SRCS "libf2c/*.c" )
+
+#PB compil Visual: pb compatibilty with isatty function.
+LIST(REMOVE_ITEM LIBF2C_SRCS "${OTB6S_SOURCE_DIR}/libf2c/open.c" )
+LIST(REMOVE_ITEM LIBF2C_SRCS "${OTB6S_SOURCE_DIR}/libf2c/inquire.c" )
 
 
 INCLUDE_DIRECTORIES(${OTB6S_SOURCE_DIR}/libf2c)

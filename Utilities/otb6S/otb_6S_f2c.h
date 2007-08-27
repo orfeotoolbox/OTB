@@ -3,6 +3,17 @@
 #ifndef otb_6S_f2c_h
 #define otb_6S_f2c_h
 
+/* Disable some warnings inside otb_6S sources.  */
+#ifdef OTB_6S_SRC
+# if defined(_MSC_VER)
+#  pragma warning (disable: 4244) /* conversion with possible loss of data */
+#  if !defined(_COMPLEX_DEFINED)
+    struct _complex { double x,y; };
+#   define _COMPLEX_DEFINED /* block math.h from defining complex macro */
+#  endif
+# endif
+#endif
+
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -15,16 +26,6 @@ extern "C" {
 
 #if 0
 
-/* Disable some warnings inside otb_6S sources.  */
-#ifdef OTB_6S_SRC
-# if defined(_MSC_VER)
-#  pragma warning (disable: 4244) /* conversion with possible loss of data */
-#  if !defined(_COMPLEX_DEFINED)
-    struct _complex { double x,y; };
-#   define _COMPLEX_DEFINED /* block math.h from defining complex macro */
-#  endif
-# endif
-#endif
 
 /* Mangle the f2c symbols and types to have a otb_6S prefix.  */
 #include "otb_6S_f2c_mangle.h"
