@@ -6,7 +6,8 @@
 #include "string.h"
 #ifndef NON_POSIX_STDIO
 #ifdef MSDOS
-#include "io.h"
+/* OTB Modifications */
+/* #include "io.h" */
 #else
 #include "unistd.h"	/* for access */
 #endif

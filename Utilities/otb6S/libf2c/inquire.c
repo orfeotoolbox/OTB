@@ -19,7 +19,8 @@ extern "C" integer f_inqu(inlist*);
 #undef abs
 #undef min
 #undef max
-#include "io.h"
+/* OTB Modifications */
+/* #include "io.h" */
 #endif
 integer f_inqu(inlist *a)
 #endif
