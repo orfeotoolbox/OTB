@@ -38,9 +38,9 @@ FILE(GLOB OTB6S_SRCS "6SV1.0B/*.c" )
 # Not use itkf2c because uncomplete for link 6S main exectuable
 FILE(GLOB LIBF2C_SRCS "libf2c/*.c" )
 
-#PB compil Visual: pb compatibilty with isatty function.
-#LIST(REMOVE_ITEM LIBF2C_SRCS "${OTB6S_SOURCE_DIR}/libf2c/open.c" )
-#LIST(REMOVE_ITEM LIBF2C_SRCS "${OTB6S_SOURCE_DIR}/libf2c/inquire.c" )
+# PB compil Visual: pb compatibilty with isatty function.
+# LIST(REMOVE_ITEM LIBF2C_SRCS "${OTB6S_SOURCE_DIR}/libf2c/open.c" )
+# LIST(REMOVE_ITEM LIBF2C_SRCS "${OTB6S_SOURCE_DIR}/libf2c/inquire.c" )
 
 
 INCLUDE_DIRECTORIES(${OTB6S_SOURCE_DIR}/libf2c)
