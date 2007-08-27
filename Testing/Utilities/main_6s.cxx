@@ -6,7 +6,8 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
-#include "f2c.h"
+
+#include "otb_6S.h"
 
 /* Common Block Declarations */
 
