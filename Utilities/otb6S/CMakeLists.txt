@@ -28,6 +28,8 @@ IF(WIN32)
       ELSE(NOT MINGW)
           ADD_DEFINITIONS(
             -DUSE_CLOCK
+            -DMSDOS
+            -DNO_TRUNCATE  #For generate endfile.c
             )
       ENDIF(NOT MINGW)
     ENDIF(NOT CYGWIN)
