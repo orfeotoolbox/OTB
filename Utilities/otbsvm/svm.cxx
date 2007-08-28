@@ -2536,9 +2536,10 @@ double svm_predict(const svm_model *model, const svm_node *x)
 		double res;
 		svm_predict_values(model, x, &res);
 		
-		if(model->param.svm_type == ONE_CLASS)
+//Gregoire M. corection
+/* 		if(model->param.svm_type == ONE_CLASS)
 			return (res>0)?1:-1;
-		else
+		else*/
 			return res;
 	}
 	else
