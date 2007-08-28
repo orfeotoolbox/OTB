@@ -484,7 +484,8 @@ SEMClassifier< TInputImage, TOutputImage >
     if ( m_Proportions[ componentIndex ] == 0.0 )
     {
       std::cerr << "No sample on class " << componentIndex;
-      std::cerr << " in " << __PRETTY_FUNCTION__ << std::endl;
+//      std::cerr << " in " << __PRETTY_FUNCTION__ << std::endl;
+      std::cerr << " in " << ITK_LOCATION << std::endl;
       continue;
     }
 
