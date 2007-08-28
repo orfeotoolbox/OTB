@@ -50,7 +50,7 @@ namespace otb
 template <class TInputPointSet, 
           class TTrainingPointSet>
 class ITK_EXPORT SVMPointSetModelEstimator: 
-    public otb::SVMModelEstimator<typename TInputPointSet::PixelType::value_type, typename TTrainingPointSet::PixelType>
+    public SVMModelEstimator<typename TInputPointSet::PixelType::value_type, typename TTrainingPointSet::PixelType>
 {
 public:
   /** Standard class typedefs. */
@@ -66,7 +66,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(SVMPointSetModelEstimator, otb::SVMModelEstimator);
+  itkTypeMacro(SVMPointSetModelEstimator, SVMModelEstimator);
 
   /** Type definition for the input image. */
     /** Type definitions for the training image. */

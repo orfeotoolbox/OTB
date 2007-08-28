@@ -50,7 +50,7 @@ namespace otb
 template <class TInputSampleList, 
           class TTrainingSampleList>
 class ITK_EXPORT SVMSampleListModelEstimator: 
-    public otb::SVMModelEstimator<typename TInputSampleList::ValueType::ValueType, typename TTrainingSampleList::ValueType::ValueType>
+    public SVMModelEstimator<typename TInputSampleList::ValueType::ValueType, typename TTrainingSampleList::ValueType::ValueType>
 {
 public:
   /** Standard class typedefs. */
@@ -66,7 +66,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(SVMSampleListModelEstimator, otb::SVMModelEstimator);
+  itkTypeMacro(SVMSampleListModelEstimator, SVMModelEstimator);
 
   /** Type definition for the input image. */
     /** Type definitions for the training image. */
