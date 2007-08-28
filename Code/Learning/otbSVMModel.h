@@ -183,7 +183,22 @@ public:
         m_GenericKernelFunctor = pGenericKernelFunctor;
         this->Modified();
   }
-
+  /** Return number of support vectors */
+  int GetNumberOfSupportVectors(void)
+  {
+        return m_Model->l;
+  }
+  /** Return rho values */
+  double * GetRho(void)
+  {
+        return m_Model->rho;
+  }
+  /** Return the support vectors */
+  svm_node ** GetSupportVectors(void)
+  {
+        return m_Model->SV;
+  }
+  
 protected:
   SVMModel();
   ~SVMModel();
