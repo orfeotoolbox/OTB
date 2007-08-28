@@ -25,6 +25,10 @@ IF(WIN32)
             -DNO_ONEXIT
             )
 #        ENDIF(NOT ITK_ENABLE_VISUAL_STUDIO_DEPRECATED_C_WARNINGS)
+      ELSE(NOT MINGW)
+          ADD_DEFINITIONS(
+            -DUSE_CLOCK
+            )
       ENDIF(NOT MINGW)
     ENDIF(NOT CYGWIN)
   ENDIF(NOT BORLAND)
