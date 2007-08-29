@@ -10,6 +10,7 @@ SET(TEMP ${OTBTesting_BINARY_DIR}/Temporary)
 
 #Tolerance sur diff pixel image
 SET(TOL 0.0)
+SET(EPSILON 0.00000000001)
 
 SET(RADIOMETRY_TESTS ${CXX_TEST_PATH}/otbRadiometryTests)
 
@@ -37,7 +38,7 @@ ADD_TEST(raTvRVI_RAndNIRVegetationIndexImageFilter ${RADIOMETRY_TESTS}
 	${TEMP}/raRAndNIRVegetationIndex_RVI_poupees_subc1c2.tif 
 	)
 ADD_TEST(raTvPVI_RAndNIRVegetationIndexImageFilter ${RADIOMETRY_TESTS}  
-  --compare-image ${TOL}   ${BASELINE}/raRAndNIRVegetationIndex_PVI_poupees_subc1c2.tif
+  --compare-image ${EPSILON}   ${BASELINE}/raRAndNIRVegetationIndex_PVI_poupees_subc1c2.tif
                     ${TEMP}/raRAndNIRVegetationIndex_PVI_poupees_subc1c2.tif
         otbSetASetBRAndNIRVegetationIndexImageFilter
         PVI
@@ -57,7 +58,7 @@ ADD_TEST(raTvSAVI_RAndNIRVegetationIndexImageFilter ${RADIOMETRY_TESTS}
 	${TEMP}/raRAndNIRVegetationIndex_SAVI_poupees_subc1c2.tif 
 	)
 ADD_TEST(raTvTSAVI_RAndNIRVegetationIndexImageFilter ${RADIOMETRY_TESTS}  
-  --compare-image ${TOL}   ${BASELINE}/raRAndNIRVegetationIndex_TSAVI_poupees_subc1c2.tif
+  --compare-image ${EPSILON}   ${BASELINE}/raRAndNIRVegetationIndex_TSAVI_poupees_subc1c2.tif
                     ${TEMP}/raRAndNIRVegetationIndex_TSAVI_poupees_subc1c2.tif
         otbSetASetBRAndNIRVegetationIndexImageFilter
         TSAVI
@@ -101,7 +102,7 @@ ADD_TEST(raTvRVI_MultiChannelRAndNIRVegetationIndexImageFilter ${RADIOMETRY_TEST
 	1 2
 	)
 ADD_TEST(raTvPVI_MultiChannelRAndNIRVegetationIndexImageFilter ${RADIOMETRY_TESTS}  
-  --compare-image ${TOL}   ${BASELINE}/raRAndNIRVegetationIndex_PVI_poupees_subc1c2.tif
+  --compare-image ${EPSILON}   ${BASELINE}/raRAndNIRVegetationIndex_PVI_poupees_subc1c2.tif
                     ${TEMP}/raMultiChannelRAndNIRVegetationIndex_PVI_poupees_subc1c2.tif
         otbSetASetBMultiChannelRAndNIRVegetationIndexImageFilter
         PVI
@@ -121,7 +122,7 @@ ADD_TEST(raTvSAVI_MultiChannelRAndNIRVegetationIndexImageFilter ${RADIOMETRY_TES
 	1 2
 	)
 ADD_TEST(raTvTSAVI_MultiChannelRAndNIRVegetationIndexImageFilter ${RADIOMETRY_TESTS}  
-  --compare-image ${TOL}   ${BASELINE}/raRAndNIRVegetationIndex_TSAVI_poupees_subc1c2.tif
+  --compare-image ${EPSILON}   ${BASELINE}/raRAndNIRVegetationIndex_TSAVI_poupees_subc1c2.tif
                     ${TEMP}/raMultiChannelRAndNIRVegetationIndex_TSAVI_poupees_subc1c2.tif
         otbSetASetBMultiChannelRAndNIRVegetationIndexImageFilter
         TSAVI
