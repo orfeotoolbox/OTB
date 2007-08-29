@@ -57,6 +57,7 @@ int ossimIntegrationTest(int argc, char* argv[])
    if(argc!=4)
    {
       usage();
+      return EXIT_FAILURE;
    }
    else
    {
@@ -136,7 +137,7 @@ int ossimIntegrationTest(int argc, char* argv[])
       delete handler;
    }
 
-   return 0;
+   return EXIT_SUCCESS;
 }
 
 

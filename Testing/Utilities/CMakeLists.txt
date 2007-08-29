@@ -21,6 +21,23 @@ ADD_TEST(utOssimIntegrationTest ${UTILITIES_TESTS}
 ossimIntegrationTest
 )
 
+ADD_TEST(utOssimKeywordlistToulouseQuickBirdTest ${UTILITIES_TESTS}
+--compare-ascii ${TOL}  ${BASELINE_FILES}/utOssimKeywordlistToulouseQuickBird.txt
+                        ${TEMP}/utOssimKeywordlistToulouseQuickBird.txt
+        ossimKeywordlistTest
+        ${IMAGEDATA}/TOULOUSE/QuickBird/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF
+        ${TEMP}/utOssimKeywordlistToulouseQuickBird.txt
+        )
+
+ADD_TEST(utOssimKeywordlistParisIkonosTest ${UTILITIES_TESTS}
+--compare-ascii ${TOL}  ${BASELINE_FILES}/utOssimKeywordlistParisIkonos.txt
+                        ${TEMP}/utOssimKeywordlistParisIkonos.txt
+        ossimKeywordlistTest
+        ${IMAGEDATA}/PARIS/Ikonos/po_79039_pan_0000000.tif
+        ${TEMP}/utOssimKeywordlistParisIkonos.txt
+        )
+
+
 ADD_TEST(utIjBSplineScatteredDataPointSetToImageFilterTest ${UTILITIES_TESTS}
 --compare-image ${EPSILON}
 		${BASELINE}/ijBSplineScatteredDataPointSetToImageFilterTestOutput.hdr
@@ -37,7 +54,7 @@ ADD_TEST(utTuSvmKernelFunctorTest ${UTILITIES_TESTS}
 )
 
 ADD_TEST(utTvSvmTest ${UTILITIES_TESTS}
---compare-ascii 0 ${INPUTDATA}/svm_model
+--compare-ascii ${TOL}  ${INPUTDATA}/svm_model
                 ${TEMP}/svm_model_test
                 svmTest
                 ${INPUTDATA}/svm_model
@@ -45,7 +62,7 @@ ADD_TEST(utTvSvmTest ${UTILITIES_TESTS}
 )
 
 ADD_TEST(utTvSvmTestNewVersionFileGenericModelTest ${UTILITIES_TESTS}
---compare-ascii 0 ${BASELINE_FILES}/utTvsvm_model_image_generic_version_test
+--compare-ascii ${TOL}  ${BASELINE_FILES}/utTvsvm_model_image_generic_version_test
                 ${TEMP}/utTvsvm_model_image_generic_version_test
                 svmTest
                 ${INPUTDATA}/svm_model_image_generic_version
@@ -53,7 +70,7 @@ ADD_TEST(utTvSvmTestNewVersionFileGenericModelTest ${UTILITIES_TESTS}
 )
 
 ADD_TEST(utTvSvmTestGenericModelTest ${UTILITIES_TESTS}
---compare-ascii 0 ${INPUTDATA}/svm_model_image_generic_kernel
+--compare-ascii ${TOL}  ${INPUTDATA}/svm_model_image_generic_kernel
                 ${TEMP}/svm_model_image_generic_kernel_test
                 svmGenericKernelTest
                 ${INPUTDATA}/svm_model_image_generic_kernel
@@ -73,6 +90,7 @@ ADD_TEST(utTvSvmTestGenericModelTest ${UTILITIES_TESTS}
 # -------       Fichiers sources CXX -----------------------------------
 SET(UtilitiesTests_SRCS
 ossimIntegrationTest.cxx
+ossimKeywordlistTest.cxx
 ijBSplineScatteredDataPointSetToImageFilterTest.cxx
 svmGenericKernelFunctor.cxx
 svmTest.cxx
