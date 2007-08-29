@@ -144,12 +144,7 @@ private:
   GDALImageIO(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
 
-  /** Méthode analyse le nom du fichier a ouvrir. S'il s'agit d'un répertoire, 
-    * on regarde s'il contient un produit CEOS (fichier "DAT...")
-    * Dans ce cas, GdalFileName contient le nom du fichier a ouvrir. Sinon GdalFileName contient filename
-    */
-  bool GetGdalReadImageFileName( const char * filename, std::string & GdalFileName );
-  
+ 
   /** Determine real file name to write the image */
   std::string GetGdalWriteImageFileName(std::string & extGDAL, std::string filename );
 

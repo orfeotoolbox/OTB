@@ -279,6 +279,20 @@ ImageFileReader<TOutputImage>
     throw itk::ImageFileReaderException(__FILE__, __LINE__, "FileName must be specified");
     }
 
+  // Find real image file name
+  // !!!!  Update FileName
+  std::string lFileName;
+  bool found = GetGdalReadImageFileName(this->m_FileName,lFileName);
+  if( found == false )
+  {
+  	  otbMsgDebugMacro( <<"Filename was NOT unknowed. May be reconize by a Image factory ! ");
+  }
+  // Update FileName
+  this->m_FileName = lFileName;
+  
+  std::string lFileNameOssimKeywordlist = this->m_FileName ;
+  
+
   // Test if the file exist and if it can be open.
   // and exception will be thrown otherwise.
   //
@@ -377,7 +391,7 @@ ImageFileReader<TOutputImage>
   // Trying to read ossim MetaData
   
   // Itinialize ossim environment
-  ossimImageHandler* handler = ossimImageHandlerRegistry::instance()->open(ossimFilename(this->m_FileName.c_str()));
+  ossimImageHandler* handler = ossimImageHandlerRegistry::instance()->open(ossimFilename(lFileNameOssimKeywordlist.c_str()));
   
 
   if (!handler)
@@ -500,6 +514,61 @@ ImageFileReader<TOutputImage>
         }
         readTester.close();
     }
+}
+
+template <class TOutputImage>
+bool
+ImageFileReader<TOutputImage>
+::GetGdalReadImageFileName( const std::string & filename, std::string & GdalFileName )
+{
+        std::vector<std::string> listFileSearch;
+        listFileSearch.push_back("DAT_01.001");// RADARSAT ou SAR_ERS2
+        listFileSearch.push_back("IMAGERY.TIF");//For format SPOT5TIF
+        listFileSearch.push_back("IMAG_01.DAT");//For format SPOT4
+        std::string str_FileName;
+        bool fic_trouve(false);
+
+        // Si c'est un repertoire, on regarde le contenu pour voir si c'est pas du RADARSAT, ERS
+        std::vector<std::string> listFileFind;
+        listFileFind = System::Readdir(filename);
+        if( listFileFind.empty() == false )
+        {
+                unsigned int cpt(0);
+		while ( (cpt < listFileFind.size()) && (fic_trouve==false) )
+                {
+			str_FileName = std::string(listFileFind[cpt]);
+                        for(unsigned int i = 0 ; i < listFileSearch.size() ; i++)
+                        {
+         			if(str_FileName.compare(listFileSearch[i]) == 0)
+	        		{
+                                         GdalFileName = std::string(filename)+listFileSearch[i];
+                                         fic_trouve=true;
+        			}
+                        }
+                        cpt++;
+                }
+	}
+        else 
+        {
+                std::string strFileName(filename);
+                
+                std::string extension = System::GetExtension(strFileName);
+                if( (extension=="HDR") || (extension=="hdr") )
+                {
+                        //Supprime l'extension
+                        GdalFileName = System::GetRootName(strFileName);
+                }
+
+                else
+                {
+                        // Sinon le filename est le nom du fichier a ouvrir
+                        GdalFileName = std::string(filename);
+                }
+		fic_trouve=true;
+        }
+	otbMsgDevMacro(<<"lFileNameGdal : "<<GdalFileName.c_str());
+	otbMsgDevMacro(<<"fic_trouve : "<<fic_trouve);
+	return( fic_trouve );
 }
 
 

@@ -90,6 +90,11 @@ private:
       doesn't exist or it is not readable, and exception with an
       approriate message will be thrown. */
   void TestFileExistanceAndReadability();
+
+  /** Generate the filename (for GDALImageI for example). If filename is a directory, look if is a 
+    * CEOS product (file "DAT...") In this case, the GdalFileName contain the open image file.
+    */
+  bool GetGdalReadImageFileName( const std::string & filename, std::string & GdalFileName );
   
   /** Copy of the GetComponentSize() method of the itk::ImageIOBase.
       We need this value to calculate buffer size. */

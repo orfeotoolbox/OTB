@@ -97,57 +97,6 @@ GDALImageIO::~GDALImageIO()
 }
 
 
-bool GDALImageIO::GetGdalReadImageFileName( const char * filename, std::string & GdalFileName )
-{
-        std::vector<std::string> listFileSearch;
-        listFileSearch.push_back("DAT_01.001");// RADARSAT ou SAR_ERS2
-        listFileSearch.push_back("IMAGERY.TIF");//Pour format SPOT5TIF
-        listFileSearch.push_back("IMAG_01.DAT");//Pour format SPOT4
-        std::string str_FileName;
-        bool fic_trouve(false);
-
-        // Si c'est un repertoire, on regarde le contenu pour voir si c'est pas du RADARSAT, ERS
-        std::vector<std::string> listFileFind;
-        listFileFind = System::Readdir(std::string (filename));
-        if( listFileFind.empty() == false )
-        {
-                unsigned int cpt(0);
-		while ( (cpt < listFileFind.size()) && (fic_trouve==false) )
-                {
-			str_FileName = std::string(listFileFind[cpt]);
-                        for(unsigned int i = 0 ; i < listFileSearch.size() ; i++)
-                        {
-         			if(str_FileName.compare(listFileSearch[i]) == 0)
-	        		{
-                                         GdalFileName = std::string(filename)+listFileSearch[i];
-                                         fic_trouve=true;
-        			}
-                        }
-                        cpt++;
-                }
-	}
-        else 
-        {
-                std::string strFileName(filename);
-                
-                std::string extension = System::GetExtension(strFileName);
-                if( (extension=="HDR") || (extension=="hdr") )
-                {
-                        //Supprime l'extension
-                        GdalFileName = System::GetRootName(strFileName);
-                }
-
-                else
-                {
-                        // Sinon le filename est le nom du fichier a ouvrir
-                        GdalFileName = std::string(filename);
-                }
-		fic_trouve=true;
-        }
-	otbMsgDevMacro(<<"lFileNameGdal : "<<GdalFileName.c_str());
-	otbMsgDevMacro(<<"fic_trouve : "<<fic_trouve);
-	return( fic_trouve );
-}
 
 // Tell only if the file can be read with GDAL.
 bool GDALImageIO::CanReadFile(const char* file) 
@@ -176,13 +125,16 @@ bool GDALImageIO::CanReadFile(const char* file)
         }
 
         // Regarde si c'est un r�pertoire
-        std::string lFileNameGdal;
+/*        std::string lFileNameGdal;
 	otbMsgDevMacro(<<"GDALImageIO::CanReadFile()");
         bool found = GetGdalReadImageFileName(file,lFileNameGdal);
 	if( found == false )
 	{
         	return false;
 	}
+*/
+        std::string lFileNameGdal;
+        lFileNameGdal = std::string(file);
 	
         // Init GDAL parameters 
         GDALAllRegister();
@@ -330,12 +282,14 @@ void GDALImageIO::InternalReadImageInformation()
     }
   
   // Recupre le nom r�el du fichier a ouvrir
-  std::string lFileNameGdal;
+/*  std::string lFileNameGdal;
   bool found = GetGdalReadImageFileName(m_FileName.c_str(),lFileNameGdal);
   if( found == false )
   {
         itkExceptionMacro(<<"The file "<<m_FileName<<" is not supported by GDAL !!!");
   }
+*/
+  std::string lFileNameGdal = m_FileName;
 
   // Init GDAL parameters 
   GDALAllRegister();

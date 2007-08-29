@@ -354,13 +354,19 @@ ADD_TEST(ioTvStreamingIFWriterBSQWithStreaming ${IO_TESTS}
 # READER
 
 ADD_TEST(ioTuGDALImageIOCanRead_ENVI ${IO_TESTS} otbGDALImageIOTestCanRead 
-        ${INPUTDATA}/poupees_1canal.c1.hdr )
+# Filename identification is now set in the ImageFileReader class (Fiche 212)
+#        ${INPUTDATA}/poupees_1canal.c1.hdr )
+        ${INPUTDATA}/poupees_1canal.c1 )
 
 ADD_TEST(ioTuGDALImageIOCanRead_RADARSAT ${IO_TESTS} otbGDALImageIOTestCanRead 
-        ${IMAGEDATA}/RADARSAT1/SCENE01/ )
-
+# Filename identification is now set in the ImageFileReader class (Fiche 212)
+#        ${IMAGEDATA}/RADARSAT1/SCENE01/ )
+        ${IMAGEDATA}/RADARSAT1/SCENE01/DAT_01.001 )
+        
 ADD_TEST(ioTuGDALImageIOCanRead_SAR_ERS2 ${IO_TESTS} otbGDALImageIOTestCanRead 
-        ${IMAGEDATA}/SAR_ERS2_SLCI_SCENE1/ )
+# Filename identification is now set in the ImageFileReader class (Fiche 212)
+#        ${IMAGEDATA}/SAR_ERS2_SLCI_SCENE1/ )
+        ${IMAGEDATA}/SAR_ERS2_SLCI_SCENE1/DAT_01.001 )
 
 ADD_TEST(ioTuGDALImageIOCanRead_QUICK_PAN ${IO_TESTS} otbGDALImageIOTestCanRead 
         ${IMAGEDATA}/TOULOUSE/QuickBird/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF )
@@ -384,10 +390,14 @@ ADD_TEST(ioTuGDALImageIOCanRead_IKONOS_NIR ${IO_TESTS} otbGDALImageIOTestCanRead
         ${IMAGEDATA}/PARIS/Ikonos/po_79039_nir_0000000.tif)
 
 ADD_TEST(ioTuGDALImageIOCanRead_SPOT4 ${IO_TESTS} otbGDALImageIOTestCanRead
-        ${IMAGEDATA}/SPOT4_SCENE01/ )
+# Filename identification is now set in the ImageFileReader class (Fiche 212)
+#        ${IMAGEDATA}/SPOT4_SCENE01/ )
+        ${IMAGEDATA}/SPOT4_SCENE01/IMAG_01.DAT )
 
 ADD_TEST(ioTuGDALImageIOCanRead_SPOT5TIF ${IO_TESTS} otbGDALImageIOTestCanRead
-        ${INPUTDATA}/poupeesTIF/ )
+# Filename identification is now set in the ImageFileReader class (Fiche 212)
+#        ${INPUTDATA}/poupeesTIF/ )
+        ${INPUTDATA}/poupeesTIF/IMAGERY.TIF )
 
 ADD_TEST(ioTuGDALImageIOCanRead_HFA ${IO_TESTS} otbGDALImageIOTestCanRead
 	${INPUTDATA}/HFAGeoreferenced.img)
