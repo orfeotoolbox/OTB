@@ -49,9 +49,9 @@ public:
   typedef System  Self;
 
   /** Return true if the parameter 'pszPath' specify a directory name) */
-  static bool IsADirName(std::string pszPath);
+  static bool IsADirName(const std::string& pszPath);
   /** Return true if the parameter 'pszPath' specify a file name) */
-  static bool IsAFileName(std::string pszPath);
+  static bool IsAFileName(const std::string& pszPath);
   /** Get the extension of the file name */
   static std::string GetExtension( const std::string& filename );
   /** Get the root name */
@@ -66,7 +66,7 @@ public:
   static std::string SetToLower( const std::string& str );
 
   /** Get list of file find in a directory */
-  static std::vector<std::string> Readdir(std::string pszPath);
+  static std::vector<std::string> Readdir(const std::string& pszPath);
 };
 
 } // namespace otb

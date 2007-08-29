@@ -79,7 +79,7 @@ System::GetRootName( const std::string& filename )
   return( filename );
 }
 
-bool System::IsAFileName(std::string pszPath)
+bool System::IsAFileName(const std::string& pszPath)
 {
         return( ! IsADirName(pszPath) );
 }
@@ -135,7 +135,7 @@ std::string System::SetToLower( const std::string& str )
                    WIN32 / MSVC++ implementation
  *====================================================================*/
 
-bool System::IsADirName(std::string pszPath)
+bool System::IsADirName(const std::string&  pszPath)
 {
     struct _finddata_t c_file;
     long    hFile;
@@ -161,7 +161,7 @@ bool System::IsADirName(std::string pszPath)
     return isADir;
 }
 
-std::vector<std::string> System::Readdir(std::string pszPath)
+std::vector<std::string> System::Readdir(const std::string&  pszPath)
 {
     struct _finddata_t c_file;
     long    hFile;
@@ -193,7 +193,7 @@ std::vector<std::string> System::Readdir(std::string pszPath)
                       POSIX (Unix) implementation
  *====================================================================*/
 
-bool System::IsADirName(std::string pszPath)
+bool System::IsADirName(const std::string&  pszPath)
 {
     bool isADir(false);
     DIR           *hDir;
@@ -231,7 +231,7 @@ bool System::IsADirName(std::string pszPath)
  * doesn't exist.
  */
 
-std::vector<std::string> System::Readdir(std::string pszPath)
+std::vector<std::string> System::Readdir(const std::string& pszPath)
 {
     DIR           *hDir;
     std::vector<std::string>  listFileFind;
