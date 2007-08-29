@@ -50,7 +50,7 @@ ADD_DEFINITIONS(
 	-D_LARGEFILE_SOURCE
 	-D_FILE_OFFSET_BITS=64
 	-D_LARGEFILE64_SOURCE
-	-D_LARGE_FILES
+	-D_LARGE_FILES 
 	)
 
 #-----------------------------------------------------------------------------
@@ -70,7 +70,7 @@ SET(OTB_VERSION_STRING "${OTB_VERSION_MAJOR}.${OTB_VERSION_MINOR}.${OTB_VERSION_
 # Librairie ITK
 #-------------------------------
 
-OPTION(OTB_USE_EXTERNAL_ITK "Use an outside build of ITK." ON)
+OPTION(OTB_USE_EXTERNAL_ITK "Use an outside build of ITK." OFF)
 IF(OTB_USE_EXTERNAL_ITK)
 	FIND_PACKAGE(ITK)
 	IF(ITK_FOUND)
@@ -85,9 +85,10 @@ ENDIF(OTB_USE_EXTERNAL_ITK)
 #-------------------------------
 # Librairie GDAL
 #-------------------------------
-#FIND_LIBRARY(GDAL_LIBRARY_DIRS gdal PATHS $ENV{GDAL_LIBRARY_DIRS} )
+
+#FIND_LIBRARY(GDAL_LIBRARY_DIRS gdal PATHS $ENV{GDAL_LIBRARY_DIRS} ) 
 FIND_PATH(GDAL_LIBRARY_DIRS gdal PATHS $ENV{GDAL_LIBRARY_DIRS} )
-FIND_PATH(GDAL_INCLUDE_DIRS gdal.h $ENV{GDAL_INCLUDE_DIRS} )
+FIND_PATH(GDAL_INCLUDE_DIRS gdal.h $ENV{GDAL_INCLUDE_DIRS} /usr/include/gdal)
 IF (NOT GDAL_LIBRARY_DIRS)
 MESSAGE(FATAL_ERROR
 	  "Cannot find GDAL library directory. Please set GDAL_LIBRARY_DIRS.")
@@ -121,6 +122,7 @@ IF(OTB_USE_VISU_GUI)
         #-------------------------------
         # Add an option to use or not use FLTK (http://www.fltk.org)
 
+        SET( FLTK_INCLUDE_DIR /usr/include )
         FIND_PACKAGE(FLTK)
         IF(FLTK_FOUND)
            INCLUDE_DIRECTORIES(${FLTK_INCLUDE_DIRS})
