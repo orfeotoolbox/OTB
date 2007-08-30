@@ -21,6 +21,12 @@ PURPOSE.  See the above copyright notices for more information.
 #include "otbMacro.h"
 #include "otbConfigure.h"
 
+#include "itkInterpolateImageFunction.h"
+#include "itkBSplineInterpolateImageFunction.h"
+#include "itkLinearInterpolateImageFunction.h"
+#include "itkNearestNeighborInterpolateImageFunction.h"
+//#include "itkWindowedSincInterpolateImageFunction.h"
+
 namespace otb
 {
 
@@ -50,12 +56,21 @@ class ITK_EXPORT StreamingTraits
   typedef typename ImageType::InternalPixelType PixelType;
   
   typedef StreamingMode StreamingModeType;
+	
+	typedef itk::InterpolateImageFunction<TImage,double> InterpolationType;
+	typedef itk::BSplineInterpolateImageFunction<TImage,double> BSplineInterpolationType;
+	typedef itk::LinearInterpolateImageFunction<TImage,double> LinearInterpolationType;
+	typedef itk::NearestNeighborInterpolateImageFunction<TImage,double> NearestNeighborInterpolationType;
+
+	//typedef typename InterpolationType::Pointer InterpolationPointerType;
+	
+	
 
   /**
    * This method computes the number of streaming divisions, based on
    * the streaming mode and the image attributes. The last three parameters are ignored if
    * the mode does not need them.
-   * \param image The image to stream,
+   * \param image The image to stream, 
    * \param region the region to stream,
    * \param mode  the streaming mode,
    * \param numberOfStreamDivision the number of stream division if streaming mode is SET_NUMBER_OF_STREAM_DIVISIONS,
@@ -69,23 +84,23 @@ class ITK_EXPORT StreamingTraits
 							unsigned long numberOfStreamDivision,
 							unsigned long bufferMemorySize,
 							unsigned long bufferNumberOfLinesDivisions)
-    {      
+  {      
       unsigned long numDivisions(0);
       
       switch(mode)
-	{
-	case SET_NUMBER_OF_STREAM_DIVISIONS :
-	  {
-	    numDivisions = numberOfStreamDivision;
-	  }
-		break;
-		case SET_BUFFER_MEMORY_SIZE :
-		{
+			{
+				case SET_NUMBER_OF_STREAM_DIVISIONS :
+	  		{
+	    		numDivisions = numberOfStreamDivision;
+	  		}
+				break;
+				case SET_BUFFER_MEMORY_SIZE :
+				{
       		const unsigned long bufferMemorySize = bufferMemorySize/8;
-			unsigned long numberColumnsOfRegion = region.GetSize()[0]; // X dimension
+					unsigned long numberColumnsOfRegion = region.GetSize()[0]; // X dimension
       		const unsigned long sizeLine = numberColumnsOfRegion * \
-		  image->GetNumberOfComponentsPerPixel() * \
-		  sizeof(PixelType);
+		  		image->GetNumberOfComponentsPerPixel() * \
+		  		sizeof(PixelType);
       		unsigned long regionSize = region.GetSize()[1] * sizeLine;
       		otbMsgDevMacro(<<"image->GetNumberOfComponentsPerPixel()   = "<<image->GetNumberOfComponentsPerPixel());
       		otbMsgDevMacro(<<"sizeof(PixelType)                 = "<<sizeof(PixelType));
@@ -105,43 +120,43 @@ class ITK_EXPORT StreamingTraits
       				regionSize = sizeLine;
       			}
       			//Calculate NumberOfStreamDivisions
-				numDivisions = static_cast<unsigned long>(vcl_ceil(static_cast<double>(regionSize)/static_cast<double>(bufferMemorySize)));
+					numDivisions = static_cast<unsigned long>(vcl_ceil(static_cast<double>(regionSize)/static_cast<double>(bufferMemorySize)));
       		}
       		else
       		{
       			//Non streaming
       			numDivisions = 1;
       		}
-		}
-		break;
-		case SET_BUFFER_NUMBER_OF_LINES :
-		{
-			if( bufferNumberOfLinesDivisions < 1 )
-			{
-				itkGenericExceptionMacro(<<"Buffer number of lines division must be greater than 0 !");
-			}
-			/* Calculate number of split */
-			unsigned long numberLinesOfRegion = region.GetSize()[1]; // Y dimension
-			if( numberLinesOfRegion > bufferNumberOfLinesDivisions )
-			{
-				numDivisions = static_cast<unsigned long>(vcl_ceil(static_cast<double>(numberLinesOfRegion)/static_cast<double>(bufferNumberOfLinesDivisions)));
-			}
-			else
-			{
+				}
+				break;
+				case SET_BUFFER_NUMBER_OF_LINES :
+				{
+					if( bufferNumberOfLinesDivisions < 1 )
+					{
+						itkGenericExceptionMacro(<<"Buffer number of lines division must be greater than 0 !");
+					}
+					/* Calculate number of split */
+					unsigned long numberLinesOfRegion = region.GetSize()[1]; // Y dimension
+					if( numberLinesOfRegion > bufferNumberOfLinesDivisions )
+					{
+						numDivisions = static_cast<unsigned long>(vcl_ceil(static_cast<double>(numberLinesOfRegion)/static_cast<double>(bufferNumberOfLinesDivisions)));
+					}
+					else
+					{
       			//Non streaming
-				numDivisions = 1;
-			}
-		}
-		break;
-		case SET_AUTOMATIC_NUMBER_OF_STREAM_DIVISIONS :
-		{
+						numDivisions = 1;
+					}
+				}
+				break;
+				case SET_AUTOMATIC_NUMBER_OF_STREAM_DIVISIONS :
+				{
       		const unsigned long streamMaxSizeBufferForStreamingBytes = OTB_STREAM_MAX_SIZE_BUFFER_FOR_STREAMING;
-      	    const unsigned long streamImageSizeToActivateStreamingBytes = OTB_STREAM_IMAGE_SIZE_TO_ACTIVATE_STREAMING;
+      	  const unsigned long streamImageSizeToActivateStreamingBytes = OTB_STREAM_IMAGE_SIZE_TO_ACTIVATE_STREAMING;
       		//Convert in octet unit
       		unsigned long streamMaxSizeBufferForStreaming = streamMaxSizeBufferForStreamingBytes/8;
-      	    const unsigned long streamImageSizeToActivateStreaming = streamImageSizeToActivateStreamingBytes/8;
+      	  const unsigned long streamImageSizeToActivateStreaming = streamImageSizeToActivateStreamingBytes/8;
       	    
-			unsigned long numberColumnsOfRegion = region.GetSize()[0]; // X dimension
+					unsigned long numberColumnsOfRegion = region.GetSize()[0]; // X dimension
       		const unsigned long sizeLine = numberColumnsOfRegion * \
       											image->GetNumberOfComponentsPerPixel() * \
       											sizeof(PixelType);
@@ -167,26 +182,62 @@ class ITK_EXPORT StreamingTraits
       			}
    				otbMsgDevMacro(<<"Buffer size : "<<streamMaxSizeBufferForStreaming);
       			//Calculate NumberOfStreamDivisions
-				numDivisions = static_cast<unsigned long>(vcl_ceil(static_cast<double>(regionSize)/static_cast<double>(streamMaxSizeBufferForStreaming)));
+					numDivisions = static_cast<unsigned long>(vcl_ceil(static_cast<double>(regionSize)/static_cast<double>(streamMaxSizeBufferForStreaming)));
       		}
       		else
       		{
       			//Non streaming
       			numDivisions = 1;
       		}
-		}
-		break;
-		default :
-			itkGenericExceptionMacro(<<"Method use to calculate number of stream divisions is not set !");
-		break;
-	}
+				}
+				break;
+				default :
+					itkGenericExceptionMacro(<<"Method use to calculate number of stream divisions is not set !");
+				break;
+			}
     if( numDivisions == 0) numDivisions = 1;
-	otbMsgDevMacro(<<" -> Resume : method : "<<mode<<"\n -> Number of divisions = "<<numDivisions);
-	return(numDivisions);
-
-
-
-    }
+		otbMsgDevMacro(<<" -> Resume : method : "<<mode<<"\n -> Number of divisions = "<<numDivisions);
+		return(numDivisions);
+   }
+	 
+	static unsigned int CalculateNeededRadiusForInterpolator(const InterpolationType* interpolator)
+	{
+//		unsigned int dimension = TImage::ImageDimension; 
+		unsigned int neededRadius = 0;
+		std::string className;
+		
+		className = interpolator->GetNameOfClass();
+		
+  	if (className == "LinearInterpolateImageFunction")
+		{
+			otbMsgDevMacro(<<"Linear Interpolator");
+			neededRadius = 1;
+		}
+		else if (className == "NearestNeighborInterpolateImageFunction")
+		{
+			otbMsgDevMacro(<<"Nearest Neighbor Interpolator");
+			neededRadius = 1;
+		}
+		else if (className == "BSplineInterpolateImageFunction")
+		{
+			otbMsgDevMacro(<<"Nearest Neighbor Interpolator");
+			neededRadius = 2;
+		}
+		
+		/*else if (className == "WindowedSincInterpolateImageFunction")
+		{
+			itkGenericExceptionMacro(<< "Windowed Sinc Interpolator not supported yet in resample");
+			otbMsgDevMacro(<<"Windowed Sinc Interpolator not supported yet in resample");
+//			dynamic_cast<typename itk::WindowedSincInterpolateImageFunction*>(interpolator);
+		}			
+		else
+		{
+			itkGenericExceptionMacro(<< "Interpolator not recognized, please choose another type !");
+		}	*/			
+		
+		return neededRadius;
+	}
+	 
 };
 }// End namespace otb
 

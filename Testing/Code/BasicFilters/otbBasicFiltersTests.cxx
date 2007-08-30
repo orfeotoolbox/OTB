@@ -67,4 +67,7 @@ REGISTER_TEST(otbStreamingStatisticsImageFilterNew);
 REGISTER_TEST(otbStreamingStatisticsImageFilter);
 REGISTER_TEST(otbVectorImageTo3DScalarImageFilterNew);
 REGISTER_TEST(otbVectorImageTo3DScalarImageFilter);
+REGISTER_TEST(otbStreamingResampleImageFilterNew);
+REGISTER_TEST(otbStreamingResampleImageFilter);
+REGISTER_TEST(otbStreamingResampleImageFilterCompareWithITK);
 }

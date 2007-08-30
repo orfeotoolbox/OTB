@@ -345,6 +345,40 @@ ADD_TEST(bfTvVectorImageTo3DScalarImageFilter ${BASICFILTERS_TESTS}
 		${TEMP}/bfTvVectorImageTo3DScalarImageFilterOutput.png
 )
 
+# -------            otb::StreamingResampleImageFilter   ----------------------------
+
+ADD_TEST(bfTuStreamingResampleImageFilterNew ${BASICFILTERS_TESTS}  
+         otbStreamingResampleImageFilterNew)
+				 
+ADD_TEST(bfTvStreamingResampleImageFilter ${BASICFILTERS_TESTS}  
+				otbStreamingResampleImageFilter
+				${INPUTDATA}/poupees.tif
+				${TEMP}/bfTvStreamingResamplePoupeesTest.tif
+)
+
+ADD_TEST(StreamingResampleImageFilterCompareWithITK ${BASICFILTERS_TESTS}  
+		--compare-image ${TOL}
+					${TEMP}/bfTvStreamingResamplePoupeesTestITK.tif
+					${TEMP}/bfTvStreamingResamplePoupeesTestOTB.tif		
+				otbStreamingResampleImageFilterCompareWithITK
+					${INPUTDATA}/poupees.tif
+					1100 1100
+					${TEMP}/bfTvStreamingResamplePoupeesTestITK.tif
+					${TEMP}/bfTvStreamingResamplePoupeesTestOTB.tif
+)
+
+#ADD_TEST(StreamingResampleImageFilterCompareWithITK ${BASICFILTERS_TESTS}  
+#		--compare-image ${TOL}
+#					${TEMP}/bfTvStreamingResampleSPOT5TestITK.tif
+#					${TEMP}/bfTvStreamingResampleSPOT5TestOTB.tif		
+#				otbStreamingResampleImageFilterCompareWithITK
+#					${INPUTDATA}/spot5SubWithGcps.tif
+#					1100 1100
+#					${TEMP}/bfTvStreamingResampleSPOT5TestITK.tif
+#					${TEMP}/bfTvStreamingResampleSPOT5TestOTB.tif
+#)
+
+
 # A enrichir
 SET(BasicFilters_SRCS
 otbLeeFilter.cxx
@@ -387,6 +421,9 @@ otbStreamingStatisticsImageFilterNew.cxx
 otbStreamingStatisticsImageFilter.cxx
 otbVectorImageTo3DScalarImageFilterNew.cxx
 otbVectorImageTo3DScalarImageFilter.cxx
+otbStreamingResampleImageFilterNew.cxx
+otbStreamingResampleImageFilter.cxx
+otbStreamingResampleImageFilterCompareWithITK.cxx
 )
 
 
