@@ -32,16 +32,16 @@
  * also used to catch errors, etc. Example usage looks like:
  * itkDebugMacro(<< "this is debug info" << this->SomeVariable); */
 #if defined(OTB_LEAN_AND_MEAN) || defined(__BORLANDC__)
-#define otbDebugMacro(x)
+#define otbDebugMacro(x) 
 #else
-#define otbDebugMacro(x) \
-  { if ( /*this->GetDebug() && */ ::itk::Object::GetGlobalWarningDisplay())   \
+#define otbDebugMacro(x) itkDebugMacro(x)
+/*  { if ( this->GetDebug() && *::itk::Object::GetGlobalWarningDisplay())   \
     { ::itk::OStringStream itkmsg; \
       itkmsg << "Debug: In " __FILE__ ", line " << __LINE__ << "\n" \
              << this->GetNameOfClass() << " (" << this << "): " x  \
              << "\n\n"; \
       ::itk::OutputWindowDisplayDebugText(itkmsg.str().c_str());} \
-}
+}*/
 #endif
 
 #if defined(OTB_LEAN_AND_MEAN) || defined(__BORLANDC__)
