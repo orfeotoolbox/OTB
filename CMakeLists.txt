@@ -122,11 +122,18 @@ IF(OTB_USE_VISU_GUI)
         #-------------------------------
         # Add an option to use or not use FLTK (http://www.fltk.org)
 
-        SET( FLTK_INCLUDE_DIR /usr/include )
+#         SET(CMAKE_MODULE_PATH "/usr/share/CMake")
+#         SET( FLTK_INCLUDE_DIR /usr/include )
+
         FIND_PACKAGE(FLTK)
+        IF (NOT FLTK_INCLUDE_DIR)
+		SET( FLTK_INCLUDE_DIR /usr/include )
+		FIND_PACKAGE(FLTK)
+	ENDIF(NOT FLTK_INCLUDE_DIR)
+
         IF(FLTK_FOUND)
-           INCLUDE_DIRECTORIES(${FLTK_INCLUDE_DIRS})
-	   LINK_DIRECTORIES(${FLTK_LIBRARY_DIRS})
+		INCLUDE_DIRECTORIES(${FLTK_INCLUDE_DIRS})
+		LINK_DIRECTORIES(${FLTK_LIBRARY_DIRS})
         ELSE(FLTK_FOUND)
            MESSAGE(FATAL_ERROR
 	         "Cannot build OTB project without FLTK.  Please set FLTK_DIR or set OTB_USE_VISU to OFF.")
