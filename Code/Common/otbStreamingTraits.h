@@ -96,22 +96,22 @@ class ITK_EXPORT StreamingTraits
 				break;
 				case SET_BUFFER_MEMORY_SIZE :
 				{
-      		const unsigned long bufferMemorySize = bufferMemorySize/8;
+      		const unsigned long bufferMemorySizeOctet = bufferMemorySize/8;
 					unsigned long numberColumnsOfRegion = region.GetSize()[0]; // X dimension
       		const unsigned long sizeLine = numberColumnsOfRegion * \
 		  		image->GetNumberOfComponentsPerPixel() * \
 		  		sizeof(PixelType);
       		unsigned long regionSize = region.GetSize()[1] * sizeLine;
       		otbMsgDevMacro(<<"image->GetNumberOfComponentsPerPixel()   = "<<image->GetNumberOfComponentsPerPixel());
-      		otbMsgDevMacro(<<"sizeof(PixelType)                 = "<<sizeof(PixelType));
-      		otbMsgDevMacro(<<"numberColumnsOfRegion                        = "<<numberColumnsOfRegion);
-      		otbMsgDevMacro(<<"sizeLine                                     = "<<sizeLine);
-      		otbMsgDevMacro(<<"regionSize                                   = "<<regionSize);
-      		otbMsgDevMacro(<<"m_BufferMemorySize                           = "<<bufferMemorySize);
-      		otbMsgDevMacro(<<"bufferMemorySize                             = "<<bufferMemorySize);
+      		otbMsgDevMacro(<<"sizeof(PixelType)                        = "<<sizeof(PixelType));
+      		otbMsgDevMacro(<<"numberColumnsOfRegion                    = "<<numberColumnsOfRegion);
+      		otbMsgDevMacro(<<"sizeLine                                 = "<<sizeLine);
+      		otbMsgDevMacro(<<"regionSize                               = "<<regionSize);
+      		otbMsgDevMacro(<<"BufferMemorySize                         = "<<bufferMemorySize);
+      		otbMsgDevMacro(<<"bufferMemorySizeOctet                    = "<<bufferMemorySizeOctet);
 
       		//Active streaming 
-	      	if( regionSize > bufferMemorySize )
+	      	if( regionSize > bufferMemorySizeOctet )
       		{
       			//The regionSize must be at list equal to the sizeLine 
       			if( regionSize < sizeLine )
@@ -120,7 +120,7 @@ class ITK_EXPORT StreamingTraits
       				regionSize = sizeLine;
       			}
       			//Calculate NumberOfStreamDivisions
-					numDivisions = static_cast<unsigned long>(vcl_ceil(static_cast<double>(regionSize)/static_cast<double>(bufferMemorySize)));
+				numDivisions = static_cast<unsigned long>(vcl_ceil(static_cast<double>(regionSize)/static_cast<double>(bufferMemorySizeOctet)));
       		}
       		else
       		{
