@@ -152,7 +152,7 @@ CumulantsForEdgeworthProfile<TInput>
 	fSum0 = fSum1 = fSum2 = fSum3 = fSum4 = 0.0;
 	fMu[0].Fill(0.0);
 	
-	unsigned int i,j;
+	unsigned i,j;
 	unsigned long k = 0;
 	double pixel,pixel_2;
 		
@@ -247,7 +247,7 @@ CumulantsForEdgeworthProfile<TInput>
 	
 	double pixel,pixel_2;
 
-	unsigned int i,j;
+	unsigned i,j;
 	unsigned long k = 0L;
 	
 	// for ( unsigned long i = 0; i < input.Size(); i++ ) 
