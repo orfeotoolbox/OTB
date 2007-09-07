@@ -101,7 +101,7 @@ int otbStreamingResampleImageFilterCompareWithITK(int argc, char * argv[])
 			writerITKFilter->Update();
 			
 			writerOTBFilter->SetInput(resamplerOTB->GetOutput());
-			writerOTBFilter->SetNumberOfStreamDivisions(10);
+			writerOTBFilter->SetTilingStreamDivisions();
 			writerOTBFilter->SetFileName(outputOTBFilename);
 			writerOTBFilter->Update();			
     }
