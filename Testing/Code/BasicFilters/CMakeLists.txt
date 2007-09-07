@@ -362,7 +362,7 @@ ADD_TEST(StreamingResampleImageFilterCompareWithITK ${BASICFILTERS_TESTS}
 					${TEMP}/bfTvStreamingResamplePoupeesTestOTB.tif		
 				otbStreamingResampleImageFilterCompareWithITK
 					${INPUTDATA}/poupees.tif
-					1100 1100
+					3000 3000
 					${TEMP}/bfTvStreamingResamplePoupeesTestITK.tif
 					${TEMP}/bfTvStreamingResamplePoupeesTestOTB.tif
 )
