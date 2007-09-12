@@ -1,3 +1,5 @@
+#include "otb_6S_f2c.h"
+
 #ifdef KR_headers
 extern double sqrt();
 double f__cabs(real, imag) double real, imag;
