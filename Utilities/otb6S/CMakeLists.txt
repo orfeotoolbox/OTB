@@ -49,20 +49,6 @@ LIST(REMOVE_ITEM LIBF2C_SRCS "${OTB6S_SOURCE_DIR}/libf2c/main.c" )
 LIST(REMOVE_ITEM LIBF2C_SRCS "${OTB6S_SOURCE_DIR}/libf2c/getarg_.c" )
 LIST(REMOVE_ITEM LIBF2C_SRCS "${OTB6S_SOURCE_DIR}/libf2c/iargc_.c" )
 
-
-
-SET(FICHIER_H "${OTB_BINARY_DIR}/toto.txt")
-
-FILE(WRITE ${FICHIER_H} "//TOTO 6S\n")
-
-#---------Create includes
-FOREACH(FILE ${LIBF2C_SRCS} )
-        FILE( APPEND ${FICHIER_H} " -> ${FILE}\n" )
-        
-ENDFOREACH(FILE ${FILES_SOURCES} )
-
-
-
 INCLUDE_DIRECTORIES(${OTB6S_SOURCE_DIR}/libf2c)
 
 # Adjust the compiler flags to avoid problems with f2c-generated code.
