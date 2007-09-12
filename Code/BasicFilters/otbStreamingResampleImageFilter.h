@@ -65,8 +65,6 @@ public:
 	typedef typename Superclass::InterpolatorType InterpolatorType;
 	typedef typename InterpolatorType::PointType  PointType;
 
-  typedef typename TInputImage::SizeType SizeType;
-
   /** Set size of neighborhood needed to interpolate points */
   itkSetMacro(InterpolatorNeighborhoodRadius,unsigned int);
 	

@@ -68,6 +68,10 @@ int otbStreamingImageFileWriterTestCalculateNumberOfDivisions (int argc, char* a
         {
                 writer->SetBufferNumberOfLinesDivisions(::atoi(argv[4]));
         }
+				else if( MethodCalculateNumberOfStreamDivision == "TILING_STREAM_DIVISIONS" )
+				{
+								writer->SetTilingStreamDivisions();
+				}
         else if( MethodCalculateNumberOfStreamDivision == "DEFAULT" )
         {
         

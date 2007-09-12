@@ -945,6 +945,31 @@ ADD_TEST(ioTvStreamingImageFileWriterCalculateNumberOfDivisions_BUFFER_NUMBER_OF
          BUFFER_NUMBER_OF_LINES
          1000
          )
+# 6. TILING_STREAM_DIVISIONS
+ADD_TEST(ioTvStreamingImageFileWriterCalculateNumberOfDivisions_TILING_STREAM_DIVISIONS ${IO_TESTS} 
+   --compare-image ${TOL}   ${INPUTDATA}/ToulouseQuickBird_Extrait_1500_3750.tif
+													${TEMP}/ioStreamingImageFileWriterCalculateNumberOfDivisions_TILING_STREAM_DIVISIONS.tif
+         otbStreamingImageFileWriterTestCalculateNumberOfDivisions
+         ${INPUTDATA}/ToulouseQuickBird_Extrait_1500_3750.tif
+         ${TEMP}/ioStreamingImageFileWriterCalculateNumberOfDivisions_TILING_STREAM_DIVISIONS.tif
+         TILING_STREAM_DIVISIONS
+         )
+ADD_TEST(ioTvStreamingImageFileWriterCalculateNumberOfDivisions_TILING_STREAM_DIVISIONS_2 ${IO_TESTS} 
+   --compare-image ${TOL}   ${INPUTDATA}/poupees.tif
+													${TEMP}/ioStreamingImageFileWriterCalculateNumberOfDivisions_TILING_STREAM_DIVISIONS2.tif
+         otbStreamingImageFileWriterTestCalculateNumberOfDivisions
+         ${INPUTDATA}/poupees.tif
+         ${TEMP}/ioStreamingImageFileWriterCalculateNumberOfDivisions_TILING_STREAM_DIVISIONS2.tif
+         TILING_STREAM_DIVISIONS
+				)
+ADD_TEST(ioTvStreamingImageFileWriterCalculateNumberOfDivisions_TILING_STREAM_DIVISIONS_3 ${IO_TESTS} 
+   --compare-image ${TOL}   ${IMAGEDATA}/RADARSAT1/SCENE01/
+													${TEMP}/ioStreamingImageFileWriterCalculateNumberOfDivisions_TILING_STREAM_DIVISIONS2.tif
+         otbStreamingImageFileWriterTestCalculateNumberOfDivisions
+         ${IMAGEDATA}/RADARSAT1/SCENE01/
+ 				 ${TEMP}/ioStreamingImageFileWriterCalculateNumberOfDivisions_TILING_STREAM_DIVISIONS3.tif
+         TILING_STREAM_DIVISIONS
+				)
 
 ADD_TEST(ioTvStreamingIFWriterWithFilter ${IO_TESTS} 
    --compare-image ${TOL}   ${BASELINE}/ioStreamingImageFileWriterWithFilter_1_100.hdr

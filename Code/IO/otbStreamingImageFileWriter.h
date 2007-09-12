@@ -97,6 +97,9 @@ public:
    * OTB_STREAM_MAX_SIZE_BUFFER_FOR_STREAMING cmake variables.
    */
   void SetAutomaticNumberOfStreamDivisions(void);
+	
+	/** Set the tiling mode for streaming division */
+	void SetTilingStreamDivisions(void);
 
   /** Return the string to indicate the method use to calculate number of stream divisions. */
   std::string GetMethodUseToCalculateNumberOfStreamDivisions(void);

@@ -23,6 +23,8 @@
 #include "itkImageRegionIterator.h"
 #include "itkObjectFactoryBase.h"
 #include "itkImageFileWriter.h"
+#include "itkImageRegionMultidimensionalSplitter.h"
+
 #include "otbMacro.h"
 #include "otbConfigure.h"
 
@@ -45,6 +47,7 @@ StreamingImageFileWriter<TInputImage>
   
   // create default region splitter
   m_RegionSplitter = itk::ImageRegionSplitter<InputImageDimension>::New();
+
 
   m_UserSpecifiedIORegion = true;
   m_FactorySpecifiedImageIO = false;
@@ -108,6 +111,19 @@ StreamingImageFileWriter<TInputImage>
 ::SetAutomaticNumberOfStreamDivisions(void)
 {
 	m_CalculationDivision = SET_AUTOMATIC_NUMBER_OF_STREAM_DIVISIONS;
+        this->Modified();
+}
+
+/**
+ *
+ */
+template <class TInputImage>
+void 
+StreamingImageFileWriter<TInputImage>
+::SetTilingStreamDivisions(void)
+{
+	m_CalculationDivision = SET_TILING_STREAM_DIVISIONS;
+	m_RegionSplitter = itk::ImageRegionMultidimensionalSplitter<InputImageDimension>::New();
         this->Modified();
 }
 
@@ -239,7 +255,9 @@ unsigned long
 StreamingImageFileWriter<TInputImage>
 ::CalculateNumberOfStreamDivisions(void)
 {
-  return StreamingTraitsType
+	otbDebugMacro(<< "TEST CalculateNumberOfStreamDivisions");
+	
+	return StreamingTraitsType
     ::CalculateNumberOfStreamDivisions(this->GetInput(),
 				       this->GetInput()->GetRequestedRegion(),
 				       m_CalculationDivision,
@@ -257,6 +275,8 @@ void
 StreamingImageFileWriter<TInputImage>
 ::UpdateOutputData(itk::DataObject *itkNotUsed(output))
 {
+  otbDebugMacro(<< "TEST UpdateOutputData");
+
   unsigned int idx;
 
   /**
@@ -379,6 +399,7 @@ StreamingImageFileWriter<TInputImage>
     else
       {
 	numDivisions = static_cast<unsigned int>(CalculateNumberOfStreamDivisions());
+	otbGenericMsgDebugMacro(<< "NumberOfStreamDivisions : " << numDivisions);
 	numDivisionsFromSplitter = m_RegionSplitter->GetNumberOfSplits(outputRegion, numDivisions);
 	if (numDivisionsFromSplitter < numDivisions)
 	  {
@@ -393,6 +414,11 @@ StreamingImageFileWriter<TInputImage>
   InputImageRegionType streamRegion;
   streamRegion = m_RegionSplitter->GetSplit(0, numDivisions,
                                               outputRegion);
+
+	otbGenericMsgDebugMacro(<< "RegionSplit : Index(" << streamRegion.GetIndex()[0]
+	                          << "," << streamRegion.GetIndex()[1]
+														<< ") Size(" << streamRegion.GetSize()[0]
+														<< "," << streamRegion.GetSize()[1] << ")");
 
   // On s'appuie sur 'outputPtr' pour d�terminer les initialiser le 'm_ImageIO'
   // Setup the ImageIO
@@ -505,8 +531,10 @@ void
 StreamingImageFileWriter<TInputImage>
 ::GenerateData(void)
 {
-  const InputImageType * input = this->GetInput();
-
+ // otbGenericMsgDebugMacro(<< "TEST GenerateData");
+	
+	const InputImageType * input = this->GetInput();
+  
   // Make sure that the image is the right type and no more than 
   // four components.
   typedef typename InputImageType::PixelType ScalarType;

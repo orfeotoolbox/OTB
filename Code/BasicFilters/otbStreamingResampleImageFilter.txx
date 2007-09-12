@@ -143,7 +143,7 @@ StreamingResampleImageFilter<TInputImage,TOutputImage,TInterpolatorPrecisionType
 		
 		if (neededRadius == 0)
 		{
-			otbDebugMacro(<< "Warning : if you haven't fixed interpolator radius,	default is 1");
+			itkGenericOutputMacro(<< "If you haven't fixed interpolator radius,	default is 1");
 			neededRadius = m_InterpolatorNeighborhoodRadius;
 		}
 		

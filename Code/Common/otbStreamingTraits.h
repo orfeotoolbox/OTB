@@ -38,7 +38,8 @@ namespace otb
       SET_NUMBER_OF_STREAM_DIVISIONS = 1,
       SET_BUFFER_MEMORY_SIZE = 2,
       SET_BUFFER_NUMBER_OF_LINES = 3,
-      SET_AUTOMATIC_NUMBER_OF_STREAM_DIVISIONS = 4
+      SET_AUTOMATIC_NUMBER_OF_STREAM_DIVISIONS = 4,
+			SET_TILING_STREAM_DIVISIONS = 5
     } StreamingMode;
   
 /** \class StreamingTraits
@@ -148,6 +149,10 @@ class ITK_EXPORT StreamingTraits
 					}
 				}
 				break;
+				case SET_TILING_STREAM_DIVISIONS :
+					{	
+						// Just like SET_AUTOMATIC_NUMBER_OF_STREAM_DIVISIONS
+					};
 				case SET_AUTOMATIC_NUMBER_OF_STREAM_DIVISIONS :
 				{
       		const unsigned long streamMaxSizeBufferForStreamingBytes = OTB_STREAM_MAX_SIZE_BUFFER_FOR_STREAMING;
@@ -199,6 +204,7 @@ class ITK_EXPORT StreamingTraits
 		otbMsgDevMacro(<<" -> Resume : method : "<<mode<<"\n -> Number of divisions = "<<numDivisions);
 		return(numDivisions);
    }
+	 
 	 
 	static unsigned int CalculateNeededRadiusForInterpolator(const InterpolationType* interpolator)
 	{
