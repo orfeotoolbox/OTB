@@ -10,7 +10,7 @@ SET(TEMP ${OTBTesting_BINARY_DIR}/Temporary)
 
 #Tolerance sur diff pixel image
 SET(TOL 0.0)
-SET(EPSILON 0.00000000001)
+SET(EPSILON 0.000000000001)
 
 SET(RADIOMETRY_TESTS ${CXX_TEST_PATH}/otbRadiometryTests)
 
@@ -150,7 +150,7 @@ ADD_TEST(raTuRAndBAndNIRVegetationIndexImageFilterNew ${RADIOMETRY_TESTS}
 
 
 ADD_TEST(raTvARVI_RAndBAndNIRVegetationIndexImageFilter ${RADIOMETRY_TESTS}  
-  --compare-image ${TOL}   ${BASELINE}/raRAndBAndNIRVegetationIndex_ARVI_poupees_subc1c2c3.tif
+  --compare-image ${EPSILON}   ${BASELINE}/raRAndBAndNIRVegetationIndex_ARVI_poupees_subc1c2c3.tif
                     ${TEMP}/raRAndBAndNIRVegetationIndex_ARVI_poupees_subc1c2c3.tif
         otbRAndBAndNIRVegetationIndexImageFilter
         ARVI
@@ -167,7 +167,7 @@ ADD_TEST(raTuMultiChannelRAndBAndNIRVegetationIndexImageFilterNew ${RADIOMETRY_T
         otbMultiChannelRAndBAndNIRVegetationIndexImageFilterNew )
 
 ADD_TEST(raTvARVI_MultiChannelRAndBAndNIRVegetationIndexImageFilter ${RADIOMETRY_TESTS}  
-  --compare-image ${TOL}   ${BASELINE}/raRAndBAndNIRVegetationIndex_ARVI_poupees_subc1c2c3.tif
+  --compare-image ${EPSILON}   ${BASELINE}/raRAndBAndNIRVegetationIndex_ARVI_poupees_subc1c2c3.tif
                     ${TEMP}/raMultiChannelRAndBAndNIRVegetationIndex_ARVI_poupees_subc1c2c3.tif
         otbMultiChannelRAndBAndNIRVegetationIndexImageFilter
         ARVI
