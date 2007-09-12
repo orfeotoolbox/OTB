@@ -158,10 +158,30 @@ ADD_TEST(FA-00052-vi_Floating_Point_Exception ${VISU_TESTS}
 	${EXAMPLES_DATA}/ROI_QB_MUL_1.png
          )
 
+# ---  FA 00060 : Pb Map activation  ---
+ADD_TEST(FA-00060-le_Map_Activation ${CXX_TEST_PATH}/MapActivation
+	${INPUTDATA}/list.mhd
+        4
+        4
+        20
+        1.0
+        0.1
+        128
+        1
+        ${TEMP}/FA-00013-le-som.hd
+        ${TEMP}/FA-00013-le-som-zoom.mhd
+        ${TEMP}/FA-00013-le-actMap.png
+        ${TEMP}/FA-00013-le-actMap-zoom.png
+        ${TEMP}/FA-00013-le-som.mhd
+	)
+
 # -------       Fin des FAs traitees -----------------------------------
 
 ADD_EXECUTABLE(AlignementsQB  AlignementsQB.cxx)
 TARGET_LINK_LIBRARIES(AlignementsQB OTBFeatureExtraction OTBIO OTBCommon gdal ITKIO ITKCommon)
+
+ADD_EXECUTABLE(MapActivation  MapActivation.cxx)
+TARGET_LINK_LIBRARIES(MapActivation OTBFeatureExtraction OTBIO OTBCommon gdal ITKIO ITKCommon)
 
 INCLUDE_DIRECTORIES("${OTBTesting_BINARY_DIR}")
 
