@@ -160,6 +160,9 @@ StreamingImageFileWriter<TInputImage>
     case SET_AUTOMATIC_NUMBER_OF_STREAM_DIVISIONS:
       return "CalculationDivisionEnumType::SET_AUTOMATIC_NUMBER_OF_STREAM_DIVISIONS";
       break;
+		case SET_TILING_STREAM_DIVISIONS:
+			return "CalculationDivisionEnumType::SET_TILING_STREAM_DIVISIONS";
+			break;
     default:
       return "unknown";
       break;
