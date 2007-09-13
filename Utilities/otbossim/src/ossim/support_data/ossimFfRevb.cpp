@@ -282,6 +282,9 @@ double ossimFfRevb::projParam(int paramNumber) const
 //***************************************************************************
 void ossimFfRevb::print(ostream& os) const
 {
+// OTB Modifications : Hide error : ostream template instantiation depth exceeds maximum of 50 
+//                     use -ftemplate-depth-NN to increase the maximum not corrected this erro. 
+//                     So, coorection : separate line and add more os command
    os << setiosflags(ios::left | ios::fixed)
       << setw(30) << "\nimage_id:" 
       << theProductOrderNumber
@@ -290,8 +293,8 @@ void ossimFfRevb::print(ostream& os) const
       << setw(30) << "\nacquisition_date:"
       << theAcquisitionDate
       << setw(30) << "\nsatellite_name:"
-      << theSatNumber
-      << setw(30) << "\nsensor_name:"
+      << theSatNumber;
+   os << setw(30) << "\nsensor_name:"
       << theInstrumentType
       << setw(30) << "\nproduct_type:" 
       << theProductType
@@ -314,8 +317,8 @@ void ossimFfRevb::print(ostream& os) const
       << setw(30) << "\nfirst_line_in_volume:" 
       << the1stLineInVolume
       << setw(30) << "\nlines_per_volume:" 
-      << theLinesPerVolume
-      << setw(30) << "\norientation_angle:" 
+      << theLinesPerVolume;
+   os << setw(30) << "\norientation_angle:" 
       << setprecision(2) << theOrientationAngle
       << setw(30) << "\nprojection_type:" 
       << theMapProjName
@@ -346,8 +349,8 @@ void ossimFfRevb::print(ostream& os) const
       << thePixelsPerLine
       << setw(30) << "\nnumber_lines:" 
       << theLinesPerImage
-      << setprecision(3)
-      << setw(30) << "\nul_longitude:" 
+      << setprecision(3);
+   os << setw(30) << "\nul_longitude:" 
       << theUlLon
       << setw(30) << "\nul_latitude:" 
       << theUlLat
@@ -360,8 +363,8 @@ void ossimFfRevb::print(ostream& os) const
       << setw(30) << "\nur_latitude:" 
       << theUrLat
       << setw(30) << "\nur_easting:" 
-      << setw(13) << theUrEasting
-      << setw(30) << "\nur_northing:" 
+      << setw(13) << theUrEasting;
+   os << setw(30) << "\nur_northing:" 
       << setw(13) << theUrNorthing
       << setw(30) << "\nlr_longitude:" 
       << theLrLon
@@ -370,8 +373,8 @@ void ossimFfRevb::print(ostream& os) const
       << setw(30) << "\nlr_easting:" 
       << setw(13) << theLrEasting
       << setw(30) << "\nlr_northing:" 
-      << setw(13) << theLrNorthing
-      << setw(30) << "\nll_longitude:" 
+      << setw(13) << theLrNorthing;
+   os << setw(30) << "\nll_longitude:" 
       << theLlLon
       << setw(30) << "\nll_latitude:" 
       << theLlLat
@@ -380,8 +383,8 @@ void ossimFfRevb::print(ostream& os) const
       << setw(30) << "\nll_northing:" 
       << setw(13) << theLlNorthing      
       << setw(30) << "\nbands_present_string:" 
-      << theBandsPresentString
-      << setw(30) << "\ntape_blocking_factor:" 
+      << theBandsPresentString;
+   os << setw(30) << "\ntape_blocking_factor:" 
       << theBlockingFactor
       << setw(30) << "\nrecord_size:" 
       << theRecordSize
@@ -392,16 +395,16 @@ void ossimFfRevb::print(ostream& os) const
       << setw(30) << "\ncenter_longitude:" 
       << theCenterLon
       << setw(30) << "\ncenter_latitude:" 
-      << theCenterLat
-      << setw(30) << "\ncenter_easting:" 
+      << theCenterLat;
+   os << setw(30) << "\ncenter_easting:" 
       << setw(13) << theCenterEasting
       << setw(30) << "\ncenter_northing:" 
       << setw(13) << theCenterNorthing
       << setw(30) << "\ncenter_sample:" 
       << theCenterSample
       << setw(30) << "\ncenter_line:" 
-      << theCenterLine
-      << setw(30) << "\nhorizontal_offset:" 
+      << theCenterLine;
+   os << setw(30) << "\nhorizontal_offset:" 
       << theOffset
       << setw(30) << "\nformat_version:" 
       << theFormatVersion
