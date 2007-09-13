@@ -273,7 +273,9 @@ SET( OTB_EXAMPLES_SRCS
   ${OTB_SOURCE_DIR}/Examples/Iterators/NeighborhoodIterators1.cxx
   ${OTB_SOURCE_DIR}/Examples/Iterators/NeighborhoodIterators4.cxx
   ${OTB_SOURCE_DIR}/Examples/Iterators/ImageRegionIteratorWithIndex.cxx
-
+  ${OTB_SOURCE_DIR}/Examples/Tutorials/HelloWorldOTB.cxx
+  ${OTB_SOURCE_DIR}/Examples/Tutorials/Pipeline.cxx
+  ${OTB_SOURCE_DIR}/Examples/Tutorials/FilteringPipeline.cxx
 )
 
 
