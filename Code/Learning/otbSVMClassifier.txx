@@ -27,7 +27,6 @@ template< class TSample, class TLabel >
 SVMClassifier< TSample, TLabel >
 ::SVMClassifier()
 {
-  m_Sample = 0 ;
   m_Output = OutputType::New() ;
   m_Model = SVMModelType::New();
 }
@@ -38,50 +37,7 @@ SVMClassifier< TSample, TLabel >
 ::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   Superclass::PrintSelf(os,indent);
-
-//   os << indent << "Sample: " ;
-//   if ( m_Sample != 0 )
-//     {
-//     os << m_Sample << std::endl;
-//     }
-//   else
-//     {
-//     os << "not set." << std::endl ;
-//     }
-
-//   os << indent << "Output: " << m_Output << std::endl;
 }
-
-// template< class TSample, class TLabel >
-// void
-// SVMClassifier< TSample, TLabel >
-// ::SetSample(const TSample* sample)
-// {
-//   otbMsgDebugMacro(  << "SVMClassifier::SetSample enter" );
-//   if ( m_Sample != sample )
-//     {
-//     m_Sample = sample ;
-//     m_Output->SetSample(sample) ;
-//     }
-//   otbMsgDebugMacro(  << "SVMClassifier::SetSample exit"  );
-// }
-
-// template< class TSample, class TLabel >
-// const TSample*
-// SVMClassifier< TSample, TLabel >
-// ::GetSample() const
-// {
-//   return m_Sample ;
-// }
-
-// template< class TSample, class TLabel >
-// void
-// SVMClassifier< TSample, TLabel >
-// ::SetMembershipFunctionClassLabels(ClassLabelVectorType& labels)
-// {
-//   m_ClassLabels = labels ;
-// }
-
 
 template< class TSample, class TLabel >
 void
@@ -99,26 +55,18 @@ SVMClassifier< TSample, TLabel >
 ::GenerateData()
 {
 
-
-  // otbMsgDebugMacro(  << "Before Resize 0" );
-/*  unsigned int i ;
-  typename TSample::ConstIterator iter = this->GetSample()->Begin() ;
-  typename TSample::ConstIterator end  = this->GetSample()->End() ;
-  typename TSample::MeasurementVectorType measurements ;
-*/
- //  otbMsgDebugMacro(  << "Before Resize " );
   m_Output->SetSample(this->GetSample()) ;
-  otbMsgDebugMacro(  << "m_Output " << m_Output );
+  otbMsgDevMacro(  << "m_Output " << m_Output );
 
   m_Output->Resize( this->GetSample()->Size() ) ;
 
   
-  otbMsgDebugMacro(  << "Resize to " << this->GetSample()->Size() );
-  otbMsgDebugMacro(  << "Resize to " << m_Output->GetSample()->Size() );
+  otbMsgDevMacro(  << "Resize to " << this->GetSample()->Size() );
+  otbMsgDevMacro(  << "Resize to " << m_Output->GetSample()->Size() );
   
   //std::vector< double > discriminantScores ;
   unsigned int numberOfClasses = this->GetNumberOfClasses() ;
-  otbMsgDebugMacro(  << "NbClass " << numberOfClasses );
+  otbMsgDevMacro(  << "NbClass " << numberOfClasses );
   //discriminantScores.resize(numberOfClasses) ;
   //unsigned int classLabel ;
 
@@ -128,41 +76,10 @@ SVMClassifier< TSample, TLabel >
 /*typename Superclass::DecisionRuleType::Pointer rule = 
     this->GetDecisionRule() ;*/
 
-  otbMsgDebugMacro(  << "Do Classif "  );
+  otbMsgDevMacro(  << "Do Classif "  );
   this->DoClassification();
-  otbMsgDebugMacro(  << "End of classif" );  
+  otbMsgDevMacro(  << "End of classif" );  
 
-//   if ( m_ClassLabels.size() != this->GetNumberOfMembershipFunctions() )
-//     {
-//     while (iter != end)
-//       {
-//       measurements = iter.GetMeasurementVector() ;
-//       for (i = 0 ; i < numberOfClasses ; i++)
-//         {
-//         discriminantScores[i] =
-//           (this->GetMembershipFunction(i))->Evaluate(measurements) ;
-//         }
-//       classLabel = rule->Evaluate(discriminantScores) ;
-//       m_Output->AddInstance(classLabel, iter.GetInstanceIdentifier()) ;
-//       ++iter ;
-//       }
-//     }
-//   else
-//     {
-//     while (iter != end)
-//       {
-//       measurements = iter.GetMeasurementVector() ;
-//       for (i = 0 ; i < numberOfClasses ; i++)
-//         {
-//         discriminantScores[i] = 
-//           (this->GetMembershipFunction(i))->Evaluate(measurements) ;
-//         }
-//       classLabel = rule->Evaluate(discriminantScores) ;
-//       m_Output->AddInstance(m_ClassLabels[classLabel], 
-//                             iter.GetInstanceIdentifier()) ;
-//       ++iter ;
-//       }
-//     }
 }
 
 template< class TSample, class TLabel >
@@ -203,7 +120,7 @@ SVMClassifier< TSample, TLabel >
 
   x = new svm_node[numberOfComponentsPerSample+1];//m_Model->GetXSpace();
 
-  otbMsgDebugMacro(  << "XSpace Allocated" );
+  otbMsgDevMacro(  << "XSpace Allocated" );
   if(svm_check_probability_model(model)==0)
     {
     throw itk::ExceptionObject(__FILE__, __LINE__,
@@ -212,10 +129,10 @@ SVMClassifier< TSample, TLabel >
     }
 
   int svm_type=svm_get_svm_type(model);
-  otbMsgDebugMacro(  << "SVM Type = " << svm_type );
+  otbMsgDevMacro(  << "SVM Type = " << svm_type );
 
   int nr_class=svm_get_nr_class(model);
-  otbMsgDebugMacro(  << "SVM nr_class = " << nr_class );
+  otbMsgDevMacro(  << "SVM nr_class = " << nr_class );
 
   int *labels=(int *) malloc(nr_class*sizeof(int));
   double *prob_estimates=NULL;
@@ -231,109 +148,52 @@ SVMClassifier< TSample, TLabel >
 
       prob_estimates = (double *) malloc(nr_class*sizeof(double));
 	}
-      /*fprintf(output,"labels");		
-      for(j=0;j<nr_class;j++)
-	fprintf(output," %d",labels[j]);
-      fprintf(output,"\n");*/
     }
-//  while(1)
 
-  otbMsgDebugMacro(  << "Starting iterations " );
+  otbMsgDevMacro(  << "Starting iterations " );
   while (iter != end && iterO != endO)
     {
     
     int i = 0;
     double v;
-    
-    /*
-    double target;
-    int c;
-    if (fscanf(input,"%lf",&target)==EOF)
-      break;*/
-    
-//     while(1)
-//       {
-//       if(i>=max_nr_attr-1)	// need one more for index = -1
-// 	{
-// 	max_nr_attr *= 2;
-// 	x = (struct svm_node *) realloc(x,max_nr_attr*sizeof(struct svm_node));
-// 	}
-      
-//       do {
-//       c = getc(input);
-//       if(c=='\n' || c==EOF) goto out2;
-//       } while(isspace(c));
-//       ungetc(c,input);
-//       fscanf(input,"%d:%lf",&x[i].index,&x[i].value);
-//       ++i;
-//       }
-    
-//     out2:
-//     x[i++].index = -1;
-
 
     measurements = iter.GetMeasurementVector() ;
-    // otbMsgDebugMacro(  << "Loop on components " << svm_type );
+    // otbMsgDevMacro(  << "Loop on components " << svm_type );
     for(i=0; i<numberOfComponentsPerSample; i++)
       {
-      // otbMsgDebugMacro(  << i << " " << measurements[i] );
-//       otbMsgDebugMacro(  << "Index "<< x[i].index );
-//       otbMsgDebugMacro(  << "Value "<< x[i].value );
       x[i].index = i+1 ;
       x[i].value = measurements[i];
-      // otbMsgDebugMacro(  << "Index "<< x[i].index );
-//       otbMsgDebugMacro(  << "Value "<< x[i].value );
-//       otbMsgDebugMacro(  << "-------------------" );
 	
       }
     x[i].index = -1;
 
-    // otbMsgDebugMacro(  << "Starting prediction" );
 
     if (predict_probability && (svm_type==C_SVC || svm_type==NU_SVC))
       {
-     //  otbMsgDebugMacro(  << "With predict" );
       v = svm_predict_probability(model,x,prob_estimates);
-     //  otbMsgDebugMacro(  << "Value : " << v );
-      /*fprintf(output,"%g ",v);
-      for(j=0;j<nr_class;j++)
-	fprintf(output,"%g ",prob_estimates[j]);
-      fprintf(output,"\n");*/
       }
     else
       {
-    //   otbMsgDebugMacro(  << "Without predict" );
       v = svm_predict(model,x);
-    //   otbMsgDebugMacro(  << "Value : " << v );
-      //fprintf(output,"%g\n",v);
       }
     
 
     ClassLabelType classLabel;
-//     if(nr_class == 2)
-//       classLabel = static_cast<ClassLabelType>(v+2);
-//   else
     classLabel = static_cast<ClassLabelType>(v);
 
- //  otbMsgDebugMacro(  << "Add instance " << classLabel ); 
-//   otbMsgDebugMacro(  << "Add instance ident " << iterO.GetInstanceIdentifier() );
   m_Output->AddInstance(classLabel, iterO.GetInstanceIdentifier()) ;
-//   otbMsgDebugMacro(  << "After add instance " << iterO.GetClassLabel() );  
 
   ++iter;
   ++iterO;
         
 }
 
-// otbMsgDebugMacro(  << "End of iterations " );
 if(predict_probability)
   {
   free(prob_estimates);
   free(labels);
   }
   
-// otbMsgDebugMacro(  << "End of iterations and free" );  
-//  free(x);
 
 delete [] x;
 }
@@ -341,11 +201,3 @@ delete [] x;
 } // end of namespace otb
 
 #endif
-
-
-
-
-
-
-
-

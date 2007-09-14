@@ -74,34 +74,15 @@ public:
   typedef typename Superclass::MembershipFunctionPointerVector 
     MembershipFunctionPointerVector ;
 
-  // FIXME :  typedef TLabel ClassLabelType ;
-  typedef unsigned int ClassLabelType ;
-  typedef std::vector< ClassLabelType > ClassLabelVectorType ;
+  /** typedef for label type */
+  typedef TLabel ClassLabelType ;
 
-//   /** Sets the target data that will be classified by this */
-//  void SetSample(const TSample* sample) ;
 
-//   /** Returns the target data */
-//   const TSample* GetSample() const;
-
-//   /** Sets the user given class labels for membership functions.
-//    * If users do not provide class labels for membership functions by calling
-//    * this function, then the index of the membership function vector for a
-//    * membership function will be used as class label of measurement vectors
-//    * belong to the membership function */ 
-//   void SetMembershipFunctionClassLabels( ClassLabelVectorType& labels) ;
-
-//   /** Gets the user given class labels */
-//   ClassLabelVectorType& GetMembershipFunctionClassLabels() 
-//   { return m_ClassLabels ; }
-
-//   /** Returns the classification result */
+   /** Returns the classification result */
   OutputType* GetOutput() ;
 
 
   /** Type definitions for the SVM Model. */
-
-
   typedef SVMModel< InputPixelType, TLabel >   SVMModelType;
   typedef typename SVMModelType::Pointer     SVMModelPointer;
   
@@ -123,14 +104,9 @@ protected:
   void DoClassification() ;
 
 private:
-  /** Target data sample pointer*/
-  const TSample* m_Sample ;
 
   /** Output pointer (MembershipSample) */
   typename OutputType::Pointer m_Output ;
-
-  /** User given class labels for membership functions */
-  ClassLabelVectorType m_ClassLabels ;
 
   SVMModelPointer m_Model;
 } ; // end of class
