@@ -196,10 +196,12 @@ TreeNode<TValueType>
 ::AddChild( int number, TreeNode<TValueType> *node ) 
 {  
   size_t size = m_Children.size();
-
-  if ( (size_t)number > size ) 
+// OTB modifications : Hide warning for comparaison between sign expressions and unsigned 
+  size_t number_t = static_cast<size_t>(number);
+  
+  if ( number_t > size ) 
     {
-    for ( size_t i=size; i <= (size_t)number; i++ )
+    for ( size_t i=size; i <= number_t; i++ )
       {
       m_Children[i] = NULL;
       }
