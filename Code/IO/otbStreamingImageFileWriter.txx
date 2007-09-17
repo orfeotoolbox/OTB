@@ -400,14 +400,17 @@ StreamingImageFileWriter<TInputImage>
         numDivisions = 1;
     }
     else
-      {
-	numDivisions = static_cast<unsigned int>(CalculateNumberOfStreamDivisions());
-	otbGenericMsgDebugMacro(<< "NumberOfStreamDivisions : " << numDivisions);
-	numDivisionsFromSplitter = m_RegionSplitter->GetNumberOfSplits(outputRegion, numDivisions);
-	if (numDivisionsFromSplitter < numDivisions)
-	  {
-	    numDivisions = numDivisionsFromSplitter;
-	  }
+    {
+			numDivisions = static_cast<unsigned int>(CalculateNumberOfStreamDivisions());
+			otbGenericMsgDebugMacro(<< "NumberOfStreamDivisions : " << numDivisions);
+			numDivisionsFromSplitter = m_RegionSplitter->GetNumberOfSplits(outputRegion, numDivisions);
+			otbGenericMsgDebugMacro(<< "NumberOfStreamSplitterDivisions : " << numDivisionsFromSplitter);
+			
+			/** In tiling streaming mode, we keep the number of divisions calculed by splitter */
+			if ((numDivisionsFromSplitter < numDivisions)||(m_CalculationDivision==SET_TILING_STREAM_DIVISIONS))
+	  	{
+	 			numDivisions = numDivisionsFromSplitter;
+	  	}
     }
   
   /**
@@ -415,13 +418,8 @@ StreamingImageFileWriter<TInputImage>
    * piece, and copy the results into the output image.
    */
   InputImageRegionType streamRegion;
-  streamRegion = m_RegionSplitter->GetSplit(0, numDivisions,
-                                              outputRegion);
-
-	otbGenericMsgDebugMacro(<< "RegionSplit : Index(" << streamRegion.GetIndex()[0]
-	                          << "," << streamRegion.GetIndex()[1]
-														<< ") Size(" << streamRegion.GetSize()[0]
-														<< "," << streamRegion.GetSize()[1] << ")");
+//  streamRegion = m_RegionSplitter->GetSplit(0, numDivisions,
+//                                              outputRegion);
 
   // On s'appuie sur 'outputPtr' pour d�terminer les initialiser le 'm_ImageIO'
   // Setup the ImageIO
@@ -464,12 +462,19 @@ StreamingImageFileWriter<TInputImage>
    */
   unsigned int piece;
   for (piece = 0;
-       piece < numDivisions && !this->GetAbortGenerateData();
+       piece < numDivisionsFromSplitter && !this->GetAbortGenerateData();
        piece++)
     {
                 streamRegion = m_RegionSplitter->GetSplit(piece, numDivisions,
                                               outputRegion);
       
+								otbGenericMsgDebugMacro(<< "Piece : " << piece);
+								otbGenericMsgDebugMacro(<< "RegionSplit : Index(" << streamRegion.GetIndex()[0]
+	                          << "," << streamRegion.GetIndex()[1]
+														<< ") Size(" << streamRegion.GetSize()[0]
+														<< "," << streamRegion.GetSize()[1] << ")");
+
+			
                 inputPtr->SetRequestedRegion(streamRegion);
                 inputPtr->PropagateRequestedRegion();
                 inputPtr->UpdateOutputData();
