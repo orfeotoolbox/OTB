@@ -53,7 +53,7 @@ StringToTestFunctionMap[#test] = test
 
 std::map<std::string,int> RegressionTestBaselines (char *);
 
-int RegressionTestImage (const char *, const char *, int, const double);
+int RegressionTestImage (int, const char *, const char *, int, const double);
 int RegressionTestBinaryFile(const char *, const char *, int);
 int RegressionTestAsciiFile(const char *, const char *, int, const double);
 int RegressionTestMetaData(const char *, const char *,int,const double);
@@ -74,6 +74,7 @@ void PrintAvailableTests()
 
 int main(int ac, char* av[] )
 {
+  bool lFlagRegression(false);
   double lToleranceDiffPixelImage(0);
   double lEpsilon(0);
   char *baselineFilenameBinary = NULL;
@@ -131,6 +132,7 @@ int main(int ac, char* av[] )
       }
     if (strcmp(av[1], "--compare-image") == 0)
       {
+      lFlagRegression = true;
       lToleranceDiffPixelImage = (double)(::atof(av[2]));
       baseLineFilenamesImage.reserve(1);
       testFilenamesImage.reserve(1);
@@ -141,6 +143,7 @@ int main(int ac, char* av[] )
       }
     else if(strcmp(av[1], "--compare-n-images") == 0)
       {
+        lFlagRegression = true;
 	lToleranceDiffPixelImage = (double)(::atof(av[2]));
 	// Number of comparisons to do
 	unsigned int nbComparisons=(unsigned int)(::atoi(av[3]));
@@ -157,6 +160,7 @@ int main(int ac, char* av[] )
       }
     else if (strcmp(av[1], "--compare-binary") == 0)
       {
+        lFlagRegression = true;
         baselineFilenameBinary = av[2];
         testFilenameBinary = av[3];
         av += 3;
@@ -164,6 +168,7 @@ int main(int ac, char* av[] )
       }
     else if (strcmp(av[1], "--compare-ascii") == 0)
       {
+        lFlagRegression = true;
         lEpsilon = (double)(::atof(av[2]));	
         baseLineFilenamesAscii.reserve(1);
         testFilenamesAscii.reserve(1);
@@ -174,6 +179,7 @@ int main(int ac, char* av[] )
       }
     else if (strcmp(av[1], "--compare-n-ascii") == 0)
       {
+        lFlagRegression = true;
         lEpsilon = (double)(::atof(av[2]));	
         // Number of comparisons to do
         unsigned int nbComparisons=(unsigned int)(::atoi(av[3]));
@@ -190,6 +196,7 @@ int main(int ac, char* av[] )
       }
     else if (strcmp(av[1], "--compare-metadata") == 0)
       {
+        lFlagRegression = true;
 	lToleranceDiffPixelImage = (double)(::atof(av[2]));
 	baselineFilenamesMetaData.reserve(1);
 	testFilenamesMetaData.reserve(1);
@@ -209,11 +216,21 @@ int main(int ac, char* av[] )
       {
       // Invoke the test's "main" function.
       result = (*f)(ac-1, av+1);
+      std::cout << "Test result:"<<result<<std::endl;
       
-      if (result!=0)
+      if (result!=EXIT_SUCCESS)
+      {
+        std::cout << "-> Test EXIT FAILURE."<<std::endl;
        	itkGenericExceptionMacro(<<"Bad function return, no regresion test !");
-            
-otbGenericMsgDebugMacro(<<"----------------     DEBUT Controle NON-REGRESION  ------------------- ");
+      }
+      std::cout << " -> Test EXIT SUCCESS."<<std::endl;
+      if( lFlagRegression == false )
+      {      
+                std::cout << "-------------  No control baseline tests    -------------"<<std::endl;
+      }
+      else
+      {
+                std::cout << "-------------  Start control baseline tests    -------------"<<std::endl;
       // Make a list of possible baselines
       // Test de non regression sur des images
       if ((baseLineFilenamesImage.size()>0) && (testFilenamesImage.size()>0))
@@ -221,6 +238,7 @@ otbGenericMsgDebugMacro(<<"----------------     DEBUT Controle NON-REGRESION  --
 	  // Creates iterators on baseline filenames vector and test filenames vector
 	  std::vector<std::string>::iterator itBaselineFilenames = baseLineFilenamesImage.begin();
 	  std::vector<std::string>::iterator itTestFilenames = testFilenamesImage.begin();
+          int cpt(1);
 	  // For each couple of baseline and test file, do the comparison
 	  for(;(itBaselineFilenames != baseLineFilenamesImage.end())
 		&&(itTestFilenames != testFilenamesImage.end());
@@ -231,17 +249,18 @@ otbGenericMsgDebugMacro(<<"----------------     DEBUT Controle NON-REGRESION  --
 
 	      std::map<std::string,int> baselines = RegressionTestBaselines(const_cast<char*>(baselineFilenameImage.c_str()));
 	      std::map<std::string,int>::iterator baseline = baselines.begin();
-	      baseline->second = RegressionTestImage(testFilenameImage.c_str(),
+	      baseline->second = RegressionTestImage(cpt,testFilenameImage.c_str(),
 							 (baseline->first).c_str(),
 							 0,
 							 lToleranceDiffPixelImage);
 		  if (baseline->second != 0)
 		    {
-		    baseline->second = RegressionTestImage(testFilenameImage.c_str(),
+		    baseline->second = RegressionTestImage(cpt,testFilenameImage.c_str(),
 							 (baseline->first).c_str(),
 							 1,
 							 lToleranceDiffPixelImage);
 		}
+                cpt++;
 	      result += baseline->second;
 	    }
         }
@@ -347,7 +366,8 @@ otbGenericMsgDebugMacro(<<"----------------     DEBUT Controle NON-REGRESION  --
         result += baseline->second;
         }
 
-otbGenericMsgDebugMacro(<<"----------------     FIN Controle NON-REGRESION  ------------------- ");
+                std::cout << "-------------  End control baseline tests    -------------"<<std::endl;
+        } // Fin else de if( lFlagRegression == false )
 
       }
     catch(const itk::ExceptionObject& e)
@@ -526,6 +546,9 @@ int RegressionTestAsciiFile(const char * testAsciiFileName, const char * baselin
     	}
 
 	TypeEtat etatPrec, etatCour ;
+        
+        std::vector<std::string> listStrDiffLineFileRef;
+        std::vector<std::string> listStrDiffLineFileTest;
 
 	while ( std::getline(fluxfileref,strfileref)!=0  )
 	{
@@ -535,6 +558,7 @@ int RegressionTestAsciiFile(const char * testAsciiFileName, const char * baselin
 			
 		buffstreamRef << strfileref ;
 		buffstreamTest << strfiletest ;
+                int nblinediff(0);
 	
 		while (buffstreamRef.peek() != EOF)
 		{
@@ -579,6 +603,7 @@ int RegressionTestAsciiFile(const char * testAsciiFileName, const char * baselin
 							fluxfilediff << "Diff at line " << numLine 
 						     << " : " << strCharRef
 						     << " != " << strCharTest << std::endl ;
+                                                     nblinediff++;
 						}
 					nbdiff++;
 				      }
@@ -600,6 +625,7 @@ int RegressionTestAsciiFile(const char * testAsciiFileName, const char * baselin
 								fluxfilediff << "Diff at line " << numLine << " : vcl_abs ( (" 
 						     		<< strNumRef << ") - (" << strNumTest
 						     		<< ") ) > " << epsilon << std::endl ;
+                                                                nblinediff++;
 							}
 							nbdiff++;
 				      }	
@@ -641,6 +667,7 @@ int RegressionTestAsciiFile(const char * testAsciiFileName, const char * baselin
 								fluxfilediff << "Diff at line " << numLine << " : vcl_abs( (" 
 						     		<< strRef << ") - (" << strTest
 						     		<< ") ) > " << epsilon << std::endl ;
+                                                                nblinediff++;
 							}
 					nbdiff++;
 				      }
@@ -654,6 +681,7 @@ int RegressionTestAsciiFile(const char * testAsciiFileName, const char * baselin
 							fluxfilediff << "Diff at line " << numLine 
 						     << " : " << strRef
 						     << " != " << strTest << std::endl ;
+                                                     nblinediff++;
 						}
 					nbdiff++;
 				      }
@@ -671,6 +699,13 @@ int RegressionTestAsciiFile(const char * testAsciiFileName, const char * baselin
 			  }
 		}
 		numLine++;
+                //Store alls differences lines 
+	        if ( nblinediff!=0 && reportErrors)
+	        {
+                        listStrDiffLineFileRef.push_back(strfileref);
+                        listStrDiffLineFileTest.push_back(strfiletest);
+                }
+
 	}
 	
 	fluxfiletest.close();
@@ -685,6 +720,18 @@ int RegressionTestAsciiFile(const char * testAsciiFileName, const char * baselin
     		std::cout << "<DartMeasurement name=\"ASCIIFileError\" type=\"numeric/int\">";
     		std::cout << nbdiff;
     		std::cout <<  "</DartMeasurement>" << std::endl;
+    		std::cout << "================================================================"<<std::endl;
+    		std::cout << "Baseline ASCII File :"<<baselineAsciiFileName << std::endl;
+    		std::cout << "Test ASCII File     :"<<testAsciiFileName << std::endl;
+    		std::cout << "Diff ASCII File     :"<<diffAsciiFileName << std::endl;
+                
+                std::cout << "Nb lines differents :"<<listStrDiffLineFileRef.size() << std::endl;
+                for( unsigned int i ; i  < listStrDiffLineFileRef.size() ; i++)
+                {
+    		        std::cout << "   -------------------------------"<<std::endl;
+    		        std::cout << "   Base << "<<listStrDiffLineFileRef[i]<<std::endl;
+    		        std::cout << "   Test >> "<<listStrDiffLineFileTest[i]<<std::endl;
+                }
 	}
   return (nbdiff != 0) ? 1 : 0;
 }
@@ -730,7 +777,7 @@ int RegressionTestBinaryFile(const char * testBinaryFileName, const char * basel
 }
 
 
-int RegressionTestImage (const char *testImageFilename, const char *baselineImageFilename, int reportErrors, const double toleranceDiffPixelImage)
+int RegressionTestImage (int cpt, const char *testImageFilename, const char *baselineImageFilename, int reportErrors, const double toleranceDiffPixelImage)
 {
   // Use the factory mechanism to read the test and baseline files and convert them to double
 
@@ -827,8 +874,13 @@ int RegressionTestImage (const char *testImageFilename, const char *baselineImag
     WriterType::Pointer writer = WriterType::New();
       writer->SetInput(extract->GetOutput());
 
-    std::cout << "<DartMeasurement name=\"ImageError\" type=\"numeric/double\">";
+//    std::cout << "<DartMeasurement name=\"ImageError\" type=\"numeric/double\">";
+    std::cout << "<DartMeasurement name=\"ImageError "<<cpt<<"\" type=\"numeric/double\">";
     std::cout << status;
+    std::cout <<  "</DartMeasurement>" << std::endl;
+
+    std::cout << "<DartMeasurement name=\"ToleranceDiffPixelImage\" type=\"numeric/double\">";
+    std::cout << toleranceDiffPixelImage;
     std::cout <<  "</DartMeasurement>" << std::endl;
 
     ::itk::OStringStream diffName;
@@ -852,7 +904,8 @@ int RegressionTestImage (const char *testImageFilename, const char *baselineImag
       std::cerr << "Error during write of " << diffName.str() << std::endl;
       }
 
-    std::cout << "<DartMeasurementFile name=\"DifferenceImage\" type=\"image/png\">";
+//    std::cout << "<DartMeasurementFile name=\"DifferenceImage\" type=\"image/png\">";
+    std::cout << "<DartMeasurementFile name=\"DifferenceImage "<<cpt<<"\" type=\"image/png\">";
     std::cout << diffName.str();
     std::cout << "</DartMeasurementFile>" << std::endl;
 
@@ -877,7 +930,8 @@ int RegressionTestImage (const char *testImageFilename, const char *baselineImag
       std::cerr << "Error during write of " << baseName.str() << std::endl;
       }
 
-    std::cout << "<DartMeasurementFile name=\"BaselineImage\" type=\"image/png\">";
+//    std::cout << "<DartMeasurementFile name=\"BaselineImage\" type=\"image/png\">";
+    std::cout << "<DartMeasurementFile name=\"BaselineImage "<<cpt<<"\" type=\"image/png\">";
     std::cout << baseName.str();
     std::cout << "</DartMeasurementFile>" << std::endl;
 
@@ -903,7 +957,8 @@ int RegressionTestImage (const char *testImageFilename, const char *baselineImag
       std::cerr << "Error during write of " << testName.str() << std::endl;
       }
 
-    std::cout << "<DartMeasurementFile name=\"TestImage\" type=\"image/png\">";
+//    std::cout << "<DartMeasurementFile name=\"TestImage\" type=\"image/png\">";
+    std::cout << "<DartMeasurementFile name=\"TestImage "<<cpt<<"\" type=\"image/png\">";
     std::cout << testName.str();
     std::cout << "</DartMeasurementFile>" << std::endl;
 
