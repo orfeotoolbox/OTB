@@ -12,7 +12,6 @@ FILE(GLOB ossim_support_data_HDRS "ossim/support_data/*.h")
 FILE(GLOB ossim_vec_HDRS "ossim/vec/*.h")
 FILE(GLOB ossim_vpfutil_HDRS "ossim/vpfutil/*.h")
 
-
 INSTALL(FILES ${ossim_base_HDRS}
     DESTINATION ${OTB_INSTALL_INCLUDE_DIR}/Utilities/otbossim/include/ossim/base
     COMPONENT Development)
@@ -51,5 +50,11 @@ INSTALL(FILES ${ossim_vec_HDRS}
     COMPONENT Development)
 INSTALL(FILES ${ossim_vpfutil_HDRS}
     DESTINATION ${OTB_INSTALL_INCLUDE_DIR}/Utilities/otbossim/include/ossim/vpfutil
+    COMPONENT Development)
+
+SET(ossim_config_HDR "${OTB_BINARY_DIR}/Utilities/otbossim/include/ossim/ossimConfig.h" )
+
+INSTALL(FILES ${ossim_config_HDR}
+    DESTINATION ${OTB_INSTALL_INCLUDE_DIR}/Utilities/otbossim/include/ossim
     COMPONENT Development)
 
