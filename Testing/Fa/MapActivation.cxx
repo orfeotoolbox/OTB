@@ -72,7 +72,7 @@ int main(int argc, char* argv[] )
 	
 	typedef itk::ImageRegionIterator< ListImageType > IteratorType;
 	IteratorType It1( tabreadImage, tabreadImage->GetLargestPossibleRegion() );
-	const int nblines = (const int)(tabreadImage->GetLargestPossibleRegion().GetSize()[1]);
+	const int nblines=591; // (const int)(tabreadImage->GetLargestPossibleRegion().GetSize()[1]);
 
 	const int nbcolonnes=9;//tabreadImage->GetLargestPossibleRegion().GetSize()[0]; 
 	
