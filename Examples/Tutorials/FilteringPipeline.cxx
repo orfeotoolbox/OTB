@@ -23,7 +23,7 @@
 // to compute the gradient of the image. The begining of the file is 
 // similar to the Pipeline.cxx. 
 //
-// We include the required header, without forgetting to add the header 
+// We include the required headers, without forgetting to add the header 
 // for the \doxygen{itk}{GradientMagnitudeImageFilter}.
 //
 //  Software Guide : EndLatex 
@@ -49,10 +49,10 @@ int main(int argc, char ** argv)
   typedef otb::Image<unsigned char, 2> ImageType;
 
   typedef otb::ImageFileReader<ImageType> ReaderType;
-  ReaderType::Pointer reader=ReaderType::New();
+  ReaderType::Pointer reader = ReaderType::New();
 
   typedef otb::StreamingImageFileWriter<ImageType> WriterType;
-  WriterType::Pointer writer=WriterType::New();
+  WriterType::Pointer writer = WriterType::New();
 
   reader->SetFileName(argv[1]);
   writer->SetFileName(argv[2]);
@@ -67,9 +67,11 @@ int main(int argc, char ** argv)
   //
   //  Software Guide : EndLatex 
   
+  // Software Guide : BeginCodeSnippet
   typedef itk::GradientMagnitudeImageFilter
       <ImageType,ImageType> FilterType;
   FilterType::Pointer filter = FilterType::New();
+  // Software Guide : EndCodeSnippet
   
   //  Software Guide : BeginLatex
   //
@@ -84,7 +86,7 @@ int main(int argc, char ** argv)
   
   //  Software Guide : BeginLatex
   //
-  // And finally, we trigger the pipeline execution calling the Update()
+  // And finally, we trigger the pipeline execution calling the \code{Update()}
   // method on the writer
   //
   //  Software Guide : EndLatex 

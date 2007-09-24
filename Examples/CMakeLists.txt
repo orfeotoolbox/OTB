@@ -1,32 +1,27 @@
-# $Id$
+PROJECT(HelloWorld)
 
-SUBDIRS( 
-  BasicFilters
-  FeatureExtraction
-  DataRepresentation
-  IO
-  Filtering
-  ChangeDetection
-  Learning
-  Classification
-  Segmentation
-  Iterators
-  MultiScale
-  DisparityMap
-  Registration
-)
+FIND_PACKAGE(OTB)
+IF(OTB_FOUND)
+  INCLUDE(${OTB_USE_FILE})
+ELSE(OTB_FOUND)
+  MESSAGE(FATAL_ERROR
+      "Cannot build OTB project without OTB.  Please set OTB_DIR.")
+ENDIF(OTB_FOUND)
 
-IF(OTB_USE_VISU)
-        SUBDIRS(Visu)
-ENDIF(OTB_USE_VISU)
+ADD_EXECUTABLE(HelloWorldOTB HelloWorldOTB.cxx )
+TARGET_LINK_LIBRARIES(HelloWorldOTB OTBCommon OTBIO)
 
-IF(OTB_USE_PATENTED)
-  SUBDIRS( Patented )
-ENDIF(OTB_USE_PATENTED)
+ADD_EXECUTABLE(Pipeline Pipeline.cxx )
+TARGET_LINK_LIBRARIES(Pipeline OTBCommon OTBIO)
 
-#Recopie du fichier README.txt dans l'arborescence BINARY
-IF( EXISTS ${OTB_BINARY_DIR}/Examples/README.txt )
-ELSE( EXISTS ${OTB_BINARY_DIR}/Examples/README.txt )
-  CONFIGURE_FILE(${OTB_SOURCE_DIR}/Examples/README.txt
-    ${OTB_BINARY_DIR}/Examples/README.txt @ONLY IMMEDIATE)
-ENDIF( EXISTS ${OTB_BINARY_DIR}/Examples/README.txt )
+ADD_EXECUTABLE(FilteringPipeline FilteringPipeline.cxx )
+TARGET_LINK_LIBRARIES(FilteringPipeline OTBCommon OTBIO)
+
+ADD_EXECUTABLE(ScalingPipeline ScalingPipeline.cxx )
+TARGET_LINK_LIBRARIES(ScalingPipeline OTBCommon OTBIO)
+
+ADD_EXECUTABLE(SmarterFilteringPipeline SmarterFilteringPipeline.cxx )
+TARGET_LINK_LIBRARIES(SmarterFilteringPipeline OTBCommon OTBIO)
+
+ADD_EXECUTABLE(SimpleViewer SimpleViewer.cxx )
+TARGET_LINK_LIBRARIES(SimpleViewer OTBCommon OTBIO OTBGui OTBVisu)

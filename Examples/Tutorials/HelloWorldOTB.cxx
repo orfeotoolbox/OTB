@@ -44,11 +44,10 @@ int main()
 //
 //  This code instantiates an image whose pixels are represented with
 //  type \code{unsigned short}. The image is then constructed and assigned to a
-//  \doxygen{itk}{SmartPointer}. Although later in the text we will discuss
-//  \code{SmartPointer}'s in detail, for now think of it as a handle on an
+//  \doxygen{itk}{SmartPointer}. Later in the text we will discuss
+//  \code{SmartPointer} in detail, for now think of it as a handle on an
 //  instance of an object (see section \ref{sec:SmartPointers} for more
-//  information).  The \doxygen{itk}{Image} class will be described in
-//  Section~\ref{sec:ImageSection}.
+//  information).
 //
 //  Software Guide : EndLatex 
 

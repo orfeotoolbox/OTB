@@ -18,7 +18,7 @@
 
 //  Software Guide : BeginLatex
 //
-//  Start by including some necessary header and with the 
+//  Start by including some necessary headers and with the 
 //  usual \code{main} declaration:
 //
 //  Software Guide : EndLatex 
@@ -35,7 +35,7 @@ int main(int argc, char ** argv)
   //  Software Guide : BeginLatex
   //
   //  Declare the image as an \doxygen{otb}{Image}, the pixel type
-  // is declared as an unsigned char and the image is specified as
+  // is declared as an unsigned char (one byte) and the image is specified as
   // having two dimensions.
   //
   //  Software Guide : EndLatex 
@@ -53,7 +53,7 @@ int main(int argc, char ** argv)
   
   // Software Guide : BeginCodeSnippet
   typedef otb::ImageFileReader<ImageType> ReaderType;
-  ReaderType::Pointer reader=ReaderType::New();
+  ReaderType::Pointer reader = ReaderType::New();
   // Software Guide : EndCodeSnippet
   
   //  Software Guide : BeginLatex
@@ -65,13 +65,13 @@ int main(int argc, char ** argv)
   
   // Software Guide : BeginCodeSnippet
   typedef otb::StreamingImageFileWriter<ImageType> WriterType;
-  WriterType::Pointer writer=WriterType::New();
+  WriterType::Pointer writer = WriterType::New();
   // Software Guide : EndCodeSnippet
   
   //  Software Guide : BeginLatex
   //
   // The filenames are passed as arguments to the program. We keep it 
-  // simple and we don't check their validity.
+  // simple for now and we don't check their validity.
   //
   //  Software Guide : EndLatex 
   
