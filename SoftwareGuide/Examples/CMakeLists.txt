@@ -276,6 +276,9 @@ SET( OTB_EXAMPLES_SRCS
   ${OTB_SOURCE_DIR}/Examples/Tutorials/HelloWorldOTB.cxx
   ${OTB_SOURCE_DIR}/Examples/Tutorials/Pipeline.cxx
   ${OTB_SOURCE_DIR}/Examples/Tutorials/FilteringPipeline.cxx
+  ${OTB_SOURCE_DIR}/Examples/Tutorials/ScalingPipeline.cxx
+  ${OTB_SOURCE_DIR}/Examples/Tutorials/SmarterFilteringPipeline.cxx
+  ${OTB_SOURCE_DIR}/Examples/Tutorials/SimpleViewer.cxx
 )
 
 
