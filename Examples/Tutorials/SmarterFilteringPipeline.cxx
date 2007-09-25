@@ -36,8 +36,8 @@
 // 	L_y^2(\mathbf{x},\sigma_D) \end{array}\right]		
 // 	\]
 //
-// 		The output of the detector is $[det(\mu) - \alpha
-// trace^2(\mu)$.
+// 		The output of the detector is $\mathrm{det}(\mu) - \alpha
+// \mathrm{trace}^2(\mu)$.
 //
 // We want to set 3 parameters of this filter through the command line:
 // $\sigma_D$ (SigmaD), $\sigma_I$ (SigmaI) and $\alpha$ (Alpha).
