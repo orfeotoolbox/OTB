@@ -30,6 +30,14 @@ ADD_TEST(leTuSVMModelLoad ${LEARNING_TESTS}
         otbSVMModelLoad
 	${INPUTDATA}/svm_model)
 
+ADD_TEST(leTvSVMModelAccessor ${LEARNING_TESTS}
+--compare-ascii ${TOL}  ${BASELINE_FILES}/leSVMModelAccessor.txt
+                        ${TEMP}/leSVMModelAccessor.txt
+        otbSVMModelAccessor
+	${INPUTDATA}/svm_model
+	${TEMP}/leSVMModelAccessor.txt)		
+
+
 ADD_TEST(leTvSVMModelLoadSave ${LEARNING_TESTS}
 --compare-ascii ${TOL}  ${INPUTDATA}/svm_model
                         ${TEMP}/svmmodel_test
@@ -72,6 +80,14 @@ ADD_TEST(leTuSVMImageModelEstimatorTrain ${LEARNING_TESTS}
 	${INPUTDATA}/ROI_QB_MUL_4.tif
 	${INPUTDATA}/ROI_QB_MUL_4_train.c1.hdr
 	${TEMP}/leTvsvm_model_image)
+
+ADD_TEST(leTvSVMImageModelEstimatorModelAccessor ${LEARNING_TESTS}
+--compare-ascii ${TOL}  ${BASELINE_FILES}/leSVMModelEstimatorModelAccessor.txt
+                        ${TEMP}/leSVMModelEstimatorModelAccessor.txt
+        otbSVMImageModelEstimatorModelAccessor
+	${INPUTDATA}/ROI_QB_MUL_4.tif
+	${INPUTDATA}/ROI_QB_MUL_4_train.c1.hdr
+	${TEMP}/leSVMModelEstimatorModelAccessor.txt)
 
 # -------            otb::SVMPointSetModelEstimator   --------------------		
 
@@ -178,11 +194,13 @@ otbSVMModelNew.cxx
 otbSVMModelAllocateProblem.cxx
 otbSVMModelLoad.cxx
 otbSVMModelLoadSave.cxx
+otbSVMModelAccessor.cxx
 otbSVMModelGenericKernelLoadSave.cxx
 #otbSVMMembershipFunctionNew.cxx
 #otbSVMMembershipFunctionLoadModel.cxx
 otbSVMImageModelEstimatorNew.cxx
 otbSVMImageModelEstimatorTrain.cxx
+otbSVMImageModelEstimatorModelAccessor.cxx
 otbSVMPointSetModelEstimatorNew.cxx
 otbSVMPointSetModelEstimatorTrain.cxx
 otbSVMClassifierNew.cxx

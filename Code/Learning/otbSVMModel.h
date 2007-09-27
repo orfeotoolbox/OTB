@@ -19,13 +19,11 @@
 #define _otbSVMModel_h
 
 #include "itkDataObject.h"
+#include "itkVariableLengthVector.h"
 
-//extern "C"
-//{
 #include "svm.h"
-//}
 
-#define Malloc(type,n) (type *)malloc((n)*sizeof(type))
+//#define Malloc(type,n) (type *)malloc((n)*sizeof(type))
 
 namespace otb
 {
@@ -88,6 +86,8 @@ public:
   typedef TInputPixel InputPixelType;
   typedef TLabel LabelType;
 
+  typedef itk::VariableLengthVector<double> ValuesType;
+
 
   /** Type definitions for the training image. */
   //typedef typename TTrainingImage::Pointer TrainingImagePointer;
@@ -131,21 +131,39 @@ public:
 //   void Update() ;
 
   /** Set the number of classes. */
-  itkSetMacro(NumberOfClasses, unsigned int);
+//  itkSetMacro(NumberOfClasses, unsigned int);
+  void SetNumberOfClasses(const unsigned int nr_class)
+  {
+        m_Model->nr_class = (int)nr_class;
+  }
   
   /** Get the number of classes. */
-  itkGetConstReferenceMacro(NumberOfClasses, unsigned int);
+  unsigned int GetNumberOfClasses(void)
+  {
+        return (unsigned int)(m_Model->nr_class);
+  }
+
+  /** Get the number of hyperplane. */
+  unsigned int GetNumberOfHyperplane(void)
+  {
+        return (unsigned int)(m_Model->nr_class - 1);
+  }
 
   /** Gets the problem */
   struct svm_problem GetProblem()
   {
-	  return m_Problem ;
+        return m_Problem ;
   }
 
-  /** Gets the problem */
+  /** Sets the x space */
+  void SetXSpace(struct svm_node* x_space)
+  {
+        m_XSpace = x_space;
+  }
+  /** Gets the x space */
   struct svm_node* GetXSpace()
   {
-	  return x_space;
+        return m_XSpace;
   }
 
   /** Allocates the problem */
@@ -168,10 +186,6 @@ public:
   /** Loads the model from a file */
   void LoadModel(const char* model_file_name);
 
-  int GetNumberOfClasses()
-  {
-    return m_Model->nr_class;
-  }
 
   /** Get/Set methods for generic kernel functor */
   virtual GenericKernelFunctorBase * GetKernelFunctor(void)const
@@ -198,6 +212,20 @@ public:
   {
         return m_Model->SV;
   }
+  /** Return the alphas values (SV Coef) */
+  double ** GetAlpha (void)
+  {
+	return m_Model->sv_coef;
+  }
+
+  /** Evaluate model */
+  double Evaluate(void);
+
+  /** Evaluate hyperplane distance model. 
+    * Return NumberOfClasses*(NumberOfClasses-1)/2 elements
+    */
+  ValuesType EvaluateHyperplaneDistance(void);
+  
   
 protected:
   SVMModel();
@@ -212,7 +240,7 @@ private:
   void operator=(const Self&); //purposely not implemented
 
 //  unsigned int                    m_NumberOfModels;
-  unsigned int         m_NumberOfClasses;
+//  unsigned int         m_NumberOfClasses;
 
   /** Container to hold the SVM model itself */
   struct svm_model* m_Model;
@@ -221,7 +249,7 @@ private:
   struct svm_parameter m_Parameters;
 
   struct svm_problem m_Problem;
-  struct svm_node* x_space;
+  struct svm_node* m_XSpace;
 
   /** Pointer to generic kernel functor */
   GenericKernelFunctorBase * m_GenericKernelFunctor;

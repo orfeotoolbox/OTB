@@ -39,7 +39,7 @@ SVMModel< TInputPixel, TLabel >::SVMModel()
   otbMsgDevMacro(  << "SVMModel::SVMModel - m_Problem.l = " <<  m_Problem.l );
   m_Problem.y = new double[1];
   m_Problem.x = new struct svm_node*[1];
-  x_space = new struct svm_node[1];
+  m_XSpace = new struct svm_node[1];
   m_GenericKernelFunctor = NULL;
 
 }
@@ -55,9 +55,9 @@ SVMModel<TInputPixel, TLabel>::~SVMModel()
   otbMsgDevMacro(  << "SVMModel destructor - y done" );
   delete [] m_Problem.x; //free(m_Problem.x);
   otbMsgDevMacro(  << "SVMModel destructor - x done" );
-  delete [] x_space;//
-  otbMsgDevMacro(  << "SVMModel destructor - x_space done" );
-  //free(x_space);
+  delete [] m_XSpace;//
+  otbMsgDevMacro(  << "SVMModel destructor - m_XSpace done" );
+  //free(m_XSpace);
 */
 
   //svm_destroy_model(m_Model);
@@ -82,11 +82,11 @@ SVMModel<TInputPixel, TLabel>
     delete [] m_Problem.x;
     m_Problem.x = new struct svm_node*[l];//Malloc(struct svm_node* ,l);
     otbMsgDevMacro(  << "SVMModel::AllocateProblem - x done" );
-    delete [] x_space;
-    x_space = new struct svm_node[elements];
-    //free(x_space);
-    //x_space = Malloc(struct svm_node,elements);
-    //otbMsgDevMacro(  << "SVMModel::AllocateProblem - x_space done" );
+    delete [] m_XSpace;
+    m_XSpace = new struct svm_node[elements];
+    //free(m_XSpace);
+    //m_XSpace = Malloc(struct svm_node,elements);
+    //otbMsgDevMacro(  << "SVMModel::AllocateProblem - m_XSpace done" );
 
   }
 
@@ -116,20 +116,13 @@ SVMModel<TInputPixel, TLabel>
 //     aProblem.y = m_Problem.y;
 //     aProblem.x = m_Problem.x;
 
-//     otbMsgDevMacro(  << "SVMModel::GetProblem - x_space " << x_space );
-// //    aNode = x_space;
+//     otbMsgDevMacro(  << "SVMModel::GetProblem - m_XSpace " << m_XSpace );
+// //    aNode = m_XSpace;
 //     otbMsgDevMacro(  << "SVMModel::GetProblem - out" );
-//     return x_space;
+//     return m_XSpace;
   }
 
-template <class TInputPixel, class TLabel >
-struct svm_node*
-SVMModel<TInputPixel, TLabel>
-::GetXSpace()
-  {
-    return x_space;
-
-  }*/
+*/
 
 
 template <class TInputPixel, class TLabel >
@@ -162,10 +155,30 @@ void
 SVMModel<TInputPixel, TLabel>
 ::PrintSelf(std::ostream& os, itk::Indent indent) const
 {  Superclass::PrintSelf(os,indent); }
+
+
+template <class TInputPixel, class TLabel >
+double 
+SVMModel<TInputPixel, TLabel>
+::Evaluate(void)
+{
+        return( svm_predict(m_Model,m_XSpace));
+}
+
+template <class TInputPixel, class TLabel >
+typename SVMModel<TInputPixel, TLabel>::ValuesType 
+SVMModel<TInputPixel, TLabel>
+::EvaluateHyperplaneDistance(void)
+{
+        ValuesType values;
+
+        values.SetSize( m_Model->nr_class*(m_Model->nr_class-1)/2);
+        
+        svm_predict_values(m_Model, m_XSpace, (double*)(values.GetDataPointer()));
+        return (values);
+}
+
 // FIXME
 }// end namespace otb
-
-
-
 
 #endif
