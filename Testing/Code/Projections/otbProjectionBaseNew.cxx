@@ -24,7 +24,7 @@
 #include <iostream>
 
 #include "otbMapProjections.h"
-#include "otbComposite.h"
+#include "otbMapToMapProjection.h"
 
 int otbProjectionBaseNew( int argc, char* argv[] )
 {
@@ -33,8 +33,8 @@ int otbProjectionBaseNew( int argc, char* argv[] )
 
         otb::AlbersProjection::Pointer lAlbersProjection = otb::AlbersProjection::New();
         otb::AzimEquDistProjection::Pointer lAzimEquDistProjection = otb::AzimEquDistProjection::New();
-        typedef otb::Composite<otb::AlbersProjection,otb::AzimEquDistProjection> CompositeType;
-        CompositeType::Pointer lComposite = CompositeType::New();
+        typedef otb::MapToMapProjection<otb::AlbersProjection,otb::AzimEquDistProjection> MapToMapProjectionType;
+        MapToMapProjectionType::Pointer lMapToMapProjection = MapToMapProjectionType::New();
         
     } 
   catch( itk::ExceptionObject & err ) 

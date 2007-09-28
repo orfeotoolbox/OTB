@@ -38,6 +38,7 @@
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
 #include "otbStreamingImageFileWriter.h"
+#include "otbStreamingResampleImageFilter.h"
 
 #include "itkExceptionObject.h"
 #include "itkExtractImageFilter.h"
@@ -59,7 +60,7 @@ int otbRegionProjectionResampler( int argc, char* argv[] )
 
         ossimInit::instance()->initialize(argc, argv);
 
-        if(argc!=8)
+        if(argc!=10)
         {
                 std::cout << argv[0] <<" <input filename> <output filename> <latitude de l'origine> <longitude de l'origine> <taille_x> <taille_y> <NumberOfstreamDivisions>" 
                 << std::endl;
@@ -69,7 +70,7 @@ int otbRegionProjectionResampler( int argc, char* argv[] )
    
    
         typedef otb::Image<unsigned char, 2>    CharImageType;
-        typedef otb::Image<unsigned int, 2>     ImageType;
+        typedef otb::Image<unsigned short, 2>     ImageType;
         typedef otb::ImageFileReader<ImageType>  ReaderType;
 //        typedef otb::ImageFileWriter<ImageType>  WriterType;
         typedef otb::StreamingImageFileWriter<ImageType>  WriterType;
@@ -78,9 +79,10 @@ int otbRegionProjectionResampler( int argc, char* argv[] )
                        ImageType, double >      InterpolatorType;
         typedef itk::RescaleIntensityImageFilter<ImageType,CharImageType>  
                                                 RescalerType;
-        typedef   itk::ResampleImageFilter< ImageType, ImageType  > 
-                                                ResamplerType;
-
+//       typedef itk::ResampleImageFilter< ImageType, ImageType  > 
+//                                                ResamplerType;
+				typedef otb::StreamingResampleImageFilter< ImageType, ImageType  > 
+                                               ResamplerType;
         ImageType::IndexType  			start;
         ImageType::SizeType  			size;
         ImageType::SpacingType  		spacing;
@@ -117,8 +119,8 @@ int otbRegionProjectionResampler( int argc, char* argv[] )
         region.SetSize(size);
         region.SetIndex(start);
 
-        spacing[0]=0.00001;
-        spacing[1]=0.00001;
+        spacing[0]=atof(argv[8]);
+        spacing[1]=atof(argv[9]);
 
         origin[0]=strtod(argv[3], NULL);         //latitude de l'origine.
         origin[1]=strtod(argv[4], NULL);         //longitude de l'origine.
@@ -145,7 +147,8 @@ int otbRegionProjectionResampler( int argc, char* argv[] )
 //        rescaler->SetInput( resampler->GetOutput() );
         
         writer->SetInput(resampler->GetOutput());
-        writer->SetNumberOfStreamDivisions(1000);
+//        writer->SetNumberOfStreamDivisions(1000);
+				writer->SetTilingStreamDivisions();
         otbGenericMsgDebugMacro(<< "Update writer ..." ); 
         writer->Update();
 

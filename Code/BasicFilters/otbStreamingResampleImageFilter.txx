@@ -49,7 +49,6 @@ void
 StreamingResampleImageFilter<TInputImage,TOutputImage,TInterpolatorPrecisionType>
 ::GenerateInputRequestedRegion()
 {
-  
 	Superclass::GenerateInputRequestedRegion();
   
 	if ( this->GetInput() )
@@ -170,17 +169,8 @@ StreamingResampleImageFilter<TInputImage,TOutputImage,TInterpolatorPrecisionType
 		
 		otbDebugMacro(<< "Final Region (After  Crop) : Index(" << region.GetIndex()[0] << "," << region.GetIndex()[1] << ") Size(" <<	region.GetSize()[0] << "," << region.GetSize()[1] << ")");
   }
-	
 }
 
-/*template<class TInputImage, class TOutputImage, class TInterpolatorPrecisionType>
-void 
-StreamingResampleImageFilter<TInputImage,TOutputImage,TInterpolatorPrecisionType>
-::SetInterpolatorNeighborhoodRadius(unsigned int radius)
-{
-	m_InterpolatorNeighborhoodRadius = radius;
-//	m_RadiusIsDeterminedByUser = true;	
-}*/
 
 
 template<class TInputImage, class TOutputImage, class TInterpolatorPrecisionType>

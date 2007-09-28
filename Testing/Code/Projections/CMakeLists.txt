@@ -61,28 +61,60 @@ ADD_TEST(prTvRegionProjectionToulouse ${PROJECTIONS_TESTS}
         500
         500
         10
+#				0.1
+#				0.1
         )
 
 ADD_TEST(prTvRegionProjectionResamplerToulouse ${PROJECTIONS_TESTS}  
         otbRegionProjectionResampler
         ${IMAGEDATA}/TOULOUSE/QuickBird/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF
-        ${TEMP}/RegionProjectionResamplerToulouse.hdr
+        ${TEMP}/prTvRegionProjectionResamplerToulouse.hdr
         43.60 1.44 # Coordonn�es Lat/Long du Capitole Toulouse
         2000
         2000
         200
+				0.00001
+				0.00001
+        )
+				
+ADD_TEST(prTvRegionProjectionResamplerCevennes ${PROJECTIONS_TESTS}  
+        otbRegionProjectionResampler
+        ${IMAGEDATA}/CEVENNES/06FEB12104912-P1BS-005533998070_01_P001.TIF
+        ${TEMP}/prTvRegionProjectionResamplerCevennes.tif
+        44.08
+        3.7
+        500
+				500
+				10
+				0.00001
+        0.00001
         )
 
-#   ADD_TEST(prTvRegionProjectionCevennes ${PROJECTIONS_TESTS}  
-#           otbRegionProjection
-#           ${IMAGEDATA}/CEVENNES/06FEB12104912-P1BS-005533998070_01_P001.TIF
-#           ${TEMP}/RegionProjectionCevennes.png
-#           44.08
-#           3.7
-#           2000
-#           2000
-#           200
-#           )
+ADD_TEST(prTvRegionProjectionCevennes ${PROJECTIONS_TESTS}  
+        otbRegionProjection
+        ${IMAGEDATA}/CEVENNES/06FEB12104912-P1BS-005533998070_01_P001.TIF
+        ${TEMP}/prTvRegionProjectionCevennes.png
+        44.08
+        3.7
+        500
+				500
+				10
+#				0.00001
+#        0.00001
+        )
+				
+ADD_TEST(prTvOrthoRectificationCevennes ${PROJECTIONS_TESTS}  
+        otbOrthoRectificationFilter
+        ${IMAGEDATA}/CEVENNES/06FEB12104912-P1BS-005533998070_01_P001.TIF
+        ${TEMP}/prTvOrthoRectificationCevennes.tif
+        44.08
+        3.7
+        500
+				500
+				10
+				0.00001
+        0.00001
+        )
 
 
 #   ADD_TEST(prTvSensorImageToCartoCevennes ${PROJECTIONS_TESTS}  
@@ -122,6 +154,7 @@ otbCreateProjectionWithOTB.cxx
 otbCreateInverseForwardSensorModel.cxx
 otbRegionProjection.cxx
 otbRegionProjectionResampler.cxx
+otbOrthoRectificationFilter.cxx
 otbSensorImageToCarto.cxx
 otbSensorImageDEMToCarto.cxx
 )

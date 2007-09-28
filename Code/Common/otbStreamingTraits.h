@@ -92,7 +92,7 @@ class ITK_EXPORT StreamingTraits
 			{
 				case SET_NUMBER_OF_STREAM_DIVISIONS :
 	  		{
-	    		numDivisions = numberOfStreamDivision;
+					numDivisions = numberOfStreamDivision;
 	  		}
 				break;
 				case SET_BUFFER_MEMORY_SIZE :

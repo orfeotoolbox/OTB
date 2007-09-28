@@ -55,6 +55,7 @@ InverseSensorModel< TScalarType,NInputDimensions,NOutputDimensions,NParametersDi
 ::TransformPoint(const InputPointType &point) const
 {
 
+//	std::cout << "InverseSensorModel Before : (" << point[0] << "," << point[1] << ")" << std::endl;
 	//On transforme le type "itk::point" en type "ossim::ossimGpt" 
   ossimGpt ossimGPoint(point[0], point[1]);
   
@@ -73,6 +74,7 @@ InverseSensorModel< TScalarType,NInputDimensions,NOutputDimensions,NParametersDi
   outputPoint[0]=ossimDPoint.x;
   outputPoint[1]=ossimDPoint.y;
   
+//	std::cout << "InverseSensorModel After : (" << outputPoint[0] << "," << outputPoint[1] << ")" << std::endl;
 	return outputPoint;
 }
   

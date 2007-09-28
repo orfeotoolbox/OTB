@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbComposite_h
-#define __otbComposite_h
+#ifndef __otbMapToMapProjection_h
+#define __otbMapToMapProjection_h
 
 #include <iostream>
 #include <sstream>
@@ -29,7 +29,7 @@ namespace otb
 {
 
 
-/** \class Composite
+/** \class MapToMapProjection
 
  * \brief Class for switching from a Map Projection coordinates to other Map Projection coordinates.
  * It converts MapProjection1 coordinates to MapProjection2 coordinates by using MapProjection methods.
@@ -42,7 +42,7 @@ template <class TInputMapProjection,
 					class TScalarType=double, 
 					unsigned int NInputDimensions=2,
 					unsigned int NOutputDimensions=2>
-class ITK_EXPORT Composite: public itk::Transform<TScalarType,       // Data type for scalars 
+class ITK_EXPORT MapToMapProjection: public itk::Transform<TScalarType,       // Data type for scalars 
 																									NInputDimensions,  // Number of dimensions in the input space
 																									NOutputDimensions> // Number of dimensions in the output space
 {
@@ -53,7 +53,7 @@ public :
   typedef itk::Transform< TScalarType,
                   				NInputDimensions,
 				                  NOutputDimensions >  				Superclass;
-  typedef Composite                            				Self;
+  typedef MapToMapProjection                            				Self;
   typedef itk::SmartPointer<Self>              				Pointer;
   typedef itk::SmartPointer<const Self>        				ConstPointer;
 
@@ -68,7 +68,7 @@ public :
 	itkNewMacro( Self );
 	
 	/** Run-time type information (and related methods). */
-	itkTypeMacro( Composite, itk::Transform );
+	itkTypeMacro( MapToMapProjection, itk::Transform );
 	
   itkStaticConstMacro(InputSpaceDimension, unsigned int, NInputDimensions);
   itkStaticConstMacro(OutputSpaceDimension, unsigned int, NOutputDimensions);
@@ -88,14 +88,14 @@ public :
 	InputPointType ComputeProjection2ToProjection1(const OutputPointType &point2);
 
 protected:
-	Composite();
-	~Composite();
+	MapToMapProjection();
+	~MapToMapProjection();
 	
 	TInputMapProjection* m_InputMapProjection;
 	TOutputMapProjection* m_OutputMapProjection;  
 	
 private:
-  Composite(const Self&); //purposely not implemented
+  MapToMapProjection(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
 	
 };
@@ -103,7 +103,7 @@ private:
 } // namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbComposite.txx"
+#include "otbMapToMapProjection.txx"
 #endif
 
 #endif

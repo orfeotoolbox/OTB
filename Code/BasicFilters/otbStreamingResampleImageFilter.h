@@ -31,7 +31,7 @@ namespace otb
  * This class add streaming aspect on it::ResampleImageFilter 
  */
 
-template <class TInputImage, class TOutputImage, class TInterpolatorPrecisionType>
+template <class TInputImage, class TOutputImage, class TInterpolatorPrecisionType=double>
 class ITK_EXPORT StreamingResampleImageFilter :  public itk::ResampleImageFilter< TInputImage, TOutputImage, TInterpolatorPrecisionType >
 {
 public:

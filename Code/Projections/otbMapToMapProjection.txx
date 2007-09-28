@@ -15,31 +15,31 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbComposite_txx
-#define __otbComposite_txx
+#ifndef __otbMapToMapProjection_txx
+#define __otbMapToMapProjection_txx
 
-#include "otbComposite.h"
+#include "otbMapToMapProjection.h"
 
 namespace otb
 {
 
 template<class TInputMapProjection, class TOutputMapProjection, class TScalarType, unsigned int NInputDimensions, unsigned int NOutputDimensions>
-Composite<TInputMapProjection, TOutputMapProjection, TScalarType, NInputDimensions, NOutputDimensions>
-::Composite()
+MapToMapProjection<TInputMapProjection, TOutputMapProjection, TScalarType, NInputDimensions, NOutputDimensions>
+::MapToMapProjection()
 : Superclass(SpaceDimension,ParametersDimension)
 {
 }
   
 template<class TInputMapProjection, class TOutputMapProjection, class TScalarType, unsigned int NInputDimensions, unsigned int NOutputDimensions>
-Composite<TInputMapProjection, TOutputMapProjection, TScalarType, NInputDimensions, NOutputDimensions>
-::~Composite()
+MapToMapProjection<TInputMapProjection, TOutputMapProjection, TScalarType, NInputDimensions, NOutputDimensions>
+::~MapToMapProjection()
 {
 }
 
 ///Méthode pour passer de la projection 1 à la projection 2
 template<class TInputMapProjection, class TOutputMapProjection, class TScalarType, unsigned int NInputDimensions, unsigned int NOutputDimensions> 
-typename Composite<TInputMapProjection, TOutputMapProjection, TScalarType, NInputDimensions, NOutputDimensions>::OutputPointType 
-Composite<TInputMapProjection, TOutputMapProjection, TScalarType, NInputDimensions, NOutputDimensions>::ComputeProjection1ToProjection2(const InputPointType &point1)
+typename MapToMapProjection<TInputMapProjection, TOutputMapProjection, TScalarType, NInputDimensions, NOutputDimensions>::OutputPointType 
+MapToMapProjection<TInputMapProjection, TOutputMapProjection, TScalarType, NInputDimensions, NOutputDimensions>::ComputeProjection1ToProjection2(const InputPointType &point1)
 {
 	InputPointType geopoint;
 	OutputPointType point2;	
@@ -54,8 +54,8 @@ Composite<TInputMapProjection, TOutputMapProjection, TScalarType, NInputDimensio
 
 ///Méthode pour passer de la projection 2 à la projection 1
 template<class TInputMapProjection, class TOutputMapProjection, class TScalarType, unsigned int NInputDimensions, unsigned int NOutputDimensions> 
-typename Composite<TInputMapProjection, TOutputMapProjection, TScalarType, NInputDimensions, NOutputDimensions>::InputPointType 
-Composite<TInputMapProjection, TOutputMapProjection, TScalarType, NInputDimensions, NOutputDimensions>::ComputeProjection2ToProjection1(const OutputPointType &point2)
+typename MapToMapProjection<TInputMapProjection, TOutputMapProjection, TScalarType, NInputDimensions, NOutputDimensions>::InputPointType 
+MapToMapProjection<TInputMapProjection, TOutputMapProjection, TScalarType, NInputDimensions, NOutputDimensions>::ComputeProjection2ToProjection1(const OutputPointType &point2)
 {
 
 	OutputPointType geopoint;

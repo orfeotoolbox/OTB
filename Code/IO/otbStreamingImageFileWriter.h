@@ -98,8 +98,10 @@ public:
    */
   void SetAutomaticNumberOfStreamDivisions(void);
 	
-	/** Set the tiling mode for streaming division */
+	/** Set the tiling automatic mode for streaming division */
 	void SetTilingStreamDivisions(void);
+	/** Choose number of divisions in tiling streaming division */
+	void SetTilingStreamDivisions(unsigned long);
 
   /** Return the string to indicate the method use to calculate number of stream divisions. */
   std::string GetMethodUseToCalculateNumberOfStreamDivisions(void);
