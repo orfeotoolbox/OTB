@@ -20,6 +20,7 @@ SET(OTB_INCLUDE_DIRS_BUILD_TREE ${OTB_INCLUDE_DIRS_BUILD_TREE}
   ${OTB_SOURCE_DIR}/Code/DisparityMap
   ${OTB_SOURCE_DIR}/Code/Visu
   ${OTB_SOURCE_DIR}/Code/Gui
+  ${OTB_SOURCE_DIR}/Code/Fusion
   ${OTB_SOURCE_DIR}/Code/Projections
   ${OTB_SOURCE_DIR}/Code/Radiometry
   ${OTB_SOURCE_DIR}/Utilities/BGL

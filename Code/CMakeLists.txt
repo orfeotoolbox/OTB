@@ -10,6 +10,7 @@ DisparityMap
 SpatialReasoning
 Projections
 Radiometry
+Fusion
 ) 
 
 IF(OTB_USE_VISU_GUI)

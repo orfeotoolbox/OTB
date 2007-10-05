@@ -379,6 +379,41 @@ ADD_TEST(StreamingResampleImageFilterCompareWithITK ${BASICFILTERS_TESTS}
 #)
 
 
+
+# -------            otb::StreamingStatisticsVectorImageFilter   ----------------------------
+
+ADD_TEST(bfTuStreamingStatisticsVectorImageFilterNew ${BASICFILTERS_TESTS}  
+         otbStreamingStatisticsVectorImageFilterNew)
+
+ADD_TEST(bfTvStreamingStatisticsVectorImageFilter ${BASICFILTERS_TESTS}  
+	--compare-ascii ${TOL}
+ 		   ${BASELINE_FILES}/bfStreamingStatisticsVectorImageFilterResults.txt
+ 		   ${TEMP}/bfTvStreamingStatisticsVectorImageFilterResults.txt
+         otbStreamingStatisticsVectorImageFilter
+		#${IMAGEDATA}/SPOT5_SCENE01/IMAGERY.TIF
+		${INPUTDATA}/sbuv.png
+		${TEMP}/bfTvStreamingStatisticsVectorImageFilterResults.txt
+		)
+		
+
+# -------            otb::MatrixTransposeMatrixImageFilter   ----------------------------
+
+ADD_TEST(bfTuMatrixTransposeMatrixImageFilterNew ${BASICFILTERS_TESTS}  
+         otbMatrixTransposeMatrixImageFilterNew)
+
+ADD_TEST(bfTvMatrixTransposeMatrixImageFilter ${BASICFILTERS_TESTS}  
+	--compare-ascii ${TOL}
+ 		   ${BASELINE_FILES}/bfTvMatrixTransposeMatrixImageFilterResults.txt
+ 		   ${TEMP}/bfMatrixTransposeMatrixImageFilterResults.txt
+         otbMatrixTransposeMatrixImageFilter
+		${INPUTDATA}/multiSpect.tif
+		${INPUTDATA}/multiSpectInterp.tif
+		${TEMP}/bfTvMatrixTransposeMatrixImageFilterResults.txt
+		)
+
+
+
+
 # A enrichir
 SET(BasicFilters_SRCS
 otbLeeFilter.cxx
@@ -424,6 +459,10 @@ otbVectorImageTo3DScalarImageFilter.cxx
 otbStreamingResampleImageFilterNew.cxx
 otbStreamingResampleImageFilter.cxx
 otbStreamingResampleImageFilterCompareWithITK.cxx
+otbStreamingStatisticsVectorImageFilterNew.cxx
+otbStreamingStatisticsVectorImageFilter.cxx
+otbMatrixTransposeMatrixImageFilterNew.cxx
+otbMatrixTransposeMatrixImageFilter.cxx
 )
 
 
