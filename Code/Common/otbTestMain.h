@@ -726,7 +726,7 @@ int RegressionTestAsciiFile(const char * testAsciiFileName, const char * baselin
     		std::cout << "Diff ASCII File     :"<<diffAsciiFileName << std::endl;
                 
                 std::cout << "Nb lines differents :"<<listStrDiffLineFileRef.size() << std::endl;
-                for( unsigned int i ; i  < listStrDiffLineFileRef.size() ; i++)
+                for( unsigned int i = 0 ; i  < listStrDiffLineFileRef.size() ; i++)
                 {
     		        std::cout << "   -------------------------------"<<std::endl;
     		        std::cout << "   Base << "<<listStrDiffLineFileRef[i]<<std::endl;
