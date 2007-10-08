@@ -387,7 +387,7 @@ ADD_TEST(bfTuStreamingStatisticsVectorImageFilterNew ${BASICFILTERS_TESTS}
 
 ADD_TEST(bfTvStreamingStatisticsVectorImageFilter ${BASICFILTERS_TESTS}  
 	--compare-ascii ${TOL}
- 		   ${BASELINE_FILES}/bfStreamingStatisticsVectorImageFilterResults.txt
+ 		   ${BASELINE_FILES}/bfTvStreamingStatisticsVectorImageFilterResults.txt
  		   ${TEMP}/bfTvStreamingStatisticsVectorImageFilterResults.txt
          otbStreamingStatisticsVectorImageFilter
 		#${IMAGEDATA}/SPOT5_SCENE01/IMAGERY.TIF
@@ -404,7 +404,7 @@ ADD_TEST(bfTuMatrixTransposeMatrixImageFilterNew ${BASICFILTERS_TESTS}
 ADD_TEST(bfTvMatrixTransposeMatrixImageFilter ${BASICFILTERS_TESTS}  
 	--compare-ascii ${TOL}
  		   ${BASELINE_FILES}/bfTvMatrixTransposeMatrixImageFilterResults.txt
- 		   ${TEMP}/bfMatrixTransposeMatrixImageFilterResults.txt
+ 		   ${TEMP}/bfTvMatrixTransposeMatrixImageFilterResults.txt
          otbMatrixTransposeMatrixImageFilter
 		${INPUTDATA}/multiSpect.tif
 		${INPUTDATA}/multiSpectInterp.tif
