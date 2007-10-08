@@ -14,21 +14,21 @@ FILE(GLOB_RECURSE ossim_kbool_SRCS "kbool/*.cpp" "kbool/*.c")
 FILE(GLOB_RECURSE ossim_dll_main_SRCS "dll_main/*.cpp")
 
 # Adjust the compiler flags to avoid problems with ossim code.
-IF(CMAKE_COMPILER_IS_GNUCC)
+IF(CMAKE_COMPILER_IS_GNUCXX)
   # Hide warnings in ossim code.
-  SET(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -w")
+  SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -w")
 
   # CMake versions before 2.4 did not put the source-file-specific flags
   # after the directory-level flags.  Remove optimization flags from the
-  # CMAKE_C_FLAGS* variables so they can be overridden.
+  # CMAKE_CXX_FLAGS* variables so they can be overridden.
   IF("${CMAKE_MAJOR_VERSION}.${CMAKE_MINOR_VERSION}" LESS 2.4)
     FOREACH(c "" "_DEBUG" "_RELEASE" "_MINSIZEREL" "_RELWITHDEBINFO")
       STRING(REGEX REPLACE
-        "-O[^ ]*( |$)" "" CMAKE_C_FLAGS${c} "${CMAKE_C_FLAGS${c}}")
+        "-O[^ ]*( |$)" "" CMAKE_CXX_FLAGS${c} "${CMAKE_CXX_FLAGS${c}}")
     ENDFOREACH(c)
   ENDIF("${CMAKE_MAJOR_VERSION}.${CMAKE_MINOR_VERSION}" LESS 2.4)
 
-ENDIF(CMAKE_COMPILER_IS_GNUCC)
+ENDIF(CMAKE_COMPILER_IS_GNUCXX)
 
 ADD_LIBRARY(otbossimKBool ${ossim_kbool_SRCS})
 
