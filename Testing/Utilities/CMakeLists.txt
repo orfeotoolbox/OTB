@@ -16,10 +16,13 @@ SET(EPSILON 0.00000000001)
 SET(UTILITIES_TESTS ${CXX_TEST_PATH}/otbUtilitiesTests)
 
 
-
-ADD_TEST(utOssimIntegrationTest ${UTILITIES_TESTS}
-ossimIntegrationTest
-)
+# Commentaire parce que trop long. Supprimer commentaire si besoin de tester integration lib Ossim
+#ADD_TEST(utOssimIntegrationTest ${UTILITIES_TESTS}
+#        ossimIntegrationTest
+#        ossimTiffWriter
+#        ${IMAGEDATA}/TOULOUSE/QuickBird/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF
+#        ${TEMP}/utOssimIntegration.tif
+#)
 
 ADD_TEST(utOssimKeywordlistToulouseQuickBirdTest ${UTILITIES_TESTS}
 --compare-ascii ${TOL}  ${BASELINE_FILES}/utOssimKeywordlistToulouseQuickBird.txt

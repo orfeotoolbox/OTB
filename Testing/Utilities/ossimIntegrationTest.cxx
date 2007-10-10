@@ -62,6 +62,7 @@ int ossimIntegrationTest(int argc, char* argv[])
    if(argc!=4)
    {
       usage();
+      itkGenericExceptionMacro( << "Usage error !" );
       return EXIT_FAILURE;
    }
    else
