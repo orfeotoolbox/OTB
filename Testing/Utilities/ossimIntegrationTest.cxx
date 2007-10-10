@@ -43,6 +43,8 @@
 // without this alll the important factories are not created.
 #include "init/ossimInit.h"
 
+#include "itkMacro.h"
+
 using namespace std;
 
 void usage();
@@ -52,6 +54,9 @@ ossimProjection* newUtmView(const ossimGpt& centerGround,
 
 int ossimIntegrationTest(int argc, char* argv[])
 {
+  try 
+    {
+
    ossimInit::instance()->initialize(argc, argv);
 
    if(argc!=4)
@@ -72,14 +77,14 @@ int ossimIntegrationTest(int argc, char* argv[])
 
       if(!handler)
       {
-         cout << "Unable to open input image: "<< argv[2] << endl;
-         return 1;
+         itkGenericExceptionMacro( << "Unable to open input image: " << std::string(argv[2]) );
+         return EXIT_FAILURE;
       }
       if(!writer)
       {
-         cout << "Unable to create writer of type: " << argv[1] << endl;
          delete handler;
-         return 1;
+         itkGenericExceptionMacro( << "Unable to create writer of type: " << std::string(argv[1]) );
+         return EXIT_FAILURE;
       }
 
       ossimKeywordlist geom;
@@ -91,10 +96,10 @@ int ossimIntegrationTest(int argc, char* argv[])
 
       if (!inputProjection)
       {
-         cout << "the input image has no input projection and can't be reprojected" << endl;
          delete handler;
          delete writer;
-         return 1;
+         itkGenericExceptionMacro( << "the input image has no input projection and can't be reprojected\n" );
+         return EXIT_FAILURE;
       }
 
       // --------------------- SETUP The Resampleing process -------------
@@ -137,7 +142,20 @@ int ossimIntegrationTest(int argc, char* argv[])
       delete handler;
    }
 
-   return EXIT_SUCCESS;
+    }
+  catch( itk::ExceptionObject & err ) 
+    { 
+    std::cout << "Exception itk::ExceptionObject levee !" << std::endl; 
+    std::cout << err << std::endl; 
+    return EXIT_FAILURE;
+    } 
+  catch (...) 
+    {
+    std::cerr << "Unknowed exception thrown" << std::endl;
+    return EXIT_FAILURE;
+    }
+
+  return EXIT_SUCCESS; 
 }
 
 
