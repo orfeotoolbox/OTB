@@ -216,11 +216,10 @@ int main(int ac, char* av[] )
       {
       // Invoke the test's "main" function.
       result = (*f)(ac-1, av+1);
-      std::cout << "Test result:"<<result<<std::endl;
       
       if (result!=EXIT_SUCCESS)
       {
-        std::cout << "-> Test EXIT FAILURE."<<std::endl;
+        std::cout << "-> Test EXIT FAILURE ("<<result<<)"."<<std::endl;
        	itkGenericExceptionMacro(<<"Bad function return, no regresion test !");
       }
       std::cout << " -> Test EXIT SUCCESS."<<std::endl;
