@@ -53,6 +53,10 @@ ADD_EXECUTABLE(ExtractRoadExample ExtractRoadExample.cxx)
 TARGET_LINK_LIBRARIES(ExtractRoadExample OTBIO OTBCommon OTBFeatureExtraction
 ITKCommon ITKBasicFilters)
 
+ADD_EXECUTABLE(SeamCarvingExample SeamCarvingExample.cxx)
+TARGET_LINK_LIBRARIES(SeamCarvingExample OTBIO OTBCommon OTBFeatureExtraction
+ITKCommon ITKBasicFilters)
+
 IF( NOT OTB_DISABLE_CXX_TESTING AND NOT OTB_DISABLE_CXX_EXAMPLES_TESTING )
 
 SET(BASELINE ${OTB_DATA_ROOT}/Baseline/Examples/FeatureExtraction)
