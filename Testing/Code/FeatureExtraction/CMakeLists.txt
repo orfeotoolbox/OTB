@@ -759,6 +759,9 @@ otbLikehoodPathListFilterNew.cxx
 otbLikehoodPathListFilter.cxx
 otbRoadExtractionFilterNew.cxx
 otbRoadExtractionFilter.cxx
+otbAddCarvingPathFilterNew.cxx
+otbRemoveCarvingPathFilterNew.cxx
+otbImageToCarvingPathFilterNew.cxx
 )
 
 
