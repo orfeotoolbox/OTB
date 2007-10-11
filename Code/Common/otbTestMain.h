@@ -219,7 +219,7 @@ int main(int ac, char* av[] )
       
       if (result!=EXIT_SUCCESS)
       {
-        std::cout << "-> Test EXIT FAILURE ("<<result<<)"."<<std::endl;
+        std::cout << "-> Test EXIT FAILURE ("<<result<<")."<<std::endl;
        	itkGenericExceptionMacro(<<"Bad function return, no regresion test !");
       }
       std::cout << " -> Test EXIT SUCCESS."<<std::endl;
