@@ -308,10 +308,44 @@ for every possible shift within an exploration area inside the slave
 image (figure \ref{zones}). \\
 
 \begin{figure}
-\begin{center}{\includegraphics[width=0.8\hsize]{zones.eps}}
+%\begin{center}{\includegraphics[width=0.8\hsize]{zones.eps}}
+  \begin{center}
+    \begin{tikzpicture}[scale=0.35]
+    \draw[fill=green!20] (5,5) rectangle (15,15);
+    \draw[step=0.5, gray, very thin] (5,5) grid (15,15);
+    \node (Reference) at (10,3) {Reference Image};
+
+    \draw[fill=blue!20] (25,5) rectangle (35,15);
+    \draw[step=0.5, gray, very thin] (25,5) grid (35,15);
+    \node (Reference) at (30,3) {Secondary Image};
+    
+    \draw[fill=red!60] (7,12) circle (0.2);
+    \draw[fill=red!60] (27,12) circle (0.2);
+    \node (CPs) at (20,14) {\tiny Candidate points};
+    
+    \draw[thick] (6.5,11.5) rectangle +(1,1);
+    \node (EW) at (20,13) {\tiny Estimation window};
+    
+    \draw[fill=gray, opacity=0.5] (25,10) rectangle +(4,4);
+    \node (SW) at (20,12) {\tiny Search window};
+    
+    \draw[thick] (25,13) rectangle +(1,1);
+    \node (SEW) at (20,11) {\tiny Similarity estimation};
+    
+    \draw[red,->] (25.5,13.5) --  ++(3,0) -- ++(0,-0.5) -- ++(-3,0) -- ++(0,-0.5) --++(3,0) -- ++(0,-0.5)  ;
+    \node (OPT) at (20,10) {\tiny Similarity optimization};
+    
+    \draw[fill=green!60] (28,10.5) circle (0.2);
+    \node (OPTF) at (20,9) {\tiny Optimum};
+    
+    \draw[blue!80,->] (27,12) -- (28,10.5);
+    \node (Deltas) at (20,8) {$\scriptstyle{\Delta_x,\Delta_y}$};
+    
+  \end{tikzpicture}
+    \end{center}
 \caption{Estimation of the correlation surface.}
 \label{zones}
-\end{center}\end{figure}
+\end{figure}
 
 
 That means that for each position we compute the correlation

@@ -205,6 +205,8 @@ SET( OTB_EXAMPLES_SRCS
   ${OTB_SOURCE_DIR}/Examples/Registration/ImageRegistration2.cxx
   ${OTB_SOURCE_DIR}/Examples/Registration/ImageRegistration5.cxx
   ${OTB_SOURCE_DIR}/Examples/Registration/ImageRegistration9.cxx
+  ${OTB_SOURCE_DIR}/Examples/Projections/SensorModelExample.cxx  
+  ${OTB_SOURCE_DIR}/Examples/Projections/OrthoRectificationExample.cxx
   ${OTB_SOURCE_DIR}/Examples/DisparityMap/SimpleDisparityMapEstimationExample.cxx
   ${OTB_SOURCE_DIR}/Examples/FeatureExtraction/AlignmentsExample.cxx
   ${OTB_SOURCE_DIR}/Examples/FeatureExtraction/RatioLineDetectorExample.cxx

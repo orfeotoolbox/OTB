@@ -1,11 +1,333 @@
-\chapter{Ortho-rectification}
+\chapter{Ortho-registration}
 
 
-This chapter introduces 
+\begin{figure}[h]
+  \begin{tikzpicture}[scale=0.25]
+    \tiny
+    \draw[fill=black!10] (-1,-12) rectangle (53,17);
+     \foreach \x in {5,...,1}
+       \draw[fill=red] (\x,\x) rectangle +(4,4);
+     \node[fill=black!10, text width= 1.2cm] (InputSeries) at
+       (3,-1) {Input Series};
+     
+     \draw[->,thick] (9,5) --  +(3,0);
+     
+     \draw[fill=black!30,rounded corners=2pt] (12.2,3) rectangle +(6,4);
+     \node[text width= 0.7cm] (SensorModel) at (15,5) {Sensor Model};
+     
+     \draw[fill=red!30] (1,-10) rectangle +(4,4);
+     \node[fill=black!10, text width= 1.2cm] (DEM) at
+       (5,-11) {DEM};
+     
+     \draw[->,thick] (3,-5.5) --  ++(0,3) -- ++(12,0) -- ++(0,5);
+     
+     \draw[->,thick] (18.5,5) --  +(3,0);
+     
+     \foreach \x in {5,...,1}
+       \draw[fill=blue,xshift=600pt] (\x,\x) rectangle +(4,4);
+     \node[fill=black!10, text width= 2.8cm] (GeographicGeometry) at
+       (28,-1) {Geographic Geometry};
+
+      
+
+       \draw[->,thick] (25.5,8.5) --  +(0,3);
+       
+     \draw[fill=black!30,rounded corners=2pt] (22,12) rectangle +(6.5,4);
+     \node[text width= 0.7cm] (HomPoExtr) at (24,14) {Homologous
+     Points};
+
+     \draw[->,thick] (21.5,14) --  +(-2.5,0);
+
+     \draw[fill=black!30,rounded corners=2pt] (12,12) rectangle +(6.5,4);
+     \node[text width= 1.3cm] (BBAdj) at (15.5,14) {Bundle-block
+     Adjustment};
+
+     \draw[->,thick] (15,11.5) --  +(0,-4);
+
+     
+      \draw[->,thick] (30,5) --  +(3,0);
+      
+     \draw[fill=black!30,rounded corners=2pt] (33.2,3) rectangle +(6,4);
+     \node[text width= 0.7cm] (MapProjection) at (36,5) {Map Projections};
+     
+
+     
+     \draw[->,thick] (39.5,5) --  +(3,0);
+     
+     \foreach \x in {5,...,1}
+       \draw[fill=green,xshift=1200pt] (\x,\x) rectangle +(4,4);
+     \node[fill=black!10, text width= 1.8cm] (CartographicGeometry) at
+       (47,-1) {Cartographic Geometry};
+     
+     %\draw[->,thick] (36,2) --  ++(0,-10) -- ++(-30,0);
+       
+  \end{tikzpicture}
+  \itkcaption[Image Ortho-registration Procedure]{Image Ortho-registration Procedure.}
+\label{fig:ImageOrtho-registrationProcedure}
+\end{figure}
+
+This chapter introduces the functionnalities available in OTB for
+image ortho-registration. We define ortho-registration as the
+procedure allowing to transform an image in sensor geometry to a
+geographic or cartographic projection.\\
+
+Figure \ref{fig:ImageOrtho-registrationProcedure} shows a synoptic
+view of the different steps involved in a classical ortho-registration
+processing chain able to deal with image series. These steps are the following:
+\begin{itemize}
+  \item Sensor modelling: the geometric sensor model allows to convert
+  image coordinates (line, column) into geographic coordinates
+  (latitude, longitude); a rigorous modelling needs a digital
+  elevation model (DEM) in order to take into account the terrain
+  topography.
+  \item Bundle-block adjustment: in the case of image series, the
+  geometric models and their parameters can be refined by using
+  homologous points between the images. This is an optional step and
+  not currently implemented in OTB.
+  \item Map projection: this step allows to go from geographic
+  coordinates to some specific cartographic projection as Lambert,
+  Mercator or UTM.
+\end{itemize}
 
 
-%% \section{Disparity Maps}
-%% \ifitkFullVersion
-%% \label{sec:DisparityMaps}
-%% \fi
+\section{Sensor Models}
+\ifitkFullVersion
+\label{sec:SensorModels}
+\fi
 
+A sensor model is a set of equations giving the relationship between
+image pixel $(l,c)$ coordinates and ground $(X,Y)$ coordinates for every
+pixel in the image. Typically, the ground coordinates are given in a
+geographic projection (latitude, longitude). The sensor model
+can be expressed either from image to ground -- forward model -- or
+from ground to image -- inverse model. This can be written as follows:
+
+\begin{displaymath}
+  \begin{array}{cc}
+    Forward & \\
+    X = f_x(l,c,h,\vec\theta) & Y = f_y(l,c,h,\vec\theta)\\
+     & \\ 
+    Inverse & \\
+    l = g_l(X,Y,h,\vec\theta) & c = g_c(X,Y,h,\vec\theta)
+  \end{array}
+\end{displaymath}
+
+Where $\vec\theta$ is the set of parameters which describe the sensor
+and the acquisition geometry (platform altitude, viewing angle, focal
+length for optical sensors, doppler centroid for SAR images, etc.).\\
+
+In OTB, sensor models are implemented as \doxygen{itk}{Transform}s
+(see section \ref{sec:Transforms} for details), which are the
+appropiate way to express coordinate changes. The base class for
+sensor models is \doxygen{otb}{SensorModelBase} from which the classes
+\doxygen{otb}{InverseSensorModel} and
+\doxygen{otb}{ForwardSensorModel} inherit.\\
+
+As one may note from the model equations, the height of the ground
+must be known. Usually, that means that a Digital Elevation Model,
+DEM, will be used.\\
+  
+
+\subsection{Types of Sensor Models}
+\label{sec:TypesofSensorModels}
+There exist 2 main types of sensor models. On one hand we have the
+so-called {\em physical models}, which are rigorous, complex,
+eventually highly non-linear equations of the sensor geometry. As
+such, they are difficult to inverse (obtain the inverse model from the
+forward one and vice-versa). They have the big advantage of having
+parameters with physical meaning (angles, distances, etc.). They are
+specific of each sensor, which means that a library of models is
+needed in the software and that it has to be updated every time a new
+sensor is available.\\
+
+On the other hand, we have general analytical models, which
+approximate the physical models. These models can take the form of
+polynomials or ratios of polynomials, the so-called rational
+polynomial functions or Rational Polynomial Coefficients, RPC, also
+known as {\em Rapid Positioning Capability}.
+Since they are approximations, they are less accurate than the
+physical models. However, the achieved accuracy is usually high: in
+the case of Pléiades, RPC models have errors lower than 0.02 pixels
+with respect to the physical model. Since these models have a standard
+form they are easier to use ans implement. However, they have the
+drawback of having parameters (coefficients, actually) without
+physical meaning.\\
+
+OTB, through the use of the OSSIM library --
+\url{http://www.ossim.org} -- offers models for most of current
+sensors either throug a physical or an analytical approach. This is
+transparent for the user, since the geometrical model for a given
+image is instantiated using the information stored in its meta-data.\\
+
+\subsection{Using Sensor Models}
+\label{sec:UsingSensorModels}
+
+The transformation of an image in sensor geometry to geographic
+geometry can be done using the following steps.
+  \begin{enumerate}
+    \item Read image meta-data and instantiate the model with the
+    given parameters.
+  \item Define the ROI in ground coordinates (this is your output
+  pixel array)
+  \item Iterate through the pixels of coordinates $(X,Y)$:
+    \begin{enumerate}
+      \item Get $h$ from the DEM
+      \item Compute $(c,l) = G(X,Y,h,\vec\theta)$
+      \item Interpolate pixel values if $(c,l)$ are not grid coordinates.
+    \end{enumerate}
+  \end{enumerate}
+
+Actually, in OTB, you don't have to manually instantiate the sensor
+model which is appropriate to your image. That is, you don't have to
+manually choose a SPOT5 or a Quickbird sensor model. This task is
+automatically performed by the \doxygen{otb}{ImageFileReader} class in
+a similar way as the image format recognition is done. The appropriate
+sensor model will then be included in the image meta-data, so you can
+access it when needed.
+
+\ifitkFullVersion
+\input{SensorModelExample.tex}
+\fi
+
+
+
+\subsection{Limits of the Approach}
+\label{LimitsoftheApproach}
+
+As you may understand by now, accurate geo-referencing needs accurate
+DEM and also accurate sensor models and parameters. In the case where
+we have several images acquired over the same area by different
+sensors or different geometric configurations, geo-referencing (geographical coordinates) or ortho-rectification
+(cartographic coordinates) is not usually enough. Indeed, when working
+with image series we usually want to compare them (fusion, change
+detection, etc.) at the pixel level.\\
+
+Since common DEM and sensor parameters do not allow for such an
+accuracy, we have to use clever strategies to improve the
+co-registration of the images. The classical one consists in refining
+the sensor parameters by taking homologous points between the images
+to co-register. This is called bundle block adjustment and will be
+implemented in comming versions of OTB.
+
+Even if the model parameters are refined, errors due to DEM accuracy
+can not be eliminated. In this case, image to image registration can
+be applied. This approaches are presented in chapters
+\ref{chap:ImageRegistration} and \ref{sec:DisparityMapEstimation}.
+
+%% \section{Bundle-block adjustment}
+%% Problem position
+%%   \begin{itemize}
+%%     \item The image series is geo-referenced (using the available DEM,
+%%     and the prior sensor parameters).
+%%     \item We assume that homologous points (GCPs, etc.) can be easily
+%%     obtained from the geo-referenced series : $HP_i = (X_i,Y_i,h_i)$
+%%     \item For each image, and each point, we can write:
+%%     $(l_{ij},c_{ij}) = G_j(X_i,Y_i,h_i,\vec\theta_j)$
+%%   \end{itemize}
+
+%% \begin{tikzpicture}[scale=0.15]
+%% \draw[fill=yellow!20] (-5.5,-15.5) rectangle (5.5,-5.5);
+%%     \draw[step=0.5, gray, very thin] (-5.5,-15.5) grid (5.5,-5.5);
+
+%%     \draw[fill=green!20,rotate=10] (-15.5,0.5) rectangle (-5.5,10.5);
+%%     \draw[step=0.5, gray, very thin,rotate=10] (-15.5,0.5) grid>
+%%     (-5.5,10.5);
+
+%%     \draw[fill=blue!20,rotate=-10] (5.5,0.5) rectangle (15.5,10.5);
+%%     \draw[step=0.5, gray, very thin,rotate=-10] (5.5,0.5) grid
+%%     (15.5,10.5);
+
+    
+%%     \draw[fill=red!70] (1,-11) circle (0.2);
+    
+%%     \draw (1,-11) .. controls +(30:1cm) and +(60:1cm) .. (-10,7);
+    
+%%     \draw[fill=red!70] (-10,7) circle (0.2);
+    
+%%     \node (eq1) at (-12.2,-4) {$\scriptstyle{G_1(X_i,Y_i,h_i,\vec\theta_1)}$};
+    
+%%     \draw (1,-11) .. controls +(-30:1cm) and +(-60:1cm) .. (10,7);
+    
+%%     \draw[fill=red!70] (10,7) circle (0.2);
+    
+%%     \node (eq2) at (7.2,-3) {$\scriptstyle{G_2(X_i,Y_i,h_i,\vec\theta_2)}$};
+    
+%% \end{tikzpicture}
+%% \begin{itemize}
+%%       \item Everything is known.
+%% \end{itemize}
+
+
+
+%% Model refinement
+%%   \begin{itemize}
+%%     \item If we define $\vec\theta_j^R = \vec\theta_j +
+%%     \vec{\Delta\theta_j}$ as the refined parameters,
+%%     $\vec{\Delta\theta_j}$ are the unknowns of the model refinement
+%%     problem.
+%%     \item We have much more equations than unknowns if enough HPs are
+%%     found.
+%%     \item We solve using non-linear least squares estimation.
+%%       \begin{itemize}
+%% 	\item The derivatives of the sensor model with respect to its
+%% 	parameters are needed.
+%%       \end{itemize}
+%%   \end{itemize}
+  
+
+%% Homologous point extraction
+%% From manual to automatic procedures
+%% \begin{itemize}
+%%   \item Manual extraction can be used for a few images and for a few
+%%   points
+%%   \item We are interested in many images (long time series) and many
+%%   points (in order to reduce registration errors)
+%%   \item Proposed procedure
+%%     \begin{enumerate}
+%%       \item Choose candidate points
+%%       \item Define a similarity measure
+%%       \item Optimize the measure
+%%     \end{enumerate}
+%% \end{itemize}
+
+%% Salient points
+%% Similarity measures
+
+  
+\section{Map Projections}
+\ifitkFullVersion
+\label{sec:MapProjections}
+\fi
+
+Map projections describe the link between geographic coordinates and
+cartographic ones. So map projections allow to represent a 2-dimensional manifold of a
+3-dimensional space (the Earth surface) in a 2-dimensional space (a
+map which used to be a sheet of paper!). This geometrical
+transformation has not a unique solution, so over the cartography
+history, every country or region in the world has been able to express
+the belief of being the center of the universe. In other words, every
+cartographic projection tries to minimize the distortions of the 3D to
+2D transformation for a given point of the Earth surface\footnote{We
+  proposed to optimize an OTB map projection for Toulouse, but we
+  didn't get any help from OTB users.}.
+
+In OTB the \doxygen{otb}{MapProjection} class is derived from the
+\doxygen{itk}{Transform} class, so the coordinate transformation
+points are overloaded with map projection equations. The
+\doxygen{otb}{MapProjection} class is templated over the type of
+cartographic projection, which is provided by the OSSIM library. In
+order to hide the complexity of the approach, some type definitions
+for the more common projections are given in the file
+\code{otbMapProjections.h} file.
+
+You will seldom use a map projection by itself, but rather in an
+ortho-rectification framework. An example is given in the next section.
+
+
+
+
+\section{Ortho-rectification with OTB}
+\ifitkFullVersion
+\label{sec:OrthorectificationwithOTB}
+\input{OrthoRectificationExample.tex}
+\fi
