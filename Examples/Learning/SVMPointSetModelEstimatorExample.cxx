@@ -264,7 +264,27 @@ int main( int argc, char* argv[] )
 // Software Guide : BeginCodeSnippet      
    
   estimator->SaveModel("svm_model.svm");
-// Software Guide : EndCodeSnippet      
+// Software Guide : EndCodeSnippet
+
+// Software Guide : BeginLatex
+//
+// The \doxygen{otb}{otbSVMModel} class provides several accessors in
+// order to get some information about the result of the learning
+// step. For instance, one can get the number of support vectors kept
+// to define the separation surface by using the
+// \code{GetNumberOfSupportVectors()}. This can be very useful to
+// detect some kind of overlearning (the number of support vectors is
+// close to the number of examples). One can also get the SVs
+// themselves by calling the \code {GetSupportVectors()}. The $\alpha$
+// values for the support vectors can be accessed by using the
+// \code{GetAlpha()} method. Finally the \code{Evaluate()} method will
+// return the result of the classification of a sample and the
+// \code{EvaluateHyperplaneDistance()} will return the distance of
+// the sample to the separating surface (or surfaces in the case of
+// multi-class problems).
+//
+// Software Guide : EndLatex
+    
 
   return EXIT_SUCCESS;
 }

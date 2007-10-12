@@ -18,6 +18,7 @@ SUBDIRS(
   Iterators
   MultiScale
   DisparityMap
+  Projections
   Registration
   Tutorials
 )
