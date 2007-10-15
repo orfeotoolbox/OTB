@@ -228,6 +228,25 @@ int main(int argc, char ** argv)
   writer->SetInput( rescaler->GetOutput() );
   writer->Update();
   // Software Guide : EndCodeSnippet
+  
+  // Software Guide : BeginLatex
+  //
+  // Figure~\ref{fig:SEAMCARVING_FILTER} shows the result of applying
+  // the seam carving filter to a satellite image.
+  // \begin{figure}
+  // \center
+  // \includegraphics[width=0.44\textwidth]{QB_Suburb.png}
+  // \includegraphics[width=0.44\textwidth]{SeamCarvingExampleOutput.png}
+  // \itkcaption[Seam carving filter application]{Result of applying
+  // the \doxygen{otb}{ImageToCarvingPathFilter} followed by the 
+  // \doxygen{otb}{RemoveCarvingPathFilter} to Quickbird
+  // image. From left to right : original image, reduced image removing the 50
+  // seams with the lowest energy.}  
+  // \label{fig:SEAMCARVING_FILTER} 
+  // \end{figure}
+  //
+  // Software Guide : EndLatex
+  
 
   return EXIT_SUCCESS;
 }
