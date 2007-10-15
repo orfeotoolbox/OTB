@@ -57,6 +57,10 @@ ADD_EXECUTABLE(SeamCarvingExample SeamCarvingExample.cxx)
 TARGET_LINK_LIBRARIES(SeamCarvingExample OTBIO OTBCommon OTBFeatureExtraction
 ITKCommon ITKBasicFilters)
 
+ADD_EXECUTABLE(SeamCarvingOtherExample SeamCarvingOtherExample.cxx)
+TARGET_LINK_LIBRARIES(SeamCarvingOtherExample OTBIO OTBCommon OTBFeatureExtraction
+ITKCommon ITKBasicFilters)
+
 IF( NOT OTB_DISABLE_CXX_TESTING AND NOT OTB_DISABLE_CXX_EXAMPLES_TESTING )
 
 SET(BASELINE ${OTB_DATA_ROOT}/Baseline/Examples/FeatureExtraction)
@@ -211,6 +215,28 @@ ADD_TEST(ExtractRoadExampleTest ${EXE_TESTS}
         ${INPUTDATA}/qb_RoadExtract.tif
         ${TEMP}/ExtractRoadExampleOutput.png
 	337 557 432 859 1.0 0.00005 1.0 0.39269 1.0 10.0 25.
+)
+
+# ------- SeamCarvingExamplesTest----------
+
+ADD_TEST(SeamCarvingExampleTest ${EXE_TESTS}
+        --compare-image ${TOL}
+        ${BASELINE}/SeamCarvingExampleOutput.png
+        ${TEMP}/SeamCarvingExampleOutput.png
+        SeamCarvingExampleTest
+        ${INPUTDATA}/QB_Suburb.png
+        ${TEMP}/SeamCarvingExampleOutput.png
+	50
+)
+
+ADD_TEST(SeamCarvingOtherExampleTest ${EXE_TESTS}
+        --compare-image ${TOL}
+        ${BASELINE}/SeamCarvingOtherExampleOutput.png
+        ${TEMP}/SeamCarvingOtherExampleOutput.png
+        SeamCarvingOtherExampleTest
+        ${INPUTDATA}/QB_Suburb.png
+        ${TEMP}/SeamCarvingOtherExampleOutput.png
+	50
 )
 
 INCLUDE_DIRECTORIES("${OTBTesting_BINARY_DIR}")

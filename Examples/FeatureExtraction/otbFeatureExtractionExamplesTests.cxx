@@ -36,6 +36,8 @@ REGISTER_TEST(RatioLineDetectorExampleTest);
 REGISTER_TEST(AlignmentsExampleTest);
 REGISTER_TEST(ExtractRoadByStepsExampleTest);
 REGISTER_TEST(ExtractRoadExampleTest);
+REGISTER_TEST(SeamCarvingExampleTest);
+REGISTER_TEST(SeamCarvingOtherExampleTest);
 }
 
 #undef main
@@ -81,3 +83,11 @@ REGISTER_TEST(ExtractRoadExampleTest);
 #undef main
 #define main ExtractRoadExampleTest
 #include "ExtractRoadExample.cxx"
+
+#undef main
+#define main SeamCarvingExampleTest
+#include "SeamCarvingExample.cxx"
+
+#undef main
+#define main SeamCarvingOtherExampleTest
+#include "SeamCarvingOtherExample.cxx"

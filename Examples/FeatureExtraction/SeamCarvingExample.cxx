@@ -39,7 +39,7 @@
 //  Software Guide : BeginCommandLineArgs
 //    INPUTS: {QB_Suburb.png}
 //    OUTPUTS: {SeamCarvingExampleOutput.png}
-//    100
+//    50
 //  Software Guide : EndCommandLineArgs
 
 
@@ -154,8 +154,6 @@ int main(int argc, char ** argv)
   
   for (int i=0; i<iteration; i++)
   {
-    std::cout << "Iterations: " << i << std::endl;
-    
     
     gradient->SetInput( duplicator->GetOutput() );
      // Software Guide : EndCodeSnippet
