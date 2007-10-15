@@ -100,4 +100,7 @@ REGISTER_TEST(otbLikehoodPathListFilterNew);
 REGISTER_TEST(otbLikehoodPathListFilter);
 REGISTER_TEST(otbRoadExtractionFilterNew);
 REGISTER_TEST(otbRoadExtractionFilter);
+REGISTER_TEST(otbAddCarvingPathFilterNew);
+REGISTER_TEST(otbRemoveCarvingPathFilterNew);
+REGISTER_TEST(otbImageToCarvingPathFilterNew);
 }

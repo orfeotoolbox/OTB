@@ -683,6 +683,20 @@ ADD_TEST(feTvRoadExtractionFilter ${FEATUREEXTRACTION_TESTS}
          22.5	          # AngularThreshold for LinkPathFiler
          ) 
 
+# -------            otb::AddCarvingPathFilter   -------------
+ADD_TEST(feTuAddCarvingPathFilterNew ${FEATUREEXTRACTION_TESTS} 
+         otbAddCarvingPathFilterNew) 
+         
+
+# -------            otb::RemoveCarvingPathFilter   -------------
+ADD_TEST(feTuRemoveCarvingPathFilterNew ${FEATUREEXTRACTION_TESTS} 
+         otbRemoveCarvingPathFilterNew) 
+
+# -------            otb::ImageToCarvingPathFilter   -------------
+ADD_TEST(feTuImageToCarvingPathFilterNew ${FEATUREEXTRACTION_TESTS} 
+         otbImageToCarvingPathFilterNew) 
+         
+
          
 # A enrichir
 SET(BasicFeatureExtraction_SRCS
