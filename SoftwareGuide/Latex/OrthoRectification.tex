@@ -123,21 +123,21 @@ sensor models is \doxygen{otb}{SensorModelBase} from which the classes
 \doxygen{otb}{InverseSensorModel} and
 \doxygen{otb}{ForwardSensorModel} inherit.\\
 
-As one may note from the model equations, the height of the ground
+As one may note from the model equations, the height of the ground, $h$,
 must be known. Usually, that means that a Digital Elevation Model,
 DEM, will be used.\\
   
 
 \subsection{Types of Sensor Models}
 \label{sec:TypesofSensorModels}
-There exist 2 main types of sensor models. On one hand we have the
+There exist two main types of sensor models. On one hand, we have the
 so-called {\em physical models}, which are rigorous, complex,
 eventually highly non-linear equations of the sensor geometry. As
 such, they are difficult to inverse (obtain the inverse model from the
-forward one and vice-versa). They have the big advantage of having
+forward one and vice-versa). They have the significant advantage of having
 parameters with physical meaning (angles, distances, etc.). They are
 specific of each sensor, which means that a library of models is
-needed in the software and that it has to be updated every time a new
+required in the software. A library which has to be updated every time a new
 sensor is available.\\
 
 On the other hand, we have general analytical models, which
@@ -147,15 +147,15 @@ polynomial functions or Rational Polynomial Coefficients, RPC, also
 known as {\em Rapid Positioning Capability}.
 Since they are approximations, they are less accurate than the
 physical models. However, the achieved accuracy is usually high: in
-the case of Pléiades, RPC models have errors lower than 0.02 pixels
+the case of Pl\'eiades, RPC models have errors lower than 0.02 pixels
 with respect to the physical model. Since these models have a standard
-form they are easier to use ans implement. However, they have the
+form they are easier to use and implement. However, they have the
 drawback of having parameters (coefficients, actually) without
 physical meaning.\\
 
 OTB, through the use of the OSSIM library --
 \url{http://www.ossim.org} -- offers models for most of current
-sensors either throug a physical or an analytical approach. This is
+sensors either through a physical or an analytical approach. This is
 transparent for the user, since the geometrical model for a given
 image is instantiated using the information stored in its meta-data.\\
 
@@ -303,7 +303,7 @@ Map projections describe the link between geographic coordinates and
 cartographic ones. So map projections allow to represent a 2-dimensional manifold of a
 3-dimensional space (the Earth surface) in a 2-dimensional space (a
 map which used to be a sheet of paper!). This geometrical
-transformation has not a unique solution, so over the cartography
+transformation doesn't have a unique solution, so over the cartography
 history, every country or region in the world has been able to express
 the belief of being the center of the universe. In other words, every
 cartographic projection tries to minimize the distortions of the 3D to
