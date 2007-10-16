@@ -55,7 +55,7 @@
 // 
 // The first step toward the use of these filters is to include the
 // proper header files: the one for the ortho-rectification filter and
-// the one defining th different projections available in OTB.
+// the one defining the different projections available in OTB.
 //
 // Software Guide : EndLatex
 
@@ -84,7 +84,7 @@ int main( int argc, char* argv[] )
 // Software Guide : BeginLatex
 //
 // We will start by defining the types for the images, the image file
-// reader a,d the image file writer. The writer will be a
+// reader and the image file writer. The writer will be a
 // \doxygen{otb}{StreamingImageFileWriter} which will allow us to set
 // the number of stream divisions we want to apply when writing the
 // output image, which can be very large.
@@ -116,9 +116,9 @@ int main( int argc, char* argv[] )
 //
 // We can now proceed to declare the type for the ortho-rectification
 // filter. The class \doxygen{otb}{OrthoRectificationFilter} is
-// templetd over the input and the output image types as well as over
+// templated over the input and the output image types as well as over
 // the cartographic projection (FIXME???). We define therefore the
-// type pf the projection we want, which is an UTM projection for this case.
+// type of the projection we want, which is an UTM projection for this case.
 //
 // Software Guide : EndLatex
 

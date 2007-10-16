@@ -105,7 +105,7 @@ int main( int argc, char* argv[] )
 // image data and meta-data has not yet been accessed by it. Since we
 // need the creation of the sensor model and all the image information
 // (size, spacing, etc.), but we do not want to read the pixel data --
-// it could be hughe -- we just ask the reader to generate the output
+// it could be huge -- we just ask the reader to generate the output
 // information needed.
 //
 // Software Guide : EndLatex
