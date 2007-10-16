@@ -235,8 +235,8 @@ int main(int argc, char ** argv)
   // the seam carving filter to a satellite image.
   // \begin{figure}
   // \center
-  // \includegraphics[width=0.44\textwidth]{QB_Suburb.png}
-  // \includegraphics[width=0.44\textwidth]{SeamCarvingExampleOutput.png}
+  // \includegraphics[width=0.44\textwidth]{QB_Suburb.eps}
+  // \includegraphics[width=0.44\textwidth]{SeamCarvingExampleOutput.eps}
   // \itkcaption[Seam carving filter application]{Result of applying
   // the \doxygen{otb}{ImageToCarvingPathFilter} followed by the 
   // \doxygen{otb}{RemoveCarvingPathFilter} to Quickbird

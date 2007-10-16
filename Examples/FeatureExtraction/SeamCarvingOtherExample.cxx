@@ -211,8 +211,8 @@ int main(int argc, char ** argv)
   // the seam carving filter to a satellite image.
   // \begin{figure}
   // \center
-  // \includegraphics[width=0.44\textwidth]{QB_Suburb.png}
-  // \includegraphics[width=0.44\textwidth]{SeamCarvingOtherExampleOutput.png}
+  // \includegraphics[width=0.44\textwidth]{QB_Suburb.eps}
+  // \includegraphics[width=0.44\textwidth]{SeamCarvingOtherExampleOutput.eps}
   // \itkcaption[Seam carving filter application]{Illustration of the minimum 
   // seams alternatively vertical and horizontal on a Quickbird
   // image. From left to right : original image, image with the 25 vertical 
