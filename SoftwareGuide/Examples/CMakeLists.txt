@@ -223,6 +223,8 @@ SET( OTB_EXAMPLES_SRCS
   ${OTB_SOURCE_DIR}/Examples/FeatureExtraction/FlusserMomentImageExample.cxx
   ${OTB_SOURCE_DIR}/Examples/FeatureExtraction/ExtractRoadByStepsExample.cxx
   ${OTB_SOURCE_DIR}/Examples/FeatureExtraction/ExtractRoadExample.cxx
+  ${OTB_SOURCE_DIR}/Examples/FeatureExtraction/SeamCarvingExample.cxx
+  ${OTB_SOURCE_DIR}/Examples/FeatureExtraction/SeamCarvingOtherExample.cxx
   ${OTB_SOURCE_DIR}/Examples/Segmentation/ConnectedThresholdImageFilter.cxx
   ${OTB_SOURCE_DIR}/Examples/Segmentation/OtsuThresholdImageFilter.cxx
   ${OTB_SOURCE_DIR}/Examples/Segmentation/OtsuMultipleThresholdImageFilter.cxx
