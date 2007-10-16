@@ -236,7 +236,7 @@ int main(int argc, char ** argv)
   // \begin{figure}
   // \center
   // \includegraphics[width=0.44\textwidth]{QB_Suburb.eps}
-  // \includegraphics[width=0.44\textwidth]{SeamCarvingExampleOutput.eps}
+  // \includegraphics[width=0.38\textwidth]{SeamCarvingExampleOutput.eps}
   // \itkcaption[Seam carving filter application]{Result of applying
   // the \doxygen{otb}{ImageToCarvingPathFilter} followed by the 
   // \doxygen{otb}{RemoveCarvingPathFilter} to Quickbird
