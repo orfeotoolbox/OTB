@@ -392,6 +392,33 @@ IF(WIN32)
 ENDIF(WIN32)
 
 #-----------------------------------------------------------------------------
+# Test for an Objective-C++ compiler.
+SET(OTB_OBJCXX_COMPILER_WORKS 0)
+IF(APPLE)
+  TRY_COMPILE(OTB_OBJCXX_COMPILER_WORKS
+              ${OTB_BINARY_DIR}/CMakeTmp
+              ${OTB_SOURCE_DIR}/CMake/otbTestObjCxxCompiler.mm
+              OUTPUT_VARIABLE OTB_OBJCXX_TRY_COMPILE_OUTPUT)
+  IF( OTB_OBJCXX_COMPILER_WORKS )
+    FILE(APPEND ${CMAKE_BINARY_DIR}${CMAKE_FILES_DIRECTORY}/CMakeOutput.log
+        "Determining if the Objective-C compiler works passed with "
+        "the following output:\n${OTB_OBJCXX_TRY_COMPILE_OUTPUT}\n\n")
+  ELSE( OTB_OBJCXX_COMPILER_WORKS )
+    FILE(APPEND ${CMAKE_BINARY_DIR}${CMAKE_FILES_DIRECTORY}/CMakeError.log
+      "Determining if the Objective-C compiler works failed with "
+      "the following output:\n${OTB_OBJCXX_TRY_COMPILE_OUTPUT}\n\n")
+  ENDIF( OTB_OBJCXX_COMPILER_WORKS )
+ENDIF(APPLE)
+#-----------------------------------------------------------------------------
+# mingw thread support
+IF(MINGW)
+  SET(OTB_REQUIRED_CXX_FLAGS "${OTB_REQUIRED_CXX_FLAGS} -mthreads")
+  SET(OTB_REQUIRED_C_FLAGS "${OTB_REQUIRED_C_FLAGS} -mthreads")
+  SET(OTB_REQUIRED_LINK_FLAGS "${OTB_REQUIRED_LINK_FLAGS} -mthreads")
+ENDIF(MINGW)
+
+
+#-----------------------------------------------------------------------------
 #
 # See if compiler preprocessor has the __FUNCTION__ directive used by itkExceptionMacro
 #
