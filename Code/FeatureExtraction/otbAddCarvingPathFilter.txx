@@ -20,6 +20,7 @@
 #define __otbAddCarvingPathFilter_txx
 
 #include "otbAddCarvingPathFilter.h"
+#include "itkMacro.h"
 
 namespace otb
 {
@@ -82,6 +83,7 @@ AddCarvingPathFilter<TInputImage,TInputPath,TOutputImage>
   typename InputPathType::VertexListType::ConstPointer vertexList = inputPath->GetVertexList();
   typename InputPathType::VertexListType::ConstIterator pathIterator;
   typename InputImageType::IndexType indexToAdd;
+  typedef typename InputImageType::IndexType::IndexValueType IndexValueType;
   
   typename InputImageType::SizeType inputSize;
   inputSize = inputImage->GetLargestPossibleRegion().GetSize();
@@ -112,20 +114,18 @@ AddCarvingPathFilter<TInputImage,TInputPath,TOutputImage>
           --pathIterator;
           if(index[dir1] != indexToAdd[dir1])
           {
-            std::cout << "Error : " << index[dir1] << " , " << indexToAdd[dir1] << std::endl;
+            itkExceptionMacro(<< "Error : " << index[dir1] << " , " << indexToAdd[dir1]);
           }
         } 
         
-        if (flag || ((index[dir0] != indexToAdd[dir0]) && (index[dir0] < inputSize[dir0])))
+        if ( (flag==true) || ((index[dir0] != indexToAdd[dir0]) && (index[dir0] < static_cast<IndexValueType>(inputSize[dir0]))))
         {
           outputIterator.Set(inputIterator.Get());
           ++inputIterator;
         }
         else
         {
-//           std::cout << "Adding the value at " << outputIterator.GetIndex() << std::endl;
           flag = true;
-//           std::cout << "[" << index[0] << "," << index[1] << "] ";
           OutputImagePixelType newValue;
           newValue = (--inputIterator).Get();
           newValue += (++inputIterator).Get();
@@ -139,7 +139,7 @@ AddCarvingPathFilter<TInputImage,TInputPath,TOutputImage>
       
       if((outputIterator.GetIndex())[dir0] != (inputIterator.GetIndex())[dir0]+1)
       {
-        std::cout << "Error 2: "<< (outputIterator.GetIndex())[dir0] <<  " , " << (inputIterator.GetIndex())[dir0] << std::endl;
+        itkExceptionMacro(<< "Error 2: "<< (outputIterator.GetIndex())[dir0] <<  " , " << (inputIterator.GetIndex())[dir0]);
       }
       inputIterator.NextLine();
       outputIterator.NextLine();

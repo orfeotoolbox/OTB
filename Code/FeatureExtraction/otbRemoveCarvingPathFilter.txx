@@ -20,6 +20,7 @@
 #define __otbRemoveCarvingPathFilter_txx
 
 #include "otbRemoveCarvingPathFilter.h"
+#include "itkMacro.h"
 
 namespace otb
 {
@@ -108,7 +109,7 @@ RemoveCarvingPathFilter<TInputImage,TInputPath,TOutputImage>
           --pathIterator;
           if(index[dir1] != indexToRemove[dir1])
           {
-            std::cout << "Error!!!" << std::endl;
+            itkExceptionMacro(<< "Error!!!");
           }
         } 
         if (index[dir0] != indexToRemove[dir0])

@@ -81,47 +81,33 @@ ImageToCarvingPathFilter<TInputImage, TOutputPath>
   typename IteratorType::OffsetType NEXT;
   
   
-  if (m_Direction == 0)
-  {
-    dir0=0;
-    dir1=1;
-
     const typename IteratorType::OffsetType LEFT   ={{-1,0}}; 
     const typename IteratorType::OffsetType RIGHT  ={{1,0}}; 
     const typename IteratorType::OffsetType UP     ={{0,-1}}; 
     const typename IteratorType::OffsetType DOWN   ={{0,1}}; 
     const typename IteratorType::OffsetType LEFTUP   ={{-1,-1}}; 
-    const typename IteratorType::OffsetType RIGHTDOWN ={{1,1}}; 
+//    const typename IteratorType::OffsetType RIGHTDOWN ={{1,1}}; 
     const typename IteratorType::OffsetType RIGHTUP  ={{1,-1}}; 
     const typename IteratorType::OffsetType LEFTDOWN ={{-1,1}}; 
-    const typename IteratorType::OffsetType CENTER ={{0,0}}; 
-    
+//    const typename IteratorType::OffsetType CENTER ={{0,0}}; 
+
+  if (m_Direction == 0)
+  {
+    dir0=0;
+    dir1=1;
     UP0 = LEFTUP;
     UP1 = UP;
     UP2 = RIGHTUP;
     NEXT = DOWN;
-    
   }
   else
   {
     dir0=1;
     dir1=0;
-    
-    const typename IteratorType::OffsetType LEFT   ={{-1,0}}; 
-    const typename IteratorType::OffsetType RIGHT  ={{1,0}}; 
-    const typename IteratorType::OffsetType UP     ={{0,-1}}; 
-    const typename IteratorType::OffsetType DOWN   ={{0,1}}; 
-    const typename IteratorType::OffsetType LEFTUP   ={{-1,-1}}; 
-    const typename IteratorType::OffsetType RIGHTDOWN ={{1,1}}; 
-    const typename IteratorType::OffsetType RIGHTUP  ={{1,-1}}; 
-    const typename IteratorType::OffsetType LEFTDOWN ={{-1,1}}; 
-    const typename IteratorType::OffsetType CENTER ={{0,0}}; 
-    
     UP0 = LEFTUP;
     UP1 = LEFT;
     UP2 = LEFTDOWN;
     NEXT = RIGHT;
-    
   }
   
   /** Compute the energy image top-down or left-right
