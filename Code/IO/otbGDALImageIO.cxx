@@ -593,8 +593,8 @@ void GDALImageIO::InternalReadImageInformation()
             
         }
         
-        m_Origin[0] = minGCPX;
-        m_Origin[1] = minGCPY;
+	m_Origin[0] = minGCPX;
+	m_Origin[1] = minGCPY;
         
     }
 
@@ -996,27 +996,41 @@ void GDALImageIO::InternalWriteImageInformation()
 /* Set the GCPs	                                                        */
 /* -------------------------------------------------------------------- */
         
- 
-	if(ImageBase::GetGCPCount(dico)>0)
-	  {
-	    unsigned int gcpCount = ImageBase::GetGCPCount(dico);
-	    GDAL_GCP * gdalGcps = new GDAL_GCP[gcpCount];
-	    
-	    for(unsigned int gcpIndex = 0; gcpIndex < gcpCount;++gcpIndex)
-	      {
-		gdalGcps[gcpIndex].pszId = const_cast<char *>(ImageBase::GetGCPId(dico,gcpIndex).c_str());
-		gdalGcps[gcpIndex].pszInfo = const_cast<char *>(ImageBase::GetGCPInfo(dico,gcpIndex).c_str());
-		gdalGcps[gcpIndex].dfGCPPixel = ImageBase::GetGCPCol(dico,gcpIndex);
-		gdalGcps[gcpIndex].dfGCPLine = ImageBase::GetGCPRow(dico,gcpIndex);
-		gdalGcps[gcpIndex].dfGCPX = ImageBase::GetGCPX(dico,gcpIndex);
-		gdalGcps[gcpIndex].dfGCPY = ImageBase::GetGCPY(dico,gcpIndex);
-		gdalGcps[gcpIndex].dfGCPZ = ImageBase::GetGCPZ(dico,gcpIndex);
-	      }
-	    
+	unsigned int gcpCount = ImageBase::GetGCPCount(dico);
+	
+	GDAL_GCP * gdalGcps = new GDAL_GCP[gcpCount+1];
 
-	    m_poDataset->SetGCPs(gcpCount,gdalGcps,ImageBase::GetGCPProjection(dico).c_str());
-	    delete [] gdalGcps;
+	bool gcpHasOrigin = false;
+
+	for(unsigned int gcpIndex = 0; gcpIndex < gcpCount;++gcpIndex)
+	  {
+	    gdalGcps[gcpIndex].pszId = const_cast<char *>(ImageBase::GetGCPId(dico,gcpIndex).c_str());
+	    gdalGcps[gcpIndex].pszInfo = const_cast<char *>(ImageBase::GetGCPInfo(dico,gcpIndex).c_str());
+	    gdalGcps[gcpIndex].dfGCPPixel = ImageBase::GetGCPCol(dico,gcpIndex);
+	    gdalGcps[gcpIndex].dfGCPLine = ImageBase::GetGCPRow(dico,gcpIndex);
+	    gdalGcps[gcpIndex].dfGCPX = ImageBase::GetGCPX(dico,gcpIndex);
+	    gdalGcps[gcpIndex].dfGCPY = ImageBase::GetGCPY(dico,gcpIndex);
+	    gdalGcps[gcpIndex].dfGCPZ = ImageBase::GetGCPZ(dico,gcpIndex);
+	    gcpHasOrigin = ImageBase::GetGCPCol(dico,gcpIndex)==0 && ImageBase::GetGCPRow(dico,gcpIndex)==0;
 	  }
+	gdalGcps[gcpCount].pszId = "Origin";
+	gdalGcps[gcpCount].pszInfo = "Origin gcp added by OTB";
+	gdalGcps[gcpCount].dfGCPPixel = 0;
+	gdalGcps[gcpCount].dfGCPLine = 0;
+	gdalGcps[gcpCount].dfGCPX = m_Origin[0];
+	gdalGcps[gcpCount].dfGCPY = m_Origin[1];
+	gdalGcps[gcpCount].dfGCPZ = 0;
+
+	if(gcpHasOrigin)
+	  {
+	    m_poDataset->SetGCPs(gcpCount,gdalGcps,ImageBase::GetGCPProjection(dico).c_str());
+	  }
+	else
+	  {
+	    std::cout<<"GCPs do not contain origin."<<std::endl;
+	    m_poDataset->SetGCPs(gcpCount+1,gdalGcps,ImageBase::GetGCPProjection(dico).c_str());
+	  }
+	delete [] gdalGcps;
 
 /* -------------------------------------------------------------------- */    
 /*  Set the six coefficients of affine geoTtransform			*/

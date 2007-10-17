@@ -124,7 +124,7 @@ ossimKeywordlist geom_kwl;
 /*                Création d'un DEMReader               */
 /********************************************************/
 
-typedef otb::DEMReader<DEMImageType>  DEMReaderType;
+typedef otb::DEMReader				  DEMReaderType;
 DEMReaderType::Pointer		      otbElevManager=DEMReaderType::New();
 double height;
 
@@ -261,7 +261,7 @@ outputimage->TransformIndexToPhysicalPoint(currentindex, outputpoint);
                 << "Le point physique correspondant est: ("<<  outputpoint[0]<< ","<<  outputpoint[1]<< ")"); 
 
 //On applique la projection:
-geoPoint= utmprojection->Inverse(outputpoint);	
+geoPoint= utmprojection->TransformPoint(outputpoint);	
 otbMsgDevMacro(<< "Le point géographique correspondant est: ("<<  geoPoint[0]<< ","<<  geoPoint[1]<< ")"); 
 
 //on calcule son altitude
@@ -308,7 +308,7 @@ min_y=pixelIndexArray[1];
  		if(j%2!=0 && pixelIndexArray[j]<min_y){min_y=pixelIndexArray[j];}
  	}//Fin while
 	
- otbGenericMsgDebugMacro(<< "max_x=" << max_x<< std::endl
+ otbMsgDevMacro(<< "max_x=" << max_x<< std::endl
            << "max_y=" << max_y<< std::endl
 	   << "min_x=" << min_x<< std::endl
 	   << "min_y=" << min_y);
@@ -365,11 +365,11 @@ DEMimage->SetPixel(currentindexbis,DEMpixelvalue);
 otbMsgDevMacro(<< "Altitude stockée:" <<  heightArray[k] ); 
  	}
 delete pixelIndexArray;
-otbGenericMsgDebugMacro(<< "pixelIndexArray deleted" );
+otbMsgDevMacro(<< "pixelIndexArray deleted" );
 delete currentIndexArray; 
-otbGenericMsgDebugMacro(<< "currentIndexArray deleted" );
+otbMsgDevMacro(<< "currentIndexArray deleted" );
 delete heightArray;
-otbGenericMsgDebugMacro(<< "heightArray deleted" );
+otbMsgDevMacro(<< "heightArray deleted" );
 }//Fin boucle principale
 
 //Création de l'image de sortie

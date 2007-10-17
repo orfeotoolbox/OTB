@@ -39,77 +39,43 @@ namespace otb
  * \ingroup Images
  *
  */
-template <class TDEMImage>
-class ITK_EXPORT DEMReader: 
-public itk::ImageSource<Image<typename TDEMImage::PixelType,2, 0> >
+
+class ITK_EXPORT DEMReader: public itk::Object
 {
 public :
 /** Standard class typedefs. */
   typedef itk::Indent														Indent;
-  typedef TDEMImage					      									DEMImageType;
-  typedef typename DEMImageType::Pointer									DEMImagePointerType;
-  typedef typename DEMImageType::PixelType                 					PixelType;
-  
-  typedef DEMReader                                	                       	Self;
-  typedef itk::ImageSource<Image<typename DEMImageType::PixelType,2, 0> >	Superclass;
-  typedef itk::SmartPointer<Self>                    	      				Pointer;
-  typedef itk::SmartPointer<const Self>              	      				ConstPointer;
-  typedef Image<PixelType,2>           						   				OutputImageType; 
-
-  typedef typename Superclass::Pointer    					    			OutputImagePointer;
-  typedef typename OutputImageType::SpacingType 							SpacingType;
-  typedef typename OutputImageType::SizeType 								SizeType;
-  typedef typename OutputImageType::PointType 								PointType;
-  typedef typename OutputImageType::IndexType 								IndexType;
-  typedef typename Superclass::OutputImageRegionType 				        OutputImageRegionType;
-  typedef itk::ImageRegionIteratorWithIndex< Image<PixelType,2, 0> >      	ImageIteratorType;
-  
+  typedef DEMReader                             Self;
+  typedef itk::Object														Superclass;
+  typedef itk::SmartPointer<Self>               Pointer;
+  typedef itk::SmartPointer<const Self>         ConstPointer;
+	
+	typedef itk::Point<double, 2> 								PointType;
+	
 	/** Method for creation through the object factory. */
   itkNewMacro(Self);
   
 	/** Run-time type information (and related methods). */
-  itkTypeMacro(DEMReader,ImageSource);
+  itkTypeMacro(DEMReader,Object);
   	                                      
-	/** Set the spacing. */
-	itkSetMacro(Spacing,SpacingType);   
-	itkGetConstReferenceMacro(Spacing,SpacingType);
-	
-	/** Set the Upper Left coordinates. */
-	itkSetMacro(Ul,PointType);
-	itkGetConstReferenceMacro(Ul,PointType);
-
-	/** Set the Lower Right coordinates. */
-	itkSetMacro(Lr,PointType);
-	itkGetConstReferenceMacro(Lr,PointType);
-
-  /** Set the spacing. */    
-	void SetSpacing(const double* spacing); 
-
 	/** Try to open the DEM directory. */
-	bool OpenDEMDirectory(char* &DEMDirectory);         
+	bool OpenDEMDirectory(const char* DEMDirectory);         
 
-	/** Compute the height above MSL(Mean Sea Level) of the point. */
-	virtual double GetHeightAboveMSL(const PointType& worldPoint);     
+	/** Compute the height above MSL(Mean Sea Level) of a geographic point. */
+	virtual double GetHeightAboveMSL(const PointType& geoPoint);     
 
 protected:
 	DEMReader();
 	~DEMReader();
 
 	void PrintSelf(std::ostream& os, Indent indent) const;
-	void GenerateData();
-	virtual void GenerateOutputInformation();
 
 	ossimElevManager* m_ElevManager;
-	//DEMImagePointerType  m_DEMImage;
-	SpacingType m_Spacing;
-	PointType m_Ul;
-	PointType m_Lr;
+
 };
 
 } // namespace otb
 
-#ifndef OTB_MANUAL_INSTANTIATION
-#include "otbDEMReader.txx"
-#endif
+
 
 #endif

@@ -31,7 +31,7 @@ namespace otb
 {
 
 template <class TScalarType,
-          unsigned int NInputDimensions=2,
+          unsigned int NInputDimensions=3,
           unsigned int NOutputDimensions=2,
           unsigned int NParametersDimensions=3>
 class ITK_EXPORT SensorModelBase : public itk::Transform<TScalarType,          

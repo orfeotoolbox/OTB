@@ -33,6 +33,8 @@ template < class TScalarType,
 InverseSensorModel< TScalarType,NInputDimensions,NOutputDimensions,NParametersDimensions>
 ::InverseSensorModel()
 {
+	m_DEMHandler = DEMHandlerType::New();
+	m_UseDEM = false;
 }
 
 template < class TScalarType,
@@ -52,12 +54,13 @@ template < class TScalarType,
            unsigned int NParametersDimensions >
 typename InverseSensorModel< TScalarType,NInputDimensions,NOutputDimensions,NParametersDimensions>::OutputPointType 
 InverseSensorModel< TScalarType,NInputDimensions,NOutputDimensions,NParametersDimensions>
-::TransformPoint(const InputPointType &point) const
+::TransformPoint(const InputPointType &point, double height) const
 {
-
+//	std::cout << "INVERSESENSORMODEL MIARY" << std::endl;
 //	std::cout << "InverseSensorModel Before : (" << point[0] << "," << point[1] << ")" << std::endl;
+
 	//On transforme le type "itk::point" en type "ossim::ossimGpt" 
-  ossimGpt ossimGPoint(point[0], point[1]);
+  ossimGpt ossimGPoint(point[0], point[1], height);
   
   //On calcule 
   ossimDpt ossimDPoint;
@@ -85,10 +88,20 @@ template < class TScalarType,
            unsigned int NParametersDimensions >
 typename InverseSensorModel< TScalarType,NInputDimensions,NOutputDimensions,NParametersDimensions>::OutputPointType 
 InverseSensorModel< TScalarType,NInputDimensions,NOutputDimensions,NParametersDimensions>
-::TransformPoint(const InputPointType &point, double height) const
+::TransformPoint(const InputPointType &point) const
 {
 	//On transforme le type "itk::point" en type "ossim::ossimGpt" 
-  ossimGpt ossimGPoint(point[0], point[1], height);
+  ossimGpt ossimGPoint(point[0], point[1]);
+	
+	if (m_UseDEM)
+	{
+		otbMsgDebugMacro(<< "USING DEM ! ") ;
+		double height = m_DEMHandler->GetHeightAboveMSL(point);
+//		ossimGpt ossimGPoint(point[0], point[1], height);
+		otbMsgDebugMacro(<< "height : " << height) ;
+		ossimGPoint.height(height);
+//		ossimGPoint.height(height);
+	}
   
   //On calcule 
   ossimDpt ossimDPoint;
@@ -103,7 +116,7 @@ InverseSensorModel< TScalarType,NInputDimensions,NOutputDimensions,NParametersDi
   OutputPointType outputPoint;
   outputPoint[0]=ossimDPoint.x;
   outputPoint[1]=ossimDPoint.y;
-  
+
 	return outputPoint;
 }
 

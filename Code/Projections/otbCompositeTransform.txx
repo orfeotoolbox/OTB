@@ -19,6 +19,7 @@
 #define __otbCompositeTransform_txx
 
 #include "otbCompositeTransform.h"
+#include "otbMapProjections.h"
 
 namespace otb
 {
@@ -39,20 +40,25 @@ CompositeTransform<TFirstTransform, TSecondTransform, TScalarType, NInputDimensi
 
 
 template<class TFirstTransform, class TSecondTransform, class TScalarType, unsigned int NInputDimensions, unsigned int NOutputDimensions> 
-typename CompositeTransform<TFirstTransform, TSecondTransform, TScalarType, NInputDimensions, NOutputDimensions>::OutputPointType 
+typename CompositeTransform<TFirstTransform, TSecondTransform, TScalarType,NInputDimensions, NOutputDimensions>::SecondTransformOutputPointType 
 CompositeTransform<TFirstTransform, TSecondTransform, TScalarType, NInputDimensions, NOutputDimensions>
-::TransformPoint(const InputPointType &point1) const
+::TransformPoint(const FirstTransformInputPointType &point1) const
 {
-	InputPointType pointTmp;
-	OutputPointType point2;	
+	FirstTransformOutputPointType pointTmp;
+	SecondTransformOutputPointType point2;	
 	
 	pointTmp=m_FirstTransform->TransformPoint(point1); 
+	//pointTmp=utmprojection->TransformPoint(point1); 
+	otbMsgDevMacro(<< "Le point géographique correspondant est: ("<<  pointTmp[0]<< ","<<  pointTmp[1]<< ")"); 	
+
 	point2=m_SecondTransform->TransformPoint(pointTmp); 
+  otbMsgDevMacro(<< "Les coordonnées en pixel sur l'image capteur correspondant à ce point sont:" << std::endl
+               << point2[0] << ","<< point2[1] );
 
 	return point2;
 }
 
-template<class TFirstTransform, class TSecondTransform, class TScalarType, unsigned int NInputDimensions, unsigned int NOutputDimensions> 
+/*template<class TFirstTransform, class TSecondTransform, class TScalarType, unsigned int NInputDimensions, unsigned int NOutputDimensions> 
 typename CompositeTransform<TFirstTransform, TSecondTransform, TScalarType, NInputDimensions, NOutputDimensions>::OutputVectorType 
 CompositeTransform<TFirstTransform, TSecondTransform, TScalarType,NInputDimensions, NOutputDimensions>
 ::TransformVector(const InputVectorType &vector1) const
@@ -92,7 +98,7 @@ CompositeTransform<TFirstTransform, TSecondTransform, TScalarType,NInputDimensio
 	covariantVector2=m_SecondTransform->TransformCovariantVector(covariantVectorTmp); 
 
 	return covariantVector2;
-}
+}*/
 
 
 

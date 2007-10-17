@@ -90,27 +90,19 @@ OrthoRectificationFilter<TInputImage, TOutputImage, TMapProjection, TInterpolato
 {
 	if (m_IsComputed == false)
 	{
+		otbMsgDevMacro(<< "COMPUTE RESAMPLE TRANSFORMATION MODEL");
 		typename TOutputImage::Pointer output = this->GetOutput();
 		
 		// Get OSSIM sensor model from image keywordlist
  	 	m_SensorModel->SetImageGeometry(output->GetImageKeywordlist());
 		
-		m_CompositeTransform->SetFirstTransform(m_SensorModel);
-		m_CompositeTransform->SetSecondTransform(m_MapProjection);
+		m_CompositeTransform->SetFirstTransform(m_MapProjection);
+		m_CompositeTransform->SetSecondTransform(m_SensorModel);
 		
 		this->SetTransform(m_CompositeTransform);		
 		
 		m_IsComputed = true;
 	}
-}
-
-template <class TInputImage, class TOutputImage, class TMapProjection, class TInterpolatorPrecision>
-void 
-OrthoRectificationFilter<TInputImage, TOutputImage, TMapProjection, TInterpolatorPrecision>
-::Modified()
-{
-	m_IsComputed = false;
-	this->Modified();
 }
 
 } //namespace otb

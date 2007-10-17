@@ -26,7 +26,7 @@ int otbDEMReaderNew(int argc, char * argv[])
     {
       const unsigned int Dimension = 2;
       typedef otb::Image<unsigned char,Dimension> ImageType;
-      typedef otb::DEMReader<ImageType> DEMReaderType;
+      typedef otb::DEMReader DEMReaderType;
 
       // Instantiating object
       DEMReaderType::Pointer object = DEMReaderType::New();

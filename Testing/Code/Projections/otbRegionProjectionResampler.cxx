@@ -46,8 +46,10 @@
 #include "itkRescaleIntensityImageFilter.h"
 #include "itkImageRegionIteratorWithIndex.h"
 #include "itkLinearInterpolateImageFunction.h"
+#include "itkTranslationTransform.h"
 
 #include "otbInverseSensorModel.h"
+#include "otbCompositeTransform.h"
 
 #include "init/ossimInit.h"
 
@@ -70,7 +72,7 @@ int otbRegionProjectionResampler( int argc, char* argv[] )
    
    
         typedef otb::Image<unsigned char, 2>    CharImageType;
-        typedef otb::Image<unsigned short, 2>     ImageType;
+        typedef otb::Image<unsigned int, 2>     ImageType;
         typedef otb::ImageFileReader<ImageType>  ReaderType;
 //        typedef otb::ImageFileWriter<ImageType>  WriterType;
         typedef otb::StreamingImageFileWriter<ImageType>  WriterType;
@@ -83,6 +85,10 @@ int otbRegionProjectionResampler( int argc, char* argv[] )
 //                                                ResamplerType;
 				typedef otb::StreamingResampleImageFilter< ImageType, ImageType  > 
                                                ResamplerType;
+				typedef itk::TranslationTransform<double,2> TransformType;
+				
+				typedef otb::CompositeTransform<ModelType,TransformType> CompositeType;																							 
+																							 
         ImageType::IndexType  			start;
         ImageType::SizeType  			size;
         ImageType::SpacingType  		spacing;
@@ -96,7 +102,9 @@ int otbRegionProjectionResampler( int argc, char* argv[] )
         InterpolatorType::Pointer	        interpolator=InterpolatorType::New();
         RescalerType::Pointer	                rescaler=RescalerType::New();
         ResamplerType::Pointer                  resampler = ResamplerType::New();
-        
+//        TransformType::Pointer translationTransform = TransformType::New();
+//				CompositeType::Pointer compositeTransform = CompositeType::New();
+				
         // Set parameters ...
         reader->SetFileName(argv[1]);
         writer->SetFileName(argv[2]);
@@ -110,6 +118,14 @@ int otbRegionProjectionResampler( int argc, char* argv[] )
 //        otb::ImageKeywordlist ImageKeyworlist = reader->GetOutput()->GetImageKeywordlist();
         model->SetImageGeometry(reader->GetOutput()->GetImageKeywordlist());
 
+/*				compositeTransform->SetFirstTransform(model);
+				
+				itk::Vector<double,2> offset;
+				offset[0]=atof(argv[10]);
+				offset[1]=atof(argv[11]);
+				translationTransform->SetOffset(offset);
+				
+				compositeTransform->SetSecondTransform(translationTransform);*/
 
         start[0]=0;     
         start[1]=0;     
@@ -131,6 +147,8 @@ int otbRegionProjectionResampler( int argc, char* argv[] )
 //        region = inputImage->GetBufferedRegion();
 
 */
+				std::cout << "Origin " << origin << std::endl;
+
         resampler->SetOutputSpacing( spacing );
         resampler->SetOutputOrigin(  origin  );
         resampler->SetSize( region.GetSize() );
@@ -141,6 +159,8 @@ int otbRegionProjectionResampler( int argc, char* argv[] )
         resampler->SetTransform( model );
         resampler->SetInterpolator( interpolator );
 
+				otbGenericMsgDebugMacro(<< "Romain Sensor Model :" << model);
+
 //        otbGenericMsgDebugMacro(<< "Resampler initialized !! " ); 
 //        resampler->Update();
 
@@ -148,10 +168,10 @@ int otbRegionProjectionResampler( int argc, char* argv[] )
         
         writer->SetInput(resampler->GetOutput());
 //        writer->SetNumberOfStreamDivisions(1000);
-				writer->SetTilingStreamDivisions();
+//			writer->SetTilingStreamDivisions(atoi(argv[7]));
+				writer->SetTilingStreamDivisions(10);
         otbGenericMsgDebugMacro(<< "Update writer ..." ); 
         writer->Update();
-
     } 
   catch( itk::ExceptionObject & err ) 
     { 

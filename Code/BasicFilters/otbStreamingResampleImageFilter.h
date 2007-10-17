@@ -65,12 +65,11 @@ public:
 	typedef typename Superclass::InterpolatorType InterpolatorType;
 	typedef typename InterpolatorType::PointType  PointType;
 
-  /** Set size of neighborhood needed to interpolate points */
   itkSetMacro(InterpolatorNeighborhoodRadius,unsigned int);
-	
-	/** Get size of neighborhood needed to interpolate points */
 	itkGetMacro(InterpolatorNeighborhoodRadius,unsigned int);
 
+  itkSetMacro(AddedRadius,unsigned int);
+	itkGetMacro(AddedRadius,unsigned int);
 
   /** ResampleImageFilter needs a different input requested region than
    * the output requested region.  As such, ResampleImageFilter needs
@@ -93,8 +92,8 @@ private:
 	// Determine size of pad needed for interpolators neighborhood
 	unsigned int m_InterpolatorNeighborhoodRadius;
 	
-	// Determine if interpolator radius is determined by class user
-//	bool m_RadiusIsDeterminedByUser;
+	// Used to be sure that each final region will be contiguous
+	unsigned int m_AddedRadius;
 
 };
 

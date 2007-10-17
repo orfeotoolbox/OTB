@@ -467,6 +467,8 @@ StreamingImageFileWriter<TInputImage>
    * Loop over the number of pieces, execute the upstream pipeline on each
    * piece, and copy the results into the output image.
    */
+	otbGenericMsgDebugMacro(<< "Number Of Stream Divisions : " << numDivisionsFromSplitter);
+	 
   unsigned int piece;
   for (piece = 0;
        piece < numDivisionsFromSplitter && !this->GetAbortGenerateData();

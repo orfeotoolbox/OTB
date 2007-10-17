@@ -62,20 +62,24 @@ public :
 	typedef typename TSecondTransform::Pointer       		SecondTransformPointerType;
 
   /** Standard vector type for this class. */
-  typedef typename Superclass::InputVectorType  InputVectorType;
-  typedef typename Superclass::OutputVectorType OutputVectorType;
+//  typedef typename TFirstTransform::InputVectorType  FirstTransformInputVectorType;
+//  typedef typename TFirstTransform::OutputVectorType FirstTransformOutputVectorType;
   
   /** Standard covariant vector type for this class */
-  typedef typename Superclass::InputCovariantVectorType InputCovariantVectorType;
-  typedef typename Superclass::OutputCovariantVectorType OutputCovariantVectorType;
+//  typedef typename TFirstTransform::InputCovariantVectorType FirstTransformInputCovariantVectorType;
+//  typedef typename TFirstTransform::OutputCovariantVectorType FirstTransformOutputCovariantVectorType;
   
   /** Standard vnl_vector type for this class. */
-  typedef typename Superclass::InputVnlVectorType InputVnlVectorType;
-  typedef typename Superclass::OutputVnlVectorType OutputVnlVectorType;
+//  typedef typename TFirstTransform::InputVnlVectorType FirstTransformInputVnlVectorType;
+//  typedef typename TFirstTransform::OutputVnlVectorType FirstTransformOutputVnlVectorType;
   
   /** Standard coordinate point type for this class */
-  typedef typename Superclass::InputPointType InputPointType;
-  typedef typename Superclass::OutputPointType OutputPointType;
+  typedef typename Superclass::InputPointType FirstTransformInputPointType;
+  typedef typename TFirstTransform::OutputPointType FirstTransformOutputPointType;
+	/** TSecondTransform::InputPointType is purposely not defined
+	 *  It contrains user to choose First Transform Output compatible 
+	 *	with Second Transform Input */
+	typedef typename Superclass::OutputPointType SecondTransformOutputPointType;
 
 	/** Method for creation through the object factory. */
 	itkNewMacro( Self );
@@ -96,22 +100,16 @@ public :
 
 
   /**  Method to transform a point. */
-  virtual OutputPointType TransformPoint(const InputPointType  & ) const;
+  virtual SecondTransformOutputPointType TransformPoint(const FirstTransformInputPointType  & ) const;
 
   /**  Method to transform a vector. */
-  virtual OutputVectorType TransformVector(const InputVectorType &) const;
+//  virtual OutputVectorType TransformVector(const InputVectorType &) const;
 
   /**  Method to transform a vnl_vector. */
-  virtual OutputVnlVectorType TransformVector(const InputVnlVectorType &) const;
+//  virtual OutputVnlVectorType TransformVector(const InputVnlVectorType &) const;
 
   /**  Method to transform a CovariantVector. */
-  virtual OutputCovariantVectorType TransformCovariantVector(const InputCovariantVectorType &) const;
-
-	/** Compute MapProjection1 coordinates to MapProjection2 coordinates. */ 
-	OutputPointType ComputeProjection1ToProjection2(const InputPointType &point1);
-
-	/** Compute MapProjection1 coordinates to MapProjection2 coordinates. */ 
-	InputPointType ComputeProjection2ToProjection1(const OutputPointType &point2);
+//  virtual OutputCovariantVectorType TransformCovariantVector(const InputCovariantVectorType &) const;
 
 protected:
 	CompositeTransform();

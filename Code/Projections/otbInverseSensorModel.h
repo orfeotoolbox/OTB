@@ -19,6 +19,8 @@
 #define __otbInverseSensorModel_h
 
 #include "otbSensorModelBase.h"
+#include "otbDEMReader.h"
+
 #include "itkMacro.h"
 #include "itkSmartPointer.h"
 #include "itkObject.h"
@@ -51,16 +53,21 @@ class ITK_EXPORT InverseSensorModel : public SensorModelBase<TScalarType,
 public :
 
 	/** Standard class typedefs. */
-  typedef InverseSensorModel                                Self;
+  typedef InverseSensorModel                             Self;
   typedef SensorModelBase< TScalarType,
                    NInputDimensions,
                    NOutputDimensions,
-                   NParametersDimensions >                  Superclass;
-  typedef itk::SmartPointer<Self>                    	      Pointer;
-  typedef itk::SmartPointer<const Self>              	      ConstPointer;
+                   NParametersDimensions >               Superclass;
+  typedef itk::SmartPointer<Self>                    	   Pointer;
+  typedef itk::SmartPointer<const Self>              	   ConstPointer;
 
   typedef typename Superclass::InputPointType            InputPointType;
-  typedef typename Superclass::OutputPointType           OutputPointType;      
+//	typedef itk::Point<TScalarType, 3>										 InputPointType;
+	typedef typename Superclass::OutputPointType           OutputPointType; 
+	
+	//typedef otb::Image<double, NInputDimensions>	 ImageType;
+	typedef DEMReader													 						 DEMHandlerType;
+	typedef typename DEMHandlerType::Pointer							 DEMHandlerPointerType;     
 
 	/** Method for creation through the object factory. */
   itkNewMacro( Self );
@@ -77,6 +84,30 @@ public :
   // Pour projeter un point géo connaissant son altitude.
   OutputPointType TransformPoint(const InputPointType &point, double height) const;
 
+	itkGetMacro(UseDEM, bool);
+	itkSetMacro(UseDEM, bool);
+	
+	itkGetObjectMacro(DEMHandler, DEMHandlerType);
+	
+	virtual void SetDEMHandler(DEMHandlerType* _arg) 
+  { 
+    if (this->m_DEMHandler != _arg) 
+      { 
+      this->m_DEMHandler = _arg; 
+      this->Modified(); 
+			m_UseDEM = true;
+      } 
+  }
+	
+	virtual void SetDEMDirectory(const std::string& directory)
+	{
+		m_DEMHandler->OpenDEMDirectory(directory.c_str());
+		m_UseDEM = true;		
+	}
+	
+	void ActiveDEM() { m_UseDEM = true; this->Modified(); } 
+	void DesactiveDEM() { m_UseDEM = false; this->Modified();} 
+
 protected:
   InverseSensorModel(); 
   virtual ~InverseSensorModel();
@@ -88,6 +119,13 @@ private :
 
   InverseSensorModel(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
+	
+	/** Object that read and use DEM */
+	DEMHandlerPointerType m_DEMHandler;
+	
+	/** Specify if DEM is used in Point Transformation */
+	bool m_UseDEM ;
+	
 
 };
 

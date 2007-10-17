@@ -157,6 +157,8 @@ otbGenericMsgDebugMacro(<< "ossimKeywordlist: "<<geom_kwl );
       otbGenericMsgDebugMacro(<< "InverseSensorModel created " ); 
       
       ModelType::OutputPointType inputpoint;
+			
+			otbGenericMsgDebugMacro(<< "Miary Sensor Model :" << model);
  
 
 //reader1->SetFileName(argv[2]);
@@ -197,7 +199,8 @@ otbGenericMsgDebugMacro(<< "Interpolator created " );
 /********************************************************/
 /*            Cr�ation de notre writer                  */
 /********************************************************/
-typedef otb::ImageFileWriter<CharImageType>  CharWriterType;
+//typedef otb::ImageFileWriter<CharImageType>  CharWriterType;
+typedef otb::ImageFileWriter<ImageType>  CharWriterType;
 typedef otb::ImageFileWriter<ImageType>  WriterType;
 WriterType::Pointer	                 extractorwriter=WriterType::New();
 CharWriterType::Pointer	                 writer=CharWriterType::New();
@@ -380,10 +383,13 @@ otbGenericMsgDebugMacro(<< "currentIndexArray deleted" );
 
 writer->SetFileName(argv[2]);
 otbGenericMsgDebugMacro(<< "FilenameSet" );
-rescaler->SetInput(outputimage);
+//rescaler->SetInput(outputimage);
 CharImageType::Pointer      charoutputimage=CharImageType::New();
-charoutputimage=rescaler->GetOutput();
-writer->SetInput(charoutputimage);
+//charoutputimage=rescaler->GetOutput();
+//writer->SetInput(charoutputimage);
+
+std::cout << "Image before Writer" << outputimage->GetOrigin() << std::endl;
+writer->SetInput(outputimage);
 writer->Update();
 otbGenericMsgDebugMacro(<< "Outputimage created" );
 

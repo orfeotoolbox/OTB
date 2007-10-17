@@ -55,23 +55,22 @@
 
 
 
-int otbOrthoRectificationFilter( int argc, char* argv[] )
+int otbOrthoRectificationFilterWithDEM( int argc, char* argv[] )
 {
   try 
     {        
 
         ossimInit::instance()->initialize(argc, argv);
 
-        if(argc!=10)
+        if(argc!=12)
         {
-                std::cout << argv[0] <<" <input filename> <output filename> <latitude de l'origine> <longitude de l'origine> <taille_x> <taille_y> <NumberOfstreamDivisions>" 
-                << std::endl;
-
-                return EXIT_FAILURE;
+                std::cout << argv[0] <<" <input filename> <output filename>	<latitude de l'origine>	<longitude de l'origine> <taille_x>	<taille_y>";
+								std::cout << " <NumberOfstreamDivisions> <x_spacing> <y_spacing> <srtm directory> <DEM Image Filename>" << std::endl;
+							 
+							  return EXIT_FAILURE;
         }
    
    
-        typedef otb::Image<unsigned char, 2>    CharImageType;
         typedef otb::Image<unsigned int, 2>     ImageType;
         typedef otb::ImageFileReader<ImageType>  ReaderType;
 //        typedef otb::ImageFileWriter<ImageType>  WriterType;
@@ -93,7 +92,6 @@ int otbOrthoRectificationFilter( int argc, char* argv[] )
 				InterpolatorType::Pointer interpolator=InterpolatorType::New();
 				ModelType::Pointer                      model= ModelType::New();
 
-//				ResamplerType::Pointer							orthoRectifFilter=ResamplerType::New();
 				OrthoRectifFilterType::Pointer     	orthoRectifFilter=OrthoRectifFilterType::New();
 				UtmMapProjectionType::Pointer utmMapProjection = UtmMapProjectionType::New();
 				
@@ -132,17 +130,10 @@ int otbOrthoRectificationFilter( int argc, char* argv[] )
 				utmMapProjection->SetZone(31);
 				utmMapProjection->SetHemisphere('N');
 				orthoRectifFilter->SetMapProjection(utmMapProjection);
+				
+				std::string srtmDirectory(argv[10]);
+				orthoRectifFilter->SetDEMDirectory(srtmDirectory);
 
-	//				orthoRectifFilter->SetTransform( model );
-//				model->SetImageGeometry(reader->GetOutput()->GetImageKeywordlist());
-//				resampler->SetTransform(model);
-//				resampler->SetInterpolator(interpolator);
-//				orthoRectifFilter->SetResampler(resampler);
-//				orthoRectifFilter->SetInterpolator(interpolator);
-				
-//				orthoRectifFilter->SetResampler(resampler);				
-//        orthoRectifFilter->SetTransform( model );
-				
         writer->SetInput(orthoRectifFilter->GetOutput());
 				
 				writer->SetTilingStreamDivisions();

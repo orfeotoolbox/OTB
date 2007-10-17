@@ -43,10 +43,13 @@ namespace otb
 *  Map projection a sa propre classe.
 **/
 
+typedef enum {FORWARD=0, INVERSE=1} InverseOrForwardTransformationEnum;
+
 template <class TOssimMapProjection,
         class TScalarType = double,
         unsigned int NInputDimensions=2,
-        unsigned int NOutputDimensions=2>
+        unsigned int NOutputDimensions=2,
+				InverseOrForwardTransformationEnum transform=INVERSE>
 class ITK_EXPORT MapProjection: public itk::Transform<TScalarType,         // Data type for scalars 
 																										  NInputDimensions,  // Number of dimensions in the input space
 																										  NOutputDimensions> // Number of dimensions in the output space
@@ -89,9 +92,11 @@ public :
 
 	void SetEllipsoid(const double &major_axis, const double &minor_axis);
 
-	OutputPointType Forward(const InputPointType &point) const;
+//	OutputPointType Forward(const InputPointType &point) const;
 
-	InputPointType Inverse(const OutputPointType &point) const;
+//	InputPointType Inverse(const OutputPointType &point) const;
+	
+	OutputPointType TransformPoint(const InputPointType &point) const;
 
 	virtual InputPointType Origin();
 

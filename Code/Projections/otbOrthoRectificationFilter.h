@@ -25,20 +25,12 @@
 #include "otbMapProjection.h"
 #include "otbStreamingResampleImageFilter.h"
 #include "otbCompositeTransform.h"
+#include "otbInverseSensorModel.h"
 
 namespace otb
 {
 
-/** Macro used to access Resampler class */
-/*#define otbSetResampleMacro(name, type)\
-	virtual void SetResample##name( const type & _arg)\
-	{\
-		if (m_Resampler->Get##name() != _arg)\
-		{\
-			m_Resampler->Set##name(_arg);\
-			this->Modified();\
-		}\
-	}\*/
+
 
 /**Template otbOrthoRectificationFilter.txx
 * Cette classe permet de passer d'une MapProjection à une autre en passant par un point géographique. 
@@ -59,9 +51,6 @@ public :
   typedef itk::SmartPointer<Self>              										Pointer;
   typedef itk::SmartPointer<const Self>        										ConstPointer;
 	
-	 
-//  typedef otb::StreamingResampleImageFilter< TInputImage, TOutputImage  >          ResamplerType;
-//	typedef typename ResamplerType::Pointer     ResamplerPointerType;
 	typedef typename TInputImage::IndexType 	  IndexType;
 	typedef typename TInputImage::SizeType  		SizeType;
   typedef typename TInputImage::SpacingType  	SpacingType;
@@ -76,12 +65,9 @@ public :
   typedef InverseSensorModel<double> SensorModelType;
 	typedef typename SensorModelType::Pointer SensorModelPointerType;
 	
-	typedef CompositeTransform<SensorModelType,MapProjectionType> CompositeTransformType; 
+	typedef CompositeTransform< MapProjectionType,SensorModelType> CompositeTransformType; 
 	typedef typename CompositeTransformType::Pointer CompositeTransformPointerType; 
 	
-	typedef typename Superclass::InterpolatorType InterpolatorType;
-//	typedef typename InterpolatorType::Pointer InterpolatorPointerType;
-
   /** Method for creation through the object factory. */
 	itkNewMacro( Self );
 	
@@ -89,8 +75,35 @@ public :
 	itkTypeMacro( OrthoRectificationFilter, StreamingResampleImageFilter );
 	
 	/** Accessors */
-	itkSetMacro(MapProjection, MapProjectionPointerType);
-	itkGetMacro(MapProjection, MapProjectionPointerType);
+	virtual void SetMapProjection (MapProjectionType* _arg) 
+  { 
+    if (this->m_MapProjection != _arg) 
+      { 
+      this->m_MapProjection = _arg; 
+      m_CompositeTransform->SetFirstTransform(_arg);
+			m_IsComputed = false;
+			this->Modified(); 
+      } 
+  } 
+
+	itkGetObjectMacro(MapProjection, MapProjectionType);
+	
+	virtual void SetDEMDirectory(const std::string& directory)
+	{
+		m_SensorModel->SetDEMDirectory(directory);
+		this->Modified();
+	}	
+	
+	virtual void ActiveDEM()
+	{
+		m_SensorModel->ActiveDEM();
+	}
+	
+	virtual void DesactiveDEM()
+	{
+		m_SensorModel->DesactiveDEM();
+	}
+	
 	
 protected:
 	OrthoRectificationFilter();
@@ -108,10 +121,10 @@ private:
 	/** Calculate transformation model from sensor model & map projection	composition */	
 	void ComputeResampleTransformationModel();
 	
-	void Modified();
 	
 	/** Boolean used to know if transformation model computation is needed */
 	bool m_IsComputed;	
+	
 	SensorModelPointerType m_SensorModel;
 	MapProjectionPointerType m_MapProjection;
 	CompositeTransformPointerType m_CompositeTransform;

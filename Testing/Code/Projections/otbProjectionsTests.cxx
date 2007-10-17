@@ -36,6 +36,7 @@ REGISTER_TEST(otbCreateInverseForwardSensorModel);
 REGISTER_TEST(otbRegionProjection);
 REGISTER_TEST(otbRegionProjectionResampler);
 REGISTER_TEST(otbOrthoRectificationFilter);
+REGISTER_TEST(otbOrthoRectificationFilterWithDEM);
 REGISTER_TEST(otbSensorImageToCarto);
 REGISTER_TEST(otbSensorImageDEMToCarto);
 }

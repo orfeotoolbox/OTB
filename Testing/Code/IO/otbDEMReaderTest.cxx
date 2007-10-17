@@ -23,7 +23,7 @@
 #include "otbImageFileWriter.h"
 #include "otbMapProjections.h"
 
-int otbDEMReader(int argc, char * argv[])
+int otbDEMReaderTest(int argc, char * argv[])
 {
   try
     {
@@ -34,7 +34,7 @@ int otbDEMReader(int argc, char * argv[])
         bool bOpenDirectory(false);
       
         typedef otb::Image<float,Dimension> ImageType;
-        typedef otb::DEMReader<ImageType> DEMReaderType;
+        typedef otb::DEMReader DEMReaderType;
 
         // Instantiating object
         DEMReaderType::Pointer demReader = DEMReaderType::New();

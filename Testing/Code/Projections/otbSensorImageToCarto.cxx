@@ -295,7 +295,7 @@ outputimage->TransformIndexToPhysicalPoint(currentindex, outputpoint);
                 << "Le point physique correspondant est: ("<<  outputpoint[0]<< ","<<  outputpoint[1]<< ")"); 
 
 //On applique la projection:
-geoPoint= utmprojection->Inverse(outputpoint);	
+geoPoint= utmprojection->TransformPoint(outputpoint);	
 otbMsgDevMacro(<< "Le point géographique correspondant est: ("<<  geoPoint[0]<< ","<<  geoPoint[1]<< ")"); 	
 //On calcule les coordonnées pixeliques sur l'image capteur
 inputpoint = model->TransformPoint(geoPoint);
