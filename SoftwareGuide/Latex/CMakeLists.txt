@@ -84,6 +84,8 @@ SET( Tex_SRCS
   Visualization.tex
   Wrapping.tex
   Watersheds.tex
+  Fusion.tex
+  Radiometry.tex
 )
 
 FOREACH( file ${Tex_SRCS})
