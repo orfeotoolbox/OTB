@@ -220,7 +220,7 @@ MatrixTransposeMatrixImageFilter<TInputImage, TInputImage2>
   for( unsigned int thread = 0; thread < numberOfThreads; thread++)
     {
       /** TODO
-       * A modifier en utilisant l'opérateur + de la méthode. Pour le moment probleme avec exceptionmacro (pas de GetClassName...)
+       * To modify using + method operator. If we use it now -> exceptionmacro (no GetClassName...)
        * resultMatrix += m_ThreadSum[thread];
        **/
       for (unsigned int i=0; i<resultMatrix.Rows(); i++)
@@ -274,14 +274,6 @@ MatrixTransposeMatrixImageFilter<TInputImage, TInputImage2>
     }
   otbMsgDebugMacro(<<"ThreadedGenerateData() - thread "<<threadId <<" - nb of divisions: "<<numDivisions);
 
-  /*
-  unsigned int numberOfComponents1 = this->GetFirstInput()->GetNumberOfComponentsPerPixel();
-  unsigned int numberOfComponents2 = this->GetSecondInput()->GetNumberOfComponentsPerPixel();
-
-  MatrixType result;
-  result.SetSize(numberOfComponents1, numberOfComponents2);
-  result.Fill(itk::NumericTraits<RealType>::Zero);
-  */
 
   /**
    * Loop over the number of pieces, execute the upstream pipeline on each

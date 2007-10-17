@@ -78,7 +78,7 @@ namespace Functor
      *  
      *  [Richardson et Wiegand, 1977]
      *
-     *  \ingroup Functor
+     *  \ingroup Functor2
      */
     template <class TInput1, class TInput2, class TOutput>
       class PVI

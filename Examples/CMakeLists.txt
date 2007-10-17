@@ -20,6 +20,8 @@ SUBDIRS(
   DisparityMap
   Projections
   Registration
+  Radiometry
+  Fusion
   Tutorials
 )
 
@@ -73,6 +75,8 @@ ELSE(OTB_BINARY_DIR)
         MultiScale
         DisparityMap
         Registration
+        Radiometry
+        Fusion
         Tutorials
         )
 

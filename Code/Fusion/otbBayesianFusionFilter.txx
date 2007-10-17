@@ -135,7 +135,7 @@ namespace otb
     tempS = tempS*m_Beta;
     
     /** TODO
-     * A modifier en utilisant l'opérateur - de la méthode. Pour le moment probleme avec exceptionmacro (pas de GetClassName...)
+     *  To modify using - method operator. If we use it now -> exceptionmacro (no GetClassName...)
      *  S = S-tempS;
      **/
     if( (S.Rows() != tempS.Rows()) || (S.Cols() != tempS.Cols()))
@@ -157,8 +157,8 @@ namespace otb
     tempS2 =  msTransposePan->GetResultOutput()->Get();
     tempS = tempS*tempS2;
     /** TODO
-     * A modifier en utilisant l'opérateur + de la méthode. Pour le moment probleme avec exceptionmacro (pas de GetClassName...)
-     * S = S-tempS;
+     *  To modify using - method operator. If we use it now -> exceptionmacro (no GetClassName...)
+     *  S = S-tempS;
      **/
     if( (S.Rows() != tempS.Rows()) || (S.Cols() != tempS.Cols()) )
       { 
@@ -184,7 +184,7 @@ namespace otb
     xxTbT = xxTb.GetTranspose();
     xxTbTb = xxTbT*m_Beta;
     /** TODO
-     * A modifier en utilisant l'opérateur + de la méthode. Pour le moment probleme avec exceptionmacro (pas de GetClassName...)
+     *  To modify using - method operator. If we use it now -> exceptionmacro (no GetClassName...)
      * S = S-xxTbTb;
      **/
     if( (S.Cols() != xxTbTb.Cols()) || (S.Cols() != xxTbTb.Cols()) ) 
@@ -240,8 +240,8 @@ namespace otb
       }
 
     /** TODO
-     * A modifier en utilisant l'opérateur + de la méthode. Pour le moment probleme avec exceptionmacro (pas de GetClassName...)
-     * m_Vcondopt = 2 *m_Lambda*varPan+2*m_CovarianceInvMatrix*(1-m_Lambda)+eye;
+     *  To modify using + method operator. If we use it now -> exceptionmacro (no GetClassName...)
+     *  m_Vcondopt = 2 *m_Lambda*varPan+2*m_CovarianceInvMatrix*(1-m_Lambda)+eye;
      **/
     if( (m_Vcondopt.Cols() != varPan.Cols()) || (m_Vcondopt.Cols() != varPan.Cols()) 
 	|| (m_Vcondopt.Cols() != m_CovarianceInvMatrix.Cols()) || (m_Vcondopt.Cols() != m_CovarianceInvMatrix.Cols())) 

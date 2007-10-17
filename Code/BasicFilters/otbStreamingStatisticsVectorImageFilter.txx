@@ -325,7 +325,7 @@ StreamingStatisticsVectorImageFilter<TInputImage>
     {
       count += m_Count[i];
       /** TODO
-       * A modifier en utilisant l'opérateur + de la méthode. Pour le moment probleme avec exceptionmacro (pas de GetClassName...)
+       *  To modify using + method operator. If we use it now -> exceptionmacro (no GetClassName...)
        * crossedMatrix += m_XX[i];
        **/
       if( (m_XX[i].Rows() != crossedMatrix.Rows()) || (m_XX[i].Cols() != crossedMatrix.Cols()))
