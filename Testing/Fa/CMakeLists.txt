@@ -181,7 +181,9 @@ ADD_TEST(FA-00070-vi_Streaming_Stat ${CXX_TEST_PATH}/StreamingStat
 	${EXAMPLES_DATA}/qb_RoadExtract.tif
          )
 
-
+ADD_TEST(FA-00070-vi_Streaming_Stat_bis ${CXX_TEST_PATH}/StreamingStat
+	${EXAMPLES_DATA}/amst.png
+         )
 
 ADD_EXECUTABLE(AlignementsQB  AlignementsQB.cxx)
 TARGET_LINK_LIBRARIES(AlignementsQB OTBFeatureExtraction OTBIO OTBCommon gdal ITKIO ITKCommon)
