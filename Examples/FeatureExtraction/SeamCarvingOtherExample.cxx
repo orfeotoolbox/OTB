@@ -221,6 +221,7 @@ int main(int argc, char ** argv)
   // \end{figure}
   //
   // Software Guide : EndLatex
-  
+
+   return EXIT_SUCCESS; 
 }
 
