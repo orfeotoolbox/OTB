@@ -12,7 +12,7 @@ SET(EXAMPLES_DATA ${OTB_SOURCE_DIR}/Examples/Data)
 #Tolerance sur diff pixel image
 SET(TOL 0.0)
 
-# !!!!!  Pointe sur un exe généré dans le repertoire Common
+# !!!!!  Pointe sur un exe gï¿½nï¿½rï¿½ dans le repertoire Common
 SET(COMMON_TESTS ${CXX_TEST_PATH}/otbCommonTests)
 SET(IO_TESTS     ${CXX_TEST_PATH}/otbIOTests)
 SET(VISU_TESTS   ${CXX_TEST_PATH}/otbVisuTests)
@@ -139,7 +139,7 @@ ADD_TEST(FA-00012-co_AlignementsQB ${CXX_TEST_PATH}/AlignementsQB
         )
 
 
-# ---  FA 00013 : impossible d'écrire une image TIFF(CAI) -> GDAL  ---
+# ---  FA 00013 : impossible d'ï¿½crire une image TIFF(CAI) -> GDAL  ---
 ADD_TEST(FA-00013-io_WriteImageTIFF ${IO_TESTS} 
         otbImageFileWriterTest
         ${INPUTDATA}/sbuv_NB_c1.png 
@@ -177,11 +177,21 @@ ADD_TEST(FA-00060-le_Map_Activation ${CXX_TEST_PATH}/MapActivation
 
 # -------       Fin des FAs traitees -----------------------------------
 
+ADD_TEST(FA-00070-vi_Streaming_Stat ${CXX_TEST_PATH}/StreamingStat
+	${EXAMPLES_DATA}/qb_RoadExtract.tif
+         )
+
+
+
 ADD_EXECUTABLE(AlignementsQB  AlignementsQB.cxx)
 TARGET_LINK_LIBRARIES(AlignementsQB OTBFeatureExtraction OTBIO OTBCommon gdal ITKIO ITKCommon)
 
 ADD_EXECUTABLE(MapActivation  MapActivation.cxx)
 TARGET_LINK_LIBRARIES(MapActivation OTBFeatureExtraction OTBIO OTBCommon gdal ITKIO ITKCommon)
+
+ADD_EXECUTABLE(StreamingStat  StreamingStat.cxx)
+TARGET_LINK_LIBRARIES(StreamingStat OTBFeatureExtraction OTBIO OTBCommon gdal ITKIO ITKCommon)
+
 
 INCLUDE_DIRECTORIES("${OTBTesting_BINARY_DIR}")
 
