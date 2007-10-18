@@ -28,7 +28,7 @@ namespace otb
 {
   
 /** \class ImageToPathListAlignFilter
- * \brief Classe de base pour extraire des alignements dans une image et en extraire ses coordonnées.
+ * \brief Base class used to implement filter to extract align points or group of points and give the coordinates. 
  *
  */
 template <class TInputImage, class TOutputPath>

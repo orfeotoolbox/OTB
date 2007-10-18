@@ -82,16 +82,16 @@ int otbAlignImageToPath( int argc, char * argv[] )
 	typedef ListAlignFilterType::OutputPathListType   ListAlignFilterOutputPathListType;
 	
 	
-	printf("Avant update\n");
+	otbMsgDebugMacro(<< "Before update");
 	testList->Update(); 
 	printf("Apres update\n");
 	ListAlignFilterOutputPathListType * sortiePath = testList->GetOutput();
 	
-	printf("Phase d'écriture:\n");
+	otbMsgDebugMacro(<< "Writing :");
 	
 	FILE *file = fopen(outputFilename,"w");
   	if (file == NULL) {
-    		fprintf(stderr,"Erreur dans l'ouverture du fichier");
+    		fprintf(stderr,"Error, can't open file");
     		exit(-1);
   	}
 	typedef itk::ContinuousIndex< double,2>              VertexType; 
@@ -102,7 +102,7 @@ int otbAlignImageToPath( int argc, char * argv[] )
 	double x1,y1,x2,y2;
 	  
 	int nbPath = sortiePath->Size();
-	printf("NbSegment: %d\n",nbPath);
+	otbMsgDebugMacro(<< "NbSegment: "<<nbPath);
 	fprintf(file,"Nb Segment: %d\n",nbPath);
 	for (int i =0 ; i<nbPath ;i++){
 	   vertexList = sortiePath->GetNthElement(i)->GetVertexList();

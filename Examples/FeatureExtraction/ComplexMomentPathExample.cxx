@@ -96,7 +96,7 @@ int main(int argc, char ** argv )
 
 
 
-            // Dessiner un carré:
+            // Draw a square:
 
  	path->Initialize();
 

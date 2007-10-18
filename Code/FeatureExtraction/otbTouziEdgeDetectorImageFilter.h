@@ -60,8 +60,7 @@ template <class TInputImage, class TOutputImage, class TOutputImageDirection = T
 class  ITK_EXPORT TouziEdgeDetectorImageFilter :  public ImageToModulusAndDirectionImageFilter< TInputImage, TOutputImage, TOutputImageDirection >
 {
 public:
-  /** 	Extrait les dimensions aussi bien des images 
-  	d'entrée (Input) que de sortie (Output). */
+  /** Extract input and output images sizes. */
   itkStaticConstMacro(		InputImageDimension,
   				unsigned int,
                       		TInputImage::ImageDimension);
@@ -81,7 +80,7 @@ public:
   /** Return the name of the class. */
   itkTypeMacro(TouziEdgeDetectorImageFilter, ImageToModulusAndDirectionImageFilter);
 
-  /** "typedef" pour simplifier la définition et la déclaration de variables. */
+  /** typedef to simplify variables definition and declaration. */
   typedef typename Superclass::InputImageType InputImageType;
   typedef typename Superclass::OutputImageType OutputImageType;
   typedef typename Superclass::OutputImageDirectionType OutputImageDirectionType;
@@ -97,8 +96,8 @@ public:
   itkGetConstReferenceMacro(Radius, SizeType);
  
 
-  /** TouziEdgeDetectorImageFilter a besoin d'une zone de traitement plus large en entrée qu'en sortie 
-   * afin de permettre une utilisation du filtre par la méthode dite pipeline
+  /** To be allowed to use the pipeline method TouziEdgeDetectorImageFilter needs 
+   * a treatment input area larger than the output one.
    *
    * \sa ImageToImageFilter::GenerateInputRequestedRegion() */
   virtual void GenerateInputRequestedRegion() throw(itk::InvalidRequestedRegionError);
@@ -110,11 +109,11 @@ protected:
 
   void BeforeThreadedGenerateData();
 
-  /** TouziEdgeDetectorImageFilter peut etre implémentée pour un traitement de filtre multithreaded.
-   * Ainsi, cette implémentation fournit la méthode ThreadedGenerateData()
-   * qui est appelée pour chaque thread du process. Les données image sont allouées automatiquement 
-   * par la classe "mère" en appelant la méthode ThreadedGenerateData(). ThreadedGenerateData peut seulement 
-   * écrire la portion de l'image spécifiée par le paramètre "outputRegionForThread"
+  /** TouziEdgeDetectorImageFilter can be implemented for a multithreaded filter treatment.
+   * Thus, this implementation give the ThreadedGenerateData() method.
+   * that is called for each process thread. Image datas are automatically allocated
+   * throught the parent class calling the ThreadedGenerateData() method.
+   * ThreadedGenerateData() can only write the area of the image specified by the parameter "outputRegionForThread"
    *
    * \sa ImageToImageFilter::ThreadedGenerateData(),
    *     ImageToImageFilter::GenerateData() */
@@ -125,7 +124,7 @@ private:
   TouziEdgeDetectorImageFilter(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
 
-  /** Déclaration du rayon */
+  /** Radius declaration */
   SizeType m_Radius;
   
 };

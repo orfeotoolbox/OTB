@@ -22,7 +22,7 @@
 namespace otb
 {
 /** \class ImageToTreeFilter
- * \brief Classe de base pour filter des données ayant en entrée une image et en sortie une list de Tree. 
+ * \brief Base class used to implement filters that have a image as input and a tree as output.  
  *
  * 
  * \ingroup TreeListFilters

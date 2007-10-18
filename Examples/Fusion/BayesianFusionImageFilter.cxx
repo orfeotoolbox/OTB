@@ -340,7 +340,7 @@ int main( int argc, char *argv[] )
   // \includegraphics[width=0.24\textwidth]{pretty_multiSpectInterp_0.5.eps}
   // \includegraphics[width=0.24\textwidth]{pretty_panchro_0.5.eps}
   // \itkcaption[Bayesian Data Fusion Example inputs]{Input
-  // images used for this example.}
+  // images used for this example (\copyright European Space Imaging).}
   // \label{fig:BayesianImageFusionFilterInput}
   // \end{figure}
   

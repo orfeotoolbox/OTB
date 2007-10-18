@@ -369,7 +369,7 @@ ImageToImageRCC8Calculator<TInputImage>
   ::IsBoolImageNotEmpty(BoolImagePointerType image)
   {
     typedef itk::ImageRegionConstIterator<BoolImageType> IteratorType;
-    // TODO : il faudra éventuellement changer qq chose ici.
+    // TODO : we'll eventually need to change something.
     IteratorType it(image,image->GetLargestPossibleRegion());
     it.GoToBegin();
     while(!it.IsAtEnd())

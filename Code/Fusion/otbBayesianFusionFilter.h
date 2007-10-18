@@ -84,7 +84,7 @@ namespace otb
 	      PanVect *= 2*m_Lambda;
 
 	      /** TODO
-	       * A modifier en utilisant l'opérateur + de la méthode. Pour le moment probleme avec exceptionmacro (pas de GetClassName...)
+	       *  To modify using + method operator. If we use it now -> exceptionmacro (no GetClassName...)
 	       * obsMat += PanVect;
 	       **/
 	      if( (obsMat.Cols() != PanVect.Cols()) || (obsMat.Rows() != PanVect.Rows()) ) 
