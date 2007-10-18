@@ -17,19 +17,19 @@
 =========================================================================*/
 #include "itkExceptionObject.h"
 
-#include "otbDEMReader.h"
+#include "otbDEMHandler.h"
 #include "otbImage.h"
 
-int otbDEMReaderNew(int argc, char * argv[])
+int otbDEMHandlerNew(int argc, char * argv[])
 {
   try
     {
       const unsigned int Dimension = 2;
       typedef otb::Image<unsigned char,Dimension> ImageType;
-      typedef otb::DEMReader DEMReaderType;
+      typedef otb::DEMHandler DEMHandlerType;
 
       // Instantiating object
-      DEMReaderType::Pointer object = DEMReaderType::New();
+      DEMHandlerType::Pointer object = DEMHandlerType::New();
     }
 
   catch( itk::ExceptionObject & err ) 

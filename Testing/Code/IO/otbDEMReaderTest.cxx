@@ -18,12 +18,12 @@
 #include "itkExceptionObject.h"
 
 #include "itkExceptionObject.h"
-#include "otbDEMReader.h"
+#include "otbDEMHandler.h"
 #include "otbImage.h"
 #include "otbImageFileWriter.h"
 #include "otbMapProjections.h"
 
-int otbDEMReaderTest(int argc, char * argv[])
+int otbDEMHandlerTest(int argc, char * argv[])
 {
   try
     {
@@ -34,11 +34,11 @@ int otbDEMReaderTest(int argc, char * argv[])
         bool bOpenDirectory(false);
       
         typedef otb::Image<float,Dimension> ImageType;
-        typedef otb::DEMReader DEMReaderType;
+        typedef otb::DEMHandler DEMHandlerType;
 
         // Instantiating object
-        DEMReaderType::Pointer demReader = DEMReaderType::New();
-        bOpenDirectory = demReader->OpenDEMDirectory(srtm_directory);
+        DEMHandlerType::Pointer DEMHandler = DEMHandlerType::New();
+        bOpenDirectory = DEMHandler->OpenDEMDirectory(srtm_directory);
         if( bOpenDirectory == false )
         {
                 itkGenericExceptionMacro(<<" OpenDEMDirectory return flase value !!");
@@ -50,7 +50,7 @@ int otbDEMReaderTest(int argc, char * argv[])
         geoPoint[0] = 44.08;
         geoPoint[1] = 3.6999;
 
-        height=demReader->GetHeightAboveMSL(geoPoint); 
+        height=DEMHandler->GetHeightAboveMSL(geoPoint); 
 
 				std::ofstream file;
 				file.open(outputfilename);
