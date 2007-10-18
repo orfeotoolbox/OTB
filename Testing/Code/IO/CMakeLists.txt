@@ -1104,13 +1104,13 @@ ADD_TEST(ioTvOSSIMImageMetaDataReader ${IO_TESTS}
 	 ${TEMP}/ioOSSIMVectorImageMetaDataReader.txt
          )
 
-# ---  otb::DEMReader ---
-ADD_TEST(ioTuDEMReaderNew ${IO_TESTS} otbDEMReaderNew )
+# ---  otb::DEMHandler ---
+ADD_TEST(ioTuDEMHandlerNew ${IO_TESTS} otbDEMReaderNew )
 
-ADD_TEST(ioTvDEMReader ${IO_TESTS} 
+ADD_TEST(ioTvDEMHandler ${IO_TESTS} 
 --compare-ascii ${TOL} 	${BASELINE_FILES}/ioDEMGetHeightAboveMSL.txt
                         ${TEMP}/ioDEMGetHeightAboveMSL.txt
-        otbDEMReaderTest
+        otbDEMHandlerTest
         ${INPUTDATA}/DEM/srtm_directory
         ${TEMP}/ioDEMGetHeightAboveMSL.txt
         )
@@ -1182,8 +1182,8 @@ otbDXFToSpatialObjectGroupFilterNew.cxx
 otbSpatialObjectDXFReaderNew.cxx
 otbSpatialObjectDXFReader.cxx
 otbOSSIMImageMetaDataReaderTest.cxx
-otbDEMReaderNew.cxx
-otbDEMReaderTest.cxx
+otbDEMHandlerNew.cxx
+otbDEMHandlerTest.cxx
 otbImageGeometryHandlerNew.cxx
 )
 
