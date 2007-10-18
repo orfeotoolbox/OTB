@@ -76,8 +76,7 @@ int otbOrthoRectificationFilter( int argc, char* argv[] )
         typedef otb::ImageFileReader<ImageType>  ReaderType;
 //        typedef otb::ImageFileWriter<ImageType>  WriterType;
         typedef otb::StreamingImageFileWriter<ImageType>  WriterType;
-				typedef itk::Transform<double,2,2> TransformType;
-        
+	       
 //				typedef otb::InverseSensorModel<double> ModelType;
 			  typedef itk::LinearInterpolateImageFunction<ImageType, double > InterpolatorType;
 				

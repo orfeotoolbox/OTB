@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbDEMReader_h
-#define __otbDEMReader_h
+#ifndef __otbDEMHandler_h
+#define __otbDEMHandler_h
 
 #include "itkIndent.h"
 #include "itkImageSource.h"
@@ -30,7 +30,7 @@
 
 namespace otb
 {
-/** \class DEMReader
+/** \class DEMHandler
  *
  * \brief Class for Reading a DEM data
  *
@@ -41,12 +41,12 @@ namespace otb
  *
  */
 
-class ITK_EXPORT DEMReader: public itk::Object
+class ITK_EXPORT DEMHandler: public itk::Object
 {
 public :
 /** Standard class typedefs. */
   typedef itk::Indent														Indent;
-  typedef DEMReader                             Self;
+  typedef DEMHandler                             Self;
   typedef itk::Object														Superclass;
   typedef itk::SmartPointer<Self>               Pointer;
   typedef itk::SmartPointer<const Self>         ConstPointer;
@@ -57,7 +57,7 @@ public :
   itkNewMacro(Self);
   
 	/** Run-time type information (and related methods). */
-  itkTypeMacro(DEMReader,Object);
+  itkTypeMacro(DEMHandler,Object);
   	                                      
 	/** Try to open the DEM directory. */
 	bool OpenDEMDirectory(const char* DEMDirectory);         
@@ -66,8 +66,8 @@ public :
 	virtual double GetHeightAboveMSL(const PointType& geoPoint);     
 
 protected:
-	DEMReader();
-	~DEMReader();
+	DEMHandler();
+	~DEMHandler();
 
 	void PrintSelf(std::ostream& os, Indent indent) const;
 

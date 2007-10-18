@@ -19,7 +19,7 @@
 #define __otbInverseSensorModel_h
 
 #include "otbSensorModelBase.h"
-#include "otbDEMReader.h"
+#include "otbDEMHandler.h"
 
 #include "itkMacro.h"
 #include "itkSmartPointer.h"
@@ -66,7 +66,7 @@ public :
 	typedef typename Superclass::OutputPointType           OutputPointType; 
 	
 	//typedef otb::Image<double, NInputDimensions>	 ImageType;
-	typedef DEMReader													 						 DEMHandlerType;
+	typedef DEMHandler													 						 DEMHandlerType;
 	typedef typename DEMHandlerType::Pointer							 DEMHandlerPointerType;     
 
 	/** Method for creation through the object factory. */

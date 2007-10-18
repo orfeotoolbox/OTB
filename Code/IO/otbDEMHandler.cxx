@@ -15,10 +15,10 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbDEMReader_cxx
-#define __otbDEMReader_cxx
+#ifndef __otbDEMHandler_cxx
+#define __otbDEMHandler_cxx
 
-#include "otbDEMReader.h"
+#include "otbDEMHandler.h"
 #include "otbMacro.h"
 
 namespace otb
@@ -26,16 +26,16 @@ namespace otb
 
 
 
-DEMReader
-::DEMReader()
+DEMHandler
+::DEMHandler()
 {
 	m_ElevManager=ossimElevManager::instance();
 }
   
 	
 
-DEMReader
-::~DEMReader()
+DEMHandler
+::~DEMHandler()
 {
 	// not needed, m_ElevManager created with instance() method
 	// delete m_ElevManager;
@@ -44,7 +44,7 @@ DEMReader
 
 
 bool 
-DEMReader
+DEMHandler
 ::OpenDEMDirectory(const char* DEMDirectory)
 {
 	ossimFilename ossimDEMDir;
@@ -59,7 +59,7 @@ DEMReader
 
 
 double 
-DEMReader
+DEMHandler
 ::GetHeightAboveMSL(const PointType& geoPoint)
 {
 	float height;
@@ -72,12 +72,12 @@ DEMReader
 
 
 void 
-DEMReader
+DEMHandler
 ::PrintSelf(std::ostream& os, Indent indent) const
 {
   Superclass::PrintSelf(os,indent);
  
-  os << indent << "DEMReader" << std::endl;
+  os << indent << "DEMHandler" << std::endl;
 }
 
 } // namespace otb

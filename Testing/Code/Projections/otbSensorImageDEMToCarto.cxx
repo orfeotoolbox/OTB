@@ -3,7 +3,7 @@
  * PURPOSE:
  *
  * Application pour projeter une région d'une image en coordonnées géographiques 
- * en utilisant un Interpolator+regionextractor+Iterator+DEMReader. 
+ * en utilisant un Interpolator+regionextractor+Iterator+DEMHandler. 
  * Prise en compte du MNT
  */
 
@@ -26,7 +26,7 @@
 
 #include "otbMapProjections.h"
 #include "otbMapProjection.h"
-#include "otbDEMReader.h"
+#include "otbDEMHandler.h"
 
 int otbSensorImageDEMToCarto( int argc, char* argv[] )
 {
@@ -121,11 +121,11 @@ ossimKeywordlist geom_kwl;
       ModelType::OutputPointType inputpoint;
 
 /********************************************************/
-/*                Création d'un DEMReader               */
+/*                Création d'un DEMHandler               */
 /********************************************************/
 
-typedef otb::DEMReader				  DEMReaderType;
-DEMReaderType::Pointer		      otbElevManager=DEMReaderType::New();
+typedef otb::DEMHandler				  DEMHandlerType;
+DEMHandlerType::Pointer		      otbElevManager=DEMHandlerType::New();
 double height;
 
 /********************************************************/
