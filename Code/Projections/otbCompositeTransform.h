@@ -36,6 +36,7 @@ namespace otb
  * (x,y) -> (x',y') -> (x'',y'')   =>    (x,y) -> (x'',y'') 
  * \ingroup Transform 
  */
+ 
 template <class TFirstTransform,
 					class TSecondTransform,
 					class TScalarType=double, 

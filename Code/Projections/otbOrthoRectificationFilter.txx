@@ -17,30 +17,9 @@
 =========================================================================*/
 #ifndef _otbOrthoRectificationFilter_txx
 #define _otbOrthoRectificationFilter_txx
+
 #include "otbOrthoRectificationFilter.h"
 
-#include "itkLinearInterpolateImageFunction.h"
-
-/*#include "itkObjectFactory.h"
-#include "itkConvertPixelBuffer.h"
-#include "itkImageRegion.h"
-#include "itkPixelTraits.h"
-#include "itkVectorImage.h"
-#include "itkMetaDataObject.h"
-
-#include "otbMacro.h"
-#include "otbSystem.h"
-#include "otbImageIOFactory.h"
-#include "otbMetaDataKey.h"
-#include "otbImageKeywordlist.h"
-
-#include "imaging/ossimImageHandlerRegistry.h"
-#include "imaging/ossimImageHandler.h"
-#include "init/ossimInit.h"
-#include "base/ossimKeywordlist.h"
-
-#include <itksys/SystemTools.hxx>
-#include <fstream>*/
 
 namespace otb
 {
@@ -50,7 +29,6 @@ template <class TInputImage, class TOutputImage, class TMapProjection, class TIn
 OrthoRectificationFilter<TInputImage, TOutputImage, TMapProjection, TInterpolatorPrecision>
 ::OrthoRectificationFilter() : otb::StreamingResampleImageFilter<TInputImage, TOutputImage,TInterpolatorPrecision>()
 {
-//	m_Resampler = ResamplerType::New();
 	m_SensorModel = SensorModelType::New();
 	m_MapProjection = MapProjectionType::New();
 	m_CompositeTransform = CompositeTransformType::New();

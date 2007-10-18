@@ -34,7 +34,8 @@ namespace otb
  *
  * \brief Class for Reading a DEM data
  *
- * This class is based on ossimElevManager. It takes in input the UL and LR geographic coordinates and the spacing.
+ * This class is based on ossimElevManager. 
+ * It allows to obtain height above MSL(Mean Sea Level) of a geographic point
  * Handle DTED and SRTM formats.
  * \ingroup Images
  *

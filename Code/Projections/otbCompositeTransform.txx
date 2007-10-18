@@ -48,10 +48,11 @@ CompositeTransform<TFirstTransform, TSecondTransform, TScalarType, NInputDimensi
 	SecondTransformOutputPointType point2;	
 	
 	pointTmp=m_FirstTransform->TransformPoint(point1); 
-	//pointTmp=utmprojection->TransformPoint(point1); 
+
 	otbMsgDevMacro(<< "Le point géographique correspondant est: ("<<  pointTmp[0]<< ","<<  pointTmp[1]<< ")"); 	
 
 	point2=m_SecondTransform->TransformPoint(pointTmp); 
+
   otbMsgDevMacro(<< "Les coordonnées en pixel sur l'image capteur correspondant à ce point sont:" << std::endl
                << point2[0] << ","<< point2[1] );
 

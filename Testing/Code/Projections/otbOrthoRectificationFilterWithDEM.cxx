@@ -73,11 +73,9 @@ int otbOrthoRectificationFilterWithDEM( int argc, char* argv[] )
    
         typedef otb::Image<unsigned int, 2>     ImageType;
         typedef otb::ImageFileReader<ImageType>  ReaderType;
-//        typedef otb::ImageFileWriter<ImageType>  WriterType;
         typedef otb::StreamingImageFileWriter<ImageType>  WriterType;
 				typedef itk::Transform<double,2,2> TransformType;
         
-//				typedef otb::InverseSensorModel<double> ModelType;
 			  typedef itk::LinearInterpolateImageFunction<ImageType, double > InterpolatorType;
 				
 				typedef otb::StreamingResampleImageFilter<ImageType,ImageType> ResamplerType;
@@ -88,7 +86,6 @@ int otbOrthoRectificationFilterWithDEM( int argc, char* argv[] )
         //Allocate pointer
         ReaderType::Pointer     	reader=ReaderType::New();
         WriterType::Pointer	    	writer=WriterType::New();
-//      ModelType::Pointer 				model=ModelType::New();
 				InterpolatorType::Pointer interpolator=InterpolatorType::New();
 				ModelType::Pointer                      model= ModelType::New();
 
@@ -103,8 +100,6 @@ int otbOrthoRectificationFilterWithDEM( int argc, char* argv[] )
         reader->GenerateOutputInformation();
         model->SetImageGeometry(reader->GetOutput()->GetImageKeywordlist());
 
-//				std::cout << "Model1: " << model << std::endl;
-			
 				orthoRectifFilter->SetInput(reader->GetOutput());
 				
 				ImageType::IndexType start;
@@ -137,7 +132,7 @@ int otbOrthoRectificationFilterWithDEM( int argc, char* argv[] )
         writer->SetInput(orthoRectifFilter->GetOutput());
 				
 				writer->SetTilingStreamDivisions();
- //       writer->SetNumberOfStreamDivisions(1000);
+
         otbGenericMsgDebugMacro(<< "Update writer ..." ); 
         writer->Update();
 
@@ -160,5 +155,5 @@ int otbOrthoRectificationFilterWithDEM( int argc, char* argv[] )
     } 
   return EXIT_SUCCESS;
 
- }//Fin main()
+ } //End main()
 

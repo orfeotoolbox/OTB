@@ -39,7 +39,6 @@ DEMReader
 {
 	// not needed, m_ElevManager created with instance() method
 	// delete m_ElevManager;
-
 }
 
 

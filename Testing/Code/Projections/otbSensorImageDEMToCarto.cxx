@@ -219,7 +219,7 @@ int max_x, max_y, min_x, min_y;
 ImageType::IndexType  			 iterationRegionStart;
 ImageType::SizeType  			 iteratorRegionSize;
 ImageType::RegionType			 iteratorRegion;
-if (otbElevManager->OpenDEMDirectory(argv[8]))
+if (model->SetDEMDirectory(argv[8]))
 {
 for(count=0;count<NumberOfStreamDivisions;count++)
 {//début boucle principale
@@ -265,10 +265,10 @@ geoPoint= utmprojection->TransformPoint(outputpoint);
 otbMsgDevMacro(<< "Le point géographique correspondant est: ("<<  geoPoint[0]<< ","<<  geoPoint[1]<< ")"); 
 
 //on calcule son altitude
-height=otbElevManager->GetHeightAboveMSL(geoPoint); 
+//height=otbElevManager->GetHeightAboveMSL(geoPoint); 
 
 //On calcule les coordonnées pixeliques sur l'image capteur
-inputpoint = model->TransformPoint(geoPoint, height);
+inputpoint = model->TransformPoint(geoPoint/*, height*/);
 otbMsgDevMacro(<< "Les coordonnées en pixel sur l'image capteur correspondant à ce point sont:" << std::endl
           << inputpoint[0] << ","<< inputpoint[1] );
 inputimage->TransformPhysicalPointToIndex(inputpoint,pixelindex);

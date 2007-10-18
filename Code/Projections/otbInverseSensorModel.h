@@ -79,10 +79,10 @@ public :
   itkStaticConstMacro(OutputSpaceDimension, unsigned int, NOutputDimensions);
   itkStaticConstMacro(ParametersDimension, unsigned int, NParametersDimensions); //A voir!!
 	         
-  // Pour projeter un point géo sur l'image en géométrie capteur.
+  // Transform of geographic point in image sensor index
 	OutputPointType TransformPoint(const InputPointType &point) const;
-  // Pour projeter un point géo connaissant son altitude.
-  OutputPointType TransformPoint(const InputPointType &point, double height) const;
+  // Transform of geographic point in image sensor index -- Backward Compatibility
+//  OutputPointType TransformPoint(const InputPointType &point, double height) const;
 
 	itkGetMacro(UseDEM, bool);
 	itkSetMacro(UseDEM, bool);
@@ -99,14 +99,15 @@ public :
       } 
   }
 	
-	virtual void SetDEMDirectory(const std::string& directory)
+	virtual bool SetDEMDirectory(const std::string& directory)
 	{
-		m_DEMHandler->OpenDEMDirectory(directory.c_str());
-		m_UseDEM = true;		
+		bool b = m_DEMHandler->OpenDEMDirectory(directory.c_str());
+		this->UseDEM(true);	
+		
+		return b;	
 	}
 	
-	void ActiveDEM() { m_UseDEM = true; this->Modified(); } 
-	void DesactiveDEM() { m_UseDEM = false; this->Modified();} 
+	virtual void UseDEM(bool b) { m_UseDEM = b; this->Modified(); } 
 
 protected:
   InverseSensorModel(); 

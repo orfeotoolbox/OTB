@@ -47,8 +47,7 @@ InverseSensorModel< TScalarType,NInputDimensions,NOutputDimensions,NParametersDi
 }
 
 
-///Méthode InverseTransformPoint:
-template < class TScalarType,
+/*template < class TScalarType,
            unsigned int NInputDimensions,
            unsigned int NOutputDimensions,
            unsigned int NParametersDimensions >
@@ -56,13 +55,9 @@ typename InverseSensorModel< TScalarType,NInputDimensions,NOutputDimensions,NPar
 InverseSensorModel< TScalarType,NInputDimensions,NOutputDimensions,NParametersDimensions>
 ::TransformPoint(const InputPointType &point, double height) const
 {
-//	std::cout << "INVERSESENSORMODEL MIARY" << std::endl;
-//	std::cout << "InverseSensorModel Before : (" << point[0] << "," << point[1] << ")" << std::endl;
-
-	//On transforme le type "itk::point" en type "ossim::ossimGpt" 
+	// Transformation of "itk::point" in "ossim::ossimGpt" 
   ossimGpt ossimGPoint(point[0], point[1], height);
   
-  //On calcule 
   ossimDpt ossimDPoint;
 
   if( this->m_Model == NULL)
@@ -72,16 +67,13 @@ InverseSensorModel< TScalarType,NInputDimensions,NOutputDimensions,NParametersDi
   
 	this->m_Model->worldToLineSample(ossimGPoint, ossimDPoint);
   
-  //On stocke le resultat dans un "OutputPointType"  
   OutputPointType outputPoint;
   outputPoint[0]=ossimDPoint.x;
   outputPoint[1]=ossimDPoint.y;
   
-//	std::cout << "InverseSensorModel After : (" << outputPoint[0] << "," << outputPoint[1] << ")" << std::endl;
 	return outputPoint;
-}
+}*/
   
-///Méthode InverseTransformPoint en tenant compte de l'altitude:
 template < class TScalarType,
            unsigned int NInputDimensions,
            unsigned int NOutputDimensions,
@@ -90,20 +82,17 @@ typename InverseSensorModel< TScalarType,NInputDimensions,NOutputDimensions,NPar
 InverseSensorModel< TScalarType,NInputDimensions,NOutputDimensions,NParametersDimensions>
 ::TransformPoint(const InputPointType &point) const
 {
-	//On transforme le type "itk::point" en type "ossim::ossimGpt" 
-  ossimGpt ossimGPoint(point[0], point[1]);
+	// Transformation of "itk::point" in "ossim::ossimGpt" 
+	ossimGpt ossimGPoint(point[0], point[1]);
 	
 	if (m_UseDEM)
 	{
 		otbMsgDebugMacro(<< "USING DEM ! ") ;
 		double height = m_DEMHandler->GetHeightAboveMSL(point);
-//		ossimGpt ossimGPoint(point[0], point[1], height);
 		otbMsgDebugMacro(<< "height : " << height) ;
 		ossimGPoint.height(height);
-//		ossimGPoint.height(height);
 	}
   
-  //On calcule 
   ossimDpt ossimDPoint;
 
   if( this->m_Model == NULL)
@@ -112,7 +101,6 @@ InverseSensorModel< TScalarType,NInputDimensions,NOutputDimensions,NParametersDi
   }
   this->m_Model->worldToLineSample(ossimGPoint, ossimDPoint); //"worldToLineSample" appelle la méthode "lineSampleHeightToWorld" pour prendre en compte l'élévation. 
   
-  //On stocke le resultat dans un "OutputPointType"  
   OutputPointType outputPoint;
   outputPoint[0]=ossimDPoint.x;
   outputPoint[1]=ossimDPoint.y;

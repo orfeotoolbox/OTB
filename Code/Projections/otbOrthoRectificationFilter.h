@@ -32,11 +32,15 @@ namespace otb
 
 
 
-/**Template otbOrthoRectificationFilter.txx
-* Cette classe permet de passer d'une MapProjection à une autre en passant par un point géographique. 
-* Ceci pour éviter TOUTES les combinaisons possibles de passage d'une proj. carto à une autre.
-* Template: Pour vérifier les types.
-**/
+/** \class OrthoRectificationFilter
+* 
+* \brief Class for Orthorectifying an image
+*
+* This class is used to apply map projection and sensor model transformation
+* to orthorectify an image, with or without DEM
+* 
+*/
+
 template <class TInputImage,
 					class TOutputImage,
 					class TMapProjection,
@@ -88,23 +92,21 @@ public :
 
 	itkGetObjectMacro(MapProjection, MapProjectionType);
 	
-	virtual void SetDEMDirectory(const std::string& directory)
+	/** Specify where are DEM files, and load useful ones */
+	virtual bool SetDEMDirectory(const std::string& directory)
 	{
-		m_SensorModel->SetDEMDirectory(directory);
+		bool b = m_SensorModel->SetDEMDirectory(directory);
 		this->Modified();
+		
+		return b;
 	}	
 	
-	virtual void ActiveDEM()
+	/** Method to decide to use DEM */	
+	virtual void UseDEM(bool b)
 	{
-		m_SensorModel->ActiveDEM();
+		m_SensorModel->UseDEM(b);
 	}
-	
-	virtual void DesactiveDEM()
-	{
-		m_SensorModel->DesactiveDEM();
-	}
-	
-	
+
 protected:
 	OrthoRectificationFilter();
 	~OrthoRectificationFilter();
@@ -121,16 +123,18 @@ private:
 	/** Calculate transformation model from sensor model & map projection	composition */	
 	void ComputeResampleTransformationModel();
 	
-	
 	/** Boolean used to know if transformation model computation is needed */
 	bool m_IsComputed;	
 	
+	/** Sensor Model used to transform geographic coordinates in image sensor	index */
 	SensorModelPointerType m_SensorModel;
+
+	/** Map Projection used to transform cartographic coordinates in geographic	coordinates */
 	MapProjectionPointerType m_MapProjection;
+	
+	/** Composite Transform of Sensor Model and Map Projection, used for Resampler */
 	CompositeTransformPointerType m_CompositeTransform;
-	
-	
-	
+
 };
 
 

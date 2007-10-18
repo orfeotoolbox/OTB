@@ -52,12 +52,12 @@ int otbDEMReaderTest(int argc, char * argv[])
 
         height=demReader->GetHeightAboveMSL(geoPoint); 
 
-	std::ofstream file;
-	file.open(outputfilename);
-	file << "--- HEIGHT ABOVE MSL TEST ---" << std::endl;
-	file << " geoPoint: "<<geoPoint[0]<<" ; "<<geoPoint[1]<< std::endl;
+				std::ofstream file;
+				file.open(outputfilename);
+				file << "--- HEIGHT ABOVE MSL TEST ---" << std::endl;
+				file << " geoPoint: "<<geoPoint[0]<<" ; "<<geoPoint[1]<< std::endl;
         file << " -> Height: "<<height<< std::endl;
-	file.close();
+				file.close();
 
         std::cout << "Height: "<<height<<std::endl;
      
