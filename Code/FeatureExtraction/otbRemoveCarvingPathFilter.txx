@@ -43,10 +43,9 @@ RemoveCarvingPathFilter<TInputImage,TInputPath,TOutputImage>
 ::GenerateData(void)
 {  
   
-  const InputImageType * inputImage = this->GetInput();
-  OutputImageType * outputImage       = this->GetOutput();
-  InputPathType * inputPath = static_cast<const InputPathType *>
-      (this->itk::ProcessObject::GetInput(1));
+  const InputImageType * inputImage = this->GetImageInput();
+  const InputPathType * inputPath = this->GetPathInput();
+  OutputImageType * outputImage = this->GetOutput();
   
   outputImage->SetBufferedRegion( outputImage->GetRequestedRegion() );
   outputImage->Allocate();
