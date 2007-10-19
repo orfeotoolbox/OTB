@@ -20,6 +20,7 @@
 #pragma warning ( disable : 4786 )
 #endif
 
+#include "otbMacro.h"
 #include "itkExceptionObject.h"
 #include "itkImage.h"
 #include "itkImageFileWriter.h"
@@ -84,7 +85,7 @@ int otbAlignImageToPath( int argc, char * argv[] )
 	
 	otbGenericMsgDebugMacro(<< "Before update");
 	testList->Update(); 
-	printf("Apres update\n");
+	otbGenericMsgDebugMacro(<< "After update");
 	ListAlignFilterOutputPathListType * sortiePath = testList->GetOutput();
 	
 	otbGenericMsgDebugMacro(<< "Writing :");
