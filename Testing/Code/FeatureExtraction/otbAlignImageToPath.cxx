@@ -82,12 +82,12 @@ int otbAlignImageToPath( int argc, char * argv[] )
 	typedef ListAlignFilterType::OutputPathListType   ListAlignFilterOutputPathListType;
 	
 	
-	otbMsgDebugMacro(<< "Before update");
+	otbGenericMsgDebugMacro(<< "Before update");
 	testList->Update(); 
 	printf("Apres update\n");
 	ListAlignFilterOutputPathListType * sortiePath = testList->GetOutput();
 	
-	otbMsgDebugMacro(<< "Writing :");
+	otbGenericMsgDebugMacro(<< "Writing :");
 	
 	FILE *file = fopen(outputFilename,"w");
   	if (file == NULL) {
@@ -102,7 +102,7 @@ int otbAlignImageToPath( int argc, char * argv[] )
 	double x1,y1,x2,y2;
 	  
 	int nbPath = sortiePath->Size();
-	otbMsgDebugMacro(<< "NbSegment: "<<nbPath);
+	otbGenericMsgDebugMacro(<< "NbSegment: "<<nbPath);
 	fprintf(file,"Nb Segment: %d\n",nbPath);
 	for (int i =0 ; i<nbPath ;i++){
 	   vertexList = sortiePath->GetNthElement(i)->GetVertexList();
