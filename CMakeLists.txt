@@ -279,6 +279,16 @@ OPTION(OTB_DISABLE_CXX_EXAMPLES_TESTING "Disable examples testing." OFF)
 MARK_AS_ADVANCED(OTB_DISABLE_CXX_EXAMPLES_TESTING)
 
 #-----------------------------------------------------------------------------
+# Advanced option to avoid recompiling utilities at each cmake reconfiguration
+OPTION(OTB_DISABLE_UTILITIES_COMPILATION "Disable utilities compilation (developpers only - use at you own risk)" OFF)
+MARK_AS_ADVANCED(OTB_DISABLE_UTILITIES_COMPILATION)
+
+IF(OTB_DISABLE_UTILITIES_COMPILATION)
+LINK_DIRECTORIES("${OTB_BINARY_DIR}/bin")
+ENDIF(OTB_DISABLE_UTILITIES_COMPILATION)
+
+
+#-----------------------------------------------------------------------------
 # Option to define streaming activation in applications
 # Use by otbConfigure.h.in
 SET(OTB_STREAM_IMAGE_SIZE_TO_ACTIVATE_STREAMING 8*2000*2000 CACHE STRING "Image size to activate using streaming for applications.")
@@ -616,6 +626,4 @@ ELSE("${CMAKE_MAJOR_VERSION}.${CMAKE_MINOR_VERSION}" GREATER 1.7)
           "This version of CMake is too old to build this version of OTB.  "
           "Please upgrade to CMake 1.8.")
 ENDIF("${CMAKE_MAJOR_VERSION}.${CMAKE_MINOR_VERSION}" GREATER 1.7)
-
-
 

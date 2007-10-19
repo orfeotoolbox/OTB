@@ -57,10 +57,14 @@ ENDIF("GDCM_COMPILER_HAS_FUNCTION" MATCHES "^GDCM_COMPILER_HAS_FUNCTION$")
 
 #-----------------------------------------------------------------------------
 # Build directory on which many applications depend
+
+# ADDED BY OTB DEVELOPPERS TO AVOID INTENSIVE RECOMPILATION
+IF(NOT DISABLE_OTB_UTILITIES_COMPILATION)
 SUBDIRS(
   Dicts
   src
 )
+ENDIF(NOT DISABLE_OTB_UTILITIES_COMPILATION)
 
 # Set the place for the public dictionary, must be set before gdcmConfigure.h
 SET( GDCM_PUB_DICT_PATH "${CMAKE_INSTALL_PREFIX}${GDCM_DATA_DIR}")
