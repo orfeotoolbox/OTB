@@ -136,7 +136,7 @@ MapProjection<TOssimMapProjection, TScalarType, NInputDimensions, NOutputDimensi
 {
 	OutputPointType outputPoint;
 	
-	if (Transform == INVERSE)
+	if (DirectionOfMapping == INVERSE)
 	{
 		//On transforme le type "itk::point" en type "ossim::ossimDpt" 
   	ossimDpt ossimDPoint(point[0], point[1]);
@@ -148,7 +148,7 @@ MapProjection<TOssimMapProjection, TScalarType, NInputDimensions, NOutputDimensi
   	outputPoint[0]=ossimGPoint.lat;
   	outputPoint[1]=ossimGPoint.lon;
 	}
-	else if (Transform == FORWARD)
+	else if (DirectionOfMapping == FORWARD)
 	{
 		//On transforme le type "itk::point" en type "ossim::ossimGpt" 
   	ossimGpt ossimGPoint(point[0], point[1]);

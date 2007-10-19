@@ -64,17 +64,19 @@ public :
   typedef itk::SmartPointer<Self>                    	      Pointer;
   typedef itk::SmartPointer<const Self>              	      ConstPointer;
 
-  typedef typename Superclass::ScalarType 									ScalarType;
-  typedef TOssimMapProjection  															OssimMapProjectionType;
+  typedef typename Superclass::ScalarType 		ScalarType;
+  typedef TOssimMapProjection  				OssimMapProjectionType;
   typedef itk::Point<ScalarType,NInputDimensions >   	      InputPointType;
   typedef itk::Point<ScalarType,NOutputDimensions >  	      OutputPointType;        
  
   /** Method for creation through the object factory. */
-	itkNewMacro( Self );
+itkNewMacro( Self );
   
 	/** Run-time type information (and related methods). */
 	itkTypeMacro( MapProjection, Transform );
 
+	
+  itkStaticConstMacro(DirectionOfMapping,InverseOrForwardTransformationEnum,transform);
   itkStaticConstMacro(InputSpaceDimension, unsigned int, NInputDimensions);
   itkStaticConstMacro(OutputSpaceDimension, unsigned int, NOutputDimensions);
   itkStaticConstMacro(SpaceDimension, unsigned int, NInputDimensions);
