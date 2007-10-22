@@ -11,7 +11,7 @@ tasks, but it is not an easy world to enter.
 These tutorial are designed to help you enter this world and grasp the logic
 behind OTB. Each of this tutorial should not take more than 10 minutes (typing
 included) and each is designed to highlight a specific point. You may not be
-concerned by the latest tutorials but it is strongly advised to go throught the
+concerned by the latest tutorials but it is strongly advised to go through the
 first few which cover the basis you'll use almost everywhere.
 
 
@@ -157,8 +157,8 @@ output.png}.
 You have the filtered version of your image in the \code{output.png} file.
 
 Now, you can practice a bit and try to replace the filter by one of the 150+
-filters which heritate from the \doxygen{otb}{ImageToImageFilter} class. You
-will definitly find some useful filters here!
+filters which inherit from the \doxygen{otb}{ImageToImageFilter} class. You
+will definitely find some useful filters here!
 
 \section{Handling type: scaling output}
 \label{sec:TutorialScaling}
@@ -176,7 +176,7 @@ format uses integer and you should convert the result to an integer image if you
 still want to visualize your images with your usual viewer (we will see in a
 tutorial later how you can avoid that using the built-in viewer).
 
-To realize this convertion, we will use the
+To realize this conversion, we will use the
 \doxygen{itk}{RescaleIntensityImageFilter}.
 
 Add the two lines to the \code{CMakeLists.txt} file:
@@ -218,7 +218,7 @@ TARGET_LINK_LIBRARIES(SmarterFilteringPipeline OTBCommon OTBIO)
 
 Compile with \code{make} as usual. The execution is a bit different now as we
 have an automatic parsing of the command line. First, try to execute as
-\code{SmarterFilteringPipeline} withou any argument.
+\code{SmarterFilteringPipeline} without any argument.
 
 The usage message (automatically generated) appears:
 
