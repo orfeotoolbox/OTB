@@ -40,14 +40,14 @@
 // \doxygen{otb}{RAndNIRVegetationIndexImageFilter} with the use of the Normalized 
 // Difference Vegatation Index (NDVI). 
 // NDVI computes the difference between the NIR channel, noted $L_{NIR}$, and the red channel,
-// noted $L_{r}$ radiances reflected from the surface and transmitted through the atmosphere :
+// noted $L_{r}$ radiances reflected from the surface and transmitted through the atmosphere:
 //
 // \begin{equation}
 // \mathbf{NDVI} = \frac{L_{NIR}-L_{r}}{L_{NIR}+L_{r}}
 // \end{equation}
 //
 // With the \doxygen{otb}{RAndNIRVegetationIndexImageFilter} class the filter
-// inputs are one channel images : one inmage represents the NIR channel, the 
+// inputs are one channel images: one inmage represents the NIR channel, the 
 // the other the NIR channel.
 //
 // Let's look at the minimal code required to use this algorithm. First, the following header 
@@ -79,7 +79,7 @@ int main( int argc, char *argv[] )
   
   //  Software Guide : BeginLatex
   //  
-  // The image types are now defined using pixel types and particular
+  // The image types are now defined using pixel types the
   // dimension. Input and output images are defined as \doxygen{otb}{Image}.
   //
   //  Software Guide : EndLatex 
@@ -101,7 +101,9 @@ int main( int argc, char *argv[] )
   //  Software Guide : BeginLatex
   //  
   // The NDVI (Normalized Difference Vegetation Index) is instantiated using 
-  // the images pixel type types as template parameters.
+  // the images pixel type types as template parameters. It is
+  // implemented as a functor class which will be passed as a
+  // parameter to an \doxygen{otb}{RAndNIRVegetationIndexImageFilter}.
   //
   //  Software Guide : EndLatex 
   
@@ -122,7 +124,8 @@ int main( int argc, char *argv[] )
   typedef otb::RAndNIRVegetationIndexImageFilter<InputRImageType,
                                                  InputNIRImageType,
                                                  OutputImageType,   
-                                                 FunctorType>       RAndNIRVegetationIndexImageFilterType;
+                                                 FunctorType>
+                                RAndNIRVegetationIndexImageFilterType;
   // Software Guide : EndCodeSnippet
   
   
@@ -134,7 +137,7 @@ int main( int argc, char *argv[] )
   
   //  Software Guide : BeginLatex
   //  
-  //  Now the input images is set and a name is given to the output image.
+  //  Now the input images are set and a name is given to the output image.
   //  
   //  Software Guide : EndLatex 
   
@@ -147,8 +150,9 @@ int main( int argc, char *argv[] )
   
   // Software Guide : BeginLatex
   //  
-  // The filter inputs are linked to readers output and
-  // the filter output is linked to the writer input.
+  // We set the processing pipeline: the filter inputs are linked to
+  // reader output and the filter output is linked to the writer
+  // input.
   //
   // Software Guide : EndLatex 
   
@@ -238,15 +242,15 @@ int main( int argc, char *argv[] )
     // Software Guide : BeginLatex
     //
     // Let's now run this example using as input the images
-    // \code{NDVI\_3.hdr} and  \code{NDVI\_4.hdr} (images kindly and free of charge given by the SISA and the CNES) 
-    // and $\gamma=0.6$ provided in the directory \code{Examples/Data}.
+    // \code{NDVI\_3.hdr} and  \code{NDVI\_4.hdr} (images kindly and free of charge given by SISA and CNES) 
+    // provided in the directory \code{Examples/Data}.
     //
     //
     // \begin{figure} \center
     // \includegraphics[width=0.24\textwidth]{pretty_Red.eps}
     // \includegraphics[width=0.24\textwidth]{pretty_NIR.eps}
     // \includegraphics[width=0.24\textwidth]{pretty_NDVIRAndNIRVegetationIndex.eps}
-    // \itkcaption[ARVI Example]{NDVI input images on the right (Red channel and NIR channel), on the left the result of the algorithm.}
+    // \itkcaption[ARVI Example]{NDVI input images on the left (Red channel and NIR channel), on the right the result of the algorithm.}
     // \label{fig:NDVIRAndNIRVegetationIndex}
     // \end{figure}
     //
