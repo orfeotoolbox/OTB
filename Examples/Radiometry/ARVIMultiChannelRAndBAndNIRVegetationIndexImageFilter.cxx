@@ -40,16 +40,19 @@
 // \index{otb::VegetationIndex!header}
 //
 //
-// The following example illustrates the use of the otb::MultiChannelRAndBAndNIR
-// VegetationIndexImageFilter with the use of the Atmospherically Resistant Vegetation Index (ARVI).
-// ARVI is an improved version of the NDVI that is more resistent to the atmospheric effect.
-// In addition to the red and NIR channels (used in the NRVI), the ARVI takes advantage of 
-// the presence of the blue channel to accomplish a self-correction process for the 
-// atmospheric effect on the red channel. For this, it uses the difference in the radiance 
-// between the blue and the red channels to correct the radiance in the red channel.
-// Let's define $\rho_{NIR}^{*}$, $\rho_{r}^{*}$, $\rho_{b}^{*}$ the normalized radiance (that is to say 
-// the radiance normalized to reflectance units) of red, blue and NIR channels.
-// $\rho_{rb}^{*}$ is defined as
+// The following example illustrates the use of the
+// otb::MultiChannelRAndBAndNIR VegetationIndexImageFilter with the
+// use of the Atmospherically Resistant Vegetation Index (ARVI).  ARVI
+// is an improved version of the NDVI that is more resistent to the
+// atmospheric effect.  In addition to the red and NIR channels (used
+// in the NDVI), the ARVI takes advantage of the presence of the blue
+// channel to accomplish a self-correction process for the atmospheric
+// effect on the red channel. For this, it uses the difference in the
+// radiance between the blue and the red channels to correct the
+// radiance in the red channel.  Let's define $\rho_{NIR}^{*}$,
+// $\rho_{r}^{*}$, $\rho_{b}^{*}$ the normalized radiances (that is to
+// say the radiance normalized to reflectance units) of red, blue and
+// NIR channels respectively.  $\rho_{rb}^{*}$ is defined as
 // 
 // \begin{equation}
 // \rho_{rb}^{*} = \rho_{r}^{*} - \gamma*(\rho_{b}^{*} - \rho_{r}^{*})
@@ -71,7 +74,7 @@
 // For more details, refer to Faufman and Tanré work \cite{ARVI}.
 // 
 // With the \doxygen{otb}{MultiChannelRAndBAndNIRVegetationIndexImageFilter} class the 
-// input has to be a multi channels image and the user has to specify index channel
+// input has to be a multi channel image and the user has to specify index channel
 // of the red, blue and NIR channel.
 //
 // Let's look at the minimal code required to use this algorithm. First, the following header 
@@ -92,6 +95,7 @@
 #include "itkRescaleIntensityImageFilter.h"
 #include "otbVectorRescaleIntensityImageFilter.h"
 #include "otbMultiChannelExtractROI.h"
+#include "itkThresholdImageFilter.h"
 
 int main( int argc, char *argv[] )
 {
@@ -105,7 +109,7 @@ int main( int argc, char *argv[] )
   
   //  Software Guide : BeginLatex
   //  
-  // The image types are now defined using pixel types and particular
+  // The image types are now defined using pixel types and 
   // dimension. The input image is defined as an \doxygen{otb}{VectorImage}, 
   // the output is a \doxygen{otb}{Image}.
   //
@@ -125,8 +129,8 @@ int main( int argc, char *argv[] )
 
   //  Software Guide : BeginLatex
   //  
-  // The ARVI (Atmospherically Resistant Vegetation Index) is instantiated using 
-  // the images pixel type types as template parameters.
+  // The ARVI (Atmospherically Resistant Vegetation Index) is
+  // instantiated using the image pixel types as template parameters.
   //
   //  Software Guide : EndLatex 
 
@@ -140,8 +144,10 @@ int main( int argc, char *argv[] )
    
   //  Software Guide : BeginLatex
   //  
-  // The \doxygen{otb}{MultiChannelRAndBAndNIRVegetationIndexImageFilter} type is instantiated using the images
-  // types and the ARVI functor as template parameters.
+  // The
+  // \doxygen{otb}{MultiChannelRAndBAndNIRVegetationIndexImageFilter}
+  // type is defined using the image types and the ARVI functor as
+  // template parameters. We then instantiate the filter itself.
   //
   //  Software Guide : EndLatex 
 
@@ -150,21 +156,10 @@ int main( int argc, char *argv[] )
   		                                   <InputImageType,
   		                                    OutputImageType,
   		                                    FunctorType      > 
-                          MultiChannelRAndBAndNIRVegetationIndexImageFilterType;
-  // Software Guide : EndCodeSnippet  
-  
-  // Instantiating object
-  
-  //  Software Guide : BeginLatex
-  //  
-  //  Next the filter is created by invoking the \code{New()} method and
-  //  assigning the result to a \doxygen{itk}{SmartPointer}.
-  //
-  //  Software Guide : EndLatex 
-  
-  // Software Guide : BeginCodeSnippet
+                   MultiChannelRAndBAndNIRVegetationIndexImageFilterType;
+
   MultiChannelRAndBAndNIRVegetationIndexImageFilterType::Pointer 
-  		filter = MultiChannelRAndBAndNIRVegetationIndexImageFilterType::New();
+    filter = MultiChannelRAndBAndNIRVegetationIndexImageFilterType::New();
   // Software Guide : EndCodeSnippet 
   
   ReaderType::Pointer reader = ReaderType::New();
@@ -195,9 +190,10 @@ int main( int argc, char *argv[] )
   
   //  Software Guide : BeginLatex
   //  
-  // The $\gamma$ parameter is set. The \doxygen{otb}{MultiChannelRAndBAndNIRVegetationIndexImageFilter}
-  // class set the default value of $\gamma$ at 0.5.
-  // This parameter is used to reduce the atmospheric effect on a global scale.
+  // The $\gamma$ parameter is set. The
+  // \doxygen{otb}{MultiChannelRAndBAndNIRVegetationIndexImageFilter}
+  // class sets the default value of $\gamma$ to $0.5$.  This parameter
+  // is used to reduce the atmospheric effect on a global scale.
   //
   //  Software Guide : EndLatex 
 
@@ -208,7 +204,7 @@ int main( int argc, char *argv[] )
   //  Software Guide : BeginLatex
   //  
   // The filter input is linked to the reader output and
-  // the filter outout is linked to the writer input.
+  // the filter output is linked to the writer input.
   //
   //  Software Guide : EndLatex 
 
@@ -277,10 +273,18 @@ int main( int argc, char *argv[] )
   vectPrettyWriter->SetInput( selecter->GetOutput() );
   
 
+  typedef itk::ThresholdImageFilter< OutputImageType >   ThresholderType;
+
+  ThresholderType::Pointer thresholder = ThresholderType::New();
+  thresholder->SetInput(  filter->GetOutput() );
+  thresholder->SetOutsideValue( 1.0 );
+  thresholder->ThresholdOutside( 0.0, 1.0 );
+  thresholder->Update();
+
 
   RescalerType::Pointer     rescaler     = RescalerType::New();                                       
   WriterPrettyType::Pointer prettyWriter = WriterPrettyType::New();
-  rescaler->SetInput( filter->GetOutput() );
+  rescaler->SetInput( thresholder->GetOutput() );
   rescaler->SetOutputMinimum(0);
   rescaler->SetOutputMaximum(255);
   prettyWriter->SetFileName( argv[4] );
@@ -308,8 +312,9 @@ int main( int argc, char *argv[] )
   // Software Guide : BeginLatex
   //
   // Let's now run this example using as input the image
-  // \code{IndexVegetation.jpg} (image kindly and free of charge given by the SISA and the CNES) 
-  // and $\gamma$=0.6 provided in the directory \code{Examples/Data}.
+  // \code{IndexVegetation.hd} (image kindly and free of charge given
+  // by SISA and CNES) and $\gamma$=0.6 provided in the
+  // directory \code{Examples/Data}.
   //
   //
   // \begin{figure} \center
