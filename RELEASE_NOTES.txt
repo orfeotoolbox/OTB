@@ -1,3 +1,139 @@
+OTB-v.1.6.0 - Changes since version 1.4.0
+-----------------------------------------
+
+*BasicFilters:
+
+	- Added StreamingVectorStatisticsImageFilter to compute 
+	the second order stastics on a large vector image.
+
+	- Added the MAtrixTransposeMatrixImageFilter to compute 
+	the product of the matrix of vector pixels from image 1 
+	in row with the the matrix of vector pixels from image 2 
+	column for large vector image. 
+
+       - Added the otb::VectorImageTo3DScalarImageFilter which transform 
+       a vector image into a 3D scalar image where each band is represented 
+       in a layer of the 3rd dimension.
+
+       - Added the otb::ImageListToVectorImageFilter and 
+       otb::VectorImageToImageListFilter to convert a vector image 
+       from/to an image list.
+
+       - Added the otb::ImageListToImageListApplyFilter which apply a given 
+       scalar image filter to a list of image.
+
+       - Added the otb::PerBandImageFilter, which apply a given scalar filter 
+       to each band of a VectorImage. This is not the optimal way for most treatments,
+       but it allows the use of almost every scalar filter on vector images.
+
+       - Added the otb::StreamingResampleImageFilter, which is a streaming capable 
+       version of the itk::ResampleImageFilter.
+
+*ChangeDetection:
+	
+	- Added the otb::KullbackLeiblerDistanceImageFilter to compute the 
+	Kullback-Leibler distance between two images.
+	
+	- Added the otb::KullbackLeiblerProfileImageFilter to perform a 
+	multi-scale change detection using the Kullback-Leibler distance.
+
+
+*Common:
+	
+	- Added an otb::Polygon, which represent a closed polyline on which 
+	intersection or point interiority can be tested.
+	
+*IO:
+
+	- Added an otb::DEMHandler to fetch the elevation value in SRTM directory.
+
+	- Added an otb::DEMToImageGenerator to generate an elevation map.
+
+	- Added a new tiling streaming mode.
+
+	- Added the otb::ImageGeometryHandler, which allows to handle seamlessly 
+	the image geometry information.
+
+	- Fixed a bug in the otb::MSTARImageIO.
+	
+*Learning:
+
+	- Added methods to access the alpha values, the number of support vectors, 
+	the support vectors, the number of hyperplanes.
+
+	- Added the otb::SEMClassifier, implementing the Stochastic Expectation  
+	Maximization algorithm to perform an estimation of a mixture model.
+
+*MultiScale:
+
+	- Various name changes and bugfixes in the morphological pyramid 
+	segmentation classes.
+	
+*Radiometry:
+
+	- Added the Radiometry directory, containing everything that has to do 
+	with image radiometry.
+	- Added the NDVI and ARVI (3 input bands) vegetation index filters.
+
+*Projections:
+
+	- Added the Projections directory, containing everything that has to do 
+	with image projections.
+	
+	- Added an otb::DEMHandler to fetch the elevation value in SRTM directory.
+
+	- Added an otb::DEMToImageGenerator to generate an elevation map.
+
+	- Added an otb::OrthoRectificationFilter to perform orthorectification of 
+	geo-referenced images.
+	
+	- Added the forward and inverse sensor model projection.
+
+	- Added several map projections transform (Eckert4, LambertConformalConic,
+	TransMercator,Mollweid,Sinusoidal,UTM)
+
+*Fusion:
+
+	- Added the Fusion directory, containing everything that has to do
+	with image fusion.
+	
+	- Added the otb::BayesianFusionImageFilter, a pan-sharpening filter which 
+	algoritm has been kindly contributed by Julien Radoux.
+
+
+*Documentation:
+
+	- Added various documented examples in the SoftwareGuide for the new classes.
+	
+	- Added a Tutorial section in the SoftwareGuide.
+
+*Utilities:
+
+	- Added the 6S library which will soon play a role in the radiometry module.
+
+	- Updated the internal version of ITK to 3.4.0.
+
+*Platforms:
+
+	- Fixed the random segfault of otbInteractiveChangeDetectionAppli under Visual 8.0.
+
+*Applications:
+
+	- Added the otbImageViewerManager application which allows to open multiple images, 
+	configure viewers and link displays.
+
+	- Added the otbRoadExtraction which demonstrates the road extraction algorithm
+	implemented in the FeatureExtraction module.
+
+	- Added the otbOrthoRectification application which allows to ortho rectify images in
+	command line using the brand new Projections module of the Orfeo ToolBox.
+
+	- Added an option in CMakeLists.txt to use VTK or not (enable or disable the
+	following application).
+
+	- Added the Pireo registration application (VTK needed).
+
+
 OTB-v.1.4.1 - Changes since version 1.4.0
 -----------------------------------------
 
