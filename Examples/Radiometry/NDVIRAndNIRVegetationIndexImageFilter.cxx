@@ -52,12 +52,11 @@
 //
 // Let's look at the minimal code required to use this algorithm. First, the following header 
 // defining the \doxygen{otb}{RAndNIRVegetationIndexImageFilter} 
-// and the \doxygen{otb}{VegetationIndex} (that contains the ARVI) classes must be included.
+// class must be included.
 // Software Guide : EndLatex 
 
 // Software Guide : BeginCodeSnippet
 #include "otbRAndNIRVegetationIndexImageFilter.h"
-#include "otbVegetationIndex.h"
 // Software Guide : EndCodeSnippet
 
 
