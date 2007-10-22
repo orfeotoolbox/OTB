@@ -75,8 +75,9 @@ itkNewMacro( Self );
 	/** Run-time type information (and related methods). */
 	itkTypeMacro( MapProjection, Transform );
 
+typedef InverseOrForwardTransformationEnum DirectionOfMappingEnumType;
 	
-  itkStaticConstMacro(DirectionOfMapping,InverseOrForwardTransformationEnum,transform);
+  itkStaticConstMacro(DirectionOfMapping,DirectionOfMappingEnumType,transform);
   itkStaticConstMacro(InputSpaceDimension, unsigned int, NInputDimensions);
   itkStaticConstMacro(OutputSpaceDimension, unsigned int, NOutputDimensions);
   itkStaticConstMacro(SpaceDimension, unsigned int, NInputDimensions);

@@ -136,34 +136,40 @@ MapProjection<TOssimMapProjection, TScalarType, NInputDimensions, NOutputDimensi
 {
 	OutputPointType outputPoint;
 	
-	if (DirectionOfMapping == INVERSE)
-	{
-		//On transforme le type "itk::point" en type "ossim::ossimDpt" 
-  	ossimDpt ossimDPoint(point[0], point[1]);
-  
-  	//On le projète sur la carte 
-  	ossimGpt ossimGPoint;
-  	ossimGPoint=m_MapProjection->inverse(ossimDPoint);
-	
-  	outputPoint[0]=ossimGPoint.lat;
-  	outputPoint[1]=ossimGPoint.lon;
-	}
-	else if (DirectionOfMapping == FORWARD)
+	switch(DirectionOfMapping)
+	  {
+	case INVERSE:
+	  {
+	    //On transforme le type "itk::point" en type "ossim::ossimDpt" 
+	    ossimDpt ossimDPoint(point[0], point[1]);
+	    
+	    //On le projète sur la carte 
+	    ossimGpt ossimGPoint;
+	    ossimGPoint=m_MapProjection->inverse(ossimDPoint);
+	    
+	    outputPoint[0]=ossimGPoint.lat;
+	    outputPoint[1]=ossimGPoint.lon;
+	    break;
+	  }
+	  case FORWARD:
 	{
 		//On transforme le type "itk::point" en type "ossim::ossimGpt" 
-  	ossimGpt ossimGPoint(point[0], point[1]);
-  
-  	//On le projète sur la carte 
-  	ossimDpt ossimDPoint;
-  	ossimDPoint=m_MapProjection->forward(ossimGPoint);
-
-  	outputPoint[0]=ossimDPoint.x;
-  	outputPoint[1]=ossimDPoint.y;
+	  ossimGpt ossimGPoint(point[0], point[1]);
+	  
+	  //On le projète sur la carte 
+	  ossimDpt ossimDPoint;
+	  ossimDPoint=m_MapProjection->forward(ossimGPoint);
+	  
+	  outputPoint[0]=ossimDPoint.x;
+	  outputPoint[1]=ossimDPoint.y;
+	  break;
 	}
-	else
-	{
-		itkExceptionMacro(<<"Model is INVERSE or FORWARD only !!");
-	}	
+	  default:
+	    {
+	      itkExceptionMacro(<<"Model is INVERSE or FORWARD only !!");
+	      break;
+	    }	
+	  }
   
 	return outputPoint;
 }
