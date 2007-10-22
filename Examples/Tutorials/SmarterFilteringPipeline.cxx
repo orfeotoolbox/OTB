@@ -104,7 +104,7 @@ int main(int argc, char ** argv)
     
     //  Software Guide : BeginLatex 
     //
-    //  It's now time to tell the parser what are the options we want. Specials
+    //  It's now time to tell the parser what are the options we want. Special
     //options are available for input and output images with the
     // \code{AddInputImage()} and \code{AddOutputImage()} methods.
     //

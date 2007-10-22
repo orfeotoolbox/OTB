@@ -69,8 +69,9 @@ int main(int argc, char ** argv)
   
   //  Software Guide : BeginLatex
   //
-  // Unkike most OTB filters,  the  \doxygen{otb}{ImageViewer} is 
-  // templated over the input pixel type
+  // Unlike most OTB filters,  the  \doxygen{otb}{ImageViewer} is 
+  // templated over the input pixel type instead of the image
+  // type. This will allow to use it with scalar and vector images.
   //
   //  Software Guide : EndLatex 
   
@@ -105,8 +106,8 @@ int main(int argc, char ** argv)
   
   //  Software Guide : BeginLatex
   //
-  // A call to \code{Fl::run()} is mandatory to hang the program 
-  // execution until the viewer is closed.
+  // A call to \code{Fl::run()} is mandatory to ask the program 
+  // to listen to mouse and keyword events until the viewer is closed.
   //
   //  Software Guide : EndLatex 
   
