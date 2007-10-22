@@ -1105,7 +1105,7 @@ ADD_TEST(ioTvOSSIMImageMetaDataReader ${IO_TESTS}
          )
 
 # ---  otb::DEMHandler ---
-ADD_TEST(ioTuDEMHandlerNew ${IO_TESTS} otbDEMReaderNew )
+ADD_TEST(ioTuDEMHandlerNew ${IO_TESTS} otbDEMHandlerNew )
 
 ADD_TEST(ioTvDEMHandler ${IO_TESTS} 
 --compare-ascii ${TOL} 	${BASELINE_FILES}/ioDEMGetHeightAboveMSL.txt
