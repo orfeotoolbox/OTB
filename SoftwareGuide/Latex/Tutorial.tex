@@ -9,10 +9,10 @@ already available, some powerful tools are defined to help you with recurrent
 tasks, but it is not an easy world to enter. 
 
 These tutorial are designed to help you enter this world and grasp the logic
-behind OTB. Each of this tutorial should not take more than 10 minutes (typing
+behind OTB. Each of these tutorials should not take more than 10 minutes (typing
 included) and each is designed to highlight a specific point. You may not be
 concerned by the latest tutorials but it is strongly advised to go through the
-first few which cover the basis you'll use almost everywhere.
+first few which cover the basics you'll use almost everywhere.
 
 
 \section{Hello world}
@@ -21,13 +21,13 @@ first few which cover the basis you'll use almost everywhere.
 \index{Hello World}
 
 Let's start by the typical {\em Hello world} program. We are going to compile
-this c++ program linking to your new OTB.
+this C++ program linking to your new OTB.
 
 First, create a new folder to put your new programs (all the examples from this
 tutorial) in and go into this folder. 
 
-All programs using OTB are handled using the cmake system, we need to create a
-\code{CMakeLists.txt} that will be used by cmake to compile our program. An
+Since all programs using OTB are handled using the CMake system, we need to create a
+\code{CMakeLists.txt} that will be used by CMake to compile our program. An
 example of this file can be found in the \code{OTB/Examples/Tutorials}
 directory. The \code{CMakeLists.txt} will be very similar between your projects.
 
@@ -70,26 +70,27 @@ which OTB libraries will be linked against this project.
 
 \input HelloWorldOTB.tex
 
-Once the file is written, run \code{ccmake} on the current directory. If OTB is
-on a non standard place, you will have to tell cmake where it is. Once your
-done with cmake (you shouldn't have to do it anymore) run \code{make}.
+Once the file is written, run \code{ccmake} on the current directory
+(that is \code{ccmake ./} under Linux/Unix). If OTB is
+on a non standard place, you will have to tell CMake where it is. Once your
+done with CMake (you shouldn't have to do it anymore) run \code{make}.
 
 You finally have your program. When you run it, you will have the {\em OTB Hello
 World !} printed.
 
-Ok, well done! You've just compile and execute your first OTB program. Actually,
+Ok, well done! You've just compiled and executed your first OTB program. Actually,
 using OTB for that is not very useful, and we doubt that you downloaded OTB only
 to do that. It's time to move on to a more advance level.
 
 
-\section{Pipeline basis: read and write}
+\section{Pipeline basics: read and write}
 \label{sec:TutorialPipeline}
 
 \index{Reader, Writer, Pipeline}
 
-OTB is designed to read images, process them and write or view the result. In
-this tutorial, we are going to see how to read and write images and the basis of
-the pipeline system.
+OTB is designed to read images, process them and write them to disk or
+view the result. In this tutorial, we are going to see how to read and
+write images and the basics of the pipeline system.
 
 First, let's add the following lines at the end of the \code{CMakeLists.txt}
 file:
@@ -106,8 +107,8 @@ Now, create a \code{Pipeline.cxx} file.
 
 \input Pipeline.tex
 
-Once this file is written you just have to run \code{make}. The \code{ccmake} is
-not required anymore.
+Once this file is written you just have to run \code{make}. The
+\code{ccmake} call is not required anymore.
 
 Get one image from the \code{OTB/Examples/Data} directory in the OTB sources.
 For example get \code{QB\_Suburb.png}. 
@@ -126,8 +127,8 @@ file.
 That's starting to be a bit more interesting: this is not just a program to copy
 image files, but also to convert between image formats.
 
-You have just experienced the pipeline structure which execute filter only when
-needed and the automatic image format detection.
+You have just experienced the pipeline structure which executes the
+filters only when needed and the automatic image format detection.
 
 Now it's time to do some processing in between.
 
@@ -140,7 +141,7 @@ Now it's time to do some processing in between.
 We are now going to insert a simple filter to do some processing between the
 reader and the writer.
 
-Let's first add the two lines to the \code{CMakeLists.txt} file:
+Let's first add the 2 following lines to the \code{CMakeLists.txt} file:
 
 \begin{small}
 \begin{verbatim}
@@ -160,11 +161,11 @@ Now, you can practice a bit and try to replace the filter by one of the 150+
 filters which inherit from the \doxygen{otb}{ImageToImageFilter} class. You
 will definitely find some useful filters here!
 
-\section{Handling type: scaling output}
+\section{Handling types: scaling output}
 \label{sec:TutorialScaling}
 
 If you tried some other filter in the previous example, you may have noticed
-that in some case, it does not make sense to save the output directly as an
+that in some cases, it does not make sense to save the output directly as an
 integer. This is the case if you tried the
 \doxygen{itk}{CannyEdgeDetectionImageFilter}. If you tried to use it directly in
 the previous example, you will have some warning about converting to unsigned
@@ -172,7 +173,7 @@ char from double.
 
 The output of the Canny edge detection is a floating point number. A simple
 solution would be to used double as the pixel type. Unfortunately, most image
-format uses integer and you should convert the result to an integer image if you
+formats use integer typed and you should convert the result to an integer image if you
 still want to visualize your images with your usual viewer (we will see in a
 tutorial later how you can avoid that using the built-in viewer).
 
@@ -240,7 +241,7 @@ interest  algorithm. Default is 1.0.  (1 parameter)
 \end{verbatim}
 \end{small}
 
-That look a bit more professional: another user should be able to play with
+That looks a bit more professional: another user should be able to play with
 your program. As this is automatic, that's a good way not to forget to
 document your programs.
 
@@ -248,7 +249,7 @@ So now you have a better idea of the command line options that are possible. Try
 \code{SmarterFilteringPipeline -in QB\_Suburb.png -out output.png} for a basic
 version with the default values.
 
-If you want some results that looks a bit better, you have to adjust the
+If you want a result that looks a bit better, you have to adjust the
 parameter with \code{SmarterFilteringPipeline -in QB\_Suburb.png -out output.png
 -d 1.5 -i 2 -a 0.1} for example.
 
@@ -258,7 +259,7 @@ parameter with \code{SmarterFilteringPipeline -in QB\_Suburb.png -out output.png
 \label{sec:TutorialViewer}
 
 So far, we had to save the image and use an external viewer every time we wanted
-to see the result of our processing. That not very convenient, especially for
+to see the result of our processing. That is not very convenient, especially for
 some {\em exotic} formats (16 bits, floating point \ldots). Thankfully, OTB
 comes with it's own visualization tool.
 
@@ -274,12 +275,12 @@ TARGET_LINK_LIBRARIES(SimpleViewer OTBCommon OTBIO OTBGui OTBVisu)
 \end{verbatim}
 \end{small}
 
-Notice that you have to link to two other OTB libraries: OTBGui and OTBVisu.
+Notice that you have to link to 2 other OTB libraries: OTBGui and OTBVisu.
 
 \input{SimpleViewer}
 
 After compiling you can execute the program with \code{SimpleViewer
-QB\_Suburb.png}. The result of the edge detection is displayed. Noticed that you
+QB\_Suburb.png}. The result of the edge detection is displayed. Notice that you
 can call this simple program with a big image (let's say $30000 \times 30000$
 pixels). For all multithreaded filters (filters which implement a
 \code{ThreadedGenerateData()} method), the image is splitted into piece and only
