@@ -51,6 +51,11 @@ class ITK_EXPORT PolyLineParametricPathWithValue
   /** Template parameters typedefs */
  typedef TValue ValueType;
  
+ /** Derived typedefs */
+ typedef typename Superclass::VertexType VertexType;
+ typedef typename Superclass::VertexListType VertexListType;
+
+
  itkGetMacro(Key,std::string);
 
  void SetValue(ValueType value)
