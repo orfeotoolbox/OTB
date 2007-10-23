@@ -63,7 +63,7 @@ try
     const unsigned int Dimension=2;
     typedef double PixelType;
     typedef otb::Image<PixelType,Dimension> ImageType;
-    typedef otb::Image<unsigned char,Dimension> OutputImageType;
+    typedef otb::Image<PixelType,Dimension> OutputImageType;
     typedef ImageType::IndexType IndexType;
     typedef ImageType::SizeType SizeType;
     typedef otb::VectorImage<double,Dimension> DeformationFieldType;
