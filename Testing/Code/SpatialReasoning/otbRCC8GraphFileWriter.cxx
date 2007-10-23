@@ -19,6 +19,7 @@
 #include "otbRCC8Graph.h"
 #include "otbRCC8VertexBase.h"
 #include "otbRCC8GraphFileWriter.h"
+#include "otbPolygon.h"
 
 int otbRCC8GraphFileWriter(int argc, char* argv[])
 {
@@ -26,8 +27,8 @@ try
   {
     const char * outputFile = argv[1];
     
-    typedef unsigned char  PixelType;
-    typedef otb::RCC8VertexBase<PixelType> VertexType;
+    typedef otb::Polygon PathType;
+    typedef otb::RCC8VertexBase<PathType> VertexType;
     typedef otb::RCC8Graph<VertexType> RCC8GraphType;
     typedef otb::RCC8GraphFileWriter<RCC8GraphType> RCC8GraphFileWriterType;
     
@@ -37,26 +38,48 @@ try
     rcc8Graph->Build();
     
     // Vertex filling
+    PathType::Pointer path = PathType::New();
+    path->Initialize();
+    
+    PathType::ContinuousIndexType p1,p2,p3;
+    
+    p1[0]=0;
+    p1[1]=0;
+    
+    p2[0]=10;
+    p2[1]=10;
+    
+    p3[0]=-5;
+    p3[1]=2;
+
+    path->AddVertex(p1);
+    path->AddVertex(p2);
+    path->AddVertex(p3);
+    
+    
     VertexType::Pointer vertex1, vertex2, vertex3, vertex4;
     vertex1 = VertexType::New();
-    vertex1->SetSegmentationImageIndex(0);
-    vertex1->SetObjectLabelInImage(0);
+    vertex1->SetSegmentationLevel(0);
+    vertex1->SetSegmentationType(0);
+    vertex1->SetPath(path);
     rcc8Graph->SetVertex(0,vertex1);
 
     vertex2 = VertexType::New();
-    vertex2->SetSegmentationImageIndex(1);
-    vertex2->SetObjectLabelInImage(1);
+    vertex2->SetSegmentationLevel(1);
+    vertex2->SetSegmentationType(1);
+    vertex2->SetPath(path);
     rcc8Graph->SetVertex(1,vertex2);
-    vertex1 = VertexType::New();
 
     vertex3 = VertexType::New();
-    vertex3->SetSegmentationImageIndex(2);
-    vertex3->SetObjectLabelInImage(2);
+    vertex3->SetSegmentationLevel(2);
+    vertex3->SetSegmentationType(0);
+    vertex3->SetPath(path);
     rcc8Graph->SetVertex(2,vertex3);
 
     vertex4 = VertexType::New();
-    vertex4->SetSegmentationImageIndex(3);
-    vertex4->SetObjectLabelInImage(3);
+    vertex4->SetSegmentationLevel(3);
+    vertex4->SetSegmentationType(0);
+    vertex4->SetPath(path);
     rcc8Graph->SetVertex(3,vertex4);
 
     // Edge filling
@@ -72,7 +95,6 @@ try
       = RCC8GraphFileWriterType::New();
     rcc8GraphWriter->SetFileName(outputFile);
     rcc8GraphWriter->SetInput(rcc8Graph);
-    rcc8GraphWriter->SetWriteSegmentationImages(false);
     rcc8GraphWriter->Update();
   }
 catch( itk::ExceptionObject & err ) 

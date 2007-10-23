@@ -18,13 +18,14 @@
 #include "itkExceptionObject.h"
 #include "otbRCC8Graph.h"
 #include "otbRCC8VertexBase.h"
+#include "otbPolygon.h"
 
 int otbRCC8GraphNew(int argc, char* argv[])
 {
 try
   {
-    typedef unsigned char  PixelType;
-    typedef otb::RCC8VertexBase<PixelType> VertexType;
+    typedef otb::Polygon  PathType;
+    typedef otb::RCC8VertexBase<PathType> VertexType;
     typedef otb::RCC8Graph<VertexType> RCC8GraphType;
     
     // Instantiation

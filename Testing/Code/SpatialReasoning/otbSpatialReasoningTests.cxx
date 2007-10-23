@@ -28,6 +28,8 @@ void RegisterTests()
 {
 REGISTER_TEST(otbImageToImageRCC8CalculatorNew);
 REGISTER_TEST(otbImageToImageRCC8Calculator);
+REGISTER_TEST(otbPolygonToPolygonRCC8CalculatorNew);
+REGISTER_TEST(otbPolygonToPolygonRCC8Calculator);
 REGISTER_TEST(otbRCC8VertexBaseNew);
 REGISTER_TEST(otbRCC8VertexBase);
 REGISTER_TEST(otbRCC8VertexWithCompacityNew);

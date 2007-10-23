@@ -22,6 +22,7 @@
 #include "otbRCC8VertexBase.h"
 #include "otbRCC8GraphFileReader.h"
 #include "otbMacro.h"
+#include "otbPolygon.h"
 
 
 int otbRCC8GraphFileReader(int argc, char* argv[])
@@ -29,8 +30,8 @@ int otbRCC8GraphFileReader(int argc, char* argv[])
 try
   {
     char * inputFilename = argv[1];
-    typedef unsigned int  LabelType;
-    typedef otb::RCC8VertexBase<LabelType> VertexType;
+    typedef otb::Polygon PathType;
+    typedef otb::RCC8VertexBase<PathType> VertexType;
     typedef otb::RCC8Graph<VertexType> RCC8GraphType;
     typedef otb::RCC8GraphFileReader<RCC8GraphType> RCC8GraphFileReaderType;
     typedef otb::RCC8VertexIterator<RCC8GraphType> VertexIteratorType;
@@ -39,9 +40,6 @@ try
     // Instantiation
     RCC8GraphFileReaderType::Pointer rcc8GraphReader = RCC8GraphFileReaderType::New();
     rcc8GraphReader->SetFileName(inputFilename);
-
-    // disabling image reading
-    rcc8GraphReader->SetReadSegmentationImages(false);
 
     rcc8GraphReader->Update();
     
@@ -58,14 +56,6 @@ try
 	   "graph->GetNumberOfVertices()!=4");
     otbControlConditionTestMacro(graph->GetNumberOfEdges()!=6,
 	   "graph->GetNumberOfEdges()!=6");
-
-    for(vIt.GoToBegin();!vIt.IsAtEnd();++vIt,++count)
-      {
-	otbControlConditionTestMacro(vIt.Get()->GetSegmentationImageIndex()!=count,
-	     "vIt.Get()->GetSegmentationImageIndex()!=count");
-	otbControlConditionTestMacro(vIt.Get()->GetObjectLabelInImage()!=count,
-	     "vIt.Get()->GetObjectLabelInImage()!=count");
-      }
     
     // Checking edges
     EdgeIteratorType eIt(graph);

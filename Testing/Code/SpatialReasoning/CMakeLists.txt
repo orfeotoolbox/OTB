@@ -34,6 +34,25 @@ ADD_TEST(srTvRCC8Calculator ${SPATIALREASONING_TESTS}
 	 ${INPUTDATA}/rcc8_mire4.png
 )
 
+
+# -------            otb::PolygonToPolygonRCC8Calculator   ----------
+
+ADD_TEST(srTuPolygonRCC8CalculatorNew ${SPATIALREASONING_TESTS} 
+         otbPolygonToPolygonRCC8CalculatorNew)
+
+ADD_TEST(srTvPolygonRCC8Calculator ${SPATIALREASONING_TESTS} 
+   --compare-ascii ${TOL}
+ 		   ${BASELINE_FILES}/srRCC8PolygonToPolygonCalculatorOutput.txt
+ 		   ${TEMP}/srRCC8PolygonToPolygonCalculatorOutput.txt
+	 otbPolygonToPolygonRCC8Calculator
+	 4
+	 ${TEMP}/srRCC8PolygonToPolygonCalculatorOutput.txt
+	 ${INPUTDATA}/rcc8_mire1.png
+	 ${INPUTDATA}/rcc8_mire2.png
+	 ${INPUTDATA}/rcc8_mire3.png
+	 ${INPUTDATA}/rcc8_mire4.png
+)
+
 # -------            otb::RCC8VertexBase   --------------------------
 
 ADD_TEST(srTuRCC8VertexBaseNew ${SPATIALREASONING_TESTS} 
@@ -181,6 +200,8 @@ ADD_TEST(srTvMultiSegToRCC8GraphFilter2WithOpti ${SPATIALREASONING_TESTS}
 SET(BasicSpatialReasoning_SRCS
 otbImageToImageRCC8CalculatorNew.cxx
 otbImageToImageRCC8Calculator.cxx
+otbPolygonToPolygonRCC8CalculatorNew.cxx
+otbPolygonToPolygonRCC8Calculator.cxx
 otbRCC8VertexBaseNew.cxx
 otbRCC8VertexBase.cxx
 otbRCC8VertexWithCompacityNew.cxx

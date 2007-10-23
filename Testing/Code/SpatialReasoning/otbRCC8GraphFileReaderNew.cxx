@@ -19,13 +19,14 @@
 #include "otbRCC8Graph.h"
 #include "otbRCC8VertexBase.h"
 #include "otbRCC8GraphFileReader.h"
+#include "otbPolygon.h"
 
 int otbRCC8GraphFileReaderNew(int argc, char* argv[])
 {
 try
   {
-    typedef unsigned char  PixelType;
-    typedef otb::RCC8VertexBase<PixelType> VertexType;
+    typedef otb::Polygon PathType;
+    typedef otb::RCC8VertexBase<PathType> VertexType;
     typedef otb::RCC8Graph<VertexType> RCC8GraphType;
     typedef otb::RCC8GraphFileReader<RCC8GraphType> RCC8GraphFileReaderType;
     

@@ -20,6 +20,7 @@
 #include "otbRCC8VertexBase.h"
 #include "otbRCC8GraphFileReader.h"
 #include "otbRCC8GraphFileWriter.h"
+#include "otbPolygon.h"
 
 int otbRCC8GraphIOEndToEnd(int argc, char* argv[])
 {
@@ -27,8 +28,8 @@ try
   {
     char * inputFilename = argv[1];
     char * outputFilename = argv[2];
-    typedef unsigned int  LabelType;
-    typedef otb::RCC8VertexBase<LabelType> VertexType;
+    typedef otb::Polygon PathType;
+    typedef otb::RCC8VertexBase<PathType> VertexType;
     typedef otb::RCC8Graph<VertexType> RCC8GraphType;
     typedef otb::RCC8GraphFileReader<RCC8GraphType> RCC8GraphFileReaderType;
     typedef otb::RCC8GraphFileWriter<RCC8GraphType> RCC8GraphFileWriterType;
@@ -36,11 +37,9 @@ try
     // End to end test
     RCC8GraphFileReaderType::Pointer rcc8GraphReader = RCC8GraphFileReaderType::New();
     rcc8GraphReader->SetFileName(inputFilename);
-    rcc8GraphReader->SetReadSegmentationImages(false);
     RCC8GraphFileWriterType::Pointer rcc8GraphWriter = RCC8GraphFileWriterType::New();
     rcc8GraphWriter->SetInput(rcc8GraphReader->GetOutput());
     rcc8GraphWriter->SetFileName(outputFilename);
-    rcc8GraphWriter->SetWriteSegmentationImages(false);
     rcc8GraphWriter->Update();
   }
 catch( itk::ExceptionObject & err ) 

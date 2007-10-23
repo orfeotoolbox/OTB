@@ -23,13 +23,13 @@ int otbImageToImageRCC8CalculatorNew(int argc, char* argv[])
 {
 try
   {
-    const unsigned int Dimension = 2;
-    typedef unsigned char PixelType;
-    typedef otb::Image<PixelType,Dimension> ImageType;
-    typedef otb::ImageToImageRCC8Calculator<ImageType> CalculatorType;
+ //    const unsigned int Dimension = 2;
+//     typedef unsigned char PixelType;
+//     typedef otb::Image<PixelType,Dimension> ImageType;
+//     typedef otb::ImageToImageRCC8Calculator<ImageType> CalculatorType;
     
-    //Instantiation
-    CalculatorType::Pointer calc = CalculatorType::New();
+//     //Instantiation
+//     CalculatorType::Pointer calc = CalculatorType::New();
   }
   catch( itk::ExceptionObject & err ) 
     { 

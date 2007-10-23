@@ -16,30 +16,30 @@
 
 =========================================================================*/
 #include "itkExceptionObject.h"
-#include "otbRCC8VertexWithCompacity.h"
+
 #include "otbPolygon.h"
 
-int otbRCC8VertexWithCompacityNew(int argc, char* argv[])
+int otbPolygonNew(int argc, char * argv[])
 {
-try
-  {
-    typedef otb::Polygon PathType;
-    typedef float PrecisionType;
-    typedef otb::RCC8VertexWithCompacity<PathType,PrecisionType> RCC8VertexType;
-    
-    // Instantiation
-    RCC8VertexType::Pointer rcc8Vertex= RCC8VertexType::New();
-  }
-catch( itk::ExceptionObject & err ) 
-  { 
+  try
+    {
+      typedef otb::Polygon PolygonType;
+
+      // Instantiating object
+      PolygonType::Pointer polygon = PolygonType::New();
+    }
+
+  catch( itk::ExceptionObject & err ) 
+    { 
     std::cout << "Exception itk::ExceptionObject thrown !" << std::endl; 
     std::cout << err << std::endl; 
     return EXIT_FAILURE;
-  } 
-catch( ... ) 
-  { 
+    } 
+
+  catch( ... ) 
+    { 
     std::cout << "Unknown exception thrown !" << std::endl; 
     return EXIT_FAILURE;
-  } 
- return EXIT_SUCCESS;
+    } 
+  return EXIT_SUCCESS;
 }

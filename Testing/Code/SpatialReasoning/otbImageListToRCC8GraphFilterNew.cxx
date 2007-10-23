@@ -20,6 +20,7 @@ PURPOSE.  See the above copyright notices for more information.
 #include "otbImage.h"
 #include "otbRCC8VertexBase.h"
 #include "otbImageListToRCC8GraphFilter.h"
+#include "otbPolygon.h"
 
 int otbImageListToRCC8GraphFilterNew(int argc, char* argv[])
 {
@@ -27,8 +28,9 @@ try
   {
     const unsigned int Dimension = 2;
     typedef unsigned short LabelPixelType;
+    typedef otb::Polygon PathType;
     typedef otb::Image<LabelPixelType,Dimension> LabelImageType;
-    typedef otb::RCC8VertexBase<LabelPixelType> VertexType;
+    typedef otb::RCC8VertexBase<PathType> VertexType;
     typedef otb::RCC8Graph<VertexType> RCC8GraphType;
     typedef otb::ImageListToRCC8GraphFilter<LabelImageType,RCC8GraphType>
       ImageListToRCC8GraphFilterType;
