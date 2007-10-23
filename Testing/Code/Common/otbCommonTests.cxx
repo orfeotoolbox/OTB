@@ -74,4 +74,6 @@ REGISTER_TEST(otbPolyLineParametricPathWithValueNew);
 REGISTER_TEST(otbPolyLineImageIterator);
 REGISTER_TEST(otbDrawPathFilterNew);
 REGISTER_TEST(otbDrawPathFilter);
+REGISTER_TEST(otbPolygonNew);
+REGISTER_TEST(otbPolygon);
 }

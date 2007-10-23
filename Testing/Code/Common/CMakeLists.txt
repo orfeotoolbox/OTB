@@ -11,6 +11,8 @@ SET(TEMP ${OTBTesting_BINARY_DIR}/Temporary)
 #Tolerance sur diff pixel image
 SET(TOL 0.0)
 
+#Tolerance sur la difference des valeurs numeriques dans le --compare-ascii
+SET(EPS 0.001)
 
 SET(COMMON_TESTS ${CXX_TEST_PATH}/otbCommonTests)
 
@@ -334,6 +336,20 @@ ADD_TEST(coTuPolyLineParametricPathWithValueNew ${COMMON_TESTS}
          otbPolyLineParametricPathWithValueNew)  
 
 
+# -------  otb::Polygon -------------------------------------------
+ADD_TEST(coTuPolygonNew ${COMMON_TESTS} 
+         otbPolygonNew)
+  
+ADD_TEST(coTuPolygon ${COMMON_TESTS} 
+--compare-ascii ${EPS}  
+		${BASELINE_FILES}/otbPolygonTest.txt
+                ${TEMP}/otbPolygonTest.txt
+         otbPolygon
+	        ${TEMP}/otbPolygonTest.txt	
+		2 10 7 10 7 9 5 9 5 8 7 8 7 6 9 6 9 5 7 5 7 3 2 3 
+		| 6 10 11 10 11 2 4 2 3 4 8 4 8 7 6 7
+)
+
 #-------- otb::PolyLineImageIterator -----------------------------------------
 
  ADD_TEST(coTuPolyLineImageIterator ${COMMON_TESTS} 
@@ -435,6 +451,8 @@ otbDrawPathListFilterNew.cxx
 otbDrawPathListFilter.cxx
 otbDrawPathListFilterWithValue.cxx
 otbPolyLineParametricPathWithValueNew.cxx
+otbPolygonNew.cxx
+otbPolygon.cxx
 )
 
 
