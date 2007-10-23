@@ -92,7 +92,7 @@ ImageListToImageListApplyFilter<TInputImageList,TOutputImageList,TFilter>
 	{
 	  m_Filter->SetInput(inputListIt.Get());
 	  m_Filter->GetOutput(m_OutputIndex)->SetRequestedRegion(outputListIt.Get()->GetRequestedRegion());
-	  m_Filter->GenerateInputRequestedRegion();
+	  m_Filter->PropagateRequestedRegion(outputListIt.Get());
 	  ++inputListIt;
 	  ++outputListIt;
 	}
@@ -118,7 +118,7 @@ ImageListToImageListApplyFilter<TInputImageList,TOutputImageList,TFilter>
 	  m_Filter->SetInput(inputListIt.Get());
 	  m_Filter->GetOutput(m_OutputIndex)->SetRequestedRegion(outputListIt.Get()->GetRequestedRegion());
 	  m_Filter->Update();
-	  outputPtr->SetNthElement(counter,m_Filter->GetOutput(m_OutputIndex));
+	  outputPtr->SetNthElement(counter,static_cast<OutputImageType *>(m_Filter->GetOutput(m_OutputIndex)));
 	  outputListIt.Get()->DisconnectPipeline();
 	  ++inputListIt;
 	  ++outputListIt;
