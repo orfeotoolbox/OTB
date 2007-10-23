@@ -84,6 +84,13 @@ SVMModel<TInputPixel, TLabel>
     otbMsgDevMacro(  << "SVMModel::AllocateProblem - x done" );
     delete [] m_XSpace;
     m_XSpace = new struct svm_node[elements];
+
+    for(unsigned int i = 0;i<elements;++i)
+      {
+	m_XSpace[i].value = 0;
+	m_XSpace[i].index = -1;
+      }
+
     //free(m_XSpace);
     //m_XSpace = Malloc(struct svm_node,elements);
     //otbMsgDevMacro(  << "SVMModel::AllocateProblem - m_XSpace done" );
