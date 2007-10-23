@@ -365,9 +365,9 @@ StreamingStatisticsImageFilter<TInputImage>
 				       m_BufferMemorySize,
 				       m_BufferNumberOfLinesDivisions)); 
   
-  otbMsgDebugMacro(<<"ThreadedGenerateData() - thread "<<threadId <<" - Thread region: "<<outputRegionForThread);
-  otbMsgDebugMacro(<<"ThreadedGenerateData() - thread "<<threadId<<" - Streaming configuration: "<<m_StreamingMode<<" "<<m_NumberOfStreamDivisions<<" "<<m_BufferMemorySize<<" "<<m_BufferNumberOfLinesDivisions);
-  otbMsgDebugMacro(<<"ThreadedGenerateData() - thread "<<threadId <<" - nb of divisions from StreamingTraits: "<<numDivisions);
+  otbMsgDevMacro(<<"ThreadedGenerateData() - thread "<<threadId <<" - Thread region: "<<outputRegionForThread);
+  otbMsgDevMacro(<<"ThreadedGenerateData() - thread "<<threadId<<" - Streaming configuration: "<<m_StreamingMode<<" "<<m_NumberOfStreamDivisions<<" "<<m_BufferMemorySize<<" "<<m_BufferNumberOfLinesDivisions);
+  otbMsgDevMacro(<<"ThreadedGenerateData() - thread "<<threadId <<" - nb of divisions from StreamingTraits: "<<numDivisions);
   
 //   SplitterPointer m_RegionSplitter = SplitterType::New();
   unsigned int numDivisionsFromSplitter = m_RegionSplitter->GetNumberOfSplits(outputRegionForThread, numDivisions);
@@ -375,7 +375,7 @@ StreamingStatisticsImageFilter<TInputImage>
     {
       numDivisions = numDivisionsFromSplitter;
     }
-  otbMsgDebugMacro(<<"ThreadedGenerateData() - thread "<<threadId <<" - nb of divisions: "<<numDivisions);
+  otbMsgDevMacro(<<"ThreadedGenerateData() - thread "<<threadId <<" - nb of divisions: "<<numDivisions);
   RealType realValue;
   PixelType value;
 
@@ -393,7 +393,7 @@ StreamingStatisticsImageFilter<TInputImage>
       //otbMsgDebugMacro(<<"ThreadedGenerateData() - piece region: "<<streamRegion);
       
       inputPtr->SetRequestedRegion(streamRegion);
-      otbMsgDebugMacro(<<"ThreadedGenerateData() - thread "<<threadId <<" - streaming region: "<<streamRegion);
+      otbMsgDevMacro(<<"ThreadedGenerateData() - thread "<<threadId <<" - streaming region: "<<streamRegion);
       inputPtr->PropagateRequestedRegion();
       inputPtr->UpdateOutputData();
       
