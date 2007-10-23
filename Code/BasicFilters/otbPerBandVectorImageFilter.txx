@@ -62,7 +62,7 @@ PerBandVectorImageFilter<TInputImage,TOutputImage,TFilter>
   dummyInputImage->SetNumberOfComponentsPerPixel(1);
   m_Filter->SetInput(dummyInputImage);
   m_Filter->GetOutput(m_OutputIndex)->SetRequestedRegion(this->GetOutput()->GetRequestedRegion());
-  m_Filter->GenerateInputRequestedRegion();
+  m_Filter->PropagateRequestedRegion(this->GetOutput());
   inputPtr->SetRequestedRegion(m_Filter->GetInput()->GetRequestedRegion());
 }
 /**
