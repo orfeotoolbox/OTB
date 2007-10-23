@@ -120,53 +120,25 @@ BinaryImageMinimalBoundingRegionCalculator<TInputImage>
 	    rit.PreviousSlice();
 	  }
       }
-    
-    // Compute size and index of the region
+
     typename InputImageType::SizeType size;
     typename InputImageType::IndexType index;
-    RegionType maxRegion = image->GetLargestPossibleRegion();
-    // If the pad option is activated
-    if(m_Pad>0)
+
+    for(int i=0;i<InputImageType::ImageDimension;i++)
       {
-	for(int i=0;i<InputImageType::ImageDimension;i++)
-	  {
-	    // If we are not on boundary case, we can do what we want
-	    if((int)(min[i]-m_Pad)> maxRegion.GetIndex()[i])
-	      {
-		index[i]= min[i]-m_Pad;
-	      }
-	    // else we are at beginning of the image, so don't pad
-	    else
-	      {
-		index[i]= maxRegion.GetIndex()[i]; 
-	      }
-	    // If are not on boundary case, we can pad the size
-	    if (index[i]+max[i]-min[i]+2*m_Pad+1<=maxRegion.GetIndex()[i]+maxRegion.GetSize()[i])
-	      {
-		size[i]=max[i]-min[i]+2*m_Pad+1;
-	      }
-	    // Else we must restrain ourselves to the image boundaries
-	    else 
-	      {
-		size[i]=maxRegion.GetSize()[i]+maxRegion.GetIndex()[i]
-		  -max[i]+min[i]-index[i];
-	      }
-	  }
+	size[i]=max[i]-min[i]+1;
+	index[i]=min[i];
       }
-    else
-      // If the pad option is not activated, the result is simple
-      {
-	for(int i=0;i<InputImageType::ImageDimension;i++)
-	  {
-	    size[i]=max[i]-min[i]+1;
-	    index[i]=min[i];
-	  }
-      }
-    // otbMsgDebugMacro(<<"BinaryImageMinimalBoundingBoxCalculator: index "<<index);
-    // otbMsgDebugMacro(<<"BinaryImageMinimalBoundingBoxCalculator: size "<<size);
-    // Set the size and index of the output region
+
     m_Region.SetIndex(index);
     m_Region.SetSize(size);
+
+    if(m_Pad)
+      {
+	m_Region.PadByRadius(m_Pad);
+      }
+
+    m_Region.Crop(image->GetLargestPossibleRegion());
 }
 /**
  * PrintSelf method
