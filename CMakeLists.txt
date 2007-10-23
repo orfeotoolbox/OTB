@@ -254,7 +254,7 @@ LINK_DIRECTORIES(.)
 
 #-----------------------------------------------------------------------------
 # OTB build configuration options.
-OPTION(BUILD_SHARED_LIBS "Build OTB with shared libraries." OFF)
+OPTION(BUILD_SHARED_LIBS "Build OTB with shared libraries." ON)
 SET(OTB_BUILD_SHARED_LIBS ${BUILD_SHARED_LIBS})
 
 # Options for building some of the most common core templates explicitly only
