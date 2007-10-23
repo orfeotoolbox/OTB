@@ -83,7 +83,7 @@ ImageToEdgePathFilter<TInputImage, TOutputPath>
       }
     }
   typename InputImageType::IndexType start = linIter.GetIndex();
-  outputPath->AddVertex(start);
+ //  outputPath->AddVertex(start);
   
   // Neighborhood definition
   typename IteratorType::RadiusType radius;
@@ -120,6 +120,20 @@ ImageToEdgePathFilter<TInputImage, TOutputPath>
   rotation.push_back(RIGHTUP);
   // Set up the iterator
   it.SetLocation(start);
+
+
+  ContinuousIndexType newVertex = it.GetIndex(CENTER);
+  if(it.GetPixel(RIGHT)==m_ForegroundValue)
+    newVertex[0]-=0.5;
+  if(it.GetPixel(LEFT)==m_ForegroundValue)
+    newVertex[0]+=0.5;
+  if(it.GetPixel(UP)==m_ForegroundValue)
+    newVertex[1]+=0.5;
+  if(it.GetPixel(DOWN)==m_ForegroundValue)
+    newVertex[1]-=0.5;
+  outputPath->AddVertex(newVertex);
+
+
   otbMsgDebugMacro(<<"START: "<<start);
   // stopping flag
   flag = true;
@@ -157,8 +171,17 @@ ImageToEdgePathFilter<TInputImage, TOutputPath>
       // Update the output path
       it+=rotation[move%8];
       nextStart=(move+5)%8;
-      outputPath->AddVertex(it.GetIndex(CENTER));
-      otbMsgDebugMacro(<<it.GetIndex(CENTER));
+      newVertex = it.GetIndex(CENTER);
+      if(it.GetPixel(RIGHT)==m_ForegroundValue)
+	newVertex[0]-=0.5;
+      if(it.GetPixel(LEFT)==m_ForegroundValue)
+	newVertex[0]+=0.5;
+      if(it.GetPixel(UP)==m_ForegroundValue)
+	newVertex[1]+=0.5;
+      if(it.GetPixel(DOWN)==m_ForegroundValue)
+	newVertex[1]-=0.5;
+      outputPath->AddVertex(newVertex);
+      otbMsgDebugMacro(<<newVertex);
       // If we came back to our start point after a sufficient number of moves
       if((it.GetIndex(CENTER)==start)&&(nbMove>=2))
 	{

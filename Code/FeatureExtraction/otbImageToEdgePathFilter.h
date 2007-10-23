@@ -70,7 +70,8 @@ public:
   typedef typename Superclass::InputImagePointerType InputImagePointerType;
   typedef typename Superclass::OutputPathType        OutputPathType;
   typedef typename Superclass::OutputPathPointerType OutputPathPointerType;
-  
+  typedef typename OutputPathType::ContinuousIndexType ContinuousIndexType;
+
   typedef typename InputImageType::PixelType		 PixelType;
 
   /** Set and Get foreground value */
