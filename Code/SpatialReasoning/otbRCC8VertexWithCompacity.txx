@@ -25,8 +25,8 @@ namespace otb
 /**
  * Constructor
  */
-template <class TLabel,class TPrecision>
-RCC8VertexWithCompacity<TLabel,TPrecision>
+template <class TPath,class TPrecision>
+RCC8VertexWithCompacity<TPath,TPrecision>
 ::RCC8VertexWithCompacity()
 {
   m_Compacity=0.0;
@@ -35,9 +35,9 @@ RCC8VertexWithCompacity<TLabel,TPrecision>
  * Set the VertexWithCompacity attributes from the attributes vector.
  * \param attributes The vector containing the parsed attributes.
  */
-template <class TLabel,class TPrecision>
+template <class TPath,class TPrecision>
 void
-RCC8VertexWithCompacity<TLabel,TPrecision>
+RCC8VertexWithCompacity<TPath,TPrecision>
 ::SetAttributesMap(AttributesMapType attributes)
 {
   this->Superclass::SetAttributesMap(attributes);
@@ -47,9 +47,9 @@ RCC8VertexWithCompacity<TLabel,TPrecision>
  * Get an attributes vector representing the VertexBase attributes.
  * \return The attributes vector
  */
-template <class TLabel,class TPrecision>
-typename RCC8VertexWithCompacity<TLabel,TPrecision>::AttributesMapType
-RCC8VertexWithCompacity<TLabel,TPrecision>
+template <class TPath,class TPrecision>
+typename RCC8VertexWithCompacity<TPath,TPrecision>::AttributesMapType
+RCC8VertexWithCompacity<TPath,TPrecision>
 ::GetAttributesMap(void)
 {  
   std::stringstream oss;
@@ -63,9 +63,9 @@ RCC8VertexWithCompacity<TLabel,TPrecision>
 /**
  * PrintSelf method
  */
-template <class TLabel,class TPrecision>
+template <class TPath,class TPrecision>
 void
-RCC8VertexWithCompacity<TLabel,TPrecision>
+RCC8VertexWithCompacity<TPath,TPrecision>
 ::PrintSelf( std::ostream& os,itk::Indent indent ) const
   {
     Superclass::PrintSelf(os,indent);

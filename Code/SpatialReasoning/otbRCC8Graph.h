@@ -30,15 +30,7 @@ namespace otb
 /**
  * \class RCC8Graph
  * \brief This class is a data structure designed to store RCC8 Graph
- * computed from a pyramidal segmentation. It is divided in two
- * components :
- * An internal graph object which uses the boost graph library
- * implementation, using RCC8GraphEdgeProperties for edges properties
- * and RCC8GraphVerticesProperties for vertices properties.
- * A list of segmentation images resulting from the pyramidal
- * segmentation. These use a label pixel type, and each region is
- * referenced from in the graph vertex properties via its
- * RegionIndexInImage parameter.
+ * computed from a pyramidal segmentation.
  *
  * A batch of boost operation has been embedded in order to provide
  * basic functionnality such as adding a new edge, or retrieving the
@@ -48,7 +40,7 @@ namespace otb
  * applications, one should provide a patch for this class including
  * the new functionnalities, for consistency reason.
  */
-template <class TVertex, class TSegmentationImage = Image< typename TVertex::LabelType,2> >  
+template <class TVertex>  
 class ITK_EXPORT RCC8Graph  :
     public itk::DataObject
 {
@@ -77,19 +69,9 @@ class ITK_EXPORT RCC8Graph  :
   typedef typename InternalGraphType::vertex_descriptor  VertexDescriptorType;
   typedef typename InternalGraphType::edge_descriptor    EdgeDescriptorType;
 
-  /** Segmentation images typedef */
-  typedef TSegmentationImage SegmentationImageType;
-  typedef typename SegmentationImageType::Pointer SegmentationImagePointerType;
-  typedef ImageList<SegmentationImageType> SegmentationImageListType;
-  typedef typename SegmentationImageListType::Pointer SegmentationImageListPointerType;
-
   /** Getters and Setters for the number of vertices */
   itkSetMacro(NumberOfVertices,unsigned int);
   itkGetConstReferenceMacro(NumberOfVertices,unsigned int);
-
-  /** Get and set the internal image list */
-  itkSetObjectMacro(SegmentationImageList,SegmentationImageListType);
-  itkGetObjectMacro(SegmentationImageList,SegmentationImageListType);
   
   /**
    *  Return the internal boost graph object.
@@ -126,11 +108,7 @@ class ITK_EXPORT RCC8Graph  :
    * /return The number of edges.
    */
   unsigned int GetNumberOfEdges(void);
-  /**
-   * Get the number of segmentation images
-   * \return the number of segmentation images
-   */
-  unsigned int GetNumberOfSegmentationImages(void);
+
 protected:
   /** Constructor */
   RCC8Graph();
@@ -150,8 +128,6 @@ private:
   unsigned int m_NumberOfVertices;
   /** Internal representation using the boost graph library */
   InternalGraphType m_Graph;
-  /** The segmentation image list associated with the graph */
-  SegmentationImageListPointerType m_SegmentationImageList;
 };
 } // end namespace otb
 

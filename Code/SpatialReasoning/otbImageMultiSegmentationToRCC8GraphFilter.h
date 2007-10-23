@@ -53,6 +53,7 @@ public:
   typedef typename OutputGraphType::Pointer OutputGraphPointerType;
   typedef typename OutputGraphType::VertexType VertexType;
   typedef typename VertexType::Pointer VertexPointerType;
+  typedef typename VertexType::PathType PathType;
   typedef typename OutputGraphType::VertexDescriptorType VertexDescriptorType;
   /** Knowledge enum typedef */
   typedef typename OutputGraphType::RCC8ValueType RCC8ValueType;

@@ -21,8 +21,6 @@
 #include "otbRCC8GraphSource.h"
 #include "itkExceptionObject.h"
 
-#include "otbImageFileReader.h"
-
 namespace otb
 {
 /** \class RCC8GraphFileReaderException
@@ -57,15 +55,6 @@ public:
  * and ParseVertex. The ParseVertex use builds an AttributesMap and pass it to a new
  * vertex.
  *
- * The flag ReadSegmentationImages enable or disable the reading of the segmentation images.
- * If this is enabled, the RCC8GraphFileReader will look for image files with the same name
- * than the graph filename, concatenated with the segmentation image index, and the image extension.
- *
- * For instance, if the graph file is "graph.dot", and the image extension "tif", and if the graph comes
- * from 6 segmentations image (information extracted from the Vertices properties), the reader will look for
- * image files named graph1.tif, graph2.tif ..., graph6.tif. If one of the segmentation image is missing, none of
- * them are loaded into the graph object output.
- *
  * \sa RCC8GraphFileWriter
  * \sa RCC8Graph
  */
@@ -88,25 +77,11 @@ public:
   typedef typename OutputGraphType::VertexType VertexType;
   typedef typename VertexType::Pointer VertexPointerType;
   typedef typename OutputGraphType::RCC8ValueType RCC8ValueType;
-  typedef typename OutputGraphType::SegmentationImageType SegmentationImageType;
-  typedef typename OutputGraphType::SegmentationImagePointerType SegmentationImagePointerType;
-  typedef typename OutputGraphType::SegmentationImageListType SegmentationImageListType;
-  typedef typename OutputGraphType::SegmentationImageListPointerType SegmentationImageListPointerType;
-  typedef ImageFileReader<SegmentationImageType> SegmentationImageReaderType;
-  typedef typename SegmentationImageReaderType::Pointer SegmentationImageReaderPointerType;
 
   /** Set the filename  */
   itkSetStringMacro(FileName);
   /** Get the filename */
   itkGetStringMacro(FileName);
-  /** Flag to enable/Disable the reading of segmentation images */
-  itkSetMacro(ReadSegmentationImages,bool);
-  itkGetMacro(ReadSegmentationImages,bool);
-  itkBooleanMacro(ReadSegmentationImages);
-  /** Set the segmentation image extension */
-  itkSetStringMacro(ImageExtension);
-  /** Get the segmentation image extension */
-  itkGetStringMacro(ImageExtension);
 
 protected:
   /** Constructor */
@@ -125,14 +100,13 @@ protected:
    * \param line The line to parse.
    */
   void  ParseVertex(std::string line);
+  
   /** PrintSelf method */
   virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
-
+  
  private:
   /** File name */
   std::string m_FileName;
-  std::string m_ImageExtension;
-  bool m_ReadSegmentationImages;
 };
 }
 #ifndef OTB_MANUAL_INSTANTIATION

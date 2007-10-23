@@ -20,11 +20,13 @@
 
 #include "otbImageMultiSegmentationToRCC8GraphFilter.h"
 #include "itkMinimumMaximumImageCalculator.h"
-#include "otbImageToImageRCC8Calculator.h"
+#include "otbPolygonToPolygonRCC8Calculator.h"
 #include "otbRCC8VertexIterator.h"
 #include "otbRCC8InEdgeIterator.h"
 #include "otbRCC8OutEdgeIterator.h"
 #include "itkProgressReporter.h"
+#include "otbImageToEdgePathFilter.h"
+#include "otbSimplifyPathListFilter.h"
 
 namespace otb
 {
@@ -135,13 +137,20 @@ ImageMultiSegmentationToRCC8GraphFilter<TInputImage, TOutputGraph>
   // Ouptut graph pointer 
   OutputGraphPointerType graph = this->GetOutput();
 
+
+
+
   // invert value vector
   RCC8ValueType invert[8]={OTB_RCC8_DC,OTB_RCC8_EC,OTB_RCC8_PO,OTB_RCC8_TPPI,
 			   OTB_RCC8_TPP,OTB_RCC8_NTPPI,OTB_RCC8_NTPP,OTB_RCC8_EQ};
 
   // Some typedefs
+  typedef otb::ImageToEdgePathFilter<InputImageType,PathType> EdgeExtractionFilterType;
+  typedef otb::SimplifyPathListFilter<PathType> SimplifyPathFilterType;
+  typedef typename SimplifyPathFilterType::PathListType PathListType;
+
   typedef itk::MinimumMaximumImageCalculator<InputImageType> MinMaxCalculatorType;
-  typedef ImageToImageRCC8Calculator<InputImageType> RCC8CalculatorType;
+  typedef PolygonToPolygonRCC8Calculator<PathType> RCC8CalculatorType;
   typedef RCC8VertexIterator<OutputGraphType> VertexIteratorType; 
   typedef RCC8InEdgeIterator<OutputGraphType> InEdgeIteratorType;
   typedef RCC8OutEdgeIterator<OutputGraphType> OutEdgeIteratorType;
@@ -164,18 +173,27 @@ ImageMultiSegmentationToRCC8GraphFilter<TInputImage, TOutputGraph>
       maxLabelVector.push_back(minMax->GetMaximum());
       otbMsgDebugMacro(<<"Number of objects in image "<<segmentationImageIndex<<": "
 	       <<minMax->GetMaximum());
-      
-      // Add the image to the segmentation image list of the output graph
-      graph->GetSegmentationImageList()->PushBack(it.Get());
 
       // then for each region of the images
       for(PixelType label=1; label<=maxLabelVector.back();++label)
 	{
+	  typename PathListType::Pointer region = PathListType::New();
+	  typename EdgeExtractionFilterType::Pointer extraction = EdgeExtractionFilterType::New();
+	  extraction->SetInput(it.Get());
+	  extraction->SetForegroundValue(label);
+	  extraction->Update();
+	  region->PushBack(extraction->GetOutput());
+	  typename SimplifyPathFilterType::Pointer simplifier = SimplifyPathFilterType::New();
+	  simplifier->SetInput(region);
+	  simplifier->SetTolerance(0.1);
+	  simplifier->Update();
+
 	  // Create a new vertex
-	  VertexPointerType vertex = VertexType::New();
+	  VertexPointerType vertex = VertexType::New(); 
 	  // Set its properties
-	  vertex->SetSegmentationImageIndex(segmentationImageIndex);
-	  vertex->SetObjectLabelInImage(label);
+	  vertex->SetPath(simplifier->GetOutput()->GetNthElement(0));
+	  vertex->SetSegmentationLevel(segmentationImageIndex/2);
+	  vertex->SetSegmentationType(segmentationImageIndex%2);
 	  // Put it in the graph
 	  graph->SetVertex(vertexIndex,vertex);
 	  vertexIndex++;
@@ -194,23 +212,14 @@ ImageMultiSegmentationToRCC8GraphFilter<TInputImage, TOutputGraph>
     {
       for(vIt2.GoToBegin();!vIt2.IsAtEnd();++vIt2)
 	{
-	  // Get the segmentation images indexes 
-	  unsigned int source = vIt1.Get()->GetSegmentationImageIndex();
-	  unsigned int target = vIt2.Get()->GetSegmentationImageIndex();
-	 
-	  // We do not examine each couple because of the RCC8 simetry
-	  if(source<target)
+	  //We do not examine each couple because of the RCC8 symmetry
+	  if(vIt1.GetIndex()<vIt2.GetIndex())
 	    {
-	      // Get the labels of source and target
-	      PixelType label1 = vIt1.Get()->GetObjectLabelInImage();	 
-	      PixelType label2 = vIt2.Get()->GetObjectLabelInImage();
-
+	      
 	      // Compute the RCC8 relation
 	      typename RCC8CalculatorType::Pointer calc = RCC8CalculatorType::New();
-	      calc->SetInput1(segList->GetNthElement(source));
-	      calc->SetInsideValue1(label1);
-	      calc->SetInput2(segList->GetNthElement(target));
-	      calc->SetInsideValue2(label2);
+	      calc->SetPolygon1(vIt1.Get()->GetPath());
+	      calc->SetPolygon2(vIt2.Get()->GetPath());
 	      RCC8ValueType value=OTB_RCC8_DC;
 	      
 	      // if the optimisations are activated
@@ -269,7 +278,7 @@ ImageMultiSegmentationToRCC8GraphFilter<TInputImage, TOutputGraph>
 		    {
 		      // Else trigger the computation
 		      // (which will take the optimisation phase info into account)
-		      calc->Update();
+		      calc->Compute();
 		      value=calc->GetValue();
 		    }
 		  // otbMsgDebugMacro(<<"RCC8GraphFilter: Leaving optimisation loop");
@@ -277,7 +286,7 @@ ImageMultiSegmentationToRCC8GraphFilter<TInputImage, TOutputGraph>
 	      // If the optimisations are not activated
 	      else
 		{
-		  calc->Update();
+		  calc->Compute();
 		  value=calc->GetValue();
 		}
 	      m_Accumulator[value]+=1;
@@ -289,12 +298,13 @@ ImageMultiSegmentationToRCC8GraphFilter<TInputImage, TOutputGraph>
 		  otbMsgDevMacro(<<"Adding edge: "<<vIt1.GetIndex()<<" -> "<<vIt2.GetIndex()<<": "<<value);
 		  graph->AddEdge(vIt1.GetIndex(),vIt2.GetIndex(),value);
 		}
-	    }
+	    }	    
 	  progress.CompletedPixel();
 	  progress.CompletedPixel();
 	}
     }
 }
+
 template <class TInputImage, class TOutputGraph>
 void
 ImageMultiSegmentationToRCC8GraphFilter<TInputImage, TOutputGraph>

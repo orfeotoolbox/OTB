@@ -29,6 +29,9 @@
 #include "otbBinaryImageMinimalBoundingRegionCalculator.h"
 #include "otbMacro.h"
 
+//TODELETE  #include "otbImageFileWriter.h"
+//TODELETE  #include "itkCastImageFilter.h"
+
 namespace otb
 {     
   /**
@@ -132,19 +135,27 @@ namespace otb
     region2=rc->GetRegion();
     // otbMsgDebugMacro(<<"RCC8Calculator->ComputeMinimalRegion() Region1: index: "<<region1.GetIndex()<<" size: "<<region1.GetSize());
     // otbMsgDebugMacro(<<"RCC8Calculator->ComputeMinimalRegion() Region2: index: "<<region2.GetIndex()<<" size: "<<region2.GetSize());
+    
+  //TODELETE     std::cout<<"RCC8Calculator->ComputeMinimalRegion() Region1: index: "<<region1.GetIndex()<<" size: "<<region1.GetSize()<<std::endl;
+ //TODELETE      std::cout<<"RCC8Calculator->ComputeMinimalRegion() Region2: index: "<<region2.GetIndex()<<" size: "<<region2.GetSize()<<std::endl;
+
     typename ImageType::SizeType size;
     typename ImageType::IndexType index;
     
     for(int i=0;i<ImageType::ImageDimension;i++)
       {
-	index[i]=std::max(region1.GetIndex()[i],region2.GetIndex()[i]);
-	int potSize = std::min(region1.GetIndex()[i]+region1.GetSize()[i],
+	index[i]=std::min(region1.GetIndex()[i],region2.GetIndex()[i]);
+	int potSize = std::max(region1.GetIndex()[i]+region1.GetSize()[i],
 			 region2.GetIndex()[i]+region2.GetSize()[i]);
 	size[i]=(potSize-index[i]<0 ? 0 : potSize-index[i]);
       }
     region.SetIndex(index);
     region.SetSize(size);
+    region.PadByRadius(2);
+    region.Crop(image1->GetLargestPossibleRegion());
+    region.Crop(image2->GetLargestPossibleRegion());
     // otbMsgDebugMacro(<<"RCC8Calculator->ComputeMinimalRegion(): index: "<<index<<" size: "<<size);
+    //TODELETE   std::cout<<"RCC8Calculator->ComputeMinimalRegion(): index: "<<index<<" size: "<<size<<std::endl;
     return region;
   }
 /**
@@ -258,6 +269,7 @@ ImageToImageRCC8Calculator<TInputImage>
     typename InvertFilterType::Pointer invert = InvertFilterType::New();
     typename AndFilterType::Pointer andFilter = AndFilterType::New();
     /// The exterior is the inverted input image
+    invert->SetMaximum(true);
     invert->SetInput(m_BoolImage1);
     andFilter->SetInput1(m_BoolImage2);
     andFilter->SetInput2(invert->GetOutput());
@@ -275,17 +287,38 @@ ImageToImageRCC8Calculator<TInputImage>
   ImageToImageRCC8Calculator<TInputImage>
   ::ComputeInterExterBool(void)
   {
-  /// Definition of the filters used
+    /// Definition of the filters used
     typedef itk::InvertIntensityImageFilter<BoolImageType,BoolImageType> InvertFilterType;
     typedef itk::AndImageFilter<BoolImageType,BoolImageType,BoolImageType> AndFilterType;
+ //TODELETE     typedef otb::Image<unsigned char,2> TmpImageType;
+ //TODELETE     typedef itk::CastImageFilter<BoolImageType,TmpImageType> CastFilterType;
+
+ //TODELETE     typedef ImageFileWriter<TmpImageType> WriterType;
     /// Declaration and instantiation
     typename InvertFilterType::Pointer invert = InvertFilterType::New();
     typename AndFilterType::Pointer andFilter = AndFilterType::New();
     /// The exterior is the inverted input image
+    invert->SetMaximum(true);
     invert->SetInput(m_BoolImage2);
+    
+ //TODELETE     typename CastFilterType::Pointer caster = CastFilterType::New();
+  //TODELETE    caster->SetInput(invert->GetOutput());
+ //TODELETE     typename WriterType::Pointer writer = WriterType::New();
+//TODELETE      writer->SetFileName("invert.tif");
+ //TODELETE     writer->SetInput(caster->GetOutput());
+//TODELETE      writer->Update();
+    
     andFilter->SetInput1(m_BoolImage1);
     andFilter->SetInput2(invert->GetOutput());
     andFilter->Update();
+
+ //TODELETE     caster = CastFilterType::New();
+ //TODELETE     caster->SetInput(andFilter->GetOutput());
+ //TODELETE     writer = WriterType::New();
+ //TODELETE     writer->SetFileName("and.tif");
+ //TODELETE     writer->SetInput(caster->GetOutput());
+ //TODELETE     writer->Update();
+
     /// test if the intersection is empty or not
     return IsBoolImageNotEmpty(andFilter->GetOutput());
   }
@@ -414,6 +447,7 @@ ImageToImageRCC8Calculator<TInputImage>
 	/// now
 	edgeEdgeBool = ComputeEdgeEdgeBool();
 	// otbMsgDebugMacro(<<"RCC8Calculator->GenerateData(): edgeEdge "<<edgeEdgeBool);
+  //TODELETE	std::cout<<"RCC8Calculator->GenerateData(): edgeEdge "<<edgeEdgeBool<<std::endl;
 	/// Here comes the outside knowledge
 	if(this->GetLevel1APrioriKnowledge())
 	  {
@@ -429,6 +463,7 @@ ImageToImageRCC8Calculator<TInputImage>
 	    // otbMsgDebugMacro(<<"RCC8Calculator->GenerateData(): interExter "<<interExterBool);
 	  }
 	/// At this stage we can determine if the relation is of type NTPP
+  //TODELETE	std::cout<<"RCC8Calculator->GenerateData(): interExter "<<interExterBool<<std::endl;
 	if((!interExterBool)&&(!edgeEdgeBool))
 	  {
 	    m_Value=OTB_RCC8_NTPP;
@@ -449,11 +484,13 @@ ImageToImageRCC8Calculator<TInputImage>
 		exterInterBool = ComputeExterInterBool();  
 		// otbMsgDebugMacro(<<"RCC8Calculator->GenerateData(): ExterInter "<<exterInterBool);
 	      }
+	//TODELETE      std::cout<<"RCC8Calculator->GenerateData(): ExterInter "<<exterInterBool<<std::endl;
 	    /// If it is not sufficient to compute the relation
 	    if(!ComputeRelation(edgeEdgeBool,interExterBool,exterInterBool))
 	      {
 		/// Compute the last boolean
 		interInterBool = ComputeInterInterBool();
+	 //TODELETE  	std::cout<<"RCC8Calculator->GenerateData(): InterInter "<<interInterBool<<std::endl;
 		// otbMsgDebugMacro(<<"RCC8Calculator->GenerateData(): InterInter "<<interInterBool);
 		/// Which allow the full determination
 		if ((interExterBool)&&(edgeEdgeBool)&&(exterInterBool)&&(!interInterBool))

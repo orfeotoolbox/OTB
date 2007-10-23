@@ -31,7 +31,7 @@ namespace otb
  *
  * \sa RCC8Graph, RCC8Edge
  */
-template <class TLabel>
+template <class TPath>
 class ITK_EXPORT RCC8VertexBase 
 : public itk::DataObject
 {
@@ -46,17 +46,21 @@ class ITK_EXPORT RCC8VertexBase
   /** Run-time type information (and related methods). */
   itkTypeMacro(RCC8VertexBase,DataObject);
   /** Input image associated typedefs*/
-  typedef TLabel LabelType;
+  typedef TPath PathType;
+  typedef typename PathType::Pointer PathPointerType;
+  typedef typename PathType::ContinuousIndexType ContinuousIndexType;
   
   /** char* vector attributes */
   typedef std::map<std::string,std::string> AttributesMapType;
  
   /** Segmentation image index accessors */
-  itkGetMacro(SegmentationImageIndex,unsigned int);
-  itkSetMacro(SegmentationImageIndex,unsigned int);
+  itkGetMacro(SegmentationLevel,unsigned int);
+  itkSetMacro(SegmentationLevel,unsigned int);
+ itkGetMacro(SegmentationType,bool);
+  itkSetMacro(SegmentationType,bool);
   /** Object label in image accessor */
-  itkGetMacro(ObjectLabelInImage,LabelType);
-  itkSetMacro(ObjectLabelInImage,LabelType);
+  itkGetObjectMacro(Path,PathType);
+  itkSetObjectMacro(Path,PathType);
   /**
    * Set the VertexBase attributes from the attributes vector.
    * \param attributes The vector containing the parsed attributes.
@@ -77,10 +81,12 @@ protected:
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
  private:
-  /** The segmentation image index */
-  unsigned int m_SegmentationImageIndex;
-  /** The label of the object in the segmentation image */
-  LabelType  m_ObjectLabelInImage;
+  /** The segmentation level */
+  unsigned int m_SegmentationLevel;
+  /** True if bright details, false otherwise */
+  bool m_SegmentationType;
+  /** The path of the edge of the region */
+  PathPointerType  m_Path;
 };
 } // end namespace otb
 #ifndef OTB_MANUAL_INSTANTIATION

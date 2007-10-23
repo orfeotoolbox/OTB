@@ -29,14 +29,14 @@ namespace otb
    *  
    * \sa RCC8Graph, RCC8Edge, RCC8VertexBase
    */
-  template <class TLabel, class TPrecision = float>
+  template <class TPath, class TPrecision = float>
     class ITK_EXPORT RCC8VertexWithCompacity 
-		: public RCC8VertexBase<TLabel>
+		: public RCC8VertexBase<TPath>
     {
       public:
       /** Standard class typedefs */
       typedef RCC8VertexWithCompacity Self;
-      typedef otb::RCC8VertexBase<TLabel>  Superclass;
+      typedef otb::RCC8VertexBase<TPath>  Superclass;
       typedef itk::SmartPointer<Self>  Pointer;
       typedef itk::SmartPointer<const Self> ConstPointer;
       /** Method for creation through the object factory. */
@@ -44,7 +44,7 @@ namespace otb
       /** Run-time type information (and related methods). */
       itkTypeMacro(RCC8VertexWithCompacity,RCC8VertexBase);
       /** Input image associated typedefs*/
-      typedef TLabel LabelType;
+      typedef TPath PathType;
       /** Precision  typedef */
       typedef TPrecision PrecisionType;
       /** char* vector attributes */
