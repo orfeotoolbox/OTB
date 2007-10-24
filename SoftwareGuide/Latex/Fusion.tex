@@ -1,5 +1,30 @@
+
 \chapter{Image Fusion }
 \section{Introduction}
+
+Satellite sensors present an important diversity in terms of characteristics.
+Some provide a high spatial resolution while other focus on providing several
+spectral bands. The fusion process brings the information from different
+sensors with different characteristics together to get the best of both
+world.
+
+The most studies case of the data fusion is the PAN+XS. This fusion combines
+the image from the PAN sensor of one satellite (high spatial resolution data)
+with the XS data (lower resolution in 4 spectral bands) to generate images with
+a high resolution and 4 spectral bands. Several advantages make this situation
+easier:
+
+\begin{itemize}
+\item PAN and XS images are taken simultaneously from the same satellite (or
+with a very short delay)
+\item area is common to both scenes
+\item many satellites provide these data (SPOT 1-5, Quickbird, Pleiades)
+\end{itemize}
+
+This case is well-studied in the litterature and many methods exists. Only very
+few are available in OTB now but this should evolve soon.
+
+
 
 \section{Bayesian Data Fusion}\label{secBayesian}
 
