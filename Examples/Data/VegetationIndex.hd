@@ -1,14 +1,14 @@
 TYPE
-R8
+UI4
 LABEL
-R8 - This BSQ image file was producted by OTB software.
+UI4 - This BSQ image file was producted by OTB software.
 CHANNELS
 3
 LINES
-1200
+400
 COLUMNS
-1200
+400
 BITS PER PIXEL
-64
+32
 SENSCODAGE
 INTEL
