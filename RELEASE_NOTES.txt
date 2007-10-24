@@ -6,12 +6,12 @@ OTB-v.1.6.0 - Changes since version 1.4.0
 	- Added StreamingVectorStatisticsImageFilter to compute 
 	the second order stastics on a large vector image.
 
-	- Added the MAtrixTransposeMatrixImageFilter to compute 
+	- Added the MatrixTransposeMatrixImageFilter to compute 
 	the product of the matrix of vector pixels from image 1 
-	in row with the the matrix of vector pixels from image 2 
-	column for large vector image. 
+	in rowwith the the matrix of vector pixels from image 2 
+	columns for large vector image. 
 
-       - Added the otb::VectorImageTo3DScalarImageFilter which transform 
+       - Added the otb::VectorImageTo3DScalarImageFilter which transforms 
        a vector image into a 3D scalar image where each band is represented 
        in a layer of the 3rd dimension.
 
@@ -19,12 +19,13 @@ OTB-v.1.6.0 - Changes since version 1.4.0
        otb::VectorImageToImageListFilter to convert a vector image 
        from/to an image list.
 
-       - Added the otb::ImageListToImageListApplyFilter which apply a given 
-       scalar image filter to a list of image.
+       - Added the otb::ImageListToImageListApplyFilter which applies a given 
+       scalar image filter to a list of images
 
-       - Added the otb::PerBandImageFilter, which apply a given scalar filter 
-       to each band of a VectorImage. This is not the optimal way for most treatments,
-       but it allows the use of almost every scalar filter on vector images.
+       - Added the otb::PerBandImageFilter, which applies a given scalar filter 
+       to each band of a VectorImage. This is not the optimal way for most 
+       processings but it allows the use of almost every scalar filter on 
+       vector images.
 
        - Added the otb::StreamingResampleImageFilter, which is a streaming capable 
        version of the itk::ResampleImageFilter.
@@ -40,12 +41,13 @@ OTB-v.1.6.0 - Changes since version 1.4.0
 
 *Common:
 	
-	- Added an otb::Polygon, which represent a closed polyline on which 
+	- Added an otb::Polygon, which represents a closed polyline on which 
 	intersection or point interiority can be tested.
 	
 *IO:
 
-	- Added an otb::DEMHandler to fetch the elevation value in SRTM directory.
+	- Added an otb::DEMHandler to fetch the elevation value in SRTMor DTED
+          directories.
 
 	- Added an otb::DEMToImageGenerator to generate an elevation map.
 
@@ -59,7 +61,7 @@ OTB-v.1.6.0 - Changes since version 1.4.0
 *Learning:
 
 	- Added methods to access the alpha values, the number of support vectors, 
-	the support vectors, the number of hyperplanes.
+	the support vectors themselves, the distance to the hyperplanes.
 
 	- Added the otb::SEMClassifier, implementing the Stochastic Expectation  
 	Maximization algorithm to perform an estimation of a mixture model.
@@ -71,6 +73,7 @@ OTB-v.1.6.0 - Changes since version 1.4.0
 	
 *Radiometry:
 
+        - The 6S Transfer Radiative Code compiles within OTB.
 	- Added the Radiometry directory, containing everything that has to do 
 	with image radiometry.
 	- Added the NDVI and ARVI (3 input bands) vegetation index filters.
@@ -80,7 +83,8 @@ OTB-v.1.6.0 - Changes since version 1.4.0
 	- Added the Projections directory, containing everything that has to do 
 	with image projections.
 	
-	- Added an otb::DEMHandler to fetch the elevation value in SRTM directory.
+	- Added an otb::DEMHandler to fetch the elevation value in SRTM/DTED 
+          directories.
 
 	- Added an otb::DEMToImageGenerator to generate an elevation map.
 
@@ -89,8 +93,8 @@ OTB-v.1.6.0 - Changes since version 1.4.0
 	
 	- Added the forward and inverse sensor model projection.
 
-	- Added several map projections transform (Eckert4, LambertConformalConic,
-	TransMercator,Mollweid,Sinusoidal,UTM)
+	- Added several map projection transforms (Eckert4, LambertConformalConic,
+	TransMercator, Mollweid, Sinusoidal, UTM)
 
 *Fusion:
 
