@@ -46,6 +46,8 @@ TARGET_LINK_LIBRARIES(MetadataExample OTBCommon OTBIO ITKCommon ITKIO)
 ADD_EXECUTABLE(DXFReaderExample DXFReaderExample.cxx )
 TARGET_LINK_LIBRARIES(DXFReaderExample OTBCommon OTBIO ITKCommon ITKIO dxf)
 
+ADD_EXECUTABLE(DEMToImageGenerator DEMToImageGenerator.cxx )
+TARGET_LINK_LIBRARIES(DEMToImageGenerator OTBProjections OTBCommon OTBIO ITKCommon ITKIO dxf)
 
 #ADD_EXECUTABLE(ImageReadExportVTK ImageReadExportVTK.cxx )
 #TARGET_LINK_LIBRARIES(ImageReadExportVTK ITKCommon ITKIO)
@@ -114,9 +116,22 @@ ADD_TEST(ExtractROITest ${EXE_TESTS}
 )
 
 
+ADD_TEST(DEMToImageGeneratorTest ${EXE_TESTS}
+--compare-image ${TOL}  ${BASELINE}/DEMToImageGenerator.tif
+                        ${TEMP}/DEMToImageGenerator.tif
+        DEMToImageGeneratorTest
+         ${INPUTDATA}/DEM_srtm
+         ${TEMP}/DEMToImageGenerator.tif
+         44.5
+         6.5
+         500
+         500
+	 0.002	 
+         )
+ 
 INCLUDE_DIRECTORIES("${OTBTesting_BINARY_DIR}")
 
 ADD_EXECUTABLE(otbIOExamplesTests otbIOExamplesTests.cxx)
-TARGET_LINK_LIBRARIES(otbIOExamplesTests gdal ITKIO ITKAlgorithms ITKStatistics ITKCommon OTBBasicFilters OTBCommon OTBDisparityMap OTBIO OTBSpatialReasoning OTBChangeDetection OTBFeatureExtraction  OTBLearning  OTBMultiScale)
+TARGET_LINK_LIBRARIES(otbIOExamplesTests gdal ITKIO ITKAlgorithms ITKStatistics ITKCommon OTBBasicFilters OTBCommon OTBDisparityMap OTBIO OTBSpatialReasoning OTBChangeDetection OTBFeatureExtraction  OTBLearning  OTBMultiScale OTBProjections)
 
 ENDIF( NOT OTB_DISABLE_CXX_TESTING AND NOT OTB_DISABLE_CXX_EXAMPLES_TESTING )
