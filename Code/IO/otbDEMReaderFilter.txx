@@ -29,13 +29,13 @@ template<class TDEMImage>
 DEMReaderFilter<TDEMImage>
 ::DEMReaderFilter()
 {
- 	m_ElevManager=ossimElevManager::instance();
-//m_DEMImage    = DEMImageType::New();
-	m_Spacing[0]=0;
+  m_ElevManager=ossimElevManager::instance();
+  //m_DEMImage    = DEMImageType::New();
+  m_Spacing[0]=0;
   m_Spacing[1]=0;	
-	m_Ul[0]=0;
+  m_Ul[0]=0;
   m_Ul[1]=0;
-	m_Lr[0]=0;
+  m_Lr[0]=0;
   m_Lr[1]=0;	
 }
   

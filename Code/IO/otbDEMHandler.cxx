@@ -62,7 +62,7 @@ double
 DEMHandler
 ::GetHeightAboveMSL(const PointType& geoPoint)
 {
-	float height;
+	double height;
 	ossimGpt ossimWorldPoint;
 	ossimWorldPoint.lat=geoPoint[0];
 	ossimWorldPoint.lon=geoPoint[1];
