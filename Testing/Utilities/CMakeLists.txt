@@ -40,6 +40,10 @@ ADD_TEST(utOssimKeywordlistParisIkonosTest ${UTILITIES_TESTS}
         ${TEMP}/utOssimKeywordlistParisIkonos.txt
         )
 
+ADD_TEST(utOssimElevManagerTest ${UTILITIES_TESTS}
+        ossimElevManagerTest
+        )
+
 
 ADD_TEST(utIjBSplineScatteredDataPointSetToImageFilterTest ${UTILITIES_TESTS}
 --compare-image ${EPSILON}
@@ -94,6 +98,7 @@ ADD_TEST(utTvSvmTestGenericModelTest ${UTILITIES_TESTS}
 SET(UtilitiesTests_SRCS
 ossimIntegrationTest.cxx
 ossimKeywordlistTest.cxx
+ossimElevManagerTest.cxx
 ijBSplineScatteredDataPointSetToImageFilterTest.cxx
 svmGenericKernelFunctor.cxx
 svmTest.cxx
