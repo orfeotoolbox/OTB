@@ -1027,7 +1027,7 @@ void GDALImageIO::InternalWriteImageInformation()
 	  }
 	else
 	  {
-	    std::cout<<"GCPs do not contain origin."<<std::endl;
+	    otbMsgDebugMacro(<<"GCPs do not contain origin.");
 	    m_poDataset->SetGCPs(gcpCount+1,gdalGcps,ImageBase::GetGCPProjection(dico).c_str());
 	  }
 	delete [] gdalGcps;
