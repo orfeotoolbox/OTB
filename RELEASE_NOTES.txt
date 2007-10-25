@@ -129,8 +129,9 @@ OTB-v.1.6.0 - Changes since version 1.4.0
 	- Added the otbRoadExtraction which demonstrates the road extraction algorithm
 	implemented in the FeatureExtraction module.
 
-	- Added the otbOrthoRectification application which allows to ortho rectify images in
-	command line using the brand new Projections module of the Orfeo ToolBox.
+	- Added the otbOrthoRectifAppli application which allows to ortho rectify images in
+	command line using the brand new Projections module of the Orfeo ToolBox. Old rigid 
+	orthoo rectification application has been moved to otbPseudoOrthoRectif.
 
 	- Added an option in CMakeLists.txt to use VTK or not (enable or disable the
 	following application).
