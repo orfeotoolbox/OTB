@@ -15,9 +15,6 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbDEMHandler_cxx
-#define __otbDEMHandler_cxx
-
 #include "otbDEMHandler.h"
 #include "otbMacro.h"
 
@@ -25,14 +22,12 @@ namespace otb
 {
 
 
-
 DEMHandler
 ::DEMHandler()
 {
 	m_ElevManager=ossimElevManager::instance();
 }
-  
-	
+
 
 DEMHandler
 ::~DEMHandler()
@@ -76,10 +71,7 @@ DEMHandler
 ::PrintSelf(std::ostream& os, Indent indent) const
 {
   Superclass::PrintSelf(os,indent);
- 
   os << indent << "DEMHandler" << std::endl;
 }
 
 } // namespace otb
-
-#endif
