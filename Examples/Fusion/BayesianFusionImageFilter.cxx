@@ -52,7 +52,7 @@
 // $\mathbf{Y}$ through the following error-like model.
 //
 // \begin{equation}
-// \mathbf{Y} = g($\mathbf{Z}$) + \mathbf{E}
+// \mathbf{Y} = g(\mathbf{Z}$) + \mathbf{E}
 // \end{equation}
 //
 // where g($\mathbf{Z}$) is a set of functionals and $\mathbf{E}$ is a
