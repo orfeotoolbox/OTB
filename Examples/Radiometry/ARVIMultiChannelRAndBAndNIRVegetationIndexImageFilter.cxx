@@ -32,7 +32,7 @@
 
 
 
-// Software Guide : BeginLatexpretty_NDVI_1
+// Software Guide : BeginLatex
 //
 // \index{otb::MultiChannelRAndBAndNIRVegetationIndexImageFilter}
 // \index{otb::MultiChannelRAndBAndNIRVegetationIndexImageFilter!header}
@@ -96,6 +96,7 @@
 #include "otbVectorRescaleIntensityImageFilter.h"
 #include "otbMultiChannelExtractROI.h"
 #include "itkThresholdImageFilter.h"
+
 
 int main( int argc, char *argv[] )
 {
@@ -269,7 +270,7 @@ int main( int argc, char *argv[] )
   selecter->SetChannel(2);
   selecter->SetChannel(3);
  
-  vectPrettyWriter->SetFileName( argv[3] );
+  vectPrettyWriter->SetFileName( argv[3] ); 
   vectPrettyWriter->SetInput( selecter->GetOutput() );
   
 
@@ -280,7 +281,6 @@ int main( int argc, char *argv[] )
   thresholder->SetOutsideValue( 1.0 );
   thresholder->ThresholdOutside( 0.0, 1.0 );
   thresholder->Update();
-
 
   RescalerType::Pointer     rescaler     = RescalerType::New();                                       
   WriterPrettyType::Pointer prettyWriter = WriterPrettyType::New();
@@ -294,7 +294,6 @@ int main( int argc, char *argv[] )
     {
       prettyWriter->Update();
       vectPrettyWriter->Update();
-      std::cout<<filter->GetFunctor().GetGamma()<<std::endl;
     }
   catch( itk::ExceptionObject & excep )
     {

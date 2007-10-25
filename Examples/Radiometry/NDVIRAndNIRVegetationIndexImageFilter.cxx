@@ -66,7 +66,6 @@
 #include "otbImageFileWriter.h"
 #include "itkRescaleIntensityImageFilter.h"
 
-
 int main( int argc, char *argv[] )
 {
   if( argc < 6 )
@@ -220,6 +219,7 @@ int main( int argc, char *argv[] )
   rescalerNIR->SetOutputMaximum(255);
   prettyWriterNIR->SetFileName( argv[5] );
   prettyWriterNIR->SetInput( rescalerNIR->GetOutput() );
+
 
     try
     {

@@ -23,9 +23,9 @@
 
 int otbDEMToImageGeneratorTest(int argc, char * argv[])
 {
-  if(argc<7)
+  if(argc<9)
     {
-      std::cout << argv[0] <<" folder path , output filename , X Output Orign point , Y Output Origin point , X Output Size, Y Output size , Spacing"  << std::endl;
+      std::cout << argv[0] <<" folder path , output filename , Longitude Output Orign point , Latitude Output Origin point , X Output Size, Y Output size , X Spacing , Y Spacing"  << std::endl;
       return EXIT_FAILURE;
     }
   
@@ -48,11 +48,15 @@ int otbDEMToImageGeneratorTest(int argc, char * argv[])
   PointType origin;
   origin[0] = ::atof(argv[3]);
   origin[1] = ::atof(argv[4]);
+  std::cout<<origin<<std::endl;
   SizeType size;
   size[0] = ::atoi(argv[5]);
   size[1] = ::atoi(argv[6]);
-  SpacingType spacing(::atof(argv[7]));
- 
+  SpacingType spacing;
+  spacing[0] = ::atof(argv[7]);
+  spacing[1] = ::atof(argv[8]);
+    std::cout<<spacing<<std::endl;
+
   object->SetDEMDirectoryPath(folderPath);
   object->SetOutputOrigin(origin);
   object->SetOutputSize(size);

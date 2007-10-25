@@ -1127,11 +1127,12 @@ ADD_TEST(ioTvDEMToImageGeneratorTest ${IO_TESTS}
         otbDEMToImageGeneratorTest
          ${INPUTDATA}/DEM/srtm_directory
          ${TEMP}/ioTvDEMToImageGenerator.tif
-         44.5
          6.5
+         44.5
          500
          500
-	 0.002	 
+	 0.002
+	 0.002
          )
  
 

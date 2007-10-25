@@ -36,6 +36,7 @@ namespace otb
     m_OutputSize[1]=1;
     m_OutputOrigin[0]=0;
     m_OutputOrigin[1]=0;
+    m_DefaultUnknownValue = -32768; // Value defined in the norm for points strm doesn't have information.
   }
   
   template<class TDEMImage>
@@ -96,12 +97,15 @@ namespace otb
     // Walk the output image, evaluating the height at each pixel
     IndexType 			currentindex;
     PointType 			phyPoint;
+    PointType                   phyPointTemp;
     double			height;
 
     for (outIt.GoToBegin(); !outIt.IsAtEnd(); ++outIt)
       {
 	currentindex=outIt.GetIndex();
-	DEMImage->TransformIndexToPhysicalPoint(currentindex, phyPoint);
+	DEMImage->TransformIndexToPhysicalPoint(currentindex, phyPointTemp);
+	phyPoint[0] = phyPointTemp[1];
+	phyPoint[1] = phyPointTemp[0];
 
 	height=m_DEMHandler->GetHeightAboveMSL(phyPoint); // Altitude calculation
 
@@ -115,7 +119,7 @@ namespace otb
 	else 
 	  {
 	    // Back to the MNT default value
-	    DEMImage->SetPixel(currentindex, static_cast<PixelType>(-32768) );
+	    DEMImage->SetPixel(currentindex, m_DefaultUnknownValue);
 	  }
       }
   }

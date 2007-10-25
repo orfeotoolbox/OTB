@@ -26,7 +26,7 @@
 //  Software Guide : BeginCommandLineArgs
 //  DEM_srtm
 //  OUTPUTS: {DEMToImageGenerator.tif} , {pretty_DEMToImageGenerator.png}
-//  44.5 6.5 500 500 0.002
+//  6.5 44.5 500 500 0.002 0.002
 // 
 //  Software Guide : EndCommandLineArgs
 
@@ -58,9 +58,9 @@
 
 int main(int argc, char * argv[])
 {
-  if(argc<7)
+  if(argc<10)
     {
-      std::cout << argv[0] <<" folder path , output filename , pretty output filename , X Output Orign point , Y Output Origin point , X Output Size, Y Output size , Spacing"  << std::endl;
+      std::cout << argv[0] <<" folder path , output filename , pretty output filename , Longitude Output Orign point , Latitude Output Origin point , X Output Size, Y Output size , X Spacing , Y Spacing"  << std::endl;
       return EXIT_FAILURE;
     }
   //  Software Guide : BeginLatex
@@ -144,6 +144,7 @@ int main(int argc, char * argv[])
   SizeType size;
   size[0] = ::atoi(argv[6]);
   size[1] = ::atoi(argv[7]);
+
   object->SetOutputSize(size);
   // Software Guide : EndCodeSnippet
 
@@ -154,7 +155,9 @@ int main(int argc, char * argv[])
   //
   //  Software Guide : EndLatex 
   // Software Guide : BeginCodeSnippet
-  SpacingType spacing(::atof(argv[8]));
+ SpacingType spacing;
+ spacing[0] = ::atof(argv[8]);
+ spacing[1] = ::atof(argv[9]);
 
   object->SetOutputSpacing(spacing);
   // Software Guide : EndCodeSnippet
@@ -219,6 +222,7 @@ int main(int argc, char * argv[])
    rescaler->SetOutputMinimum(0);
    rescaler->SetOutputMaximum(255);
    prettyWriter->SetFileName( argv[3] );
+
    prettyWriter->SetInput( rescaler->GetOutput() );
    try
      {

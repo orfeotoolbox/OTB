@@ -86,6 +86,10 @@ namespace otb
       itkSetMacro(OutputSpacing,SpacingType);
       itkGetConstReferenceMacro(OutputSpacing,SpacingType);
 
+      /** Set/Get the Default Unknown Value. */    
+      itkSetMacro(DefaultUnknownValue,PixelType);
+      itkGetConstReferenceMacro(DefaultUnknownValue,PixelType);
+
       /** Set the DEM directory. */
       bool SetDEMDirectoryPath(const char* DEMDirectory);         
      
@@ -101,7 +105,8 @@ namespace otb
       DEMHandlerType::Pointer m_DEMHandler;
       PointType m_OutputOrigin;
       SpacingType  m_OutputSpacing;
-      SizeType m_OutputSize; 
+      SizeType m_OutputSize;
+      PixelType m_DefaultUnknownValue;
     };
   
 } // namespace otb
