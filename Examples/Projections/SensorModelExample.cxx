@@ -65,9 +65,9 @@ int main( int argc, char* argv[] )
 
   if(argc!=8)
     {
-    std::cout << argv[0] <<" <input filename> <output filename>"
-	      << "<latitude de l'origine> <longitude de l'origine>"
-              << "<taille_x> <taille_y> <NumberOfstreamDivisions>" 
+    std::cout << argv[0] <<" <input_filename> <output_filename>"
+	      << " <upper_left_corner_latitude> <upper_left_corner_longitude>"
+              << " <size_x> <sizee_y> <number_of_stream_divisions>" 
 	      << std::endl;
 
     return EXIT_FAILURE;
@@ -218,14 +218,23 @@ int main( int argc, char* argv[] )
   size[0]=atoi(argv[5]);      
   size[1]=atoi(argv[6]);	
 
+// Software Guide : EndCodeSnippet
+
+// Software Guide : BeginLatex
+//
+// The spacing in y direction is negative since origin is the upper left corner. 
+//
+// Software Guide : EndLatex
+
+// Software Guide : BeginCodeSnippet
   ImageType::SpacingType  		 spacing;
   spacing[0]=0.00001;
-  spacing[1]=0.00001;
+  spacing[1]=-0.00001; 
 
-  
+ 
   ImageType::PointType			 origin;
-  origin[0]=strtod(argv[3], NULL);         //latitude
-  origin[1]=strtod(argv[4], NULL);         //longitude
+  origin[0]=strtod(argv[3], NULL);         //longitude
+  origin[1]=strtod(argv[4], NULL);         //lattitude
 
   ImageType::RegionType			 region;
 

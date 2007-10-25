@@ -73,9 +73,9 @@ int main( int argc, char* argv[] )
 
   ossimInit::instance()->initialize(argc, argv);
 
-  if(argc!=10)
+  if(argc!=9)
     {
-    std::cout << argv[0] <<" <input filename> <output filename> <originLatitude> <originLongitude> <x_Size> <y_Size> <x_groundSamplingDistance> <y_groundSamplingDistance>" 
+    std::cout << argv[0] <<" <input_filename> <output_filename> <x_ground_upper_left_corner> <y_ground_upper_left_corner> <x_Size> <y_Size> <x_groundSamplingDistance> <y_groundSamplingDistance (should be negative since origin is upper left)>" 
 	      << std::endl;
 
     return EXIT_FAILURE;
@@ -181,8 +181,8 @@ int main( int argc, char* argv[] )
   orthoRectifFilter->SetSize(size);
 				
   ImageType::SpacingType spacing;
-  spacing[0]=atof(argv[8]);
-  spacing[1]=atof(argv[9]);
+  spacing[0]=atof(argv[7]);
+  spacing[1]=atof(argv[8]);
   orthoRectifFilter->SetOutputSpacing(spacing);
 				
   ImageType::PointType origin;
