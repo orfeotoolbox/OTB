@@ -1,4 +1,4 @@
-OTB-v.1.6.0 - Changes since version 1.4.0
+OTB-v.1.6.0 - Changes since version 1.4.0 (2007/10/25)
 -----------------------------------------
 
 *BasicFilters:
