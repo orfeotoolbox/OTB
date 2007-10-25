@@ -47,8 +47,7 @@ ADD_EXECUTABLE(DXFReaderExample DXFReaderExample.cxx )
 TARGET_LINK_LIBRARIES(DXFReaderExample OTBCommon OTBIO ITKCommon ITKIO dxf)
 
 ADD_EXECUTABLE(DEMToImageGenerator DEMToImageGenerator.cxx )
-#TARGET_LINK_LIBRARIES(DEMToImageGenerator OTBProjections OTBCommon OTBIO ITKCommon ITKIO otbossim)
-TARGET_LINK_LIBRARIES(DEMToImageGenerator otbossimProjectionImaging otbossimElevation OTBBasicFilters OTBCommon OTBDisparityMap OTBIO OTBSpatialReasoning OTBChangeDetection OTBFeatureExtraction  OTBLearning  OTBMultiScale OTBProjections gdal ITKIO ITKAlgorithms ITKStatistics ITKCommon dxf otbossim)
+TARGET_LINK_LIBRARIES(DEMToImageGenerator OTBProjections OTBIO OTBCommon ITKCommon ITKIO otbossim otbossimElevation )
 
 #ADD_EXECUTABLE(ImageReadExportVTK ImageReadExportVTK.cxx )
 #TARGET_LINK_LIBRARIES(ImageReadExportVTK ITKCommon ITKIO)
