@@ -48,14 +48,14 @@ int otbDEMToImageGeneratorTest(int argc, char * argv[])
   PointType origin;
   origin[0] = ::atof(argv[3]);
   origin[1] = ::atof(argv[4]);
-  std::cout<<origin<<std::endl;
+
   SizeType size;
   size[0] = ::atoi(argv[5]);
   size[1] = ::atoi(argv[6]);
+
   SpacingType spacing;
   spacing[0] = ::atof(argv[7]);
   spacing[1] = ::atof(argv[8]);
-    std::cout<<spacing<<std::endl;
 
   object->SetDEMDirectoryPath(folderPath);
   object->SetOutputOrigin(origin);

@@ -15,7 +15,6 @@ TARGET_LINK_LIBRARIES(ImageReadCastWrite OTBCommon OTBIO ITKCommon ITKIO)
 
 ADD_EXECUTABLE(ImageReadRegionOfInterestWrite ImageReadRegionOfInterestWrite.cxx )
 TARGET_LINK_LIBRARIES(ImageReadRegionOfInterestWrite OTBCommon OTBIO ITKCommon ITKIO)
-
 ADD_EXECUTABLE(RGBImageReadWrite RGBImageReadWrite.cxx )
 TARGET_LINK_LIBRARIES(RGBImageReadWrite OTBCommon OTBIO ITKCommon ITKIO)
 
@@ -123,11 +122,12 @@ ADD_TEST(DEMToImageGeneratorTest ${EXE_TESTS}
          ${INPUTDATA}/DEM_srtm
          ${TEMP}/DEMToImageGenerator.tif
 	 ${TEMP}/pretty_DEMToImageGenerator.png
-         44.5
          6.5
+         44.5
          500
          500
-	 0.02	 
+	 0.002
+	 0.002	
          )
  
 INCLUDE_DIRECTORIES("${OTBTesting_BINARY_DIR}")
