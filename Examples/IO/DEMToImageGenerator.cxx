@@ -244,7 +244,7 @@ int main(int argc, char * argv[])
    // Software Guide : BeginLatex
    //
    // Let's now run this example using as input the Srtm datas contained in 
-   // \code{DEM_srtm} folder.
+   // \code{DEM\_srtm} folder.
    //
    //
    // \begin{figure} \center
