@@ -10,7 +10,7 @@ SET(TEMP ${OTBTesting_BINARY_DIR}/Temporary)
 
 #Tolerance sur diff pixel image
 SET(TOL 0.0)
-SET(EPSILON 0.0000000001)
+SET(EPSILON 0.0001)
 
 SET(PROJECTIONS_TESTS ${CXX_TEST_PATH}/otbProjectionsTests)
 
@@ -90,7 +90,7 @@ ADD_TEST(prTvRegionProjectionCevennes ${PROJECTIONS_TESTS}
 #=======================================================================================
 # TEST 12
 ADD_TEST(prTvRegionProjectionResamplerToulouse ${PROJECTIONS_TESTS}  
-  --compare-image ${TOL}  ${BASELINE}/prTvRegionProjectionResamplerToulouse.tif
+  --compare-image ${EPSILON}  ${BASELINE}/prTvRegionProjectionResamplerToulouse.tif
                           ${TEMP}/prTvRegionProjectionResamplerToulouse.tif
         otbRegionProjectionResampler
         ${IMAGEDATA}/TOULOUSE/QuickBird/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF
@@ -104,7 +104,7 @@ ADD_TEST(prTvRegionProjectionResamplerToulouse ${PROJECTIONS_TESTS}
         )				
 # TEST 13				
 ADD_TEST(prTvRegionProjectionResamplerCevennes ${PROJECTIONS_TESTS}  
-  --compare-image ${TOL}  ${BASELINE}/prTvRegionProjectionResamplerCevennes.tif
+  --compare-image ${EPSILON}  ${BASELINE}/prTvRegionProjectionResamplerCevennes.tif
                           ${TEMP}/prTvRegionProjectionResamplerCevennes.tif
 				otbRegionProjectionResampler
         ${IMAGEDATA}/CEVENNES/06FEB12104912-P1BS-005533998070_01_P001.TIF
@@ -151,7 +151,7 @@ ADD_TEST(prTvSensorImageToCartoCevennes ${PROJECTIONS_TESTS}
 #=======================================================================================
 # TEST 15				
 ADD_TEST(prTvOrthoRectificationToulouse ${PROJECTIONS_TESTS} 
-  --compare-image ${TOL}  ${BASELINE}/prTvOrthoRectificationToulouse_UTM.tif
+  --compare-image ${EPSILON}  ${BASELINE}/prTvOrthoRectificationToulouse_UTM.tif
                           ${TEMP}/prTvOrthoRectificationToulouse_UTM.tif
         otbOrthoRectificationFilter
         ${IMAGEDATA}/TOULOUSE/QuickBird/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF
@@ -167,7 +167,7 @@ ADD_TEST(prTvOrthoRectificationToulouse ${PROJECTIONS_TESTS}
 
 # TEST 15
 ADD_TEST(prTvOrthoRectificationCevennes ${PROJECTIONS_TESTS} 
-  --compare-image ${TOL}  ${BASELINE}/prTvOrthoRectificationCevennes_UTM.tif
+  --compare-image ${EPSILON}  ${BASELINE}/prTvOrthoRectificationCevennes_UTM.tif
                           ${TEMP}/prTvOrthoRectificationCevennes_UTM.tif
         otbOrthoRectificationFilter
         ${IMAGEDATA}/CEVENNES/06FEB12104912-P1BS-005533998070_01_P001.TIF
@@ -218,7 +218,7 @@ ADD_TEST(prTvSensorImageDEMToCartoCevennes ${PROJECTIONS_TESTS}
 #=======================================================================================
 # TEST 18
 ADD_TEST(prTvOrthoRectificationToulouseWithDEM ${PROJECTIONS_TESTS}  
-  --compare-image ${TOL}  ${BASELINE}/prTvOrthoRectificationToulouseWithDEM_UTM.tif
+  --compare-image ${EPSILON}  ${BASELINE}/prTvOrthoRectificationToulouseWithDEM_UTM.tif
                           ${TEMP}/prTvOrthoRectificationToulouseWithDEM_UTM.tif
         otbOrthoRectificationFilterWithDEM	
 	${IMAGEDATA}/TOULOUSE/QuickBird/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF
@@ -236,7 +236,7 @@ ADD_TEST(prTvOrthoRectificationToulouseWithDEM ${PROJECTIONS_TESTS}
 
 # TEST 19
 ADD_TEST(prTvOrthoRectificationCevennesWithDEM ${PROJECTIONS_TESTS}  
-  --compare-image ${TOL}  ${BASELINE}/prTvOrthoRectificationCevennesWithDEM_UTM.tif
+  --compare-image ${EPSILON}  ${BASELINE}/prTvOrthoRectificationCevennesWithDEM_UTM.tif
                           ${TEMP}/prTvOrthoRectificationCevennesWithDEM_UTM.tif
         otbOrthoRectificationFilterWithDEM
         ${IMAGEDATA}/CEVENNES/06FEB12104912-P1BS-005533998070_01_P001.TIF
