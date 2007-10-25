@@ -45,15 +45,17 @@ public :
 	/** Run-time type information (and related methods). */
 	itkTypeMacro( MollweidMapProjection, MapProjection );
 
-	void SetFalseEasting(double falseEasting);
+	virtual void SetFalseEasting(double falseEasting);
 
-	void SetFalseNorthing(double falseNorthing);
+	virtual void SetFalseNorthing(double falseNorthing);
 
-	double GetFalseNorthing() const;
+	virtual double GetFalseNorthing() const;
 
-	double GetFalseEasting() const;
+	virtual double GetFalseEasting() const;
+	
+	virtual void SetParameters(double falseEasting,double falseNorthing);
 
-	void SetDefaults();
+	virtual void SetDefaults();
 
 protected:
 

@@ -34,10 +34,10 @@ int otbSensorImageDEMToCarto( int argc, char* argv[] )
     {        
 
 
-   if(argc!=10)
+   if(argc!=12)
    {
       std::cout << argv[0] <<" <input filename> <output filename> <X origine> <Y origine> <taille_x> <taille_y> <NumberOfstreamDivisions> <srtm directory> <DEM Image Filename" 
-                << std::endl;
+                << "<xSpacing> <ySpacing>" << std::endl;
 
       return EXIT_FAILURE;
    }
@@ -67,8 +67,8 @@ size[0]=atoi(argv[5]);      //Taille en X.
 size[1]=atoi(argv[6]);	    //Taille en Y.
 
 ImageType::SpacingType  		 spacing;
-spacing[0]=0.7;
-spacing[1]=0.7;
+spacing[0]=atof(argv[10]);
+spacing[1]=atof(argv[11]);
 
 ImageType::PointType			 origin;
 origin[0]=strtod(argv[3], NULL);         //latitude de l'origine.

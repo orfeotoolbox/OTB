@@ -72,7 +72,7 @@ int otbRegionProjectionResampler( int argc, char* argv[] )
    
    
         typedef otb::Image<unsigned char, 2>    CharImageType;
-        typedef otb::Image<unsigned int, 2>     ImageType;
+        typedef otb::Image<double, 2>     ImageType;
         typedef otb::ImageFileReader<ImageType>  ReaderType;
 //        typedef otb::ImageFileWriter<ImageType>  WriterType;
         typedef otb::StreamingImageFileWriter<ImageType>  WriterType;
@@ -138,8 +138,8 @@ int otbRegionProjectionResampler( int argc, char* argv[] )
         spacing[0]=atof(argv[8]);
         spacing[1]=atof(argv[9]);
 
-        origin[0]=strtod(argv[3], NULL);         //latitude de l'origine.
-        origin[1]=strtod(argv[4], NULL);         //longitude de l'origine.
+        origin[0]=strtod(argv[3], NULL);         //longitude de l'origine.
+        origin[1]=strtod(argv[4], NULL);         //latitude de l'origine.
 
 /*        
         spacing = inputImage->GetSpacing();

@@ -58,10 +58,10 @@ int otbSensorImageToCarto( int argc, char* argv[] )
 
    ossimInit::instance()->initialize(argc, argv);
 
-   if(argc!=8)
+   if(argc!=10)
    {
       std::cout << argv[0] <<" <input filename> <output filename> <X origine> <Y origine> <taille_x> <taille_y> <NumberOfstreamDivisions>" 
-                << std::endl;
+                << "<xSPacing> <ySpacing>" << std::endl;
 
       return EXIT_FAILURE;
    }
@@ -87,8 +87,8 @@ size[0]=atoi(argv[5]);      //Taille en X.
 size[1]=atoi(argv[6]);	    //Taille en Y.
 
 ImageType::SpacingType  		 spacing;
-spacing[0]=0.5;
-spacing[1]=0.5;
+spacing[0]=atof(argv[8]);
+spacing[1]=atof(argv[9]);
 
 ImageType::PointType			 origin;
 origin[0]=strtod(argv[3], NULL);         //latitude de l'origine.

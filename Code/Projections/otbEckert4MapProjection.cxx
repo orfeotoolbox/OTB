@@ -75,5 +75,11 @@ double Eckert4MapProjection
 	return falseEasting;
 }
 
+void Eckert4MapProjection
+::SetParameters(double falseEasting,double falseNorthing)
+{
+	m_Eckert4Projection->setFalseEastingNorthing(falseEasting,falseNorthing);
+}
+
 } // namespace otb
 

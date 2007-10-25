@@ -62,10 +62,10 @@ int otbRegionProjection( int argc, char* argv[] )
 
    ossimInit::instance()->initialize(argc, argv);
 
-   if(argc!=8)
+   if(argc!=10)
    {
       std::cout << argv[0] <<" <input filename> <output filename> <latitude de l'origine> <longitude de l'origine> <taille_x> <taille_y> <NumberOfstreamDivisions>" 
-                << std::endl;
+                << "<xSpacing> <ySpacing>" << std::endl;
 
       return EXIT_FAILURE;
    }
@@ -93,8 +93,8 @@ size[0]=atoi(argv[5]);      //Taille en X.
 size[1]=atoi(argv[6]);	    //Taille en Y.
 
 ImageType::SpacingType  		 spacing;
-spacing[0]=0.00001;
-spacing[1]=0.00001;
+spacing[0]=atof(argv[8]);
+spacing[1]=atof(argv[9]);
 
 ImageType::PointType			 origin;
 origin[0]=strtod(argv[3], NULL);         //latitude de l'origine.
@@ -270,6 +270,16 @@ int *currentIndexArray=new int[pixelIndexArrayDimension];
 /**Cr�ation de l'it�rateur pour chaque portion:**/
 IteratorType outputIt(outputimage, iteratorRegion);
 
+std::cout << "Origin : " << outputimage->GetOrigin() << std::endl;
+std::cout << "Spacing : " << outputimage->GetSpacing() << std::endl;
+
+/*PointType ulc;
+ulc[0]=inputimage->GetOrigin()[0];
+ulc[1]=inputimage->GetOrigin()[1]+(inputimage->GetSpacing()[1]*inputimage->GetLargestPossibleRegion().GetSize()[1]);
+model->SetUpperLeftCorner(ulc);*/
+
+
+
 /**On applique l'it�ration sur chaque portion**/
 It=0;
 for (outputIt.GoToBegin(); !outputIt.IsAtEnd(); ++outputIt)
@@ -278,15 +288,15 @@ for (outputIt.GoToBegin(); !outputIt.IsAtEnd(); ++outputIt)
 currentindex=outputIt.GetIndex();
 //On le transforme en Point physique
 outputimage->TransformIndexToPhysicalPoint(currentindex, outputpoint);
-      otbMsgDevMacro(<< "Pour l'Index Ncurrent:(" << currentindex[0]<< ","<< currentindex[1] << ")"<<  std::endl
-                << "Le point physique correspondant est: ("<<  outputpoint[0]<< ","<<  outputpoint[1]<< ")"); 
+      otbGenericMsgDebugMacro(<< "Pour l'Index Ncurrent:(" << currentindex[0]<< ","<< currentindex[1] << ")"<<  std::endl
+                << "Le point physique correspondant est: ("<<  outputpoint[0]<<	","<<outputpoint[1]<< ")"); 
 
 //On calcule les coordonn�es pixeliques sur l'image capteur
 inputpoint = model->TransformPoint(outputpoint);
-  otbMsgDevMacro(<< "Les coordonnees en pixel sur l'image capteur correspondant a ce point sont:" << std::endl
+  otbGenericMsgDebugMacro(<< "Les coordonnees en pixel sur l'image capteur correspondant a ce point sont:" << std::endl
                << inputpoint[0] << ","<< inputpoint[1] );
 inputimage->TransformPhysicalPointToIndex(inputpoint,pixelindex);
-    otbMsgDevMacro(<< "L'index correspondant a ce point est:" << std::endl
+    otbGenericMsgDebugMacro(<< "L'index correspondant a ce point est:" << std::endl
                  << pixelindex[0] << ","<< pixelindex[1] );
 
 /**On stocke les pixel index dans un tableau pixelindexarray**/

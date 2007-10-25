@@ -126,8 +126,6 @@ private :
 	
 	/** Specify if DEM is used in Point Transformation */
 	bool m_UseDEM ;
-	
-
 };
 
 } // namespace otb

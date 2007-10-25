@@ -71,23 +71,16 @@ int otbOrthoRectificationFilterWithDEM( int argc, char* argv[] )
         }
    
    
-        typedef otb::Image<unsigned int, 2>     ImageType;
+        typedef otb::Image<double, 2>     ImageType;
         typedef otb::ImageFileReader<ImageType>  ReaderType;
         typedef otb::StreamingImageFileWriter<ImageType>  WriterType;
-				typedef itk::Transform<double,2,2> TransformType;
-        
-			  typedef itk::LinearInterpolateImageFunction<ImageType, double > InterpolatorType;
-				
-				typedef otb::StreamingResampleImageFilter<ImageType,ImageType> ResamplerType;
+       
 				typedef otb::UtmProjection UtmMapProjectionType ;
 			  typedef otb::OrthoRectificationFilter<ImageType, ImageType, UtmMapProjectionType> OrthoRectifFilterType ;
-			  typedef otb::InverseSensorModel<double> ModelType;
 				
         //Allocate pointer
         ReaderType::Pointer     	reader=ReaderType::New();
         WriterType::Pointer	    	writer=WriterType::New();
-				InterpolatorType::Pointer interpolator=InterpolatorType::New();
-				ModelType::Pointer                      model= ModelType::New();
 
 				OrthoRectifFilterType::Pointer     	orthoRectifFilter=OrthoRectifFilterType::New();
 				UtmMapProjectionType::Pointer utmMapProjection = UtmMapProjectionType::New();
@@ -97,8 +90,8 @@ int otbOrthoRectificationFilterWithDEM( int argc, char* argv[] )
         writer->SetFileName(argv[2]);
    
         // Read meta data (ossimKeywordlist)
-        reader->GenerateOutputInformation();
-        model->SetImageGeometry(reader->GetOutput()->GetImageKeywordlist());
+//        reader->GenerateOutputInformation();
+//        model->SetImageGeometry(reader->GetOutput()->GetImageKeywordlist());
 
 				orthoRectifFilter->SetInput(reader->GetOutput());
 				

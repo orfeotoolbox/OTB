@@ -19,6 +19,7 @@
 #define __otbMapProjection_txx
 
 #include "otbMapProjection.h"
+#include "otbMacro.h"
 
 namespace otb
 {
@@ -140,21 +141,24 @@ MapProjection<TOssimMapProjection, TScalarType, NInputDimensions, NOutputDimensi
 	  {
 	case INVERSE:
 	  {
-	    //On transforme le type "itk::point" en type "ossim::ossimDpt" 
+	    otbGenericMsgDebugMacro(<< "Point en x/y carto : (" << point[0] << "," << point[1] << ")");
+			
+			//On transforme le type "itk::point" en type "ossim::ossimDpt" 
 	    ossimDpt ossimDPoint(point[0], point[1]);
 	    
 	    //On le projète sur la carte 
 	    ossimGpt ossimGPoint;
 	    ossimGPoint=m_MapProjection->inverse(ossimDPoint);
 	    
-	    outputPoint[0]=ossimGPoint.lat;
-	    outputPoint[1]=ossimGPoint.lon;
+	    outputPoint[0]=ossimGPoint.lon;
+	    outputPoint[1]=ossimGPoint.lat;
+			otbGenericMsgDebugMacro(<< "Point en lon/lat : (" << outputPoint[0] << "," << outputPoint[1] << ")");
 	    break;
 	  }
 	  case FORWARD:
 	{
-		//On transforme le type "itk::point" en type "ossim::ossimGpt" 
-	  ossimGpt ossimGPoint(point[0], point[1]);
+		//On transforme le type "itk::point" en type "ossim::ossimGpt"
+	  ossimGpt ossimGPoint(point[1], point[0]);
 	  
 	  //On le projète sur la carte 
 	  ossimDpt ossimDPoint;

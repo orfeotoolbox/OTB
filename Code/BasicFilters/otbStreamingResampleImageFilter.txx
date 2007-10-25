@@ -104,6 +104,9 @@ StreamingResampleImageFilter<TInputImage,TOutputImage,TInterpolatorPrecisionType
 			ContinuousIndexType indexTmpTr;
 			
 			// Calculate transformed points needed for previous filter in the pipeline
+//			std::cout << "Origin : " << outputImage->GetOrigin() << std::endl;
+//			std::cout << "Spacing : " << outputImage->GetSpacing() << std::endl;
+			
 			outputImage->TransformIndexToPhysicalPoint( *it, outputPoint );
 
       otbMsgDebugMacro(<< "Pour l'Index Ncurrent:(" << (*it)[0]<<","<< (*it)[1] << ")"<<  std::endl

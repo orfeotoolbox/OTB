@@ -45,23 +45,23 @@ public :
 	/** Run-time type information (and related methods). */
 	itkTypeMacro( TransMercatorMapProjection, MapProjection );
 	
-	void SetEllipsoid();
+	virtual void SetEllipsoid();
     
-	void SetFalseEasting(double falseEasting);
+	virtual void SetFalseEasting(double falseEasting);
 
-	void SetFalseNorthing(double falseNorthing);
+	virtual void SetFalseNorthing(double falseNorthing);
 
-	void SetScaleFactor(double scaleFactor);
+	virtual void SetScaleFactor(double scaleFactor);
 
-	void SetParameters(double falseEasting,double falseNorthing, double scaleFactor);
+	virtual void SetParameters(double falseEasting,double falseNorthing, double scaleFactor);
 
-	void SetDefaults();
+	virtual void SetDefaults();
 
-	double GetFalseNorthing() const;
+	virtual double GetFalseNorthing() const;
 	
-	double GetFalseEasting() const;
+	virtual double GetFalseEasting() const;
 
-	double GetScaleFactor() const;
+	virtual double GetScaleFactor() const;
 
 protected:
 

@@ -72,5 +72,11 @@ double MollweidMapProjection
 	return falseEasting;
 }
 
+void MollweidMapProjection
+::SetParameters(double falseEasting,double falseNorthing)
+{
+	m_MollweidProjection->setFalseEastingNorthing(falseEasting,falseNorthing);
+}
+
 } // namespace otb
 

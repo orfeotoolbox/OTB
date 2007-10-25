@@ -73,5 +73,12 @@ double SinusoidalMapProjection
 	return falseEasting;
 }
 
+void SinusoidalMapProjection
+::SetParameters(double falseEasting,double falseNorthing)
+{
+	m_SinusoidalProjection->setFalseEastingNorthing(falseEasting,falseNorthing);
+}
+
+
 } // namespace otb
 

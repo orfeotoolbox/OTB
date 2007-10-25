@@ -67,10 +67,12 @@ ADD_TEST(prTvRegionProjectionToulouse ${PROJECTIONS_TESTS}
         otbRegionProjection
         ${IMAGEDATA}/TOULOUSE/QuickBird/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF
         ${TEMP}/prTvRegionProjectionToulouse.tif
-        43.60 1.44 # Coordonnees Lat/Long du Capitole Toulouse
+				1.44 43.6050 # Coordonnees Long/Lat du Capitole Toulouse
         500
         500
         10
+				0.00001
+				-0.00001
         )
 
 # TEST 11
@@ -80,12 +82,14 @@ ADD_TEST(prTvRegionProjectionResamplerToulouse ${PROJECTIONS_TESTS}
         otbRegionProjectionResampler
         ${IMAGEDATA}/TOULOUSE/QuickBird/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF
         ${TEMP}/prTvRegionProjectionResamplerToulouse.tif
-        43.60 1.44 # Coordonnees Lat/Long du Capitole Toulouse
+				1.44 43.6050 # Coordonnees Lat/Long du Capitole Toulouse
+#				43.6544 1.3541 # Upper Left Corner
+#				43.4787 1.35588 # Lower Left Corner
         500
         500
         100
 				0.00001
-				0.00001
+				-0.00001
         )
 				
 # TEST 12
@@ -95,11 +99,12 @@ ADD_TEST(prTvRegionProjectionCevennes ${PROJECTIONS_TESTS}
         otbRegionProjection
         ${IMAGEDATA}/CEVENNES/06FEB12104912-P1BS-005533998070_01_P001.TIF
         ${TEMP}/prTvRegionProjectionCevennes.tif
-        44.08
-        3.7
+        3.7 44.08 
         500
 				500
 				10
+				0.00001
+        -0.00001
         )
 
 # TEST 13				
@@ -109,13 +114,12 @@ ADD_TEST(prTvRegionProjectionResamplerCevennes ${PROJECTIONS_TESTS}
 				otbRegionProjectionResampler
         ${IMAGEDATA}/CEVENNES/06FEB12104912-P1BS-005533998070_01_P001.TIF
         ${TEMP}/prTvRegionProjectionResamplerCevennes.tif
-        44.08
-        3.7
+        3.7 44.08
         500
 				500
 				10
 				0.00001
-        0.00001
+        -0.00001
         )
 
 				
@@ -144,6 +148,8 @@ ADD_TEST(prTvSensorImageToCartoCevennes ${PROJECTIONS_TESTS}
            500 
            500 
            220
+					 0.5
+					 -0.5
            )
 
 # TEST 15				
@@ -159,8 +165,25 @@ ADD_TEST(prTvOrthoRectificationCevennes ${PROJECTIONS_TESTS}
 				500 
 				220
 				0.5
-        0.5
+        -0.5
         )
+
+# TEST 15				
+ADD_TEST(prTvOrthoRectificationToulouse ${PROJECTIONS_TESTS} 
+  --compare-image ${TOL}  ${BASELINE}/prTvOrthoRectificationToulouse_UTM.tif
+                          ${TEMP}/prTvOrthoRectificationToulouse_UTM.tif
+        otbOrthoRectificationFilter
+        ${IMAGEDATA}/TOULOUSE/QuickBird/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF
+        ${TEMP}/prTvOrthoRectificationToulouse_UTM.tif
+        374100.8
+        4829184.8 
+        500
+				500 
+				220
+				0.5
+        -0.5
+        )
+
 
 # TEST 16
 ADD_TEST(prTvSensorImageDEMToCartoCevennes ${PROJECTIONS_TESTS}  
@@ -176,6 +199,8 @@ ADD_TEST(prTvSensorImageDEMToCartoCevennes ${PROJECTIONS_TESTS}
         200 
         ${INPUTDATA}/DEM/srtm_directory/ 
         ${TEMP}/SensorImageDEMToCartoCevennes.hdr
+				0.7
+				-0.7
         )
 
 # TEST 17
@@ -191,7 +216,7 @@ ADD_TEST(prTvOrthoRectificationCevennesWithDEM ${PROJECTIONS_TESTS}
         500 
         200 
 				0.7
-				0.7
+				-0.7
         ${INPUTDATA}/DEM/srtm_directory/ 
         ${TEMP}/prTvOrthoRectificationCevennesWithDEM_UTM.tif
         )
