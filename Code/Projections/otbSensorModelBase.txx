@@ -18,12 +18,6 @@
 #ifndef __otbSensorModelBase_txx
 #define __otbSensorModelBase_txx
 
-
-/**SensorModelBase.cxx
-*  Purpose:
-*  Cette classe permet de projeter un point au sol en un point sur un point sur l'image capteur.
-*  (lat,lon) -> (i,j) ou (lat,lon,h) -> (i,j)
-**/
 #include "otbSensorModelBase.h"
 
 #include "otbMacro.h"
@@ -64,7 +58,7 @@ SensorModelBase< TScalarType,NInputDimensions,NOutputDimensions,NParametersDimen
 }
 
 
-/// Méthode GetGeometryKeywordlist
+/// Get the Geometry Keyword list
 template < class TScalarType,
            unsigned int NInputDimensions,
            unsigned int NOutputDimensions,
@@ -76,7 +70,7 @@ SensorModelBase< TScalarType,NInputDimensions,NOutputDimensions,NParametersDimen
 	return m_ImageKeywordlist;
 }
 
-/// Méthode GetGeometryKeywordlist
+/// Get the Geometry Keyword list
 template < class TScalarType,
            unsigned int NInputDimensions,
            unsigned int NOutputDimensions,
@@ -119,7 +113,7 @@ SensorModelBase< TScalarType,NInputDimensions,NOutputDimensions,NParametersDimen
 }
 
 
-/// Méthode SetGeometry :Créer et instancier le modèle de capteur grâce aux metadata.
+///Instatiate the sensor model from metadata.
 template < class TScalarType,
            unsigned int NInputDimensions,
            unsigned int NOutputDimensions,

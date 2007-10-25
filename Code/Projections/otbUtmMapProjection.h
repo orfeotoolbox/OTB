@@ -24,7 +24,10 @@
 
 namespace otb
 { 
-
+/** \class UtmMapProjection
+   *  \brief This class implements the UTM map projection.
+   * It converts coordinates in longitude,latitude to UTM map coordinates.
+   */
 class ITK_EXPORT UtmMapProjection : public MapProjection<ossimUtmProjection> 
 {
 public :

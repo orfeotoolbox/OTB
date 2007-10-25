@@ -24,7 +24,11 @@
 
 namespace otb
 {
-
+  /** \class TransMercatorMapProjection
+   *  \brief This class implements the TransMercator map projection.
+   * It converts coordinates in longitude,latitude to TransMercator map coordinates.
+   *
+   */
 class ITK_EXPORT TransMercatorMapProjection : public MapProjection<ossimTransMercatorProjection> 
 {
 public :

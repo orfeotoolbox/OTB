@@ -36,7 +36,7 @@ MapToMapProjection<TInputMapProjection, TOutputMapProjection, TScalarType, NInpu
 {
 }
 
-///Méthode pour passer de la projection 1 à la projection 2
+///Pass from projection 1 to projection 2
 template<class TInputMapProjection, class TOutputMapProjection, class TScalarType, unsigned int NInputDimensions, unsigned int NOutputDimensions> 
 typename MapToMapProjection<TInputMapProjection, TOutputMapProjection, TScalarType, NInputDimensions, NOutputDimensions>::OutputPointType 
 MapToMapProjection<TInputMapProjection, TOutputMapProjection, TScalarType, NInputDimensions, NOutputDimensions>::ComputeProjection1ToProjection2(const InputPointType &point1)
@@ -44,15 +44,15 @@ MapToMapProjection<TInputMapProjection, TOutputMapProjection, TScalarType, NInpu
 	InputPointType geopoint;
 	OutputPointType point2;	
 	
-	//On projette le point en (lat,lon) 
+	//(lat,lon) projection 
 	geopoint=m_InputMapProjection->Inverse(point1); 
-	//Puis on le reprojette en coord carto.
+	//map projection
 	point2=m_OutputMapProjection->Forward(geopoint); 
 
 	return point2;
 }
 
-///Méthode pour passer de la projection 2 à la projection 1
+///Pass from projection 2 to projection 1
 template<class TInputMapProjection, class TOutputMapProjection, class TScalarType, unsigned int NInputDimensions, unsigned int NOutputDimensions> 
 typename MapToMapProjection<TInputMapProjection, TOutputMapProjection, TScalarType, NInputDimensions, NOutputDimensions>::InputPointType 
 MapToMapProjection<TInputMapProjection, TOutputMapProjection, TScalarType, NInputDimensions, NOutputDimensions>::ComputeProjection2ToProjection1(const OutputPointType &point2)
@@ -61,9 +61,9 @@ MapToMapProjection<TInputMapProjection, TOutputMapProjection, TScalarType, NInpu
 	OutputPointType geopoint;
 	InputPointType point1;
 
-	//On projette le point en (lat,lon) 
+	//(lat,lon) projection
 	geopoint=m_OutputMapProjection->Inverse(point2);
-	//Puis on le reprojette en coord carto.
+	//map projection
 	point1=m_InputMapProjection->Forward(geopoint);
 	
 	return point1;

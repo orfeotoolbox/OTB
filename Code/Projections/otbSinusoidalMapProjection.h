@@ -25,7 +25,10 @@
 namespace otb
 {
 
-
+  /** \class SinusoidalMapProjection
+   *  \brief This class implements the Sinusoidal map projection.
+   *  It converts coordinates in longitude,latitude to Sinusoidal map coordinates. 
+   */
 class ITK_EXPORT SinusoidalMapProjection : public otb::MapProjection<ossimSinusoidalProjection> 
 {
 public :

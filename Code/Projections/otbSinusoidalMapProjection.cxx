@@ -34,28 +34,28 @@ SinusoidalMapProjection
 	delete m_SinusoidalProjection;
 }
 
-///Spécification du false easting
+///Set the false easting
 void SinusoidalMapProjection
 ::SetFalseEasting(double falseEasting) 
 {
 	m_SinusoidalProjection->setFalseEasting(falseEasting);
 }
 
-///Spécification du false Northing
+///Set the False Northing
 void SinusoidalMapProjection
 ::SetFalseNorthing(double falseNorthing) 
 {
 	m_SinusoidalProjection->setFalseNorthing(falseNorthing);
 }
 
-///Instanciation avec les paramètres par défaut
+///Set the default parameter
 void SinusoidalMapProjection
 ::SetDefaults() 
 {
 	m_SinusoidalProjection->setDefaults();
 }
 
-///Méthode pour récupérer le FalseNorthing(pour éviter les coordonnées négatives)
+///\return the False Northing (avoid negative coordinates)
 double SinusoidalMapProjection
 ::GetFalseNorthing() const
 {
@@ -64,7 +64,7 @@ double SinusoidalMapProjection
 	return falseNorthing;
 }
 
-///Méthode pour récupérer le FalseEasting(pour éviter les coordonnées négatives)
+///\return the False Easting (avoid negative coordinates)
 double SinusoidalMapProjection
 ::GetFalseEasting() const
 {

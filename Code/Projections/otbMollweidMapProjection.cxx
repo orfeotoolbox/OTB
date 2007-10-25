@@ -33,28 +33,28 @@ MollweidMapProjection
 	delete m_MollweidProjection;
 }
 
-///Spécification du false easting
+///Set the false easting
 void MollweidMapProjection
 ::SetFalseEasting(double falseEasting) 
 {
 	m_MollweidProjection->setFalseEasting(falseEasting);
 }
 
-///Spécification du false Northing
+///Set the false Northing
 void MollweidMapProjection
 ::SetFalseNorthing(double falseNorthing) 
 {
 	m_MollweidProjection->setFalseNorthing(falseNorthing);
 }
 
-///Instanciation avec les paramètres par défaut
+///Set the default parameters
 void MollweidMapProjection
 ::SetDefaults() 
 {
 	m_MollweidProjection->setDefaults();
 }
 
-///Méthode pour récupérer le FalseNorthing(pour éviter les coordonnées négatives)
+///\return the false northing (avoid negative coordinates)
 double MollweidMapProjection
 ::GetFalseNorthing() const
 {
@@ -63,7 +63,7 @@ double MollweidMapProjection
 	return falseNorthing;
 }
 
-///Méthode pour récupérer le FalseEasting(pour éviter les coordonnées négatives)
+///\return the false easting (avoid negative coordinates)
 double MollweidMapProjection
 ::GetFalseEasting() const
 {

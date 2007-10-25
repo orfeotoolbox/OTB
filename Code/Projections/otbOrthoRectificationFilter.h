@@ -38,7 +38,7 @@ namespace otb
 * \brief Class for Orthorectifying an image
 *
 * This class is used to apply map projection and sensor model transformation
-* to orthorectify an image, with or without DEM
+* to orthorectify an image, with or without DEM.
 * 
 */
 

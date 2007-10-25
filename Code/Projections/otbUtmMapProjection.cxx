@@ -15,7 +15,6 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-
 #include "otbUtmMapProjection.h"
 
 namespace otb
@@ -33,7 +32,7 @@ UtmMapProjection
 	delete m_utmprojection;
 }
 
-///Instanciation de UtmProjection avec une zone (2 méthodes)
+///Set the zone
 void UtmMapProjection
 ::SetZone(long zone)
 {
@@ -41,6 +40,7 @@ void UtmMapProjection
 	m_utmprojection= new ossimUtmProjection(zone);
 }
 
+///Set the zone
 void UtmMapProjection
 ::SetZone(const InputPointType &ground) 
 {
@@ -50,14 +50,14 @@ void UtmMapProjection
 	m_utmprojection->setZone(ossimGround);
 }
 
-///Spécification de l' hémisphère
+///Set the hemisphere
 void UtmMapProjection
 ::SetHemisphere(char hemisphere) 
 {
 	m_utmprojection->setHemisphere(hemisphere);
 }
 
-///Récupérer la Zone
+///\return the zone
 long UtmMapProjection
 ::GetZone()
 {
@@ -67,7 +67,7 @@ long UtmMapProjection
 	return zone;
 }
 
-///Récupérer l'hémisphère
+///\return the hemisphere
 const char UtmMapProjection
 ::GetHemisphere() const
 {
