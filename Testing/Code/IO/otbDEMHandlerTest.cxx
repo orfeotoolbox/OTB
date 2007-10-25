@@ -34,11 +34,11 @@ int otbDEMHandlerTest(int argc, char * argv[])
         bool bOpenDirectory(false);
       
         typedef otb::Image<float,Dimension> ImageType;
-        typedef otb::DEMHandler DEMHandlerType;
+        typedef otb::DEMHandler              DEMHandlerType;
 
         // Instantiating object
-        DEMHandlerType::Pointer DEMHandler = DEMHandlerType::New();
-        bOpenDirectory = DEMHandler->OpenDEMDirectory(srtm_directory);
+        DEMHandlerType::Pointer demHandler = DEMHandlerType::New();
+        bOpenDirectory = demHandler->OpenDEMDirectory(srtm_directory);
         if( bOpenDirectory == false )
         {
                 itkGenericExceptionMacro(<<" OpenDEMDirectory return flase value !!");
@@ -50,14 +50,14 @@ int otbDEMHandlerTest(int argc, char * argv[])
         geoPoint[0] = 44.08;
         geoPoint[1] = 3.6999;
 
-        height=DEMHandler->GetHeightAboveMSL(geoPoint); 
+        height=demHandler->GetHeightAboveMSL(geoPoint); 
 
-				std::ofstream file;
-				file.open(outputfilename);
-				file << "--- HEIGHT ABOVE MSL TEST ---" << std::endl;
-				file << " geoPoint: "<<geoPoint[0]<<" ; "<<geoPoint[1]<< std::endl;
+	std::ofstream file;
+	file.open(outputfilename);
+	file << "--- HEIGHT ABOVE MSL TEST ---" << std::endl;
+	file << " geoPoint: "<<geoPoint[0]<<" ; "<<geoPoint[1]<< std::endl;
         file << " -> Height: "<<height<< std::endl;
-				file.close();
+	file.close();
 
         std::cout << "Height: "<<height<<std::endl;
      

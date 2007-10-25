@@ -77,4 +77,6 @@ REGISTER_TEST(otbOSSIMImageMetaDataReaderTest);
 REGISTER_TEST(otbDEMHandlerNew);
 REGISTER_TEST(otbDEMHandlerTest);
 REGISTER_TEST(otbImageGeometryHandlerNew);
+REGISTER_TEST(otbDEMToImageGeneratorNew);
+REGISTER_TEST(otbDEMToImageGeneratorTest);
 }

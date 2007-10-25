@@ -1118,6 +1118,21 @@ ADD_TEST(ioTvDEMHandler ${IO_TESTS}
 # ---  otb::ImageGeometryHandler ---
 ADD_TEST(ioTuImageGeometryHandlerNew ${IO_TESTS} otbImageGeometryHandlerNew )
 
+# ---  otb::DEMToImageGenerator ---
+ADD_TEST(ioTuDEMToImageGeneratorNew ${IO_TESTS} otbDEMToImageGeneratorNew )
+                                                
+ADD_TEST(ioTvDEMToImageGeneratorTest ${IO_TESTS}
+--compare-image ${TOL}  ${BASELINE}/ioTvDEMToImageGenerator.tif
+                        ${TEMP}/ioTvDEMToImageGenerator.tif
+        otbDEMToImageGeneratorTest
+         ${INPUTDATA}/DEM/srtm_directory
+         ${TEMP}/ioTvDEMToImageGenerator.tif
+         44.5
+         6.5
+         500
+         500
+	 0.002	 
+         )
  
 
 #----------------------------------------------------------------------------------
@@ -1184,6 +1199,8 @@ otbSpatialObjectDXFReader.cxx
 otbOSSIMImageMetaDataReaderTest.cxx
 otbDEMHandlerNew.cxx
 otbDEMHandlerTest.cxx
+otbDEMToImageGeneratorNew.cxx
+otbDEMToImageGeneratorTest.cxx
 otbImageGeometryHandlerNew.cxx
 )
 
