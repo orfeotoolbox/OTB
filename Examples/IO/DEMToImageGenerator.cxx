@@ -25,8 +25,9 @@
 
 //  Software Guide : BeginCommandLineArgs
 //  DEM_srtm
-//  OUTPUTS: {DEMToImageGenerator.tif}
+//  OUTPUTS: {DEMToImageGenerator.tif} , {pretty_DEMToImageGenerator.png}
 //  44.5 6.5 500 500 0.002
+//  OUTPUTS
 //  Software Guide : EndCommandLineArgs
 
 // Software Guide : BeginLatex
@@ -49,7 +50,8 @@
 #include "otbDEMToImageGenerator.h"
 // Software Guide : EndCodeSnippet
 
-
+#include "itkRescaleIntensityImageFilter.h"
+#include "itkThresholdImageFilter.h"
 #include "itkExceptionObject.h"
 #include "otbImageFileWriter.h"
 #include "otbImage.h"
@@ -58,7 +60,7 @@ int main(int argc, char * argv[])
 {
   if(argc<7)
     {
-      std::cout << argv[0] <<" folder path , output filename , X Output Orign point , Y Output Origin point , X Output Size, Y Output size , Spacing"  << std::endl;
+      std::cout << argv[0] <<" folder path , output filename , pretty output filename , X Output Orign point , Y Output Origin point , X Output Size, Y Output size , Spacing"  << std::endl;
       return EXIT_FAILURE;
     }
   //  Software Guide : BeginLatex
@@ -126,8 +128,8 @@ int main(int argc, char * argv[])
   // Software Guide : EndLatex 
   // Software Guide : BeginCodeSnippet
   PointType origin;
-  origin[0] = ::atof(argv[3]);
-  origin[1] = ::atof(argv[4]);
+  origin[0] = ::atof(argv[4]);
+  origin[1] = ::atof(argv[5]);
 
   object->SetOutputOrigin(origin);
   // Software Guide : EndCodeSnippet
@@ -140,8 +142,8 @@ int main(int argc, char * argv[])
   // Software Guide : EndLatex 
   // Software Guide : BeginCodeSnippet
   SizeType size;
-  size[0] = ::atoi(argv[5]);
-  size[1] = ::atoi(argv[6]);
+  size[0] = ::atoi(argv[6]);
+  size[1] = ::atoi(argv[7]);
   object->SetOutputSize(size);
   // Software Guide : EndCodeSnippet
 
@@ -152,7 +154,7 @@ int main(int argc, char * argv[])
   //
   //  Software Guide : EndLatex 
   // Software Guide : BeginCodeSnippet
-  SpacingType spacing(::atof(argv[7]));
+  SpacingType spacing(::atof(argv[8]));
 
   object->SetOutputSpacing(spacing);
   // Software Guide : EndCodeSnippet
@@ -196,5 +198,57 @@ int main(int argc, char * argv[])
       std::cout << "Unknown exception thrown !" << std::endl; 
       return EXIT_FAILURE;
     } 
-  return EXIT_SUCCESS;
+ 
+
+   // Pretty image creation for the printing
+   typedef otb::Image<unsigned char, Dimension>                                  OutputPrettyImageType;
+   typedef otb::ImageFileWriter<OutputPrettyImageType>                           WriterPrettyType;
+   typedef itk::RescaleIntensityImageFilter< ImageType, OutputPrettyImageType>   RescalerType;
+   typedef itk::ThresholdImageFilter< ImageType >                                ThresholderType;
+   
+   ThresholderType::Pointer  thresholder  = ThresholderType::New();
+   RescalerType::Pointer     rescaler     = RescalerType::New();  
+   WriterPrettyType::Pointer prettyWriter = WriterPrettyType::New();
+   
+   thresholder->SetInput(  object->GetOutput() );
+   thresholder->SetOutsideValue( 0.0 );
+   thresholder->ThresholdBelow( 0.0 );
+   thresholder->Update();
+   
+   rescaler->SetInput( thresholder->GetOutput() );
+   rescaler->SetOutputMinimum(0);
+   rescaler->SetOutputMaximum(255);
+   prettyWriter->SetFileName( argv[3] );
+   prettyWriter->SetInput( rescaler->GetOutput() );
+   try
+     {
+       prettyWriter->Update();
+     }
+   catch( itk::ExceptionObject & excep )
+     {
+       std::cerr << "Exception caught !" << std::endl;
+       std::cerr << excep << std::endl;
+     }
+   catch( ... ) 
+     { 
+       std::cout << "Unknown exception !" << std::endl; 
+       return EXIT_FAILURE;
+     } 
+   
+   return EXIT_SUCCESS;
+ 
+   // Software Guide : BeginLatex
+   //
+   // Let's now run this example using as input the Srtm datas contained in 
+   // \code{DEM_srtm} folder.
+   //
+   //
+   // \begin{figure} \center
+   // \includegraphics[width=0.24\textwidth]{pretty_DEMToImageGenerator.eps}
+   // \itkcaption[ARVI Example]{DEMToImageGenerator iamge.}
+   // \label{fig:DEMToImageGenerator}
+   // \end{figure}
+   //
+   //  Software Guide : EndLatex 
+   
 }

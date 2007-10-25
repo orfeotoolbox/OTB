@@ -122,6 +122,7 @@ ADD_TEST(DEMToImageGeneratorTest ${EXE_TESTS}
         DEMToImageGeneratorTest
          ${INPUTDATA}/DEM_srtm
          ${TEMP}/DEMToImageGenerator.tif
+	 ${TEMP}/pretty_DEMToImageGenerator.tif	
          44.5
          6.5
          500
