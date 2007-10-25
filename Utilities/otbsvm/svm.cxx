@@ -36,7 +36,7 @@ inline double powi(double base, int times)
 }
 #define INF HUGE_VAL
 #define TAU 1e-12
-#define Malloc(type,n) (type *)malloc((n)*sizeof(type))
+#define Malloc(type,n) new type[n]
 #if 1
 void info(char *fmt,...)
 {
@@ -99,8 +99,8 @@ Cache::Cache(int l_,long int size_):l(l_),size(size_)
 Cache::~Cache()
 {
 	for(head_t *h = lru_head.next; h != &lru_head; h=h->next)
-		free(h->data);
-	free(head);
+		delete [](h->data);
+	delete [](head);
 }
 
 void Cache::lru_delete(head_t *h)
@@ -132,7 +132,7 @@ int Cache::get_data(const int index, Qfloat **data, int len)
 		{
 			head_t *old = lru_head.next;
 			lru_delete(old);
-			free(old->data);
+			delete [](old->data);
 			size += old->len;
 			old->data = 0;
 			old->len = 0;
@@ -171,7 +171,7 @@ void Cache::swap_index(int i, int j)
 			{
 				// give up
 				lru_delete(h);
-				free(h->data);
+				delete [](h->data);
 				size += h->len;
 				h->data = 0;
 				h->len = 0;
@@ -1832,7 +1832,7 @@ void sigmoid_train(
 
 	if (iter>=max_iter)
 		info("Reaching maximal iterations in two-class probability estimates\n");
-	free(t);
+	delete [](t);
 }
 
 double sigmoid_predict(double decision_value, double A, double B)
@@ -1903,9 +1903,9 @@ void multiclass_probability(int k, double **r, double *p)
 	}
 	if (iter>=max_iter)
 		info("Exceeds max_iter in multiclass_prob\n");
-	for(t=0;t<k;t++) free(Q[t]);
-	free(Q);
-	free(Qp);
+	for(t=0;t<k;t++) delete [](Q[t]);
+	delete [](Q);
+	delete [](Qp);
 }
 
 // Cross-validation decision values for probability estimates
@@ -1987,12 +1987,12 @@ void svm_binary_svc_probability(
 			svm_destroy_model(submodel);
 			svm_destroy_param(&subparam);
 		}
-		free(subprob.x);
-		free(subprob.y);
+		delete [](subprob.x);
+		delete [](subprob.y);
 	}		
 	sigmoid_train(prob->l,dec_values,prob->y,probA,probB);
-	free(dec_values);
-	free(perm);
+	delete [](dec_values);
+	delete [](perm);
 }
 
 // Return parameter of a Laplace distribution 
@@ -2023,7 +2023,7 @@ double svm_svr_probability(
 		        mae+=fabs(ymv[i]);
 	mae /= (prob->l-count);
 	info("Prob. model for test data: target value = predicted value + z,\nz: Laplace distribution e^(-|z|/sigma)/(2sigma),sigma= %g\n",mae);
-	free(ymv);
+	delete [](ymv);
 	return mae;
 }
 
@@ -2084,7 +2084,7 @@ void svm_group_classes(const svm_problem *prob, int *nr_class_ret, int **label_r
 	*label_ret = label;
 	*start_ret = start;
 	*count_ret = count;
-	free(data_label);
+	delete [](data_label);
 }
 
 //
@@ -2135,7 +2135,7 @@ svm_model *svm_train(const svm_problem *prob, const svm_parameter *param)
 				++j;
 			}		
 
-		free(f.alpha);
+		delete [](f.alpha);
 	}
 	else
 	{
@@ -2217,8 +2217,8 @@ svm_model *svm_train(const svm_problem *prob, const svm_parameter *param)
 				for(k=0;k<cj;k++)
 					if(!nonzero[sj+k] && fabs(f[p].alpha[ci+k]) > 0)
 						nonzero[sj+k] = true;
-				free(sub_prob.x);
-				free(sub_prob.y);
+				delete [](sub_prob.x);
+				delete [](sub_prob.y);
 				++p;
 			}
 
@@ -2308,20 +2308,20 @@ svm_model *svm_train(const svm_problem *prob, const svm_parameter *param)
 				++p;
 			}
 		
-		free(label);
-		free(probA);
-		free(probB);
-		free(count);
-		free(perm);
-		free(start);
-		free(x);
-		free(weighted_C);
-		free(nonzero);
+		delete [](label);
+		delete [](probA);
+		delete [](probB);
+		delete [](count);
+		delete [](perm);
+		delete [](start);
+		delete [](x);
+		delete [](weighted_C);
+		delete [](nonzero);
 		for(i=0;i<nr_class*(nr_class-1)/2;i++)
-			free(f[i].alpha);
-		free(f);
-		free(nz_count);
-		free(nz_start);
+			delete [](f[i].alpha);
+		delete [](f);
+		delete [](nz_count);
+		delete [](nz_start);
 	}
 	return model;
 }
@@ -2380,11 +2380,11 @@ void svm_cross_validation(const svm_problem *prob, const svm_parameter *param, i
 		fold_start[0]=0;
 		for (i=1;i<=nr_fold;i++)
 			fold_start[i] = fold_start[i-1]+fold_count[i-1];
-		free(start);	
-		free(label);
-		free(count);	
-		free(index);
-		free(fold_count);
+		delete [](start);	
+		delete [](label);
+		delete [](count);	
+		delete [](index);
+		delete [](fold_count);
 	}
 	else
 	{
@@ -2429,17 +2429,17 @@ void svm_cross_validation(const svm_problem *prob, const svm_parameter *param, i
 			double *prob_estimates=Malloc(double,svm_get_nr_class(submodel));
 			for(j=begin;j<end;j++)
 				target[perm[j]] = svm_predict_probability(submodel,prob->x[perm[j]],prob_estimates);
-			free(prob_estimates);			
+			delete [](prob_estimates);			
 		}
 		else
 			for(j=begin;j<end;j++)
 				target[perm[j]] = svm_predict(submodel,prob->x[perm[j]]);
 		svm_destroy_model(submodel);
-		free(subprob.x);
-		free(subprob.y);
+		delete [](subprob.x);
+		delete [](subprob.y);
 	}		
-	free(fold_start);
-	free(perm);	
+	delete [](fold_start);
+	delete [](perm);	
 }
 
 
@@ -2522,8 +2522,8 @@ void svm_predict_values(const svm_model *model, const svm_node *x, double* dec_v
 				p++;
 			}
 
-		free(kvalue);
-		free(start);
+		delete [](kvalue);
+		delete [](start);
 	}
 }
 
@@ -2565,8 +2565,8 @@ double svm_predict(const svm_model *model, const svm_node *x)
 		for(i=1;i<nr_class;i++)
 			if(vote[i] > vote[vote_max_idx])
 				vote_max_idx = i;
-		free(vote);
-		free(dec_values);
+		delete [](vote);
+		delete [](dec_values);
 		return model->label[vote_max_idx];
 	}
 }
@@ -2601,9 +2601,9 @@ double svm_predict_probability(
 			if(prob_estimates[i] > prob_estimates[prob_max_idx])
 				prob_max_idx = i;
 		for(i=0;i<nr_class;i++)
-			free(pairwise_prob[i]);
-		free(dec_values);
-                free(pairwise_prob);	     
+			delete [](pairwise_prob[i]);
+		delete [](dec_values);
+                delete [](pairwise_prob);	     
 		return model->label[prob_max_idx];
 	}
 	else 
@@ -2760,10 +2760,10 @@ svm_model *svm_load_model(const char *model_file_name, /*otb::*/GenericKernelFun
 			if(svm_type_table[i] == NULL)
 			{
 				fprintf(stderr,"unknown svm type.\n");
-				free(model->rho);
-				free(model->label);
-				free(model->nSV);
-				free(model);
+				delete [](model->rho);
+				delete [](model->label);
+				delete [](model->nSV);
+				delete [](model);
 				return NULL;
 			}
 		}
@@ -2782,10 +2782,10 @@ svm_model *svm_load_model(const char *model_file_name, /*otb::*/GenericKernelFun
 			if(kernel_type_table[i] == NULL)
 			{
 				fprintf(stderr,"unknown kernel function.\n");
-				free(model->rho);
-				free(model->label);
-				free(model->nSV);
-				free(model);
+				delete [](model->rho);
+				delete [](model->label);
+				delete [](model->nSV);
+				delete [](model);
 				return NULL;
 			}
 		}
@@ -2870,10 +2870,10 @@ svm_model *svm_load_model(const char *model_file_name, /*otb::*/GenericKernelFun
 		else
 		{
 			fprintf(stderr,"unknown text in model file: [%s]\n",cmd);
-			free(model->rho);
-			free(model->label);
-			free(model->nSV);
-			free(model);
+			delete [](model->rho);
+			delete [](model->label);
+			delete [](model->nSV);
+			delete [](model);
 			return NULL;
 		}
 	}
@@ -2940,23 +2940,23 @@ out2:
 void svm_destroy_model(svm_model* model)
 {
 	if(model->free_sv && model->l > 0)
-		free((void *)(model->SV[0]));
+		delete []((void *)(model->SV[0]));
 	for(int i=0;i<model->nr_class-1;i++)
-		free(model->sv_coef[i]);
-	free(model->SV);
-	free(model->sv_coef);
-	free(model->rho);
-	free(model->label);
-	free(model->probA);
-	free(model->probB);
-	free(model->nSV);
-	free(model);
+		delete [](model->sv_coef[i]);
+	delete [](model->SV);
+	delete [](model->sv_coef);
+	delete [](model->rho);
+	delete [](model->label);
+	delete [](model->probA);
+	delete [](model->probB);
+	delete [](model->nSV);
+	delete [](model);
 }
 
 void svm_destroy_param(svm_parameter* param)
 {
-	free(param->weight_label);
-	free(param->weight);
+	delete [](param->weight_label);
+	delete [](param->weight);
 }
 
 const char *svm_check_parameter(const svm_problem *prob, const svm_parameter *param)
@@ -3071,14 +3071,14 @@ const char *svm_check_parameter(const svm_problem *prob, const svm_parameter *pa
 				int n2 = count[j];
 				if(param->nu*(n1+n2)/2 > min(n1,n2))
 				{
-					free(label);
-					free(count);
+					delete [](label);
+					delete [](count);
 					return "specified nu is infeasible";
 				}
 			}
 		}
-		free(label);
-		free(count);
+		delete [](label);
+		delete [](count);
 	}
 
 	return NULL;
