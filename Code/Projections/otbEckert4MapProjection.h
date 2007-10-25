@@ -24,8 +24,10 @@
 
 namespace otb
 {
-
-
+  /** \class Exckert4MapProjection
+   *  \brief This class implements the Eckert4 map projection.
+   * It converts coordinates in longitude,latitude to Eckert4 map coordinates.
+   */
 class ITK_EXPORT Eckert4MapProjection : public MapProjection<ossimEckert4Projection> 
 {
 public :
@@ -33,12 +35,12 @@ public :
 	/** Standard class typedefs. */
   typedef Eckert4MapProjection                                  Self;
   typedef MapProjection<ossimEckert4Projection>                 Superclass;
-  typedef itk::SmartPointer<Self>                    	      	  Pointer;
-  typedef itk::SmartPointer<const Self>              	      	  ConstPointer;
+  typedef itk::SmartPointer<Self>                    	        Pointer;
+  typedef itk::SmartPointer<const Self>              	      	ConstPointer;
 
-  typedef Superclass::ScalarType 																ScalarType;
-	typedef itk::Point<ScalarType,2 >   	      									InputPointType;
-	typedef itk::Point<ScalarType,2 >  	      										OutputPointType; 
+  typedef Superclass::ScalarType 				ScalarType;
+  typedef itk::Point<ScalarType,2 >   	      			InputPointType;
+  typedef itk::Point<ScalarType,2 >  	      			OutputPointType; 
 
   /** Method for creation through the object factory. */
 	itkNewMacro( Self );

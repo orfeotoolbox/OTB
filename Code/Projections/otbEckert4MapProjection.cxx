@@ -15,11 +15,6 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-
-/** Eckert4MapProjection.cxx
-Définition des méthodes propres à Eckert4MapProjection.
-**/
-
 #include "otbEckert4MapProjection.h"
 
 namespace otb
@@ -38,28 +33,28 @@ Eckert4MapProjection
 	delete m_Eckert4Projection;
 }
 
-///Spécification du false easting
+///False easting specification
 void Eckert4MapProjection
 ::SetFalseEasting(double falseEasting) 
 {
 	m_Eckert4Projection->setFalseEasting(falseEasting);
 }
 
-///Spécification du false Northing
+///False Northing specification
 void Eckert4MapProjection
 ::SetFalseNorthing(double falseNorthing) 
 {
 	m_Eckert4Projection->setFalseNorthing(falseNorthing);
 }
 
-///Instanciation avec les paramètres par défaut
+///Set the defaul parameters
 void Eckert4MapProjection
 	::SetDefaults() 
 {
 m_Eckert4Projection->setDefaults();
 }
 
-///Méthode pour récupérer le FalseNorthing(pour éviter les coordonnées négatives)
+///Get the false northing coordinates (avoid negative values)
 double Eckert4MapProjection
 ::GetFalseNorthing() const
 {
@@ -67,7 +62,7 @@ double Eckert4MapProjection
 	return falseNorthing;
 }
 
-///Méthode pour récupérer le FalseEasting(pour éviter les coordonnées négatives)
+///Get the false easting coordinates (avoid negative values)
 double Eckert4MapProjection
 ::GetFalseEasting() const
 {

@@ -34,56 +34,56 @@ LambertConformalConicMapProjection
 }
 
 
-///Spécification du Parallel1
+/// Parallel1 specification
 void LambertConformalConicMapProjection
 ::SetStandardParallel1(double degree) 
 {
 	m_LambertConformalConicProjection->setStandardParallel1(degree);
 }
 
-///Spécification du Parallel2
+/// Parallel2 specification
 void LambertConformalConicMapProjection
 ::SetStandardParallel2(double degree) 
 {
 	m_LambertConformalConicProjection->setStandardParallel2(degree);
 }
 
-///Spécification des 2 parallels
+/// Specification of the 2 parallels
 void LambertConformalConicMapProjection
 ::SetStandardParallels(double parallel1Degree,double parallel2Degree) 
 {
 	m_LambertConformalConicProjection->setStandardParallels(parallel1Degree,parallel2Degree);
 }
 
-///Spécification du false easting
+/// False easting specification
 void LambertConformalConicMapProjection
 ::SetFalseEasting(double falseEasting) 
 {
 	m_LambertConformalConicProjection->setFalseEasting(falseEasting);
 }
 
-///Spécification du false Northing
+/// False Northing specification
 void LambertConformalConicMapProjection
 ::SetFalseNorthing(double falseNorthing) 
 {
 	m_LambertConformalConicProjection->setFalseNorthing(falseNorthing);
 }
 
-///Instanciation de tous les paramètres
+/// Set the parameters
 void LambertConformalConicMapProjection
 ::SetParameters(double parallel1Degree,double parallel2Degree,double falseEasting,double falseNorthing) 
 {
 	m_LambertConformalConicProjection->setParameters(parallel1Degree, parallel2Degree, falseEasting, falseNorthing);
 }
 
-///Instanciation avec les paramètres par défaut
+/// Set the default parameters
 void LambertConformalConicMapProjection
 ::SetDefaults() 
 {
 	m_LambertConformalConicProjection->setDefaults();
 }
 
-///Méthode pour récupérer le FalseNorthing(pour éviter les coordonnées négatives)
+/// Get the False Northing (avoid negative coordinates)
 double LambertConformalConicMapProjection
 ::GetFalseNorthing() const
 {
@@ -92,7 +92,7 @@ double LambertConformalConicMapProjection
 	return falseNorthing;
 }
 
-///Méthode pour récupérer le FalseEasting(pour éviter les coordonnées négatives)
+///Get the False Easting (avoid negative coordinates)
 double LambertConformalConicMapProjection
 ::GetFalseEasting() const
 {

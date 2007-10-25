@@ -56,7 +56,7 @@ typename InverseSensorModel< TScalarType,NInputDimensions,NOutputDimensions,NPar
 InverseSensorModel< TScalarType,NInputDimensions,NOutputDimensions,NParametersDimensions>
 ::TransformPoint(const InputPointType &point) const
 {
-	otbGenericMsgDebugMacro(<< "Point en lon/lat : (" << point[0] << "," <<	point[1] << ")");
+	otbGenericMsgDebugMacro(<< "Geographic point lon/lat : (" << point[0] << "," <<	point[1] << ")");
 	
 	// Transformation of "itk::point" in "ossim::ossimGpt" 
 	ossimGpt ossimGPoint(point[1], point[0]);
@@ -88,7 +88,7 @@ InverseSensorModel< TScalarType,NInputDimensions,NOutputDimensions,NParametersDi
   outputPoint[0]=ossimDPoint.x;
   outputPoint[1]=ossimDPoint.y;
 
-	otbGenericMsgDebugMacro(<< "Point en x/y capteur : (" << outputPoint[0] << "," <<	outputPoint[1] << ")");
+	otbGenericMsgDebugMacro(<< "Point in sensor geometry: (" << outputPoint[0] << "," <<	outputPoint[1] << ")");
 
 	return outputPoint;
 }

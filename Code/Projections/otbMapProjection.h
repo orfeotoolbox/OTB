@@ -36,11 +36,8 @@
 namespace otb
 {
 
-/**OtbMapProjection header
-*  Cette classe concerne les méthodes communes à toutes les projections(UTM, Lambert,...).
-*  Encapsule les méthodes utiles de ossimMapProjection.
-*  A savoir: Pour créer une Map Projection, il faut lui instancier des paramètres propres à la projection. Pour cela, chaque 
-*  Map projection a sa propre classe.
+/** \class otbMapProjection
+ *  \brief This is the base class for all geographic projections (UTM, Lambert, ...)
 **/
 
 typedef enum {FORWARD=0, INVERSE=1} InverseOrForwardTransformationEnum;
@@ -84,10 +81,7 @@ typedef InverseOrForwardTransformationEnum DirectionOfMappingEnumType;
   itkStaticConstMacro(ParametersDimension, unsigned int,NInputDimensions*(NInputDimensions+1));
 
 	                                      
-	//Déclaration des méthodes:
-	//const ossimEllipsoid* CreateEllipsoid(char* &code)const;
-
-	virtual void SetEllipsoid ();
+  virtual void SetEllipsoid ();
 
 	void SetEllipsoid (const ossimEllipsoid &ellipsoid);
 
