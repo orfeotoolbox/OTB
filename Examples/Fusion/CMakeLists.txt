@@ -32,7 +32,7 @@ ADD_TEST(BayesianFusionImageFilterTest ${EXE_TESTS}
 	${TEMP}/ImageBayesianFusion2.png
 	${TEMP}/ImageBayesianFusion3.png
 	${TEMP}/ImageBayesianFusion4.png
-	0.5
+	0.9999
 )
 
 

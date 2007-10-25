@@ -13,8 +13,8 @@
   for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     This software is distributed WITHOUT ANY WARRANTY; without even
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
@@ -31,7 +31,7 @@
 //  INPUTS: {multiSpect.tif} , {multiSpectInterp.tif}, {panchro.tif}
 //  OUTPUTS: {BayesianFusion_0.9999.tif} , {pretty_BayesianFusion_0.9999.png} , {pretty_multiSpect_0.9999.png} , {pretty_multiSpectInterp_0.9999.png} , {pretty_panchro_0.9999.png}
 //  0.9999
-//  Software Guide : EndCommandLineArgs     
+//  Software Guide : EndCommandLineArgs    
 
 //  Software Guide : BeginCommandLineArgs
 //  INPUTS: {multiSpect.tif} , {multiSpectInterp.tif}, {panchro.tif}
@@ -46,33 +46,33 @@
 // \index{otb::BayesianFusionFilter!header}
 //
 // The following example illustrates the use of the
-// \doxygen{otb}{BayesianFusionFilter}. The Bayesian data fusion 
-// relies on the idea that variables of interest, denoted as vector $\mathbf{Z}$, 
-// cannot be directly observed. They are linked to the observable variables 
+// \doxygen{otb}{BayesianFusionFilter}. The Bayesian data fusion
+// relies on the idea that variables of interest, denoted as vector $\mathbf{Z}$,
+// cannot be directly observed. They are linked to the observable variables
 // $\mathbf{Y}$ through the following error-like model.
 //
 // \begin{equation}
-// \mathbf{Y} = \mathbf{Z} + \mathbf{E}
+// \mathbf{Y} = g($\mathbf{Z}$) + \mathbf{E}
 // \end{equation}
 //
-// where g($\mathbf{Z}$) is a set of functionals and $\mathbf{E}$ is a 
+// where g($\mathbf{Z}$) is a set of functionals and $\mathbf{E}$ is a
 // vector of random errors that are stochastically independent from $\mathbf{Z}$.
 // This algorithm uses elementary probability calculus, and several assumptions to compute
-// the data fusion. For more explication see Fasbender, Radoux and Bogaert's 
+// the data fusion. For more explication see Fasbender, Radoux and Bogaert's
 // publication \cite{JRadoux}.
 // Three images are used :
 // \begin{itemize}
 // \item a panchromatic image,
 // \item a multispectral image resampled at the panchromatic image spatial resolution,
 // \item a multispectral image resampled at the panchromatic image spatial resolution,
-// using a cubic interpolator.
+// using, e.g. a cubic interpolator.
 // \item a float : $\lambda$, the meaning of the weight to be given to the panchromatic
 // image compared to the multispectral one.
 // \end{itemize}
 //
-// Let's look at the minimal code required to use this algorithm. First, the following header 
+// Let's look at the minimal code required to use this algorithm. First, the following header
 // defining the otb::BayesianFusionFilter class must be included.
-// Software Guide : EndLatex 
+// Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
 #include "otbBayesianFusionFilter.h"
@@ -100,12 +100,12 @@ int main( int argc, char *argv[] )
     }
 
   //  Software Guide : BeginLatex
-  //  
+  // 
   //  The image types are now defined using pixel types and particular
   //  dimension. The panchromatic image is defined as an \doxygen{otb}{Image}
   //  and the multispectral one as \doxygen{otb}{VectorImage}.
   //
-  //  Software Guide : EndLatex 
+  //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
   typedef double                                            InternalPixelType;
@@ -116,7 +116,7 @@ int main( int argc, char *argv[] )
 
   typedef double                                         OutputPixelType;
   typedef otb::VectorImage< OutputPixelType, Dimension > OutputImageType;
-                        
+                       
 
   // We instantiate reader and writer types
   //
@@ -136,26 +136,26 @@ int main( int argc, char *argv[] )
 
 
   //  Software Guide : BeginLatex
-  //  
+  // 
   //  The Bayesian data fusion filter type is instantiated using the images types as
   //  a template parameters.
   //
-  //  Software Guide : EndLatex 
+  //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  typedef otb::BayesianFusionFilter< MultiSpecImageType, 
-   				     MultiSpecImageType, 
-                                     PanchroImageType, 
+  typedef otb::BayesianFusionFilter< MultiSpecImageType,
+                                         MultiSpecImageType,
+                                     PanchroImageType,
                                      OutputImageType     >    BayesianFusionFilterType;
   // Software Guide : EndCodeSnippet
 
 
   //  Software Guide : BeginLatex
-  //  
+  // 
   //  Next the filter is created by invoking the \code{New()} method and
   //  assigning the result to a \doxygen{itk}{SmartPointer}.
   //
-  //  Software Guide : EndLatex 
+  //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
   BayesianFusionFilterType::Pointer bayesianFilter = BayesianFusionFilterType::New();
@@ -163,28 +163,28 @@ int main( int argc, char *argv[] )
 
 
   //  Software Guide : BeginLatex
-  //  
-  //  Now the multi spectral image, the interpolated multi spectral image and 
+  // 
+  //  Now the multi spectral image, the interpolated multi spectral image and
   //  the panchromatic image are given as inputs to the filter.
-  //  
-  //  Software Guide : EndLatex 
+  // 
+  //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
   bayesianFilter->SetMultiSpect(       multiSpectReader->GetOutput() );
   bayesianFilter->SetMultiSpectInterp( multiSpectInterpReader->GetOutput() );
   bayesianFilter->SetPanchro(          panchroReader->GetOutput() );
-  
+ 
   writer->SetInput( bayesianFilter->GetOutput() );
   // Software Guide : EndCodeSnippet
 
 
   //  Software Guide : BeginLatex
   //  The BayesianFusionFilter requires defining one parameter : $\lambda$.
-  //  The $\lambda$ parameter can be used to tune the fusion toward either a high color 
-  //  consistency or sharp details. Possible $\lambda$ value range in  $[0.5, 1[$,  where higher
+  //  The $\lambda$ parameter can be used to tune the fusion toward either a high color
+  //  consistency or sharp details. Typical $\lambda$ value range in  $[0.5, 1[$,  where higher
   //  values yield sharper details. by default $\lambda$ is set at 0.9999.
   //
-  //  Software Guide : EndLatex 
+  //  Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
   bayesianFilter->SetLambda( atof(argv[9]) );
@@ -192,15 +192,15 @@ int main( int argc, char *argv[] )
 
 
   //  Software Guide : BeginLatex
-  //  
+  // 
   //  The invocation of the \code{Update()} method on the writer triggers the
   //  execution of the pipeline.  It is recommended to place update calls in a
   //  \code{try/catch} block in case errors occur and exceptions are thrown.
   //
-  //  Software Guide : EndLatex 
+  //  Software Guide : EndLatex
 
 
-  
+ 
   // Software Guide : BeginCodeSnippet
   try
     {
@@ -212,8 +212,8 @@ int main( int argc, char *argv[] )
     std::cerr << excep << std::endl;
     }
    // Software Guide : EndCodeSnippet
-  
-    
+ 
+   
    // Create an 3 band images for the software guide
   typedef unsigned char                                                            OutputPixelType2;
   typedef otb::VectorImage<OutputPixelType2, Dimension>                            OutputVectorImageType;
@@ -223,14 +223,14 @@ int main( int argc, char *argv[] )
   typedef otb::VectorRescaleIntensityImageFilter<OutputImageType,
                                                  OutputVectorImageType>            VectorRescalerBayesianType;
   typedef otb::Image< OutputPixelType2, Dimension >                                PanchroOutputImageType;
-  typedef otb::ImageToVectorImageCastFilter<PanchroImageType, MultiSpecImageType>  CasterType;                                         
+  typedef otb::ImageToVectorImageCastFilter<PanchroImageType, MultiSpecImageType>  CasterType;                                        
   typedef otb::MultiChannelExtractROI<OutputPixelType2,OutputPixelType2>           ChannelExtractorType;
   typedef otb::ImageFileWriter<PanchroOutputImageType>                             WriterType2;
-  
+ 
   multiSpectReader->GenerateOutputInformation();
   multiSpectInterpReader->GenerateOutputInformation();
  
-  CasterType::Pointer cast = CasterType::New(); 
+  CasterType::Pointer cast = CasterType::New();
   cast->SetInput(panchroReader->GetOutput());
  
   OutputVectorImageType::PixelType minimum,maximum;
@@ -238,26 +238,26 @@ int main( int argc, char *argv[] )
   maximum.SetSize(multiSpectReader->GetOutput()->GetNumberOfComponentsPerPixel());
   minimum.Fill(0);
   maximum.Fill(255);
-  
+ 
   VectorRescalerType::Pointer         vrms  = VectorRescalerType::New();
   VectorRescalerType::Pointer         vrmsi = VectorRescalerType::New();
   VectorRescalerBayesianType::Pointer vrb   = VectorRescalerBayesianType::New();
-  
+ 
   vrms->SetInput(multiSpectReader->GetOutput());
   vrms->SetOutputMinimum(minimum);
   vrms->SetOutputMaximum(maximum);
   vrms->SetClampThreshold(0.01);
-  
+ 
   vrmsi->SetInput(multiSpectInterpReader->GetOutput());
   vrmsi->SetOutputMinimum(minimum);
   vrmsi->SetOutputMaximum(maximum);
   vrmsi->SetClampThreshold(0.01);
-  
+ 
   vrb->SetInput(bayesianFilter->GetOutput());
   vrb->SetOutputMinimum(minimum);
   vrb->SetOutputMaximum(maximum);
   vrb->SetClampThreshold(0.01);
-  
+ 
   VectorRescalerType::Pointer rp = VectorRescalerType::New();
   rp->SetInput(cast->GetOutput());
   minimum.SetSize(1);
@@ -267,7 +267,7 @@ int main( int argc, char *argv[] )
   rp->SetOutputMinimum(minimum);
   rp->SetOutputMaximum(maximum);
   rp->SetClampThreshold(0.01);
-  
+ 
   ChannelExtractorType::Pointer selecterms = ChannelExtractorType::New();
   ChannelExtractorType::Pointer selectermsi = ChannelExtractorType::New();
   ChannelExtractorType::Pointer selecterf = ChannelExtractorType::New();
@@ -277,20 +277,20 @@ int main( int argc, char *argv[] )
   selecterms->SetChannel(2);
   selecterms->SetChannel(3);
   selecterms->SetChannel(4);
-  
+ 
   selectermsi->SetInput(vrmsi->GetOutput());
  // selectermsi->SetExtractionRegion(multiSpectInterpReader->GetOutput()->GetLargestPossibleRegion());
   selectermsi->SetChannel(2);
   selectermsi->SetChannel(3);
   selectermsi->SetChannel(4);
-  
+ 
   selecterf->SetInput(vrb->GetOutput());
   //selecterf->SetExtractionRegion(bayesianFilter->GetOutput()->GetLargestPossibleRegion());
   selecterf->SetChannel(2);
   selecterf->SetChannel(3);
   selecterf->SetChannel(4);
-  
-  
+ 
+ 
   VectorWriterType::Pointer vectWriterms  = VectorWriterType::New();
   VectorWriterType::Pointer vectWritermsi = VectorWriterType::New();
   VectorWriterType::Pointer vectWriterf   = VectorWriterType::New();
@@ -304,9 +304,9 @@ int main( int argc, char *argv[] )
   vectWritermsi->SetInput(selectermsi->GetOutput());
   vectWriterp->SetFileName(argv[8]);
   vectWriterp->SetInput(rp->GetOutput());
-  
-  
-  
+ 
+ 
+ 
   try
     {
     vectWriterms->Update();
@@ -319,12 +319,12 @@ int main( int argc, char *argv[] )
     std::cerr << "Exception caught !" << std::endl;
     std::cerr << excep << std::endl;
     }
-  catch( ... ) 
-    { 
-      std::cout << "Unknown exception !" << std::endl; 
+  catch( ... )
+    {
+      std::cout << "Unknown exception !" << std::endl;
       return EXIT_FAILURE;
-    } 
-  
+    }
+ 
 
 
 
@@ -343,7 +343,7 @@ int main( int argc, char *argv[] )
   // images used for this example (\copyright European Space Imaging).}
   // \label{fig:BayesianImageFusionFilterInput}
   // \end{figure}
-  
+ 
   // \begin{figure} \center
   // \includegraphics[width=0.24\textwidth]{pretty_BayesianFusion_0.5.eps}
   // \includegraphics[width=0.24\textwidth]{pretty_BayesianFusion_0.9999.eps}
@@ -353,12 +353,8 @@ int main( int argc, char *argv[] )
   // \end{figure}
   //
   //
-  //  Software Guide : EndLatex 
+  //  Software Guide : EndLatex
 
 
   return 0;
 }
-
-
-
-
