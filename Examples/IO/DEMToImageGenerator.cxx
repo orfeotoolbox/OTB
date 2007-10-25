@@ -27,7 +27,7 @@
 //  DEM_srtm
 //  OUTPUTS: {DEMToImageGenerator.tif} , {pretty_DEMToImageGenerator.png}
 //  44.5 6.5 500 500 0.002
-//  OUTPUTS
+// 
 //  Software Guide : EndCommandLineArgs
 
 // Software Guide : BeginLatex
@@ -245,7 +245,7 @@ int main(int argc, char * argv[])
    //
    // \begin{figure} \center
    // \includegraphics[width=0.24\textwidth]{pretty_DEMToImageGenerator.eps}
-   // \itkcaption[ARVI Example]{DEMToImageGenerator iamge.}
+   // \itkcaption[ARVI Example]{DEMToImageGenerator image.}
    // \label{fig:DEMToImageGenerator}
    // \end{figure}
    //
