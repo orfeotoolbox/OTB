@@ -72,8 +72,6 @@ namespace otb
       }
     double xb = this->GetVertexList()->Begin().Value()[0];
     double yb = this->GetVertexList()->Begin().Value()[1];
-    double xmin = std::min(xa,xb);
-    double xmax = std::max(xa,xb);
     if(vcl_abs(xb-xa)< m_Epsilon)
       {
 	if(ya>yb && xa>x && y>=yb && y<ya)
