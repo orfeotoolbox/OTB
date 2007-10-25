@@ -73,7 +73,9 @@ public:
         return lValeur;                                                                 \
   }
   
-  otbGetParameterMacro(Short,short);
+	
+	otbGetParameterMacro(Char,char);
+	otbGetParameterMacro(Short,short);
   otbGetParameterMacro(UShort,unsigned short);
   otbGetParameterMacro(Int,int);
   otbGetParameterMacro(UInt,unsigned int);
