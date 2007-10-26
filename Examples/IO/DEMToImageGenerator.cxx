@@ -24,9 +24,8 @@
 #endif
 
 //  Software Guide : BeginCommandLineArgs
-//  DEM_srtm
 //  OUTPUTS: {DEMToImageGenerator.tif} , {pretty_DEMToImageGenerator.png}
-//  6.5 44.5 500 500 0.002 0.002
+//  6.5 44.5 500 500 0.002 0.002 DEM_srtm
 // 
 //  Software Guide : EndCommandLineArgs
 
@@ -37,10 +36,10 @@
 //
 //
 // The following example illustrates the use of the otb::DEMToImageGenerator class.
-// The aim of this class is to generate an image from the srtm data (precising the start extraction 
+// The aim of this class is to generate an image from SRTM or DTED data (precising the start extraction 
 // latitude and longitude point). Each pixel is a geographic point and its intensity is 
 // the altitude of the point.
-// If srtm doesn't have altitude information for a point, the altitude value is set at -32768 (value of the srtm norm).
+// If SRTM doesn't have altitude information for a point, the altitude value is set at -32768 (value of the SRTM norm).
 //
 // Let's look at the minimal code required to use this algorithm. First, the following header 
 // defining the \doxygen{otb}{DEMToImageGenerator} class must be included.
@@ -60,7 +59,7 @@ int main(int argc, char * argv[])
 {
   if(argc<10)
     {
-      std::cout << argv[0] <<" folder path , output filename , pretty output filename , Longitude Output Orign point , Latitude Output Origin point , X Output Size, Y Output size , X Spacing , Y Spacing"  << std::endl;
+      std::cout << argv[0] <<" output filename , pretty output filename , Longitude Output Orign point , Latitude Output Origin point , X Output Size, Y Output size , X Spacing , Y Spacing, srtmFolder"  << std::endl;
       return EXIT_FAILURE;
     }
   //  Software Guide : BeginLatex
@@ -70,8 +69,8 @@ int main(int argc, char * argv[])
   //
   // Software Guide : EndLatex 
 
-  char * folderPath = argv[1];
-  char * outputName = argv[2];
+  char * folderPath = argv[8];
+  char * outputName = argv[1];
    // Software Guide : BeginCodeSnippet
   const unsigned int Dimension = 2;
   typedef otb::Image<double , Dimension>           ImageType;
@@ -118,7 +117,7 @@ int main(int argc, char * argv[])
   //
   // Software Guide : EndLatex 
   // Software Guide : BeginCodeSnippet
-  object->SetDEMDirectoryPath(folderPath);
+  object->SetDEMDirectoryPath("/usr/local/stok/OTB/trunk/OTB/Examples/Data/DEM_srtm");
  // Software Guide : EndCodeSnippet
 
   // Software Guide : BeginLatex
@@ -128,8 +127,8 @@ int main(int argc, char * argv[])
   // Software Guide : EndLatex 
   // Software Guide : BeginCodeSnippet
   PointType origin;
-  origin[0] = ::atof(argv[4]);
-  origin[1] = ::atof(argv[5]);
+  origin[0] = ::atof(argv[3]);
+  origin[1] = ::atof(argv[4]);
 
   object->SetOutputOrigin(origin);
   // Software Guide : EndCodeSnippet
@@ -142,8 +141,8 @@ int main(int argc, char * argv[])
   // Software Guide : EndLatex 
   // Software Guide : BeginCodeSnippet
   SizeType size;
-  size[0] = ::atoi(argv[6]);
-  size[1] = ::atoi(argv[7]);
+  size[0] = ::atoi(argv[5]);
+  size[1] = ::atoi(argv[6]);
 
   object->SetOutputSize(size);
   // Software Guide : EndCodeSnippet
@@ -156,8 +155,8 @@ int main(int argc, char * argv[])
   //  Software Guide : EndLatex 
   // Software Guide : BeginCodeSnippet
  SpacingType spacing;
- spacing[0] = ::atof(argv[8]);
- spacing[1] = ::atof(argv[9]);
+ spacing[0] = ::atof(argv[7]);
+ spacing[1] = ::atof(argv[8]);
 
   object->SetOutputSpacing(spacing);
   // Software Guide : EndCodeSnippet
@@ -221,7 +220,7 @@ int main(int argc, char * argv[])
    rescaler->SetInput( thresholder->GetOutput() );
    rescaler->SetOutputMinimum(0);
    rescaler->SetOutputMaximum(255);
-   prettyWriter->SetFileName( argv[3] );
+   prettyWriter->SetFileName( argv[2] );
 
    prettyWriter->SetInput( rescaler->GetOutput() );
    try
@@ -244,12 +243,14 @@ int main(int argc, char * argv[])
    // Software Guide : BeginLatex
    //
    // Let's now run this example using as input the Srtm datas contained in 
-   // \code{DEM\_srtm} folder.
+   // \code{DEM\_srtm} folder. Figure \ref{fig:DEMToImageGenerator}
+   // shows the result.
    //
    //
    // \begin{figure} \center
    // \includegraphics[width=0.24\textwidth]{pretty_DEMToImageGenerator.eps}
-   // \itkcaption[ARVI Example]{DEMToImageGenerator image.}
+   // \itkcaption[DEM Generator Example]{DEM generated as an image
+   // from SRTM data files.}
    // \label{fig:DEMToImageGenerator}
    // \end{figure}
    //

@@ -332,7 +332,9 @@ int main( int argc, char *argv[] )
   //
   //  Let's now run this example using as input the images
   //  \code{multiSpect.tif} , \code{multiSpectInterp.tif} and \code{panchro.tif}
-  //  provided in the directory \code{Examples/Data}. And with different values for $\lambda$.
+  //  provided in the directory \code{Examples/Data}. The results
+  //  obtained for 2 different values for $\lambda$ are shown in figure
+  //  \ref{fig:BayesianImageFusionFilterInput}.
   //
   //
   // \begin{figure} \center

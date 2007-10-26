@@ -117,7 +117,7 @@ int main( int argc, char* argv[] )
 // We can now proceed to declare the type for the ortho-rectification
 // filter. The class \doxygen{otb}{OrthoRectificationFilter} is
 // templated over the input and the output image types as well as over
-// the cartographic projection (FIXME???). We define therefore the
+// the cartographic projection. We define therefore the
 // type of the projection we want, which is an UTM projection for this case.
 //
 // Software Guide : EndLatex
