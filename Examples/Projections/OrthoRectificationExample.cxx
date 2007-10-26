@@ -134,12 +134,30 @@ int main( int argc, char* argv[] )
 	
   OrthoRectifFilterType::Pointer  orthoRectifFilter =
                                               OrthoRectifFilterType::New();
+  
+// Software Guide : EndCodeSnippet
+  
+  
+// Software Guide : BeginLatex
+//
+// If your image is not in Toulouse (in region 31 to be exact), you need to 
+// instanciate the map projection, set the {\em zone} and {\em hemisphere} 
+// parameters and pass this projection to the orthorectification filter.
+//
+// Software Guide : EndLatex
+  
+// Software Guide : BeginCodeSnippet
+  utmMapProjectionType::Pointer utmMapProjection =
+                                              utmMapProjectionType::New();
+  utmMapProjection->SetZone(31);
+  utmMapProjection->SetHemisphere('N');
+  orthoRectifFilter->SetMapProjection(utmMapProjection);
 				
 // Software Guide : EndCodeSnippet	
 
 // Software Guide : BeginLatex
 //
-// Since the size of the outpu image will be fixed by the user and we
+// Since the size of the output image will be fixed by the user and we
 // are working with a stream-capable, synchronized pipeline, the
 // ortho-rectification filter needs to know the input image size
 // before the reader actually accesses the pixels. In order to make
