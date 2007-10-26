@@ -80,8 +80,8 @@ ForwardSensorModel< TScalarType,
   
   // "OutputPointType" storage.
   OutputPointType outputPoint;
-  outputPoint[0]=ossimGPoint.lat;
-  outputPoint[1]=ossimGPoint.lon;
+  outputPoint[0]=ossimGPoint.lon;
+  outputPoint[1]=ossimGPoint.lat;
   
   return outputPoint;
 }
