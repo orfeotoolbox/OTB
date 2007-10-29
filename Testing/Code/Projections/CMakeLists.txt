@@ -66,7 +66,7 @@ ADD_TEST(prTvRegionProjectionToulouse ${PROJECTIONS_TESTS}
         otbRegionProjection
         ${IMAGEDATA}/TOULOUSE/QuickBird/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF
         ${TEMP}/prTvRegionProjectionToulouse.tif
-	1.44 43.6050 # Lat/Long of Toulouse, Capitole
+	1.44 43.6050 # Long/Lat of Toulouse, Capitole
         500
         500
         10
@@ -95,7 +95,7 @@ ADD_TEST(prTvRegionProjectionResamplerToulouse ${PROJECTIONS_TESTS}
         otbRegionProjectionResampler
         ${IMAGEDATA}/TOULOUSE/QuickBird/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF
         ${TEMP}/prTvRegionProjectionResamplerToulouse.tif
-	1.44 43.6050 # Lat/Long of Toulouse, Capitole
+	1.44 43.6050 # Long/Lat of Toulouse, Capitole
         500
         500
         100

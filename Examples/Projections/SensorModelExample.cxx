@@ -66,7 +66,7 @@ int main( int argc, char* argv[] )
   if(argc!=8)
     {
     std::cout << argv[0] <<" <input_filename> <output_filename>"
-	      << " <upper_left_corner_latitude> <upper_left_corner_longitude>"
+	      << " <upper_left_corner_longitude> <upper_left_corner_latitude>"
               << " <size_x> <sizee_y> <number_of_stream_divisions>" 
 	      << std::endl;
 
@@ -95,7 +95,7 @@ int main( int argc, char* argv[] )
   ReaderType::Pointer	                 reader=ReaderType::New();
   reader->SetFileName(argv[1]);
 
-  ImageType::Pointer  			 inputimage= reader->GetOutput();
+  ImageType::Pointer  			 inputImage= reader->GetOutput();
 
 // Software Guide : EndCodeSnippet  
 
@@ -181,16 +181,16 @@ int main( int argc, char* argv[] )
 // Software Guide : BeginCodeSnippet
   
       
-  ModelType::OutputPointType inputpoint;
+  ModelType::OutputPointType inputPoint;
   typedef itk::Point <double, 2> 	 PointType;
-  PointType				 outputpoint; 
+  PointType				 outputPoint;
 
  
  
-  ImageType::IndexType 			 currentindex;
-  ImageType::IndexType 			 currentindexbis;
-  ImageType::IndexType 			 pixelindex;
-  ImageType::IndexType 			 pixelindexbis;
+  ImageType::IndexType 			 currentIndex;
+  ImageType::IndexType 			 currentIndexBis;
+  ImageType::IndexType 			 pixelIndex;
+  ImageType::IndexType 			 pixelIndexBis;
  
 
 // Software Guide : EndCodeSnippet  
@@ -206,9 +206,9 @@ int main( int argc, char* argv[] )
 
 // Software Guide : BeginCodeSnippet
   
-  ImageType::Pointer 	  	         outputimage = ImageType::New();
+  ImageType::Pointer 	  	         outputImage = ImageType::New();
 
-  ImageType::PixelType			 pixelvalue;
+  ImageType::PixelType			 pixelValue;
 
   ImageType::IndexType  		 start;
   start[0]=0;     
@@ -241,10 +241,10 @@ int main( int argc, char* argv[] )
   region.SetSize(size);
   region.SetIndex(start);
 
-  outputimage->SetOrigin(origin);
-  outputimage->SetRegions(region);
-  outputimage->SetSpacing(spacing);
-  outputimage->Allocate();  
+  outputImage->SetOrigin(origin);
+  outputImage->SetRegions(region);
+  outputImage->SetSpacing(spacing);
+  outputImage->Allocate();
 
 // Software Guide : EndCodeSnippet  
 
@@ -294,10 +294,10 @@ int main( int argc, char* argv[] )
   typedef otb::Image<unsigned char, 2>    CharImageType;
   typedef otb::ImageFileWriter<CharImageType>  CharWriterType;
   typedef otb::ImageFileWriter<ImageType>  WriterType;
-  WriterType::Pointer	                 extractorwriter=WriterType::New();
+  WriterType::Pointer	                 extractorWriter=WriterType::New();
   CharWriterType::Pointer	                 writer=CharWriterType::New();
-  extractorwriter->SetFileName("image_temp.jpeg");
-  extractorwriter->SetInput(extract->GetOutput());
+  extractorWriter->SetFileName("image_temp.jpeg");
+  extractorWriter->SetInput(extract->GetOutput());
 
 // Software Guide : EndCodeSnippet    
 // Software Guide : BeginLatex
@@ -400,7 +400,7 @@ int main( int argc, char* argv[] )
 // Software Guide : EndLatex
 // Software Guide : BeginCodeSnippet
     
-    IteratorType outputIt(outputimage, iteratorRegion);
+    IteratorType outputIt(outputImage, iteratorRegion);
 
     It=0;
     for (outputIt.GoToBegin(); !outputIt.IsAtEnd(); ++outputIt)
@@ -413,7 +413,7 @@ int main( int argc, char* argv[] )
 // Software Guide : EndLatex
 // Software Guide : BeginCodeSnippet
 
-      currentindex=outputIt.GetIndex();
+      currentIndex=outputIt.GetIndex();
 // Software Guide : EndCodeSnippet    
 // Software Guide : BeginLatex
 //
@@ -422,7 +422,7 @@ int main( int argc, char* argv[] )
 // Software Guide : EndLatex
 // Software Guide : BeginCodeSnippet
 
-      outputimage->TransformIndexToPhysicalPoint(currentindex, outputpoint);
+      outputImage->TransformIndexToPhysicalPoint(currentIndex, outputPoint);
 
 // Software Guide : EndCodeSnippet    
 // Software Guide : BeginLatex
@@ -436,16 +436,16 @@ int main( int argc, char* argv[] )
 // Software Guide : EndLatex
 // Software Guide : BeginCodeSnippet
 
-      inputpoint = model->TransformPoint(outputpoint);
+      inputPoint = model->TransformPoint(outputPoint);
 
-      inputimage->TransformPhysicalPointToIndex(inputpoint,pixelindex);
+      inputImage->TransformPhysicalPointToIndex(inputPoint,pixelIndex);
 		     
-      pixelIndexArray[It]=pixelindex[0];
-      pixelIndexArray[It+1]=pixelindex[1];
+      pixelIndexArray[It]=pixelIndex[0];
+      pixelIndexArray[It+1]=pixelIndex[1];
 
 
-      currentIndexArray[It]=currentindex[0];
-      currentIndexArray[It+1]=currentindex[1];
+      currentIndexArray[It]=currentIndex[0];
+      currentIndexArray[It+1]=currentIndex[1];
 
       It=It+2;
       }
@@ -486,32 +486,32 @@ int main( int argc, char* argv[] )
 // Software Guide : EndLatex
 // Software Guide : BeginCodeSnippet
 
-    ImageType::RegionType	            extractregion;
+    ImageType::RegionType	            extractRegion;
 
-    ImageType::IndexType  		    extractstart;
+    ImageType::IndexType  		    extractStart;
 
     if (min_x<10 && min_y<10)
       {
-      extractstart[0]=0;     
-      extractstart[1]=0;
+      extractStart[0]=0;
+      extractStart[1]=0;
       }
 
     else
       {
-      extractstart[0]=min_x-10;     
-      extractstart[1]=min_y-10; 
+      extractStart[0]=min_x-10;
+      extractStart[1]=min_y-10;
       } 
 
-    ImageType::SizeType  		    extractsize;
+    ImageType::SizeType  		    extractSize;
 
-    extractsize[0]=(max_x-min_x)+20;  
-    extractsize[1]=(max_y-min_y)+20;	
-    extractregion.SetSize(extractsize);
-    extractregion.SetIndex(extractstart);
+    extractSize[0]=(max_x-min_x)+20;
+    extractSize[1]=(max_y-min_y)+20;
+    extractRegion.SetSize(extractSize);
+    extractRegion.SetIndex(extractStart);
 
-    extract->SetExtractionRegion(extractregion);
+    extract->SetExtractionRegion(extractRegion);
     extract->SetInput(reader->GetOutput());
-    extractorwriter->Update();
+    extractorWriter->Update();
 
 // Software Guide : EndCodeSnippet    
 // Software Guide : BeginLatex
@@ -527,21 +527,21 @@ int main( int argc, char* argv[] )
 
     for ( k=0; k<It/2; k++)
       {
-      pixelindexbis[0]= pixelIndexArray[2*k];
-      pixelindexbis[1]= pixelIndexArray[2*k+1];
-      currentindexbis[0]= currentIndexArray[2*k];
-      currentindexbis[1]= currentIndexArray[2*k+1];
+      pixelIndexBis[0]= pixelIndexArray[2*k];
+      pixelIndexBis[1]= pixelIndexArray[2*k+1];
+      currentIndexBis[0]= currentIndexArray[2*k];
+      currentIndexBis[1]= currentIndexArray[2*k+1];
 
-      if (interpolator->IsInsideBuffer(pixelindexbis))
+      if (interpolator->IsInsideBuffer(pixelIndexBis))
 	{
-	pixelvalue=int (interpolator->EvaluateAtIndex(pixelindexbis));
+	pixelValue=int (interpolator->EvaluateAtIndex(pixelIndexBis));
 	}
       else
 	{
-	pixelvalue=0;
+	pixelValue=0;
 	}
 
-      outputimage->SetPixel(currentindexbis,pixelvalue);
+      outputImage->SetPixel(currentIndexBis,pixelValue);
       }
     delete pixelIndexArray;
     delete currentIndexArray; 
@@ -560,7 +560,7 @@ int main( int argc, char* argv[] )
 
   writer->SetFileName(argv[2]);
 
-  rescaler->SetInput(outputimage);
+  rescaler->SetInput(outputImage);
 
   writer->SetInput(rescaler->GetOutput());
   writer->Update();
