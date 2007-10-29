@@ -49,7 +49,7 @@ namespace otb {
     {
     public:
       /** Standard Self typedef */
-      typedef MatrixTransposeMatrixImageFilter              Self;
+      typedef MatrixTransposeMatrixImageFilter                  Self;
       typedef itk::ImageToImageFilter<TInputImage,TInputImage>  Superclass;
       typedef itk::SmartPointer<Self>                           Pointer;
       typedef itk::SmartPointer<const Self>                     ConstPointer;
@@ -62,19 +62,19 @@ namespace otb {
       
       /** Image related typedefs. */
       // First Input
-      typedef TInputImage                                                            ImageType;
-      typedef typename TInputImage::Pointer                                          InputImagePointer;
-      typedef typename TInputImage::RegionType                                       RegionType;
-      typedef typename TInputImage::SizeType                                         SizeType;
-      typedef typename TInputImage::IndexType                                        IndexType;
-      typedef typename TInputImage::PixelType                                        PixelType;
-      typedef typename TInputImage::InternalPixelType                                InternalPixelType;
+      typedef TInputImage                                                             ImageType;
+      typedef typename TInputImage::Pointer                                           InputImagePointer;
+      typedef typename TInputImage::RegionType                                        RegionType;
+      typedef typename TInputImage::SizeType                                          SizeType;
+      typedef typename TInputImage::IndexType                                         IndexType;
+      typedef typename TInputImage::PixelType                                         PixelType;
+      typedef typename TInputImage::InternalPixelType                                 InternalPixelType;
 
       typedef typename TInputImage2::IndexType                                        IndexType2;
       typedef typename TInputImage2::PixelType                                        PixelType2;
       typedef typename TInputImage2::InternalPixelType                                InternalPixelType2;
 
-      typedef StreamingTraits<TInputImage>                                           StreamingTraitsType;
+      typedef StreamingTraits<TInputImage>                                            StreamingTraitsType;
       typedef StreamingMode                                                           StreamingModeType;
       typedef itk::ImageRegionSplitter<itkGetStaticConstMacro(InputImageDimension)>   SplitterType;
       typedef typename SplitterType::Pointer                                          SplitterPointer;
@@ -109,7 +109,8 @@ namespace otb {
       
       /** Type to use for computations. */
       // First Input
-      typedef typename itk::NumericTraits<InternalPixelType>::RealType RealType;
+      //typedef typename itk::NumericTraits<InternalPixelType>::RealType RealType;
+      typedef double                                                   RealType;
       typedef itk::VariableLengthVector<RealType>                      RealPixelType;
       
       
@@ -186,9 +187,9 @@ namespace otb {
       MatrixTransposeMatrixImageFilter(const Self&); //purposely not implemented
       void operator=(const Self&); //purposely not implemented
       
-      ArrayMatrixType    m_ThreadSum;
-      bool m_UsePadFirstInput;
-      bool m_UsePadSecondInput;
+      ArrayMatrixType  m_ThreadSum;
+      bool             m_UsePadFirstInput;
+      bool             m_UsePadSecondInput;
 
       /** Nulber Of Component per Pixel. Change for padding */
       unsigned int m_NumberOfComponents1;

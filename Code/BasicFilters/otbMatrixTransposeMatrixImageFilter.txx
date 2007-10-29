@@ -23,7 +23,7 @@
 #include "otbMatrixTransposeMatrixImageFilter.h"
 
 #include "itkImageRegionIterator.h"
-#include "itkImageRegionConstIteratorWithIndex.h"
+#include "itkImageRegionConstIterator.h"
 #include "itkNumericTraits.h"
 #include "itkProgressReporter.h"
 
@@ -42,7 +42,6 @@ MatrixTransposeMatrixImageFilter<TInputImage, TInputImage2>
   // allocate the data objects for the outputs which are
   // just decorators around pixel types
   
-
   typename ImageType::Pointer output1 = static_cast<ImageType*>(this->MakeOutput(0).GetPointer());
   this->itk::ProcessObject::SetNthOutput(0, output1.GetPointer());
   typename MatrixObjectType::Pointer output2 = static_cast<MatrixObjectType*>(this->MakeOutput(1).GetPointer());
@@ -295,17 +294,15 @@ MatrixTransposeMatrixImageFilter<TInputImage, TInputImage2>
       input2Ptr->PropagateRequestedRegion();
       input2Ptr->UpdateOutputData(); 
       
-      itk::ImageRegionConstIteratorWithIndex<TInputImage> it1 (input1Ptr, streamRegion); 
-      itk::ImageRegionConstIteratorWithIndex<TInputImage> it2 (input2Ptr, streamRegion);
+      itk::ImageRegionConstIterator<TInputImage> it1 (input1Ptr, streamRegion); 
+      itk::ImageRegionConstIterator<TInputImage2> it2 (input2Ptr, streamRegion);
       it1.GoToBegin();
       it2.GoToBegin();
  
       // loop the second image and get one pixel a time
       while (!it1.IsAtEnd())
 	{
-	  //IndexType index1 = it1.GetIndex();
 	  PixelType vectorValue1 = it1.Get();
-	  //IndexType2 index2 = it2.GetIndex();
 	  PixelType2 vectorValue2 = it2.Get();
 	  
 	  // Add a first component to vectorValue2 and vectorValue1 filled with ones.
@@ -339,7 +336,7 @@ MatrixTransposeMatrixImageFilter<TInputImage, TInputImage2>
 	    {
 	      for (unsigned int j=0; j<vectorValue2.Size(); j++)
 		{
-		  m_ThreadSum[threadId](i, j) += vectorValue1[i]*static_cast<InternalPixelType>(vectorValue2[j]);
+		  m_ThreadSum[threadId](i, j) += static_cast<RealType>(vectorValue1[i])*static_cast<RealType>(vectorValue2[j]);
 		}
 	      
 	    }
