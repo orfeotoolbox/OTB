@@ -23,7 +23,6 @@ int otbPolygonToPolygonRCC8CalculatorNew(int argc, char* argv[])
 {
 try
   {
-    const unsigned int Dimension = 2;
     typedef otb::Polygon PolygonType;
     typedef otb::PolygonToPolygonRCC8Calculator<PolygonType> CalculatorType;
     
