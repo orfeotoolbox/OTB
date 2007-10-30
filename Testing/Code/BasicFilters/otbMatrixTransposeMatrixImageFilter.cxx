@@ -34,9 +34,10 @@ int otbMatrixTransposeMatrixImageFilter( int argc, char * argv[] )
       const char * outfname = argv[3];
 
       const unsigned int Dimension = 2;
-      typedef double InputPixelType;
-      typedef double OutputPixelType;
-
+      //typedef double InputPixelType;
+      //typedef double OutputPixelType;
+      typedef unsigned char InputPixelType;
+      typedef unsigned char OutputPixelType;
       
       typedef otb::VectorImage<InputPixelType,Dimension>                                InputImage1Type;
       typedef otb::VectorImage<InputPixelType,Dimension>                                InputImage2Type;

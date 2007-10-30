@@ -52,6 +52,8 @@ found in them.
    * Segmentation - a suite of basic segmentation examples.
 
    * Visu - simple examples for image visualization.
+   
+   * Fusion - Image fusion examples.
 
    
 
