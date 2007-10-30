@@ -28,17 +28,18 @@ namespace otb
    *  \brief This class implements the UTM map projection.
    * It converts coordinates in longitude,latitude to UTM map coordinates.
    */
-  class ITK_EXPORT UtmMapProjection : public MapProjection<ossimUtmProjection> 
+	template <InverseOrForwardTransformationEnum transform>
+  class ITK_EXPORT UtmMapProjection : public MapProjection<ossimUtmProjection,transform> 
     {
       public :
 	
 	/** Standard class typedefs. */
 	typedef UtmMapProjection                Self;
-      typedef MapProjection<ossimUtmProjection> Superclass;
+      typedef MapProjection<ossimUtmProjection,transform> Superclass;
       typedef itk::SmartPointer<Self>           Pointer;
       typedef itk::SmartPointer<const Self>     ConstPointer;
       
-      typedef Superclass::ScalarType 		ScalarType;
+      typedef typename Superclass::ScalarType 		ScalarType;
       typedef itk::Point<ScalarType,2>   	InputPointType;
       typedef itk::Point<ScalarType,2>  	OutputPointType;     
 
@@ -64,6 +65,10 @@ namespace otb
       void operator=(const Self&);   //purposely not implemented
       
     };
+		
+#ifndef OTB_MANUAL_INSTANTIATION
+#include "otbUtmMapProjection.txx"
+#endif
 
 } // namespace otb
 

@@ -127,7 +127,7 @@ int main( int argc, char* argv[] )
 
 
 	
-  typedef otb::UtmProjection utmMapProjectionType ;
+  typedef otb::UtmInverseProjection utmMapProjectionType ;
   typedef otb::OrthoRectificationFilter<ImageType, ImageType,
                               utmMapProjectionType> OrthoRectifFilterType ;
 

@@ -65,7 +65,7 @@ namespace otb
                       NParametersDimensions>
   ::TransformPoint(const InputPointType &point) const
   {
-    otbMsgDevMacro(<< "Geographic point lon/lat : (" << point[0] << "," <<	point[1] << ")");
+    otbGenericMsgDebugMacro(<< "Geographic point lon/lat : (" << point[0] << "," <<	point[1] << ")");
     
     // Transformation of "itk::point" in "ossim::ossimGpt" 
     ossimGpt ossimGPoint(point[1], point[0]);
@@ -97,7 +97,7 @@ namespace otb
     outputPoint[0]=ossimDPoint.x;
     outputPoint[1]=ossimDPoint.y;
 
-    otbMsgDevMacro(<< "Point in sensor geometry: (" << outputPoint[0] << "," <<	outputPoint[1] << ")");
+    otbGenericMsgDebugMacro(<< "Point in sensor geometry: (" << outputPoint[0] << "," <<	outputPoint[1] << ")");
     
     return outputPoint;
   }

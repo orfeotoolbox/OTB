@@ -43,10 +43,10 @@ namespace otb
   typedef enum {FORWARD=0, INVERSE=1} InverseOrForwardTransformationEnum;
   
   template <class TOssimMapProjection,
+						InverseOrForwardTransformationEnum transform,
             class TScalarType = double,
             unsigned int NInputDimensions=2,
-            unsigned int NOutputDimensions=2,
-            InverseOrForwardTransformationEnum transform=INVERSE>
+            unsigned int NOutputDimensions=2>
     class ITK_EXPORT MapProjection: public itk::Transform<TScalarType,       // Data type for scalars 
                                                           NInputDimensions,  // Number of dimensions in the input space
                                                           NOutputDimensions> // Number of dimensions in the output space
@@ -110,6 +110,10 @@ namespace otb
       virtual void ComputeMetersPerPixel(double deltaDegreesPerPixelLat, double deltaDegreesPerPixelLon, OutputPointType &metersPerPixel);
       //virtual void SetMatrix(double rotation,  const OutputPointType &scale, const OutputPointType &translation);
       void SetFalseEasting(double falseEasting);
+			
+			/** Return the inverse of the transform.
+   		 *  The inverse is recomputed if it has been modified */
+		  //bool GetInverse(Self*) const ;
 
       protected:
       MapProjection();

@@ -29,18 +29,19 @@ namespace otb
    * It converts coordinates in longitude,latitude to Lambert Conformal Conic map coordinates.
    *
    */
-  class ITK_EXPORT LambertConformalConicMapProjection : public MapProjection<ossimLambertConformalConicProjection> 
+	template <InverseOrForwardTransformationEnum transform>
+  class ITK_EXPORT LambertConformalConicMapProjection : public MapProjection<ossimLambertConformalConicProjection,transform> 
     {
       public :
 	/** Standard class typedefs. */
 	typedef LambertConformalConicMapProjection                  Self;
-      typedef MapProjection<ossimLambertConformalConicProjection>   Superclass;
+      typedef MapProjection<ossimLambertConformalConicProjection,transform>   Superclass;
       typedef itk::SmartPointer<Self>                    	    Pointer;
       typedef itk::SmartPointer<const Self>              	    ConstPointer;
       
-      typedef Superclass::ScalarType                                ScalarType;
-      typedef itk::Point<ScalarType,2 >   	                    InputPointType;
-      typedef itk::Point<ScalarType,2 >              	            OutputPointType;
+      typedef typename Superclass::ScalarType                 ScalarType;
+      typedef itk::Point<ScalarType,2 >   	                  InputPointType;
+      typedef itk::Point<ScalarType,2 >              	        OutputPointType;
       
       /** Method for creation through the object factory. */
       itkNewMacro( Self );
@@ -70,5 +71,8 @@ namespace otb
   
 } // namespace otb
 
+#ifndef OTB_MANUAL_INSTANTIATION
+#include "otbLambertConformalConicMapProjection.txx"
+#endif
 
 #endif

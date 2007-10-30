@@ -75,7 +75,7 @@ int otbOrthoRectificationFilterWithDEM( int argc, char* argv[] )
         typedef otb::ImageFileReader<ImageType>  ReaderType;
         typedef otb::StreamingImageFileWriter<ImageType>  WriterType;
        
-				typedef otb::UtmProjection UtmMapProjectionType ;
+				typedef otb::UtmInverseProjection UtmMapProjectionType ;
 			  typedef otb::OrthoRectificationFilter<ImageType, ImageType, UtmMapProjectionType> OrthoRectifFilterType ;
 				
         //Allocate pointer
@@ -111,8 +111,8 @@ int otbOrthoRectificationFilterWithDEM( int argc, char* argv[] )
 				orthoRectifFilter->SetOutputSpacing(spacing);
 				
 				ImageType::PointType origin;
-				origin[0]=strtod(argv[3], NULL);         //latitude de l'origine.
-			  origin[1]=strtod(argv[4], NULL);         //longitude de l'origine.
+				origin[0]=strtod(argv[3], NULL);         //longitude de l'origine.
+			  origin[1]=strtod(argv[4], NULL);         //latitude de l'origine.
 				orthoRectifFilter->SetOutputOrigin(origin);
 				
 				utmMapProjection->SetZone(31);

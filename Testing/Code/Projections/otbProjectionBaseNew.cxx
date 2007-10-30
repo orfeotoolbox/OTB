@@ -31,9 +31,9 @@ int otbProjectionBaseNew( int argc, char* argv[] )
   try 
     {        
 
-        otb::AlbersProjection::Pointer lAlbersProjection = otb::AlbersProjection::New();
-        otb::AzimEquDistProjection::Pointer lAzimEquDistProjection = otb::AzimEquDistProjection::New();
-        typedef otb::MapToMapProjection<otb::AlbersProjection,otb::AzimEquDistProjection> MapToMapProjectionType;
+        otb::AlbersInverseProjection::Pointer lAlbersProjection = otb::AlbersInverseProjection::New();
+        otb::AzimEquDistForwardProjection::Pointer lAzimEquDistProjection = otb::AzimEquDistForwardProjection::New();
+        typedef otb::MapToMapProjection<otb::AlbersInverseProjection,otb::AzimEquDistForwardProjection> MapToMapProjectionType;
         MapToMapProjectionType::Pointer lMapToMapProjection = MapToMapProjectionType::New();
         
     } 

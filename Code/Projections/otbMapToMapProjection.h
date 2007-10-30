@@ -55,10 +55,15 @@ namespace otb
       typedef itk::SmartPointer<Self>              	 Pointer;
       typedef itk::SmartPointer<const Self>        	 ConstPointer;
       
-      typedef TInputMapProjection                  	 InputMapProjectionType;
-      typedef TOutputMapProjection                 	 OutputMapProjectionType;
-      typedef itk::Point<TScalarType,NInputDimensions >  InputPointType;
-      typedef itk::Point<TScalarType,NOutputDimensions > OutputPointType;        
+      typedef TInputMapProjection                  	 		InputMapProjectionType;
+			typedef typename InputMapProjectionType::Pointer	InputMapProjectionPointerType;
+			typedef typename InputMapProjectionType::OutputPointType OutputPointOfInputMapProjectionType;
+			
+      typedef TOutputMapProjection                 	 		OutputMapProjectionType;
+			typedef typename OutputMapProjectionType::Pointer	OutputMapProjectionPointerType;
+      
+			typedef typename Superclass::InputPointType  InputPointType;
+      typedef typename Superclass::OutputPointType  OutputPointType;        
       
       /** Method for creation through the object factory. */
       itkNewMacro( Self );
@@ -77,18 +82,21 @@ namespace otb
       /** Set MapProjection2. */ 
       itkSetObjectMacro(OutputMapProjection,OutputMapProjectionType);
       
-      /** Compute MapProjection1 coordinates to MapProjection2 coordinates. */ 
-      OutputPointType ComputeProjection1ToProjection2(const InputPointType &point1);
+			/** Transform Point from MapProjection1 to MapProjection2 */
+      OutputPointType TransformPoint(const InputPointType &point) const;
+
+//    Compute MapProjection1 coordinates to MapProjection2 coordinates. */ 
+//    OutputPointType ComputeProjection1ToProjection2(const InputPointType &point1);
       
-      /** Compute MapProjection1 coordinates to MapProjection2 coordinates. */ 
-      InputPointType ComputeProjection2ToProjection1(const OutputPointType &point2);
+//		Compute MapProjection1 coordinates to MapProjection2 coordinates. */ 
+//    InputPointType ComputeProjection2ToProjection1(const OutputPointType &point2);
       
       protected:
       MapToMapProjection();
       ~MapToMapProjection();
       
-      TInputMapProjection*  m_InputMapProjection;
-      TOutputMapProjection* m_OutputMapProjection;  
+      InputMapProjectionPointerType  m_InputMapProjection;
+      OutputMapProjectionPointerType m_OutputMapProjection;  
       
       private:
       MapToMapProjection(const Self&); //purposely not implemented

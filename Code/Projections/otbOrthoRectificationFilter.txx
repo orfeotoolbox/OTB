@@ -32,7 +32,7 @@ namespace otb
 			   TOutputImage, 
 			   TMapProjection, 
 			   TInterpolatorPrecision>
-  ::OrthoRectificationFilter() : otb::StreamingResampleImageFilter<TInputImage,
+  ::OrthoRectificationFilter() : StreamingResampleImageFilter<TInputImage,
 								   TOutputImage,
 								   TInterpolatorPrecision>()
   {

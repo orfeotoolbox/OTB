@@ -97,8 +97,8 @@ spacing[0]=atof(argv[8]);
 spacing[1]=atof(argv[9]);
 
 ImageType::PointType			 origin;
-origin[0]=strtod(argv[3], NULL);         //latitude de l'origine.
-origin[1]=strtod(argv[4], NULL);         //longitude de l'origine.
+origin[0]=strtod(argv[3], NULL);         //longitude de l'origine.
+origin[1]=strtod(argv[4], NULL);         //latitude de l'origine.
 
 ImageType::RegionType			 region;
 

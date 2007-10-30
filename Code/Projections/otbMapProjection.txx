@@ -24,16 +24,16 @@ PURPOSE.  See the above copyright notices for more information.
 namespace otb
 {
   
-  template<class TOssimMapProjection, class TScalarType, unsigned int NInputDimensions, unsigned int NOutputDimensions, InverseOrForwardTransformationEnum Transform>
-  MapProjection<TOssimMapProjection, TScalarType, NInputDimensions, NOutputDimensions, Transform>
+  template<class TOssimMapProjection, InverseOrForwardTransformationEnum Transform, class TScalarType, unsigned int NInputDimensions, unsigned int NOutputDimensions>
+  MapProjection<TOssimMapProjection, Transform, TScalarType, NInputDimensions, NOutputDimensions>
   ::MapProjection() : Superclass(SpaceDimension,ParametersDimension)
   {
     m_MapProjection =  new OssimMapProjectionType();
   }
   
   
-  template<class TOssimMapProjection, class TScalarType, unsigned int NInputDimensions, unsigned int NOutputDimensions, InverseOrForwardTransformationEnum Transform>
-  MapProjection<TOssimMapProjection, TScalarType, NInputDimensions, NOutputDimensions, Transform>
+  template<class TOssimMapProjection, InverseOrForwardTransformationEnum Transform, class TScalarType, unsigned int NInputDimensions, unsigned int NOutputDimensions>
+  MapProjection<TOssimMapProjection, Transform, TScalarType, NInputDimensions, NOutputDimensions>
   ::~MapProjection()
   {
     delete m_MapProjection;
@@ -41,24 +41,24 @@ namespace otb
   
   
   /// Method to set the projection ellipsoid
-  template<class TOssimMapProjection, class TScalarType, unsigned int NInputDimensions, unsigned int NOutputDimensions, InverseOrForwardTransformationEnum Transform>
-  void MapProjection<TOssimMapProjection, TScalarType, NInputDimensions, NOutputDimensions, Transform>
+  template<class TOssimMapProjection, InverseOrForwardTransformationEnum Transform, class TScalarType, unsigned int NInputDimensions, unsigned int NOutputDimensions>
+  void MapProjection<TOssimMapProjection, Transform, TScalarType, NInputDimensions, NOutputDimensions>
   ::SetEllipsoid()
   {
     ossimEllipsoid ellipsoid=ossimEllipsoid();
     m_MapProjection->setEllipsoid(ellipsoid);
   }
   /// Method to set the projection ellipsoid by copy
-  template<class TOssimMapProjection, class TScalarType, unsigned int NInputDimensions, unsigned int NOutputDimensions, InverseOrForwardTransformationEnum Transform> 
-  void MapProjection<TOssimMapProjection, TScalarType, NInputDimensions, NOutputDimensions, Transform>
+  template<class TOssimMapProjection, InverseOrForwardTransformationEnum Transform, class TScalarType, unsigned int NInputDimensions, unsigned int NOutputDimensions> 
+  void MapProjection<TOssimMapProjection, Transform, TScalarType, NInputDimensions, NOutputDimensions>
   ::SetEllipsoid(const ossimEllipsoid &ellipsoid)
   {
     m_MapProjection->setEllipsoid(ellipsoid);
   }
   
   ///// Method to set the projection ellipsoid by knowing its code
-  template<class TOssimMapProjection, class TScalarType, unsigned int NInputDimensions, unsigned int NOutputDimensions, InverseOrForwardTransformationEnum Transform>
-  void MapProjection<TOssimMapProjection, TScalarType, NInputDimensions, NOutputDimensions, Transform>
+  template<class TOssimMapProjection, InverseOrForwardTransformationEnum Transform, class TScalarType, unsigned int NInputDimensions, unsigned int NOutputDimensions>
+  void MapProjection<TOssimMapProjection, Transform, TScalarType, NInputDimensions, NOutputDimensions>
   ::SetEllipsoid(std::string code)
   {
     const ossimEllipsoid *ellipsoid = ossimEllipsoidFactory::instance()->create(ossimString(code));
@@ -74,8 +74,8 @@ namespace otb
   }
   
   ///// Method to set the projection ellipsoid by knowing its axis
-  template<class TOssimMapProjection, class TScalarType, unsigned int NInputDimensions, unsigned int NOutputDimensions, InverseOrForwardTransformationEnum Transform>
-  void MapProjection<TOssimMapProjection, TScalarType, NInputDimensions, NOutputDimensions, Transform>
+  template<class TOssimMapProjection, InverseOrForwardTransformationEnum Transform, class TScalarType, unsigned int NInputDimensions, unsigned int NOutputDimensions>
+  void MapProjection<TOssimMapProjection, Transform, TScalarType, NInputDimensions, NOutputDimensions>
   ::SetEllipsoid(const double &major_axis, const double &minor_axis)
   {
     ossimEllipsoid ellipse(major_axis,minor_axis);
@@ -83,9 +83,9 @@ namespace otb
     m_MapProjection= new OssimMapProjectionType(ellipse);
   }
   
-  template<class TOssimMapProjection, class TScalarType, unsigned int NInputDimensions, unsigned int NOutputDimensions, InverseOrForwardTransformationEnum Transform>
-  typename MapProjection<TOssimMapProjection, TScalarType, NInputDimensions, NOutputDimensions, Transform>::OutputPointType
-  MapProjection<TOssimMapProjection, TScalarType, NInputDimensions, NOutputDimensions, Transform>
+  template<class TOssimMapProjection, InverseOrForwardTransformationEnum Transform, class TScalarType, unsigned int NInputDimensions, unsigned int NOutputDimensions>
+  typename MapProjection<TOssimMapProjection, Transform, TScalarType, NInputDimensions, NOutputDimensions>::OutputPointType
+  MapProjection<TOssimMapProjection, Transform, TScalarType, NInputDimensions, NOutputDimensions>
   ::TransformPoint(const InputPointType & point) const
   {
     OutputPointType outputPoint;
@@ -94,7 +94,7 @@ namespace otb
       {
       case INVERSE:
 	{
-	  otbMsgDevMacro(<< "Cartographic coordinates: (" << point[0] << "," << point[1] << ")");
+	  otbGenericMsgDebugMacro(<< "Cartographic coordinates: (" << point[0] << "," << point[1] << ")");
 	  
 	  //from "itk::point" to "ossim::ossimDpt" 
 	  ossimDpt ossimDPoint(point[0], point[1]);
@@ -105,7 +105,7 @@ namespace otb
 	  
 	  outputPoint[0]=ossimGPoint.lon;
 	  outputPoint[1]=ossimGPoint.lat;
-	  otbMsgDevMacro(<< "Geographic coordinates (long/lat) : (" << outputPoint[0] << "," << outputPoint[1] << ")");
+	  otbGenericMsgDebugMacro(<< "Geographic coordinates (long/lat) : (" << outputPoint[0] << "," << outputPoint[1] << ")");
 	  break;
 	}
       case FORWARD:
@@ -134,9 +134,9 @@ namespace otb
   
   
   ///\return The geographic point corresponding to (0,0)
-  template<class TOssimMapProjection, class TScalarType, unsigned int NInputDimensions, unsigned int NOutputDimensions, InverseOrForwardTransformationEnum Transform> 
-  typename MapProjection<TOssimMapProjection, TScalarType, NInputDimensions, NOutputDimensions, Transform>::InputPointType 
-  MapProjection<TOssimMapProjection, TScalarType, NInputDimensions, NOutputDimensions, Transform>
+  template<class TOssimMapProjection, InverseOrForwardTransformationEnum Transform, class TScalarType, unsigned int NInputDimensions, unsigned int NOutputDimensions> 
+  typename MapProjection<TOssimMapProjection, Transform, TScalarType, NInputDimensions, NOutputDimensions>::InputPointType 
+  MapProjection<TOssimMapProjection, Transform, TScalarType, NInputDimensions, NOutputDimensions>
   ::Origin()
   {
     ossimGpt ossimOrigin=m_MapProjection->origin();
@@ -148,9 +148,9 @@ namespace otb
   }
   
   ///\return The False Northing(avoid negative coordinates)
-  template<class TOssimMapProjection, class TScalarType, unsigned int NInputDimensions, unsigned int NOutputDimensions, InverseOrForwardTransformationEnum Transform>
+  template<class TOssimMapProjection, InverseOrForwardTransformationEnum Transform, class TScalarType, unsigned int NInputDimensions, unsigned int NOutputDimensions>
   double 
-  MapProjection<TOssimMapProjection, TScalarType, NInputDimensions, NOutputDimensions, Transform>
+  MapProjection<TOssimMapProjection, Transform, TScalarType, NInputDimensions, NOutputDimensions>
   ::GetFalseNorthing() const
   {
     double falseNorthing=m_MapProjection->getFalseNorthing();
@@ -159,9 +159,9 @@ namespace otb
   }
   
   ///\return The FalseEasting(avoid negative coordinates)
-  template<class TOssimMapProjection, class TScalarType, unsigned int NInputDimensions, unsigned int NOutputDimensions, InverseOrForwardTransformationEnum Transform>
+  template<class TOssimMapProjection, InverseOrForwardTransformationEnum Transform, class TScalarType, unsigned int NInputDimensions, unsigned int NOutputDimensions>
   double 
-  MapProjection<TOssimMapProjection, TScalarType, NInputDimensions, NOutputDimensions, Transform>
+  MapProjection<TOssimMapProjection, Transform, TScalarType, NInputDimensions, NOutputDimensions>
   ::GetFalseEasting() const
   {
     double falseEasting=m_MapProjection->getFalseEasting();
@@ -170,9 +170,9 @@ namespace otb
   }
   
   ///\return The StandardParallel1(depends on the projection type)
-  template<class TOssimMapProjection, class TScalarType, unsigned int NInputDimensions, unsigned int NOutputDimensions, InverseOrForwardTransformationEnum Transform>
+  template<class TOssimMapProjection, InverseOrForwardTransformationEnum Transform, class TScalarType, unsigned int NInputDimensions, unsigned int NOutputDimensions>
   double
-  MapProjection<TOssimMapProjection, TScalarType, NInputDimensions, NOutputDimensions, Transform>
+  MapProjection<TOssimMapProjection, Transform, TScalarType, NInputDimensions, NOutputDimensions>
   ::GetStandardParallel1() const
   {
     double standardParallel1=m_MapProjection->getStandardParallel1();
@@ -181,9 +181,9 @@ namespace otb
   }
   
   ///\return The StandardParallel2(depends on the projection type)
-  template<class TOssimMapProjection, class TScalarType, unsigned int NInputDimensions, unsigned int NOutputDimensions, InverseOrForwardTransformationEnum Transform>
+  template<class TOssimMapProjection, InverseOrForwardTransformationEnum Transform, class TScalarType, unsigned int NInputDimensions, unsigned int NOutputDimensions>
   double 
-  MapProjection<TOssimMapProjection, TScalarType, NInputDimensions, NOutputDimensions, Transform>
+  MapProjection<TOssimMapProjection, Transform, TScalarType, NInputDimensions, NOutputDimensions>
   ::GetStandardParallel2() const
   {
     double standardParallel2=m_MapProjection->getStandardParallel2();
@@ -192,9 +192,9 @@ namespace otb
   }
   
   ///\return The projection name
-  template<class TOssimMapProjection, class TScalarType, unsigned int NInputDimensions, unsigned int NOutputDimensions, InverseOrForwardTransformationEnum Transform> 
+  template<class TOssimMapProjection, InverseOrForwardTransformationEnum Transform, class TScalarType, unsigned int NInputDimensions, unsigned int NOutputDimensions> 
   std::string 
-  MapProjection<TOssimMapProjection, TScalarType, NInputDimensions, NOutputDimensions, Transform>
+  MapProjection<TOssimMapProjection, Transform, TScalarType, NInputDimensions, NOutputDimensions>
   ::GetProjectionName() const
   {
     std::string projectionName;
@@ -204,18 +204,18 @@ namespace otb
   }
   
   ///Check if the projection is geographic
-  template<class TOssimMapProjection, class TScalarType, unsigned int NInputDimensions, unsigned int NOutputDimensions, InverseOrForwardTransformationEnum Transform>
+  template<class TOssimMapProjection, InverseOrForwardTransformationEnum Transform, class TScalarType, unsigned int NInputDimensions, unsigned int NOutputDimensions>
   bool 
-  MapProjection<TOssimMapProjection, TScalarType, NInputDimensions, NOutputDimensions, Transform>
+  MapProjection<TOssimMapProjection, Transform, TScalarType, NInputDimensions, NOutputDimensions>
   ::IsGeographic() const
   {
     return (m_MapProjection->isGeographic());
   }
   
   ///\return the major axis of the ellipsoid
-  template<class TOssimMapProjection, class TScalarType, unsigned int NInputDimensions, unsigned int NOutputDimensions, InverseOrForwardTransformationEnum Transform>
+  template<class TOssimMapProjection, InverseOrForwardTransformationEnum Transform, class TScalarType, unsigned int NInputDimensions, unsigned int NOutputDimensions>
   double 
-  MapProjection<TOssimMapProjection, TScalarType, NInputDimensions, NOutputDimensions, Transform>
+  MapProjection<TOssimMapProjection, Transform, TScalarType, NInputDimensions, NOutputDimensions>
   ::GetA() const
   {
     double majorAxis=m_MapProjection->getA();
@@ -224,9 +224,9 @@ namespace otb
   }
   
   ///\return the minor axis of the ellipsoid
-  template<class TOssimMapProjection, class TScalarType, unsigned int NInputDimensions, unsigned int NOutputDimensions, InverseOrForwardTransformationEnum Transform>
+  template<class TOssimMapProjection, InverseOrForwardTransformationEnum Transform, class TScalarType, unsigned int NInputDimensions, unsigned int NOutputDimensions>
   double 
-  MapProjection<TOssimMapProjection, TScalarType, NInputDimensions, NOutputDimensions, Transform>
+  MapProjection<TOssimMapProjection, Transform, TScalarType, NInputDimensions, NOutputDimensions>
   ::GetB() const
   {
     double minorAxis=m_MapProjection->getB();
@@ -235,9 +235,9 @@ namespace otb
   }
   
   ///\return the flatening of the ellipsoid
-  template<class TOssimMapProjection, class TScalarType, unsigned int NInputDimensions, unsigned int NOutputDimensions, InverseOrForwardTransformationEnum Transform> 
+  template<class TOssimMapProjection, InverseOrForwardTransformationEnum Transform, class TScalarType, unsigned int NInputDimensions, unsigned int NOutputDimensions> 
   double 
-  MapProjection<TOssimMapProjection, TScalarType, NInputDimensions, NOutputDimensions, Transform>
+  MapProjection<TOssimMapProjection, Transform, TScalarType, NInputDimensions, NOutputDimensions>
   ::GetF() const
   {
     double flattening=m_MapProjection->getF();
@@ -246,9 +246,9 @@ namespace otb
   }
   
   ///\return The resolution in meters
-  template<class TOssimMapProjection, class TScalarType, unsigned int NInputDimensions, unsigned int NOutputDimensions, InverseOrForwardTransformationEnum Transform> 
-  typename MapProjection<TOssimMapProjection, TScalarType, NInputDimensions, NOutputDimensions, Transform>::OutputPointType 
-  MapProjection<TOssimMapProjection, TScalarType, NInputDimensions, NOutputDimensions, Transform>
+  template<class TOssimMapProjection, InverseOrForwardTransformationEnum Transform, class TScalarType, unsigned int NInputDimensions, unsigned int NOutputDimensions> 
+  typename MapProjection<TOssimMapProjection, Transform, TScalarType, NInputDimensions, NOutputDimensions>::OutputPointType 
+  MapProjection<TOssimMapProjection, Transform, TScalarType, NInputDimensions, NOutputDimensions>
   ::GetMetersPerPixel() const
   {
     ossimDpt ossimMetersPerPixels=m_MapProjection->getMetersPerPixel();
@@ -261,9 +261,9 @@ namespace otb
   }
   
   ///\return The resolution in degree
-  template<class TOssimMapProjection, class TScalarType, unsigned int NInputDimensions, unsigned int NOutputDimensions, InverseOrForwardTransformationEnum Transform> 
-  typename MapProjection<TOssimMapProjection, TScalarType, NInputDimensions, NOutputDimensions, Transform>::OutputPointType 
-  MapProjection<TOssimMapProjection, TScalarType, NInputDimensions, NOutputDimensions, Transform>
+  template<class TOssimMapProjection, InverseOrForwardTransformationEnum Transform, class TScalarType, unsigned int NInputDimensions, unsigned int NOutputDimensions> 
+  typename MapProjection<TOssimMapProjection, Transform, TScalarType, NInputDimensions, NOutputDimensions>::OutputPointType 
+  MapProjection<TOssimMapProjection, Transform, TScalarType, NInputDimensions, NOutputDimensions>
   ::GetDecimalDegreesPerPixel() const
   {
     ossimDpt ossimDecimalDegreesPerPixels=m_MapProjection->getDecimalDegreesPerPixel();
@@ -276,16 +276,16 @@ namespace otb
   }
   
   ///Set the ellipsoid axis
-  template<class TOssimMapProjection, class TScalarType, unsigned int NInputDimensions, unsigned int NOutputDimensions, InverseOrForwardTransformationEnum Transform>
-  void MapProjection<TOssimMapProjection, TScalarType, NInputDimensions, NOutputDimensions, Transform>
+  template<class TOssimMapProjection, InverseOrForwardTransformationEnum Transform, class TScalarType, unsigned int NInputDimensions, unsigned int NOutputDimensions>
+  void MapProjection<TOssimMapProjection, Transform, TScalarType, NInputDimensions, NOutputDimensions>
   ::SetAB(double a, double b) 
   {
     m_MapProjection->setAB(a,b);
   }
   
   ///Set the origin
-  template<class TOssimMapProjection, class TScalarType, unsigned int NInputDimensions, unsigned int NOutputDimensions, InverseOrForwardTransformationEnum Transform>
-  void MapProjection<TOssimMapProjection, TScalarType, NInputDimensions, NOutputDimensions, Transform>
+  template<class TOssimMapProjection, InverseOrForwardTransformationEnum Transform, class TScalarType, unsigned int NInputDimensions, unsigned int NOutputDimensions>
+  void MapProjection<TOssimMapProjection, Transform, TScalarType, NInputDimensions, NOutputDimensions>
   ::SetOrigin(const InputPointType &origin) 
   {
     ossimGpt ossimOrigin(origin[0], origin[1]);
@@ -293,8 +293,8 @@ namespace otb
   }
   
   ///Set the map resolution in meters
-  template<class TOssimMapProjection, class TScalarType, unsigned int NInputDimensions, unsigned int NOutputDimensions, InverseOrForwardTransformationEnum Transform>
-  void MapProjection<TOssimMapProjection, TScalarType, NInputDimensions, NOutputDimensions, Transform>
+  template<class TOssimMapProjection, InverseOrForwardTransformationEnum Transform, class TScalarType, unsigned int NInputDimensions, unsigned int NOutputDimensions>
+  void MapProjection<TOssimMapProjection, Transform, TScalarType, NInputDimensions, NOutputDimensions>
   ::SetMetersPerPixel(const OutputPointType &point) 
   {
     ossimDpt ossimDPoint(point[0], point[1]);
@@ -302,8 +302,8 @@ namespace otb
   }
   
   ///Set the map resolution in degree
-  template<class TOssimMapProjection, class TScalarType, unsigned int NInputDimensions, unsigned int NOutputDimensions, InverseOrForwardTransformationEnum Transform>
-  void MapProjection<TOssimMapProjection, TScalarType, NInputDimensions, NOutputDimensions, Transform>
+  template<class TOssimMapProjection, InverseOrForwardTransformationEnum Transform, class TScalarType, unsigned int NInputDimensions, unsigned int NOutputDimensions>
+  void MapProjection<TOssimMapProjection, Transform, TScalarType, NInputDimensions, NOutputDimensions>
   ::SetDecimalDegreesPerPixel(const OutputPointType &point) 
   {
     ossimDpt ossimDPoint(point[0], point[1]);
@@ -311,8 +311,8 @@ namespace otb
   }
   
   ///\return an approximation of the resolution in degree
-  template<class TOssimMapProjection, class TScalarType, unsigned int NInputDimensions, unsigned int NOutputDimensions, InverseOrForwardTransformationEnum Transform> 
-  void MapProjection<TOssimMapProjection, TScalarType, NInputDimensions, NOutputDimensions, Transform>
+  template<class TOssimMapProjection, InverseOrForwardTransformationEnum Transform, class TScalarType, unsigned int NInputDimensions, unsigned int NOutputDimensions> 
+  void MapProjection<TOssimMapProjection, Transform, TScalarType, NInputDimensions, NOutputDimensions>
   ::ComputeDegreesPerPixel(const InputPointType &ground, const OutputPointType &metersPerPixel, double &deltaLat, double &deltaLon) 
   {
     ossimDpt ossimMetersPerPixel(metersPerPixel[0], metersPerPixel[1]);
@@ -321,9 +321,9 @@ namespace otb
   }
   
   ///\return an approximation of the resolution in meters
-  template<class TOssimMapProjection, class TScalarType, unsigned int NInputDimensions, unsigned int NOutputDimensions, InverseOrForwardTransformationEnum Transform> 
+  template<class TOssimMapProjection, InverseOrForwardTransformationEnum Transform, class TScalarType, unsigned int NInputDimensions, unsigned int NOutputDimensions> 
   void
-  MapProjection<TOssimMapProjection, TScalarType, NInputDimensions, NOutputDimensions, Transform>
+  MapProjection<TOssimMapProjection, Transform, TScalarType, NInputDimensions, NOutputDimensions>
   ::ComputeMetersPerPixel(const InputPointType &center, double deltaDegreesPerPixelLat, double deltaDegreesPerPixelLon, OutputPointType &metersPerPixel) 
   {
     //Correction 
@@ -335,9 +335,9 @@ namespace otb
   }
   
   ///\return an approximation of the resolution in meters
-  template<class TOssimMapProjection, class TScalarType, unsigned int NInputDimensions, unsigned int NOutputDimensions, InverseOrForwardTransformationEnum Transform> 
+  template<class TOssimMapProjection, InverseOrForwardTransformationEnum Transform, class TScalarType, unsigned int NInputDimensions, unsigned int NOutputDimensions> 
   void 
-  MapProjection<TOssimMapProjection, TScalarType, NInputDimensions, NOutputDimensions, Transform>
+  MapProjection<TOssimMapProjection, Transform, TScalarType, NInputDimensions, NOutputDimensions>
   ::ComputeMetersPerPixel(double deltaDegreesPerPixelLat, double deltaDegreesPerPixelLon, OutputPointType &metersPerPixel) 
   {
     ossimDpt ossimMetersPerPixel;
@@ -345,6 +345,15 @@ namespace otb
     metersPerPixel[0]=ossimMetersPerPixel.x;
     metersPerPixel[1]=ossimMetersPerPixel.y;
   }
+	
+	/*bool GetInverse(Self*) const 
+	{
+		
+	
+	}*/
+	
+	
+	
 } // namespace otb
 
 #endif

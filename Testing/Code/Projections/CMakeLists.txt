@@ -66,12 +66,12 @@ ADD_TEST(prTvRegionProjectionToulouse ${PROJECTIONS_TESTS}
         otbRegionProjection
         ${IMAGEDATA}/TOULOUSE/QuickBird/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF
         ${TEMP}/prTvRegionProjectionToulouse.tif
-	1.44 43.6050 # Long/Lat of Toulouse, Capitole
+				1.44 43.6050 # Long/Lat of Toulouse, Capitole
         500
         500
         10
-	0.00001
-	-0.00001
+				0.00001
+				-0.00001
         )
 # TEST 11
 ADD_TEST(prTvRegionProjectionCevennes ${PROJECTIONS_TESTS}  
@@ -82,10 +82,10 @@ ADD_TEST(prTvRegionProjectionCevennes ${PROJECTIONS_TESTS}
         ${TEMP}/prTvRegionProjectionCevennes.tif
         3.7 44.08 
         500
-	500
-	10
-	0.00001
-	-0.00001
+				500
+				10
+				0.00001
+				-0.00001
         )
 #=======================================================================================
 # TEST 12
@@ -95,12 +95,12 @@ ADD_TEST(prTvRegionProjectionResamplerToulouse ${PROJECTIONS_TESTS}
         otbRegionProjectionResampler
         ${IMAGEDATA}/TOULOUSE/QuickBird/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF
         ${TEMP}/prTvRegionProjectionResamplerToulouse.tif
-	1.44 43.6050 # Long/Lat of Toulouse, Capitole
+				1.44 43.6050 # Long/Lat of Toulouse, Capitole
         500
         500
         100
-	0.00001
-	-0.00001
+				0.00001
+				-0.00001
         )				
 # TEST 13				
 ADD_TEST(prTvRegionProjectionResamplerCevennes ${PROJECTIONS_TESTS}  
@@ -111,10 +111,10 @@ ADD_TEST(prTvRegionProjectionResamplerCevennes ${PROJECTIONS_TESTS}
         ${TEMP}/prTvRegionProjectionResamplerCevennes.tif
         3.7 44.08
         500
-	500
-	10
-	0.00001
-	-0.00001
+				500
+				10
+				0.00001
+				-0.00001
         )
 #=======================================================================================
 # TEST 14
@@ -140,16 +140,16 @@ ADD_TEST(prTvSensorImageToCartoCevennes ${PROJECTIONS_TESTS}
 				   otbSensorImageToCarto
            ${IMAGEDATA}/CEVENNES/06FEB12104912-P1BS-005533998070_01_P001.TIF
            ${TEMP}/prTvSensorImageToCartoCevennes_UTM.tif
-	   556046 
+	   			 556046 
            4.881e+06 
            500 
            500 
            220
-	   0.5
-	   -0.5
+	   			 0.5
+	   			 -0.5
            )
 #=======================================================================================
-# TEST 15				
+# TEST 16				
 ADD_TEST(prTvOrthoRectificationToulouse ${PROJECTIONS_TESTS} 
   --compare-image ${EPSILON}  ${BASELINE}/prTvOrthoRectificationToulouse_UTM.tif
                           ${TEMP}/prTvOrthoRectificationToulouse_UTM.tif
@@ -159,13 +159,13 @@ ADD_TEST(prTvOrthoRectificationToulouse ${PROJECTIONS_TESTS}
         374100.8
         4829184.8 
         500
-	500 
-	220
-	0.5
+				500 
+				220
+				0.5
         -0.5
         )
 
-# TEST 15
+# TEST 17
 ADD_TEST(prTvOrthoRectificationCevennes ${PROJECTIONS_TESTS} 
   --compare-image ${EPSILON}  ${BASELINE}/prTvOrthoRectificationCevennes_UTM.tif
                           ${TEMP}/prTvOrthoRectificationCevennes_UTM.tif
@@ -175,13 +175,13 @@ ADD_TEST(prTvOrthoRectificationCevennes ${PROJECTIONS_TESTS}
         556046 
         4.881e+06 
         500
-	500 
-	220
-	0.5
+				500 
+				220
+				0.5
         -0.5
         )
 #=======================================================================================				
-# TEST 16
+# TEST 18
 ADD_TEST(prTvSensorImageDEMToCartoToulouse ${PROJECTIONS_TESTS}  
   --compare-image ${TOL}  ${BASELINE}/prTvSensorImageDEMToCartoToulouse_UTM.tif
                           ${TEMP}/prTvSensorImageDEMToCartoToulouse_UTM.tif
@@ -191,14 +191,14 @@ ADD_TEST(prTvSensorImageDEMToCartoToulouse ${PROJECTIONS_TESTS}
         374100.8
         4829184.8 
         500
-	500 
-	220
+				500 
+				220
         ${INPUTDATA}/DEM/srtm_directory/ 
-        ${TEMP}/SensorImageDEMToCartoToulouse.hdr
-	0.5
-	-0.5
+				0.5
+				-0.5
         )
-# TEST 17
+				
+# TEST 19
 ADD_TEST(prTvSensorImageDEMToCartoCevennes ${PROJECTIONS_TESTS}  
   --compare-image ${TOL}  ${BASELINE}/prTvSensorImageDEMToCartoCevennes_UTM.tif
                           ${TEMP}/prTvSensorImageDEMToCartoCevennes_UTM.tif
@@ -211,12 +211,11 @@ ADD_TEST(prTvSensorImageDEMToCartoCevennes ${PROJECTIONS_TESTS}
         500 
         200 
         ${INPUTDATA}/DEM/srtm_directory/ 
-        ${TEMP}/SensorImageDEMToCartoCevennes.hdr
-	0.5
-	-0.5
+				0.5
+				-0.5
         )
 #=======================================================================================
-# TEST 18
+# TEST 20
 ADD_TEST(prTvOrthoRectificationToulouseWithDEM ${PROJECTIONS_TESTS}  
   --compare-image ${EPSILON}  ${BASELINE}/prTvOrthoRectificationToulouseWithDEM_UTM.tif
                           ${TEMP}/prTvOrthoRectificationToulouseWithDEM_UTM.tif
@@ -226,15 +225,15 @@ ADD_TEST(prTvOrthoRectificationToulouseWithDEM ${PROJECTIONS_TESTS}
         374100.8
         4829184.8 
         500
-	500 
-	220
-	0.5
-	-0.5
+				500 
+				220
+				0.5
+				-0.5
         ${INPUTDATA}/DEM/srtm_directory/ 
         ${TEMP}/prTvOrthoRectificationToulouseWithDEM_UTM.tif
         )
 
-# TEST 19
+# TEST 21
 ADD_TEST(prTvOrthoRectificationCevennesWithDEM ${PROJECTIONS_TESTS}  
   --compare-image ${EPSILON}  ${BASELINE}/prTvOrthoRectificationCevennesWithDEM_UTM.tif
                           ${TEMP}/prTvOrthoRectificationCevennesWithDEM_UTM.tif
@@ -246,11 +245,45 @@ ADD_TEST(prTvOrthoRectificationCevennesWithDEM ${PROJECTIONS_TESTS}
         500 
         500 
         200 
-	0.5
-	-0.5
+				0.5
+				-0.5
         ${INPUTDATA}/DEM/srtm_directory/ 
         ${TEMP}/prTvOrthoRectificationCevennesWithDEM_UTM.tif
         )
+#========================= TESTS SINGAPOUR ===============================
+
+SET(EMMANUELDATA ${OTB_DATA_ROOT}/Emmanuel/Singapour/000000173549_01_P001_MUL)
+
+# TEST 22
+ADD_TEST(prTvRegionProjectionResamplerSingapour ${PROJECTIONS_TESTS}  
+				otbRegionProjectionResampler
+        ${EMMANUELDATA}/04MAR21031747-M1BS-000000173549_01_P001.TIF
+        ${TEMP}/prTvRegionProjectionResamplerSingapour.tif
+        103.8464 1.31
+        500
+				500
+				10
+				0.00001
+				-0.00001
+        )
+
+# TEST 23
+ADD_TEST(prTvOrthoRectificationSingapour ${PROJECTIONS_TESTS} 
+        otbOrthoRectificationFilter
+        ${EMMANUELDATA}/04MAR21031747-M1BS-000000173549_01_P001.TIF
+        ${TEMP}/prTvOrthoRectificationSingapour_UTM.tif
+#        144885.4	371997.12 #Emmanuel
+				374100.8
+        4829184.8 
+        500
+				500 
+				220
+				1
+        -1
+        )
+
+
+
 #=======================================================================================
 SET(Projections_SRCS
 otbProjectionBaseNew.cxx

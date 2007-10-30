@@ -149,7 +149,7 @@ StreamingResampleImageFilter<TInputImage,TOutputImage,TInterpolatorPrecisionType
     region.SetIndex(index);
 		
 		// Grow region to be sure that interpolator can found needed point on image borders
-		unsigned int neededRadius =	otb::StreamingTraits<typename Superclass::InputImageType>::CalculateNeededRadiusForInterpolator(this->GetInterpolator());
+		unsigned int neededRadius =	StreamingTraits<typename Superclass::InputImageType>::CalculateNeededRadiusForInterpolator(this->GetInterpolator());
 		
 		if (neededRadius == 0)
 		{

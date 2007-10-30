@@ -15,33 +15,42 @@ the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
 PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
+
+#ifndef __otbUtmMapProjection_txx
+#define __otbUtmMapProjection_txx
+
 #include "otbUtmMapProjection.h"
 
 namespace otb
 { 
   
-  UtmMapProjection
+ 	template <InverseOrForwardTransformationEnum transform>
+	UtmMapProjection<transform>
   ::UtmMapProjection()
   {
     m_utmprojection = new ossimUtmProjection();
   }
   
-  UtmMapProjection
+ 	template <InverseOrForwardTransformationEnum transform>
+  UtmMapProjection<transform>
   ::~UtmMapProjection()
   {
     delete m_utmprojection;
   }
   
   ///Set the zone
-  void UtmMapProjection
+	template <InverseOrForwardTransformationEnum transform>
+  void UtmMapProjection<transform>
   ::SetZone(long zone)
   {
-    delete m_utmprojection;
-    m_utmprojection= new ossimUtmProjection(zone);
+ //   delete m_utmprojection;
+ //   m_utmprojection= new ossimUtmProjection(zone);
+ 		m_utmprojection->setZone(zone);
   }
   
   ///Set the zone
-  void UtmMapProjection
+	template <InverseOrForwardTransformationEnum transform>
+  void UtmMapProjection<transform>
   ::SetZone(const InputPointType &ground) 
   {
     ossimGpt ossimGround;
@@ -51,14 +60,16 @@ namespace otb
   }
   
   ///Set the hemisphere
-  void UtmMapProjection
+	template <InverseOrForwardTransformationEnum transform>
+  void UtmMapProjection<transform>
   ::SetHemisphere(char hemisphere) 
   {
     m_utmprojection->setHemisphere(hemisphere);
   }
   
   ///\return the zone
-  long UtmMapProjection
+  template <InverseOrForwardTransformationEnum transform>
+	long UtmMapProjection<transform>
   ::GetZone()
   {
     long zone;
@@ -68,7 +79,8 @@ namespace otb
   }
   
   ///\return the hemisphere
-  const char UtmMapProjection
+  template <InverseOrForwardTransformationEnum transform>
+	const char UtmMapProjection<transform>
   ::GetHemisphere() const
   {
     char hemisphere=0;
@@ -79,3 +91,4 @@ namespace otb
   
 } // namespace otb
 
+#endif

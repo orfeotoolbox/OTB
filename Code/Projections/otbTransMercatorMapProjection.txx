@@ -15,27 +15,32 @@ the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
 PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
+#ifndef __otbTransMercatorMapProjection_txx
+#define __otbTransMercatorMapProjection_txx
 
 #include "otbTransMercatorMapProjection.h"
 
 namespace otb
 { 
   
-  TransMercatorMapProjection
+	template <InverseOrForwardTransformationEnum transform>
+  TransMercatorMapProjection<transform>
   ::TransMercatorMapProjection()
   {
     m_TransMercatorProjection = new ossimTransMercatorProjection();
   }
   
   /// Desctructor
-  TransMercatorMapProjection
+  template <InverseOrForwardTransformationEnum transform>
+	TransMercatorMapProjection<transform>
   ::~TransMercatorMapProjection()
   {
     delete m_TransMercatorProjection;
   }
   
   ///Set the default ellipsoid 
-  void TransMercatorMapProjection
+  template <InverseOrForwardTransformationEnum transform>
+	void TransMercatorMapProjection<transform>
   ::SetEllipsoid() 
   {
     ossimEllipsoid ellipse(6378137.0,6356752.3142);
@@ -46,42 +51,48 @@ namespace otb
   }
   
   ///Set the false Easting
-  void TransMercatorMapProjection
+  template <InverseOrForwardTransformationEnum transform>
+	void TransMercatorMapProjection<transform>
   ::SetFalseEasting(double falseEasting) 
   {
     m_TransMercatorProjection->setFalseEasting(falseEasting);
   }
   
   ///Set the False Northing
-  void TransMercatorMapProjection
+  template <InverseOrForwardTransformationEnum transform>
+	void TransMercatorMapProjection<transform>
   ::SetFalseNorthing(double falseNorthing) 
   {
     m_TransMercatorProjection->setFalseNorthing(falseNorthing);
   }
   
   ///Set the scale factor
-  void TransMercatorMapProjection
+  template <InverseOrForwardTransformationEnum transform>
+	void TransMercatorMapProjection<transform>
   ::SetScaleFactor(double scaleFactor) 
   {
     m_TransMercatorProjection->setScaleFactor(scaleFactor);
   }
   
   ///Set the parameters
-  void TransMercatorMapProjection
+  template <InverseOrForwardTransformationEnum transform>
+	void TransMercatorMapProjection<transform>
   ::SetParameters(double falseEasting,double falseNorthing,double scaleFactor) 
   {
     m_TransMercatorProjection->setParameters(falseEasting, falseNorthing, scaleFactor);
   }
   
   ///Set the default parameters
-  void TransMercatorMapProjection
+  template <InverseOrForwardTransformationEnum transform>
+	void TransMercatorMapProjection<transform>
   ::SetDefaults() 
   {
     m_TransMercatorProjection->setDefaults();
   }
   
   ///\return the scale factor
-  double TransMercatorMapProjection
+  template <InverseOrForwardTransformationEnum transform>
+	double TransMercatorMapProjection<transform>
   ::GetScaleFactor() const
   {
     double scaleFactor;
@@ -91,7 +102,8 @@ namespace otb
   }
   
   ///\return the false northing (avoid negative coordinates)
-  double TransMercatorMapProjection
+  template <InverseOrForwardTransformationEnum transform>
+	double TransMercatorMapProjection<transform>
   ::GetFalseNorthing() const
   {
     double falseNorthing=m_TransMercatorProjection->getFalseNorthing();
@@ -100,7 +112,8 @@ namespace otb
   }
   
   ///\return the false easting (avoid negative coordinates)
-  double TransMercatorMapProjection
+  template <InverseOrForwardTransformationEnum transform>
+	double TransMercatorMapProjection<transform>
   ::GetFalseEasting() const
   {
     double falseEasting=m_TransMercatorProjection->getFalseEasting();
@@ -110,3 +123,4 @@ namespace otb
   
 } // namespace otb
 
+#endif

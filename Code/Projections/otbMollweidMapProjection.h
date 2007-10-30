@@ -28,16 +28,17 @@ namespace otb
    *  \brief This class implements the Mollweid map projection.
    *  It converts coordinates in longitude,latitude to Mollweid map coordinates.
    */
-  class ITK_EXPORT MollweidMapProjection : public MapProjection<ossimMollweidProjection> 
+  template <InverseOrForwardTransformationEnum transform>
+	class ITK_EXPORT MollweidMapProjection : public	MapProjection<ossimMollweidProjection, transform> 
     {
 public :
   /** Standard class typedefs. */
   typedef MollweidMapProjection                  Self;
- typedef MapProjection<ossimMollweidProjection>  Superclass;
+ typedef MapProjection<ossimMollweidProjection,transform>  Superclass;
  typedef itk::SmartPointer<Self>                 Pointer;
  typedef itk::SmartPointer<const Self>           ConstPointer;
  
- typedef Superclass::ScalarType  		 ScalarType;
+ typedef typename Superclass::ScalarType  		 ScalarType;
  typedef itk::Point<ScalarType,2 >   	      	 InputPointType;
  typedef itk::Point<ScalarType,2 >  	      	 OutputPointType;      
  
@@ -64,6 +65,10 @@ public :
  void operator=(const Self&);          //purposely not implemented
  
     };
+ 
+#ifndef OTB_MANUAL_INSTANTIATION
+#include "otbMollweidMapProjection.txx"
+#endif 
   
 } // namespace otb
 

@@ -29,17 +29,18 @@ namespace otb
    * It converts coordinates in longitude,latitude to TransMercator map coordinates.
    *
    */
-  class ITK_EXPORT TransMercatorMapProjection : public MapProjection<ossimTransMercatorProjection> 
+	template <InverseOrForwardTransformationEnum transform>
+  class ITK_EXPORT TransMercatorMapProjection : public MapProjection<ossimTransMercatorProjection,transform> 
     {
       public :
 	
 	/** Standard class typedefs. */
  	typedef TransMercatorMapProjection                 Self;
-      typedef MapProjection<ossimTransMercatorProjection>  Superclass;
+      typedef MapProjection<ossimTransMercatorProjection, transform>  Superclass;
       typedef itk::SmartPointer<Self>                      Pointer;
       typedef itk::SmartPointer<const Self>                ConstPointer;
       
-      typedef Superclass::ScalarType  			   ScalarType;
+      typedef typename Superclass::ScalarType  			   ScalarType;
       typedef itk::Point<ScalarType,2>   	      	   InputPointType;
       typedef itk::Point<ScalarType,2>  	      	   OutputPointType;     
       
@@ -68,6 +69,10 @@ namespace otb
       void operator=(const Self&);               //purposely not implemented
  	
 };
+
+#ifndef OTB_MANUAL_INSTANTIATION
+#include "otbTransMercatorMapProjection.txx"
+#endif
 
 } // namespace otb
 

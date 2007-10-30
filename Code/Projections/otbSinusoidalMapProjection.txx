@@ -16,47 +16,56 @@ PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
 
+#ifndef __otbSinusoidalMapProjection_txx
+#define __otbSinusoidalMapProjection_txx
+
 #include "otbSinusoidalMapProjection.h"
 
 namespace otb
 { 
   
-  SinusoidalMapProjection
+  template <InverseOrForwardTransformationEnum transform> 
+	SinusoidalMapProjection<transform> 
   ::SinusoidalMapProjection()
   {
     m_SinusoidalProjection = new ossimSinusoidalProjection();
   }
   
   
-  SinusoidalMapProjection
+  template <InverseOrForwardTransformationEnum transform> 
+	SinusoidalMapProjection<transform>
   ::~SinusoidalMapProjection()
   {
     delete m_SinusoidalProjection;
   }
   
   ///Set the false Easting
-  void SinusoidalMapProjection
+  template <InverseOrForwardTransformationEnum transform> 
+	void SinusoidalMapProjection<transform>
   ::SetFalseEasting(double falseEasting) 
   {
     m_SinusoidalProjection->setFalseEasting(falseEasting);
   }
   
   ///Set the False Northing
-  void SinusoidalMapProjection
+  template <InverseOrForwardTransformationEnum transform> 
+	void SinusoidalMapProjection<transform>
   ::SetFalseNorthing(double falseNorthing) 
   {
     m_SinusoidalProjection->setFalseNorthing(falseNorthing);
   }
   
   ///Set the default parameter
-  void SinusoidalMapProjection
+  template <InverseOrForwardTransformationEnum transform> 
+	void SinusoidalMapProjection<transform>
   ::SetDefaults() 
   {
 	m_SinusoidalProjection->setDefaults();
   }
   
   ///\return the False Northing (avoid negative coordinates)
-  double SinusoidalMapProjection
+  template <InverseOrForwardTransformationEnum transform> 
+	double SinusoidalMapProjection<transform>
   ::GetFalseNorthing() const
   {
     double falseNorthing=m_SinusoidalProjection->getFalseNorthing();
@@ -65,7 +74,8 @@ namespace otb
   }
   
   ///\return the False Easting (avoid negative coordinates)
-  double SinusoidalMapProjection
+  template <InverseOrForwardTransformationEnum transform> 
+	double SinusoidalMapProjection<transform>
   ::GetFalseEasting() const
   {
     double falseEasting=m_SinusoidalProjection->getFalseEasting();
@@ -73,8 +83,9 @@ namespace otb
     return falseEasting;
   }
   
-  void SinusoidalMapProjection
-::SetParameters(double falseEasting,double falseNorthing)
+  template <InverseOrForwardTransformationEnum transform> 
+	void SinusoidalMapProjection<transform>
+	::SetParameters(double falseEasting,double falseNorthing)
   {
     m_SinusoidalProjection->setFalseEastingNorthing(falseEasting,falseNorthing);
   }
@@ -82,3 +93,4 @@ namespace otb
   
 } // namespace otb
 
+#endif

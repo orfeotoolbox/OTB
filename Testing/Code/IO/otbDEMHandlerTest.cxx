@@ -44,7 +44,7 @@ int otbDEMHandlerTest(int argc, char * argv[])
                 itkGenericExceptionMacro(<<" OpenDEMDirectory return flase value !!");
         }
       
-        typedef otb::UtmProjection                      utmProjection;
+        typedef otb::UtmInverseProjection                      utmProjection;
         typedef utmProjection::InputPointType	        InputPoint;
         InputPoint                                      geoPoint;
         geoPoint[0] = 44.08;

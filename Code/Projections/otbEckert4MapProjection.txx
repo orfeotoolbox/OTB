@@ -15,47 +15,57 @@ the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
 PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
+
+#ifndef __otbEckert4MapProjection_txx
+#define __otbEckert4MapProjection_txx
+
 #include "otbEckert4MapProjection.h"
 
 namespace otb
 { 
   
-  Eckert4MapProjection
+  template <InverseOrForwardTransformationEnum transform>
+	Eckert4MapProjection<transform>
   ::Eckert4MapProjection()
   {
 	m_Eckert4Projection = new ossimEckert4Projection();
   }
   
   
-  Eckert4MapProjection
+  template <InverseOrForwardTransformationEnum transform>
+	Eckert4MapProjection<transform>
   ::~Eckert4MapProjection()
   {
     delete m_Eckert4Projection;
   }
   
   ///False easting specification
-  void Eckert4MapProjection
+	template <InverseOrForwardTransformationEnum transform>
+	void Eckert4MapProjection<transform>
 ::SetFalseEasting(double falseEasting) 
   {
     m_Eckert4Projection->setFalseEasting(falseEasting);
   }
   
   ///False Northing specification
-  void Eckert4MapProjection
+  template <InverseOrForwardTransformationEnum transform>
+	void Eckert4MapProjection<transform>
   ::SetFalseNorthing(double falseNorthing) 
   {
     m_Eckert4Projection->setFalseNorthing(falseNorthing);
   }
   
   ///Set the defaul parameters
-  void Eckert4MapProjection
+  template <InverseOrForwardTransformationEnum transform>
+	void Eckert4MapProjection<transform>
   ::SetDefaults() 
   {
     m_Eckert4Projection->setDefaults();
   }
   
   ///Get the false northing coordinates (avoid negative values)
-  double Eckert4MapProjection
+  template <InverseOrForwardTransformationEnum transform>
+	double Eckert4MapProjection<transform>
   ::GetFalseNorthing() const
   {
     double falseNorthing=m_Eckert4Projection->getFalseNorthing();
@@ -63,14 +73,16 @@ namespace otb
   }
   
   ///Get the false easting coordinates (avoid negative values)
-  double Eckert4MapProjection
+  template <InverseOrForwardTransformationEnum transform>
+	double Eckert4MapProjection<transform>
   ::GetFalseEasting() const
   {
     double falseEasting=m_Eckert4Projection->getFalseEasting();
     return falseEasting;
   }
   
-  void Eckert4MapProjection
+  template <InverseOrForwardTransformationEnum transform>
+	void Eckert4MapProjection<transform>
   ::SetParameters(double falseEasting,double falseNorthing)
   {
     m_Eckert4Projection->setFalseEastingNorthing(falseEasting,falseNorthing);
@@ -78,3 +90,4 @@ namespace otb
   
 } // namespace otb
 
+#endif

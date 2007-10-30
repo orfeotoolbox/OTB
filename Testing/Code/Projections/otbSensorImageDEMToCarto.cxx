@@ -26,7 +26,7 @@
 
 #include "otbMapProjections.h"
 #include "otbMapProjection.h"
-#include "otbDEMHandler.h"
+
 
 int otbSensorImageDEMToCarto( int argc, char* argv[] )
 {
@@ -34,9 +34,9 @@ int otbSensorImageDEMToCarto( int argc, char* argv[] )
     {        
 
 
-   if(argc!=12)
+   if(argc!=11)
    {
-      std::cout << argv[0] <<" <input filename> <output filename> <X origine> <Y origine> <taille_x> <taille_y> <NumberOfstreamDivisions> <srtm directory> <DEM Image Filename" 
+      std::cout << argv[0] <<" <input filename> <output filename> <X origine> <Y origine> <taille_x> <taille_y> <NumberOfstreamDivisions> <srtm directory> " 
                 << "<xSpacing> <ySpacing>" << std::endl;
 
       return EXIT_FAILURE;
@@ -50,14 +50,11 @@ PointType				 outputpoint;
 /*************************************************/
 typedef otb::Image<unsigned char, 2>     CharImageType;
 typedef otb::Image<unsigned int, 2>      ImageType;
-typedef otb::Image<double,2>		 DEMImageType;
 typedef otb::Image<unsigned int, 2>      InputImageType;
 ImageType::Pointer 	  	         outputimage = ImageType::New();
-DEMImageType::Pointer 	  	         DEMimage = DEMImageType::New();
 CharImageType::Pointer      		 charoutputimage=CharImageType::New();
 
 ImageType::PixelType			 pixelvalue;
-DEMImageType::PixelType			 DEMpixelvalue;
 ImageType::IndexType  			 start;
 start[0]=0;     
 start[1]=0;     
@@ -67,12 +64,12 @@ size[0]=atoi(argv[5]);      //Taille en X.
 size[1]=atoi(argv[6]);	    //Taille en Y.
 
 ImageType::SpacingType  		 spacing;
-spacing[0]=atof(argv[10]);
-spacing[1]=atof(argv[11]);
+spacing[0]=atof(argv[9]);
+spacing[1]=atof(argv[10]);
 
 ImageType::PointType			 origin;
-origin[0]=strtod(argv[3], NULL);         //latitude de l'origine.
-origin[1]=strtod(argv[4], NULL);         //longitude de l'origine.
+origin[0]=strtod(argv[3], NULL);         //longitude de l'origine.
+origin[1]=strtod(argv[4], NULL);         //latitude de l'origine.
 
 ImageType::RegionType			 region;
 
@@ -85,12 +82,6 @@ outputimage->SetSpacing(spacing);
 outputimage-> Allocate();     //Notre image de sortie est allouée.
 otbGenericMsgDebugMacro(<< "Output image created!! ");
 
-DEMimage-> SetOrigin(origin);
-DEMimage-> SetRegions(region);
-DEMimage->SetSpacing(spacing);
-DEMimage-> Allocate();     //Notre DEMimage est allouée.
-otbGenericMsgDebugMacro(<< "DEMimage created!! " );
-
 /******************************/
 /*  Création de mon handler   */
 /******************************/
@@ -101,7 +92,6 @@ ossimKeywordlist geom_kwl;
       otbGenericMsgDebugMacro(<< "Handler created " );
       handler->SetFileName(argv[1]);
       geom_kwl=handler->GetGeometryKeywordlist();
-//otbGenericMsgDebugMacro(<< geom_kwl );
 
 /********************************************************/
 /*   Création de notre modèle en fonction de l'image    */
@@ -120,13 +110,6 @@ ossimKeywordlist geom_kwl;
       
       ModelType::OutputPointType inputpoint;
 
-/********************************************************/
-/*                Création d'un DEMHandler               */
-/********************************************************/
-
-typedef otb::DEMHandler				  DEMHandlerType;
-DEMHandlerType::Pointer		      otbElevManager=DEMHandlerType::New();
-double height;
 
 /********************************************************/
 /*                  Création d'un reader                */
@@ -134,11 +117,7 @@ double height;
 
 typedef otb::ImageFileReader<ImageType>  ReaderType;
 ReaderType::Pointer	                 reader=ReaderType::New();
-//ReaderType::Pointer	                 reader1=ReaderType::New();
 reader->SetFileName(argv[1]);
-//reader1->SetFileName(argv[2]);
-//ImageType::Pointer 	  	         image = reader1->GetOutput();
-//reader->Update();
 ImageType::Pointer  			 inputimage= reader->GetOutput();
 ImageType::IndexType 			 currentindex;
 ImageType::IndexType 			 currentindexbis;
@@ -168,10 +147,10 @@ otbGenericMsgDebugMacro(<< "Interpolator created " );
 
 typedef otb::ImageFileWriter<ImageType>      WriterType;
 typedef otb::ImageFileWriter<CharImageType>  CharWriterType;
-typedef otb::ImageFileWriter<DEMImageType>   DEMWriterType;
+
 WriterType::Pointer	                     	 extractorwriter=WriterType::New();
 CharWriterType::Pointer	                     writer=CharWriterType::New();
-DEMWriterType::Pointer	                     DEMwriter=DEMWriterType::New();
+
 extractorwriter->SetFileName("image_temp1.jpeg");
 extractorwriter->SetInput(extract->GetOutput());
 otbGenericMsgDebugMacro(<< "extractorwriter created" );
@@ -189,7 +168,7 @@ otbGenericMsgDebugMacro(<< "rescaler created" );
 /********************************************************/
 /*            Création de notre projection              */
 /********************************************************/
-typedef otb::UtmProjection                      utmProjection;
+typedef otb::UtmInverseProjection                      utmProjection;
 typedef utmProjection::OutputPointType	        OutputPoint;
 typedef utmProjection::InputPointType	        InputPoint;
 InputPoint                                      geoPoint;
@@ -202,7 +181,6 @@ utmprojection->SetHemisphere('N');
 /*************************************************/
 
 typedef itk::ImageRegionIteratorWithIndex<ImageType>	IteratorType;
-//IteratorType outputIt(outputimage, region); //Définition de notre itérateur.
 otbGenericMsgDebugMacro(<< "Iterator created " );
 
 //Donner une valeur par défaut numberofstreamdivision ou le faire fixer par l'utilisateur.
@@ -234,8 +212,6 @@ else
 iterationRegionStart[1]=count*iteratorRegionSize[1]; 
 }    
 iterationRegionStart[0]=0;//Début de chaque ligne==>0     
-// otbGenericMsgDebugMacro(<<iteratorRegionSize[1]);  
-// otbGenericMsgDebugMacro(<<iterationRegionStart[0]); 
 iteratorRegion.SetSize(iteratorRegionSize);
 iteratorRegion.SetIndex(iterationRegionStart); 
 
@@ -243,7 +219,6 @@ iteratorRegion.SetIndex(iterationRegionStart);
 unsigned int pixelIndexArrayDimension= iteratorRegionSize[0]*iteratorRegionSize[1]*2;
 int *pixelIndexArray=new int[pixelIndexArrayDimension];
 int *currentIndexArray=new int[pixelIndexArrayDimension];
-double *heightArray=new double[iteratorRegionSize[0]*iteratorRegionSize[1]];
 
 /**Création de l'itérateur pour chaque portion:**/
 IteratorType outputIt(outputimage, iteratorRegion);
@@ -264,9 +239,6 @@ outputimage->TransformIndexToPhysicalPoint(currentindex, outputpoint);
 geoPoint= utmprojection->TransformPoint(outputpoint);	
 otbMsgDevMacro(<< "Le point géographique correspondant est: ("<<  geoPoint[0]<< ","<<  geoPoint[1]<< ")"); 
 
-//on calcule son altitude
-height=otbElevManager->GetHeightAboveMSL(geoPoint); 
-
 //On calcule les coordonnées pixeliques sur l'image capteur
 inputpoint = model->TransformPoint(geoPoint);
 otbMsgDevMacro(<< "Les coordonnées en pixel sur l'image capteur correspondant à ce point sont:" << std::endl
@@ -278,18 +250,16 @@ inputimage->TransformPhysicalPointToIndex(inputpoint,pixelindex);
 /**On stocke les pixel index dans un tableau pixelindexarray**/
  pixelIndexArray[It]=pixelindex[0];
  pixelIndexArray[It+1]=pixelindex[1];
-// otbMsgDevMacro(<< "La valeur stockée" << std::endl
-//           << pixelIndexArray[It] <<  "," << pixelIndexArray[It+1] <<std::endl;
+ otbMsgDevMacro(<< "La valeur stockée" << std::endl
+          << pixelIndexArray[It] <<  "," << pixelIndexArray[It+1] <<std::endl);
 
 /**On stocke les pixel index dans un tableau currentindexarray**/
  currentIndexArray[It]=currentindex[0];
  currentIndexArray[It+1]=currentindex[1];
-// otbGenericMsgDebugMacro(<< "La valeur stockée" << std::endl
-//           << pixelIndexArray[It] <<  "," << pixelIndexArray[It+1] <<std::endl;
+ otbMsgDevMacro(<< "La valeur stockée" << std::endl
+           << pixelIndexArray[It] <<  "," << pixelIndexArray[It+1] <<std::endl);
  
-/**On stocke les pixel index dans un tableau currentindexarray**/
- heightArray[It1]=height;
- //otbMsgDevMacro(<< "Altitude:" <<  heightArray[It1] <<std::endl; 	
+ 
  It=It+2;
  It1=It1+1;
 }//Fin boucle: on a stocké tous les index qui nous interesse
@@ -336,23 +306,21 @@ extractsize[0]=(max_x-min_x)+20;      //Taille en X.
 extractsize[1]=(max_y-min_y)+20;	//Taille en Y.
 extractregion.SetSize(extractsize);
 extractregion.SetIndex(extractstart);
-//extractregion=inputimage->GetRequestedRegion();
 extract->SetExtractionRegion(extractregion);
 extract->SetInput(reader->GetOutput());
 extractorwriter->Update();
 
 /**Interpolation:**/
 interpolator->SetInputImage(reader->GetOutput());
-//interpolator->SetDefaultPixelValue(0);
 for ( k=0; k<It/2; k++)
 	{
 	pixelindexbis[0]= pixelIndexArray[2*k];
 	pixelindexbis[1]= pixelIndexArray[2*k+1];
 	currentindexbis[0]= currentIndexArray[2*k];
 	currentindexbis[1]= currentIndexArray[2*k+1];
-	DEMpixelvalue=heightArray[k];
+
 //Test si notre index est dans la région extraite:
-		if (interpolator->IsInsideBuffer(pixelindexbis) && DEMpixelvalue> -11000)
+		if (interpolator->IsInsideBuffer(pixelindexbis) )
 			{
 			pixelvalue=int (interpolator->EvaluateAtIndex(pixelindexbis));
 			}
@@ -361,15 +329,12 @@ for ( k=0; k<It/2; k++)
 otbMsgDevMacro(<< "La valeur du pixel est:"<< float(pixelvalue) );
 	   
 outputimage->SetPixel(currentindexbis,pixelvalue);
-DEMimage->SetPixel(currentindexbis,DEMpixelvalue);
-otbMsgDevMacro(<< "Altitude stockée:" <<  heightArray[k] ); 
+
  	}
 delete pixelIndexArray;
 otbMsgDevMacro(<< "pixelIndexArray deleted" );
 delete currentIndexArray; 
 otbMsgDevMacro(<< "currentIndexArray deleted" );
-delete heightArray;
-otbMsgDevMacro(<< "heightArray deleted" );
 }//Fin boucle principale
 
 //Création de l'image de sortie
@@ -381,12 +346,6 @@ writer->SetInput(charoutputimage);
 writer->Update();
 otbGenericMsgDebugMacro(<< "Outputimage created" );
 
-//Création de l'image DEM
-DEMwriter->SetFileName(argv[9]);
-otbGenericMsgDebugMacro(<< "FilenameSet" );
-DEMwriter->SetInput(DEMimage);
-DEMwriter->Update();
-otbGenericMsgDebugMacro(<< "DEMImage created" );
 
 }
 else 

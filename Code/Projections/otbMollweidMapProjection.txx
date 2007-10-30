@@ -16,46 +16,55 @@ PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
 
+#ifndef __otbMollweidMapProjection_txx
+#define __otbMollweidMapProjection_txx
+
 #include "otbMollweidMapProjection.h"
 
 namespace otb
 { 
   
-  MollweidMapProjection
+  template <InverseOrForwardTransformationEnum transform>
+	MollweidMapProjection<transform>
   ::MollweidMapProjection()
   {
     m_MollweidProjection = new ossimMollweidProjection();
   }
   
-  MollweidMapProjection
+  template <InverseOrForwardTransformationEnum transform>
+	MollweidMapProjection<transform>
   ::~MollweidMapProjection()
   {
     delete m_MollweidProjection;
   }
   
   ///Set the false easting
-  void MollweidMapProjection
+  template <InverseOrForwardTransformationEnum transform>
+	void MollweidMapProjection<transform>
   ::SetFalseEasting(double falseEasting) 
   {
     m_MollweidProjection->setFalseEasting(falseEasting);
   }
   
   ///Set the false Northing
-  void MollweidMapProjection
+  template <InverseOrForwardTransformationEnum transform>
+	void MollweidMapProjection<transform>
   ::SetFalseNorthing(double falseNorthing) 
   {
     m_MollweidProjection->setFalseNorthing(falseNorthing);
   }
   
   ///Set the default parameters
-  void MollweidMapProjection
+  template <InverseOrForwardTransformationEnum transform>
+	void MollweidMapProjection<transform>
   ::SetDefaults() 
   {
     m_MollweidProjection->setDefaults();
   }
   
   ///\return the false northing (avoid negative coordinates)
-  double MollweidMapProjection
+  template <InverseOrForwardTransformationEnum transform>
+	double MollweidMapProjection<transform>
   ::GetFalseNorthing() const
   {
     double falseNorthing=m_MollweidProjection->getFalseNorthing();
@@ -64,7 +73,8 @@ namespace otb
   }
   
   ///\return the false easting (avoid negative coordinates)
-  double MollweidMapProjection
+  template <InverseOrForwardTransformationEnum transform>
+	double MollweidMapProjection<transform>
   ::GetFalseEasting() const
   {
     double falseEasting=m_MollweidProjection->getFalseEasting();
@@ -72,7 +82,8 @@ namespace otb
     return falseEasting;
 }
   
-  void MollweidMapProjection
+  template <InverseOrForwardTransformationEnum transform>
+	void MollweidMapProjection<transform>
   ::SetParameters(double falseEasting,double falseNorthing)
   {
     m_MollweidProjection->setFalseEastingNorthing(falseEasting,falseNorthing);
@@ -80,3 +91,4 @@ namespace otb
   
 } // namespace otb
 
+#endif
