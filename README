@@ -66,11 +66,11 @@ Installation on Linux/Unix platforms
 4. Install OTB
 
       cd INSTALL_DIR
-      gunzip OrfeoToolbox-1.0.0.tgz
-      tar xvf OrfeoToolbox-1.0.0.tar
+      gunzip OrfeoToolbox-1.6.1.tgz
+      tar xvf OrfeoToolbox-1.6.1.tar
       mkdir OTB-Binary
       cd OTB-Binary
-      ccmake ../OrfeoToolbox-1.0.0
+      ccmake ../OrfeoToolbox-1.6.1
       --> follow the CMake instructions, in particular:
 	  --> set BUILD_EXAMPLES to ON within CMake
 	  --> set BUILD_SHARED_LIBS to OFF within CMake
