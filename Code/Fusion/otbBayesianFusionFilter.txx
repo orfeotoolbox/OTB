@@ -67,8 +67,8 @@ namespace otb
   {	
     // Allocate output
     typename OutputImageType::Pointer                        output           = this->GetOutput();
-    typename InputMultiSpectralImageType::ConstPointer       multiSpec        = this->GetMultiSpect();
-    typename InputMultiSpectralInterpImageType::ConstPointer multiSpecInterp  = this->GetMultiSpectInterp();
+    typename InputMultiSpectralImageType::Pointer            multiSpec   = const_cast<InputMultiSpectralImageType *>(this->GetMultiSpect());
+    typename InputMultiSpectralInterpImageType::Pointer multiSpecInterp  = const_cast<InputMultiSpectralInterpImageType *>(this->GetMultiSpectInterp());
     typename InputPanchroImageType::ConstPointer             panchro          = this->GetPanchro();
     
     /** Variable Initialisaton  */
@@ -88,8 +88,7 @@ namespace otb
     /** Compute the inverse of the multispectral interpolated image covariance matrix   */
     typename StreamingStatisticsVectorImageFilterType::Pointer covComputefilter = StreamingStatisticsVectorImageFilterType::New();
     covComputefilter->SetInput(multiSpecInterp);
-    covComputefilter->SetStreamingMode(otb::SET_NUMBER_OF_STREAM_DIVISIONS);
-    covComputefilter->SetNumberOfStreamDivisions(200);
+    covComputefilter->GetStreamer()->SetNumberOfStreamDivisions(200);
     covComputefilter->Update();
     MatrixType m_CovarianceMatrix = covComputefilter->GetCovariance();
     m_CovarianceInvMatrix = m_CovarianceMatrix.GetInverse();

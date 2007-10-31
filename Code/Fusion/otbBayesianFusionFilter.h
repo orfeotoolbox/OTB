@@ -28,7 +28,7 @@
 #include "itkNumericTraits.h"
 #include "otbStreamingStatisticsVectorImageFilter.h"
 #include "otbFusionImageBase.h"
-#include "otbMatrixTransposeMatrixImageFilter.h"
+#include "otbStreamingMatrixTransposeMatrixImageFilter.h"
 #include "otbImageToVectorImageCastFilter.h"
 #include "itkVariableSizeMatrix.h"
 
@@ -176,7 +176,7 @@ public:
                            Functor::BayesianFunctor<ITK_TYPENAME InputMultiSpectralImageType::PixelType,
                          	                    ITK_TYPENAME InputMultiSpectralInterpImageType::PixelType,
 	                                            ITK_TYPENAME InputPanchroImageType::PixelType, 
-	                                            ITK_TYPENAME OutputImageType::PixelType>                  > Superclass;
+	                                            ITK_TYPENAME OutputImageType::PixelType> > Superclass;
   typedef itk::SmartPointer<Self> Pointer;
   typedef itk::SmartPointer<const Self>  ConstPointer;
 
@@ -212,7 +212,7 @@ public:
   /** Typedef for statistic computing. */
   typedef StreamingStatisticsVectorImageFilter<InputMultiSpectralImageType>                           StreamingStatisticsVectorImageFilterType;
   typedef typename StreamingStatisticsVectorImageFilterType::MatrixType                               MatrixType;
-  typedef MatrixTransposeMatrixImageFilter<InputMultiSpectralImageType, InputMultiSpectralImageType>  MSTransposeMSType;
+  typedef StreamingMatrixTransposeMatrixImageFilter<InputMultiSpectralImageType, InputMultiSpectralImageType>  MSTransposeMSType;
   typedef ImageToVectorImageCastFilter<InputPanchroImageType, InputMultiSpectralImageType>            CasterType;
 
 
