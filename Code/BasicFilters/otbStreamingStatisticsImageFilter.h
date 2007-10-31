@@ -21,85 +21,58 @@
 #ifndef __otbStreamingStatisticsImageFilter_h
 #define __otbStreamingStatisticsImageFilter_h
 
-#include "itkImageToImageFilter.h"
+#include "otbPersistentImageFilter.h"
 #include "itkNumericTraits.h"
 #include "itkArray.h"
 #include "itkSimpleDataObjectDecorator.h"
-#include "otbStreamingTraits.h"
-// #include "itkImageRegionNonUniformMultidimensionalSplitter.h"
-// #include "itkImageRegionMultidimensionalSplitter.h"
-#include "itkImageRegionSplitter.h"
+#include "otbPersistentFilterStreamingDecorator.h"
 
 namespace otb {
 
-/** \class StreamingStatisticsImageFilter
- * \brief Compute min. max, variance and mean of a large image using streaming
+/** \class PersistentStatisticsImageFilter
+ * \brief Compute min. max, variance and mean of an image using the output requested region.
  *
- * This filter Computes the same statistics as the StatisticsImageFilter, but it 
- * supports large image since it processes reasonnable pieces of the input image one
- * afther the other. It supports the same streaming mode than the StreamingImageFileWriter.
+ *  This filter persists its temporary data. It means that if you Update it n times on n different
+ * requested regions, the output statistics will be the statitics of the whole set of n regions.
  *
- * Of course streaming at the end of a pipeline is only available when each filter in the pipeline
- * supports streaming. This filter will also perform multithreading if possible.
+ * To reset the temporary data, one should call the Reset() function. 
  *
- * \note The output image has no sense at all and should not be used.
+ * To get the statistics once the regions have been processed via the pipeline, use the Synthetize() method.
  *
- * \sa StreamingTraits
- * \sa StreamingImageFileWriter
- * \sa StatisticsImageFilter
+ * \sa PersistentImageFilter
  * \ingroup Streamed
  * \ingroup Multithreaded
  * \ingroup MathematicalStatisticsImageFilters
  */
 template<class TInputImage>
-class ITK_EXPORT StreamingStatisticsImageFilter :
-    public itk::ImageToImageFilter<TInputImage, TInputImage>
+class ITK_EXPORT PersistentStatisticsImageFilter :
+    public PersistentImageFilter<TInputImage, TInputImage>
 {
 public:
   /** Standard Self typedef */
-  typedef StreamingStatisticsImageFilter               Self;
-  typedef itk::ImageToImageFilter<TInputImage,TInputImage>  Superclass;
-  typedef itk::SmartPointer<Self>                      Pointer;
-  typedef itk::SmartPointer<const Self>                ConstPointer;
+  typedef PersistentStatisticsImageFilter                 Self;
+  typedef PersistentImageFilter<TInputImage,TInputImage>  Superclass;
+  typedef itk::SmartPointer<Self>                         Pointer;
+  typedef itk::SmartPointer<const Self>                   ConstPointer;
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
 
   /** Runtime information support. */
-  itkTypeMacro(StreamingStatisticsImageFilter, ImageToImageFilter);
+  itkTypeMacro(PersistentStatisticsImageFilter,PersistentImageFilter);
 
   /** Image related typedefs. */
+  typedef TInputImage ImageType;
   typedef typename TInputImage::Pointer InputImagePointer;
 
   typedef typename TInputImage::RegionType RegionType;
   typedef typename TInputImage::SizeType   SizeType;
   typedef typename TInputImage::IndexType  IndexType;
-  typedef typename TInputImage::PixelType  PixelType;
-
-  typedef StreamingTraits<TInputImage> StreamingTraitsType;
-  typedef StreamingMode StreamingModeType;
-  
+  typedef typename TInputImage::PixelType  PixelType;  
   
   itkStaticConstMacro(InputImageDimension, unsigned int,
                        TInputImage::ImageDimension);
-
-//   typedef itk::ImageRegionNonUniformMultidimensionalSplitter<itkGetStaticConstMacro(InputImageDimension)>  SplitterType;
-  typedef itk::ImageRegionSplitter<itkGetStaticConstMacro(InputImageDimension)>  SplitterType;
-  typedef typename SplitterType::Pointer SplitterPointer;
-  
-  /// Streaming-related accessors
-  itkSetMacro(BufferMemorySize, unsigned long);
-  itkGetMacro(BufferMemorySize, unsigned long);
-  itkSetMacro(BufferNumberOfLinesDivisions, unsigned long);
-  itkGetMacro(BufferNumberOfLinesDivisions, unsigned long);
-  itkSetMacro(NumberOfStreamDivisions,unsigned long);
-  itkGetMacro(NumberOfStreamDivisions,unsigned long);
-  itkSetMacro(StreamingMode,StreamingModeType);
-  itkGetMacro(StreamingMode,StreamingModeType);
-  
-  itkSetObjectMacro(RegionSplitter, SplitterType);
-  itkGetObjectMacro(RegionSplitter, SplitterType);
-
+ 
   /** Image related typedefs. */
   itkStaticConstMacro(ImageDimension, unsigned int,
                       TInputImage::ImageDimension );
@@ -161,28 +134,23 @@ public:
   
   void GenerateOutputInformation();
 
+ void Synthetize(void);
+
+ void Reset(void);
+
+
 protected:
-  StreamingStatisticsImageFilter();
-  ~StreamingStatisticsImageFilter(){};
+  PersistentStatisticsImageFilter();
+  ~PersistentStatisticsImageFilter(){};
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
-
-  /** Initialize some accumulators before the threads run. */
-  void BeforeThreadedGenerateData ();
-
-  /** Do final mean and variance computation from data accumulated in threads.
-   */
-  void AfterThreadedGenerateData ();
-
+ 
   /** Multi-thread version GenerateData. */
   void  ThreadedGenerateData (const RegionType&
                               outputRegionForThread,
                               int threadId);
 
-  // Override since the filter needs all the data for the algorithm
-  void GenerateInputRequestedRegion();
-
 private:
-  StreamingStatisticsImageFilter(const Self&); //purposely not implemented
+  PersistentStatisticsImageFilter(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
 
   itk::Array<RealType>  m_ThreadSum;
@@ -190,17 +158,147 @@ private:
   itk::Array<long>      m_Count;
   itk::Array<PixelType> m_ThreadMin;
   itk::Array<PixelType> m_ThreadMax;
+}; // end of class PersistentStatisticsImageFilter
 
-  /** Use to define the method used to calculate number of divisions */ 
-  unsigned long m_BufferMemorySize;
-  unsigned long m_BufferNumberOfLinesDivisions;
-  unsigned long m_NumberOfStreamDivisions;
+/**===========================================================================*/
+
+/** \class StreamingStatisticsImageFilter
+ * \brief This class streams the whole input image through the PersistentStatisticsImageFilter.
+ *
+ * This way, it allows to compute the first order global statistics of this image. It calls the
+ * Reset() method of the PersistentStatisticsImageFilter before streaming the image and the 
+ * Synthetize() method of the PersistentStatisticsImageFilter after having streamed the image
+ * to compute the statistics. The accessor on the results are wrapping the accessors of the 
+ * internal PersistentStatisticsImageFilter.
+ *
+ * \sa PersistentStatisticsImageFilter
+ * \sa PersistentImageFilter
+ * \sa PersistentFilterStreamingDecorator
+ * \sa StreamingImageVirtualWriter
+ * \ingroup Streamed
+ * \ingroup Multithreaded
+ * \ingroup MathematicalStatisticsImageFilters
+ */
+
+template<class TInputImage>
+class ITK_EXPORT StreamingStatisticsImageFilter :
+    public PersistentFilterStreamingDecorator< PersistentStatisticsImageFilter<TInputImage> >
+{
+public:
+  /** Standard Self typedef */
+  typedef StreamingStatisticsImageFilter           Self;
+  typedef PersistentFilterStreamingDecorator
+    < PersistentStatisticsImageFilter<TInputImage> > Superclass;
+  typedef itk::SmartPointer<Self>                  Pointer;
+  typedef itk::SmartPointer<const Self>            ConstPointer;
+
+  /** Type macro */
+  itkNewMacro(Self);
   
-  SplitterPointer m_RegionSplitter;
+  /** Creation through object factory macro */
+  itkTypeMacro(StreamingStatisticsImageFilter,PersistentFilterStreamingDecorator);
+
+  typedef typename Superclass::FilterType StatFilterType;
+  typedef typename StatFilterType::PixelType PixelType;
+  typedef typename StatFilterType::RealType RealType;
   
- /** Use to determine method of calculation number of divisions */
- StreamingModeType  m_StreamingMode;
-}; // end of class
+  /** Type of DataObjects used for scalar outputs */
+  typedef itk::SimpleDataObjectDecorator<RealType>  RealObjectType;
+  typedef itk::SimpleDataObjectDecorator<PixelType> PixelObjectType;
+  
+  /** Return the computed Minimum. */
+  PixelType GetMinimum() const
+    { 
+      return this->GetFilter()->GetMinimumOutput()->Get(); 
+    }
+  PixelObjectType* GetMinimumOutput()
+    {
+      return this->GetFilter()->MinimumOutput();
+    }
+  const PixelObjectType* GetMinimumOutput() const
+    {
+      return this->GetFilter()->MinimumOutput();
+    }
+  /** Return the computed Maximum. */
+  PixelType GetMaximum() const
+    { 
+      return this->GetFilter()->GetMaximumOutput()->Get(); 
+    }
+  PixelObjectType* GetMaximumOutput()
+    {
+      return this->GetFilter()->GetMaximumOutput();
+    }
+  const PixelObjectType* GetMaximumOutput() const
+    {
+      return this->GetFilter()->GetMaximumOutput();
+    }
+  /** Return the computed Mean. */
+  RealType GetMean() const
+    { 
+      return this->GetFilter()->GetMeanOutput()->Get(); 
+    }
+  RealObjectType* GetMeanOutput()
+    {
+      return this->GetFilter()->GetMeanOutput();
+    }
+  const RealObjectType* GetMeanOutput() const
+    {
+      return this->GetFilter()->GetMeanOutput();
+    }
+  
+  /** Return the computed Standard Deviation. */
+  RealType GetSigma() const
+    { 
+      return this->GetSigmaOutput()->Get(); 
+    }
+  RealObjectType* GetSigmaOutput()
+    {
+      return this->GetFilter()->GetSigmaOutput();
+    }
+  const RealObjectType* GetSigmaOutput() const
+    {
+      return this->GetFilter()->GetSigmaOutput();
+    }
+  
+  /** Return the computed Variance. */
+  RealType GetVariance() const
+    { 
+      return this->GetFilter()->GetVarianceOutput()->Get(); 
+    }
+  RealObjectType* GetVarianceOutput()
+    {
+      return this->GetFilter()->GetVarianceOutput();
+    }
+  const RealObjectType* GetVarianceOutput() const
+    {
+      return this->GetFilter()->GetVarianceOutput();
+    }
+
+  /** Return the compute Sum. */
+  RealType GetSum() const
+    { 
+      return this->GetFilter()->GetSumOutput()->Get(); 
+    }
+  RealObjectType* GetSumOutput()
+    {
+      return this->GetFilter()->GetSumOutput();
+    }
+  const RealObjectType* GetSumOutput() const
+    {
+      return this->GetFilter()->GetSumOutput();
+    }
+
+
+ protected:
+  /** Constructor */
+  StreamingStatisticsImageFilter(){};
+  /** Destructor */
+  virtual ~StreamingStatisticsImageFilter(){};
+  
+private:
+  StreamingStatisticsImageFilter(const Self&); //purposely not implemented
+  void operator=(const Self&); //purposely not implemented
+};
 
 } // end namespace otb
 
