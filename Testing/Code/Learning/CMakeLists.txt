@@ -73,7 +73,7 @@ ADD_TEST(leTvSVMModelKernelTypeGenericLoadSave ${LEARNING_TESTS}
 ADD_TEST(leTuSVMImageModelEstimatorNew ${LEARNING_TESTS}  
         otbSVMImageModelEstimatorNew)
 
-ADD_TEST(leTuSVMImageModelEstimatorTrain ${LEARNING_TESTS}
+ADD_TEST(leTvSVMImageModelEstimatorTrain ${LEARNING_TESTS}
 --compare-ascii ${TOL}  ${BASELINE_FILES}/leTvsvm_model_image 
                         ${TEMP}/leTvsvm_model_image 
         otbSVMImageModelEstimatorTrain

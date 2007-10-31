@@ -588,11 +588,11 @@ int RegressionTestAsciiFile(const char * testAsciiFileName, const char * baselin
 				else 
 				  etatCour = ETAT_CHAR;
 				
-				// initialisation de l'�tat de "r�f�rence"
+				// "reference" state initialisation.
 				if (i==0)
 				  etatPrec=etatCour;
 				
-				// Cas o� l'on a un chiffre apr�s des caract�res
+				// Case where there's a number after characteres.
 				if ((etatCour==ETAT_NUM)&&(etatPrec==ETAT_CHAR))
 				  {
 				    if ( strCharRef != strCharTest )
@@ -613,7 +613,7 @@ int RegressionTestAsciiFile(const char * testAsciiFileName, const char * baselin
 				    strNumTest=charTmpTest;
 				    chgt=true;
 				  }
-				// Cas o� l'on a un caract�re apr�s des chiffres
+				// Case where there's a character after numbers.
 				else if ((etatCour==ETAT_CHAR)&&(etatPrec==ETAT_NUM))
 				  {
 				    
@@ -653,7 +653,7 @@ int RegressionTestAsciiFile(const char * testAsciiFileName, const char * baselin
 				i++;
 			      }	
 			    
-			    // Cas le plus simple : chaine de caractere ou valeur num�rique entre 2 separateurs
+			    // Simpliest case : string characters or numeric value between 2 separators
 			    if (!chgt)
 			      {
 				if (isNumeric(strRef))
@@ -723,7 +723,8 @@ int RegressionTestAsciiFile(const char * testAsciiFileName, const char * baselin
     		std::cout << "Baseline ASCII File :"<<baselineAsciiFileName << std::endl;
     		std::cout << "Test ASCII File     :"<<testAsciiFileName << std::endl;
     		std::cout << "Diff ASCII File     :"<<diffAsciiFileName << std::endl;
-                
+                std::cout << "Tolerance value     :"<<epsilon << std::endl;
+
                 std::cout << "Nb lines differents :"<<listStrDiffLineFileRef.size() << std::endl;
                 for( unsigned int i = 0 ; i  < listStrDiffLineFileRef.size() ; i++)
                 {

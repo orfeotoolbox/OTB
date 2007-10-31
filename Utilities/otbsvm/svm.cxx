@@ -2665,7 +2665,7 @@ int svm_save_model(const char *model_file_name, const svm_model *model)
 	{
 		fprintf(fp, "rho");
 		for(int i=0;i<nr_class*(nr_class-1)/2;i++)
-			fprintf(fp," %g",model->rho[i]);
+			fprintf(fp," %.10g ",model->rho[i]);
 		fprintf(fp, "\n");
 	}
 	
@@ -2681,14 +2681,14 @@ int svm_save_model(const char *model_file_name, const svm_model *model)
 	{
 		fprintf(fp, "probA");
 		for(int i=0;i<nr_class*(nr_class-1)/2;i++)
-			fprintf(fp," %g",model->probA[i]);
+			fprintf(fp," %.10g ",model->probA[i]);
 		fprintf(fp, "\n");
 	}
 	if(model->probB)
 	{
 		fprintf(fp, "probB");
 		for(int i=0;i<nr_class*(nr_class-1)/2;i++)
-			fprintf(fp," %g",model->probB[i]);
+			fprintf(fp," %.10g ",model->probB[i]);
 		fprintf(fp, "\n");
 	}
 
