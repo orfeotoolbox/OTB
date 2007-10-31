@@ -201,11 +201,17 @@ public:
   typedef typename Superclass::FilterType StatFilterType;
   typedef typename StatFilterType::PixelType PixelType;
   typedef typename StatFilterType::RealType RealType;
+  typedef TInputImage InputImageType;
   
   /** Type of DataObjects used for scalar outputs */
   typedef itk::SimpleDataObjectDecorator<RealType>  RealObjectType;
   typedef itk::SimpleDataObjectDecorator<PixelType> PixelObjectType;
   
+  void SetInput(InputImageType * input)
+    {
+      this->GetFilter()->SetInput(input);
+    }
+
   /** Return the computed Minimum. */
   PixelType GetMinimum() const
     { 

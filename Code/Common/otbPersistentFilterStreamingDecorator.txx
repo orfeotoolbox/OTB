@@ -66,8 +66,6 @@ PersistentFilterStreamingDecorator<TFilter>
 {
   // Reset the filter before the generation.
   this->GetFilter()->Reset();
-
-  m_Filter->SetInput(this->GetInput());
   m_Streamer->SetInput(m_Filter->GetOutput());
   m_Streamer->Update();
 
