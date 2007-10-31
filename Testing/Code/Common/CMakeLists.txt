@@ -66,9 +66,9 @@ ADD_TEST(coTuCmdLineArgParser_List2ArgBis ${COMMON_TESTS}
         otbTestCommandLineArgumentParserList
         -image image.png -entier 150 -double 12.25 -doubles 1.0 2.0 -deuxentiers 78 56 )
 
-ADD_TEST(coTuCmdLineArgParserGUIDeuxEntiers_ExactNumberArg ${COMMON_TESTS}  
-        otbTestCommandLineArgumentParserGUI
-        -image image.png -entier 150 -double 12.25 -deuxentiers 78 56 )
+#ADD_TEST(coTuCmdLineArgParserGUIDeuxEntiers_ExactNumberArg ${COMMON_TESTS}  
+#        otbTestCommandLineArgumentParserGUI
+#        -image image.png -entier 150 -double 12.25 -deuxentiers 78 56 )
 
 
 ADD_TEST(coTuLineSpatialObjectList ${COMMON_TESTS}  
