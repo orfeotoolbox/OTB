@@ -94,7 +94,7 @@ namespace otb
       {
       case INVERSE:
 	{
-	  otbGenericMsgDebugMacro(<< "Cartographic coordinates: (" << point[0] << "," << point[1] << ")");
+	  otbMsgDevMacro(<< "Cartographic coordinates: (" << point[0] << "," << point[1] << ")");
 	  
 	  //from "itk::point" to "ossim::ossimDpt" 
 	  ossimDpt ossimDPoint(point[0], point[1]);
@@ -105,7 +105,7 @@ namespace otb
 	  
 	  outputPoint[0]=ossimGPoint.lon;
 	  outputPoint[1]=ossimGPoint.lat;
-	  otbGenericMsgDebugMacro(<< "Geographic coordinates (long/lat) : (" << outputPoint[0] << "," << outputPoint[1] << ")");
+	  otbMsgDevMacro(<< "Geographic coordinates (long/lat) : (" << outputPoint[0] << "," << outputPoint[1] << ")");
 	  break;
 	}
       case FORWARD:

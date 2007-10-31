@@ -273,8 +273,7 @@ ADD_TEST(prTvOrthoRectificationSingapour ${PROJECTIONS_TESTS}
         ${EMMANUELDATA}/04MAR21031747-M1BS-000000173549_01_P001.TIF
         ${TEMP}/prTvOrthoRectificationSingapour_UTM.tif
 #        144885.4	371997.12 #Emmanuel
-				374100.8
-        4829184.8 
+				2.61165e+07 1.50256e+06
         500
 				500 
 				220
