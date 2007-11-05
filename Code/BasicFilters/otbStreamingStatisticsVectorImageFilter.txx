@@ -26,15 +26,14 @@
 #include "itkImageRegionConstIteratorWithIndex.h"
 #include "itkNumericTraits.h"
 #include "itkProgressReporter.h"
-
+#include "otbMacro.h"
 
 namespace otb {
 
 template<class TInputImage>
-StreamingStatisticsVectorImageFilter<TInputImage>
-::StreamingStatisticsVectorImageFilter()
+PersistentStatisticsVectorImageFilter<TInputImage>
+::PersistentStatisticsVectorImageFilter()
 {
-	
   // first output is a copy of the image, DataObject created by
   // superclass
   //
@@ -43,8 +42,8 @@ StreamingStatisticsVectorImageFilter<TInputImage>
   
   for (int i=1; i < 3; ++i)
     {
-    typename PixelObjectType::Pointer output = static_cast<PixelObjectType*>(this->MakeOutput(i).GetPointer());
-    this->itk::ProcessObject::SetNthOutput(i, output.GetPointer());
+      typename PixelObjectType::Pointer output = static_cast<PixelObjectType*>(this->MakeOutput(i).GetPointer());
+      this->itk::ProcessObject::SetNthOutput(i, output.GetPointer());
     }
   
   // allocate the data objects for the outputs which are
@@ -52,31 +51,22 @@ StreamingStatisticsVectorImageFilter<TInputImage>
   
   for (int i=3; i < 5; ++i)
     {
-    typename RealPixelObjectType::Pointer output = static_cast<RealPixelObjectType*>(this->MakeOutput(i).GetPointer());
-    this->itk::ProcessObject::SetNthOutput(i, output.GetPointer());
+      typename RealPixelObjectType::Pointer output = static_cast<RealPixelObjectType*>(this->MakeOutput(i).GetPointer());
+      this->itk::ProcessObject::SetNthOutput(i, output.GetPointer());
     }
- 
+  
   // allocate the data objects for the outputs which are
   // just decorators around matrix types
   typename MatrixObjectType::Pointer output = static_cast<MatrixObjectType*>(this->MakeOutput(5).GetPointer());
   this->itk::ProcessObject::SetNthOutput(5, output.GetPointer());
-
-  // Streaming initialization
-  m_BufferMemorySize = 0;
-  m_BufferNumberOfLinesDivisions = 0;
-  m_NumberOfStreamDivisions = 0;
-  // default to AUTOMATIC_NUMBER_OF_DIVISIONS
-  m_StreamingMode = SET_AUTOMATIC_NUMBER_OF_STREAM_DIVISIONS;
-  
-  // create default region splitter
-  m_RegionSplitter = itk::ImageRegionSplitter<InputImageDimension>::New();
-  
-}
+   std::cout<<"construction"<<std::endl;
+  //this->Reset();
+ }
 
 
 template<class TInputImage>
 itk::DataObject::Pointer
-StreamingStatisticsVectorImageFilter<TInputImage>
+PersistentStatisticsVectorImageFilter<TInputImage>
 ::MakeOutput(unsigned int output)
 {
   switch (output)
@@ -105,16 +95,16 @@ StreamingStatisticsVectorImageFilter<TInputImage>
 
 
 template<class TInputImage>
-typename StreamingStatisticsVectorImageFilter<TInputImage>::PixelObjectType*
-StreamingStatisticsVectorImageFilter<TInputImage>
+typename PersistentStatisticsVectorImageFilter<TInputImage>::PixelObjectType*
+PersistentStatisticsVectorImageFilter<TInputImage>
 ::GetMinimumOutput()
 {
   return static_cast<PixelObjectType*>(this->itk::ProcessObject::GetOutput(1));
 }
 
 template<class TInputImage>
-const typename StreamingStatisticsVectorImageFilter<TInputImage>::PixelObjectType*
-StreamingStatisticsVectorImageFilter<TInputImage>
+const typename PersistentStatisticsVectorImageFilter<TInputImage>::PixelObjectType*
+PersistentStatisticsVectorImageFilter<TInputImage>
 ::GetMinimumOutput() const
 {
   return static_cast<const PixelObjectType*>(this->itk::ProcessObject::GetOutput(1));
@@ -122,16 +112,16 @@ StreamingStatisticsVectorImageFilter<TInputImage>
 
 
 template<class TInputImage>
-typename StreamingStatisticsVectorImageFilter<TInputImage>::PixelObjectType*
-StreamingStatisticsVectorImageFilter<TInputImage>
+typename PersistentStatisticsVectorImageFilter<TInputImage>::PixelObjectType*
+PersistentStatisticsVectorImageFilter<TInputImage>
 ::GetMaximumOutput()
 {
   return static_cast<PixelObjectType*>(this->itk::ProcessObject::GetOutput(2));
 }
 
 template<class TInputImage>
-const typename StreamingStatisticsVectorImageFilter<TInputImage>::PixelObjectType*
-StreamingStatisticsVectorImageFilter<TInputImage>
+const typename PersistentStatisticsVectorImageFilter<TInputImage>::PixelObjectType*
+PersistentStatisticsVectorImageFilter<TInputImage>
 ::GetMaximumOutput() const
 {
   return static_cast<const PixelObjectType*>(this->itk::ProcessObject::GetOutput(2));
@@ -139,48 +129,48 @@ StreamingStatisticsVectorImageFilter<TInputImage>
 
 
 template<class TInputImage>
-typename StreamingStatisticsVectorImageFilter<TInputImage>::RealPixelObjectType*
-StreamingStatisticsVectorImageFilter<TInputImage>
+typename PersistentStatisticsVectorImageFilter<TInputImage>::RealPixelObjectType*
+PersistentStatisticsVectorImageFilter<TInputImage>
 ::GetMeanOutput()
 {
   return static_cast<RealPixelObjectType*>(this->itk::ProcessObject::GetOutput(3));
 }
 
 template<class TInputImage>
-const typename StreamingStatisticsVectorImageFilter<TInputImage>::RealPixelObjectType*
-StreamingStatisticsVectorImageFilter<TInputImage>
+const typename PersistentStatisticsVectorImageFilter<TInputImage>::RealPixelObjectType*
+PersistentStatisticsVectorImageFilter<TInputImage>
 ::GetMeanOutput() const
 {
   return static_cast<const RealPixelObjectType*>(this->itk::ProcessObject::GetOutput(3));
 }
 
 template<class TInputImage>
-typename StreamingStatisticsVectorImageFilter<TInputImage>::RealPixelObjectType*
-StreamingStatisticsVectorImageFilter<TInputImage>
+typename PersistentStatisticsVectorImageFilter<TInputImage>::RealPixelObjectType*
+PersistentStatisticsVectorImageFilter<TInputImage>
 ::GetSumOutput()
 {
   return static_cast<RealPixelObjectType*>(this->itk::ProcessObject::GetOutput(4));
 }
 
 template<class TInputImage>
-const typename StreamingStatisticsVectorImageFilter<TInputImage>::RealPixelObjectType*
-StreamingStatisticsVectorImageFilter<TInputImage>
+const typename PersistentStatisticsVectorImageFilter<TInputImage>::RealPixelObjectType*
+PersistentStatisticsVectorImageFilter<TInputImage>
 ::GetSumOutput() const
 {
   return static_cast<const RealPixelObjectType*>(this->itk::ProcessObject::GetOutput(4));
 }
 
 template<class TInputImage>
-typename StreamingStatisticsVectorImageFilter<TInputImage>::MatrixObjectType*
-StreamingStatisticsVectorImageFilter<TInputImage>
+typename PersistentStatisticsVectorImageFilter<TInputImage>::MatrixObjectType*
+PersistentStatisticsVectorImageFilter<TInputImage>
 ::GetCovarianceOutput()
 {
   return static_cast<MatrixObjectType*>(this->itk::ProcessObject::GetOutput(5));
 }
 
 template<class TInputImage>
-const typename StreamingStatisticsVectorImageFilter<TInputImage>::MatrixObjectType*
-StreamingStatisticsVectorImageFilter<TInputImage>
+const typename PersistentStatisticsVectorImageFilter<TInputImage>::MatrixObjectType*
+PersistentStatisticsVectorImageFilter<TInputImage>
 ::GetCovarianceOutput() const
 {
   return static_cast<const MatrixObjectType*>(this->itk::ProcessObject::GetOutput(5));
@@ -189,26 +179,7 @@ StreamingStatisticsVectorImageFilter<TInputImage>
 
 template<class TInputImage>
 void
-StreamingStatisticsVectorImageFilter<TInputImage>
-::GenerateInputRequestedRegion()
-{
-  Superclass::GenerateInputRequestedRegion();
-  if ( this->GetInput() )
-    {
-      InputImagePointer image = const_cast< typename Superclass::InputImageType * >( this->GetInput() );
-      IndexType index = image->GetLargestPossibleRegion().GetIndex();
-      SizeType size;
-      size.Fill(0);
-      RegionType region;
-      region.SetSize(size);
-      region.SetIndex(index);
-      image->SetRequestedRegion(region);
-    }
-}
-
-template<class TInputImage>
-void
-StreamingStatisticsVectorImageFilter<TInputImage>
+PersistentStatisticsVectorImageFilter<TInputImage>
 ::GenerateOutputInformation()
 {
   Superclass::GenerateOutputInformation();
@@ -216,33 +187,39 @@ StreamingStatisticsVectorImageFilter<TInputImage>
     {
       this->GetOutput()->CopyInformation(this->GetInput());
       this->GetOutput()->SetLargestPossibleRegion(this->GetInput()->GetLargestPossibleRegion());
+      
+      if(this->GetOutput()->GetRequestedRegion().GetNumberOfPixels()==0)
+	{
+	  this->GetOutput()->SetRequestedRegion(this->GetOutput()->GetLargestPossibleRegion());
+	}
+      otbMsgDebugMacro(<<"BeforeThreadedGenerateData() - output requested region: "<<this->GetOutput()->GetRequestedRegion());
     }
 }
 
 template<class TInputImage>
 void
-StreamingStatisticsVectorImageFilter<TInputImage>
+PersistentStatisticsVectorImageFilter<TInputImage>
 ::AllocateOutputs()
 {
-  
+  std::cout<<"AllocateOutputs"<<std::endl;
   // Pass the input through as the output
   InputImagePointer image = const_cast< TInputImage * >( this->GetInput() );
   this->GraftOutput( image );
+ std::cout<<"AllocateOutputs"<<std::endl;
   // Nothing that needs to be allocated for the remaining outputs
 }
 
+
 template<class TInputImage>
 void
-StreamingStatisticsVectorImageFilter<TInputImage>
-::BeforeThreadedGenerateData()
+PersistentStatisticsVectorImageFilter<TInputImage>
+::Reset()
 { 
-  if(this->GetOutput()->GetRequestedRegion().GetNumberOfPixels()==0)
-    {
-      this->GetOutput()->SetRequestedRegion(this->GetOutput()->GetLargestPossibleRegion());
-    }
-
   unsigned int numberOfThreads = this->GetNumberOfThreads();
+  std::cout<<"ca passe pas : "<<this->GetInput()<<std::endl;
   unsigned int numberOfComponent = this->GetInput()->GetNumberOfComponentsPerPixel();
+  std::cout<<"ca passe pas "<<std::endl;
+
   // Variable Initialisation
   PixelType tempPixel;
   tempPixel.SetSize(numberOfComponent);
@@ -264,7 +241,6 @@ StreamingStatisticsVectorImageFilter<TInputImage>
   tempMatrix.SetSize(numberOfComponent, numberOfComponent);
   tempMatrix.Fill(itk::NumericTraits<RealType>::Zero);
 
-
   // Initialize the tempories
   m_Count.SetSize(numberOfThreads);
   m_Count.Fill( itk::NumericTraits<long>::Zero );
@@ -283,16 +259,14 @@ StreamingStatisticsVectorImageFilter<TInputImage>
   m_ThreadSum = ArrayRealPixelType(numberOfThreads, tempTemporiesRealPixel);
 
   m_XX = ArrayMatrixType(numberOfThreads, tempMatrix);
-
-  otbMsgDevMacro(<<"BeforeThreadedGenerateData() - output requested region: "<<this->GetOutput()->GetRequestedRegion());
-  otbMsgDevMacro(<<"Leaving BeforeThreadedGenerateData() - nb threads: "<<numberOfThreads);
 }
 
 template<class TInputImage>
 void
-StreamingStatisticsVectorImageFilter<TInputImage>
-::AfterThreadedGenerateData()
-{
+PersistentStatisticsVectorImageFilter<TInputImage>
+::Synthetize()
+{ 
+  std::cout<<"Synthetize"<<std::endl;
   //otbMsgDebugMacro(<<"Entering AfterThreadedGenerateData()");
   int i;
   long count;
@@ -321,8 +295,10 @@ StreamingStatisticsVectorImageFilter<TInputImage>
    
   // Find the min/max over all threads and accumulate count, sum and
   // sum of squares 
+  std::cout<<numberOfThreads<<std::endl;
   for( i = 0; i < numberOfThreads; i++)
     {
+      std::cout<<i<<std::endl;
       count += m_Count[i];
       /** TODO
        *  To modify using + method operator. If we use it now -> exceptionmacro (no GetClassName...)
@@ -356,7 +332,8 @@ StreamingStatisticsVectorImageFilter<TInputImage>
 	      maximumVector[j] = m_ThreadMax[i][j];
 	    }
 	}
-    }
+    } // end for( i = 0; i < numberOfThreads; i++)
+
   for (unsigned int j=0; j<numberOfComponent; j++)
     {
       // compute statistics
@@ -407,49 +384,28 @@ StreamingStatisticsVectorImageFilter<TInputImage>
   this->GetMeanOutput()->Set( meanVector );
   this->GetSumOutput()->Set( sumVector);
   this->GetCovarianceOutput()->Set( covMatrix );
-
+ std::cout<<"Synthetize"<<std::endl;
   //otbMsgDebugMacro(<<"Leaving AfterThreadedGenerateData()");
 }
 
 template<class TInputImage>
 void
-StreamingStatisticsVectorImageFilter<TInputImage>
+PersistentStatisticsVectorImageFilter<TInputImage>
 ::ThreadedGenerateData(const RegionType& outputRegionForThread, int threadId) 
 {
   //otbMsgDebugMacro(<<"Entering ThreadedGenerateData()");
   /**
    * Grab the input
    */
-
-  InputImagePointer inputPtr = const_cast< TInputImage * >( this->GetInput(0) );
-
+  std::cout<<"threadId : "<<threadId<<std::endl;
+  InputImagePointer inputPtr = const_cast< TInputImage * >( this->GetInput() );
+  
   
   // support progress methods/callbacks
   itk::ProgressReporter progress(this, threadId, outputRegionForThread.GetNumberOfPixels());
-
-  // Here we will divide the input region into pieces to process one afther the other.
-  unsigned int numDivisions = static_cast<unsigned int>(StreamingTraitsType
-    ::CalculateNumberOfStreamDivisions(this->GetInput(),
-				       outputRegionForThread,
-				       m_StreamingMode,
-				       m_NumberOfStreamDivisions,
-				       m_BufferMemorySize,
-				       m_BufferNumberOfLinesDivisions)); // calcul en combien fau diviser idealement l'image
-
-  otbMsgDebugMacro(<<"ThreadedGeneraeData() - thread "<<threadId <<" - Thread region: "<<outputRegionForThread);
-  otbMsgDebugMacro(<<"ThreadedGenerateData() - thread "<<threadId<<" - Streaming configuration: "<<m_StreamingMode<<" "<<m_NumberOfStreamDivisions<<" "<<m_BufferMemorySize<<" "<<m_BufferNumberOfLinesDivisions);
-  otbMsgDebugMacro(<<"ThreadedGenerateData() - thread "<<threadId <<" - nb of divisions from StreamingTraits: "<<numDivisions);
-
-  unsigned int numDivisionsFromSplitter = m_RegionSplitter->GetNumberOfSplits(outputRegionForThread, numDivisions);
-  if (numDivisionsFromSplitter < numDivisions)
-    {
-      numDivisions = numDivisionsFromSplitter;
-    }
-  otbMsgDebugMacro(<<"ThreadedGenerateData() - thread "<<threadId <<" - nb of divisions: "<<numDivisions);
-
-
+  
   MatrixType pixelVector, pixelTransposeVector, pixelSumVector, tempMatrix;
-
+  
   pixelVector.SetSize(this->GetInput()->GetNumberOfComponentsPerPixel(), 1);
   pixelVector.Fill(itk::NumericTraits<RealType>::Zero);
   pixelTransposeVector.SetSize(1, this->GetInput()->GetNumberOfComponentsPerPixel());
@@ -457,86 +413,66 @@ StreamingStatisticsVectorImageFilter<TInputImage>
   pixelSumVector.SetSize(this->GetInput()->GetNumberOfComponentsPerPixel(), this->GetInput()->GetNumberOfComponentsPerPixel());
   pixelSumVector.Fill(itk::NumericTraits<RealType>::Zero);
   tempMatrix.SetSize(this->GetInput()->GetNumberOfComponentsPerPixel(), this->GetInput()->GetNumberOfComponentsPerPixel());
-
-  /**
-   * Loop over the number of pieces, execute the upstream pipeline on each
-   * piece, and copy the results into the output image.
-   */
-  unsigned int piece;
-  for (piece = 0;
-       piece < numDivisions && !this->GetAbortGenerateData();
-       piece++)
-    {
-      //otbMsgDebugMacro(<<"ThreadedGenerateData() - processing piece: "<<piece<<"/"<<numDivisions);
-      RegionType streamRegion = m_RegionSplitter->GetSplit(piece,numDivisions,outputRegionForThread);
-      //otbMsgDebugMacro(<<"ThreadedGenerateData() - piece region: "<<streamRegion);
-      
-      inputPtr->SetRequestedRegion(streamRegion);
-      otbMsgDebugMacro(<<"ThreadedGenerateData() - thread "<<threadId <<" - streaming region: "<<streamRegion);
-      inputPtr->PropagateRequestedRegion();
-      inputPtr->UpdateOutputData();
-      
   
-      
-      itk::ImageRegionConstIteratorWithIndex<TInputImage> it (inputPtr, streamRegion);   
-      it.GoToBegin();
-      // do the work
-      while (!it.IsAtEnd())
+  
+  
+  itk::ImageRegionConstIteratorWithIndex<TInputImage> it (inputPtr, outputRegionForThread);   
+  it.GoToBegin();
+  // do the work
+  while (!it.IsAtEnd())
+    {
+      IndexType index = it.GetIndex();
+      PixelType vectorValue = it.Get();
+      for (unsigned int j=0; j<vectorValue.GetSize(); j++)
 	{
-
-	  IndexType index = it.GetIndex();
-	  PixelType vectorValue = it.Get();
-	  for (unsigned int j=0; j<vectorValue.GetSize(); j++)
+	  InternalPixelType value = vectorValue[j];
+	  
+	  RealType realValue = static_cast<RealType>( value );
+	  if (value < m_ThreadMin[threadId][j])
 	    {
-	      InternalPixelType value = vectorValue[j];
-
-	      RealType realValue = static_cast<RealType>( value );
-	      if (value < m_ThreadMin[threadId][j])
-		{
-		  m_ThreadMin[threadId][j] = value;
-		}
-	      if (value > m_ThreadMax[threadId][j])
-		{
-		  m_ThreadMax[threadId][j] = value;
-		}
-	      m_ThreadSum[threadId][j] += realValue;
-	      pixelVector(j, 0) = realValue;
+	      m_ThreadMin[threadId][j] = value;
 	    }
-
-	  ++it;
-	  progress.CompletedPixel();
-	  pixelTransposeVector = pixelVector.GetTranspose();
-
-	  /** TODO
-	   * A modifier en utilisant l'opérateur + de la méthode. Pour le moment probleme avec exceptionmacro (pas de GetClassName...)
-	   * m_XX[threadId]+=pixelVector*pixelTransposeVector;
-	   **/
- 	  tempMatrix = pixelVector*pixelTransposeVector;
-	  if( (m_XX[threadId].Rows() != tempMatrix.Rows()) || (m_XX[threadId].Cols() != tempMatrix.Cols()))
-	    { 
-	      itkExceptionMacro( << "Matrix with size (" << m_XX[threadId].Rows() << "," << 
-				 m_XX[threadId].Cols() << ") cannot be subtracted from matrix with size (" <<
-				 tempMatrix.Rows() << "," << tempMatrix.Cols() );
-	    }
-
-	  for( unsigned int r=0; r<m_XX[threadId].Rows(); r++) 
+	  if (value > m_ThreadMax[threadId][j])
 	    {
-	      for( unsigned int c=0; c<m_XX[threadId].Cols(); c++ ) 
-		{
-		  m_XX[threadId](r,c) += tempMatrix(r,c);
-		}
+	      m_ThreadMax[threadId][j] = value;
 	    }
-	  //**** END TODO ****
-	  m_Count[threadId]++;
+	  m_ThreadSum[threadId][j] += realValue;
+	  pixelVector(j, 0) = realValue;
 	}
+      
+      ++it;
+      progress.CompletedPixel();
+      pixelTransposeVector = pixelVector.GetTranspose();
+      
+      /** TODO
+       * A modifier en utilisant l'opérateur + de la méthode. Pour le moment probleme avec exceptionmacro (pas de GetClassName...)
+       * m_XX[threadId]+=pixelVector*pixelTransposeVector;
+       **/
+      tempMatrix = pixelVector*pixelTransposeVector;
+      if( (m_XX[threadId].Rows() != tempMatrix.Rows()) || (m_XX[threadId].Cols() != tempMatrix.Cols()))
+	{ 
+	  itkExceptionMacro( << "Matrix with size (" << m_XX[threadId].Rows() << "," << 
+			     m_XX[threadId].Cols() << ") cannot be subtracted from matrix with size (" <<
+			     tempMatrix.Rows() << "," << tempMatrix.Cols() );
+	}
+      
+      for( unsigned int r=0; r<m_XX[threadId].Rows(); r++) 
+	{
+	  for( unsigned int c=0; c<m_XX[threadId].Cols(); c++ ) 
+	    {
+	      m_XX[threadId](r,c) += tempMatrix(r,c);
+	    }
+	}
+      //**** END TODO ****
+      m_Count[threadId]++;
     }
-
+  std::cout<<"Leaving ThreadedGenerateData()"<<std::endl;
   //otbMsgDebugMacro(<<"Leaving ThreadedGenerateData()");
 }
 
 template <class TImage>
 void 
-StreamingStatisticsVectorImageFilter<TImage>
+PersistentStatisticsVectorImageFilter<TImage>
 ::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   Superclass::PrintSelf(os,indent);
