@@ -37,6 +37,6 @@ REGISTER_TEST(otbRAndBAndNIRVegetationIndexImageFilterNew);
 REGISTER_TEST(otbRAndBAndNIRVegetationIndexImageFilter);
 REGISTER_TEST(otbMultiChannelRAndBAndNIRVegetationIndexImageFilterNew);
 REGISTER_TEST(otbMultiChannelRAndBAndNIRVegetationIndexImageFilter);
-REGISTER_TEST(otbImageToLuminanceImageFilterNew);
-REGISTER_TEST(otbImageToLuminanceImageFilter);
+//REGISTER_TEST(otbImageToLuminanceImageFilterNew);
+//REGISTER_TEST(otbImageToLuminanceImageFilter);
 }

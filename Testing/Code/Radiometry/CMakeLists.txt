@@ -178,17 +178,17 @@ ADD_TEST(raTvARVI_MultiChannelRAndBAndNIRVegetationIndexImageFilter ${RADIOMETRY
 	)
         
 # -------            otb::ImageToLuminanceImageFilter   ------------------------------
-ADD_TEST(raTuImageToLuminanceImageFilterNew ${RADIOMETRY_TESTS}  
-        otbImageToLuminanceImageFilterNew
-)
+#ADD_TEST(raTuImageToLuminanceImageFilterNew ${RADIOMETRY_TESTS}  
+#        otbImageToLuminanceImageFilterNew
+#)
 
-ADD_TEST(raTvImageToLuminanceImageFilter ${RADIOMETRY_TESTS} 
-  #  --compare-image ${TOL}  ${BASELINE}/raTvImageToLuminanceImageFilter.tif
-  #                         ${TEMP}/raTvImageToLuminanceImageFilter.tif
-        otbImageToLuminanceImageFilter
-	${INPUTDATA}/babytux.tiff 
-	${TEMP}/raTvImageToLuminanceImageFilter.tif
-)  
+#ADD_TEST(raTvImageToLuminanceImageFilter ${RADIOMETRY_TESTS} 
+#  #  --compare-image ${TOL}  ${BASELINE}/raTvImageToLuminanceImageFilter.tif
+#  #                         ${TEMP}/raTvImageToLuminanceImageFilter.tif
+#        otbImageToLuminanceImageFilter
+#	${INPUTDATA}/babytux.tiff 
+#	${TEMP}/raTvImageToLuminanceImageFilter.tif
+#)  
 
 # A enrichir
 SET(Radiometry_SRCS
@@ -202,8 +202,8 @@ otbRAndBAndNIRVegetationIndexImageFilterNew.cxx
 otbRAndBAndNIRVegetationIndexImageFilter.cxx
 otbMultiChannelRAndBAndNIRVegetationIndexImageFilterNew.cxx
 otbMultiChannelRAndBAndNIRVegetationIndexImageFilter.cxx
-otbImageToLuminanceImageFilterNew.cxx
-otbImageToLuminanceImageFilter.cxx
+#otbImageToLuminanceImageFilterNew.cxx
+#otbImageToLuminanceImageFilter.cxx
 )
 
 
