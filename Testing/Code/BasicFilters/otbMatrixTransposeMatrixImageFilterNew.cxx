@@ -20,7 +20,7 @@
 #include "itkExceptionObject.h"
 #include "otbImage.h"
 #include "otbVectorImage.h"
-#include "otbMatrixTransposeMatrixImageFilter.h"
+#include "otbStreamingMatrixTransposeMatrixImageFilter.h"
 
 
 int otbMatrixTransposeMatrixImageFilterNew( int argc, char * argv[] )
@@ -33,7 +33,7 @@ int otbMatrixTransposeMatrixImageFilterNew( int argc, char * argv[] )
       
       typedef otb::VectorImage<InputPixelType,Dimension>       InputImage1Type;
       typedef otb::VectorImage<InputPixelType,Dimension>       InputImage2Type;
-      typedef otb::MatrixTransposeMatrixImageFilter<InputImage1Type, InputImage2Type >  MatrixTransposeMatrixImageFilterType;
+      typedef otb::StreamingMatrixTransposeMatrixImageFilter<InputImage1Type, InputImage2Type >  MatrixTransposeMatrixImageFilterType;
       
       // Instantiation
       MatrixTransposeMatrixImageFilterType::Pointer filter = MatrixTransposeMatrixImageFilterType::New();
