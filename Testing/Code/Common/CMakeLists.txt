@@ -410,7 +410,7 @@ ADD_TEST(coTvDrawPatFilter ${COMMON_TESTS}
 SET(BasicCommon_SRCS
 otbSystemTest.cxx
 otbTestCommandLineArgumentParser.cxx
-otbTestCommandLineArgumentParserGUI.cxx
+#otbTestCommandLineArgumentParserGUI.cxx
 otbTestCommandLineArgumentParserHelp.cxx
 otbTestCommandLineArgumentParserList.cxx
 otbTestCommandLineArgumentParserWithError.cxx
