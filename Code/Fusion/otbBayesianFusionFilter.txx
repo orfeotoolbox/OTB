@@ -65,34 +65,40 @@ namespace otb
 		       TOutputImage>
   ::BeforeThreadedGenerateData ()
   {	
+    std::cout<<"1"<<std::endl;
     // Allocate output
     typename OutputImageType::Pointer                        output           = this->GetOutput();
     typename InputMultiSpectralImageType::Pointer            multiSpec   = const_cast<InputMultiSpectralImageType *>(this->GetMultiSpect());
     typename InputMultiSpectralInterpImageType::Pointer multiSpecInterp  = const_cast<InputMultiSpectralInterpImageType *>(this->GetMultiSpectInterp());
     typename InputPanchroImageType::ConstPointer             panchro          = this->GetPanchro();
-    
+
     /** Variable Initialisaton  */
     m_Beta.SetSize(multiSpecInterp->GetNumberOfComponentsPerPixel()+1, 1);
     m_Beta.Fill(itk::NumericTraits<InputMultiSpectralInterpRealType>::Zero);
-    
+
     m_CovarianceMatrix.SetSize( multiSpecInterp->GetNumberOfComponentsPerPixel(), multiSpecInterp->GetNumberOfComponentsPerPixel() );
     m_CovarianceMatrix.Fill(itk::NumericTraits<InputMultiSpectralInterpRealType>::Zero);
-    
+  
     m_CovarianceInvMatrix.SetSize( multiSpecInterp->GetNumberOfComponentsPerPixel(), multiSpecInterp->GetNumberOfComponentsPerPixel() );
     m_CovarianceInvMatrix.Fill(itk::NumericTraits<InputMultiSpectralInterpRealType>::Zero);
-    
+  
     m_Vcondopt.SetSize( multiSpecInterp->GetNumberOfComponentsPerPixel(), multiSpecInterp->GetNumberOfComponentsPerPixel() );
     m_Vcondopt.Fill(itk::NumericTraits<InputMultiSpectralInterpRealType>::Zero);
-    
-    
+    std::cout<<"2******************"<<std::endl;
     /** Compute the inverse of the multispectral interpolated image covariance matrix   */
     typename StreamingStatisticsVectorImageFilterType::Pointer covComputefilter = StreamingStatisticsVectorImageFilterType::New();
+
+ std::cout<<"2.1"<<std::endl;
     covComputefilter->SetInput(multiSpecInterp);
+ std::cout<<"2.1"<<std::endl;
     covComputefilter->GetStreamer()->SetNumberOfStreamDivisions(200);
+ std::cout<<"2.1"<<std::endl;
     covComputefilter->Update();
+ std::cout<<"2.2"<<std::endl;
     MatrixType m_CovarianceMatrix = covComputefilter->GetCovariance();
+ std::cout<<"2.3"<<std::endl;
     m_CovarianceInvMatrix = m_CovarianceMatrix.GetInverse();
-    
+     std::cout<<"2.4"<<std::endl;
     /** Beta computation : Regression model coefficient */
     // MatrixTransform only support vectorimage input
     typename CasterType::Pointer         caster         = CasterType::New();
@@ -102,7 +108,7 @@ namespace otb
     typename MSTransposeMSType::Pointer  msTransposeMs  = MSTransposeMSType::New();
     // Compute the transpose multispectral image multiplied by the panchromatic one
     typename MSTransposeMSType::Pointer  msTransposePan  = MSTransposeMSType::New();
-    
+      std::cout<<"3"<<std::endl;
     // Add a dimension filled with ones to the images 
     msTransposeMs->SetUsePadFirstInput(true);
     msTransposeMs->SetUsePadSecondInput(true);
@@ -127,7 +133,7 @@ namespace otb
     panTransposePan->SetFirstInput(caster->GetOutput());
     panTransposePan->SetSecondInput(caster->GetOutput());
     panTransposePan->Update();
-    
+      std::cout<<"4"<<std::endl;
     MatrixType S, tempS, tempS2;
     S = panTransposePan->GetResultOutput()->Get();
     tempS = msTransposePan->GetResultOutput()->Get().GetTranspose();
@@ -166,7 +172,7 @@ namespace otb
 			   tempS.Rows() << "," << tempS.Cols() << " )" );
 	
       }
-    
+      std::cout<<"5"<<std::endl;
     for( unsigned int r=0; r<S.Rows(); r++) 
       {
 	for( unsigned int c=0; c<S.Cols(); c++ ) 
@@ -207,7 +213,7 @@ namespace otb
     m_S = S(0,0);
     m_S /= static_cast<float>(size1-size2);
 
-
+  std::cout<<"6"<<std::endl;
     // cutBeta is the N-1 last m_Beta element matrix.
     // varPan contains transpose(cutBeta)*cutBeta/S
     MatrixType varPan, cutBeta;
@@ -227,7 +233,7 @@ namespace otb
     varPan *= tempvarPan;
     varPan /= m_S;
  
-
+  std::cout<<"7"<<std::endl;
     // Compute the optimization matrix : m_Vcondopt
     // eye is the identical matrix which size is the number of components of the multispectral image
     MatrixType eye;
@@ -262,7 +268,7 @@ namespace otb
   //**** END TODO ****/
     m_Vcondopt = m_Vcondopt.GetInverse();
  
-    
+    std::cout<<"8"<<std::endl;
     // Functor initialisation
     this->GetFunctor().SetVcondopt(m_Vcondopt);
     this->GetFunctor().SetBeta(cutBeta);

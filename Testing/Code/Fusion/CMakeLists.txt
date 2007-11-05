@@ -40,6 +40,8 @@ ADD_TEST(fuTvBayesianFusionFilter ${FUSION_TESTS}
 	${TEMP}/fuTvBayesianFusion.tif
 )
 
+
+
         
 # A enrichir
 SET(Fusion_SRCS

@@ -210,7 +210,7 @@ public:
 
 
   /** Typedef for statistic computing. */
-  typedef StreamingStatisticsVectorImageFilter<InputMultiSpectralImageType>                           StreamingStatisticsVectorImageFilterType;
+  typedef StreamingStatisticsVectorImageFilter<InputMultiSpectralInterpImageType>                           StreamingStatisticsVectorImageFilterType;
   typedef typename StreamingStatisticsVectorImageFilterType::MatrixType                               MatrixType;
   typedef StreamingMatrixTransposeMatrixImageFilter<InputMultiSpectralImageType, InputMultiSpectralImageType>  MSTransposeMSType;
   typedef ImageToVectorImageCastFilter<InputPanchroImageType, InputMultiSpectralImageType>            CasterType;
