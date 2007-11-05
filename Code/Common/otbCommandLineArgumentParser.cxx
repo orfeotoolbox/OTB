@@ -21,6 +21,10 @@
 #include <assert.h>
 #include <iostream>
 #include "otbConfigure.h" // Pour OTB_VERSION_STRING genere par le ccmake
+#include <FL/Fl_Window.H>
+#include <FL/Fl_Button.H>
+#include <FL/Fl_Input.H>
+#include <FL/Fl.H>
 
 namespace otb
 {
@@ -168,6 +172,34 @@ CommandLineArgumentParser
 	
 }
 
+void 
+CommandLineArgumentParser
+::ParseGUI(CommandLineArgumentParseResult * outResult,bool failOnUnknownTrailingParameters ) 
+{
+Fl_Window *window = new Fl_Window(320,(m_OptionList.size()+2)*50);
+
+ std::vector<Fl_Input*> myInputs; 
+ unsigned int pos = 1; 
+ for(ListOptionType::iterator it = m_OptionList.begin();it!=m_OptionList.end();++it,++pos)
+   {
+     Fl_Input * tmpInput = new Fl_Input(50,pos*50,200,30,it->CommonName.c_str());
+     tmpInput->tooltip(it->Description.c_str());
+     
+   } 
+ Fl_Button * button = new Fl_Button(50,pos*50 , 130, 30, "Ok");
+ button->tooltip("Validate parameters and exit.");
+  window->end();
+  window->show();
+  Fl::run();
+
+  for(std::vector<Fl_Input * >::iterator flIt =myInputs.begin();flIt!=myInputs.end();++flIt)
+    {
+      delete (*flIt);
+    }
+  delete button;
+  delete window;
+
+}
 void 
 CommandLineArgumentParser
 ::ParseCommandLine(int argc, char *argv[], 

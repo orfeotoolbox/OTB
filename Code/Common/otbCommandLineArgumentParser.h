@@ -167,6 +167,8 @@ public:
                            CommandLineArgumentParseResult * outResult,
                            bool failOnUnknownTrailingParameters = true);
 
+  void ParseGUI(   CommandLineArgumentParseResult * outResult,
+                           bool failOnUnknownTrailingParameters = true);
 protected:
  CommandLineArgumentParser();
  ~CommandLineArgumentParser(){};

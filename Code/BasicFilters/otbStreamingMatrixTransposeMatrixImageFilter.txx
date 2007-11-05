@@ -20,7 +20,8 @@
 =========================================================================*/
 #ifndef _otbMatrixTransposeMatrixImageFilter_txx
 #define _otbMatrixTransposeMatrixImageFilter_txx
-#include "otbMatrixTransposeMatrixImageFilter.h"
+
+#include "otbStreamingMatrixTransposeMatrixImageFilter.h"
 
 #include "itkImageRegionIterator.h"
 #include "itkImageRegionConstIterator.h"
@@ -31,8 +32,8 @@
 namespace otb {
 
 template<class TInputImage, class TInputImage2>
-MatrixTransposeMatrixImageFilter<TInputImage, TInputImage2>
-::MatrixTransposeMatrixImageFilter()
+PersistentMatrixTransposeMatrixImageFilter<TInputImage, TInputImage2>
+::PersistentMatrixTransposeMatrixImageFilter()
 {
   this->SetNumberOfRequiredInputs(2);
   
@@ -50,14 +51,6 @@ MatrixTransposeMatrixImageFilter<TInputImage, TInputImage2>
   // false means no pad added
   m_UsePadFirstInput = false;
   m_UsePadSecondInput = false;
-  // Streaming initialization
-  m_BufferMemorySize = 0;
-  m_BufferNumberOfLinesDivisions = 0;
-  m_NumberOfStreamDivisions = 0;
-  // default to AUTOMATIC_NUMBER_OF_DIVISIONS
-  m_StreamingMode = SET_AUTOMATIC_NUMBER_OF_STREAM_DIVISIONS;
-  // create default region splitter
-  m_RegionSplitter = itk::ImageRegionSplitter<InputImageDimension>::New();
 
   // Number of component initialisation
   m_NumberOfComponents1 = 0;
@@ -67,7 +60,7 @@ MatrixTransposeMatrixImageFilter<TInputImage, TInputImage2>
 
 template<class TInputImage, class TInputImage2>
 itk::DataObject::Pointer
-MatrixTransposeMatrixImageFilter<TInputImage, TInputImage2>
+PersistentMatrixTransposeMatrixImageFilter<TInputImage, TInputImage2>
 ::MakeOutput(unsigned int output)
 {
   switch (output)
@@ -85,20 +78,17 @@ MatrixTransposeMatrixImageFilter<TInputImage, TInputImage2>
     }
     
 }
-
-
-
 template<class TInputImage, class TInputImage2>
-typename MatrixTransposeMatrixImageFilter<TInputImage, TInputImage2>::MatrixObjectType*
-MatrixTransposeMatrixImageFilter<TInputImage, TInputImage2>
+typename PersistentMatrixTransposeMatrixImageFilter<TInputImage, TInputImage2>::MatrixObjectType*
+PersistentMatrixTransposeMatrixImageFilter<TInputImage, TInputImage2>
 ::GetResultOutput()
 {
   return static_cast<MatrixObjectType*>(this->itk::ProcessObject::GetOutput(1));
 }
 
 template<class TInputImage, class TInputImage2>
-const typename MatrixTransposeMatrixImageFilter<TInputImage, TInputImage2>::MatrixObjectType*
-MatrixTransposeMatrixImageFilter<TInputImage, TInputImage2>
+const typename PersistentMatrixTransposeMatrixImageFilter<TInputImage, TInputImage2>::MatrixObjectType*
+PersistentMatrixTransposeMatrixImageFilter<TInputImage, TInputImage2>
 ::GetResultOutput() const
 {
   return static_cast<const MatrixObjectType*>(this->itk::ProcessObject::GetOutput(1));
@@ -107,37 +97,21 @@ MatrixTransposeMatrixImageFilter<TInputImage, TInputImage2>
 
 template<class TInputImage, class TInputImage2>
 void
-MatrixTransposeMatrixImageFilter<TInputImage, TInputImage2>
+PersistentMatrixTransposeMatrixImageFilter<TInputImage, TInputImage2>
 ::GenerateInputRequestedRegion()
 {
   Superclass::GenerateInputRequestedRegion();
   if ( this->GetInput() )
     {
       InputImagePointer image = const_cast< typename Superclass::InputImageType * >( this->GetFirstInput() );
-      InputImagePointer image2 = const_cast< typename Superclass::InputImageType * >( this->GetSecondInput() );
-
-      IndexType index = image->GetLargestPossibleRegion().GetIndex();
-      SizeType size;
-      size.Fill(0);
-      RegionType region;
-      region.SetSize(size);
-      region.SetIndex(index);
-      image->SetRequestedRegion(region);
-
-      IndexType index2 = image2->GetLargestPossibleRegion().GetIndex();
-      SizeType size2;
-      size2.Fill(0);
-      RegionType region2;
-      region2.SetSize(size2);
-      region2.SetIndex(index2);
-      image2->SetRequestedRegion(region2);
-
+      InputImagePointer image2 = const_cast< typename Superclass::InputImageType * >( this->GetSecondInput() );    
+      image->SetRequestedRegion(this->GetOutput()->GetRequestedRegion());
+      image2->SetRequestedRegion(this->GetOutput()->GetRequestedRegion());
     }
 }
-
 template<class TInputImage, class TInputImage2>
 void
-MatrixTransposeMatrixImageFilter<TInputImage, TInputImage2>
+PersistentMatrixTransposeMatrixImageFilter<TInputImage, TInputImage2>
 ::GenerateOutputInformation()
 {
   Superclass::GenerateOutputInformation();
@@ -150,7 +124,7 @@ MatrixTransposeMatrixImageFilter<TInputImage, TInputImage2>
 
 template<class TInputImage, class TInputImage2>
 void
-MatrixTransposeMatrixImageFilter<TInputImage, TInputImage2>
+PersistentMatrixTransposeMatrixImageFilter<TInputImage, TInputImage2>
 ::AllocateOutputs()
 {
   
@@ -162,25 +136,31 @@ MatrixTransposeMatrixImageFilter<TInputImage, TInputImage2>
 
 template<class TInputImage, class TInputImage2>
 void
-MatrixTransposeMatrixImageFilter<TInputImage, TInputImage2>
-::BeforeThreadedGenerateData()
+PersistentMatrixTransposeMatrixImageFilter<TInputImage, TInputImage2>
+::Reset()
 { 
+
+  TInputImage * inputPtr1 = const_cast<TInputImage * >(this->GetFirstInput());
+  inputPtr1->UpdateOutputInformation();
+  TInputImage2 * inputPtr2 = const_cast<TInputImage2 * >(this->GetSecondInput());
+  inputPtr2->UpdateOutputInformation();
+
   if(this->GetOutput()->GetRequestedRegion().GetNumberOfPixels()==0)
     {
       this->GetOutput()->SetRequestedRegion(this->GetOutput()->GetLargestPossibleRegion());
     }
 
-  if ( this->GetFirstInput()->GetLargestPossibleRegion().GetSize() !=  this->GetSecondInput()->GetLargestPossibleRegion().GetSize() )
+  if ( inputPtr1->GetLargestPossibleRegion().GetSize() !=  inputPtr2->GetLargestPossibleRegion().GetSize() )
     {
       itkExceptionMacro( <<" Can't multiply the transposed matrix of a "
-			 << this->GetFirstInput()->GetLargestPossibleRegion().GetSize() 
+			 << inputPtr1->GetLargestPossibleRegion().GetSize() 
 			 << " and a "
-			 << this->GetSecondInput()->GetLargestPossibleRegion().GetSize()
+			 << inputPtr2->GetLargestPossibleRegion().GetSize()
 			 << " matrix " );
     }
 
-  m_NumberOfComponents1 = this->GetFirstInput()->GetNumberOfComponentsPerPixel();
-  m_NumberOfComponents2 = this->GetSecondInput()->GetNumberOfComponentsPerPixel();
+  m_NumberOfComponents1 = inputPtr1->GetNumberOfComponentsPerPixel();
+  m_NumberOfComponents2 = inputPtr2->GetNumberOfComponentsPerPixel();
   unsigned int numberOfThreads = this->GetNumberOfThreads();
   
   if ( m_UsePadFirstInput == true )
@@ -207,8 +187,8 @@ MatrixTransposeMatrixImageFilter<TInputImage, TInputImage2>
 
 template<class TInputImage, class TInputImage2>
 void
-MatrixTransposeMatrixImageFilter<TInputImage, TInputImage2>
-::AfterThreadedGenerateData()
+PersistentMatrixTransposeMatrixImageFilter<TInputImage, TInputImage2>
+::Synthetize()
 {
   unsigned int numberOfThreads = this->GetNumberOfThreads();
   MatrixType resultMatrix;
@@ -236,7 +216,7 @@ MatrixTransposeMatrixImageFilter<TInputImage, TInputImage2>
 
 template<class TInputImage, class TInputImage2>
 void
-MatrixTransposeMatrixImageFilter<TInputImage, TInputImage2>
+PersistentMatrixTransposeMatrixImageFilter<TInputImage, TInputImage2>
 ::ThreadedGenerateData(const RegionType& outputRegionForThread, int threadId) 
 {
   /**
@@ -248,109 +228,71 @@ MatrixTransposeMatrixImageFilter<TInputImage, TInputImage2>
   
   // support progress methods/callbacks
   itk::ProgressReporter progress(this, threadId, outputRegionForThread.GetNumberOfPixels());
-
-  // Here we will divide the input region into pieces to process one afther the other.
-  unsigned int numDivisions = static_cast<unsigned int>(StreamingTraitsType
-    ::CalculateNumberOfStreamDivisions(this->GetFirstInput(),
-				       outputRegionForThread,
-				       m_StreamingMode,
-				       m_NumberOfStreamDivisions,
-				       m_BufferMemorySize,
-				       m_BufferNumberOfLinesDivisions));
   
-
-  otbMsgDebugMacro(<<"ThreadedGeneraeData() - thread "<<threadId<<" - Thread region: "<<outputRegionForThread);
-  otbMsgDebugMacro(<<"ThreadedGenerateData() - thread "<<threadId<<" - Streaming configuration: "<<m_StreamingMode<<" "<<m_NumberOfStreamDivisions<<" "<<m_BufferMemorySize<<" "<<m_BufferNumberOfLinesDivisions);
-  otbMsgDebugMacro(<<"ThreadedGenerateData() - thread "<<threadId <<" - nb of divisions from StreamingTraits: "<<numDivisions);
- 
-
-  unsigned int numDivisionsFromSplitter = m_RegionSplitter->GetNumberOfSplits(outputRegionForThread, numDivisions);
-
-
-  if (numDivisionsFromSplitter < numDivisions)
+  
+  input1Ptr->SetRequestedRegion(outputRegionForThread);
+  input2Ptr->SetRequestedRegion(outputRegionForThread);
+  otbMsgDebugMacro(<<"ThreadedGenerateData() - thread "<<threadId <<" - streaming region: "<<outputRegionForThread);
+  input1Ptr->PropagateRequestedRegion();
+  input1Ptr->UpdateOutputData();
+  input2Ptr->PropagateRequestedRegion();
+  input2Ptr->UpdateOutputData(); 
+  
+  itk::ImageRegionConstIterator<TInputImage> it1 (input1Ptr, outputRegionForThread); 
+  itk::ImageRegionConstIterator<TInputImage2> it2 (input2Ptr, outputRegionForThread);
+  it1.GoToBegin();
+  it2.GoToBegin();
+  
+  // loop the second image and get one pixel a time
+  while (!it1.IsAtEnd())
     {
-      numDivisions = numDivisionsFromSplitter;
-    }
-  otbMsgDebugMacro(<<"ThreadedGenerateData() - thread "<<threadId <<" - nb of divisions: "<<numDivisions);
-
-
-  /**
-   * Loop over the number of pieces, execute the upstream pipeline on each
-   * piece, and copy the results into the output image.
-   */
-  unsigned int piece;
-  for (piece = 0;
-       piece < numDivisions && !this->GetAbortGenerateData();
-       piece++)
-    {
-      RegionType streamRegion = m_RegionSplitter->GetSplit(piece,numDivisions,outputRegionForThread);
-
+      PixelType vectorValue1 = it1.Get();
+      PixelType2 vectorValue2 = it2.Get();
       
-      input1Ptr->SetRequestedRegion(streamRegion);
-      input2Ptr->SetRequestedRegion(streamRegion);
-      otbMsgDebugMacro(<<"ThreadedGenerateData() - thread "<<threadId <<" - streaming region: "<<streamRegion);
-      input1Ptr->PropagateRequestedRegion();
-      input1Ptr->UpdateOutputData();
-      input2Ptr->PropagateRequestedRegion();
-      input2Ptr->UpdateOutputData(); 
-      
-      itk::ImageRegionConstIterator<TInputImage> it1 (input1Ptr, streamRegion); 
-      itk::ImageRegionConstIterator<TInputImage2> it2 (input2Ptr, streamRegion);
-      it1.GoToBegin();
-      it2.GoToBegin();
- 
-      // loop the second image and get one pixel a time
-      while (!it1.IsAtEnd())
+      // Add a first component to vectorValue2 and vectorValue1 filled with ones.
+      if (m_UsePadFirstInput == true)
 	{
-	  PixelType vectorValue1 = it1.Get();
-	  PixelType2 vectorValue2 = it2.Get();
-	  
-	  // Add a first component to vectorValue2 and vectorValue1 filled with ones.
-	  if (m_UsePadFirstInput == true)
+	  PixelType vectortemp1(vectorValue1.Size()+1);
+	  vectortemp1[0] = 1;
+	  for (unsigned int n=0; n<vectorValue1.Size(); n++)
 	    {
-	      PixelType vectortemp1(vectorValue1.Size()+1);
-	      vectortemp1[0] = 1;
-	       for (unsigned int n=0; n<vectorValue1.Size(); n++)
-		 {
 		   vectortemp1[n+1] = vectorValue1[n];
-
-		 }
-	       vectorValue1.SetSize(vectortemp1.Size());
-	       vectorValue1 = vectortemp1;
+		   
 	    }
-
-	  if (m_UsePadSecondInput == true)
-	    { 
-	       PixelType2 vectortemp2(vectorValue2.Size()+1);
-	       vectortemp2[0] = 1;
-	       for (unsigned int m=0; m<vectorValue2.Size(); m++)
-		 {
-		   vectortemp2[m+1] = vectorValue2[m];
-
-		 }
-	       vectorValue2.SetSize(vectortemp2.Size());
-	       vectorValue2 = vectortemp2;
-	    }
-
-	  for (unsigned int i=0; i<vectorValue1.Size(); i++)
+	  vectorValue1.SetSize(vectortemp1.Size());
+	  vectorValue1 = vectortemp1;
+	}
+      
+      if (m_UsePadSecondInput == true)
+	{ 
+	  PixelType2 vectortemp2(vectorValue2.Size()+1);
+	  vectortemp2[0] = 1;
+	  for (unsigned int m=0; m<vectorValue2.Size(); m++)
 	    {
-	      for (unsigned int j=0; j<vectorValue2.Size(); j++)
-		{
-		  m_ThreadSum[threadId](i, j) += static_cast<RealType>(vectorValue1[i])*static_cast<RealType>(vectorValue2[j]);
-		}
+	      vectortemp2[m+1] = vectorValue2[m];
 	      
 	    }
-	  ++it1;
-	  ++it2;
-	  progress.CompletedPixel();
+	  vectorValue2.SetSize(vectortemp2.Size());
+	  vectorValue2 = vectortemp2;
 	}
+      
+      for (unsigned int i=0; i<vectorValue1.Size(); i++)
+	{
+	  for (unsigned int j=0; j<vectorValue2.Size(); j++)
+	    {
+	      m_ThreadSum[threadId](i, j) += static_cast<RealType>(vectorValue1[i])*static_cast<RealType>(vectorValue2[j]);
+	    }
+	  
+	}
+      ++it1;
+      ++it2;
+      progress.CompletedPixel();
     }
-  //otbMsgDebugMacro(<<"Leaving ThreadedGenerateData()");
 }
 
 template<class TInputImage, class TInputImage2>
 void 
-MatrixTransposeMatrixImageFilter<TInputImage, TInputImage2>
+PersistentMatrixTransposeMatrixImageFilter<TInputImage, TInputImage2>
 ::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   Superclass::PrintSelf(os,indent);

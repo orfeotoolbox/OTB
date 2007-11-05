@@ -18,47 +18,53 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbMatrixTransposeMatrixImageFilter_h
-#define __otbMatrixTransposeMatrixImageFilter_h
+#ifndef __otbStreamingMatrixTransposeMatrixImageFilter_h
+#define __otbStreamingMatrixTransposeMatrixImageFilter_h
 
-#include "itkImageToImageFilter.h"
+#include "otbPersistentImageFilter.h"
 #include "itkNumericTraits.h"
 #include "itkArray.h"
 #include "itkSimpleDataObjectDecorator.h"
 #include "otbStreamingTraits.h"
-#include "itkImageRegionSplitter.h"
 #include "itkVariableSizeMatrix.h"
 #include "itkVariableLengthVector.h"
-
+#include "otbPersistentFilterStreamingDecorator.h"
 
 namespace otb {
   
-  /** \class MatrixTransposeMatrixImageFilter
+  /** \class PersistentMatrixTransposeMatrixImageFilter
    * \brief Compute \f[X^T.Y \f]. Allow a padding of ones.
    * 
    * \f[X\f] and \f[Y\f] are the input images.
    * The padding has the effect of adding a component filled with ones to the image
+   *
+   *  This filter persists its temporary data. It means that if you Update it n times on n different
+   * requested regions, the output statistics will be the result for the whole set of n regions.
+   *
+   * To reset the temporary data, one should call the Reset() function. 
+   *
+   * To get the statistics once the regions have been processed via the pipeline, use the Synthetize() method.
    *
    * \sa StreamingTraits
    * \sa StatisticsImageFilter
    * \ingroup MathematicalStatisticsImageFilters
    */
   template<class TInputImage, class TInputImage2>
-    class ITK_EXPORT MatrixTransposeMatrixImageFilter :
-    public itk::ImageToImageFilter<TInputImage, TInputImage>
+    class ITK_EXPORT PersistentMatrixTransposeMatrixImageFilter :
+    public PersistentImageFilter<TInputImage, TInputImage>
     {
     public:
       /** Standard Self typedef */
-      typedef MatrixTransposeMatrixImageFilter                  Self;
-      typedef itk::ImageToImageFilter<TInputImage,TInputImage>  Superclass;
-      typedef itk::SmartPointer<Self>                           Pointer;
-      typedef itk::SmartPointer<const Self>                     ConstPointer;
+      typedef PersistentMatrixTransposeMatrixImageFilter           Self;
+      typedef PersistentImageFilter<TInputImage,TInputImage>       Superclass;
+      typedef itk::SmartPointer<Self>                              Pointer;
+      typedef itk::SmartPointer<const Self>                        ConstPointer;
       
       /** Method for creation through the object factory. */
       itkNewMacro(Self);
       
       /** Runtime information support. */
-      itkTypeMacro(MatrixTransposeMatrixImageFilter, ImageToImageFilter);
+      itkTypeMacro(PersistentMatrixTransposeMatrixImageFilter, PersistentImageFilter);
       
       /** Image related typedefs. */
       // First Input
@@ -74,43 +80,20 @@ namespace otb {
       typedef typename TInputImage2::PixelType                                        PixelType2;
       typedef typename TInputImage2::InternalPixelType                                InternalPixelType2;
 
-      typedef StreamingTraits<TInputImage>                                            StreamingTraitsType;
-      typedef StreamingMode                                                           StreamingModeType;
-      typedef itk::ImageRegionSplitter<itkGetStaticConstMacro(InputImageDimension)>   SplitterType;
-      typedef typename SplitterType::Pointer                                          SplitterPointer;
-      
-      itkStaticConstMacro(InputImageDimension, unsigned int, TInputImage::ImageDimension);
-      
-      
-      /** Streaming-related accessors */
-      itkSetMacro(BufferMemorySize, unsigned long);
-      itkGetMacro(BufferMemorySize, unsigned long);
-      itkSetMacro(BufferNumberOfLinesDivisions, unsigned long);
-      itkGetMacro(BufferNumberOfLinesDivisions, unsigned long);
-      itkSetMacro(NumberOfStreamDivisions,unsigned long);
-      itkGetMacro(NumberOfStreamDivisions,unsigned long);
-      itkSetMacro(StreamingMode,StreamingModeType);
-      itkGetMacro(StreamingMode,StreamingModeType);
-      
+      itkStaticConstMacro(InputImageDimension, unsigned int, TInputImage::ImageDimension);     
       
       itkSetMacro(UsePadFirstInput,bool);
       itkGetMacro(UsePadFirstInput,bool);
       itkSetMacro(UsePadSecondInput,bool);
       itkGetMacro(UsePadSecondInput,bool);
 
-
-      itkSetObjectMacro(RegionSplitter, SplitterType);
-      itkGetObjectMacro(RegionSplitter, SplitterType);
-      
       /** Image related typedefs. */
       itkStaticConstMacro(ImageDimension, unsigned int, TInputImage::ImageDimension );
       
-      
-      
       /** Type to use for computations. */
       // First Input
-      typedef typename itk::NumericTraits<InternalPixelType>::RealType RealType;
-      //typedef double                                                   RealType;
+      //typedef typename itk::NumericTraits<InternalPixelType>::RealType RealType;
+      typedef double                                                   RealType;
       typedef itk::VariableLengthVector<RealType>                      RealPixelType;
       
       
@@ -144,7 +127,10 @@ namespace otb {
        */
       void AllocateOutputs();
       void GenerateOutputInformation();
-
+      // Override since the filter needs all the data for the algorithm
+      virtual void GenerateInputRequestedRegion();
+      virtual void Reset(void);
+      virtual void Synthetize(void);
 
       /** Input wrapper */
       void SetFirstInput(const TInputImage  *input1){ this->SetInput(0, input1 ); };
@@ -171,20 +157,14 @@ namespace otb {
 	}
       
     protected:
-      MatrixTransposeMatrixImageFilter();
-      ~MatrixTransposeMatrixImageFilter(){};
+      PersistentMatrixTransposeMatrixImageFilter();
+      ~PersistentMatrixTransposeMatrixImageFilter(){};
       void PrintSelf(std::ostream& os, itk::Indent indent) const;
-      /** Initialize some accumulators before the threads run. */
-      virtual void BeforeThreadedGenerateData ();
-      /** Do final mean and variance computation from data accumulated in threads. */
-      virtual void AfterThreadedGenerateData ();
       /** Multi-thread version GenerateData. */
       virtual void  ThreadedGenerateData (const RegionType& outputRegionForThread,int threadId);
-      // Override since the filter needs all the data for the algorithm
-      virtual void GenerateInputRequestedRegion();
       
     private:
-      MatrixTransposeMatrixImageFilter(const Self&); //purposely not implemented
+      PersistentMatrixTransposeMatrixImageFilter(const Self&); //purposely not implemented
       void operator=(const Self&); //purposely not implemented
       
       ArrayMatrixType  m_ThreadSum;
@@ -194,22 +174,109 @@ namespace otb {
       /** Nulber Of Component per Pixel. Change for padding */
       unsigned int m_NumberOfComponents1;
       unsigned int m_NumberOfComponents2;
-
-      /** Use to define the method used to calculate number of divisions */ 
-      unsigned long m_BufferMemorySize;
-      unsigned long m_BufferNumberOfLinesDivisions;
-      unsigned long m_NumberOfStreamDivisions;
-      
-      SplitterPointer m_RegionSplitter;
-      
-      /** Use to determine method of calculation number of divisions */
-      StreamingModeType  m_StreamingMode;
     }; // end of class
   
+/**===========================================================================*/
+
+/** \class StreamingMatrixTransposeMatrixImageFilter
+ * \brief This class streams the whole input image through the PersistentMatrixTransposeMatrixImageFilter.
+ *
+ * This way, it allows to compute \f[X^T.Y \f] where \f[X\f] and \f[Y\f] are the input images.
+ * first order global statistics of this image. It calls the Reset() method of the 
+ * PersistentMatrixTransposeMatrixImageFilter before streaming the image and the 
+ * Synthetize() method of the PersistentMatrixTransposeMatrixImageFilter after having streamed the image
+ * to compute the statistics. The accessor on the results are wrapping the accessors of the 
+ * internal PersistentStatisticsImageFilter. The accessor on the pad options are also provided.
+ *
+ * \sa PersistentMatrixTransposeMatrixImageFilter
+ * \sa PersistentImageFilter
+ * \sa PersistentFilterStreamingDecorator
+ * \sa StreamingImageVirtualWriter
+ * \ingroup Streamed
+ * \ingroup Multithreaded
+ * \ingroup MathematicalStatisticsImageFilters
+ */
+
+
+template<class TInputImage1, class TInputImage2>
+class ITK_EXPORT StreamingMatrixTransposeMatrixImageFilter :
+ public PersistentFilterStreamingDecorator
+  < PersistentMatrixTransposeMatrixImageFilter<TInputImage1, TInputImage2> >
+{
+public:
+  /** Standard Self typedef */
+  typedef StreamingMatrixTransposeMatrixImageFilter       Self;
+  typedef PersistentFilterStreamingDecorator
+    < PersistentMatrixTransposeMatrixImageFilter<TInputImage1, TInputImage2> > Superclass;
+  typedef itk::SmartPointer<Self>                  Pointer;
+  typedef itk::SmartPointer<const Self>            ConstPointer;
+
+  /** Type macro */
+  itkNewMacro(Self);
+  
+  /** Creation through object factory macro */
+  itkTypeMacro(StreamingMatrixTransposeMatrixImageFilter,PersistentFilterStreamingDecorator);
+
+  typedef typename Superclass::FilterType MatrixToTransposeMatrixFilterType;
+  typedef typename MatrixToTransposeMatrixFilterType::MatrixType MatrixType;
+  typedef itk::SimpleDataObjectDecorator<MatrixType> MatrixObjectType;
+  
+  typedef TInputImage1 InputImage1Type;
+  typedef TInputImage2 InputImage2Type;
+
+  /** Interfaces to the embedded filter */
+  void SetFirstInput(InputImage1Type * input1)
+    {
+      this->GetFilter()->SetFirstInput(input1);
+    }
+  void SetSecondInput(InputImage2Type * input2)
+    {
+      this->GetFilter()->SetSecondInput(input2);
+    }
+  void SetUsePadFirstInput(bool pad)
+    {
+      this->GetFilter()->SetUsePadFirstInput(pad);
+    }
+  void SetUsePadSecondInput(bool pad)
+    {
+      this->GetFilter()->SetUsePadSecondInput(pad);
+    }
+  bool GetUsePadFirstInput(void)
+    {
+      return this->GetFilter()->GetUsePadFirstInput();
+    }
+  bool GetUsePadSecondInput(void)
+    {
+      return this->GetFilter()->GetUsePadSecondInput();
+    }
+  /** Return the computed transpose(Image1)*Image2. */
+  MatrixType GetResult(void) const 
+    { 
+      return this->GetResultOutput()->Get(); 
+    }
+  MatrixObjectType* GetResultOutput(void)
+    {
+      return this->GetFilter()->GetResultOutput();
+    }
+  const MatrixObjectType* GetResultOutput() const
+    {
+      return this->GetFilter()->GetResultOutput();
+    }
+ protected:
+  /** Constructor */
+  StreamingMatrixTransposeMatrixImageFilter(){};
+  /** Destructor */
+  virtual ~StreamingMatrixTransposeMatrixImageFilter(){};
+  
+ private:
+  StreamingMatrixTransposeMatrixImageFilter(const Self&); //purposely not implemented
+  void operator=(const Self&); //purposely not implemented
+};
+
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbMatrixTransposeMatrixImageFilter.txx"
+#include "otbStreamingMatrixTransposeMatrixImageFilter.txx"
 #endif
 
 #endif
