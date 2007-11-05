@@ -140,7 +140,7 @@ class ITK_EXPORT PersistentStatisticsVectorImageFilter :
 
   protected:
     PersistentStatisticsVectorImageFilter();
-    ~PersistentStatisticsVectorImageFilter(){};
+    virtual ~PersistentStatisticsVectorImageFilter(){};
     void PrintSelf(std::ostream& os, itk::Indent indent) const;
      /** Multi-thread version GenerateData. */
     void  ThreadedGenerateData (const RegionType& outputRegionForThread,int threadId);

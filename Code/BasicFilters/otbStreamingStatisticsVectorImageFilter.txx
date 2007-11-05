@@ -215,9 +215,12 @@ void
 PersistentStatisticsVectorImageFilter<TInputImage>
 ::Reset()
 { 
+  TInputImage * inputPtr = const_cast<TInputImage * >(this->GetInput());
+  inputPtr->UpdateOutputInformation();
+
   unsigned int numberOfThreads = this->GetNumberOfThreads();
-  std::cout<<"ca passe pas : "<<this->GetInput()<<std::endl;
-  unsigned int numberOfComponent = this->GetInput()->GetNumberOfComponentsPerPixel();
+  std::cout<<"ca passe pas : "<<inputPtr<<std::endl;
+  unsigned int numberOfComponent = inputPtr->GetNumberOfComponentsPerPixel();
   std::cout<<"ca passe pas "<<std::endl;
 
   // Variable Initialisation
