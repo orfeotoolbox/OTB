@@ -18,6 +18,9 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
+#ifndef __otbBayesianFusionFilter_txx
+#define __otbBayesianFusionFilter_txx
+
 #include "otbBayesianFusionFilter.h"
 
 
@@ -280,3 +283,5 @@ namespace otb
   
   
 } // end namespace otb
+
+#endif
