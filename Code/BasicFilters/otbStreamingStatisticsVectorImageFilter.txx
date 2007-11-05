@@ -59,8 +59,6 @@ PersistentStatisticsVectorImageFilter<TInputImage>
   // just decorators around matrix types
   typename MatrixObjectType::Pointer output = static_cast<MatrixObjectType*>(this->MakeOutput(5).GetPointer());
   this->itk::ProcessObject::SetNthOutput(5, output.GetPointer());
-   std::cout<<"construction"<<std::endl;
-  //this->Reset();
  }
 
 
@@ -201,11 +199,9 @@ void
 PersistentStatisticsVectorImageFilter<TInputImage>
 ::AllocateOutputs()
 {
-  std::cout<<"AllocateOutputs"<<std::endl;
   // Pass the input through as the output
   InputImagePointer image = const_cast< TInputImage * >( this->GetInput() );
   this->GraftOutput( image );
- std::cout<<"AllocateOutputs"<<std::endl;
   // Nothing that needs to be allocated for the remaining outputs
 }
 
@@ -219,9 +215,7 @@ PersistentStatisticsVectorImageFilter<TInputImage>
   inputPtr->UpdateOutputInformation();
 
   unsigned int numberOfThreads = this->GetNumberOfThreads();
-  std::cout<<"ca passe pas : "<<inputPtr<<std::endl;
   unsigned int numberOfComponent = inputPtr->GetNumberOfComponentsPerPixel();
-  std::cout<<"ca passe pas "<<std::endl;
 
   // Variable Initialisation
   PixelType tempPixel;
@@ -269,7 +263,6 @@ void
 PersistentStatisticsVectorImageFilter<TInputImage>
 ::Synthetize()
 { 
-  std::cout<<"Synthetize"<<std::endl;
   //otbMsgDebugMacro(<<"Entering AfterThreadedGenerateData()");
   int i;
   long count;
@@ -298,10 +291,8 @@ PersistentStatisticsVectorImageFilter<TInputImage>
    
   // Find the min/max over all threads and accumulate count, sum and
   // sum of squares 
-  std::cout<<numberOfThreads<<std::endl;
   for( i = 0; i < numberOfThreads; i++)
     {
-      std::cout<<i<<std::endl;
       count += m_Count[i];
       /** TODO
        *  To modify using + method operator. If we use it now -> exceptionmacro (no GetClassName...)
@@ -387,7 +378,6 @@ PersistentStatisticsVectorImageFilter<TInputImage>
   this->GetMeanOutput()->Set( meanVector );
   this->GetSumOutput()->Set( sumVector);
   this->GetCovarianceOutput()->Set( covMatrix );
- std::cout<<"Synthetize"<<std::endl;
   //otbMsgDebugMacro(<<"Leaving AfterThreadedGenerateData()");
 }
 
@@ -400,7 +390,6 @@ PersistentStatisticsVectorImageFilter<TInputImage>
   /**
    * Grab the input
    */
-  std::cout<<"threadId : "<<threadId<<std::endl;
   InputImagePointer inputPtr = const_cast< TInputImage * >( this->GetInput() );
   
   
@@ -469,7 +458,6 @@ PersistentStatisticsVectorImageFilter<TInputImage>
       //**** END TODO ****
       m_Count[threadId]++;
     }
-  std::cout<<"Leaving ThreadedGenerateData()"<<std::endl;
   //otbMsgDebugMacro(<<"Leaving ThreadedGenerateData()");
 }
 
