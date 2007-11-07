@@ -72,8 +72,6 @@ namespace otb
 } // namespace otb
 
 
-} // namespace otb
-
 #ifndef OTB_MANUAL_INSTANTIATION
 #include "otbUtmMapProjection.txx"
 #endif
