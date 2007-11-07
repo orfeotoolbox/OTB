@@ -68,10 +68,10 @@ namespace otb
       
     };
 
+
+} // namespace otb
 #ifndef OTB_MANUAL_INSTANTIATION
 #include "otbSinusoidalMapProjection.txx"
 #endif
-
-} // namespace otb
 
 #endif

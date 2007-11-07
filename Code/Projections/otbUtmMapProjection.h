@@ -67,11 +67,11 @@ namespace otb
       void operator=(const Self&);   //purposely not implemented
      };
 		
-#ifndef OTB_MANUAL_INSTANTIATION
-#include "otbUtmMapProjection.txx"
-#endif
 
 } // namespace otb
 
+#ifndef OTB_MANUAL_INSTANTIATION
+#include "otbUtmMapProjection.txx"
+#endif
 
 #endif

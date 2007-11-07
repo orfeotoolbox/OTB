@@ -21,6 +21,8 @@ PURPOSE.  See the above copyright notices for more information.
 
 #include "otbSinusoidalMapProjection.h"
 
+namespace otb
+{
   
   template <InverseOrForwardTransformationEnum transform> 
 	SinusoidalMapProjection<transform> 
@@ -89,5 +91,5 @@ PURPOSE.  See the above copyright notices for more information.
   }
   
   
-
+}
 #endif
