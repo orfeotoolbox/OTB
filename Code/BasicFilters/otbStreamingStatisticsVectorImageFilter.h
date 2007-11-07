@@ -217,7 +217,7 @@ public:
   typedef typename StatFilterType::ArrayLongPixelType ArrayLongPixelType;
   typedef typename StatFilterType::ArrayRealPixelType ArrayRealPixelType;
   typedef typename StatFilterType::ArrayPixelType ArrayPixelType;
-  typedef typename StatFilterType::PixelObjectType PixelObjectType;
+
   
   
   
