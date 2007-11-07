@@ -347,6 +347,14 @@ namespace otb
     metersPerPixel[1]=ossimMetersPerPixel.y;
   }
 	
+	template<class TOssimMapProjection, InverseOrForwardTransformationEnum Transform, class TScalarType, unsigned int NInputDimensions, unsigned int NOutputDimensions> 
+	void 
+  MapProjection<TOssimMapProjection, Transform, TScalarType, NInputDimensions, NOutputDimensions>
+  ::PrintMap() const
+	{
+		std::cout << m_MapProjection->print(std::cout);
+	}
+
 	/*bool GetInverse(Self*) const 
 	{
 		

@@ -21,6 +21,8 @@ PURPOSE.  See the above copyright notices for more information.
 
 #include "otbMollweidMapProjection.h"
 
+namespace otb
+{
   
   template <InverseOrForwardTransformationEnum transform>
 	MollweidMapProjection<transform>
@@ -84,6 +86,8 @@ PURPOSE.  See the above copyright notices for more information.
   {
     this->m_MapProjection->setFalseEastingNorthing(falseEasting,falseNorthing);
   }
+	
+} // end namespace otb
   
 
 #endif

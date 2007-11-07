@@ -111,6 +111,7 @@ namespace otb
       //virtual void SetMatrix(double rotation,  const OutputPointType &scale, const OutputPointType &translation);
       void SetFalseEasting(double falseEasting);
 			
+			virtual void PrintMap() const ;
 			/** Return the inverse of the transform.
    		 *  The inverse is recomputed if it has been modified */
 		  //bool GetInverse(Self*) const ;

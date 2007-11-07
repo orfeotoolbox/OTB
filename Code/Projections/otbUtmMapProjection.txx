@@ -85,12 +85,10 @@ namespace otb
     return hemisphere;
   }
 	
-	template <InverseOrForwardTransformationEnum transform>
-	void UtmMapProjection<transform>
-  ::PrintMap() const
-	{
-		std::cout << this->m_MapProjection->print(std::cout);
-	}
+
+/*	template <InverseOrForwardTransformationEnum transform>
+	void UtmMapProjection<transform>*/
+	
 	
   
 

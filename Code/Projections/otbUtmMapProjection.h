@@ -55,8 +55,6 @@ namespace otb
       virtual long GetZone();
       virtual const char GetHemisphere() const;
 			
-			virtual void PrintMap() const;
-
 //			virtual unsigned char GetZoneFromGeoPoint(const InputPointType& geoPoint);
       
     protected:
