@@ -46,12 +46,12 @@ namespace otb
  * \sa PersistentImageStreamingDecorator.
  */
 template <class TInputImage>
-class ITK_EXPORT StreamingImageVirtualWriter : public itk::ProcessObject
+  class ITK_EXPORT StreamingImageVirtualWriter : public itk::ImageToImageFilter<TInputImage,TInputImage>
 {
 public:
   /** Standard class typedefs. */
   typedef StreamingImageVirtualWriter  Self;
-  typedef itk::ProcessObject  Superclass;
+  typedef itk::ImageToImageFilter<TInputImage,TInputImage>  Superclass;
   typedef itk::SmartPointer<Self>  Pointer;
   typedef itk::SmartPointer<const Self>  ConstPointer;
 
@@ -59,7 +59,7 @@ public:
   itkNewMacro(Self);
   
   /** Run-time type information (and related methods). */
-  itkTypeMacro(StreamingImageVirtualWriter,itk::ProcessObject);
+  itkTypeMacro(StreamingImageVirtualWriter,itk::ImageToImageFilter);
 
   /** Some typedefs for the input and output. */
   typedef TInputImage InputImageType;
@@ -95,10 +95,10 @@ public:
    */
   void SetAutomaticNumberOfStreamDivisions(void);
 	
-	/** Set the tiling automatic mode for streaming division */
-	void SetTilingStreamDivisions(void);
-	/** Choose number of divisions in tiling streaming division */
-	void SetTilingStreamDivisions(unsigned long);
+  /** Set the tiling automatic mode for streaming division */
+  void SetTilingStreamDivisions(void);
+  /** Choose number of divisions in tiling streaming division */
+  void SetTilingStreamDivisions(unsigned long);
 
   /** Return the string to indicate the method use to calculate number of stream divisions. */
   std::string GetMethodUseToCalculateNumberOfStreamDivisions(void);
@@ -121,20 +121,15 @@ public:
   /** Type use to define number of divisions */
   typedef StreamingMode CalculationDivisionEnumType;
 
-  virtual void Update(void);
+ 
+  virtual void GenerateInputRequestedRegion(void);
 
 protected:
   StreamingImageVirtualWriter();
   ~StreamingImageVirtualWriter();
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
-  /** Override UpdateOutputData() from ProcessObject to divide upstream
-   * updates into pieces. This filter does not have a GenerateData()
-   * or ThreadedGenerateData() method.  Instead, all the work is done
-   * in UpdateOutputData() since it must update a little, execute a little,
-   * update some more, execute some more, etc. */
-  virtual void Stream(void);
-
+  virtual void GenerateData(void);
 
 private:
   StreamingImageVirtualWriter(const StreamingImageVirtualWriter&); //purposely not implemented

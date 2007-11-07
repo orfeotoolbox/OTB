@@ -133,19 +133,17 @@ class ITK_EXPORT PersistentStatisticsVectorImageFilter :
     /** Pass the input through unmodified. Do this by Grafting in the
      *  AllocateOutputs method.
      */
-    void AllocateOutputs();
-    void GenerateOutputInformation();
-    void Synthetize(void);
-    void Reset(void);
+    virtual void AllocateOutputs();
+    virtual void GenerateOutputInformation();
+    virtual void Synthetize(void);
+    virtual void Reset(void);
 
   protected:
     PersistentStatisticsVectorImageFilter();
     virtual ~PersistentStatisticsVectorImageFilter(){};
-    void PrintSelf(std::ostream& os, itk::Indent indent) const;
+    virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
      /** Multi-thread version GenerateData. */
     void  ThreadedGenerateData (const RegionType& outputRegionForThread,int threadId);
-    // Override since the filter needs all the data for the algorithm
-    //void GenerateInputRequestedRegion();
     
   private:
     PersistentStatisticsVectorImageFilter(const Self&); //purposely not implemented
@@ -157,15 +155,6 @@ class ITK_EXPORT PersistentStatisticsVectorImageFilter :
     ArrayPixelType     m_ThreadMax;
     ArrayMatrixType    m_XX;
 
-    /** Use to define the method used to calculate number of divisions */ 
-    //unsigned long m_BufferMemorySize;
-    //unsigned long m_BufferNumberOfLinesDivisions;
-    //unsigned long m_NumberOfStreamDivisions;
-    
-    //SplitterPointer m_RegionSplitter;
-    
-    /** Use to determine method of calculation number of divisions */
-    //StreamingModeType  m_StreamingMode;
   }; // end of class PersistentStatisticsVectorImageFilter
 
 /**===========================================================================*/

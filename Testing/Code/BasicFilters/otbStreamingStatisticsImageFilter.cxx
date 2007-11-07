@@ -18,6 +18,7 @@
 #include "itkExceptionObject.h"
 
 #include "otbStreamingStatisticsImageFilter.h"
+#include "itkStatisticsImageFilter.h"
 #include "otbImageFileReader.h"
 #include "otbImage.h"
 #include <fstream>
@@ -36,7 +37,7 @@ int otbStreamingStatisticsImageFilter(int argc, char * argv[])
       typedef otb::Image<PixelType,Dimension> ImageType;
       typedef otb::ImageFileReader<ImageType> ReaderType;
       typedef otb::StreamingStatisticsImageFilter<ImageType> StreamingStatisticsImageFilterType;
-
+      //typedef itk::StatisticsImageFilter<ImageType> StreamingStatisticsImageFilterType;
       // Instantiating object
       StreamingStatisticsImageFilterType::Pointer filter = StreamingStatisticsImageFilterType::New();
       

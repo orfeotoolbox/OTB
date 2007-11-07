@@ -64,7 +64,6 @@ namespace otb {
     this->Reset();
   }
 
-
   template<class TInputImage>
   typename itk::DataObject::Pointer
   PersistentStatisticsImageFilter<TInputImage>
@@ -210,20 +209,17 @@ namespace otb {
 	  {
 	    this->GetOutput()->SetRequestedRegion(this->GetOutput()->GetLargestPossibleRegion());
 	  }
-	otbMsgDebugMacro(<<"BeforeThreadedGenerateData() - output requested region: "<<this->GetOutput()->GetRequestedRegion());
       }
   }
-
   template<class TInputImage>
   void
   PersistentStatisticsImageFilter<TInputImage>
   ::AllocateOutputs()
   {
-    // Pass the input through as the output
-    InputImagePointer image =
-      const_cast< TInputImage * >( this->GetInput() );
-    this->GraftOutput( image );
-
+    // This is commented to prevent the streaming of the whole image for the first stream strip
+    // It shall not cause any problem because the output image of this filter is not intended to be used.
+    //InputImagePointer image = const_cast< TInputImage * >( this->GetInput() );
+    //this->GraftOutput( image );
     // Nothing that needs to be allocated for the remaining outputs
   }
 
@@ -232,7 +228,6 @@ namespace otb {
   PersistentStatisticsImageFilter<TInputImage>
   ::Synthetize()
   {
-    //otbMsgDebugMacro(<<"Entering AfterThreadedGenerateData()");
     int i;
     long count;
     RealType sumOfSquares;
@@ -283,7 +278,6 @@ namespace otb {
     this->GetSigmaOutput()->Set( sigma );
     this->GetVarianceOutput()->Set( variance );
     this->GetSumOutput()->Set( sum );
-    //otbMsgDebugMacro(<<"Leaving AfterThreadedGenerateData()");
   }
 
   template<class TInputImage>
@@ -315,7 +309,6 @@ namespace otb {
   ::ThreadedGenerateData(const RegionType& outputRegionForThread,
 			 int threadId) 
   {
-    //otbMsgDebugMacro(<<"Entering ThreadedGenerateData()");
     /**
      * Grab the input
      */
@@ -323,14 +316,12 @@ namespace otb {
     // support progress methods/callbacks
     itk::ProgressReporter progress(this, threadId, outputRegionForThread.GetNumberOfPixels());
 
-    otbMsgDebugMacro(<<"ThreadedGenerateData() - thread "<<threadId <<" - Thread region: "<<outputRegionForThread);
-
     RealType realValue;
     PixelType value;
 
     itk::ImageRegionConstIterator<TInputImage> it (inputPtr, outputRegionForThread);
       
-      
+    it.GoToBegin();
     // do the work
     while (!it.IsAtEnd())
       {

@@ -138,7 +138,7 @@ StreamingImageVirtualWriter<TInputImage>
 ::SetInput(const InputImageType *input)
 {
   // ProcessObject is not const_correct so this cast is required here.
-  this->ProcessObject::SetNthInput(0, 
+  this->itk::ProcessObject::SetNthInput(0, 
                                    const_cast<TInputImage *>(input ) );
 }
 
@@ -155,7 +155,7 @@ StreamingImageVirtualWriter<TInputImage>
     }
   
   return static_cast<TInputImage*>
-    (this->ProcessObject::GetInput(0));
+    (this->itk::ProcessObject::GetInput(0));
 }
 
 
@@ -164,9 +164,23 @@ const typename StreamingImageVirtualWriter<TInputImage>::InputImageType *
 StreamingImageVirtualWriter<TInputImage>
 ::GetInput(unsigned int idx)
 {
-  return static_cast<TInputImage*> (this->ProcessObject::GetInput(idx));
+  return static_cast<TInputImage*> (this->itk::ProcessObject::GetInput(idx));
 }
-
+template <class TInputImage>
+void
+StreamingImageVirtualWriter<TInputImage>
+::GenerateInputRequestedRegion(void)
+{
+  InputImagePointer inputPtr = const_cast< InputImageType * >( this->GetInput(0) );
+  typename InputImageRegionType::SizeType size;
+  typename InputImageRegionType::IndexType index;
+  InputImageRegionType region;
+  index.Fill(0);
+  size.Fill(0);
+  region.SetSize(size);
+  region.SetIndex(index);
+  inputPtr->SetRequestedRegion(region);  
+}
 /**
  *
  */
@@ -181,8 +195,7 @@ template<class TInputImage>
 unsigned long 
 StreamingImageVirtualWriter<TInputImage>
 ::CalculateNumberOfStreamDivisions(void)
-{
-	
+{	
 	return StreamingTraitsType
     ::CalculateNumberOfStreamDivisions(this->GetInput(),
 				       this->GetInput()->GetRequestedRegion(),
@@ -191,8 +204,6 @@ StreamingImageVirtualWriter<TInputImage>
 				       m_BufferMemorySize,
 				       m_BufferNumberOfLinesDivisions);
 }
-
-
 /**
  *
  */
@@ -223,7 +234,6 @@ StreamingImageVirtualWriter<TInputImage>
       break;
     }
 }
-
 /**
  *
  */
@@ -244,66 +254,26 @@ StreamingImageVirtualWriter<TInputImage>
     os << indent << "Region splitter: (none)" << std::endl;
     }
 }
-
 template<class TInputImage>
 void 
 StreamingImageVirtualWriter<TInputImage>
-::Update(void)
+::GenerateData(void)
 {
-  this->Stream();
-}
-
-template<class TInputImage>
-void 
-StreamingImageVirtualWriter<TInputImage>
-::Stream(void)
-{
-unsigned int idx;
-
-  /**
-   * prevent chasing our tail
-   */
-  if (this->m_Updating)
-    {
-    return;
-    }
-
-
   /**
    * Prepare all the outputs. This may deallocate previous bulk data.
    */
   this->PrepareOutputs();
-
-  /**
-   * Make sure we have the necessary inputs
-   */
-  unsigned int ninputs = this->GetNumberOfValidRequiredInputs();
-  if (ninputs < this->GetNumberOfRequiredInputs())
-    {
-    itkExceptionMacro(<< "At least " << static_cast<unsigned int>( this->GetNumberOfRequiredInputs() ) << " inputs are required but only " << ninputs << " are specified.");
-    return;
-    }
   this->SetAbortGenerateData(0);
   this->SetProgress(0.0);
   this->m_Updating = true;
-    
-
   /**
    * Tell all Observers that the filter is starting
    */
   this->InvokeEvent( itk::StartEvent() );
-
-  
-
   /**
    * Grab the input
    */
-  InputImagePointer inputPtr = 
-    const_cast< InputImageType * >( this->GetInput(0) );
-  inputPtr->UpdateOutputInformation();
-  /**
-   * Allocate the output buffer. 
-   */
+  InputImagePointer inputPtr = const_cast< InputImageType * >( this->GetInput(0) );
   InputImageRegionType outputRegion = inputPtr->GetLargestPossibleRegion();
   /**
    * Determine of number of pieces to divide the input.  This will be the
@@ -311,48 +281,33 @@ unsigned int idx;
    * and what the Splitter thinks is a reasonable value.
    */
   unsigned int numDivisions, numDivisionsFromSplitter;
-
   numDivisions = static_cast<unsigned int>(CalculateNumberOfStreamDivisions());
-  otbDebugMacro(<< "NumberOfStreamDivisions : " << numDivisions);
   numDivisionsFromSplitter = m_RegionSplitter->GetNumberOfSplits(outputRegion, numDivisions);
-  otbDebugMacro(<< "NumberOfStreamSplitterDivisions : " << numDivisionsFromSplitter);
+  otbMsgDebugMacro(<<"LargestPossibleRegion: "<<outputRegion);
+  otbMsgDebugMacro(<<"NumberOfStreamDivisions : " << numDivisions);
+  otbMsgDebugMacro(<<"NumberOfStreamSplitterDivisions : " << numDivisionsFromSplitter);
   
   /** In tiling streaming mode, we keep the number of divisions calculed by splitter */
   if ((numDivisionsFromSplitter < numDivisions)||(m_CalculationDivision==SET_TILING_STREAM_DIVISIONS))
     {
       numDivisions = numDivisionsFromSplitter;
     }
-  
   /**
    * Loop over the number of pieces, execute the upstream pipeline on each
    * piece, and copy the results into the output image.
    */
   InputImageRegionType streamRegion;
-
-  otbMsgDebugMacro(<< "Number Of Stream Divisions : " << numDivisionsFromSplitter);
-
   unsigned int piece;
   for (piece = 0;
        piece < numDivisionsFromSplitter && !this->GetAbortGenerateData();
        piece++)
     {
-      streamRegion = m_RegionSplitter->GetSplit(piece, numDivisions,
-						outputRegion);
-      
-      otbMsgDebugMacro(<< "Piece : " << piece );
-      otbMsgDebugMacro(<< "RegionSplit : Index(" << streamRegion.GetIndex()[0]
-		    << "," << streamRegion.GetIndex()[1]
-		    << ") Size(" << streamRegion.GetSize()[0]
-		    << "," << streamRegion.GetSize()[1] << ")" );
-      
-      
+      streamRegion = m_RegionSplitter->GetSplit(piece, numDivisions,outputRegion);
+      inputPtr->ReleaseData();
       inputPtr->SetRequestedRegion(streamRegion);
-      inputPtr->PropagateRequestedRegion();
-      inputPtr->UpdateOutputData();
-      
+      inputPtr->Update();
       this->UpdateProgress((float) piece / numDivisions );
     }
-  
   /**
    * If we ended due to aborting, push the progress up to 1.0 (since
    * it probably didn't end there)
@@ -368,27 +323,18 @@ unsigned int idx;
   /**
    * Now we have to mark the data as up to data.
    */
-  for (idx = 0; idx < this->GetNumberOfOutputs(); ++idx)
+  for (unsigned int idx = 0; idx < this->GetNumberOfOutputs(); ++idx)
     {
     if (this->GetOutput(idx))
       {
       this->GetOutput(idx)->DataHasBeenGenerated();
       }
     }
-  
   /**
    * Release any inputs if marked for release
    */
   this->ReleaseInputs();
-  
-  // Mark that we are no longer updating the data in this filter
-  this->m_Updating = false;
-
-
 }
-
-
-
 } // end namespace otb
 
 #endif

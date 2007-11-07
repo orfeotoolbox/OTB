@@ -92,7 +92,6 @@ namespace otb {
       
       /** Type to use for computations. */
       // First Input
-      //typedef typename itk::NumericTraits<InternalPixelType>::RealType RealType;
       typedef double                                                   RealType;
       typedef itk::VariableLengthVector<RealType>                      RealPixelType;
       

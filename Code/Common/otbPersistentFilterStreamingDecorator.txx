@@ -68,7 +68,6 @@ PersistentFilterStreamingDecorator<TFilter>
   this->GetFilter()->Reset();
   m_Streamer->SetInput(m_Filter->GetOutput());
   m_Streamer->Update();
-
   // Synthetize data afther the streaming of the whole image.
   this->GetFilter()->Synthetize();
 }

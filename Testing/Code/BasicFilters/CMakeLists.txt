@@ -328,7 +328,7 @@ ADD_TEST(bfTvStreamingStatisticsImageFilter ${BASICFILTERS_TESTS}
  		   ${BASELINE_FILES}/bfStreamingStatisticsImageFilterResults.txt
  		   ${TEMP}/bfStreamingStatisticsImageFilterResults.txt
          otbStreamingStatisticsImageFilter
-		${IMAGEDATA}/TOULOUSE/QuickBird/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF
+		${INPUTDATA}/panchro.tif
 		${TEMP}/bfStreamingStatisticsImageFilterResults.txt)
 
 # -------            otb::VectorImageTo3DScalarImageFilter   ----------------------------

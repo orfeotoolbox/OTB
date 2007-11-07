@@ -101,7 +101,8 @@ PersistentMatrixTransposeMatrixImageFilter<TInputImage, TInputImage2>
 ::GenerateInputRequestedRegion()
 {
   Superclass::GenerateInputRequestedRegion();
-  if ( this->GetInput() )
+  
+  if ( this->GetFirstInput() && this->GetSecondInput() )
     {
       InputImagePointer image = const_cast< typename Superclass::InputImageType * >( this->GetFirstInput() );
       InputImagePointer image2 = const_cast< typename Superclass::InputImageType * >( this->GetSecondInput() );    
@@ -115,11 +116,16 @@ PersistentMatrixTransposeMatrixImageFilter<TInputImage, TInputImage2>
 ::GenerateOutputInformation()
 {
   Superclass::GenerateOutputInformation();
-  if ( this->GetInput() )
+  if ( this->GetFirstInput() )
     {
       this->GetOutput()->CopyInformation(this->GetFirstInput());
       this->GetOutput()->SetLargestPossibleRegion(this->GetFirstInput()->GetLargestPossibleRegion());
     }
+
+  if(this->GetOutput()->GetRequestedRegion().GetNumberOfPixels()==0)
+	  {
+	    this->GetOutput()->SetRequestedRegion(this->GetOutput()->GetLargestPossibleRegion());
+	  }
 }
 
 template<class TInputImage, class TInputImage2>
@@ -127,10 +133,10 @@ void
 PersistentMatrixTransposeMatrixImageFilter<TInputImage, TInputImage2>
 ::AllocateOutputs()
 {
-  
-  // Pass the input through as the output
-  InputImagePointer image = const_cast< TInputImage * >( this->GetInput() );
-  this->GraftOutput( image );
+  // This is commented to prevent the streaming of the whole image for the first stream strip
+  // It shall not cause any problem because the output image of this filter is not intended to be used.
+  //InputImagePointer image = const_cast< TInputImage * >( this->GetInput() );
+  //this->GraftOutput( image );
   // Nothing that needs to be allocated for the remaining outputs
 }
 
@@ -222,17 +228,13 @@ PersistentMatrixTransposeMatrixImageFilter<TInputImage, TInputImage2>
   /**
    * Grab the input
    */
-
   InputImagePointer input1Ptr = const_cast< TInputImage * >( this->GetFirstInput() );
   InputImagePointer input2Ptr = const_cast< TInputImage2 * >( this->GetSecondInput() );
   
   // support progress methods/callbacks
-  itk::ProgressReporter progress(this, threadId, outputRegionForThread.GetNumberOfPixels());
-  
-  
+  itk::ProgressReporter progress(this, threadId, outputRegionForThread.GetNumberOfPixels());  
   input1Ptr->SetRequestedRegion(outputRegionForThread);
   input2Ptr->SetRequestedRegion(outputRegionForThread);
-  otbMsgDebugMacro(<<"ThreadedGenerateData() - thread "<<threadId <<" - streaming region: "<<outputRegionForThread);
   input1Ptr->PropagateRequestedRegion();
   input1Ptr->UpdateOutputData();
   input2Ptr->PropagateRequestedRegion();
