@@ -44,7 +44,6 @@ int generic_main(int argc, char* argv[], TMapProjection* mapProjection, otb::Com
     { 
 		
 				typedef TMapProjection MapProjectionType;
-				typename MapProjectionType::Pointer mapProjection = MapProjectionType::New();
 				
 				typename MapProjectionType::InputPointType cartoPoint;
 				typename MapProjectionType::OutputPointType geoPoint;
@@ -134,7 +133,7 @@ try
 						
 					utmProjection->SetZone(numZone);
 					utmProjection->SetHemisphere(hemisphere);
-						
+					
 					return generic_main<UtmProjectionType>(argc,argv, utmProjection, parseResult);
 				}
 				else
