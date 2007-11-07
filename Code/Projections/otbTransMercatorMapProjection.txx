@@ -27,7 +27,6 @@ namespace otb
   TransMercatorMapProjection<transform>
   ::TransMercatorMapProjection()
   {
-    m_TransMercatorProjection = new ossimTransMercatorProjection();
   }
   
   /// Desctructor
@@ -35,7 +34,6 @@ namespace otb
 	TransMercatorMapProjection<transform>
   ::~TransMercatorMapProjection()
   {
-    delete m_TransMercatorProjection;
   }
   
   ///Set the default ellipsoid 
@@ -46,8 +44,8 @@ namespace otb
     ossimEllipsoid ellipse(6378137.0,6356752.3142);
     ossimGpt origin(49.83,6.16);
     
-    delete m_TransMercatorProjection;
-    m_TransMercatorProjection = new ossimTransMercatorProjection(ellipse,origin,80000.0,100000.0,1.0);
+    delete (this->m_MapProjection);
+    this->m_MapProjection = new ossimTransMercatorProjection(ellipse,origin,80000.0,100000.0,1.0);
   }
   
   ///Set the false Easting
@@ -55,7 +53,7 @@ namespace otb
 	void TransMercatorMapProjection<transform>
   ::SetFalseEasting(double falseEasting) 
   {
-    m_TransMercatorProjection->setFalseEasting(falseEasting);
+    this->m_MapProjection->setFalseEasting(falseEasting);
   }
   
   ///Set the False Northing
@@ -63,7 +61,7 @@ namespace otb
 	void TransMercatorMapProjection<transform>
   ::SetFalseNorthing(double falseNorthing) 
   {
-    m_TransMercatorProjection->setFalseNorthing(falseNorthing);
+    this->m_MapProjection->setFalseNorthing(falseNorthing);
   }
   
   ///Set the scale factor
@@ -71,7 +69,7 @@ namespace otb
 	void TransMercatorMapProjection<transform>
   ::SetScaleFactor(double scaleFactor) 
   {
-    m_TransMercatorProjection->setScaleFactor(scaleFactor);
+    this->m_MapProjection->setScaleFactor(scaleFactor);
   }
   
   ///Set the parameters
@@ -79,7 +77,7 @@ namespace otb
 	void TransMercatorMapProjection<transform>
   ::SetParameters(double falseEasting,double falseNorthing,double scaleFactor) 
   {
-    m_TransMercatorProjection->setParameters(falseEasting, falseNorthing, scaleFactor);
+    this->m_MapProjection->setParameters(falseEasting, falseNorthing, scaleFactor);
   }
   
   ///Set the default parameters
@@ -87,7 +85,7 @@ namespace otb
 	void TransMercatorMapProjection<transform>
   ::SetDefaults() 
   {
-    m_TransMercatorProjection->setDefaults();
+    this->m_MapProjection->setDefaults();
   }
   
   ///\return the scale factor
@@ -96,7 +94,7 @@ namespace otb
   ::GetScaleFactor() const
   {
     double scaleFactor;
-    scaleFactor=m_TransMercatorProjection->getScaleFactor();
+    scaleFactor=this->m_MapProjection->getScaleFactor();
     
     return scaleFactor;
   }
@@ -106,7 +104,7 @@ namespace otb
 	double TransMercatorMapProjection<transform>
   ::GetFalseNorthing() const
   {
-    double falseNorthing=m_TransMercatorProjection->getFalseNorthing();
+    double falseNorthing=this->m_MapProjection->getFalseNorthing();
     
     return falseNorthing;
   }
@@ -116,7 +114,7 @@ namespace otb
 	double TransMercatorMapProjection<transform>
   ::GetFalseEasting() const
   {
-    double falseEasting=m_TransMercatorProjection->getFalseEasting();
+    double falseEasting=this->m_MapProjection->getFalseEasting();
     
     return falseEasting;
   }

@@ -255,31 +255,30 @@ ADD_TEST(prTvOrthoRectificationCevennesWithDEM ${PROJECTIONS_TESTS}
 SET(EMMANUELDATA ${OTB_DATA_ROOT}/Emmanuel/Singapour/000000173549_01_P001_MUL)
 
 # TEST 22
-ADD_TEST(prTvRegionProjectionResamplerSingapour ${PROJECTIONS_TESTS}  
-				otbRegionProjectionResampler
-        ${EMMANUELDATA}/04MAR21031747-M1BS-000000173549_01_P001.TIF
-        ${TEMP}/prTvRegionProjectionResamplerSingapour.tif
-        103.8464 1.31
-        500
-				500
-				10
-				0.00001
-				-0.00001
-        )
+#ADD_TEST(prTvRegionProjectionResamplerSingapour ${PROJECTIONS_TESTS}  
+#				otbRegionProjectionResampler
+#        ${EMMANUELDATA}/04MAR21031747-M1BS-000000173549_01_P001.TIF
+#        ${TEMP}/prTvRegionProjectionResamplerSingapour.tif
+#        103.8464 1.31
+#        500
+#				500
+#				10
+#				0.00001
+#				-0.00001
+#        )
 
 # TEST 23
-ADD_TEST(prTvOrthoRectificationSingapour ${PROJECTIONS_TESTS} 
-        otbOrthoRectificationFilter
-        ${EMMANUELDATA}/04MAR21031747-M1BS-000000173549_01_P001.TIF
-        ${TEMP}/prTvOrthoRectificationSingapour_UTM.tif
-#        144885.4	371997.12 #Emmanuel
-				2.61165e+07 1.50256e+06
-        500
-				500 
-				220
-				1
-        -1
-        )
+#ADD_TEST(prTvOrthoRectificationSingapour ${PROJECTIONS_TESTS} 
+#        otbOrthoRectificationFilter
+#        ${EMMANUELDATA}/04MAR21031747-M1BS-000000173549_01_P001.TIF
+#        ${TEMP}/prTvOrthoRectificationSingapour_UTM.tif
+#        371997.12 144885.4
+#        500
+#				500 
+#				220
+#				1
+#        -1
+#        )
 
 
 

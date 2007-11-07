@@ -28,7 +28,6 @@ namespace otb
 	Eckert4MapProjection<transform>
   ::Eckert4MapProjection()
   {
-	m_Eckert4Projection = new ossimEckert4Projection();
   }
   
   
@@ -36,7 +35,6 @@ namespace otb
 	Eckert4MapProjection<transform>
   ::~Eckert4MapProjection()
   {
-    delete m_Eckert4Projection;
   }
   
   ///False easting specification
@@ -44,7 +42,7 @@ namespace otb
 	void Eckert4MapProjection<transform>
 ::SetFalseEasting(double falseEasting) 
   {
-    m_Eckert4Projection->setFalseEasting(falseEasting);
+    this->m_MapProjection->setFalseEasting(falseEasting);
   }
   
   ///False Northing specification
@@ -52,7 +50,7 @@ namespace otb
 	void Eckert4MapProjection<transform>
   ::SetFalseNorthing(double falseNorthing) 
   {
-    m_Eckert4Projection->setFalseNorthing(falseNorthing);
+    this->m_MapProjection->setFalseNorthing(falseNorthing);
   }
   
   ///Set the defaul parameters
@@ -60,7 +58,7 @@ namespace otb
 	void Eckert4MapProjection<transform>
   ::SetDefaults() 
   {
-    m_Eckert4Projection->setDefaults();
+    this->m_MapProjection->setDefaults();
   }
   
   ///Get the false northing coordinates (avoid negative values)
@@ -68,7 +66,7 @@ namespace otb
 	double Eckert4MapProjection<transform>
   ::GetFalseNorthing() const
   {
-    double falseNorthing=m_Eckert4Projection->getFalseNorthing();
+    double falseNorthing=this->m_MapProjection->getFalseNorthing();
     return falseNorthing;
   }
   
@@ -77,7 +75,7 @@ namespace otb
 	double Eckert4MapProjection<transform>
   ::GetFalseEasting() const
   {
-    double falseEasting=m_Eckert4Projection->getFalseEasting();
+    double falseEasting=this->m_MapProjection->getFalseEasting();
     return falseEasting;
   }
   
@@ -85,7 +83,7 @@ namespace otb
 	void Eckert4MapProjection<transform>
   ::SetParameters(double falseEasting,double falseNorthing)
   {
-    m_Eckert4Projection->setFalseEastingNorthing(falseEasting,falseNorthing);
+    this->m_MapProjection->setFalseEastingNorthing(falseEasting,falseNorthing);
   }
   
 } // namespace otb

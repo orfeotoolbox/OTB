@@ -58,7 +58,6 @@ namespace otb
       protected :
 	Eckert4MapProjection(); 
       virtual ~Eckert4MapProjection();
-      ossimEckert4Projection* m_Eckert4Projection;
       
       private :
 	Eckert4MapProjection(const Self&); //purposely not implemented

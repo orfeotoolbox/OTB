@@ -60,7 +60,6 @@ namespace otb
     protected:
       SinusoidalMapProjection(); 
       virtual ~SinusoidalMapProjection();
-      ossimSinusoidalProjection* m_SinusoidalProjection;
       
       private :
 	SinusoidalMapProjection(const Self&); //purposely not implemented
@@ -68,8 +67,8 @@ namespace otb
       
     };
 
-
 } // namespace otb
+
 #ifndef OTB_MANUAL_INSTANTIATION
 #include "otbSinusoidalMapProjection.txx"
 #endif

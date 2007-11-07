@@ -62,7 +62,6 @@ namespace otb
     protected:
 	LambertConformalConicMapProjection(); 
 	virtual ~LambertConformalConicMapProjection();
-	ossimLambertConformalConicProjection* m_LambertConformalConicProjection;
 	
 	private :
 	  LambertConformalConicMapProjection(const Self&); //purposely not implemented

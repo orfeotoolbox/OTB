@@ -62,7 +62,6 @@ namespace otb
     protected:
       TransMercatorMapProjection(); 
       virtual ~TransMercatorMapProjection();
-      ossimTransMercatorProjection* m_TransMercatorProjection;
 	
       private :
 	TransMercatorMapProjection(const Self&); //purposely not implemented
@@ -72,6 +71,7 @@ namespace otb
 
 
 } // namespace otb
+
 #ifndef OTB_MANUAL_INSTANTIATION
 #include "otbTransMercatorMapProjection.txx"
 #endif

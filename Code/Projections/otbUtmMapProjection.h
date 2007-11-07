@@ -56,6 +56,8 @@ namespace otb
       virtual const char GetHemisphere() const;
 			
 			virtual void PrintMap() const;
+
+//			virtual unsigned char GetZoneFromGeoPoint(const InputPointType& geoPoint);
       
     protected:
       UtmMapProjection(); 
@@ -66,7 +68,9 @@ namespace otb
       UtmMapProjection(const Self&); //purposely not implemented
       void operator=(const Self&);   //purposely not implemented
      };
-		
+
+} // namespace otb
+
 
 } // namespace otb
 

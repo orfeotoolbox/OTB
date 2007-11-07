@@ -26,14 +26,12 @@ PURPOSE.  See the above copyright notices for more information.
 	MollweidMapProjection<transform>
   ::MollweidMapProjection()
   {
-    m_MollweidProjection = new ossimMollweidProjection();
   }
   
   template <InverseOrForwardTransformationEnum transform>
 	MollweidMapProjection<transform>
   ::~MollweidMapProjection()
   {
-    delete m_MollweidProjection;
   }
   
   ///Set the false easting
@@ -41,7 +39,7 @@ PURPOSE.  See the above copyright notices for more information.
 	void MollweidMapProjection<transform>
   ::SetFalseEasting(double falseEasting) 
   {
-    m_MollweidProjection->setFalseEasting(falseEasting);
+    this->m_MapProjection->setFalseEasting(falseEasting);
   }
   
   ///Set the false Northing
@@ -49,7 +47,7 @@ PURPOSE.  See the above copyright notices for more information.
 	void MollweidMapProjection<transform>
   ::SetFalseNorthing(double falseNorthing) 
   {
-    m_MollweidProjection->setFalseNorthing(falseNorthing);
+    this->m_MapProjection->setFalseNorthing(falseNorthing);
   }
   
   ///Set the default parameters
@@ -57,7 +55,7 @@ PURPOSE.  See the above copyright notices for more information.
 	void MollweidMapProjection<transform>
   ::SetDefaults() 
   {
-    m_MollweidProjection->setDefaults();
+    this->m_MapProjection->setDefaults();
   }
   
   ///\return the false northing (avoid negative coordinates)
@@ -65,7 +63,7 @@ PURPOSE.  See the above copyright notices for more information.
 	double MollweidMapProjection<transform>
   ::GetFalseNorthing() const
   {
-    double falseNorthing=m_MollweidProjection->getFalseNorthing();
+    double falseNorthing=this->m_MapProjection->getFalseNorthing();
     
     return falseNorthing;
   }
@@ -75,7 +73,7 @@ PURPOSE.  See the above copyright notices for more information.
 	double MollweidMapProjection<transform>
   ::GetFalseEasting() const
   {
-    double falseEasting=m_MollweidProjection->getFalseEasting();
+    double falseEasting=this->m_MapProjection->getFalseEasting();
     
     return falseEasting;
 }
@@ -84,7 +82,7 @@ PURPOSE.  See the above copyright notices for more information.
 	void MollweidMapProjection<transform>
   ::SetParameters(double falseEasting,double falseNorthing)
   {
-    m_MollweidProjection->setFalseEastingNorthing(falseEasting,falseNorthing);
+    this->m_MapProjection->setFalseEastingNorthing(falseEasting,falseNorthing);
   }
   
 

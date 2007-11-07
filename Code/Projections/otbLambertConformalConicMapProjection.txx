@@ -28,14 +28,12 @@ namespace otb
   LambertConformalConicMapProjection<transform>
   ::LambertConformalConicMapProjection()
   {
-    m_LambertConformalConicProjection = new ossimLambertConformalConicProjection();
   }
   
 	template <InverseOrForwardTransformationEnum transform>
   LambertConformalConicMapProjection<transform>
   ::~LambertConformalConicMapProjection()
   {
-    delete m_LambertConformalConicProjection;
   }
   
   
@@ -44,7 +42,7 @@ namespace otb
   void LambertConformalConicMapProjection<transform>
   ::SetStandardParallel1(double degree) 
   {
-    m_LambertConformalConicProjection->setStandardParallel1(degree);
+    this->m_MapProjection->setStandardParallel1(degree);
   }
   
   /// Parallel2 specification
@@ -52,7 +50,7 @@ namespace otb
 	void LambertConformalConicMapProjection<transform>
   ::SetStandardParallel2(double degree) 
   {
-    m_LambertConformalConicProjection->setStandardParallel2(degree);
+    this->m_MapProjection->setStandardParallel2(degree);
   }
   
   /// Specification of the 2 parallels
@@ -60,7 +58,7 @@ namespace otb
 	void LambertConformalConicMapProjection<transform>
   ::SetStandardParallels(double parallel1Degree,double parallel2Degree) 
   {
-    m_LambertConformalConicProjection->setStandardParallels(parallel1Degree,parallel2Degree);
+    this->m_MapProjection->setStandardParallels(parallel1Degree,parallel2Degree);
   }
   
   /// False easting specification
@@ -68,7 +66,7 @@ namespace otb
 	void LambertConformalConicMapProjection<transform>
   ::SetFalseEasting(double falseEasting) 
   {
-    m_LambertConformalConicProjection->setFalseEasting(falseEasting);
+    this->m_MapProjection->setFalseEasting(falseEasting);
   }
   
   /// False Northing specification
@@ -76,7 +74,7 @@ namespace otb
 	void LambertConformalConicMapProjection<transform>
   ::SetFalseNorthing(double falseNorthing) 
   {
-    m_LambertConformalConicProjection->setFalseNorthing(falseNorthing);
+    this->m_MapProjection->setFalseNorthing(falseNorthing);
   }
   
   /// Set the parameters
@@ -84,7 +82,7 @@ namespace otb
 	void LambertConformalConicMapProjection<transform>
   ::SetParameters(double parallel1Degree,double parallel2Degree,double falseEasting,double falseNorthing) 
   {
-    m_LambertConformalConicProjection->setParameters(parallel1Degree, parallel2Degree, falseEasting, falseNorthing);
+    this->m_MapProjection->setParameters(parallel1Degree, parallel2Degree, falseEasting, falseNorthing);
   }
   
   /// Set the default parameters
@@ -92,7 +90,7 @@ namespace otb
 	void LambertConformalConicMapProjection<transform>
   ::SetDefaults() 
   {
-    m_LambertConformalConicProjection->setDefaults();
+    this->m_MapProjection->setDefaults();
   }
   
   /// Get the False Northing (avoid negative coordinates)
@@ -100,7 +98,7 @@ namespace otb
 	double LambertConformalConicMapProjection<transform>
   ::GetFalseNorthing() const
   {
-    double falseNorthing=m_LambertConformalConicProjection->getFalseNorthing();
+    double falseNorthing=this->m_MapProjection->getFalseNorthing();
     
     return falseNorthing;
   }
@@ -110,7 +108,7 @@ namespace otb
 	double LambertConformalConicMapProjection<transform>
   ::GetFalseEasting() const
   {
-    double falseEasting=m_LambertConformalConicProjection->getFalseEasting();
+    double falseEasting=this->m_MapProjection->getFalseEasting();
     return falseEasting;
   }
   

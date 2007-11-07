@@ -28,7 +28,6 @@ namespace otb
 	SinusoidalMapProjection<transform> 
   ::SinusoidalMapProjection()
   {
-    m_SinusoidalProjection = new ossimSinusoidalProjection();
   }
   
   
@@ -36,7 +35,6 @@ namespace otb
 	SinusoidalMapProjection<transform>
   ::~SinusoidalMapProjection()
   {
-    delete m_SinusoidalProjection;
   }
   
   ///Set the false Easting
@@ -44,7 +42,7 @@ namespace otb
 	void SinusoidalMapProjection<transform>
   ::SetFalseEasting(double falseEasting) 
   {
-    m_SinusoidalProjection->setFalseEasting(falseEasting);
+    this->m_MapProjection->setFalseEasting(falseEasting);
   }
   
   ///Set the False Northing
@@ -52,7 +50,7 @@ namespace otb
 	void SinusoidalMapProjection<transform>
   ::SetFalseNorthing(double falseNorthing) 
   {
-    m_SinusoidalProjection->setFalseNorthing(falseNorthing);
+    this->m_MapProjection->setFalseNorthing(falseNorthing);
   }
   
   ///Set the default parameter
@@ -60,7 +58,7 @@ namespace otb
 	void SinusoidalMapProjection<transform>
   ::SetDefaults() 
   {
-	m_SinusoidalProjection->setDefaults();
+	this->m_MapProjection->setDefaults();
   }
   
   ///\return the False Northing (avoid negative coordinates)
@@ -68,7 +66,7 @@ namespace otb
 	double SinusoidalMapProjection<transform>
   ::GetFalseNorthing() const
   {
-    double falseNorthing=m_SinusoidalProjection->getFalseNorthing();
+    double falseNorthing=this->m_MapProjection->getFalseNorthing();
     
     return falseNorthing;
   }
@@ -78,7 +76,7 @@ namespace otb
 	double SinusoidalMapProjection<transform>
   ::GetFalseEasting() const
   {
-    double falseEasting=m_SinusoidalProjection->getFalseEasting();
+    double falseEasting=this->m_MapProjection->getFalseEasting();
     
     return falseEasting;
   }
@@ -87,7 +85,7 @@ namespace otb
 	void SinusoidalMapProjection<transform>
 	::SetParameters(double falseEasting,double falseNorthing)
   {
-    m_SinusoidalProjection->setFalseEastingNorthing(falseEasting,falseNorthing);
+    this->m_MapProjection->setFalseEastingNorthing(falseEasting,falseNorthing);
   }
   
   

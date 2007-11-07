@@ -58,19 +58,17 @@ public :
  MollweidMapProjection(); 
  virtual ~MollweidMapProjection();
  
- ossimMollweidProjection* m_MollweidProjection;
- 
  private :
    MollweidMapProjection(const Self&); //purposely not implemented
  void operator=(const Self&);          //purposely not implemented
  
     };
  
+ 
+} // namespace otb
+
 #ifndef OTB_MANUAL_INSTANTIATION
 #include "otbMollweidMapProjection.txx"
 #endif 
-  
-} // namespace otb
-
 
 #endif
