@@ -49,22 +49,23 @@ namespace otb
       /** Run-time type information (and related methods). */
       itkTypeMacro( UtmMapProjection, MapProjection );
       
-      void SetZone(long zone);
-      void SetZone(const InputPointType &ground); 
-      void SetHemisphere(char hemisphere);
-      long GetZone();
-      const char GetHemisphere() const;
+      virtual void SetZone(long zone);
+      virtual void SetZone(const InputPointType &ground); 
+      virtual void SetHemisphere(char hemisphere);
+      virtual long GetZone();
+      virtual const char GetHemisphere() const;
+			
+			virtual void PrintMap() const;
       
     protected:
       UtmMapProjection(); 
       virtual ~UtmMapProjection();
-      ossimUtmProjection* m_utmprojection;
-      
+			
+        
     private:
       UtmMapProjection(const Self&); //purposely not implemented
       void operator=(const Self&);   //purposely not implemented
-      
-    };
+     };
 		
 #ifndef OTB_MANUAL_INSTANTIATION
 #include "otbUtmMapProjection.txx"

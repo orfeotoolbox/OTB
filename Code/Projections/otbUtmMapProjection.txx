@@ -28,14 +28,12 @@ namespace otb
 	UtmMapProjection<transform>
   ::UtmMapProjection()
   {
-    m_utmprojection = new ossimUtmProjection();
   }
   
  	template <InverseOrForwardTransformationEnum transform>
   UtmMapProjection<transform>
   ::~UtmMapProjection()
   {
-    delete m_utmprojection;
   }
   
   ///Set the zone
@@ -43,9 +41,7 @@ namespace otb
   void UtmMapProjection<transform>
   ::SetZone(long zone)
   {
- //   delete m_utmprojection;
- //   m_utmprojection= new ossimUtmProjection(zone);
- 		m_utmprojection->setZone(zone);
+		this->m_MapProjection->setZone(zone);
   }
   
   ///Set the zone
@@ -56,7 +52,7 @@ namespace otb
     ossimGpt ossimGround;
     ossimGround.lon=ground[0];
     ossimGround.lat=ground[1];
-    m_utmprojection->setZone(ossimGround);
+    this->m_MapProjection->setZone(ossimGround);
   }
   
   ///Set the hemisphere
@@ -64,7 +60,7 @@ namespace otb
   void UtmMapProjection<transform>
   ::SetHemisphere(char hemisphere) 
   {
-    m_utmprojection->setHemisphere(hemisphere);
+		this->m_MapProjection->setHemisphere(hemisphere);
   }
   
   ///\return the zone
@@ -73,7 +69,7 @@ namespace otb
   ::GetZone()
   {
     long zone;
-    zone=m_utmprojection->getZone();
+    zone=this->m_MapProjection->getZone();
     
     return zone;
   }
@@ -84,10 +80,18 @@ namespace otb
   ::GetHemisphere() const
   {
     char hemisphere=0;
-    hemisphere=m_utmprojection->getHemisphere();
+    hemisphere=this->m_MapProjection->getHemisphere();
 	
     return hemisphere;
   }
+	
+	template <InverseOrForwardTransformationEnum transform>
+	void UtmMapProjection<transform>
+  ::PrintMap() const
+	{
+		std::cout << this->m_MapProjection->print(std::cout);
+	}
+	
   
 } // namespace otb
 
