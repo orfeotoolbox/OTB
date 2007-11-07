@@ -102,7 +102,8 @@ namespace otb
 	  //map projection
 	  ossimGpt ossimGPoint;
 	  ossimGPoint=m_MapProjection->inverse(ossimDPoint);
-	  
+//	 	otbGenericMsgDebugMacro(<< "Inverse : " << std::endl << m_MapProjection->print(std::cout));
+		
 	  outputPoint[0]=ossimGPoint.lon;
 	  outputPoint[1]=ossimGPoint.lat;
 	  otbMsgDevMacro(<< "Geographic coordinates (long/lat) : (" << outputPoint[0] << "," << outputPoint[1] << ")");
@@ -116,7 +117,7 @@ namespace otb
 	  //map projection
 	  ossimDpt ossimDPoint;
 	  ossimDPoint=m_MapProjection->forward(ossimGPoint);
-	  
+//	 	otbGenericMsgDebugMacro(<< "Forward : ========================= " << std::endl << m_MapProjection->print(std::cout));
 	  outputPoint[0]=ossimDPoint.x;
 	  outputPoint[1]=ossimDPoint.y;
 	  break;

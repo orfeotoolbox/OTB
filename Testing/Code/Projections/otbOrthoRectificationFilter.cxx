@@ -112,11 +112,11 @@ int otbOrthoRectificationFilter( int argc, char* argv[] )
 				orthoRectifFilter->SetOutputSpacing(spacing);
 				
 				ImageType::PointType origin;
-				origin[0]=strtod(argv[3], NULL);         //longitude de l'origine.
-			  origin[1]=strtod(argv[4], NULL);         //latitude de l'origine.
+				origin[0]=strtod(argv[3], NULL);         //Coord x en mètres de l'origine.
+			  origin[1]=strtod(argv[4], NULL);         //Coord y en mètres de l'origine.
 				orthoRectifFilter->SetOutputOrigin(origin);
 				
-				utmMapProjection->SetZone(48);
+				utmMapProjection->SetZone(31);
 				utmMapProjection->SetHemisphere('N');
 				orthoRectifFilter->SetMapProjection(utmMapProjection);
 
