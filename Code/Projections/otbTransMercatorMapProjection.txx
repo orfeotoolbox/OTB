@@ -20,8 +20,7 @@ PURPOSE.  See the above copyright notices for more information.
 
 #include "otbTransMercatorMapProjection.h"
 
-namespace otb
-{ 
+
   
 	template <InverseOrForwardTransformationEnum transform>
   TransMercatorMapProjection<transform>
@@ -121,6 +120,5 @@ namespace otb
     return falseEasting;
   }
   
-} // namespace otb
 
 #endif

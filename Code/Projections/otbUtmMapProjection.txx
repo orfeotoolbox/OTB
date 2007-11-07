@@ -21,8 +21,7 @@ PURPOSE.  See the above copyright notices for more information.
 
 #include "otbUtmMapProjection.h"
 
-namespace otb
-{ 
+
   
  	template <InverseOrForwardTransformationEnum transform>
 	UtmMapProjection<transform>
@@ -93,6 +92,6 @@ namespace otb
 	}
 	
   
-} // namespace otb
+
 
 #endif
