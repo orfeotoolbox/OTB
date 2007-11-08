@@ -288,6 +288,24 @@ public:
    */
   virtual void PrepareOutputs();
 
+
+ /************************************ OTB ADD ON *******************/
+  unsigned long ComputePipelineBufferSize(void)
+    {
+      unsigned long resp = 0;
+      for(unsigned int idx = 0; idx<this->GetNumberOfInputs();++idx)
+	{
+	  std::cout<<"Input "<<idx<<" -> "<<this->GetInput(idx)->GetNameOfClass()<<std::endl;
+	  if(this->GetInput(idx)->GetSource())
+	    {
+	      this->GetInput(idx)->GetSource()->ComputePipelineBufferSize();
+	    }
+	}
+      return resp;
+    }
+  /************************************ END OTB ADD ON *******************/
+
+
 protected:
   ProcessObject();
   ~ProcessObject();

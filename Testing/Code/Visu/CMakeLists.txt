@@ -90,6 +90,38 @@ ADD_TEST(viTvDoubleImageViewerWithLink ${VISU_TESTS}
 	${INPUTDATA}/couleurs.jpg
         )
 
+# -------   otb::ImageToGrayscaleAnaglyphImageFilter  -----------------------------------
+
+ADD_TEST(viTuImageToGrayscaleAnaglyphImageFilterNew ${VISU_TESTS}
+	otbImageToGrayscaleAnaglyphImageFilterNew
+)
+
+ADD_TEST(viTvImageToGrayscaleAnaglyphImageFilter ${VISU_TESTS}
+	--compare-image ${TOL}  
+	${BASELINE}/viTvGrayscaleAnaglyphFilterResult.tif
+	${TEMP}/viTvGrayscaleAnaglyphFilterResult.tif
+	otbImageToGrayscaleAnaglyphImageFilter
+	${INPUTDATA}/anaglyphInput1.jpg
+	${INPUTDATA}/anaglyphInput2.jpg
+	${TEMP}/viTvGrayscaleAnaglyphFilterResult.tif
+)
+
+# -------   otb::VectorImageToColorAnaglyphVectorImageFilter  ---------------------------
+
+ADD_TEST(viTuVectorImageToColorAnaglyphVectorImageFilterNew ${VISU_TESTS}
+	otbVectorImageToColorAnaglyphVectorImageFilterNew
+)
+
+ADD_TEST(viTvVectorImageToColorAnaglyphVectorImageFilter ${VISU_TESTS}
+	--compare-image ${TOL}  
+	${BASELINE}/viTvColorAnaglyphFilterResult.tif
+	${TEMP}/viTvColorAnaglyphFilterResult.tif
+	otbVectorImageToColorAnaglyphVectorImageFilter
+	${INPUTDATA}/anaglyphInput1.jpg
+	${INPUTDATA}/anaglyphInput2.jpg
+	${TEMP}/viTvColorAnaglyphFilterResult.tif
+)
+
 # -------       Fichiers sources CXX -----------------------------------
 SET(BasicVisu_SRCS
 otbImageWidgetBaseNew.cxx
@@ -104,6 +136,10 @@ otbImageViewerWithOtbImage.cxx
 otbImageViewerWithMultiBandFilter.cxx
 otbImageViewerNew.cxx
 otbDoubleImageViewerWithLink.cxx
+otbImageToGrayscaleAnaglyphImageFilterNew.cxx
+otbImageToGrayscaleAnaglyphImageFilter.cxx
+otbVectorImageToColorAnaglyphVectorImageFilterNew.cxx
+otbVectorImageToColorAnaglyphVectorImageFilter.cxx
 )
 
 INCLUDE_DIRECTORIES("${OTBTesting_BINARY_DIR}") 
