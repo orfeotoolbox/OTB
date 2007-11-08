@@ -26,6 +26,8 @@
 #include "otbKullbackLeiblerProfileImageFilter.h" 
 #include "otbMath.h"
 
+namespace otb {
+
 /* *******************************************************************
 *	Classe CumulantsForEdgeworthProfile 
 * ********************************************************************
@@ -429,6 +431,8 @@ namespace Functor {
 	}
 
 } // Functor
+
+} // namespace otb
 
 
 #endif

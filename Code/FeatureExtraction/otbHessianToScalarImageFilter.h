@@ -90,6 +90,7 @@ public:
   void SetAlpha(double Alpha)
   {
 	this->GetFunctor().SetAlpha( Alpha );
+        this->Modified();
   }  
   double GetAlpha(void)const
   {

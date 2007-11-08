@@ -25,6 +25,8 @@
 #include "otbMacro.h"
 
 
+namespace otb {
+
 /* *******************************************************************
  *	Classe CumulantsForEdgeworth
  *********************************************************************
@@ -166,6 +168,7 @@ CumulantsForEdgeworth<TInput>
 	return 0;
 }
 
+} // namespace otb
 
 #endif
 

@@ -91,6 +91,7 @@ ImageToPathListAlignFilter<TInputImage,TOutputPath>
       {
       m_Spacing[i] = spacing[i];
       }
+    this->Modified();
     }
 }
 
@@ -113,6 +114,7 @@ ImageToPathListAlignFilter<TInputImage,TOutputPath>
       {
       m_Spacing[i] = spacing[i];
       }
+    this->Modified();
     }
 }
 

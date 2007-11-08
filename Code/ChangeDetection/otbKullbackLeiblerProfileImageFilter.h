@@ -166,11 +166,12 @@ class ITK_EXPORT KullbackLeiblerProfileImageFilter :
 
 };
 
+} // namespace otb
+
 #ifndef OTB_MANUAL_INSTANTIATION
 #include "otbKullbackLeiblerProfileImageFilter.txx"
 #endif
 
-} // namespace otb
 
 #endif
 

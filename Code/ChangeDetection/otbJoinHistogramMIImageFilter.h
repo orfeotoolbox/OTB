@@ -157,7 +157,7 @@ protected:
 
 template <class TInputImage1, class TInputImage2, class TOutputImage>
 class ITK_EXPORT JoinHistogramMIImageFilter :
-    public otb::BinaryFunctorNeighborhoodJoinHistogramImageFilter<
+    public BinaryFunctorNeighborhoodJoinHistogramImageFilter<
             TInputImage1,TInputImage2,TOutputImage,
             Functor::JoinHistogramMI<
                    typename itk::ConstNeighborhoodIterator<TInputImage1>, 
@@ -167,7 +167,7 @@ class ITK_EXPORT JoinHistogramMIImageFilter :
 public:
   /** Standard class typedefs. */
   typedef JoinHistogramMIImageFilter  Self;
-  typedef typename otb::BinaryFunctorNeighborhoodJoinHistogramImageFilter<
+  typedef BinaryFunctorNeighborhoodJoinHistogramImageFilter<
       TInputImage1,TInputImage2,TOutputImage, 
           Functor::JoinHistogramMI< 
                typename itk::ConstNeighborhoodIterator<TInputImage1>, 
