@@ -282,11 +282,11 @@ protected:
   /** A function that generates the 
    * model based on the training input data
    * Achieves the goal of training the classifier. */
-  void EstimateModels();
+  virtual void EstimateModels();
   virtual void BuildProblem()
   {
   }
-  void  PrepareData();
+  virtual void  PrepareData();
 
   SVMModelPointer m_Model;
 
