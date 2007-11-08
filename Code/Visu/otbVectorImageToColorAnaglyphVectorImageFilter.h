@@ -52,9 +52,9 @@ namespace Functor
 	inline TOutputPixel operator()(const TInputPixel1& pixel1, const TInputPixel2& pixel2)
 	  {
 	    TOutputPixel result(3);
-	    result[0]=static_cast<typename TOutputPixel::ValueType>(pixel2[m_RedChannelIndex]);
-	    result[1]=static_cast<typename TOutputPixel::ValueType>(pixel1[m_GreenChannelIndex]);
-	    result[2]=static_cast<typename TOutputPixel::ValueType>(pixel1[m_BlueChannelIndex]);
+	    result[0]=static_cast<typename TOutputPixel::ValueType>(pixel1[m_RedChannelIndex]);
+	    result[1]=static_cast<typename TOutputPixel::ValueType>(pixel2[m_GreenChannelIndex]);
+	    result[2]=static_cast<typename TOutputPixel::ValueType>(pixel2[m_BlueChannelIndex]);
 	    return result;
 	  }
 	
