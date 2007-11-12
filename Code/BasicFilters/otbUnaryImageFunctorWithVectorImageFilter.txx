@@ -25,6 +25,7 @@
 
 namespace otb
 {
+
 /**
  * Constructor
  */
