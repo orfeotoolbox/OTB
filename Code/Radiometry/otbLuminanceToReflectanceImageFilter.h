@@ -34,6 +34,11 @@ namespace otb
 {
   namespace Functor
     {
+      /** Functor::LuminanceToReflectanceImageFunctor
+       *  Multiply by Pi and by an illumination correction coefficient the qutient between the input and the given solar illumination.
+       *
+       * \ingroup Functor
+       */
       template <class TInput, class TOutput>
 	class LuminanceToReflectanceImageFunctor
 	{
@@ -68,7 +73,12 @@ namespace otb
 	};
     }
 
-
+  /** \class LuminanceToReflectanceImageFilter
+   *  \brief Transform a luminance image into the reflectance. For this it uses the functor LuminanceToReflectanceImaeFunctor 
+   *   calling for each component of each pixel. 
+   *
+   * \ingroup ImageToLuminanceImageFunctor
+   */
 template <class TInputImage, class TOutputImage>
 class ITK_EXPORT LuminanceToReflectanceImageFilter : 
 public UnaryImageFunctorWithVectorImageFilter< TInputImage,

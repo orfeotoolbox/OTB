@@ -35,6 +35,13 @@ namespace otb
 {
   namespace Functor
     {
+      /** Functor::ImageToReflectanceImageFunctor
+       *  Call the ImageToLuminanceFunctor over the input and the LuminanceToReflectanceFunctor to this result.
+       *
+       * \ingroup Functor
+       * \ingroup ImageToLuminanceFunctor
+       * \ingroup LuminanceToReflectanceFunctor
+       */
       template <class TInput, class TOutput>
 	class ImageToReflectanceImageFunctor
 	{
@@ -78,7 +85,13 @@ namespace otb
 	};
     }
 
-
+/** \class ImageToReflectanceImageFilter
+   *  \brief Transform a classical image into the reflectance image. For this it uses the functor ImageToReflectanceFunctor calling for each component of each pixel. 
+   *
+   * \ingroup ImageToReflectanceImageFunctor
+   * \ingroup ImageToLuminanceImageFilter
+   * \ingroup ReflectanceToLuminanceImageFilter
+   */
 template <class TInputImage, class TOutputImage>
 class ITK_EXPORT ImageToReflectanceImageFilter : 
 public UnaryImageFunctorWithVectorImageFilter< TInputImage,

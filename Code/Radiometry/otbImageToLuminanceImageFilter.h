@@ -33,6 +33,12 @@ namespace otb
 {
   namespace Functor
     {
+      /** Functor::ImageToLuminanceImageFunctor
+       *  Add beta to the quotient Input over alpha.
+       *
+       * \ingroup Functor
+       */
+
       template <class TInput, class TOutput>
 	class ImageToLuminanceImageFunctor
 	{
@@ -64,7 +70,11 @@ namespace otb
 	};
     }
 
-
+  /** \class ImageToLuminanceImageFilter
+   *  \brief Transform a classical image into the luminance image. For this it uses the functor ImageToLuminanceImageFunctor calling for each component of each pixel. 
+   *
+   * \ingroup ImageToLuminanceImageFunctor
+   */
 template <class TInputImage, class TOutputImage>
 class ITK_EXPORT ImageToLuminanceImageFilter : 
 public UnaryImageFunctorWithVectorImageFilter< TInputImage,
@@ -73,7 +83,7 @@ public UnaryImageFunctorWithVectorImageFilter< TInputImage,
                                                                                                    ITK_TYPENAME TOutputImage::InternalPixelType > >
 {
 public:
-/** 	Extract input and output images dimensions.*/
+  /** 	Extract input and output images dimensions.*/
   itkStaticConstMacro( InputImageDimension, unsigned int, TInputImage::ImageDimension);
   itkStaticConstMacro( OutputImageDimension, unsigned int, TOutputImage::ImageDimension);
 
