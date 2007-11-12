@@ -12,6 +12,7 @@ nm libotb_6s.a |grep " [TR] "
 */
 
 /* Functions */
+#define varsol_ otb_6s_varsol_
 
 #define adaptquad_ otb_6s_adaptquad_
 #define balanc_ otb_6s_balanc_

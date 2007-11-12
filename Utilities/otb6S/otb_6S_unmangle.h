@@ -4,6 +4,8 @@
 
 /* Functions */
 
+#undef varsol_
+
 #undef adaptquad_
 #undef balanc_
 #undef balbak_
