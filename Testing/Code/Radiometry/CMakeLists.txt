@@ -178,17 +178,113 @@ ADD_TEST(raTvARVI_MultiChannelRAndBAndNIRVegetationIndexImageFilter ${RADIOMETRY
 	)
         
 # -------            otb::ImageToLuminanceImageFilter   ------------------------------
-#ADD_TEST(raTuImageToLuminanceImageFilterNew ${RADIOMETRY_TESTS}  
-#        otbImageToLuminanceImageFilterNew
-#)
+ADD_TEST(raTuImageToLuminanceImageFilterNew ${RADIOMETRY_TESTS}  
+        otbImageToLuminanceImageFilterNew
+)
 
-#ADD_TEST(raTvImageToLuminanceImageFilter ${RADIOMETRY_TESTS} 
-#  #  --compare-image ${TOL}  ${BASELINE}/raTvImageToLuminanceImageFilter.tif
-#  #                         ${TEMP}/raTvImageToLuminanceImageFilter.tif
-#        otbImageToLuminanceImageFilter
-#	${INPUTDATA}/babytux.tiff 
-#	${TEMP}/raTvImageToLuminanceImageFilter.tif
-#)  
+ADD_TEST(raTvImageToLuminanceImageFilter ${RADIOMETRY_TESTS} 
+  --compare-image ${TOL}  ${BASELINE}/raTvImageToLuminanceImageFilter.tif
+                          ${TEMP}/raTvImageToLuminanceImageFilter.tif
+        otbImageToLuminanceImageFilter
+	${INPUTDATA}/poupees_sub.png 
+	${TEMP}/raTvImageToLuminanceImageFilter.tif
+	10   #channel 1 alpha
+	20   #channel 2 alpha	
+	30   #channel 3 alpha	
+	40   #channel 4 alpha
+	1    #channel 1 beta
+	2    #channel 2 beta
+	3    #channel 3 beta
+	4    #channel 4 beta
+         ) 
+
+# -------            otb::LuminanceToReflectanceImageFilter   ------------------------------
+ADD_TEST(raTuLuminanceToReflectanceImageFilterNew ${RADIOMETRY_TESTS}  
+        otbLuminanceToReflectanceImageFilterNew
+)
+
+ADD_TEST(raTvLuminanceToReflectanceImageFilter ${RADIOMETRY_TESTS} 
+  --compare-image ${TOL}  ${BASELINE}/raTvLuminanceToReflectanceImageFilterDsol.tif
+                          ${TEMP}/raTvLuminanceToReflectanceImageFilterDsol.tif
+        otbLuminanceToReflectanceImageFilter
+	${INPUTDATA}/poupees_sub.png 
+	${TEMP}/raTvLuminanceToReflectanceImageFilterDsol.tif
+	0.2 #radius
+	10  #channel 1 illumination
+	20  #channel 2 illumination	
+	30  #channel 3 illumination
+	40  #channel 4 illumination
+	0.9923885328 #d/d0 corresponding to the date 03/05
+         ) 
+
+ADD_TEST(raTvLuminanceToReflectanceImageFilterDayMounth ${RADIOMETRY_TESTS} 
+  --compare-image ${TOL}  ${BASELINE}/raTvLuminanceToReflectanceImageFilter.tif
+                          ${TEMP}/raTvLuminanceToReflectanceImageFilterDayMounth.tif
+        otbLuminanceToReflectanceImageFilter
+	${INPUTDATA}/poupees_sub.png 
+	${TEMP}/raTvLuminanceToReflectanceImageFilterDayMounth.tif
+	0.2 #radius
+	10  #channel 1 illumination
+	20  #channel 2 illumination	
+	30  #channel 3 illumination
+	40  #channel 4 illumination
+	3   #day
+	5   #mounth
+        ) 
+
+
+
+# -------            otb::ImageToReflectanceImageFilter   ------------------------------
+ADD_TEST(raTuImageToReflectanceImageFilterNew ${RADIOMETRY_TESTS}  
+        otbImageToReflectanceImageFilterNew
+)
+
+ADD_TEST(raTvImageToReflectanceImageFilter ${RADIOMETRY_TESTS} 
+  --compare-image ${TOL}  ${BASELINE}/raTvImageToReflectanceImageFilterDsol.tif
+                          ${TEMP}/raTvImageToReflectanceImageFilterDsol.tif
+        otbImageToReflectanceImageFilter
+	${INPUTDATA}/poupees_sub.png 
+	${TEMP}/raTvImageToReflectanceImageFilterDsol.tif
+	0.2 #radius
+	1   #channel 1 alpha
+	2   #channel 2 alpha	
+	3   #channel 3 alpha	
+	4   #channel 4 alpha
+	10  #channel 1 beta
+	11  #channel 2 beta
+	12  #channel 3 beta
+	13  #channel 4 beta
+	10  #channel 1 illumination
+	20  #channel 2 illumination	
+	30  #channel 3 illumination
+	40  #channel 4 illumination
+	0.9923885328 #d/d0 corresponding to the date 03/05
+         ) 
+
+ADD_TEST(raTvImageToReflectanceImageFilterDayMounth ${RADIOMETRY_TESTS} 
+#  --compare-image ${TOL}  ${BASELINE}/raTvImageToReflectanceImageFilter.tif
+#                          ${TEMP}/raTvImageToReflectanceImageFilterDayMounth.tif
+        otbImageToReflectanceImageFilter
+	${INPUTDATA}/poupees_sub.png 
+	${TEMP}/raTvImageToReflectanceImageFilterDayMounth.tif
+	0.2 #radius
+	1   #channel 1 alpha
+	2   #channel 2 alpha	
+	3   #channel 3 alpha	
+	4   #channel 4 alpha
+	10  #channel 1 beta
+	11  #channel 2 beta
+	12  #channel 3 beta
+	13  #channel 4 beta
+	10  #channel 1 illumination
+	20  #channel 2 illumination	
+	30  #channel 3 illumination
+	40  #channel 4 illumination
+	3   #day
+	5   #mounth
+         )
+
+
 
 # A enrichir
 SET(Radiometry_SRCS
@@ -202,15 +298,19 @@ otbRAndBAndNIRVegetationIndexImageFilterNew.cxx
 otbRAndBAndNIRVegetationIndexImageFilter.cxx
 otbMultiChannelRAndBAndNIRVegetationIndexImageFilterNew.cxx
 otbMultiChannelRAndBAndNIRVegetationIndexImageFilter.cxx
-#otbImageToLuminanceImageFilterNew.cxx
-#otbImageToLuminanceImageFilter.cxx
+otbImageToLuminanceImageFilterNew.cxx
+otbImageToLuminanceImageFilter.cxx
+otbLuminanceToReflectanceImageFilterNew.cxx
+otbLuminanceToReflectanceImageFilter.cxx
+otbImageToReflectanceImageFilterNew.cxx
+otbImageToReflectanceImageFilter.cxx
 )
 
 
 INCLUDE_DIRECTORIES("${OTBTesting_BINARY_DIR}")
 
 ADD_EXECUTABLE(otbRadiometryTests otbRadiometryTests.cxx ${Radiometry_SRCS})
-TARGET_LINK_LIBRARIES(otbRadiometryTests OTBRadiometry OTBCommon OTBIO gdal ITKIO ITKCommon ITKBasicFilters)
+TARGET_LINK_LIBRARIES(otbRadiometryTests OTBRadiometry OTBCommon OTBIO gdal ITKIO ITKCommon ITKBasicFilters otb6S)
 
 
 ENDIF( NOT OTB_DISABLE_CXX_TESTING )
