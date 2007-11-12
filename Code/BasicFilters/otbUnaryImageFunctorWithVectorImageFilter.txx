@@ -1,4 +1,4 @@
-/*=========================================================================
+3/*=========================================================================
 
   Program:   ORFEO Toolbox
   Language:  C++
@@ -39,9 +39,9 @@ UnaryImageFunctorWithVectorImageFilter<TInputImage,TOutputImage,TFunction>
 
 /** 
  * UnaryImageFunctorWithVectorImageFilter can produce an image which is a different resolution
- * than its input image.  As such, UnaryImageFunctorWithVectorImageFilter needs to provide an
+ * than its input image. As such, UnaryImageFunctorWithVectorImageFilter needs to provide an
  * implementation for GenerateOutputInformation() in order to inform
- * the pipeline execution model.  The original documentation of this
+ * the pipeline execution model. The original documentation of this
  * method is below.
  *
  * \sa ProcessObject::GenerateOutputInformaton() 
