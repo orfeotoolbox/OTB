@@ -40,6 +40,9 @@ namespace otb
   ::SensorModelBase(): Superclass(OutputSpaceDimension, ParametersDimension)
   {
     m_Model = NULL;
+		m_DEMHandler = DEMHandlerType::New();
+    m_UseDEM = false;
+
   }
   
   
@@ -51,10 +54,10 @@ namespace otb
   ::~SensorModelBase()
   {
     if( m_Model != NULL)
-      {
-	delete m_Model;
-	m_Model = NULL;
-      }
+    {
+			delete m_Model;
+			m_Model = NULL;
+    }
   }
   
   
@@ -128,9 +131,9 @@ namespace otb
     image_kwl.convertToOSSIMKeywordlist(geom);
     m_Model = ossimProjectionFactoryRegistry::instance()->createProjection(geom);
     if( m_Model == NULL)
-      {
-	itkExceptionMacro(<<"Invalid Model pointer m_Model == NULL !\n The ossim keywordlist is bad!");
-      }
+    {
+			itkExceptionMacro(<<"Invalid Model pointer m_Model == NULL !\n The ossim keywordlist is bad!");
+    }
   }
   
   /**

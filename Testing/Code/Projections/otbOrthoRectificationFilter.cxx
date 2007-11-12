@@ -116,24 +116,15 @@ int otbOrthoRectificationFilter( int argc, char* argv[] )
 			  origin[1]=strtod(argv[4], NULL);         //Coord y en mètres de l'origine.
 				orthoRectifFilter->SetOutputOrigin(origin);
 				
-				utmMapProjection->SetZone(31);
-				utmMapProjection->SetHemisphere('N');
+				 
+//				utmMapProjection->SetZone(31);
+//				utmMapProjection->SetHemisphere('N');
 				orthoRectifFilter->SetMapProjection(utmMapProjection);
 
-	//				orthoRectifFilter->SetTransform( model );
-//				model->SetImageGeometry(reader->GetOutput()->GetImageKeywordlist());
-//				resampler->SetTransform(model);
-//				resampler->SetInterpolator(interpolator);
-//				orthoRectifFilter->SetResampler(resampler);
-//				orthoRectifFilter->SetInterpolator(interpolator);
-				
-//				orthoRectifFilter->SetResampler(resampler);				
-//        orthoRectifFilter->SetTransform( model );
-				
-        writer->SetInput(orthoRectifFilter->GetOutput());
+	      writer->SetInput(orthoRectifFilter->GetOutput());
 				
 				writer->SetTilingStreamDivisions();
- //       writer->SetNumberOfStreamDivisions(1000);
+
         otbGenericMsgDebugMacro(<< "Update writer ..." ); 
         writer->Update();
 

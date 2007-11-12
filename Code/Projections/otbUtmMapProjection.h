@@ -33,8 +33,8 @@ namespace otb
     {
       public :
 	
-	/** Standard class typedefs. */
-	typedef UtmMapProjection                Self;
+			/** Standard class typedefs. */
+			typedef UtmMapProjection                Self;
       typedef MapProjection<ossimUtmProjection,transform> Superclass;
       typedef itk::SmartPointer<Self>           Pointer;
       typedef itk::SmartPointer<const Self>     ConstPointer;
@@ -54,9 +54,13 @@ namespace otb
       virtual void SetHemisphere(char hemisphere);
       virtual long GetZone();
       virtual const char GetHemisphere() const;
+
+			virtual void SetZoneAndHemisphereFromGeoPoint(const InputPointType &geoPoint);
+//			virtual void SetZoneAndHemisphereFromCartoPoint(const OutputPointType &cartoPoint);
+			virtual int GetZoneFromGeoPoint(const InputPointType& geoPoint);
+
+//      virtual void Initialize(const InputPointType& middlePoint);
 			
-//			virtual unsigned char GetZoneFromGeoPoint(const InputPointType& geoPoint);
-      
     protected:
       UtmMapProjection(); 
       virtual ~UtmMapProjection();

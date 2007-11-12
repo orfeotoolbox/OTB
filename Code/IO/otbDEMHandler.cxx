@@ -59,8 +59,8 @@ DEMHandler
 {
 	double height;
 	ossimGpt ossimWorldPoint;
-	ossimWorldPoint.lat=geoPoint[0];
-	ossimWorldPoint.lon=geoPoint[1];
+	ossimWorldPoint.lon=geoPoint[0];
+	ossimWorldPoint.lat=geoPoint[1];
 	height=m_ElevManager->getHeightAboveMSL(ossimWorldPoint);
 	return height;
 }

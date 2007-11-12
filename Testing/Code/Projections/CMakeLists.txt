@@ -252,7 +252,7 @@ ADD_TEST(prTvOrthoRectificationCevennesWithDEM ${PROJECTIONS_TESTS}
         )
 #========================= TESTS SINGAPOUR ===============================
 
-SET(EMMANUELDATA ${OTB_DATA_ROOT}/Emmanuel/Singapour/000000173549_01_P001_MUL)
+#SET(EMMANUELDATA ${OTB_DATA_ROOT}/Emmanuel/Singapour/000000173549_01_P001_MUL)
 
 # TEST 22
 #ADD_TEST(prTvRegionProjectionResamplerSingapour ${PROJECTIONS_TESTS}  
@@ -261,10 +261,10 @@ SET(EMMANUELDATA ${OTB_DATA_ROOT}/Emmanuel/Singapour/000000173549_01_P001_MUL)
 #        ${TEMP}/prTvRegionProjectionResamplerSingapour.tif
 #        103.8464 1.31
 #        500
-#				500
-#				10
-#				0.00001
-#				-0.00001
+#				 500
+#				 10
+#				 0.00001
+#				 -0.00001
 #        )
 
 # TEST 23
@@ -274,9 +274,9 @@ SET(EMMANUELDATA ${OTB_DATA_ROOT}/Emmanuel/Singapour/000000173549_01_P001_MUL)
 #        ${TEMP}/prTvOrthoRectificationSingapour_UTM.tif
 #        371997.12 144885.4
 #        500
-#				500 
-#				220
-#				1
+#				 500 
+#				 220
+#				 1
 #        -1
 #        )
 

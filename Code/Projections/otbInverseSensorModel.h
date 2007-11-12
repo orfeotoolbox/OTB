@@ -19,7 +19,6 @@ PURPOSE.  See the above copyright notices for more information.
 #define __otbInverseSensorModel_h
 
 #include "otbSensorModelBase.h"
-#include "otbDEMHandler.h"
 
 #include "itkMacro.h"
 #include "itkSmartPointer.h"
@@ -61,12 +60,7 @@ namespace otb
       typedef itk::SmartPointer<const Self>              ConstPointer;
       
       typedef typename Superclass::InputPointType        InputPointType;
-      //typedef itk::Point<TScalarType, 3>		   InputPointType;
       typedef typename Superclass::OutputPointType       OutputPointType; 
-      
-      //typedef otb::Image<double, NInputDimensions>	   ImageType;
-      typedef DEMHandler				 DEMHandlerType;
-      typedef typename DEMHandlerType::Pointer		 DEMHandlerPointerType;     
       
       /** Method for creation through the object factory. */
       itkNewMacro( Self );
@@ -79,34 +73,10 @@ namespace otb
       itkStaticConstMacro(ParametersDimension,  unsigned int, NParametersDimensions); //A voir!!
       
       // Transform of geographic point in image sensor index
-      OutputPointType TransformPoint(const InputPointType &point) const;
+      virtual OutputPointType TransformPoint(const InputPointType &point) const;
       // Transform of geographic point in image sensor index -- Backward Compatibility
       //  OutputPointType TransformPoint(const InputPointType &point, double height) const;
       
-      itkGetMacro(UseDEM, bool);
-      itkSetMacro(UseDEM, bool);
-      
-      itkGetObjectMacro(DEMHandler, DEMHandlerType);
-      
-      virtual void SetDEMHandler(DEMHandlerType* _arg) 
-      { 
-	if (this->m_DEMHandler != _arg) 
-	  { 
-	    this->m_DEMHandler = _arg; 
-	    this->Modified(); 
-	    m_UseDEM = true;
-	  } 
-      }
-      
-      virtual bool SetDEMDirectory(const std::string& directory)
-      {
-	bool b = m_DEMHandler->OpenDEMDirectory(directory.c_str());
-	this->UseDEM(true);	
-	
-	return b;	
-      }
-      
-      virtual void UseDEM(bool b) { m_UseDEM = b; this->Modified(); } 
       
       protected:
       InverseSensorModel(); 
@@ -120,11 +90,6 @@ namespace otb
       InverseSensorModel(const Self&); //purposely not implemented
       void operator=(const Self&);     //purposely not implemented
       
-      /** Object that read and use DEM */
-      DEMHandlerPointerType m_DEMHandler;
-      
-      /** Specify if DEM is used in Point Transformation */
-      bool m_UseDEM ;
     };
   
 } // namespace otb

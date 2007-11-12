@@ -20,10 +20,13 @@ PURPOSE.  See the above copyright notices for more information.
 
 #include <iostream>
 
-#include "itkTransform.h"
 #include "otbMacro.h"
 #include "otbImageKeywordlist.h"
+#include "otbDEMHandler.h"
+
 #include "projection/ossimProjection.h"
+
+#include "itkTransform.h"
 #include "itkSmartPointer.h"
 #include "itkObject.h"
 
@@ -34,15 +37,17 @@ namespace otb
    *  This class allows to transform a geographic point in (lat,long) to a point in the sensor geometry.
    *  (lat,lon) -> (i,j) ou (lat,lon,h) -> (i,j)
    */
-  template <class TScalarType,
-            unsigned int NInputDimensions=3,
-            unsigned int NOutputDimensions=2,
-            unsigned int NParametersDimensions=3>
-    class ITK_EXPORT SensorModelBase : public itk::Transform<TScalarType,          
-			                                     NInputDimensions,  
-			                                     NOutputDimensions> 
-    {
-      public :
+template <class TScalarType,
+          unsigned int NInputDimensions=3,
+          unsigned int NOutputDimensions=2,
+          unsigned int NParametersDimensions=3>
+class ITK_EXPORT SensorModelBase : public itk::Transform<TScalarType,          
+										                                     NInputDimensions,  
+			            							                         NOutputDimensions> 
+{
+
+		public :
+
       /** Standard class typedefs. */
       typedef SensorModelBase                             Self;
       typedef itk::Transform< TScalarType,
@@ -54,6 +59,9 @@ namespace otb
       typedef itk::Point<TScalarType, NInputDimensions >  InputPointType;
       typedef itk::Point<TScalarType, NOutputDimensions > OutputPointType;      
       
+      typedef DEMHandler				 DEMHandlerType;
+      typedef typename DEMHandlerType::Pointer		 DEMHandlerPointerType;     
+			
       /** Method for creation through the object factory. */
       itkNewMacro( Self );
       
@@ -75,7 +83,33 @@ namespace otb
       /* Set the Imagekeywordlist and affect the ossim projection ( m_Model) */
       virtual void SetImageGeometry(ossimKeywordlist &geom_kwl);
       
-      protected:
+			
+			itkGetMacro(UseDEM, bool);
+      itkSetMacro(UseDEM, bool);
+      
+      itkGetObjectMacro(DEMHandler, DEMHandlerType);
+      
+      virtual void SetDEMHandler(DEMHandlerType* _arg) 
+      { 
+				if (this->m_DEMHandler != _arg) 
+	  		{ 
+	    		this->m_DEMHandler = _arg; 
+	    		this->Modified(); 
+	    		m_UseDEM = true;
+	  		} 
+      }
+      
+      virtual bool SetDEMDirectory(const std::string& directory)
+      {
+				bool b = m_DEMHandler->OpenDEMDirectory(directory.c_str());
+				this->UseDEM(true);	
+	
+				return b;	
+      }
+      
+      virtual void UseDEM(bool b) { m_UseDEM = b; this->Modified(); } 
+
+   protected:
       SensorModelBase(); 
       virtual ~SensorModelBase();
       
@@ -89,11 +123,17 @@ namespace otb
       ImageKeywordlist m_ImageKeywordlist;
       /** Pointer on an ossim projection (created with the keywordlist) */
       ossimProjection * m_Model;
+
+      /** Object that read and use DEM */
+      DEMHandlerPointerType m_DEMHandler;
       
-      private :
+      /** Specify if DEM is used in Point Transformation */
+      bool m_UseDEM ;
+       
+   private :
       SensorModelBase(const Self&); //purposely not implemented
       void operator=(const Self&); //purposely not implemented
-      
+     
     };
 
 } // namespace otb

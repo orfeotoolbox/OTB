@@ -36,6 +36,7 @@ ForwardSensorModel< TScalarType,
                     NParametersDimensions>
 ::ForwardSensorModel()
 {
+	m_Epsilon = 0.5;
 }
 
 template < class TScalarType,
@@ -70,13 +71,58 @@ ForwardSensorModel< TScalarType,
   
   // Calculation 
   ossimGpt ossimGPoint;
+
   if( this->m_Model == NULL)
-    {
-      itkExceptionMacro(<<"TransformPoint(): Invalid Model pointer m_Model == NULL !");
-    }
-  
+  {
+    itkExceptionMacro(<<"TransformPoint(): Invalid Model pointer m_Model == NULL !");
+  }
+	
+	/*if (this->m_UseDEM)
+  {
+		otbMsgDevMacro(<< "USING DEM ! ") ;
+			
+		otbMsgDevMacro(<< "Point : (" << point[1] << "," << point[0] << ")");
+		double height = this->m_DEMHandler->GetHeightAboveMSL(point);
+		otbMsgDevMacro(<< "height : " << height) ;
+
+		this->m_Model->lineSampleHeightToWorld(ossimPoint, height, ossimGPoint);
+  }
+  else
+	{*/
   // Projection using the method of the class ossimSensorModel : lineSampleToWorld()
-  this->m_Model->lineSampleToWorld(ossimPoint, ossimGPoint); 
+	//}
+	
+	if (this->m_UseDEM)
+	{
+		ossimGpt ossimGPointTmp = ossimGPoint;
+		ossimGpt ossimGPointRef;
+		double height;
+		itk::Point<double, 2> point;
+		int nbIter = 0;
+	
+		otbMsgDevMacro(<< "USING DEM ! ") ;
+
+		while ((( fabs(ossimGPointRef.lat - ossimGPointTmp.lat) > m_Epsilon)
+			||( fabs(ossimGPointRef.lon - ossimGPointTmp.lon) > m_Epsilon))
+			&& (nbIter < 100))
+		{
+			ossimGPointRef = ossimGPointTmp;
+			
+			point[0] = ossimGPointTmp.lon;
+			point[1] = ossimGPointTmp.lat;
+			
+			otbMsgDevMacro(<< "Point : (" << point[1] << "," << point[0] << ")");
+			height = this->m_DEMHandler->GetHeightAboveMSL(point);
+			otbMsgDevMacro(<< "height : " << height) ;
+			
+			this->m_Model->lineSampleHeightToWorld(ossimPoint, height, ossimGPointTmp);	
+			nbIter++;
+		}
+	}
+	else
+	{
+		  this->m_Model->lineSampleToWorld(ossimPoint, ossimGPoint); 
+	}	
   
   // "OutputPointType" storage.
   OutputPointType outputPoint;

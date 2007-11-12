@@ -115,6 +115,8 @@ namespace otb
 			/** Return the inverse of the transform.
    		 *  The inverse is recomputed if it has been modified */
 		  //bool GetInverse(Self*) const ;
+			
+//			virtual void Initialize(const InputPointType& middlePoint) {};
 
       protected:
       MapProjection();

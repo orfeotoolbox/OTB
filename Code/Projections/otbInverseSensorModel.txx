@@ -36,8 +36,6 @@ namespace otb
                       NParametersDimensions>
   ::InverseSensorModel()
   {
-    m_DEMHandler = DEMHandlerType::New();
-    m_UseDEM = false;
   }
   
   template < class TScalarType,
@@ -70,21 +68,22 @@ namespace otb
     // Transformation of "itk::point" in "ossim::ossimGpt" 
     ossimGpt ossimGPoint(point[1], point[0]);
     
-    if (m_UseDEM)
-      {
-	otbMsgDevMacro(<< "USING DEM ! ") ;
-	otbMsgDevMacro(<< "Point : (" << point[1] << "," << point[0] << ")");
-	double height = m_DEMHandler->GetHeightAboveMSL(point);
-	otbMsgDevMacro(<< "height : " << height) ;
-	ossimGPoint.height(height);
-      }
+    if (this->m_UseDEM)
+    {
+			otbMsgDevMacro(<< "USING DEM ! ") ;
+			otbMsgDevMacro(<< "Point : (" << point[1] << "," << point[0] << ")");
+			double height = this->m_DEMHandler->GetHeightAboveMSL(point);
+			otbMsgDevMacro(<< "height : " << height) ;
+			ossimGPoint.height(height);
+    }
     
     ossimDpt ossimDPoint;
     
     if( this->m_Model == NULL)
-      {
-  	itkExceptionMacro(<<"TransformPoint(): Invalid Model pointer m_Model == NULL !");
-      }
+    {
+  		itkExceptionMacro(<<"TransformPoint(): Invalid Model pointer m_Model == NULL !");
+    }
+		
     this->m_Model->worldToLineSample(ossimGPoint, ossimDPoint); //"worldToLineSample" appelle la méthode "lineSampleHeightToWorld" pour prendre en compte l'élévation. 
     
     OutputPointType outputPoint;

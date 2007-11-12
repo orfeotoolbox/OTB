@@ -25,13 +25,13 @@ namespace otb
 { 
   
   template <class TInputImage, 
-	    class TOutputImage, 
-	    class TMapProjection, 
-	    class TInterpolatorPrecision>
+	    			class TOutputImage, 
+	    			class TMapProjection, 
+	    			class TInterpolatorPrecision>
   OrthoRectificationFilter<TInputImage, 
-			   TOutputImage, 
-			   TMapProjection, 
-			   TInterpolatorPrecision>
+			   								 	 TOutputImage, 
+			  	 								 TMapProjection, 
+			   									 TInterpolatorPrecision>
   ::OrthoRectificationFilter() : StreamingResampleImageFilter<TInputImage,
 								   TOutputImage,
 								   TInterpolatorPrecision>()
@@ -43,25 +43,25 @@ namespace otb
   }
   
   template <class TInputImage, 
-	    class TOutputImage, 
-	    class TMapProjection, 
-	    class TInterpolatorPrecision>
+	    			class TOutputImage, 
+	    			class TMapProjection, 
+	    			class TInterpolatorPrecision>
   OrthoRectificationFilter<TInputImage, 
-			   TOutputImage, 
-			   TMapProjection, 
-			   TInterpolatorPrecision>
+			   									 TOutputImage, 
+			   									 TMapProjection, 
+			   									 TInterpolatorPrecision>
   ::~OrthoRectificationFilter()
   {
   }
   
   template <class TInputImage, 
-	    class TOutputImage, 
-	    class TMapProjection, 
-	    class TInterpolatorPrecision>
+	    			class TOutputImage, 
+	    			class TMapProjection, 
+	    			class TInterpolatorPrecision>
   void OrthoRectificationFilter<TInputImage, 
-				TOutputImage, 
-				TMapProjection, 
-				TInterpolatorPrecision>
+															  TOutputImage, 
+																TMapProjection, 
+																TInterpolatorPrecision>
 ::PrintSelf(std::ostream& os, itk::Indent indent) const
   {
     Superclass::PrintSelf(os, indent);
@@ -71,14 +71,14 @@ namespace otb
   
   
   template <class TInputImage, 
-	    class TOutputImage, 
-	    class TMapProjection, 
-	    class TInterpolatorPrecision>
+	    			class TOutputImage, 
+	    			class TMapProjection, 
+	    			class TInterpolatorPrecision>
   void
   OrthoRectificationFilter<TInputImage, 
-			   TOutputImage, 
-			   TMapProjection, 
-			   TInterpolatorPrecision>
+			   									 TOutputImage, 
+			   									 TMapProjection, 
+			   									 TInterpolatorPrecision>
   ::GenerateInputRequestedRegion()
   {
     this->ComputeResampleTransformationModel();
@@ -87,27 +87,34 @@ namespace otb
   }
   
   template <class TInputImage, 
-	    class TOutputImage, 
-	    class TMapProjection, 
-	    class TInterpolatorPrecision>
+	    			class TOutputImage, 
+	    			class TMapProjection, 
+	    			class TInterpolatorPrecision>
   void
   OrthoRectificationFilter<TInputImage, 
-			   TOutputImage, 
-			   TMapProjection, 
-			   TInterpolatorPrecision>
+			   								 	 TOutputImage, 
+			   									 TMapProjection, 
+			   									 TInterpolatorPrecision>
   ::ComputeResampleTransformationModel()
   {
     if (m_IsComputed == false)
       {
-	otbMsgDevMacro(<< "COMPUTE RESAMPLE TRANSFORMATION MODEL");
-	typename TOutputImage::Pointer output = this->GetOutput();
+				otbMsgDevMacro(<< "COMPUTE RESAMPLE TRANSFORMATION MODEL");
+				typename TOutputImage::Pointer output = this->GetOutput();
 	
-	// Get OSSIM sensor model from image keywordlist
-	m_SensorModel->SetImageGeometry(output->GetImageKeywordlist());
-	m_CompositeTransform->SetFirstTransform(m_MapProjection);
-	m_CompositeTransform->SetSecondTransform(m_SensorModel);
-	this->SetTransform(m_CompositeTransform);		
-	m_IsComputed = true;
+				// Get OSSIM sensor model from image keywordlist
+				m_SensorModel->SetImageGeometry(output->GetImageKeywordlist());
+				
+				// Initialize Map Projection if needed
+/*				PointType geoPoint;
+				geoPoint[1] = this->GetOutputOrigin()[1] + this->GetSize()[0]*this->GetOutputSpacing()[0]/2;
+				geoPoint[0] = this->GetOutputOrigin()[0] + this->GetSize()[1]*this->GetOutputSpacing()[1]/2;
+				m_MapProjection->Initialize(geoPoint);			*/
+			
+				m_CompositeTransform->SetFirstTransform(m_MapProjection);
+				m_CompositeTransform->SetSecondTransform(m_SensorModel);
+				this->SetTransform(m_CompositeTransform);		
+				m_IsComputed = true;
       }
   }
   
