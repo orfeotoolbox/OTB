@@ -328,7 +328,7 @@ ADD_TEST(bfTvStreamingStatisticsImageFilter ${BASICFILTERS_TESTS}
  		   ${BASELINE_FILES}/bfStreamingStatisticsImageFilterResults.txt
  		   ${TEMP}/bfStreamingStatisticsImageFilterResults.txt
          otbStreamingStatisticsImageFilter
-		${INPUTDATA}/panchro.tif
+		${IMAGEDATA}/TOULOUSE/QuickBird/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF
 		${TEMP}/bfStreamingStatisticsImageFilterResults.txt)
 
 # -------            otb::VectorImageTo3DScalarImageFilter   ----------------------------
@@ -412,6 +412,20 @@ ADD_TEST(bfTvMatrixTransposeMatrixImageFilter ${BASICFILTERS_TESTS}
 		)
 
 
+# -------            otb::UnaryImageFunctorWithVectorImageFilter   ----------------------------
+
+ADD_TEST(bfTuUnaryImageFunctorWithVectorImageFilterNew ${BASICFILTERS_TESTS}  
+         otbUnaryImageFunctorWithVectorImageFilterNew)
+
+ADD_TEST(bfTvUnaryImageFunctorWithVectorImageFilter ${BASICFILTERS_TESTS}  
+     --compare-image ${TOL}
+     		     ${BASELINE}/bfTvUnaryImageFunctorWithVectorImageFilter.tif
+		     ${TEMP}/bfTvUnaryImageFunctorWithVectorImageFilter.tif
+         otbUnaryImageFunctorWithVectorImageFilter
+		${INPUTDATA}/poupees_sub.png
+		${TEMP}/bfTvUnaryImageFunctorWithVectorImageFilter.tif
+		)
+
 
 
 # A enrichir
@@ -463,6 +477,8 @@ otbStreamingStatisticsVectorImageFilterNew.cxx
 otbStreamingStatisticsVectorImageFilter.cxx
 otbMatrixTransposeMatrixImageFilterNew.cxx
 otbMatrixTransposeMatrixImageFilter.cxx
+otbUnaryImageFunctorWithVectorImageFilterNew.cxx
+otbUnaryImageFunctorWithVectorImageFilter.cxx
 )
 
 
