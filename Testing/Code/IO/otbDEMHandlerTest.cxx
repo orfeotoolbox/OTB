@@ -47,15 +47,15 @@ int otbDEMHandlerTest(int argc, char * argv[])
         typedef otb::UtmInverseProjection                      utmProjection;
         typedef utmProjection::InputPointType	        InputPoint;
         InputPoint                                      geoPoint;
-        geoPoint[0] = 44.08;
-        geoPoint[1] = 3.6999;
+        geoPoint[0] = 3.6999;
+        geoPoint[1] = 44.08;
 
         height=demHandler->GetHeightAboveMSL(geoPoint); 
 
 	std::ofstream file;
 	file.open(outputfilename);
 	file << "--- HEIGHT ABOVE MSL TEST ---" << std::endl;
-	file << " geoPoint: "<<geoPoint[0]<<" ; "<<geoPoint[1]<< std::endl;
+	file << " geoPoint: "<<geoPoint[1]<<" ; "<<geoPoint[0]<< std::endl;
         file << " -> Height: "<<height<< std::endl;
 	file.close();
 
