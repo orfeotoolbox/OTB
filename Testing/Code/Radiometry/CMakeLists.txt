@@ -183,7 +183,7 @@ ADD_TEST(raTuImageToLuminanceImageFilterNew ${RADIOMETRY_TESTS}
 )
 
 ADD_TEST(raTvImageToLuminanceImageFilter ${RADIOMETRY_TESTS} 
-  --compare-image ${TOL}  ${BASELINE}/raTvImageToLuminanceImageFilter.tif
+  --compare-image ${EPSILON}  ${BASELINE}/raTvImageToLuminanceImageFilter.tif
                           ${TEMP}/raTvImageToLuminanceImageFilter.tif
         otbImageToLuminanceImageFilter
 	${INPUTDATA}/poupees_sub.png 
@@ -204,7 +204,7 @@ ADD_TEST(raTuLuminanceToReflectanceImageFilterNew ${RADIOMETRY_TESTS}
 )
 
 ADD_TEST(raTvLuminanceToReflectanceImageFilter ${RADIOMETRY_TESTS} 
-  --compare-image ${TOL}  ${BASELINE}/raTvLuminanceToReflectanceImageFilterDsol.tif
+  --compare-image ${EPSILON}  ${BASELINE}/raTvLuminanceToReflectanceImageFilterDsol.tif
                           ${TEMP}/raTvLuminanceToReflectanceImageFilterDsol.tif
         otbLuminanceToReflectanceImageFilter
 	${INPUTDATA}/poupees_sub.png 
@@ -218,7 +218,7 @@ ADD_TEST(raTvLuminanceToReflectanceImageFilter ${RADIOMETRY_TESTS}
          ) 
 
 ADD_TEST(raTvLuminanceToReflectanceImageFilterDayMounth ${RADIOMETRY_TESTS} 
-  --compare-image ${TOL}  ${BASELINE}/raTvLuminanceToReflectanceImageFilter.tif
+  --compare-image ${EPSILON}  ${BASELINE}/raTvLuminanceToReflectanceImageFilter.tif
                           ${TEMP}/raTvLuminanceToReflectanceImageFilterDayMounth.tif
         otbLuminanceToReflectanceImageFilter
 	${INPUTDATA}/poupees_sub.png 
@@ -240,7 +240,7 @@ ADD_TEST(raTuImageToReflectanceImageFilterNew ${RADIOMETRY_TESTS}
 )
 
 ADD_TEST(raTvImageToReflectanceImageFilter ${RADIOMETRY_TESTS} 
-  --compare-image ${TOL}  ${BASELINE}/raTvImageToReflectanceImageFilterDsol.tif
+  --compare-image ${EPSILON}  ${BASELINE}/raTvImageToReflectanceImageFilterDsol.tif
                           ${TEMP}/raTvImageToReflectanceImageFilterDsol.tif
         otbImageToReflectanceImageFilter
 	${INPUTDATA}/poupees_sub.png 
@@ -262,8 +262,8 @@ ADD_TEST(raTvImageToReflectanceImageFilter ${RADIOMETRY_TESTS}
          ) 
 
 ADD_TEST(raTvImageToReflectanceImageFilterDayMounth ${RADIOMETRY_TESTS} 
-#  --compare-image ${TOL}  ${BASELINE}/raTvImageToReflectanceImageFilter.tif
-#                          ${TEMP}/raTvImageToReflectanceImageFilterDayMounth.tif
+  --compare-image ${EPSILON}  ${BASELINE}/raTvImageToReflectanceImageFilter.tif
+                          ${TEMP}/raTvImageToReflectanceImageFilterDayMounth.tif
         otbImageToReflectanceImageFilter
 	${INPUTDATA}/poupees_sub.png 
 	${TEMP}/raTvImageToReflectanceImageFilterDayMounth.tif
