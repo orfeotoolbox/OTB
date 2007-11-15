@@ -88,6 +88,11 @@ namespace otb
 /** \class ImageToReflectanceImageFilter
    *  \brief Transform a classical image into the reflectance image. For this it uses the functor ImageToReflectanceFunctor calling for each component of each pixel. 
    *
+   *  Transform a classical image into the reflectance image. For this it uses the functor ImageToReflectanceFunctor calling for each component of each pixel.
+   *  The flux normalization coefficient (that is the ratio solar distance over mean solar distance) can be directly set or the user can 
+   *  give the day and the mounth of the observation and the class will used a coefficient given by a 6S routine that will give the corresponding coefficient. 
+   *  To note that in the case, 6S gives the square of the distances ratio.
+   *  
    * \ingroup ImageToReflectanceImageFunctor
    * \ingroup ImageToLuminanceImageFilter
    * \ingroup ReflectanceToLuminanceImageFilter
