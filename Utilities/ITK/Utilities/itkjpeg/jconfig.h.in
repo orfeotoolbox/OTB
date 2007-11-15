@@ -20,10 +20,7 @@
 /* Define this if you get warnings about undefined structures. */
 #undef INCOMPLETE_TYPES_BROKEN
 
-
-/* OTB Modification for MinGW generation -> report bug on the ITK mailing list */
-/* #if defined(_WIN32) && !defined(__CYGWIN__) */
-#if defined(_WIN32) && !(defined(__CYGWIN__) || defined(__MINGW32__))
+#if defined(_WIN32) && !defined(__CYGWIN__)
 /* Define "boolean" as unsigned char, not int, per Windows custom */
 /* don't conflict if rpcndr.h already read; Note that the w32api headers
    used by Cygwin does not define "boolean", so jmorecfg.h
