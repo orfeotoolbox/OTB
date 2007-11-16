@@ -171,19 +171,11 @@ ImageFileReader<TOutputImage>
     // note: char is used here because the buffer is read in bytes
     // regardles of the actual type of the pixels.
     ImageRegionType region = output->GetBufferedRegion();
-//THOMAS : PB : le GetImageSizeInBytes s'appuie sur m_Dimension lue, donc dimensions physique,de 
-// l'image (pas celle bufferis�d ans la cas du streaming )
-// JULIEN: fix for the problem mentionned : the componentsize is computed here since ad hoc methods in 
-// itkImageIOBase are protected.
-//THOMAS : PB with big file : "unsigned int" is not adapted. We use streamoff type.
-//    unsigned int componentSize = this->m_ImageIO->GetImageSizeInBytes();
-/*    componentSize = static_cast<std::streamoff>(this->m_ImageIO->GetImageSizeInPixels());
-    componentSize = componentSize * static_cast<std::streamoff>(this->m_ImageIO->GetNumberOfComponents()); */
-// PB : the GetComponentSize() method of the itkImageIOBase  class is protected. 
-// duplicated this method in this class (very BAD)
 	
-    std::streamoff nbBytes = static_cast<std::streamoff>(this->GetComponentSize())*static_cast<std::streamoff>(region.GetNumberOfPixels())*static_cast<std::streamoff>(this->m_ImageIO->GetNumberOfComponents());
-    otbMsgDevMacro(<<"NbBytes "<<nbBytes);
+    // Adapte the image size with the region
+    std::streamoff nbBytes = (this->m_ImageIO->GetImageSizeInBytes() / this->m_ImageIO->GetImageSizeInPixels()) * static_cast<std::streamoff>(region.GetNumberOfPixels());
+    otbMsgDevMacro(<<"NbBytes for region: "<<nbBytes);
+
 
     otbMsgDevMacro(<< "Buffer conversion required from: "
                      << this->m_ImageIO->GetComponentTypeInfo().name()
@@ -199,40 +191,6 @@ ImageFileReader<TOutputImage>
     }
 }
 
-template <class TOutputImage>
-unsigned int 
-ImageFileReader<TOutputImage>
-::GetComponentSize() const
-{
-  switch(this->m_ImageIO->GetComponentType())
-    {
-    case itk::ImageIOBase::UCHAR:
-      return sizeof(unsigned char);
-    case itk::ImageIOBase::CHAR:
-      return sizeof(char);
-    case itk::ImageIOBase::USHORT:
-      return sizeof(unsigned short);
-    case itk::ImageIOBase::SHORT:
-      return sizeof(short);
-    case itk::ImageIOBase::UINT:
-      return sizeof(unsigned int);
-    case itk::ImageIOBase::INT:
-      return sizeof(int);
-    case itk::ImageIOBase::ULONG:
-      return sizeof(unsigned long);
-    case itk::ImageIOBase::LONG:
-      return sizeof(long);
-    case itk::ImageIOBase::FLOAT:
-      return sizeof(float);
-    case itk::ImageIOBase::DOUBLE:
-      return sizeof(double);
-    case itk::ImageIOBase::UNKNOWNCOMPONENTTYPE:
-    default:
-      itkExceptionMacro ("Unknown component type: " << this->m_ImageIO->GetComponentType());
-    }
-
-  return 0;
-}
 
 template <class TOutputImage>
 void
@@ -393,7 +351,6 @@ ImageFileReader<TOutputImage>
   // Itinialize ossim environment
   ossimImageHandler* handler = ossimImageHandlerRegistry::instance()->open(ossimFilename(lFileNameOssimKeywordlist.c_str()));
   
-
   if (!handler)
   {
   	  otbMsgDebugMacro( <<"OSSIM Open Image FAILED ! ");
@@ -522,9 +479,11 @@ ImageFileReader<TOutputImage>
 ::GetGdalReadImageFileName( const std::string & filename, std::string & GdalFileName )
 {
         std::vector<std::string> listFileSearch;
-        listFileSearch.push_back("DAT_01.001");// RADARSAT ou SAR_ERS2
-        listFileSearch.push_back("IMAGERY.TIF");//For format SPOT5TIF
-        listFileSearch.push_back("IMAG_01.DAT");//For format SPOT4
+        listFileSearch.push_back("DAT_01.001");listFileSearch.push_back("dat_01.001");// RADARSAT ou SAR_ERS2
+        listFileSearch.push_back("IMAGERY.TIF");listFileSearch.push_back("imagery.tif");//For format SPOT5TIF
+// Not recognised as a supported file format by GDAL.
+//        listFileSearch.push_back("IMAGERY.BIL");listFileSearch.push_back("imagery.bil");//For format SPOT5BIL
+        listFileSearch.push_back("IMAG_01.DAT");listFileSearch.push_back("imag_01.dat");//For format SPOT4
         std::string str_FileName;
         bool fic_trouve(false);
 
@@ -541,7 +500,7 @@ ImageFileReader<TOutputImage>
                         {
          			if(str_FileName.compare(listFileSearch[i]) == 0)
 	        		{
-                                         GdalFileName = std::string(filename)+listFileSearch[i];
+                                         GdalFileName = std::string(filename)+str_FileName;//listFileSearch[i];
                                          fic_trouve=true;
         			}
                         }

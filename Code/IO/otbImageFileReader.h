@@ -96,10 +96,6 @@ private:
     */
   bool GetGdalReadImageFileName( const std::string & filename, std::string & GdalFileName );
   
-  /** Copy of the GetComponentSize() method of the itk::ImageIOBase.
-      We need this value to calculate buffer size. */
-  virtual unsigned int GetComponentSize() const;
-
   ImageFileReader(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
   
