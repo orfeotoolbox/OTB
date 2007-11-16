@@ -125,7 +125,7 @@ namespace otb
 	::GetZoneFromGeoPoint(const InputPointType& geoPoint)
 	{
 		double longitude = geoPoint[0];
-		double latitude = geoPoint[1];
+		//double latitude = geoPoint[1];
 		int zone;
 		
 		// Each UTM zone is a narrow zone of 6 degrees in width
