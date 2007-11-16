@@ -839,6 +839,7 @@ int RegressionTestImage (int cpt, const char *testImageFilename, const char *bas
     diff->UpdateLargestPossibleRegion();
 
   double status = diff->GetTotalDifference();
+  unsigned long numberOfPixelsWithDifferences = diff->GetNumberOfPixelsWithDifferences();
 
     otbGenericMsgDebugMacro(<< "Status diff->GetTotalDifference : "<<status);
   // if there are discrepencies, create an diff image
@@ -877,6 +878,10 @@ int RegressionTestImage (int cpt, const char *testImageFilename, const char *bas
 //    std::cout << "<DartMeasurement name=\"ImageError\" type=\"numeric/double\">";
     std::cout << "<DartMeasurement name=\"ImageError "<<cpt<<"\" type=\"numeric/double\">";
     std::cout << status;
+    std::cout <<  "</DartMeasurement>" << std::endl;
+
+    std::cout << "<DartMeasurement name=\"NumberOfPixelsWithDifferences "<<cpt<<"\" type=\"numeric/integer\">";
+    std::cout << numberOfPixelsWithDifferences;
     std::cout <<  "</DartMeasurement>" << std::endl;
 
     std::cout << "<DartMeasurement name=\"ToleranceDiffPixelImage\" type=\"numeric/double\">";
