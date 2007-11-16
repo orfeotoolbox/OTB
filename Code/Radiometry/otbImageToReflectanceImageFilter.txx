@@ -81,7 +81,7 @@ namespace otb
       {
 	if (m_Day*m_Mounth != 0 && m_Day<32 && m_Mounth<12)
 	  {
-	    otb_6s_real dsol;
+	    otb_6s_real dsol = 0.;
 	    otb_6s_integer day = static_cast<otb_6s_integer>(m_Day);
 	    otb_6s_integer mounth = static_cast<otb_6s_integer>(m_Mounth);
 	    int cr = otb_6s_varsol_(&day, &mounth, &dsol);
