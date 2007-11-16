@@ -585,7 +585,7 @@ int main( int argc, char *argv[] )
   //  The moving image after resampling is presented on the left
   //  side of Figure \ref{fig:ImageRegistration2Output}. The center and right
   //  figures present a checkerboard composite of the fixed and
-  //  moving images before and after registration. Since the reakl
+  //  moving images before and after registration. Since the real
   //  deformation between the 2 images is not simply a shift, some
   //  registration errors remain, but the left part of the images is
   //  correctly registered.
