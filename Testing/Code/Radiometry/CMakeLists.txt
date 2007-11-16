@@ -284,6 +284,11 @@ ADD_TEST(raTvImageToReflectanceImageFilterDayMounth ${RADIOMETRY_TESTS}
 	5   #mounth
          )
 
+# -------            otb::AtmosphericCorrectionParameters   ------------------------------
+ADD_TEST(raTuAtmosphericCorrectionParametersNew ${RADIOMETRY_TESTS}  
+        otbAtmosphericCorrectionParametersNew
+)
+
 
 
 # A enrichir
@@ -304,6 +309,7 @@ otbLuminanceToReflectanceImageFilterNew.cxx
 otbLuminanceToReflectanceImageFilter.cxx
 otbImageToReflectanceImageFilterNew.cxx
 otbImageToReflectanceImageFilter.cxx
+otbAtmosphericCorrectionParametersNew.cxx
 )
 
 
