@@ -284,11 +284,6 @@ ADD_TEST(raTvImageToReflectanceImageFilterDayMounth ${RADIOMETRY_TESTS}
 	5   #mounth
        )
 
-# -------            otb::AtmosphericCorrectionParameters   ------------------------------
-ADD_TEST(raTuAtmosphericCorrectionParametersNew ${RADIOMETRY_TESTS}  
-        otbAtmosphericCorrectionParametersNew
-)
-
 # -------            otb::DEMCaracteristicsExtractor   ------------------------------
 
 ADD_TEST(raTuDEMCaracteristicsExtractorNew ${RADIOMETRY_TESTS}  
@@ -319,6 +314,17 @@ ADD_TEST(raTvDEMCaracteristicsExtractor ${RADIOMETRY_TESTS}
 	)
 
 
+# -------            otb::AtmosphericCorrectionParameters   ------------------------------
+ADD_TEST(raTuAtmosphericCorrectionParametersNew ${RADIOMETRY_TESTS}  
+        otbAtmosphericCorrectionParametersNew
+)
+
+# -------            otb::AtmosphericRadiativeTerms   ------------------------------
+ADD_TEST(raTuAtmosphericRadiativeTermsNew ${RADIOMETRY_TESTS}  
+        otbAtmosphericRadiativeTermsNew
+)
+
+
 
 # A enrichir
 SET(Radiometry_SRCS
@@ -341,6 +347,7 @@ otbImageToReflectanceImageFilter.cxx
 otbDEMCaracteristicsExtractorNew.cxx
 otbDEMCaracteristicsExtractor.cxx
 otbAtmosphericCorrectionParametersNew.cxx
+otbAtmosphericRadiativeTermsNew.cxx
 )
 
 

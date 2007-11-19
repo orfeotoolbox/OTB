@@ -55,9 +55,9 @@ int otbDEMCaracteristicsExtractor(int argc, char * argv[])
       exitanceWriter->SetFileName(outputExitanceFileName);
       filter->SetInput(input->GetOutput());
       filter->SetViewAzimut(static_cast<double>(atof(argv[2])));
-      filter->SetViewRadius(static_cast<double>(atof(argv[3])));
+      filter->SetViewAngle(static_cast<double>(atof(argv[3])));
       filter->SetSolarAzimut(static_cast<double>(atof(argv[4])));
-      filter->SetSolarRadius(static_cast<double>(atof(argv[5])));
+      filter->SetSolarAngle(static_cast<double>(atof(argv[5])));
 
       slotWriter->SetInput(filter->GetSlopOutput());
       aspectWriter->SetInput(filter->GetAspectOutput());

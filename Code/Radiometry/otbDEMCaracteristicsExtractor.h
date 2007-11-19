@@ -196,16 +196,16 @@ namespace otb
 	  return m_ExitanceFilter; 
 	};
 
-      /** Radius parameters*/
-      /** Set/Get Solar Radius */
-      itkSetMacro(SolarRadius, double);
-      itkGetConstMacro(SolarRadius, double);
+      /** Angle parameters*/
+      /** Set/Get Solar Angle */
+      itkSetMacro(SolarAngle, double);
+      itkGetConstMacro(SolarAngle, double);
       /** Set/Get Solar Solar */
       itkSetMacro(SolarAzimut, double);
       itkGetConstMacro(SolarAzimut, double);
-      /** Set/Get View Radius */
-      itkSetMacro(ViewRadius, double);
-      itkGetConstMacro(ViewRadius, double);
+      /** Set/Get View Angle */
+      itkSetMacro(ViewAngle, double);
+      itkGetConstMacro(ViewAngle, double);
       /** Set/Get View Solar */
       itkSetMacro(ViewAzimut, double);
       itkGetConstMacro(ViewAzimut, double);
@@ -213,6 +213,8 @@ namespace otb
     protected:
       DEMCaracteristicsExtractor();
       virtual ~DEMCaracteristicsExtractor();
+      /**PrintSelf method */
+      void PrintSelf(std::ostream& os, itk::Indent indent) const;
       
       void GenerateData();
       
@@ -229,13 +231,13 @@ namespace otb
       /** Inverse cosinus Image filter used to compute the exitance image */
       AcosImageFilterPointerType                       m_ExitanceFilter;
 
-      /** Radius parameters*/
-      /** Solar Radius */
-      double m_SolarRadius;
+      /** Angle parameters*/
+      /** Solar Angle */
+      double m_SolarAngle;
       /** Solar Solar */
       double m_SolarAzimut;
-      /** View Radius */
-      double m_ViewRadius;
+      /** View Angle */
+      double m_ViewAngle;
       /** View Solar */
       double m_ViewAzimut;
     };

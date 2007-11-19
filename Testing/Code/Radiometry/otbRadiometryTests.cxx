@@ -46,4 +46,5 @@ REGISTER_TEST(otbImageToReflectanceImageFilterNew);
 REGISTER_TEST(otbDEMCaracteristicsExtractorNew);
 REGISTER_TEST(otbDEMCaracteristicsExtractor);
 REGISTER_TEST(otbAtmosphericCorrectionParametersNew);
+REGISTER_TEST(otbAtmosphericRadiativeTermsNew);
 }

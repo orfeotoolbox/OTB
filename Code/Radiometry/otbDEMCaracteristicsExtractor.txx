@@ -44,9 +44,9 @@ namespace otb
     m_IncidenceFilter                 = AcosImageFilterType::New();
     m_ExitanceFilter                  = AcosImageFilterType::New();
 
-    m_SolarRadius = 0;
+    m_SolarAngle = 0;
     m_SolarAzimut = 0;
-    m_ViewRadius = 0;
+    m_ViewAngle = 0;
     m_ViewAzimut = 0;
   }
   
@@ -131,21 +131,21 @@ namespace otb
     typename CosImageFilterType::Pointer cosAAzimut = CosImageFilterType::New();
     cosAAzimut->SetInput( addAzimut->GetOutput() );
 
-    typename MultiplyByScalarImageFilterType::Pointer sinSsinSolarRadiusFilter = MultiplyByScalarImageFilterType::New();
-    sinSsinSolarRadiusFilter->SetCoef( vcl_sin(m_SolarRadius/rad2degCoef ));
-    sinSsinSolarRadiusFilter->SetInput( sinS->GetOutput() );
+    typename MultiplyByScalarImageFilterType::Pointer sinSsinSolarAngleFilter = MultiplyByScalarImageFilterType::New();
+    sinSsinSolarAngleFilter->SetCoef( vcl_sin(m_SolarAngle/rad2degCoef ));
+    sinSsinSolarAngleFilter->SetInput( sinS->GetOutput() );
 
-    typename MultiplyImageFilterType::Pointer cosAAzimuthsinSsinRadius =  MultiplyImageFilterType::New();
-    cosAAzimuthsinSsinRadius->SetInput1( sinSsinSolarRadiusFilter->GetOutput() );
-    cosAAzimuthsinSsinRadius->SetInput2( cosAAzimut->GetOutput() );
+    typename MultiplyImageFilterType::Pointer cosAAzimuthsinSsinAngle =  MultiplyImageFilterType::New();
+    cosAAzimuthsinSsinAngle->SetInput1( sinSsinSolarAngleFilter->GetOutput() );
+    cosAAzimuthsinSsinAngle->SetInput2( cosAAzimut->GetOutput() );
 
-    typename MultiplyByScalarImageFilterType::Pointer cosScosSolarRadiusFilter = MultiplyByScalarImageFilterType::New();
-    cosScosSolarRadiusFilter->SetCoef( vcl_cos(m_SolarRadius/rad2degCoef) );
-    cosScosSolarRadiusFilter->SetInput( cosS->GetOutput() );
+    typename MultiplyByScalarImageFilterType::Pointer cosScosSolarAngleFilter = MultiplyByScalarImageFilterType::New();
+    cosScosSolarAngleFilter->SetCoef( vcl_cos(m_SolarAngle/rad2degCoef) );
+    cosScosSolarAngleFilter->SetInput( cosS->GetOutput() );
 
     typename AddImageFilterType::Pointer cosIncidence = AddImageFilterType::New();
-    cosIncidence->SetInput1( cosAAzimuthsinSsinRadius->GetOutput() );
-    cosIncidence->SetInput2( cosScosSolarRadiusFilter->GetOutput() );
+    cosIncidence->SetInput1( cosAAzimuthsinSsinAngle->GetOutput() );
+    cosIncidence->SetInput2( cosScosSolarAngleFilter->GetOutput() );
 
     m_IncidenceFilter->SetInput( cosIncidence->GetOutput() );
 
@@ -168,22 +168,22 @@ namespace otb
     typename CosImageFilterType::Pointer cosAAzimut2 = CosImageFilterType::New();
     cosAAzimut2->SetInput( addAzimut2->GetOutput() );
 
-    typename MultiplyByScalarImageFilterType::Pointer sinSsinSolarRadiusFilter2 = MultiplyByScalarImageFilterType::New();
-    sinSsinSolarRadiusFilter2->SetCoef( vcl_sin(m_ViewRadius/rad2degCoef) );
-    sinSsinSolarRadiusFilter2->SetInput( sinS->GetOutput() );
+    typename MultiplyByScalarImageFilterType::Pointer sinSsinSolarAngleFilter2 = MultiplyByScalarImageFilterType::New();
+    sinSsinSolarAngleFilter2->SetCoef( vcl_sin(m_ViewAngle/rad2degCoef) );
+    sinSsinSolarAngleFilter2->SetInput( sinS->GetOutput() );
 
-    typename MultiplyImageFilterType::Pointer cosAAzimuthsinSsinRadius2 =  MultiplyImageFilterType::New();
-    cosAAzimuthsinSsinRadius2->SetInput1( sinSsinSolarRadiusFilter2->GetOutput() );
-    cosAAzimuthsinSsinRadius2->SetInput2( cosAAzimut2->GetOutput() );
+    typename MultiplyImageFilterType::Pointer cosAAzimuthsinSsinAngle2 =  MultiplyImageFilterType::New();
+    cosAAzimuthsinSsinAngle2->SetInput1( sinSsinSolarAngleFilter2->GetOutput() );
+    cosAAzimuthsinSsinAngle2->SetInput2( cosAAzimut2->GetOutput() );
 
 
-    typename MultiplyByScalarImageFilterType::Pointer cosScosSolarRadiusFilter2 = MultiplyByScalarImageFilterType::New();
-    cosScosSolarRadiusFilter2->SetCoef( vcl_cos(m_ViewRadius/rad2degCoef) );
-    cosScosSolarRadiusFilter2->SetInput( cosS->GetOutput() );
+    typename MultiplyByScalarImageFilterType::Pointer cosScosSolarAngleFilter2 = MultiplyByScalarImageFilterType::New();
+    cosScosSolarAngleFilter2->SetCoef( vcl_cos(m_ViewAngle/rad2degCoef) );
+    cosScosSolarAngleFilter2->SetInput( cosS->GetOutput() );
 
     typename AddImageFilterType::Pointer cosIncidence2 = AddImageFilterType::New();
-    cosIncidence2->SetInput1( cosAAzimuthsinSsinRadius2->GetOutput() );
-    cosIncidence2->SetInput2( cosScosSolarRadiusFilter2->GetOutput() );
+    cosIncidence2->SetInput1( cosAAzimuthsinSsinAngle2->GetOutput() );
+    cosIncidence2->SetInput2( cosScosSolarAngleFilter2->GetOutput() );
 
     m_ExitanceFilter->SetInput( cosIncidence2->GetOutput() );
 
@@ -196,7 +196,19 @@ namespace otb
     rad2DegFilter3->Update();
     this->GraftNthOutput( 3, rad2DegFilter3->GetOutput() );
     
-    
   }
   
+  /**PrintSelf method */
+  template <class TInputImage, class TOutputImage>
+  void
+  DEMCaracteristicsExtractor<TInputImage,TOutputImage>
+  ::PrintSelf(std::ostream& os, itk::Indent indent) const
+  {
+    Superclass::PrintSelf(os,indent);
+    os << indent << "Solar Angle: " << m_SolarAngle << std::endl;
+    os << indent << "Solar Azimut: " << m_SolarAzimut << std::endl;
+    os << indent << "View Angle: " << m_ViewAngle << std::endl;
+    os << indent << "View Azimut: " << m_ViewAzimut << std::endl;
+  }
+ 
 } // end namespace otb
