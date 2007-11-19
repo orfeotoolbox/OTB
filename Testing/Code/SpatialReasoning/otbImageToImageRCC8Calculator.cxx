@@ -59,7 +59,7 @@ try
       {
 	for(IteratorType it2=images->Begin();it2!=images->End();++it2)
 	  {
-	    std::cout<<"Test: computing relation "<<i<<","<<j<<std::endl;
+	    std::cout << "Test: computing relation " << i <<","<< j << std::endl;
 	    calc=CalculatorType::New();
 	    calc->SetInput1(it1.Get());
 	    calc->SetInput2(it2.Get());
