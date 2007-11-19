@@ -84,7 +84,8 @@ namespace otb
 	    otb_6s_real dsol = 0.;
 	    otb_6s_integer day = static_cast<otb_6s_integer>(m_Day);
 	    otb_6s_integer mounth = static_cast<otb_6s_integer>(m_Mounth);
-	    int cr = otb_6s_varsol_(&day, &mounth, &dsol);
+	    int cr(0);
+            cr = otb_6s_varsol_(&day, &mounth, &dsol);
 	    coefTemp = vcl_cos(m_ZenithalSolarRadius)*static_cast<double>(dsol);
 	  }
 	else
