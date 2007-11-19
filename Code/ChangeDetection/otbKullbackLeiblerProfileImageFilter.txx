@@ -160,6 +160,7 @@ CumulantsForEdgeworthProfile<TInput>
 		
 	// for ( unsigned long i = 0; i < input.Size(); i++ ) 
 	for (i = 0; i < mask.rows(); i++ )
+        {
 		for ( j = 0; j < mask.cols(); j++ )
 		{
 			// std::cerr << "(" << i << "," << j << ") k=" << k << " ";
@@ -175,11 +176,10 @@ CumulantsForEdgeworthProfile<TInput>
 				fSum4 += pixel_2 * pixel_2;
 				// std::cerr << "*\n";
 			}
-
 			k++;
 		}
-	
-	if ( fSum0 == 0.0 )
+	}
+        if ( fSum0 == 0.0 )
 		return 1;
 
 	double mu1, mu2;
@@ -194,8 +194,8 @@ CumulantsForEdgeworthProfile<TInput>
 	
 	itk::VariableLengthVector<double> tab ( input.Size() );
 	double * x = const_cast<double *> ( tab.GetDataPointer() );
-	for ( unsigned long i = 0; i < input.Size(); i++ )
-		*x++ = ( static_cast<double> ( input.GetPixel(i) ) - mu1 ) / sigma;
+	for ( unsigned long cp = 0; cp < input.Size(); cp++ )
+		*x++ = ( static_cast<double> ( input.GetPixel(cp) ) - mu1 ) / sigma;
 	
 	double mu3 = 0.0;
 	double mu4 = 0.0;
@@ -203,6 +203,7 @@ CumulantsForEdgeworthProfile<TInput>
 	
 	// for ( unsigned long i = 0; i < input.Size(); i++ ) 
 	for ( i = 0; i < mask.rows(); i++ )
+        {
 		for ( j = 0; j < mask.cols(); j++ )
 		{
 			if ( mask.get(i,j) == 1 )
@@ -215,6 +216,7 @@ CumulantsForEdgeworthProfile<TInput>
 			}
 			else
 				x++;
+                }
 	}
 	
 	mu3 /= fSum0;
@@ -254,6 +256,7 @@ CumulantsForEdgeworthProfile<TInput>
 	
 	// for ( unsigned long i = 0; i < input.Size(); i++ ) 
 	for ( i = 0; i < mask.rows(); i++ )
+        {
 		for ( j = 0; j < mask.cols(); j++ )
 		{
 			if ( mask.get(i,j) == 1 )
@@ -267,8 +270,8 @@ CumulantsForEdgeworthProfile<TInput>
 				sum3 += pixel * pixel_2;
 				sum4 += pixel_2 * pixel_2;
 			}
-
 			k++;
+                }
 	}
 
 	fSum0 += sum0;
