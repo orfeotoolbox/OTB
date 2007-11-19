@@ -282,12 +282,41 @@ ADD_TEST(raTvImageToReflectanceImageFilterDayMounth ${RADIOMETRY_TESTS}
 	40  #channel 4 illumination
 	3   #day
 	5   #mounth
-         )
+       )
 
 # -------            otb::AtmosphericCorrectionParameters   ------------------------------
 ADD_TEST(raTuAtmosphericCorrectionParametersNew ${RADIOMETRY_TESTS}  
         otbAtmosphericCorrectionParametersNew
 )
+
+# -------            otb::DEMCaracteristicsExtractor   ------------------------------
+
+ADD_TEST(raTuDEMCaracteristicsExtractorNew ${RADIOMETRY_TESTS}  
+        otbDEMCaracteristicsExtractorNew 
+)
+
+
+ADD_TEST(raTvDEMCaracteristicsExtractor ${RADIOMETRY_TESTS}  
+  --compare-n-images ${EPSILON} 4
+                     ${BASELINE}/raTvDEMCaracteristicsExtractorSlop.tif
+                     ${TEMP}/raTvDEMCaracteristicsExtractorSlop.tif
+                     ${BASELINE}/raTvDEMCaracteristicsExtractorAspect.tif 
+                     ${TEMP}/raTvDEMCaracteristicsExtractorAspect.tif 
+		     ${BASELINE}/raTvDEMCaracteristicsExtractorIncidence.tif
+                     ${TEMP}/raTvDEMCaracteristicsExtractorIncidence.tif
+                     ${BASELINE}/raTvDEMCaracteristicsExtractorExitance.tif 
+                     ${TEMP}/raTvDEMCaracteristicsExtractorExitance.tif 
+        otbDEMCaracteristicsExtractor
+	${INPUTDATA}/pyramide.tif
+	20 # view azimut
+	40 # view angle
+	10 # solar azimut
+	30 # solar angle
+	${TEMP}/raTvDEMCaracteristicsExtractorSlop.tif
+	${TEMP}/raTvDEMCaracteristicsExtractorAspect.tif 
+	${TEMP}/raTvDEMCaracteristicsExtractorIncidence.tif 
+	${TEMP}/raTvDEMCaracteristicsExtractorExitance.tif 
+	)
 
 
 
@@ -309,6 +338,8 @@ otbLuminanceToReflectanceImageFilterNew.cxx
 otbLuminanceToReflectanceImageFilter.cxx
 otbImageToReflectanceImageFilterNew.cxx
 otbImageToReflectanceImageFilter.cxx
+otbDEMCaracteristicsExtractorNew.cxx
+otbDEMCaracteristicsExtractor.cxx
 otbAtmosphericCorrectionParametersNew.cxx
 )
 

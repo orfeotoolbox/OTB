@@ -43,5 +43,7 @@ REGISTER_TEST(otbLuminanceToReflectanceImageFilter);
 REGISTER_TEST(otbLuminanceToReflectanceImageFilterNew);
 REGISTER_TEST(otbImageToReflectanceImageFilter);
 REGISTER_TEST(otbImageToReflectanceImageFilterNew);
+REGISTER_TEST(otbDEMCaracteristicsExtractorNew);
+REGISTER_TEST(otbDEMCaracteristicsExtractor);
 REGISTER_TEST(otbAtmosphericCorrectionParametersNew);
 }

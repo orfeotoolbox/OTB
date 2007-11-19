@@ -12,7 +12,7 @@ extern "C" {
 #include "otb_6S.h"
 
 /*<    >*/
-/* Subroutine */ int varsol_(integer *jday, integer *month, real *dsol)
+/* Subroutine */ int otb_6s_varsol_(integer *jday, integer *month, real *dsol)
 {
     /* System generated locals */
     real r__1;
