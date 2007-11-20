@@ -81,10 +81,10 @@ try
     std::ofstream out;
     out.open(outfile,std::ios::out);
     out<<"Test results from otbPolygonToPolygonRCC8calculator test."<<std::endl;
-    for(int i=1;i<=nbImages;++i)
+    for(int cpt=1;cpt<=nbImages;++cpt)
       {
 	ReaderType::Pointer reader = ReaderType::New();
-	reader->SetFileName(argv[2+i]);
+	reader->SetFileName(argv[2+cpt]);
 	EdgeExtractionFilterType::Pointer extraction = EdgeExtractionFilterType::New();
 	extraction->SetInput(reader->GetOutput());
 	extraction->SetForegroundValue(255);
@@ -100,8 +100,8 @@ try
     // Declaration
     CalculatorType::Pointer calc1,calc2,calc3;
     // Computing relations for each images couple
-    int i =1;
-    int j = 1;
+    unsigned int i =1;
+    unsigned int j = 1;
     for(IteratorType it1=simplifier->GetOutput()->Begin();it1!=simplifier->GetOutput()->End();++it1)
       {
 	for(IteratorType it2=simplifier->GetOutput()->Begin();it2!=simplifier->GetOutput()->End();++it2)
