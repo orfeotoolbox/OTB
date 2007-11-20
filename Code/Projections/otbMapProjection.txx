@@ -111,7 +111,8 @@ namespace otb
 	}
       case FORWARD:
 	{
-	  //from "itk::point" to "ossim::ossimGpt"
+	  otbGenericMsgDebugMacro(<< "Geographic coordinates (long/lat) : (" << point[1] << "," << point[0] << ")");
+		//from "itk::point" to "ossim::ossimGpt"
 	  ossimGpt ossimGPoint(point[1], point[0]);
 	  
 	  //map projection
@@ -120,6 +121,9 @@ namespace otb
 //	 	otbGenericMsgDebugMacro(<< "Forward : ========================= " << std::endl << m_MapProjection->print(std::cout));
 	  outputPoint[0]=ossimDPoint.x;
 	  outputPoint[1]=ossimDPoint.y;
+		
+	  otbGenericMsgDebugMacro(<< "Cartographic coordinates: (" << outputPoint[0] << "," << outputPoint[1] << ")");
+
 	  break;
 	}
       default:

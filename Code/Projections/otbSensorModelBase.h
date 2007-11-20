@@ -83,31 +83,40 @@ class ITK_EXPORT SensorModelBase : public itk::Transform<TScalarType,
       /* Set the Imagekeywordlist and affect the ossim projection ( m_Model) */
       virtual void SetImageGeometry(ossimKeywordlist &geom_kwl);
       
-			
-			itkGetMacro(UseDEM, bool);
-      itkSetMacro(UseDEM, bool);
+     
+//      itkGetObjectMacro(DEMHandler, DEMHandlerType);
       
-      itkGetObjectMacro(DEMHandler, DEMHandlerType);
-      
-      virtual void SetDEMHandler(DEMHandlerType* _arg) 
+/*      virtual void SetDEMHandler(DEMHandlerType* _arg) 
       { 
 				if (this->m_DEMHandler != _arg) 
 	  		{ 
 	    		this->m_DEMHandler = _arg; 
 	    		this->Modified(); 
-	    		m_UseDEM = true;
+	    		this->UseDEM(true);
 	  		} 
-      }
+      }*/
       
       virtual bool SetDEMDirectory(const std::string& directory)
       {
 				bool b = m_DEMHandler->OpenDEMDirectory(directory.c_str());
-				this->UseDEM(true);	
+				m_DEMIsLoaded=true;
+				this->EnableDEM();	
 	
 				return b;	
       }
+			
+			virtual void DisableDEM()
+			{
+				m_UseDEM = false; 
+				this->Modified();
+			}
       
-      virtual void UseDEM(bool b) { m_UseDEM = b; this->Modified(); } 
+      virtual void EnableDEM() 
+			{ 
+				if (m_DEMIsLoaded) 
+					m_UseDEM = true; 
+				this->Modified();
+			} 
 
    protected:
       SensorModelBase(); 
@@ -124,15 +133,18 @@ class ITK_EXPORT SensorModelBase : public itk::Transform<TScalarType,
       /** Pointer on an ossim projection (created with the keywordlist) */
       ossimProjection * m_Model;
 
-      /** Object that read and use DEM */
-      DEMHandlerPointerType m_DEMHandler;
-      
       /** Specify if DEM is used in Point Transformation */
       bool m_UseDEM ;
-       
+			
+      /** Object that read and use DEM */
+      DEMHandlerPointerType m_DEMHandler;
+			
    private :
       SensorModelBase(const Self&); //purposely not implemented
       void operator=(const Self&); //purposely not implemented
+			
+			/** Specify if DEM is loaded */
+			bool m_DEMIsLoaded ;
      
     };
 

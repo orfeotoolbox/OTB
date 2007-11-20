@@ -82,13 +82,13 @@ namespace otb
       /** Accessors */
       virtual void SetMapProjection (MapProjectionType* _arg) 
       { 
-	if (this->m_MapProjection != _arg) 
-	  { 
-	    this->m_MapProjection = _arg; 
-	    m_CompositeTransform->SetFirstTransform(_arg);
-	    m_IsComputed = false;
-	    this->Modified(); 
-	  } 
+				if (this->m_MapProjection != _arg) 
+	  		{ 
+	    		this->m_MapProjection = _arg; 
+	    		m_CompositeTransform->SetFirstTransform(_arg);
+	    		m_IsComputed = false;
+	    		this->Modified(); 
+	  		} 
       } 
       
       itkGetObjectMacro(MapProjection, MapProjectionType);
@@ -96,17 +96,16 @@ namespace otb
       /** Specify where are DEM files, and load useful ones */
       virtual bool SetDEMDirectory(const std::string& directory)
       {
-	bool b = m_SensorModel->SetDEMDirectory(directory);
-	this->Modified();
+				bool b = m_SensorModel->SetDEMDirectory(directory);
+				this->Modified();
 	
-	return b;
+				return b;
       }	
       
       /** Method to decide to use DEM */	
-      virtual void UseDEM(bool b)
-      {
-	m_SensorModel->UseDEM(b);
-      }
+      virtual void EnableDEM() { m_SensorModel->EnableDEM(); }
+			
+      virtual void DisableDEM()	{	m_SensorModel->DisableDEM(); }
       
       protected:
       OrthoRectificationFilter();

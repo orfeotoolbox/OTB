@@ -42,7 +42,7 @@ namespace otb
     m_Model = NULL;
 		m_DEMHandler = DEMHandlerType::New();
     m_UseDEM = false;
-
+		m_DEMIsLoaded = false;
   }
   
   
