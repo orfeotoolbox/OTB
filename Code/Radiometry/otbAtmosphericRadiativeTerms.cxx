@@ -31,7 +31,8 @@ namespace otb
     os << indent << "Ozone Transmission: " << m_OzoneTransmission << std::endl;
     os << indent << "OxygenTransmission: " << m_OxygenTransmission << std::endl;
     os << indent << "Water vapor Transmission: " << m_WaterVaporTransmission << std::endl;
-    os << indent << "Total Transmittance of the Atmospher: " << m_TotalTransmittance << std::endl;
+    os << indent << "Downward Transmittance of the Atmospher: " << m_DownwardTransmittance << std::endl;
+    os << indent << "Upward Transmittance of the Atmospher: " << m_UpwardTransmittance << std::endl;
    }
 
 } // end namespace otb

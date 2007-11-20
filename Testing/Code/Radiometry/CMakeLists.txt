@@ -325,6 +325,24 @@ ADD_TEST(raTuAtmosphericRadiativeTermsNew ${RADIOMETRY_TESTS}
 )
 
 
+# -------            otb::ReflectanceToSurfaceReflectanceImageFilter   ------------------------------
+ADD_TEST(raTuReflectanceToSurfaceReflectanceImageFilterNew ${RADIOMETRY_TESTS}  
+        otbReflectanceToSurfaceReflectanceImageFilterNew
+)
+ADD_TEST(raTvReflectanceToSurfaceReflectanceImageFilter ${RADIOMETRY_TESTS} 
+  --compare-image ${EPSILON}  ${BASELINE}/raTvReflectanceToSurfaceReflectanceImageFilter.tif
+                              ${TEMP}/raTvReflectanceToSurfaceReflectanceImageFilter.tif
+        otbReflectanceToSurfaceReflectanceImageFilter
+	${INPUTDATA}/poupees_sub.png 
+	${TEMP}/raTvReflectanceToSurfaceReflectanceImageFilter.tif
+	1  # intrinsic atmospheric reflectance	
+	2  # spherical albedo of the atmosphere
+	3  # ozone transmission
+	4  # ozygen transmission	
+	1  # water vapor transmission	
+	2  # downward transmittance
+	3  # upward transmittance
+       )
 
 # A enrichir
 SET(Radiometry_SRCS
@@ -348,6 +366,8 @@ otbDEMCaracteristicsExtractorNew.cxx
 otbDEMCaracteristicsExtractor.cxx
 otbAtmosphericCorrectionParametersNew.cxx
 otbAtmosphericRadiativeTermsNew.cxx
+otbReflectanceToSurfaceReflectanceImageFilterNew.cxx
+otbReflectanceToSurfaceReflectanceImageFilter.cxx
 )
 
 

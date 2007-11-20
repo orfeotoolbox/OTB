@@ -22,6 +22,8 @@ PURPOSE.  See the above copyright notices for more information.
 #include "itkObjectFactory.h"
 #include "itkMacro.h"
 
+
+
 namespace otb 
 {
 /** \class AtmosphericRadiativeTerms
@@ -77,12 +79,16 @@ public:
   itkGetMacro(WaterVaporTransmission,double); 
  
   /**
-   * Set/Get the total transmittance of the atmosphere.
+   * Set/Get the downward transmittance of the atmosphere.
    */
-  itkSetMacro(TotalTransmittance,double); 
-  itkGetMacro(TotalTransmittance,double); 
+  itkSetMacro(DownwardTransmittance,double); 
+  itkGetMacro(DownwardTransmittance,double); 
 
- 
+  /**
+   * Set/Get the upward transmittance of the atmosphere.
+   */
+  itkSetMacro(UpwardTransmittance,double); 
+  itkGetMacro(UpwardTransmittance,double); 
 
 protected:
   /** Constructor */
@@ -112,9 +118,11 @@ private:
   /** The water vapor transmission. */
   double m_WaterVaporTransmission; 
 
-  /** The total transmittance of the atmosphere. */
-  double m_TotalTransmittance; 
+  /** The downward transmittance. */
+  double m_DownwardTransmittance; 
 
+ /** The upward transmittance. */
+  double m_UpwardTransmittance; 
 
 };
 
