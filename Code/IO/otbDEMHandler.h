@@ -60,7 +60,7 @@ namespace otb
       itkTypeMacro(DEMHandler,Object);
       
       /** Try to open the DEM directory. */
-      bool OpenDEMDirectory(const char* DEMDirectory);         
+      void OpenDEMDirectory(const char* DEMDirectory);         
       
       /** Compute the height above MSL(Mean Sea Level) of a geographic point. */
       virtual double GetHeightAboveMSL(const PointType& geoPoint);     

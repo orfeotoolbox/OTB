@@ -38,18 +38,17 @@ DEMHandler
 
 
 
-bool 
+void
 DEMHandler
 ::OpenDEMDirectory(const char* DEMDirectory)
 {
 	ossimFilename ossimDEMDir;
 	ossimDEMDir=ossimFilename(DEMDirectory);
-	bool result= false;
-	if (m_ElevManager->openDirectory(ossimDEMDir))
+
+	if (!m_ElevManager->openDirectory(ossimDEMDir))
 	{
-		result= true;
+		itkExceptionMacro("Not possible to open DEM Directory");
 	}
-	return result;
 }
 
 

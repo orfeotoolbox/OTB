@@ -87,12 +87,14 @@ ForwardSensorModel< TScalarType,
 		ossimGpt ossimTest;
 		ossimGpt ossimGPointRef = ossimGPoint;
 		double height;
+		double diffHeight = 100;
+		double heightTmp;
 		itk::Point<double, 2> point;
 		int nbIter = 0;
 	
 		otbMsgDevMacro(<< "USING DEM ! ") ;
 
-		while ((( fabs(ossimGPointRef.lat - ossimGPointTmp.lat) > m_Epsilon)
+		/*while ((( fabs(ossimGPointRef.lat - ossimGPointTmp.lat) > m_Epsilon)
 			||( fabs(ossimGPointRef.lon - ossimGPointTmp.lon) > m_Epsilon))
 			&& (nbIter < 3))
 		{
@@ -113,9 +115,31 @@ ForwardSensorModel< TScalarType,
 			otbGenericMsgDebugMacro(<< "Point After iter :    (" << ossimGPointTmp.lat << "," << ossimGPointTmp.lon << ")");
 
 			nbIter++;
+		}*/
+		while ((diffHeight > m_Epsilon)	&& (nbIter < 10))
+		{
+			otbMsgDevMacro(<< "Iter " << nbIter);
+			
+			if (nbIter != 0)
+				height = heightTmp;
+				
+			otbMsgDevMacro(<< "Point Before iter : (" << ossimGPointRef.lat << "," << ossimGPointRef.lon <<")");	
+			
+			point[0] = ossimGPointRef.lon;
+			point[1] = ossimGPointRef.lat;
+			
+			heightTmp = this->m_DEMHandler->GetHeightAboveMSL(point);
+			otbMsgDevMacro(<< "height : " << heightTmp) ;
+			
+			this->m_Model->lineSampleHeightToWorld(ossimPoint, heightTmp, ossimGPointRef);	
+			otbMsgDevMacro(<< "Point After iter :    (" << ossimGPointRef.lat << "," << ossimGPointRef.lon << ")");
+
+			diffHeight = fabs(heightTmp - height);
+
+			nbIter++;
 		}
 		
-		ossimGPoint = ossimGPointRef;
+		ossimGPoint = ossimGPointTmp;
 	}
   
   // "OutputPointType" storage.

@@ -102,10 +102,9 @@ namespace otb
 				return b;
       }	
       
-      /** Method to decide to use DEM */	
+      /** Methods to decide to use DEM */	
       virtual void EnableDEM() { m_SensorModel->EnableDEM(); }
-			
-      virtual void DisableDEM()	{	m_SensorModel->DisableDEM(); }
+	    virtual void DisableDEM()	{	m_SensorModel->DisableDEM(); }
       
       protected:
       OrthoRectificationFilter();

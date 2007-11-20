@@ -96,13 +96,11 @@ class ITK_EXPORT SensorModelBase : public itk::Transform<TScalarType,
 	  		} 
       }*/
       
-      virtual bool SetDEMDirectory(const std::string& directory)
+      virtual void SetDEMDirectory(const std::string& directory)
       {
-				bool b = m_DEMHandler->OpenDEMDirectory(directory.c_str());
+				m_DEMHandler->OpenDEMDirectory(directory.c_str());
 				m_DEMIsLoaded=true;
 				this->EnableDEM();	
-	
-				return b;	
       }
 			
 			virtual void DisableDEM()
