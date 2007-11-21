@@ -197,8 +197,9 @@ int max_x, max_y, min_x, min_y;
 ImageType::IndexType  			 iterationRegionStart;
 ImageType::SizeType  			 iteratorRegionSize;
 ImageType::RegionType			 iteratorRegion;
-if (model->SetDEMDirectory(argv[8]))
-{
+
+model->SetDEMDirectory(argv[8]);
+
 for(count=0;count<NumberOfStreamDivisions;count++)
 {//début boucle principale
 /**Création de la région pour chaque portion**/
@@ -347,12 +348,7 @@ writer->Update();
 otbGenericMsgDebugMacro(<< "Outputimage created" );
 
 
-}
-else 
-{
-otbGenericMsgDebugMacro(<< "Srtm Directory File opening failed" );
-return EXIT_FAILURE;
-}
+
 
 
 

@@ -38,12 +38,8 @@ int otbDEMHandlerTest(int argc, char * argv[])
 
         // Instantiating object
         DEMHandlerType::Pointer demHandler = DEMHandlerType::New();
-        bOpenDirectory = demHandler->OpenDEMDirectory(srtm_directory);
-        if( bOpenDirectory == false )
-        {
-                itkGenericExceptionMacro(<<" OpenDEMDirectory return flase value !!");
-        }
-      
+        demHandler->OpenDEMDirectory(srtm_directory);
+        
         typedef otb::UtmInverseProjection                      utmProjection;
         typedef utmProjection::InputPointType	        InputPoint;
         InputPoint                                      geoPoint;

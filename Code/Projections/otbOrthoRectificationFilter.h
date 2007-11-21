@@ -94,12 +94,10 @@ namespace otb
       itkGetObjectMacro(MapProjection, MapProjectionType);
       
       /** Specify where are DEM files, and load useful ones */
-      virtual bool SetDEMDirectory(const std::string& directory)
+      virtual void SetDEMDirectory(const std::string& directory)
       {
-				bool b = m_SensorModel->SetDEMDirectory(directory);
+				m_SensorModel->SetDEMDirectory(directory);
 				this->Modified();
-	
-				return b;
       }	
       
       /** Methods to decide to use DEM */	

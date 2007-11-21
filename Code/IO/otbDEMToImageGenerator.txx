@@ -48,13 +48,11 @@ namespace otb
   
   // DEM folder specification method 
   template<class TDEMImage>
-  bool 
+  void 
   DEMToImageGenerator<TDEMImage>::
   SetDEMDirectoryPath(const char* DEMDirectory)
   {
-    bool result = false;
-    result = m_DEMHandler->OpenDEMDirectory(DEMDirectory);
-    return result;
+    m_DEMHandler->OpenDEMDirectory(DEMDirectory);
   }
   
   // GenerateOutputInformation method

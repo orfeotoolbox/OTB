@@ -91,7 +91,7 @@ namespace otb
       itkGetConstReferenceMacro(DefaultUnknownValue,PixelType);
 
       /** Set the DEM directory. */
-      bool SetDEMDirectoryPath(const char* DEMDirectory);         
+      void SetDEMDirectoryPath(const char* DEMDirectory);         
      
       
     protected:
