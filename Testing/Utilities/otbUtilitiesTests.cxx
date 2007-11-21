@@ -34,4 +34,5 @@ REGISTER_TEST(svmGenericKernelFunctor);
 REGISTER_TEST(svmTest);
 REGISTER_TEST(svmGenericKernelTest);
 REGISTER_TEST(SIXSMainTest);
+REGISTER_TEST(SIXSMainOtbWithCallFunctionTest);
 }

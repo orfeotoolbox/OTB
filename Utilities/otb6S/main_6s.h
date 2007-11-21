@@ -6,6 +6,7 @@ extern "C" {
 #endif
 
 int ssssss_ ();
+int call6s_();
 
 #ifdef __cplusplus
 	}

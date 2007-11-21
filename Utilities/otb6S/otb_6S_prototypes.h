@@ -114,3 +114,6 @@
 #include "6SV1.0B/WAVA4.h"
 #include "6SV1.0B/WAVA5.h"
 #include "6SV1.0B/WAVA6.h"
+
+/* otb 6S Main function */
+#include "otb_main6S_function.h"

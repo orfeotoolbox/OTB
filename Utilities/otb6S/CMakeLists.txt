@@ -49,6 +49,13 @@ LIST(REMOVE_ITEM LIBF2C_SRCS "${OTB6S_SOURCE_DIR}/libf2c/main.c" )
 LIST(REMOVE_ITEM LIBF2C_SRCS "${OTB6S_SOURCE_DIR}/libf2c/getarg_.c" )
 LIST(REMOVE_ITEM LIBF2C_SRCS "${OTB6S_SOURCE_DIR}/libf2c/iargc_.c" )
 
+# Main code source
+SET(OTB6S_MAIN_SRCS
+otb_main6S_function.c                # otb 6S main function
+main.c                               # ORIGINAL 6S main 
+otb_main6S_program_call_function.c   # OTB 6S main (which call otb_main6S_function function)
+)
+
 INCLUDE_DIRECTORIES(${OTB6S_SOURCE_DIR}/libf2c)
 
 # Adjust the compiler flags to avoid problems with f2c-generated code.
@@ -75,7 +82,7 @@ INSTALL(FILES ${__files1}
     COMPONENT Development)
 
 IF(NOT OTB_DISABLE_UTILITIES_COMPILATION)
-ADD_LIBRARY(otb6S ${LIBF2C_SRCS} ${OTB6S_SRCS} )
+ADD_LIBRARY(otb6S ${LIBF2C_SRCS} ${OTB6S_SRCS} ${OTB6S_MAIN_SRCS})
 
 IF(UNIX)
     TARGET_LINK_LIBRARIES (otb6S m)

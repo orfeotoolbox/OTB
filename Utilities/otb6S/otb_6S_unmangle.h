@@ -5,6 +5,8 @@
 /* Functions */
 
 #undef varsol_
+/* otb 6S Main function */
+#undef ssssss_otb_main_function
 
 #undef adaptquad_
 #undef balanc_

@@ -104,6 +104,7 @@ svmGenericKernelFunctor.cxx
 svmTest.cxx
 svmGenericKernelTest.cxx
 6SMainTest.cxx
+6SMainOtbWithCallFunctionTest.cxx
 )
 
 INCLUDE_DIRECTORIES("${OTBTesting_BINARY_DIR}")
