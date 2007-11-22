@@ -140,6 +140,7 @@ otbImageToGrayscaleAnaglyphImageFilterNew.cxx
 otbImageToGrayscaleAnaglyphImageFilter.cxx
 otbVectorImageToColorAnaglyphVectorImageFilterNew.cxx
 otbVectorImageToColorAnaglyphVectorImageFilter.cxx
+otbAlternateViewerTest.cxx
 )
 
 INCLUDE_DIRECTORIES("${OTBTesting_BINARY_DIR}") 

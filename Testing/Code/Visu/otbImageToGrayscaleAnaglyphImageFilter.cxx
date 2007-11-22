@@ -28,7 +28,7 @@ int otbImageToGrayscaleAnaglyphImageFilter(int argc, char * argv[])
   try
     {
       const unsigned int Dimension = 2;
-      typedef unsigned char PixelType;
+      typedef double PixelType;
 
       typedef otb::Image<PixelType,Dimension> ImageType;
       typedef otb::VectorImage<PixelType,Dimension> VectorImageType;

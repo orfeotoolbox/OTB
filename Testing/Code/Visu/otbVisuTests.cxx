@@ -42,4 +42,5 @@ REGISTER_TEST(otbImageToGrayscaleAnaglyphImageFilterNew);
 REGISTER_TEST(otbImageToGrayscaleAnaglyphImageFilter);
 REGISTER_TEST(otbVectorImageToColorAnaglyphVectorImageFilterNew);
 REGISTER_TEST(otbVectorImageToColorAnaglyphVectorImageFilter);
+REGISTER_TEST(otbAlternateViewerTest);
 }
