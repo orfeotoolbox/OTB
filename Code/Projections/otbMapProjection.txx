@@ -111,7 +111,7 @@ namespace otb
 	}
       case FORWARD:
 	{
-	  otbGenericMsgDebugMacro(<< "Geographic coordinates (long/lat) : (" << point[1] << "," << point[0] << ")");
+	  otbMsgDevMacro(<< "Geographic coordinates (long/lat) : (" << point[1] << "," << point[0] << ")");
 		//from "itk::point" to "ossim::ossimGpt"
 	  ossimGpt ossimGPoint(point[1], point[0]);
 	  
@@ -122,7 +122,7 @@ namespace otb
 	  outputPoint[0]=ossimDPoint.x;
 	  outputPoint[1]=ossimDPoint.y;
 		
-	  otbGenericMsgDebugMacro(<< "Cartographic coordinates: (" << outputPoint[0] << "," << outputPoint[1] << ")");
+	  otbMsgDevMacro(<< "Cartographic coordinates: (" << outputPoint[0] << "," << outputPoint[1] << ")");
 
 	  break;
 	}
