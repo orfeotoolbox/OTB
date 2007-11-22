@@ -58,8 +58,10 @@ namespace otb
 
 	  inline TOutput operator() (const TInput & inPixel) 
 	    {
-	      TOutput outPixel; 
- 	      outPixel = static_cast<TOutput>(inPixel)/static_cast<TOutput>(m_Alpha) + static_cast<TOutput>(m_Beta); 
+	      TOutput outPixel;
+	      double temp; 
+ 	      temp = static_cast<double>(inPixel)/m_Alpha + m_Beta; 
+	      outPixel = static_cast<TOutput>(temp);
 	      
 	      return outPixel;
 	    }

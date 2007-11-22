@@ -70,10 +70,12 @@ namespace otb
 	  inline TOutput operator() (const TInput & inPixel) 
 	    {
 	      TOutput outPixel;
-	      double temp;
-	      temp = static_cast<TOutput>(inPixel)*static_cast<TOutput>(m_Coefficient) + static_cast<TOutput>(m_Residu);
-	      outPixel = temp / (1 + static_cast<TOutput>(m_SphericalAlbedo) *  temp);
-	
+	      double temp, temp2;
+	      temp = static_cast<double>(inPixel)*m_Coefficient + m_Residu;
+	      temp2 =  temp / (1 + m_SphericalAlbedo *  temp);
+	      outPixel = static_cast<TOutput>(temp2);
+	      
+
 	      return outPixel;
 	    }
 
