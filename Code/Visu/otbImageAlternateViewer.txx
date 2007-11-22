@@ -19,8 +19,8 @@ PURPOSE.  See the above copyright notices for more information.
 #define _otbImageAlternateViewer_txx
 
 #include "otbImageAlternateViewer.h"
-#include <Fl/fl_draw.H>
-#include <Fl/Fl.h>
+#include <FL/fl_draw.H>
+#include <FL/Fl.H>
 #include "otbMath.h"
 #include "itkTimeProbe.h"
 #include "GL/glu.h"

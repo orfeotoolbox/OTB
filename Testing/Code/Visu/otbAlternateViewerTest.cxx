@@ -2,7 +2,7 @@
 #include "otbVectorRescaleIntensityImageFilter.h"
 #include "otbImageFileReader.h"
 #include "otbImageAlternateViewer.h"
-#include "Fl/Fl.h"
+#include "Fl/Fl.H"
 
 
 int otbAlternateViewerTest(int argc, char* argv[])
