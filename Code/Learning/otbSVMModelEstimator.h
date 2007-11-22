@@ -92,13 +92,14 @@ public:
   /** Set the SVM type to C_SVC, NU_SVC, ONE_CLASS, EPSILON_SVR, NU_SVR */
   void SetSVMType(int svmtype)
   {
-    param.svm_type = svmtype;
+    m_Model->GetParameters().svm_type = svmtype;
+    this->Modified();
   }
 
   /** Get the SVM type (C_SVC, NU_SVC, ONE_CLASS, EPSILON_SVR, NU_SVR) */
   int GetSVMType(void)
   {
-    return param.svm_type;
+    return m_Model->GetParameters().svm_type;
   }
   
   /** Set the kernel type to LINEAR, POLY, RBF, SIGMOID
@@ -108,97 +109,105 @@ public:
 	sigmoid: tanh(gamma*u'*v + coef0)*/
   void SetKernelType(int kerneltype)
   {
-    param.kernel_type = kerneltype;
+    m_Model->GetParameters().kernel_type = kerneltype;
+    this->Modified();
   }
 
  /** Get the kernel type */
  int GetKernelType(void)
   {
-    return param.kernel_type;
+    return m_Model->GetParameters().kernel_type;
   }
 
   /** Set the degree of the polynomial kernel */
   void SetPolynomialKernelDegree(int degree)
   {
-    param.degree = degree;
+    m_Model->GetParameters().degree = degree;
+    this->Modified();
   }
 
 
   /** Get the degree of the polynomial kernel */
   int GetPolynomialKernelDegree(void)
   {
-    return param.degree;
+    return m_Model->GetParameters().degree;
   }
 
   /** Set the gamma parameter for poly/rbf/sigmoid kernels */
   void SetKernelGamma(double gamma)
   {
-    param.gamma = gamma;
+    m_Model->GetParameters().gamma = gamma;
+    this->Modified();
   }
  /** Get the gamma parameter for poly/rbf/sigmoid kernels */
   double GetKernelGamma(void)
   {
-    return param.gamma;
+    return m_Model->GetParameters().gamma;
   }
 
   /** Set the coef0 parameter for poly/sigmoid kernels */
   void SetKernelCoef0(double coef0)
   {
-    param.coef0 = coef0;
+    m_Model->GetParameters().coef0 = coef0;
+    this->Modified();
   }
 
   /** Get the coef0 parameter for poly/sigmoid kernels */
   double GetKernelCoef0(void)
   {
-    return param.coef0;
+    return m_Model->GetParameters().coef0;
   }
 
   /** Set the Nu parameter for the training */
   void SetNu(double nu)
   {
-    param.nu = nu;
+    m_Model->GetParameters().nu = nu;
+    this->Modified();
   }
 
   /** Set the Nu parameter for the training */
   double GetNu(void)
     {
-      return param.nu;
+      return m_Model->GetParameters().nu;
     }
   
   /** Set the cache size in MB for the training */
   void SetCacheSize(int cSize)
   {
-    param.cache_size = static_cast<double>(cSize);
+    m_Model->GetParameters().cache_size = static_cast<double>(cSize);
+    this->Modified();
   }
 
   /** Get the cache size in MB for the training */
   int GetCacheSize(void)
   {
-    return static_cast<int>(param.cache_size);
+    return static_cast<int>(m_Model->GetParameters().cache_size);
   }
 
   /** Set the C parameter for the training for C_SVC, EPSILON_SVR and NU_SVR */
   void SetC(double c)
   {
-    param.C = c;
+    m_Model->GetParameters().C = c;
+    this->Modified();
   }
 
 /** Get the C parameter for the training for C_SVC, EPSILON_SVR and NU_SVR */
   double GetC(void)
   {
-    return param.C;
+    return m_Model->GetParameters().C;
   }
 
   /** Set the tolerance for the stopping criterion for the training*/
   void SetEpsilon(double eps)
   {
-    param.eps = eps;
+    m_Model->GetParameters().eps = eps;
+    this->Modified();
   }
 
 /** Get the tolerance for the stopping criterion for the training*/
   double GetEpsilon(void)
   {
-    return param.eps;
+    return m_Model->GetParameters().eps;
   }
 
 
@@ -206,45 +215,43 @@ public:
   void SetP(double p)
   {
     //param.svm_type = EPSILON_SVR;
-    param.p = p;
+    m_Model->GetParameters().p = p;
+    this->Modified();
   }
 
   
   /* Get the value of p for EPSILON_SVR */
   double GetP(void)
   {
-    return param.p;
+    return m_Model->GetParameters().p;
   }
 
   /** Use the shrinking heuristics for the training */
   void DoShrinking(bool s)
   {
-    param.shrinking = static_cast<int>(s);
+    m_Model->GetParameters().shrinking = static_cast<int>(s);
+    this->Modified();
   }
 
   /** Get Use the shrinking heuristics for the training boolean */
   bool GetDoShrinking(void)
   {
-    return static_cast<bool>(param.shrinking);
+    return static_cast<bool>(m_Model->GetParameters().shrinking);
   }
 
 
   /** Do probability estimates */
   void DoProbabilityEstimates(bool prob)
   {
-    param.probability = static_cast<int>(prob);
+    m_Model->GetParameters().probability = static_cast<int>(prob);
+    this->Modified();
   }
 
   /** Get Do probability estimates boolean */
   bool GetDoProbabilityEstimates(void)
   {
-    return static_cast<bool>(param.probability);
+    return static_cast<bool>(m_Model->GetParameters().probability);
   }
-
-  /*
-  param.nr_weight = 0;
-  param.weight_label = NULL;
-  param.weight = NULL;*/
 
   void Update();
   
@@ -290,10 +297,10 @@ protected:
 
   SVMModelPointer m_Model;
 
-  struct svm_parameter param;	
+/*  struct svm_parameter param;	
   struct svm_problem prob;
   struct svm_node* x_space;
-
+*/
   bool m_Done;
 
 

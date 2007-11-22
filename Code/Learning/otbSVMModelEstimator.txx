@@ -32,29 +32,27 @@ m_NumberOfClasses( 0 )
 {
   // FIXME initialize SVMModel
 
-  m_Model = SVMModelType::New();
+        m_Model = SVMModelType::New();
 
-  m_Done = 0;
-  // default values
+        m_Done = 0;
+        // default values
 
-  	param.svm_type = C_SVC;
-	param.kernel_type = LINEAR;
-	param.degree = 3;
-	param.gamma = 0;	// 1/k
-	param.coef0 = 0;
-        param.kernel_generic = NULL;
-	param.nu = 0.5;
-	param.cache_size = 40;
-	param.C = 1;
-	param.eps = 1e-3;
-	param.p = 0.1;
-	param.shrinking = 1;
-	param.probability = 1;
-	param.nr_weight = 0;
-	param.weight_label = NULL;
-	param.weight = NULL;
-        
-        
+        m_Model->GetParameters().svm_type = C_SVC;
+	m_Model->GetParameters().kernel_type = LINEAR;
+	m_Model->GetParameters().degree = 3;
+	m_Model->GetParameters().gamma = 0;	// 1/k
+	m_Model->GetParameters().coef0 = 0;
+        m_Model->GetParameters().kernel_generic = NULL;
+	m_Model->GetParameters().nu = 0.5;
+	m_Model->GetParameters().cache_size = 40;
+	m_Model->GetParameters().C = 1;
+	m_Model->GetParameters().eps = 1e-3;
+	m_Model->GetParameters().p = 0.1;
+	m_Model->GetParameters().shrinking = 1;
+	m_Model->GetParameters().probability = 1;
+	m_Model->GetParameters().nr_weight = 0;
+	m_Model->GetParameters().weight_label = NULL;
+	m_Model->GetParameters().weight = NULL;
 
   //cross_validation = 0;
 }
@@ -65,7 +63,7 @@ SVMModelEstimator<InputPixelType, LabelPixelType>
 ::~SVMModelEstimator(void)
 {
   
-   svm_destroy_param(&param);
+   svm_destroy_param(&m_Model->GetParameters());
 
 }
 
@@ -131,7 +129,7 @@ SVMModelEstimator<InputPixelType, LabelPixelType>
 
   this->BuildProblem();
   
-  const char* error_msg = svm_check_parameter(&prob,&param);
+  const char* error_msg = svm_check_parameter(&m_Model->GetProblem(),&m_Model->GetParameters());
 
   if(error_msg)
     {
@@ -140,7 +138,7 @@ SVMModelEstimator<InputPixelType, LabelPixelType>
 
   otbMsgDebugMacro(  << "Starting training" );
 
-  svm_model* tempModel = svm_train(&prob,&param);
+  svm_model* tempModel = svm_train(&m_Model->GetProblem(),&m_Model->GetParameters());
 
   otbMsgDebugMacro(  << "Training done" );
     
@@ -167,11 +165,8 @@ SVMModelEstimator< InputPixelType, LabelPixelType >
 
   m_Model->AllocateProblem(probl, elements);
 
-  //struct svm_problem prob;
-  //struct svm_node *x_space;
-
-  prob = m_Model->GetProblem();
-  x_space = m_Model->GetXSpace();
+  struct svm_problem & prob = m_Model->GetProblem();
+  struct svm_node *x_space = m_Model->GetXSpace();
 
    otbMsgDebugMacro(  << "x_space " <<  x_space );
    otbMsgDebugMacro(  << "prob = " << &prob );
@@ -232,8 +227,8 @@ SVMModelEstimator< InputPixelType, LabelPixelType >
 
   otbMsgDebugMacro(  << "Processed " << i << " examples" );
 
-  if(param.gamma == 0)
-    param.gamma = 1.0/max_index;
+  if(m_Model->GetParameters().gamma == 0)
+    m_Model->GetParameters().gamma = 1.0/max_index;
 
 }
 

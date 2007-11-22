@@ -150,7 +150,7 @@ public:
   }
 
   /** Gets the problem */
-  struct svm_problem GetProblem()
+  struct svm_problem & GetProblem()
   {
         return m_Problem ;
   }
@@ -190,11 +190,12 @@ public:
   /** Get/Set methods for generic kernel functor */
   virtual GenericKernelFunctorBase * GetKernelFunctor(void)const
   {
-        return m_GenericKernelFunctor;
+        return m_Parameters.kernel_generic;// m_GenericKernelFunctor;
   }
   virtual void SetKernelFunctor(GenericKernelFunctorBase* pGenericKernelFunctor)
   {
-        m_GenericKernelFunctor = pGenericKernelFunctor;
+        //m_GenericKernelFunctor = pGenericKernelFunctor;
+        m_Parameters.kernel_generic = pGenericKernelFunctor;
         this->Modified();
   }
   /** Return number of support vectors */
@@ -226,6 +227,11 @@ public:
     */
   ValuesType EvaluateHyperplaneDistance(void);
   
+  /** Get reference */
+  struct svm_parameter & GetParameters()
+  {
+        return (m_Parameters);
+  }
   
 protected:
   SVMModel();
@@ -252,7 +258,7 @@ private:
   struct svm_node* m_XSpace;
 
   /** Pointer to generic kernel functor */
-  GenericKernelFunctorBase * m_GenericKernelFunctor;
+//  GenericKernelFunctorBase * m_GenericKernelFunctor;
 
 }; // class SVMModel
 
