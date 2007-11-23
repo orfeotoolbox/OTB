@@ -535,13 +535,11 @@ int RegressionTestAsciiFile(const char * testAsciiFileName, const char * baselin
 	int numLine(1);
     	if (!fluxfiletest)
     	{
-    		std::cerr << "Impossible to open the test ASCII file <"<<testAsciiFileName<<">.\n";
-    		return 1000;
+               	itkGenericExceptionMacro(<<"Impossible to open the test ASCII file <"<<testAsciiFileName<<">.");
     	}
     	if (!fluxfileref)
     	{
-    		std::cerr << "Impossible to open the baseline ASCII file <"<<baselineAsciiFileName<<">.\n";
-    		return 1000;
+    		itkGenericExceptionMacro(<< "Impossible to open the baseline ASCII file <"<<baselineAsciiFileName<<">.");
     	}
 
 	TypeEtat etatPrec, etatCour ;
@@ -745,13 +743,11 @@ int RegressionTestBinaryFile(const char * testBinaryFileName, const char * basel
 	fluxfileref = fopen(baselineBinaryFileName,"rb");
 	if ( fluxfiletest==NULL	)
 	{
-    		std::cerr << "Impossible to open the test BINARY file <"<<testBinaryFileName<<">.\n";
-    		return 1000;
+    		itkGenericExceptionMacro(<<"Impossible to open the test BINARY file <"<<testBinaryFileName<<">.");
 	}
 	if ( fluxfileref==NULL	)
 	{
-    		std::cerr << "Impossible to open the baseline BINARY file <"<<baselineBinaryFileName<<">.\n";
-    		return 1000;
+    		itkGenericExceptionMacro(<<"Impossible to open the baseline BINARY file <"<<baselineBinaryFileName<<">.");
 	}
 
  	while( !feof(fluxfiletest) && !feof(fluxfileref) )
@@ -795,7 +791,7 @@ int RegressionTestImage (int cpt, const char *testImageFilename, const char *bas
     }
   catch (itk::ExceptionObject& e)
     {
-    std::cerr << "Exception detected while reading " << baselineImageFilename << " : "  << e.GetDescription();
+    itkGenericExceptionMacro(<< "Exception detected while reading " << baselineImageFilename << " : "  << e.GetDescription());
     return 1000;
     }
 
@@ -808,7 +804,7 @@ int RegressionTestImage (int cpt, const char *testImageFilename, const char *bas
     }
   catch (itk::ExceptionObject& e)
     {
-    std::cerr << "Exception detected while reading " << testImageFilename << " : "  << e.GetDescription() << std::endl;
+    itkGenericExceptionMacro(<< "Exception detected while reading " << testImageFilename << " : "  << e.GetDescription() );
     return 1000;
     }
 
@@ -897,7 +893,7 @@ int RegressionTestImage (int cpt, const char *testImageFilename, const char *bas
       }
     catch (...)
       {
-      std::cerr << "Error during rescale of " << diffName.str() << std::endl;
+      itkGenericExceptionMacro(<< "Error during rescale of " << diffName.str() );
       }
     writer->SetFileName(diffName.str().c_str());
     try
@@ -906,7 +902,7 @@ int RegressionTestImage (int cpt, const char *testImageFilename, const char *bas
       }
     catch (...)
       {
-      std::cerr << "Error during write of " << diffName.str() << std::endl;
+      itkGenericExceptionMacro(<< "Error during write of " << diffName.str() );
       }
 
 //    std::cout << "<DartMeasurementFile name=\"DifferenceImage\" type=\"image/png\">";
@@ -923,7 +919,7 @@ int RegressionTestImage (int cpt, const char *testImageFilename, const char *bas
       }
     catch (...)
       {
-      std::cerr << "Error during rescale of " << baseName.str() << std::endl;
+      itkGenericExceptionMacro(<<"Error during rescale of " << baseName.str() );
       }
     try
       {
@@ -932,7 +928,7 @@ int RegressionTestImage (int cpt, const char *testImageFilename, const char *bas
       }
     catch (...)
       {
-      std::cerr << "Error during write of " << baseName.str() << std::endl;
+      itkGenericExceptionMacro(<<"Error during write of " << baseName.str() );
       }
 
 //    std::cout << "<DartMeasurementFile name=\"BaselineImage\" type=\"image/png\">";
@@ -949,8 +945,7 @@ int RegressionTestImage (int cpt, const char *testImageFilename, const char *bas
       }
     catch (...)
       {
-      std::cerr << "Error during rescale of " << testName.str()
-                << std::endl;
+      itkGenericExceptionMacro(<< "Error during rescale of " << testName.str());
       }
     try
       {
@@ -959,7 +954,7 @@ int RegressionTestImage (int cpt, const char *testImageFilename, const char *bas
       }
     catch (...)
       {
-      std::cerr << "Error during write of " << testName.str() << std::endl;
+      itkGenericExceptionMacro(<<"Error during write of " << testName.str() );
       }
 
 //    std::cout << "<DartMeasurementFile name=\"TestImage\" type=\"image/png\">";
@@ -987,8 +982,7 @@ int RegressionTestMetaData (const char *testImageFilename, const char *baselineI
     }
   catch (itk::ExceptionObject& e)
     {
-    std::cerr << "Exception detected while reading " << baselineImageFilename << " : "  << e.GetDescription();
-    return 1000;
+    itkGenericExceptionMacro(<< "Exception detected while reading " << baselineImageFilename << " : "  << e.GetDescription());
     }
 
    // Read the baseline file
@@ -1000,8 +994,7 @@ int RegressionTestMetaData (const char *testImageFilename, const char *baselineI
     }
   catch (itk::ExceptionObject& e)
     {
-    std::cerr << "Exception detected while reading " << baselineImageFilename << " : "  << e.GetDescription();
-    return 1000;
+    itkGenericExceptionMacro(<< "Exception detected while reading " << baselineImageFilename << " : "  << e.GetDescription());
     }
 
   unsigned int errcount = 0;
