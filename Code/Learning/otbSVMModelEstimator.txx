@@ -37,24 +37,20 @@ m_NumberOfClasses( 0 )
         m_Done = 0;
         // default values
 
-        m_Model->GetParameters().svm_type = C_SVC;
-	m_Model->GetParameters().kernel_type = LINEAR;
-	m_Model->GetParameters().degree = 3;
-	m_Model->GetParameters().gamma = 0;	// 1/k
-	m_Model->GetParameters().coef0 = 0;
-        m_Model->GetParameters().kernel_generic = NULL;
-	m_Model->GetParameters().nu = 0.5;
-	m_Model->GetParameters().cache_size = 40;
-	m_Model->GetParameters().C = 1;
-	m_Model->GetParameters().eps = 1e-3;
-	m_Model->GetParameters().p = 0.1;
-	m_Model->GetParameters().shrinking = 1;
-	m_Model->GetParameters().probability = 1;
-	m_Model->GetParameters().nr_weight = 0;
-	m_Model->GetParameters().weight_label = NULL;
-	m_Model->GetParameters().weight = NULL;
+        m_Model->SetSVMType(C_SVC);
+	m_Model->SetKernelType(LINEAR);
+	m_Model->SetPolynomialKernelDegree(3);
+	m_Model->SetKernelGamma(0.);	// 1/k
+	m_Model->SetKernelCoef0(0);
+        m_Model->SetKernelFunctor(NULL);
+	m_Model->SetNu(0.5);
+	m_Model->SetCacheSize(40);
+	m_Model->SetC(1);
+	m_Model->SetEpsilon(1e-3);
+	m_Model->SetP(0.1);
+	m_Model->DoShrinking(1);
+	m_Model->DoProbabilityEstimates(true);
 
-  //cross_validation = 0;
 }
 
 
@@ -227,8 +223,8 @@ SVMModelEstimator< InputPixelType, LabelPixelType >
 
   otbMsgDebugMacro(  << "Processed " << i << " examples" );
 
-  if(m_Model->GetParameters().gamma == 0)
-    m_Model->GetParameters().gamma = 1.0/max_index;
+  if(m_Model->GetKernelGamma() == 0)
+    m_Model->SetKernelGamma(1.0/max_index);
 
 }
 

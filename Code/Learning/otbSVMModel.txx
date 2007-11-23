@@ -42,6 +42,9 @@ SVMModel< TInputPixel, TLabel >::SVMModel()
   m_XSpace = new struct svm_node[1];
 //  m_GenericKernelFunctor = NULL;
   m_Parameters.kernel_generic = NULL;
+  m_Parameters.nr_weight = 0;
+  m_Parameters.weight_label = NULL;
+  m_Parameters.weight = NULL;
 
 }
 
