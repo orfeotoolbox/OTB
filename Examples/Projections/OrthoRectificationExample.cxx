@@ -40,7 +40,7 @@
 #include "itkImageRegionIteratorWithIndex.h"
 #include "itkLinearInterpolateImageFunction.h"
 
-
+#include "itkChangeInformationImageFilter.h"
 
 
 #include "init/ossimInit.h"
@@ -173,8 +173,19 @@ int main( int argc, char* argv[] )
 
 	
   reader->GenerateOutputInformation();
+  
+  typedef itk::ChangeInformationImageFilter<ImageType > ChangeInfoFilterType;
+  ChangeInfoFilterType::Pointer changeInfo = ChangeInfoFilterType::New();
+  changeInfo->SetInput(reader->GetOutput());
+  changeInfo->ChangeOriginOn();
+  ImageType::PointType originNull;
+  originNull[0]=0;
+  originNull[1]=0;
+  changeInfo->SetOutputOrigin(originNull);
+	
+  changeInfo->GenerateOutputInformation();
 			
-  orthoRectifFilter->SetInput(reader->GetOutput());
+  orthoRectifFilter->SetInput(changeInfo->GetOutput());
 
 // Software Guide : EndCodeSnippet	
 

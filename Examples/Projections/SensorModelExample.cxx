@@ -423,6 +423,7 @@ int main( int argc, char* argv[] )
 // Software Guide : BeginCodeSnippet
 
       outputImage->TransformIndexToPhysicalPoint(currentIndex, outputPoint);
+      
 
 // Software Guide : EndCodeSnippet    
 // Software Guide : BeginLatex
@@ -438,11 +439,13 @@ int main( int argc, char* argv[] )
 
       inputPoint = model->TransformPoint(outputPoint);
 
-      inputImage->TransformPhysicalPointToIndex(inputPoint,pixelIndex);
+//       inputImage->TransformPhysicalPointToIndex(inputPoint,pixelIndex);
+      
 		     
-      pixelIndexArray[It]=pixelIndex[0];
-      pixelIndexArray[It+1]=pixelIndex[1];
-
+//       pixelIndexArray[It]=pixelIndex[0];
+//       pixelIndexArray[It+1]=pixelIndex[1];
+      pixelIndexArray[It]=inputPoint[0];
+      pixelIndexArray[It+1]=inputPoint[1];
 
       currentIndexArray[It]=currentIndex[0];
       currentIndexArray[It+1]=currentIndex[1];

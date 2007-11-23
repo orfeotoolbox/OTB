@@ -73,7 +73,7 @@ class ITK_EXPORT SensorModelBase : public itk::Transform<TScalarType,
       itkStaticConstMacro(ParametersDimension,  unsigned int, NParametersDimensions); //A voir!!
       
       /* Get the ImageKeywordlist */
-      ImageKeywordlist & GetImageGeometryKeywordlist(void) const;
+      ImageKeywordlist GetImageGeometryKeywordlist(void) const;
       /* Get an ossimKeywordlist */
       ossimKeywordlist GetOssimKeywordlist(void);
       

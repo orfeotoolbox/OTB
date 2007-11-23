@@ -66,7 +66,7 @@ namespace otb
 	     unsigned int NInputDimensions,
 	     unsigned int NOutputDimensions,
            unsigned int NParametersDimensions >
-  ImageKeywordlist &
+  ImageKeywordlist
   SensorModelBase< TScalarType,NInputDimensions,NOutputDimensions,NParametersDimensions>
   ::GetImageGeometryKeywordlist(void)const
   {
