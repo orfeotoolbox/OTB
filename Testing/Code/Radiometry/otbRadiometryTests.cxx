@@ -49,4 +49,5 @@ REGISTER_TEST(otbAtmosphericCorrectionParametersNew);
 REGISTER_TEST(otbAtmosphericRadiativeTermsNew);
 REGISTER_TEST(otbReflectanceToSurfaceReflectanceImageFilterNew);
 REGISTER_TEST(otbReflectanceToSurfaceReflectanceImageFilter);
+REGISTER_TEST(otbFilterFunctionValuesTest);
 }

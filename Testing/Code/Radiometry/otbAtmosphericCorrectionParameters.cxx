@@ -20,20 +20,49 @@
 #endif
 
 #include "itkExceptionObject.h"
-
 #include "otbAtmosphericCorrectionParameters.h"
+#include <fstream>
 
-int otbAtmosphericCorrectionParametersNew(int argc, char * argv[])
+int otbFilterFunctionValuesTest(int argc, char * argv[])
 {
   try
-    {
-      typedef otb::AtmosphericCorrectionParameters  AtmosphericCorrectionParametersType;
+    {   
+      char * outname   = argv[1];
+
       typedef otb::FilterFunctionValues FilterFunctionValuesType;
       // Instantiating object
-      AtmosphericCorrectionParametersType::Pointer objectAtmo = AtmosphericCorrectionParametersType::New();
-      FilterFunctionValuesType::Pointer objectFilter = FilterFunctionValuesType::New();
-    }
+      FilterFunctionValuesType::Pointer object = FilterFunctionValuesType::New();
+      FilterFunctionValuesType::ValuesVectorType vect;
 
+      for(unsigned int i=5; i<argc; i++)
+	{
+	  vect.push_back(atof(argv[i]));
+	}
+ 
+      bool bumbo = object->SetParameters(atof(argv[2]), atof(argv[3]), atof(argv[4]), vect);
+
+      // Writing output file
+      std::ofstream file;
+      file.open(outname);
+      
+      file <<"Input Vector :"<<std::endl;
+      for (unsigned int i=0; i<vect.size(); i++)
+	{
+	  file<< vect[i] <<std::endl;
+	}
+      file<<std::endl;
+      file<<"Output vector :"<<std::endl;
+      for (unsigned int i=0; i<object->GetFilterFunctionValues().size(); i++)
+	{
+	  file<< object->GetFilterFunctionValues()[i] <<std::endl;
+	}
+      file<<std::endl;
+      file<<"L_min :"<<object->GetMinSpectralValue()<<std::endl;
+      file<<"L_max :"<<object->GetMaxSpectralValue()<<std::endl;
+      
+      file.close();
+    }
+  
   catch( itk::ExceptionObject & err ) 
     { 
     std::cout << "Exception itk::ExceptionObject thrown !" << std::endl; 

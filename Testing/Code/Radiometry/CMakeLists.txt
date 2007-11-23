@@ -315,9 +315,24 @@ ADD_TEST(raTvDEMCaracteristicsExtractor ${RADIOMETRY_TESTS}
 
 
 # -------            otb::AtmosphericCorrectionParameters   ------------------------------
+# launch the FilterFunctionValues unitary test too.
 ADD_TEST(raTuAtmosphericCorrectionParametersNew ${RADIOMETRY_TESTS}  
         otbAtmosphericCorrectionParametersNew
 )
+
+##########           otb::FilterFunctionValues -------------------
+# in otbAtmosphericCorrectionParameters.h/.cxx
+ADD_TEST(raTvFilterFunctionValuesTest ${RADIOMETRY_TESTS}
+    --compare-ascii ${TOL} ${BASELINE_FILES}/raTvFilterFunctionValuesTest.txt
+                           ${TEMP}/raTvFilterFunctionValuesTest.txt
+        otbFilterFunctionValuesTest
+	${TEMP}/raTvFilterFunctionValuesTest.txt
+	5            # lambda min
+	17           # lambda max
+	3            # user step
+	2 5 3 9 8  # vectorlambda max
+)
+
 
 # -------            otb::AtmosphericRadiativeTerms   ------------------------------
 ADD_TEST(raTuAtmosphericRadiativeTermsNew ${RADIOMETRY_TESTS}  
@@ -344,6 +359,19 @@ ADD_TEST(raTvReflectanceToSurfaceReflectanceImageFilter ${RADIOMETRY_TESTS}
 	3  # upward transmittance
        )
 
+
+
+
+# -------            otb::NeighborTest   ------------------------------
+# ------- ADD_TEST(raTvNeighborTest ${RADIOMETRY_TESTS} 
+# -------         NeighborTest
+# ------- 	${INPUTDATA}/poupees_sub.png 
+# ------- 	${TEMP}/raTvReflectanceToSurfaceReflectanceImageFilter.tif
+# -------  	10  # intrinsic atmospheric reflectance	
+# ------- 	20  # spherical albedo of the atmosphere
+# -------        )
+
+
 # A enrichir
 SET(Radiometry_SRCS
 otbRAndNIRVegetationIndexImageFilterNew.cxx
@@ -365,9 +393,11 @@ otbImageToReflectanceImageFilter.cxx
 otbDEMCaracteristicsExtractorNew.cxx
 otbDEMCaracteristicsExtractor.cxx
 otbAtmosphericCorrectionParametersNew.cxx
+otbAtmosphericCorrectionParameters.cxx
 otbAtmosphericRadiativeTermsNew.cxx
 otbReflectanceToSurfaceReflectanceImageFilterNew.cxx
 otbReflectanceToSurfaceReflectanceImageFilter.cxx
+# -------NeighborTest.cxx
 )
 
 

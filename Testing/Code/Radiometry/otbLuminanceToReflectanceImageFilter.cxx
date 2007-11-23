@@ -59,16 +59,16 @@ int otbLuminanceToReflectanceImageFilter(int argc, char * argv[])
       reader->SetFileName(inputFileName);
       writer->SetFileName(outputFileName);
       reader->GenerateOutputInformation();
- 
-      unsigned int nbOfComponent = reader->GetOutput()->GetNumberOfComponentsPerPixel();
 
+      unsigned int nbOfComponent = reader->GetOutput()->GetNumberOfComponentsPerPixel();
+      // WARNING : 1 ELEMENT FOR EACH PIXEL IMAGE COMPONENT
       VectorType solarIllumination(nbOfComponent);
       solarIllumination.Fill(0);
       solarIllumination[0] = static_cast<double>(atof(argv[4]));
       solarIllumination[1] = static_cast<double>(atof(argv[5]));
       solarIllumination[2] = static_cast<double>(atof(argv[6]));
       solarIllumination[3] = static_cast<double>(atof(argv[7]));
-    
+
  
       // Instantiating object
       LuminanceToReflectanceImageFilterType::Pointer filter = LuminanceToReflectanceImageFilterType::New();
@@ -85,7 +85,6 @@ int otbLuminanceToReflectanceImageFilter(int argc, char * argv[])
 	  filter->SetMounth(mounth); 
 	}
       
-
       filter->SetInput(reader->GetOutput());
       writer->SetInput(filter->GetOutput());
       writer->Update();
