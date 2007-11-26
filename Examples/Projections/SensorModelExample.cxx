@@ -447,8 +447,8 @@ int main( int argc, char* argv[] )
       pixelIndexArray[It]=inputPoint[0];
       pixelIndexArray[It+1]=inputPoint[1];
 
-      currentIndexArray[It]=currentIndex[0];
-      currentIndexArray[It+1]=currentIndex[1];
+      currentIndexArray[It]=static_cast<int>(currentIndex[0]);
+      currentIndexArray[It+1]=static_cast<int>(currentIndex[1]);
 
       It=It+2;
       }
