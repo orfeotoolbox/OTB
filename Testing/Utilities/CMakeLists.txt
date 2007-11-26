@@ -103,8 +103,6 @@ ijBSplineScatteredDataPointSetToImageFilterTest.cxx
 svmGenericKernelFunctor.cxx
 svmTest.cxx
 svmGenericKernelTest.cxx
-6SMainTest.cxx
-6SMainOtbWithCallFunctionTest.cxx
 )
 
 INCLUDE_DIRECTORIES("${OTBTesting_BINARY_DIR}")
@@ -113,6 +111,20 @@ ADD_EXECUTABLE(otbUtilitiesTests otbUtilitiesTests.cxx ${UtilitiesTests_SRCS})
 TARGET_LINK_LIBRARIES(otbUtilitiesTests OTBIO OTBCommon gdal ITKIO ITKAlgorithms ITKStatistics ITKCommon otbossim otbsvm otb6S)
 IF(UNIX)
     TARGET_LINK_LIBRARIES (otbUtilitiesTests m)
+ENDIF(UNIX)
+
+# Original 6S main executable in C
+ADD_EXECUTABLE(otb6SMain 6SMainTest.cxx )
+TARGET_LINK_LIBRARIES(otb6SMain OTBCommon ITKCommon otb6S)
+IF(UNIX)
+    TARGET_LINK_LIBRARIES (otb6SMain m)
+ENDIF(UNIX)
+
+# OTB 6S main executable in C (call 6S  mian function.
+ADD_EXECUTABLE(otb6SMainWithCallFunction 6SMainOtbWithCallFunctionTest.cxx )
+TARGET_LINK_LIBRARIES(otb6SMainWithCallFunction OTBCommon ITKCommon otb6S)
+IF(UNIX)
+    TARGET_LINK_LIBRARIES (otb6SMainWithCallFunction m)
 ENDIF(UNIX)
 
 

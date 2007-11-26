@@ -6,7 +6,10 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
+/* OTB patches: replace "f2c.h" by "otb_6S.h" */
+/*#include "f2c.h"*/
 #include "otb_6S.h"
+
 
 /* Table of constant values */
 
@@ -15,8 +18,8 @@ static integer c__1 = 1;
 static integer c__4 = 4;
 static integer c__3 = 3;
 
-/*<       program call6S >*/
-/* Main program */ OTB_MAIN__()
+/*<       program call6Sv1_0b >*/
+/* Main program */ OTB_6S_MAIN__()
 {
     /* Format strings */
     static char fmt_100[] = "(10x,\002 ----->  atmospheric reflectance :    \
@@ -449,9 +452,9 @@ static integer c__3 = 3;
 L999:
 /*<       end >*/
     return 0;
-} /* OTB_MAIN__ */
+} /* OTB_6S_MAIN__ */
 
-/* Main program alias */ int call6s_ () { OTB_MAIN__ (); return 0; }
+/* Main program alias */ int call6sv1_0b__ () { OTB_6S_MAIN__ (); return 0; }
 #ifdef __cplusplus
 	}
 #endif

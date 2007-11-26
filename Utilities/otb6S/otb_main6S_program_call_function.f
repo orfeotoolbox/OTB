@@ -1,4 +1,4 @@
-      program call6S
+      program call6Sv1_0b
  
       IMPLICIT NONE
       

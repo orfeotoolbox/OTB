@@ -11,7 +11,7 @@
 
 
 /* OTB test main */
-int SIXSMainOtbWithCallFunctionTest(int argc, char* argv[])
+int main(int argc, char* argv[])
 {
-   return (call6s_());
+   return (call6sv1_0b__());
 }
