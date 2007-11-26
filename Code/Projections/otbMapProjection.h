@@ -84,12 +84,9 @@ namespace otb
       void SetEllipsoid (const ossimEllipsoid &ellipsoid);
       void SetEllipsoid(std::string code);
       void SetEllipsoid(const double &major_axis, const double &minor_axis);
-      //OutputPointType Forward(const InputPointType &point) const;
-      //InputPointType Inverse(const OutputPointType &point) const;
-	
+ 
       OutputPointType TransformPoint(const InputPointType &point) const;
       virtual InputPointType Origin();
-      //virtual void LineSampleToEastingNorthing(const InputPointType &linesample, InputPointType &eastingNorthing) const; 
       virtual double GetFalseNorthing() const;
       virtual double GetFalseEasting() const;
       virtual double GetStandardParallel1() const;
@@ -112,11 +109,6 @@ namespace otb
       void SetFalseEasting(double falseEasting);
 			
 			virtual void PrintMap() const ;
-			/** Return the inverse of the transform.
-   		 *  The inverse is recomputed if it has been modified */
-		  //bool GetInverse(Self*) const ;
-			
-//			virtual void Initialize(const InputPointType& middlePoint) {};
 
       protected:
       MapProjection();

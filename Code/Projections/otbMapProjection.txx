@@ -63,11 +63,8 @@ namespace otb
   {
     const ossimEllipsoid *ellipsoid = ossimEllipsoidFactory::instance()->create(ossimString(code));
     double a=ellipsoid->getA();
-    //std::cout <<a<< std::endl;
     double b=ellipsoid->getB();
-    //std::cout <<b<< std::endl;
     //ossimString codes=ellipsoid->name();
-    //std::cout <<codes<< std::endl;
     ossimEllipsoid ellipse(a,b);
     delete m_MapProjection;
     m_MapProjection= new OssimMapProjectionType(ellipse);
@@ -359,12 +356,6 @@ namespace otb
 		std::cout << m_MapProjection->print(std::cout);
 	}
 
-	/*bool GetInverse(Self*) const 
-	{
-		
-	
-	}*/
-	
 	
 	
 } // namespace otb

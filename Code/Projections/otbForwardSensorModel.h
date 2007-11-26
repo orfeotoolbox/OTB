@@ -74,7 +74,7 @@ namespace otb
       
       /** Compute the world coordinates. */ 
       OutputPointType TransformPoint(const InputPointType &point) const;
-      
+ 			
       protected:
       ForwardSensorModel(); 
       virtual ~ForwardSensorModel();
@@ -87,7 +87,11 @@ namespace otb
       ForwardSensorModel(const Self&); //purposely not implemented
       void operator=(const Self&);     //purposely not implemented
 			
+			/** Difference between consecutives heights in iterative transform point with DEM */
 			double m_Epsilon;
+			
+			/** Number of iterations in iterative transform point with DEM */
+			double m_NbIter;
     };
   
   

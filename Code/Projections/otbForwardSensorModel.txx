@@ -37,6 +37,7 @@ ForwardSensorModel< TScalarType,
 ::ForwardSensorModel()
 {
 	m_Epsilon = 0.0001;
+	m_NbIter = 1;
 }
 
 template < class TScalarType,
@@ -85,13 +86,13 @@ ForwardSensorModel< TScalarType,
 	{
 		ossimGpt ossimGPointRef = ossimGPoint;
 		double height, heightTmp ;
-		double diffHeight = 100;
+		double diffHeight = 100; // arbitrary value
 		itk::Point<double, 2> point;
 		int nbIter = 0;
 	
 		otbMsgDevMacro(<< "USING DEM ! ") ;
 
-		while ((diffHeight > m_Epsilon)	&& (nbIter < 2))
+		while ((diffHeight > m_Epsilon)	&& (nbIter < m_NbIter))
 		{
 			otbMsgDevMacro(<< "Iter " << nbIter);
 			
