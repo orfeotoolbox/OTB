@@ -92,7 +92,11 @@ ADD_TEST(utTvSvmTestGenericModelTest ${UTILITIES_TESTS}
 #                ${INPUTDATA}/132.149.107.66.wloip20967.INP
 #)
 
-
+ADD_TEST(utTv6SFunctionMainTest ${UTILITIES_TESTS}
+                SIXSFunctionMainOtbTest
+                ${INPUTDATA}/in6S_otb
+                ${TEMP}/6S_function_main_test.txt
+)
 
 # -------       Fichiers sources CXX -----------------------------------
 SET(UtilitiesTests_SRCS
@@ -103,6 +107,7 @@ ijBSplineScatteredDataPointSetToImageFilterTest.cxx
 svmGenericKernelFunctor.cxx
 svmTest.cxx
 svmGenericKernelTest.cxx
+6SFunctionMainTest.cxx
 )
 
 INCLUDE_DIRECTORIES("${OTBTesting_BINARY_DIR}")
