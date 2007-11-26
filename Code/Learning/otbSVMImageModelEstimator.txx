@@ -38,22 +38,19 @@ SVMImageModelEstimator<TInputImage, TTrainingImage>
 
         this->m_Done = 0;
 
-  	this->param.svm_type = C_SVC;
-	this->param.kernel_type = LINEAR;
-	this->param.degree = 3;
-	this->param.gamma = 0;	// 1/k
-	this->param.coef0 = 0;
-        this->param.kernel_generic = NULL;
-	this->param.nu = 0.5;
-	this->param.cache_size = 40;
-	this->param.C = 1;
-	this->param.eps = 1e-3;
-	this->param.p = 0.1;
-	this->param.shrinking = 1;
-	this->param.probability = 1;
-	this->param.nr_weight = 0;
-	this->param.weight_label = NULL;
-	this->param.weight = NULL;
+        this->m_Model->SetSVMType(C_SVC);
+	this->m_Model->SetKernelType(LINEAR);
+	this->m_Model->SetPolynomialKernelDegree(3);
+	this->m_Model->SetKernelGamma(0.);	// 1/k
+	this->m_Model->SetKernelCoef0(0);
+        this->m_Model->SetKernelFunctor(NULL);
+	this->m_Model->SetNu(0.5);
+	this->m_Model->SetCacheSize(40);
+	this->m_Model->SetC(1);
+	this->m_Model->SetEpsilon(1e-3);
+	this->m_Model->SetP(0.1);
+	this->m_Model->DoShrinking(1);
+	this->m_Model->DoProbabilityEstimates(true);
 }
 #else
 template<class TInputImage, class TTrainingImage>
@@ -81,16 +78,7 @@ void
 SVMImageModelEstimator<TInputImage, TTrainingImage>
 ::PrintSelf( std::ostream& os, itk::Indent indent ) const
 {  
-  // FIXME : print useful SVM information
-//   os << indent << "                   " << std::endl;
-//   os << indent << "Gaussian Models generated from the training data." << std::endl;
-//   os << indent << "TrainingImage: " ;
-//   os << m_TrainingImage.GetPointer() << std::endl;
-//   os << indent << "Results printed in the superclass " << std::endl;
-//   os << indent << "                   " << std::endl;
-
   Superclass::PrintSelf(os,indent);
-
 }// end PrintSelf
 
 

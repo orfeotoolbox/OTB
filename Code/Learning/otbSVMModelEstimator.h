@@ -297,10 +297,6 @@ protected:
 
   SVMModelPointer m_Model;
 
-/*  struct svm_parameter param;	
-  struct svm_problem prob;
-  struct svm_node* x_space;
-*/
   bool m_Done;
 
 
