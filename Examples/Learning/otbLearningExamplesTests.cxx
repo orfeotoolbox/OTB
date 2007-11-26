@@ -32,6 +32,8 @@ REGISTER_TEST(SVMImageModelEstimatorExampleTest);
 REGISTER_TEST(SOMExampleTest);
 REGISTER_TEST(SOMClassifierExampleTest);
 REGISTER_TEST(SEMModelEstimatorExampleTest);
+REGISTER_TEST(SVMGenericKernelImageModelEstimatorExampleTest);
+REGISTER_TEST(SVMGenericKernelImageClassificationExampleTest);
 }
 
 #undef main
@@ -62,5 +64,13 @@ REGISTER_TEST(SEMModelEstimatorExampleTest);
 #undef main
 #define main SEMModelEstimatorExampleTest
 #include "SEMModelEstimatorExample.cxx"
+
+#undef main
+#define main SVMGenericKernelImageModelEstimatorExampleTest
+#include "SVMGenericKernelImageModelEstimatorExample.cxx"
+
+#undef main
+#define main SVMGenericKernelImageClassificationExampleTest
+#include "SVMGenericKernelImageClassificationExample.cxx"
 
 

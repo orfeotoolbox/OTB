@@ -146,6 +146,29 @@ ADD_TEST(SEMModelEstimatorExampleTest ${EXE_TESTS}
         4 40 5
 )
 
+# ------- SVMGenericKernelImageModelEstimatorExampleTest----------
+
+ADD_TEST(SVMGenericKernelImageModelEstimatorExampleTest ${EXE_TESTS}
+	--compare-ascii ${TOL}
+	${BASELINE}/svm_image_model_generic_kernel.svn
+	${TEMP}/svm_image_model_generic_kernel.svn
+	SVMGenericKernelImageModelEstimatorExampleTest
+	${INPUTDATA}/ROI_QB_MUL_1.png
+	${INPUTDATA}/ROI_mask_multi.png
+	${TEMP}/svm_image_model_generic_kernel.svn
+)
+
+# ------- SVMGenericKernelImageClassificationExampleTest----------
+
+ADD_TEST(SVMGenericKernelImageClassificationExampleTest ${EXE_TESTS}
+	--compare-ascii ${TOL}
+	${BASELINE}/svm_image_model_generic_kernel.svn
+	${TEMP}/svm_image_model_generic_kernel.svn
+	SVMGenericKernelImageClassificationExampleTest
+	${INPUTDATA}/ROI_QB_MUL_1.png
+	${TEMP}/ROI_QB_MUL_GENERIC_KERNEL_IMAGE_CLASSIF.png
+	${INPUTDATA}/svm_image_model_generic_kernel.svn
+)
 
 
 INCLUDE_DIRECTORIES("${OTBTesting_BINARY_DIR}")
