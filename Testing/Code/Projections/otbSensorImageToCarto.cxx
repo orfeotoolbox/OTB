@@ -301,13 +301,17 @@ otbMsgDevMacro(<< "Le point géographique correspondant est: ("<<  geoPoint[0]<< 
 inputpoint = model->TransformPoint(geoPoint);
   otbMsgDevMacro(<< "Les coordonnées en pixel sur l'image capteur correspondant à ce point sont:" << std::endl
                << inputpoint[0] << ","<< inputpoint[1] );
-inputimage->TransformPhysicalPointToIndex(inputpoint,pixelindex);
-    otbMsgDevMacro(<< "L'index correspondant à ce point est:" << std::endl
-                 << pixelindex[0] << ","<< pixelindex[1] );
+//inputimage->TransformPhysicalPointToIndex(inputpoint,pixelindex);
+//    otbMsgDevMacro(<< "L'index correspondant à ce point est:" << std::endl
+//                 << pixelindex[0] << ","<< pixelindex[1] );
 
 /**On stocke les pixel index dans un tableau pixelindexarray**/
- pixelIndexArray[It]=pixelindex[0];
- pixelIndexArray[It+1]=pixelindex[1];
+// pixelIndexArray[It]=pixelindex[0];
+// pixelIndexArray[It+1]=pixelindex[1];
+pixelIndexArray[It]=static_cast<int>(inputpoint[0]);
+pixelIndexArray[It+1]=static_cast<int>(inputpoint[1]);
+
+
 //std::cout << "La valeur stockée" << endl
 //          << pixelIndexArray[It] <<  "," << pixelIndexArray[It+1] <<std::endl;
 

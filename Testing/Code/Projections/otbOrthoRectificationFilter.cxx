@@ -47,6 +47,7 @@
 #include "itkRescaleIntensityImageFilter.h"
 #include "itkImageRegionIteratorWithIndex.h"
 #include "itkLinearInterpolateImageFunction.h"
+#include "itkChangeInformationImageFilter.h"
 
 #include "otbOrthoRectificationFilter.h"
 #include "otbMapProjections.h"
@@ -93,8 +94,20 @@ int otbOrthoRectificationFilter( int argc, char* argv[] )
 //       model->SetImageGeometry(reader->GetOutput()->GetImageKeywordlist());
 
 //				std::cout << "Model1: " << model << std::endl;
+
+				// image origin modification
+  			typedef itk::ChangeInformationImageFilter<ImageType > ChangeInfoFilterType;
+  			ChangeInfoFilterType::Pointer changeInfo = ChangeInfoFilterType::New();
+  			changeInfo->SetInput(reader->GetOutput());
+  			changeInfo->ChangeOriginOn();
+  			ImageType::PointType originNull;
+  			originNull[0]=0;
+  			originNull[1]=0;
+  			changeInfo->SetOutputOrigin(originNull);
+	
+  			changeInfo->GenerateOutputInformation();
 			
-				orthoRectifFilter->SetInput(reader->GetOutput());
+				orthoRectifFilter->SetInput(changeInfo->GetOutput());
 				
 				ImageType::IndexType start;
 				start[0]=0;
