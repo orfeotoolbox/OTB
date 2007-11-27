@@ -121,18 +121,18 @@ IF(UNIX)
 ENDIF(UNIX)
 
 # Original 6S main executable in C
-ADD_EXECUTABLE(otb6SMain 6SMainTest.cxx )
-TARGET_LINK_LIBRARIES(otb6SMain OTBCommon ITKCommon otb6S)
-IF(UNIX)
-    TARGET_LINK_LIBRARIES (otb6SMain m)
-ENDIF(UNIX)
+#     ADD_EXECUTABLE(otb6SMain 6SMainTest.cxx )
+#     TARGET_LINK_LIBRARIES(otb6SMain OTBCommon ITKCommon otb6S)
+#     IF(UNIX)
+#         TARGET_LINK_LIBRARIES (otb6SMain m)
+#     ENDIF(UNIX)
 
-# OTB 6S main executable in C (call 6S  mian function.
-ADD_EXECUTABLE(otb6SMainWithCallFunction 6SMainOtbWithCallFunctionTest.cxx )
-TARGET_LINK_LIBRARIES(otb6SMainWithCallFunction OTBCommon ITKCommon otb6S)
-IF(UNIX)
-    TARGET_LINK_LIBRARIES (otb6SMainWithCallFunction m)
-ENDIF(UNIX)
+# OTB 6S main executable in C (call 6S main function.
+#     ADD_EXECUTABLE(otb6SMainWithCallFunction 6SMainOtbWithCallFunctionTest.cxx )
+#     TARGET_LINK_LIBRARIES(otb6SMainWithCallFunction OTBCommon ITKCommon otb6S)
+#     IF(UNIX)
+#         TARGET_LINK_LIBRARIES (otb6SMainWithCallFunction m)
+#     ENDIF(UNIX)
 
 
 ENDIF( NOT OTB_DISABLE_CXX_TESTING )
