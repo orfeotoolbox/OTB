@@ -31,7 +31,6 @@ int otbDEMHandlerTest(int argc, char * argv[])
         char * srtm_directory(argv[1]);
         const char * outputfilename(argv[2]);
         double height(0.);
-        bool bOpenDirectory(false);
       
         typedef otb::Image<float,Dimension> ImageType;
         typedef otb::DEMHandler              DEMHandlerType;
