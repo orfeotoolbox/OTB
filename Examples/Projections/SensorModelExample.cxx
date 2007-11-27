@@ -189,7 +189,6 @@ int main( int argc, char* argv[] )
  
   ImageType::IndexType 			 currentIndex;
   ImageType::IndexType 			 currentIndexBis;
-  ImageType::IndexType 			 pixelIndex;
   ImageType::IndexType 			 pixelIndexBis;
  
 
@@ -439,13 +438,8 @@ int main( int argc, char* argv[] )
 
       inputPoint = model->TransformPoint(outputPoint);
 
-//       inputImage->TransformPhysicalPointToIndex(inputPoint,pixelIndex);
-      
-		     
-//       pixelIndexArray[It]=pixelIndex[0];
-//       pixelIndexArray[It+1]=pixelIndex[1];
-      pixelIndexArray[It]=inputPoint[0];
-      pixelIndexArray[It+1]=inputPoint[1];
+      pixelIndexArray[It]=static_cast<int>(inputPoint[0]);
+      pixelIndexArray[It+1]=static_cast<int>(inputPoint[1]);
 
       currentIndexArray[It]=static_cast<int>(currentIndex[0]);
       currentIndexArray[It+1]=static_cast<int>(currentIndex[1]);

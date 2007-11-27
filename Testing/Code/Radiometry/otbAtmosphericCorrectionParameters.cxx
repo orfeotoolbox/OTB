@@ -34,7 +34,7 @@ int otbFilterFunctionValuesTest(int argc, char * argv[])
       FilterFunctionValuesType::Pointer object = FilterFunctionValuesType::New();
       FilterFunctionValuesType::ValuesVectorType vect;
 
-      for(unsigned int i=5; i<argc; i++)
+      for(int i=5; i<argc; i++)
 	{
 	  vect.push_back(atof(argv[i]));
 	}
