@@ -93,9 +93,11 @@ ADD_TEST(utTvSvmTestGenericModelTest ${UTILITIES_TESTS}
 #)
 
 ADD_TEST(utTv6SFunctionMainTest ${UTILITIES_TESTS}
+--compare-ascii ${TOL}  ${BASELINE_FILES}/ut6S_function_main_test.txt
+                ${TEMP}/ut6S_function_main_test.txt
                 SIXSFunctionMainOtbTest
                 ${INPUTDATA}/in6S_otb
-                ${TEMP}/6S_function_main_test.txt
+                ${TEMP}/ut6S_function_main_test.txt
 )
 
 # -------       Fichiers sources CXX -----------------------------------

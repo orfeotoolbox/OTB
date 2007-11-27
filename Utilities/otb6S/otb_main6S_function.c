@@ -3633,6 +3633,7 @@ n*/
 /*<        irop=0 >*/
     irop = 0;
 /*<        read(iread,*,end=37) irop >*/
+/*
     io___150.ciunit = iread;
     i__1 = s_rsle(&io___150);
     if (i__1 != 0) {
@@ -3646,6 +3647,7 @@ n*/
     if (i__1 != 0) {
 	goto L37;
     }
+*/
 /*<        if (irop.eq.1) then >*/
     if (irop == 1) {
 /*<        read(iread,*) ropq,ropu >*/

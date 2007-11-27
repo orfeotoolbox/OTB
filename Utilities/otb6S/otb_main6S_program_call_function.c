@@ -53,7 +53,7 @@ static integer c__3 = 3;
     real taer55, tgasm, wlinf;
     integer month;
     real wlsup;
-    extern /* Subroutine */ int otb_6s__(real *, real *, real *, real *, 
+    extern /* Subroutine */ int otb_6s_ssssss_otb_main_function(real *, real *, real *, real *, 
 	    integer *, integer *, real *, real *, real *, integer *, real *, 
 	    real *, real *, real *, real *, real *, real *, real *, real *);
     real sdtott, sutott;

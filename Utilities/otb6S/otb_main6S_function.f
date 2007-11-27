@@ -2317,7 +2317,7 @@ C       read(iread,*,end=37) ilut
       
        irop=0
 
-       read(iread,*,end=37) irop
+C_otb        read(iread,*,end=37) irop
 
        if (irop.eq.1) then
        read(iread,*) ropq,ropu
