@@ -17,6 +17,7 @@
 =========================================================================*/
 
 #include <iostream>
+#include <iomanip>
 #include <fstream>
 #include <vector>
 
@@ -222,7 +223,7 @@ int SIXSFunctionMainOtbTest( int argc, char *argv[] )
         }
         fout <<" ---------------------------------------------------------"<<std::endl;
         fout << "Outputs values:"<<std::endl;
-        fout << "   ----->  atmospheric reflectance :      "<<otb_ratm__<<std::endl;
+        fout << "   ----->  atmospheric reflectance :      "<<std::setprecision(10)<<otb_ratm__<<std::endl;
         fout << "   ----->  atmospheric spherical albedo : "<<sast<<std::endl;
         fout << "   ----->  total gaseous transmission :   "<<tgasm<<std::endl;
         fout << "   ----->  downward transmittance :       "<<sdtott<<std::endl;
