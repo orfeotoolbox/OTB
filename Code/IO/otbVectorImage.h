@@ -49,6 +49,7 @@ public:
   typedef itk::VectorImage<TPixel, VImageDimension>  Superclass;
   typedef itk::SmartPointer<Self>  Pointer;
   typedef itk::SmartPointer<const Self>  ConstPointer;
+  typedef itk::WeakPointer<const Self> ConstWeakPointer;
   
   typedef ImageBase::VectorType	VectorType;	
   typedef ImageBase::ImageKeywordlistType	ImageKeywordlistType;	
@@ -153,6 +154,22 @@ public:
   virtual void CopyInformation(const itk::DataObject *);
   
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
+
+  /** Return the Pixel Accessor object */	
+  AccessorType GetPixelAccessor( void ) 
+    { return AccessorType( this->GetNumberOfComponentsPerPixel() ); }
+
+  /** Return the Pixel Accesor object */
+  const AccessorType GetPixelAccessor( void ) const
+    { return AccessorType( this->GetNumberOfComponentsPerPixel() ); }
+
+  /** Return the NeighborhoodAccessor functor */
+  NeighborhoodAccessorFunctorType GetNeighborhoodAccessor() 
+    { return NeighborhoodAccessorFunctorType( this->GetNumberOfComponentsPerPixel() ); }
+  
+  /** Return the NeighborhoodAccessor functor */
+  const NeighborhoodAccessorFunctorType GetNeighborhoodAccessor() const
+    { return NeighborhoodAccessorFunctorType(this->GetNumberOfComponentsPerPixel()); }
 
 protected:
   VectorImage();
