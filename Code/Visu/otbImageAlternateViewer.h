@@ -108,6 +108,10 @@ class ITK_EXPORT ImageAlternateViewer
 
     itkSetObjectMacro(Image,ImageType);
     itkGetObjectMacro(Image,ImageType);
+    
+    itkSetObjectMacro(SecondImage,ImageType);
+    itkGetObjectMacro(SecondImage,ImageType);
+
 
     itkSetMacro(DisplayExtent,RegionType);
     itkGetMacro(DisplayExtent,RegionType);
@@ -161,11 +165,19 @@ protected:
 
   RegionType GetAdditionalBufferRegion(unsigned int i);
   
-  unsigned char * CreateAdditionalBuffer(RegionType region);
+  unsigned char * CreateAdditionalBuffer(RegionType region,ImagePointerType image);
   
   virtual void MergeBuffersAndFreeMemory(std::vector<unsigned char *> bufferList, 
 					 std::vector<RegionType> bufferRegionList);
+
+  virtual void AdditionalRedraw(void);
+
+  virtual void DecorationRedraw(void);
   
+  virtual void DrawRegionBoundary(RegionType& region);
+
+  virtual long IndexInOldGrid(PointType point, PointType oldUpperLeft, SpacingType spacing, SizeType size);
+
   RegionType ComputeRequestedRegion(RegionType &region);
  /**PrintSelf method */
   virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
@@ -230,9 +242,24 @@ private:
 
   /** Prevent messing around with simultaneous update */
   bool m_Updating;
-
+  /** Region splitter */
   SplitterPointerType m_Splitter;
+  /** Swith the drag mode */
+  bool m_Drag;
+  /** Count drag events */
+  unsigned int m_DragEventCounter;
+  /** Remember the mouse pos in drag mode */
+  IndexType m_OldMousePos;
 
+  /** The second image */
+  ImagePointerType m_SecondImage;
+  /** The subwindow region */
+  RegionType m_SubWindowRegion;
+  /** subwindow mode switch */
+  bool m_SubWindowMode;
+/** subwindow mode switch */
+  bool m_SubWindowMove;
+  
 };
 }// End namespace otb
 #ifndef OTB_MANUAL_INSTANTIATION
