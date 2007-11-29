@@ -966,7 +966,6 @@ namespace otb
       case FL_MOUSEWHEEL:
 	{
 	  int dy = Fl::event_dy();
-	  int oldState = m_ZoomState;
 	  m_OldSpacingZoomFactor = m_SpacingZoomFactor;
 	  m_OpenGlIsotropicZoom -=static_cast<double>(dy)/10;
 	  if(m_OpenGlIsotropicZoom>2)
