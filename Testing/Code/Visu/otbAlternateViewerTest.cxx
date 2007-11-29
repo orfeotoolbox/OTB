@@ -7,7 +7,7 @@
 
 int otbAlternateViewerTest(int argc, char* argv[])
 {
-  const unsigned int Dimension = 2;
+ const unsigned int Dimension = 2;
   typedef double PixelType;
   typedef otb::VectorImage<PixelType,Dimension> ImageType;
   typedef otb::ImageFileReader<ImageType> ReaderType;
@@ -16,6 +16,10 @@ int otbAlternateViewerTest(int argc, char* argv[])
   ReaderType::Pointer reader = ReaderType::New();
   reader->SetFileName(argv[1]);
   reader->GenerateOutputInformation();
+
+  ReaderType::Pointer reader2 = ReaderType::New();
+  reader2->SetFileName(argv[2]);
+  reader2->GenerateOutputInformation();
   
   ImageType::PixelType min,max;
   min.SetSize(reader->GetOutput()->GetNumberOfComponentsPerPixel());
@@ -41,38 +45,18 @@ int otbAlternateViewerTest(int argc, char* argv[])
   Fl_Window window(512,512);
   ViewerType::Pointer viewer = ViewerType::New();
   viewer->SetImage(reader->GetOutput());
+  viewer->SetSecondImage(reader2->GetOutput());
   viewer->SetMinComponentValues(min);
   viewer->SetMaxComponentValues(max);
-  viewer->SetRedChannelIndex(atoi(argv[2]));
-  viewer->SetGreenChannelIndex(atoi(argv[3]));
-  viewer->SetBlueChannelIndex(atoi(argv[4]));
+  viewer->SetRedChannelIndex(atoi(argv[3]));
+  viewer->SetGreenChannelIndex(atoi(argv[4]));
+  viewer->SetBlueChannelIndex(atoi(argv[5]));
   window.end();
   window.resizable(viewer.GetPointer());
   viewer->Init("test de la nouvelle visu");
   window.show();
   viewer->Show();
-  
-
-   Fl::check();
-
-//    window.resize(0,0,600,400);
-//   Fl::check();
-//    window.resize(0,0,600,600);
-//   Fl::check();
-//   window.resize(0,0,650,500);
-//   Fl::check();
-//   window.resize(0,0,700,500);
-//   Fl::check();
-//   window.resize(0,0,750,500);
-//   Fl::check();
-//   window.resize(0,0,800,500);
-//   Fl::check();
-
-
-//   window.resize(0,0,521,481);
-
   Fl::run();
-  
 
   return EXIT_SUCCESS;
 }
