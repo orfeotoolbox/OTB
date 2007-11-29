@@ -76,7 +76,7 @@ namespace otb
     typename OutputImageType::Pointer                        output           = this->GetOutput();
     typename InputMultiSpectralImageType::Pointer            multiSpec   = const_cast<InputMultiSpectralImageType *>(this->GetMultiSpect());
     typename InputMultiSpectralInterpImageType::Pointer multiSpecInterp  = const_cast<InputMultiSpectralInterpImageType *>(this->GetMultiSpectInterp());
-    typename InputPanchroImageType::ConstPointer             panchro          = this->GetPanchro();
+    typename InputPanchroImageType::Pointer             panchro          = const_cast<InputPanchroImageType *>(this->GetPanchro());
 
     /** Variable Initialisaton  */
     m_Beta.SetSize(multiSpecInterp->GetNumberOfComponentsPerPixel()+1, 1);
@@ -278,6 +278,10 @@ namespace otb
     multiSpec->SetRequestedRegion(msRequestedRegion);
     multiSpec->PropagateRequestedRegion();
     multiSpec->UpdateOutputData();
+
+   panchro->SetRequestedRegion(panchroRequestedRegion);
+   panchro->PropagateRequestedRegion();
+   panchro->UpdateOutputData(); 
   } 
 } // end namespace otb
 
