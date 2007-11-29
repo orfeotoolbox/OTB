@@ -32,6 +32,7 @@ namespace otb
   
   /** Check the correpondance between the vector value size and the interval number between min and max.*/ 
   /** return true if the vector step is not at 2.5 and the vector has been changed. */
+/*
   bool 
   FilterFunctionValues
   :: SetParameters(const WavelenghtSpectralBandType L_min, const WavelenghtSpectralBandType L_max, const WavelenghtSpectralBandType step, const ValuesVectorType & vect)
@@ -79,7 +80,7 @@ namespace otb
       }
     return hasChangedVector;
   }
-
+*/
   /**PrintSelf method */
   void 
   FilterFunctionValues

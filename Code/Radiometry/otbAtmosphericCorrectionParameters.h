@@ -51,18 +51,40 @@ namespace otb
       typedef float WavelenghtSpectralBandType;
       typedef std::vector<WavelenghtSpectralBandType>    ValuesVectorType;
      
+      /** Set vector that contains the filter function value. */
+      void SetFilterFunctionValues(const ValuesVectorType & vect)
+	{
+	  m_FilterFunctionValues = vect;
+	  this->Modified();
+	};
       /** Get vector that contains the filter function value. */
       const ValuesVectorType & GetFilterFunctionValues() const { return m_FilterFunctionValues; }; 
+      /** Get vector that contains the filter function value 6S. */
+      void SetFilterFunctionValues6S(const ValuesVectorType & vect)
+      { 
+          m_FilterFunctionValues6S = vect;
+	  this->Modified();
+      }; 
+      /** Get vector that contains the filter function value 6S. */
+      const ValuesVectorType & GetFilterFunctionValues6S() const { return m_FilterFunctionValues6S; }; 
+
+      /** Set minimum spectral value. */
+      itkSetMacro(MinSpectralValue,WavelenghtSpectralBandType);      
       /** Get minimum spectral value. */ 
       itkGetMacro(MinSpectralValue,WavelenghtSpectralBandType);
+      /** Set maximum spectral value. This value is automatically computed.*/
+      itkSetMacro(MaxSpectralValue,WavelenghtSpectralBandType);
       /** Get maximum spectral value. This value is automatically computed.*/
       itkGetMacro(MaxSpectralValue,WavelenghtSpectralBandType);
+      /** Set user step between each wavelenght spectral band values. */
+      itkSetMacro(UserStep,WavelenghtSpectralBandType);
       /** Get user step between each wavelenght spectral band values. */
       itkGetMacro(UserStep,WavelenghtSpectralBandType);
       /** Get the 6S imposed step : 2.5nm. */
       itkGetConstMacro(StepOfWavelenghtSpectralBandValues, WavelenghtSpectralBandType);
+
       /** Set paramaters and check value step. If it's not 2.5nm (cf. 6S), interpolate needed values.*/ 
-      bool SetParameters(const WavelenghtSpectralBandType L_min, const WavelenghtSpectralBandType L_max, const WavelenghtSpectralBandType step, const ValuesVectorType & vect);
+//      bool SetParameters(const WavelenghtSpectralBandType L_min, const WavelenghtSpectralBandType L_max, const WavelenghtSpectralBandType step, const ValuesVectorType & vect);
 
 
     protected:
@@ -79,21 +101,13 @@ namespace otb
       FilterFunctionValues(const Self&) ; //purposely not implemented
       void operator=(const Self&) ; //purposely not implemented
 
-      /** Set vector that contains the filter function value. */
-      void SetFilterFunctionValues(ValuesVectorType vect)
-	{
-	  m_FilterFunctionValues = vect;
-	  this->Modified();
-	};
-      /** Set minimum spectral value. */
-      itkSetMacro(MinSpectralValue,WavelenghtSpectralBandType);      
-      /** Set maximum spectral value. This value is automatically computed.*/
-      itkSetMacro(MaxSpectralValue,WavelenghtSpectralBandType);
-      /** Set user step between each wavelenght spectral band values. */
-      itkSetMacro(UserStep,WavelenghtSpectralBandType);
       
       /** Vector that contains the filter function value. */
       ValuesVectorType m_FilterFunctionValues;
+      /** Vector that contains the filter function value in 6S format (step of 0.0025). 
+        * There values a computed by 6S. If the UserStep is 0.0025, then m_FilterFunctionValues is identical as m_FilterFunctionValues6S
+        */
+      ValuesVectorType m_FilterFunctionValues6S;
       /** Minimum spectral value (in nm). */
       WavelenghtSpectralBandType m_MinSpectralValue;
       /** Maximum spectral value (in nm). */

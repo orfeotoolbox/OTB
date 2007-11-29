@@ -1,0 +1,77 @@
+/*=========================================================================
+
+  Program:   ORFEO Toolbox
+  Language:  C++
+  Date:      $Date$
+  Version:   $Revision$
+
+
+  Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
+  See OTBCopyright.txt for details.
+
+
+     This software is distributed WITHOUT ANY WARRANTY; without even 
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     PURPOSE.  See the above copyright notices for more information.
+
+=========================================================================*/
+#ifndef _otbSIXSTraits_h
+#define _otbSIXSTraits_h
+
+#include "otbAtmosphericCorrectionParameters.h"
+
+namespace otb
+{
+
+
+/** \class SIXSTraits
+ * \brief SIXSTraits operations.
+ *
+ * Call 6S main function. The main method call 6S to calculate atmospheric correction parameters.
+ * It use by the OTB Atmospheric correction framework. 
+ *
+ */
+class ITK_EXPORT SIXSTraits 
+{
+public:
+
+  /** Standard class typedefs. */
+  typedef SIXSTraits  Self;
+
+  typedef FilterFunctionValues WavelenghtSpectralType;
+  typedef AtmosphericCorrectionParameters::AerosolModelType AerosolModelType;
+  typedef WavelenghtSpectralType::WavelenghtSpectralBandType WavelenghtSpectralBandType;
+  typedef WavelenghtSpectralType::ValuesVectorType ValuesVectorType;
+
+  /** Call 6S main function */
+  static void ComputeAtmosphericParameters(
+        const   double                  SolarZenithalAngle,             /** The Solar zenithal angle */
+        const   double                  SolarAzimutalAngle,             /** The Solar azimutal angle */
+        const   double                  ViewingZenithalAngle,           /** The Viewing zenithal angle */
+        const   double                  ViewingAzimutalAngle,           /** The Viewing azimutal angle */
+        const   unsigned int            Month,                          /** The Month */
+        const   unsigned int            Day,                            /** The Day (in the month) */
+        const   double                  AtmosphericPressure,            /** The Atmospheric pressure */
+        const   double                  WaterVaporAmount,               /** The Water vapor amount (Total water vapor content over vertical atmospheric column) */
+        const   double                  OzoneAmount,                    /** The Ozone amount (Stratospheric ozone layer content) */
+        const   AerosolModelType &      AerosolModel,                   /** The Aerosol model */
+        const   double                  AerosolOptical,                 /** The Aerosol optical (radiative impact of aerosol for the reference wavelenght 550-nm) */
+                WavelenghtSpectralType& WavelenghtSpectralBand,         /** Wavelenght for the spectral band definition */
+                                                                        /** Note : The Max wavelenght spectral band value must be updated ! */
+                double &                AtmosphericReflectance,         /** Atmospheric reflectance */     
+                double &                AtmosphericSphericalAlbedo,     /** atmospheric spherical albedo */
+                double &                TotalGaseousTransmission,       /** Total gaseous transmission */
+                double &                DownwardTransmittance,          /** downward transmittance */      
+                double &                UpwardTransmittance             /** upward transmittance */
+        );
+  /** Generate WavelenghtSpectralBand if the step is not the official 6S step value */
+  static void ComputeWavelenghtSpectralBandValuesFor6S(
+        const   double                  SIXSStepOfWavelenghtSpectralBandValues,
+                WavelenghtSpectralType& WavelenghtSpectralBand
+        );
+
+};
+
+} // namespace otb
+
+#endif
