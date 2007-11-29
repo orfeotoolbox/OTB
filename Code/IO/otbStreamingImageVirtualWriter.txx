@@ -198,7 +198,7 @@ StreamingImageVirtualWriter<TInputImage>
 {	
 	return StreamingTraitsType
     ::CalculateNumberOfStreamDivisions(this->GetInput(),
-				       this->GetInput()->GetRequestedRegion(),
+				       this->GetInput()->GetLargestPossibleRegion(),
 				       m_CalculationDivision,
 				       m_NumberOfStreamDivisions,
 				       m_BufferMemorySize,
@@ -283,9 +283,6 @@ StreamingImageVirtualWriter<TInputImage>
   unsigned int numDivisions, numDivisionsFromSplitter;
   numDivisions = static_cast<unsigned int>(CalculateNumberOfStreamDivisions());
   numDivisionsFromSplitter = m_RegionSplitter->GetNumberOfSplits(outputRegion, numDivisions);
-  otbMsgDebugMacro(<<"LargestPossibleRegion: "<<outputRegion);
-  otbMsgDebugMacro(<<"NumberOfStreamDivisions : " << numDivisions);
-  otbMsgDebugMacro(<<"NumberOfStreamSplitterDivisions : " << numDivisionsFromSplitter);
   
   /** In tiling streaming mode, we keep the number of divisions calculed by splitter */
   if ((numDivisionsFromSplitter < numDivisions)||(m_CalculationDivision==SET_TILING_STREAM_DIVISIONS))
