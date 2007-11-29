@@ -68,6 +68,10 @@ namespace otb
 		       TOutputImage>
   ::BeforeThreadedGenerateData ()
   {	
+    OutputImageRegionType msiRequestedRegion = this->GetMultiSpectInterp()->GetRequestedRegion();
+    OutputImageRegionType msRequestedRegion = this->GetMultiSpect()->GetRequestedRegion();
+    OutputImageRegionType panchroRequestedRegion = this->GetPanchro()->GetRequestedRegion();
+
     // Allocate output
     typename OutputImageType::Pointer                        output           = this->GetOutput();
     typename InputMultiSpectralImageType::Pointer            multiSpec   = const_cast<InputMultiSpectralImageType *>(this->GetMultiSpect());
@@ -91,13 +95,15 @@ namespace otb
 
     covComputefilter->SetInput(multiSpecInterp);
     covComputefilter->Update();
+
     MatrixType m_CovarianceMatrix = covComputefilter->GetCovariance();
+
     m_CovarianceInvMatrix = m_CovarianceMatrix.GetInverse();
     /** Beta computation : Regression model coefficient */
     // MatrixTransform only support vectorimage input
     typename CasterType::Pointer         caster         = CasterType::New();
     caster->SetInput(panchro);
-    caster->Update();
+    // caster->Update();
     // Compute the transpose multispectral image multiplied by itself
     typename MSTransposeMSType::Pointer  msTransposeMs  = MSTransposeMSType::New();
     // Compute the transpose multispectral image multiplied by the panchromatic one
@@ -262,6 +268,16 @@ namespace otb
     this->GetFunctor().SetCovarianceInvMatrix(m_CovarianceInvMatrix);
     this->GetFunctor().SetLambda(m_Lambda);
     this->GetFunctor().SetS(m_S);
+
+
+    // Restore the previous buffered data
+    multiSpecInterp->SetRequestedRegion(msiRequestedRegion);
+    multiSpecInterp->PropagateRequestedRegion();
+    multiSpecInterp->UpdateOutputData();
+
+    multiSpec->SetRequestedRegion(msRequestedRegion);
+    multiSpec->PropagateRequestedRegion();
+    multiSpec->UpdateOutputData();
   } 
 } // end namespace otb
 
