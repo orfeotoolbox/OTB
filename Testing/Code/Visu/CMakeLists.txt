@@ -101,8 +101,8 @@ ADD_TEST(viTvImageToGrayscaleAnaglyphImageFilter ${VISU_TESTS}
 	${BASELINE}/viTvGrayscaleAnaglyphFilterResult.tif
 	${TEMP}/viTvGrayscaleAnaglyphFilterResult.tif
 	otbImageToGrayscaleAnaglyphImageFilter
-	${INPUTDATA}/anaglyphInput1.jpg
-	${INPUTDATA}/anaglyphInput2.jpg
+	${INPUTDATA}/anaglyphInput1.tif
+	${INPUTDATA}/anaglyphInput2.tif
 	${TEMP}/viTvGrayscaleAnaglyphFilterResult.tif
 )
 
@@ -117,8 +117,8 @@ ADD_TEST(viTvVectorImageToColorAnaglyphVectorImageFilter ${VISU_TESTS}
 	${BASELINE}/viTvColorAnaglyphFilterResult.tif
 	${TEMP}/viTvColorAnaglyphFilterResult.tif
 	otbVectorImageToColorAnaglyphVectorImageFilter
-	${INPUTDATA}/anaglyphInput1.jpg
-	${INPUTDATA}/anaglyphInput2.jpg
+	${INPUTDATA}/anaglyphInput1.tif
+	${INPUTDATA}/anaglyphInput2.tif
 	${TEMP}/viTvColorAnaglyphFilterResult.tif
 )
 
