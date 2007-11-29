@@ -36,8 +36,7 @@ namespace itk
  *
  * More precisely
  * \f[ Output(x_i) =
-      \begin{cases}
-        InsideValue & \text{if $LowerThreshold \leq x_i \leq UpperThreshold$}
+      \begin{cases} InsideValue & \text{if $LowerThreshold \leq x_i \leq UpperThreshold$}
         \\
         OutsideValue & \text{otherwise}
       \end{cases}
