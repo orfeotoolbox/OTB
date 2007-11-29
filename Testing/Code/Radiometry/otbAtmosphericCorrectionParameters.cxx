@@ -21,6 +21,7 @@
 
 #include "itkExceptionObject.h"
 #include "otbAtmosphericCorrectionParameters.h"
+#include "otbSIXSTraits.h"
 #include <fstream>
 
 int otbFilterFunctionValuesTest(int argc, char * argv[])
@@ -39,7 +40,14 @@ int otbFilterFunctionValuesTest(int argc, char * argv[])
 	  vect.push_back(atof(argv[i]));
 	}
  
-      object->SetParameters(atof(argv[2]), atof(argv[3]), atof(argv[4]), vect);
+//      bool bumbo = object->SetParameters(atof(argv[2]), atof(argv[3]), atof(argv[4]), vect);
+        const double SIXSStepOfWavelenghtSpectralBandValues(0.0025);
+/*
+        otb::SIXSTraits::ComputeWavelenghtSpectralBandValuesFor6S(
+        ,
+                WavelenghtSpectralType& WavelenghtSpectralBand
+        );
+*/
 
       // Writing output file
       std::ofstream file;
