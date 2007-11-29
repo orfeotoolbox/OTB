@@ -10,7 +10,7 @@ SET(IMAGEDATA ${OTB_DATA_ROOT}/LargeInput )
 SET(TEMP ${OTBTesting_BINARY_DIR}/Temporary)
 
 #Tolerance sur diff pixel image
-SET(TOL 0.0)
+SET(TOL 0.000000001)
 
 #Tolerance sur la difference des valeurs numeriques dans le --compare-ascii
 SET(EPS 0.001)

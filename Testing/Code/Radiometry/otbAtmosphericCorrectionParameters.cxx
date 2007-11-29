@@ -39,7 +39,7 @@ int otbFilterFunctionValuesTest(int argc, char * argv[])
 	  vect.push_back(atof(argv[i]));
 	}
  
-      bool bumbo = object->SetParameters(atof(argv[2]), atof(argv[3]), atof(argv[4]), vect);
+      object->SetParameters(atof(argv[2]), atof(argv[3]), atof(argv[4]), vect);
 
       // Writing output file
       std::ofstream file;

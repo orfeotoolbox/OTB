@@ -361,15 +361,27 @@ ADD_TEST(raTvReflectanceToSurfaceReflectanceImageFilter ${RADIOMETRY_TESTS}
 
 
 
+# -------            otb::SurfaceAdjencyEffect6SCorrectionSchemeFilter   ------------------------------
+ADD_TEST(raTuSurfaceAdjencyEffect6SCorrectionSchemeFilterNew ${RADIOMETRY_TESTS}  
+        otbSurfaceAdjencyEffect6SCorrectionSchemeFilterNew
+)
 
-# -------            otb::NeighborTest   ------------------------------
-# ------- ADD_TEST(raTvNeighborTest ${RADIOMETRY_TESTS} 
-# -------         NeighborTest
-# ------- 	${INPUTDATA}/poupees_sub.png 
-# ------- 	${TEMP}/raTvReflectanceToSurfaceReflectanceImageFilter.tif
-# -------  	10  # intrinsic atmospheric reflectance	
-# ------- 	20  # spherical albedo of the atmosphere
-# -------        )
+ADD_TEST(raTuSurfaceAdjencyEffect6SCorrectionSchemeFilter ${RADIOMETRY_TESTS}  
+ --compare-image ${EPSILON}  ${BASELINE}/raTvSurfaceAdjencyEffect6SCorrectionSchemeFilter.tif
+                             ${TEMP}/raTvSurfaceAdjencyEffect6SCorrectionSchemeFilter.tif
+        otbSurfaceAdjencyEffect6SCorrectionSchemeFilter
+	${INPUTDATA}/poupees_sub.png
+	${TEMP}/raTvSurfaceAdjencyEffect6SCorrectionSchemeFilter.tif
+	1   # Radius;	
+	0.5 # UpwardTransmission;
+	2   # UpwardDirectTransmission;
+	1   # UpwardDiffusTransmission;
+	1 0 0  0 0 1  0 1 0 # Channel 1 ponderation values;
+	0 1 0  0 0 1  0 1 0 # Channel 2 ponderation values;
+	0 0 1  0 0 1  0 1 0 # Channel 3 ponderation values;
+	0 0 0  0 0 1  0 1 0 # Channel 4 ponderation values;
+)
+
 
 
 # A enrichir
@@ -397,7 +409,8 @@ otbAtmosphericCorrectionParameters.cxx
 otbAtmosphericRadiativeTermsNew.cxx
 otbReflectanceToSurfaceReflectanceImageFilterNew.cxx
 otbReflectanceToSurfaceReflectanceImageFilter.cxx
-# -------NeighborTest.cxx
+otbSurfaceAdjencyEffect6SCorrectionSchemeFilterNew.cxx
+otbSurfaceAdjencyEffect6SCorrectionSchemeFilter.cxx
 )
 
 

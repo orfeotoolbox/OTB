@@ -77,4 +77,6 @@ REGISTER_TEST(otbDrawPathFilterNew);
 REGISTER_TEST(otbDrawPathFilter);
 REGISTER_TEST(otbPolygonNew);
 REGISTER_TEST(otbPolygon);
+REGISTER_TEST(otbUnaryFunctorNeighborhoodVectorImageFilterNew);
+REGISTER_TEST(otbUnaryFunctorNeighborhoodVectorImageFilter);
 }

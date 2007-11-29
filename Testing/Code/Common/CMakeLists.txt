@@ -405,6 +405,20 @@ ADD_TEST(coTvDrawPatFilter ${COMMON_TESTS}
 		${TEMP}/coTvDrawPathFilterOutput.png
 )
 
+# -------  otb::UnaryFunctorNeighborhoodVectorImageFilter ----------------------
+ADD_TEST(coTuUnaryFunctorNeighborhoodVectorImageFilterNew ${COMMON_TESTS}
+otbUnaryFunctorNeighborhoodVectorImageFilterNew
+)
+
+ADD_TEST(coTvUnaryFunctorNeighborhoodVectorImageFilter ${COMMON_TESTS}
+--compare-image ${TOL}
+		${INPUTDATA}/poupees_sub.png    # copie the input image
+		${TEMP}/coTvUnaryFunctorNeighborhoodVectorImageFilter.tif
+    otbUnaryFunctorNeighborhoodVectorImageFilter
+        ${INPUTDATA}/poupees_sub.png
+	${TEMP}/coTvUnaryFunctorNeighborhoodVectorImageFilter.tif
+	3
+)
 
 # -------       Fichiers sources CXX -----------------------------------
 SET(BasicCommon_SRCS
@@ -459,6 +473,8 @@ otbDrawPathListFilterWithValue.cxx
 otbPolyLineParametricPathWithValueNew.cxx
 otbPolygonNew.cxx
 otbPolygon.cxx
+otbUnaryFunctorNeighborhoodVectorImageFilterNew.cxx
+otbUnaryFunctorNeighborhoodVectorImageFilter.cxx
 )
 
 
