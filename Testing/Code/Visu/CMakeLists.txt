@@ -10,6 +10,8 @@ SET(TEMP ${OTBTesting_BINARY_DIR}/Temporary)
 
 #Tolerance sur diff pixel image
 SET(TOL 0.0)
+SET(EPSILON 0.000001)
+
 
 SET(VISU_TESTS ${CXX_TEST_PATH}/otbVisuTests)
 
@@ -113,7 +115,7 @@ ADD_TEST(viTuVectorImageToColorAnaglyphVectorImageFilterNew ${VISU_TESTS}
 )
 
 ADD_TEST(viTvVectorImageToColorAnaglyphVectorImageFilter ${VISU_TESTS}
-	--compare-image ${TOL}  
+	--compare-image ${EPSILON}  
 	${BASELINE}/viTvColorAnaglyphFilterResult.tif
 	${TEMP}/viTvColorAnaglyphFilterResult.tif
 	otbVectorImageToColorAnaglyphVectorImageFilter
