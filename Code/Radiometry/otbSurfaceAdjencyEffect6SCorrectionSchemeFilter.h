@@ -130,7 +130,8 @@ public:
 
   /** "typedef" for standard classes. */
   typedef SurfaceAdjencyEffect6SCorrectionSchemeFilter                                           Self;
-  typedef UnaryImageFunctorWithVectorImageFilter< TInputImage, TOutputImage, FunctorType > Superclass;  
+  //typedef UnaryImageFunctorWithVectorImageFilter< TInputImage, TOutputImage, FunctorType > Superclass; 
+  typedef UnaryFunctorNeighborhoodVectorImageFilter< TInputImage, TOutputImage, FunctorType >    Superclass; 
   typedef itk::SmartPointer<Self>                                                                Pointer;
   typedef itk::SmartPointer<const Self>                                                          ConstPointer;
 
