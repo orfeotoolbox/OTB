@@ -30,8 +30,10 @@ namespace otb
   ImageToLuminanceImageFilter<TInputImage, TOutputImage>
   ::ImageToLuminanceImageFilter()
   {
-    m_Alpha.Fill(0);
-    m_Beta.Fill(0);
+    m_Alpha.SetSize(4);
+    m_Alpha.Fill(1.);
+    m_Beta.SetSize(4);
+    m_Beta.Fill(0.);
   }
   
   
