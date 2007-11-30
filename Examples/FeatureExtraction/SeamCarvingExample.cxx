@@ -57,7 +57,7 @@
 #include "itkImageDuplicator.h"
 
 
-int main(int argc, char ** argv)
+int main(int argc, char * argv[])
 {
 
   typedef float InputPixelType;
