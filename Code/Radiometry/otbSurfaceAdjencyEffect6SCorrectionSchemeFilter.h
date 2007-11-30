@@ -23,7 +23,6 @@
 #define __otbSurfaceAdjencyEffect6SCorrectionSchemeFilter_h
 
 #include "itkNumericTraits.h"
-#include "otbUnaryImageFunctorWithVectorImageFilter.h"
 #include <vector>
 #include "itkConstNeighborhoodIterator.h"
 #include "otbUnaryFunctorNeighborhoodVectorImageFilter.h"
