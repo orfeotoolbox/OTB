@@ -245,15 +245,18 @@ public:
   itkSetMacro(S, float);
   /** Give the S coefficient. */
   itkGetConstReferenceMacro(S, float);
-
-
+  
 protected:
   BayesianFusionFilter();
   virtual ~BayesianFusionFilter();
-  /** Initialize some accumulators before the threads run. */
+  /** Check if internal statistics need to be computed, and do so */
   void BeforeThreadedGenerateData ();
- 
-                        
+  /** Compute internal statistics required for fusion */
+  void ComputeInternalStatistics(void);
+  /** Call the superclass implementation and set the StatisticsHaveBeenGenerated
+   * flag to false */
+  virtual void Modified(void);
+   
 private:
   /** Ponderation declaration*/
   float m_Lambda;
@@ -266,7 +269,8 @@ private:
   MatrixType m_Beta;
   /** Optimisation matrix */
   MatrixType m_Vcondopt;
-  
+  /** True if internal statistics have been generated */
+  bool m_StatisticsHaveBeenGenerated;
 };
 
 } // end namespace otb

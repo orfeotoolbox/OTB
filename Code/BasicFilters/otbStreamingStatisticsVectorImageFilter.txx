@@ -290,7 +290,6 @@ namespace otb {
     // sum of squares 
     for( i = 0; i < numberOfThreads; i++)
       {
-	std::cout<<i<<std::endl;
 	count += m_Count[i];
 	/** TODO
 	 *  To modify using + method operator. If we use it now -> exceptionmacro (no GetClassName...)
@@ -351,7 +350,7 @@ namespace otb {
     tempTranspose = pixelSumMatrix.GetTranspose();
     covMatrixTemp = pixelSumMatrix*tempTranspose;
     /** TODO
-     * A modifier en utilisant l'opérateur + de la méthode. Pour le moment probleme avec exceptionmacro (pas de GetClassName...)
+     *  To modify using - method operator. If we use it now -> exceptionmacro (no GetClassName...)
      *covMatrix -= covMatrixTemp;
      **/
     if( (covMatrix.Rows() != covMatrixTemp.Rows()) || (covMatrix.Cols() != covMatrixTemp.Cols()))
@@ -430,9 +429,8 @@ namespace otb {
 	++it;
 	progress.CompletedPixel();
 	pixelTransposeVector = pixelVector.GetTranspose();
-      
-	/** TODO
-	 * A modifier en utilisant l'opérateur + de la méthode. Pour le moment probleme avec exceptionmacro (pas de GetClassName...)
+        /** TODO
+         *  To modify using + method operator. If we use it now -> exceptionmacro (no GetClassName...)
 	 * m_XX[threadId]+=pixelVector*pixelTransposeVector;
 	 **/
 	tempMatrix = pixelVector*pixelTransposeVector;

@@ -40,6 +40,7 @@ namespace otb
   {
     m_Lambda = 0.9999;
     m_S = 1;
+     m_StatisticsHaveBeenGenerated = false;
   }
   
   
@@ -55,7 +56,20 @@ namespace otb
   {
     
   }
-  
+  template <class TInputMultiSpectralImage, 
+  class TInputMultiSpectralInterpImage, 
+  class TInputPanchroImage,  
+  class TOutputImage>
+      void
+      BayesianFusionFilter<TInputMultiSpectralImage, 
+      TInputMultiSpectralInterpImage,  
+      TInputPanchroImage, 
+      TOutputImage>
+  ::Modified()
+      {
+       Superclass::Modified();
+        m_StatisticsHaveBeenGenerated = false; 
+      }
   
   template <class TInputMultiSpectralImage, 
 	    class TInputMultiSpectralInterpImage, 
@@ -68,7 +82,25 @@ namespace otb
 		       TOutputImage>
   ::BeforeThreadedGenerateData ()
   {	
-    OutputImageRegionType msiRequestedRegion = this->GetMultiSpectInterp()->GetRequestedRegion();
+    if(!m_StatisticsHaveBeenGenerated)
+    {
+     this->ComputeInternalStatistics();
+     m_StatisticsHaveBeenGenerated = true;
+    }
+  }
+  
+  template <class TInputMultiSpectralImage, 
+  class TInputMultiSpectralInterpImage, 
+  class TInputPanchroImage,  
+  class TOutputImage>
+      void
+      BayesianFusionFilter<TInputMultiSpectralImage, 
+      TInputMultiSpectralInterpImage,  
+      TInputPanchroImage, 
+      TOutputImage>
+  ::ComputeInternalStatistics()
+        {	
+      OutputImageRegionType msiRequestedRegion = this->GetMultiSpectInterp()->GetRequestedRegion();
     OutputImageRegionType msRequestedRegion = this->GetMultiSpect()->GetRequestedRegion();
     OutputImageRegionType panchroRequestedRegion = this->GetPanchro()->GetRequestedRegion();
 
@@ -95,8 +127,10 @@ namespace otb
 
     covComputefilter->SetInput(multiSpecInterp);
     covComputefilter->Update();
-
+    
+    
     MatrixType m_CovarianceMatrix = covComputefilter->GetCovariance();
+    otbMsgDebugMacro(<<"Covariance: "<<m_CovarianceMatrix);
 
     m_CovarianceInvMatrix = m_CovarianceMatrix.GetInverse();
     /** Beta computation : Regression model coefficient */
@@ -120,8 +154,10 @@ namespace otb
     msTransposePan->SetSecondInput( caster->GetOutput() );
     
     msTransposeMs->Update();
+    otbMsgDebugMacro(<<"MsTMs: "<<msTransposeMs->GetResultOutput()->Get());
     msTransposePan->Update();
-
+    otbMsgDebugMacro(<<"MsTPan: "<<msTransposePan->GetResultOutput()->Get()); 
+    
     MatrixType temp;
     temp = msTransposeMs->GetResultOutput()->Get().GetInverse();
     m_Beta = temp*msTransposePan->GetResultOutput()->Get();
@@ -132,6 +168,7 @@ namespace otb
     panTransposePan->SetFirstInput(caster->GetOutput());
     panTransposePan->SetSecondInput(caster->GetOutput());
     panTransposePan->Update();
+    otbMsgDebugMacro(<<"PanTPan: "<<msTransposePan->GetResultOutput()->Get()); 
     MatrixType S, tempS, tempS2;
     S = panTransposePan->GetResultOutput()->Get();
     tempS = msTransposePan->GetResultOutput()->Get().GetTranspose();
@@ -282,6 +319,8 @@ namespace otb
    panchro->SetRequestedRegion(panchroRequestedRegion);
    panchro->PropagateRequestedRegion();
    panchro->UpdateOutputData(); 
+   
+    std::cout<<"End of BeforeThreaderGenerateData."<<std::endl;
   } 
 } // end namespace otb
 
