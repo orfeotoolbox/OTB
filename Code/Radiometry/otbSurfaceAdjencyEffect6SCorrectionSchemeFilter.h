@@ -49,6 +49,7 @@ namespace otb
 	  
 	  typedef itk::VariableSizeMatrix<double>               PonderationMatrixType;
 	  typedef typename std::vector<PonderationMatrixType>   PonderationValuesContainerType;
+	  typedef typename TOutput::RealValueType               RealValueType;
 
 	  void SetPonderationValues(const PonderationValuesContainerType & cont){ m_PonderationValues = cont; };
 	  void SetUpwardTransmissionRatio(double upwardTransmissionRatio){ m_UpwardTransmissionRatio = upwardTransmissionRatio;};
@@ -95,9 +96,9 @@ namespace otb
 		    }
 		  temp = 0.; 
 		  temp = static_cast<double>(it.GetCenterPixel()[j])*m_UpwardTransmissionRatio + contribution*m_DiffusRatio; 
-		  outPixel[j] = temp;
+		  outPixel[j] = static_cast<RealValueType>(temp);
 		}
-	      return static_cast<TOutput>(outPixel);
+	      return outPixel;
 	    }
 
 	private:
