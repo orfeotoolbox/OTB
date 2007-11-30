@@ -129,8 +129,7 @@ public:
                                                                    ITK_TYPENAME TOutputImage::PixelType> FunctorType;
 
   /** "typedef" for standard classes. */
-  typedef SurfaceAdjencyEffect6SCorrectionSchemeFilter                                           Self;
-  //typedef UnaryImageFunctorWithVectorImageFilter< TInputImage, TOutputImage, FunctorType > Superclass; 
+  typedef SurfaceAdjencyEffect6SCorrectionSchemeFilter                                           Self; 
   typedef UnaryFunctorNeighborhoodVectorImageFilter< TInputImage, TOutputImage, FunctorType >    Superclass; 
   typedef itk::SmartPointer<Self>                                                                Pointer;
   typedef itk::SmartPointer<const Self>                                                          ConstPointer;
