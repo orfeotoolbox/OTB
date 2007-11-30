@@ -38,7 +38,7 @@ SIXSTraits::ComputeAtmosphericParameters(
         const   double                  OzoneAmount,                    /** The Ozone amount (Stratospheric ozone layer content) */
         const   AerosolModelType &      AerosolModel,                   /** The Aerosol model */
         const   double                  AerosolOptical,                 /** The Aerosol optical (radiative impact of aerosol for the reference wavelenght 550-nm) */
-                WavelenghtSpectralType& WavelenghtSpectralBand,         /** Wavelenght for the spectral band definition */
+                WavelenghtSpectralType* WavelenghtSpectralBand,         /** Wavelenght for the spectral band definition */
                                                                         /** Note : The Max wavelenght spectral band value must be updated ! */
                 double &                AtmosphericReflectance,         /** Atmospheric reflectance */     
                 double &                AtmosphericSphericalAlbedo,     /** atmospheric spherical albedo */
@@ -83,14 +83,14 @@ SIXSTraits::ComputeAtmosphericParameters(
                 // 6S official tab size Wavelenght Spectral
                 const unsigned int S_6S_SIZE=1501;
                 // Generate WavelenghtSpectralBand  in 6S compatible buffer s[1501]
-                otb_6s_integer iinf = static_cast<otb_6s_integer>((WavelenghtSpectralBand.GetMinSpectralValue() - (double).25) / SIXSStepOfWavelenghtSpectralBandValues + (double)1.5);
-                otb_6s_integer isup = static_cast<otb_6s_integer>((WavelenghtSpectralBand.GetMaxSpectralValue() - (double).25) / SIXSStepOfWavelenghtSpectralBandValues + (double)1.5);
+                otb_6s_integer iinf = static_cast<otb_6s_integer>((WavelenghtSpectralBand->GetMinSpectralValue() - (double).25) / SIXSStepOfWavelenghtSpectralBandValues + (double)1.5);
+                otb_6s_integer isup = static_cast<otb_6s_integer>((WavelenghtSpectralBand->GetMaxSpectralValue() - (double).25) / SIXSStepOfWavelenghtSpectralBandValues + (double)1.5);
 
                 otb_6s_integer cpt=iinf-1;
                 otb_6s_real * s(NULL);
                 s = new otb_6s_real[S_6S_SIZE];
                 memset( s, 0, S_6S_SIZE*sizeof(otb_6s_real) );
-                const ValuesVectorType & FilterFunctionValues6S = WavelenghtSpectralBand.GetFilterFunctionValues6S();
+                const ValuesVectorType & FilterFunctionValues6S = WavelenghtSpectralBand->GetFilterFunctionValues6S();
                 // Set the values of FilterFunctionValues6S in s between [iinf-1;isup]
                 for(unsigned int i=0 ; cpt<isup ; i++)
                 {
@@ -135,13 +135,13 @@ SIXSTraits::ComputeAtmosphericParameters(
 void
 SIXSTraits::ComputeWavelenghtSpectralBandValuesFor6S(
         const   double                          SIXSStepOfWavelenghtSpectralBandValues,
-                WavelenghtSpectralType&         WavelenghtSpectralBand
+                WavelenghtSpectralType*         WavelenghtSpectralBand
         )
 {
-        const double L_min = static_cast<double>(WavelenghtSpectralBand.GetMinSpectralValue());
-        const double L_max = static_cast<double>(WavelenghtSpectralBand.GetMaxSpectralValue());
-        const double L_userStep = static_cast<double>(WavelenghtSpectralBand.GetUserStep());
-        const ValuesVectorType & FilterFunctionValues = WavelenghtSpectralBand.GetFilterFunctionValues();
+        const double L_min = static_cast<double>(WavelenghtSpectralBand->GetMinSpectralValue());
+        const double L_max = static_cast<double>(WavelenghtSpectralBand->GetMaxSpectralValue());
+        const double L_userStep = static_cast<double>(WavelenghtSpectralBand->GetUserStep());
+        const ValuesVectorType & FilterFunctionValues = WavelenghtSpectralBand->GetFilterFunctionValues();
         unsigned int i = 1;
         unsigned int j = 1;
         const double invStep = static_cast<double>(1./L_userStep);
@@ -169,6 +169,7 @@ SIXSTraits::ComputeWavelenghtSpectralBandValuesFor6S(
 	                values.push_back(static_cast<WavelenghtSpectralBandType>(valueTemp));
 
 	                i++;
+                        value = i*SIXSStepOfWavelenghtSpectralBandValues;
 	        }
 
 	        if (L_min+(i-1)*SIXSStepOfWavelenghtSpectralBandValues != L_max)
@@ -176,15 +177,15 @@ SIXSTraits::ComputeWavelenghtSpectralBandValuesFor6S(
 	                values.push_back(0);
 	        }
 	         // Store this values        
-                WavelenghtSpectralBand.SetFilterFunctionValues6S(values);
+                WavelenghtSpectralBand->SetFilterFunctionValues6S(values);
                 // Store the new Max MaxSpectralValue         
-                WavelenghtSpectralBand.SetMaxSpectralValue(static_cast<WavelenghtSpectralBandType>(L_min + i*SIXSStepOfWavelenghtSpectralBandValues));
+                WavelenghtSpectralBand->SetMaxSpectralValue(static_cast<WavelenghtSpectralBandType>(L_min + i*SIXSStepOfWavelenghtSpectralBandValues));
 
         }
         else
         {
                 // Init with copy of FilterFunctionValues input vector values
-                WavelenghtSpectralBand.SetFilterFunctionValues6S(FilterFunctionValues);
+                WavelenghtSpectralBand->SetFilterFunctionValues6S(FilterFunctionValues);
         }
 }
 

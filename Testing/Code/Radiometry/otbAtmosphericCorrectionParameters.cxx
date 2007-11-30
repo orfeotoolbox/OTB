@@ -29,6 +29,7 @@ int otbFilterFunctionValuesTest(int argc, char * argv[])
   try
     {   
       char * outname   = argv[1];
+      const double SIXSStepOfWavelenghtSpectralBandValues(0.0025);
 
       typedef otb::FilterFunctionValues FilterFunctionValuesType;
       // Instantiating object
@@ -40,14 +41,16 @@ int otbFilterFunctionValuesTest(int argc, char * argv[])
 	  vect.push_back(atof(argv[i]));
 	}
  
-//      bool bumbo = object->SetParameters(atof(argv[2]), atof(argv[3]), atof(argv[4]), vect);
-        const double SIXSStepOfWavelenghtSpectralBandValues(0.0025);
-/*
-        otb::SIXSTraits::ComputeWavelenghtSpectralBandValuesFor6S(
-        ,
-                WavelenghtSpectralType& WavelenghtSpectralBand
-        );
-*/
+      object->SetMinSpectralValue(atof(argv[2]));
+      object->SetMaxSpectralValue(atof(argv[3]));
+      object->SetUserStep(atof(argv[4]));
+      object->SetFilterFunctionValues(vect);
+
+      // Call interpolate 
+      otb::SIXSTraits::ComputeWavelenghtSpectralBandValuesFor6S(
+                              SIXSStepOfWavelenghtSpectralBandValues,
+                              object);
+
 
       // Writing output file
       std::ofstream file;
@@ -60,9 +63,9 @@ int otbFilterFunctionValuesTest(int argc, char * argv[])
 	}
       file<<std::endl;
       file<<"Output vector :"<<std::endl;
-      for (unsigned int i=0; i<object->GetFilterFunctionValues().size(); i++)
+      for (unsigned int i=0; i<object->GetFilterFunctionValues6S().size(); i++)
 	{
-	  file<< object->GetFilterFunctionValues()[i] <<std::endl;
+	  file<< object->GetFilterFunctionValues6S()[i] <<std::endl;
 	}
       file<<std::endl;
       file<<"L_min :"<<object->GetMinSpectralValue()<<std::endl;

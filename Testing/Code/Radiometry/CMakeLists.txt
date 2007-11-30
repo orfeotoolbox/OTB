@@ -327,10 +327,10 @@ ADD_TEST(raTvFilterFunctionValuesTest ${RADIOMETRY_TESTS}
                            ${TEMP}/raTvFilterFunctionValuesTest.txt
         otbFilterFunctionValuesTest
 	${TEMP}/raTvFilterFunctionValuesTest.txt
-	5            # lambda min
-	17           # lambda max
-	3            # user step
-	2 5 3 9 8  # vectorlambda max
+	0.5             # lambda min
+	0.7             # lambda max
+	0.05            # user step
+	0.2 0.5 0.3 0.9 # vectorlambda max
 )
 
 

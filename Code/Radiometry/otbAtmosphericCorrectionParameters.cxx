@@ -21,7 +21,6 @@ PURPOSE.  See the above copyright notices for more information.
 namespace otb 
 { 
   /***********************      FilterFunctionValues **************************/
-  const FilterFunctionValues::WavelenghtSpectralBandType FilterFunctionValues::m_StepOfWavelenghtSpectralBandValues = 2.5;
   FilterFunctionValues
   ::FilterFunctionValues()
   { 
@@ -30,57 +29,6 @@ namespace otb
      m_FilterFunctionValues.empty();
   }
   
-  /** Check the correpondance between the vector value size and the interval number between min and max.*/ 
-  /** return true if the vector step is not at 2.5 and the vector has been changed. */
-/*
-  bool 
-  FilterFunctionValues
-  :: SetParameters(const WavelenghtSpectralBandType L_min, const WavelenghtSpectralBandType L_max, const WavelenghtSpectralBandType step, const ValuesVectorType & vect)
-  {
-    m_MinSpectralValue = L_min;
-    m_UserStep = step;
-
-    bool hasChangedVector = false;
-
-    if(m_UserStep != m_StepOfWavelenghtSpectralBandValues) 
-      {
-	ValuesVectorType values(1, vect[0]);
-	unsigned int i = 1;
-	unsigned int j = 1;
-	double invStep = 1/m_UserStep;
-	// Stop the interpolation at the max spectral value.
-	while(m_MinSpectralValue+i*m_StepOfWavelenghtSpectralBandValues <= L_max )
-	  {
-	    // Search the User interval that surround the StepOfWavelenghtSpectralBandValues current value.
-	    while(j*m_UserStep <= i*m_StepOfWavelenghtSpectralBandValues)
-	      {
-		j++;
-	      }
-	    double valueTemp;
-	    valueTemp = static_cast<double>(vect[j-1]) 
-	      + ((static_cast<double>(vect[j])-static_cast<double>(vect[j-1]))*invStep)
-	      *(i*static_cast<double>(m_StepOfWavelenghtSpectralBandValues)-static_cast<double>(m_UserStep)*(j-1));
-	    values.push_back(static_cast<WavelenghtSpectralBandType>(valueTemp));
-
-	    i++;
-	  }
-
-	if (m_MinSpectralValue+(i-1)*m_StepOfWavelenghtSpectralBandValues != L_max)
-	  {
-	    values.push_back(0);
-	  }
-	m_FilterFunctionValues = values;
-	m_MaxSpectralValue = m_MinSpectralValue + i*m_StepOfWavelenghtSpectralBandValues;
-      }
-    else
-      {
-	m_MaxSpectralValue = L_max;
-	m_FilterFunctionValues = vect;
-	hasChangedVector = true;
-      }
-    return hasChangedVector;
-  }
-*/
   /**PrintSelf method */
   void 
   FilterFunctionValues
@@ -95,7 +43,11 @@ namespace otb
       {
 	os << indent << m_FilterFunctionValues[i] <<std::endl;
       }
-    os << indent << "6S Step between each wavelenght spectral band values: " << m_StepOfWavelenghtSpectralBandValues << std::endl;
+    os << indent << "Filter function Vector Values 6S: " << std::endl;
+    for (unsigned int i=0; i<m_FilterFunctionValues6S.size(); i++)
+      {
+	os << indent << m_FilterFunctionValues6S[i] <<std::endl;
+      }
   }
 
 

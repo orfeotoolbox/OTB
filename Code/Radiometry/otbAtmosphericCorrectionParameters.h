@@ -83,9 +83,6 @@ namespace otb
       /** Get the 6S imposed step : 2.5nm. */
       itkGetConstMacro(StepOfWavelenghtSpectralBandValues, WavelenghtSpectralBandType);
 
-      /** Set paramaters and check value step. If it's not 0.0025µm (cf. 6S), interpolate needed values.*/ 
-//      bool SetParameters(const WavelenghtSpectralBandType L_min, const WavelenghtSpectralBandType L_max, const WavelenghtSpectralBandType step, const ValuesVectorType & vect);
-
 
     protected:
       /** Constructor */

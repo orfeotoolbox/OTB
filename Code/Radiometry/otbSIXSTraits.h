@@ -56,7 +56,7 @@ public:
         const   double                  OzoneAmount,                    /** The Ozone amount (Stratospheric ozone layer content) */
         const   AerosolModelType &      AerosolModel,                   /** The Aerosol model */
         const   double                  AerosolOptical,                 /** The Aerosol optical (radiative impact of aerosol for the reference wavelenght 550-nm) */
-                WavelenghtSpectralType& WavelenghtSpectralBand,         /** Wavelenght for the spectral band definition */
+                WavelenghtSpectralType* WavelenghtSpectralBand,         /** Wavelenght for the spectral band definition */
                                                                         /** Note : The Max wavelenght spectral band value must be updated ! */
                 double &                AtmosphericReflectance,         /** Atmospheric reflectance */     
                 double &                AtmosphericSphericalAlbedo,     /** atmospheric spherical albedo */
@@ -64,10 +64,13 @@ public:
                 double &                DownwardTransmittance,          /** downward transmittance */      
                 double &                UpwardTransmittance             /** upward transmittance */
         );
-  /** Generate WavelenghtSpectralBand if the step is not the official 6S step value */
+  /** Check the correpondance between the vector value size and the interval number between min and max.
+    * If the vector step is not at 0.0025, the new values are computed.
+    * The utput vector values is store in the m_FilterFunctionValues6S of WavelenghtSpectralBand
+  . */
   static void ComputeWavelenghtSpectralBandValuesFor6S(
         const   double                  SIXSStepOfWavelenghtSpectralBandValues,
-                WavelenghtSpectralType& WavelenghtSpectralBand
+                WavelenghtSpectralType* WavelenghtSpectralBand
         );
 
 };
