@@ -28,9 +28,7 @@ namespace otb
     Superclass::PrintSelf(os,indent);
     os << indent << "Intrinsic Atmospheric Reflectance: " << m_IntrinsicAtmosphericReflectance << std::endl;
     os << indent << "Shperical Albedo of the Atmosphere: " << m_SphericalAlbedo << std::endl;
-    os << indent << "Ozone Transmission: " << m_OzoneTransmission << std::endl;
-    os << indent << "OxygenTransmission: " << m_OxygenTransmission << std::endl;
-    os << indent << "Water vapor Transmission: " << m_WaterVaporTransmission << std::endl;
+    os << indent << "Total Gaseous Transmission: " << m_TotalGaseousTransmission << std::endl;
     os << indent << "Downward Transmittance of the Atmospher: " << m_DownwardTransmittance << std::endl;
     os << indent << "Upward Transmittance of the Atmospher: " << m_UpwardTransmittance << std::endl;
    }

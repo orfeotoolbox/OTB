@@ -352,9 +352,7 @@ ADD_TEST(raTvReflectanceToSurfaceReflectanceImageFilter ${RADIOMETRY_TESTS}
 	${TEMP}/raTvReflectanceToSurfaceReflectanceImageFilter.tif
 	1  # intrinsic atmospheric reflectance	
 	2  # spherical albedo of the atmosphere
-	3  # ozone transmission
-	4  # ozygen transmission	
-	1  # water vapor transmission	
+	3  # total transmission	
 	2  # downward transmittance
 	3  # upward transmittance
        )

@@ -61,24 +61,12 @@ public:
   itkSetMacro(SphericalAlbedo,double); 
   itkGetMacro(SphericalAlbedo,double); 
   /**
-   * Set/Get the ozone transmission.
+   * Set/Get the total gaseous transmission.
    */
-  itkSetMacro(OzoneTransmission,double); 
-  itkGetMacro(OzoneTransmission,double); 
+  itkSetMacro(TotalGaseousTransmission,double); 
+  itkGetMacro(TotalGaseousTransmission,double); 
 
-  /**
-   * Set/Get the ozygen transmission.
-   */
-  itkSetMacro(OxygenTransmission,double); 
-  itkGetMacro(OxygenTransmission,double); 
-
-  /**
-   * Set/Get the water vapor transmission.
-   */
-  itkSetMacro(WaterVaporTransmission,double); 
-  itkGetMacro(WaterVaporTransmission,double); 
- 
-  /**
+   /**
    * Set/Get the downward transmittance of the atmosphere.
    */
   itkSetMacro(DownwardTransmittance,double); 
@@ -109,14 +97,8 @@ private:
   /** The spherical albedo of the atmosphere.*/
   double m_SphericalAlbedo; 
 
-  /** The ozone transmission. */
-  double m_OzoneTransmission; 
-
-  /** The ozygen transmission. */
-  double m_OxygenTransmission; 
-
-  /** The water vapor transmission. */
-  double m_WaterVaporTransmission; 
+  /**The total gaseous transmission (for all species). */
+  double m_TotalGaseousTransmission; 
 
   /** The downward transmittance. */
   double m_DownwardTransmittance; 

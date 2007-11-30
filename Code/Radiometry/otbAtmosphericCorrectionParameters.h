@@ -31,7 +31,7 @@ namespace otb
   /** \class FilterFunctionValues
    *  \brief This class contains the values of the filter function for the processed spectral band.
    *
-   *  The step between 2 values is 2.5nm. The class contains the min and the max value.Those value can be directly read from the image metadatas.
+   *  The step between 2 values is 0.0025µm. The class contains the min and the max value.Those value can be directly read from the image metadatas.
    */
   class ITK_EXPORT FilterFunctionValues : public itk::DataObject
     {
@@ -83,7 +83,7 @@ namespace otb
       /** Get the 6S imposed step : 2.5nm. */
       itkGetConstMacro(StepOfWavelenghtSpectralBandValues, WavelenghtSpectralBandType);
 
-      /** Set paramaters and check value step. If it's not 2.5nm (cf. 6S), interpolate needed values.*/ 
+      /** Set paramaters and check value step. If it's not 0.0025µm (cf. 6S), interpolate needed values.*/ 
 //      bool SetParameters(const WavelenghtSpectralBandType L_min, const WavelenghtSpectralBandType L_max, const WavelenghtSpectralBandType step, const ValuesVectorType & vect);
 
 
@@ -104,15 +104,15 @@ namespace otb
       
       /** Vector that contains the filter function value. */
       ValuesVectorType m_FilterFunctionValues;
-      /** Vector that contains the filter function value in 6S format (step of 0.0025). 
-        * There values a computed by 6S. If the UserStep is 0.0025, then m_FilterFunctionValues is identical as m_FilterFunctionValues6S
+      /** Vector that contains the filter function value in 6S format (step of 0.0025µm). 
+        * There values a computed by 6S. If the UserStep is 0.0025µm, then m_FilterFunctionValues is identical as m_FilterFunctionValues6S
         */
       ValuesVectorType m_FilterFunctionValues6S;
-      /** Minimum spectral value (in nm). */
+      /** Minimum spectral value (in µm). */
       WavelenghtSpectralBandType m_MinSpectralValue;
-      /** Maximum spectral value (in nm). */
+      /** Maximum spectral value (in µm). */
       WavelenghtSpectralBandType m_MaxSpectralValue;
-      /** User step between each wavelenght spectral band values. (in nm) */
+      /** User step between each wavelenght spectral band values. (in µm) */
       WavelenghtSpectralBandType m_UserStep;
       /** Step between each wavelenght spectral band values */
       static const WavelenghtSpectralBandType m_StepOfWavelenghtSpectralBandValues;

@@ -57,7 +57,7 @@
     
     double coef;
     double res;
-    
+    /*
     coef = static_cast<double>(m_AtmosphericRadiativeTerms->GetOzoneTransmission()
 			       * m_AtmosphericRadiativeTerms->GetOxygenTransmission()
 			       * m_AtmosphericRadiativeTerms->GetWaterVaporTransmission()
@@ -70,7 +70,16 @@
 				* m_AtmosphericRadiativeTerms->GetUpwardTransmittance()     );
     res = m_AtmosphericRadiativeTerms->GetIntrinsicAtmosphericReflectance() / res;
     res = -res;
+    */
+
+    coef = static_cast<double>(m_AtmosphericRadiativeTerms->GetTotalGaseousTransmission()
+			       * m_AtmosphericRadiativeTerms->GetDownwardTransmittance()
+			       * m_AtmosphericRadiativeTerms->GetUpwardTransmittance()     );
+    coef = 1 / coef;
     
+    res = -m_AtmosphericRadiativeTerms->GetIntrinsicAtmosphericReflectance() * coef;
+ 
+
     // Functor initialisation
     this->GetFunctor().SetCoefficient(coef);
     this->GetFunctor().SetResidu(res);

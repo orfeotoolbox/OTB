@@ -48,11 +48,9 @@ int otbReflectanceToSurfaceReflectanceImageFilter(int argc, char * argv[])
 
       atmo->SetIntrinsicAtmosphericReflectance(static_cast<double>(atof(argv[3])));
       atmo->SetSphericalAlbedo(static_cast<double>(atof(argv[4])));
-      atmo->SetOzoneTransmission(static_cast<double>(atof(argv[5])));
-      atmo->SetOxygenTransmission(static_cast<double>(atof(argv[6])));
-      atmo->SetWaterVaporTransmission(static_cast<double>(atof(argv[7])));
-      atmo->SetDownwardTransmittance(static_cast<double>(atof(argv[8])));
-      atmo->SetUpwardTransmittance(static_cast<double>(atof(argv[9])));
+      atmo->SetTotalGaseousTransmission(static_cast<double>(atof(argv[5])));
+      atmo->SetDownwardTransmittance(static_cast<double>(atof(argv[6])));
+      atmo->SetUpwardTransmittance(static_cast<double>(atof(argv[7])));
 
       
 
