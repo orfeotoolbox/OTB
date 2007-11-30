@@ -80,9 +80,6 @@ namespace otb
       itkSetMacro(UserStep,WavelenghtSpectralBandType);
       /** Get user step between each wavelenght spectral band values. */
       itkGetMacro(UserStep,WavelenghtSpectralBandType);
-      /** Get the 6S imposed step : 2.5nm. */
-      itkGetConstMacro(StepOfWavelenghtSpectralBandValues, WavelenghtSpectralBandType);
-
 
     protected:
       /** Constructor */
@@ -111,8 +108,6 @@ namespace otb
       WavelenghtSpectralBandType m_MaxSpectralValue;
       /** User step between each wavelenght spectral band values. (in µm) */
       WavelenghtSpectralBandType m_UserStep;
-      /** Step between each wavelenght spectral band values */
-      static const WavelenghtSpectralBandType m_StepOfWavelenghtSpectralBandValues;
     };
 
 
