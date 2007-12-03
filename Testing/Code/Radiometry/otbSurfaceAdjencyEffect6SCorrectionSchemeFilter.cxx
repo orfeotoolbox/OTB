@@ -25,8 +25,6 @@
 
 int otbSurfaceAdjencyEffect6SCorrectionSchemeFilter(int argc, char * argv[])
 {
-  try
-    {
       const char * inputFileName  = argv[1];
       const char * outputFileName = argv[2];
         
@@ -82,19 +80,5 @@ int otbSurfaceAdjencyEffect6SCorrectionSchemeFilter(int argc, char * argv[])
 
       writer->Update();
 
-    }
-
-  catch( itk::ExceptionObject & err ) 
-    { 
-    std::cout << "Exception itk::ExceptionObject thrown !" << std::endl; 
-    std::cout << err << std::endl; 
-    return EXIT_FAILURE;
-    } 
-
-  catch( ... ) 
-    { 
-    std::cout << "Unknown exception thrown !" << std::endl; 
-    return EXIT_FAILURE;
-    } 
-  return EXIT_SUCCESS;
+      return EXIT_SUCCESS;
 }
