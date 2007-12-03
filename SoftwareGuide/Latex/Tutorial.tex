@@ -286,6 +286,22 @@ pixels). For all multithreaded filters (filters which implement a
 \code{ThreadedGenerateData()} method), the image is splitted into piece and only
 the piece on display is processed.
 
+\section{Going from raw satellite images to useful products}
+
+Quite often, when you buy satellite images, you end up with several images. In the case of optical satellite, you often have a panchromatic spectral band with the highest spatial resolution and a multispectral product of the same area with a lower resolution. The resolution ratio is likely to be around 4.
+
+To get the best of the image processing algorithms, you want to combine these data to produce a new image with the highest spatial resolution and several spectral band. This step is called fusion and you can find more details about it in \ref{sec:Fusion}. However, the fusion suppose that your two images represents exactly the same area. There are different solutions to process your data to reach this situation. Here we are going to use the metadata available with the images to produce an orthorectification as detailled in \ref{sec:Ortho}.
+
+First you need to add the following lines in the \code{CMakeLists.txt} file:
+
+\begin{small}
+\begin{verbatim}
+ADD_EXECUTABLE(OrthoFusion  OrthoFusion.cxx)
+TARGET_LINK_LIBRARIES(OrthoFusion OTBProjections OTBCommon OTBIO)
+\end{verbatim}
+\end{small}
+
+\input{OrthoFusion}
 
 
 % \section{Multiband images}
