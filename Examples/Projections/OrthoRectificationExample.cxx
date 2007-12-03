@@ -29,16 +29,7 @@
 #include "otbMacro.h"
 #include "otbImage.h"
 #include "otbImageFileReader.h"
-#include "otbImageFileWriter.h"
 #include "otbStreamingImageFileWriter.h"
-#include "otbStreamingResampleImageFilter.h"
-
-#include "itkExceptionObject.h"
-#include "itkExtractImageFilter.h"
-#include "itkResampleImageFilter.h"
-#include "itkRescaleIntensityImageFilter.h"
-#include "itkImageRegionIteratorWithIndex.h"
-#include "itkLinearInterpolateImageFunction.h"
 
 #include "itkChangeInformationImageFilter.h"
 
