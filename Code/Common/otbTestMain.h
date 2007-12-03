@@ -213,181 +213,190 @@ int main(int ac, char* av[] )
     MainFuncPointer f = j->second;
     int result;
     try
-      {
+    {
       // Invoke the test's "main" function.
       result = (*f)(ac-1, av+1);
-      
       if (result!=EXIT_SUCCESS)
       {
         std::cout << "-> Test EXIT FAILURE ("<<result<<")."<<std::endl;
        	itkGenericExceptionMacro(<<"Bad function return, no regresion test !");
       }
-      std::cout << " -> Test EXIT SUCCESS."<<std::endl;
-      if( lFlagRegression == false )
-      {      
-                std::cout << "-------------  No control baseline tests    -------------"<<std::endl;
-      }
-      else
+    }
+    catch( itk::ExceptionObject & e )
+    {
+        std::cerr << "otbTestMain '"<<testToRun<<"': ITK Exception thrown:" << std::endl;
+        std::cerr << e.GetFile() << ":" << e.GetLine() << ":"<< std::endl;
+        std::cerr << e.GetDescription() << std::endl;
+        result = EXIT_FAILURE;
+    }
+    catch( std::bad_alloc & err )
+    {
+        std::cerr << "otbTestMain '"<<testToRun<<"': Exception bad_alloc thrown: "<< std::endl;
+        std::cerr <<(char*)err.what()<< std::endl;
+        result = EXIT_FAILURE;
+    }
+    catch(const std::exception& e)
+    {
+        std::cerr << "otbTestMain '"<<testToRun<<"': std::exception  thrown:"<< std::endl;
+        std::cerr << e.what() <<  std::endl;
+        result = EXIT_FAILURE;
+    }
+    catch( ... )
+    {
+        std::cerr << "otbTestMain '"<<testToRun<<"': Unknown exception thrown !" << std::endl;
+        result = EXIT_FAILURE;
+    }
+
+      if (result==EXIT_SUCCESS)
       {
-                std::cout << "-------------  Start control baseline tests    -------------"<<std::endl;
-      // Make a list of possible baselines
-      // Test de non regression sur des images
-      if ((baseLineFilenamesImage.size()>0) && (testFilenamesImage.size()>0))
-        {
-	  // Creates iterators on baseline filenames vector and test filenames vector
-	  std::vector<std::string>::iterator itBaselineFilenames = baseLineFilenamesImage.begin();
-	  std::vector<std::string>::iterator itTestFilenames = testFilenamesImage.begin();
-          int cpt(1);
-	  // For each couple of baseline and test file, do the comparison
-	  for(;(itBaselineFilenames != baseLineFilenamesImage.end())
-		&&(itTestFilenames != testFilenamesImage.end());
-	      ++itBaselineFilenames,++itTestFilenames)
-	    {
-	      std::string baselineFilenameImage = (*itBaselineFilenames);
-	      std::string testFilenameImage = (*itTestFilenames);
+                result = 0;
+                std::cout << " -> Test EXIT SUCCESS."<<std::endl;
+                if( lFlagRegression == false )
+                {      
+                        std::cout << "-------------  No control baseline tests    -------------"<<std::endl;
+                }
+                else
+                {
+                    try
+                    {
 
-	      std::map<std::string,int> baselines = RegressionTestBaselines(const_cast<char*>(baselineFilenameImage.c_str()));
-	      std::map<std::string,int>::iterator baseline = baselines.begin();
-	      baseline->second = RegressionTestImage(cpt,testFilenameImage.c_str(),
+                        std::cout << "-------------  Start control baseline tests    -------------"<<std::endl;
+                        // Make a list of possible baselines
+                        // Test de non regression sur des images
+                        if ((baseLineFilenamesImage.size()>0) && (testFilenamesImage.size()>0))
+                        {
+	                        // Creates iterators on baseline filenames vector and test filenames vector
+	                        std::vector<std::string>::iterator itBaselineFilenames = baseLineFilenamesImage.begin();
+	                        std::vector<std::string>::iterator itTestFilenames = testFilenamesImage.begin();
+                                int cpt(1);
+	                        // For each couple of baseline and test file, do the comparison
+	                        for(;(itBaselineFilenames != baseLineFilenamesImage.end())
+		                        &&(itTestFilenames != testFilenamesImage.end());
+	                                ++itBaselineFilenames,++itTestFilenames)
+	                        {
+	                                std::string baselineFilenameImage = (*itBaselineFilenames);
+	                                std::string testFilenameImage = (*itTestFilenames);
+
+	                                std::map<std::string,int> baselines = RegressionTestBaselines(const_cast<char*>(baselineFilenameImage.c_str()));
+	                                std::map<std::string,int>::iterator baseline = baselines.begin();
+	                                baseline->second = RegressionTestImage(cpt,testFilenameImage.c_str(),
 							 (baseline->first).c_str(),
 							 0,
 							 lToleranceDiffPixelImage);
-		  if (baseline->second != 0)
-		    {
-		    baseline->second = RegressionTestImage(cpt,testFilenameImage.c_str(),
+		                        if (baseline->second != 0)
+		                        {
+		                                baseline->second = RegressionTestImage(cpt,testFilenameImage.c_str(),
 							 (baseline->first).c_str(),
 							 1,
 							 lToleranceDiffPixelImage);
-		}
-                cpt++;
-	      result += baseline->second;
-	    }
-        }
+		                        }
+                                        cpt++;
+	                                result += baseline->second;
+	                        }
+                        }
 
-      // Non-regression testing on metadata.
-      if ((baselineFilenamesMetaData.size()>0) && (testFilenamesMetaData.size()>0))
-        {
-	  // Creates iterators on baseline filenames vector and test filenames vector
-	  std::vector<std::string>::iterator itBaselineFilenames = baselineFilenamesMetaData.begin();
-	  std::vector<std::string>::iterator itTestFilenames = testFilenamesMetaData.begin();
-	  // For each couple of baseline and test file, do the comparison
-	  for(;(itBaselineFilenames != baselineFilenamesMetaData.end())
-		&&(itTestFilenames != testFilenamesMetaData.end());
-	      ++itBaselineFilenames,++itTestFilenames)
-	    {
-	      std::string baselineFilenameImage = (*itBaselineFilenames);
-	      std::string testFilenameImage = (*itTestFilenames);
+                        // Non-regression testing on metadata.
+                        if ((baselineFilenamesMetaData.size()>0) && (testFilenamesMetaData.size()>0))
+                        {
+	                        // Creates iterators on baseline filenames vector and test filenames vector
+	                        std::vector<std::string>::iterator itBaselineFilenames = baselineFilenamesMetaData.begin();
+	                        std::vector<std::string>::iterator itTestFilenames = testFilenamesMetaData.begin();
+	                        // For each couple of baseline and test file, do the comparison
+	                        for(;(itBaselineFilenames != baselineFilenamesMetaData.end())
+		                        &&(itTestFilenames != testFilenamesMetaData.end());
+	                                ++itBaselineFilenames,++itTestFilenames)
+	                        {
+	                                std::string baselineFilenameImage = (*itBaselineFilenames);
+	                                std::string testFilenameImage = (*itTestFilenames);
 
-	      std::map<std::string,int> baselines = RegressionTestBaselines(const_cast<char*>(baselineFilenameImage.c_str()));
-	      std::map<std::string,int>::iterator baseline = baselines.begin();
-	      baseline->second = RegressionTestMetaData(testFilenameImage.c_str(),
+	                                std::map<std::string,int> baselines = RegressionTestBaselines(const_cast<char*>(baselineFilenameImage.c_str()));
+	                                std::map<std::string,int>::iterator baseline = baselines.begin();
+	                                baseline->second = RegressionTestMetaData(testFilenameImage.c_str(),
 							 (baseline->first).c_str(),
 							 0,
 							 lToleranceDiffPixelImage);
-		 /*  if (baseline->second != 0) */
-/* 		    { */
-/* 		    baseline->second = RegressionTestMetaData(testFilenameImage.c_str(), */
-/* 							 (baseline->first).c_str(), */
-/* 							 1, */
-/* 							 lToleranceDiffPixelImage); */
-/* 		} */
-	      result += baseline->second;
-	    }
-        }
+	                                result += baseline->second;
+	                        }
+                        }
 
-      // Test de non regression sur des fichiers ascii
-      if ((baseLineFilenamesAscii.size()>0) && (testFilenamesAscii.size()>0))
-        {
-	  // Creates iterators on baseline filenames vector and test filenames vector
-	  std::vector<std::string>::iterator itBaselineFilenames = baseLineFilenamesAscii.begin();
-	  std::vector<std::string>::iterator itTestFilenames = testFilenamesAscii.begin();
-	  // For each couple of baseline and test file, do the comparison
-	  for(;(itBaselineFilenames != baseLineFilenamesAscii.end())
-		&&(itTestFilenames != testFilenamesAscii.end());
-	      ++itBaselineFilenames,++itTestFilenames)
-	    {
-	      std::string baselineFilenameAscii = (*itBaselineFilenames);
-	      std::string testFilenameAscii = (*itTestFilenames);
+                        // Test de non regression sur des fichiers ascii
+                        if ((baseLineFilenamesAscii.size()>0) && (testFilenamesAscii.size()>0))
+                        {
+	                        // Creates iterators on baseline filenames vector and test filenames vector
+	                        std::vector<std::string>::iterator itBaselineFilenames = baseLineFilenamesAscii.begin();
+	                        std::vector<std::string>::iterator itTestFilenames = testFilenamesAscii.begin();
+	                        // For each couple of baseline and test file, do the comparison
+	                        for(;(itBaselineFilenames != baseLineFilenamesAscii.end())
+		                        &&(itTestFilenames != testFilenamesAscii.end());
+	                                ++itBaselineFilenames,++itTestFilenames)
+	                        {
+	                                std::string baselineFilenameAscii = (*itBaselineFilenames);
+	                                std::string testFilenameAscii = (*itTestFilenames);
 
-	      std::map<std::string,int> baselines = RegressionTestBaselines(const_cast<char*>(baselineFilenameAscii.c_str()));
-	      std::map<std::string,int>::iterator baseline = baselines.begin();
-	      baseline->second = RegressionTestAsciiFile(testFilenameAscii.c_str(),
+	                                std::map<std::string,int> baselines = RegressionTestBaselines(const_cast<char*>(baselineFilenameAscii.c_str()));
+	                                std::map<std::string,int>::iterator baseline = baselines.begin();
+	                                baseline->second = RegressionTestAsciiFile(testFilenameAscii.c_str(),
 							 (baseline->first).c_str(),
 							 0,
 							 lToleranceDiffPixelImage);
-		  if (baseline->second != 0)
-		    {
-		    baseline->second = RegressionTestAsciiFile(testFilenameAscii.c_str(),
+		                        if (baseline->second != 0)
+		                        {
+		                                baseline->second = RegressionTestAsciiFile(testFilenameAscii.c_str(),
 							 (baseline->first).c_str(),
 							 1,
 							 lToleranceDiffPixelImage);
-		}
-	      result += baseline->second;
-	    }
-        }
-/*
-      if (baselineFilenameAscii && testFilenameAscii)
-        {
+		                        }
+	                                result += baseline->second;
+	                        }
+                        }
+                        // Test de non regression sur des fichiers binaires
+                        if (baselineFilenameBinary && testFilenameBinary)
+                        {
         
-  	std::map<std::string,int> baselines;
-  	baselines[std::string(baselineFilenameAscii)] = 0;
-        std::map<std::string,int>::iterator baseline = baselines.begin();
-        baseline->second = RegressionTestAsciiFile(testFilenameAscii,
-                                                 (baseline->first).c_str(),
-                                                 0,
-                                                 lEpsilon);
-        if (baseline->second != 0)
-            {
-	        baseline->second = RegressionTestAsciiFile(testFilenameAscii,
-                                                 (baseline->first).c_str(),
-                                                 1,
-                                                 lEpsilon);
-            }
-        result += baseline->second;
-        }
-*/
-      // Test de non regression sur des fichiers binaires
-      if (baselineFilenameBinary && testFilenameBinary)
-        {
-        
-  	std::map<std::string,int> baselines;
-  	baselines[std::string(baselineFilenameBinary)] = 0;
-        std::map<std::string,int>::iterator baseline = baselines.begin();
-        baseline->second = RegressionTestBinaryFile(testFilenameBinary,
+  	                        std::map<std::string,int> baselines;
+  	                        baselines[std::string(baselineFilenameBinary)] = 0;
+                                std::map<std::string,int>::iterator baseline = baselines.begin();
+                                baseline->second = RegressionTestBinaryFile(testFilenameBinary,
                                                  (baseline->first).c_str(),
                                                  0);
-        if (baseline->second != 0)
-            {
-	        baseline->second = RegressionTestBinaryFile(testFilenameBinary,
+                                if (baseline->second != 0)
+                                {
+	                                baseline->second = RegressionTestBinaryFile(testFilenameBinary,
                                                  (baseline->first).c_str(),
                                                  1);
-            }
-        result += baseline->second;
-        }
+                                }
+                                result += baseline->second;
+                        }
 
-                std::cout << "-------------  End control baseline tests    -------------"<<std::endl;
-        } // Fin else de if( lFlagRegression == false )
-
-      }
-    catch(const itk::ExceptionObject& e)
-      {
-      std::cerr << "OTB outil de tests a leve une exception de type ITK:\n";
-      std::cerr << e.GetFile() << ":" << e.GetLine() << ":\n"
-                << e.GetDescription() << "\n";
-      result = -1;
-      }
-    catch(const std::exception& e)
-      {
-      std::cerr << "OTB outil de tests a leve une exception standard:\n";
-      std::cerr << e.what() << "\n";
-      result = -1;
-      }
-    catch(...)
-      {
-      std::cerr << "OTB outil de tests a leve une exception non identifiee !!!\n";
-      result = -1;
-      }
-    return result;
+                    }
+                    catch( itk::ExceptionObject & e )
+                    {
+                        std::cerr << "otbTestMain 'control baseline test': ITK Exception thrown:" << std::endl;
+                        std::cerr << e.GetFile() << ":" << e.GetLine() << ":"<< std::endl;
+                        std::cerr << e.GetDescription() << std::endl;
+                        return -1;
+                    }
+                    catch( std::bad_alloc & err )
+                    {
+                        std::cerr << "otbTestMain 'control baseline test': Exception bad_alloc thrown: "<< std::endl;
+                        std::cerr <<(char*)err.what()<< std::endl;
+                        return -1;
+                    }
+                    catch(const std::exception& e)
+                    {
+                        std::cerr << "otbTestMain 'control baseline test': std::exception  thrown:"<< std::endl;
+                        std::cerr << e.what() <<  std::endl;
+                        return -1;
+                    }
+                    catch( ... )
+                    {
+                        std::cerr << "otbTestMain 'control baseline test': Unknown exception thrown !" << std::endl;
+                        return -1;
+                    }
+                        std::cout << "-------------  End control baseline tests    -------------"<<std::endl;
+                } // Fin else de if( lFlagRegression == false )
+        } // if (result==EXIT_SUCCESS)
+        return result;
     }
   PrintAvailableTests();
   std::cerr << "Echec: " << testToRun << ": Pas de test identifie " << testToRun << "\n";
