@@ -8,8 +8,6 @@
 
   Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
   See OTBCopyright.txt for details.
-
-  This code is from a Julien Radoux contribution.
   
   Some parts of this code are derived from ITK. See ITKCopyright.txt
   for details.
@@ -75,34 +73,16 @@ public:
   /** Image size "typedef" definition. */
   typedef typename InputImageType::SizeType SizeType;
 
+  typedef std::vector<FunctorType> FunctorVectorType; 
 
   /** return class name. */
   itkTypeMacro(UnaryImageFunctorWithVectorImageFilter, itk::InPlaceImageFilter);
-  
-
-
-   /** Get the functor object.  The functor is returned by reference. 
-    * (Functors do not have to derive from itk::LightObject, so they do 
-    * not necessarily have a reference count. So we cannot return a 
-    * SmartPointer.) */
-   FunctorType& GetFunctor() { return m_Functor; }; 
-   const FunctorType& GetFunctor() const { return m_Functor; }; 
-  
-   /** Set the functor object.  This replaces the current Functor with a 
-    * copy of the specified Functor. This allows the user to specify a 
-    * functor that has ivars set differently than the default functor.
-    * This method requires an operator!=() be defined on the functor 
-    * (or the compiler's default implementation of operator!=() being 
-    * appropriate). */
-   void SetFunctor(const FunctorType& functor) 
-     { 
-       if (m_Functor != functor) 
- 	{ 
- 	  m_Functor = functor; 
- 	  this->Modified(); 
- 	} 
-     } 
-   
+    
+  /** Get the functor list */
+  FunctorVectorType& GetFunctorVector(void)
+    {
+      return m_FunctorVector;
+    }
 
  protected:
   UnaryImageFunctorWithVectorImageFilter();
@@ -135,7 +115,7 @@ public:
                         
 private:
   /** Ponderation declaration*/
-  FunctorType m_Functor;
+  FunctorVectorType m_FunctorVector;
 
 };
 

@@ -22,11 +22,13 @@
 #ifndef __otbImageToLuminanceImageFilter_h
 #define __otbImageToLuminanceImageFilter_h
 
+#include "otb_6S.h"
 #include "otbUnaryImageFunctorWithVectorImageFilter.h"
 #include "otbVectorImage.h"
 #include "itkNumericTraits.h"
 #include "itkVariableLengthVector.h"
 
+#include <fstream>
 
 namespace otb
 {
@@ -61,7 +63,6 @@ namespace otb
 	      double temp; 
  	      temp = static_cast<double>(inPixel)/m_Alpha + m_Beta; 
 	      outPixel = static_cast<TOutput>(temp);
-	      
 	      return outPixel;
 	    }
 
@@ -133,33 +134,35 @@ public:
    
   
  protected:
-  ImageToLuminanceImageFilter();
-  virtual ~ImageToLuminanceImageFilter();
+  
+  ImageToLuminanceImageFilter()
+  {
+    m_Alpha.SetSize(1);
+    m_Beta.SetSize(1);
+    m_Alpha.Fill(1);
+    m_Beta.Fill(0);
+  };
+  virtual ~ImageToLuminanceImageFilter(){};
 
-  /** ImageToLuminanceImageFilter can be implemented as a multithreaded filter.
-   * Therefore, this implementation provides a ThreadedGenerateData() routine
-   * which is called for each processing thread. The output image data is
-   * allocated automatically by the superclass prior to calling
-   * ThreadedGenerateData().  ThreadedGenerateData can only write to the
-   * portion of the output image specified by the parameter
-   * "outputRegionForThread"
-   *
-   * \sa ImageToImageFilter::ThreadedGenerateData(),
-   *     ImageToImageFilter::GenerateData()  */
-  void ThreadedGenerateData(const OutputImageRegionType &outputRegionForThread, int threadId);
+  virtual void BeforeThreadedGenerateData(void)
+    {
+      this->GetFunctorVector().clear();
+      for(unsigned int i = 0;i<this->GetInput()->GetNumberOfComponentsPerPixel();++i)
+	{
+	  FunctorType functor;
+	  functor.SetAlpha(m_Alpha[i]);
+	  functor.SetBeta(m_Beta[i]);
+	  this->GetFunctorVector().push_back(functor);
+	}
+    }
   
                         
 private:
   /** Ponderation declaration*/
   VectorType m_Alpha;
   VectorType m_Beta;
-
 };
 
 } // end namespace otb
-
-#ifndef OTB_MANUAL_INSTANTIATION
-#include "otbImageToLuminanceImageFilter.txx"
-#endif
 
 #endif

@@ -22,6 +22,7 @@
 #ifndef __otbLuminanceToReflectanceImageFilter_h
 #define __otbLuminanceToReflectanceImageFilter_h
 
+#include "otb_6S.h"
 #include "otbUnaryImageFunctorWithVectorImageFilter.h"
 #include "otbVectorImage.h"
 #include "otbMath.h"
@@ -140,9 +141,9 @@ public:
   itkGetConstReferenceMacro(Day, int);
 
  /** Set the mounth. */
-  itkSetMacro(Mounth, int);
+  itkSetMacro(Month, int);
   /** Give the mounth. */
-  itkGetConstReferenceMacro(Mounth, int);
+  itkGetConstReferenceMacro(Month, int);
    
     /** Set the flux normalization coefficient. */
   void SetFluxNormalizationCoefficient(double coef)
@@ -160,22 +161,54 @@ public:
   itkGetConstReferenceMacro(IsSetFluxNormalizationCoefficient, bool);
 
  protected:
-  LuminanceToReflectanceImageFilter();
-  virtual ~LuminanceToReflectanceImageFilter();
+  /** Constructor */
+  LuminanceToReflectanceImageFilter()
+    {
+    m_ZenithalSolarRadius = 1.;
+    m_FluxNormalizationCoefficient = 1.;
+    m_SolarIllumination.SetSize(1);
+    m_SolarIllumination.Fill(1.);
+    m_Month = 1;
+    m_Day = 1;
+    m_IsSetFluxNormalizationCoefficient = false;
+    };
+  /** Destructor */
+  virtual ~LuminanceToReflectanceImageFilter(){};
 
-  /** LuminanceToReflectanceImageFilter can be implemented as a multithreaded filter.
-   * Therefore, this implementation provides a ThreadedGenerateData() routine
-   * which is called for each processing thread. The output image data is
-   * allocated automatically by the superclass prior to calling
-   * ThreadedGenerateData().  ThreadedGenerateData can only write to the
-   * portion of the output image specified by the parameter
-   * "outputRegionForThread"
-   *
-   * \sa ImageToImageFilter::ThreadedGenerateData(),
-   *     ImageToImageFilter::GenerateData()  */
-  void ThreadedGenerateData(const OutputImageRegionType &outputRegionForThread, int threadId);
-  
-                        
+  /** Update the functor list */
+  virtual void BeforeThreadedGenerateData(void)
+    {
+       this->GetFunctorVector().clear();
+      for(unsigned int i = 0;i<this->GetInput()->GetNumberOfComponentsPerPixel();++i)
+	{
+	  FunctorType functor;
+	  double coefTemp = 0.;  
+	  if (!m_IsSetFluxNormalizationCoefficient)
+	    {
+	      if (m_Day*m_Month != 0 && m_Day<32 && m_Month<12)
+		{
+		  otb_6s_real dsol = 0.;
+		  otb_6s_integer day = static_cast<otb_6s_integer>(m_Day);
+		  otb_6s_integer month = static_cast<otb_6s_integer>(m_Month);
+		  int cr(0);
+		  cr = otb_6s_varsol_(&day, &month, &dsol);
+		  coefTemp = vcl_cos(m_ZenithalSolarRadius)*static_cast<double>(dsol);
+		}
+	      else
+		{
+		  itkExceptionMacro( << "Day has to be included between 1 and 31, Month beetween 1 and 12.");
+		}
+	    }
+	  else
+	    {
+	      coefTemp = vcl_cos(m_ZenithalSolarRadius)*m_FluxNormalizationCoefficient*m_FluxNormalizationCoefficient;
+	    }
+	  functor.SetIlluminationCorrectionCoefficient(1. / coefTemp);
+	  functor.SetSolarIllumination(static_cast<double>(m_SolarIllumination[i]));
+	  this->GetFunctorVector().push_back(functor);
+	}
+    }
+                 
 private:
 
   /** Set the zenithal soalr radius. */
@@ -185,7 +218,7 @@ private:
   /* Acquisition day. */
   int m_Day;
   /* Acquisition mounth. */
-  int m_Mounth;
+  int m_Month;
   /** Solar illumination value. */
   VectorType m_SolarIllumination;
   /** Used to know if the user has set a value for the FluxNormalizationCoefficient parameter
@@ -195,9 +228,4 @@ private:
 };
 
 } // end namespace otb
-
-#ifndef OTB_MANUAL_INSTANTIATION
-#include "otbLuminanceToReflectanceImageFilter.txx"
-#endif
-
 #endif

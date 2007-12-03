@@ -55,16 +55,11 @@ namespace otb
 	  void SetBeta(double beta){ m_ImToLumFunctor.SetBeta(beta); };
 	  void SetSolarIllumination(double solarIllumination){ m_LumToReflecFunctor.SetSolarIllumination(solarIllumination); };
 	  void SetIlluminationCorrectionCoefficient(double coef){ m_LumToReflecFunctor.SetIlluminationCorrectionCoefficient(coef); };
-	  void SetDay(int day){ m_LumToReflecFunctor.SetDay(day); }
-	  void SetMounth(int mounth){ m_LumToReflecFunctor.SetMounth(mounth); }
 	  
 	  double GetAlpha(){ return m_ImToLumFunctor.GetAlpha();};
 	  double GetBeta(){ return m_ImToLumFunctor.GetBeta();};
 	  double GetSolarIllumination(){ return  m_LumToReflecFunctor.GetSolarIllumination();};
 	  double GetIlluminationCorrectionCoefficient(){ return m_LumToReflecFunctor.GetIlluminationCorrectionCoefficient();};
-	  int GetDay(){ return m_LumToReflecFunctor.GetMounth();};
-	  int GetMounth(){ return m_LumToReflecFunctor.GetDay();};
- 
 
 	  inline TOutput operator() (const TInput & inPixel) 
 	    {
@@ -174,26 +169,62 @@ public:
     /** Get the acquisition day. */
     itkGetConstReferenceMacro(Day, int);
     /** Set the acquisition mounth. */
-	  itkSetMacro(Mounth, int);
+	  itkSetMacro(Month, int);
 	  /** Set the  acquisition mounth. */
-    itkGetConstReferenceMacro(Mounth, int);
+    itkGetConstReferenceMacro(Month, int);
 	  
   
  protected:
-  ImageToReflectanceImageFilter();
-  virtual ~ImageToReflectanceImageFilter();
+  ImageToReflectanceImageFilter()
+    {
+      m_Alpha.SetSize(1);
+      m_Alpha.Fill(0);
+      m_Beta.SetSize(1);
+      m_Beta.Fill(0);
+      m_ZenithalSolarRadius = 1.;
+      m_FluxNormalizationCoefficient = 1.;
+      m_SolarIllumination.Fill(1.);
+      m_IsSetFluxNormalizationCoefficient = false;
+      m_Day = 1;
+      m_Month = 1;
 
-  /** ImageToReflectanceImageFilter can be implemented as a multithreaded filter.
-   * Therefore, this implementation provides a ThreadedGenerateData() routine
-   * which is called for each processing thread. The output image data is
-   * allocated automatically by the superclass prior to calling
-   * ThreadedGenerateData().  ThreadedGenerateData can only write to the
-   * portion of the output image specified by the parameter
-   * "outputRegionForThread"
-   *
-   * \sa ImageToImageFilter::ThreadedGenerateData(),
-   *     ImageToImageFilter::GenerateData()  */
-  void ThreadedGenerateData(const OutputImageRegionType &outputRegionForThread, int threadId);
+    };
+  virtual ~ImageToReflectanceImageFilter(){};
+
+  virtual void BeforeThreadedGenerateData(void)
+    {
+      this->GetFunctorVector().clear();
+      for(unsigned int i = 0;i<this->GetInput()->GetNumberOfComponentsPerPixel();++i)
+	{
+	  FunctorType functor;
+	  double coefTemp = 0.;  
+	  if (!m_IsSetFluxNormalizationCoefficient)
+	    {
+	      if (m_Day*m_Month != 0 && m_Day<32 && m_Month<12)
+		{
+		  otb_6s_real dsol = 0.;
+		  otb_6s_integer day = static_cast<otb_6s_integer>(m_Day);
+		  otb_6s_integer mounth = static_cast<otb_6s_integer>(m_Month);
+		  int cr(0);
+		  cr = otb_6s_varsol_(&day, &mounth, &dsol);
+		  coefTemp = vcl_cos(m_ZenithalSolarRadius)*static_cast<double>(dsol);
+		}
+	      else
+		{
+		  itkExceptionMacro( << "Day has to be included between 1 and 31, Month beetween 1 and 12.");
+		}
+	    }
+	  else
+	    {
+	      coefTemp = vcl_cos(m_ZenithalSolarRadius)*m_FluxNormalizationCoefficient*m_FluxNormalizationCoefficient;
+	    }
+	  functor.SetIlluminationCorrectionCoefficient(1. / coefTemp);
+	  functor.SetAlpha(m_Alpha[i]);
+	  functor.SetBeta(m_Beta[i]);
+	  functor.SetSolarIllumination(m_SolarIllumination[i]);
+	  this->GetFunctorVector().push_back(functor);
+	}
+    }
   
                         
 private:
@@ -211,14 +242,10 @@ private:
   bool m_IsSetFluxNormalizationCoefficient;
   /** Acquisition Day*/
   int m_Day;
-  /** Acquisition Mounth*/
-  int m_Mounth;
+  /** Acquisition Month*/
+  int m_Month;
 };
 
 } // end namespace otb
-
-#ifndef OTB_MANUAL_INSTANTIATION
-#include "otbImageToReflectanceImageFilter.txx"
-#endif
 
 #endif

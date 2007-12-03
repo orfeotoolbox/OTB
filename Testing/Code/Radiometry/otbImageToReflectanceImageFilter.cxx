@@ -33,7 +33,7 @@ int otbImageToReflectanceImageFilter(int argc, char * argv[])
       const double radius = static_cast<double>(atof(argv[3]));
       double flux = 0.;
       int day = 1;
-      int mounth = 1;
+      int month = 1;
 
       if (argc==17)
 	{
@@ -42,7 +42,7 @@ int otbImageToReflectanceImageFilter(int argc, char * argv[])
       else
 	{
 	  day = atoi(argv[16]);
-	  mounth = atoi(argv[17]); 
+	  month = atoi(argv[17]); 
 	}
 
       const unsigned int Dimension = 2;
@@ -92,7 +92,7 @@ int otbImageToReflectanceImageFilter(int argc, char * argv[])
       else
 	{
 	  filter->SetDay(day);
-	  filter->SetMounth(mounth); 
+	  filter->SetMonth(month); 
 	}
 
       filter->SetInput(reader->GetOutput());

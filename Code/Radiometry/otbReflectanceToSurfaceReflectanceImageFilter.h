@@ -146,32 +146,40 @@ namespace otb
 
        
     protected:
-      ReflectanceToSurfaceReflectanceImageFilter();
-      virtual ~ReflectanceToSurfaceReflectanceImageFilter();
+      /** Constructor */
+      ReflectanceToSurfaceReflectanceImageFilter()
+	{
+	  m_AtmosphericRadiativeTerms = AtmosphericRadiativeTerms::New();
+	};
+      /** Destructor */
+      virtual ~ReflectanceToSurfaceReflectanceImageFilter(){};
    
-      /** Initialize some accumulators before the threads run. */
-      void BeforeThreadedGenerateData ();
-      /** ImageToLuminanceImageFilter can be implemented as a multithreaded filter.
-       * Therefore, this implementation provides a ThreadedGenerateData() routine
-       * which is called for each processing thread. The output image data is
-       * allocated automatically by the superclass prior to calling
-       * ThreadedGenerateData().  ThreadedGenerateData can only write to the
-       * portion of the output image specified by the parameter
-       * "outputRegionForThread"
-       *
-       * \sa ImageToImageFilter::ThreadedGenerateData(),
-       *     ImageToImageFilter::GenerateData()  */
-      void ThreadedGenerateData(const OutputImageRegionType &outputRegionForThread, int threadId);
-      
-      
+      /** Initialize the functor vector */
+      void BeforeThreadedGenerateData ()
+	{
+	  double coef;
+	  double res;
+	  coef = static_cast<double>(m_AtmosphericRadiativeTerms->GetTotalGaseousTransmission()
+				     * m_AtmosphericRadiativeTerms->GetDownwardTransmittance()
+				     * m_AtmosphericRadiativeTerms->GetUpwardTransmittance()     );
+	  coef = 1 / coef;
+	  res = -m_AtmosphericRadiativeTerms->GetIntrinsicAtmosphericReflectance() * coef;
+
+	  this->GetFunctorVector().clear();
+	  for(unsigned int i = 0;i<this->GetInput()->GetNumberOfComponentsPerPixel();++i)
+	    {
+	      FunctorType functor;
+	      functor.SetCoefficient(coef);
+	      functor.SetResidu(res);
+	      functor.SetSphericalAlbedo(static_cast<double>(m_AtmosphericRadiativeTerms->GetSphericalAlbedo()));
+	      this->GetFunctorVector().push_back(functor);
+	    }
+	}
+ 
     private:
       AtmosphericRadiativeTermsPointerType m_AtmosphericRadiativeTerms;
     };
   
 } // end namespace otb
-
-#ifndef OTB_MANUAL_INSTANTIATION
-#include "otbReflectanceToSurfaceReflectanceImageFilter.txx"
-#endif
 
 #endif
