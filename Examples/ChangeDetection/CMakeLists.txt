@@ -3,9 +3,12 @@ INCLUDE_REGULAR_EXPRESSION("^.*$")
 
 # Adjust the compiler flags to avoid problems with multiline comment.
 IF(CMAKE_COMPILER_IS_GNUCXX)
-  # Hide warnings in code.
-  SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-comment")
+  SET_SOURCE_FILES_PROPERTIES(
+        KullbackLeiblerDistanceChDet.cxx
+        PROPERTIES COMPILE_FLAGS -Wno-comment
+  )
 ENDIF(CMAKE_COMPILER_IS_GNUCXX)
+
 
 
 ADD_EXECUTABLE(ChangeDetectionFrameworkExample ChangeDetectionFrameworkExample.cxx )
