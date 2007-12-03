@@ -18,3 +18,6 @@ TARGET_LINK_LIBRARIES(SmarterFilteringPipeline OTBCommon OTBIO)
 
 ADD_EXECUTABLE(SimpleViewer SimpleViewer.cxx )
 TARGET_LINK_LIBRARIES(SimpleViewer OTBCommon OTBIO OTBGui OTBVisu)
+
+ADD_EXECUTABLE(OrthoFusion OrthoFusion.cxx )
+TARGET_LINK_LIBRARIES(OrthoFusion OTBProjections OTBCommon OTBIO)
