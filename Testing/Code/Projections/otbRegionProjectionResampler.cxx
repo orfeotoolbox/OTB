@@ -108,8 +108,8 @@ int otbRegionProjectionResampler( int argc, char* argv[] )
         // Set parameters ...
         reader->SetFileName(argv[1]);
         writer->SetFileName(argv[2]);
-        rescaler->SetOutputMinimum(50);
-        rescaler->SetOutputMaximum(500);
+        rescaler->SetOutputMinimum(0);
+        rescaler->SetOutputMaximum(255);
 
         // Read meta data (ossimKeywordlist)
         reader->GenerateOutputInformation();

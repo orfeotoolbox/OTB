@@ -161,8 +161,8 @@ otbGenericMsgDebugMacro(<< "extractorwriter created" );
 
 typedef itk::RescaleIntensityImageFilter<ImageType,CharImageType>  RescalerType;
 RescalerType::Pointer	                 rescaler=RescalerType::New();
-rescaler->SetOutputMinimum(50);
-rescaler->SetOutputMaximum(400);
+rescaler->SetOutputMinimum(0);
+rescaler->SetOutputMaximum(255);
 otbGenericMsgDebugMacro(<< "rescaler created" );
 
 /********************************************************/
