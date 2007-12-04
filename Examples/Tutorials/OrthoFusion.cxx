@@ -259,4 +259,5 @@ int main( int argc, char* argv[] )
   return EXIT_SUCCESS;
 
 }
-    // Software Guide : EndCodeSnippet	
+    // Software Guide : EndCodeSnippet
+	

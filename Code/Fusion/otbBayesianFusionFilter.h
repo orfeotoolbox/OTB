@@ -105,7 +105,7 @@ namespace otb
 	      obsMat *= m_Vcondopt; 
 	      for (unsigned int i=0; i<obs.GetSize();i++)
 		{
-		  obs[i] = obsMat(0,i);
+		  obs[i] = obsMat(0,static_cast<double>(i));
 		}
 	      return obs;
 	    }

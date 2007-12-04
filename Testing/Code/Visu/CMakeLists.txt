@@ -99,7 +99,7 @@ ADD_TEST(viTuImageToGrayscaleAnaglyphImageFilterNew ${VISU_TESTS}
 )
 
 ADD_TEST(viTvImageToGrayscaleAnaglyphImageFilter ${VISU_TESTS}
-	--compare-image ${TOL}  
+	--compare-image  ${EPSILON} 
 	${BASELINE}/viTvGrayscaleAnaglyphFilterResult.tif
 	${TEMP}/viTvGrayscaleAnaglyphFilterResult.tif
 	otbImageToGrayscaleAnaglyphImageFilter
