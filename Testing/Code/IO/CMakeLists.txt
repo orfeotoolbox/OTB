@@ -215,6 +215,13 @@ ADD_TEST(ioTvStreamingIFWriterLUMWithStreaming ${IO_TESTS}
          10
          )
 
+# ---  STREAMING  Pipeline Example ---
+ADD_TEST(ioTvSreamingPipeline_TIF2PNG ${IO_TESTS} 
+         otbPipeline
+         ${INPUTDATA}/cthead1.png #ROI_IKO_PAN_LesHalles.tif
+         ${TEMP}/ioPipeline.png
+         )
+
 
 # -------            otb::BSQImageIO   ------------------------------
 # CanRead()
@@ -1090,7 +1097,7 @@ ADD_TEST(ioTvSpatialObjectDXFReader ${IO_TESTS}
 	 50
 )
 
-# -------     Test pour la lecture des métadonnées OSSIM  ------------------------
+# -------     Test pour la lecture des mï¿½tadonnï¿½es OSSIM  ------------------------
 
 # ---  Quickbird Metadata ---
 ADD_TEST(ioTvOSSIMImageMetaDataReader ${IO_TESTS} 
@@ -1203,6 +1210,7 @@ otbDEMHandlerTest.cxx
 otbDEMToImageGeneratorNew.cxx
 otbDEMToImageGeneratorTest.cxx
 otbImageGeometryHandlerNew.cxx
+otbPipeline.cxx
 )
 
 INCLUDE_DIRECTORIES("${OTBTesting_BINARY_DIR}")
