@@ -61,8 +61,6 @@ namespace otb
       
       typedef typename Superclass::InputPointType        InputPointType;
       typedef typename Superclass::OutputPointType       OutputPointType; 
-      typedef typename Superclass::DEMHandlerType        DEMHandlerType;
-      typedef typename Superclass::DEMHandlerPointerType DEMHandlerPointerType;
       
       /** Method for creation through the object factory. */
       itkNewMacro( Self );

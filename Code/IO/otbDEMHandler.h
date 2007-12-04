@@ -27,6 +27,7 @@
 #include "base/ossimFilename.h"
 #include "itkImageRegionIteratorWithIndex.h"
 #include "itkIndent.h"
+#include "itkSimpleFastMutexLock.h"
 
 namespace otb
 {
@@ -72,6 +73,8 @@ namespace otb
       void PrintSelf(std::ostream& os, Indent indent) const;
       
       ossimElevManager* m_ElevManager;
+
+      itk::SimpleFastMutexLock m_Mutex;
       
     };
   

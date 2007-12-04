@@ -72,10 +72,7 @@ namespace otb
     {
 			otbMsgDevMacro(<< "USING DEM ! ") ;
 			otbMsgDevMacro(<< "Point : (" << point[1] << "," << point[0] << ")");
-			DEMHandlerPointerType demHandler = DEMHandlerType::New();
-			demHandler->OpenDEMDirectory(this->m_DEMDirectory.c_str());
-			// double height = this->m_DEMHandler->GetHeightAboveMSL(point);
-			double height = demHandler->GetHeightAboveMSL(point);
+			double height = this->m_DEMHandler->GetHeightAboveMSL(point);
 			otbMsgDevMacro(<< "height : " << height) ;
 			ossimGPoint.height(height);
     }
