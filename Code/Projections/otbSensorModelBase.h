@@ -37,22 +37,22 @@ namespace otb
    *  This class allows to transform a geographic point in (lat,long) to a point in the sensor geometry.
    *  (lat,lon) -> (i,j) ou (lat,lon,h) -> (i,j)
    */
-template <class TScalarType,
-          unsigned int NInputDimensions=3,
-          unsigned int NOutputDimensions=2,
-          unsigned int NParametersDimensions=3>
-class ITK_EXPORT SensorModelBase : public itk::Transform<TScalarType,          
-										                                     NInputDimensions,  
-			            							                         NOutputDimensions> 
-{
+  template <class TScalarType,
+    unsigned int NInputDimensions=3,
+    unsigned int NOutputDimensions=2,
+    unsigned int NParametersDimensions=3>
+    class ITK_EXPORT SensorModelBase : public itk::Transform<TScalarType,          
+    NInputDimensions,  
+    NOutputDimensions> 
+    {
 
-		public :
+      public :
 
       /** Standard class typedefs. */
       typedef SensorModelBase                             Self;
       typedef itk::Transform< TScalarType,
-                              NInputDimensions,
-                              NOutputDimensions >         Superclass;
+      NInputDimensions,
+      NOutputDimensions >         Superclass;
       typedef itk::SmartPointer<Self>                     Pointer;
       typedef itk::SmartPointer<const Self>               ConstPointer;
       
@@ -84,39 +84,40 @@ class ITK_EXPORT SensorModelBase : public itk::Transform<TScalarType,
       virtual void SetImageGeometry(ossimKeywordlist &geom_kwl);
       
      
-//      itkGetObjectMacro(DEMHandler, DEMHandlerType);
+      //      itkGetObjectMacro(DEMHandler, DEMHandlerType);
       
-/*      virtual void SetDEMHandler(DEMHandlerType* _arg) 
-      { 
-				if (this->m_DEMHandler != _arg) 
-	  		{ 
-	    		this->m_DEMHandler = _arg; 
-	    		this->Modified(); 
-	    		this->UseDEM(true);
-	  		} 
-      }*/
+      /*      virtual void SetDEMHandler(DEMHandlerType* _arg) 
+	      { 
+	      if (this->m_DEMHandler != _arg) 
+	      { 
+	      this->m_DEMHandler = _arg; 
+	      this->Modified(); 
+	      this->UseDEM(true);
+	      } 
+	      }*/
       
       virtual void SetDEMDirectory(const std::string& directory)
       {
-				m_DEMHandler->OpenDEMDirectory(directory.c_str());
-				m_DEMIsLoaded=true;
-				this->EnableDEM();	
+	/* m_DEMHandler->OpenDEMDirectory(directory.c_str()); */
+	m_DEMDirectory = directory;
+	m_DEMIsLoaded=true;
+	this->EnableDEM();	
       }
 			
-			virtual void DisableDEM()
-			{
-				m_UseDEM = false; 
-				this->Modified();
-			}
+      virtual void DisableDEM()
+      {
+	m_UseDEM = false; 
+	this->Modified();
+      }
       
       virtual void EnableDEM() 
-			{ 
-				if (m_DEMIsLoaded) 
-					m_UseDEM = true; 
-				this->Modified();
-			} 
+      { 
+	if (m_DEMIsLoaded) 
+	m_UseDEM = true; 
+	this->Modified();
+      } 
 
-   protected:
+      protected:
       SensorModelBase(); 
       virtual ~SensorModelBase();
       
@@ -135,14 +136,16 @@ class ITK_EXPORT SensorModelBase : public itk::Transform<TScalarType,
       bool m_UseDEM ;
 			
       /** Object that read and use DEM */
-      DEMHandlerPointerType m_DEMHandler;
+      //DEMHandlerPointerType m_DEMHandler;
+	
+      std::string m_DEMDirectory;
 			
-   private :
+      private :
       SensorModelBase(const Self&); //purposely not implemented
       void operator=(const Self&); //purposely not implemented
 			
-			/** Specify if DEM is loaded */
-			bool m_DEMIsLoaded ;
+      /** Specify if DEM is loaded */
+      bool m_DEMIsLoaded ;
      
     };
 

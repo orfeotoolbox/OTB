@@ -106,7 +106,7 @@ ForwardSensorModel< TScalarType,
 			
 //			otbMsgDevMacro(<< "PointP Before iter : (" << point[1] << "," << point[0] <<")");
 			DEMHandlerPointerType demHandler = DEMHandlerType::New();
-			demHandler->OpenDEMDirectory(this->GetDEMDirectory().c_str());
+			demHandler->OpenDEMDirectory(this->m_DEMDirectory.c_str());
 			// heightTmp = this->m_DEMHandler->GetHeightAboveMSL(point);
 			heightTmp = demHandler->GetHeightAboveMSL(point);
 			otbMsgDevMacro(<< "height : " << heightTmp) ;
