@@ -104,8 +104,11 @@ ForwardSensorModel< TScalarType,
 			point[0] = ossimGPointRef.lon;
 			point[1] = ossimGPointRef.lat;
 			
-//			otbMsgDevMacro(<< "PointP Before iter : (" << point[1] << "," << point[0] <<")");	
-			heightTmp = this->m_DEMHandler->GetHeightAboveMSL(point);
+//			otbMsgDevMacro(<< "PointP Before iter : (" << point[1] << "," << point[0] <<")");
+			DEMHandlerPointerType demHandler = DEMHandlerType::New();
+			demHandler->OpenDEMDirectory(this->m_DEMDirectory.c_str());
+			// heightTmp = this->m_DEMHandler->GetHeightAboveMSL(point);
+			heightTmp = demHandler->GetHeightAboveMSL(point);
 			otbMsgDevMacro(<< "height : " << heightTmp) ;
 			
 			this->m_Model->lineSampleHeightToWorld(ossimPoint, heightTmp, ossimGPointRef);	
