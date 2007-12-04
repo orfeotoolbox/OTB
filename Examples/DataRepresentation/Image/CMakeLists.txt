@@ -53,7 +53,7 @@ SET(TOL 0.0)
 
 # ------- ImageAdaptor4Test----------
 
-ADD_TEST(ImageAdaptor4Test ${EXE_TESTS}
+ADD_TEST(ImageAdaptor4Test1 ${EXE_TESTS}
 	--compare-n-images ${TOL} 1
 	${BASELINE}/ImageAdaptorThresholdingA.png
 	${TEMP}/ImageAdaptorThresholdingA.png
@@ -65,7 +65,7 @@ ADD_TEST(ImageAdaptor4Test ${EXE_TESTS}
 
 # ------- ImageAdaptor4Test----------
 
-ADD_TEST(ImageAdaptor4Test ${EXE_TESTS}
+ADD_TEST(ImageAdaptor4Test2 ${EXE_TESTS}
 	--compare-n-images ${TOL} 1
 	${BASELINE}/ImageAdaptorThresholdingB.png
 	${TEMP}/ImageAdaptorThresholdingB.png
@@ -73,6 +73,13 @@ ADD_TEST(ImageAdaptor4Test ${EXE_TESTS}
 	${INPUTDATA}/QB_Suburb.png
 	${TEMP}/ImageAdaptorThresholdingB.png
     200
+)
+
+# ------- Image5Test----------
+
+ADD_TEST(Image5Test ${EXE_TESTS}
+	Image5Test
+	${TEMP}/Image5.png
 )
 
 

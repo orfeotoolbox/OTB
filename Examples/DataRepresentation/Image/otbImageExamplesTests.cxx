@@ -26,9 +26,14 @@
 void RegisterTests()
 {
 REGISTER_TEST(ImageAdaptor4Test);
+REGISTER_TEST(Image5Test);
 }
 
 #undef main
 #define main ImageAdaptor4Test
 #include "ImageAdaptor4.cxx"
+
+#undef main
+#define main Image5Test
+#include "Image5.cxx"
 
