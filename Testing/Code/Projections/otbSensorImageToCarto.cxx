@@ -173,7 +173,7 @@ if( toto.valid() == false)
 ImageType::Pointer  			 inputimage= reader->GetOutput();
 ImageType::IndexType 			 currentindex;
 ImageType::IndexType 			 currentindexbis;
-ImageType::IndexType 			 pixelindex;
+//ImageType::IndexType 			 pixelindex;
 ImageType::IndexType 			 pixelindexbis;
 otbGenericMsgDebugMacro(<< "Reader created " ); 
 
