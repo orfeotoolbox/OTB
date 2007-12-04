@@ -22,7 +22,7 @@
 #include "otbImage.h"
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
-#include "itkCosImageFilter.h"
+#include "itkCastImageFilter.h"
 
 int otbUnaryImageFunctorWithVectorImageFilter(int argc, char * argv[])
 {
@@ -35,7 +35,7 @@ int otbUnaryImageFunctorWithVectorImageFilter(int argc, char * argv[])
       typedef double PixelType;
       typedef otb::VectorImage<PixelType,Dimension>                           InputImageType;
       typedef InputImageType::InternalPixelType                               InternalPixelType;
-      typedef itk::Functor::Cos<InternalPixelType,InternalPixelType>          FunctorType;
+      typedef itk::Functor::Cast<InternalPixelType,InternalPixelType>          FunctorType;
       typedef otb::VectorImage<PixelType,Dimension>                           OutputImageType;
       typedef otb::ImageFileReader<InputImageType>                            ReaderType;
       typedef otb::ImageFileWriter<OutputImageType>                           WriterType;
