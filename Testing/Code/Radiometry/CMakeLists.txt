@@ -261,7 +261,7 @@ ADD_TEST(raTvImageToReflectanceImageFilter ${RADIOMETRY_TESTS}
 	0.9923885328 #d/d0 corresponding to the date 03/05
          ) 
 
-ADD_TEST(raTvImageToReflectanceImageFilterDayMounth ${RADIOMETRY_TESTS} 
+ADD_TEST(raTvImageToReflectanceImageFilterDayMonth ${RADIOMETRY_TESTS} 
   --compare-image ${EPSILON}  ${BASELINE}/raTvImageToReflectanceImageFilter.tif
                           ${TEMP}/raTvImageToReflectanceImageFilterDayMounth.tif
         otbImageToReflectanceImageFilter
