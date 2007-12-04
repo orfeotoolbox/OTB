@@ -116,7 +116,7 @@ void
 StreamingImageVirtualWriter<TInputImage>
 ::SetTilingStreamDivisions(void)
 {
-	m_CalculationDivision = SET_TILING_STREAM_DIVISIONS;
+	m_CalculationDivision = SET_TILING_WITH_SET_AUTOMATIC_NUMBER_OF_STREAM_DIVISIONS;
 	m_RegionSplitter = itk::ImageRegionMultidimensionalSplitter<InputImageDimension>::New();
   this->Modified();
 }
@@ -126,7 +126,7 @@ void
 StreamingImageVirtualWriter<TInputImage>
 ::SetTilingStreamDivisions(unsigned long nb_divisions)
 {
-	m_CalculationDivision = SET_NUMBER_OF_STREAM_DIVISIONS;
+	m_CalculationDivision = SET_TILING_WITH_SET_NUMBER_OF_STREAM_DIVISIONS;
 	m_NumberOfStreamDivisions = nb_divisions;
 	m_RegionSplitter = itk::ImageRegionMultidimensionalSplitter<InputImageDimension>::New();
   this->Modified();
@@ -263,15 +263,7 @@ StreamingImageVirtualWriter<TInputImage>
    */
   unsigned int numDivisions;
   numDivisions = static_cast<unsigned int>(CalculateNumberOfStreamDivisions());
-/*
-  numDivisionsFromSplitter = m_RegionSplitter->GetNumberOfSplits(outputRegion, numDivisions);
-  
-  // In tiling streaming mode, we keep the number of divisions calculed by splitter 
-  if ((numDivisionsFromSplitter < numDivisions)||(m_CalculationDivision==SET_TILING_STREAM_DIVISIONS))
-    {
-      numDivisions = numDivisionsFromSplitter;
-    }
-*/
+
   /**
    * Loop over the number of pieces, execute the upstream pipeline on each
    * piece, and copy the results into the output image.
