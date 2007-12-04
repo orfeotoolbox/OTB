@@ -199,6 +199,7 @@ StreamingImageVirtualWriter<TInputImage>
 	return StreamingTraitsType
     ::CalculateNumberOfStreamDivisions(this->GetInput(),
 				       this->GetInput()->GetLargestPossibleRegion(),
+                                       m_RegionSplitter,
 				       m_CalculationDivision,
 				       m_NumberOfStreamDivisions,
 				       m_BufferMemorySize,
@@ -212,27 +213,7 @@ std::string
 StreamingImageVirtualWriter<TInputImage>
 ::GetMethodUseToCalculateNumberOfStreamDivisions(void)
 {
-  switch(m_CalculationDivision)
-    {
-    case SET_NUMBER_OF_STREAM_DIVISIONS:
-      return "CalculationDivisionEnumType::SET_NUMBER_OF_STREAM_DIVISIONS";
-      break;
-    case SET_BUFFER_MEMORY_SIZE:
-      return "CalculationDivisionEnumType::SET_BUFFER_MEMORY_SIZE";
-      break;
-    case SET_BUFFER_NUMBER_OF_LINES:
-      return "CalculationDivisionEnumType::SET_BUFFER_NUMBER_OF_LINES";
-      break;
-    case SET_AUTOMATIC_NUMBER_OF_STREAM_DIVISIONS:
-      return "CalculationDivisionEnumType::SET_AUTOMATIC_NUMBER_OF_STREAM_DIVISIONS";
-      break;
-		case SET_TILING_STREAM_DIVISIONS:
-			return "CalculationDivisionEnumType::SET_TILING_STREAM_DIVISIONS";
-			break;
-    default:
-      return "unknown";
-      break;
-    }
+  return (StreamingTraitsType::GetMethodUseToCalculateNumberOfStreamDivisions(m_CalculationDivision));
 }
 /**
  *
@@ -280,15 +261,17 @@ StreamingImageVirtualWriter<TInputImage>
    * minimum of what the user specified via SetNumberOfStreamDivisions()
    * and what the Splitter thinks is a reasonable value.
    */
-  unsigned int numDivisions, numDivisionsFromSplitter;
+  unsigned int numDivisions;
   numDivisions = static_cast<unsigned int>(CalculateNumberOfStreamDivisions());
+/*
   numDivisionsFromSplitter = m_RegionSplitter->GetNumberOfSplits(outputRegion, numDivisions);
   
-  /** In tiling streaming mode, we keep the number of divisions calculed by splitter */
+  // In tiling streaming mode, we keep the number of divisions calculed by splitter 
   if ((numDivisionsFromSplitter < numDivisions)||(m_CalculationDivision==SET_TILING_STREAM_DIVISIONS))
     {
       numDivisions = numDivisionsFromSplitter;
     }
+*/
   /**
    * Loop over the number of pieces, execute the upstream pipeline on each
    * piece, and copy the results into the output image.
@@ -296,7 +279,7 @@ StreamingImageVirtualWriter<TInputImage>
   InputImageRegionType streamRegion;
   unsigned int piece;
   for (piece = 0;
-       piece < numDivisionsFromSplitter && !this->GetAbortGenerateData();
+       piece < numDivisions && !this->GetAbortGenerateData();
        piece++)
     {
       streamRegion = m_RegionSplitter->GetSplit(piece, numDivisions,outputRegion);
