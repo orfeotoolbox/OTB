@@ -338,13 +338,13 @@ int main(int ac, char* av[] )
 	                                baseline->second = RegressionTestAsciiFile(testFilenameAscii.c_str(),
 							 (baseline->first).c_str(),
 							 0,
-							 lToleranceDiffPixelImage);
+							 lEpsilon);
 		                        if (baseline->second != 0)
 		                        {
 		                                baseline->second = RegressionTestAsciiFile(testFilenameAscii.c_str(),
 							 (baseline->first).c_str(),
 							 1,
-							 lToleranceDiffPixelImage);
+							 lEpsilon);
 		                        }
 	                                result += baseline->second;
 	                        }
