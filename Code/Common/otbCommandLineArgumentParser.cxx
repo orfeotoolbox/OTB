@@ -41,14 +41,14 @@ CommandLineArgumentParseResult
 
 bool 
 CommandLineArgumentParseResult
-::IsOptionPresent(const char *option)const
+::IsOptionPresent(std::string option)const
 {
-  return (m_OptionMap.find(std::string(option)) != m_OptionMap.end());
+  return (m_OptionMap.find(option) != m_OptionMap.end());
 }
 
 std::string 
 CommandLineArgumentParseResult
-::GetParameterString(const char *option, unsigned int number)const
+::GetParameterString(std::string option, unsigned int number)const
 {
         if( this->IsOptionPresent(option) == false )
         {
@@ -56,7 +56,7 @@ CommandLineArgumentParseResult
         }
   
         OptionMapType::const_iterator it = m_OptionMap.begin();
-        it = m_OptionMap.find(std::string(option));
+        it = m_OptionMap.find(option);
         ParameterArrayType pat = (*it).second;
         std::string lString = pat[number];
         return ( lString );
@@ -77,10 +77,10 @@ CommandLineArgumentParseResult
 
 int  
 CommandLineArgumentParseResult
-::GetNumberOfParameters(const char *option)
+::GetNumberOfParameters(std::string option)
 {
   assert(IsOptionPresent(option));
-  return (m_OptionMap[std::string(option)].size());
+  return (m_OptionMap[option].size());
 }
 
 
@@ -135,13 +135,13 @@ CommandLineArgumentParser
 
 void 
 CommandLineArgumentParser
-::AddOption(const char *name, const  char * comment, char *synonim, int nParameters, bool obligatory )
+::AddOption(std::string name, std::string comment, std::string synonim, int nParameters, bool obligatory )
 {
   // Create a structure for the command
   OptionType option;
-  option.CommonName  = std::string(name);
-  option.Description = std::string(comment);
-  option.Synonim     = std::string(synonim);
+  option.CommonName  = name;
+  option.Description = comment;
+  option.Synonim     = synonim;
   option.NumberOfParameters = nParameters;
   option.NumberOfParametersFixed = true;
   option.Obligatory = obligatory;
@@ -154,13 +154,13 @@ CommandLineArgumentParser
 
 void 
 CommandLineArgumentParser
-::AddOptionNParams(const char *name, const char * comment, char *synonim, bool obligatory )
+::AddOptionNParams(std::string name, std::string comment, std::string synonim, bool obligatory )
 {
   // Create a structure for the command
   OptionType option;
-  option.CommonName  = std::string(name);
-  option.Description = std::string(comment);
-  option.Synonim     = std::string(synonim);
+  option.CommonName  = name;
+  option.Description = comment;
+  option.Synonim     = synonim;
   option.NumberOfParameters = -1;
   option.NumberOfParametersFixed = false;
   option.Obligatory = obligatory;

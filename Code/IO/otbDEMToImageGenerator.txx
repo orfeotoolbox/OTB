@@ -36,7 +36,7 @@ namespace otb
     m_OutputSize[1]=1;
     m_OutputOrigin[0]=0;
     m_OutputOrigin[1]=0;
-    m_DefaultUnknownValue = -32768; // Value defined in the norm for points strm doesn't have information.
+    m_DefaultUnknownValue = static_cast<PixelType>(-32768); // Value defined in the norm for points strm doesn't have information.
   }
   
   template<class TDEMImage>

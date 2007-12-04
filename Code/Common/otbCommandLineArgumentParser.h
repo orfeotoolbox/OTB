@@ -54,16 +54,16 @@ public:
   itkTypeMacro(CommandLineArgumentParseResult,itk::ProcessObject);
 
   /** Check whether the option was passed in or not */
-  bool IsOptionPresent(const char *option) const;
+  bool IsOptionPresent(std::string option) const;
 
   /** Get one of the parameters to the option */
 //  const char *GetOptionParameter(const char *option, unsigned int number = 0);
-  int GetNumberOfParameters(const char *option);
+  int GetNumberOfParameters(std::string option);
 
   void PrintSelf(std::ostream& os/*, itk::Indent indent*/) const;
 
 #define otbGetParameterMacro(name,type)                                                 \
-  virtual type GetParameter##name (const char *option, unsigned int number=0) const     \
+  virtual type GetParameter##name (std::string option, unsigned int number=0) const     \
   {                                                                                     \
         std::string parameter = this->GetParameterString(option, number);               \
         type lValeur;                                                                   \
@@ -85,7 +85,7 @@ public:
   otbGetParameterMacro(Double,double);
 
 
-  std::string           GetParameterString(const char *option, unsigned int number=0) const;
+  std::string           GetParameterString(std::string option, unsigned int number=0) const;
 
   std::string           GetInputImage(void) const;
   std::string           GetOutputImage(void) const;
@@ -98,7 +98,7 @@ protected:
 private:
 
   template< typename TypeValeur >
-  TypeValeur GetParameter(const char *option, unsigned int number=0) const;
+  TypeValeur GetParameter(std::string option, unsigned int number=0) const;
 
   typedef std::vector< std::string > ParameterArrayType;
   typedef std::map< std::string, ParameterArrayType > OptionMapType;
@@ -156,9 +156,9 @@ public:
 //  void AddOption(const char *name, const int nParameters, const char * comment);
   // at least one value
 
-  void AddOption(const char *name, const  char * comment, char *synonim = NULL, int nParameters = 1, bool obligatory =true);
+  void AddOption(std::string name, std::string comment, std::string synonim = NULL, int nParameters = 1, bool obligatory =true);
   // if -1 we do not know the number of parameters
-  void AddOptionNParams(const char *name, const char * comment, char *synonim = NULL, bool obligatory =true);
+  void AddOptionNParams(std::string name, std::string  comment, std::string synonim = NULL, bool obligatory =true);
   
   /** Add a different string that envokes the same option (--file and -f) */  
 //  void AddSynonim(const char *option, const char *synonim);
