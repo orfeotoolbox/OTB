@@ -138,14 +138,14 @@ AtmosphericRadiativeTerms
     }
   else
     {
-      itkExceptionMacro(<< "Can't insert value before iniatilize vector value..."<<std::endl);
+      itkExceptionMacro(<< "Can't insert value before iniatilizing vector value..."<<std::endl);
     }
 }
 
 
 
 /** GET ACCESSORS WITH VECTORS. */
-AtmosphericRadiativeTerms::DataVectorType
+AtmosphericRadiativeTerms::DataVectorType 
 AtmosphericRadiativeTerms
 ::GetIntrinsicAtmosphericReflectances()
 {

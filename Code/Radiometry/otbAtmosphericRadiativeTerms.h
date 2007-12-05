@@ -158,11 +158,11 @@ public:
   void SetValueByIndex(unsigned int id, const ValueType & val);
 
   /** Get methods with vectors. */
-  const DataVectorType & GetIntrinsicAtmosphericReflectances()const; 
-  const DataVectorType & GetSphericalAlbedos()const; 
-  const DataVectorType & GetTotalGaseousTransmissions()const; 
-  const DataVectorType & GetDownwardTransmittances()const; 
-  const DataVectorType & GetUpwardTransmittances()const; 
+  DataVectorType & GetIntrinsicAtmosphericReflectances(); 
+  DataVectorType & GetSphericalAlbedos(); 
+  DataVectorType & GetTotalGaseousTransmissions(); 
+  DataVectorType & GetDownwardTransmittances(); 
+  DataVectorType & GetUpwardTransmittances(); 
  /** Get methods with index. */
   double GetIntrinsicAtmosphericReflectances(unsigned int id); 
   double GetSphericalAlbedos(unsigned int id); 
