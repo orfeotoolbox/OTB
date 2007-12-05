@@ -170,7 +170,7 @@ public:
   double GetDownwardTransmittances(unsigned int id); 
   double GetUpwardTransmittances(unsigned int id);
 
-  //const ValueType & GetValueByIndex(unsigned int id) const;
+  const ValueType GetValueByIndex(unsigned int id) const;
  
   /** Initialization method.*/
   void ValuesInitialization(unsigned int nbChannel);

@@ -231,14 +231,14 @@ AtmosphericRadiativeTerms
 {
   return m_Values[id]->GetUpwardTransmittance();
 }
-/*
-const ValueType & 
+
+const AtmosphericRadiativeTerms::ValueType 
 AtmosphericRadiativeTerms
 ::GetValueByIndex(unsigned int id) const
 {
   return m_Values[id];
 }
-*/
+
 /**PrintSelf method */
 void 
 AtmosphericRadiativeTerms
