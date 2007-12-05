@@ -17,19 +17,19 @@ SET(BASICFILTERS_TESTS ${CXX_TEST_PATH}/otbBasicFiltersTests)
 
 
 ADD_TEST(bfTvFiltreLee1CanalPoupees ${BASICFILTERS_TESTS}  
-  --compare-image ${TOL}  ${BASELINE}/bfFiltreLee_05_05_04.png
-                          ${TEMP}/bfFiltreLee_05_05_04.png  
+  --compare-image ${TOL}  ${BASELINE}/bfFiltreLee_05_05_04.tif
+                          ${TEMP}/bfFiltreLee_05_05_04.tif
         otbLeeFilter
 	${INPUTDATA}/poupees_1canal.c1.hdr
-	${TEMP}/bfFiltreLee_05_05_04.png
+	${TEMP}/bfFiltreLee_05_05_04.tif
 	05 05 4.0)
 
 ADD_TEST(bfTvFiltreLee ${BASICFILTERS_TESTS}  
-  --compare-image ${TOL}  ${BASELINE}/bfFiltreLee_05_05_12.png
-                           ${TEMP}/bfFiltreLee_05_05_12.png  
+  --compare-image ${TOL}  ${BASELINE}/bfFiltreLee_05_05_12.tif
+                           ${TEMP}/bfFiltreLee_05_05_12.tif  
         otbLeeFilter
 	${INPUTDATA}/poupees.hdr
-	${TEMP}/bfFiltreLee_05_05_12.png
+	${TEMP}/bfFiltreLee_05_05_12.tif
 	05 05 12.0)
 
 #

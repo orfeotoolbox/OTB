@@ -39,8 +39,8 @@ int otbLeeFilter( int argc, char * argv[] )
         unsigned int  RadiusY((unsigned int)::atoi(argv[4]));
         double        NbLooks((double)::atof(argv[5]));
 
-        typedef unsigned char                                   InputPixelType;
-        typedef unsigned char   	                        OutputPixelType;
+        typedef double                                   InputPixelType;
+        typedef double    	                        OutputPixelType;
         const   unsigned int        	                        Dimension = 2;
 
         typedef otb::Image< InputPixelType,  Dimension >        InputImageType;
