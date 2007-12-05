@@ -26,7 +26,7 @@ namespace otb
   ::DEMHandler()
   {
     m_ElevManager=ossimElevManager::instance();
-    m_Mutex = itk::SimpleFastMutexLock();
+    m_Mutex.Unlock();
   }
 
 
