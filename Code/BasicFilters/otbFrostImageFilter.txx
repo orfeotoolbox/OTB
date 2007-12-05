@@ -156,7 +156,14 @@ void FrostImageFilter< TInputImage, TOutputImage>::ThreadedGenerateData(
       Moyenne   = sum  / double(neighborhoodSize);
       Variance  = sum2 / double(neighborhoodSize) - Moyenne * Moyenne ;
      
-      Alpha = m_Deramp * Variance / (Moyenne * Moyenne) ;
+      if(Moyenne == 0)
+	{
+	  Alpha = 0;
+	}
+      else
+	{
+	  Alpha = m_Deramp * Variance / (Moyenne * Moyenne) ;
+	}
       
       NormFiltre  = 0.0;
       FrostFiltre = 0.0;

@@ -23,7 +23,7 @@
 #include "otbFrostImageFilter.h"
 
 #include "itkExceptionObject.h"
-#include "itkImageFileWriter.h"
+#include "otbImageFileWriter.h"
 #include "itkImage.h"
 #include "itkRandomImageSource.h"
 #include "itkMeanImageFilter.h"
@@ -40,15 +40,15 @@ int otbFrostFilter( int argc, char * argv[] )
         unsigned int  RadiusY((unsigned int)::atoi(argv[4]));
         double        Deramp ((double)::atof(argv[5]));
 
-        typedef unsigned char                                   InputPixelType;
-        typedef unsigned char   	                        OutputPixelType;
+        typedef double                                   InputPixelType;
+        typedef double     	                         OutputPixelType;
         const   unsigned int        	                        Dimension = 2;
 
         typedef itk::Image< InputPixelType,  Dimension >        InputImageType;
         typedef itk::Image< OutputPixelType, Dimension >        OutputImageType;
 
         typedef otb::ImageFileReader< InputImageType  >         ReaderType;
-        typedef itk::ImageFileWriter< OutputImageType >         WriterType;
+        typedef otb::ImageFileWriter< OutputImageType >         WriterType;
 
         typedef otb::FrostImageFilter< InputImageType,OutputImageType >   FilterType;
 	

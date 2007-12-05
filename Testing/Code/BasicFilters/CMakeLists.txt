@@ -11,13 +11,13 @@ SET(TEMP ${OTBTesting_BINARY_DIR}/Temporary)
 
 #Tolerance sur diff pixel image
 SET(TOL 0.0)
-SET(EPSILON 0.0000000001)
+SET(EPSILON 0.000000001)
 
 SET(BASICFILTERS_TESTS ${CXX_TEST_PATH}/otbBasicFiltersTests)
 
 
 ADD_TEST(bfTvFiltreLee1CanalPoupees ${BASICFILTERS_TESTS}  
-  --compare-image ${TOL}  ${BASELINE}/bfFiltreLee_05_05_04.tif
+  --compare-image ${EPSILON}  ${BASELINE}/bfFiltreLee_05_05_04.tif
                           ${TEMP}/bfFiltreLee_05_05_04.tif
         otbLeeFilter
 	${INPUTDATA}/poupees_1canal.c1.hdr
@@ -25,7 +25,7 @@ ADD_TEST(bfTvFiltreLee1CanalPoupees ${BASICFILTERS_TESTS}
 	05 05 4.0)
 
 ADD_TEST(bfTvFiltreLee ${BASICFILTERS_TESTS}  
-  --compare-image ${TOL}  ${BASELINE}/bfFiltreLee_05_05_12.tif
+  --compare-image ${EPSILON}  ${BASELINE}/bfFiltreLee_05_05_12.tif
                            ${TEMP}/bfFiltreLee_05_05_12.tif  
         otbLeeFilter
 	${INPUTDATA}/poupees.hdr
@@ -37,11 +37,11 @@ ADD_TEST(bfTvFiltreLee ${BASICFILTERS_TESTS}
 #
 	
 ADD_TEST(bfTvFiltreFrost ${BASICFILTERS_TESTS}  
-  --compare-image ${TOL}  ${BASELINE}/bfFiltreFrost_poupees_05_05_01.png
-                          ${TEMP}/bfFiltreFrost_poupees_05_05_01.png 
+  --compare-image ${EPSILON}  ${BASELINE}/bfFiltreFrost_poupees_05_05_01.tif
+                          ${TEMP}/bfFiltreFrost_poupees_05_05_01.tif
         otbFrostFilter
 	${INPUTDATA}/poupees.hdr
-	${TEMP}/bfFiltreFrost_poupees_05_05_01.png
+	${TEMP}/bfFiltreFrost_poupees_05_05_01.tif
 	05 05 0.1)
 
 # -------            otb::PointSetSource   ------------------------------
