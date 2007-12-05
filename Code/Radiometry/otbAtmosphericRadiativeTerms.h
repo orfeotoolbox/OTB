@@ -21,28 +21,29 @@ PURPOSE.  See the above copyright notices for more information.
 #include "itkDataObject.h"
 #include "itkObjectFactory.h"
 #include "itkMacro.h"
-
+#include <vector>
 
 
 namespace otb 
 {
-/** \class AtmosphericRadiativeTerms
- *  \brief This class contain all atmospheric radiative terms.
+
+/** \class AtmosphericRadiativeTermsSingleChannel
+ *  \brief This class contains all atmospheric radiative terms for one channel.
  *
  * Each value can be deducted from the atmospheric correction parameters (using 6S) or directly set by the user.
  */
 
-class ITK_EXPORT AtmosphericRadiativeTerms : public itk::DataObject
+class ITK_EXPORT AtmosphericRadiativeTermsSingleChannel : public itk::DataObject
 {
 public:
   /** Standard typedefs */
-  typedef AtmosphericRadiativeTerms     Self;
-  typedef itk::DataObject               Superclass;
-  typedef itk::SmartPointer<Self>       Pointer;
-  typedef itk::SmartPointer<const Self> ConstPointer;
+  typedef AtmosphericRadiativeTermsSingleChannel     Self;
+  typedef itk::DataObject                            Superclass;
+  typedef itk::SmartPointer<Self>                    Pointer;
+  typedef itk::SmartPointer<const Self>              ConstPointer;
 
   /** Type macro */
-  itkTypeMacro(AtmosphericRadiativeTerms,DataObject);
+  itkTypeMacro(AtmosphericRadiativeTermsSingleChannel,DataObject);
 
   /** Creation through object factory macro */
   itkNewMacro(Self);
@@ -80,14 +81,14 @@ public:
 
 protected:
   /** Constructor */
-  AtmosphericRadiativeTerms(){};
+  AtmosphericRadiativeTermsSingleChannel(){};
   /** Destructor */
-  ~AtmosphericRadiativeTerms(){};
+  ~AtmosphericRadiativeTermsSingleChannel(){};
   /**PrintSelf method */
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
 private:
-  AtmosphericRadiativeTerms(const Self&) ; //purposely not implemented
+  AtmosphericRadiativeTermsSingleChannel(const Self&) ; //purposely not implemented
   void operator=(const Self&) ; //purposely not implemented
 
 
@@ -107,6 +108,88 @@ private:
   double m_UpwardTransmittance; 
 
 };
+
+
+/** \class AtmosphericRadiativeTerms
+ *  \brief This class is a vector of AtmosphericRadiativeTermsSingleChannel, 
+ *         it contains all atmospheric radiative terms for each studied channel.
+ *
+ * \ingroup AtmosphericRadiativeTermSingleChannel
+ */
+
+
+class ITK_EXPORT AtmosphericRadiativeTerms : public itk::DataObject
+{
+public:
+  /** Standard typedefs */
+  typedef AtmosphericRadiativeTerms        Self;
+  typedef itk::DataObject                  Superclass;
+  typedef itk::SmartPointer<Self>          Pointer;
+  typedef itk::SmartPointer<const Self>    ConstPointer;
+
+  /** Type macro */
+  itkTypeMacro(AtmosphericRadiativeTerms,DataObject);
+
+  /** Creation through object factory macro */
+  itkNewMacro(Self);
+  
+  typedef AtmosphericRadiativeTermsSingleChannel::Pointer   ValueType;
+  typedef std::vector<ValueType>                            VectorValueType;
+  typedef std::vector<double>                               DataVectorType;  
+  /**
+   * Set/Get the values.
+   */
+  void SetValues( const VectorValueType & val) 
+    { 
+      m_Values = val; 
+      this->Modified();
+    }; 
+  VectorValueType GetValues() { return m_Values; }; 
+  
+  /** Set/Get the data classified by channel. */
+  /** Set methods with vectors. */
+  void SetIntrinsicAtmosphericReflectances(const DataVectorType & vect); 
+  void SetSphericalAlbedos(const DataVectorType & vect); 
+  void SetTotalGaseousTransmissions(const DataVectorType & vect); 
+  void SetDownwardTransmittances(const DataVectorType & vect); 
+  void SetUpwardTransmittances(const DataVectorType & vect); 
+  /** Set methods with index. */
+  void SetValueByIndex(unsigned int id, const ValueType & val);
+
+  /** Get methods with vectors. */
+  DataVectorType GetIntrinsicAtmosphericReflectances(); 
+  DataVectorType GetSphericalAlbedos(); 
+  DataVectorType GetTotalGaseousTransmissions(); 
+  DataVectorType GetDownwardTransmittances(); 
+  DataVectorType GetUpwardTransmittances(); 
+ /** Get methods with index. */
+  double GetIntrinsicAtmosphericReflectances(unsigned int id); 
+  double GetSphericalAlbedos(unsigned int id); 
+  double GetTotalGaseousTransmissions(unsigned int id); 
+  double GetDownwardTransmittances(unsigned int id); 
+  double GetUpwardTransmittances(unsigned int id);
+
+  /** Initialization method.*/
+  void ValuesInitialization(unsigned int nbChannel);
+
+protected:
+  /** Constructor */
+  AtmosphericRadiativeTerms();
+  /** Destructor */
+  ~AtmosphericRadiativeTerms(){};
+  /**PrintSelf method */
+  void PrintSelf(std::ostream& os, itk::Indent indent) const;
+
+private:
+  AtmosphericRadiativeTerms(const Self&) ; //purposely not implemented
+  void operator=(const Self&) ; //purposely not implemented
+
+  /** The vector containing each channel information. */
+  VectorValueType m_Values; 
+  /** Boolean to know if m_Values has been initialized. */
+  bool m_IsInitialized; 
+};
+
 
 } // end namespace otb
 

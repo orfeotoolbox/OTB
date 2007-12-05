@@ -20,18 +20,230 @@ PURPOSE.  See the above copyright notices for more information.
 
 namespace otb 
 {
-  /**PrintSelf method */
-  void 
-  AtmosphericRadiativeTerms
-  ::PrintSelf(std::ostream& os, itk::Indent indent) const
-  {
-    Superclass::PrintSelf(os,indent);
-    os << indent << "Intrinsic Atmospheric Reflectance: " << m_IntrinsicAtmosphericReflectance << std::endl;
-    os << indent << "Shperical Albedo of the Atmosphere: " << m_SphericalAlbedo << std::endl;
-    os << indent << "Total Gaseous Transmission: " << m_TotalGaseousTransmission << std::endl;
-    os << indent << "Downward Transmittance of the Atmospher: " << m_DownwardTransmittance << std::endl;
-    os << indent << "Upward Transmittance of the Atmospher: " << m_UpwardTransmittance << std::endl;
-   }
+/*********************************** AtmosphericRadiativeTermsSingleChannel***********************************************/ 
+/**PrintSelf method */
+void 
+AtmosphericRadiativeTermsSingleChannel
+::PrintSelf(std::ostream& os, itk::Indent indent) const
+{
+  Superclass::PrintSelf(os,indent);
+  os << indent << "Intrinsic Atmospheric Reflectance: " << m_IntrinsicAtmosphericReflectance << std::endl;
+  os << indent << "Shperical Albedo of the Atmosphere: " << m_SphericalAlbedo << std::endl;
+  os << indent << "Total Gaseous Transmission: " << m_TotalGaseousTransmission << std::endl;
+  os << indent << "Downward Transmittance of the Atmospher: " << m_DownwardTransmittance << std::endl;
+  os << indent << "Upward Transmittance of the Atmospher: " << m_UpwardTransmittance << std::endl;
+}
+  
+
+
+
+/*********************************** AtmosphericRadiativeTerms **********************************************************/ 
+/**CONSTRUCTOR. */
+AtmosphericRadiativeTerms
+::AtmosphericRadiativeTerms()
+{
+  m_Values.clear();
+  m_IsInitialized = false;
+}
+
+void 
+AtmosphericRadiativeTerms
+::ValuesInitialization(unsigned int nbChannel)
+{
+  ValueType temp = AtmosphericRadiativeTermsSingleChannel::New();
+  for (unsigned int j=0; j<nbChannel; j++)
+    {
+      m_Values.push_back(temp);
+    }
+  m_IsInitialized = true;
+}
+
+/** SET ACCESSORS WITH VECTORS. */
+void 
+AtmosphericRadiativeTerms
+::SetIntrinsicAtmosphericReflectances(const DataVectorType & vect)
+{
+  if ( !m_IsInitialized)
+    { 
+      this->ValuesInitialization(vect.size());
+      
+    }
+  for (unsigned int nbChannel=0; nbChannel<vect.size(); nbChannel++)
+    { 
+      m_Values[nbChannel]->SetIntrinsicAtmosphericReflectance(vect[nbChannel]);
+    }
+}
+void 
+AtmosphericRadiativeTerms
+::SetSphericalAlbedos(const DataVectorType & vect)
+{
+  if ( !m_IsInitialized)
+    { 
+      this->ValuesInitialization(vect.size());
+    }
+  for (unsigned int nbChannel=0; nbChannel<vect.size(); nbChannel++)
+    {
+      m_Values[nbChannel]->SetSphericalAlbedo(vect[nbChannel]);
+    } 
+}
+void 
+AtmosphericRadiativeTerms
+::SetTotalGaseousTransmissions(const DataVectorType & vect)
+{
+  if ( !m_IsInitialized)
+    { 
+      this->ValuesInitialization(vect.size());
+    }
+  for (unsigned int nbChannel=0; nbChannel<vect.size(); nbChannel++)
+    {
+      m_Values[nbChannel]->SetTotalGaseousTransmission(vect[nbChannel]);
+    }  
+  
+}
+void 
+AtmosphericRadiativeTerms
+::SetDownwardTransmittances(const DataVectorType & vect)
+{
+  if ( !m_IsInitialized)
+    { 
+      this->ValuesInitialization(vect.size());
+    }
+  for (unsigned int nbChannel=0; nbChannel<vect.size(); nbChannel++)
+    {
+      m_Values[nbChannel]->SetDownwardTransmittance(vect[nbChannel]);
+    }
+}
+void 
+AtmosphericRadiativeTerms
+::SetUpwardTransmittances(const DataVectorType & vect)
+{
+  if ( !m_IsInitialized)
+    { 
+      this->ValuesInitialization(vect.size());
+    }
+  for (unsigned int nbChannel=0; nbChannel<vect.size(); nbChannel++)
+    {
+      m_Values[nbChannel]->SetUpwardTransmittance(vect[nbChannel]);
+    }  
+}
+
+/** SET ACCESSORS WITH INDEX. */
+void 
+AtmosphericRadiativeTerms
+::SetValueByIndex(unsigned int id, const ValueType & val)
+{
+  if ( m_IsInitialized )
+    {
+      m_Values[id] = val;
+    }
+  else
+    {
+      itkExceptionMacro(<< "Can't insert value before iniatilize vector value..."<<std::endl);
+    }
+}
+
+
+
+/** GET ACCESSORS WITH VECTORS. */
+AtmosphericRadiativeTerms::DataVectorType
+AtmosphericRadiativeTerms
+::GetIntrinsicAtmosphericReflectances()
+{
+  DataVectorType vect(m_Values.size(), 0);
+  for (unsigned int nbChannel=0; nbChannel<m_Values.size(); nbChannel++)
+    {
+      vect[nbChannel] = m_Values[nbChannel]->GetIntrinsicAtmosphericReflectance();
+    } 
+  return vect;
+}
+AtmosphericRadiativeTerms::DataVectorType
+AtmosphericRadiativeTerms
+::GetSphericalAlbedos()
+{
+  DataVectorType vect(m_Values.size(), 0);
+  for (unsigned int nbChannel=0; nbChannel<m_Values.size(); nbChannel++)
+    {
+      vect[nbChannel] = m_Values[nbChannel]->GetIntrinsicAtmosphericReflectance();
+    } 
+  return vect;
+}
+AtmosphericRadiativeTerms::DataVectorType
+AtmosphericRadiativeTerms
+::GetTotalGaseousTransmissions()
+{
+  DataVectorType vect(m_Values.size(), 0);
+  for (unsigned int nbChannel=0; nbChannel<m_Values.size(); nbChannel++)
+    {
+      vect[nbChannel] = m_Values[nbChannel]->GetIntrinsicAtmosphericReflectance();
+    } 
+  return vect;
+}
+AtmosphericRadiativeTerms::DataVectorType
+AtmosphericRadiativeTerms
+::GetDownwardTransmittances() 
+{
+  DataVectorType vect(m_Values.size(), 0);
+  for (unsigned int nbChannel=0; nbChannel<m_Values.size(); nbChannel++)
+    {
+      vect[nbChannel] = m_Values[nbChannel]->GetIntrinsicAtmosphericReflectance();
+    } 
+  return vect;
+}
+AtmosphericRadiativeTerms::DataVectorType
+AtmosphericRadiativeTerms
+::GetUpwardTransmittances()
+{
+  DataVectorType vect(m_Values.size(), 0);
+  for (unsigned int nbChannel=0; nbChannel<m_Values.size(); nbChannel++)
+    {
+      vect[nbChannel] = m_Values[nbChannel]->GetIntrinsicAtmosphericReflectance();
+    } 
+  return vect;
+}
+/** GET ACCESSORS WITH INDEX. */
+double
+AtmosphericRadiativeTerms
+::GetIntrinsicAtmosphericReflectances(unsigned int id)
+{
+  return m_Values[id]->GetIntrinsicAtmosphericReflectance();
+}
+double
+AtmosphericRadiativeTerms
+::GetSphericalAlbedos(unsigned int id) 
+{
+  return m_Values[id]->GetSphericalAlbedo();
+}
+double
+AtmosphericRadiativeTerms
+::GetTotalGaseousTransmissions(unsigned int id)
+{
+  return m_Values[id]->GetTotalGaseousTransmission();
+}
+double 
+AtmosphericRadiativeTerms
+::GetDownwardTransmittances(unsigned int id) 
+{
+  return m_Values[id]->GetDownwardTransmittance();
+}
+double 
+AtmosphericRadiativeTerms
+::GetUpwardTransmittances(unsigned int id)
+{
+  return m_Values[id]->GetUpwardTransmittance();
+}
+
+/**PrintSelf method */
+void 
+AtmosphericRadiativeTerms
+::PrintSelf(std::ostream& os, itk::Indent indent) const
+{
+  for (unsigned int i=0; i<m_Values.size(); i++)
+    {
+      os << indent << "Channel "<< i << " : "<< std::endl;
+      //ValueType::(os,indent);
+    }
+}
+
 
 } // end namespace otb
 

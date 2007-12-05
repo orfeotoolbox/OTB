@@ -38,6 +38,7 @@ int otbReflectanceToSurfaceReflectanceImageFilter(int argc, char * argv[])
       typedef otb::ImageFileReader<InputImageType>  ReaderType;
       typedef otb::ImageFileWriter<OutputImageType> WriterType;
       typedef otb::ReflectanceToSurfaceReflectanceImageFilter<InputImageType, OutputImageType> ReflectanceToSurfaceReflectanceImageFilterType;
+      typedef otb::AtmosphericRadiativeTerms::DataVectorType DataVectorType;
       otb::AtmosphericRadiativeTerms::Pointer atmo = otb::AtmosphericRadiativeTerms::New();
 
 
@@ -46,14 +47,21 @@ int otbReflectanceToSurfaceReflectanceImageFilter(int argc, char * argv[])
       reader->SetFileName(inputFileName);
       writer->SetFileName(outputFileName);
 
-      atmo->SetIntrinsicAtmosphericReflectance(static_cast<double>(atof(argv[3])));
-      atmo->SetSphericalAlbedo(static_cast<double>(atof(argv[4])));
-      atmo->SetTotalGaseousTransmission(static_cast<double>(atof(argv[5])));
-      atmo->SetDownwardTransmittance(static_cast<double>(atof(argv[6])));
-      atmo->SetUpwardTransmittance(static_cast<double>(atof(argv[7])));
+      reader->GenerateOutputInformation();
+      unsigned int nbChannel = reader->GetOutput()->GetNumberOfComponentsPerPixel();
+ 
+      DataVectorType intrinsic(nbChannel, static_cast<double>(atof(argv[3])));
+      DataVectorType albedo(nbChannel, static_cast<double>(atof(argv[4])));
+      DataVectorType gaseous(nbChannel, static_cast<double>(atof(argv[5])));
+      DataVectorType downTrans(nbChannel, static_cast<double>(atof(argv[6])));
+      DataVectorType upTrans(nbChannel, static_cast<double>(atof(argv[7])));
 
+      atmo->SetIntrinsicAtmosphericReflectances(intrinsic);
+      atmo->SetSphericalAlbedos(albedo);
+      atmo->SetTotalGaseousTransmissions(gaseous);
+      atmo->SetDownwardTransmittances(downTrans);
+      atmo->SetUpwardTransmittances(upTrans);  
       
-
       // Instantiating object
       ReflectanceToSurfaceReflectanceImageFilterType::Pointer filter = ReflectanceToSurfaceReflectanceImageFilterType::New();
       filter->SetAtmosphericRadiativeTerms(atmo);

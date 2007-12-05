@@ -157,21 +157,21 @@ namespace otb
       /** Initialize the functor vector */
       void BeforeThreadedGenerateData ()
 	{
-	  double coef;
-	  double res;
-	  coef = static_cast<double>(m_AtmosphericRadiativeTerms->GetTotalGaseousTransmission()
-				     * m_AtmosphericRadiativeTerms->GetDownwardTransmittance()
-				     * m_AtmosphericRadiativeTerms->GetUpwardTransmittance()     );
-	  coef = 1 / coef;
-	  res = -m_AtmosphericRadiativeTerms->GetIntrinsicAtmosphericReflectance() * coef;
-
 	  this->GetFunctorVector().clear();
 	  for(unsigned int i = 0;i<this->GetInput()->GetNumberOfComponentsPerPixel();++i)
 	    {
+	      double coef;
+	      double res;
+	      coef = static_cast<double>(m_AtmosphericRadiativeTerms->GetTotalGaseousTransmissions(i)
+					 * m_AtmosphericRadiativeTerms->GetDownwardTransmittances(i)
+					 * m_AtmosphericRadiativeTerms->GetUpwardTransmittances(i)     );
+	      coef = 1 / coef;
+	      res = -m_AtmosphericRadiativeTerms->GetIntrinsicAtmosphericReflectances(i) * coef;
+
 	      FunctorType functor;
 	      functor.SetCoefficient(coef);
 	      functor.SetResidu(res);
-	      functor.SetSphericalAlbedo(static_cast<double>(m_AtmosphericRadiativeTerms->GetSphericalAlbedo()));
+	      functor.SetSphericalAlbedo(static_cast<double>(m_AtmosphericRadiativeTerms->GetSphericalAlbedos(i)));
 	      this->GetFunctorVector().push_back(functor);
 	    }
 	}
