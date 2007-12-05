@@ -356,6 +356,16 @@ ADD_TEST(raTvFilterFunctionValuesTest ${RADIOMETRY_TESTS}
 )
 
 
+ADD_TEST(raTvSIXSTraitsComputeAtmosphericParametersTest ${RADIOMETRY_TESTS}
+#    --compare-ascii ${TOL} ${BASELINE_FILES}/raTvFilterFunctionValuesTest.txt
+#                           ${TEMP}/raTvFilterFunctionValuesTest.txt
+        otbSIXSTraitsComputeAtmosphericParametersTest
+	${INPUTDATA}/in6S_otb
+	${TEMP}/raTvSIXSTraitsComputeAtmosphericParametersTest.txt
+)
+
+
+
 # -------            otb::AtmosphericRadiativeTerms   ------------------------------
 ADD_TEST(raTuAtmosphericRadiativeTermsNew ${RADIOMETRY_TESTS}  
         otbAtmosphericRadiativeTermsNew
@@ -430,7 +440,8 @@ otbImageToReflectanceImageFilter.cxx
 otbDEMCaracteristicsExtractorNew.cxx
 otbDEMCaracteristicsExtractor.cxx
 otbAtmosphericCorrectionParametersNew.cxx
-otbAtmosphericCorrectionParameters.cxx
+otbFilterFunctionValues.cxx
+otbSIXSTraitsComputeAtmosphericParameters.cxx
 otbAtmosphericRadiativeTermsNew.cxx
 otbReflectanceToSurfaceReflectanceImageFilterNew.cxx
 otbReflectanceToSurfaceReflectanceImageFilter.cxx
