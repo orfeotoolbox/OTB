@@ -26,7 +26,6 @@ namespace otb
   ::DEMHandler()
   {
     m_ElevManager=ossimElevManager::instance();
-    m_Mutex.Unlock();
   }
 
 
@@ -46,11 +45,10 @@ namespace otb
     m_Mutex.Lock();
     ossimFilename ossimDEMDir;
     ossimDEMDir=ossimFilename(DEMDirectory);
-
     if (!m_ElevManager->openDirectory(ossimDEMDir))
       {
 	m_Mutex.Unlock();
-	itkExceptionMacro("Not possible to open DEM Directory");
+	itkExceptionMacro("Failed to open DEM Directory: "<<ossimDEMDir);
       }
     m_Mutex.Unlock();
   }

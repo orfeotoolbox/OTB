@@ -52,7 +52,8 @@ ImageGeometryHandler::ImageGeometryHandler()
       /***************************/
 ImageGeometryHandler::~ImageGeometryHandler()
 {
-delete handler;
+//Not needed since we use the instance method
+//delete handler;
 }
       
       /***************************/
