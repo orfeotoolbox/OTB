@@ -91,9 +91,10 @@ public:
 
     for(unsigned long pos = 0; pos< itA.Size(); ++pos)
       {
-      
-      crossCorrel += (static_cast<TOutput>(itA.GetPixel(pos))-meanA)*(static_cast<TOutput>(itB.GetPixel(pos))-meanB)/(itA.Size()*vcl_sqrt(varA*varB));
-
+	if(varA!=0 && varB!=0)
+	  {
+	    crossCorrel += (static_cast<TOutput>(itA.GetPixel(pos))-meanA)*(static_cast<TOutput>(itB.GetPixel(pos))-meanB)/(itA.Size()*vcl_sqrt(varA*varB));
+	  }
       }
 
     return static_cast<TOutput>( 1.0-crossCorrel );
