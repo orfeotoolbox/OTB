@@ -158,11 +158,11 @@ public:
   void SetValueByIndex(unsigned int id, const ValueType & val);
 
   /** Get methods with vectors. */
-  DataVectorType & GetIntrinsicAtmosphericReflectances(); 
-  DataVectorType & GetSphericalAlbedos(); 
-  DataVectorType & GetTotalGaseousTransmissions(); 
-  DataVectorType & GetDownwardTransmittances(); 
-  DataVectorType & GetUpwardTransmittances(); 
+  DataVectorType GetIntrinsicAtmosphericReflectances(); 
+  DataVectorType GetSphericalAlbedos(); 
+  DataVectorType GetTotalGaseousTransmissions(); 
+  DataVectorType GetDownwardTransmittances(); 
+  DataVectorType GetUpwardTransmittances(); 
  /** Get methods with index. */
   double GetIntrinsicAtmosphericReflectances(unsigned int id); 
   double GetSphericalAlbedos(unsigned int id); 
@@ -170,6 +170,8 @@ public:
   double GetDownwardTransmittances(unsigned int id); 
   double GetUpwardTransmittances(unsigned int id);
 
+  //const ValueType & GetValueByIndex(unsigned int id) const;
+ 
   /** Initialization method.*/
   void ValuesInitialization(unsigned int nbChannel);
 
