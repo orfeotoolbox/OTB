@@ -211,7 +211,7 @@ int main(int ac, char* av[] )
   if(j != StringToTestFunctionMap.end())
     {
     MainFuncPointer f = j->second;
-    int result;
+    int result, multiResult;
     try
     {
       // Invoke the test's "main" function.
@@ -279,19 +279,25 @@ int main(int ac, char* av[] )
 
 	                                std::map<std::string,int> baselines = RegressionTestBaselines(const_cast<char*>(baselineFilenameImage.c_str()));
 	                                std::map<std::string,int>::iterator baseline = baselines.begin();
-	                                baseline->second = RegressionTestImage(cpt,testFilenameImage.c_str(),
-							 (baseline->first).c_str(),
-							 0,
-							 lToleranceDiffPixelImage);
-		                        if (baseline->second != 0)
-		                        {
+	                                multiResult = 0;
+					while(baseline!=baselines.end())
+					  {
+					    baseline->second = RegressionTestImage(cpt,testFilenameImage.c_str(),
+										   (baseline->first).c_str(),
+										   0,
+										   lToleranceDiffPixelImage);
+					    if (baseline->second != 0)
+					      {
 		                                baseline->second = RegressionTestImage(cpt,testFilenameImage.c_str(),
-							 (baseline->first).c_str(),
-							 1,
-							 lToleranceDiffPixelImage);
-		                        }
+										       (baseline->first).c_str(),
+										       1,
+										       lToleranceDiffPixelImage);
+					      }
+					    multiResult = min(multiResult,baseline->second);
+					    ++baseline;
+					  }
                                         cpt++;
-	                                result += baseline->second;
+	                                result += multiResult;
 	                        }
                         }
 
