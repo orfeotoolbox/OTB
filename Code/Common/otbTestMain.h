@@ -279,8 +279,8 @@ int main(int ac, char* av[] )
 
 	                                std::map<std::string,int> baselines = RegressionTestBaselines(const_cast<char*>(baselineFilenameImage.c_str()));
 	                                std::map<std::string,int>::iterator baseline = baselines.begin();
-	                                multiResult = 0;
-					while(baseline!=baselines.end())
+	                                multiResult = 1;
+					while(baseline!=baselines.end() && (multiResult!=0))
 					  {
 					    baseline->second = RegressionTestImage(cpt,testFilenameImage.c_str(),
 										   (baseline->first).c_str(),
@@ -293,7 +293,7 @@ int main(int ac, char* av[] )
 										       1,
 										       lToleranceDiffPixelImage);
 					      }
-					    multiResult = min(multiResult,baseline->second);
+					    multiResult = baseline->second;
 					    ++baseline;
 					  }
                                         cpt++;
