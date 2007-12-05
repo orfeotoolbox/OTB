@@ -417,6 +417,23 @@ ADD_TEST(raTuSurfaceAdjencyEffect6SCorrectionSchemeFilter ${RADIOMETRY_TESTS}
 ADD_TEST(raTuAtmosphericCorrectionParametersTo6SAtmosphericRadiativeTermsNew ${RADIOMETRY_TESTS}  
         otbAtmosphericCorrectionParametersTo6SAtmosphericRadiativeTermsNew
 )
+ADD_TEST(raTuAtmosphericCorrectionParametersTo6SAtmosphericRadiativeTerms ${RADIOMETRY_TESTS}  
+        otbAtmosphericCorrectionParametersTo6SAtmosphericRadiativeTerms
+	#${INPUTDATA}/poupees_sub.png							# input image
+	#${TEMP}/raTvAtmosphericCorrectionParametersTo6SAtmosphericRadiativeTerms.tif    # output image
+	# wavelet length file for channel 1
+	# wavelet length file for channel 2
+	# wavelet length file for channel 3
+	# wavelet length file for channel 4
+	# solar zenithal angle
+        # solar azimutal angle
+       # viewing zenithal angle
+       # viewing azimutal angle
+       # acquisition month
+       # acquisition day
+# aerosol model type (0 = NO_AEROSOL=0, 1 = CONTINENTAL, 2 = MARITIME, 3 =)NO_AEROSOL=0,CONTINENTAL=1,MARITIME=2,URBAN=3,DESERTIC=5
+)
+
 
 
 # A enrichir
@@ -448,6 +465,7 @@ otbReflectanceToSurfaceReflectanceImageFilter.cxx
 otbSurfaceAdjencyEffect6SCorrectionSchemeFilterNew.cxx
 otbSurfaceAdjencyEffect6SCorrectionSchemeFilter.cxx
 otbAtmosphericCorrectionParametersTo6SAtmosphericRadiativeTermsNew.cxx
+otbAtmosphericCorrectionParametersTo6SAtmosphericRadiativeTerms.cxx
 )
 
 

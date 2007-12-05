@@ -27,7 +27,7 @@ namespace otb
 {
   /**
    * \class AtmosphericCorrectionParametersTo6SAtmosphericRadiativeTerms
-   * \brief This class compute the Atmospheric radiative terms with 6S.
+   * \brief This class computes the atmospheric radiative terms with 6S.
    * \ingroup DataSources
    */
 class ITK_EXPORT AtmosphericCorrectionParametersTo6SAtmosphericRadiativeTerms
@@ -40,12 +40,12 @@ class ITK_EXPORT AtmosphericCorrectionParametersTo6SAtmosphericRadiativeTerms
   typedef itk::SmartPointer<Self> Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
 
-  /** Creation througth the object factory */
-  itkNewMacro(Self);
+ 
 
   /** Runtime information */
   itkTypeMacro(AtmosphericCorrectionParametersTo6SAtmosphericRadiativeTerms,itk::ProcessObject);
-
+ /** Creation througth the object factory */
+  itkNewMacro(Self);
   /** Template parameters typedefs */
   typedef AtmosphericCorrectionParameters AtmosphericCorrectionParametersType;
   typedef AtmosphericCorrectionParametersType::Pointer AtmosphericCorrectionParametersPointer;
