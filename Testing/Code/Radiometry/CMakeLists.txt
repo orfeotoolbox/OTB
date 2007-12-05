@@ -261,7 +261,29 @@ ADD_TEST(raTvImageToReflectanceImageFilter ${RADIOMETRY_TESTS}
 	0.9923885328 #d/d0 corresponding to the date 03/05
          ) 
 
-ADD_TEST(raTvImageToReflectanceImageFilterDayMonth ${RADIOMETRY_TESTS} 
+ADD_TEST(raTvRomaniaImageToReflectance ${RADIOMETRY_TESTS} 
+  --compare-image ${EPSILON}  ${BASELINE}/raTvRomaniaReflectanceImage
+                          ${TEMP}/raTvRomaniaReflectanceImage.tif
+        otbImageToReflectanceImageFilter
+	${IMAGEDATA}/ROMANIA/S4_20020518.tif 
+	${TEMP}/raTvRomaniaReflectanceImage.tif
+	27.3                    # = 90-62.70 : elevation et azimuth solaire 
+        0.881338*2.24800        #channel 1 alpha
+	0.858713*5.04500        #channel 2 alpha	
+	0.685568*3.38500        #channel 3 alpha	
+	6.19122*1.50500         #channel 4 alpha
+	0                       #channel 1 beta
+	0                       #channel 2 beta
+	0                       #channel 3 beta
+	0                       #channel 4 beta
+	1057.56                 #channel 1 illumination
+	1570.23                 #channel 2 illumination    
+	1842.94                 #channel 3 illumination
+	232.820                 #channel 4 illumination
+	0.9889145564708814      #= sqrt(0.977952) d/d0 corresponding to the date 03/05 
+        ) 
+
+ADD_TEST(raTvImageToReflectanceImageFilterDayMounth ${RADIOMETRY_TESTS} 
   --compare-image ${EPSILON}  ${BASELINE}/raTvImageToReflectanceImageFilter.tif
                           ${TEMP}/raTvImageToReflectanceImageFilterDayMounth.tif
         otbImageToReflectanceImageFilter
@@ -380,6 +402,10 @@ ADD_TEST(raTuSurfaceAdjencyEffect6SCorrectionSchemeFilter ${RADIOMETRY_TESTS}
 	0 0 0  0 0 1  0 1 0 # Channel 4 ponderation values;
 )
 
+# -------            otb::AtmosphericCorrectionParametersTo6SAtmosphericRadiativeTermsNew   ------------------------------
+ADD_TEST(raTuAtmosphericCorrectionParametersTo6SAtmosphericRadiativeTermsNew ${RADIOMETRY_TESTS}  
+        otbAtmosphericCorrectionParametersTo6SAtmosphericRadiativeTermsNew
+)
 
 
 # A enrichir
@@ -409,6 +435,7 @@ otbReflectanceToSurfaceReflectanceImageFilterNew.cxx
 otbReflectanceToSurfaceReflectanceImageFilter.cxx
 otbSurfaceAdjencyEffect6SCorrectionSchemeFilterNew.cxx
 otbSurfaceAdjencyEffect6SCorrectionSchemeFilter.cxx
+otbAtmosphericCorrectionParametersTo6SAtmosphericRadiativeTermsNew.cxx
 )
 
 
