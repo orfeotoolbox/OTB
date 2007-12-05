@@ -144,7 +144,8 @@ public:
       m_Values = val; 
       this->Modified();
     }; 
-  VectorValueType GetValues() { return m_Values; }; 
+  VectorValueType & GetValues() { return m_Values; }; 
+  const VectorValueType & GetValues() const { return m_Values; }; 
   
   /** Set/Get the data classified by channel. */
   /** Set methods with vectors. */
@@ -157,11 +158,11 @@ public:
   void SetValueByIndex(unsigned int id, const ValueType & val);
 
   /** Get methods with vectors. */
-  DataVectorType GetIntrinsicAtmosphericReflectances(); 
-  DataVectorType GetSphericalAlbedos(); 
-  DataVectorType GetTotalGaseousTransmissions(); 
-  DataVectorType GetDownwardTransmittances(); 
-  DataVectorType GetUpwardTransmittances(); 
+  const DataVectorType & GetIntrinsicAtmosphericReflectances()const; 
+  const DataVectorType & GetSphericalAlbedos()const; 
+  const DataVectorType & GetTotalGaseousTransmissions()const; 
+  const DataVectorType & GetDownwardTransmittances()const; 
+  const DataVectorType & GetUpwardTransmittances()const; 
  /** Get methods with index. */
   double GetIntrinsicAtmosphericReflectances(unsigned int id); 
   double GetSphericalAlbedos(unsigned int id); 
