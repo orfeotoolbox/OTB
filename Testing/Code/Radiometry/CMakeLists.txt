@@ -372,6 +372,7 @@ ADD_TEST(raTvReflectanceToSurfaceReflectanceImageFilter ${RADIOMETRY_TESTS}
         otbReflectanceToSurfaceReflectanceImageFilter
 	${INPUTDATA}/poupees_sub.png 
 	${TEMP}/raTvReflectanceToSurfaceReflectanceImageFilter.tif
+	# SAME VALUE FOR EACH CHANNEL
 	1  # intrinsic atmospheric reflectance	
 	2  # spherical albedo of the atmosphere
 	3  # total transmission	
