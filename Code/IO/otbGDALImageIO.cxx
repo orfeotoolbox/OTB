@@ -1013,8 +1013,8 @@ void GDALImageIO::InternalWriteImageInformation()
 	    gdalGcps[gcpIndex].dfGCPZ = ImageBase::GetGCPZ(dico,gcpIndex);
 	    gcpHasOrigin = ImageBase::GetGCPCol(dico,gcpIndex)==0 && ImageBase::GetGCPRow(dico,gcpIndex)==0;
 	  }
-	gdalGcps[gcpCount].pszId = "Origin";
-	gdalGcps[gcpCount].pszInfo = "Origin gcp added by OTB";
+	gdalGcps[gcpCount].pszId =   const_cast<char*>(std::string("Origin").c_str());
+	gdalGcps[gcpCount].pszInfo = const_cast<char*>(std::string("Origin gcp added by OTB").c_str());
 	gdalGcps[gcpCount].dfGCPPixel = 0;
 	gdalGcps[gcpCount].dfGCPLine = 0;
 	gdalGcps[gcpCount].dfGCPX = m_Origin[0];
