@@ -131,11 +131,6 @@ int otbSIXSTraitsComputeAtmosphericParametersTest(int argc, char * argv[])
         fout << "   ----->  MinSpectralValue :                  "<<MinSpectralValue<<std::endl;
         fout << "   ----->  MaxSpectralValue :                  "<<MaxSpectralValue<<std::endl;
         fout << "   ----->  UserStep :                          "<<functionValues->GetUserStep()<<std::endl;
-        fout<<"Input wavelenght band values ["<<functionValues->GetFilterFunctionValues().size()<<"]:"<<std::endl;
-        for (unsigned int i=0; i<functionValues->GetFilterFunctionValues().size(); i++)
-	{
-	        fout<< "    "<<functionValues->GetFilterFunctionValues()[i] <<std::endl;
-	}
         fout <<" ---------------------------------------------------------"<<std::endl;
         fout << "Outputs values:"<<std::endl;
         fout << "   ----->  atmospheric reflectance :           "<<AtmosphericReflectance<<std::endl;
@@ -145,10 +140,17 @@ int otbSIXSTraitsComputeAtmosphericParametersTest(int argc, char * argv[])
         fout << "   ----->  upward transmittance :              "<<UpwardTransmittance<<std::endl;
         fout << "   ----->  MinSpectralValue update:            "<<functionValues->GetMinSpectralValue()<<std::endl;
         fout << "   ----->  MaxSpectralValue update :           "<<functionValues->GetMaxSpectralValue()<<std::endl;
+        fout <<" ---------------------------------------------------------"<<std::endl;
+        fout<<"Input wavelenght band values ["<<functionValues->GetFilterFunctionValues().size()<<"]:"<<std::endl;
+        for (unsigned int i=0; i<functionValues->GetFilterFunctionValues().size(); i++)
+	{
+	        fout<< "    "<<functionValues->GetFilterFunctionValues()[i] <<std::endl;
+	}
+        fout <<" ---------------------------------------------------------"<<std::endl;
         fout<<"Output wavelenght band values 6S ["<<functionValues->GetFilterFunctionValues6S().size()<<"]:"<<std::endl;
         for (unsigned int i=0; i<functionValues->GetFilterFunctionValues6S().size(); i++)
 	{
-	        fout<< "            "<<functionValues->GetFilterFunctionValues6S()[i] <<std::endl;
+	        fout<< "    "<<functionValues->GetFilterFunctionValues6S()[i] <<std::endl;
 	}
         fout<<std::endl;
         fout.close();

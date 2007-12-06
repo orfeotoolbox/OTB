@@ -74,7 +74,7 @@ SIXSTraits::ComputeAtmosphericParameters(
         try
         {
                 // 6S official Wavelenght Spectral Band step value 
-                const double SIXSStepOfWavelenghtSpectralBandValues = .0025;
+                const float SIXSStepOfWavelenghtSpectralBandValues = .0025;
                 // Generate 6s Wavelenght Spectral Band with the offcicial step value
                 ComputeWavelenghtSpectralBandValuesFor6S(       SIXSStepOfWavelenghtSpectralBandValues,
                                                                 WavelenghtSpectralBand // Update 
@@ -83,8 +83,11 @@ SIXSTraits::ComputeAtmosphericParameters(
                 // 6S official tab size Wavelenght Spectral
                 const unsigned int S_6S_SIZE=1501;
                 // Generate WavelenghtSpectralBand  in 6S compatible buffer s[1501]
-                otb_6s_integer iinf = static_cast<otb_6s_integer>((WavelenghtSpectralBand->GetMinSpectralValue() - (double).25) / SIXSStepOfWavelenghtSpectralBandValues + (double)1.5);
-                otb_6s_integer isup = static_cast<otb_6s_integer>((WavelenghtSpectralBand->GetMaxSpectralValue() - (double).25) / SIXSStepOfWavelenghtSpectralBandValues + (double)1.5);
+                wlinf = static_cast<otb_6s_real>(WavelenghtSpectralBand->GetMinSpectralValue());
+                wlsup = static_cast<otb_6s_real>(WavelenghtSpectralBand->GetMaxSpectralValue());
+                
+                otb_6s_integer iinf = static_cast<otb_6s_integer>((wlinf - (float).25) / SIXSStepOfWavelenghtSpectralBandValues + (float)1.5);
+                otb_6s_integer isup = static_cast<otb_6s_integer>((wlsup - (float).25) / SIXSStepOfWavelenghtSpectralBandValues + (float)1.5);
 
                 otb_6s_integer cpt=iinf-1;
                 otb_6s_real * s(NULL);
@@ -148,7 +151,7 @@ SIXSTraits::ComputeWavelenghtSpectralBandValuesFor6S(
         double value(0.);
         
         // Generate WavelenghtSpectralBand if the step is not the offical 6S step value
-        if( vcl_abs(L_userStep-SIXSStepOfWavelenghtSpectralBandValues) > .00000001 ) 
+        if( vcl_abs(L_userStep-SIXSStepOfWavelenghtSpectralBandValues) > .000001 ) 
         {
                 ValuesVectorType values(1, FilterFunctionValues[0]); //vector size 1 with the value vect[0]
                 
