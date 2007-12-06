@@ -7,6 +7,9 @@ SET(FUSION_EXAMPLES ${CXX_TEST_PATH}/otbFusionExamplesTests)
 ADD_EXECUTABLE(BayesianFusionImageFilter BayesianFusionImageFilter.cxx )
 TARGET_LINK_LIBRARIES(BayesianFusionImageFilter OTBFusion OTBCommon OTBIO ITKNumerics ITKIO)
 
+ADD_EXECUTABLE(PanSharpeningExample PanSharpeningExample.cxx )
+TARGET_LINK_LIBRARIES(PanSharpeningExample OTBFusion OTBCommon OTBIO ITKNumerics ITKIO)
+
 
 IF( NOT OTB_DISABLE_CXX_TESTING AND NOT OTB_DISABLE_CXX_EXAMPLES_TESTING )
 
