@@ -42,8 +42,8 @@ int otbDEMHandlerTest(int argc, char * argv[])
         typedef otb::UtmInverseProjection                      utmProjection;
         typedef utmProjection::InputPointType	        InputPoint;
         InputPoint                                      geoPoint;
-        geoPoint[0] = 3.6999;
-        geoPoint[1] = 44.08;
+        geoPoint[0] = atof(argv[3]);//3.6999;
+        geoPoint[1] = atof(argv[4]);//44.08;
 
         height=demHandler->GetHeightAboveMSL(geoPoint); 
 

@@ -79,5 +79,6 @@ REGISTER_TEST(otbDEMHandlerTest);
 REGISTER_TEST(otbImageGeometryHandlerNew);
 REGISTER_TEST(otbDEMToImageGeneratorNew);
 REGISTER_TEST(otbDEMToImageGeneratorTest);
+REGISTER_TEST(otbOssimElevManagerTest); 
 REGISTER_TEST(otbPipeline);
 }

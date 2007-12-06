@@ -1120,6 +1120,7 @@ ADD_TEST(ioTvDEMHandler ${IO_TESTS}
         otbDEMHandlerTest
         ${INPUTDATA}/DEM/srtm_directory
         ${TEMP}/ioDEMGetHeightAboveMSL.txt
+	3.6999 44.08
         )
 
 # ---  otb::ImageGeometryHandler ---
@@ -1142,6 +1143,21 @@ ADD_TEST(ioTvDEMToImageGeneratorTest ${IO_TESTS}
 				 0.002
          )
  
+
+
+ADD_TEST(ioTvossimElevManagerTest ${IO_TESTS}
+--compare-image ${TOL}  ${BASELINE}/ioTvossimElevManagerTest.tif
+                        ${TEMP}/ioTvossimElevManagerTest.tif
+        otbOssimElevManagerTest
+         ${INPUTDATA}/DEM/srtm_directory
+         ${TEMP}/ioTvossimElevManagerTest.tif
+				 6.5
+         44.5
+				 0.002
+				 0.002
+				  500
+				  500
+         )
 
 #----------------------------------------------------------------------------------
 # Exemples de tests sur les grosses images
@@ -1211,6 +1227,7 @@ otbDEMToImageGeneratorNew.cxx
 otbDEMToImageGeneratorTest.cxx
 otbImageGeometryHandlerNew.cxx
 otbPipeline.cxx
+otbOssimElevManagerTest.cxx
 )
 
 INCLUDE_DIRECTORIES("${OTBTesting_BINARY_DIR}")
