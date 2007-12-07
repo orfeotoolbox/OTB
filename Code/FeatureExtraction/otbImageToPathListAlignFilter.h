@@ -69,8 +69,9 @@ public:
   typedef typename Superclass::OutputPathPointerType  OutputPathPointerType;
 
 //  typedef          float                                        RealType;
-  typedef typename itk::NumericTraits<PixelType>::RealType       RealType;
-//  typedef typename itk::Image<RealType,InputImageDimension>      RealImageType; 
+  //typedef typename itk::NumericTraits<PixelType>::RealType       RealType;
+  typedef double                                                  RealType;
+//  typedef typename itk::Image<RealType,InputImageDimension>      RealImageType;
   typedef typename otb::Image<RealType,InputImageDimension>      RealImageType; 
   typedef typename RealImageType::Pointer                        RealImageTypePointer;
   typedef typename RealImageType::IndexType                      RealImageTypeIndexType;
@@ -141,7 +142,7 @@ private:
   int		m_NbLineDirection; 	/// Number of line directions to scan, default 96)
   double	m_MinGradNorm;		/// Minimum gradient norm to define a direction, default 2.
   double	m_Eps;			/// -log10(max. number of false alarms), default 0
-  std::vector<float> m_seglist;
+  std::vector<double> m_seglist;
 
   RealImageType * m_AngleImage; //Angle image use by GenerateData and AngleCalculate methods
 };

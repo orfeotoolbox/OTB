@@ -222,7 +222,7 @@ void
 ImageToPathListAlignFilter<TInputImage,TOutputPath>
 ::AngleCalculate(const InputImageType* InputImage)
 {
-  float threshold;
+  double threshold;
   int n,p,x,y;
     
   typename InputImageType::SizeType Taille;
@@ -322,15 +322,15 @@ ImageToPathListAlignFilter<TInputImage,TOutputPath>
   double nfa,max_nfa;
   std::vector<double> test; 
   std::vector<int>   count,startbloc,endbloc;
-  std::vector<float> seglist;   /* list of recorded segments */
+  std::vector<double> seglist;   /* list of recorded segments */
   std::vector<one_segment> seg;
   int mx,my,ox,oy,nx,ny,n;
   int xx,yy,pos,posmax,nblocs,inbloc,max_nblocs;
   int cur,i,j,side,l,lphase;
   // int tmp;
   int itheta,ntheta;
-  float theta,theta0,dtheta,dx,dy,prec;
-  float error =0.0; 
+  double theta,theta0,dtheta,dx,dy,prec;
+  double error =0.0; 
   itkDebugMacro(<< "ImageToPathListAlignFilter::GenerateData() called");
 
 
@@ -360,9 +360,9 @@ ImageToPathListAlignFilter<TInputImage,TOutputPath>
   test = tab(n,1.0/(double)(m_NbGradDirection),(double)(nx*ny)*(double)(nx*ny));    
   
    /*** initialization ***/
-  prec = M_PI/(float)(m_NbGradDirection);
+  prec = M_PI/(double)(m_NbGradDirection);
   ntheta = m_NbLineDirection/2;  /* i.e. # directions of NON-ORIENTED lines */
-  dtheta = M_PI/(float)ntheta;
+  dtheta = M_PI/(double)ntheta;
 
 /******************** memory allocation ********************/
 
@@ -400,9 +400,9 @@ ImageToPathListAlignFilter<TInputImage,TOutputPath>
     for (itheta = 0; itheta<ntheta; itheta++) {
       printf(".");
       fflush(stdout);
-      theta = theta0 + (float)(itheta)*dtheta;
-      dx = (float)vcl_cos((double)theta);
-      dy = (float)vcl_sin((double)theta);
+      theta = theta0 + (double)(itheta)*dtheta;
+      dx = (double)vcl_cos((double)theta);
+      dy = (double)vcl_sin((double)theta);
       
       /*** third loop : start positions ***/
       for (pos=0;pos<posmax;pos++) {
@@ -415,8 +415,8 @@ ImageToPathListAlignFilter<TInputImage,TOutputPath>
 	  
 	  /*** detect aligned points by blocs ***/
 	  inbloc = nblocs = cur = l = count[0] = 0;
-	  xx = ox+pos*mx + (int)(dx*(float)(l*2+lphase));
-	  yy = oy+pos*my + (int)(dy*(float)(l*2+lphase));
+	  xx = ox+pos*mx + (int)(dx*(double)(l*2+lphase));
+	  yy = oy+pos*my + (int)(dy*(double)(l*2+lphase));
 
 
 	  for (;xx>=0 && xx<nx && yy>=0 && yy<ny;) {
@@ -428,7 +428,7 @@ ImageToPathListAlignFilter<TInputImage,TOutputPath>
 	    assert( indexAngle[0] >= 0 );
 	    assert( indexAngle[1] >= 0 );
 	    
-	    error = static_cast<float>( m_AngleImage->GetPixel(indexAngle) );
+	    error = static_cast<double>( m_AngleImage->GetPixel(indexAngle) );
 	    if (error>-100.0) {
 	      error -= theta;
 	      while (error<=-M_PI) error += 2.0*M_PI;
@@ -451,8 +451,8 @@ ImageToPathListAlignFilter<TInputImage,TOutputPath>
 	    }
 	    /* compute next point */
 	    l++;
-	    xx = ox+pos*mx + (int)(dx*(float)(l*2+lphase));
-	    yy = oy+pos*my + (int)(dy*(float)(l*2+lphase));
+	    xx = ox+pos*mx + (int)(dx*(double)(l*2+lphase));
+	    yy = oy+pos*my + (int)(dy*(double)(l*2+lphase));
 	  }
 	  
 	  /*** detect meaningful segments ***/
@@ -494,11 +494,11 @@ ImageToPathListAlignFilter<TInputImage,TOutputPath>
 	/*** store detected segments ***/
 	for (i=0;i<iseg;i++) 
 	  if (seg[i].ok) {
-	    seglist[iseglist*5  ]=(float)(ox+pos*mx)+dx*(float)(seg[i].start);
-	    seglist[iseglist*5+1]=(float)(oy+pos*my)+dy*(float)(seg[i].start);
-	    seglist[iseglist*5+2]=(float)(ox+pos*mx)+dx*(float)(seg[i].end);
-	    seglist[iseglist*5+3]=(float)(oy+pos*my)+dy*(float)(seg[i].end);
-	    seglist[iseglist*5+4]=-(float)log10(seg[i].nfa);
+	    seglist[iseglist*5  ]=(double)(ox+pos*mx)+dx*(double)(seg[i].start);
+	    seglist[iseglist*5+1]=(double)(oy+pos*my)+dy*(double)(seg[i].start);
+	    seglist[iseglist*5+2]=(double)(ox+pos*mx)+dx*(double)(seg[i].end);
+	    seglist[iseglist*5+3]=(double)(oy+pos*my)+dy*(double)(seg[i].end);
+	    seglist[iseglist*5+4]=-(double)log10(seg[i].nfa);
 	    iseglist++; 
 	    /* reallocate seglist if necessary */
 	    if (iseglist==size_seglist) {
