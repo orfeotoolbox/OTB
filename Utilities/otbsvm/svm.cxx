@@ -2908,8 +2908,22 @@ out:
 	for(i=0;i<m;i++)
 		model->sv_coef[i] = Malloc(double,l);
 	model->SV = Malloc(svm_node*,l);
+	for(unsigned int n = 0;n<l;++n)
+	  {
+	    model->SV[n]=Malloc(svm_node,1);
+	    model->SV[n]->index = -1;
+	    model->SV[n]->value = 0.;
+	  }
 	svm_node *x_space=NULL;
-	if(l>0) x_space = Malloc(svm_node,elements);
+	if(l>0) 
+	  {
+	    x_space = Malloc(svm_node,elements);
+	    for(unsigned int n = 0;n<elements;++n)
+	      {
+		x_space[n].index = -1;
+		x_space[n].value = 0.;
+	      }
+	  }
 
 	int j=0;
 	for(i=0;i<l;i++)
