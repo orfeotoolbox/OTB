@@ -100,9 +100,9 @@ public:
 #ifdef ITK_USE_CONCEPT_CHECKING
   /** Begin concept checking */
   itkConceptMacro(IntConvertibleToInput2Check,
-    (Concept::Convertible<int, typename TInputImage2::PixelType>));
+    (itk::Concept::Convertible<int, typename TInputImage2::PixelType>));
   itkConceptMacro(Input1Input2OutputDivisionOperatorsCheck,
-    (Concept::DivisionOperators<typename TInputImage1::PixelType,
+    (itk::Concept::DivisionOperators<typename TInputImage1::PixelType,
                                 typename TInputImage2::PixelType,
                                 typename TOutputImage::PixelType>));
   /** End concept checking */
