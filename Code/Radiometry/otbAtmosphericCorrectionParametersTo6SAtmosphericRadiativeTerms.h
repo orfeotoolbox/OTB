@@ -67,6 +67,9 @@ class ITK_EXPORT AtmosphericCorrectionParametersTo6SAtmosphericRadiativeTerms
   virtual AtmosphericRadiativeTermsType * GetOutput(void);
   virtual AtmosphericRadiativeTermsType * GetOutput(unsigned int idx);
 
+  /** Generate the output.*/
+  virtual void GenerateData();
+
  protected:
   /** Constructor */
   AtmosphericCorrectionParametersTo6SAtmosphericRadiativeTerms();

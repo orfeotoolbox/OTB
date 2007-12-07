@@ -141,8 +141,61 @@ AtmosphericRadiativeTerms
       itkExceptionMacro(<< "Can't insert value before iniatilizing vector value..."<<std::endl);
     }
 }
-
-
+void 
+AtmosphericRadiativeTerms
+::SetIntrinsicAtmosphericReflectances(unsigned int id, const double & val)
+{
+  if ( m_Values.size()<id+1 )
+    { 
+      ValueType temp = AtmosphericRadiativeTermsSingleChannel::New();
+      m_Values.push_back(temp);
+    }
+  m_Values[id]->SetIntrinsicAtmosphericReflectance(val);
+} 
+void
+AtmosphericRadiativeTerms
+::SetSphericalAlbedos(unsigned int id, const double & val)
+{
+  if ( m_Values.size()<id+1 )
+    { 
+      ValueType temp = AtmosphericRadiativeTermsSingleChannel::New();
+      m_Values.push_back(temp);
+    }
+  m_Values[id]->SetSphericalAlbedo(val);
+} 
+void 
+AtmosphericRadiativeTerms
+::SetTotalGaseousTransmissions(unsigned int id, const double & val)
+{
+  if ( m_Values.size()<id+1 )
+    { 
+      ValueType temp = AtmosphericRadiativeTermsSingleChannel::New();
+      m_Values.push_back(temp);
+    }
+  m_Values[id]->SetTotalGaseousTransmission(val);
+} 
+void 
+AtmosphericRadiativeTerms
+::SetDownwardTransmittances(unsigned int id, const double & val ) 
+{
+ if ( m_Values.size()<id+1 )
+    { 
+      ValueType temp = AtmosphericRadiativeTermsSingleChannel::New();
+      m_Values.push_back(temp);
+    }
+  m_Values[id]->SetDownwardTransmittance(val);
+} 
+void 
+AtmosphericRadiativeTerms
+::SetUpwardTransmittances(unsigned int id, const  double & val ) 
+{
+   if ( m_Values.size()<id+1 )
+    { 
+      ValueType temp = AtmosphericRadiativeTermsSingleChannel::New();
+      m_Values.push_back(temp);
+    }
+  m_Values[id]->SetUpwardTransmittance(val);
+} 
 
 /** GET ACCESSORS WITH VECTORS. */
 AtmosphericRadiativeTerms::DataVectorType 

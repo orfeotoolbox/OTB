@@ -18,34 +18,175 @@
 
 #include "otbAtmosphericCorrectionParametersTo6SAtmosphericRadiativeTerms.h"
 #include "otbAtmosphericCorrectionParameters.h"
+#include "otbAtmosphericRadiativeTerms.h"
+#include <vector>
+#include <fstream>
+#include <iostream>
+#include <iomanip>
 
 int otbAtmosphericCorrectionParametersTo6SAtmosphericRadiativeTerms(int argc, char * argv[])
 {
-  typedef otb::AtmosphericCorrectionParametersTo6SAtmosphericRadiativeTerms  AtmosphericCorrectionParametersTo6SAtmosphericRadiativeTermsType;
-  typedef otb::AtmosphericCorrectionParameters AtmosphericCorrectionParametersType;
-  typedef AtmosphericCorrectionParametersType::AerosolModelType AerosolModelType;
   /*
+  std::vector<const char *> wavelenghFiles;
+  wavelenghFiles.push_back( argv[3] );
+  wavelenghFiles.push_back( argv[4] );
+  wavelenghFiles.push_back( argv[5] );
+  wavelenghFiles.push_back( argv[6] );
+  */  
+  const char * wavelenghFile  = argv[1];
+  const char * outputFile     = argv[2];
+
+  typedef otb::AtmosphericCorrectionParametersTo6SAtmosphericRadiativeTerms  CorrectionParametersTo6SRadiativeTermsType;
+  typedef otb::AtmosphericCorrectionParameters                               CorrectionParametersType;
+  typedef otb::AtmosphericRadiativeTerms                                     RadiativeTermsType;
+  typedef CorrectionParametersType::AerosolModelType                         AerosolModelType;
+  typedef otb::FilterFunctionValues                                          FilterFunctionValuesType;
+  typedef FilterFunctionValuesType::WavelenghtSpectralBandType               ValueType;
+  typedef FilterFunctionValuesType::ValuesVectorType                         ValuesVectorType;
+
   // Instantiating object
-  AtmosphericCorrectionParametersTo6SAtmosphericRadiativeTermsType::Pointer object = AtmosphericCorrectionParametersTo6SAtmosphericRadiativeTermsType::New();
-  AtmosphericCorrectionParametersType param; // =  otbAtmosphericCorrectionParameters::New();
-  AerosolModelType aerosolModel;
+  CorrectionParametersTo6SRadiativeTermsType::Pointer object         = CorrectionParametersTo6SRadiativeTermsType::New();
+  CorrectionParametersType::Pointer                   param          = CorrectionParametersType::New();
+  AerosolModelType                                    aerosolModel;
+  FilterFunctionValuesType::Pointer                   functionValues = FilterFunctionValuesType::New();
+  ValuesVectorType                                    vect;
+  RadiativeTermsType::Pointer                         radiative      = RadiativeTermsType::New();
+
+  ValueType val = 0.0025;
   
+  //for(unsigned int i=0; i<wavelenghFiles.size(); i++)
+  //{
+  //functionValues = FilterFunctionValuesType::New();
+  vect.clear();
+
+  // Filter function values initialization
+  float minSpectralValue(0.);
+  float maxSpectralValue(0.);
+  float value(0.);
+  // Correction parameters initialization
+  double solarZenithalAngle(0.);
+  double solarAzimutalAngle(0.);
+  double viewingZenithalAngle(0.);
+  double viewingAzimutalAngle(0.);
+  unsigned int month(0);
+  unsigned int day(0);
+  double atmosphericPressure(0.);
+  double waterVaporAmount(0.);
+  double ozoneAmount(0.);
+  double aerosolOptical(0.);
+
+
+  std::ifstream fin;
+  std::ofstream fout;
+  //Read input file parameters
+  fin.open(wavelenghFile);
+  fin >> solarZenithalAngle;//asol;
+  fin >> solarAzimutalAngle;//phi0;
+  fin >> viewingZenithalAngle;//avis;
+  fin >> viewingAzimutalAngle;//phiv;
+  fin >> month;//month;
+  fin >> day;//jday;
+  fin >> atmosphericPressure;//pressure;
+  fin >> waterVaporAmount;//uw;
+  fin >> ozoneAmount;//uo3;
+  unsigned int aer(0);
+  fin >> aer;//iaer;
+  aerosolModel = static_cast<AerosolModelType>(aer);
+  fin >> aerosolOptical;//taer55;
+  fin >> minSpectralValue;//wlinf;
+  fin >> maxSpectralValue;//wlsup; 
   
+  //fin.open(wavelenghFiles[i]);
+  while (!fin.eof() && fin.good())
+    {
+      fin >> value;
+      vect.push_back(value);
+    }
+  // Remove the last vector element which is added by fin, and not contains in the original file.
+  //vect.pop_back();
+  fin.close();
+  functionValues->SetFilterFunctionValues(vect);
+  functionValues->SetMinSpectralValue(minSpectralValue);
+  functionValues->SetMaxSpectralValue(maxSpectralValue);
+  functionValues->SetUserStep( val );
+  param->GetWavelenghtSpectralBandRef()->push_back(functionValues);
+
+  //}
+
+  aerosolModel = static_cast<AerosolModelType>(::atoi(argv[16]));
   
-  AerosolModelType AerosolModel;
-  
-  param->SetSolarZenithalAngle(static_cast<double>(::atof(argv[])));
-  param->SetSolarAzimutalAngle(static_cast<double>(::atof(argv[])));
-  param->SetViewingZenithalAngle(static_cast<double>(::atof(argv[])));
-  param->SetViewingAzimutalAngle(static_cast<double>(::atof(argv[])));
-  param->SetMonth(::atoi(argv[]));
-  param->SetDay(::atoi(argv[]));
-  param->SetAtmosphericPressure(static_cast<double>(::atof(argv[]))); 
-  param->SetWaterVaporAmount(static_cast<double>(::atof(argv[])));
-  param->SetOzoneAmount(static_cast<double>(::atof(argv[])));
-  aerosolModel = static_cast<AerosolModelType>(::atoi(argv[]));
+  // Set parameters
+  param->SetSolarZenithalAngle(static_cast<double>(solarZenithalAngle));
+  param->SetSolarAzimutalAngle(static_cast<double>(solarAzimutalAngle));
+  param->SetViewingZenithalAngle(static_cast<double>(viewingZenithalAngle));
+  param->SetViewingAzimutalAngle(static_cast<double>(viewingAzimutalAngle));
+  param->SetMonth(month);
+  param->SetDay(day);
+  param->SetAtmosphericPressure(static_cast<double>(atmosphericPressure)); 
+  param->SetWaterVaporAmount(static_cast<double>(waterVaporAmount));
+  param->SetOzoneAmount(static_cast<double>(ozoneAmount));
   param->SetAerosolModel(aerosolModel);
-  param->SetAerosolOptical(static_cast<double>(::atof(argv[])));
+  param->SetAerosolOptical(static_cast<double>(aerosolOptical));
+
+  /*
+  aerosolModel = static_cast<AerosolModelType>(::atoi(argv[16]));
+  
+  // Set parameters
+  param->SetSolarZenithalAngle(static_cast<double>(::atof(argv[7])));
+  param->SetSolarAzimutalAngle(static_cast<double>(::atof(argv[8])));
+  param->SetViewingZenithalAngle(static_cast<double>(::atof(argv[9])));
+  param->SetViewingAzimutalAngle(static_cast<double>(::atof(argv[10])));
+  param->SetMonth(::atoi(argv[11]));
+  param->SetDay(::atoi(argv[12]));
+  param->SetAtmosphericPressure(static_cast<double>(::atof(argv[13]))); 
+  param->SetWaterVaporAmount(static_cast<double>(::atof(argv[14])));
+  param->SetOzoneAmount(static_cast<double>(::atof(argv[15])));
+  param->SetAerosolModel(aerosolModel);
+  param->SetAerosolOptical(static_cast<double>(::atof(argv[17])));
   */
+  object->SetInput( param );
+  object->GenerateData();
+  radiative = object->GetOutput();
+
+  fout.open(outputFile);
+  fout <<" ---------------------------------------------------------"<<std::endl;
+  fout << "Inputs values:"<<std::setprecision(10)<<std::endl;
+  fout << "   ----->  SolarZenithalAngle :                "<<solarZenithalAngle<<std::endl;
+  fout << "   ----->  SolarAzimutalAngle :                "<<solarAzimutalAngle<<std::endl;
+  fout << "   ----->  ViewingZenithalAngle :              "<<viewingZenithalAngle<<std::endl;
+  fout << "   ----->  ViewingAzimutalAngle :              "<<viewingAzimutalAngle<<std::endl;
+  fout << "   ----->  Month :                             "<<month<<std::endl;
+  fout << "   ----->  Day :                               "<<day<<std::endl;
+  fout << "   ----->  AtmosphericPressure :               "<<atmosphericPressure<<std::endl;
+  fout << "   ----->  WaterVaporAmount :                  "<<waterVaporAmount<<std::endl;
+  fout << "   ----->  OzoneAmount :                       "<<ozoneAmount<<std::endl;
+  fout << "   ----->  AerosolModel :                      "<<aer<<std::endl;
+  fout << "   ----->  AerosolOptical :                    "<<aerosolOptical<<std::endl;
+  fout << "   ----->  MinSpectralValue :                  "<<minSpectralValue<<std::endl;
+  fout << "   ----->  MaxSpectralValue :                  "<<maxSpectralValue<<std::endl;
+  fout << "   ----->  UserStep :                          "<<functionValues->GetUserStep()<<std::endl;
+  fout <<" ---------------------------------------------------------"<<std::endl;
+  fout << "Outputs values:"<<std::endl;
+  fout << "   ----->  atmospheric reflectance :           "<<radiative->GetIntrinsicAtmosphericReflectances(0)<<std::endl;
+  fout << "   ----->  atmospheric spherical albedo :      "<<radiative->GetSphericalAlbedos(0)<<std::endl;
+  fout << "   ----->  total gaseous transmission :        "<<radiative->GetTotalGaseousTransmissions(0)<<std::endl;
+  fout << "   ----->  downward transmittance :            "<<radiative->GetDownwardTransmittances(0)<<std::endl;
+  fout << "   ----->  upward transmittance :              "<<radiative->GetUpwardTransmittances(0)<<std::endl;
+  fout << "   ----->  MinSpectralValue update:            "<<functionValues->GetMinSpectralValue()<<std::endl;
+  fout << "   ----->  MaxSpectralValue update :           "<<functionValues->GetMaxSpectralValue()<<std::endl;
+  fout <<" ---------------------------------------------------------"<<std::endl;
+  fout<<"Input wavelenght band values ["<<functionValues->GetFilterFunctionValues().size()<<"]:"<<std::endl;
+  for (unsigned int i=0; i<functionValues->GetFilterFunctionValues().size(); i++)
+    {
+      fout<< "    "<<functionValues->GetFilterFunctionValues()[i] <<std::endl;
+    }
+  fout <<" ---------------------------------------------------------"<<std::endl;
+  fout<<"Output wavelenght band values 6S ["<<functionValues->GetFilterFunctionValues6S().size()<<"]:"<<std::endl;
+  for (unsigned int i=0; i<functionValues->GetFilterFunctionValues6S().size(); i++)
+    {
+      fout<< "            "<<functionValues->GetFilterFunctionValues6S()[i] <<std::endl;
+    } 
+  fout<<std::endl;
+  fout.close();
   return EXIT_SUCCESS;
 }

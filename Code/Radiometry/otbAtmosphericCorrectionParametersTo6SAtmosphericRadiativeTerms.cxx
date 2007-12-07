@@ -16,6 +16,7 @@ PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
 #include "otbAtmosphericCorrectionParametersTo6SAtmosphericRadiativeTerms.h"
+#include "otbSIXSTraits.h"
 
 namespace otb
 {
@@ -132,7 +133,7 @@ AtmosphericCorrectionParametersTo6SAtmosphericRadiativeTerms
     (this->itk::ProcessObject::GetInput(0) );
 }
 
-#if 0
+
 void
 AtmosphericCorrectionParametersTo6SAtmosphericRadiativeTerms
 ::GenerateData()
@@ -141,24 +142,24 @@ AtmosphericCorrectionParametersTo6SAtmosphericRadiativeTerms
         AtmosphericCorrectionParametersPointer input = this->GetInput();
         AtmosphericRadiativeTermsPointer output = this->GetOutput();
         
-        output->GetVector().clear();
+        output->GetValues().clear();
         typedef AtmosphericCorrectionParameters::WavelenghtSpectralBandVectorType WavelenghtSpectralBandVectorType;
         WavelenghtSpectralBandVectorType WavelenghtSpectralBandVector = input->GetWavelenghtSpectralBand();
         unsigned int NbBand = WavelenghtSpectralBandVector.size();
-        
-        double AtmosphericReflectance(0.);
-        double AtmosphericSphericalAlbedo(0.);
-        double TotalGaseousTransmission(0.);
-        double DownwardTransmittance(0.);
-        double UpwardTransmittance(0.);
+
+        double atmosphericReflectance(0.);
+        double atmosphericSphericalAlbedo(0.);
+        double totalGaseousTransmission(0.);
+        double downwardTransmittance(0.);
+        double upwardTransmittance(0.);
                 
         for(unsigned int i=0 ; i<NbBand ; i++)
         {
-                AtmosphericReflectance = 0.;
-                AtmosphericSphericalAlbedo = 0.;
-                TotalGaseousTransmission = 0.;
-                DownwardTransmittance = 0.;
-                UpwardTransmittance = 0.;
+	  atmosphericReflectance = 0.;
+                atmosphericSphericalAlbedo = 0.;
+                totalGaseousTransmission = 0.;
+                downwardTransmittance = 0.;
+                upwardTransmittance = 0.;
                 SIXSTraits::ComputeAtmosphericParameters(
                         input->GetSolarZenithalAngle(),                 /** The Solar zenithal angle */
                         input->GetSolarAzimutalAngle(),                 /** The Solar azimutal angle */
@@ -171,27 +172,35 @@ AtmosphericCorrectionParametersTo6SAtmosphericRadiativeTerms
                         input->GetOzoneAmount(),                        /** The Ozone amount (Stratospheric ozone layer content) */
                         input->GetAerosolModel(),                       /** The Aerosol model */
                         input->GetAerosolOptical(),                     /** The Aerosol optical (radiative impact of aerosol for the reference wavelenght 550-nm) */
-                        input->GetWavelenghtSpectralBand(),             /** Wavelenght for the spectral band definition */
+                        input->GetWavelenghtSpectralBand()[i],          /** Wavelenght for the spectral band definition */
                                                                         /** Note : The Max wavelenght spectral band value must be updated ! */
-                        AtmosphericReflectance,                         /** Atmospheric reflectance */     
-                        AtmosphericSphericalAlbedo,                     /** atmospheric spherical albedo */
-                        TotalGaseousTransmission,                       /** Total gaseous transmission */
-                        DownwardTransmittance,                          /** downward transmittance */      
-                        UpwardTransmittance )                           /** upward transmittance */
+                        atmosphericReflectance,                         /** Atmospheric reflectance */     
+                        atmosphericSphericalAlbedo,                     /** atmospheric spherical albedo */
+                        totalGaseousTransmission,                       /** Total gaseous transmission */
+                        downwardTransmittance,                          /** downward transmittance */      
+                        upwardTransmittance );                          /** upward transmittance */
                 
-                        atmRadiativeTerm = New();
-                        atmRadiativeTerm->SetAtmosphericReflectance(AtmosphericReflectance);
-                        atmRadiativeTerm->SetAtmosphericSphericalAlbedo(AtmosphericSphericalAlbedo);
-                        atmRadiativeTerm->SetTotalGaseousTransmission(TotalGaseousTransmission);
-                        atmRadiativeTerm->SetDownwardTransmittance(DownwardTransmittance);
-                        atmRadiativeTerm->SetUpwardTransmittance(UpwardTransmittance); 
-                        //output->Get...().push_back(atmRadiativeTerm);
-			output->SetValueByIndex(i, atmRadiativeTerm);
+		/*
+		  atmRadiativeTerm = New();
+		  atmRadiativeTerm->SetAtmosphericReflectances(AtmosphericReflectance);
+		  atmRadiativeTerm->SetAtmosphericSphericalAlbedo(AtmosphericSphericalAlbedo);
+		  atmRadiativeTerm->SetTotalGaseousTransmission(TotalGaseousTransmission);
+		  atmRadiativeTerm->SetDownwardTransmittance(DownwardTransmittance);
+		  atmRadiativeTerm->SetUpwardTransmittance(UpwardTransmittance); 
+		  //output->Get...().push_back(atmRadiativeTerm);
+		  output->SetValueByIndex(i, atmRadiativeTerm);
+		*/
+		output->SetIntrinsicAtmosphericReflectances(i, atmosphericReflectance);
+		output->SetSphericalAlbedos(i, atmosphericSphericalAlbedo);
+		output->SetTotalGaseousTransmissions(i, totalGaseousTransmission);
+		output->SetDownwardTransmittances(i, downwardTransmittance);
+		output->SetUpwardTransmittances(i, upwardTransmittance);
+
         }
         
 
 }
-#endif        
+        
 
 /**
  * PrintSelf Method

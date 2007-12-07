@@ -202,12 +202,20 @@ public:
   itkSetMacro(AerosolOptical,double); 
   itkGetMacro(AerosolOptical,double); 
 
+  /**
+   * Set/Get the wavelenght spectral band.
+   */
+  void SetWavelenghtSpectralBand( const WavelenghtSpectralBandVectorType & waveband){ m_WavelenghtSpectralBand = waveband; }; 
+  WavelenghtSpectralBandVectorType GetWavelenghtSpectralBand(){ return m_WavelenghtSpectralBand; }; 
+  WavelenghtSpectralBandVectorType * GetWavelenghtSpectralBandRef(){ return &m_WavelenghtSpectralBand; }; 
 
-protected:
   /** Constructor */
   AtmosphericCorrectionParameters();
   /** Destructor */
   ~AtmosphericCorrectionParameters(){};
+
+protected:
+
   /**PrintSelf method */
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
 

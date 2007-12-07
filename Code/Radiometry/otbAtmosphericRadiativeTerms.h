@@ -156,6 +156,11 @@ public:
   void SetUpwardTransmittances(const DataVectorType & vect); 
   /** Set methods with index. */
   void SetValueByIndex(unsigned int id, const ValueType & val);
+  void SetIntrinsicAtmosphericReflectances(unsigned int id, const double & val); 
+  void SetSphericalAlbedos(unsigned int id, const double & val); 
+  void SetTotalGaseousTransmissions(unsigned int id, const double & val); 
+  void SetDownwardTransmittances(unsigned int id, const double & val ); 
+  void SetUpwardTransmittances(unsigned int id, const  double & val ); 
 
   /** Get methods with vectors. */
   DataVectorType GetIntrinsicAtmosphericReflectances(); 

@@ -11,7 +11,7 @@ SET(TEMP ${OTBTesting_BINARY_DIR}/Temporary)
 #Tolerance sur diff pixel image
 SET(TOL 0.0)
 SET(EPSILON 0.000000000001)
-
+SET(EPSILON_10e6 0.000001)
 SET(RADIOMETRY_TESTS ${CXX_TEST_PATH}/otbRadiometryTests)
 
 # -------            otb::RAndNIRVegetationIndexImageFilter   ------------------------------
@@ -262,25 +262,25 @@ ADD_TEST(raTvImageToReflectanceImageFilter ${RADIOMETRY_TESTS}
          ) 
 
 ADD_TEST(raTvRomaniaImageToReflectance ${RADIOMETRY_TESTS} 
-  --compare-image ${EPSILON}  ${BASELINE}/raTvRomaniaReflectanceImage
+  --compare-image ${EPSILON}  ${BASELINE}/raTvRomaniaReflectanceImage.tif
                           ${TEMP}/raTvRomaniaReflectanceImage.tif
         otbImageToReflectanceImageFilter
 	${IMAGEDATA}/ROMANIA/S4_20020518.tif 
 	${TEMP}/raTvRomaniaReflectanceImage.tif
-	27.3                    # = 90-62.70 : elevation et azimuth solaire 
-        0.881338*2.24800        #channel 1 alpha
-	0.858713*5.04500        #channel 2 alpha	
-	0.685568*3.38500        #channel 3 alpha	
-	6.19122*1.50500         #channel 4 alpha
-	0                       #channel 1 beta
-	0                       #channel 2 beta
-	0                       #channel 3 beta
-	0                       #channel 4 beta
-	1057.56                 #channel 1 illumination
-	1570.23                 #channel 2 illumination    
-	1842.94                 #channel 3 illumination
-	232.820                 #channel 4 illumination
-	0.9889145564708814      #= sqrt(0.977952) d/d0 corresponding to the date 03/05 
+	27.3                 # = 90-62.70 : elevation et azimuth solaire 
+        1.981247824          #channel 1 alpha = 0.881338*2.24800 
+	4.332207085          #channel 2 alpha = 0.858713*5.04500	
+	2.32064768           #channel 3 alpha = 0.685568*3.38500 	
+	9.3177861            #channel 4 alpha = 6.19122*1.50500
+	0                    #channel 1 beta
+	0                    #channel 2 beta
+	0                    #channel 3 beta
+	0                    #channel 4 beta
+	1057.56              #channel 1 illumination
+	1570.23              #channel 2 illumination    
+	1842.94              #channel 3 illumination
+	232.820              #channel 4 illumination
+	0.9889145564708814   #= sqrt(0.977952) d/d0 corresponding to the date 03/05 
         ) 
 
 ADD_TEST(raTvImageToReflectanceImageFilterDayMounth ${RADIOMETRY_TESTS} 
@@ -418,21 +418,33 @@ ADD_TEST(raTuSurfaceAdjencyEffect6SCorrectionSchemeFilter ${RADIOMETRY_TESTS}
 ADD_TEST(raTuAtmosphericCorrectionParametersTo6SAtmosphericRadiativeTermsNew ${RADIOMETRY_TESTS}  
         otbAtmosphericCorrectionParametersTo6SAtmosphericRadiativeTermsNew
 )
-ADD_TEST(raTuAtmosphericCorrectionParametersTo6SAtmosphericRadiativeTerms ${RADIOMETRY_TESTS}  
+ADD_TEST(raTvAtmosphericCorrectionParametersTo6SAtmosphericRadiativeTerms ${RADIOMETRY_TESTS}  
+--compare-ascii ${EPSILON_10e6}  
+		${BASELINE_FILES}/raTvSIXSTraitsComputeAtmosphericParametersTest.txt
+                ${TEMP}/raTvCorrectionTo6SRadiative.txt
         otbAtmosphericCorrectionParametersTo6SAtmosphericRadiativeTerms
-	#${INPUTDATA}/poupees_sub.png							# input image
+                ${INPUTDATA}/in6S_otb
+                ${TEMP}/raTvCorrectionTo6SRadiative.txt
+		
+	#${IMAGEDATA}/Romania/S4_2002518.tif						# input image
 	#${TEMP}/raTvAtmosphericCorrectionParametersTo6SAtmosphericRadiativeTerms.tif    # output image
-	# wavelet length file for channel 1
-	# wavelet length file for channel 2
-	# wavelet length file for channel 3
-	# wavelet length file for channel 4
-	# solar zenithal angle
-        # solar azimutal angle
-       # viewing zenithal angle
-       # viewing azimutal angle
-       # acquisition month
-       # acquisition day
-# aerosol model type (0 = NO_AEROSOL=0, 1 = CONTINENTAL, 2 = MARITIME, 3 =)NO_AEROSOL=0,CONTINENTAL=1,MARITIME=2,URBAN=3,DESERTIC=5
+	#${INPUTDATA}/RADIO_WAVELENGHT_SPECTRAL_BAND_SPOT4_1_B1.txt  # wavelet length file for channel 1
+	#${INPUTDATA}/RADIO_WAVELENGHT_SPECTRAL_BAND_SPOT4_1_B2.txt  # wavelet length file for channel 2
+	#${INPUTDATA}/RADIO_WAVELENGHT_SPECTRAL_BAND_SPOT4_1_B3.txt  # wavelet length file for channel 3
+	#${INPUTDATA}/RADIO_WAVELENGHT_SPECTRAL_BAND_SPOT4_1_MIR.txt # wavelet length file for channel 4
+	#27.3     # = 90-62.7, solar zenithal angle
+        #152.7    # solar azimutal angle
+        #2        # = 90-88, viewing zenithal angle
+        #-77.0    # viewing azimutal angle
+        #12       # acquisition month
+        #17       # acquisition day
+        #1013.00  # atmospheric pressure     
+        #2.48134  # water vapor amount
+        #0.344000 # ozone amount
+        #1        # aerosol model type (0 = NO_AEROSOL=0, 1 = CONTINENTAL, 2 = MARITIME, 3 =)NO_AEROSOL=0,CONTINENTAL=1,MARITIME=2,URBAN=3,DESERTIC=5 
+        #1.99854  # aerosol opical thichness 
+
+
 )
 
 
