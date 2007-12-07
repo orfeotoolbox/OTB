@@ -97,16 +97,16 @@ public:
    */
   itkNewMacro(Self);
 
-#ifdef ITK_USE_CONCEPT_CHECKING
-  /** Begin concept checking */
-  itkConceptMacro(IntConvertibleToInput2Check,
-    (itk::Concept::Convertible<int, typename TInputImage2::PixelType>));
-  itkConceptMacro(Input1Input2OutputDivisionOperatorsCheck,
-    (itk::Concept::DivisionOperators<typename TInputImage1::PixelType,
-                                typename TInputImage2::PixelType,
-                                typename TOutputImage::PixelType>));
-  /** End concept checking */
-#endif
+// #ifdef ITK_USE_CONCEPT_CHECKING
+//   /** Begin concept checking */
+//   itkConceptMacro(IntConvertibleToInput2Check,
+//     (itk::Concept::Convertible<int, typename TInputImage2::PixelType>));
+//   itkConceptMacro(Input1Input2OutputDivisionOperatorsCheck,
+//     (itk::Concept::DivisionOperators<typename TInputImage1::PixelType,
+//                                 typename TInputImage2::PixelType,
+//                                 typename TOutputImage::PixelType>));
+//   /** End concept checking */
+// #endif
 
 protected:
   DivideVectorImageFilter() {}
