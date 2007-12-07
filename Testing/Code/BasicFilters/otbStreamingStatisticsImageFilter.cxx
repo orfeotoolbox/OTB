@@ -53,6 +53,8 @@ int otbStreamingStatisticsImageFilter(int argc, char * argv[])
       file.open(outfname);
       file<<"Minimum: "<<filter->GetMinimum()<<std::endl;
       file<<"Maximum: "<<filter->GetMaximum()<<std::endl;
+      file<<std::fixed;
+      file.precision(5);
       file<<"Sum: "<<filter->GetSum()<<std::endl;
       file<<"Mean: "<<filter->GetMean()<<std::endl;
       file<<"Sigma: "<<filter->GetSigma()<<std::endl;
