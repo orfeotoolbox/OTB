@@ -28,11 +28,12 @@
 
 #include "otbMacro.h"
 #include "otbImage.h"
+#include "otbVectorImage.h"
 #include "otbImageFileReader.h"
 #include "otbStreamingImageFileWriter.h"
 
 #include "itkChangeInformationImageFilter.h"
-
+#include "otbPerBandVectorImageFilter.h"
 
 #include "init/ossimInit.h"
 
@@ -90,8 +91,9 @@ int main( int argc, char* argv[] )
    
   typedef otb::Image<unsigned char, 2>    CharImageType;
   typedef otb::Image<unsigned int, 2>     ImageType;
-  typedef otb::ImageFileReader<ImageType>  ReaderType;
-  typedef otb::StreamingImageFileWriter<ImageType>  WriterType;
+  typedef otb::VectorImage<unsigned int, 2>     VectorImageType;
+  typedef otb::ImageFileReader<VectorImageType>  ReaderType;
+  typedef otb::StreamingImageFileWriter<VectorImageType>  WriterType;
 
 					
   ReaderType::Pointer     	reader=ReaderType::New();
@@ -165,7 +167,7 @@ int main( int argc, char* argv[] )
 	
   reader->GenerateOutputInformation();
   
-  typedef itk::ChangeInformationImageFilter<ImageType > ChangeInfoFilterType;
+  typedef itk::ChangeInformationImageFilter<VectorImageType > ChangeInfoFilterType;
   ChangeInfoFilterType::Pointer changeInfo = ChangeInfoFilterType::New();
   changeInfo->SetInput(reader->GetOutput());
   changeInfo->ChangeOriginOn();
@@ -176,8 +178,14 @@ int main( int argc, char* argv[] )
 	
   changeInfo->GenerateOutputInformation();
 			
-  orthoRectifFilter->SetInput(changeInfo->GetOutput());
+//   orthoRectifFilter->SetInput(changeInfo->GetOutput());
 
+  
+  typedef otb::PerBandVectorImageFilter<VectorImageType, VectorImageType, OrthoRectifFilterType> PerBandFilterType;
+  PerBandFilterType::Pointer perBandFilter=PerBandFilterType::New();
+  perBandFilter->SetFilter(orthoRectifFilter);
+  perBandFilter->SetInput(changeInfo->GetOutput());
+  
 // Software Guide : EndCodeSnippet	
 
 // Software Guide : BeginLatex
@@ -224,7 +232,8 @@ int main( int argc, char* argv[] )
 
 // Software Guide : BeginCodeSnippet
   
-  writer->SetInput(orthoRectifFilter->GetOutput());
+//   writer->SetInput(orthoRectifFilter->GetOutput());
+  writer->SetInput(perBandFilter->GetOutput());
 				
   writer->SetTilingStreamDivisions(20);
 
