@@ -60,8 +60,8 @@ SIXSTraits::ComputeAtmosphericParameters(
 // atmospheric model
         otb_6s_integer iaer(static_cast<otb_6s_integer>(AerosolModel));
         otb_6s_real taer55(static_cast<otb_6s_real>(AerosolOptical));
-        
- 
+
+	 
         // Init output parameters       
         AtmosphericReflectance = 0.;   
         AtmosphericSphericalAlbedo = 0.; 
@@ -131,7 +131,7 @@ SIXSTraits::ComputeAtmosphericParameters(
         AtmosphericSphericalAlbedo = static_cast<double>(sast); 
         TotalGaseousTransmission = static_cast<double>(tgasm);  
         DownwardTransmittance = static_cast<double>(sdtott);    
-        UpwardTransmittance = static_cast<double>(sutott);      
+        UpwardTransmittance = static_cast<double>(sutott);   
 }
 
 

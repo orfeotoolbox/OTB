@@ -26,13 +26,6 @@
 
 int otbAtmosphericCorrectionParametersTo6SAtmosphericRadiativeTerms(int argc, char * argv[])
 {
-  /*
-  std::vector<const char *> wavelenghFiles;
-  wavelenghFiles.push_back( argv[3] );
-  wavelenghFiles.push_back( argv[4] );
-  wavelenghFiles.push_back( argv[5] );
-  wavelenghFiles.push_back( argv[6] );
-  */  
   const char * wavelenghFile  = argv[1];
   const char * outputFile     = argv[2];
 
@@ -102,18 +95,16 @@ int otbAtmosphericCorrectionParametersTo6SAtmosphericRadiativeTerms(int argc, ch
       fin >> value;
       vect.push_back(value);
     }
-  // Remove the last vector element which is added by fin, and not contains in the original file.
-  //vect.pop_back();
+
   fin.close();
   functionValues->SetFilterFunctionValues(vect);
   functionValues->SetMinSpectralValue(minSpectralValue);
   functionValues->SetMaxSpectralValue(maxSpectralValue);
   functionValues->SetUserStep( val );
-  param->GetWavelenghtSpectralBandRef()->push_back(functionValues);
-
+  param->SetWavelenghtSpectralBandWithIndex(0, functionValues);
   //}
 
-  aerosolModel = static_cast<AerosolModelType>(::atoi(argv[16]));
+  //aerosolModel = static_cast<AerosolModelType>(::atoi(argv[16]));
   
   // Set parameters
   param->SetSolarZenithalAngle(static_cast<double>(solarZenithalAngle));
@@ -128,24 +119,8 @@ int otbAtmosphericCorrectionParametersTo6SAtmosphericRadiativeTerms(int argc, ch
   param->SetAerosolModel(aerosolModel);
   param->SetAerosolOptical(static_cast<double>(aerosolOptical));
 
-  /*
-  aerosolModel = static_cast<AerosolModelType>(::atoi(argv[16]));
-  
-  // Set parameters
-  param->SetSolarZenithalAngle(static_cast<double>(::atof(argv[7])));
-  param->SetSolarAzimutalAngle(static_cast<double>(::atof(argv[8])));
-  param->SetViewingZenithalAngle(static_cast<double>(::atof(argv[9])));
-  param->SetViewingAzimutalAngle(static_cast<double>(::atof(argv[10])));
-  param->SetMonth(::atoi(argv[11]));
-  param->SetDay(::atoi(argv[12]));
-  param->SetAtmosphericPressure(static_cast<double>(::atof(argv[13]))); 
-  param->SetWaterVaporAmount(static_cast<double>(::atof(argv[14])));
-  param->SetOzoneAmount(static_cast<double>(::atof(argv[15])));
-  param->SetAerosolModel(aerosolModel);
-  param->SetAerosolOptical(static_cast<double>(::atof(argv[17])));
-  */
   object->SetInput( param );
-  object->GenerateData();
+  object->Update();
   radiative = object->GetOutput();
 
   fout.open(outputFile);

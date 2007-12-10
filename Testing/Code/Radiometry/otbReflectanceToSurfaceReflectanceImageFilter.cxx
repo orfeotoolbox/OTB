@@ -49,12 +49,22 @@ int otbReflectanceToSurfaceReflectanceImageFilter(int argc, char * argv[])
 
       reader->GenerateOutputInformation();
       unsigned int nbChannel = reader->GetOutput()->GetNumberOfComponentsPerPixel();
- 
-      DataVectorType intrinsic(nbChannel, static_cast<double>(atof(argv[3])));
-      DataVectorType albedo(nbChannel, static_cast<double>(atof(argv[4])));
-      DataVectorType gaseous(nbChannel, static_cast<double>(atof(argv[5])));
-      DataVectorType downTrans(nbChannel, static_cast<double>(atof(argv[6])));
-      DataVectorType upTrans(nbChannel, static_cast<double>(atof(argv[7])));
+
+      DataVectorType intrinsic;
+      DataVectorType albedo;
+      DataVectorType gaseous;
+      DataVectorType downTrans;
+      DataVectorType upTrans;
+    
+      std::cout<<nbChannel<<std::endl;
+      for( unsigned int j=0; j<nbChannel; j++)
+	{
+	  intrinsic.push_back(static_cast<double>(atof(argv[3+j])));
+	  albedo.push_back(static_cast<double>(atof(argv[3+j+nbChannel])));
+	  gaseous.push_back(static_cast<double>(atof(argv[3+j+2*nbChannel])));
+	  downTrans.push_back(static_cast<double>(atof(argv[3+j+3*nbChannel])));
+	  upTrans.push_back(static_cast<double>(atof(argv[3+j+4*nbChannel])));
+	}
 
       atmo->SetIntrinsicAtmosphericReflectances(intrinsic);
       atmo->SetSphericalAlbedos(albedo);

@@ -22,6 +22,7 @@
 #include "itkImageRegionIterator.h"
 #include "itkImageRegionConstIterator.h"
 #include "itkProgressReporter.h"
+#include "itkNumericTraits.h"
 
 namespace otb
 {
@@ -63,86 +64,9 @@ UnaryImageFunctorWithVectorImageFilter<TInputImage,TOutputImage,TFunction>
     {
     return;
     }
-
-//   // Set the output image largest possible region.  Use a RegionCopier
-//   // so that the input and output images can be different dimensions.
-//   OutputImageRegionType outputLargestPossibleRegion;
-//   this->CallCopyInputRegionToOutputRegion(outputLargestPossibleRegion,
-//                                           inputPtr->GetLargestPossibleRegion());
-//   outputPtr->SetLargestPossibleRegion( outputLargestPossibleRegion );
-
-//   // Set the output spacing and origin
-//   const itk::ImageBase<Superclass::InputImageDimension> *phyData;
-
-//   phyData
-//     = dynamic_cast<const itk::ImageBase<Superclass::InputImageDimension>*>(this->GetInput());
-
-//   if (phyData)
-//     {
-//     // Copy what we can from the image from spacing and origin of the input
-//     // This logic needs to be augmented with logic that select which
-//     // dimensions to copy
-//     unsigned int i, j;
-//     const typename InputImageType::SpacingType&
-//       inputSpacing = inputPtr->GetSpacing();
-//     const typename InputImageType::PointType&
-//       inputOrigin = inputPtr->GetOrigin();
-//     const typename InputImageType::DirectionType&
-//       inputDirection = inputPtr->GetDirection();
-
-//     typename OutputImageType::SpacingType outputSpacing;
-//     typename OutputImageType::PointType outputOrigin;
-//     typename OutputImageType::DirectionType outputDirection;
-
-//     // copy the input to the output and fill the rest of the
-//     // output with zeros.
-//     for (i=0; i < Superclass::InputImageDimension; ++i)
-//       {
-//       outputSpacing[i] = inputSpacing[i];
-//       outputOrigin[i] = inputOrigin[i];
-//       for (j=0; j < Superclass::OutputImageDimension; j++)
-//         {
-//         if (j < Superclass::InputImageDimension)
-//           {
-//           outputDirection[j][i] = inputDirection[j][i];
-//           }
-//         else
-//           {
-//           outputDirection[j][i] = 0.0;          
-//           }
-//         }
-//       }
-//     for (; i < Superclass::OutputImageDimension; ++i)
-//       {
-//       outputSpacing[i] = 1.0;
-//       outputOrigin[i] = 0.0;
-//       for (j=0; j < Superclass::OutputImageDimension; j++)
-//         {
-//         if (j == i)
-//           {
-//           outputDirection[j][i] = 1.0;
-//           }
-//         else
-//           {
-//           outputDirection[j][i] = 0.0;          
-//           }
-//         }
-//       }
-
-//     // set the spacing and origin
-//     outputPtr->SetSpacing( outputSpacing );
-//     outputPtr->SetOrigin( outputOrigin );
-//     outputPtr->SetDirection( outputDirection );
     outputPtr->SetNumberOfComponentsPerPixel( // propagate vector length info
         inputPtr->GetNumberOfComponentsPerPixel());
- //    }
-//   else
-//     {
-//     // pointer could not be cast back down
-//     itkExceptionMacro(<< "otb::UnaryImageFunctorWithVectorImageFilter::GenerateOutputInformation "
-//                       << "cannot cast input to "
-//                       << typeid(itk::ImageBase<Superclass::InputImageDimension>*).name() );
-//     }
+
 }
 
 /**
@@ -171,16 +95,25 @@ UnaryImageFunctorWithVectorImageFilter<TInputImage,TOutputImage,TFunction>
   
   inputIt.GoToBegin();
   outputIt.GoToBegin();
-  
+
+  // Null piuxel construction
+  InputPixelType nullPixel;
+  nullPixel.SetSize( outputIt.Get().GetSize() );
+  nullPixel.Fill(itk::NumericTraits<OutputInternalPixelType>::Zero);
+
+
   while( !inputIt.IsAtEnd() ) 
     {
       InputPixelType inPixel = inputIt.Get();
-      OutputPixelType outPixel = outputIt.Get();
-      
+      OutputPixelType outPixel = nullPixel;//outputIt.Get();
+      // if the input pixel in null, the output is considered as null ( no sensor informations )
+      if( inPixel!= nullPixel)
+	{      
       for (unsigned int j=0; j<inPixel.GetSize(); j++)
 	{
 	  outPixel[j] = m_FunctorVector[j]( inPixel[j] );
 	}	
+	}
       outputIt.Set(outPixel);
       ++inputIt;
       ++outputIt;

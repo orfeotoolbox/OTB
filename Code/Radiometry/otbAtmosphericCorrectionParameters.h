@@ -206,6 +206,18 @@ public:
    * Set/Get the wavelenght spectral band.
    */
   void SetWavelenghtSpectralBand( const WavelenghtSpectralBandVectorType & waveband){ m_WavelenghtSpectralBand = waveband; }; 
+  void SetWavelenghtSpectralBandWithIndex( unsigned int id, const FilterFunctionValues::Pointer & function)
+    {
+      if (m_WavelenghtSpectralBand.size() <  id+1)
+	{
+	  for(unsigned int j=0; j<(id+1-m_WavelenghtSpectralBand.size());j++)
+	    {
+	      FilterFunctionValues::Pointer temp;
+	      m_WavelenghtSpectralBand.push_back(temp);
+	    }
+	}
+      m_WavelenghtSpectralBand[id] = function;
+    };
   WavelenghtSpectralBandVectorType GetWavelenghtSpectralBand(){ return m_WavelenghtSpectralBand; }; 
   WavelenghtSpectralBandVectorType * GetWavelenghtSpectralBandRef(){ return &m_WavelenghtSpectralBand; }; 
 

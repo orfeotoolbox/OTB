@@ -177,8 +177,9 @@ public:
 
   /** Update the functor list */
   virtual void BeforeThreadedGenerateData(void)
-    {
+    {std::cout<<"BeforeThreadedGenerateData LumToRef"<<std::endl;
        this->GetFunctorVector().clear();
+       std::cout<<"1. / coefTemp"<<this->GetInput()->GetNumberOfComponentsPerPixel()<<std::endl;
       for(unsigned int i = 0;i<this->GetInput()->GetNumberOfComponentsPerPixel();++i)
 	{
 	  FunctorType functor;
@@ -192,7 +193,7 @@ public:
 		  otb_6s_integer month = static_cast<otb_6s_integer>(m_Month);
 		  int cr(0);
 		  cr = otb_6s_varsol_(&day, &month, &dsol);
-		  coefTemp = vcl_cos(m_ZenithalSolarRadius)*static_cast<double>(dsol);
+		  coefTemp = vcl_cos(m_ZenithalSolarRadius*M_PI/180)*static_cast<double>(dsol);
 		}
 	      else
 		{
@@ -201,10 +202,11 @@ public:
 	    }
 	  else
 	    {
-	      coefTemp = vcl_cos(m_ZenithalSolarRadius)*m_FluxNormalizationCoefficient*m_FluxNormalizationCoefficient;
+	      coefTemp = vcl_cos(m_ZenithalSolarRadius*M_PI/180)*m_FluxNormalizationCoefficient*m_FluxNormalizationCoefficient;
 	    }
 	  functor.SetIlluminationCorrectionCoefficient(1. / coefTemp);
 	  functor.SetSolarIllumination(static_cast<double>(m_SolarIllumination[i]));
+
 	  this->GetFunctorVector().push_back(functor);
 	}
     }

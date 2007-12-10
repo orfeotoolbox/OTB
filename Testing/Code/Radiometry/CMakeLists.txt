@@ -262,11 +262,13 @@ ADD_TEST(raTvImageToReflectanceImageFilter ${RADIOMETRY_TESTS}
          ) 
 
 ADD_TEST(raTvRomaniaImageToReflectance ${RADIOMETRY_TESTS} 
-  --compare-image ${EPSILON}  ${BASELINE}/raTvRomaniaReflectanceImage.tif
+  --compare-image ${EPSILON}  #${BASELINE}/raTvS4_20020518.img.hdr
+  ${BASELINE}/raTvRomania_S4_20020518_Reflectance.tif
                           ${TEMP}/raTvRomaniaReflectanceImage.tif
         otbImageToReflectanceImageFilter
 	${IMAGEDATA}/ROMANIA/S4_20020518.tif 
 	${TEMP}/raTvRomaniaReflectanceImage.tif
+# 
 	27.3                 # = 90-62.70 : elevation et azimuth solaire 
         1.981247824          #channel 1 alpha = 0.881338*2.24800 
 	4.332207085          #channel 2 alpha = 0.858713*5.04500	
@@ -384,14 +386,34 @@ ADD_TEST(raTvReflectanceToSurfaceReflectanceImageFilter ${RADIOMETRY_TESTS}
 	${INPUTDATA}/poupees_sub.png 
 	${TEMP}/raTvReflectanceToSurfaceReflectanceImageFilter.tif
 	# SAME VALUE FOR EACH CHANNEL
-	1  # intrinsic atmospheric reflectance	
-	2  # spherical albedo of the atmosphere
-	3  # total transmission	
-	2  # downward transmittance
-	3  # upward transmittance
+	1 1 1 1 # intrinsic atmospheric reflectance	
+	2 2 2 2 # spherical albedo of the atmosphere
+	3 3 3 3 # total transmission	
+	2 2 2 2 # downward transmittance
+	3 3 3 3 # upward transmittance
        )
 
+ADD_TEST(raTvRomaniaReflectanceToRomaniaSurfaceReflectanceImageFilter ${RADIOMETRY_TESTS} 
+  --compare-image ${EPSILON}   
+		  ${IMAGEDATA}/ROMANIA/raTvS4_20020518_Corrected.img.hdr
+		  ${TEMP}/raTvRomaniaReflectanceToRomaniaSurfaceReflectanceImageFilter.tif
+        otbRomaniaReflectanceToRomaniaSurfaceReflectanceImageFilter
+		#${IMAGEDATA}/ROMANIA/raTvS4_20020518_Reflectance.img.hdr # 
+		${BASELINE}/raTvRomania_S4_20020518_Reflectance.tif 
+		${TEMP}/raTvRomaniaReflectanceToRomaniaSurfaceReflectanceImageFilter.tif
+		${INPUTDATA}/testRomania.txt  # atmo param;
+		${INPUTDATA}/RADIO_WAVELENGHT_SPECTRAL_BAND_SPOT4_1_B3.txt  # wavelenghts, channel 3	
+		${INPUTDATA}/RADIO_WAVELENGHT_SPECTRAL_BAND_SPOT4_1_B2.txt  # wavelenghts, channel 2	
+		${INPUTDATA}/RADIO_WAVELENGHT_SPECTRAL_BAND_SPOT4_1_B1.txt  # wavelenghts, channel 1	
+		${INPUTDATA}/RADIO_WAVELENGHT_SPECTRAL_BAND_SPOT4_1_MIR.txt  # wavelenghts, channel 4
 
+		# SAME VALUE FOR EACH CHANNEL
+		# 0.02571013197 0.02571013197 0.02571013197 0.02571013197 # intrinsic atmospheric reflectance	
+		# 0.06615033001 0.06615033001 0.06615033001 0.06615033001 # spherical albedo of the atmosphere
+		# 0.9276281595  0.9276281595  0.9276281595  0.9276281595  # total transmission	
+		# 0.9506403804  0.9506403804  0.9506403804  0.9506403804  # downward transmittance
+		# 0.9373859167  0.9373859167  0.9373859167  0.9373859167  # upward transmittance
+       )
 
 # -------            otb::SurfaceAdjencyEffect6SCorrectionSchemeFilter   ------------------------------
 ADD_TEST(raTuSurfaceAdjencyEffect6SCorrectionSchemeFilterNew ${RADIOMETRY_TESTS}  
@@ -414,7 +436,7 @@ ADD_TEST(raTuSurfaceAdjencyEffect6SCorrectionSchemeFilter ${RADIOMETRY_TESTS}
 	0 0 0  0 0 1  0 1 0 # Channel 4 ponderation values;
 )
 
-# -------            otb::AtmosphericCorrectionParametersTo6SAtmosphericRadiativeTermsNew   ------------------------------
+# -------            otb::AtmosphericCorrectionParametersTo6SAtmosphericRadiativeTerms   ------------------------------
 ADD_TEST(raTuAtmosphericCorrectionParametersTo6SAtmosphericRadiativeTermsNew ${RADIOMETRY_TESTS}  
         otbAtmosphericCorrectionParametersTo6SAtmosphericRadiativeTermsNew
 )
@@ -425,27 +447,27 @@ ADD_TEST(raTvAtmosphericCorrectionParametersTo6SAtmosphericRadiativeTerms ${RADI
         otbAtmosphericCorrectionParametersTo6SAtmosphericRadiativeTerms
                 ${INPUTDATA}/in6S_otb
                 ${TEMP}/raTvCorrectionTo6SRadiative.txt
-		
-	#${IMAGEDATA}/Romania/S4_2002518.tif						# input image
-	#${TEMP}/raTvAtmosphericCorrectionParametersTo6SAtmosphericRadiativeTerms.tif    # output image
-	#${INPUTDATA}/RADIO_WAVELENGHT_SPECTRAL_BAND_SPOT4_1_B1.txt  # wavelet length file for channel 1
-	#${INPUTDATA}/RADIO_WAVELENGHT_SPECTRAL_BAND_SPOT4_1_B2.txt  # wavelet length file for channel 2
-	#${INPUTDATA}/RADIO_WAVELENGHT_SPECTRAL_BAND_SPOT4_1_B3.txt  # wavelet length file for channel 3
-	#${INPUTDATA}/RADIO_WAVELENGHT_SPECTRAL_BAND_SPOT4_1_MIR.txt # wavelet length file for channel 4
-	#27.3     # = 90-62.7, solar zenithal angle
-        #152.7    # solar azimutal angle
-        #2        # = 90-88, viewing zenithal angle
-        #-77.0    # viewing azimutal angle
-        #12       # acquisition month
-        #17       # acquisition day
-        #1013.00  # atmospheric pressure     
-        #2.48134  # water vapor amount
-        #0.344000 # ozone amount
-        #1        # aerosol model type (0 = NO_AEROSOL=0, 1 = CONTINENTAL, 2 = MARITIME, 3 =)NO_AEROSOL=0,CONTINENTAL=1,MARITIME=2,URBAN=3,DESERTIC=5 
-        #1.99854  # aerosol opical thichness 
-
-
 )
+
+				
+#	${IMAGEDATA}/Romania/S4_2002518.tif						# input image
+#	${TEMP}/raTvAtmosphericCorrectionParametersTo6SAtmosphericRadiativeTerms.tif    # output image
+#	${INPUTDATA}/RADIO_WAVELENGHT_SPECTRAL_BAND_SPOT4_1_B1.txt  # wavelet length file for channel 1
+#	${INPUTDATA}/RADIO_WAVELENGHT_SPECTRAL_BAND_SPOT4_1_B2.txt  # wavelet length file for channel 2
+#	${INPUTDATA}/RADIO_WAVELENGHT_SPECTRAL_BAND_SPOT4_1_B3.txt  # wavelet length file for channel 3
+#	${INPUTDATA}/RADIO_WAVELENGHT_SPECTRAL_BAND_SPOT4_1_MIR.txt # wavelet length file for channel 4
+#	27.3     # = 90-62.7, solar zenithal angle
+#        152.7    # solar azimutal angle
+#        2        # = 90-88, viewing zenithal angle
+#        -77.0    # viewing azimutal angle
+#        12       # acquisition month
+#        17       # acquisition day
+#        1013.00  # atmospheric pressure     
+#        2.48134  # water vapor amount
+#        0.344000 # ozone amount
+#        1        # aerosol model type (0 = NO_AEROSOL=0, 1 = CONTINENTAL, 2 = MARITIME, 3 =)NO_AEROSOL=0,CONTINENTAL=1,MARITIME=2,URBAN=3,DESERTIC=5 
+#        1.99854  # aerosol opical thichness 
+
 
 
 
@@ -479,6 +501,7 @@ otbSurfaceAdjencyEffect6SCorrectionSchemeFilterNew.cxx
 otbSurfaceAdjencyEffect6SCorrectionSchemeFilter.cxx
 otbAtmosphericCorrectionParametersTo6SAtmosphericRadiativeTermsNew.cxx
 otbAtmosphericCorrectionParametersTo6SAtmosphericRadiativeTerms.cxx
+otbRomaniaReflectanceToRomaniaSurfaceReflectanceImageFilter.cxx
 )
 
 

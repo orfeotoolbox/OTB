@@ -134,6 +134,14 @@ AtmosphericRadiativeTerms
 {
   if ( m_IsInitialized )
     {
+      if ( m_Values.size()<id+1 )
+	{ 
+	  for(unsigned int j=0; j<(id+1-m_Values.size());j++)
+	    {
+	      ValueType temp = AtmosphericRadiativeTermsSingleChannel::New();
+	      m_Values.push_back(temp);
+	    }
+	}
       m_Values[id] = val;
     }
   else
@@ -147,8 +155,11 @@ AtmosphericRadiativeTerms
 {
   if ( m_Values.size()<id+1 )
     { 
-      ValueType temp = AtmosphericRadiativeTermsSingleChannel::New();
-      m_Values.push_back(temp);
+      for(unsigned int j=0; j<(id+1-m_Values.size());j++)
+	{
+	  ValueType temp = AtmosphericRadiativeTermsSingleChannel::New();
+	  m_Values.push_back(temp);
+	}
     }
   m_Values[id]->SetIntrinsicAtmosphericReflectance(val);
 } 
@@ -157,9 +168,12 @@ AtmosphericRadiativeTerms
 ::SetSphericalAlbedos(unsigned int id, const double & val)
 {
   if ( m_Values.size()<id+1 )
-    { 
-      ValueType temp = AtmosphericRadiativeTermsSingleChannel::New();
-      m_Values.push_back(temp);
+    {
+      for(unsigned int j=0; j<(id+1-m_Values.size());j++)
+	{
+	  ValueType temp = AtmosphericRadiativeTermsSingleChannel::New();
+	  m_Values.push_back(temp);
+	}
     }
   m_Values[id]->SetSphericalAlbedo(val);
 } 
@@ -169,8 +183,11 @@ AtmosphericRadiativeTerms
 {
   if ( m_Values.size()<id+1 )
     { 
-      ValueType temp = AtmosphericRadiativeTermsSingleChannel::New();
-      m_Values.push_back(temp);
+      for(unsigned int j=0; j<(id+1-m_Values.size());j++)
+	{
+	  ValueType temp = AtmosphericRadiativeTermsSingleChannel::New();
+	  m_Values.push_back(temp);
+	}
     }
   m_Values[id]->SetTotalGaseousTransmission(val);
 } 
@@ -180,8 +197,11 @@ AtmosphericRadiativeTerms
 {
  if ( m_Values.size()<id+1 )
     { 
-      ValueType temp = AtmosphericRadiativeTermsSingleChannel::New();
-      m_Values.push_back(temp);
+      for(unsigned int j=0; j<(id+1-m_Values.size());j++)
+	{
+	  ValueType temp = AtmosphericRadiativeTermsSingleChannel::New();
+	  m_Values.push_back(temp);
+	}
     }
   m_Values[id]->SetDownwardTransmittance(val);
 } 
@@ -191,8 +211,11 @@ AtmosphericRadiativeTerms
 {
    if ( m_Values.size()<id+1 )
     { 
-      ValueType temp = AtmosphericRadiativeTermsSingleChannel::New();
-      m_Values.push_back(temp);
+      for(unsigned int j=0; j<(id+1-m_Values.size());j++)
+	{
+	  ValueType temp = AtmosphericRadiativeTermsSingleChannel::New();
+	  m_Values.push_back(temp);
+	}
     }
   m_Values[id]->SetUpwardTransmittance(val);
 } 
