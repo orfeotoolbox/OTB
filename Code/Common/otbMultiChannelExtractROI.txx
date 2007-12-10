@@ -96,6 +96,8 @@ void
 MultiChannelExtractROI<TInputPixelType,TOutputPixelType>
 ::GenerateOutputInformation()
 {
+   // Call to the superclass implementation
+  Superclass::GenerateOutputInformation();
         // Analyse of channels to process
         ChannelsType Channels;
         if( m_Channels.empty() == false )
@@ -177,12 +179,7 @@ MultiChannelExtractROI<TInputPixelType,TOutputPixelType>
  			     	itkExceptionMacro(<< oss.str().c_str());
  			     }
         }
-        
 	outputPtr->SetNumberOfComponentsPerPixel( outputPtr->GetVectorLength() );
-
-        // Call to the superclass implementation
-        Superclass::GenerateOutputInformation();
-
 }
 
 
@@ -211,6 +208,9 @@ MultiChannelExtractROI<TInputPixelType,TOutputPixelType>
 
   OutputIterator outIt(outputPtr, outputRegionForThread);
   InputIterator inIt(inputPtr, inputRegionForThread);
+
+  outIt.GoToBegin();
+  inIt.GoToBegin();
 
   // if default behaviour
   if ( m_ChannelsWorksBool == false )
@@ -245,7 +245,7 @@ MultiChannelExtractROI<TInputPixelType,TOutputPixelType>
                         pixelOutput[channelOut] = static_cast<OutputValueType>(pixelInput[channelIn]);
                         channelOut++;
                 }
-                outIt.Set( pixelOutput );
+		outIt.Set( pixelOutput );
                 ++outIt; 
                 ++inIt; 
                 progress.CompletedPixel();

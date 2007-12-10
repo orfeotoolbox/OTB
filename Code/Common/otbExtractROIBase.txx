@@ -64,8 +64,18 @@ ExtractROIBase<TInputImage,TOutputImage>
 ::CallCopyOutputRegionToInputRegion(InputImageRegionType &destRegion,
                                     const OutputImageRegionType &srcRegion)
 {
-  ExtractROIBaseRegionCopierType extractImageRegionCopier;
-  extractImageRegionCopier(destRegion, srcRegion, m_ExtractionRegion);
+ //  ExtractROIBaseRegionCopierType extractImageRegionCopier;
+//   extractImageRegionCopier(destRegion, srcRegion, m_ExtractionRegion);
+
+  destRegion = srcRegion;
+
+  OutputImageIndexType index = destRegion.GetIndex();
+  
+  for (unsigned int i = 0; i < InputImageDimension; ++i)
+    {
+      index[i]+=m_ExtractionRegion.GetIndex()[i];
+    }
+  destRegion.SetIndex(index);
 }
 
 
@@ -90,7 +100,7 @@ ExtractROIBase<TInputImage,TOutputImage>
     if (inputSize[i])
       { 
       outputSize[nonzeroSizeCount] = inputSize[i];    
-      outputIndex[nonzeroSizeCount] = extractRegion.GetIndex()[i];
+      outputIndex[nonzeroSizeCount] =0;
       nonzeroSizeCount++;
       }
     }
@@ -103,6 +113,32 @@ ExtractROIBase<TInputImage,TOutputImage>
   m_OutputImageRegion.SetSize(outputSize);
   m_OutputImageRegion.SetIndex(outputIndex);
   this->Modified();
+}
+
+template <class TInputImage, class TOutputImage>
+void 
+ExtractROIBase<TInputImage,TOutputImage>
+::GenerateInputRequestedRegion()
+{
+  Superclass::GenerateInputRequestedRegion();
+  
+  typename Superclass::InputImagePointer  inputPtr  = const_cast<InputImageType*>(this->GetInput());
+  typename Superclass::OutputImagePointer      outputPtr = this->GetOutput();
+
+  if ( !outputPtr || !inputPtr)
+    {
+      return;
+    }
+  InputImageRegionType requestedRegion = outputPtr->GetRequestedRegion();
+  InputImageIndexType index = requestedRegion.GetIndex();
+  InputImageIndexType offset = m_ExtractionRegion.GetIndex();
+
+  for (unsigned int i=0; i < InputImageDimension; ++i)
+        {
+	  index[i]+=offset[i];
+	}
+  requestedRegion.SetIndex(index);  
+  inputPtr->SetRequestedRegion(requestedRegion);
 }
 
 
@@ -166,7 +202,7 @@ ExtractROIBase<TInputImage,TOutputImage>
     }
 
   // Set the output image size to the same value as the extraction region.
-  outputPtr->SetLargestPossibleRegion( m_OutputImageRegion );
+  outputPtr->SetRegions( m_OutputImageRegion );
 
   // Set the output spacing and origin
   const itk::ImageBase<InputImageDimension> *phyData;

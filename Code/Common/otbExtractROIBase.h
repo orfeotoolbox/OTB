@@ -105,6 +105,10 @@ protected:
   ~ExtractROIBase() {};
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
+
+  virtual void GenerateInputRequestedRegion();
+
+
   /** ExtractROIBase can produce an image which is a different
    * resolution than its input image.  As such, ExtractROIBase
    * needs to provide an implementation for
