@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkDivideImageFilter.h,v $
   Language:  C++
-  Date:      $Date: 2006/03/31 14:31:04 $
-  Version:   $Revision: 1.11 $
+  Date:      $Date: 2007/12/08 17:18:04 $
+  Version:   $Revision: 1.13 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -53,9 +53,13 @@ public:
   inline TOutput operator()( const TInput1 & A, const TInput2 & B)
   {
     if(B != (TInput2) 0)
+      {
       return (TOutput)(A / B);
+      }
     else
-      return NumericTraits<TOutput>::max();
+      {
+      return NumericTraits<TOutput>::max(A);
+      }
   }
 }; 
 }
@@ -95,6 +99,10 @@ public:
    * Method for creation through the object factory.
    */
   itkNewMacro(Self);
+
+  /** Runtime information support. */
+  itkTypeMacro(DivideImageFilter, 
+               BinaryFunctorImageFilter);
 
 #ifdef ITK_USE_CONCEPT_CHECKING
   /** Begin concept checking */

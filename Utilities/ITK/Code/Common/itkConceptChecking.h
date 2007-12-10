@@ -3,8 +3,8 @@
   Program:   Insight Segmentation & Registration Toolkit
   Module:    $RCSfile: itkConceptChecking.h,v $
   Language:  C++
-  Date:      $Date: 2007/02/13 18:34:17 $
-  Version:   $Revision: 1.28 $
+  Date:      $Date: 2007/12/08 17:16:01 $
+  Version:   $Revision: 1.30 $
 
   Copyright (c) Insight Software Consortium. All rights reserved.
   See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
@@ -21,6 +21,8 @@
 #define __itkConceptChecking_h
 
 #include "itkPixelTraits.h"
+#include "itkNumericTraits.h"
+#include <iostream>
 
 /** Choose a concept checking implementation based on compiler abilities. */
 #ifndef ITK_CONCEPT_NO_CHECKING
@@ -372,13 +374,13 @@ struct DivisionOperators
     void constraints()
       {
       a = static_cast<T3>(b / c);
-      a /= static_cast<T3>(c);
+      a /= c;
       const_constraints(b, c);
       }
     void const_constraints(const T1& d, const T2& e)
       {
       a = static_cast<T3>(d / e);
-      a /= static_cast<T3>(e);
+      a /= e;
       }
     T3 a;
     T1 b;
