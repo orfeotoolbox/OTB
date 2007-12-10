@@ -23,8 +23,7 @@
 
 #include "itkImageToImageFilter.h"
 #include "itkMeanImageFilter.h"
-// #include "itkDivideImageFilter.h"
-#include "otbDivideVectorImageFilter.h"//TODO to correct after the fix from ITK
+#include "itkDivideImageFilter.h"
 #include "itkMultiplyImageFilter.h"
     
 namespace otb {
@@ -83,7 +82,7 @@ class ITK_EXPORT SimpleRcsPanSharpeningFusionImageFilter :
 
           typedef itk::MeanImageFilter
               <TPanImageType, InternalImageType> MeanFilterType;
-          typedef otb::DivideVectorImageFilter
+          typedef itk::DivideImageFilter
               <InternalVectorImageType,InternalImageType,
               InternalVectorImageType> DivideFilterType;
           typedef itk::MultiplyImageFilter
