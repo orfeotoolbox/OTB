@@ -44,12 +44,12 @@ namespace otb {
 
   template <class TPanImageType,class TXsImageType,class TOutputImageType>
 class ITK_EXPORT SimpleRcsPanSharpeningFusionImageFilter :
-    public itk::ImageToImageFilter<TPanImageType, TOutputImageType>
+    public itk::ImageToImageFilter<TXsImageType, TOutputImageType>
       {
         public:
           typedef SimpleRcsPanSharpeningFusionImageFilter   Self;
           typedef itk::ImageToImageFilter
-              <TPanImageType, TOutputImageType> Superclass;
+              <TXsImageType, TOutputImageType> Superclass;
           typedef itk::SmartPointer<Self>             Pointer;
           typedef itk::SmartPointer<const Self>       ConstPointer;
           typedef otb::Image<double,2>                InternalImageType;

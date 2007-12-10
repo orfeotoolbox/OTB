@@ -52,7 +52,7 @@ namespace otb
   // We have 2 inputs:  an image and a vector image
 
   // Process object is not const-correct so the const_cast is required here
-    this->itk::ProcessObject::SetNthInput(0, 
+    this->itk::ProcessObject::SetNthInput(1, 
                                      const_cast<  TPanImageType* >( image ) );
     this->Modified();
   }
@@ -62,13 +62,13 @@ namespace otb
           SimpleRcsPanSharpeningFusionImageFilter<TPanImageType, TXsImageType, TOutputImageType>
   ::GetPanInput(void) 
   {
-    if (this->GetNumberOfInputs() < 1)
+    if (this->GetNumberOfInputs() < 2)
     {
       return 0;
     }
   
     return static_cast<const TPanImageType * >
-        (this->itk::ProcessObject::GetInput(0) );
+        (this->itk::ProcessObject::GetInput(1) );
   }
   
   template <class TPanImageType, class TXsImageType, class TOutputImageType>
@@ -79,7 +79,7 @@ namespace otb
   // We have 2 inputs:  an image and a vector image
 
   // Process object is not const-correct so the const_cast is required here
-    this->itk::ProcessObject::SetNthInput(1, 
+    this->itk::ProcessObject::SetNthInput(0, 
                          const_cast<  TXsImageType* >( image ) );
     this->Modified();
   }
@@ -89,13 +89,13 @@ namespace otb
           SimpleRcsPanSharpeningFusionImageFilter<TPanImageType, TXsImageType, TOutputImageType>
   ::GetXsInput(void) 
   {
-    if (this->GetNumberOfInputs() < 2)
+    if (this->GetNumberOfInputs() < 1)
     {
       return 0;
     }
   
     return static_cast<const TXsImageType * >
-        (this->itk::ProcessObject::GetInput(1) );
+        (this->itk::ProcessObject::GetInput(0) );
   }
   
   
