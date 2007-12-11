@@ -1,4 +1,4 @@
-#include "f2c.h"
+#include "otb_6S.h"
 
 #ifdef __cplusplus
 extern "C" {

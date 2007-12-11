@@ -13,6 +13,7 @@ nm libotb_6s.a |grep " [TR] "
 
 /* Functions */
 #define varsol_ otb_6s_varsol_
+#define enviro_ otb_6s_enviro_
 /* otb 6S Main function */
 #define  ssssss_otb_main_function otb_6s_ssssss_otb_main_function 
 

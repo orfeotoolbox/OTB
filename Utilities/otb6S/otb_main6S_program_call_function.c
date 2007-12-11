@@ -18,7 +18,7 @@ static integer c__4 = 4;
 static integer c__3 = 3;
 
 /*<       program call6Sv1_0b >*/
-/* Main program */ MAIN__()
+/* Main program */ OTB_6S_MAIN__()
 {
     /* Format strings */
     static char fmt_100[] = "(10x,\002 ----->  atmospheric reflectance :    \
@@ -439,7 +439,7 @@ static integer c__3 = 3;
  */
 /*      goto 800 */
 /*<    >*/
-    otb_6s__(&asol, &phi0, &avis, &phiv, &month, &jday, &pressure, &uw, &uo3, 
+    otb_6s_ssssss_otb_main_function(&asol, &phi0, &avis, &phiv, &month, &jday, &pressure, &uw, &uo3, 
 	    &iaer, &taer55, &wlinf, &wlsup, s, &otb_ratm__, &sast, &tgasm, &
 	    sdtott, &sutott, &otb_tdif_up__, &otb_tdir_up__, &
 	    otb_tdif_up_ray__, &otb_tdif_up_aer__);
@@ -498,7 +498,7 @@ L999:
     return 0;
 } /* MAIN__ */
 
-/* Main program alias */ int call6sv1_0b__ () { MAIN__ (); return 0; }
+/* Main program alias */ int call6sv1_0b__ () { OTB_6S_MAIN__ (); return 0; }
 #ifdef __cplusplus
 	}
 #endif

@@ -3,7 +3,7 @@
    mangle/unmangle repeatedly. */
 
 /* Functions */
-
+#undef enviro_
 #undef varsol_
 /* otb 6S Main function */
 #undef ssssss_otb_main_function
