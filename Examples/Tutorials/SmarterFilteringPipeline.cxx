@@ -16,6 +16,13 @@
 
 =========================================================================*/
 
+//  Software Guide : BeginCommandLineArgs
+//    INPUTS: {QB_Suburb.png}
+//    OUTPUTS: {TutorialsSmarterFilteringPipelineOutput.png}
+//    -d 1.5 -i 2 -a 0.1
+//  Software Guide : EndCommandLineArgs
+
+
 //  Software Guide : BeginLatex
 //
 //  
@@ -71,7 +78,7 @@
 #include "itkRescaleIntensityImageFilter.h"
 #include "otbHarrisImageFilter.h"
 
-int main(int argc, char ** argv)
+int main( int argc, char * argv[] )
 {
 // Software Guide : EndCodeSnippet
   

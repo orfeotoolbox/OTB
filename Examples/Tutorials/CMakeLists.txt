@@ -36,6 +36,41 @@ SET(EXE_TESTS ${CXX_TEST_PATH}/otbTutorialsExamplesTests)
 SET(TOL 0.0)
 
 
+ADD_TEST( TutorialsPipelineTest ${EXE_TESTS}
+        --compare-image ${TOL}          ${BASELINE}/TutorialsPipelineOutput.png
+                                        ${TEMP}/TutorialsPipelineOutput.png
+        TutorialsPipelineTest
+        ${INPUTDATA}/QB_Suburb.png
+        ${TEMP}/TutorialsPipelineOutput.png
+        )
+ADD_TEST( TutorialsFilteringPipelineTest ${EXE_TESTS}
+        --compare-image ${TOL}          ${BASELINE}/TutorialsFilteringPipelineOutput.png
+                                        ${TEMP}/TutorialsFilteringPipelineOutput.png
+        TutorialsFilteringPipelineTest
+        ${INPUTDATA}/QB_Suburb.png
+        ${TEMP}/TutorialsFilteringPipelineOutput.png
+        )
+ADD_TEST( TutorialsScalingPipelineTest ${EXE_TESTS}
+        --compare-image ${TOL}          ${BASELINE}/TutorialsScalingPipelineOutput.png
+                                        ${TEMP}/TutorialsScalingPipelineOutput.png
+        TutorialsScalingPipelineTest
+        ${INPUTDATA}/QB_Suburb.png
+        ${TEMP}/TutorialsScalingPipelineOutput.png
+        )
+
+ADD_TEST( TutorialsSmarterFilteringPipelineTest ${EXE_TESTS}
+        --compare-image ${TOL}          ${BASELINE}/TutorialsSmarterFilteringPipelineOutput.png
+                                        ${TEMP}/TutorialsSmarterFilteringPipelineOutput.png
+        TutorialsSmarterFilteringPipelineTest
+        -in ${INPUTDATA}/QB_Suburb.png
+        -out ${TEMP}/TutorialsSmarterFilteringPipelineOutput.png
+        -d 1.5 
+        -i 2 
+        -a 0.1
+        )
+
+
+
 
 
 INCLUDE_DIRECTORIES("${OTBTesting_BINARY_DIR}")

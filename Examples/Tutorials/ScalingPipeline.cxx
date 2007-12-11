@@ -16,6 +16,12 @@
 
 =========================================================================*/
 
+//  Software Guide : BeginCommandLineArgs
+//    INPUTS: {QB_Suburb.png}
+//    OUTPUTS: {TutorialsScalingPipelineOutput.png}
+//  Software Guide : EndCommandLineArgs
+
+
 //  Software Guide : BeginLatex
 //
 //  This example illustrates the use of the 
@@ -35,7 +41,7 @@
 #include "itkCannyEdgeDetectionImageFilter.h"
 #include "itkRescaleIntensityImageFilter.h"
 
-int main(int argc, char ** argv)
+int main( int argc, char * argv[] )
 {
 // Software Guide : EndCodeSnippet
   

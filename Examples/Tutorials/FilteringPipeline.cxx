@@ -16,6 +16,12 @@
 
 =========================================================================*/
 
+//  Software Guide : BeginCommandLineArgs
+//    INPUTS: {QB_Suburb.png}
+//    OUTPUTS: {TutorialsFilteringPipelineOutput.png}
+//  Software Guide : EndCommandLineArgs
+
+
 //  Software Guide : BeginLatex
 //
 //  
@@ -34,7 +40,7 @@
 #include "otbStreamingImageFileWriter.h"
 #include "itkGradientMagnitudeImageFilter.h"
 
-int main(int argc, char ** argv)
+int main( int argc, char * argv[] )
 {
 // Software Guide : EndCodeSnippet
   

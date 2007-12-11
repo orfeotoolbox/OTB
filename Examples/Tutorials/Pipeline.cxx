@@ -16,6 +16,12 @@
 
 =========================================================================*/
 
+//  Software Guide : BeginCommandLineArgs
+//    INPUTS: {QB_Suburb.png}
+//    OUTPUTS: {TutorialsPipelineOutput.png}
+//  Software Guide : EndCommandLineArgs
+
+
 //  Software Guide : BeginLatex
 //
 //  Start by including some necessary headers and with the 
@@ -28,7 +34,7 @@
 #include "otbImageFileReader.h"
 #include "otbStreamingImageFileWriter.h"
 
-int main(int argc, char ** argv)
+int main( int argc, char * argv[] )
 {
 // Software Guide : EndCodeSnippet
   

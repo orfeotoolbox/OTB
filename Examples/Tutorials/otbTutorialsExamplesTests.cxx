@@ -26,8 +26,29 @@
 void RegisterTests()
 {
   REGISTER_TEST(HelloWorldOTBTest);
+  REGISTER_TEST(TutorialsPipelineTest);
+  REGISTER_TEST(TutorialsFilteringPipelineTest);
+  REGISTER_TEST(TutorialsScalingPipelineTest);
+  REGISTER_TEST(TutorialsSmarterFilteringPipelineTest);
 }
 
 #undef main
 #define main HelloWorldOTBTest
-#include "HelloWorldOTBTest.cxx"
+#include "HelloWorldOTBT.cxx"
+
+#undef main
+#define main TutorialsPipelineTest
+#include "Pipeline.cxx"
+
+#undef main
+#define main TutorialsFilteringPipelineTest
+#include "FilteringPipeline.cxx"
+
+#undef main
+#define main TutorialsScalingPipelineTest
+#include "ScalingPipeline.cxx"
+
+#undef main
+#define main TutorialsSmarterFilteringPipelineTest
+#include "SmarterFilteringPipeline.cxx"
+
