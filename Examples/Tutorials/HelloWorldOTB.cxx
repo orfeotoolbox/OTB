@@ -28,7 +28,7 @@
 #include "otbImage.h"
 #include <iostream>
 
-int main()
+int main( int argc, char * argv[] )
 {
   typedef otb::Image< unsigned short, 2 > ImageType;
 
