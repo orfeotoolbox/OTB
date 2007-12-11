@@ -320,7 +320,6 @@ namespace otb
    panchro->PropagateRequestedRegion();
    panchro->UpdateOutputData(); 
    
-    std::cout<<"End of BeforeThreaderGenerateData."<<std::endl;
   } 
 } // end namespace otb
 
