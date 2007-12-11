@@ -239,7 +239,7 @@ AtmosphericRadiativeTerms
   DataVectorType vect(m_Values.size(), 0);
   for (unsigned int nbChannel=0; nbChannel<m_Values.size(); nbChannel++)
     {
-      vect[nbChannel] = m_Values[nbChannel]->GetIntrinsicAtmosphericReflectance();
+      vect[nbChannel] = m_Values[nbChannel]->GetSphericalAlbedo();
     } 
   return vect;
 }
@@ -250,7 +250,7 @@ AtmosphericRadiativeTerms
   DataVectorType vect(m_Values.size(), 0);
   for (unsigned int nbChannel=0; nbChannel<m_Values.size(); nbChannel++)
     {
-      vect[nbChannel] = m_Values[nbChannel]->GetIntrinsicAtmosphericReflectance();
+      vect[nbChannel] = m_Values[nbChannel]->GetTotalGaseousTransmission();
     } 
   return vect;
 }
@@ -261,7 +261,7 @@ AtmosphericRadiativeTerms
   DataVectorType vect(m_Values.size(), 0);
   for (unsigned int nbChannel=0; nbChannel<m_Values.size(); nbChannel++)
     {
-      vect[nbChannel] = m_Values[nbChannel]->GetIntrinsicAtmosphericReflectance();
+      vect[nbChannel] = m_Values[nbChannel]->GetDownwardTransmittance();
     } 
   return vect;
 }
@@ -272,7 +272,7 @@ AtmosphericRadiativeTerms
   DataVectorType vect(m_Values.size(), 0);
   for (unsigned int nbChannel=0; nbChannel<m_Values.size(); nbChannel++)
     {
-      vect[nbChannel] = m_Values[nbChannel]->GetIntrinsicAtmosphericReflectance();
+      vect[nbChannel] = m_Values[nbChannel]->GetUpwardTransmittance();
     } 
   return vect;
 }
