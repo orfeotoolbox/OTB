@@ -360,7 +360,7 @@ ADD_TEST(raTvFilterFunctionValuesTest ${RADIOMETRY_TESTS}
 
 ##########           otb::SIXSTraits -------------------
 ADD_TEST(raTvSIXSTraitsComputeAtmosphericParametersTest ${RADIOMETRY_TESTS}
-    --compare-ascii ${TOL} ${BASELINE_FILES}/raTvSIXSTraitsComputeAtmosphericParametersTest.txt
+    --compare-ascii ${EPSILON_10e6} ${BASELINE_FILES}/raTvSIXSTraitsComputeAtmosphericParametersTest.txt
                            ${TEMP}/raTvSIXSTraitsComputeAtmosphericParametersTest.txt
         otbSIXSTraitsComputeAtmosphericParametersTest
 	${INPUTDATA}/in6S_otb
