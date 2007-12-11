@@ -172,6 +172,7 @@ namespace otb
 	      functor.SetCoefficient(coef);
 	      functor.SetResidu(res);
 	      functor.SetSphericalAlbedo(static_cast<double>(m_AtmosphericRadiativeTerms->GetSphericalAlbedo(i)));
+
 	      this->GetFunctorVector().push_back(functor);
 	    }
 	}

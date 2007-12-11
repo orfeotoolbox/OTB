@@ -177,9 +177,9 @@ public:
 
   /** Update the functor list */
   virtual void BeforeThreadedGenerateData(void)
-    {std::cout<<"BeforeThreadedGenerateData LumToRef"<<std::endl;
-       this->GetFunctorVector().clear();
-       std::cout<<"1. / coefTemp"<<this->GetInput()->GetNumberOfComponentsPerPixel()<<std::endl;
+    {
+      this->GetFunctorVector().clear();
+
       for(unsigned int i = 0;i<this->GetInput()->GetNumberOfComponentsPerPixel();++i)
 	{
 	  FunctorType functor;
