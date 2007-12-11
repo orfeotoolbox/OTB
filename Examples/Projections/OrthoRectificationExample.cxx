@@ -236,7 +236,7 @@ int main( int argc, char* argv[] )
 //   writer->SetInput(orthoRectifFilter->GetOutput());
   writer->SetInput(perBandFilter->GetOutput());
 				
-  writer->SetTilingStreamDivisions(20);
+  writer->SetTilingStreamDivisions();
 
 // Software Guide : EndCodeSnippet	
 

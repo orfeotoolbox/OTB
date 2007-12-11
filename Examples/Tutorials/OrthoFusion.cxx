@@ -252,7 +252,7 @@ int main( int argc, char* argv[] )
   
   writer->SetInput(fusion->GetOutput());
 				
-  writer->SetTilingStreamDivisions(20);
+  writer->SetTilingStreamDivisions();
 
   writer->Update();
 
