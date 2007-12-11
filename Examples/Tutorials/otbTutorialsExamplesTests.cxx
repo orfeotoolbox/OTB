@@ -34,7 +34,7 @@ void RegisterTests()
 
 #undef main
 #define main HelloWorldOTBTest
-#include "HelloWorldOTBT.cxx"
+#include "HelloWorldOTB.cxx"
 
 #undef main
 #define main TutorialsPipelineTest

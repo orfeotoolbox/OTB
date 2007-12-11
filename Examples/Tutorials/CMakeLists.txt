@@ -70,9 +70,6 @@ ADD_TEST( TutorialsSmarterFilteringPipelineTest ${EXE_TESTS}
         )
 
 
-
-
-
 INCLUDE_DIRECTORIES("${OTBTesting_BINARY_DIR}")
 
 ADD_EXECUTABLE(otbTutorialsExamplesTests otbTutorialsExamplesTests.cxx)
