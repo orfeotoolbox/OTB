@@ -426,7 +426,19 @@ ADD_TEST(bfTvUnaryImageFunctorWithVectorImageFilter ${BASICFILTERS_TESTS}
 		${TEMP}/bfTvUnaryImageFunctorWithVectorImageFilter.tif
 		)
 
+# -------            otb::PrintableImageFilter   ------------------------------
 
+ADD_TEST(bfTuPrintableImageFilterNew ${BASICFILTERS_TESTS}  
+         otbPrintableImageFilterNew)
+         
+ADD_TEST(bfTvPrintableImageFilter ${BASICFILTERS_TESTS}  
+     --compare-image ${TOL}
+     		     ${BASELINE}/bfTvPrintableImageFilter.png
+		     ${TEMP}/bfTvPrintableImageFilter.png
+         otbPrintableImageFilter
+		${INPUTDATA}/QB_Toulouse_Ortho_XS.tif
+		${TEMP}/bfTvPrintableImageFilter.png
+		)
 
 # A enrichir
 SET(BasicFilters_SRCS
@@ -479,6 +491,8 @@ otbMatrixTransposeMatrixImageFilterNew.cxx
 otbMatrixTransposeMatrixImageFilter.cxx
 otbUnaryImageFunctorWithVectorImageFilterNew.cxx
 otbUnaryImageFunctorWithVectorImageFilter.cxx
+otbPrintableImageFilterNew.cxx
+otbPrintableImageFilter.cxx
 )
 
 

@@ -76,4 +76,6 @@ REGISTER_TEST(otbMatrixTransposeMatrixImageFilterNew);
 REGISTER_TEST(otbMatrixTransposeMatrixImageFilter);
 REGISTER_TEST(otbUnaryImageFunctorWithVectorImageFilterNew);
 REGISTER_TEST(otbUnaryImageFunctorWithVectorImageFilter);
+REGISTER_TEST(otbPrintableImageFilterNew);
+REGISTER_TEST(otbPrintableImageFilter);
 }
