@@ -60,33 +60,33 @@ ADD_TEST(prTvTestCreateInverseForwardSensorModel_Cevennes ${PROJECTIONS_TESTS}
         )
 #=======================================================================================
 # TEST 10
-ADD_TEST(prTvRegionProjectionToulouse ${PROJECTIONS_TESTS} 
-  --compare-image ${TOL}  ${BASELINE}/prTvRegionProjectionToulouse.tif
-                          ${TEMP}/prTvRegionProjectionToulouse.tif
-        otbRegionProjection
-        ${IMAGEDATA}/TOULOUSE/QuickBird/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF
-        ${TEMP}/prTvRegionProjectionToulouse.tif
-				1.44 43.6050 # Long/Lat of Toulouse, Capitole
-        500
-        500
-        10
-				0.00001
-				-0.00001
-        )
+#   ADD_TEST(prTvRegionProjectionToulouse ${PROJECTIONS_TESTS} 
+#     --compare-image ${TOL}  ${BASELINE}/prTvRegionProjectionToulouse.tif
+#                             ${TEMP}/prTvRegionProjectionToulouse.tif
+#           otbRegionProjection
+#           ${IMAGEDATA}/TOULOUSE/QuickBird/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF
+#           ${TEMP}/prTvRegionProjectionToulouse.tif
+#   				1.44 43.6050 # Long/Lat of Toulouse, Capitole
+#           500
+#           500
+#           10
+#   				0.00001
+#   				-0.00001
+#           )
 # TEST 11
-ADD_TEST(prTvRegionProjectionCevennes ${PROJECTIONS_TESTS}  
-  --compare-image ${TOL}  ${BASELINE}/prTvRegionProjectionCevennes.tif
-                          ${TEMP}/prTvRegionProjectionCevennes.tif
-        otbRegionProjection
-        ${IMAGEDATA}/CEVENNES/06FEB12104912-P1BS-005533998070_01_P001.TIF
-        ${TEMP}/prTvRegionProjectionCevennes.tif
-        3.7 44.08 
-        500
-				500
-				10
-				0.00001
-				-0.00001
-        )
+#   ADD_TEST(prTvRegionProjectionCevennes ${PROJECTIONS_TESTS}  
+#     --compare-image ${TOL}  ${BASELINE}/prTvRegionProjectionCevennes.tif
+#                             ${TEMP}/prTvRegionProjectionCevennes.tif
+#           otbRegionProjection
+#           ${IMAGEDATA}/CEVENNES/06FEB12104912-P1BS-005533998070_01_P001.TIF
+#           ${TEMP}/prTvRegionProjectionCevennes.tif
+#           3.7 44.08 
+#           500
+#   				500
+#   				10
+#   				0.00001
+#   				-0.00001
+#           )
 #=======================================================================================
 # TEST 12
 ADD_TEST(prTvRegionProjectionResamplerToulouse ${PROJECTIONS_TESTS}  
@@ -149,7 +149,28 @@ ADD_TEST(prTvRegionProjectionResamplerCevennes ${PROJECTIONS_TESTS}
 #	   			 -0.5
 #           )
 #=======================================================================================
+
+# TU pour otb::OrthoRectificationFilterBase otb::OrthoRectificationFilter 
+ADD_TEST(prTuOrthoRectificationFilterNew ${PROJECTIONS_TESTS} 
+        otbOrthoRectificationFilterNew )
+
 # TEST 16				
+ADD_TEST(prTvOrthoRectificationToulouseBase ${PROJECTIONS_TESTS} 
+  --compare-image ${EPSILON}  ${BASELINE}/prTvOrthoRectificationToulouse_UTM.tif
+                          ${TEMP}/prTvOrthoRectificationBaseToulouse_UTM.tif
+        otbOrthoRectificationFilterBase
+        ${IMAGEDATA}/TOULOUSE/QuickBird/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF
+        ${TEMP}/prTvOrthoRectificationBaseToulouse_UTM.tif
+        374100.8
+        4829184.8 
+        500
+        500 
+        220
+        0.5
+        -0.5
+        )
+
+# TEST 16.2
 ADD_TEST(prTvOrthoRectificationToulouse ${PROJECTIONS_TESTS} 
   --compare-image ${EPSILON}  ${BASELINE}/prTvOrthoRectificationToulouse_UTM.tif
                           ${TEMP}/prTvOrthoRectificationToulouse_UTM.tif
@@ -159,9 +180,9 @@ ADD_TEST(prTvOrthoRectificationToulouse ${PROJECTIONS_TESTS}
         374100.8
         4829184.8 
         500
-				500 
-				220
-				0.5
+        500 
+        220
+        0.5
         -0.5
         )
 
@@ -175,9 +196,9 @@ ADD_TEST(prTvOrthoRectificationCevennes ${PROJECTIONS_TESTS}
         556046 
         4.881e+06 
         500
-				500 
-				220
-				0.5
+        500 
+        220
+        0.5
         -0.5
         )
 #=======================================================================================				
@@ -216,6 +237,23 @@ ADD_TEST(prTvOrthoRectificationCevennes ${PROJECTIONS_TESTS}
 #        )
 #=======================================================================================
 # TEST 20
+ADD_TEST(prTvOrthoRectificationToulouseBaseWithDEM ${PROJECTIONS_TESTS}  
+  --compare-image ${EPSILON}  ${BASELINE}/prTvOrthoRectificationToulouseWithDEM_UTM.tif
+                          ${TEMP}/prTvOrthoRectificationToulouseBaseWithDEM_UTM.tif
+        otbOrthoRectificationFilterBaseWithDEM	
+	${IMAGEDATA}/TOULOUSE/QuickBird/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF
+        ${TEMP}/prTvOrthoRectificationToulouseBaseWithDEM_UTM.tif
+        374100.8
+        4829184.8 
+        500
+	500 
+	220
+	0.5
+	-0.5
+        ${INPUTDATA}/DEM/srtm_directory/ 
+        ${TEMP}/prTvOrthoRectificationToulouseBaseWithDEM_UTM.tif
+        )
+# TEST 20.2
 ADD_TEST(prTvOrthoRectificationToulouseWithDEM ${PROJECTIONS_TESTS}  
   --compare-image ${EPSILON}  ${BASELINE}/prTvOrthoRectificationToulouseWithDEM_UTM.tif
                           ${TEMP}/prTvOrthoRectificationToulouseWithDEM_UTM.tif
@@ -290,9 +328,12 @@ otbSensorModelsNew.cxx
 otbCreateProjectionWithOSSIM.cxx
 otbCreateProjectionWithOTB.cxx
 otbCreateInverseForwardSensorModel.cxx
-otbRegionProjection.cxx
+#otbRegionProjection.cxx
 otbRegionProjectionResampler.cxx
+otbOrthoRectificationFilterNew.cxx
+otbOrthoRectificationFilterBase.cxx
 otbOrthoRectificationFilter.cxx
+otbOrthoRectificationFilterBaseWithDEM.cxx
 otbOrthoRectificationFilterWithDEM.cxx
 #otbSensorImageToCarto.cxx
 #otbSensorImageDEMToCarto.cxx

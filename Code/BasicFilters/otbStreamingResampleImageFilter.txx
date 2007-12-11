@@ -53,7 +53,7 @@ StreamingResampleImageFilter<TInputImage,TOutputImage,TInterpolatorPrecisionType
   
 	if ( this->GetInput() )
   {
-		otbMsgDebugMacro(<< "-------------- GenerateInputRequestedRegion	---------------" << std::endl);
+		otbMsgDevMacro(<< "-------------- GenerateInputRequestedRegion	---------------" << std::endl);
 		
 		InputImagePointer inputImage = const_cast< typename Superclass::InputImageType *>( this->GetInput() );
     OutputImagePointer outputImage = const_cast< typename Superclass::OutputImageType *>( this->GetOutput() );
@@ -66,7 +66,7 @@ StreamingResampleImageFilter<TInputImage,TOutputImage,TInterpolatorPrecisionType
 		std::vector<IndexType> vPoints;
 		typename std::vector<IndexType>::iterator it;
 		  		
-		otbMsgDebugMacro(<< "Size : " << size[0] << " " << size[1]);
+		otbMsgDevMacro(<< "Size : " << size[0] << " " << size[1]);
 		
 		indexTmp[0]=index[0];
 		indexTmp[1]=index[1]; 
@@ -109,14 +109,14 @@ StreamingResampleImageFilter<TInputImage,TOutputImage,TInterpolatorPrecisionType
 			
 			outputImage->TransformIndexToPhysicalPoint( *it, outputPoint );
 
-      otbMsgDebugMacro(<< "Pour l'Index Ncurrent:(" << (*it)[0]<<","<< (*it)[1] << ")"<<  std::endl
-                << "Le point physique correspondant est: ("<<  outputPoint[0]<< ","<<  outputPoint[1]<< ")"); 
+      otbMsgDevMacro(<< "Ncurrent Index :(" << (*it)[0]<<","<< (*it)[1] << ")"<<  std::endl
+                << "Physical point: ("<<  outputPoint[0]<< ","<<  outputPoint[1]<< ")"); 
 
     	// Compute corresponding input pixel continuous index
     	inputPoint = this->GetTransform()->TransformPoint(outputPoint);
      	inputImage->TransformPhysicalPointToContinuousIndex(inputPoint, indexTmpTr);
 	
-	    otbMsgDebugMacro(<< "L'index correspondant a ce point est:" << std::endl
+	    otbMsgDevMacro(<< " -> Point Index:" << std::endl
                  << indexTmpTr[0] << ","<< indexTmpTr[1] );
 		
 			if (indexTmpTr[0]>maxX)
@@ -134,7 +134,7 @@ StreamingResampleImageFilter<TInputImage,TOutputImage,TInterpolatorPrecisionType
 			//otbGenericMsgDebugMacro(<< "indexTr : (" << indexTmpTr[0] << "," << indexTmpTr[1] << ")");
 		}
 		
-		otbMsgDebugMacro(<< "MinX : " << minX << " MinY : " << minY << " MaxX : " << maxX << " MaxY " << maxY);
+		otbMsgDevMacro(<< "MinX : " << minX << " MinY : " << minY << " MaxX : " << maxX << " MaxY " << maxY);
 		
 		// Create region needed in previous filter in the pipeline, which is the bounding box of previous transformed points
     InputImageRegionType region;
@@ -143,7 +143,7 @@ StreamingResampleImageFilter<TInputImage,TOutputImage,TInterpolatorPrecisionType
 		size[0] = static_cast<long unsigned int>(maxX - minX);
 		size[1] = static_cast<long unsigned int>(maxY - minY);
 		
-		otbMsgDebugMacro(<< "Index : (" << index[0] << "," << index[1] << ") Size : (" << size[0] << "," << size[1] << ")");
+		otbMsgDevMacro(<< "Index : (" << index[0] << "," << index[1] << ") Size : (" << size[0] << "," << size[1] << ")");
 					
     region.SetSize(size);
     region.SetIndex(index);
@@ -157,13 +157,13 @@ StreamingResampleImageFilter<TInputImage,TOutputImage,TInterpolatorPrecisionType
 			neededRadius = m_InterpolatorNeighborhoodRadius;
 		}
 		
-		otbMsgDebugMacro(<< "Interpolation needed radius : " << neededRadius);
+		otbMsgDevMacro(<< "Interpolation needed radius : " << neededRadius);
 		region.PadByRadius(neededRadius+m_AddedRadius);
 		
-		otbMsgDebugMacro(<< "Initial Region : Index(" << inputImage->GetLargestPossibleRegion().GetIndex()[0] << "," << inputImage->GetLargestPossibleRegion().GetIndex()[1] << ") Size(" <<	inputImage->GetLargestPossibleRegion().GetSize()[0] << "," << inputImage->GetLargestPossibleRegion().GetSize()[1] << ")");
+		otbMsgDevMacro(<< "Initial Region : Index(" << inputImage->GetLargestPossibleRegion().GetIndex()[0] << "," << inputImage->GetLargestPossibleRegion().GetIndex()[1] << ") Size(" <<	inputImage->GetLargestPossibleRegion().GetSize()[0] << "," << inputImage->GetLargestPossibleRegion().GetSize()[1] << ")");
 		
 		// To be sure that requested region in pipeline is not largest than real input image
-		otbMsgDebugMacro(<< "Final Region (Before Crop) : Index(" << region.GetIndex()[0] << "," << region.GetIndex()[1] << ") Size(" <<	region.GetSize()[0] << "," << region.GetSize()[1] << ")");
+		otbMsgDevMacro(<< "Final Region (Before Crop) : Index(" << region.GetIndex()[0] << "," << region.GetIndex()[1] << ") Size(" <<	region.GetSize()[0] << "," << region.GetSize()[1] << ")");
 
 		// If requested region is not contained in input image, then result region is null
 		if (!region.Crop(inputImage->GetLargestPossibleRegion()))
@@ -178,7 +178,7 @@ StreamingResampleImageFilter<TInputImage,TOutputImage,TInterpolatorPrecisionType
 		
 		inputImage->SetRequestedRegion(region);
 		
-		otbMsgDebugMacro(<< "Final Region (After  Crop) : Index(" << region.GetIndex()[0] << "," << region.GetIndex()[1] << ") Size(" <<	region.GetSize()[0] << "," << region.GetSize()[1] << ")");
+		otbMsgDevMacro(<< "Final Region (After  Crop) : Index(" << region.GetIndex()[0] << "," << region.GetIndex()[1] << ") Size(" <<	region.GetSize()[0] << "," << region.GetSize()[1] << ")");
   }
 }
 
@@ -190,8 +190,8 @@ StreamingResampleImageFilter<TInputImage,TOutputImage,TInterpolatorPrecisionType
 ::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   Superclass::PrintSelf(os,indent);
-
-  os << indent << "StreamingResampleImageFilter " << std::endl;
+  os << indent << "m_InterpolatorNeighborhoodRadius: " << m_InterpolatorNeighborhoodRadius<<std::endl;
+  os << indent << "m_AddedRadius: " <<m_AddedRadius<< std::endl;
 }
 
 

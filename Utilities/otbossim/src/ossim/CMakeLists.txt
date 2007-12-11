@@ -15,35 +15,13 @@ FILE(GLOB_RECURSE ossim_dll_main_SRCS "dll_main/*.cpp")
 
 # Adjust the compiler flags to avoid problems with ossim code.
 IF(CMAKE_COMPILER_IS_GNUCXX)
-  # Hide warnings in ossim code.
-  SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -w")
-
-  # CMake versions before 2.4 did not put the source-file-specific flags
-  # after the directory-level flags.  Remove optimization flags from the
-  # CMAKE_CXX_FLAGS* variables so they can be overridden.
-  IF("${CMAKE_MAJOR_VERSION}.${CMAKE_MINOR_VERSION}" LESS 2.4)
-    FOREACH(c "" "_DEBUG" "_RELEASE" "_MINSIZEREL" "_RELWITHDEBINFO")
-      STRING(REGEX REPLACE
-        "-O[^ ]*( |$)" "" CMAKE_CXX_FLAGS${c} "${CMAKE_CXX_FLAGS${c}}")
-    ENDFOREACH(c)
-  ENDIF("${CMAKE_MAJOR_VERSION}.${CMAKE_MINOR_VERSION}" LESS 2.4)
-
+  FOREACH(f      ${ossim_base_SRCS} ${ossim_elevation_SRCS} ${ossim_font_SRCS} ${ossim_imaging_SRCS} ${ossim_matrix_SRCS} 
+                 ${ossim_parallel_SRCS} ${ossim_projection_SRCS} ${ossim_support_data_SRCS}
+                 ${ossim_vec_SRCS} ${ossim_vpfutil_SRCS} ${ossim_plugin_SRCS} ${ossim_init_SRCS} 
+                 ${ossim_kbool_SRCS} ${ossim_dll_main_SRCS} )
+        SET_SOURCE_FILES_PROPERTIES( ${f} PROPERTIES COMPILE_FLAGS -w )
+  ENDFOREACH(f)
 ENDIF(CMAKE_COMPILER_IS_GNUCXX)
-IF(CMAKE_COMPILER_IS_GNUCC)
-  # Hide warnings in ossim code.
-  SET(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -w")
-
-  # CMake versions before 2.4 did not put the source-file-specific flags
-  # after the directory-level flags.  Remove optimization flags from the
-  # CMAKE_C_FLAGS* variables so they can be overridden.
-  IF("${CMAKE_MAJOR_VERSION}.${CMAKE_MINOR_VERSION}" LESS 2.4)
-    FOREACH(c "" "_DEBUG" "_RELEASE" "_MINSIZEREL" "_RELWITHDEBINFO")
-      STRING(REGEX REPLACE
-        "-O[^ ]*( |$)" "" CMAKE_C_FLAGS${c} "${CMAKE_C_FLAGS${c}}")
-    ENDFOREACH(c)
-  ENDIF("${CMAKE_MAJOR_VERSION}.${CMAKE_MINOR_VERSION}" LESS 2.4)
-
-ENDIF(CMAKE_COMPILER_IS_GNUCC)
 
 ADD_LIBRARY(otbossimKBool ${ossim_kbool_SRCS})
 

@@ -30,23 +30,33 @@
 
 // iostream is used for general output
 #include <iostream>
+#include <iterator>
 #include <stdlib.h>
 
 #include "otbMacro.h"
 #include "otbImage.h"
 #include "otbImageFileReader.h"
+#include "otbImageFileWriter.h"
 #include "otbStreamingImageFileWriter.h"
 #include "otbInverseSensorModel.h"
 #include "otbStreamingResampleImageFilter.h"
 
-#include "otbOrthoRectificationFilter.h"
+#include "itkExceptionObject.h"
+#include "itkExtractImageFilter.h"
+#include "itkResampleImageFilter.h"
+#include "itkRescaleIntensityImageFilter.h"
+#include "itkImageRegionIteratorWithIndex.h"
+#include "itkLinearInterpolateImageFunction.h"
+#include "itkChangeInformationImageFilter.h"
+
+#include "otbOrthoRectificationFilterBase.h"
 #include "otbMapProjections.h"
 
 #include "init/ossimInit.h"
 
 
 
-int otbOrthoRectificationFilter( int argc, char* argv[] )
+int otbOrthoRectificationFilterBase( int argc, char* argv[] )
 {
         ossimInit::instance()->initialize(argc, argv);
 
@@ -62,7 +72,7 @@ int otbOrthoRectificationFilter( int argc, char* argv[] )
         typedef otb::ImageFileReader<ImageType>  ReaderType;
         typedef otb::StreamingImageFileWriter<ImageType>  WriterType;
         typedef otb::UtmInverseProjection UtmMapProjectionType ;
-        typedef otb::OrthoRectificationFilter<ImageType, ImageType, UtmMapProjectionType> OrthoRectifFilterType ;
+        typedef otb::OrthoRectificationFilterBase<ImageType, ImageType, UtmMapProjectionType> OrthoRectifFilterType ;
               
         //Allocate pointer
         ReaderType::Pointer             reader = ReaderType::New();
@@ -74,8 +84,21 @@ int otbOrthoRectificationFilter( int argc, char* argv[] )
         // Set parameters ...
         reader->SetFileName(argv[1]);
         writer->SetFileName(argv[2]);
+   
         
-        orthoRectifFilter->SetInput(reader->GetOutput());
+        // image origin modification
+        typedef itk::ChangeInformationImageFilter<ImageType > ChangeInfoFilterType;
+        ChangeInfoFilterType::Pointer changeInfo = ChangeInfoFilterType::New();
+        changeInfo->SetInput(reader->GetOutput());
+        changeInfo->ChangeOriginOn();
+        ImageType::PointType originNull;
+        originNull[0]=0;
+        originNull[1]=0;
+        changeInfo->SetOutputOrigin(originNull);
+        
+        changeInfo->GenerateOutputInformation();
+        
+        orthoRectifFilter->SetInput(changeInfo->GetOutput());
         
         ImageType::IndexType start;
         start[0]=0;

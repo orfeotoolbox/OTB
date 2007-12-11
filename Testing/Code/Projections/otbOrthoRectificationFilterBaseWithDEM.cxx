@@ -49,18 +49,15 @@
 #include "itkLinearInterpolateImageFunction.h"
 #include "itkChangeInformationImageFilter.h"
 
-#include "otbOrthoRectificationFilter.h"
+#include "otbOrthoRectificationFilterBase.h"
 #include "otbMapProjections.h"
 
 #include "init/ossimInit.h"
 
 
 
-int otbOrthoRectificationFilterWithDEM( int argc, char* argv[] )
+int otbOrthoRectificationFilterBaseWithDEM( int argc, char* argv[] )
 {
-  try 
-    {        
-
         ossimInit::instance()->initialize(argc, argv);
 
         if(argc!=12)
@@ -77,7 +74,7 @@ int otbOrthoRectificationFilterWithDEM( int argc, char* argv[] )
         typedef otb::StreamingImageFileWriter<ImageType>  WriterType;
        
 				typedef otb::UtmInverseProjection UtmMapProjectionType ;
-			  typedef otb::OrthoRectificationFilter<ImageType, ImageType, UtmMapProjectionType> OrthoRectifFilterType ;
+			  typedef otb::OrthoRectificationFilterBase<ImageType, ImageType, UtmMapProjectionType> OrthoRectifFilterType ;
 				
         //Allocate pointer
         ReaderType::Pointer     	reader=ReaderType::New();
@@ -90,7 +87,23 @@ int otbOrthoRectificationFilterWithDEM( int argc, char* argv[] )
         reader->SetFileName(argv[1]);
         writer->SetFileName(argv[2]);
    
-				orthoRectifFilter->SetInput(reader->GetOutput());
+        // Read meta data (ossimKeywordlist)
+//        reader->GenerateOutputInformation();
+//        model->SetImageGeometry(reader->GetOutput()->GetImageKeywordlist());
+
+				// image origin modification
+  			typedef itk::ChangeInformationImageFilter<ImageType > ChangeInfoFilterType;
+  			ChangeInfoFilterType::Pointer changeInfo = ChangeInfoFilterType::New();
+  			changeInfo->SetInput(reader->GetOutput());
+  			changeInfo->ChangeOriginOn();
+  			ImageType::PointType originNull;
+  			originNull[0]=0;
+  			originNull[1]=0;
+  			changeInfo->SetOutputOrigin(originNull);
+	
+  			changeInfo->GenerateOutputInformation();
+			
+				orthoRectifFilter->SetInput(changeInfo->GetOutput());
 				
 				ImageType::IndexType start;
 				start[0]=0;
@@ -126,25 +139,7 @@ int otbOrthoRectificationFilterWithDEM( int argc, char* argv[] )
         otbGenericMsgDebugMacro(<< "Update writer ..." ); 
         writer->Update();
 
-    } 
-  catch( itk::ExceptionObject & err ) 
-    { 
-    std::cout << "Exception itk::ExceptionObject levee !" << std::endl; 
-    std::cout << err << std::endl; 
-    return EXIT_FAILURE;
-    } 
-  catch( std::bad_alloc & err ) 
-    { 
-    std::cout << "Exception bad_alloc : "<<(char*)err.what()<< std::endl; 
-    return EXIT_FAILURE;
-    } 
-  catch( ... ) 
-    { 
-    std::cout << "Exception levee inconnue !" << std::endl; 
-    return EXIT_FAILURE;
-    } 
-  return EXIT_SUCCESS;
+        return EXIT_SUCCESS;
 
  } //End main()
-
 

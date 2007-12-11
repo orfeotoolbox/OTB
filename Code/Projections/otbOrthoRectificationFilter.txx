@@ -24,99 +24,98 @@ PURPOSE.  See the above copyright notices for more information.
 namespace otb
 { 
   
-  template <class TInputImage, 
-	    			class TOutputImage, 
-	    			class TMapProjection, 
-	    			class TInterpolatorPrecision>
-  OrthoRectificationFilter<TInputImage, 
-			   								 	 TOutputImage, 
-			  	 								 TMapProjection, 
-			   									 TInterpolatorPrecision>
-  ::OrthoRectificationFilter() : StreamingResampleImageFilter<TInputImage,
-								   TOutputImage,
-								   TInterpolatorPrecision>()
-  {
-    m_SensorModel = SensorModelType::New();
-    m_MapProjection = MapProjectionType::New();
-    m_CompositeTransform = CompositeTransformType::New();
-    m_IsComputed = false;
-  }
+template <      class TInputImage, 
+	    	class TOutputImage, 
+	    	class TMapProjection, 
+	    	class TInterpolatorPrecision>
+OrthoRectificationFilter<       TInputImage, 
+			   	TOutputImage, 
+			   	TMapProjection, 
+			   	TInterpolatorPrecision>
+::OrthoRectificationFilter() : itk::ImageToImageFilter<TInputImage, TOutputImage>()
+{
+        m_OrthoRectificationFilter=OrthoRectificationFilterBaseType::New();
+        m_ChangeInfoFilter = ChangeInfoFilterType::New();
+        m_OrthoRectificationFilter->SetInput(m_ChangeInfoFilter->GetOutput());
+	PointType originNull;
+	originNull.Fill(0);
+        m_ChangeInfoFilter->ChangeOriginOn();
+	m_ChangeInfoFilter->SetOutputOrigin(originNull);
+	SpacingType spacing;
+	spacing.Fill(1);
+	m_ChangeInfoFilter->SetOutputSpacing(spacing);
+}
   
-  template <class TInputImage, 
-	    			class TOutputImage, 
-	    			class TMapProjection, 
-	    			class TInterpolatorPrecision>
-  OrthoRectificationFilter<TInputImage, 
-			   									 TOutputImage, 
-			   									 TMapProjection, 
-			   									 TInterpolatorPrecision>
-  ::~OrthoRectificationFilter()
-  {
-  }
+template <      class TInputImage, 
+	    	class TOutputImage, 
+	    	class TMapProjection, 
+	    	class TInterpolatorPrecision>
+OrthoRectificationFilter<       TInputImage, 
+			   	TOutputImage, 
+			   	TMapProjection, 
+			   	TInterpolatorPrecision>
+::~OrthoRectificationFilter()
+{
+
+}
   
-  template <class TInputImage, 
-	    			class TOutputImage, 
-	    			class TMapProjection, 
-	    			class TInterpolatorPrecision>
-  void OrthoRectificationFilter<TInputImage, 
-															  TOutputImage, 
-																TMapProjection, 
-																TInterpolatorPrecision>
+template <      class TInputImage, 
+	    	class TOutputImage, 
+	    	class TMapProjection, 
+	    	class TInterpolatorPrecision>
+void
+OrthoRectificationFilter<       TInputImage, 
+			   	TOutputImage, 
+			   	TMapProjection, 
+			   	TInterpolatorPrecision>
 ::PrintSelf(std::ostream& os, itk::Indent indent) const
-  {
-    Superclass::PrintSelf(os, indent);
-    
-    os << indent << "OrthoRectification" << "\n";
-  }
-  
-  
-  template <class TInputImage, 
-	    			class TOutputImage, 
-	    			class TMapProjection, 
-	    			class TInterpolatorPrecision>
-  void
-  OrthoRectificationFilter<TInputImage, 
-			   									 TOutputImage, 
-			   									 TMapProjection, 
-			   									 TInterpolatorPrecision>
-  ::GenerateInputRequestedRegion()
-  {
-    this->ComputeResampleTransformationModel();
-    
-    Superclass::GenerateInputRequestedRegion();
-  }
-  
-  template <class TInputImage, 
-	    			class TOutputImage, 
-	    			class TMapProjection, 
-	    			class TInterpolatorPrecision>
-  void
-  OrthoRectificationFilter<TInputImage, 
-			   								 	 TOutputImage, 
-			   									 TMapProjection, 
-			   									 TInterpolatorPrecision>
-  ::ComputeResampleTransformationModel()
-  {
-    if (m_IsComputed == false)
-      {
-				otbMsgDevMacro(<< "COMPUTE RESAMPLE TRANSFORMATION MODEL");
-				typename TOutputImage::Pointer output = this->GetOutput();
-	
-				// Get OSSIM sensor model from image keywordlist
-				m_SensorModel->SetImageGeometry(output->GetImageKeywordlist());
-				
-				// Initialize Map Projection if needed
-/*				PointType geoPoint;
-				geoPoint[1] = this->GetOutputOrigin()[1] + this->GetSize()[0]*this->GetOutputSpacing()[0]/2;
-				geoPoint[0] = this->GetOutputOrigin()[0] + this->GetSize()[1]*this->GetOutputSpacing()[1]/2;
-				m_MapProjection->Initialize(geoPoint);			*/
-			
-				m_CompositeTransform->SetFirstTransform(m_MapProjection);
-				m_CompositeTransform->SetSecondTransform(m_SensorModel);
-				this->SetTransform(m_CompositeTransform);		
-				m_IsComputed = true;
-      }
-  }
+{
+        Superclass::PrintSelf(os, indent);
+        os << indent << "m_OrthoRectification:\n" << m_OrthoRectificationFilter<<"\n";
+        os << indent << "m_ChangeInfoFilter:\n" << m_ChangeInfoFilter <<"\n";
+}
+
+template <      class TInputImage, 
+	    	class TOutputImage, 
+	    	class TMapProjection, 
+	    	class TInterpolatorPrecision>
+void
+OrthoRectificationFilter<       TInputImage, 
+			   	TOutputImage, 
+			   	TMapProjection, 
+			   	TInterpolatorPrecision>
+::GenerateOutputInformation()
+{
+        // This must be done so that the orthoRectificationFilter can generate its ouptut information correctly.
+        m_ChangeInfoFilter->SetInput(this->GetInput());
+        m_OrthoRectificationFilter->GenerateOutputInformation();
+        this->GetOutput()->CopyInformation(m_OrthoRectificationFilter->GetOutput());
+}
+
+
+
+
+template <      class TInputImage, 
+	    	class TOutputImage, 
+	    	class TMapProjection, 
+	    	class TInterpolatorPrecision>
+void
+OrthoRectificationFilter<       TInputImage, 
+			   	TOutputImage, 
+			   	TMapProjection, 
+			   	TInterpolatorPrecision>
+::GenerateData(void)
+{
+        // This is done here instead of inside the GenerateData() method so that the pipeline negociation
+        // use the minipipeline instead of default ITK methods.
+        m_OrthoRectificationFilter->GraftOutput(this->GetOutput());
+        //m_OrthoRectificationFilter->GetOutput()->UpdateOutputInformation();
+        //m_OrthoRectificationFilter->GetOutput()->PropagateRequestedRegion();
+        //m_OrthoRectificationFilter->GetOutput()->UpdateOutputData();
+        m_OrthoRectificationFilter->Update();
+        this->GraftOutput(m_OrthoRectificationFilter->GetOutput());
+        //m_OrthoRectificationFilter->Update();
+}
   
 } //namespace otb
 
