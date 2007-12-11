@@ -415,13 +415,13 @@ ADD_TEST(raTuSurfaceAdjencyEffect6SCorrectionSchemeFilter ${RADIOMETRY_TESTS}
  --compare-image ${EPSILON}  ${BASELINE}/raTvSurfaceAdjencyEffect6SCorrectionSchemeFilter.tif
                              ${TEMP}/raTvSurfaceAdjencyEffect6SCorrectionSchemeFilter.tif
         otbSurfaceAdjencyEffect6SCorrectionSchemeFilter
-	${BASELINE}/raTvRomania_Corrected.tif
+	${BASELINE}/raTvRomania_Correction.tif
 	${TEMP}/raTvSurfaceAdjencyEffect6SCorrectionSchemeFilter.tif
 	1   # Radius;	
 	0.020 # pixel spacing in kilometers
 	${INPUTDATA}/testRomania.txt  # atmo param;
 	${INPUTDATA}/RADIO_WAVELENGHT_SPECTRAL_BAND_SPOT4_1_B3.txt  # wavelenghts, channel 3	
-	${INPUTDATA}/RADIO_WAV	ELENGHT_SPECTRAL_BAND_SPOT4_1_B2.txt  # wavelenghts, channel 2	
+	${INPUTDATA}/RADIO_WAVELENGHT_SPECTRAL_BAND_SPOT4_1_B2.txt  # wavelenghts, channel 2	
 	${INPUTDATA}/RADIO_WAVELENGHT_SPECTRAL_BAND_SPOT4_1_B1.txt  # wavelenghts, channel 1	
 	${INPUTDATA}/RADIO_WAVELENGHT_SPECTRAL_BAND_SPOT4_1_MIR.txt  # wavelenghts, channel 4
 )

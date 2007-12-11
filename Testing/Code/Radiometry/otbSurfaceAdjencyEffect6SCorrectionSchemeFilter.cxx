@@ -74,6 +74,7 @@ int otbSurfaceAdjencyEffect6SCorrectionSchemeFilter(int argc, char * argv[])
   for(unsigned int i=0; i<nbChannel; i++)
     {
       wavelenghFiles.push_back( argv[i+6] );
+      std::cout<<argv[i+6]<<std::endl;
     }
       
   ValueType val = 0.0025;
@@ -121,17 +122,17 @@ int otbSurfaceAdjencyEffect6SCorrectionSchemeFilter(int argc, char * argv[])
   param->SetAerosolOptical(static_cast<double>(aerosolOptical));
 
 
-  std::cout<<"SetSolarZenithalAngle"<<param->GetSolarZenithalAngle()<<std::endl;
-  std::cout<<"SetSolarAzimutalAngle"<<param->GetSolarAzimutalAngle()<<std::endl;
-  std::cout<<"SetViewingZenithalAngle"<<param->GetViewingZenithalAngle()<<std::endl;
-  std::cout<<"SetViewingAzimutalAngle"<<param->GetViewingAzimutalAngle()<<std::endl;
-  std::cout<<"SetMonth"<<param->GetMonth()<<std::endl;
-  std::cout<<"SetDay"<<param->GetDay()<<std::endl;
-  std::cout<<"SetAtmosphericPressure"<<param->GetAtmosphericPressure()<<std::endl;
-  std::cout<<"SetWaterVaporAmount"<<param->GetWaterVaporAmount()<<std::endl;
-  std::cout<<"SetOzoneAmount"<< param->GetOzoneAmount()<<std::endl;
-  std::cout<<"SetAerosolModel"<<param->GetAerosolModel()<<std::endl;
-  std::cout<<"SetAerosolOptical"<<param->GetAerosolOptical()<<std::endl;
+  std::cout<<"SetSolarZenithalAngle: "<<param->GetSolarZenithalAngle()<<std::endl;
+  std::cout<<"SetSolarAzimutalAngle: "<<param->GetSolarAzimutalAngle()<<std::endl;
+  std::cout<<"SetViewingZenithalAngle: "<<param->GetViewingZenithalAngle()<<std::endl;
+  std::cout<<"SetViewingAzimutalAngle: "<<param->GetViewingAzimutalAngle()<<std::endl;
+  std::cout<<"SetMonth: "<<param->GetMonth()<<std::endl;
+  std::cout<<"SetDay: "<<param->GetDay()<<std::endl;
+  std::cout<<"SetAtmosphericPressure: "<<param->GetAtmosphericPressure()<<std::endl;
+  std::cout<<"SetWaterVaporAmount: "<<param->GetWaterVaporAmount()<<std::endl;
+  std::cout<<"SetOzoneAmount: "<< param->GetOzoneAmount()<<std::endl;
+  std::cout<<"SetAerosolModel: "<<param->GetAerosolModel()<<std::endl;
+  std::cout<<"SetAerosolOptical: "<<param->GetAerosolOptical()<<std::endl;
 
   ValuesVectorType vect;
   for(unsigned int j=0; j<nbChannel; j++)
