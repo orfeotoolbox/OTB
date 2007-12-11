@@ -160,30 +160,30 @@ int main( int argc, char* argv[] )
 
 // Software Guide : BeginCodeSnippet
   
-  ImageType::PointType originNull;
-  originNull[0]=0;
-  originNull[1]=0;
-  
-  readerPAN->GenerateOutputInformation();
-  
-  typedef itk::ChangeInformationImageFilter<ImageType > ChangeInfoFilterType;
-  ChangeInfoFilterType::Pointer changeInfoPAN = ChangeInfoFilterType::New();
-  changeInfoPAN->SetInput(readerPAN->GetOutput());
-  changeInfoPAN->ChangeOriginOn();
-  changeInfoPAN->SetOutputOrigin(originNull);
-  changeInfoPAN->GenerateOutputInformation();
-  orthoRectifPAN->SetInput(changeInfoPAN->GetOutput());
+//   ImageType::PointType originNull;
+//   originNull[0]=0;
+//   originNull[1]=0;
+//   
+//   readerPAN->GenerateOutputInformation();
+//   
+//   typedef itk::ChangeInformationImageFilter<ImageType > ChangeInfoFilterType;
+//   ChangeInfoFilterType::Pointer changeInfoPAN = ChangeInfoFilterType::New();
+//   changeInfoPAN->SetInput(readerPAN->GetOutput());
+//   changeInfoPAN->ChangeOriginOn();
+//   changeInfoPAN->SetOutputOrigin(originNull);
+//   changeInfoPAN->GenerateOutputInformation();
+  orthoRectifPAN->SetInput(readerPAN->GetOutput());
 
   
-  readerXS->GenerateOutputInformation();
+//   readerXS->GenerateOutputInformation();
   
-  typedef itk::ChangeInformationImageFilter<VectorImageType > VectorChangeInfoFilterType;
-  VectorChangeInfoFilterType::Pointer changeInfoXS = VectorChangeInfoFilterType::New();
-  changeInfoXS->SetInput(readerXS->GetOutput());
-  changeInfoXS->ChangeOriginOn();
-  changeInfoXS->SetOutputOrigin(originNull);
-  changeInfoXS->GenerateOutputInformation();
-  orthoRectifXSVector->SetInput(changeInfoXS->GetOutput());
+//   typedef itk::ChangeInformationImageFilter<VectorImageType > VectorChangeInfoFilterType;
+//   VectorChangeInfoFilterType::Pointer changeInfoXS = VectorChangeInfoFilterType::New();
+//   changeInfoXS->SetInput(readerXS->GetOutput());
+//   changeInfoXS->ChangeOriginOn();
+//   changeInfoXS->SetOutputOrigin(originNull);
+//   changeInfoXS->GenerateOutputInformation();
+  orthoRectifXSVector->SetInput(readerXS->GetOutput());
   
   // Software Guide : EndCodeSnippet				
 

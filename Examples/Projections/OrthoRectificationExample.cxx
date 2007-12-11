@@ -165,18 +165,18 @@ int main( int argc, char* argv[] )
    
 
 	
-  reader->GenerateOutputInformation();
-  
-  typedef itk::ChangeInformationImageFilter<VectorImageType > ChangeInfoFilterType;
-  ChangeInfoFilterType::Pointer changeInfo = ChangeInfoFilterType::New();
-  changeInfo->SetInput(reader->GetOutput());
-  changeInfo->ChangeOriginOn();
-  ImageType::PointType originNull;
-  originNull[0]=0;
-  originNull[1]=0;
-  changeInfo->SetOutputOrigin(originNull);
-	
-  changeInfo->GenerateOutputInformation();
+//   reader->GenerateOutputInformation();
+//   
+//   typedef itk::ChangeInformationImageFilter<VectorImageType > ChangeInfoFilterType;
+//   ChangeInfoFilterType::Pointer changeInfo = ChangeInfoFilterType::New();
+//   changeInfo->SetInput(reader->GetOutput());
+//   changeInfo->ChangeOriginOn();
+//   ImageType::PointType originNull;
+//   originNull[0]=0;
+//   originNull[1]=0;
+//   changeInfo->SetOutputOrigin(originNull);
+// 	
+//   changeInfo->GenerateOutputInformation();
 			
 //   orthoRectifFilter->SetInput(changeInfo->GetOutput());
 
@@ -184,7 +184,8 @@ int main( int argc, char* argv[] )
   typedef otb::PerBandVectorImageFilter<VectorImageType, VectorImageType, OrthoRectifFilterType> PerBandFilterType;
   PerBandFilterType::Pointer perBandFilter=PerBandFilterType::New();
   perBandFilter->SetFilter(orthoRectifFilter);
-  perBandFilter->SetInput(changeInfo->GetOutput());
+//   perBandFilter->SetInput(changeInfo->GetOutput());
+  perBandFilter->SetInput(reader->GetOutput());
   
 // Software Guide : EndCodeSnippet	
 

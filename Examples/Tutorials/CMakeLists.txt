@@ -29,12 +29,12 @@ IF( NOT OTB_DISABLE_CXX_TESTING AND NOT OTB_DISABLE_CXX_EXAMPLES_TESTING )
 SET(BASELINE ${OTB_DATA_ROOT}/Baseline/Examples/Tutorials)
 
 SET(INPUTDATA ${OTB_SOURCE_DIR}/Examples/Data)
-SET(TEMP ${OTB_BINARY_DIR}/Testing/Temporary)
+SET(INPUTLARGEDATA ${OTB_DATA_ROOT}/LargeInput)
+SET(TEMP ${OTB_BINARY_DIR}/Examples/Tutorials/Testing/Temporary)
 
 SET(EXE_TESTS ${CXX_TEST_PATH}/otbTutorialsExamplesTests)
 
 SET(TOL 0.0)
-
 
 ADD_TEST( TutorialsPipelineTest ${EXE_TESTS}
         --compare-image ${TOL}          ${BASELINE}/TutorialsPipelineOutput.png
@@ -43,6 +43,7 @@ ADD_TEST( TutorialsPipelineTest ${EXE_TESTS}
         ${INPUTDATA}/QB_Suburb.png
         ${TEMP}/TutorialsPipelineOutput.png
         )
+        
 ADD_TEST( TutorialsFilteringPipelineTest ${EXE_TESTS}
         --compare-image ${TOL}          ${BASELINE}/TutorialsFilteringPipelineOutput.png
                                         ${TEMP}/TutorialsFilteringPipelineOutput.png
@@ -50,6 +51,7 @@ ADD_TEST( TutorialsFilteringPipelineTest ${EXE_TESTS}
         ${INPUTDATA}/QB_Suburb.png
         ${TEMP}/TutorialsFilteringPipelineOutput.png
         )
+        
 ADD_TEST( TutorialsScalingPipelineTest ${EXE_TESTS}
         --compare-image ${TOL}          ${BASELINE}/TutorialsScalingPipelineOutput.png
                                         ${TEMP}/TutorialsScalingPipelineOutput.png
@@ -68,6 +70,23 @@ ADD_TEST( TutorialsSmarterFilteringPipelineTest ${EXE_TESTS}
         -i 2 
         -a 0.1
         )
+
+ADD_TEST( TutorialsOrthoFusionTest ${EXE_TESTS}
+        --compare-image ${TOL}          ${BASELINE}/TutorialsOrthoFusionOutput.tif
+                                        ${TEMP}/TutorialsOrthoFusionOutput.tif
+        TutorialsOrthoFusionTest
+        ${INPUTLARGEDATA}/TOULOUSE/QuickBird/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF
+        ${INPUTLARGEDATA}/TOULOUSE/QuickBird/000000128955_01_P001_MUL/02APR01105228-M1BS-000000128955_01_P001.TIF
+        ${TEMP}/TutorialsScalingPipelineOutput.tif
+        31
+        373100
+        4830184
+        1000
+        1000 
+        5 
+        -5
+        )
+
 
 
 INCLUDE_DIRECTORIES("${OTBTesting_BINARY_DIR}")

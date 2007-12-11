@@ -25,15 +25,16 @@
 
 void RegisterTests()
 {
-  REGISTER_TEST(HelloWorldOTBTest);
+  REGISTER_TEST(TutorialsHelloWorldOTBTest);
   REGISTER_TEST(TutorialsPipelineTest);
   REGISTER_TEST(TutorialsFilteringPipelineTest);
   REGISTER_TEST(TutorialsScalingPipelineTest);
   REGISTER_TEST(TutorialsSmarterFilteringPipelineTest);
+  REGISTER_TEST(TutorialsOrthoFusionTest);
 }
 
 #undef main
-#define main HelloWorldOTBTest
+#define main TutorialsHelloWorldOTBTest
 #include "HelloWorldOTB.cxx"
 
 #undef main
@@ -51,4 +52,10 @@ void RegisterTests()
 #undef main
 #define main TutorialsSmarterFilteringPipelineTest
 #include "SmarterFilteringPipeline.cxx"
+             
+#undef main
+#define main TutorialsOrthoFusionTest
+#include "OrthoFusion.cxx"
+
+
 
