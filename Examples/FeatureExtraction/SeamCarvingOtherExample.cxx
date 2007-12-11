@@ -26,7 +26,7 @@
 
 // Software Guide : BeginLatex
 //
-// This example illustrate the use of the \doxygen{otb}{AddCarvingPathFilter},
+// This example illustrates the use of the \doxygen{otb}{AddCarvingPathFilter},
 // the opposite of the \doxygen{otb}{RemoveCarvingPathFilter}.
 //
 // Here, we use this filter combined with the \doxygen{otb}{DrawPathFilter} to 
