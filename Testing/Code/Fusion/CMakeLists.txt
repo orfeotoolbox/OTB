@@ -41,6 +41,20 @@ ADD_TEST(fuTvBayesianFusionFilter ${FUSION_TESTS}
 )
 
 
+# -------    otb::SimpleRcsPanSharpeningFusionImageFilter   -------------------
+ADD_TEST(fuTuSimpleRcsPanSharpeningFusionImageFilterNew ${FUSION_TESTS}  
+        otbSimpleRcsPanSharpeningFusionImageFilterNew
+)
+
+ADD_TEST(fuTvSimpleRcsPanSharpeningFusionImageFilter ${FUSION_TESTS} 
+    --compare-image ${TOL}  ${BASELINE}/fuTvRcsPanSharpeningFusion.tif
+                           ${TEMP}/fuTvRcsPanSharpeningFusion.tif
+        otbSimpleRcsPanSharpeningFusionImageFilter
+	${INPUTDATA}/QB_Toulouse_Ortho_PAN.tif
+	${INPUTDATA}/QB_Toulouse_Ortho_XS.tif 
+	${TEMP}/fuTvRcsPanSharpeningFusion.tif
+)
+
 
         
 # A enrichir
@@ -48,6 +62,8 @@ SET(Fusion_SRCS
 otbFusionImageBaseNew.cxx
 otbBayesianFusionFilterNew.cxx
 otbBayesianFusionFilter.cxx
+otbSimpleRcsPanSharpeningFusionImageFilterNew.cxx
+otbSimpleRcsPanSharpeningFusionImageFilter.cxx
 )
 
 
