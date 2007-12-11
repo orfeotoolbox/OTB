@@ -44,6 +44,8 @@ int SIXSFunctionMainOtbTest( int argc, char *argv[] )
         otb_6s_real wlinf(0.), wlsup(0.);
         otb_6s_real value(0.);
         otb_6s_real otb_ratm__(0.), sast(0.), tgasm(0.), sdtott(0.), sutott(0.);
+        otb_6s_real tdif_up (0.),tdir_up(0.), tdif_up_ray(0.), tdif_up_aer(0.);
+
         otb_6s_integer iinf(0), isup(0);
         const unsigned int S_SIZE=1501;
         std::vector<otb_6s_real> vector_wavelenght;
@@ -95,6 +97,7 @@ int SIXSFunctionMainOtbTest( int argc, char *argv[] )
 
         // Call 6S function main
         std::cout << "Start otb_6s_ssssss_otb_main_function() ..."<<std::endl;
+
         otb_6s_ssssss_otb_main_function(        &asol, &phi0, &avis, &phiv, &month, &jday, 
                                                 &pressure, &uw, &uo3, 
 	                                        &iaer, 
@@ -105,7 +108,12 @@ int SIXSFunctionMainOtbTest( int argc, char *argv[] )
                                                 &sast, 
                                                 &tgasm, 
                                                 &sdtott, 
-                                                &sutott);
+                                                &sutott,
+                                                &tdif_up,
+                                                &tdir_up,
+                                                &tdif_up_ray,
+                                                &tdif_up_aer);
+
         std::cout << "Done !"<<std::endl;
         delete [] s;
         s = NULL;
@@ -113,33 +121,39 @@ int SIXSFunctionMainOtbTest( int argc, char *argv[] )
         fout.open(argv[2]);
         fout <<" ---------------------------------------------------------"<<std::endl;
         fout << "Inputs values:"<<std::endl;
-        fout << "   ----->  asol :                         "<<asol<<std::endl;
-        fout << "   ----->  phi0 :                         "<<phi0<<std::endl;
-        fout << "   ----->  avis :                         "<<avis<<std::endl;
-        fout << "   ----->  phiv :                         "<<phiv<<std::endl;
-        fout << "   ----->  month :                        "<<month<<std::endl;
-        fout << "   ----->  jday :                         "<<jday<<std::endl;
-        fout << "   ----->  pressure :                     "<<pressure<<std::endl;
-        fout << "   ----->  uw :                           "<<uw<<std::endl;
-        fout << "   ----->  uo3 :                          "<<uo3<<std::endl;
-        fout << "   ----->  iaer :                         "<<iaer<<std::endl;
-        fout << "   ----->  taer55 :                       "<<taer55<<std::endl;
-        fout << "   ----->  wlinf :                        "<<wlinf<<std::endl;
-        fout << "   ----->  wlsup :                        "<<wlsup<<std::endl;
-        fout << "   ----->  iinf :                         "<<iinf<<std::endl;
-        fout << "   ----->  isup :                         "<<isup<<std::endl;
+        fout << "   ----->  asol :                                      "<<asol<<std::endl;
+        fout << "   ----->  phi0 :                                      "<<phi0<<std::endl;
+        fout << "   ----->  avis :                                      "<<avis<<std::endl;
+        fout << "   ----->  phiv :                                      "<<phiv<<std::endl;
+        fout << "   ----->  month :                                     "<<month<<std::endl;
+        fout << "   ----->  jday :                                      "<<jday<<std::endl;
+        fout << "   ----->  pressure :                                  "<<pressure<<std::endl;
+        fout << "   ----->  uw :                                        "<<uw<<std::endl;
+        fout << "   ----->  uo3 :                                       "<<uo3<<std::endl;
+        fout << "   ----->  iaer :                                      "<<iaer<<std::endl;
+        fout << "   ----->  taer55 :                                    "<<taer55<<std::endl;
+        fout << "   ----->  wlinf :                                     "<<wlinf<<std::endl;
+        fout << "   ----->  wlsup :                                     "<<wlsup<<std::endl;
+        fout << "   ----->  iinf :                                      "<<iinf<<std::endl;
+        fout << "   ----->  isup :                                      "<<isup<<std::endl;
+        fout <<" ---------------------------------------------------------"<<std::endl;
+        fout << "Outputs values:"<<std::endl;
+        fout << "   ----->  atmospheric reflectance :                   "<<std::setprecision(10)<<otb_ratm__<<std::endl;
+        fout << "   ----->  atmospheric spherical albedo :              "<<sast<<std::endl;
+        fout << "   ----->  total gaseous transmission :                "<<tgasm<<std::endl;
+        fout << "   ----->  downward transmittance :                    "<<sdtott<<std::endl;
+        fout << "   ----->  upward transmittance :                      "<<sutott<<std::endl;
+        fout << "   ----->  upward diffuse transmittance :              "<<tdif_up<<std::endl;
+        fout << "   ----->  upward direct transmittance :               "<<tdir_up<<std::endl;
+        fout << "   ----->  upward diffuse transmittance for rayleigh : "<<tdif_up_ray<<std::endl;
+        fout << "   ----->  upward diffuse transmittance for aerosols : "<<tdif_up_aer<<std::endl;
+        fout <<" ---------------------------------------------------------"<<std::endl;
         fout << "   ----->  Inputs wavelenght values ["<<vector_wavelenght.size()<<"]"<<std::endl;
         for(unsigned int i=0 ; i<vector_wavelenght.size() ; i++)
         {
                 fout << "            "<<vector_wavelenght[i]<<std::endl;
         }
-        fout <<" ---------------------------------------------------------"<<std::endl;
-        fout << "Outputs values:"<<std::endl;
-        fout << "   ----->  atmospheric reflectance :      "<<std::setprecision(10)<<otb_ratm__<<std::endl;
-        fout << "   ----->  atmospheric spherical albedo : "<<sast<<std::endl;
-        fout << "   ----->  total gaseous transmission :   "<<tgasm<<std::endl;
-        fout << "   ----->  downward transmittance :       "<<sdtott<<std::endl;
-        fout << "   ----->  upward transmittance :         "<<sutott<<std::endl;
+
         fout.close();
   
     }

@@ -55,6 +55,10 @@ int otbSIXSTraitsComputeAtmosphericParametersTest(int argc, char * argv[])
         double TotalGaseousTransmission(0.);     
         double DownwardTransmittance(0.);       
         double UpwardTransmittance(0.);
+        double UpwardDiffuseTransmittance(0.);
+        double UpwardDirectTransmittance(0.);
+        double UpwardDiffuseTransmittanceForRayleigh(0.);
+        double UpwardDiffuseTransmittanceForAerosol(0.);
 
         std::ifstream fin;
         std::ofstream fout;
@@ -112,34 +116,42 @@ int otbSIXSTraitsComputeAtmosphericParametersTest(int argc, char * argv[])
                 AtmosphericSphericalAlbedo,    
                 TotalGaseousTransmission,      
                 DownwardTransmittance,         
-                UpwardTransmittance );
+                UpwardTransmittance,
+                UpwardDiffuseTransmittance,
+                UpwardDirectTransmittance,
+                UpwardDiffuseTransmittanceForRayleigh,
+                UpwardDiffuseTransmittanceForAerosol );
 
         fout.open(outname);
         fout <<" ---------------------------------------------------------"<<std::endl;
         fout << "Inputs values:"<<std::setprecision(10)<<std::endl;
-        fout << "   ----->  SolarZenithalAngle :                "<<SolarZenithalAngle<<std::endl;
-        fout << "   ----->  SolarAzimutalAngle :                "<<SolarAzimutalAngle<<std::endl;
-        fout << "   ----->  ViewingZenithalAngle :              "<<ViewingZenithalAngle<<std::endl;
-        fout << "   ----->  ViewingAzimutalAngle :              "<<ViewingAzimutalAngle<<std::endl;
-        fout << "   ----->  Month :                             "<<Month<<std::endl;
-        fout << "   ----->  Day :                               "<<Day<<std::endl;
-        fout << "   ----->  AtmosphericPressure :               "<<AtmosphericPressure<<std::endl;
-        fout << "   ----->  WaterVaporAmount :                  "<<WaterVaporAmount<<std::endl;
-        fout << "   ----->  OzoneAmount :                       "<<OzoneAmount<<std::endl;
-        fout << "   ----->  AerosolModel :                      "<<aer<<std::endl;
-        fout << "   ----->  AerosolOptical :                    "<<AerosolOptical<<std::endl;
-        fout << "   ----->  MinSpectralValue :                  "<<MinSpectralValue<<std::endl;
-        fout << "   ----->  MaxSpectralValue :                  "<<MaxSpectralValue<<std::endl;
-        fout << "   ----->  UserStep :                          "<<functionValues->GetUserStep()<<std::endl;
+        fout << "   ----->  SolarZenithalAngle :                        "<<SolarZenithalAngle<<std::endl;
+        fout << "   ----->  SolarAzimutalAngle :                        "<<SolarAzimutalAngle<<std::endl;
+        fout << "   ----->  ViewingZenithalAngle :                      "<<ViewingZenithalAngle<<std::endl;
+        fout << "   ----->  ViewingAzimutalAngle :                      "<<ViewingAzimutalAngle<<std::endl;
+        fout << "   ----->  Month :                                     "<<Month<<std::endl;
+        fout << "   ----->  Day :                                       "<<Day<<std::endl;
+        fout << "   ----->  AtmosphericPressure :                       "<<AtmosphericPressure<<std::endl;
+        fout << "   ----->  WaterVaporAmount :                          "<<WaterVaporAmount<<std::endl;
+        fout << "   ----->  OzoneAmount :                               "<<OzoneAmount<<std::endl;
+        fout << "   ----->  AerosolModel :                              "<<aer<<std::endl;
+        fout << "   ----->  AerosolOptical :                            "<<AerosolOptical<<std::endl;
+        fout << "   ----->  MinSpectralValue :                          "<<MinSpectralValue<<std::endl;
+        fout << "   ----->  MaxSpectralValue :                          "<<MaxSpectralValue<<std::endl;
+        fout << "   ----->  UserStep :                                  "<<functionValues->GetUserStep()<<std::endl;
         fout <<" ---------------------------------------------------------"<<std::endl;
         fout << "Outputs values:"<<std::endl;
-        fout << "   ----->  atmospheric reflectance :           "<<AtmosphericReflectance<<std::endl;
-        fout << "   ----->  atmospheric spherical albedo :      "<<AtmosphericSphericalAlbedo<<std::endl;
-        fout << "   ----->  total gaseous transmission :        "<<TotalGaseousTransmission<<std::endl;
-        fout << "   ----->  downward transmittance :            "<<DownwardTransmittance<<std::endl;
-        fout << "   ----->  upward transmittance :              "<<UpwardTransmittance<<std::endl;
-        fout << "   ----->  MinSpectralValue update:            "<<functionValues->GetMinSpectralValue()<<std::endl;
-        fout << "   ----->  MaxSpectralValue update :           "<<functionValues->GetMaxSpectralValue()<<std::endl;
+        fout << "   ----->  atmospheric reflectance :                   "<<AtmosphericReflectance<<std::endl;
+        fout << "   ----->  atmospheric spherical albedo :              "<<AtmosphericSphericalAlbedo<<std::endl;
+        fout << "   ----->  total gaseous transmission :                "<<TotalGaseousTransmission<<std::endl;
+        fout << "   ----->  downward transmittance :                    "<<DownwardTransmittance<<std::endl;
+        fout << "   ----->  upward transmittance :                      "<<UpwardTransmittance<<std::endl;
+        fout << "   ----->  upward diffuse transmittance :              "<<UpwardDiffuseTransmittance<<std::endl;
+        fout << "   ----->  upward direct transmittance :               "<<UpwardDirectTransmittance<<std::endl;
+        fout << "   ----->  upward diffuse transmittance for rayleigh : "<<UpwardDiffuseTransmittanceForRayleigh<<std::endl;
+        fout << "   ----->  upward diffuse transmittance for aerosols : "<<UpwardDiffuseTransmittanceForAerosol<<std::endl;
+        fout << "   ----->  MinSpectralValue update:                    "<<functionValues->GetMinSpectralValue()<<std::endl;
+        fout << "   ----->  MaxSpectralValue update :                   "<<functionValues->GetMaxSpectralValue()<<std::endl;
         fout <<" ---------------------------------------------------------"<<std::endl;
         fout<<"Input wavelenght band values ["<<functionValues->GetFilterFunctionValues().size()<<"]:"<<std::endl;
         for (unsigned int i=0; i<functionValues->GetFilterFunctionValues().size(); i++)

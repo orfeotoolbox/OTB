@@ -10,7 +10,6 @@ extern "C" {
 /*#include "f2c.h"*/
 #include "otb_6S.h"
 
-
 /* Table of constant values */
 
 static integer c__9 = 9;
@@ -19,7 +18,7 @@ static integer c__4 = 4;
 static integer c__3 = 3;
 
 /*<       program call6Sv1_0b >*/
-/* Main program */ OTB_6S_MAIN__()
+/* Main program */ MAIN__()
 {
     /* Format strings */
     static char fmt_100[] = "(10x,\002 ----->  atmospheric reflectance :    \
@@ -32,6 +31,14 @@ static integer c__3 = 3;
   \002,f6.5)";
     static char fmt_500[] = "(10x,\002 ----->  upward transmittance :       \
   \002,f6.5)";
+    static char fmt_600[] = "(10x,\002 ----->  upward diffuse transmittance \
+: \002,f6.5)";
+    static char fmt_700[] = "(10x,\002 ----->  upward direct transmittance :\
+  \002,f6.5)";
+    static char fmt_710[] = "(10x,\002 ----->  upward diffuse transm. ray:  \
+  \002,f6.5)";
+    static char fmt_720[] = "(10x,\002 ----->  upward diffuse transm. aer:  \
+  \002,f6.5)";
 
     /* System generated locals */
     integer i__1;
@@ -42,21 +49,23 @@ static integer c__3 = 3;
 	    integer *, char *, ftnlen), e_wsfe();
 
     /* Local variables */
+    integer iaer, iinf, jday;
+    real asol, avis, phiv, sast;
+    integer isup;
     real otb_ratm__, pressure;
     integer i__, l;
     real s[1501];
-    integer ik;
-    real uw, uo3, phi0;
-    integer iaer, iinf, jday;
-    real asol, avis, phiv, sast;
-    integer isup, iread;
+    integer iread;
     real taer55, tgasm, wlinf;
     integer month;
     real wlsup;
-    extern /* Subroutine */ int otb_6s_ssssss_otb_main_function(real *, real *, real *, real *, 
+    extern /* Subroutine */ int otb_6s__(real *, real *, real *, real *, 
 	    integer *, integer *, real *, real *, real *, integer *, real *, 
-	    real *, real *, real *, real *, real *, real *, real *, real *);
-    real sdtott, sutott;
+	    real *, real *, real *, real *, real *, real *, real *, real *, 
+	    real *, real *, real *, real *);
+    integer ik;
+    real uw, sdtott, uo3, sutott, otb_tdif_up__, phi0, otb_tdif_up_aer__, 
+	    otb_tdir_up__, otb_tdif_up_ray__;
 
     /* Fortran I/O blocks */
     static cilist io___4 = { 0, 6, 0, 0, 0 };
@@ -80,25 +89,39 @@ static integer c__3 = 3;
     static cilist io___37 = { 0, 6, 0, 0, 0 };
     static cilist io___38 = { 0, 6, 0, 0, 0 };
     static cilist io___40 = { 0, 0, 0, 0, 0 };
-    static cilist io___47 = { 0, 6, 0, 0, 0 };
-    static cilist io___48 = { 0, 6, 0, fmt_100, 0 };
-    static cilist io___49 = { 0, 6, 0, fmt_200, 0 };
-    static cilist io___50 = { 0, 6, 0, fmt_300, 0 };
-    static cilist io___51 = { 0, 6, 0, fmt_400, 0 };
-    static cilist io___52 = { 0, 6, 0, fmt_500, 0 };
+    static cilist io___51 = { 0, 6, 0, 0, 0 };
+    static cilist io___52 = { 0, 6, 0, fmt_100, 0 };
+    static cilist io___53 = { 0, 6, 0, fmt_200, 0 };
+    static cilist io___54 = { 0, 6, 0, fmt_300, 0 };
+    static cilist io___55 = { 0, 6, 0, fmt_400, 0 };
+    static cilist io___56 = { 0, 6, 0, fmt_500, 0 };
+    static cilist io___57 = { 0, 6, 0, fmt_600, 0 };
+    static cilist io___58 = { 0, 6, 0, fmt_700, 0 };
+    static cilist io___59 = { 0, 6, 0, fmt_710, 0 };
+    static cilist io___60 = { 0, 6, 0, fmt_720, 0 };
 
 
+/* _otb MOD V2 : New outputs : */
+/* _otb	otb_tdif_up = Upward diffuse transmittance */
+/* _otb 	otb_tdir_up = Upward direct transmittance */
+/* _otb 	otb_tdif_up_ray = Upward diffuse transmittance for rayleigh */
+/* _otb  	otb_tdif_up_aer = Upward diffuse transmittance for aerosols */
 /*<       IMPLICIT NONE >*/
 /*<       real wlinf,wlsup,s(1501) >*/
 /*<       real asol,phi0,avis,phiv >*/
 /*<       integer month,jday >*/
 /*<       real uw,uo3,taer55 >*/
 /*<       real tgasm,sdtott,sutott,sast >*/
+/*<       real sutotr,sutota >*/
 /*<       integer iwave,iinf,isup,inhomo,idirec,iaer >*/
 /*<       integer iread,i,ik,l >*/
-/* _otb	Atmospheric reflectance */
+/* _otb	Atmospheric parameters */
 /*<       real otb_ratm	!Atmospheric reflectance >*/
 /*<       real pressure     !Atmospheric pressure >*/
+/*<       real otb_tdif_up  !Upward diffuse transmittance >*/
+/*<       real otb_tdir_up !Upward direct transmittance >*/
+/*<       real otb_tdif_up_ray !Upward diffuse transmittance for rayleigh >*/
+/*<       real otb_tdif_up_aer !Upward diffuse transmittance for aerosols >*/
 /* ***********************************************************************
  */
 /*   Parameters  initialization */
@@ -416,45 +439,66 @@ static integer c__3 = 3;
  */
 /*      goto 800 */
 /*<    >*/
-    otb_6s_ssssss_otb_main_function(&asol, &phi0, &avis, &phiv, &month, &jday, &pressure, &uw, &uo3, 
+    otb_6s__(&asol, &phi0, &avis, &phiv, &month, &jday, &pressure, &uw, &uo3, 
 	    &iaer, &taer55, &wlinf, &wlsup, s, &otb_ratm__, &sast, &tgasm, &
-	    sdtott, &sutott);
+	    sdtott, &sutott, &otb_tdif_up__, &otb_tdir_up__, &
+	    otb_tdif_up_ray__, &otb_tdif_up_aer__);
 /*<       write(6,*) >*/
-    s_wsle(&io___47);
+    s_wsle(&io___51);
     e_wsle();
 /*< 800   write(6,100) otb_ratm >*/
 /* L800: */
-    s_wsfe(&io___48);
+    s_wsfe(&io___52);
     do_fio(&c__1, (char *)&otb_ratm__, (ftnlen)sizeof(real));
     e_wsfe();
 /*<       write(6,200) sast >*/
-    s_wsfe(&io___49);
+    s_wsfe(&io___53);
     do_fio(&c__1, (char *)&sast, (ftnlen)sizeof(real));
     e_wsfe();
 /*<       write(6,300) tgasm >*/
-    s_wsfe(&io___50);
+    s_wsfe(&io___54);
     do_fio(&c__1, (char *)&tgasm, (ftnlen)sizeof(real));
     e_wsfe();
 /*<       write(6,400) sdtott >*/
-    s_wsfe(&io___51);
+    s_wsfe(&io___55);
     do_fio(&c__1, (char *)&sdtott, (ftnlen)sizeof(real));
     e_wsfe();
 /*<       write(6,500) sutott >*/
-    s_wsfe(&io___52);
+    s_wsfe(&io___56);
     do_fio(&c__1, (char *)&sutott, (ftnlen)sizeof(real));
+    e_wsfe();
+/*<       write(6,600) otb_tdif_up >*/
+    s_wsfe(&io___57);
+    do_fio(&c__1, (char *)&otb_tdif_up__, (ftnlen)sizeof(real));
+    e_wsfe();
+/*<       write(6,700) otb_tdir_up >*/
+    s_wsfe(&io___58);
+    do_fio(&c__1, (char *)&otb_tdir_up__, (ftnlen)sizeof(real));
+    e_wsfe();
+/*<       write(6,710) otb_tdif_up_ray  >*/
+    s_wsfe(&io___59);
+    do_fio(&c__1, (char *)&otb_tdif_up_ray__, (ftnlen)sizeof(real));
+    e_wsfe();
+/*<       write(6,720) otb_tdif_up_aer >*/
+    s_wsfe(&io___60);
+    do_fio(&c__1, (char *)&otb_tdif_up_aer__, (ftnlen)sizeof(real));
     e_wsfe();
 /*< 100   format(10x,40h ----->  atmospheric reflectance :      , f6.5)  >*/
 /*< 200   format(10x,40h ----->  atmospheric spherical albedo : , f6.5)    >*/
 /*< 300   format(10x,40h ----->  total gaseous transmission :   , f6.5)    >*/
 /*< 400   format(10x,40h ----->  downward transmittance :       , f6.5)    >*/
-/*< 500   format(10x,40h ----->  upward transmittance :         , f6.5)   >*/
+/*< 500   format(10x,40h ----->  upward transmittance :         , f6.5)  >*/
+/*< 600   format(10x,40h ----->  upward diffuse transmittance : , f6.5)  >*/
+/*< 700   format(10x,40h ----->  upward direct transmittance :  , f6.5)  >*/
+/*< 710   format(10x,40h ----->  upward diffuse transm. ray:    , f6.5)  >*/
+/*< 720   format(10x,40h ----->  upward diffuse transm. aer:    , f6.5)   >*/
 /*< 999   continue >*/
 L999:
 /*<       end >*/
     return 0;
-} /* OTB_6S_MAIN__ */
+} /* MAIN__ */
 
-/* Main program alias */ int call6sv1_0b__ () { OTB_6S_MAIN__ (); return 0; }
+/* Main program alias */ int call6sv1_0b__ () { MAIN__ (); return 0; }
 #ifdef __cplusplus
 	}
 #endif

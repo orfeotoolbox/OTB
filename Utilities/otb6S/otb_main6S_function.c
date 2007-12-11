@@ -9,8 +9,6 @@ extern "C" {
 /* OTB patches: replace "f2c.h" by "otb_6S.h" */
 /*#include "f2c.h"*/
 #include "otb_6S.h"
-
-
 /* Common Block Declarations */
 
 Extern struct {
@@ -105,7 +103,7 @@ static integer c__3 = 3;
 static integer c__1 = 1;
 static integer c__4 = 4;
 static integer c__2 = 2;
-static doublereal c_b309 = 2.;
+static doublereal c_b308 = 2.;
 static integer c__9 = 9;
 
 /*<    >*/
@@ -114,7 +112,9 @@ static integer c__9 = 9;
 	otb_jday__, real *otb_pressure__, real *otb_uw__, real *otb_uo3__, 
 	integer *otb_iaer__, real *otb_taer55__, real *otb_wlinf__, real *
 	otb_wlsup__, real *otb_s__, real *otb_ratm__, real *otb_sast__, real *
-	otb_tgasm__, real *otb_sdtott__, real *otb_sutott__)
+	otb_tgasm__, real *otb_sdtott__, real *otb_sutott__, real *
+	otb_tdif_up__, real *otb_tdir_up__, real *otb_tdif_up_ray__, real *
+	otb_tdif_up_aer__)
 {
     /* Initialized data */
 
@@ -365,7 +365,7 @@ flectance  \002,t79,\002*\002,/,\002*\002,6x,\002 Lambertian case :  \002,1x\
     cllist cl__1;
 
     /* Builtin functions */
-    /* Subroutine */ /*int s_copy(char *, char *, ftnlen, ftnlen);*/
+    /* Subroutine */ /* int s_copy(char *, char *, ftnlen, ftnlen);*/
     double acos(doublereal), cos(doublereal);
     /* Subroutine */ int s_stop(char *, ftnlen);
     double sqrt(doublereal);
@@ -380,26 +380,27 @@ flectance  \002,t79,\002*\002,/,\002*\002,6x,\002 Lambertian case :  \002,1x\
     double atan(doublereal);
 
     /* Local variables */
-    extern /* Subroutine */ int equivwl_(integer *, integer *, real *, real *)
-	    , discom_(integer *, integer *, integer *, real *, real *, real *,
-	     real *, real *, real *, real *, integer *, integer *, integer *, 
-	    real *, real *, real *, real *, integer *, real *, real *, real *,
-	     integer *, integer *, real *, real *, real *, real *), odrayl_(
-	    real *, real *), polnad_(real *, real *, real *, real *, real *, 
-	    real *), polglit_(real *, real *, real *, real *, real *, real *, 
-	    real *), solirr_(real *, real *), abstra_(integer *, real *, real 
-	    *, real *, real *, real *, real *, real *, integer *, real *, 
+    extern /* Subroutine */ int aeroso_(integer *, real *, real *, real *, 
+	    char *, integer *, ftnlen), equivwl_(integer *, integer *, real *,
+	     real *), discom_(integer *, integer *, integer *, real *, real *,
+	     real *, real *, real *, real *, real *, integer *, integer *, 
+	    integer *, real *, real *, real *, real *, integer *, real *, 
+	    real *, real *, integer *, integer *, real *, real *, real *, 
+	    real *), odrayl_(real *, real *), polnad_(real *, real *, real *, 
+	    real *, real *, real *), polglit_(real *, real *, real *, real *, 
+	    real *, real *, real *), solirr_(real *, real *), abstra_(integer 
+	    *, real *, real *, real *, real *, real *, real *, real *, 
+	    integer *, real *, real *, real *, real *, real *, real *, real *,
+	     real *, real *, real *, real *, real *, real *, real *, real *, 
+	    real *, real *, real *, real *, real *, real *, real *, real *, 
+	    real *, real *), interp_(integer *, integer *, real *, real *, 
 	    real *, real *, real *, real *, real *, real *, real *, real *, 
 	    real *, real *, real *, real *, real *, real *, real *, real *, 
-	    real *, real *, real *, real *, real *, real *, real *, real *), 
-	    interp_(integer *, integer *, real *, real *, real *, real *, 
 	    real *, real *, real *, real *, real *, real *, real *, real *, 
-	    real *, real *, real *, real *, real *, real *, real *, real *, 
-	    real *, real *, real *, real *, real *, real *, real *, real *, 
-	    real *, real *, real *, real *, real *, integer *, real *, real *,
-	     real *, integer *, real *, real *, real *, real *, real *, real *
-	    , integer *), enviro_(real *, real *, real *, real *, real *, 
-	    real *, real *, real *);
+	    real *, real *, real *, real *, real *, real *, real *, integer *,
+	     real *, real *, real *, integer *, real *, real *, real *, real *
+	    , real *, real *, integer *), enviro_(real *, real *, real *, 
+	    real *, real *, real *, real *, real *);
     real rqatm2, ruatm2, tdirqu, rqmeas2, rumeas2, qlumeas, ulumeas, qlumet, 
 	    ulumet, rqfet, rufet, xtphi, refet_fi__[181], roatm_fi__[10860]	
 	    /* was [3][20][181] */, height_z__[101], phi_wind__, rfoamave, 
@@ -432,7 +433,7 @@ flectance  \002,t79,\002*\002,/,\002*\002,6x,\002 Lambertian case :  \002,1x\
     extern /* Subroutine */ int us62_();
     real phi0;
     integer ifi;
-    real xap, xla0, tgp1, tgp2;
+    real xla0, xap, tgp1, tgp2;
     integer mum1;
     real xlm1[2499]	/* was [51][49] */, xlm2[2499]	/* was [51][49] */, 
 	    puo3, adif, scaa, phaa, qhaa, coef, uhaa, aini[6]	/* was [2][3] 
@@ -487,16 +488,12 @@ flectance  \002,t79,\002*\002,/,\002*\002,6x,\002 Lambertian case :  \002,1x\
 	    attwava, pizert;
     integer idatmp, inhomo, igroun;
     real discri, rogbrdf, rfoaml[1501], sodrayp, sdppray, spdpray, rglitl[
-	    1501], cij_out__[4], ftray, sodtotp, sdpptot, spdptot, rolutiq[
-	    1025]	/* was [25][41] */, ratm2_fi__[181], rolutiu[1025]	
-	    /* was [25][41] */, pizmoyp, rolutsq[20500]	/* was [20][25][41] */
-	    , rwatave;
+	    1501], cij_out__[4], sodtotp, sdpptot, spdptot, rolutiq[1025]	
+	    /* was [25][41] */, ftray, ratm2_fi__[181], rolutiu[1025]	/* 
+	    was [25][41] */, pizmoyp, rolutsq[20500]	/* was [20][25][41] */
+	    , rolutsu[20500]	/* was [20][25][41] */, rwatave;
     extern /* Subroutine */ int gauss_(real *, real *, real *, real *, 
-	    integer *);
-    real rolutsu[20500]	/* was [20][25][41] */;
-    extern /* Subroutine */ int varsol_(integer *, integer *, real *), 
-	    aeroso_(integer *, real *, real *, real *, char *, integer *, 
-	    ftnlen);
+	    integer *), varsol_(integer *, integer *, real *);
 
     /* Fortran I/O blocks */
     static cilist io___60 = { 0, 5, 0, 0, 0 };
@@ -522,55 +519,55 @@ flectance  \002,t79,\002*\002,/,\002*\002,6x,\002 Lambertian case :  \002,1x\
     static cilist io___98 = { 0, 0, 0, 0, 0 };
     static cilist io___102 = { 0, 0, 0, 0, 0 };
     static cilist io___123 = { 0, 6, 0, 0, 0 };
-    static cilist io___150 = { 0, 0, 1, 0, 0 };
-    static cilist io___151 = { 0, 0, 0, 0, 0 };
-    static cilist io___154 = { 0, 0, 0, 0, 0 };
-    static cilist io___156 = { 0, 0, 0, 0, 0 };
-    static cilist io___164 = { 0, 0, 0, fmt_98, 0 };
-    static cilist io___165 = { 0, 0, 0, fmt_1401, 0 };
-    static cilist io___166 = { 0, 0, 0, fmt_103, 0 };
-    static cilist io___167 = { 0, 0, 0, fmt_101, 0 };
-    static cilist io___171 = { 0, 0, 0, fmt_102, 0 };
-    static cilist io___172 = { 0, 0, 0, fmt_1110, 0 };
-    static cilist io___173 = { 0, 0, 0, fmt_1119, 0 };
-    static cilist io___174 = { 0, 0, 0, fmt_1281, 0 };
-    static cilist io___175 = { 0, 0, 0, fmt_1272, 0 };
-    static cilist io___176 = { 0, 0, 0, fmt_1271, 0 };
-    static cilist io___177 = { 0, 0, 0, fmt_1261, 0 };
-    static cilist io___178 = { 0, 0, 0, fmt_5550, 0 };
-    static cilist io___179 = { 0, 0, 0, fmt_5554, 0 };
-    static cilist io___181 = { 0, 6, 0, fmt_5551, 0 };
-    static cilist io___182 = { 0, 6, 0, fmt_5552, 0 };
-    static cilist io___183 = { 0, 6, 0, fmt_5553, 0 };
+    static cilist io___150 = { 0, 0, 0, 0, 0 };
+    static cilist io___153 = { 0, 0, 0, 0, 0 };
+    static cilist io___155 = { 0, 0, 0, 0, 0 };
+    static cilist io___163 = { 0, 0, 0, fmt_98, 0 };
+    static cilist io___164 = { 0, 0, 0, fmt_1401, 0 };
+    static cilist io___165 = { 0, 0, 0, fmt_103, 0 };
+    static cilist io___166 = { 0, 0, 0, fmt_101, 0 };
+    static cilist io___170 = { 0, 0, 0, fmt_102, 0 };
+    static cilist io___171 = { 0, 0, 0, fmt_1110, 0 };
+    static cilist io___172 = { 0, 0, 0, fmt_1119, 0 };
+    static cilist io___173 = { 0, 0, 0, fmt_1281, 0 };
+    static cilist io___174 = { 0, 0, 0, fmt_1272, 0 };
+    static cilist io___175 = { 0, 0, 0, fmt_1271, 0 };
+    static cilist io___176 = { 0, 0, 0, fmt_1261, 0 };
+    static cilist io___177 = { 0, 0, 0, fmt_5550, 0 };
+    static cilist io___178 = { 0, 0, 0, fmt_5554, 0 };
+    static cilist io___180 = { 0, 6, 0, fmt_5551, 0 };
+    static cilist io___181 = { 0, 6, 0, fmt_5552, 0 };
+    static cilist io___182 = { 0, 6, 0, fmt_5553, 0 };
+    static cilist io___183 = { 0, 0, 0, fmt_132, 0 };
     static cilist io___184 = { 0, 0, 0, fmt_132, 0 };
     static cilist io___185 = { 0, 0, 0, fmt_132, 0 };
-    static cilist io___186 = { 0, 0, 0, fmt_132, 0 };
-    static cilist io___187 = { 0, 0, 0, fmt_133, 0 };
-    static cilist io___188 = { 0, 6, 0, fmt_134, 0 };
-    static cilist io___189 = { 0, 0, 0, fmt_135, 0 };
-    static cilist io___190 = { 0, 0, 0, fmt_136, 0 };
-    static cilist io___191 = { 0, 0, 0, fmt_137, 0 };
-    static cilist io___192 = { 0, 0, 0, fmt_139, 0 };
-    static cilist io___193 = { 0, 0, 0, fmt_138, 0 };
-    static cilist io___194 = { 0, 0, 0, fmt_140, 0 };
-    static cilist io___195 = { 0, 0, 0, fmt_141, 0 };
-    static cilist io___196 = { 0, 6, 0, fmt_5555, 0 };
-    static cilist io___197 = { 0, 0, 0, fmt_148, 0 };
-    static cilist io___198 = { 0, 0, 0, fmt_1510, 0 };
-    static cilist io___199 = { 0, 0, 0, fmt_149, 0 };
-    static cilist io___200 = { 0, 0, 0, fmt_1510, 0 };
-    static cilist io___201 = { 0, 0, 0, fmt_142, 0 };
-    static cilist io___202 = { 0, 0, 0, fmt_146, 0 };
-    static cilist io___203 = { 0, 0, 0, fmt_144, 0 };
-    static cilist io___204 = { 0, 0, 0, fmt_145, 0 };
-    static cilist io___205 = { 0, 0, 0, fmt_143, 0 };
-    static cilist io___212 = { 0, 0, 0, fmt_169, 0 };
-    static cilist io___214 = { 0, 0, 0, fmt_170, 0 };
-    static cilist io___216 = { 0, 0, 0, fmt_171, 0 };
-    static cilist io___297 = { 0, 0, 0, fmt_1500, 0 };
-    static cilist io___427 = { 0, 6, 0, 0, 0 };
+    static cilist io___186 = { 0, 0, 0, fmt_133, 0 };
+    static cilist io___187 = { 0, 6, 0, fmt_134, 0 };
+    static cilist io___188 = { 0, 0, 0, fmt_135, 0 };
+    static cilist io___189 = { 0, 0, 0, fmt_136, 0 };
+    static cilist io___190 = { 0, 0, 0, fmt_137, 0 };
+    static cilist io___191 = { 0, 0, 0, fmt_139, 0 };
+    static cilist io___192 = { 0, 0, 0, fmt_138, 0 };
+    static cilist io___193 = { 0, 0, 0, fmt_140, 0 };
+    static cilist io___194 = { 0, 0, 0, fmt_141, 0 };
+    static cilist io___195 = { 0, 6, 0, fmt_5555, 0 };
+    static cilist io___196 = { 0, 0, 0, fmt_148, 0 };
+    static cilist io___197 = { 0, 0, 0, fmt_1510, 0 };
+    static cilist io___198 = { 0, 0, 0, fmt_149, 0 };
+    static cilist io___199 = { 0, 0, 0, fmt_1510, 0 };
+    static cilist io___200 = { 0, 0, 0, fmt_142, 0 };
+    static cilist io___201 = { 0, 0, 0, fmt_146, 0 };
+    static cilist io___202 = { 0, 0, 0, fmt_144, 0 };
+    static cilist io___203 = { 0, 0, 0, fmt_145, 0 };
+    static cilist io___204 = { 0, 0, 0, fmt_143, 0 };
+    static cilist io___211 = { 0, 0, 0, fmt_169, 0 };
+    static cilist io___213 = { 0, 0, 0, fmt_170, 0 };
+    static cilist io___215 = { 0, 0, 0, fmt_171, 0 };
+    static cilist io___296 = { 0, 0, 0, fmt_1500, 0 };
+    static cilist io___426 = { 0, 6, 0, 0, 0 };
+    static cilist io___427 = { 0, 10, 0, fmt_2222, 0 };
     static cilist io___428 = { 0, 10, 0, fmt_2222, 0 };
-    static cilist io___429 = { 0, 10, 0, fmt_2222, 0 };
+    static cilist io___430 = { 0, 10, 0, fmt_2223, 0 };
     static cilist io___431 = { 0, 10, 0, fmt_2223, 0 };
     static cilist io___432 = { 0, 10, 0, fmt_2223, 0 };
     static cilist io___433 = { 0, 10, 0, fmt_2223, 0 };
@@ -578,11 +575,11 @@ flectance  \002,t79,\002*\002,/,\002*\002,6x,\002 Lambertian case :  \002,1x\
     static cilist io___435 = { 0, 10, 0, fmt_2223, 0 };
     static cilist io___436 = { 0, 10, 0, fmt_2223, 0 };
     static cilist io___437 = { 0, 10, 0, fmt_2223, 0 };
-    static cilist io___438 = { 0, 10, 0, fmt_2223, 0 };
+    static cilist io___438 = { 0, 10, 0, fmt_333, 0 };
     static cilist io___439 = { 0, 10, 0, fmt_333, 0 };
-    static cilist io___440 = { 0, 10, 0, fmt_333, 0 };
+    static cilist io___440 = { 0, 10, 0, fmt_2222, 0 };
     static cilist io___441 = { 0, 10, 0, fmt_2222, 0 };
-    static cilist io___442 = { 0, 10, 0, fmt_2222, 0 };
+    static cilist io___442 = { 0, 10, 0, fmt_2223, 0 };
     static cilist io___443 = { 0, 10, 0, fmt_2223, 0 };
     static cilist io___444 = { 0, 10, 0, fmt_2223, 0 };
     static cilist io___445 = { 0, 10, 0, fmt_2223, 0 };
@@ -590,18 +587,18 @@ flectance  \002,t79,\002*\002,/,\002*\002,6x,\002 Lambertian case :  \002,1x\
     static cilist io___447 = { 0, 10, 0, fmt_2223, 0 };
     static cilist io___448 = { 0, 10, 0, fmt_2223, 0 };
     static cilist io___449 = { 0, 10, 0, fmt_2223, 0 };
-    static cilist io___450 = { 0, 10, 0, fmt_2223, 0 };
-    static cilist io___452 = { 0, 0, 0, fmt_430, 0 };
-    static cilist io___453 = { 0, 0, 0, fmt_431, 0 };
-    static cilist io___455 = { 0, 0, 0, fmt_429, 0 };
-    static cilist io___456 = { 0, 0, 0, fmt_432, 0 };
-    static cilist io___457 = { 0, 0, 0, fmt_434, 0 };
-    static cilist io___458 = { 0, 0, 0, fmt_432, 0 };
-    static cilist io___459 = { 0, 0, 0, fmt_434, 0 };
-    static cilist io___460 = { 0, 0, 0, fmt_436, 0 };
-    static cilist io___461 = { 0, 0, 0, fmt_437, 0 };
-    static cilist io___462 = { 0, 0, 0, fmt_929, 0 };
-    static cilist io___463 = { 0, 0, 0, fmt_930, 0 };
+    static cilist io___451 = { 0, 0, 0, fmt_430, 0 };
+    static cilist io___452 = { 0, 0, 0, fmt_431, 0 };
+    static cilist io___454 = { 0, 0, 0, fmt_429, 0 };
+    static cilist io___455 = { 0, 0, 0, fmt_432, 0 };
+    static cilist io___456 = { 0, 0, 0, fmt_434, 0 };
+    static cilist io___457 = { 0, 0, 0, fmt_432, 0 };
+    static cilist io___458 = { 0, 0, 0, fmt_434, 0 };
+    static cilist io___459 = { 0, 0, 0, fmt_436, 0 };
+    static cilist io___460 = { 0, 0, 0, fmt_437, 0 };
+    static cilist io___461 = { 0, 0, 0, fmt_929, 0 };
+    static cilist io___462 = { 0, 0, 0, fmt_930, 0 };
+    static cilist io___463 = { 0, 0, 0, fmt_931, 0 };
     static cilist io___464 = { 0, 0, 0, fmt_931, 0 };
     static cilist io___465 = { 0, 0, 0, fmt_931, 0 };
     static cilist io___466 = { 0, 0, 0, fmt_931, 0 };
@@ -609,15 +606,15 @@ flectance  \002,t79,\002*\002,/,\002*\002,6x,\002 Lambertian case :  \002,1x\
     static cilist io___468 = { 0, 0, 0, fmt_931, 0 };
     static cilist io___469 = { 0, 0, 0, fmt_931, 0 };
     static cilist io___470 = { 0, 0, 0, fmt_931, 0 };
-    static cilist io___471 = { 0, 0, 0, fmt_931, 0 };
+    static cilist io___471 = { 0, 0, 0, fmt_1401, 0 };
     static cilist io___472 = { 0, 0, 0, fmt_1401, 0 };
-    static cilist io___473 = { 0, 0, 0, fmt_1401, 0 };
+    static cilist io___473 = { 0, 0, 0, fmt_931, 0 };
     static cilist io___474 = { 0, 0, 0, fmt_931, 0 };
     static cilist io___475 = { 0, 0, 0, fmt_931, 0 };
-    static cilist io___476 = { 0, 0, 0, fmt_931, 0 };
+    static cilist io___476 = { 0, 0, 0, fmt_1401, 0 };
     static cilist io___477 = { 0, 0, 0, fmt_1401, 0 };
-    static cilist io___478 = { 0, 0, 0, fmt_1401, 0 };
-    static cilist io___479 = { 0, 0, 0, fmt_939, 0 };
+    static cilist io___478 = { 0, 0, 0, fmt_939, 0 };
+    static cilist io___479 = { 0, 0, 0, fmt_931, 0 };
     static cilist io___480 = { 0, 0, 0, fmt_931, 0 };
     static cilist io___481 = { 0, 0, 0, fmt_931, 0 };
     static cilist io___482 = { 0, 0, 0, fmt_931, 0 };
@@ -626,25 +623,35 @@ flectance  \002,t79,\002*\002,/,\002*\002,6x,\002 Lambertian case :  \002,1x\
     static cilist io___485 = { 0, 0, 0, fmt_931, 0 };
     static cilist io___486 = { 0, 0, 0, fmt_931, 0 };
     static cilist io___487 = { 0, 0, 0, fmt_931, 0 };
-    static cilist io___488 = { 0, 0, 0, fmt_931, 0 };
+    static cilist io___488 = { 0, 0, 0, fmt_932, 0 };
     static cilist io___489 = { 0, 0, 0, fmt_932, 0 };
-    static cilist io___490 = { 0, 0, 0, fmt_932, 0 };
+    static cilist io___490 = { 0, 0, 0, fmt_931, 0 };
     static cilist io___491 = { 0, 0, 0, fmt_931, 0 };
     static cilist io___492 = { 0, 0, 0, fmt_931, 0 };
     static cilist io___493 = { 0, 0, 0, fmt_931, 0 };
     static cilist io___494 = { 0, 0, 0, fmt_931, 0 };
-    static cilist io___495 = { 0, 0, 0, fmt_931, 0 };
-    static cilist io___496 = { 0, 0, 0, fmt_1401, 0 };
-    static cilist io___497 = { 0, 0, 0, fmt_1402, 0 };
-    static cilist io___521 = { 0, 0, 0, fmt_940, 0 };
-    static cilist io___522 = { 0, 0, 0, fmt_941, 0 };
-    static cilist io___523 = { 0, 0, 0, fmt_942, 0 };
-    static cilist io___524 = { 0, 0, 0, fmt_943, 0 };
-    static cilist io___525 = { 0, 0, 0, fmt_944, 0 };
-    static cilist io___526 = { 0, 0, 0, fmt_222, 0 };
-    static cilist io___527 = { 0, 0, 0, fmt_944, 0 };
+    static cilist io___495 = { 0, 0, 0, fmt_1401, 0 };
+    static cilist io___496 = { 0, 0, 0, fmt_1402, 0 };
+    static cilist io___520 = { 0, 0, 0, fmt_940, 0 };
+    static cilist io___521 = { 0, 0, 0, fmt_941, 0 };
+    static cilist io___522 = { 0, 0, 0, fmt_942, 0 };
+    static cilist io___523 = { 0, 0, 0, fmt_943, 0 };
+    static cilist io___524 = { 0, 0, 0, fmt_944, 0 };
+    static cilist io___525 = { 0, 0, 0, fmt_222, 0 };
+    static cilist io___526 = { 0, 0, 0, fmt_944, 0 };
 
 
+/* _otb MOD V2 : New outputs : otb_tdif_up =  upward diffuse transmittance
+ */
+/* _otb MOD V2 : New outputs : otb_tdir_up =  upward direct transmittance 
+*/
+/*_otb MOD V2 : New outputs : otb_tdif_up_ray = upward dif. trans for rayl
+eigh*/
+/*_otb MOD V2 : New outputs : otb_tdif_up_aer = upward dif. transm. for ae
+rosols*/
+/* _otb MOD V2 : */
+/* _otb MOD V2 : Normalization of US62 pressure profile */
+/* _otb MOD V2 : by the user defined pressure */
 /* **********************************************************************c
  */
 /*                                                                      c 
@@ -1068,7 +1075,11 @@ p  c*/
 /*< 	real otb_sast			!Atmospheric spherical albedo (output) >*/
 /*< 	real otb_tgasm			!Total gaseous transmission (output) >*/
 /*< 	real otb_sdtott			!Downward transmittance (output) >*/
-/*< 	real otb_sutott			!Upward transmittance (output) >*/
+/*< 	real otb_sutott			!Upward transmittance (output)	 >*/
+/*< 	real otb_tdif_up		!Upward diffuse transmittance (output) >*/
+/*< 	real otb_tdir_up		!Upward direct transmittance (output) >*/
+/*< 	real otb_tdif_up_ray 		!Upward diffuse transmittance for rayleigh (output) >*/
+/*< 	real otb_tdif_up_aer 		!Upward diffuse transmittance for aerosols (output)	 >*/
 /* _otb_adaptation End : otb variables declaration */
 /* ***********************************************************************
  */
@@ -1523,6 +1534,18 @@ ss c*/
     uw = *otb_uw__;
 /*<       uo3 = otb_uo3	!Added_for_OTB >*/
     uo3 = *otb_uo3__;
+/* Normalization of the US62 pressure profile accouting for */
+/* the ground pressure entered by user. */
+
+/* Normalization of gas amounts is performed in subroutine ABSTRA. */
+/*<       do 123 i=1,34        		!Added_for_OTB >*/
+    for (i__ = 1; i__ <= 34; ++i__) {
+/*<          p(i)=p(i)*otb_pressure/p(1) 	!Added_for_OTB         >*/
+	sixs_atm__1.p[i__ - 1] = sixs_atm__1.p[i__ - 1] * *otb_pressure__ / 
+		sixs_atm__1.p[0];
+/*< 123   continue				!Added_for_OTB >*/
+/* L123: */
+    }
 /* _otb      if(idatm.eq.0) go to 5 */
 /* _otb      if(idatm.eq.8) read(iread,*) uw,uo3 */
 /* _otb      if(idatm.ne.7) go to 6 */
@@ -3632,27 +3655,12 @@ n*/
 /*       read(iread,*,end=37) ilut */
 /*<        irop=0 >*/
     irop = 0;
-/*<        read(iread,*,end=37) irop >*/
-/*
-    io___150.ciunit = iread;
-    i__1 = s_rsle(&io___150);
-    if (i__1 != 0) {
-	goto L37;
-    }
-    i__1 = do_lio(&c__3, &c__1, (char *)&irop, (ftnlen)sizeof(integer));
-    if (i__1 != 0) {
-	goto L37;
-    }
-    i__1 = e_rsle();
-    if (i__1 != 0) {
-	goto L37;
-    }
-*/
+/* _otb       read(iread,*,end=37) irop */
 /*<        if (irop.eq.1) then >*/
     if (irop == 1) {
 /*<        read(iread,*) ropq,ropu >*/
-	io___151.ciunit = iread;
-	s_rsle(&io___151);
+	io___150.ciunit = iread;
+	s_rsle(&io___150);
 	do_lio(&c__4, &c__1, (char *)&ropq, (ftnlen)sizeof(real));
 	do_lio(&c__4, &c__1, (char *)&ropu, (ftnlen)sizeof(real));
 	e_rsle();
@@ -3661,8 +3669,8 @@ n*/
 /*<        if (irop.eq.2) then >*/
     if (irop == 2) {
 /*<        read(iread,*) pveg >*/
-	io___154.ciunit = iread;
-	s_rsle(&io___154);
+	io___153.ciunit = iread;
+	s_rsle(&io___153);
 	do_lio(&c__4, &c__1, (char *)&pveg, (ftnlen)sizeof(real));
 	e_rsle();
 /*<        call polnad(asol,avis,phi,pveg,ropq,ropu) >*/
@@ -3672,8 +3680,8 @@ n*/
 /*<        if (irop.eq.3) then >*/
     if (irop == 3) {
 /*<        read(iread,*) wspd,azw >*/
-	io___156.ciunit = iread;
-	s_rsle(&io___156);
+	io___155.ciunit = iread;
+	s_rsle(&io___155);
 	do_lio(&c__4, &c__1, (char *)&wspd, (ftnlen)sizeof(real));
 	do_lio(&c__4, &c__1, (char *)&azw, (ftnlen)sizeof(real));
 	e_rsle();
@@ -3684,7 +3692,7 @@ n*/
 /*<        endif >*/
     }
 /*<  37    if ((irop.lt.1).or.(irop.gt.3)) then >*/
-L37:
+/* L37: */
     if (irop < 1 || irop > 3) {
 /*<        if (idirec.eq.0) then >*/
 	if (idirec == 0) {
@@ -3786,8 +3794,8 @@ L37:
 /* _otb_adaptation End : jump writings */
 /* ---- geometrical conditions ---- */
 /*<       write(iwr, 98) >*/
-    io___164.ciunit = sixs_ier__1.iwr;
-    s_wsfe(&io___164);
+    io___163.ciunit = sixs_ier__1.iwr;
+    s_wsfe(&io___163);
     e_wsfe();
 /*<       write(iwr, etiq1(igeom+1)) >*/
     ci__1.cierr = 0;
@@ -3798,12 +3806,12 @@ L37:
 /*<       if(igeom.eq.0) then >*/
     if (igeom == 0) {
 /*< 	 write(iwr, 1401) >*/
-	io___165.ciunit = sixs_ier__1.iwr;
-	s_wsfe(&io___165);
+	io___164.ciunit = sixs_ier__1.iwr;
+	s_wsfe(&io___164);
 	e_wsfe();
 /*< 	 write(iwr, 103)month,jday >*/
-	io___166.ciunit = sixs_ier__1.iwr;
-	s_wsfe(&io___166);
+	io___165.ciunit = sixs_ier__1.iwr;
+	s_wsfe(&io___165);
 	do_fio(&c__1, (char *)&month, (ftnlen)sizeof(integer));
 	do_fio(&c__1, (char *)&jday, (ftnlen)sizeof(integer));
 	e_wsfe();
@@ -3811,8 +3819,8 @@ L37:
     }
 /*<       if(igeom.ne.0) write(iwr, 101)month,jday,tu,xlat,xlon >*/
     if (igeom != 0) {
-	io___167.ciunit = sixs_ier__1.iwr;
-	s_wsfe(&io___167);
+	io___166.ciunit = sixs_ier__1.iwr;
+	s_wsfe(&io___166);
 	do_fio(&c__1, (char *)&month, (ftnlen)sizeof(integer));
 	do_fio(&c__1, (char *)&jday, (ftnlen)sizeof(integer));
 	do_fio(&c__1, (char *)&tu, (ftnlen)sizeof(real));
@@ -3821,14 +3829,14 @@ L37:
 	e_wsfe();
     }
 /*<       write(iwr, 102)asol,phi0 >*/
-    io___171.ciunit = sixs_ier__1.iwr;
-    s_wsfe(&io___171);
+    io___170.ciunit = sixs_ier__1.iwr;
+    s_wsfe(&io___170);
     do_fio(&c__1, (char *)&asol, (ftnlen)sizeof(real));
     do_fio(&c__1, (char *)&phi0, (ftnlen)sizeof(real));
     e_wsfe();
 /*<       write(iwr, 1110)avis,phiv,adif,phi >*/
-    io___172.ciunit = sixs_ier__1.iwr;
-    s_wsfe(&io___172);
+    io___171.ciunit = sixs_ier__1.iwr;
+    s_wsfe(&io___171);
     do_fio(&c__1, (char *)&avis, (ftnlen)sizeof(real));
     do_fio(&c__1, (char *)&phiv, (ftnlen)sizeof(real));
     do_fio(&c__1, (char *)&adif, (ftnlen)sizeof(real));
@@ -3836,8 +3844,8 @@ L37:
     e_wsfe();
 /* --- atmospheric model ---- */
 /*<       write(iwr, 1119) >*/
-    io___173.ciunit = sixs_ier__1.iwr;
-    s_wsfe(&io___173);
+    io___172.ciunit = sixs_ier__1.iwr;
+    s_wsfe(&io___172);
     e_wsfe();
 /*<       if(idatm-7)226,227,228 >*/
     if ((i__1 = idatm - 7) < 0) {
@@ -3849,8 +3857,8 @@ L37:
     }
 /*<   228 write(iwr, 1281)uw,uo3 >*/
 L228:
-    io___174.ciunit = sixs_ier__1.iwr;
-    s_wsfe(&io___174);
+    io___173.ciunit = sixs_ier__1.iwr;
+    s_wsfe(&io___173);
     do_fio(&c__1, (char *)&uw, (ftnlen)sizeof(real));
     do_fio(&c__1, (char *)&uo3, (ftnlen)sizeof(real));
     e_wsfe();
@@ -3858,14 +3866,14 @@ L228:
     goto L219;
 /*<   227 write(iwr, 1272) >*/
 L227:
-    io___175.ciunit = sixs_ier__1.iwr;
-    s_wsfe(&io___175);
+    io___174.ciunit = sixs_ier__1.iwr;
+    s_wsfe(&io___174);
     e_wsfe();
 /*<       do 229 i=1,34 >*/
     for (i__ = 1; i__ <= 34; ++i__) {
 /*<         write(iwr, 1271)z(i),p(i),t(i),wh(i),wo(i) >*/
-	io___176.ciunit = sixs_ier__1.iwr;
-	s_wsfe(&io___176);
+	io___175.ciunit = sixs_ier__1.iwr;
+	s_wsfe(&io___175);
 	do_fio(&c__1, (char *)&sixs_atm__1.z__[i__ - 1], (ftnlen)sizeof(real))
 		;
 	do_fio(&c__1, (char *)&sixs_atm__1.p[i__ - 1], (ftnlen)sizeof(real));
@@ -3880,21 +3888,21 @@ L227:
     goto L219;
 /*<   226 write(iwr, 1261)atmid(idatm+1) >*/
 L226:
-    io___177.ciunit = sixs_ier__1.iwr;
-    s_wsfe(&io___177);
+    io___176.ciunit = sixs_ier__1.iwr;
+    s_wsfe(&io___176);
     do_fio(&c__1, atmid + idatm * 51, 51L);
     e_wsfe();
 /* --- aerosols model (type) ---- */
 /*< 219    write(iwr,5550) >*/
 L219:
-    io___178.ciunit = sixs_ier__1.iwr;
-    s_wsfe(&io___178);
+    io___177.ciunit = sixs_ier__1.iwr;
+    s_wsfe(&io___177);
     e_wsfe();
 /*<        if(iaer.eq.0) then >*/
     if (iaer == 0) {
 /*<         write(iwr, 5554) >*/
-	io___179.ciunit = sixs_ier__1.iwr;
-	s_wsfe(&io___179);
+	io___178.ciunit = sixs_ier__1.iwr;
+	s_wsfe(&io___178);
 	e_wsfe();
 /*<         goto 1112 >*/
 	goto L1112;
@@ -3929,17 +3937,17 @@ L219:
 /*<        num_z=num_z-1 >*/
 	--aeroprof_1.num_z__;
 /*<        write(6,5551) num_z >*/
-	s_wsfe(&io___181);
+	s_wsfe(&io___180);
 	do_fio(&c__1, (char *)&aeroprof_1.num_z__, (ftnlen)sizeof(integer));
 	e_wsfe();
 /*<        write(6,5552) >*/
-	s_wsfe(&io___182);
+	s_wsfe(&io___181);
 	e_wsfe();
 /*<        do i=1,num_z >*/
 	i__1 = aeroprof_1.num_z__;
 	for (i__ = 1; i__ <= i__1; ++i__) {
 /*<    >*/
-	    s_wsfe(&io___183);
+	    s_wsfe(&io___182);
 	    do_fio(&c__1, (char *)&i__, (ftnlen)sizeof(integer));
 	    do_fio(&c__1, (char *)&height_z__[aeroprof_1.num_z__ + 1 - i__], (
 		    ftnlen)sizeof(real));
@@ -3969,22 +3977,22 @@ L219:
 	s_copy(aer_model__ + 500, "Sun Photometer aerosol model", 50L, 28L);
 /*<       if (iaer.ge.1.and.iaer.lt.4) write (iwr,132) aer_model(iaer) >*/
 	if (iaer >= 1 && iaer < 4) {
-	    io___184.ciunit = sixs_ier__1.iwr;
-	    s_wsfe(&io___184);
+	    io___183.ciunit = sixs_ier__1.iwr;
+	    s_wsfe(&io___183);
 	    do_fio(&c__1, aer_model__ + (iaer - 1) * 50, 50L);
 	    e_wsfe();
 	}
 /*<       if (iaer.ge.5.and.iaer.le.7) write (iwr,132) aer_model(iaer) >*/
 	if (iaer >= 5 && iaer <= 7) {
-	    io___185.ciunit = sixs_ier__1.iwr;
-	    s_wsfe(&io___185);
+	    io___184.ciunit = sixs_ier__1.iwr;
+	    s_wsfe(&io___184);
 	    do_fio(&c__1, aer_model__ + (iaer - 1) * 50, 50L);
 	    e_wsfe();
 	}
 /*<       if (iaer.eq.11) write(iwr,132) aer_model(iaer) >*/
 	if (iaer == 11) {
-	    io___186.ciunit = sixs_ier__1.iwr;
-	    s_wsfe(&io___186);
+	    io___185.ciunit = sixs_ier__1.iwr;
+	    s_wsfe(&io___185);
 	    do_fio(&c__1, aer_model__ + (iaer - 1) * 50, 50L);
 	    e_wsfe();
 	}
@@ -3992,8 +4000,8 @@ L219:
     }
 /*<        if (iaer.eq.4)write(iwr,133)(c(i),i=1,4) >*/
     if (iaer == 4) {
-	io___187.ciunit = sixs_ier__1.iwr;
-	s_wsfe(&io___187);
+	io___186.ciunit = sixs_ier__1.iwr;
+	s_wsfe(&io___186);
 	for (i__ = 1; i__ <= 4; ++i__) {
 	    do_fio(&c__1, (char *)&c__[i__ - 1], (ftnlen)sizeof(real));
 	}
@@ -4002,15 +4010,15 @@ L219:
 /*<        if (iaer.eq.8) then >*/
     if (iaer == 8) {
 /*<         write(6,134) icp >*/
-	s_wsfe(&io___188);
+	s_wsfe(&io___187);
 	do_fio(&c__1, (char *)&mie_in__1.icp, (ftnlen)sizeof(integer));
 	e_wsfe();
 /*<         do i=1,icp >*/
 	i__1 = mie_in__1.icp;
 	for (i__ = 1; i__ <= i__1; ++i__) {
 /*<          write(iwr,135)x1(i),x2(i),cij_out(i) >*/
-	    io___189.ciunit = sixs_ier__1.iwr;
-	    s_wsfe(&io___189);
+	    io___188.ciunit = sixs_ier__1.iwr;
+	    s_wsfe(&io___188);
 	    do_fio(&c__1, (char *)&mie_in__1.x1[i__ - 1], (ftnlen)sizeof(real)
 		    );
 	    do_fio(&c__1, (char *)&mie_in__1.x2[i__ - 1], (ftnlen)sizeof(real)
@@ -4023,8 +4031,8 @@ L219:
     }
 /*<        if (iaer.eq.9) write(iwr,136)x1(1),x2(1),x3(1) >*/
     if (iaer == 9) {
-	io___190.ciunit = sixs_ier__1.iwr;
-	s_wsfe(&io___190);
+	io___189.ciunit = sixs_ier__1.iwr;
+	s_wsfe(&io___189);
 	do_fio(&c__1, (char *)&mie_in__1.x1[0], (ftnlen)sizeof(real));
 	do_fio(&c__1, (char *)&mie_in__1.x2[0], (ftnlen)sizeof(real));
 	do_fio(&c__1, (char *)&mie_in__1.x3[0], (ftnlen)sizeof(real));
@@ -4032,22 +4040,22 @@ L219:
     }
 /*<        if (iaer.eq.10) write(iwr,137)x1(1)  >*/
     if (iaer == 10) {
-	io___191.ciunit = sixs_ier__1.iwr;
-	s_wsfe(&io___191);
+	io___190.ciunit = sixs_ier__1.iwr;
+	s_wsfe(&io___190);
 	do_fio(&c__1, (char *)&mie_in__1.x1[0], (ftnlen)sizeof(real));
 	e_wsfe();
     }
 /*<        if (iaerp.eq.1)write(iwr,139)FILE2(1:i2) >*/
     if (iaerp == 1) {
-	io___192.ciunit = sixs_ier__1.iwr;
-	s_wsfe(&io___192);
+	io___191.ciunit = sixs_ier__1.iwr;
+	s_wsfe(&io___191);
 	do_fio(&c__1, file2, i2);
 	e_wsfe();
     }
 /*<        if (iaer.eq.12)write(iwr,138)FILE2(1:i2) >*/
     if (iaer == 12) {
-	io___193.ciunit = sixs_ier__1.iwr;
-	s_wsfe(&io___193);
+	io___192.ciunit = sixs_ier__1.iwr;
+	s_wsfe(&io___192);
 	do_fio(&c__1, file2, i2);
 	e_wsfe();
     }
@@ -4057,15 +4065,15 @@ L219:
     if (iaer_prof__ == 0) {
 /*<       if(abs(v).le.xacc) write(iwr, 140)taer55 >*/
 	if (dabs(v) <= sixs_test__1.xacc) {
-	    io___194.ciunit = sixs_ier__1.iwr;
-	    s_wsfe(&io___194);
+	    io___193.ciunit = sixs_ier__1.iwr;
+	    s_wsfe(&io___193);
 	    do_fio(&c__1, (char *)&taer55, (ftnlen)sizeof(real));
 	    e_wsfe();
 	}
 /*<       if(abs(v).gt.xacc) write(iwr, 141)v,taer55 >*/
 	if (dabs(v) > sixs_test__1.xacc) {
-	    io___195.ciunit = sixs_ier__1.iwr;
-	    s_wsfe(&io___195);
+	    io___194.ciunit = sixs_ier__1.iwr;
+	    s_wsfe(&io___194);
 	    do_fio(&c__1, (char *)&v, (ftnlen)sizeof(real));
 	    do_fio(&c__1, (char *)&taer55, (ftnlen)sizeof(real));
 	    e_wsfe();
@@ -4074,17 +4082,17 @@ L219:
     }
 /*< 1112  write(6,5555) >*/
 L1112:
-    s_wsfe(&io___196);
+    s_wsfe(&io___195);
     e_wsfe();
 /* --- spectral condition ---- */
 /*<       write(iwr, 148) >*/
-    io___197.ciunit = sixs_ier__1.iwr;
-    s_wsfe(&io___197);
+    io___196.ciunit = sixs_ier__1.iwr;
+    s_wsfe(&io___196);
     e_wsfe();
 /*<       if(iwave.eq.-2) write(iwr, 1510) nsat(1),wlinf,wlsup >*/
     if (iwave == -2) {
-	io___198.ciunit = sixs_ier__1.iwr;
-	s_wsfe(&io___198);
+	io___197.ciunit = sixs_ier__1.iwr;
+	s_wsfe(&io___197);
 	do_fio(&c__1, nsat, 17L);
 	do_fio(&c__1, (char *)&sixs_ffu__1.wlinf, (ftnlen)sizeof(real));
 	do_fio(&c__1, (char *)&sixs_ffu__1.wlsup, (ftnlen)sizeof(real));
@@ -4092,15 +4100,15 @@ L1112:
     }
 /*<       if(iwave.eq.-1) write(iwr, 149) wl >*/
     if (iwave == -1) {
-	io___199.ciunit = sixs_ier__1.iwr;
-	s_wsfe(&io___199);
+	io___198.ciunit = sixs_ier__1.iwr;
+	s_wsfe(&io___198);
 	do_fio(&c__1, (char *)&wl, (ftnlen)sizeof(real));
 	e_wsfe();
     }
 /*<       if(iwave.ge.0) write(iwr, 1510) nsat(iwave+1), wlinf,wlsup >*/
     if (iwave >= 0) {
-	io___200.ciunit = sixs_ier__1.iwr;
-	s_wsfe(&io___200);
+	io___199.ciunit = sixs_ier__1.iwr;
+	s_wsfe(&io___199);
 	do_fio(&c__1, nsat + iwave * 17, 17L);
 	do_fio(&c__1, (char *)&sixs_ffu__1.wlinf, (ftnlen)sizeof(real));
 	do_fio(&c__1, (char *)&sixs_ffu__1.wlsup, (ftnlen)sizeof(real));
@@ -4110,36 +4118,36 @@ L1112:
 /*<       if (ipol.ne.0)then >*/
     if (ipol != 0) {
 /*< 	write(iwr, 142) >*/
-	io___201.ciunit = sixs_ier__1.iwr;
-	s_wsfe(&io___201);
+	io___200.ciunit = sixs_ier__1.iwr;
+	s_wsfe(&io___200);
 	e_wsfe();
 /*< 	if (irop.eq.1) write(iwr,146) ropq,ropq >*/
 	if (irop == 1) {
-	    io___202.ciunit = sixs_ier__1.iwr;
-	    s_wsfe(&io___202);
+	    io___201.ciunit = sixs_ier__1.iwr;
+	    s_wsfe(&io___201);
 	    do_fio(&c__1, (char *)&ropq, (ftnlen)sizeof(real));
 	    do_fio(&c__1, (char *)&ropq, (ftnlen)sizeof(real));
 	    e_wsfe();
 	}
 /*< 	if (irop.eq.2) write(iwr,144) pveg*100.0 >*/
 	if (irop == 2) {
-	    io___203.ciunit = sixs_ier__1.iwr;
-	    s_wsfe(&io___203);
+	    io___202.ciunit = sixs_ier__1.iwr;
+	    s_wsfe(&io___202);
 	    r__1 = pveg * (float)100.;
 	    do_fio(&c__1, (char *)&r__1, (ftnlen)sizeof(real));
 	    e_wsfe();
 	}
 /*< 	if (irop.eq.3) write(iwr,145) wspd,azw >*/
 	if (irop == 3) {
-	    io___204.ciunit = sixs_ier__1.iwr;
-	    s_wsfe(&io___204);
+	    io___203.ciunit = sixs_ier__1.iwr;
+	    s_wsfe(&io___203);
 	    do_fio(&c__1, (char *)&wspd, (ftnlen)sizeof(real));
 	    do_fio(&c__1, (char *)&azw, (ftnlen)sizeof(real));
 	    e_wsfe();
 	}
 /*< 	w >*/
-	io___205.ciunit = sixs_ier__1.iwr;
-	s_wsfe(&io___205);
+	io___204.ciunit = sixs_ier__1.iwr;
+	s_wsfe(&io___204);
 	do_fio(&c__1, (char *)&ropq, (ftnlen)sizeof(real));
 	do_fio(&c__1, (char *)&ropu, (ftnlen)sizeof(real));
 	r__1 = sqrt(ropq * ropq + ropu * ropu);
@@ -4199,8 +4207,8 @@ L8888:
 	    goto L260;
 	}
 /*<         write(iwr, 169)rad >*/
-	io___212.ciunit = sixs_ier__1.iwr;
-	s_wsfe(&io___212);
+	io___211.ciunit = sixs_ier__1.iwr;
+	s_wsfe(&io___211);
 	do_fio(&c__1, (char *)&rad, (ftnlen)sizeof(real));
 	e_wsfe();
 /*<         igroun=igrou1 >*/
@@ -4208,8 +4216,8 @@ L8888:
 /*<         ro=rocave >*/
 	ro = rocave;
 /*<         write(iwr, 170) >*/
-	io___214.ciunit = sixs_ier__1.iwr;
-	s_wsfe(&io___214);
+	io___213.ciunit = sixs_ier__1.iwr;
+	s_wsfe(&io___213);
 	e_wsfe();
 /*<         goto 261 >*/
 	goto L261;
@@ -4219,8 +4227,8 @@ L262:
 /*<         ro=roeave >*/
 	ro = roeave;
 /*<         write(iwr, 171) >*/
-	io___216.ciunit = sixs_ier__1.iwr;
-	s_wsfe(&io___216);
+	io___215.ciunit = sixs_ier__1.iwr;
+	s_wsfe(&io___215);
 	e_wsfe();
 /*<         goto 261 >*/
 	goto L261;
@@ -4607,8 +4615,8 @@ L999:
 /* ---- spectral loop ---- */
 /*<       if (iwave.eq.-2) write(iwr,1500) >*/
     if (iwave == -2) {
-	io___297.ciunit = sixs_ier__1.iwr;
-	s_wsfe(&io___297);
+	io___296.ciunit = sixs_ier__1.iwr;
+	s_wsfe(&io___296);
 	e_wsfe();
     }
 /*<         do 51 l=iinf,isup >*/
@@ -5268,15 +5276,15 @@ swl,roc, */
 /*< 	srpray=sqrt(srqray**2.+sruray**2.) >*/
 	d__1 = (doublereal) srqray;
 	d__2 = (doublereal) sruray;
-	srpray = sqrt(pow_dd(&d__1, &c_b309) + pow_dd(&d__2, &c_b309));
+	srpray = sqrt(pow_dd(&d__1, &c_b308) + pow_dd(&d__2, &c_b308));
 /*<  	srpaer=sqrt(srqaer**2.+sruaer**2.) >*/
 	d__1 = (doublereal) srqaer;
 	d__2 = (doublereal) sruaer;
-	srpaer = sqrt(pow_dd(&d__1, &c_b309) + pow_dd(&d__2, &c_b309));
+	srpaer = sqrt(pow_dd(&d__1, &c_b308) + pow_dd(&d__2, &c_b308));
 /*< 	srptot=sqrt(srqtot**2.+srutot**2.) >*/
 	d__1 = (doublereal) srqtot;
 	d__2 = (doublereal) srutot;
-	srptot = sqrt(pow_dd(&d__1, &c_b309) + pow_dd(&d__2, &c_b309));
+	srptot = sqrt(pow_dd(&d__1, &c_b308) + pow_dd(&d__2, &c_b308));
 /*      we define the primary degrees of polarization */
 /*< 	spdpray=foqhsr/fophsr >*/
 	spdpray = foqhsr / fophsr;
@@ -5339,16 +5347,28 @@ swl,roc, */
 /* L57: */
     }
 /* _otb_adaptation Beginning: Atmospheric reflectance storage */
-/*<       otb_ratm   = ainr(1,1)	!Added_for_OTB >*/
+/*<       otb_ratm   = ainr(1,1)	!Added_for_OTB : atmospheric reflectance >*/
     *otb_ratm__ = ainr[0];
-/*<       otb_sast   = sast		!Added_for_OTB >*/
+/*<       otb_sast   = sast		!Added_for_OTB : atmospheric spherical albedo >*/
     *otb_sast__ = sast;
-/*<       otb_tgasm  = tgasm	!Added_for_OTB >*/
+/*<       otb_tgasm  = tgasm	!Added_for_OTB : total gaseous transmissio >*/
     *otb_tgasm__ = tgasm;
-/*<       otb_sdtott = sdtott	!Added_for_OTB >*/
+/*<       otb_sdtott = sdtott	!Added_for_OTB : downward transmittance >*/
     *otb_sdtott__ = sdtott;
-/*<       otb_sutott = sutott	!Added_for_OTB  >*/
+/*<       otb_sutott = sutott	!Added_for_OTB : upward transmittance >*/
     *otb_sutott__ = sutott;
+/* Added_for_OTB : upward directe transmittance */
+/*<       otb_tdir_up = exp(-sodtot/xmuv)     >*/
+    *otb_tdir_up__ = exp(-sodtot / xmuv);
+/* Added_for_OTB : upward diffuse transmittance */
+/*<       otb_tdif_up = otb_sutott - otb_tdir_up  >*/
+    *otb_tdif_up__ = *otb_sutott__ - *otb_tdir_up__;
+/* Added_for_OTB : upward diffuse transmittance for Rayleigh */
+/*<       otb_tdif_up_ray = sutotr - exp(-sodray/xmuv) >*/
+    *otb_tdif_up_ray__ = sutotr - exp(-sodray / xmuv);
+/* Added_for_OTB : upward diffuse transmittance for aerosols */
+/*<       otb_tdif_up_aer = sutota - exp(-sodaer/xmuv)    >*/
+    *otb_tdif_up_aer__ = sutota - exp(-sodaer / xmuv);
 /* _otb_adaptation End : Atmospheric reflectance storage */
 /* **********************************************************************c
  */
@@ -5374,7 +5394,7 @@ swl,roc, */
 /*< 	  xtphi=(ifi-1)*180.0/(nfi-1) >*/
 	    xtphi = (ifi - 1) * (float)180. / (nfi - 1);
 /*< 	  write(6,*) "lutfi ",xtphi,ratm2_fi(ifi) >*/
-	    s_wsle(&io___427);
+	    s_wsle(&io___426);
 	    do_lio(&c__9, &c__1, "lutfi ", 6L);
 	    do_lio(&c__4, &c__1, (char *)&xtphi, (ftnlen)sizeof(real));
 	    do_lio(&c__4, &c__1, (char *)&ratm2_fi__[ifi - 1], (ftnlen)sizeof(
@@ -5401,14 +5421,14 @@ swl,roc, */
 	o__1.oblnk = 0;
 	f_open(&o__1);
 /*<       write(10,2222) "AERO-LUT Lambda min,max ",wlinf,wlsup >*/
-	s_wsfe(&io___428);
+	s_wsfe(&io___427);
 	do_fio(&c__1, "AERO-LUT Lambda min,max ", 24L);
 	do_fio(&c__1, (char *)&sixs_ffu__1.wlinf, (ftnlen)sizeof(real));
 	do_fio(&c__1, (char *)&sixs_ffu__1.wlsup, (ftnlen)sizeof(real));
 	e_wsfe();
 /*<  2222 Format(A28,3(F10.7,1X))       >*/
 /*<       write(10,2222) "Tau-Lambda,Tau550 asol  ",sodaer,taer55,asol >*/
-	s_wsfe(&io___429);
+	s_wsfe(&io___428);
 	do_fio(&c__1, "Tau-Lambda,Tau550 asol  ", 24L);
 	do_fio(&c__1, (char *)&sodaer, (ftnlen)sizeof(real));
 	do_fio(&c__1, (char *)&taer55, (ftnlen)sizeof(real));
@@ -5419,7 +5439,7 @@ swl,roc, */
 /*<       if (iaer.eq.12) then >*/
 	if (iaer == 12) {
 /*<       write(10,2223) "aerosol model ",FILE2(1:i2) >*/
-	    s_wsfe(&io___431);
+	    s_wsfe(&io___430);
 	    do_fio(&c__1, "aerosol model ", 14L);
 	    do_fio(&c__1, file2, i2);
 	    e_wsfe();
@@ -5430,7 +5450,7 @@ swl,roc, */
 /*<       if (iaer.eq.1) then >*/
 	if (iaer == 1) {
 /*<       write(10,2223) "aerosol model ","CONTINENTAL" >*/
-	    s_wsfe(&io___432);
+	    s_wsfe(&io___431);
 	    do_fio(&c__1, "aerosol model ", 14L);
 	    do_fio(&c__1, "CONTINENTAL", 11L);
 	    e_wsfe();
@@ -5441,7 +5461,7 @@ swl,roc, */
 /*<       if (iaer.eq.2) then >*/
 	if (iaer == 2) {
 /*<       write(10,2223) "aerosol model ","MARITIME" >*/
-	    s_wsfe(&io___433);
+	    s_wsfe(&io___432);
 	    do_fio(&c__1, "aerosol model ", 14L);
 	    do_fio(&c__1, "MARITIME", 8L);
 	    e_wsfe();
@@ -5452,7 +5472,7 @@ swl,roc, */
 /*<       if (iaer.eq.3) then >*/
 	if (iaer == 3) {
 /*<       write(10,2223) "aerosol model ","URBAN" >*/
-	    s_wsfe(&io___434);
+	    s_wsfe(&io___433);
 	    do_fio(&c__1, "aerosol model ", 14L);
 	    do_fio(&c__1, "URBAN", 5L);
 	    e_wsfe();
@@ -5463,7 +5483,7 @@ swl,roc, */
 /*<       if (iaer.eq.5) then >*/
 	if (iaer == 5) {
 /*<       write(10,2223) "aerosol model ","DESERTIC" >*/
-	    s_wsfe(&io___435);
+	    s_wsfe(&io___434);
 	    do_fio(&c__1, "aerosol model ", 14L);
 	    do_fio(&c__1, "DESERTIC", 8L);
 	    e_wsfe();
@@ -5474,7 +5494,7 @@ swl,roc, */
 /*<       if (iaer.eq.6) then >*/
 	if (iaer == 6) {
 /*<       write(10,2223) "aerosol model ","SMOKE" >*/
-	    s_wsfe(&io___436);
+	    s_wsfe(&io___435);
 	    do_fio(&c__1, "aerosol model ", 14L);
 	    do_fio(&c__1, "SMOKE", 5L);
 	    e_wsfe();
@@ -5485,7 +5505,7 @@ swl,roc, */
 /*<       if (iaer.eq.7) then >*/
 	if (iaer == 7) {
 /*<       write(10,2223) "aerosol model ","STRATOSPHERIC" >*/
-	    s_wsfe(&io___437);
+	    s_wsfe(&io___436);
 	    do_fio(&c__1, "aerosol model ", 14L);
 	    do_fio(&c__1, "STRATOSPHERIC", 13L);
 	    e_wsfe();
@@ -5496,7 +5516,7 @@ swl,roc, */
 /*<       if (aerod.eq.0) then >*/
 	if (aerod == 0) {
 /*<       write(10,2223) "aerosol model ","UNDEFINED" >*/
-	    s_wsfe(&io___438);
+	    s_wsfe(&io___437);
 	    do_fio(&c__1, "aerosol model ", 14L);
 	    do_fio(&c__1, "UNDEFINED", 9L);
 	    e_wsfe();
@@ -5517,7 +5537,7 @@ swl,roc, */
 /*<       iscami=acos(cscaa)*180./pi >*/
 	iscami = acos(cscaa) * (float)180. / pi;
 /*<       write(10,333) its,avis,nfilut(mu),iscama,iscami >*/
-	s_wsfe(&io___439);
+	s_wsfe(&io___438);
 	do_fio(&c__1, (char *)&its, (ftnlen)sizeof(real));
 	do_fio(&c__1, (char *)&avis, (ftnlen)sizeof(real));
 	do_fio(&c__1, (char *)&nfilut[mu - 1], (ftnlen)sizeof(integer));
@@ -5557,7 +5577,7 @@ swl,roc, */
 /*<       iscami=acos(cscaa)*180./pi >*/
 	    iscami = acos(cscaa) * (float)180. / pi;
 /*<       write(10,333) its,luttv,nfilut(i),iscama,iscami >*/
-	    s_wsfe(&io___440);
+	    s_wsfe(&io___439);
 	    do_fio(&c__1, (char *)&its, (ftnlen)sizeof(real));
 	    do_fio(&c__1, (char *)&luttv, (ftnlen)sizeof(real));
 	    do_fio(&c__1, (char *)&nfilut[i__ - 1], (ftnlen)sizeof(integer));
@@ -5607,13 +5627,13 @@ swl,roc, */
 	o__1.oblnk = 0;
 	f_open(&o__1);
 /*<       write(10,2222) "AERO-LUT Lambda min,max ",wlinf,wlsup >*/
-	s_wsfe(&io___441);
+	s_wsfe(&io___440);
 	do_fio(&c__1, "AERO-LUT Lambda min,max ", 24L);
 	do_fio(&c__1, (char *)&sixs_ffu__1.wlinf, (ftnlen)sizeof(real));
 	do_fio(&c__1, (char *)&sixs_ffu__1.wlsup, (ftnlen)sizeof(real));
 	e_wsfe();
 /*<       write(10,2222) "Tau-Lambda,Tau550 asol  ",sodaer,taer55,asol >*/
-	s_wsfe(&io___442);
+	s_wsfe(&io___441);
 	do_fio(&c__1, "Tau-Lambda,Tau550 asol  ", 24L);
 	do_fio(&c__1, (char *)&sodaer, (ftnlen)sizeof(real));
 	do_fio(&c__1, (char *)&taer55, (ftnlen)sizeof(real));
@@ -5624,7 +5644,7 @@ swl,roc, */
 /*<       if (iaer.eq.12) then >*/
 	if (iaer == 12) {
 /*<       write(10,2223) "aerosol model ",FILE2(1:i2) >*/
-	    s_wsfe(&io___443);
+	    s_wsfe(&io___442);
 	    do_fio(&c__1, "aerosol model ", 14L);
 	    do_fio(&c__1, file2, i2);
 	    e_wsfe();
@@ -5635,7 +5655,7 @@ swl,roc, */
 /*<       if (iaer.eq.1) then >*/
 	if (iaer == 1) {
 /*<       write(10,2223) "aerosol model ","CONTINENTAL" >*/
-	    s_wsfe(&io___444);
+	    s_wsfe(&io___443);
 	    do_fio(&c__1, "aerosol model ", 14L);
 	    do_fio(&c__1, "CONTINENTAL", 11L);
 	    e_wsfe();
@@ -5646,7 +5666,7 @@ swl,roc, */
 /*<       if (iaer.eq.2) then >*/
 	if (iaer == 2) {
 /*<       write(10,2223) "aerosol model ","MARITIME" >*/
-	    s_wsfe(&io___445);
+	    s_wsfe(&io___444);
 	    do_fio(&c__1, "aerosol model ", 14L);
 	    do_fio(&c__1, "MARITIME", 8L);
 	    e_wsfe();
@@ -5657,7 +5677,7 @@ swl,roc, */
 /*<       if (iaer.eq.3) then >*/
 	if (iaer == 3) {
 /*<       write(10,2223) "aerosol model ","URBAN" >*/
-	    s_wsfe(&io___446);
+	    s_wsfe(&io___445);
 	    do_fio(&c__1, "aerosol model ", 14L);
 	    do_fio(&c__1, "URBAN", 5L);
 	    e_wsfe();
@@ -5668,7 +5688,7 @@ swl,roc, */
 /*<       if (iaer.eq.5) then >*/
 	if (iaer == 5) {
 /*<       write(10,2223) "aerosol model ","DESERTIC" >*/
-	    s_wsfe(&io___447);
+	    s_wsfe(&io___446);
 	    do_fio(&c__1, "aerosol model ", 14L);
 	    do_fio(&c__1, "DESERTIC", 8L);
 	    e_wsfe();
@@ -5679,7 +5699,7 @@ swl,roc, */
 /*<       if (iaer.eq.6) then >*/
 	if (iaer == 6) {
 /*<       write(10,2223) "aerosol model ","SMOKE" >*/
-	    s_wsfe(&io___448);
+	    s_wsfe(&io___447);
 	    do_fio(&c__1, "aerosol model ", 14L);
 	    do_fio(&c__1, "SMOKE", 5L);
 	    e_wsfe();
@@ -5690,7 +5710,7 @@ swl,roc, */
 /*<       if (iaer.eq.7) then >*/
 	if (iaer == 7) {
 /*<       write(10,2223) "aerosol model ","STRATOSPHERIC" >*/
-	    s_wsfe(&io___449);
+	    s_wsfe(&io___448);
 	    do_fio(&c__1, "aerosol model ", 14L);
 	    do_fio(&c__1, "STRATOSPHERIC", 13L);
 	    e_wsfe();
@@ -5701,7 +5721,7 @@ swl,roc, */
 /*<       if (aerod.eq.0) then >*/
 	if (aerod == 0) {
 /*<       write(10,2223) "aerosol model ","UNDEFINED" >*/
-	    s_wsfe(&io___450);
+	    s_wsfe(&io___449);
 	    do_fio(&c__1, "aerosol model ", 14L);
 	    do_fio(&c__1, "UNDEFINED", 9L);
 	    e_wsfe();
@@ -5800,15 +5820,15 @@ swl,roc, */
 /*<  160  continue >*/
 /* L160: */
 /*<         write(iwr, 430 )refet,alumet,tgasm >*/
-    io___452.ciunit = sixs_ier__1.iwr;
-    s_wsfe(&io___452);
+    io___451.ciunit = sixs_ier__1.iwr;
+    s_wsfe(&io___451);
     do_fio(&c__1, (char *)&refet, (ftnlen)sizeof(real));
     do_fio(&c__1, (char *)&alumet, (ftnlen)sizeof(real));
     do_fio(&c__1, (char *)&tgasm, (ftnlen)sizeof(real));
     e_wsfe();
 /*<         write(iwr, 431 )refet1,refet2,refet3 >*/
-    io___453.ciunit = sixs_ier__1.iwr;
-    s_wsfe(&io___453);
+    io___452.ciunit = sixs_ier__1.iwr;
+    s_wsfe(&io___452);
     do_fio(&c__1, (char *)&refet1, (ftnlen)sizeof(real));
     do_fio(&c__1, (char *)&refet2, (ftnlen)sizeof(real));
     do_fio(&c__1, (char *)&refet3, (ftnlen)sizeof(real));
@@ -5822,8 +5842,8 @@ swl,roc, */
 /*< 	xpol=atan2(rufet,rqfet)*180.0/3.14159/2. >*/
 	xpol = atan2(rufet, rqfet) * (float)180. / (float)3.14159 / (float)2.;
 /*<         write(iwr, 429 )rpfet,plumet,xpol,rpfet/refet >*/
-	io___455.ciunit = sixs_ier__1.iwr;
-	s_wsfe(&io___455);
+	io___454.ciunit = sixs_ier__1.iwr;
+	s_wsfe(&io___454);
 	do_fio(&c__1, (char *)&rpfet, (ftnlen)sizeof(real));
 	do_fio(&c__1, (char *)&plumet, (ftnlen)sizeof(real));
 	do_fio(&c__1, (char *)&xpol, (ftnlen)sizeof(real));
@@ -5836,8 +5856,8 @@ swl,roc, */
 /*<         if(inhomo.ne.0) then >*/
     if (inhomo != 0) {
 /*<    >*/
-	io___456.ciunit = sixs_ier__1.iwr;
-	s_wsfe(&io___456);
+	io___455.ciunit = sixs_ier__1.iwr;
+	s_wsfe(&io___455);
 	for (j = 1; j <= 3; ++j) {
 	    do_fio(&c__1, (char *)&aini[(j << 1) - 2], (ftnlen)sizeof(real));
 	}
@@ -5848,8 +5868,8 @@ swl,roc, */
 	}
 	e_wsfe();
 /*<    >*/
-	io___457.ciunit = sixs_ier__1.iwr;
-	s_wsfe(&io___457);
+	io___456.ciunit = sixs_ier__1.iwr;
+	s_wsfe(&io___456);
 	for (j = 1; j <= 3; ++j) {
 	    do_fio(&c__1, (char *)&aini[(j << 1) - 1], (ftnlen)sizeof(real));
 	}
@@ -5864,8 +5884,8 @@ swl,roc, */
 /*<         if(inhomo.eq.0) then >*/
     if (inhomo == 0) {
 /*<    >*/
-	io___458.ciunit = sixs_ier__1.iwr;
-	s_wsfe(&io___458);
+	io___457.ciunit = sixs_ier__1.iwr;
+	s_wsfe(&io___457);
 	for (j = 1; j <= 3; ++j) {
 	    do_fio(&c__1, (char *)&aini[(j << 1) - 2], (ftnlen)sizeof(real));
 	}
@@ -5876,8 +5896,8 @@ swl,roc, */
 	}
 	e_wsfe();
 /*<    >*/
-	io___459.ciunit = sixs_ier__1.iwr;
-	s_wsfe(&io___459);
+	io___458.ciunit = sixs_ier__1.iwr;
+	s_wsfe(&io___458);
 	for (j = 1; j <= 3; ++j) {
 	    do_fio(&c__1, (char *)&aini[(j << 1) - 1], (ftnlen)sizeof(real));
 	}
@@ -5892,15 +5912,15 @@ swl,roc, */
 /*<       if (iwave.eq.-1)then >*/
     if (iwave == -1) {
 /*<         write(iwr, 436)seb >*/
-	io___460.ciunit = sixs_ier__1.iwr;
-	s_wsfe(&io___460);
+	io___459.ciunit = sixs_ier__1.iwr;
+	s_wsfe(&io___459);
 	do_fio(&c__1, (char *)&seb, (ftnlen)sizeof(real));
 	e_wsfe();
 /*<       else >*/
     } else {
 /*<         write(iwr, 437)sb,seb >*/
-	io___461.ciunit = sixs_ier__1.iwr;
-	s_wsfe(&io___461);
+	io___460.ciunit = sixs_ier__1.iwr;
+	s_wsfe(&io___460);
 	do_fio(&c__1, (char *)&sb, (ftnlen)sizeof(real));
 	do_fio(&c__1, (char *)&seb, (ftnlen)sizeof(real));
 	e_wsfe();
@@ -5917,88 +5937,88 @@ swl,roc, */
 /* **********************************************************************c
  */
 /*<       write(iwr, 929) >*/
+    io___461.ciunit = sixs_ier__1.iwr;
+    s_wsfe(&io___461);
+    e_wsfe();
+/*<       write(iwr, 930) >*/
     io___462.ciunit = sixs_ier__1.iwr;
     s_wsfe(&io___462);
     e_wsfe();
-/*<       write(iwr, 930) >*/
+/*<       write(iwr, 931)'global gas. trans. :',dgasm,ugasm,tgasm >*/
     io___463.ciunit = sixs_ier__1.iwr;
     s_wsfe(&io___463);
-    e_wsfe();
-/*<       write(iwr, 931)'global gas. trans. :',dgasm,ugasm,tgasm >*/
-    io___464.ciunit = sixs_ier__1.iwr;
-    s_wsfe(&io___464);
     do_fio(&c__1, "global gas. trans. :", 20L);
     do_fio(&c__1, (char *)&dgasm, (ftnlen)sizeof(real));
     do_fio(&c__1, (char *)&ugasm, (ftnlen)sizeof(real));
     do_fio(&c__1, (char *)&tgasm, (ftnlen)sizeof(real));
     e_wsfe();
 /*<       write(iwr, 931)'water   "     "    :',sdwava,suwava,stwava >*/
-    io___465.ciunit = sixs_ier__1.iwr;
-    s_wsfe(&io___465);
+    io___464.ciunit = sixs_ier__1.iwr;
+    s_wsfe(&io___464);
     do_fio(&c__1, "water   \"     \"    :", 20L);
     do_fio(&c__1, (char *)&sdwava, (ftnlen)sizeof(real));
     do_fio(&c__1, (char *)&suwava, (ftnlen)sizeof(real));
     do_fio(&c__1, (char *)&stwava, (ftnlen)sizeof(real));
     e_wsfe();
 /*<       write(iwr, 931)'ozone   "     "    :',sdozon,suozon,stozon >*/
-    io___466.ciunit = sixs_ier__1.iwr;
-    s_wsfe(&io___466);
+    io___465.ciunit = sixs_ier__1.iwr;
+    s_wsfe(&io___465);
     do_fio(&c__1, "ozone   \"     \"    :", 20L);
     do_fio(&c__1, (char *)&sdozon, (ftnlen)sizeof(real));
     do_fio(&c__1, (char *)&suozon, (ftnlen)sizeof(real));
     do_fio(&c__1, (char *)&stozon, (ftnlen)sizeof(real));
     e_wsfe();
 /*<       write(iwr, 931)'co2     "     "    :',sddica,sudica,stdica >*/
-    io___467.ciunit = sixs_ier__1.iwr;
-    s_wsfe(&io___467);
+    io___466.ciunit = sixs_ier__1.iwr;
+    s_wsfe(&io___466);
     do_fio(&c__1, "co2     \"     \"    :", 20L);
     do_fio(&c__1, (char *)&sddica, (ftnlen)sizeof(real));
     do_fio(&c__1, (char *)&sudica, (ftnlen)sizeof(real));
     do_fio(&c__1, (char *)&stdica, (ftnlen)sizeof(real));
     e_wsfe();
 /*<       write(iwr, 931)'oxyg    "     "    :',sdoxyg,suoxyg,stoxyg >*/
-    io___468.ciunit = sixs_ier__1.iwr;
-    s_wsfe(&io___468);
+    io___467.ciunit = sixs_ier__1.iwr;
+    s_wsfe(&io___467);
     do_fio(&c__1, "oxyg    \"     \"    :", 20L);
     do_fio(&c__1, (char *)&sdoxyg, (ftnlen)sizeof(real));
     do_fio(&c__1, (char *)&suoxyg, (ftnlen)sizeof(real));
     do_fio(&c__1, (char *)&stoxyg, (ftnlen)sizeof(real));
     e_wsfe();
 /*<       write(iwr, 931)'no2     "     "    :',sdniox,suniox,stniox >*/
-    io___469.ciunit = sixs_ier__1.iwr;
-    s_wsfe(&io___469);
+    io___468.ciunit = sixs_ier__1.iwr;
+    s_wsfe(&io___468);
     do_fio(&c__1, "no2     \"     \"    :", 20L);
     do_fio(&c__1, (char *)&sdniox, (ftnlen)sizeof(real));
     do_fio(&c__1, (char *)&suniox, (ftnlen)sizeof(real));
     do_fio(&c__1, (char *)&stniox, (ftnlen)sizeof(real));
     e_wsfe();
 /*<       write(iwr, 931)'ch4     "     "    :',sdmeth,sumeth,stmeth >*/
-    io___470.ciunit = sixs_ier__1.iwr;
-    s_wsfe(&io___470);
+    io___469.ciunit = sixs_ier__1.iwr;
+    s_wsfe(&io___469);
     do_fio(&c__1, "ch4     \"     \"    :", 20L);
     do_fio(&c__1, (char *)&sdmeth, (ftnlen)sizeof(real));
     do_fio(&c__1, (char *)&sumeth, (ftnlen)sizeof(real));
     do_fio(&c__1, (char *)&stmeth, (ftnlen)sizeof(real));
     e_wsfe();
 /*<       write(iwr, 931)'co      "     "    :',sdmoca,sumoca,stmoca >*/
-    io___471.ciunit = sixs_ier__1.iwr;
-    s_wsfe(&io___471);
+    io___470.ciunit = sixs_ier__1.iwr;
+    s_wsfe(&io___470);
     do_fio(&c__1, "co      \"     \"    :", 20L);
     do_fio(&c__1, (char *)&sdmoca, (ftnlen)sizeof(real));
     do_fio(&c__1, (char *)&sumoca, (ftnlen)sizeof(real));
     do_fio(&c__1, (char *)&stmoca, (ftnlen)sizeof(real));
     e_wsfe();
 /*<       write(iwr, 1401) >*/
+    io___471.ciunit = sixs_ier__1.iwr;
+    s_wsfe(&io___471);
+    e_wsfe();
+/*<       write(iwr, 1401) >*/
     io___472.ciunit = sixs_ier__1.iwr;
     s_wsfe(&io___472);
     e_wsfe();
-/*<       write(iwr, 1401) >*/
+/*<       write(iwr, 931)'rayl.  sca. trans. :',sdtotr,sutotr,sutotr*sdtotr >*/
     io___473.ciunit = sixs_ier__1.iwr;
     s_wsfe(&io___473);
-    e_wsfe();
-/*<       write(iwr, 931)'rayl.  sca. trans. :',sdtotr,sutotr,sutotr*sdtotr >*/
-    io___474.ciunit = sixs_ier__1.iwr;
-    s_wsfe(&io___474);
     do_fio(&c__1, "rayl.  sca. trans. :", 20L);
     do_fio(&c__1, (char *)&sdtotr, (ftnlen)sizeof(real));
     do_fio(&c__1, (char *)&sutotr, (ftnlen)sizeof(real));
@@ -6006,8 +6026,8 @@ swl,roc, */
     do_fio(&c__1, (char *)&r__1, (ftnlen)sizeof(real));
     e_wsfe();
 /*<       write(iwr, 931)'aeros. sca.   "    :',sdtota,sutota,sutota*sdtota >*/
-    io___475.ciunit = sixs_ier__1.iwr;
-    s_wsfe(&io___475);
+    io___474.ciunit = sixs_ier__1.iwr;
+    s_wsfe(&io___474);
     do_fio(&c__1, "aeros. sca.   \"    :", 20L);
     do_fio(&c__1, (char *)&sdtota, (ftnlen)sizeof(real));
     do_fio(&c__1, (char *)&sutota, (ftnlen)sizeof(real));
@@ -6015,8 +6035,8 @@ swl,roc, */
     do_fio(&c__1, (char *)&r__1, (ftnlen)sizeof(real));
     e_wsfe();
 /*<       write(iwr, 931)'total  sca.   "    :',sdtott,sutott,sutott*sdtott >*/
-    io___476.ciunit = sixs_ier__1.iwr;
-    s_wsfe(&io___476);
+    io___475.ciunit = sixs_ier__1.iwr;
+    s_wsfe(&io___475);
     do_fio(&c__1, "total  sca.   \"    :", 20L);
     do_fio(&c__1, (char *)&sdtott, (ftnlen)sizeof(real));
     do_fio(&c__1, (char *)&sutott, (ftnlen)sizeof(real));
@@ -6024,36 +6044,36 @@ swl,roc, */
     do_fio(&c__1, (char *)&r__1, (ftnlen)sizeof(real));
     e_wsfe();
 /*<       write(iwr, 1401) >*/
+    io___476.ciunit = sixs_ier__1.iwr;
+    s_wsfe(&io___476);
+    e_wsfe();
+/*<       write(iwr, 1401) >*/
     io___477.ciunit = sixs_ier__1.iwr;
     s_wsfe(&io___477);
     e_wsfe();
-/*<       write(iwr, 1401) >*/
+/*<       write(iwr, 939) >*/
     io___478.ciunit = sixs_ier__1.iwr;
     s_wsfe(&io___478);
     e_wsfe();
-/*<       write(iwr, 939) >*/
+/*<       write(iwr, 931)'spherical albedo   :',sasr,sasa,sast >*/
     io___479.ciunit = sixs_ier__1.iwr;
     s_wsfe(&io___479);
-    e_wsfe();
-/*<       write(iwr, 931)'spherical albedo   :',sasr,sasa,sast >*/
-    io___480.ciunit = sixs_ier__1.iwr;
-    s_wsfe(&io___480);
     do_fio(&c__1, "spherical albedo   :", 20L);
     do_fio(&c__1, (char *)&sasr, (ftnlen)sizeof(real));
     do_fio(&c__1, (char *)&sasa, (ftnlen)sizeof(real));
     do_fio(&c__1, (char *)&sast, (ftnlen)sizeof(real));
     e_wsfe();
 /*<       write(iwr, 931)'optical depth total:',sodray,sodaer,sodtot >*/
-    io___481.ciunit = sixs_ier__1.iwr;
-    s_wsfe(&io___481);
+    io___480.ciunit = sixs_ier__1.iwr;
+    s_wsfe(&io___480);
     do_fio(&c__1, "optical depth total:", 20L);
     do_fio(&c__1, (char *)&sodray, (ftnlen)sizeof(real));
     do_fio(&c__1, (char *)&sodaer, (ftnlen)sizeof(real));
     do_fio(&c__1, (char *)&sodtot, (ftnlen)sizeof(real));
     e_wsfe();
 /*<       write(iwr, 931)'optical depth plane:',sodrayp,sodaerp,sodtotp >*/
-    io___482.ciunit = sixs_ier__1.iwr;
-    s_wsfe(&io___482);
+    io___481.ciunit = sixs_ier__1.iwr;
+    s_wsfe(&io___481);
     do_fio(&c__1, "optical depth plane:", 20L);
     do_fio(&c__1, (char *)&sodrayp, (ftnlen)sizeof(real));
     do_fio(&c__1, (char *)&sodaerp, (ftnlen)sizeof(real));
@@ -6062,16 +6082,16 @@ swl,roc, */
 /*<       if (ipol.eq.0) then >*/
     if (ipol == 0) {
 /*<         write(iwr, 931)'reflectance        :',sroray,sroaer,srotot >*/
-	io___483.ciunit = sixs_ier__1.iwr;
-	s_wsfe(&io___483);
+	io___482.ciunit = sixs_ier__1.iwr;
+	s_wsfe(&io___482);
 	do_fio(&c__1, "reflectance        :", 20L);
 	do_fio(&c__1, (char *)&sroray, (ftnlen)sizeof(real));
 	do_fio(&c__1, (char *)&sroaer, (ftnlen)sizeof(real));
 	do_fio(&c__1, (char *)&srotot, (ftnlen)sizeof(real));
 	e_wsfe();
 /*<         write(iwr, 931)'phase function     :',fophsr,fophsa,fophst >*/
-	io___484.ciunit = sixs_ier__1.iwr;
-	s_wsfe(&io___484);
+	io___483.ciunit = sixs_ier__1.iwr;
+	s_wsfe(&io___483);
 	do_fio(&c__1, "phase function     :", 20L);
 	do_fio(&c__1, (char *)&fophsr, (ftnlen)sizeof(real));
 	do_fio(&c__1, (char *)&fophsa, (ftnlen)sizeof(real));
@@ -6080,48 +6100,48 @@ swl,roc, */
 /*<       else  >*/
     } else {
 /*<         write(iwr, 931)'reflectance I      :',sroray,sroaer,srotot >*/
-	io___485.ciunit = sixs_ier__1.iwr;
-	s_wsfe(&io___485);
+	io___484.ciunit = sixs_ier__1.iwr;
+	s_wsfe(&io___484);
 	do_fio(&c__1, "reflectance I      :", 20L);
 	do_fio(&c__1, (char *)&sroray, (ftnlen)sizeof(real));
 	do_fio(&c__1, (char *)&sroaer, (ftnlen)sizeof(real));
 	do_fio(&c__1, (char *)&srotot, (ftnlen)sizeof(real));
 	e_wsfe();
 /*<         write(iwr, 931)'reflectance Q      :',srqray,srqaer,srqtot >*/
-	io___486.ciunit = sixs_ier__1.iwr;
-	s_wsfe(&io___486);
+	io___485.ciunit = sixs_ier__1.iwr;
+	s_wsfe(&io___485);
 	do_fio(&c__1, "reflectance Q      :", 20L);
 	do_fio(&c__1, (char *)&srqray, (ftnlen)sizeof(real));
 	do_fio(&c__1, (char *)&srqaer, (ftnlen)sizeof(real));
 	do_fio(&c__1, (char *)&srqtot, (ftnlen)sizeof(real));
 	e_wsfe();
 /*<         write(iwr, 931)'reflectance U      :',sruray,sruaer,srutot >*/
-	io___487.ciunit = sixs_ier__1.iwr;
-	s_wsfe(&io___487);
+	io___486.ciunit = sixs_ier__1.iwr;
+	s_wsfe(&io___486);
 	do_fio(&c__1, "reflectance U      :", 20L);
 	do_fio(&c__1, (char *)&sruray, (ftnlen)sizeof(real));
 	do_fio(&c__1, (char *)&sruaer, (ftnlen)sizeof(real));
 	do_fio(&c__1, (char *)&srutot, (ftnlen)sizeof(real));
 	e_wsfe();
 /*<         write(iwr, 931)'polarized reflect. :',srpray,srpaer,srptot >*/
-	io___488.ciunit = sixs_ier__1.iwr;
-	s_wsfe(&io___488);
+	io___487.ciunit = sixs_ier__1.iwr;
+	s_wsfe(&io___487);
 	do_fio(&c__1, "polarized reflect. :", 20L);
 	do_fio(&c__1, (char *)&srpray, (ftnlen)sizeof(real));
 	do_fio(&c__1, (char *)&srpaer, (ftnlen)sizeof(real));
 	do_fio(&c__1, (char *)&srptot, (ftnlen)sizeof(real));
 	e_wsfe();
 /*<         write(iwr, 932)'degree of polar.   :',sdpray,sdpaer,sdptot >*/
-	io___489.ciunit = sixs_ier__1.iwr;
-	s_wsfe(&io___489);
+	io___488.ciunit = sixs_ier__1.iwr;
+	s_wsfe(&io___488);
 	do_fio(&c__1, "degree of polar.   :", 20L);
 	do_fio(&c__1, (char *)&sdpray, (ftnlen)sizeof(real));
 	do_fio(&c__1, (char *)&sdpaer, (ftnlen)sizeof(real));
 	do_fio(&c__1, (char *)&sdptot, (ftnlen)sizeof(real));
 	e_wsfe();
 /*<         write(iwr, 932)'dir. plane polar.  :',sdppray,sdppaer,sdpptot >*/
-	io___490.ciunit = sixs_ier__1.iwr;
-	s_wsfe(&io___490);
+	io___489.ciunit = sixs_ier__1.iwr;
+	s_wsfe(&io___489);
 	do_fio(&c__1, "dir. plane polar.  :", 20L);
 	do_fio(&c__1, (char *)&sdppray, (ftnlen)sizeof(real));
 	do_fio(&c__1, (char *)&sdppaer, (ftnlen)sizeof(real));
@@ -6129,32 +6149,32 @@ swl,roc, */
 	e_wsfe();
 /* CC	write(iwr, 931)'instrument app ref.:',zero,zero,refeti */
 /*<         write(iwr, 931)'phase function I   :',fophsr,fophsa,fophst >*/
-	io___491.ciunit = sixs_ier__1.iwr;
-	s_wsfe(&io___491);
+	io___490.ciunit = sixs_ier__1.iwr;
+	s_wsfe(&io___490);
 	do_fio(&c__1, "phase function I   :", 20L);
 	do_fio(&c__1, (char *)&fophsr, (ftnlen)sizeof(real));
 	do_fio(&c__1, (char *)&fophsa, (ftnlen)sizeof(real));
 	do_fio(&c__1, (char *)&fophst, (ftnlen)sizeof(real));
 	e_wsfe();
 /*<         write(iwr, 931)'phase function Q   :',foqhsr,foqhsa,foqhst >*/
-	io___492.ciunit = sixs_ier__1.iwr;
-	s_wsfe(&io___492);
+	io___491.ciunit = sixs_ier__1.iwr;
+	s_wsfe(&io___491);
 	do_fio(&c__1, "phase function Q   :", 20L);
 	do_fio(&c__1, (char *)&foqhsr, (ftnlen)sizeof(real));
 	do_fio(&c__1, (char *)&foqhsa, (ftnlen)sizeof(real));
 	do_fio(&c__1, (char *)&foqhst, (ftnlen)sizeof(real));
 	e_wsfe();
 /*<         write(iwr, 931)'phase function U   :',fouhsr,fouhsa,fouhst >*/
-	io___493.ciunit = sixs_ier__1.iwr;
-	s_wsfe(&io___493);
+	io___492.ciunit = sixs_ier__1.iwr;
+	s_wsfe(&io___492);
 	do_fio(&c__1, "phase function U   :", 20L);
 	do_fio(&c__1, (char *)&fouhsr, (ftnlen)sizeof(real));
 	do_fio(&c__1, (char *)&fouhsa, (ftnlen)sizeof(real));
 	do_fio(&c__1, (char *)&fouhst, (ftnlen)sizeof(real));
 	e_wsfe();
 /*<         write(iwr, 931)'primary deg. of pol:',spdpray,spdpaer,spdptot >*/
-	io___494.ciunit = sixs_ier__1.iwr;
-	s_wsfe(&io___494);
+	io___493.ciunit = sixs_ier__1.iwr;
+	s_wsfe(&io___493);
 	do_fio(&c__1, "primary deg. of pol:", 20L);
 	do_fio(&c__1, (char *)&spdpray, (ftnlen)sizeof(real));
 	do_fio(&c__1, (char *)&spdpaer, (ftnlen)sizeof(real));
@@ -6163,20 +6183,20 @@ swl,roc, */
 /*<       endif >*/
     }
 /*<       write(iwr, 931)'sing. scat. albedo :',pizerr,pizera,pizert >*/
-    io___495.ciunit = sixs_ier__1.iwr;
-    s_wsfe(&io___495);
+    io___494.ciunit = sixs_ier__1.iwr;
+    s_wsfe(&io___494);
     do_fio(&c__1, "sing. scat. albedo :", 20L);
     do_fio(&c__1, (char *)&pizerr, (ftnlen)sizeof(real));
     do_fio(&c__1, (char *)&pizera, (ftnlen)sizeof(real));
     do_fio(&c__1, (char *)&pizert, (ftnlen)sizeof(real));
     e_wsfe();
 /*<       write(iwr, 1401) >*/
-    io___496.ciunit = sixs_ier__1.iwr;
-    s_wsfe(&io___496);
+    io___495.ciunit = sixs_ier__1.iwr;
+    s_wsfe(&io___495);
     e_wsfe();
 /*<       write(iwr, 1402) >*/
-    io___497.ciunit = sixs_ier__1.iwr;
-    s_wsfe(&io___497);
+    io___496.ciunit = sixs_ier__1.iwr;
+    s_wsfe(&io___496);
     e_wsfe();
 /* **********************************************************************c
  */
@@ -6273,29 +6293,29 @@ swl,roc, */
 /*< 	 endif >*/
 	}
 /*<          write(iwr, 940) >*/
-	io___521.ciunit = sixs_ier__1.iwr;
-	s_wsfe(&io___521);
+	io___520.ciunit = sixs_ier__1.iwr;
+	s_wsfe(&io___520);
 	e_wsfe();
 /*<          write(iwr, 941)rapp >*/
-	io___522.ciunit = sixs_ier__1.iwr;
-	s_wsfe(&io___522);
+	io___521.ciunit = sixs_ier__1.iwr;
+	s_wsfe(&io___521);
 	do_fio(&c__1, (char *)&rapp, (ftnlen)sizeof(real));
 	e_wsfe();
 /*<          write(iwr, 942)xrad >*/
-	io___523.ciunit = sixs_ier__1.iwr;
-	s_wsfe(&io___523);
+	io___522.ciunit = sixs_ier__1.iwr;
+	s_wsfe(&io___522);
 	do_fio(&c__1, (char *)&xrad, (ftnlen)sizeof(real));
 	e_wsfe();
 /*< 	 if (irapp.eq.0) then   >*/
 	if (irapp == 0) {
 /*<          write(iwr, 943)rog >*/
-	    io___524.ciunit = sixs_ier__1.iwr;
-	    s_wsfe(&io___524);
+	    io___523.ciunit = sixs_ier__1.iwr;
+	    s_wsfe(&io___523);
 	    do_fio(&c__1, (char *)&rog, (ftnlen)sizeof(real));
 	    e_wsfe();
 /*<          write(iwr, 944)xa,xb,xc >*/
-	    io___525.ciunit = sixs_ier__1.iwr;
-	    s_wsfe(&io___525);
+	    io___524.ciunit = sixs_ier__1.iwr;
+	    s_wsfe(&io___524);
 	    do_fio(&c__1, (char *)&xa, (ftnlen)sizeof(real));
 	    do_fio(&c__1, (char *)&xb, (ftnlen)sizeof(real));
 	    do_fio(&c__1, (char *)&xc, (ftnlen)sizeof(real));
@@ -6303,16 +6323,16 @@ swl,roc, */
 /*< 	 else >*/
 	} else {
 /*< 	 write(iwr,222)rog,rogbrdf >*/
-	    io___526.ciunit = sixs_ier__1.iwr;
-	    s_wsfe(&io___526);
+	    io___525.ciunit = sixs_ier__1.iwr;
+	    s_wsfe(&io___525);
 	    do_fio(&c__1, (char *)&rog, (ftnlen)sizeof(real));
 	    do_fio(&c__1, (char *)&rogbrdf, (ftnlen)sizeof(real));
 	    e_wsfe();
 /*< 	 endif >*/
 	}
 /*<          write(iwr, 944)xa,xb,xc >*/
-	io___527.ciunit = sixs_ier__1.iwr;
-	s_wsfe(&io___527);
+	io___526.ciunit = sixs_ier__1.iwr;
+	s_wsfe(&io___526);
 	do_fio(&c__1, (char *)&xa, (ftnlen)sizeof(real));
 	do_fio(&c__1, (char *)&xb, (ftnlen)sizeof(real));
 	do_fio(&c__1, (char *)&xc, (ftnlen)sizeof(real));

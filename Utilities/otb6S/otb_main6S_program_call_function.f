@@ -1,5 +1,12 @@
       program call6Sv1_0b
- 
+
+C_otb MOD V2 : New outputs : 
+C_otb	otb_tdif_up = Upward diffuse transmittance
+C_otb 	otb_tdir_up = Upward direct transmittance
+C_otb 	otb_tdif_up_ray = Upward diffuse transmittance for rayleigh
+C_otb  	otb_tdif_up_aer = Upward diffuse transmittance for aerosols
+	
+	
       IMPLICIT NONE
       
       real wlinf,wlsup,s(1501)
@@ -8,14 +15,18 @@
       real uw,uo3,taer55
         
       real tgasm,sdtott,sutott,sast
+      real sutotr,sutota
  
       integer iwave,iinf,isup,inhomo,idirec,iaer
       integer iread,i,ik,l
 	
-C_otb	Atmospheric reflectance
+C_otb	Atmospheric parameters
       real otb_ratm	!Atmospheric reflectance
       real pressure     !Atmospheric pressure
-
+      real otb_tdif_up  !Upward diffuse transmittance
+      real otb_tdir_up !Upward direct transmittance
+      real otb_tdif_up_ray !Upward diffuse transmittance for rayleigh
+      real otb_tdif_up_aer !Upward diffuse transmittance for aerosols
 
 
 c***********************************************************************
@@ -163,7 +174,9 @@ c      goto 800
      I            pressure, uw, uo3,
      I            iaer, taer55,
      I            wlinf, wlsup, s,
-     O            otb_ratm,sast,tgasm,sdtott,sutott)
+     O            otb_ratm,sast,tgasm,sdtott,
+     O            sutott, otb_tdif_up, otb_tdir_up,
+     O		  otb_tdif_up_ray, otb_tdif_up_aer)
 
 
       write(6,*)
@@ -172,12 +185,20 @@ c      goto 800
       write(6,300) tgasm
       write(6,400) sdtott
       write(6,500) sutott
+      write(6,600) otb_tdif_up
+      write(6,700) otb_tdir_up
+      write(6,710) otb_tdif_up_ray 
+      write(6,720) otb_tdif_up_aer
 
 100   format(10x,40h ----->  atmospheric reflectance :      , f6.5) 
 200   format(10x,40h ----->  atmospheric spherical albedo : , f6.5)   
 300   format(10x,40h ----->  total gaseous transmission :   , f6.5)   
 400   format(10x,40h ----->  downward transmittance :       , f6.5)   
-500   format(10x,40h ----->  upward transmittance :         , f6.5)  
+500   format(10x,40h ----->  upward transmittance :         , f6.5) 
+600   format(10x,40h ----->  upward diffuse transmittance : , f6.5) 
+700   format(10x,40h ----->  upward direct transmittance :  , f6.5) 
+710   format(10x,40h ----->  upward diffuse transm. ray:    , f6.5) 
+720   format(10x,40h ----->  upward diffuse transm. aer:    , f6.5)  
       
 999   continue
       end

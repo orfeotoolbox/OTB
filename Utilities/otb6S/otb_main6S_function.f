@@ -4,7 +4,18 @@
      I			 otb_iaer, otb_taer55,
      I                   otb_wlinf, otb_wlsup, otb_s,
      O                   otb_ratm,otb_sast,otb_tgasm,
-     O                   otb_sdtott,otb_sutott)
+     O                   otb_sdtott,
+     O                   otb_sutott, otb_tdif_up, otb_tdir_up,
+     O                   otb_tdif_up_ray, otb_tdif_up_aer)
+	
+C_otb MOD V2 : New outputs : otb_tdif_up =  upward diffuse transmittance 
+C_otb MOD V2 : New outputs : otb_tdir_up =  upward direct transmittance
+C_otb MOD V2 : New outputs : otb_tdif_up_ray = upward dif. trans for rayleigh
+C_otb MOD V2 : New outputs : otb_tdif_up_aer = upward dif. transm. for aerosols
+C_otb MOD V2 :
+C_otb MOD V2 : Normalization of US62 pressure profile 
+C_otb MOD V2 : by the user defined pressure
+
  
 c**********************************************************************c
 c                                                                      c
@@ -292,7 +303,12 @@ C_otb_adaptation Beginning: otb variables declaration
 	real otb_sast			!Atmospheric spherical albedo (output)
 	real otb_tgasm			!Total gaseous transmission (output)
 	real otb_sdtott			!Downward transmittance (output)
-	real otb_sutott			!Upward transmittance (output)
+	real otb_sutott			!Upward transmittance (output)	
+	real otb_tdif_up		!Upward diffuse transmittance (output)
+	real otb_tdir_up		!Upward direct transmittance (output)
+	real otb_tdif_up_ray 		!Upward diffuse transmittance for rayleigh (output)
+	real otb_tdif_up_aer 		!Upward diffuse transmittance for aerosols (output)	
+	
 C_otb_adaptation End : otb variables declaration	
 
       
@@ -723,6 +739,15 @@ C_otb      read(iread,*) idatm
       uw = otb_uw	!Added_for_OTB
       uo3 = otb_uo3	!Added_for_OTB
       
+      !Normalization of the US62 pressure profile accouting for
+      !the ground pressure entered by user.
+      !
+      !Normalization of gas amounts is performed in subroutine ABSTRA.
+      do 123 i=1,34        		!Added_for_OTB
+         p(i)=p(i)*otb_pressure/p(1) 	!Added_for_OTB        
+123   continue				!Added_for_OTB
+    
+    
 C_otb      if(idatm.eq.0) go to 5
 C_otb      if(idatm.eq.8) read(iread,*) uw,uo3
 C_otb      if(idatm.ne.7) go to 6
@@ -2317,7 +2342,7 @@ C       read(iread,*,end=37) ilut
       
        irop=0
 
-C_otb        read(iread,*,end=37) irop
+C_otb       read(iread,*,end=37) irop
 
        if (irop.eq.1) then
        read(iread,*) ropq,ropu
@@ -3176,11 +3201,24 @@ c  ---output at satellite level
    57 continue
 
 C_otb_adaptation Beginning: Atmospheric reflectance storage
-      otb_ratm   = ainr(1,1)	!Added_for_OTB
-      otb_sast   = sast		!Added_for_OTB
-      otb_tgasm  = tgasm	!Added_for_OTB
-      otb_sdtott = sdtott	!Added_for_OTB
-      otb_sutott = sutott	!Added_for_OTB 
+      otb_ratm   = ainr(1,1)	!Added_for_OTB : atmospheric reflectance
+      otb_sast   = sast		!Added_for_OTB : atmospheric spherical albedo
+      otb_tgasm  = tgasm	!Added_for_OTB : total gaseous transmissio
+      otb_sdtott = sdtott	!Added_for_OTB : downward transmittance
+      otb_sutott = sutott	!Added_for_OTB : upward transmittance
+      
+      !Added_for_OTB : upward directe transmittance
+      otb_tdir_up = exp(-sodtot/xmuv)    
+      
+      !Added_for_OTB : upward diffuse transmittance
+      otb_tdif_up = otb_sutott - otb_tdir_up 
+      
+      !Added_for_OTB : upward diffuse transmittance for Rayleigh 
+      otb_tdif_up_ray = sutotr - exp(-sodray/xmuv)
+      
+      !Added_for_OTB : upward diffuse transmittance for aerosols 
+      otb_tdif_up_aer = sutota - exp(-sodaer/xmuv)   
+     
 C_otb_adaptation End : Atmospheric reflectance storage
 
 c**********************************************************************c

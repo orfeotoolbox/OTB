@@ -27,24 +27,28 @@ namespace otb
 
 void
 SIXSTraits::ComputeAtmosphericParameters(
-        const   double                  SolarZenithalAngle,             /** The Solar zenithal angle */
-        const   double                  SolarAzimutalAngle,             /** The Solar azimutal angle */
-        const   double                  ViewingZenithalAngle,           /** The Viewing zenithal angle */
-        const   double                  ViewingAzimutalAngle,           /** The Viewing azimutal angle */
-        const   unsigned int            Month,                          /** The Month */
-        const   unsigned int            Day,                            /** The Day (in the month) */
-        const   double                  AtmosphericPressure,            /** The Atmospheric pressure */
-        const   double                  WaterVaporAmount,               /** The Water vapor amount (Total water vapor content over vertical atmospheric column) */
-        const   double                  OzoneAmount,                    /** The Ozone amount (Stratospheric ozone layer content) */
-        const   AerosolModelType &      AerosolModel,                   /** The Aerosol model */
-        const   double                  AerosolOptical,                 /** The Aerosol optical (radiative impact of aerosol for the reference wavelenght 550-nm) */
-                WavelenghtSpectralType* WavelenghtSpectralBand,         /** Wavelenght for the spectral band definition */
-                                                                        /** Note : The Max wavelenght spectral band value must be updated ! */
-                double &                AtmosphericReflectance,         /** Atmospheric reflectance */     
-                double &                AtmosphericSphericalAlbedo,     /** atmospheric spherical albedo */
-                double &                TotalGaseousTransmission,       /** Total gaseous transmission */
-                double &                DownwardTransmittance,          /** downward transmittance */      
-                double &                UpwardTransmittance             /** upward transmittance */
+        const   double                  SolarZenithalAngle,                     /** The Solar zenithal angle */
+        const   double                  SolarAzimutalAngle,                     /** The Solar azimutal angle */
+        const   double                  ViewingZenithalAngle,                   /** The Viewing zenithal angle */
+        const   double                  ViewingAzimutalAngle,                   /** The Viewing azimutal angle */
+        const   unsigned int            Month,                                  /** The Month */
+        const   unsigned int            Day,                                    /** The Day (in the month) */
+        const   double                  AtmosphericPressure,                    /** The Atmospheric pressure */
+        const   double                  WaterVaporAmount,                       /** The Water vapor amount (Total water vapor content over vertical atmospheric column) */
+        const   double                  OzoneAmount,                            /** The Ozone amount (Stratospheric ozone layer content) */
+        const   AerosolModelType &      AerosolModel,                           /** The Aerosol model */
+        const   double                  AerosolOptical,                         /** The Aerosol optical (radiative impact of aerosol for the reference wavelenght 550-nm) */
+                WavelenghtSpectralType* WavelenghtSpectralBand,                 /** Wavelenght for the spectral band definition */
+                                                                                /** Note : The Max wavelenght spectral band value must be updated ! */
+                double &                AtmosphericReflectance,                 /** Atmospheric reflectance */     
+                double &                AtmosphericSphericalAlbedo,             /** atmospheric spherical albedo */
+                double &                TotalGaseousTransmission,               /** Total gaseous transmission */
+                double &                DownwardTransmittance,                  /** downward transmittance */      
+                double &                UpwardTransmittance,                    /** upward transmittance */
+                double &                UpwardDiffuseTransmittance,             /** upward diffuse transmittance */
+                double &                UpwardDirectTransmittance,              /** Upward direct transmittance */
+                double &                UpwardDiffuseTransmittanceForRayleigh,  /** upward diffuse transmittance for rayleigh */
+                double &                UpwardDiffuseTransmittanceForAerosol    /** supward diffuse transmittance for aerosols */
         )
 {
 // geometrical conditions
@@ -61,16 +65,20 @@ SIXSTraits::ComputeAtmosphericParameters(
         otb_6s_integer iaer(static_cast<otb_6s_integer>(AerosolModel));
         otb_6s_real taer55(static_cast<otb_6s_real>(AerosolOptical));
 
-	 
         // Init output parameters       
         AtmosphericReflectance = 0.;   
         AtmosphericSphericalAlbedo = 0.; 
         TotalGaseousTransmission = 0.;  
         DownwardTransmittance = 0.;    
         UpwardTransmittance = 0.;      
+        UpwardDiffuseTransmittance = 0.;      
+        UpwardDirectTransmittance = 0.;      
+        UpwardDiffuseTransmittanceForRayleigh = 0.;      
+        UpwardDiffuseTransmittanceForAerosol = 0.;      
 
         otb_6s_real wlinf(0.), wlsup(0.);
         otb_6s_real otb_ratm__(0.), sast(0.), tgasm(0.), sdtott(0.), sutott(0.);
+        otb_6s_real tdif_up(0.), tdir_up(0.), tdif_up_ray(0.), tdif_up_aer(0.);
         try
         {
                 // 6S official Wavelenght Spectral Band step value 
@@ -112,7 +120,11 @@ SIXSTraits::ComputeAtmosphericParameters(
                                                         &sast, 
                                                         &tgasm, 
                                                         &sdtott, 
-                                                        &sutott);
+                                                        &sutott,
+                                                        &tdif_up,
+                                                        &tdir_up,
+                                                        &tdif_up_ray,
+                                                        &tdif_up_aer);
                 otbMsgDevMacro(<< "Done call 6S main function!");
                 delete [] s;
                 s = NULL;
@@ -132,6 +144,10 @@ SIXSTraits::ComputeAtmosphericParameters(
         TotalGaseousTransmission = static_cast<double>(tgasm);  
         DownwardTransmittance = static_cast<double>(sdtott);    
         UpwardTransmittance = static_cast<double>(sutott);   
+        UpwardDiffuseTransmittance = static_cast<double>(tdif_up);      
+        UpwardDirectTransmittance = static_cast<double>(tdir_up);      
+        UpwardDiffuseTransmittanceForRayleigh = static_cast<double>(tdif_up_ray);      
+        UpwardDiffuseTransmittanceForAerosol = static_cast<double>(tdif_up_aer);      
 }
 
 

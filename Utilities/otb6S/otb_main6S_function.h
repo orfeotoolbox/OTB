@@ -16,5 +16,9 @@ otb_6s_real *otb_ratm__,
 otb_6s_real *otb_sast__, 
 otb_6s_real *otb_tgasm__, 
 otb_6s_real *otb_sdtott__, 
-otb_6s_real *otb_sutott__
+otb_6s_real *otb_sutott__,
+otb_6s_real *otb_tdif_up__, 
+otb_6s_real *otb_tdir_up__, 
+otb_6s_real *otb_tdif_up_ray__, 
+otb_6s_real *otb_tdif_up_aer__
 );

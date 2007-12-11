@@ -79,6 +79,30 @@ public:
   itkSetMacro(UpwardTransmittance,double); 
   itkGetMacro(UpwardTransmittance,double); 
 
+  /**
+   * Set/Get the upward diffuse transmittance 
+   */
+  itkSetMacro(UpwardDiffuseTransmittance,double); 
+  itkGetMacro(UpwardDiffuseTransmittance,double); 
+
+  /**
+   * Set/Get the upward direct transmittance 
+   */
+  itkSetMacro(UpwardDirectTransmittance,double); 
+  itkGetMacro(UpwardDirectTransmittance,double); 
+
+  /**
+   * Set/Get the upward diffuse transmittance for rayleigh 
+   */
+  itkSetMacro(UpwardDiffuseTransmittanceForRayleigh,double); 
+  itkGetMacro(UpwardDiffuseTransmittanceForRayleigh,double); 
+
+  /**
+   * Set/Get the upward diffuse transmittance for aerosols
+   */
+  itkSetMacro(UpwardDiffuseTransmittanceForAerosol,double); 
+  itkGetMacro(UpwardDiffuseTransmittanceForAerosol,double); 
+
 protected:
   /** Constructor */
   AtmosphericRadiativeTermsSingleChannel(){};
@@ -106,6 +130,18 @@ private:
 
  /** The upward transmittance. */
   double m_UpwardTransmittance; 
+
+ /** The upward diffuse transmittance. */
+  double m_UpwardDiffuseTransmittance; 
+
+ /** The upward direct transmittance. */
+  double m_UpwardDirectTransmittance; 
+
+ /** The upward diffuse transmittance for rayleigh. */
+  double m_UpwardDiffuseTransmittanceForRayleigh; 
+
+ /** The upward diffuse transmittance for aerosols. */
+  double m_UpwardDiffuseTransmittanceForAerosol; 
 
 };
 
@@ -154,6 +190,12 @@ public:
   void SetTotalGaseousTransmissions(const DataVectorType & vect); 
   void SetDownwardTransmittances(const DataVectorType & vect); 
   void SetUpwardTransmittances(const DataVectorType & vect); 
+
+  void SetUpwardDiffuseTransmittance(const DataVectorType & vect); 
+  void SetUpwardDirectTransmittance(const DataVectorType & vect); 
+  void SetUpwardDiffuseTransmittanceForRayleigh(const DataVectorType & vect); 
+  void SetUpwardDiffuseTransmittanceForAerosol(const DataVectorType & vect); 
+
   /** Set methods with index. */
   void SetValueByIndex(unsigned int id, const ValueType & val);
   void SetIntrinsicAtmosphericReflectances(unsigned int id, const double & val); 
@@ -162,18 +204,33 @@ public:
   void SetDownwardTransmittances(unsigned int id, const double & val ); 
   void SetUpwardTransmittances(unsigned int id, const  double & val ); 
 
+  void SetUpwardDiffuseTransmittance(unsigned int id, const  double & val ); 
+  void SetUpwardDirectTransmittance(unsigned int id, const  double & val ); 
+  void SetUpwardDiffuseTransmittanceForRayleigh(unsigned int id, const  double & val ); 
+  void SetUpwardDiffuseTransmittanceForAerosol(unsigned int id, const  double & val ); 
+
   /** Get methods with vectors. */
   DataVectorType GetIntrinsicAtmosphericReflectances(); 
   DataVectorType GetSphericalAlbedos(); 
   DataVectorType GetTotalGaseousTransmissions(); 
   DataVectorType GetDownwardTransmittances(); 
   DataVectorType GetUpwardTransmittances(); 
+
+  DataVectorType GetUpwardDiffuseTransmittance(); 
+  DataVectorType GetUpwardDirectTransmittance(); 
+  DataVectorType GetUpwardDiffuseTransmittanceForRayleigh(); 
+  DataVectorType GetUpwardDiffuseTransmittanceForAerosol(); 
+
  /** Get methods with index. */
   double GetIntrinsicAtmosphericReflectances(unsigned int id); 
   double GetSphericalAlbedos(unsigned int id); 
   double GetTotalGaseousTransmissions(unsigned int id); 
   double GetDownwardTransmittances(unsigned int id); 
   double GetUpwardTransmittances(unsigned int id);
+  double GetUpwardDiffuseTransmittance(unsigned int id);
+  double GetUpwardDirectTransmittance(unsigned int id);
+  double GetUpwardDiffuseTransmittanceForRayleigh(unsigned int id);
+  double GetUpwardDiffuseTransmittanceForAerosol(unsigned int id);
 
   const ValueType GetValueByIndex(unsigned int id) const;
  

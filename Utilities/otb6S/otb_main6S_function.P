@@ -1,4 +1,4 @@
-extern int otb_6s__(real *otb_asol__, real *otb_phi0__, real *otb_avis__, real *otb_phiv__, integer *otb_month__, integer *otb_jday__, real *otb_pressure__, real *otb_uw__, real *otb_uo3__, integer *otb_iaer__, real *otb_taer55__, real *otb_wlinf__, real *otb_wlsup__, real *otb_s__, real *otb_ratm__, real *otb_sast__, real *otb_tgasm__, real *otb_sdtott__, real *otb_sutott__);
+extern int otb_6s__(real *otb_asol__, real *otb_phi0__, real *otb_avis__, real *otb_phiv__, integer *otb_month__, integer *otb_jday__, real *otb_pressure__, real *otb_uw__, real *otb_uo3__, integer *otb_iaer__, real *otb_taer55__, real *otb_wlinf__, real *otb_wlsup__, real *otb_s__, real *otb_ratm__, real *otb_sast__, real *otb_tgasm__, real *otb_sdtott__, real *otb_sutott__, real *otb_tdif_up__, real *otb_tdir_up__, real *otb_tdif_up_ray__, real *otb_tdif_up_aer__);
 /* comlen num_quad__ 4 */
 /* comlen aeroprof_ 1216 */
 /* comlen sixs_ier__ 8 */
