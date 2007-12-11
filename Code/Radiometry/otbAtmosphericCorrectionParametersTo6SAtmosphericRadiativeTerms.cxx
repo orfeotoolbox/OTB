@@ -202,8 +202,8 @@ AtmosphericCorrectionParametersTo6SAtmosphericRadiativeTerms
       output->SetUpwardDiffuseTransmittanceForRayleigh(i,upwardDiffuseTransmittanceForRayleigh );
       output->SetUpwardDiffuseTransmittanceForAerosol(i, upwardDiffuseTransmittanceForAerosol);
 
-}
-        
+    }
+}        
 
 /**
  * PrintSelf Method
