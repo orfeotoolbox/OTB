@@ -27,7 +27,8 @@
 namespace otb
 {
   template <class TPanImageType, class TXsImageType, class TOutputImageType>
-      SimpleRcsPanSharpeningFusionImageFilter<TPanImageType, TXsImageType, TOutputImageType>
+      SimpleRcsPanSharpeningFusionImageFilter
+          <TPanImageType, TXsImageType, TOutputImageType>
   ::SimpleRcsPanSharpeningFusionImageFilter()
   {
     this->SetNumberOfRequiredInputs(2);
@@ -46,7 +47,8 @@ namespace otb
   
   template <class TPanImageType, class TXsImageType, class TOutputImageType>
       void
-          SimpleRcsPanSharpeningFusionImageFilter<TPanImageType, TXsImageType, TOutputImageType>
+          SimpleRcsPanSharpeningFusionImageFilter
+          <TPanImageType, TXsImageType, TOutputImageType>
   ::SetPanInput(const TPanImageType *image)
   {
   // We have 2 inputs:  an image and a vector image
@@ -59,7 +61,8 @@ namespace otb
 
   template <class TPanImageType, class TXsImageType, class TOutputImageType>
       const TPanImageType *
-          SimpleRcsPanSharpeningFusionImageFilter<TPanImageType, TXsImageType, TOutputImageType>
+          SimpleRcsPanSharpeningFusionImageFilter
+          <TPanImageType, TXsImageType, TOutputImageType>
   ::GetPanInput(void) 
   {
     if (this->GetNumberOfInputs() < 2)
@@ -73,7 +76,8 @@ namespace otb
   
   template <class TPanImageType, class TXsImageType, class TOutputImageType>
       void
-          SimpleRcsPanSharpeningFusionImageFilter<TPanImageType, TXsImageType, TOutputImageType>
+          SimpleRcsPanSharpeningFusionImageFilter
+          <TPanImageType, TXsImageType, TOutputImageType>
   ::SetXsInput(const TXsImageType *image)
   {
   // We have 2 inputs:  an image and a vector image
@@ -86,7 +90,8 @@ namespace otb
 
   template <class TPanImageType, class TXsImageType, class TOutputImageType>
       const TXsImageType *
-          SimpleRcsPanSharpeningFusionImageFilter<TPanImageType, TXsImageType, TOutputImageType>
+          SimpleRcsPanSharpeningFusionImageFilter
+          <TPanImageType, TXsImageType, TOutputImageType>
   ::GetXsInput(void) 
   {
     if (this->GetNumberOfInputs() < 1)
@@ -101,7 +106,8 @@ namespace otb
   
   template <class TPanImageType,class TXsImageType,class TOutputImageType>
       void
-      SimpleRcsPanSharpeningFusionImageFilter<TPanImageType, TXsImageType, TOutputImageType>
+      SimpleRcsPanSharpeningFusionImageFilter
+          <TPanImageType, TXsImageType, TOutputImageType>
   ::GenerateData()
       {
         m_MeanFilter->SetInput( this->GetPanInput() );
@@ -116,7 +122,8 @@ namespace otb
       
   template <class TPanImageType,class TXsImageType,class TOutputImageType>
           void
-      SimpleRcsPanSharpeningFusionImageFilter<TPanImageType, TXsImageType, TOutputImageType>
+      SimpleRcsPanSharpeningFusionImageFilter
+              <TPanImageType, TXsImageType, TOutputImageType>
   ::PrintSelf( std::ostream& os, itk::Indent indent ) const
           {
             Superclass::PrintSelf(os,indent);

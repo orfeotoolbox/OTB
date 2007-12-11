@@ -83,7 +83,7 @@ class ITK_EXPORT SimpleRcsPanSharpeningFusionImageFilter :
           typedef itk::MeanImageFilter
               <TPanImageType, InternalImageType> MeanFilterType;
           typedef itk::DivideImageFilter
-              <InternalVectorImageType,InternalImageType,
+              <TXsImageType,InternalImageType,
               InternalVectorImageType> DivideFilterType;
           typedef itk::MultiplyImageFilter
               <InternalVectorImageType,TPanImageType,TOutputImageType> MultiplyFilterType;
