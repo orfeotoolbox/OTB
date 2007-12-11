@@ -47,7 +47,8 @@
 #include "itkChangeInformationImageFilter.h"
 #include "otbPerBandVectorImageFilter.h"
 
-#include "otbBayesianFusionFilter.h"
+// #include "otbBayesianFusionFilter.h"
+#include "otbSimpleRcsPanSharpeningFusionImageFilter.h"
 
 #include "init/ossimInit.h"
 
@@ -163,7 +164,6 @@ int main( int argc, char* argv[] )
   originNull[0]=0;
   originNull[1]=0;
   
-  
   readerPAN->GenerateOutputInformation();
   
   typedef itk::ChangeInformationImageFilter<ImageType > ChangeInfoFilterType;
@@ -230,12 +230,12 @@ int main( int argc, char* argv[] )
 
 // Software Guide : BeginCodeSnippet
   
-  typedef otb::BayesianFusionFilter< VectorImageType, VectorImageType, ImageType, VectorImageType     >    BayesianFusionFilterType;
-  BayesianFusionFilterType::Pointer bayesianFilter = BayesianFusionFilterType::New();
-  
-  bayesianFilter->SetMultiSpect(orthoRectifXSVector->GetOutput() );
-  bayesianFilter->SetMultiSpectInterp(orthoRectifXSVector->GetOutput() );
-  bayesianFilter->SetPanchro(orthoRectifPAN->GetOutput() );
+  typedef otb::SimpleRcsPanSharpeningFusionImageFilter
+      <ImageType,VectorImageType,VectorImageType> FusionFilterType;
+  FusionFilterType::Pointer fusion = FusionFilterType::New();
+  fusion->SetPanInput(orthoRectifPAN->GetOutput());
+  fusion->SetXsInput(orthoRectifXSVector->GetOutput());
+
   
   
   // Software Guide : EndCodeSnippet				
@@ -250,7 +250,7 @@ int main( int argc, char* argv[] )
 
   // Software Guide : BeginCodeSnippet
   
-  writer->SetInput(bayesianFilter->GetOutput());
+  writer->SetInput(fusion->GetOutput());
 				
   writer->SetTilingStreamDivisions(20);
 
