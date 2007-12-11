@@ -162,16 +162,16 @@ namespace otb
 	    {
 	      double coef;
 	      double res;
-	      coef = static_cast<double>(m_AtmosphericRadiativeTerms->GetTotalGaseousTransmissions(i)
-					 * m_AtmosphericRadiativeTerms->GetDownwardTransmittances(i)
-					 * m_AtmosphericRadiativeTerms->GetUpwardTransmittances(i)     );
+	      coef = static_cast<double>(m_AtmosphericRadiativeTerms->GetTotalGaseousTransmission(i)
+					 * m_AtmosphericRadiativeTerms->GetDownwardTransmittance(i)
+					 * m_AtmosphericRadiativeTerms->GetUpwardTransmittance(i)     );
 	      coef = 1 / coef;
-	      res = -m_AtmosphericRadiativeTerms->GetIntrinsicAtmosphericReflectances(i) * coef;
+	      res = -m_AtmosphericRadiativeTerms->GetIntrinsicAtmosphericReflectance(i) * coef;
 
 	      FunctorType functor;
 	      functor.SetCoefficient(coef);
 	      functor.SetResidu(res);
-	      functor.SetSphericalAlbedo(static_cast<double>(m_AtmosphericRadiativeTerms->GetSphericalAlbedos(i)));
+	      functor.SetSphericalAlbedo(static_cast<double>(m_AtmosphericRadiativeTerms->GetSphericalAlbedo(i)));
 	      this->GetFunctorVector().push_back(functor);
 	    }
 	}

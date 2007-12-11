@@ -424,22 +424,21 @@ ADD_TEST(raTuSurfaceAdjencyEffect6SCorrectionSchemeFilter ${RADIOMETRY_TESTS}
  --compare-image ${EPSILON}  ${BASELINE}/raTvSurfaceAdjencyEffect6SCorrectionSchemeFilter.tif
                              ${TEMP}/raTvSurfaceAdjencyEffect6SCorrectionSchemeFilter.tif
         otbSurfaceAdjencyEffect6SCorrectionSchemeFilter
-	${INPUTDATA}/poupees_sub.png
+	${BASELINE}/raTvRomania_Corrected.tif
 	${TEMP}/raTvSurfaceAdjencyEffect6SCorrectionSchemeFilter.tif
 	1   # Radius;	
-	0.5 # UpwardTransmission;
-	2   # UpwardDirectTransmission;
-	1   # UpwardDiffusTransmission;
-	1 0 0  0 0 1  0 1 0 # Channel 1 ponderation values;
-	0 1 0  0 0 1  0 1 0 # Channel 2 ponderation values;
-	0 0 1  0 0 1  0 1 0 # Channel 3 ponderation values;
-	0 0 0  0 0 1  0 1 0 # Channel 4 ponderation values;
+	0.020 # pixel spacing in kilometers
+	${INPUTDATA}/testRomania.txt  # atmo param;
+	${INPUTDATA}/RADIO_WAVELENGHT_SPECTRAL_BAND_SPOT4_1_B3.txt  # wavelenghts, channel 3	
+	${INPUTDATA}/RADIO_WAV	ELENGHT_SPECTRAL_BAND_SPOT4_1_B2.txt  # wavelenghts, channel 2	
+	${INPUTDATA}/RADIO_WAVELENGHT_SPECTRAL_BAND_SPOT4_1_B1.txt  # wavelenghts, channel 1	
+	${INPUTDATA}/RADIO_WAVELENGHT_SPECTRAL_BAND_SPOT4_1_MIR.txt  # wavelenghts, channel 4
 )
 
 # -------            otb::AtmosphericCorrectionParametersTo6SAtmosphericRadiativeTerms   ------------------------------
 ADD_TEST(raTuAtmosphericCorrectionParametersTo6SAtmosphericRadiativeTermsNew ${RADIOMETRY_TESTS}  
-        otbAtmosphericCorrectionParametersTo6SAtmosphericRadiativeTermsNew
-)
+        otbAtmosphericCorrectionParametersTo6SAtmosphericRadiativeTermsNew)
+
 ADD_TEST(raTvAtmosphericCorrectionParametersTo6SAtmosphericRadiativeTerms ${RADIOMETRY_TESTS}  
 --compare-ascii ${EPSILON_10e6}  
 		${BASELINE_FILES}/raTvSIXSTraitsComputeAtmosphericParametersTest.txt

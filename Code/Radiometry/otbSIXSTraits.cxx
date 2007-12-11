@@ -208,4 +208,27 @@ SIXSTraits::ComputeWavelenghtSpectralBandValuesFor6S(
         }
 }
 
+void
+SIXSTraits::ComputeEnvironmentalContribution(const double diffuseTransmittanceForRayleighScattering,
+					     const double diffuseTransmittanceForAerosolScattering,
+					     const double radiusInKilometers,
+					     const double altitude,
+					     const double cosineOfViewingAngle,
+					       double & rayleighEstimation,
+					       double & aerosolEstimation,
+					       double & globalEstimation)
+{
+  otb_6s_real difr(static_cast<otb_6s_real>(diffuseTransmittanceForRayleighScattering));
+  otb_6s_real difa(static_cast<otb_6s_real>(diffuseTransmittanceForAerosolScattering));
+  otb_6s_real rad(static_cast<otb_6s_real>(radiusInKilometers));
+  otb_6s_real palt(static_cast<otb_6s_real>(altitude));
+  otb_6s_real xmuv(static_cast<otb_6s_real>(cosineOfViewingAngle));
+  otb_6s_real fra(0.),fae(0.),fr(0.);
+  otb_6s_enviro_(&difr,&difa,&rad,&palt,&xmuv,&fra,&fae,&fr);
+  rayleighEstimation = static_cast<double>(fra);
+  aerosolEstimation = static_cast<double>(fae);
+  globalEstimation = static_cast<double>(fr);
+}
+
+
 } // namespace otb

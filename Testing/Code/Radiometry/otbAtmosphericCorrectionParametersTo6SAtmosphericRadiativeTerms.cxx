@@ -142,11 +142,11 @@ int otbAtmosphericCorrectionParametersTo6SAtmosphericRadiativeTerms(int argc, ch
   fout << "   ----->  UserStep :                                        "<<functionValues->GetUserStep()<<std::endl;
   fout <<" ---------------------------------------------------------"<<std::endl;
   fout << "Outputs values:"<<std::endl;
-  fout << "   ----->  atmospheric reflectance :                         "<<radiative->GetIntrinsicAtmosphericReflectances(0)<<std::endl;
-  fout << "   ----->  atmospheric spherical albedo :                    "<<radiative->GetSphericalAlbedos(0)<<std::endl;
-  fout << "   ----->  total gaseous transmission :                      "<<radiative->GetTotalGaseousTransmissions(0)<<std::endl;
-  fout << "   ----->  downward transmittance :                          "<<radiative->GetDownwardTransmittances(0)<<std::endl;
-  fout << "   ----->  upward transmittance :                            "<<radiative->GetUpwardTransmittances(0)<<std::endl;
+  fout << "   ----->  atmospheric reflectance :                         "<<radiative->GetIntrinsicAtmosphericReflectance(0)<<std::endl;
+  fout << "   ----->  atmospheric spherical albedo :                    "<<radiative->GetSphericalAlbedo(0)<<std::endl;
+  fout << "   ----->  total gaseous transmission :                      "<<radiative->GetTotalGaseousTransmission(0)<<std::endl;
+  fout << "   ----->  downward transmittance :                          "<<radiative->GetDownwardTransmittance(0)<<std::endl;
+  fout << "   ----->  upward transmittance :                            "<<radiative->GetUpwardTransmittance(0)<<std::endl;
   fout << "   ----->  upward diffuse transmittance :                    "<<radiative->GetUpwardDiffuseTransmittance(0)<<std::endl;
   fout << "   ----->  upward direct transmittance :                     "<<radiative->GetUpwardDirectTransmittance(0)<<std::endl;
   fout << "   ----->  upward diffuse transmittance for rayleigh :       "<<radiative->GetUpwardDiffuseTransmittanceForRayleigh(0)<<std::endl;

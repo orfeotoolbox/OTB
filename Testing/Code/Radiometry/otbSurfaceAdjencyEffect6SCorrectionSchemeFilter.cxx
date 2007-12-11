@@ -1,18 +1,18 @@
 /*=========================================================================
 
-  Program:   ORFEO Toolbox
-  Language:  C++
-  Date:      $Date$
-  Version:   $Revision$
+Program:   ORFEO Toolbox
+Language:  C++
+Date:      $Date$
+Version:   $Revision$
 
 
-  Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
-  See OTBCopyright.txt for details.
+Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
+See OTBCopyright.txt for details.
 
 
-     This software is distributed WITHOUT ANY WARRANTY; without even 
-     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
-     PURPOSE.  See the above copyright notices for more information.
+This software is distributed WITHOUT ANY WARRANTY; without even 
+the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
 #include "itkExceptionObject.h"
@@ -22,63 +22,162 @@
 #include "otbImage.h"
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
+#include "otbAtmosphericCorrectionParametersTo6SAtmosphericRadiativeTerms.h"
+#include "otbAtmosphericCorrectionParameters.h"
+#include "otbAtmosphericRadiativeTerms.h"
+#include<fstream>
+#include<iostream>
 
 int otbSurfaceAdjencyEffect6SCorrectionSchemeFilter(int argc, char * argv[])
 {
-      const char * inputFileName  = argv[1];
-      const char * outputFileName = argv[2];
-        
-      const unsigned int Dimension = 2;
-      typedef double PixelType;
-      typedef otb::VectorImage<PixelType,Dimension> InputImageType;
-      typedef otb::VectorImage<PixelType,Dimension> OutputImageType;
-      typedef otb::ImageFileReader<InputImageType>  ReaderType;
-      typedef otb::ImageFileWriter<OutputImageType> WriterType;
-     
-      typedef otb::SurfaceAdjencyEffect6SCorrectionSchemeFilter<InputImageType, OutputImageType> SurfaceAdjencyEffect6SCorrectionSchemeFilterType;
-      typedef SurfaceAdjencyEffect6SCorrectionSchemeFilterType::PonderationMatrixType            PonderationMatrixType;
-      typedef SurfaceAdjencyEffect6SCorrectionSchemeFilterType::PonderationValuesContainerType   PonderationValuesContainerType;
+  const char * inputFileName  = argv[1];
+  const char * outputFileName = argv[2];
+  const char * paramFile = argv[5];
 
-      // Instantiating object
-      SurfaceAdjencyEffect6SCorrectionSchemeFilterType::Pointer filter = SurfaceAdjencyEffect6SCorrectionSchemeFilterType::New();
+  const unsigned int Dimension = 2;
+  typedef double PixelType;
+  typedef otb::VectorImage<PixelType,Dimension> InputImageType;
+  typedef otb::VectorImage<PixelType,Dimension> OutputImageType;
+  typedef otb::ImageFileReader<InputImageType>  ReaderType;
+  typedef otb::ImageFileWriter<OutputImageType> WriterType;
      
-      ReaderType::Pointer reader  = ReaderType::New();
-      WriterType::Pointer writer = WriterType::New();
-      reader->SetFileName(inputFileName);
-      writer->SetFileName(outputFileName);
-      reader->GenerateOutputInformation();
+  typedef otb::SurfaceAdjencyEffect6SCorrectionSchemeFilter<InputImageType, OutputImageType> SurfaceAdjencyEffect6SCorrectionSchemeFilterType;
+  typedef SurfaceAdjencyEffect6SCorrectionSchemeFilterType::WeightingMatrixType            WeightingMatrixType;
+  typedef SurfaceAdjencyEffect6SCorrectionSchemeFilterType::WeightingValuesContainerType   WeightingValuesContainerType;
+
+  typedef otb::AtmosphericRadiativeTerms::DataVectorType                                   DataVectorType;
+  typedef otb::AtmosphericCorrectionParametersTo6SAtmosphericRadiativeTerms                CorrectionParametersTo6SRadiativeTermsType;
+  typedef otb::AtmosphericCorrectionParameters                                             CorrectionParametersType;
+  typedef otb::AtmosphericRadiativeTerms                                                   RadiativeTermsType;
+  typedef otb::FilterFunctionValues                                                        FilterFunctionValuesType;
+  typedef CorrectionParametersType::AerosolModelType                                       AerosolModelType;
+  typedef FilterFunctionValuesType::WavelenghtSpectralBandType                             ValueType;
+  typedef FilterFunctionValuesType::ValuesVectorType                                       ValuesVectorType;
       
-      filter->SetWindowRadius(atoi(argv[3]));
-      filter->SetUpwardTransmission(static_cast<double>(atof(argv[4])));
-      filter->SetUpwardDirectTransmission(static_cast<double>(atof(argv[5])));
-      filter->SetUpwardDiffusTransmission(static_cast<double>(atof(argv[6])));
 
-      // Poderation matrix vector construction
-      unsigned int nbOfComponent = reader->GetOutput()->GetNumberOfComponentsPerPixel();
-      unsigned int id = 7;
-      PonderationValuesContainerType container;
-      PonderationMatrixType mat(2*atoi(argv[3])+1, 2*atoi(argv[3])+1);
 
-      for(unsigned int i=0; i<nbOfComponent; i++)
-	{ 
-	  mat.Fill(0.);
-	  for(unsigned int r=0; r<mat.Rows(); r++)
-	    {
-	      for(unsigned int c=0; c<mat.Rows(); c++)
-		{ 
-		  mat(r, c) = static_cast<double>(atof(argv[id]));
-		  id++;
-		}
-	    }
-	  container.push_back(mat);
+
+  RadiativeTermsType::Pointer                         radiative     = RadiativeTermsType::New();
+  CorrectionParametersType::Pointer                   param         = CorrectionParametersType::New();
+  CorrectionParametersTo6SRadiativeTermsType::Pointer corrToRadia   = CorrectionParametersTo6SRadiativeTermsType::New();
+  FilterFunctionValuesType::Pointer                   functionValues;
+  // Instantiating object
+  SurfaceAdjencyEffect6SCorrectionSchemeFilterType::Pointer filter = SurfaceAdjencyEffect6SCorrectionSchemeFilterType::New();
+     
+  ReaderType::Pointer reader  = ReaderType::New();
+  WriterType::Pointer writer = WriterType::New();
+  reader->SetFileName(inputFileName);
+  writer->SetFileName(outputFileName);
+  reader->GenerateOutputInformation();
+  std::vector<const char *> wavelenghFiles;
+  unsigned int nbChannel = reader->GetOutput()->GetNumberOfComponentsPerPixel();
+  for(unsigned int i=0; i<nbChannel; i++)
+    {
+      wavelenghFiles.push_back( argv[i+6] );
+    }
+      
+  ValueType val = 0.0025;
+ 
+  // Correction parameters initialization
+  double solarZenithalAngle(0.);
+  double solarAzimutalAngle(0.);
+  double viewingZenithalAngle(0.);
+  double viewingAzimutalAngle(0.);
+  unsigned int month(0);
+  unsigned int day(0);
+  double atmosphericPressure(0.);
+  double waterVaporAmount(0.);
+  double ozoneAmount(0.);
+  double aerosolOptical(0.);
+      
+  std::ifstream fin;
+  fin.open(paramFile);
+  //Read input file parameters
+  fin >> solarZenithalAngle;//asol;
+  fin >> solarAzimutalAngle;//phi0;
+  fin >> viewingZenithalAngle;//avis;
+  fin >> viewingAzimutalAngle;//phiv;
+  fin >> month;//month;
+  fin >> day;//jday;
+  fin >> atmosphericPressure;//pressure;
+  fin >> waterVaporAmount;//uw;
+  fin >> ozoneAmount;//uo3;
+  unsigned int aer(0);
+  fin >> aer;//iaer;
+  AerosolModelType aerosolModel = static_cast<AerosolModelType>(aer);
+  fin >> aerosolOptical;//taer55;
+  fin.close();
+  // Set atmospheric parameters
+  param->SetSolarZenithalAngle(static_cast<double>(solarZenithalAngle));
+  param->SetSolarAzimutalAngle(static_cast<double>(solarAzimutalAngle));
+  param->SetViewingZenithalAngle(static_cast<double>(viewingZenithalAngle));
+  param->SetViewingAzimutalAngle(static_cast<double>(viewingAzimutalAngle));
+  param->SetMonth(month);
+  param->SetDay(day);
+  param->SetAtmosphericPressure(static_cast<double>(atmosphericPressure)); 
+  param->SetWaterVaporAmount(static_cast<double>(waterVaporAmount));
+  param->SetOzoneAmount(static_cast<double>(ozoneAmount));
+  param->SetAerosolModel(aerosolModel);
+  param->SetAerosolOptical(static_cast<double>(aerosolOptical));
+
+
+  std::cout<<"SetSolarZenithalAngle"<<param->GetSolarZenithalAngle()<<std::endl;
+  std::cout<<"SetSolarAzimutalAngle"<<param->GetSolarAzimutalAngle()<<std::endl;
+  std::cout<<"SetViewingZenithalAngle"<<param->GetViewingZenithalAngle()<<std::endl;
+  std::cout<<"SetViewingAzimutalAngle"<<param->GetViewingAzimutalAngle()<<std::endl;
+  std::cout<<"SetMonth"<<param->GetMonth()<<std::endl;
+  std::cout<<"SetDay"<<param->GetDay()<<std::endl;
+  std::cout<<"SetAtmosphericPressure"<<param->GetAtmosphericPressure()<<std::endl;
+  std::cout<<"SetWaterVaporAmount"<<param->GetWaterVaporAmount()<<std::endl;
+  std::cout<<"SetOzoneAmount"<< param->GetOzoneAmount()<<std::endl;
+  std::cout<<"SetAerosolModel"<<param->GetAerosolModel()<<std::endl;
+  std::cout<<"SetAerosolOptical"<<param->GetAerosolOptical()<<std::endl;
+
+  ValuesVectorType vect;
+  for(unsigned int j=0; j<nbChannel; j++)
+    {
+      functionValues = FilterFunctionValuesType::New();
+      vect.clear();
+	  
+      // Filter function values initialization
+      float minSpectralValue(0.);
+      float maxSpectralValue(0.);
+      float value(0.);
+	  	  
+      std::ifstream fin;
+      //Read input file parameters
+      fin.open(wavelenghFiles[j]);
+      fin >> minSpectralValue;//wlinf;
+      fin >> maxSpectralValue;//wlsup; 
+      std::cout<<minSpectralValue<<" "<<maxSpectralValue<<std::endl;
+      //fin.open(wavelenghFiles[i]);
+      while (!fin.eof() && fin.good())
+	{
+	  fin >> value;
+	  vect.push_back(value);
 	}
+      // Remove the last vector element which is added by fin, and not contains in the original file.
+      //vect.pop_back();
+      fin.close();
+      functionValues->SetFilterFunctionValues(vect);
+      functionValues->SetMinSpectralValue(minSpectralValue);
+      functionValues->SetMaxSpectralValue(maxSpectralValue);
+      functionValues->SetUserStep( val );
 
+      param->SetWavelenghtSpectralBandWithIndex(j, functionValues);
+    }
+ 
+  corrToRadia->SetInput( param );
 
-      filter->SetPonderationValues(container);
-      filter->SetInput(reader->GetOutput());
-      writer->SetInput(filter->GetOutput());
+  filter->SetAtmosphericRadiativeTerms(corrToRadia->GetOutput());
+  filter->SetWindowRadius(atoi(argv[3]));
+  filter->SetPixelSpacingInKilometers(static_cast<double>(atof(argv[4])));
+  filter->SetZenithalViewingAngle(param->GetViewingZenithalAngle());
 
-      writer->Update();
+  filter->SetInput(reader->GetOutput());
+  writer->SetInput(filter->GetOutput());
 
-      return EXIT_SUCCESS;
+  writer->Update();
+
+  return EXIT_SUCCESS;
 }

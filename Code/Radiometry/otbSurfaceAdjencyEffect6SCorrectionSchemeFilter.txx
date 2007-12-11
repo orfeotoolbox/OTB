@@ -33,7 +33,8 @@
 #include "itkOffset.h"
 #include "itkProgressReporter.h"
 #include "otbImage.h"
-
+#include "otbSIXSTraits.h"
+#include "otbAtmosphericRadiativeTerms.h"
 
 namespace otb
 {
@@ -43,59 +44,110 @@ SurfaceAdjencyEffect6SCorrectionSchemeFilter<TInputImage, TOutputImage>
 ::SurfaceAdjencyEffect6SCorrectionSchemeFilter()
 { 
   m_WindowRadius = 1;
-  m_UpwardTransmission = 1.;
-  m_UpwardDirectTransmission = 1.;
-  m_UpwardDiffusTransmission = 1.;   
+  m_PixelSpacingInKilometers = 1.;
+  m_ZenithalViewingAngle = 0;
+  m_AtmosphericRadiativeTerms = AtmosphericRadiativeTermsType::New();
 }
 
+template <class TInputImage, class TOutputImage>
+void 
+SurfaceAdjencyEffect6SCorrectionSchemeFilter<TInputImage, TOutputImage>
+::GenerateOutputInformation()
+{
+  Superclass::GenerateOutputInformation();
+  typename InputImageType::Pointer inputPtr = const_cast< TInputImage * >( this->GetInput() );
+  typename OutputImageType::Pointer outputPtr = const_cast< TOutputImage * >( this->GetOutput() );
+  
+  if(!inputPtr || !outputPtr)
+    return;
+  outputPtr->SetNumberOfComponentsPerPixel(inputPtr->GetNumberOfComponentsPerPixel());
+}
+
+template <class TInputImage, class TOutputImage>
+void 
+SurfaceAdjencyEffect6SCorrectionSchemeFilter<TInputImage, TOutputImage>
+::Modified()
+{
+  Superclass::Modified();
+  m_ParametersHaveBeenComputed  = false;
+}
 
 template <class TInputImage, class TOutputImage>
 void 
 SurfaceAdjencyEffect6SCorrectionSchemeFilter<TInputImage, TOutputImage>
 ::BeforeThreadedGenerateData ()
 {
+  if(!m_ParametersHaveBeenComputed)
+    {
+      this->ComputeParameters();
+      m_ParametersHaveBeenComputed = true;
+    }
+}
+
+template <class TInputImage, class TOutputImage>
+void 
+SurfaceAdjencyEffect6SCorrectionSchemeFilter<TInputImage, TOutputImage>
+::ComputeParameters()
+{
   // get pointers to the input and output
   typename InputImageType::Pointer inputPtr = const_cast< TInputImage * >( this->GetInput() );
   typename OutputImageType::Pointer outputPtr = const_cast< TOutputImage * >( this->GetOutput() );
 
-  outputPtr->SetNumberOfComponentsPerPixel(inputPtr->GetNumberOfComponentsPerPixel());
+  
+  WeightingMatrixType radiusMatrix(2*m_WindowRadius+1,2*m_WindowRadius+1);
+  radiusMatrix.Fill(0.);
 
-  // Check Matrix ponderation value validity.
-  if(std::floor(static_cast<double>(m_PonderationValues[0].Rows())) != 2*m_WindowRadius+1 
-     ||  std::floor(static_cast<double>(m_PonderationValues[0].Cols())) != 2*m_WindowRadius+1)
+  double center = static_cast<double>(m_WindowRadius+1);
+ 
+  for(int i = 0; i<m_WindowRadius; ++i)
     {
-      itkExceptionMacro( << "The ponderation values matrix have to have a size equal to 2*WindowRadius+1."); 
-    }
-  // Check the validity of the ponderation container.
-  if(m_PonderationValues.size()==inputPtr->GetNumberOfComponentsPerPixel() && m_PonderationValues.size()!=1)
-    {
-      for (unsigned int i=0; i<m_PonderationValues.size()-1;i++)
+      for(int j = 0; j<m_WindowRadius; ++j)
 	{
-	  // Check the matrix size parity. It has to be odd.
-	  if(std::floor(static_cast<double>(m_PonderationValues[i].Rows())/2.) == static_cast<double>(m_PonderationValues[i].Rows())/2. 
-	     &&  std::floor(static_cast<double>(m_PonderationValues[i].Cols())/2.) == static_cast<double>(m_PonderationValues[i].Cols())/2)
-	  {
-	      itkExceptionMacro( << "Each ponderation values matrix has to have an odd size (and 0 as central value)."); 
-	  }
-	  if(m_PonderationValues[i].Rows()!=m_PonderationValues[i+1].Rows() || m_PonderationValues[i].Cols()!=m_PonderationValues[i+1].Cols())
-	    {
-	      itkExceptionMacro( << "Each ponderation values matrix has to have the same number of components."); 
-	    }
+	  double id = static_cast<double>(i);
+	  double jd = static_cast<double>(j);
+	  double currentRadius = m_PixelSpacingInKilometers*vcl_sqrt(vcl_pow(id-center,2)+vcl_pow(jd-center,2));
+	  radiusMatrix(i,j)=currentRadius;
+	  radiusMatrix(m_WindowRadius-i,j)=currentRadius;
+	  radiusMatrix(m_WindowRadius-i,m_WindowRadius-j)=currentRadius;
+	  radiusMatrix(i,m_WindowRadius-j)=currentRadius;
 	}
     }
-  else
+
+  for(unsigned int band = 0; band<inputPtr->GetNumberOfComponentsPerPixel();++band)
     {
-      itkExceptionMacro( << "Each channel has to have its own ponderation values vector (or 1 vector apply to every channel).");  
+      WeightingMatrixType currentWeightingMatrix(2*m_WindowRadius+1,2*m_WindowRadius+1);
+      double rayleigh = m_AtmosphericRadiativeTerms->GetUpwardDiffuseTransmittanceForRayleigh(band);
+      double aerosol =  m_AtmosphericRadiativeTerms->GetUpwardDiffuseTransmittanceForAerosol(band);
+     
+      currentWeightingMatrix.Fill(0.);
+
+      for(int i = 0; i<2*m_WindowRadius+1; ++i)
+	{
+	  for(int j = 0; j<2*m_WindowRadius+1; ++j)
+	    {
+	      double notUsed1,notUsed2;
+	      double factor = 1;
+	      double palt = 1000.;
+	      SIXSTraits::ComputeEnvironmentalContribution(rayleigh,aerosol,radiusMatrix(i,j),palt,vcl_cos(m_ZenithalViewingAngle*M_PI/180.),notUsed1,notUsed2,factor); //Call to 6S
+	      currentWeightingMatrix(i,j)=factor;
+	    }
+	}
+      std::cout<<currentWeightingMatrix<<std::endl;
+      m_WeightingValues.push_back(currentWeightingMatrix);
+    }  
+  
+  
+  DoubleContainerType upwardTransmittanceRatio,diffuseRatio;
+  
+  for(unsigned int band = 0; band<inputPtr->GetNumberOfComponentsPerPixel();++band)
+    {
+      upwardTransmittanceRatio.push_back(m_AtmosphericRadiativeTerms->GetUpwardTransmittance(band)/m_AtmosphericRadiativeTerms->GetUpwardDirectTransmittance(band));
+      diffuseRatio .push_back(m_AtmosphericRadiativeTerms->GetUpwardDiffuseTransmittance(band)/m_AtmosphericRadiativeTerms->GetUpwardDirectTransmittance(band));
     }
-
-  // Functor initialisation
-  double tempInvUpwardDirectTransmission = 1./m_UpwardDirectTransmission;
-  this->GetFunctor().SetUpwardTransmissionRatio(m_UpwardTransmission*tempInvUpwardDirectTransmission);
-  this->GetFunctor().SetDiffusRatio(m_UpwardDiffusTransmission*tempInvUpwardDirectTransmission);
-  this->GetFunctor().SetPonderationValues(m_PonderationValues);
+  this->GetFunctor().SetUpwardTransmittanceRatio(upwardTransmittanceRatio);
+  this->GetFunctor().SetDiffuseRatio(diffuseRatio);
+  this->GetFunctor().SetWeightingValues(m_WeightingValues);
 }
-
-
 /**
  * Standard "PrintSelf" method
  */
@@ -105,10 +157,8 @@ SurfaceAdjencyEffect6SCorrectionSchemeFilter<TInputImage, TOutput>
 ::PrintSelf( std::ostream& os, itk::Indent indent) const
 {
   os << indent << "Radius : " << m_WindowRadius << std::endl;
-  os << indent << "Upward direct transmission : " << m_UpwardDirectTransmission << std::endl;
-  os << indent << "Upward transmission : " << m_UpwardTransmission << std::endl;
-  os << indent << "Upward diffus transmission : " << m_UpwardDiffusTransmission << std::endl;
-
+  os << indent << "Pixel spacing in kilometers: "<<m_PixelSpacingInKilometers <<std::endl;
+  os << indent << "Zenithal viewing angle in degree: "<<m_ZenithalViewingAngle<<std::endl;
 }
 
 } // end namespace otb

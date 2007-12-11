@@ -192,11 +192,11 @@ AtmosphericCorrectionParametersTo6SAtmosphericRadiativeTerms
                        upwardDiffuseTransmittanceForAerosol             /** Upward diffuse transmittance for aerosols */
                        );
       
-      output->SetIntrinsicAtmosphericReflectances(i, atmosphericReflectance);
-      output->SetSphericalAlbedos(i, atmosphericSphericalAlbedo);
-      output->SetTotalGaseousTransmissions(i, totalGaseousTransmission);
-      output->SetDownwardTransmittances(i, downwardTransmittance);
-      output->SetUpwardTransmittances(i, upwardTransmittance);
+      output->SetIntrinsicAtmosphericReflectance(i, atmosphericReflectance);
+      output->SetSphericalAlbedo(i, atmosphericSphericalAlbedo);
+      output->SetTotalGaseousTransmission(i, totalGaseousTransmission);
+      output->SetDownwardTransmittance(i, downwardTransmittance);
+      output->SetUpwardTransmittance(i, upwardTransmittance);
       output->SetUpwardDiffuseTransmittance(i, upwardDiffuseTransmittance );
       output->SetUpwardDirectTransmittance(i, upwardDirectTransmittance);
       output->SetUpwardDiffuseTransmittanceForRayleigh(i,upwardDiffuseTransmittanceForRayleigh );

@@ -27,7 +27,7 @@
 #include "itkConstNeighborhoodIterator.h"
 #include "otbUnaryFunctorNeighborhoodVectorImageFilter.h"
 #include "itkVariableSizeMatrix.h"
-
+#include "otbAtmosphericRadiativeTerms.h"
 
 namespace otb
 {
@@ -46,16 +46,17 @@ namespace otb
 	  ComputeNeighborhoodContributionFunctor() {};
 	  ~ComputeNeighborhoodContributionFunctor() {};
 	  
-	  typedef itk::VariableSizeMatrix<double>               PonderationMatrixType;
-	  typedef typename std::vector<PonderationMatrixType>   PonderationValuesContainerType;
-	  typedef typename TOutput::RealValueType               RealValueType;
+	  typedef itk::VariableSizeMatrix<double>             WeightingMatrixType;
+	  typedef typename std::vector<WeightingMatrixType>   WeightingValuesContainerType;
+	  typedef typename TOutput::RealValueType             RealValueType;
+	  typedef std::vector<double>                         DoubleContainerType;
 
-	  void SetPonderationValues(const PonderationValuesContainerType & cont){ m_PonderationValues = cont; };
-	  void SetUpwardTransmissionRatio(double upwardTransmissionRatio){ m_UpwardTransmissionRatio = upwardTransmissionRatio;};
-	  void SetDiffusRatio(double diffusRatio){ m_DiffusRatio = diffusRatio;};
-	  PonderationValuesContainerType GetPonderationValues(){ return m_PonderationValues;};
-	  double GetUpwardTransmissionRatio(){ return m_UpwardTransmissionRatio;};
-	  double GetDiffusRatio(){ return m_DiffusRatio;};
+	  void SetWeightingValues(const WeightingValuesContainerType & cont){ m_WeightingValues = cont; };
+	  void SetUpwardTransmittanceRatio(DoubleContainerType upwardTransmittanceRatio){ m_UpwardTransmittanceRatio = upwardTransmittanceRatio;};
+	  void SetDiffuseRatio(DoubleContainerType diffuseRatio){ m_DiffuseRatio = diffuseRatio;};
+	  WeightingValuesContainerType GetWeightingValues(){ return m_WeightingValues;};
+	  DoubleContainerType GetUpwardTransmittanceRatio(){ return m_UpwardTransmittanceRatio;};
+	  DoubleContainerType GetDiffuseRatio(){ return m_DiffuseRatio;};
 
 	  inline TOutput operator()(const TNeighIter & it)
 	    {	 
@@ -69,24 +70,24 @@ namespace otb
 		{
 		  contribution = 0;
 		  // Load the current channel ponderation value matrix
-		  PonderationMatrixType TempChannelPonderation = m_PonderationValues[j];
+		  WeightingMatrixType TempChannelWeighting = m_WeightingValues[j];
 		  // Loop over the neighborhood
 		  for (unsigned int i = 0; i < neighborhoodSize; ++i)
 		    { 
 		      // Current neighborhood pixel index calculation
 		      unsigned int RowIdx = 0;
 		      unsigned int ColIdx = 0;
-		      RowIdx = i/TempChannelPonderation.Cols();
+		      RowIdx = i/TempChannelWeighting.Cols();
 		      if(RowIdx != 0)
 			{
-			  ColIdx = (i+1)-RowIdx*TempChannelPonderation.Cols()-1;
+			  ColIdx = (i+1)-RowIdx*TempChannelWeighting.Cols()-1;
 			}
 		      else
 			{
 			  ColIdx = i;
 			}
 		      // Extract the current neighborhood pixel ponderation
-		      double idVal = TempChannelPonderation(RowIdx, ColIdx);
+		      double idVal = TempChannelWeighting(RowIdx, ColIdx);
 		      // Extract the current neighborhood pixel value
 		      TOutput tempPix = it.GetPixel(i);
 		      
@@ -94,16 +95,16 @@ namespace otb
 
 		    }
 		  temp = 0.; 
-		  temp = static_cast<double>(it.GetCenterPixel()[j])*m_UpwardTransmissionRatio + contribution*m_DiffusRatio; 
+		  temp = static_cast<double>(it.GetCenterPixel()[j])*m_UpwardTransmittanceRatio[j] + contribution*m_DiffuseRatio[j]; 
 		  outPixel[j] = static_cast<RealValueType>(temp);
 		}
 	      return outPixel;
 	    }
 
 	private:
-	  PonderationValuesContainerType m_PonderationValues;
-	  double m_UpwardTransmissionRatio;
-	  double m_DiffusRatio;
+	  WeightingValuesContainerType m_WeightingValues;
+	  DoubleContainerType m_UpwardTransmittanceRatio;
+	  DoubleContainerType m_DiffuseRatio;
 	};
   
     }
@@ -137,7 +138,7 @@ public:
   typedef typename Superclass::InputImageType         InputImageType;
   typedef typename Superclass::OutputImageType        OutputImageType;
 
-
+  typedef std::vector<double>                         DoubleContainerType;
   /** object factory method. */
   itkNewMacro(Self);
 
@@ -157,12 +158,12 @@ public:
   typedef typename OutputImageType::InternalPixelType                  OutputInternalPixelType;
   typedef typename OutputImageType::RegionType                         OutputImageRegionType;
 
+  typedef AtmosphericRadiativeTerms                                    AtmosphericRadiativeTermsType;
+  typedef typename AtmosphericRadiativeTermsType::Pointer              AtmosphericRadiativeTermsPointerType;
 
   /** Storage ponderation values types*/
-  typedef itk::VariableSizeMatrix<double>                               PonderationMatrixType;
-  typedef typename std::vector<PonderationMatrixType>                   PonderationValuesContainerType;
-
-
+  typedef itk::VariableSizeMatrix<double>                               WeightingMatrixType;
+  typedef typename std::vector<WeightingMatrixType>                   WeightingValuesContainerType;
 
   /** typedef for calculation*/
   typedef typename itk::ConstNeighborhoodIterator<InputImageType>          NeighborIterType;
@@ -175,25 +176,28 @@ public:
       this->Modified();
     }
   itkGetConstReferenceMacro(WindowRadius, unsigned int);
-   /** Set/Get the ponderation values container. */
-  void SetPonderationValues(const PonderationValuesContainerType & val)
+  
+  /** Set/Get the pixel spacing in kilometers */
+  itkSetMacro(PixelSpacingInKilometers,double);
+  itkGetMacro(PixelSpacingInKilometers,double);
+  /** Set/Get the viewing angle */
+  itkSetMacro(ZenithalViewingAngle,double);
+  itkGetMacro(ZenithalViewingAngle,double);
+
+  /** Get/Set Atmospheric Radiative Terms. */
+  void SetAtmosphericRadiativeTerms(AtmosphericRadiativeTermsPointerType atmo)
     {
-      m_PonderationValues = val;
+      m_AtmosphericRadiativeTerms = atmo;
+      this->SetNthInput(1, m_AtmosphericRadiativeTerms);
       this->Modified();
     }
-  PonderationValuesContainerType GetPonderationValues() { return m_PonderationValues; };
+  AtmosphericRadiativeTermsPointerType GetAtmosphericRadiativeTerms()
+    {
+      return m_AtmosphericRadiativeTerms;
+    }
 
-
- /** Set/Get the upward transmission.*/
-  itkSetMacro(UpwardTransmission, double);
-  itkGetConstReferenceMacro(UpwardTransmission, double);
-  /** Set/Get the upward direct transmission.*/
-  itkSetMacro(UpwardDirectTransmission, double);
-  itkGetConstReferenceMacro(UpwardDirectTransmission, double);
-  /** Set/Get the upward diffus transmission. */
-  itkSetMacro(UpwardDiffusTransmission, double);
-  itkGetConstReferenceMacro(UpwardDiffusTransmission, double);
-
+  /** Compute the functor parameters */
+  void ComputeParameters();
 
 
  protected:
@@ -201,22 +205,29 @@ public:
   virtual ~SurfaceAdjencyEffect6SCorrectionSchemeFilter(){};
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
- /** Initialize some accumulators before the threads run. */
-  virtual void BeforeThreadedGenerateData ();
+  /** GenerateOutputInformation method */
+  virtual void GenerateOutputInformation();
 
-                        
+  /** Initialize some accumulators before the threads run. */
+  virtual void BeforeThreadedGenerateData();
+
+  /** If modified, we need to compute the parameters again */
+  virtual void Modified();
+
 private:
 
   /** Size of the window. */
   unsigned int m_WindowRadius;
-  /** Ponderation values for the neighbor pixels.*/
-  PonderationValuesContainerType m_PonderationValues;
-  /** Upward Transmission.*/
-  double m_UpwardTransmission;
-  /** Upward Direct Transmission.*/
-  double m_UpwardDirectTransmission;
-  /** Diffus Transmission. */
-  double m_UpwardDiffusTransmission;
+  /** Weighting values for the neighbor pixels.*/
+  WeightingValuesContainerType m_WeightingValues;
+  /** True if the parameters have been generated */
+  bool m_ParametersHaveBeenComputed;
+  /** Pixel spacing in kilometers */
+  double m_PixelSpacingInKilometers;
+  /** Viewing angle in degree */
+  double m_ZenithalViewingAngle;
+  /** Radiative terms object */
+  AtmosphericRadiativeTermsPointerType m_AtmosphericRadiativeTerms;
   
 };
 
