@@ -61,6 +61,7 @@ class ITK_EXPORT OrthoRectificationFilter : public itk::ImageToImageFilter< TInp
         typedef typename OrthoRectificationFilterBaseType::IndexType            IndexType;
         typedef typename OrthoRectificationFilterBaseType::SizeType             SizeType;
         typedef typename OrthoRectificationFilterBaseType::PointType            PointType;
+	typedef typename OrthoRectificationFilterBaseType::RegionType           RegionType;
         typedef typename OrthoRectificationFilterBaseType::OriginPointType      OriginPointType;
         typedef typename OrthoRectificationFilterBaseType::SpacingType          SpacingType;
   
