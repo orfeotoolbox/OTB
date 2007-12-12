@@ -24,10 +24,9 @@
 #endif
 
 //  Software Guide : BeginCommandLineArgs
-//  INPUTS: {DEM_srtm}
-//  OUTPUTS: {DEMToImageGenerator.tif} , {pretty_DEMToImageGenerator.png}
-//  6.5 44.5 500 500 0.002 0.002
-// 
+//  OUTPUTS: {DEMToImageGenerator.tif}
+//  OUTPUTS: {pretty_DEMToImageGenerator.png}
+//  6.5 44.5 500 500 0.002 0.002 ${OTB_SOURCE_DIR}/Examples/Data/DEM_srtm
 //  Software Guide : EndCommandLineArgs
 
 // Software Guide : BeginLatex
@@ -60,7 +59,7 @@ int main(int argc, char * argv[])
 {
   if(argc<10)
     {
-      std::cout << argv[0] <<" DEM folder path , output filename , pretty output filename , Longitude Output Orign point , Latitude Output Origin point , X Output Size, Y Output size , X Spacing , Y Spacing"  << std::endl;
+      std::cout << argv[0] <<" output filename , pretty output filename , Longitude Output Orign point , Latitude Output Origin point , X Output Size, Y Output size , X Spacing , Y Spacing, DEM folder path"  << std::endl;
       return EXIT_FAILURE;
     }
   //  Software Guide : BeginLatex
@@ -70,8 +69,8 @@ int main(int argc, char * argv[])
   //
   // Software Guide : EndLatex 
 
-  char * folderPath = argv[1];
-  char * outputName = argv[2];
+  char * folderPath = argv[9];
+  char * outputName = argv[1];
    // Software Guide : BeginCodeSnippet
   const unsigned int Dimension = 2;
   typedef otb::Image<double , Dimension>           ImageType;
@@ -128,8 +127,8 @@ int main(int argc, char * argv[])
   // Software Guide : EndLatex 
   // Software Guide : BeginCodeSnippet
   PointType origin;
-  origin[0] = ::atof(argv[4]);
-  origin[1] = ::atof(argv[5]);
+  origin[0] = ::atof(argv[3]);
+  origin[1] = ::atof(argv[4]);
 
   object->SetOutputOrigin(origin);
   // Software Guide : EndCodeSnippet
@@ -142,8 +141,8 @@ int main(int argc, char * argv[])
   // Software Guide : EndLatex 
   // Software Guide : BeginCodeSnippet
   SizeType size;
-  size[0] = ::atoi(argv[6]);
-  size[1] = ::atoi(argv[7]);
+  size[0] = ::atoi(argv[5]);
+  size[1] = ::atoi(argv[6]);
 
   object->SetOutputSize(size);
   // Software Guide : EndCodeSnippet
@@ -156,8 +155,8 @@ int main(int argc, char * argv[])
   //  Software Guide : EndLatex 
   // Software Guide : BeginCodeSnippet
  SpacingType spacing;
- spacing[0] = ::atof(argv[8]);
- spacing[1] = ::atof(argv[9]);
+ spacing[0] = ::atof(argv[7]);
+ spacing[1] = ::atof(argv[8]);
 
   object->SetOutputSpacing(spacing);
   // Software Guide : EndCodeSnippet
@@ -221,7 +220,7 @@ int main(int argc, char * argv[])
    rescaler->SetInput( thresholder->GetOutput() );
    rescaler->SetOutputMinimum(0);
    rescaler->SetOutputMaximum(255);
-   prettyWriter->SetFileName( argv[3] );
+   prettyWriter->SetFileName( argv[2] );
 
    prettyWriter->SetInput( rescaler->GetOutput() );
    try
@@ -244,7 +243,7 @@ int main(int argc, char * argv[])
    // Software Guide : BeginLatex
    //
    // Let's now run this example using as input the Srtm datas contained in 
-   // \code{DEM_srtm} folder.
+   // \code{DEM\_srtm} folder.
    //
    //
    // \begin{figure} \center
