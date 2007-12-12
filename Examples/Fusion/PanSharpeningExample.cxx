@@ -180,11 +180,6 @@ int main( int argc, char* argv[] )
   pngwriter2->Update();
   
   
-// Software Guide : BeginCodeSnippet  
-  return EXIT_SUCCESS;
-  
-
-// Software Guide : EndCodeSnippet
 
   // Software Guide : BeginLatex
   //
@@ -205,4 +200,10 @@ int main( int argc, char* argv[] )
   //
   // Software Guide : EndLatex
 
+
+  return EXIT_SUCCESS;
+  
 }
+
+
+
