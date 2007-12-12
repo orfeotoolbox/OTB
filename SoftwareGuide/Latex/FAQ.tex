@@ -249,7 +249,10 @@ The \texttt{--without-python} option passed to the \texttt{configure} step avoid
   \end{verbatim}
   
   If you want a faster compilation and don't want the compilation of the examples, you
-  can set \texttt{BUILD\_EXAMPLES} to \texttt{OFF}.
+  can set \texttt{BUILD\_EXAMPLES} to \texttt{OFF}. Some plateforms apparently 
+  have more difficulties with shared libraries, if you experience any problem 
+  with that, you can set \texttt{BUILD\_SHARED\_LIBS} to \texttt{OFF} but the 
+  built size might reach 1~GB.
       
   After these steps, you have the source of OTB in \texttt{INSTALL\_DIR/OrfeoToolbox-2.0.0}
   and the compiled binaries and libraries in \texttt{INSTALL\_DIR/OTB-Binary}. Keeping
