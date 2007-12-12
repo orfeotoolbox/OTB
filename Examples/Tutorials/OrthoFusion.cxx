@@ -150,38 +150,9 @@ int main( int argc, char* argv[] )
 // Software Guide : EndCodeSnippet				
 
 
-  //
-  //  ************** This shouldn't be necessary any more !!!**********
-  //
 
-
-
-  
-//   ImageType::PointType originNull;
-//   originNull[0]=0;
-//   originNull[1]=0;
-//   
-//   readerPAN->GenerateOutputInformation();
-//   
-//   typedef itk::ChangeInformationImageFilter<ImageType > ChangeInfoFilterType;
-//   ChangeInfoFilterType::Pointer changeInfoPAN = ChangeInfoFilterType::New();
-//   changeInfoPAN->SetInput(readerPAN->GetOutput());
-//   changeInfoPAN->ChangeOriginOn();
-//   changeInfoPAN->SetOutputOrigin(originNull);
-//   changeInfoPAN->GenerateOutputInformation();
   // Software Guide : BeginCodeSnippet
   orthoRectifPAN->SetInput(readerPAN->GetOutput());
-  // Software Guide : EndCodeSnippet
-  
-//   readerXS->GenerateOutputInformation();
-  
-//   typedef itk::ChangeInformationImageFilter<VectorImageType > VectorChangeInfoFilterType;
-//   VectorChangeInfoFilterType::Pointer changeInfoXS = VectorChangeInfoFilterType::New();
-//   changeInfoXS->SetInput(readerXS->GetOutput());
-//   changeInfoXS->ChangeOriginOn();
-//   changeInfoXS->SetOutputOrigin(originNull);
-//   changeInfoXS->GenerateOutputInformation();
-    // Software Guide : BeginCodeSnippet
   orthoRectifXSVector->SetInput(readerXS->GetOutput());
   
   // Software Guide : EndCodeSnippet				

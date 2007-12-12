@@ -77,14 +77,14 @@ ADD_TEST( TutorialsOrthoFusionTest ${EXE_TESTS}
         TutorialsOrthoFusionTest
         ${INPUTLARGEDATA}/TOULOUSE/QuickBird/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF
         ${INPUTLARGEDATA}/TOULOUSE/QuickBird/000000128955_01_P001_MUL/02APR01105228-M1BS-000000128955_01_P001.TIF
-        ${TEMP}/TutorialsScalingPipelineOutput.tif
+        ${TEMP}/TutorialsOrthoFusionOutput.tif
         31
-        373100
-        4830184
-        1000
-        1000 
-        5 
-        -5
+        375000 
+	4828100 
+	500 
+	500 
+	0.6 
+	-0.6
         )
 
 
