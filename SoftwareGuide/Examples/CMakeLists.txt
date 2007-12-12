@@ -183,7 +183,7 @@ SET( OTB_EXAMPLES_SRCS
   ${OTB_SOURCE_DIR}/Examples/IO/ExtractROI.cxx
   ${OTB_SOURCE_DIR}/Examples/IO/MetadataExample.cxx
   ${OTB_SOURCE_DIR}/Examples/IO/DXFReaderExample.cxx
-  #${OTB_SOURCE_DIR}/Examples/IO/DEMToImageGenerator.cxx
+  ${OTB_SOURCE_DIR}/Examples/IO/DEMToImageGenerator.cxx
   ${OTB_SOURCE_DIR}/Examples/Filtering/BinaryThresholdImageFilter.cxx
   ${OTB_SOURCE_DIR}/Examples/Filtering/ThresholdImageFilter.cxx
   ${OTB_SOURCE_DIR}/Examples/Filtering/CannyEdgeDetectionImageFilter.cxx
@@ -281,6 +281,7 @@ SET( OTB_EXAMPLES_SRCS
   ${OTB_SOURCE_DIR}/Examples/Radiometry/ARVIMultiChannelRAndBAndNIRVegetationIndexImageFilter.cxx
   ${OTB_SOURCE_DIR}/Examples/Radiometry/NDVIRAndNIRVegetationIndexImageFilter.cxx
   ${OTB_SOURCE_DIR}/Examples/Fusion/BayesianFusionImageFilter.cxx
+  ${OTB_SOURCE_DIR}/Examples/Fusion/PanSharpeningExample.cxx
   ${OTB_SOURCE_DIR}/Examples/Tutorials/HelloWorldOTB.cxx
   ${OTB_SOURCE_DIR}/Examples/Tutorials/Pipeline.cxx
   ${OTB_SOURCE_DIR}/Examples/Tutorials/FilteringPipeline.cxx
@@ -289,6 +290,7 @@ SET( OTB_EXAMPLES_SRCS
   ${OTB_SOURCE_DIR}/Examples/Tutorials/SimpleViewer.cxx
   ${OTB_SOURCE_DIR}/Examples/Tutorials/OrthoFusion.cxx
 )
+
 
 
 # It is recommended that the user build the figures from the Insight executables

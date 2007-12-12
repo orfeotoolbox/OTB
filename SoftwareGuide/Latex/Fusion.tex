@@ -28,7 +28,10 @@ few are available in OTB now but this should evolve soon.
 
 \section{Simple Pan Sharpening}\label{secPanSharpening}
 
-A simple way to view the pan-sharpening of data is to consider that, at the same resolution,  the panchromatic channel is the sum of the XS channel. After putting the two images in the same geometry, after orthorectification (see \ref{sec:Ortho}) with an oversampling of the XS image, we can proceed to the data fusion. 
+A simple way to view the pan-sharpening of data is to consider that,
+at the same resolution,  the panchromatic channel is the sum of the XS
+channel. After putting the two images in the same geometry, after
+orthorectification (see chapter \ref{sec:Ortho}) with an oversampling of the XS image, we can proceed to the data fusion. 
 
 The idea is to apply a low pass filter to the panchromatic band to give it a spectral content (in the Fourier domain) equivalent to the XS data. Then we normalize the XS data with this low-pass panchromatic and multiply the result with the original panchromatic band.
 
@@ -61,7 +64,7 @@ The process is described on figure \ref{fig:PanSharpening}.
 	\draw[->,thick] (10,8) --  ++(0,4) -- ++(22,0) -- ++(0,-7);
 
 	\draw[fill=black!30,rounded corners=2pt] (31,3) rectangle +(2,2);
-	\node[anchor=center, text width= 1cm] (Mult) at (33.5,4) {*};
+	\node[anchor=center, text width= 1cm] (Mult) at (33.5,4) {$\times$};
 
 	\draw[->,thick] (33,4) --  ++(6,0);
 
