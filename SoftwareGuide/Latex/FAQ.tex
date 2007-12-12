@@ -249,13 +249,13 @@ The \texttt{--without-python} option passed to the \texttt{configure} step avoid
   \end{verbatim}
   
   If you want a faster compilation and don't want the compilation of the examples, you
-  can set \texttt{BUILD_EXAMPLES} to \texttt{OFF}.
+  can set \texttt{BUILD\_EXAMPLES} to \texttt{OFF}.
       
-  After these steps, you have the source of OTB in \texttt{INSTALL_DIR/OrfeoToolbox-2.0.0}
-  and the compiled binaries and libraries in \texttt{INSTALL_DIR/OTB-Binary}. Keeping
+  After these steps, you have the source of OTB in \texttt{INSTALL\_DIR/OrfeoToolbox-2.0.0}
+  and the compiled binaries and libraries in \texttt{INSTALL\_DIR/OTB-Binary}. Keeping
   the sources is important as most programs you will designed will need an access 
   to the txx files during compilation. However, the binaries directory knows were
-  its sources are and you will need to point only to the \texttt{INSTALL_DIR/OTB-Binary}
+  its sources are and you will need to point only to the \texttt{INSTALL\_DIR/OTB-Binary}
   when the \texttt{cmake} for your program will ask you where the OTB is. 
 
   If you want to put OTB in a standard location, you can proceed with:
