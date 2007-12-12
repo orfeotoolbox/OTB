@@ -26,6 +26,14 @@
 #define ITK_LEAN_AND_MEAN
 #endif
 
+//  Software Guide : BeginCommandLineArgs
+//    INPUTS: {QB_Toulouse_Ortho_PAN.tif}, {QB_Toulouse_Ortho_XS.tif}
+//    OUTPUTS: {QB_Toulouse_Ortho_PXS.tif}
+//    OUTPUTS: {pretty_QB_Toulouse_Ortho_PXS.png}
+//    OUTPUTS: {pretty_QB_Toulouse_Ortho_PAN.png}
+//    OUTPUTS: {pretty_QB_Toulouse_Ortho_XS.png}
+//  Software Guide : EndCommandLineArgs
+
 
 // Software Guide : BeginLatex
 //
@@ -42,11 +50,6 @@
 //
 // Software Guide : EndLatex 
 
-//  Software Guide : BeginCommandLineArgs
-//    INPUTS: {QB_Toulouse_Ortho_PAN.tif QB_Toulouse_Ortho_XS.tif}
-//    OUTPUTS: {QB_Toulouse_Ortho_PXS.tif pretty_QB_Toulouse_Ortho_PXS.png 
-//       pretty_QB_Toulouse_Ortho_PAN.png pretty_QB_Toulouse_Ortho_XS.png}
-//  Software Guide : EndCommandLineArgs
 
 // Software Guide : BeginLatex
 //
@@ -180,7 +183,7 @@ int main( int argc, char* argv[] )
 // Software Guide : BeginCodeSnippet  
   return EXIT_SUCCESS;
   
-}
+
 // Software Guide : EndCodeSnippet
 
   // Software Guide : BeginLatex
@@ -202,4 +205,4 @@ int main( int argc, char* argv[] )
   //
   // Software Guide : EndLatex
 
-
+}
