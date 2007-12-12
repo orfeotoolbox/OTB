@@ -32,7 +32,6 @@
 #include "otbImageFileReader.h"
 #include "otbStreamingImageFileWriter.h"
 
-#include "itkChangeInformationImageFilter.h"
 #include "otbPerBandVectorImageFilter.h"
 
 #include "init/ossimInit.h"
@@ -63,11 +62,11 @@ int main( int argc, char* argv[] )
 {
 
 
-  ossimInit::instance()->initialize(argc, argv);
+  //ossimInit::instance()->initialize(argc, argv);
 
   if(argc!=9)
     {
-    std::cout << argv[0] <<" <input_filename> <output_filename> <x_ground_upper_left_corner> <y_ground_upper_left_corner> <x_Size> <y_Size> <x_groundSamplingDistance> <y_groundSamplingDistance (should be negative since origin is upper left)>" 
+    std::cout << argv[0] <<" <input_filename> <output_filename> <x_ground_upper_left_corner> <y_ground_upper_left_corner> <x_Size> <y_Size> <x_groundSamplingDistance> <y_groundSamplingDistance> (should be negative since origin is upper left)>" 
 	      << std::endl;
 
     return EXIT_FAILURE;
@@ -149,38 +148,13 @@ int main( int argc, char* argv[] )
 // Software Guide : EndCodeSnippet	
 
 // Software Guide : BeginLatex
-//
-// Since the size of the output image will be fixed by the user and we
-// are working with a stream-capable, synchronized pipeline, the
-// ortho-rectification filter needs to know the input image size
-// before the reader actually accesses the pixels. In order to make
-// the pipeline aware of the input image size we execute the
-// \code{GenerateOutputInformation()} method of the reader. Then we
-// can plug the pipeline as usual.
+// 
+// Wiring the orthorectification filter into a PerBandImageFilter allows 
+// to orthrectify images with multiple bands seamlesly.
 //
 // Software Guide : EndLatex
 
-
-
-   
-
-	
-//   reader->GenerateOutputInformation();
-//   
-//   typedef itk::ChangeInformationImageFilter<VectorImageType > ChangeInfoFilterType;
-//   ChangeInfoFilterType::Pointer changeInfo = ChangeInfoFilterType::New();
-//   changeInfo->SetInput(reader->GetOutput());
-//   changeInfo->ChangeOriginOn();
-//   ImageType::PointType originNull;
-//   originNull[0]=0;
-//   originNull[1]=0;
-//   changeInfo->SetOutputOrigin(originNull);
-// 	
-//   changeInfo->GenerateOutputInformation();
-			
-//   orthoRectifFilter->SetInput(changeInfo->GetOutput());
-
-// Software Guide : BeginCodeSnippet  
+// Software Guide : BeginCodeSnippet
   typedef otb::PerBandVectorImageFilter<VectorImageType, VectorImageType, OrthoRectifFilterType> PerBandFilterType;
   PerBandFilterType::Pointer perBandFilter=PerBandFilterType::New();
   perBandFilter->SetFilter(orthoRectifFilter);

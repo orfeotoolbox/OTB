@@ -55,6 +55,7 @@ class ITK_EXPORT OrthoRectificationFilter : public itk::ImageToImageFilter< TInp
         typedef typename ChangeInfoFilterType::Pointer ChangeInfoFilterPointer;
         
         typedef typename OrthoRectificationFilterBaseType::InputImageType       InputImageType;
+	typedef typename OrthoRectificationFilterBaseType::OutputImageType       OutputImageType;
         typedef typename OrthoRectificationFilterBaseType::MapProjectionType    MapProjectionType;
         typedef typename OrthoRectificationFilterBaseType::InterpolatorType     InterpolatorType;
         typedef typename OrthoRectificationFilterBaseType::IndexType            IndexType;
@@ -148,9 +149,11 @@ class ITK_EXPORT OrthoRectificationFilter : public itk::ImageToImageFilter< TInp
         
         /** Main computation method */
         virtual void GenerateData(void);
-
+	
         /** Generate Output Information */
-        virtual void GenerateOutputInformation();
+        virtual void GenerateOutputInformation(void);
+
+	 virtual void GenerateInputRequestedRegion(void);
 
   private:
         OrthoRectificationFilter(const Self&); //purposely not implemented

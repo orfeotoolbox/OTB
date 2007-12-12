@@ -91,7 +91,22 @@ OrthoRectificationFilter<       TInputImage,
         m_OrthoRectificationFilter->GenerateOutputInformation();
         this->GetOutput()->CopyInformation(m_OrthoRectificationFilter->GetOutput());
 }
-
+template <      class TInputImage, 
+	    	class TOutputImage, 
+	    	class TMapProjection, 
+	    	class TInterpolatorPrecision>
+void
+OrthoRectificationFilter<       TInputImage, 
+			   	TOutputImage, 
+			   	TMapProjection, 
+			   	TInterpolatorPrecision>
+::GenerateInputRequestedRegion(void)
+{
+  Superclass::GenerateInputRequestedRegion();
+  m_OrthoRectificationFilter->GetOutput()->UpdateOutputInformation();
+  m_OrthoRectificationFilter->GetOutput()->SetRequestedRegion(this->GetOutput()->GetRequestedRegion());
+  m_OrthoRectificationFilter->GetOutput()->PropagateRequestedRegion();
+}
 
 
 
@@ -108,12 +123,12 @@ OrthoRectificationFilter<       TInputImage,
 {
         // This is done here instead of inside the GenerateData() method so that the pipeline negociation
         // use the minipipeline instead of default ITK methods.
-        m_OrthoRectificationFilter->GraftOutput(this->GetOutput());
-        //m_OrthoRectificationFilter->GetOutput()->UpdateOutputInformation();
-        //m_OrthoRectificationFilter->GetOutput()->PropagateRequestedRegion();
-        //m_OrthoRectificationFilter->GetOutput()->UpdateOutputData();
-        m_OrthoRectificationFilter->Update();
-        this->GraftOutput(m_OrthoRectificationFilter->GetOutput());
+  m_OrthoRectificationFilter->GraftOutput(this->GetOutput());
+//         m_OrthoRectificationFilter->GetOutput()->UpdateOutputInformation();
+//         m_OrthoRectificationFilter->GetOutput()->PropagateRequestedRegion();
+//         m_OrthoRectificationFilter->GetOutput()->UpdateOutputData();
+  m_OrthoRectificationFilter->Update();
+  this->GraftOutput(m_OrthoRectificationFilter->GetOutput());
         //m_OrthoRectificationFilter->Update();
 }
   
