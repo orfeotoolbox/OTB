@@ -71,7 +71,7 @@ namespace otb
 	      TOutput outPixel;
 	      double temp, temp2;
 	      temp = static_cast<double>(inPixel)*m_Coefficient + m_Residu;
-	      temp2 =  temp / (1 + m_SphericalAlbedo *  temp);
+	      temp2 =  temp / (1. + m_SphericalAlbedo *  temp);
 	      outPixel = static_cast<TOutput>(temp2);
 	      
 
@@ -165,7 +165,7 @@ namespace otb
 	      coef = static_cast<double>(m_AtmosphericRadiativeTerms->GetTotalGaseousTransmission(i)
 					 * m_AtmosphericRadiativeTerms->GetDownwardTransmittance(i)
 					 * m_AtmosphericRadiativeTerms->GetUpwardTransmittance(i)     );
-	      coef = 1 / coef;
+	      coef = 1. / coef;
 	      res = -m_AtmosphericRadiativeTerms->GetIntrinsicAtmosphericReflectance(i) * coef;
 
 	      FunctorType functor;

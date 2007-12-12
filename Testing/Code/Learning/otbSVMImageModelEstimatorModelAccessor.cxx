@@ -126,7 +126,7 @@ int otbSVMImageModelEstimatorModelAccessor( int argc, char* argv[] )
     {
         itkGenericExceptionMacro(<<"rhos NULL"); 
     }
-    f << "      ";
+    f << std::setprecision(10) <<"      ";
     for(unsigned int i=0;i<taille;i++)
     {
         f << " " << rhos[i];

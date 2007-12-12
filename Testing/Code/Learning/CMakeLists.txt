@@ -16,8 +16,8 @@ SET(LEARNING_TESTS ${CXX_TEST_PATH}/otbLearningTests)
 
 #EPSILON est different de 0.0 pour les tests multiplateformes avec différentes options de compilation.
 SET(EPSILON 0.0000000001)
-SET(BIGEPSILON 0.001)
-
+SET(EPSILON_10e3 0.001)
+SET(EPSILON_10e4 0.0001)
 
 # -------            otb::SVMModel   ------------------------------
 
@@ -75,7 +75,7 @@ ADD_TEST(leTuSVMImageModelEstimatorNew ${LEARNING_TESTS}
         otbSVMImageModelEstimatorNew)
 
 ADD_TEST(leTvSVMImageModelEstimatorTrain ${LEARNING_TESTS}
---compare-ascii ${BIGEPSILON}  ${BASELINE_FILES}/leTvsvm_model_image 
+--compare-ascii ${EPSILON_10e3}  ${BASELINE_FILES}/leTvsvm_model_image 
                         ${TEMP}/leTvsvm_model_image 
         otbSVMImageModelEstimatorTrain
 	${INPUTDATA}/ROI_QB_MUL_4.tif
@@ -83,7 +83,7 @@ ADD_TEST(leTvSVMImageModelEstimatorTrain ${LEARNING_TESTS}
 	${TEMP}/leTvsvm_model_image)
 
 ADD_TEST(leTvSVMImageModelEstimatorModelAccessor ${LEARNING_TESTS}
---compare-ascii ${TOL}  ${BASELINE_FILES}/leSVMModelEstimatorModelAccessor.txt
+--compare-ascii ${EPSILON_10e4}  ${BASELINE_FILES}/leSVMModelEstimatorModelAccessor.txt
                         ${TEMP}/leSVMModelEstimatorModelAccessor.txt
         otbSVMImageModelEstimatorModelAccessor
 	${INPUTDATA}/ROI_QB_MUL_4.tif
@@ -96,7 +96,7 @@ ADD_TEST(leTuSVMPointSetModelEstimatorNew ${LEARNING_TESTS}
         otbSVMPointSetModelEstimatorNew)
 
 ADD_TEST(leTuSVMPointSetModelEstimatorTrain ${LEARNING_TESTS}  
---compare-ascii ${BIGEPSILON}  ${BASELINE_FILES}/leTvsvm_model_pointset 
+--compare-ascii ${EPSILON_10e3}  ${BASELINE_FILES}/leTvsvm_model_pointset 
                         ${TEMP}/leTvsvm_model_pointset 
         otbSVMPointSetModelEstimatorTrain
 	${TEMP}/leTvsvm_model_pointset)
