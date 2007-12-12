@@ -97,19 +97,19 @@ SurfaceAdjencyEffect6SCorrectionSchemeFilter<TInputImage, TOutputImage>
   WeightingMatrixType radiusMatrix(2*m_WindowRadius+1,2*m_WindowRadius+1);
   radiusMatrix.Fill(0.);
 
-  double center = static_cast<double>(m_WindowRadius+1);
- 
-  for(int i = 0; i<m_WindowRadius; ++i)
+  double center = static_cast<double>(m_WindowRadius);
+
+  for(unsigned int i = 0; i<m_WindowRadius+1; ++i)
     {
-      for(int j = 0; j<m_WindowRadius; ++j)
+      for(unsigned int j = 0; j<m_WindowRadius+1; ++j)
 	{
 	  double id = static_cast<double>(i);
 	  double jd = static_cast<double>(j);
 	  double currentRadius = m_PixelSpacingInKilometers*vcl_sqrt(vcl_pow(id-center,2)+vcl_pow(jd-center,2));
 	  radiusMatrix(i,j)=currentRadius;
-	  radiusMatrix(m_WindowRadius-i,j)=currentRadius;
-	  radiusMatrix(m_WindowRadius-i,m_WindowRadius-j)=currentRadius;
-	  radiusMatrix(i,m_WindowRadius-j)=currentRadius;
+	  radiusMatrix(2*m_WindowRadius-i,j)=currentRadius;
+	  radiusMatrix(2*m_WindowRadius-i,2*m_WindowRadius-j)=currentRadius;
+	  radiusMatrix(i,2*m_WindowRadius-j)=currentRadius;
 	}
     }
 
@@ -121,9 +121,9 @@ SurfaceAdjencyEffect6SCorrectionSchemeFilter<TInputImage, TOutputImage>
      
       currentWeightingMatrix.Fill(0.);
 
-      for(int i = 0; i<2*m_WindowRadius+1; ++i)
+      for(unsigned int i = 0; i<2*m_WindowRadius+1; ++i)
 	{
-	  for(int j = 0; j<2*m_WindowRadius+1; ++j)
+	  for(unsigned int j = 0; j<2*m_WindowRadius+1; ++j)
 	    {
 	      double notUsed1,notUsed2;
 	      double factor = 1;
