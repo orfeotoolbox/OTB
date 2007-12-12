@@ -38,7 +38,17 @@ ADD_TEST(BayesianFusionImageFilterTest ${EXE_TESTS}
 	0.9999
 )
 
-
+ADD_TEST(PanSharpeningExampleTest ${EXE_TESTS} 
+    --compare-image ${TOL}  ${BASELINE}/PanSharpeningExampleTest.tif
+                           ${TEMP}/PanSharpeningExampleTest.tif
+        PanSharpeningExampleTest
+	${INPUTDATA}/QB_Toulouse_Ortho_PAN.tif
+	${INPUTDATA}/QB_Toulouse_Ortho_XS.tif 
+	${TEMP}/PanSharpeningExampleTest.tif
+	${TEMP}/PanSharpeningExampleTest1.png
+	${TEMP}/PanSharpeningExampleTest2.png
+	${TEMP}/PanSharpeningExampleTest3.png
+)
 
 INCLUDE_DIRECTORIES("${OTBTesting_BINARY_DIR}")
 

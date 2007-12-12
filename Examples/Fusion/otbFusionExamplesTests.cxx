@@ -26,8 +26,15 @@
 void RegisterTests()
 {
 REGISTER_TEST(BayesianFusionImageFilterTest);
+REGISTER_TEST(PanSharpeningExampleTest);
 }
 
 #undef main
 #define main BayesianFusionImageFilterTest
 #include "BayesianFusionImageFilter.cxx"
+             
+#undef main
+#define main PanSharpeningExampleTest
+#include "PanSharpeningExample.cxx"
+                          
+             
