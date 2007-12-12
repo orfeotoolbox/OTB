@@ -368,9 +368,7 @@ int main( int argc, char *argv[] )
   //  you find a good compromise on the time it takes to compute one evaluation
   //  of the Metric. Note that it is not useful to have very fast evaluations
   //  of the Metric if the noise in their values results in more iterations
-  //  being required by the optimizer to converge. You must then study the
-  //  behavior of the metric values as the iterations progress, just as
-  //  illustrated in section~\ref{sec:MonitoringImageRegistration}.
+  //  being required by the optimizer to converge. 
   //
   //  \index{itk::Mutual\-Information\-Image\-To\-Image\-Metric!SetNumberOfSpatialSamples()}
   //  \index{itk::Mutual\-Information\-Image\-To\-Image\-Metric!Trade-offs}

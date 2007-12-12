@@ -407,7 +407,7 @@ int main (int argc, char* argv[])
   //
   // One must also specify the origin, size and spacing of the output deformation field.
   //
-  // Software Guide : endLatex
+  // Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
 

@@ -133,7 +133,7 @@ int main( int argc, char* argv[] )
   
 // Software Guide : BeginLatex
 //
-// If your image is not in Toulouse (in region 31 to be exact), you need to 
+// Now we need to 
 // instanciate the map projection, set the {\em zone} and {\em hemisphere} 
 // parameters and pass this projection to the orthorectification filter.
 //
@@ -161,7 +161,7 @@ int main( int argc, char* argv[] )
 // Software Guide : EndLatex
 
 
-// Software Guide : BeginCodeSnippet
+
    
 
 	
@@ -180,11 +180,10 @@ int main( int argc, char* argv[] )
 			
 //   orthoRectifFilter->SetInput(changeInfo->GetOutput());
 
-  
+// Software Guide : BeginCodeSnippet  
   typedef otb::PerBandVectorImageFilter<VectorImageType, VectorImageType, OrthoRectifFilterType> PerBandFilterType;
   PerBandFilterType::Pointer perBandFilter=PerBandFilterType::New();
   perBandFilter->SetFilter(orthoRectifFilter);
-//   perBandFilter->SetInput(changeInfo->GetOutput());
   perBandFilter->SetInput(reader->GetOutput());
   
 // Software Guide : EndCodeSnippet	
@@ -233,7 +232,6 @@ int main( int argc, char* argv[] )
 
 // Software Guide : BeginCodeSnippet
   
-//   writer->SetInput(orthoRectifFilter->GetOutput());
   writer->SetInput(perBandFilter->GetOutput());
 				
   writer->SetTilingStreamDivisions();
