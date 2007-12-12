@@ -38,7 +38,7 @@
 //
 // \begin{equation}
 // \frac{XS}{\mathrm{Filtered}(PAN)} PAN
-// /end{equation}
+// \end{equation}
 //
 // Software Guide : EndLatex 
 
