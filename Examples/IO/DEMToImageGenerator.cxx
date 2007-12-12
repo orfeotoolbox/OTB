@@ -242,8 +242,10 @@ int main(int argc, char * argv[])
  
    // Software Guide : BeginLatex
    //
-   // Let's now run this example using as input the Srtm datas contained in 
-   // \code{DEM\_srtm} folder.
+   // Let's now run this example using as input the SRTM data contained in 
+   // \code{DEM\_srtm} folder. Figure \redf{fig:DEMToImageGenerator}
+   // shows the obtained DEM. Invalid data values -- hidden areas due
+   // to SAR shadowing -- are set to zero.
    //
    //
    // \begin{figure} \center
