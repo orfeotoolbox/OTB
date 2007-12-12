@@ -132,7 +132,6 @@ SurfaceAdjencyEffect6SCorrectionSchemeFilter<TInputImage, TOutputImage>
 	      currentWeightingMatrix(i,j)=factor;
 	    }
 	}
-      std::cout<<currentWeightingMatrix<<std::endl;
       m_WeightingValues.push_back(currentWeightingMatrix);
     }  
   
