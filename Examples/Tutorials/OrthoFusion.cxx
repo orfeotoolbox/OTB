@@ -31,23 +31,15 @@
 
 // Software Guide : BeginCodeSnippet
 
-// iostream is used for general output
-// #include <iostream>
-// #include <iterator>
-// #include <stdlib.h>
-
 #include "otbMacro.h"
 #include "otbImage.h"
 #include "otbVectorImage.h"
 #include "otbImageFileReader.h"
 #include "otbStreamingImageFileWriter.h"
-// #include "otbStreamingResampleImageFilter.h"
-
 
 #include "itkChangeInformationImageFilter.h"
 #include "otbPerBandVectorImageFilter.h"
 
-// #include "otbBayesianFusionFilter.h"
 #include "otbSimpleRcsPanSharpeningFusionImageFilter.h"
 
 #include "init/ossimInit.h"
@@ -65,7 +57,7 @@ int main( int argc, char* argv[] )
   //  Software Guide : BeginLatex
   //
   // We initialize ossim which is required for the orthorectification and we 
-  // check that all parameters are provided. Basically, we need
+  // check that all parameters are provided. Basically, we need:
   // \begin{itemize}
   // \item the name of the input PAN image; 
   // \item the name of the input XS image;
@@ -85,7 +77,11 @@ int main( int argc, char* argv[] )
 
   if(argc!=11)
   {
-    std::cout << argv[0] <<" <input_pan_filename> <input_xs_filename> <output_filename> <utm zone> <x_ground_upper_left_corner> <y_ground_upper_left_corner> <x_Size> <y_Size> <x_groundSamplingDistance> <y_groundSamplingDistance (should be negative since origin is upper left)>" 
+  std::cout << argv[0] <<" <input_pan_filename> <input_xs_filename> ";
+  std::cout << "<output_filename> <utm zone> <x_ground_upper_left_corner> ";
+  std::cout << "<y_ground_upper_left_corner> <x_Size> <y_Size> ";
+  std::cout << "<x_groundSamplingDistance> ";
+  std::cout << "<y_groundSamplingDistance (should be negative since origin is upper left)>" 
         << std::endl;
 
     return EXIT_FAILURE;
@@ -118,10 +114,10 @@ int main( int argc, char* argv[] )
 
   //  Software Guide : BeginLatex
   //
-  // We declare the projection (here we chose the UTM projection, other choice 
+  // We declare the projection (here we chose the UTM projection, other choices 
   // are possible). We also declare the orthorectification filter. Note that
   // the \doxygen{otb}{OrthoRectificationFilter} is designed to work with one
-  // band images. To be able to process the XS image (which are 
+  // band images. To be able to process the XS image (which is a 
   // \doxygen{otb}{VectorImage}), we need to use the 
   // \doxygen{otb}{PerBandVectorImageFilter} which is going to apply the filter
   // set via the method \code{SetFilter()} to all spectral bands.
@@ -134,7 +130,8 @@ int main( int argc, char* argv[] )
   typedef otb::UtmInverseProjection utmMapProjectionType ;
   typedef otb::OrthoRectificationFilter<ImageType, ImageType,
   utmMapProjectionType> OrthoRectifFilterType ;
-  typedef otb::PerBandVectorImageFilter<VectorImageType, VectorImageType, OrthoRectifFilterType> VectorOrthoRectifFilterType;
+  typedef otb::PerBandVectorImageFilter<VectorImageType,
+    VectorImageType, OrthoRectifFilterType> VectorOrthoRectifFilterType;
 	
   OrthoRectifFilterType::Pointer  orthoRectifPAN =
       OrthoRectifFilterType::New();
@@ -152,13 +149,13 @@ int main( int argc, char* argv[] )
   orthoRectifXS->SetMapProjection(utmMapProjection);
 // Software Guide : EndCodeSnippet				
 
-  //  Software Guide : BeginLatex
+
   //
   //  ************** This shouldn't be necessary any more !!!**********
   //
-  //  Software Guide : EndLatex 
 
-// Software Guide : BeginCodeSnippet
+
+
   
 //   ImageType::PointType originNull;
 //   originNull[0]=0;
@@ -172,8 +169,9 @@ int main( int argc, char* argv[] )
 //   changeInfoPAN->ChangeOriginOn();
 //   changeInfoPAN->SetOutputOrigin(originNull);
 //   changeInfoPAN->GenerateOutputInformation();
+  // Software Guide : BeginCodeSnippet
   orthoRectifPAN->SetInput(readerPAN->GetOutput());
-
+  // Software Guide : EndCodeSnippet
   
 //   readerXS->GenerateOutputInformation();
   
@@ -183,6 +181,7 @@ int main( int argc, char* argv[] )
 //   changeInfoXS->ChangeOriginOn();
 //   changeInfoXS->SetOutputOrigin(originNull);
 //   changeInfoXS->GenerateOutputInformation();
+    // Software Guide : BeginCodeSnippet
   orthoRectifXSVector->SetInput(readerXS->GetOutput());
   
   // Software Guide : EndCodeSnippet				
