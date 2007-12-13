@@ -23,10 +23,9 @@
 #define ITK_LEAN_AND_MEAN
 #endif
 //  Software Guide : BeginCommandLineArgs
-//  INPUTS: {Romania_Extract.tif}, {atmosphericCorrectionSequencement_alpha_beta.txt}, {atmosphericCorrectionSequencement_solar_illumination.txt}, {atmosphericCorrectionSequencement_wavelenght_spectral_bands_spot4_1.txt}
-//  
-// 
+//  INPUTS: {Romania_Extract.tif}
 //  OUTPUTS: {AtmosphericCorrectionSequencement.tif}
+//  ${OTB_SOURCE_DIR}/Examples/Data/atmosphericCorrectionSequencement_alpha_beta.txt ${OTB_SOURCE_DIR}/Examples/Data/atmosphericCorrectionSequencement_solar_illumination.txt atmosphericCorrectionSequencement_wavelenght_spectral_bands_spot4_1.txt 27.3 4 12 27.3 152.7 2.5 -77.0 1013. 2.48134 0.34400 1 0.199854 2 0.020
 //  Software Guide : EndCommandLineArgs
 
 // Software Guide : BeginLatex
@@ -38,24 +37,25 @@
 //
 //
 // The following example illustrates the application of an atmospheric correction to
-// a Pleiade image.
+// an optical multispectral image similar to Pl\'eaides.
 // This correction is made using in four steps :
 // \begin{itemize}
-// \item Numerical to Luminance image changeover;
-// \item Luminance to Refletance image changeover;
-// \item Reflectance to Atmospheric correction changeover;
-// \item Correction of the adjency effects : neighborhood contribution taking into account.
+// \item digital number to luminance correction;
+// \item luminance to refletance image conversion;
+// \item atmospheric correction for TOA to TOC reflectance estimation;
+// \item correction of the adjency effects taking into account the neighborhood contribution.
 // \end{itemize}
 // 
-// The manipulation of each class used for the different step and the link with the 6S radiometry 
-// library will be explained.
+// The manipulation of each class used for the different steps and the
+// link with the 6S radiometry library will be explained.
 //
-// Let's look at the minimal code required to use this algorithm. First, the following header 
-// defining the \doxygen{otb}{AtmosphericCorrectionSequencement} 
-// class must be included.
-// For the numerical to luminance image, luminance to refletance image, and 
-// reflectance to atmospheric correction image changeover and the neighborhood 
-// correction, four includes are needed. 
+// Let's look at the minimal code required to use this
+// algorithm. First, the following header defining the
+// \doxygen{otb}{AtmosphericCorrectionSequencement} class must be
+// included.  For the numerical to luminance image, luminance to
+// refletance image, and reflectance to atmospheric correction image
+// corrections and the neighborhood correction, four header files are
+// needed.
 // Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
@@ -66,9 +66,11 @@
 // Software Guide : EndCodeSnippet
 
 // Software Guide : BeginLatex
-// This chain use 6S to compute radiometric parameters. To manipulate 6S datas, three classes
-// are needed (the first to store the metadatas, the second that
-// calls 6S class and generates the asked informations which will be stored in the last class).
+// This chain uses the 6S radiative
+// transfer code to compute radiometric parameters. To manipulate 6S
+// data, three classes are needed (the first to store the metadata,
+// the second that calls 6S class and generates the information
+// which will be stored in the last class).
 // Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
@@ -88,12 +90,7 @@ int main( int argc, char *argv[] )
     {
       std::cerr << "Missing Parameters " << std::endl;
       std::cerr << "Usage: " << argv[0]<< std::endl;
-      std::cerr << "    inputImage , alphaBetaFileName , solarIlluminationFileName , wavelenghtSpectralBandFileName ," << std::endl;
-      std::cerr << "    outputImage,"  << std::endl;
-      std::cerr << "    zenithalSolarRadius , day , month ,"  << std::endl;
-      std::cerr << "    solarZenithalAngle , solarAzimutalAngle , viewingZenithalAngle , viewingAzimutalAngle ,"  << std::endl;
-      std::cerr << "    atmosphericPressure , waterVaporAmount , ozoneAmount , aerosolModel , AerosolOptical ,"  << std::endl;
-      std::cerr << "    adjencyEffect6SCorrectionWindowRadius , pixelSpacingInKilometers" << std::endl;
+      std::cerr << " inputImage outputImage atmosphericCorrectionSequencement_alpha_beta.txt atmosphericCorrectionSequencement_solar_illumination.txt atmosphericCorrectionSequencement_wavelenght_spectral_bands_spot4_1.txt elevation azimuth day month AtmosphericCorrectionParametersTo6SAtmosphericRadiativeTerms (9 parameters) SurfaceAdjencyEffect6SCorrectionSchemeFilter (2 parameters                )"<< std::endl;
       std::cerr << std::endl;
       return 1;
     }
@@ -103,7 +100,7 @@ int main( int argc, char *argv[] )
   // The image types are now defined using pixel types and 
   // dimension. The input image is defined as an \doxygen{otb}{VectorImage}, 
   // the output is a \doxygen{otb}{VectorImage}. To simplify, input and 
-  // output image type are the same one.
+  // output image types are the same one.
   //
   // Software Guide : EndLatex 
   
@@ -120,9 +117,10 @@ int main( int argc, char *argv[] )
 
   // Software Guide : BeginLatex
   //  
-  // The \code{GenerateOutputInformation()} reader method is invoqued
-  // to known the number of component per pixel of the image.  It is recommended to 
-  // place GenerateOutputInformation calls in a \code{try/catch} block in case 
+  // The \code{GenerateOutputInformation()} reader method is called
+  // to know the number of component per pixel of the image.  It is
+  // recommended to  
+  // place \code{GenerateOutputInformation} calls in a \code{try/catch} block in case 
   // errors occur and exceptions are thrown.
   //
   // Software Guide : EndLatex 
@@ -150,19 +148,20 @@ int main( int argc, char *argv[] )
   //-------------------------------
   // Software Guide : BeginLatex
   //
-  // \doxygen{otb}{ImageToLuminanceImageFilter}
-  // type is defined and instancied. This class used a functor applied 
-  // to each component of each pixel (\mathbf{X^{k}}) which formula is the following one.
+  // The \doxygen{otb}{ImageToLuminanceImageFilter}
+  // type is defined and instancied. This class uses a functor applied 
+  // to each component of each pixel ($\mathbf{X^{k}}$) whose formula is:
   //
   // \begin{equation}
-  // \mathbf{L_{TOA}^{k}} = \frac{ X^{k} } { \alpha_{k} } + \beta_{k}
+  // \mathbf{L_{TOA}^{k}} = \frac{ X^{k} } { \alpha_{k} } + \beta_{k}.
   // \end{equation}
   //
   // Where :
   // \begin{itemize}
-  // \item $\mathbf{L_{TOA}^{k}}$ is the incidente luminance (in W.m^{-2}.sr^{-1}.\mum^{-1}).
-  // \item X^{k} is the numeric account measured (ie. the input image pixel component).
-  // \item $\alpha_{k}$ is the absolute calibration gain for the channel k.
+  // \item $\mathbf{L_{TOA}^{k}}$ is the incident luminance (in
+  // $W.m^{-2}.sr^{-1}.\mu m^{-1}$);
+  // \item $\mathbf{X^{k}}$ is the measured digital number (ie. the input image pixel component);
+  // \item $\alpha_{k}$ is the absolute calibration gain for the channel k;
   // \item $\beta_{k}$ is the absolute calibration bias for the channel k.
   // \end{itemize}
   //
@@ -182,7 +181,7 @@ int main( int argc, char *argv[] )
   alpha.Fill(0);
   beta.Fill(0);
   std::ifstream fin;
-  fin.open(argv[2]);
+  fin.open(argv[3]);
   double dalpha(0.), dbeta(0.);
   for( unsigned int i=0 ; i < nbOfComponent ; i++)
     {
@@ -194,8 +193,8 @@ int main( int argc, char *argv[] )
   fin.close();
 
   // Software Guide : BeginLatex
-  // $\alpha$ and $\beta$ are read from a file text given in input, 
-  // stored in vector and given to the class. 
+  // Here, $\alpha$ and $\beta$ are read from an ASCII file given in input, 
+  // stored in a vector and passed to the class. 
   // Software Guide : EndLatex 
 
    // Software Guide : BeginCodeSnippet
@@ -206,21 +205,22 @@ int main( int argc, char *argv[] )
   //-------------------------------
   // Software Guide : BeginLatex
   //
-  // \doxygen{otb}{LuminanceToReflectanceImageFilter}
+  // The \doxygen{otb}{LuminanceToReflectanceImageFilter}
   // type is defined and instancied. 
   // This class used a functor applied to each component of each pixel 
-  // of the luminance filter output (\mathbf{L_{TOA}^{k}}) the following formula.
+  // of the luminance filter output ($\mathbf{L_{TOA}^{k}}$):
   //
   // \begin{equation}
-  // \rho_{TOA}^{k} = \frac{ \pi.\mathbf{L_{TOA}^{k}} } { E_{S}^{k}.cos(\theta_{S}).d/d_{0} }
+  // \rho_{TOA}^{k} = \frac{ \pi.\mathbf{L_{TOA}^{k}} } { E_{S}^{k}.cos(\theta_{S}).d/d_{0} }.
   // \end{equation}
   //
-  //// Where :
+  // Where :
   // \begin{itemize}
-  // \item $\mathbf{rho_{TOA}^{k}}$ is the reflectance measured by at the sensor.
-  // \item $\theta_{S}$ is the zenithal solar angle in degrees.
+  // \item $\mathbf{rho_{TOA}^{k}}$ is the reflectance measured by the sensor;
+  // \item $\theta_{S}$ is the zenithal solar angle in degrees;
   // \item $E_{S}^{k}$ is the solar illumination out of the atmosphere measured at a distance 
-  // d_{0} from the earth.\item d/d_{0} is the ratio between the Earth-Sun distance at 
+  // $d_{0}$ from the earth;
+  // \item $d/d_{0}$ is the ratio between the Earth-Sun distance at 
   // the acquisition date and the mean Earth-Sun distance. The ratio can be directly 
   // given to the class or computed using a 6S routine. 
   // In the last case (that is the one of this example), the user has to precise 
@@ -241,7 +241,7 @@ int main( int argc, char *argv[] )
   VectorType solarIllumination(nbOfComponent);
   solarIllumination.Fill(0);
   
-  fin.open(argv[3]);
+  fin.open(argv[4]);
   double dsolarIllumination(0.);
   for( unsigned int i=0 ; i < nbOfComponent ; i++)
   {
@@ -251,15 +251,17 @@ int main( int argc, char *argv[] )
   fin.close();
    
   // Software Guide : BeginLatex
-  // The solar illumination is read from a file text given in input, stored in vector 
+  // The solar illumination is read from a ASCII file given in input,
+  // stored in a vector 
   // and given to the class.
   // Day, month and zenital solar angle are inputs and can be directly given to the class.   
   // Software Guide : EndLatex 
 
   // Software Guide : BeginCodeSnippet
-  filterLuminanceToReflectance->SetZenithalSolarAngle(static_cast<double>(atof(argv[6])));
-  filterLuminanceToReflectance->SetDay(atoi(argv[7]));
-  filterLuminanceToReflectance->SetMonth(atoi(argv[8])); 
+  filterLuminanceToReflectance->SetZenithalSolarAngle(
+    static_cast<double>(atof(argv[7])));
+  filterLuminanceToReflectance->SetDay(atoi(argv[8]));
+  filterLuminanceToReflectance->SetMonth(atoi(argv[9])); 
   filterLuminanceToReflectance->SetSolarIllumination(solarIllumination);
   // Software Guide : EndCodeSnippet
 
@@ -269,7 +271,7 @@ int main( int argc, char *argv[] )
   // At this step of the chain, radiometric informations are nedeed. Those informations
   // will be computed from different parameters stored in a 
   // \doxygen{otb}{AtmosphericCorrectionParameters} class intance. 
-  // This "container" will be given to an 
+  // This {\em container} will be given to an 
   // \doxygen{otb}{AtmosphericCorrectionParametersTo6SAtmosphericRadiativeTerms}
   // class instance which will call a 6S routine that will compute the needed 
   // radiometric informations and store them in a
@@ -283,12 +285,14 @@ int main( int argc, char *argv[] )
   // Software Guide : EndLatex 
   
   // Software Guide : BeginCodeSnippet
-  typedef otb::AtmosphericCorrectionParametersTo6SAtmosphericRadiativeTerms     
-                                AtmosphericCorrectionParametersTo6SRadiativeTermsType;
-  typedef otb::AtmosphericCorrectionParameters                                  
-                                AtmosphericCorrectionParametersType;
-  typedef otb::AtmosphericRadiativeTerms                                        
-                                AtmosphericRadiativeTermsType;
+  typedef otb::AtmosphericCorrectionParametersTo6SAtmosphericRadiativeTerms
+                       AtmosphericCorrectionParametersTo6SRadiativeTermsType;
+  
+  typedef otb::AtmosphericCorrectionParameters
+                                         AtmosphericCorrectionParametersType;
+
+  typedef otb::AtmosphericRadiativeTerms
+                                               AtmosphericRadiativeTermsType;
   // Software Guide : EndCodeSnippet
   typedef AtmosphericCorrectionParametersType::AerosolModelType                 
                                 AerosolModelType;
@@ -311,7 +315,7 @@ int main( int argc, char *argv[] )
   std::string sString;
   ValuesVectorType vector;
   
-  fin.open(argv[4]);
+  fin.open(argv[5]);
   fin >> nbBands;
   for(unsigned int i=0 ; i<nbBands ; i++)
   {
@@ -338,15 +342,15 @@ int main( int argc, char *argv[] )
  
   // Software Guide : BeginLatex
   //
-  // \doxygen{otb}{AtmosphericCorrectionParameters} class needs some various parameters :
+  // The \doxygen{otb}{AtmosphericCorrectionParameters} class needs several parameters :
   //  \begin{itemize}
   // \item The zenithal and azimutal solar angles that describe the solar incidence 
   // configuration (in degrees);
-  // \item The zenithal and azimutal viewing angles that describe the viewing 
+  // \item The zenithal and azimuthal viewing angles that describe the viewing 
   // direction (in degrees); 
   // \item The month and the day of the acquisition;
   // \item The atmospheric pressure;
-  // \item The water vapor amount that is the total water vapor content over vertical 
+  // \item The water vapor amount, that is, the total water vapor content over vertical 
   // atmospheric column;
   // \item The ozone amount that is the Stratospheric ozone layer content;
   // \item The aerosol model that is the kind of particles (no aerosol, continental,
@@ -364,18 +368,38 @@ int main( int argc, char *argv[] )
 
   // Set parameters
   // Software Guide : BeginCodeSnippet
-  dataAtmosphericCorrectionParameters->SetSolarZenithalAngle(static_cast<double>(atof(argv[9])));
-  dataAtmosphericCorrectionParameters->SetSolarAzimutalAngle(static_cast<double>(atof(argv[10])));
-  dataAtmosphericCorrectionParameters->SetViewingZenithalAngle(static_cast<double>(atof(argv[11])));
-  dataAtmosphericCorrectionParameters->SetViewingAzimutalAngle(static_cast<double>(atof(argv[12])));
-  dataAtmosphericCorrectionParameters->SetMonth(atoi(argv[8]));
-  dataAtmosphericCorrectionParameters->SetDay(atoi(argv[7]));
-  dataAtmosphericCorrectionParameters->SetAtmosphericPressure(static_cast<double>(atof(argv[13]))); 
-  dataAtmosphericCorrectionParameters->SetWaterVaporAmount(static_cast<double>(atof(argv[14])));
-  dataAtmosphericCorrectionParameters->SetOzoneAmount(static_cast<double>(atof(argv[15])));
-  AerosolModelType aerosolModel = static_cast<AerosolModelType>(::atoi(argv[16]));
+  dataAtmosphericCorrectionParameters->SetSolarZenithalAngle(
+    static_cast<double>(atof(argv[10])));
+
+  dataAtmosphericCorrectionParameters->SetSolarAzimutalAngle(
+    static_cast<double>(atof(argv[11])));
+
+  dataAtmosphericCorrectionParameters->SetViewingZenithalAngle(
+    static_cast<double>(atof(argv[12])));
+
+  dataAtmosphericCorrectionParameters->SetViewingAzimutalAngle(
+    static_cast<double>(atof(argv[13])));
+
+  dataAtmosphericCorrectionParameters->SetMonth(atoi(argv[9]));
+
+  dataAtmosphericCorrectionParameters->SetDay(atoi(argv[8]));
+
+  dataAtmosphericCorrectionParameters->SetAtmosphericPressure(
+    static_cast<double>(atof(argv[14]))); 
+
+  dataAtmosphericCorrectionParameters->SetWaterVaporAmount(
+    static_cast<double>(atof(argv[15])));
+
+  dataAtmosphericCorrectionParameters->SetOzoneAmount(
+    static_cast<double>(atof(argv[16])));
+
+  AerosolModelType aerosolModel =
+    static_cast<AerosolModelType>(::atoi(argv[17]));
+
   dataAtmosphericCorrectionParameters->SetAerosolModel(aerosolModel);
-  dataAtmosphericCorrectionParameters->SetAerosolOptical(static_cast<double>(atof(argv[17])));
+
+  dataAtmosphericCorrectionParameters->SetAerosolOptical(
+    static_cast<double>(atof(argv[18])));
   // Software Guide : EndCodeSnippet
 
   // Software Guide : BeginLatex
@@ -388,8 +412,12 @@ int main( int argc, char *argv[] )
   // Software Guide : EndLatex 
 
  // Software Guide : BeginCodeSnippet
-  AtmosphericCorrectionParametersTo6SRadiativeTermsType::Pointer  filterAtmosphericCorrectionParametersTo6SRadiativeTerms = AtmosphericCorrectionParametersTo6SRadiativeTermsType::New();
-  filterAtmosphericCorrectionParametersTo6SRadiativeTerms->SetInput( dataAtmosphericCorrectionParameters );
+  AtmosphericCorrectionParametersTo6SRadiativeTermsType::Pointer
+    filterAtmosphericCorrectionParametersTo6SRadiativeTerms =
+    AtmosphericCorrectionParametersTo6SRadiativeTermsType::New();
+
+  filterAtmosphericCorrectionParametersTo6SRadiativeTerms->SetInput(
+    dataAtmosphericCorrectionParameters );
   // Software Guide : EndCodeSnippet
 
   // Software Guide : BeginLatex
@@ -414,36 +442,39 @@ int main( int argc, char *argv[] )
   // Software Guide : EndLatex 
 
   // Software Guide : BeginCodeSnippet
-  typedef otb::ReflectanceToSurfaceReflectanceImageFilter<ImageType, ImageType> ReflectanceToSurfaceReflectanceImageFilterType;
-  ReflectanceToSurfaceReflectanceImageFilterType::Pointer  filterReflectanceToSurfaceReflectanceImageFilter 
+  typedef otb::ReflectanceToSurfaceReflectanceImageFilter<ImageType,
+    ImageType> ReflectanceToSurfaceReflectanceImageFilterType;
+
+  ReflectanceToSurfaceReflectanceImageFilterType::Pointer
+    filterReflectanceToSurfaceReflectanceImageFilter 
   	= ReflectanceToSurfaceReflectanceImageFilterType::New();
   // Software Guide : EndCodeSnippet
 
   // Software Guide : BeginLatex
-  // The aim of the atmospheric correction is to inverse the surface reflectance 
+  // The aim of the atmospheric correction is to invert the surface reflectance 
   // (for each pixel of the input image) from the TOA reflectance and from simulations 
   // of the atmospheric radiative functions corresponding to the geometrical conditions 
   // of the observation and to the atmospheric components.
   // The process required to be applied on each pixel of the image, band by band with 
-  // the folowing formula.
+  // the folowing formula:
   // 
   // \begin{equation}
   // \rho_{S}^{unif} = \frac{ \mathbf{A} }{ 1 + Sx\mathbf{A} }
   // \end{equation}
   // Where,
   // \begin{equation}
-  // \mathbf{A} = \frac{ \rhO_{TOA} - \rhO_{atm} }{ T(\mu_{S}).T(\mu_{V}).t_{g}^{all gas} }
+  // \mathbf{A} = \frac{ \rho_{TOA} - \rho_{atm} }{ T(\mu_{S}).T(\mu_{V}).t_{g}^{all gas} }
   // \end{equation}
   //
   // With :
   // \begin{itemize}
-  // \item $\rhO_{TOA}$ is the reflectance at the top of the atmosphere;
+  // \item $\rho_{TOA}$ is the reflectance at the top of the atmosphere;
   // \item $\rho_{S}^{unif}$ is the ground reflectance under asumption
   // of a lambertian surface and an uniform environment;
-  // \item $\rhO_{atm}$ is the intrinsic atmospheric reflectance;
-  // \item t_{g}^{all gas} is the soherical albedo of the atmosphere;
-  // \item T($\mu_{S}$) is the downward transmittance;
-  // \item T($\mu_{V}$) is the upward transmittance.
+  // \item $\rho_{atm}$ is the intrinsic atmospheric reflectance;
+  // \item $t_{g}^{all gas}$ is the soherical albedo of the atmosphere;
+  // \item $T(\mu_{S})$ is the downward transmittance;
+  // \item $T(\mu_{V})$ is the upward transmittance.
   // \end{itemize} 
   // All those parameters are contained in the AtmosphericCorrectionParametersTo6SRadiativeTerms
   // output.
@@ -451,7 +482,8 @@ int main( int argc, char *argv[] )
 
   // Software Guide : BeginCodeSnippet
   filterReflectanceToSurfaceReflectanceImageFilter->
-    SetAtmosphericRadiativeTerms( filterAtmosphericCorrectionParametersTo6SRadiativeTerms->GetOutput() );
+    SetAtmosphericRadiativeTerms(
+      filterAtmosphericCorrectionParametersTo6SRadiativeTerms->GetOutput() );
   // Software Guide : EndCodeSnippet
 
 
@@ -471,13 +503,13 @@ int main( int argc, char *argv[] )
   // With :
   // \begin{itemize}
   // \item $\rho_{S}^{unif}$ is the ground reflectance under asumption of an homogeneous environment;
-  // \item T($\mu_{V}$) is the upward transmittance;
-  // \item t_{d}($\mu_{S}$) is the upward diffus transmittance;
-  // \item exp(-$\delta$/$\mu_{v}$) is the upward direct transmittance;
+  // \item $T(\mu_{V})$ is the upward transmittance;
+  // \item $t_{d}(\mu_{S})$ is the upward diffus transmittance;
+  // \item $exp(-\delta/\mu_{v})$ is the upward direct transmittance;
   // \item <$\rho{S}$> is the environment contribution to the pixel target reflectance in the total
   // observed signal.
   // \begin{equation}
-  // <\rho{S}> = <math>\sum{j}<math>\sum{i}f(r(i,j))x\rho_{S}^{unif}(i,j)<\math><\math>
+  // \rho{S} = \sum{j}\sum{i}f(r(i,j))x\rho_{S}^{unif}(i,j)
   // \end{equation}
   // where, 
   // \begin{itemize}
@@ -512,8 +544,8 @@ int main( int argc, char *argv[] )
   // Software Guide : EndLatex
   filterSurfaceAdjencyEffect6SCorrectionSchemeFilter->SetAtmosphericRadiativeTerms(filterAtmosphericCorrectionParametersTo6SRadiativeTerms->GetOutput());
   filterSurfaceAdjencyEffect6SCorrectionSchemeFilter->SetZenithalViewingAngle(dataAtmosphericCorrectionParameters->GetViewingZenithalAngle());
-  filterSurfaceAdjencyEffect6SCorrectionSchemeFilter->SetWindowRadius(atoi(argv[18]));
-  filterSurfaceAdjencyEffect6SCorrectionSchemeFilter->SetPixelSpacingInKilometers(static_cast<double>(atof(argv[19])));
+  filterSurfaceAdjencyEffect6SCorrectionSchemeFilter->SetWindowRadius(atoi(argv[19]));
+  filterSurfaceAdjencyEffect6SCorrectionSchemeFilter->SetPixelSpacingInKilometers(static_cast<double>(atof(argv[20])));
  
 
 //-------------------------------
@@ -527,14 +559,17 @@ int main( int argc, char *argv[] )
   //  Software Guide : EndLatex 
 
   // Software Guide : BeginCodeSnippet
-  writer->SetFileName(argv[5]);
+  writer->SetFileName(argv[2]);
 
   filterImageToLuminance->SetInput(reader->GetOutput());
   filterLuminanceToReflectance->SetInput(filterImageToLuminance->GetOutput());
-  filterReflectanceToSurfaceReflectanceImageFilter->SetInput(filterLuminanceToReflectance->GetOutput());
-  filterSurfaceAdjencyEffect6SCorrectionSchemeFilter->SetInput(filterReflectanceToSurfaceReflectanceImageFilter->GetOutput());
+  filterReflectanceToSurfaceReflectanceImageFilter->SetInput(
+    filterLuminanceToReflectance->GetOutput());
+  filterSurfaceAdjencyEffect6SCorrectionSchemeFilter->SetInput(
+    filterReflectanceToSurfaceReflectanceImageFilter->GetOutput());
 
-  writer->SetInput(filterSurfaceAdjencyEffect6SCorrectionSchemeFilter->GetOutput());
+  writer->SetInput(
+    filterSurfaceAdjencyEffect6SCorrectionSchemeFilter->GetOutput());
  // Software Guide : EndCodeSnippet
 
  //  Software Guide : BeginLatex
