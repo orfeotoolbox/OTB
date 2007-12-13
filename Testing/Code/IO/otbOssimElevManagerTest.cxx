@@ -16,7 +16,7 @@ int otbOssimElevManagerTest(int argc,char* argv[])
     }
 
   const ossimFilename srtmDir(argv[1]);
-  std::cout<<"ossimFilename.isDir(): "<<ossimFilename.isDir()<<std::endl;
+  std::cout<<"ossimFilename.isDir(): "<<srtmDir.isDir()<<std::endl;
   const char * outfname = argv[2];  
 
   typedef double PixelType;
