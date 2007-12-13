@@ -280,25 +280,31 @@ int main(int ac, char* av[] )
 	                                std::map<std::string,int> baselines = RegressionTestBaselines(const_cast<char*>(baselineFilenameImage.c_str()));
 	                                std::map<std::string,int>::iterator baseline = baselines.begin();
 	                                multiResult = 1;
+					std::cout<<"Number of baseline images: "<<baselines.size()<<std::endl; 
 					while(baseline!=baselines.end() && (multiResult!=0))
 					  {
+					    std::cout<<"Testing non-regression on image: "<<(baseline->first).c_str()<<std::endl;
 					    baseline->second = RegressionTestImage(cpt,testFilenameImage.c_str(),
 										   (baseline->first).c_str(),
 										   0,
 										   lToleranceDiffPixelImage);
-					    if (baseline->second != 0)
+					    
+					    multiResult = baseline->second;
+					    ++baseline;
+					  }
+					  if (multiResult != 0)
 					      {
-		                                baseline->second = RegressionTestImage(cpt,testFilenameImage.c_str(),
+					      	baseline = baselines.begin();
+		                                baseline->second 
+						= RegressionTestImage(cpt,testFilenameImage.c_str(),
 										       (baseline->first).c_str(),
 										       1,
 										       lToleranceDiffPixelImage);
 					      }
-					    multiResult = baseline->second;
-					    ++baseline;
-					  }
                                         cpt++;
 	                                result += multiResult;
 	                        }
+				
                         }
 
                         // Non-regression testing on metadata.
@@ -317,11 +323,29 @@ int main(int ac, char* av[] )
 
 	                                std::map<std::string,int> baselines = RegressionTestBaselines(const_cast<char*>(baselineFilenameImage.c_str()));
 	                                std::map<std::string,int>::iterator baseline = baselines.begin();
-	                                baseline->second = RegressionTestMetaData(testFilenameImage.c_str(),
-							 (baseline->first).c_str(),
-							 0,
-							 lToleranceDiffPixelImage);
-	                                result += baseline->second;
+	                                multiResult = 1;
+					std::cout<<"Number of baseline images: "<<baselines.size()<<std::endl; 
+					while(baseline!=baselines.end() && (multiResult!=0))
+					  {
+					    std::cout<<"Testing non-regression on image: "<<(baseline->first).c_str()<<std::endl;
+					    baseline->second = RegressionTestMetaData(testFilenameImage.c_str(),
+										   (baseline->first).c_str(),
+										   0,
+										   lToleranceDiffPixelImage);
+					    
+					    multiResult = baseline->second;
+					    ++baseline;
+					  }
+					  if (multiResult != 0)
+					      {
+					      	baseline = baselines.begin();
+		                                baseline->second 
+						= RegressionTestMetaData(testFilenameImage.c_str(),
+										       (baseline->first).c_str(),
+										       1,
+										       lToleranceDiffPixelImage);
+					      }
+  	                                result += multiResult;
 	                        }
                         }
 
@@ -341,18 +365,29 @@ int main(int ac, char* av[] )
 
 	                                std::map<std::string,int> baselines = RegressionTestBaselines(const_cast<char*>(baselineFilenameAscii.c_str()));
 	                                std::map<std::string,int>::iterator baseline = baselines.begin();
-	                                baseline->second = RegressionTestAsciiFile(testFilenameAscii.c_str(),
-							 (baseline->first).c_str(),
-							 0,
-							 lEpsilon);
-		                        if (baseline->second != 0)
-		                        {
-		                                baseline->second = RegressionTestAsciiFile(testFilenameAscii.c_str(),
-							 (baseline->first).c_str(),
-							 1,
-							 lEpsilon);
-		                        }
-	                                result += baseline->second;
+	                                multiResult = 1;
+					std::cout<<"Number of baseline files: "<<baselines.size()<<std::endl; 
+					while(baseline!=baselines.end() && (multiResult!=0))
+					  {
+					    std::cout<<"Testing non-regression on file: "<<(baseline->first).c_str()<<std::endl;
+					    baseline->second = RegressionTestAsciiFile(testFilenameAscii.c_str(),
+										   (baseline->first).c_str(),
+										   0,
+										   lEpsilon);
+					    
+					    multiResult = baseline->second;
+					    ++baseline;
+					  }
+					  if (multiResult != 0)
+					      {
+					      	baseline = baselines.begin();
+		                                baseline->second 
+						= RegressionTestAsciiFile(testFilenameAscii.c_str(),
+										       (baseline->first).c_str(),
+										       1,
+										       lEpsilon);
+					      }
+	                                result += multiResult;
 	                        }
                         }
                         // Test de non regression sur des fichiers binaires
