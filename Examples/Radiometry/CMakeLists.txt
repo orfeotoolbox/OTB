@@ -31,7 +31,7 @@ SET(EPSILON 0.000000000001)
 
 ADD_TEST(ARVIMultiChannelRAndBAndNIRVegetationIndexImageFilterTest ${EXE_TESTS}  
   --compare-image ${EPSILON}   
-  		  ${BASELINE}/ARVIRAndBAndNIRVegetationIndex.tif
+  		  ${BASELINE}/ARVIMultiChannelRAndBAndNIRVegetationIndex.tif
                   ${TEMP}/ARVIMultiChannelRAndBAndNIRVegetationIndex.tif
        ARVIMultiChannelRAndBAndNIRVegetationIndexImageFilterTest
         	  ${INPUTDATA}/poupees_sub.png
