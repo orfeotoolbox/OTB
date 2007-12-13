@@ -64,9 +64,9 @@ int main( int argc, char* argv[] )
 
   //ossimInit::instance()->initialize(argc, argv);
 
-  if(argc!=9)
+  if(argc!=11)
     {
-    std::cout << argv[0] <<" <input_filename> <output_filename> <x_ground_upper_left_corner> <y_ground_upper_left_corner> <x_Size> <y_Size> <x_groundSamplingDistance> <y_groundSamplingDistance> (should be negative since origin is upper left)>" 
+      std::cout << argv[0] <<" <input_filename> <output_filename>  <utm zone> <hemisphere N/S> <x_ground_upper_left_corner> <y_ground_upper_left_corner> <x_Size> <y_Size> <x_groundSamplingDistance> <y_groundSamplingDistance> (should be negative since origin is upper left)>" 
 	      << std::endl;
 
     return EXIT_FAILURE;
@@ -141,8 +141,8 @@ int main( int argc, char* argv[] )
 // Software Guide : BeginCodeSnippet
   utmMapProjectionType::Pointer utmMapProjection =
                                               utmMapProjectionType::New();
-  utmMapProjection->SetZone(31);
-  utmMapProjection->SetHemisphere('N');
+  utmMapProjection->SetZone(atoi(argv[3]));
+  utmMapProjection->SetHemisphere(*(argv[4]));
   orthoRectifFilter->SetMapProjection(utmMapProjection);
 				
 // Software Guide : EndCodeSnippet	
@@ -178,18 +178,18 @@ int main( int argc, char* argv[] )
   orthoRectifFilter->SetOutputStartIndex(start);
 				
   ImageType::SizeType size;
-  size[0]=atoi(argv[5]);
-  size[1]=atoi(argv[6]);
+  size[0]=atoi(argv[7]);
+  size[1]=atoi(argv[8]);
   orthoRectifFilter->SetSize(size);
 				
   ImageType::SpacingType spacing;
-  spacing[0]=atof(argv[7]);
-  spacing[1]=atof(argv[8]);
+  spacing[0]=atof(argv[9]);
+  spacing[1]=atof(argv[10]);
   orthoRectifFilter->SetOutputSpacing(spacing);
 				
   ImageType::PointType origin;
-  origin[0]=strtod(argv[3], NULL);
-  origin[1]=strtod(argv[4], NULL);
+  origin[0]=strtod(argv[5], NULL);
+  origin[1]=strtod(argv[6], NULL);
   orthoRectifFilter->SetOutputOrigin(origin);
 
 

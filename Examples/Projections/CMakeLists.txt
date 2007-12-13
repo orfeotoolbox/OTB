@@ -38,6 +38,8 @@ ADD_TEST(OrthoRectificationExampleTest ${EXE_TESTS}
     OrthoRectificationExampleTest  
 	 ${INPUTLARGEDATA}/TOULOUSE/QuickBird/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF 
 	${TEMP}/panOrthoToul.tif 
+	31
+	N
 	375000 
 	4828100 
 	500 
@@ -54,6 +56,8 @@ ADD_TEST(OrthoRectificationExampleXSTest ${EXE_TESTS}
     OrthoRectificationExampleTest  
 	 ${INPUTLARGEDATA}/TOULOUSE/QuickBird/000000128955_01_P001_MUL/02APR01105228-M1BS-000000128955_01_P001.TIF
 	${TEMP}/xsOrthoToul.tif 
+	31
+	N
 	375000 
 	4828100 
 	500 
