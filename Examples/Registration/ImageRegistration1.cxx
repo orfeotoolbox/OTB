@@ -562,14 +562,14 @@ int main( int argc, char *argv[] )
 
   //  Software Guide : BeginLatex
   //  
-  //  It is common, as the last step of a registration task, to use the
-  //  resulting transform to map the moving image into the fixed image space.
-  //  This is easily done with the \doxygen{itk}{ResampleImageFilter}. Please
-  //  refer to Section~\ref{sec:ResampleImageFilter} for details on the use
-  //  of this filter.  First, a ResampleImageFilter type is instantiated
-  //  using the image types. It is convenient to use the fixed image type as
-  //  the output type since it is likely that the transformed moving image
-  //  will be compared with the fixed image.
+  //  It is common, as the last step of a registration task, to use
+  //  the resulting transform to map the moving image into the fixed
+  //  image space.  This is easily done with the
+  //  \doxygen{itk}{ResampleImageFilter}. First, a ResampleImageFilter
+  //  type is instantiated using the image types. It is convenient to
+  //  use the fixed image type as the output type since it is likely
+  //  that the transformed moving image will be compared with the
+  //  fixed image.
   //
   //  Software Guide : EndLatex 
 
@@ -622,7 +622,7 @@ int main( int argc, char *argv[] )
 
   //  Software Guide : BeginLatex
   //  
-  //  As described in Section \ref{sec:ResampleImageFilter}, the
+  //  The
   //  ResampleImageFilter requires additional parameters to be specified, in
   //  particular, the spacing, origin and size of the output image. The default
   //  pixel value is also set to a distinct gray level in order to highlight
