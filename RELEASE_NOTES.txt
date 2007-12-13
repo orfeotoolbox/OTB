@@ -1,3 +1,68 @@
+OTB-v.2.0.0 - Changes since version 1.6.0 (2007/12/14)
+-----------------------------------------
+
+
+*Projections
+
+        - Bug correction in otb::OrthoRectificationFilter
+
+*Fusion
+
+        - Added simple Pansharpening algorithm
+        - Fixed streaming bug on BayesianFusion filter
+
+*Radiometry:
+
+        Added classes for atmospheric correction using the 6S Radiative Transfer Code:
+        - Luminance estimation otb::ImageToLuminanceImageFilter
+        - Reflectance estimation TOA: otb::LuminanceToReflectanceImageFilter
+        - Added Composite transform filter: otb::ImageToReflectanceImageFilter, 
+          equivalent to the pipeline process ImageToLuminanceImageFilter and LuminanceToReflectanceImageFilter filters
+        - Reflectance estimation TOC: otb::ReflectanceToSurfaceReflectanceImageFilter
+        - 6S effect correction: otb::SurfaceAdjencyEffect6SCorrectionSchemeFilter
+        - DEM slope and shading estimations: otb::DEMCaracteriticsExtractor
+
+
+*Common:
+
+        - Added otb::UnaryFunctorNeighborhoodVectorImageFilter
+        - Fixed bug on otb::ExtractROIBase class
+
+
+*IO:
+
+        - Bug fixed on otb::VectorImage class
+
+
+*BasicFilters:
+
+        - Bug correction in otb::StreamingStatisticsVectorImageFilter, otb::StreamingStatisticsImageFilter
+          StreamingMatrixTransposeMatrixImageFilter
+        - Added PrintableImageFilter
+        - Fixed bugs on otb::FrostImageFilter and otb::LeeImageFilter
+
+*Utilities:
+
+        - Fixed memory allocation bug on svm.cxx file 
+
+*Examples
+
+        - Tutorials: Added OrthoFusion example
+        - Radiometry: Added AtmosphericCorrectionSequencement example
+
+*Applications:
+
+        - Rename Pireo application to otbPireo
+        - Added transform coordinate point applications: otbConvertCartoToGeo otbConvertGeoToCarto
+        - Pireo corrections in CMakeLists.txt (GUI dir source code) and source code (suppress of call VnlModifiedOptimizer class)
+
+*Platforms:
+
+	- Fixed some problems under Visual and MinGW platforms.
+
+
+        
+
 OTB-v.1.6.0 - Changes since version 1.4.0 (2007/10/25)
 -----------------------------------------
 
