@@ -98,7 +98,7 @@ ADD_TEST(RatioChDetTest ${EXE_TESTS}
 ADD_TEST(KullbackLeiblerDistanceChDetTest ${EXE_TESTS}
 	--compare-n-images ${TOL} 1
 	${BASELINE}/KullbackLeiblerDistanceChDetTest.png
-	${TEMP}/KullbackLeiblerDistanceChDet.png
+	${TEMP}/KullbackLeiblerDistanceChDetTest.png
 	KullbackLeiblerDistanceChDetTest
 	${INPUTDATA}/GomaAvant.png
 	${INPUTDATA}/GomaApres.png
@@ -111,7 +111,7 @@ ADD_TEST(KullbackLeiblerDistanceChDetTest ${EXE_TESTS}
 ADD_TEST(KullbackLeiblerProfileChDetTest ${EXE_TESTS}
 	--compare-n-images ${TOL} 1
 	${BASELINE}/KullbackLeiblerProfileChDetTest.png
-	${TEMP}/KullbackLeiblerProfileChDet.png
+	${TEMP}/KullbackLeiblerProfileChDetTest.png
 	KullbackLeiblerProfileChDetTest
 	${INPUTDATA}/GomaAvant.png
 	${INPUTDATA}/GomaApres.png
