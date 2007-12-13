@@ -30,7 +30,7 @@ int otbImageToReflectanceImageFilter(int argc, char * argv[])
     {
       const char * inputFileName  = argv[1];
       const char * outputFileName = argv[2];
-      const double radius = static_cast<double>(atof(argv[3]));
+      const double angle = static_cast<double>(atof(argv[3]));
       double flux = 0.;
       int day = 1;
       int month = 1;
@@ -82,7 +82,7 @@ int otbImageToReflectanceImageFilter(int argc, char * argv[])
 
       filter->SetAlpha(alpha);
       filter->SetBeta(beta);
-      filter->SetZenithalSolarRadius(radius);
+      filter->SetZenithalSolarAngle(angle);
       filter->SetSolarIllumination(solarIllumination);
 
       if (argc==17)

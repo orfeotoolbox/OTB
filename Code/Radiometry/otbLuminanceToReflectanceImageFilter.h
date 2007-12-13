@@ -130,10 +130,10 @@ public:
   /** Give the solar illumination value. */
   itkGetConstReferenceMacro(SolarIllumination, VectorType);
 
-  /** Set the zenithal solar radius. */
-  itkSetMacro(ZenithalSolarRadius, double);
-  /** Give the zenithal solar radius. */
-  itkGetConstReferenceMacro(ZenithalSolarRadius, double);
+  /** Set the zenithal solar angle. */
+  itkSetMacro(ZenithalSolarAngle, double);
+  /** Give the zenithal solar angle. */
+  itkGetConstReferenceMacro(ZenithalSolarAngle, double);
 
  /** Set the day. */
   itkSetClampMacro(Day, int, 1, 31);
@@ -164,7 +164,7 @@ public:
   /** Constructor */
   LuminanceToReflectanceImageFilter()
     {
-    m_ZenithalSolarRadius = 1.;
+    m_ZenithalSolarAngle = 1.;
     m_FluxNormalizationCoefficient = 1.;
     m_SolarIllumination.SetSize(1);
     m_SolarIllumination.Fill(1.);
@@ -193,7 +193,7 @@ public:
 		  otb_6s_integer month = static_cast<otb_6s_integer>(m_Month);
 		  int cr(0);
 		  cr = otb_6s_varsol_(&day, &month, &dsol);
-		  coefTemp = vcl_cos(m_ZenithalSolarRadius*M_PI/180)*static_cast<double>(dsol);
+		  coefTemp = vcl_cos(m_ZenithalSolarAngle*M_PI/180)*static_cast<double>(dsol);
 		}
 	      else
 		{
@@ -202,7 +202,7 @@ public:
 	    }
 	  else
 	    {
-	      coefTemp = vcl_cos(m_ZenithalSolarRadius*M_PI/180)*m_FluxNormalizationCoefficient*m_FluxNormalizationCoefficient;
+	      coefTemp = vcl_cos(m_ZenithalSolarAngle*M_PI/180)*m_FluxNormalizationCoefficient*m_FluxNormalizationCoefficient;
 	    }
 	  functor.SetIlluminationCorrectionCoefficient(1. / coefTemp);
 	  functor.SetSolarIllumination(static_cast<double>(m_SolarIllumination[i]));
@@ -213,8 +213,8 @@ public:
                  
 private:
 
-  /** Set the zenithal soalr radius. */
-  double m_ZenithalSolarRadius;
+  /** Set the zenithal soalr angle. */
+  double m_ZenithalSolarAngle;
   /** Flux normalization coefficient. */
   double m_FluxNormalizationCoefficient;
   /* Acquisition day. */

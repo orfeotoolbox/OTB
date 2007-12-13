@@ -30,7 +30,7 @@ int otbLuminanceToReflectanceImageFilter(int argc, char * argv[])
     {
       const char * inputFileName  = argv[1];
       const char * outputFileName = argv[2];
-      const double radius = static_cast<double>(atof(argv[3]));
+      const double angle = static_cast<double>(atof(argv[3]));
       double flux = 0.;
       int day = 1;
       int month = 1;
@@ -73,7 +73,7 @@ int otbLuminanceToReflectanceImageFilter(int argc, char * argv[])
       // Instantiating object
       LuminanceToReflectanceImageFilterType::Pointer filter = LuminanceToReflectanceImageFilterType::New();
 
-      filter->SetZenithalSolarRadius(radius);
+      filter->SetZenithalSolarAngle(angle);
       filter->SetSolarIllumination(solarIllumination);
       if (argc==9)
 	{
@@ -84,7 +84,7 @@ int otbLuminanceToReflectanceImageFilter(int argc, char * argv[])
 	  filter->SetDay(day);
 	  filter->SetMonth(month); 
 	}
-      
+ 
       filter->SetInput(reader->GetOutput());
       writer->SetInput(filter->GetOutput());
       writer->Update();
