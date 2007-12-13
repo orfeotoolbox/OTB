@@ -121,10 +121,6 @@ int otbSurfaceAdjencyEffect6SCorrectionSchemeFilter(int argc, char * argv[])
   param->SetAerosolModel(aerosolModel);
   param->SetAerosolOptical(static_cast<double>(aerosolOptical));
 
-  // Output verifiacation
-  std::ofstream fout;
-  fout.open(argv[10]);
-
   ValuesVectorType vect;
   for(unsigned int j=0; j<nbChannel; j++)
     {
@@ -141,11 +137,10 @@ int otbSurfaceAdjencyEffect6SCorrectionSchemeFilter(int argc, char * argv[])
       fin.open(wavelenghFiles[j]);
       fin >> minSpectralValue;//wlinf;
       fin >> maxSpectralValue;//wlsup; 
-      fout << "CHANNEL "<<j<<"inf: "<<minSpectralValue<<"    max: "<<maxSpectralValue<<std::endl;
+ 
       while (!fin.eof() && fin.good())
 	{
 	  fin >> value;
-	  fout <<value<<std::endl;
 	  vect.push_back(value);
 	}
 
@@ -169,55 +164,6 @@ int otbSurfaceAdjencyEffect6SCorrectionSchemeFilter(int argc, char * argv[])
   writer->SetInput(filter->GetOutput());
 
   writer->Update();
-
-
- 
- fout <<" ---------------------------------------------------------"<<std::endl;
-        fout << "Inputs values:"<<std::setprecision(10)<<std::endl;
-        fout << "   ----->  SolarZenithalAngle :                        "<<solarZenithalAngle<<std::endl;
-        fout << "   ----->  SolarAzimutalAngle :                        "<<solarAzimutalAngle<<std::endl;
-        fout << "   ----->  ViewingZenithalAngle :                      "<<viewingZenithalAngle<<std::endl;
-        fout << "   ----->  ViewingAzimutalAngle :                      "<<viewingAzimutalAngle<<std::endl;
-        fout << "   ----->  Month :                                     "<<month<<std::endl;
-        fout << "   ----->  Day :                                       "<<day<<std::endl;
-        fout << "   ----->  AtmosphericPressure :                       "<<atmosphericPressure<<std::endl;
-        fout << "   ----->  WaterVaporAmount :                          "<<waterVaporAmount<<std::endl;
-        fout << "   ----->  OzoneAmount :                               "<<ozoneAmount<<std::endl;
-        fout << "   ----->  AerosolModel :                              "<<aer<<std::endl;
-        fout << "   ----->  AerosolOptical :                            "<<aerosolOptical<<std::endl;
-        fout << "   ----->  UserStep :                                  "<<functionValues->GetUserStep()<<std::endl;
-        fout <<" ---------------------------------------------------------"<<std::endl;
-        fout << "Outputs values:"<<std::endl;
-	for(unsigned  int k=0; k<nbChannel;k++)
-	  {  fout << "CHANNEL "<<k<<std::endl;
-        fout << "   ----->  atmospheric reflectance :                   "<<corrToRadia->GetOutput()->GetIntrinsicAtmosphericReflectance(k)<<std::endl;
-        fout << "   ----->  atmospheric spherical albedo :              "<<corrToRadia->GetOutput()->GetSphericalAlbedo(k)<<std::endl;
-        fout << "   ----->  total gaseous transmission :                "<<corrToRadia->GetOutput()->GetTotalGaseousTransmission(k)<<std::endl;
-        fout << "   ----->  downward transmittance :                    "<<corrToRadia->GetOutput()->GetDownwardTransmittance(k)<<std::endl;
-        fout << "   ----->  upward transmittance :                      "<<corrToRadia->GetOutput()->GetUpwardTransmittance(k)<<std::endl;
-        fout << "   ----->  upward diffuse transmittance :              "<<corrToRadia->GetOutput()->GetUpwardDiffuseTransmittance(k)<<std::endl;
-        fout << "   ----->  upward direct transmittance :               "<<corrToRadia->GetOutput()->GetUpwardDirectTransmittance(k)<<std::endl;
-        fout << "   ----->  upward diffuse transmittance for rayleigh : "<<corrToRadia->GetOutput()->GetUpwardDiffuseTransmittanceForRayleigh(k)<<std::endl;
-        fout << "   ----->  upward diffuse transmittance for aerosols : "<<corrToRadia->GetOutput()->GetUpwardDiffuseTransmittanceForAerosol(k)<<std::endl;
-        fout <<" ---------------------------------------------------------"<<std::endl;
-        fout<<"Input wavelenght band values ["<<functionValues->GetFilterFunctionValues().size()<<"]:"<<std::endl;
-  	 
-	fout << "Function Values:"<<std::endl;
-        for (unsigned int i=0; i<functionValues->GetFilterFunctionValues().size(); i++)
-	{  
-	  fout << "    "<<functionValues->GetFilterFunctionValues()[i] <<std::endl;
-	}
-
-        fout <<" ---------------------------------------------------------"<<std::endl;
-        fout<<"Output wavelenght band values 6S ["<<functionValues->GetFilterFunctionValues6S().size()<<"]:"<<std::endl;
-        for (unsigned int i=0; i<functionValues->GetFilterFunctionValues6S().size(); i++)
-	{
-	  fout<< "    "<<functionValues->GetFilterFunctionValues6S()[i] <<std::endl;
-	}
-        fout<<std::endl;
-	  }
-        fout.close();
-
 
   return EXIT_SUCCESS;
 }
