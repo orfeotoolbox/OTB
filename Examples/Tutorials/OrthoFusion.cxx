@@ -97,6 +97,8 @@ int main( int argc, char* argv[] )
 // Software Guide : BeginCodeSnippet
   typedef otb::Image<unsigned int, 2>     ImageType;
   typedef otb::VectorImage<unsigned int, 2>     VectorImageType;
+  typedef otb::Image<double, 2>     DoubleImageType;
+  typedef otb::VectorImage<double, 2>     DoubleVectorImageType;
   typedef otb::ImageFileReader<ImageType>  ReaderType;
   typedef otb::ImageFileReader<VectorImageType>  VectorReaderType;
   typedef otb::StreamingImageFileWriter<VectorImageType>  WriterType;
@@ -128,10 +130,10 @@ int main( int argc, char* argv[] )
 
 	
   typedef otb::UtmInverseProjection utmMapProjectionType ;
-  typedef otb::OrthoRectificationFilter<ImageType, ImageType,
+  typedef otb::OrthoRectificationFilter<ImageType, DoubleImageType,
   utmMapProjectionType> OrthoRectifFilterType ;
   typedef otb::PerBandVectorImageFilter<VectorImageType,
-    VectorImageType, OrthoRectifFilterType> VectorOrthoRectifFilterType;
+    DoubleVectorImageType, OrthoRectifFilterType> VectorOrthoRectifFilterType;
 	
   OrthoRectifFilterType::Pointer  orthoRectifPAN =
       OrthoRectifFilterType::New();
@@ -201,7 +203,7 @@ int main( int argc, char* argv[] )
 // Software Guide : BeginCodeSnippet
   
   typedef otb::SimpleRcsPanSharpeningFusionImageFilter
-      <ImageType,VectorImageType,VectorImageType> FusionFilterType;
+      <DoubleImageType,DoubleVectorImageType,VectorImageType> FusionFilterType;
   FusionFilterType::Pointer fusion = FusionFilterType::New();
   fusion->SetPanInput(orthoRectifPAN->GetOutput());
   fusion->SetXsInput(orthoRectifXSVector->GetOutput());
@@ -225,7 +227,7 @@ int main( int argc, char* argv[] )
   writer->SetTilingStreamDivisions();
 
   writer->Update();
-
+  
   return EXIT_SUCCESS;
 
 }
