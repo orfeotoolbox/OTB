@@ -136,12 +136,12 @@ public:
   itkGetConstReferenceMacro(ZenithalSolarRadius, double);
 
  /** Set the day. */
-  itkSetMacro(Day, int);
+  itkSetClampMacro(Day, int, 12, 31);
   /** Give the day. */
   itkGetConstReferenceMacro(Day, int);
 
  /** Set the mounth. */
-  itkSetMacro(Month, int);
+  itkSetClampMacro(Month, int, 1, 12);
   /** Give the mounth. */
   itkGetConstReferenceMacro(Month, int);
    
@@ -186,7 +186,7 @@ public:
 	  double coefTemp = 0.;  
 	  if (!m_IsSetFluxNormalizationCoefficient)
 	    {
-	      if (m_Day*m_Month != 0 && m_Day<32 && m_Month<12)
+	      if (m_Day*m_Month != 0 && m_Day<32 && m_Month<=12)
 		{
 		  otb_6s_real dsol = 0.;
 		  otb_6s_integer day = static_cast<otb_6s_integer>(m_Day);
