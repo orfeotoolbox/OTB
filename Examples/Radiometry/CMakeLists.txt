@@ -10,12 +10,15 @@ TARGET_LINK_LIBRARIES(ARVIMultiChannelRAndBAndNIRVegetationIndexImageFilter OTBR
 ADD_EXECUTABLE(NDVIRAndNIRVegetationIndexImageFilter NDVIRAndNIRVegetationIndexImageFilter.cxx )
 TARGET_LINK_LIBRARIES(NDVIRAndNIRVegetationIndexImageFilter OTBRadiometry OTBCommon OTBIO ITKNumerics ITKIO)
 
+ADD_EXECUTABLE(AtmosphericCorrectionSequencement AtmosphericCorrectionSequencement.cxx )
+TARGET_LINK_LIBRARIES(AtmosphericCorrectionSequencement OTBRadiometry OTBCommon OTBIO ITKNumerics ITKIO)
+
 IF( NOT OTB_DISABLE_CXX_TESTING AND NOT OTB_DISABLE_CXX_EXAMPLES_TESTING )
 
 SET(BASELINE ${OTB_DATA_ROOT}/Baseline/Examples/Radiometry)
 
 SET(INPUTDATA ${OTB_SOURCE_DIR}/Examples/Data)
-SET(TEMP ${OTB_BINARY_DIR}/Examples/Radiometry/Testing/Temporary)
+SET(TEMP ${OTB_BINARY_DIR}/Testing/Temporary)
 
 SET(EXE_TESTS ${CXX_TEST_PATH}/otbRadiometryExamplesTests)
 
@@ -57,12 +60,43 @@ ADD_TEST(NDVIRAndNIRVegetationIndexImageFilterTest ${EXE_TESTS}
  	${TEMP}/NDVIRAndNIRVegetationIndex3.tif
  	)
 
+ADD_TEST(AtmosphericCorrectionSequencementTest ${EXE_TESTS}  
+        --compare-image ${TOL}  
+		${BASELINE}/raTvSurfaceAdjencyEffect6SCorrectionSchemeFilter.tif
+                ${TEMP}/raTvRomaniaAtmosphericCorrectionSequencement.tif
+        AtmosphericCorrectionSequencementTest
+        ${INPUTDATA}/Romania_Extract.tif
+        ${INPUTDATA}/atmosphericCorrectionSequencement_alpha_beta.txt
+        ${INPUTDATA}/atmosphericCorrectionSequencement_solar_illumination.txt
+        ${INPUTDATA}/atmosphericCorrectionSequencement_wavelenght_spectral_bands_spot4_1.txt
+        ${TEMP}/raTvRomaniaAtmosphericCorrectionSequencement.tif
+# ImageToLuminance parameters                
+# LuminanceToReflectance parameters                
+        27.3    #elevation et azimuth solaire
+	4       #day
+	12      #mounth
+# AtmosphericCorrectionParametersTo6SAtmosphericRadiativeTerms parameters                
+        27.3
+        152.7
+        2.5
+        -77.0
+        1013.
+        2.48134
+        0.34400
+        1		
+        0.199854		
+# ReflectanceToSurfaceReflectance parameters                
+# SurfaceAdjencyEffect6SCorrectionSchemeFilter parameters                
+	2       # Radius;	
+	0.020   # pixel spacing in kilometers
+        )
+
 
 
 INCLUDE_DIRECTORIES("${OTBTesting_BINARY_DIR}")
 
 ADD_EXECUTABLE(otbRadiometryExamplesTests otbRadiometryExamplesTests.cxx)
-TARGET_LINK_LIBRARIES(otbRadiometryExamplesTests gdal ITKIO ITKAlgorithms ITKStatistics ITKNumerics ITKCommon OTBBasicFilters OTBCommon OTBDisparityMap OTBIO OTBSpatialReasoning OTBChangeDetection OTBFeatureExtraction  OTBLearning  OTBMultiScale OTBFusion)
+TARGET_LINK_LIBRARIES(otbRadiometryExamplesTests OTBBasicFilters OTBCommon OTBDisparityMap OTBRadiometry OTBIO OTBSpatialReasoning OTBChangeDetection OTBFeatureExtraction  OTBLearning  OTBMultiScale OTBFusion  gdal ITKIO ITKAlgorithms ITKStatistics ITKNumerics ITKCommon )
 
 ENDIF( NOT OTB_DISABLE_CXX_TESTING AND NOT OTB_DISABLE_CXX_EXAMPLES_TESTING )
 
