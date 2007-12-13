@@ -75,10 +75,10 @@ int main( int argc, char* argv[] )
 // Software Guide : BeginCodeSnippet
   ossimInit::instance()->initialize(argc, argv);
 
-  if(argc!=11)
+  if(argc!=12)
   {
   std::cout << argv[0] <<" <input_pan_filename> <input_xs_filename> ";
-  std::cout << "<output_filename> <utm zone> <x_ground_upper_left_corner> ";
+  std::cout << "<output_filename> <utm zone> <hemisphere N/S> <x_ground_upper_left_corner> ";
   std::cout << "<y_ground_upper_left_corner> <x_Size> <y_Size> ";
   std::cout << "<x_groundSamplingDistance> ";
   std::cout << "<y_groundSamplingDistance (should be negative since origin is upper left)>" 
@@ -146,7 +146,7 @@ int main( int argc, char* argv[] )
   utmMapProjectionType::Pointer utmMapProjection =
       utmMapProjectionType::New();
   utmMapProjection->SetZone(atoi(argv[4]));
-  utmMapProjection->SetHemisphere('N');
+  utmMapProjection->SetHemisphere(*(argv[5]));
   orthoRectifPAN->SetMapProjection(utmMapProjection);
   orthoRectifXS->SetMapProjection(utmMapProjection);
 // Software Guide : EndCodeSnippet				
@@ -175,20 +175,20 @@ int main( int argc, char* argv[] )
   orthoRectifXS->SetOutputStartIndex(start);
 				
   ImageType::SizeType size;
-  size[0]=atoi(argv[7]);
-  size[1]=atoi(argv[8]);
+  size[0]=atoi(argv[8]);
+  size[1]=atoi(argv[9]);
   orthoRectifPAN->SetSize(size);
   orthoRectifXS->SetSize(size);
 				
   ImageType::SpacingType spacing;
-  spacing[0]=atof(argv[9]);
-  spacing[1]=atof(argv[10]);
+  spacing[0]=atof(argv[10]);
+  spacing[1]=atof(argv[11]);
   orthoRectifPAN->SetOutputSpacing(spacing);
   orthoRectifXS->SetOutputSpacing(spacing);
 				
   ImageType::PointType origin;
-  origin[0]=strtod(argv[5], NULL);
-  origin[1]=strtod(argv[6], NULL);
+  origin[0]=strtod(argv[6], NULL);
+  origin[1]=strtod(argv[7], NULL);
   orthoRectifPAN->SetOutputOrigin(origin);
   orthoRectifXS->SetOutputOrigin(origin);
 

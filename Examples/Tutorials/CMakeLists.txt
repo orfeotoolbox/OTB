@@ -79,6 +79,7 @@ ADD_TEST( TutorialsOrthoFusionTest ${EXE_TESTS}
         ${INPUTLARGEDATA}/TOULOUSE/QuickBird/000000128955_01_P001_MUL/02APR01105228-M1BS-000000128955_01_P001.TIF
         ${TEMP}/TutorialsOrthoFusionOutput.tif
         31
+        N
         375000 
 	4828100 
 	500 
