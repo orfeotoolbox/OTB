@@ -136,7 +136,7 @@ public:
   itkGetConstReferenceMacro(ZenithalSolarRadius, double);
 
  /** Set the day. */
-  itkSetClampMacro(Day, int, 12, 31);
+  itkSetClampMacro(Day, int, 1, 31);
   /** Give the day. */
   itkGetConstReferenceMacro(Day, int);
 
