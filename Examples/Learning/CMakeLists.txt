@@ -56,7 +56,8 @@ SET(TEMP ${OTB_BINARY_DIR}/Testing/Temporary)
 SET(EXE_TESTS ${CXX_TEST_PATH}/otbLearningExamplesTests)
 
 SET(TOL 0.0)
-
+#Tolerance sur la difference des valeurs numeriques dans le --compare-ascii
+SET(EPS 0.001)
 
 # ------- SVMImageClassificationExampleTest----------
 
@@ -97,7 +98,7 @@ ADD_TEST(GenerateTrainingImageExampleTest ${EXE_TESTS}
 # ------- SVMImageModelEstimatorExampleTest----------
 
 ADD_TEST(SVMImageModelEstimatorExampleTest ${EXE_TESTS}
-	--compare-ascii ${TOL}
+	--compare-ascii ${EPS}
 	${BASELINE}/svm_image_model.svn
 	${TEMP}/svm_image_model.svn
 	SVMImageModelEstimatorExampleTest
