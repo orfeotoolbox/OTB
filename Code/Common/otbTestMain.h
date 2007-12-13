@@ -278,10 +278,10 @@ int main(int ac, char* av[] )
 	                                std::string testFilenameImage = (*itTestFilenames);
 
 	                                std::map<std::string,int> baselines = RegressionTestBaselines(const_cast<char*>(baselineFilenameImage.c_str()));
-	                                std::map<std::string,int>::iterator baseline = baselines.begin();
+	                                std::map<std::string,int>::reverse_iterator baseline = baselines.rbegin();
 	                                multiResult = 1;
 					std::cout<<"Number of baseline images: "<<baselines.size()<<std::endl; 
-					while(baseline!=baselines.end() && (multiResult!=0))
+					while(baseline!=baselines.rend() && (multiResult!=0))
 					  {
 					    std::cout<<"Testing non-regression on image: "<<(baseline->first).c_str()<<std::endl;
 					    baseline->second = RegressionTestImage(cpt,testFilenameImage.c_str(),
@@ -294,7 +294,7 @@ int main(int ac, char* av[] )
 					  }
 					  if (multiResult != 0)
 					      {
-					      	baseline = baselines.begin();
+					      	baseline = baselines.rbegin();
 		                                baseline->second 
 						= RegressionTestImage(cpt,testFilenameImage.c_str(),
 										       (baseline->first).c_str(),
@@ -322,10 +322,10 @@ int main(int ac, char* av[] )
 	                                std::string testFilenameImage = (*itTestFilenames);
 
 	                                std::map<std::string,int> baselines = RegressionTestBaselines(const_cast<char*>(baselineFilenameImage.c_str()));
-	                                std::map<std::string,int>::iterator baseline = baselines.begin();
+	                                std::map<std::string,int>::reverse_iterator baseline = baselines.rbegin();
 	                                multiResult = 1;
 					std::cout<<"Number of baseline images: "<<baselines.size()<<std::endl; 
-					while(baseline!=baselines.end() && (multiResult!=0))
+					while(baseline!=baselines.rend() && (multiResult!=0))
 					  {
 					    std::cout<<"Testing non-regression on image: "<<(baseline->first).c_str()<<std::endl;
 					    baseline->second = RegressionTestMetaData(testFilenameImage.c_str(),
@@ -338,7 +338,7 @@ int main(int ac, char* av[] )
 					  }
 					  if (multiResult != 0)
 					      {
-					      	baseline = baselines.begin();
+					      	baseline = baselines.rbegin();
 		                                baseline->second 
 						= RegressionTestMetaData(testFilenameImage.c_str(),
 										       (baseline->first).c_str(),
@@ -364,10 +364,10 @@ int main(int ac, char* av[] )
 	                                std::string testFilenameAscii = (*itTestFilenames);
 
 	                                std::map<std::string,int> baselines = RegressionTestBaselines(const_cast<char*>(baselineFilenameAscii.c_str()));
-	                                std::map<std::string,int>::iterator baseline = baselines.begin();
+	                                std::map<std::string,int>::reverse_iterator baseline = baselines.rbegin();
 	                                multiResult = 1;
 					std::cout<<"Number of baseline files: "<<baselines.size()<<std::endl; 
-					while(baseline!=baselines.end() && (multiResult!=0))
+					while(baseline!=baselines.rend() && (multiResult!=0))
 					  {
 					    std::cout<<"Testing non-regression on file: "<<(baseline->first).c_str()<<std::endl;
 					    baseline->second = RegressionTestAsciiFile(testFilenameAscii.c_str(),
@@ -380,7 +380,7 @@ int main(int ac, char* av[] )
 					  }
 					  if (multiResult != 0)
 					      {
-					      	baseline = baselines.begin();
+					      	baseline = baselines.rbegin();
 		                                baseline->second 
 						= RegressionTestAsciiFile(testFilenameAscii.c_str(),
 										       (baseline->first).c_str(),
