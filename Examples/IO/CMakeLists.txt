@@ -118,8 +118,7 @@ ADD_TEST(ExtractROITest ${EXE_TESTS}
 ADD_TEST(DEMToImageGeneratorTest ${EXE_TESTS}
 --compare-image ${TOL}  ${BASELINE}/DEMToImageGenerator.tif
                         ${TEMP}/DEMToImageGenerator.tif
-        DEMToImageGeneratorTest
-         ${INPUTDATA}/DEM_srtm
+        DEMToImageGeneratorTest        
          ${TEMP}/DEMToImageGenerator.tif
 	 ${TEMP}/pretty_DEMToImageGenerator.png
          6.5
@@ -128,6 +127,7 @@ ADD_TEST(DEMToImageGeneratorTest ${EXE_TESTS}
          500
 	 0.002
 	 0.002	
+	  ${INPUTDATA}/DEM_srtm
          )
  
 INCLUDE_DIRECTORIES("${OTBTesting_BINARY_DIR}")
