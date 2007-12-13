@@ -165,7 +165,7 @@ whatever you want. Make sure that you have downloaded the source code for:
 
 \subsubsection{Unix/Linux Platforms}
 
-\textbf{Important note}: on some Linux distribution (eg. Debian, Ubuntu, Fedora), you should use 
+\textbf{Important note}: on some Linux distributions (eg. Debian, Ubuntu, Fedora), you may use 
 the official packages for CMake, GDAL and Fltk. Once you have installed these 
 packages, you can skip to step 4.
 
@@ -414,12 +414,12 @@ Due to an unknown bug, Fltk can't compile on some versions of Cygwin (OpenGL pro
 
 Put OTB\_USE\_VISU to OFF to avoid these problems.
 
-Some bugs can appear while compiling GDAL with JPEG2000 files : disable this format to resolve the problem.
+Some bugs can appear while compiling GDAL with JPEG2000 files : disable this format to solve the problem.
 
 \subsubsection{MSVC++ 8.0}
 Execution errors can appear on some platforms, using GDAL compiled with MSVC++ 8.0.
 
-This problem can be resolved by downloading GDAL binaries for Windows
+This problem can be solved by downloading GDAL binaries for Windows
 at \url{http://vterrain.org/Distrib/gdal.html}.
 
 \section{Using OTB}
@@ -433,7 +433,7 @@ you how to build your own programs.
 
 \subsection{What is the image size limitation of OTB ?}
 
-The maximum physical space a user can allocate depends on his platform. Therefore, 
+The maximum physical space a user can allocate depends on her platform. Therefore, 
 image allocation in OTB is restricted by image dimension, size, pixel type and number 
 of bands.
 
@@ -447,8 +447,8 @@ other, so that there is not allocation problem anymore. We are often working wit
 images of $25000 \times 25000$ pixels.
 
 For the streaming to work, all the filters in the pipeline must be streaming capable 
-(this is the case for most of the filter in OTB). The output image format also need to be 
-streamable (not png or jpeg, but tiff or ENVI, for instance).
+(this is the case for most of the filters in OTB). The output image format also need to be 
+streamable (not PNG or JPEG, but TIFF or ENVI, for instance).
 
 To tune the size of the streaming pieces, the OTB has
 two CMake variables. The first is named
@@ -485,17 +485,17 @@ on-line API documentation which is available at \url{http://orfeo-toolbox.source
 First, you can send an email to otb@cnes.fr to let us know what functionality 
 you would like to introduce in OTB. If the functionality seems important for the 
 OTB users, we will then discuss on how to send your code,
-make the necessary adaption, check with you that the results are correct and finally
+make the necessary adaptions, check with you that the results are correct and finally
 include it in the next release.
 
 \subsection{What are the benefits of contributing to OTB?}
 
 Besides the satisfaction of contributing to an open source project, we will include
-the references to the relevant paper in the software guide. Having algorithms
+the references to relevant papers in the software guide. Having algorithms
 published in the form of reproducible research helps science move faster and 
-encourage people who needs your algorithm to use it.
+encourages people who needs your algorithms to use them.
 
-You will also benefit from the strengths of OTB: multiplateform, streaming and 
+You will also benefit from the strengths of OTB: multiplatform, streaming and 
 threading, etc.
 
 \subsection{What functionality can I contribute?}
@@ -530,8 +530,8 @@ A bugfix version is released when significant bugs are identified and fixed.
 
 \subsection{When will the next version of OTB be available?}
 We plan to release major new OTB version once a year, that is, version
-2.0.0 was available end of 2007, version 3.0.0 should be released
-end 2008, and so on.
+2.0.0 was available at the end of 2007, version 3.0.0 should be released
+by the end of 2008, and so on.
 
 \subsection{What features will the OTB include and when?}
 There is no detailed plan about the availability of OTB new features,
