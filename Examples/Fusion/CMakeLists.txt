@@ -21,9 +21,10 @@ SET(TEMP ${OTB_BINARY_DIR}/Examples/Fusion/Testing/Temporary)
 SET(EXE_TESTS ${CXX_TEST_PATH}/otbFusionExamplesTests)
 
 SET(TOL 0.0)
+SET(EPSILON 0.00000001)
 
 ADD_TEST(BayesianFusionImageFilterTest ${EXE_TESTS}
-	--compare-image ${TOL}
+	--compare-image ${EPSILON}
 	${BASELINE}/ImageBayesianFusion.tif
 	${TEMP}/ImageBayesianFusion.tif
     BayesianFusionImageFilterTest
@@ -39,7 +40,7 @@ ADD_TEST(BayesianFusionImageFilterTest ${EXE_TESTS}
 )
 
 ADD_TEST(PanSharpeningExampleTest ${EXE_TESTS} 
-    --compare-image ${TOL}  ${BASELINE}/PanSharpeningExampleTest.tif
+    --compare-image ${EPSILON}  ${BASELINE}/PanSharpeningExampleTest.tif
                            ${TEMP}/PanSharpeningExampleTest.tif
         PanSharpeningExampleTest
 	${INPUTDATA}/QB_Toulouse_Ortho_PAN.tif
