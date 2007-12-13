@@ -83,7 +83,7 @@ ADD_TEST(leTvSVMImageModelEstimatorTrain ${LEARNING_TESTS}
 	${TEMP}/leTvsvm_model_image)
 
 ADD_TEST(leTvSVMImageModelEstimatorModelAccessor ${LEARNING_TESTS}
---compare-ascii ${EPSILON_10e4}  ${BASELINE_FILES}/leSVMModelEstimatorModelAccessor.txt
+--compare-ascii ${EPSILON_10e3}  ${BASELINE_FILES}/leSVMModelEstimatorModelAccessor.txt
                         ${TEMP}/leSVMModelEstimatorModelAccessor.txt
         otbSVMImageModelEstimatorModelAccessor
 	${INPUTDATA}/ROI_QB_MUL_4.tif
