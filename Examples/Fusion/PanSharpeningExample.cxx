@@ -50,6 +50,24 @@
 //
 // Software Guide : EndLatex 
 
+// Software Guide : BeginLatex
+//
+// Figure~\ref{fig:PANSHARP_FILTER} shows the result of applying
+// this PAN sharpening filter to a Quickbird image.
+// \begin{figure}
+// \center
+// \includegraphics[width=0.44\textwidth]{pretty_QB_Toulouse_Ortho_PAN.eps}
+// \includegraphics[width=0.44\textwidth]{pretty_QB_Toulouse_Ortho_XS.eps}
+// \includegraphics[width=0.44\textwidth]{pretty_QB_Toulouse_Ortho_PXS.eps}
+// \itkcaption[Pan sharpening]{Result of applying
+// the \doxygen{otb}{SimpleRcsPanSharpeningFusionImageFilter} to 
+// orthorectified Quickbird
+// image. From left to right : original PAN image, original XS image and the 
+// result of the PAN sharpening}  
+// \label{fig:PANSHARP_FILTER} 
+// \end{figure}
+//
+// Software Guide : EndLatex
 
 // Software Guide : BeginLatex
 //
@@ -179,27 +197,6 @@ int main( int argc, char* argv[] )
   pngwriter2->SetInput(rescaler->GetOutput());
   pngwriter2->Update();
   
-  
-
-  // Software Guide : BeginLatex
-  //
-  // Figure~\ref{fig:PANSHARP_FILTER} shows the result of applying
-  // this PAN sharpening filter to a Quickbird image.
-  // \begin{figure}
-  // \center
-  // \includegraphics[width=0.44\textwidth]{pretty_QB_Toulouse_Ortho_PAN.eps}
-  // \includegraphics[width=0.44\textwidth]{pretty_QB_Toulouse_Ortho_XS.eps}
-  // \includegraphics[width=0.44\textwidth]{pretty_QB_Toulouse_Ortho_PXS.eps}
-  // \itkcaption[Pan sharpening]{Result of applying
-  // the \doxygen{otb}{SimpleRcsPanSharpeningFusionImageFilter} to 
-  // orthorectified Quickbird
-  // image. From left to right : original PAN image, original XS image and the 
-  // result of the PAN sharpening}  
-  // \label{fig:PANSHARP_FILTER} 
-  // \end{figure}
-  //
-  // Software Guide : EndLatex
-
 
   return EXIT_SUCCESS;
   
