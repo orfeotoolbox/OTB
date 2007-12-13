@@ -47,7 +47,7 @@ ADD_TEST(fuTuSimpleRcsPanSharpeningFusionImageFilterNew ${FUSION_TESTS}
 )
 
 ADD_TEST(fuTvSimpleRcsPanSharpeningFusionImageFilter ${FUSION_TESTS} 
-    --compare-image ${TOL}  ${BASELINE}/fuTvRcsPanSharpeningFusion.tif
+    --compare-image ${EPSILON}  ${BASELINE}/fuTvRcsPanSharpeningFusion.tif
                            ${TEMP}/fuTvRcsPanSharpeningFusion.tif
         otbSimpleRcsPanSharpeningFusionImageFilter
 	${INPUTDATA}/QB_Toulouse_Ortho_PAN.tif
