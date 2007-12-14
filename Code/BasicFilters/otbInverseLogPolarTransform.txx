@@ -22,6 +22,7 @@
 #include "otbMacro.h"
 #include "otbMath.h"
 
+
 namespace otb
 {
 /**
@@ -95,24 +96,24 @@ typename InverseLogPolarTransform<TScalarType>
   double rho =vcl_sqrt(vcl_pow(point[0]-m_Center[0],2)+vcl_pow(point[1]-m_Center[1],2));
   if(rho>0)
     {
-      result[0]=(1/m_Scale[0])*vcl_asin((point[1]-m_Center[1])/rho);
+      result[0]=(1./m_Scale[0])*vcl_asin((point[1]-m_Center[1])/rho);
       // degree conversion
-      result[0]=result[0]*(180/M_PI);
+      result[0]=result[0]*(180./M_PI);
       // Deplacing the range to [0,90], [270,360]
-      result[0]= result[0]>0 ? result[0] : result[0]+360;
+      result[0]= result[0]>0. ? result[0] : result[0]+360.;
       // Avoiding asin indetermination
       if((point[0]-m_Center[0])>=0)
 	{
-	  result[0]=result[0]<90 ? result[0]+90 : result[0]-90;
+	  result[0]=result[0]<90. ? result[0]+90. : result[0]-90.;
 	}
-      result[1]=(1/m_Scale[1])*vcl_log(rho);
+      result[1]=(1./m_Scale[1])*vcl_log(rho);
       // otbMsgDebugMacro(<<vcl_log(vcl_pow(point[0]-m_Center[0],2)+vcl_pow(point[1]-m_Center[1],2)));
     }
   else
     {
       // for rho=0, reject the point outside the angular range to avoid nan error
-      result[0]=400;
-      result[1]=0;
+      result[0]=400.;
+      result[1]=0.;
     }
   return result;
 }

@@ -128,7 +128,7 @@ ADD_TEST(bfTvInverseLogPolarTransform ${BASICFILTERS_TESTS}
 		     ${BASELINE_FILES}/bfInverseLogPolarTransformResults.txt
 		     ${TEMP}/bfInverseLogPolarTransformResults.txt
         otbInverseLogPolarTransform
-	1 1 
+	1. 1. 
 	${TEMP}/bfInverseLogPolarTransformResults.txt	
 	6 0 0 10 20 45 60 3.14 3.14 1 0 0 1
 	)
