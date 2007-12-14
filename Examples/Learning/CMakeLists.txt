@@ -150,7 +150,7 @@ ADD_TEST(SEMModelEstimatorExampleTest ${EXE_TESTS}
 # ------- SVMGenericKernelImageModelEstimatorExampleTest----------
 
 ADD_TEST(SVMGenericKernelImageModelEstimatorExampleTest ${EXE_TESTS}
-	--compare-ascii ${TOL}
+	--compare-ascii ${EPS}
 	${BASELINE}/svm_image_model_generic_kernel.svn
 	${TEMP}/svm_image_model_generic_kernel.svn
 	SVMGenericKernelImageModelEstimatorExampleTest
@@ -162,7 +162,7 @@ ADD_TEST(SVMGenericKernelImageModelEstimatorExampleTest ${EXE_TESTS}
 # ------- SVMGenericKernelImageClassificationExampleTest----------
 
 ADD_TEST(SVMGenericKernelImageClassificationExampleTest ${EXE_TESTS}
-	--compare-ascii ${TOL}
+	--compare-ascii ${EPS}
 	${BASELINE}/svm_image_model_generic_kernel.svn
 	${TEMP}/svm_image_model_generic_kernel.svn
 	SVMGenericKernelImageClassificationExampleTest
