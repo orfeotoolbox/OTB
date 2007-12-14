@@ -25,13 +25,23 @@ int main(int argc, char* argv[])
   typedef otb::ImageViewerManager<PixelType> ManagerType;
   ManagerType::Pointer manager = ManagerType::New();
   manager->Show();
-
+  std::string strTest("--Test");
+  bool bFlRun(true);       
+        
   for(int i = 1; i<argc;++i)
     {
-      manager->OpenImage(argv[i]);
-      Fl::check();
+      if( strTest.compare(argv[i])==0 )
+      {
+        std::cout << "--Test option. No FL::run() call !" << std::endl;
+        bFlRun=false;
+      }
+      else
+      {  
+        manager->OpenImage(argv[i]);
+        Fl::check();
+      } 
     }
-  return Fl::run();
+  if( bFlRun==true) return Fl::run();
     } 
   catch( itk::ExceptionObject & err ) 
     { 
