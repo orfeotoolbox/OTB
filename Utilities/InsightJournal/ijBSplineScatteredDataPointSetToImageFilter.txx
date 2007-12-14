@@ -8,12 +8,11 @@
 #include "itkImageDuplicator.h"
 #include "itkCastImageFilter.h"
 #include "itkNumericTraits.h"
+#include "itkTimeProbe.h"
 
 #include "vnl/vnl_math.h"
 #include "vnl/algo/vnl_matrix_inverse.h"
 #include "vnl/vnl_vector.h"
-
-
 namespace ij
 {
 
@@ -71,7 +70,7 @@ BSplineScatteredDataPointSetToImageFilter<TInputPointSet, TOutputImage>
     { 
     if ( this->m_SplineOrder[i] == 0 )
       {
-      itkExceptionMacro( << "The spline order in each dimension must be greater than 0" );
+      itkExceptionMacro( "The spline order in each dimension must be greater than 0" );
       }
 
     this->m_Kernel[i] = KernelType::New();
@@ -83,10 +82,10 @@ BSplineScatteredDataPointSetToImageFilter<TInputPointSet, TOutputImage>
       typename KernelType::MatrixType C;
       C = this->m_Kernel[i]->GetShapeFunctionsInZeroToOneInterval();
       R = C;
-      for (unsigned int j = 0; j < C.cols(); j++ )
+      for ( int j = 0; j < C.cols(); j++ )
         {
         RealType c = pow( 2.0, static_cast<RealType>( C.cols()-j-1 ) );
-        for (unsigned int k = 0; k < C.rows(); k++)
+        for ( int k = 0; k < C.rows(); k++)
           {
           R(k, j) *= c;
           }
@@ -122,7 +121,7 @@ BSplineScatteredDataPointSetToImageFilter<TInputPointSet, TOutputImage>
     {
     if ( this->m_NumberOfLevels[i] == 0 )
       {
-      itkExceptionMacro( << "The number of levels in each dimension must be greater than 0" );
+      itkExceptionMacro( "The number of levels in each dimension must be greater than 0" );
       }
     if ( this->m_NumberOfLevels[i] > this->m_MaximumNumberOfLevels )
       {
@@ -130,10 +129,10 @@ BSplineScatteredDataPointSetToImageFilter<TInputPointSet, TOutputImage>
       } 
     }
 
-  itkDebugMacro( << "Setting m_NumberOfLevels to " 
-                 << this->m_NumberOfLevels );
-  itkDebugMacro( << "Setting m_MaximumNumberOfLevels to " 
-                 << this->m_MaximumNumberOfLevels );
+  itkDebugMacro( "Setting m_NumberOfLevels to " <<  
+                 this->m_NumberOfLevels );
+  itkDebugMacro( "Setting m_MaximumNumberOfLevels to " <<
+                 this->m_MaximumNumberOfLevels );
 
   if ( this->m_MaximumNumberOfLevels > 1 ) 
     {
@@ -162,17 +161,35 @@ void
 BSplineScatteredDataPointSetToImageFilter<TInputPointSet, TOutputImage>
 ::GenerateData()
 {
-
-  Superclass::GenerateData();
-
-  this->m_InputPointData->Initialize();
-  this->m_OutputPointData->Initialize();
-
+  if ( this->GetInput()->GetNumberOfPoints() == 0 )
+    {
+    itkExceptionMacro( "The number of points must be greater than 0." );
+    }
   if ( this->m_UsePointWeights && 
        ( this->m_PointWeights->Size() != this->GetInput()->GetNumberOfPoints() ) )
     {
-    itkExceptionMacro( << "The number of weight points and input points must be equal." );   
+    itkExceptionMacro( "The number of weight points and input points must be equal." );   
     }
+
+
+  /**
+   *  Create the output image
+   */
+
+  for ( unsigned int i = 0; i < ImageDimension; i++)
+    {
+    if ( this->m_Size[i] == 0 )
+      {
+      itkExceptionMacro( "Size must be specified." );
+      }
+    }
+  this->GetOutput()->SetOrigin( this->m_Origin );
+  this->GetOutput()->SetSpacing( this->m_Spacing );
+  this->GetOutput()->SetRegions( this->m_Size );
+  this->GetOutput()->Allocate();
+
+  this->m_InputPointData->Initialize();
+  this->m_OutputPointData->Initialize();
 
   typename PointSetType::PointDataContainer::ConstIterator It;
   It = this->GetInput()->GetPointData()->Begin();
@@ -224,7 +241,7 @@ BSplineScatteredDataPointSetToImageFilter<TInputPointSet, TOutputImage>
       if ( this->m_CurrentLevel < this->m_NumberOfLevels[i] )
         {
         this->m_CurrentNumberOfControlPoints[i] = 
-	      2*this->m_CurrentNumberOfControlPoints[i]-this->m_SplineOrder[i];
+	         2*this->m_CurrentNumberOfControlPoints[i]-this->m_SplineOrder[i];
         }
       }
 
@@ -232,8 +249,9 @@ BSplineScatteredDataPointSetToImageFilter<TInputPointSet, TOutputImage>
     itkDebugMacro( << "  No. of control points = " 
                    << this->m_CurrentNumberOfControlPoints );
 
-    RealType avg_p = itk::NumericTraits<RealType>::Zero;
-    // RealType norm_p;
+    RealType avg_p = 0.0;
+    RealType totalWeight = 0.0;
+    RealType norm_p;
 
     typename PointDataContainerType::Iterator  ItIn, ItOut;
     ItIn = this->m_InputPointData->Begin();
@@ -241,16 +259,17 @@ BSplineScatteredDataPointSetToImageFilter<TInputPointSet, TOutputImage>
     while ( ItIn != this->m_InputPointData->End() )
       {
       this->m_InputPointData->InsertElement( ItIn.Index(), ItIn.Value()-ItOut.Value() );
-
       if ( this->GetDebug() )
-	       { 
-	       avg_p += ( ItIn.Value()-ItOut.Value() ).GetNorm();	 
+   	    {
+        RealType weight = this->m_PointWeights->GetElement( ItIn.Index() );
+	       avg_p += ( ItIn.Value()-ItOut.Value() ).GetNorm() * weight;	 
+        totalWeight += weight;
         }  	
       ++ItIn;
       ++ItOut;
       }
-    itkDebugMacro( << "The average difference norm of the point set is " 
-                   << avg_p / static_cast<RealType>( this->GetInput()->GetNumberOfPoints() ) );
+    itkDebugMacro( << "The average weighted difference norm of the point set is " 
+                   << avg_p / totalWeight );
 
     this->GenerateControlLattice();
     this->UpdatePointSet();
@@ -262,8 +281,7 @@ BSplineScatteredDataPointSetToImageFilter<TInputPointSet, TOutputImage>
       ItPsi( this->m_PsiLattice, this->m_PsiLattice->GetLargestPossibleRegion() );
     itk::ImageRegionIterator<PointDataImageType> 
       ItPhi( this->m_PhiLattice, this->m_PhiLattice->GetLargestPossibleRegion() );
-    for ( ItPsi.GoToBegin(), ItPhi.GoToBegin(); 
-          !ItPsi.IsAtEnd(); ++ItPsi, ++ItPhi )
+    for ( ItPsi.GoToBegin(), ItPhi.GoToBegin(); !ItPsi.IsAtEnd(); ++ItPsi, ++ItPhi )
       {
       ItPsi.Set( ItPhi.Get()+ItPsi.Get() );
       } 
@@ -278,7 +296,8 @@ BSplineScatteredDataPointSetToImageFilter<TInputPointSet, TOutputImage>
 
   if ( this->m_GenerateOutputImage )
     {  
-    this->GenerateOutputImage();
+    //this->GenerateOutputImage();
+    this->GenerateOutputImageFast();
     }
 }
 
@@ -360,7 +379,7 @@ BSplineScatteredDataPointSetToImageFilter<TInputPointSet, TOutputImage>
       for ( unsigned int j = 0; j < ImageDimension; j++ )
         {
         tmp[j] = idx[j] + off[j];
-        if ( tmp[j] >= static_cast<int>(NumberOfNewControlPoints[j]) && !this->m_CloseDimension[j] )
+        if ( tmp[j] >= NumberOfNewControlPoints[j] && !this->m_CloseDimension[j] )
           {
              OutOfBoundary = true;
              break;
@@ -375,7 +394,7 @@ BSplineScatteredDataPointSetToImageFilter<TInputPointSet, TOutputImage>
         continue;
         }      
  
-      for ( int j = 0; j < N; j++ )
+      for ( unsigned int j = 0; j < N; j++ )
         {
         off_Psi = this->IndexToSubscript( j, size_Psi );
 
@@ -383,7 +402,7 @@ BSplineScatteredDataPointSetToImageFilter<TInputPointSet, TOutputImage>
         for ( unsigned int k = 0; k < ImageDimension; k++ )
           {
           tmp_Psi[k] = idx_Psi[k] + off_Psi[k];
-          if ( tmp_Psi[k] >= static_cast<int>(this->m_CurrentNumberOfControlPoints[k]) 
+          if ( tmp_Psi[k] >= this->m_CurrentNumberOfControlPoints[k] 
                   && !this->m_CloseDimension[k] )
             {
             OutOfBoundary = true;
@@ -496,10 +515,8 @@ BSplineScatteredDataPointSetToImageFilter<TInputPointSet, TOutputImage>
     }  
     
   typename PointDataContainerType::ConstIterator It;
-  for ( It = this->m_InputPointData->Begin(); 
-        It != this->m_InputPointData->End(); ++It )
+  for ( It = this->m_InputPointData->Begin(); It != this->m_InputPointData->End(); ++It )
     {
-    
     PointType point;
     this->GetInput()->GetPoint( It.Index(), &point );
 
@@ -515,9 +532,9 @@ BSplineScatteredDataPointSetToImageFilter<TInputPointSet, TOutputImage>
       typename RealImageType::IndexType idx = Itw.GetIndex();
       for ( unsigned int i = 0; i < ImageDimension; i++ )
         {	 
-	    RealType u = static_cast<RealType>( p[i] - 
-	             static_cast<unsigned>( p[i]) - idx[i] ) 
-	             + 0.5*static_cast<RealType>( this->m_SplineOrder[i]-1 );
+	       RealType u = static_cast<RealType>( p[i] - 
+	         static_cast<unsigned>( p[i] ) - idx[i] ) 
+	         + 0.5*static_cast<RealType>( this->m_SplineOrder[i]-1 );
         B *= this->m_Kernel[i]->Evaluate( u );
         }  
       Itw.Set( B );
@@ -535,14 +552,14 @@ BSplineScatteredDataPointSetToImageFilter<TInputPointSet, TOutputImage>
           idx[i] %= delta->GetLargestPossibleRegion().GetSize()[i];
           }  
         }
-        RealType wc = this->m_PointWeights->GetElement( It.Index() );
-        RealType t = Itw.Get();
-        PointDataType data = It.Value();
-        data *= ( t/w2_sum ); 
-        Itp.Set( data );
-        data *= ( t*t*wc );       
-        delta->SetPixel( idx, delta->GetPixel( idx ) + data );
-        omega->SetPixel( idx, omega->GetPixel( idx ) + wc*t*t );
+						RealType wc = this->m_PointWeights->GetElement( It.Index() );
+						RealType t = Itw.Get();
+						PointDataType data = It.Value();
+						data *= ( t/w2_sum ); 
+						Itp.Set( data );
+						data *= ( t*t*wc );       
+						delta->SetPixel( idx, delta->GetPixel( idx ) + data );
+						omega->SetPixel( idx, omega->GetPixel( idx ) + wc*t*t );
       }
     }  
 
@@ -603,17 +620,105 @@ BSplineScatteredDataPointSetToImageFilter<TInputPointSet, TOutputImage>
 
   for ( It.GoToBegin(); !It.IsAtEnd(); ++It )
     {
-    typename ImageType::IndexType idx = It.GetIndex();
-    PointType point;
-    for ( unsigned int i = 0; i < ImageDimension; i++ )
-      {
-      point[i] = static_cast<RealType>( idx[i] ) 
-               /( static_cast<RealType>( this->m_Size[i]-1 ) );
-      }
     PointDataType data;
-    this->Evaluate( point, data );
+    this->EvaluateAtIndex( It.GetIndex(), data );
     It.Set( data );
     }
+}
+
+template <class TInputPointSet, class TOutputImage>
+void
+BSplineScatteredDataPointSetToImageFilter<TInputPointSet, TOutputImage>
+::GenerateOutputImageFast() 
+{
+  typename PointDataImageType::Pointer collapsedPhiLattices[ImageDimension+1];
+  for ( int i = 0; i < ImageDimension; i++ )
+    {
+    collapsedPhiLattices[i] = PointDataImageType::New();
+    collapsedPhiLattices[i]->SetOrigin( this->m_PhiLattice->GetOrigin() );
+    collapsedPhiLattices[i]->SetSpacing( this->m_PhiLattice->GetSpacing() );
+    typename PointDataImageType::SizeType size;
+    size.Fill( 1 );
+    for ( unsigned int j = 0; j < i; j++ )
+      {
+      size[j] = this->m_PhiLattice->GetLargestPossibleRegion().GetSize()[j];
+      }
+    collapsedPhiLattices[i]->SetRegions( size );
+    collapsedPhiLattices[i]->Allocate();
+    } 
+  collapsedPhiLattices[ImageDimension] = this->m_PhiLattice;
+  ArrayType totalNumberOfSpans;
+  for ( unsigned int i = 0; i < ImageDimension; i++ )
+    {
+    totalNumberOfSpans[i] = this->m_CurrentNumberOfControlPoints[i] - this->m_SplineOrder[i];
+    }
+  itk::FixedArray<RealType, ImageDimension> U;
+  itk::FixedArray<RealType, ImageDimension> currentU;
+  currentU.Fill( -1 );
+  typename ImageType::IndexType startIndex 
+    = this->GetOutput()->GetRequestedRegion().GetIndex();
+  typename PointDataImageType::IndexType startPhiIndex
+    = this->GetOutput()->GetLargestPossibleRegion().GetIndex();
+
+  itk::ImageRegionIteratorWithIndex<ImageType> 
+     It( this->GetOutput(), this->GetOutput()->GetRequestedRegion() );
+  for ( It.GoToBegin(); !It.IsAtEnd(); ++It )
+    {
+    typename ImageType::IndexType idx = It.GetIndex();
+    for ( unsigned int i = 0; i < ImageDimension; i++ )
+      {
+      U[i] = static_cast<RealType>( totalNumberOfSpans[i] ) * 
+             static_cast<RealType>( idx[i] - startIndex[i] ) /
+             static_cast<RealType>( this->m_Size[i] - 1.0 );
+      if ( U[i] == 1.0 )
+        {
+        U[i] -= vnl_math::float_eps;
+        }  
+      } 
+    for ( int i = ImageDimension-1; i >= 0; i-- )
+      {
+      if ( U[i] != currentU[i] )
+        {    
+        for ( int j = i; j >= 0; j-- )
+          { 
+          this->CollapsePhiLattice( collapsedPhiLattices[j+1], collapsedPhiLattices[j], U[j], j );
+          currentU[j] = U[j];
+          }
+        break;
+        }
+      }
+    It.Set( collapsedPhiLattices[0]->GetPixel( startPhiIndex ) ); 
+    }   
+}
+
+template <class TInputPointSet, class TOutputImage>
+void
+BSplineScatteredDataPointSetToImageFilter<TInputPointSet, TOutputImage>
+::CollapsePhiLattice( PointDataImageType *lattice, 
+                      PointDataImageType *collapsedLattice,
+                      RealType u, unsigned int dimension ) 
+{
+  itk::ImageRegionIteratorWithIndex<PointDataImageType> It
+    ( collapsedLattice, collapsedLattice->GetLargestPossibleRegion() );
+
+  for ( It.GoToBegin(); !It.IsAtEnd(); ++It )
+    { 
+    PointDataType data;
+    data.Fill( 0.0 );
+    typename PointDataImageType::IndexType idx = It.GetIndex();
+    for ( unsigned int i = 0; i < this->m_SplineOrder[dimension] + 1; i++ )
+      {
+      idx[dimension] = static_cast<unsigned int>( u ) + i;         
+      if ( this->m_CloseDimension[dimension] )
+        {
+        idx[dimension] %= lattice->GetLargestPossibleRegion().GetSize()[dimension]; 
+        }
+      RealType B = this->m_Kernel[dimension]->Evaluate
+        ( u - idx[dimension] + 0.5*static_cast<RealType>( this->m_SplineOrder[dimension] - 1 ) ); 
+      data += ( lattice->GetPixel( idx ) * B );
+      }    
+    It.Set( data );
+    }  
 }
 
 template <class TInputPointSet, class TOutputImage>
@@ -624,7 +729,7 @@ BSplineScatteredDataPointSetToImageFilter<TInputPointSet, TOutputImage>
   for ( unsigned int i = 0; i < ImageDimension; i++)
     {
     point[i] -= this->m_Origin[i];
-    point[i] /= ( static_cast<RealType>( this->m_Size[i]*this->m_Spacing[i] ) );
+    point[i] /= ( static_cast<RealType>( ( this->m_Size[i] - 1 )*this->m_Spacing[i] ) );
     }  
   this->Evaluate( point, data );
 }
@@ -657,14 +762,14 @@ BSplineScatteredDataPointSetToImageFilter<TInputPointSet, TOutputImage>
   vnl_vector<RealType> p( ImageDimension );
   for ( unsigned int i = 0; i < ImageDimension; i++ )
     {
-    if ( params[i] >= 1.0 )
+    if ( params[i] < 0.0 || params[i] > 1.0 )
       {
-      params[i] = 0.99999;
+      itkExceptionMacro( "The specifed point is outside the image domain." );
       }
-    if ( params[i] < 0.0 )
+    if ( params[i] == 1.0 )
       {
-      params[i] = 0.0;
-      }
+      params[i] = 1.0 - vnl_math::float_eps;  
+      }   
     p[i] = static_cast<RealType>( params[i] ) 
          * static_cast<RealType>( this->m_CurrentNumberOfControlPoints[i]
 	                          - this->m_SplineOrder[i] );
@@ -673,19 +778,18 @@ BSplineScatteredDataPointSetToImageFilter<TInputPointSet, TOutputImage>
   typename RealImageType::RegionType::SizeType size;
   for ( unsigned int i = 0; i < ImageDimension; i++ )
     {
-    size[i] = this->m_SplineOrder[i]+1;
+    size[i] = this->m_SplineOrder[i] + 1;
     } 
   typename RealImageType::Pointer w;
   w = RealImageType::New();  
   w->SetRegions( size );
   w->Allocate(); 
 
-  itk::ImageRegionIteratorWithIndex<RealImageType> 
-     Itw( w, w->GetLargestPossibleRegion() );
-
   PointDataType val;
   data.Fill( 0.0 );
-  
+
+  itk::ImageRegionIteratorWithIndex<RealImageType> Itw( w, w->GetLargestPossibleRegion() );
+
   for ( Itw.GoToBegin(); !Itw.IsAtEnd(); ++Itw )
     {
     RealType B = 1.0;
@@ -721,7 +825,7 @@ BSplineScatteredDataPointSetToImageFilter<TInputPointSet, TOutputImage>
   for ( unsigned int i = 0; i < ImageDimension; i++)
     {
     point[i] -= this->m_Origin[i];
-    point[i] /= ( static_cast<RealType>( this->m_Size[i]*this->m_Spacing[i] ) );
+    point[i] /= ( static_cast<RealType>( ( this->m_Size[i] - 1 )*this->m_Spacing[i] ) );
     }  
   this->EvaluateGradient( point, gradient );
 }
@@ -754,14 +858,14 @@ BSplineScatteredDataPointSetToImageFilter<TInputPointSet, TOutputImage>
   vnl_vector<RealType> p( ImageDimension );
   for ( unsigned int i = 0; i < ImageDimension; i++ )
     {
-    if ( params[i] >= 1.0 )
+    if ( params[i] < 0.0 || params[i] > 1.0 )
       {
-      params[i] = 0.99999;
+      itkExceptionMacro( "The specifed point is outside the image domain." );
       }
-    if ( params[i] < 0.0 )
+    if ( params[i] == 1.0 )
       {
-      params[i] = 0.0;
-      }
+      params[i] = 1.0 - vnl_math::float_eps;  
+      }   
     p[i] = static_cast<RealType>( params[i] ) 
          * static_cast<RealType>( this->m_CurrentNumberOfControlPoints[i]
 	                          - this->m_SplineOrder[i] );
@@ -777,14 +881,14 @@ BSplineScatteredDataPointSetToImageFilter<TInputPointSet, TOutputImage>
   w->SetRegions( size );
   w->Allocate(); 
 
+  PointDataType val;
+  gradient.SetSize( val.Size(), ImageDimension );
+  gradient.Fill( 0.0 );
+  
   itk::ImageRegionIteratorWithIndex<RealImageType> 
      Itw( w, w->GetLargestPossibleRegion() );
 
-  PointDataType val;
-  gradient.set_size( val.Size(), ImageDimension );
-  gradient.fill( 0.0 );
-  
-  for ( unsigned int j = 0; j < gradient.cols(); j++ )
+  for ( unsigned int j = 0; j < gradient.Rows(); j++ )
     {
     for ( Itw.GoToBegin(); !Itw.IsAtEnd(); ++Itw )
       {
@@ -792,7 +896,7 @@ BSplineScatteredDataPointSetToImageFilter<TInputPointSet, TOutputImage>
       typename RealImageType::IndexType idx = Itw.GetIndex();
       for ( unsigned int k = 0; k < ImageDimension; k++ )
         {	  
-        RealType u = p[k] - static_cast<RealType>( static_cast<unsigned>(p[k]) + idx[k] ) 
+        RealType u = p[k] - static_cast<RealType>( static_cast<unsigned>( p[k] ) + idx[k] ) 
                           + 0.5*static_cast<RealType>( this->m_SplineOrder[k] - 1 );
         if ( j == k )
           { 
@@ -817,11 +921,12 @@ BSplineScatteredDataPointSetToImageFilter<TInputPointSet, TOutputImage>
         val *= B;
         for ( unsigned int k = 0; k < val.Size(); k++ )
           {
-          gradient( k, j ) += val[k];
+          gradient( j, k ) += val[k];
           }
         } 
       }
   	 }  
+ 
 }
 
 /**
@@ -848,7 +953,6 @@ BSplineScatteredDataPointSetToImageFilter<TInputPointSet, TOutputImage>
   os << indent << "Number of levels " 
      << this->m_NumberOfLevels << std::endl;
 }
-
 } // end namespace ij
 
 #endif

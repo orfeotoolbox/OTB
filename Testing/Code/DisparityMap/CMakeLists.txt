@@ -224,7 +224,7 @@ ADD_TEST(dmTvCenteredRigidDeformationFieldEstimation ${DISPARITYMAP_TESTS}
 	 ${INPUTDATA}/ROI_IKO_PAN_LesHalles_sub.tif
 	 ${INPUTDATA}/ROI_IKO_PAN_LesHalles_sub_warped_centered_rigid.tif
 	 ${TEMP}/dmTvCenteredRigidDeformationFieldEstimationOutput
-	 15 5 0.01 250 0.95 4 50 127 65 
+	 15 5 0.01 250 0.7 4 50 127 65 
 )
 
 ADD_TEST(dmTvSinusoidDeformationFieldEstimation ${DISPARITYMAP_TESTS} 

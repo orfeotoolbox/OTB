@@ -20,6 +20,7 @@
 #include "ijPointSetToImageFilter.h"
 #include "ijBSplineKernelFunction.h"
 #include "itkFixedArray.h"
+#include "itkVariableSizeMatrix.h"
 #include "itkVector.h"
 #include "itkVectorContainer.h"
 
@@ -68,7 +69,7 @@ class BSplineScatteredDataPointSetToImageFilter
 {
 public:
   typedef BSplineScatteredDataPointSetToImageFilter           Self;
-  typedef ij::PointSetToImageFilter<TInputPointSet, TOutputImage> Superclass;
+  typedef PointSetToImageFilter<TInputPointSet, TOutputImage> Superclass;
   typedef itk::SmartPointer<Self>                                  Pointer;
   typedef itk::SmartPointer<const Self>                            ConstPointer;
 
@@ -99,12 +100,17 @@ public:
   typedef itk::VectorContainer<unsigned, RealType>                 WeightsContainerType;
   typedef itk::FixedArray<unsigned, 
     itkGetStaticConstMacro( ImageDimension )>                 ArrayType;
-  typedef vnl_matrix<RealType>                                GradientType;
+  typedef itk::VariableSizeMatrix<RealType>                        GradientType;
   typedef itk::Image<RealType, 
     itkGetStaticConstMacro( ImageDimension )>                 RealImageType;
   typedef itk::Image<PointDataType, 
     itkGetStaticConstMacro( ImageDimension )>                 PointDataImageType;
-  
+
+  /** Interpolation kernel type (default spline order = 3) */
+  typedef ij::BSplineKernelFunction<3>                            KernelType;  
+
+  /** Helper functions */
+
   void SetNumberOfLevels( unsigned int );
   void SetNumberOfLevels( ArrayType );
   itkGetConstReferenceMacro( NumberOfLevels, ArrayType );
@@ -155,9 +161,10 @@ public:
   void EvaluateGradientAtContinuousIndex( ContinuousIndexType, GradientType & );
 
   /** 
-   * Evaluate the gradient of the resulting B-spline object at a specified
-   * parameteric point.  Note that the parameterization over
-   * each dimension of the B-spline object is [0, 1).
+   * Evaluate the gradient of the resulting B-spline object 
+   * at a specified parameteric point.  Note that the 
+   * parameterization over each dimension of the B-spline 
+   * object is [0, 1).
    */
   void EvaluateGradient( PointType, GradientType & );
 
@@ -176,9 +183,11 @@ private:
   void RefineControlLattice();
   void UpdatePointSet();
   void GenerateOutputImage();
+  void GenerateOutputImageFast();
+  void CollapsePhiLattice( PointDataImageType *, 
+                           PointDataImageType *,
+                           RealType, unsigned int );
 
-  /** Interpolation kernel type (default spline order = 3) */
-  typedef BSplineKernelFunction<3> KernelType;  
 
   bool                                                        m_DoMultilevel;
   bool                                                        m_GenerateOutputImage;
@@ -217,7 +226,6 @@ private:
     return sub;
     }
 };
-
 } // end namespace ij
 
 #ifndef OTB_MANUAL_INSTANTIATION
