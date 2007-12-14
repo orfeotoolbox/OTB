@@ -56,5 +56,6 @@ REGISTER_TEST(otbSurfaceAdjencyEffect6SCorrectionSchemeFilter);
 REGISTER_TEST(otbAtmosphericCorrectionParametersTo6SAtmosphericRadiativeTermsNew);
 REGISTER_TEST(otbAtmosphericCorrectionParametersTo6SAtmosphericRadiativeTerms);
 REGISTER_TEST(otbRomaniaReflectanceToRomaniaSurfaceReflectanceImageFilter);
+REGISTER_TEST(otbAtmosphericCorrectionSequencementTest);
 }
 

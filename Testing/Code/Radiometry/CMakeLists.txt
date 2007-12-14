@@ -443,6 +443,36 @@ ADD_TEST(raTvAtmosphericCorrectionParametersTo6SAtmosphericRadiativeTerms ${RADI
                 ${TEMP}/raTvCorrectionTo6SRadiative.txt
 )
 
+ADD_TEST(raTvAtmosphericCorrectionSequencementTest ${RADIOMETRY_TESTS}  
+        --compare-image ${TOL}  
+		${BASELINE}/raTvSurfaceAdjencyEffect6SCorrectionSchemeFilter.tif
+                ${TEMP}/raTvRomaniaAtmosphericCorrectionSequencement.tif
+        otbAtmosphericCorrectionSequencementTest
+        ${INPUTDATA}/Romania_Extract.tif
+        ${TEMP}/raTvRomaniaAtmosphericCorrectionSequencement.tif
+# ImageToLuminance parameters                
+        ${INPUTDATA}/atmosphericCorrectionSequencement_alpha_beta.txt
+# LuminanceToReflectance parameters                
+        27.3    #elevation et azimuth solaire
+	4       #day
+	12      #mounth
+        ${INPUTDATA}/atmosphericCorrectionSequencement_solar_illumination.txt
+# AtmosphericCorrectionParametersTo6SAtmosphericRadiativeTerms parameters                
+        27.3
+        152.7
+        2.5
+        -77.0
+        1013.
+        2.48134
+        0.34400
+        1		
+        0.199854		
+        ${INPUTDATA}/atmosphericCorrectionSequencement_wavelenght_spectral_bands_spot4_1.txt
+# ReflectanceToSurfaceReflectance parameters                
+# SurfaceAdjencyEffect6SCorrectionSchemeFilter parameters                
+	2       # Radius;	
+	0.020   # pixel spacing in kilometers
+        )
 
 
 
@@ -477,6 +507,7 @@ otbSurfaceAdjencyEffect6SCorrectionSchemeFilter.cxx
 otbAtmosphericCorrectionParametersTo6SAtmosphericRadiativeTermsNew.cxx
 otbAtmosphericCorrectionParametersTo6SAtmosphericRadiativeTerms.cxx
 otbRomaniaReflectanceToRomaniaSurfaceReflectanceImageFilter.cxx
+otbAtmosphericCorrectionSequencement.cxx
 )
 
 
