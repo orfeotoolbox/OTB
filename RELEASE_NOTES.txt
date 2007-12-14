@@ -60,6 +60,14 @@ OTB-v.2.0.0 - Changes since version 1.6.0 (2007/12/14)
 
 	- Fixed some problems under Visual and MinGW platforms.
 
+*Utilities:
+        - 4 files from ITK 3.4.0 have been replaced by the cvs version to allow
+        correct use of the itkDivideImageFilter.h with VectorImage. These files
+        are:
+            Common/itkNumericTraitsVariableLengthVectorPixel.h
+            Common/itkNumericTraitsVariableLengthVectorPixel.cxx
+            Common/itkConceptChecking.h
+            BasicFilters/itkDivideImageFilter.h
 
         
 
