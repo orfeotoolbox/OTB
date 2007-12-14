@@ -235,7 +235,7 @@ ExtractROIBase<TInputImage,TOutputImage>
       for (i=0; i < InputImageDimension; ++i)
         {
         outputSpacing[i] = inputSpacing[i];
-        outputOrigin[i] = inputOrigin[i];
+        outputOrigin[i] = inputOrigin[i]+static_cast<double>(m_ExtractionRegion.GetIndex()[i])*outputSpacing[i];
         for (unsigned int dim = 0; dim < InputImageDimension; ++dim)
           {
           outputDirection[i][dim] = inputDirection[i][dim];
@@ -261,7 +261,7 @@ ExtractROIBase<TInputImage,TOutputImage>
         if (m_ExtractionRegion.GetSize()[i])
           {
           outputSpacing[nonZeroCount] = inputSpacing[i];
-          outputOrigin[nonZeroCount] = inputOrigin[i];
+          outputOrigin[nonZeroCount] = inputOrigin[i]+static_cast<double>(m_ExtractionRegion.GetIndex()[i])*outputSpacing[i];
           for (unsigned int dim = 0; dim < OutputImageDimension; ++dim)
             {
             outputDirection[nonZeroCount][dim] =

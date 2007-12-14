@@ -104,6 +104,8 @@ protected:
   /** Main computation method */
   virtual void GenerateData();
 
+  virtual void GenerateOutputInformation();
+
   /**
    * Test wether a parameter is angular or not.
    * \param index The index of the parameter to test.

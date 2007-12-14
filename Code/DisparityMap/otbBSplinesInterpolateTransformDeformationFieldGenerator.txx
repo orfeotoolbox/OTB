@@ -39,6 +39,16 @@ BSplinesInterpolateTransformDeformationFieldGenerator<TPointSet, TDeformationFie
   m_NumberOfLevels = 10;
 }
 
+template <class TPointSet,class TDeformationField>
+void
+BSplinesInterpolateTransformDeformationFieldGenerator<TPointSet, TDeformationField>
+::GenerateOutputInformation()
+{
+  Superclass::GenerateOutputInformation();
+  this->GetOutput()->SetNumberOfComponentsPerPixel(2);
+}
+
+
 /** Main computation method */
 template <class TPointSet,class TDeformationField>
 void
@@ -66,6 +76,7 @@ BSplinesInterpolateTransformDeformationFieldGenerator<TPointSet, TDeformationFie
       splineIntList->PushBack(SPlineInterpolateFilterType::New());
       // Create a new point set
       typename InternalPointSetType::Pointer tmpPointSet = InternalPointSetType::New();
+      tmpPointSet->Initialize();
       unsigned int pointDataCounter = 0;
       for(PointSetIteratorType it = this->GetPointSet()->GetPoints()->Begin();it!=this->GetPointSet()->GetPoints()->End();++it)
 	{
@@ -88,7 +99,8 @@ BSplinesInterpolateTransformDeformationFieldGenerator<TPointSet, TDeformationFie
 	       tmpPointSet->SetPointData( nbPoints, V );
 	    }
 	  ++pointDataCounter;
-	}
+	} 
+
       // Set the interpolator parameters
       splineIntList->Back()->SetInput(tmpPointSet);
       splineIntList->Back()->SetSplineOrder(m_SplineOrder);  

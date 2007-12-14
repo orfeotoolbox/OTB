@@ -643,8 +643,16 @@ BSplineScatteredDataPointSetToImageFilter<TInputPointSet, TOutputImage>
       {
       size[j] = this->m_PhiLattice->GetLargestPossibleRegion().GetSize()[j];
       }
-    collapsedPhiLattices[i]->SetRegions( size );
+    typename PointDataImageType::IndexType index;
+    index.Fill(0);
+
+    typename PointDataImageType::RegionType region;
+    region.SetIndex(index);
+    region.SetSize(size);
+    
+    collapsedPhiLattices[i]->SetRegions( region );
     collapsedPhiLattices[i]->Allocate();
+    collapsedPhiLattices[i]->FillBuffer(typename PointDataImageType::PixelType(0.));
     } 
   collapsedPhiLattices[ImageDimension] = this->m_PhiLattice;
   ArrayType totalNumberOfSpans;
@@ -715,7 +723,11 @@ BSplineScatteredDataPointSetToImageFilter<TInputPointSet, TOutputImage>
         }
       RealType B = this->m_Kernel[dimension]->Evaluate
         ( u - idx[dimension] + 0.5*static_cast<RealType>( this->m_SplineOrder[dimension] - 1 ) ); 
-      data += ( lattice->GetPixel( idx ) * B );
+
+      if(lattice->GetLargestPossibleRegion().IsInside(idx))
+	{
+	  data += ( lattice->GetPixel( idx ) * B );
+	}
       }    
     It.Set( data );
     }  

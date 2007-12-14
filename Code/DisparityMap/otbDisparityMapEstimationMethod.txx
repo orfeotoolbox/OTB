@@ -23,6 +23,9 @@
 #include "otbExtractROI.h"
 #include "otbMacro.h"
 
+// #include "otbStreamingImageFileWriter.h"
+// #include "itkMacro.h"
+
 namespace otb
 {
 /*
@@ -163,21 +166,40 @@ DisparityMapEstimationMethod<TFixedImage,TMovingImage,TPointSet>
     movingExtractor->SetInput(moving);
     
     // Fixed extractor setup
-    fixedExtractor->SetStartX(static_cast<unsigned int>(p[0]-m_ExploSize[0]));
-    fixedExtractor->SetStartY(static_cast<unsigned int>(p[1]-m_ExploSize[1]));
-    fixedExtractor->SetSizeX(2*m_ExploSize[0]+1);
-    fixedExtractor->SetSizeY(2*m_ExploSize[1]+1);
+    fixedExtractor->SetStartX(static_cast<unsigned long>(p[0]-m_ExploSize[0]));
+    fixedExtractor->SetStartY(static_cast<unsigned long>(p[1]-m_ExploSize[1]));
+    fixedExtractor->SetSizeX(static_cast<unsigned long>(2*m_ExploSize[0]+1));
+    fixedExtractor->SetSizeY(static_cast<unsigned long>(2*m_ExploSize[1]+1));
     otbMsgDebugMacro(<<"Point id: "<<dataId);
     otbMsgDebugMacro(<<"Fixed region: origin("<<p[0]-m_ExploSize[0]<<", "<<p[1]-m_ExploSize[1]<<") size("<<2*m_ExploSize[0]+1<<", "<<2*m_ExploSize[1]+1<<")");
     // Moving extractor setup
-    movingExtractor->SetStartX(static_cast<unsigned int>(p[0]-m_WinSize[0]));
-    movingExtractor->SetStartY(static_cast<unsigned int>(p[1]-m_WinSize[1]));
-    movingExtractor->SetSizeX(2*m_WinSize[0]+1);
-    movingExtractor->SetSizeY(2*m_WinSize[1]+1);
+    movingExtractor->SetStartX(static_cast<unsigned long>(p[0]-m_WinSize[0]));
+    movingExtractor->SetStartY(static_cast<unsigned long>(p[1]-m_WinSize[1]));
+    movingExtractor->SetSizeX(static_cast<unsigned long>(2*m_WinSize[0]+1));
+    movingExtractor->SetSizeY(static_cast<unsigned long>(2*m_WinSize[1]+1));
     otbMsgDebugMacro(<<"Moving region: origin("<<p[0]-m_WinSize[0]<<", "<<p[1]-m_WinSize[1]<<") size("<<2*m_WinSize[0]+1<<", "<<2*m_WinSize[1]+1<<")");
     // update the extractors
     fixedExtractor->Update();
     movingExtractor->Update();
+
+   //  typedef otb::StreamingImageFileWriter<FixedImageType> FixedWriterType;
+//      typedef otb::StreamingImageFileWriter<MovingImageType> MovingWriterType;
+
+//      typename FixedWriterType::Pointer fwriter = FixedWriterType::New();
+//      typename MovingWriterType::Pointer mwriter = MovingWriterType::New();
+
+//      itk::OStringStream oss;
+//      oss.str("");
+//      oss<<"Fixed"<<dataId<<".tif";
+//      fwriter->SetInput(fixedExtractor->GetOutput());
+//      fwriter->SetFileName(oss.str());
+//      fwriter->Update();
+
+//      oss.str("");
+//      oss<<"Moving"<<dataId<<".tif";
+//      mwriter->SetInput(movingExtractor->GetOutput());
+//      mwriter->SetFileName(oss.str());
+//      mwriter->Update();
 
     // Registration filter definition
     typename RegistrationType::Pointer   registration = RegistrationType::New();
@@ -212,6 +234,7 @@ DisparityMapEstimationMethod<TFixedImage,TMovingImage,TPointSet>
     outputPoint = m_Transform->TransformPoint(inputPoint);
 
     otbMsgDebugMacro(<<"Metric value: "<<value);
+    otbMsgDebugMacro(<<"Transform parameters: "<<finalParameters);
     otbMsgDebugMacro(<<"Deformation: ("<<outputPoint[0]-inputPoint[0]<<", "<<outputPoint[1]-inputPoint[1]<<")");
     otbMsgDebugMacro(<<"Final parameters: "<<finalParameters);
 

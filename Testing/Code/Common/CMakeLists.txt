@@ -82,8 +82,8 @@ ADD_TEST(coTuExtractROINew ${COMMON_TESTS}
 	otbExtractROINew)
 	
 ADD_TEST(coTvExtractROI ${COMMON_TESTS}  
-#  --compare-image ${TOL}   ${BASELINE}/coExtractROI_cthead1_26_97_209_100.png
-#                    ${TEMP}/coExtractROI_cthead1_26_97_209_100.png
+  --compare-image ${TOL}   ${BASELINE}/coExtractROI_cthead1_26_97_209_100.png
+                    ${TEMP}/coExtractROI_cthead1_26_97_209_100.png
         otbExtractROI
         ${INPUTDATA}/cthead1.png 
         ${TEMP}/coExtractROI_cthead1_26_97_209_100.png 

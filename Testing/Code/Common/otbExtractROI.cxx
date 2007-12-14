@@ -30,7 +30,7 @@ int otbExtractROI( int argc, char * argv[] )
     { 
         const char * inputFilename  = argv[1];
         const char * outputFilename = argv[2];
-        
+        unsigned int  startX((unsigned int)::atoi(argv[3]));
         unsigned int  startY((unsigned int)::atoi(argv[4]));
         unsigned int  sizeX((unsigned int)::atoi(argv[5]));
         unsigned int  sizeY((unsigned int)::atoi(argv[6]));
@@ -48,7 +48,7 @@ int otbExtractROI( int argc, char * argv[] )
         typedef otb::ImageFileWriter< OutputImageType >         WriterType;
         FilterType::Pointer filter = FilterType::New();
         
-//        filter->SetStartX( startX );
+        filter->SetStartX( startX );
         filter->SetStartY( startY );
         filter->SetSizeX( sizeX );
         filter->SetSizeY( sizeY );
