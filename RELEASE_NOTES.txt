@@ -22,17 +22,14 @@ OTB-v.2.0.0 - Changes since version 1.6.0 (2007/12/14)
         - 6S effect correction: otb::SurfaceAdjencyEffect6SCorrectionSchemeFilter
         - DEM slope and shading estimations: otb::DEMCaracteriticsExtractor
 
-
 *Common:
 
         - Added otb::UnaryFunctorNeighborhoodVectorImageFilter
         - Fixed bug on otb::ExtractROIBase class
 
-
 *IO:
 
         - Bug fixed on otb::VectorImage class
-
 
 *BasicFilters:
 
@@ -44,6 +41,13 @@ OTB-v.2.0.0 - Changes since version 1.6.0 (2007/12/14)
 *Utilities:
 
         - Fixed memory allocation bug on svm.cxx file 
+        - 4 files from ITK 3.4.0 have been replaced by the cvs version to allow
+        correct use of the itkDivideImageFilter.h with VectorImage. These files
+        are:
+            Common/itkNumericTraitsVariableLengthVectorPixel.h
+            Common/itkNumericTraitsVariableLengthVectorPixel.cxx
+            Common/itkConceptChecking.h
+            BasicFilters/itkDivideImageFilter.h
 
 *Examples
 
@@ -59,15 +63,6 @@ OTB-v.2.0.0 - Changes since version 1.6.0 (2007/12/14)
 *Platforms:
 
 	- Fixed some problems under Visual and MinGW platforms.
-
-*Utilities:
-        - 4 files from ITK 3.4.0 have been replaced by the cvs version to allow
-        correct use of the itkDivideImageFilter.h with VectorImage. These files
-        are:
-            Common/itkNumericTraitsVariableLengthVectorPixel.h
-            Common/itkNumericTraitsVariableLengthVectorPixel.cxx
-            Common/itkConceptChecking.h
-            BasicFilters/itkDivideImageFilter.h
 
         
 
