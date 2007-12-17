@@ -455,10 +455,9 @@ ADD_TEST(raTvAtmosphericCorrectionSequencementTest ${RADIOMETRY_TESTS}
 # LuminanceToReflectance parameters                
         27.3    #elevation et azimuth solaire
 	4       #day
-	12      #mounth
+	12      #month
         ${INPUTDATA}/atmosphericCorrectionSequencement_solar_illumination.txt
 # AtmosphericCorrectionParametersTo6SAtmosphericRadiativeTerms parameters                
-        27.3
         152.7
         2.5
         -77.0

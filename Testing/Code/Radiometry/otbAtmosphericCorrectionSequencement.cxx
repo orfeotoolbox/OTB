@@ -40,13 +40,13 @@
 
 int otbAtmosphericCorrectionSequencementTest( int argc, char *argv[] )
 {
-  if( argc != 20 )
+  if( argc != 19 )
     {
       std::cerr << "Missing Parameters " << std::endl;
       std::cerr << "Usage: " << argv[0];
       std::cerr << "    inputImage , outputImage,"  << std::endl;
-      std::cerr << "    alphaBetaFileName , zenithalSolarRadius , day, month , solarIlluminationFileName,"  << std::endl;
-      std::cerr << "    solarZenithalAngle , solarAzimutalAngle , viewingZenithalAngle , viewingAzimutalAngle,"  << std::endl;
+      std::cerr << "    alphaBetaFileName , solarZenithalAngle , day, month , solarIlluminationFileName,"  << std::endl;
+      std::cerr << "    solarAzimutalAngle , viewingZenithalAngle , viewingAzimutalAngle,"  << std::endl;
       std::cerr << "    atmosphericPressure , waterVaporAmount , ozoneAmount , aerosolModel , AerosolOptical,"  << std::endl;
       std::cerr << "    wavelenghtSpectralBandFileName , adjencyEffect6SCorrectionWindowRadius, pixelSpacingInKilometers" << std::endl;
       std::cerr << std::endl;
@@ -178,7 +178,7 @@ int otbAtmosphericCorrectionSequencementTest( int argc, char *argv[] )
   std::string sString;
   ValuesVectorType vector;
   
-  fin.open(argv[17]);
+  fin.open(argv[16]);
   fin >> nbBands;
   for(unsigned int i=0 ; i<nbBands ; i++)
   {
@@ -205,18 +205,18 @@ int otbAtmosphericCorrectionSequencementTest( int argc, char *argv[] )
 
   
   // Set parameters
-  dataAtmosphericCorrectionParameters->SetSolarZenithalAngle(static_cast<double>(atof(argv[8])));
-  dataAtmosphericCorrectionParameters->SetSolarAzimutalAngle(static_cast<double>(atof(argv[9])));
-  dataAtmosphericCorrectionParameters->SetViewingZenithalAngle(static_cast<double>(atof(argv[10])));
-  dataAtmosphericCorrectionParameters->SetViewingAzimutalAngle(static_cast<double>(atof(argv[11])));
+  dataAtmosphericCorrectionParameters->SetSolarZenithalAngle(filterLuminanceToReflectance->GetZenithalSolarAngle());
+  dataAtmosphericCorrectionParameters->SetSolarAzimutalAngle(static_cast<double>(atof(argv[8])));
+  dataAtmosphericCorrectionParameters->SetViewingZenithalAngle(static_cast<double>(atof(argv[9])));
+  dataAtmosphericCorrectionParameters->SetViewingAzimutalAngle(static_cast<double>(atof(argv[10])));
   dataAtmosphericCorrectionParameters->SetMonth(month);
   dataAtmosphericCorrectionParameters->SetDay(day);
-  dataAtmosphericCorrectionParameters->SetAtmosphericPressure(static_cast<double>(atof(argv[12]))); 
-  dataAtmosphericCorrectionParameters->SetWaterVaporAmount(static_cast<double>(atof(argv[13])));
-  dataAtmosphericCorrectionParameters->SetOzoneAmount(static_cast<double>(atof(argv[14])));
-  AerosolModelType aerosolModel = static_cast<AerosolModelType>(::atoi(argv[15]));
+  dataAtmosphericCorrectionParameters->SetAtmosphericPressure(static_cast<double>(atof(argv[11]))); 
+  dataAtmosphericCorrectionParameters->SetWaterVaporAmount(static_cast<double>(atof(argv[12])));
+  dataAtmosphericCorrectionParameters->SetOzoneAmount(static_cast<double>(atof(argv[13])));
+  AerosolModelType aerosolModel = static_cast<AerosolModelType>(::atoi(argv[14]));
   dataAtmosphericCorrectionParameters->SetAerosolModel(aerosolModel);
-  dataAtmosphericCorrectionParameters->SetAerosolOptical(static_cast<double>(atof(argv[16])));
+  dataAtmosphericCorrectionParameters->SetAerosolOptical(static_cast<double>(atof(argv[15])));
 
   AtmosphericCorrectionParametersTo6SRadiativeTermsType::Pointer  filterAtmosphericCorrectionParametersTo6SRadiativeTerms = AtmosphericCorrectionParametersTo6SRadiativeTermsType::New();
   filterAtmosphericCorrectionParametersTo6SRadiativeTerms->SetInput( dataAtmosphericCorrectionParameters );
@@ -235,8 +235,8 @@ int otbAtmosphericCorrectionSequencementTest( int argc, char *argv[] )
   SurfaceAdjencyEffect6SCorrectionSchemeFilterType::Pointer  filterSurfaceAdjencyEffect6SCorrectionSchemeFilter = SurfaceAdjencyEffect6SCorrectionSchemeFilterType::New();
 
   filterSurfaceAdjencyEffect6SCorrectionSchemeFilter->SetAtmosphericRadiativeTerms(filterAtmosphericCorrectionParametersTo6SRadiativeTerms->GetOutput());
-  filterSurfaceAdjencyEffect6SCorrectionSchemeFilter->SetWindowRadius(atoi(argv[18]));
-  filterSurfaceAdjencyEffect6SCorrectionSchemeFilter->SetPixelSpacingInKilometers(static_cast<double>(atof(argv[19])));
+  filterSurfaceAdjencyEffect6SCorrectionSchemeFilter->SetWindowRadius(atoi(argv[17]));
+  filterSurfaceAdjencyEffect6SCorrectionSchemeFilter->SetPixelSpacingInKilometers(static_cast<double>(atof(argv[18])));
   filterSurfaceAdjencyEffect6SCorrectionSchemeFilter->SetZenithalViewingAngle(dataAtmosphericCorrectionParameters->GetViewingZenithalAngle());
   filterSurfaceAdjencyEffect6SCorrectionSchemeFilter->SetInput(filterReflectanceToSurfaceReflectanceImageFilter->GetOutput());
 
