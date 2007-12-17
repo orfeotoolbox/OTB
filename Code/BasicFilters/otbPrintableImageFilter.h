@@ -71,7 +71,7 @@ class ITK_EXPORT PrintableImageFilter :
         void PrintSelf( std::ostream& os, itk::Indent indent ) const;
           
         void SetChannel( unsigned int channel);
-        const ChannelsType GetChannels(void);
+        const ChannelsType GetChannels(void) const;
           
       protected:
 

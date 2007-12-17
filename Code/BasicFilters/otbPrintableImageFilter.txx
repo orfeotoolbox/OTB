@@ -51,7 +51,7 @@ namespace otb
   template <class TInputImage>
       const typename PrintableImageFilter<TInputImage>::ChannelsType
       PrintableImageFilter<TInputImage>
-  ::GetChannels()
+  ::GetChannels() const
   {
     return m_Extractor->GetChannels();
   }
