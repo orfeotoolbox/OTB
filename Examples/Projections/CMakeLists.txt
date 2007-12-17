@@ -25,7 +25,7 @@ SET(BASELINE ${OTB_DATA_ROOT}/Baseline/Examples/Projections)
 
 SET(INPUTDATA ${OTB_SOURCE_DIR}/Examples/Data)
 SET(INPUTLARGEDATA ${OTB_DATA_ROOT}/LargeInput)
-SET(TEMP ${OTB_BINARY_DIR}/Examples/Projections/Testing/Temporary)
+SET(TEMP ${OTB_BINARY_DIR}/Testing/Temporary)
 
 SET(EXE_TESTS ${CXX_TEST_PATH}/otbProjectionsExamplesTests)
 

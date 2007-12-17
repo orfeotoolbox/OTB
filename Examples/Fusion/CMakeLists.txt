@@ -16,7 +16,7 @@ IF( NOT OTB_DISABLE_CXX_TESTING AND NOT OTB_DISABLE_CXX_EXAMPLES_TESTING )
 SET(BASELINE ${OTB_DATA_ROOT}/Baseline/Examples/Fusion)
 
 SET(INPUTDATA ${OTB_SOURCE_DIR}/Examples/Data)
-SET(TEMP ${OTB_BINARY_DIR}/Examples/Fusion/Testing/Temporary)
+SET(TEMP ${OTB_BINARY_DIR}/Testing/Temporary)
 
 SET(EXE_TESTS ${CXX_TEST_PATH}/otbFusionExamplesTests)
 
