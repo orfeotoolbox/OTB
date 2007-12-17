@@ -498,22 +498,22 @@ int main( int argc, char *argv[] )
   // of the contribution of neighbored pixels moderated by their distance to the target pixel. 
   // A simplified relation may be :
   // \begin{equation}
-  // \rho{S} = \frac{ \rho_{S}^{unif}.T(\mu_{V}) - <\rho{S}>.t_{d}(\mu_{v}) }{ exp(-\delta/\mu_{v}) }
+  // \rho{S} = \frac{ \rho_{S}^{unif}.T(\mu_{V}) - <\rho{S}>.t_{d}(\mu_{V}) }{ exp(-\delta/\mu_{V}) }
   // \end{equation}
   // With :
   // \begin{itemize}
   // \item $\rho_{S}^{unif}$ is the ground reflectance under asumption of an homogeneous environment;
   // \item $T(\mu_{V})$ is the upward transmittance;
   // \item $t_{d}(\mu_{S})$ is the upward diffus transmittance;
-  // \item $exp(-\delta/\mu_{v})$ is the upward direct transmittance;
-  // \item <$\rho{S}$> is the environment contribution to the pixel target reflectance in the total
+  // \item $exp(-\delta/\mu_{V})$ is the upward direct transmittance;
+  // \item $\rho{S}$ is the environment contribution to the pixel target reflectance in the total
   // observed signal.
   // \begin{equation}
-  // \rho{S} = \sum{j}\sum{i}f(r(i,j))x\rho_{S}^{unif}(i,j)
+  // \rho{S} = \sum{j}\sum{i}f(r(i,j))\times \rho_{S}^{unif}(i,j)
   // \end{equation}
   // where, 
   // \begin{itemize}
-  // \item r(i,j) is the distance between the pixel(i,j) and the central pixel of the window in km;
+  // \item r(i,j) is the distance between the pixel(i,j) and the central pixel of the window in $km$;
   // \item f(r) is the global environment function.
   // \begin{equation}
   // f(r) = \frac{t_{d}^{R}(\mu_{V}).f_{R}(r)+t_{d}^{A}(\mu_{V}).f_{A}(r)}{ t_{d}(\mu_{V}) }
@@ -524,12 +524,13 @@ int main( int argc, char *argv[] )
   // An instance of \doxygen{otb}{SurfaceAdjencyEffect6SCorrectionSchemeFilter} is created.
   // Software Guide : EndLatex
 
-  //  Software Guide : BeginLatex
-  typedef otb::SurfaceAdjencyEffect6SCorrectionSchemeFilter<ImageType, ImageType> 
-    SurfaceAdjencyEffect6SCorrectionSchemeFilterType;
-  SurfaceAdjencyEffect6SCorrectionSchemeFilterType::Pointer  filterSurfaceAdjencyEffect6SCorrectionSchemeFilter 
+  //  Software Guide : BeginCodeSnippet
+  typedef otb::SurfaceAdjencyEffect6SCorrectionSchemeFilter<ImageType,
+    ImageType>  SurfaceAdjencyEffect6SCorrectionSchemeFilterType;
+  SurfaceAdjencyEffect6SCorrectionSchemeFilterType::Pointer
+    filterSurfaceAdjencyEffect6SCorrectionSchemeFilter 
     = SurfaceAdjencyEffect6SCorrectionSchemeFilterType::New();
-  //  Software Guide : EndLatex
+  //  Software Guide : EndCodeSnippet
 
   // Software Guide : BeginLatex
   //
