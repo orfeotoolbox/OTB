@@ -64,10 +64,10 @@ ADD_TEST(NDVIRAndNIRVegetationIndexImageFilterTest ${EXE_TESTS}
 ADD_TEST(AtmosphericCorrectionSequencementTest ${EXE_TESTS}  
         --compare-image ${TOL}  
 		${BASELINE}/raTvSurfaceAdjencyEffect6SCorrectionSchemeFilter.tif
-                ${TEMP}/raTvRomaniaAtmosphericCorrectionSequencement.tif
+                ${TEMP}/Example_RomaniaAtmosphericCorrectionSequencement.tif
         AtmosphericCorrectionSequencementTest
         ${INPUTDATA}/Romania_Extract.tif
-	${TEMP}/raTvRomaniaAtmosphericCorrectionSequencement.tif
+	${TEMP}/Example_RomaniaAtmosphericCorrectionSequencement.tif
         ${INPUTDATA}/atmosphericCorrectionSequencement_alpha_beta.txt
         ${INPUTDATA}/atmosphericCorrectionSequencement_solar_illumination.txt
         ${INPUTDATA}/atmosphericCorrectionSequencement_wavelenght_spectral_bands_spot4_1.txt
@@ -78,8 +78,8 @@ ADD_TEST(AtmosphericCorrectionSequencementTest ${EXE_TESTS}
 	4       #day
 	12      #mounth
 # AtmosphericCorrectionParametersTo6SAtmosphericRadiativeTerms parameters                
-        27.3
         152.7
+	2.5	
         -77.0
         1013.
         2.48134
