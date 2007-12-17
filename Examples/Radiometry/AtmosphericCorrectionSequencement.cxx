@@ -506,7 +506,7 @@ int main( int argc, char *argv[] )
   // \item $T(\mu_{V})$ is the upward transmittance;
   // \item $t_{d}(\mu_{S})$ is the upward diffus transmittance;
   // \item $exp(-\delta/\mu_{V})$ is the upward direct transmittance;
-  // \item $\rho{S}$ is the environment contribution to the pixel target reflectance in the total
+  // \item $\rho_{S}$ is the environment contribution to the pixel target reflectance in the total
   // observed signal.
   // \begin{equation}
   // \rho{S} = \sum{j}\sum{i}f(r(i,j))\times \rho_{S}^{unif}(i,j)
