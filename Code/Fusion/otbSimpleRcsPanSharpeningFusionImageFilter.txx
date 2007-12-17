@@ -63,7 +63,7 @@ namespace otb
       const TPanImageType *
           SimpleRcsPanSharpeningFusionImageFilter
           <TPanImageType, TXsImageType, TOutputImageType>
-  ::GetPanInput(void) 
+  ::GetPanInput(void) const
   {
     if (this->GetNumberOfInputs() < 2)
     {
@@ -92,7 +92,7 @@ namespace otb
       const TXsImageType *
           SimpleRcsPanSharpeningFusionImageFilter
           <TPanImageType, TXsImageType, TOutputImageType>
-  ::GetXsInput(void) 
+  ::GetXsInput(void) const
   {
     if (this->GetNumberOfInputs() < 1)
     {

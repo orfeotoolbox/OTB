@@ -71,10 +71,10 @@ class ITK_EXPORT SimpleRcsPanSharpeningFusionImageFilter :
           itkSetMacro( Radius, RadiusType);
           
           virtual void SetPanInput( const TPanImageType * image);
-          const TPanImageType * GetPanInput(void);
+          const TPanImageType * GetPanInput(void) const;
              
           virtual void SetXsInput( const TXsImageType * path);
-          const TXsImageType * GetXsInput(void);
+          const TXsImageType * GetXsInput(void) const;
           
         protected:
 
