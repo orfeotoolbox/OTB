@@ -25,7 +25,7 @@
 //  Software Guide : BeginCommandLineArgs
 //  INPUTS: {Romania_Extract.tif}
 //  OUTPUTS: {AtmosphericCorrectionSequencement.tif}
-//  ${OTB_SOURCE_DIR}/Examples/Data/atmosphericCorrectionSequencement_alpha_beta.txt ${OTB_SOURCE_DIR}/Examples/Data/atmosphericCorrectionSequencement_solar_illumination.txt atmosphericCorrectionSequencement_wavelenght_spectral_bands_spot4_1.txt 27.3 4 12 27.3 152.7 2.5 -77.0 1013. 2.48134 0.34400 1 0.199854 2 0.020
+//  ${OTB_SOURCE_DIR}/Examples/Data/atmosphericCorrectionSequencement_alpha_beta.txt ${OTB_SOURCE_DIR}/Examples/Data/atmosphericCorrectionSequencement_solar_illumination.txt atmosphericCorrectionSequencement_wavelenght_spectral_bands_spot4_1.txt 27.3 4 12 152.7 2.5 -77.0 1013. 2.48134 0.34400 1 0.199854 2 0.020
 //  Software Guide : EndCommandLineArgs
 
 // Software Guide : BeginLatex
@@ -86,11 +86,11 @@
 
 int main( int argc, char *argv[] )
 {
-  if( argc != 20 )
+  if( argc != 19 )
     {
       std::cerr << "Missing Parameters " << std::endl;
       std::cerr << "Usage: " << argv[0]<< std::endl;
-      std::cerr << " inputImage outputImage atmosphericCorrectionSequencement_alpha_beta.txt atmosphericCorrectionSequencement_solar_illumination.txt atmosphericCorrectionSequencement_wavelenght_spectral_bands_spot4_1.txt elevation azimuth day month AtmosphericCorrectionParametersTo6SAtmosphericRadiativeTerms (9 parameters) SurfaceAdjencyEffect6SCorrectionSchemeFilter (2 parameters                )"<< std::endl;
+      std::cerr << " inputImage outputImage atmosphericCorrectionSequencement_alpha_beta.txt atmosphericCorrectionSequencement_solar_illumination.txt atmosphericCorrectionSequencement_wavelenght_spectral_bands_spot4_1.txt azimuth day month AtmosphericCorrectionParametersTo6SAtmosphericRadiativeTerms (9 parameters) SurfaceAdjencyEffect6SCorrectionSchemeFilter (2 parameters                )"<< std::endl;
       std::cerr << std::endl;
       return 1;
     }
@@ -259,9 +259,9 @@ int main( int argc, char *argv[] )
 
   // Software Guide : BeginCodeSnippet
   filterLuminanceToReflectance->SetZenithalSolarAngle(
-    static_cast<double>(atof(argv[7])));
-  filterLuminanceToReflectance->SetDay(atoi(argv[8]));
-  filterLuminanceToReflectance->SetMonth(atoi(argv[9])); 
+    static_cast<double>(atof(argv[6])));
+  filterLuminanceToReflectance->SetDay(atoi(argv[7]));
+  filterLuminanceToReflectance->SetMonth(atoi(argv[8])); 
   filterLuminanceToReflectance->SetSolarIllumination(solarIllumination);
   // Software Guide : EndCodeSnippet
 
@@ -369,37 +369,37 @@ int main( int argc, char *argv[] )
   // Set parameters
   // Software Guide : BeginCodeSnippet
   dataAtmosphericCorrectionParameters->SetSolarZenithalAngle(
-    static_cast<double>(atof(argv[10])));
+    static_cast<double>(atof(argv[6])));
 
   dataAtmosphericCorrectionParameters->SetSolarAzimutalAngle(
-    static_cast<double>(atof(argv[11])));
+    static_cast<double>(atof(argv[9])));
 
   dataAtmosphericCorrectionParameters->SetViewingZenithalAngle(
-    static_cast<double>(atof(argv[12])));
+    static_cast<double>(atof(argv[10])));
 
   dataAtmosphericCorrectionParameters->SetViewingAzimutalAngle(
-    static_cast<double>(atof(argv[13])));
+    static_cast<double>(atof(argv[11])));
 
-  dataAtmosphericCorrectionParameters->SetMonth(atoi(argv[9]));
+  dataAtmosphericCorrectionParameters->SetMonth(atoi(argv[8]));
 
-  dataAtmosphericCorrectionParameters->SetDay(atoi(argv[8]));
+  dataAtmosphericCorrectionParameters->SetDay(atoi(argv[7]));
 
   dataAtmosphericCorrectionParameters->SetAtmosphericPressure(
-    static_cast<double>(atof(argv[14]))); 
+    static_cast<double>(atof(argv[12]))); 
 
   dataAtmosphericCorrectionParameters->SetWaterVaporAmount(
-    static_cast<double>(atof(argv[15])));
+    static_cast<double>(atof(argv[13])));
 
   dataAtmosphericCorrectionParameters->SetOzoneAmount(
-    static_cast<double>(atof(argv[16])));
+    static_cast<double>(atof(argv[14])));
 
   AerosolModelType aerosolModel =
-    static_cast<AerosolModelType>(::atoi(argv[17]));
+    static_cast<AerosolModelType>(::atoi(argv[15]));
 
   dataAtmosphericCorrectionParameters->SetAerosolModel(aerosolModel);
 
   dataAtmosphericCorrectionParameters->SetAerosolOptical(
-    static_cast<double>(atof(argv[18])));
+    static_cast<double>(atof(argv[16])));
   // Software Guide : EndCodeSnippet
 
   // Software Guide : BeginLatex
@@ -544,8 +544,8 @@ int main( int argc, char *argv[] )
   // Software Guide : EndLatex
   filterSurfaceAdjencyEffect6SCorrectionSchemeFilter->SetAtmosphericRadiativeTerms(filterAtmosphericCorrectionParametersTo6SRadiativeTerms->GetOutput());
   filterSurfaceAdjencyEffect6SCorrectionSchemeFilter->SetZenithalViewingAngle(dataAtmosphericCorrectionParameters->GetViewingZenithalAngle());
-  filterSurfaceAdjencyEffect6SCorrectionSchemeFilter->SetWindowRadius(atoi(argv[19]));
-  filterSurfaceAdjencyEffect6SCorrectionSchemeFilter->SetPixelSpacingInKilometers(static_cast<double>(atof(argv[20])));
+  filterSurfaceAdjencyEffect6SCorrectionSchemeFilter->SetWindowRadius(atoi(argv[17]));
+  filterSurfaceAdjencyEffect6SCorrectionSchemeFilter->SetPixelSpacingInKilometers(static_cast<double>(atof(argv[18])));
  
 
 //-------------------------------
