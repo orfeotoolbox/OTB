@@ -32,6 +32,8 @@ SET(OTB_INCLUDE_DIRS_BUILD_TREE ${OTB_INCLUDE_DIRS_BUILD_TREE}
   ${OTB_SOURCE_DIR}/Utilities/dxflib
   ${OTB_SOURCE_DIR}/Utilities/InsightJournal
   ${OTB_SOURCE_DIR}/Utilities/otb6S
+  ${OTB_SOURCE_DIR}/Utilities/otbgeotiff
+  ${OTB_SOURCE_DIR}/Utilities/otbgeotiff/libxtiff
 )
 
 #-----------------------------------------------------------------------------
@@ -118,6 +120,8 @@ SET(OTB_INCLUDE_DIRS_INSTALL_TREE ${OTB_INCLUDE_DIRS_INSTALL_TREE}
   ${OTB_INSTALL_INCLUDE_DIR}/Utilities/otbossim/include/ossim
   ${OTB_INSTALL_INCLUDE_DIR}/Utilities/InsightJournal
   ${OTB_INSTALL_INCLUDE_DIR}/Utilities/otb6S
+  ${OTB_INSTALL_INCLUDE_DIR}/Utilities/otbgeotiff
+  ${OTB_INSTALL_INCLUDE_DIR}/Utilities/otbgeotiff/libxtiff
 )
 
 SET(OTB_INCLUDE_DIRS_INSTALL_TREE ${OTB_INCLUDE_DIRS_INSTALL_TREE}
