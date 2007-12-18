@@ -6,7 +6,6 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
-
 /* OTB patches: replace "f2c.h" by "otb_6S.h" */
 /*#include "f2c.h"*/
 #include "otb_6S.h"
@@ -14,21 +13,24 @@ extern "C" {
 /* Common Block Declarations */
 
 Extern struct {
-    real delta, sigma;
+    doublereal delta, sigma;
 } sixs_del__;
 
 #define sixs_del__1 sixs_del__
 
 /*<    >*/
-/* Subroutine */ int atmref_(integer *iaer, integer *iaer_prof__, real *tamoy,
-	 real *taer, real *trmoy, real *pizmoy, real *piza, real *tamoyp, 
-	real *taerp, real *trmoyp, real *palt, real *phi, real *xmus, real *
-	xmuv, real *phirad, integer *nt, integer *mu, integer *np, real *rm, 
-	real *gb, real *rp, real *rorayl, real *roaero, real *romix, real *
-	rqrayl, real *rqaero, real *rqmix, real *rurayl, real *ruaero, real *
-	rumix, integer *ipol, real *xlm1, real *xlm2, real *rorayl_fi__, real 
-	*romix_fi__, integer *nfi, integer *nfilut, real *filut, real *rolut, 
-	real *rolutq, real *rolutu)
+/* Subroutine */ int atmref_(integer *iaer, integer *iaer_prof__, doublereal *
+	tamoy, doublereal *taer, doublereal *trmoy, doublereal *pizmoy, 
+	doublereal *piza, doublereal *tamoyp, doublereal *taerp, doublereal *
+	trmoyp, doublereal *palt, doublereal *phi, doublereal *xmus, 
+	doublereal *xmuv, doublereal *phirad, integer *nt, integer *mu, 
+	integer *np, doublereal *rm, doublereal *gb, doublereal *rp, 
+	doublereal *rorayl, doublereal *roaero, doublereal *romix, doublereal 
+	*rqrayl, doublereal *rqaero, doublereal *rqmix, doublereal *rurayl, 
+	doublereal *ruaero, doublereal *rumix, integer *ipol, doublereal *
+	xlm1, doublereal *xlm2, doublereal *rorayl_fi__, doublereal *
+	romix_fi__, integer *nfi, integer *nfilut, doublereal *filut, 
+	doublereal *rolut, doublereal *rolutq, doublereal *rolutu)
 {
     /* System generated locals */
     integer rolut_dim1, rolut_offset, rolutq_dim1, rolutq_offset, rolutu_dim1,
@@ -37,17 +39,21 @@ Extern struct {
 
     /* Local variables */
     integer i__, j;
-    extern /* Subroutine */ int os_(integer *, real *, real *, real *, real *,
-	     real *, real *, real *, integer *, integer *, integer *, real *, 
-	    real *, real *, real *, real *, integer *, real *);
+    extern /* Subroutine */ int os_(integer *, doublereal *, doublereal *, 
+	    doublereal *, doublereal *, doublereal *, doublereal *, 
+	    doublereal *, integer *, integer *, integer *, doublereal *, 
+	    doublereal *, doublereal *, doublereal *, doublereal *, integer *,
+	     doublereal *);
     integer ifi;
-    real xqm1[2499]	/* was [51][49] */, xum1[2499]	/* was [51][49] */, 
-	    tamol;
-    extern /* Subroutine */ int ospol_(integer *, real *, real *, real *, 
-	    real *, real *, real *, real *, integer *, integer *, integer *, 
-	    real *, real *, real *, real *, real *, real *, real *, integer *,
-	     integer *, real *, real *, real *, real *);
-    real tamolp, xlphim[181], rolutd[1025]	/* was [25][41] */;
+    doublereal xqm1[2499]	/* was [51][49] */, xum1[2499]	/* was [51][
+	    49] */, tamol;
+    extern /* Subroutine */ int ospol_(integer *, doublereal *, doublereal *, 
+	    doublereal *, doublereal *, doublereal *, doublereal *, 
+	    doublereal *, integer *, integer *, integer *, doublereal *, 
+	    doublereal *, doublereal *, doublereal *, doublereal *, 
+	    doublereal *, doublereal *, integer *, integer *, doublereal *, 
+	    doublereal *, doublereal *, doublereal *);
+    doublereal tamolp, xlphim[181], rolutd[1025]	/* was [25][41] */;
 
 /*<       real    rolut(mu,41),rolutq(mu,41),rolutu(mu,41) >*/
 /* THOMAS */
@@ -105,27 +111,27 @@ Extern struct {
     --rorayl_fi__;
 
     /* Function Body */
-    *rorayl = (float)0.;
+    *rorayl = 0.;
 /*<       roaero=0. >*/
-    *roaero = (float)0.;
+    *roaero = 0.;
 /*<       romix=0. >*/
-    *romix = (float)0.;
+    *romix = 0.;
 /*<       rqrayl=0. >*/
-    *rqrayl = (float)0.;
+    *rqrayl = 0.;
 /*<       rqaero=0. >*/
-    *rqaero = (float)0.;
+    *rqaero = 0.;
 /*<       rqmix=0. >*/
-    *rqmix = (float)0.;
+    *rqmix = 0.;
 /*<       rurayl=999. >*/
-    *rurayl = (float)999.;
+    *rurayl = 999.;
 /*<       ruaero=999. >*/
-    *ruaero = (float)999.;
+    *ruaero = 999.;
 /*<       rumix=999. >*/
-    *rumix = (float)999.;
+    *rumix = 999.;
 
 /* 3 possible cases (satellite,plane,ground) */
 /*<       if(palt.gt.0.0)then >*/
-    if (*palt > (float)0.) {
+    if (*palt > 0.) {
 /*<         rm(-mu)=-xmuv >*/
 	rm[-(*mu)] = -(*xmuv);
 /*<         rm(mu)=xmuv >*/
@@ -134,9 +140,9 @@ Extern struct {
 	rm[0] = -(*xmus);
 /*  -----rayleigh reflectance = rorayl,rprayl */
 /*<         tamol=0. >*/
-	tamol = (float)0.;
+	tamol = 0.;
 /*<         tamolp=0. >*/
-	tamolp = (float)0.;
+	tamolp = 0.;
 /*<  	 >*/
 	ospol_(iaer_prof__, &tamol, trmoy, piza, &tamolp, trmoyp, palt, 
 		phirad, nt, mu, np, &rm[rm_offset], &gb[gb_offset], &rp[1], &
@@ -200,20 +206,20 @@ roduced */
 /*< 	 rumix=rurayl >*/
 	    *rumix = *rurayl;
 /*< 	 roaero=0.0 >*/
-	    *roaero = (float)0.;
+	    *roaero = 0.;
 /*< 	 rqaero=0.0 >*/
-	    *rqaero = (float)0.;
+	    *rqaero = 0.;
 /*< 	 ruaero=0.0 >*/
-	    *ruaero = (float)0.;
+	    *ruaero = 0.;
 /*<         return >*/
 	    return 0;
 /*< 	endif >*/
 	}
 /*  -----aerosol reflectance = roaero,rpaero */
 /*<         tamol=0. >*/
-	tamol = (float)0.;
+	tamol = 0.;
 /*<         tamolp=0. >*/
-	tamolp = (float)0.;
+	tamolp = 0.;
 /*< 	if (ipol.ne.1)then >*/
 	if (*ipol != 1) {
 /*<    >*/

@@ -6,7 +6,6 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
-
 /* OTB patches: replace "f2c.h" by "otb_6S.h" */
 /*#include "f2c.h"*/
 #include "otb_6S.h"
@@ -18,8 +17,8 @@ static integer c__48 = 48;
 static doublereal c_b7 = 1.5;
 
 /*<    >*/
-/* Subroutine */ int hapkalbe_(real *om, real *af, real *s0, real *h__, real *
-	brdfalb)
+/* Subroutine */ int hapkalbe_(doublereal *om, doublereal *af, doublereal *s0,
+	 doublereal *h__, doublereal *brdfalb)
 {
     /* System generated locals */
     doublereal d__1;
@@ -30,12 +29,12 @@ static doublereal c_b7 = 1.5;
 	     tan(doublereal);
 
     /* Local variables */
-    real f, g;
+    doublereal f, g;
     integer j, k, l;
-    real h1, h2, p0, fa[48], bg, cg, fi, ta[24], pg, pi, si1, si2, mu1, mu2, 
-	    h1h2, wfa[48], wta[24], phi1, phi2, pond, summ, teta1, teta2;
-    extern /* Subroutine */ int gauss_(real *, real *, real *, real *, 
-	    integer *);
+    doublereal h1, h2, p0, fa[48], bg, cg, fi, ta[24], pg, pi, si1, si2, mu1, 
+	    mu2, h1h2, wfa[48], wta[24], phi1, phi2, pond, summ, teta1, teta2;
+    extern /* Subroutine */ int gauss_(doublereal *, doublereal *, doublereal 
+	    *, doublereal *, integer *);
 
 /*<       parameter (nta=24,nfa=48) >*/
 /*<       real teta1,teta2,phi1,phi2,ta(nta),fa(nfa),wta(nta),wfa(nfa) >*/
@@ -45,23 +44,23 @@ static doublereal c_b7 = 1.5;
 /*<       real pi >*/
 /*<       integer k,j,l >*/
 /*<       pi=atan(1.)*4. >*/
-    pi = atan((float)1.) * (float)4.;
+    pi = atan(1.) * 4.;
 /*<       teta1=0. >*/
-    teta1 = (float)0.;
+    teta1 = 0.;
 /*<       teta2=pi/2. >*/
-    teta2 = pi / (float)2.;
+    teta2 = pi / 2.;
 /*<       call gauss(teta1,teta2,ta,wta,nta) >*/
     gauss_(&teta1, &teta2, ta, wta, &c__24);
 /*<       phi1=0. >*/
-    phi1 = (float)0.;
+    phi1 = 0.;
 /*<       phi2=2.*pi >*/
-    phi2 = pi * (float)2.;
+    phi2 = pi * 2.;
 /*<       call gauss(phi1,phi2,fa,wfa,nfa) >*/
     gauss_(&phi1, &phi2, fa, wfa, &c__48);
 /*<       brdfalb=0. >*/
-    *brdfalb = (float)0.;
+    *brdfalb = 0.;
 /*<       summ=0. >*/
-    summ = (float)0.;
+    summ = 0.;
 /*<       do 1 k=1,nfa >*/
     for (k = 1; k <= 48; ++k) {
 /*<       do 2 j=1,nta >*/
@@ -79,35 +78,31 @@ static doublereal c_b7 = 1.5;
 /*<       fi=fa(k) >*/
 		fi = fa[k - 1];
 /*<       f=om/4./(mu2+mu1) >*/
-		f = *om / (float)4. / (mu2 + mu1);
+		f = *om / 4. / (mu2 + mu1);
 /*<       cg=mu1*mu2+sqrt(1.-mu1*mu1)*sqrt(1.-mu2*mu2)*cos(fi) >*/
-		cg = mu1 * mu2 + sqrt((float)1. - mu1 * mu1) * sqrt((float)1. 
-			- mu2 * mu2) * cos(fi);
+		cg = mu1 * mu2 + sqrt(1. - mu1 * mu1) * sqrt(1. - mu2 * mu2) *
+			 cos(fi);
 /*<       h1=(1.+2*mu1)/(1.+2.*sqrt(1.-om)*mu1) >*/
-		h1 = (mu1 * 2 + (float)1.) / (sqrt((float)1. - *om) * (float)
-			2. * mu1 + (float)1.);
+		h1 = (mu1 * 2 + 1.) / (sqrt(1. - *om) * 2. * mu1 + 1.);
 /*<       h2=(1.+2*mu2)/(1.+2.*sqrt(1.-om)*mu2) >*/
-		h2 = (mu2 * 2 + (float)1.) / (sqrt((float)1. - *om) * (float)
-			2. * mu2 + (float)1.);
+		h2 = (mu2 * 2 + 1.) / (sqrt(1. - *om) * 2. * mu2 + 1.);
 /*<       h1h2=h1*h2 >*/
 		h1h2 = h1 * h2;
 /*<       pg=(1-af*af)/((1+af*af+2*af*cg)**1.5) >*/
-		d__1 = (doublereal) (*af * *af + 1 + *af * 2 * cg);
+		d__1 = *af * *af + 1 + *af * 2 * cg;
 		pg = (1 - *af * *af) / pow_dd(&d__1, &c_b7);
 /*<       p0=(1-af*af)/((1+af*af+2*af)**1.5) >*/
-		d__1 = (doublereal) (*af * *af + 1 + *af * 2);
+		d__1 = *af * *af + 1 + *af * 2;
 		p0 = (1 - *af * *af) / pow_dd(&d__1, &c_b7);
 /*<       g=acos(cg) >*/
 		g = acos(cg);
 /*<       bg=(s0/(om*p0))/(1.+tan(g/2.)/h) >*/
-		bg = *s0 / (*om * p0) / (tan(g / (float)2.) / *h__ + (float)
-			1.);
+		bg = *s0 / (*om * p0) / (tan(g / 2.) / *h__ + 1.);
 /*<       pond=mu1*mu2*si1*si2*wfa(k)*wta(j)*wta(l) >*/
 		pond = mu1 * mu2 * si1 * si2 * wfa[k - 1] * wta[j - 1] * wta[
 			l - 1];
 /*<       brdfalb=brdfalb+f*((1.+bg)*pg+h1h2-1.)*pond >*/
-		*brdfalb += f * ((bg + (float)1.) * pg + h1h2 - (float)1.) * 
-			pond;
+		*brdfalb += f * ((bg + 1.) * pg + h1h2 - 1.) * pond;
 /*<       summ=summ+pond >*/
 		summ += pond;
 /*<   3   continue >*/

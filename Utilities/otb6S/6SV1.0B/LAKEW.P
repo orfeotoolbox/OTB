@@ -1,1 +1,1 @@
-extern int lakew_(real *r__);
+extern int lakew_(doublereal *r__);

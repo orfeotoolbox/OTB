@@ -6,47 +6,37 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
-
 /* OTB patches: replace "f2c.h" by "otb_6S.h" */
 /*#include "f2c.h"*/
 #include "otb_6S.h"
 
 /*<    >*/
-/* Subroutine */ int enviro_(real *difr, real *difa, real *r__, real *palt, 
-	real *xmuv, real *fra, real *fae, real *fr)
+/* Subroutine */ int enviro_(doublereal *difr, doublereal *difa, doublereal *
+	r__, doublereal *palt, doublereal *xmuv, doublereal *fra, doublereal *
+	fae, doublereal *fr)
 {
     /* Initialized data */
 
-    static real alt[16] = { (float).5,(float)1.,(float)2.,(float)3.,(float)4.,
-	    (float)5.,(float)6.,(float)7.,(float)8.,(float)10.,(float)12.,(
-	    float)14.,(float)16.,(float)18.,(float)20.,(float)60. };
-    static real cfr1[16] = { (float).73,(float).71,(float).656,(float).606,(
-	    float).56,(float).516,(float).473,(float).433,(float).395,(float)
-	    .323,(float).258,(float).209,(float).171,(float).142,(float).122,(
-	    float).07 };
-    static real cfr2[16] = { (float)2.8,(float)1.51,(float).845,(float).634,(
-	    float).524,(float).465,(float).429,(float).405,(float).39,(float)
-	    .386,(float).409,(float).445,(float).488,(float).545,(float).608,(
-	    float).868 };
-    static real cfa1[16] = { (float).239,(float).396,(float).588,(float).626,(
-	    float).612,(float).505,(float).454,(float).448,(float).444,(float)
-	    .445,(float).444,(float).448,(float).448,(float).448,(float).448,(
-	    float).448 };
-    static real cfa2[16] = { (float)1.4,(float)1.2,(float)1.02,(float).86,(
-	    float).74,(float).56,(float).46,(float).42,(float).38,(float).34,(
-	    float).3,(float).28,(float).27,(float).27,(float).27,(float).27 };
-    static real cfa3[16] = { (float)9.17,(float)6.26,(float)5.48,(float)5.16,(
-	    float)4.74,(float)3.65,(float)3.24,(float)3.15,(float)3.07,(float)
-	    2.97,(float)2.88,(float)2.83,(float)2.83,(float)2.83,(float)2.83,(
-	    float)2.83 };
+    static doublereal alt[16] = { .5,1.,2.,3.,4.,5.,6.,7.,8.,10.,12.,14.,16.,
+	    18.,20.,60. };
+    static doublereal cfr1[16] = { .73,.71,.656,.606,.56,.516,.473,.433,.395,
+	    .323,.258,.209,.171,.142,.122,.07 };
+    static doublereal cfr2[16] = { 2.8,1.51,.845,.634,.524,.465,.429,.405,.39,
+	    .386,.409,.445,.488,.545,.608,.868 };
+    static doublereal cfa1[16] = { .239,.396,.588,.626,.612,.505,.454,.448,
+	    .444,.445,.444,.448,.448,.448,.448,.448 };
+    static doublereal cfa2[16] = { 1.4,1.2,1.02,.86,.74,.56,.46,.42,.38,.34,
+	    .3,.28,.27,.27,.27,.27 };
+    static doublereal cfa3[16] = { 9.17,6.26,5.48,5.16,4.74,3.65,3.24,3.15,
+	    3.07,2.97,2.88,2.83,2.83,2.83,2.83,2.83 };
 
     /* Builtin functions */
     double exp(doublereal), log(doublereal);
 
     /* Local variables */
     integer i__;
-    real a0, b0, a1, b1, fae0, fra0, zmin, zmax, xlnv, xcfa1, xcfa2, xcfa3, 
-	    xcfr1, xcfr2;
+    doublereal a0, b0, a1, b1, fae0, fra0, zmin, zmax, xlnv, xcfa1, xcfa2, 
+	    xcfa3, xcfr1, xcfr2;
 
 /*<       real difr, difa, r, palt >*/
 /*<       real fae,fra,fr,fae0,fra0,xmuv,xlnv,a0,b0,a1,b1 >*/
@@ -67,21 +57,19 @@ extern "C" {
 /*     and are corrected of the effect of the view zenith angle. */
 
 /*<       a0=1.3347 >*/
-    a0 = (float)1.3347;
+    a0 = 1.3347;
 /*<       b0=0.57757 >*/
-    b0 = (float).57757;
+    b0 = .57757;
 /*<       a1=-1.479 >*/
-    a1 = (float)-1.479;
+    a1 = -1.479;
 /*<       b1=-1.5275 >*/
-    b1 = (float)-1.5275;
+    b1 = -1.5275;
 /*<       if (palt.ge.60.) then >*/
-    if (*palt >= (float)60.) {
+    if (*palt >= 60.) {
 /*<       fae0=1-0.448*exp(-r*0.27)-0.552*exp(-r*2.83) >*/
-	fae0 = 1 - exp(-(*r__) * (float).27) * (float).448 - exp(-(*r__) * (
-		float)2.83) * (float).552;
+	fae0 = 1 - exp(-(*r__) * .27) * .448 - exp(-(*r__) * 2.83) * .552;
 /*<       fra0=1-0.930*exp(-r*0.080)-0.070*exp(-r*1.100) >*/
-	fra0 = 1 - exp(-(*r__) * (float).08) * (float).93 - exp(-(*r__) * (
-		float)1.1) * (float).07;
+	fra0 = 1 - exp(-(*r__) * .08) * .93 - exp(-(*r__) * 1.1) * .07;
 /*<       else >*/
     } else {
 /*<       i=0 >*/
@@ -131,11 +119,11 @@ L10:
 /*<          endif >*/
 	}
 /*<       fra0=1.-xcfr1*exp(-r*xcfr2)-(1.-xcfr1)*exp(-r*0.08) >*/
-	fra0 = (float)1. - xcfr1 * exp(-(*r__) * xcfr2) - ((float)1. - xcfr1) 
-		* exp(-(*r__) * (float).08);
+	fra0 = 1. - xcfr1 * exp(-(*r__) * xcfr2) - (1. - xcfr1) * exp(-(*r__) 
+		* .08);
 /*<       fae0=1.-xcfa1*exp(-r*xcfa2)-(1.-xcfa1)*exp(-r*xcfa3) >*/
-	fae0 = (float)1. - xcfa1 * exp(-(*r__) * xcfa2) - ((float)1. - xcfa1) 
-		* exp(-(*r__) * xcfa3);
+	fae0 = 1. - xcfa1 * exp(-(*r__) * xcfa2) - (1. - xcfa1) * exp(-(*r__) 
+		* xcfa3);
 /*<       endif >*/
     }
 /* correction of the effect of the view zenith angle */
@@ -149,13 +137,13 @@ L10:
 	    xlnv * xlnv));
 
 /*<       if ((difa+difr).gt.1.E-03) then >*/
-    if (*difa + *difr > (float).001) {
+    if (*difa + *difr > .001) {
 /*<          fr=(fae*difa+fra*difr)/(difa+difr) >*/
 	*fr = (*fae * *difa + *fra * *difr) / (*difa + *difr);
 /*<          else >*/
     } else {
 /*<          fr=1. >*/
-	*fr = (float)1.;
+	*fr = 1.;
 /*<          endif >*/
     }
 /*<       return >*/

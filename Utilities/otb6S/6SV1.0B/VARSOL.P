@@ -1,1 +1,1 @@
-extern int varsol_(integer *jday, integer *month, real *dsol);
+extern int varsol_(integer *jday, integer *month, doublereal *dsol);

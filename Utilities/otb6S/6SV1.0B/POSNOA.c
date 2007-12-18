@@ -6,7 +6,6 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
-
 /* OTB patches: replace "f2c.h" by "otb_6S.h" */
 /*#include "f2c.h"*/
 #include "otb_6S.h"
@@ -21,19 +20,20 @@ Extern struct {
 #define sixs_ier__1 sixs_ier__
 
 /*<    >*/
-/* Subroutine */ int posnoa_(integer *month, integer *jday, real *tu, integer 
-	*nc, real *xlonan, real *hna, real *campm, real *asol, real *phi0, 
-	real *avis, real *phiv, real *xlon, real *xlat)
+/* Subroutine */ int posnoa_(integer *month, integer *jday, doublereal *tu, 
+	integer *nc, doublereal *xlonan, doublereal *hna, doublereal *campm, 
+	doublereal *asol, doublereal *phi0, doublereal *avis, doublereal *
+	phiv, doublereal *xlon, doublereal *xlat)
 {
     /* Builtin functions */
     double sin(doublereal), asin(doublereal), cos(doublereal), atan2(
 	    doublereal, doublereal);
 
     /* Local variables */
-    real d__, r__, t, u, y, z__, ai, an, pi, ylo1, hnam, delt, xden, ylat, 
-	    zlat, cosy, ylon, siny, zlon, xnum, ylonan;
-    extern /* Subroutine */ int possol_(integer *, integer *, real *, real *, 
-	    real *, real *, real *);
+    doublereal d__, r__, t, u, y, z__, ai, an, pi, ylo1, hnam, delt, xden, 
+	    ylat, zlat, cosy, ylon, siny, zlon, xnum, ylonan;
+    extern /* Subroutine */ int possol_(integer *, integer *, doublereal *, 
+	    doublereal *, doublereal *, doublereal *, doublereal *);
 
 /*<       logical ier >*/
 /*<       real tu,xlonan,hna,asol,phi0,avis,phiv,xlon,xlat,campm >*/
@@ -47,15 +47,15 @@ Extern struct {
 /*     h/r=860/6378 */
 /*     campm allows the user to switch to pm platforms */
 /*<       pi=3.1415926 >*/
-    pi = (float)3.1415926;
+    pi = 3.1415926;
 /*<       r=860./6378.155 >*/
-    r__ = (float).13483523056432464;
+    r__ = .13483523056432464;
 /*<       ai=98.96*pi/180. >*/
-    ai = pi * (float)98.96 / (float)180.;
+    ai = pi * 98.96 / 180.;
 /*<       an=360.*pi/(6119.*180.) >*/
-    an = pi * (float)360. / (float)1101420.;
+    an = pi * 360. / 1101420.;
 /*<       ylonan=xlonan*pi/180. >*/
-    ylonan = *xlonan * pi / (float)180.;
+    ylonan = *xlonan * pi / 180.;
 /*<       t=tu*3600 >*/
     t = *tu * 3600;
 /*<       hnam=hna >*/
@@ -67,9 +67,9 @@ Extern struct {
 /*<       u=campm*u*an >*/
     u = *campm * u * an;
 /*<       delt=((nc-(2048+1)/2.)*55.385/((2048.-1)/2.)) >*/
-    delt = (*nc - (float)1024.5) * (float)55.385 / (float)1023.5;
+    delt = (*nc - 1024.5) * 55.385 / 1023.5;
 /*<       delt=campm*delt*pi/180. >*/
-    delt = *campm * delt * pi / (float)180.;
+    delt = *campm * delt * pi / 180.;
 /*<       avis=asin((1+r)*sin(delt)) >*/
     *avis = asin((r__ + 1) * sin(delt));
 /*<       d=avis-delt >*/
@@ -87,24 +87,24 @@ Extern struct {
 /*<       ylon=asin(siny) >*/
     ylon = asin(siny);
 /*<       if(cosy.gt.0.)goto 10 >*/
-    if (cosy > (float)0.) {
+    if (cosy > 0.) {
 	goto L10;
     }
 /*<       if(siny.gt.0) ylon=pi-ylon >*/
-    if (siny > (float)0.) {
+    if (siny > 0.) {
 	ylon = pi - ylon;
     }
 /*<       if(siny.le.0) ylon=-(pi+ylon) >*/
-    if (siny <= (float)0.) {
+    if (siny <= 0.) {
 	ylon = -(pi + ylon);
     }
 /*<  10   ylo1=ylon+ylonan-(t-hnam)*2.*pi/86400. >*/
 L10:
-    ylo1 = ylon + ylonan - (t - hnam) * (float)2. * pi / (float)86400.;
+    ylo1 = ylon + ylonan - (t - hnam) * 2. * pi / 86400.;
 /*<       xlat=ylat*180./pi >*/
-    *xlat = ylat * (float)180. / pi;
+    *xlat = ylat * 180. / pi;
 /*<       xlon=ylo1*180./pi >*/
-    *xlon = ylo1 * (float)180. / pi;
+    *xlon = ylo1 * 180. / pi;
 /*<    >*/
     possol_(month, jday, tu, xlon, xlat, asol, phi0);
 /*<       if(ier)return >*/
@@ -118,24 +118,24 @@ L10:
 /*<       if(nc.ne.1024)then >*/
     if (*nc != 1024) {
 /*<       xnum=sin(zlon-ylon)*cos(zlat)/sin(abs(d)) >*/
-	xnum = sin(zlon - ylon) * cos(zlat) / sin((dabs(d__)));
+	xnum = sin(zlon - ylon) * cos(zlat) / sin((abs(d__)));
 /*<       xden=(sin(zlat)-sin(ylat)*cos(d))/cos(ylat)/sin(abs(d)) >*/
-	xden = (sin(zlat) - sin(ylat) * cos(d__)) / cos(ylat) / sin((dabs(d__)
-		));
+	xden = (sin(zlat) - sin(ylat) * cos(d__)) / cos(ylat) / sin((abs(d__))
+		);
 /*<       phiv=atan2(xnum,xden) >*/
 	*phiv = atan2(xnum, xden);
 /*<       else >*/
     } else {
 /*<       phiv=0. >*/
-	*phiv = (float)0.;
+	*phiv = 0.;
 /*<       endif >*/
     }
 /*<       phiv=phiv*180./pi >*/
-    *phiv = *phiv * (float)180. / pi;
+    *phiv = *phiv * 180. / pi;
 /*<       avis=abs(avis) >*/
-    *avis = dabs(*avis);
+    *avis = abs(*avis);
 /*<       avis=avis*180./pi >*/
-    *avis = *avis * (float)180. / pi;
+    *avis = *avis * 180. / pi;
 /*<       return >*/
     return 0;
 /*<       end >*/

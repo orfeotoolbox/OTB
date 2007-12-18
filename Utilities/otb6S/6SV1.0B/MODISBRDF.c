@@ -6,14 +6,14 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
-
 /* OTB patches: replace "f2c.h" by "otb_6S.h" */
 /*#include "f2c.h"*/
 #include "otb_6S.h"
 
 /*<    >*/
-/* Subroutine */ int modisbrdf_(real *p1, real *p2, real *p3, integer *mu, 
-	integer *np, real *rm, real *rp, real *brdfint)
+/* Subroutine */ int modisbrdf_(doublereal *p1, doublereal *p2, doublereal *
+	p3, integer *mu, integer *np, doublereal *rm, doublereal *rp, 
+	doublereal *brdfint)
 {
     /* System generated locals */
     integer rm_offset, brdfint_dim1, brdfint_offset, i__1, i__2;
@@ -24,9 +24,9 @@ extern "C" {
 
     /* Local variables */
     integer j, k;
-    real rossthick, pi, cfi, rfi, sfi, cts, ctv, rts, sts, rtv, stv, cpha, 
-	    rpha, cost, tvar, sint, tanti, tantv, angdist, angtemp, angover, 
-	    lispars, rosselt;
+    doublereal rossthick, pi, cfi, rfi, sfi, cts, ctv, rts, sts, rtv, stv, 
+	    cpha, rpha, cost, tvar, sint, tanti, tantv, angdist, angtemp, 
+	    angover, lispars, rosselt;
 
 /*<       real p1,p2,p3,xmu,view >*/
 /*<       real dts,dtv,dfs,dfv,dfi >*/
@@ -51,7 +51,7 @@ extern "C" {
     /* Function Body */
     rts = acos(rm[0]);
 /*<       pi=atan(1.)*4. >*/
-    pi = atan((float)1.) * (float)4.;
+    pi = atan(1.) * 4.;
 /*<       do 1 k=1,np >*/
     i__1 = *np;
     for (k = 1; k <= i__1; ++k) {
@@ -71,7 +71,7 @@ extern "C" {
 /*<          endif >*/
 	    }
 /*<       rfi=abs(rfi) >*/
-	    rfi = dabs(rfi);
+	    rfi = abs(rfi);
 /*< 	cts=cos(rts) >*/
 	    cts = cos(rts);
 /*< 	ctv=cos(rtv) >*/
@@ -91,40 +91,39 @@ extern "C" {
 /*< 	rosselt=(pi/2-rpha)*cpha+sin(rpha) >*/
 	    rosselt = (pi / 2 - rpha) * cpha + sin(rpha);
 /*< 	rossthick=(rosselt/(cts+ctv))-pi/4. >*/
-	    rossthick = rosselt / (cts + ctv) - pi / (float)4.;
+	    rossthick = rosselt / (cts + ctv) - pi / 4.;
 /*< 	tanti=tan(rts) >*/
 	    tanti = tan(rts);
 /*< 	tantv=tan(rtv) >*/
 	    tantv = tan(rtv);
 /*< 	angdist=tanti*tanti+tantv*tantv-2.*tanti*tantv*cfi >*/
-	    angdist = tanti * tanti + tantv * tantv - tanti * (float)2. * 
-		    tantv * cfi;
+	    angdist = tanti * tanti + tantv * tantv - tanti * 2. * tantv * 
+		    cfi;
 /*< 	angdist=sqrt(angdist) >*/
 	    angdist = sqrt(angdist);
 /*< 	angtemp=1./cts+1./ctv >*/
-	    angtemp = (float)1. / cts + (float)1. / ctv;
+	    angtemp = 1. / cts + 1. / ctv;
 /*< 	c >*/
 	    cost = sqrt(angdist * angdist + tanti * tanti * tantv * tantv * 
-		    sfi * sfi) * (float)2.;
+		    sfi * sfi) * 2.;
 /*< 	cost=cost/angtemp >*/
 	    cost /= angtemp;
 /*< 	if (cost.ge.1.) cost=1. >*/
-	    if (cost >= (float)1.) {
-		cost = (float)1.;
+	    if (cost >= 1.) {
+		cost = 1.;
 	    }
 /*< 	if (cost.le.-1.) cost=-1. >*/
-	    if (cost <= (float)-1.) {
-		cost = (float)-1.;
+	    if (cost <= -1.) {
+		cost = -1.;
 	    }
 /*< 	tvar=acos(cost) >*/
 	    tvar = acos(cost);
 /*< 	sint=sqrt(1.-cost*cost) >*/
-	    sint = sqrt((float)1. - cost * cost);
+	    sint = sqrt(1. - cost * cost);
 /*< 	angover=(tvar-sint*cost)*angtemp/pi >*/
 	    angover = (tvar - sint * cost) * angtemp / pi;
 /*< 	lispars=angover-angtemp+0.5*(1.+cpha)/cts/ctv >*/
-	    lispars = angover - angtemp + (cpha + (float)1.) * (float).5 / 
-		    cts / ctv;
+	    lispars = angover - angtemp + (cpha + 1.) * .5 / cts / ctv;
 /*<       brdfint(j,k)=p1+p2*rossthick+p3*lispars >*/
 	    brdfint[j + k * brdfint_dim1] = *p1 + *p2 * rossthick + *p3 * 
 		    lispars;

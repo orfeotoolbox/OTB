@@ -6,22 +6,24 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
-
 /* OTB patches: replace "f2c.h" by "otb_6S.h" */
 /*#include "f2c.h"*/
 #include "otb_6S.h"
 
 /* Table of constant values */
 
-static real c_b3 = (float)999.;
+static doublereal c_b3 = 999.;
 
 /*<    >*/
-/* Subroutine */ int scatra_(integer *iaer_prof__, real *taer, real *taerp, 
-	real *tray, real *trayp, real *piza, real *palt, integer *nt, integer 
-	*mu, real *rm, real *gb, real *xmus, real *xmuv, real *ddirtt, real *
-	ddiftt, real *udirtt, real *udiftt, real *sphalbt, real *ddirtr, real 
-	*ddiftr, real *udirtr, real *udiftr, real *sphalbr, real *ddirta, 
-	real *ddifta, real *udirta, real *udifta, real *sphalba)
+/* Subroutine */ int scatra_(integer *iaer_prof__, doublereal *taer, 
+	doublereal *taerp, doublereal *tray, doublereal *trayp, doublereal *
+	piza, doublereal *palt, integer *nt, integer *mu, doublereal *rm, 
+	doublereal *gb, doublereal *xmus, doublereal *xmuv, doublereal *
+	ddirtt, doublereal *ddiftt, doublereal *udirtt, doublereal *udiftt, 
+	doublereal *sphalbt, doublereal *ddirtr, doublereal *ddiftr, 
+	doublereal *udirtr, doublereal *udiftr, doublereal *sphalbr, 
+	doublereal *ddirta, doublereal *ddifta, doublereal *udirta, 
+	doublereal *udifta, doublereal *sphalba)
 {
     /* System generated locals */
     integer rm_offset, gb_offset;
@@ -31,11 +33,12 @@ static real c_b3 = (float)999.;
 
     /* Local variables */
     integer it;
-    extern /* Subroutine */ int iso_(integer *, real *, real *, real *, real *
-	    , real *, real *, integer *, integer *, real *, real *, real *);
-    real tamol;
-    extern /* Subroutine */ int csalbr_(real *, real *);
-    real tamolp, xtrans[3];
+    extern /* Subroutine */ int iso_(integer *, doublereal *, doublereal *, 
+	    doublereal *, doublereal *, doublereal *, doublereal *, integer *,
+	     integer *, doublereal *, doublereal *, doublereal *);
+    doublereal tamol;
+    extern /* Subroutine */ int csalbr_(doublereal *, doublereal *);
+    doublereal tamolp, xtrans[3];
 
 /*<       integer mu >*/
 /*<       real rm(-mu:mu),gb(-mu:mu) >*/
@@ -56,40 +59,40 @@ static real c_b3 = (float)999.;
     rm -= rm_offset;
 
     /* Function Body */
-    *ddirtt = (float)1.;
+    *ddirtt = 1.;
 /*<       ddiftt=0. >*/
-    *ddiftt = (float)0.;
+    *ddiftt = 0.;
 /*<       udirtt=1. >*/
-    *udirtt = (float)1.;
+    *udirtt = 1.;
 /*<       udiftt=0. >*/
-    *udiftt = (float)0.;
+    *udiftt = 0.;
 /*<       sphalbt=0. >*/
-    *sphalbt = (float)0.;
+    *sphalbt = 0.;
 /*<       ddirtr=1. >*/
-    *ddirtr = (float)1.;
+    *ddirtr = 1.;
 /*<       ddiftr=0. >*/
-    *ddiftr = (float)0.;
+    *ddiftr = 0.;
 /*<       udirtr=1. >*/
-    *udirtr = (float)1.;
+    *udirtr = 1.;
 /*<       udiftr=0. >*/
-    *udiftr = (float)0.;
+    *udiftr = 0.;
 /*<       sphalbr=0. >*/
-    *sphalbr = (float)0.;
+    *sphalbr = 0.;
 /*<       ddirta=1. >*/
-    *ddirta = (float)1.;
+    *ddirta = 1.;
 /*<       ddifta=0. >*/
-    *ddifta = (float)0.;
+    *ddifta = 0.;
 /*<       udirta=1. >*/
-    *udirta = (float)1.;
+    *udirta = 1.;
 /*<       udifta=0. >*/
-    *udifta = (float)0.;
+    *udifta = 0.;
 /*<       sphalba=0. >*/
-    *sphalba = (float)0.;
+    *sphalba = 0.;
 /*<       do 1 it=1,3 >*/
     for (it = 1; it <= 3; ++it) {
 /* it=1 rayleigh only, it=2 aerosol only, it=3 rayleigh+aerosol */
 /*<         if (it.eq.2.and.taer.le.0.) goto 1 >*/
-	if (it == 2 && *taer <= (float)0.) {
+	if (it == 2 && *taer <= 0.) {
 	    goto L1;
 	}
 /*     compute upward,downward diffuse transmittance for rayleigh,aero
@@ -97,19 +100,19 @@ sol */
 /*<         if (it.eq.1) then >*/
 	if (it == 1) {
 /*<           if (palt.gt.900) then >*/
-	    if (*palt > (float)900.) {
+	    if (*palt > 900.) {
 /*<             udiftt=(2./3.+xmuv)+(2./3.-xmuv)*exp(-tray/xmuv) >*/
-		*udiftt = *xmuv + (float).66666666666666663 + ((float)
-			.66666666666666663 - *xmuv) * exp(-(*tray) / *xmuv);
+		*udiftt = *xmuv + .66666666666666663 + (.66666666666666663 - *
+			xmuv) * exp(-(*tray) / *xmuv);
 /*<             udiftt=udiftt/((4./3.)+tray)-exp(-tray/xmuv) >*/
-		*udiftt = *udiftt / (*tray + (float)1.3333333333333333) - exp(
-			-(*tray) / *xmuv);
+		*udiftt = *udiftt / (*tray + 1.3333333333333333) - exp(-(*
+			tray) / *xmuv);
 /*<             ddiftt=(2./3.+xmus)+(2./3.-xmus)*exp(-tray/xmus) >*/
-		*ddiftt = *xmus + (float).66666666666666663 + ((float)
-			.66666666666666663 - *xmus) * exp(-(*tray) / *xmus);
+		*ddiftt = *xmus + .66666666666666663 + (.66666666666666663 - *
+			xmus) * exp(-(*tray) / *xmus);
 /*<             ddiftt=ddiftt/((4./3.)+tray)-exp(-tray/xmus) >*/
-		*ddiftt = *ddiftt / (*tray + (float)1.3333333333333333) - exp(
-			-(*tray) / *xmus);
+		*ddiftt = *ddiftt / (*tray + 1.3333333333333333) - exp(-(*
+			tray) / *xmus);
 /*<             ddirtt=exp(-tray/xmus) >*/
 		*ddirtt = exp(-(*tray) / *xmus);
 /*<             udirtt=exp(-tray/xmuv) >*/
@@ -119,11 +122,11 @@ sol */
 /*<           endif >*/
 	    }
 /*<           if (palt.lt.900) then >*/
-	    if (*palt < (float)900.) {
+	    if (*palt < 900.) {
 /*<             tamol=0. >*/
-		tamol = (float)0.;
+		tamol = 0.;
 /*<             tamolp=0. >*/
-		tamolp = (float)0.;
+		tamolp = 0.;
 /*<             rm(-mu)=-xmuv >*/
 		rm[-(*mu)] = -(*xmuv);
 /*<             rm(mu)=xmuv >*/
@@ -144,11 +147,11 @@ sol */
 /*<             rm(0)=xmus >*/
 		rm[0] = *xmus;
 /*<             ddiftt=(2./3.+xmus)+(2./3.-xmus)*exp(-tray/xmus) >*/
-		*ddiftt = *xmus + (float).66666666666666663 + ((float)
-			.66666666666666663 - *xmus) * exp(-(*tray) / *xmus);
+		*ddiftt = *xmus + .66666666666666663 + (.66666666666666663 - *
+			xmus) * exp(-(*tray) / *xmus);
 /*<             ddiftt=ddiftt/((4./3.)+tray)-exp(-tray/xmus) >*/
-		*ddiftt = *ddiftt / (*tray + (float)1.3333333333333333) - exp(
-			-(*tray) / *xmus);
+		*ddiftt = *ddiftt / (*tray + 1.3333333333333333) - exp(-(*
+			tray) / *xmus);
 /*<             ddirtt=exp(-tray/xmus) >*/
 		*ddirtt = exp(-(*tray) / *xmus);
 /*<             udirtt=exp(-tray/xmuv) >*/
@@ -158,11 +161,11 @@ sol */
 /*<           endif >*/
 	    }
 /*<           if (palt.le.0.) then >*/
-	    if (*palt <= (float)0.) {
+	    if (*palt <= 0.) {
 /*<             udiftt=0. >*/
-		*udiftt = (float)0.;
+		*udiftt = 0.;
 /*<             udirtt=1. >*/
-		*udirtt = (float)1.;
+		*udirtt = 1.;
 /*<           endif >*/
 	    }
 /*<         endif >*/
@@ -170,9 +173,9 @@ sol */
 /*<       if (it.eq.2) then >*/
 	if (it == 2) {
 /*<         tamol=0. >*/
-	    tamol = (float)0.;
+	    tamol = 0.;
 /*<         tamolp=0. >*/
-	    tamolp = (float)0.;
+	    tamolp = 0.;
 /*<         rm(-mu)=-xmuv >*/
 	    rm[-(*mu)] = -(*xmuv);
 /*<         rm(mu)=xmuv >*/
@@ -200,13 +203,13 @@ sol */
 /*<         ddiftt=xtrans(1)-exp(-taer/xmus) >*/
 	    *ddiftt = xtrans[2] - exp(-(*taer) / *xmus);
 /*<         sphalbt=xtrans(0)*2. >*/
-	    *sphalbt = xtrans[1] * (float)2.;
+	    *sphalbt = xtrans[1] * 2.;
 /*<         if (palt.le.0.) then >*/
-	    if (*palt <= (float)0.) {
+	    if (*palt <= 0.) {
 /*<           udiftt=0. >*/
-		*udiftt = (float)0.;
+		*udiftt = 0.;
 /*<           udirtt=1. >*/
-		*udirtt = (float)1.;
+		*udirtt = 1.;
 /*<         endif >*/
 	    }
 /*<       endif >*/
@@ -240,13 +243,13 @@ sol */
 /*<         ddirtt=exp(-(taer+tray)/xmus) >*/
 	    *ddirtt = exp(-(*taer + *tray) / *xmus);
 /*<         sphalbt=xtrans(0)*2. >*/
-	    *sphalbt = xtrans[1] * (float)2.;
+	    *sphalbt = xtrans[1] * 2.;
 /*<         if (palt.le.0.) then >*/
-	    if (*palt <= (float)0.) {
+	    if (*palt <= 0.) {
 /*<           udiftt=0. >*/
-		*udiftt = (float)0.;
+		*udiftt = 0.;
 /*<           udirtt=1. >*/
-		*udirtt = (float)1.;
+		*udirtt = 1.;
 /*<         endif >*/
 	    }
 /*<       endif >*/

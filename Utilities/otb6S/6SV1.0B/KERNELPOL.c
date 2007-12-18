@@ -6,7 +6,6 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
-
 /* OTB patches: replace "f2c.h" by "otb_6S.h" */
 /*#include "f2c.h"*/
 #include "otb_6S.h"
@@ -20,14 +19,14 @@ Extern struct {
 #define num_quad__1 num_quad__
 
 Extern struct {
-    real pha[1000], qha[1000], uha[1000], alphal[1001], betal[1001], gammal[
-	    1001], zetal[1001];
+    doublereal pha[1000], qha[1000], uha[1000], alphal[1001], betal[1001], 
+	    gammal[1001], zetal[1001];
 } sixs_polar__;
 
 #define sixs_polar__1 sixs_polar__
 
 /*<       subroutine kernelpol(is,mu,rm,xpl,xrl,xtl,bp,gr,gt,arr,art,att) >*/
-/* Subroutine */ int kernelpol_(integer *is, integer *mu, real *rm, 
+/* Subroutine */ int kernelpol_(integer *is, integer *mu, doublereal *rm, 
 	doublereal *xpl, doublereal *xrl, doublereal *xtl, doublereal *bp, 
 	doublereal *gr, doublereal *gt, doublereal *arr, doublereal *art, 
 	doublereal *att)
@@ -118,7 +117,7 @@ Extern struct {
     i__1 = *mu;
     for (j = 0; j <= i__1; ++j) {
 /*<         c=dble(rm(j)) >*/
-	c__ = (doublereal) rm[j];
+	c__ = rm[j];
 /*<         psl(0,j)=1.D+00 >*/
 	psl[j * 1002 + 25051] = 1.;
 /*<         psl(0,-j)=1.D+00 >*/
@@ -130,7 +129,7 @@ Extern struct {
 /*<         xdb=(3.D+00*c*c-1.D+00)*0.5D+00 >*/
 	xdb = (c__ * 3. * c__ - 1.) * .5;
 /*< 	if (abs(xdb).lt.1.e-30) xdb =0.0D+00 >*/
-	if (abs(xdb) < (float)1e-30) {
+	if (abs(xdb) < 1e-30) {
 	    xdb = 0.;
 	}
 /*<         psl(2,j)=xdb >*/
@@ -144,7 +143,7 @@ Extern struct {
 /*<         xdb=3.D+00*(1.D+00-c*c)/2.D+00/sqrt(6.D+00) >*/
 	xdb = (1. - c__ * c__) * 3. / 2. / sqrt(6.);
 /*< 	if (abs(xdb).lt.1.e-30) xdb =0.0D+00 >*/
-	if (abs(xdb) < (float)1e-30) {
+	if (abs(xdb) < 1e-30) {
 	    xdb = 0.;
 	}
 /*<         rsl(2,j)=xdb >*/
@@ -178,7 +177,7 @@ L700:
     i__1 = *mu;
     for (j = 0; j <= i__1; ++j) {
 /*<         c=dble(rm(j)) >*/
-	c__ = (doublereal) rm[j];
+	c__ = rm[j];
 /*<         x=1.d+00-c*c >*/
 	x = 1. - c__ * c__;
 /*<         psl(0,j)=0.D+00 >*/
@@ -242,7 +241,7 @@ L701:
     i__1 = *mu;
     for (j = 0; j <= i__1; ++j) {
 /*<         c=dble(rm(j)) >*/
-	c__ = (doublereal) rm[j];
+	c__ = rm[j];
 /*<         xx=1.d+00-c*c >*/
 	xx = 1. - c__ * c__;
 /*<         psl(is-1,j)=0.d+00 >*/
@@ -255,7 +254,7 @@ L701:
 	d__1 = *is * .5;
 	xdb = a * pow_dd(&xx, &d__1);
 /*< 	if (abs(xdb).lt.1.e-30) xdb =0.0d+00 >*/
-	if (abs(xdb) < (float)1e-30) {
+	if (abs(xdb) < 1e-30) {
 	    xdb = 0.;
 	}
 /*<         psl(is,-j)=xdb >*/
@@ -263,10 +262,10 @@ L701:
 /*<         psl(is,j)=xdb >*/
 	psl[*is + j * 1002 + 25051] = xdb;
 /*<         xdb=b*(1.+c*c)*xx**(is*0.5-1.d+00) >*/
-	d__1 = *is * (float).5 - 1.;
-	xdb = b * (c__ * c__ + (float)1.) * pow_dd(&xx, &d__1);
+	d__1 = *is * .5 - 1.;
+	xdb = b * (c__ * c__ + 1.) * pow_dd(&xx, &d__1);
 /*< 	if (abs(xdb).lt.1.e-30) xdb =0.0d+00 >*/
-	if (abs(xdb) < (float)1e-30) {
+	if (abs(xdb) < 1e-30) {
 	    xdb = 0.;
 	}
 /*<         rsl(is,-j)=xdb >*/
@@ -274,10 +273,10 @@ L701:
 /*<         rsl(is,j)=xdb >*/
 	rsl[*is + j * 1002 + 25051] = xdb;
 /*<         xdb=2.d+00*b*c*xx**(is*0.5-1.d+00) >*/
-	d__1 = *is * (float).5 - 1.;
+	d__1 = *is * .5 - 1.;
 	xdb = b * 2. * c__ * pow_dd(&xx, &d__1);
 /*< 	if (abs(xdb).lt.1.e-30) xdb =0.0d+00 >*/
-	if (abs(xdb) < (float)1e-30) {
+	if (abs(xdb) < 1e-30) {
 	    xdb = 0.;
 	}
 /*<         tsl(is,-j)=-xdb >*/
@@ -316,28 +315,27 @@ L501:
 /*<         a=(2*l+1.d+00)/sqrt((l+is+1.d+00)*(l-is+1.d+00)) >*/
 	a = ((l << 1) + 1.) / sqrt((l + *is + 1.) * (l - *is + 1.));
 /*<         b=dsqrt(1.d+00*(l+is)*(l-is))/(2.*l+1.d+00) >*/
-	b = sqrt((l + *is) * 1. * (l - *is)) / (l * (float)2. + 1.);
+	b = sqrt((l + *is) * 1. * (l - *is)) / (l * 2. + 1.);
 /*<         d=(l+1.d+00)*(2*l+1.d+00) >*/
 	d__ = (l + 1.) * ((l << 1) + 1.);
 /*<   	d=d/dsqrt((l+3.d+00)*(l-1)*(l+is+1.d+00)*(l-is+1.)) >*/
-	d__ /= sqrt((l + 3.) * (l - 1) * (l + *is + 1.) * (l - *is + (float)
-		1.));
+	d__ /= sqrt((l + 3.) * (l - 1) * (l + *is + 1.) * (l - *is + 1.));
 /*< 	e=dsqrt((l+2.d+00)*(l-2.)*(l+is)*(l-is))/(l*(2.*l+1.)) >*/
-	e = sqrt((l + 2.) * (l - (float)2.) * (l + *is) * (l - *is)) / (l * (
-		l * (float)2. + (float)1.));
+	e = sqrt((l + 2.) * (l - 2.) * (l + *is) * (l - *is)) / (l * (l * 2. 
+		+ 1.));
 /*< 	f=2.d+00*is/(l*(l+1.)) >*/
-	f = *is * 2. / (l * (l + (float)1.));
+	f = *is * 2. / (l * (l + 1.));
 /*<         do 31 j=0,mu >*/
 	i__2 = *mu;
 	for (j = 0; j <= i__2; ++j) {
 /*<           c=dble(rm(j)) >*/
-	    c__ = (doublereal) rm[j];
+	    c__ = rm[j];
 /*<           xdb=a*(c*psl(l,j)-b*psl(lm,j)) >*/
 	    xdb = a * (c__ * psl[l + j * 1002 + 25051] - b * psl[lm + j * 
 		    1002 + 25051]);
 /*< 	  if (abs(xdb).lt.1.e-30) xdb =0.0 >*/
-	    if (abs(xdb) < (float)1e-30) {
-		xdb = (float)0.;
+	    if (abs(xdb) < 1e-30) {
+		xdb = 0.;
 	    }
 /*<           psl(lp,j)=xdb >*/
 	    psl[lp + j * 1002 + 25051] = xdb;
@@ -345,8 +343,8 @@ L501:
 	    xdb = d__ * (c__ * rsl[l + j * 1002 + 25051] - f * tsl[l + j * 
 		    1002 + 25051] - e * rsl[lm + j * 1002 + 25051]);
 /*< 	  if (abs(xdb).lt.1.e-30) xdb =0.0 >*/
-	    if (abs(xdb) < (float)1e-30) {
-		xdb = (float)0.;
+	    if (abs(xdb) < 1e-30) {
+		xdb = 0.;
 	    }
 /*<           rsl(lp,j)=xdb >*/
 	    rsl[lp + j * 1002 + 25051] = xdb;
@@ -354,8 +352,8 @@ L501:
 	    xdb = d__ * (c__ * tsl[l + j * 1002 + 25051] - f * rsl[l + j * 
 		    1002 + 25051] - e * tsl[lm + j * 1002 + 25051]);
 /*< 	  if (abs(xdb).lt.1.e-30) xdb =0.0 >*/
-	    if (abs(xdb) < (float)1e-30) {
-		xdb = (float)0.;
+	    if (abs(xdb) < 1e-30) {
+		xdb = 0.;
 	    }
 /*<           tsl(lp,j)=xdb >*/
 	    tsl[lp + j * 1002 + 25051] = xdb;
@@ -403,17 +401,17 @@ L502:
 	i__2 = *mu;
 	for (k = -(*mu); k <= i__2; ++k) {
 /*<           sbp=0. >*/
-	    sbp = (float)0.;
+	    sbp = 0.;
 /*< 	  sgr=0. >*/
-	    sgr = (float)0.;
+	    sgr = 0.;
 /*< 	  sgt=0. >*/
-	    sgt = (float)0.;
+	    sgt = 0.;
 /*< 	  satt=0. >*/
-	    satt = (float)0.;
+	    satt = 0.;
 /*< 	  sarr=0. >*/
-	    sarr = (float)0.;
+	    sarr = 0.;
 /*< 	  sart=0. >*/
-	    sart = (float)0.;
+	    sart = 0.;
 /*<           if(is.gt.ij) goto 1 >*/
 	    if (*is > ij) {
 		goto L1;
@@ -455,38 +453,38 @@ L502:
 /*<  1        continue >*/
 L1:
 /*<  	  if (abs(sbp).lt.1.e-30) sbp =0.0 >*/
-	    if (abs(sbp) < (float)1e-30) {
-		sbp = (float)0.;
+	    if (abs(sbp) < 1e-30) {
+		sbp = 0.;
 	    }
 /*<           bp(j,k)=sbp >*/
 	    bp[j + k * bp_dim1] = sbp;
 /*<  	  if (abs(sgr).lt.1.e-30) sgr =0.0 >*/
-	    if (abs(sgr) < (float)1e-30) {
-		sgr = (float)0.;
+	    if (abs(sgr) < 1e-30) {
+		sgr = 0.;
 	    }
 /*<           gr(j,k)=sgr >*/
 	    gr[j + k * gr_dim1] = sgr;
 /*<  	  if (abs(sgt).lt.1.e-30) sgt =0.0 >*/
-	    if (abs(sgt) < (float)1e-30) {
-		sgt = (float)0.;
+	    if (abs(sgt) < 1e-30) {
+		sgt = 0.;
 	    }
 /*<           gt(j,k)=sgt >*/
 	    gt[j + k * gt_dim1] = sgt;
 /*<  	  if (abs(satt).lt.1.e-30) satt =0.0 >*/
-	    if (abs(satt) < (float)1e-30) {
-		satt = (float)0.;
+	    if (abs(satt) < 1e-30) {
+		satt = 0.;
 	    }
 /*<           att(j,k)=satt >*/
 	    att[j + k * att_dim1] = satt;
 /*<  	  if (abs(sart).lt.1.e-30) sart =0.0 >*/
-	    if (abs(sart) < (float)1e-30) {
-		sart = (float)0.;
+	    if (abs(sart) < 1e-30) {
+		sart = 0.;
 	    }
 /*<           art(j,k)=sart >*/
 	    art[j + k * art_dim1] = sart;
 /*<  	  if (abs(sarr).lt.1.e-30) sarr =0.0 >*/
-	    if (abs(sarr) < (float)1e-30) {
-		sarr = (float)0.;
+	    if (abs(sarr) < 1e-30) {
+		sarr = 0.;
 	    }
 /*<           arr(j,k)=sarr >*/
 	    arr[j + k * arr_dim1] = sarr;

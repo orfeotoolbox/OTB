@@ -6,13 +6,13 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
-
 /* OTB patches: replace "f2c.h" by "otb_6S.h" */
 /*#include "f2c.h"*/
 #include "otb_6S.h"
 
 /*<       subroutine gauss(x1,x2,x,w,n) >*/
-/* Subroutine */ int gauss_(real *x1, real *x2, real *x, real *w, integer *n)
+/* Subroutine */ int gauss_(doublereal *x1, doublereal *x2, doublereal *x, 
+	doublereal *w, integer *n)
 {
     /* System generated locals */
     integer i__1, i__2;
@@ -71,12 +71,12 @@ L1:
 /*<           z=z1-p1/pp >*/
 	z__ = z1 - p1 / pp;
 /*<         if(abs(z-z1).gt.eps)go to 1 >*/
-	if ((d__1 = z__ - z1, abs(d__1)) > (float)3e-14) {
+	if ((d__1 = z__ - z1, abs(d__1)) > 3e-14) {
 	    goto L1;
 	}
 /*<         if (abs(z).lt.eps) z=0. >*/
-	if (abs(z__) < (float)3e-14) {
-	    z__ = (float)0.;
+	if (abs(z__) < 3e-14) {
+	    z__ = 0.;
 	}
 /*<         x(i)=xm-xl*z >*/
 	x[i__] = xm - xl * z__;

@@ -1,1 +1,1 @@
-extern int dirpopol_(real *xq, real *xu, real *dirpol);
+extern int dirpopol_(doublereal *xq, doublereal *xu, doublereal *dirpol);

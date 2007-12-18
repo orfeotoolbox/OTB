@@ -6,7 +6,6 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
-
 /* OTB patches: replace "f2c.h" by "otb_6S.h" */
 /*#include "f2c.h"*/
 #include "otb_6S.h"
@@ -15,7 +14,7 @@ extern "C" {
 
 Extern struct {
     integer num_z__;
-    real alt_z__[101], taer_z__[101], taer55_z__[101];
+    doublereal alt_z__[101], taer_z__[101], taer55_z__[101];
 } aeroprof_;
 
 #define aeroprof_1 aeroprof_
@@ -34,10 +33,7 @@ Extern struct {
     /* Local variables */
     doublereal dtau_aer__, dtau_ray__;
     integer i__, j, n;
-    real z__;
-    doublereal dz, dtau, z_up__;
-    real ssa_aer__;
-    doublereal dtau_os__;
+    doublereal z__, dz, dtau, z_up__, ssa_aer__, dtau_os__;
 
 /*<       include "paramdef.inc" >*/
 /*<       double precision xdel(0:nt),ydel(0:nt),ch(0:nt),h(0:nt) >*/
@@ -52,9 +48,9 @@ Extern struct {
 /* If the maximum aerosol height is less than 300 km, one additional */
 /* layer is added above with the aerosol optical thickness equal to 0. */
 /*<       if (alt_z(0).lt.300) then >*/
-    if (aeroprof_1.alt_z__[0] < (float)300.) {
+    if (aeroprof_1.alt_z__[0] < 300.) {
 /*<        taer_z(0)=0.0 >*/
-	aeroprof_1.taer_z__[0] = (float)0.;
+	aeroprof_1.taer_z__[0] = 0.;
 /*<        num_z=num_z+1 >*/
 	++aeroprof_1.num_z__;
 /*<        do i=0,num_z-1 >*/
@@ -71,7 +67,7 @@ Extern struct {
 /*<       endif >*/
     }
 /*<       alt_z(0)=300 >*/
-    aeroprof_1.alt_z__[0] = (float)300.;
+    aeroprof_1.alt_z__[0] = 300.;
 /*<       ssa_aer=piz >*/
     ssa_aer__ = *piz;
 /* The atmosphere is divided into nt layers with the same */
@@ -81,25 +77,25 @@ Extern struct {
 /*<       i=0 >*/
     i__ = 0;
 /*<       dz=0.0001 >*/
-    dz = (float)1e-4;
+    dz = 1e-4;
 /*<       h(0)=0.0 >*/
-    h__[0] = (float)0.;
+    h__[0] = 0.;
 /*<       altc(0)=300.0 >*/
-    altc[0] = (float)300.;
+    altc[0] = 300.;
 /*<       z_up=alt_z(0) >*/
     z_up__ = aeroprof_1.alt_z__[0];
 /*<       ch(0)=0.5 >*/
-    ch[0] = (float).5;
+    ch[0] = .5;
 /*<       ydel(0)=1.0 >*/
-    ydel[0] = (float)1.;
+    ydel[0] = 1.;
 /*<       xdel(0)=0.0 >*/
-    xdel[0] = (float)0.;
+    xdel[0] = 0.;
 /*<       j=1 >*/
     j = 1;
 /*<       n=1 >*/
     n = 1;
 /*<       dtau_aer=0.0 >*/
-    dtau_aer__ = (float)0.;
+    dtau_aer__ = 0.;
 /*<  11   i=i+1 >*/
 L11:
     ++i__;
@@ -134,11 +130,11 @@ L11:
 /*<         z_up=z >*/
 	z_up__ = z__;
 /*<         dtau_aer=0.0 >*/
-	dtau_aer__ = (float)0.;
+	dtau_aer__ = 0.;
 /*<       endif >*/
     }
 /*<       if(z.gt.0) goto 11 >*/
-    if (z__ > (float)0.) {
+    if (z__ > 0.) {
 	goto L11;
     }
 /*<        altc(nt)=0 >*/

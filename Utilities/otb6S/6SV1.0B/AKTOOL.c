@@ -6,7 +6,6 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
-
 /* OTB patches: replace "f2c.h" by "otb_6S.h" */
 /*#include "f2c.h"*/
 #include "otb_6S.h"
@@ -2694,13 +2693,15 @@ L13:
 /*                       Remote Sens. Environ.,  1994,  50(2):75-82. */
 
 /*<    >*/
-/* Subroutine */ int akbrdf_(real *eei, real *thmi, real *uli, real *sli, 
-	real *rsl1i, real *wlmoy, real *rnci, real *cabi, real *cwi, real *
-	vaii, integer *mu, integer *np, real *rm, real *rp, real *brdfint)
+/* Subroutine */ int akbrdf_(doublereal *eei, doublereal *thmi, doublereal *
+	uli, doublereal *sli, doublereal *rsl1i, doublereal *wlmoy, 
+	doublereal *rnci, doublereal *cabi, doublereal *cwi, doublereal *vaii,
+	 integer *mu, integer *np, doublereal *rm, doublereal *rp, doublereal 
+	*brdfint)
 {
     /* Initialized data */
 
-    static real pir = (float)3.14159265;
+    static doublereal pir = 3.14159265;
     static doublereal pi12 = 1.570796326794895;
     static doublereal dr = .0174532925199433;
     static doublereal eps = 1e-6;
@@ -2721,10 +2722,7 @@ L13:
     /* Local variables */
     extern /* Subroutine */ int soilspec_();
     integer j, k;
-    real fi;
-    doublereal xx;
-    real mu1, mu2;
-    doublereal eln, clx, clz, tgt, tgt1;
+    doublereal fi, xx, mu1, mu2, eln, clx, clz, tgt, tgt1;
     extern /* Subroutine */ int leaf_();
     doublereal cth10, sth10;
     extern /* Subroutine */ int msrm_();
@@ -2916,16 +2914,16 @@ L13:
 /*<         th10 = acos(mu1) >*/
 	    msrmdata_1.th10 = acos(mu1);
 /*<         if (fi .lt. 0.) fi = fi + 2.*pir >*/
-	    if (fi < (float)0.) {
-		fi += pir * (float)2.;
+	    if (fi < 0.) {
+		fi += pir * 2.;
 	    }
 /*<         if (fi .gt. (2.*pir)) fi = fi - 2.*pir >*/
-	    if (fi > pir * (float)2.) {
-		fi -= pir * (float)2.;
+	    if (fi > pir * 2.) {
+		fi -= pir * 2.;
 	    }
 /*<         if (fi .gt. pir) fi = 2.*pir - fi >*/
 	    if (fi > pir) {
-		fi = pir * (float)2. - fi;
+		fi = pir * 2. - fi;
 	    }
 /*<         tgt1 = tan(th10) >*/
 	    tgt1 = tan(msrmdata_1.th10);
@@ -2987,7 +2985,7 @@ L13:
 /* ***************************************************************** */
 
 /*<    >*/
-/* Subroutine */ int akalbe_(real *albbrdf)
+/* Subroutine */ int akalbe_(doublereal *albbrdf)
 {
     /* Initialized data */
 

@@ -6,7 +6,6 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
-
 /* OTB patches: replace "f2c.h" by "otb_6S.h" */
 /*#include "f2c.h"*/
 #include "otb_6S.h"
@@ -14,13 +13,14 @@ extern "C" {
 /* Common Block Declarations */
 
 Extern struct {
-    real z__[34], p[34], t[34], wh[34], wo[34];
+    doublereal z__[34], p[34], t[34], wh[34], wo[34];
 } sixs_atm__;
 
 #define sixs_atm__1 sixs_atm__
 
 /*<        subroutine pressure(uw,uo3,xps) >*/
-/* Subroutine */ int pressure_(real *uw, real *uo3, real *xps)
+/* Subroutine */ int pressure_(doublereal *uw, doublereal *uo3, doublereal *
+	xps)
 {
     /* System generated locals */
     integer i__1;
@@ -29,13 +29,13 @@ Extern struct {
     double log(doublereal), exp(doublereal);
 
     /* Local variables */
-    real g;
+    doublereal g;
     integer i__, k, l;
-    real ds, xa, xb, ps, ro3, air, xwh, xwo, rmo3[34];
+    doublereal ds, xa, xb, ps, ro3, air, xwh, xwo, rmo3[34];
     integer iinf;
-    real xalt, rmwh[34];
+    doublereal xalt, rmwh[34];
     integer isup;
-    real roair, xtemp;
+    doublereal roair, xtemp;
 
 /*<        common /sixs_atm/z(34),p(34),t(34),wh(34),wo(34) >*/
 /*<        real z,p,t,wh,wo,xa,xb,xalt,xtemp,xwo,xwh,g >*/
@@ -47,8 +47,8 @@ Extern struct {
 /*<            xps=-xps >*/
     *xps = -(*xps);
 /*< 	   if (xps.ge.100.) xps=99.99 >*/
-    if (*xps >= (float)100.) {
-	*xps = (float)99.99;
+    if (*xps >= 100.) {
+	*xps = 99.99;
     }
 /*<            i=0 >*/
     i__ = 0;
@@ -141,24 +141,24 @@ L10:
     }
 /* compute modified h2o and o3 integrated content */
 /*<       uw=0. >*/
-    *uw = (float)0.;
+    *uw = 0.;
 /*<       uo3=0. >*/
-    *uo3 = (float)0.;
+    *uo3 = 0.;
 /*<       g=98.1 >*/
-    g = (float)98.1;
+    g = 98.1;
 /*<       air=0.028964/0.0224 >*/
-    air = (float)1.2930357142857143;
+    air = 1.2930357142857143;
 /*<       ro3=0.048/0.0224 >*/
-    ro3 = (float)2.1428571428571428;
+    ro3 = 2.1428571428571428;
 /*<       do k=1,33 >*/
     for (k = 1; k <= 33; ++k) {
 /*<       roair=air*273.16*p(k)/(1013.25*t(k)) >*/
-	roair = air * (float)273.16 * sixs_atm__1.p[k - 1] / (sixs_atm__1.t[k 
-		- 1] * (float)1013.25);
+	roair = air * 273.16 * sixs_atm__1.p[k - 1] / (sixs_atm__1.t[k - 1] * 
+		1013.25);
 /*<       rmwh(k)=wh(k)/(roair*1000.) >*/
-	rmwh[k - 1] = sixs_atm__1.wh[k - 1] / (roair * (float)1e3);
+	rmwh[k - 1] = sixs_atm__1.wh[k - 1] / (roair * 1e3);
 /*<       rmo3(k)=wo(k)/(roair*1000.) >*/
-	rmo3[k - 1] = sixs_atm__1.wo[k - 1] / (roair * (float)1e3);
+	rmo3[k - 1] = sixs_atm__1.wo[k - 1] / (roair * 1e3);
 /*<       enddo >*/
     }
 /*<       do k=2,33 >*/
@@ -166,17 +166,17 @@ L10:
 /*<       ds=(p(k-1)-p(k))/p(1) >*/
 	ds = (sixs_atm__1.p[k - 2] - sixs_atm__1.p[k - 1]) / sixs_atm__1.p[0];
 /*<       uw=uw+((rmwh(k)+rmwh(k-1))/2.)*ds >*/
-	*uw += (rmwh[k - 1] + rmwh[k - 2]) / (float)2. * ds;
+	*uw += (rmwh[k - 1] + rmwh[k - 2]) / 2. * ds;
 /*<       uo3=uo3+((rmo3(k)+rmo3(k-1))/2.)*ds >*/
-	*uo3 += (rmo3[k - 1] + rmo3[k - 2]) / (float)2. * ds;
+	*uo3 += (rmo3[k - 1] + rmo3[k - 2]) / 2. * ds;
 /*<       enddo >*/
     }
 /*<       uw=uw*p(1)*100./g >*/
-    *uw = *uw * sixs_atm__1.p[0] * (float)100. / g;
+    *uw = *uw * sixs_atm__1.p[0] * 100. / g;
 /*<       uo3=uo3*p(1)*100./g >*/
-    *uo3 = *uo3 * sixs_atm__1.p[0] * (float)100. / g;
+    *uo3 = *uo3 * sixs_atm__1.p[0] * 100. / g;
 /*<       uo3=1000.*uo3/ro3 >*/
-    *uo3 = *uo3 * (float)1e3 / ro3;
+    *uo3 = *uo3 * 1e3 / ro3;
 /*<       return >*/
     return 0;
 /*<       end >*/

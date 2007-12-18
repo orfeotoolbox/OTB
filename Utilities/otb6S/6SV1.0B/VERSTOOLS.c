@@ -6,7 +6,6 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
-
 /* OTB patches: replace "f2c.h" by "otb_6S.h" */
 /*#include "f2c.h"*/
 #include "otb_6S.h"
@@ -16,29 +15,28 @@ extern "C" {
 static doublereal c_b2 = 1.5;
 
 /*<          real function mvbp1 (option, angles, optics, struct, error) >*/
-doublereal mvbp1_(integer *option, real *angles, real *optics, real *struct__,
-	 integer *error)
+doublereal mvbp1_(integer *option, doublereal *angles, doublereal *optics, 
+	doublereal *struct__, integer *error)
 {
     /* Initialized data */
 
-    static real pi = (float)3.14159265;
-    static real pitwo = (float)6.28318531;
-    static real pio2me = (float)1.57;
-    static real coef1 = (float).42441318;
-    static real coef2 = (float).07957747;
+    static doublereal pi = 3.14159265;
+    static doublereal pitwo = 6.28318531;
+    static doublereal pio2me = 1.57;
+    static doublereal coef1 = .42441318;
+    static doublereal coef2 = .07957747;
 
     /* System generated locals */
-    real ret_val;
-    doublereal d__1;
+    doublereal ret_val;
 
     /* Builtin functions */
     double cos(doublereal), sin(doublereal), acos(doublereal), tan(doublereal)
 	    , sqrt(doublereal), pow_dd(doublereal *, doublereal *);
 
     /* Local variables */
-    real x1, x2, mu1, mu2, pvg, vpg, psi1, psi2, kmkm, coef4, hfun1, hfun2, 
-	    asyf2, kappa1, kappa2, tante1, tante2, geofac, phaang, cospha, 
-	    phafun, mulsca, cosphi, gotwor;
+    doublereal x1, x2, mu1, mu2, pvg, vpg, psi1, psi2, kmkm, coef4, hfun1, 
+	    hfun2, asyf2, kappa1, kappa2, tante1, tante2, geofac, phaang, 
+	    cospha, phafun, mulsca, cosphi, gotwor;
 
 /* ***********************************************************************
  */
@@ -390,19 +388,19 @@ doublereal mvbp1_(integer *option, real *angles, real *optics, real *struct__,
 /*  verify validity of angles: */
 
 /*<       if ((angles (1) .lt. 0.0) .or. (angles (1) .gt. pio2me)) then >*/
-    if (angles[1] < (float)0. || angles[1] > pio2me) {
+    if (angles[1] < 0. || angles[1] > pio2me) {
 /*<          error = 201 >*/
 	*error = 201;
 /*<       end if >*/
     }
 /*<       if ((angles (2) .lt. 0.0) .or. (angles (2) .gt. pio2me)) then >*/
-    if (angles[2] < (float)0. || angles[2] > pio2me) {
+    if (angles[2] < 0. || angles[2] > pio2me) {
 /*<          error = 202 >*/
 	*error = 202;
 /*<       end if >*/
     }
 /*<       if ((angles (3) .lt. 0.0) .or. (angles (3) .gt. pitwo)) then >*/
-    if (angles[3] < (float)0. || angles[3] > pitwo) {
+    if (angles[3] < 0. || angles[3] > pitwo) {
 /*<          error = 203 >*/
 	*error = 203;
 /*<       end if >*/
@@ -411,7 +409,7 @@ doublereal mvbp1_(integer *option, real *angles, real *optics, real *struct__,
 /*  verify validity of optical parameters: */
 
 /*<       if ((optics (1) .lt. 0.0) .or. (optics (1) .gt. 1.0)) then >*/
-    if (optics[1] < (float)0. || optics[1] > (float)1.) {
+    if (optics[1] < 0. || optics[1] > 1.) {
 /*<          error = 301 >*/
 	*error = 301;
 /*<       end if >*/
@@ -419,7 +417,7 @@ doublereal mvbp1_(integer *option, real *angles, real *optics, real *struct__,
 /*<       if (option (4) .eq. 1) then >*/
     if (option[4] == 1) {
 /*<          if ((optics (2) .lt. -1.0) .or. (optics (2) .gt. 1.0)) then >*/
-	if (optics[2] < (float)-1. || optics[2] > (float)1.) {
+	if (optics[2] < -1. || optics[2] > 1.) {
 /*<             error = 302 >*/
 	    *error = 302;
 /*<          end if >*/
@@ -430,13 +428,13 @@ doublereal mvbp1_(integer *option, real *angles, real *optics, real *struct__,
 /*  verify validity of structural parameters: */
 
 /*<       if (struct (1) .le. 0.0) then >*/
-    if (struct__[1] <= (float)0.) {
+    if (struct__[1] <= 0.) {
 /*<          error = 401 >*/
 	*error = 401;
 /*<       endif >*/
     }
 /*<       if (struct (2) .le. 0.0) then >*/
-    if (struct__[2] <= (float)0.) {
+    if (struct__[2] <= 0.) {
 /*<          error = 402 >*/
 	*error = 402;
 /*<       endif >*/
@@ -444,13 +442,13 @@ doublereal mvbp1_(integer *option, real *angles, real *optics, real *struct__,
 /*<       if (option (3) .eq. 0) then >*/
     if (option[3] == 0) {
 /*<          if ((struct (3) .lt. -1.0) .or. (struct (3) .gt. 1.0)) then >*/
-	if (struct__[3] < (float)-1. || struct__[3] > (float)1.) {
+	if (struct__[3] < -1. || struct__[3] > 1.) {
 /*<             error = 411 >*/
 	    *error = 411;
 /*<          end if >*/
 	}
 /*<          if ((struct (4) .lt. -1.0) .or. (struct (4) .gt. 1.0)) then >*/
-	if (struct__[4] < (float)-1. || struct__[4] > (float)1.) {
+	if (struct__[4] < -1. || struct__[4] > 1.) {
 /*<             error = 412 >*/
 	    *error = 412;
 /*<          end if >*/
@@ -460,7 +458,7 @@ doublereal mvbp1_(integer *option, real *angles, real *optics, real *struct__,
 /*<       if ((option (3) .eq. 1) .or. (option (3) .eq. 2)) then >*/
     if (option[3] == 1 || option[3] == 2) {
 /*<          if ((struct (3) .lt. -0.4) .or. (struct (3) .gt. 0.6)) then >*/
-	if (struct__[3] < (float)-.4 || struct__[3] > (float).6) {
+	if (struct__[3] < -.4 || struct__[3] > .6) {
 /*<             error = 421 >*/
 	    *error = 421;
 /*<          end if >*/
@@ -471,7 +469,7 @@ doublereal mvbp1_(integer *option, real *angles, real *optics, real *struct__,
 /*<       if (error .ge. 200) then >*/
     if (*error >= 200) {
 /*<          mvbp1 = -1.0 >*/
-	ret_val = (float)-1.;
+	ret_val = -1.;
 /*<          return >*/
 	return ret_val;
 /*<       end if >*/
@@ -494,8 +492,8 @@ doublereal mvbp1_(integer *option, real *angles, real *optics, real *struct__,
 /*<       tante2 = tan (angles (2)) >*/
     tante2 = tan(angles[2]);
 /*<    >*/
-    geofac = sqrt(tante1 * tante1 + tante2 * tante2 - tante1 * (float)2. * 
-	    tante2 * cosphi);
+    geofac = sqrt(tante1 * tante1 + tante2 * tante2 - tante1 * 2. * tante2 * 
+	    cosphi);
 
 /*  compute the leaf orientation parameters kappa: */
 
@@ -510,10 +508,9 @@ doublereal mvbp1_(integer *option, real *angles, real *optics, real *struct__,
 /*<       if (option (3) .eq. 1) then >*/
     if (option[3] == 1) {
 /*<          psi1 = 0.5 - (0.6333 + 0.33 * struct (3)) * struct (3) >*/
-	psi1 = (float).5 - (struct__[3] * (float).33 + (float).6333) * 
-		struct__[3];
+	psi1 = .5 - (struct__[3] * .33 + .6333) * struct__[3];
 /*<          psi2 = 0.877 * (1.0 - 2.0 * psi1) >*/
-	psi2 = ((float)1. - psi1 * (float)2.) * (float).877;
+	psi2 = (1. - psi1 * 2.) * .877;
 /*<          kappa1 = psi1 + psi2 * mu1 >*/
 	kappa1 = psi1 + psi2 * mu1;
 /*<          kappa2 = psi1 + psi2 * mu2 >*/
@@ -523,10 +520,9 @@ doublereal mvbp1_(integer *option, real *angles, real *optics, real *struct__,
 /*<       if (option (3) .eq. 2) then >*/
     if (option[3] == 2) {
 /*<          psi1 = 0.5 - (0.489 + 0.11 * struct (3)) * struct (3) >*/
-	psi1 = (float).5 - (struct__[3] * (float).11 + (float).489) * 
-		struct__[3];
+	psi1 = .5 - (struct__[3] * .11 + .489) * struct__[3];
 /*<          psi2 = 1.0 * (1.0 - 2.0 * psi1) >*/
-	psi2 = ((float)1. - psi1 * (float)2.) * (float)1.;
+	psi2 = (1. - psi1 * 2.) * 1.;
 /*<          kappa1 = psi1 + psi2 * mu1 >*/
 	kappa1 = psi1 + psi2 * mu1;
 /*<          kappa2 = psi1 + psi2 * mu2 >*/
@@ -539,7 +535,7 @@ doublereal mvbp1_(integer *option, real *angles, real *optics, real *struct__,
 /*<       if (option (4) .eq. 0) then >*/
     if (option[4] == 0) {
 /*<          phafun = 1.0 >*/
-	phafun = (float)1.;
+	phafun = 1.;
 /*<       endif >*/
     }
 /*<       if (option (4) .eq. 1) then >*/
@@ -547,17 +543,16 @@ doublereal mvbp1_(integer *option, real *angles, real *optics, real *struct__,
 /*<          asyf2 = optics (2) * optics (2) >*/
 	asyf2 = optics[2] * optics[2];
 /*<          x1 = (1.0 + asyf2 - 2.0 * optics (2) * cos (pi - phaang)) >*/
-	x1 = asyf2 + (float)1. - optics[2] * (float)2. * cos(pi - phaang);
+	x1 = asyf2 + 1. - optics[2] * 2. * cos(pi - phaang);
 /*<          phafun = (1.0 - asyf2) / (x1 ** 1.5) >*/
-	d__1 = (doublereal) x1;
-	phafun = ((float)1. - asyf2) / pow_dd(&d__1, &c_b2);
+	phafun = (1. - asyf2) / pow_dd(&x1, &c_b2);
 /*<       endif >*/
     }
 /*<       if (option (4) .eq. 2) then >*/
     if (option[4] == 2) {
 /*<    >*/
-	phafun = optics[2] * cospha + (float)1. + optics[3] * ((cospha * (
-		float)3. * cospha - (float)1.) * (float).5);
+	phafun = optics[2] * cospha + 1. + optics[3] * ((cospha * 3. * cospha 
+		- 1.) * .5);
 /*<       endif >*/
     }
 
@@ -566,7 +561,7 @@ doublereal mvbp1_(integer *option, real *angles, real *optics, real *struct__,
 /*<       kmkm = kappa1 * mu2 + kappa2 * mu1 >*/
     kmkm = kappa1 * mu2 + kappa2 * mu1;
 /*<       gotwor = geofac / (2.0 * struct (2)) >*/
-    gotwor = geofac / (struct__[2] * (float)2.);
+    gotwor = geofac / (struct__[2] * 2.);
 
 /*  equation (52) of reference (1) above: case impossible */
 
@@ -589,10 +584,9 @@ doublereal mvbp1_(integer *option, real *angles, real *optics, real *struct__,
 /*<       if (option (1) .eq. 1) then >*/
     if (option[1] == 1) {
 /*<    >*/
-	vpg = ((float)1. - coef1) * (float)4. * mu2 * gotwor / (struct__[1] * 
-		kappa2);
+	vpg = (1. - coef1) * 4. * mu2 * gotwor / (struct__[1] * kappa2);
 /*<          pvg = 1.0 + (1.0 / (1.0 + vpg)) >*/
-	pvg = (float)1. / (vpg + (float)1.) + (float)1.;
+	pvg = 1. / (vpg + 1.) + 1.;
 /*<       endif >*/
     }
 
@@ -601,7 +595,7 @@ doublereal mvbp1_(integer *option, real *angles, real *optics, real *struct__,
 /*<       if (option (5) .eq. 0) then >*/
     if (option[5] == 0) {
 /*<          mulsca = 0.0 >*/
-	mulsca = (float)0.;
+	mulsca = 0.;
 /*<       else >*/
     } else {
 /*<          x1 = mu1 / kappa1 >*/
@@ -609,13 +603,11 @@ doublereal mvbp1_(integer *option, real *angles, real *optics, real *struct__,
 /*<          x2 = mu2 / kappa2 >*/
 	x2 = mu2 / kappa2;
 /*<          hfun1 = (1.0 + x1) / (1.0 + x1 * sqrt (1.0 - optics (1))) >*/
-	hfun1 = (x1 + (float)1.) / (x1 * sqrt((float)1. - optics[1]) + (float)
-		1.);
+	hfun1 = (x1 + 1.) / (x1 * sqrt(1. - optics[1]) + 1.);
 /*<          hfun2 = (1.0 + x2) / (1.0 + x2 * sqrt (1.0 - optics (1))) >*/
-	hfun2 = (x2 + (float)1.) / (x2 * sqrt((float)1. - optics[1]) + (float)
-		1.);
+	hfun2 = (x2 + 1.) / (x2 * sqrt(1. - optics[1]) + 1.);
 /*<          mulsca = hfun1 * hfun2 - 1.0 >*/
-	mulsca = hfun1 * hfun2 - (float)1.;
+	mulsca = hfun1 * hfun2 - 1.;
 /*<       endif >*/
     }
 
@@ -630,7 +622,7 @@ doublereal mvbp1_(integer *option, real *angles, real *optics, real *struct__,
 /*<       if (option (2) .eq. 1) then >*/
     if (option[2] == 1) {
 /*<          coef4 = 0.25 * optics (1) * kappa1 / kmkm >*/
-	coef4 = optics[1] * (float).25 * kappa1 / kmkm;
+	coef4 = optics[1] * .25 * kappa1 / kmkm;
 /*<       endif >*/
     }
 /*<       mvbp1 = coef4 * (pvg * phafun + mulsca) >*/

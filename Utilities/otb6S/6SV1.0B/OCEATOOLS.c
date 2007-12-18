@@ -6,7 +6,6 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
-
 /* OTB patches: replace "f2c.h" by "otb_6S.h" */
 /*#include "f2c.h"*/
 #include "otb_6S.h"
@@ -17,71 +16,44 @@ static doublereal c_b3 = .62;
 static doublereal c_b10 = 2.;
 
 /*<       subroutine morcasiwat(wl,C,R2) >*/
-/* Subroutine */ int morcasiwat_(real *wl, real *c__, real *r2)
+/* Subroutine */ int morcasiwat_(doublereal *wl, doublereal *c__, doublereal *
+	r2)
 {
     /* Initialized data */
 
-    static real tkw[61] = { (float).0209,(float).02,(float).0196,(float).0189,
-	    (float).0183,(float).0182,(float).0171,(float).017,(float).0168,(
-	    float).0166,(float).0168,(float).017,(float).0173,(float).0174,(
-	    float).0175,(float).0184,(float).0194,(float).0203,(float).0217,(
-	    float).024,(float).0271,(float).032,(float).0384,(float).0445,(
-	    float).049,(float).0505,(float).0518,(float).0543,(float).0568,(
-	    float).0615,(float).064,(float).064,(float).0717,(float).0762,(
-	    float).0807,(float).094,(float).107,(float).128,(float).157,(
-	    float).2,(float).253,(float).279,(float).296,(float).303,(float)
-	    .31,(float).315,(float).32,(float).325,(float).33,(float).34,(
-	    float).35,(float).37,(float).405,(float).418,(float).43,(float)
-	    .44,(float).45,(float).47,(float).5,(float).55,(float).65 };
-    static real txc[61] = { (float).11,(float).111,(float).1125,(float).1135,(
-	    float).1126,(float).1104,(float).1078,(float).1065,(float).1041,(
-	    float).0996,(float).0971,(float).0939,(float).0896,(float).0859,(
-	    float).0823,(float).0788,(float).0746,(float).0726,(float).069,(
-	    float).066,(float).0636,(float).06,(float).0578,(float).054,(
-	    float).0498,(float).0475,(float).0467,(float).045,(float).044,(
-	    float).0426,(float).041,(float).04,(float).039,(float).0375,(
-	    float).036,(float).034,(float).033,(float).0328,(float).0325,(
-	    float).033,(float).034,(float).035,(float).036,(float).0375,(
-	    float).0385,(float).04,(float).042,(float).043,(float).044,(float)
-	    .0445,(float).045,(float).046,(float).0475,(float).049,(float)
-	    .0515,(float).052,(float).0505,(float).044,(float).039,(float)
-	    .034,(float).03 };
-    static real te[61] = { (float).668,(float).672,(float).68,(float).687,(
-	    float).693,(float).701,(float).707,(float).708,(float).707,(float)
-	    .704,(float).701,(float).699,(float).7,(float).703,(float).703,(
-	    float).703,(float).703,(float).704,(float).702,(float).7,(float)
-	    .7,(float).695,(float).69,(float).685,(float).68,(float).675,(
-	    float).67,(float).665,(float).66,(float).655,(float).65,(float)
-	    .645,(float).64,(float).63,(float).623,(float).615,(float).61,(
-	    float).614,(float).618,(float).622,(float).626,(float).63,(float)
-	    .634,(float).638,(float).642,(float).647,(float).653,(float).658,(
-	    float).663,(float).667,(float).672,(float).677,(float).682,(float)
-	    .687,(float).695,(float).697,(float).693,(float).665,(float).64,(
-	    float).62,(float).6 };
-    static real tbw[61] = { (float).0076,(float).0072,(float).0068,(float)
-	    .0064,(float).0061,(float).0058,(float).0055,(float).0052,(float)
-	    .0049,(float).0047,(float).0045,(float).0043,(float).0041,(float)
-	    .0039,(float).0037,(float).0036,(float).0034,(float).0033,(float)
-	    .0031,(float).003,(float).0029,(float).0027,(float).0026,(float)
-	    .0025,(float).0024,(float).0023,(float).0022,(float).0022,(float)
-	    .0021,(float).002,(float).0019,(float).0018,(float).0018,(float)
-	    .0017,(float).0017,(float).0016,(float).0016,(float).0015,(float)
-	    .0015,(float).0014,(float).0014,(float).0013,(float).0013,(float)
-	    .0012,(float).0012,(float).0011,(float).0011,(float).001,(float)
-	    .001,(float).001,(float).001,(float)9e-4,(float)8e-4,(float)8e-4,(
-	    float)8e-4,(float)7e-4,(float)7e-4,(float)7e-4,(float)7e-4,(float)
-	    7e-4,(float)7e-4 };
+    static doublereal tkw[61] = { .0209,.02,.0196,.0189,.0183,.0182,.0171,
+	    .017,.0168,.0166,.0168,.017,.0173,.0174,.0175,.0184,.0194,.0203,
+	    .0217,.024,.0271,.032,.0384,.0445,.049,.0505,.0518,.0543,.0568,
+	    .0615,.064,.064,.0717,.0762,.0807,.094,.107,.128,.157,.2,.253,
+	    .279,.296,.303,.31,.315,.32,.325,.33,.34,.35,.37,.405,.418,.43,
+	    .44,.45,.47,.5,.55,.65 };
+    static doublereal txc[61] = { .11,.111,.1125,.1135,.1126,.1104,.1078,
+	    .1065,.1041,.0996,.0971,.0939,.0896,.0859,.0823,.0788,.0746,.0726,
+	    .069,.066,.0636,.06,.0578,.054,.0498,.0475,.0467,.045,.044,.0426,
+	    .041,.04,.039,.0375,.036,.034,.033,.0328,.0325,.033,.034,.035,
+	    .036,.0375,.0385,.04,.042,.043,.044,.0445,.045,.046,.0475,.049,
+	    .0515,.052,.0505,.044,.039,.034,.03 };
+    static doublereal te[61] = { .668,.672,.68,.687,.693,.701,.707,.708,.707,
+	    .704,.701,.699,.7,.703,.703,.703,.703,.704,.702,.7,.7,.695,.69,
+	    .685,.68,.675,.67,.665,.66,.655,.65,.645,.64,.63,.623,.615,.61,
+	    .614,.618,.622,.626,.63,.634,.638,.642,.647,.653,.658,.663,.667,
+	    .672,.677,.682,.687,.695,.697,.693,.665,.64,.62,.6 };
+    static doublereal tbw[61] = { .0076,.0072,.0068,.0064,.0061,.0058,.0055,
+	    .0052,.0049,.0047,.0045,.0043,.0041,.0039,.0037,.0036,.0034,.0033,
+	    .0031,.003,.0029,.0027,.0026,.0025,.0024,.0023,.0022,.0022,.0021,
+	    .002,.0019,.0018,.0018,.0017,.0017,.0016,.0016,.0015,.0015,.0014,
+	    .0014,.0013,.0013,.0012,.0012,.0011,.0011,.001,.001,.001,.001,
+	    9e-4,8e-4,8e-4,8e-4,7e-4,7e-4,7e-4,7e-4,7e-4,7e-4 };
 
     /* System generated locals */
-    real r__1;
-    doublereal d__1, d__2;
+    doublereal d__1;
 
     /* Builtin functions */
-    integer i_nint(real *);
-    double pow_dd(doublereal *, doublereal *), r_lg10(real *);
+    integer i_dnnt(doublereal *);
+    double pow_dd(doublereal *, doublereal *), d_lg10(doublereal *);
 
     /* Local variables */
-    real b, e, r1, u1, u2, bb, kd, bw, xc, kw, bbt, err;
+    doublereal b, e, r1, u1, u2, bb, kd, bw, xc, kw, bbt, err;
     integer iwl;
 
 /* Spectral diffuse attenuation coefficient of Case I Waters as Predicted 
@@ -120,16 +92,16 @@ al*/
 /*<    >*/
 /*<    >*/
 /*<       if (wl.lt.0.400.or.wl.gt.0.700)then >*/
-    if (*wl < (float).4 || *wl > (float).7) {
+    if (*wl < .4 || *wl > .7) {
 /*< 	R2=0.000 >*/
-	*r2 = (float)0.;
+	*r2 = 0.;
 /*< 	goto 60 >*/
 	goto L60;
 /*<       endif >*/
     }
 /*<       iwl=1+nint((wl-0.400)/0.005) >*/
-    r__1 = (*wl - (float).4) / (float).005;
-    iwl = i_nint(&r__1) + 1;
+    d__1 = (*wl - .4) / .005;
+    iwl = i_dnnt(&d__1) + 1;
 /*<       Kw=tKw(iwl) >*/
     kw = tkw[iwl - 1];
 /*<       Xc=tXc(iwl) >*/
@@ -140,40 +112,36 @@ al*/
     bw = tbw[iwl - 1];
 
 /*<       if (abs(C).lt.0.0001)then >*/
-    if (dabs(*c__) < (float)1e-4) {
+    if (abs(*c__) < 1e-4) {
 /*<          bb=0.5*bw >*/
-	bb = bw * (float).5;
+	bb = bw * .5;
 /*<          Kd=Kw >*/
 	kd = kw;
 /*<       else >*/
     } else {
 /*<          b=0.30*C**0.62 >*/
-	d__1 = (doublereal) (*c__);
-	b = pow_dd(&d__1, &c_b3) * (float).3;
+	b = pow_dd(c__, &c_b3) * .3;
 /*<          bbt=0.002+0.02*(0.5-0.25*alog10(C))*0.550/wl >*/
-	bbt = ((float).5 - r_lg10(c__) * (float).25) * (float).02 * (float)
-		.55 / *wl + (float).002;
+	bbt = (.5 - d_lg10(c__) * .25) * .02 * .55 / *wl + .002;
 /*<          bb=0.5*bw+bbt*b >*/
-	bb = bw * (float).5 + bbt * b;
+	bb = bw * .5 + bbt * b;
 /*<          Kd=Kw+Xc*C**e >*/
-	d__1 = (doublereal) (*c__);
-	d__2 = (doublereal) e;
-	kd = kw + xc * pow_dd(&d__1, &d__2);
+	kd = kw + xc * pow_dd(c__, &e);
 /*<       endif >*/
     }
 /*<       u1=0.75 >*/
-    u1 = (float).75;
+    u1 = .75;
 /*<       R1=0.33*bb/u1/Kd >*/
-    r1 = bb * (float).33 / u1 / kd;
+    r1 = bb * .33 / u1 / kd;
 /*<  50   u2=0.90*(1.-R1)/(1.+2.25*R1) >*/
 L50:
-    u2 = ((float)1. - r1) * (float).9 / (r1 * (float)2.25 + (float)1.);
+    u2 = (1. - r1) * .9 / (r1 * 2.25 + 1.);
 /*<       R2=0.33*bb/u2/Kd >*/
-    *r2 = bb * (float).33 / u2 / kd;
+    *r2 = bb * .33 / u2 / kd;
 /*<       err=abs((R2-R1)/R2) >*/
-    err = (r__1 = (*r2 - r1) / *r2, dabs(r__1));
+    err = (d__1 = (*r2 - r1) / *r2, abs(d__1));
 /*<       if (err.lt.0.0001)goto 60 >*/
-    if (err < (float)1e-4) {
+    if (err < 1e-4) {
 	goto L60;
     }
 /*<       R1=R2 >*/
@@ -188,52 +156,33 @@ L60:
 
 
 /*<        subroutine indwat(wl,xsal,nr,ni) >*/
-/* Subroutine */ int indwat_(real *wl, real *xsal, real *nr, real *ni)
+/* Subroutine */ int indwat_(doublereal *wl, doublereal *xsal, doublereal *nr,
+	 doublereal *ni)
 {
     /* Initialized data */
 
-    static real twl[62] = { (float).25,(float).275,(float).3,(float).325,(
-	    float).345,(float).375,(float).4,(float).425,(float).445,(float)
-	    .475,(float).5,(float).525,(float).55,(float).575,(float).6,(
-	    float).625,(float).65,(float).675,(float).7,(float).725,(float)
-	    .75,(float).775,(float).8,(float).825,(float).85,(float).875,(
-	    float).9,(float).925,(float).95,(float).975,(float)1.,(float)1.2,(
-	    float)1.4,(float)1.6,(float)1.8,(float)2.,(float)2.2,(float)2.4,(
-	    float)2.6,(float)2.65,(float)2.7,(float)2.75,(float)2.8,(float)
-	    2.85,(float)2.9,(float)2.95,(float)3.,(float)3.05,(float)3.1,(
-	    float)3.15,(float)3.2,(float)3.25,(float)3.3,(float)3.35,(float)
-	    3.4,(float)3.45,(float)3.5,(float)3.6,(float)3.7,(float)3.8,(
-	    float)3.9,(float)4. };
-    static real tnr[62] = { (float)1.362,(float)1.354,(float)1.349,(float)
-	    1.346,(float)1.343,(float)1.341,(float)1.339,(float)1.338,(float)
-	    1.337,(float)1.336,(float)1.335,(float)1.334,(float)1.333,(float)
-	    1.333,(float)1.332,(float)1.332,(float)1.331,(float)1.331,(float)
-	    1.331,(float)1.33,(float)1.33,(float)1.33,(float)1.329,(float)
-	    1.329,(float)1.329,(float)1.328,(float)1.328,(float)1.328,(float)
-	    1.327,(float)1.327,(float)1.327,(float)1.324,(float)1.321,(float)
-	    1.317,(float)1.312,(float)1.306,(float)1.296,(float)1.279,(float)
-	    1.242,(float)1.219,(float)1.188,(float)1.157,(float)1.142,(float)
-	    1.149,(float)1.201,(float)1.292,(float)1.371,(float)1.426,(float)
-	    1.467,(float)1.483,(float)1.478,(float)1.467,(float)1.45,(float)
-	    1.432,(float)1.42,(float)1.41,(float)1.4,(float)1.385,(float)
-	    1.374,(float)1.364,(float)1.357,(float)1.351 };
-    static real tni[62] = { (float)3.35e-8,(float)2.35e-8,(float)1.6e-8,(
-	    float)1.08e-8,(float)6.5e-9,(float)3.5e-9,(float)1.86e-9,(float)
-	    1.3e-9,(float)1.02e-9,(float)9.35e-10,(float)1e-9,(float)1.32e-9,(
-	    float)1.96e-9,(float)3.6e-9,(float)1.09e-8,(float)1.39e-8,(float)
-	    1.64e-8,(float)2.23e-8,(float)3.35e-8,(float)9.15e-8,(float)
-	    1.56e-7,(float)1.48e-7,(float)1.25e-7,(float)1.82e-7,(float)
-	    2.93e-7,(float)3.91e-7,(float)4.86e-7,(float)1.06e-6,(float)
-	    2.93e-6,(float)3.48e-6,(float)2.89e-6,(float)9.89e-6,(float)
-	    1.38e-4,(float)8.55e-5,(float)1.15e-4,(float).0011,(float)2.89e-4,
-	    (float)9.56e-4,(float).00317,(float).0067,(float).019,(float).059,
-	    (float).115,(float).185,(float).268,(float).298,(float).272,(
-	    float).24,(float).192,(float).135,(float).0924,(float).061,(float)
-	    .0368,(float).0261,(float).0195,(float).0132,(float).0094,(float)
-	    .00515,(float).0036,(float).0034,(float).0038,(float).0046 };
+    static doublereal twl[62] = { .25,.275,.3,.325,.345,.375,.4,.425,.445,
+	    .475,.5,.525,.55,.575,.6,.625,.65,.675,.7,.725,.75,.775,.8,.825,
+	    .85,.875,.9,.925,.95,.975,1.,1.2,1.4,1.6,1.8,2.,2.2,2.4,2.6,2.65,
+	    2.7,2.75,2.8,2.85,2.9,2.95,3.,3.05,3.1,3.15,3.2,3.25,3.3,3.35,3.4,
+	    3.45,3.5,3.6,3.7,3.8,3.9,4. };
+    static doublereal tnr[62] = { 1.362,1.354,1.349,1.346,1.343,1.341,1.339,
+	    1.338,1.337,1.336,1.335,1.334,1.333,1.333,1.332,1.332,1.331,1.331,
+	    1.331,1.33,1.33,1.33,1.329,1.329,1.329,1.328,1.328,1.328,1.327,
+	    1.327,1.327,1.324,1.321,1.317,1.312,1.306,1.296,1.279,1.242,1.219,
+	    1.188,1.157,1.142,1.149,1.201,1.292,1.371,1.426,1.467,1.483,1.478,
+	    1.467,1.45,1.432,1.42,1.41,1.4,1.385,1.374,1.364,1.357,1.351 };
+    static doublereal tni[62] = { 3.35e-8,2.35e-8,1.6e-8,1.08e-8,6.5e-9,
+	    3.5e-9,1.86e-9,1.3e-9,1.02e-9,9.35e-10,1e-9,1.32e-9,1.96e-9,
+	    3.6e-9,1.09e-8,1.39e-8,1.64e-8,2.23e-8,3.35e-8,9.15e-8,1.56e-7,
+	    1.48e-7,1.25e-7,1.82e-7,2.93e-7,3.91e-7,4.86e-7,1.06e-6,2.93e-6,
+	    3.48e-6,2.89e-6,9.89e-6,1.38e-4,8.55e-5,1.15e-4,.0011,2.89e-4,
+	    9.56e-4,.00317,.0067,.019,.059,.115,.185,.268,.298,.272,.24,.192,
+	    .135,.0924,.061,.0368,.0261,.0195,.0132,.0094,.00515,.0036,.0034,
+	    .0038,.0046 };
 
     integer i__;
-    real yi, yr, nic, nrc, xwl;
+    doublereal yi, yr, nic, nrc, xwl;
 
 
 /* input parameters:  wl=wavelength (in micrometers) */
@@ -301,13 +250,13 @@ le*/
 */
 /*        N.J., 1942, p 173. */
 /*<         nrc=0.006 >*/
-    nrc = (float).006;
+    nrc = .006;
 /*<         nic=0.000 >*/
-    nic = (float)0.;
+    nic = 0.;
 /*<         nr=nr+nrc*(xsal/34.3) >*/
-    *nr += nrc * (*xsal / (float)34.3);
+    *nr += nrc * (*xsal / 34.3);
 /*< 	ni=ni+nic*(xsal/34.3) >*/
-    *ni += nic * (*xsal / (float)34.3);
+    *ni += nic * (*xsal / 34.3);
 /*<         return >*/
     return 0;
 /*<         end >*/
@@ -315,23 +264,24 @@ le*/
 
 
 /*<       subroutine sunglint(wspd,nr,ni,azw,ts,tv,fi,rog) >*/
-/* Subroutine */ int sunglint_(real *wspd, real *nr, real *ni, real *azw, 
-	real *ts, real *tv, real *fi, real *rog)
+/* Subroutine */ int sunglint_(doublereal *wspd, doublereal *nr, doublereal *
+	ni, doublereal *azw, doublereal *ts, doublereal *tv, doublereal *fi, 
+	doublereal *rog)
 {
     /* System generated locals */
-    real r__1;
+    doublereal d__1;
 
     /* Builtin functions */
     double atan(doublereal), cos(doublereal), sin(doublereal), sqrt(
 	    doublereal), exp(doublereal);
 
     /* Local variables */
-    real r1, c21, c03, c40, c04, c22, cs, pi, cv, xe, ss, xn, sv, zx, zy, xe2,
-	     xn2, fac, phi, phw, coef, tilt, proba, sigmac, coschi, sinchi, 
-	    sigmau, cos2chi;
-    extern /* Subroutine */ int fresnel_(real *, real *, real *, real *, real 
-	    *);
-    real tantilt;
+    doublereal r1, c21, c03, c40, c04, c22, cs, pi, cv, xe, ss, xn, sv, zx, 
+	    zy, xe2, xn2, fac, phi, phw, coef, tilt, proba, sigmac, coschi, 
+	    sinchi, sigmau, cos2chi;
+    extern /* Subroutine */ int fresnel_(doublereal *, doublereal *, 
+	    doublereal *, doublereal *, doublereal *);
+    doublereal tantilt;
 
 /* input parameters:   wspd=speed of the wind (in m/s) */
 /*                     nr=index of refraction of the sea water */
@@ -349,9 +299,9 @@ le*/
 /*<       real coef,cos2chi,coschi,sinchi >*/
 /*<       real r1,sigmaC,sigmaU,C21,C03,C40,C04,C22 >*/
 /*<       pi=atan(1.)*4. >*/
-    pi = atan((float)1.) * (float)4.;
+    pi = atan(1.) * 4.;
 /*<       fac=pi/180. >*/
-    fac = pi / (float)180.;
+    fac = pi / 180.;
 /*<       phw=azw*fac >*/
     phw = *azw * fac;
 /*<       cs=cos(ts*fac) >*/
@@ -377,19 +327,19 @@ le*/
 /*  Anisotropic Gaussian distribution */
 /*    phw=phi_sun-phi_wind */
 /*<       sigmaC=0.003+0.00192*wspd >*/
-    sigmac = *wspd * (float).00192 + (float).003;
+    sigmac = *wspd * .00192 + .003;
 /*<       sigmaU=0.00316*wspd >*/
-    sigmau = *wspd * (float).00316;
+    sigmau = *wspd * .00316;
 /*<       C21=0.01-0.0086*wspd >*/
-    c21 = (float).01 - *wspd * (float).0086;
+    c21 = .01 - *wspd * .0086;
 /*<       C03=0.04-0.033*wspd >*/
-    c03 = (float).04 - *wspd * (float).033;
+    c03 = .04 - *wspd * .033;
 /*<       C40=0.40 >*/
-    c40 = (float).4;
+    c40 = .4;
 /*<       C22=0.12 >*/
-    c22 = (float).12;
+    c22 = .12;
 /*<       C04=0.23 >*/
-    c04 = (float).23;
+    c04 = .23;
 /*<       xe=(cos(phw)*Zx+sin(phw)*Zy)/sqrt(SigmaC) >*/
     xe = (cos(phw) * zx + sin(phw) * zy) / sqrt(sigmac);
 /*<       xn=(-sin(phw)*Zx+cos(phw)*Zy)/sqrt(SigmaU) >*/
@@ -399,17 +349,16 @@ le*/
 /*<       xn2=xn*xn >*/
     xn2 = xn * xn;
 /*<       coef=1-C21/2.*(xe2-1)*xn-C03/6.*(xn2-3)*xn >*/
-    coef = 1 - c21 / (float)2. * (xe2 - 1) * xn - c03 / (float)6. * (xn2 - 3) 
-	    * xn;
+    coef = 1 - c21 / 2. * (xe2 - 1) * xn - c03 / 6. * (xn2 - 3) * xn;
 /*<       coef=coef+c40/24.*(xe2*xe2-6*xe2+3) >*/
-    coef += c40 / (float)24. * (xe2 * xe2 - xe2 * 6 + 3);
+    coef += c40 / 24. * (xe2 * xe2 - xe2 * 6 + 3);
 /*<       coef=coef+C04/24.*(xn2*xn2-6*xn2+3) >*/
-    coef += c04 / (float)24. * (xn2 * xn2 - xn2 * 6 + 3);
+    coef += c04 / 24. * (xn2 * xn2 - xn2 * 6 + 3);
 /*<       coef=coef+C22/4.*(xe2-1)*(xn2-1) >*/
-    coef += c22 / (float)4. * (xe2 - 1) * (xn2 - 1);
+    coef += c22 / 4. * (xe2 - 1) * (xn2 - 1);
 /*<       proba=coef/2./pi/sqrt(sigmaU)/sqrt(sigmaC)*exp(-(xe2+xn2)/2.) >*/
-    proba = coef / (float)2. / pi / sqrt(sigmau) / sqrt(sigmac) * exp(-(xe2 + 
-	    xn2) / (float)2.);
+    proba = coef / 2. / pi / sqrt(sigmau) / sqrt(sigmac) * exp(-(xe2 + xn2) / 
+	    2.);
 /*      write(6,*) "probaglit:",proba */
 /*      write(6,*) "coef glit:",coef */
 /*      write(6,*) "tilt glit:",tilt */
@@ -418,40 +367,40 @@ le*/
 /*<       cos2chi=cv*cs+sv*ss*cos(phi) >*/
     cos2chi = cv * cs + sv * ss * cos(phi);
 /*<       if (cos2chi.gt.1.0)cos2chi=0.99999999999 >*/
-    if (cos2chi > (float)1.) {
-	cos2chi = (float).99999999999;
+    if (cos2chi > 1.) {
+	cos2chi = .99999999999;
     }
 /*<       if (cos2chi.lt.-1.0)cos2chi=-0.99999999999 >*/
-    if (cos2chi < (float)-1.) {
-	cos2chi = (float)-.99999999999;
+    if (cos2chi < -1.) {
+	cos2chi = -.99999999999;
     }
 /*<       coschi=sqrt(0.5*(1+cos2chi)) >*/
-    coschi = sqrt((cos2chi + 1) * (float).5);
+    coschi = sqrt((cos2chi + 1) * .5);
 /*<       sinchi=sqrt(0.5*(1-cos2chi)) >*/
-    sinchi = sqrt((1 - cos2chi) * (float).5);
+    sinchi = sqrt((1 - cos2chi) * .5);
 /*<       if (coschi.ge.1.0)coschi=0.99999999 >*/
-    if (coschi >= (float)1.) {
-	coschi = (float).99999999;
+    if (coschi >= 1.) {
+	coschi = .99999999;
     }
 /*<       if (coschi.le.-1.0)coschi=-0.999999 >*/
-    if (coschi <= (float)-1.) {
-	coschi = (float)-.999999;
+    if (coschi <= -1.) {
+	coschi = -.999999;
     }
 /*<        if (sinchi.gt.1.0)sinchi=0.9999999 >*/
-    if (sinchi > (float)1.) {
-	sinchi = (float).9999999;
+    if (sinchi > 1.) {
+	sinchi = .9999999;
     }
 /*<       if (sinchi.lt.-1.0)sinchi=-0.999999 >*/
-    if (sinchi < (float)-1.) {
-	sinchi = (float)-.999999;
+    if (sinchi < -1.) {
+	sinchi = -.999999;
     }
 /*<       Call Fresnel(nr,ni,coschi,sinchi,R1) >*/
     fresnel_(nr, ni, &coschi, &sinchi, &r1);
 /* Compute Reflectance of the sun glint */
 /*<       Rog=pi*R1*proba/4./cs/cv/(cos(tilt)**4) >*/
 /* Computing 4th power */
-    r__1 = cos(tilt), r__1 *= r__1;
-    *rog = pi * r1 * proba / (float)4. / cs / cv / (r__1 * r__1);
+    d__1 = cos(tilt), d__1 *= d__1;
+    *rog = pi * r1 * proba / 4. / cs / cv / (d__1 * d__1);
 /*      write(6,*) "ROg ",Rog,R1,proba */
 /*<       return >*/
     return 0;
@@ -461,18 +410,17 @@ le*/
 
 
 /*<       Subroutine Fresnel(nr,ni,coschi,sinchi,R1) >*/
-/* Subroutine */ int fresnel_(real *nr, real *ni, real *coschi, real *sinchi, 
-	real *r1)
+/* Subroutine */ int fresnel_(doublereal *nr, doublereal *ni, doublereal *
+	coschi, doublereal *sinchi, doublereal *r1)
 {
     /* System generated locals */
-    real r__1, r__2, r__3, r__4;
-    doublereal d__1;
+    doublereal d__1, d__2, d__3, d__4;
 
     /* Builtin functions */
     double pow_dd(doublereal *, doublereal *), sqrt(doublereal);
 
     /* Local variables */
-    real u, v, a1, a2, b1, b2, rl2, rr2;
+    doublereal u, v, a1, a2, b1, b2, rl2, rr2;
 
 
 /* to compute the Fresnel's coefficient of reflection (see for */
@@ -490,36 +438,36 @@ ion*/
 /*<       real nr,ni,a1,a2,u,v,Rr2,Rl2,b1,b2,R1,coschi,sinchi >*/
 /* absolute value for a1 to get v=0 when ni=0 */
 /*<       a1=abs(nr*nr-ni*ni-sinchi*sinchi) >*/
-    a1 = (r__1 = *nr * *nr - *ni * *ni - *sinchi * *sinchi, dabs(r__1));
+    a1 = (d__1 = *nr * *nr - *ni * *ni - *sinchi * *sinchi, abs(d__1));
 /*<       a2=sqrt((nr*nr-ni*ni-sinchi*sinchi)**2.+4*nr*nr*ni*ni) >*/
-    d__1 = (doublereal) (*nr * *nr - *ni * *ni - *sinchi * *sinchi);
+    d__1 = *nr * *nr - *ni * *ni - *sinchi * *sinchi;
     a2 = sqrt(pow_dd(&d__1, &c_b10) + *nr * 4 * *nr * *ni * *ni);
 /*<       u=sqrt(0.5*abs(a1+a2)) >*/
-    u = sqrt((r__1 = a1 + a2, dabs(r__1)) * (float).5);
+    u = sqrt((d__1 = a1 + a2, abs(d__1)) * .5);
 /*<       v=sqrt(0.5*abs(-a1+a2)) >*/
-    v = sqrt((r__1 = -a1 + a2, dabs(r__1)) * (float).5);
+    v = sqrt((d__1 = -a1 + a2, abs(d__1)) * .5);
 /*<       Rr2=((coschi-u)**2+v*v)/((coschi+u)**2+v*v) >*/
 /* Computing 2nd power */
-    r__1 = *coschi - u;
+    d__1 = *coschi - u;
 /* Computing 2nd power */
-    r__2 = *coschi + u;
-    rr2 = (r__1 * r__1 + v * v) / (r__2 * r__2 + v * v);
+    d__2 = *coschi + u;
+    rr2 = (d__1 * d__1 + v * v) / (d__2 * d__2 + v * v);
 /*<       b1=(nr*nr-ni*ni)*coschi >*/
     b1 = (*nr * *nr - *ni * *ni) * *coschi;
 /*<       b2=2*nr*ni*coschi >*/
     b2 = *nr * 2 * *ni * *coschi;
 /*<       Rl2=((b1-u)**2+(b2+v)**2)/((b1+u)**2+(b2-v)**2) >*/
 /* Computing 2nd power */
-    r__1 = b1 - u;
+    d__1 = b1 - u;
 /* Computing 2nd power */
-    r__2 = b2 + v;
+    d__2 = b2 + v;
 /* Computing 2nd power */
-    r__3 = b1 + u;
+    d__3 = b1 + u;
 /* Computing 2nd power */
-    r__4 = b2 - v;
-    rl2 = (r__1 * r__1 + r__2 * r__2) / (r__3 * r__3 + r__4 * r__4);
+    d__4 = b2 - v;
+    rl2 = (d__1 * d__1 + d__2 * d__2) / (d__3 * d__3 + d__4 * d__4);
 /*<       R1=(Rr2+Rl2)/2. >*/
-    *r1 = (rr2 + rl2) / (float)2.;
+    *r1 = (rr2 + rl2) / 2.;
 /*      write(6,*) "fresnel ", R1,u,v,a1,a2 */
 /*<       return >*/
     return 0;
@@ -529,12 +477,12 @@ ion*/
 
 
 /*<       subroutine glitalbe(wspd,nr,ni,azw,rge) >*/
-/* Subroutine */ int glitalbe_(real *wspd, real *nr, real *ni, real *azw, 
-	real *rge)
+/* Subroutine */ int glitalbe_(doublereal *wspd, doublereal *nr, doublereal *
+	ni, doublereal *azw, doublereal *rge)
 {
     /* System generated locals */
     integer i__1, i__2, i__3;
-    real r__1;
+    doublereal d__1;
 
     /* Builtin functions */
     double atan(doublereal), sqrt(doublereal), acos(doublereal), sin(
@@ -542,18 +490,18 @@ ion*/
 
     /* Local variables */
     integer i__, j;
-    real q, r1, c21, c03, c40, c04, c22;
+    doublereal q, r1, c21, c03, c40, c04, c22;
     integer km;
-    real pi, xe, pp, pr, xn, zx, zy, xe2, xn2, fac, hfa;
+    doublereal pi, xe, pp, pr, xn, zx, zy, xe2, xn2, fac, hfa;
     integer nfa;
-    real hta, htb;
+    doublereal hta, htb;
     integer nta, ntb;
-    real tet, phw, cofa, diff, coef, cota, cotb, phin, pond, fonc0, sigma, 
-	    proba, prefl, costt, sigmac, coschi, sinchi, sigmau, costet, 
-	    sintet;
-    extern /* Subroutine */ int fresnel_(real *, real *, real *, real *, real 
-	    *);
-    real cosphin, sinphin, tantetn, costetn, sintetn;
+    doublereal tet, phw, cofa, diff, coef, cota, cotb, phin, pond, fonc0, 
+	    sigma, proba, prefl, costt, sigmac, coschi, sinchi, sigmau, 
+	    costet, sintet;
+    extern /* Subroutine */ int fresnel_(doublereal *, doublereal *, 
+	    doublereal *, doublereal *, doublereal *);
+    doublereal cosphin, sinphin, tantetn, costetn, sintetn;
 
 
 /* To compute the spherical albedo of the sea water. See for example */
@@ -573,41 +521,41 @@ ion*/
 /*<       real zx,zy,xe,xn,xe2,xn2,fonc0,pond,r1 >*/
 /*<       integer nta,nfa,ntb,km,i,j >*/
 /*<       pi=atan(1.)*4. >*/
-    pi = atan((float)1.) * (float)4.;
+    pi = atan(1.) * 4.;
 /*<       fac=pi/180. >*/
-    fac = pi / (float)180.;
+    fac = pi / 180.;
 /*<       sigma=0.003+0.00512*wspd >*/
-    sigma = *wspd * (float).00512 + (float).003;
+    sigma = *wspd * .00512 + .003;
 /*<       sigmaC=0.003+0.00192*wspd >*/
-    sigmac = *wspd * (float).00192 + (float).003;
+    sigmac = *wspd * .00192 + .003;
 /*<       sigmaU=0.00316*wspd >*/
-    sigmau = *wspd * (float).00316;
+    sigmau = *wspd * .00316;
 /*<       C21=0.01-0.0086*wspd >*/
-    c21 = (float).01 - *wspd * (float).0086;
+    c21 = .01 - *wspd * .0086;
 /*<       C03=0.04-0.033*wspd >*/
-    c03 = (float).04 - *wspd * (float).033;
+    c03 = .04 - *wspd * .033;
 /*<       C40=0.40 >*/
-    c40 = (float).4;
+    c40 = .4;
 /*<       C22=0.12 >*/
-    c22 = (float).12;
+    c22 = .12;
 /*<       C04=0.23 >*/
-    c04 = (float).23;
+    c04 = .23;
 /* costt to minimize the time of the computation */
 /*     integration between 1 and costt instead of 1 and 0 */
 /*<       q=50 >*/
-    q = (float)50.;
+    q = 50.;
 /*<       costt=1./sqrt(1+q*sigma/4.) >*/
-    costt = (float)1. / sqrt(q * sigma / (float)4. + 1);
+    costt = 1. / sqrt(q * sigma / 4. + 1);
 /*<       phw=azw*fac >*/
     phw = *azw * fac;
 /*<       prefl=0. >*/
-    prefl = (float)0.;
+    prefl = 0.;
 /*<       proba=0. >*/
-    proba = (float)0.;
+    proba = 0.;
 /*<       ntb=31 >*/
     ntb = 31;
 /*<       htb=1./float(ntb-1) >*/
-    htb = (float)1. / (real) (ntb - 1);
+    htb = 1. / (doublereal) (ntb - 1);
 /* loops on the zenith angle of the emitted radiation */
 /*<       do km=1,ntb >*/
     i__1 = ntb;
@@ -615,13 +563,13 @@ ion*/
 /*<         costet=(km-1)*htb >*/
 	costet = (km - 1) * htb;
 /*< 	if (costet.lt.0.99999999) then >*/
-	if (costet < (float).99999999) {
+	if (costet < .99999999) {
 /*<            tet=acos(costet) >*/
 	    tet = acos(costet);
 /*< 	   else >*/
 	} else {
 /*< 	   tet=0.0 >*/
-	    tet = (float)0.;
+	    tet = 0.;
 /*< 	   endif >*/
 	}
 /*<         sintet=sin(tet) >*/
@@ -631,46 +579,46 @@ ion*/
 /* 	write(6,*) "sintet ",sintet,tet,costet */
 /* Simpson's rules for the angle of the emitted radiation teta */
 /*<         cotb=2. >*/
-	cotb = (float)2.;
+	cotb = 2.;
 /*<         diff=abs(km/2-km/2.) >*/
-	diff = (r__1 = km / 2 - km / (float)2., dabs(r__1));
+	diff = (d__1 = km / 2 - km / 2., abs(d__1));
 /*<         if (diff.lt.0.00001)cotb=4. >*/
-	if (diff < (float)1e-5) {
-	    cotb = (float)4.;
+	if (diff < 1e-5) {
+	    cotb = 4.;
 	}
 /*<         if (km.eq.1.or.km.eq.ntb)cotb=1.0 >*/
 	if (km == 1 || km == ntb) {
-	    cotb = (float)1.;
+	    cotb = 1.;
 	}
 /*  loops step for phiN and tetaN (N is the facet unit normal vector) 
 */
 /*<         if (tet.lt.91)nta=801 >*/
-	if (tet < (float)91.) {
+	if (tet < 91.) {
 	    nta = 801;
 	}
 /*<         if (tet.lt.81)nta=301 >*/
-	if (tet < (float)81.) {
+	if (tet < 81.) {
 	    nta = 301;
 	}
 /*<         if (tet.lt.75)nta=101 >*/
-	if (tet < (float)75.) {
+	if (tet < 75.) {
 	    nta = 101;
 	}
 /*<         if (tet.lt.65)nta=31 >*/
-	if (tet < (float)65.) {
+	if (tet < 65.) {
 	    nta = 31;
 	}
 /*<         nfa=nta >*/
 	nfa = nta;
 /*<         hta=(1.-costt)/float(nta-1) >*/
-	hta = ((float)1. - costt) / (real) (nta - 1);
+	hta = (1. - costt) / (doublereal) (nta - 1);
 /*<         hfa=pi/float(nfa-1) >*/
-	hfa = pi / (real) (nfa - 1);
+	hfa = pi / (doublereal) (nfa - 1);
 /* loops on phiN (azimuth angle of the facet normal vector) */
 /*<         pr=0. >*/
-	pr = (float)0.;
+	pr = 0.;
 /*<         pp=0. >*/
-	pp = (float)0.;
+	pp = 0.;
 /*<         do i=1,nfa >*/
 	i__2 = nfa;
 	for (i__ = 1; i__ <= i__2; ++i__) {
@@ -682,16 +630,16 @@ ion*/
 	    sinphin = sin(phin);
 /*  Simpson's rules for phin */
 /*<          cofa=2. >*/
-	    cofa = (float)2.;
+	    cofa = 2.;
 /*<          diff=abs(i/2-i/2.) >*/
-	    diff = (r__1 = i__ / 2 - i__ / (float)2., dabs(r__1));
+	    diff = (d__1 = i__ / 2 - i__ / 2., abs(d__1));
 /*<          if (diff.lt.0.00001)cofa=4. >*/
-	    if (diff < (float)1e-5) {
-		cofa = (float)4.;
+	    if (diff < 1e-5) {
+		cofa = 4.;
 	    }
 /*<          if (i.eq.1.or.i.eq.nfa)cofa=1.0 >*/
 	    if (i__ == 1 || i__ == nfa) {
-		cofa = (float)1.;
+		cofa = 1.;
 	    }
 /* loops on tetaN (zenith angle of the facet normal vector) */
 /*<          do j=1,nta >*/
@@ -700,39 +648,38 @@ ion*/
 /*<           costetn=costt+(j-1)*hta >*/
 		costetn = costt + (j - 1) * hta;
 /*<           sintetn=sqrt(abs(1.-costetn*costetn)) >*/
-		sintetn = sqrt((r__1 = (float)1. - costetn * costetn, dabs(
-			r__1)));
+		sintetn = sqrt((d__1 = 1. - costetn * costetn, abs(d__1)));
 /*<           tantetn=sintetn/costetn >*/
 		tantetn = sintetn / costetn;
 /*  Simpson's rules for tetaN */
 /*<           cota=2. >*/
-		cota = (float)2.;
+		cota = 2.;
 /*<           diff=abs(j/2-j/2.) >*/
-		diff = (r__1 = j / 2 - j / (float)2., dabs(r__1));
+		diff = (d__1 = j / 2 - j / 2., abs(d__1));
 /*<           if (diff.lt.0.00001)cota=4. >*/
-		if (diff < (float)1e-5) {
-		    cota = (float)4.;
+		if (diff < 1e-5) {
+		    cota = 4.;
 		}
 /*<           if (j.eq.1.or.j.eq.nta)cota=1.0 >*/
 		if (j == 1 || j == nta) {
-		    cota = (float)1.;
+		    cota = 1.;
 		}
 /* Fresnel's reflection coefficient R1 */
 /*<           coschi=costet*costetn+sintet*sintetn*cosphin >*/
 		coschi = costet * costetn + sintet * sintetn * cosphin;
 /*       write(6,*)" coschi ",coschi,sintet,sintetn,cosphin */
 /*<           if (coschi*coschi.gt.1.0)coschi=0.99999999999 >*/
-		if (coschi * coschi > (float)1.) {
-		    coschi = (float).99999999999;
+		if (coschi * coschi > 1.) {
+		    coschi = .99999999999;
 		}
 /*<           sinchi=sqrt(1-coschi*coschi) >*/
 		sinchi = sqrt(1 - coschi * coschi);
 /*<           if (coschi.lt.0.0)then >*/
-		if (coschi < (float)0.) {
+		if (coschi < 0.) {
 /*<             r1=0. >*/
-		    r1 = (float)0.;
+		    r1 = 0.;
 /*<             cota=0. >*/
-		    cota = (float)0.;
+		    cota = 0.;
 /*<           else >*/
 		} else {
 /*<             Call Fresnel(nr,ni,coschi,sinchi,r1) >*/
@@ -754,19 +701,19 @@ ion*/
 /*<           xn2=xn*xn >*/
 		xn2 = xn * xn;
 /*<           coef=1-C21/2.*(xe2-1)*xn-C03/6.*(xn2-3)*xn >*/
-		coef = 1 - c21 / (float)2. * (xe2 - 1) * xn - c03 / (float)6. 
-			* (xn2 - 3) * xn;
+		coef = 1 - c21 / 2. * (xe2 - 1) * xn - c03 / 6. * (xn2 - 3) * 
+			xn;
 /*<           coef=coef+c40/24.*(xe2*xe2-6*xe2+3) >*/
-		coef += c40 / (float)24. * (xe2 * xe2 - xe2 * 6 + 3);
+		coef += c40 / 24. * (xe2 * xe2 - xe2 * 6 + 3);
 /*<           coef=coef+C04/24.*(xn2*xn2-6*xn2+3) >*/
-		coef += c04 / (float)24. * (xn2 * xn2 - xn2 * 6 + 3);
+		coef += c04 / 24. * (xn2 * xn2 - xn2 * 6 + 3);
 /*<           coef=coef+C22/4.*(xe2-1)*(xn2-1) >*/
-		coef += c22 / (float)4. * (xe2 - 1) * (xn2 - 1);
+		coef += c22 / 4. * (xe2 - 1) * (xn2 - 1);
 /*<           fonc0=0.5*coschi*coef*exp(-(xe2+xn2)/2.)/(costetn**4) >*/
 /* Computing 4th power */
-		r__1 = costetn, r__1 *= r__1;
-		fonc0 = coschi * (float).5 * coef * exp(-(xe2 + xn2) / (float)
-			2.) / (r__1 * r__1);
+		d__1 = costetn, d__1 *= d__1;
+		fonc0 = coschi * .5 * coef * exp(-(xe2 + xn2) / 2.) / (d__1 * 
+			d__1);
 /*<           pr=pr+r1*fonc0*cofa*cota*cotb >*/
 		pr += r1 * fonc0 * cofa * cota * cotb;
 /*<           pp=pp+fonc0*cofa*cota*cotb >*/
@@ -779,8 +726,8 @@ ion*/
 	}
 
 /*<         pond=2.*hta*hfa*htb/pi/sqrt(sigmaC)/sqrt(sigmaU)/3./3./3. >*/
-	pond = hta * (float)2. * hfa * htb / pi / sqrt(sigmac) / sqrt(sigmau) 
-		/ (float)3. / (float)3. / (float)3.;
+	pond = hta * 2. * hfa * htb / pi / sqrt(sigmac) / sqrt(sigmau) / 3. / 
+		3. / 3.;
 /*       write(6,*) "pond ",pond," pr ",pr," pp ",pp */
 /*<         prefl=prefl+pr*pond >*/
 	prefl += pr * pond;

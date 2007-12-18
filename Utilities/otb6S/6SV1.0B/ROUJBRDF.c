@@ -6,14 +6,14 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
-
 /* OTB patches: replace "f2c.h" by "otb_6S.h" */
 /*#include "f2c.h"*/
 #include "otb_6S.h"
 
 /*<       subroutine roujbrdf(k0,k1,k2,mu,np,rm,rp,brdfint) >*/
-/* Subroutine */ int roujbrdf_(real *k0, real *k1, real *k2, integer *mu, 
-	integer *np, real *rm, real *rp, real *brdfint)
+/* Subroutine */ int roujbrdf_(doublereal *k0, doublereal *k1, doublereal *k2,
+	 integer *mu, integer *np, doublereal *rm, doublereal *rp, doublereal 
+	*brdfint)
 {
     /* System generated locals */
     integer rm_offset, brdfint_dim1, brdfint_offset, i__1, i__2;
@@ -24,7 +24,7 @@ extern "C" {
 
     /* Local variables */
     integer j, k;
-    real f1, f2, fi, fr, pi, psi, tts, ttv, cpsi, xmus, xmuv;
+    doublereal f1, f2, fi, fr, pi, psi, tts, ttv, cpsi, xmus, xmuv;
 
 /* model can be found in JGR 1992 paper, Vol. 97,No D18, Page20,445-20,468
  */
@@ -45,7 +45,7 @@ extern "C" {
     /* Function Body */
     xmus = rm[0];
 /*<       pi=atan(1.)*4. >*/
-    pi = atan((float)1.) * (float)4.;
+    pi = atan(1.) * 4.;
 /*<       do 1 k=1,np >*/
     i__1 = *np;
     for (k = 1; k <= i__1; ++k) {
@@ -73,22 +73,21 @@ extern "C" {
 /*<       cpsi=xmus*xmuv+sin(acos(xmus))*sin(acos(xmuv))*cos(fi) >*/
 	    cpsi = xmus * xmuv + sin(acos(xmus)) * sin(acos(xmuv)) * cos(fi);
 /*<       if (cpsi.lt.1.) then >*/
-	    if (cpsi < (float)1.) {
+	    if (cpsi < 1.) {
 /*<       psi=acos(cpsi) >*/
 		psi = acos(cpsi);
 /*<       else >*/
 	    } else {
 /*<       psi=0. >*/
-		psi = (float)0.;
+		psi = 0.;
 /*<       endif >*/
 	    }
 /*<       f2=4./(3.*pi*(xmus+xmuv))*((pi/2-psi)*cpsi+sin(psi))-1./3. >*/
-	    f2 = (float)4. / (pi * (float)3. * (xmus + xmuv)) * ((pi / 2 - 
-		    psi) * cpsi + sin(psi)) - (float).33333333333333331;
+	    f2 = 4. / (pi * 3. * (xmus + xmuv)) * ((pi / 2 - psi) * cpsi + 
+		    sin(psi)) - .33333333333333331;
 /*<    >*/
-	    f1 = ((pi - fr) * cos(fr) + sin(fr)) * (float).5 * tts * ttv - 
-		    tts - ttv - sqrt(tts * tts + ttv * ttv - tts * 2 * ttv * 
-		    cos(fr));
+	    f1 = ((pi - fr) * cos(fr) + sin(fr)) * .5 * tts * ttv - tts - ttv 
+		    - sqrt(tts * tts + ttv * ttv - tts * 2 * ttv * cos(fr));
 /*<       f1=f1/pi >*/
 	    f1 /= pi;
 /*<       brdfint(j,k)=k0+k1*f1+k2*f2 >*/

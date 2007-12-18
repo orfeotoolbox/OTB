@@ -1,4 +1,3 @@
-
 /* OTB patches: replace "f2c.h" by "otb_6S.h" */
 /*#include "f2c.h"*/
 #include "otb_6S.h"
@@ -8,7 +7,7 @@ extern "C" {
 #endif
 
 struct {
-    real xgm[20], wgm[20];
+    doublereal xgm[20], wgm[20];
     integer n;
 } gauss_m__;
 

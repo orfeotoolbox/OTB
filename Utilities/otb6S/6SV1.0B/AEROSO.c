@@ -6,7 +6,6 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
-
 /* OTB patches: replace "f2c.h" by "otb_6S.h" */
 /*#include "f2c.h"*/
 #include "otb_6S.h"
@@ -20,28 +19,28 @@ Extern struct {
 #define num_quad__1 num_quad__
 
 Extern struct {
-    real ph[20000]	/* was [20][1000] */, qh[20000]	/* was [20][1000] */, 
-	    uh[20000]	/* was [20][1000] */;
+    doublereal ph[20000]	/* was [20][1000] */, qh[20000]	/* was [20][
+	    1000] */, uh[20000]	/* was [20][1000] */;
 } sixs_aerbas__;
 
 #define sixs_aerbas__1 sixs_aerbas__
 
 Extern struct {
-    real phasel[20000]	/* was [20][1000] */, qhasel[20000]	/* was [20][
-	    1000] */, uhasel[20000]	/* was [20][1000] */;
+    doublereal phasel[20000]	/* was [20][1000] */, qhasel[20000]	/* 
+	    was [20][1000] */, uhasel[20000]	/* was [20][1000] */;
 } sixs_phase__;
 
 #define sixs_phase__1 sixs_phase__
 
 Extern struct {
-    real ext[20], ome[20], gasym[20], phase[20], qhase[20], uhase[20];
+    doublereal ext[20], ome[20], gasym[20], phase[20], qhase[20], uhase[20];
 } sixs_aer__;
 
 #define sixs_aer__1 sixs_aer__
 
 Extern struct {
-    real ex[80]	/* was [4][20] */, sc[80]	/* was [4][20] */, asy[80]	
-	    /* was [4][20] */, vi[4];
+    doublereal ex[80]	/* was [4][20] */, sc[80]	/* was [4][20] */, 
+	    asy[80]	/* was [4][20] */, vi[4];
 } sixs_coef__;
 
 #define sixs_coef__1 sixs_coef__
@@ -50,12 +49,12 @@ Extern struct {
 
 static integer c__3 = 3;
 static integer c__1 = 1;
-static real c_b19 = (float)-1.;
-static real c_b20 = (float)1.;
+static doublereal c_b19 = -1.;
+static doublereal c_b20 = 1.;
 
 /*<       subroutine aeroso (iaer,co,xmud,wldis,FILE,ipol) >*/
-/* Subroutine */ int aeroso_(integer *iaer, real *co, real *xmud, real *wldis,
-	 char *file, integer *ipol, ftnlen file_len)
+/* Subroutine */ int aeroso_(integer *iaer, doublereal *co, doublereal *xmud, 
+	doublereal *wldis, char *file, integer *ipol, ftnlen file_len)
 {
 
     /* Format strings */
@@ -63,7 +62,6 @@ static real c_b20 = (float)1.;
 
     /* System generated locals */
     integer i__1, i__2;
-    real r__1;
     doublereal d__1, d__2;
     cilist ci__1;
     olist o__1;
@@ -79,25 +77,23 @@ static real c_b20 = (float)1.;
 
     /* Local variables */
     integer i__, j, k, l, j1, j2;
-    real dd[80]	/* was [4][20] */, ci[4], pi, qq[80]	/* was [4][20] */, uu[
-	    80]	/* was [4][20] */;
+    doublereal dd[80]	/* was [4][20] */, ci[4], pi, qq[80]	/* was [4][20]
+	     */, uu[80]	/* was [4][20] */;
     extern /* Subroutine */ int bbm_(), bdm_();
-    doublereal cij[4];
-    real sca[20], pha[100000]	/* was [5][20][1000] */, qha[100000]	/* 
-	    was [5][20][1000] */;
-    extern /* Subroutine */ int mie_(integer *, real *, real *, real *, real *
-	    , integer *);
+    doublereal cij[4], sca[20], pha[100000]	/* was [5][20][1000] */, qha[
+	    100000]	/* was [5][20][1000] */;
+    extern /* Subroutine */ int mie_(integer *, doublereal *, doublereal *, 
+	    doublereal *, doublereal *, integer *);
     integer icp;
-    real uha[100000]	/* was [5][20][1000] */;
-    doublereal nis;
+    doublereal uha[100000]	/* was [5][20][1000] */, nis;
     extern /* Subroutine */ int stm_(), ocea_();
-    real coef, sigm;
+    doublereal coef, sigm;
     integer nbmu;
-    extern /* Subroutine */ int wate_(), dust_(), soot_(), gauss_(real *, 
-	    real *, real *, real *, integer *);
+    extern /* Subroutine */ int wate_(), dust_(), soot_(), gauss_(doublereal *
+	    , doublereal *, doublereal *, doublereal *, integer *);
     doublereal sumni;
     integer nbmu_2__;
-    real cosang[1000], pdgs_s__[1000], weight[1000], cgaus_s__[1000];
+    doublereal cosang[1000], pdgs_s__[1000], weight[1000], cgaus_s__[1000];
 
     /* Fortran I/O blocks */
     static cilist io___3 = { 0, 10, 0, 0, 0 };
@@ -142,7 +138,7 @@ static real c_b20 = (float)1.;
 
     /* Function Body */
 /*<       pi=4.*atan(1.)  >*/
-    pi = atan((float)1.) * (float)4.;
+    pi = atan(1.) * 4.;
 /*      if(iaer.eq.0) return */
 /*<       if (iaer.eq.12) then >*/
     if (*iaer == 12) {
@@ -173,12 +169,12 @@ static real c_b20 = (float)1.;
 	    ci__1.cifmt = "(10x,4(3x,f8.4,3x))";
 	    s_rsfe(&ci__1);
 	    do_fio(&c__1, (char *)&sixs_aer__1.ext[l - 1], (ftnlen)sizeof(
-		    real));
-	    do_fio(&c__1, (char *)&sca[l - 1], (ftnlen)sizeof(real));
+		    doublereal));
+	    do_fio(&c__1, (char *)&sca[l - 1], (ftnlen)sizeof(doublereal));
 	    do_fio(&c__1, (char *)&sixs_aer__1.ome[l - 1], (ftnlen)sizeof(
-		    real));
+		    doublereal));
 	    do_fio(&c__1, (char *)&sixs_aer__1.gasym[l - 1], (ftnlen)sizeof(
-		    real));
+		    doublereal));
 	    e_rsfe();
 /*<         enddo     >*/
 	}
@@ -200,7 +196,7 @@ static real c_b20 = (float)1.;
 	    s_rsfe(&ci__1);
 	    for (l = 1; l <= 20; ++l) {
 		do_fio(&c__1, (char *)&sixs_phase__1.phasel[l + k * 20 - 21], 
-			(ftnlen)sizeof(real));
+			(ftnlen)sizeof(doublereal));
 	    }
 	    e_rsfe();
 /*<         enddo    >*/
@@ -218,7 +214,7 @@ static real c_b20 = (float)1.;
 		s_rsfe(&ci__1);
 		for (l = 1; l <= 20; ++l) {
 		    do_fio(&c__1, (char *)&sixs_phase__1.qhasel[l + k * 20 - 
-			    21], (ftnlen)sizeof(real));
+			    21], (ftnlen)sizeof(doublereal));
 		}
 		e_rsfe();
 /*<           enddo >*/
@@ -234,7 +230,7 @@ static real c_b20 = (float)1.;
 		s_rsfe(&ci__1);
 		for (l = 1; l <= 20; ++l) {
 		    do_fio(&c__1, (char *)&sixs_phase__1.uhasel[l + k * 20 - 
-			    21], (ftnlen)sizeof(real));
+			    21], (ftnlen)sizeof(doublereal));
 		}
 		e_rsfe();
 /*<           enddo >*/
@@ -259,9 +255,9 @@ static real c_b20 = (float)1.;
     i__1 = nbmu - 3;
     gauss_(&c_b19, &c_b20, cosang, weight, &i__1);
 /*<       cgaus_S(1)=-1.0 >*/
-    cgaus_s__[0] = (float)-1.;
+    cgaus_s__[0] = -1.;
 /*<       pdgs_S(1)=0.0 >*/
-    pdgs_s__[0] = (float)0.;
+    pdgs_s__[0] = 0.;
 /*<       do j=1,nbmu_2 >*/
     i__1 = nbmu_2__;
     for (j = 1; j <= i__1; ++j) {
@@ -272,9 +268,9 @@ static real c_b20 = (float)1.;
 /*<       enddo  >*/
     }
 /*<       cgaus_S(nbmu_2+2)=0. >*/
-    cgaus_s__[nbmu_2__ + 1] = (float)0.;
+    cgaus_s__[nbmu_2__ + 1] = 0.;
 /*<       pdgs_S(nbmu_2+2)=0. >*/
-    pdgs_s__[nbmu_2__ + 1] = (float)0.;
+    pdgs_s__[nbmu_2__ + 1] = 0.;
 /*<       do j=nbmu_2+1,nbmu-3 >*/
     i__1 = nbmu - 3;
     for (j = nbmu_2__ + 1; j <= i__1; ++j) {
@@ -285,9 +281,9 @@ static real c_b20 = (float)1.;
 /*<       enddo >*/
     }
 /*<       cgaus_S(nbmu)=1.0 >*/
-    cgaus_s__[nbmu - 1] = (float)1.;
+    cgaus_s__[nbmu - 1] = 1.;
 /*<       pdgs_S(nbmu)=0. >*/
-    pdgs_s__[nbmu - 1] = (float)0.;
+    pdgs_s__[nbmu - 1] = 0.;
 /* - calculation of gauss points */
 /*<       do 7 k=1,nbmu-1 >*/
     i__1 = nbmu - 1;
@@ -342,32 +338,32 @@ L8:
 /*<       do 1 l=1,20 >*/
     for (l = 1; l <= 20; ++l) {
 /*<        ext(l)=0. >*/
-	sixs_aer__1.ext[l - 1] = (float)0.;
+	sixs_aer__1.ext[l - 1] = 0.;
 /*<        sca(l)=0. >*/
-	sca[l - 1] = (float)0.;
+	sca[l - 1] = 0.;
 /*<        if(l.eq.4.and.iaer.eq.0) ext(l)=1. >*/
 	if (l == 4 && *iaer == 0) {
-	    sixs_aer__1.ext[l - 1] = (float)1.;
+	    sixs_aer__1.ext[l - 1] = 1.;
 	}
 /*<        ome(l)=0. >*/
-	sixs_aer__1.ome[l - 1] = (float)0.;
+	sixs_aer__1.ome[l - 1] = 0.;
 /*<        gasym(l)=0. >*/
-	sixs_aer__1.gasym[l - 1] = (float)0.;
+	sixs_aer__1.gasym[l - 1] = 0.;
 /*<        phase(l)=0. >*/
-	sixs_aer__1.phase[l - 1] = (float)0.;
+	sixs_aer__1.phase[l - 1] = 0.;
 /*<        qhase(l)=0. >*/
-	sixs_aer__1.qhase[l - 1] = (float)0.;
+	sixs_aer__1.qhase[l - 1] = 0.;
 /*<        uhase(l)=0. >*/
-	sixs_aer__1.uhase[l - 1] = (float)0.;
+	sixs_aer__1.uhase[l - 1] = 0.;
 /*<        do 1 k=1,nbmu >*/
 	i__1 = nbmu;
 	for (k = 1; k <= i__1; ++k) {
 /*<         phasel(l,k)=0. >*/
-	    sixs_phase__1.phasel[l + k * 20 - 21] = (float)0.;
+	    sixs_phase__1.phasel[l + k * 20 - 21] = 0.;
 /*<         qhasel(l,k)=0. >*/
-	    sixs_phase__1.qhasel[l + k * 20 - 21] = (float)0.;
+	    sixs_phase__1.qhasel[l + k * 20 - 21] = 0.;
 /*<         uhasel(l,k)=0. >*/
-	    sixs_phase__1.uhasel[l + k * 20 - 21] = (float)0.;
+	    sixs_phase__1.uhasel[l + k * 20 - 21] = 0.;
 /*<     1 continue >*/
 /* L1: */
 	}
@@ -455,7 +451,7 @@ L8:
 /*<          icp=1 >*/
 	icp = 1;
 /*<          cij(1)=1.00 >*/
-	cij[0] = (float)1.;
+	cij[0] = 1.;
 /* for normalization of the extinction coefficient */
 /*<          nis=1.d+00/ex(1,8) >*/
 	nis = 1. / sixs_coef__1.ex[28];
@@ -470,11 +466,11 @@ L8:
 /*< 	  do j=1,4 >*/
 	    for (j = 1; j <= 4; ++j) {
 /*<  	   ex(j,l)=0 >*/
-		sixs_coef__1.ex[j + (l << 2) - 5] = (float)0.;
+		sixs_coef__1.ex[j + (l << 2) - 5] = 0.;
 /*< 	   sc(j,l)=0.  >*/
-		sixs_coef__1.sc[j + (l << 2) - 5] = (float)0.;
+		sixs_coef__1.sc[j + (l << 2) - 5] = 0.;
 /*< 	   asy(j,l)=0. >*/
-		sixs_coef__1.asy[j + (l << 2) - 5] = (float)0.;
+		sixs_coef__1.asy[j + (l << 2) - 5] = 0.;
 /*< 	  enddo >*/
 	    }
 /*< 	  enddo >*/
@@ -541,9 +537,9 @@ L8:
 	}
 /*     summ of the ci/vi calculation */
 /*<          sigm=0. >*/
-	sigm = (float)0.;
+	sigm = 0.;
 /*<          sumni=0.0 >*/
-	sumni = (float)0.;
+	sumni = 0.;
 /*<          do 3 i=1,4 >*/
 	for (i__ = 1; i__ <= 4; ++i__) {
 /*<     3    sigm=sigm+ci(i)/vi(i) >*/
@@ -699,14 +695,14 @@ L8:
 	    ci__1.ciunit = 10;
 	    ci__1.cifmt = "(2x,f8.4,4(3x,f8.4,3x),2(2x,e10.4))";
 	    s_wsfe(&ci__1);
-	    do_fio(&c__1, (char *)&wldis[l], (ftnlen)sizeof(real));
+	    do_fio(&c__1, (char *)&wldis[l], (ftnlen)sizeof(doublereal));
 	    do_fio(&c__1, (char *)&sixs_aer__1.ext[l - 1], (ftnlen)sizeof(
-		    real));
-	    do_fio(&c__1, (char *)&sca[l - 1], (ftnlen)sizeof(real));
+		    doublereal));
+	    do_fio(&c__1, (char *)&sca[l - 1], (ftnlen)sizeof(doublereal));
 	    do_fio(&c__1, (char *)&sixs_aer__1.ome[l - 1], (ftnlen)sizeof(
-		    real));
+		    doublereal));
 	    do_fio(&c__1, (char *)&sixs_aer__1.gasym[l - 1], (ftnlen)sizeof(
-		    real));
+		    doublereal));
 	    d__1 = sixs_aer__1.ext[l - 1] / nis;
 	    do_fio(&c__1, (char *)&d__1, (ftnlen)sizeof(doublereal));
 	    d__2 = sca[l - 1] / nis;
@@ -723,7 +719,7 @@ L8:
 	do_fio(&c__1, " Phase Function ", 16L);
 	do_fio(&c__1, "TETA", 4L);
 	for (l = 1; l <= 20; ++l) {
-	    do_fio(&c__1, (char *)&wldis[l], (ftnlen)sizeof(real));
+	    do_fio(&c__1, (char *)&wldis[l], (ftnlen)sizeof(doublereal));
 	}
 	e_wsfe();
 /*<         do 76 k=1,nbmu >*/
@@ -731,11 +727,11 @@ L8:
 	for (k = 1; k <= i__1; ++k) {
 /*<           write(10,761)180.*acos(cgaus_S(k))/pi,(phasel(l,k),l=1,20) >*/
 	    s_wsfe(&io___32);
-	    r__1 = acos(cgaus_s__[k - 1]) * (float)180. / pi;
-	    do_fio(&c__1, (char *)&r__1, (ftnlen)sizeof(real));
+	    d__1 = acos(cgaus_s__[k - 1]) * 180. / pi;
+	    do_fio(&c__1, (char *)&d__1, (ftnlen)sizeof(doublereal));
 	    for (l = 1; l <= 20; ++l) {
 		do_fio(&c__1, (char *)&sixs_phase__1.phasel[l + k * 20 - 21], 
-			(ftnlen)sizeof(real));
+			(ftnlen)sizeof(doublereal));
 	    }
 	    e_wsfe();
 /*<  76     continue >*/
@@ -749,11 +745,11 @@ L8:
 	    for (k = 1; k <= i__1; ++k) {
 /*<             write(10,761)180.*acos(cgaus_S(k))/pi,(qhasel(l,k),l=1,20) >*/
 		s_wsfe(&io___33);
-		r__1 = acos(cgaus_s__[k - 1]) * (float)180. / pi;
-		do_fio(&c__1, (char *)&r__1, (ftnlen)sizeof(real));
+		d__1 = acos(cgaus_s__[k - 1]) * 180. / pi;
+		do_fio(&c__1, (char *)&d__1, (ftnlen)sizeof(doublereal));
 		for (l = 1; l <= 20; ++l) {
 		    do_fio(&c__1, (char *)&sixs_phase__1.qhasel[l + k * 20 - 
-			    21], (ftnlen)sizeof(real));
+			    21], (ftnlen)sizeof(doublereal));
 		}
 		e_wsfe();
 /*< 	  enddo >*/
@@ -763,11 +759,11 @@ L8:
 	    for (k = 1; k <= i__1; ++k) {
 /*<             write(10,761)180.*acos(cgaus_S(k))/pi,(uhasel(l,k),l=1,20) >*/
 		s_wsfe(&io___34);
-		r__1 = acos(cgaus_s__[k - 1]) * (float)180. / pi;
-		do_fio(&c__1, (char *)&r__1, (ftnlen)sizeof(real));
+		d__1 = acos(cgaus_s__[k - 1]) * 180. / pi;
+		do_fio(&c__1, (char *)&d__1, (ftnlen)sizeof(doublereal));
 		for (l = 1; l <= 20; ++l) {
 		    do_fio(&c__1, (char *)&sixs_phase__1.uhasel[l + k * 20 - 
-			    21], (ftnlen)sizeof(real));
+			    21], (ftnlen)sizeof(doublereal));
 		}
 		e_wsfe();
 /*< 	  enddo >*/

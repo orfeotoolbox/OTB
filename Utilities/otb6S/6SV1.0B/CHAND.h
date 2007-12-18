@@ -1,7 +1,7 @@
 extern int otb_6s_chand_(
-  otb_6s_real *xphi,
-  otb_6s_real *xmuv,
-  otb_6s_real *xmus,
-  otb_6s_real *xtau,
-  otb_6s_real *xrray
+  otb_6s_doublereal *xphi,
+  otb_6s_doublereal *xmuv,
+  otb_6s_doublereal *xmus,
+  otb_6s_doublereal *xtau,
+  otb_6s_doublereal *xrray
   );

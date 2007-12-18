@@ -6,7 +6,6 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
-
 /* OTB patches: replace "f2c.h" by "otb_6S.h" */
 /*#include "f2c.h"*/
 #include "otb_6S.h"
@@ -20,14 +19,14 @@ Extern struct {
 #define num_quad__1 num_quad__
 
 Extern struct {
-    real pha[1000], qha[1000], uha[1000], alphal[1001], betal[1001], gammal[
-	    1001], zetal[1001];
+    doublereal pha[1000], qha[1000], uha[1000], alphal[1001], betal[1001], 
+	    gammal[1001], zetal[1001];
 } sixs_polar__;
 
 #define sixs_polar__1 sixs_polar__
 
 Extern struct {
-    real delta, sigma;
+    doublereal delta, sigma;
 } sixs_del__;
 
 #define sixs_del__1 sixs_del__
@@ -46,18 +45,19 @@ Extern struct {
 #define multorder_1 multorder_
 
 /*<    >*/
-/* Subroutine */ int ospol_(integer *iaer_prof__, real *tamoy, real *trmoy, 
-	real *pizmoy, real *tamoyp, real *trmoyp, real *palt, real *phirad, 
-	integer *nt, integer *mu, integer *np, real *rm, real *gb, real *rp, 
-	real *xli, real *xlq, real *xlu, real *xlphim, integer *nfi, integer *
-	nfilut, real *filut, real *rolut, real *rolutq, real *rolutu)
+/* Subroutine */ int ospol_(integer *iaer_prof__, doublereal *tamoy, 
+	doublereal *trmoy, doublereal *pizmoy, doublereal *tamoyp, doublereal 
+	*trmoyp, doublereal *palt, doublereal *phirad, integer *nt, integer *
+	mu, integer *np, doublereal *rm, doublereal *gb, doublereal *rp, 
+	doublereal *xli, doublereal *xlq, doublereal *xlu, doublereal *xlphim,
+	 integer *nfi, integer *nfilut, doublereal *filut, doublereal *rolut, 
+	doublereal *rolutq, doublereal *rolutu)
 {
     /* System generated locals */
     integer rm_offset, gb_offset, xli_dim1, xli_offset, xlq_dim1, xlq_offset, 
 	    xlu_dim1, xlu_offset, rolut_dim1, rolut_offset, rolutq_dim1, 
 	    rolutq_offset, rolutu_dim1, rolutu_offset, filut_dim1, 
 	    filut_offset, i__1, i__2, i__3, i__4;
-    real r__1;
     doublereal d__1;
 
     /* Builtin functions */
@@ -65,35 +65,30 @@ Extern struct {
 	    doublereal), cos(doublereal), sin(doublereal);
 
     /* Local variables */
-    real roiavion[4], roqavion[4], rouavion[4];
-    doublereal a, b, c__, d__, f, h__[31];
+    doublereal roiavion[4], roqavion[4], rouavion[4], a, b, c__, d__, f, h__[
+	    31];
     integer i__, j, k, l, m;
-    doublereal x, y, z__, a1, d1, g1;
-    real i1[1581]	/* was [31][51] */, i2[1581]	/* was [31][51] */, 
-	    i3[51], i4[51];
+    doublereal x, y, z__, a1, d1, g1, i1[1581]	/* was [31][51] */, i2[1581]	
+	    /* was [31][51] */, i3[51], i4[51];
     extern /* Subroutine */ int aero_prof__(doublereal *, doublereal *, 
 	    doublereal *, doublereal *, integer *, doublereal *, doublereal *,
 	     doublereal *, doublereal *, doublereal *, doublereal *);
-    real q1[1581]	/* was [31][51] */, q2[1581]	/* was [31][51] */, 
+    doublereal q1[1581]	/* was [31][51] */, q2[1581]	/* was [31][51] */, 
 	    q3[51], q4[51], u1[1581]	/* was [31][51] */, u2[1581]	/* 
-	    was [31][51] */, u3[51], u4[51];
-    doublereal y1, r1;
-    extern /* Subroutine */ int kernelpol_(integer *, integer *, real *, 
-	    doublereal *, doublereal *, doublereal *, doublereal *, 
+	    was [31][51] */, u3[51], u4[51], y1, r1;
+    extern /* Subroutine */ int kernelpol_(integer *, integer *, doublereal *,
+	     doublereal *, doublereal *, doublereal *, doublereal *, 
 	    doublereal *, doublereal *, doublereal *, doublereal *, 
 	    doublereal *);
     doublereal ca, dd, ha, ch[31];
     integer ig;
     doublereal bp[1326]	/* was [26][51] */;
     integer jj;
-    doublereal ta, cr;
-    real in[153]	/* was [3][51] */;
-    doublereal gr[1326]	/* was [26][51] */, hr, gt[1326]	/* was [26][
-	    51] */, th, pi;
-    real qn[153]	/* was [3][51] */;
+    doublereal ta, cr, in[153]	/* was [3][51] */, gr[1326]	/* was [26][
+	    51] */, hr, gt[1326]	/* was [26][51] */, th, pi, qn[153]	
+	    /* was [3][51] */;
     integer it;
-    real un[153]	/* was [3][51] */;
-    doublereal tr;
+    doublereal un[153]	/* was [3][51] */, tr;
     integer is;
     doublereal xx, zx, yy, ii1, ii2, sa1, sa2, sb1, sb2, sc1, sc2, xi1, qq1, 
 	    zi1, qq2, xi2, xq1, uu1, zq1, xt1, xt2, uu2, zu1, xq2, xu1, xu2;
@@ -115,9 +110,7 @@ Extern struct {
     extern /* Subroutine */ int discre_(doublereal *, doublereal *, 
 	    doublereal *, doublereal *, integer *, integer *, doublereal *, 
 	    doublereal *, doublereal *, doublereal *, doublereal *);
-    doublereal arrjmk, artjmk, artkmj, attjmk;
-    real phimul;
-    doublereal delta0s;
+    doublereal arrjmk, artjmk, artkmj, attjmk, phimul, delta0s;
 
 /* - to vary the number of quadratures */
 /*<       include "paramdef.inc" >*/
@@ -231,7 +224,7 @@ se (nfilut)*/
     /* Function Body */
     snt = *nt;
 /*<       hr=8.0 >*/
-    hr = (float)8.;
+    hr = 8.;
 /*<       ta=tamoy >*/
     ta = *tamoy;
 /*<       tr=trmoy >*/
@@ -245,9 +238,9 @@ se (nfilut)*/
 /*<       iplane=0 >*/
     iplane = 0;
 /*<       acu=1.e-20 >*/
-    acu = (float)1e-20;
+    acu = 1e-20;
 /*<       acu2=1.e-4 >*/
-    acu2 = (float)1e-4;
+    acu2 = 1e-4;
 /*<       mum1=mu-1 >*/
     mum1 = *mu - 1;
 /* if plane observations recompute scale height for aerosol knowing: */
@@ -262,15 +255,15 @@ se (nfilut)*/
 /*                        ntp=nt-1   plane observation selected */
 /*     it's a mixing rayleigh+aerosol */
 /*<       if(palt.le.900..and.palt.gt.0.0) then >*/
-    if (*palt <= (float)900. && *palt > (float)0.) {
+    if (*palt <= 900. && *palt > 0.) {
 /*<         if (tap.gt.1.e-03) then >*/
-	if (tap > (float).001) {
+	if (tap > .001) {
 /*<           ha=-palt/log(tap/ta) >*/
 	    ha = -(*palt) / log(tap / ta);
 /*<         else >*/
 	} else {
 /*<           ha=2. >*/
-	    ha = (float)2.;
+	    ha = 2.;
 /*<         endif >*/
 	}
 /*<         ntp=nt-1 >*/
@@ -278,7 +271,7 @@ se (nfilut)*/
 /*<       else >*/
     } else {
 /*<         ha=2.0 >*/
-	ha = (float)2.;
+	ha = 2.;
 /*<         ntp=nt >*/
 	ntp = *nt;
 /*<       endif >*/
@@ -300,15 +293,15 @@ se (nfilut)*/
 /*<           h(j)=j*tr/ntp >*/
 	    h__[j] = j * tr / ntp;
 /*<           ch(j)=exp(-h(j)/xmus)/2. >*/
-	    ch[j] = exp(-h__[j] / xmus) / (float)2.;
+	    ch[j] = exp(-h__[j] / xmus) / 2.;
 /*<           ydel(j)=1.0 >*/
-	    ydel[j] = (float)1.;
+	    ydel[j] = 1.;
 /*<           xdel(j)=0.0 >*/
-	    xdel[j] = (float)0.;
+	    xdel[j] = 0.;
 /*<           if (j.eq.0) then >*/
 	    if (j == 0) {
 /*<             altc(j)=300. >*/
-		altc[j] = (float)300.;
+		altc[j] = 300.;
 /*<           else >*/
 	    } else {
 /*<             altc(j)=-log(h(j)/tr)*hr >*/
@@ -327,15 +320,15 @@ se (nfilut)*/
 /*<           h(j)=j*ta/ntp >*/
 	    h__[j] = j * ta / ntp;
 /*<           ch(j)=exp(-h(j)/xmus)/2. >*/
-	    ch[j] = exp(-h__[j] / xmus) / (float)2.;
+	    ch[j] = exp(-h__[j] / xmus) / 2.;
 /*<           ydel(j)=0.0 >*/
-	    ydel[j] = (float)0.;
+	    ydel[j] = 0.;
 /*<           xdel(j)=piz >*/
 	    xdel[j] = piz;
 /*<           if (j.eq.0) then >*/
 	    if (j == 0) {
 /*<             altc(j)=300. >*/
-		altc[j] = (float)300.;
+		altc[j] = 300.;
 /*<           else >*/
 	    } else {
 /*<             altc(j)=-log(h(j)/ta)*ha >*/
@@ -351,17 +344,17 @@ se (nfilut)*/
 /*<       if(tr.gt.acu2.and.ta.gt.acu2.and.iaer_prof.eq.0)then >*/
     if (tr > acu2 && ta > acu2 && *iaer_prof__ == 0) {
 /*<         ydel(0)=1.0 >*/
-	ydel[0] = (float)1.;
+	ydel[0] = 1.;
 /*<         xdel(0)=0.0 >*/
-	xdel[0] = (float)0.;
+	xdel[0] = 0.;
 /*<         h(0)=0. >*/
-	h__[0] = (float)0.;
+	h__[0] = 0.;
 /*<         ch(0)=0.5 >*/
-	ch[0] = (float).5;
+	ch[0] = .5;
 /*<         altc(0)=300. >*/
-	altc[0] = (float)300.;
+	altc[0] = 300.;
 /*<         zx=300. >*/
-	zx = (float)300.;
+	zx = 300.;
 /*<         iplane=0 >*/
 	iplane = 0;
 /*<         do 14 it=0,ntp >*/
@@ -370,9 +363,9 @@ se (nfilut)*/
 /*<           if (it.eq.0) then >*/
 	    if (it == 0) {
 /*<             yy=0. >*/
-		yy = (float)0.;
+		yy = 0.;
 /*<             dd=0. >*/
-		dd = (float)0.;
+		dd = 0.;
 /*<             goto 111 >*/
 		goto L111;
 /*<           endif >*/
@@ -383,9 +376,9 @@ se (nfilut)*/
 	    dd = ydel[it - 1];
 /*<  111      ppp2=300.0 >*/
 L111:
-	    ppp2 = (float)300.;
+	    ppp2 = 300.;
 /*<           ppp1=0.0 >*/
-	    ppp1 = (float)0.;
+	    ppp1 = 0.;
 /*<           itp=it >*/
 	    itp = it;
 /*<           call discre(ta,ha,tr,hr,itp,ntp,yy,dd,ppp2,ppp1,zx) >*/
@@ -400,7 +393,7 @@ L111:
 /*<           if (xx.le.-20) then >*/
 	    if (xx <= -20.) {
 /*<             ca=0. >*/
-		ca = (float)0.;
+		ca = 0.;
 /*<           else >*/
 	    } else {
 /*<             ca=ta*dexp(xx) >*/
@@ -416,7 +409,7 @@ L111:
 /*<           altc(it)=zx >*/
 	    altc[it] = zx;
 /*<           ch(it)=exp(-h(it)/xmus)/2. >*/
-	    ch[it] = exp(-h__[it] / xmus) / (float)2.;
+	    ch[it] = exp(-h__[it] / xmus) / 2.;
 /*<           cr=cr/hr >*/
 	    cr /= hr;
 /*<           ca=ca/ha >*/
@@ -424,7 +417,7 @@ L111:
 /*<           ratio=cr/(cr+ca) >*/
 	    ratio = cr / (cr + ca);
 /*<           xdel(it)=(1.e+00-ratio)*piz >*/
-	    xdel[it] = ((float)1. - ratio) * piz;
+	    xdel[it] = (1. - ratio) * piz;
 /*<           ydel(it)=ratio >*/
 	    ydel[it] = ratio;
 /*<   14    continue >*/
@@ -461,7 +454,7 @@ L111:
 /* update the layer from the end to the position to update if necessar
 y */
 /*<         th=0.0005 >*/
-	th = (float)5e-4;
+	th = 5e-4;
 /*<         xt1=abs(h(iplane)-taup) >*/
 	xt1 = (d__1 = h__[iplane] - taup, abs(d__1));
 /*<         xt2=abs(h(iplane+1)-taup) >*/
@@ -510,21 +503,21 @@ y */
 /*<           ratio=cr/(cr+ca) >*/
 	    ratio = cr / (cr + ca);
 /*<           xdel(iplane)=(1.e+00-ratio)*piz >*/
-	    xdel[iplane] = ((float)1. - ratio) * piz;
+	    xdel[iplane] = (1. - ratio) * piz;
 /*<           ydel(iplane)=ratio >*/
 	    ydel[iplane] = ratio;
 /*<           altc(iplane)=palt >*/
 	    altc[iplane] = *palt;
 /*<           ch(iplane)=exp(-h(iplane)/xmus)/2. >*/
-	    ch[iplane] = exp(-h__[iplane] / xmus) / (float)2.;
+	    ch[iplane] = exp(-h__[iplane] / xmus) / 2.;
 /*<         endif >*/
 	}
 /*<         if ( tr.gt.acu2.and.ta.le.acu2) then >*/
 	if (tr > acu2 && ta <= acu2) {
 /*<           ydel(iplane)=1. >*/
-	    ydel[iplane] = (float)1.;
+	    ydel[iplane] = 1.;
 /*<           xdel(iplane)=0. >*/
-	    xdel[iplane] = (float)0.;
+	    xdel[iplane] = 0.;
 /*<           altc(iplane)=palt >*/
 	    altc[iplane] = *palt;
 /*<         endif >*/
@@ -532,9 +525,9 @@ y */
 /*<         if ( tr.le.acu2.and.ta.gt.acu2) then >*/
 	if (tr <= acu2 && ta > acu2) {
 /*<           ydel(iplane)=0. >*/
-	    ydel[iplane] = (float)0.;
+	    ydel[iplane] = 0.;
 /*<           xdel(iplane)=1.*piz >*/
-	    xdel[iplane] = piz * (float)1.;
+	    xdel[iplane] = piz * 1.;
 /*<           altc(iplane)=palt >*/
 	    altc[iplane] = *palt;
 /*<         endif >*/
@@ -549,7 +542,7 @@ y */
 /*     enddo */
 
 /*<       pi=acos(-1.) >*/
-    pi = acos((float)-1.);
+    pi = acos(-1.);
 /*<       phi=phirad >*/
     phi = *phirad;
 /*<       do 716 l=1,np >*/
@@ -559,11 +552,11 @@ y */
 	i__2 = *mu;
 	for (m = -(*mu); m <= i__2; ++m) {
 /*< 	  xli(m,l)=0. >*/
-	    xli[m + l * xli_dim1] = (float)0.;
+	    xli[m + l * xli_dim1] = 0.;
 /*< 	  xlq(m,l)=0. >*/
-	    xlq[m + l * xlq_dim1] = (float)0.;
+	    xlq[m + l * xlq_dim1] = 0.;
 /*< 	  xlu(m,l)=0. >*/
-	    xlu[m + l * xlu_dim1] = (float)0.;
+	    xlu[m + l * xlu_dim1] = 0.;
 /*<  716  continue >*/
 /* L716: */
 	}
@@ -572,7 +565,7 @@ y */
     i__2 = *nfi;
     for (ifi = 1; ifi <= i__2; ++ifi) {
 /*<       xlphim(ifi)=0. >*/
-	xlphim[ifi] = (float)0.;
+	xlphim[ifi] = 0.;
 /*<       enddo >*/
     }
 /* CC initialization of look up table variable */
@@ -582,11 +575,11 @@ y */
 /*<       do j=1,41 >*/
 	for (j = 1; j <= 41; ++j) {
 /*<       rolut(i,j)=0. >*/
-	    rolut[i__ + j * rolut_dim1] = (float)0.;
+	    rolut[i__ + j * rolut_dim1] = 0.;
 /*<       rolutq(i,j)=0. >*/
-	    rolutq[i__ + j * rolutq_dim1] = (float)0.;
+	    rolutq[i__ + j * rolutq_dim1] = 0.;
 /*<       rolutu(i,j)=0. >*/
-	    rolutu[i__ + j * rolutu_dim1] = (float)0.;
+	    rolutu[i__ + j * rolutu_dim1] = 0.;
 /*<       enddo >*/
 	}
 /*<       enddo >*/
@@ -606,13 +599,13 @@ y */
 /*     rayleigh phase function */
 
 /*<       beta0=1. >*/
-    beta0 = (float)1.;
+    beta0 = 1.;
 /*<       beta2=0.5*ron >*/
-    beta2 = ron * (float).5;
+    beta2 = ron * .5;
 /*<       gamma2=-ron*sqrt(1.5) >*/
-    gamma2 = -ron * sqrt((float)1.5);
+    gamma2 = -ron * sqrt(1.5);
 /*<       alpha2=3.*ron >*/
-    alpha2 = ron * (float)3.;
+    alpha2 = ron * 3.;
 
 /*     fourier decomposition */
 
@@ -620,11 +613,11 @@ y */
     i__2 = *mu;
     for (j = -(*mu); j <= i__2; ++j) {
 /*<         i4(j)=0. >*/
-	i4[j + 25] = (float)0.;
+	i4[j + 25] = 0.;
 /*<         q4(j)=0. >*/
-	q4[j + 25] = (float)0.;
+	q4[j + 25] = 0.;
 /*<         u4(j)=0. >*/
-	u4[j + 25] = (float)0.;
+	u4[j + 25] = 0.;
 /*<    17 continue >*/
 /* L17: */
     }
@@ -635,7 +628,7 @@ y */
 	iborm = 2;
     }
 /*<       if( abs (xmus-1.000000) .lt.1.e-06)iborm=0 >*/
-    if ((d__1 = xmus - (float)1., abs(d__1)) < (float)1e-6) {
+    if ((d__1 = xmus - 1., abs(d__1)) < 1e-6) {
 	iborm = 0;
     }
 /*<       do 24 is=0,iborm >*/
@@ -649,22 +642,22 @@ y */
 /*<         do k=0,3 >*/
 	for (k = 0; k <= 3; ++k) {
 /*<           roIavion(k-1)=0. >*/
-	    roiavion[k] = (float)0.;
+	    roiavion[k] = 0.;
 /*<           roQavion(k-1)=0. >*/
-	    roqavion[k] = (float)0.;
+	    roqavion[k] = 0.;
 /*<           roUavion(k-1)=0. >*/
-	    rouavion[k] = (float)0.;
+	    rouavion[k] = 0.;
 /*<         enddo >*/
 	}
 /*<         do 16 j=-mu,mu >*/
 	i__1 = *mu;
 	for (j = -(*mu); j <= i__1; ++j) {
 /*<           i3(j)=0. >*/
-	    i3[j + 25] = (float)0.;
+	    i3[j + 25] = 0.;
 /*<           q3(j)=0. >*/
-	    q3[j + 25] = (float)0.;
+	    q3[j + 25] = 0.;
 /*<           u3(j)=0. >*/
-	    u3[j + 25] = (float)0.;
+	    u3[j + 25] = 0.;
 /*<    16   continue >*/
 /* L16: */
 	}
@@ -678,7 +671,7 @@ y */
 		art, att);
 /*<         if(is.gt.0)beta0=0. >*/
 	if (is > 0) {
-	    beta0 = (float)0.;
+	    beta0 = 0.;
 	}
 /*<         do 100 j=-mu,mu >*/
 	i__1 = *mu;
@@ -710,15 +703,15 @@ L200:
 L201:
 	    sa2 = bp[j * 26 + 650];
 /*<           sa1=0. >*/
-	    sa1 = (float)0.;
+	    sa1 = 0.;
 /*<           sb2=gr(0,j) >*/
 	    sb2 = gr[j * 26 + 650];
 /*<           sb1=0. >*/
-	    sb1 = (float)0.;
+	    sb1 = 0.;
 /*<           sc2=gt(0,j) >*/
 	    sc2 = gt[j * 26 + 650];
 /*<           sc1=0. >*/
-	    sc1 = (float)0.;
+	    sc1 = 0.;
 
 /*     primary scattering source function at every level within th
 e layer */
@@ -752,11 +745,11 @@ L202:
 	i__1 = *mu;
 	for (k = 1; k <= i__1; ++k) {
 /*<            i1(nt,k)=0. >*/
-	    i1[*nt + k * 31 + 775] = (float)0.;
+	    i1[*nt + k * 31 + 775] = 0.;
 /*<            q1(nt,k)=0. >*/
-	    q1[*nt + k * 31 + 775] = (float)0.;
+	    q1[*nt + k * 31 + 775] = 0.;
 /*<            u1(nt,k)=0. >*/
-	    u1[*nt + k * 31 + 775] = (float)0.;
+	    u1[*nt + k * 31 + 775] = 0.;
 /*<            zi1=i1(nt,k) >*/
 	    zi1 = i1[*nt + k * 31 + 775];
 /*<            zq1=q1(nt,k) >*/
@@ -774,7 +767,7 @@ L202:
 /*<               c=exp(-f/yy) >*/
 		c__ = exp(-f / yy);
 /*<               d=1.0e+00-c >*/
-		d__ = (float)1. - c__;
+		d__ = 1. - c__;
 /*<               xx=h(i)-h(jj)*c >*/
 		xx = h__[i__] - h__[jj] * c__;
 /*<               a=(i2(jj,k)-i2(i,k))/f >*/
@@ -782,7 +775,7 @@ L202:
 /*<               b=i2(i,k)-a*h(i) >*/
 		b = i2[i__ + k * 31 + 775] - a * h__[i__];
 /*<               zi1=c*zi1+(d*(b+a*yy)+a*xx)*0.5e+00 >*/
-		zi1 = c__ * zi1 + (d__ * (b + a * yy) + a * xx) * (float).5;
+		zi1 = c__ * zi1 + (d__ * (b + a * yy) + a * xx) * .5;
 /*<               i1(i,k)=zi1 >*/
 		i1[i__ + k * 31 + 775] = zi1;
 /*<               a=(q2(jj,k)-q2(i,k))/f >*/
@@ -790,7 +783,7 @@ L202:
 /*<               b=q2(i,k)-a*h(i) >*/
 		b = q2[i__ + k * 31 + 775] - a * h__[i__];
 /*<               zq1=c*zq1+(d*(b+a*yy)+a*xx)*0.5e+00 >*/
-		zq1 = c__ * zq1 + (d__ * (b + a * yy) + a * xx) * (float).5;
+		zq1 = c__ * zq1 + (d__ * (b + a * yy) + a * xx) * .5;
 /*<               q1(i,k)=zq1 >*/
 		q1[i__ + k * 31 + 775] = zq1;
 /*<               a=(u2(jj,k)-u2(i,k))/f >*/
@@ -798,7 +791,7 @@ L202:
 /*<               b=u2(i,k)-a*h(i) >*/
 		b = u2[i__ + k * 31 + 775] - a * h__[i__];
 /*<               zu1=c*zu1+(d*(b+a*yy)+a*xx)*0.5e+00 >*/
-		zu1 = c__ * zu1 + (d__ * (b + a * yy) + a * xx) * (float).5;
+		zu1 = c__ * zu1 + (d__ * (b + a * yy) + a * xx) * .5;
 /*<               u1(i,k)=zu1 >*/
 		u1[i__ + k * 31 + 775] = zu1;
 /*<   108   continue >*/
@@ -811,11 +804,11 @@ L202:
 /*<         do 109 k=-mu,-1 >*/
 	for (k = -(*mu); k <= -1; ++k) {
 /*<           i1(0,k)=0. >*/
-	    i1[k * 31 + 775] = (float)0.;
+	    i1[k * 31 + 775] = 0.;
 /*<           q1(0,k)=0. >*/
-	    q1[k * 31 + 775] = (float)0.;
+	    q1[k * 31 + 775] = 0.;
 /*<           u1(0,k)=0. >*/
-	    u1[k * 31 + 775] = (float)0.;
+	    u1[k * 31 + 775] = 0.;
 /*<           zi1=i1(0,k) >*/
 	    zi1 = i1[k * 31 + 775];
 /*<           zq1=q1(0,k) >*/
@@ -834,7 +827,7 @@ L202:
 /*<             c=exp(f/yy) >*/
 		c__ = exp(f / yy);
 /*<             d=1.0e+00-c >*/
-		d__ = (float)1. - c__;
+		d__ = 1. - c__;
 /*<             xx=h(i)-h(jj)*c >*/
 		xx = h__[i__] - h__[jj] * c__;
 /*<             a=(i2(i,k)-i2(jj,k))/f >*/
@@ -842,7 +835,7 @@ L202:
 /*<             b=i2(i,k)-a*h(i) >*/
 		b = i2[i__ + k * 31 + 775] - a * h__[i__];
 /*<             zi1=c*zi1+(d*(b+a*yy)+a*xx)*0.5e+00 >*/
-		zi1 = c__ * zi1 + (d__ * (b + a * yy) + a * xx) * (float).5;
+		zi1 = c__ * zi1 + (d__ * (b + a * yy) + a * xx) * .5;
 /*<             i1(i,k)=zi1 >*/
 		i1[i__ + k * 31 + 775] = zi1;
 /*<             a=(q2(i,k)-q2(jj,k))/f >*/
@@ -850,7 +843,7 @@ L202:
 /*<             b=q2(i,k)-a*h(i) >*/
 		b = q2[i__ + k * 31 + 775] - a * h__[i__];
 /*<             zq1=c*zq1+(d*(b+a*yy)+a*xx)*0.5e+00 >*/
-		zq1 = c__ * zq1 + (d__ * (b + a * yy) + a * xx) * (float).5;
+		zq1 = c__ * zq1 + (d__ * (b + a * yy) + a * xx) * .5;
 /*<             q1(i,k)=zq1 >*/
 		q1[i__ + k * 31 + 775] = zq1;
 /*<             a=(u2(i,k)-u2(jj,k))/f >*/
@@ -858,7 +851,7 @@ L202:
 /*<             b=u2(i,k)-a*h(i) >*/
 		b = u2[i__ + k * 31 + 775] - a * h__[i__];
 /*<             zu1=c*zu1+(d*(b+a*yy)+a*xx)*0.5e+00 >*/
-		zu1 = c__ * zu1 + (d__ * (b + a * yy) + a * xx) * (float).5;
+		zu1 = c__ * zu1 + (d__ * (b + a * yy) + a * xx) * .5;
 /*<             u1(i,k)=zu1 >*/
 		u1[i__ + k * 31 + 775] = zu1;
 /*<   109   continue >*/
@@ -968,17 +961,17 @@ L210:
 	    i__3 = *nt;
 	    for (i__ = 0; i__ <= i__3; ++i__) {
 /*<             ii1=0. >*/
-		ii1 = (float)0.;
+		ii1 = 0.;
 /*<             ii2=0. >*/
-		ii2 = (float)0.;
+		ii2 = 0.;
 /*<             qq1=0. >*/
-		qq1 = (float)0.;
+		qq1 = 0.;
 /*<             qq2=0. >*/
-		qq2 = (float)0.;
+		qq2 = 0.;
 /*<             uu1=0. >*/
-		uu1 = (float)0.;
+		uu1 = 0.;
 /*<             uu2=0. >*/
-		uu2 = (float)0.;
+		uu2 = 0.;
 /*<             x=xdel(i) >*/
 		x = xdel[i__];
 /*<             y=ydel(i) >*/
@@ -1106,28 +1099,28 @@ L210:
 /* L477: */
 		}
 /*<             if (abs(ii2).lt.1.E-30) ii2=0. >*/
-		if (abs(ii2) < (float)1e-30) {
-		    ii2 = (float)0.;
+		if (abs(ii2) < 1e-30) {
+		    ii2 = 0.;
 		}
 /*<             if (abs(ii1).lt.1.E-30) ii1=0. >*/
-		if (abs(ii1) < (float)1e-30) {
-		    ii1 = (float)0.;
+		if (abs(ii1) < 1e-30) {
+		    ii1 = 0.;
 		}
 /*<             if (abs(qq2).lt.1.E-30) qq2=0. >*/
-		if (abs(qq2) < (float)1e-30) {
-		    qq2 = (float)0.;
+		if (abs(qq2) < 1e-30) {
+		    qq2 = 0.;
 		}
 /*<             if (abs(qq1).lt.1.E-30) qq1=0. >*/
-		if (abs(qq1) < (float)1e-30) {
-		    qq1 = (float)0.;
+		if (abs(qq1) < 1e-30) {
+		    qq1 = 0.;
 		}
 /*<             if (abs(uu2).lt.1.E-30) uu2=0. >*/
-		if (abs(uu2) < (float)1e-30) {
-		    uu2 = (float)0.;
+		if (abs(uu2) < 1e-30) {
+		    uu2 = 0.;
 		}
 /*<             if (abs(uu1).lt.1.E-30) uu1=0. >*/
-		if (abs(uu1) < (float)1e-30) {
-		    uu1 = (float)0.;
+		if (abs(uu1) < 1e-30) {
+		    uu1 = 0.;
 		}
 /*<             i2(i,k)=ii2 >*/
 		i2[i__ + k * 31 + 775] = ii2;
@@ -1155,17 +1148,17 @@ L211:
 	    i__1 = *nt;
 	    for (i__ = 0; i__ <= i__1; ++i__) {
 /*<             ii1=0. >*/
-		ii1 = (float)0.;
+		ii1 = 0.;
 /*<             ii2=0. >*/
-		ii2 = (float)0.;
+		ii2 = 0.;
 /*<             qq1=0. >*/
-		qq1 = (float)0.;
+		qq1 = 0.;
 /*<             qq2=0. >*/
-		qq2 = (float)0.;
+		qq2 = 0.;
 /*<             uu1=0. >*/
-		uu1 = (float)0.;
+		uu1 = 0.;
 /*<             uu2=0. >*/
-		uu2 = (float)0.;
+		uu2 = 0.;
 /*<             x=xdel(i) >*/
 		x = xdel[i__];
 /*<             do47 j=1,mu >*/
@@ -1265,28 +1258,28 @@ L211:
 /* L47: */
 		}
 /*<             if (abs(ii2).lt.1.E-30) ii2=0. >*/
-		if (abs(ii2) < (float)1e-30) {
-		    ii2 = (float)0.;
+		if (abs(ii2) < 1e-30) {
+		    ii2 = 0.;
 		}
 /*<             if (abs(ii1).lt.1.E-30) ii1=0. >*/
-		if (abs(ii1) < (float)1e-30) {
-		    ii1 = (float)0.;
+		if (abs(ii1) < 1e-30) {
+		    ii1 = 0.;
 		}
 /*<             if (abs(qq2).lt.1.E-30) qq2=0. >*/
-		if (abs(qq2) < (float)1e-30) {
-		    qq2 = (float)0.;
+		if (abs(qq2) < 1e-30) {
+		    qq2 = 0.;
 		}
 /*<             if (abs(qq1).lt.1.E-30) qq1=0. >*/
-		if (abs(qq1) < (float)1e-30) {
-		    qq1 = (float)0.;
+		if (abs(qq1) < 1e-30) {
+		    qq1 = 0.;
 		}
 /*<             if (abs(uu2).lt.1.E-30) uu2=0. >*/
-		if (abs(uu2) < (float)1e-30) {
-		    uu2 = (float)0.;
+		if (abs(uu2) < 1e-30) {
+		    uu2 = 0.;
 		}
 /*<             if (abs(uu1).lt.1.E-30) uu1=0. >*/
-		if (abs(uu1) < (float)1e-30) {
-		    uu1 = (float)0.;
+		if (abs(uu1) < 1e-30) {
+		    uu1 = 0.;
 		}
 /*<             i2(i,k)=ii2 >*/
 		i2[i__ + k * 31 + 775] = ii2;
@@ -1312,11 +1305,11 @@ L213:
 	i__1 = *mu;
 	for (k = 1; k <= i__1; ++k) {
 /*<           i1(nt,k)=0. >*/
-	    i1[*nt + k * 31 + 775] = (float)0.;
+	    i1[*nt + k * 31 + 775] = 0.;
 /*<           q1(nt,k)=0. >*/
-	    q1[*nt + k * 31 + 775] = (float)0.;
+	    q1[*nt + k * 31 + 775] = 0.;
 /*<           u1(nt,k)=0. >*/
-	    u1[*nt + k * 31 + 775] = (float)0.;
+	    u1[*nt + k * 31 + 775] = 0.;
 /*<           zi1=i1(nt,k) >*/
 	    zi1 = i1[*nt + k * 31 + 775];
 /*<           zq1=q1(nt,k) >*/
@@ -1334,7 +1327,7 @@ L213:
 /*<             c=exp(-f/yy) >*/
 		c__ = exp(-f / yy);
 /*<             d=1.e+00-c >*/
-		d__ = (float)1. - c__;
+		d__ = 1. - c__;
 /*<             xx=h(i)-h(jj)*c >*/
 		xx = h__[i__] - h__[jj] * c__;
 /*<             a=(i2(jj,k)-i2(i,k))/f >*/
@@ -1342,10 +1335,10 @@ L213:
 /*<             b=i2(i,k)-a*h(i) >*/
 		b = i2[i__ + k * 31 + 775] - a * h__[i__];
 /*<             zi1=c*zi1+(d*(b+a*yy)+a*xx)*0.5e+00 >*/
-		zi1 = c__ * zi1 + (d__ * (b + a * yy) + a * xx) * (float).5;
+		zi1 = c__ * zi1 + (d__ * (b + a * yy) + a * xx) * .5;
 /*<             if (abs(zi1).le.1.E-20) zi1=0. >*/
-		if (abs(zi1) <= (float)1e-20) {
-		    zi1 = (float)0.;
+		if (abs(zi1) <= 1e-20) {
+		    zi1 = 0.;
 		}
 /*<             i1(i,k)=zi1 >*/
 		i1[i__ + k * 31 + 775] = zi1;
@@ -1354,10 +1347,10 @@ L213:
 /*<             b=q2(i,k)-a*h(i) >*/
 		b = q2[i__ + k * 31 + 775] - a * h__[i__];
 /*<             zq1=c*zq1+(d*(b+a*yy)+a*xx)*0.5e+00 >*/
-		zq1 = c__ * zq1 + (d__ * (b + a * yy) + a * xx) * (float).5;
+		zq1 = c__ * zq1 + (d__ * (b + a * yy) + a * xx) * .5;
 /*<             if (abs(zq1).le.1.E-20) zq1=0. >*/
-		if (abs(zq1) <= (float)1e-20) {
-		    zq1 = (float)0.;
+		if (abs(zq1) <= 1e-20) {
+		    zq1 = 0.;
 		}
 /*<             q1(i,k)=zq1 >*/
 		q1[i__ + k * 31 + 775] = zq1;
@@ -1366,10 +1359,10 @@ L213:
 /*<             b=u2(i,k)-a*h(i) >*/
 		b = u2[i__ + k * 31 + 775] - a * h__[i__];
 /*<             zu1=c*zu1+(d*(b+a*yy)+a*xx)*0.5e+00 >*/
-		zu1 = c__ * zu1 + (d__ * (b + a * yy) + a * xx) * (float).5;
+		zu1 = c__ * zu1 + (d__ * (b + a * yy) + a * xx) * .5;
 /*<             if (abs(zu1).le.1.E-20) zu1=0. >*/
-		if (abs(zu1) <= (float)1e-20) {
-		    zu1 = (float)0.;
+		if (abs(zu1) <= 1e-20) {
+		    zu1 = 0.;
 		}
 /*<             u1(i,k)=zu1 >*/
 		u1[i__ + k * 31 + 775] = zu1;
@@ -1383,11 +1376,11 @@ L213:
 /*<         do 50 k=-mu,-1 >*/
 	for (k = -(*mu); k <= -1; ++k) {
 /*<           i1(0,k)=0. >*/
-	    i1[k * 31 + 775] = (float)0.;
+	    i1[k * 31 + 775] = 0.;
 /*<           q1(0,k)=0. >*/
-	    q1[k * 31 + 775] = (float)0.;
+	    q1[k * 31 + 775] = 0.;
 /*<           u1(0,k)=0. >*/
-	    u1[k * 31 + 775] = (float)0.;
+	    u1[k * 31 + 775] = 0.;
 /*<           zi1=i1(0,k) >*/
 	    zi1 = i1[k * 31 + 775];
 /*<           zq1=q1(0,k) >*/
@@ -1406,7 +1399,7 @@ L213:
 /*<             c=exp(f/yy) >*/
 		c__ = exp(f / yy);
 /*<             d=1.e+00-c >*/
-		d__ = (float)1. - c__;
+		d__ = 1. - c__;
 /*<             xx=h(i)-h(jj)*c >*/
 		xx = h__[i__] - h__[jj] * c__;
 /*<             a=(i2(i,k)-i2(jj,k))/f >*/
@@ -1414,10 +1407,10 @@ L213:
 /*<             b=i2(i,k)-a*h(i) >*/
 		b = i2[i__ + k * 31 + 775] - a * h__[i__];
 /*<             zi1=c*zi1+(d*(b+a*yy)+a*xx)*0.5e+00 >*/
-		zi1 = c__ * zi1 + (d__ * (b + a * yy) + a * xx) * (float).5;
+		zi1 = c__ * zi1 + (d__ * (b + a * yy) + a * xx) * .5;
 /*<             if (abs(zi1).le.1.E-20) zi1=0. >*/
-		if (abs(zi1) <= (float)1e-20) {
-		    zi1 = (float)0.;
+		if (abs(zi1) <= 1e-20) {
+		    zi1 = 0.;
 		}
 /*<             i1(i,k)=zi1 >*/
 		i1[i__ + k * 31 + 775] = zi1;
@@ -1426,10 +1419,10 @@ L213:
 /*<             b=q2(i,k)-a*h(i) >*/
 		b = q2[i__ + k * 31 + 775] - a * h__[i__];
 /*<             zq1=c*zq1+(d*(b+a*yy)+a*xx)*0.5e+00 >*/
-		zq1 = c__ * zq1 + (d__ * (b + a * yy) + a * xx) * (float).5;
+		zq1 = c__ * zq1 + (d__ * (b + a * yy) + a * xx) * .5;
 /*<             if (abs(zq1).le.1.E-20) zq1=0. >*/
-		if (abs(zq1) <= (float)1e-20) {
-		    zq1 = (float)0.;
+		if (abs(zq1) <= 1e-20) {
+		    zq1 = 0.;
 		}
 /*<             q1(i,k)=zq1 >*/
 		q1[i__ + k * 31 + 775] = zq1;
@@ -1438,10 +1431,10 @@ L213:
 /*<             b=u2(i,k)-a*h(i) >*/
 		b = u2[i__ + k * 31 + 775] - a * h__[i__];
 /*<             zu1=c*zu1+(d*(b+a*yy)+a*xx)*0.5e+00 >*/
-		zu1 = c__ * zu1 + (d__ * (b + a * yy) + a * xx) * (float).5;
+		zu1 = c__ * zu1 + (d__ * (b + a * yy) + a * xx) * .5;
 /*<             if (abs(zu1).le.1.E-20) zu1=0. >*/
-		if (abs(zu1) <= (float)1e-20) {
-		    zu1 = (float)0.;
+		if (abs(zu1) <= 1e-20) {
+		    zu1 = 0.;
 		}
 /*<             u1(i,k)=zu1 >*/
 		u1[i__ + k * 31 + 775] = zu1;
@@ -1495,15 +1488,15 @@ L30:
 /*<         if(ig.gt.2) then >*/
 	if (ig > 2) {
 /*<           z=0. >*/
-	    z__ = (float)0.;
+	    z__ = 0.;
 /*<             a1=abs(roIavion(2)) >*/
-	    a1 = dabs(roiavion[3]);
+	    a1 = abs(roiavion[3]);
 /*<             d1=abs(roIavion(1)) >*/
-	    d1 = dabs(roiavion[2]);
+	    d1 = abs(roiavion[2]);
 /*<             g1=abs(roIavion(0)) >*/
-	    g1 = dabs(roiavion[1]);
+	    g1 = abs(roiavion[1]);
 /*< 	    r1=abs(roIavion(-1)) >*/
-	    r1 = dabs(roiavion[0]);
+	    r1 = abs(roiavion[0]);
 /*<             if(a1.ge.acu.and.d1.ge.acu.and.r1.ge.acu) then >*/
 	    if (a1 >= acu && d1 >= acu && r1 >= acu) {
 /*<               a1=roIavion(2) >*/
@@ -1525,13 +1518,13 @@ L30:
 /*<             endif >*/
 	    }
 /*<             a1=abs(roQavion(2)) >*/
-	    a1 = dabs(roqavion[3]);
+	    a1 = abs(roqavion[3]);
 /*<             d1=abs(roQavion(1)) >*/
-	    d1 = dabs(roqavion[2]);
+	    d1 = abs(roqavion[2]);
 /*<             g1=abs(roQavion(0)) >*/
-	    g1 = dabs(roqavion[1]);
+	    g1 = abs(roqavion[1]);
 /*<             r1=abs(roQavion(-1)) >*/
-	    r1 = dabs(roqavion[0]);
+	    r1 = abs(roqavion[0]);
 /*<             if(a1.ge.acu.and.d1.ge.acu.and.r1.ge.acu) then >*/
 	    if (a1 >= acu && d1 >= acu && r1 >= acu) {
 /*<               a1=roQavion(2) >*/
@@ -1553,13 +1546,13 @@ L30:
 /*<             endif >*/
 	    }
 /*<             a1=abs(roUavion(2)) >*/
-	    a1 = dabs(rouavion[3]);
+	    a1 = abs(rouavion[3]);
 /*<             d1=abs(roUavion(1)) >*/
-	    d1 = dabs(rouavion[2]);
+	    d1 = abs(rouavion[2]);
 /*<             g1=abs(roUavion(0)) >*/
-	    g1 = dabs(rouavion[1]);
+	    g1 = abs(rouavion[1]);
 /*<             r1=abs(roUavion(-1)) >*/
-	    r1 = dabs(rouavion[0]);
+	    r1 = abs(rouavion[0]);
 /*<             if(a1.ge.acu.and.d1.ge.acu.and.r1.ge.acu) then >*/
 	    if (a1 >= acu && d1 >= acu && r1 >= acu) {
 /*<               a1=roUavion(2) >*/
@@ -1602,7 +1595,7 @@ L30:
 		    goto L98;
 		}
 /*<               if(abs(i3(l)).le.acu) go to 98 >*/
-		if ((r__1 = i3[l + 25], dabs(r__1)) <= acu) {
+		if ((d__1 = i3[l + 25], abs(d__1)) <= acu) {
 		    goto L98;
 		}
 /*<               y=((g1/d1-d1/a1)/((1-g1/d1)**2)*(g1/i3(l))) >*/
@@ -1629,7 +1622,7 @@ L98:
 		    goto L97;
 		}
 /*<               if(abs(q3(l)).le.acu) go to 97 >*/
-		if ((r__1 = q3[l + 25], dabs(r__1)) <= acu) {
+		if ((d__1 = q3[l + 25], abs(d__1)) <= acu) {
 		    goto L97;
 		}
 /*<               y=((g1/d1-d1/a1)/((1-g1/d1)**2)*(g1/q3(l))) >*/
@@ -1656,7 +1649,7 @@ L97:
 		    goto L99;
 		}
 /*<               if(abs(u3(l)).le.acu) go to 99 >*/
-		if ((r__1 = u3[l + 25], dabs(r__1)) <= acu) {
+		if ((d__1 = u3[l + 25], abs(d__1)) <= acu) {
 		    goto L99;
 		}
 /*<               y=((g1/d1-d1/a1)/((1-g1/d1)**2)*(g1/u3(l))) >*/
@@ -1672,14 +1665,14 @@ L99:
 		;
 	    }
 /*<           if(z.lt.0.01) then >*/
-	    if (z__ < (float).01) {
+	    if (z__ < .01) {
 
 /*     successful test (geometrical serie) */
 /*<             do 606 l=-mu,mu >*/
 		i__1 = *mu;
 		for (l = -(*mu); l <= i__1; ++l) {
 /*<               y1=1. >*/
-		    y1 = (float)1.;
+		    y1 = 1.;
 /*<               d1=in(1,l) >*/
 		    d1 = in[l * 3 + 76];
 /*<               if(abs(d1).le.acu) go to 605 >*/
@@ -1700,7 +1693,7 @@ L99:
 		    i3[l + 25] += g1;
 /*<  605          y1=1. >*/
 L605:
-		    y1 = (float)1.;
+		    y1 = 1.;
 /*<               d1=qn(1,l) >*/
 		    d1 = qn[l * 3 + 76];
 /*<               if(abs(d1).le.acu) go to 604 >*/
@@ -1721,7 +1714,7 @@ L605:
 		    q3[l + 25] += g1;
 /*<  604          y1=1. >*/
 L604:
-		    y1 = (float)1.;
+		    y1 = 1.;
 /*<               d1=un(1,l) >*/
 		    d1 = un[l * 3 + 76];
 /*<               if(abs(d1).le.acu) go to 606	 >*/
@@ -1745,7 +1738,7 @@ L606:
 		    ;
 		}
 /*<             y1=1. >*/
-		y1 = (float)1.;
+		y1 = 1.;
 /*<             d1=roIavion(1) >*/
 		d1 = roiavion[2];
 /*<             if(abs(d1).ge.acu) then >*/
@@ -1765,7 +1758,7 @@ L606:
 /*<             endif >*/
 		}
 /*<             y1=1. >*/
-		y1 = (float)1.;
+		y1 = 1.;
 /*<             d1=roQavion(1) >*/
 		d1 = roqavion[2];
 /*<             if(abs(d1).ge.acu) then >*/
@@ -1785,7 +1778,7 @@ L606:
 /*<             endif >*/
 		}
 /*<             y1=1. >*/
-		y1 = (float)1.;
+		y1 = 1.;
 /*<             d1=roUavion(1) >*/
 		d1 = rouavion[2];
 /*<             if(abs(d1).ge.acu) then >*/
@@ -1875,30 +1868,30 @@ L606:
 
 /*     stop if order n is less than 1% of the sum */
 /*<           z=0. >*/
-	z__ = (float)0.;
+	z__ = 0.;
 /*<           do 612 l=-mu,mu >*/
 	i__1 = *mu;
 	for (l = -(*mu); l <= i__1; ++l) {
 /*<             if (abs(i3(l)).ge.acu) then >*/
-	    if ((r__1 = i3[l + 25], dabs(r__1)) >= acu) {
+	    if ((d__1 = i3[l + 25], abs(d__1)) >= acu) {
 /*<               y=abs(in(0,l)/i3(l)) >*/
-		y = (r__1 = in[l * 3 + 75] / i3[l + 25], dabs(r__1));
+		y = (d__1 = in[l * 3 + 75] / i3[l + 25], abs(d__1));
 /*<               z=dmax1(z,dble(y)) >*/
 		z__ = max(z__,y);
 /*<             endif >*/
 	    }
 /*<             if (abs(q3(l)).ge.acu) then >*/
-	    if ((r__1 = q3[l + 25], dabs(r__1)) >= acu) {
+	    if ((d__1 = q3[l + 25], abs(d__1)) >= acu) {
 /*<               y=abs(qn(0,l)/q3(l)) >*/
-		y = (r__1 = qn[l * 3 + 75] / q3[l + 25], dabs(r__1));
+		y = (d__1 = qn[l * 3 + 75] / q3[l + 25], abs(d__1));
 /*<               z=dmax1(z,dble(y)) >*/
 		z__ = max(z__,y);
 /*<             endif >*/
 	    }
 /*<             if (abs(u3(l)).ge.acu) then >*/
-	    if ((r__1 = u3[l + 25], dabs(r__1)) >= acu) {
+	    if ((d__1 = u3[l + 25], abs(d__1)) >= acu) {
 /*<               y=abs(un(0,l)/u3(l)) >*/
-		y = (r__1 = un[l * 3 + 75] / u3[l + 25], dabs(r__1));
+		y = (d__1 = un[l * 3 + 75] / u3[l + 25], abs(d__1));
 /*<               z=dmax1(z,dble(y)) >*/
 		z__ = max(z__,y);
 /*<             endif >*/
@@ -1910,7 +1903,7 @@ L606:
 /*       if(z.lt.0.001) go to 505     ###6sV4.0 choice */
 /*        if(z.lt.0.01) go to 505 */
 /*<        if(z.lt.0.00000001) go to 505 ! - like in a modified file  >*/
-	if (z__ < (float)1e-8) {
+	if (z__ < 1e-8) {
 	    goto L505;
 	}
 
@@ -1940,9 +1933,9 @@ L505:
 /*<           i4(l)=i4(l)+abs(delta0s*i3(l)) >*/
 	    i4[l + 25] += (d__1 = delta0s * i3[l + 25], abs(d__1));
 /*<           q4(l)=q4(l)+abs(q3(l)) >*/
-	    q4[l + 25] += (r__1 = q3[l + 25], dabs(r__1));
+	    q4[l + 25] += (d__1 = q3[l + 25], abs(d__1));
 /*<           u4(l)=u4(l)+abs(u3(l)) >*/
-	    u4[l + 25] += (r__1 = u3[l + 25], dabs(r__1));
+	    u4[l + 25] += (d__1 = u3[l + 25], abs(d__1));
 /*<   613   continue >*/
 /* L613: */
 	}
@@ -1993,7 +1986,7 @@ L505:
 	    i__1 = nfilut[m];
 	    for (l = 1; l <= i__1; ++l) {
 /*<       phimul=filut(m,l)*pi/180. >*/
-		phimul = filut[m + l * filut_dim1] * pi / (float)180.;
+		phimul = filut[m + l * filut_dim1] * pi / 180.;
 /*<       rolut(m,l)=rolut(m,l)+delta0s*i3(m)*cos(is*(phimul+pi)) >*/
 		rolut[m + l * rolut_dim1] += delta0s * i3[m + 25] * cos(is * (
 			phimul + pi));
@@ -2051,12 +2044,12 @@ L505:
 /*<         enddo >*/
 	}
 /*<           z=0. >*/
-	z__ = (float)0.;
+	z__ = 0.;
 /*<           do 616 l=-mu,mu >*/
 	i__3 = *mu;
 	for (l = -(*mu); l <= i__3; ++l) {
 /*<             if (abs(i4(l)).lt.acu) goto 617 >*/
-	    if ((r__1 = i4[l + 25], dabs(r__1)) < acu) {
+	    if ((d__1 = i4[l + 25], abs(d__1)) < acu) {
 		goto L617;
 	    }
 /*<             x=abs(delta0s*i3(l)/i4(l)) >*/
@@ -2065,20 +2058,20 @@ L505:
 	    z__ = max(z__,x);
 /*<  617        if (abs(q4(l)).lt.acu) goto 618 >*/
 L617:
-	    if ((r__1 = q4[l + 25], dabs(r__1)) < acu) {
+	    if ((d__1 = q4[l + 25], abs(d__1)) < acu) {
 		goto L618;
 	    }
 /*<             x=abs(q3(l)/q4(l)) >*/
-	    x = (r__1 = q3[l + 25] / q4[l + 25], dabs(r__1));
+	    x = (d__1 = q3[l + 25] / q4[l + 25], abs(d__1));
 /*<             z=dmax1(z,x) >*/
 	    z__ = max(z__,x);
 /*<  618        if (abs(u4(l)).lt.acu) goto 616 >*/
 L618:
-	    if ((r__1 = u4[l + 25], dabs(r__1)) < acu) {
+	    if ((d__1 = u4[l + 25], abs(d__1)) < acu) {
 		goto L616;
 	    }
 /*<             x=abs(u3(l)/u4(l)) >*/
-	    x = (r__1 = u3[l + 25] / u4[l + 25], dabs(r__1));
+	    x = (d__1 = u3[l + 25] / u4[l + 25], abs(d__1));
 /*<             z=dmax1(z,x) >*/
 	    z__ = max(z__,x);
 /*<   616     continue >*/
@@ -2088,7 +2081,7 @@ L616:
 /*       if(z.gt.0.0001) go to 24     #### originally */
 /*       if(z.gt.0.001) go to 24    #### 6s choice */
 /*<          if(z.gt.0.0005) go to 24  >*/
-	if (z__ > (float)5e-4) {
+	if (z__ > 5e-4) {
 	    goto L24;
 	}
 /*<        goto 243  >*/

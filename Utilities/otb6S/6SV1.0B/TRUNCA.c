@@ -6,7 +6,6 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
-
 /* OTB patches: replace "f2c.h" by "otb_6S.h" */
 /*#include "f2c.h"*/
 #include "otb_6S.h"
@@ -20,39 +19,39 @@ Extern struct {
 #define num_quad__1 num_quad__
 
 Extern struct {
-    real pha[1000], qha[1000], uha[1000], alphal[1001], betal[1001], gammal[
-	    1001], zetal[1001];
+    doublereal pha[1000], qha[1000], uha[1000], alphal[1001], betal[1001], 
+	    gammal[1001], zetal[1001];
 } sixs_polar__;
 
 #define sixs_polar__1 sixs_polar__
 
 /* Table of constant values */
 
-static real c_b2 = (float)-1.;
-static real c_b3 = (float)1.;
+static doublereal c_b2 = -1.;
+static doublereal c_b3 = 1.;
 
 /*<       subroutine trunca(coeff,ipol) >*/
-/* Subroutine */ int trunca_(real *coeff, integer *ipol)
+/* Subroutine */ int trunca_(doublereal *coeff, integer *ipol)
 {
     /* System generated locals */
     integer i__1, i__2;
-    real r__1;
+    doublereal d__1;
 
     /* Builtin functions */
     double sqrt(doublereal);
 
     /* Local variables */
-    real d__, e;
+    doublereal d__, e;
     integer i__, j, k;
-    real x, c2;
+    doublereal x, c2;
     integer mm;
-    real pl[1002];
+    doublereal pl[1002];
     integer nn;
-    real rm, xx, co1, co2, co3, z1p, pol[1001], som1, som2, som3, som4;
+    doublereal rm, xx, co1, co2, co3, z1p, pol[1001], som1, som2, som3, som4;
     integer nbmu;
-    extern /* Subroutine */ int gauss_(real *, real *, real *, real *, 
-	    integer *);
-    real deltal[1001], pdgs_s__[1000], cgaus_s__[1000];
+    extern /* Subroutine */ int gauss_(doublereal *, doublereal *, doublereal 
+	    *, doublereal *, integer *);
+    doublereal deltal[1001], pdgs_s__[1000], cgaus_s__[1000];
 
 /* - to vary the number of quadratures */
 /*<       include "paramdef.inc" >*/
@@ -73,9 +72,9 @@ static real c_b3 = (float)1.;
     nbmu = num_quad__1.nquad;
 /* - calculation of gauss points */
 /*<       cgaus_S(nbmu)=1.0 >*/
-    cgaus_s__[nbmu - 1] = (float)1.;
+    cgaus_s__[nbmu - 1] = 1.;
 /*<       pdgs_S(nbmu)=0.0 >*/
-    pdgs_s__[nbmu - 1] = (float)0.;
+    pdgs_s__[nbmu - 1] = 0.;
 /*<       call gauss(-1.,1.,cgaus_S,pdgs_S,nbmu-2) >*/
     i__1 = nbmu - 2;
     gauss_(&c_b2, &c_b3, cgaus_s__, pdgs_s__, &i__1);
@@ -89,9 +88,9 @@ static real c_b3 = (float)1.;
 /*<       enddo >*/
     }
 /*<       cgaus_S(1)=-1.0 >*/
-    cgaus_s__[0] = (float)-1.;
+    cgaus_s__[0] = -1.;
 /*<       pdgs_S(1)=0.0 >*/
-    pdgs_s__[0] = (float)0.;
+    pdgs_s__[0] = 0.;
 /*      write(6,*) 'TRUNCA - gauss' */
 /*      do j=1,nbmu */
 /*      write(6,*) j,cgaus_S(j),pdgs_S(j) */
@@ -103,15 +102,15 @@ static real c_b3 = (float)1.;
     i__1 = nbmu - 3;
     for (k = 0; k <= i__1; ++k) {
 /*< 	alphal(k)=0. >*/
-	sixs_polar__1.alphal[k] = (float)0.;
+	sixs_polar__1.alphal[k] = 0.;
 /*<         betal(k)=0. >*/
-	sixs_polar__1.betal[k] = (float)0.;
+	sixs_polar__1.betal[k] = 0.;
 /*< 	gammal(k)=0. >*/
-	sixs_polar__1.gammal[k] = (float)0.;
+	sixs_polar__1.gammal[k] = 0.;
 /*< 	deltal(k)=0. >*/
-	deltal[k] = (float)0.;
+	deltal[k] = 0.;
 /*< 	zetal(k)=0. >*/
-	sixs_polar__1.zetal[k] = (float)0.;
+	sixs_polar__1.zetal[k] = 0.;
 /*<    10 continue >*/
 /* L10: */
     }
@@ -123,15 +122,15 @@ static real c_b3 = (float)1.;
 /*<         rm=cgaus_S(j) >*/
 	rm = cgaus_s__[j - 1];
 /*<         pl(-1)=0. >*/
-	pl[0] = (float)0.;
+	pl[0] = 0.;
 /*<         pl(0)=1. >*/
-	pl[1] = (float)1.;
+	pl[1] = 1.;
 /*<         do 12 k=0,nbmu-3 >*/
 	i__2 = nbmu - 3;
 	for (k = 0; k <= i__2; ++k) {
 /*<           pl(k+1)=((2*k+1.)*rm*pl(k)-k*pl(k-1))/(k+1.) >*/
-	    pl[k + 2] = (((k << 1) + (float)1.) * rm * pl[k + 1] - k * pl[k]) 
-		    / (k + (float)1.);
+	    pl[k + 2] = (((k << 1) + 1.) * rm * pl[k + 1] - k * pl[k]) / (k + 
+		    1.);
 /*<           betal(k)=betal(k)+x*pl(k) >*/
 	    sixs_polar__1.betal[k] += x * pl[k + 1];
 /*<   12    continue >*/
@@ -144,16 +143,16 @@ static real c_b3 = (float)1.;
     i__1 = nbmu - 3;
     for (k = 0; k <= i__1; ++k) {
 /*<         betal(k)=(2*k+1.)*0.5*betal(k) >*/
-	sixs_polar__1.betal[k] = ((k << 1) + (float)1.) * (float).5 * 
-		sixs_polar__1.betal[k];
+	sixs_polar__1.betal[k] = ((k << 1) + 1.) * .5 * sixs_polar__1.betal[k]
+		;
 /* - to put negative coefficients to 0 */
 /*<       if (betal(k).lt.0) then >*/
-	if (sixs_polar__1.betal[k] < (float)0.) {
+	if (sixs_polar__1.betal[k] < 0.) {
 /*<         do j=k,nbmu-3 >*/
 	    i__2 = nbmu - 3;
 	    for (j = k; j <= i__2; ++j) {
 /*< 	  betal(j)=0.0 >*/
-		sixs_polar__1.betal[j] = (float)0.;
+		sixs_polar__1.betal[j] = 0.;
 /*< 	enddo >*/
 	    }
 /*< 	goto 133 >*/
@@ -179,27 +178,24 @@ L133:
 /*< 	  rm=cgaus_S(j) >*/
 	    rm = cgaus_s__[j - 1];
 /*< 	  pol(0)=0. >*/
-	    pol[0] = (float)0.;
+	    pol[0] = 0.;
 /*< 	  pol(1)=0. >*/
-	    pol[1] = (float)0.;
+	    pol[1] = 0.;
 /*< 	  pol(2)=3.*(1.-rm**2)/2./sqrt(6.0) >*/
 /* Computing 2nd power */
-	    r__1 = rm;
-	    pol[2] = ((float)1. - r__1 * r__1) * (float)3. / (float)2. / sqrt(
-		    (float)6.);
+	    d__1 = rm;
+	    pol[2] = (1. - d__1 * d__1) * 3. / 2. / sqrt(6.);
 /*< 	  pl(-1)=0. >*/
-	    pl[0] = (float)0.;
+	    pl[0] = 0.;
 /*< 	  pl(0)=1. >*/
-	    pl[1] = (float)1.;
+	    pl[1] = 1.;
 /*< 	  do 15 k=2,nbmu-3 >*/
 	    i__2 = nbmu - 3;
 	    for (k = 2; k <= i__2; ++k) {
 /*< 	    d=(2.*k+1.)/sqrt((k+3)*(k-1.)) >*/
-		d__ = (k * (float)2. + (float)1.) / sqrt((k + 3) * (k - (
-			float)1.));
+		d__ = (k * 2. + 1.) / sqrt((k + 3) * (k - 1.));
 /*< 	    e=sqrt((k+2.)*(k-2.))/(2.*k+1.) >*/
-		e = sqrt((k + (float)2.) * (k - (float)2.)) / (k * (float)2. 
-			+ (float)1.);
+		e = sqrt((k + 2.) * (k - 2.)) / (k * 2. + 1.);
 /*< 	    pol(k+1)=d*(rm*pol(k)-e*pol(k-1)) >*/
 		pol[k + 1] = d__ * (rm * pol[k] - e * pol[k - 1]);
 /*< 	    gammal(k)=gammal(k)+x*pol(k) >*/
@@ -211,8 +207,8 @@ L133:
 	    i__2 = nbmu - 3;
 	    for (k = 0; k <= i__2; ++k) {
 /*< 	    pl(k+1)=((2.*k+1.)*rm*pl(k)-k*pl(k-1))/(k+1.) >*/
-		pl[k + 2] = ((k * (float)2. + (float)1.) * rm * pl[k + 1] - k 
-			* pl[k]) / (k + (float)1.);
+		pl[k + 2] = ((k * 2. + 1.) * rm * pl[k + 1] - k * pl[k]) / (k 
+			+ 1.);
 /*< 	    deltal(k)=deltal(k)+xx*pl(k) >*/
 		deltal[k] += xx * pl[k + 1];
 /*<  16       continue >*/
@@ -225,10 +221,10 @@ L133:
 	i__1 = nbmu - 3;
 	for (k = 0; k <= i__1; ++k) {
 /*< 	  deltal(k)=deltal(k)*(2.*k+1.)/2. >*/
-	    deltal[k] = deltal[k] * (k * (float)2. + (float)1.) / (float)2.;
+	    deltal[k] = deltal[k] * (k * 2. + 1.) / 2.;
 /*< 	  gammal(k)=gammal(k)*(2.*k+1.)/2. >*/
-	    sixs_polar__1.gammal[k] = sixs_polar__1.gammal[k] * (k * (float)
-		    2. + (float)1.) / (float)2.;
+	    sixs_polar__1.gammal[k] = sixs_polar__1.gammal[k] * (k * 2. + 1.) 
+		    / 2.;
 /*<  17     continue >*/
 /* L17: */
 	}
@@ -236,33 +232,32 @@ L133:
 	i__1 = nbmu - 3;
 	for (i__ = 2; i__ <= i__1; ++i__) {
 /*< 	  co1=4.*(2.*i+1.)/(i*(i-1.)*(i+1.)*(i+2.)) >*/
-	    co1 = (i__ * (float)2. + (float)1.) * (float)4. / (i__ * (i__ - (
-		    float)1.) * (i__ + (float)1.) * (i__ + (float)2.));
+	    co1 = (i__ * 2. + 1.) * 4. / (i__ * (i__ - 1.) * (i__ + 1.) * (
+		    i__ + 2.));
 /*< 	  co2=i*(i-1.)/((i+1.)*(i+2.)) >*/
-	    co2 = i__ * (i__ - (float)1.) / ((i__ + (float)1.) * (i__ + (
-		    float)2.));
+	    co2 = i__ * (i__ - 1.) / ((i__ + 1.) * (i__ + 2.));
 /*< 	  co3=co2*deltal(i) >*/
 	    co3 = co2 * deltal[i__];
 /*< 	  co2=co2*betal(i) >*/
 	    co2 *= sixs_polar__1.betal[i__];
 /*< 	  nn=i/2. >*/
-	    nn = i__ / (float)2.;
+	    nn = (integer) (i__ / 2.);
 /*< 	  mm=(i-1)/2. >*/
-	    mm = (i__ - 1) / (float)2.;
+	    mm = (integer) ((i__ - 1) / 2.);
 /*< 	  som1=0. >*/
-	    som1 = (float)0.;
+	    som1 = 0.;
 /*< 	  som2=0. >*/
-	    som2 = (float)0.;
+	    som2 = 0.;
 /*< 	  som3=0. >*/
-	    som3 = (float)0.;
+	    som3 = 0.;
 /*< 	  som4=0. >*/
-	    som4 = (float)0.;
+	    som4 = 0.;
 /*< 	  do 19 j=1,nn >*/
 	    i__2 = nn;
 	    for (j = 1; j <= i__2; ++j) {
 /*< 	    c2=(i-1.)*(i-1.)-3.*(2*j-1.)*(i-j) >*/
-		c2 = (i__ - (float)1.) * (i__ - (float)1.) - ((j << 1) - (
-			float)1.) * (float)3. * (i__ - j);
+		c2 = (i__ - 1.) * (i__ - 1.) - ((j << 1) - 1.) * 3. * (i__ - 
+			j);
 /*< 	    som1=som1+c2*betal(i-2*j) >*/
 		som1 += c2 * sixs_polar__1.betal[i__ - (j << 1)];
 /*< 	    som2=som2+c2*deltal(i-2*j) >*/
@@ -274,8 +269,8 @@ L133:
 	    i__2 = mm;
 	    for (j = 0; j <= i__2; ++j) {
 /*< 	    c2=(i-1.)*(i-1.)-3.*j*(2*i-2*j-1.) >*/
-		c2 = (i__ - (float)1.) * (i__ - (float)1.) - j * (float)3. * (
-			(i__ << 1) - (j << 1) - (float)1.);
+		c2 = (i__ - 1.) * (i__ - 1.) - j * 3. * ((i__ << 1) - (j << 1)
+			 - 1.);
 /*< 	    som3=som3+c2*betal(i-2*j-1) >*/
 		som3 += c2 * sixs_polar__1.betal[i__ - (j << 1) - 1];
 /*< 	    som4=som4+c2*deltal(i-2*j-1) >*/
@@ -308,7 +303,7 @@ L133:
 /*<       endif >*/
     }
 /*<       coeff=0.0 >*/
-    *coeff = (float)0.;
+    *coeff = 0.;
 /*<       return >*/
     return 0;
 /*<       end >*/

@@ -6,27 +6,26 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
-
 /* OTB patches: replace "f2c.h" by "otb_6S.h" */
 /*#include "f2c.h"*/
 #include "otb_6S.h"
 
 /* Table of constant values */
 
-static real c_b4 = (float)1e30;
+static doublereal c_b4 = 1e30;
 
 /*<       subroutine splie2(x2a,ya,m,n,y2a) >*/
-/* Subroutine */ int splie2_(real *x2a, real *ya, integer *m, integer *n, 
-	real *y2a)
+/* Subroutine */ int splie2_(doublereal *x2a, doublereal *ya, integer *m, 
+	integer *n, doublereal *y2a)
 {
     /* System generated locals */
     integer ya_dim1, ya_offset, y2a_dim1, y2a_offset, i__1, i__2;
 
     /* Local variables */
     integer j, k;
-    real ytmp[100], y2tmp[100];
-    extern /* Subroutine */ int spline_(real *, real *, integer *, real *, 
-	    real *, real *);
+    doublereal ytmp[100], y2tmp[100];
+    extern /* Subroutine */ int spline_(doublereal *, doublereal *, integer *,
+	     doublereal *, doublereal *, doublereal *);
 
 /*<       parameter (nn=100) >*/
 /*<       integer m,n,j,k >*/

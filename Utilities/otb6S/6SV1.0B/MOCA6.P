@@ -1,1 +1,1 @@
-extern int moca6_(real *a, integer *inu);
+extern int moca6_(doublereal *a, integer *inu);

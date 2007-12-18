@@ -6,7 +6,6 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
-
 /* OTB patches: replace "f2c.h" by "otb_6S.h" */
 /*#include "f2c.h"*/
 #include "otb_6S.h"
@@ -20,27 +19,27 @@ Extern struct {
 #define num_quad__1 num_quad__
 
 Extern struct {
-    real ph[20000]	/* was [20][1000] */, qh[20000]	/* was [20][1000] */, 
-	    uh[20000]	/* was [20][1000] */;
+    doublereal ph[20000]	/* was [20][1000] */, qh[20000]	/* was [20][
+	    1000] */, uh[20000]	/* was [20][1000] */;
 } sixs_aerbas__;
 
 #define sixs_aerbas__1 sixs_aerbas__
 
 Extern struct {
-    real rmax, rmin;
+    doublereal rmax, rmin;
     integer icp;
-    real rn[80]	/* was [20][4] */, ri[80]	/* was [20][4] */, x1[4], x2[
-	    4], x3[4], cij[4];
+    doublereal rn[80]	/* was [20][4] */, ri[80]	/* was [20][4] */, x1[
+	    4], x2[4], x3[4], cij[4];
     integer irsunph;
-    real rsunph[50], nrsunph[50];
+    doublereal rsunph[50], nrsunph[50];
 } mie_in__;
 
 #define mie_in__1 mie_in__
 
 /* Table of constant values */
 
-static real c_b2 = (float)-1.;
-static real c_b3 = (float)1.;
+static doublereal c_b2 = -1.;
+static doublereal c_b3 = 1.;
 static doublereal c_b5 = 10.;
 static doublereal c_b14 = 2.;
 static integer c__9 = 9;
@@ -48,8 +47,8 @@ static integer c__1 = 1;
 static integer c__3 = 3;
 
 /*<       subroutine mie(iaer,wldis,ex,sc,asy,ipol) >*/
-/* Subroutine */ int mie_(integer *iaer, real *wldis, real *ex, real *sc, 
-	real *asy, integer *ipol)
+/* Subroutine */ int mie_(integer *iaer, doublereal *wldis, doublereal *ex, 
+	doublereal *sc, doublereal *asy, integer *ipol)
 {
     /* System generated locals */
     integer i__1, i__2;
@@ -64,28 +63,20 @@ static integer c__3 = 3;
     integer i__, j, k, l;
     doublereal r__, p1[80000]	/* was [20][4][1000] */, q1[80000]	/* 
 	    was [20][4][1000] */, r0;
-    extern /* Subroutine */ int exscphase_(doublereal *, real *, real *, 
+    extern /* Subroutine */ int exscphase_(doublereal *, doublereal *, 
 	    doublereal *, doublereal *, doublereal *, doublereal *, 
-	    doublereal *, integer *, real *, real *);
+	    doublereal *, doublereal *, integer *, doublereal *, doublereal *)
+	    ;
     doublereal u1[80000]	/* was [20][4][1000] */, p11[1000], q11[1000],
-	     u11[1000], pi, dr, np[4], nr;
-    real vi[4];
-    doublereal sca[80]	/* was [20][4] */, arg, ext[80]	/* was [20][4] */, 
-	    qsca;
-    real sigm;
+	     u11[1000], pi, dr, np[4], nr, vi[4], sca[80]	/* was [20][4]
+	     */, arg, ext[80]	/* was [20][4] */, qsca, sigm;
     integer nbmu;
-    real xmug;
-    doublereal qext, alpha;
-    real asy_d__;
-    doublereal rmind;
-    real asy_n__;
-    doublereal rmaxd, ldexp;
-    extern /* Subroutine */ int gauss_(real *, real *, real *, real *, 
-	    integer *);
+    doublereal xmug, qext, alpha, asy_d__, rmind, asy_n__, rmaxd, ldexp;
+    extern /* Subroutine */ int gauss_(doublereal *, doublereal *, doublereal 
+	    *, doublereal *, integer *);
     integer nbmu_2__;
-    doublereal xndpr2;
-    real cosang[1000], pdgs_s__[1000], weight[1000], cgaus_s__[1000];
-    doublereal rlogpas;
+    doublereal xndpr2, cosang[1000], pdgs_s__[1000], weight[1000], cgaus_s__[
+	    1000], rlogpas;
 
 /* - to vary the number of quadratures */
 /*<       include "paramdef.inc" >*/
@@ -120,11 +111,11 @@ static integer c__3 = 3;
     --wldis;
 
     /* Function Body */
-    ldexp = (float)-300.;
+    ldexp = -300.;
 /*<       pi=4.D+00*datan(1.D+00) >*/
     pi = atan(1.) * 4.;
 /*<       rlogpas=0.011 >*/
-    rlogpas = (float).011;
+    rlogpas = .011;
 /*<       nbmu=nquad  >*/
     nbmu = num_quad__1.nquad;
 /*<       do i=1,icp >*/
@@ -135,11 +126,11 @@ static integer c__3 = 3;
 /*<         do l=1,20 >*/
 	for (l = 1; l <= 20; ++l) {
 /*<           ex(i,l)=0.0 >*/
-	    ex[i__ + (l << 2)] = (float)0.;
+	    ex[i__ + (l << 2)] = 0.;
 /*<           sc(i,l)=0.0 >*/
-	    sc[i__ + (l << 2)] = (float)0.;
+	    sc[i__ + (l << 2)] = 0.;
 /*<           asy(i,l)=0.0 >*/
-	    asy[i__ + (l << 2)] = (float)0.;
+	    asy[i__ + (l << 2)] = 0.;
 /*<           ext(l,i)=0.D+00 >*/
 	    ext[l + i__ * 20 - 21] = 0.;
 /*<           sca(l,i)=0.D+00 >*/
@@ -160,9 +151,9 @@ static integer c__3 = 3;
 /*<       enddo >*/
     }
 /*<       rmaxd=dble(rmax) >*/
-    rmaxd = (doublereal) mie_in__1.rmax;
+    rmaxd = mie_in__1.rmax;
 /*<       rmind=dble(rmin) >*/
-    rmind = (doublereal) mie_in__1.rmin;
+    rmind = mie_in__1.rmin;
 /*<       do k=1,nbmu >*/
     i__1 = nbmu;
     for (k = 1; k <= i__1; ++k) {
@@ -181,9 +172,9 @@ static integer c__3 = 3;
     i__1 = nbmu - 3;
     gauss_(&c_b2, &c_b3, cosang, weight, &i__1);
 /*<       cgaus_S(1)=-1.0 >*/
-    cgaus_s__[0] = (float)-1.;
+    cgaus_s__[0] = -1.;
 /*<       pdgs_S(1)=0.0 >*/
-    pdgs_s__[0] = (float)0.;
+    pdgs_s__[0] = 0.;
 /*<       do j=1,nbmu_2 >*/
     i__1 = nbmu_2__;
     for (j = 1; j <= i__1; ++j) {
@@ -194,9 +185,9 @@ static integer c__3 = 3;
 /*<       enddo  >*/
     }
 /*<       cgaus_S(nbmu_2+2)=0. >*/
-    cgaus_s__[nbmu_2__ + 1] = (float)0.;
+    cgaus_s__[nbmu_2__ + 1] = 0.;
 /*<       pdgs_S(nbmu_2+2)=0. >*/
-    pdgs_s__[nbmu_2__ + 1] = (float)0.;
+    pdgs_s__[nbmu_2__ + 1] = 0.;
 /*<       do j=nbmu_2+1,nbmu-3 >*/
     i__1 = nbmu - 3;
     for (j = nbmu_2__ + 1; j <= i__1; ++j) {
@@ -207,9 +198,9 @@ static integer c__3 = 3;
 /*<       enddo >*/
     }
 /*<       cgaus_S(nbmu)=1.0 >*/
-    cgaus_s__[nbmu - 1] = (float)1.;
+    cgaus_s__[nbmu - 1] = 1.;
 /*<       pdgs_S(nbmu)=0. >*/
-    pdgs_s__[nbmu - 1] = (float)0.;
+    pdgs_s__[nbmu - 1] = 0.;
 /* - calculation of gauss points */
 /* LOOPS ON THE NUMBER OF PARTICLE TYPE (4 max) */
 /*<       do 600 i=1,icp >*/
@@ -257,18 +248,16 @@ L301:
 	r0 = 1.;
 /*<        arg=-x2(i)*((r/r0)**x3(i)) >*/
 	d__1 = r__ / r0;
-	d__2 = (doublereal) mie_in__1.x3[i__ - 1];
-	arg = -mie_in__1.x2[i__ - 1] * pow_dd(&d__1, &d__2);
+	arg = -mie_in__1.x2[i__ - 1] * pow_dd(&d__1, &mie_in__1.x3[i__ - 1]);
 /*<        if (arg.gt.ldexp) then >*/
 	if (arg > ldexp) {
 /*<           nr=((r/r0)**x1(i))*DEXP(arg) >*/
 	    d__1 = r__ / r0;
-	    d__2 = (doublereal) mie_in__1.x1[i__ - 1];
-	    nr = pow_dd(&d__1, &d__2) * exp(arg);
+	    nr = pow_dd(&d__1, &mie_in__1.x1[i__ - 1]) * exp(arg);
 /*<           else >*/
 	} else {
 /*<           nr=0. >*/
-	    nr = (float)0.;
+	    nr = 0.;
 /*<           endif >*/
 	}
 /*<        goto 399 >*/
@@ -278,11 +267,11 @@ L301:
 L302:
 	r0 = .1;
 /*<        nr= r0**(-x1(i)) >*/
-	d__1 = (doublereal) (-mie_in__1.x1[i__ - 1]);
+	d__1 = -mie_in__1.x1[i__ - 1];
 	nr = pow_dd(&r0, &d__1);
 /*<        IF(r.GT.r0 ) nr= r**(-x1(i)) >*/
 	if (r__ > r0) {
-	    d__1 = (doublereal) (-mie_in__1.x1[i__ - 1]);
+	    d__1 = -mie_in__1.x1[i__ - 1];
 	    nr = pow_dd(&r__, &d__1);
 	}
 /*<        goto 399 >*/
@@ -296,7 +285,7 @@ L303:
 	i__2 = mie_in__1.irsunph;
 	for (j = 2; j <= i__2; ++j) {
 /*< 	if ((r-rsunph(j)).lt.0.000001)then >*/
-	    if (r__ - mie_in__1.rsunph[j - 1] < (float)1e-6) {
+	    if (r__ - mie_in__1.rsunph[j - 1] < 1e-6) {
 /*<          nr=(r-rsunph(j-1))/(rsunph(j)-rsunph(j-1)) >*/
 		nr = (r__ - mie_in__1.rsunph[j - 2]) / (mie_in__1.rsunph[j - 
 			1] - mie_in__1.rsunph[j - 2]);
@@ -319,7 +308,7 @@ cient*/
 /* (if it's not in the selected range of wavelengths). */
 /*<  398   nr=nr*3./(pi*r*r*r*r*4.) >*/
 L398:
-	nr = nr * (float)3. / (pi * r__ * r__ * r__ * r__ * (float)4.);
+	nr = nr * 3. / (pi * r__ * r__ * r__ * r__ * 4.);
 /*<  399   continue >*/
 L399:
 /*<        xndpr2=nr*dr*pi*(r**2.D+00) >*/
@@ -383,7 +372,7 @@ L600:
 /* Computation of the scattering and extinction coefficients. */
 /* The coefficients will be normalized at 0.550 micron. */
 /*<        sigm=0. >*/
-    sigm = (float)0.;
+    sigm = 0.;
 /*<        do i=1,icp >*/
     i__1 = mie_in__1.icp;
     for (i__ = 1; i__ <= i__1; ++i__) {
@@ -407,11 +396,11 @@ L600:
 	i__1 = mie_in__1.icp;
 	for (i__ = 1; i__ <= i__1; ++i__) {
 /*<          ex(1,l)=ex(1,l)+cij(i)*real(ext(l,i)) >*/
-	    ex[(l << 2) + 1] += mie_in__1.cij[i__ - 1] * (real) ext[l + i__ * 
-		    20 - 21];
+	    ex[(l << 2) + 1] += mie_in__1.cij[i__ - 1] * ext[l + i__ * 20 - 
+		    21];
 /*<          sc(1,l)=sc(1,l)+cij(i)*real(sca(l,i)) >*/
-	    sc[(l << 2) + 1] += mie_in__1.cij[i__ - 1] * (real) sca[l + i__ * 
-		    20 - 21];
+	    sc[(l << 2) + 1] += mie_in__1.cij[i__ - 1] * sca[l + i__ * 20 - 
+		    21];
 /*<        enddo >*/
 	}
 /*<       enddo >*/
@@ -421,20 +410,20 @@ L600:
 /*<       do l=1,20 >*/
     for (l = 1; l <= 20; ++l) {
 /*<         asy_n=0. >*/
-	asy_n__ = (float)0.;
+	asy_n__ = 0.;
 /*<         asy_d=0. >*/
-	asy_d__ = (float)0.;
+	asy_d__ = 0.;
 /*<         do k=1,nbmu >*/
 	i__1 = nbmu;
 	for (k = 1; k <= i__1; ++k) {
 /*<           ph(l,k)=0. >*/
-	    sixs_aerbas__1.ph[l + k * 20 - 21] = (float)0.;
+	    sixs_aerbas__1.ph[l + k * 20 - 21] = 0.;
 /*<           do i=1,icp >*/
 	    i__2 = mie_in__1.icp;
 	    for (i__ = 1; i__ <= i__2; ++i__) {
 /*<            ph(l,k)=ph(l,k)+real(cij(i)*p1(l,i,k)) >*/
-		sixs_aerbas__1.ph[l + k * 20 - 21] += (real) (mie_in__1.cij[
-			i__ - 1] * p1[l + (i__ + (k << 2)) * 20 - 101]);
+		sixs_aerbas__1.ph[l + k * 20 - 21] += mie_in__1.cij[i__ - 1] *
+			 p1[l + (i__ + (k << 2)) * 20 - 101];
 /*<           enddo >*/
 	    }
 /*<           ph(l,k)=ph(l,k)/sc(1,l) >*/
@@ -442,20 +431,18 @@ L600:
 /*< 	  if (ipol.ne.0)then >*/
 	    if (*ipol != 0) {
 /*< 	    qh(l,k)=0. >*/
-		sixs_aerbas__1.qh[l + k * 20 - 21] = (float)0.;
+		sixs_aerbas__1.qh[l + k * 20 - 21] = 0.;
 /*< 	    uh(l,k)=0. >*/
-		sixs_aerbas__1.uh[l + k * 20 - 21] = (float)0.;
+		sixs_aerbas__1.uh[l + k * 20 - 21] = 0.;
 /*< 	    do i=1,icp >*/
 		i__2 = mie_in__1.icp;
 		for (i__ = 1; i__ <= i__2; ++i__) {
 /*<               qh(l,k)=qh(l,k)+real(cij(i)*q1(l,i,k)) >*/
-		    sixs_aerbas__1.qh[l + k * 20 - 21] += (real) (
-			    mie_in__1.cij[i__ - 1] * q1[l + (i__ + (k << 2)) *
-			     20 - 101]);
+		    sixs_aerbas__1.qh[l + k * 20 - 21] += mie_in__1.cij[i__ - 
+			    1] * q1[l + (i__ + (k << 2)) * 20 - 101];
 /*<               uh(l,k)=uh(l,k)+real(cij(i)*u1(l,i,k)) >*/
-		    sixs_aerbas__1.uh[l + k * 20 - 21] += (real) (
-			    mie_in__1.cij[i__ - 1] * u1[l + (i__ + (k << 2)) *
-			     20 - 101]);
+		    sixs_aerbas__1.uh[l + k * 20 - 21] += mie_in__1.cij[i__ - 
+			    1] * u1[l + (i__ + (k << 2)) * 20 - 101];
 /*< 	    enddo >*/
 		}
 /*<             qh(l,k)=qh(l,k)/sc(1,l) >*/
@@ -501,9 +488,10 @@ L600:
 /*extinction efficiency factors (usually written Qsca and Qext) and it also*/
 /* computes the scattering intensity efficiency */
 /*<    >*/
-/* Subroutine */ int exscphase_(doublereal *x, real *nr, real *ni, doublereal 
-	*qext, doublereal *qsca, doublereal *p11, doublereal *q11, doublereal 
-	*u11, integer *ipol, real *cgaus_s__, real *pdgs_s__)
+/* Subroutine */ int exscphase_(doublereal *x, doublereal *nr, doublereal *ni,
+	 doublereal *qext, doublereal *qsca, doublereal *p11, doublereal *q11,
+	 doublereal *u11, integer *ipol, doublereal *cgaus_s__, doublereal *
+	pdgs_s__)
 {
     /* System generated locals */
     integer i__1, i__2;
@@ -607,12 +595,12 @@ ms*/
     up = y * 2. / (np * 2. + 1.);
 /* jcc */
 /*<       mu1=int(Np+30.*(0.10+0.35*Up*(2-Up*Up)/2./(1-Up))) >*/
-    mu1 = (integer) (np + (up * (float).35 * (2 - up * up) / (float)2. / (1 - 
-	    up) + (float).1) * (float)30.);
+    mu1 = (integer) (np + (up * .35 * (2 - up * up) / 2. / (1 - up) + .1) * 
+	    30.);
 /* jcc */
 /*     Np=int(X-0.5D+00+dsqrt(30.*0.35*X)) */
 /*<       Np=int(Y-0.5D+00+dsqrt(30.*0.35*Y)) >*/
-    np = (integer) (y - .5 + sqrt(y * (float)10.5));
+    np = (integer) (y - .5 + sqrt(y * 10.5));
 /* jcc */
 /*<       if (Np.gt.N)then >*/
     if (np > n) {
@@ -622,8 +610,8 @@ ms*/
 	up = y * 2. / (np * 2. + 1.);
 /* jcc */
 /*<        mu2=int(Np+30.*(0.10+0.35*Up*(2-Up*Up)/2./(1-Up))) >*/
-	mu2 = (integer) (np + (up * (float).35 * (2 - up * up) / (float)2. / (
-		1 - up) + (float).1) * (float)30.);
+	mu2 = (integer) (np + (up * .35 * (2 - up * up) / 2. / (1 - up) + .1) 
+		* 30.);
 /*<       endif >*/
     }
 /*<       mu=min0(mu1,mu2) >*/

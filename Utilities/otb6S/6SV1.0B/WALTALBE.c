@@ -6,7 +6,6 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
-
 /* OTB patches: replace "f2c.h" by "otb_6S.h" */
 /*#include "f2c.h"*/
 #include "otb_6S.h"
@@ -17,19 +16,19 @@ static integer c__24 = 24;
 static integer c__48 = 48;
 
 /*<    >*/
-/* Subroutine */ int waltalbe_(real *a, real *ap, real *b, real *c__, real *
-	brdfalb)
+/* Subroutine */ int waltalbe_(doublereal *a, doublereal *ap, doublereal *b, 
+	doublereal *c__, doublereal *brdfalb)
 {
     /* Builtin functions */
     double atan(doublereal), sin(doublereal), cos(doublereal);
 
     /* Local variables */
     integer j, k, l;
-    real fa[48], ta[24], pi, ts, tv, si1, si2, mu1, mu2, wfa[48], phi, wta[24]
-	    , phi1, phi2, pond, summ, teta1, teta2;
-    extern /* Subroutine */ int gauss_(real *, real *, real *, real *, 
-	    integer *);
-    real brdfint;
+    doublereal fa[48], ta[24], pi, ts, tv, si1, si2, mu1, mu2, wfa[48], phi, 
+	    wta[24], phi1, phi2, pond, summ, teta1, teta2;
+    extern /* Subroutine */ int gauss_(doublereal *, doublereal *, doublereal 
+	    *, doublereal *, integer *);
+    doublereal brdfint;
 
 /*<       parameter (nta=24,nfa=48) >*/
 /*<       real teta1,teta2,phi1,phi2,ta(nta),fa(nfa),wta(nta),wfa(nfa) >*/
@@ -38,23 +37,23 @@ static integer c__48 = 48;
 /*<       real brdfalb,summ,si2,si1,ts,tv,phi,pond,brdfint,mu1,mu2 >*/
 /*<       integer k,j,l >*/
 /*<       pi=atan(1.)*4. >*/
-    pi = atan((float)1.) * (float)4.;
+    pi = atan(1.) * 4.;
 /*<       teta1=0. >*/
-    teta1 = (float)0.;
+    teta1 = 0.;
 /*<       teta2=pi/2. >*/
-    teta2 = pi / (float)2.;
+    teta2 = pi / 2.;
 /*<       call gauss(teta1,teta2,ta,wta,nta) >*/
     gauss_(&teta1, &teta2, ta, wta, &c__24);
 /*<       phi1=0. >*/
-    phi1 = (float)0.;
+    phi1 = 0.;
 /*<       phi2=2.*pi >*/
-    phi2 = pi * (float)2.;
+    phi2 = pi * 2.;
 /*<       call gauss(phi1,phi2,fa,wfa,nfa) >*/
     gauss_(&phi1, &phi2, fa, wfa, &c__48);
 /*<       brdfalb=0. >*/
-    *brdfalb = (float)0.;
+    *brdfalb = 0.;
 /*<       summ=0. >*/
-    summ = (float)0.;
+    summ = 0.;
 /*<       do 1 k=1,nfa >*/
     for (k = 1; k <= 48; ++k) {
 /*<       do 2 j=1,nta >*/

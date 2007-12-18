@@ -1,35 +1,35 @@
 extern int otb_6s_morcasiwat_(
-  otb_6s_real *wl,
-  otb_6s_real *c__,
-  otb_6s_real *r2
+  otb_6s_doublereal *wl,
+  otb_6s_doublereal *c__,
+  otb_6s_doublereal *r2
   );
 extern int otb_6s_indwat_(
-  otb_6s_real *wl,
-  otb_6s_real *xsal,
-  otb_6s_real *nr,
-  otb_6s_real *ni
+  otb_6s_doublereal *wl,
+  otb_6s_doublereal *xsal,
+  otb_6s_doublereal *nr,
+  otb_6s_doublereal *ni
   );
 extern int otb_6s_sunglint_(
-  otb_6s_real *wspd,
-  otb_6s_real *nr,
-  otb_6s_real *ni,
-  otb_6s_real *azw,
-  otb_6s_real *ts,
-  otb_6s_real *tv,
-  otb_6s_real *fi,
-  otb_6s_real *rog
+  otb_6s_doublereal *wspd,
+  otb_6s_doublereal *nr,
+  otb_6s_doublereal *ni,
+  otb_6s_doublereal *azw,
+  otb_6s_doublereal *ts,
+  otb_6s_doublereal *tv,
+  otb_6s_doublereal *fi,
+  otb_6s_doublereal *rog
   );
 extern int otb_6s_fresnel_(
-  otb_6s_real *nr,
-  otb_6s_real *ni,
-  otb_6s_real *coschi,
-  otb_6s_real *sinchi,
-  otb_6s_real *r1
+  otb_6s_doublereal *nr,
+  otb_6s_doublereal *ni,
+  otb_6s_doublereal *coschi,
+  otb_6s_doublereal *sinchi,
+  otb_6s_doublereal *r1
   );
 extern int otb_6s_glitalbe_(
-  otb_6s_real *wspd,
-  otb_6s_real *nr,
-  otb_6s_real *ni,
-  otb_6s_real *azw,
-  otb_6s_real *rge
+  otb_6s_doublereal *wspd,
+  otb_6s_doublereal *nr,
+  otb_6s_doublereal *ni,
+  otb_6s_doublereal *azw,
+  otb_6s_doublereal *rge
   );

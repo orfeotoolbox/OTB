@@ -1,1 +1,1 @@
-extern int wava3_(real *a, integer *inu);
+extern int wava3_(doublereal *a, integer *inu);

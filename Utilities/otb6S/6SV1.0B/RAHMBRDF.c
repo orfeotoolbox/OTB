@@ -6,7 +6,6 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
-
 /* OTB patches: replace "f2c.h" by "otb_6S.h" */
 /*#include "f2c.h"*/
 #include "otb_6S.h"
@@ -16,12 +15,13 @@ extern "C" {
 static doublereal c_b4 = 1.5;
 
 /*<       Subroutine RAHMBRDF (rho0,af,xk,mu,np,rm,rp,brdfint) >*/
-/* Subroutine */ int rahmbrdf_(real *rho0, real *af, real *xk, integer *mu, 
-	integer *np, real *rm, real *rp, real *brdfint)
+/* Subroutine */ int rahmbrdf_(doublereal *rho0, doublereal *af, doublereal *
+	xk, integer *mu, integer *np, doublereal *rm, doublereal *rp, 
+	doublereal *brdfint)
 {
     /* System generated locals */
     integer rm_offset, brdfint_dim1, brdfint_offset, i__1, i__2;
-    doublereal d__1, d__2, d__3, d__4, d__5, d__6;
+    doublereal d__1, d__2, d__3, d__4;
 
     /* Builtin functions */
     double acos(doublereal), sqrt(doublereal), cos(doublereal), pow_dd(
@@ -29,8 +29,8 @@ static doublereal c_b4 = 1.5;
 
     /* Local variables */
     integer j, k;
-    real fi, pi, mu1, mu2, coef1, coef2, tante1, tante2, geofac, phaang, 
-	    cospha, phafun;
+    doublereal fi, pi, mu1, mu2, coef1, coef2, tante1, tante2, geofac, phaang,
+	     cospha, phafun;
 
 /* ***********************************************************************
  */
@@ -88,7 +88,7 @@ static doublereal c_b4 = 1.5;
     --rp;
 
     /* Function Body */
-    pi = acos((float)-1.);
+    pi = acos(-1.);
 /*<       mu1=rm(0) >*/
     mu1 = rm[0];
 /*<       do 1 k=1,np >*/
@@ -111,35 +111,32 @@ static doublereal c_b4 = 1.5;
 	    }
 /* Compute various trigonometric expressions: */
 /*<       cospha=mu1*mu2+sqrt(1.-mu1*mu1)*sqrt(1.-mu2*mu2)*cos(fi) >*/
-	    cospha = mu1 * mu2 + sqrt((float)1. - mu1 * mu1) * sqrt((float)1. 
-		    - mu2 * mu2) * cos(fi);
+	    cospha = mu1 * mu2 + sqrt(1. - mu1 * mu1) * sqrt(1. - mu2 * mu2) *
+		     cos(fi);
 /*<       phaang=acos(cospha) >*/
 	    phaang = acos(cospha);
 /*<       tante1=sqrt(1.-mu1*mu1)/mu1 >*/
-	    tante1 = sqrt((float)1. - mu1 * mu1) / mu1;
+	    tante1 = sqrt(1. - mu1 * mu1) / mu1;
 /*<       tante2=sqrt(1.-mu2*mu2)/mu2 >*/
-	    tante2 = sqrt((float)1. - mu2 * mu2) / mu2;
+	    tante2 = sqrt(1. - mu2 * mu2) / mu2;
 /*<       geofac=sqrt(tante1*tante1+tante2*tante2-2.0*tante1*tante2*cos(fi)) >*/
-	    geofac = sqrt(tante1 * tante1 + tante2 * tante2 - tante1 * (float)
-		    2. * tante2 * cos(fi));
+	    geofac = sqrt(tante1 * tante1 + tante2 * tante2 - tante1 * 2. * 
+		    tante2 * cos(fi));
 /* Compute the first term */
 /*<       coef1=(mu1**(xk-1.))*(mu2**(xk-1.))/((mu1+mu2)**(1.-xk)) >*/
-	    d__1 = (doublereal) mu1;
-	    d__2 = (doublereal) (*xk - (float)1.);
-	    d__3 = (doublereal) mu2;
-	    d__4 = (doublereal) (*xk - (float)1.);
-	    d__5 = (doublereal) (mu1 + mu2);
-	    d__6 = (doublereal) ((float)1. - *xk);
-	    coef1 = pow_dd(&d__1, &d__2) * pow_dd(&d__3, &d__4) / pow_dd(&
-		    d__5, &d__6);
+	    d__1 = *xk - 1.;
+	    d__2 = *xk - 1.;
+	    d__3 = mu1 + mu2;
+	    d__4 = 1. - *xk;
+	    coef1 = pow_dd(&mu1, &d__1) * pow_dd(&mu2, &d__2) / pow_dd(&d__3, 
+		    &d__4);
 /* Compute the phase function: */
 /*<       phafun=(1.0-af*af)/((1.0+af*af-2.0*af*cos(pi-phaang))**1.5) >*/
-	    d__1 = (doublereal) (*af * *af + (float)1. - *af * (float)2. * 
-		    cos(pi - phaang));
-	    phafun = ((float)1. - *af * *af) / pow_dd(&d__1, &c_b4);
+	    d__1 = *af * *af + 1. - *af * 2. * cos(pi - phaang);
+	    phafun = (1. - *af * *af) / pow_dd(&d__1, &c_b4);
 /* Compute the opposition (hot spot) function: */
 /*<       coef2=1.+(1.-rho0)/(1.+geofac) >*/
-	    coef2 = ((float)1. - *rho0) / (geofac + (float)1.) + (float)1.;
+	    coef2 = (1. - *rho0) / (geofac + 1.) + 1.;
 /* Compute the bidirectional reflectance factor: */
 /*<       brdfint(j,k)=rho0*coef1*phafun*coef2 >*/
 	    brdfint[j + k * brdfint_dim1] = *rho0 * coef1 * phafun * coef2;

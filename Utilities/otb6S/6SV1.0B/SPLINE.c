@@ -6,21 +6,20 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
-
 /* OTB patches: replace "f2c.h" by "otb_6S.h" */
 /*#include "f2c.h"*/
 #include "otb_6S.h"
 
 /*<       subroutine spline(x,y,n,yp1,ypn,y2) >*/
-/* Subroutine */ int spline_(real *x, real *y, integer *n, real *yp1, real *
-	ypn, real *y2)
+/* Subroutine */ int spline_(doublereal *x, doublereal *y, integer *n, 
+	doublereal *yp1, doublereal *ypn, doublereal *y2)
 {
     /* System generated locals */
     integer i__1;
 
     /* Local variables */
     integer i__, k;
-    real p, u[100], qn, un, sig;
+    doublereal p, u[100], qn, un, sig;
 
 /*<       parameter (nmax=100) >*/
 /*<       integer n,i,k >*/
@@ -33,18 +32,17 @@ extern "C" {
     --x;
 
     /* Function Body */
-    if (*yp1 > (float)9.9e29) {
+    if (*yp1 > 9.9e29) {
 /*<         y2(1)=0. >*/
-	y2[1] = (float)0.;
+	y2[1] = 0.;
 /*<         u(1)=0. >*/
-	u[0] = (float)0.;
+	u[0] = 0.;
 /*<       else >*/
     } else {
 /*<         y2(1)=-0.5 >*/
-	y2[1] = (float)-.5;
+	y2[1] = -.5;
 /*<         u(1)=(3./(x(2)-x(1)))*((y(2)-y(1))/(x(2)-x(1))-yp1) >*/
-	u[0] = (float)3. / (x[2] - x[1]) * ((y[2] - y[1]) / (x[2] - x[1]) - *
-		yp1);
+	u[0] = 3. / (x[2] - x[1]) * ((y[2] - y[1]) / (x[2] - x[1]) - *yp1);
 /*<       endif >*/
     }
 /*<       do 11 i=2,n-1 >*/
@@ -53,33 +51,33 @@ extern "C" {
 /*<         sig=(x(i)-x(i-1))/(x(i+1)-x(i-1)) >*/
 	sig = (x[i__] - x[i__ - 1]) / (x[i__ + 1] - x[i__ - 1]);
 /*<         p=sig*y2(i-1)+2. >*/
-	p = sig * y2[i__ - 1] + (float)2.;
+	p = sig * y2[i__ - 1] + 2.;
 /*<         y2(i)=(sig-1.)/p >*/
-	y2[i__] = (sig - (float)1.) / p;
+	y2[i__] = (sig - 1.) / p;
 /*<    >*/
 	u[i__ - 1] = (((y[i__ + 1] - y[i__]) / (x[i__ + 1] - x[i__]) - (y[i__]
-		 - y[i__ - 1]) / (x[i__] - x[i__ - 1])) * (float)6. / (x[i__ 
-		+ 1] - x[i__ - 1]) - sig * u[i__ - 2]) / p;
+		 - y[i__ - 1]) / (x[i__] - x[i__ - 1])) * 6. / (x[i__ + 1] - 
+		x[i__ - 1]) - sig * u[i__ - 2]) / p;
 /*< 11    continue >*/
 /* L11: */
     }
 /*<       if (ypn.gt..99e30) then >*/
-    if (*ypn > (float)9.9e29) {
+    if (*ypn > 9.9e29) {
 /*<         qn=0. >*/
-	qn = (float)0.;
+	qn = 0.;
 /*<         un=0. >*/
-	un = (float)0.;
+	un = 0.;
 /*<       else >*/
     } else {
 /*<         qn=0.5 >*/
-	qn = (float).5;
+	qn = .5;
 /*<         un=(3./(x(n)-x(n-1)))*(ypn-(y(n)-y(n-1))/(x(n)-x(n-1))) >*/
-	un = (float)3. / (x[*n] - x[*n - 1]) * (*ypn - (y[*n] - y[*n - 1]) / (
-		x[*n] - x[*n - 1]));
+	un = 3. / (x[*n] - x[*n - 1]) * (*ypn - (y[*n] - y[*n - 1]) / (x[*n] 
+		- x[*n - 1]));
 /*<       endif >*/
     }
 /*<       y2(n)=(un-qn*u(n-1))/(qn*y2(n-1)+1.) >*/
-    y2[*n] = (un - qn * u[*n - 2]) / (qn * y2[*n - 1] + (float)1.);
+    y2[*n] = (un - qn * u[*n - 2]) / (qn * y2[*n - 1] + 1.);
 /*<       do 12 k=n-1,1,-1 >*/
     for (k = *n - 1; k >= 1; --k) {
 /*<         y2(k)=y2(k)*y2(k+1)+u(k) >*/

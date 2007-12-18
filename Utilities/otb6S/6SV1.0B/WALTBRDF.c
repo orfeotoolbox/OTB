@@ -6,14 +6,14 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
-
 /* OTB patches: replace "f2c.h" by "otb_6S.h" */
 /*#include "f2c.h"*/
 #include "otb_6S.h"
 
 /*<    >*/
-/* Subroutine */ int waltbrdf_(real *a, real *ap, real *b, real *c__, integer 
-	*mu, integer *np, real *rm, real *rp, real *brdfint)
+/* Subroutine */ int waltbrdf_(doublereal *a, doublereal *ap, doublereal *b, 
+	doublereal *c__, integer *mu, integer *np, doublereal *rm, doublereal 
+	*rp, doublereal *brdfint)
 {
     /* System generated locals */
     integer rm_offset, brdfint_dim1, brdfint_offset, i__1, i__2;
@@ -23,7 +23,7 @@ extern "C" {
 
     /* Local variables */
     integer j, k;
-    real fi, ts, tv, phi, xmu, view;
+    doublereal fi, ts, tv, phi, xmu, view;
 
 /* this model can be found in applied optics vol 24 / no 3/ pp 383-387 */
 /* but it has to be modified (slightly) to match reciprocity principle */

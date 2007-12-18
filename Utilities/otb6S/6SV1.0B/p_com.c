@@ -1,4 +1,3 @@
-
 /* OTB patches: replace "f2c.h" by "otb_6S.h" */
 /*#include "f2c.h"*/
 #include "otb_6S.h"
@@ -8,7 +7,7 @@ extern "C" {
 #endif
 
 struct {
-    real xlt, rl, tl, rs, c__;
+    doublereal xlt, rl, tl, rs, c__;
     integer ild;
 } p_;
 

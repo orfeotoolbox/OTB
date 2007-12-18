@@ -6,7 +6,6 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
-
 /* OTB patches: replace "f2c.h" by "otb_6S.h" */
 /*#include "f2c.h"*/
 #include "otb_6S.h"
@@ -16,35 +15,30 @@ extern "C" {
 static doublereal c_b2 = 3.52;
 
 /*<    >*/
-/* Subroutine */ int oceaalbe_(real *pws, real *paw, real *xsal, real *pcl, 
-	real *pwl, real *brdfalbe)
+/* Subroutine */ int oceaalbe_(doublereal *pws, doublereal *paw, doublereal *
+	xsal, doublereal *pcl, doublereal *pwl, doublereal *brdfalbe)
 {
     /* Initialized data */
 
-    static real ref[39] = { (float).22,(float).22,(float).22,(float).22,(
-	    float).22,(float).22,(float).215,(float).21,(float).2,(float).19,(
-	    float).175,(float).155,(float).13,(float).08,(float).1,(float)
-	    .105,(float).1,(float).08,(float).045,(float).055,(float).065,(
-	    float).06,(float).055,(float).04,(float)0.,(float)0.,(float)0.,(
-	    float)0.,(float)0.,(float)0.,(float)0.,(float)0.,(float)0.,(float)
-	    0.,(float)0.,(float)0.,(float)0.,(float)0.,(float)0. };
-
-    /* System generated locals */
-    doublereal d__1;
+    static doublereal ref[39] = { .22,.22,.22,.22,.22,.22,.215,.21,.2,.19,
+	    .175,.155,.13,.08,.1,.105,.1,.08,.045,.055,.065,.06,.055,.04,0.,
+	    0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0. };
 
     /* Builtin functions */
     double pow_dd(doublereal *, doublereal *);
 
     /* Local variables */
-    extern /* Subroutine */ int glitalbe_(real *, real *, real *, real *, 
-	    real *);
-    real a, c__, w, ni, nr, wl, rw;
-    extern /* Subroutine */ int morcasiwat_(real *, real *, real *);
-    real rwb, rwc;
+    extern /* Subroutine */ int glitalbe_(doublereal *, doublereal *, 
+	    doublereal *, doublereal *, doublereal *);
+    doublereal a, c__, w, ni, nr, wl, rw;
+    extern /* Subroutine */ int morcasiwat_(doublereal *, doublereal *, 
+	    doublereal *);
+    doublereal rwb, rwc;
     integer iwl;
-    real azw, wlp, wspd, ref_i__;
-    extern /* Subroutine */ int indwat_(real *, real *, real *, real *);
-    real rogalbe;
+    doublereal azw, wlp, wspd, ref_i__;
+    extern /* Subroutine */ int indwat_(doublereal *, doublereal *, 
+	    doublereal *, doublereal *);
+    doublereal rogalbe;
 
 /* INPUT:  pws=speed of wind (in m/s) */
 /*         paw=azim. of sun - azim. of wind (in deg.) */
@@ -71,14 +65,13 @@ static doublereal c_b2 = 3.52;
     wl = *pwl;
 /* COMPUTE WHITECAPS REFLECTANCE (LAMBERTIAN) */
 /*<       W=2.95e-06*(wspd**3.52) >*/
-    d__1 = (doublereal) wspd;
-    w = pow_dd(&d__1, &c_b2) * (float)2.95e-6;
+    w = pow_dd(&wspd, &c_b2) * 2.95e-6;
 /*<       iwl=1+int((wl-0.2)/0.1) >*/
-    iwl = (integer) ((wl - (float).2) / (float).1) + 1;
+    iwl = (integer) ((wl - .2) / .1) + 1;
 /*<       wlp=0.5+(iwl-1)*0.1 >*/
-    wlp = (iwl - 1) * (float).1 + (float).5;
+    wlp = (iwl - 1) * .1 + .5;
 /*<       Ref_i=ref(iwl+1)+(wl-wlp)/0.1*(ref(iwl)-ref(iwl+1)) >*/
-    ref_i__ = ref[iwl] + (wl - wlp) / (float).1 * (ref[iwl - 1] - ref[iwl]);
+    ref_i__ = ref[iwl] + (wl - wlp) / .1 * (ref[iwl - 1] - ref[iwl]);
 /*<       Rwc=W*Ref_i >*/
     rwc = w * ref_i__;
 /* COMPUTE WATER REFRACTION INDEX */
@@ -98,9 +91,9 @@ static doublereal c_b2 = 3.52;
 /* Aspects of Oceanography (N.G. Jerlov and E. Steeman Nielsen,Eds), */
 /* Academic,London,pp. 317-344 */
 /*<       a=0.485 >*/
-    a = (float).485;
+    a = .485;
 /*<       Rwb=(1.-Rogalbe)*(1.-a)*Rw/(1-a*Rw) >*/
-    rwb = ((float)1. - rogalbe) * ((float)1. - a) * rw / (1 - a * rw);
+    rwb = (1. - rogalbe) * (1. - a) * rw / (1 - a * rw);
 /* SPHERICAL ALBEDO OF SEA WATER */
 /*<       brdfalbe=Rwc+(1-W)*Rogalbe+(1-Rwc)*Rwb >*/
     *brdfalbe = rwc + (1 - w) * rogalbe + (1 - rwc) * rwb;

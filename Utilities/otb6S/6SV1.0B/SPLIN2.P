@@ -1,3 +1,3 @@
-extern int splin2_(real *x1a, real *x2a, real *ya, real *y2a, integer *m, integer *n, real *x1, real *x2, real *y);
-/*:ref: splint_ 14 6 6 6 6 4 6 6 */
-/*:ref: spline_ 14 6 6 6 4 6 6 6 */
+extern int splin2_(doublereal *x1a, doublereal *x2a, doublereal *ya, doublereal *y2a, integer *m, integer *n, doublereal *x1, doublereal *x2, doublereal *y);
+/*:ref: splint_ 14 6 7 7 7 4 7 7 */
+/*:ref: spline_ 14 6 7 7 4 7 7 7 */

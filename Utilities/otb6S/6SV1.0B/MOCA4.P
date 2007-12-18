@@ -1,1 +1,1 @@
-extern int moca4_(real *a, integer *inu);
+extern int moca4_(doublereal *a, integer *inu);

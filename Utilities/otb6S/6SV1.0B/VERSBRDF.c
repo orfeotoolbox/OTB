@@ -6,7 +6,6 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
-
 /* OTB patches: replace "f2c.h" by "otb_6S.h" */
 /*#include "f2c.h"*/
 #include "otb_6S.h"
@@ -25,8 +24,9 @@ Extern struct {
 static integer c__1 = 1;
 
 /*<    >*/
-/* Subroutine */ int versbrdf_(integer *option, real *optics, real *struct__, 
-	integer *mu, integer *np, real *rm, real *rp, real *brdfint)
+/* Subroutine */ int versbrdf_(integer *option, doublereal *optics, 
+	doublereal *struct__, integer *mu, integer *np, doublereal *rm, 
+	doublereal *rp, doublereal *brdfint)
 {
     /* Initialized data */
 
@@ -64,10 +64,11 @@ phase function parameter (optics (2) not acceptable                        4\
 
     /* Local variables */
     integer j, k;
-    real fi, pi, mu1, mu2;
-    extern doublereal mvbp1_(integer *, real *, real *, real *, integer *);
+    doublereal fi, pi, mu1, mu2;
+    extern doublereal mvbp1_(integer *, doublereal *, doublereal *, 
+	    doublereal *, integer *);
     integer error;
-    real angles[3];
+    doublereal angles[3];
 
 
 /* interface between the computer code of the model of verstraete and pin 
@@ -134,7 +135,7 @@ phase function parameter (optics (2) not acceptable                        4\
 /*      real mu1,mu2,fi */
 /*      real pi */
 /*<       pi=atan(1.)*4. >*/
-    pi = atan((float)1.) * (float)4.;
+    pi = atan(1.) * 4.;
 /*<       mu1=rm(0) >*/
     mu1 = rm[0];
 /*<       do 1 k=1,np >*/
@@ -161,12 +162,12 @@ phase function parameter (optics (2) not acceptable                        4\
 /*<       angles(2)=acos(mu2) >*/
 	    angles[1] = acos(mu2);
 /*<       if (fi.lt.0.) fi=fi+2.*pi >*/
-	    if (fi < (float)0.) {
-		fi += pi * (float)2.;
+	    if (fi < 0.) {
+		fi += pi * 2.;
 	    }
 /*<       if (fi.gt.(2.*pi)) fi=fi-2.*pi >*/
-	    if (fi > pi * (float)2.) {
-		fi -= pi * (float)2.;
+	    if (fi > pi * 2.) {
+		fi -= pi * 2.;
 	    }
 /*<       angles(3)=fi >*/
 	    angles[2] = fi;

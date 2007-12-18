@@ -12,8 +12,8 @@ extern int s13aaf_();
 extern int tav_();
 extern int valeur_();
 extern int dakg_(doublereal *u, doublereal *a, integer *nq);
-extern int akbrdf_(real *eei, real *thmi, real *uli, real *sli, real *rsl1i, real *wlmoy, real *rnci, real *cabi, real *cwi, real *vaii, integer *mu, integer *np, real *rm, real *rp, real *brdfint);
-extern int akalbe_(real *albbrdf);
+extern int akbrdf_(doublereal *eei, doublereal *thmi, doublereal *uli, doublereal *sli, doublereal *rsl1i, doublereal *wlmoy, doublereal *rnci, doublereal *cabi, doublereal *cwi, doublereal *vaii, integer *mu, integer *np, doublereal *rm, doublereal *rp, doublereal *brdfint);
+extern int akalbe_(doublereal *albbrdf);
 /* comlen count_ 352 */
 /* comlen soildata_ 6472 */
 /* comlen aaa_ 72 */

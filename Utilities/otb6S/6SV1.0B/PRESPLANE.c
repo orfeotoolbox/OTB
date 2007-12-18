@@ -6,7 +6,6 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
-
 /* OTB patches: replace "f2c.h" by "otb_6S.h" */
 /*#include "f2c.h"*/
 #include "otb_6S.h"
@@ -14,19 +13,20 @@ extern "C" {
 /* Common Block Declarations */
 
 Extern struct {
-    real z__[34], p[34], t[34], wh[34], wo[34];
+    doublereal z__[34], p[34], t[34], wh[34], wo[34];
 } sixs_atm__;
 
 #define sixs_atm__1 sixs_atm__
 
 Extern struct {
-    real zpl[34], ppl[34], tpl[34], whpl[34], wopl[34];
+    doublereal zpl[34], ppl[34], tpl[34], whpl[34], wopl[34];
 } sixs_planesim__;
 
 #define sixs_planesim__1 sixs_planesim__
 
 /*<       subroutine presplane(uw,uo3,xpp,ftray) >*/
-/* Subroutine */ int presplane_(real *uw, real *uo3, real *xpp, real *ftray)
+/* Subroutine */ int presplane_(doublereal *uw, doublereal *uo3, doublereal *
+	xpp, doublereal *ftray)
 {
     /* System generated locals */
     integer i__1;
@@ -35,13 +35,13 @@ Extern struct {
     double log(doublereal), exp(doublereal);
 
     /* Local variables */
-    real g;
+    doublereal g;
     integer i__, k;
-    real ds, xa, xb, rp, ps, rt, ro3, air, xwh, xwo, rmo3[34];
+    doublereal ds, xa, xb, rp, ps, rt, ro3, air, xwh, xwo, rmo3[34];
     integer iinf;
-    real xalt, rmwh[34];
+    doublereal xalt, rmwh[34];
     integer isup;
-    real roair, xtemp;
+    doublereal roair, xtemp;
 
 /*<       real z,p,t,wh,wo,zpl,ppl,tpl,whpl,wopl,xa,xb,xalt >*/
 /*<       real xtemp,xwo,xwh,g,air,ro3,rt,rp,roair,ds >*/
@@ -54,8 +54,8 @@ Extern struct {
 /*<       xpp=xpp+z(1) >*/
     *xpp += sixs_atm__1.z__[0];
 /*<       if (xpp.ge.100.) xpp=1000. >*/
-    if (*xpp >= (float)100.) {
-	*xpp = (float)1e3;
+    if (*xpp >= 100.) {
+	*xpp = 1e3;
     }
 /*<       i=0 >*/
     i__ = 0;
@@ -143,28 +143,28 @@ L10:
 /* compute conversion factor for rayleigh optical thickness computation */
 /* ftray=rp/rt */
 /*<       uw=0. >*/
-    *uw = (float)0.;
+    *uw = 0.;
 /*<       uo3=0. >*/
-    *uo3 = (float)0.;
+    *uo3 = 0.;
 /*<       g=98.1 >*/
-    g = (float)98.1;
+    g = 98.1;
 /*<       air=0.028964/0.0224 >*/
-    air = (float)1.2930357142857143;
+    air = 1.2930357142857143;
 /*<       ro3=0.048/0.0224 >*/
-    ro3 = (float)2.1428571428571428;
+    ro3 = 2.1428571428571428;
 /*<       rt=0. >*/
-    rt = (float)0.;
+    rt = 0.;
 /*<       rp=0. >*/
-    rp = (float)0.;
+    rp = 0.;
 /*<       do k=1,33 >*/
     for (k = 1; k <= 33; ++k) {
 /*<         roair=air*273.16*ppl(k)/(1013.25*tpl(k)) >*/
-	roair = air * (float)273.16 * sixs_planesim__1.ppl[k - 1] / (
-		sixs_planesim__1.tpl[k - 1] * (float)1013.25);
+	roair = air * 273.16 * sixs_planesim__1.ppl[k - 1] / (
+		sixs_planesim__1.tpl[k - 1] * 1013.25);
 /*<         rmwh(k)=wh(k)/(roair*1000.) >*/
-	rmwh[k - 1] = sixs_atm__1.wh[k - 1] / (roair * (float)1e3);
+	rmwh[k - 1] = sixs_atm__1.wh[k - 1] / (roair * 1e3);
 /*<         rmo3(k)=wo(k)/(roair*1000.) >*/
-	rmo3[k - 1] = sixs_atm__1.wo[k - 1] / (roair * (float)1e3);
+	rmo3[k - 1] = sixs_atm__1.wo[k - 1] / (roair * 1e3);
 /*<         rt=rt+(p(k+1)/t(k+1)+p(k)/t(k))*(z(k+1)-z(k)) >*/
 	rt += (sixs_atm__1.p[k] / sixs_atm__1.t[k] + sixs_atm__1.p[k - 1] / 
 		sixs_atm__1.t[k - 1]) * (sixs_atm__1.z__[k] - sixs_atm__1.z__[
@@ -183,17 +183,17 @@ L10:
 	ds = (sixs_planesim__1.ppl[k - 2] - sixs_planesim__1.ppl[k - 1]) / 
 		sixs_planesim__1.ppl[0];
 /*<         uw=uw+((rmwh(k)+rmwh(k-1))/2.)*ds >*/
-	*uw += (rmwh[k - 1] + rmwh[k - 2]) / (float)2. * ds;
+	*uw += (rmwh[k - 1] + rmwh[k - 2]) / 2. * ds;
 /*<         uo3=uo3+((rmo3(k)+rmo3(k-1))/2.)*ds >*/
-	*uo3 += (rmo3[k - 1] + rmo3[k - 2]) / (float)2. * ds;
+	*uo3 += (rmo3[k - 1] + rmo3[k - 2]) / 2. * ds;
 /*<       enddo >*/
     }
 /*<       uw=uw*ppl(1)*100./g >*/
-    *uw = *uw * sixs_planesim__1.ppl[0] * (float)100. / g;
+    *uw = *uw * sixs_planesim__1.ppl[0] * 100. / g;
 /*<       uo3=uo3*ppl(1)*100./g >*/
-    *uo3 = *uo3 * sixs_planesim__1.ppl[0] * (float)100. / g;
+    *uo3 = *uo3 * sixs_planesim__1.ppl[0] * 100. / g;
 /*<       uo3=1000.*uo3/ro3 >*/
-    *uo3 = *uo3 * (float)1e3 / ro3;
+    *uo3 = *uo3 * 1e3 / ro3;
 /*<       return >*/
     return 0;
 /*<       end >*/

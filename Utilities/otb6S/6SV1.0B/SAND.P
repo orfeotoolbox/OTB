@@ -1,1 +1,1 @@
-extern int sand_(real *r__);
+extern int sand_(doublereal *r__);

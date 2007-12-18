@@ -1,1 +1,1 @@
-extern int clearw_(real *r__);
+extern int clearw_(doublereal *r__);

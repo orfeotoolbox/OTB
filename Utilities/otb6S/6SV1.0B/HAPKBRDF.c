@@ -6,7 +6,6 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
-
 /* OTB patches: replace "f2c.h" by "otb_6S.h" */
 /*#include "f2c.h"*/
 #include "otb_6S.h"
@@ -16,8 +15,9 @@ extern "C" {
 static doublereal c_b4 = 1.5;
 
 /*<    >*/
-/* Subroutine */ int hapkbrdf_(real *om, real *af, real *s0, real *h__, 
-	integer *mu, integer *np, real *rm, real *rp, real *brdfint)
+/* Subroutine */ int hapkbrdf_(doublereal *om, doublereal *af, doublereal *s0,
+	 doublereal *h__, integer *mu, integer *np, doublereal *rm, 
+	doublereal *rp, doublereal *brdfint)
 {
     /* System generated locals */
     integer rm_offset, brdfint_dim1, brdfint_offset, i__1, i__2;
@@ -28,9 +28,9 @@ static doublereal c_b4 = 1.5;
 	    *), acos(doublereal), tan(doublereal);
 
     /* Local variables */
-    real f, g;
+    doublereal f, g;
     integer j, k;
-    real h1, h2, p0, bg, cg, fi, pg, mu1, mu2, h1h2;
+    doublereal h1, h2, p0, bg, cg, fi, pg, mu1, mu2, h1h2;
 
 /*<       integer mu,np,k,j >*/
 /*<       real rm(-mu:mu),rp(np),brdfint(-mu:mu,np) >*/
@@ -78,31 +78,28 @@ static doublereal c_b4 = 1.5;
 /*<          endif >*/
 	    }
 /*<       cg=mu1*mu2+sqrt(1.-mu1*mu1)*sqrt(1.-mu2*mu2)*cos(fi) >*/
-	    cg = mu1 * mu2 + sqrt((float)1. - mu1 * mu1) * sqrt((float)1. - 
-		    mu2 * mu2) * cos(fi);
+	    cg = mu1 * mu2 + sqrt(1. - mu1 * mu1) * sqrt(1. - mu2 * mu2) * 
+		    cos(fi);
 /*<       f=om/4./(mu2+mu1) >*/
-	    f = *om / (float)4. / (mu2 + mu1);
+	    f = *om / 4. / (mu2 + mu1);
 /*<       h1=(1.+2*mu1)/(1.+2.*sqrt(1.-om)*mu1) >*/
-	    h1 = (mu1 * 2 + (float)1.) / (sqrt((float)1. - *om) * (float)2. * 
-		    mu1 + (float)1.);
+	    h1 = (mu1 * 2 + 1.) / (sqrt(1. - *om) * 2. * mu1 + 1.);
 /*<       h2=(1.+2*mu2)/(1.+2.*sqrt(1.-om)*mu2) >*/
-	    h2 = (mu2 * 2 + (float)1.) / (sqrt((float)1. - *om) * (float)2. * 
-		    mu2 + (float)1.);
+	    h2 = (mu2 * 2 + 1.) / (sqrt(1. - *om) * 2. * mu2 + 1.);
 /*<       h1h2=h1*h2 >*/
 	    h1h2 = h1 * h2;
 /*<       pg=(1-af*af)/((1+af*af+2*af*cg)**1.5) >*/
-	    d__1 = (doublereal) (*af * *af + 1 + *af * 2 * cg);
+	    d__1 = *af * *af + 1 + *af * 2 * cg;
 	    pg = (1 - *af * *af) / pow_dd(&d__1, &c_b4);
 /*<       p0=(1-af*af)/((1+af*af+2*af)**1.5) >*/
-	    d__1 = (doublereal) (*af * *af + 1 + *af * 2);
+	    d__1 = *af * *af + 1 + *af * 2;
 	    p0 = (1 - *af * *af) / pow_dd(&d__1, &c_b4);
 /*<       g=acos(cg) >*/
 	    g = acos(cg);
 /*<       bg=(s0/(om*p0))/(1+tan(g/2.)/h) >*/
-	    bg = *s0 / (*om * p0) / (tan(g / (float)2.) / *h__ + 1);
+	    bg = *s0 / (*om * p0) / (tan(g / 2.) / *h__ + 1);
 /*<       brdfint(j,k)=f*((1.+bg)*pg+h1h2-1.) >*/
-	    brdfint[j + k * brdfint_dim1] = f * ((bg + (float)1.) * pg + h1h2 
-		    - (float)1.);
+	    brdfint[j + k * brdfint_dim1] = f * ((bg + 1.) * pg + h1h2 - 1.);
 /*<   2   continue >*/
 /* L2: */
 	}

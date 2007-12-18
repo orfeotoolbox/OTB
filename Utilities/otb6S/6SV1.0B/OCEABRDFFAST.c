@@ -6,15 +6,14 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
-
 /* OTB patches: replace "f2c.h" by "otb_6S.h" */
 /*#include "f2c.h"*/
 #include "otb_6S.h"
 
 /*<    >*/
-/* Subroutine */ int oceabrdffast_(real *pws, real *paw, real *xsal, real *
-	pcl, real *pwl, integer *mu, integer *np, real *rm, real *rp, real *
-	brdfint)
+/* Subroutine */ int oceabrdffast_(doublereal *pws, doublereal *paw, 
+	doublereal *xsal, doublereal *pcl, doublereal *pwl, integer *mu, 
+	integer *np, doublereal *rm, doublereal *rp, doublereal *brdfint)
 {
 
     /* System generated locals */
@@ -24,12 +23,14 @@ extern "C" {
     double atan(doublereal), acos(doublereal), sqrt(doublereal);
 
     /* Local variables */
-    extern /* Subroutine */ int sunglint_(real *, real *, real *, real *, 
-	    real *, real *, real *, real *);
-    real a, c__;
+    extern /* Subroutine */ int sunglint_(doublereal *, doublereal *, 
+	    doublereal *, doublereal *, doublereal *, doublereal *, 
+	    doublereal *, doublereal *);
+    doublereal a, c__;
     integer j, k;
-    real fi, n12, ni, pi, nr, wl, fac, rog, azw, wspd, tetas, tetav;
-    extern /* Subroutine */ int indwat_(real *, real *, real *, real *);
+    doublereal fi, n12, ni, pi, nr, wl, fac, rog, azw, wspd, tetas, tetav;
+    extern /* Subroutine */ int indwat_(doublereal *, doublereal *, 
+	    doublereal *, doublereal *);
 
 
 /* INPUT:  pws=wind speed (in m/s) */
@@ -74,9 +75,9 @@ g*/
 /*<       wl=pwl >*/
     wl = *pwl;
 /*<       pi=atan(1.)*4. >*/
-    pi = atan((float)1.) * (float)4.;
+    pi = atan(1.) * 4.;
 /*<       fac=pi/180. >*/
-    fac = pi / (float)180.;
+    fac = pi / 180.;
 /*<       tetas=acos(rm(0))/fac >*/
     tetas = acos(rm[0]) / fac;
 /* COMPUTE INDEX OF WATER */
@@ -156,12 +157,12 @@ g*/
 /*<            endif >*/
 	    }
 /*<            if (fi.lt.0.) fi=fi+2.*pi >*/
-	    if (fi < (float)0.) {
-		fi += pi * (float)2.;
+	    if (fi < 0.) {
+		fi += pi * 2.;
 	    }
 /*<            if (fi.gt.(2.*pi)) fi=fi-2.*pi >*/
-	    if (fi > pi * (float)2.) {
-		fi -= pi * (float)2.;
+	    if (fi > pi * 2.) {
+		fi -= pi * 2.;
 	    }
 /*<            fi=fi/fac >*/
 	    fi /= fac;
@@ -171,7 +172,7 @@ g*/
 /*  water reflectance above the sea surface */
 /* for explanation on value of a see OCEAALBE.f */
 /*<            a=0.485 >*/
-	    a = (float).485;
+	    a = .485;
 /* add change in solid angle from under to above to surface */
 /* that account for 1/(n12*n12) decrease in sea water directional 
 */

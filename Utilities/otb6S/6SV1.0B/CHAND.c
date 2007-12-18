@@ -6,23 +6,20 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
-
 /* OTB patches: replace "f2c.h" by "otb_6S.h" */
 /*#include "f2c.h"*/
 #include "otb_6S.h"
 
 /*< 	s >*/
-/* Subroutine */ int chand_(real *xphi, real *xmuv, real *xmus, real *xtau, 
-	real *xrray)
+/* Subroutine */ int chand_(doublereal *xphi, doublereal *xmuv, doublereal *
+	xmus, doublereal *xtau, doublereal *xrray)
 {
     /* Initialized data */
 
-    static real as0[10] = { (float).33243832,(float)-.06777104,(float)
-	    .1628537,(float).001577425,(float)-.30924818,(float)-.01240906,(
-	    float)-.10324388,(float).03241678,(float).11493334,(float)
-	    -.03503695 };
-    static real as1[2] = { (float).19666292,(float)-.05439061 };
-    static real as2[2] = { (float).14545937,(float)-.02910845 };
+    static doublereal as0[10] = { .33243832,-.06777104,.1628537,.001577425,
+	    -.30924818,-.01240906,-.10324388,.03241678,.11493334,-.03503695 };
+    static doublereal as1[2] = { .19666292,-.05439061 };
+    static doublereal as2[2] = { .14545937,-.02910845 };
 
     /* Builtin functions */
     double cos(doublereal), sqrt(doublereal), exp(doublereal), log(doublereal)
@@ -30,8 +27,8 @@ extern "C" {
 
     /* Local variables */
     integer i__;
-    real pi, pl[10], fs0, fs1, fs2, xp1, xp2, xp3, fac, xfd, xph1, xph2, xph3,
-	     xdep, xitm, phios, cfonc1, cfonc2, cfonc3, xbeta2, xcosf1, 
+    doublereal pi, pl[10], fs0, fs1, fs2, xp1, xp2, xp3, fac, xfd, xph1, xph2,
+	     xph3, xdep, xitm, phios, cfonc1, cfonc2, cfonc3, xbeta2, xcosf1, 
 	    xcosf2, xcosf3, xitot1, xitot2, xitot3, xlntau;
 
 /* input parameters: xphi,xmus,xmuv,xtau */
@@ -53,37 +50,36 @@ extern "C" {
 /*< 	data (as1(i),i=1,2) /.19666292, -5.439061e-02/ >*/
 /*< 	data (as2(i),i=1,2) /.14545937,-2.910845e-02/ >*/
 /*< 	pi=3.1415927 >*/
-    pi = (float)3.1415927;
+    pi = 3.1415927;
 /*< 	fac=pi/180. >*/
-    fac = pi / (float)180.;
+    fac = pi / 180.;
 /*< 	phios=180.-xphi >*/
-    phios = (float)180. - *xphi;
+    phios = 180. - *xphi;
 /*< 	xcosf1=1. >*/
-    xcosf1 = (float)1.;
+    xcosf1 = 1.;
 /*< 	xcosf2=cos(phios*fac) >*/
     xcosf2 = cos(phios * fac);
 /*< 	xcosf3=cos(2*phios*fac) >*/
     xcosf3 = cos(phios * 2 * fac);
 /*< 	xbeta2=0.5 >*/
-    xbeta2 = (float).5;
+    xbeta2 = .5;
 /*< 	xdep=0.0279 >*/
-    xdep = (float).0279;
+    xdep = .0279;
 /*< 	xfd=xdep/(2-xdep) >*/
     xfd = xdep / (2 - xdep);
 /*< 	xfd=(1-xfd)/(1+2*xfd) >*/
     xfd = (1 - xfd) / (xfd * 2 + 1);
 /*< 	xph1=1+(3*xmus*xmus-1)*(3*xmuv*xmuv-1)*xfd/8. >*/
-    xph1 = (*xmus * 3 * *xmus - 1) * (*xmuv * 3 * *xmuv - 1) * xfd / (float)
-	    8. + 1;
+    xph1 = (*xmus * 3 * *xmus - 1) * (*xmuv * 3 * *xmuv - 1) * xfd / 8. + 1;
 /*< 	xph2=-xmus*xmuv*sqrt(1-xmus*xmus)*sqrt(1-xmuv*xmuv) >*/
     xph2 = -(*xmus) * *xmuv * sqrt(1 - *xmus * *xmus) * sqrt(1 - *xmuv * *
 	    xmuv);
 /*< 	xph2=xph2*xfd*xbeta2*1.5 >*/
-    xph2 = xph2 * xfd * xbeta2 * (float)1.5;
+    xph2 = xph2 * xfd * xbeta2 * 1.5;
 /*< 	xph3=(1-xmus*xmus)*(1-xmuv*xmuv) >*/
     xph3 = (1 - *xmus * *xmus) * (1 - *xmuv * *xmuv);
 /*< 	xph3=xph3*xfd*xbeta2*0.375 >*/
-    xph3 = xph3 * xfd * xbeta2 * (float).375;
+    xph3 = xph3 * xfd * xbeta2 * .375;
 /*< 	xitm=(1-exp(-xtau*(1/xmus+1/xmuv)))*xmus/(4*(xmus+xmuv)) >*/
     xitm = (1 - exp(-(*xtau) * (1 / *xmus + 1 / *xmuv))) * *xmus / ((*xmus + *
 	    xmuv) * 4);
@@ -104,7 +100,7 @@ extern "C" {
 /*< 	xlntau=log(xtau) >*/
     xlntau = log(*xtau);
 /*< 	pl(1)=1. >*/
-    pl[0] = (float)1.;
+    pl[0] = 1.;
 /*< 	pl(2)=xlntau >*/
     pl[1] = xlntau;
 /*< 	pl(3)=xmus+xmuv >*/
@@ -124,7 +120,7 @@ extern "C" {
 /*< 	pl(10)=xlntau*pl(9) >*/
     pl[9] = xlntau * pl[8];
 /*< 	fs0=0. >*/
-    fs0 = (float)0.;
+    fs0 = 0.;
 /*< 	do i=1,10 >*/
     for (i__ = 1; i__ <= 10; ++i__) {
 /*< 	fs0=fs0+pl(i)*as0(i) >*/

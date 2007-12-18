@@ -1,15 +1,15 @@
-extern E_f ro_1__(real *theta_i__, real *phi_i__, real *theta_e__, real *phi_e__);
-extern E_f gamma_f__(real *theta_p__, real *phi_p__, real *theta, real *phi);
-extern E_f geo_(real *theta_i__, real *phi_i__, real *theta_e__, real *phi_e__);
-extern E_f h_(real *xl, real *xli);
-extern E_f g_f__(real *theta);
-extern E_f psi_(real *theta, real *xt);
-extern E_f gl_(real *theta);
-extern int gauleg_(real *x1, real *x2, real *x, real *w, integer *n);
-extern int solve_(real *theta_i__);
+extern doublereal ro_1__(doublereal *theta_i__, doublereal *phi_i__, doublereal *theta_e__, doublereal *phi_e__);
+extern doublereal gamma_f__(doublereal *theta_p__, doublereal *phi_p__, doublereal *theta, doublereal *phi);
+extern doublereal geo_(doublereal *theta_i__, doublereal *phi_i__, doublereal *theta_e__, doublereal *phi_e__);
+extern doublereal h_(doublereal *xl, doublereal *xli);
+extern doublereal g_f__(doublereal *theta);
+extern doublereal psi_(doublereal *theta, doublereal *xt);
+extern doublereal gl_(doublereal *theta);
+extern int gauleg_(doublereal *x1, doublereal *x2, doublereal *x, doublereal *w, integer *n);
+extern int solve_(doublereal *theta_i__);
 extern int lad_();
-/* comlen gauss_m__ 164 */
-/* comlen p_ 24 */
-/* comlen ro_ 12 */
-/* comlen ld_ 16 */
-/* comlen l_ 8 */
+/* comlen gauss_m__ 324 */
+/* comlen p_ 44 */
+/* comlen ro_ 24 */
+/* comlen ld_ 32 */
+/* comlen l_ 16 */

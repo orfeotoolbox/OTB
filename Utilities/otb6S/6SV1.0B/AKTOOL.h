@@ -44,22 +44,22 @@ extern int otb_6s_dakg_(
   otb_6s_integer *nq
   );
 extern int otb_6s_akbrdf_(
-  otb_6s_real *eei,
-  otb_6s_real *thmi,
-  otb_6s_real *uli,
-  otb_6s_real *sli,
-  otb_6s_real *rsl1i,
-  otb_6s_real *wlmoy,
-  otb_6s_real *rnci,
-  otb_6s_real *cabi,
-  otb_6s_real *cwi,
-  otb_6s_real *vaii,
+  otb_6s_doublereal *eei,
+  otb_6s_doublereal *thmi,
+  otb_6s_doublereal *uli,
+  otb_6s_doublereal *sli,
+  otb_6s_doublereal *rsl1i,
+  otb_6s_doublereal *wlmoy,
+  otb_6s_doublereal *rnci,
+  otb_6s_doublereal *cabi,
+  otb_6s_doublereal *cwi,
+  otb_6s_doublereal *vaii,
   otb_6s_integer *mu,
   otb_6s_integer *np,
-  otb_6s_real *rm,
-  otb_6s_real *rp,
-  otb_6s_real *brdfint
+  otb_6s_doublereal *rm,
+  otb_6s_doublereal *rp,
+  otb_6s_doublereal *brdfint
   );
 extern int otb_6s_akalbe_(
-  otb_6s_real *albbrdf
+  otb_6s_doublereal *albbrdf
   );

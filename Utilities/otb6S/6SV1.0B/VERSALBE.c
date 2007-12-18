@@ -6,7 +6,6 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
-
 /* OTB patches: replace "f2c.h" by "otb_6S.h" */
 /*#include "f2c.h"*/
 #include "otb_6S.h"
@@ -25,11 +24,11 @@ Extern struct {
 static integer c__24 = 24;
 static integer c__48 = 48;
 static integer c__1 = 1;
-static integer c__4 = 4;
+static integer c__5 = 5;
 
 /*<    >*/
-/* Subroutine */ int versalbe_(integer *option, real *optics, real *struct__, 
-	real *brdfalb)
+/* Subroutine */ int versalbe_(integer *option, doublereal *optics, 
+	doublereal *struct__, doublereal *brdfalb)
 {
     /* Initialized data */
 
@@ -69,13 +68,14 @@ phase function parameter (optics (2) not acceptable                        4\
 
     /* Local variables */
     integer j, k, l;
-    real y, fa[48], fi, ta[24], pi, si1, si2, mu1, mu2, wfa[48], wta[24], 
-	    phi1, phi2, pond, summ, teta1, teta2;
-    extern doublereal mvbp1_(integer *, real *, real *, real *, integer *);
-    extern /* Subroutine */ int gauss_(real *, real *, real *, real *, 
-	    integer *);
+    doublereal y, fa[48], fi, ta[24], pi, si1, si2, mu1, mu2, wfa[48], wta[24]
+	    , phi1, phi2, pond, summ, teta1, teta2;
+    extern doublereal mvbp1_(integer *, doublereal *, doublereal *, 
+	    doublereal *, integer *);
+    extern /* Subroutine */ int gauss_(doublereal *, doublereal *, doublereal 
+	    *, doublereal *, integer *);
     integer error;
-    real angles[3];
+    doublereal angles[3];
 
     /* Fortran I/O blocks */
     static cilist io___24 = { 0, 0, 0, 0, 0 };
@@ -140,23 +140,23 @@ phase function parameter (optics (2) not acceptable                        4\
 /*<    >*/
 
 /*<       pi=atan(1.)*4. >*/
-    pi = atan((float)1.) * (float)4.;
+    pi = atan(1.) * 4.;
 /*<       teta1=0. >*/
-    teta1 = (float)0.;
+    teta1 = 0.;
 /*<       teta2=pi/2. >*/
-    teta2 = pi / (float)2.;
+    teta2 = pi / 2.;
 /*<       call gauss(teta1,teta2,ta,wta,nta) >*/
     gauss_(&teta1, &teta2, ta, wta, &c__24);
 /*<       phi1=0. >*/
-    phi1 = (float)0.;
+    phi1 = 0.;
 /*<       phi2=2.*pi >*/
-    phi2 = pi * (float)2.;
+    phi2 = pi * 2.;
 /*<       call gauss(phi1,phi2,fa,wfa,nfa) >*/
     gauss_(&phi1, &phi2, fa, wfa, &c__48);
 /*<       brdfalb=0. >*/
-    *brdfalb = (float)0.;
+    *brdfalb = 0.;
 /*<       summ=0. >*/
-    summ = (float)0.;
+    summ = 0.;
 /*<       do 1 k=1,nfa >*/
     for (k = 1; k <= 48; ++k) {
 /*<       do 2 j=1,nta >*/
@@ -240,8 +240,8 @@ phase function parameter (optics (2) not acceptable                        4\
 /*<          write(iwr,*) angles(1) >*/
 		    io___24.ciunit = sixs_ier__1.iwr;
 		    s_wsle(&io___24);
-		    do_lio(&c__4, &c__1, (char *)&angles[0], (ftnlen)sizeof(
-			    real));
+		    do_lio(&c__5, &c__1, (char *)&angles[0], (ftnlen)sizeof(
+			    doublereal));
 		    e_wsle();
 /*<          endif >*/
 		}
@@ -257,8 +257,8 @@ phase function parameter (optics (2) not acceptable                        4\
 /*<          write(iwr,*) angles(2) >*/
 		    io___25.ciunit = sixs_ier__1.iwr;
 		    s_wsle(&io___25);
-		    do_lio(&c__4, &c__1, (char *)&angles[1], (ftnlen)sizeof(
-			    real));
+		    do_lio(&c__5, &c__1, (char *)&angles[1], (ftnlen)sizeof(
+			    doublereal));
 		    e_wsle();
 /*<          endif >*/
 		}

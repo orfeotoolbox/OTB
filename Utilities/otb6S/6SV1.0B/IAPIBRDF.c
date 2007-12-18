@@ -6,7 +6,6 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
-
 /* OTB patches: replace "f2c.h" by "otb_6S.h" */
 /*#include "f2c.h"*/
 #include "otb_6S.h"
@@ -21,27 +20,27 @@ Extern struct {
 #define sixs_ier__1 sixs_ier__
 
 Extern struct {
-    real xgm[20], wgm[20];
+    doublereal xgm[20], wgm[20];
     integer n;
 } gauss_m__;
 
 #define gauss_m__1 gauss_m__
 
 Extern struct {
-    real xlt, rl, tl, rs, c__;
+    doublereal xlt, rl, tl, rs, c__;
     integer ild;
 } p_;
 
 #define p_1 p_
 
 Extern struct {
-    real a_ld__, b_ld__, c_ld__, d_ld__;
+    doublereal a_ld__, b_ld__, c_ld__, d_ld__;
 } ld_;
 
 #define ld_1 ld_
 
 Extern struct {
-    real ro_1_c__, ro_1_s__, ro_mult__;
+    doublereal ro_1_c__, ro_1_s__, ro_mult__;
 } ro_;
 
 #define ro_1 ro_
@@ -50,13 +49,14 @@ Extern struct {
 
 static integer c__9 = 9;
 static integer c__1 = 1;
-static real c_b52 = (float)-1.;
-static real c_b53 = (float)1.;
+static doublereal c_b52 = -1.;
+static doublereal c_b53 = 1.;
 
 /*<    >*/
-/* Subroutine */ int iapibrdf_(integer *pild, real *pxlt, real *prl, real *
-	ptl, real *prs, integer *pihs, real *pc, integer *mu, integer *np, 
-	real *rm, real *rp, real *brdfint)
+/* Subroutine */ int iapibrdf_(integer *pild, doublereal *pxlt, doublereal *
+	prl, doublereal *ptl, doublereal *prs, integer *pihs, doublereal *pc, 
+	integer *mu, integer *np, doublereal *rm, doublereal *rp, doublereal *
+	brdfint)
 {
     /* System generated locals */
     integer rm_offset, brdfint_dim1, brdfint_offset, i__1, i__2;
@@ -69,14 +69,15 @@ static real c_b53 = (float)1.;
 
     /* Local variables */
     integer j, k;
-    real fi, mu1, mu2;
+    doublereal fi, mu1, mu2;
     extern /* Subroutine */ int lad_();
     integer ihs;
-    extern doublereal ro_1__(real *, real *, real *, real *);
-    real phi_i__, phi_v__;
-    extern /* Subroutine */ int solve_(real *), gauleg_(real *, real *, real *
-	    , real *, integer *);
-    real theta_i__, theta_v__;
+    extern doublereal ro_1__(doublereal *, doublereal *, doublereal *, 
+	    doublereal *);
+    doublereal phi_i__, phi_v__;
+    extern /* Subroutine */ int solve_(doublereal *), gauleg_(doublereal *, 
+	    doublereal *, doublereal *, doublereal *, integer *);
+    doublereal theta_i__, theta_v__;
 
     /* Fortran I/O blocks */
     static cilist io___2 = { 0, 6, 0, 0, 0 };
@@ -182,7 +183,7 @@ static real c_b53 = (float)1.;
 /*<             endif >*/
     }
 /*<             if (xlt.le.0.) then >*/
-    if (p_1.xlt <= (float)0.) {
+    if (p_1.xlt <= 0.) {
 /*<               print*,'Leaf area index < 0. !' >*/
 	s_wsle(&io___3);
 	do_lio(&c__9, &c__1, "Leaf area index < 0. !", 22L);
@@ -192,7 +193,7 @@ static real c_b53 = (float)1.;
 /*<             endif >*/
     }
 /*<             if (xlt.lt.1.) then >*/
-    if (p_1.xlt < (float)1.) {
+    if (p_1.xlt < 1.) {
 /*<               print*,'Leaf area index < 1. !' >*/
 	s_wsle(&io___4);
 	do_lio(&c__9, &c__1, "Leaf area index < 1. !", 22L);
@@ -200,7 +201,7 @@ static real c_b53 = (float)1.;
 /*<             endif >*/
     }
 /*<             if (xlt.gt.15.) then >*/
-    if (p_1.xlt > (float)15.) {
+    if (p_1.xlt > 15.) {
 /*<               print*,'Leaf area index > 15. !' >*/
 	s_wsle(&io___5);
 	do_lio(&c__9, &c__1, "Leaf area index > 15. !", 23L);
@@ -208,7 +209,7 @@ static real c_b53 = (float)1.;
 /*<             endif >*/
     }
 /*<             if (Rl.lt.0.) then >*/
-    if (p_1.rl < (float)0.) {
+    if (p_1.rl < 0.) {
 /*<               print*,'Leaf reflectance < 0. !' >*/
 	s_wsle(&io___6);
 	do_lio(&c__9, &c__1, "Leaf reflectance < 0. !", 23L);
@@ -218,7 +219,7 @@ static real c_b53 = (float)1.;
 /*<             endif >*/
     }
 /*<             if (Rl.gt..99) then >*/
-    if (p_1.rl > (float).99) {
+    if (p_1.rl > .99) {
 /*<               print*,'Leaf reflectance > .99 !' >*/
 	s_wsle(&io___7);
 	do_lio(&c__9, &c__1, "Leaf reflectance > .99 !", 24L);
@@ -228,7 +229,7 @@ static real c_b53 = (float)1.;
 /*<             endif >*/
     }
 /*<             if (Tl.lt.0.) then >*/
-    if (p_1.tl < (float)0.) {
+    if (p_1.tl < 0.) {
 /*<               print*,'Leaf transmittance < 0. !' >*/
 	s_wsle(&io___8);
 	do_lio(&c__9, &c__1, "Leaf transmittance < 0. !", 25L);
@@ -238,7 +239,7 @@ static real c_b53 = (float)1.;
 /*<             endif >*/
     }
 /*<             if (Tl.gt..99) then >*/
-    if (p_1.tl > (float).99) {
+    if (p_1.tl > .99) {
 /*<               print*,'Leaf transmittance > .99 !' >*/
 	s_wsle(&io___9);
 	do_lio(&c__9, &c__1, "Leaf transmittance > .99 !", 26L);
@@ -248,7 +249,7 @@ static real c_b53 = (float)1.;
 /*<             endif >*/
     }
 /*<             if (Rl+Tl.gt..99) then >*/
-    if (p_1.rl + p_1.tl > (float).99) {
+    if (p_1.rl + p_1.tl > .99) {
 /*<               print*,'Single scattering albedo > .99 !' >*/
 	s_wsle(&io___10);
 	do_lio(&c__9, &c__1, "Single scattering albedo > .99 !", 32L);
@@ -258,7 +259,7 @@ static real c_b53 = (float)1.;
 /*<             endif >*/
     }
 /*<             if (Rs.lt.0.) then >*/
-    if (p_1.rs < (float)0.) {
+    if (p_1.rs < 0.) {
 /*<               print*,'Soil albedo < 0. !' >*/
 	s_wsle(&io___11);
 	do_lio(&c__9, &c__1, "Soil albedo < 0. !", 18L);
@@ -268,7 +269,7 @@ static real c_b53 = (float)1.;
 /*<             endif >*/
     }
 /*<             if (Rs.gt..99) then >*/
-    if (p_1.rs > (float).99) {
+    if (p_1.rs > .99) {
 /*<               print*,'Soil albedo > .99 !' >*/
 	s_wsle(&io___12);
 	do_lio(&c__9, &c__1, "Soil albedo > .99 !", 19L);
@@ -278,7 +279,7 @@ static real c_b53 = (float)1.;
 /*<             endif >*/
     }
 /*<             if (c.lt.0.) then >*/
-    if (p_1.c__ < (float)0.) {
+    if (p_1.c__ < 0.) {
 /*<               print*,'Hot-spot parameter < 0. !' >*/
 	s_wsle(&io___13);
 	do_lio(&c__9, &c__1, "Hot-spot parameter < 0. !", 25L);
@@ -288,7 +289,7 @@ static real c_b53 = (float)1.;
 /*<             endif >*/
     }
 /*<             if (c.gt.2.) then >*/
-    if (p_1.c__ > (float)2.) {
+    if (p_1.c__ > 2.) {
 /*<               print*,'Hot-spot parameter > 2. !' >*/
 	s_wsle(&io___14);
 	do_lio(&c__9, &c__1, "Hot-spot parameter > 2. !", 25L);
@@ -305,7 +306,7 @@ static real c_b53 = (float)1.;
 
 /*<         if (ihs.eq.0) c=0. >*/
     if (ihs == 0) {
-	p_1.c__ = (float)0.;
+	p_1.c__ = 0.;
     }
 
 /*<       mu1=rm(0) >*/
@@ -313,7 +314,7 @@ static real c_b53 = (float)1.;
 /*<       Theta_i=acos(mu1) >*/
     theta_i__ = acos(mu1);
 /*<       Theta_i=Pi-Theta_i >*/
-    theta_i__ = (float)3.141592653589793 - theta_i__;
+    theta_i__ = 3.141592653589793 - theta_i__;
 
 
 /* - Gauss's quadrature (n points) */
@@ -349,17 +350,17 @@ static real c_b53 = (float)1.;
 /*<       Theta_v=acos(mu2) >*/
 	    theta_v__ = acos(mu2);
 /*<       if (fi.lt.0.) fi=fi+2.*pi >*/
-	    if (fi < (float)0.) {
-		fi += (float)6.2831853071795862;
+	    if (fi < 0.) {
+		fi += 6.2831853071795862;
 	    }
 /*<       if (fi.gt.(2.*pi)) fi=fi-2.*pi >*/
-	    if (fi > (float)6.2831853071795862) {
-		fi += (float)-6.2831853071795862;
+	    if (fi > 6.2831853071795862) {
+		fi += -6.2831853071795862;
 	    }
 /*<       Phi_i=fi >*/
 	    phi_i__ = fi;
 /*<       Phi_v=0. >*/
-	    phi_v__ = (float)0.;
+	    phi_v__ = 0.;
 /*<       brdfint(j,k)=Ro_1(Theta_i,Phi_i,Theta_v,Phi_v)+Ro_mult >*/
 	    brdfint[j + k * brdfint_dim1] = ro_1__(&theta_i__, &phi_i__, &
 		    theta_v__, &phi_v__) + ro_1.ro_mult__;

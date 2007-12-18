@@ -6,7 +6,6 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
-
 /* OTB patches: replace "f2c.h" by "otb_6S.h" */
 /*#include "f2c.h"*/
 #include "otb_6S.h"
@@ -14,7 +13,7 @@ extern "C" {
 /* Common Block Declarations */
 
 Extern struct {
-    real z__[34], p[34], t[34], wh[34], wo[34];
+    doublereal z__[34], p[34], t[34], wh[34], wo[34];
 } sixs_atm__;
 
 #define sixs_atm__1 sixs_atm__
@@ -24,42 +23,23 @@ Extern struct {
 {
     /* Initialized data */
 
-    static real z2[34] = { (float)0.,(float)1.,(float)2.,(float)3.,(float)4.,(
-	    float)5.,(float)6.,(float)7.,(float)8.,(float)9.,(float)10.,(
-	    float)11.,(float)12.,(float)13.,(float)14.,(float)15.,(float)16.,(
-	    float)17.,(float)18.,(float)19.,(float)20.,(float)21.,(float)22.,(
-	    float)23.,(float)24.,(float)25.,(float)30.,(float)35.,(float)40.,(
-	    float)45.,(float)50.,(float)70.,(float)100.,(float)99999. };
-    static real p2[34] = { (float)1013.,(float)902.,(float)802.,(float)710.,(
-	    float)628.,(float)554.,(float)487.,(float)426.,(float)372.,(float)
-	    324.,(float)281.,(float)243.,(float)209.,(float)179.,(float)153.,(
-	    float)130.,(float)111.,(float)95.,(float)81.2,(float)69.5,(float)
-	    59.5,(float)51.,(float)43.7,(float)37.6,(float)32.2,(float)27.7,(
-	    float)13.2,(float)6.52,(float)3.33,(float)1.76,(float).951,(float)
-	    .0671,(float)3e-4,(float)0. };
-    static real t2[34] = { (float)294.,(float)290.,(float)285.,(float)279.,(
-	    float)273.,(float)267.,(float)261.,(float)255.,(float)248.,(float)
-	    242.,(float)235.,(float)229.,(float)222.,(float)216.,(float)216.,(
-	    float)216.,(float)216.,(float)216.,(float)216.,(float)217.,(float)
-	    218.,(float)219.,(float)220.,(float)222.,(float)223.,(float)224.,(
-	    float)234.,(float)245.,(float)258.,(float)270.,(float)276.,(float)
-	    218.,(float)210.,(float)210. };
-    static real wh2[34] = { (float)14.,(float)9.3,(float)5.9,(float)3.3,(
-	    float)1.9,(float)1.,(float).61,(float).37,(float).21,(float).12,(
-	    float).064,(float).022,(float).006,(float).0018,(float).001,(
-	    float)7.6e-4,(float)6.4e-4,(float)5.6e-4,(float)5e-4,(float)
-	    4.9e-4,(float)4.5e-4,(float)5.1e-4,(float)5.1e-4,(float)5.4e-4,(
-	    float)6e-4,(float)6.7e-4,(float)3.6e-4,(float)1.1e-4,(float)
-	    4.3e-5,(float)1.9e-5,(float)1.3e-6,(float)1.4e-7,(float)1e-9,(
-	    float)0. };
-    static real wo2[34] = { (float)6e-5,(float)6e-5,(float)6e-5,(float)6.2e-5,
-	    (float)6.4e-5,(float)6.6e-5,(float)6.9e-5,(float)7.5e-5,(float)
-	    7.9e-5,(float)8.6e-5,(float)9e-5,(float)1.1e-4,(float)1.2e-4,(
-	    float)1.5e-4,(float)1.8e-4,(float)1.9e-4,(float)2.1e-4,(float)
-	    2.4e-4,(float)2.8e-4,(float)3.2e-4,(float)3.4e-4,(float)3.6e-4,(
-	    float)3.6e-4,(float)3.4e-4,(float)3.2e-4,(float)3e-4,(float)2e-4,(
-	    float)9.2e-5,(float)4.1e-5,(float)1.3e-5,(float)4.3e-6,(float)
-	    8.6e-8,(float)4.3e-11,(float)0. };
+    static doublereal z2[34] = { 0.,1.,2.,3.,4.,5.,6.,7.,8.,9.,10.,11.,12.,
+	    13.,14.,15.,16.,17.,18.,19.,20.,21.,22.,23.,24.,25.,30.,35.,40.,
+	    45.,50.,70.,100.,99999. };
+    static doublereal p2[34] = { 1013.,902.,802.,710.,628.,554.,487.,426.,
+	    372.,324.,281.,243.,209.,179.,153.,130.,111.,95.,81.2,69.5,59.5,
+	    51.,43.7,37.6,32.2,27.7,13.2,6.52,3.33,1.76,.951,.0671,3e-4,0. };
+    static doublereal t2[34] = { 294.,290.,285.,279.,273.,267.,261.,255.,248.,
+	    242.,235.,229.,222.,216.,216.,216.,216.,216.,216.,217.,218.,219.,
+	    220.,222.,223.,224.,234.,245.,258.,270.,276.,218.,210.,210. };
+    static doublereal wh2[34] = { 14.,9.3,5.9,3.3,1.9,1.,.61,.37,.21,.12,.064,
+	    .022,.006,.0018,.001,7.6e-4,6.4e-4,5.6e-4,5e-4,4.9e-4,4.5e-4,
+	    5.1e-4,5.1e-4,5.4e-4,6e-4,6.7e-4,3.6e-4,1.1e-4,4.3e-5,1.9e-5,
+	    1.3e-6,1.4e-7,1e-9,0. };
+    static doublereal wo2[34] = { 6e-5,6e-5,6e-5,6.2e-5,6.4e-5,6.6e-5,6.9e-5,
+	    7.5e-5,7.9e-5,8.6e-5,9e-5,1.1e-4,1.2e-4,1.5e-4,1.8e-4,1.9e-4,
+	    2.1e-4,2.4e-4,2.8e-4,3.2e-4,3.4e-4,3.6e-4,3.6e-4,3.4e-4,3.2e-4,
+	    3e-4,2e-4,9.2e-5,4.1e-5,1.3e-5,4.3e-6,8.6e-8,4.3e-11,0. };
 
     integer i__;
 

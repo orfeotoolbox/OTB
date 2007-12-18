@@ -6,23 +6,22 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
-
 /* OTB patches: replace "f2c.h" by "otb_6S.h" */
 /*#include "f2c.h"*/
 #include "otb_6S.h"
 
 /*<       subroutine splint(xa,ya,y2a,n,x,y) >*/
-/* Subroutine */ int splint_(real *xa, real *ya, real *y2a, integer *n, real *
-	x, real *y)
+/* Subroutine */ int splint_(doublereal *xa, doublereal *ya, doublereal *y2a, 
+	integer *n, doublereal *x, doublereal *y)
 {
     /* System generated locals */
-    real r__1, r__2, r__3, r__4, r__5;
+    doublereal d__1, d__2, d__3, d__4, d__5;
 
     /* Builtin functions */
     /* Subroutine */ int s_paus(char *, ftnlen);
 
     /* Local variables */
-    real a, b, h__;
+    doublereal a, b, h__;
     integer k, khi, klo;
 
 /*<       integer n,klo,khi,k >*/
@@ -60,7 +59,7 @@ L1:
 /*<       h=xa(khi)-xa(klo) >*/
     h__ = xa[khi] - xa[klo];
 /*<       if (h.eq.0.) pause 'bad xa input.' >*/
-    if (h__ == (float)0.) {
+    if (h__ == 0.) {
 	s_paus("bad xa input.", 13L);
     }
 /*<       a=(xa(khi)-x)/h >*/
@@ -69,14 +68,13 @@ L1:
     b = (*x - xa[klo]) / h__;
 /*<    >*/
 /* Computing 3rd power */
-    r__1 = a, r__2 = r__1;
+    d__1 = a, d__2 = d__1;
 /* Computing 3rd power */
-    r__3 = b, r__4 = r__3;
+    d__3 = b, d__4 = d__3;
 /* Computing 2nd power */
-    r__5 = h__;
-    *y = a * ya[klo] + b * ya[khi] + ((r__2 * (r__1 * r__1) - a) * y2a[klo] + 
-	    (r__4 * (r__3 * r__3) - b) * y2a[khi]) * (r__5 * r__5) / (float)
-	    6.;
+    d__5 = h__;
+    *y = a * ya[klo] + b * ya[khi] + ((d__2 * (d__1 * d__1) - a) * y2a[klo] + 
+	    (d__4 * (d__3 * d__3) - b) * y2a[khi]) * (d__5 * d__5) / 6.;
 /*<       return >*/
     return 0;
 /*<       end >*/

@@ -1,1 +1,1 @@
-extern int niox6_(real *a, integer *inu);
+extern int niox6_(doublereal *a, integer *inu);

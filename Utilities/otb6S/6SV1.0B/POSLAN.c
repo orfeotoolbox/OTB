@@ -6,7 +6,6 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
-
 /* OTB patches: replace "f2c.h" by "otb_6S.h" */
 /*#include "f2c.h"*/
 #include "otb_6S.h"
@@ -21,11 +20,12 @@ Extern struct {
 #define sixs_ier__1 sixs_ier__
 
 /*<    >*/
-/* Subroutine */ int poslan_(integer *month, integer *jday, real *tu, real *
-	xlon, real *xlat, real *asol, real *phi0, real *avis, real *phiv)
+/* Subroutine */ int poslan_(integer *month, integer *jday, doublereal *tu, 
+	doublereal *xlon, doublereal *xlat, doublereal *asol, doublereal *
+	phi0, doublereal *avis, doublereal *phiv)
 {
-    extern /* Subroutine */ int possol_(integer *, integer *, real *, real *, 
-	    real *, real *, real *);
+    extern /* Subroutine */ int possol_(integer *, integer *, doublereal *, 
+	    doublereal *, doublereal *, doublereal *, doublereal *);
 
 /*<       logical ier >*/
 /*<       real tu,xlon,xlat,asol,phi0,avis,phiv >*/
@@ -35,9 +35,9 @@ Extern struct {
 /*     warning !!! */
 /*     xlon and xlat are the coordinates of the scene center. */
 /*<       avis=0. >*/
-    *avis = (float)0.;
+    *avis = 0.;
 /*<       phiv=0. >*/
-    *phiv = (float)0.;
+    *phiv = 0.;
 /*<    >*/
     possol_(month, jday, tu, xlon, xlat, asol, phi0);
 /*<       if(ier)return >*/

@@ -6,23 +6,22 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
-
 /* OTB patches: replace "f2c.h" by "otb_6S.h" */
 /*#include "f2c.h"*/
 #include "otb_6S.h"
 
 /*<    >*/
-/* Subroutine */ int otb_6s_varsol_(integer *jday, integer *month, real *dsol)
+/* Subroutine */ int varsol_(integer *jday, integer *month, doublereal *dsol)
 {
     /* System generated locals */
-    real r__1;
+    doublereal d__1;
 
     /* Builtin functions */
     double acos(doublereal), cos(doublereal);
 
     /* Local variables */
     integer j;
-    real pi, om;
+    doublereal pi, om;
 
 /*<       real dsol,pi,om >*/
 /*<       integer jday,month,j >*/
@@ -53,13 +52,13 @@ L2:
     j = (*month - 1) * 31 - (*month - 2) / 2 - 2 + *jday;
 /*<     3 pi=2.*acos (0.) >*/
 L3:
-    pi = acos((float)0.) * (float)2.;
+    pi = acos(0.) * 2.;
 /*<       om=(.9856*float(j-4))*pi/180. >*/
-    om = (real) (j - 4) * (float).9856 * pi / (float)180.;
+    om = (doublereal) (j - 4) * .9856 * pi / 180.;
 /*<       dsol=1./((1.-.01673*cos(om))**2) >*/
 /* Computing 2nd power */
-    r__1 = (float)1. - cos(om) * (float).01673;
-    *dsol = (float)1. / (r__1 * r__1);
+    d__1 = 1. - cos(om) * .01673;
+    *dsol = 1. / (d__1 * d__1);
 /*<       return >*/
     return 0;
 /*<       end >*/

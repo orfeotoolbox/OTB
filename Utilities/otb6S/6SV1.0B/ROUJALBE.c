@@ -6,7 +6,6 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
-
 /* OTB patches: replace "f2c.h" by "otb_6S.h" */
 /*#include "f2c.h"*/
 #include "otb_6S.h"
@@ -17,7 +16,8 @@ static integer c__24 = 24;
 static integer c__48 = 48;
 
 /*<    >*/
-/* Subroutine */ int roujalbe_(real *k0, real *k1, real *k2, real *brdfalb)
+/* Subroutine */ int roujalbe_(doublereal *k0, doublereal *k1, doublereal *k2,
+	 doublereal *brdfalb)
 {
     /* Builtin functions */
     double atan(doublereal), sin(doublereal), cos(doublereal), acos(
@@ -25,11 +25,11 @@ static integer c__48 = 48;
 
     /* Local variables */
     integer j, k, l;
-    real f1, f2, fa[48], ta[24], fr, pi, ft, ts, tv, si1, si2, mu1, mu2, wfa[
-	    48], wta[24], psi, tts, ttv, phi1, phi2, cpsi, pond, summ, xmus, 
-	    xmuv, teta1, teta2;
-    extern /* Subroutine */ int gauss_(real *, real *, real *, real *, 
-	    integer *);
+    doublereal f1, f2, fa[48], ta[24], fr, pi, ft, ts, tv, si1, si2, mu1, mu2,
+	     wfa[48], wta[24], psi, tts, ttv, phi1, phi2, cpsi, pond, summ, 
+	    xmus, xmuv, teta1, teta2;
+    extern /* Subroutine */ int gauss_(doublereal *, doublereal *, doublereal 
+	    *, doublereal *, integer *);
 
 /*<       parameter (nta=24,nfa=48) >*/
 /*<       real teta1,teta2,phi1,phi2,ta(nta),fa(nfa),wta(nta),wfa(nfa) >*/
@@ -38,23 +38,23 @@ static integer c__48 = 48;
 /*<       real summ,ts,tv,fr,pond,tts,ttv,xmus,xmuv,f2,f1 >*/
 /*<       integer k,j,l >*/
 /*<       pi=atan(1.)*4. >*/
-    pi = atan((float)1.) * (float)4.;
+    pi = atan(1.) * 4.;
 /*<       teta1=0. >*/
-    teta1 = (float)0.;
+    teta1 = 0.;
 /*<       teta2=pi/2. >*/
-    teta2 = pi / (float)2.;
+    teta2 = pi / 2.;
 /*<       call gauss(teta1,teta2,ta,wta,nta) >*/
     gauss_(&teta1, &teta2, ta, wta, &c__24);
 /*<       phi1=0. >*/
-    phi1 = (float)0.;
+    phi1 = 0.;
 /*<       phi2=2.*pi >*/
-    phi2 = pi * (float)2.;
+    phi2 = pi * 2.;
 /*<       call gauss(phi1,phi2,fa,wfa,nfa) >*/
     gauss_(&phi1, &phi2, fa, wfa, &c__48);
 /*<       brdfalb=0. >*/
-    *brdfalb = (float)0.;
+    *brdfalb = 0.;
 /*<       summ=0. >*/
-    summ = (float)0.;
+    summ = 0.;
 /*<       do 1 k=1,nfa >*/
     for (k = 1; k <= 48; ++k) {
 /*<       do 2 j=1,nta >*/
@@ -89,23 +89,23 @@ static integer c__48 = 48;
 /*<       cpsi=xmus*xmuv+sin(ts)*sin(tv)*cos(fr) >*/
 		cpsi = xmus * xmuv + sin(ts) * sin(tv) * cos(fr);
 /*<       if (cpsi.lt.1.) then >*/
-		if (cpsi < (float)1.) {
+		if (cpsi < 1.) {
 /*<       psi=acos(cpsi) >*/
 		    psi = acos(cpsi);
 /*<       else >*/
 		} else {
 /*<       psi=0. >*/
-		    psi = (float)0.;
+		    psi = 0.;
 /*<       endif >*/
 		}
 /*<       f2=4./(3.*pi*(xmus+xmuv))*((pi/2-psi)*cpsi+sin(psi))-1./3. >*/
-		f2 = (float)4. / (pi * (float)3. * (xmus + xmuv)) * ((pi / 2 
-			- psi) * cpsi + sin(psi)) - (float).33333333333333331;
+		f2 = 4. / (pi * 3. * (xmus + xmuv)) * ((pi / 2 - psi) * cpsi 
+			+ sin(psi)) - .33333333333333331;
 /*<       ft=tts*tts+ttv*ttv-2*tts*ttv*cos(fr) >*/
 		ft = tts * tts + ttv * ttv - tts * 2 * ttv * cos(fr);
 /*<       f1=0.5*((pi-fr)*cos(fr)+sin(fr))*tts*ttv-tts-ttv-sqrt(ft) >*/
-		f1 = ((pi - fr) * cos(fr) + sin(fr)) * (float).5 * tts * ttv 
-			- tts - ttv - sqrt(ft);
+		f1 = ((pi - fr) * cos(fr) + sin(fr)) * .5 * tts * ttv - tts - 
+			ttv - sqrt(ft);
 /*<       f1=f1/pi >*/
 		f1 /= pi;
 /*<       brdfalb=brdfalb+(k0+k1*f1+k2*f2)*pond >*/

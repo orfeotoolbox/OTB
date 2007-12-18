@@ -6,7 +6,6 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
-
 /* OTB patches: replace "f2c.h" by "otb_6S.h" */
 /*#include "f2c.h"*/
 #include "otb_6S.h"
@@ -17,20 +16,22 @@ static integer c__10 = 10;
 static integer c__13 = 13;
 
 /*<    >*/
-/* Subroutine */ int brdfgrid_(integer *mu, integer *np, real *rm, real *rp, 
-	real *brdfdat, real *angmu, real *angphi, real *brdfint)
+/* Subroutine */ int brdfgrid_(integer *mu, integer *np, doublereal *rm, 
+	doublereal *rp, doublereal *brdfdat, doublereal *angmu, doublereal *
+	angphi, doublereal *brdfint)
 {
     /* System generated locals */
     integer brdfint_dim1, brdfint_offset, rm_offset, i__1, i__2;
 
     /* Local variables */
-    real brdftemp[130]	/* was [10][13] */, gaussphi;
+    doublereal brdftemp[130]	/* was [10][13] */, gaussphi;
     integer j, k;
-    real y;
-    extern /* Subroutine */ int splie2_(real *, real *, integer *, integer *, 
-	    real *), splin2_(real *, real *, real *, real *, integer *, 
-	    integer *, real *, real *, real *);
-    real gaussmu;
+    doublereal y;
+    extern /* Subroutine */ int splie2_(doublereal *, doublereal *, integer *,
+	     integer *, doublereal *), splin2_(doublereal *, doublereal *, 
+	    doublereal *, doublereal *, integer *, integer *, doublereal *, 
+	    doublereal *, doublereal *);
+    doublereal gaussmu;
 
 /*<       integer mu,np >*/
 /*<    >*/
@@ -57,7 +58,7 @@ static integer c__13 = 13;
 	for (k = 1; k <= i__2; ++k) {
 /*<    10 brdfint(k,j)=0. >*/
 /* L10: */
-	    brdfint[k + j * brdfint_dim1] = (float)0.;
+	    brdfint[k + j * brdfint_dim1] = 0.;
 	}
     }
 /*<       call splie2(angphi,brdfdat,10,13,brdftemp) >*/

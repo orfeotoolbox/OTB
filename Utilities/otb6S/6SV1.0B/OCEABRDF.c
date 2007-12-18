@@ -6,7 +6,6 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
-
 /* OTB patches: replace "f2c.h" by "otb_6S.h" */
 /*#include "f2c.h"*/
 #include "otb_6S.h"
@@ -16,26 +15,22 @@ extern "C" {
 static doublereal c_b2 = 3.52;
 static integer c__24 = 24;
 static integer c__48 = 48;
-static real c_b6 = (float)0.;
+static doublereal c_b6 = 0.;
 
 /*<    >*/
-/* Subroutine */ int oceabrdf_(real *pws, real *paw, real *xsal, real *pcl, 
-	real *pwl, real *rfoam, real *rwat, real *rglit, integer *mu, integer 
-	*np, real *rm, real *rp, real *brdfint)
+/* Subroutine */ int oceabrdf_(doublereal *pws, doublereal *paw, doublereal *
+	xsal, doublereal *pcl, doublereal *pwl, doublereal *rfoam, doublereal 
+	*rwat, doublereal *rglit, integer *mu, integer *np, doublereal *rm, 
+	doublereal *rp, doublereal *brdfint)
 {
     /* Initialized data */
 
-    static real ref[39] = { (float).22,(float).22,(float).22,(float).22,(
-	    float).22,(float).22,(float).215,(float).21,(float).2,(float).19,(
-	    float).175,(float).155,(float).13,(float).08,(float).1,(float)
-	    .105,(float).1,(float).08,(float).045,(float).055,(float).065,(
-	    float).06,(float).055,(float).04,(float)0.,(float)0.,(float)0.,(
-	    float)0.,(float)0.,(float)0.,(float)0.,(float)0.,(float)0.,(float)
-	    0.,(float)0.,(float)0.,(float)0.,(float)0.,(float)0. };
+    static doublereal ref[39] = { .22,.22,.22,.22,.22,.22,.215,.21,.2,.19,
+	    .175,.155,.13,.08,.1,.105,.1,.08,.045,.055,.065,.06,.055,.04,0.,
+	    0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0. };
 
     /* System generated locals */
     integer rm_offset, brdfint_dim1, brdfint_offset, i__1, i__2;
-    real r__1;
     doublereal d__1;
 
     /* Builtin functions */
@@ -44,20 +39,23 @@ static real c_b6 = (float)0.;
 	    asin(doublereal);
 
     /* Local variables */
-    extern /* Subroutine */ int sunglint_(real *, real *, real *, real *, 
-	    real *, real *, real *, real *);
-    real a, c__;
+    extern /* Subroutine */ int sunglint_(doublereal *, doublereal *, 
+	    doublereal *, doublereal *, doublereal *, doublereal *, 
+	    doublereal *, doublereal *);
+    doublereal a, c__;
     integer j, k, m, n;
-    real w, fa[48], fi, n12, ta[24], ni, pi, nr, wl, tp, rw, tw;
-    extern /* Subroutine */ int morcasiwat_(real *, real *, real *);
-    real fac, wfa[48], fip, rog, tds;
+    doublereal w, fa[48], fi, n12, ta[24], ni, pi, nr, wl, tp, rw, tw;
+    extern /* Subroutine */ int morcasiwat_(doublereal *, doublereal *, 
+	    doublereal *);
+    doublereal fac, wfa[48], fip, rog, tds;
     integer iwl;
-    real wta[24], rwc, tdv, rwb, azw, wlp, phi1, phi2, pond, rogp, wspd, summ,
-	     teta1, teta2, ref_i__, tetas;
-    extern /* Subroutine */ int gauss_(real *, real *, real *, real *, 
-	    integer *);
-    real tetav;
-    extern /* Subroutine */ int indwat_(real *, real *, real *, real *);
+    doublereal wta[24], rwc, tdv, rwb, azw, wlp, phi1, phi2, pond, rogp, wspd,
+	     summ, teta1, teta2, ref_i__, tetas;
+    extern /* Subroutine */ int gauss_(doublereal *, doublereal *, doublereal 
+	    *, doublereal *, integer *);
+    doublereal tetav;
+    extern /* Subroutine */ int indwat_(doublereal *, doublereal *, 
+	    doublereal *, doublereal *);
 
 
 /* INPUT:  pws=wind speed (in m/s) */
@@ -107,9 +105,9 @@ am reflectance)*/
 /*<       wl=pwl >*/
     wl = *pwl;
 /*<       pi=atan(1.)*4. >*/
-    pi = atan((float)1.) * (float)4.;
+    pi = atan(1.) * 4.;
 /*<       fac=pi/180. >*/
-    fac = pi / (float)180.;
+    fac = pi / 180.;
 /*<       tetas=acos(rm(0))/fac >*/
     tetas = acos(rm[0]) / fac;
 /* COMPUTE INDEX OF WATER */
@@ -120,14 +118,13 @@ am reflectance)*/
     n12 = sqrt(nr * nr + ni * ni);
 /* COMPUTE WHITECAPS REFLECTANCE (LAMBERTIAN) */
 /*<       W=2.95e-06*(wspd**3.52) >*/
-    d__1 = (doublereal) wspd;
-    w = pow_dd(&d__1, &c_b2) * (float)2.95e-6;
+    w = pow_dd(&wspd, &c_b2) * 2.95e-6;
 /*<       iwl=1+int((wl-0.2)/0.1) >*/
-    iwl = (integer) ((wl - (float).2) / (float).1) + 1;
+    iwl = (integer) ((wl - .2) / .1) + 1;
 /*<       wlp=0.5+(iwl-1)*0.1 >*/
-    wlp = (iwl - 1) * (float).1 + (float).5;
+    wlp = (iwl - 1) * .1 + .5;
 /*<       Ref_i=ref(iwl+1)+(wl-wlp)/0.1*(ref(iwl)-ref(iwl+1)) >*/
-    ref_i__ = ref[iwl] + (wl - wlp) / (float).1 * (ref[iwl - 1] - ref[iwl]);
+    ref_i__ = ref[iwl] + (wl - wlp) / .1 * (ref[iwl - 1] - ref[iwl]);
 /*<       Rwc=W*Ref_i >*/
     rwc = w * ref_i__;
 /* COMPUTE BACKSCATTERED REFLECTANCE FROM THE SEA WATER (LAMBERTIAN) */
@@ -136,28 +133,28 @@ am reflectance)*/
     morcasiwat_(&wl, &c__, &rw);
 /* call gauss quadrature */
 /*<       tds=1.0 >*/
-    tds = (float)1.;
+    tds = 1.;
 /*<       tdv=1.0 >*/
-    tdv = (float)1.;
+    tdv = 1.;
 /*<       if (Rw.gt.0.0001) then >*/
-    if (rw > (float)1e-4) {
+    if (rw > 1e-4) {
 /*<         teta1=0. >*/
-	teta1 = (float)0.;
+	teta1 = 0.;
 /*<         teta2=pi/2. >*/
-	teta2 = pi / (float)2.;
+	teta2 = pi / 2.;
 /*<         call gauss(teta1,teta2,ta,wta,nta) >*/
 	gauss_(&teta1, &teta2, ta, wta, &c__24);
 /*<         phi1=0. >*/
-	phi1 = (float)0.;
+	phi1 = 0.;
 /*<         phi2=2.*pi >*/
-	phi2 = pi * (float)2.;
+	phi2 = pi * 2.;
 /*<         call gauss(phi1,phi2,fa,wfa,nfa) >*/
 	gauss_(&phi1, &phi2, fa, wfa, &c__48);
 /* COMPUTE DOWNWARD TRANSMISSION FUNCTION */
 /*<         tds=0. >*/
-	tds = (float)0.;
+	tds = 0.;
 /*<         summ=0. >*/
-	summ = (float)0.;
+	summ = 0.;
 /*<         do k=1,nfa >*/
 	for (k = 1; k <= 48; ++k) {
 /*<         do j=1,nta >*/
@@ -180,7 +177,7 @@ am reflectance)*/
 /*<         enddo >*/
 	}
 /*<         tds=1.-tds/summ >*/
-	tds = (float)1. - tds / summ;
+	tds = 1. - tds / summ;
 /*<       endif >*/
     }
 /* Compute glint contribution,transmission terms and total reflectance */
@@ -191,13 +188,13 @@ am reflectance)*/
 	tetav = acos(rm[j]) / fac;
 /* compute upward transmission */
 /*<         if (Rw.gt.0.0001) then >*/
-	if (rw > (float)1e-4) {
+	if (rw > 1e-4) {
 /*<           tw=asin(sin(tetav*fac)/nr)/fac >*/
 	    tw = asin(sin(tetav * fac) / nr) / fac;
 /*<           tdv=0. >*/
-	    tdv = (float)0.;
+	    tdv = 0.;
 /*<           summ=0. >*/
-	    summ = (float)0.;
+	    summ = 0.;
 /*<           do n=1,nfa >*/
 	    for (n = 1; n <= 48; ++n) {
 /*<           do m=1,nta >*/
@@ -208,8 +205,8 @@ am reflectance)*/
 		    fip = fa[n - 1] / fac;
 /* here we assume no aborption */
 /*<             call sunglint(wspd,1./nr,0.0,azw,tw,tp,fip,rogp) >*/
-		    r__1 = (float)1. / nr;
-		    sunglint_(&wspd, &r__1, &c_b6, &azw, &tw, &tp, &fip, &
+		    d__1 = 1. / nr;
+		    sunglint_(&wspd, &d__1, &c_b6, &azw, &tw, &tp, &fip, &
 			    rogp);
 /*<             pond=cos(ta(m))*sin(ta(m))*wfa(n)*wta(m) >*/
 		    pond = cos(ta[m - 1]) * sin(ta[m - 1]) * wfa[n - 1] * wta[
@@ -223,7 +220,7 @@ am reflectance)*/
 /*<           enddo >*/
 	    }
 /*<           tdv=1.-tdv/summ >*/
-	    tdv = (float)1. - tdv / summ;
+	    tdv = 1. - tdv / summ;
 /*<         endif >*/
 	}
 /*<         Do 2 k=1,np >*/
@@ -240,12 +237,12 @@ am reflectance)*/
 /*<            endif >*/
 	    }
 /*<            if (fi.lt.0.) fi=fi+2.*pi >*/
-	    if (fi < (float)0.) {
-		fi += pi * (float)2.;
+	    if (fi < 0.) {
+		fi += pi * 2.;
 	    }
 /*<            if (fi.gt.(2.*pi)) fi=fi-2.*pi >*/
-	    if (fi > pi * (float)2.) {
-		fi -= pi * (float)2.;
+	    if (fi > pi * 2.) {
+		fi -= pi * 2.;
 	    }
 /*<            fi=fi/fac >*/
 	    fi /= fac;
@@ -255,7 +252,7 @@ am reflectance)*/
 /*  water reflectance above the sea surface */
 /* for explanation on value of a see OCEAALBE.f */
 /*<            a=0.485 >*/
-	    a = (float).485;
+	    a = .485;
 /* add change in solid angle from under to above to surface */
 /* that account for 1/(n12*n12) decrease in sea water directional 
 */

@@ -6,7 +6,6 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
-
 /* OTB patches: replace "f2c.h" by "otb_6S.h" */
 /*#include "f2c.h"*/
 #include "otb_6S.h"
@@ -20,55 +19,57 @@ Extern struct {
 #define num_quad__1 num_quad__
 
 Extern struct {
-    real phasel[20000]	/* was [20][1000] */, qhasel[20000]	/* was [20][
-	    1000] */, uhasel[20000]	/* was [20][1000] */;
+    doublereal phasel[20000]	/* was [20][1000] */, qhasel[20000]	/* 
+	    was [20][1000] */, uhasel[20000]	/* was [20][1000] */;
 } sixs_phase__;
 
 #define sixs_phase__1 sixs_phase__
 
 Extern struct {
-    real pha[1000], qha[1000], uha[1000], alphal[1001], betal[1001], gammal[
-	    1001], zetal[1001];
+    doublereal pha[1000], qha[1000], uha[1000], alphal[1001], betal[1001], 
+	    gammal[1001], zetal[1001];
 } sixs_polar__;
 
 #define sixs_polar__1 sixs_polar__
 
 Extern struct {
-    real ext[20], ome[20], gasym[20], phase[20], qhase[20], uhase[20];
+    doublereal ext[20], ome[20], gasym[20], phase[20], qhase[20], uhase[20];
 } sixs_aer__;
 
 #define sixs_aer__1 sixs_aer__
 
 Extern struct {
-    real roatm[60]	/* was [3][20] */, dtdir[60]	/* was [3][20] */, 
-	    dtdif[60]	/* was [3][20] */, utdir[60]	/* was [3][20] */, 
-	    utdif[60]	/* was [3][20] */, sphal[60]	/* was [3][20] */, 
-	    wldis[20], trayl[20], traypl[20], rqatm[60]	/* was [3][20] */, 
-	    ruatm[60]	/* was [3][20] */;
+    doublereal roatm[60]	/* was [3][20] */, dtdir[60]	/* was [3][20]
+	     */, dtdif[60]	/* was [3][20] */, utdir[60]	/* was [3][20]
+	     */, utdif[60]	/* was [3][20] */, sphal[60]	/* was [3][20]
+	     */, wldis[20], trayl[20], traypl[20], rqatm[60]	/* was [3][20]
+	     */, ruatm[60]	/* was [3][20] */;
 } sixs_disc__;
 
 #define sixs_disc__1 sixs_disc__
 
 Extern struct {
-    real s[1501], wlinf, wlsup;
+    doublereal s[1501], wlinf, wlsup;
 } sixs_ffu__;
 
 #define sixs_ffu__1 sixs_ffu__
 
 Extern struct {
     integer num_z__;
-    real alt_z__[101], taer_z__[101], taer55_z__[101];
+    doublereal alt_z__[101], taer_z__[101], taer55_z__[101];
 } aeroprof_;
 
 #define aeroprof_1 aeroprof_
 
 /*<    >*/
 /* Subroutine */ int discom_(integer *idatmp, integer *iaer, integer *
-	iaer_prof__, real *xmus, real *xmuv, real *phi, real *taer55, real *
-	taer55p, real *palt, real *phirad, integer *nt, integer *mu, integer *
-	np, real *rm, real *gb, real *rp, real *ftray, integer *ipol, real *
-	xlm1, real *xlm2, real *roatm_fi__, integer *nfi, integer *nfilut, 
-	real *filut, real *roluts, real *rolutsq, real *rolutsu)
+	iaer_prof__, doublereal *xmus, doublereal *xmuv, doublereal *phi, 
+	doublereal *taer55, doublereal *taer55p, doublereal *palt, doublereal 
+	*phirad, integer *nt, integer *mu, integer *np, doublereal *rm, 
+	doublereal *gb, doublereal *rp, doublereal *ftray, integer *ipol, 
+	doublereal *xlm1, doublereal *xlm2, doublereal *roatm_fi__, integer *
+	nfi, integer *nfilut, doublereal *filut, doublereal *roluts, 
+	doublereal *rolutsq, doublereal *rolutsu)
 {
     /* System generated locals */
     integer rm_offset, gb_offset, xlm1_dim1, xlm1_offset, xlm2_dim1, 
@@ -77,29 +78,36 @@ Extern struct {
 	    filut_offset, i__1;
 
     /* Local variables */
-    real romix_fi__[181];
+    doublereal romix_fi__[181];
     integer i__, j, k, l;
-    real rorayl_fi__[181], wl;
+    doublereal rorayl_fi__[181], wl;
     integer ifi;
-    real taer, nbmu, piza, tray, coeff, taerp, tamoy, romix, trayp, rqmix, 
-	    rumix, rolut[1025]	/* was [25][41] */, ddifta, ddirta, ddiftt, 
-	    ddiftr, udifta;
-    extern /* Subroutine */ int atmref_(integer *, integer *, real *, real *, 
-	    real *, real *, real *, real *, real *, real *, real *, real *, 
-	    real *, real *, real *, integer *, integer *, integer *, real *, 
-	    real *, real *, real *, real *, real *, real *, real *, real *, 
-	    real *, real *, real *, integer *, real *, real *, real *, real *,
-	     integer *, integer *, real *, real *, real *, real *);
-    real roaero, ddirtr, rqaero, ddirtt, udirta;
-    extern /* Subroutine */ int odrayl_(real *, real *);
-    real ruaero, udiftr, udiftt;
-    extern /* Subroutine */ int trunca_(real *, integer *), scatra_(integer *,
-	     real *, real *, real *, real *, real *, real *, integer *, 
-	    integer *, real *, real *, real *, real *, real *, real *, real *,
-	     real *, real *, real *, real *, real *, real *, real *, real *, 
-	    real *, real *, real *, real *);
-    real rorayl, tamoyp, rqrayl, udirtt, udirtr, rurayl, rolutq[1025]	/* 
-	    was [25][41] */, pizmoy, rolutu[1025]	/* was [25][41] */, 
+    doublereal taer, nbmu, piza, tray, coeff, taerp, tamoy, romix, trayp, 
+	    rqmix, rumix, rolut[1025]	/* was [25][41] */, ddifta, ddirta, 
+	    ddiftt, ddiftr, udifta;
+    extern /* Subroutine */ int atmref_(integer *, integer *, doublereal *, 
+	    doublereal *, doublereal *, doublereal *, doublereal *, 
+	    doublereal *, doublereal *, doublereal *, doublereal *, 
+	    doublereal *, doublereal *, doublereal *, doublereal *, integer *,
+	     integer *, integer *, doublereal *, doublereal *, doublereal *, 
+	    doublereal *, doublereal *, doublereal *, doublereal *, 
+	    doublereal *, doublereal *, doublereal *, doublereal *, 
+	    doublereal *, integer *, doublereal *, doublereal *, doublereal *,
+	     doublereal *, integer *, integer *, doublereal *, doublereal *, 
+	    doublereal *, doublereal *);
+    doublereal roaero, ddirtr, rqaero, ddirtt, udirta;
+    extern /* Subroutine */ int odrayl_(doublereal *, doublereal *);
+    doublereal ruaero, udiftr, udiftt;
+    extern /* Subroutine */ int trunca_(doublereal *, integer *), scatra_(
+	    integer *, doublereal *, doublereal *, doublereal *, doublereal *,
+	     doublereal *, doublereal *, integer *, integer *, doublereal *, 
+	    doublereal *, doublereal *, doublereal *, doublereal *, 
+	    doublereal *, doublereal *, doublereal *, doublereal *, 
+	    doublereal *, doublereal *, doublereal *, doublereal *, 
+	    doublereal *, doublereal *, doublereal *, doublereal *, 
+	    doublereal *, doublereal *);
+    doublereal rorayl, tamoyp, rqrayl, udirtt, udirtr, rurayl, rolutq[1025]	
+	    /* was [25][41] */, pizmoy, rolutu[1025]	/* was [25][41] */, 
 	    sphalba, sphalbr, sphalbt;
 
 /* - to vary the number of quadratures */
@@ -217,7 +225,7 @@ L30:
 	    }
 /*< 	  if (idatmp.eq.0) trayp=0. >*/
 	    if (*idatmp == 0) {
-		trayp = (float)0.;
+		trayp = 0.;
 	    }
 /*< 	else >*/
 	} else {
@@ -253,9 +261,9 @@ L30:
 /*     call trunca to decompose aerosol phase function in */
 /*     Legendre polynomials. */
 /*<         nbmu=nquad >*/
-	nbmu = (real) num_quad__1.nquad;
+	nbmu = (doublereal) num_quad__1.nquad;
 /*<           do k=1,nbmu >*/
-	i__1 = nbmu;
+	i__1 = (integer) nbmu;
 	for (k = 1; k <= i__1; ++k) {
 /*<             pha(k)=phasel(l,k) >*/
 	    sixs_polar__1.pha[k - 1] = sixs_phase__1.phasel[l + k * 20 - 21];
@@ -264,7 +272,7 @@ L30:
 /*< 	  if (ipol.ne.0)then >*/
 	if (*ipol != 0) {
 /*<             do k=1,nbmu >*/
-	    i__1 = nbmu;
+	    i__1 = (integer) nbmu;
 	    for (k = 1; k <= i__1; ++k) {
 /*<               qha(k)=qhasel(l,k) >*/
 		sixs_polar__1.qha[k - 1] = sixs_phase__1.qhasel[l + k * 20 - 
@@ -281,11 +289,11 @@ L30:
 	    trunca_(&coeff, ipol);
 	}
 /*<         tamoy=taer*(1.-piza*coeff) >*/
-	tamoy = taer * ((float)1. - piza * coeff);
+	tamoy = taer * (1. - piza * coeff);
 /*<         tamoyp=taerp*(1.-piza*coeff) >*/
-	tamoyp = taerp * ((float)1. - piza * coeff);
+	tamoyp = taerp * (1. - piza * coeff);
 /*<         pizmoy=piza*(1.-coeff)/(1.-piza*coeff) >*/
-	pizmoy = piza * ((float)1. - coeff) / ((float)1. - piza * coeff);
+	pizmoy = piza * (1. - coeff) / (1. - piza * coeff);
 /*<    >*/
 	atmref_(iaer, iaer_prof__, &tamoy, &taer, &tray, &pizmoy, &piza, &
 		tamoyp, &taerp, &trayp, palt, phi, xmus, xmuv, phirad, nt, mu,

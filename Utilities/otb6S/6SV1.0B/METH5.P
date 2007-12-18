@@ -1,1 +1,1 @@
-extern int meth5_(real *a, integer *inu);
+extern int meth5_(doublereal *a, integer *inu);

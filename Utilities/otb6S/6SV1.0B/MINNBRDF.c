@@ -6,14 +6,13 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
-
 /* OTB patches: replace "f2c.h" by "otb_6S.h" */
 /*#include "f2c.h"*/
 #include "otb_6S.h"
 
 /*<    >*/
-/* Subroutine */ int minnbrdf_(real *par1, real *par2, integer *mu, integer *
-	np, real *rm, real *brdfint)
+/* Subroutine */ int minnbrdf_(doublereal *par1, doublereal *par2, integer *
+	mu, integer *np, doublereal *rm, doublereal *brdfint)
 {
     /* System generated locals */
     integer rm_offset, brdfint_dim1, brdfint_offset, i__1, i__2;
@@ -24,7 +23,7 @@ extern "C" {
 
     /* Local variables */
     integer j, k;
-    real xmu, view;
+    doublereal xmu, view;
 
 /*<       real par1,par2,xmu,view >*/
 /*<       integer mu,np,k,j >*/
@@ -48,10 +47,10 @@ extern "C" {
 /*<       view=rm(j) >*/
 	    view = rm[j];
 /*<       brdfint(j,k)=0.5*par2*(par1+1.)*((xmu*view)**(par1-1)) >*/
-	    d__1 = (doublereal) (xmu * view);
-	    d__2 = (doublereal) (*par1 - 1);
-	    brdfint[j + k * brdfint_dim1] = *par2 * (float).5 * (*par1 + (
-		    float)1.) * pow_dd(&d__1, &d__2);
+	    d__1 = xmu * view;
+	    d__2 = *par1 - 1;
+	    brdfint[j + k * brdfint_dim1] = *par2 * .5 * (*par1 + 1.) * 
+		    pow_dd(&d__1, &d__2);
 /*<   2   continue >*/
 /* L2: */
 	}

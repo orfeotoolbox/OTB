@@ -1,6 +1,6 @@
 extern int otb_6s_rahmalbe_(
-  otb_6s_real *rho0,
-  otb_6s_real *af,
-  otb_6s_real *xk,
-  otb_6s_real *brdfalb
+  otb_6s_doublereal *rho0,
+  otb_6s_doublereal *af,
+  otb_6s_doublereal *xk,
+  otb_6s_doublereal *brdfalb
   );

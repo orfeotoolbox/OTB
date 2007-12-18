@@ -6,22 +6,21 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
-
 /* OTB patches: replace "f2c.h" by "otb_6S.h" */
 /*#include "f2c.h"*/
 #include "otb_6S.h"
 
 /*<        Subroutine POLNAD(xts,xtv,phi,pveg,ropq,ropu) >*/
-/* Subroutine */ int polnad_(real *xts, real *xtv, real *phi, real *pveg, 
-	real *ropq, real *ropu)
+/* Subroutine */ int polnad_(doublereal *xts, doublereal *xtv, doublereal *
+	phi, doublereal *pveg, doublereal *ropq, doublereal *ropu)
 {
     /* Builtin functions */
     double acos(doublereal), cos(doublereal), sin(doublereal), asin(
 	    doublereal), sqrt(doublereal);
 
     /* Local variables */
-    real n, pi, xf1, xf2, sca, ksi, dtr, mui, mus, mut, muv, csca, cksi, sinv,
-	     alpha, rpveg, rpsur, alphap, rpsoil, fpalpha;
+    doublereal n, pi, xf1, xf2, sca, ksi, dtr, mui, mus, mut, muv, csca, cksi,
+	     sinv, alpha, rpveg, rpsur, alphap, rpsoil, fpalpha;
 
 /*<        real xts,xtv,phi,pveg,ropq,ropu >*/
 /*      compute the polarized components of the surface */
@@ -42,18 +41,18 @@ extern "C" {
 /*   according to fresnel law */
 /*<         real mus,muv,sinv,cksi,ksi,xf1,xf2 >*/
 /*<         N=1.5	 >*/
-    n = (float)1.5;
+    n = 1.5;
 /*<         pi=acos(0.0)*2.0 >*/
-    pi = acos((float)0.) * (float)2.;
+    pi = acos(0.) * 2.;
 /*<         dtr=pi/180.0 >*/
-    dtr = pi / (float)180.;
+    dtr = pi / 180.;
 /*< 	c >*/
     csca = -cos(*xts * dtr) * cos(*xtv * dtr) - sin(*xts * dtr) * sin(*xtv * 
 	    dtr) * cos(*phi * dtr);
 /*<         sca=acos(csca) >*/
     sca = acos(csca);
 /*< 	alpha=(pi-sca)/2.0 >*/
-    alpha = (pi - sca) / (float)2.;
+    alpha = (pi - sca) / 2.;
 /*< 	alphap=asin(sin(alpha)/N) >*/
     alphap = asin(sin(alpha) / n);
 /*< 	mui=cos(alpha) >*/
@@ -65,13 +64,13 @@ extern "C" {
 /*< 	xf2=(N*mui-mut)/(N*mui+mut) >*/
     xf2 = (n * mui - mut) / (n * mui + mut);
 /*< 	fpalpha=0.5*(xf1*xf1-xf2*xf2) >*/
-    fpalpha = (xf1 * xf1 - xf2 * xf2) * (float).5;
+    fpalpha = (xf1 * xf1 - xf2 * xf2) * .5;
 /*<         rpveg=fpalpha/4./(cos(xts*dtr)+cos(xtv*dtr)) >*/
-    rpveg = fpalpha / (float)4. / (cos(*xts * dtr) + cos(*xtv * dtr));
+    rpveg = fpalpha / 4. / (cos(*xts * dtr) + cos(*xtv * dtr));
 /*< 	rpsoil=fpalpha/4./cos(xts*dtr)/cos(xtv*dtr) >*/
-    rpsoil = fpalpha / (float)4. / cos(*xts * dtr) / cos(*xtv * dtr);
+    rpsoil = fpalpha / 4. / cos(*xts * dtr) / cos(*xtv * dtr);
 /*< 	rpsur=rpveg*pveg+rpsoil*(1.-pveg) >*/
-    rpsur = rpveg * *pveg + rpsoil * ((float)1. - *pveg);
+    rpsur = rpveg * *pveg + rpsoil * (1. - *pveg);
 /* compute rotation angle for Q and U */
 /*<         muv=cos(xtv*dtr) >*/
     muv = cos(*xtv * dtr);
@@ -80,38 +79,38 @@ extern "C" {
 /*< 	sinv=sin(xtv*dtr) >*/
     sinv = sin(*xtv * dtr);
 /*< 	if (xtv.gt.0.5) then >*/
-    if (*xtv > (float).5) {
+    if (*xtv > .5) {
 /*<         if (sin(phi*dtr).lt.0) then >*/
-	if (sin(*phi * dtr) < (float)0.) {
+	if (sin(*phi * dtr) < 0.) {
 /*<         cksi=(muv*csca+mus)/sqrt(1.-csca*csca)/sinv >*/
-	    cksi = (muv * csca + mus) / sqrt((float)1. - csca * csca) / sinv;
+	    cksi = (muv * csca + mus) / sqrt(1. - csca * csca) / sinv;
 /*<         else >*/
 	} else {
 /*<         cksi=-(muv*csca+mus)/sqrt(1.-csca*csca)/sinv >*/
-	    cksi = -(muv * csca + mus) / sqrt((float)1. - csca * csca) / sinv;
+	    cksi = -(muv * csca + mus) / sqrt(1. - csca * csca) / sinv;
 /*<         endif >*/
 	}
 /*<         else >*/
     } else {
 /*<         cksi=0.0 >*/
-	cksi = (float)0.;
+	cksi = 0.;
 /*<         endif >*/
     }
 /*< 	if (cksi.gt.1.) cksi=1. >*/
-    if (cksi > (float)1.) {
-	cksi = (float)1.;
+    if (cksi > 1.) {
+	cksi = 1.;
     }
 /*< 	if (cksi.lt.-1.) cksi=-1. >*/
-    if (cksi < (float)-1.) {
-	cksi = (float)-1.;
+    if (cksi < -1.) {
+	cksi = -1.;
     }
 /*<         ksi=acos(cksi)/dtr >*/
     ksi = acos(cksi) / dtr;
 /* 	write(6,*) "KSI=",ksi */
 /*< 	ropq=rpsur*(2.*cksi*cksi-1.) >*/
-    *ropq = rpsur * (cksi * (float)2. * cksi - (float)1.);
+    *ropq = rpsur * (cksi * 2. * cksi - 1.);
 /*< 	ropu=-rpsur*2.*cksi*sqrt(1.-cksi*cksi) >*/
-    *ropu = -rpsur * (float)2. * cksi * sqrt((float)1. - cksi * cksi);
+    *ropu = -rpsur * 2. * cksi * sqrt(1. - cksi * cksi);
 /*< 	return >*/
     return 0;
 /*< 	end >*/

@@ -1,4 +1,4 @@
-extern int interp_(integer *iaer, integer *idatmp, real *wl, real *taer55, real *taer55p, real *xmud, real *romix, real *rorayl, real *roaero, real *phaa, real *phar, real *rqmix, real *rqrayl, real *rqaero, real *qhaa, real *qhar, real *rumix, real *rurayl, real *ruaero, real *uhaa, real *uhar, real *tsca, real *tray, real *trayp, real *taer, real *taerp, real *dtott, real *utott, real *astot, real *asray, real *asaer, real *utotr, real *utota, real *dtotr, real *dtota, integer *ipol, real *roatm_fi__, real *romix_fi__, real *rorayl_fi__, integer *nfi, real *roluts, real *rolut, real *rolutsq, real *rolutq, real *rolutsu, real *rolutu, integer *nfilut);
-/* comlen sixs_aer__ 480 */
-/* comlen sixs_disc__ 2160 */
-/* comlen sixs_del__ 8 */
+extern int interp_(integer *iaer, integer *idatmp, doublereal *wl, doublereal *taer55, doublereal *taer55p, doublereal *xmud, doublereal *romix, doublereal *rorayl, doublereal *roaero, doublereal *phaa, doublereal *phar, doublereal *rqmix, doublereal *rqrayl, doublereal *rqaero, doublereal *qhaa, doublereal *qhar, doublereal *rumix, doublereal *rurayl, doublereal *ruaero, doublereal *uhaa, doublereal *uhar, doublereal *tsca, doublereal *tray, doublereal *trayp, doublereal *taer, doublereal *taerp, doublereal *dtott, doublereal *utott, doublereal *astot, doublereal *asray, doublereal *asaer, doublereal *utotr, doublereal *utota, doublereal *dtotr, doublereal *dtota, integer *ipol, doublereal *roatm_fi__, doublereal *romix_fi__, doublereal *rorayl_fi__, integer *nfi, doublereal *roluts, doublereal *rolut, doublereal *rolutsq, doublereal *rolutq, doublereal *rolutsu, doublereal *rolutu, integer *nfilut);
+/* comlen sixs_aer__ 960 */
+/* comlen sixs_disc__ 4320 */
+/* comlen sixs_del__ 16 */

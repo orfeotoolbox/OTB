@@ -6,7 +6,6 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
-
 /* OTB patches: replace "f2c.h" by "otb_6S.h" */
 /*#include "f2c.h"*/
 #include "otb_6S.h"
@@ -14,97 +13,91 @@ extern "C" {
 /* Common Block Declarations */
 
 Extern struct {
-    real z__[34], p[34], t[34], wh[34], wo[34];
+    doublereal z__[34], p[34], t[34], wh[34], wo[34];
 } sixs_atm__;
 
 #define sixs_atm__1 sixs_atm__
 
 Extern struct {
-    real zpl[34], ppl[34], tpl[34], whpl[34], wopl[34];
+    doublereal zpl[34], ppl[34], tpl[34], whpl[34], wopl[34];
 } sixs_planesim__;
 
 #define sixs_planesim__1 sixs_planesim__
 
 /*<    >*/
-/* Subroutine */ int abstra_(integer *idatm, real *wl, real *xmus, real *xmuv,
-	 real *uw, real *uo3, real *uwus, real *uo3us, integer *idatmp, real *
-	uwpl, real *uo3pl, real *uwusp, real *uo3usp, real *dtwava, real *
-	dtozon, real *dtdica, real *dtoxyg, real *dtniox, real *dtmeth, real *
-	dtmoca, real *utwava, real *utozon, real *utdica, real *utoxyg, real *
-	utniox, real *utmeth, real *utmoca, real *ttwava, real *ttozon, real *
-	ttdica, real *ttoxyg, real *ttniox, real *ttmeth, real *ttmoca)
+/* Subroutine */ int abstra_(integer *idatm, doublereal *wl, doublereal *xmus,
+	 doublereal *xmuv, doublereal *uw, doublereal *uo3, doublereal *uwus, 
+	doublereal *uo3us, integer *idatmp, doublereal *uwpl, doublereal *
+	uo3pl, doublereal *uwusp, doublereal *uo3usp, doublereal *dtwava, 
+	doublereal *dtozon, doublereal *dtdica, doublereal *dtoxyg, 
+	doublereal *dtniox, doublereal *dtmeth, doublereal *dtmoca, 
+	doublereal *utwava, doublereal *utozon, doublereal *utdica, 
+	doublereal *utoxyg, doublereal *utniox, doublereal *utmeth, 
+	doublereal *utmoca, doublereal *ttwava, doublereal *ttozon, 
+	doublereal *ttdica, doublereal *ttoxyg, doublereal *ttniox, 
+	doublereal *ttmeth, doublereal *ttmoca)
 {
     /* Initialized data */
 
     static integer ivli[6] = { 2500,5060,7620,10180,12740,15300 };
-    static real co3[102] = { (float).0045,(float).008,(float).0107,(float)
-	    .011,(float).0127,(float).0171,(float).02,(float).0245,(float)
-	    .0307,(float).0384,(float).0478,(float).0567,(float).0654,(float)
-	    .0762,(float).0915,(float).1,(float).109,(float).12,(float).128,(
-	    float).112,(float).111,(float).116,(float).119,(float).113,(float)
-	    .103,(float).0924,(float).0828,(float).0757,(float).0707,(float)
-	    .0658,(float).0556,(float).0477,(float).0406,(float).0387,(float)
-	    .0382,(float).0294,(float).0209,(float).018,(float).0191,(float)
-	    .0166,(float).0117,(float).0077,(float).0061,(float).0085,(float)
-	    .0061,(float).0037,(float).0032,(float).0031,(float).00255,(float)
-	    .00198,(float).0014,(float)8.25e-4,(float)2.5e-4,(float)0.,(float)
-	    0.,(float)0.,(float)5.65e-4,(float).00204,(float).00735,(float)
-	    .0203,(float).0498,(float).118,(float).246,(float).518,(float)
-	    1.02,(float)1.95,(float)3.79,(float)6.65,(float)12.4,(float)22.,(
-	    float)36.7,(float)59.5,(float)85.,(float)126.,(float)168.,(float)
-	    206.,(float)242.,(float)271.,(float)291.,(float)302.,(float)303.,(
-	    float)294.,(float)277.,(float)254.,(float)226.,(float)196.,(float)
-	    168.,(float)144.,(float)117.,(float)97.5,(float)76.5,(float)60.4,(
-	    float)46.2,(float)34.6,(float)25.2,(float)20.,(float)15.7,(float)
-	    12.,(float)10.,(float)8.8,(float)8.3,(float)8.6 };
-    static real cch2o[15] = { (float)0.,(float).19,(float).15,(float).12,(
-	    float).1,(float).09,(float).1,(float).12,(float).15,(float).17,(
-	    float).2,(float).24,(float).28,(float).33,(float)0. };
+    static doublereal co3[102] = { .0045,.008,.0107,.011,.0127,.0171,.02,
+	    .0245,.0307,.0384,.0478,.0567,.0654,.0762,.0915,.1,.109,.12,.128,
+	    .112,.111,.116,.119,.113,.103,.0924,.0828,.0757,.0707,.0658,.0556,
+	    .0477,.0406,.0387,.0382,.0294,.0209,.018,.0191,.0166,.0117,.0077,
+	    .0061,.0085,.0061,.0037,.0032,.0031,.00255,.00198,.0014,8.25e-4,
+	    2.5e-4,0.,0.,0.,5.65e-4,.00204,.00735,.0203,.0498,.118,.246,.518,
+	    1.02,1.95,3.79,6.65,12.4,22.,36.7,59.5,85.,126.,168.,206.,242.,
+	    271.,291.,302.,303.,294.,277.,254.,226.,196.,168.,144.,117.,97.5,
+	    76.5,60.4,46.2,34.6,25.2,20.,15.7,12.,10.,8.8,8.3,8.6 };
+    static doublereal cch2o[15] = { 0.,.19,.15,.12,.1,.09,.1,.12,.15,.17,.2,
+	    .24,.28,.33,0. };
 
     /* Builtin functions */
     double exp(doublereal), sqrt(doublereal);
 
     /* Local variables */
-    real a[8], g;
+    doublereal a[8], g;
     integer i__, k, n;
-    real u, v, y, p0, r2[34], r3[34], t0;
+    doublereal u, v, y, p0, r2[34], r3[34], t0;
     integer id, nh;
-    real ds, te, ud, xd;
+    doublereal ds, te, ud, xd;
     integer iv;
-    real rm[34], xh, tp[34], up, xi, tt, ut, uu, tn, ds2, te2, air, phi, rat[
-	    10], upd, udp;
+    doublereal rm[34], xh, tp[34], up, xi, tt, ut, uu, tn, ds2, te2, air, phi,
+	     rat[10], upd, udp;
     integer inu;
-    real psi, uud, upl, udt, tnu[30]	/* was [10][3] */, upt, utt, uut, uuu,
-	     ah2o, ako3, r2pl[34], r3pl[34], rmo2, rmo3;
+    doublereal psi, uud, upl, udt, tnu[30]	/* was [10][3] */, upt, utt, 
+	    uut, uuu, ah2o, ako3, r2pl[34], r3pl[34], rmo2, rmo3;
     extern /* Subroutine */ int print_error__(char *, ftnlen);
-    real accu, rmco, updp, rmpl[34], udtp, updt, uppl;
-    extern /* Subroutine */ int dica2_(real *, integer *), dica3_(real *, 
-	    integer *), dica1_(real *, integer *);
-    real uupl, uptt;
-    extern /* Subroutine */ int moca1_(real *, integer *), moca2_(real *, 
-	    integer *), moca3_(real *, integer *), moca5_(real *, integer *), 
-	    moca6_(real *, integer *), moca4_(real *, integer *);
-    real rmch4;
-    extern /* Subroutine */ int meth1_(real *, integer *), meth2_(real *, 
-	    integer *), meth3_(real *, integer *), meth4_(real *, integer *), 
-	    meth5_(real *, integer *), meth6_(real *, integer *);
-    real roco2;
-    extern /* Subroutine */ int wava6_(real *, integer *), wava5_(real *, 
-	    integer *), wava4_(real *, integer *), wava3_(real *, integer *), 
-	    wava2_(real *, integer *), wava1_(real *, integer *);
-    real rmn2o;
-    extern /* Subroutine */ int niox1_(real *, integer *), niox2_(real *, 
-	    integer *);
-    real test1, test2, test3;
-    extern /* Subroutine */ int niox6_(real *, integer *), niox5_(real *, 
-	    integer *), niox4_(real *, integer *), niox3_(real *, integer *), 
-	    ozon1_(real *, integer *), oxyg3_(real *, integer *), oxyg4_(real 
-	    *, integer *), oxyg5_(real *, integer *), oxyg6_(real *, integer *
-	    );
+    doublereal accu, rmco, updp, rmpl[34], udtp, updt, uppl;
+    extern /* Subroutine */ int dica2_(doublereal *, integer *), dica3_(
+	    doublereal *, integer *), dica1_(doublereal *, integer *);
+    doublereal uupl, uptt;
+    extern /* Subroutine */ int moca1_(doublereal *, integer *), moca2_(
+	    doublereal *, integer *), moca3_(doublereal *, integer *), moca5_(
+	    doublereal *, integer *), moca6_(doublereal *, integer *), moca4_(
+	    doublereal *, integer *);
+    doublereal rmch4;
+    extern /* Subroutine */ int meth1_(doublereal *, integer *), meth2_(
+	    doublereal *, integer *), meth3_(doublereal *, integer *), meth4_(
+	    doublereal *, integer *), meth5_(doublereal *, integer *), meth6_(
+	    doublereal *, integer *);
+    doublereal roco2;
+    extern /* Subroutine */ int wava6_(doublereal *, integer *), wava5_(
+	    doublereal *, integer *), wava4_(doublereal *, integer *), wava3_(
+	    doublereal *, integer *), wava2_(doublereal *, integer *), wava1_(
+	    doublereal *, integer *);
+    doublereal rmn2o;
+    extern /* Subroutine */ int niox1_(doublereal *, integer *), niox2_(
+	    doublereal *, integer *);
+    doublereal test1, test2, test3;
+    extern /* Subroutine */ int niox6_(doublereal *, integer *), niox5_(
+	    doublereal *, integer *), niox4_(doublereal *, integer *), niox3_(
+	    doublereal *, integer *), ozon1_(doublereal *, integer *), oxyg3_(
+	    doublereal *, integer *), oxyg4_(doublereal *, integer *), oxyg5_(
+	    doublereal *, integer *), oxyg6_(doublereal *, integer *);
     integer idgaz;
-    real roair, atest, ratpl[10], updtp;
-    doublereal ptest, ptest1;
-    real dtcont, ttcont, utcont;
+    doublereal roair, atest, ratpl[10], updtp, ptest, ptest1, dtcont, ttcont, 
+	    utcont;
 
 /*     transmittance calculation for ozone, water vapor, */
 /*     carbon dioxyde and oxygen. */
@@ -155,66 +148,66 @@ Extern struct {
 /*<    >*/
 /*<    >*/
 /*<       accu=1.E-10 >*/
-    accu = (float)1e-10;
+    accu = 1e-10;
 /*<       dtwava=1. >*/
-    *dtwava = (float)1.;
+    *dtwava = 1.;
 /*<       utwava=1. >*/
-    *utwava = (float)1.;
+    *utwava = 1.;
 /*<       ttwava=1. >*/
-    *ttwava = (float)1.;
+    *ttwava = 1.;
 /*<       dtcont=1. >*/
-    dtcont = (float)1.;
+    dtcont = 1.;
 /*<       utcont=1. >*/
-    utcont = (float)1.;
+    utcont = 1.;
 /*<       ttcont=1. >*/
-    ttcont = (float)1.;
+    ttcont = 1.;
 /*<       dtozon=1. >*/
-    *dtozon = (float)1.;
+    *dtozon = 1.;
 /*<       utozon=1. >*/
-    *utozon = (float)1.;
+    *utozon = 1.;
 /*<       ttozon=1. >*/
-    *ttozon = (float)1.;
+    *ttozon = 1.;
 /*<       dtdica=1. >*/
-    *dtdica = (float)1.;
+    *dtdica = 1.;
 /*<       utdica=1. >*/
-    *utdica = (float)1.;
+    *utdica = 1.;
 /*<       ttdica=1. >*/
-    *ttdica = (float)1.;
+    *ttdica = 1.;
 /*<       dtoxyg=1. >*/
-    *dtoxyg = (float)1.;
+    *dtoxyg = 1.;
 /*<       utoxyg=1. >*/
-    *utoxyg = (float)1.;
+    *utoxyg = 1.;
 /*<       ttoxyg=1. >*/
-    *ttoxyg = (float)1.;
+    *ttoxyg = 1.;
 /*<       dtniox=1. >*/
-    *dtniox = (float)1.;
+    *dtniox = 1.;
 /*<       utniox=1. >*/
-    *utniox = (float)1.;
+    *utniox = 1.;
 /*<       ttniox=1. >*/
-    *ttniox = (float)1.;
+    *ttniox = 1.;
 /*<       dtmeth=1. >*/
-    *dtmeth = (float)1.;
+    *dtmeth = 1.;
 /*<       utmeth=1. >*/
-    *utmeth = (float)1.;
+    *utmeth = 1.;
 /*<       ttmeth=1. >*/
-    *ttmeth = (float)1.;
+    *ttmeth = 1.;
 /*<       dtmoca=1. >*/
-    *dtmoca = (float)1.;
+    *dtmoca = 1.;
 /*<       utmoca=1. >*/
-    *utmoca = (float)1.;
+    *utmoca = 1.;
 /*<       ttmoca=1. >*/
-    *ttmoca = (float)1.;
+    *ttmoca = 1.;
 /*<       do 201 i=1,10 >*/
     for (i__ = 1; i__ <= 10; ++i__) {
 /* orig do 201 i=1,7 */
 /*<       rat(i)=1. >*/
-	rat[i__ - 1] = (float)1.;
+	rat[i__ - 1] = 1.;
 /*<       tnu(i,1)=1. >*/
-	tnu[i__ - 1] = (float)1.;
+	tnu[i__ - 1] = 1.;
 /*<       tnu(i,2)=1. >*/
-	tnu[i__ + 9] = (float)1.;
+	tnu[i__ + 9] = 1.;
 /*<       tnu(i,3)=1. >*/
-	tnu[i__ + 19] = (float)1.;
+	tnu[i__ + 19] = 1.;
 /*<   201 continue >*/
 /* L201: */
     }
@@ -223,41 +216,41 @@ Extern struct {
 	return 0;
     }
 /*<       if((xmus.eq.0.).or.(xmuv.eq.0.)) goto 95 >*/
-    if (*xmus == (float)0. || *xmuv == (float)0.) {
+    if (*xmus == 0. || *xmuv == 0.) {
 	goto L95;
     }
 /*     constants determination */
 /*<       p0=1013.25 >*/
-    p0 = (float)1013.25;
+    p0 = 1013.25;
 /*<       g=98.1 >*/
-    g = (float)98.1;
+    g = 98.1;
 /*<       t0=250. >*/
-    t0 = (float)250.;
+    t0 = 250.;
 /*     volumic mass in kilogrammes per m3 */
 /*<       ds=0. >*/
-    ds = (float)0.;
+    ds = 0.;
 /*<       te=0. >*/
-    te = (float)0.;
+    te = 0.;
 /*<       roair=0. >*/
-    roair = (float)0.;
+    roair = 0.;
 /*<       air=0.028964/0.0224 >*/
-    air = (float)1.2930357142857143;
+    air = 1.2930357142857143;
 /*<       roco2=0.044/0.0224 >*/
-    roco2 = (float)1.9642857142857142;
+    roco2 = 1.9642857142857142;
 /*<       rmo2=0.032/0.0224 >*/
-    rmo2 = (float)1.4285714285714286;
+    rmo2 = 1.4285714285714286;
 /*<       rmo3=0.048/0.0224 >*/
-    rmo3 = (float)2.1428571428571428;
+    rmo3 = 2.1428571428571428;
 /*<       rmn2o=0.044/0.0224 >*/
-    rmn2o = (float)1.9642857142857142;
+    rmn2o = 1.9642857142857142;
 /*<       rmch4=0.016/0.0224 >*/
-    rmch4 = (float).7142857142857143;
+    rmch4 = .7142857142857143;
 /*<       rmco =0.028/0.0224 >*/
-    rmco = (float)1.25;
+    rmco = 1.25;
 /*<       uwus=1.424 >*/
-    *uwus = (float)1.424;
+    *uwus = 1.424;
 /*<       uo3us=.344 >*/
-    *uo3us = (float).344;
+    *uo3us = .344;
 /*<       if(idatm.eq.8) goto 80 >*/
     if (*idatm == 8) {
 	goto L80;
@@ -268,17 +261,17 @@ Extern struct {
 L80:
     rat[0] = *uw / *uwus;
 /*<       rat(2)=1. >*/
-    rat[1] = (float)1.;
+    rat[1] = 1.;
 /*<       rat(3)=1. >*/
-    rat[2] = (float)1.;
+    rat[2] = 1.;
 /*<       rat(4)=uo3/uo3us >*/
     rat[3] = *uo3 / *uo3us;
 /*<       rat(5)=1. >*/
-    rat[4] = (float)1.;
+    rat[4] = 1.;
 /*<       rat(6)=1. >*/
-    rat[5] = (float)1.;
+    rat[5] = 1.;
 /*<       rat(7)=1. >*/
-    rat[6] = (float)1.;
+    rat[6] = 1.;
 /*<       rat(8)=uw/uwus >*/
     rat[7] = *uw / *uwus;
 /*<       rat(9)=uw/uwus >*/
@@ -287,9 +280,9 @@ L80:
     rat[9] = *uw / *uwus;
 /*<    90 v=1.0e+04/wl >*/
 L90:
-    v = (float)1e4 / *wl;
+    v = 1e4 / *wl;
 /*<       iv=v/5. >*/
-    iv = v / (float)5.;
+    iv = (integer) (v / 5.);
 /*<       iv=iv*5 >*/
     iv *= 5;
 /*<       id=((iv-2500)/10)/256+1 >*/
@@ -503,7 +496,7 @@ L101:
 L270:
 	for (i__ = 1; i__ <= 8; ++i__) {
 /*<       a(i)=0. >*/
-	    a[i__ - 1] = (float)0.;
+	    a[i__ - 1] = 0.;
 /*<   200 continue >*/
 /* L200: */
 	}
@@ -513,10 +506,10 @@ L271:
 /*<       do k=1,33  >*/
 	for (k = 1; k <= 33; ++k) {
 /*<       roair=air*273.16*p(k)/(1013.25*t(k)) >*/
-	    roair = air * (float)273.16 * sixs_atm__1.p[k - 1] / (
-		    sixs_atm__1.t[k - 1] * (float)1013.25);
+	    roair = air * 273.16 * sixs_atm__1.p[k - 1] / (sixs_atm__1.t[k - 
+		    1] * 1013.25);
 /*<       tp(k)=(t(k)+t(k+1))/2. >*/
-	    tp[k - 1] = (sixs_atm__1.t[k - 1] + sixs_atm__1.t[k]) / (float)2.;
+	    tp[k - 1] = (sixs_atm__1.t[k - 1] + sixs_atm__1.t[k]) / 2.;
 /*<       te=tp(k)-t0 >*/
 	    te = tp[k - 1] - t0;
 /*<       te2=te*te >*/
@@ -527,31 +520,31 @@ L271:
 	    psi = exp(a[4] * te + a[5] * te2);
 /*<       if(idgaz.eq.1) rm(k)=wh(k)/(roair*1000.) >*/
 	    if (idgaz == 1) {
-		rm[k - 1] = sixs_atm__1.wh[k - 1] / (roair * (float)1e3);
+		rm[k - 1] = sixs_atm__1.wh[k - 1] / (roair * 1e3);
 	    }
 /*<       if(idgaz.eq.2) rm(k)=3.3e-04*roco2/air >*/
 	    if (idgaz == 2) {
-		rm[k - 1] = roco2 * (float)3.3e-4 / air;
+		rm[k - 1] = roco2 * 3.3e-4 / air;
 	    }
 /*<       if(idgaz.eq.3) rm(k)=0.20947*rmo2/air >*/
 	    if (idgaz == 3) {
-		rm[k - 1] = rmo2 * (float).20947 / air;
+		rm[k - 1] = rmo2 * .20947 / air;
 	    }
 /*<       if(idgaz.eq.4) rm(k)=wo(k)/(roair*1000.) >*/
 	    if (idgaz == 4) {
-		rm[k - 1] = sixs_atm__1.wo[k - 1] / (roair * (float)1e3);
+		rm[k - 1] = sixs_atm__1.wo[k - 1] / (roair * 1e3);
 	    }
 /*<       if(idgaz.eq.5) rm(k)=310.e-09*rmn2o/air >*/
 	    if (idgaz == 5) {
-		rm[k - 1] = rmn2o * (float)3.1e-7 / air;
+		rm[k - 1] = rmn2o * 3.1e-7 / air;
 	    }
 /*<       if(idgaz.eq.6) rm(k)=1.72e-06*rmch4/air >*/
 	    if (idgaz == 6) {
-		rm[k - 1] = rmch4 * (float)1.72e-6 / air;
+		rm[k - 1] = rmch4 * 1.72e-6 / air;
 	    }
 /*<       if(idgaz.eq.7) rm(k)=1.00e-09*rmco /air >*/
 	    if (idgaz == 7) {
-		rm[k - 1] = rmco * (float)1e-9 / air;
+		rm[k - 1] = rmco * 1e-9 / air;
 	    }
 /*<       r2(k)=rm(k)*phi >*/
 	    r2[k - 1] = rm[k - 1] * phi;
@@ -561,33 +554,33 @@ L271:
 	}
 
 /*<       uu=0. >*/
-	uu = (float)0.;
+	uu = 0.;
 /*<       u=0. >*/
-	u = (float)0.;
+	u = 0.;
 /*<       up=0. >*/
-	up = (float)0.;
+	up = 0.;
 /*<       uud=0. >*/
-	uud = (float)0.;
+	uud = 0.;
 /*<       uut=0. >*/
-	uut = (float)0.;
+	uut = 0.;
 /*<       uuu=0. >*/
-	uuu = (float)0.;
+	uuu = 0.;
 /*<       ud=0. >*/
-	ud = (float)0.;
+	ud = 0.;
 /*<       ut=0. >*/
-	ut = (float)0.;
+	ut = 0.;
 /*<       upd=0. >*/
-	upd = (float)0.;
+	upd = 0.;
 /*<       upt=0. >*/
-	upt = (float)0.;
+	upt = 0.;
 /*<       udp=0. >*/
-	udp = (float)0.;
+	udp = 0.;
 /*<       updp=0. >*/
-	updp = (float)0.;
+	updp = 0.;
 /*<       udtp=0. >*/
-	udtp = (float)0.;
+	udtp = 0.;
 /*<       updtp=0. >*/
-	updtp = (float)0.;
+	updtp = 0.;
 /*     pressure scale integration sigma=p/p0 */
 /*<          do 50 k=2,33                                   >*/
 	for (k = 2; k <= 33; ++k) {
@@ -597,41 +590,41 @@ L271:
 /*<          ds2=(p(k-1)*p(k-1)-p(k)*p(k))/(2.*p(1)*p0)   >*/
 	    ds2 = (sixs_atm__1.p[k - 2] * sixs_atm__1.p[k - 2] - 
 		    sixs_atm__1.p[k - 1] * sixs_atm__1.p[k - 1]) / (
-		    sixs_atm__1.p[0] * (float)2. * p0);
+		    sixs_atm__1.p[0] * 2. * p0);
 /*<          uu=uu+((rm(k)+rm(k-1))/2.)*ds*rat(idgaz)    >*/
-	    uu += (rm[k - 1] + rm[k - 2]) / (float)2. * ds * rat[idgaz - 1];
+	    uu += (rm[k - 1] + rm[k - 2]) / 2. * ds * rat[idgaz - 1];
 /*<          u =u +((r2(k)+r2(k-1))/2.)*ds*rat(idgaz)   >*/
-	    u += (r2[k - 1] + r2[k - 2]) / (float)2. * ds * rat[idgaz - 1];
+	    u += (r2[k - 1] + r2[k - 2]) / 2. * ds * rat[idgaz - 1];
 /*<          up=up+((r3(k)+r3(k-1))/2.)*ds2*rat(idgaz) >*/
-	    up += (r3[k - 1] + r3[k - 2]) / (float)2. * ds2 * rat[idgaz - 1];
+	    up += (r3[k - 1] + r3[k - 2]) / 2. * ds2 * rat[idgaz - 1];
 /*<    50    continue                                 >*/
 /* L50: */
 	}
 /*<          uu=uu*p(1)*100./g                       >*/
-	uu = uu * sixs_atm__1.p[0] * (float)100. / g;
+	uu = uu * sixs_atm__1.p[0] * 100. / g;
 /*<          u=u*p(1)*100./g                        >*/
-	u = u * sixs_atm__1.p[0] * (float)100. / g;
+	u = u * sixs_atm__1.p[0] * 100. / g;
 /*<          up=up*p(1)*100./g                     >*/
-	up = up * sixs_atm__1.p[0] * (float)100. / g;
+	up = up * sixs_atm__1.p[0] * 100. / g;
 /*<          if(idgaz.eq.4) uu=1000.*uu/rmo3     >*/
 	if (idgaz == 4) {
-	    uu = uu * (float)1e3 / rmo3;
+	    uu = uu * 1e3 / rmo3;
 	}
 /*<          if(idgaz.eq.2) uu=1000.*uu/roco2   >*/
 	if (idgaz == 2) {
-	    uu = uu * (float)1e3 / roco2;
+	    uu = uu * 1e3 / roco2;
 	}
 /*<          if(idgaz.eq.5) uu=1000.*uu/rmn2o >*/
 	if (idgaz == 5) {
-	    uu = uu * (float)1e3 / rmn2o;
+	    uu = uu * 1e3 / rmn2o;
 	}
 /*<          if(idgaz.eq.6) uu=1000.*uu/rmch4 >*/
 	if (idgaz == 6) {
-	    uu = uu * (float)1e3 / rmch4;
+	    uu = uu * 1e3 / rmch4;
 	}
 /*<          if(idgaz.eq.7) uu=1000.*uu/rmco >*/
 	if (idgaz == 7) {
-	    uu = uu * (float)1e3 / rmco;
+	    uu = uu * 1e3 / rmco;
 	}
 /*     mixing ratio for plane calculation for each gaseous constituent
 s */
@@ -648,11 +641,11 @@ s */
 /*<           do k=1,33 >*/
 	    for (k = 1; k <= 33; ++k) {
 /*<           roair=air*273.16*ppl(k)/(1013.25*tpl(k)) >*/
-		roair = air * (float)273.16 * sixs_planesim__1.ppl[k - 1] / (
-			sixs_planesim__1.tpl[k - 1] * (float)1013.25);
+		roair = air * 273.16 * sixs_planesim__1.ppl[k - 1] / (
+			sixs_planesim__1.tpl[k - 1] * 1013.25);
 /*<           tp(k)=(tpl(k)+tpl(k+1))/2. >*/
 		tp[k - 1] = (sixs_planesim__1.tpl[k - 1] + 
-			sixs_planesim__1.tpl[k]) / (float)2.;
+			sixs_planesim__1.tpl[k]) / 2.;
 /*<           te=tp(k)-t0 >*/
 		te = tp[k - 1] - t0;
 /*<           te2=te*te >*/
@@ -663,33 +656,33 @@ s */
 		psi = exp(a[4] * te + a[5] * te2);
 /*<           if(idgaz.eq.1) rmpl(k)=whpl(k)/(roair*1000.) >*/
 		if (idgaz == 1) {
-		    rmpl[k - 1] = sixs_planesim__1.whpl[k - 1] / (roair * (
-			    float)1e3);
+		    rmpl[k - 1] = sixs_planesim__1.whpl[k - 1] / (roair * 1e3)
+			    ;
 		}
 /*<           if(idgaz.eq.2) rmpl(k)=3.3e-04*roco2/air >*/
 		if (idgaz == 2) {
-		    rmpl[k - 1] = roco2 * (float)3.3e-4 / air;
+		    rmpl[k - 1] = roco2 * 3.3e-4 / air;
 		}
 /*<           if(idgaz.eq.3) rmpl(k)=0.20947*rmo2/air >*/
 		if (idgaz == 3) {
-		    rmpl[k - 1] = rmo2 * (float).20947 / air;
+		    rmpl[k - 1] = rmo2 * .20947 / air;
 		}
 /*<           if(idgaz.eq.4) rmpl(k)=wopl(k)/(roair*1000.) >*/
 		if (idgaz == 4) {
-		    rmpl[k - 1] = sixs_planesim__1.wopl[k - 1] / (roair * (
-			    float)1e3);
+		    rmpl[k - 1] = sixs_planesim__1.wopl[k - 1] / (roair * 1e3)
+			    ;
 		}
 /*<           if(idgaz.eq.5) rmpl(k)=310.e-09*rmn2o/air >*/
 		if (idgaz == 5) {
-		    rmpl[k - 1] = rmn2o * (float)3.1e-7 / air;
+		    rmpl[k - 1] = rmn2o * 3.1e-7 / air;
 		}
 /*<           if(idgaz.eq.6) rmpl(k)=1.72e-06*rmch4/air >*/
 		if (idgaz == 6) {
-		    rmpl[k - 1] = rmch4 * (float)1.72e-6 / air;
+		    rmpl[k - 1] = rmch4 * 1.72e-6 / air;
 		}
 /*<           if(idgaz.eq.7) rmpl(k)=1.00e-09*rmco /air >*/
 		if (idgaz == 7) {
-		    rmpl[k - 1] = rmco * (float)1e-9 / air;
+		    rmpl[k - 1] = rmco * 1e-9 / air;
 		}
 /*<           r2pl(k)=rmpl(k)*phi >*/
 		r2pl[k - 1] = rmpl[k - 1] * phi;
@@ -699,16 +692,16 @@ s */
 	    }
 
 /*<           uupl=0. >*/
-	    uupl = (float)0.;
+	    uupl = 0.;
 /*<           upl=0. >*/
-	    upl = (float)0.;
+	    upl = 0.;
 /*<           uppl=0. >*/
-	    uppl = (float)0.;
+	    uppl = 0.;
 /* update ratio plane */
 /*<           do i=1,10 >*/
 	    for (i__ = 1; i__ <= 10; ++i__) {
 /*<           ratpl(i)=1. >*/
-		ratpl[i__ - 1] = (float)1.;
+		ratpl[i__ - 1] = 1.;
 /*<           enddo >*/
 	    }
 /*<           if (idatmp.eq.8) then >*/
@@ -716,17 +709,17 @@ s */
 /*<           ratpl(1)=uwpl/uwusp >*/
 		ratpl[0] = *uwpl / *uwusp;
 /*<           ratpl(2)=1. >*/
-		ratpl[1] = (float)1.;
+		ratpl[1] = 1.;
 /*<           ratpl(3)=1. >*/
-		ratpl[2] = (float)1.;
+		ratpl[2] = 1.;
 /*<           ratpl(4)=uo3pl/uo3usp >*/
 		ratpl[3] = *uo3pl / *uo3usp;
 /*<           ratpl(5)=1. >*/
-		ratpl[4] = (float)1.;
+		ratpl[4] = 1.;
 /*<           ratpl(6)=1. >*/
-		ratpl[5] = (float)1.;
+		ratpl[5] = 1.;
 /*<           ratpl(7)=1. >*/
-		ratpl[6] = (float)1.;
+		ratpl[6] = 1.;
 /*<           ratpl(8)=uwpl/uwusp >*/
 		ratpl[7] = *uwpl / *uwusp;
 /*<           ratpl(9)=uwpl/uwusp >*/
@@ -746,24 +739,24 @@ s */
 		ds2 = (sixs_planesim__1.ppl[k - 2] * sixs_planesim__1.ppl[k - 
 			2] - sixs_planesim__1.ppl[k - 1] * 
 			sixs_planesim__1.ppl[k - 1]) / (sixs_planesim__1.ppl[
-			0] * (float)2. * p0);
+			0] * 2. * p0);
 /*<          uupl=uupl+((rmpl(k)+rmpl(k-1))/2.)*ds*ratpl(idgaz) >*/
-		uupl += (rmpl[k - 1] + rmpl[k - 2]) / (float)2. * ds * ratpl[
-			idgaz - 1];
+		uupl += (rmpl[k - 1] + rmpl[k - 2]) / 2. * ds * ratpl[idgaz - 
+			1];
 /*<          upl =upl +((r2pl(k)+r2pl(k-1))/2.)*ds*ratpl(idgaz) >*/
-		upl += (r2pl[k - 1] + r2pl[k - 2]) / (float)2. * ds * ratpl[
-			idgaz - 1];
+		upl += (r2pl[k - 1] + r2pl[k - 2]) / 2. * ds * ratpl[idgaz - 
+			1];
 /*<          uppl=uppl+((r3pl(k)+r3pl(k-1))/2.)*ds2*ratpl(idgaz) >*/
-		uppl += (r3pl[k - 1] + r3pl[k - 2]) / (float)2. * ds2 * ratpl[
-			idgaz - 1];
+		uppl += (r3pl[k - 1] + r3pl[k - 2]) / 2. * ds2 * ratpl[idgaz 
+			- 1];
 /*<          enddo >*/
 	    }
 /*<          uupl=uupl*ppl(1)*100./g >*/
-	    uupl = uupl * sixs_planesim__1.ppl[0] * (float)100. / g;
+	    uupl = uupl * sixs_planesim__1.ppl[0] * 100. / g;
 /*<          upl=upl*ppl(1)*100./g >*/
-	    upl = upl * sixs_planesim__1.ppl[0] * (float)100. / g;
+	    upl = upl * sixs_planesim__1.ppl[0] * 100. / g;
 /*<          uppl=uppl*ppl(1)*100./g >*/
-	    uppl = uppl * sixs_planesim__1.ppl[0] * (float)100. / g;
+	    uppl = uppl * sixs_planesim__1.ppl[0] * 100. / g;
 /*<          if(idgaz.eq.4) uupl=1000*uupl/rmo3 >*/
 	    if (idgaz == 4) {
 		uupl = uupl * 1000 / rmo3;
@@ -816,21 +809,21 @@ s */
 	goto L145;
 /*<   146 xi=0. >*/
 L146:
-	xi = (float)0.;
+	xi = 0.;
 /*<       n=0 >*/
 	n = 0;
 /*<       xd=0. >*/
-	xd = (float)0.;
+	xd = 0.;
 /*<       if(iv.lt.2350.or.iv.gt.3000) goto 148 >*/
 	if (iv < 2350 || iv > 3000) {
 	    goto L148;
 	}
 /*<       xi=(v-2350.)/50.+1. >*/
-	xi = (v - (float)2350.) / (float)50. + (float)1.;
+	xi = (v - 2350.) / 50. + 1.;
 /*<       NH=XI+1.001 >*/
-	nh = xi + (float)1.001;
+	nh = (integer) (xi + 1.001);
 /*<       XH=XI-FLOAT(NH) >*/
-	xh = xi - (real) nh;
+	xh = xi - (doublereal) nh;
 /*<       AH2O=CCH2O(NH)+XH*(CCH2O(NH)-CCH2O(NH-1)) >*/
 	ah2o = cch2o[nh - 1] + xh * (cch2o[nh - 1] - cch2o[nh - 2]);
 /*<       DTCONT=EXP(-AH2O*UUD) >*/
@@ -857,26 +850,26 @@ L148:
 	    goto L135;
 	}
 /*<       tnu(4,1)=1. >*/
-	tnu[3] = (float)1.;
+	tnu[3] = 1.;
 /*<       tnu(4,2)=1. >*/
-	tnu[13] = (float)1.;
+	tnu[13] = 1.;
 /*<       tnu(4,3)=1. >*/
-	tnu[23] = (float)1.;
+	tnu[23] = 1.;
 /*<       goto 45 >*/
 	goto L45;
 /*<   130 xi=(v-13000.)/200.+1. >*/
 L130:
-	xi = (v - (float)1.3e4) / (float)200. + (float)1.;
+	xi = (v - 1.3e4) / 200. + 1.;
 /*<       goto 140 >*/
 	goto L140;
 /*<   135 xi=(v-27500.)/500.+57. >*/
 L135:
-	xi = (v - (float)27500.) / (float)500. + (float)57.;
+	xi = (v - 27500.) / 500. + 57.;
 /*<   140 n=xi+1.001 >*/
 L140:
-	n = xi + (float)1.001;
+	n = (integer) (xi + 1.001);
 /*<       xd=xi-float(n) >*/
-	xd = xi - (real) n;
+	xd = xi - (doublereal) n;
 /*<       ako3=co3(n)+xd*(co3(n)-co3(n-1)) >*/
 	ako3 = co3[n - 1] + xd * (co3[n - 1] - co3[n - 2]);
 /*<       test1=ako3*uud >*/
@@ -887,16 +880,16 @@ L140:
 	test3 = ako3 * uut;
 /*     exponential overflow test */
 /*<       if(test1.gt.86.0) test1=86.0 >*/
-	if (test1 > (float)86.) {
-	    test1 = (float)86.;
+	if (test1 > 86.) {
+	    test1 = 86.;
 	}
 /*<       if(test2.gt.86.0) test2=86.0 >*/
-	if (test2 > (float)86.) {
-	    test2 = (float)86.;
+	if (test2 > 86.) {
+	    test2 = 86.;
 	}
 /*<       if(test3.gt.86.0) test3=86.0 >*/
-	if (test3 > (float)86.) {
-	    test3 = (float)86.;
+	if (test3 > 86.) {
+	    test3 = 86.;
 	}
 /*<       tnu(4,1)=exp(-test1) >*/
 	tnu[3] = exp(-test1);
@@ -922,22 +915,22 @@ L145:
 /*<       udt=ud >*/
 	udt = ud;
 /*<       if(ud.eq.0.and.upd.eq.0.) udt=1. >*/
-	if (ud == (float)0. && upd == (float)0.) {
-	    udt = (float)1.;
+	if (ud == 0. && upd == 0.) {
+	    udt = 1.;
 	}
 /*<       tn=a(2)*upd/(2*udt) >*/
 	tn = a[1] * upd / (udt * 2);
 /*<       atest=a(2) >*/
 	atest = a[1];
 /*<       if (a(2).eq.0.and.a(1).eq.0.) atest=1. >*/
-	if (a[1] == (float)0. && a[0] == (float)0.) {
-	    atest = (float)1.;
+	if (a[1] == 0. && a[0] == 0.) {
+	    atest = 1.;
 	}
 /*<       updt=upd >*/
 	updt = upd;
 /*<       if(ud.eq.0.and.upd.eq.0.) updt=1. >*/
-	if (ud == (float)0. && upd == (float)0.) {
-	    updt = (float)1.;
+	if (ud == 0. && upd == 0.) {
+	    updt = 1.;
 	}
 /*<       tt=1+4*(a(1)/atest)*((ud*ud)/updt) >*/
 	tt = a[0] / atest * 4 * (ud * ud / updt) + 1;
@@ -959,22 +952,22 @@ L145:
 /*<       udtp=udp >*/
 	udtp = udp;
 /*<       if(udp.eq.0.and.updp.eq.0.) udtp=1. >*/
-	if (udp == (float)0. && updp == (float)0.) {
-	    udtp = (float)1.;
+	if (udp == 0. && updp == 0.) {
+	    udtp = 1.;
 	}
 /*<       tn=a(2)*updp/(2*udtp) >*/
 	tn = a[1] * updp / (udtp * 2);
 /*<       atest=a(2) >*/
 	atest = a[1];
 /*<       if (a(2).eq.0.and.a(1).eq.0.) atest=1. >*/
-	if (a[1] == (float)0. && a[0] == (float)0.) {
-	    atest = (float)1.;
+	if (a[1] == 0. && a[0] == 0.) {
+	    atest = 1.;
 	}
 /*<       updtp=updp >*/
 	updtp = updp;
 /*<       if(udp.eq.0.and.updp.eq.0.) updtp=1. >*/
-	if (udp == (float)0. && updp == (float)0.) {
-	    updtp = (float)1.;
+	if (udp == 0. && updp == 0.) {
+	    updtp = 1.;
 	}
 /*<       tt=1+4*(a(1)/atest)*((udp*udp)/updtp) >*/
 	tt = a[0] / atest * 4 * (udp * udp / updtp) + 1;
@@ -996,16 +989,16 @@ L145:
 /*<       utt=ut >*/
 	utt = ut;
 /*<       if(ut.eq.0.and.upt.eq.0.) utt=1. >*/
-	if (ut == (float)0. && upt == (float)0.) {
-	    utt = (float)1.;
+	if (ut == 0. && upt == 0.) {
+	    utt = 1.;
 	}
 /*<       tn=a(2)*upt/(2*utt) >*/
 	tn = a[1] * upt / (utt * 2);
 /*<       uptt=upt >*/
 	uptt = upt;
 /*<       if(ut.eq.0.and.upt.eq.0.) uptt=1. >*/
-	if (ut == (float)0. && upt == (float)0.) {
-	    uptt = (float)1.;
+	if (ut == 0. && upt == 0.) {
+	    uptt = 1.;
 	}
 /*<       tt=1+4*(a(1)/atest)*((ut*ut)/uptt) >*/
 	tt = a[0] / atest * 4 * (ut * ut / uptt) + 1;
@@ -1021,11 +1014,11 @@ L145:
 	goto L40;
 /*<   147 tnu(idgaz,1)=1. >*/
 L147:
-	tnu[idgaz - 1] = (float)1.;
+	tnu[idgaz - 1] = 1.;
 /*<       tnu(idgaz,2)=1. >*/
-	tnu[idgaz + 9] = (float)1.;
+	tnu[idgaz + 9] = 1.;
 /*<       tnu(idgaz,3)=1. >*/
-	tnu[idgaz + 19] = (float)1.;
+	tnu[idgaz + 19] = 1.;
 /*<    40 continue >*/
 L40:
 	;
@@ -1043,7 +1036,7 @@ L45:
 /*<          else >*/
     } else {
 /*<          dtwava=0. >*/
-	*dtwava = (float)0.;
+	*dtwava = 0.;
 /*<          endif >*/
     }
 /*<       ptest1=tnu(1,2)*utcont >*/
@@ -1057,7 +1050,7 @@ L45:
 /*<          else >*/
     } else {
 /*<          utwava=0. >*/
-	*utwava = (float)0.;
+	*utwava = 0.;
 /*<          endif >*/
     }
 /*<       ptest1=tnu(1,3)*ttcont >*/
@@ -1071,7 +1064,7 @@ L45:
 /*<          else >*/
     } else {
 /*<          ttwava=0. >*/
-	*ttwava = (float)0.;
+	*ttwava = 0.;
 /*<          endif >*/
     }
 /*<       dtdica=tnu(2,1) >*/
@@ -1115,31 +1108,31 @@ L45:
 /*<          ttwava=dtwava >*/
 	*ttwava = *dtwava;
 /*<          utwava=1. >*/
-	*utwava = (float)1.;
+	*utwava = 1.;
 /*<          ttdica=dtdica >*/
 	*ttdica = *dtdica;
 /*<          utdica=1. >*/
-	*utdica = (float)1.;
+	*utdica = 1.;
 /*<          ttoxyg=dtoxyg >*/
 	*ttoxyg = *dtoxyg;
 /*<          utoxyg=1. >*/
-	*utoxyg = (float)1.;
+	*utoxyg = 1.;
 /*<          ttozon=dtozon >*/
 	*ttozon = *dtozon;
 /*<          utozon=1. >*/
-	*utozon = (float)1.;
+	*utozon = 1.;
 /*<          ttniox=dtniox >*/
 	*ttniox = *dtniox;
 /*<          utniox=1. >*/
-	*utniox = (float)1.;
+	*utniox = 1.;
 /*<          ttmeth=dtmeth >*/
 	*ttmeth = *dtmeth;
 /*<          utmeth=1. >*/
-	*utmeth = (float)1.;
+	*utmeth = 1.;
 /*<          ttmoca=dtmoca >*/
 	*ttmoca = *dtmoca;
 /*<          utmoca=1. >*/
-	*utmoca = (float)1.;
+	*utmoca = 1.;
 /*<          endif >*/
     }
 /*<       return >*/

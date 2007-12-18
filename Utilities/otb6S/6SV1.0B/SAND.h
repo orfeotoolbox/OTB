@@ -1,3 +1,3 @@
 extern int otb_6s_sand_(
-  otb_6s_real *r__
+  otb_6s_doublereal *r__
   );

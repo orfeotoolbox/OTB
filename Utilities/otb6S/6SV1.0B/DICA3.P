@@ -1,1 +1,1 @@
-extern int dica3_(real *a, integer *inu);
+extern int dica3_(doublereal *a, integer *inu);

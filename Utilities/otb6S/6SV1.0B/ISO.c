@@ -6,7 +6,6 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
-
 /* OTB patches: replace "f2c.h" by "otb_6S.h" */
 /*#include "f2c.h"*/
 #include "otb_6S.h"
@@ -14,7 +13,7 @@ extern "C" {
 /* Common Block Declarations */
 
 Extern struct {
-    real delta, sigma;
+    doublereal delta, sigma;
 } sixs_del__;
 
 #define sixs_del__1 sixs_del__
@@ -37,9 +36,10 @@ Extern struct {
 static integer c__0 = 0;
 
 /*<    >*/
-/* Subroutine */ int iso_(integer *iaer_prof__, real *tamoy, real *trmoy, 
-	real *pizmoy, real *tamoyp, real *trmoyp, real *palt, integer *nt, 
-	integer *mu, real *rm, real *gb, real *xf)
+/* Subroutine */ int iso_(integer *iaer_prof__, doublereal *tamoy, doublereal 
+	*trmoy, doublereal *pizmoy, doublereal *tamoyp, doublereal *trmoyp, 
+	doublereal *palt, integer *nt, integer *mu, doublereal *rm, 
+	doublereal *gb, doublereal *xf)
 {
     /* System generated locals */
     integer rm_offset, gb_offset, i__1, i__2, i__3;
@@ -54,8 +54,8 @@ static integer c__0 = 0;
     doublereal x, y, z__, a1, d1, g1, i1[1581]	/* was [31][51] */, i2[1581]	
 	    /* was [31][51] */, i3[51];
     extern /* Subroutine */ int aero_prof__(doublereal *, doublereal *, 
-	    doublereal *, doublereal *, integer *, real *, doublereal *, 
-	    doublereal *, doublereal *, doublereal *, doublereal *);
+	    doublereal *, doublereal *, integer *, doublereal *, doublereal *,
+	     doublereal *, doublereal *, doublereal *, doublereal *);
     doublereal y1, ca, dd, ha, ch[31];
     integer ig;
     doublereal bp[1326]	/* was [26][51] */;
@@ -68,16 +68,14 @@ static integer c__0 = 0;
 	    xpk, trp, ypk;
     integer snt, ntp;
     doublereal xxx, acu2, inm1[51], inm2[51], ppp1, ppp2, aaaa, altc[31], 
-	    bpjk, xdel[31], ydel[31], taup, beta0;
-    real xmus;
-    doublereal beta2, bpjmk;
+	    bpjk, xdel[31], ydel[31], taup, beta0, xmus, beta2, bpjmk;
     integer index;
     doublereal ratio;
     integer iplane;
     extern /* Subroutine */ int discre_(doublereal *, doublereal *, 
 	    doublereal *, doublereal *, integer *, integer *, doublereal *, 
 	    doublereal *, doublereal *, doublereal *, doublereal *), kernel_(
-	    integer *, integer *, real *, doublereal *, doublereal *, 
+	    integer *, integer *, doublereal *, doublereal *, doublereal *, 
 	    doublereal *);
     doublereal tavion, tavion0, tavion1, tavion2;
 
@@ -132,9 +130,9 @@ static integer c__0 = 0;
 /*<       iplane=0 >*/
     iplane = 0;
 /*<       acu=1.e-20 >*/
-    acu = (float)1e-20;
+    acu = 1e-20;
 /*<       acu2=1.e-3 >*/
-    acu2 = (float).001;
+    acu2 = .001;
 /*<       ta=tamoy >*/
     ta = *tamoy;
 /*<       piz=pizmoy >*/
@@ -145,7 +143,7 @@ static integer c__0 = 0;
     for (m = -1; m <= 1; ++m) {
 /*<  615  xf(m)=0. >*/
 /* L615: */
-	xf[m] = (float)0.;
+	xf[m] = 0.;
     }
 
 /*     molecular ratio within the layer */
@@ -161,7 +159,7 @@ static integer c__0 = 0;
 /*     print *, 'tamoy,trmoy,pizmoy,tap,trp,palt,nt' */
 /*     print *,tamoy,trmoy,pizmoy,tap,trp,palt,nt */
 /*<       acu=1.e-20 >*/
-    acu = (float)1e-20;
+    acu = 1e-20;
 /* if plane observations recompute scale height for aerosol knowing: */
 /* the aerosol optical depth as measure from the plane 	= tamoyp */
 /* the rayleigh scale   height = 			= hr (8km) */
@@ -173,18 +171,18 @@ static integer c__0 = 0;
 /* ntp local variable: if ntp=nt     no plane observation selected */
 /*                        ntp=nt-1   plane observation selected */
 /*<       hr=8.0 >*/
-    hr = (float)8.;
+    hr = 8.;
 /*     it's a mixing rayleigh+aerosol */
 /*<       if(palt.le.900..and.palt.gt.0.0)then >*/
-    if (*palt <= (float)900. && *palt > (float)0.) {
+    if (*palt <= 900. && *palt > 0.) {
 /*<       if (tap.gt.1.e-03) then >*/
-	if (tap > (float).001) {
+	if (tap > .001) {
 /*<          ha=-palt/log(tap/ta) >*/
 	    ha = -(*palt) / log(tap / ta);
 /*<          else >*/
 	} else {
 /*<          ha=2. >*/
-	    ha = (float)2.;
+	    ha = 2.;
 /*<          endif >*/
 	}
 /*<       ntp=nt-1 >*/
@@ -192,7 +190,7 @@ static integer c__0 = 0;
 /*<       else >*/
     } else {
 /*<       ha=2.0 >*/
-	ha = (float)2.;
+	ha = 2.;
 /*<       ntp=nt >*/
 	ntp = *nt;
 /*<       endif >*/
@@ -218,9 +216,9 @@ static integer c__0 = 0;
 /*<       h(j)=j*tr/ntp >*/
 	    h__[j] = j * tr / ntp;
 /*<       ydel(j)=1.0 >*/
-	    ydel[j] = (float)1.;
+	    ydel[j] = 1.;
 /*<       xdel(j)=0.0 >*/
-	    xdel[j] = (float)0.;
+	    xdel[j] = 0.;
 /*<       enddo >*/
 	}
 /*<       endif >*/
@@ -233,7 +231,7 @@ static integer c__0 = 0;
 /*<       h(j)=j*ta/ntp >*/
 	    h__[j] = j * ta / ntp;
 /*<       ydel(j)=0.0 >*/
-	    ydel[j] = (float)0.;
+	    ydel[j] = 0.;
 /*<       xdel(j)=piz >*/
 	    xdel[j] = piz;
 /*<       enddo >*/
@@ -244,15 +242,15 @@ static integer c__0 = 0;
 /*<       if(tr.gt.acu2.and.ta.gt.acu2.and.iaer_prof.eq.0)then >*/
     if (tr > acu2 && ta > acu2 && *iaer_prof__ == 0) {
 /*<       ydel(0)=1.0 >*/
-	ydel[0] = (float)1.;
+	ydel[0] = 1.;
 /*<       xdel(0)=0.0 >*/
-	xdel[0] = (float)0.;
+	xdel[0] = 0.;
 /*<       h(0)=0. >*/
-	h__[0] = (float)0.;
+	h__[0] = 0.;
 /*<       altc(0)=300. >*/
-	altc[0] = (float)300.;
+	altc[0] = 300.;
 /*<       zx=300. >*/
-	zx = (float)300.;
+	zx = 300.;
 /*<       iplane=0 >*/
 	iplane = 0;
 /*<       do 14 it=0,ntp >*/
@@ -261,9 +259,9 @@ static integer c__0 = 0;
 /*<       if (it.eq.0) then >*/
 	    if (it == 0) {
 /*<          yy=0. >*/
-		yy = (float)0.;
+		yy = 0.;
 /*<          dd=0. >*/
-		dd = (float)0.;
+		dd = 0.;
 /*<          goto 111 >*/
 		goto L111;
 /*<       endif >*/
@@ -274,9 +272,9 @@ static integer c__0 = 0;
 	    dd = ydel[it - 1];
 /*<  111  ppp2=300.0 >*/
 L111:
-	    ppp2 = (float)300.;
+	    ppp2 = 300.;
 /*<       ppp1=0.0 >*/
-	    ppp1 = (float)0.;
+	    ppp1 = 0.;
 /*<       itp=it >*/
 	    itp = it;
 /*<    >*/
@@ -291,7 +289,7 @@ L111:
 /*<       if (xxx.lt.-18) then >*/
 	    if (xxx < -18.) {
 /*<          ca=0. >*/
-		ca = (float)0.;
+		ca = 0.;
 /*<          else >*/
 	    } else {
 /*<          ca=ta*dexp(xxx) >*/
@@ -314,7 +312,7 @@ L111:
 /*<       ratio=cr/(cr+ca) >*/
 	    ratio = cr / (cr + ca);
 /*<       xdel(it)=(1.e+00-ratio)*piz >*/
-	    xdel[it] = ((float)1. - ratio) * piz;
+	    xdel[it] = (1. - ratio) * piz;
 /*<       ydel(it)=ratio >*/
 	    ydel[it] = ratio;
 /*<   14  continue >*/
@@ -349,7 +347,7 @@ L111:
 /* update the layer from the end to the position to update if necessar
 y */
 /*<          th=0.005 >*/
-	th = (float).005;
+	th = .005;
 /*<          xt1=abs(h(iplane)-taup) >*/
 	xt1 = (d__1 = h__[iplane] - taup, abs(d__1));
 /*<          xt2=abs(h(iplane+1)-taup) >*/
@@ -394,7 +392,7 @@ y */
 /*<          ratio=cr/(cr+ca) >*/
 	    ratio = cr / (cr + ca);
 /*<          xdel(iplane)=(1.e+00-ratio)*piz >*/
-	    xdel[iplane] = ((float)1. - ratio) * piz;
+	    xdel[iplane] = (1. - ratio) * piz;
 /*<          ydel(iplane)=ratio >*/
 	    ydel[iplane] = ratio;
 /*<          altc(iplane)=palt >*/
@@ -404,9 +402,9 @@ y */
 /*<          if ( tr.gt.acu2.and.ta.le.acu2) then >*/
 	if (tr > acu2 && ta <= acu2) {
 /*<          ydel(iplane)=1. >*/
-	    ydel[iplane] = (float)1.;
+	    ydel[iplane] = 1.;
 /*<          xdel(iplane)=0. >*/
-	    xdel[iplane] = (float)0.;
+	    xdel[iplane] = 0.;
 /*<          altc(iplane)=palt >*/
 	    altc[iplane] = *palt;
 /*<          endif >*/
@@ -414,9 +412,9 @@ y */
 /*<          if ( tr.le.acu2.and.ta.gt.acu2) then >*/
 	if (tr <= acu2 && ta > acu2) {
 /*<          ydel(iplane)=0. >*/
-	    ydel[iplane] = (float)0.;
+	    ydel[iplane] = 0.;
 /*<          xdel(iplane)=1.*piz >*/
-	    xdel[iplane] = piz * (float)1.;
+	    xdel[iplane] = piz * 1.;
 /*<          altc(iplane)=palt >*/
 	    altc[iplane] = *palt;
 /*<          endif >*/
@@ -437,27 +435,27 @@ y */
 /*     rayleigh phase function */
 
 /*<       beta0=1. >*/
-    beta0 = (float)1.;
+    beta0 = 1.;
 /*<       beta2=0.5*ron >*/
-    beta2 = ron * (float).5;
+    beta2 = ron * .5;
 
 /*    primary scattering */
 
 /*<       ig=1 >*/
     ig = 1;
 /*<       tavion0=0. >*/
-    tavion0 = (float)0.;
+    tavion0 = 0.;
 /*<       tavion1=0. >*/
-    tavion1 = (float)0.;
+    tavion1 = 0.;
 /*<       tavion2=0. >*/
-    tavion2 = (float)0.;
+    tavion2 = 0.;
 /*<       tavion=0. >*/
-    tavion = (float)0.;
+    tavion = 0.;
 /*<       do 16 j=-mu,mu >*/
     i__1 = *mu;
     for (j = -(*mu); j <= i__1; ++j) {
 /*<       i3(j)=0. >*/
-	i3[j + 25] = (float)0.;
+	i3[j + 25] = 0.;
 /*<    16 continue >*/
 /* L16: */
     }
@@ -473,7 +471,7 @@ y */
 	i__2 = *nt;
 	for (k = 0; k <= i__2; ++k) {
 /*<       i2(k,j)=0.0000 >*/
-	    i2[k + j * 31 + 775] = (float)0.;
+	    i2[k + j * 31 + 775] = 0.;
 /*<   101 continue >*/
 /* L101: */
 	}
@@ -487,7 +485,7 @@ y */
     i__1 = *mu;
     for (k = 1; k <= i__1; ++k) {
 /*<       i1(nt,k)=1.0 >*/
-	i1[*nt + k * 31 + 775] = (float)1.;
+	i1[*nt + k * 31 + 775] = 1.;
 /*<       zi1=i1(nt,k) >*/
 	zi1 = i1[*nt + k * 31 + 775];
 /*<       yy=rm(k) >*/
@@ -509,7 +507,7 @@ y */
 	i__1 = *nt;
 	for (i__ = 0; i__ <= i__1; ++i__) {
 /*<       i1(i,k)=0.00 >*/
-	    i1[i__ + k * 31 + 775] = (float)0.;
+	    i1[i__ + k * 31 + 775] = 0.;
 /*<   109 continue >*/
 /* L109: */
 	}
@@ -578,9 +576,9 @@ L503:
 	i__2 = *nt;
 	for (i__ = 0; i__ <= i__2; ++i__) {
 /*<       ii1=0. >*/
-	    ii1 = (float)0.;
+	    ii1 = 0.;
 /*<       ii2=0. >*/
-	    ii2 = (float)0.;
+	    ii2 = 0.;
 /*<       x=xdel(i) >*/
 	    x = xdel[i__];
 /*<       y=ydel(i) >*/
@@ -624,7 +622,7 @@ L503:
     i__2 = *mu;
     for (k = 1; k <= i__2; ++k) {
 /*<       i1(nt,k)=0.0 >*/
-	i1[*nt + k * 31 + 775] = (float)0.;
+	i1[*nt + k * 31 + 775] = 0.;
 /*<       zi1=i1(nt,k) >*/
 	zi1 = i1[*nt + k * 31 + 775];
 /*<       yy=rm(k) >*/
@@ -642,11 +640,11 @@ L503:
 /*<       c=exp(-f/yy) >*/
 	    c__ = exp(-f / yy);
 /*<       d=1.e+00-c >*/
-	    d__ = (float)1. - c__;
+	    d__ = 1. - c__;
 /*<       xx=h(i)-h(jj)*c >*/
 	    xx = h__[i__] - h__[jj] * c__;
 /*<       zi1=c*zi1+(d*(b+a*yy)+a*xx)*0.5e+00 >*/
-	    zi1 = c__ * zi1 + (d__ * (b + a * yy) + a * xx) * (float).5;
+	    zi1 = c__ * zi1 + (d__ * (b + a * yy) + a * xx) * .5;
 /*<       i1(i,k)=zi1 >*/
 	    i1[i__ + k * 31 + 775] = zi1;
 /*<    48 continue >*/
@@ -659,7 +657,7 @@ L503:
 /*<       do 50 k=-mu,-1 >*/
     for (k = -(*mu); k <= -1; ++k) {
 /*<       i1(0,k)=0. >*/
-	i1[k * 31 + 775] = (float)0.;
+	i1[k * 31 + 775] = 0.;
 /*<       zi1=i1(0,k) >*/
 	zi1 = i1[k * 31 + 775];
 /*<       yy=rm(k) >*/
@@ -674,7 +672,7 @@ L503:
 /*<       c=exp(f/yy) >*/
 	    c__ = exp(f / yy);
 /*<       d=1.e+00-c >*/
-	    d__ = (float)1. - c__;
+	    d__ = 1. - c__;
 /*<       a=(i2(i,k)-i2(jj,k))/f >*/
 	    a = (i2[i__ + k * 31 + 775] - i2[jj + k * 31 + 775]) / f;
 /*<       b=i2(i,k)-a*h(i) >*/
@@ -682,7 +680,7 @@ L503:
 /*<       xx=h(i)-h(jj)*c >*/
 	    xx = h__[i__] - h__[jj] * c__;
 /*<       zi1=c*zi1+(d*(b+a*yy)+a*xx)*0.5e+00 >*/
-	    zi1 = c__ * zi1 + (d__ * (b + a * yy) + a * xx) * (float).5;
+	    zi1 = c__ * zi1 + (d__ * (b + a * yy) + a * xx) * .5;
 /*<       i1(i,k)=zi1 >*/
 	    i1[i__ + k * 31 + 775] = zi1;
 /*<    50 continue >*/
@@ -727,7 +725,7 @@ L30:
 /*<       if(ig.gt.2) then >*/
     if (ig > 2) {
 /*<       z=0. >*/
-	z__ = (float)0.;
+	z__ = 0.;
 /*<       a1=tavion2 >*/
 	a1 = tavion2;
 /*<       d1=tavion1 >*/
@@ -738,7 +736,7 @@ L30:
 	if (a1 >= acu && d1 >= acu && tavion >= acu) {
 /*<          y=((g1/d1-d1/a1)/((1.-g1/d1)**2)*(g1/tavion)) >*/
 /* Computing 2nd power */
-	    d__1 = (float)1. - g1 / d1;
+	    d__1 = 1. - g1 / d1;
 	    y = (g1 / d1 - d1 / a1) / (d__1 * d__1) * (g1 / tavion);
 /*<          y=abs(y) >*/
 	    y = abs(y);
@@ -760,15 +758,15 @@ L30:
 /*<       g1=in(l) >*/
 	    g1 = in[l + 25];
 /*<       if(a1.eq.0.) go to 99 >*/
-	    if (a1 == (float)0.) {
+	    if (a1 == 0.) {
 		goto L99;
 	    }
 /*<       if(d1.eq.0.) go to 99 >*/
-	    if (d1 == (float)0.) {
+	    if (d1 == 0.) {
 		goto L99;
 	    }
 /*<       if(i3(l).eq.0.) go to 99 >*/
-	    if (i3[l + 25] == (float)0.) {
+	    if (i3[l + 25] == 0.) {
 		goto L99;
 	    }
 /*<       y=((g1/d1-d1/a1)/((1-g1/d1)**2)*(g1/i3(l))) >*/
@@ -784,7 +782,7 @@ L99:
 	    ;
 	}
 /*<       if(z.lt.0.0001) then >*/
-	if (z__ < (float)1e-4) {
+	if (z__ < 1e-4) {
 
 /*     successful test (geometrical serie) */
 
@@ -796,13 +794,13 @@ L99:
 		    goto L606;
 		}
 /*<       y1=1. >*/
-		y1 = (float)1.;
+		y1 = 1.;
 /*<       d1=inm1(l) >*/
 		d1 = inm1[l + 25];
 /*<       g1=in(l) >*/
 		g1 = in[l + 25];
 /*<       if(d1.eq.0.0) go to 606 >*/
-		if (d1 == (float)0.) {
+		if (d1 == 0.) {
 		    goto L606;
 		}
 /*<       y1=1-g1/d1 >*/
@@ -820,13 +818,13 @@ L606:
 /*<       g1=tavion0 >*/
 	    g1 = tavion0;
 /*<       y1=1. >*/
-	    y1 = (float)1.;
+	    y1 = 1.;
 /*<       if (d1.ge.acu) then >*/
 	    if (d1 >= acu) {
 /*<       if (abs(g1-d1).ge.acu) then >*/
 		if ((d__1 = g1 - d1, abs(d__1)) >= acu) {
 /*<          y1=1.-g1/d1 >*/
-		    y1 = (float)1. - g1 / d1;
+		    y1 = 1. - g1 / d1;
 /*<          g1=g1/y1 >*/
 		    g1 /= y1;
 /*<       endif >*/
@@ -884,7 +882,7 @@ L606:
 /*     stop if order n is less than 1% of the sum */
 
 /*<       z=0. >*/
-    z__ = (float)0.;
+    z__ = 0.;
 /*<       do 611 l=-mu,mu >*/
     i__2 = *mu;
     for (l = -(*mu); l <= i__2; ++l) {
@@ -900,7 +898,7 @@ L606:
 /* L611: */
     }
 /*<       if(z.lt.0.00001) go to 505 >*/
-    if (z__ < (float)1e-5) {
+    if (z__ < 1e-5) {
 	goto L505;
     }
 
