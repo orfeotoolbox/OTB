@@ -26,16 +26,6 @@
 
 void RegisterTests()
 {
-REGISTER_TEST(otbMorphologicalPyramidResamplerNew);
-REGISTER_TEST(otbMorphologicalPyramidResampler);
-REGISTER_TEST(otbMorphologicalPyramidAnalysisFilterNew);
-REGISTER_TEST(otbMorphologicalPyramidAnalysisFilter);
-REGISTER_TEST(otbMorphologicalPyramidSynthesisFilterNew);
-REGISTER_TEST(otbMorphologicalPyramidSynthesisFilter);
-REGISTER_TEST(otbMorphologicalPyramidMRToMSConverterNew);
-REGISTER_TEST(otbMorphologicalPyramidMRToMSConverter);
-REGISTER_TEST(otbMorphologicalPyramidSegmenterNew);
-REGISTER_TEST(otbMorphologicalPyramidSegmenter);
 REGISTER_TEST(otbMorphologicalPyramidSegmentationFilterNew);
 REGISTER_TEST(otbMorphologicalPyramidSegmentationFilter);
 }
