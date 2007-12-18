@@ -5,6 +5,8 @@ FILE(GLOB libgeotiff_HDRS "*.h")
 
 CONFIGURE_FILE(geo_config.h.in ${OTB_BINARY_DIR}/Utilities/otbgeotiff/geo_config.h)
 
+INCLUDE_DIRECTORIES(${OTB_BINARY_DIR}/Utilities/otbgeotiff/)
+
 ADD_LIBRARY(otbgeotiff ${libgeotiff_SRCS})
 TARGET_LINK_LIBRARIES(otbgeotiff)
 
