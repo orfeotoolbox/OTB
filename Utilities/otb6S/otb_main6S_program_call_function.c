@@ -14,7 +14,7 @@ extern "C" {
 
 static integer c__9 = 9;
 static integer c__1 = 1;
-static integer c__4 = 4;
+static integer c__5 = 5;
 static integer c__3 = 3;
 
 /*<       program call6Sv1_0b >*/
@@ -49,23 +49,24 @@ static integer c__3 = 3;
 	    integer *, char *, ftnlen), e_wsfe();
 
     /* Local variables */
-    integer iaer, iinf, jday;
-    real asol, avis, phiv, sast;
-    integer isup;
-    real otb_ratm__, pressure;
+    doublereal otb_ratm__, pressure;
     integer i__, l;
-    real s[1501];
-    integer iread;
-    real taer55, tgasm, wlinf;
-    integer month;
-    real wlsup;
-    extern /* Subroutine */ int otb_6s__(real *, real *, real *, real *, 
-	    integer *, integer *, real *, real *, real *, integer *, real *, 
-	    real *, real *, real *, real *, real *, real *, real *, real *, 
-	    real *, real *, real *, real *);
+    doublereal s[1501];
     integer ik;
-    real uw, sdtott, uo3, sutott, otb_tdif_up__, phi0, otb_tdif_up_aer__, 
-	    otb_tdir_up__, otb_tdif_up_ray__;
+    doublereal uw, uo3, otb_tdif_up__, phi0, otb_tdir_up__;
+    integer iaer, iinf, jday;
+    doublereal asol, avis, phiv, sast;
+    integer isup, iread;
+    doublereal taer55, tgasm, wlinf;
+    integer month;
+    doublereal wlsup;
+    extern /* Subroutine */ int otb_6s_ssssss_otb_main_function(doublereal *, doublereal *, 
+	    doublereal *, doublereal *, integer *, integer *, doublereal *, 
+	    doublereal *, doublereal *, integer *, doublereal *, doublereal *,
+	     doublereal *, doublereal *, doublereal *, doublereal *, 
+	    doublereal *, doublereal *, doublereal *, doublereal *, 
+	    doublereal *, doublereal *, doublereal *);
+    doublereal sdtott, sutott, otb_tdif_up_aer__, otb_tdif_up_ray__;
 
     /* Fortran I/O blocks */
     static cilist io___4 = { 0, 6, 0, 0, 0 };
@@ -231,10 +232,10 @@ static integer c__3 = 3;
 /*<       read(iread,*) asol,phi0,avis,phiv,month,jday >*/
     io___5.ciunit = iread;
     s_rsle(&io___5);
-    do_lio(&c__4, &c__1, (char *)&asol, (ftnlen)sizeof(real));
-    do_lio(&c__4, &c__1, (char *)&phi0, (ftnlen)sizeof(real));
-    do_lio(&c__4, &c__1, (char *)&avis, (ftnlen)sizeof(real));
-    do_lio(&c__4, &c__1, (char *)&phiv, (ftnlen)sizeof(real));
+    do_lio(&c__5, &c__1, (char *)&asol, (ftnlen)sizeof(doublereal));
+    do_lio(&c__5, &c__1, (char *)&phi0, (ftnlen)sizeof(doublereal));
+    do_lio(&c__5, &c__1, (char *)&avis, (ftnlen)sizeof(doublereal));
+    do_lio(&c__5, &c__1, (char *)&phiv, (ftnlen)sizeof(doublereal));
     do_lio(&c__3, &c__1, (char *)&month, (ftnlen)sizeof(integer));
     do_lio(&c__3, &c__1, (char *)&jday, (ftnlen)sizeof(integer));
     e_rsle();
@@ -244,10 +245,10 @@ static integer c__3 = 3;
     e_wsle();
 /*<       write(6,*)  asol,phi0,avis,phiv,month,jday >*/
     s_wsle(&io___13);
-    do_lio(&c__4, &c__1, (char *)&asol, (ftnlen)sizeof(real));
-    do_lio(&c__4, &c__1, (char *)&phi0, (ftnlen)sizeof(real));
-    do_lio(&c__4, &c__1, (char *)&avis, (ftnlen)sizeof(real));
-    do_lio(&c__4, &c__1, (char *)&phiv, (ftnlen)sizeof(real));
+    do_lio(&c__5, &c__1, (char *)&asol, (ftnlen)sizeof(doublereal));
+    do_lio(&c__5, &c__1, (char *)&phi0, (ftnlen)sizeof(doublereal));
+    do_lio(&c__5, &c__1, (char *)&avis, (ftnlen)sizeof(doublereal));
+    do_lio(&c__5, &c__1, (char *)&phiv, (ftnlen)sizeof(doublereal));
     do_lio(&c__3, &c__1, (char *)&month, (ftnlen)sizeof(integer));
     do_lio(&c__3, &c__1, (char *)&jday, (ftnlen)sizeof(integer));
     e_wsle();
@@ -275,9 +276,9 @@ static integer c__3 = 3;
 /*<       read(iread,*) pressure, uw, uo3    >*/
     io___15.ciunit = iread;
     s_rsle(&io___15);
-    do_lio(&c__4, &c__1, (char *)&pressure, (ftnlen)sizeof(real));
-    do_lio(&c__4, &c__1, (char *)&uw, (ftnlen)sizeof(real));
-    do_lio(&c__4, &c__1, (char *)&uo3, (ftnlen)sizeof(real));
+    do_lio(&c__5, &c__1, (char *)&pressure, (ftnlen)sizeof(doublereal));
+    do_lio(&c__5, &c__1, (char *)&uw, (ftnlen)sizeof(doublereal));
+    do_lio(&c__5, &c__1, (char *)&uo3, (ftnlen)sizeof(doublereal));
     e_rsle();
 /*<       write(6,*) "pressure, uw, uo3" >*/
     s_wsle(&io___19);
@@ -285,9 +286,9 @@ static integer c__3 = 3;
     e_wsle();
 /*<       write(6,*)  pressure, uw, uo3  >*/
     s_wsle(&io___20);
-    do_lio(&c__4, &c__1, (char *)&pressure, (ftnlen)sizeof(real));
-    do_lio(&c__4, &c__1, (char *)&uw, (ftnlen)sizeof(real));
-    do_lio(&c__4, &c__1, (char *)&uo3, (ftnlen)sizeof(real));
+    do_lio(&c__5, &c__1, (char *)&pressure, (ftnlen)sizeof(doublereal));
+    do_lio(&c__5, &c__1, (char *)&uw, (ftnlen)sizeof(doublereal));
+    do_lio(&c__5, &c__1, (char *)&uo3, (ftnlen)sizeof(doublereal));
     e_wsle();
 /*<       write(6,*)   >*/
     s_wsle(&io___21);
@@ -351,12 +352,12 @@ static integer c__3 = 3;
 /*<       read(iread,*) taer55 >*/
     io___28.ciunit = iread;
     s_rsle(&io___28);
-    do_lio(&c__4, &c__1, (char *)&taer55, (ftnlen)sizeof(real));
+    do_lio(&c__5, &c__1, (char *)&taer55, (ftnlen)sizeof(doublereal));
     e_rsle();
 /*<       write(6,*)  "taer55 = ", taer55 >*/
     s_wsle(&io___30);
     do_lio(&c__9, &c__1, "taer55 = ", 9L);
-    do_lio(&c__4, &c__1, (char *)&taer55, (ftnlen)sizeof(real));
+    do_lio(&c__5, &c__1, (char *)&taer55, (ftnlen)sizeof(doublereal));
     e_wsle();
 /*<       write(6,*) >*/
     s_wsle(&io___31);
@@ -381,7 +382,7 @@ static integer c__3 = 3;
     i__1 = isup;
     for (l = iinf; l <= i__1; ++l) {
 /*<        s(l)=0. >*/
-	s[l - 1] = (float)0.;
+	s[l - 1] = 0.;
 /*<    38 continue >*/
 /* L38: */
     }
@@ -389,27 +390,27 @@ static integer c__3 = 3;
 /* L110: */
     io___34.ciunit = iread;
     s_rsle(&io___34);
-    do_lio(&c__4, &c__1, (char *)&wlinf, (ftnlen)sizeof(real));
-    do_lio(&c__4, &c__1, (char *)&wlsup, (ftnlen)sizeof(real));
+    do_lio(&c__5, &c__1, (char *)&wlinf, (ftnlen)sizeof(doublereal));
+    do_lio(&c__5, &c__1, (char *)&wlsup, (ftnlen)sizeof(doublereal));
     e_rsle();
 /*<       write(6,*) " wlinf,wlsup : ", wlinf,wlsup >*/
     s_wsle(&io___37);
     do_lio(&c__9, &c__1, " wlinf,wlsup : ", 15L);
-    do_lio(&c__4, &c__1, (char *)&wlinf, (ftnlen)sizeof(real));
-    do_lio(&c__4, &c__1, (char *)&wlsup, (ftnlen)sizeof(real));
+    do_lio(&c__5, &c__1, (char *)&wlinf, (ftnlen)sizeof(doublereal));
+    do_lio(&c__5, &c__1, (char *)&wlsup, (ftnlen)sizeof(doublereal));
     e_wsle();
 /*<       write(6,*) >*/
     s_wsle(&io___38);
     e_wsle();
 /*<       iinf=(wlinf-.25)/0.0025+1.5 >*/
-    iinf = (wlinf - (float).25) / (float).0025 + (float)1.5;
+    iinf = (integer) ((wlinf - .25) / .0025 + 1.5);
 /*<       isup=(wlsup-.25)/0.0025+1.5 >*/
-    isup = (wlsup - (float).25) / (float).0025 + (float)1.5;
+    isup = (integer) ((wlsup - .25) / .0025 + 1.5);
 /*<       do 1113 ik=iinf,isup >*/
     i__1 = isup;
     for (ik = iinf; ik <= i__1; ++ik) {
 /*<        s(ik)=0. >*/
-	s[ik - 1] = (float)0.;
+	s[ik - 1] = 0.;
 /*<  1113 continue >*/
 /* L1113: */
     }
@@ -418,7 +419,7 @@ static integer c__3 = 3;
     s_rsle(&io___40);
     i__1 = isup;
     for (i__ = iinf; i__ <= i__1; ++i__) {
-	do_lio(&c__4, &c__1, (char *)&s[i__ - 1], (ftnlen)sizeof(real));
+	do_lio(&c__5, &c__1, (char *)&s[i__ - 1], (ftnlen)sizeof(doublereal));
     }
     e_rsle();
 /* **********************************************************************c
@@ -449,39 +450,39 @@ static integer c__3 = 3;
 /*< 800   write(6,100) otb_ratm >*/
 /* L800: */
     s_wsfe(&io___52);
-    do_fio(&c__1, (char *)&otb_ratm__, (ftnlen)sizeof(real));
+    do_fio(&c__1, (char *)&otb_ratm__, (ftnlen)sizeof(doublereal));
     e_wsfe();
 /*<       write(6,200) sast >*/
     s_wsfe(&io___53);
-    do_fio(&c__1, (char *)&sast, (ftnlen)sizeof(real));
+    do_fio(&c__1, (char *)&sast, (ftnlen)sizeof(doublereal));
     e_wsfe();
 /*<       write(6,300) tgasm >*/
     s_wsfe(&io___54);
-    do_fio(&c__1, (char *)&tgasm, (ftnlen)sizeof(real));
+    do_fio(&c__1, (char *)&tgasm, (ftnlen)sizeof(doublereal));
     e_wsfe();
 /*<       write(6,400) sdtott >*/
     s_wsfe(&io___55);
-    do_fio(&c__1, (char *)&sdtott, (ftnlen)sizeof(real));
+    do_fio(&c__1, (char *)&sdtott, (ftnlen)sizeof(doublereal));
     e_wsfe();
 /*<       write(6,500) sutott >*/
     s_wsfe(&io___56);
-    do_fio(&c__1, (char *)&sutott, (ftnlen)sizeof(real));
+    do_fio(&c__1, (char *)&sutott, (ftnlen)sizeof(doublereal));
     e_wsfe();
 /*<       write(6,600) otb_tdif_up >*/
     s_wsfe(&io___57);
-    do_fio(&c__1, (char *)&otb_tdif_up__, (ftnlen)sizeof(real));
+    do_fio(&c__1, (char *)&otb_tdif_up__, (ftnlen)sizeof(doublereal));
     e_wsfe();
 /*<       write(6,700) otb_tdir_up >*/
     s_wsfe(&io___58);
-    do_fio(&c__1, (char *)&otb_tdir_up__, (ftnlen)sizeof(real));
+    do_fio(&c__1, (char *)&otb_tdir_up__, (ftnlen)sizeof(doublereal));
     e_wsfe();
 /*<       write(6,710) otb_tdif_up_ray  >*/
     s_wsfe(&io___59);
-    do_fio(&c__1, (char *)&otb_tdif_up_ray__, (ftnlen)sizeof(real));
+    do_fio(&c__1, (char *)&otb_tdif_up_ray__, (ftnlen)sizeof(doublereal));
     e_wsfe();
 /*<       write(6,720) otb_tdif_up_aer >*/
     s_wsfe(&io___60);
-    do_fio(&c__1, (char *)&otb_tdif_up_aer__, (ftnlen)sizeof(real));
+    do_fio(&c__1, (char *)&otb_tdif_up_aer__, (ftnlen)sizeof(doublereal));
     e_wsfe();
 /*< 100   format(10x,40h ----->  atmospheric reflectance :      , f6.5)  >*/
 /*< 200   format(10x,40h ----->  atmospheric spherical albedo : , f6.5)    >*/

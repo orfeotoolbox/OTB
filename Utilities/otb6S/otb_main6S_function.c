@@ -9,6 +9,7 @@ extern "C" {
 /* OTB patches: replace "f2c.h" by "otb_6S.h" */
 /*#include "f2c.h"*/
 #include "otb_6S.h"
+
 /* Common Block Declarations */
 
 Extern struct {
@@ -19,7 +20,7 @@ Extern struct {
 
 Extern struct {
     integer num_z__;
-    real alt_z__[101], taer_z__[101], taer55_z__[101];
+    doublereal alt_z__[101], taer_z__[101], taer55_z__[101];
 } aeroprof_;
 
 #define aeroprof_1 aeroprof_
@@ -32,12 +33,12 @@ Extern struct {
 #define sixs_ier__1 sixs_ier__
 
 Extern struct {
-    real rmax, rmin;
+    doublereal rmax, rmin;
     integer icp;
-    real rn[80]	/* was [20][4] */, ri[80]	/* was [20][4] */, x1[4], x2[
-	    4], x3[4], cij[4];
+    doublereal rn[80]	/* was [20][4] */, ri[80]	/* was [20][4] */, x1[
+	    4], x2[4], x3[4], cij[4];
     integer irsunph;
-    real rsunph[50], nrsunph[50];
+    doublereal rsunph[50], nrsunph[50];
 } mie_in__;
 
 #define mie_in__1 mie_in__
@@ -49,84 +50,81 @@ Extern struct {
 #define multorder_1 multorder_
 
 Extern struct {
-    real zpl[34], ppl[34], tpl[34], whpl[34], wopl[34];
+    doublereal zpl[34], ppl[34], tpl[34], whpl[34], wopl[34];
 } sixs_planesim__;
 
 #define sixs_planesim__1 sixs_planesim__
 
 Extern struct {
-    real xacc;
+    doublereal xacc;
 } sixs_test__;
 
 #define sixs_test__1 sixs_test__
 
 Extern struct {
-    real s[1501], wlinf, wlsup;
+    doublereal s[1501], wlinf, wlsup;
 } sixs_ffu__;
 
 #define sixs_ffu__1 sixs_ffu__
 
 Extern struct {
-    real delta, sigma;
+    doublereal delta, sigma;
 } sixs_del__;
 
 #define sixs_del__1 sixs_del__
 
 Extern struct {
-    real z__[34], p[34], t[34], wh[34], wo[34];
+    doublereal z__[34], p[34], t[34], wh[34], wo[34];
 } sixs_atm__;
 
 #define sixs_atm__1 sixs_atm__
 
 Extern struct {
-    real ext[20], ome[20], gasym[20], phase[20], qhase[20], uhase[20];
+    doublereal ext[20], ome[20], gasym[20], phase[20], qhase[20], uhase[20];
 } sixs_aer__;
 
 #define sixs_aer__1 sixs_aer__
 
 Extern struct {
-    real roatm[60]	/* was [3][20] */, dtdir[60]	/* was [3][20] */, 
-	    dtdif[60]	/* was [3][20] */, utdir[60]	/* was [3][20] */, 
-	    utdif[60]	/* was [3][20] */, sphal[60]	/* was [3][20] */, 
-	    wldis[20], trayl[20], traypl[20], rqatm[60]	/* was [3][20] */, 
-	    ruatm[60]	/* was [3][20] */;
+    doublereal roatm[60]	/* was [3][20] */, dtdir[60]	/* was [3][20]
+	     */, dtdif[60]	/* was [3][20] */, utdir[60]	/* was [3][20]
+	     */, utdif[60]	/* was [3][20] */, sphal[60]	/* was [3][20]
+	     */, wldis[20], trayl[20], traypl[20], rqatm[60]	/* was [3][20]
+	     */, ruatm[60]	/* was [3][20] */;
 } sixs_disc__;
 
 #define sixs_disc__1 sixs_disc__
 
 /* Table of constant values */
 
-static real c_b4 = (float)-1.;
-static real c_b5 = (float)1.;
-static real c_b6 = (float)0.;
+static doublereal c_b4 = -1.;
+static doublereal c_b5 = 1.;
+static doublereal c_b6 = 0.;
 static integer c__3 = 3;
 static integer c__1 = 1;
-static integer c__4 = 4;
+static integer c__5 = 5;
 static integer c__2 = 2;
 static doublereal c_b308 = 2.;
 static integer c__9 = 9;
 
 /*<    >*/
-/* Subroutine */ int otb_6s_ssssss_otb_main_function(real *otb_asol__, real *otb_phi0__, real *
-	otb_avis__, real *otb_phiv__, integer *otb_month__, integer *
-	otb_jday__, real *otb_pressure__, real *otb_uw__, real *otb_uo3__, 
-	integer *otb_iaer__, real *otb_taer55__, real *otb_wlinf__, real *
-	otb_wlsup__, real *otb_s__, real *otb_ratm__, real *otb_sast__, real *
-	otb_tgasm__, real *otb_sdtott__, real *otb_sutott__, real *
-	otb_tdif_up__, real *otb_tdir_up__, real *otb_tdif_up_ray__, real *
-	otb_tdif_up_aer__)
+/* Subroutine */ int otb_6s_ssssss_otb_main_function(doublereal *otb_asol__, doublereal *otb_phi0__, 
+	doublereal *otb_avis__, doublereal *otb_phiv__, integer *otb_month__, 
+	integer *otb_jday__, doublereal *otb_pressure__, doublereal *otb_uw__,
+	 doublereal *otb_uo3__, integer *otb_iaer__, doublereal *otb_taer55__,
+	 doublereal *otb_wlinf__, doublereal *otb_wlsup__, doublereal *
+	otb_s__, doublereal *otb_ratm__, doublereal *otb_sast__, doublereal *
+	otb_tgasm__, doublereal *otb_sdtott__, doublereal *otb_sutott__, 
+	doublereal *otb_tdif_up__, doublereal *otb_tdir_up__, doublereal *
+	otb_tdif_up_ray__, doublereal *otb_tdif_up_aer__)
 {
     /* Initialized data */
 
-    static real angmu[10] = { (float)85.,(float)80.,(float)70.,(float)60.,(
-	    float)50.,(float)40.,(float)30.,(float)20.,(float)10.,(float)0. };
-    static real angphi[13] = { (float)0.,(float)30.,(float)60.,(float)90.,(
-	    float)120.,(float)150.,(float)180.,(float)210.,(float)240.,(float)
-	    270.,(float)300.,(float)330.,(float)360. };
-    static real wldisc[20] = { (float).35,(float).4,(float).412,(float).443,(
-	    float).47,(float).488,(float).515,(float).55,(float).59,(float)
-	    .633,(float).67,(float).694,(float).76,(float).86,(float)1.24,(
-	    float)1.536,(float)1.65,(float)1.95,(float)2.25,(float)3.75 };
+    static doublereal angmu[10] = { 85.,80.,70.,60.,50.,40.,30.,20.,10.,0. };
+    static doublereal angphi[13] = { 0.,30.,60.,90.,120.,150.,180.,210.,240.,
+	    270.,300.,330.,360. };
+    static doublereal wldisc[20] = { .35,.4,.412,.443,.47,.488,.515,.55,.59,
+	    .633,.67,.694,.76,.86,1.24,1.536,1.65,1.95,2.25,3.75 };
     static char etiq1[60*8+1] = "(1h*,22x,34h user defined conditions       \
    ,t79,1h*)     (1h*,22x,24h meteosat observation   ,t79,1h*)              \
  (1h*,22x,25h goes east observation   ,t79,1h*)              (1h*,22x,25h go\
@@ -358,14 +356,13 @@ flectance  \002,t79,\002*\002,/,\002*\002,6x,\002 Lambertian case :  \002,1x\
     /* System generated locals */
     address a__1[2];
     integer i__1, i__2[2], i__3;
-    real r__1, r__2, r__3;
-    doublereal d__1, d__2;
+    doublereal d__1, d__2, d__3;
     cilist ci__1;
     olist o__1;
     cllist cl__1;
 
     /* Builtin functions */
-    /* Subroutine */ /* int s_copy(char *, char *, ftnlen, ftnlen);*/
+    /* Subroutine */ /*int s_copy(char *, char *, ftnlen, ftnlen);*/
     double acos(doublereal), cos(doublereal);
     /* Subroutine */ int s_stop(char *, ftnlen);
     double sqrt(doublereal);
@@ -380,100 +377,117 @@ flectance  \002,t79,\002*\002,/,\002*\002,6x,\002 Lambertian case :  \002,1x\
     double atan(doublereal);
 
     /* Local variables */
-    extern /* Subroutine */ int aeroso_(integer *, real *, real *, real *, 
-	    char *, integer *, ftnlen), equivwl_(integer *, integer *, real *,
-	     real *), discom_(integer *, integer *, integer *, real *, real *,
-	     real *, real *, real *, real *, real *, integer *, integer *, 
-	    integer *, real *, real *, real *, real *, integer *, real *, 
-	    real *, real *, integer *, integer *, real *, real *, real *, 
-	    real *), odrayl_(real *, real *), polnad_(real *, real *, real *, 
-	    real *, real *, real *), polglit_(real *, real *, real *, real *, 
-	    real *, real *, real *), solirr_(real *, real *), abstra_(integer 
-	    *, real *, real *, real *, real *, real *, real *, real *, 
-	    integer *, real *, real *, real *, real *, real *, real *, real *,
-	     real *, real *, real *, real *, real *, real *, real *, real *, 
-	    real *, real *, real *, real *, real *, real *, real *, real *, 
-	    real *, real *), interp_(integer *, integer *, real *, real *, 
-	    real *, real *, real *, real *, real *, real *, real *, real *, 
-	    real *, real *, real *, real *, real *, real *, real *, real *, 
-	    real *, real *, real *, real *, real *, real *, real *, real *, 
-	    real *, real *, real *, real *, real *, real *, real *, integer *,
-	     real *, real *, real *, integer *, real *, real *, real *, real *
-	    , real *, real *, integer *), enviro_(real *, real *, real *, 
-	    real *, real *, real *, real *, real *);
-    real rqatm2, ruatm2, tdirqu, rqmeas2, rumeas2, qlumeas, ulumeas, qlumet, 
-	    ulumet, rqfet, rufet, xtphi, refet_fi__[181], roatm_fi__[10860]	
-	    /* was [3][20][181] */, height_z__[101], phi_wind__, rfoamave, 
-	    brdfints[2499]	/* was [51][49] */, romix_fi__[181], rglitave;
-    extern /* Subroutine */ int dirpopol_(real *, real *, real *), pressure_(
-	    real *, real *, real *);
-    real c__[4];
+    extern /* Subroutine */ int aeroso_(integer *, doublereal *, doublereal *,
+	     doublereal *, char *, integer *, ftnlen), equivwl_(integer *, 
+	    integer *, doublereal *, doublereal *), discom_(integer *, 
+	    integer *, integer *, doublereal *, doublereal *, doublereal *, 
+	    doublereal *, doublereal *, doublereal *, doublereal *, integer *,
+	     integer *, integer *, doublereal *, doublereal *, doublereal *, 
+	    doublereal *, integer *, doublereal *, doublereal *, doublereal *,
+	     integer *, integer *, doublereal *, doublereal *, doublereal *, 
+	    doublereal *), odrayl_(doublereal *, doublereal *), polnad_(
+	    doublereal *, doublereal *, doublereal *, doublereal *, 
+	    doublereal *, doublereal *), polglit_(doublereal *, doublereal *, 
+	    doublereal *, doublereal *, doublereal *, doublereal *, 
+	    doublereal *), solirr_(doublereal *, doublereal *), abstra_(
+	    integer *, doublereal *, doublereal *, doublereal *, doublereal *,
+	     doublereal *, doublereal *, doublereal *, integer *, doublereal *
+	    , doublereal *, doublereal *, doublereal *, doublereal *, 
+	    doublereal *, doublereal *, doublereal *, doublereal *, 
+	    doublereal *, doublereal *, doublereal *, doublereal *, 
+	    doublereal *, doublereal *, doublereal *, doublereal *, 
+	    doublereal *, doublereal *, doublereal *, doublereal *, 
+	    doublereal *, doublereal *, doublereal *, doublereal *), interp_(
+	    integer *, integer *, doublereal *, doublereal *, doublereal *, 
+	    doublereal *, doublereal *, doublereal *, doublereal *, 
+	    doublereal *, doublereal *, doublereal *, doublereal *, 
+	    doublereal *, doublereal *, doublereal *, doublereal *, 
+	    doublereal *, doublereal *, doublereal *, doublereal *, 
+	    doublereal *, doublereal *, doublereal *, doublereal *, 
+	    doublereal *, doublereal *, doublereal *, doublereal *, 
+	    doublereal *, doublereal *, doublereal *, doublereal *, 
+	    doublereal *, doublereal *, integer *, doublereal *, doublereal *,
+	     doublereal *, integer *, doublereal *, doublereal *, doublereal *
+	    , doublereal *, doublereal *, doublereal *, integer *), enviro_(
+	    doublereal *, doublereal *, doublereal *, doublereal *, 
+	    doublereal *, doublereal *, doublereal *, doublereal *);
+    doublereal rqatm2, ruatm2, tdirqu, rqmeas2, rumeas2, qlumeas, ulumeas, 
+	    qlumet, ulumet, rqfet, rufet, xtphi, refet_fi__[181], roatm_fi__[
+	    10860]	/* was [3][20][181] */, height_z__[101], phi_wind__, 
+	    rfoamave, brdfints[2499]	/* was [51][49] */, romix_fi__[181], 
+	    rglitave;
+    extern /* Subroutine */ int dirpopol_(doublereal *, doublereal *, 
+	    doublereal *), pressure_(doublereal *, doublereal *, doublereal *)
+	    ;
+    doublereal c__[4];
     integer i__, j, k, l, n;
-    real v, y;
+    doublereal v, y;
     char aer_model__[50*15];
     integer iaer_prof__, i1, i2;
-    real rorayl_fi__[181];
-    extern /* Subroutine */ int presplane_(real *, real *, real *, real *);
-    real robarstar, gb[51];
+    doublereal rorayl_fi__[181];
+    extern /* Subroutine */ int presplane_(doublereal *, doublereal *, 
+	    doublereal *, doublereal *);
+    doublereal robarstar, gb[51];
     integer ik;
-    real sb, gp[49], fr, pi, es, xa, xb, xc;
+    doublereal sb, gp[49], fr, pi, es, xa, xb, xc;
     integer np;
-    real rm[51], ro, rp[49], wl;
+    doublereal rm[51], ro, rp[49], wl;
     integer nt, mu;
-    real tu, ul, uw, ea0, ee0, elsesdpaer, pi2;
+    doublereal tu, ul, uw, ea0, ee0, elsesdpaer, pi2;
     integer mu2;
-    real uo3;
-    extern /* Subroutine */ int specinterp_(real *, real *, real *, real *, 
-	    real *, real *, real *, integer *);
-    real robarpstar, fae, cfi, ani[6]	/* was [2][3] */, rad, seb, fra, sha, 
-	    tdd, anr[6]	/* was [2][3] */, phi, roc, roe, etn, rog, avr, dtr, 
-	    esn, xle, tdu, tsd, its, swl, xpp, xlt, xps, puw, tsu, azw, pps, 
-	    pws, ea0n, ee0n;
+    doublereal uo3;
+    extern /* Subroutine */ int specinterp_(doublereal *, doublereal *, 
+	    doublereal *, doublereal *, doublereal *, doublereal *, 
+	    doublereal *, integer *);
+    doublereal robarpstar, fae, cfi, ani[6]	/* was [2][3] */, rad, seb, 
+	    fra, sha, tdd, anr[6]	/* was [2][3] */, phi, roc, roe, etn, 
+	    rog, avr, dtr, esn, xle, tdu, tsd, its, swl, xpp, xlt, xps, puw, 
+	    tsu, azw, pps, pws, ea0n, ee0n;
     integer nfi;
     extern /* Subroutine */ int us62_();
-    real phi0;
+    doublereal phi0;
     integer ifi;
-    real xla0, xap, tgp1, tgp2;
+    doublereal xla0, xap, tgp1, tgp2;
     integer mum1;
-    real xlm1[2499]	/* was [51][49] */, xlm2[2499]	/* was [51][49] */, 
-	    puo3, adif, scaa, phaa, qhaa, coef, uhaa, aini[6]	/* was [2][3] 
-	    */;
+    doublereal xlm1[2499]	/* was [51][49] */, xlm2[2499]	/* was [51][
+	    49] */, puo3, adif, scaa, phaa, qhaa, coef, uhaa, aini[6]	/* 
+	    was [2][3] */;
     integer iaer;
     char file[80];
     integer iinf;
-    real tdif, sasa, sham, ainr[6]	/* was [2][3] */, phar, taer, tsca, 
-	    asol, rocl[1501], roel[1501], avis, dsol, phiv, rapp, xlat, sbor, 
-	    step, sasr, xmud, sast, tray, xlon, qhar, uhar, tdir, xltn, xlen, 
-	    xrad, xmup;
+    doublereal tdif, sasa, sham, ainr[6]	/* was [2][3] */, phar, taer, 
+	    tsca, asol, rocl[1501], roel[1501], avis, dsol, phiv, rapp, xlat, 
+	    sbor, step, sasr, xmud, sast, tray, xlon, qhar, uhar, tdir, xltn, 
+	    xlen, xrad, xmup;
     integer ipol, jday;
-    real xmus, accu2, accu3, xmuv;
+    doublereal xmus, accu2, accu3, xmuv;
     integer isup, ilut, irop;
-    real uwus, ropq, ropu, pveg, wspd, razw, total_height__;
+    doublereal uwus, ropq, ropu, pveg, wspd, razw, total_height__;
     char file2[80];
-    real palt, xla0n, ratm1, ratm2, ratm3, robarbarstar, puoz, xpol, edifa, 
-	    cscaa, coefa, uo3us, coefb, coefc;
+    doublereal palt, xla0n, ratm1, ratm2, ratm3, robarbarstar, puoz, xpol, 
+	    edifa, cscaa, coefa, uo3us, coefb, coefc;
     integer iread, ibrdf, aerod;
-    real dgasm, asaer, robar[1501], taer55, refet, tgasm, filut[1025]	/* 
-	    was [25][41] */, rpfet, ugasm, tamoy, taerp, romix, trayp, dtott, 
-	    rqmix, rumix, rolut[1025]	/* was [25][41] */, astot, wlmoy, 
-	    asray, trmoy, utotr, luttv, utott, utota, dtotr, dtota, puwus, 
-	    dgtot, tgtot, robar1, robar2, refet1, refet2, refet3, coefp, 
-	    ugtot, edifr, rpfet1, rpfet2, rpfet3, tdird, tdiru, tdifd, tdifu, 
-	    rsurf, tmdir, tmdif;
+    doublereal dgasm, asaer, robar[1501], taer55, refet, tgasm, filut[1025]	
+	    /* was [25][41] */, rpfet, ugasm, tamoy, taerp, romix, trayp, 
+	    dtott, rqmix, rumix, rolut[1025]	/* was [25][41] */, astot, 
+	    wlmoy, asray, trmoy, utotr, luttv, utott, utota, dtotr, dtota, 
+	    puwus, dgtot, tgtot, robar1, robar2, refet1, refet2, refet3, 
+	    coefp, ugtot, edifr, rpfet1, rpfet2, rpfet3, tdird, tdiru, tdifd, 
+	    tdifu, rsurf, tmdir, tmdif;
     integer igeom, month, idatm, iaerp, iwave, igrou1;
-    real xnorm1, xnorm2;
+    doublereal xnorm1, xnorm2;
     integer igrou2;
-    real sddica, dtdica;
+    doublereal sddica, dtdica;
     integer isort, irapp;
-    real iscama, puo3us;
+    doublereal iscama, puo3us;
     integer nbisca, idirec;
-    real rwatl[1501], anglem[48], iscami, phirad, sdmoca, robard[1501], 
+    doublereal rwatl[1501], anglem[48], iscami, phirad, sdmoca, robard[1501], 
 	    sudica, stdica, dtmoca, rocave, sodaer, roeave, fophsa, ssdaer, 
 	    sdmeth, robarp[1501], taer55p, alumet, sdwava, sumoca, stmoca, 
 	    sroaer, sdtota;
     integer nfilut[25];
-    real sodray, sdniox, sumeth, plumet, suwava, stwava, tamoyp, stmeth, 
-	    sdozon, sdoxyg, roluti[1025]	/* was [25][41] */, sodtot, 
+    doublereal sodray, sdniox, sumeth, plumet, suwava, stwava, tamoyp, stmeth,
+	     sdozon, sdoxyg, roluti[1025]	/* was [25][41] */, sodtot, 
 	    fophsr, sroray, sdtotr, sdtott, stniox, suniox, rolutq[1025]	
 	    /* was [25][41] */, pizmoy, roluts[20500]	/* was [20][25][41] */
 	    , rolutu[1025]	/* was [25][41] */, trmoyp, lutmuv, suozon, 
@@ -487,13 +501,15 @@ flectance  \002,t79,\002*\002,/,\002*\002,6x,\002 Lambertian case :  \002,1x\
 	    sdppaer, spdpaer, sodaerp, pizera, fophst, weightm[48], pizerr, 
 	    attwava, pizert;
     integer idatmp, inhomo, igroun;
-    real discri, rogbrdf, rfoaml[1501], sodrayp, sdppray, spdpray, rglitl[
-	    1501], cij_out__[4], sodtotp, sdpptot, spdptot, rolutiq[1025]	
-	    /* was [25][41] */, ftray, ratm2_fi__[181], rolutiu[1025]	/* 
-	    was [25][41] */, pizmoyp, rolutsq[20500]	/* was [20][25][41] */
-	    , rolutsu[20500]	/* was [20][25][41] */, rwatave;
-    extern /* Subroutine */ int gauss_(real *, real *, real *, real *, 
-	    integer *), varsol_(integer *, integer *, real *);
+    doublereal discri, rogbrdf, rfoaml[1501], sodrayp, sdppray, spdpray, 
+	    rglitl[1501], cij_out__[4], sodtotp, sdpptot, spdptot, rolutiq[
+	    1025]	/* was [25][41] */, ftray, ratm2_fi__[181], rolutiu[
+	    1025]	/* was [25][41] */, pizmoyp, rolutsq[20500]	/* 
+	    was [20][25][41] */, rolutsu[20500]	/* was [20][25][41] */, 
+	    rwatave;
+    extern /* Subroutine */ int gauss_(doublereal *, doublereal *, doublereal 
+	    *, doublereal *, integer *), varsol_(integer *, integer *, 
+	    doublereal *);
 
     /* Fortran I/O blocks */
     static cilist io___60 = { 0, 5, 0, 0, 0 };
@@ -1192,23 +1208,23 @@ ss c*/
 /* ***********************************************************************
  */
 /*<       pi=acos(-1.) >*/
-    pi = acos((float)-1.);
+    pi = acos(-1.);
 /*<       pi2=2*pi >*/
     pi2 = pi * 2;
 /*<       accu2=1.E-03 >*/
-    accu2 = (float).001;
+    accu2 = .001;
 /*<       accu3=1.E-07 >*/
-    accu3 = (float)1e-7;
+    accu3 = 1e-7;
 /*<       do k=1,13 >*/
     for (k = 1; k <= 13; ++k) {
 /*<        angphi(k)=angphi(k)*pi/180. >*/
-	angphi[k - 1] = angphi[k - 1] * pi / (float)180.;
+	angphi[k - 1] = angphi[k - 1] * pi / 180.;
 /*<       enddo >*/
     }
 /*<       do k=1,10 >*/
     for (k = 1; k <= 10; ++k) {
 /*<        angmu(k)=cos(angmu(k)*pi/180.) >*/
-	angmu[k - 1] = cos(angmu[k - 1] * pi / (float)180.);
+	angmu[k - 1] = cos(angmu[k - 1] * pi / 180.);
 /*<       enddo >*/
     }
 /*<       call gauss(-1.,1.,anglem,weightm,mu2) >*/
@@ -1241,11 +1257,11 @@ ss c*/
 /* L582: */
     }
 /*<       gb(-mu)=0. >*/
-    gb[-mu + 25] = (float)0.;
+    gb[-mu + 25] = 0.;
 /*<       gb(0)=0. >*/
-    gb[25] = (float)0.;
+    gb[25] = 0.;
 /*<       gb(mu)=0. >*/
-    gb[mu + 25] = (float)0.;
+    gb[mu + 25] = 0.;
 /* ***********************************************************************
  */
 /*                             return to 6s */
@@ -1253,17 +1269,17 @@ ss c*/
  */
 /* constantes values */
 /*<       sigma=0.056032 >*/
-    sixs_del__1.sigma = (float).056032;
+    sixs_del__1.sigma = .056032;
 /*<       delta=0.0279 >*/
-    sixs_del__1.delta = (float).0279;
+    sixs_del__1.delta = .0279;
 /* CC     pinst=0.02 */
 /* CC     ksiinst=0. */
 /*<       xacc=1.e-06 >*/
-    sixs_test__1.xacc = (float)1e-6;
+    sixs_test__1.xacc = 1e-6;
 /*<       iread=5 >*/
     iread = 5;
 /*<       step=0.0025 >*/
-    step = (float).0025;
+    step = .0025;
 /*<       do 1111 l=1,20 >*/
     for (l = 1; l <= 20; ++l) {
 /*<        wldis(l)=wldisc(l) >*/
@@ -1402,7 +1418,7 @@ ss c*/
 	s_stop("", 0L);
     }
 /*<       dsol=1. >*/
-    dsol = (float)1.;
+    dsol = 1.;
 /*<       call varsol(jday,month,dsol) >*/
     varsol_(&jday, &month, &dsol);
 /* **********************************************************************c
@@ -1426,37 +1442,37 @@ ss c*/
 /* **********************************************************************c
  */
 /*<       phi=abs(phiv-phi0) >*/
-    phi = (r__1 = phiv - phi0, dabs(r__1));
+    phi = (d__1 = phiv - phi0, abs(d__1));
 /*<       phirad=(phi0-phiv)*pi/180. >*/
-    phirad = (phi0 - phiv) * pi / (float)180.;
+    phirad = (phi0 - phiv) * pi / 180.;
 /*<       if (phirad.lt.0.) phirad=phirad+2.*pi >*/
-    if (phirad < (float)0.) {
-	phirad += pi * (float)2.;
+    if (phirad < 0.) {
+	phirad += pi * 2.;
     }
 /*<       if (phirad.gt.(2.*pi)) phirad=phirad-2.*pi >*/
-    if (phirad > pi * (float)2.) {
-	phirad -= pi * (float)2.;
+    if (phirad > pi * 2.) {
+	phirad -= pi * 2.;
     }
 /*<       xmus=cos(asol*pi/180.) >*/
-    xmus = cos(asol * pi / (float)180.);
+    xmus = cos(asol * pi / 180.);
 /*<       xmuv=cos(avis*pi/180.) >*/
-    xmuv = cos(avis * pi / (float)180.);
+    xmuv = cos(avis * pi / 180.);
 /*<       xmup=cos(phirad) >*/
     xmup = cos(phirad);
 /*<       xmud=-xmus*xmuv-sqrt(1.-xmus*xmus)*sqrt(1.-xmuv*xmuv)*xmup >*/
-    xmud = -xmus * xmuv - sqrt((float)1. - xmus * xmus) * sqrt((float)1. - 
-	    xmuv * xmuv) * xmup;
+    xmud = -xmus * xmuv - sqrt(1. - xmus * xmus) * sqrt(1. - xmuv * xmuv) * 
+	    xmup;
 /* test vermote bug */
 /*<       if (xmud.gt.1.) xmud=1. >*/
-    if (xmud > (float)1.) {
-	xmud = (float)1.;
+    if (xmud > 1.) {
+	xmud = 1.;
     }
 /*<       if (xmud.lt.-1.) xmud=-1. >*/
-    if (xmud < (float)-1.) {
-	xmud = (float)-1.;
+    if (xmud < -1.) {
+	xmud = -1.;
     }
 /*<       adif=acos(xmud)*180./pi >*/
-    adif = acos(xmud) * (float)180. / pi;
+    adif = acos(xmud) * 180. / pi;
 /* **********************************************************************c
  */
 /*       idatm      atmospheric model                                   c 
@@ -1696,25 +1712,25 @@ s*/
 /* **********************************************************************c
  */
 /*<       rmin=0. >*/
-    mie_in__1.rmin = (float)0.;
+    mie_in__1.rmin = 0.;
 /*<       rmax=0. >*/
-    mie_in__1.rmax = (float)0.;
+    mie_in__1.rmax = 0.;
 /*<       icp=1 >*/
     mie_in__1.icp = 1;
 /*<       do i=1,4 >*/
     for (i__ = 1; i__ <= 4; ++i__) {
 /*<        x1(i)=0.0 >*/
-	mie_in__1.x1[i__ - 1] = (float)0.;
+	mie_in__1.x1[i__ - 1] = 0.;
 /*<        x2(i)=0.0 >*/
-	mie_in__1.x2[i__ - 1] = (float)0.;
+	mie_in__1.x2[i__ - 1] = 0.;
 /*<        x3(i)=0.0 >*/
-	mie_in__1.x3[i__ - 1] = (float)0.;
+	mie_in__1.x3[i__ - 1] = 0.;
 /*<        do l=1,20 >*/
 	for (l = 1; l <= 20; ++l) {
 /*<         rn(l,i)=0.0 >*/
-	    mie_in__1.rn[l + i__ * 20 - 21] = (float)0.;
+	    mie_in__1.rn[l + i__ * 20 - 21] = 0.;
 /*<         ri(l,i)=0.0 >*/
-	    mie_in__1.ri[l + i__ * 20 - 21] = (float)0.;
+	    mie_in__1.ri[l + i__ * 20 - 21] = 0.;
 /*<        enddo >*/
 	}
 /*<       enddo >*/
@@ -1722,17 +1738,17 @@ s*/
 /*<       do i=1,50 >*/
     for (i__ = 1; i__ <= 50; ++i__) {
 /*<        rsunph(i)=0. >*/
-	mie_in__1.rsunph[i__ - 1] = (float)0.;
+	mie_in__1.rsunph[i__ - 1] = 0.;
 /*<        nrsunph(i)=0. >*/
-	mie_in__1.nrsunph[i__ - 1] = (float)0.;
+	mie_in__1.nrsunph[i__ - 1] = 0.;
 /*<       enddo >*/
     }
 /*<       cij(1)=1.00 >*/
-    mie_in__1.cij[0] = (float)1.;
+    mie_in__1.cij[0] = 1.;
 /*<        taer=0.		 >*/
-    taer = (float)0.;
+    taer = 0.;
 /*<        taer55=0.     >*/
-    taer55 = (float)0.;
+    taer55 = 0.;
 /*<        iaer_prof=0	 >*/
     iaer_prof__ = 0;
 /* _otb_adaptation Beginning: iaer becomes input arguments */
@@ -1745,7 +1761,7 @@ s*/
 /*<       if (iaer.lt.0) then >*/
     if (iaer < 0) {
 /*<       total_height=0.0 >*/
-	total_height__ = (float)0.;
+	total_height__ = 0.;
 /*<       iaer_prof=1 >*/
 	iaer_prof__ = 1;
 /*<       num_z=0 >*/
@@ -1753,13 +1769,13 @@ s*/
 /*<       do i=0,50 >*/
 	for (i__ = 0; i__ <= 50; ++i__) {
 /*<       alt_z(i)=0.0 >*/
-	    aeroprof_1.alt_z__[i__] = (float)0.;
+	    aeroprof_1.alt_z__[i__] = 0.;
 /*<       taer55_z(i)=0.0 >*/
-	    aeroprof_1.taer55_z__[i__] = (float)0.;
+	    aeroprof_1.taer55_z__[i__] = 0.;
 /*<       taer_z(i)=0.0 >*/
-	    aeroprof_1.taer_z__[i__] = (float)0.;
+	    aeroprof_1.taer_z__[i__] = 0.;
 /*<       height_z(i)=0.0 >*/
-	    height_z__[i__] = (float)0.;
+	    height_z__[i__] = 0.;
 /*<       enddo >*/
 	}
 /*<       read(5,*) num_z >*/
@@ -1772,10 +1788,10 @@ s*/
 	for (i__ = 0; i__ <= i__1; ++i__) {
 /*<        read(5,*) height_z(num_z-i),taer55_z(num_z-i),iaer >*/
 	    s_rsle(&io___61);
-	    do_lio(&c__4, &c__1, (char *)&height_z__[aeroprof_1.num_z__ - i__]
-		    , (ftnlen)sizeof(real));
-	    do_lio(&c__4, &c__1, (char *)&aeroprof_1.taer55_z__[
-		    aeroprof_1.num_z__ - i__], (ftnlen)sizeof(real));
+	    do_lio(&c__5, &c__1, (char *)&height_z__[aeroprof_1.num_z__ - i__]
+		    , (ftnlen)sizeof(doublereal));
+	    do_lio(&c__5, &c__1, (char *)&aeroprof_1.taer55_z__[
+		    aeroprof_1.num_z__ - i__], (ftnlen)sizeof(doublereal));
 	    do_lio(&c__3, &c__1, (char *)&iaer, (ftnlen)sizeof(integer));
 	    e_rsle();
 /*<        alt_z(num_z-1-i)=total_height+height_z(num_z-i) >*/
@@ -1803,7 +1819,8 @@ s*/
 	io___62.ciunit = iread;
 	s_rsle(&io___62);
 	for (n = 1; n <= 4; ++n) {
-	    do_lio(&c__4, &c__1, (char *)&c__[n - 1], (ftnlen)sizeof(real));
+	    do_lio(&c__5, &c__1, (char *)&c__[n - 1], (ftnlen)sizeof(
+		    doublereal));
 	}
 	e_rsle();
     }
@@ -1825,43 +1842,43 @@ s*/
     }
 /*<    40 c(1)=0.70 >*/
 L40:
-    c__[0] = (float).7;
+    c__[0] = .7;
 /*<       c(2)=0.29 >*/
-    c__[1] = (float).29;
+    c__[1] = .29;
 /*<       c(3)=0.00 >*/
-    c__[2] = (float)0.;
+    c__[2] = 0.;
 /*<       c(4)=0.01  >*/
-    c__[3] = (float).01;
+    c__[3] = .01;
 /*<       go to 49 >*/
     goto L49;
 /*<    41 c(1)=0.00 >*/
 L41:
-    c__[0] = (float)0.;
+    c__[0] = 0.;
 /*<       c(2)=0.05 >*/
-    c__[1] = (float).05;
+    c__[1] = .05;
 /*<       c(3)=0.95 >*/
-    c__[2] = (float).95;
+    c__[2] = .95;
 /*<       c(4)=0.00      >*/
-    c__[3] = (float)0.;
+    c__[3] = 0.;
 /*<       go to 49 >*/
     goto L49;
 /*<    42 c(1)=0.17 >*/
 L42:
-    c__[0] = (float).17;
+    c__[0] = .17;
 /*<       c(2)=0.61 >*/
-    c__[1] = (float).61;
+    c__[1] = .61;
 /*<       c(3)=0.00 >*/
-    c__[2] = (float)0.;
+    c__[2] = 0.;
 /*<       c(4)=0.22 >*/
-    c__[3] = (float).22;
+    c__[3] = .22;
 /*<       go to 49 >*/
     goto L49;
 /*<    43 read(iread,*) rmin,rmax,icp >*/
 L43:
     io___65.ciunit = iread;
     s_rsle(&io___65);
-    do_lio(&c__4, &c__1, (char *)&mie_in__1.rmin, (ftnlen)sizeof(real));
-    do_lio(&c__4, &c__1, (char *)&mie_in__1.rmax, (ftnlen)sizeof(real));
+    do_lio(&c__5, &c__1, (char *)&mie_in__1.rmin, (ftnlen)sizeof(doublereal));
+    do_lio(&c__5, &c__1, (char *)&mie_in__1.rmax, (ftnlen)sizeof(doublereal));
     do_lio(&c__3, &c__1, (char *)&mie_in__1.icp, (ftnlen)sizeof(integer));
     e_rsle();
 /*<       do i=1,icp >*/
@@ -1869,25 +1886,25 @@ L43:
     for (i__ = 1; i__ <= i__1; ++i__) {
 /*<        read(5,*)x1(i),x2(i),cij(i) >*/
 	s_rsle(&io___66);
-	do_lio(&c__4, &c__1, (char *)&mie_in__1.x1[i__ - 1], (ftnlen)sizeof(
-		real));
-	do_lio(&c__4, &c__1, (char *)&mie_in__1.x2[i__ - 1], (ftnlen)sizeof(
-		real));
-	do_lio(&c__4, &c__1, (char *)&mie_in__1.cij[i__ - 1], (ftnlen)sizeof(
-		real));
+	do_lio(&c__5, &c__1, (char *)&mie_in__1.x1[i__ - 1], (ftnlen)sizeof(
+		doublereal));
+	do_lio(&c__5, &c__1, (char *)&mie_in__1.x2[i__ - 1], (ftnlen)sizeof(
+		doublereal));
+	do_lio(&c__5, &c__1, (char *)&mie_in__1.cij[i__ - 1], (ftnlen)sizeof(
+		doublereal));
 	e_rsle();
 /*<        read(5,*)(rn(l,i),l=1,20) >*/
 	s_rsle(&io___67);
 	for (l = 1; l <= 20; ++l) {
-	    do_lio(&c__4, &c__1, (char *)&mie_in__1.rn[l + i__ * 20 - 21], (
-		    ftnlen)sizeof(real));
+	    do_lio(&c__5, &c__1, (char *)&mie_in__1.rn[l + i__ * 20 - 21], (
+		    ftnlen)sizeof(doublereal));
 	}
 	e_rsle();
 /*<        read(5,*)(ri(l,i),l=1,20) >*/
 	s_rsle(&io___68);
 	for (l = 1; l <= 20; ++l) {
-	    do_lio(&c__4, &c__1, (char *)&mie_in__1.ri[l + i__ * 20 - 21], (
-		    ftnlen)sizeof(real));
+	    do_lio(&c__5, &c__1, (char *)&mie_in__1.ri[l + i__ * 20 - 21], (
+		    ftnlen)sizeof(doublereal));
 	}
 	e_rsle();
 /*<       enddo >*/
@@ -1905,28 +1922,31 @@ L43:
 L44:
     io___70.ciunit = iread;
     s_rsle(&io___70);
-    do_lio(&c__4, &c__1, (char *)&mie_in__1.rmin, (ftnlen)sizeof(real));
-    do_lio(&c__4, &c__1, (char *)&mie_in__1.rmax, (ftnlen)sizeof(real));
+    do_lio(&c__5, &c__1, (char *)&mie_in__1.rmin, (ftnlen)sizeof(doublereal));
+    do_lio(&c__5, &c__1, (char *)&mie_in__1.rmax, (ftnlen)sizeof(doublereal));
     e_rsle();
 /*<       read(iread,*) x1(1),x2(1),x3(1) >*/
     io___71.ciunit = iread;
     s_rsle(&io___71);
-    do_lio(&c__4, &c__1, (char *)&mie_in__1.x1[0], (ftnlen)sizeof(real));
-    do_lio(&c__4, &c__1, (char *)&mie_in__1.x2[0], (ftnlen)sizeof(real));
-    do_lio(&c__4, &c__1, (char *)&mie_in__1.x3[0], (ftnlen)sizeof(real));
+    do_lio(&c__5, &c__1, (char *)&mie_in__1.x1[0], (ftnlen)sizeof(doublereal))
+	    ;
+    do_lio(&c__5, &c__1, (char *)&mie_in__1.x2[0], (ftnlen)sizeof(doublereal))
+	    ;
+    do_lio(&c__5, &c__1, (char *)&mie_in__1.x3[0], (ftnlen)sizeof(doublereal))
+	    ;
     e_rsle();
 /*<       read(5,*)(rn(l,1),l=1,20) >*/
     s_rsle(&io___72);
     for (l = 1; l <= 20; ++l) {
-	do_lio(&c__4, &c__1, (char *)&mie_in__1.rn[l - 1], (ftnlen)sizeof(
-		real));
+	do_lio(&c__5, &c__1, (char *)&mie_in__1.rn[l - 1], (ftnlen)sizeof(
+		doublereal));
     }
     e_rsle();
 /*<       read(5,*)(ri(l,1),l=1,20) >*/
     s_rsle(&io___73);
     for (l = 1; l <= 20; ++l) {
-	do_lio(&c__4, &c__1, (char *)&mie_in__1.ri[l - 1], (ftnlen)sizeof(
-		real));
+	do_lio(&c__5, &c__1, (char *)&mie_in__1.ri[l - 1], (ftnlen)sizeof(
+		doublereal));
     }
     e_rsle();
 /*<       go to 49 >*/
@@ -1935,26 +1955,27 @@ L44:
 L45:
     io___74.ciunit = iread;
     s_rsle(&io___74);
-    do_lio(&c__4, &c__1, (char *)&mie_in__1.rmin, (ftnlen)sizeof(real));
-    do_lio(&c__4, &c__1, (char *)&mie_in__1.rmax, (ftnlen)sizeof(real));
+    do_lio(&c__5, &c__1, (char *)&mie_in__1.rmin, (ftnlen)sizeof(doublereal));
+    do_lio(&c__5, &c__1, (char *)&mie_in__1.rmax, (ftnlen)sizeof(doublereal));
     e_rsle();
 /*<       read(iread,*) x1(1) >*/
     io___75.ciunit = iread;
     s_rsle(&io___75);
-    do_lio(&c__4, &c__1, (char *)&mie_in__1.x1[0], (ftnlen)sizeof(real));
+    do_lio(&c__5, &c__1, (char *)&mie_in__1.x1[0], (ftnlen)sizeof(doublereal))
+	    ;
     e_rsle();
 /*<       read(5,*)(rn(l,1),l=1,20) >*/
     s_rsle(&io___76);
     for (l = 1; l <= 20; ++l) {
-	do_lio(&c__4, &c__1, (char *)&mie_in__1.rn[l - 1], (ftnlen)sizeof(
-		real));
+	do_lio(&c__5, &c__1, (char *)&mie_in__1.rn[l - 1], (ftnlen)sizeof(
+		doublereal));
     }
     e_rsle();
 /*<       read(5,*)(ri(l,1),l=1,20) >*/
     s_rsle(&io___77);
     for (l = 1; l <= 20; ++l) {
-	do_lio(&c__4, &c__1, (char *)&mie_in__1.ri[l - 1], (ftnlen)sizeof(
-		real));
+	do_lio(&c__5, &c__1, (char *)&mie_in__1.ri[l - 1], (ftnlen)sizeof(
+		doublereal));
     }
     e_rsle();
 /*<       go to 49 >*/
@@ -1969,10 +1990,10 @@ L46:
     for (i__ = 1; i__ <= i__1; ++i__) {
 /*<        read(5,*)rsunph(i),nrsunph(i) >*/
 	s_rsle(&io___79);
-	do_lio(&c__4, &c__1, (char *)&mie_in__1.rsunph[i__ - 1], (ftnlen)
-		sizeof(real));
-	do_lio(&c__4, &c__1, (char *)&mie_in__1.nrsunph[i__ - 1], (ftnlen)
-		sizeof(real));
+	do_lio(&c__5, &c__1, (char *)&mie_in__1.rsunph[i__ - 1], (ftnlen)
+		sizeof(doublereal));
+	do_lio(&c__5, &c__1, (char *)&mie_in__1.nrsunph[i__ - 1], (ftnlen)
+		sizeof(doublereal));
 	e_rsle();
 /*       nrsunph(i)=nrsunph(i)/(rsunph(i)**4.)/(4*3.1415/3) */
 /*<       enddo >*/
@@ -1980,19 +2001,19 @@ L46:
 /*<       rmin=rsunph(1) >*/
     mie_in__1.rmin = mie_in__1.rsunph[0];
 /*<       rmax=rsunph(irsunph)+1e-07 >*/
-    mie_in__1.rmax = mie_in__1.rsunph[mie_in__1.irsunph - 1] + (float)1e-7;
+    mie_in__1.rmax = mie_in__1.rsunph[mie_in__1.irsunph - 1] + 1e-7;
 /*<       read(5,*)(rn(l,1),l=1,20) >*/
     s_rsle(&io___80);
     for (l = 1; l <= 20; ++l) {
-	do_lio(&c__4, &c__1, (char *)&mie_in__1.rn[l - 1], (ftnlen)sizeof(
-		real));
+	do_lio(&c__5, &c__1, (char *)&mie_in__1.rn[l - 1], (ftnlen)sizeof(
+		doublereal));
     }
     e_rsle();
 /*<       read(5,*)(ri(l,1),l=1,20) >*/
     s_rsle(&io___81);
     for (l = 1; l <= 20; ++l) {
-	do_lio(&c__4, &c__1, (char *)&mie_in__1.ri[l - 1], (ftnlen)sizeof(
-		real));
+	do_lio(&c__5, &c__1, (char *)&mie_in__1.ri[l - 1], (ftnlen)sizeof(
+		doublereal));
     }
     e_rsle();
 /*<       go to 49 >*/
@@ -2086,7 +2107,7 @@ L49:
 /* _otb   71 continue */
 /* _otb      endif */
 /*<            v=0.				!Added_for_OTB >*/
-    v = (float)0.;
+    v = 0.;
 /*<            taer55 = otb_taer55		!Added_for_OTB    >*/
     taer55 = *otb_taer55__;
 /* _otb_adaptation End :  v=0 and taer55 become  argument values */
@@ -2115,16 +2136,16 @@ L49:
 /* _otb_adaptation Beginning: xps=0 Target at sea level */
 /* _otb 771   read(iread,*) xps */
 /*< 	xps=0.		!Added_for_OTB	 >*/
-    xps = (float)0.;
+    xps = 0.;
 /* _otb_adaptation End : xps=0 Target at sea level */
 /*<        if (xps.ge.0.) then >*/
-    if (xps >= (float)0.) {
+    if (xps >= 0.) {
 /*<         xps=0. >*/
-	xps = (float)0.;
+	xps = 0.;
 /*<         uwus=1.424 >*/
-	uwus = (float)1.424;
+	uwus = 1.424;
 /*<         uo3us=0.344 >*/
-	uo3us = (float).344;
+	uo3us = .344;
 /*<        else >*/
     } else {
 /*<         if (idatm.ne.8) then >*/
@@ -2187,38 +2208,38 @@ L49:
 /* _otb_adaptation Beginning: xpp=-1000 sensor aboard a satellite */
 /* _otb        read(iread,*) xpp */
 /*< 	xpp=-1000.		!Added_for_OTB	 >*/
-    xpp = (float)-1e3;
+    xpp = -1e3;
 /* _otb_adaptation End : xpp=-1000 sensor aboard a satellite */
 /*<         xpp=-xpp >*/
     xpp = -xpp;
 /*<         if (xpp.le.0.0) then >*/
-    if (xpp <= (float)0.) {
+    if (xpp <= 0.) {
 /*          ground measurement option */
 /*<            palt=0. >*/
-	palt = (float)0.;
+	palt = 0.;
 /*<            pps=p(1) >*/
 	pps = sixs_atm__1.p[0];
 /*< 	   idatmp=0 >*/
 	idatmp = 0;
 /*< 	   taer55p=0. >*/
-	taer55p = (float)0.;
+	taer55p = 0.;
 /*< 	   puw=0. >*/
-	puw = (float)0.;
+	puw = 0.;
 /*< 	   puoz=0. >*/
-	puoz = (float)0.;
+	puoz = 0.;
 /*<            else >*/
     } else {
 /*< 	   if (xpp.ge.100.) then >*/
-	if (xpp >= (float)100.) {
+	if (xpp >= 100.) {
 /* 	       satellite case of equivalent */
 /*< 	      palt=1000. >*/
-	    palt = (float)1e3;
+	    palt = 1e3;
 /*< 	      pps=0. >*/
-	    pps = (float)0.;
+	    pps = 0.;
 /*< 	      taer55p=taer55 >*/
 	    taer55p = taer55;
 /*< 	      ftray=1. >*/
-	    ftray = (float)1.;
+	    ftray = 1.;
 /*< 	      idatmp=4 >*/
 	    idatmp = 4;
 /*< 	      else >*/
@@ -2227,11 +2248,11 @@ L49:
 /*<               read(iread,*) puw,puo3 >*/
 	    io___98.ciunit = iread;
 	    s_rsle(&io___98);
-	    do_lio(&c__4, &c__1, (char *)&puw, (ftnlen)sizeof(real));
-	    do_lio(&c__4, &c__1, (char *)&puo3, (ftnlen)sizeof(real));
+	    do_lio(&c__5, &c__1, (char *)&puw, (ftnlen)sizeof(doublereal));
+	    do_lio(&c__5, &c__1, (char *)&puo3, (ftnlen)sizeof(doublereal));
 	    e_rsle();
 /*< 	      if (puw.lt.0.) then >*/
-	    if (puw < (float)0.) {
+	    if (puw < 0.) {
 /*<                  call presplane(puw,puo3,xpp,ftray) >*/
 		presplane_(&puw, &puo3, &xpp, &ftray);
 /*< 	         idatmp=2 >*/
@@ -2269,31 +2290,32 @@ L49:
 /*<               read(iread,*) taer55p >*/
 	    io___102.ciunit = iread;
 	    s_rsle(&io___102);
-	    do_lio(&c__4, &c__1, (char *)&taer55p, (ftnlen)sizeof(real));
+	    do_lio(&c__5, &c__1, (char *)&taer55p, (ftnlen)sizeof(doublereal))
+		    ;
 	    e_rsle();
 /*< 	    if ((taer55p.lt.0.).or.((taer55-taer55p).lt.accu2)) then >*/
-	    if (taer55p < (float)0. || taer55 - taer55p < accu2) {
+	    if (taer55p < 0. || taer55 - taer55p < accu2) {
 /* a scale heigh of 2km is assumed in case no value is given f
 or taer55p */
 /*<                taer55p=taer55*(1.-exp(-palt/2.)) >*/
-		taer55p = taer55 * ((float)1. - exp(-palt / (float)2.));
+		taer55p = taer55 * (1. - exp(-palt / 2.));
 /*<             else >*/
 	    } else {
 /* compute effective scale heigh */
 /*<                sham=exp(-palt/4.) >*/
-		sham = exp(-palt / (float)4.);
+		sham = exp(-palt / 4.);
 /*<                sha=1.-(taer55p/taer55) >*/
-		sha = (float)1. - taer55p / taer55;
+		sha = 1. - taer55p / taer55;
 /*<                if (sha.ge.sham) then >*/
 		if (sha >= sham) {
 /*<                   taer55p=taer55*(1.-exp(-palt/4.)) >*/
-		    taer55p = taer55 * ((float)1. - exp(-palt / (float)4.));
+		    taer55p = taer55 * (1. - exp(-palt / 4.));
 /*<                else >*/
 		} else {
 /*<                   sha=-palt/log(sha) >*/
 		    sha = -palt / log(sha);
 /*<                   taer55p=taer55*(1.-exp(-palt/sha)) >*/
-		    taer55p = taer55 * ((float)1. - exp(-palt / sha));
+		    taer55p = taer55 * (1. - exp(-palt / sha));
 /*<                endif >*/
 		}
 /*<             endif >*/
@@ -2546,9 +2568,9 @@ rguments*/
 /* _otb_adaptation End : iwave=1 and s(l) becomes an input argument */
 /*<    19 iinf=(wlinf-.25)/0.0025+1.5 >*/
 /* L19: */
-    iinf = (sixs_ffu__1.wlinf - (float).25) / (float).0025 + (float)1.5;
+    iinf = (integer) ((sixs_ffu__1.wlinf - .25) / .0025 + 1.5);
 /*<       isup=(wlsup-.25)/0.0025+1.5 >*/
-    isup = (sixs_ffu__1.wlsup - (float).25) / (float).0025 + (float)1.5;
+    isup = (integer) ((sixs_ffu__1.wlsup - .25) / .0025 + 1.5);
 /*<    20 continue >*/
 /* L20: */
 /* ***********************************************************************
@@ -2566,27 +2588,27 @@ rguments*/
 /*<       do j=1,41 >*/
 	for (j = 1; j <= 41; ++j) {
 /*<       rolut(i,j)=0. >*/
-	    rolut[i__ + j * 25 - 26] = (float)0.;
+	    rolut[i__ + j * 25 - 26] = 0.;
 /*<       rolutq(i,j)=0. >*/
-	    rolutq[i__ + j * 25 - 26] = (float)0.;
+	    rolutq[i__ + j * 25 - 26] = 0.;
 /*<       rolutu(i,j)=0. >*/
-	    rolutu[i__ + j * 25 - 26] = (float)0.;
+	    rolutu[i__ + j * 25 - 26] = 0.;
 /*<       filut(i,j)=0. >*/
-	    filut[i__ + j * 25 - 26] = (float)0.;
+	    filut[i__ + j * 25 - 26] = 0.;
 /*<       roluti(i,j)=0. >*/
-	    roluti[i__ + j * 25 - 26] = (float)0.;
+	    roluti[i__ + j * 25 - 26] = 0.;
 /*<       rolutiq(i,j)=0. >*/
-	    rolutiq[i__ + j * 25 - 26] = (float)0.;
+	    rolutiq[i__ + j * 25 - 26] = 0.;
 /*<       rolutiu(i,j)=0. >*/
-	    rolutiu[i__ + j * 25 - 26] = (float)0.;
+	    rolutiu[i__ + j * 25 - 26] = 0.;
 /*<       enddo >*/
 	}
 /*<       enddo >*/
     }
 /*<       xmus=cos(asol*pi/180.) >*/
-    xmus = cos(asol * pi / (float)180.);
+    xmus = cos(asol * pi / 180.);
 /*<       its=acos(xmus)*180.0/pi >*/
-    its = acos(xmus) * (float)180. / pi;
+    its = acos(xmus) * 180. / pi;
 /* Case standart LUT */
 /*<       if (ilut.eq.1) then >*/
     if (ilut == 1) {
@@ -2596,34 +2618,33 @@ rguments*/
 /*<          lutmuv=rm(i) >*/
 	    lutmuv = rm[i__ + 25];
 /*<          luttv=acos(lutmuv)*180./pi >*/
-	    luttv = acos(lutmuv) * (float)180. / pi;
+	    luttv = acos(lutmuv) * 180. / pi;
 /*<          iscama=(180-abs(luttv-its)) >*/
-	    iscama = 180 - (r__1 = luttv - its, dabs(r__1));
+	    iscama = 180 - (d__1 = luttv - its, abs(d__1));
 /*<          iscami=(180-(luttv+its)) >*/
 	    iscami = 180 - (luttv + its);
 /*<          nbisca=int(0.01+(iscama-iscami)/4.0)+1 >*/
-	    nbisca = (integer) ((iscama - iscami) / (float)4. + (float).01) + 
-		    1;
+	    nbisca = (integer) ((iscama - iscami) / 4. + .01) + 1;
 /*<          nfilut(i)=nbisca >*/
 	    nfilut[i__ - 1] = nbisca;
 /*<          filut(i,1)=0.0 >*/
-	    filut[i__ - 1] = (float)0.;
+	    filut[i__ - 1] = 0.;
 /*<          filut(i,nbisca)=180.0 >*/
-	    filut[i__ + nbisca * 25 - 26] = (float)180.;
+	    filut[i__ + nbisca * 25 - 26] = 180.;
 /*< 	 scaa=iscama >*/
 	    scaa = iscama;
 /*<          do j=2,nfilut(i)-1 >*/
 	    i__3 = nfilut[i__ - 1] - 1;
 	    for (j = 2; j <= i__3; ++j) {
 /*<           scaa=scaa-4.0 >*/
-		scaa += (float)-4.;
+		scaa += -4.;
 /*<           cscaa=cos(scaa*pi/180.) >*/
-		cscaa = cos(scaa * pi / (float)180.);
+		cscaa = cos(scaa * pi / 180.);
 /*<    >*/
 		cfi = -(cscaa + xmus * lutmuv) / (sqrt(1 - xmus * xmus) * 
-			sqrt((float)1. - lutmuv * lutmuv));
+			sqrt(1. - lutmuv * lutmuv));
 /*<           filut(i,j)=acos(cfi)*180.0/pi >*/
-		filut[i__ + j * 25 - 26] = acos(cfi) * (float)180. / pi;
+		filut[i__ + j * 25 - 26] = acos(cfi) * 180. / pi;
 /*<          enddo >*/
 	    }
 /*<       enddo >*/
@@ -2631,11 +2652,11 @@ rguments*/
 /*<       i=mu >*/
 	i__ = mu;
 /*<          lutmuv=cos(avis*pi/180.) >*/
-	lutmuv = cos(avis * pi / (float)180.);
+	lutmuv = cos(avis * pi / 180.);
 /*<          luttv=acos(lutmuv)*180./pi >*/
-	luttv = acos(lutmuv) * (float)180. / pi;
+	luttv = acos(lutmuv) * 180. / pi;
 /*<          iscama=(180-abs(luttv-its)) >*/
-	iscama = 180 - (r__1 = luttv - its, dabs(r__1));
+	iscama = 180 - (d__1 = luttv - its, abs(d__1));
 /*<          iscami=(180-(luttv+its)) >*/
 	iscami = 180 - (luttv + its);
 /*<          nbisca=int((iscama-iscami)/4)+1 >*/
@@ -2643,23 +2664,23 @@ rguments*/
 /*<          nfilut(i)=nbisca >*/
 	nfilut[i__ - 1] = nbisca;
 /*<          filut(i,1)=0.0 >*/
-	filut[i__ - 1] = (float)0.;
+	filut[i__ - 1] = 0.;
 /*<          filut(i,nbisca)=180.0 >*/
-	filut[i__ + nbisca * 25 - 26] = (float)180.;
+	filut[i__ + nbisca * 25 - 26] = 180.;
 /*< 	 scaa=iscama >*/
 	scaa = iscama;
 /*<          do j=2,nfilut(i)-1 >*/
 	i__1 = nfilut[i__ - 1] - 1;
 	for (j = 2; j <= i__1; ++j) {
 /*<           scaa=scaa-4.0 >*/
-	    scaa += (float)-4.;
+	    scaa += -4.;
 /*<           cscaa=cos(scaa*pi/180.) >*/
-	    cscaa = cos(scaa * pi / (float)180.);
+	    cscaa = cos(scaa * pi / 180.);
 /*<    >*/
-	    cfi = -(cscaa + xmus * lutmuv) / (sqrt(1 - xmus * xmus) * sqrt((
-		    float)1. - lutmuv * lutmuv));
+	    cfi = -(cscaa + xmus * lutmuv) / (sqrt(1 - xmus * xmus) * sqrt(1. 
+		    - lutmuv * lutmuv));
 /*<           filut(i,j)=acos(cfi)*180.0/pi >*/
-	    filut[i__ + j * 25 - 26] = acos(cfi) * (float)180. / pi;
+	    filut[i__ + j * 25 - 26] = acos(cfi) * 180. / pi;
 /*<          enddo >*/
 	}
 /*<         endif >*/
@@ -2678,7 +2699,7 @@ rguments*/
 /*<          filut(i,1)=(phi0-phiv) >*/
 	    filut[i__ - 1] = phi0 - phiv;
 /*<          filut(i,nbisca)=(phi0-phiv)+180.0 >*/
-	    filut[i__ + nbisca * 25 - 26] = phi0 - phiv + (float)180.;
+	    filut[i__ + nbisca * 25 - 26] = phi0 - phiv + 180.;
 /*<       enddo >*/
 	}
 /*<       i=mu >*/
@@ -2699,23 +2720,22 @@ rguments*/
 /*<          lutmuv=rm(i) >*/
 	lutmuv = rm[i__ + 25];
 /*<          luttv=acos(lutmuv)*180./pi >*/
-	luttv = acos(lutmuv) * (float)180. / pi;
+	luttv = acos(lutmuv) * 180. / pi;
 /*<         do j=1,nfilut(i) >*/
 	i__3 = nfilut[i__ - 1];
 	for (j = 1; j <= i__3; ++j) {
 /*<    >*/
-	    cscaa = -xmus * lutmuv - cos(filut[i__ + j * 25 - 26] * pi / (
-		    float)180.) * sqrt((float)1. - xmus * xmus) * sqrt((float)
-		    1. - lutmuv * lutmuv);
+	    cscaa = -xmus * lutmuv - cos(filut[i__ + j * 25 - 26] * pi / 180.)
+		     * sqrt(1. - xmus * xmus) * sqrt(1. - lutmuv * lutmuv);
 /*<        scaa=acos(cscaa)*180./pi >*/
-	    scaa = acos(cscaa) * (float)180. / pi;
+	    scaa = acos(cscaa) * 180. / pi;
 /*<       write(6,*) its,luttv,filut(i,j),scaa >*/
 	    s_wsle(&io___123);
-	    do_lio(&c__4, &c__1, (char *)&its, (ftnlen)sizeof(real));
-	    do_lio(&c__4, &c__1, (char *)&luttv, (ftnlen)sizeof(real));
-	    do_lio(&c__4, &c__1, (char *)&filut[i__ + j * 25 - 26], (ftnlen)
-		    sizeof(real));
-	    do_lio(&c__4, &c__1, (char *)&scaa, (ftnlen)sizeof(real));
+	    do_lio(&c__5, &c__1, (char *)&its, (ftnlen)sizeof(doublereal));
+	    do_lio(&c__5, &c__1, (char *)&luttv, (ftnlen)sizeof(doublereal));
+	    do_lio(&c__5, &c__1, (char *)&filut[i__ + j * 25 - 26], (ftnlen)
+		    sizeof(doublereal));
+	    do_lio(&c__5, &c__1, (char *)&scaa, (ftnlen)sizeof(doublereal));
 	    e_wsle();
 /*<       enddo >*/
 	}
@@ -2794,9 +2814,9 @@ rguments*/
 /*<       if (idatmp.eq.0) then >*/
     if (idatmp == 0) {
 /*<          trmoyp=0. >*/
-	trmoyp = (float)0.;
+	trmoyp = 0.;
 /*<          tamoyp=0. >*/
-	tamoyp = (float)0.;
+	tamoyp = 0.;
 /*<       endif >*/
     }
 /* *********************************************************************c 
@@ -3136,16 +3156,16 @@ rguments*/
 /* **********************************************************************c
  */
 /*<       fr=0. >*/
-    fr = (float)0.;
+    fr = 0.;
 /*<       rad=0. >*/
-    rad = (float)0.;
+    rad = 0.;
 /*<       do 1116 ik=iinf,isup >*/
     i__1 = isup;
     for (ik = iinf; ik <= i__1; ++ik) {
 /*<         rocl(ik)=0. >*/
-	rocl[ik - 1] = (float)0.;
+	rocl[ik - 1] = 0.;
 /*<         roel(ik)=0. >*/
-	roel[ik - 1] = (float)0.;
+	roel[ik - 1] = 0.;
 /*<  1116 continue >*/
 /* L1116: */
     }
@@ -3512,7 +3532,7 @@ rguments*/
 /* _otb */
 /* _otb  32  read(iread,*) ro */
 /*<        ro=0.0		!Added_for_OTB >*/
-    ro = (float)0.;
+    ro = 0.;
 /* _otb */
 /* _otb      do 35 l=iinf,isup */
 /* _otb        rocl(l)=ro */
@@ -3621,7 +3641,7 @@ n*/
 /*< 	irapp=-1		!Added_for_OTB (No atm. corrections selected) >*/
     irapp = -1;
 /*< 	rapp=-10.		!Added_for_OTB >*/
-    rapp = (float)-10.;
+    rapp = -10.;
 /* _otb_adaptation End : irapp=-1 & rapp=-10. no atmospheric correction */
 /* **********************************************************************c
  */
@@ -3661,8 +3681,8 @@ n*/
 /*<        read(iread,*) ropq,ropu >*/
 	io___150.ciunit = iread;
 	s_rsle(&io___150);
-	do_lio(&c__4, &c__1, (char *)&ropq, (ftnlen)sizeof(real));
-	do_lio(&c__4, &c__1, (char *)&ropu, (ftnlen)sizeof(real));
+	do_lio(&c__5, &c__1, (char *)&ropq, (ftnlen)sizeof(doublereal));
+	do_lio(&c__5, &c__1, (char *)&ropu, (ftnlen)sizeof(doublereal));
 	e_rsle();
 /*<        endif >*/
     }
@@ -3671,7 +3691,7 @@ n*/
 /*<        read(iread,*) pveg >*/
 	io___153.ciunit = iread;
 	s_rsle(&io___153);
-	do_lio(&c__4, &c__1, (char *)&pveg, (ftnlen)sizeof(real));
+	do_lio(&c__5, &c__1, (char *)&pveg, (ftnlen)sizeof(doublereal));
 	e_rsle();
 /*<        call polnad(asol,avis,phi,pveg,ropq,ropu) >*/
 	polnad_(&asol, &avis, &phi, &pveg, &ropq, &ropu);
@@ -3682,8 +3702,8 @@ n*/
 /*<        read(iread,*) wspd,azw >*/
 	io___155.ciunit = iread;
 	s_rsle(&io___155);
-	do_lio(&c__4, &c__1, (char *)&wspd, (ftnlen)sizeof(real));
-	do_lio(&c__4, &c__1, (char *)&azw, (ftnlen)sizeof(real));
+	do_lio(&c__5, &c__1, (char *)&wspd, (ftnlen)sizeof(doublereal));
+	do_lio(&c__5, &c__1, (char *)&azw, (ftnlen)sizeof(doublereal));
 	e_rsle();
 /*<        razw=phi0-azw >*/
 	razw = phi0 - azw;
@@ -3697,9 +3717,9 @@ n*/
 /*<        if (idirec.eq.0) then >*/
 	if (idirec == 0) {
 /*<        ropq=0.000 >*/
-	    ropq = (float)0.;
+	    ropq = 0.;
 /*<        ropu=0.000 >*/
-	    ropu = (float)0.;
+	    ropu = 0.;
 /*<        else >*/
 	} else {
 /*<        if (ibrdf.eq.6) then >*/
@@ -3725,8 +3745,8 @@ n*/
 /*<           pveg=ul >*/
 		pveg = ul;
 /*< 	  if (pveg.gt.1.) pveg=1 >*/
-		if (pveg > (float)1.) {
-		    pveg = (float)1.;
+		if (pveg > 1.) {
+		    pveg = 1.;
 		}
 /*< 	  call polnad(asol,avis,phi,pveg,ropq,ropu) >*/
 		polnad_(&asol, &avis, &phi, &pveg, &ropq, &ropu);
@@ -3823,24 +3843,24 @@ n*/
 	s_wsfe(&io___166);
 	do_fio(&c__1, (char *)&month, (ftnlen)sizeof(integer));
 	do_fio(&c__1, (char *)&jday, (ftnlen)sizeof(integer));
-	do_fio(&c__1, (char *)&tu, (ftnlen)sizeof(real));
-	do_fio(&c__1, (char *)&xlat, (ftnlen)sizeof(real));
-	do_fio(&c__1, (char *)&xlon, (ftnlen)sizeof(real));
+	do_fio(&c__1, (char *)&tu, (ftnlen)sizeof(doublereal));
+	do_fio(&c__1, (char *)&xlat, (ftnlen)sizeof(doublereal));
+	do_fio(&c__1, (char *)&xlon, (ftnlen)sizeof(doublereal));
 	e_wsfe();
     }
 /*<       write(iwr, 102)asol,phi0 >*/
     io___170.ciunit = sixs_ier__1.iwr;
     s_wsfe(&io___170);
-    do_fio(&c__1, (char *)&asol, (ftnlen)sizeof(real));
-    do_fio(&c__1, (char *)&phi0, (ftnlen)sizeof(real));
+    do_fio(&c__1, (char *)&asol, (ftnlen)sizeof(doublereal));
+    do_fio(&c__1, (char *)&phi0, (ftnlen)sizeof(doublereal));
     e_wsfe();
 /*<       write(iwr, 1110)avis,phiv,adif,phi >*/
     io___171.ciunit = sixs_ier__1.iwr;
     s_wsfe(&io___171);
-    do_fio(&c__1, (char *)&avis, (ftnlen)sizeof(real));
-    do_fio(&c__1, (char *)&phiv, (ftnlen)sizeof(real));
-    do_fio(&c__1, (char *)&adif, (ftnlen)sizeof(real));
-    do_fio(&c__1, (char *)&phi, (ftnlen)sizeof(real));
+    do_fio(&c__1, (char *)&avis, (ftnlen)sizeof(doublereal));
+    do_fio(&c__1, (char *)&phiv, (ftnlen)sizeof(doublereal));
+    do_fio(&c__1, (char *)&adif, (ftnlen)sizeof(doublereal));
+    do_fio(&c__1, (char *)&phi, (ftnlen)sizeof(doublereal));
     e_wsfe();
 /* --- atmospheric model ---- */
 /*<       write(iwr, 1119) >*/
@@ -3859,8 +3879,8 @@ n*/
 L228:
     io___173.ciunit = sixs_ier__1.iwr;
     s_wsfe(&io___173);
-    do_fio(&c__1, (char *)&uw, (ftnlen)sizeof(real));
-    do_fio(&c__1, (char *)&uo3, (ftnlen)sizeof(real));
+    do_fio(&c__1, (char *)&uw, (ftnlen)sizeof(doublereal));
+    do_fio(&c__1, (char *)&uo3, (ftnlen)sizeof(doublereal));
     e_wsfe();
 /*<       goto 219 >*/
     goto L219;
@@ -3874,12 +3894,16 @@ L227:
 /*<         write(iwr, 1271)z(i),p(i),t(i),wh(i),wo(i) >*/
 	io___175.ciunit = sixs_ier__1.iwr;
 	s_wsfe(&io___175);
-	do_fio(&c__1, (char *)&sixs_atm__1.z__[i__ - 1], (ftnlen)sizeof(real))
-		;
-	do_fio(&c__1, (char *)&sixs_atm__1.p[i__ - 1], (ftnlen)sizeof(real));
-	do_fio(&c__1, (char *)&sixs_atm__1.t[i__ - 1], (ftnlen)sizeof(real));
-	do_fio(&c__1, (char *)&sixs_atm__1.wh[i__ - 1], (ftnlen)sizeof(real));
-	do_fio(&c__1, (char *)&sixs_atm__1.wo[i__ - 1], (ftnlen)sizeof(real));
+	do_fio(&c__1, (char *)&sixs_atm__1.z__[i__ - 1], (ftnlen)sizeof(
+		doublereal));
+	do_fio(&c__1, (char *)&sixs_atm__1.p[i__ - 1], (ftnlen)sizeof(
+		doublereal));
+	do_fio(&c__1, (char *)&sixs_atm__1.t[i__ - 1], (ftnlen)sizeof(
+		doublereal));
+	do_fio(&c__1, (char *)&sixs_atm__1.wh[i__ - 1], (ftnlen)sizeof(
+		doublereal));
+	do_fio(&c__1, (char *)&sixs_atm__1.wo[i__ - 1], (ftnlen)sizeof(
+		doublereal));
 	e_wsfe();
 /*<   229 continue >*/
 /* L229: */
@@ -3950,9 +3974,9 @@ L219:
 	    s_wsfe(&io___182);
 	    do_fio(&c__1, (char *)&i__, (ftnlen)sizeof(integer));
 	    do_fio(&c__1, (char *)&height_z__[aeroprof_1.num_z__ + 1 - i__], (
-		    ftnlen)sizeof(real));
+		    ftnlen)sizeof(doublereal));
 	    do_fio(&c__1, (char *)&aeroprof_1.taer55_z__[aeroprof_1.num_z__ + 
-		    1 - i__], (ftnlen)sizeof(real));
+		    1 - i__], (ftnlen)sizeof(doublereal));
 	    do_fio(&c__1, aer_model__ + (iaer - 1) * 50, 50L);
 	    e_wsfe();
 /*<        enddo >*/
@@ -4003,7 +4027,7 @@ L219:
 	io___186.ciunit = sixs_ier__1.iwr;
 	s_wsfe(&io___186);
 	for (i__ = 1; i__ <= 4; ++i__) {
-	    do_fio(&c__1, (char *)&c__[i__ - 1], (ftnlen)sizeof(real));
+	    do_fio(&c__1, (char *)&c__[i__ - 1], (ftnlen)sizeof(doublereal));
 	}
 	e_wsfe();
     }
@@ -4019,11 +4043,12 @@ L219:
 /*<          write(iwr,135)x1(i),x2(i),cij_out(i) >*/
 	    io___188.ciunit = sixs_ier__1.iwr;
 	    s_wsfe(&io___188);
-	    do_fio(&c__1, (char *)&mie_in__1.x1[i__ - 1], (ftnlen)sizeof(real)
-		    );
-	    do_fio(&c__1, (char *)&mie_in__1.x2[i__ - 1], (ftnlen)sizeof(real)
-		    );
-	    do_fio(&c__1, (char *)&cij_out__[i__ - 1], (ftnlen)sizeof(real));
+	    do_fio(&c__1, (char *)&mie_in__1.x1[i__ - 1], (ftnlen)sizeof(
+		    doublereal));
+	    do_fio(&c__1, (char *)&mie_in__1.x2[i__ - 1], (ftnlen)sizeof(
+		    doublereal));
+	    do_fio(&c__1, (char *)&cij_out__[i__ - 1], (ftnlen)sizeof(
+		    doublereal));
 	    e_wsfe();
 /*<         enddo >*/
 	}
@@ -4033,16 +4058,16 @@ L219:
     if (iaer == 9) {
 	io___189.ciunit = sixs_ier__1.iwr;
 	s_wsfe(&io___189);
-	do_fio(&c__1, (char *)&mie_in__1.x1[0], (ftnlen)sizeof(real));
-	do_fio(&c__1, (char *)&mie_in__1.x2[0], (ftnlen)sizeof(real));
-	do_fio(&c__1, (char *)&mie_in__1.x3[0], (ftnlen)sizeof(real));
+	do_fio(&c__1, (char *)&mie_in__1.x1[0], (ftnlen)sizeof(doublereal));
+	do_fio(&c__1, (char *)&mie_in__1.x2[0], (ftnlen)sizeof(doublereal));
+	do_fio(&c__1, (char *)&mie_in__1.x3[0], (ftnlen)sizeof(doublereal));
 	e_wsfe();
     }
 /*<        if (iaer.eq.10) write(iwr,137)x1(1)  >*/
     if (iaer == 10) {
 	io___190.ciunit = sixs_ier__1.iwr;
 	s_wsfe(&io___190);
-	do_fio(&c__1, (char *)&mie_in__1.x1[0], (ftnlen)sizeof(real));
+	do_fio(&c__1, (char *)&mie_in__1.x1[0], (ftnlen)sizeof(doublereal));
 	e_wsfe();
     }
 /*<        if (iaerp.eq.1)write(iwr,139)FILE2(1:i2) >*/
@@ -4064,18 +4089,18 @@ L219:
 /*<       if (iaer_prof.eq.0) then >*/
     if (iaer_prof__ == 0) {
 /*<       if(abs(v).le.xacc) write(iwr, 140)taer55 >*/
-	if (dabs(v) <= sixs_test__1.xacc) {
+	if (abs(v) <= sixs_test__1.xacc) {
 	    io___193.ciunit = sixs_ier__1.iwr;
 	    s_wsfe(&io___193);
-	    do_fio(&c__1, (char *)&taer55, (ftnlen)sizeof(real));
+	    do_fio(&c__1, (char *)&taer55, (ftnlen)sizeof(doublereal));
 	    e_wsfe();
 	}
 /*<       if(abs(v).gt.xacc) write(iwr, 141)v,taer55 >*/
-	if (dabs(v) > sixs_test__1.xacc) {
+	if (abs(v) > sixs_test__1.xacc) {
 	    io___194.ciunit = sixs_ier__1.iwr;
 	    s_wsfe(&io___194);
-	    do_fio(&c__1, (char *)&v, (ftnlen)sizeof(real));
-	    do_fio(&c__1, (char *)&taer55, (ftnlen)sizeof(real));
+	    do_fio(&c__1, (char *)&v, (ftnlen)sizeof(doublereal));
+	    do_fio(&c__1, (char *)&taer55, (ftnlen)sizeof(doublereal));
 	    e_wsfe();
 	}
 /*<       endif >*/
@@ -4094,15 +4119,15 @@ L1112:
 	io___197.ciunit = sixs_ier__1.iwr;
 	s_wsfe(&io___197);
 	do_fio(&c__1, nsat, 17L);
-	do_fio(&c__1, (char *)&sixs_ffu__1.wlinf, (ftnlen)sizeof(real));
-	do_fio(&c__1, (char *)&sixs_ffu__1.wlsup, (ftnlen)sizeof(real));
+	do_fio(&c__1, (char *)&sixs_ffu__1.wlinf, (ftnlen)sizeof(doublereal));
+	do_fio(&c__1, (char *)&sixs_ffu__1.wlsup, (ftnlen)sizeof(doublereal));
 	e_wsfe();
     }
 /*<       if(iwave.eq.-1) write(iwr, 149) wl >*/
     if (iwave == -1) {
 	io___198.ciunit = sixs_ier__1.iwr;
 	s_wsfe(&io___198);
-	do_fio(&c__1, (char *)&wl, (ftnlen)sizeof(real));
+	do_fio(&c__1, (char *)&wl, (ftnlen)sizeof(doublereal));
 	e_wsfe();
     }
 /*<       if(iwave.ge.0) write(iwr, 1510) nsat(iwave+1), wlinf,wlsup >*/
@@ -4110,8 +4135,8 @@ L1112:
 	io___199.ciunit = sixs_ier__1.iwr;
 	s_wsfe(&io___199);
 	do_fio(&c__1, nsat + iwave * 17, 17L);
-	do_fio(&c__1, (char *)&sixs_ffu__1.wlinf, (ftnlen)sizeof(real));
-	do_fio(&c__1, (char *)&sixs_ffu__1.wlsup, (ftnlen)sizeof(real));
+	do_fio(&c__1, (char *)&sixs_ffu__1.wlinf, (ftnlen)sizeof(doublereal));
+	do_fio(&c__1, (char *)&sixs_ffu__1.wlsup, (ftnlen)sizeof(doublereal));
 	e_wsfe();
     }
 /* ---- atmospheric polarization requested */
@@ -4125,35 +4150,35 @@ L1112:
 	if (irop == 1) {
 	    io___201.ciunit = sixs_ier__1.iwr;
 	    s_wsfe(&io___201);
-	    do_fio(&c__1, (char *)&ropq, (ftnlen)sizeof(real));
-	    do_fio(&c__1, (char *)&ropq, (ftnlen)sizeof(real));
+	    do_fio(&c__1, (char *)&ropq, (ftnlen)sizeof(doublereal));
+	    do_fio(&c__1, (char *)&ropq, (ftnlen)sizeof(doublereal));
 	    e_wsfe();
 	}
 /*< 	if (irop.eq.2) write(iwr,144) pveg*100.0 >*/
 	if (irop == 2) {
 	    io___202.ciunit = sixs_ier__1.iwr;
 	    s_wsfe(&io___202);
-	    r__1 = pveg * (float)100.;
-	    do_fio(&c__1, (char *)&r__1, (ftnlen)sizeof(real));
+	    d__1 = pveg * 100.;
+	    do_fio(&c__1, (char *)&d__1, (ftnlen)sizeof(doublereal));
 	    e_wsfe();
 	}
 /*< 	if (irop.eq.3) write(iwr,145) wspd,azw >*/
 	if (irop == 3) {
 	    io___203.ciunit = sixs_ier__1.iwr;
 	    s_wsfe(&io___203);
-	    do_fio(&c__1, (char *)&wspd, (ftnlen)sizeof(real));
-	    do_fio(&c__1, (char *)&azw, (ftnlen)sizeof(real));
+	    do_fio(&c__1, (char *)&wspd, (ftnlen)sizeof(doublereal));
+	    do_fio(&c__1, (char *)&azw, (ftnlen)sizeof(doublereal));
 	    e_wsfe();
 	}
 /*< 	w >*/
 	io___204.ciunit = sixs_ier__1.iwr;
 	s_wsfe(&io___204);
-	do_fio(&c__1, (char *)&ropq, (ftnlen)sizeof(real));
-	do_fio(&c__1, (char *)&ropu, (ftnlen)sizeof(real));
-	r__1 = sqrt(ropq * ropq + ropu * ropu);
-	do_fio(&c__1, (char *)&r__1, (ftnlen)sizeof(real));
-	r__2 = atan2(ropu, ropq) * (float)180. / (float)3.1415927 / (float)2.;
-	do_fio(&c__1, (char *)&r__2, (ftnlen)sizeof(real));
+	do_fio(&c__1, (char *)&ropq, (ftnlen)sizeof(doublereal));
+	do_fio(&c__1, (char *)&ropu, (ftnlen)sizeof(doublereal));
+	d__1 = sqrt(ropq * ropq + ropu * ropu);
+	do_fio(&c__1, (char *)&d__1, (ftnlen)sizeof(doublereal));
+	d__2 = atan2(ropu, ropq) * 180. / 3.1415927 / 2.;
+	do_fio(&c__1, (char *)&d__2, (ftnlen)sizeof(doublereal));
 	e_wsfe();
 /*<       endif >*/
     }
@@ -4165,11 +4190,11 @@ L8888:
 /*<       if(idirec.eq.0) then >*/
     if (idirec == 0) {
 /*<         rocave=0. >*/
-	rocave = (float)0.;
+	rocave = 0.;
 /*<         roeave=0. >*/
-	roeave = (float)0.;
+	roeave = 0.;
 /*<         seb=0. >*/
-	seb = (float)0.;
+	seb = 0.;
 /*<         do 264 i=iinf,isup >*/
 	i__1 = isup;
 	for (i__ = iinf; i__ <= i__1; ++i__) {
@@ -4177,10 +4202,10 @@ L8888:
 	    sbor = sixs_ffu__1.s[i__ - 1];
 /*<           if(i.eq.iinf.or.i.eq.isup) sbor=sbor*0.5 >*/
 	    if (i__ == iinf || i__ == isup) {
-		sbor *= (float).5;
+		sbor *= .5;
 	    }
 /*<           wl=.25+(i-1)*step >*/
-	    wl = (i__ - 1) * step + (float).25;
+	    wl = (i__ - 1) * step + .25;
 /*<    >*/
 	    solirr_(&wl, &swl);
 /*<           swl=swl*dsol >*/
@@ -4209,7 +4234,7 @@ L8888:
 /*<         write(iwr, 169)rad >*/
 	io___211.ciunit = sixs_ier__1.iwr;
 	s_wsfe(&io___211);
-	do_fio(&c__1, (char *)&rad, (ftnlen)sizeof(real));
+	do_fio(&c__1, (char *)&rad, (ftnlen)sizeof(doublereal));
 	e_wsfe();
 /*<         igroun=igrou1 >*/
 	igroun = igrou1;
@@ -4264,15 +4289,15 @@ L261:
 /*<         if(idirec.eq.1) then >*/
 	if (idirec == 1) {
 /*<         rocave=0. >*/
-	    rocave = (float)0.;
+	    rocave = 0.;
 /*<         rfoamave=0. >*/
-	    rfoamave = (float)0.;
+	    rfoamave = 0.;
 /*<         rwatave=0. >*/
-	    rwatave = (float)0.;
+	    rwatave = 0.;
 /*<         rglitave=0. >*/
-	    rglitave = (float)0.;
+	    rglitave = 0.;
 /*<         seb=0. >*/
-	    seb = (float)0.;
+	    seb = 0.;
 /*<         do  i=iinf,isup >*/
 	    i__1 = isup;
 	    for (i__ = iinf; i__ <= i__1; ++i__) {
@@ -4280,10 +4305,10 @@ L261:
 		sbor = sixs_ffu__1.s[i__ - 1];
 /*<           if(i.eq.iinf.or.i.eq.isup) sbor=sbor*0.5 >*/
 		if (i__ == iinf || i__ == isup) {
-		    sbor *= (float).5;
+		    sbor *= .5;
 		}
 /*<           wl=.25+(i-1)*step >*/
-		wl = (i__ - 1) * step + (float).25;
+		wl = (i__ - 1) * step + .25;
 /*<    >*/
 		solirr_(&wl, &swl);
 /*<           swl=swl*dsol >*/
@@ -4442,170 +4467,170 @@ L999:
 /*< 	do j=1,41 >*/
 	for (j = 1; j <= 41; ++j) {
 /*< 	roluti(i,j)=0.0 >*/
-	    roluti[i__ + j * 25 - 26] = (float)0.;
+	    roluti[i__ + j * 25 - 26] = 0.;
 /*< 	rolutiq(i,j)=0.0 >*/
-	    rolutiq[i__ + j * 25 - 26] = (float)0.;
+	    rolutiq[i__ + j * 25 - 26] = 0.;
 /*< 	rolutiu(i,j)=0.0 >*/
-	    rolutiu[i__ + j * 25 - 26] = (float)0.;
+	    rolutiu[i__ + j * 25 - 26] = 0.;
 /*< 	enddo >*/
 	}
 /*< 	enddo >*/
     }
 /* End Update Look up table */
 /*<       sb=0. >*/
-    sb = (float)0.;
+    sb = 0.;
 /*<       seb=0. >*/
-    seb = (float)0.;
+    seb = 0.;
 /*<       refet=0. >*/
-    refet = (float)0.;
+    refet = 0.;
 /*<       refet1=0. >*/
-    refet1 = (float)0.;
+    refet1 = 0.;
 /*<       refet2=0. >*/
-    refet2 = (float)0.;
+    refet2 = 0.;
 /*<       refet3=0. >*/
-    refet3 = (float)0.;
+    refet3 = 0.;
 /*<       rpfet=0. >*/
-    rpfet = (float)0.;
+    rpfet = 0.;
 /*<       rpfet1=0. >*/
-    rpfet1 = (float)0.;
+    rpfet1 = 0.;
 /*<       rpfet2=0. >*/
-    rpfet2 = (float)0.;
+    rpfet2 = 0.;
 /*<       rpfet3=0. >*/
-    rpfet3 = (float)0.;
+    rpfet3 = 0.;
 /*<       alumet=0. >*/
-    alumet = (float)0.;
+    alumet = 0.;
 /*<       plumet=0. >*/
-    plumet = (float)0.;
+    plumet = 0.;
 /*<       tgasm=0. >*/
-    tgasm = (float)0.;
+    tgasm = 0.;
 /*<       rog=0. >*/
-    rog = (float)0.;
+    rog = 0.;
 /*<       dgasm=0. >*/
-    dgasm = (float)0.;
+    dgasm = 0.;
 /*<       ugasm=0. >*/
-    ugasm = (float)0.;
+    ugasm = 0.;
 /*<       sdwava=0. >*/
-    sdwava = (float)0.;
+    sdwava = 0.;
 /*<       sdozon=0. >*/
-    sdozon = (float)0.;
+    sdozon = 0.;
 /*<       sddica=0. >*/
-    sddica = (float)0.;
+    sddica = 0.;
 /*<       sdoxyg=0. >*/
-    sdoxyg = (float)0.;
+    sdoxyg = 0.;
 /*<       sdniox=0. >*/
-    sdniox = (float)0.;
+    sdniox = 0.;
 /*<       sdmoca=0. >*/
-    sdmoca = (float)0.;
+    sdmoca = 0.;
 /*<       sdmeth=0. >*/
-    sdmeth = (float)0.;
+    sdmeth = 0.;
 /*<       suwava=0. >*/
-    suwava = (float)0.;
+    suwava = 0.;
 /*<       suozon=0. >*/
-    suozon = (float)0.;
+    suozon = 0.;
 /*<       sudica=0. >*/
-    sudica = (float)0.;
+    sudica = 0.;
 /*<       suoxyg=0. >*/
-    suoxyg = (float)0.;
+    suoxyg = 0.;
 /*<       suniox=0. >*/
-    suniox = (float)0.;
+    suniox = 0.;
 /*<       sumoca=0. >*/
-    sumoca = (float)0.;
+    sumoca = 0.;
 /*<       sumeth=0. >*/
-    sumeth = (float)0.;
+    sumeth = 0.;
 /*<       stwava=0. >*/
-    stwava = (float)0.;
+    stwava = 0.;
 /*<       stozon=0. >*/
-    stozon = (float)0.;
+    stozon = 0.;
 /*<       stdica=0. >*/
-    stdica = (float)0.;
+    stdica = 0.;
 /*<       stoxyg=0. >*/
-    stoxyg = (float)0.;
+    stoxyg = 0.;
 /*<       stniox=0. >*/
-    stniox = (float)0.;
+    stniox = 0.;
 /*<       stmoca=0. >*/
-    stmoca = (float)0.;
+    stmoca = 0.;
 /*<       stmeth=0. >*/
-    stmeth = (float)0.;
+    stmeth = 0.;
 /*<       sodray=0. >*/
-    sodray = (float)0.;
+    sodray = 0.;
 /*<       sodrayp=0. >*/
-    sodrayp = (float)0.;
+    sodrayp = 0.;
 /*<       sodaer=0. >*/
-    sodaer = (float)0.;
+    sodaer = 0.;
 /*<       sodaerp=0. >*/
-    sodaerp = (float)0.;
+    sodaerp = 0.;
 /*<       sodtot=0. >*/
-    sodtot = (float)0.;
+    sodtot = 0.;
 /*<       sodtotp=0. >*/
-    sodtotp = (float)0.;
+    sodtotp = 0.;
 /*<       fophsr=0. >*/
-    fophsr = (float)0.;
+    fophsr = 0.;
 /*<       fophsa=0. >*/
-    fophsa = (float)0.;
+    fophsa = 0.;
 /*<       foqhsr=0. >*/
-    foqhsr = (float)0.;
+    foqhsr = 0.;
 /*<       foqhsa=0. >*/
-    foqhsa = (float)0.;
+    foqhsa = 0.;
 /*<       fouhsr=0. >*/
-    fouhsr = (float)0.;
+    fouhsr = 0.;
 /*<       fouhsa=0. >*/
-    fouhsa = (float)0.;
+    fouhsa = 0.;
 /*<       sroray=0. >*/
-    sroray = (float)0.;
+    sroray = 0.;
 /*<       sroaer=0. >*/
-    sroaer = (float)0.;
+    sroaer = 0.;
 /*<       srotot=0. >*/
-    srotot = (float)0.;
+    srotot = 0.;
 /*<       srpray=0. >*/
-    srpray = (float)0.;
+    srpray = 0.;
 /*<       srpaer=0. >*/
-    srpaer = (float)0.;
+    srpaer = 0.;
 /*<       srptot=0. >*/
-    srptot = (float)0.;
+    srptot = 0.;
 /*<       srqray=0. >*/
-    srqray = (float)0.;
+    srqray = 0.;
 /*<       srqaer=0. >*/
-    srqaer = (float)0.;
+    srqaer = 0.;
 /*<       srqtot=0. >*/
-    srqtot = (float)0.;
+    srqtot = 0.;
 /*<       sruray=0. >*/
-    sruray = (float)0.;
+    sruray = 0.;
 /*<       sruaer=0. >*/
-    sruaer = (float)0.;
+    sruaer = 0.;
 /*<       srutot=0. >*/
-    srutot = (float)0.;
+    srutot = 0.;
 /*<       ssdaer=0. >*/
-    ssdaer = (float)0.;
+    ssdaer = 0.;
 /*<       sdtotr=0. >*/
-    sdtotr = (float)0.;
+    sdtotr = 0.;
 /*<       sdtota=0. >*/
-    sdtota = (float)0.;
+    sdtota = 0.;
 /*<       sdtott=0. >*/
-    sdtott = (float)0.;
+    sdtott = 0.;
 /*<       sutotr=0. >*/
-    sutotr = (float)0.;
+    sutotr = 0.;
 /*<       sutota=0. >*/
-    sutota = (float)0.;
+    sutota = 0.;
 /*<       sutott=0. >*/
-    sutott = (float)0.;
+    sutott = 0.;
 /*<       sasr=0. >*/
-    sasr = (float)0.;
+    sasr = 0.;
 /*<       sasa=0. >*/
-    sasa = (float)0.;
+    sasa = 0.;
 /*<       sast=0. >*/
-    sast = (float)0.;
+    sast = 0.;
 /*<       do 52 i=1,2 >*/
     for (i__ = 1; i__ <= 2; ++i__) {
 /*<         do 53 j=1,3 >*/
 	for (j = 1; j <= 3; ++j) {
 /*<           ani(i,j)=0. >*/
-	    ani[i__ + (j << 1) - 3] = (float)0.;
+	    ani[i__ + (j << 1) - 3] = 0.;
 /*<           aini(i,j)=0. >*/
-	    aini[i__ + (j << 1) - 3] = (float)0.;
+	    aini[i__ + (j << 1) - 3] = 0.;
 /*<           anr(i,j)=0. >*/
-	    anr[i__ + (j << 1) - 3] = (float)0.;
+	    anr[i__ + (j << 1) - 3] = 0.;
 /*<           ainr(i,j)=0. >*/
-	    ainr[i__ + (j << 1) - 3] = (float)0.;
+	    ainr[i__ + (j << 1) - 3] = 0.;
 /*<    53   continue >*/
 /* L53: */
 	}
@@ -4626,24 +4651,24 @@ L999:
 	sbor = sixs_ffu__1.s[l - 1];
 /*<         if(l.eq.iinf.or.l.eq.isup) sbor=sbor*0.5 >*/
 	if (l == iinf || l == isup) {
-	    sbor *= (float).5;
+	    sbor *= .5;
 	}
 /*<         if(iwave.eq.-1) sbor=1.0/step >*/
 	if (iwave == -1) {
-	    sbor = (float)1. / step;
+	    sbor = 1. / step;
 	}
 /*<         roc=rocl(l) >*/
 	roc = rocl[l - 1];
 /*<         roe=roel(l) >*/
 	roe = roel[l - 1];
 /*<         wl=.25+(l-1)*step >*/
-	wl = (l - 1) * step + (float).25;
+	wl = (l - 1) * step + .25;
 
 /*<    >*/
-	r__1 = uw / (float)2.;
-	r__2 = puw / (float)2.;
-	abstra_(&idatm, &wl, &xmus, &xmuv, &r__1, &uo3, &uwus, &uo3us, &
-		idatmp, &r__2, &puo3, &puwus, &puo3us, &dtwava, &dtozon, &
+	d__1 = uw / 2.;
+	d__2 = puw / 2.;
+	abstra_(&idatm, &wl, &xmus, &xmuv, &d__1, &uo3, &uwus, &uo3us, &
+		idatmp, &d__2, &puo3, &puwus, &puo3us, &dtwava, &dtozon, &
 		dtdica, &dtoxyg, &dtniox, &dtmeth, &dtmoca, &utwava, &utozon, 
 		&utdica, &utoxyg, &utniox, &utmeth, &utmoca, &attwava, &
 		ttozon, &ttdica, &ttoxyg, &ttniox, &ttmeth, &ttmoca);
@@ -4655,75 +4680,75 @@ L999:
 		 &ttoxyg, &ttniox, &ttmeth, &ttmoca);
 /*<         if (dtwava.lt.accu3) dtwava=0. >*/
 	if (dtwava < accu3) {
-	    dtwava = (float)0.;
+	    dtwava = 0.;
 	}
 /*<         if (dtozon.lt.accu3) dtozon=0. >*/
 	if (dtozon < accu3) {
-	    dtozon = (float)0.;
+	    dtozon = 0.;
 	}
 /*<         if (dtdica.lt.accu3) dtdica=0. >*/
 	if (dtdica < accu3) {
-	    dtdica = (float)0.;
+	    dtdica = 0.;
 	}
 /*<         if (dtniox.lt.accu3) dtniox=0. >*/
 	if (dtniox < accu3) {
-	    dtniox = (float)0.;
+	    dtniox = 0.;
 	}
 /*<         if (dtmeth.lt.accu3) dtmeth=0. >*/
 	if (dtmeth < accu3) {
-	    dtmeth = (float)0.;
+	    dtmeth = 0.;
 	}
 /*<         if (dtmoca.lt.accu3) dtmeth=0. >*/
 	if (dtmoca < accu3) {
-	    dtmeth = (float)0.;
+	    dtmeth = 0.;
 	}
 /*<         if (utwava.lt.accu3) utwava=0. >*/
 	if (utwava < accu3) {
-	    utwava = (float)0.;
+	    utwava = 0.;
 	}
 /*<         if (utozon.lt.accu3) utozon=0. >*/
 	if (utozon < accu3) {
-	    utozon = (float)0.;
+	    utozon = 0.;
 	}
 /*<         if (utdica.lt.accu3) utdica=0. >*/
 	if (utdica < accu3) {
-	    utdica = (float)0.;
+	    utdica = 0.;
 	}
 /*<         if (utniox.lt.accu3) utniox=0. >*/
 	if (utniox < accu3) {
-	    utniox = (float)0.;
+	    utniox = 0.;
 	}
 /*<         if (utmeth.lt.accu3) utmeth=0. >*/
 	if (utmeth < accu3) {
-	    utmeth = (float)0.;
+	    utmeth = 0.;
 	}
 /*<         if (utmoca.lt.accu3) utmeth=0. >*/
 	if (utmoca < accu3) {
-	    utmeth = (float)0.;
+	    utmeth = 0.;
 	}
 /*<         if (ttwava.lt.accu3) ttwava=0. >*/
 	if (ttwava < accu3) {
-	    ttwava = (float)0.;
+	    ttwava = 0.;
 	}
 /*<         if (ttozon.lt.accu3) ttozon=0. >*/
 	if (ttozon < accu3) {
-	    ttozon = (float)0.;
+	    ttozon = 0.;
 	}
 /*<         if (ttdica.lt.accu3) ttdica=0. >*/
 	if (ttdica < accu3) {
-	    ttdica = (float)0.;
+	    ttdica = 0.;
 	}
 /*<         if (ttniox.lt.accu3) ttniox=0. >*/
 	if (ttniox < accu3) {
-	    ttniox = (float)0.;
+	    ttniox = 0.;
 	}
 /*<         if (ttmeth.lt.accu3) ttmeth=0. >*/
 	if (ttmeth < accu3) {
-	    ttmeth = (float)0.;
+	    ttmeth = 0.;
 	}
 /*<         if (ttmoca.lt.accu3) ttmeth=0. >*/
 	if (ttmoca < accu3) {
-	    ttmeth = (float)0.;
+	    ttmeth = 0.;
 	}
 
 /*<    >*/
@@ -4776,8 +4801,8 @@ L999:
 	    rsurf = roc * tdird * tdiru + robar[l - 1] * tdifd * tdiru + 
 		    robarp[l - 1] * tdifu * tdird + robard[l - 1] * tdifd * 
 		    tdifu + (tdifd + tdird) * (tdifu + tdiru) * astot * 
-		    robard[l - 1] * robard[l - 1] / ((float)1. - astot * 
-		    robard[l - 1]);
+		    robard[l - 1] * robard[l - 1] / (1. - astot * robard[l - 
+		    1]);
 /*<         avr=robard(l) >*/
 	    avr = robard[l - 1];
 /*<         else >*/
@@ -4785,11 +4810,11 @@ L999:
 /*<           call enviro(edifr,edifa,rad,palt,xmuv,fra,fae,fr) >*/
 	    enviro_(&edifr, &edifa, &rad, &palt, &xmuv, &fra, &fae, &fr);
 /*<           avr=roc*fr+(1.-fr)*roe >*/
-	    avr = roc * fr + ((float)1. - fr) * roe;
+	    avr = roc * fr + (1. - fr) * roe;
 /*<    >*/
-	    rsurf = roc * dtott * exp(-(trayp + taerp) / xmuv) / ((float)1. - 
-		    avr * astot) + avr * dtott * (utott - exp(-(trayp + taerp)
-		     / xmuv)) / ((float)1. - avr * astot);
+	    rsurf = roc * dtott * exp(-(trayp + taerp) / xmuv) / (1. - avr * 
+		    astot) + avr * dtott * (utott - exp(-(trayp + taerp) / 
+		    xmuv)) / (1. - avr * astot);
 /*<         endif >*/
 	}
 /*<         ratm1=(romix-rorayl)*tgtot+rorayl*tgp1 >*/
@@ -4868,8 +4893,7 @@ swl,roc, */
 /*<           ruatm2=(rumix-rurayl)*tgp2+rurayl*tgp1 >*/
 	    ruatm2 = (rumix - rurayl) * tgp2 + rurayl * tgp1;
 /*<           tdirqu=exp(-(trayp+taerp)*(1./xmuv+1./xmus)) >*/
-	    tdirqu = exp(-(trayp + taerp) * ((float)1. / xmuv + (float)1. / 
-		    xmus));
+	    tdirqu = exp(-(trayp + taerp) * (1. / xmuv + 1. / xmus));
 /*< 	  rqmeas2=rqatm2+ropq*tgtot*tdirqu >*/
 	    rqmeas2 = rqatm2 + ropq * tgtot * tdirqu;
 /*< 	  rumeas2=ruatm2+ropu*tgtot*tdirqu >*/
@@ -5025,7 +5049,7 @@ swl,roc, */
 /*<         tdif=dtott-tdir >*/
 	tdif = dtott - tdir;
 /*<         etn=dtott*dgtot/(1.-avr*astot) >*/
-	etn = dtott * dgtot / ((float)1. - avr * astot);
+	etn = dtott * dgtot / (1. - avr * astot);
 /*<         esn=tdir*dgtot >*/
 	esn = tdir * dgtot;
 /*<         es=tdir*dgtot*xmus*swl >*/
@@ -5035,10 +5059,9 @@ swl,roc, */
 /*<         ea0=tdif*dgtot*xmus*swl >*/
 	ea0 = tdif * dgtot * xmus * swl;
 /*<         ee0n=dgtot*avr*astot*dtott/(1.-avr*astot) >*/
-	ee0n = dgtot * avr * astot * dtott / ((float)1. - avr * astot);
+	ee0n = dgtot * avr * astot * dtott / (1. - avr * astot);
 /*<         ee0=xmus*swl*dgtot*avr*astot*dtott/(1.-avr*astot) >*/
-	ee0 = xmus * swl * dgtot * avr * astot * dtott / ((float)1. - avr * 
-		astot);
+	ee0 = xmus * swl * dgtot * avr * astot * dtott / (1. - avr * astot);
 /*<         if (etn.gt.accu3) then >*/
 	if (etn > accu3) {
 /*<            ani(1,1)=esn/etn >*/
@@ -5050,11 +5073,11 @@ swl,roc, */
 /*<         else >*/
 	} else {
 /*<            ani(1,1)=0. >*/
-	    ani[0] = (float)0.;
+	    ani[0] = 0.;
 /*<            ani(1,2)=0. >*/
-	    ani[2] = (float)0.;
+	    ani[2] = 0.;
 /*<            ani(1,3)=0. >*/
-	    ani[4] = (float)0.;
+	    ani[4] = 0.;
 /*<         endif >*/
 	}
 /*<         ani(2,1)=es >*/
@@ -5085,11 +5108,11 @@ swl,roc, */
 /*<         xla0=xla0n*xmus*swl/pi >*/
 	xla0 = xla0n * xmus * swl / pi;
 /*<         xltn=roc*dtott*tmdir*tgtot/(1.-avr*astot) >*/
-	xltn = roc * dtott * tmdir * tgtot / ((float)1. - avr * astot);
+	xltn = roc * dtott * tmdir * tgtot / (1. - avr * astot);
 /*<         xlt=xltn*xmus*swl/pi >*/
 	xlt = xltn * xmus * swl / pi;
 /*<         xlen=avr*dtott*tmdif*tgtot/(1.-avr*astot) >*/
-	xlen = avr * dtott * tmdif * tgtot / ((float)1. - avr * astot);
+	xlen = avr * dtott * tmdif * tgtot / (1. - avr * astot);
 /*<         xle=xlen*xmus*swl/pi >*/
 	xle = xlen * xmus * swl / pi;
 /*<         anr(1,1)=xla0n >*/
@@ -5199,9 +5222,9 @@ swl,roc, */
 /*<       sodtotp=sodtotp/seb >*/
     sodtotp /= seb;
 /*<       pizera=0.0 >*/
-    pizera = (float)0.;
+    pizera = 0.;
 /*<       pizerr=1. >*/
-    pizerr = (float)1.;
+    pizerr = 1.;
 /*<       if(iaer.ne.0) pizera=ssdaer/sodaer/seb >*/
     if (iaer != 0) {
 	pizera = ssdaer / sodaer / seb;
@@ -5274,17 +5297,11 @@ swl,roc, */
 	fouhst = (sodray * fouhsr + sodaer * fouhsa) / (sodray + sodaer);
 /*      we define the polarized reflectances */
 /*< 	srpray=sqrt(srqray**2.+sruray**2.) >*/
-	d__1 = (doublereal) srqray;
-	d__2 = (doublereal) sruray;
-	srpray = sqrt(pow_dd(&d__1, &c_b308) + pow_dd(&d__2, &c_b308));
+	srpray = sqrt(pow_dd(&srqray, &c_b308) + pow_dd(&sruray, &c_b308));
 /*<  	srpaer=sqrt(srqaer**2.+sruaer**2.) >*/
-	d__1 = (doublereal) srqaer;
-	d__2 = (doublereal) sruaer;
-	srpaer = sqrt(pow_dd(&d__1, &c_b308) + pow_dd(&d__2, &c_b308));
+	srpaer = sqrt(pow_dd(&srqaer, &c_b308) + pow_dd(&sruaer, &c_b308));
 /*< 	srptot=sqrt(srqtot**2.+srutot**2.) >*/
-	d__1 = (doublereal) srqtot;
-	d__2 = (doublereal) srutot;
-	srptot = sqrt(pow_dd(&d__1, &c_b308) + pow_dd(&d__2, &c_b308));
+	srptot = sqrt(pow_dd(&srqtot, &c_b308) + pow_dd(&srutot, &c_b308));
 /*      we define the primary degrees of polarization */
 /*< 	spdpray=foqhsr/fophsr >*/
 	spdpray = foqhsr / fophsr;
@@ -5295,37 +5312,37 @@ swl,roc, */
 /*< 	else >*/
 	} else {
 /*< 	 spdpaer=0.0 >*/
-	    spdpaer = (float)0.;
+	    spdpaer = 0.;
 /*< 	endif >*/
 	}
 /*< 	spdptot=foqhst/fophst >*/
 	spdptot = foqhst / fophst;
 /*      we define the degrees of polarization */
 /*< 	sdpray=100.*srpray/sroray >*/
-	sdpray = srpray * (float)100. / sroray;
+	sdpray = srpray * 100. / sroray;
 /*< 	if (sroaer.ne.0) then >*/
-	if (sroaer != (float)0.) {
+	if (sroaer != 0.) {
 /*< 	 sdpaer=100.*srpaer/sroaer >*/
-	    sdpaer = srpaer * (float)100. / sroaer;
+	    sdpaer = srpaer * 100. / sroaer;
 /*< 	else sdpaer=0.0 >*/
-	    elsesdpaer = (float)0.;
+	    elsesdpaer = 0.;
 /*< 	endif  >*/
 	}
 /*< 	sdptot=100.*srptot/srotot >*/
-	sdptot = srptot * (float)100. / srotot;
+	sdptot = srptot * 100. / srotot;
 /*      and we compute the direction of the plane of polarization */
 /*< 	call dirpopol(srqray*xmus,sruray*xmus,sdppray) >*/
-	r__1 = srqray * xmus;
-	r__2 = sruray * xmus;
-	dirpopol_(&r__1, &r__2, &sdppray);
+	d__1 = srqray * xmus;
+	d__2 = sruray * xmus;
+	dirpopol_(&d__1, &d__2, &sdppray);
 /*< 	call dirpopol(srqaer*xmus,sruaer*xmus,sdppaer) >*/
-	r__1 = srqaer * xmus;
-	r__2 = sruaer * xmus;
-	dirpopol_(&r__1, &r__2, &sdppaer);
+	d__1 = srqaer * xmus;
+	d__2 = sruaer * xmus;
+	dirpopol_(&d__1, &d__2, &sdppaer);
 /*< 	call dirpopol(srqtot*xmus,srutot*xmus,sdpptot) >*/
-	r__1 = srqtot * xmus;
-	r__2 = srutot * xmus;
-	dirpopol_(&r__1, &r__2, &sdpptot);
+	d__1 = srqtot * xmus;
+	d__2 = srutot * xmus;
+	dirpopol_(&d__1, &d__2, &sdpptot);
 /* C	ksirad=sdpptot*3.1415927/180. */
 /* C	refeti=refet+pinst*rpfet*cos(2*(ksiinst*3.1415925/180.+ksirad)) 
 */
@@ -5392,13 +5409,13 @@ swl,roc, */
 	i__1 = nfi;
 	for (ifi = 1; ifi <= i__1; ++ifi) {
 /*< 	  xtphi=(ifi-1)*180.0/(nfi-1) >*/
-	    xtphi = (ifi - 1) * (float)180. / (nfi - 1);
+	    xtphi = (ifi - 1) * 180. / (nfi - 1);
 /*< 	  write(6,*) "lutfi ",xtphi,ratm2_fi(ifi) >*/
 	    s_wsle(&io___426);
 	    do_lio(&c__9, &c__1, "lutfi ", 6L);
-	    do_lio(&c__4, &c__1, (char *)&xtphi, (ftnlen)sizeof(real));
-	    do_lio(&c__4, &c__1, (char *)&ratm2_fi__[ifi - 1], (ftnlen)sizeof(
-		    real));
+	    do_lio(&c__5, &c__1, (char *)&xtphi, (ftnlen)sizeof(doublereal));
+	    do_lio(&c__5, &c__1, (char *)&ratm2_fi__[ifi - 1], (ftnlen)sizeof(
+		    doublereal));
 	    e_wsle();
 /*< 	  enddo >*/
 	}
@@ -5408,7 +5425,7 @@ swl,roc, */
 /*<       if (ilut.eq.1) then >*/
     if (ilut == 1) {
 /*<       its=acos(xmus)*180.0/pi >*/
-	its = acos(xmus) * (float)180. / pi;
+	its = acos(xmus) * 180. / pi;
 /*<       open(10,file='rotoa_bs',ACCESS='APPEND') >*/
 	o__1.oerr = 0;
 	o__1.ounit = 10;
@@ -5423,16 +5440,16 @@ swl,roc, */
 /*<       write(10,2222) "AERO-LUT Lambda min,max ",wlinf,wlsup >*/
 	s_wsfe(&io___427);
 	do_fio(&c__1, "AERO-LUT Lambda min,max ", 24L);
-	do_fio(&c__1, (char *)&sixs_ffu__1.wlinf, (ftnlen)sizeof(real));
-	do_fio(&c__1, (char *)&sixs_ffu__1.wlsup, (ftnlen)sizeof(real));
+	do_fio(&c__1, (char *)&sixs_ffu__1.wlinf, (ftnlen)sizeof(doublereal));
+	do_fio(&c__1, (char *)&sixs_ffu__1.wlsup, (ftnlen)sizeof(doublereal));
 	e_wsfe();
 /*<  2222 Format(A28,3(F10.7,1X))       >*/
 /*<       write(10,2222) "Tau-Lambda,Tau550 asol  ",sodaer,taer55,asol >*/
 	s_wsfe(&io___428);
 	do_fio(&c__1, "Tau-Lambda,Tau550 asol  ", 24L);
-	do_fio(&c__1, (char *)&sodaer, (ftnlen)sizeof(real));
-	do_fio(&c__1, (char *)&taer55, (ftnlen)sizeof(real));
-	do_fio(&c__1, (char *)&asol, (ftnlen)sizeof(real));
+	do_fio(&c__1, (char *)&sodaer, (ftnlen)sizeof(doublereal));
+	do_fio(&c__1, (char *)&taer55, (ftnlen)sizeof(doublereal));
+	do_fio(&c__1, (char *)&asol, (ftnlen)sizeof(doublereal));
 	e_wsfe();
 /*<       aerod=0 >*/
 	aerod = 0;
@@ -5524,25 +5541,25 @@ swl,roc, */
 	}
 /*<  2223 format(A24,1X,A80)       >*/
 /*<       lutmuv=cos(avis*pi/180.) >*/
-	lutmuv = cos(avis * pi / (float)180.);
+	lutmuv = cos(avis * pi / 180.);
 /*<    >*/
-	cscaa = -xmus * lutmuv - cos(filut[mu - 1] * pi / (float)180.) * sqrt(
-		(float)1. - xmus * xmus) * sqrt((float)1. - lutmuv * lutmuv);
+	cscaa = -xmus * lutmuv - cos(filut[mu - 1] * pi / 180.) * sqrt(1. - 
+		xmus * xmus) * sqrt(1. - lutmuv * lutmuv);
 /*<       iscama=acos(cscaa)*180./pi >*/
-	iscama = acos(cscaa) * (float)180. / pi;
+	iscama = acos(cscaa) * 180. / pi;
 /*<    >*/
 	cscaa = -xmus * lutmuv - cos(filut[mu + nfilut[mu - 1] * 25 - 26] * 
-		pi / (float)180.) * sqrt((float)1. - xmus * xmus) * sqrt((
-		float)1. - lutmuv * lutmuv);
+		pi / 180.) * sqrt(1. - xmus * xmus) * sqrt(1. - lutmuv * 
+		lutmuv);
 /*<       iscami=acos(cscaa)*180./pi >*/
-	iscami = acos(cscaa) * (float)180. / pi;
+	iscami = acos(cscaa) * 180. / pi;
 /*<       write(10,333) its,avis,nfilut(mu),iscama,iscami >*/
 	s_wsfe(&io___438);
-	do_fio(&c__1, (char *)&its, (ftnlen)sizeof(real));
-	do_fio(&c__1, (char *)&avis, (ftnlen)sizeof(real));
+	do_fio(&c__1, (char *)&its, (ftnlen)sizeof(doublereal));
+	do_fio(&c__1, (char *)&avis, (ftnlen)sizeof(doublereal));
 	do_fio(&c__1, (char *)&nfilut[mu - 1], (ftnlen)sizeof(integer));
-	do_fio(&c__1, (char *)&iscama, (ftnlen)sizeof(real));
-	do_fio(&c__1, (char *)&iscami, (ftnlen)sizeof(real));
+	do_fio(&c__1, (char *)&iscama, (ftnlen)sizeof(doublereal));
+	do_fio(&c__1, (char *)&iscami, (ftnlen)sizeof(doublereal));
 	e_wsfe();
 /*<       write(10,'(41(F8.5,1X))')(roluti(mu,j)/seb,j=1,nfilut(mu)) >*/
 	ci__1.cierr = 0;
@@ -5551,8 +5568,8 @@ swl,roc, */
 	s_wsfe(&ci__1);
 	i__1 = nfilut[mu - 1];
 	for (j = 1; j <= i__1; ++j) {
-	    r__1 = roluti[mu + j * 25 - 26] / seb;
-	    do_fio(&c__1, (char *)&r__1, (ftnlen)sizeof(real));
+	    d__1 = roluti[mu + j * 25 - 26] / seb;
+	    do_fio(&c__1, (char *)&d__1, (ftnlen)sizeof(doublereal));
 	}
 	e_wsfe();
 /*      write(10,'(41(F8.5,1X))')(rolutiq(mu,j)/seb,j=1,nfilut(mu)) */
@@ -5563,26 +5580,25 @@ swl,roc, */
 /*<       lutmuv=rm(i) >*/
 	    lutmuv = rm[i__ + 25];
 /*<       luttv=acos(lutmuv)*180./pi >*/
-	    luttv = acos(lutmuv) * (float)180. / pi;
+	    luttv = acos(lutmuv) * 180. / pi;
 /*<    >*/
-	    cscaa = -xmus * lutmuv - cos(filut[i__ - 1] * pi / (float)180.) * 
-		    sqrt((float)1. - xmus * xmus) * sqrt((float)1. - lutmuv * 
-		    lutmuv);
+	    cscaa = -xmus * lutmuv - cos(filut[i__ - 1] * pi / 180.) * sqrt(
+		    1. - xmus * xmus) * sqrt(1. - lutmuv * lutmuv);
 /*<       iscama=acos(cscaa)*180./pi >*/
-	    iscama = acos(cscaa) * (float)180. / pi;
+	    iscama = acos(cscaa) * 180. / pi;
 /*<    >*/
 	    cscaa = -xmus * lutmuv - cos(filut[i__ + nfilut[i__ - 1] * 25 - 
-		    26] * pi / (float)180.) * sqrt((float)1. - xmus * xmus) * 
-		    sqrt((float)1. - lutmuv * lutmuv);
+		    26] * pi / 180.) * sqrt(1. - xmus * xmus) * sqrt(1. - 
+		    lutmuv * lutmuv);
 /*<       iscami=acos(cscaa)*180./pi >*/
-	    iscami = acos(cscaa) * (float)180. / pi;
+	    iscami = acos(cscaa) * 180. / pi;
 /*<       write(10,333) its,luttv,nfilut(i),iscama,iscami >*/
 	    s_wsfe(&io___439);
-	    do_fio(&c__1, (char *)&its, (ftnlen)sizeof(real));
-	    do_fio(&c__1, (char *)&luttv, (ftnlen)sizeof(real));
+	    do_fio(&c__1, (char *)&its, (ftnlen)sizeof(doublereal));
+	    do_fio(&c__1, (char *)&luttv, (ftnlen)sizeof(doublereal));
 	    do_fio(&c__1, (char *)&nfilut[i__ - 1], (ftnlen)sizeof(integer));
-	    do_fio(&c__1, (char *)&iscama, (ftnlen)sizeof(real));
-	    do_fio(&c__1, (char *)&iscami, (ftnlen)sizeof(real));
+	    do_fio(&c__1, (char *)&iscama, (ftnlen)sizeof(doublereal));
+	    do_fio(&c__1, (char *)&iscami, (ftnlen)sizeof(doublereal));
 	    e_wsfe();
 /*<  333  Format(F10.5,1X,F10.5,1X,I3,F10.5,F10.5)     >*/
 /*<       write(10,'(41(F8.5,1X))')(roluti(i,j)/seb,j=1,nfilut(i)) >*/
@@ -5592,8 +5608,8 @@ swl,roc, */
 	    s_wsfe(&ci__1);
 	    i__3 = nfilut[i__ - 1];
 	    for (j = 1; j <= i__3; ++j) {
-		r__1 = roluti[i__ + j * 25 - 26] / seb;
-		do_fio(&c__1, (char *)&r__1, (ftnlen)sizeof(real));
+		d__1 = roluti[i__ + j * 25 - 26] / seb;
+		do_fio(&c__1, (char *)&d__1, (ftnlen)sizeof(doublereal));
 	    }
 	    e_wsfe();
 /*      write(10,'(41(F8.5,1X))')(rolutiq(i,j)/seb,j=1,nfilut(i)) 
@@ -5614,7 +5630,7 @@ swl,roc, */
 /*<       if (ilut.eq.3) then >*/
     if (ilut == 3) {
 /*<       its=acos(xmus)*180.0/pi >*/
-	its = acos(xmus) * (float)180. / pi;
+	its = acos(xmus) * 180. / pi;
 /*<       open(10,file='rotoa_aps_bs',ACCESS='APPEND') >*/
 	o__1.oerr = 0;
 	o__1.ounit = 10;
@@ -5629,15 +5645,15 @@ swl,roc, */
 /*<       write(10,2222) "AERO-LUT Lambda min,max ",wlinf,wlsup >*/
 	s_wsfe(&io___440);
 	do_fio(&c__1, "AERO-LUT Lambda min,max ", 24L);
-	do_fio(&c__1, (char *)&sixs_ffu__1.wlinf, (ftnlen)sizeof(real));
-	do_fio(&c__1, (char *)&sixs_ffu__1.wlsup, (ftnlen)sizeof(real));
+	do_fio(&c__1, (char *)&sixs_ffu__1.wlinf, (ftnlen)sizeof(doublereal));
+	do_fio(&c__1, (char *)&sixs_ffu__1.wlsup, (ftnlen)sizeof(doublereal));
 	e_wsfe();
 /*<       write(10,2222) "Tau-Lambda,Tau550 asol  ",sodaer,taer55,asol >*/
 	s_wsfe(&io___441);
 	do_fio(&c__1, "Tau-Lambda,Tau550 asol  ", 24L);
-	do_fio(&c__1, (char *)&sodaer, (ftnlen)sizeof(real));
-	do_fio(&c__1, (char *)&taer55, (ftnlen)sizeof(real));
-	do_fio(&c__1, (char *)&asol, (ftnlen)sizeof(real));
+	do_fio(&c__1, (char *)&sodaer, (ftnlen)sizeof(doublereal));
+	do_fio(&c__1, (char *)&taer55, (ftnlen)sizeof(doublereal));
+	do_fio(&c__1, (char *)&asol, (ftnlen)sizeof(doublereal));
 	e_wsfe();
 /*<       aerod=0 >*/
 	aerod = 0;
@@ -5729,7 +5745,7 @@ swl,roc, */
 	}
 
 /*<       dtr=atan(1.)*4./180. >*/
-	dtr = atan((float)1.) * (float)4. / (float)180.;
+	dtr = atan(1.) * 4. / 180.;
 /*<    >*/
 	ci__1.cierr = 0;
 	ci__1.ciunit = 10;
@@ -5737,11 +5753,13 @@ swl,roc, */
 	s_wsfe(&ci__1);
 	do_fio(&c__1, "phi", 3L);
 	for (i__ = 16; i__ >= 1; --i__) {
-	    do_fio(&c__1, (char *)&filut[i__ - 1], (ftnlen)sizeof(real));
+	    do_fio(&c__1, (char *)&filut[i__ - 1], (ftnlen)sizeof(doublereal))
+		    ;
 	}
-	do_fio(&c__1, (char *)&filut[mu - 1], (ftnlen)sizeof(real));
+	do_fio(&c__1, (char *)&filut[mu - 1], (ftnlen)sizeof(doublereal));
 	for (i__ = 1; i__ <= 16; ++i__) {
-	    do_fio(&c__1, (char *)&filut[i__ + 24], (ftnlen)sizeof(real));
+	    do_fio(&c__1, (char *)&filut[i__ + 24], (ftnlen)sizeof(doublereal)
+		    );
 	}
 	e_wsfe();
 /*<    >*/
@@ -5751,14 +5769,14 @@ swl,roc, */
 	s_wsfe(&ci__1);
 	do_fio(&c__1, "tv", 2L);
 	for (i__ = 16; i__ >= 1; --i__) {
-	    r__1 = acos(rm[i__ + 25]) / dtr;
-	    do_fio(&c__1, (char *)&r__1, (ftnlen)sizeof(real));
+	    d__1 = acos(rm[i__ + 25]) / dtr;
+	    do_fio(&c__1, (char *)&d__1, (ftnlen)sizeof(doublereal));
 	}
-	r__2 = acos(rm[25]) / dtr;
-	do_fio(&c__1, (char *)&r__2, (ftnlen)sizeof(real));
+	d__2 = acos(rm[25]) / dtr;
+	do_fio(&c__1, (char *)&d__2, (ftnlen)sizeof(doublereal));
 	for (k = 1; k <= 16; ++k) {
-	    r__3 = acos(rm[k + 25]) / dtr;
-	    do_fio(&c__1, (char *)&r__3, (ftnlen)sizeof(real));
+	    d__3 = acos(rm[k + 25]) / dtr;
+	    do_fio(&c__1, (char *)&d__3, (ftnlen)sizeof(doublereal));
 	}
 	e_wsfe();
 /*<    >*/
@@ -5767,14 +5785,14 @@ swl,roc, */
 	ci__1.cifmt = "(41(F8.5,1X))";
 	s_wsfe(&ci__1);
 	for (i__ = 16; i__ >= 1; --i__) {
-	    r__1 = roluti[i__ - 1] / seb;
-	    do_fio(&c__1, (char *)&r__1, (ftnlen)sizeof(real));
+	    d__1 = roluti[i__ - 1] / seb;
+	    do_fio(&c__1, (char *)&d__1, (ftnlen)sizeof(doublereal));
 	}
-	r__2 = roluti[mu - 1] / seb;
-	do_fio(&c__1, (char *)&r__2, (ftnlen)sizeof(real));
+	d__2 = roluti[mu - 1] / seb;
+	do_fio(&c__1, (char *)&d__2, (ftnlen)sizeof(doublereal));
 	for (i__ = 1; i__ <= 16; ++i__) {
-	    r__3 = roluti[i__ + 24] / seb;
-	    do_fio(&c__1, (char *)&r__3, (ftnlen)sizeof(real));
+	    d__3 = roluti[i__ + 24] / seb;
+	    do_fio(&c__1, (char *)&d__3, (ftnlen)sizeof(doublereal));
 	}
 	e_wsfe();
 /*<    >*/
@@ -5783,14 +5801,14 @@ swl,roc, */
 	ci__1.cifmt = "(41(F8.5,1X))";
 	s_wsfe(&ci__1);
 	for (i__ = 16; i__ >= 1; --i__) {
-	    r__1 = rolutiq[i__ - 1] / seb;
-	    do_fio(&c__1, (char *)&r__1, (ftnlen)sizeof(real));
+	    d__1 = rolutiq[i__ - 1] / seb;
+	    do_fio(&c__1, (char *)&d__1, (ftnlen)sizeof(doublereal));
 	}
-	r__2 = rolutiq[mu - 1] / seb;
-	do_fio(&c__1, (char *)&r__2, (ftnlen)sizeof(real));
+	d__2 = rolutiq[mu - 1] / seb;
+	do_fio(&c__1, (char *)&d__2, (ftnlen)sizeof(doublereal));
 	for (i__ = 1; i__ <= 16; ++i__) {
-	    r__3 = rolutiq[i__ + 24] / seb;
-	    do_fio(&c__1, (char *)&r__3, (ftnlen)sizeof(real));
+	    d__3 = rolutiq[i__ + 24] / seb;
+	    do_fio(&c__1, (char *)&d__3, (ftnlen)sizeof(doublereal));
 	}
 	e_wsfe();
 /*<    >*/
@@ -5799,14 +5817,14 @@ swl,roc, */
 	ci__1.cifmt = "(41(F8.5,1X))";
 	s_wsfe(&ci__1);
 	for (i__ = 16; i__ >= 1; --i__) {
-	    r__1 = rolutiu[i__ - 1] / seb;
-	    do_fio(&c__1, (char *)&r__1, (ftnlen)sizeof(real));
+	    d__1 = rolutiu[i__ - 1] / seb;
+	    do_fio(&c__1, (char *)&d__1, (ftnlen)sizeof(doublereal));
 	}
-	r__2 = rolutiu[mu - 1] / seb;
-	do_fio(&c__1, (char *)&r__2, (ftnlen)sizeof(real));
+	d__2 = rolutiu[mu - 1] / seb;
+	do_fio(&c__1, (char *)&d__2, (ftnlen)sizeof(doublereal));
 	for (i__ = 1; i__ <= 16; ++i__) {
-	    r__3 = rolutiu[i__ + 24] / seb;
-	    do_fio(&c__1, (char *)&r__3, (ftnlen)sizeof(real));
+	    d__3 = rolutiu[i__ + 24] / seb;
+	    do_fio(&c__1, (char *)&d__3, (ftnlen)sizeof(doublereal));
 	}
 	e_wsfe();
 /*<       close(10) >*/
@@ -5822,16 +5840,16 @@ swl,roc, */
 /*<         write(iwr, 430 )refet,alumet,tgasm >*/
     io___451.ciunit = sixs_ier__1.iwr;
     s_wsfe(&io___451);
-    do_fio(&c__1, (char *)&refet, (ftnlen)sizeof(real));
-    do_fio(&c__1, (char *)&alumet, (ftnlen)sizeof(real));
-    do_fio(&c__1, (char *)&tgasm, (ftnlen)sizeof(real));
+    do_fio(&c__1, (char *)&refet, (ftnlen)sizeof(doublereal));
+    do_fio(&c__1, (char *)&alumet, (ftnlen)sizeof(doublereal));
+    do_fio(&c__1, (char *)&tgasm, (ftnlen)sizeof(doublereal));
     e_wsfe();
 /*<         write(iwr, 431 )refet1,refet2,refet3 >*/
     io___452.ciunit = sixs_ier__1.iwr;
     s_wsfe(&io___452);
-    do_fio(&c__1, (char *)&refet1, (ftnlen)sizeof(real));
-    do_fio(&c__1, (char *)&refet2, (ftnlen)sizeof(real));
-    do_fio(&c__1, (char *)&refet3, (ftnlen)sizeof(real));
+    do_fio(&c__1, (char *)&refet1, (ftnlen)sizeof(doublereal));
+    do_fio(&c__1, (char *)&refet2, (ftnlen)sizeof(doublereal));
+    do_fio(&c__1, (char *)&refet3, (ftnlen)sizeof(doublereal));
     e_wsfe();
 /*<       if (ipol.eq.1)then >*/
     if (ipol == 1) {
@@ -5840,15 +5858,15 @@ swl,roc, */
 /*< 	plumet=sqrt(qlumet*qlumet+ulumet*ulumet) >*/
 	plumet = sqrt(qlumet * qlumet + ulumet * ulumet);
 /*< 	xpol=atan2(rufet,rqfet)*180.0/3.14159/2. >*/
-	xpol = atan2(rufet, rqfet) * (float)180. / (float)3.14159 / (float)2.;
+	xpol = atan2(rufet, rqfet) * 180. / 3.14159 / 2.;
 /*<         write(iwr, 429 )rpfet,plumet,xpol,rpfet/refet >*/
 	io___454.ciunit = sixs_ier__1.iwr;
 	s_wsfe(&io___454);
-	do_fio(&c__1, (char *)&rpfet, (ftnlen)sizeof(real));
-	do_fio(&c__1, (char *)&plumet, (ftnlen)sizeof(real));
-	do_fio(&c__1, (char *)&xpol, (ftnlen)sizeof(real));
-	r__1 = rpfet / refet;
-	do_fio(&c__1, (char *)&r__1, (ftnlen)sizeof(real));
+	do_fio(&c__1, (char *)&rpfet, (ftnlen)sizeof(doublereal));
+	do_fio(&c__1, (char *)&plumet, (ftnlen)sizeof(doublereal));
+	do_fio(&c__1, (char *)&xpol, (ftnlen)sizeof(doublereal));
+	d__1 = rpfet / refet;
+	do_fio(&c__1, (char *)&d__1, (ftnlen)sizeof(doublereal));
 	e_wsfe();
 /*       write(iwr, 428 )rpfet1,rpfet2,rpfet3 */
 /*<       endif >*/
@@ -5859,24 +5877,28 @@ swl,roc, */
 	io___455.ciunit = sixs_ier__1.iwr;
 	s_wsfe(&io___455);
 	for (j = 1; j <= 3; ++j) {
-	    do_fio(&c__1, (char *)&aini[(j << 1) - 2], (ftnlen)sizeof(real));
+	    do_fio(&c__1, (char *)&aini[(j << 1) - 2], (ftnlen)sizeof(
+		    doublereal));
 	}
 	do_fio(&c__1, "environment", 11L);
 	do_fio(&c__1, "target", 6L);
 	for (j = 1; j <= 3; ++j) {
-	    do_fio(&c__1, (char *)&ainr[(j << 1) - 2], (ftnlen)sizeof(real));
+	    do_fio(&c__1, (char *)&ainr[(j << 1) - 2], (ftnlen)sizeof(
+		    doublereal));
 	}
 	e_wsfe();
 /*<    >*/
 	io___456.ciunit = sixs_ier__1.iwr;
 	s_wsfe(&io___456);
 	for (j = 1; j <= 3; ++j) {
-	    do_fio(&c__1, (char *)&aini[(j << 1) - 1], (ftnlen)sizeof(real));
+	    do_fio(&c__1, (char *)&aini[(j << 1) - 1], (ftnlen)sizeof(
+		    doublereal));
 	}
 	do_fio(&c__1, "environment", 11L);
 	do_fio(&c__1, "target", 6L);
 	for (j = 1; j <= 3; ++j) {
-	    do_fio(&c__1, (char *)&ainr[(j << 1) - 1], (ftnlen)sizeof(real));
+	    do_fio(&c__1, (char *)&ainr[(j << 1) - 1], (ftnlen)sizeof(
+		    doublereal));
 	}
 	e_wsfe();
 /*<         endif >*/
@@ -5887,24 +5909,28 @@ swl,roc, */
 	io___457.ciunit = sixs_ier__1.iwr;
 	s_wsfe(&io___457);
 	for (j = 1; j <= 3; ++j) {
-	    do_fio(&c__1, (char *)&aini[(j << 1) - 2], (ftnlen)sizeof(real));
+	    do_fio(&c__1, (char *)&aini[(j << 1) - 2], (ftnlen)sizeof(
+		    doublereal));
 	}
 	do_fio(&c__1, "background ", 11L);
 	do_fio(&c__1, "pixel ", 6L);
 	for (j = 1; j <= 3; ++j) {
-	    do_fio(&c__1, (char *)&ainr[(j << 1) - 2], (ftnlen)sizeof(real));
+	    do_fio(&c__1, (char *)&ainr[(j << 1) - 2], (ftnlen)sizeof(
+		    doublereal));
 	}
 	e_wsfe();
 /*<    >*/
 	io___458.ciunit = sixs_ier__1.iwr;
 	s_wsfe(&io___458);
 	for (j = 1; j <= 3; ++j) {
-	    do_fio(&c__1, (char *)&aini[(j << 1) - 1], (ftnlen)sizeof(real));
+	    do_fio(&c__1, (char *)&aini[(j << 1) - 1], (ftnlen)sizeof(
+		    doublereal));
 	}
 	do_fio(&c__1, "background ", 11L);
 	do_fio(&c__1, "pixel ", 6L);
 	for (j = 1; j <= 3; ++j) {
-	    do_fio(&c__1, (char *)&ainr[(j << 1) - 1], (ftnlen)sizeof(real));
+	    do_fio(&c__1, (char *)&ainr[(j << 1) - 1], (ftnlen)sizeof(
+		    doublereal));
 	}
 	e_wsfe();
 /*<         endif >*/
@@ -5914,15 +5940,15 @@ swl,roc, */
 /*<         write(iwr, 436)seb >*/
 	io___459.ciunit = sixs_ier__1.iwr;
 	s_wsfe(&io___459);
-	do_fio(&c__1, (char *)&seb, (ftnlen)sizeof(real));
+	do_fio(&c__1, (char *)&seb, (ftnlen)sizeof(doublereal));
 	e_wsfe();
 /*<       else >*/
     } else {
 /*<         write(iwr, 437)sb,seb >*/
 	io___460.ciunit = sixs_ier__1.iwr;
 	s_wsfe(&io___460);
-	do_fio(&c__1, (char *)&sb, (ftnlen)sizeof(real));
-	do_fio(&c__1, (char *)&seb, (ftnlen)sizeof(real));
+	do_fio(&c__1, (char *)&sb, (ftnlen)sizeof(doublereal));
+	do_fio(&c__1, (char *)&seb, (ftnlen)sizeof(doublereal));
 	e_wsfe();
 /*<       endif >*/
     }
@@ -5948,65 +5974,65 @@ swl,roc, */
     io___463.ciunit = sixs_ier__1.iwr;
     s_wsfe(&io___463);
     do_fio(&c__1, "global gas. trans. :", 20L);
-    do_fio(&c__1, (char *)&dgasm, (ftnlen)sizeof(real));
-    do_fio(&c__1, (char *)&ugasm, (ftnlen)sizeof(real));
-    do_fio(&c__1, (char *)&tgasm, (ftnlen)sizeof(real));
+    do_fio(&c__1, (char *)&dgasm, (ftnlen)sizeof(doublereal));
+    do_fio(&c__1, (char *)&ugasm, (ftnlen)sizeof(doublereal));
+    do_fio(&c__1, (char *)&tgasm, (ftnlen)sizeof(doublereal));
     e_wsfe();
 /*<       write(iwr, 931)'water   "     "    :',sdwava,suwava,stwava >*/
     io___464.ciunit = sixs_ier__1.iwr;
     s_wsfe(&io___464);
     do_fio(&c__1, "water   \"     \"    :", 20L);
-    do_fio(&c__1, (char *)&sdwava, (ftnlen)sizeof(real));
-    do_fio(&c__1, (char *)&suwava, (ftnlen)sizeof(real));
-    do_fio(&c__1, (char *)&stwava, (ftnlen)sizeof(real));
+    do_fio(&c__1, (char *)&sdwava, (ftnlen)sizeof(doublereal));
+    do_fio(&c__1, (char *)&suwava, (ftnlen)sizeof(doublereal));
+    do_fio(&c__1, (char *)&stwava, (ftnlen)sizeof(doublereal));
     e_wsfe();
 /*<       write(iwr, 931)'ozone   "     "    :',sdozon,suozon,stozon >*/
     io___465.ciunit = sixs_ier__1.iwr;
     s_wsfe(&io___465);
     do_fio(&c__1, "ozone   \"     \"    :", 20L);
-    do_fio(&c__1, (char *)&sdozon, (ftnlen)sizeof(real));
-    do_fio(&c__1, (char *)&suozon, (ftnlen)sizeof(real));
-    do_fio(&c__1, (char *)&stozon, (ftnlen)sizeof(real));
+    do_fio(&c__1, (char *)&sdozon, (ftnlen)sizeof(doublereal));
+    do_fio(&c__1, (char *)&suozon, (ftnlen)sizeof(doublereal));
+    do_fio(&c__1, (char *)&stozon, (ftnlen)sizeof(doublereal));
     e_wsfe();
 /*<       write(iwr, 931)'co2     "     "    :',sddica,sudica,stdica >*/
     io___466.ciunit = sixs_ier__1.iwr;
     s_wsfe(&io___466);
     do_fio(&c__1, "co2     \"     \"    :", 20L);
-    do_fio(&c__1, (char *)&sddica, (ftnlen)sizeof(real));
-    do_fio(&c__1, (char *)&sudica, (ftnlen)sizeof(real));
-    do_fio(&c__1, (char *)&stdica, (ftnlen)sizeof(real));
+    do_fio(&c__1, (char *)&sddica, (ftnlen)sizeof(doublereal));
+    do_fio(&c__1, (char *)&sudica, (ftnlen)sizeof(doublereal));
+    do_fio(&c__1, (char *)&stdica, (ftnlen)sizeof(doublereal));
     e_wsfe();
 /*<       write(iwr, 931)'oxyg    "     "    :',sdoxyg,suoxyg,stoxyg >*/
     io___467.ciunit = sixs_ier__1.iwr;
     s_wsfe(&io___467);
     do_fio(&c__1, "oxyg    \"     \"    :", 20L);
-    do_fio(&c__1, (char *)&sdoxyg, (ftnlen)sizeof(real));
-    do_fio(&c__1, (char *)&suoxyg, (ftnlen)sizeof(real));
-    do_fio(&c__1, (char *)&stoxyg, (ftnlen)sizeof(real));
+    do_fio(&c__1, (char *)&sdoxyg, (ftnlen)sizeof(doublereal));
+    do_fio(&c__1, (char *)&suoxyg, (ftnlen)sizeof(doublereal));
+    do_fio(&c__1, (char *)&stoxyg, (ftnlen)sizeof(doublereal));
     e_wsfe();
 /*<       write(iwr, 931)'no2     "     "    :',sdniox,suniox,stniox >*/
     io___468.ciunit = sixs_ier__1.iwr;
     s_wsfe(&io___468);
     do_fio(&c__1, "no2     \"     \"    :", 20L);
-    do_fio(&c__1, (char *)&sdniox, (ftnlen)sizeof(real));
-    do_fio(&c__1, (char *)&suniox, (ftnlen)sizeof(real));
-    do_fio(&c__1, (char *)&stniox, (ftnlen)sizeof(real));
+    do_fio(&c__1, (char *)&sdniox, (ftnlen)sizeof(doublereal));
+    do_fio(&c__1, (char *)&suniox, (ftnlen)sizeof(doublereal));
+    do_fio(&c__1, (char *)&stniox, (ftnlen)sizeof(doublereal));
     e_wsfe();
 /*<       write(iwr, 931)'ch4     "     "    :',sdmeth,sumeth,stmeth >*/
     io___469.ciunit = sixs_ier__1.iwr;
     s_wsfe(&io___469);
     do_fio(&c__1, "ch4     \"     \"    :", 20L);
-    do_fio(&c__1, (char *)&sdmeth, (ftnlen)sizeof(real));
-    do_fio(&c__1, (char *)&sumeth, (ftnlen)sizeof(real));
-    do_fio(&c__1, (char *)&stmeth, (ftnlen)sizeof(real));
+    do_fio(&c__1, (char *)&sdmeth, (ftnlen)sizeof(doublereal));
+    do_fio(&c__1, (char *)&sumeth, (ftnlen)sizeof(doublereal));
+    do_fio(&c__1, (char *)&stmeth, (ftnlen)sizeof(doublereal));
     e_wsfe();
 /*<       write(iwr, 931)'co      "     "    :',sdmoca,sumoca,stmoca >*/
     io___470.ciunit = sixs_ier__1.iwr;
     s_wsfe(&io___470);
     do_fio(&c__1, "co      \"     \"    :", 20L);
-    do_fio(&c__1, (char *)&sdmoca, (ftnlen)sizeof(real));
-    do_fio(&c__1, (char *)&sumoca, (ftnlen)sizeof(real));
-    do_fio(&c__1, (char *)&stmoca, (ftnlen)sizeof(real));
+    do_fio(&c__1, (char *)&sdmoca, (ftnlen)sizeof(doublereal));
+    do_fio(&c__1, (char *)&sumoca, (ftnlen)sizeof(doublereal));
+    do_fio(&c__1, (char *)&stmoca, (ftnlen)sizeof(doublereal));
     e_wsfe();
 /*<       write(iwr, 1401) >*/
     io___471.ciunit = sixs_ier__1.iwr;
@@ -6020,28 +6046,28 @@ swl,roc, */
     io___473.ciunit = sixs_ier__1.iwr;
     s_wsfe(&io___473);
     do_fio(&c__1, "rayl.  sca. trans. :", 20L);
-    do_fio(&c__1, (char *)&sdtotr, (ftnlen)sizeof(real));
-    do_fio(&c__1, (char *)&sutotr, (ftnlen)sizeof(real));
-    r__1 = sutotr * sdtotr;
-    do_fio(&c__1, (char *)&r__1, (ftnlen)sizeof(real));
+    do_fio(&c__1, (char *)&sdtotr, (ftnlen)sizeof(doublereal));
+    do_fio(&c__1, (char *)&sutotr, (ftnlen)sizeof(doublereal));
+    d__1 = sutotr * sdtotr;
+    do_fio(&c__1, (char *)&d__1, (ftnlen)sizeof(doublereal));
     e_wsfe();
 /*<       write(iwr, 931)'aeros. sca.   "    :',sdtota,sutota,sutota*sdtota >*/
     io___474.ciunit = sixs_ier__1.iwr;
     s_wsfe(&io___474);
     do_fio(&c__1, "aeros. sca.   \"    :", 20L);
-    do_fio(&c__1, (char *)&sdtota, (ftnlen)sizeof(real));
-    do_fio(&c__1, (char *)&sutota, (ftnlen)sizeof(real));
-    r__1 = sutota * sdtota;
-    do_fio(&c__1, (char *)&r__1, (ftnlen)sizeof(real));
+    do_fio(&c__1, (char *)&sdtota, (ftnlen)sizeof(doublereal));
+    do_fio(&c__1, (char *)&sutota, (ftnlen)sizeof(doublereal));
+    d__1 = sutota * sdtota;
+    do_fio(&c__1, (char *)&d__1, (ftnlen)sizeof(doublereal));
     e_wsfe();
 /*<       write(iwr, 931)'total  sca.   "    :',sdtott,sutott,sutott*sdtott >*/
     io___475.ciunit = sixs_ier__1.iwr;
     s_wsfe(&io___475);
     do_fio(&c__1, "total  sca.   \"    :", 20L);
-    do_fio(&c__1, (char *)&sdtott, (ftnlen)sizeof(real));
-    do_fio(&c__1, (char *)&sutott, (ftnlen)sizeof(real));
-    r__1 = sutott * sdtott;
-    do_fio(&c__1, (char *)&r__1, (ftnlen)sizeof(real));
+    do_fio(&c__1, (char *)&sdtott, (ftnlen)sizeof(doublereal));
+    do_fio(&c__1, (char *)&sutott, (ftnlen)sizeof(doublereal));
+    d__1 = sutott * sdtott;
+    do_fio(&c__1, (char *)&d__1, (ftnlen)sizeof(doublereal));
     e_wsfe();
 /*<       write(iwr, 1401) >*/
     io___476.ciunit = sixs_ier__1.iwr;
@@ -6059,25 +6085,25 @@ swl,roc, */
     io___479.ciunit = sixs_ier__1.iwr;
     s_wsfe(&io___479);
     do_fio(&c__1, "spherical albedo   :", 20L);
-    do_fio(&c__1, (char *)&sasr, (ftnlen)sizeof(real));
-    do_fio(&c__1, (char *)&sasa, (ftnlen)sizeof(real));
-    do_fio(&c__1, (char *)&sast, (ftnlen)sizeof(real));
+    do_fio(&c__1, (char *)&sasr, (ftnlen)sizeof(doublereal));
+    do_fio(&c__1, (char *)&sasa, (ftnlen)sizeof(doublereal));
+    do_fio(&c__1, (char *)&sast, (ftnlen)sizeof(doublereal));
     e_wsfe();
 /*<       write(iwr, 931)'optical depth total:',sodray,sodaer,sodtot >*/
     io___480.ciunit = sixs_ier__1.iwr;
     s_wsfe(&io___480);
     do_fio(&c__1, "optical depth total:", 20L);
-    do_fio(&c__1, (char *)&sodray, (ftnlen)sizeof(real));
-    do_fio(&c__1, (char *)&sodaer, (ftnlen)sizeof(real));
-    do_fio(&c__1, (char *)&sodtot, (ftnlen)sizeof(real));
+    do_fio(&c__1, (char *)&sodray, (ftnlen)sizeof(doublereal));
+    do_fio(&c__1, (char *)&sodaer, (ftnlen)sizeof(doublereal));
+    do_fio(&c__1, (char *)&sodtot, (ftnlen)sizeof(doublereal));
     e_wsfe();
 /*<       write(iwr, 931)'optical depth plane:',sodrayp,sodaerp,sodtotp >*/
     io___481.ciunit = sixs_ier__1.iwr;
     s_wsfe(&io___481);
     do_fio(&c__1, "optical depth plane:", 20L);
-    do_fio(&c__1, (char *)&sodrayp, (ftnlen)sizeof(real));
-    do_fio(&c__1, (char *)&sodaerp, (ftnlen)sizeof(real));
-    do_fio(&c__1, (char *)&sodtotp, (ftnlen)sizeof(real));
+    do_fio(&c__1, (char *)&sodrayp, (ftnlen)sizeof(doublereal));
+    do_fio(&c__1, (char *)&sodaerp, (ftnlen)sizeof(doublereal));
+    do_fio(&c__1, (char *)&sodtotp, (ftnlen)sizeof(doublereal));
     e_wsfe();
 /*<       if (ipol.eq.0) then >*/
     if (ipol == 0) {
@@ -6085,17 +6111,17 @@ swl,roc, */
 	io___482.ciunit = sixs_ier__1.iwr;
 	s_wsfe(&io___482);
 	do_fio(&c__1, "reflectance        :", 20L);
-	do_fio(&c__1, (char *)&sroray, (ftnlen)sizeof(real));
-	do_fio(&c__1, (char *)&sroaer, (ftnlen)sizeof(real));
-	do_fio(&c__1, (char *)&srotot, (ftnlen)sizeof(real));
+	do_fio(&c__1, (char *)&sroray, (ftnlen)sizeof(doublereal));
+	do_fio(&c__1, (char *)&sroaer, (ftnlen)sizeof(doublereal));
+	do_fio(&c__1, (char *)&srotot, (ftnlen)sizeof(doublereal));
 	e_wsfe();
 /*<         write(iwr, 931)'phase function     :',fophsr,fophsa,fophst >*/
 	io___483.ciunit = sixs_ier__1.iwr;
 	s_wsfe(&io___483);
 	do_fio(&c__1, "phase function     :", 20L);
-	do_fio(&c__1, (char *)&fophsr, (ftnlen)sizeof(real));
-	do_fio(&c__1, (char *)&fophsa, (ftnlen)sizeof(real));
-	do_fio(&c__1, (char *)&fophst, (ftnlen)sizeof(real));
+	do_fio(&c__1, (char *)&fophsr, (ftnlen)sizeof(doublereal));
+	do_fio(&c__1, (char *)&fophsa, (ftnlen)sizeof(doublereal));
+	do_fio(&c__1, (char *)&fophst, (ftnlen)sizeof(doublereal));
 	e_wsfe();
 /*<       else  >*/
     } else {
@@ -6103,82 +6129,82 @@ swl,roc, */
 	io___484.ciunit = sixs_ier__1.iwr;
 	s_wsfe(&io___484);
 	do_fio(&c__1, "reflectance I      :", 20L);
-	do_fio(&c__1, (char *)&sroray, (ftnlen)sizeof(real));
-	do_fio(&c__1, (char *)&sroaer, (ftnlen)sizeof(real));
-	do_fio(&c__1, (char *)&srotot, (ftnlen)sizeof(real));
+	do_fio(&c__1, (char *)&sroray, (ftnlen)sizeof(doublereal));
+	do_fio(&c__1, (char *)&sroaer, (ftnlen)sizeof(doublereal));
+	do_fio(&c__1, (char *)&srotot, (ftnlen)sizeof(doublereal));
 	e_wsfe();
 /*<         write(iwr, 931)'reflectance Q      :',srqray,srqaer,srqtot >*/
 	io___485.ciunit = sixs_ier__1.iwr;
 	s_wsfe(&io___485);
 	do_fio(&c__1, "reflectance Q      :", 20L);
-	do_fio(&c__1, (char *)&srqray, (ftnlen)sizeof(real));
-	do_fio(&c__1, (char *)&srqaer, (ftnlen)sizeof(real));
-	do_fio(&c__1, (char *)&srqtot, (ftnlen)sizeof(real));
+	do_fio(&c__1, (char *)&srqray, (ftnlen)sizeof(doublereal));
+	do_fio(&c__1, (char *)&srqaer, (ftnlen)sizeof(doublereal));
+	do_fio(&c__1, (char *)&srqtot, (ftnlen)sizeof(doublereal));
 	e_wsfe();
 /*<         write(iwr, 931)'reflectance U      :',sruray,sruaer,srutot >*/
 	io___486.ciunit = sixs_ier__1.iwr;
 	s_wsfe(&io___486);
 	do_fio(&c__1, "reflectance U      :", 20L);
-	do_fio(&c__1, (char *)&sruray, (ftnlen)sizeof(real));
-	do_fio(&c__1, (char *)&sruaer, (ftnlen)sizeof(real));
-	do_fio(&c__1, (char *)&srutot, (ftnlen)sizeof(real));
+	do_fio(&c__1, (char *)&sruray, (ftnlen)sizeof(doublereal));
+	do_fio(&c__1, (char *)&sruaer, (ftnlen)sizeof(doublereal));
+	do_fio(&c__1, (char *)&srutot, (ftnlen)sizeof(doublereal));
 	e_wsfe();
 /*<         write(iwr, 931)'polarized reflect. :',srpray,srpaer,srptot >*/
 	io___487.ciunit = sixs_ier__1.iwr;
 	s_wsfe(&io___487);
 	do_fio(&c__1, "polarized reflect. :", 20L);
-	do_fio(&c__1, (char *)&srpray, (ftnlen)sizeof(real));
-	do_fio(&c__1, (char *)&srpaer, (ftnlen)sizeof(real));
-	do_fio(&c__1, (char *)&srptot, (ftnlen)sizeof(real));
+	do_fio(&c__1, (char *)&srpray, (ftnlen)sizeof(doublereal));
+	do_fio(&c__1, (char *)&srpaer, (ftnlen)sizeof(doublereal));
+	do_fio(&c__1, (char *)&srptot, (ftnlen)sizeof(doublereal));
 	e_wsfe();
 /*<         write(iwr, 932)'degree of polar.   :',sdpray,sdpaer,sdptot >*/
 	io___488.ciunit = sixs_ier__1.iwr;
 	s_wsfe(&io___488);
 	do_fio(&c__1, "degree of polar.   :", 20L);
-	do_fio(&c__1, (char *)&sdpray, (ftnlen)sizeof(real));
-	do_fio(&c__1, (char *)&sdpaer, (ftnlen)sizeof(real));
-	do_fio(&c__1, (char *)&sdptot, (ftnlen)sizeof(real));
+	do_fio(&c__1, (char *)&sdpray, (ftnlen)sizeof(doublereal));
+	do_fio(&c__1, (char *)&sdpaer, (ftnlen)sizeof(doublereal));
+	do_fio(&c__1, (char *)&sdptot, (ftnlen)sizeof(doublereal));
 	e_wsfe();
 /*<         write(iwr, 932)'dir. plane polar.  :',sdppray,sdppaer,sdpptot >*/
 	io___489.ciunit = sixs_ier__1.iwr;
 	s_wsfe(&io___489);
 	do_fio(&c__1, "dir. plane polar.  :", 20L);
-	do_fio(&c__1, (char *)&sdppray, (ftnlen)sizeof(real));
-	do_fio(&c__1, (char *)&sdppaer, (ftnlen)sizeof(real));
-	do_fio(&c__1, (char *)&sdpptot, (ftnlen)sizeof(real));
+	do_fio(&c__1, (char *)&sdppray, (ftnlen)sizeof(doublereal));
+	do_fio(&c__1, (char *)&sdppaer, (ftnlen)sizeof(doublereal));
+	do_fio(&c__1, (char *)&sdpptot, (ftnlen)sizeof(doublereal));
 	e_wsfe();
 /* CC	write(iwr, 931)'instrument app ref.:',zero,zero,refeti */
 /*<         write(iwr, 931)'phase function I   :',fophsr,fophsa,fophst >*/
 	io___490.ciunit = sixs_ier__1.iwr;
 	s_wsfe(&io___490);
 	do_fio(&c__1, "phase function I   :", 20L);
-	do_fio(&c__1, (char *)&fophsr, (ftnlen)sizeof(real));
-	do_fio(&c__1, (char *)&fophsa, (ftnlen)sizeof(real));
-	do_fio(&c__1, (char *)&fophst, (ftnlen)sizeof(real));
+	do_fio(&c__1, (char *)&fophsr, (ftnlen)sizeof(doublereal));
+	do_fio(&c__1, (char *)&fophsa, (ftnlen)sizeof(doublereal));
+	do_fio(&c__1, (char *)&fophst, (ftnlen)sizeof(doublereal));
 	e_wsfe();
 /*<         write(iwr, 931)'phase function Q   :',foqhsr,foqhsa,foqhst >*/
 	io___491.ciunit = sixs_ier__1.iwr;
 	s_wsfe(&io___491);
 	do_fio(&c__1, "phase function Q   :", 20L);
-	do_fio(&c__1, (char *)&foqhsr, (ftnlen)sizeof(real));
-	do_fio(&c__1, (char *)&foqhsa, (ftnlen)sizeof(real));
-	do_fio(&c__1, (char *)&foqhst, (ftnlen)sizeof(real));
+	do_fio(&c__1, (char *)&foqhsr, (ftnlen)sizeof(doublereal));
+	do_fio(&c__1, (char *)&foqhsa, (ftnlen)sizeof(doublereal));
+	do_fio(&c__1, (char *)&foqhst, (ftnlen)sizeof(doublereal));
 	e_wsfe();
 /*<         write(iwr, 931)'phase function U   :',fouhsr,fouhsa,fouhst >*/
 	io___492.ciunit = sixs_ier__1.iwr;
 	s_wsfe(&io___492);
 	do_fio(&c__1, "phase function U   :", 20L);
-	do_fio(&c__1, (char *)&fouhsr, (ftnlen)sizeof(real));
-	do_fio(&c__1, (char *)&fouhsa, (ftnlen)sizeof(real));
-	do_fio(&c__1, (char *)&fouhst, (ftnlen)sizeof(real));
+	do_fio(&c__1, (char *)&fouhsr, (ftnlen)sizeof(doublereal));
+	do_fio(&c__1, (char *)&fouhsa, (ftnlen)sizeof(doublereal));
+	do_fio(&c__1, (char *)&fouhst, (ftnlen)sizeof(doublereal));
 	e_wsfe();
 /*<         write(iwr, 931)'primary deg. of pol:',spdpray,spdpaer,spdptot >*/
 	io___493.ciunit = sixs_ier__1.iwr;
 	s_wsfe(&io___493);
 	do_fio(&c__1, "primary deg. of pol:", 20L);
-	do_fio(&c__1, (char *)&spdpray, (ftnlen)sizeof(real));
-	do_fio(&c__1, (char *)&spdpaer, (ftnlen)sizeof(real));
-	do_fio(&c__1, (char *)&spdptot, (ftnlen)sizeof(real));
+	do_fio(&c__1, (char *)&spdpray, (ftnlen)sizeof(doublereal));
+	do_fio(&c__1, (char *)&spdpaer, (ftnlen)sizeof(doublereal));
+	do_fio(&c__1, (char *)&spdptot, (ftnlen)sizeof(doublereal));
 	e_wsfe();
 /*<       endif >*/
     }
@@ -6186,9 +6212,9 @@ swl,roc, */
     io___494.ciunit = sixs_ier__1.iwr;
     s_wsfe(&io___494);
     do_fio(&c__1, "sing. scat. albedo :", 20L);
-    do_fio(&c__1, (char *)&pizerr, (ftnlen)sizeof(real));
-    do_fio(&c__1, (char *)&pizera, (ftnlen)sizeof(real));
-    do_fio(&c__1, (char *)&pizert, (ftnlen)sizeof(real));
+    do_fio(&c__1, (char *)&pizerr, (ftnlen)sizeof(doublereal));
+    do_fio(&c__1, (char *)&pizera, (ftnlen)sizeof(doublereal));
+    do_fio(&c__1, (char *)&pizert, (ftnlen)sizeof(doublereal));
     e_wsfe();
 /*<       write(iwr, 1401) >*/
     io___495.ciunit = sixs_ier__1.iwr;
@@ -6211,7 +6237,7 @@ swl,roc, */
 /*<        if (irapp.ge.0) then >*/
     if (irapp >= 0) {
 /*< 	 if (rapp.ge.0.) then >*/
-	if (rapp >= (float)0.) {
+	if (rapp >= 0.) {
 /*< 	    xrad=rapp >*/
 	    xrad = rapp;
 /*< 	    rapp=pi*xrad*sb/xmus/seb >*/
@@ -6229,11 +6255,11 @@ swl,roc, */
 /*<          rog=(rog-ainr(1,1)/tgasm)/sutott/sdtott >*/
 	rog = (rog - ainr[0] / tgasm) / sutott / sdtott;
 /*<          rog=rog/(1.+rog*sast) >*/
-	rog /= rog * sast + (float)1.;
+	rog /= rog * sast + 1.;
 /*< 	 xa=pi*sb/xmus/seb/tgasm/sutott/sdtott >*/
 	xa = pi * sb / xmus / seb / tgasm / sutott / sdtott;
 /*< 	 xap=1./tgasm/sutott/sdtott >*/
-	xap = (float)1. / tgasm / sutott / sdtott;
+	xap = 1. / tgasm / sutott / sdtott;
 /*< 	 xb=ainr(1,1)/sutott/sdtott/tgasm >*/
 	xb = ainr[0] / sutott / sdtott / tgasm;
 /*< 	 xb=ainr(1,1)/sutott/sdtott/tgasm >*/
@@ -6299,43 +6325,43 @@ swl,roc, */
 /*<          write(iwr, 941)rapp >*/
 	io___521.ciunit = sixs_ier__1.iwr;
 	s_wsfe(&io___521);
-	do_fio(&c__1, (char *)&rapp, (ftnlen)sizeof(real));
+	do_fio(&c__1, (char *)&rapp, (ftnlen)sizeof(doublereal));
 	e_wsfe();
 /*<          write(iwr, 942)xrad >*/
 	io___522.ciunit = sixs_ier__1.iwr;
 	s_wsfe(&io___522);
-	do_fio(&c__1, (char *)&xrad, (ftnlen)sizeof(real));
+	do_fio(&c__1, (char *)&xrad, (ftnlen)sizeof(doublereal));
 	e_wsfe();
 /*< 	 if (irapp.eq.0) then   >*/
 	if (irapp == 0) {
 /*<          write(iwr, 943)rog >*/
 	    io___523.ciunit = sixs_ier__1.iwr;
 	    s_wsfe(&io___523);
-	    do_fio(&c__1, (char *)&rog, (ftnlen)sizeof(real));
+	    do_fio(&c__1, (char *)&rog, (ftnlen)sizeof(doublereal));
 	    e_wsfe();
 /*<          write(iwr, 944)xa,xb,xc >*/
 	    io___524.ciunit = sixs_ier__1.iwr;
 	    s_wsfe(&io___524);
-	    do_fio(&c__1, (char *)&xa, (ftnlen)sizeof(real));
-	    do_fio(&c__1, (char *)&xb, (ftnlen)sizeof(real));
-	    do_fio(&c__1, (char *)&xc, (ftnlen)sizeof(real));
+	    do_fio(&c__1, (char *)&xa, (ftnlen)sizeof(doublereal));
+	    do_fio(&c__1, (char *)&xb, (ftnlen)sizeof(doublereal));
+	    do_fio(&c__1, (char *)&xc, (ftnlen)sizeof(doublereal));
 	    e_wsfe();
 /*< 	 else >*/
 	} else {
 /*< 	 write(iwr,222)rog,rogbrdf >*/
 	    io___525.ciunit = sixs_ier__1.iwr;
 	    s_wsfe(&io___525);
-	    do_fio(&c__1, (char *)&rog, (ftnlen)sizeof(real));
-	    do_fio(&c__1, (char *)&rogbrdf, (ftnlen)sizeof(real));
+	    do_fio(&c__1, (char *)&rog, (ftnlen)sizeof(doublereal));
+	    do_fio(&c__1, (char *)&rogbrdf, (ftnlen)sizeof(doublereal));
 	    e_wsfe();
 /*< 	 endif >*/
 	}
 /*<          write(iwr, 944)xa,xb,xc >*/
 	io___526.ciunit = sixs_ier__1.iwr;
 	s_wsfe(&io___526);
-	do_fio(&c__1, (char *)&xa, (ftnlen)sizeof(real));
-	do_fio(&c__1, (char *)&xb, (ftnlen)sizeof(real));
-	do_fio(&c__1, (char *)&xc, (ftnlen)sizeof(real));
+	do_fio(&c__1, (char *)&xa, (ftnlen)sizeof(doublereal));
+	do_fio(&c__1, (char *)&xb, (ftnlen)sizeof(doublereal));
+	do_fio(&c__1, (char *)&xc, (ftnlen)sizeof(doublereal));
 	e_wsfe();
 /*         write(iwr, *) "david roy ", xap,xb,xc */
 /*<          y=xa*xrad-xb >*/
