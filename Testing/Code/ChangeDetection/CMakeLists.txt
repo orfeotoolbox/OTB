@@ -13,11 +13,12 @@ SET(TEMP ${OTBTesting_BINARY_DIR}/Temporary)
 SET(TOL 0.0)
 SET(EPSILON 0.0000000001)
 
-SET(CHANGEDETECTION_TESTS ${CXX_TEST_PATH}/otbChangeDetectionTests)
+SET(CHANGEDETECTION_TESTS1 ${CXX_TEST_PATH}/otbChangeDetectionTests1)
+SET(CHANGEDETECTION_TESTS2 ${CXX_TEST_PATH}/otbChangeDetectionTests2)
 
 # -------            otb::CBAMI   ------------------------------
 
-ADD_TEST(cdTvCBAMI ${CHANGEDETECTION_TESTS}  
+ADD_TEST(cdTvCBAMI ${CHANGEDETECTION_TESTS1}  
   --compare-image ${TOL}   ${BASELINE}/cdCBAMIImage.png
                     ${TEMP}/cdCBAMIImage.png
         otbCBAMIChangeDetectionTest
@@ -27,7 +28,7 @@ ADD_TEST(cdTvCBAMI ${CHANGEDETECTION_TESTS}
 	 ${TEMP}/cdCBAMIImage.png 
 	 )
 	 
-ADD_TEST(cdTvCorrel ${CHANGEDETECTION_TESTS}
+ADD_TEST(cdTvCorrel ${CHANGEDETECTION_TESTS1}
   --compare-image ${TOL}   ${BASELINE}/cdCorrelImage.png
                     ${TEMP}/cdCorrelImage.png
 	otbCorrelChangeDetectionTest 
@@ -37,7 +38,7 @@ ADD_TEST(cdTvCorrel ${CHANGEDETECTION_TESTS}
 	 ${TEMP}/cdCorrelImage.png 
 	 )
 
-ADD_TEST(cdTvMeanDiff ${CHANGEDETECTION_TESTS}
+ADD_TEST(cdTvMeanDiff ${CHANGEDETECTION_TESTS1}
   --compare-image ${EPSILON} 
 		  ${BASELINE}/cdMeanDiffImage.hdr
 		  ${TEMP}/cdMeanDiffImage.hdr
@@ -48,7 +49,7 @@ ADD_TEST(cdTvMeanDiff ${CHANGEDETECTION_TESTS}
 	 ${TEMP}/cdMeanDiffImage.hdr 
 	 )
 
-ADD_TEST(cdTvMeanRatio ${CHANGEDETECTION_TESTS}
+ADD_TEST(cdTvMeanRatio ${CHANGEDETECTION_TESTS1}
   --compare-image ${TOL}   ${BASELINE}/cdMeanRatioImage.png
                     ${TEMP}/cdMeanRatioImage.png
 	otbMeanRatioChangeDetectionTest 
@@ -58,7 +59,7 @@ ADD_TEST(cdTvMeanRatio ${CHANGEDETECTION_TESTS}
 	 ${TEMP}/cdMeanRatioImage.png 
 	 )
 	 
-ADD_TEST(cdTvLHMI ${CHANGEDETECTION_TESTS}
+ADD_TEST(cdTvLHMI ${CHANGEDETECTION_TESTS1}
 #  --compare-image ${TOL}   ${BASELINE}/cdLHMIImage.png
 #                    ${TEMP}/cdLHMIImage.png
 	otbLHMIChangeDetectionTest 
@@ -68,7 +69,7 @@ ADD_TEST(cdTvLHMI ${CHANGEDETECTION_TESTS}
 	 ${TEMP}/cdLHMIImage.png 
 	 )
 
-ADD_TEST(cdTvJHMI ${CHANGEDETECTION_TESTS}
+ADD_TEST(cdTvJHMI ${CHANGEDETECTION_TESTS1}
   --compare-image ${TOL}   
 		  ${BASELINE}/cdJHMIImage.png
                   ${TEMP}/cdJHMIImage.png
@@ -79,10 +80,10 @@ ADD_TEST(cdTvJHMI ${CHANGEDETECTION_TESTS}
 	 ${TEMP}/cdJHMIImage.png 
 	 )
 
-ADD_TEST(cdTuKullbackLeiblerDistanceImageFilterNew ${CHANGEDETECTION_TESTS}
+ADD_TEST(cdTuKullbackLeiblerDistanceImageFilterNew ${CHANGEDETECTION_TESTS1}
          otbKullbackLeiblerDistanceImageFilterNew)
 
-ADD_TEST(cdTvKullbackLeiblerDistanceImageFilter ${CHANGEDETECTION_TESTS}
+ADD_TEST(cdTvKullbackLeiblerDistanceImageFilter ${CHANGEDETECTION_TESTS1}
          --compare-image ${EPSILON}
 			 ${BASELINE}/cdTVKullbackLeiblerDistanceImageFilterOutput.hdr
 			 ${TEMP}/cdTVKullbackLeiblerDistanceImageFilterOutput.hdr
@@ -92,10 +93,10 @@ ADD_TEST(cdTvKullbackLeiblerDistanceImageFilter ${CHANGEDETECTION_TESTS}
 			${TEMP}/cdTVKullbackLeiblerDistanceImageFilterOutput.hdr
 			35)
 
-ADD_TEST(cdTuKullbackLeiblerProfileImageFilterNew ${CHANGEDETECTION_TESTS}
+ADD_TEST(cdTuKullbackLeiblerProfileImageFilterNew ${CHANGEDETECTION_TESTS1}
          otbKullbackLeiblerProfileImageFilterNew)
 
-ADD_TEST(cdTvKullbackLeiblerProfileImageFilter ${CHANGEDETECTION_TESTS}
+ADD_TEST(cdTvKullbackLeiblerProfileImageFilter ${CHANGEDETECTION_TESTS1}
          --compare-image ${EPSILON}
 			 ${BASELINE}/cdTVKullbackLeiblerProfileImageFilterOutput.hdr
 			 ${TEMP}/cdTVKullbackLeiblerProfileImageFilterOutput.hdr
@@ -107,7 +108,7 @@ ADD_TEST(cdTvKullbackLeiblerProfileImageFilter ${CHANGEDETECTION_TESTS}
 
 
 # -------       Fichiers sources CXX -----------------------------------
-SET(BasicChangeDetection_SRCS
+SET(BasicChangeDetection_SRCS1
 otbCBAMIChangeDetectionTest.cxx
 otbCorrelChangeDetectionTest.cxx
 otbMeanDiffChangeDetectionTest.cxx
@@ -120,10 +121,18 @@ otbKullbackLeiblerProfileImageFilterNew.cxx
 otbKullbackLeiblerProfileImageFilter.cxx
 )
 
+# -------       Fichiers sources CXX -----------------------------------
+SET(BasicChangeDetection_SRCS2
+)
+
+
 
 INCLUDE_DIRECTORIES("${OTBTesting_BINARY_DIR}")
 
-ADD_EXECUTABLE(otbChangeDetectionTests otbChangeDetectionTests.cxx ${BasicChangeDetection_SRCS})
-TARGET_LINK_LIBRARIES(otbChangeDetectionTests OTBChangeDetection OTBIO OTBCommon gdal ITKIO ITKCommon ITKStatistics)
+ADD_EXECUTABLE(otbChangeDetectionTests1 otbChangeDetectionTests1.cxx ${BasicChangeDetection_SRCS1})
+TARGET_LINK_LIBRARIES(otbChangeDetectionTests1 OTBChangeDetection OTBIO OTBCommon gdal ITKIO ITKCommon ITKStatistics)
+
+ADD_EXECUTABLE(otbChangeDetectionTests2 otbChangeDetectionTests2.cxx ${BasicChangeDetection_SRCS2})
+TARGET_LINK_LIBRARIES(otbChangeDetectionTests2 OTBChangeDetection OTBIO OTBCommon gdal ITKIO ITKCommon ITKStatistics)
 
 ENDIF( NOT OTB_DISABLE_CXX_TESTING )
