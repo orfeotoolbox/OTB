@@ -556,8 +556,4 @@ ADD_EXECUTABLE(otbCommonTests7 otbCommonTests7.cxx ${BasicCommon_SRCS7})
 TARGET_LINK_LIBRARIES(otbCommonTests7 OTBIO OTBCommon gdal ITKIO ITKAlgorithms ITKStatistics ITKCommon)
 
 
-ADD_EXECUTABLE(otbTestExtractROI otbTestExtractROI.cxx )
-TARGET_LINK_LIBRARIES(otbTestExtractROI OTBIO OTBCommon gdal ITKIO ITKCommon)
-
-
 ENDIF( NOT OTB_DISABLE_CXX_TESTING )
