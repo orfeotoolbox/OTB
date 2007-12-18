@@ -36,19 +36,19 @@ int SIXSFunctionMainOtbTest( int argc, char *argv[] )
                 std::cout << argv[0] <<" <input filename> <output filename>" << std::endl;
                 return EXIT_FAILURE;
         }
-        otb_6s_real asol(0.), phi0(0.), avis(0.), phiv(0.);
+        otb_6s_doublereal asol(0.), phi0(0.), avis(0.), phiv(0.);
         otb_6s_integer month(0), jday(0);
-        otb_6s_real pressure(0.), uw(0.), uo3(0.); 
+        otb_6s_doublereal pressure(0.), uw(0.), uo3(0.); 
         otb_6s_integer iaer(0);
-        otb_6s_real taer55(0.);
-        otb_6s_real wlinf(0.), wlsup(0.);
-        otb_6s_real value(0.);
-        otb_6s_real otb_ratm__(0.), sast(0.), tgasm(0.), sdtott(0.), sutott(0.);
-        otb_6s_real tdif_up (0.),tdir_up(0.), tdif_up_ray(0.), tdif_up_aer(0.);
+        otb_6s_doublereal taer55(0.);
+        otb_6s_doublereal wlinf(0.), wlsup(0.);
+        otb_6s_doublereal value(0.);
+        otb_6s_doublereal otb_ratm__(0.), sast(0.), tgasm(0.), sdtott(0.), sutott(0.);
+        otb_6s_doublereal tdif_up (0.),tdir_up(0.), tdif_up_ray(0.), tdif_up_aer(0.);
 
         otb_6s_integer iinf(0), isup(0);
         const unsigned int S_SIZE=1501;
-        std::vector<otb_6s_real> vector_wavelenght;
+        std::vector<otb_6s_doublereal> vector_wavelenght;
 
         std::ifstream fin;
         std::ofstream fout;
@@ -79,8 +79,8 @@ int SIXSFunctionMainOtbTest( int argc, char *argv[] )
         }
         fin.close();
 
-        otb_6s_real * s(NULL);
-        s = new otb_6s_real[S_SIZE];
+        otb_6s_doublereal * s(NULL);
+        s = new otb_6s_doublereal[S_SIZE];
         for(unsigned int i=0 ; i<S_SIZE ; i++)
         {
                 s[i]=0;
