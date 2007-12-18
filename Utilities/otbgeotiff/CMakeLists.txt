@@ -19,7 +19,7 @@ INSTALL(FILES ${libgeotiff_HDRS_HDRS}
     DESTINATION ${OTB_INSTALL_INCLUDE_DIR}/Utilities/otbgeotiff
     COMPONENT Development)
 
-INSTALL(FILES ${OTB_BINARY_DIR}/Utilities/otbgeotif/geo_config.h
+INSTALL(FILES ${OTB_BINARY_DIR}/Utilities/otbgeotiff/geo_config.h
 	      DESTINATION ${OTB_INSTALL_INCLUDE_DIR}/Utilities/otbgeotiff
 	      COMPONENT Development)
 
