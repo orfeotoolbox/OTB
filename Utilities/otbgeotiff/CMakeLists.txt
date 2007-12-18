@@ -3,7 +3,7 @@ PROJECT(libgeotiff)
 FILE(GLOB libgeotiff_SRCS "*.c")
 FILE(GLOB libgeotiff_HDRS "*.h")
 
-CONFIGURE_FILE(geo_config.h.in geo_config.h)
+CONFIGURE_FILE(geo_config.h.in ${OTB_BINARY_DIR}/Utilities/otbgeotif/geo_config.h)
 
 ADD_LIBRARY(otbgeotiff ${libgeotiff_SRCS})
 TARGET_LINK_LIBRARIES(otbgeotiff)
@@ -16,5 +16,9 @@ ARCHIVE DESTINATION ${OTB_INSTALL_LIB_DIR} COMPONENT Development)
 INSTALL(FILES ${libgeotiff_HDRS_HDRS}
     DESTINATION ${OTB_INSTALL_INCLUDE_DIR}/Utilities/otbgeotiff
     COMPONENT Development)
+
+INSTALL(FILES ${OTB_BINARY_DIR}/Utilities/otbgeotif/geo_config.h)
+	      DESTINATION ${OTB_INSTALL_INCLUDE_DIR}/Utilities/otbgeotiff
+	      COMPONENT Development)
 
 SUBDIRS(libxtiff)
