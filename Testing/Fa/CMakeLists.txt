@@ -12,10 +12,11 @@ SET(EXAMPLES_DATA ${OTB_SOURCE_DIR}/Examples/Data)
 #Tolerance sur diff pixel image
 SET(TOL 0.0)
 
-# !!!!!  Pointe sur un exe g�n�r� dans le repertoire Common
-SET(COMMON_TESTS ${CXX_TEST_PATH}/otbCommonTests)
-SET(IO_TESTS     ${CXX_TEST_PATH}/otbIOTests)
-SET(VISU_TESTS   ${CXX_TEST_PATH}/otbVisuTests)
+# !!!!!  Exe generated in the Common dir
+SET(COMMON_TESTS ${CXX_TEST_PATH}/otbCommonTests3)
+SET(IO_TESTS     ${CXX_TEST_PATH}/otbIOTests9)
+SET(IO_TESTS2     ${CXX_TEST_PATH}/otbIOTests8)
+SET(VISU_TESTS   ${CXX_TEST_PATH}/otbVisuTests1)
 
 # -------       FAs traitees -----------------------------------
 
@@ -140,7 +141,7 @@ ADD_TEST(FA-00012-co_AlignementsQB ${CXX_TEST_PATH}/AlignementsQB
 
 
 # ---  FA 00013 : impossible d'�crire une image TIFF(CAI) -> GDAL  ---
-ADD_TEST(FA-00013-io_WriteImageTIFF ${IO_TESTS} 
+ADD_TEST(FA-00013-io_WriteImageTIFF ${IO_TESTS2} 
         otbImageFileWriterTest
         ${INPUTDATA}/sbuv_NB_c1.png 
         ${TEMP}/FA-00013-io_WriteImageTIFF_sbuv_NB_c1.tif )
