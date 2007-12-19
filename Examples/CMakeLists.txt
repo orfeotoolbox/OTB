@@ -23,6 +23,7 @@ SUBDIRS(
   Radiometry
   Fusion
   Tutorials
+  Markov
 )
 
 IF(OTB_USE_VISU)
@@ -78,6 +79,7 @@ ELSE(OTB_BINARY_DIR)
         Radiometry
         Fusion
         Tutorials
+        Markov
         )
 
     IF(OTB_USE_VISU)
