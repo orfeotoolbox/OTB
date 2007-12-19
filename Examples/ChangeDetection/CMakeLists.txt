@@ -52,7 +52,7 @@ SET(TEMP ${OTB_BINARY_DIR}/Testing/Temporary)
 SET(EXE_TESTS ${CXX_TEST_PATH}/otbChangeDetectionExamplesTests)
 
 SET(TOL 0.0)
-
+SET(PNGEPSILON 2)
 
 # ------- CorrelChDetTest----------
 
@@ -96,7 +96,7 @@ ADD_TEST(RatioChDetTest ${EXE_TESTS}
 # ------- KullbackLeiblerDistanceChDetTest----------
 
 ADD_TEST(KullbackLeiblerDistanceChDetTest ${EXE_TESTS}
-	--compare-n-images ${TOL} 1
+	--compare-n-images ${PNGEPSILON} 1
 	${BASELINE}/KullbackLeiblerDistanceChDetTest.png
 	${TEMP}/KullbackLeiblerDistanceChDetTest.png
 	KullbackLeiblerDistanceChDetTest

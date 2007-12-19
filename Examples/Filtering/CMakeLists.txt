@@ -257,7 +257,7 @@ SET(TEMP ${OTB_BINARY_DIR}/Testing/Temporary)
 SET(EXE_TESTS ${CXX_TEST_PATH}/otbFilteringExamplesTests)
 
 SET(TOL 0.0)
-
+SET(PNGTOL 2)
 
 # ------- MathematicalMorphologyBinaryFiltersTest----------
 
@@ -322,7 +322,7 @@ ADD_TEST(ThresholdImageFilterTest ${EXE_TESTS}
 # ------- GradientMagnitudeRecursiveGaussianImageFilterTest----------
 
 ADD_TEST(GradientMagnitudeRecursiveGaussianImageFilterTest ${EXE_TESTS}
-	--compare-n-images ${TOL} 1
+	--compare-n-images ${PNGTOL} 1
 	${BASELINE}/GradientMagnitudeRecursiveGaussianImageFilterOutput3.png
 	${TEMP}/GradientMagnitudeRecursiveGaussianImageFilterOutput3.png
 	GradientMagnitudeRecursiveGaussianImageFilterTest
