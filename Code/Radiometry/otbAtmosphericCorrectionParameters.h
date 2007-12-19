@@ -48,7 +48,7 @@ namespace otb
       /** Creation through object factory macro */
       itkNewMacro(Self);
       
-      typedef float WavelenghtSpectralBandType;
+      typedef double WavelenghtSpectralBandType;
       typedef std::vector<WavelenghtSpectralBandType>    ValuesVectorType;
      
       /** Set vector that contains the filter function value. */
