@@ -35,12 +35,6 @@ REGISTER_TEST(otbZoomableImageWidgetNew);
 REGISTER_TEST(otbZoomableImageWidget); 
 REGISTER_TEST(otbImageViewer);
 REGISTER_TEST(otbImageViewerWithOtbImage);
-REGISTER_TEST(otbImageViewerWithMultiBandFilter);
-REGISTER_TEST(otbDoubleImageViewerWithLink);
 REGISTER_TEST(otbImageViewerNew);
-REGISTER_TEST(otbImageToGrayscaleAnaglyphImageFilterNew);
-REGISTER_TEST(otbImageToGrayscaleAnaglyphImageFilter);
-REGISTER_TEST(otbVectorImageToColorAnaglyphVectorImageFilterNew);
-REGISTER_TEST(otbVectorImageToColorAnaglyphVectorImageFilter);
-REGISTER_TEST(otbAlternateViewerTest);
+
 }
