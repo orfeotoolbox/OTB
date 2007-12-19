@@ -127,7 +127,7 @@ ADD_TEST(SOMExampleTest ${EXE_TESTS}
 
 ADD_TEST(SOMClassifierExampleTest ${EXE_TESTS}
 	--compare-image ${TOL} 
-	${BASELINE}/ROI_QB_MUL_SOMACT.png
+	${BASELINE}/ROI_QB_MUL_SOMCLASS.png
 	${TEMP}/ROI_QB_MUL_SOMCLASS.png
 	SOMClassifierExampleTest
 	${INPUTDATA}/ROI_QB_MUL_1.png
