@@ -52,18 +52,18 @@ SIXSTraits::ComputeAtmosphericParameters(
         )
 {
 // geometrical conditions
-        otb_6s_real asol(static_cast<otb_6s_real>(SolarZenithalAngle)); 
-        otb_6s_real phi0(static_cast<otb_6s_real>(SolarAzimutalAngle));
-        otb_6s_real avis(static_cast<otb_6s_real>(ViewingZenithalAngle));
-        otb_6s_real phiv(static_cast<otb_6s_real>(ViewingAzimutalAngle));
+        otb_6s_doublereal asol(static_cast<otb_6s_doublereal>(SolarZenithalAngle)); 
+        otb_6s_doublereal phi0(static_cast<otb_6s_doublereal>(SolarAzimutalAngle));
+        otb_6s_doublereal avis(static_cast<otb_6s_doublereal>(ViewingZenithalAngle));
+        otb_6s_doublereal phiv(static_cast<otb_6s_doublereal>(ViewingAzimutalAngle));
         otb_6s_integer month(static_cast<otb_6s_integer>(Month));
         otb_6s_integer jday(static_cast<otb_6s_integer>(Day));
-        otb_6s_real pressure(static_cast<otb_6s_real>(AtmosphericPressure));
-        otb_6s_real uw(static_cast<otb_6s_real>(WaterVaporAmount));
-        otb_6s_real uo3(static_cast<otb_6s_real>(OzoneAmount)); 
+        otb_6s_doublereal pressure(static_cast<otb_6s_doublereal>(AtmosphericPressure));
+        otb_6s_doublereal uw(static_cast<otb_6s_doublereal>(WaterVaporAmount));
+        otb_6s_doublereal uo3(static_cast<otb_6s_doublereal>(OzoneAmount)); 
 // atmospheric model
         otb_6s_integer iaer(static_cast<otb_6s_integer>(AerosolModel));
-        otb_6s_real taer55(static_cast<otb_6s_real>(AerosolOptical));
+        otb_6s_doublereal taer55(static_cast<otb_6s_doublereal>(AerosolOptical));
 
         // Init output parameters       
         AtmosphericReflectance = 0.;   
@@ -76,9 +76,9 @@ SIXSTraits::ComputeAtmosphericParameters(
         UpwardDiffuseTransmittanceForRayleigh = 0.;      
         UpwardDiffuseTransmittanceForAerosol = 0.;      
 
-        otb_6s_real wlinf(0.), wlsup(0.);
-        otb_6s_real otb_ratm__(0.), sast(0.), tgasm(0.), sdtott(0.), sutott(0.);
-        otb_6s_real tdif_up(0.), tdir_up(0.), tdif_up_ray(0.), tdif_up_aer(0.);
+        otb_6s_doublereal wlinf(0.), wlsup(0.);
+        otb_6s_doublereal otb_ratm__(0.), sast(0.), tgasm(0.), sdtott(0.), sutott(0.);
+        otb_6s_doublereal tdif_up(0.), tdir_up(0.), tdif_up_ray(0.), tdif_up_aer(0.);
         try
         {
                 // 6S official Wavelenght Spectral Band step value 
@@ -91,16 +91,16 @@ SIXSTraits::ComputeAtmosphericParameters(
                 // 6S official tab size Wavelenght Spectral
                 const unsigned int S_6S_SIZE=1501;
                 // Generate WavelenghtSpectralBand  in 6S compatible buffer s[1501]
-                wlinf = static_cast<otb_6s_real>(WavelenghtSpectralBand->GetMinSpectralValue());
-                wlsup = static_cast<otb_6s_real>(WavelenghtSpectralBand->GetMaxSpectralValue());
+                wlinf = static_cast<otb_6s_doublereal>(WavelenghtSpectralBand->GetMinSpectralValue());
+                wlsup = static_cast<otb_6s_doublereal>(WavelenghtSpectralBand->GetMaxSpectralValue());
                 
                 otb_6s_integer iinf = static_cast<otb_6s_integer>((wlinf - (float).25) / SIXSStepOfWavelenghtSpectralBandValues + (float)1.5);
                 otb_6s_integer isup = static_cast<otb_6s_integer>((wlsup - (float).25) / SIXSStepOfWavelenghtSpectralBandValues + (float)1.5);
 
                 otb_6s_integer cpt=iinf-1;
-                otb_6s_real * s(NULL);
-                s = new otb_6s_real[S_6S_SIZE];
-                memset( s, 0, S_6S_SIZE*sizeof(otb_6s_real) );
+                otb_6s_doublereal * s(NULL);
+                s = new otb_6s_doublereal[S_6S_SIZE];
+                memset( s, 0, S_6S_SIZE*sizeof(otb_6s_doublereal) );
                 const ValuesVectorType & FilterFunctionValues6S = WavelenghtSpectralBand->GetFilterFunctionValues6S();
                 // Set the values of FilterFunctionValues6S in s between [iinf-1;isup]
                 for(unsigned int i=0 ; cpt<isup ; i++)
@@ -218,12 +218,12 @@ SIXSTraits::ComputeEnvironmentalContribution(const double diffuseTransmittanceFo
 					       double & aerosolEstimation,
 					       double & globalEstimation)
 {
-  otb_6s_real difr(static_cast<otb_6s_real>(diffuseTransmittanceForRayleighScattering));
-  otb_6s_real difa(static_cast<otb_6s_real>(diffuseTransmittanceForAerosolScattering));
-  otb_6s_real rad(static_cast<otb_6s_real>(radiusInKilometers));
-  otb_6s_real palt(static_cast<otb_6s_real>(altitude));
-  otb_6s_real xmuv(static_cast<otb_6s_real>(cosineOfViewingAngle));
-  otb_6s_real fra(0.),fae(0.),fr(0.);
+  otb_6s_doublereal difr(static_cast<otb_6s_doublereal>(diffuseTransmittanceForRayleighScattering));
+  otb_6s_doublereal difa(static_cast<otb_6s_doublereal>(diffuseTransmittanceForAerosolScattering));
+  otb_6s_doublereal rad(static_cast<otb_6s_doublereal>(radiusInKilometers));
+  otb_6s_doublereal palt(static_cast<otb_6s_doublereal>(altitude));
+  otb_6s_doublereal xmuv(static_cast<otb_6s_doublereal>(cosineOfViewingAngle));
+  otb_6s_doublereal fra(0.),fae(0.),fr(0.);
   otb_6s_enviro_(&difr,&difa,&rad,&palt,&xmuv,&fra,&fae,&fr);
   rayleighEstimation = static_cast<double>(fra);
   aerosolEstimation = static_cast<double>(fae);

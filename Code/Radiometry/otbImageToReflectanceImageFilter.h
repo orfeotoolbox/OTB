@@ -200,14 +200,14 @@ public:
 	  double coefTemp = 0.;  
 	  if (!m_IsSetFluxNormalizationCoefficient)
 	    {
-	      if (m_Day*m_Month != 0 && m_Day<32 && m_Month<=12)
+	      if (m_Day*m_Month != 0 && m_Day<32 && m_Month<13)
 		{
-		  otb_6s_real dsol = 0.;
+		  otb_6s_doublereal dsol = 0.;
 		  otb_6s_integer day = static_cast<otb_6s_integer>(m_Day);
 		  otb_6s_integer mounth = static_cast<otb_6s_integer>(m_Month);
 		  int cr(0);
 		  cr = otb_6s_varsol_(&day, &mounth, &dsol);
-		  coefTemp = vcl_cos(m_ZenithalSolarAngle*M_PI/180)*static_cast<double>(dsol);
+		  coefTemp = vcl_cos(m_ZenithalSolarAngle*M_PI/180.)*static_cast<double>(dsol);
 		}
 	      else
 		{
@@ -216,7 +216,7 @@ public:
 	    }
 	  else
 	    {
-	      coefTemp = vcl_cos(m_ZenithalSolarAngle*M_PI/180)*m_FluxNormalizationCoefficient*m_FluxNormalizationCoefficient;
+	      coefTemp = vcl_cos(m_ZenithalSolarAngle*M_PI/180.)*m_FluxNormalizationCoefficient*m_FluxNormalizationCoefficient;
 	    }
 	  functor.SetIlluminationCorrectionCoefficient(1. / coefTemp);
 	  functor.SetAlpha(m_Alpha[i]);
