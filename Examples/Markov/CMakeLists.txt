@@ -24,9 +24,8 @@ ADD_TEST(MarkovClassification1ExampleTest ${EXE_TESTS}
 	${BASELINE}/MarkovClassification1.png
 	${TEMP}/MarkovClassification1.png
         MarkovClassification1ExampleTest
-        ${INPUTDATA}/multiSpect.tif
-	${INPUTDATA}/multiSpectInterp.tif
-        ${INPUTDATA}/panchro.tif
+        ${INPUTDATA}/QB_Suburb.png
+	${INPUTDATA}/RandomImage.png
 	${TEMP}/MarkovClassification1.png
 	1.0
 	30
