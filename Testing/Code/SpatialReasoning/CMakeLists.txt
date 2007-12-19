@@ -12,16 +12,18 @@ SET(TEMP ${OTBTesting_BINARY_DIR}/Temporary)
 SET(TOL 0.0)
 
 
-SET(SPATIALREASONING_TESTS ${CXX_TEST_PATH}/otbSpatialReasoningTests)
+SET(SPATIALREASONING_TESTS1 ${CXX_TEST_PATH}/otbSpatialReasoningTests1)
+SET(SPATIALREASONING_TESTS2 ${CXX_TEST_PATH}/otbSpatialReasoningTests2)
 
-
-
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ 
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ otbSPATIALREASONINGTests1 ~~~~~~~~~~~~~~~~~~~~~~
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ 
 # -------            otb::ImageToImageRCC8Calculator   ----------
 
-ADD_TEST(srTuRCC8CalculatorNew ${SPATIALREASONING_TESTS} 
+ADD_TEST(srTuRCC8CalculatorNew ${SPATIALREASONING_TESTS1} 
          otbImageToImageRCC8CalculatorNew)
 
-ADD_TEST(srTvRCC8Calculator ${SPATIALREASONING_TESTS} 
+ADD_TEST(srTvRCC8Calculator ${SPATIALREASONING_TESTS1} 
    --compare-ascii ${TOL}
  		   ${BASELINE_FILES}/srRCC8CalculatorOutput.txt
  		   ${TEMP}/srRCC8CalculatorOutput.txt
@@ -37,10 +39,10 @@ ADD_TEST(srTvRCC8Calculator ${SPATIALREASONING_TESTS}
 
 # -------            otb::PolygonToPolygonRCC8Calculator   ----------
 
-ADD_TEST(srTuPolygonRCC8CalculatorNew ${SPATIALREASONING_TESTS} 
+ADD_TEST(srTuPolygonRCC8CalculatorNew ${SPATIALREASONING_TESTS1} 
          otbPolygonToPolygonRCC8CalculatorNew)
 
-ADD_TEST(srTvPolygonRCC8Calculator ${SPATIALREASONING_TESTS} 
+ADD_TEST(srTvPolygonRCC8Calculator ${SPATIALREASONING_TESTS1} 
    --compare-ascii ${TOL}
  		   ${BASELINE_FILES}/srRCC8PolygonToPolygonCalculatorOutput.txt
  		   ${TEMP}/srRCC8PolygonToPolygonCalculatorOutput.txt
@@ -55,10 +57,10 @@ ADD_TEST(srTvPolygonRCC8Calculator ${SPATIALREASONING_TESTS}
 
 # -------            otb::RCC8VertexBase   --------------------------
 
-ADD_TEST(srTuRCC8VertexBaseNew ${SPATIALREASONING_TESTS} 
+ADD_TEST(srTuRCC8VertexBaseNew ${SPATIALREASONING_TESTS1} 
          otbRCC8VertexBaseNew)
 
-ADD_TEST(srTvRCC8VertexBase ${SPATIALREASONING_TESTS} 
+ADD_TEST(srTvRCC8VertexBase ${SPATIALREASONING_TESTS1} 
          otbRCC8VertexBase
 	 5
 	 5
@@ -66,10 +68,10 @@ ADD_TEST(srTvRCC8VertexBase ${SPATIALREASONING_TESTS}
 
 # -------            otb::RCC8VertexWithCompacity----------------------
 
-ADD_TEST(srTuRCC8VertexWithCompacityNew ${SPATIALREASONING_TESTS} 
+ADD_TEST(srTuRCC8VertexWithCompacityNew ${SPATIALREASONING_TESTS1} 
          otbRCC8VertexWithCompacityNew)
 
-ADD_TEST(srTvRCC8VertexWithCompacity ${SPATIALREASONING_TESTS} 
+ADD_TEST(srTvRCC8VertexWithCompacity ${SPATIALREASONING_TESTS1} 
          otbRCC8VertexWithCompacity
 	 5
 	 5
@@ -78,34 +80,38 @@ ADD_TEST(srTvRCC8VertexWithCompacity ${SPATIALREASONING_TESTS}
 
 # -------            otb::RCC8VertexWithCompacity----------------------
 
-ADD_TEST(srTuRCC8EdgeNew ${SPATIALREASONING_TESTS} 
+ADD_TEST(srTuRCC8EdgeNew ${SPATIALREASONING_TESTS1} 
          otbRCC8EdgeNew)
 
-ADD_TEST(srTvRCC8Edge ${SPATIALREASONING_TESTS} 
+ADD_TEST(srTvRCC8Edge ${SPATIALREASONING_TESTS1} 
          otbRCC8Edge
 	 )
+ 
 
 # -------            otb::RCC8Graph   --------------------------
 # (also testing otb::RCC8VertexIterator and otb::RCC8EdgeIterator)
 
-ADD_TEST(srTuRCC8GraphNew ${SPATIALREASONING_TESTS} 
+ADD_TEST(srTuRCC8GraphNew ${SPATIALREASONING_TESTS1} 
          otbRCC8GraphNew)
 
-ADD_TEST(srTvRCC8Graph ${SPATIALREASONING_TESTS} 
+ADD_TEST(srTvRCC8Graph ${SPATIALREASONING_TESTS1} 
          otbRCC8Graph	 
 	 )
 
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ 
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ otbSPATIALREASONINGTests2 ~~~~~~~~~~~~~~~~~~~~~~
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # -------            otb::RCC8GraphSource   --------------------------
 
-ADD_TEST(srTuRCC8GraphSourceNew ${SPATIALREASONING_TESTS} 
+ADD_TEST(srTuRCC8GraphSourceNew ${SPATIALREASONING_TESTS2} 
          otbRCC8GraphSourceNew)
 
 # -------        otb::RCC8GraphFileWriter   --------------------------
 
-ADD_TEST(srTuRCC8GraphFileWriterNew ${SPATIALREASONING_TESTS} 
+ADD_TEST(srTuRCC8GraphFileWriterNew ${SPATIALREASONING_TESTS2} 
          otbRCC8GraphFileWriterNew)
 
-ADD_TEST(srTvRCC8GraphFileWriter ${SPATIALREASONING_TESTS} 
+ADD_TEST(srTvRCC8GraphFileWriter ${SPATIALREASONING_TESTS2} 
 	--compare-ascii	${TOL}
 			${BASELINE_FILES}/srRCC8GraphWriterOutput1.dot
 			${TEMP}/srRCC8GraphWriterOutput1.dot
@@ -115,15 +121,15 @@ ADD_TEST(srTvRCC8GraphFileWriter ${SPATIALREASONING_TESTS}
 
 # -------        otb::RCC8GraphFileReader   --------------------------
 
-ADD_TEST(srTuRCC8GraphFileReaderNew ${SPATIALREASONING_TESTS} 
+ADD_TEST(srTuRCC8GraphFileReaderNew ${SPATIALREASONING_TESTS2} 
          otbRCC8GraphFileReaderNew)
 
-ADD_TEST(srTvRCC8GraphFileReader ${SPATIALREASONING_TESTS} 
+ADD_TEST(srTvRCC8GraphFileReader ${SPATIALREASONING_TESTS2} 
 	 otbRCC8GraphFileReader
 			${TEMP}/srRCC8GraphWriterOutput1.dot
 )
 
-ADD_TEST(srTvRCC8GraphIOEndToEnd ${SPATIALREASONING_TESTS}
+ADD_TEST(srTvRCC8GraphIOEndToEnd ${SPATIALREASONING_TESTS2}
 	--compare-ascii	${TOL}
 			${BASELINE_FILES}/srRCC8GraphWriterOutput1.dot
 			${TEMP}/srRCC8GraphIOEndToEndOut.dot
@@ -136,17 +142,17 @@ ADD_TEST(srTvRCC8GraphIOEndToEnd ${SPATIALREASONING_TESTS}
 
 
 
-ADD_TEST(srTuImageListToRCC8GraphFilterNew ${SPATIALREASONING_TESTS} 
+ADD_TEST(srTuImageListToRCC8GraphFilterNew ${SPATIALREASONING_TESTS2} 
          otbImageListToRCC8GraphFilterNew)
 
 
 # -------        otb::ImageMultiSegmentationToRCC8GraphFilter   --------------------------
 
-ADD_TEST(srTuMultiSegToRCC8GraphFilterNew ${SPATIALREASONING_TESTS} 
+ADD_TEST(srTuMultiSegToRCC8GraphFilterNew ${SPATIALREASONING_TESTS2} 
          otbImageMultiSegmentationToRCC8GraphFilterNew)
 
 
-ADD_TEST(srTvMultiSegToRCC8GraphFilter1 ${SPATIALREASONING_TESTS}
+ADD_TEST(srTvMultiSegToRCC8GraphFilter1 ${SPATIALREASONING_TESTS2}
 	--compare-ascii	${TOL}
 			${BASELINE_FILES}/srRCC8GraphFilterOutput.dot
 			${TEMP}/srRCC8GraphFilterOutput.dot
@@ -158,7 +164,7 @@ ADD_TEST(srTvMultiSegToRCC8GraphFilter1 ${SPATIALREASONING_TESTS}
 			${INPUTDATA}/Seg2InputForRCC8Graph.tif			
 )
 
-ADD_TEST(srTvMultiSegToRCC8GraphFilter1WithOpti ${SPATIALREASONING_TESTS}
+ADD_TEST(srTvMultiSegToRCC8GraphFilter1WithOpti ${SPATIALREASONING_TESTS2}
 	--compare-ascii	${TOL}
 			${BASELINE_FILES}/srRCC8GraphFilterOutput.dot
 			${TEMP}/srRCC8GraphFilterOutputWithOpti.dot
@@ -170,7 +176,7 @@ ADD_TEST(srTvMultiSegToRCC8GraphFilter1WithOpti ${SPATIALREASONING_TESTS}
 			${INPUTDATA}/Seg2InputForRCC8Graph.tif		
 )
 
-ADD_TEST(srTvMultiSegToRCC8GraphFilter2 ${SPATIALREASONING_TESTS}
+ADD_TEST(srTvMultiSegToRCC8GraphFilter2 ${SPATIALREASONING_TESTS2}
 	--compare-ascii ${TOL}
 			${BASELINE_FILES}/srRCC8GraphFilterOutput2.dot
 			${TEMP}/srRCC8GraphFilterOutput2.dot
@@ -183,7 +189,7 @@ ADD_TEST(srTvMultiSegToRCC8GraphFilter2 ${SPATIALREASONING_TESTS}
 			${INPUTDATA}/Seg5InputForRCC8Graph.tif
 )
 
-ADD_TEST(srTvMultiSegToRCC8GraphFilter2WithOpti ${SPATIALREASONING_TESTS}
+ADD_TEST(srTvMultiSegToRCC8GraphFilter2WithOpti ${SPATIALREASONING_TESTS2}
 	--compare-ascii ${TOL}
 			${BASELINE_FILES}/srRCC8GraphFilterOutput2.dot
 			${TEMP}/srRCC8GraphFilterOutput2WithOpti.dot
@@ -196,8 +202,13 @@ ADD_TEST(srTvMultiSegToRCC8GraphFilter2WithOpti ${SPATIALREASONING_TESTS}
 			${INPUTDATA}/Seg5InputForRCC8Graph.tif
 )
 
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ 
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ otbSPATIALREASONINGTests3 ~~~~~~~~~~~~~~~~~~~~~~
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
 # -------       Fichiers sources CXX -----------------------------------
-SET(BasicSpatialReasoning_SRCS
+SET(BasicSpatialReasoning_SRCS1
 otbImageToImageRCC8CalculatorNew.cxx
 otbImageToImageRCC8Calculator.cxx
 otbPolygonToPolygonRCC8CalculatorNew.cxx
@@ -210,6 +221,8 @@ otbRCC8EdgeNew.cxx
 otbRCC8Edge.cxx
 otbRCC8GraphNew.cxx
 otbRCC8Graph.cxx
+)
+SET(BasicSpatialReasoning_SRCS2
 otbRCC8GraphSourceNew.cxx
 otbRCC8GraphFileWriterNew.cxx
 otbRCC8GraphFileWriter.cxx
@@ -223,7 +236,9 @@ otbImageMultiSegmentationToRCC8GraphFilter.cxx
 
 INCLUDE_DIRECTORIES("${OTBTesting_BINARY_DIR}")
 
-ADD_EXECUTABLE(otbSpatialReasoningTests otbSpatialReasoningTests.cxx ${BasicSpatialReasoning_SRCS})
-TARGET_LINK_LIBRARIES(otbSpatialReasoningTests OTBIO OTBSpatialReasoning gdal ITKIO ITKAlgorithms ITKStatistics ITKCommon)
+ADD_EXECUTABLE(otbSpatialReasoningTests1 otbSpatialReasoningTests1.cxx ${BasicSpatialReasoning_SRCS1})
+TARGET_LINK_LIBRARIES(otbSpatialReasoningTests1 OTBIO OTBSpatialReasoning gdal ITKIO ITKAlgorithms ITKStatistics ITKCommon)
+ADD_EXECUTABLE(otbSpatialReasoningTests2 otbSpatialReasoningTests2.cxx ${BasicSpatialReasoning_SRCS2})
+TARGET_LINK_LIBRARIES(otbSpatialReasoningTests2 OTBIO OTBSpatialReasoning gdal ITKIO ITKAlgorithms ITKStatistics ITKCommon)
 
 ENDIF( NOT OTB_DISABLE_CXX_TESTING )

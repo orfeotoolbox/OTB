@@ -38,13 +38,4 @@ REGISTER_TEST(otbRCC8EdgeNew);
 REGISTER_TEST(otbRCC8Edge);
 REGISTER_TEST(otbRCC8GraphNew);
 REGISTER_TEST(otbRCC8Graph);
-REGISTER_TEST(otbRCC8GraphSourceNew);
-REGISTER_TEST(otbRCC8GraphFileWriterNew);
-REGISTER_TEST(otbRCC8GraphFileWriter);
-REGISTER_TEST(otbRCC8GraphFileReaderNew);
-REGISTER_TEST(otbRCC8GraphFileReader);
-REGISTER_TEST(otbRCC8GraphIOEndToEnd);
-REGISTER_TEST(otbImageListToRCC8GraphFilterNew);
-REGISTER_TEST(otbImageMultiSegmentationToRCC8GraphFilterNew);
-REGISTER_TEST(otbImageMultiSegmentationToRCC8GraphFilter);
 }
