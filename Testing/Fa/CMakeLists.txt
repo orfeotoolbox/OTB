@@ -14,6 +14,7 @@ SET(TOL 0.0)
 
 # !!!!!  Exe generated in the Common dir
 SET(COMMON_TESTS ${CXX_TEST_PATH}/otbCommonTests3)
+SET(COMMON_TESTS2 ${CXX_TEST_PATH}/otbCommonTests2)
 SET(IO_TESTS     ${CXX_TEST_PATH}/otbIOTests9)
 SET(IO_TESTS2     ${CXX_TEST_PATH}/otbIOTests8)
 SET(VISU_TESTS   ${CXX_TEST_PATH}/otbVisuTests1)
@@ -27,7 +28,7 @@ ADD_TEST(FA-00005-io_EnviMultiBande_RW ${IO_TESTS}
          ${TEMP}/FA-00005-io_EnviMultiBande_GomaBestScale_w15.hdr
          )
 
-ADD_TEST(FA-00005-io_EnviMultiBande ${COMMON_TESTS} 
+ADD_TEST(FA-00005-io_EnviMultiBande ${COMMON_TESTS2} 
 #   --compare-image ${TOL}  ${BASELINE}/FA-00005-io_EnviMultiBande_GomaBestScale_w15_50_100_120_150_200.hdr
 #                     ${TEMP}/FA-00005-io_EnviMultiBande_GomaBestScale_w15_50_100_120_150_200.hdr
          otbMultiChannelExtractROI
