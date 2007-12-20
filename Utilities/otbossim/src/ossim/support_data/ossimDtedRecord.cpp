@@ -17,7 +17,7 @@
 //         User Header Label (UHL) in South to North profile sequence.
 //
 //********************************************************************
-// $Id: ossimDtedRecord.cpp 10256 2007-01-14 18:31:35Z dburken $
+// $Id: ossimDtedRecord.cpp 11550 2007-08-09 19:43:12Z dburken $
 
 #include <iostream>
 
@@ -129,7 +129,7 @@ ossimDtedRecord::~ossimDtedRecord()
 void ossimDtedRecord::parse(std::istream& in)
 {
    // DTED is stored in big endian byte order so swap the bytes if needed.
-   bool swap_bytes = ossimGetByteOrder() == OSSIM_LITTLE_ENDIAN ? true : false;
+   bool swap_bytes = ossim::byteOrder() == OSSIM_LITTLE_ENDIAN ? true : false;
    
    ossim_sint16 s;
    
@@ -153,22 +153,15 @@ void ossimDtedRecord::parse(std::istream& in)
    
    // Parse all elevation points.
    in.seekg(theStartOffset + ELEV_DATA_OFFSET, std::ios::beg);
-   int i = 0;
-   for(i = 0; i < theNumPoints; ++i)
+   for(int i = 0; i < theNumPoints; ++i)
    {
       in.read((char*)&s, 2);
       s = (swap_bytes ? ( ( (s & 0x00ff) << 8) | ( (s & 0xff00) >> 8) ) : s);
-      if (s & DATA_SIGN_MASK) s = (s & DATA_VALUE_MASK) * -1;
-      ossim_int32 value = convert(s);
-
-      // Check to make sure value is within valid limits for a value.
-      if(value == OSSIM_NAN)
+      if (s & DATA_SIGN_MASK)
       {
-         ossimNotify(ossimNotifyLevel_WARN) << "WARNING ossimDtedRecord::parse: Null Value found at point index: " << i
-                                            << ", continuing..." << std::endl;
+         s = (s & DATA_VALUE_MASK) * -1;
       }
-
-      thePoints[i] = value;
+      thePoints[i] = static_cast<ossim_int32>(s);
       thePointsData[i] = s;
    }
 }
@@ -179,7 +172,7 @@ void ossimDtedRecord::parse(std::istream& in)
 bool ossimDtedRecord::validateCheckSum(std::istream& in)
 {
    // DTED is stored in big endian byte order so swap the bytes if needed.
-   bool swap_bytes = ossimGetByteOrder() == OSSIM_LITTLE_ENDIAN ? true : false;
+   bool swap_bytes = ossim::byteOrder() == OSSIM_LITTLE_ENDIAN ? true : false;
    
    // Compute the check sum.
    in.seekg(theStartOffset, std::ios::beg);

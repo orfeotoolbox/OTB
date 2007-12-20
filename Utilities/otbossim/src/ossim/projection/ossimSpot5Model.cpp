@@ -1,9 +1,6 @@
 //*******************************************************************
-// Copyright (C) 2003 ImageLinks Inc.  All rights reserved.
 //
-// License:  LGPL
-// 
-// See LICENSE.txt file in the top level directory for more details.
+// License:  See top level LICENSE.txt file.
 //
 // Author:  Oscar Kramer (ossim port by D. Burken)
 //
@@ -12,7 +9,7 @@
 // Contains definition of class ossimSpot5Model.
 // 
 //*****************************************************************************
-// $Id: ossimSpot5Model.cpp 9094 2006-06-13 19:12:40Z dburken $
+// $Id: ossimSpot5Model.cpp 12128 2007-12-06 15:50:33Z gpotts $
 
 #include <iostream>
 #include <iomanip>
@@ -77,6 +74,7 @@ ossimSpot5Model::ossimSpot5Model()
    theIllumElevation     (0.0),
    thePositionError      (0.0),
    theRefImagingTime     (0.0),
+   theRefImagingTimeLine (0.0),   
    theLineSamplingPeriod (0.0),
    theSatToOrbRotation   (3, 3),
    theOrbToEcfRotation   (3, 3),
@@ -100,6 +98,7 @@ ossimSpot5Model::ossimSpot5Model(ossimSpotDimapSupportData* sd)
    theIllumElevation     (0.0),
    thePositionError      (0.0),
    theRefImagingTime     (0.0),
+   theRefImagingTimeLine (0.0),   
    theLineSamplingPeriod (0.0),
    theSatToOrbRotation   (3, 3),
    theOrbToEcfRotation   (3, 3),
@@ -245,7 +244,21 @@ void ossimSpot5Model::updateModel()
       theYawRate        = computeParameterOffset(5);
       theFocalLenOffset = computeParameterOffset(6);
    }
-
+   theSeedFunction = 0;
+   ossimGpt ulg, urg, lrg, llg;
+   lineSampleToWorld(theImageClipRect.ul(), ulg);
+   lineSampleToWorld(theImageClipRect.ur(), urg);
+   lineSampleToWorld(theImageClipRect.lr(), lrg);
+   lineSampleToWorld(theImageClipRect.ll(), llg);
+   theSeedFunction = new ossimBilinearProjection(theImageClipRect.ul(),
+                                                 theImageClipRect.ur(),
+                                                 theImageClipRect.lr(),
+                                                 theImageClipRect.ll(),
+                                                 ulg,
+                                                 urg,
+                                                 lrg,
+                                                 llg);
+   
    if (traceExec())  ossimNotify(ossimNotifyLevel_DEBUG) << "DEBUG ossimSpot5Model::updateModel(): returning..." << std::endl;   
 }
 
@@ -305,17 +318,28 @@ void ossimSpot5Model::loadSupportData()
    theSensorID     = "Spot 5";
    theImageID      = theSupportData->getImageID();
    theMetaDataFile = theSupportData->getMetadataFile();
+
+   // Center of frame, sub image if we have one.
    theSupportData->getRefGroundPoint(theRefGndPt);
-   theSupportData->getRefImagePoint(theRefImgPt);
+
    theSupportData->getSunAzimuth(theIllumAzimuth);
    theSupportData->getSunElevation(theIllumElevation);
    ossimDpt sz;
    theSupportData->getImageSize(sz);
    theImageSize = sz;
    theSupportData->getRefLineTime(theRefImagingTime);
+   theSupportData->getRefLineTimeLine(theRefImagingTimeLine);
+   
    theSupportData->getLineSamplingPeriod(theLineSamplingPeriod);
-   theSupportData->getSubImageOffset(theSubImageOffset);
-   theImageClipRect    = ossimDrect(0,0, theImageSize.x -1, theImageSize.y-1);
+   theSupportData->getSubImageOffset(theSpotSubImageOffset);
+
+   //---
+   // We make this zero base as the base ossimSensorModel does not know about
+   // any sub image we have.
+   //---
+   theSupportData->getImageRect(theImageClipRect);
+   theSupportData->getRefImagePoint(theRefImgPt);
+    
    ossimGpt p1;
    ossimGpt p2;
    ossimGpt p3;
@@ -379,7 +403,11 @@ ossimObject* ossimSpot5Model::dup() const
 
 std::ostream& ossimSpot5Model::print(std::ostream& out) const
 {
+   // Capture stream flags since we are going to mess with them.
+   std::ios_base::fmtflags f = out.flags();
+
    out << "\nDump of ossimSpot5Model at address " << (hex) << this
+       << (dec)
        << "\n------------------------------------------------"
        << "\n  theImageID            = " << theImageID
        << "\n  theMetadataFile       = " << theMetaDataFile
@@ -390,6 +418,7 @@ std::ostream& ossimSpot5Model::print(std::ostream& out) const
        << "\n  theRefGndPt           = " << theRefGndPt
        << "\n  theRefImgPt           = " << theRefImgPt
        << "\n  theRefImagingTime     = " << theRefImagingTime
+       << "\n  theRefImagingTimeLine = " << theRefImagingTimeLine
        << "\n  theLineSamplingPeriod = " << theLineSamplingPeriod
        << "\n  theRollOffset         = " << theRollOffset
        << "\n  thePitchOffset        = " << thePitchOffset
@@ -401,6 +430,9 @@ std::ostream& ossimSpot5Model::print(std::ostream& out) const
        << "\n------------------------------------------------"
        << "\n  " << endl;
 
+   // Set the flags back.
+   out.flags(f);
+ 
    return ossimSensorModel::print(out);
 }
 
@@ -455,15 +487,14 @@ void ossimSpot5Model::imagingRay(const ossimDpt& image_point,
    bool runtime_dbflag = 0;
 
    ossimDpt iPt = image_point;
-   iPt.samp += theSubImageOffset.samp;
-   iPt.line += theSubImageOffset.line;
-
+   iPt.samp += theSpotSubImageOffset.samp;
+   iPt.line += theSpotSubImageOffset.line;
 
    //
    // 1. Establish time of line imaging:
    //
    double t_line = theRefImagingTime +
-                   theLineSamplingPeriod*(iPt.line - theRefImgPt.line);
+                   theLineSamplingPeriod*(iPt.line - theRefImagingTimeLine);
    if (traceDebug() || runtime_dbflag)
    {
       ossimNotify(ossimNotifyLevel_DEBUG) << "DEBUG Spot5Model::imagingRay():------------ BEGIN DEBUG PASS ---------------" << std::endl;
@@ -482,8 +513,9 @@ void ossimSpot5Model::imagingRay(const ossimDpt& image_point,
                          tempEcefPoint.z());
    if (traceDebug() || runtime_dbflag)
    {
-      ossimNotify(ossimNotifyLevel_DEBUG) << "DEBUG:\n\tP_ecf = " << P_ecf
-                                          << "\n\t V_ecf = " << V_ecf << std::endl;
+      ossimNotify(ossimNotifyLevel_DEBUG)
+         << "DEBUG:\n\tP_ecf = " << P_ecf
+         << "\n\t V_ecf = " << V_ecf << std::endl;
    }
                    
    //
@@ -496,14 +528,16 @@ void ossimSpot5Model::imagingRay(const ossimDpt& image_point,
     theSupportData->getPixelLookAngleY(iPt.samp, Psi_y);
     if (traceDebug() || runtime_dbflag)
     {
-       ossimNotify(ossimNotifyLevel_DEBUG) << "DEBUG:\n\t Psi_x = " << Psi_x
-                                           << "\n\t Psi_y = " << Psi_y << endl;
+       ossimNotify(ossimNotifyLevel_DEBUG)
+          << "DEBUG:\n\t Psi_x = " << Psi_x
+          << "\n\t Psi_y = " << Psi_y << endl;
     }
 
     ossimColumnVector3d u_sat (-tan(Psi_y), tan(Psi_x), -(1.0 + theFocalLenOffset));
     if (traceDebug() || runtime_dbflag)
     {
-       ossimNotify(ossimNotifyLevel_DEBUG) << "DEBUG \n\t u_sat = " << u_sat << endl;
+       ossimNotify(ossimNotifyLevel_DEBUG)
+          << "DEBUG \n\t u_sat = " << u_sat << endl;
     }
 
    //
@@ -515,8 +549,9 @@ void ossimSpot5Model::imagingRay(const ossimDpt& image_point,
     ossimColumnVector3d u_orb = (theSatToOrbRotation*u_sat).unit();
     if (traceDebug() || runtime_dbflag)
     {
-       ossimNotify(ossimNotifyLevel_DEBUG) << "DEBUG:\n\t theSatToOrbRotation = " << theSatToOrbRotation
-                                           << "\n\t u_orb = " << u_orb << endl;
+       ossimNotify(ossimNotifyLevel_DEBUG)
+          << "DEBUG:\n\t theSatToOrbRotation = " << theSatToOrbRotation
+          << "\n\t u_orb = " << u_orb << endl;
     }
 
    //
@@ -545,8 +580,9 @@ void ossimSpot5Model::imagingRay(const ossimDpt& image_point,
    ossimColumnVector3d u_ecf  = (theOrbToEcfRotation*u_orb);
     if (traceDebug() || runtime_dbflag)
     {
-       ossimNotify(ossimNotifyLevel_DEBUG) << "DEBUG:\n\t theOrbToEcfRotation = " << theOrbToEcfRotation
-            << "\n\t u_ecf = " << u_ecf << endl;
+       ossimNotify(ossimNotifyLevel_DEBUG)
+          << "DEBUG:\n\t theOrbToEcfRotation = " << theOrbToEcfRotation
+          << "\n\t u_ecf = " << u_ecf << endl;
     }
    
    //
@@ -554,7 +590,11 @@ void ossimSpot5Model::imagingRay(const ossimDpt& image_point,
    //
     image_ray = ossimEcefRay(P_ecf, ossimEcefVector(u_ecf[0], u_ecf[1], u_ecf[2]));
     
-    if (traceExec())  ossimNotify(ossimNotifyLevel_DEBUG) << "DEBUG Spot5Model::imagingRay(): returning..." << std::endl;
+    if (traceExec())
+    {
+       ossimNotify(ossimNotifyLevel_DEBUG)
+          << "DEBUG Spot5Model::imagingRay(): returning..." << std::endl;
+    }
 }
 
 void ossimSpot5Model::lineSampleHeightToWorld(const ossimDpt& image_point,
@@ -563,7 +603,14 @@ void ossimSpot5Model::lineSampleHeightToWorld(const ossimDpt& image_point,
 {
    if (!insideImage(image_point))
    {
-      worldPoint = extrapolate(image_point, heightEllipsoid);
+      if(theSeedFunction.valid())
+      {
+         theSeedFunction->lineSampleToWorld(image_point, worldPoint);
+      }
+      else
+      {
+         worldPoint = extrapolate(image_point, heightEllipsoid);
+      }
       if (traceExec())  ossimNotify(ossimNotifyLevel_DEBUG) << "DEBUG ossimSpot5Model::lineSampleHeightToWorld(): returning..." << std::endl;
       return;
    }
@@ -577,13 +624,13 @@ void ossimSpot5Model::lineSampleHeightToWorld(const ossimDpt& image_point,
    worldPoint = ossimGpt(Pecf);
 }
 
-ossimDpt ossimSpot5Model::extrapolate (const ossimGpt& gp) const
-{
-    ossimDpt temp;
+// ossimDpt ossimSpot5Model::extrapolate (const ossimGpt& gp) const
+// {
+//     ossimDpt temp;
 
-    temp.makeNan();
+//     temp.makeNan();
 
-    return temp;
+//     return temp;
 
 //   ossimDpt tempGpt = gp;
 //   ossimDpt dest;
@@ -591,20 +638,20 @@ ossimDpt ossimSpot5Model::extrapolate (const ossimGpt& gp) const
   
 //  return dest;
 
-}
+// }
 
-ossimGpt ossimSpot5Model::extrapolate (const ossimDpt& ip,
-				       const double& height) const
-{
-  return ossimGpt(OSSIM_DBL_NAN, OSSIM_DBL_NAN, OSSIM_DBL_NAN, 0);
+// ossimGpt ossimSpot5Model::extrapolate (const ossimDpt& ip,
+// 				       const double& height) const
+// {
+//   return ossimGpt(ossim::nan(), ossim::nan(), ossim::nan(), 0);
 
 //    ossimDpt dest;
 
 //    theImageToGroundMap.map(ip, dest);
   
 
-//    return ossimGpt(dest.lat, dest.lon, OSSIM_DBL_NAN, origin().datum());
-}
+//    return ossimGpt(dest.lat, dest.lon, ossim::nan(), origin().datum());
+// }
 
 bool
 ossimSpot5Model::setupOptimizer(const ossimString& init_file)
@@ -645,11 +692,7 @@ ossimSpot5Model::setupOptimizer(const ossimString& init_file)
       ossimKeywordlist kwl;
       if(kwl.addFile(init_file.c_str()))
       {
-         bool result = loadState(kwl);
-
-//         std::cout << "RESULT == " << result << std::endl;
-         
-         return  result;
+         return loadState(kwl);
       }
    }
    return false;

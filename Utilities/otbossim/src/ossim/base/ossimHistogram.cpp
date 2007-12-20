@@ -15,7 +15,7 @@
 // frequency counts for each of these buckets.
 //
 //********************************************************************
-// $Id: ossimHistogram.cpp 9963 2006-11-28 21:11:01Z gpotts $
+// $Id: ossimHistogram.cpp 11955 2007-10-31 16:10:22Z gpotts $
 //
 
 #include <stdio.h>
@@ -28,6 +28,15 @@ using namespace std;
 #include <ossim/base/ossimCommon.h>
 #include <ossim/base/ossimHistogram.h>
 #include <ossim/base/ossimNotifyContext.h>
+
+// nonstandard versions that use operator>, so they behave differently
+// than std:::min/max and ossim::min/max.  kept here for now for that
+// reason.
+#ifndef MAX
+#  define MAX(x,y) ((x)>(y)?(x):(y))
+#  define MIN(x,y) ((x)>(y)?(y):(x))
+#endif
+
 
 static const int MEAN_FLAG = 1, SD_FLAG = 2;
 RTTI_DEF1(ossimHistogram, "ossimHistogram", ossimObject);
@@ -914,7 +923,7 @@ float ossimHistogram::getLowFractionFromValue(float val) const
    float max = ceil(GetMaxVal());
    if (val < min || val > max)
    {
-      return OSSIM_FLT_NAN;
+      return ossim::nan();
    }
 
    int total_buckets = GetRes();
@@ -940,7 +949,7 @@ float ossimHistogram::getHighFractionFromValue(float val) const
    float max = ceil(GetMaxVal());
    if (val < min || val > max)
    {
-      return OSSIM_FLT_NAN;
+      return ossim::nan();
    }
 
    int total_buckets = GetRes();
@@ -1360,5 +1369,82 @@ bool ossimHistogram::loadState(const ossimKeywordlist& kwl,
          }
       }
    }
+   return true;
+}
+
+bool ossimHistogram::loadState(const ossimRefPtr<ossimXmlNode> xmlNode)
+{
+  ossimRefPtr<ossimXmlNode> binValues =  xmlNode->findFirstNode("binValues");
+  ossimRefPtr<ossimXmlNode> minValueNode  =  xmlNode->findFirstNode("minValue");
+  ossimRefPtr<ossimXmlNode> maxValueNode  =  xmlNode->findFirstNode("maxValue");
+
+  if(binValues.valid())
+  {
+     ossim_uint32 count = 0;
+     float minValue = 0.0;
+     float maxValue = 0.0;
+     std::vector<float> floatValues;
+     std::istringstream in(binValues->getText());
+     float v;
+     while(!in.fail())
+     {
+        in>>v;
+        if(!in.fail())
+        {
+           floatValues.push_back(v);
+        }
+     }
+     count = floatValues.size();
+     
+     if(count)
+     {
+        minValue = 0;
+        maxValue = count - 1;
+
+        if(minValueNode.valid())
+        {
+           minValue = minValueNode->getText().toFloat32();
+        }
+        if(maxValueNode.valid())
+        {
+           maxValue = maxValueNode->getText().toFloat32();
+        }
+
+        create(count, minValue, maxValue);
+        float* countsPtr = GetCounts();
+        ossim_uint32 idx = 0;
+        for(idx = 0; idx < count; ++idx)
+        {
+           countsPtr[idx] = floatValues[idx];
+        }
+        return true;
+     }
+  }
+
+  return false;
+}
+
+bool ossimHistogram::saveState(ossimRefPtr<ossimXmlNode> xmlNode)const
+{
+   ossimRefPtr<ossimXmlNode> binValues = new ossimXmlNode;
+   xmlNode->setTag("ossimHistogram");
+   xmlNode->addChildNode("minValue", ossimString::toString(vmin));
+   xmlNode->addChildNode("maxValue", ossimString::toString(vmax));
+   xmlNode->addChildNode("standardDeviation", ossimString::toString(standard_dev));
+   xmlNode->addChildNode("mean", ossimString::toString(mean));
+   binValues->setTag("binValues");
+   std::ostringstream out;
+
+   ossim_int32 idx = 0;
+   if(num > 0)
+   {
+      for(idx = 0; idx < num;++idx)
+      {
+         out << ossimString::toString(counts[idx], 8, true) << " ";
+      }
+      binValues->setText(out.str());
+   }
+   xmlNode->addChildNode(binValues);
+   
    return true;
 }

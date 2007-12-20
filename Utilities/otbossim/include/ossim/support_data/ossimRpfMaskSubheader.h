@@ -1,7 +1,6 @@
 #ifndef ossimRpfMaskSubheader_HEADER
 #define ossimRpfMaskSubheader_HEADER
 #include <iostream>
-using namespace std;
 
 #include <ossim/base/ossimConstants.h>
 #include <ossim/base/ossimErrorContext.h>
@@ -10,14 +9,15 @@ using namespace std;
 class ossimRpfMaskSubheader
 {
 public:
-   friend ostream& operator <<(ostream& out,
-                               const ossimRpfMaskSubheader& data);
+   friend std::ostream& operator <<(std::ostream& out,
+                                    const ossimRpfMaskSubheader& data);
    ossimRpfMaskSubheader();
-   virtual ~ossimRpfMaskSubheader(){}
 
-   ossimErrorCode parseStream(istream& in,
+   virtual ~ossimRpfMaskSubheader();
+
+   ossimErrorCode parseStream(std::istream& in,
                               ossimByteOrder byteOrder);
-   void print(ostream& out)const;
+   void print(std::ostream& out)const;
    
 private:
    void clearFields();

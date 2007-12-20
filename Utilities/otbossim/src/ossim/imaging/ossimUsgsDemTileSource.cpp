@@ -9,7 +9,7 @@
 // Contains class declaration for ossimUsgsDemTileSource.
 //
 //********************************************************************
-// $Id: ossimUsgsDemTileSource.cpp 9574 2006-09-15 14:37:19Z dburken $
+// $Id: ossimUsgsDemTileSource.cpp 11419 2007-07-27 16:24:57Z dburken $
 
 #include <iostream>
 #include <fstream>
@@ -353,7 +353,7 @@ bool ossimUsgsDemTileSource::open()
    //---
    // Set the null to -32768.  This will also be the missing data values.
    //---
-   theNullValue = OSSIM_SSHORT_NAN;
+   theNullValue = OSSIM_DEFAULT_NULL_PIX_SINT16;
 
    //---
    // Read the dem.

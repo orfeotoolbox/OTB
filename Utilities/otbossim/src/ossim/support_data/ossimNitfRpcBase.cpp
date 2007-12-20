@@ -11,8 +11,9 @@
 // Rational Polynomial Coefficient extension.
 //
 //********************************************************************
-// $Id: ossimNitfRpcBase.cpp 10173 2007-01-03 18:21:26Z gpotts $
+// $Id: ossimNitfRpcBase.cpp 11347 2007-07-23 13:01:59Z gpotts $
 
+#include <algorithm>
 #include <iostream>
 #include <vector>
 #include <ossim/support_data/ossimNitfRpcBase.h>
@@ -41,9 +42,6 @@ static const ossimString SAMP_DEN_COEFF_KW = "SAMP_DEN_COEFF_";
 
 RTTI_DEF1(ossimNitfRpcBase, "ossimNitfRpcBase", ossimNitfRegisteredTag);
 
-#ifndef MIN
-#  define MIN(a,b) ((a)<(b)?(a):(b))
-#endif
 
 ossimNitfRpcBase::ossimNitfRpcBase()
 {
@@ -222,7 +220,7 @@ void ossimNitfRpcBase::setErrorBias(const ossim_float64& errorBias)
 void ossimNitfRpcBase::setErrorBias(const ossimString& errorBias)
 {
    memset(theErrorBias, ' ', ERROR_BIAS_SIZE);
-   memcpy(theErrorBias, errorBias.c_str(), MIN(ERROR_BIAS_SIZE, errorBias.length()));
+   memcpy(theErrorBias, errorBias.c_str(), std::min((size_t)ERROR_BIAS_SIZE, errorBias.length()));
 }
 
 ossimString ossimNitfRpcBase::getErrorRand()const
@@ -241,7 +239,7 @@ void ossimNitfRpcBase::setErrorRand(const ossim_float64& errorRand)
 void ossimNitfRpcBase::setErrorRand(const ossimString& errorRand)
 {
    memset(theErrRand, ' ', ERR_RAND_SIZE);
-   memcpy(theErrRand, errorRand.c_str(), MIN(ERR_RAND_SIZE, errorRand.length()));
+   memcpy(theErrRand, errorRand.c_str(), std::min((size_t)ERR_RAND_SIZE, errorRand.length()));
 }
 
 ossimString ossimNitfRpcBase::getLineOffset()const
@@ -259,7 +257,7 @@ void ossimNitfRpcBase::setLineOffset(ossim_uint32 lineOffset)
 void ossimNitfRpcBase::setLineOffset(const ossimString& lineOffset)
 {
    memset(theLineOffset, ' ', LINE_OFFSET_SIZE);
-   memcpy(theLineOffset, lineOffset.c_str(), MIN(LINE_OFFSET_SIZE, lineOffset.length()));
+   memcpy(theLineOffset, lineOffset.c_str(), std::min((size_t)LINE_OFFSET_SIZE, lineOffset.length()));
 }
 
 ossimString ossimNitfRpcBase::getSampleOffset()const
@@ -277,7 +275,7 @@ void ossimNitfRpcBase::setSampleOffset(ossim_uint32 sampleOffset)
 void ossimNitfRpcBase::setSampleOffset(const ossimString& sampleOffset)
 {
    memset(theSampleOffset, ' ', SAMPLE_OFFSET_SIZE);
-   memcpy(theSampleOffset, sampleOffset.c_str(), MIN(SAMPLE_OFFSET_SIZE, sampleOffset.length()));
+   memcpy(theSampleOffset, sampleOffset.c_str(), std::min((size_t)SAMPLE_OFFSET_SIZE, sampleOffset.length()));
 }
 
 ossimString ossimNitfRpcBase::getGeodeticLatOffset()const
@@ -302,7 +300,7 @@ void ossimNitfRpcBase::setGeodeticLatOffset(
    const ossimString& geodeticLatOffset)
 {
    memset(theGeodeticLatOffset, ' ', GEODETIC_LAT_OFFSET_SIZE);
-   memcpy(theGeodeticLatOffset, geodeticLatOffset.c_str(), MIN(GEODETIC_LAT_OFFSET_SIZE, geodeticLatOffset.length()));
+   memcpy(theGeodeticLatOffset, geodeticLatOffset.c_str(), std::min((size_t)GEODETIC_LAT_OFFSET_SIZE, geodeticLatOffset.length()));
 }
 
 ossimString ossimNitfRpcBase::getGeodeticLonOffset()const
@@ -326,7 +324,7 @@ void ossimNitfRpcBase::setGeodeticLonOffset(
 void ossimNitfRpcBase::setGeodeticLonOffset(const ossimString& geodeticLonOffset)
 {
    memset(theGeodeticLonOffset, ' ', GEODETIC_LON_OFFSET_SIZE);
-   memcpy(theGeodeticLonOffset, geodeticLonOffset.c_str(), MIN(GEODETIC_LON_OFFSET_SIZE, geodeticLonOffset.length()));
+   memcpy(theGeodeticLonOffset, geodeticLonOffset.c_str(), std::min((size_t)GEODETIC_LON_OFFSET_SIZE, geodeticLonOffset.length()));
 }
 
 ossimString ossimNitfRpcBase::getGeodeticHeightOffset()const
@@ -346,7 +344,7 @@ void ossimNitfRpcBase::setGeodeticHeightOffset(
 void ossimNitfRpcBase::setGeodeticHeightOffset(const ossimString& geodeticHeightOffset)
 {
    memset(theGeodeticHeightOffset, ' ', GEODETIC_HEIGHT_OFFSET_SIZE);
-   memcpy(theGeodeticHeightOffset, geodeticHeightOffset.c_str(), MIN(GEODETIC_HEIGHT_OFFSET_SIZE, geodeticHeightOffset.length()));
+   memcpy(theGeodeticHeightOffset, geodeticHeightOffset.c_str(), std::min((size_t)GEODETIC_HEIGHT_OFFSET_SIZE, geodeticHeightOffset.length()));
 }
 
 ossimString ossimNitfRpcBase::getLineScale()const
@@ -364,7 +362,7 @@ void ossimNitfRpcBase::setLineScale(ossim_uint32 lineScale)
 void ossimNitfRpcBase::setLineScale(const ossimString& lineScale)
 {
    memset(theLineScale, ' ', LINE_SCALE_SIZE);
-   memcpy(theLineScale, lineScale.c_str(), MIN(LINE_SCALE_SIZE, lineScale.length()));
+   memcpy(theLineScale, lineScale.c_str(), std::min((size_t)LINE_SCALE_SIZE, lineScale.length()));
 }
 
 ossimString ossimNitfRpcBase::getSampleScale()const
@@ -382,7 +380,7 @@ void ossimNitfRpcBase::setSampleScale(ossim_uint32 sampleScale)
 void ossimNitfRpcBase::setSampleScale(const ossimString& sampleScale)
 {
    memset(theSampleScale, ' ', SAMPLE_SCALE_SIZE);
-   memcpy(theSampleScale, sampleScale.c_str(), MIN(SAMPLE_SCALE_SIZE, sampleScale.length()));
+   memcpy(theSampleScale, sampleScale.c_str(), std::min((size_t)SAMPLE_SCALE_SIZE, sampleScale.length()));
 }
 
 ossimString ossimNitfRpcBase::getGeodeticLatScale()const
@@ -411,7 +409,7 @@ void ossimNitfRpcBase::setGeodeticLatScale(
 void ossimNitfRpcBase::setGeodeticLatScale(const ossimString& geodeticLatScale)
 {
    memset(theGeodeticLatScale, ' ', GEODETIC_LAT_SCALE_SIZE);
-   memcpy(theGeodeticLatScale, geodeticLatScale.c_str(), MIN(GEODETIC_LAT_SCALE_SIZE, geodeticLatScale.length()));
+   memcpy(theGeodeticLatScale, geodeticLatScale.c_str(), std::min((size_t)GEODETIC_LAT_SCALE_SIZE, geodeticLatScale.length()));
 }
 
 ossimString ossimNitfRpcBase::getGeodeticLonScale()const
@@ -440,7 +438,7 @@ void ossimNitfRpcBase::setGeodeticLonScale(
 void ossimNitfRpcBase::setGeodeticLonScale(const ossimString& geodeticLonScale)
 {
    memset(theGeodeticLonScale, ' ', GEODETIC_LON_SCALE_SIZE);
-   memcpy(theGeodeticLonScale, geodeticLonScale.c_str(), MIN(GEODETIC_LON_SCALE_SIZE, geodeticLonScale.length()));
+   memcpy(theGeodeticLonScale, geodeticLonScale.c_str(), std::min((size_t)GEODETIC_LON_SCALE_SIZE, geodeticLonScale.length()));
 }
 
 ossimString ossimNitfRpcBase::getGeodeticHeightScale()const
@@ -460,7 +458,7 @@ void ossimNitfRpcBase::setGeodeticHeightScale(
    const ossimString& geodeticHeightScale)
 {
    memset(theGeodeticHeightScale, ' ', GEODETIC_HEIGHT_SCALE_SIZE);
-   memcpy(theGeodeticHeightScale, geodeticHeightScale.c_str(), MIN(GEODETIC_HEIGHT_SCALE_SIZE, geodeticHeightScale.length()));
+   memcpy(theGeodeticHeightScale, geodeticHeightScale.c_str(), std::min((size_t)GEODETIC_HEIGHT_SCALE_SIZE, geodeticHeightScale.length()));
 }
 
 /* Temp comment out until range error handling is decided.*/

@@ -2,14 +2,14 @@
 //
 // License:  See top level LICENSE.txt file.
 // 
-// AUTHOR: Oscar Kramer (okramer@imagelinks.com)
+// AUTHOR: Oscar Kramer
 //
 // DESCRIPTION:
 //   Contains implementation of class ossimWarpModel. This is an
 //   implementation of a warping interpolation model.
 //
 //*****************************************************************************
-//  $Id: ossimWarpProjection.cpp 9963 2006-11-28 21:11:01Z gpotts $
+//  $Id: ossimWarpProjection.cpp 11806 2007-10-05 14:55:57Z dburken $
 
 #include <ossim/projection/ossimWarpProjection.h>
 RTTI_DEF1(ossimWarpProjection, "ossimWarpProjection", ossimProjection);
@@ -37,9 +37,9 @@ static ossimTrace traceDebug ("ossimWarpProjection:debug");
 ossimWarpProjection::ossimWarpProjection()
    :
       ossimProjection(),
-      theClientProjection (NULL),
-      theWarpTransform (NULL),
-      theAffineTransform (NULL)
+      theClientProjection (0),
+      theWarpTransform (0),
+      theAffineTransform (0)
 {
    theWarpTransform   = new ossimQuadTreeWarp;
    theAffineTransform = new ossimAffineTransform;   
@@ -55,8 +55,8 @@ ossimWarpProjection::ossimWarpProjection(ossimProjection* client)
    :
       ossimProjection(),
       theClientProjection (client),
-      theWarpTransform (NULL),
-      theAffineTransform (NULL)
+      theWarpTransform (0),
+      theAffineTransform (0)
 {
    theWarpTransform   = new ossimQuadTreeWarp;
    theAffineTransform = new ossimAffineTransform;
@@ -69,9 +69,9 @@ ossimWarpProjection::ossimWarpProjection(const ossimKeywordlist& geom_kwl,
                                          const char* prefix)
    :
       ossimProjection(),
-      theClientProjection (NULL),
-      theWarpTransform (NULL),
-      theAffineTransform (NULL)
+      theClientProjection (0),
+      theWarpTransform (0),
+      theAffineTransform (0)
 {
    theClientProjection = ossimProjectionFactoryRegistry::instance()->
                          createProjection(geom_kwl, prefix);
@@ -96,17 +96,17 @@ ossimWarpProjection::~ossimWarpProjection()
    if(theClientProjection)
    {
       delete theClientProjection;
-      theClientProjection = NULL;
+      theClientProjection = 0;
    }
    if(theWarpTransform)
    {
       delete theWarpTransform;
-      theWarpTransform = NULL;
+      theWarpTransform = 0;
    }
    if(theAffineTransform)
    {
       delete theAffineTransform;
-      theAffineTransform = NULL;
+      theAffineTransform = 0;
    }
 }
 
@@ -246,7 +246,7 @@ bool ossimWarpProjection::loadState(const ossimKeywordlist& kwl,
    ossimString quadwarpPrefix = ossimString(prefix) + QUADWARP_PREFIX;
 
    if(theClientProjection) delete theClientProjection;
-   theClientProjection = (ossimProjection*)NULL;
+   theClientProjection = (ossimProjection*)0;
 
    if (!theWarpTransform)
       theWarpTransform = new ossimQuadTreeWarp();
@@ -296,7 +296,7 @@ ossimDpt  ossimWarpProjection::getMetersPerPixel() const
 {
    if (theClientProjection)
       return theClientProjection->getMetersPerPixel();
-   return ossimDpt(OSSIM_NAN, OSSIM_NAN);
+   return ossimDpt(ossim::nan(), ossim::nan());
 }
       
 
@@ -307,7 +307,7 @@ void ossimWarpProjection::setNewWarpTransform(ossim2dTo2dTransform* warp)
       if(theWarpTransform)
       {
          delete theWarpTransform;
-         theWarpTransform = NULL;
+         theWarpTransform = 0;
       }
       theWarpTransform = warp;
    }
@@ -320,7 +320,7 @@ void ossimWarpProjection::setNewAffineTransform(ossim2dTo2dTransform* affine)
       if(theAffineTransform)
       {
          delete theAffineTransform;
-         theAffineTransform = NULL;
+         theAffineTransform = 0;
       }
       theAffineTransform = affine;
    }

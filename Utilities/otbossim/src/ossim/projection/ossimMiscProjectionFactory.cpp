@@ -1,11 +1,7 @@
 //*****************************************************************************
 // FILE: ossimMiscProjectionFactory.cc
 //
-// Copyright (C) 2001 ImageLinks, Inc.
-//
-// License:  LGPL
-// 
-// See LICENSE.txt file in the top level directory for more details.
+// License:  See top level LICENSE.txt file.
 //
 // DESCRIPTION:
 //   Contains implementation of class ossimMiscProjectionFactory
@@ -16,7 +12,7 @@
 //              Initial coding.
 //<
 //*****************************************************************************
-//  $Id: ossimMiscProjectionFactory.cpp 9094 2006-06-13 19:12:40Z dburken $
+//  $Id: ossimMiscProjectionFactory.cpp 12082 2007-11-26 21:46:44Z dburken $
 
 #include <ossim/projection/ossimMiscProjectionFactory.h>
 #include <ossim/base/ossimKeywordlist.h>
@@ -178,21 +174,4 @@ void ossimMiscProjectionFactory::getTypeNameList(std::vector<ossimString>& typeL
    typeList.push_back(ossimString(STATIC_TYPE_NAME(ossimQuadProjection)));   
    typeList.push_back(ossimString(STATIC_TYPE_NAME(ossimWarpProjection)));
    typeList.push_back(ossimString(STATIC_TYPE_NAME(ossimPolynomProjection)));
-}
-
-//*****************************************************************************
-//  METHOD 
-//*****************************************************************************
-std::list<ossimString> ossimMiscProjectionFactory::getList()const
-{
-	std::list<ossimString> result;
-
-   result.push_back(ossimString(STATIC_TYPE_NAME(ossimAffineProjection)));
-   result.push_back(ossimString(STATIC_TYPE_NAME(ossimBilinearProjection)));
-   result.push_back(ossimString(STATIC_TYPE_NAME(ossimRpcProjection)));
-   result.push_back(ossimString(STATIC_TYPE_NAME(ossimQuadProjection)));   
-   result.push_back(ossimString(STATIC_TYPE_NAME(ossimWarpProjection)));
-   result.push_back(ossimString(STATIC_TYPE_NAME(ossimPolynomProjection)));
-
-   return result;
 }

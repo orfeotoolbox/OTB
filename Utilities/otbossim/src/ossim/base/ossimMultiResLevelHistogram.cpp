@@ -2,12 +2,12 @@
 //
 // License:  See top level LICENSE.txt file.
 // 
-// Author: Garrett Potts (gpotts@imagelinks.com)
+// Author: Garrett Potts
 //
 // Description: 
 //
 //*******************************************************************
-//  $Id: ossimMultiResLevelHistogram.cpp 9963 2006-11-28 21:11:01Z gpotts $
+//  $Id: ossimMultiResLevelHistogram.cpp 11721 2007-09-13 13:19:34Z gpotts $
 #include <ossim/base/ossimMultiResLevelHistogram.h>
 #include <ossim/base/ossimMultiBandHistogram.h>
 #include <ossim/base/ossimKeyword.h>
@@ -26,7 +26,7 @@ ossimMultiResLevelHistogram::ossimMultiResLevelHistogram()
 {  
 }
 
-ossimMultiResLevelHistogram::ossimMultiResLevelHistogram(long numberOfResLevels)
+ossimMultiResLevelHistogram::ossimMultiResLevelHistogram(ossim_uint32 numberOfResLevels)
    :
       theHistogramList(),
       theHistogramFile()
@@ -43,7 +43,7 @@ ossimMultiResLevelHistogram::ossimMultiResLevelHistogram(const ossimMultiResLeve
    create(rhs.getNumberOfResLevels());
    for(ossim_uint32 i = 0; i < theHistogramList.size(); ++i)
    {
-      theHistogramList[0] = rhs.theHistogramList[i]?
+      theHistogramList[i] = rhs.theHistogramList[i].valid()?
                             new ossimMultiBandHistogram(*rhs.theHistogramList[i]):
                             (ossimMultiBandHistogram*)NULL;
    }
@@ -54,30 +54,30 @@ ossimMultiResLevelHistogram::~ossimMultiResLevelHistogram()
    deleteHistograms();
 }
 
-void ossimMultiResLevelHistogram::create(long numberOfResLevels)
+void ossimMultiResLevelHistogram::create(ossim_uint32 numberOfResLevels)
 {
    deleteHistograms();
 
-   for(long index = 0; index < numberOfResLevels; ++index)
+   for(ossim_uint32 idx = 0; idx < numberOfResLevels; ++idx)
    {
       theHistogramList.push_back(new ossimMultiBandHistogram);      
    }
 }
 
-ossimMultiResLevelHistogram* ossimMultiResLevelHistogram::createAccumulationLessThanEqual()const
+ossimRefPtr<ossimMultiResLevelHistogram> ossimMultiResLevelHistogram::createAccumulationLessThanEqual()const
 {
-   ossimMultiResLevelHistogram* result = NULL;
+   ossimRefPtr<ossimMultiResLevelHistogram> result = NULL;
 
    if(theHistogramList.size() > 0)
    {
       result = new ossimMultiResLevelHistogram(theHistogramList.size());
 
-      for(long index=0; index < (long) theHistogramList.size(); ++ index)
+      for(ossim_uint32 idx=0; idx < (ossim_uint32) theHistogramList.size(); ++ idx)
       {
-         if(theHistogramList[index])
+         if(theHistogramList[idx].valid())
          {
-            ossimMultiBandHistogram* multiBandAccumulator = theHistogramList[index]->createAccumulationLessThanEqual();
-            result->theHistogramList[index] = multiBandAccumulator;
+            ossimRefPtr<ossimMultiBandHistogram> multiBandAccumulator = theHistogramList[idx]->createAccumulationLessThanEqual();
+            result->theHistogramList[idx] = multiBandAccumulator;
          }
          else
          {
@@ -85,14 +85,12 @@ ossimMultiResLevelHistogram* ossimMultiResLevelHistogram::createAccumulationLess
             // turn off a band.  A null accumulation will
             // indicate no histogram data.
             //
-            result->theHistogramList[index] = NULL;
+            result->theHistogramList[idx] = 0;
          }
       }
       
-      if(result->theHistogramList.size() < 1)
-      {
-         delete result;
-      }
+      result = 0;
+      
    }
    
    return result;
@@ -102,30 +100,30 @@ void ossimMultiResLevelHistogram::setBinCount(double binNumber, double count)
 {
    if(theHistogramList.size() > 0)
    {
-      for(long index=0; index < (long) theHistogramList.size(); ++ index)
+      for(ossim_uint32 idx=0; idx < (ossim_uint32) theHistogramList.size(); ++ idx)
       {
-         if(theHistogramList[index])
+         if(theHistogramList[idx].valid())
          {
-            theHistogramList[index]->setBinCount(binNumber, count);
+            theHistogramList[idx]->setBinCount(binNumber, count);
          }
       }
    }   
 }
 
-ossimMultiResLevelHistogram* ossimMultiResLevelHistogram::createAccumulationGreaterThanEqual()const
+ossimRefPtr<ossimMultiResLevelHistogram> ossimMultiResLevelHistogram::createAccumulationGreaterThanEqual()const
 {
-   ossimMultiResLevelHistogram* result = NULL;
+   ossimRefPtr<ossimMultiResLevelHistogram> result = NULL;
 
    if(theHistogramList.size() > 0)
    {
       result = new ossimMultiResLevelHistogram(theHistogramList.size());
 
-      for(long index=0; index < (long) theHistogramList.size(); ++ index)
+      for(ossim_uint32 idx=0; idx < (ossim_uint32) theHistogramList.size(); ++ idx)
       {
-         if(theHistogramList[index])
+         if(theHistogramList[idx].valid())
          {
-            ossimMultiBandHistogram* multiBandAccumulator = theHistogramList[index]->createAccumulationGreaterThanEqual();
-            result->theHistogramList[index]=multiBandAccumulator;
+            ossimRefPtr<ossimMultiBandHistogram> multiBandAccumulator = theHistogramList[idx]->createAccumulationGreaterThanEqual();
+            result->theHistogramList[idx]=multiBandAccumulator;
          }
          else
          {
@@ -133,14 +131,10 @@ ossimMultiResLevelHistogram* ossimMultiResLevelHistogram::createAccumulationGrea
             // turn off a band.  A null accumulation will
             // indicate no histogram data.
             //
-            result->theHistogramList[index] = NULL;
+            result->theHistogramList[idx] = 0;
          }
       }
-      
-      if(result->theHistogramList.size() < 1)
-      {
-         delete result;
-      }
+      result = 0;
    }
    
    return result;
@@ -151,21 +145,17 @@ void ossimMultiResLevelHistogram::addHistogram(ossimMultiBandHistogram* histo)
    theHistogramList.push_back(histo);
 }
 
-ossimMultiBandHistogram* ossimMultiResLevelHistogram::addHistogram()
+ossimRefPtr<ossimMultiBandHistogram> ossimMultiResLevelHistogram::addHistogram()
 {
-   ossimMultiBandHistogram* result = new ossimMultiBandHistogram;
+   ossimRefPtr<ossimMultiBandHistogram> result = new ossimMultiBandHistogram;
    theHistogramList.push_back(result);
    return result;
 }
 
-bool ossimMultiResLevelHistogram::setHistogram(ossimMultiBandHistogram* histo, long resLevel)
+bool ossimMultiResLevelHistogram::setHistogram(ossimRefPtr<ossimMultiBandHistogram> histo, ossim_uint32 resLevel)
 {
    if( (resLevel >= 0) && (resLevel < getNumberOfResLevels()))
    {
-      if(theHistogramList[resLevel])
-      {
-         delete theHistogramList[resLevel];
-      }
       theHistogramList[resLevel] = histo;
       return true;
    }
@@ -174,38 +164,51 @@ bool ossimMultiResLevelHistogram::setHistogram(ossimMultiBandHistogram* histo, l
 
 void ossimMultiResLevelHistogram::deleteHistograms()
 {
-   for(long index = 0; index < (long)theHistogramList.size(); ++index)
+   for(ossim_uint32 idx = 0; idx < (ossim_uint32)theHistogramList.size(); ++idx)
    {
-      if(theHistogramList[index])
+      if(theHistogramList[idx].valid())
       {
-         delete theHistogramList[index];
-         theHistogramList[index] = NULL;
+         theHistogramList[idx] = NULL;
       }
    }
    
    theHistogramList.clear();
 }
 
-ossimHistogram* ossimMultiResLevelHistogram::getHistogram(long band,
-                                                          long resLevel)
+ossimRefPtr<ossimHistogram> ossimMultiResLevelHistogram::getHistogram(ossim_uint32 band,
+                                                          ossim_uint32 resLevel)
 {
-   ossimMultiBandHistogram* temp = getMultiBandHistogram(resLevel);
-   if(temp)
+   ossimRefPtr<ossimMultiBandHistogram> temp = getMultiBandHistogram(resLevel);
+
+   if(temp.valid())
    {
       return temp->getHistogram(band);
    }
-   return NULL;
+   
+   return (ossimHistogram*)0;
+}
+const ossimRefPtr<ossimHistogram> ossimMultiResLevelHistogram::getHistogram(ossim_uint32 band,
+                                                                            ossim_uint32 resLevel)const
+{
+   const ossimRefPtr<ossimMultiBandHistogram> temp = getMultiBandHistogram(resLevel);
+
+   if(temp.valid())
+   {
+      return temp->getHistogram(band);
+   }
+   
+   return (ossimHistogram*)0;
 }
 
-long ossimMultiResLevelHistogram::getNumberOfResLevels()const
+ossim_uint32 ossimMultiResLevelHistogram::getNumberOfResLevels()const
 {
-   return (long)theHistogramList.size();
+   return (ossim_uint32)theHistogramList.size();
 }
 
-ossim_uint32 ossimMultiResLevelHistogram::getNumberOfBands(long resLevel) const
+ossim_uint32 ossimMultiResLevelHistogram::getNumberOfBands(ossim_uint32 resLevel) const
 {
-   const ossimMultiBandHistogram* h = getMultiBandHistogram(resLevel);
-   if (h)
+   const ossimRefPtr<ossimMultiBandHistogram> h = getMultiBandHistogram(resLevel);
+   if (h.valid())
    {
       return h->getNumberOfBands();
    }
@@ -213,9 +216,9 @@ ossim_uint32 ossimMultiResLevelHistogram::getNumberOfBands(long resLevel) const
    return 0;
 }  
 
-ossimMultiBandHistogram* ossimMultiResLevelHistogram::getMultiBandHistogram(long resLevel) const
+ossimRefPtr<ossimMultiBandHistogram> ossimMultiResLevelHistogram::getMultiBandHistogram(ossim_uint32 resLevel) const
 {
-   if((resLevel >=0) &&(resLevel < (long)theHistogramList.size()))
+   if((resLevel >=0) &&(resLevel < (ossim_uint32)theHistogramList.size()))
    {
       return theHistogramList[resLevel];
    }
@@ -223,10 +226,21 @@ ossimMultiBandHistogram* ossimMultiResLevelHistogram::getMultiBandHistogram(long
    return NULL;
 }
 
-bool ossimMultiResLevelHistogram::importHistogram(istream& in)
+bool ossimMultiResLevelHistogram::importHistogram(std::istream& in)
 {
+   if (!in) // Check stream state.
+   {
+      return false;
+   }
+   
    ossimString buffer;
    getline(in, buffer);
+
+   if ( in.eof() ) // Zero byte files will hit here.
+   {
+      return false;
+   }
+
    // check to see if it is a proprietary histogram file
    // 
    if((buffer =="") || (buffer.c_str()[0] != 'F' ||
@@ -234,34 +248,40 @@ bool ossimMultiResLevelHistogram::importHistogram(istream& in)
    {
       in.seekg(0, ios::beg);
       ossimKeywordlist kwl;
-      kwl.parseStream(in);
-      return loadState(kwl);
-
+      if (kwl.parseStream(in) == true)
+      {
+         return loadState(kwl);
+      }
+      else
+      {
+         return false;
+      }
    }
+   
    ossimProprietaryHeaderInformation header;
    in.seekg(0, ios::beg);
    deleteHistograms();
    if(header.parseStream(in))
    {
-      long numberOfResLevels = header.getNumberOfResLevels();
+      ossim_uint32 numberOfResLevels = header.getNumberOfResLevels();
       
       if(numberOfResLevels)
       {
          theHistogramList.resize(numberOfResLevels);
 
-         for(long counter = 0; counter < (long)theHistogramList.size(); ++counter)
+         for(ossim_uint32 counter = 0; counter < (ossim_uint32)theHistogramList.size(); ++counter)
          {
             theHistogramList[counter] = NULL;
          }
          ossimString reslevelBuffer;
          ossimString buffer;
          
-         for(long index = 0; index < numberOfResLevels; ++index)
+         for(ossim_uint32 idx = 0; idx < numberOfResLevels; ++idx)
          {
             getline(in, buffer);
             if(buffer.find("RR Level") != string::npos)
             {
-               unsigned long offset = buffer.find(":");
+               std::string::size_type offset = buffer.find(":");
                if(offset != string::npos)
                {
                   reslevelBuffer = buffer.substr(offset+1);
@@ -277,22 +297,19 @@ bool ossimMultiResLevelHistogram::importHistogram(istream& in)
                deleteHistograms();
                return false;
             }
-            long resLevelIndex = reslevelBuffer.toLong();
+            ossim_uint32 resLevelIdx = reslevelBuffer.toUInt32();
 
-            if(resLevelIndex < (long)theHistogramList.size())
+            if(resLevelIdx < (ossim_uint32)theHistogramList.size())
             {
-               if(!theHistogramList[resLevelIndex])
+               if(!theHistogramList[resLevelIdx])
                {
-                  ossimMultiBandHistogram* histogram = new ossimMultiBandHistogram;
+                  ossimRefPtr<ossimMultiBandHistogram> histogram = new ossimMultiBandHistogram;
                   if(histogram->importHistogram(in))
                   {
-                     theHistogramList[resLevelIndex] = histogram;
+                     theHistogramList[resLevelIdx] = histogram;
                   }
                   else
                   {
-                     delete histogram;
-                     histogram = NULL;
-                     
                      deleteHistograms();
                      return false;
                   }
@@ -318,29 +335,27 @@ bool ossimMultiResLevelHistogram::importHistogram(istream& in)
 
 bool ossimMultiResLevelHistogram::importHistogram(const ossimFilename& file)
 {
-   if(file.exists())
+   if( file.fileSize() > 0 )
    {
       theHistogramFile = file;
       
       ifstream input(file.c_str());
-
       return importHistogram(input);
    }
-
    return false;
 }
 
-bool ossimMultiResLevelHistogram::ossimProprietaryHeaderInformation::parseStream(istream& in)
+bool ossimMultiResLevelHistogram::ossimProprietaryHeaderInformation::parseStream(std::istream& in)
 {
    ossimString inputLine;
 
    getline(in, inputLine);  
    if(inputLine.find("File Type") != string::npos)
    {
-      unsigned long index = inputLine.find(":");
-      if(index != string::npos)
+      std::string::size_type idx = inputLine.find(":");
+      if(idx != string::npos)
       {
-         theFileType = inputLine.substr(index+1);
+         theFileType = inputLine.substr(idx+1);
          theFileType = theFileType.trim();
       }
       else
@@ -357,10 +372,10 @@ bool ossimMultiResLevelHistogram::ossimProprietaryHeaderInformation::parseStream
    getline(in, inputLine);  
    if(inputLine.find("Version") != string::npos)
    {
-      unsigned long index = inputLine.find(":");
-      if(index != string::npos)
+      std::string::size_type idx = inputLine.find(":");
+      if(idx != string::npos)
       {
-         theVersion = inputLine.substr(index+1);
+         theVersion = inputLine.substr(idx+1);
          theVersion = theVersion.trim();
       }
       else
@@ -376,10 +391,10 @@ bool ossimMultiResLevelHistogram::ossimProprietaryHeaderInformation::parseStream
    getline(in, inputLine);  
    if(inputLine.find("Creator ID") != string::npos)
    {
-      unsigned long index = inputLine.find(":");
-      if(index != string::npos)
+      std::string::size_type idx = inputLine.find(":");
+      if(idx != string::npos)
       {
-         theCreatorId = inputLine.substr(index+1);
+         theCreatorId = inputLine.substr(idx+1);
          theCreatorId = theCreatorId.trim();
       }
       else
@@ -395,10 +410,10 @@ bool ossimMultiResLevelHistogram::ossimProprietaryHeaderInformation::parseStream
    getline(in, inputLine);  
    if(inputLine.find("RR Levels") != string::npos)
    {
-      unsigned long index = inputLine.find(":");
-      if(index != string::npos)
+      std::string::size_type idx = inputLine.find(":");
+      if(idx != string::npos)
       {
-         theNumberOfResLevels = inputLine.substr(index+1);
+         theNumberOfResLevels = inputLine.substr(idx+1);
          theNumberOfResLevels = theNumberOfResLevels.trim();
       }
       else
@@ -430,13 +445,13 @@ bool ossimMultiResLevelHistogram::saveState(ossimKeywordlist& kwl,
               static_cast<ossim_uint32>(theHistogramList.size()),
               true);
 
-      for(ossim_uint32 index = 0; index < theHistogramList.size(); ++index)
+      for(ossim_uint32 idx = 0; idx < theHistogramList.size(); ++idx)
       {
          ossimString rr_level = ossimString(prefix) + "rr_level";
-         rr_level += ossimString::toString(index)   + ".";
-         if(theHistogramList[index])
+         rr_level += ossimString::toString(idx)   + ".";
+         if(theHistogramList[idx].valid())
          {
-            result = theHistogramList[index]->saveState(kwl, rr_level.c_str());
+            result = theHistogramList[idx]->saveState(kwl, rr_level.c_str());
             
             if(!result)
             {
@@ -462,13 +477,13 @@ bool ossimMultiResLevelHistogram::loadState(const ossimKeywordlist& kwl,
       if(numberOfResLevels)
       {
          ossimString newPrefix;
-         for(ossim_uint32 index = 0; index < numberOfResLevels; ++index)
+         for(ossim_uint32 idx = 0; idx < numberOfResLevels; ++idx)
          {
-            ossimMultiBandHistogram* histo = new ossimMultiBandHistogram;
+            ossimRefPtr<ossimMultiBandHistogram> histo = new ossimMultiBandHistogram;
 
             newPrefix = prefix;
             newPrefix += "rr_level";
-            newPrefix += ossimString::toString(index);
+            newPrefix += ossimString::toString(idx);
             newPrefix += ".";
             
             histo->loadState(kwl, newPrefix.c_str());

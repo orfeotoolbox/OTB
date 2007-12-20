@@ -9,7 +9,7 @@
 // Contains declaration of class ossimXmlNode.
 // 
 //*****************************************************************************
-// $Id: ossimXmlNode.h 10421 2007-02-05 04:19:37Z gpotts $
+// $Id: ossimXmlNode.h 11668 2007-09-04 17:09:44Z gpotts $
 #ifndef ossimXmlNode_HEADER
 #define ossimXmlNode_HEADER
 
@@ -63,8 +63,9 @@ public:
    ossimRefPtr<ossimXmlNode> addChildNode(const ossimString& tagName,
                                           const ossimString& text="");
    void setText(const ossimString& text);
-   ossimString                      getText()       const;
-
+   const ossimString&                      getText()       const;
+   bool cdataFlag()const;
+   void setCDataFlag(bool value);
    OSSIMDLLEXPORT friend ostream& operator << (ostream& os, const ossimXmlNode* xml_node);
    OSSIMDLLEXPORT friend ostream& operator << (ostream& os, const ossimXmlNode& xml_node);
 
@@ -77,18 +78,22 @@ public:
   
 protected:
    ~ossimXmlNode();
+   bool readTag(std::istream& in,
+                ossimString& tag);
+   bool readTextContent(std::istream& in);
+   bool readEndTag(std::istream& in,
+                   ossimString& endTag);
+
+   void skipCommentTag(std::istream& in);
+   bool readCDataContent(std::istream& in);
    ossimString                 theTag;
    ossimXmlNode*         theParentNode;
    vector<ossimRefPtr<ossimXmlNode> >      theChildNodes;
    vector<ossimRefPtr<ossimXmlAttribute> >  theAttributes;
    ossimString                 theText;
+   bool                        theCDataFlag;
+/*    ossimString                 theCData; */
 
-   bool readTag(std::istream& in,
-                ossimString& tag);
-   bool readTextContent(std::istream& in,
-                        ossimString& text);
-   bool readEndTag(std::istream& in,
-                   ossimString& endTag);
 TYPE_DATA
 };
 

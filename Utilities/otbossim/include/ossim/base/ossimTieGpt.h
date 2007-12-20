@@ -67,18 +67,18 @@ public:
       {
        ossimGpt::makeNan();
        tie.makeNan();
-       score=OSSIM_DBL_NAN;
+       score=ossim::nan();
       }
    
    bool hasNans()const
-      {
-         return (ossimGpt::hasNans() || tie.hasNans() || (score==OSSIM_DBL_NAN));
-      }
-
+   {
+      return (ossimGpt::hasNans() || tie.hasNans() || (ossim::isnan(score)));
+   }
+   
    bool isNan()const
-      {
-         return (ossimGpt::isNan() && tie.isNan() && (score==OSSIM_DBL_NAN));
-      }
+   {
+      return (ossimGpt::isNan() && tie.isNan() && (ossim::isnan(score)));
+   }
    /**
     * text serialization
     */

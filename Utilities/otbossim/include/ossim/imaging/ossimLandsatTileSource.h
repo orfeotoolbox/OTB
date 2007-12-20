@@ -1,9 +1,6 @@
 //*******************************************************************
-// Copyright (C) 2000 ImageLinks Inc.
 //
-// License:  LGPL
-// 
-// See LICENSE.txt file in the top level directory for more details.
+// License:  See top level LICENSE.txt file.
 //
 // Author:  Garrett Potts
 //
@@ -14,7 +11,7 @@
 // TileSource.
 //
 //*******************************************************************
-//  $Id: ossimLandsatTileSource.h 9094 2006-06-13 19:12:40Z dburken $
+//  $Id: ossimLandsatTileSource.h 10751 2007-04-23 16:49:08Z dburken $
 
 #ifndef ossimLandsatTileSource_HEADER
 #define ossimLandsatTileSource_HEADER
@@ -70,6 +67,19 @@ public:
 
    virtual bool loadState(const ossimKeywordlist& kwl,
                           const char* prefix = NULL);
+
+   /**
+    * @brief Gets a property for matching name.
+    * @param name The name of the property to get.
+    * @return Returns property matching "name".
+    */
+   virtual ossimRefPtr<ossimProperty> getProperty(const ossimString& name)const;
+   
+   /**
+    * @brief Gets a list of property names available.
+    * @param propertyNames The list to push back names to.
+    */
+   virtual void getPropertyNames(std::vector<ossimString>& propertyNames)const;
    
 private:
 

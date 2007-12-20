@@ -5,7 +5,7 @@
 
     Licence: wxWidgets Licence
 
-    RCS-ID: $Id: link.cpp 9094 2006-06-13 19:12:40Z dburken $
+    RCS-ID: $Id: link.cpp 11347 2007-07-23 13:01:59Z gpotts $
 */
 
 #ifdef __GNUG__
@@ -320,11 +320,6 @@ void KBoolLink::Mark()
 {
 	m_mark = true;
 }
-
-
-#ifndef ABS
-#define ABS(a) (((a)<0) ? -(a) : (a))
-#endif
 
 
 //

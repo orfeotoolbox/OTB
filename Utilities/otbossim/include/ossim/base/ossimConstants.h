@@ -1,16 +1,13 @@
 /********************************************************************
- * Copyright (C) 2000 ImageLinks Inc.
  *
- * License:  LGPL
- *
- * See LICENSE.txt file in the top level directory for more details.
+ * License:  See top level LICENSE.txt file.
  *
  * Author: Ken Melero
  * 
  * Description: Common file for global constants.
  *
  **************************************************************************
- * $Id: ossimConstants.h 10370 2007-01-25 18:35:43Z gpotts $
+ * $Id: ossimConstants.h 11959 2007-10-31 19:22:56Z gpotts $
  */
 #ifndef ossimConstants_HEADER
 #define ossimConstants_HEADER
@@ -26,7 +23,10 @@ extern "C" {
 #endif
 #include <ossim/ossimConfig.h>
 
-
+#ifdef NULL
+#undef NULL
+#define NULL 0
+#endif
 /**
  * WARNINGS SECTION:
  */
@@ -62,8 +62,8 @@ extern "C" {
 #  define OSSIMIMPORT
 #  define OSSIMDLLEXPORT
 #  define OSSIM_DLL
-#  define OSSIMDLLEXPORT_DATA
-#  define OSSIM_DLL_DATA
+#  define OSSIMDLLEXPORT_DATA(type) type
+#  define OSSIM_DLL_DATA(type) type
 #  define OSSIMDLLEXPORT_CTORFN
 #endif /* #if defined(_MSC_VER) */
 
@@ -357,8 +357,6 @@ enum ossimCoordSysOrientMode
    OSSIM_RIGHT_HANDED = 1
 };
 
-
-
 /*
  Definitions for unit type.
 */
@@ -458,6 +456,7 @@ enum ossimByteOrder
 #  define SQRT_TWO_PI_DIV2 ((ossim_float64)7.07106781186547524401E-1)
 #endif
 
+#define TIFFTAG_OSSIM_METADATA 50955
 #define OSSIM_DEFAULT_TILE_HEIGHT  ((ossim_int32)64)
 #define OSSIM_DEFAULT_TILE_WIDTH   ((ossim_int32)64)
 
@@ -470,50 +469,61 @@ enum ossimByteOrder
 #  define  US_METERS_PER_FT ((ossim_float64)0.3048006096)
 #endif
 
-#define OSSIM_DBL_NAN    ((ossim_float64)-1.0/DBL_EPSILON)
-#define OSSIM_FLT_NAN    ((ossim_float32)-1.0/FLT_EPSILON)
-#define OSSIM_LONG_NAN   ((ossim_sint32)0x80000000)
-#define OSSIM_INT_NAN    ((ossim_sint32)0x80000000)
-#define OSSIM_ULONG_NAN  ((ossim_uint32)0x0)
-#define OSSIM_UINT_NAN   ((ossim_uint32)0x0)
-#define OSSIM_SSHORT_NAN ((ossim_sint16)0x8000)
-#define OSSIM_USHORT_NAN ((ossim_uint16)0)
+//---
+// Integer nan kept for ossimIpt.
+// This should be the most negative int: -2147483648
+//---
+#define OSSIM_INT_NAN ((ossim_sint32)0x80000000)
 
+#define OSSIM_DEFAULT_NULL_PIX_UCHAR ((ossim_uint8)0)
 #define OSSIM_DEFAULT_MIN_PIX_UCHAR ((ossim_uint8)1)
 #define OSSIM_DEFAULT_MAX_PIX_UCHAR ((ossim_uint8)255)
+
+#define OSSIM_DEFAULT_NULL_PIX_UINT8 ((ossim_uint8)0)
 #define OSSIM_DEFAULT_MIN_PIX_UINT8 ((ossim_uint8)1)
 #define OSSIM_DEFAULT_MAX_PIX_UINT8 ((ossim_uint8)255)
+
+#define OSSIM_DEFAULT_NULL_PIX_SINT8 ((ossim_sint8)0x80)
 #define OSSIM_DEFAULT_MIN_PIX_SINT8 ((ossim_sint8)0x81)
 #define OSSIM_DEFAULT_MAX_PIX_SINT8 ((ossim_sint8)0x7F)
+
+#define OSSIM_DEFAULT_NULL_PIX_SINT16 ((ossim_sint16)0x8000)
 #define OSSIM_DEFAULT_MIN_PIX_SINT16 ((ossim_sint16)0x8001)
 #define OSSIM_DEFAULT_MAX_PIX_SINT16 ((ossim_sint16)0x7FFF)
+
+#define OSSIM_DEFAULT_NULL_PIX_UINT16 ((ossim_uint16)0)
 #define OSSIM_DEFAULT_MIN_PIX_UINT16 ((ossim_uint16)1)
 #define OSSIM_DEFAULT_MAX_PIX_UINT16 ((ossim_uint16)0xFFFF)
+
+#define OSSIM_DEFAULT_NULL_PIX_SINT32 ((ossim_sint32)0x80000000)
 #define OSSIM_DEFAULT_MIN_PIX_SINT32 ((ossim_sint32)0x80000001)
 #define OSSIM_DEFAULT_MAX_PIX_SINT32 ((ossim_sint32)0x7FFFFFFF)
+
+#define OSSIM_DEFAULT_NULL_PIX_UINT32 ((ossim_uint32)0)
 #define OSSIM_DEFAULT_MIN_PIX_UINT32 ((ossim_uint32)1)
 #define OSSIM_DEFAULT_MAX_PIX_UINT32 ((ossim_uint32)0xFFFFFFFF)
+
+#define OSSIM_DEFAULT_NULL_PIX_UINT11 ((ossim_uint16)0)
 #define OSSIM_DEFAULT_MIN_PIX_UINT11 ((ossim_uint16)1)
 #define OSSIM_DEFAULT_MAX_PIX_UINT11 ((ossim_uint16)0x07FF)
+
+#define OSSIM_DEFAULT_NULL_PIX_FLOAT    ((ossim_float32)-1.0/FLT_EPSILON)
 #define OSSIM_DEFAULT_MIN_PIX_FLOAT ((ossim_float32)((-1.0/FLT_EPSILON) + 1))
 #define OSSIM_DEFAULT_MAX_PIX_FLOAT  ((ossim_float32)((1.0/FLT_EPSILON)))
+
+#define OSSIM_DEFAULT_NULL_PIX_NORM_FLOAT ((ossim_float32)0)
 #define OSSIM_DEFAULT_MIN_PIX_NORM_FLOAT ((ossim_float32)((2*FLT_EPSILON)))
 #define OSSIM_DEFAULT_MAX_PIX_NORM_FLOAT ((ossim_float32)1.0)
+
+#define OSSIM_DEFAULT_NULL_PIX_DOUBLE ((ossim_float64)-1.0/DBL_EPSILON)
 #define OSSIM_DEFAULT_MIN_PIX_DOUBLE ((ossim_float64)((-1.0/DBL_EPSILON) + 1))
 #define OSSIM_DEFAULT_MAX_PIX_DOUBLE ((ossim_float64)((1.0/DBL_EPSILON)))
+
+#define OSSIM_DEFAULT_NULL_PIX_NORM_DOUBLE ((ossim_float64)0)
 #define OSSIM_DEFAULT_MIN_PIX_NORM_DOUBLE ((ossim_float64)((2*DBL_EPSILON)))
 #define OSSIM_DEFAULT_MAX_PIX_NORM_DOUBLE ((ossim_float64)(1.0))
 
-
-/*
- *OSSIM Numerical Limits
- */
-#ifndef _OSSIM_LIMITS_
-#define _OSSIM_LIMITS_
-#define OSSIM_INFINITY ((ossim_float64)((1.0 / DBL_EPSILON) - 1.0))
-#define OSSIM_NAN      ((ossim_float64)(-(1.0 / DBL_EPSILON)))
-#define OSSIM_EPSILON  ((ossim_float64)(DBL_EPSILON))
-#endif
+#define OSSIM_DEFAULT_MEAN_SEA_LEVEL ((ossim_float64)0.0)
 
 #ifdef __cplusplus
 }

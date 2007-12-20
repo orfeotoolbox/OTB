@@ -6,7 +6,7 @@
 // Author:  Garrett Potts
 //
 //*******************************************************************
-//  $Id: ossimBngProjection.cpp 9094 2006-06-13 19:12:40Z dburken $
+//  $Id: ossimBngProjection.cpp 11949 2007-10-31 14:33:29Z gpotts $
 #include <ossim/projection/ossimBngProjection.h>
 #include <ossim/projection/ossimTranmerc.h>
 #include <ossim/base/ossimDatumFactory.h>
@@ -48,7 +48,7 @@ RTTI_DEF1(ossimBngProjection, "ossimBngProjection", ossimMapProjection);
 
 ossimBngProjection::ossimBngProjection()
    :ossimMapProjection(*ossimEllipsoidFactory::instance()->create("AA"),
-                       ossimGpt(49.0, -2.0, OSSIM_DBL_NAN, ossimDatumFactory::instance()->create("OGB-M")))
+                       ossimGpt(49.0, -2.0, ossim::nan(), ossimDatumFactory::instance()->create("OGB-M")))
 {
    string_Broken = 0;
    theDatum = ossimDatumFactory::instance()->create("OGB-M");
@@ -74,7 +74,7 @@ ossimGpt ossimBngProjection::inverse(const ossimDpt &eastingNorthing)const
    Convert_BNG_To_Geodetic(s,
                            &lat,
                            &lon);
-   ossimGpt result(49, -2, OSSIM_DBL_NAN,theDatum);
+   ossimGpt result(49, -2, ossim::nan(),theDatum);
    result.latr(lat);
    result.lonr(lon);
 
@@ -118,14 +118,14 @@ void ossimBngProjection::update()
       //   if(code.upcase().contains("OGB"))
    //     {
 
-   theOrigin = ossimGpt(49.0, -2.0, OSSIM_DBL_NAN, theDatum);
+   theOrigin = ossimGpt(49.0, -2.0, ossim::nan(), theDatum);
    theFalseEastingNorthing.x = BNG_False_Easting;
    theFalseEastingNorthing.y = BNG_False_Northing;
 
        //     }
    //   else
 //      {
-//        theOrigin = ossimGpt(49.0, -2.0, OSSIM_DBL_NAN, ossimDatumFactory::instance()->create("OGB-7"));      
+//        theOrigin = ossimGpt(49.0, -2.0, ossim::nan(), ossimDatumFactory::instance()->create("OGB-7"));      
 //      }
    
    ossimMapProjection::update();
@@ -181,10 +181,10 @@ long ossimBngProjection::Find_Index (char letter,
  *    letter_Array        : Array being searched         
  *    index               : Index of letter in array        
  */
-  long i = 0;
-  long not_Found = 1;
-  long length = strlen(letter_Array);
-  long Error_Code = BNG_NO_ERROR;
+  ossim_uint32 i = 0;
+  ossim_uint32 not_Found = 1;
+  ossim_uint32 length = strlen(letter_Array);
+  ossim_uint32 Error_Code = BNG_NO_ERROR;
 
   while ((i < length) && (not_Found))
   {

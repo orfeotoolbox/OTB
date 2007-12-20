@@ -1,5 +1,4 @@
 //*******************************************************************
-// Copyright (C) 2000 ImageLinks Inc. 
 //
 // LICENSE: LGPL see top level LICENSE.txt for more details
 //
@@ -8,7 +7,7 @@
 // Description: Nitf support class
 // 
 //********************************************************************
-// $Id: ossimNitfImageHeader.h 9094 2006-06-13 19:12:40Z dburken $
+// $Id: ossimNitfImageHeader.h 11330 2007-07-19 18:34:15Z dburken $
 #ifndef ossimNitfImageHeader_HEADER
 #define ossimNitfImageHeader_HEADER
 
@@ -55,6 +54,7 @@ public:
    virtual bool isEncrypted()const=0;
 
    virtual ossimString getCompressionCode()const=0;
+   virtual ossimString getCompressionRateCode()const=0;
    virtual ossim_uint32 getDisplayLevel()const=0;
    virtual ossim_uint32 getAttachmentLevel()const=0;
    
@@ -66,6 +66,7 @@ public:
    virtual ossim_int32 getNumberOfPixelsPerBlockHoriz()const=0;
    virtual ossim_int32 getNumberOfPixelsPerBlockVert()const=0;
    virtual ossimString getImageId()const=0;
+   virtual ossimString getTitle()const=0;
    virtual ossim_int32 getActualBitsPerPixelPerBand()const=0;
    virtual ossim_int32 getBitsPerPixelPerBand()const=0;
    virtual ossimDrect  getImageRect()const=0;
@@ -84,6 +85,10 @@ public:
    virtual ossimString  getCoordinateSystem()const=0;
    virtual ossimString  getGeographicLocation()const=0;
    virtual ossimString  getPixelValueType()const=0;
+
+   /** @return IMAG field */
+   virtual ossimString  getImageMagnification()const=0;
+   
    virtual bool hasBlockMaskRecords()const=0;
    virtual bool hasPadPixelMaskRecords()const=0;
    virtual bool hasTransparentCode()const=0;
@@ -105,7 +110,17 @@ public:
 
    virtual ossim_uint32 getTotalTagLength()const;
    virtual void printTags(std::ostream& out)const;
-
+   
+   /**
+    * @brief Populates keyword list with metadata.
+    * expample:  country_code: US
+    * 
+    * @param kwl Keywordlist to populate with metadata.
+    *
+    * @param prefix Optional prefix to put in front of key, like: "image1.".
+    */
+   virtual void getMetadata(ossimKeywordlist& kwl,
+                            const char* prefix=0) const;
 protected:
 
    /**

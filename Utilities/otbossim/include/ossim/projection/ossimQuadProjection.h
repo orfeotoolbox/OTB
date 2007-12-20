@@ -5,7 +5,7 @@
 // Author: Garrett Potts
 // 
 //********************************************************************
-// $Id: ossimQuadProjection.h 9968 2006-11-29 14:01:53Z gpotts $
+// $Id: ossimQuadProjection.h 11805 2007-10-05 14:54:28Z dburken $
 #ifndef ossimQuadProjection_HEADER
 #define ossimQuadProjection_HEADER
 
@@ -54,6 +54,13 @@ class ossimQuadProjection : public ossimProjection
    
    virtual bool operator==(const ossimProjection& projection) const;
    virtual ossimDpt getMetersPerPixel() const;
+
+   /**
+    * @brief Implementation of pure virtual
+    * ossimProjection::isAffectedByElevation method.
+    * @return false.
+    */
+   virtual bool isAffectedByElevation() const { return false; }
 
  protected:
    ossimIrect theInputRect;

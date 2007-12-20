@@ -2,11 +2,11 @@
 //
 // License:  See top level LICENSE.txt file.
 // 
-// Author: Garrett Potts (gpotts@imagelinks.com)
+// Author: Garrett Potts
 // Description: Rpf support class
 // 
 //********************************************************************
-// $Id: ossimRpfHeader.h 9967 2006-11-29 02:01:23Z gpotts $
+// $Id: ossimRpfHeader.h 11095 2007-05-30 14:50:30Z dburken $
 #ifndef ossimRpfHeader_HEADER
 #define ossimRpfHeader_HEADER
 #include <iostream>
@@ -80,7 +80,7 @@ public:
 
    ossimString getDate()const;
 private:
-   ossim_uint8    theLittleBigEndianIndicator; // 1 byte bool
+   ossim_uint8  theLittleBigEndianIndicator; // 1 byte bool
    ossim_uint16 theHeaderSectionLength;     // 2 bytes uint
    char         theFileName[13];            // 12 byte ascii
    unsigned char theNewRepUpIndicator;       // 1 byte unsigned int

@@ -7,34 +7,36 @@
 // Description: 
 //
 //*******************************************************************
-//  $Id: ossimMultiResLevelHistogram.h 9968 2006-11-29 14:01:53Z gpotts $
+//  $Id: ossimMultiResLevelHistogram.h 11721 2007-09-13 13:19:34Z gpotts $
 #ifndef ossimMultiResLevelHistogram_HEADER
 #define ossimMultiResLevelHistogram_HEADER
 #include <vector>
-using namespace std;
 #include <ossim/base/ossimFilename.h>
 #include <ossim/base/ossimKeywordlist.h>
+#include <ossim/base/ossimReferenced.h>
+#include <ossim/base/ossimRefPtr.h>
+#include <ossim/base/ossimHistogram.h>
+#include <ossim/base/ossimMultiBandHistogram.h>
 
-class OSSIMDLLEXPORT ossimMultiBandHistogram;
-class OSSIMDLLEXPORT ossimHistogram;
-
-class OSSIMDLLEXPORT ossimMultiResLevelHistogram
+class OSSIMDLLEXPORT ossimMultiResLevelHistogram : public ossimReferenced
 {
 public:
    ossimMultiResLevelHistogram();
-   ossimMultiResLevelHistogram(long numberOfResLevels);
+   ossimMultiResLevelHistogram(ossim_uint32 numberOfResLevels);
    ossimMultiResLevelHistogram(const ossimMultiResLevelHistogram& rhs);
    
    virtual ~ossimMultiResLevelHistogram();
 
-   ossimHistogram* getHistogram(long band,
-                                long resLevel=0);
-   long getNumberOfResLevels()const;
-   ossim_uint32 getNumberOfBands(long resLevel=0) const;
-   void create(long numberOfResLevels);
-   ossimMultiBandHistogram* getMultiBandHistogram(long resLevel) const;
-   ossimMultiResLevelHistogram* createAccumulationLessThanEqual()const;
-   ossimMultiResLevelHistogram* createAccumulationGreaterThanEqual()const;
+   ossimRefPtr<ossimHistogram> getHistogram(ossim_uint32 band,
+                                            ossim_uint32 resLevel=0);
+   const ossimRefPtr<ossimHistogram> getHistogram(ossim_uint32 band,
+                                                  ossim_uint32 resLevel=0)const;
+   ossim_uint32 getNumberOfResLevels()const;
+   ossim_uint32 getNumberOfBands(ossim_uint32 resLevel=0) const;
+   void create(ossim_uint32 numberOfResLevels);
+   ossimRefPtr<ossimMultiBandHistogram> getMultiBandHistogram(ossim_uint32 resLevel) const;
+   ossimRefPtr<ossimMultiResLevelHistogram> createAccumulationLessThanEqual()const;
+   ossimRefPtr<ossimMultiResLevelHistogram> createAccumulationGreaterThanEqual()const;
 
    void setBinCount(double binNumber, double count);
    /*!
@@ -46,7 +48,7 @@ public:
     * This will create and append a histogram to the
     * list and return a pointer to the new histogram.
     */
-   virtual ossimMultiBandHistogram* addHistogram();
+   virtual ossimRefPtr<ossimMultiBandHistogram> addHistogram();
 
    /*!
     * Will set the histogram to the passed in res level.
@@ -55,11 +57,11 @@ public:
     * the resLevel is out of range it will return false meaning
     * it was unable to assign the pointer.
     */
-   virtual bool setHistogram(ossimMultiBandHistogram* histo, long resLevel);
+   virtual bool setHistogram(ossimRefPtr<ossimMultiBandHistogram> histo, ossim_uint32 resLevel);
 
    virtual ossimFilename getHistogramFile() const;
    virtual bool importHistogram(const ossimFilename& inputFile);
-   virtual bool importHistogram(istream& in);
+   virtual bool importHistogram(std::istream& in);
 
    virtual bool loadState(const ossimKeywordlist& kwl,
                           const char* prefix=0);
@@ -72,11 +74,11 @@ protected:
    public:
       ossimProprietaryHeaderInformation(){clear();}
 
-      bool parseStream(istream& in);
+      bool parseStream(std::istream& in);
 
-      long getNumberOfResLevels()
+      ossim_uint32 getNumberOfResLevels()
          {
-            return theNumberOfResLevels.toLong();
+            return theNumberOfResLevels.toUInt32();
          }
       void clear()
          {
@@ -91,11 +93,11 @@ protected:
       ossimString theNumberOfResLevels;
    };
 
-   vector<ossimMultiBandHistogram*> theHistogramList;
+   std::vector<ossimRefPtr<ossimMultiBandHistogram> > theHistogramList;
    ossimFilename                    theHistogramFile;
    
    void deleteHistograms();
-   bool parseProprietaryHistogram(istream& in);
+   bool parseProprietaryHistogram(std::istream& in);
 };
 
 #endif

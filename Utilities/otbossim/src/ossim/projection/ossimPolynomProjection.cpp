@@ -90,14 +90,16 @@ ossimPolynomProjection::worldToLineSample(const ossimGpt& ground_point,
    vector<double> gpt(3);
    gpt[0] = (ground_point.lon - theLonOffset) * theLonScale;
    gpt[1] = (ground_point.lat - theLatOffset) * theLatScale;
-
-   if(ground_point.hgt == OSSIM_DBL_NAN)
+   
+   if(ossim::isnan(ground_point.hgt)||ossim::almostEqual(theHgtOffset, 0.0))
    {
       gpt[2] = 0.0;
-   } else {
+   }
+   else
+   {
       gpt[2] = (ground_point.hgt - theHgtOffset) * theHgtScale;
    }
-
+   
    imgPt.x = thePolySamp.eval(gpt);
    imgPt.y = thePolyLine.eval(gpt);
 
@@ -156,10 +158,12 @@ void ossimPolynomProjection::lineSampleHeightToWorld(const ossimDpt& image_point
    vector<double> ngpt(3);
    ngpt[0] = 0.0; //normalized longitude (center)
    ngpt[1] = 0.0; //normalized latitude
-   if(ellHeight == OSSIM_DBL_NAN)
+   if(ossim::isnan(ellHeight)||ossim::almostEqual(theHgtOffset, 0.0))
    {
       ngpt[2] = 0;  // norm height
-   } else {
+   }
+   else
+   {
       ngpt[2] = (ellHeight - theHgtOffset) * theHgtScale;  // norm height
    }
    
@@ -573,23 +577,36 @@ ossimPolynomProjection::optimizeFit(const ossimTieGptSet& tieSet, double* target
    // TBD : check anti-meridian crossings + modulo 360!
    ossimGpt gmin,gmax;
    tieSet.getGroundBoundaries(gmin,gmax);
-
+   if(gmax.isLatNan() || gmax.isLonNan()|| gmin.isLatNan()||gmin.isLonNan())
+   {
+      return -1.0;
+   }
    //get offsets
    theLonOffset = (gmax.lon+gmin.lon)/2.0;
    theLatOffset = (gmax.lat+gmin.lat)/2.0;
-   if (gmax.hgt <= OSSIM_DEFAULT_MIN_PIX_DOUBLE)
+   if(ossim::isnan(gmax.hgt)||ossim::isnan(gmin.hgt))
+   {
+      theHgtOffset = 0.0;
+   }
+   else if (gmax.hgt <= OSSIM_DEFAULT_MIN_PIX_DOUBLE)
    {
       //no height value found
       theHgtOffset = 0.0;
-   } else {
+   }
+   else
+   {
       theHgtOffset = (gmax.hgt+gmin.hgt)/2.0;
    }
 
    //get scales
    ossim_float64 lonScale  = (gmax.lon-gmin.lon)/2.0;
    ossim_float64 latScale  = (gmax.lat-gmin.lat)/2.0;
-   ossim_float64 hgtScale  = (gmax.hgt-gmin.hgt)/2.0;
+   ossim_float64 hgtScale  = 1.0;
 
+   if(!ossim::isnan(gmax.hgt)&&!ossim::isnan(gmin.hgt))
+   {
+      hgtScale = (gmax.hgt-gmin.hgt)/2.0;
+   }
    //test ranges and correct
    if ((lonScale < DBL_EPSILON) && (latScale < DBL_EPSILON))
    {
@@ -597,14 +614,19 @@ ossimPolynomProjection::optimizeFit(const ossimTieGptSet& tieSet, double* target
       return -1.0;
    }
    if (lonScale < DBL_EPSILON) lonScale = theLatScale;  
-   if (latScale < DBL_EPSILON) latScale = theLonScale;  
-   if (hgtScale < DBL_EPSILON) hgtScale = 500; //TBC : arbitrary value in meters
+   if (latScale < DBL_EPSILON) latScale = theLonScale;
+   
+   if (hgtScale < DBL_EPSILON) hgtScale = 1.0; //TBC : arbitrary value in meters
 
    //store inverted extents
    theLonScale = 1.0/lonScale;
    theLatScale = 1.0/latScale;
    theHgtScale = 1.0/hgtScale;
 
+//    std::cout << "theLonScale = " << theLonScale << std::endl
+//              << "theLatScale = " << theLatScale << std::endl
+//              << "theHgtScale = " << theHgtScale << std::endl
+//              << "theHgtOffset = " << theHgtOffset << std::endl;
    //normalize ground points and store in ossimPolynom input space
    // + store line and samp separately
    vector< ossimPolynom< ossim_float64 , 3 >::VAR_TUPLE > inputs(tieSet.size());
@@ -621,10 +643,12 @@ ossimPolynomProjection::optimizeFit(const ossimTieGptSet& tieSet, double* target
       //setup input
       pit->push_back(((*tit)->lon - theLonOffset)*theLonScale);
       pit->push_back(((*tit)->lat - theLatOffset)*theLatScale);
-      if ((*tit)->hgt == OSSIM_DBL_NAN)
+      if (ossim::isnan((*tit)->hgt))
       {
          pit->push_back(theHgtOffset);
-      } else {
+      }
+      else
+      {
          pit->push_back(((*tit)->hgt - theHgtOffset)*theHgtScale);
       }
 
@@ -652,6 +676,8 @@ ossimPolynomProjection::optimizeFit(const ossimTieGptSet& tieSet, double* target
    //init
    buildDerivatives();
 
+//    std::cout << "line_rms = " << line_rms << std::endl
+//              << "samp_rms = " << samp_rms << std::endl; 
    return samp_rms*samp_rms + line_rms*line_rms; //variance
 }
 

@@ -13,7 +13,7 @@
 // Container class for four double points representing a rectangle.
 // 
 //*******************************************************************
-//  $Id: ossimDrect.h 9278 2006-07-17 03:49:41Z gpotts $
+//  $Id: ossimDrect.h 11346 2007-07-23 12:59:48Z gpotts $
 
 #ifndef ossimDrect_HEADER
 #define ossimDrect_HEADER
@@ -307,8 +307,8 @@ public:
 
    ossimDrect operator -(const ossimDpt& shift)const
       {
-         ossimIpt ul(irint(theUlCorner.x-shift.x),
-                     irint(theUlCorner.y-shift.y));
+         ossimIpt ul(ossim::round<int>(theUlCorner.x-shift.x),
+                     ossim::round<int>(theUlCorner.y-shift.y));
                      
          if(theOrientMode == OSSIM_LEFT_HANDED)
          {

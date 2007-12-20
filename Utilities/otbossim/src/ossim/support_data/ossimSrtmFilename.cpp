@@ -10,8 +10,8 @@ ossimGpt ossimSrtmFilename::ul()const
 {
    ossimGpt result;
    
-   if((theSouthwestLongitude==OSSIM_DBL_NAN)||
-      (theSouthwestLatitude==OSSIM_DBL_NAN))
+   if((ossim::isnan(theSouthwestLongitude)) ||
+      (ossim::isnan(theSouthwestLatitude)))
    {
       result.makeNan();
    }
@@ -28,8 +28,8 @@ ossimGpt ossimSrtmFilename::ur()const
 {
    ossimGpt result;
    
-   if((theSouthwestLongitude==OSSIM_DBL_NAN)||
-      (theSouthwestLatitude==OSSIM_DBL_NAN))
+   if((ossim::isnan(theSouthwestLongitude)) ||
+      (ossim::isnan(theSouthwestLatitude)) )
    {
       result.makeNan();
    }
@@ -46,8 +46,8 @@ ossimGpt ossimSrtmFilename::lr()const
 {
    ossimGpt result;
    
-   if((theSouthwestLongitude==OSSIM_DBL_NAN)||
-      (theSouthwestLatitude==OSSIM_DBL_NAN))
+   if((ossim::isnan(theSouthwestLongitude)) ||
+      (ossim::isnan(theSouthwestLatitude)) )
    {
       result.makeNan();
    }
@@ -64,8 +64,8 @@ ossimGpt ossimSrtmFilename::ll()const
 {
    ossimGpt result;
    
-   if((theSouthwestLongitude==OSSIM_DBL_NAN)||
-      (theSouthwestLatitude==OSSIM_DBL_NAN))
+   if((ossim::isnan(theSouthwestLongitude)) ||
+      (ossim::isnan(theSouthwestLatitude)) )
    {
       result.makeNan();
    }
@@ -82,8 +82,8 @@ ossimGpt ossimSrtmFilename::ll()const
 bool ossimSrtmFilename::setFilename(const ossimFilename& srtmFilename)
 {
    theFilename = srtmFilename;
-   theSouthwestLongitude = OSSIM_DBL_NAN;
-   theSouthwestLatitude  = OSSIM_DBL_NAN;
+   theSouthwestLongitude = ossim::nan();
+   theSouthwestLatitude  = ossim::nan();
 
    if(srtmFilename == "") return false;
 
@@ -117,13 +117,14 @@ bool ossimSrtmFilename::setFilename(const ossimFilename& srtmFilename)
    {
       return false;
    }
-   ossimString s;
-
+//    ossimString s;
    if(latLonOrderFlag)
    {
-      s.push_back(f[1]);
-      s.push_back(f[2]);
-      theSouthwestLatitude = s.toDouble();
+      
+//       s.push_back(f[1]);
+//       s.push_back(f[2]);
+      theSouthwestLatitude = ossimString(f.begin()+1,
+                                         f.begin()+3).toDouble();//s.toDouble();
       // Get the latitude.
       if (f[0] == 'S')
       {
@@ -134,11 +135,12 @@ bool ossimSrtmFilename::setFilename(const ossimFilename& srtmFilename)
          return false; // Must be either 's' or 'n'.
       }
       // Get the longitude.
-      s.clear();
-      s.push_back(f[4]);
-      s.push_back(f[5]);
-      s.push_back(f[6]);
-      theSouthwestLongitude = s.toDouble();
+//       s.clear();
+//       s.push_back(f[4]);
+//       s.push_back(f[5]);
+//       s.push_back(f[6]);
+      theSouthwestLongitude = ossimString(f.begin()+4,
+                                          f.begin()+7).toDouble();//s.toDouble();
       if (f[3] == 'W')
       {
       theSouthwestLongitude *= -1;
@@ -151,11 +153,12 @@ bool ossimSrtmFilename::setFilename(const ossimFilename& srtmFilename)
    else
    {
       // Get the longitude.
-      s.clear();
-      s.push_back(f[1]);
-      s.push_back(f[2]);
-      s.push_back(f[3]);
-      theSouthwestLongitude = s.toDouble();
+//       s.clear();
+//       s.push_back(f[1]);
+//       s.push_back(f[2]);
+//       s.push_back(f[3]);
+      theSouthwestLongitude =  ossimString(f.begin()+1,
+                                           f.begin()+4).toDouble();//s.toDouble();
       if (f[0] == 'W')
       {
       theSouthwestLongitude *= -1;
@@ -164,11 +167,12 @@ bool ossimSrtmFilename::setFilename(const ossimFilename& srtmFilename)
       {
          return false; // Must be either 'e' or 'w'.
       }
-      s.clear();
+//       s.clear();
       
-      s.push_back(f[5]);
-      s.push_back(f[6]);
-      theSouthwestLatitude = s.toDouble();
+//       s.push_back(f[5]);
+//       s.push_back(f[6]);
+      theSouthwestLatitude = ossimString(f.begin()+5,
+                                         f.begin()+7).toDouble();//s.toDouble();
       // Get the latitude.
       if (f[4] == 'S')
       {
@@ -179,6 +183,67 @@ bool ossimSrtmFilename::setFilename(const ossimFilename& srtmFilename)
          return false; // Must be either 's' or 'n'.
       }
    }
+
+//    if(latLonOrderFlag)
+//    {
+//       s.push_back(f[1]);
+//       s.push_back(f[2]);
+//       theSouthwestLatitude = s.toDouble();
+//       // Get the latitude.
+//       if (f[0] == 'S')
+//       {
+//          theSouthwestLatitude *= -1;
+//       }
+//       else if (f[0] != 'N')
+//       {
+//          return false; // Must be either 's' or 'n'.
+//       }
+//       // Get the longitude.
+//       s.clear();
+//       s.push_back(f[4]);
+//       s.push_back(f[5]);
+//       s.push_back(f[6]);
+//       theSouthwestLongitude = s.toDouble();
+//       if (f[3] == 'W')
+//       {
+//       theSouthwestLongitude *= -1;
+//       }
+//       else if (f[3] != 'E')
+//       {
+//          return false; // Must be either 'e' or 'w'.
+//       }
+//    }
+//    else
+//    {
+//       // Get the longitude.
+//       s.clear();
+//       s.push_back(f[1]);
+//       s.push_back(f[2]);
+//       s.push_back(f[3]);
+//       theSouthwestLongitude = s.toDouble();
+//       if (f[0] == 'W')
+//       {
+//       theSouthwestLongitude *= -1;
+//       }
+//       else if (f[0] != 'E')
+//       {
+//          return false; // Must be either 'e' or 'w'.
+//       }
+//       s.clear();
+      
+//       s.push_back(f[5]);
+//       s.push_back(f[6]);
+//       theSouthwestLatitude = s.toDouble();
+//       // Get the latitude.
+//       if (f[4] == 'S')
+//       {
+//          theSouthwestLatitude *= -1;
+//       }
+//       else if (f[4] != 'N')
+//       {
+//          return false; // Must be either 's' or 'n'.
+//       }
+//    }
    
    return true;
 }

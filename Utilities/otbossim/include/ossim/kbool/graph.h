@@ -8,7 +8,7 @@
     RCS-ID: $Id: graph.h 9094 2006-06-13 19:12:40Z dburken $
 */
 
-/* @@(#) $Source$ $Revision: 9094 $ $Date: 2006-06-13 21:12:40 +0200 (mar, 13 jun 2006) $ */
+/* @@(#) $Source$ $Revision: 9094 $ $Date: 2006-06-13 21:12:40 +0200 (Tue, 13 Jun 2006) $ */
 
 /*
 Program	GRAPH.H

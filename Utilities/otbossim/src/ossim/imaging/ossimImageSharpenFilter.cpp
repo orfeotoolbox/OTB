@@ -8,7 +8,7 @@
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimImageSharpenFilter.cpp 9094 2006-06-13 19:12:40Z dburken $
+// $Id: ossimImageSharpenFilter.cpp 11347 2007-07-23 13:01:59Z gpotts $
 #include <ossim/imaging/ossimImageSharpenFilter.h>
 #include <ossim/base/ossimIrect.h>
 #include <ossim/imaging/ossimImageDataFactory.h>
@@ -197,8 +197,8 @@ template<class T> void ossimImageSharpenFilter::sharpenPartial(
    ossimIpt outputOrigin = outputData->getOrigin();
    ossimIpt inputOrigin  = inputData->getOrigin();
    
-   ossim_int32 startInputOffset = ossimAbs(outputOrigin.y - inputOrigin.y)*
-      inputW + ossimAbs(outputOrigin.x - inputOrigin.x);
+   ossim_int32 startInputOffset = std::abs(outputOrigin.y - inputOrigin.y)*
+      inputW + std::abs(outputOrigin.x - inputOrigin.x);
    ossim_int32 ulKernelStart    = -inputW - 1;
    ossim_int32 leftKernelStart  = -1;
    ossim_int32 llKernelStart    = inputW  - 1;
@@ -282,8 +282,8 @@ template<class T> void ossimImageSharpenFilter::sharpenFull(
    ossimIpt outputOrigin = outputData->getOrigin();
    ossimIpt inputOrigin  = inputData->getOrigin();
    
-   ossim_int32 startInputOffset = ossimAbs(outputOrigin.y - inputOrigin.y)*
-      inputW + ossimAbs(outputOrigin.x - inputOrigin.x);
+   ossim_int32 startInputOffset = std::abs(outputOrigin.y - inputOrigin.y)*
+      inputW + std::abs(outputOrigin.x - inputOrigin.x);
    ossim_int32 ulKernelStart    = -inputW - 1;
    ossim_int32 leftKernelStart  = -1;
    ossim_int32 llKernelStart    = inputW  - 1;

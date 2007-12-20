@@ -9,7 +9,7 @@
 //
 // MeanRadialLens distortion.
 //*******************************************************************
-//  $Id: ossimMeanRadialLensDistortion.cpp 9094 2006-06-13 19:12:40Z dburken $
+//  $Id: ossimMeanRadialLensDistortion.cpp 11024 2007-05-23 17:56:00Z gpotts $
 #include <ossim/projection/ossimMeanRadialLensDistortion.h>
 
 #include <ossim/base/ossimCommon.h>
@@ -21,8 +21,8 @@ RTTI_DEF1(ossimMeanRadialLensDistortion, "ossimMeanRadialLensDistortion", ossimL
 void ossimMeanRadialLensDistortion::solveCoefficients(const std::vector<double>& radialDistance,
                                                       const std::vector<double>& radialDistortion)
 {
-   NEWMAT::ColumnVector distanceVec(radialDistance.size());
-   NEWMAT::ColumnVector distortionVec(radialDistortion.size());
+   NEWMAT::ColumnVector distanceVec((int)radialDistance.size());
+   NEWMAT::ColumnVector distortionVec((int)radialDistortion.size());
    ossim_uint32 idx = 0;
 
    theCoefficients[0] = 0;

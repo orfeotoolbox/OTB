@@ -12,7 +12,7 @@
 //   system. 
 //
 //*****************************************************************************
-//  $Id: ossimDblGrid.cpp 9963 2006-11-28 21:11:01Z gpotts $
+//  $Id: ossimDblGrid.cpp 11428 2007-07-27 18:44:18Z gpotts $
 
 #include <ossim/base/ossimDblGrid.h>
 #include <limits.h>
@@ -30,7 +30,6 @@ using namespace std;
 static ossimTrace traceExec  ("ossimDblGrid:exec");
 static ossimTrace traceDebug ("ossimDblGrid:debug");
 
-const double ossimDblGrid::DEFAULT_NULL_VALUE =  OSSIM_DBL_NAN;
 static const ossimString MAGIC_NUMBER ("OSSIM_DBL_GRID");
 static const int   MAX_LENGTH_DESCR = 80;
 
@@ -44,9 +43,9 @@ ossimDblGrid::ossimDblGrid()
       theSize           (0, 0),
       theOrigin         (0.0, 0.0),
       theSpacing        (0.0, 0.0),
-      theMinValue       (OSSIM_INFINITY),
-      theMaxValue       (-OSSIM_INFINITY),
-      theNullValue      (DEFAULT_NULL_VALUE),
+      theMinValue       (OSSIM_DEFAULT_MIN_PIX_DOUBLE),
+      theMaxValue       (OSSIM_DEFAULT_MAX_PIX_DOUBLE),
+      theNullValue      (OSSIM_DEFAULT_NULL_PIX_DOUBLE),
       theMeanIsComputed (false)
 { }
 
@@ -166,8 +165,8 @@ void ossimDblGrid::initialize(const ossimIpt&  size,
    theSize           = size;
    theOrigin         = origin;
    theSpacing        = spacing;
-   theMinValue       = OSSIM_INFINITY;
-   theMaxValue       =  -OSSIM_INFINITY;
+   theMinValue       = OSSIM_DEFAULT_MAX_PIX_DOUBLE;
+   theMaxValue       =  OSSIM_DEFAULT_MIN_PIX_DOUBLE;
    theNullValue      = null_value;
    theMeanIsComputed = false;
 
@@ -263,8 +262,8 @@ void ossimDblGrid::setNearestNode (const ossimDpt& uv_point,
    //***
    // Establish the grid indexes:
    //***
-   int xi = (int) irint((uv_point.u - theOrigin.u)/theSpacing.x);
-   int yi = (int) irint((uv_point.v - theOrigin.v)/theSpacing.y);
+   int xi = ossim::round<int>((uv_point.u - theOrigin.u)/theSpacing.x);
+   int yi = ossim::round<int>((uv_point.v - theOrigin.v)/theSpacing.y);
 
    if (xi < 0)
       xi = 0;
@@ -626,8 +625,8 @@ bool ossimDblGrid::load(istream& is)
    theSize           = ossimDpt(0,0);
    theOrigin         = ossimDpt(0,0);
    theSpacing        = ossimDpt(0,0);
-   theMinValue       = OSSIM_INFINITY;
-   theMaxValue       =  -OSSIM_INFINITY;
+   theMinValue       = OSSIM_DEFAULT_MAX_PIX_DOUBLE;
+   theMaxValue       =  OSSIM_DEFAULT_MIN_PIX_DOUBLE;
    theNullValue      = theNullValue;
    theMeanIsComputed = false;
 

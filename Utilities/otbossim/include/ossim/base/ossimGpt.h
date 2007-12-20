@@ -1,5 +1,4 @@
 //*******************************************************************
-// Copyright (C) 2000 ImageLinks Inc.
 //
 // License:  See top level LICENSE.txt.
 //
@@ -11,23 +10,22 @@
 //
 // CONSTRUCTOR TAKES LAT/LON IN DEGREES!!!
 //
-// Height is relative to the ellipsoid.
+// Height is relative to the ellipsoid in meters.
 //
 //*******************************************************************
-//  $Id: ossimGpt.h 9094 2006-06-13 19:12:40Z dburken $
+//  $Id: ossimGpt.h 11495 2007-08-06 09:16:43Z dburken $
 
 #ifndef gpt_HEADER
 #define gpt_HEADER
 
 #include <iosfwd>
 #include <ossim/base/ossimConstants.h>
-#include <ossim/base/ossimIpt.h>
 #include <ossim/base/ossimDpt.h>
 #include <ossim/base/ossimDatumFactory.h>
+#include <ossim/base/ossimString.h>
 
 class OSSIMDLLEXPORT ossimDatum;
 class OSSIMDLLEXPORT ossimEcefPoint;
-class OSSIMDLLEXPORT ossimString;
 
 class OSSIMDLLEXPORT ossimGpt
 {
@@ -128,15 +126,18 @@ public:
     */
    void heightMSL(double heightMSL);
 
-   void makeNan(){lat = OSSIM_DBL_NAN; lon=OSSIM_DBL_NAN; hgt=OSSIM_DBL_NAN;}
-   bool isNan()const{return isLatNan()&&isLonNan()&&isHgtNan();}
+   void makeNan(){lat=ossim::nan(); lon=ossim::nan(); hgt=ossim::nan();}
+   bool isNan()const
+   {
+      return (ossim::isnan(lat)&&ossim::isnan(lon)&&ossim::isnan(hgt));
+   }
    bool hasNans()const
-      {
-         return (ossimIsNan(lat) || ossimIsNan(lon) || ossimIsNan(hgt));
-      }
-   bool isLatNan()const{return ossimIsNan(lat);}
-   bool isLonNan()const{return ossimIsNan(lon);}
-   bool isHgtNan()const{return ossimIsNan(hgt);}
+   {
+      return (ossim::isnan(lat)||ossim::isnan(lon)||ossim::isnan(hgt));
+   }
+   bool isLatNan()const{return ossim::isnan(lat);}
+   bool isLonNan()const{return ossim::isnan(lon);}
+   bool isHgtNan()const{return ossim::isnan(hgt);}
 
    std::ostream& print(std::ostream& os, ossim_uint32 precision=15) const;
 

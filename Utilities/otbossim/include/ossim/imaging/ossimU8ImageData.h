@@ -20,7 +20,7 @@
 //        If you want anything else use the less efficient ossimImageData.
 //
 //*************************************************************************
-// $Id: ossimU8ImageData.h 10405 2007-01-30 19:46:38Z gpotts $
+// $Id: ossimU8ImageData.h 11721 2007-09-13 13:19:34Z gpotts $
 
 #ifndef ossimU8ImageData_HEADER
 #define ossimU8ImageData_HEADER
@@ -120,7 +120,6 @@ public:
    virtual double computeMeanSquaredError(double meanValue,
                                           ossim_uint32 bandNumber = 0);
   
-   virtual void populateHistogram(ossimMultiBandHistogram* histo);
 
    /*!
     *  Initializes data to null pixel values.

@@ -1,5 +1,4 @@
 //----------------------------------------------------------------------------
-// Copyright (C) 2004 Intelligence Data Systems, Inc.
 //
 // License:  See top level LICENSE.txt file.
 //
@@ -10,7 +9,7 @@
 //
 // Contains class definition for ossimNitfProjectionFactory.
 //
-// $Id: ossimNitfProjectionFactory.cpp 9094 2006-06-13 19:12:40Z dburken $
+// $Id: ossimNitfProjectionFactory.cpp 12082 2007-11-26 21:46:44Z dburken $
 //----------------------------------------------------------------------------
 
 #include <fstream>
@@ -167,12 +166,6 @@ ossimNitfProjectionFactory::createObject(const ossimKeywordlist& kwl,
 void ossimNitfProjectionFactory::getTypeNameList(std::vector<ossimString>& typeList)const
 {
    
-}
-
-std::list<ossimString> ossimNitfProjectionFactory::getList()const
-{
-   std::list<ossimString> result;
-   return result;
 }
 
 bool ossimNitfProjectionFactory::isNitf(const ossimFilename& filename)const

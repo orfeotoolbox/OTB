@@ -6,17 +6,17 @@
 //
 // Description: Base class for tuple-based ossimSensorModel metric operations.
 //----------------------------------------------------------------------------
-// $Id: ossimSensorModelTuple.h 10375 2007-01-25 20:01:28Z dburken $
+// $Id: ossimSensorModelTuple.h 11614 2007-08-15 17:07:49Z dburken $
 #ifndef ossimSensorModelTuple_HEADER
 #define ossimSensorModelTuple_HEADER
 
 #include <ossim/projection/ossimSensorModel.h>
-#include <ossim/elevation/ossimHgtRef.h>
 #include <ossim/base/ossimDpt.h>
-#include <ossim/base/ossimEcefPoint.h>
+#include <ossim/elevation/ossimHgtRef.h>
 #include <ossim/matrix/newmat.h>
-#include <ossim/matrix/newmatap.h>
-#include <ossim/matrix/newmatio.h>
+
+// Forward class declarations:
+class ossimEcefPoint;
 
 typedef vector<ossimDpt> DptSet_t;
 
@@ -60,117 +60,103 @@ public:
    /**
     * @brief Multi-image intersection method.
     *
-    * @param obs Vector of image point observations.
-    *
-    * @param pt Intersected ECF position of point.
-    *
-    * @param CE90 90% horizontal circular error.
-    *
-    * @param LE90 90% vertical linear error.
-    *
-    * @return true on success, false on error.
-    */
-   ossimSensorModelTuple::IntersectStatus intersect(DptSet_t obs,
-                                                    ossimEcefPoint& pt,
-                                                    ossim_float64& CE90,
-                                                    ossim_float64& LE90);
-   
-   /**
-    * @brief Single-image/DEM intersection method.
-    *
-    * @param obs Vector of image point observations.
-    *
-    * @param pt Intersected ECF position of point.
-    *
-    * @param CE90 90% horizontal circular error.
-    *
-    * @param LE90 90% vertical linear error.
-    *
-    * @return true on success, false on error.
-    */
-   ossimSensorModelTuple::IntersectStatus intersect(const ossimDpt& obs,
-                                                    ossimEcefPoint& pt,
-                                                    ossim_float64& CE90,
-                                                    ossim_float64& LE90);
-   
-   /**
-    * @brief Single-image/height intersection method.
-    *
-    * @param obs Vector of image point observations.
-    *
-    * @param heightAboveEllipsoid Desired intersection height.
-    *
-    * @param pt Intersected ECF position of point.
-    *
-    * @param CE90 90% horizontal circular error.
-    *
-    * @param LE90 90% vertical linear error.
+    * @param obs     Vector of image point observations.
+    * @param pt      Intersected ECF position of point.
+    * @param covMat  3X3 ECF position covariance matrix [m].
     *
     * @return true on success, false on error.
     */
    ossimSensorModelTuple::IntersectStatus intersect(
-      const ossimDpt& obs,
-      const double& heightAboveEllipsoid,
-      ossimEcefPoint& pt,
-      ossim_float64& CE90,
-      ossim_float64& LE90);
+      const DptSet_t         obs,
+      ossimEcefPoint&  pt,
+      NEWMAT::Matrix&  covMat) const;
+   
+   /**
+    * @brief Single-image/DEM intersection method.
+    *
+    * @param img     Image set index of current image.
+    * @param obs     Image point observations.
+    * @param pt      Intersected ECF position of point.
+    * @param covMat  3X3 ECF position covariance matrix [m].
+    *
+    * @return true on success, false on error.
+    */
+   ossimSensorModelTuple::IntersectStatus intersect(
+      const ossim_int32&     img,
+      const ossimDpt&        obs,
+      ossimEcefPoint&  pt,
+      NEWMAT::Matrix&  covMat) const;
+   
+   /**
+    * @brief Single-image/height intersection method.
+    *
+    * @param img                  Image set index of current image.
+    * @param obs                  Image point observations.
+    * @param heightAboveEllipsoid Desired intersection height [m].
+    * @param pt                   Intersected ECF position of point.
+    * @param covMat               3X3 ECF position covariance matrix [m].
+    *
+    * @return true on success, false on error.
+    */
+   ossimSensorModelTuple::IntersectStatus intersect(
+      const ossim_int32&     img,
+      const ossimDpt&        obs,
+      const ossim_float64&   heightAboveEllipsoid,
+      ossimEcefPoint&  pt,
+      NEWMAT::Matrix&  covMat) const;
+            
+   /**
+    * @brief Set intersection surface accuracy method.
+    *
+    * @param surfCE90 90% CE [m].
+    * @param surfLE90 90% LE [m].
+    *
+    * @return true on success, false on exception.
+    * Entry of negative value(s) indicates "no DEM" error prop for RPC
+    */
+   bool setIntersectionSurfaceAccuracy(const ossim_float64 surfCE90,
+                                       const ossim_float64 surfLE90);
 
 protected:
 
 private:
    std::vector<ossimSensorModel*> theImages;
+
+   ossim_int32    theNumImages;
+   
+   ossim_float64  theSurfCE90;
+   ossim_float64  theSurfLE90;
+   bool           theSurfAccSet;
+   bool           theSurfAccRepresentsNoDEM;
    
    /**
     * @brief Compute single image intersection covariance matrix.
     *
-    * @param obs Vector of image point observations.
-    *
-    * @param ptG Current ground estimate.
-    *
+    * @param img      Image set index of current image.
+    * @param obs      Image point observations.
+    * @param ptG      Current ground estimate.
     * @param cRefType Current height reference type.
+    * @param covMat   3X3 ECF position covariance matrix.
     *
     * @return true on success, false on error.
     */
-   bool computeSingleInterCov(const ossimDpt& obs,
-                              const ossimGpt& ptG,
-                              HeightRefType_t cRefType,
-                              NEWMAT::Matrix& covMat);
-   
-   /**
-    * @brief Compute 90% circular/linear error (CE/LE).
-    *
-    * @param covMat ENU covariance matrix.
-    *
-    * @param posG Current ground estimate.
-    *
-    * @param CE90 90% circular error (ft).
-    *
-    * @param LE90 90% linear error (ft).
-    *
-    * @return true on success, false on error.
-    */
-   bool computeCE_LE(const NEWMAT::Matrix& covMat,
-                     const ossimGpt& posG,
-                     ossim_float64& CE90,
-                     ossim_float64& LE90);
-   
+   bool computeSingleInterCov(const ossim_int32& img,
+                              const ossimDpt&    obs,
+                              const ossimGpt&    ptG,
+                              HeightRefType_t    cRefType,
+                              NEWMAT::Matrix&    covMat) const;
+      
    
    /**
     * @brief Get observation equation components.
     *
-    * @param img Image set index of current image.
-    *
-    * @param iter Current iteration.
-    *
-    * @param obs Range/Doppler observations.
-    *
+    * @param img   Image set index of current image.
+    * @param iter  Current iteration.
+    * @param obs   Observations.
     * @param ptEst Current ground estimate.
-    *
-    * @param resid Range/Doppler observation residuals.
-    *
-    * @param B Matrix of partials of rng/Dop WRT X,Y,Z.
-    *
-    * @param W Weight matrix of rng/Dop.
+    * @param resid Observation residuals.
+    * @param B     Matrix of partials of observations WRT X,Y,Z.
+    * @param W     Weight matrix of observations.
     *
     * @param img Image set index of current image.
     */
@@ -180,7 +166,7 @@ private:
                                  const ossimGpt& ptEst,
                                  ossimDpt& resid,
                                  NEWMAT::Matrix& B,
-                                 NEWMAT::SymmetricMatrix& W);
+                                 NEWMAT::SymmetricMatrix& W) const;
 
    NEWMAT::Matrix invert(const NEWMAT::Matrix& m) const;
 

@@ -1,9 +1,6 @@
 //*******************************************************************
-// Copyright (C) 2000 ImageLinks Inc.
 //
-// License:  LGPL
-// 
-// See LICENSE.txt file in the top level directory for more details.
+// License:  See top level LICENSE.txt file.
 //
 // Author:  David Burken
 //
@@ -11,7 +8,7 @@
 //
 // Contains class definition for JpegTileSource.
 //*******************************************************************
-//  $Id: ossimJpegTileSource.cpp 9094 2006-06-13 19:12:40Z dburken $
+//  $Id: ossimJpegTileSource.cpp 11349 2007-07-23 13:30:44Z gpotts $
 
 #include <ossim/imaging/ossimJpegTileSource.h>
 #include <ossim/imaging/ossimTiffTileSource.h>
@@ -143,7 +140,7 @@ void ossimJpegTileSource::allocate()
       theLineBuffer = 0;
    }
    // Make the cache tile the height of one tile by the image width.
-   ossimGetDefaultTileSize(theCacheSize);
+   ossim::defaultTileSize(theCacheSize);
    theCacheSize.x = theImageRect.width();
 
    ossimAppFixedTileCache::instance()->deleteCache(theCacheId);
@@ -279,8 +276,7 @@ void ossimJpegTileSource::fillTile(const ossimIrect& clip_rect)
          
          // Get pointers to the cache tile buffers.
          JSAMPROW jbuf[1];
-//         ossim_uint8* buf[3] = new ossim_uint8*[theNumberOfBands];
-         ossim_uint8* buf[3];
+         std::vector<ossim_uint8*> buf(theNumberOfBands);
          ossim_uint32 band = 0;
          for (band = 0; band < theNumberOfBands; ++band)
          {

@@ -6,7 +6,7 @@
 // Author:  Garrett Potts
 //
 //*******************************************************************
-//  $Id: ossimUnitTypeLut.h 9094 2006-06-13 19:12:40Z dburken $
+//  $Id: ossimUnitTypeLut.h 11959 2007-10-31 19:22:56Z gpotts $
 #ifndef ossimUnitTypeLut_HEADER
 #define ossimUnitTypeLut_HEADER
 
@@ -41,7 +41,7 @@ public:
     *  else, the test will be case sensitive.
     */
    virtual ossim_int32 getEntryNumber(const ossimKeywordlist& kwl,
-                                      const char* prefix=NULL,
+                                      const char* prefix=0,
                                       bool case_insensitive = true) const;
    
    virtual ossimKeyword getKeyword() const;

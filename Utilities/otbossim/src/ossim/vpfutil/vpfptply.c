@@ -71,6 +71,12 @@
 #include <ossim/vpfutil/mapgraph.h>
 #include <ossim/vpfutil/vpfdraw.h>
 #include <ossim/vpfutil/vpftidx.h>
+#  ifndef min
+#    define min(a,b) ((a) <= (b) ? (a) : (b))
+#  endif
+#  ifndef max
+#    define max(a,b) ((a) <= (b) ? (b) : (a))
+#  endif
 
 typedef struct {
    float x1;

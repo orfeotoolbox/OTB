@@ -1,8 +1,6 @@
 //*****************************************************************************
 // FILE: ossimCoarseGridModel.cc
 //
-// Copyright (C) 2001 ImageLinks, Inc.
-//
 // License:  See LICENSE.txt file in the top level directory.
 //
 // AUTHOR: Oscar Kramer
@@ -16,7 +14,7 @@
 //   elevations relative to the ellipsoid.
 //
 //*****************************************************************************
-//  $Id: ossimCoarseGridModel.cpp 9094 2006-06-13 19:12:40Z dburken $
+//  $Id: ossimCoarseGridModel.cpp 11955 2007-10-31 16:10:22Z gpotts $
 
 #include <ossim/projection/ossimCoarseGridModel.h>
 
@@ -215,8 +213,8 @@ void ossimCoarseGridModel::buildGrid(const ossimDrect& imageBounds,
         spacing = ossimDpt((double)(imageBounds.width()-1)/(gridSize.x-1),
                            (double)(imageBounds.height()-1)/(gridSize.y-1));
 
-        theLatGrid.setNullValue(OSSIM_DBL_NAN);
-        theLonGrid.setNullValue(OSSIM_DBL_NAN);
+        theLatGrid.setNullValue(ossim::nan());
+        theLonGrid.setNullValue(ossim::nan());
         theDlatDhGrid.setNullValue(0.0);
         theDlonDhGrid.setNullValue(0.0);
         theLatGrid.initialize(gridSize, gridOrigin, spacing);
@@ -237,7 +235,7 @@ void ossimCoarseGridModel::buildGrid(const ossimDrect& imageBounds,
               
               proj->lineSampleToWorld(pt, gpt);
               double h = gpt.height();
-              if(h == OSSIM_DBL_NAN)
+              if(ossim::isnan(h))
               {
                  h += heightDelta;
               }
@@ -301,7 +299,7 @@ void ossimCoarseGridModel::buildGrid(const ossimDrect& imageBounds,
 //               gpt.changeDatum(targetDatum);
 //               double dist = gpt.distanceTo(bilinearGpt);
 
-//               error = ossimMax(ossimMax(dist/theMeanGSD, dist/theMeanGSD), error);
+//               error = ossim::max(ossim::max(dist/theMeanGSD, dist/theMeanGSD), error);
                error = (testIpt-imagePoint).length();
            }
         }
@@ -469,7 +467,7 @@ ossimCoarseGridModel::lineSampleHeightToWorld(const ossimDpt& lineSampPt,
       return;
    }
 
-   double height = (arg_hgt_above_ellipsoid == OSSIM_DBL_NAN) ? 0.0 : arg_hgt_above_ellipsoid;
+   double height = (ossim::isnan(arg_hgt_above_ellipsoid)) ? 0.0 : arg_hgt_above_ellipsoid;
 
    // Extrapolate if point is outside image:
    if (!insideImage(lineSampPt))
@@ -772,7 +770,7 @@ bool ossimCoarseGridModel::loadState(const ossimKeywordlist& kwl,
 
    theInitialAdjustment.loadState(kwl, initAdjPrefix.c_str());
 
-   if((theRefGndPt.hgt == OSSIM_DBL_NAN) ||
+   if((ossim::isnan(theRefGndPt.hgt)) ||
       (theRefGndPt.hgt == 0))
    {
       theRefGndPt.hgt = ossimElevManager::instance()->getHeightAboveEllipsoid(theRefGndPt);
@@ -1002,8 +1000,8 @@ void ossimCoarseGridModel::reallocateGrid(const ossimIpt& grid_size)
    // Allocate all:
    //***
    ossimDpt grid_origin(0.0, 0.0);
-   theLatGrid.setNullValue(OSSIM_DBL_NAN);
-   theLonGrid.setNullValue(OSSIM_DBL_NAN);
+   theLatGrid.setNullValue(ossim::nan());
+   theLonGrid.setNullValue(ossim::nan());
    theDlatDhGrid.setNullValue(0.0);
    theDlonDhGrid.setNullValue(0.0);
    theLatGrid.initialize(grid_size, grid_origin, spacing);

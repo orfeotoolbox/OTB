@@ -1,5 +1,4 @@
 //*******************************************************************
-// Copyright (C) 2000 ImageLinks Inc.
 //
 // License:  See top level LICENSE.txt file.
 //
@@ -10,7 +9,7 @@
 // Contains class implementaiton for the class "ossim LandsatTileSource".
 //
 //*******************************************************************
-//  $Id: ossimLandsatTileSource.cpp 9302 2006-07-19 17:17:03Z dburken $
+//  $Id: ossimLandsatTileSource.cpp 10752 2007-04-23 16:50:08Z dburken $
 
 #include <ossim/imaging/ossimLandsatTileSource.h>
 #include <ossim/base/ossimDirectory.h>
@@ -96,7 +95,7 @@ bool ossimLandsatTileSource::open()
    for (ossim_uint32 i=0; i<theFfHdr->getBandCount(); ++i)
    {
       bool addFile = false;
-      ossimFilename f1 = theFfHdr->theBandFileNames[i];
+      ossimFilename f1 = theFfHdr->getBandFilename(i);
       if (f1.trim() != "")
       {
          // Make the file name.
@@ -143,7 +142,7 @@ bool ossimLandsatTileSource::open()
             if (traceDebug())
             {
                f2 = theImageFile.path();
-               f1 = theFfHdr->theBandFileNames[i];
+               f1 = theFfHdr->getBandFilename(i);
                f1.trim();
                f2 = f2.dirCat(f1);
                CLOG << "\nCould not find:  " << f2 << std::endl;
@@ -162,8 +161,8 @@ bool ossimLandsatTileSource::open()
 					    OSSIM_UINT8,
 					    OSSIM_BSQ_MULTI_FILE,
 					    fileList.size(),
-					    theFfHdr->theLinesPerBand,
-					    theFfHdr->thePixelsPerLine,
+					    theFfHdr->getLinesPerBand(),
+					    theFfHdr->getPixelsPerLine(),
 					    0,
 					    ossimGeneralRasterInfo::NONE,
 					    0);
@@ -173,8 +172,8 @@ bool ossimLandsatTileSource::open()
                                                  OSSIM_UINT8,
                                                  OSSIM_BSQ,
                                                  fileList.size(),
-                                                 theFfHdr->theLinesPerBand,
-                                                 theFfHdr->thePixelsPerLine,
+                                                 theFfHdr->getLinesPerBand(),
+                                                 theFfHdr->getPixelsPerLine(),
                                                  0,
                                                  ossimGeneralRasterInfo::NONE,
                                                  0);
@@ -369,6 +368,34 @@ bool ossimLandsatTileSource::loadState(const ossimKeywordlist& kwl,
    return false;
 }
 
+ossimRefPtr<ossimProperty> ossimLandsatTileSource::getProperty(
+   const ossimString& name)const
+{
+   ossimRefPtr<ossimProperty> result = 0;
+
+   if (theFfHdr)
+   {
+      result = theFfHdr->getProperty(name);
+   }
+
+   if ( result.valid() == false )
+   {
+      result = ossimGeneralRasterTileSource::getProperty(name);
+   }
+
+   return result;
+}
+
+void ossimLandsatTileSource::getPropertyNames(
+   std::vector<ossimString>& propertyNames)const
+{
+   if (theFfHdr)
+   {
+      theFfHdr->getPropertyNames(propertyNames);
+   }
+   ossimGeneralRasterTileSource::getPropertyNames(propertyNames);
+}
+
 ossimString ossimLandsatTileSource::getShortName() const
 {
    return ossimString("Landsat");
@@ -408,20 +435,8 @@ bool ossimLandsatTileSource::getAcquisitionDate(ossimDate& date)const
 {
    if(!theFfHdr) return false;
 
-   ossimNotify(ossimNotifyLevel_DEBUG)
-      << "Date = " << theFfHdr->theAcquisitionDate << std::endl;
-   
-   ossimString y = ossimString(theFfHdr->theAcquisitionDate,
-                               theFfHdr->theAcquisitionDate+4);
-   ossimString m = ossimString(theFfHdr->theAcquisitionDate+4,
-                               theFfHdr->theAcquisitionDate+6);
-   ossimString d = ossimString(theFfHdr->theAcquisitionDate+6,
-                               theFfHdr->theAcquisitionDate+8);
+   theFfHdr->getAcquisitionDate(date);
 
-   date = ossimDate(m.toInt(),
-                    d.toInt(),
-                    y.toInt());
-   
    return true;
 }
 
@@ -429,7 +444,7 @@ ossimString ossimLandsatTileSource::getSatelliteName()const
 {
    if(!theFfHdr) return "";
 
-   return theFfHdr->theSatName;
+   return theFfHdr->getSatelliteName();
 }
 
 ossimFilename ossimLandsatTileSource::getBandFilename(ossim_uint32 idx)const
@@ -442,7 +457,7 @@ ossimFilename ossimLandsatTileSource::getBandFilename(ossim_uint32 idx)const
    }
 
    ossimFilename path = getFilename().path();
-   ossimString filename = theFfHdr->theBandFileNames[idx];
+   ossimString filename = theFfHdr->getBandFilename(idx);
    filename = filename.trim();
    ossimFilename file = path.dirCat(filename);
 

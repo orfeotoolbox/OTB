@@ -1,7 +1,7 @@
 //---
 // License:  See top level LICENSE.txt file.
 //
-// $Id: ossimPolyArea2d.cpp 9094 2006-06-13 19:12:40Z dburken $
+// $Id: ossimPolyArea2d.cpp 11955 2007-10-31 16:10:22Z gpotts $
 //---
 #include <ossim/base/ossimPolyArea2d.h>
 #include <ossim/base/ossimKeywordNames.h>
@@ -546,10 +546,10 @@ void ossimPolyArea2d::getBoundingRect(ossimDrect& rect)
                }
                else
                {
-                  minX = ossimMin(x, minX);
-                  maxX = ossimMax(x, maxX);
-                  minY = ossimMin(y, minY);
-                  maxY = ossimMax(y, maxY);
+                  minX = ossim::min(x, minX);
+                  maxX = ossim::max(x, maxX);
+                  minY = ossim::min(y, minY);
+                  maxY = ossim::max(y, maxY);
                }
             }
          }
@@ -678,7 +678,7 @@ bool ossimPolyArea2d::loadState(const ossimKeywordlist& kwl,
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimPolyArea2d.cpp 9094 2006-06-13 19:12:40Z dburken $
+// $Id: ossimPolyArea2d.cpp 11955 2007-10-31 16:10:22Z gpotts $
 #include <list>
 #include <sstream>
 using namespace std;

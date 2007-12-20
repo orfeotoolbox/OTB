@@ -9,7 +9,7 @@
 //   implementation of a warping interpolation model.
 //
 //*****************************************************************************
-//  $Id: ossimAffineProjection.cpp 9963 2006-11-28 21:11:01Z gpotts $
+//  $Id: ossimAffineProjection.cpp 11428 2007-07-27 18:44:18Z gpotts $
 
 #include <ossim/projection/ossimAffineProjection.h>
 RTTI_DEF1(ossimAffineProjection, "ossimAffineProjection", ossimProjection);
@@ -266,6 +266,6 @@ ossimDpt  ossimAffineProjection::getMetersPerPixel() const
 {
    if (theClientProjection)
       return theClientProjection->getMetersPerPixel();
-   return ossimDpt(OSSIM_NAN, OSSIM_NAN);
+   return ossimDpt(ossim::nan(), ossim::nan());
 }
       

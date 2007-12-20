@@ -5,7 +5,7 @@
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimAnnotationMultiEllipseObject.cpp 9963 2006-11-28 21:11:01Z gpotts $
+// $Id: ossimAnnotationMultiEllipseObject.cpp 11347 2007-07-23 13:01:59Z gpotts $
 
 #include <ossim/imaging/ossimAnnotationMultiEllipseObject.h>
 
@@ -102,10 +102,10 @@ void ossimAnnotationMultiEllipseObject::draw(ossimRgbImage& anImage)const
                                          tempPoint.y + theWidthHeight.y));
             if(tempRect.intersects(imageRect))
             {
-               anImage.drawFilledArc(irint(tempPoint.x),
-                                     irint(tempPoint.y),
-                                     irint(theWidthHeight.x),
-                                     irint(theWidthHeight.y),
+               anImage.drawFilledArc(ossim::round<int>(tempPoint.x),
+                                     ossim::round<int>(tempPoint.y),
+                                     ossim::round<int>(theWidthHeight.x),
+                                     ossim::round<int>(theWidthHeight.y),
                                      0,
                                      360);
             }
@@ -123,10 +123,10 @@ void ossimAnnotationMultiEllipseObject::draw(ossimRgbImage& anImage)const
                                          tempPoint.y + theWidthHeight.y));
             if(tempRect.intersects(imageRect))
             {
-               anImage.drawArc(irint(tempPoint.x),
-                               irint(tempPoint.y),
-                               irint(theWidthHeight.x),
-                               irint(theWidthHeight.y),
+               anImage.drawArc(ossim::round<int>(tempPoint.x),
+                               ossim::round<int>(tempPoint.y),
+                               ossim::round<int>(theWidthHeight.x),
+                               ossim::round<int>(theWidthHeight.y),
                                0,
                                360);
             }

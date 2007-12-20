@@ -1,23 +1,21 @@
 //*******************************************************************
-// License:  LGPL
-//
-// See LICENSE.txt file in the top level directory for more details.
+// License:  See top level LICENSE.txt file.
 //
 // Author:  David Burken
 //
 //*******************************************************************
-//  $Id: ossimGeoidEgm96.cpp 9842 2006-10-31 19:33:30Z gpotts $
-
-#include <stdio.h>
+//  $Id: ossimGeoidEgm96.cpp 11513 2007-08-06 11:40:18Z gpotts $
 
 #include <ossim/base/ossimGeoidEgm96.h>
 #include <ossim/base/ossimConstants.h>
+#include <ossim/base/ossimCommon.h> /* for ossim::nan() */
 #include <ossim/base/ossimGpt.h>
 #include <ossim/base/ossimFilename.h>
 #include <ossim/base/ossimEndian.h>
 #include <ossim/base/ossimTrace.h>
 #include <ossim/base/ossimNotifyContext.h>
 #include <ossim/base/ossimDatumFactory.h>
+#include <fstream>
 
 static ossimTrace traceDebug ("ossimGeoidEgm96:debug");
 
@@ -33,29 +31,23 @@ static ossimTrace traceDebug ("ossimGeoidEgm96:debug");
 RTTI_DEF1(ossimGeoidEgm96, "ossimGeoidEgm96", ossimGeoid)
 
 ossimGeoidEgm96::ossimGeoidEgm96()
-   :
-      theGeoidHeightBuffer(NULL)
-{}
+   :theGeoidHeightBufferPtr(0)
+{
+}
 
 ossimGeoidEgm96::ossimGeoidEgm96(const ossimFilename& grid_file,
                                  ossimByteOrder byteOrder)
-   :
-      theGeoidHeightBuffer(NULL)
+   :theGeoidHeightBufferPtr(0)
 {
    open(grid_file, byteOrder);
    if (getErrorStatus() != ossimErrorCodes::OSSIM_OK)
    {
-      if (theGeoidHeightBuffer)
-      {
-         delete theGeoidHeightBuffer;
-         theGeoidHeightBuffer = NULL;
-      }
+      theGeoidHeightBuffer.clear();
    }
 }
 
 ossimGeoidEgm96::~ossimGeoidEgm96()
 {
-   if (theGeoidHeightBuffer) delete [] theGeoidHeightBuffer;
 }
 
 ossimString ossimGeoidEgm96::getShortName()const
@@ -63,7 +55,8 @@ ossimString ossimGeoidEgm96::getShortName()const
    return "geoid1996";
 }
 
-bool ossimGeoidEgm96::open(const ossimFilename& grid_file, ossimByteOrder byteOrder)
+bool ossimGeoidEgm96::open(const ossimFilename& grid_file,
+                           ossimByteOrder byteOrder)
 {
    static const char MODULE[] = "ossimGeoidEgm96::open";
 
@@ -72,16 +65,15 @@ bool ossimGeoidEgm96::open(const ossimFilename& grid_file, ossimByteOrder byteOr
       ossimNotify(ossimNotifyLevel_DEBUG) << MODULE << " Entered...\n";
    }
 
-   if (theGeoidHeightBuffer)
+   if(theGeoidHeightBuffer.size() != NumbGeoidElevs)
    {
-      delete theGeoidHeightBuffer;
+      theGeoidHeightBuffer.resize(NumbGeoidElevs);
+      theGeoidHeightBufferPtr = &theGeoidHeightBuffer.front();
    }
-
-   theGeoidHeightBuffer = new float[NumbGeoidElevs];
    
-   int   ItemsRead = 0;
+   // int   ItemsRead = 0;
    long  ElevationsRead = 0;
-   long  ItemsDiscarded = 0;
+   // long  ItemsDiscarded = 0;
    long  num = 0;
 
    ossimFilename grid = grid_file;
@@ -96,9 +88,10 @@ bool ossimGeoidEgm96::open(const ossimFilename& grid_file, ossimByteOrder byteOr
    }
    
    // Open the File READONLY, or Return Error Condition:
-   FILE* GeoidHeightFile;
+   std::ifstream gridHeightFile(grid.c_str(), std::ios::in|std::ios::binary);
+//   FILE* GeoidHeightFile;
 
-   if ( ( GeoidHeightFile = fopen( grid.c_str(), "rb" ) ) == NULL)
+   if ( gridHeightFile.fail())
    {
       if(traceDebug())
       {
@@ -111,32 +104,24 @@ bool ossimGeoidEgm96::open(const ossimFilename& grid_file, ossimByteOrder byteOr
   
    // Skip the Header Line:
    ossimEndian oe;
-   bool swap_bytes = (ossimGetByteOrder() != byteOrder) ? true : false;
-   while ( num < NumbHeaderItems )
-   {
-      if (feof( GeoidHeightFile )) break;
-      if (ferror( GeoidHeightFile )) break;
-      
+   bool swap_bytes = (ossim::byteOrder() != byteOrder) ? true : false;
+   while ( (num < NumbHeaderItems)&&(!gridHeightFile.fail()))
+   {      
       float f;
-      ItemsRead = fread( &f, 4, 1, GeoidHeightFile );
+      gridHeightFile.read( (char*)(&f), 4);
       if (swap_bytes) oe.swap(f);
       theGeoidHeightBuffer[num] = f;
-      ItemsDiscarded += ItemsRead;
       ++num;
    }
-
    // Determine if header read properly, or NOT:
-   if (theGeoidHeightBuffer[0] !=  -90.0 ||
-       theGeoidHeightBuffer[1] !=   90.0 ||
-       theGeoidHeightBuffer[2] !=    0.0 ||
-       theGeoidHeightBuffer[3] !=  360.0 ||
-       theGeoidHeightBuffer[4] !=  ( 1.0 / ScaleFactor ) ||
-       theGeoidHeightBuffer[5] !=  ( 1.0 / ScaleFactor ) ||
-       ItemsDiscarded != NumbHeaderItems)
+   if ((!ossim::almostEqual(theGeoidHeightBuffer[0], (float)-90.0)) ||
+       (!ossim::almostEqual(theGeoidHeightBuffer[1], (float)90.0)) ||
+       (!ossim::almostEqual(theGeoidHeightBuffer[2], (float)0.0)) ||
+       (!ossim::almostEqual(theGeoidHeightBuffer[3],(float)360.0))||
+       (!ossim::almostEqual(theGeoidHeightBuffer[4],(float)(1.0 / ScaleFactor ))) ||
+       (!ossim::almostEqual(theGeoidHeightBuffer[5],(float)( 1.0 / ScaleFactor ))) ||
+       gridHeightFile.fail())
    {
-      
-      fclose(GeoidHeightFile);
-
       if(traceDebug())
       {
          ossimNotify(ossimNotifyLevel_WARN) << MODULE << " bad header file "
@@ -148,20 +133,20 @@ bool ossimGeoidEgm96::open(const ossimFilename& grid_file, ossimByteOrder byteOr
 
    // Extract elements from the file:
    num = 0;
-   while ( num < NumbGeoidElevs )
+   while ( (num < NumbGeoidElevs)&&(!gridHeightFile.fail()) )
    {
-      if (feof( GeoidHeightFile )) break;
-      if (ferror( GeoidHeightFile )) break;
+//       if (feof( GeoidHeightFile )) break;
+//       if (ferror( GeoidHeightFile )) break;
       
       float f;
-      fread( &f, 4, 1, GeoidHeightFile );
+      gridHeightFile.read( (char*)(&f), 4);
       if (swap_bytes) oe.swap(f);
       theGeoidHeightBuffer[num] = f;
       ++ElevationsRead;
       ++num;
    }
 
-   fclose(GeoidHeightFile);
+//    fclose(GeoidHeightFile);
    
    // Determine if all elevations of file read properly, or NOT:
    if (ElevationsRead != NumbGeoidElevs)
@@ -184,14 +169,14 @@ bool ossimGeoidEgm96::open(const ossimFilename& grid_file, ossimByteOrder byteOr
 
 double ossimGeoidEgm96::offsetFromEllipsoid(const ossimGpt& gpt) const
 {
-   double offset = OSSIM_DBL_NAN;
+   double offset = ossim::nan();
    ossimGpt savedGpt = gpt;
    if(ossimDatumFactory::instance()->wgs84())
    {
       savedGpt.changeDatum(ossimDatumFactory::instance()->wgs84());
    }
    
-   if (!theGeoidHeightBuffer)
+   if (!theGeoidHeightBufferPtr)
    {
       if(traceDebug())
       {
@@ -272,11 +257,11 @@ double ossimGeoidEgm96::offsetFromEllipsoid(const ossimGpt& gpt) const
    OffsetY = ( 90.0 - LatitudeDD ) * ScaleFactor;
    
    //***
-   // Find Four Nearest Geoid Height Cells for specified Latitude,
-   // Longitude;  Assumes that (0,0) of Geoid Height Array is at
-   // Northwest corner:
-   //***
-   PostX = floor( OffsetX );
+        // Find Four Nearest Geoid Height Cells for specified Latitude,
+        // Longitude;  Assumes that (0,0) of Geoid Height Array is at
+        // Northwest corner:
+        //***
+             PostX = floor( OffsetX );
    if ((PostX + 1) == NumbGeoidCols)
       PostX--;
    PostY = floor( OffsetY );
@@ -284,12 +269,12 @@ double ossimGeoidEgm96::offsetFromEllipsoid(const ossimGpt& gpt) const
       PostY--;
    
    Index = (long)(PostY * NumbGeoidCols + PostX);
-   ElevationNW = theGeoidHeightBuffer[ Index ];
-   ElevationNE = theGeoidHeightBuffer[ Index+ 1 ];
+   ElevationNW = theGeoidHeightBufferPtr[ Index ];
+   ElevationNE = theGeoidHeightBufferPtr[ Index+ 1 ];
    
    Index = (long)((PostY + 1) * NumbGeoidCols + PostX);
-   ElevationSW = theGeoidHeightBuffer[ Index ];
-   ElevationSE = theGeoidHeightBuffer[ Index + 1 ];
+   ElevationSW = theGeoidHeightBufferPtr[ Index ];
+   ElevationSE = theGeoidHeightBufferPtr[ Index + 1 ];
    
    //Perform Bi-Linear Interpolation to compute Height above Ellipsoid:
    DeltaX = OffsetX - PostX;
@@ -300,27 +285,31 @@ double ossimGeoidEgm96::offsetFromEllipsoid(const ossimGpt& gpt) const
    
    offset = UpperY + DeltaY * ( LowerY - UpperY );
    
-  return offset;
+   return offset;
 }
 
 double ossimGeoidEgm96::geoidToEllipsoidHeight(double lat,
                                                double lon,
-                                               double geoidHeight)
+                                               double geoidHeight) const
 {
    ossimGpt gpt(lat, lon);
-   
    double height = offsetFromEllipsoid(gpt);
-
-   return (height + geoidHeight);
+   if (!ossim::isnan(height))
+   {
+      height += geoidHeight;
+   }
+   return height;
 }
 
 double ossimGeoidEgm96::ellipsoidToGeoidHeight(double lat,
                                                double lon,
-                                               double ellipsoidHeight)
+                                               double ellipsoidHeight) const
 {
    ossimGpt gpt(lat, lon);
-   
    double height = offsetFromEllipsoid(gpt);
-
-   return ellipsoidHeight - height;
+   if (!ossim::isnan(height))
+   {
+      return (ellipsoidHeight - height);
+   }
+   return height; // nan
 }

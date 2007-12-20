@@ -4,11 +4,11 @@
 //
 // Author:  David Burken
 //
-// Description: Class definition for mpi master sequencer for building
+// Description: Class definition for mpi slave sequencer for building
 // overview files.
 // 
 //----------------------------------------------------------------------------
-// $Id: ossimMpiSlaveOverviewSequencer.cpp 10152 2006-12-30 20:54:39Z dburken $
+// $Id: ossimMpiSlaveOverviewSequencer.cpp 12099 2007-12-01 16:09:36Z dburken $
 
 #include <ossim/parallel/ossimMpiSlaveOverviewSequencer.h>
 #include <ossim/ossimConfig.h>        /* To pick up OSSIM_HAS_MPI. */
@@ -96,7 +96,7 @@ void ossimMpiSlaveOverviewSequencer::slaveProcessTiles()
    {
       if (theImageHandler->getOutputScalarType() != OSSIM_UINT8)
       {
-         if (ossimGetByteOrder() != OSSIM_BIG_ENDIAN)
+         if (ossim::byteOrder() != OSSIM_BIG_ENDIAN)
          {
             endian = new ossimEndian();
          }
@@ -107,7 +107,6 @@ void ossimMpiSlaveOverviewSequencer::slaveProcessTiles()
    ossim_uint32 numberOfTiles = getNumberOfTiles();
 
    int         errorValue; // Needed for MPI_Isend and MPI_Wait.
-   MPI_Status  status;     // Needed for MPI_Wait.
    MPI_Request request;    // Needed for MPI_Isend and MPI_Wait.
 
    while(theCurrentTileNumber < numberOfTiles)
@@ -123,7 +122,7 @@ void ossimMpiSlaveOverviewSequencer::slaveProcessTiles()
       }
 
       // Send the buffer to the master process.
-      request = 0;
+      request = MPI_REQUEST_NULL;
       errorValue = MPI_Isend(buf,
                              data->getSizeInBytes(),
                              MPI_UNSIGNED_CHAR,
@@ -136,7 +135,7 @@ void ossimMpiSlaveOverviewSequencer::slaveProcessTiles()
       // Wait for send to complete before we overwrite the buffer with the
       // next tile.
       //---
-      errorValue = MPI_Wait(&request, &status);
+      errorValue = MPI_Wait(&request, MPI_STATUS_IGNORE);
 
       //---
       // If we have eight processes only seven are used for resampling tiles,

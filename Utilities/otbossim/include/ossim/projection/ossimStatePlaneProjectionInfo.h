@@ -1,50 +1,55 @@
 //*******************************************************************
-// Copyright (C) 2000 ImageLinks Inc.
 //
 // License:  See top LICENSE.txt file.
 //
 // Author: Garrett Potts
 //*******************************************************************
-//  $Id: ossimStatePlaneProjectionInfo.h 9094 2006-06-13 19:12:40Z dburken $
+//  $Id: ossimStatePlaneProjectionInfo.h 12096 2007-11-30 20:24:13Z dburken $
 #ifndef ossimStatePlaneProjectionInfo_HEADER
 #define ossimStatePlaneProjectionInfo_HEADER
 
+#include <ostream>
+
+#include <ossim/base/ossimConstants.h> /* for OSSIM_DLL macro */
 #include <ossim/base/ossimDms.h>
 #include <ossim/base/ossimGpt.h>
 #include <ossim/base/ossimString.h>
-#include <ossim/base/ossimKeywordlist.h>
 
 class ossimDatum;
 class ossimMapProjection;
+class ossimKeywordlist;
 
-class OSSIMDLLEXPORT ossimStatePlaneProjectionInfo
+class OSSIM_DLL ossimStatePlaneProjectionInfo
 {
 
-   friend ostream& operator<<(ostream&, const ossimStatePlaneProjectionInfo&);
+   friend std::ostream& operator<<(std::ostream&,
+                                   const ossimStatePlaneProjectionInfo&);
 
 public:
 
-   ossimStatePlaneProjectionInfo(char*  name,
-                                 int    pcsCode,
-                                 char*  projCode,
-                                 char*  param1,
-                                 char*  param2,
-                                 char*  param3,
-                                 char*  param4,
-                                 double falseEast,
-                                 double falseNorth,
-                                 char*   units);
+   ossimStatePlaneProjectionInfo(const std::string&  name,
+                                 int                 pcsCode,
+                                 const std::string&  projCode,
+                                 const std::string&  param1,
+                                 const std::string&  param2,
+                                 const std::string&  param3,
+                                 const std::string&  param4,
+                                 double              falseEast,
+                                 double              falseNorth,
+                                 const std::string&  units,
+                                 const ossimDatum*   datum=0);
   
-   ossimStatePlaneProjectionInfo(char*  name,
-                                 int    pcsCode,
-                                 char*  projCode,
-                                 char*  param1,
-                                 char*  param2,
-                                 double param3,
-                                 double param4,
-                                 double falseEast,
-                                 double falseNorth,
-                                 char*  units);
+   ossimStatePlaneProjectionInfo(const std::string&  name,
+                                 int                 pcsCode,
+                                 const std::string&  projCode,
+                                 const std::string&  param1,
+                                 const std::string&  param2,
+                                 double              param3,
+                                 double              param4,
+                                 double              falseEast,
+                                 double              falseNorth,
+                                 const std::string&  units,
+                                 const ossimDatum*   datum=0);
    
    int                code()                  const;
    const ossimString& name()                  const;
@@ -78,7 +83,7 @@ public:
    bool               isSameCode( int Code )  const;
 
    void populateProjectionKeywords(ossimKeywordlist& kwl,
-                                   const char* prefix=NULL)const;
+                                   const char* prefix=0)const;
 private:
    
    int                  thePcsCode;       // The Geotiff code 

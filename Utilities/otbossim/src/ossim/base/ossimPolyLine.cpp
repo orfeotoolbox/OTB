@@ -5,7 +5,7 @@
 // AUTHOR: Garrett Potts (gpotts@imagelinks.com)
 //
 //*****************************************************************************
-//  $Id: ossimPolyLine.cpp 9963 2006-11-28 21:11:01Z gpotts $
+//  $Id: ossimPolyLine.cpp 11408 2007-07-27 13:43:00Z dburken $
 //
 #include <ossim/base/ossimPolyLine.h>
 #include <ossim/base/ossimCommon.h>
@@ -220,10 +220,10 @@ void ossimPolyLine::getBounds(double& minX,
    }
    else
    {
-      minX = OSSIM_DBL_NAN;
-      minY = OSSIM_DBL_NAN;
-      maxX = OSSIM_DBL_NAN;
-      maxY = OSSIM_DBL_NAN;
+      minX = ossim::nan();
+      minY = ossim::nan();
+      maxX = ossim::nan();
+      maxY = ossim::nan();
    }
 }
 

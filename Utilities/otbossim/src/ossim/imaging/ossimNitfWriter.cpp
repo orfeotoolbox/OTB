@@ -5,7 +5,7 @@
 // Author:  Garrett Potts
 //
 //*******************************************************************
-//  $Id: ossimNitfWriter.cpp 10234 2007-01-12 14:36:32Z gpotts $
+//  $Id: ossimNitfWriter.cpp 11385 2007-07-25 13:56:38Z gpotts $
 
 #include <fstream>
 #include <algorithm>
@@ -261,7 +261,7 @@ void ossimNitfWriter::getPropertyNames(std::vector<ossimString>& propertyNames)c
 bool ossimNitfWriter::writeBlockBandSeparate()
 {
    ossimScalarType scalarType = theInputConnection->getOutputScalarType();
-   ossim_uint64 byteSize      = ossimGetScalarSizeInBytes(scalarType);
+   ossim_uint64 byteSize      = ossim::scalarSizeInBytes(scalarType);
    ossimIrect rect            = theInputConnection->getBoundingRect();
    ossim_uint64 bands         = theInputConnection->getNumberOfOutputBands();
    ossim_uint64 idx           = 0;
@@ -418,7 +418,7 @@ bool ossimNitfWriter::writeBlockBandSeparate()
 bool ossimNitfWriter::writeBlockBandSequential()
 {
    ossimScalarType scalarType = theInputConnection->getOutputScalarType();
-   ossim_uint64    byteSize   = ossimGetScalarSizeInBytes(scalarType);
+   ossim_uint64    byteSize   = ossim::scalarSizeInBytes(scalarType);
    ossimIrect      rect       = theInputConnection->getBoundingRect();
    ossim_uint64    bands      = theInputConnection->getNumberOfOutputBands();
    ossim_uint64    idx        = 0;
@@ -510,7 +510,7 @@ bool ossimNitfWriter::writeBlockBandSequential()
    
    // holds the total pixels to the next band
 
-   ossim_uint64 blockSizeInBytes = blockSize.x*blockSize.y*ossimGetScalarSizeInBytes(data->getScalarType());
+   ossim_uint64 blockSizeInBytes = blockSize.x*blockSize.y*ossim::scalarSizeInBytes(data->getScalarType());
    ossim_uint64 bandOffsetInBytes = (blockSizeInBytes*blocksHorizontal*blocksVertical);
 
    bool needSwapping = endian.getSystemEndianType() == OSSIM_LITTLE_ENDIAN;
@@ -701,7 +701,7 @@ void ossimNitfWriter::setComplexityLevel(ossim_uint64 endPosition)
       complexity = "07";
    }
    
-   theFileHeader->setComplexityLevel(ossimString("05"));
+   theFileHeader->setComplexityLevel(complexity);
 }
 
 #if 0

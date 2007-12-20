@@ -8,15 +8,14 @@
 //              endian byte swap routines.
 //
 //***********************************
-// $Id: ossimEndian.cpp 9182 2006-06-22 17:24:59Z dburken $
+// $Id: ossimEndian.cpp 11678 2007-09-07 12:06:19Z dburken $
 
-#include <cstddef> /* for NULL */
 #include <ossim/base/ossimEndian.h>
 
 ossimEndian::ossimEndian()
 {
    ossim_uint16  test;
-   ossim_uint8  *testPtr=NULL;
+   ossim_uint8  *testPtr=0;
    test = 0x0001;
    
    testPtr       = reinterpret_cast<unsigned char*>(&test);

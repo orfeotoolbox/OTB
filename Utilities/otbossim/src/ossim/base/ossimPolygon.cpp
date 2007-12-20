@@ -12,7 +12,7 @@
 // LIMITATIONS: None.
 //
 //*****************************************************************************
-//  $Id: ossimPolygon.cpp 9094 2006-06-13 19:12:40Z dburken $
+//  $Id: ossimPolygon.cpp 11428 2007-07-27 18:44:18Z gpotts $
 
 #include <algorithm>
 #include <iterator>
@@ -779,7 +779,7 @@ void ossimPolygon::getMinimumBoundingRect(ossimPolygon& minRect) const
    ossimDpt rotatedVertex(0.0, 0.0);
    double min_x, min_y, max_x, max_y;
    double area;
-   double min_area = OSSIM_INFINITY;
+   double min_area = 1.0/DBL_EPSILON;
    rotatedPolygon.theVertexList[0] = ossimDpt(0, 0);  // first vertex always at origin
    bool first_time = true;
    ossimDrect best_rect;

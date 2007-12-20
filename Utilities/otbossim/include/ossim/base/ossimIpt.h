@@ -1,5 +1,4 @@
 //*******************************************************************
-// Copyright (C) 2000 ImageLinks Inc.
 //
 // License:  See top level LICENSE.txt file.
 //
@@ -11,7 +10,7 @@
 // Used to represent an interger point containing an x and y data member.
 // 
 //*******************************************************************
-//  $Id: ossimIpt.h 9094 2006-06-13 19:12:40Z dburken $
+//  $Id: ossimIpt.h 11414 2007-07-27 15:10:00Z dburken $
 
 #ifndef ossimIpt_HEADER
 #define ossimIpt_HEADER
@@ -49,21 +48,22 @@ public:
    const ossimIpt& operator=(const ossimFpt& pt);
 
    bool operator==(const ossimIpt& pt) const
-      { return ( (x == pt.x) && (y == pt.y) ); } 
-
+   { return ( (x == pt.x) && (y == pt.y) ); } 
+   
    bool operator!=(const ossimIpt& pt) const
-      { return ( (x != pt.x) || (y != pt.y) ); }
-
+   { return ( (x != pt.x) || (y != pt.y) ); }
+   
    void makeNan(){x = OSSIM_INT_NAN; y=OSSIM_INT_NAN;}
+   
    bool hasNans()const
-      {
-         return (ossimIsNan(x) || ossimIsNan(y));
-      }
+   {
+      return ( (x==OSSIM_INT_NAN) || (y==OSSIM_INT_NAN) );
+   }
    bool isNan()const
-      {
-         return (ossimIsNan(x) && ossimIsNan(y));        
-      }
-
+   {
+      return ( (x==OSSIM_INT_NAN) && (y==OSSIM_INT_NAN) );
+   }
+   
    std::ostream& print(std::ostream& os) const;
    
    friend OSSIMDLLEXPORT std::ostream& operator<<(std::ostream& os,
@@ -139,7 +139,7 @@ public:
    //***
    union {ossim_int32 x; ossim_int32 u; ossim_int32 samp;};
    union {ossim_int32 y; ossim_int32 v; ossim_int32 line;};
-      
+
 };
 
 inline const ossimIpt& ossimIpt::operator=(const ossimIpt& pt)

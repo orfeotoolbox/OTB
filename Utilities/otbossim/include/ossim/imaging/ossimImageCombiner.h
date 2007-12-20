@@ -1,14 +1,11 @@
 //*******************************************************************
-// Copyright (C) 2000 ImageLinks Inc. 
 //
-// License:  LGPL
-// 
-// See LICENSE.txt file in the top level directory for more details.
+// License:  See LICENSE.txt file in the top level directory for more details.
 //
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimImageCombiner.h 9094 2006-06-13 19:12:40Z dburken $
+// $Id: ossimImageCombiner.h 10777 2007-04-25 14:49:17Z gpotts $
 #ifndef ossimImageCombiner_HEADER
 #define ossimImageCombiner_HEADER
 #include <vector>
@@ -81,31 +78,43 @@ public:
 				    const ossimIrect& rect,
                                     ossim_uint32 resLevel=0)const;
    
-   virtual ossimRefPtr<ossimImageData> getNextTile(ossim_uint32 index,
-                                                   const ossimIpt& origin,
-                                                   ossim_uint32 resLevel=0);
    
-   virtual ossimRefPtr<ossimImageData> getNextTile(const ossimIpt& origin,
-                                                   ossim_uint32 resLevel=0);
+/*    virtual ossimRefPtr<ossimImageData> getNextTile(ossim_uint32& returnedIdx, */
+/*                                                    ossim_uint32 startIdx, */
+/*                                                    const ossimIpt& origin, */
+/*                                                    ossim_uint32 resLevel=0); */
    
-   virtual ossimRefPtr<ossimImageData> getNextTile(ossim_uint32 index,
-                                                   const ossimIrect& origin,
+/*    virtual ossimRefPtr<ossimImageData> getNextTile(ossim_uint32& returnedIdx, */
+/*                                                    const ossimIpt& origin, */
+/*                                                    ossim_uint32 resLevel=0); */
+   
+   virtual ossimRefPtr<ossimImageData> getNextTile(ossim_uint32& returnedIdx,
+                                                   const ossim_uint32 startIdx,
+                                                   const ossimIrect& tileRect,
                                                    ossim_uint32 resLevel=0);
 
-   virtual ossimRefPtr<ossimImageData> getNextTile(const ossimIrect& origin,
+   virtual ossimRefPtr<ossimImageData> getNextTile(ossim_uint32& returnedIdx,
+                                                   const ossimIrect& tileRect,
                                                    ossim_uint32 resLevel=0);
+
    
-   virtual ossimRefPtr<ossimImageData> getNextNormTile(ossim_uint32 index,
-                                                       const ossimIpt& origin,
-                                                       ossim_uint32 resLevel=0);
-   virtual ossimRefPtr<ossimImageData> getNextNormTile(const ossimIpt& origin,
+   virtual ossimRefPtr<ossimImageData> getNextNormTile(ossim_uint32& returnedIdx,
+                                                       const ossim_uint32 index,
+                                                       const ossimIrect& tileRect,
                                                        ossim_uint32 resLevel=0);
    
-   virtual ossimRefPtr<ossimImageData> getNextNormTile(ossim_uint32 index,
-                                                       const ossimIrect& origin,
+   virtual ossimRefPtr<ossimImageData> getNextNormTile(ossim_uint32& returnedIdx,
+                                                       const ossimIrect& tileRect,
                                                        ossim_uint32 resLevel=0);
-   virtual ossimRefPtr<ossimImageData> getNextNormTile(const ossimIrect& origin,
-                                                       ossim_uint32 resLevel=0);
+   
+/*    virtual ossimRefPtr<ossimImageData> getNextNormTile(ossim_uint32& returnedIdx, */
+/*                                                        ossim_uint32 index, */
+/*                                                        const ossimIpt& origin, */
+/*                                                        ossim_uint32 resLevel=0); */
+/*    virtual ossimRefPtr<ossimImageData> getNextNormTile(ossim_uint32& returnedIdx, */
+/*                                                        const ossimIpt& origin, */
+/*                                                        ossim_uint32 resLevel=0); */
+   
    
    virtual bool canConnectMyInputTo(ossim_int32 inputIndex,
                                     const ossimConnectableObject* object)const;
@@ -115,16 +124,18 @@ public:
    virtual void propertyEvent(ossimPropertyEvent& event);
    virtual void refreshEvent(ossimRefreshEvent& event);
    virtual bool hasDifferentInputs()const;
+
    
 protected:
+   void precomputeBounds()const;
+
    ossim_uint32                theLargestNumberOfInputBands;
    ossim_uint32                theInputToPassThrough;
    bool                        theHasDifferentInputs;
    ossimRefPtr<ossimImageData> theNormTile;
-   ossim_int32                 theCurrentIndex;
    mutable std::vector<ossimIrect>     theFullResBounds;
    mutable bool                theComputeFullResBoundsFlag;
-   void precomputeBounds()const;
+   ossim_uint32                theCurrentIndex;
    
 TYPE_DATA  
 };

@@ -7,7 +7,7 @@
 // Description: This class provides manipulation of filenames.
 //
 //*************************************************************************
-// $Id: ossimFilename.h 9888 2006-11-09 01:12:07Z gpotts $
+// $Id: ossimFilename.h 11476 2007-08-02 19:30:40Z gpotts $
 
 #ifndef ossimFilename_HEADER
 #define ossimFilename_HEADER
@@ -71,7 +71,7 @@ public:
    bool        isFile()       const;
    bool        isDir()        const;
    bool        isReadable()   const;
-   bool        isWritable()   const;
+   bool        isWriteable()  const;
    bool        isExecutable() const;
    ossim_int64 fileSize()     const;
    
@@ -165,7 +165,7 @@ public:
    /*!
     */
    bool createDirectory(bool recurseFlag=true,
-                        int perm=0775);
+                        int perm=0775)const;
 
    /*!
     * Removes pathname from filesystem if supported by platform.
@@ -185,6 +185,8 @@ public:
     * 
     */ 
    static bool wildcardRemove(const ossimFilename& pathname);
+
+   bool rename(const ossimFilename& destFile, bool overwriteDestinationFlag=true)const;
    
    bool remove()const;
    bool wildcardRemove()const;

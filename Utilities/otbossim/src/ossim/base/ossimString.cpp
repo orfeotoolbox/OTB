@@ -6,12 +6,13 @@
 // Description: This class extends the stl's string class.
 // 
 //********************************************************************
-// $Id: ossimString.cpp 10077 2006-12-13 13:29:18Z dburken $
+// $Id: ossimString.cpp 12047 2007-11-15 15:44:31Z gpotts $
 
 #include <iostream>
 #include <iomanip>
 #include <sstream>
 #include <algorithm>
+#include <ossim/base/ossimCommon.h>
 #include <ossim/base/ossimString.h>
 #include <ossim/base/ossimRegExp.h>
 #include <ossim/base/ossimTrace.h>
@@ -20,7 +21,7 @@
 static ossimTrace traceDebug("ossimString:debug");
 
 #ifdef OSSIM_ID_ENABLED
-static char OSSIM_ID[] = "$Id: ossimString.cpp 10077 2006-12-13 13:29:18Z dburken $";
+static char OSSIM_ID[] = "$Id: ossimString.cpp 12047 2007-11-15 15:44:31Z gpotts $";
 #endif
 
 ossimString::ossimString(char aChar)
@@ -195,7 +196,7 @@ ossimString  ossimString::trim(const ossimString& valueToTrim) const
 ossimString& ossimString::trim(const ossimString& valueToTrim)
 {
    if(this->size() == 0) return *this;
-   
+   if(valueToTrim.empty()) return *this;
    iterator startPos = (*this).begin();
    iterator endPos   = (*this).begin() + ((*this).size()-1);
 
@@ -626,15 +627,26 @@ ossim_float32 ossimString::toFloat32()const
 {
    if(contains("nan"))
    {
-      return OSSIM_DBL_NAN;
+      return ossim::nan();
    }
    ossim_float32 d = 0.0;
+   // this part is core dumping under mingw in ossimPlanet.
+   // There is a possibility that this isn't a thread safe implementation
+   // in mingw stl.  Let's resort back to atof for now
+
+#if 0
    ossimString os = c_str();
    if (!os.empty())
    {
       std::istringstream is(os);
       is >> d;
    }
+#endif
+   if(!this->empty())
+   {
+      d = (ossim_float32)atof(this->c_str());
+   }
+
    return d;
 }
 
@@ -642,15 +654,26 @@ ossim_float32 ossimString::toFloat32(const ossimString& aString)
 {
    if(aString.contains("nan"))
    {
-      return OSSIM_DBL_NAN;
+      return ossim::nan();
    }
    ossim_float32 d = 0.0;
-   ossimString os = aString;
+   // this part is core dumping under mingw in ossimPlanet.
+   // There is a possibility that this isn't a thread safe implementation
+   // in mingw stl.  Let's resort back to atof for now
+
+#if 0
+   ossimString os =aString.c_str();
    if (!os.empty())
    {
       std::istringstream is(os);
       is >> d;
    }
+#endif
+   if(!aString.empty())
+   {
+      d = (ossim_float32)atof(aString.c_str());
+   }
+
    return d;
 }
 
@@ -658,15 +681,26 @@ ossim_float64 ossimString::toFloat64()const
 {
    if(contains("nan"))
    {
-      return OSSIM_DBL_NAN;
+      return ossim::nan();
    }
    ossim_float64 d = 0.0;
-   ossimString os = c_str();
+   // this part is core dumping under mingw in ossimPlanet.
+   // There is a possibility that this isn't a thread safe implementation
+   // in mingw stl.  Let's resort back to atof for now
+
+#if 0
+   ossimString os = ths->c_str();
    if (!os.empty())
    {
       std::istringstream is(os);
       is >> d;
    }
+#endif
+   if(!this->empty())
+   {
+      d = (ossim_float64)atof(this->c_str());
+   }
+   
    return d;
 }
 
@@ -674,14 +708,24 @@ ossim_float64 ossimString::toFloat64(const ossimString& aString)
 {
    if(aString.contains("nan"))
    {
-      return OSSIM_DBL_NAN;
+      return ossim::nan();
    }
    ossim_float64 d = 0.0;
+   // this part is core dumping under mingw in ossimPlanet.
+   // There is a possibility that this isn't a thread safe implementation
+   // in mingw stl.  Let's resort back to atof for now
+
+#if 0
    ossimString os = aString;
    if (!os.empty())
    {
       std::istringstream is(os);
       is >> d;
+   }
+#endif
+   if(!aString.empty())
+   {
+      d = (ossim_float64)atof(aString.c_str());
    }
    return d;
 }
@@ -690,15 +734,28 @@ double ossimString::toDouble()const
 {
    if(contains("nan"))
    {
-      return OSSIM_DBL_NAN;
+      return ossim::nan();
    }
    double d = 0.0;
+
+   // this part is core dumping under mingw in ossimPlanet.
+   // There is a possibility that this isn't a thread safe implementation
+   // in mingw stl.  Let's resort back to atof for now
+
+#if 0
    ossimString os = c_str();
    if (!os.empty())
    {
       std::istringstream is(os);
       is >> d;
    }
+#endif
+
+   if(!this->empty())
+   {
+      d = atof(this->c_str());
+   }
+   
    return d;
 }
 
@@ -706,15 +763,26 @@ double ossimString::toDouble(const ossimString& aString)
 {
    if(aString.contains("nan"))
    {
-      return OSSIM_DBL_NAN;
+      return ossim::nan();
    }
    double d = 0.0;
-   ossimString os = aString;
+   // this part is core dumping under mingw in ossimPlanet.
+   // There is a possibility that this isn't a thread safe implementation
+   // in mingw stl.  Let's resort back to atof for now
+
+#if 0
+   ossimString os = c_str();
    if (!os.empty())
    {
       std::istringstream is(os);
       is >> d;
    }
+#endif
+   if(!aString.empty())
+   {
+      d = atof(aString.c_str());
+   }
+
    return d;
 }
 
@@ -779,7 +847,7 @@ ossimString ossimString::toString(ossim_float32 aValue,
                                   bool trimZeroFlag,
                                   bool scientific)
 {
-   if (aValue == OSSIM_FLT_NAN)
+   if ( ossim::isnan(aValue) )
    {
       return ossimString("nan");
    }
@@ -795,19 +863,27 @@ ossimString ossimString::toString(ossim_float32 aValue,
 	   s << setiosflags(std::ios::scientific);
    }
 
-   s << std::setprecision(precision) << aValue;
-   
+   s << std::setprecision(precision)  << aValue;
    ossimString result(s.str());
-
    if( !scientific && trimZeroFlag && result.contains(".") )
    {
       // Trim all zeroes front and back of the '.'.
       result = result.trim('0');
-      
+      if(result == ".")
+      {
+         result = "0";
+      }
+      else if(*(result.begin()+(result.size()-1)) == '.') // check for 123. now.
+      {
+         return ossimString(result.begin(),
+                            result.begin()+result.size()-1);
+      }
+
+#if 0      
       ossim_uint32 size = result.size();
       if (size == 1) // A single '.'
       {
-         result = "0.0";
+         result = "0";
       }
       else
       {
@@ -821,13 +897,14 @@ ossimString ossimString::toString(ossim_float32 aValue,
          {
             i = result.end();
             --i;
-            if ((*i) == '.') // something. like 129. make "0.129"
+            if ((*i) == '.') // something. like 129. make 129"
             {
                // something. like 129. make "0.129"
                result.push_back('0');
             }
          }
       }
+#endif
    }
    return result;
 }
@@ -837,7 +914,7 @@ ossimString ossimString::toString(ossim_float64 aValue,
                                   bool trimZeroFlag,
                                   bool scientific)
 {
-   if (aValue == OSSIM_DBL_NAN)
+   if (aValue == ossim::nan())
    {
       return ossimString("nan");
    }
@@ -861,6 +938,18 @@ ossimString ossimString::toString(ossim_float64 aValue,
    {
       // Trim all zeroes front and back of the '.'.
       result = result.trim('0');
+      if(result == ".")
+      {
+         result = "0";
+      }
+      else if(*(result.begin()+(result.size()-1)) == '.') // check for 123. now.
+      {
+         return ossimString(result.begin(),
+                            result.begin()+result.size()-1);
+      }
+#if 0
+      // Trim all zeroes front and back of the '.'.
+      result = result.trim('0');
 
       ossim_uint32 size = result.size();
       if (size == 1) // A single '.'
@@ -886,6 +975,7 @@ ossimString ossimString::toString(ossim_float64 aValue,
             }
          }
       }
+#endif
    }
    return result;
 }
@@ -913,6 +1003,7 @@ ossimString ossimString::after(const ossimString& str,
 void ossimString::split(std::vector<ossimString>& result,
                         const ossimString& separatorList)const
 {
+	if(this->empty()) return;
 //   result = split(separatorList);
    ossimString copyString = *this;
 

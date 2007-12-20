@@ -17,10 +17,10 @@
 #include <ossim/base/ossimNotify.h>
 
 
-static ossimTrace traceDebug(ossimString("ossimImageTuple:debug"));
+static ossimTrace traceDebug(ossimString("ossimHgtRef:debug"));
 
 #ifdef OSSIM_ID_ENABLED
-static const char OSSIM_ID[] = "$Id: ossimHgtRef.cpp,v 1.0 2006/10/02  ?????";
+static const char OSSIM_ID[] = "$Id: ossimHgtRef.cpp 12086 2007-11-29 14:46:01Z dhicks $";
 #endif
 
 
@@ -32,6 +32,8 @@ static const char OSSIM_ID[] = "$Id: ossimHgtRef.cpp,v 1.0 2006/10/02  ?????";
 //  
 //*****************************************************************************
 ossimHgtRef::ossimHgtRef(HeightRefType_t cRefType)
+:
+theCurrentHeightRefType(cRefType)
 {
    if (traceDebug())
    {
@@ -42,8 +44,6 @@ ossimHgtRef::ossimHgtRef(HeightRefType_t cRefType)
          << "OSSIM_ID:  " << OSSIM_ID << std::endl;
 #endif 
    }
-   
-   theCurrentHeightRefType = cRefType;
    
 }
 
@@ -55,6 +55,9 @@ ossimHgtRef::ossimHgtRef(HeightRefType_t cRefType)
 //  
 //*****************************************************************************
 ossimHgtRef::ossimHgtRef(HeightRefType_t cRefType, const ossim_float64& atHgt)
+:
+theCurrentHeightRefType(cRefType),
+theCurrentRefHeight(atHgt)
 {
    if (traceDebug())
    {
@@ -65,9 +68,6 @@ ossimHgtRef::ossimHgtRef(HeightRefType_t cRefType, const ossim_float64& atHgt)
          << "OSSIM_ID:  " << OSSIM_ID << std::endl;
 #endif 
    }
-   
-   theCurrentHeightRefType = cRefType;
-   theCurrentRefHeight = atHgt;
    
 }
 
@@ -106,18 +106,17 @@ ossim_float64 ossimHgtRef::getRefHeight(const ossimGpt& pg) const
 
 
 //*****************************************************************************
-//  METHOD: ossimHgtRef::getHeightCovMatrix()
+//  METHOD: ossimHgtRef::getSurfaceCovMatrix()
 //  
-//  Get height reference covariance matrix.
+//  Get reference surface covariance matrix.
 //  
 //*****************************************************************************
-bool ossimHgtRef::getHeightCovMatrix(const ossimGpt& pg, NEWMAT::Matrix& cov) const
+bool ossimHgtRef::
+getSurfaceCovMatrix(const ossimGpt& pg, NEWMAT::Matrix& cov) const
 {
    
    ossim_float64 refCE;
    ossim_float64 refLE;
-   NEWMAT::Matrix tnU(3,1);
-   ossimLsrSpace enu(pg);
    
    switch (theCurrentHeightRefType)
    {
@@ -131,11 +130,11 @@ bool ossimHgtRef::getHeightCovMatrix(const ossimGpt& pg, NEWMAT::Matrix& cov) co
          
       case AT_DEM:
          // Set the reference CE/LE
-         //   Note: currently set to SRTM spec
+         //   Note: currently set to SRTM spec in METERS
          //        (ref: www2.jpl.nas.gov/srtm/statistics.html)
          //  "refCE = ossimElevManager::instance()->getAccuracyCE90(pg)" is
          //    the desirable operation here (if it is implemented)
-         refCE = 20.0; //meters
+         refCE = 20.0;
          refLE = 16.0;
          
          break;
@@ -144,29 +143,111 @@ bool ossimHgtRef::getHeightCovMatrix(const ossimGpt& pg, NEWMAT::Matrix& cov) co
          return false;
          break;
    }
-
-   // Set surface normal vector in ENU
-   ossimColumnVector3d sn = getLocalTerrainNormal(pg);
-   tnU << sn[0] << sn[1] << sn[2];
    
-   // Form the reference covariance matrix
-   NEWMAT::SymmetricMatrix refCov(3);
-   refCov = 0.0;
-   refCov(1,1) = refCE/2.146;
-   refCov(2,2) = refCE/2.146;
-   refCov(3,3) = refLE/1.6449;
+   // Form the covariance matrix
+   //  A circular error ellipse with no correlation must be assumed.
+   cov = 0.0;
+   cov(1,1) = refCE/2.146;
+   cov(2,2) = refCE/2.146;
+   cov(3,3) = refLE/1.6449;
+   cov(1,1) *= cov(1,1);
+   cov(2,2) *= cov(2,2);
+   cov(3,3) *= cov(3,3);
+   
+   return true;
+}
 
-   // Propagate to ECF
+
+//*****************************************************************************
+///  METHOD: ossimHgtRef::getSurfaceCovMatrix()
+//  
+//  Get reference surface covariance matrix.
+// 
+//*****************************************************************************
+bool ossimHgtRef::getSurfaceCovMatrix(const ossim_float64   refCE, 
+                                      const ossim_float64   refLE,
+                                      NEWMAT::Matrix& cov) const
+{
+   ossim_float64 useCE;
+   ossim_float64 useLE;
+   
+   if (refCE<0.0 || refLE<0.0)
+   {
+      return false;
+   }
+   
+   switch (theCurrentHeightRefType)
+   {
+      case AT_HGT:
+         // Set the reference CE/LE
+         //   Note: currently set to reflect no contribution
+         useCE = 0.0;
+         useLE = .01;
+         
+         break;
+         
+      case AT_DEM:
+         // Set the reference CE/LE
+         useCE = refCE;
+         useLE = refLE;
+         
+         break;
+         
+      default:
+         return false;
+         break;
+   }
+   
+   // Form the covariance matrix
+   //  A circular error ellipse with no correlation must be assumed.
+   cov = 0.0;
+   cov(1,1) = useCE/2.146;
+   cov(2,2) = useCE/2.146;
+   cov(3,3) = useLE/1.6449;
+   cov(1,1) *= cov(1,1);
+   cov(2,2) *= cov(2,2);
+   cov(3,3) *= cov(3,3);
+   
+   return true;
+}
+
+
+//*****************************************************************************
+//  METHOD: ossimHgtRef::getSurfaceNormalCovMatrix()
+//  
+//  Form surface normal ECF covariance matrix from ENU surface covariance.
+//  
+//*****************************************************************************
+bool ossimHgtRef::
+getSurfaceNormalCovMatrix
+   (const ossimGpt&       pg, 
+    const NEWMAT::Matrix& surfCov, 
+          NEWMAT::Matrix& normCov) const
+{
+   // Set the local frame
+   ossimLsrSpace enu(pg);
+
+   // Propagate the reference covariance matrix to ECF
    NEWMAT::Matrix covEcf;
-   covEcf = enu.lsrToEcefRotMatrix() * refCov * enu.lsrToEcefRotMatrix().t();
+   covEcf = enu.lsrToEcefRotMatrix() * surfCov * enu.lsrToEcefRotMatrix().t();
+
+   // Get surface normal vector in ENU
+   ossimColumnVector3d sn = getLocalTerrainNormal(pg);
+   NEWMAT::Matrix tnU(3,1);
+   tnU << sn[0] << sn[1] << sn[2];
+
+   // Rotate surface normal to ECF
+   NEWMAT::Matrix tnUecf(3,1);
+   tnUecf = enu.lsrToEcefRotMatrix().t() * tnU;
 
    // Propagate to terrain normal
    NEWMAT::Matrix ptn;
    NEWMAT::SymmetricMatrix ptns;
-   ptn = tnU.t() * covEcf * tnU;
+   ptn = tnUecf.t() * covEcf * tnUecf;
    ptns << ptn;
 
-   cov = tnU * ptns * tnU.t();
+   // And back to ECF
+   normCov = tnUecf * ptns * tnUecf.t();
 
 
    return true;
@@ -210,6 +291,19 @@ ossimColumnVector3d ossimHgtRef::getLocalTerrainNormal(const ossimGpt& pg) const
                      ossimElevManager::instance()->getHeightAboveEllipsoid(p);
                }
             }
+            
+            if (traceDebug())
+            {
+               ossimNotify(ossimNotifyLevel_DEBUG)
+                  <<"DEBUG: getLocalTerrainNormal...  3X3 grid"<<endl;
+               for (ossim_int32 lat=1; lat>=-1; --lat)
+               {
+                  for (ossim_int32 lon=-1; lon<=1; ++lon)
+                    ossimNotify(ossimNotifyLevel_DEBUG)<<"  "<<h(lat+2,lon+2);
+                  ossimNotify(ossimNotifyLevel_DEBUG)<<endl;
+               }
+            }
+
             ossim_float64 dz_dlon =
                   ((h(1,3)+2*h(2,3)+h(3,3))-(h(1,1)+2*h(2,1)+h(3,1)))/(8*delta);
             ossim_float64 dz_dlat =
@@ -217,6 +311,18 @@ ossimColumnVector3d ossimHgtRef::getLocalTerrainNormal(const ossimGpt& pg) const
             tNorm[0] = dz_dlon;
             tNorm[1] = dz_dlat;
             tNorm[2] = 1.0 - sqrt(dz_dlon*dz_dlon+dz_dlat*dz_dlat);
+         }
+         
+         // If error condition, return z-aligned vector to allow continuation
+         if (ossim::isnan(tNorm[0]) ||
+             ossim::isnan(tNorm[1]) ||
+             ossim::isnan(tNorm[2]))
+         {
+            tNorm = tNorm.zAligned();
+            ossimNotify(ossimNotifyLevel_WARN)
+               << "WARNING: ossimHgtRef::getLocalTerrainNormal(): "
+               << "\n   error... terrain normal set to vertical..."
+               << std::endl;
          }
          break;
          

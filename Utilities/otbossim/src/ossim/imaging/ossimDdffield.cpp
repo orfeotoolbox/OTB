@@ -26,7 +26,7 @@
  * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
  * DEALINGS IN THE SOFTWARE.
  ******************************************************************************
- * $Id: ossimDdffield.cpp 9094 2006-06-13 19:12:40Z dburken $
+ * $Id: ossimDdffield.cpp 11347 2007-07-23 13:01:59Z gpotts $
  */
 
 #include <ossim/imaging/ossimIso8211.h>
@@ -35,7 +35,7 @@
 
 // #include "cpl_conv.h"
 
-// CPL_CVSID("$Id: ossimDdffield.cpp 9094 2006-06-13 19:12:40Z dburken $");
+// CPL_CVSID("$Id: ossimDdffield.cpp 11347 2007-07-23 13:01:59Z gpotts $");
 
 // Note, we implement no constructor for this class to make instantiation
 // cheaper.  It is required that the Initialize() be called before anything
@@ -81,7 +81,7 @@ void ossimDDFField::Dump( FILE * fp )
     fprintf( fp, "      DataSize = %d\n", nDataSize );
 
     fprintf( fp, "      Data = `" );
-    for( int i = 0; i < MIN(nDataSize,40); i++ )
+    for( int i = 0; i < std::min(nDataSize,40); i++ )
     {
         if( pachData[i] < 32 || pachData[i] > 126 )
             fprintf( fp, "\\%02X", ((unsigned char *) pachData)[i] );

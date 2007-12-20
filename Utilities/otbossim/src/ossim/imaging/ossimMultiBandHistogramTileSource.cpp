@@ -1,14 +1,11 @@
 //*******************************************************************
-// Copyright (C) 2000 ImageLinks Inc. 
 //
-// License:  LGPL
-// 
-// See LICENSE.txt file in the top level directory for more details.
+// License:  See top level LICENSE.txt file.
 //
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimMultiBandHistogramTileSource.cpp 9094 2006-06-13 19:12:40Z dburken $
+// $Id: ossimMultiBandHistogramTileSource.cpp 11721 2007-09-13 13:19:34Z gpotts $
 #include <ossim/imaging/ossimMultiBandHistogramTileSource.h>
 #include <ossim/base/ossimMultiResLevelHistogram.h>
 #include <ossim/base/ossimMultiBandHistogram.h>
@@ -31,7 +28,7 @@ RTTI_DEF1(ossimMultiBandHistogramTileSource,
    
 ossimMultiBandHistogramTileSource::ossimMultiBandHistogramTileSource()
    : ossimImageSourceHistogramFilter(),
-     theTile(NULL),
+     theTile(0),
      theAlgorithm(OSSIM_HISTOGRAM_LINEAR_STRETCH_ALGORITHM)
 {
    disableSource();
@@ -42,7 +39,7 @@ ossimMultiBandHistogramTileSource::ossimMultiBandHistogramTileSource(double minV
                                                                ossimImageSource* inputSource,
                                                                ossimMultiResLevelHistogram* histogram)
    : ossimImageSourceHistogramFilter(inputSource, histogram),
-     theTile(NULL),
+     theTile(0),
      theAlgorithm(OSSIM_HISTOGRAM_LINEAR_STRETCH_ALGORITHM)
 {
    disableSource();
@@ -56,7 +53,7 @@ ossimRefPtr<ossimImageData> ossimMultiBandHistogramTileSource::getTile(
    const ossimIrect& tileRect,
    ossim_uint32 resLevel)
 {
-   if(!theInputConnection) return NULL;
+   if(!theInputConnection) return 0;
    
    ossimRefPtr<ossimImageData> inputTile = theInputConnection->getTile(tileRect,
                                                                        resLevel);
@@ -134,7 +131,7 @@ void ossimMultiBandHistogramTileSource::initialize()
    ossimImageSourceHistogramFilter::initialize();
 
    // Force an allocate on the next getTile.
-   theTile = NULL;
+   theTile = 0;
 }
 
 void ossimMultiBandHistogramTileSource::allocate()
@@ -313,8 +310,8 @@ ossimRefPtr<ossimImageData> ossimMultiBandHistogramTileSource::runLinearStretchA
       return tile;
    }
 
-   ossimMultiBandHistogram* histo    = getHistogram()->getMultiBandHistogram(theCurrentResLevel);
-   if(histo)
+   ossimRefPtr<ossimMultiBandHistogram> histo    = getHistogram()->getMultiBandHistogram(theCurrentResLevel);
+   if(histo.valid())
    {
       ossim_uint32 maxBands = ( (histo->getNumberOfBands() >
                            tile->getNumberOfBands())?
@@ -325,14 +322,14 @@ ossimRefPtr<ossimImageData> ossimMultiBandHistogramTileSource::runLinearStretchA
 
       for(ossim_uint32 band = 0; band < maxBands; ++band)
       {
-         ossimHistogram* h  = histo->getHistogram(band);
+         ossimRefPtr<ossimHistogram> h  = histo->getHistogram(band);
          
          T* buf   = static_cast<T*>(tile->getBuf(band));
          T np     = static_cast<T>(tile->getNullPix(band));
          T minPix = static_cast<T>(tile->getMinPix(band));
          T maxPix = static_cast<T>(tile->getMaxPix(band));
          T range  = (maxPix - minPix);
-         if(h&&buf)
+         if(h.valid()&&buf)
          {
             
             double maxClip = minPix + (h->HighClipVal(theMaxValuePercentArray[band])/(double)h->GetRes())*range;

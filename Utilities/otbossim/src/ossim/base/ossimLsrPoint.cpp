@@ -71,17 +71,24 @@ ossimLsrPoint::ossimLsrPoint(const ossimEcefPoint& convert_this,
 //  given an ECEF point. Assumes theLsrSpace has been previously initialized.
 //  
 //*****************************************************************************
-void ossimLsrPoint::initialize(ossimEcefPoint ecef_point)
+void ossimLsrPoint::initialize(const ossimEcefPoint& ecef_point)
 {
-   //***
-   // Translate to new space given the space's offset origin:
-   //***
-   ossimColumnVector3d xlated ((ecef_point - theLsrSpace.origin()).data());
-
-   //***
-   // Rotate by the inverse (transpose) of the LSR-to-ECEF rot matrix:
-   //***
-   theData = theLsrSpace.ecefToLsrRotMatrix() * xlated;
+   if(ecef_point.hasNans())
+   {
+      makeNan();
+   }
+   else
+   {
+      //
+      // Translate to new space given the space's offset origin:
+      //
+      ossimColumnVector3d xlated ((ecef_point - theLsrSpace.origin()).data());
+      
+      //
+      // Rotate by the inverse (transpose) of the LSR-to-ECEF rot matrix:
+      //
+      theData = theLsrSpace.ecefToLsrRotMatrix() * xlated;
+   }
 }
 
 //*****************************************************************************
@@ -90,12 +97,13 @@ void ossimLsrPoint::initialize(ossimEcefPoint ecef_point)
 //*****************************************************************************
 ossimLsrVector ossimLsrPoint::operator-(const ossimLsrPoint& p) const
 {
-   if (theLsrSpace == p.theLsrSpace)
-      return ossimLsrVector(theData-p.theData, theLsrSpace);
-
-   //else error:
-   ossimLsrSpace::lsrSpaceErrorMessage();
-   return ossimLsrVector(OSSIM_NAN, OSSIM_NAN, OSSIM_NAN, theLsrSpace);
+   if(hasNans()||p.hasNans()||(theLsrSpace != p.lsrSpace()))
+   {
+      theLsrSpace.lsrSpaceErrorMessage();
+      return ossimLsrVector(ossim::nan(), ossim::nan(), ossim::nan(), theLsrSpace);
+      
+   }
+   return ossimLsrVector(theData-p.theData, theLsrSpace);
 }
 
 //*****************************************************************************
@@ -104,11 +112,12 @@ ossimLsrVector ossimLsrPoint::operator-(const ossimLsrPoint& p) const
 //*****************************************************************************
 ossimLsrPoint ossimLsrPoint::operator+(const ossimLsrVector& v) const
 {
-   if (theLsrSpace == v.lsrSpace())
-      return ossimLsrPoint(theData + v.data(), theLsrSpace);
-
-   //else error:
-   theLsrSpace.lsrSpaceErrorMessage();
-   return ossimLsrPoint(OSSIM_NAN, OSSIM_NAN, OSSIM_NAN, theLsrSpace);
+   if(hasNans()||v.hasNans()||(theLsrSpace != v.lsrSpace()))
+   {
+      ossimLsrSpace::lsrSpaceErrorMessage();
+      return ossimLsrPoint(ossim::nan(), ossim::nan(), ossim::nan(), theLsrSpace);
+      
+   }
+   return ossimLsrPoint(theData + v.data(), theLsrSpace);
 }
 

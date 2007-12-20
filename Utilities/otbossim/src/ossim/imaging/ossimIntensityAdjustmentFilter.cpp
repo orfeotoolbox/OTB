@@ -8,7 +8,7 @@
 // Author:  Garrett Potts
 //
 //*******************************************************************
-// $Id: ossimIntensityAdjustmentFilter.cpp 9094 2006-06-13 19:12:40Z dburken $
+// $Id: ossimIntensityAdjustmentFilter.cpp 11411 2007-07-27 13:53:51Z dburken $
 #include <ossim/imaging/ossimIntensityAdjustmentFilter.h>
 #include <ossim/imaging/ossimImageDataFactory.h>
 #include <ossim/base/ossimHsvVector.h>
@@ -18,7 +18,7 @@ RTTI_DEF1(ossimIntensityAdjustmentFilter, "ossimIntensityAdjustmentFilter", ossi
 
 ossimIntensityAdjustmentFilter::ossimIntensityAdjustmentFilter()
    :ossimImageSourceFilter(),
-    theMeanIntensityTarget(OSSIM_DBL_NAN),
+    theMeanIntensityTarget(ossim::nan()),
     theNormTile(NULL),
     theTile(NULL),
     theBlankTile(NULL)
@@ -58,7 +58,7 @@ ossimRefPtr<ossimImageData> ossimIntensityAdjustmentFilter::getTile(
    theNormTile->setImageRectangle(rect);
    loadNormTile(data);
 
-   if(theMeanIntensityTarget == OSSIM_DBL_NAN)
+   if(ossim::isnan(theMeanIntensityTarget))
    {
       theMeanIntensityTarget = theMeanIntensityGrid.meanValue();
    }

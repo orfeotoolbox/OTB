@@ -8,7 +8,7 @@
 //
 // Contains class declaration for ossimImageWriter
 //*******************************************************************
-//  $Id: ossimImageFileWriter.h 10318 2007-01-19 18:40:09Z dburken $
+//  $Id: ossimImageFileWriter.h 11181 2007-06-07 19:57:14Z dburken $
 
 #ifndef ossimImageFileWriter_HEADER
 #define ossimImageFileWriter_HEADER
@@ -212,6 +212,9 @@ public:
     * @return true if object can write to stream, false if not.
     */
    virtual bool setOutputStream(ossimRefPtr<ossimOStream> stream);
+
+   /** tmp drb */
+   virtual bool setOutputStream(std::ostream& str);
 
    /**
     * @brief Method to return the stream attached to output.

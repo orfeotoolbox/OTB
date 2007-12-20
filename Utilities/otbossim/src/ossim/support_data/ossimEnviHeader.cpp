@@ -10,7 +10,7 @@
 // Images) header file.
 //
 //----------------------------------------------------------------------------
-// $Id: ossimEnviHeader.cpp 9094 2006-06-13 19:12:40Z dburken $
+// $Id: ossimEnviHeader.cpp 11347 2007-07-23 13:01:59Z gpotts $
 
 #include <fstream>
 #include <string>
@@ -56,7 +56,7 @@ ossimEnviHeader::ossimEnviHeader()
    theWavelength()   
 {
    // Start the byte order of with the machine byte order.
-   theByteOrder = ossimGetByteOrder();
+   theByteOrder = ossim::byteOrder();
 }
 
 ossimEnviHeader::~ossimEnviHeader()

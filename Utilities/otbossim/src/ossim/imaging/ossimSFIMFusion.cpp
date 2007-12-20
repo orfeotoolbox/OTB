@@ -6,7 +6,7 @@
 // Author:  Garrett Potts
 //
 //*******************************************************************
-//  $Id: ossimSFIMFusion.cpp 9609 2006-09-25 18:29:41Z gpotts $
+//  $Id: ossimSFIMFusion.cpp 11347 2007-07-23 13:01:59Z gpotts $
 #include <ossim/imaging/ossimSFIMFusion.h>
 #include <ossim/matrix/newmat.h>
 #include <ossim/matrix/newmatio.h>
@@ -267,7 +267,7 @@ void ossimSFIMFusion::initAdjustableParameters()
 void ossimSFIMFusion::adjustableParametersChanged()
 {
 //   std::cout << "Parameter offset = " << computeParameterOffset(2) << std::endl;
-   theBlurrKernelWidth = (ossim_uint32)(irint(computeParameterOffset(PAN_BLURR_WIDTH_OFFSET)));
+   theBlurrKernelWidth = (ossim_uint32)(ossim::round<int>(computeParameterOffset(PAN_BLURR_WIDTH_OFFSET)));
 }
 
 

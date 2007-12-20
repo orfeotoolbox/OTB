@@ -1,11 +1,7 @@
 //*****************************************************************************
-// FILE: ossimInit.cc
+// FILE: ossimInit.cpp
 //
-// Copyright (C) 2001 ImageLinks, Inc.
-//
-// License:  LGPL
-//
-// See LICENSE.txt file in the top level directory for more details.
+// License:  See top level LICENSE.txt file.
 //
 // DESCRIPTION:
 //   Contains implementation of class ossimInit. This object handles all
@@ -20,11 +16,11 @@
 //   24Apr2001  Oscar Kramer
 //              Initial coding.
 //*****************************************************************************
-// $Id: ossimInit.cpp 9922 2006-11-21 23:11:33Z dburken $
+// $Id: ossimInit.cpp 12181 2007-12-12 22:03:17Z dburken $
 
-#include <iostream>
-using namespace std;
+
 #include <ossim/init/ossimInit.h>
+//#include <ossim/ossimVersion.h>
 #include <ossim/base/ossimPreferences.h>
 #include <ossim/base/ossimKeywordNames.h>
 #include <ossim/base/ossimArgumentParser.h>
@@ -32,7 +28,7 @@ using namespace std;
 #include <ossim/base/ossimTraceManager.h>
 #include <algorithm>
 #include <ossim/base/ossimEnvironmentUtility.h>
-
+#include <ossim/base/ossimGeoidEgm96.h>
 //***
 // Define Trace flags for use within this file:
 //***
@@ -64,15 +60,16 @@ using namespace std;
 static ossimTrace traceExec = ossimTrace("ossimInit:exec");
 static ossimTrace traceDebug = ossimTrace("ossimInit:debug");
 
-ossimInit* ossimInit::theInstance = NULL;
+ossimInit* ossimInit::theInstance = 0;
 
 ossimInit::~ossimInit()
 {
-   theInstance = NULL;
+   theInstance = 0;
 }
 
 ossimInit::ossimInit()
     :
+       theInitializedFlag(false),
        theAppName(),
        thePreferences(ossimPreferences::instance()),
        theElevEnabledFlag(true),
@@ -110,11 +107,26 @@ void ossimInit::addOptions(ossimArgumentParser& parser)
  *****************************************************************************/
 void ossimInit::initialize(int& argc, char** argv)
 {
-   if (traceExec())  ossimNotify(ossimNotifyLevel_DEBUG)
-      << "DEBUG ossimInit::initialize(argc, argv): entering..." << std::endl;
+   if (traceExec())
+   {
+      ossimNotify(ossimNotifyLevel_DEBUG)
+         << "DEBUG ossimInit::initialize(argc, argv): entering..."
+         << std::endl;
+   }
 
+   if(theInitializedFlag)
+   {
+      if (traceDebug())
+      {
+         ossimNotify(ossimNotifyLevel_DEBUG)
+            << "DEBUG ossimInit::initialize(argc, argv): Already initialized, returning......"
+            << std::endl;
+      }
+      return;
+   }
    theInstance->theAppName  = argv[0];
 
+   
    theInstance->thePreferences = ossimPreferences::instance();
 
    // Parse the command line:
@@ -129,6 +141,8 @@ void ossimInit::initialize(int& argc, char** argv)
    
    if (traceExec())  ossimNotify(ossimNotifyLevel_DEBUG)
       << "DEBUG ossimInit::initialize(argc, argv): leaving..." << std::endl;
+
+   theInitializedFlag = true;
    return;
 }
 
@@ -139,8 +153,18 @@ void ossimInit::initialize(ossimArgumentParser& parser)
       ossimNotify(ossimNotifyLevel_DEBUG)
       << "DEBUG ossimInit::initialize(parser): entering..." << endl;
    }
+   if(theInitializedFlag)
+   {
+      if (traceDebug())
+      {
+         ossimNotify(ossimNotifyLevel_DEBUG)<< "DEBUG ossimInit::initialize(parser): Already initialized, returning......"
+                                            << std::endl;
+      }
+      return;
+   }
 
    theInstance->theAppName  = parser.getApplicationUsage()->getApplicationName();
+   theInstance->parseNotifyOption(parser);
    theInstance->thePreferences = ossimPreferences::instance();
       
     //Parse the command line:
@@ -164,6 +188,7 @@ void ossimInit::initialize(ossimArgumentParser& parser)
       ossimNotify(ossimNotifyLevel_DEBUG)
       << "DEBUG ossimInit::initialize(parser): leaving..." << endl;
    }
+   theInitializedFlag = true;
    return;
 }
 
@@ -171,6 +196,15 @@ void ossimInit::initialize()
 {
    if (traceExec())  ossimNotify(ossimNotifyLevel_DEBUG)
       << "DEBUG ossimInit::initialize(): entering..." << std::endl;
+   if(theInitializedFlag)
+   {
+      if (traceDebug())
+      {
+         ossimNotify(ossimNotifyLevel_DEBUG)<< "DEBUG ossimInit::initialize(): Already initialized, returning......"
+                                            << std::endl;
+      }
+      return;
+   }
 
    theInstance->theAppName  = "";
    theInstance->thePreferences = ossimPreferences::instance();
@@ -187,6 +221,7 @@ void ossimInit::initialize()
    {
       theInstance->initializePlugins();
    }
+   theInitializedFlag = true;
    
    return;
 }
@@ -225,6 +260,37 @@ void ossimInit::setPluginLoaderEnabledFlag(bool flag)
    thePluginLoaderEnabledFlag = flag;  
 }
 
+void ossimInit::loadPlugins(const ossimFilename& plugin)
+{
+   if(!thePluginLoaderEnabledFlag) return;
+
+   if(plugin.exists())
+   {
+      if(plugin.isDir())
+      {
+         ossimDirectory dir;
+         if(dir.open(plugin))
+         {
+            ossimFilename file;
+            
+            if(dir.getFirst(file,
+                            ossimDirectory::OSSIM_DIR_FILES))
+            {
+               do
+               { 
+                  ossimSharedPluginRegistry::instance()->registerPlugin(file);
+               }
+               while(dir.getNext(file));
+            }
+         }
+      }
+      else
+      {
+         ossimSharedPluginRegistry::instance()->registerPlugin(plugin);
+      }
+   }
+   
+}
 
 void ossimInit::parseOptions(ossimArgumentParser& parser)
 {
@@ -406,6 +472,41 @@ void ossimInit::parseOptions(int& argc, char** argv)
       << "DEBUG ossimInit::parseOptions(argc, argv): leaving..." << std::endl;
 }
 
+void ossimInit::parseNotifyOption(ossimArgumentParser& parser)
+{
+   std::string tempString;
+   ossimArgumentParser::ossimParameter stringParameter(tempString);
+   while(parser.read("--disable-notify", stringParameter))
+   {
+      ossimString tempDownCase = tempString;
+      tempDownCase = tempDownCase.downcase();
+
+      if(tempDownCase == "warn")
+      {
+         ossimDisableNotify(ossimNotifyFlags_WARN);
+      }
+      else if(tempDownCase == "fatal")
+      {
+         ossimDisableNotify(ossimNotifyFlags_FATAL);
+      }
+      else if(tempDownCase == "debug")
+      {
+         ossimDisableNotify(ossimNotifyFlags_DEBUG);
+      }
+      else if(tempDownCase == "info")
+      {
+         ossimDisableNotify(ossimNotifyFlags_INFO);
+      }
+      else if(tempDownCase == "notice")
+      {
+         ossimDisableNotify(ossimNotifyFlags_NOTICE);
+      }
+      else if(tempDownCase == "all")
+      {
+         ossimDisableNotify(ossimNotifyFlags_ALL);
+      }
+   }
+}
 
 /*!****************************************************************************
  * METHOD: ossimInit::removeOption()
@@ -469,6 +570,21 @@ void ossimInit::initializeDefaultFactories()
 
 void ossimInit::initializePlugins()
 {
+   // check for plugins in the current directory
+   // and load them
+   ossimDirectory currentDir(theAppName.path());
+   std::vector<ossimFilename> result;
+   currentDir.findAllFilesThatMatch(result, "ossim.*plugin.*", ossimDirectory::OSSIM_DIR_FILES);
+
+   if(result.size())
+   {
+	   ossim_uint32 idx = 0;
+	   for(idx = 0; idx < result.size(); ++idx)
+	   {
+          ossimSharedPluginRegistry::instance()->registerPlugin(result[idx]);
+	   }
+   }
+
    ossimString regExpressionDir =  ossimString("^(") + "plugin.dir[0-9]+)";
    ossimString regExpressionFile =  ossimString("^(") + "plugin.file[0-9]+)";
 
@@ -485,45 +601,55 @@ void ossimInit::initializePlugins()
 
    
    ossimFilename installedPluginDir = ossimEnvironmentUtility::instance()->getInstalledOssimPluginDir();
-   if(installedPluginDir.exists())
-   {
-      ossimDirectory dir;
-      if(dir.open(installedPluginDir))
-      {
-         ossimFilename file;
+   loadPlugins(installedPluginDir);
+//    if(installedPluginDir.exists())
+//    {
+//       ossimDirectory dir;
+//       if(dir.open(installedPluginDir))
+//       {
+//          ossimFilename file;
 
-         if(dir.getFirst(file,
-                         ossimDirectory::OSSIM_DIR_FILES))
-         {
-            do
-            {
-               ossimSharedPluginRegistry::instance()->registerPlugin(file);
-            }
-            while(dir.getNext(file));
-         }
-      }
-   }
+//          if(dir.getFirst(file,
+//                          ossimDirectory::OSSIM_DIR_FILES))
+//          {
+//             do
+//             {
+//                ossimSharedPluginRegistry::instance()->registerPlugin(file);
+//             }
+//             while(dir.getNext(file));
+//          }
+//       }
+//    }
    
    // register user plugins first
    ossimFilename userPluginDir = ossimEnvironmentUtility::instance()->getUserOssimPluginDir();
-   if(userPluginDir.exists())
-   {
-      ossimDirectory dir;
-      if(dir.open(userPluginDir))
-      {
-         ossimFilename file;
+   loadPlugins(userPluginDir);
 
-         if(dir.getFirst(file,
-                         ossimDirectory::OSSIM_DIR_FILES))
-         {
-            do
-            {
-               ossimSharedPluginRegistry::instance()->registerPlugin(file);
-            }
-            while(dir.getNext(file));
-         }
-      }
-   }
+   // no check for bundled plugins that are at the executable/plugins location
+//   ossimFilename bundlePlugins = theAppName.path();
+//   bundlePlugins = bundlePlugins.dirCat("plugins");
+//   if(bundlePlugins.exists())
+//   {
+//	  loadPlugins(bundlePlugins);
+//   }
+//    if(userPluginDir.exists())
+//    {
+//       ossimDirectory dir;
+//       if(dir.open(userPluginDir))
+//       {
+//          ossimFilename file;
+
+//          if(dir.getFirst(file,
+//                          ossimDirectory::OSSIM_DIR_FILES))
+//          {
+//             do
+//             {
+//                ossimSharedPluginRegistry::instance()->registerPlugin(file);
+//             }
+//             while(dir.getNext(file));
+//          }
+//       }
+//    }
    
    if(numberList.size()>0)
    {
@@ -543,20 +669,21 @@ void ossimInit::initializePlugins()
          
          if(directory)
          {
-            ossimDirectory d;
+            loadPlugins(ossimFilename(directory));
+//             ossimDirectory d;
             
-            if(d.open(ossimFilename(directory)))
-            {
-               ossimFilename file;
+//             if(d.open(ossimFilename(directory)))
+//             {
+//                ossimFilename file;
                
-               if(d.getFirst(file, ossimDirectory::OSSIM_DIR_FILES))
-               {
-                  do
-                  {
-                     ossimSharedPluginRegistry::instance()->registerPlugin(file);
-                  }while(d.getNext(file));
-               }
-            }
+//                if(d.getFirst(file, ossimDirectory::OSSIM_DIR_FILES))
+//                {
+//                   do
+//                   {
+//                      ossimSharedPluginRegistry::instance()->registerPlugin(file);
+//                   }while(d.getNext(file));
+//                }
+//             }
          }
       }
    }
@@ -583,7 +710,8 @@ void ossimInit::initializePlugins()
          
          if(file&&ossimFilename(file).exists())
          {
-            ossimSharedPluginRegistry::instance()->registerPlugin(file);
+            loadPlugins(file);
+//             ossimSharedPluginRegistry::instance()->registerPlugin(file);
          }
       }
    }
@@ -596,9 +724,56 @@ void ossimInit::initializeElevation()
    
    const ossimKeywordlist& KWL = thePreferences->preferencesKWL();
 
+   ossimFilename appPath = theAppName.path();
+   // look for bundled elevation and geoids
+   {
+	   ossimFilename geoid = appPath.dirCat("geoids");
+	   geoid = geoid.dirCat("geoid1996");
+	   geoid = geoid.dirCat("egm96.grd");
+	   if(geoid.exists())
+	   {
+         ossimGeoid* geoidPtr = new ossimGeoidEgm96(geoid);
+
+         if (geoidPtr->getErrorStatus() == ossimErrorCodes::OSSIM_OK)
+         {
+		    ossimGeoidManager::instance()->addGeoid(geoidPtr);
+		 }
+	   }
+	   ossimFilename elevation = appPath.dirCat("elevation");
+	   if(elevation.exists())
+	   {
+		   ossimElevManager::instance()->loadElevationPath(elevation);
+	   }
+   }
    ossimGeoidManager::instance()->loadState(KWL);
    ossimElevManager::instance()->loadState(KWL);
    
    if (traceDebug()) ossimNotify(ossimNotifyLevel_DEBUG)
       << "DEBUG ossimInit::initializeElevation(): leaving..." << std::endl;
 }
+
+ossimString ossimInit::version() const
+{
+   ossimString versionString = "version ";
+#ifdef OSSIM_VERSION
+   versionString += OSSIM_VERSION;
+#else
+   versionString += "?.?.?";
+#endif
+   
+   versionString += " ";
+
+#ifdef OSSIM_BUILD_DATE
+   versionString += OSSIM_BUILD_DATE;
+#else
+   versionString += "(yyyymmdd)";
+#endif
+
+   return versionString;
+}
+
+ossimInit::ossimInit(const ossimInit& /* obj */ )
+{}       
+
+void ossimInit::operator=(const ossimInit& /* rhs */) const
+{}

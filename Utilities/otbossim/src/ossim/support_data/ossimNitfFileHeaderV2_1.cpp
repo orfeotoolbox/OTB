@@ -7,7 +7,7 @@
 // Description: Nitf support class
 // 
 //********************************************************************
-// $Id: ossimNitfFileHeaderV2_1.cpp 10553 2007-02-28 20:35:26Z gpotts $
+// $Id: ossimNitfFileHeaderV2_1.cpp 11062 2007-05-29 12:46:36Z gpotts $
 
 #include <iostream>
 #include <iomanip>
@@ -1097,7 +1097,6 @@ void ossimNitfFileHeaderV2_1::setFileLength(ossim_uint64 fileLength)
 }
 
 void ossimNitfFileHeaderV2_1::setNumberOfImageInfoRecords(ossim_uint64 num)
-   throw(std::out_of_range)
 {
    if (num < 1000)
    {

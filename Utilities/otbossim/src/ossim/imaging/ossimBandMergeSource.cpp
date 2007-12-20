@@ -8,7 +8,7 @@
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimBandMergeSource.cpp 9094 2006-06-13 19:12:40Z dburken $
+// $Id: ossimBandMergeSource.cpp 11411 2007-07-27 13:53:51Z dburken $
 #include <ossim/imaging/ossimBandMergeSource.h>
 #include <ossim/imaging/ossimImageData.h>
 #include <ossim/imaging/ossimImageDataFactory.h>
@@ -39,9 +39,10 @@ ossimBandMergeSource::~ossimBandMergeSource()
 ossimRefPtr<ossimImageData> ossimBandMergeSource::getTile(const ossimIrect& tileRect,
                                               ossim_uint32 resLevel)
 {
+   ossim_uint32 layerIdx = 0;
    if( ( getNumberOfInputs() == 1) || !isSourceEnabled() )
    {
-      return getNextTile(0, tileRect, resLevel);
+      return getNextTile(layerIdx, 0, tileRect, resLevel);
    }
 
    // test if initialized
@@ -52,7 +53,7 @@ ossimRefPtr<ossimImageData> ossimBandMergeSource::getTile(const ossimIrect& tile
    
    if(!theTile.get())
    {
-      return getNextTile(0, tileRect, resLevel);
+      return getNextTile(layerIdx, 0, tileRect, resLevel);
    }
    
    long w     = tileRect.width();
@@ -160,7 +161,7 @@ double ossimBandMergeSource::getNullPixelValue(ossim_uint32 band)const
       ++idx;
    }
    
-   return OSSIM_DBL_NAN;
+   return ossim::nan();
 }
 
 double ossimBandMergeSource::getMinPixelValue(ossim_uint32 band)const
@@ -216,7 +217,7 @@ double ossimBandMergeSource::getMaxPixelValue(ossim_uint32 band)const
       ++idx;
    }
    
-   return OSSIM_DBL_NAN;
+   return ossim::nan();
 }
 
 void ossimBandMergeSource::initialize()

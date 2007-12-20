@@ -1,5 +1,5 @@
 //*****************************************************************************
-// FILE: ossimEcefPoint.cc
+// FILE: ossimEcefPoint.cpp
 //
 // License:  See top level LICENSE.txt file.
 //
@@ -13,9 +13,9 @@
 //              Initial coding.
 //<
 //*****************************************************************************
-//  $Id: ossimEcefPoint.cpp 9531 2006-09-11 11:18:27Z dburken $
+//  $Id: ossimEcefPoint.cpp 11399 2007-07-26 13:39:54Z dburken $
 
-#include <sstream>
+#include <ostream>
 
 #include <ossim/base/ossimEcefPoint.h>
 #include <ossim/base/ossimGpt.h>

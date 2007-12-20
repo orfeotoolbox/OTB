@@ -8,7 +8,7 @@
 // Author:  Garrett Potts
 //
 //*******************************************************************
-//  $Id: ossimMeanMedianFilter.cpp 9094 2006-06-13 19:12:40Z dburken $
+//  $Id: ossimMeanMedianFilter.cpp 11955 2007-10-31 16:10:22Z gpotts $
 
 #include <vector>
 #include <algorithm>
@@ -294,7 +294,7 @@ void ossimMeanMedianFilter::applyMean(T dummyVariable,
    ossim_uint32 iw  = inputData->getWidth();
    ossim_uint32 ow  = theTile->getWidth();
    ossim_uint32 oh = theTile->getHeight();
-   ossim_uint32 numberOfBands = ossimMin(theTile->getNumberOfBands(),
+   ossim_uint32 numberOfBands = ossim::min(theTile->getNumberOfBands(),
                                          inputData->getNumberOfBands());
    ossimDataObjectStatus status = inputData->getDataObjectStatus();
    std::vector<double> values(theWindowSize*theWindowSize);
@@ -418,7 +418,7 @@ template <class T> void ossimMeanMedianFilter::applyMeanNullCenterOnly(
    ossim_uint32 iw  = inputData->getWidth();
    ossim_uint32 ow  = theTile->getWidth();
    ossim_uint32 oh = theTile->getHeight();
-   ossim_uint32 numberOfBands = ossimMin(theTile->getNumberOfBands(),
+   ossim_uint32 numberOfBands = ossim::min(theTile->getNumberOfBands(),
                                          inputData->getNumberOfBands());
    ossimDataObjectStatus status = inputData->getDataObjectStatus();
    std::vector<double> values;
@@ -513,7 +513,7 @@ void ossimMeanMedianFilter::applyMedian(T dummyVariable,
    ossim_uint32 iw  = inputData->getWidth();
    ossim_uint32 ow  = theTile->getWidth();
    ossim_uint32 oh = theTile->getHeight();
-   ossim_uint32 numberOfBands = ossimMin(theTile->getNumberOfBands(),
+   ossim_uint32 numberOfBands = ossim::min(theTile->getNumberOfBands(),
                                          inputData->getNumberOfBands());
    ossimDataObjectStatus status = inputData->getDataObjectStatus();
    std::vector<T> values(theWindowSize*theWindowSize);
@@ -633,7 +633,7 @@ template <class T> void ossimMeanMedianFilter::applyMedianNullCenterOnly (
    ossim_uint32 iw  = inputData->getWidth();
    ossim_uint32 ow  = theTile->getWidth();
    ossim_uint32 oh = theTile->getHeight();
-   ossim_uint32 numberOfBands = ossimMin(theTile->getNumberOfBands(),
+   ossim_uint32 numberOfBands = ossim::min(theTile->getNumberOfBands(),
                                          inputData->getNumberOfBands());
    ossimDataObjectStatus status = inputData->getDataObjectStatus();
    std::vector<T> values;

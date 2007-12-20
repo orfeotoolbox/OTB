@@ -7,7 +7,7 @@
 //              support data for a ADRG image file(s).
 //
 //********************************************************************
-// $Id: ossimAdrgHeader.cpp 10267 2007-01-14 19:29:35Z dburken $
+// $Id: ossimAdrgHeader.cpp 11285 2007-07-11 16:37:33Z dburken $
 
 #include <iostream>
 
@@ -21,7 +21,7 @@
 ossimAdrgHeader::ossimAdrgHeader(const ossimFilename& img_file)
    :
       theErrorStatus(OSSIM_OK),
-      theHeaderFile(ossimFilename("")),
+      theHeaderFile(img_file),
       theImageFile(img_file),
       theValidImageRect(0,0,0,0),
       thePixelType(OSSIM_UCHAR),
@@ -32,39 +32,26 @@ ossimAdrgHeader::ossimAdrgHeader(const ossimFilename& img_file)
       theHeaderSize(0),
       theTim(0)
 {
-   // Validate header file exists.
-   ossimFilename tmp_file;
-   ossimFilename tmp_path;
-   ossimFilename tmp_base;
-   ossimFilename tmp_hdr1;
-   ossimFilename tmp_hdr2;
+   // Get the extension.
+   ossimString ext = img_file.ext();
 
-   tmp_file = theImageFile.file();
-   tmp_path = theImageFile.path();
-   tmp_base = tmp_file.beforePos(6);
-
-   tmp_hdr1 = tmp_path.dirCat(tmp_base);
-   tmp_hdr1 += "01.GEN";
-
-   tmp_hdr2 = tmp_path.dirCat(tmp_base);
-   tmp_hdr2 += "01.gen";
-
-   // we will force an open on the .img file
-   //
-   if(img_file.ext().downcase() != "img")
+   if (ext == "IMG")
    {
+      theHeaderFile.setExtension(ossimString("GEN"));
+   }
+   else if (ext == "img")
+   {
+      theHeaderFile.setExtension(ossimString("gen"));
+   }
+   else
+   {
+      // Required "img" or "IMG" extension.
       theErrorStatus = OSSIM_ERROR;
       return;
    }
-   if(tmp_hdr1.exists())
-   {
-      theHeaderFile = tmp_hdr1;
-   }
-   else if(tmp_hdr2.exists())
-   {
-      theHeaderFile = tmp_hdr2;
-   }
-   else
+
+   // Check for header file.
+   if(theHeaderFile.exists() == false)
    {
       theErrorStatus = OSSIM_ERROR;
       return;
@@ -495,4 +482,3 @@ double ossimAdrgHeader::parseLatitudeString(const ossimString& lat) const
    
    return degrees;
 }
-

@@ -1,5 +1,4 @@
 //*******************************************************************
-// Copyright (C) 2000 ImageLinks Inc.
 //
 // License:  See top LICENSE.txt file.
 //
@@ -9,7 +8,7 @@
 //
 // Calls Geotrans Utm projection code.  
 //*******************************************************************
-//  $Id: ossimUtmProjection.cpp 9094 2006-06-13 19:12:40Z dburken $
+//  $Id: ossimUtmProjection.cpp 11427 2007-07-27 17:33:32Z dburken $
 #include <cmath>
 using namespace std;
 
@@ -249,7 +248,7 @@ void ossimUtmProjection::setZone(const ossimGpt& ground)
 
 void ossimUtmProjection::setZone(ossim_int32 zone)
 {
-   if(ossimIsNan(zone))
+   if( (zone < 1) || (zone > 60) )
    {
       theZone = computeZone(theOrigin);
    }
@@ -348,7 +347,7 @@ bool ossimUtmProjection::loadState(const ossimKeywordlist& kwl,
 
    // initialize zone to a dummy value.
    //
-   theZone = OSSIM_LONG_NAN;
+   theZone = 0;
 //   if(ossimString(type) == STATIC_TYPE_NAME(ossimUtmProjection))
    {
       if(!zone)
@@ -359,7 +358,7 @@ bool ossimUtmProjection::loadState(const ossimKeywordlist& kwl,
       {
          theZone = atoi(zone);
 
-         if(theZone  < 1)
+         if( (theZone  < 1) || (theZone > 60) )
          {
             theZone = computeZone(theOrigin);
          }

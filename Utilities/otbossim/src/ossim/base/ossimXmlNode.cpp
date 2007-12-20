@@ -9,11 +9,10 @@
 // Contains definition of class ossimXmlNode.
 // 
 //*****************************************************************************
-// $Id: ossimXmlNode.cpp 10425 2007-02-06 19:00:11Z gpotts $
+// $Id: ossimXmlNode.cpp 11669 2007-09-04 17:10:06Z gpotts $
 
 #include <iostream>
-using namespace std;
-
+#include <stack>
 #include <ossim/base/ossimXmlNode.h>
 #include <ossim/base/ossimXmlAttribute.h>
 #include <ossim/base/ossimKeywordlist.h>
@@ -39,16 +38,17 @@ static std::istream& xmlskipws(std::istream& in)
    return in;
 }
 
-
 ossimXmlNode::ossimXmlNode(istream& xml_stream, ossimXmlNode* parent)
    :
-   theParentNode (parent)
+   theParentNode (parent),
+   theCDataFlag(false)
 {
    read(xml_stream);
 }
 
 ossimXmlNode::ossimXmlNode()
-   :theParentNode(0)
+   :theParentNode(0),
+    theCDataFlag(false)
 {
 }
 
@@ -61,9 +61,30 @@ void ossimXmlNode::setParent(ossimXmlNode* parent)
    theParentNode = parent;
 }
 
+void ossimXmlNode::skipCommentTag(std::istream& in)
+{
+   char c;
+   while(!in.fail())
+   {
+      c = in.get();
+      if(c == '-')
+      {
+         if(in.peek() == '-')
+         {
+            in.ignore();
+            if(in.peek() == '>')
+            {
+               in.ignore();
+               return;
+            }
+         }
+      }
+   }
+}
+
 bool ossimXmlNode::read(std::istream& in)
 {
-   
+   char c;
    in >> xmlskipws;
    if(in.fail()) return false;
    if(in.peek() == '<')
@@ -76,7 +97,7 @@ bool ossimXmlNode::read(std::istream& in)
 
    
    if(!readTag(in, theTag)) return false;
-   char c = in.peek();
+//    std::cout << "theTag = " << theTag << std::endl;
 
    if((!in.fail())&&readEndTag(in, endTag))
    {
@@ -100,8 +121,6 @@ bool ossimXmlNode::read(std::istream& in)
    // skip white space characters
    //
    in >> xmlskipws;
-
-   c = in.peek();
 
    if(!in.fail()&&readEndTag(in, endTag))
    {
@@ -129,15 +148,14 @@ bool ossimXmlNode::read(std::istream& in)
    c = in.peek();
    // now do the text portion
    //
-   theText = "";
-
-   readTextContent(in, theText);
+   if(!readTextContent(in))
+   {
+      return false;
+   }
    in >> xmlskipws;
    c = in.peek();
 
-   c = in.peek();
-
-   if(c != '<')
+    if(c != '<')
    {
       setErrorStatus();
       return false;
@@ -494,9 +512,19 @@ void ossimXmlNode::setText(const ossimString& text)
    theText = text;
 }
 
-ossimString ossimXmlNode::getText() const
+const ossimString& ossimXmlNode::getText() const
 {
    return theText;
+}
+
+bool ossimXmlNode::cdataFlag()const
+{
+   return theCDataFlag;
+}
+
+void ossimXmlNode::setCDataFlag(bool value)
+{
+   theCDataFlag = value;
 }
 
 ostream& operator << (ostream& os, const ossimXmlNode& xml_node)
@@ -547,12 +575,18 @@ ostream& operator << (ostream& os, const ossimXmlNode* xml_node)
    else
    {
       os << ">";
-      
-      //
-      // Dump any text:
-      //
-      os << xml_node->theText;
-      
+
+      if(xml_node->cdataFlag())
+      {
+         os << "<![CDATA[" <<xml_node->theText <<  "]]>";
+      }
+      else
+      {
+         //
+         // Dump any text:
+         //
+         os << xml_node->theText;
+      }
       //
       // Dump any child nodes:
       //
@@ -800,48 +834,150 @@ bool ossimXmlNode::readTag(std::istream& in,
 
    tag = "";
    int c = in.peek();
-   
-   while( (c != ' ')&&
-          (c != '\n')&&
-          (c != '\t')&&
-	  (c != '\r')&&
-          (c != '<')&&
-          (c != '>')&&
-          (c != '/')&&
-          (!in.fail()))
-   {
-      tag += (char)c;
-      in.ignore(1);
-      c = in.peek();
-   }
 
+   // bool validTag = false;
+   //    while(!validTag)
+   {
+      while( (c != ' ')&&
+             (c != '\n')&&
+             (c != '\t')&&
+             (c != '\r')&&
+             (c != '<')&&
+             (c != '>')&&
+             (c != '/')&&
+             (!in.fail()))
+      {
+         tag += (char)c;
+         in.ignore(1);
+         c = in.peek();
+         if(tag == "!--") // ignore comment tags
+         {
+            tag = "--";
+            break;
+         }
+      }
+   }
    return ((tag != "")&&(!in.fail()));
 }
 
-bool ossimXmlNode::readTextContent(std::istream& in,
-                                   ossimString& text)
+bool ossimXmlNode::readCDataContent(std::istream& in)
+{
+   char c;
+   while(!in.fail())
+   {
+      c = in.get();
+      if(c == ']')
+      {
+         if(in.peek() == ']')
+         {
+            in.ignore();
+            if(in.peek() == '>')
+            {
+               in.ignore();
+               in >> xmlskipws;
+               return true;
+            }
+            else
+            {
+               in.putback(']');
+               theText += c;
+            }
+         }
+         else
+         {
+            theText += c;
+         }
+      }
+      else
+      {
+         theText += c;
+      }
+   }
+   
+   return false;
+}
+
+bool ossimXmlNode::readTextContent(std::istream& in)
 {
    in >> xmlskipws;
 
-   text = "";
+   theText = "";
+   theCDataFlag = false;
    char c = in.peek();
-   bool done = false;
 
    do
    {
       if(c == '<')
       {
-         done = true;
+         in.ignore();
+
+         // we will check for comments or CDATA
+         if(in.peek()=='!')
+         {
+            char buf1[4];
+            buf1[3] = '\0';
+            in.read(buf1, 3);
+            if(ossimString(buf1) == "!--")
+            {
+               // special text read
+               theText += buf1;
+               bool done = false;
+               do
+               {
+                  if(in.peek() != '-')
+                  {
+                     in.ignore();
+                  }
+                  else
+                  {
+                     in.ignore();
+                     if(in.peek() == '-')
+                     {
+                        in.ignore();
+                        if(in.peek() == '>')
+                        {
+                           in.ignore();
+                           done = true;
+                           c = in.peek();
+                        }
+                     }
+                  }
+               }while(!done&&!in.fail());
+            }
+            else
+            {
+               
+               char buf2[6];
+               buf2[5] = '\0';
+               in.read(buf2, 5);
+               if(in.fail())
+               {
+                  return false;
+               }
+               if(ossimString(buf1)+ossimString(buf2) == "![CDATA[")
+               {
+                  if(readCDataContent(in))
+                  {
+                     theCDataFlag = true;
+                     return true;
+                  }
+               }
+            }
+         }
+         else
+         {
+            in.putback(c);
+            return true;
+         }
       }
       else
       {
-         text += (char)in.get();
+         theText += (char)in.get();
          c = in.peek();
       }
-   }while((!in.bad())&&
-          (!done));
+   }while(!in.fail());
 
-   return (text != "");
+   return !in.fail();
 }
 
 bool ossimXmlNode::readEndTag(std::istream& in,
@@ -851,6 +987,12 @@ bool ossimXmlNode::readEndTag(std::istream& in,
    char c = in.peek();
    endTag = "";
 
+   if(theTag == "--")// this is a comment tag
+   {
+      skipCommentTag(in);
+      endTag = "--";
+      return (!in.fail());
+   }
    // check end tag
    //
    if(c == '/')

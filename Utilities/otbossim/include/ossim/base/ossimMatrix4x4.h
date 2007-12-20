@@ -7,7 +7,7 @@
 // Description:
 //
 //*******************************************************************
-//  $Id: ossimMatrix4x4.h 9968 2006-11-29 14:01:53Z gpotts $
+//  $Id: ossimMatrix4x4.h 11856 2007-10-12 15:21:17Z gpotts $
 
 #ifndef ossimMatrix4x4_HEADER
 #define ossimMatrix4x4_HEADER
@@ -16,8 +16,9 @@
 #include <ossim/matrix/newmatio.h>
 #include <ossim/base/ossimColumnVector4d.h>
 #include <ossim/base/ossimColumnVector3d.h>
+#include <ossim/base/ossimQuaternion.h>
 
-class OSSIMDLLEXPORT ossimMatrix4x4
+class OSSIM_DLL ossimMatrix4x4
 {
  public:
    friend std::ostream& operator<<(std::ostream& out,
@@ -31,6 +32,7 @@ class OSSIMDLLEXPORT ossimMatrix4x4
                  double v10, double v11, double v12, double v13,
                  double v20, double v21, double v22, double v23,
                  double v30, double v31, double v32, double v33);
+  inline explicit ossimMatrix4x4(const ossim::Quaternion& quat){ makeRotate(quat);}
   ossimMatrix4x4(const ossimMatrix4x4& rhs)
     :theData(4,4)
     {
@@ -51,6 +53,11 @@ class OSSIMDLLEXPORT ossimMatrix4x4
       theData[3][2] = rhs.theData[3][2];
       theData[3][3] = rhs.theData[3][3];
     }
+     void makeRotate( const ossim::Quaternion& quat);
+     void setRotate( const ossim::Quaternion& quat);
+     ossim::Quaternion getRotate()const;
+     void getRotate(ossim::Quaternion& quat)const;
+     
   ossimMatrix4x4 operator+ (const ossimMatrix4x4& rhs)const
     {
       return ossimMatrix4x4(theData[0][0] + rhs.theData[0][0], theData[0][1] + rhs.theData[0][1], theData[0][2] + rhs.theData[0][2], theData[0][3] + rhs.theData[0][3],
@@ -238,7 +245,9 @@ class OSSIMDLLEXPORT ossimMatrix4x4
     * matrix
     */ 
    ossimColumnVector3d getEigenValues()const;
-   
+
+   void setZero();
+   void setIdentity();
    static NEWMAT::Matrix createIdentity();
    static NEWMAT::Matrix createRotateOnly(const ossimMatrix4x4& aMatrix);
   

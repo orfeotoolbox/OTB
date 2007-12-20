@@ -8,7 +8,7 @@
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimNBandToIndexFilter.cpp 9094 2006-06-13 19:12:40Z dburken $
+// $Id: ossimNBandToIndexFilter.cpp 11955 2007-10-31 16:10:22Z gpotts $
 
 #include <ossim/imaging/ossimNBandToIndexFilter.h>
 #include <ossim/imaging/ossimImageData.h>
@@ -234,7 +234,7 @@ ossimRefPtr<ossimImageData> ossimNBandToIndexFilter::convertInputTileToOutputTem
    ossimNBandLutDataObject::LUT_ENTRY_TYPE* bandValues = new ossimNBandLutDataObject::LUT_ENTRY_TYPE[numberOfBands];
 
    memset(bandValues, 0, sizeof(ossimNBandLutDataObject::LUT_ENTRY_TYPE)*numberOfBands);
-   numberOfBands = ossimMin(BANDS,
+   numberOfBands = ossim::min(BANDS,
                             numberOfBands);
    if(!numberOfBands) return theTile;
    T1** band = new T1*[numberOfBands];

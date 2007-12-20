@@ -1,12 +1,11 @@
 //*******************************************************************
-// Copyright (C) 2000 ImageLinks Inc.
 //
-// LICENSE: LGPL
+// LICENSE: See top level LICENSE.txt file.
 // 
 // Author:  Garrett Potts
 //
 //*******************************************************************
-//  $Id: ossimDiscrete3x3HatFilter.cpp 9094 2006-06-13 19:12:40Z dburken $
+//  $Id: ossimDiscrete3x3HatFilter.cpp 11419 2007-07-27 16:24:57Z dburken $
 #include <ossim/imaging/ossimDiscrete3x3HatFilter.h>
 #include <ossim/base/ossimCommon.h>
 
@@ -278,12 +277,12 @@ void ossimDiscrete3x3HatFilter::buildConvolution(double xLocation,
    NEWMAT::RowVector    row(3);
    NEWMAT::ColumnVector col(3);
    
-   row[0] = ossimAbs(xLocation);
+   row[0] = std::abs(xLocation);
    row[1] = 1;
-   row[2] = ossimAbs(xLocation);
-   col[0] = ossimAbs(yLocation);
+   row[2] = std::abs(xLocation);
+   col[0] = std::abs(yLocation);
    col[1] = 1;
-   col[2] = ossimAbs(yLocation);
+   col[2] = std::abs(yLocation);
   
    (*theKernel) = col*row;
 }

@@ -11,7 +11,7 @@
 // See:  STDI-000_v2.1 Table 7-3 for detailed description.
 // 
 //********************************************************************
-// $Id: ossimNitfStdidcTag.cpp 10177 2007-01-03 19:22:09Z gpotts $
+// $Id: ossimNitfStdidcTag.cpp 11347 2007-07-23 13:01:59Z gpotts $
 
 #include <iostream>
 #include <iomanip>
@@ -36,9 +36,6 @@ static const ossimString COUNTRY_KW = "COUNTRY";
 static const ossimString WAC_KW = "WAC";
 static const ossimString LOCATION_KW = "LOCATION";
 
-#ifndef MIN
-#  define MIN(a,b) ((a)<(b)?(a):(b))
-#endif
 
 ossimNitfStdidcTag::ossimNitfStdidcTag()
 {
@@ -154,7 +151,7 @@ ossimString ossimNitfStdidcTag::getAcqDate()const
 void ossimNitfStdidcTag::setAcqDate(ossimString acqDate)
 {
    memset(theAcqDate, ' ', ACQ_DATE_SIZE);
-   memcpy(theAcqDate, acqDate.c_str(), MIN(ACQ_DATE_SIZE, acqDate.length()));
+   memcpy(theAcqDate, acqDate.c_str(), std::min((size_t)ACQ_DATE_SIZE, acqDate.length()));
 }
 
 ossimString ossimNitfStdidcTag::getMission()const
@@ -165,7 +162,7 @@ ossimString ossimNitfStdidcTag::getMission()const
 void ossimNitfStdidcTag::setMission(ossimString mission)
 {
    memset(theMission, ' ', MISSION_SIZE);
-   memcpy(theMission, mission.c_str(), MIN(MISSION_SIZE, mission.length()));
+   memcpy(theMission, mission.c_str(), std::min((size_t)MISSION_SIZE, mission.length()));
 }
 
 ossimString ossimNitfStdidcTag::getPass()const
@@ -176,7 +173,7 @@ ossimString ossimNitfStdidcTag::getPass()const
 void ossimNitfStdidcTag::setPass(ossimString pass)
 {
    memset(thePass, ' ', PASS_SIZE);
-   memcpy(thePass, pass.c_str(), MIN(PASS_SIZE, pass.length()));
+   memcpy(thePass, pass.c_str(), std::min((size_t)PASS_SIZE, pass.length()));
 }
 
 ossimString ossimNitfStdidcTag::getOpNum()const
@@ -187,7 +184,7 @@ ossimString ossimNitfStdidcTag::getOpNum()const
 void ossimNitfStdidcTag::setOpNum(ossimString opNum) 
 {
    memset(theOpNum, ' ', OP_NUM_SIZE);
-   memcpy(theOpNum, opNum.c_str(), MIN(OP_NUM_SIZE, opNum.length()));
+   memcpy(theOpNum, opNum.c_str(), std::min((size_t)OP_NUM_SIZE, opNum.length()));
 }
 
 ossimString ossimNitfStdidcTag::getStartSegment()const
@@ -198,7 +195,7 @@ ossimString ossimNitfStdidcTag::getStartSegment()const
 void ossimNitfStdidcTag::setStartSegment(ossimString startSegment) 
 {
    memset(theStartSegment, ' ', START_SEGMENT_SIZE);
-   memcpy(theStartSegment, startSegment.c_str(), MIN(START_SEGMENT_SIZE, startSegment.length()));
+   memcpy(theStartSegment, startSegment.c_str(), std::min((size_t)START_SEGMENT_SIZE, startSegment.length()));
 }
 
 ossimString ossimNitfStdidcTag::getReproNum()const
@@ -209,7 +206,7 @@ ossimString ossimNitfStdidcTag::getReproNum()const
 void ossimNitfStdidcTag::setReproNum(ossimString reproNum) 
 {
    memset(theReproNum, ' ', REPRO_NUM_SIZE);
-   memcpy(theReproNum, reproNum.c_str(), MIN(REPRO_NUM_SIZE, reproNum.length()));
+   memcpy(theReproNum, reproNum.c_str(), std::min((size_t)REPRO_NUM_SIZE, reproNum.length()));
 }
 
 ossimString ossimNitfStdidcTag::getReplayRegen()const
@@ -220,7 +217,7 @@ ossimString ossimNitfStdidcTag::getReplayRegen()const
 void ossimNitfStdidcTag::setReplayRegen(ossimString replayRegen) 
 {
    memset(theReplayRegen, ' ', REPLAY_REGEN_SIZE);
-   memcpy(theReplayRegen, replayRegen.c_str(), MIN(REPLAY_REGEN_SIZE, replayRegen.length()));
+   memcpy(theReplayRegen, replayRegen.c_str(), std::min((size_t)REPLAY_REGEN_SIZE, replayRegen.length()));
 }
 
 ossimString ossimNitfStdidcTag::getBlankFill()const
@@ -231,7 +228,7 @@ ossimString ossimNitfStdidcTag::getBlankFill()const
 void ossimNitfStdidcTag::setBlankFill(ossimString blankFill) 
 {
    memset(theBlankFill, ' ', BLANK_FILL_SIZE);
-   memcpy(theBlankFill, blankFill.c_str(), MIN(BLANK_FILL_SIZE, blankFill.length()));
+   memcpy(theBlankFill, blankFill.c_str(), std::min((size_t)BLANK_FILL_SIZE, blankFill.length()));
 }
 
 ossimString ossimNitfStdidcTag::getStartColumn()const
@@ -242,7 +239,7 @@ ossimString ossimNitfStdidcTag::getStartColumn()const
 void ossimNitfStdidcTag::setStartColumn(ossimString startColumn) 
 {
    memset(theStartColumn, ' ', START_COLUMN_SIZE);
-   memcpy(theStartColumn, startColumn.c_str(), MIN(START_COLUMN_SIZE, startColumn.length()));
+   memcpy(theStartColumn, startColumn.c_str(), std::min((size_t)START_COLUMN_SIZE, startColumn.length()));
 }
 
 ossimString ossimNitfStdidcTag::getStartRow()const
@@ -253,7 +250,7 @@ ossimString ossimNitfStdidcTag::getStartRow()const
 void ossimNitfStdidcTag::setStartRow(ossimString startRow) 
 {
    memset(theStartRow, ' ', START_ROW_SIZE);
-   memcpy(theStartRow, startRow.c_str(), MIN(START_ROW_SIZE, startRow.length()));
+   memcpy(theStartRow, startRow.c_str(), std::min((size_t)START_ROW_SIZE, startRow.length()));
 }
 
 ossimString ossimNitfStdidcTag::getEndSegment()const
@@ -264,7 +261,7 @@ ossimString ossimNitfStdidcTag::getEndSegment()const
 void ossimNitfStdidcTag::setEndSegment(ossimString endSegment) 
 {
    memset(theEndSegment, ' ', END_SEGMENT_SIZE);
-   memcpy(theEndSegment, endSegment.c_str(), MIN(END_SEGMENT_SIZE, endSegment.length()));
+   memcpy(theEndSegment, endSegment.c_str(), std::min((size_t)END_SEGMENT_SIZE, endSegment.length()));
 }
 
 ossimString ossimNitfStdidcTag::getEndColumn()const
@@ -275,7 +272,7 @@ ossimString ossimNitfStdidcTag::getEndColumn()const
 void ossimNitfStdidcTag::setEndColumn(ossimString endColumn) 
 {
    memset(theEndColumn, ' ', END_COLUMN_SIZE);
-   memcpy(theEndColumn, endColumn.c_str(), MIN(END_COLUMN_SIZE, endColumn.length()));
+   memcpy(theEndColumn, endColumn.c_str(), std::min((size_t)END_COLUMN_SIZE, endColumn.length()));
 }
 
 ossimString ossimNitfStdidcTag::getEndRow()const
@@ -286,7 +283,7 @@ ossimString ossimNitfStdidcTag::getEndRow()const
 void ossimNitfStdidcTag::setEndRow(ossimString endRow) 
 {
    memset(theEndRow, ' ', END_ROW_SIZE);
-   memcpy(theEndRow, endRow.c_str(), MIN(END_ROW_SIZE, endRow.length()));
+   memcpy(theEndRow, endRow.c_str(), std::min((size_t)END_ROW_SIZE, endRow.length()));
 }
 
 ossimString ossimNitfStdidcTag::getCountry()const
@@ -297,7 +294,7 @@ ossimString ossimNitfStdidcTag::getCountry()const
 void ossimNitfStdidcTag::setCountry(ossimString country) 
 {
    memset(theCountry, ' ', COUNTRY_SIZE);
-   memcpy(theCountry, country.c_str(), MIN(COUNTRY_SIZE, country.length()));
+   memcpy(theCountry, country.c_str(), std::min((size_t)COUNTRY_SIZE, country.length()));
 }
 
 ossimString ossimNitfStdidcTag::getWac()const
@@ -308,7 +305,7 @@ ossimString ossimNitfStdidcTag::getWac()const
 void ossimNitfStdidcTag::setWac(ossimString wac) 
 {
    memset(theWac, ' ', WAC_SIZE);
-   memcpy(theWac, wac.c_str(), MIN(WAC_SIZE, wac.length()));
+   memcpy(theWac, wac.c_str(), std::min((size_t)WAC_SIZE, wac.length()));
 }
 
 ossimString ossimNitfStdidcTag::getLocation()const
@@ -319,7 +316,7 @@ ossimString ossimNitfStdidcTag::getLocation()const
 void ossimNitfStdidcTag::setLocation(ossimString location) 
 {
    memset(theLocation, ' ', LOCATION_SIZE);
-   memcpy(theLocation, location.c_str(), MIN(LOCATION_SIZE, location.length()));
+   memcpy(theLocation, location.c_str(), std::min((size_t)LOCATION_SIZE, location.length()));
 }
 
 ossimString ossimNitfStdidcTag::getField17()const
@@ -330,7 +327,7 @@ ossimString ossimNitfStdidcTag::getField17()const
 void ossimNitfStdidcTag::setField17(ossimString field17) 
 {
    memset(theField17, ' ', FIELD17_SIZE);
-   memcpy(theField17, field17.c_str(), MIN(FIELD17_SIZE, field17.length()));
+   memcpy(theField17, field17.c_str(), std::min((size_t)FIELD17_SIZE, field17.length()));
 }
 
 ossimString ossimNitfStdidcTag::getField18()const
@@ -341,7 +338,7 @@ ossimString ossimNitfStdidcTag::getField18()const
 void ossimNitfStdidcTag::setField18(ossimString field18) 
 {
    memset(theField18, ' ', FIELD18_SIZE);
-   memcpy(theField18, field18.c_str(), MIN(FIELD18_SIZE, field18.length()));
+   memcpy(theField18, field18.c_str(), std::min((size_t)FIELD18_SIZE, field18.length()));
 }
 
 std::ostream& ossimNitfStdidcTag::print(std::ostream& out) const

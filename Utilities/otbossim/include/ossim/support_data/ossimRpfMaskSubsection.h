@@ -6,11 +6,10 @@
 // Description: Rpf support class
 // 
 //********************************************************************
-// $Id: ossimRpfMaskSubsection.h 9967 2006-11-29 02:01:23Z gpotts $
+// $Id: ossimRpfMaskSubsection.h 11691 2007-09-09 20:02:30Z dburken $
 #ifndef ossimRpfMaskSubsection_HEADER
 #define ossimRpfMaskSubsection_HEADER
 #include <iostream>
-using namespace std;
 
 #include <ossim/base/ossimConstants.h>
 #include <ossim/base/ossimErrorContext.h>
@@ -18,19 +17,18 @@ using namespace std;
 class ossimRpfMaskSubheader;
 class ossimRpfImageDescriptionSubheader;
 
-class ossimRpfMaskSubsection
+class OSSIM_DLL ossimRpfMaskSubsection
 {
 public:
-   friend ostream& operator <<(ostream& out,
-                               const ossimRpfMaskSubsection& data);
+   friend std::ostream& operator <<(std::ostream& out,
+                                    const ossimRpfMaskSubsection& data);
    ossimRpfMaskSubsection();
    virtual ~ossimRpfMaskSubsection();
 
-   ossimErrorCode parseStream(istream& in, ossimByteOrder byteOrder);
-   virtual void print(ostream& out)const;
+   ossimErrorCode parseStream(std::istream& in, ossimByteOrder byteOrder);
+   virtual void print(std::ostream& out)const;
    
 private:
-   void deleteAll();
    ossimRpfMaskSubheader *theMaskSubheader;   
 };
 

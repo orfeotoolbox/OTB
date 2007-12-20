@@ -2,19 +2,18 @@
 //
 // License:  See top level LICENSE.txt file.
 //
-// Author:  David Burken (dburken@imagelinks.com)
+// Author:  David Burken
 //
 // Description:
 //
 // Contains class declaration for fpt.
 // Used to represent a two dimensional point containing data members x and y.
 //*******************************************************************
-//  $Id: ossimFpt.h 9968 2006-11-29 14:01:53Z gpotts $
+//  $Id: ossimFpt.h 11398 2007-07-26 13:29:58Z dburken $
 
 #ifndef ossimFpt_HEADER
 #define ossimFpt_HEADER
-#include <iostream>
-#include <ossim/base/ossimConstants.h>
+#include <iosfwd>
 #include <ossim/base/ossimCommon.h>
 
 // Forward class declarations.
@@ -54,11 +53,11 @@ public:
    bool operator!=(const ossimFpt& pt) const
       { return ( (x != pt.x) || (y != pt.y) ); }
 
-   void makeNan(){x = OSSIM_FLT_NAN; y=OSSIM_FLT_NAN;}
+   void makeNan(){x = ossim::nan(); y=ossim::nan();}
    
    bool hasNans()const
       {
-         return (ossimIsNan(x) || ossimIsNan(y));
+         return (ossim::isnan(x) || ossim::isnan(y));
       }
    
    void print(std::ostream& os) const;

@@ -25,17 +25,19 @@
 // LIMITATIONS: None.
 //
 //*****************************************************************************
-//  $Id: ossimSensorModel.h 10248 2007-01-13 21:24:35Z dburken $
+//  $Id: ossimSensorModel.h 12123 2007-12-06 15:21:16Z gpotts $
 
 #ifndef ossimSensorModel_HEADER
 #define ossimSensorModel_HEADER
 
 #include <ossim/projection/ossimProjection.h>
+#include <ossim/projection/ossimBilinearProjection.h>
 #include <ossim/projection/ossimOptimizableProjection.h>
 #include <ossim/base/ossimEcefRay.h>
 #include <ossim/base/ossimString.h>
 #include <ossim/base/ossimPolygon.h>
 #include <ossim/base/ossimDrect.h>
+#include <ossim/base/ossimCommon.h> /* for ossim::nan() */
 #include <ossim/elevation/ossimElevSource.h>
 #include <ossim/base/ossimAdjustableParameterInterface.h>
 #include <ossim/matrix/newmat.h>
@@ -60,6 +62,15 @@ public:
       COV_INVALID = 0,
       COV_PARTIAL = 1,
       COV_FULL    = 2
+   };
+
+   enum DeriveMode
+   {
+      OBS_INIT =-99,
+      EVALUATE =-98,
+      P_WRT_X = -1,
+      P_WRT_Y = -2,
+      P_WRT_Z = -3
    };
    
    /*!
@@ -198,7 +209,8 @@ public:
     */
    virtual ossim_uint32 degreesOfFreedom()const;
    inline virtual bool needsInitialState()const {return true;}
-   virtual double optimizeFit(const ossimTieGptSet& tieSet, double* targetVariance=NULL);
+   virtual double optimizeFit(const ossimTieGptSet& tieSet,
+                              double* targetVariance=0);
 
    /*!
     * METHOD: getForwardDeriv()
@@ -222,6 +234,13 @@ public:
     */
    virtual ossimSensorModel::CovMatStatus getObsCovMat(
       const ossimDpt& ipos, NEWMAT::SymmetricMatrix& Cov);
+
+   /**
+    * @brief Implementation of pure virtual
+    * ossimProjection::isAffectedByElevation method.
+    * @return true.
+    */
+   virtual bool isAffectedByElevation() const { return true; }
    
 protected:
    /*!
@@ -232,8 +251,7 @@ protected:
     */
    virtual ossimDpt extrapolate (const ossimGpt& gp) const;
    virtual ossimGpt extrapolate (const ossimDpt& ip,
-				 const double& height
-				 =ossimElevSource::DEFAULT_NULL_HEIGHT) const;
+				 const double& height=ossim::nan()) const;
 
    /*!
     * METHOD: buildNormalEquation
@@ -286,7 +304,21 @@ protected:
    ossimPolygon   theBoundGndPolygon;
    ossimDrect     theImageClipRect;
    ossim_float64  theNominalPosError; // meters
-  
+
+   /** Partials for current point */
+   ossimDpt theParWRTx;
+   ossimDpt theParWRTy;
+   ossimDpt theParWRTz;
+   
+   /** Observations & residuals for current point */
+   ossimDpt theObs;
+   ossimDpt theResid;
+
+   /**
+    * Used as an initial guess for iterative solutions and a guess for points outside the support
+    * bounds.
+    */ 
+   ossimRefPtr<ossimProjection> theSeedFunction;
 TYPE_DATA
 };
 

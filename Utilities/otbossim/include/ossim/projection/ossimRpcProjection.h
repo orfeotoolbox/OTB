@@ -1,8 +1,6 @@
 //*****************************************************************************
 // FILE: ossimRpcProjection.h
 //
-// Copyright (C) 2004 Intelligence Data Syatems
-//
 // LGPL
 //
 // DESCRIPTION: Contains declaration of class ossimRpcProjection.
@@ -11,7 +9,7 @@
 //   (USM).
 //
 //*****************************************************************************
-//  $Id: ossimRpcProjection.h 9094 2006-06-13 19:12:40Z dburken $
+//  $Id: ossimRpcProjection.h 11805 2007-10-05 14:54:28Z dburken $
 
 #ifndef ossimRpcProjection_HEADER
 #define ossimRpcProjection_HEADER
@@ -139,6 +137,13 @@ public:
     * -should be reimplemented with formal derivative in child class
     */
    virtual ossimGpt getInverseDeriv(int parmIdx, const ossimDpt& ipos, double hdelta=1e-11);
+
+   /**
+    * @brief Implementation of pure virtual
+    * ossimProjection::isAffectedByElevation method.
+    * @return true.
+    */
+   virtual bool isAffectedByElevation() const { return true; }
 
 protected:
    //***

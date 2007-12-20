@@ -11,7 +11,7 @@
 // longitude to x / y" projection.
 // 
 //*******************************************************************
-//  $Id: ossimLlxyProjection.cpp 9094 2006-06-13 19:12:40Z dburken $
+//  $Id: ossimLlxyProjection.cpp 11412 2007-07-27 13:56:11Z dburken $
 
 #include <ossim/projection/ossimLlxyProjection.h>
 #include <ossim/elevation/ossimElevManager.h>
@@ -30,8 +30,8 @@ ossimLlxyProjection::ossimLlxyProjection()
   // set to about 1 meter per pixel
    theDegreesPerPixel.y = DEFAULT_DEGREES_PER_PIXEL;
    theDegreesPerPixel.x = DEFAULT_DEGREES_PER_PIXEL;
-   theUlEastingNorthing.y = OSSIM_DBL_NAN;
-   theUlEastingNorthing.x = OSSIM_DBL_NAN;
+   theUlEastingNorthing.y = ossim::nan();
+   theUlEastingNorthing.x = ossim::nan();
    computeMetersPerPixel(theOrigin, 
 			 theDegreesPerPixel.y,
 			 theDegreesPerPixel.x,
@@ -44,8 +44,8 @@ ossimLlxyProjection::ossimLlxyProjection(const ossimLlxyProjection& rhs)
 {
    theOrigin              = rhs.theOrigin;
    theUlGpt               = rhs.theUlGpt;
-   theUlEastingNorthing.y = OSSIM_DBL_NAN;
-   theUlEastingNorthing.x = OSSIM_DBL_NAN;
+   theUlEastingNorthing.y = ossim::nan();
+   theUlEastingNorthing.x = ossim::nan();
    theDatum               = theOrigin.datum();
    theEllipsoid           = *(theDatum->ellipsoid());
    theDegreesPerPixel.y    = rhs.theDegreesPerPixel.y;
@@ -82,8 +82,8 @@ ossimLlxyProjection::ossimLlxyProjection(const ossimEllipsoid& ellipsoid,
 {
    theDegreesPerPixel.y = 1.0;
    theDegreesPerPixel.x = 1.0;
-   theUlEastingNorthing.y = OSSIM_DBL_NAN;
-   theUlEastingNorthing.x = OSSIM_DBL_NAN;
+   theUlEastingNorthing.y = ossim::nan();
+   theUlEastingNorthing.x = ossim::nan();
    computeMetersPerPixel(theOrigin, 
 			 theDegreesPerPixel.y,
 			 theDegreesPerPixel.x,

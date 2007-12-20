@@ -8,7 +8,7 @@
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimScaleFilter.cpp 9094 2006-06-13 19:12:40Z dburken $
+// $Id: ossimScaleFilter.cpp 11955 2007-10-31 16:10:22Z gpotts $
 #include <ossim/imaging/ossimScaleFilter.h>
 #include <ossim/imaging/ossimFilter.h>
 #include <ossim/imaging/ossimDiscreteConvolutionKernel.h>
@@ -392,7 +392,7 @@ template <class T> void ossimScaleFilter::runHorizontalFilterTemplate(
    ossim_int32 bandIdx = 0;
    ossim_int32 numberOfBands = theTile->getNumberOfBands();
    
-   scale = theBlurFactor*ossimMax(1.0/theScaleFactor.x, 1.0);
+   scale = theBlurFactor*ossim::max(1.0/theScaleFactor.x, 1.0);
    
    support=scale*filter->getSupport();
    if (support <= 0.5)
@@ -413,8 +413,8 @@ template <class T> void ossimScaleFilter::runHorizontalFilterTemplate(
       for(x = 0; x < vw; ++x)
       {
          center=(origin.x + x+ .5)/theScaleFactor.x;
-         start=ossimMax((ossim_int32)irint(center-support), (ossim_int32)inputUl.x);
-         stop=ossimMin((ossim_int32)irint(center+support), (ossim_int32)inputLr.x);
+         start=ossim::max((ossim_int32)ossim::round<int>(center-support), (ossim_int32)inputUl.x);
+         stop=ossim::min((ossim_int32)ossim::round<int>(center+support), (ossim_int32)inputLr.x);
          ossim_int32 delta = stop-start;
          if (delta <= 0)
          {
@@ -513,7 +513,7 @@ template <class T> void ossimScaleFilter::runVerticalFilterTemplate(
    ossim_int32 bandIdx = 0;
    ossim_int32 numberOfBands = theTile->getNumberOfBands();
    
-   scale = theBlurFactor*ossimMax(1.0/theScaleFactor.y, 1.0);
+   scale = theBlurFactor*ossim::max(1.0/theScaleFactor.y, 1.0);
    
    support=scale*filter->getSupport();
    if (support <= 0.5)
@@ -535,8 +535,8 @@ template <class T> void ossimScaleFilter::runVerticalFilterTemplate(
       for(y = 0; y < vh; ++y)
       {
          center=(double) ((y + origin.y+0.5)/theScaleFactor.y);
-         start=ossimMax((ossim_int32)irint(center-support), (ossim_int32)inputUl.y);
-         stop=ossimMin((ossim_int32)irint(center+support), (ossim_int32)inputLr.y);
+         start=ossim::max((ossim_int32)ossim::round<int>(center-support), (ossim_int32)inputUl.y);
+         stop=ossim::min((ossim_int32)ossim::round<int>(center+support), (ossim_int32)inputLr.y);
          ossim_int32 delta = stop-start;
          if (delta <= 0)
          {
@@ -666,10 +666,10 @@ bool ossimScaleFilter::getImageGeometry(ossimKeywordlist& kwl,
 ossimIrect ossimScaleFilter::scaleRect(const ossimIrect input,
                                        const ossimDpt& scaleFactor)const
 {
-   ossimIpt origin(irint(input.ul().x*scaleFactor.x),
-                   irint(input.ul().y*scaleFactor.y));
-   ossim_int32 w = irint(input.width()*scaleFactor.x);
-   ossim_int32 h = irint(input.height()*scaleFactor.y);
+   ossimIpt origin(ossim::round<int>(input.ul().x*scaleFactor.x),
+                   ossim::round<int>(input.ul().y*scaleFactor.y));
+   ossim_int32 w = ossim::round<int>(input.width()*scaleFactor.x);
+   ossim_int32 h = ossim::round<int>(input.height()*scaleFactor.y);
 
    if(w < 1) w = 1;
    if(h < 1) h = 1;
@@ -823,9 +823,9 @@ void ossimScaleFilter::getSupport(double& x, double& y)
    const ossimFilter* horizontalFilter = getHorizontalFilter();
    const ossimFilter* verticalFilter   = getVerticalFilter();
    
-   x = theBlurFactor*ossimMax(1.0/theScaleFactor.x, 1.0)*
+   x = theBlurFactor*ossim::max(1.0/theScaleFactor.x, 1.0)*
        horizontalFilter->getSupport();
-   y = theBlurFactor*ossimMax(1.0/theScaleFactor.y, 1.0)*
+   y = theBlurFactor*ossim::max(1.0/theScaleFactor.y, 1.0)*
        verticalFilter->getSupport();
 }
 

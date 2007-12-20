@@ -1,6 +1,6 @@
 #include <ossim/elevation/ossimGeneralRasterElevFactory.h>
 #include <ossim/elevation/ossimGeneralRasterElevHandler.h>
-
+#include <ossim/base/ossimDirectory.h>
 
 RTTI_DEF1(ossimGeneralRasterElevFactory, "ossimGeneralRasterElevFactory", ossimElevSourceFactory)
 
@@ -19,24 +19,64 @@ ossimGeneralRasterElevFactory::~ossimGeneralRasterElevFactory()
 {
 }
 
+void ossimGeneralRasterElevFactory::setDirectory(const ossimFilename& directory)
+{
+   ossimElevSourceFactory::setDirectory(directory);
+   theGeneralRasterInfoList.clear();
+   ossimGeneralRasterElevHandler handler;
+  
+   if(theDirectory.exists())
+   {
+      if(theDirectory.isDir())
+      {
+         ossimDirectory dir(theDirectory);
+         
+         ossimFilename file;
+         ossim_uint32 maxCount = 10; // search at least the first 10 files to see if there are any here
+         ossim_uint32 count = 0;
+         bool foundOne = false;
+         if(dir.getFirst(file))
+         {
+            do
+            {
+               ++count;
+               ossimString ext = file.ext();
+               ext = ext.downcase();
+               if(ext == "ras")
+               {
+                  if(handler.setFilename(file))
+                  {
+                     foundOne = true;
+                     addInfo(handler.generalRasterInfo());
+                  }
+               }
+            } while(dir.getNext(file) &&
+                    (!foundOne &&
+                     (count < maxCount)));
+         }
+      }
+   }  
+}
+
 ossimElevSource* ossimGeneralRasterElevFactory::getNewElevSource(const ossimGpt& gpt) const
 {
-   if(theHandlerReturnedFlag)
+   ossimDpt pt(gpt);
+   std::vector<ossimGeneralRasterElevHandler::GeneralRasterInfo>::const_iterator i = theGeneralRasterInfoList.begin();
+   while (i != theGeneralRasterInfoList.end())
    {
-      return 0;
+      if ((*i).theBounds.pointWithin(pt))
+      {
+         return new ossimGeneralRasterElevHandler((*i));
+         
+      }
+      ++i;
    }
+   return 0;
+}
 
-   ossimElevSource* source = new  ossimGeneralRasterElevHandler(theDirectory);
-   if(source->pointHasCoverage(gpt))
-   {
-      theHandlerReturnedFlag = true;
-   }
-   else
-   {
-      delete source;
-      source = 0;
-   }
-   return source;
+void ossimGeneralRasterElevFactory::addInfo(const ossimGeneralRasterElevHandler::GeneralRasterInfo& info)
+{
+   theGeneralRasterInfoList.push_back(info);
 }
 
 void ossimGeneralRasterElevFactory::createIndex()

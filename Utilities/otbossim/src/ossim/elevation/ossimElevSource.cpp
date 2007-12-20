@@ -1,11 +1,7 @@
 //*****************************************************************************
 // FILE: ossimElevSource.cc
 //
-// Copyright (C) 2001 ImageLinks, Inc.
-//
-// License:  LGPL
-//
-// See LICENSE.txt file in the top level directory for more details.
+// License:  See top level LICENSE.txt file.
 //
 // DESCRIPTION:
 //   Contains implementation of class ossimElevSource. This is the base class
@@ -19,7 +15,7 @@
 //              Initial coding.
 //<
 //*****************************************************************************
-// $Id: ossimElevSource.cpp 10063 2006-12-11 17:44:49Z gpotts $
+// $Id: ossimElevSource.cpp 11506 2007-08-06 09:41:03Z dburken $
 
 #include <ossim/elevation/ossimElevSource.h>
 #include <ossim/base/ossimPreferences.h>
@@ -38,8 +34,6 @@ RTTI_DEF1(ossimElevSource, "ossimElevSource" , ossimSource)
 static ossimTrace traceExec  ("ossimElevSource:exec");
 static ossimTrace traceDebug ("ossimElevSource:debug");
 
-const double ossimElevSource::DEFAULT_NULL_HEIGHT = OSSIM_DBL_NAN;
-const double ossimElevSource::DEFAULT_SEA_LEVEL   = 0.0;
 
 static const char ENABLE_STATS_KW[] = "elevation.compute_statistics.enabled";
 
@@ -47,8 +41,8 @@ ossimElevSource::ossimElevSource()
    :
       theMinHeightAboveMSL (0.0),
       theMaxHeightAboveMSL (0.0),
-      theNullHeightValue   (DEFAULT_NULL_HEIGHT),
-      theSeaLevelValue     (DEFAULT_SEA_LEVEL),
+      theNullHeightValue   (ossim::nan()),
+      theSeaLevelValue     (OSSIM_DEFAULT_MEAN_SEA_LEVEL),
       theGroundRect(),
       theComputeStatsFlag(false)
    
@@ -102,14 +96,17 @@ ossimElevSource::~ossimElevSource()
 
 const ossimElevSource& ossimElevSource::operator = (const ossimElevSource& src)
 {
-   theMinHeightAboveMSL = src.theMinHeightAboveMSL;
-   theMaxHeightAboveMSL = src.theMaxHeightAboveMSL;
-   theNullHeightValue   = src.theNullHeightValue;
-   theSeaLevelValue     = src.theSeaLevelValue;
-   theGroundRect        = src.theGroundRect;
-   theComputeStatsFlag  = src.theComputeStatsFlag;
-
-   ossimSource::operator=(src);
+   if (this != &src)
+   {
+      theMinHeightAboveMSL = src.theMinHeightAboveMSL;
+      theMaxHeightAboveMSL = src.theMaxHeightAboveMSL;
+      theNullHeightValue   = src.theNullHeightValue;
+      theSeaLevelValue     = src.theSeaLevelValue;
+      theGroundRect        = src.theGroundRect;
+      theComputeStatsFlag  = src.theComputeStatsFlag;
+      
+      ossimSource::operator=(src);
+   }
    return *this;
 }
 
@@ -151,7 +148,8 @@ bool ossimElevSource::intersectRay(const ossimEcefRay& ray, ossimGpt& gpt)
    double          distance;
    bool            done = false;
    int             iteration_count = 0;
-   
+
+   if(ray.hasNans()) return false;
    //***
    // Set the initial guess for horizontal intersect position as the ray's
    // origin, and establish the datum and ellipsoid:
@@ -179,7 +177,7 @@ bool ossimElevSource::intersectRay(const ossimEcefRay& ray, ossimGpt& gpt)
       // Intersect ray with ellipsoid inflated by h_ellips:
       //
       h_ellips = getHeightAboveEllipsoid(gpt);
-      if (h_ellips == theNullHeightValue) h_ellips = 0.0;
+      if ( ossim::isnan(h_ellips) ) h_ellips = 0.0;
       
       intersected = ellipsoid->nearestIntersection(ray,
                                                    h_ellips,

@@ -8,7 +8,7 @@
 // AUTHOR: Garrett Potts
 //
 //*****************************************************************************
-//  $Id: ossimGeoPolygon.h 9094 2006-06-13 19:12:40Z dburken $
+//  $Id: ossimGeoPolygon.h 11407 2007-07-27 13:41:05Z dburken $
 #ifndef ossimGeoPolygon_HEADER
 #define ossimGeoPolygon_HEADER
 #include <vector>
@@ -41,7 +41,7 @@ public:
       {
          theVertexList.push_back(pt);
       }
-   void addPoint(double lat, double lon, double h=OSSIM_DBL_NAN, const ossimDatum* datum=NULL)
+   void addPoint(double lat, double lon, double h=ossim::nan(), const ossimDatum* datum=0)
       {
          theVertexList.push_back(ossimGpt(lat, lon, h, datum));
       }

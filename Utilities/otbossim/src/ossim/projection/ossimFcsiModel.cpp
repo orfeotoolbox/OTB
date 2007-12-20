@@ -64,7 +64,7 @@
 //              Initial coding
 //
 //*****************************************************************************
-// $Id: ossimFcsiModel.cpp 9094 2006-06-13 19:12:40Z dburken $
+// $Id: ossimFcsiModel.cpp 11347 2007-07-23 13:01:59Z gpotts $
 
 #include <ossim/projection/ossimFcsiModel.h>
 #include <ossim/base/ossimNotifyContext.h>
@@ -890,9 +890,9 @@ void  ossimFcsiModel::updateModel()
    // source. A similar situation occurrs with the scan rotation which manifests
    // as an attitude adjustment.
    //***
-   double cos_rot  = cosd(theScanRotation);
-   double sin_rot  = sind(theScanRotation);
-   double tan_skew = tand(theScanSkew + theScanSkewCorr);
+   double cos_rot  = ossim::cosd(theScanRotation);
+   double sin_rot  = ossim::sind(theScanRotation);
+   double tan_skew = ossim::tand(theScanSkew + theScanSkewCorr);
 
    double a =  theScanScaleMatrix[0]*(sin_rot*tan_skew + cos_rot) +
                theScanScaleMatrix[1]*(cos_rot*tan_skew - sin_rot);
@@ -918,12 +918,12 @@ void  ossimFcsiModel::updateModel()
    //***
    // Establish the differential rotation matrix due to attitude correction:
    //***
-   double cw = cosd(theXrotCorr);
-   double sw = sind(theXrotCorr);
-   double cp = cosd(theYrotCorr);
-   double sp = sind(theYrotCorr);
-   double ck = cosd(theZrotCorr);
-   double sk = sind(theZrotCorr);
+   double cw = ossim::cosd(theXrotCorr);
+   double sw = ossim::sind(theXrotCorr);
+   double cp = ossim::cosd(theYrotCorr);
+   double sp = ossim::sind(theYrotCorr);
+   double ck = ossim::cosd(theZrotCorr);
+   double sk = ossim::sind(theZrotCorr);
 
    NEWMAT::Matrix attitudeCorrection(3, 3);
    attitudeCorrection(1,1) =  ck*cw - sk*sp*sw;

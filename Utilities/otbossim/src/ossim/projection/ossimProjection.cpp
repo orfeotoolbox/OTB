@@ -1,9 +1,6 @@
 //*******************************************************************
-// Copyright (C) 2000 ImageLinks Inc.
 //
-// License:  LGPL
-// 
-// See LICENSE.txt file in the top level directory for more details.
+// License:  See top level LICENSE.txt file.
 //
 // Author:  Garrett Potts
 //
@@ -11,7 +8,7 @@
 //
 // Base class for all projections.  
 //*******************************************************************
-//  $Id: ossimProjection.cpp 9094 2006-06-13 19:12:40Z dburken $
+//  $Id: ossimProjection.cpp 11510 2007-08-06 09:52:07Z dburken $
 
 #include <iostream>
 #include <iomanip>
@@ -71,9 +68,10 @@ bool ossimProjection::loadState(const ossimKeywordlist& kwl,
 //  
 //*****************************************************************************
 void ossimProjection::worldToLineSample(const ossimGpt& worldPoint,
-                                         ossimDpt&       ip) const
+                                        ossimDpt&       ip) const
 {
    if (traceExec())  ossimNotify(ossimNotifyLevel_DEBUG) << "DEBUG ossimProjection::worldToLineSample: entering..." << std::endl;
+
    static const double PIXEL_THRESHOLD    = 0.1; // acceptable pixel error
    static const int    MAX_NUM_ITERATIONS = 20;
 
@@ -82,9 +80,10 @@ void ossimProjection::worldToLineSample(const ossimGpt& worldPoint,
    //***
    int iters = 0;
    double height = worldPoint.hgt;
-   if ((height == ossimElevSource::DEFAULT_NULL_HEIGHT)||
-       (height == OSSIM_DBL_NAN))
+   if ( ossim::isnan(height) )
+   {
       height = 0.0;
+   }
 
    //***
    // Utilize iterative scheme for arriving at image point. Begin with guess

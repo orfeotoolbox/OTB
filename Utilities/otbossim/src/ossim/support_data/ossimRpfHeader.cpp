@@ -6,7 +6,7 @@
 // Description: This class extends the stl's string class.
 //
 //********************************************************************
-// $Id: ossimRpfHeader.cpp 9963 2006-11-28 21:11:01Z gpotts $
+// $Id: ossimRpfHeader.cpp 11094 2007-05-30 14:48:30Z dburken $
 #include <ossim/support_data/ossimRpfHeader.h>
 #include <string.h>
 #include <ossim/base/ossimEndian.h>
@@ -26,10 +26,6 @@
 #include <ossim/support_data/ossimRpfCompressionSection.h>
 #include <ossim/support_data/ossimRpfColorGrayscaleSubheader.h>
 
-#ifndef NULL
-#include <stddef.h>
-#endif
-
 ostream& operator <<(ostream &out, const ossimRpfHeader &data)
 {
    data.print(out);
@@ -42,15 +38,15 @@ ossimRpfHeader::~ossimRpfHeader()
    if(theLocationSection)
    {
       delete theLocationSection;
-      theLocationSection = NULL;
+      theLocationSection = 0;
    }
 }
 ossimRpfHeader::ossimRpfHeader()
-   :theLittleBigEndianIndicator(true),
+   :theLittleBigEndianIndicator(0x00),
     theHeaderSectionLength(0),
     theNewRepUpIndicator(0),
     theLocSectionLoc(0),
-    theLocationSection(NULL)
+    theLocationSection(0)
 {
    theLocationSection = new ossimRpfLocationSection;
    
@@ -70,7 +66,7 @@ ossimRpfHeader::ossimRpfHeader()
 }
 
 ossimErrorCode ossimRpfHeader::parseStream(istream& in)
-{   
+{
    if(in)
    {      
       ossimEndian anEndian;
@@ -86,7 +82,7 @@ ossimErrorCode ossimRpfHeader::parseStream(istream& in)
       in.read((char*)theCountryCode, 2);
       in.read((char*)theSecurityReleaseMarking, 2);
       in.read((char*)&theLocSectionLoc, 4);
-
+      
       theFileName[12] = '\0';
       theGovSpecNumber[15] = '\0';
       theGovSpecDate[8] = '\0';
@@ -94,11 +90,16 @@ ossimErrorCode ossimRpfHeader::parseStream(istream& in)
       theCountryCode[2] = '\0';
       theSecurityReleaseMarking[2] = '\0';
 
-      ossimByteOrder dataByteOrder = ((theLittleBigEndianIndicator==0xff)?OSSIM_LITTLE_ENDIAN:OSSIM_BIG_ENDIAN);
+      //---
+      // From spec:  MIL-PRF-89038CARDG theLittleBigEndianIndicator shall
+      // be 0x00 for all data denoting big endian storage.  We will test
+      // anyway just in case...
+      //---
+      ossimByteOrder dataByteOrder = ((theLittleBigEndianIndicator==0x00) ?
+                                      OSSIM_BIG_ENDIAN:OSSIM_LITTLE_ENDIAN);
 
       if(anEndian.getSystemEndianType() != dataByteOrder)
       {
-
          anEndian.swap(theHeaderSectionLength);
          anEndian.swap(theLocSectionLoc);
       }
@@ -119,15 +120,17 @@ ossimErrorCode ossimRpfHeader::parseStream(istream& in)
 
 void ossimRpfHeader::print(ostream &out)const
 {
-   out << "theLittleBigEndianIndicator:               " << theLittleBigEndianIndicator << endl
-       << "theHeaderSectionLength:                   " << theHeaderSectionLength     << endl
-       << "theFileName:                              " << theFileName                << endl
-       << "theNewRepUpIndicator:                     " << theNewRepUpIndicator       << endl
-       << "theGovSpecNumber:                         " << theGovSpecNumber           << endl
-       << "theSecurityClassification:                " << theSecurityClassification  << endl
-       << "theCountryCode:                           " << theCountryCode             << endl
-       << "theSecurityReleaseMarking:                " << theSecurityReleaseMarking  << endl
-       << "theLocSectionLoc:                         " << theLocSectionLoc           << endl
+   out << "ossimRpfHeader::print:"
+       << "\ntheLittleBigEndianIndicator: "
+       << int(theLittleBigEndianIndicator)
+       << "\ntheHeaderSectionLength:      " << theHeaderSectionLength
+       << "\ntheFileName:                 " << theFileName
+       << "\ntheNewRepUpIndicator:        " << theNewRepUpIndicator       
+       << "\ntheGovSpecNumber:            " << theGovSpecNumber           
+       << "\ntheSecurityClassification:   " << theSecurityClassification  
+       << "\ntheCountryCode:              " << theCountryCode             
+       << "\ntheSecurityReleaseMarking:   " << theSecurityReleaseMarking  
+       << "\ntheLocSectionLoc:            " << theLocSectionLoc << "\n"
        << (*theLocationSection) << endl;
 }
 
@@ -148,7 +151,7 @@ ossimString ossimRpfHeader::getSecurityClassification()const
 
 ossimRpfCoverageSection* ossimRpfHeader::getNewCoverageSection(istream& in)const
 {
-   ossimRpfCoverageSection* result = NULL;
+   ossimRpfCoverageSection* result = 0;
 
    if(in&&theLocationSection)
    {
@@ -168,7 +171,7 @@ ossimRpfCoverageSection* ossimRpfHeader::getNewCoverageSection(istream& in)const
          else
          {
             delete result;
-            result = NULL;
+            result = 0;
          }
       }
    }
@@ -177,7 +180,7 @@ ossimRpfCoverageSection* ossimRpfHeader::getNewCoverageSection(istream& in)const
 
 ossimRpfMaskSubsection*  ossimRpfHeader::getNewMaskSubsection(istream& in)const
 {
-   ossimRpfMaskSubsection* result = NULL;
+   ossimRpfMaskSubsection* result = 0;
 
    if(in&&theLocationSection)
    {
@@ -196,13 +199,13 @@ ossimRpfMaskSubsection*  ossimRpfHeader::getNewMaskSubsection(istream& in)const
                ossimErrorCodes::OSSIM_OK)
             {
                delete result;
-               result = NULL;
+               result = 0;
             }
          }
          else
          {
             delete result;
-            result = NULL;
+            result = 0;
          }
       }
    }
@@ -213,7 +216,7 @@ ossimRpfMaskSubsection*  ossimRpfHeader::getNewMaskSubsection(istream& in)const
 
 ossimRpfAttributeSectionSubheader* ossimRpfHeader::getNewAttributeSectionSubheader(istream& in)const
 {
-   ossimRpfAttributeSectionSubheader* result = NULL;
+   ossimRpfAttributeSectionSubheader* result = 0;
 
    if(in&&theLocationSection)
    {
@@ -232,13 +235,13 @@ ossimRpfAttributeSectionSubheader* ossimRpfHeader::getNewAttributeSectionSubhead
                ossimErrorCodes::OSSIM_OK)
             {
                delete result;
-               result = NULL;
+               result = 0;
             }
          }
          else
          {
             delete result;
-            result = NULL;
+            result = 0;
          }
       }
    }
@@ -248,7 +251,7 @@ ossimRpfAttributeSectionSubheader* ossimRpfHeader::getNewAttributeSectionSubhead
 
 ossimRpfColorGrayscaleSubheader* ossimRpfHeader::getNewColorGrayscaleSubheader(istream& in)const
 {
-   ossimRpfColorGrayscaleSubheader* result = NULL;
+   ossimRpfColorGrayscaleSubheader* result = 0;
    
    if(in&&theLocationSection)
    {
@@ -267,13 +270,13 @@ ossimRpfColorGrayscaleSubheader* ossimRpfHeader::getNewColorGrayscaleSubheader(i
                ossimErrorCodes::OSSIM_OK)
             {
                delete result;
-               result = NULL;
+               result = 0;
             }
          }
          else
          {
             delete result;
-            result = NULL;
+            result = 0;
          }
       }      
    }
@@ -283,7 +286,7 @@ ossimRpfColorGrayscaleSubheader* ossimRpfHeader::getNewColorGrayscaleSubheader(i
 
 ossimRpfCompressionSection* ossimRpfHeader::getNewCompressionSection(istream& in)const
 {   
-   ossimRpfCompressionSection* result = NULL;
+   ossimRpfCompressionSection* result = 0;
 
    if(in&&theLocationSection)
    {
@@ -302,13 +305,13 @@ ossimRpfCompressionSection* ossimRpfHeader::getNewCompressionSection(istream& in
                ossimErrorCodes::OSSIM_OK)
             {
                delete result;
-               result = NULL;
+               result = 0;
             }
          }
          else
          {
             delete result;
-            result = NULL;
+            result = 0;
          }
       }
    }
@@ -318,7 +321,7 @@ ossimRpfCompressionSection* ossimRpfHeader::getNewCompressionSection(istream& in
 
 ossimRpfCompressionSectionSubheader* ossimRpfHeader::getNewCompressionSectionSubheader(istream& in)const
 {
-   ossimRpfCompressionSectionSubheader* result = NULL;
+   ossimRpfCompressionSectionSubheader* result = 0;
 
    if(in&&theLocationSection)
    {
@@ -337,13 +340,13 @@ ossimRpfCompressionSectionSubheader* ossimRpfHeader::getNewCompressionSectionSub
                ossimErrorCodes::OSSIM_OK)
             {
                delete result;
-               result = NULL;
+               result = 0;
             }
          }
          else
          {
             delete result;
-            result = NULL;
+            result = 0;
          }
       }
    }
@@ -355,7 +358,7 @@ ossimRpfCompressionSectionSubheader* ossimRpfHeader::getNewCompressionSectionSub
 
 ossimRpfImageDisplayParameterSubheader* ossimRpfHeader::getNewImageDisplayParameterSubheader(istream& in)const
 {
-   ossimRpfImageDisplayParameterSubheader* result = NULL;
+   ossimRpfImageDisplayParameterSubheader* result = 0;
 
    if(in&&theLocationSection)
    {
@@ -374,13 +377,13 @@ ossimRpfImageDisplayParameterSubheader* ossimRpfHeader::getNewImageDisplayParame
                ossimErrorCodes::OSSIM_OK)
             {
                delete result;
-               result = NULL;
+               result = 0;
             }
          }
          else
          {
             delete result;
-            result = NULL;
+            result = 0;
          }
       }
    }
@@ -390,7 +393,7 @@ ossimRpfImageDisplayParameterSubheader* ossimRpfHeader::getNewImageDisplayParame
 
 ossimRpfImageDescriptionSubheader* ossimRpfHeader::getNewImageDescriptionSubheader(istream& in)const
 {
-   ossimRpfImageDescriptionSubheader* result = NULL;
+   ossimRpfImageDescriptionSubheader* result = 0;
 
    if(in&&theLocationSection)
    {
@@ -409,13 +412,13 @@ ossimRpfImageDescriptionSubheader* ossimRpfHeader::getNewImageDescriptionSubhead
                ossimErrorCodes::OSSIM_OK)
             {
                delete result;
-               result = NULL;
+               result = 0;
             }
          }
          else
          {
             delete result;
-            result = NULL;
+            result = 0;
          }
       }
    }
@@ -426,7 +429,7 @@ ossimRpfImageDescriptionSubheader* ossimRpfHeader::getNewImageDescriptionSubhead
 
 ossimRpfBoundaryRectTable* ossimRpfHeader::getNewBoundaryRectTable(istream &in)const
 {
-   ossimRpfBoundaryRectTable* result = NULL;
+   ossimRpfBoundaryRectTable* result = 0;
 
    if(in&&theLocationSection)
    {
@@ -449,18 +452,18 @@ ossimRpfBoundaryRectTable* ossimRpfHeader::getNewBoundaryRectTable(istream &in)c
                   ossimErrorCodes::OSSIM_OK)
                {
                   delete result;
-                  result = NULL;
+                  result = 0;
                }
             }
             else
             {
                delete result;
-               result = NULL;
+               result = 0;
             }
          }
 
          delete tempSubheader;
-         tempSubheader = NULL;
+         tempSubheader = 0;
       }
    }   
 
@@ -469,7 +472,7 @@ ossimRpfBoundaryRectTable* ossimRpfHeader::getNewBoundaryRectTable(istream &in)c
 
 ossimRpfBoundaryRectSectionSubheader* ossimRpfHeader::getNewBoundaryRectSectSubheader(istream &in)const
 {
-   ossimRpfBoundaryRectSectionSubheader* result = NULL;
+   ossimRpfBoundaryRectSectionSubheader* result = 0;
 
    if(in&&theLocationSection)
    {
@@ -488,13 +491,13 @@ ossimRpfBoundaryRectSectionSubheader* ossimRpfHeader::getNewBoundaryRectSectSubh
                ossimErrorCodes::OSSIM_OK)
             {
                delete result;
-               result = NULL;
+               result = 0;
             }
          }
          else
          {
             delete result;
-            result = NULL;
+            result = 0;
          }
       }
    }   
@@ -505,7 +508,7 @@ ossimRpfBoundaryRectSectionSubheader* ossimRpfHeader::getNewBoundaryRectSectSubh
 
 ossimRpfFrameFileIndexSectionSubheader* ossimRpfHeader::getNewFrameFileIndexSectionSubheader(istream &in)const
 {
-   ossimRpfFrameFileIndexSectionSubheader* result = NULL;
+   ossimRpfFrameFileIndexSectionSubheader* result = 0;
 
    if(in&&theLocationSection)
    {
@@ -523,13 +526,13 @@ ossimRpfFrameFileIndexSectionSubheader* ossimRpfHeader::getNewFrameFileIndexSect
                ossimErrorCodes::OSSIM_OK)
             {
                delete result;
-               result = NULL;
+               result = 0;
             }
          }
          else
          {
             delete result;
-            result = NULL;
+            result = 0;
          }
       }
    }   
@@ -539,7 +542,7 @@ ossimRpfFrameFileIndexSectionSubheader* ossimRpfHeader::getNewFrameFileIndexSect
 
 ossimRpfFrameFileIndexSubsection* ossimRpfHeader::getNewFileIndexSubsection(istream& in)const
 {
-   ossimRpfFrameFileIndexSubsection* result = NULL;
+   ossimRpfFrameFileIndexSubsection* result = 0;
 
    if(in&&theLocationSection)
    {
@@ -560,19 +563,19 @@ ossimRpfFrameFileIndexSubsection* ossimRpfHeader::getNewFileIndexSubsection(istr
                ossimErrorCodes::OSSIM_OK)
             {
                delete result;
-               result = NULL;
+               result = 0;
             }
          }
          else
          {
             delete result;
-            result = NULL;
+            result = 0;
          }
       }
       if(tempSubheader)
       {
          delete tempSubheader;
-         tempSubheader = NULL;
+         tempSubheader = 0;
       }
    }   
 

@@ -1,9 +1,6 @@
 //*******************************************************************
-// Copyright (C) 2000 ImageLinks Inc.
 //
-// License:  LGPL
-// 
-// See LICENSE.txt file in the top level directory for more details.
+// License:  See top level LICENSE.txt file.
 //
 // Author:  Garrett Potts
 //
@@ -13,7 +10,7 @@
 // Contains class definition for ossimResampler.
 // 
 //*******************************************************************
-//  $Id: ossimResampler.cpp 9094 2006-06-13 19:12:40Z dburken $
+//  $Id: ossimResampler.cpp 11411 2007-07-27 13:53:51Z dburken $
 
 
 #include <iostream>
@@ -472,7 +469,7 @@ void ossimResampler::resamplePartialTile(T,// not used
          {
             h[j] = 0.0;
             ossim_int32 count = 0;
-            double lastValue = OSSIM_DBL_NAN;
+            double lastValue = ossim::nan();
             for (l = 0; l < theKernelHeight; l++)
             {
                ossim_int32 index = Ly[k] + l + kernelVerticalShift;
@@ -502,7 +499,7 @@ void ossimResampler::resamplePartialTile(T,// not used
 //                            break;
 //                         }
 //                      }
-//                      if(lastValue != OSSIM_DBL_NAN)
+//                      if(ossim::isnan(lastValue) == false)
 //                      {
 //                         h[j] += lastValue *
 //                                 theWeightTableY[theKernelHeight - l-1][indexMod];
@@ -518,7 +515,7 @@ void ossimResampler::resamplePartialTile(T,// not used
             }
             if(!count)
             {
-               h[j] = OSSIM_DBL_NAN;
+               h[j] = ossim::nan();
             }
          }
          for (ossim_int32 m = 0; m < out_width; m++)
@@ -534,13 +531,13 @@ void ossimResampler::resamplePartialTile(T,// not used
             }
             else
             {
-               double lastValue = OSSIM_DBL_NAN;
+               double lastValue = ossim::nan();
                for (l = 0; l < theKernelWidth; l++)
                {
                   ossim_int32 index = Lx[m] + l + kernelHorizontalShift;
                   if ((index >= 0) && (index < in_width))
                   {
-                     if(h[index] != OSSIM_DBL_NAN)
+                     if(ossim::isnan(h[index]) == false)
                      {
                         lastValue = h[index];
                         x += h[index] * theWeightTableX[theKernelWidth - l-1][indexMod];
@@ -555,13 +552,13 @@ void ossimResampler::resamplePartialTile(T,// not used
 //                         for(ossim_int32 templ = l; templ < l; ++templ)
 //                         {
 //                            ossim_int32 index = Lx[m] + templ + kernelHorizontalShift;
-//                            if(h[index] != OSSIM_DBL_NAN)
+//                            if(ossim::isnan(h[index]) == false))
 //                            {
 //                               lastValue = h[index];
 //                               break;
 //                            }
 //                         }
-//                         if(lastValue != OSSIM_DBL_NAN)
+//                         if(ossim::isnan(lastValue) == false)
 //                         {
 //                            x += lastValue * theWeightTableX[theKernelWidth - l-1][indexMod];
 //                         }
@@ -983,8 +980,8 @@ void ossimResampler::allocateWeightTable()//uint32 outWidth)
       break;
      }
    }
-   theTableWidthX = (ossim_int32)irint(theOutputToInputRatio.x);
-   theTableWidthY = (ossim_int32)irint(theOutputToInputRatio.y);
+   theTableWidthX = (ossim_int32)ossim::round<int>(theOutputToInputRatio.x);
+   theTableWidthY = (ossim_int32)ossim::round<int>(theOutputToInputRatio.y);
    if(theTableWidthX&&theTableHeight)
    {
       theWeightTableX = new double*[theTableHeight];
@@ -1139,8 +1136,8 @@ void ossimResampler::setRatio(const ossimDpt& outputToInputRatio)
    theOutputToInputRatio.x = (outputToInputRatio.x);
    theOutputToInputRatio.y = (outputToInputRatio.y);
 
-   if((theTableWidthX != irint(outputToInputRatio.x))||
-      (theTableWidthY != irint(outputToInputRatio.y)))
+   if((theTableWidthX != ossim::round<int>(outputToInputRatio.x))||
+      (theTableWidthY != ossim::round<int>(outputToInputRatio.y)))
    {
       allocateWeightTable();
       generateWeightTable();

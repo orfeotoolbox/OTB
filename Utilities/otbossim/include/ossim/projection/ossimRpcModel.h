@@ -1,11 +1,7 @@
 //*****************************************************************************
 // FILE: ossimRpcModel.h
 //
-// Copyright (C) 2001 ImageLinks, Inc.
-//
-// License:  LGPL
-//
-// See LICENSE.txt file in the top level directory for more details.
+// License:  See top level LICENSE.txt file.
 //
 // AUTHOR: Oscar Kramer
 //
@@ -15,7 +11,7 @@
 //   (USM).
 //
 //*****************************************************************************
-//  $Id: ossimRpcModel.h 9575 2006-09-15 19:07:00Z dburken $
+//  $Id: ossimRpcModel.h 11521 2007-08-07 21:55:58Z dburken $
 
 #ifndef ossimRpcModel_HEADER
 #define ossimRpcModel_HEADER
@@ -24,6 +20,7 @@
 #include <ossim/base/ossimIpt.h>
 #include <ossim/base/ossimDblGrid.h>
 #include <ossim/base/ossimFilename.h>
+
 
 /*!****************************************************************************
  *
@@ -41,14 +38,35 @@ public:
       A='A',  // corresponds to "RPC00A"
       B='B'   // corresponds to "RPC00B"
    };
-   
-   /*!
-    * CONSTRUCTORS:
-    */
+
+   /** @brief RPC model structure used for access function */
+   struct rpcModelStruct
+   {
+      double lineScale;
+      double sampScale;
+      double latScale;
+      double lonScale;
+      double hgtScale;
+      double lineOffset;
+      double sampOffset;
+      double latOffset;
+      double lonOffset;
+      double hgtOffset;
+      double lineNumCoef[20];
+      double lineDenCoef[20];
+      double sampNumCoef[20];
+      double sampDenCoef[20];
+      char   type;
+   };
+
+   /** @brief default constructor */
    ossimRpcModel();
+
+   /** @brief copy construtor */
    ossimRpcModel(const ossimRpcModel& copy_this);
-   ossimRpcModel(const ossimKeywordlist& geom_kwl);
-   ~ossimRpcModel();
+
+   /** @brief virtual destructor */
+   virtual ~ossimRpcModel();
 
    void setAttributes(ossim_float64 theSampleOffset,
                       ossim_float64 theLineOffset,
@@ -65,9 +83,18 @@ public:
                       const std::vector<double>& yNumeratorCoeffs,
                       const std::vector<double>& yDenominatorCoeffs,
                       PolynomialType polyType = B,
-                      bool computeGsd=true);
+                      bool computeGsdFlag=true);
 
    void setMetersPerPixel(const ossimDpt& metersPerPixel);
+
+   /**
+    * This method computes the ground sample distance(gsd) and sets class
+    * attribute theGSD and theMeanGSD by doing a lineSampleHeightToWorld on
+    * three points and calculating the distance from them.
+    *
+    * @return Nothing but throws ossimException on error.
+    */
+   void computeGsd();
 
    /**
     * @brief Sets data member theBiasError, theRandError.
@@ -86,43 +113,59 @@ public:
                          const ossim_float64& randomError,
                          bool initNominalPostionErrorFlag);
 
-   /*!
-    * METHOD: worldToLineSample()
+   /**
+    * @brief worldToLineSample()
     * Overrides base class implementation. Directly computes line-sample from
     * the polynomials.
     */
    virtual void  worldToLineSample(const ossimGpt& world_point,
                                    ossimDpt&       image_point) const;
-   /*!
-    * METHOD: print()
+   /**
+    * @brief print()
     * Extends base-class implementation. Dumps contents of object to ostream.
     */
    virtual std::ostream& print(std::ostream& out) const;
 
-   /*!
-    * METHODS:  saveState, loadState
+   /**
+    * @brief saveState
     * Fulfills ossimObject base-class pure virtuals. Loads and saves geometry
     * KWL files. Returns true if successful.
     */
    virtual bool saveState(ossimKeywordlist& kwl,
                           const char* prefix=0) const;
-
+   
+   /**
+    * @brief loadState
+    * Fulfills ossimObject base-class pure virtuals. Loads and saves geometry
+    * KWL files. Returns true if successful.
+    */
    virtual bool loadState(const ossimKeywordlist& kwl,
                           const char* prefix=0);
 
+   //***
+   // @brief lineSampleToWorld()
+   // Overrides base class pure virtual.  Intersects DEM.
+   //***
    virtual void  lineSampleToWorld(const ossimDpt& image_point,
                                    ossimGpt&       world_point) const;
    //***
-   // METHOD: lineSampleHeightToWorld()
+   // @brief lineSampleHeightToWorld()
    // Overrides base class pure virtual. Height understood to be relative to
    // standard ellipsoid.
    //***
    virtual void lineSampleHeightToWorld(const ossimDpt& image_point,
                                         const double&   heightEllipsoid,
                                         ossimGpt&       worldPoint) const;
+   
+   /**
+    * @brief imagingRay()
+    * Overrides base class pure virtual.
+    */
+   virtual void imagingRay(const ossimDpt& image_point,
+                           ossimEcefRay&   image_ray) const;
 
-   /*!
-    * STATIC METHOD: writeGeomTemplate(ostream)
+   /**
+    * @brief STATIC METHOD: writeGeomTemplate(ostream)
     * Writes a template of geom keywords processed by loadState and saveState
     * to output stream.
     */
@@ -131,20 +174,53 @@ public:
    virtual void updateModel();
    virtual void initAdjustableParameters();
 
-   /*!
-    * METHOD: dup()
+   /**
+    * @brief dup()
     * Returns pointer to a new instance, copy of this.
     */
-   virtual ossimObject* dup() const { return new ossimRpcModel(*this); }
+   virtual ossimObject* dup() const;
 
-   /*!
-    * ossimOptimizableProjection
-    */
-//   inline virtual bool useForward()const {return true;} //!ground to image faster
    inline virtual bool useForward()const {return false;}
-   virtual bool setupOptimizer(const ossimString& init_file); //!uses file path to init model
 
-  static const ossimFilename INIT_RPC_GEOM_FILENAME;
+   /** @brief uses file path to init model */
+   virtual bool setupOptimizer(const ossimString& init_file);
+
+   /**
+    * @brief Compute partials of samp/line WRT ground point
+    *
+    * @param parmIdx computational mode:
+    *        OBS_INIT, EVALUATE, P_WRT_X, P_WRT_X, P_WRT_X.
+    *
+    * @param gpos Current ground point estimate.
+    *
+    * @param h Not used.
+    *
+    * @return OBS_INT: n/a, EVALUATE: residuals, P_WRT_X/Y/Z: partials.
+    */
+   virtual ossimDpt getForwardDeriv(int parmIdx,
+                                    const ossimGpt& gpos,
+                                    double h);
+
+   /**
+    * @brief Returns Error - Bias.
+    * @return Error - Bias
+    * @note See NITF field "ERR_BIAS" from RPC00x tag where x = A or B.
+    */
+   double getBiasError() const;
+
+   /**
+    * @brief Returns Error - Random.
+    * @return Error - Random
+    * @note See NITF field "ERR_RAND" from RPC00x tag where x = A or B.
+    */
+   double getRandError() const;
+
+   /**
+    * @brief Returns RPC parameter set in structure.
+    * @param rpcModelStruct structure to initialize.
+    */
+   void getRpcParameters(ossimRpcModel::rpcModelStruct& model) const;
+   
 
 protected:
    enum AdjustParamIndex
@@ -173,12 +249,13 @@ protected:
                      const double& nlon,
                      const double& nhgt,
                      const double* coeffs) const;
+   double dPoly_dHgt(const double& nlat,
+                     const double& nlon,
+                     const double& nhgt,
+                     const double* coeffs) const;
    
-   virtual ossimDpt extrapolate (const ossimGpt& gp) const;
-   virtual ossimGpt extrapolate (const ossimDpt& ip,
-				 const double& height
-				 =ossimElevSource::DEFAULT_NULL_HEIGHT) const;
    PolynomialType thePolyType;
+
    //***
    // Quantities for zero-biasing and normalizing the image point and
    // ground point coordinates referenced in the polynomials:
@@ -194,13 +271,6 @@ protected:
    double theLonOffset;
    double theHgtOffset;
 
-   //***
-   // Coefficients:
-   //***
-   double theLineNumCoef[20];
-   double theLineDenCoef[20];
-   double theSampNumCoef[20];
-   double theSampDenCoef[20];
    
    //***
    // Quantities derived from the adjustable parameters:
@@ -209,11 +279,21 @@ protected:
    double theCrtrackOffset;
    double theIntrackScale;
    double theCrtrackScale;
-   double theYawSkew;  // = sin(theYawOffset)
    double theCosMapRot;
    double theSinMapRot;
+
+   /** error */
    double theBiasError; // meters
    double theRandError; // meters
+
+   //***
+   // Coefficients:
+   //***
+   double theLineNumCoef[20];
+   double theLineDenCoef[20];
+   double theSampNumCoef[20];
+   double theSampDenCoef[20];
+ 
 
    TYPE_DATA
 };

@@ -10,7 +10,7 @@
 // Contains class definition for ossimIrect.
 // 
 //*******************************************************************
-//  $Id: ossimIrect.cpp 9094 2006-06-13 19:12:40Z dburken $
+//  $Id: ossimIrect.cpp 11955 2007-10-31 16:10:22Z gpotts $
 
 #include <ostream>
 #include <ossim/base/ossimIrect.h>
@@ -18,6 +18,14 @@
 #include <ossim/base/ossimKeywordlist.h>
 #include <ossim/base/ossimString.h>
 #include <ossim/base/ossimKeywordNames.h>
+
+// nonstandard versions that use operator>, so they behave differently
+// than std:::min/max and ossim::min/max.  kept here for now for that
+// reason.
+#ifndef MAX
+#  define MAX(x,y) ((x)>(y)?(x):(y))
+#  define MIN(x,y) ((x)>(y)?(y):(x))
+#endif
 
 ossimIrect::ossimIrect(const ossimDrect& rect)
    :
@@ -44,10 +52,10 @@ ossimIrect::ossimIrect(const std::vector<ossimIpt>& points,
       // find the bounds
       for(index = 1; index < points.size();index++)
       {
-         minx = ossimMin(minx, points[index].x);
-         miny = ossimMin(miny, points[index].y);
-         maxx = ossimMax(maxx, points[index].x);
-         maxy = ossimMax(maxy, points[index].y);
+         minx = ossim::min(minx, points[index].x);
+         miny = ossim::min(miny, points[index].y);
+         maxx = ossim::max(maxx, points[index].x);
+         maxy = ossim::max(maxy, points[index].y);
          
       }
       if(theOrientMode == OSSIM_LEFT_HANDED)
@@ -81,10 +89,10 @@ ossimIrect::ossimIrect(const ossimIpt& p1,
       ossim_int32 minx, miny;
       ossim_int32 maxx, maxy;
       
-      minx = ossimMin( p1.x, ossimMin(p2.x, ossimMin(p3.x, p4.x)));
-      miny = ossimMin( p1.y, ossimMin(p2.y, ossimMin(p3.y, p4.y)));
-      maxx = ossimMax( p1.x, ossimMax(p2.x, ossimMax(p3.x, p4.x)));
-      maxy = ossimMax( p1.y, ossimMax(p2.y, ossimMax(p3.y, p4.y)));
+      minx = ossim::min( p1.x, ossim::min(p2.x, ossim::min(p3.x, p4.x)));
+      miny = ossim::min( p1.y, ossim::min(p2.y, ossim::min(p3.y, p4.y)));
+      maxx = ossim::max( p1.x, ossim::max(p2.x, ossim::max(p3.x, p4.x)));
+      maxy = ossim::max( p1.y, ossim::max(p2.y, ossim::max(p3.y, p4.y)));
       
       if(theOrientMode == OSSIM_LEFT_HANDED)
       {
@@ -197,8 +205,8 @@ void ossimIrect::stretchToTileBoundary(const ossimIpt& tileWidthHeight)
             ul.y += tileWidthHeight.y;
          }
       }
-      ossim_int32 w = ossimAbs(theLrCorner.x - ul.x) + 1;
-      ossim_int32 h = ossimAbs(theLrCorner.y - ul.y) + 1;
+      ossim_int32 w = std::abs(theLrCorner.x - ul.x) + 1;
+      ossim_int32 h = std::abs(theLrCorner.y - ul.y) + 1;
 
       ossim_int32 nw = (w / tileWidthHeight.x)*tileWidthHeight.x;
       ossim_int32 nh = (h / tileWidthHeight.y)*tileWidthHeight.y;

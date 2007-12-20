@@ -11,7 +11,7 @@
 //              header.
 //
 //********************************************************************
-// $Id: ossimDoqq.cpp 9094 2006-06-13 19:12:40Z dburken $
+// $Id: ossimDoqq.cpp 11347 2007-07-23 13:01:59Z gpotts $
 
 #include <fstream>
 #include <iostream>
@@ -223,8 +223,8 @@ void ossimDoqq::ldstr_v2(std::istream& in)
          theGsd.x = gsd.toDouble();
          theGsd.y = gsd.toDouble();
 //         theGsd = atof(gsd.chars());
-//          theGsd.x = ossimAbs(ossimString(dum1).toDouble());
-//          theGsd.y = ossimAbs(ossimString(dum2).toDouble());
+//          theGsd.x = std::abs(ossimString(dum1).toDouble());
+//          theGsd.y = std::abs(ossimString(dum2).toDouble());
       }
    }
 
@@ -353,10 +353,10 @@ void ossimDoqq::ldstr_v1(std::istream& in)
    char tmp10[GSD_SIZE+1];
    in.seekg( (theRecordSize*3) + GSD_X_OFFSET, std::ios::beg);
    in.get(tmp10, GSD_SIZE+1);
-   theGsd.x = ossimAbs(ossimString(tmp10, tmp10+GSD_SIZE).toDouble());
+   theGsd.x = std::abs(ossimString(tmp10, tmp10+GSD_SIZE).toDouble());
    in.seekg( (theRecordSize*3) + GSD_Y_OFFSET, std::ios::beg);
    in.get(tmp10, GSD_SIZE+1);
-   theGsd.y = ossimAbs(ossimString(tmp10, tmp10+GSD_SIZE).toDouble());
+   theGsd.y = std::abs(ossimString(tmp10, tmp10+GSD_SIZE).toDouble());
    
 }
 

@@ -1,11 +1,9 @@
 //----------------------------------------------------------------------------
 //
-// License:  LGPL
-// 
-// See LICENSE.txt file in the top level directory for more details.
+// License:  See top level LICENSE.txt file.
 //
 //----------------------------------------------------------------------------
-// $Id: ossimImageHandlerFactory.cpp 10104 2006-12-14 16:13:05Z gpotts $
+// $Id: ossimImageHandlerFactory.cpp 10845 2007-05-04 15:14:11Z dburken $
 #include <ossim/imaging/ossimImageHandlerFactory.h>
 #include <ossim/imaging/ossimAdrgTileSource.h>
 #include <ossim/imaging/ossimCcfTileSource.h>
@@ -235,7 +233,6 @@ ossimImageHandler* ossimImageHandlerFactory::open(const ossimFilename& fileName)
    }
    delete result;
 
-
    if(traceDebug())
    {
       ossimNotify(ossimNotifyLevel_DEBUG)
@@ -243,10 +240,9 @@ ossimImageHandler* ossimImageHandlerFactory::open(const ossimFilename& fileName)
    }
    result = new ossimVpfTileSource;
    if(result->open(copyFilename))
-     {
-        std::cout << "??????????????????????????" << std::endl;
-       return result;
-     }
+   {
+      return result;
+   }
    delete result;
 
    if(traceDebug())

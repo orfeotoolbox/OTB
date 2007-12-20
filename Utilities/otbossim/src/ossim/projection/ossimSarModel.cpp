@@ -9,12 +9,13 @@
 //              This model represents a standard model using relatively
 //              generic support data based on the following references:
 //                [1] Modern Photogrammetry; Mikhail, Bethel, & McGlone;
-//                    Sections 11.7-11.9
+//                    Sections 11.7-11.9.  Equation number references are
+//                    provided where possible for added clarity.
 //                [2] The Compendium of Controlled Extensions for NITFS
 //                    21 Mar 2006, paragraph E.3.8, SAR MPDSR
 //
 //----------------------------------------------------------------------------
-// $Id: ossimSarModel.cpp 10374 2007-01-25 20:00:39Z dburken $
+// $Id: ossimSarModel.cpp 11949 2007-10-31 14:33:29Z gpotts $
 
 #include <ossim/elevation/ossimHgtRef.h>
 #include <ossim/projection/ossimSarModel.h>
@@ -30,7 +31,7 @@ static ossimTrace traceExec (ossimString("ossimSarModel:exec"));
 static ossimTrace traceDebug(ossimString("ossimSarModel:debug"));
 
 #ifdef OSSIM_ID_ENABLED
-static const char OSSIM_ID[] = "$Id: ossimSarModel.cpp 10374 2007-01-25 20:00:39Z dburken $";
+static const char OSSIM_ID[] = "$Id: ossimSarModel.cpp 11949 2007-10-31 14:33:29Z gpotts $";
 #endif
 
 static const char ACQ_MODE_KW[]         = "acq_mode";
@@ -155,7 +156,7 @@ bool ossimSarModel::loadState(const ossimKeywordlist& kwl, const char* prefix)
 
    const char* lookup;
    
-   // Get the acquition mode
+   // Get the acquisition mode
    lookup = kwl.find(prefix, ACQ_MODE_KW);
    theAcquisitionMode = ossimSarModel::UNKNOWN;
    if (lookup)
@@ -174,7 +175,7 @@ bool ossimSarModel::loadState(const ossimKeywordlist& kwl, const char* prefix)
       return false;
    }
 
-   // Get the ORP position
+   // Get the ORP (aka Output/Ground Reference Point)
    theOrpPosition.makeNan();
    lookup = kwl.find(prefix, ORP_POS_KW);
    if (lookup)
@@ -214,7 +215,7 @@ bool ossimSarModel::loadState(const ossimKeywordlist& kwl, const char* prefix)
       return false;
    }
 
-   // Get the output plane normal
+   // Get the output plane normal (slant plane orientation)
    theOutputPlaneNormal.makeNan();
    lookup = kwl.find(prefix, OPNORM_KW);
    if (lookup)
@@ -234,7 +235,7 @@ bool ossimSarModel::loadState(const ossimKeywordlist& kwl, const char* prefix)
       return false;
    }
 
-   // Get the output plane x-axis
+   // Get the output plane x-axis (slant plane orientation)
    theOutputPlaneXaxis.makeNan();
    lookup = kwl.find(prefix, OP_X_AXIS_KW);
    if (lookup)
@@ -255,14 +256,14 @@ bool ossimSarModel::loadState(const ossimKeywordlist& kwl, const char* prefix)
    }
 
    // Get the output IPR
-   theOipr = OSSIM_DBL_NAN;
+   theOipr = ossim::nan();
    lookup = kwl.find(prefix, OIPR_KW);
    if (lookup)
    {
       theOipr = ossimString::toFloat64(lookup);
    }
    
-   if (theOipr == OSSIM_DBL_NAN)
+   if (ossim::isnan(theOipr))
    {
       if (traceDebug())
       {
@@ -275,14 +276,14 @@ bool ossimSarModel::loadState(const ossimKeywordlist& kwl, const char* prefix)
    }
 
    // Get the pixel size
-   thePixelSize = OSSIM_DBL_NAN;
+   thePixelSize = ossim::nan();
    lookup = kwl.find(prefix, PIX_SIZE_KW);
    if (lookup)
    {
       thePixelSize = ossimString::toFloat64(lookup);
    }
    
-   if (thePixelSize == OSSIM_DBL_NAN)
+   if (ossim::isnan(thePixelSize))
    {
       if (traceDebug())
       {
@@ -295,14 +296,14 @@ bool ossimSarModel::loadState(const ossimKeywordlist& kwl, const char* prefix)
    }
 
    // Get the ARP time
-   theArpTime = OSSIM_DBL_NAN;
+   theArpTime = ossim::nan();
    lookup = kwl.find(prefix, ARP_TIME_KW);
    if (lookup)
    {
       theArpTime = ossimString::toFloat64(lookup);
    }
 
-   if (theArpTime == OSSIM_DBL_NAN)
+   if (ossim::isnan(theArpTime))
    {
       if (traceDebug())
       {
@@ -315,6 +316,7 @@ bool ossimSarModel::loadState(const ossimKeywordlist& kwl, const char* prefix)
    }
 
    // Get the ARP position coefficients
+   //  (variable degree polynomial representation of position)
    theArpXPolCoeff.clear();
    theArpYPolCoeff.clear();
    theArpZPolCoeff.clear();
@@ -365,6 +367,7 @@ bool ossimSarModel::loadState(const ossimKeywordlist& kwl, const char* prefix)
    }
 
    // Get the time coefficients
+   //  (variable degree polynomial representation of time WRT image coordinates)
    theTimeCoeff.clear();
    ossim_uint32 timeCount = kwl.numberOf(TIME_COEFF);
    if (timeCount)
@@ -577,13 +580,15 @@ void ossimSarModel::lineSampleHeightToWorld(const ossimDpt& lineSampPt,
    
    // Set the height reference
    ossim_float64 hgtSet;
-   if (heightAboveEllipsoid == OSSIM_NAN)
+   if ( ossim::isnan(heightAboveEllipsoid) )
    {
       ossimGpt orpG(theOrpPosition);
       hgtSet = orpG.height();
    }
    else
+   {
       hgtSet = heightAboveEllipsoid;
+   }
       
    ossimHgtRef hgtRef(AT_HGT, hgtSet);
    
@@ -659,9 +664,11 @@ void ossimSarModel::lineSampleToWorld(const ossimDpt& lineSampPt,
 //  
 //  Given an image point, returns a ray originating at the ARP position
 //  and pointing towards the target's position in the Output
-//  Plane.  This DOES NOT provide the conventional definition for an
-//  imaging ray.  It DOES provide a radius vector for the
-//  range/Doppler circle.
+//  Plane.
+//  This DOES NOT provide the conventional definition for an imaging ray
+//  because the imaging locus for SAR is not a ray.
+//
+//  It DOES provide a radius vector for the range/Doppler circle.
 //  
 //*****************************************************************************
 void ossimSarModel::imagingRay(const ossimDpt& image_point,
@@ -748,6 +755,7 @@ void ossimSarModel::updateModel()
    thePixelSpacing = thePixelSize;
    
    // Define the output(focus) plane
+   //    Ref[1], eq. 11-29 -> 11-31
    theOPZ = theOutputPlaneNormal.unitVector();
    theOPX = theOutputPlaneXaxis.unitVector();
    
@@ -832,14 +840,16 @@ ossimEcefVector ossimSarModel::getArpVel() const
 //  METHOD: ossimSarModel::getArpPos()
 //  
 //  Compute ARP position as function of time-dependent polynomial.
+//    Note: The polynomial degree/coefficients must be
+//    predetermined by the data provider.
 //  
 //*****************************************************************************
 ossimEcefPoint ossimSarModel::getArpPos(const ossim_float64& time) const
 {
    ossim_int32 i;
-   ossim_uint32 nTermsX = theArpXPolCoeff.size();
-   ossim_uint32 nTermsY = theArpYPolCoeff.size();
-   ossim_uint32 nTermsZ = theArpZPolCoeff.size();
+   ossim_uint32 nTermsX = (ossim_uint32)theArpXPolCoeff.size();
+   ossim_uint32 nTermsY = (ossim_uint32)theArpYPolCoeff.size();
+   ossim_uint32 nTermsZ = (ossim_uint32)theArpZPolCoeff.size();
 
    ossim_float64 x = theArpXPolCoeff[nTermsX-1];
    for (i=nTermsX-2; i>=0; i--)
@@ -881,14 +891,16 @@ ossimEcefPoint ossimSarModel::getArpPos(const ossim_float64& time) const
 //  METHOD: ossimSarModel::getArpVel()
 //  
 //  Compute ARP velocity as 1st derivative of time-dependent polynomial.
+//    Note: The polynomial degree/coefficients must be
+//    predetermined by the data provider.
 //  
 //*****************************************************************************
 ossimEcefVector ossimSarModel::getArpVel(const ossim_float64& time) const
 {
    ossim_int32 i;
-   ossim_uint32 nTermsX = theArpXPolCoeff.size();
-   ossim_uint32 nTermsY = theArpYPolCoeff.size();
-   ossim_uint32 nTermsZ = theArpZPolCoeff.size();
+   ossim_uint32 nTermsX = (ossim_uint32)theArpXPolCoeff.size();
+   ossim_uint32 nTermsY = (ossim_uint32)theArpYPolCoeff.size();
+   ossim_uint32 nTermsZ = (ossim_uint32)theArpZPolCoeff.size();
    
    ossim_float64 x = nTermsX * theArpXPolCoeff[nTermsX-1];
    for (i=nTermsX-2; i>=1; i--)
@@ -932,6 +944,9 @@ ossim_float64 ossimSarModel::getArpTime() const
 //  
 //  Compute ARP time as function of line/sample-dependent polynomial.
 //  Defaults to full 3rd order.
+//    Note: The polynomial degree/coefficients must be
+//    predetermined by the data provider.  Higher order terms
+//    can be zeroed out if necessary.
 //  
 //*****************************************************************************
 ossim_float64 ossimSarModel::getArpTime(const ossimDpt& imgPt) const
@@ -978,6 +993,7 @@ ossim_float64 ossimSarModel::getArpTime(const ossimDpt& imgPt) const
 //  METHOD: ossimSarModel::computeRangeDoppler()
 //  
 //  Compute range/Doppler for given ARP state and ECF point.
+//    Ref[1], eq. 11-37, 11-38
 //  
 //*****************************************************************************
 bool ossimSarModel::computeRangeDoppler(const ossimEcefPoint& pt,
@@ -1013,6 +1029,7 @@ bool ossimSarModel::computeRangeDoppler(const ossimEcefPoint& pt,
 //  METHOD: ossimSarModel::computeOPfromImage()
 //  
 //  Compute Output Plane coordinates from image coordinates.
+//    Ref[1], eq. 11-32 -> 11-35
 //  
 //*****************************************************************************
 bool ossimSarModel::computeOPfromImage(const ossimDpt& imgPt,
@@ -1034,6 +1051,7 @@ bool ossimSarModel::computeOPfromImage(const ossimDpt& imgPt,
 //  METHOD: ossimSarModel::computeImageFromOP()
 //  
 //  Compute image coordinates from Output Plane coordinates.
+//    Ref[1], eq. 11-32 -> 11-35
 //  
 //*****************************************************************************
 bool ossimSarModel::computeImageFromOP(const ossimEcefPoint& opPt, ossimDpt& imgPt) const
@@ -1202,7 +1220,7 @@ bool ossimSarModel::projEllipsoidToOP(const ossimEcefPoint& ellPt,
       ossimEcefPoint ori = (theOPZ*c1+arpVelunit*c2)+ossimEcefPoint(0.0,0.0,0.0);
       ossimEcefVector dir = theOPZ.cross(arpVelunit);
    
-      // Solve for intersection points
+      // Solve for intersection points (RD circle and OP)
       ossimEcefVector delta = ori - arpPos;
       ossim_float64 a2 = dir.length()*dir.length();
       ossim_float64 a1 = delta.dot(dir);
@@ -1281,6 +1299,8 @@ ossimDpt ossimSarModel::getForwardDeriv(int derivMode,
          computeOPfromImage(obs, theObsOP);
          computeRangeDoppler
             (theObsOP, theObsArpPos, theObsArpVel, theObsRng, theObsDop);
+         ossimDpt obsRD(theObsRng, theObsDop);
+         theObs = obsRD;
       }
 
       //******************************************

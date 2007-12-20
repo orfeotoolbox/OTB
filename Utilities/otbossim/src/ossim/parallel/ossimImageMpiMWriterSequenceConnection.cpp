@@ -1,8 +1,6 @@
 //*******************************************************************
 //
-// License:  LGPL
-// 
-// See LICENSE.txt file in the top level directory for more details.
+// License:  See top level LICENSE.txt file.
 //
 // Author:  Garrett Potts
 //
@@ -16,7 +14,7 @@
 // all the actual work and processing.
 //
 //*******************************************************************
-//  $Id: ossimImageMpiMWriterSequenceConnection.cpp 9105 2006-06-14 01:45:40Z gpotts $
+//  $Id: ossimImageMpiMWriterSequenceConnection.cpp 12099 2007-12-01 16:09:36Z dburken $
 
 
 #include <ossim/ossimConfig.h> /* To pick up OSSIM_HAS_MPI. */
@@ -133,7 +131,6 @@ ossimRefPtr<ossimImageData> ossimImageMpiMWriterSequenceConnection::getNextTile(
 {
 #if OSSIM_HAS_MPI
    ossimEndian endian;
-   MPI_Status status;
    if(!theOutputTile)
    {
       initialize();
@@ -158,7 +155,7 @@ ossimRefPtr<ossimImageData> ossimImageMpiMWriterSequenceConnection::getNextTile(
                          theCurrentTileNumber%(theNumberOfProcessors-1)+1,
                          0,
                          MPI_COMM_WORLD,
-                         &status);
+                         MPI_STATUS_IGNORE);
    if((endian.getSystemEndianType()!=OSSIM_BIG_ENDIAN)&&
       (theOutputTile->getScalarType()!=OSSIM_UINT8))
    {
@@ -185,7 +182,7 @@ ossimRefPtr<ossimImageData> ossimImageMpiMWriterSequenceConnection::getNextTile(
                                theCurrentTileNumber%(theNumberOfProcessors-1)+1,
                                0,
                                MPI_COMM_WORLD,
-                               &status);
+                               MPI_STATUS_IGNORE);
          break;
       }
       case OSSIM_SINT8:
@@ -198,7 +195,7 @@ ossimRefPtr<ossimImageData> ossimImageMpiMWriterSequenceConnection::getNextTile(
                                theCurrentTileNumber%(theNumberOfProcessors-1)+1,
                                0,
                                MPI_COMM_WORLD,
-                               &status);
+                               MPI_STATUS_IGNORE);
          break;
       }
       case OSSIM_UINT16:
@@ -210,7 +207,7 @@ ossimRefPtr<ossimImageData> ossimImageMpiMWriterSequenceConnection::getNextTile(
                                theCurrentTileNumber%(theNumberOfProcessors-1)+1,
                                0,
                                MPI_COMM_WORLD,
-                               &status);
+                               MPI_STATUS_IGNORE);
          break;
       }
       case OSSIM_SINT16:
@@ -221,7 +218,7 @@ ossimRefPtr<ossimImageData> ossimImageMpiMWriterSequenceConnection::getNextTile(
                                theCurrentTileNumber%(theNumberOfProcessors-1)+1,
                                0,
                                MPI_COMM_WORLD,
-                               &status);
+                               MPI_STATUS_IGNORE);
          break;
       }
       case OSSIM_SINT32:
@@ -232,7 +229,7 @@ ossimRefPtr<ossimImageData> ossimImageMpiMWriterSequenceConnection::getNextTile(
                                theCurrentTileNumber%(theNumberOfProcessors-1)+1,
                                0,
                                MPI_COMM_WORLD,
-                               &status);
+                               MPI_STATUS_IGNORE);
          break;
       }
       case OSSIM_UINT32:
@@ -243,7 +240,7 @@ ossimRefPtr<ossimImageData> ossimImageMpiMWriterSequenceConnection::getNextTile(
                                theCurrentTileNumber%(theNumberOfProcessors-1)+1,
                                0,
                                MPI_COMM_WORLD,
-                               &status);
+                               MPI_STATUS_IGNORE);
          break;
       }
       case OSSIM_FLOAT32:
@@ -255,7 +252,7 @@ ossimRefPtr<ossimImageData> ossimImageMpiMWriterSequenceConnection::getNextTile(
                                theCurrentTileNumber%(theNumberOfProcessors-1)+1,
                                0,
                                MPI_COMM_WORLD,
-                               &status);
+                               MPI_STATUS_IGNORE);
          break;
       }
       case OSSIM_FLOAT64:
@@ -267,7 +264,7 @@ ossimRefPtr<ossimImageData> ossimImageMpiMWriterSequenceConnection::getNextTile(
                                theCurrentTileNumber%(theNumberOfProcessors-1)+1,
                                0,
                                MPI_COMM_WORLD,
-                               &status);
+                               MPI_STATUS_IGNORE);
          break;
       }
       default:

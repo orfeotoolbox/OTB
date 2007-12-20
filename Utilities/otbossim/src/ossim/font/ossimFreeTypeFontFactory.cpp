@@ -6,7 +6,7 @@
 // Author: Garrett Potts
 // 
 //********************************************************************
-// $Id: ossimFreeTypeFontFactory.cpp 9099 2006-06-13 21:21:10Z dburken $
+// $Id: ossimFreeTypeFontFactory.cpp 12179 2007-12-12 21:20:45Z dburken $
 
 #include <ossim/ossimConfig.h> /* To pick up OSSIM_HAS_FREETYPE. */
 
@@ -26,7 +26,7 @@ ossimFreeTypeFontFactory::ossimFreeTypeFontFactory()
 
 ossimFreeTypeFontFactory::~ossimFreeTypeFontFactory()
 {
-   theInstance = (ossimFreeTypeFontFactory*)NULL;
+   theInstance = 0;
 }
 
 ossimFreeTypeFontFactory* ossimFreeTypeFontFactory::instance()
@@ -146,25 +146,30 @@ void ossimFreeTypeFontFactory::getFontInformation(std::vector<ossimFontInformati
 bool ossimFreeTypeFontFactory::addFile(const ossimFilename& file)
 {
    ossimFreeTypeFont* font = new ossimFreeTypeFont(file);
+   
    std::vector<ossimFontInformation> fontInfoList;
    
    bool result = false;
    int i = 0;
    if(font->getFontFace())
-     {
-       if(!font->getErrorStatus())
-	 {
-	   font->getFontInformation(fontInfoList);
-	   
-	   for(i = 0; i < (int)fontInfoList.size();++i)
-	     {
-	       theFontInformationList.push_back(ossimFreeTypeFontInformation(file,
-									     fontInfoList[i]));
-	     }
-	   result = true;
-	 }
-     }
+   {
+      if(!font->getErrorStatus())
+      {
+         font->getFontInformation(fontInfoList);
+	 
+         for(i = 0; i < (int)fontInfoList.size();++i)
+         {
+            theFontInformationList.push_back(ossimFreeTypeFontInformation(file,
+                                                                          fontInfoList[i]));
+         }
+         result = true;
+      }
+   }
 
+   // Free memory.
+   delete font;
+   font = 0;
+   
    return result;
 }
 

@@ -8,7 +8,7 @@
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossim3x3ConvolutionFilter.cpp 9094 2006-06-13 19:12:40Z dburken $
+// $Id: ossim3x3ConvolutionFilter.cpp 11347 2007-07-23 13:01:59Z gpotts $
 
 #include <ossim/imaging/ossim3x3ConvolutionFilter.h>
 #include <ossim/base/ossimIrect.h>
@@ -187,8 +187,8 @@ template<class T> void ossim3x3ConvolutionFilter::convolvePartial(
    ossimIpt outputOrigin  = outputData->getOrigin();
    ossimIpt inputOrigin   = inputData->getOrigin();
    
-   ossim_int32 startInputOffset = ossimAbs(outputOrigin.y - inputOrigin.y)*
-      inputW + ossimAbs(outputOrigin.x - inputOrigin.x);
+   ossim_int32 startInputOffset = std::abs(outputOrigin.y - inputOrigin.y)*
+      inputW + std::abs(outputOrigin.x - inputOrigin.x);
    ossim_int32 ulKernelStart    = -inputW - 1;
    ossim_int32 leftKernelStart  = -1;
    ossim_int32 llKernelStart    = inputW  - 1;
@@ -285,8 +285,8 @@ template<class T> void ossim3x3ConvolutionFilter::convolveFull(
    ossimIpt outputOrigin = outputData->getOrigin();
    ossimIpt inputOrigin  = inputData->getOrigin();
    
-   ossim_int32 startInputOffset = ossimAbs(outputOrigin.y - inputOrigin.y)*
-      inputW + ossimAbs(outputOrigin.x - inputOrigin.x);
+   ossim_int32 startInputOffset = std::abs(outputOrigin.y - inputOrigin.y)*
+      inputW + std::abs(outputOrigin.x - inputOrigin.x);
    ossim_int32 ulKernelStart    = -inputW - 1;
    ossim_int32 leftKernelStart  = -1;
    ossim_int32 llKernelStart    = inputW  - 1;
@@ -530,7 +530,7 @@ double ossim3x3ConvolutionFilter::getNullPixelValue(ossim_uint32 band)const
       return theNullPixValue[band];
    }
 
-   return ossimGetDefaultNull(getOutputScalarType());
+   return ossim::defaultNull(getOutputScalarType());
 }
 
 double ossim3x3ConvolutionFilter::getMinPixelValue(ossim_uint32 band)const
@@ -568,9 +568,9 @@ void ossim3x3ConvolutionFilter::computeNullMinMax()
    theMinPixValue.resize(BANDS);
    theMaxPixValue.resize(BANDS);
 
-   ossim_float64 defaultNull = ossimGetDefaultNull(getOutputScalarType());
-   ossim_float64 defaultMin = ossimGetDefaultMin(getOutputScalarType());
-   ossim_float64 defaultMax = ossimGetDefaultMax(getOutputScalarType());
+   ossim_float64 defaultNull = ossim::defaultNull(getOutputScalarType());
+   ossim_float64 defaultMin = ossim::defaultMin(getOutputScalarType());
+   ossim_float64 defaultMax = ossim::defaultMax(getOutputScalarType());
   
    for (ossim_uint32 band = 0; band < BANDS; ++band)
    {

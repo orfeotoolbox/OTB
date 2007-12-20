@@ -8,7 +8,7 @@
 //
 // Contains class definition for ossimGeneralRasterTileSource.
 //*******************************************************************
-//  $Id: ossimGeneralRasterTileSource.cpp 9851 2006-11-01 20:26:31Z gpotts $
+//  $Id: ossimGeneralRasterTileSource.cpp 11347 2007-07-23 13:01:59Z gpotts $
 
 #include <ossim/imaging/ossimGeneralRasterTileSource.h>
 #include <ossim/base/ossimConstants.h>
@@ -60,7 +60,7 @@ ossimGeneralRasterTileSource::~ossimGeneralRasterTileSource()
       theBuffer = NULL;
    }
 
-   std::vector<ossimRefPtr<ossimIStream> >::iterator is =
+   std::vector<ossimRefPtr<ossimIFStream> >::iterator is =
       theFileStrList.begin();
 
    while (is != theFileStrList.end())
@@ -612,8 +612,8 @@ bool ossimGeneralRasterTileSource::fillBsqMultiFile(const ossimIpt& origin)
 //       ossimDpt decimation;
 //       getDecimationFactor(reduced_res_level, decimation);
 //       ossimIpt offset = theImageData.subImageOffset();
-//       offset.x = irint(offset.x*decimation.x);
-//       offset.y = irint(offset.y*decimation.y);
+//       offset.x = ossim::round<int>(offset.x*decimation.x);
+//       offset.y = ossim::round<int>(offset.y*decimation.y);
       
 //       return ossimIrect(offset.x,                         // upper left x
 // 			offset.y,                         // upper left y
@@ -892,29 +892,29 @@ bool ossimGeneralRasterTileSource::initializeHandler()
 
    ossim_uint32 number_of_bands = theImageData.numberOfBands();
 
-   std::streampos expectedSizeInBytes;
+//    std::streampos expectedSizeInBytes;
 
-   if (theImageData.interleaveType() != OSSIM_BSQ_MULTI_FILE)
-   {
-      expectedSizeInBytes = theImageData.validSamples()  *
-                            theImageData.validLines()    *
-                            number_of_bands *
-                            theImageData.bytesPerPixel();
-   }
-   else
-   {
-      expectedSizeInBytes = theImageData.validSamples()  *
-                            theImageData.validLines()    *
-                            theImageData.bytesPerPixel();
-   }
+//    if (theImageData.interleaveType() != OSSIM_BSQ_MULTI_FILE)
+//    {
+//       expectedSizeInBytes = theImageData.validSamples()  *
+//                             theImageData.validLines()    *
+//                             number_of_bands *
+//                             theImageData.bytesPerPixel();
+//    }
+//    else
+//    {
+//       expectedSizeInBytes = theImageData.validSamples()  *
+//                             theImageData.validLines()    *
+//                             theImageData.bytesPerPixel();
+//    }
    
    vector<ossimFilename> aList = theImageData.getImageFileList();
 
    for (ossim_uint32 i=0; i<aList.size(); ++i)
    {
       // open it...
-      ossimRefPtr<ossimIStream> is = ossimStreamFactoryRegistry::instance()->
-         createNewInputStream(aList[i], std::ios::in|std::ios::binary);
+      ossimRefPtr<ossimIFStream> is = ossimStreamFactoryRegistry::instance()->
+         createNewIFStream(aList[i], std::ios::in|std::ios::binary);
 
       // check the stream...
       if(is.valid())
@@ -930,21 +930,25 @@ bool ossimGeneralRasterTileSource::initializeHandler()
             return false;
          }
       }
-
+#if 0
       // check the size
       if ((!is->isCompressed()) &&
           (aList[i].fileSize() < expectedSizeInBytes))
       {
          theErrorStatus = ossimErrorCodes::OSSIM_ERROR;
-         ossimNotify(ossimNotifyLevel_WARN)
-            << "ossimGeneralRasterTileSource::open" << " ERROR:"
-            << "\nFile size not big enough!\n"
-            << "\nExpected:  " << expectedSizeInBytes
-            << "\nGot:       " << aList[i].fileSize()
-            << "\nReturning with error..." << endl;
+         if (traceDebug())
+         {
+            ossimNotify(ossimNotifyLevel_WARN)
+               << "ossimGeneralRasterTileSource::open ERROR:"
+               << "\nFile size not big enough!"
+               << "\nExpected:  " << expectedSizeInBytes
+               << "\nGot:       " << aList[i].fileSize()
+               << "\nFile:      " << aList[i]
+               << "\nReturning with error..." << endl;
+         }
          return false;
       }
-   
+#endif
       theFileStrList.push_back(is); // Add it to the list...
    }
 
@@ -1021,7 +1025,7 @@ bool ossimGeneralRasterTileSource::initializeHandler()
    // Get the byte order of the image data and host machine.  If different,
    // set the swap bytes flag...
    //***
-   if (theImageData.getImageDataByteOrder() != ossimGetByteOrder())
+   if (theImageData.getImageDataByteOrder() != ossim::byteOrder())
    {
       theSwapBytesFlag = true;
    }

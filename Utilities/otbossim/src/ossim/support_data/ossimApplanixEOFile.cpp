@@ -1,12 +1,11 @@
 //*******************************************************************
-// Copyright (C) 2005 Garrett Potts
 //
 // LGPL
 // 
 // Author:  Garrett Potts
 //
 //*******************************************************************
-//  $Id: ossimApplanixEOFile.cpp 9094 2006-06-13 19:12:40Z dburken $
+//  $Id: ossimApplanixEOFile.cpp 11423 2007-07-27 16:59:22Z dburken $
 #include <ossim/support_data/ossimApplanixEOFile.h>
 #include <iterator>
 #include <fstream>
@@ -16,6 +15,7 @@
 #include <ossim/base/ossimKeywordlist.h>
 #include <ossim/base/ossimRegExp.h>
 #include <ossim/base/ossimTrace.h>
+#include <ossim/base/ossimCommon.h>
 
 static ossimTrace traceDebug("ossimApplanixEOFile:debug");
 
@@ -101,10 +101,10 @@ std::ostream& operator <<(std::ostream& out, const ossimApplanixEOFile& src)
 
 ossimApplanixEOFile::ossimApplanixEOFile()
 {
-   theMinLat = OSSIM_DBL_NAN;
-   theMinLon = OSSIM_DBL_NAN;
-   theMaxLat = OSSIM_DBL_NAN;
-   theMaxLon = OSSIM_DBL_NAN;
+   theMinLat = ossim::nan();
+   theMinLon = ossim::nan();
+   theMaxLat = ossim::nan();
+   theMaxLon = ossim::nan();
 }
 
 bool ossimApplanixEOFile::parseFile(const ossimFilename& file)
@@ -317,7 +317,7 @@ bool ossimApplanixEOFile::parseStream(std::istream& in)
       std::getline(in, line);
    }
    in>>applanix_skipws;
-   ossimRefPtr<ossimApplanixEORecord> record = new ossimApplanixEORecord(theRecordFormat.size());
+   ossimRefPtr<ossimApplanixEORecord> record = new ossimApplanixEORecord((ossim_uint32)theRecordFormat.size());
    ossim_int32 latIdx = getFieldIdx("LAT");
    ossim_int32 lonIdx = getFieldIdx("LONG");;
    bool hasLatLon = (latIdx >=0)&&(lonIdx >= 0);
@@ -332,10 +332,10 @@ bool ossimApplanixEOFile::parseStream(std::istream& in)
    }
    else
    {
-      theMinLat = OSSIM_DBL_NAN;
-      theMaxLat = OSSIM_DBL_NAN;
-      theMinLon = OSSIM_DBL_NAN;
-      theMaxLon = OSSIM_DBL_NAN;
+      theMinLat = ossim::nan();
+      theMaxLat = ossim::nan();
+      theMinLon = ossim::nan();
+      theMaxLon = ossim::nan();
    }
    
    while(in.good()&&theRecordFormat.size())
@@ -527,7 +527,7 @@ const ossimRefPtr<ossimApplanixEORecord> ossimApplanixEOFile::getRecordGivenId(c
 
 ossim_uint32 ossimApplanixEOFile::getNumberOfRecords()const
 {
-   return theApplanixRecordList.size();
+   return (ossim_uint32)theApplanixRecordList.size();
 }
 
 const ossimRefPtr<ossimApplanixEORecord> ossimApplanixEOFile::getRecord(ossim_uint32 idx)const

@@ -1,12 +1,11 @@
 //*******************************************************************
-// Copyright (C) 2000 ImageLinks Inc. 
 //
 // License:  See LICENSE.txt file in the top level directory.
 //
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimAnnotationEllipseObject.h 9094 2006-06-13 19:12:40Z dburken $
+// $Id: ossimAnnotationEllipseObject.h 11360 2007-07-23 20:49:37Z dburken $
 #ifndef ossimAnnotationEllipseObject_HEADER
 #define ossimAnnotationEllipseObject_HEADER
 
@@ -17,6 +16,7 @@ class OSSIMDLLEXPORT ossimAnnotationEllipseObject : public ossimAnnotationObject
 public:
    ossimAnnotationEllipseObject(const ossimDpt& center = ossimDpt(0,0),
                                 const ossimDpt& widthHeight = ossimDpt(1,1),
+                                ossim_float64 azimuthInDegrees=0.0,
                                 bool enableFill = false,
                                 ossim_uint8 r = 255,
                                 ossim_uint8 g = 255,
@@ -45,10 +45,34 @@ public:
    virtual bool isPointWithin(const ossimDpt& imagePoint)const;
    virtual void setCenterWidthHeight(const ossimDpt& center,
                                      const ossimDpt& widthHeight);
-   virtual void setFill(bool enabled);
+
+   /**
+    * @brief Sets the azimuth.
+    * @param azimuth in degrees.
+    */
+   virtual void setAzimuth(ossim_float64 azimuth);
+
+   /**
+    * @brief Gets the azimuth.
+    * @return The azimuth in decimal degrees.
+    */
+   virtual ossim_float64 getAzimuth() const;
+   
+   virtual void setFillFlag(bool enabled);
 
    /** @return theFillEnabled flag. */
-   virtual bool getFill() const;
+   virtual bool getFillFlag() const;
+
+   /**
+    * @brief Turns on and off drawing of axes on the ellipse.
+    * This flag is only used if fill is turned off.
+    *
+    * @param flag true to enable, false to disable.
+    */
+   virtual void setDrawAxesFlag(bool flag);
+
+   /** @return The draw axes flag. */
+   virtual bool getDrawAxesFlag() const;
 
    /**
     * Saves the current state of this object.
@@ -64,10 +88,12 @@ public:
                           const char* prefix=0);
    
 protected:
-   ossimDpt   theCenter;
-   ossimDpt   theWidthHeight;
-   bool       theFillEnabled;
-   ossimDrect theBoundingRect;
+   ossimDpt      theCenter;
+   ossimDpt      theWidthHeight;
+   ossim_float64 theAzimuthInDegrees;
+   bool          theFillEnabled;
+   bool          theDrawAxesFlag;
+   ossimDrect    theBoundingRect;
 
 TYPE_DATA
 };

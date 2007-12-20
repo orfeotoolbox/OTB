@@ -8,7 +8,7 @@
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimMapCompositionSource.cpp 9928 2006-11-22 18:29:24Z gpotts $
+// $Id: ossimMapCompositionSource.cpp 11347 2007-07-23 13:01:59Z gpotts $
 
 #include <ossim/imaging/ossimMapCompositionSource.h>
 #include <ossim/imaging/ossimU8ImageData.h>
@@ -893,7 +893,7 @@ void ossimMapCompositionSource::addGeographicTopGridLabels()
                   lonLabel->getBoundingRect(boundsD);
                   
                   ossimIpt center( rounded.x,
-                                   irint(rect.ul().y-(boundsD.height()/2)));
+                                   ossim::round<int>(rect.ul().y-(boundsD.height()/2)));
                
                   lonLabel->setColor(theTopGeographicLabelColor.getR(), theTopGeographicLabelColor.getG(), theTopGeographicLabelColor.getB());
                   lonLabel->setPositionCenter(center);
@@ -905,7 +905,7 @@ void ossimMapCompositionSource::addGeographicTopGridLabels()
                   if(rect.intersects(labelRect))
                   {
                      ossimIrect intersection = rect.clipToRect(labelRect);
-                     center.y -= irint(rect.ul().y - intersection.lr().y);
+                     center.y -= ossim::round<int>(rect.ul().y - intersection.lr().y);
                   }
 
                   center.y -= 24; // this will need to be the tick height later;
@@ -917,9 +917,9 @@ void ossimMapCompositionSource::addGeographicTopGridLabels()
                if(theTopGeographicTickFlag)
                {
                   ossimAnnotationLineObject* lineLabel = new ossimAnnotationLineObject(ossimIpt(rounded.x,
-                                                                                                irint(rect.ul().y-24)),
+                                                                                                ossim::round<int>(rect.ul().y-24)),
                                                                                        ossimIpt(rounded.x,
-                                                                                                irint(rect.ul().y)));
+                                                                                                ossim::round<int>(rect.ul().y)));
                   lineLabel->setColor(theTopGeographicLabelColor.getR(), theTopGeographicLabelColor.getG(), theTopGeographicLabelColor.getB());
                   addFixedAnnotation(lineLabel);
                }
@@ -1033,7 +1033,7 @@ void ossimMapCompositionSource::addGeographicBottomGridLabels()
                   ossimIrect bounds = boundsD;
                   
                   ossimIpt center( rounded.x,
-                                   irint(rect.lr().y+(bounds.height()/2)));
+                                   ossim::round<int>(rect.lr().y+(bounds.height()/2)));
                   
                   lonLabel->setColor(theBottomGeographicLabelColor.getR(), theBottomGeographicLabelColor.getG(), theBottomGeographicLabelColor.getB());
                   lonLabel->setPositionCenter(center);
@@ -1047,7 +1047,7 @@ void ossimMapCompositionSource::addGeographicBottomGridLabels()
                   if(rect.intersects(labelRect))
                   {
                      ossimIrect intersection = rect.clipToRect(labelRect);
-                     center.y += irint(rect.lr().y - intersection.ul().y);
+                     center.y += ossim::round<int>(rect.lr().y - intersection.ul().y);
                   }
 
                   center.y += 24; // this will need to be the tick height later;
@@ -1060,9 +1060,9 @@ void ossimMapCompositionSource::addGeographicBottomGridLabels()
                if(theBottomGeographicTickFlag)
                {
                   ossimAnnotationLineObject* lineLabel = new ossimAnnotationLineObject(ossimIpt(rounded.x,
-                                                                                                irint(rect.lr().y+24)),
+                                                                                                ossim::round<int>(rect.lr().y+24)),
                                                                                        ossimIpt(rounded.x,
-                                                                                                irint(rect.lr().y)));
+                                                                                                ossim::round<int>(rect.lr().y)));
                   lineLabel->setColor(theBottomGeographicLabelColor.getR(), theBottomGeographicLabelColor.getG(), theBottomGeographicLabelColor.getB());
                   addFixedAnnotation(lineLabel);
                }
@@ -1168,7 +1168,7 @@ void ossimMapCompositionSource::addGeographicLeftGridLabels()
                   latLabel->getBoundingRect(boundsD);
                   ossimIrect bounds = boundsD;
                   
-                  ossimIpt center( irint((rect.ul().x - (bounds.width()/2))),
+                  ossimIpt center( ossim::round<int>((rect.ul().x - (bounds.width()/2))),
                                    rounded.y);
                   
                   latLabel->setColor(theLeftGeographicLabelColor.getR(), theLeftGeographicLabelColor.getG(), theLeftGeographicLabelColor.getB());
@@ -1183,7 +1183,7 @@ void ossimMapCompositionSource::addGeographicLeftGridLabels()
                   if(rect.intersects(labelRect))
                   {
                      ossimIrect intersection = rect.clipToRect(labelRect);
-                     center.x -= irint(rect.ul().x - intersection.ur().x);
+                     center.x -= ossim::round<int>(rect.ul().x - intersection.ur().x);
                   }
 
                   center.x -= 24; // this will need to be the tick height later;
@@ -1197,9 +1197,9 @@ void ossimMapCompositionSource::addGeographicLeftGridLabels()
                
                if(theLeftGeographicTickFlag)
                {
-                  ossimAnnotationLineObject* lineLabel = new ossimAnnotationLineObject(ossimIpt(irint(rect.ul().x),
+                  ossimAnnotationLineObject* lineLabel = new ossimAnnotationLineObject(ossimIpt(ossim::round<int>(rect.ul().x),
                                                                                                 rounded.y),
-                                                                                       ossimIpt(irint(rect.ul().x-23),
+                                                                                       ossimIpt(ossim::round<int>(rect.ul().x-23),
                                                                                                 rounded.y));
                   lineLabel->setColor(theLeftGeographicLabelColor.getR(), theLeftGeographicLabelColor.getG(), theLeftGeographicLabelColor.getB());
                   addFixedAnnotation(lineLabel);
@@ -1306,7 +1306,7 @@ void ossimMapCompositionSource::addGeographicRightGridLabels()
                   latLabel->getBoundingRect(boundsD);
                   ossimIrect bounds = boundsD;
                   
-                  ossimIpt center( irint((rect.ur().x + (bounds.width()/2))),
+                  ossimIpt center( ossim::round<int>((rect.ur().x + (bounds.width()/2))),
                                    rounded.y);
                
                   latLabel->setColor(theRightGeographicLabelColor.getR(), theRightGeographicLabelColor.getG(), theRightGeographicLabelColor.getB());
@@ -1321,7 +1321,7 @@ void ossimMapCompositionSource::addGeographicRightGridLabels()
                   if(rect.intersects(labelRect))
                   {
                      ossimIrect intersection = rect.clipToRect(labelRect);
-                     center.x -= irint(rect.ur().x - intersection.ul().x);
+                     center.x -= ossim::round<int>(rect.ur().x - intersection.ul().x);
                   }
 
                   center.x += 24; // this will need to be the tick height later;
@@ -1334,9 +1334,9 @@ void ossimMapCompositionSource::addGeographicRightGridLabels()
                
                if(theRightGeographicTickFlag)
                {
-                  ossimAnnotationLineObject* lineLabel = new ossimAnnotationLineObject(ossimIpt(irint(rect.lr().x),
+                  ossimAnnotationLineObject* lineLabel = new ossimAnnotationLineObject(ossimIpt(ossim::round<int>(rect.lr().x),
                                                                                                 rounded.y),
-                                                                                       ossimIpt(irint(rect.lr().x+23),
+                                                                                       ossimIpt(ossim::round<int>(rect.lr().x+23),
                                                                                                 rounded.y));
                   
                   lineLabel->setColor(theRightGeographicLabelColor.getR(), theRightGeographicLabelColor.getG(), theRightGeographicLabelColor.getB());
@@ -1757,8 +1757,8 @@ void ossimMapCompositionSource::addMeterGridLabels()
                ossimDrect boundsTop;
                topLabel->getBoundingRect(boundsTop);
                
-               ossimIpt centerTop(irint(tipt.x),
-                                  irint(rect.ul().y-(boundsTop.height()/2)));
+               ossimIpt centerTop(ossim::round<int>(tipt.x),
+                                  ossim::round<int>(rect.ul().y-(boundsTop.height()/2)));
                
                topLabel->setColor(theTopMeterLabelColor.getR(),
                                   theTopMeterLabelColor.getG(),
@@ -1773,7 +1773,7 @@ void ossimMapCompositionSource::addMeterGridLabels()
                if(rect.intersects(labelRect))
                {
                   ossimIrect intersection = rect.clipToRect(labelRect);
-                  centerTop.y -= irint(rect.ul().y - intersection.lr().y);
+                  centerTop.y -= ossim::round<int>(rect.ul().y - intersection.lr().y);
                }
                
                centerTop.y -= (24+extraTopDelta); // this will need to be the tick height later;
@@ -1783,10 +1783,10 @@ void ossimMapCompositionSource::addMeterGridLabels()
 
                if(theTopMeterTickFlag)
                {
-                  ossimAnnotationLineObject* lineLabel = new ossimAnnotationLineObject(ossimIpt(irint(tipt.x),
-                                                                                                irint(tipt.y-24)),
-                                                                                       ossimIpt(irint(tipt.x),
-                                                                                                irint(tipt.y)));
+                  ossimAnnotationLineObject* lineLabel = new ossimAnnotationLineObject(ossimIpt(ossim::round<int>(tipt.x),
+                                                                                                ossim::round<int>(tipt.y-24)),
+                                                                                       ossimIpt(ossim::round<int>(tipt.x),
+                                                                                                ossim::round<int>(tipt.y)));
                   
                   lineLabel->setColor(theTopMeterLabelColor.getR(), theTopMeterLabelColor.getG(), theTopMeterLabelColor.getB());
                   addFixedAnnotation(lineLabel);
@@ -1807,8 +1807,8 @@ void ossimMapCompositionSource::addMeterGridLabels()
                ossimDrect boundsBottom;
                bottomLabel->getBoundingRect(boundsBottom);
                
-               ossimIpt centerBottom(irint(bipt.x),
-                                     irint(rect.lr().y+(boundsBottom.height()/2)));
+               ossimIpt centerBottom(ossim::round<int>(bipt.x),
+                                     ossim::round<int>(rect.lr().y+(boundsBottom.height()/2)));
                
                bottomLabel->setColor(theBottomMeterLabelColor.getR(),
                                      theBottomMeterLabelColor.getG(),
@@ -1823,7 +1823,7 @@ void ossimMapCompositionSource::addMeterGridLabels()
                if(rect.intersects(labelRect))
                {
                   ossimIrect intersection = rect.clipToRect(labelRect);
-                  centerBottom.y += irint(rect.lr().y - intersection.ul().y);
+                  centerBottom.y += ossim::round<int>(rect.lr().y - intersection.ul().y);
                }
                
                centerBottom.y += (24+extraBottomDelta); // this will need to be the tick height later;
@@ -1832,10 +1832,10 @@ void ossimMapCompositionSource::addMeterGridLabels()
                addFixedAnnotation(bottomLabel);
                if(theBottomMeterTickFlag)
                {
-                  ossimAnnotationLineObject* lineLabel = new ossimAnnotationLineObject(ossimIpt(irint(bipt.x),
-                                                                                                irint(bipt.y+24)),
-                                                                                       ossimIpt(irint(bipt.x),
-                                                                                                irint(bipt.y)));
+                  ossimAnnotationLineObject* lineLabel = new ossimAnnotationLineObject(ossimIpt(ossim::round<int>(bipt.x),
+                                                                                                ossim::round<int>(bipt.y+24)),
+                                                                                       ossimIpt(ossim::round<int>(bipt.x),
+                                                                                                ossim::round<int>(bipt.y)));
                   
                   lineLabel->setColor(theBottomMeterLabelColor.getR(), theBottomMeterLabelColor.getG(), theBottomMeterLabelColor.getB());
                   addFixedAnnotation(lineLabel);
@@ -1875,8 +1875,8 @@ void ossimMapCompositionSource::addMeterGridLabels()
                ossimDrect boundsLeft;
                leftLabel->getBoundingRect(boundsLeft);
                
-               ossimIpt centerLeft(irint(rect.ul().x-(boundsLeft.width()/2)),
-                                   irint(lipt.y));
+               ossimIpt centerLeft(ossim::round<int>(rect.ul().x-(boundsLeft.width()/2)),
+                                   ossim::round<int>(lipt.y));
                                   
                
                leftLabel->setColor(theLeftMeterLabelColor.getR(),
@@ -1892,7 +1892,7 @@ void ossimMapCompositionSource::addMeterGridLabels()
                if(rect.intersects(labelRect))
                {
                   ossimIrect intersection = rect.clipToRect(labelRect);
-                  centerLeft.x -= irint(intersection.lr().x - rect.ul().x);
+                  centerLeft.x -= ossim::round<int>(intersection.lr().x - rect.ul().x);
                }
                
                centerLeft.x -= (24+extraLeftDelta); // this will need to be the tick height later;
@@ -1901,10 +1901,10 @@ void ossimMapCompositionSource::addMeterGridLabels()
                addFixedAnnotation(leftLabel);
                if(theLeftMeterTickFlag)
                {
-                  ossimAnnotationLineObject* lineLabel = new ossimAnnotationLineObject(ossimIpt(irint(lipt.x-24),
-                                                                                                irint(lipt.y)),
-                                                                                       ossimIpt(irint(lipt.x),
-                                                                                                irint(lipt.y)));
+                  ossimAnnotationLineObject* lineLabel = new ossimAnnotationLineObject(ossimIpt(ossim::round<int>(lipt.x-24),
+                                                                                                ossim::round<int>(lipt.y)),
+                                                                                       ossimIpt(ossim::round<int>(lipt.x),
+                                                                                                ossim::round<int>(lipt.y)));
                   
                   lineLabel->setColor(theLeftMeterLabelColor.getR(), theLeftMeterLabelColor.getG(), theLeftMeterLabelColor.getB());
                   addFixedAnnotation(lineLabel);
@@ -1923,8 +1923,8 @@ void ossimMapCompositionSource::addMeterGridLabels()
                ossimDrect boundsRight;
                rightLabel->getBoundingRect(boundsRight);
                
-               ossimIpt centerRight(irint(rect.ur().x+(boundsRight.width()/2)),
-                                    irint(ript.y));
+               ossimIpt centerRight(ossim::round<int>(rect.ur().x+(boundsRight.width()/2)),
+                                    ossim::round<int>(ript.y));
                                   
                
                rightLabel->setColor(theRightMeterLabelColor.getR(),
@@ -1940,7 +1940,7 @@ void ossimMapCompositionSource::addMeterGridLabels()
                if(rect.intersects(labelRect))
                {
                   ossimIrect intersection = rect.clipToRect(labelRect);
-                  centerRight.x += irint(intersection.ul().x - rect.ur().x);
+                  centerRight.x += ossim::round<int>(intersection.ul().x - rect.ur().x);
                }
                
                centerRight.x += (24+extraRightDelta); // this will need to be the tick height later;
@@ -1949,10 +1949,10 @@ void ossimMapCompositionSource::addMeterGridLabels()
                addFixedAnnotation(rightLabel);
                if(theRightMeterTickFlag)
                {
-                  ossimAnnotationLineObject* lineLabel = new ossimAnnotationLineObject(ossimIpt(irint(ript.x+24),
-                                                                                                irint(ript.y)),
-                                                                                       ossimIpt(irint(ript.x),
-                                                                                                irint(ript.y)));
+                  ossimAnnotationLineObject* lineLabel = new ossimAnnotationLineObject(ossimIpt(ossim::round<int>(ript.x+24),
+                                                                                                ossim::round<int>(ript.y)),
+                                                                                       ossimIpt(ossim::round<int>(ript.x),
+                                                                                                ossim::round<int>(ript.y)));
                   
                   lineLabel->setColor(theRightMeterLabelColor.getR(), theRightMeterLabelColor.getG(), theRightMeterLabelColor.getB());
                   addFixedAnnotation(lineLabel);

@@ -4,7 +4,7 @@
 // OSSIM.
 //
 //-------------------------------------------------------------------------
-// $Id: ossimApplicationUsage.cpp 10284 2007-01-16 17:42:39Z dburken $
+// $Id: ossimApplicationUsage.cpp 11955 2007-10-31 16:10:22Z gpotts $
 
 #include <iostream>
 #include <ossim/base/ossimApplicationUsage.h>
@@ -89,7 +89,7 @@ void ossimApplicationUsage::getFormatedString(ossimString& str, const UsageMap& 
         citr!=um.end();
         ++citr)
     {
-        maxNumCharsInOptions = ossimMax(maxNumCharsInOptions,(unsigned int)citr->first.length());
+        maxNumCharsInOptions = ossim::max(maxNumCharsInOptions,(unsigned int)citr->first.length());
     }
     
     unsigned int fullWidth = widthOfOutput;
@@ -123,7 +123,8 @@ void ossimApplicationUsage::getFormatedString(ossimString& str, const UsageMap& 
             
             firstInLine = false;
         
-            ossimString::size_type width = ossimMin((ossimString::size_type)(explanation.length()-pos),(ossimString::size_type)(explanationWidth-offset));
+            ossimString::size_type width = ossim::min((ossim_int64)(explanation.length()-pos),
+                                                      (ossim_int64)(explanationWidth-offset));
             ossimString::size_type slashn_pos = explanation.find('\n',pos);
             
             unsigned int extraSkip = 0;

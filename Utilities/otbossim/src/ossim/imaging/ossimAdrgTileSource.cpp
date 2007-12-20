@@ -3,17 +3,18 @@
 // See top level LICENSE.txt file.
 //
 // Author: Ken Melero
+// Contributor: David A. Horner (DAH) - http://dave.thehorners.com
 // 
 // Description: This class give the capability to access tiles from an
 //              ADRG file.
 //
 //********************************************************************
-// $Id: ossimAdrgTileSource.cpp 10431 2007-02-07 01:32:55Z dburken $
+// $Id: ossimAdrgTileSource.cpp 11286 2007-07-11 16:38:46Z dburken $
 
 #include <iostream>
-using namespace std;
 
 #include <ossim/imaging/ossimAdrgTileSource.h>
+#include <ossim/imaging/ossimAdrgHeader.h>
 #include <ossim/base/ossimConstants.h>
 #include <ossim/base/ossimCommon.h>
 #include <ossim/base/ossimKeywordNames.h>
@@ -21,6 +22,7 @@ using namespace std;
 #include <ossim/base/ossimKeywordlist.h>
 #include <ossim/base/ossimEllipsoid.h>
 #include <ossim/base/ossimDatum.h>
+#include <ossim/base/ossimUnitTypeLut.h>
 #include <ossim/projection/ossimMapProjection.h>
 #include <ossim/projection/ossimEquDistCylProjection.h>
 #include <ossim/imaging/ossimTiffTileSource.h>
@@ -263,7 +265,7 @@ bool ossimAdrgTileSource::open()
    if(traceDebug())
    {
       ossimNotify(ossimNotifyLevel_DEBUG)
-         << MODULE << "Entered..."<<endl;
+         << MODULE << "Entered..."<<std::endl;
    }
    if(isOpen())
    {
@@ -283,7 +285,7 @@ bool ossimAdrgTileSource::open()
       if (traceDebug())
       {
          ossimNotify(ossimNotifyLevel_WARN)
-            << MODULE << " Error in ossimAdrg header detected." << endl;
+            << MODULE << " Error in ossimAdrg header detected." << std::endl;
       }
 
       close();
@@ -300,7 +302,7 @@ bool ossimAdrgTileSource::open()
       if (traceDebug())
       {
          ossimNotify(ossimNotifyLevel_WARN) << MODULE << "\nCannot open:  "
-              << theAdrgHeader->imageFile().c_str() << endl;
+              << theAdrgHeader->imageFile().c_str() << std::endl;
       }
       close();
       
@@ -311,7 +313,7 @@ bool ossimAdrgTileSource::open()
    {
       ossimNotify(ossimNotifyLevel_DEBUG)
          << MODULE
-         << "File is opened -> "<< theAdrgHeader->imageFile()<<endl;
+         << "File is opened -> "<< theAdrgHeader->imageFile()<<std::endl;
    }
 
    // allow the base handler to check for other overrides
@@ -332,7 +334,7 @@ bool ossimAdrgTileSource::open()
          << "\nmaxLond:  " << theAdrgHeader->maxLongitude()
          << "\nmaxLat:   " << theAdrgHeader->maxLat()
          << "\nmaxLatd:  " << theAdrgHeader->maxLatitude()
-         << endl;
+         << std::endl;
    }
    
    return true;
@@ -371,118 +373,98 @@ bool ossimAdrgTileSource::loadState(const ossimKeywordlist& kwl,
 bool ossimAdrgTileSource::getImageGeometry(ossimKeywordlist& kwl,
                                            const char* prefix)
 {
-
    if(ossimImageSource::getImageGeometry(kwl, prefix))
    {
       return true;
    }
+
+   // origin of latitude
+   ossim_float64 originLatitude = (theAdrgHeader->maxLatitude() +
+                                   theAdrgHeader->minLatitude()) / 2.0;
    
-   //***
-   // NOTE:
-   // All these keywords are going to change.  Hard coded right now for test.
-   //***
+   // central meridian.
+   ossim_float64 centralMeridian = (theAdrgHeader->maxLongitude() +
+                                    theAdrgHeader->minLongitude()) / 2.0;
+
+   //---
+   // Compute the pixel size in latitude and longitude direction.  This will
+   // be full image extents divided by full image lines and samples.
+   //---
    
-   // model type.  This will be going away soon and will
-   // be replaced with projection.type bellow.
+   // Samples in full image (used to compute degPerPixelX).
+   ossim_float64 samples = theAdrgHeader->samples();
+   
+   // Lines in full image (used to compute degPerPixelX).
+   ossim_float64 lines = theAdrgHeader->lines();
+
+   // Degrees in latitude direction of the full image.
+   ossim_float64 degrees_in_lat_dir = theAdrgHeader->maxLatitude() -
+      theAdrgHeader->minLatitude();
+
+   // Degrees in longitude direction of the full image.
+   ossim_float64 degrees_in_lon_dir = theAdrgHeader->maxLongitude() -
+      theAdrgHeader->minLongitude();
+   
+   ossim_float64 degPerPixelY = degrees_in_lat_dir / lines;
+   ossim_float64 degPerPixelX = degrees_in_lon_dir / samples;
+   
+   //---
+   // The tie is determined with the following assumptions that need to be
+   // verified:
+   // 1) Rows and columns start at 1.
+   // 2) The min / max latitudes longitudes go to the edge of the pixel.
+   // 3) Latitude decreases by degPerPixelY with each line.
+   // 4) Longitude increases by degPerPixelX with each sample.
+   //---
+
+   // OLD:
+   //    double ul_lat = (theAdrgHeader->maxLatitude() + 
+   //                     theAdrgHeader->startRow()*degPerPixelY) - (degPerPixelY*.5);
+   //    double ul_lon = (theAdrgHeader->minLongitude() -
+   //                     theAdrgHeader->startCol()*degPerPixelX) +  (degPerPixelX*.5); 
+   
+   ossim_float64 ul_lat = (theAdrgHeader->maxLatitude() - 
+                    ( (theAdrgHeader->startRow() - 1) *
+                      degPerPixelY ) - ( degPerPixelY * 0.5 ) );
+   ossim_float64 ul_lon = (theAdrgHeader->minLongitude() +
+                    ( (theAdrgHeader->startCol() -1) *
+                      degPerPixelX ) +  ( degPerPixelX * 0.5 ) );
+   
+   // projection type
    kwl.add(prefix,
            ossimKeywordNames::TYPE_KW,
            "ossimEquDistCylProjection",
            true);
-   
-   ossimString projPref = prefix?prefix:"";
 
-   // origin of latitude
-   double lat = (theAdrgHeader->maxLatitude() +
-                 theAdrgHeader->minLatitude()) / 2.0;
-   
-   // central meridian.
-   double lon = (theAdrgHeader->maxLongitude() +
-                 theAdrgHeader->minLongitude()) / 2.0;
-   
-   //***
-   // Make a projection to get the easting / northing of the tie point and
-   // the scale in meters.
-   //***
-   const ossimDatum* datum = ossimDatumFactory::instance()->wgs84();
+   // datum.
+   kwl.add(prefix,
+           ossimKeywordNames::DATUM_KW,
+           "WGE",
+           true);
 
-   ossimProjection* proj
-      = new ossimEquDistCylProjection(*(datum->ellipsoid()),
-                                      ossimGpt(lat, lon),
-                                      0.0,   // false easting
-                                      0.0);  // false northing
-   proj->saveState(kwl, projPref);
-   
-   // Get the scale in meters.
-   ossimGpt ul_gpt(theAdrgHeader->maxLatitude(),
-                   theAdrgHeader->minLongitude(),
-                   OSSIM_DBL_NAN);
+   // origin latitude
+   kwl.add(prefix,
+           ossimKeywordNames::ORIGIN_LATITUDE_KW,
+           originLatitude,
+           true);
 
-   //   ossimDpt ul_dpt = proj->forward(ul_gpt);
-   
-   ossimGpt ur_gpt(theAdrgHeader->maxLatitude(),
-                   theAdrgHeader->maxLongitude(),
-                   0.0);
+   // central meridin
+   kwl.add(prefix,
+           ossimKeywordNames::CENTRAL_MERIDIAN_KW,
+           centralMeridian,
+           true);
 
-   //   ossimDpt ur_dpt = proj->forward(ur_gpt);
+   // Save the tie point.
+   kwl.add(prefix,
+           ossimKeywordNames::TIE_POINT_XY_KW,
+           ossimDpt(ul_lon, ul_lat).toString().c_str(),
+           true);
+   kwl.add(prefix,
+           ossimKeywordNames::TIE_POINT_UNITS_KW,
+           ossimUnitTypeLut::instance()->getEntryString(OSSIM_DEGREES),
+           true);
 
-   ossimGpt ll_gpt(theAdrgHeader->minLatitude(),
-                   theAdrgHeader->minLongitude(),
-                   0.0);
-   
-   //   ossimDpt ll_dpt = proj->forward(ll_gpt);
-   
-   ossimGpt lr_gpt(theAdrgHeader->minLatitude(),
-                   theAdrgHeader->maxLongitude(),
-                   0.0);
-   
-   //   ossimDpt lr_dpt = proj->forward(lr_gpt);
-
-   double samples = theAdrgHeader->stopCol() - theAdrgHeader->startCol() + 1;
-   double lines   = theAdrgHeader->stopRow() - theAdrgHeader->startRow() + 1;
-
-//    double meters_per_pix_x = (ur_dpt.x - ul_dpt.x) / samples;
-//    double meters_per_pix_y = (ur_dpt.y - lr_dpt.y) / lines;
-
-   // will remove these two and replace with the next two
-   // we will for now just duplicate with different prefix.
-//    kwl.add(prefix,
-//            ossimKeywordNames::METERS_PER_PIXEL_X_KW,
-//            meters_per_pix_x,
-//            true);
-
-//    kwl.add(prefix,
-//            ossimKeywordNames::METERS_PER_PIXEL_Y_KW,
-//            meters_per_pix_y,
-//            true);
-
-
-   //***
-   // To get the tie point the padding must be accounted for...
-   // The min / max lat / lon is relative to the unpadded image.
-   //***
-   double degrees_in_lat_dir = theAdrgHeader->maxLatitude() -
-                               theAdrgHeader->minLatitude();
-   double degrees_in_lon_dir = theAdrgHeader->maxLongitude() -
-                               theAdrgHeader->minLongitude();
-   
-   double degPerPixelY = degrees_in_lat_dir / lines;
-   double degPerPixelX = degrees_in_lon_dir / samples;
-
-//    double ul_lat = theAdrgHeader->maxLatitude() +
-//                    (theAdrgHeader->startRow() - 1.0) * degPerPixelY;
-//    double ul_lon = theAdrgHeader->minLongitude() -
-//                    (theAdrgHeader->startCol() - 1.0) * degPerPixelX;
-   double ul_lat = (theAdrgHeader->maxLatitude() + 
-                    theAdrgHeader->startRow()*degPerPixelY) - (degPerPixelY*.5);
-   double ul_lon = (theAdrgHeader->minLongitude() -
-                    theAdrgHeader->startCol()*degPerPixelX) +  (degPerPixelX*.5);
-
-//    ossimGpt ul_adjusted_gpt(ul_lat,
-//                             ul_lon,
-//                             0.0);
-
-//   ossimDpt ul_adjusted_dpt = proj->forward(ul_adjusted_gpt);
-
+   // Save the scale.
    kwl.add(prefix,
            ossimKeywordNames::TIE_POINT_LAT_KW,
            ul_lat,
@@ -493,95 +475,61 @@ bool ossimAdrgTileSource::getImageGeometry(ossimKeywordlist& kwl,
            ul_lon,
            true);
 
+   // Save the scale.
    kwl.add(prefix,
-           ossimKeywordNames::DECIMAL_DEGREES_PER_PIXEL_LAT,
-           degPerPixelY,
+           ossimKeywordNames::PIXEL_SCALE_XY_KW,
+           ossimDpt(degPerPixelX, degPerPixelY).toString().c_str(),
            true);
-   
    kwl.add(prefix,
-           ossimKeywordNames::DECIMAL_DEGREES_PER_PIXEL_LON,
-           degPerPixelX,
-           true);
-   
-   
-   // will remove the first two here and replace
-   // with the second 2
-//    kwl.add(prefix,
-//            ossimKeywordNames::TIE_POINT_EASTING_KW,
-//            ul_adjusted_dpt.x,
-//            true);
+           ossimKeywordNames::PIXEL_SCALE_UNITS_KW,
+           ossimUnitTypeLut::instance()->getEntryString(OSSIM_DEGREES),
+           true);  
 
-//    kwl.add(prefix,
-//            ossimKeywordNames::TIE_POINT_NORTHING_KW,
-//            ul_adjusted_dpt.y,
-//            true);
-
-//    kwl.add(projPref,
-//            ossimKeywordNames::TIE_POINT_EASTING_KW,
-//            ul_adjusted_dpt.x,
-//            true);
-
-//    kwl.add(projPref,
-//            ossimKeywordNames::TIE_POINT_NORTHING_KW,
-//            ul_adjusted_dpt.y,
-//            true);
-   
-   // now add the general image geometry to the
-   // list.
+   // lines
    kwl.add(prefix,
            ossimKeywordNames::NUMBER_LINES_KW,
            getNumberOfLines());
 
+   // samples
    kwl.add(prefix,
            ossimKeywordNames::NUMBER_SAMPLES_KW,
            getNumberOfSamples());
-   
+
+   // res sets
    kwl.add(prefix,
            ossimKeywordNames::NUMBER_REDUCED_RES_SETS_KW,
            getNumberOfDecimationLevels());
 
+   // bands
    kwl.add(prefix,
            ossimKeywordNames::NUMBER_INPUT_BANDS_KW,
            getNumberOfInputBands());
 
+   // bands
    kwl.add(prefix,
            ossimKeywordNames::NUMBER_OUTPUT_BANDS_KW,
            getNumberOfOutputBands());
 
-   kwl.add(prefix,
-           ossimKeywordNames::DATUM_KW,
-           "WGE",
-           true);
    
    if (traceDebug())
    {
       ossimNotify(ossimNotifyLevel_DEBUG)
-         << "\nminLon:           " << theAdrgHeader->minLon()
-         << "\nminLond:          " << theAdrgHeader->minLongitude() 
-         << "\nminLat:           " << theAdrgHeader->minLat()
-         << "\nminLatd:          " << theAdrgHeader->minLatitude()
-         << "\nmaxLon:           " << theAdrgHeader->maxLon()
-         << "\nmaxLond:          " << theAdrgHeader->maxLongitude()
-         << "\nmaxLat:           " << theAdrgHeader->maxLat()
-         << "\nmaxLatd:          " << theAdrgHeader->maxLatitude()
-         << "\nstartRow:         " << theAdrgHeader->startRow()
-         << "\nstartCol:         " << theAdrgHeader->startCol()
-         << "\nstopRow:          " << theAdrgHeader->stopRow()
-         << "\nstopCol:          " << theAdrgHeader->stopCol()
-//            << "\nul_adjusted_gpt:  " << ul_adjusted_gpt
-         << "\nul_gpt:           " << ul_gpt
-         << "\nur_gpt:           " << ur_gpt
-         << "\nlr_gpt:           " << lr_gpt
-         << "\nll_gpt:           " << ll_gpt
-//            << "\nul_adjusted_dpt:  " << ul_adjusted_dpt
-//            << "\nul_dpt:           " << ul_dpt
-//            << "\nur_dpt:           " << ur_dpt
-//            << "\nlr_dpt:           " << lr_dpt
-//            << "\nll_dpt:           " << ll_dpt
-//            << "\nmeters_per_pix_x: " << meters_per_pix_x
-//            << "\nmeters_per_pix_y: " << meters_per_pix_y
-         << "kwl:\n"               << kwl
-         << endl;
+         << "\nminLon:             " << theAdrgHeader->minLon()
+         << "\nminLond:            " << theAdrgHeader->minLongitude() 
+         << "\nminLat:             " << theAdrgHeader->minLat()
+         << "\nminLatd:            " << theAdrgHeader->minLatitude()
+         << "\nmaxLon:             " << theAdrgHeader->maxLon()
+         << "\nmaxLond:            " << theAdrgHeader->maxLongitude()
+         << "\nmaxLat:             " << theAdrgHeader->maxLat()
+         << "\nmaxLatd:            " << theAdrgHeader->maxLatitude()
+         << "\nstartRow:           " << theAdrgHeader->startRow()
+         << "\nstartCol:           " << theAdrgHeader->startCol()
+         << "\nstopRow:            " << theAdrgHeader->stopRow()
+         << "\nstopCol:            " << theAdrgHeader->stopCol()
+         << "\nfull image lines:   " << lines
+         << "\nfull image samples: " << samples
+         << "\nkwl:\n"               << kwl
+         << std::endl;
    }
 
    setImageGeometry(kwl);
@@ -618,9 +566,9 @@ ossim_uint32 ossimAdrgTileSource::getTileHeight() const
 //*******************************************************************
 ossim_uint32 ossimAdrgTileSource::getNumberOfLines(ossim_uint32 reduced_res_level) const
 {
-   if (reduced_res_level == 0)
+   if ( (reduced_res_level == 0) && theAdrgHeader )
    {
-      return theAdrgHeader->lines();
+      return (theAdrgHeader->stopRow() - theAdrgHeader->startRow()) + 1;
    }
    else if (theOverview)
    {
@@ -635,9 +583,9 @@ ossim_uint32 ossimAdrgTileSource::getNumberOfLines(ossim_uint32 reduced_res_leve
 //*******************************************************************
 ossim_uint32 ossimAdrgTileSource::getNumberOfSamples(ossim_uint32 reduced_res_level) const
 {
-   if (reduced_res_level == 0)
+   if ( (reduced_res_level == 0) && theAdrgHeader )
    {
-      return theAdrgHeader->samples();
+      return (theAdrgHeader->stopCol() - theAdrgHeader->startCol()) + 1;
    }
    else if (theOverview)
    {

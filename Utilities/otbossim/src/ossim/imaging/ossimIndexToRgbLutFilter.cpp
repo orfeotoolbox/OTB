@@ -1,5 +1,4 @@
 //*******************************************************************
-// Copyright (C) 2000 ImageLinks Inc. 
 //
 // License:  LGPL
 // 
@@ -8,7 +7,7 @@
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimIndexToRgbLutFilter.cpp 9094 2006-06-13 19:12:40Z dburken $
+// $Id: ossimIndexToRgbLutFilter.cpp 11411 2007-07-27 13:53:51Z dburken $
 #include <ossim/imaging/ossimIndexToRgbLutFilter.h>
 #include <ossim/imaging/ossimImageDataFactory.h>
 #include <ossim/base/ossimRgbVector.h>
@@ -29,9 +28,9 @@ static const char* INTERPOLATION_TYPE_KW = "interpolation_type";
 
 ossimIndexToRgbLutFilter::ossimIndexToRgbLutFilter()
    :ossimImageSourceFilter(),
-    theMinValue(OSSIM_DBL_NAN),
-    theMaxValue(OSSIM_DBL_NAN),
-    theMinMaxDeltaLength(OSSIM_DBL_NAN),
+    theMinValue(ossim::nan()),
+    theMaxValue(ossim::nan()),
+    theMinMaxDeltaLength(ossim::nan()),
     theMinValueOverride(false),
     theMaxValueOverride(false),
     theInterpolationType(ossimIndexToRgbLutFilter_NEAREST),
@@ -396,7 +395,7 @@ void ossimIndexToRgbLutFilter::getColorNormIndex(double index,
    }
    else
    {
-      int i = irint(index);
+      int i = ossim::round<int>(index);
       i = i < 0?0:i;
       i = i >numberOfEntries?numberOfEntries:i;
       result = theLut[i];
@@ -421,7 +420,7 @@ void ossimIndexToRgbLutFilter::getColor(double index,
    }
    else
    {
-      result = theLut[irint(index)];
+      result = theLut[ossim::round<int>(index)];
    }
 }
 
@@ -508,8 +507,8 @@ bool ossimIndexToRgbLutFilter::loadState(const ossimKeywordlist& kwl,
    {
       theMaxValueOverride = false;
    }
-   if((theMinValue != OSSIM_DBL_NAN) &&
-      (theMaxValue != OSSIM_DBL_NAN))
+   if( (ossim::isnan(theMinValue) == false) &&
+       (ossim::isnan(theMaxValue) == false) )
    {
       if(theMinValue > theMaxValue)
       {
@@ -521,7 +520,7 @@ bool ossimIndexToRgbLutFilter::loadState(const ossimKeywordlist& kwl,
    }
    else
    {
-      theMinMaxDeltaLength = OSSIM_DBL_NAN;
+      theMinMaxDeltaLength = ossim::nan();
    }
    ossimString newPrefix = ossimString(prefix)+ "lut.";
 

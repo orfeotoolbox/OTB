@@ -1,4 +1,4 @@
-// $Id: ossimOrthoIgen.cpp 10457 2007-02-08 14:24:51Z gpotts $
+// $Id: ossimOrthoIgen.cpp 11425 2007-07-27 17:03:29Z dburken $
 #include <sstream>
 #include <ossim/parallel/ossimOrthoIgen.h>
 #include <ossim/parallel/ossimIgen.h>
@@ -63,8 +63,9 @@ ossimOrthoIgen::ossimOrthoIgen()
    :
    theThumbnailRes(""),
    theThumbnailFlag(false),
-   theMetersPerPixelOverride(OSSIM_DBL_NAN, OSSIM_DBL_NAN),
-   theProjectionType(OSSIM_UNKNOWN_PROJECTION),
+   theDeltaPerPixelUnit(OSSIM_UNIT_UNKNOWN),
+   theDeltaPerPixelOverride(ossim::nan(), ossim::nan()),
+   theProjectionType(OSSIM_INPUT_PROJECTION),
    theProjectionName(""),
    theGeographicOriginOfLatitude(0.0),
    theCombinerType("ossimImageMosaic"),
@@ -77,12 +78,13 @@ ossimOrthoIgen::ossimOrthoIgen()
    theAnnotationTemplate(""),
    theWriterTemplate(""),
    theSlaveBuffers("2"),
-   theCutCenter(OSSIM_DBL_NAN, OSSIM_DBL_NAN),
-   theCutDxDy(OSSIM_DBL_NAN, OSSIM_DBL_NAN),
-   theCutCenterUnit(OSSIM_UNIT_UNKNOWN),
+   theCutOriginType(ossimOrthoIgen::OSSIM_CENTER_ORIGIN),
+   theCutOrigin(ossim::nan(), ossim::nan()),
+   theCutDxDy(ossim::nan(), ossim::nan()),
+   theCutOriginUnit(OSSIM_UNIT_UNKNOWN),
    theCutDxDyUnit(OSSIM_UNIT_UNKNOWN),
-   theLowPercentClip(OSSIM_DBL_NAN),
-   theHighPercentClip(OSSIM_DBL_NAN),
+   theLowPercentClip(ossim::nan()),
+   theHighPercentClip(ossim::nan()),
    theUseAutoMinMaxFlag(false),
    theScaleToEightBitFlag(false),
    theFilenames()
@@ -118,6 +120,9 @@ void ossimOrthoIgen::addArguments(ossimArgumentParser& argumentParser)
    argumentParser.getApplicationUsage()->addCommandLineOption("--cut-center-ll","Specify the center cut in lat lon space.  Takes two argument <lat> <lon>");
    argumentParser.getApplicationUsage()->addCommandLineOption("--cut-radius-meters","Specify the cut distance in meters.  A bounding box for the cut will be produced");
 
+   argumentParser.getApplicationUsage()->addCommandLineOption("--cut-bbox-ll","Specify the min lat and min lon and max lat and maxlon <minLat> <minLon> <maxLat> <maxLon>");
+   argumentParser.getApplicationUsage()->addCommandLineOption("--cut-pixel-width-height","Specify cut box's width and height in pixels");
+
    argumentParser.getApplicationUsage()->addCommandLineOption("--hist-stretch","Specify in normalized percent the low clip and then the high clip value");
 
    argumentParser.getApplicationUsage()->addCommandLineOption("--hist-auto-minmax","uses the automatic search for the best min and max clip values");
@@ -136,19 +141,25 @@ void ossimOrthoIgen::initialize(ossimArgumentParser& argumentParser)
    }
    double tempDouble;
    double tempDouble2;
+   double tempDouble3;
+   double tempDouble4;
    ossimString tempString;
    ossimArgumentParser::ossimParameter stringParam(tempString);
    ossimArgumentParser::ossimParameter doubleParam(tempDouble);
    ossimArgumentParser::ossimParameter doubleParam2(tempDouble2);
-   theCutCenter.makeNan();
+   ossimArgumentParser::ossimParameter doubleParam3(tempDouble3);
+   ossimArgumentParser::ossimParameter doubleParam4(tempDouble4);
+   theCutOriginType = ossimOrthoIgen::OSSIM_CENTER_ORIGIN;
+   theCutOrigin.makeNan();
    theCutDxDy.makeNan();
-   theCutCenterUnit   = OSSIM_UNIT_UNKNOWN;
+   theCutOriginUnit   = OSSIM_UNIT_UNKNOWN;
    theCutDxDyUnit     = OSSIM_UNIT_UNKNOWN;
-   theLowPercentClip  = OSSIM_DBL_NAN;
-   theHighPercentClip = OSSIM_DBL_NAN;
-
+   theLowPercentClip  = ossim::nan();
+   theHighPercentClip = ossim::nan();
+   double minLat=ossim::nan(), minLon=ossim::nan(), maxLat=ossim::nan(), maxLon=ossim::nan();
    theUseAutoMinMaxFlag = false;
-   theMetersPerPixelOverride.makeNan();
+   theDeltaPerPixelOverride.makeNan();
+   theDeltaPerPixelUnit = OSSIM_UNIT_UNKNOWN;
    if(argumentParser.read("--annotate", stringParam))
    {
       theAnnotationTemplate = ossimFilename(tempString);
@@ -165,15 +176,47 @@ void ossimOrthoIgen::initialize(ossimArgumentParser& argumentParser)
    }
    if(argumentParser.read("--cut-center-ll", doubleParam, doubleParam2))
    {
-      theCutCenter.lat = tempDouble;
-      theCutCenter.lon = tempDouble2;
-      theCutCenterUnit = OSSIM_DEGREES;
+      theCutOrigin.lat = tempDouble;
+      theCutOrigin.lon = tempDouble2;
+      theCutOriginUnit = OSSIM_DEGREES;
+      theCutOriginType = ossimOrthoIgen::OSSIM_CENTER_ORIGIN;
    }
    if(argumentParser.read("--cut-radius-meters", doubleParam))
    {
       theCutDxDy.x = tempDouble;
       theCutDxDy.y = tempDouble;
       theCutDxDyUnit = OSSIM_METERS;
+   }
+   if(argumentParser.read("--cut-bbox-ll", doubleParam, doubleParam2, doubleParam3, doubleParam4))
+   {
+      minLat = tempDouble;
+      minLon = tempDouble2;
+      maxLat = tempDouble3;
+      maxLon = tempDouble4;
+      theCutOriginUnit = OSSIM_DEGREES;
+      theCutOriginType = ossimOrthoIgen::OSSIM_UPPER_LEFT_ORIGIN;
+      theCutOrigin.lat = maxLat;
+      theCutOrigin.lon = minLon;
+      theCutDxDy.lat   = (maxLat-minLat);
+      theCutDxDy.lon   = (maxLon-minLon);
+      theCutDxDyUnit   = theCutOriginUnit;
+   }
+   if(argumentParser.read("--cut-pixel-width-height", doubleParam, doubleParam2))
+   {
+      if((ossim::isnan(minLat) == false)&&
+         (ossim::isnan(minLon) == false)&&
+         (ossim::isnan(maxLat) == false)&&
+         (ossim::isnan(maxLon) == false))
+      {
+         theDeltaPerPixelOverride = ossimDpt(theCutDxDy.x/(tempDouble-1),
+                                             theCutDxDy.y/(tempDouble2-1));
+         theDeltaPerPixelUnit     = theCutDxDyUnit;
+      }
+      else
+      {
+         theCutOrigin.makeNan();
+         ossimNotify(ossimNotifyLevel_WARN) << "Can't have option --cut-pixel-width-height without --cut-bbox-ll" << std::endl;
+      }
    }
    if(argumentParser.read("--hist-stretch", doubleParam, doubleParam2))
    {
@@ -190,8 +233,9 @@ void ossimOrthoIgen::initialize(ossimArgumentParser& argumentParser)
    }
    if(argumentParser.read("--meters", doubleParam))
    {
-      theMetersPerPixelOverride.x = tempDouble;
-      theMetersPerPixelOverride.y = tempDouble;
+      theDeltaPerPixelUnit = OSSIM_METERS;
+      theDeltaPerPixelOverride.x = tempDouble;
+      theDeltaPerPixelOverride.y = tempDouble;
    }
    if(argumentParser.read("--writer-template",
                           stringParam))
@@ -225,10 +269,7 @@ void ossimOrthoIgen::initialize(ossimArgumentParser& argumentParser)
    {
       theProjectionType = OSSIM_INPUT_PROJECTION;
    }
-   else
-   {
-      theProjectionType = OSSIM_UNKNOWN_PROJECTION;
-   }
+
    if(argumentParser.read("--view-template", stringParam))
    {
       theTemplateView = ossimFilename(tempString);
@@ -392,7 +433,8 @@ void ossimOrthoIgen::setDefaultValues()
 {
    theThumbnailRes = "";
    theThumbnailFlag = false;
-   theMetersPerPixelOverride.makeNan();
+   theDeltaPerPixelUnit = OSSIM_UNIT_UNKNOWN;
+   theDeltaPerPixelOverride.makeNan();
    theTemplateView = "";
    theProjectionType = OSSIM_UNKNOWN_PROJECTION;
    theGeographicOriginOfLatitude = 0.0;
@@ -402,11 +444,11 @@ void ossimOrthoIgen::setDefaultValues()
    theTilingFilename = "";
    theSlaveBuffers = "2";
    clearFilenameList();
-   theLowPercentClip = OSSIM_DBL_NAN;
-   theHighPercentClip = OSSIM_DBL_NAN;
-   theCutCenter.makeNan();
+   theLowPercentClip = ossim::nan();
+   theHighPercentClip = ossim::nan();
+   theCutOrigin.makeNan();
    theCutDxDy.makeNan();
-   theCutCenterUnit   = OSSIM_UNIT_UNKNOWN;
+   theCutOriginUnit   = OSSIM_UNIT_UNKNOWN;
    theCutDxDyUnit     = OSSIM_UNIT_UNKNOWN;
 }
 
@@ -438,8 +480,9 @@ void ossimOrthoIgen::setResamplerType(const ossimString& resamplerType)
 void ossimOrthoIgen::setCutCenter(const ossimDpt& dpt,
                                   ossimUnitType unit)
 {
-   theCutCenter     = dpt;
-   theCutCenterUnit = unit;
+   theCutOriginType = ossimOrthoIgen::OSSIM_CENTER_ORIGIN;
+   theCutOrigin     = dpt;
+   theCutOriginUnit = unit;
 }
 
 void ossimOrthoIgen::setCutDxDy(const ossimDpt& dpt,
@@ -595,9 +638,9 @@ bool ossimOrthoIgen::setupIgenKwl(ossimKeywordlist& kwl)
                h->setCurrentEntry(entryList[entryIdx]);
                ossimImageChain* tempChain = (ossimImageChain*)chain->dup();
                tempChain->addLast(h);
-               if((theHighPercentClip!=OSSIM_DBL_NAN)&&
-                  (theLowPercentClip!=OSSIM_DBL_NAN)||
-                  (theUseAutoMinMaxFlag))
+               if( ( (ossim::isnan(theHighPercentClip) == false)  &&
+                     (ossim::isnan(theLowPercentClip) == false) ) ||
+                   theUseAutoMinMaxFlag )
                {
                   ossimFilename inputHisto = handler->createHistogramFilename();
                   if(inputHisto.exists())
@@ -606,8 +649,8 @@ bool ossimOrthoIgen::setupIgenKwl(ossimKeywordlist& kwl)
                      histRemapper = new ossimHistogramRemapper;
                      tempChain->insertRight(histRemapper, h);
                      histRemapper->openHistogram(inputHisto);
-                     if((theHighPercentClip!=OSSIM_DBL_NAN)&&
-                        (theLowPercentClip!=OSSIM_DBL_NAN))
+                     if((ossim::isnan(theHighPercentClip) == false) &&
+                        (ossim::isnan(theLowPercentClip) == false) )
                      {
                         histRemapper->setHighNormalizedClipPoint(1.0-theHighPercentClip);
                         histRemapper->setLowNormalizedClipPoint(theLowPercentClip);
@@ -729,67 +772,132 @@ ossimRefPtr<ossimConnectableObject> ossimOrthoIgen::setupCutter(
       ossimMapProjection* mapProj = PTR_CAST(ossimMapProjection, viewProj.get());
       if(mapProj)
       {
-         ossimGpt centerLatLon(theCutCenter.lat,
-                               theCutCenter.lon,
+         ossimGpt originLatLon(theCutOrigin.lat,
+                               theCutOrigin.lon,
                                0.0,
                                mapProj->getDatum());
-//         if(theCutDxDyUnit == OSSIM_METERS)
+
+         if(!mapProj->isGeographic())  // projection in meters...
          {
-            if(!mapProj->isGeographic())
+            // Convert the cut radius to meters if not already.
+            ossimDpt dxdy;
+            if (theCutDxDyUnit == OSSIM_METERS)
             {
-               ossimDpt dxdy(ossimUnitConversionTool(theCutDxDy.x, theCutDxDyUnit).getValue(OSSIM_METERS),
-                             ossimUnitConversionTool(theCutDxDy.y, theCutDxDyUnit).getValue(OSSIM_METERS));
-               
-               ossimEastingNorthingCutter* cutter = new ossimEastingNorthingCutter;
-               ossimDpt pt, centerEn;
-               mapProj->worldToLineSample(centerLatLon,
-                                          pt);
-               pt = ossimIpt(pt);
-               mapProj->lineSampleToEastingNorthing(pt, centerEn);
-               
-               ossimDpt ul = centerEn + ossimDpt(-dxdy.x,
-                                                 dxdy.y);
-               ossimDpt lr = centerEn + ossimDpt(dxdy.x,
-                                                 -dxdy.y);
-               
-               
-               cutter->setEastingNorthingRectangle(ul, lr);
-               
-               result = cutter;
+               dxdy = theCutDxDy;
             }
             else
             {
-               ossimDpt dxdy(ossimUnitConversionTool(theCutDxDy.x, theCutDxDyUnit).getValue(OSSIM_DEGREES),
-                             ossimUnitConversionTool(theCutDxDy.y, theCutDxDyUnit).getValue(OSSIM_DEGREES));
-               ossimGeoPolyCutter* cutter = new ossimGeoPolyCutter;
-//                ossimDpt metersPerDegree = centerLatLon.metersPerDegree();
-//                ossimDpt degreePerMeter;
-               std::vector<ossimGpt> polygon;
-//                degreePerMeter.x = ((metersPerDegree.x > FLT_EPSILON)?1.0/metersPerDegree.x:0.0);
-//                degreePerMeter.y = ((metersPerDegree.y > FLT_EPSILON)?1.0/metersPerDegree.y:0.0);
-               
-               ossimGpt ul(centerLatLon.latd() + dxdy.y,
-                           centerLatLon.lond() - dxdy.x);
-               ossimGpt ur(centerLatLon.latd() + dxdy.y,
-                           centerLatLon.lond() + dxdy.x);
-               ossimGpt lr(centerLatLon.latd() - dxdy.y,
-                           centerLatLon.lond() + dxdy.x);
-               ossimGpt ll(centerLatLon.latd() - dxdy.y,
-                           centerLatLon.lond() - dxdy.x);
-
-               polygon.push_back(ul);
-               polygon.push_back(ur);
-               polygon.push_back(lr);
-               polygon.push_back(ll);
-               cutter->setNumberOfPolygons(1);
-               cutter->setPolygon(polygon);
-
-               result = cutter;
-
+               dxdy.x = ossimUnitConversionTool(
+                  theCutDxDy.x, theCutDxDyUnit).getValue(OSSIM_METERS);
+               dxdy.y = ossimUnitConversionTool(
+                  theCutDxDy.y, theCutDxDyUnit).getValue(OSSIM_METERS);
             }
+
+            ossimEastingNorthingCutter* cutter = new ossimEastingNorthingCutter;
+            ossimDpt pt, originEn;
+            mapProj->worldToLineSample(originLatLon,
+                                       pt);
+            pt = ossimIpt(pt);
+            mapProj->lineSampleToEastingNorthing(pt, originEn);
+            
+            ossimDpt ul, lr;
+            
+            switch(theCutOriginType)
+            {
+               case ossimOrthoIgen::OSSIM_CENTER_ORIGIN:  
+               {
+                  ul = originEn + ossimDpt(-dxdy.x,
+                                           dxdy.y);
+                  lr = originEn + ossimDpt(dxdy.x,
+                                           -dxdy.y);
+                  break;
+               }
+               case ossimOrthoIgen::OSSIM_UPPER_LEFT_ORIGIN:
+               {
+                  ul = originEn;
+                  lr = originEn + ossimDpt(dxdy.x,
+                                           -dxdy.y);
+                  
+                  break;
+               }
+               default:
+               {
+                  break;
+               }
+            }
+            
+            cutter->setEastingNorthingRectangle(ul, lr);
+            
+            result = cutter;
+         }
+         else // geographic projection, units = decimal degrees.
+         {
+            // Convert the cut radius to meters if not already.
+            ossimDpt dxdy;
+            if (theCutDxDyUnit == OSSIM_DEGREES)
+            {
+               dxdy = theCutDxDy;
+            }
+            else
+            {
+               dxdy.x = ossimUnitConversionTool(
+                  theCutDxDy.x, theCutDxDyUnit).getValue(OSSIM_DEGREES);
+               dxdy.y = ossimUnitConversionTool(
+                  theCutDxDy.y, theCutDxDyUnit).getValue(OSSIM_DEGREES);
+            }
+            
+            ossimGeoPolyCutter* cutter = new ossimGeoPolyCutter;
+            std::vector<ossimGpt> polygon;
+               
+            switch(theCutOriginType)
+            {
+               case ossimOrthoIgen::OSSIM_CENTER_ORIGIN:  
+               {
+                  ossimGpt ul(originLatLon.latd() + dxdy.y,
+                              originLatLon.lond() - dxdy.x);
+                  ossimGpt ur(originLatLon.latd() + dxdy.y,
+                              originLatLon.lond() + dxdy.x);
+                  ossimGpt lr(originLatLon.latd() - dxdy.y,
+                              originLatLon.lond() + dxdy.x);
+                  ossimGpt ll(originLatLon.latd() - dxdy.y,
+                              originLatLon.lond() - dxdy.x);
+                  
+                  polygon.push_back(ul);
+                  polygon.push_back(ur);
+                  polygon.push_back(lr);
+                  polygon.push_back(ll);
+                  break;
+               }
+               case ossimOrthoIgen::OSSIM_UPPER_LEFT_ORIGIN:
+               {
+                  ossimGpt ul(originLatLon.latd(),
+                              originLatLon.lond());
+                  ossimGpt ur(originLatLon.latd(),
+                              originLatLon.lond() + dxdy.x);
+                  ossimGpt lr(originLatLon.latd() - dxdy.y,
+                              originLatLon.lond() + dxdy.x);
+                  ossimGpt ll(originLatLon.latd() - dxdy.y,
+                              originLatLon.lond());
+                  
+                  polygon.push_back(ul);
+                  polygon.push_back(ur);
+                  polygon.push_back(lr);
+                  polygon.push_back(ll);
+                  
+                  break;
+               }
+               default:
+               {
+                  break;
+               }
+            }
+            cutter->setNumberOfPolygons(1);
+            cutter->setPolygon(polygon);
+            result = cutter;
          }
       }
    }
+
    if(result.valid())
    {
       result->connectMyInputTo(input);
@@ -929,13 +1037,26 @@ bool ossimOrthoIgen::setupView(ossimKeywordlist& kwl)
       }
       else
       {
-         if(!theMetersPerPixelOverride.hasNans())
+         if(!theDeltaPerPixelOverride.hasNans())
          {
             ossimMapProjection* mapProj = PTR_CAST(ossimMapProjection, productObj.get());
 
-            if(mapProj&&!theMetersPerPixelOverride.hasNans())
+            if(mapProj)
             {
-               mapProj->setMetersPerPixel(theMetersPerPixelOverride);
+               if(mapProj->isGeographic())
+               {
+                  mapProj->setDecimalDegreesPerPixel(ossimDpt(ossimUnitConversionTool(theDeltaPerPixelOverride.x,
+                                                                                      theDeltaPerPixelUnit).getValue(OSSIM_DEGREES),
+                                                              ossimUnitConversionTool(theDeltaPerPixelOverride.y,
+                                                                                      theDeltaPerPixelUnit).getValue(OSSIM_DEGREES)));
+               }
+               else
+               {
+                  mapProj->setMetersPerPixel(ossimDpt(ossimUnitConversionTool(theDeltaPerPixelOverride.x,
+                                                                              theDeltaPerPixelUnit).getValue(OSSIM_METERS),
+                                                      ossimUnitConversionTool(theDeltaPerPixelOverride.y,
+                                                                              theDeltaPerPixelUnit).getValue(OSSIM_METERS)));
+               }
             }
          }
       }
@@ -984,10 +1105,13 @@ bool ossimOrthoIgen::setupView(ossimKeywordlist& kwl)
          // Get the input resolution.
          ossimDpt metersPerPixel = inputProj->getMetersPerPixel();
 
-         ossim_float64 gsd = (metersPerPixel.x+metersPerPixel.y)/2.0;
-         if(!theMetersPerPixelOverride.hasNans())
+         double gsdTemp = (metersPerPixel.x+metersPerPixel.y)*.5;
+         ossimUnitType gsdUnits = OSSIM_METERS;
+         ossimDpt gsd(gsdTemp, gsdTemp);
+         if(!theDeltaPerPixelOverride.hasNans())
          {
-            gsd = theMetersPerPixelOverride.x;
+            gsd      = theDeltaPerPixelOverride;
+            gsdUnits = theDeltaPerPixelUnit;
          }
          
          // Get the bounding rect.
@@ -1004,8 +1128,11 @@ bool ossimOrthoIgen::setupView(ossimKeywordlist& kwl)
             // Set the origin.
             outputProjection->setOrigin(gpt);
             // Set the resolution.
-            outputProjection->setMetersPerPixel(ossimDpt(gsd, gsd));
-            
+//             outputProjection->setMetersPerPixel(ossimDpt(gsd, gsd));
+            outputProjection->setDecimalDegreesPerPixel(ossimDpt(ossimUnitConversionTool(gsd.x,
+                                                                                         gsdUnits).getValue(OSSIM_DEGREES),
+                                                                 ossimUnitConversionTool(gsd.y,
+                                                                                         gsdUnits).getValue(OSSIM_DEGREES)));
             // Save the state to keyword list.
             outputProjection->saveState(kwl, "product.projection.");
          }
@@ -1026,14 +1153,17 @@ bool ossimOrthoIgen::setupView(ossimKeywordlist& kwl)
             
             ossimDpt eastingNorthing;
             
-            utm->setMetersPerPixel(ossimDpt(gsd, gsd));
+            utm->setMetersPerPixel(ossimDpt(ossimUnitConversionTool(gsd.x,
+                                                                    gsdUnits).getValue(OSSIM_METERS),
+                                            ossimUnitConversionTool(gsd.y,
+                                                                    gsdUnits).getValue(OSSIM_METERS)));
             
             eastingNorthing = utm->forward(utm->origin());
             
             utm->setUlEastingNorthing(eastingNorthing);
             outputProjection = utm;
             // Set the resolution.
-            outputProjection->setMetersPerPixel(ossimDpt(gsd, gsd));
+//             outputProjection->setMetersPerPixel(ossimDpt(gsd, gsd));
             // Save the state to keyword list.
             outputProjection->saveState(kwl, "product.projection.");
          }
@@ -1178,7 +1308,8 @@ bool ossimOrthoIgen::setupTiling(ossimKeywordlist& kwl)
 
 void ossimOrthoIgen::setMetersPerPixel(const ossimDpt& mpp)
 {
-   theMetersPerPixelOverride = mpp;
+   theDeltaPerPixelOverride = mpp;
+   theDeltaPerPixelUnit = OSSIM_METERS;
 }
 
 void ossimOrthoIgen::setThumbnailResolution(const ossimIpt& res)

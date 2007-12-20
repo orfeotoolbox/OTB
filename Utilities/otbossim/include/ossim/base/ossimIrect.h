@@ -1,5 +1,4 @@
 //*******************************************************************
-// Copyright (C) 2000 ImageLinks Inc.
 //
 // License:  See top level LICENSE.txt file.
 //
@@ -11,7 +10,7 @@
 // Container class for four integer points representing a rectangle.
 //
 //*******************************************************************
-//  $Id: ossimIrect.h 10149 2006-12-28 17:44:35Z dburken $
+//  $Id: ossimIrect.h 11414 2007-07-27 15:10:00Z dburken $
 
 #ifndef ossimIrect_HEADER
 #define ossimIrect_HEADER
@@ -295,22 +294,22 @@ public:
    void getCenter(ossimDpt& center_point) const;
    
    void makeNan()
-      {
-         theUlCorner.makeNan();
-         theLlCorner.makeNan();
-         theLrCorner.makeNan();
-         theUrCorner.makeNan();
-      }
+   {
+      theUlCorner.makeNan();
+      theLlCorner.makeNan();
+      theLrCorner.makeNan();
+      theUrCorner.makeNan();
+   }
    
    bool hasNans()const{ return (theUlCorner.hasNans() ||
                                 theLlCorner.hasNans() ||
                                 theLrCorner.hasNans() ||
                                 theUrCorner.hasNans());}
    
-   bool isNan()const{ return (theUlCorner.hasNans() &&
-                              theLlCorner.hasNans() &&
-                              theLrCorner.hasNans() &&
-                              theUrCorner.hasNans());}
+   bool isNan()const{ return (theUlCorner.isNan() &&
+                              theLlCorner.isNan() &&
+                              theLrCorner.isNan() &&
+                              theUrCorner.isNan());}
 
    //***
    // This class supports both left and right-handed coordinate systems. For
@@ -413,7 +412,7 @@ public:
     */
    ossim_uint32 height() const
    {
-      return static_cast<ossim_uint32>(ossimAbs(theLlCorner.y -
+      return static_cast<ossim_uint32>(std::abs(theLlCorner.y -
                                                 theUlCorner.y) + 1);
    }
 
@@ -422,7 +421,7 @@ public:
     */
    ossim_uint32 width()  const
    {
-      return static_cast<ossim_uint32>(ossimAbs(theLrCorner.x -
+      return static_cast<ossim_uint32>(std::abs(theLrCorner.x -
                                                 theLlCorner.x) + 1);
    }
  
@@ -673,8 +672,8 @@ inline ossimIpt ossimIrect::midPoint()const
    double x = (ul().x + ur().x + ll().x + lr().x) * 0.25;
    double y = (ul().y + ur().y + ll().y + lr().y) * 0.25;
    
-   return ossimIpt(static_cast<ossim_int32>(irint(x)),
-                   static_cast<ossim_int32>(irint(y)));
+   return ossimIpt(ossim::round<int>(x),
+                   ossim::round<int>(y));
 }
 
 //*******************************************************************

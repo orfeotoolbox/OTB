@@ -13,12 +13,12 @@
 // ossimGeneralRasterTileSource is derived from ImageHandler which is
 // derived from ossimTileSource.
 //*******************************************************************
-//  $Id: ossimGeneralRasterTileSource.h 9794 2006-10-25 21:35:30Z dburken $
+//  $Id: ossimGeneralRasterTileSource.h 11181 2007-06-07 19:57:14Z dburken $
 
 #ifndef ossimGeneralRasterTileSource_HEADER
 #define ossimGeneralRasterTileSource_HEADER
 
-#include <fstream>
+  // #include <fstream>
 #include <ossim/base/ossimIoStream.h>
   //using namespace std;
 
@@ -149,7 +149,7 @@ protected:
    ossimRefPtr<ossimImageData>  theTile;
    ossim_uint8*                 theBuffer;
    ossimInterleaveType          theBufferInterleave;
-   std::vector<ossimRefPtr<ossimIStream> > theFileStrList;
+   std::vector<ossimRefPtr<ossimIFStream> > theFileStrList;
 //   vector<istream*>            theFileStrList;   
    ossimGeneralRasterInfo       theImageData;
    ossimIrect                   theBufferRect;

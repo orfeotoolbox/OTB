@@ -5,7 +5,7 @@
 // Author:  David Burken
 //
 //*******************************************************************
-//  $Id: ossimJpegWriter.cpp 9818 2006-10-30 12:43:40Z dburken $
+//  $Id: ossimJpegWriter.cpp 10889 2007-05-11 14:20:08Z dburken $
 
 #include <cstdio>
 
@@ -57,25 +57,36 @@ ossimJpegWriter::~ossimJpegWriter()
 bool ossimJpegWriter::writeFile()
 {
    static const char MODULE[] = "ossimJpegWriter::writeFile";
-
+   
    if( !theInputConnection || (getErrorStatus() != ossimErrorCodes::OSSIM_OK))
    {
       return false;
    }
-
+   
+   bool bandsDontMatch = false;
    // Get the number of bands.  Must be one or three for this writer.
    ossim_int32 components   = theInputConnection->getNumberOfOutputBands();
+   ossim_int32 outputComponents = components;
    if (components != 1 && components != 3)
    {
-      ossimNotify(ossimNotifyLevel_WARN)
-         << MODULE << " Range Error:"
-         << "\nInvalid number of input bands!  Must be one or three."
-         << "\nInput bands = " << components
-         << "\nReturning from method." << endl;
+      bandsDontMatch = true;
+      if(components < 3)
+      {
+         outputComponents = 1;
+      }
+      else if(components > 3)
+      {
+         outputComponents = 3;
+      }
+//      ossimNotify(ossimNotifyLevel_WARN)
+//         << MODULE << " Range Error:"
+//         << "\nInvalid number of input bands!  Must be one or three."
+//         << "\nInput bands = " << components
+//         << "\nReturning from method." << endl;
       
-      return false;
+//      return false;
    }
-
+   
    if(theInputConnection->isMaster())
    {
       if (!isOpen())
@@ -95,17 +106,17 @@ bool ossimJpegWriter::writeFile()
    }
    
    bool needToDeleteInput = false;
-
+   
    if(theInputConnection->getOutputScalarType() != OSSIM_UINT8)
    {
       ossimImageSource* inputSource=new ossimScalarRemapper;
-
+      
       inputSource->connectMyInputTo(0, theInputConnection->getInput(0));
       theInputConnection->connectMyInputTo(0, inputSource);
       theInputConnection->initialize();
       needToDeleteInput = true;
    }
-
+   
    if(theInputConnection->isMaster())
    {
       if (traceDebug())
@@ -122,8 +133,7 @@ bool ossimJpegWriter::writeFile()
       ossim_int32 tileHeight   = theInputConnection->getTileHeight();
       
       // Allocate a buffer to hold a row of tiles.
-      ossim_int32 buf_size = tileHeight*image_width*components;
-      
+      ossim_uint32 buf_size   = tileHeight*image_width*outputComponents;
       if (traceDebug())
       {
          CLOG << "DEBUG:"
@@ -131,12 +141,24 @@ bool ossimJpegWriter::writeFile()
               << endl;
       }
       
-      ossim_uint8* buf = new ossim_uint8[buf_size];
-      ossimImageData* blankTile = new ossimImageData(NULL,
-                                                     OSSIM_UINT8,
-                                                     components,
-                                                     tileWidth,
-                                                     tileHeight);
+      std::vector<ossim_uint8> buf(buf_size);
+      ossimRefPtr<ossimImageData> blankTile =
+         new ossimImageData(NULL,
+                            OSSIM_UINT8,
+                            outputComponents,
+                            tileWidth,
+                            tileHeight);
+      ossimRefPtr<ossimImageData> tempTile;
+      std::vector<ossim_uint8> tempBuf;
+      if(bandsDontMatch)
+      {
+         tempTile = new ossimImageData(NULL,
+                                       OSSIM_UINT8,
+                                       outputComponents,
+                                       tileWidth,
+                                       tileHeight);
+         tempTile->initialize();
+      }
       blankTile->initialize();
       //
       // Stuff needed for the jpeg library.
@@ -147,17 +169,17 @@ bool ossimJpegWriter::writeFile()
       JSAMPROW row_pointer[1];  // pointer to JSAMPLE row[s]
       
       // physical row width in image buffer
-      int row_stride = image_width * components;
+      int row_stride = image_width * outputComponents;
       
       cinfo.err = jpeg_std_error(&jerr);
       jpeg_create_compress(&cinfo);
       jpeg_stdio_dest(&cinfo, theOutputFilePtr);
       cinfo.image_width = image_width;   // image width and height, in pixels
       cinfo.image_height = image_height;
-      cinfo.input_components = components; // # of color components per pixel
+      cinfo.input_components = outputComponents; // # of color components per pixel
       
       // colorspace of input image 
-      if (components == 3)
+      if (outputComponents == 3)
       {
          cinfo.in_color_space = JCS_RGB;
       }
@@ -193,26 +215,46 @@ bool ossimJpegWriter::writeFile()
          buf_rect.set_uly(theAreaOfInterest.ul().y+i*tileHeight);
          buf_rect.set_lry(buf_rect.ul().y + tileHeight - 1);
          
-         for (ossim_int32 j=0;
-              ((j<maxX)&&
-               (!needsAborting()));
-              ++j)
+         for (ossim_int32 j=0; ((j<maxX)&& (!needsAborting())); ++j)
          {
             // Grab the tile.
             const ossimRefPtr<ossimImageData> t =
                theInputConnection->getNextTile();
-
+            
             if ( t.valid() )
             {
                if (t->getDataObjectStatus() != OSSIM_NULL)
                {
-                  // Copy the tile to the buffer.
-                  t->unloadTile(buf, buf_rect, OSSIM_BIP);
+                  if(bandsDontMatch)
+                  {
+                     tempTile->setImageRectangle(t->getImageRectangle());
+                     tempTile->setDataObjectStatus(t->getDataObjectStatus());
+                     memcpy(tempTile->getBuf(), 
+                            t->getBuf(),  
+                            t->getSizePerBandInBytes()*outputComponents);
+                     tempTile->unloadTile(&buf.front(), buf_rect, OSSIM_BIP);
+                  }
+                  else
+                  {
+                     // Copy the tile to the buffer.
+                     t->unloadTile(&buf.front(), buf_rect, OSSIM_BIP);
+                  }
                }
                else
                {
                   blankTile->setOrigin(t->getOrigin());
-                  blankTile->unloadTile(buf, buf_rect, OSSIM_BIP);
+                  if(bandsDontMatch)
+                  {
+                     tempTile->setImageRectangle(blankTile->getImageRectangle());
+                     tempTile->setDataObjectStatus(t->getDataObjectStatus());
+                     memcpy(tempTile->getBuf(), t->getBuf(),  t->getSizePerBandInBytes()*outputComponents);
+                     blankTile->unloadTile(&buf.front(), buf_rect, OSSIM_BIP);
+                  }
+                  else
+                  {
+                     // Copy the tile to the buffer.
+                     blankTile->unloadTile(&buf.front(), buf_rect, OSSIM_BIP);
+                  }
                }
             }
             ++tileCount;
@@ -251,18 +293,13 @@ bool ossimJpegWriter::writeFile()
       // Free memory.
       if(!needsAborting())
       {
-	jpeg_finish_compress(&cinfo);
+         jpeg_finish_compress(&cinfo);
       }
       
       fclose(theOutputFilePtr);
       theOutputFilePtr = NULL;
-
-      jpeg_destroy_compress(&cinfo);
       
-      delete [] buf;
-      buf = NULL;
-      delete blankTile;
-      blankTile = NULL;
+      jpeg_destroy_compress(&cinfo);
    }
    else
    {

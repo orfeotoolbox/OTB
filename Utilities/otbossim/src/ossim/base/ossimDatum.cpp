@@ -7,7 +7,7 @@
 // Description:
 //
 //*******************************************************************
-//  $Id: ossimDatum.cpp 9966 2006-11-29 02:01:07Z gpotts $
+//  $Id: ossimDatum.cpp 11408 2007-07-27 13:43:00Z dburken $
 #include <ossim/base/ossimDatum.h>
 #include <ossim/base/ossimGpt.h>
 #include <ossim/base/ossimEllipsoid.h>
@@ -67,7 +67,7 @@ void ossimDatum::molodenskyShift(double a,
   double dh1;       /* Delta height calculations                          */
   double dh2;       /* Delta height calculations                          */
 
-  if(Hgt_in == OSSIM_DBL_NAN)
+  if(ossim::isnan(Hgt_in))
   {
      Hgt_in = 0.0;
   }

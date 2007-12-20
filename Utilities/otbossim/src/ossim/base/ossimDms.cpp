@@ -1,9 +1,6 @@
 //*******************************************************************
-// Copyright (C) 2000 ImageLinks Inc.
 //
-// License:  LGPL
-// 
-// See LICENSE.txt file in the top level directory for more details.
+// License:  See top level LICENSE.txt file.
 //
 // Author:  Garrett Potts
 //
@@ -11,23 +8,31 @@
 //
 // Contains class definition for Degrees Minutes Seconds (ossimDms)
 //*******************************************************************
-//  $Id: ossimDms.cpp 10596 2007-03-07 16:41:07Z gpotts $
+//  $Id: ossimDms.cpp 12095 2007-11-30 16:06:06Z dburken $
 
-#include <math.h>
+#include <cmath>
+#include <cstring> /* for strcpy */
 #include <iomanip>
 #include <sstream>
-using namespace std;
-#include <stdio.h>
 
 #include <ossim/base/ossimDms.h>
 #include <ossim/base/ossimCommon.h>
-#include <iomanip>
-using namespace std;
 
 const ossim_uint8 ossimDms::theDegreeSign = 176;
 char *ossimDms::DEFAULT_FORMAT = "ddd mm.mmC";
 char *ossimDms::SPACES = "                   ";
 
+ossimDms::ossimDms()
+   : theDegrees(0.0),
+     theLatFlag(true),
+     theDecDegs(0.0),
+     theAfterDot(false),
+     theDoingSeconds(true),
+     theIntDegs(0),
+     theSign(1),
+     theWorking(0.0)
+{
+}
 
 ossimDms::ossimDms(double someDegrees, bool latFlag)
    : theDegrees(someDegrees),
@@ -41,7 +46,7 @@ ossimDms::ossimDms(double someDegrees, bool latFlag)
 {
 }
 
-ossimDms::ossimDms(char *value)
+ossimDms::ossimDms(const std::string& value)
    : theDegrees(0.0),
      theLatFlag(false),
      theDecDegs(0.0),
@@ -51,7 +56,7 @@ ossimDms::ossimDms(char *value)
      theSign(1),
      theWorking(0.0)
 {
-   if(value && (ossimString(value)!=ossimString("")))
+   if (value != "")
    {
       theDegrees = string_to_degree(value);
    }
@@ -69,7 +74,7 @@ ossimDms& ossimDms::setDegrees(double degrees)
    return *this;
 }
 
-bool ossimDms::setDegrees(const char *cdegrees)
+bool ossimDms::setDegrees(const std::string& cdegrees)
 {
    bool status = true;
    
@@ -346,7 +351,7 @@ ossimString ossimDms::toString(const ossimString& formatString)const
             }
             if (theAfterDot == true)
             {		/* beyond the decimal point */
-               double fractionalDegrees = ossimAbs(theDegrees-(int)theDegrees);
+               double fractionalDegrees = std::abs(theDegrees-(int)theDegrees);
                i = d_s;
                while (i > 0)
                {
@@ -359,7 +364,7 @@ ossimString ossimDms::toString(const ossimString& formatString)const
             }
             else
             {
-               theIntDegs = ossimAbs((int)(theDegrees));
+               theIntDegs = std::abs((int)(theDegrees));
                ossimString temp = ossimString::toString(theIntDegs);
                ossimString prefix;
                d_s -= temp.length();
@@ -643,14 +648,14 @@ void ossimDms::calc_mins_or_secs(double *dd,
 	   *dd = (du - (ires * ufactor)) / (double)ufactor;
            if(*dd < 0.0) *dd = 0.0;
 	}
-        ostringstream out;
+        std::ostringstream out;
         
-        out << setw(numunits)
-            << setfill('0')
-            << setiosflags(ios::right)
-            << setprecision(numunits)
+        out << std::setw(numunits)
+            << std::setfill('0')
+            << std::setiosflags(std::ios::right)
+            << std::setprecision(numunits)
             << ires
-            << ends;
+            << std::ends;
         result+=out.str().c_str();
         
 
@@ -670,7 +675,7 @@ void ossimDms::calc_mins_or_secs(double *dd,
 
 
 int ossimDms::calc_mins_or_secs(double *dd,
-                                char *format,
+                                const char *format,
                                 char *res)const
 {
 	double du;
@@ -797,164 +802,186 @@ void ossimDms::init_values(double d)const
 
 
 
-double ossimDms::string_to_degree(char *cdegrees)
+double ossimDms::string_to_degree(const std::string& cdegrees)
 {
-	double degrees, factor, dividend, units;
-	int i;
-        bool afterdelim;
-	char *cptr, c;
+   if (cdegrees.size() == 0) return 0.0;
 
-	theAfterDot = false;
-	afterdelim = false;
-	cptr = cdegrees;
-	degrees = 0.0;
-	units = 0.0;
-	factor = 1.0;
-	dividend = 60.0;
-	theSign = 1;
+   // We must make a non-const copy of "cdegrees".
+   char* copy = new char[cdegrees.size()+1];
 
-/* get rid of leading spaces */
+   //---
+   // Since where going to play with the "copy" pointer we must keep the
+   // original pointer so we can delete it at the bottom.
+   //---
+   char* cptr = copy;
+   
+   strcpy(cptr, cdegrees.c_str());
+   
+   double degrees, factor, dividend, units;
+   int i;
+   bool afterdelim;
+   char c;
+   
+   theAfterDot = false;
+   afterdelim = false;
+   degrees = 0.0;
+   units = 0.0;
+   factor = 1.0;
+   dividend = 60.0;
+   theSign = 1;
+   
+   /* get rid of leading spaces */
+   
+   while (*cptr == ' ')
+      cptr++;
+   
+   while(*cptr != '\0')
+   {
+      switch (*cptr)
+      {
+         
+         /* north, west and + values will change sign of degrees to plus */
+         case '+':
+         case 'n':
+         case 'N':
+         case 'e':
+         case 'E': 
+         {
+            if(toupper(*cptr) == 'N')
+            {
+               theLatFlag = true;
+            }
+            else if(toupper(*cptr) == 'E')
+            {
+               theLatFlag = false;
+            }
+            theSign = 1;
+            cptr++;
+            break;
+         }
+         
+         /* south, east and - values will change sign of degrees to minus */
+         
+         case '-':
+         case 's':
+         case 'S':
+         case 'w':
+         case 'W': 
+         {
+            if(toupper(*cptr) == 'S')
+            {
+               theLatFlag = true;
+            }
+            else if(toupper(*cptr) == 'W')
+            {
+               theLatFlag = false;
+            }
+            theSign = -1;
+            cptr++;
+            break;
+         }
+         
+         case '0':
+         case '1':
+         case '2':
+         case '3':
+         case '4':
+         case '5':
+         case '6':
+         case '7':
+         case '8':
+         case '9':
+         {
+            c = *cptr;
+            i = (c - '0');
+            
+            if (afterdelim == true) {
+               
+               if (theAfterDot == true) 
+                  units = units + (((double)i * factor) / dividend);
+               else
+                  units = (units * factor) + ((double)i / dividend);
+            }
+            else {
+               
+               if (theAfterDot == true)
+                  degrees = degrees + ((double)i * factor);
+               else
+                  degrees = (degrees * factor) + (double)i;
+            }
+            
+            if (theAfterDot == true) 
+               factor = factor * .10;
+            else
+               factor = 10.;
+            
+            cptr++;
+            break;
+         }
+            
+         /* a decimal point indicates a change in the factor used */
+         /* to calculate degrees or units (minutes or seconds)    */
+            
+         case '.':
+         {
+            factor = .10;
+            theAfterDot = true;
+            cptr++;
+            break;
+         }
+         
+         /* after a delimiter the value contains minutes, first time through */
+         
+         case ' ':
+         {
+            
+            while (*(cptr + 1) == ' ') 
+               cptr++;
+            
+            degrees = degrees + units;
+            units = 0.0;
+            
+            if (afterdelim == true) 	/* must be seconds */
+               dividend = dividend * dividend;
+            else 
+               afterdelim = true;
+            
+            factor = 1.;
+            
+            cptr++;
+            
+            /* skip any leading zeroes after delimiter */
+            
+            while (*cptr == '0')
+               cptr++;
+            
+            break;
+         }
+            
+         /* check for a delimiter that is allowable:
+            isspace allows: space, tab, cr, nl, vt, ff
+            ispunct allows: punctuation char != space or control or letter */
+         
+         default:
+         {
+            if (isspace(*cptr) || ispunct(*cptr))
+               *cptr = ' ';
+         }
+         
+      }	/* end switch */
+      
+   }	/* end while loop */
+   
+   /* add any units that may have been calculated (minutes or seconds) */
+   
+   degrees = degrees + units;
 
-	while (*cptr == ' ')
-	   cptr++;
-
-	while(*cptr != '\0') {
-
-	   switch (*cptr) {
-
-/* north, west and + values will change sign of degrees to plus */
-
-	     case '+':
-	     case 'n':
-	     case 'N':
-	     case 'e':
-	     case 'E': 
-	       {
-		 if(toupper(*cptr) == 'N')
-		   {
-		     theLatFlag = true;
-		   }
-		 else if(toupper(*cptr) == 'E')
-		   {
-		     theLatFlag = false;
-		   }
-		theSign = 1;
-		cptr++;
-		break;
-	       }
-
-/* south, east and - values will change sign of degrees to minus */
-
-	     case '-':
-	     case 's':
-	     case 'S':
-	     case 'w':
-	     case 'W': 
-	       {
-		 if(toupper(*cptr) == 'S')
-		   {
-		     theLatFlag = true;
-		   }
-		 else if(toupper(*cptr) == 'W')
-		   {
-		     theLatFlag = false;
-		   }
-		theSign = -1;
-		cptr++;
-		break;
-	     }
-
-	     case '0':
-	     case '1':
-	     case '2':
-	     case '3':
-	     case '4':
-	     case '5':
-	     case '6':
-	     case '7':
-	     case '8':
-	     case '9': {
-		c = *cptr;
-		i = (c - '0');
-
-		if (afterdelim == true) {
-
-		   if (theAfterDot == true) 
-			units = units + (((double)i * factor) / dividend);
-		   else
-			units = (units * factor) + ((double)i / dividend);
-		}
-		else {
-
-		   if (theAfterDot == true)
-			degrees = degrees + ((double)i * factor);
-		   else
-			degrees = (degrees * factor) + (double)i;
-		}
-
-		if (theAfterDot == true) 
-		   factor = factor * .10;
-		else
-		   factor = 10.;
-
-		cptr++;
-		break;
-	     }
-
-/* a decimal point indicates a change in the factor used */
-/* to calculate degrees or units (minutes or seconds)    */
-
-           case '.':
-           {
-              factor = .10;
-              theAfterDot = true;
-              cptr++;
-              break;
-           }
-
-/* after a delimiter the value contains minutes, first time through */
-
-	     case ' ': {
-
-		while (*(cptr + 1) == ' ') 
-		   cptr++;
-
-		degrees = degrees + units;
-		units = 0.0;
-
-		if (afterdelim == true) 	/* must be seconds */
-		   dividend = dividend * dividend;
-		else 
-		   afterdelim = true;
-
-		factor = 1.;
-
-		cptr++;
-
-/* skip any leading zeroes after delimiter */
-
-		while (*cptr == '0')
-			cptr++;
-
-		break;
-	     }
-
-/* check for a delimiter that is allowable:
-   	isspace allows: space, tab, cr, nl, vt, ff
-   	ispunct allows: punctuation char != space or control or letter */
-
-	     default: {
-		if (isspace(*cptr) || ispunct(*cptr))
-		   *cptr = ' ';
-	     }
-
-	  }	/* end switch */
-
-	}	/* end while loop */
-
-/* add any units that may have been calculated (minutes or seconds) */
-
-	degrees = degrees + units;
-
-	return(degrees * (double)theSign);
+   //---
+   // NOTE:  local variable "cptr" has been moved so do not delete "cptr"
+   // delete "copy" which points to the original allocated memory...
+   //---
+   delete [] copy;
+   copy = 0;
+   
+   return(degrees * (double)theSign);
 }

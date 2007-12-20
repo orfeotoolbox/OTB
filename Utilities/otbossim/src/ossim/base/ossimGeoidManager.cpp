@@ -1,9 +1,7 @@
 //*****************************************************************************
 // FILE: ossimGeoidManager.cpp
 //
-// License:  LGPL
-// 
-// See LICENSE.txt file in the top level directory for more details.
+// License:  See top level LICENSE.txt file.
 //
 // AUTHOR: Oscar Kramer
 //
@@ -12,8 +10,9 @@
 // LIMITATIONS: None.
 //
 //*****************************************************************************
-//  $Id: ossimGeoidManager.cpp 10217 2007-01-09 17:33:55Z dburken $
+//  $Id: ossimGeoidManager.cpp 11499 2007-08-06 09:21:41Z dburken $
 
+#include <ossim/base/ossimCommon.h>
 #include <ossim/base/ossimGeoidManager.h>
 #include <ossim/base/ossimEnvironmentUtility.h>
 
@@ -33,7 +32,7 @@ RTTI_DEF1(ossimGeoidManager, "ossimGeoidManager", ossimGeoid);
 static ossimTrace traceExec  ("ossimGeoidManager:exec");
 static ossimTrace traceDebug ("ossimGeoidManager:debug");
 
-ossimGeoidManager* ossimGeoidManager::theInstance = NULL;
+ossimGeoidManager* ossimGeoidManager::theInstance = 0;
 
 //*****************************************************************************
 //  CONSTRUCTOR: ossimGeoidManager
@@ -139,7 +138,7 @@ bool ossimGeoidManager::loadState(const ossimKeywordlist& kwl,
          else
          {
             delete geoid;
-            geoid = NULL;
+            geoid = 0;
          }
       }
    }
@@ -176,7 +175,7 @@ bool ossimGeoidManager::loadState(const ossimKeywordlist& kwl,
       else
       {
          delete geoid;
-         geoid = NULL;
+         geoid = 0;
       }
    }
    else
@@ -205,7 +204,7 @@ bool ossimGeoidManager::loadState(const ossimKeywordlist& kwl,
             else
             {
                delete geoid;
-               geoid = NULL;
+               geoid = 0;
             }
          }
       }
@@ -243,11 +242,11 @@ bool ossimGeoidManager::open(const ossimFilename& dir, ossimByteOrder byteOrder)
 //*****************************************************************************
 double ossimGeoidManager::offsetFromEllipsoid(const ossimGpt& gpt) const
 {
-   double offset = OSSIM_DBL_NAN;
+   double offset = ossim::nan();
    std::vector<ossimRefPtr<ossimGeoid> >::const_iterator geoid =
       theGeoidList.begin();
    
-   while ((offset == OSSIM_DBL_NAN) && (geoid != theGeoidList.end()))
+   while ( ossim::isnan(offset) && (geoid != theGeoidList.end()))
    {
       offset = ((*geoid))->offsetFromEllipsoid(gpt);
       ++geoid;

@@ -7,7 +7,7 @@
 // Description: A brief description of the contents of the file.
 //
 //*******************************************************************
-// $Id: ossimImageData.h 10412 2007-01-31 22:02:40Z dburken $
+// $Id: ossimImageData.h 12034 2007-11-13 19:48:39Z gpotts $
 #ifndef ossimImageData_HEADER
 #define ossimImageData_HEADER
 
@@ -23,18 +23,41 @@ class ossimMultiBandHistogram;
 class OSSIMDLLEXPORT ossimImageData : public ossimRectilinearDataObject
 {
 public:
+
+   /** @brief copy constructor */
    ossimImageData(const ossimImageData &rhs);
-   
+
+   /**
+    * @brief Constructor
+    * @param source The owner.  This can be null.
+    * @param scalar The Scalar type like OSSIM_UINT8, OSSIM_UINT16...
+    * @param bands  The number of bands.
+    * 
+    * @note This does not initialize the undelying data buffer.
+    *       Call the initialize method to allocate storage.
+    */
    ossimImageData(ossimSource* source,
                   ossimScalarType scalar,
                   ossim_uint32 bands = 1);
 
+   /**
+    * @brief Constructor
+    * @param source The owner.  This can be null.
+    * @param scalar The Scalar type like OSSIM_UINT8, OSSIM_UINT16...
+    * @param bands  The number of bands.
+    * @param width  The width or number of samples in the buffer.
+    * @param height The height or numer of lines in the buffer.
+    * 
+    * @note This does not initialize the undelying data buffer.
+    *       Call the initialize method to allocate storage.
+    */
    ossimImageData(ossimSource* source,
                   ossimScalarType scalar,
                   ossim_uint32 bands,
                   ossim_uint32 width,
                   ossim_uint32 height);
 
+   /** @brief virtual destructor */
    virtual ~ossimImageData();
 
    /**
@@ -233,7 +256,7 @@ public:
       ossim_float64 meanValue,
       ossim_uint32 bandNumber = 0) const;
   
-   virtual void populateHistogram(ossimMultiBandHistogram* histo);
+   virtual void populateHistogram(ossimRefPtr<ossimMultiBandHistogram> histo);
 
    /**
     * @return const void* to theDataBuffer
@@ -492,6 +515,13 @@ public:
                          const ossimIrect& clip_rect,                         
                          ossimInterleaveType il_type);
 
+   virtual void nullTileAlpha(const ossim_uint8* src,
+                              const ossimIrect& src_rect,
+                              bool mutliplyAlphaFlag=false);
+   virtual void nullTileAlpha(const ossim_uint8* src,
+                              const ossimIrect& src_rect,
+                              const ossimIrect& clip_rect,
+                              bool multiplyAlphaFlag=false);
    /**
     * Will load a tile of different types.  If they
     * are the same then it will call loadTile(void*...)
@@ -705,6 +735,12 @@ protected:
                                             const ossimIrect& clip_rect,
                                             ossim_uint32 band);
 
+   template <class T> void nullTileAlphaTemplate(T,
+                                                 const ossim_uint8* src,
+                                                 const ossimIrect& src_rect,
+                                                 const ossimIrect& clip_rect,
+                                                 bool multiplyAlphaFlag=false);
+   
    template <class T> void loadTileFromBipTemplate(T, // dummy template variable
                                                    const void* src,
                                                    const ossimIrect& src_rect);

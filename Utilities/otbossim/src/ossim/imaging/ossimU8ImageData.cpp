@@ -17,7 +17,7 @@
 //        If you want anything else use the less efficient ossimImageData.
 //
 //*************************************************************************
-// $Id: ossimU8ImageData.cpp 10490 2007-02-14 18:12:33Z dburken $
+// $Id: ossimU8ImageData.cpp 11721 2007-09-13 13:19:34Z gpotts $
 
 #include <cstring>  // for memset function
 using namespace std;
@@ -283,43 +283,6 @@ double ossimU8ImageData::computeMeanSquaredError(double meanValue,
    }
 
    return result;
-}
-
-//******************************************************************
-//
-// NOTE: I was checking for null and not adding it to the histogram.
-//       this was messing up the equalization algorithms since the
-//       accumulation histogram did not represent the area of the
-//       image.  For now I will leave out the check for "is null" and
-//       add this to the count so that the total accumulation is the
-//       area of the image.
-//
-//******************************************************************
-void ossimU8ImageData::populateHistogram(ossimMultiBandHistogram* histo)
-{
-   ossim_uint32 numberOfBands = getNumberOfBands();
-
-   if( (getDataObjectStatus() == OSSIM_NULL) ||
-       (getDataObjectStatus() == OSSIM_EMPTY))
-   {
-      return;
-   }
-
-   for(ossim_uint32 band = 0; band < numberOfBands; ++band)
-   {
-      ossimHistogram* currentHisto = histo->getHistogram(band);
-      ossim_uint8* buffer = getUcharBuf(band);
-      
-      if(currentHisto)
-      {
-         float *counts = currentHisto->GetCounts();
-         ossim_uint32 upperBound = getWidth()*getHeight();
-         for(ossim_uint32 offset = 0; offset < upperBound; ++offset)
-         {
-            counts[buffer[offset]]++;
-         }
-      }
-   }
 }
 
 double ossimU8ImageData::computeAverageBandValue(ossim_uint32 bandNumber)

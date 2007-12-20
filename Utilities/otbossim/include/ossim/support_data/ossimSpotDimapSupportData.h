@@ -1,9 +1,6 @@
 //*******************************************************************
-// Copyright (C) 2003 ImageLinks Inc.  All rights reserved.
 //
-// License:  LGPL
-// 
-// See LICENSE.txt file in the top level directory for more details.
+// License:  See top level LICENSE.txt file.
 //
 //
 // Author:  Oscar Kramer (ossim port by D. Burken)
@@ -13,7 +10,7 @@
 // Contains declaration of class ossimSpotDimapSupportData.
 // 
 //*****************************************************************************
-// $Id: ossimSpotDimapSupportData.h 9094 2006-06-13 19:12:40Z dburken $
+// $Id: ossimSpotDimapSupportData.h 12101 2007-12-01 19:15:28Z dburken $
 #ifndef ossimSpotDimapSupportData_HEADER
 #define ossimSpotDimapSupportData_HEADER
 
@@ -40,7 +37,18 @@ class ossimSpotDimapSupportData : public ossimObject,
                                   public ossimErrorStatusInterface
 {
 public:
+
+   /** metadata.dim format version */
+   enum ossimSpotMetadataVersion
+   {
+      OSSIM_SPOT_METADATA_VERSION_UNKNOWN = 0,
+      OSSIM_SPOT_METADATA_VERSION_1_0 = 1,
+      OSSIM_SPOT_METADATA_VERSION_1_1 = 2
+   };
+   
    ossimSpotDimapSupportData();
+
+
    ossimSpotDimapSupportData(const ossimSpotDimapSupportData& rhs);
    ossimSpotDimapSupportData(const ossimFilename& dimapFile,
                              bool  processSwir=false);
@@ -52,6 +60,7 @@ public:
    bool loadXmlFile(const ossimFilename& file,
                     bool processSwir=false);
 
+   ossimString   getMetadataVersionString()               const;
    ossimString   getAcquisitionDate()                     const;
    ossimString   getImageID()                             const;
    ossimFilename getMetadataFile()                        const;
@@ -67,11 +76,21 @@ public:
    //---
    // Image center point:
    //---
-   void getRefGroundPoint(ossimGpt& gp)     const;
-   void getRefImagePoint(ossimDpt& rp)      const;
-   void getRefLineTime(ossim_float64& rt)   const;
 
-   ossimDrect getImageRect()const;
+   /** Center of frame, sub image if there is one. */
+   void getRefGroundPoint(ossimGpt& gp)         const;
+
+   /** zero base center point */
+   void getRefImagePoint(ossimDpt& rp)          const;
+
+   void getRefLineTime(ossim_float64& rt)       const;
+
+   /** relative to full frame. */
+   void getRefLineTimeLine(ossim_float64& rtl)  const;
+
+   /** Zero based image rectangle, sub image if there is one. */
+   void getImageRect(ossimDrect& rect)const;
+   
    //---
    // Sub image offset:
    //---
@@ -131,46 +150,111 @@ public:
                           const char* prefix = 0);
 private:
    void getLagrangeInterpolation(const ossim_float64& t,
-                                 const vector<ossimDpt3d>& V,
-                                 const vector<ossim_float64>& T,
+                                 const std::vector<ossimDpt3d>& V,
+                                 const std::vector<ossim_float64>& T,
                                  ossimDpt3d& li )const;
 
    void getBilinearInterpolation(const ossim_float64& t,
-                                 const vector<ossimDpt3d>& V,
-                                 const vector<ossim_float64>& T,
+                                 const std::vector<ossimDpt3d>& V,
+                                 const std::vector<ossim_float64>& T,
                                  ossimDpt3d& li )const;
 
    void getInterpolatedLookAngle(const ossim_float64& p,
-                                 const vector<ossim_float64>& angles,
+                                 const std::vector<ossim_float64>& angles,
                                  ossim_float64& la) const;
    
    ossim_float64 convertTimeStamp(const ossimString& time_stamp) const;
 
    void convertTimeStamp(const ossimString& time_stamp,
                          ossim_float64& ti) const;
-   
+
+   /**
+    * Initializes theMetadataVersion.
+    * @return true on success, false if not found.
+    */
+   bool initMetadataVersion(ossimRefPtr<ossimXmlDocument> xmlDocument);
+
+   /**
+    * Initializes theImageId.
+    * @return true on success, false if not found.
+    */
+   bool initImageId(ossimRefPtr<ossimXmlDocument> xmlDocument);
+
+   /**
+    * From xml section:
+    * /Dimap_Document/Dataset_Sources/Source_Information/Scene_Source
+    *
+    * Initializes:
+    * theSunAzimuth
+    * theSunElevation
+    * theIncidenceAngle
+    * @return true on success, false if not found.
+    */
+   bool initSceneSource(ossimRefPtr<ossimXmlDocument> xmlDocument);
+
+   /**
+    * Frame points:
+    * 
+    * From xml section:
+    * /Dimap_Document/Dataset_Frame/
+    *
+    * Initializes:
+    * theRefGroundPoint
+    * theUlCorner
+    * theUrCorner
+    * theLrCorner
+    * theLlCorner
+    *
+    * Note that the theRefImagePoint will be the zero based center of the
+    * frame.
+    * @return true on success, false if not found.
+    */
+   bool initFramePoints(ossimRefPtr<ossimXmlDocument> xmlDocument);
+
+   ossimSpotMetadataVersion    theMetadataVersion;
    ossimString                 theImageID;
    ossimFilename               theMetadataFile;
+
+   /*
+    * From xml section:
+    * /Dimap_Document/Dataset_Sources/Source_Information/
+    * Scene_Source
+    */
    ossim_float64               theSunAzimuth;  
    ossim_float64               theSunElevation;
+   ossim_float64               theIncidenceAngle;
+
    ossimDpt                    theImageSize;
+
+   /** Center of frame on ground, if sub image it's the center of that. */
    ossimGpt                    theRefGroundPoint;
+
+   /** Zero based center of frame. */
    ossimDpt                    theRefImagePoint;
+   
    ossimDpt                    theSubImageOffset;
+
+   /** relative to full image */
    ossim_float64               theRefLineTime;
+
+   /** relative to full image */
+   ossim_float64               theRefLineTimeLine;
+   
    ossim_float64               theLineSamplingPeriod;
-   vector<ossim_float64>       thePixelLookAngleX;
-   vector<ossim_float64>       thePixelLookAngleY;
-   vector<ossimDpt3d>          theAttitudeSamples; // x=pitch, y=roll, z=yaw
-   vector<ossim_float64>       theAttSampTimes;
-   vector<ossimDpt3d>          thePosEcfSamples;
-   vector<ossimDpt3d>          theVelEcfSamples;
-   vector<ossim_float64>       theEphSampTimes;
+
+   /** holds the size of thePixelLookAngleX/Y */
+   ossim_uint32                theDetectorCount; 
+   std::vector<ossim_float64>  thePixelLookAngleX;
+   std::vector<ossim_float64>  thePixelLookAngleY;
+   std::vector<ossimDpt3d>     theAttitudeSamples; // x=pitch, y=roll, z=yaw
+   std::vector<ossim_float64>  theAttSampTimes;
+   std::vector<ossimDpt3d>     thePosEcfSamples;
+   std::vector<ossimDpt3d>     theVelEcfSamples;
+   std::vector<ossim_float64>  theEphSampTimes;
    bool                        theStarTrackerUsed;
    bool                        theSwirDataFlag;
    ossim_uint32                theNumBands;
    ossimString                 theAcquisitionDate;
-   ossim_float64               theIncidenceAngle;
 
    //---
    // Corner points:
@@ -183,8 +267,8 @@ private:
    //---
    // Geoposition Points:
    //---
-   vector <ossimDpt> theGeoPosImagePoints;
-   vector <ossimGpt> theGeoPosGroundPoints;
+   std::vector <ossimDpt> theGeoPosImagePoints;
+   std::vector <ossimGpt> theGeoPosGroundPoints;
 
    ossimGpt createGround(const ossimString& s)const;
    ossimDpt createDpt(const ossimString& s)const;

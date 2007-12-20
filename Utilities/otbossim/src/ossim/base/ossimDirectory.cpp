@@ -10,7 +10,7 @@
 // Description: A brief description of the contents of the file.
 //
 //*************************************************************************
-// $Id: ossimDirectory.cpp 9094 2006-06-13 19:12:40Z dburken $
+// $Id: ossimDirectory.cpp 11079 2007-05-29 19:58:57Z gpotts $
 
 #include <iostream>
 
@@ -180,7 +180,8 @@ bool ossimDirectory::fileMatched(ossimFilename &filename) const
 
 bool ossimDirectory::isOpened() const
 {
-    return theData != 0;
+	return theDirectoryName.isDir();
+    //return theData != 0;
 }
 
 #else

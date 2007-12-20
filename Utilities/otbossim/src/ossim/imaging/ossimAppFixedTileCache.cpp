@@ -1,16 +1,13 @@
 //******************************************************************
-// Copyright (C) 2000 ImageLinks Inc.
 //
-// License:  LGPL
-// 
-// See LICENSE.txt file in the top level directory for more details.
+// License:  See top level LICENSE.txt file.
 //
 // Author: Garrett Potts
 // 
 // Description: This file contains the Application cache algorithm
 //
 //***********************************
-// $Id: ossimAppFixedTileCache.cpp 9250 2006-07-13 20:04:08Z gpotts $
+// $Id: ossimAppFixedTileCache.cpp 11694 2007-09-09 21:55:16Z dburken $
 #include <algorithm>
 #include <sstream>
 #include <ossim/imaging/ossimAppFixedTileCache.h>
@@ -19,7 +16,7 @@
 #include <ossim/base/ossimCommon.h>
 #include <ossim/base/ossimTrace.h>
 
-ossimAppFixedTileCache* ossimAppFixedTileCache::theInstance = NULL;
+ossimAppFixedTileCache* ossimAppFixedTileCache::theInstance = 0;
 ossimAppFixedTileCache::ossimAppFixedCacheId ossimAppFixedTileCache::theUniqueAppIdCounter = 0;
 const ossim_uint32 ossimAppFixedTileCache::DEFAULT_SIZE = 1024*1024*80;
 
@@ -30,7 +27,8 @@ std::ostream& operator <<(std::ostream& out, const ossimAppFixedTileCache& rhs)
 
    if(iter == rhs.theAppCacheMap.end())
    {
-      cout << "***** APP CACHE EMPTY *****" << endl;
+      ossimNotify(ossimNotifyLevel_NOTICE)
+         << "***** APP CACHE EMPTY *****" << endl;
    }
    else
    {
@@ -55,7 +53,7 @@ ossimAppFixedTileCache::ossimAppFixedTileCache()
    theTileSize = ossimIpt(64, 64);
    theCurrentCacheSize = 0;
 
-   ossimGetDefaultTileSize(theTileSize);
+   // ossim::defaultTileSize(theTileSize);
    
    ossim_uint32 cacheSize = ossimString(ossimPreferences::instance()->findPreference("cache_size")).toUInt32()*(1024*1024);
    const char* tileSize = ossimPreferences::instance()->findPreference("tile_size");
@@ -76,13 +74,15 @@ ossimAppFixedTileCache::ossimAppFixedTileCache()
    }
    if(traceDebug())
    {
-      ossimNotify(ossimNotifyLevel_DEBUG) << "DEBUG: cache tile size = " << theTileSize << std::endl
-                                          << "Cache size = " << cacheSize << " bytes" << std::endl;
+      ossimNotify(ossimNotifyLevel_DEBUG)
+         << "DEBUG: cache tile size = " << theTileSize << std::endl
+         << "Cache size = " << cacheSize << " bytes" << std::endl;
    }
 
    if(traceDebug())
    {
-      ossimNotify(ossimNotifyLevel_DEBUG) << "ossimAppFixedTileCache::ossimAppFixedTileCache() DEBUG: leaving ..." << std::endl;
+      ossimNotify(ossimNotifyLevel_DEBUG)
+         << "ossimAppFixedTileCache::ossimAppFixedTileCache() DEBUG: leaving ..." << std::endl;
    }
 }
 
@@ -155,7 +155,9 @@ ossimAppFixedTileCache::ossimAppFixedCacheId ossimAppFixedTileCache::newTileCach
    if(tileSize.x == 0 ||
       tileSize.y == 0)
    {
-      newCache->setRect(tileBoundaryRect, theTileSize);
+      // newCache->setRect(tileBoundaryRect, theTileSize);
+      newCache->setRect(tileBoundaryRect,
+                        newCache->getTileSize());
    }
    else
    {
@@ -186,8 +188,11 @@ void ossimAppFixedTileCache::setRect(ossimAppFixedCacheId cacheId,
    ossimFixedTileCache* cache = getCache(cacheId);
    if(cache)
    {
+      
       ossim_uint32 cacheSize = cache->getCacheSize();
-      cache->setRect(boundaryTileRect, theTileSize);
+      // cache->setRect(boundaryTileRect, theTileSize);
+      cache->setRect(boundaryTileRect,
+                     cache->getTileSize());      
       theCurrentCacheSize += (cache->getCacheSize() - cacheSize);
    }
 }
@@ -201,15 +206,15 @@ void ossimAppFixedTileCache::setTileSize(ossimAppFixedCacheId cacheId,
       ossim_uint32 cacheSize = cache->getCacheSize();
       cache->setRect(cache->getTileBoundaryRect(), tileSize);
       theCurrentCacheSize += (cache->getCacheSize() - cacheSize);
-   } 
+      theTileSize = cache->getTileSize();
+   }
 }
-
 
 ossimRefPtr<ossimImageData> ossimAppFixedTileCache::getTile(
    ossimAppFixedCacheId cacheId,
    const ossimIpt& origin)
 {
-   ossimRefPtr<ossimImageData> result = NULL;
+   ossimRefPtr<ossimImageData> result = 0;
    ossimFixedTileCache* cache = getCache(cacheId);
    if(cache)
    {
@@ -224,7 +229,7 @@ ossimRefPtr<ossimImageData> ossimAppFixedTileCache::addTile(
    ossimAppFixedCacheId cacheId,
    ossimRefPtr<ossimImageData> data)
 {
-   ossimRefPtr<ossimImageData> result = NULL;
+   ossimRefPtr<ossimImageData> result = 0;
    ossimFixedTileCache *aCache = this->getCache(cacheId);
    if(!aCache)
    {         
@@ -273,7 +278,7 @@ ossimRefPtr<ossimImageData> ossimAppFixedTileCache::removeTile(
    ossimAppFixedCacheId cacheId,
    const ossimIpt& origin)
 {
-   ossimRefPtr<ossimImageData> result = NULL;
+   ossimRefPtr<ossimImageData> result = 0;
    
    ossimFixedTileCache* cache = getCache(cacheId);
    if(cache)
@@ -301,7 +306,7 @@ void ossimAppFixedTileCache::deleteTile(ossimAppFixedCacheId cacheId,
 ossimFixedTileCache* ossimAppFixedTileCache::getCache(ossimAppFixedCacheId cacheId)
 {
    std::map<ossimAppFixedCacheId, ossimFixedTileCache*>::iterator currentIter = theAppCacheMap.find(cacheId);
-   ossimFixedTileCache* result = (ossimFixedTileCache*)NULL;
+   ossimFixedTileCache* result = 0;
    
    if(currentIter != theAppCacheMap.end())
    {
@@ -368,7 +373,7 @@ void ossimAppFixedTileCache::shrinkCacheSize(ossimFixedTileCache* cache,
             ossim_uint32 before = cache->getCacheSize();
             cache->deleteTile();
             ossim_uint32 after = cache->getCacheSize();
-            ossim_uint32 delta = ossimAbs((int)(before - after));
+            ossim_uint32 delta = std::abs((int)(before - after));
             if(delta)
             {
                byteCount -= delta;
@@ -386,11 +391,9 @@ void ossimAppFixedTileCache::shrinkCacheSize(ossimFixedTileCache* cache,
 const ossimIpt& ossimAppFixedTileCache::getTileSize(ossimAppFixedCacheId cacheId)
 {
    ossimFixedTileCache* cache = getCache(cacheId);
-
    if(cache)
    {
       return cache->getTileSize();
    }
-
    return theTileSize;
 }

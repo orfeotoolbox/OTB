@@ -1,11 +1,7 @@
 //***************************************************************************
 // FILE: ossimGeoTiff.h
 //
-// Copyright (C) 2001 ImageLinks, Inc.
-//
-// License:  LGPL
-//
-// See LICENSE.txt file in the top level directory for more details.
+// License:  See top level LICENSE.txt file.
 //
 // Author:  David Burken
 //
@@ -14,27 +10,28 @@
 // information.
 //
 //***************************************************************************
-// $Id: ossimGeoTiff.h 9094 2006-06-13 19:12:40Z dburken $
+// $Id: ossimGeoTiff.h 12058 2007-11-16 19:31:11Z dburken $
 
 #ifndef ossimGeoTiff_HEADER
 #define ossimGeoTiff_HEADER
-
-#include <stdio.h>
-#include <vector>
-using namespace std;
-
 #include <ossim/base/ossimErrorStatusInterface.h>
 #include <ossim/base/ossimEndian.h>
 #include <ossim/base/ossimString.h>
+#include <ossim/projection/ossimMapProjectionInfo.h>
+#include <ossim/base/ossimRefPtr.h>
+  // #include <stdio.h>
+#include <vector>
+
+#include <itk_tiff.h>
 
 class ossimFilename;
 class ossimKeywordlist;
-
+class ossimTieGptSet;
 
 class ossimGeoTiff : public ossimErrorStatusInterface
 {
 public:
-   ossimGeoTiff(const ossimFilename& file);
+   ossimGeoTiff(const ossimFilename& file, ossim_uint32 entryIdx=0);
    ~ossimGeoTiff();
   
    enum
@@ -72,32 +69,26 @@ public:
       ANGULAR_DMS                      = 9107,
       ANGULAR_DMS_HEMISPHERE           = 9108,
       PCS_BRITISH_NATIONAL_GRID        = 27700,
-      USER_DEFINED                     = 32767,
-      MODEL_PIXEL_SCALE_TAG            = 33550,
-      MODEL_TIE_POINT_TAG              = 33922,
-      MODEL_TRANSFORM_TAG              = 34264,
-      GEO_KEY_DIRECTORY_TAG            = 34735,
-      GEO_DOUBLE_PARAMS_TAG            = 34736,
-      GEO_ASCII_PARAMS_TAG             = 34737,
+      USER_DEFINED                     = 32767
    };
 
-   enum CompressType
-   {
-      NOT_COMPRESSED = 0,
-      COMPRESSED     = 1
-   };
+/*    enum CompressType */
+/*    { */
+/*       NOT_COMPRESSED = 0, */
+/*       COMPRESSED     = 1 */
+/*    }; */
  
-   enum PhotoInterpretation
-   {
-      PHOTO_MINISWHITE  = 0,   // min value is white 
-      PHOTO_MINISBLACK  = 1,   // min value is black 
-      PHOTO_RGB         = 2,   // RGB color model 
-      PHOTO_PALETTE     = 3,   // color map indexed 
-      PHOTO_MASK        = 4,   // $holdout mask 
-      PHOTO_SEPARATED   = 5,   // !color separations 
-      PHOTO_YCBCR       = 6,   // !CCIR 601 
-      PHOTO_CIELAB      = 8    // !1976 CIE L*a*b*
-   };
+/*    enum PhotoInterpretation */
+/*    { */
+/*       PHOTO_MINISWHITE  = 0,   // min value is white  */
+/*       PHOTO_MINISBLACK  = 1,   // min value is black  */
+/*       PHOTO_RGB         = 2,   // RGB color model  */
+/*       PHOTO_PALETTE     = 3,   // color map indexed  */
+/*       PHOTO_MASK        = 4,   // $holdout mask  */
+/*       PHOTO_SEPARATED   = 5,   // !color separations  */
+/*       PHOTO_YCBCR       = 6,   // !CCIR 601  */
+/*       PHOTO_CIELAB      = 8    // !1976 CIE L*a*b* */
+/*    }; */
 
    enum ModelType
    {
@@ -107,12 +98,17 @@ public:
       MODEL_TYPE_GEOCENTRIC = 3
    };
 
+   static int getPcsUnitType(ossim_int32 pcsCode);
 
+   static bool writeTags(TIFF* tiffOut,
+                         const ossimRefPtr<ossimMapProjectionInfo> projectionInfo,
+                         bool imagineNad27Flag=false);
+   
    /**
     *  Reads tags.
     *  Returns true on success, false on error.
     */
-   bool readTags(const ossimFilename& file);
+   bool readTags(const ossimFilename& file, ossim_uint32 entryIdx=0);
 
    /**
     *  Returns the map zone as an interger.
@@ -148,57 +144,26 @@ public:
     */
    void setOssimDatumName();
 
-   /**
-    * Returns enumerated byte order of the tiff file.
-    * Either OSSIM_LITTLE_ENDIAN or OSSIM_BIG_ENDIAN.
-    * See ossimConstants.h
-    */
-   ossimByteOrder getByteOrder() const;
+   void getScale(std::vector<double>& scale) const;
+   void getTiePoint(std::vector<double>& tie_point) const;
+   void getModelTransformation(std::vector<double>& transform) const;
 
-   void getScale(vector<double>& scale) const;
-   void getTiePoint(vector<double>& tie_point) const;
-   void getModelTransformation(vector<double>& transform) const;
-
-   const vector<double>& getTiePoint() const;
-   const vector<double>& getModelTransformation() const;
-   const vector<double>& getScale() const;
+   const std::vector<double>& getTiePoint() const;
+   const std::vector<double>& getModelTransformation() const;
+   const std::vector<double>& getScale() const;
 
    int getWidth() const;
    int getLength() const;
-   int getSamplesPerPixel() const;
+/*    int getSamplesPerPixel() const; */
+
+   /** Prints data members. */
+   virtual std::ostream& print(std::ostream& out) const;
    
 private:
 
    // Disallow ...
    ossimGeoTiff(const ossimGeoTiff* rhs) {}
    ossimGeoTiff& operator=(const ossimGeoTiff& rhs) { return *this; }
-   
-   /**
-    *  Reads geo keys.
-    *  Returns true on success, false on error.
-    */
-   bool readGeoKeys(ifstream& str, std::streampos offset, int length);
-
-   /**
-    *  Initializes s reference.  Does byte swapping as needed.
-    */
-   void readShort(ossim_uint16& s, ifstream& str);
-   
-   /**
-    *  Initializes l reference.  Does byte swapping as needed.
-    */
-   void readLong(ossim_int32& l, ifstream& str);   
-   
-
-   /**
-    *  Initializes l reference.  Does byte swapping as needed.
-    */
-   void readLong(ossim_uint32& l, ifstream& str);
-      
-   /**
-    *  Initializes l reference.  Does byte swapping as needed.
-    */
-   void readDouble(ossim_float64& d, ifstream& str);   
 
    /**
     *  Attempts to parse the pcs code (3072).
@@ -215,11 +180,28 @@ private:
     *  base on "theLiniarUnitsCode".
     */
    double convert2meters(double d) const;
-      
+
+   /**
+    * @return true if conditions are present to use model transform; false
+    * if not.
+    */
+   bool getModelTransformFlag() const;
+
+   /**
+    * Initializes tieSet from theTiePoints.  Has logic to shift one based
+    * ties to be zero based like the rest of the code.
+    */
+   void getTieSet(ossimTieGptSet& tieSet) const;
+
+   /**
+    * Attempts to detect if tie points are one or zero based.
+    * @return true if one base, false if not.
+    */
+   bool hasOneBasedTiePoints() const;
+
+   TIFF*                 theTiffPtr;
    ossim_uint32          theGeoKeyOffset;
    int                   theGeoKeyLength;
-   ossimByteOrder        theTiffByteOrder;
-   ossimEndian           theEndian;
    bool                  theGeoKeysPresentFlag;
    int                   theZone;
    ossimString           theHemisphere;
@@ -228,36 +210,27 @@ private:
    ossimString           theProjectionName;
    ossimString           theDatumName;
    
-   vector<double>        theScale;                         // tag 33550
-   vector<double>        theTiePoint;                      // tag 33922
-   vector<double>        theModelTransformation;           // tag 34264
-   double*               theDoubleParam;                   // tag 34736
-   char*                 theAsciiParam;                    // tag 34737
+   std::vector<double>   theScale;                         // tag 33550
+   std::vector<double>   theTiePoint;                      // tag 33922
+   std::vector<double>   theModelTransformation;           // tag 34264
+   std::vector<double>   theDoubleParam;                   // tag 34736
+   ossimString           theAsciiParam;                    // tag 34737
    
-   int                   theWidth;                         // tag 256
-   int                   theLength;                        // tag 257
-   vector<ossim_uint16>  theBitsPerSample;                 // tag 258
-   CompressType          theCompresionType;                // tag 259
-   PhotoInterpretation   thePhotoInterpretation;           // tag 262
-   ossimString           theImageDescriptionString;        // tag 270
-   int                   theSamplesPerPixel;               // tag 277
-   int                   thePlanarConfig;                  // tag 284
-   ossimString           theSoftwareDescriptionString;     // tag 305
-   ossimString           theDateDescriptionString;         // tag 306
-   int                   theTileWidth;                     // tag 322
-   int                   theTileLength;                    // tag 323
+   ossim_uint32          theWidth;                         // tag 256
+   ossim_uint32          theLength;                        // tag 257
+   ossim_uint16          theBitsPerSample;                 // tag 258
 
    ModelType             theModelType;                     // key 1024
-   int                   theRasterType;                    // key 1025
-   int                   theGcsCode;                       // key 2048
-   int                   theDatumCode;                     // key 2050
-   int                   theAngularUnits;                  // key 2054
-   int                   thePcsCode;                       // key 3072
+   ossim_uint16          theRasterType;                    // key 1025
+   ossim_uint16          theGcsCode;                       // key 2048
+   ossim_uint16          theDatumCode;                     // key 2050
+   ossim_uint16          theAngularUnits;                  // key 2054
+   ossim_uint32          thePcsCode;                       // key 3072
    bool                  theSavePcsCodeFlag;
    ossimString           thePcsCitation;                   // key 3073
-   int                   theProjGeoCode;                   // key 3074
-   int                   theCoorTransGeoCode;              // key 3075
-   int                   theLinearUnitsCode;               // key 3076
+   ossim_uint16          theProjGeoCode;                   // key 3074
+   ossim_uint16          theCoorTransGeoCode;              // key 3075
+   ossim_uint16          theLinearUnitsCode;               // key 3076
    double                theStdPar1;                       // key 3078 
    double                theStdPar2;                       // key 3079
    mutable double        theOriginLon;                     // key 3080

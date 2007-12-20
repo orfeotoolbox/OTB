@@ -1,9 +1,6 @@
 //----------------------------------------------------------------------------
-// Copyright (c) 2005, David Burken, all rights reserved.
 //
-// License:  LGPL
-// 
-// See LICENSE.txt file in the top level directory for more details.
+// License:  See top level LICENSE.txt file.
 //
 // Author:  David Burken
 //
@@ -13,7 +10,7 @@
 // ossimSrtmElevSource given a ground point.
 //
 //----------------------------------------------------------------------------
-// $Id: ossimSrtmFactory.cpp 9094 2006-06-13 19:12:40Z dburken $
+// $Id: ossimSrtmFactory.cpp 11179 2007-06-07 19:55:00Z dburken $
 
 #include <iostream>
 #include <iomanip>
@@ -125,8 +122,8 @@ ossimElevSource* ossimSrtmFactory::getNewElevSource(const ossimGpt& gpt) const
          << std::endl;
    }
 
-   ossimRefPtr<ossimIStream> is = ossimStreamFactoryRegistry::instance()->
-      createNewInputStream(srtmFile, std::ios::in | std::ios::binary);
+   ossimRefPtr<ossimIFStream> is = ossimStreamFactoryRegistry::instance()->
+      createNewIFStream(srtmFile, std::ios::in | std::ios::binary);
 
    // Look for the file mix case, then all lower case, then all upper case.
    if (is.valid())
@@ -138,7 +135,7 @@ ossimElevSource* ossimSrtmFactory::getNewElevSource(const ossimGpt& gpt) const
          srtmFile = theDirectory.dirCat(srtmFileBasename);
          
          is =  ossimStreamFactoryRegistry::instance()->
-            createNewInputStream(srtmFile, std::ios::in | std::ios::binary);      
+            createNewIFStream(srtmFile, std::ios::in | std::ios::binary);      
          if (is.valid())
          {
             if(is->fail())
@@ -147,7 +144,7 @@ ossimElevSource* ossimSrtmFactory::getNewElevSource(const ossimGpt& gpt) const
                srtmFileBasename = srtmFileBasename.upcase();
                srtmFile = theDirectory.dirCat(srtmFileBasename);
                is =  ossimStreamFactoryRegistry::instance()->
-                  createNewInputStream(srtmFile, std::ios::in | std::ios::binary);
+                  createNewIFStream(srtmFile, std::ios::in | std::ios::binary);
             }
          }
       }

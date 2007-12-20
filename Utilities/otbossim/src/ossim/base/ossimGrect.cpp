@@ -9,7 +9,7 @@
 // Description:
 //
 //*************************************************************************
-// $Id: ossimGrect.cpp 9094 2006-06-13 19:12:40Z dburken $
+// $Id: ossimGrect.cpp 11955 2007-10-31 16:10:22Z gpotts $
 
 #include <ossim/base/ossimGrect.h>
 using namespace std;
@@ -221,13 +221,13 @@ bool ossimGrect::intersects(const ossimGrect& rect) const
       return false;
    }
    
-   ossim_float64  ulx = ossimMax(rect.ul().lon, ul().lon);
-   ossim_float64  lrx = ossimMin(rect.lr().lon, lr().lon);
+   ossim_float64  ulx = ossim::max(rect.ul().lon, ul().lon);
+   ossim_float64  lrx = ossim::min(rect.lr().lon, lr().lon);
    ossim_float64  uly, lry;
    bool rtn;
    
-   uly  = ossimMin(rect.ul().lat, ul().lat);
-   lry  = ossimMax(rect.lr().lat, lr().lat);
+   uly  = ossim::min(rect.ul().lat, ul().lat);
+   lry  = ossim::max(rect.lr().lat, lr().lat);
    rtn = ((ulx <= lrx) && (uly >= lry));
    
       return (rtn);

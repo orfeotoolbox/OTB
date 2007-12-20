@@ -1,34 +1,37 @@
 //*******************************************************************
-// Copyright (C) 2000 ImageLinks Inc.
 //
 // License:  See top level LICENSE.txt file.
 //
 // Author: Garrett Potts
 //*******************************************************************
-//  $Id: ossimStatePlaneProjectionInfo.cpp 9094 2006-06-13 19:12:40Z dburken $
+//  $Id: ossimStatePlaneProjectionInfo.cpp 12096 2007-11-30 20:24:13Z dburken $
+
 #include <ossim/projection/ossimStatePlaneProjectionInfo.h>
 #include <ossim/projection/ossimTransMercatorProjection.h>
 #include <ossim/projection/ossimLambertConformalConicProjection.h>
 #include <ossim/base/ossimKeywordNames.h>
+#include <ossim/base/ossimKeywordlist.h>
 #include <ossim/base/ossimDatumFactory.h>
 #include <ossim/base/ossimConstants.h>
 #include <ossim/base/ossimUnitTypeLut.h>
 
-ossimStatePlaneProjectionInfo::ossimStatePlaneProjectionInfo(char*  name,
-                                                             int    pcsCode,
-                                                             char*  projName,
-                                                             char*  param1,
-                                                             char*  param2,
-                                                             char*  param3,
-                                                             char*  param4,
-                                                             double falseEast,
-                                                             double falseNorth,
-                                                             char*  units)
+ossimStatePlaneProjectionInfo::ossimStatePlaneProjectionInfo(
+   const std::string&  name,
+   int                 pcsCode,
+   const std::string&  projName,
+   const std::string&  param1,
+   const std::string&  param2,
+   const std::string&  param3,
+   const std::string&  param4,
+   double              falseEast,
+   double              falseNorth,
+   const std::string&  units,
+   const ossimDatum*   datum)
    :
       thePcsCode        (pcsCode),
       theName           (name),
       theProjectionName (projName),
-      theDatum          (0),
+      theDatum          (datum),
       theOriginLat      (param1),
       theOriginLon      (param2),
       theOrigin         (),
@@ -44,13 +47,18 @@ ossimStatePlaneProjectionInfo::ossimStatePlaneProjectionInfo(char*  name,
    theParameter3 = ossimDms(param3).getDegrees();
    theParameter4 = ossimDms(param4).getDegrees();
 
-   if(theName.contains("NAD27"))
+   if (!theDatum)
    {
-      theDatum = ossimDatumFactory::instance()->create("NAS-C"); // NAD 1927
-   }
-   else
-   {
-      theDatum = ossimDatumFactory::instance()->create("NAR-C");  // NAD 1983
+      if(theName.contains("NAD27"))
+      {
+         // NAD 1927
+         theDatum = ossimDatumFactory::instance()->create("NAS-C"); 
+      }
+      else
+      {
+         // NAD 1983
+         theDatum = ossimDatumFactory::instance()->create("NAR-C");  
+      }
    }
 
    theOrigin = ossimGpt(theOriginLat.getDegrees(),
@@ -59,21 +67,23 @@ ossimStatePlaneProjectionInfo::ossimStatePlaneProjectionInfo(char*  name,
                         theDatum);   
 }
 
-ossimStatePlaneProjectionInfo::ossimStatePlaneProjectionInfo(char*  name,
-                                                             int    pcsCode,
-                                                             char*  projName,
-                                                             char*  param1,
-                                                             char*  param2,
-                                                             double param3,
-                                                             double param4,
-                                                             double falseEast,
-                                                             double falseNorth,
-                                                             char*  units)
+ossimStatePlaneProjectionInfo::ossimStatePlaneProjectionInfo(
+   const std::string&  name,
+   int                 pcsCode,
+   const std::string&  projName,
+   const std::string&  param1,
+   const std::string&  param2,
+   double              param3,
+   double              param4,
+   double              falseEast,
+   double              falseNorth,
+   const std::string&  units,
+   const ossimDatum*   datum)
    :
       thePcsCode        (pcsCode),
       theName           (name),
       theProjectionName (projName),
-      theDatum          (0),
+      theDatum          (datum),
       theOriginLat      (param1),
       theOriginLon      (param2),
       theOrigin         (),
@@ -84,13 +94,18 @@ ossimStatePlaneProjectionInfo::ossimStatePlaneProjectionInfo(char*  name,
       theScaleFactor    (0.0),
       theUnits          (units)
 {
-   if(theName.contains("NAD27"))
+   if (!theDatum)
    {
-      theDatum = ossimDatumFactory::instance()->create("NAS-C"); // NAD 1927
-   }
-   else
-   {
-      theDatum = ossimDatumFactory::instance()->create("NAR-C");  // NAD 1983
+      if(theName.contains("NAD27"))
+      {
+         // NAD 1927
+         theDatum = ossimDatumFactory::instance()->create("NAS-C"); 
+      }
+      else
+      {
+         // NAD 1983
+         theDatum = ossimDatumFactory::instance()->create("NAR-C");  
+      }
    }
 
    theOrigin = ossimGpt(theOriginLat.getDegrees(),
@@ -347,7 +362,8 @@ bool ossimStatePlaneProjectionInfo::matchesProjection(
    return false;
 }
 
-ostream& operator<<(ostream& os, const ossimStatePlaneProjectionInfo& thePlane)
+std::ostream& operator<<(std::ostream& os,
+                         const ossimStatePlaneProjectionInfo& thePlane)
 {
    if (thePlane.projName()== STATIC_TYPE_NAME(ossimTransMercatorProjection))
    {

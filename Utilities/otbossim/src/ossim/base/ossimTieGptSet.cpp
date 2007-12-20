@@ -273,7 +273,7 @@ ossimTieGptSet::getGroundBoundaries(ossimGpt& gBoundInf, ossimGpt& gBoundSup)con
       if (gp.lon < gBoundInf.lon) gBoundInf.lon = gp.lon;
       if (gp.lat > gBoundSup.lat) gBoundSup.lat = gp.lat;
       if (gp.lat < gBoundInf.lat) gBoundInf.lat = gp.lat;
-      if (gp.hgt != OSSIM_DBL_NAN)
+      if (ossim::isnan(gp.hgt) == false)
       {
          if (gp.hgt > gBoundSup.hgt) gBoundSup.hgt = gp.hgt;
          if (gp.hgt < gBoundInf.hgt) gBoundInf.hgt = gp.hgt;

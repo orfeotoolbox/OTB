@@ -8,7 +8,7 @@
 // overview files.
 // 
 //----------------------------------------------------------------------------
-// $Id: ossimMpiMasterOverviewSequencer.cpp 10273 2007-01-15 15:41:26Z dburken $
+// $Id: ossimMpiMasterOverviewSequencer.cpp 12099 2007-12-01 16:09:36Z dburken $
 
 #include <ossim/parallel/ossimMpiMasterOverviewSequencer.h>
 #include <ossim/ossimConfig.h> /* To pick up OSSIM_HAS_MPI. */
@@ -75,7 +75,7 @@ ossimRefPtr<ossimImageData> ossimMpiMasterOverviewSequencer::getNextTile()
    {
       if (theImageHandler->getOutputScalarType() != OSSIM_UINT8)
       {
-         if (ossimGetByteOrder() != OSSIM_BIG_ENDIAN)
+         if (ossim::byteOrder() != OSSIM_BIG_ENDIAN)
          {
             endian = new ossimEndian();
          }
@@ -83,7 +83,6 @@ ossimRefPtr<ossimImageData> ossimMpiMasterOverviewSequencer::getNextTile()
    }
 
    int         errorValue;
-   MPI_Status  status;
 
    // Buffer to receive the data from slaves.
    void* buf = theTile->getBuf();
@@ -102,7 +101,7 @@ ossimRefPtr<ossimImageData> ossimMpiMasterOverviewSequencer::getNextTile()
                          theCurrentTileNumber%(theNumberOfProcessors-1)+1,
                          0,
                          MPI_COMM_WORLD,
-                         &status);
+                         MPI_STATUS_IGNORE);
 
    // Data always sent in big endian order.
    if ( endian )

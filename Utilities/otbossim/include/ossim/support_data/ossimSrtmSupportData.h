@@ -12,7 +12,7 @@
 // Support data class for a Shuttle Radar Topography Mission (SRTM) file.
 //
 //----------------------------------------------------------------------------
-// $Id: ossimSrtmSupportData.h 9261 2006-07-14 20:47:30Z dburken $
+// $Id: ossimSrtmSupportData.h 11184 2007-06-08 02:21:08Z gpotts $
 #ifndef ossimSrtmSupportData_HEADER
 #define ossimSrtmSupportData_HEADER
 
@@ -187,7 +187,7 @@ private:
 
    ossimScalarType theScalarType;
 
-   mutable ossimRefPtr<ossimIStream> theFileStream;
+   mutable ossimRefPtr<ossimIFStream> theFileStream;
    template <class T>
    bool computeMinMaxTemplate(T dummy,
                               double defaultNull);

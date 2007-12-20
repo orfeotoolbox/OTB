@@ -70,6 +70,12 @@
 #include <string.h>
 #include <ossim/vpfutil/vpftable.h>
 #include <ossim/vpfutil/vpfmisc.h>
+#  ifndef min
+#    define min(a,b) ((a) <= (b) ? (a) : (b))
+#  endif
+#  ifndef max
+#    define max(a,b) ((a) <= (b) ? (b) : (a))
+#  endif
 
 extern int STORAGE_BYTE_ORDER;
 

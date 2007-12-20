@@ -1,8 +1,6 @@
 //*****************************************************************************
 // FILE: ossimNitfRpcModel.cc
 //
-// Copyright (C) 2001 ImageLinks, Inc.
-//
 // License:  See top level LICENSE.txt file.
 //
 // AUTHOR: Oscar Kramer
@@ -14,12 +12,13 @@
 // LIMITATIONS: None.
 //
 //*****************************************************************************
-//  $Id: ossimNitfRpcModel.cpp 9576 2006-09-15 19:10:45Z dburken $
+//  $Id: ossimNitfRpcModel.cpp 11981 2007-11-02 16:33:10Z dburken $
 
 #include <ossim/projection/ossimNitfRpcModel.h>
 
 RTTI_DEF1(ossimNitfRpcModel, "ossimNitfRpcModel", ossimRpcModel);
 
+#include <ossim/base/ossimException.h>
 #include <ossim/base/ossimKeywordlist.h>
 #include <ossim/base/ossimNotifyContext.h>
 #include <ossim/support_data/ossimNitfFile.h>
@@ -44,12 +43,16 @@ static const char* STDIDC_TAG = "STDIDC";
 static const char* USE00A_TAG = "USE00A";
 
 ossimNitfRpcModel::ossimNitfRpcModel()
-  :ossimRpcModel()
+   :
+   ossimRpcModel(),
+   theDecimation(1.0)
 {
 }
 
 ossimNitfRpcModel::ossimNitfRpcModel(const ossimNitfRpcModel& rhs)
-  :ossimRpcModel(rhs)
+  :
+   ossimRpcModel(rhs),
+   theDecimation(1.0)
 {
 }
 
@@ -61,7 +64,8 @@ ossimNitfRpcModel::ossimNitfRpcModel(const ossimNitfRpcModel& rhs)
 //*****************************************************************************
 ossimNitfRpcModel::ossimNitfRpcModel(const ossimFilename& nitfFile)
    :
-      ossimRpcModel()
+   ossimRpcModel(),
+   theDecimation(1.0)
 {
    if (traceExec())
    {
@@ -69,20 +73,68 @@ ossimNitfRpcModel::ossimNitfRpcModel(const ossimFilename& nitfFile)
          << "DEBUG ossimNitfRpcModel::ossimNitfRpcModel(nitfFile): entering..."
          << std::endl;
    }
+   if(!parseFile(nitfFile))
+   {
+      if (traceExec())
+      {
+         ossimNotify(ossimNotifyLevel_DEBUG)
+            << "DEBUG ossimNitfRpcModel::ossimNitfRpcModel(nitfFile): Unable to parse file " << nitfFile
+            << std::endl;
+      }
+      ++theErrorStatus;
+   }
 
+   if (traceExec())
+   {
+      ossimNotify(ossimNotifyLevel_DEBUG)
+         << "DEBUG ossimNitfRpcModel::ossimNitfRpcModel(nitfFile): returning..."
+         << std::endl;
+   }
+}
+
+ossimObject* ossimNitfRpcModel::dup() const
+{
+   return new ossimNitfRpcModel(*this);
+}
+
+bool ossimNitfRpcModel::parseFile(const ossimFilename& nitfFile)
+{
    ossimRefPtr<ossimNitfFile> file = new ossimNitfFile;
 
    if(!file->parseFile(nitfFile))
    {
-      return;
+      setErrorStatus();
+      return false;
    }
 
    ossimRefPtr<ossimNitfImageHeader> ih = file->getNewImageHeader(0);
    if(!ih)
    {
-      return;
+      setErrorStatus();
+      return false;
    }
 
+   //---
+   // Get the decimation if any from the header "IMAG" field.
+   // 
+   // Look for string like:
+   // "/2" = 1/2
+   // "/4  = 1/4
+   // ...
+   // "/16 = 1/16
+   // If it is full resolution it should be "1.0"
+   //---
+   ossimString os = ih->getImageMagnification();
+   if ( os.contains("/") )
+   {
+      os = os.after("/");
+      ossim_float64 d = os.toFloat64();
+      if (d)
+      {
+         theDecimation = 1.0 / d;
+      }
+   }
+   
    //***
    // Fetch Image ID:
    //***
@@ -90,11 +142,13 @@ ossimNitfRpcModel::ossimNitfRpcModel(const ossimFilename& nitfFile)
 
    ossimIrect imageRect = ih->getImageRect();
    
-   //***
+   //---
    // Fetch Image Size:
-   //***
-   theImageSize.line = imageRect.height();
-   theImageSize.samp = imageRect.width();
+   //---
+   theImageSize.line =
+      static_cast<ossim_int32>(imageRect.height() / theDecimation);
+   theImageSize.samp =
+      static_cast<ossim_int32>(imageRect.width() / theDecimation);
 
    // Search for the STDID Tag to fetch mission (satellite) name:
    getSensorID(ih.get());
@@ -104,13 +158,12 @@ ossimNitfRpcModel::ossimNitfRpcModel(const ossimFilename& nitfFile)
       if (traceDebug())
       {
          ossimNotify(ossimNotifyLevel_DEBUG)
-            << "ossimNitfRpcModel::ossimNitfRpcModel DEBUG:"
+            << "ossimNitfRpcModel::parseFile DEBUG:"
             << "\nError parsing rpc tags.  Aborting with error."
             << std::endl;
       }
-
-      ++theErrorStatus;
-      return;
+      setErrorStatus();
+      return false;
    }
 
    //***
@@ -129,58 +182,32 @@ ossimNitfRpcModel::ossimNitfRpcModel(const ossimFilename& nitfFile)
    theImageClipRect = ossimDrect(0.0, 0.0,
                                  theImageSize.samp-1, theImageSize.line-1);
 
-   //***
+   //---
    // Assign the bounding ground polygon:
-   //***
+   //
+   // NOTE:  We will use the base ossimRpcModel for transformation since all
+   // of our calls are in full image space (not decimated).
+   //---
    ossimGpt v0, v1, v2, v3;
    ossimDpt ip0 (0.0, 0.0);
-   lineSampleHeightToWorld(ip0, theHgtOffset, v0);
+   ossimRpcModel::lineSampleHeightToWorld(ip0, theHgtOffset, v0);
    ossimDpt ip1 (theImageSize.samp-1.0, 0.0);
-   lineSampleHeightToWorld(ip1, theHgtOffset, v1);
+   ossimRpcModel::lineSampleHeightToWorld(ip1, theHgtOffset, v1);
    ossimDpt ip2 (theImageSize.samp-1.0, theImageSize.line-1.0);
-   lineSampleHeightToWorld(ip2, theHgtOffset, v2);
+   ossimRpcModel::lineSampleHeightToWorld(ip2, theHgtOffset, v2);
    ossimDpt ip3 (0.0, theImageSize.line-1.0);
-   lineSampleHeightToWorld(ip3, theHgtOffset, v3);
+   ossimRpcModel::lineSampleHeightToWorld(ip3, theHgtOffset, v3);
 
    theBoundGndPolygon
       = ossimPolygon (ossimDpt(v0), ossimDpt(v1), ossimDpt(v2), ossimDpt(v3));
 
-   
-   lineSampleHeightToWorld(theRefImgPt, theHgtOffset, theRefGndPt);
+   updateModel();
 
-   //---
-   // See bugzilla #1187
-   // Since the rpc model can compute the ground sample distance (gsd)
-   // accurately, and
-   // we have experienced bad "MEANGSD" fields in the PIAIMC tag the code
-   // has been changed to always compute "theGSD".  Since the gsd is for
-   // user information purposes only, in other words, not used in the
-   // ossimRpcModel::neSampleHeightToWorld this is a very safe code change.
-   //---
-   {
-      // Limit the scope of all this {} ...
-      ossimGpt rightGpt;
-      ossimGpt topGpt;
-      
-      lineSampleHeightToWorld(theRefImgPt + ossimDpt(1, 0),
-                              theHgtOffset,
-                              rightGpt);
-      lineSampleHeightToWorld(theRefImgPt + ossimDpt(0, -1),
-                              theHgtOffset,
-                              topGpt);
-      ossimEcefPoint rightPt = rightGpt;
-      ossimEcefPoint topPt   = topGpt;
-      ossimEcefPoint origin  = theRefGndPt;
-      
-      ossim_float64 gsdx = (rightPt-origin).magnitude();
-      ossim_float64 gsdy = (topPt-origin).magnitude();
-      theGSD.x = (gsdx + gsdy)/2.0;
-      theGSD.y = theGSD.x;
-   }
-   
-   theMeanGSD = (theGSD.x + theGSD.y)/2.0;
-   if (ossimString::toString(theRefGndPt.lat).trim().upcase() == "NAN" 
-       || ossimString::toString(theRefGndPt.lon).trim().upcase() == "NAN")
+   // Set the ground reference point.
+   ossimRpcModel::lineSampleHeightToWorld(theRefImgPt,
+                                          theHgtOffset,
+                                          theRefGndPt);
+   if ( theRefGndPt.isLatNan() || theRefGndPt.isLonNan() )
    {
       if (traceDebug())
       {
@@ -190,32 +217,95 @@ ossimNitfRpcModel::ossimNitfRpcModel(const ossimFilename& nitfFile)
             << " Aborting with error..."
             << std::endl;
       }
-
-      ++theErrorStatus;
-      return;
+      setErrorStatus();
+      return false;
    }
 
-   ossimString drivePart;
-   ossimString pathPart;
-   ossimString filePart;
-   ossimString extPart;
-   nitfFile.split(drivePart,
-                  pathPart,
-                  filePart,
-                  extPart);
-   
+   //---
+   // This will set theGSD and theMeanGSD.  This model doesn't need these but
+   // others do.
+   //---
+   try
+   {
+      computeGsd();
+   }
+   catch (const ossimException& e)
+   {
+      if (traceDebug())
+      {
+         ossimNotify(ossimNotifyLevel_DEBUG)
+            << "ossimNitfRpcModel::ossimNitfRpcModel DEBUG:\n"
+            << e.what() << std::endl;
+      }
+   }
+
    if (traceExec())
    {
       ossimNotify(ossimNotifyLevel_DEBUG)
-         << "DEBUG ossimNitfRpcModel::ossimNitfRpcModel: returning..."
+         << "DEBUG ossimNitfRpcModel::parseFile: returning..."
          << std::endl;
    }
+   
+   return true;
+}
+void ossimNitfRpcModel::worldToLineSample(const ossimGpt& world_point,
+                                          ossimDpt&       image_point) const
+{
+   // Get the full res (not decimated) point.
+   ossimRpcModel::worldToLineSample(world_point, image_point);
+
+   // Apply decimation.
+   image_point.x = image_point.x * theDecimation;
+   image_point.y = image_point.y * theDecimation;
+}
+
+void ossimNitfRpcModel::lineSampleHeightToWorld(
+   const ossimDpt& image_point,
+   const double&   heightEllipsoid,
+   ossimGpt&       worldPoint) const
+{
+   // Convert image point to full res (not decimated) point.
+   ossimDpt pt;
+   pt.x = image_point.x / theDecimation;
+   pt.y = image_point.y / theDecimation;
+
+   // Call base...
+   ossimRpcModel::lineSampleHeightToWorld(pt, heightEllipsoid, worldPoint);
+}
+
+bool ossimNitfRpcModel::saveState(ossimKeywordlist& kwl,
+                                  const char* prefix) const
+{
+   // Save the decimation.
+   kwl.add(prefix, "decimation", theDecimation);
+
+   // Call base.
+   return ossimRpcModel::saveState(kwl, prefix);
+}
+
+bool ossimNitfRpcModel::loadState(const ossimKeywordlist& kwl,
+                                  const char* prefix)
+{
+   // Lookup decimation.
+   const char* value = kwl.find(prefix, "decimation");
+   if (value)
+   {
+      theDecimation = ossimString(value).toFloat64();
+      if (theDecimation <= 0.0)
+      {
+         // Do not allow negative or "0.0"(divide by zero).
+         theDecimation = 1.0;
+      }
+   }
+
+   // Call base.
+   return ossimRpcModel::loadState(kwl, prefix);
 }
 
 void ossimNitfRpcModel::getGsd(const ossimNitfImageHeader* ih)
 {
-   theGSD.line = OSSIM_DBL_NAN;
-   theGSD.samp = OSSIM_DBL_NAN;
+   theGSD.line = ossim::nan();
+   theGSD.samp = ossim::nan();
 
    if (!ih)
    {
@@ -284,7 +374,7 @@ bool ossimNitfRpcModel::getRpcData(const ossimNitfImageHeader* ih)
    }
 
    // Get the the RPC tag:
-   ossimNitfRpcBase* rpcTag = NULL;
+   ossimNitfRpcBase* rpcTag = 0;
 
    // Look for the RPC00B tag first.
    ossimRefPtr<ossimNitfRegisteredTag> tag = ih->getTagData(RPC00B_TAG);
@@ -311,6 +401,19 @@ bool ossimNitfRpcModel::getRpcData(const ossimNitfImageHeader* ih)
             << "ossimNitfRpcModel::getRpcData DEBUG:"
             << "\nCould not find neither RPC tags <" << RPC00A_TAG
             << "> nor <" << RPC00B_TAG
+            << "\nAborting with error..."
+            << std::endl;
+      }
+      return false;
+   }
+
+   if ( rpcTag->getSuccess() == false )
+   {
+      if (traceDebug())
+      {
+         ossimNotify(ossimNotifyLevel_DEBUG)
+            << "ossimNitfRpcModel::getRpcData DEBUG:"
+            << "\nSuccess flag set to false."
             << "\nAborting with error..."
             << std::endl;
       }

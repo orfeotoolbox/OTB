@@ -5,7 +5,7 @@
 // AUTHOR: Garrett Potts (gpotts@imagelinks.com)
 //
 //*****************************************************************************
-//  $Id: ossimActiveEdgeTable.cpp 9966 2006-11-29 02:01:07Z gpotts $
+//  $Id: ossimActiveEdgeTable.cpp 11347 2007-07-23 13:01:59Z gpotts $
 #include <ossim/base/ossimActiveEdgeTable.h>
 #include <ossim/base/ossimPolygon.h>
 #include <ossim/base/ossimLine.h>
@@ -34,8 +34,8 @@ void ossimActiveEdgeTable::addPolygon(const ossimPolygon& polygon)
       {
          // CURRENT EDGE IS FROM polygon[i] to polygon[(i+1)%numPts]
          int iNext = (i+1)%numPts;  // INDEX FOR SECOND EDGE VERTEX
-         iNextY = irint(polygon[iNext].y-theRectOrigin.y);
-         iY = (irint)(polygon[i].y-theRectOrigin.y);
+         iNextY = ossim::round<ossim_int32>(polygon[iNext].y-theRectOrigin.y);
+         iY = ossim::round<ossim_int32>(polygon[i].y-theRectOrigin.y);
          int dy = (iNextY - iY);
          if (dy != 0)   // ADD ONLY IF EDGE NOT HORIZONTAL
          {
@@ -187,8 +187,8 @@ bool ossimActiveEdgeTableHelper::getNextLineSegment(ossimIpt& start,
    {
       int y = theEdgeTable->getCurrentScanLine()+getYShift();
       
-      start = ossimIpt( irint((*theIterator).theCurrentX),
-                        y);
+      start = ossimIpt(ossim::round<int>((*theIterator).theCurrentX),
+                       y);
       ++theIterator;
       if(theIterator == theEdgeTable->theActiveList.end())
       {
@@ -196,7 +196,7 @@ bool ossimActiveEdgeTableHelper::getNextLineSegment(ossimIpt& start,
       }
       else
       {
-         end = ossimIpt( irint((*theIterator).theCurrentX),
+         end = ossimIpt( ossim::round<int>((*theIterator).theCurrentX),
                          y);
          
          ++theIterator;

@@ -8,7 +8,7 @@
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimHistogramEqualization.cpp 9094 2006-06-13 19:12:40Z dburken $
+// $Id: ossimHistogramEqualization.cpp 11721 2007-09-13 13:19:34Z gpotts $
 #include <ossim/imaging/ossimHistogramEqualization.h>
 #include <ossim/base/ossimMultiResLevelHistogram.h>
 #include <ossim/base/ossimMultiBandHistogram.h>
@@ -35,13 +35,13 @@ ossimHistogramEqualization::ossimHistogramEqualization()
 }
 
 ossimHistogramEqualization::ossimHistogramEqualization(ossimImageSource* inputSource,
-                                                       ossimMultiResLevelHistogram* histogram)
+                                                       ossimRefPtr<ossimMultiResLevelHistogram> histogram)
    : ossimImageSourceHistogramFilter(inputSource, histogram),
-     theTile(NULL),
-     theAccumulationHistogram(NULL),
+     theTile(0),
+     theAccumulationHistogram(0),
      theInverseFlag(false)
 {
-   if(getHistogram())
+   if(getHistogram().valid())
    {
       theAccumulationHistogram = getHistogram()->createAccumulationLessThanEqual();
       initializeLuts();
@@ -49,14 +49,14 @@ ossimHistogramEqualization::ossimHistogramEqualization(ossimImageSource* inputSo
 }
 
 ossimHistogramEqualization::ossimHistogramEqualization(ossimImageSource* inputSource,
-                                                       ossimMultiResLevelHistogram* histogram,
+                                                       ossimRefPtr<ossimMultiResLevelHistogram> histogram,
                                                        bool inverseFlag)
    : ossimImageSourceHistogramFilter(inputSource, histogram),
      theTile(NULL),
-     theAccumulationHistogram(NULL),
+     theAccumulationHistogram(0),
      theInverseFlag(inverseFlag)
 {
-   if(getHistogram())
+   if(getHistogram().valid())
    {
       theAccumulationHistogram = getHistogram()->createAccumulationLessThanEqual();
       initializeLuts();
@@ -65,11 +65,6 @@ ossimHistogramEqualization::ossimHistogramEqualization(ossimImageSource* inputSo
 
 ossimHistogramEqualization::~ossimHistogramEqualization()
 {
-   if(theAccumulationHistogram)
-   {
-      delete theAccumulationHistogram;
-      theAccumulationHistogram = NULL;
-   }
    deleteLuts();
 }
 
@@ -175,7 +170,7 @@ ossimRefPtr<ossimImageData> ossimHistogramEqualization::getTile(
    return inputTile;
 }
 
-void ossimHistogramEqualization::setHistogram(ossimMultiResLevelHistogram* histogram)
+void ossimHistogramEqualization::setHistogram(ossimRefPtr<ossimMultiResLevelHistogram> histogram)
 {
    ossimImageSourceHistogramFilter::setHistogram(histogram);
    computeAccumulationHistogram();
@@ -235,13 +230,7 @@ bool ossimHistogramEqualization::loadState(const ossimKeywordlist& kwl,
 
 void ossimHistogramEqualization::computeAccumulationHistogram()
 {
-   if(theAccumulationHistogram)
-   {
-      delete theAccumulationHistogram;
-      theAccumulationHistogram = NULL;
-   }
-
-   if(getHistogram())
+   if(getHistogram().valid())
    {
       theAccumulationHistogram = getHistogram()->createAccumulationLessThanEqual();
    }
@@ -258,9 +247,9 @@ ossimRefPtr<ossimImageData> ossimHistogramEqualization::runEqualizationAlgorithm
    }
 
    // for now we will always pull from res 0 information
-   ossimMultiBandHistogram* histo = getHistogram()->getMultiBandHistogram(0);
+   ossimRefPtr<ossimMultiBandHistogram> histo = getHistogram()->getMultiBandHistogram(0);
 
-   if(histo)
+   if(histo.valid())
    {
       ossim_uint32 maxBands = ( (histo->getNumberOfBands() >
                                  tile->getNumberOfBands())?
@@ -271,11 +260,11 @@ ossimRefPtr<ossimImageData> ossimHistogramEqualization::runEqualizationAlgorithm
 
       for(ossim_uint32 band = 0; band < maxBands; ++band)
       {
-         ossimHistogram* bandHisto = histo->getHistogram(band);
+         ossimRefPtr<ossimHistogram> bandHisto = histo->getHistogram(band);
          T* buf = static_cast<T*>(tile->getBuf(band));
          double *histoLut = band<theForwardLut.size()?theForwardLut[band]:NULL;
          ossim_uint32 actualBand = theBandList[band];
-         if(bandHisto)
+         if(bandHisto.valid())
          {
             if(buf&&histoLut&&(actualBand <  histo->getNumberOfBands()))
             {
@@ -374,12 +363,12 @@ void ossimHistogramEqualization::initializeLuts()
    {
       return;
    }
-   ossimMultiBandHistogram* accumHisto = theAccumulationHistogram->getMultiBandHistogram(0);
-   ossimMultiBandHistogram* histogram  = getHistogram()->getMultiBandHistogram(0);
+   ossimRefPtr<ossimMultiBandHistogram> accumHisto = theAccumulationHistogram->getMultiBandHistogram(0);
+   ossimRefPtr<ossimMultiBandHistogram> histogram  = getHistogram()->getMultiBandHistogram(0);
    ossimKeywordlist kwl;
    theAccumulationHistogram->saveState(kwl);
 
-   if(accumHisto&&histogram)
+   if(accumHisto.valid()&&histogram.valid())
    {
       long maxBands = accumHisto->getNumberOfBands();
       
@@ -387,10 +376,10 @@ void ossimHistogramEqualization::initializeLuts()
       {
          // first we grab pointers to the histogram and the accumulation
          // histogram
-         ossimHistogram* h  = accumHisto->getHistogram(band);
-         ossimHistogram* h2 = histogram->getHistogram(band);
+         ossimRefPtr<ossimHistogram> h  = accumHisto->getHistogram(band);
+         ossimRefPtr<ossimHistogram> h2 = histogram->getHistogram(band);
 
-         if(h&&h2)
+         if(h.valid()&&h2.valid())
          {
             // lets get the number of indices.
             ossim_uint32 numberOfIndices = (ossim_uint32)h2->GetRes();
@@ -419,7 +408,7 @@ void ossimHistogramEqualization::initializeLuts()
             //
             for(idx = 0; idx < numberOfIndices; ++ idx)
             {
-               inverseLut[idx] = OSSIM_DBL_NAN;
+               inverseLut[idx] = ossim::nan();
             }
             for(idx = 0; idx < numberOfIndices; ++ idx)
             {
@@ -437,7 +426,7 @@ void ossimHistogramEqualization::initializeLuts()
             ossim_uint32 idxStart = 0;
             ossim_uint32 idxEnd = 0;
             
-            while((inverseLut[idxEnd] == OSSIM_DBL_NAN)&&(idxEnd <numberOfIndices)){ ++idxEnd;}
+            while((ossim::isnan(inverseLut[idxEnd]))&&(idxEnd <numberOfIndices)){ ++idxEnd;}
             if((idxStart!=idxEnd)&&(idxEnd<numberOfIndices))
             {
                std::fill(inverseLut,
@@ -445,7 +434,7 @@ void ossimHistogramEqualization::initializeLuts()
                          inverseLut[idxEnd]);
             }
             idxStart = numberOfIndices-1;
-            while((inverseLut[idxStart] == OSSIM_DBL_NAN)&&(idxStart > 0)){ --idxStart;}
+            while((ossim::isnan(inverseLut[idxStart]))&&(idxStart > 0)){ --idxStart;}
             if(idxStart !=0)
             {
                std::fill(inverseLut+idxStart,
@@ -461,9 +450,9 @@ void ossimHistogramEqualization::initializeLuts()
             while(idxStart < numberOfIndices)
             {
                idxEnd = idxStart;
-               if(inverseLut[idxStart] == OSSIM_DBL_NAN)
+               if(ossim::isnan(inverseLut[idxStart]))
                {
-                  while((inverseLut[idxEnd] == OSSIM_DBL_NAN)&&(idxEnd < (numberOfIndices-1))) ++idxEnd;
+                  while(ossim::isnan(inverseLut[idxEnd])&&(idxEnd < (numberOfIndices-1))) ++idxEnd;
                   double length = (idxEnd-idxStart)+1;
                   valueEnd = inverseLut[idxEnd];
                   double deltaVal = (valueEnd-valueStart);

@@ -17,7 +17,7 @@
 //         User Header Label (UHL) in South to North profile sequence.
 //
 //********************************************************************
-// $Id: ossimDtedRecord.h 10262 2007-01-14 18:58:38Z dburken $
+// $Id: ossimDtedRecord.h 11548 2007-08-09 19:39:20Z dburken $
 #ifndef ossimDtedRecord_H
 #define ossimDtedRecord_H
 #include <iosfwd>
@@ -149,12 +149,6 @@ private:
    ossim_int32  theStopOffset;
 
    /*!
-    *  Converts signed short to an interger.  Returns OSSIM_NAN if val is
-    *  a null value (-32767).
-    */
-   ossim_int32 convert(ossim_sint16 val);
-
-   /*!
     *  Compute the check sum for the Data Record and compare against
     *  the parsed check sum from the data record. This must be correct
     *  to be a valid data record. If not, there is a chance of a
@@ -164,14 +158,5 @@ private:
     */
    bool validateCheckSum(std::istream& in);
 };
-
-inline ossim_int32 ossimDtedRecord::convert(ossim_sint16 val)
-{
-   if(val == -32767) // Null value.
-         return static_cast<ossim_int32>(OSSIM_INT_NAN);
-   else
-       return static_cast<ossim_int32>(val);
-}
-
 
 #endif

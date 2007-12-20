@@ -1,9 +1,6 @@
 //*******************************************************************
-// Copyright (C) 2000 ImageLinks Inc. 
 //
-// License:  LGPL
-// 
-// See LICENSE.txt file in the top level directory for more details.
+// License:   See top level LICENSE.txt file.
 //
 // Author: Garrett Potts
 // 
@@ -13,7 +10,7 @@
 // derive from.
 //
 //********************************************************************
-// $Id: ossimImageHandler.h 9094 2006-06-13 19:12:40Z dburken $
+// $Id: ossimImageHandler.h 10804 2007-04-30 14:48:08Z dburken $
 #ifndef ossimImageHandler_HEADER
 #define ossimImageHandler_HEADER
 
@@ -500,7 +497,7 @@ public:
     * @note The implementation does nothing.  Derived classes that handle
     * multiple images should override.
     *
-    * @return true if it was able to set the current entryadn false otherwise
+    * @return true if it was able to set the current entry and false otherwise.
     */
    virtual bool setCurrentEntry(ossim_uint32 entryIdx);
 

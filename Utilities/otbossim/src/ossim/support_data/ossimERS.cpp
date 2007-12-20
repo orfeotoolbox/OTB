@@ -10,7 +10,7 @@
 // file format header.
 //
 //********************************************************************
-// $Id: ossimERS.cpp 10414 2007-02-01 17:45:09Z dburken $
+// $Id: ossimERS.cpp 11347 2007-07-23 13:01:59Z gpotts $
 
 #include <fstream>
 #include <iostream>
@@ -143,7 +143,7 @@ void ossimERS::parseRasterInfo(std::istream& in)
                                                 // need to check coordinatestype ("Cannot use Latitude with UTM projection")
          double deg, min, sec;
          sscanf (tokens[1].chars(), "%lg:%lg:%lg", &deg, &min, &sec);
-         theOriginX = ossimAbs(deg) + min/60.0 + sec/3600.0;
+         theOriginX = std::abs(deg) + min/60.0 + sec/3600.0;
          if (deg < 0.0)
          {
             theOriginX = -theOriginX;
@@ -154,7 +154,7 @@ void ossimERS::parseRasterInfo(std::istream& in)
       {	// ignore "RegistrationCoord"
          double deg, min, sec;
          sscanf (tokens[1].chars(), "%lg:%lg:%lg", &deg, &min, &sec);
-         theOriginY = ossimAbs(deg) + min/60.0 + sec/3600.0;
+         theOriginY = std::abs(deg) + min/60.0 + sec/3600.0;
          if (deg < 0.0)
          {
             theOriginY = -theOriginY;

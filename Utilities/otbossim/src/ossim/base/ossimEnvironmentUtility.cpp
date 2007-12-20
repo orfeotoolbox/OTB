@@ -12,6 +12,21 @@ ossimEnvironmentUtility* ossimEnvironmentUtility::theInstance=0;
 ossimEnvironmentUtility::ossimEnvironmentUtility()
 {
    theInstance = this;
+
+   ossimFilename dir = getUserOssimPluginDir();
+   
+   if(!dir.empty())
+   {
+      thePluginSearchPath.push_back(dir);
+   }
+   
+   dir = getInstalledOssimPluginDir();
+   if(!dir.empty())
+   {   
+      thePluginSearchPath.push_back(dir);
+   }
+
+   
 }
 
 ossimEnvironmentUtility* ossimEnvironmentUtility::instance()
@@ -133,6 +148,7 @@ ossimFilename ossimEnvironmentUtility::getInstalledOssimPluginDir()const
    }
 
    return result;
+
 }
 
 ossimFilename ossimEnvironmentUtility::getInstalledOssimPreferences()const
@@ -157,3 +173,90 @@ ossimFilename ossimEnvironmentUtility::getInstalledOssimPreferences()const
    return result;
    
 }
+
+ossimFilename ossimEnvironmentUtility::searchAllPaths(const ossimFilename& file)const
+{
+   ossimFilename result;
+
+   result = findPlugin(file);
+   if(!result.empty()) return result;
+
+   result = findData(file);
+
+
+   return result;
+}
+
+void ossimEnvironmentUtility::addDataSearchPath(const ossimFilename& path)
+{
+   theDataSearchPath.push_back(path);
+}
+
+void ossimEnvironmentUtility::addDataSearchPathToFront(const ossimFilename& path)
+{
+   theDataSearchPath.insert(theDataSearchPath.begin(), path);
+}
+
+void ossimEnvironmentUtility::addPluginSearchPath(const ossimFilename& path)
+{
+   thePluginSearchPath.push_back(path);
+}
+
+void ossimEnvironmentUtility::addPluginSearchPathToFront(const ossimFilename& path)
+{
+   thePluginSearchPath.insert(thePluginSearchPath.begin(), path);
+}
+
+ossimFilename ossimEnvironmentUtility::findPlugin(const ossimFilename& plugin)const
+{
+   for(ossimEnvironmentUtility::FilenameListType::const_iterator iter = thePluginSearchPath.begin();
+       iter != thePluginSearchPath.end();
+       ++iter)
+   {
+      ossimFilename temp = iter->dirCat(plugin);
+      if(temp.exists())
+      {
+         return temp;
+      }
+   }
+
+   return "";
+}
+
+ossimFilename ossimEnvironmentUtility::findData(const ossimFilename& data)const
+{
+   for(ossimEnvironmentUtility::FilenameListType::const_iterator iter = theDataSearchPath.begin();
+       iter != theDataSearchPath.end();
+       ++iter)
+   {
+      ossimFilename temp = iter->dirCat(data);
+      if(temp.exists())
+      {
+         return temp;
+      }
+   }
+
+   return "";
+}
+
+
+ossimEnvironmentUtility::FilenameListType& ossimEnvironmentUtility::getPluginSearchPath()
+{
+   return thePluginSearchPath;
+}
+
+const ossimEnvironmentUtility::FilenameListType& ossimEnvironmentUtility::getPluginSearchPath()const
+{
+   return thePluginSearchPath;
+}
+
+ossimEnvironmentUtility::FilenameListType& ossimEnvironmentUtility::getDataSearchPath()
+{
+   return theDataSearchPath;
+}
+
+const ossimEnvironmentUtility::FilenameListType& ossimEnvironmentUtility::getDataSearchPath()const
+{
+   return theDataSearchPath;
+}
+

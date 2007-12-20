@@ -25,7 +25,7 @@
 // LIMITATIONS: None.
 //
 //*****************************************************************************
-//  $Id: ossimSensorModel.cpp 10249 2007-01-13 21:26:02Z dburken $
+//  $Id: ossimSensorModel.cpp 12156 2007-12-10 15:16:54Z gpotts $
 #include <iostream>
 #include <sstream>
 using namespace std;
@@ -249,7 +249,7 @@ void ossimSensorModel::worldToLineSample(const ossimGpt& worldPoint,
 {
    //   static bool recursionFlag = false;
 
-   static const double PIXEL_THRESHOLD    = 0.1; // acceptable pixel error
+   static const double PIXEL_THRESHOLD    = .1; // acceptable pixel error
    static const int    MAX_NUM_ITERATIONS = 20;
 
 
@@ -272,26 +272,42 @@ void ossimSensorModel::worldToLineSample(const ossimGpt& worldPoint,
    {
       if (!(theBoundGndPolygon.pointWithin(wdp)))
       {
+         if(theSeedFunction.valid())
+         {
+            theSeedFunction->worldToLineSample(worldPoint, ip);
+         }
+         else
+         {
          //      recursionFlag = true;
-         ip = extrapolate(worldPoint);
+            ip = extrapolate(worldPoint);
          //      recursionFlag = false;
+         }
          return;
       }         
    }
+
    //***
    // Substitute zero for null elevation if present:
    //***
    double height = worldPoint.hgt;
-   if ((height == ossimElevSource::DEFAULT_NULL_HEIGHT)||
-       (height == OSSIM_DBL_NAN))
+   if ( ossim::isnan(height) )
+   {
       height = 0.0;
+   }
 
-   //***
+   //
    // Utilize iterative scheme for arriving at image point. Begin with guess
    // at image center:
-   //***
-   ip.u = theRefImgPt.u;
-   ip.v = theRefImgPt.v;
+   //
+   if(theSeedFunction.valid())
+   {
+      theSeedFunction->worldToLineSample(worldPoint, ip);
+   }
+   else
+   {
+      ip.u = theRefImgPt.u;
+      ip.v = theRefImgPt.v;
+   }
    
    ossimDpt ip_du;
    ossimDpt ip_dv;
@@ -300,7 +316,7 @@ void ossimSensorModel::worldToLineSample(const ossimGpt& worldPoint,
    double dlat_du, dlat_dv, dlon_du, dlon_dv;
    double delta_lat, delta_lon, delta_u, delta_v;
    double inverse_norm;
-   
+   bool done = false;
    //***
    // Begin iterations:
    //***
@@ -321,37 +337,52 @@ void ossimSensorModel::worldToLineSample(const ossimGpt& worldPoint,
       lineSampleHeightToWorld(ip_du, height, gp_du);
       lineSampleHeightToWorld(ip_dv, height, gp_dv);
 
+      if(gp.isLatNan() || gp.isLonNan())
+      {
+         gp = extrapolate(ip);
+      }
+      if(gp_du.isLatNan() || gp_du.isLonNan())
+      {
+         gp_du = extrapolate(ip_du);
+      }
+      if(gp_dv.isLatNan() | gp_dv.isLonNan())
+      {
+         gp_dv = extrapolate(ip_dv);
+         
+      }
       dlat_du = gp_du.lat - gp.lat; //e
       dlon_du = gp_du.lon - gp.lon; //g
       dlat_dv = gp_dv.lat - gp.lat; //f
       dlon_dv = gp_dv.lon - gp.lon; //h
-
-      //***
+      
+      //
       // Test for convergence:
-      //***
+      //
       delta_lat = worldPoint.lat - gp.lat;
       delta_lon = worldPoint.lon - gp.lon;
-      
-      //***
+
+
+      //
       // Compute linearized estimate of image point given gp delta:
-      //***
+      //
       inverse_norm = dlat_dv*dlon_du - dlat_du*dlon_dv; // fg-eh
-      if (inverse_norm != 0)
+      
+      if (!ossim::almostEqual(inverse_norm, 0.0, DBL_EPSILON))
       {
-          delta_u = (-dlon_dv*delta_lat + dlat_dv*delta_lon)/inverse_norm;
-          delta_v = ( dlon_du*delta_lat - dlat_du*delta_lon)/inverse_norm;
-          ip.u += delta_u;
-          ip.v += delta_v;
+         delta_u = (-dlon_dv*delta_lat + dlat_dv*delta_lon)/inverse_norm;
+         delta_v = ( dlon_du*delta_lat - dlat_du*delta_lon)/inverse_norm;
+         ip.u += delta_u;
+         ip.v += delta_v;
       }
       else
       {
          delta_u = 0;
          delta_v = 0;
       }
-
+      done = ((fabs(delta_u) < PIXEL_THRESHOLD)&&
+              (fabs(delta_v) < PIXEL_THRESHOLD));
       iters++;
-    } while (((fabs(delta_u) > PIXEL_THRESHOLD) ||
-              (fabs(delta_v) > PIXEL_THRESHOLD)) &&
+   } while ((!done) &&
              (iters < MAX_NUM_ITERATIONS));
 //    } while (((fabs(delta_u) > PIXEL_THRESHOLD) ||
 //              (fabs(delta_v) > PIXEL_THRESHOLD)) &&
@@ -362,10 +393,17 @@ void ossimSensorModel::worldToLineSample(const ossimGpt& worldPoint,
    // iterating. A linear (no iteration) solution would finish with iters =
    // MAX_NUM_ITERATIONS + 1:
    //***
-   if (iters == MAX_NUM_ITERATIONS)
+   if (iters >= MAX_NUM_ITERATIONS)
    {
+//       std::cout << "MAX ITERATION!!!" << std::endl;
+//       std::cout << "delta_u = "   << delta_u
+//                 << "\ndelta_v = " << delta_v << "\n";
    }
-
+   else
+   {
+//       std::cout << "ITERS === " << iters << std::endl;
+   }
+//    std::cout << "iters = " << iters << "\n";
    //***
    // The image point computed this way corresponds to full image space.
    // Apply image offset in the case this is a sub-image rectangle:
@@ -761,17 +799,25 @@ ossimGpt ossimSensorModel::extrapolate (const ossimDpt& imagePoint,
 {
    if (traceExec())  ossimNotify(ossimNotifyLevel_DEBUG) <<  "DEBUG ossimSensorModel::extrapolate: entering... " << std::endl;
 
-   //***
+   //---
    // If image point supplied has NaN components, return now with a NaN point.
    // This prevents an infinite recursion between model worldToLineSample
    // and this method:
-   //***
-   if ((imagePoint.line == OSSIM_DBL_NAN) || (imagePoint.samp == OSSIM_DBL_NAN))
+   //---
+   if (imagePoint.hasNans())
    {
       if (traceExec())  ossimNotify(ossimNotifyLevel_DEBUG) << "DEBUG ossimSensorModel::extrapolate: returning..." << std::endl;
-      return ossimGpt(OSSIM_DBL_NAN, OSSIM_DBL_NAN, OSSIM_DBL_NAN);
+      return ossimGpt(ossim::nan(), ossim::nan(), ossim::nan());
    }
 
+   if(theSeedFunction.valid())
+   {
+      ossimGpt wpt;
+
+      theSeedFunction->lineSampleToWorld(imagePoint, wpt);
+
+      return wpt;
+   }
    //***
    // Determine which edge is intersected by the radial, and establish
    // intersection:
@@ -797,7 +843,7 @@ ossimGpt ossimSensorModel::extrapolate (const ossimDpt& imagePoint,
    ossimGpt edgeGP;
    ossimGpt edgeGP_prime;
 
-   if (height == OSSIM_DBL_NAN)
+   if (ossim::isnan(height))
    {
       lineSampleToWorld(edgePt, edgeGP);
       lineSampleToWorld(edgePt_prime, edgeGP_prime);
@@ -823,13 +869,14 @@ ossimGpt ossimSensorModel::extrapolate (const ossimDpt& imagePoint,
 
    gpt.lat = edgeGP.lat + dlat_drad*delta_pixel;
    gpt.lon = edgeGP.lon + dlon_drad*delta_pixel;
-   if (height == ossimElevSource::DEFAULT_NULL_HEIGHT)
+   if ( ossim::isnan(height) )
    {
       gpt.hgt = ossimElevManager::instance()->getHeightAboveEllipsoid(gpt);
    }
    else
+   {
       gpt.hgt = height;
-   
+   }
    if (traceExec())  ossimNotify(ossimNotifyLevel_DEBUG) << "DEBUG ossimSensorModel::extrapolate: returning..." << std::endl;
    return gpt;
 }
@@ -846,19 +893,27 @@ ossimDpt ossimSensorModel::extrapolate (const ossimGpt& gpt) const
    if (traceExec())  ossimNotify(ossimNotifyLevel_DEBUG) <<  "DEBUG ossimSensorModel::extrapolate: entering... " << std::endl;
 
    double height = 0.0;
-   //***
+   //---
    // If ground point supplied has NaN components, return now with a NaN point.
-   //***
-   if ((gpt.lat==OSSIM_DBL_NAN) ||
-       (gpt.lon==OSSIM_DBL_NAN)) //||
+   //---
+   if ( (ossim::isnan(gpt.lat)) || (ossim::isnan(gpt.lon)) )
 //       (gpt.hgt==OSSIM_DBL_NAN))
    {
       if (traceExec())  ossimNotify(ossimNotifyLevel_DEBUG) << "DEBUG ossimSensorModel::extrapolate: returning..." << std::endl;
-      return ossimDpt(OSSIM_DBL_NAN, OSSIM_DBL_NAN);
+      return ossimDpt(ossim::nan(), ossim::nan());
    }
-   if(gpt.hgt != OSSIM_DBL_NAN)
+   if(ossim::isnan(gpt.hgt) == false)
    {
       height = gpt.hgt;
+   }
+   
+   if(theSeedFunction.valid())
+   {
+      ossimDpt ipt;
+
+      theSeedFunction->worldToLineSample(gpt, ipt);
+
+      return ipt;
    }
    //***
    // Determine which edge is intersected by the radial, and establish
@@ -1057,9 +1112,9 @@ ossimSensorModel::optimizeFit(const ossimTieGptSet& tieSet, double* targetVarian
    double olddamping = 0.0;
    bool found = false;
 
-//DEBUG TBR
-cout<<"rms="<<sqrt(ki2/nobs)<<" ";
-cout.flush();
+   //DEBUG TBR
+   // cout<<"rms="<<sqrt(ki2/nobs)<<" ";
+   // cout.flush();
 
    while ( (!found) && (iter < iter_max) ) //non linear optimization loop
    {

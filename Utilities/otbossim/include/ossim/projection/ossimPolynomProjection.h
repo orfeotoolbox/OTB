@@ -87,6 +87,13 @@ public:
    const ossim_float64& getHgtScale()const { return theHgtScale;}
    void setHgtScale(const ossim_float64& v) { theHgtScale = v; }
 
+   /**
+    * @brief Implementation of pure virtual
+    * ossimProjection::isAffectedByElevation method.
+    * @return true.
+    */
+   virtual bool isAffectedByElevation() const { return true; }
+
 protected:
    /**
     * desired exponents tuples set (for both line and sample polynoms)

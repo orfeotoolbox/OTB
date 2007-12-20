@@ -6,7 +6,7 @@
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimAdjustableParameterInfo.cpp 9094 2006-06-13 19:12:40Z dburken $
+// $Id: ossimAdjustableParameterInfo.cpp 11347 2007-07-23 13:01:59Z gpotts $
 #include <sstream>
 #include <algorithm>
 #include <ossim/base/ossimAdjustableParameterInfo.h>
@@ -65,7 +65,7 @@ void ossimAdjustableParameterInfo::setOffset(ossim_float64 value)
       double maxValue = theCenter + theSigma;
       double x = 0.0;
       
-      if(ossimAbs(theSigma) > DBL_EPSILON)
+      if(std::abs(theSigma) > DBL_EPSILON)
       {
          x = (value - theCenter)/theSigma;
          

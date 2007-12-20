@@ -9,13 +9,14 @@
 // Contains class declaration for TiffWriter.
 //
 //*******************************************************************
-//  $Id: ossimTiffWriter.h 9257 2006-07-14 15:31:02Z dburken $
+//  $Id: ossimTiffWriter.h 11683 2007-09-07 17:25:30Z gpotts $
 #ifndef ossimTiffWriter_HEADER
 #define ossimTiffWriter_HEADER
 
 #include <itk_tiff.h>
 #include <ossim/imaging/ossimImageFileWriter.h>
 #include <ossim/base/ossimKeywordlist.h>
+#include <ossim/base/ossimRefPtr.h>
 #include <ossim/projection/ossimMapProjectionInfo.h>
 #include <ossim/base/ossimNBandLutDataObject.h>
 #include <ossim/imaging/ossimNBandToIndexFilter.h>
@@ -185,7 +186,7 @@ protected:
     *  Writes geotiff tags from ossimMapProjectionInfo to tiff file.
     *  @return true on success, false on error.
     */
-   bool writeGeotiffTags(ossimMapProjectionInfo* projectionInfo);
+   bool writeGeotiffTags(ossimRefPtr<ossimMapProjectionInfo> projectionInfo);
 
    /**
     *  @return true if the output type is tiled, false if not.
@@ -208,10 +209,12 @@ protected:
    bool                    theOutputGeotiffTagsFlag;
    bool                    theImagineNad27Flag;
    bool                    theColorLutFlag;
-   ossimMapProjectionInfo* theProjectionInfo;
+   ossimRefPtr<ossimMapProjectionInfo> theProjectionInfo;
    ossimIpt                theOutputTileSize;
    ossimNBandLutDataObject theColorLut;
    ossimFilename           theLutFilename;
+   bool                    theForceBigTiffFlag;
+   bool                    theBigTiffFlag;
    mutable ossimRefPtr<ossimNBandToIndexFilter> theNBandToIndexFilter;
 TYPE_DATA
 };

@@ -1,14 +1,11 @@
 //*******************************************************************
-// Copyright (C) 2000 ImageLinks Inc. 
 //
-// License:  LGPL
-// 
-// See LICENSE.txt file in the top level directory for more details.
+// License:  See top level LICENSE.txt file.
 //
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimImageCombiner.cpp 9094 2006-06-13 19:12:40Z dburken $
+// $Id: ossimImageCombiner.cpp 11411 2007-07-27 13:53:51Z dburken $
 #include <ossim/imaging/ossimImageCombiner.h>
 #include <ossim/base/ossimKeywordlist.h>
 #include <ossim/base/ossimIrect.h>
@@ -30,7 +27,6 @@ ossimImageCombiner::ossimImageCombiner()
     theInputToPassThrough(0),
     theHasDifferentInputs(false),
     theNormTile(NULL),
-
     theCurrentIndex(0)
 {
 	theComputeFullResBoundsFlag = true;
@@ -255,7 +251,7 @@ double ossimImageCombiner::getMinPixelValue(ossim_uint32 band)const
    }
    if(!getNumberOfInputs())
    {
-      return OSSIM_DBL_NAN;
+      return ossim::nan();
    }
    double result = 1.0/DBL_EPSILON;
    
@@ -272,7 +268,7 @@ double ossimImageCombiner::getMinPixelValue(ossim_uint32 band)const
          }
          else
          {
-            temp = input->getMinPixelValue(bands-1);
+            temp = input->getMinPixelValue(0);
          }
          
          if(temp < result)
@@ -301,7 +297,7 @@ double ossimImageCombiner::getMaxPixelValue(ossim_uint32 band)const
    }
    if(!getNumberOfInputs())
    {
-      return OSSIM_DBL_NAN;
+      return ossim::nan();
    }
    double result = -1.0/DBL_EPSILON;
    
@@ -318,7 +314,7 @@ double ossimImageCombiner::getMaxPixelValue(ossim_uint32 band)const
          }
          else
          {
-            temp = input->getMaxPixelValue(bands-1);
+            temp = input->getMaxPixelValue(0);
          }
          if(temp > result)
          {
@@ -370,16 +366,16 @@ void ossimImageCombiner::initialize()
                if(scalarType == OSSIM_SCALAR_UNKNOWN)
                {
                   scalarType = current;
-                  scalarSizeInBytes = ossimGetScalarSizeInBytes(scalarType);
+                  scalarSizeInBytes = ossim::scalarSizeInBytes(scalarType);
                   theInputToPassThrough = idx;
                }
                else
                {
                   theHasDifferentInputs = true;
-                  if(scalarSizeInBytes < ossimGetScalarSizeInBytes(current))
+                  if(scalarSizeInBytes < ossim::scalarSizeInBytes(current))
                   {
                      scalarType        = current;
-                     scalarSizeInBytes = ossimGetScalarSizeInBytes(current);
+                     scalarSizeInBytes = ossim::scalarSizeInBytes(current);
                      theInputToPassThrough = idx;
                   }
                }
@@ -401,81 +397,94 @@ void ossimImageCombiner::updateRects()
 	theComputeFullResBoundsFlag = true;
 }
 
-ossimRefPtr<ossimImageData> ossimImageCombiner::getNextTile(
-   ossim_uint32 index,
-   const ossimIpt& origin,
-   ossim_uint32 resLevel)
+// ossimRefPtr<ossimImageData> ossimImageCombiner::getNextTile(ossim_uint32& returnedIdx,
+//                                                             ossim_uint32 idx,
+//                                                             const ossimIpt& tileRect,
+//                                                             ossim_uint32 resLevel)
+// {
+//    theCurrentIndex  = idx;
+//    return getNextTile(returnedIdx, origin, resLevel);
+// }
+
+// ossimRefPtr<ossimImageData> ossimImageCombiner::getNextTile(ossim_uint32& returnedIdx,
+//                                                             ossim_uint32 idx,
+//                                                             const ossimIpt& origin,
+//                                                             ossim_uint32 resLevel)
+// {
+//    theCurrentIndex  = idx;
+//    return getNextTile(returnedIdx, origin, resLevel);
+// }
+
+ossimRefPtr<ossimImageData> ossimImageCombiner::getNextTile(ossim_uint32& returnedIdx,
+                                                            const ossim_uint32 startIdx,
+                                                            const ossimIrect& tileRect,
+                                                            ossim_uint32 resLevel)
 {
-   theCurrentIndex = (ossim_int32)index - 1;
-   return getNextTile(origin, resLevel);
+   theCurrentIndex = startIdx;   
+   return getNextTile(returnedIdx, tileRect, resLevel);
 }
 
-ossimRefPtr<ossimImageData> ossimImageCombiner::getNextTile(
-   ossim_uint32 index,
-   const ossimIrect& tileRect,
-   ossim_uint32 resLevel)
-{
-   theCurrentIndex = (ossim_int32)index-1;
-   return getNextTile(tileRect, resLevel);
-}
-
-ossimRefPtr<ossimImageData> ossimImageCombiner::getNextTile(
-   const ossimIpt& origin,
-   ossim_uint32 resLevel)
-{
-   ossim_int32 w = getTileWidth();
-   ossim_int32 h = getTileHeight();
+// ossimRefPtr<ossimImageData> ossimImageCombiner::getNextTile(ossim_uint32& returnedIdx,
+//                                                             const ossimIpt& origin,
+//                                                             ossim_uint32 resLevel)
+// {
+//    ossim_int32 w = getTileWidth();
+//    ossim_int32 h = getTileHeight();
    
-   return getNextTile(ossimIrect(origin.x,
-                                 origin.y,
-                                 origin.x + w-1,
-                                 origin.y + h-1),
-                      resLevel);
-}
+//    return getNextTile(returnedIndex,
+//                       ossimIrect(origin.x,
+//                                  origin.y,
+//                                  origin.x + w-1,
+//                                  origin.y + h-1),
+//                       resLevel);
+// }
 
-ossimRefPtr<ossimImageData> ossimImageCombiner::getNextTile(
-   const ossimIrect& tileRect,
-   ossim_uint32 resLevel)
+ossimRefPtr<ossimImageData> ossimImageCombiner::getNextTile(ossim_uint32& returnedIdx,
+                                                            const ossimIrect& tileRect,
+                                                            ossim_uint32 resLevel)
 {
+   ossim_uint32 size = getNumberOfInputs();
+   if ( theCurrentIndex >= size)
+   {
+      return 0;
+   }
+   
    if(theComputeFullResBoundsFlag)
    {
       precomputeBounds();
    }
-   ossim_int32 size = getNumberOfInputs();
-
    
-   if((theCurrentIndex+1) >= size) return NULL;
+   ossimImageSourceInterface* temp = 0;
+   ossimRefPtr<ossimImageData> result = 0;
+   ossimDataObjectStatus status = OSSIM_NULL;
+
    double scale = 1.0/std::pow(2.0, (double)resLevel);
    ossimDpt scalar(scale, scale);
 
-   ossimImageSourceInterface* temp = NULL;
-   ossimRefPtr<ossimImageData> result;
-   ossimDataObjectStatus status = OSSIM_NULL;
-   do
+   while( (theCurrentIndex<size) && !result)
    {
-      ++theCurrentIndex;
       ossimIrect rect = theFullResBounds[theCurrentIndex];
       if(!rect.hasNans())
       {
          rect = rect * scalar;
          temp = PTR_CAST(ossimImageSourceInterface,
                          getInput(theCurrentIndex));
+         
          if(rect.intersects(tileRect)&&temp)
          {
-            
             result = temp->getTile(tileRect, resLevel);
             status = (result.valid() ?
                       result->getDataObjectStatus():OSSIM_NULL);
             if((status == OSSIM_NULL)||
                (status == OSSIM_EMPTY))
             {
-               result = NULL;
+               result = 0;
             }
          }
          else
          {
             status = OSSIM_NULL;
-            result = NULL;
+            result = 0;
          }
       }
       else
@@ -483,60 +492,73 @@ ossimRefPtr<ossimImageData> ossimImageCombiner::getNextTile(
          status = OSSIM_NULL;
          result = NULL;
       }
-
-   }while(!result&&(theCurrentIndex<size));
+      
+      // Go to next source.
+      ++theCurrentIndex;
+   }
+   returnedIdx = theCurrentIndex;
+   if(result.valid())
+   {
+      --returnedIdx;
+   }
 
    return result;
 }
 
 
-ossimRefPtr<ossimImageData> ossimImageCombiner::getNextNormTile(
-   ossim_uint32 index,
-   const ossimIpt& origin,
-   ossim_uint32 resLevel)
+// ossimRefPtr<ossimImageData> ossimImageCombiner::getNextNormTile(ossim_uint32& returnedIdx,
+//                                                                 ossim_uint32 index,
+//                                                                 const ossimIpt& origin,
+//                                                                 ossim_uint32 resLevel)
+// {
+//    theCurrentIndex = index;
+//    return getNextNormTile(returnedIdx, origin, resLevel);
+// }
+
+ossimRefPtr<ossimImageData> ossimImageCombiner::getNextNormTile(ossim_uint32& returnedIdx,
+                                                                const ossim_uint32 startIdx,
+                                                                const ossimIrect& tileRect,
+                                                                ossim_uint32 resLevel)
 {
-   theCurrentIndex = (ossim_int32)index - 1;
-   return getNextNormTile(origin, resLevel);
+   theCurrentIndex = startIdx;
+   return getNextNormTile(returnedIdx, tileRect, resLevel);
 }
 
-ossimRefPtr<ossimImageData> ossimImageCombiner::getNextNormTile(
-   ossim_uint32 index,
-   const ossimIrect& tileRect,
-   ossim_uint32 resLevel)
-{
-   theCurrentIndex = (ossim_int32)index-1;
-   return getNextNormTile(tileRect, resLevel);
-}
-
-ossimRefPtr<ossimImageData> ossimImageCombiner::getNextNormTile(
-   const ossimIpt& origin,
-   ossim_uint32 resLevel)
-{
-   ossim_int32 w = getTileWidth();
-   ossim_int32 h = getTileHeight();
+// ossimRefPtr<ossimImageData> ossimImageCombiner::getNextNormTile(ossim_uint32& returnedIdx,
+//                                                                 const ossimIpt& origin,
+//                                                                 ossim_uint32 resLevel)
+// {
+//    ossim_int32 w = getTileWidth();
+//    ossim_int32 h = getTileHeight();
    
-   return getNextNormTile(ossimIrect(origin.x,
-                                     origin.y,
-                                     origin.x + w-1,
-                                     origin.y + h-1),
-                          resLevel);
-}
+//    return getNextNormTile(returnedIdx,
+//                           ossimIrect(origin.x,
+//                                      origin.y,
+//                                      origin.x + w-1,
+//                                      origin.y + h-1),
+//                           resLevel);
+// }
 
-ossimRefPtr<ossimImageData> ossimImageCombiner::getNextNormTile(
-   const ossimIrect& tileRect,
-   ossim_uint32 resLevel)
+
+ossimRefPtr<ossimImageData> ossimImageCombiner::getNextNormTile(ossim_uint32& returnedIdx,
+                                                                const ossimIrect& tileRect,
+                                                                ossim_uint32 resLevel)
 {
-   ossim_int32 size = getNumberOfInputs();
+   ossim_uint32 size = getNumberOfInputs();
 
+   if(theCurrentIndex >= size)
+   {
+      return 0;
+   }
+   
    if(!theNormTile)
    {
       theNormTile = new ossimImageData(this,
                                        OSSIM_NORMALIZED_FLOAT);
       theNormTile->initialize();
    }
-   if((theCurrentIndex+1) >= size) return NULL;
 
-   ossimRefPtr<ossimImageData> result = getNextTile(tileRect, resLevel);
+   ossimRefPtr<ossimImageData> result = getNextTile(returnedIdx, tileRect, resLevel);
 
    if(result.valid())
    {
@@ -552,7 +574,7 @@ ossimRefPtr<ossimImageData> ossimImageCombiner::getNextNormTile(
 }
 
 ossim_uint32 ossimImageCombiner::getNumberOfOverlappingImages(const ossimIrect& rect,
-                                                         ossim_uint32 resLevel)const
+                                                              ossim_uint32 resLevel)const
 {
    if(theComputeFullResBoundsFlag)
    {

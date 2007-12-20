@@ -14,7 +14,7 @@
 // http://www.remotesensing.org/geotiff/spec/geotiff6.html#6.3.3.1
 // 
 //----------------------------------------------------------------------------
-//  $Id: ossimPcsCodeProjectionFactory.cpp 9094 2006-06-13 19:12:40Z dburken $
+//  $Id: ossimPcsCodeProjectionFactory.cpp 12082 2007-11-26 21:46:44Z dburken $
 
 #include <ossim/projection/ossimPcsCodeProjectionFactory.h>
 #include <ossim/projection/ossimProjectionFactoryRegistry.h>
@@ -30,7 +30,7 @@ static const ossimTrace
 traceDebug(ossimString("ossimPcsCodeProjectionFactory:debug"));
 
 #if OSSIM_ID_ENABLED
-static const char OSSIM_ID[] = "$Id: ossimPcsCodeProjectionFactory.cpp 9094 2006-06-13 19:12:40Z dburken $";
+static const char OSSIM_ID[] = "$Id: ossimPcsCodeProjectionFactory.cpp 12082 2007-11-26 21:46:44Z dburken $";
 #endif
 
 ossimPcsCodeProjectionFactory* ossimPcsCodeProjectionFactory::theInstance = 0;
@@ -316,12 +316,6 @@ ossimObject* ossimPcsCodeProjectionFactory::createObject(
 void ossimPcsCodeProjectionFactory::getTypeNameList(
    std::vector<ossimString>& /* typeList */)const
 {
-}
-
-std::list<ossimString> ossimPcsCodeProjectionFactory::getList()const
-{
-   std::list<ossimString> result;
-   return result;
 }
 
 ossim_int16 ossimPcsCodeProjectionFactory::getPcsCodeFromProjection(

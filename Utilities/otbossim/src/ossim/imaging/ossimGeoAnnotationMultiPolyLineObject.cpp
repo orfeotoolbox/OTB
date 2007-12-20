@@ -1,12 +1,11 @@
 //*******************************************************************
-// Copyright (C) 2000 ImageLinks Inc. 
 //
-// License:  See LICENSE.txt file in the top level directory.
+// License:  See top level LICENSE.txt file.
 //
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimGeoAnnotationMultiPolyLineObject.cpp 9094 2006-06-13 19:12:40Z dburken $
+// $Id: ossimGeoAnnotationMultiPolyLineObject.cpp 11411 2007-07-27 13:53:51Z dburken $
 
 #include <sstream>
 
@@ -24,7 +23,7 @@ ossimGeoAnnotationMultiPolyLineObject::ossimGeoAnnotationMultiPolyLineObject()
    theMultiPolyLine(),
    theBoundingRect(),
    theDatum(ossimDatumFactory::instance()->wgs84()),
-   theProjectedPolyLineObject(NULL)
+   theProjectedPolyLineObject(0)
 {
    allocateProjectedPolyLine();   
    theBoundingRect.makeNan();
@@ -41,7 +40,7 @@ ossimGeoAnnotationMultiPolyLineObject::ossimGeoAnnotationMultiPolyLineObject(
    theMultiPolyLine(multiPoly),
    theBoundingRect(),
    theDatum(ossimDatumFactory::instance()->wgs84()),
-   theProjectedPolyLineObject(NULL)
+   theProjectedPolyLineObject(0)
 {
    allocateProjectedPolyLine();   
    theBoundingRect.makeNan();
@@ -53,7 +52,7 @@ ossimGeoAnnotationMultiPolyLineObject::ossimGeoAnnotationMultiPolyLineObject(
     theMultiPolyLine(rhs.theMultiPolyLine),
     theBoundingRect(rhs.theBoundingRect),
     theDatum(rhs.theDatum),
-    theProjectedPolyLineObject(rhs.theProjectedPolyLineObject?(ossimAnnotationMultiPolyLineObject*)rhs.theProjectedPolyLineObject->dup():NULL)
+    theProjectedPolyLineObject(rhs.theProjectedPolyLineObject?(ossimAnnotationMultiPolyLineObject*)rhs.theProjectedPolyLineObject->dup():0)
 {
 }
 
@@ -67,7 +66,7 @@ ossimGeoAnnotationMultiPolyLineObject::~ossimGeoAnnotationMultiPolyLineObject()
    if(theProjectedPolyLineObject)
    {
       delete theProjectedPolyLineObject;
-      theProjectedPolyLineObject = NULL;
+      theProjectedPolyLineObject = 0;
    }
 }
 
@@ -80,26 +79,35 @@ void ossimGeoAnnotationMultiPolyLineObject::applyScale(double x, double y)
 
 void ossimGeoAnnotationMultiPolyLineObject::transform(ossimProjection* projection)
 {
-   cout << "ossimGeoAnnotationMultiPolyLineObject::transform entered..."
-        << endl;
-   
-   if(!projection) return;
-   int polyI  = 0;
-   int pointI = 0;
+   if(!projection)
+   {
+      return;
+   }
    
    allocateProjectedPolyLine();
+
+   //---
+   // NOTE:
+   // allocateProjectedPolygon() will set theProjectedPolyLineObject to 0 if
+   // theMultiPolyLine is empty (theMultiPolyLine.size() == 0).  So check
+   // before accessing pointer to avoid a core dump.
+   //---
    if(!theProjectedPolyLineObject)
    {
       return;
    }
-   std::vector<ossimPolyLine>& multiPolyLine = theProjectedPolyLineObject->getMultiPolyLine();
-   ossimGpt tempPoint(0,0, OSSIM_DBL_NAN, theDatum);
-   for(polyI = 0; polyI < (int)theMultiPolyLine.size(); ++polyI)
+
+   std::vector<ossimPolyLine>& multiPolyLine =
+      theProjectedPolyLineObject->getMultiPolyLine();
+   ossimGpt tempPoint(0,0, ossim::nan(), theDatum);
+   
+   for(ossim_uint32 polyI = 0; polyI < theMultiPolyLine.size(); ++polyI)
    {
       ossimPolyLine polyLine;
       
-      int numberOfVertices = (int)theMultiPolyLine[polyI].getNumberOfVertices();
-      for(pointI = 0; pointI < numberOfVertices; ++pointI)
+      ossim_uint32 numberOfVertices =
+         theMultiPolyLine[polyI].getNumberOfVertices();
+      for(ossim_uint32 pointI = 0; pointI < numberOfVertices; ++pointI)
       {
          tempPoint.latd(theMultiPolyLine[polyI][pointI].lat);
          tempPoint.lond(theMultiPolyLine[polyI][pointI].lon);
@@ -112,7 +120,6 @@ void ossimGeoAnnotationMultiPolyLineObject::transform(ossimProjection* projectio
       }
       multiPolyLine[polyI].roundToIntegerBounds(true);
    }
-   
 }
 
 std::ostream& ossimGeoAnnotationMultiPolyLineObject::print(std::ostream& out)const
@@ -164,7 +171,7 @@ void ossimGeoAnnotationMultiPolyLineObject::addPoint(ossim_uint32 polygonIndex,
       if(theProjectedPolyLineObject)
       {
          delete theProjectedPolyLineObject;
-         theProjectedPolyLineObject = NULL;
+         theProjectedPolyLineObject = 0;
       }
    }
 }
@@ -176,7 +183,7 @@ void ossimGeoAnnotationMultiPolyLineObject::setMultiPolyLine(
    if(theProjectedPolyLineObject)
    {
       delete theProjectedPolyLineObject;
-      theProjectedPolyLineObject = NULL;
+      theProjectedPolyLineObject = 0;
    }
 }
 
@@ -270,9 +277,6 @@ bool ossimGeoAnnotationMultiPolyLineObject::saveState(ossimKeywordlist& kwl,
 bool ossimGeoAnnotationMultiPolyLineObject::loadState(
    const ossimKeywordlist& kwl, const char* prefix)
 {
-   cout << "ossimGeoAnnotationMultiPolyLineObject::loadState entered..."
-        << endl;
-   
    //---
    // Base class state must be called first to pick up colors...
    //---
@@ -283,9 +287,6 @@ bool ossimGeoAnnotationMultiPolyLineObject::loadState(
    ossim_uint32 count = kwl.getNumberOfSubstringKeys(copyPrefix+
                                                       "v[0-9]");
    
-
-   cout << "count: " << count << endl;
-   
    ossim_uint32 numberOfMatches = 0;
    const ossim_uint32 MAX_INDEX = count + 100;
    ossimPolyLine pl;
@@ -295,10 +296,6 @@ bool ossimGeoAnnotationMultiPolyLineObject::loadState(
       ossimString key = "v";
       key += ossimString::toString(index);
 
-      cout << "prefix: " << prefix
-           << "\nkey: " << key
-           << endl;
-      
       const char* lookup = kwl.find(prefix, key.c_str());
       if (lookup)
       {
@@ -307,14 +304,11 @@ bool ossimGeoAnnotationMultiPolyLineObject::loadState(
 
          std::istringstream is(lookup);
          is >> dpt.x >> dpt.y;
-         cout << "added point: " << dpt << endl;
          pl.addPoint(dpt);
       }
 
       if (pl.size() == 2)
       {
-         cout << "added line: " << pl << endl;
-         
          theMultiPolyLine.push_back(pl);
          pl.clear();
       }
@@ -335,20 +329,17 @@ void ossimGeoAnnotationMultiPolyLineObject::allocateProjectedPolyLine()
    if(theProjectedPolyLineObject)
    {
       delete theProjectedPolyLineObject;
-      theProjectedPolyLineObject = NULL;
+      theProjectedPolyLineObject = 0;
    }
-
-   vector<ossimPolyLine> polyList;
    
    if(theMultiPolyLine.size())
    {
-      polyList.resize(theMultiPolyLine.size());
-
-      theProjectedPolyLineObject = new ossimAnnotationMultiPolyLineObject(
-         polyList,
-         theRed,
-         theGreen,
-         theBlue,
-         theThickness);
+      vector<ossimPolyLine> polyList(theMultiPolyLine.size());
+      theProjectedPolyLineObject =
+         new ossimAnnotationMultiPolyLineObject(polyList,
+                                                theRed,
+                                                theGreen,
+                                                theBlue,
+                                                theThickness);
    }
 }

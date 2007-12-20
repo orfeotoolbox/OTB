@@ -6,7 +6,7 @@
 // Contributor: David A. Horner (DAH) - http://dave.thehorners.com
 // 
 //*************************************************************************
-// $Id: ossimImageDataFactory.cpp 10484 2007-02-13 11:54:58Z dburken $
+// $Id: ossimImageDataFactory.cpp 11349 2007-07-23 13:30:44Z gpotts $
 #include <ossim/imaging/ossimImageDataFactory.h>
 #include <ossim/imaging/ossimU8ImageData.h>
 #include <ossim/imaging/ossimU11ImageData.h>
@@ -50,10 +50,10 @@ ossimRefPtr<ossimImageData> ossimImageDataFactory::create(
    ossimScalarType scalar,
    ossim_uint32 bands)const
 {
-   ossimIpt defaultTileSize;
-   ossimGetDefaultTileSize(defaultTileSize);
-   ossim_uint32 width  = defaultTileSize.x;
-   ossim_uint32 height = defaultTileSize.y;
+   ossimIpt tileSize;
+   ossim::defaultTileSize(tileSize);
+   ossim_uint32 width  = tileSize.x;
+   ossim_uint32 height = tileSize.y;
    
    // do some bounds checking and initialize to a default
    bands  = (bands>0)?bands:1;
@@ -122,12 +122,12 @@ ossimRefPtr<ossimImageData> ossimImageDataFactory::create(
    ossim_uint32 width,
    ossim_uint32 height)const
 {
-   ossimIpt defaultTileSize;
-   ossimGetDefaultTileSize(defaultTileSize);
+   ossimIpt tileSize;
+   ossim::defaultTileSize(tileSize);
    // do some bounds checking and initialize to a default
    bands  = bands  > 0?bands:1;
-   width  = width  > 0?width:defaultTileSize.x;
-   height = height > 0?height:defaultTileSize.y;
+   width  = width  > 0?width:tileSize.x;
+   height = height > 0?height:tileSize.y;
    scalar = scalar != OSSIM_SCALAR_UNKNOWN?scalar:OSSIM_UINT8;
 
    if (traceDebug())

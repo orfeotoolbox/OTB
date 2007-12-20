@@ -13,12 +13,12 @@
 //              Initial coding.
 //<
 //*****************************************************************************
-//  $Id: ossimEcefPoint.h 9532 2006-09-11 11:20:05Z dburken $
+//  $Id: ossimEcefPoint.h 11860 2007-10-15 19:59:10Z dburken $
 
 #ifndef ossimEcefPoint_HEADER
 #define ossimEcefPoint_HEADER
-#include <iostream>
-#include <stdio.h>
+#include <iosfwd>
+#include <ossim/base/ossimCommon.h>
 #include <ossim/base/ossimColumnVector3d.h>
 #include <ossim/base/ossimNotify.h>
 #include <ossim/base/ossimString.h>
@@ -56,24 +56,24 @@ public:
    
    void makeNan()
       {
-         theData[0] = OSSIM_DBL_NAN;
-         theData[1] = OSSIM_DBL_NAN;
-         theData[2] = OSSIM_DBL_NAN;
+         theData[0] = ossim::nan();
+         theData[1] = ossim::nan();
+         theData[2] = ossim::nan();
       }
    
    bool hasNans()const
       {
-         return ((theData[0]==OSSIM_DBL_NAN)||
-                 (theData[1]==OSSIM_DBL_NAN)||
-                 (theData[2]==OSSIM_DBL_NAN));
+         return ( ossim::isnan(theData[0]) ||
+                  ossim::isnan(theData[1]) ||
+                  ossim::isnan(theData[2]) );
                            
       }
 
    bool isNan()const
       {
-         return ((theData[0]==OSSIM_DBL_NAN)&&
-                 (theData[1]==OSSIM_DBL_NAN)&&
-                 (theData[2]==OSSIM_DBL_NAN));
+         return ( ossim::isnan(theData[0]) &&
+                  ossim::isnan(theData[1]) &&
+                  ossim::isnan(theData[2]) );
          
       }
    /*!
@@ -156,8 +156,8 @@ public:
     */
    void print(std::ostream& os = ossimNotify(ossimNotifyLevel_INFO)) const;
    
-   friend std::ostream& operator<<(std::ostream& os ,
-                                   const ossimEcefPoint& instance);
+   friend OSSIM_DLL std::ostream& operator<<(std::ostream& os ,
+                                             const ossimEcefPoint& instance);
 
 protected:
    ossimColumnVector3d theData;

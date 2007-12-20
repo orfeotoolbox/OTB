@@ -10,7 +10,7 @@
 // elevation handler for general raster elevation files.
 //
 //----------------------------------------------------------------------------
-// $Id: ossimGeneralRasterElevFactory.h 10042 2006-12-07 16:08:51Z dburken $
+// $Id: ossimGeneralRasterElevFactory.h 11441 2007-07-30 15:17:55Z gpotts $
 #ifndef ossimGeneralRasterElevFactory_HEADER
 #define ossimGeneralRasterElevFactory_HEADER
 
@@ -27,6 +27,9 @@
 class OSSIM_DLL ossimGeneralRasterElevFactory : public ossimElevSourceFactory
 {
 public:
+   typedef std::vector<ossimGeneralRasterElevHandler::GeneralRasterInfo> BoundingRectListType;
+
+   /** Constructor that takes a file name. */
 
    /** default constructor */
    ossimGeneralRasterElevFactory();
@@ -36,6 +39,7 @@ public:
 
    /** destructor */
    virtual ~ossimGeneralRasterElevFactory();
+   void setDirectory(const ossimFilename& directory);
 
    /**
     * Open the appropriate handler that covers given a
@@ -43,7 +47,7 @@ public:
     *
     * @param gpt Ground point that an elevation source is need for.
     *
-    * @return Returns a pointer to an ossimElevSource if an srtm file is found
+    * @return Returns a pointer to an ossimElevSource if an elevation file is found
     * that can cover the ground point.  Returns NULL if no cell is found
     * for the point.
     */
@@ -53,6 +57,16 @@ public:
    virtual void createIndex();
 
 protected:
+/*    void initializeList(const ossimFilename& file); */
+/*    bool initializeInfo(ossimGeneralRasterElevHandler::GeneralRasterInfo& info, */
+/*                        const ossimFilename& file); */
+   void addInfo(const ossimGeneralRasterElevHandler::GeneralRasterInfo& info);
+
+   
+   std::vector<ossimGeneralRasterElevHandler::GeneralRasterInfo>  theGeneralRasterInfoList;
+   ossimDrect            theBoundingRect;
+/*    mutable std::ifstream theFileStr;  */
+   mutable ossim_int32   theCurrentIdx;
    mutable bool theHandlerReturnedFlag;
    
 TYPE_DATA

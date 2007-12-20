@@ -10,7 +10,7 @@
 // AUTHOR: Garrett Potts
 //
 //*****************************************************************************
-//  $Id: ossimRpcSolver.cpp 9969 2006-11-29 17:25:10Z gpotts $
+//  $Id: ossimRpcSolver.cpp 11412 2007-07-27 13:56:11Z dburken $
 #include <ossim/projection/ossimRpcSolver.h>
 #include <ossim/projection/ossimRpcModel.h>
 #include <ossim/projection/ossimProjection.h>
@@ -113,7 +113,7 @@ void ossimRpcSolver::solveCoefficients(const ossimDrect& imageBounds,
          if(theHeightAboveMSLFlag)
          {
             double h = ossimElevManager::instance()->getHeightAboveMSL(gpt);
-            if(h!=OSSIM_DBL_NAN)
+            if(ossim::isnan(h) == false)
             {
                gpt.height(h);
             }
@@ -181,11 +181,11 @@ void ossimRpcSolver::solveCoefficients(const std::vector<ossimDpt>& imagePoints,
    //
    for(c = 0; c < groundControlPoints.size();++c)
    {
-      if(groundControlPoints[c].latd() != OSSIM_DBL_NAN)
+      if(ossim::isnan(groundControlPoints[c].latd()) == false)
       {
          latSum += groundControlPoints[c].latd();
       }
-      if(groundControlPoints[c].lond() != OSSIM_DBL_NAN)
+      if(ossim::isnan(groundControlPoints[c].lond()) == false)
       {
          lonSum += groundControlPoints[c].lond();
       }
@@ -284,7 +284,7 @@ void ossimRpcSolver::solveCoefficients(const std::vector<ossimDpt>& imagePoints,
                              h/2.0);
    theGroundOffset = centerGround;
 
-   if(theGroundOffset.height() == OSSIM_DBL_NAN)
+   if(ossim::isnan(theGroundOffset.height()))
    {
       theGroundOffset.height(0.0);
    }
@@ -354,11 +354,11 @@ void ossimRpcSolver::solveCoefficients(const std::vector<ossimDpt>& imagePoints,
 //              << "Height scale         = " << theHeightScale << std::endl;
    for (idx = 0; idx<imagePoints.size(); idx++)
    {
-       ossim_float64 x = (groundControlPoints[idx].lond() - theGroundOffset.lond())/theLonScale;
-       ossim_float64 y = (groundControlPoints[idx].latd() - theGroundOffset.latd())/theLatScale;
-       ossim_float64 z = (groundControlPoints[idx].height() - theGroundOffset.height())/theHeightScale;
-
-      if(z == OSSIM_DBL_NAN)
+      ossim_float64 x = (groundControlPoints[idx].lond() - theGroundOffset.lond())/theLonScale;
+      ossim_float64 y = (groundControlPoints[idx].latd() - theGroundOffset.latd())/theLatScale;
+      ossim_float64 z = (groundControlPoints[idx].height() - theGroundOffset.height())/theHeightScale;
+      
+      if(ossim::isnan(z))
       {
          z = 0.0;
       }

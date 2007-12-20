@@ -2,7 +2,6 @@
 #include <iomanip>
 #include <sstream>
 
-
 std::ostream& operator<< (std::ostream& out, const ossimDate& src)
 {
    return src.print(out);
@@ -516,9 +515,24 @@ ossimLocalTm& ossimLocalTm::setFractionalSecond(double fractionalSecond)
 
 time_t ossimLocalTm::getTicks()const
 {
+   return getEpoc();
+}
+
+time_t ossimLocalTm::getEpoc()const
+{
    std::tm temp = *this;
 
    return mktime(&temp);
+}
+
+void ossimLocalTm::setTimeNoAdjustmentGivenEpoc(time_t ticks)
+{
+   *this = *gmtime(&ticks);
+}
+
+void ossimLocalTm::setTimeGivenEpoc(time_t ticks)
+{
+   *this = *localtime(&ticks);
 }
 
 ossimRefPtr<ossimXmlNode> ossimLocalTm::saveXml()const
@@ -527,8 +541,6 @@ ossimRefPtr<ossimXmlNode> ossimLocalTm::saveXml()const
 
    result->setTag("ossimDate");
    result->addAttribute("version", "1");
-   result->addChildNode("julian", ossimString::toString(getJulian()));
-   result->addChildNode("modifiedJulian", ossimString::toString(getModifiedJulian()));
    result->addChildNode("month", ossimString::toString(getMonth()));
    result->addChildNode("day", ossimString::toString(getDay()));
    result->addChildNode("year", ossimString::toString(getYear()));
@@ -581,7 +593,7 @@ bool ossimLocalTm::loadXml(ossimRefPtr<ossimXmlNode> dateNode)
    }
    else if(julian.valid())
    {
-      setDateFromModifiedJulian(julian->getText().toDouble());
+      setDateFromJulian(julian->getText().toDouble());
    }
    else
    {
@@ -591,11 +603,48 @@ bool ossimLocalTm::loadXml(ossimRefPtr<ossimXmlNode> dateNode)
    return result;
 }
 
+ossimDate::ossimDate(int datefmt)
+   :ossimLocalTm(0), _fmt(datefmt)
+{}
+
+ossimDate::ossimDate (ossimLocalTm const & t,
+                      int dtfmt)
+   : ossimLocalTm (t), _fmt(dtfmt)
+{}
+
+ossimDate::ossimDate (time_t t, int dtfmt)
+   : ossimLocalTm (t), _fmt(dtfmt)
+{}
+
+ossimDate::ossimDate(int month,
+                     int day,
+                     int year,
+                     int dtfmt)
+   :ossimLocalTm (0), _fmt(dtfmt)
+{
+   setMonth(month);
+   setDay(day);
+   setYear(year);
+   setHour(0);
+   setMin(0);
+   setSec(0);
+   setFractionalSecond(0.0);
+}
+
+int ossimDate::fmt(int f)
+{
+   return _fmt = f;
+}
+
+int ossimDate::fmt(void) const
+{
+   return _fmt;
+}
+
 std::ostream& ossimDate::print (std::ostream & os) const
 {
    return printDate (os, _fmt);
 }
-
 
 std::ostream& operator <<(std::ostream& out, const ossimTime& src)
 {

@@ -10,10 +10,10 @@
 static ossimTrace traceDebug("ossimImageShapeFileIndex:debug");
 
 ossimImageShapeFileIndex::ossimImageShapeFileIndex(const ossimFilename& shapeFilename)
-   :theGlobalMinx(OSSIM_INFINITY),
-    theGlobalMiny(OSSIM_INFINITY),
-    theGlobalMaxx(-OSSIM_INFINITY),
-    theGlobalMaxy(-OSSIM_INFINITY)
+   :theGlobalMinx(1.0/DBL_EPSILON),
+    theGlobalMiny(1.0/DBL_EPSILON),
+    theGlobalMaxx(-1.0/DBL_EPSILON),
+    theGlobalMaxy(-1.0/DBL_EPSILON)
 {
    setFilename(shapeFilename);
 }

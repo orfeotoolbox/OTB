@@ -6,7 +6,7 @@
 // Author:  Garrett Potts
 //
 //*******************************************************************
-//  $Id: ossimSpaceObliqueMercatorProjection.cpp 9094 2006-06-13 19:12:40Z dburken $
+//  $Id: ossimSpaceObliqueMercatorProjection.cpp 11428 2007-07-27 18:44:18Z gpotts $
 #include <ossim/projection/ossimSpaceObliqueMercatorProjection.h>
 #include <math.h>
 #include <ossim/base/ossimConstants.h>
@@ -256,7 +256,9 @@ ossimSpaceObliqueMercatorProjection::forward(const ossimGpt &worldPoint) const
    }
    else
    {
-      xy.x = xy.y = OSSIM_INFINITY;
+      xy.makeNan();
+      return xy;
+//       xy.x = xy.y = 1.0/DBL_EPSILON; // st to large number
    }
 
    xy.x*=a;

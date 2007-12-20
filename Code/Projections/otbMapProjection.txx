@@ -343,7 +343,7 @@ namespace otb
   ::ComputeMetersPerPixel(double deltaDegreesPerPixelLat, double deltaDegreesPerPixelLon, OutputPointType &metersPerPixel) 
   {
     ossimDpt ossimMetersPerPixel;
-    m_MapProjection->computeMetersPerPixel(deltaDegreesPerPixelLat, deltaDegreesPerPixelLon,ossimMetersPerPixel);
+    m_MapProjection->computeMetersPerPixel(m_MapProjection->origin(),deltaDegreesPerPixelLat, deltaDegreesPerPixelLon,ossimMetersPerPixel);
     metersPerPixel[0]=ossimMetersPerPixel.x;
     metersPerPixel[1]=ossimMetersPerPixel.y;
   }

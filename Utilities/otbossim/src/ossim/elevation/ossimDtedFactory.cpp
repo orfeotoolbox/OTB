@@ -13,7 +13,7 @@
 // pure virtual methods that all elevation source factories must implement.
 //
 //**************************************************************************
-// $Id: ossimDtedFactory.cpp 10027 2006-12-04 20:10:56Z dburken $
+// $Id: ossimDtedFactory.cpp 11321 2007-07-17 20:53:07Z dburken $
 
 #include <sstream>
 #include <iomanip>
@@ -52,7 +52,7 @@ ossimElevSource* ossimDtedFactory::getNewElevSource(const ossimGpt& gpt) const
    
    ossimElevManager* mgr = ossimElevManager::instance();
    
-   ossimElevSource* dted_ptr = NULL;
+   ossimElevSource* dted_ptr = 0;
    
    if (theDirectory == ossimFilename::NIL)
    {
@@ -125,7 +125,7 @@ ossimElevSource* ossimDtedFactory::getNewElevSource(const ossimGpt& gpt) const
       else
       {
          delete dted_ptr;
-         dted_ptr = NULL;
+         dted_ptr = 0;
       }
    }
 
@@ -152,7 +152,7 @@ ossimElevSource* ossimDtedFactory::getNewElevSource(const ossimGpt& gpt) const
       else
       {
          delete dted_ptr;
-         dted_ptr = NULL;
+         dted_ptr = 0;
       }
    }
 
@@ -179,7 +179,7 @@ ossimElevSource* ossimDtedFactory::getNewElevSource(const ossimGpt& gpt) const
       else
       {
          delete dted_ptr;
-         dted_ptr = NULL;
+         dted_ptr = 0;
       }
    }
 

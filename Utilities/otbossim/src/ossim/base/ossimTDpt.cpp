@@ -13,11 +13,13 @@ std::ostream& ossimTDpt::print(std::ostream& os) const
    os << ", ";
    os << tie;
    os << ", ";
-   if (score != OSSIM_DBL_NAN)
+   if (ossim::isnan(score) == false)
    {
       os << std::setiosflags(std::ios::fixed) << std::setprecision(15);
       os << score;
-   } else {
+   }
+   else
+   {
       os << "nan";
    }
    os << " )";
@@ -83,7 +85,7 @@ std::istream& operator>>(std::istream& is, ossimTDpt& pt)
    tempString.trim();
    if (tempString == "nan")
    {
-      pt.score = OSSIM_DBL_NAN;
+      pt.score = ossim::nan();
    }
    else
    {

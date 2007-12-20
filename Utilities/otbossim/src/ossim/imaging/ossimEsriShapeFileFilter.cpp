@@ -6,7 +6,7 @@
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimEsriShapeFileFilter.cpp 9094 2006-06-13 19:12:40Z dburken $
+// $Id: ossimEsriShapeFileFilter.cpp 11411 2007-07-27 13:53:51Z dburken $
 
 #include <cstdio>
 #include <cstdlib>
@@ -62,8 +62,8 @@ ossimEsriShapeFileFilter::ossimEsriShapeFileFilter(ossimImageSource* inputSource
    ossimViewInterface::theObject = this;
    ossimAnnotationSource::setNumberOfBands(3);
    theBoundingRect.makeNan();
-   theMinArray[0] = theMinArray[1] = theMinArray[2] = theMinArray[3] = OSSIM_DBL_NAN;
-   theMaxArray[0] = theMaxArray[1] = theMaxArray[2] = theMaxArray[3] = OSSIM_DBL_NAN;
+   theMinArray[0] = theMinArray[1] = theMinArray[2] = theMinArray[3] = ossim::nan();
+   theMaxArray[0] = theMaxArray[1] = theMaxArray[2] = theMaxArray[3] = ossim::nan();
 }
 
 ossimEsriShapeFileFilter::~ossimEsriShapeFileFilter()

@@ -8,7 +8,7 @@
 // Description: Common file for global Keywords.
 //
 //*************************************************************************
-// $Id: ossimKeywordNames.cpp 10161 2007-01-02 16:05:30Z gpotts $
+// $Id: ossimKeywordNames.cpp 11731 2007-09-17 13:48:57Z gpotts $
 
 #include <ossim/base/ossimKeywordNames.h>
 
@@ -67,6 +67,8 @@ const char* ossimKeywordNames::HEMISPHERE_KW = "hemisphere";
 const char* ossimKeywordNames::HORIZONTAL_SIZE_KW = "horizontal_size";
 const char* ossimKeywordNames::ID_KW ="id";
 const char* ossimKeywordNames::IMAGE_FILE_KW = "image_file";
+const char* ossimKeywordNames::IMAGE_MODEL_TRANSFORM_MATRIX_KW = "image_model_transform_matrix";
+const char* ossimKeywordNames::IMAGE_MODEL_TRANSFORM_UNIT_KW = "image_model_transform_unit";
 const char* ossimKeywordNames::IMAGE_PATH_KW = "image_path";
 const char* ossimKeywordNames::IMAGE_TYPE_KW = "image_type";
 const char* ossimKeywordNames::IMAGE_DATE_KW = "image_date";
@@ -109,6 +111,7 @@ const char* ossimKeywordNames::ORIGIN_LATITUDE_KW = "origin_latitude";
 const char* ossimKeywordNames::OUTPUT_FILE_KW = "output_file";
 const char* ossimKeywordNames::OUTPUT_FILE_PREFIX_KW = "output_file_prefix";
 const char* ossimKeywordNames::OUTPUT_FILE_EXTENSION_KW = "output_file_extension";
+const char* ossimKeywordNames::OUTPUT_TILE_SIZE_KW = "output_tile_size";
 const char* ossimKeywordNames::OVERVIEW_COMPRESSION_QUALITY_KW = "overview_compression_quality";
 const char* ossimKeywordNames::OVERVIEW_COMPRESSION_TYPE_KW = "overview_compression_type";
 const char* ossimKeywordNames::OVERVIEW_FILE_KW  = "overview_file";

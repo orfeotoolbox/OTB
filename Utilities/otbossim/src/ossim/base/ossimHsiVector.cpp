@@ -6,12 +6,20 @@
 // Description:
 //
 //*************************************************************************
-// $Id: ossimHsiVector.cpp 9963 2006-11-28 21:11:01Z gpotts $
+// $Id: ossimHsiVector.cpp 11955 2007-10-31 16:10:22Z gpotts $
 #include <ossim/base/ossimHsiVector.h>
 #include <ossim/base/ossimRgbVector.h>
 #include <ossim/base/ossimNormRgbVector.h>
 #include <math.h>
 #include <ossim/base/ossimCommon.h>
+
+// nonstandard versions that use operator>, so they behave differently
+// than std:::min/max and ossim::min/max.  kept here for now for that
+// reason.
+#ifndef MAX
+#  define MAX(x,y) ((x)>(y)?(x):(y))
+#  define MIN(x,y) ((x)>(y)?(y):(x))
+#endif
 
 ossimHsiVector::ossimHsiVector(const ossimRgbVector& rgb)
 {

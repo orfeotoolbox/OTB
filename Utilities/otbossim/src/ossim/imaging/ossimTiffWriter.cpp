@@ -5,7 +5,7 @@
 // Author:  Frank Warmerdam (warmerda@home.com)
 //
 //*******************************************************************
-//  $Id: ossimTiffWriter.cpp 9257 2006-07-14 15:31:02Z dburken $
+//  $Id: ossimTiffWriter.cpp 11971 2007-11-01 16:44:19Z gpotts $
 
 #include <algorithm>
 #include <sstream>
@@ -33,6 +33,7 @@
 #include <ossim/projection/ossimStatePlaneProjectionInfo.h>
 #include <ossim/imaging/ossimImageDataFactory.h>
 #include <ossim/base/ossimFilenameProperty.h>
+#include <ossim/support_data/ossimGeoTiff.h>
 
 static ossimTrace traceDebug("ossimTiffWriter:debug");
 
@@ -52,6 +53,10 @@ static const long  DEFAULT_JPEG_QUALITY = 75;
 
 RTTI_DEF1(ossimTiffWriter, "ossimTiffWriter", ossimImageFileWriter);
 
+#ifdef OSSIM_ID_ENABLED
+static const char OSSIM_ID[] = "$Id: ossimTiffWriter.cpp 11971 2007-11-01 16:44:19Z gpotts $";
+#endif
+
 ossimTiffWriter::ossimTiffWriter()
    :
       ossimImageFileWriter(),
@@ -62,10 +67,20 @@ ossimTiffWriter::ossimTiffWriter()
       theImagineNad27Flag(false),
       theColorLutFlag(false),
       theProjectionInfo(NULL),
-      theOutputTileSize(OSSIM_DEFAULT_TILE_WIDTH, OSSIM_DEFAULT_TILE_HEIGHT)
+      theOutputTileSize(OSSIM_DEFAULT_TILE_WIDTH, OSSIM_DEFAULT_TILE_HEIGHT),
+      theForceBigTiffFlag(false),
+      theBigTiffFlag(false)
 {
-   ossimGetDefaultTileSize(theOutputTileSize);
+   ossim::defaultTileSize(theOutputTileSize);
    theOutputImageType = "tiff_tiled_band_separate";
+
+   
+#ifdef OSSIM_ID_ENABLED /* to quell unused variable warning. */
+   if (traceDebug())
+   {
+      ossimNotify(ossimNotifyLevel_DEBUG)<< "OSSIM_ID:  " << OSSIM_ID << endl;
+   }
+#endif
 }
 
 ossimTiffWriter::~ossimTiffWriter()
@@ -73,11 +88,6 @@ ossimTiffWriter::~ossimTiffWriter()
    if(isOpen())
    {
       closeTiff();
-   }
-   if(theProjectionInfo)
-   {
-      delete theProjectionInfo;
-      theProjectionInfo = NULL;
    }
 }
 
@@ -106,15 +116,20 @@ bool ossimTiffWriter::openTiff()
       return false;
    }
 
+   ossimString openMode = "w";
+   if(theBigTiffFlag||theForceBigTiffFlag)
+   {
+      openMode += "8";
+   }
    // Open the new file.
 #ifdef OSSIM_HAS_GEOTIFF
 #  if OSSIM_HAS_GEOTIFF
-   theTif = XTIFFOpen( theFilename.c_str(), "w" );
+   theTif = XTIFFOpen( theFilename.c_str(), openMode.c_str() );
 #  else
-   theTif = TIFFOpen( theFilename.c_str(), "w" );
+   theTif = TIFFOpen( theFilename.c_str(), openMode.c_str() );
 #  endif
 #else
-   theTif = TIFFOpen( theFilename.c_str(), "w" );
+   theTif = TIFFOpen( theFilename.c_str(), openMode.c_str() );
 #endif
 
    if (!theTif)
@@ -343,7 +358,7 @@ Call setFilename method.\n",
    return true;
 }
 
-bool ossimTiffWriter::writeGeotiffTags(ossimMapProjectionInfo* projectionInfo)
+bool ossimTiffWriter::writeGeotiffTags(ossimRefPtr<ossimMapProjectionInfo> projectionInfo)
 {
    static const char MODULE[] = "ossimTiffWriter::writeGeotiffTags";
 	
@@ -359,15 +374,17 @@ Call setFilename method.\n",
                     MODULE);
       return false;
    }
-
-   if (!projectionInfo)
+   
+   if (!projectionInfo.valid())
    {
       return false;
    }
-
-#ifdef OSSIM_HAS_GEOTIFF
-#  if OSSIM_HAS_GEOTIFF
-
+   return ossimGeoTiff::writeTags(theTif,
+                                  projectionInfo,
+                                  theImagineNad27Flag);
+// #ifdef OSSIM_HAS_GEOTIFF
+// #  if OSSIM_HAS_GEOTIFF
+#if 0
    GTIF* gtif = GTIFNew(theTif);
    
    // Get a pointer to the projection.
@@ -389,7 +406,6 @@ Call setFilename method.\n",
    const char* scaleFactor  = kwl.find(ossimKeywordNames::SCALE_FACTOR_KW);
 
    // Set the pixel type.  This will shift the tie point correctly for us.
-   projectionInfo->setPixelType(thePixelType);
 
    //---
    // Since using a pcs code is the easiest way to go, look for that first.
@@ -504,23 +520,23 @@ Call setFilename method.\n",
    {
       case LINEAR_FOOT:
       {
-         tiePoints[3]  = mtrs2ft(projectionInfo->ulEastingNorthingPt().x);
-         tiePoints[4]  = mtrs2ft(projectionInfo->ulEastingNorthingPt().y);
-         pixScale[0]   = mtrs2ft(projectionInfo->getMetersPerPixel().x);
-         pixScale[1]   = mtrs2ft(projectionInfo->getMetersPerPixel().y);
-         falseEasting  = mtrs2ft(falseEasting);
-         falseNorthing = mtrs2ft(falseNorthing);
+         tiePoints[3]  = ossim::mtrs2ft(projectionInfo->ulEastingNorthingPt().x);
+         tiePoints[4]  = ossim::mtrs2ft(projectionInfo->ulEastingNorthingPt().y);
+         pixScale[0]   = ossim::mtrs2ft(projectionInfo->getMetersPerPixel().x);
+         pixScale[1]   = ossim::mtrs2ft(projectionInfo->getMetersPerPixel().y);
+         falseEasting  = ossim::mtrs2ft(falseEasting);
+         falseNorthing = ossim::mtrs2ft(falseNorthing);
          
          break;
       }
       case LINEAR_FOOT_US_SURVEY:
       {
-         tiePoints[3]  = mtrs2usft(projectionInfo->ulEastingNorthingPt().x);
-         tiePoints[4]  = mtrs2usft(projectionInfo->ulEastingNorthingPt().y);
-         pixScale[0]   = mtrs2usft(projectionInfo->getMetersPerPixel().x);
-         pixScale[1]   = mtrs2usft(projectionInfo->getMetersPerPixel().y);
-         falseEasting  = mtrs2usft(falseEasting);
-         falseNorthing = mtrs2usft(falseNorthing);
+         tiePoints[3]  = ossim::mtrs2usft(projectionInfo->ulEastingNorthingPt().x);
+         tiePoints[4]  = ossim::mtrs2usft(projectionInfo->ulEastingNorthingPt().y);
+         pixScale[0]   = ossim::mtrs2usft(projectionInfo->getMetersPerPixel().x);
+         pixScale[1]   = ossim::mtrs2usft(projectionInfo->getMetersPerPixel().y);
+         falseEasting  = ossim::mtrs2usft(falseEasting);
+         falseNorthing = ossim::mtrs2usft(falseNorthing);
          break;
       }
       case ANGULAR_DEGREES:
@@ -597,7 +613,7 @@ Call setFilename method.\n",
       gcs = USER_DEFINED;
 
       std::ostringstream os;
-      os << "IMAGINE GeoTIFF Support\nCopyright 1991 -  2001 by ERDAS, Inc. All Rights Reserved\n@(#)$RCSfile$ $Revision: 9257 $ $Date: 2006-07-14 17:31:02 +0200 (ven, 14 jui 2006) $\nUnable to match Ellipsoid (Datum) to a GeographicTypeGeoKey value\nEllipsoid = Clarke 1866\nDatum = NAD27 (CONUS)";
+      os << "IMAGINE GeoTIFF Support\nCopyright 1991 -  2001 by ERDAS, Inc. All Rights Reserved\n@(#)$RCSfile$ $Revision: 11971 $ $Date: 2007-11-01 17:44:19 +0100 (Thu, 01 Nov 2007) $\nUnable to match Ellipsoid (Datum) to a GeographicTypeGeoKey value\nEllipsoid = Clarke 1866\nDatum = NAD27 (CONUS)";
 
       GTIFKeySet(gtif,
                  GeogCitationGeoKey,
@@ -932,10 +948,10 @@ Call setFilename method.\n",
    GTIFFree(gtif);
 
    return true;
-#  endif
-#endif // #ifdef OSSIM_HAS_GEOTIFF
-
-   return true;
+// #  endif
+// #endif // #ifdef OSSIM_HAS_GEOTIFF
+#endif
+//   return true;
 }
 
 bool ossimTiffWriter::writeFile()
@@ -1001,7 +1017,24 @@ bool ossimTiffWriter::writeFile()
    {
       close();
    }
-
+   ossim_uint64 threeGigs = (static_cast<ossim_uint64>(1024)*
+                            static_cast<ossim_uint64>(1024)*
+                            static_cast<ossim_uint64>(1024)*
+                            static_cast<ossim_uint64>(3));
+   ossimIrect bounds = theInputConnection->getBoundingRect();
+   ossim_uint64 byteCheck = (static_cast<ossim_uint64>(bounds.width())*
+                             static_cast<ossim_uint64>(bounds.height())*
+                             static_cast<ossim_uint64>(theInputConnection->getNumberOfOutputBands())*
+                             static_cast<ossim_uint64>(ossim::scalarSizeInBytes(theInputConnection->getOutputScalarType())));
+	
+   if(byteCheck > threeGigs)
+   {
+      theBigTiffFlag = true;
+   }
+   else
+   {
+      theBigTiffFlag = false;
+   }
    open();
 
    if (!isOpen())
@@ -1045,8 +1078,9 @@ bool ossimTiffWriter::writeFile()
                                              theViewController->getView());
          if(proj)
          {
-            ossimMapProjectionInfo* projectionInfo
+            ossimRefPtr<ossimMapProjectionInfo> projectionInfo
                = new ossimMapProjectionInfo(proj, theAreaOfInterest);
+            projectionInfo->setPixelType(thePixelType);
 
             if (writeGeotiffTags(projectionInfo) == false)
             {
@@ -1057,15 +1091,13 @@ bool ossimTiffWriter::writeFile()
                      << "\nError detected writing geotiff tags.  Returning..."
                      << std::endl;
                }
-               delete projectionInfo;
                return false;
             }
-
-            delete projectionInfo;
          }
       }
-      else if(theProjectionInfo)
+      else if(theProjectionInfo.valid())
       {
+         theProjectionInfo->setPixelType(thePixelType);
          if (writeGeotiffTags(theProjectionInfo) == false)
          {
             if(traceDebug())
@@ -1088,9 +1120,10 @@ bool ossimTiffWriter::writeFile()
          ossimMapProjection* mapProj = PTR_CAST(ossimMapProjection, proj);
          if(mapProj)
          {
-            ossimMapProjectionInfo* projectionInfo
+            ossimRefPtr<ossimMapProjectionInfo> projectionInfo
                = new ossimMapProjectionInfo(mapProj, theAreaOfInterest);
 
+            projectionInfo->setPixelType(thePixelType);
             if (writeGeotiffTags(projectionInfo) == false)
             {
                if(traceDebug())
@@ -1104,12 +1137,8 @@ bool ossimTiffWriter::writeFile()
                {
                   delete proj;
                }
-               delete projectionInfo;
                return false;
             }
-
-            delete projectionInfo;
-
          }
          if(proj)
          {
@@ -1231,7 +1260,7 @@ bool ossimTiffWriter::loadState(const ossimKeywordlist& kwl,
    const char *value;
 
    ossimIpt defaultTileSize;
-   ossimGetDefaultTileSize(defaultTileSize);
+   ossim::defaultTileSize(defaultTileSize);
 
    value = kwl.find(prefix,
                     TIFF_WRITER_OUTPUT_TILE_SIZE_X_KW);
@@ -1548,15 +1577,17 @@ bool ossimTiffWriter::writeToTilesBandSep()
             tdata_t* data = (tdata_t*)id->getBuf(band);
             // Write the tile.
             tsize_t bytesWritten = 0;
-            bytesWritten = TIFFWriteTile(theTif,
-                                         data,
-                                         (ossim_uint32)origin.x,
-                                         (ossim_uint32)origin.y,
-                                         (ossim_uint32)0,        // z
-                                         (tsample_t)band);    // sample
-
-	    if (bytesWritten != tileSizeInBytes)
-	      {
+			if(data)
+			{
+				bytesWritten = TIFFWriteTile(theTif,
+                                             data,
+                                             (ossim_uint32)origin.x,
+                                             (ossim_uint32)origin.y,
+                                             (ossim_uint32)0,        // z
+                                             (tsample_t)band);    // sample
+			}
+	        if (bytesWritten != tileSizeInBytes)
+	        {
                if(traceDebug())
                {
                   ossimNotify(ossimNotifyLevel_DEBUG)
@@ -1612,7 +1643,7 @@ bool ossimTiffWriter::writeToStrips()
    ossim_uint32 numberOfTiles = theInputConnection->getNumberOfTiles();
    ossim_uint32 width = theAreaOfInterest.width();
    ossim_uint32 bytesInLine =
-      ossimGetScalarSizeInBytes(theInputConnection->getOutputScalarType()) *
+      ossim::scalarSizeInBytes(theInputConnection->getOutputScalarType()) *
       width * bands;
 
    //---
@@ -1727,7 +1758,7 @@ bool ossimTiffWriter::writeToStripsBandSep()
    ossim_uint32 numberOfTiles   = theInputConnection->getNumberOfTiles();
    ossim_uint32 width           = theAreaOfInterest.width();
    ossim_uint32 bytesInLine     =
-      ossimGetScalarSizeInBytes(theInputConnection->getOutputScalarType()) *
+      ossim::scalarSizeInBytes(theInputConnection->getOutputScalarType()) *
       width;
 
    //---
@@ -1831,7 +1862,7 @@ bool ossimTiffWriter::writeToStripsBandSep()
 
 void ossimTiffWriter::setTileSize(const ossimIpt& tileSize)
 {
-   if (tileSize.x % 32 || tileSize.y % 32)
+   if ( (tileSize.x % 16) || (tileSize.y % 16) )
    {
       if(traceDebug())
       {
@@ -1916,12 +1947,12 @@ void ossimTiffWriter::setProperty(ossimRefPtr<ossimProperty> property)
 
    if(property->getName() == ossimKeywordNames::COMPRESSION_QUALITY_KW)
    {
-      ossimNumericProperty* numericProperty = PTR_CAST(ossimNumericProperty,
-                                                       property.get());
-      if (numericProperty)
-      {
-         setJpegQuality( numericProperty->asInt32() );
-      }
+//       ossimNumericProperty* numericProperty = PTR_CAST(ossimNumericProperty,
+//                                                        property.get());
+//       if (numericProperty)
+//       {
+      setJpegQuality( property->valueToString().toInt32() );
+//       }
    }
    else if (property->getName() == ossimKeywordNames::COMPRESSION_TYPE_KW)
    {
@@ -1942,6 +1973,15 @@ void ossimTiffWriter::setProperty(ossimRefPtr<ossimProperty> property)
    else if(property->getName() == "color_lut_flag")
    {
       theColorLutFlag = property->valueToString().toBool();
+   }
+   else if(property->getName() == "big_tiff_flag")
+   {
+      theForceBigTiffFlag = property->valueToString().toBool();
+   }
+   else if(property->getName() == ossimKeywordNames::OUTPUT_TILE_SIZE_KW)
+   {
+      theOutputTileSize.x = property->valueToString().toInt32();
+      theOutputTileSize.y =  theOutputTileSize.x;
    }
    else
    {
@@ -2004,6 +2044,29 @@ ossimRefPtr<ossimProperty> ossimTiffWriter::getProperty(const ossimString& name)
                                                                     theColorLutFlag);
       return boolProperty;
    }
+   else if(name == "big_tiff_flag")
+   {
+       ossimBooleanProperty* boolProperty = new ossimBooleanProperty(name,
+                                                                    theForceBigTiffFlag);
+      return boolProperty;     
+   }
+   else if(name == "output_tile_size")
+   {
+      ossimStringProperty* stringProp =
+         new ossimStringProperty(name,
+                                 ossimString::toString(theOutputTileSize.x),
+                                 false); // editable flag
+      stringProp->addConstraint(ossimString("16"));
+      stringProp->addConstraint(ossimString("32"));
+      stringProp->addConstraint(ossimString("64"));
+      stringProp->addConstraint(ossimString("128"));
+      stringProp->addConstraint(ossimString("256"));      
+      stringProp->addConstraint(ossimString("512"));      
+      stringProp->addConstraint(ossimString("1024"));      
+      stringProp->addConstraint(ossimString("2048"));      
+      return stringProp;
+     
+   }
    return ossimImageFileWriter::getProperty(name);
 }
 
@@ -2015,7 +2078,9 @@ void ossimTiffWriter::getPropertyNames(std::vector<ossimString>& propertyNames)c
                               ossimKeywordNames::COMPRESSION_TYPE_KW));
    propertyNames.push_back(ossimString("lut_file"));
    propertyNames.push_back(ossimString("color_lut_flag"));
-   
+   propertyNames.push_back(ossimString("big_tiff_flag"));
+   propertyNames.push_back(ossimString("output_tile_size"));
+  
    ossimImageFileWriter::getPropertyNames(propertyNames);
 }
 
@@ -2095,10 +2160,6 @@ ossimIpt ossimTiffWriter::getOutputTileSize()const
 
 ossim_int32 ossimTiffWriter::setProjectionInfo(const ossimMapProjectionInfo& proj)
 {
-   if(theProjectionInfo)
-   {
-      delete theProjectionInfo;
-   }
    theProjectionInfo = new ossimMapProjectionInfo(proj);
 
    return ossimErrorCodes::OSSIM_OK;

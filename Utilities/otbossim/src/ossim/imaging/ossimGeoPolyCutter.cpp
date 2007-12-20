@@ -5,7 +5,7 @@
 // Author: Garrett Potts (gpotts@imagelinks.com)
 //
 //*************************************************************************
-// $Id: ossimGeoPolyCutter.cpp 9963 2006-11-28 21:11:01Z gpotts $
+// $Id: ossimGeoPolyCutter.cpp 11347 2007-07-23 13:01:59Z gpotts $
 #include <algorithm>
 #include <ossim/imaging/ossimGeoPolyCutter.h>
 #include <ossim/projection/ossimProjection.h>
@@ -305,8 +305,8 @@ void ossimGeoPolyCutter::transformVertices()
             theViewProjection->worldToLineSample(gpoly[j], poly[j]);
 //	    theViewProjection->getRoundTripError(ossimIpt(poly[j]), error);
 //	    poly[j] = poly[j] + error;
-            poly[j] = ossimDpt(irint(poly[j].x),
-                               irint(poly[j].y));
+            poly[j] = ossimDpt(ossim::round<int>(poly[j].x),
+                               ossim::round<int>(poly[j].y));
          }
       }
       computeBoundingRect();
@@ -331,8 +331,8 @@ void ossimGeoPolyCutter::transformVertices(int i)
      theViewProjection->worldToLineSample(gpoly[j], poly[j]);
 //     theViewProjection->getRoundTripError(poly[j], error);
 //     poly[j] = poly[j] + error;
-     poly[j] = ossimDpt(irint(poly[j].x),
-			irint(poly[j].y));
+     poly[j] = ossimDpt(ossim::round<int>(poly[j].x),
+			ossim::round<int>(poly[j].y));
    }
    
    computeBoundingRect();

@@ -10,7 +10,7 @@
 // Contains class definitions for ipt.
 //
 //*******************************************************************
-//  $Id: ossimIpt.cpp 9094 2006-06-13 19:12:40Z dburken $
+//  $Id: ossimIpt.cpp 11347 2007-07-23 13:01:59Z gpotts $
 
 #include <iostream>
 #include <sstream>
@@ -33,8 +33,8 @@ ossimIpt::ossimIpt(const ossimDpt& pt)
    }
    else
    {
-      x = irint(pt.x);
-      y = irint(pt.y);
+      x = ossim::round<int>(pt.x);
+      y = ossim::round<int>(pt.y);
    }
 }
 
@@ -49,8 +49,8 @@ ossimIpt::ossimIpt(const ossimFpt& pt)
    }
    else
    {
-      x = irint(pt.x);
-      y = irint(pt.y);
+      x = ossim::round<int>(pt.x);
+      y = ossim::round<int>(pt.y);
    }
 }
 
@@ -62,8 +62,8 @@ ossimIpt::ossimIpt(const ossimDpt3d &pt)
    }
    else
    {
-      x = irint(pt.x);
-      y = irint(pt.y);
+      x = ossim::round<int>(pt.x);
+      y = ossim::round<int>(pt.y);
    }
 }
 //*******************************************************************
@@ -77,8 +77,8 @@ const ossimIpt& ossimIpt::operator=(const ossimDpt& pt)
    }
    else
    {
-      x = irint(pt.x);
-      y = irint(pt.y);
+      x = ossim::round<int>(pt.x);
+      y = ossim::round<int>(pt.y);
    }
    
    return *this;
@@ -95,8 +95,8 @@ const ossimIpt& ossimIpt::operator=(const ossimFpt& pt)
    }
    else
    {
-      x = irint(pt.x);
-      y = irint(pt.y);
+      x = ossim::round<int>(pt.x);
+      y = ossim::round<int>(pt.y);
    }
    
    return *this;

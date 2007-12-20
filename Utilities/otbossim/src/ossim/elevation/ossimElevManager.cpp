@@ -1,8 +1,6 @@
 //**************************************************************************
 // FILE: ossimElevManager.cc
 //
-// Copyright (C) 2001 ImageLinks, Inc.
-//
 // License:  See top level LICENSE.txt file.
 //
 // DESCRIPTION:
@@ -19,7 +17,7 @@
 //              Initial coding.
 //<
 //**************************************************************************
-// $Id: ossimElevManager.cpp 10070 2006-12-11 20:43:19Z gpotts $
+// $Id: ossimElevManager.cpp 12194 2007-12-14 17:27:23Z dburken $
 
 #include <algorithm>
 
@@ -50,10 +48,10 @@ RTTI_DEF1(ossimElevManager, "ossimElevManager" , ossimElevSource)
 static ossimTrace traceDebug ("ossimElevManager:debug");
 
 #ifdef OSSIM_ID_ENABLED
-static const char OSSIM_ID[] = "$Id: ossimElevManager.cpp 10070 2006-12-11 20:43:19Z gpotts $";
+static const char OSSIM_ID[] = "$Id: ossimElevManager.cpp 12194 2007-12-14 17:27:23Z dburken $";
 #endif
 
-ossimElevManager* ossimElevManager::theInstance = NULL;
+ossimElevManager* ossimElevManager::theInstance = 0;
 
 ossimElevManager* ossimElevManager::instance()
 {
@@ -71,6 +69,7 @@ ossimElevManager::ossimElevManager()
       ossimElevSource(),
       theElevSourceList(0),
       theElevSourceFactoryList(0),
+      theCurrentElevSourceIdx(0),
       theGeoidManager(ossimGeoidManager::instance()),
       theAutoLoadFlag(true),
       theAutoSortFlag(true),
@@ -94,7 +93,7 @@ ossimElevManager::ossimElevManager()
 
 ossimElevManager::~ossimElevManager()
 {
-   theInstance = NULL;
+   theInstance = 0;
 
    // Delete the list of elevation sources and clear the list.
 //    vector<ossimElevSource*>::iterator s = theElevSourceList.begin();
@@ -562,22 +561,56 @@ double ossimElevManager::getHeightAboveMSL(const ossimGpt& gpt)
    if (theEnableFlag)
    {
       ossimScopedLock<ossimMutex> scopedLock(theMutex);
-      //***
+
+      //---
+      // Temp set the index to alway start at zero until theElevSourceList is
+      // split by resolution so highest resolution list get searched first.
+      // (drb)
+      //---
+      theCurrentElevSourceIdx = 0;
+      
+      //---
       // Search through the list of elevation sources for a valid elevation
       // post.
-      //***
-      ossimElevSourceListIterator s = theElevSourceList.begin();
-      while (s != theElevSourceList.end())
+      //---
+      ossim_uint32 size = theElevSourceList.size();
+      for (ossim_uint32 i = 0; i < size; ++i)
       {
-         double d = (*s)->getHeightAboveMSL(gpt);
-         if (d != (*s)->getNullHeightValue())
+         //---
+         // Compute index using modulus (current % size) for round robin
+         // through cells starting at theCurrentElevSourceIdx.
+         //---
+         ossim_uint32 idx = theCurrentElevSourceIdx%size;
+
+         if (theElevSourceList[idx].get()) // pointer check
          {
-            return  d;
+            // Get the post.
+            double d = theElevSourceList[idx]->getHeightAboveMSL(gpt);
+
+            //---
+            // Check for null post; if so, go to next source as there may
+            // be a hole in the current cell that a lower resolution cell
+            // may have coverage for.
+            //---
+            if (!ossim::isnan(d))
+            {
+               return d;
+            }
+         
+            // Close not used cell to keep file descriptors down.
+            theElevSourceList[idx]->close();
          }
-         (*s)->close();  // Close to keep file descriptors down.
-         ++s;
+
+         // Increment the index.
+         ++theCurrentElevSourceIdx;
       }
-      
+
+      //---
+      // Reset the search index to zero as any cells added will be sorted by
+      // resolution and we probably should start the search at the beginning.
+      //---
+      theCurrentElevSourceIdx = 0;
+
       if (theAutoLoadFlag)
       {
          //
@@ -606,28 +639,22 @@ double ossimElevManager::getHeightAboveMSL(const ossimGpt& gpt)
             }
             if (source)
             {
-               theMutex.unlock();
-               // Add it to the list.
-               addElevSource(source);
-               
-               theMutex.lock();
-               
                double d = source->getHeightAboveMSL(gpt);
-               if (d != source->getNullHeightValue())
+               if ( !ossim::isnan(d) )
                {
+                  // Add it to the list.
+                  protectedAddElevSource(source);
+ 
                   return d;
-               }
-               else
-               {
-                  return theNullHeightValue;
                }
             }
             ++sf;
-         }
+            
+         } // End of while (sf != theElevSourceFactoryList.end())
       }
       
    }  // End of "if (isSourceEnabled())"
-   
+
    // If we get here return a null height value.
    return theNullHeightValue;
 }
@@ -638,11 +665,10 @@ double ossimElevManager::getHeightAboveEllipsoid(const ossimGpt& gpt)
    {
       // Fetch the geoid offset first:
       double d = theGeoidManager->offsetFromEllipsoid(gpt);
-      
-      if (d != OSSIM_DBL_NAN)
+      if ( !ossim::isnan(d) )
       {
          double h = getHeightAboveMSL(gpt);
-         if (h != theNullHeightValue)
+         if ( !ossim::isnan(h) )
          {
             return  (h + d);
          }
@@ -658,14 +684,28 @@ double ossimElevManager::getHeightAboveEllipsoid(const ossimGpt& gpt)
 
 double ossimElevManager::getAccuracyCE90(const ossimGpt& gpt) const
 {
-   // return theDtedManager->getAccuracyCE90(gpt);
-   return 0.0;
+   theMutex.lock();
+   double result = 0.0;
+   ossimRefPtr<ossimElevSource>  elevSource = getElevSourceForPoint(gpt);
+   if (elevSource.get())
+   {
+      result = elevSource->getAccuracyCE90(gpt);
+   }
+   theMutex.unlock();
+   return result;
 }
 
 double ossimElevManager::getAccuracyLE90(const ossimGpt& gpt) const
 {
-   // return theDtedManager->getAccuracyLE90(gpt);
-   return 0.0;
+   theMutex.lock();
+   double result = 0.0;
+   ossimRefPtr<ossimElevSource>  elevSource = getElevSourceForPoint(gpt);
+   if (elevSource.get())
+   {
+      result = elevSource->getAccuracyLE90(gpt);
+   }
+   theMutex.unlock();
+   return result; 
 }
 
 double ossimElevManager::getMeanSpacingMeters() const
@@ -681,13 +721,27 @@ double ossimElevManager::getMeanSpacingMeters() const
 
 bool ossimElevManager::pointHasCoverage(const ossimGpt& gpt) const
 {
-   // return theDtedManager->pointHasCoverage(gpt);
-   return 0.0;
+   theMutex.lock();
+   bool result = false;
+   ossimRefPtr<ossimElevSource>  elevSource = getElevSourceForPoint(gpt);
+   if (elevSource.get())
+   {
+      result = elevSource->pointHasCoverage(gpt);
+   }
+   theMutex.unlock();
+   return result; 
 }
 
 void ossimElevManager::addElevSource(ossimElevSource* source)
 {
-   ossimScopedLock<ossimMutex> scopedLock(theMutex);
+   theMutex.lock();
+   protectedAddElevSource(source);
+   theMutex.unlock();
+      
+}
+
+void ossimElevManager::protectedAddElevSource(ossimElevSource* source)
+{
    // Add it to the list...
    if (traceDebug())
    {
@@ -705,6 +759,17 @@ void ossimElevManager::addElevSource(ossimElevSource* source)
            theElevSourceList.end(),
            ossimElevLess());
    }
+   
+   //---
+   // We have two choices for the theCurrentElevSourceIdx:
+   // 
+   // 1) Set to the beginning.
+   // 2) Set the the index of cell just added.
+   //
+   // Given that cells are sorted by resolution (usually) I am setting index
+   // back to the beginning.
+   //---
+   theCurrentElevSourceIdx = 0;
 
    // Update the min / max values.
    updateMinMax();
@@ -879,51 +944,15 @@ bool ossimElevManager::isCellOpen(const ossimFilename& cell) const
 ossimFilename ossimElevManager::getCellFilenameForPoint(
    const ossimGpt& gpt) const
 {
+   theMutex.lock();
    ossimFilename result;
-   
-   //---
-   // Search through the list of elevation sources for a valid elevation
-   // post.
-   //---
-   ossimElevSourceListConstIterator s = theElevSourceList.begin();
-   while( s != theElevSourceList.end() )
+   ossimRefPtr<ossimElevSource>  elevSource = getElevSourceForPoint(gpt);
+   if (elevSource.get())
    {
-      if( (*s)->pointHasCoverage(gpt) )
-      {
-         result = (*s)->getFilename();
-         break;
-      }
-      ++s;
+      result = elevSource->getFilename();
    }
-      
-   //---
-   // If we got here there were no sources in the list that contained
-   // coverage so go through the list of managers and see if they have
-   // coverage.  We will not capture the source, just grab the filename and
-   // delete.
-   //---
-   ossimElevSourceFactoryConstIterator sf =
-      theElevSourceFactoryList.begin();
-
-   while (sf != theElevSourceFactoryList.end())
-   {
-      ossimElevSource* source = (*sf)->getNewElevSource(gpt);
-      if (source)
-      {
-         if ( source->pointHasCoverage(gpt) )
-         {
-            result = source->getFilename();
-            delete source;
-            source = NULL;
-            break;
-         }
-         result = source->getFilename();
-         delete source;
-         source = NULL;
-      }
-      ++sf;
-   }
-   return result;
+   theMutex.unlock();
+   return result; 
 }
 
 bool ossimElevManager::openCell(const ossimFilename& cell)
@@ -976,7 +1005,34 @@ bool ossimElevManager::openDirectory(const ossimFilename& dir)
          << "\nDirectory:  " << dir << std::endl;
    }
 
-   if (dir == ossimFilename::NIL || !dir.isDir()) return false;
+   //---
+   // NOTE: both getNumberOfFactories() and getFactory(idx) set
+   // a lock so we cannot do it here or the calls will never return as they
+   // are waiting for an unlock...
+   //---
+   // theMutex.lock();
+   
+   // make sure we don't have one opened already
+   ossim_uint32 numberOfDatabases = getNumberOfFactories();
+   ossim_uint32 idx = 0;
+   for(idx = 0; idx < numberOfDatabases; ++idx)
+   {
+      const ossimRefPtr<ossimElevSourceFactory> factory = getFactory(idx);
+      if(factory.valid())
+      {
+         ossimFilename directory = factory->getDirectory();
+         if(directory == dir)
+         {
+            return true;
+         }
+      }
+   }
+   // theMutex.unlock();
+
+   if (dir == ossimFilename::NIL || !dir.isDir())
+   {
+      return false;
+   }
 
    ossimDirectory od(dir);
 
@@ -1015,7 +1071,15 @@ bool ossimElevManager::closeCell(const ossimFilename& cell)
                << "Closed cell:  " << (*s)->getFilename().c_str()
                << std::endl;
          }
+         
+         // Erase the cell from the list.
          theElevSourceList.erase(s);
+
+         // Reset the index.
+         if (theElevSourceList.size())
+         {
+            theCurrentElevSourceIdx = 0;
+         }
          return true;
       }
       ++s;
@@ -1037,7 +1101,11 @@ void ossimElevManager::closeAllCells()
       ++s;
    }
 
+   // Clear the list.
    theElevSourceList.clear();
+
+   // Reset the index.
+   theCurrentElevSourceIdx = 0;
 }
 
 void ossimElevManager::getOpenCellList(std::vector<ossimFilename>& list) const
@@ -1075,6 +1143,10 @@ bool ossimElevManager::moveCellUpOne(const ossimFilename& cell)
       if ( cell == (*b)->getFilename() )
       {
          iter_swap(a, b);
+
+         // Reset the index.
+         theCurrentElevSourceIdx = 0;
+         
          return true;
       }
       ++a;
@@ -1096,6 +1168,10 @@ bool ossimElevManager::moveCellDownOne(const ossimFilename& cell)
       if ( cell == (*a)->getFilename() )
       {
          iter_swap(a, b);
+
+         // Reset the index.
+         theCurrentElevSourceIdx = 0;
+         
          return true;
       }
       ++a;
@@ -1438,10 +1514,10 @@ bool ossimElevManager::isDtedDirectory(const ossimFilename& dir) const
    }
    ossim_uint32 count = 0;
    ossim_uint32 maxCount = 25;
-   ossimDirectory od(dir);
-   if (od.isOpened() == false)
+   ossimDirectory od;
+   if(!od.open(dir))
    {
-      return false;
+     return false;
    }
 
    ossimFilename f;
@@ -1460,7 +1536,6 @@ bool ossimElevManager::isDtedDirectory(const ossimFilename& dir) const
          
          // Downcase it.
          f.downcase();
-         
          // Must start with 'e' or 'w'.
          if ( ((f.c_str()[0] == 'e') || ( f.c_str()[0] == 'w')) &&
               (f.size() == 4))
@@ -1682,29 +1757,171 @@ void ossimElevManager::addGeneralRasterElevFactory(const ossimFilename& file)
    //---
    // This handler IS a factory so no need to use the factory.
    //---
-   ossimElevSource* source = new  ossimGeneralRasterElevHandler(file);
-   if (source->getErrorStatus() == ossimErrorCodes::OSSIM_OK)
+   ossimRefPtr<ossimElevSourceFactory> factory = new  ossimGeneralRasterElevFactory(file);
+   addElevSourceFactory(factory);
+//    if (source->getErrorStatus() == ossimErrorCodes::OSSIM_OK)
+//    {
+//       addElevSource(source);
+//       if (traceDebug())
+//       {
+//          ossimNotify(ossimNotifyLevel_DEBUG)
+//             << "Added ossimGeneralRasterElevHandler:  " << file.c_str()
+//             << std::endl;
+//       }
+//    }
+//    else
+//    {
+//       delete source;
+//       source = 0;
+//       if (traceDebug())
+//       {
+//          ossimNotify(ossimNotifyLevel_DEBUG)
+//             << "ossimGeneralRasterElevHandler not added for :  "
+//             << file.c_str()
+//             << std::endl;
+//       }
+//    }
+}
+
+bool ossimElevManager::loadElevationPath(const ossimFilename& elevationPath)
+{
+   if(elevationPath.exists())
    {
-      addElevSource(source);
-      if (traceDebug())
+      TheElevationSearchPaths.push_back(elevationPath);
+   }
+   bool result = false;
+   // check first to see if this is an immediate directory of elevation data
+   ossimFilename file = elevationPath;
+   if ( isDtedDirectory(file) )
+   {
+      addDtedFactory(file);
+      return true;
+   }
+   else if ( isSrtmDirectory(file) )
+   {
+      addSrtmFactory(file);
+      return true;
+   }
+   else if (isGeneralRaster(file))
+   {
+      addGeneralRasterElevFactory(file);
+      return true;
+   }
+   if(elevationPath.exists())
+   {
+      ossimDirectory dir;
+
+      if(dir.open(elevationPath))
       {
-         ossimNotify(ossimNotifyLevel_DEBUG)
-            << "Added ossimGeneralRasterElevHandler:  " << file.c_str()
-            << std::endl;
+         dir.getFirst(file, ossimDirectory::OSSIM_DIR_DIRS);
+         do
+         {
+            if((file != "") && file.isDir())
+            {
+               if ( isDtedDirectory(file) )
+               {
+                  addDtedFactory(file);
+                  result = true;
+               }
+               
+               else if ( isSrtmDirectory(file) )
+               {
+                  addSrtmFactory(file);
+                  result = true;
+               }
+               else if (isGeneralRaster(file))
+               {
+                  addGeneralRasterElevFactory(file);
+                  result = true;
+               }
+               
+            }
+         }while(dir.getNext(file));
       }
    }
-   else
+   return result;
+}
+
+const std::vector<ossimFilename>& ossimElevManager::elevationSearchPaths()const
+{
+   return TheElevationSearchPaths;
+}
+
+
+ossimRefPtr<ossimElevSource> ossimElevManager::getElevSourceForPoint(
+      const ossimGpt& gpt) const
+{
+   ossimRefPtr<ossimElevSource> result = 0;
+   
+   if (theEnableFlag)
    {
-      delete source;
-      source = 0;
-      if (traceDebug())
+      //---
+      // Search through the list of elevation sources for a valid elevation
+      // post.
+      //---
+      ossim_uint32 size = theElevSourceList.size();
+      for (ossim_uint32 i = 0; i < size; ++i)
       {
-         ossimNotify(ossimNotifyLevel_DEBUG)
-            << "ossimGeneralRasterElevHandler not added for :  "
-            << file.c_str()
-            << std::endl;
+         //---
+         // Compute index using modulus (current % size) for round robin
+         // through cells.
+         //---
+         ossim_uint32 idx = theCurrentElevSourceIdx%size;
+
+         if (theElevSourceList[idx].get()) // pointer check
+         {
+            // Check for coverage.
+            if (theElevSourceList[idx]->pointHasCoverage(gpt))
+            {
+               result = theElevSourceList[idx];
+               return result;
+            }
+         
+            // Close not used cell to keep file descriptors down.
+            theElevSourceList[idx]->close();
+         }
+
+         // Increment the index.
+         ++theCurrentElevSourceIdx;
       }
-   }
+
+      //---
+      // Reset the search index to zero as any cells added will be sorted by
+      // resolution and we probably should start the search at the beginning.
+      //---
+      theCurrentElevSourceIdx = 0;
+
+      if (theAutoLoadFlag)
+      {
+         //--- 
+         // If we got here there were no sources in the list that contained
+         // coverage so go through the list of managers and see if they have
+         // coverage.
+         //--- 
+         ossimElevSourceFactoryConstIterator sf =
+            theElevSourceFactoryList.begin();
+
+         while (sf != theElevSourceFactoryList.end())
+         {
+            result = (*sf)->getNewElevSource(gpt);
+            if(result.get())
+            {
+               if (result->pointHasCoverage(gpt))
+               {
+                  return result;
+               }
+               else
+               {
+                  result = 0;
+               }
+            }
+            ++sf;
+         }
+      }
+      
+   }  // End of "if (isSourceEnabled())"
+
+   return result;
 }
 
 void ossimElevManager::loadStandardElevationPaths()
@@ -1714,7 +1931,36 @@ void ossimElevManager::loadStandardElevationPaths()
 
    userDir = userDir.dirCat("elevation");
    installDir = installDir.dirCat("elevation");
+
+   loadElevationPath(userDir);
+   loadElevationPath(installDir);
    
+    ossimString paths = ossimEnvironmentUtility::instance()->getEnvironmentVariable("OSSIM_ELEVATION_PATH");
+    std::vector<ossimString> pathArray;
+    ossimString pathSeparator = ":";
+#if defined(WIN32) && !defined(CYGWIN)
+    pathSeparator = ";";
+#endif
+
+    if(!paths.empty())
+    {
+       paths.split(pathArray, pathSeparator);
+       if(!pathArray.empty())
+       {
+          ossim_uint32 idx = 0;
+          for(idx = 0; idx < pathArray.size(); ++idx)
+          {
+             ossimFilename file(pathArray[idx]);
+             
+             if(file.exists())
+             {
+                loadElevationPath(file);
+             }
+          }
+       }
+    }
+    
+#if 0   
    ossimFilename file;
    if(userDir.exists())
    {
@@ -1772,4 +2018,5 @@ void ossimElevManager::loadStandardElevationPaths()
          }while(dir.getNext(file));
       }
    }
+#endif
 }

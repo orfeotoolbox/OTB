@@ -1,11 +1,9 @@
 //----------------------------------------------------------------------------
-// License:  LGPL
-// 
-// See LICENSE.txt file in the top level directory for more details.
+// License:  See top level LICENSE.txt file.
 //
 // Author:  Garrett Potts
 //
-// $Id: ossimImageMpiSWriterSequenceConnection.cpp 9105 2006-06-14 01:45:40Z gpotts $
+// $Id: ossimImageMpiSWriterSequenceConnection.cpp 12157 2007-12-10 17:06:22Z dburken $
 //----------------------------------------------------------------------------
 
 #include <ossim/ossimConfig.h> /* To pick up OSSIM_HAS_MPI. */
@@ -144,12 +142,11 @@ void ossimImageMpiSWriterSequenceConnection::slaveProcessTiles()
    long currentSendRequest = 0;
    long numberOfTilesSent  = 0;
    int errorValue= 0;
-   MPI_Status status;
-   MPI_Status *statusArray = new MPI_Status[theNumberOfTilesToBuffer];
    MPI_Request *requests   = new MPI_Request[theNumberOfTilesToBuffer];
-
-   memset(statusArray, '\0', sizeof(MPI_Status)*theNumberOfTilesToBuffer);
-   memset(requests, '\0', sizeof(MPI_Request)*theNumberOfTilesToBuffer);
+   for (int i = 0; i < theNumberOfTilesToBuffer; ++i)
+   {
+      requests[i] = MPI_REQUEST_NULL;
+   }
 
    if(traceDebug())
    {
@@ -162,9 +159,8 @@ void ossimImageMpiSWriterSequenceConnection::slaveProcessTiles()
       // if the current send requests have looped around
       // make sure we wait to see if it was sent
       //
-      errorValue = MPI_Wait(&requests[currentSendRequest],
-                            &status);
-      requests[currentSendRequest] = 0;
+      errorValue = MPI_Wait(&requests[currentSendRequest], MPI_STATUS_IGNORE);
+      requests[currentSendRequest] = MPI_REQUEST_NULL;
       if(data.valid() &&
          (data->getDataObjectStatus()!=OSSIM_NULL)&&
          (data->getDataObjectStatus()!=OSSIM_EMPTY))
@@ -329,16 +325,14 @@ void ossimImageMpiSWriterSequenceConnection::slaveProcessTiles()
       currentSendRequest++;
       currentSendRequest %= theNumberOfTilesToBuffer;
       
-      errorValue = MPI_Wait(&requests[currentSendRequest],
-                            &status);
+      errorValue = MPI_Wait(&requests[currentSendRequest], MPI_STATUS_IGNORE);
       ++tempCount;
    }
    
 //   MPI_Waitall(theNumberOfTilesToBuffer,
 //               requests,
-//               statusArray);
+//               MPI_STATUS_IGNORE);
    
-   delete [] statusArray;
    delete [] requests;
 #  endif
 #endif

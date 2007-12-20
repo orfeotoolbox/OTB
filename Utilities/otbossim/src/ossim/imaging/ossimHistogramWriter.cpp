@@ -1,5 +1,4 @@
 //*******************************************************************
-// Copyright (C) 2000 ImageLinks Inc. 
 //
 // License:  LGPL
 // 
@@ -8,7 +7,7 @@
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimHistogramWriter.cpp 9094 2006-06-13 19:12:40Z dburken $
+// $Id: ossimHistogramWriter.cpp 11721 2007-09-13 13:19:34Z gpotts $
 #include <ossim/base/ossimProcessListener.h>
 #include <ossim/imaging/ossimHistogramWriter.h>
 #include <ossim/imaging/ossimImageSource.h>
@@ -16,6 +15,7 @@
 #include <ossim/imaging/ossimImageSourceSequencer.h>
 #include <ossim/base/ossimMultiResLevelHistogram.h>
 #include <ossim/base/ossimMultiBandHistogram.h>
+#include <ossim/imaging/ossimImageHistogramSource.h>
 
 class ossimHistogramWriterProcessListener : public ossimProcessListener
 {
@@ -50,7 +50,11 @@ ossimHistogramWriter::ossimHistogramWriter(ossimImageSource* inputSource,
                        0,
                        true,
                        false),
-     theFileStream(NULL)
+     theAreaOfInterest(),
+     theFilename(),
+     theFileStream(0),
+     theProcessListener(0),
+     theHistogramSource(0)
 {
    theProcessListener = new ossimHistogramWriterProcessListener(this);
    
@@ -69,7 +73,115 @@ ossimHistogramWriter::~ossimHistogramWriter()
       delete theProcessListener;
       theProcessListener = 0;
    }
+
+   // This does not need to be deleted here.  Simply stored for abort.
+   if (theHistogramSource)
+   {
+      theHistogramSource = 0;
+   }
+}
+
+void ossimHistogramWriter::setAreaOfInterest(const ossimIrect& rect)
+{
+   theAreaOfInterest = rect;
+}
+
+ossimObject* ossimHistogramWriter::getObject()
+{
+   return this;
+}
+
+bool ossimHistogramWriter::isOpen()const
+{
+   return (theFileStream != 0);
+}
+
+bool ossimHistogramWriter::open()
+{
+   if(isOpen())
+   {
+      close();
+   }
    
+   theFileStream = new std::ofstream(theFilename.c_str());
+   
+   return theFileStream->good();
+}
+
+bool ossimHistogramWriter::open(const ossimFilename& filename)
+{
+   return ossimOutputSource::open(filename);
+}
+
+void ossimHistogramWriter::close()
+{
+   delete theFileStream;
+   theFileStream = 0;
+}
+
+void ossimHistogramWriter::setOutputName(const ossimString& outputName)
+{
+   ossimOutputSource::setOutputName(outputName);
+   setFilename(outputName);
+}
+
+void ossimHistogramWriter::setFilename(const ossimFilename& filename)
+{
+   theFilename = filename;
+}
+   
+bool ossimHistogramWriter::canConnectMyInputTo(
+   ossim_int32 inputIndex, const ossimConnectableObject* object)const
+{
+   return (object&&(inputIndex == 0)&& 
+           (PTR_CAST(ossimHistogramSource, object)||
+            PTR_CAST(ossimImageSourceInterface, object)));
+}
+
+const ossimObject* ossimHistogramWriter::getObject()const
+{
+   return this;
+}
+
+void ossimHistogramWriter::processProgressEvent(
+   ossimProcessProgressEvent& event)
+{
+   // we will raise the event if its coming from our
+   // input.  This means that we are connected to a
+   // ossimHistogramSource.
+   //
+   if(event.getObject() != this)
+   {
+      ossimProcessInterface::setCurrentMessage(event.getMessage());
+      setPercentComplete(event.getPercentComplete());
+   }
+}
+
+void ossimHistogramWriter::connectInputEvent(
+   ossimConnectionEvent& event)
+{
+   if(event.getObject() == this)
+   {
+      if(event.getOldObject())
+      {
+         event.getOldObject()->removeListener((ossimProcessListener*)this);
+      }
+      if(getInput(0)&&
+         PTR_CAST(ossimHistogramSource, getInput(0)))
+      {
+         getInput(0)->addListener( (ossimProcessListener*)this);
+      }
+   }
+}
+
+void ossimHistogramWriter::disconnectInputEvent(
+   ossimConnectionEvent& event)
+{
+   if(event.getOldObject()&&
+      PTR_CAST(ossimHistogramSource, getInput(0)))
+   {
+      event.getOldObject()->removeListener((ossimProcessListener*)this);
+   }
 }
 
 bool ossimHistogramWriter::saveState(ossimKeywordlist& kwl,
@@ -111,30 +223,40 @@ void ossimHistogramWriter::writeHistogram()
       open();
       if(!isOpen())
       {
-          cerr << "unable to open file " << theFilename << endl;
+         cerr << "unable to open file " << theFilename << endl;
           return;
-       }
-    }
-    if(!getInput(0))
-    {
-       cerr << "ossimHistogramWriter::writeHistogram is not connected" << endl;
-       return;
-    }
+      }
+   }
+   if(!getInput(0))
+   {
+      cerr << "ossimHistogramWriter::writeHistogram is not connected" << endl;
+      return;
+   }
    ossimHistogramSource* histoSource = PTR_CAST(ossimHistogramSource, getInput(0));
    bool deleteHistoSource = false;
    if(!histoSource)
    {
-     histoSource = new ossimImageHistogramSource;
-     histoSource->connectMyInputTo(0, getInput(0));
-     histoSource->enableSource();
-     deleteHistoSource = true;
+      histoSource = new ossimImageHistogramSource;
+      histoSource->connectMyInputTo(0, getInput(0));
+      histoSource->enableSource();
+      deleteHistoSource = true;
+
+      //---
+      // Capture the pointer for abort call.  Note a ossimHistogramSource has
+      // no abort so the abort will only work through the
+      // ossimImageHistogramSource pointer.
+      //---
+      theHistogramSource = (ossimImageHistogramSource*)histoSource;
    }
+
+   // Capture the pointer for abort call.
+   theHistogramSource = histoSource;
    
    histoSource->addListener( theProcessListener);
    
-   ossimMultiResLevelHistogram* histo = histoSource->getHistogram();
+   ossimRefPtr<ossimMultiResLevelHistogram> histo = histoSource->getHistogram();
 
-   if(histo)
+   if(histo.valid())
    {
       ossimKeywordlist kwl;
       histo->saveState(kwl);
@@ -148,7 +270,24 @@ void ossimHistogramWriter::writeHistogram()
       delete histoSource;
       histoSource = NULL;
    }
+   theHistogramSource = 0;
    
    close();
 }
 
+void ossimHistogramWriter::abort()
+{
+   // Call base...
+   ossimProcessInterface::abort();
+
+   // Propagate to histo source.
+   if (theHistogramSource)
+   {
+      ossimImageHistogramSource* histoSource =
+         PTR_CAST(ossimImageHistogramSource, theHistogramSource);
+      if (histoSource)
+      {
+         histoSource->abort();
+      }
+   }
+}

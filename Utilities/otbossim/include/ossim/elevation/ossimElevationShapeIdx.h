@@ -13,7 +13,7 @@ public:
    ossimElevationShapeIdx(const ossimFilename& shapeFilename = "",
                           bool overWriteFlag = false);
    virtual ~ossimElevationShapeIdx();
-   void setFilename(const ossimFilename& file, bool overWriteFlag=false)throw(std::exception());
+   void setFilename(const ossimFilename& file, bool overWriteFlag=false);
 
    void add(const ossimFilename& filename,
             ossim_float64 minx,  // decimal degrees

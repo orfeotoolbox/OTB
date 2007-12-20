@@ -1,5 +1,4 @@
 //*******************************************************************
-// Copyright (C) 2000 ImageLinks Inc. 
 //
 // LICENSE:  See top level LICENSE.txt file.
 // 
@@ -8,19 +7,21 @@
 // Description: Nitf support class
 // 
 //********************************************************************
-// $Id: ossimNitfRegisteredTag.h 10177 2007-01-03 19:22:09Z gpotts $
+// $Id: ossimNitfRegisteredTag.h 11255 2007-06-21 20:52:22Z dburken $
 #ifndef ossimNitfRegisteredTag_HEADER
 #define ossimNitfRegisteredTag_HEADER
 
 #include <ossim/base/ossimObject.h>
 #include <ossim/base/ossimPropertyInterface.h>
 
+class ossimKeywordlist;
+
 class OSSIM_DLL ossimNitfRegisteredTag : public ossimObject ,
                                          public ossimPropertyInterface
 {
 public:
-   ossimNitfRegisteredTag(){}
-   virtual ~ossimNitfRegisteredTag(){}
+   ossimNitfRegisteredTag();
+   virtual ~ossimNitfRegisteredTag();
    
    /**
     * 
@@ -43,6 +44,19 @@ public:
    virtual void setProperty(ossimRefPtr<ossimProperty> property);
    virtual ossimRefPtr<ossimProperty> getProperty(const ossimString& name)const;
    virtual void getPropertyNames(std::vector<ossimString>& propertyNames)const;
+
+   /**
+    * @brief Default interface to populate keyword list with metadata.
+    * expample:  country_code: US
+    * This implementation does nothing.  Derived classes should implement as
+    * they see fit.
+    * 
+    * @param kwl Keywordlist to populate with metadata.
+    *
+    * @param prefix Optional prefix to put in front of key, like: "image1.".
+    */
+   virtual void getMetadata(ossimKeywordlist& kwl,
+                            const char* prefix=0) const;
 
 protected:
    ossimString theRegisteredTagName;

@@ -1,5 +1,4 @@
 //*******************************************************************
-// Copyright (C) 2000 ImageLinks Inc. 
 //
 // LICENSE: LGPL  see top level LICENSE.txt
 //
@@ -7,7 +6,7 @@
 // Description: Nitf support class
 // 
 //********************************************************************
-// $Id: ossimNitfTagInformation.cpp 9094 2006-06-13 19:12:40Z dburken $
+// $Id: ossimNitfTagInformation.cpp 11093 2007-05-30 14:41:56Z dburken $
 
 #include <ossim/support_data/ossimNitfTagInformation.h>
 #include <ossim/support_data/ossimNitfTagFactoryRegistry.h>

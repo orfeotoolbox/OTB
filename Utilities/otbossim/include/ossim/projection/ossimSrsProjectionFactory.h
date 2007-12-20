@@ -6,7 +6,7 @@
 // Author:  Garrett Potts
 //
 //*******************************************************************
-//  $Id: ossimSrsProjectionFactory.h 9094 2006-06-13 19:12:40Z dburken $
+//  $Id: ossimSrsProjectionFactory.h 12081 2007-11-26 21:44:18Z dburken $
 
 #ifndef ossimSrsProjectionFactory_HEADER
 #define ossimSrsProjectionFactory_HEADER
@@ -50,12 +50,6 @@ public:
     * name must be unique.
     */
    virtual void getTypeNameList(std::vector<ossimString>& typeList)const;
-
-   /*!
-    * METHOD: getList()
-    * Returns list of all projections represented by this factory:
-    */
-   virtual std::list<ossimString> getList()const;
 
 protected:
    ossimSrsProjectionFactory() {}

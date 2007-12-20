@@ -8,22 +8,21 @@
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimHistogramSource.h 9094 2006-06-13 19:12:40Z dburken $
+// $Id: ossimHistogramSource.h 11721 2007-09-13 13:19:34Z gpotts $
 #ifndef ossimHistogramSource_HEADER
 #define ossimHistogramSource_HEADER
 
 #include <ossim/base/ossimSource.h>
 #include <ossim/base/ossimFilename.h>
+#include <ossim/base/ossimMultiResLevelHistogram.h>
 
-class OSSIMDLLEXPORT ossimMultiResLevelHistogram;
-
-class OSSIMDLLEXPORT ossimHistogramSource : public ossimSource
+class OSSIM_DLL ossimHistogramSource : public ossimSource
 {
 public:
    
    virtual ~ossimHistogramSource();
    
-   virtual ossimMultiResLevelHistogram* getHistogram();
+   virtual ossimRefPtr<ossimMultiResLevelHistogram> getHistogram();
    
    virtual bool loadState(const ossimKeywordlist& kwl,
                           const char* prefix=0);
@@ -36,7 +35,7 @@ protected:
                         bool inputListFixedFlag=true,
                         bool outputListFixedFlag=true);
    
-   ossimMultiResLevelHistogram* theHistogram;
+   ossimRefPtr<ossimMultiResLevelHistogram> theHistogram;
    
    /*!
     * if the filename is not "" then it will use

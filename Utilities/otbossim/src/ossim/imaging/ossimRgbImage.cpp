@@ -1,9 +1,6 @@
 //*******************************************************************
-// Copyright (C) 2000 ImageLinks Inc. 
 //
-// License:  LGPL
-// 
-// See LICENSE.txt file in the top level directory for more details.
+// License:  See top level LICENSE.txt file.
 //
 // Author: Garrett Potts
 // Description:
@@ -61,14 +58,10 @@
      
 // END OF COPYRIGHT STATEMENT
 //*************************************************************************
-// $Id: ossimRgbImage.cpp 9094 2006-06-13 19:12:40Z dburken $
-#include <iostream>
-using namespace std;
-#include <stdlib.h>
+// $Id: ossimRgbImage.cpp 11832 2007-10-10 13:39:29Z dburken $
+
+#include <cmath>
 #include <ossim/imaging/ossimRgbImage.h>
-#include <stddef.h>
-#include <math.h>
-#include <ossim/base/ossimDrect.h>
 #include <ossim/base/ossimCommon.h>
 
 // this should be in another file.  This is from gd's gdtable.c file and has
@@ -803,8 +796,9 @@ static const int gdSinT[] =
 };
 
 ossimRgbImage::ossimRgbImage()
-   : theImageData(NULL),
-     theOffsets(NULL),
+   : ossimReferenced(),
+     theImageData(0),
+     theOffsets(0),
      theThickness(1),
      theRed(255),
      theGreen(255),
@@ -813,8 +807,9 @@ ossimRgbImage::ossimRgbImage()
 }
 
 ossimRgbImage::ossimRgbImage(ossimRefPtr<ossimImageData>& currentImageData)
-   : theImageData(NULL),
-     theOffsets(NULL),
+   : ossimReferenced(),
+     theImageData(0),
+     theOffsets(0),
      theThickness(1),
      theRed(255),
      theGreen(255),
@@ -829,7 +824,7 @@ ossimRgbImage::~ossimRgbImage()
    if(theOffsets)
    {
       delete [] theOffsets;
-      theOffsets = NULL;
+      theOffsets = 0;
    }
 }
 
@@ -838,9 +833,9 @@ const ossimRefPtr<ossimImageData> ossimRgbImage::getImageData()const
    return theImageData;
 }
 
-void ossimRgbImage::createNewGrey(long width, long height)
+void ossimRgbImage::createNewGrey(ossim_int32 width, ossim_int32 height)
 {
-   theImageData = new ossimImageData(NULL,
+   theImageData = new ossimImageData(0,
                                      OSSIM_UCHAR,
                                      1,
                                      width,
@@ -851,9 +846,9 @@ void ossimRgbImage::createNewGrey(long width, long height)
 
 }
 
-void ossimRgbImage::createNewTrueColor(long width, long height)
+void ossimRgbImage::createNewTrueColor(ossim_int32 width, ossim_int32 height)
 {
-   theImageData = new ossimImageData(NULL,
+   theImageData = new ossimImageData(0,
                                      OSSIM_UCHAR,
                                      3,
                                      width,
@@ -870,36 +865,36 @@ void ossimRgbImage::initialize()
    if(theOffsets)
    {
       delete [] theOffsets;
-      theOffsets = NULL;
+      theOffsets = 0;
    }
    theWidth  = theImageData->getWidth();
    theHeight = theImageData->getHeight();
    
-   theOffsets = new long[theHeight];
-   for(long row = 0; row < theHeight; ++row)
+   theOffsets = new ossim_int32[theHeight];
+   for(ossim_int32 row = 0; row < theHeight; ++row)
    {
       theOffsets[row] = row*theWidth;
    }
    
    // make it work for 1, 2, or 3 band data.
    // we assume the fourth band is for the alpha channel
-   if(theImageData->getNumberOfBands() == 3)
+   if(theImageData->getNumberOfBands() >= 3)
    { // point each band to r, g, b.
-      theBands[0] = static_cast<unsigned char*>(theImageData->getBuf(0));
-      theBands[1] = static_cast<unsigned char*>(theImageData->getBuf(1));
-      theBands[2] = static_cast<unsigned char*>(theImageData->getBuf(2));
+      theBands[0] = static_cast<ossim_uint8*>(theImageData->getBuf(0));
+      theBands[1] = static_cast<ossim_uint8*>(theImageData->getBuf(1));
+      theBands[2] = static_cast<ossim_uint8*>(theImageData->getBuf(2));
    }
    else if(theImageData->getNumberOfBands() == 2)
    {//point r and g to the same place
-      theBands[0] = static_cast<unsigned char*>(theImageData->getBuf(0));
-      theBands[1] = static_cast<unsigned char*>(theImageData->getBuf(0));
-      theBands[2] = static_cast<unsigned char*>(theImageData->getBuf(1));
+      theBands[0] = static_cast<ossim_uint8*>(theImageData->getBuf(0));
+      theBands[1] = static_cast<ossim_uint8*>(theImageData->getBuf(0));
+      theBands[2] = static_cast<ossim_uint8*>(theImageData->getBuf(1));
    }
    else if(theImageData->getNumberOfBands() == 1)
    {// point all band s to the first band
-      theBands[0] = static_cast<unsigned char*>(theImageData->getBuf(0));
-      theBands[1] = static_cast<unsigned char*>(theImageData->getBuf(0));
-      theBands[2] = static_cast<unsigned char*>(theImageData->getBuf(0));
+      theBands[0] = static_cast<ossim_uint8*>(theImageData->getBuf(0));
+      theBands[1] = static_cast<ossim_uint8*>(theImageData->getBuf(0));
+      theBands[2] = static_cast<ossim_uint8*>(theImageData->getBuf(0));
    }
 }
 
@@ -976,7 +971,7 @@ void ossimRgbImage::drawPolygon(ossimDpt *p,
    }
 }
 
-void ossimRgbImage::drawPolygon(const vector<ossimIpt> &p)
+void ossimRgbImage::drawPolygon(const std::vector<ossimIpt> &p)
 {
    if(!theImageData)
    {
@@ -1003,7 +998,7 @@ void ossimRgbImage::drawPolygon(const vector<ossimIpt> &p)
    }
 }
 
-void ossimRgbImage::drawPolygon(const vector<ossimDpt> &p)
+void ossimRgbImage::drawPolygon(const std::vector<ossimDpt> &p)
 {
    if(!theImageData)
    {
@@ -1042,12 +1037,12 @@ void ossimRgbImage::drawFilledArc (double cx,
                                    double s,
                                    double e)
 {
-//    drawFilledArc((int)irint(cx), // center x
-//                  (int)irint(cy), // center y
-//                  (int)irint(w), // width
-//                  (int)irint(h), // height
-//                  (int)irint(s), // start angle
-//                  (int)irint(e)); // end angle
+//    drawFilledArc((int)ossim::round<int>(cx), // center x
+//                  (int)ossim::round<int>(cy), // center y
+//                  (int)ossim::round<int>(w), // width
+//                  (int)ossim::round<int>(h), // height
+//                  (int)ossim::round<int>(s), // start angle
+//                  (int)ossim::round<int>(e)); // end angle
    drawFilledArc((int)(cx), // center x
                  (int)(cy), // center y
                  (int)(w), // width
@@ -1081,8 +1076,8 @@ void ossimRgbImage::drawFilledArc (int cx,
    for (i = s; (i <= e); i++)
    {
       int x, y;
-      x = ((long) gdCosT[i % 360] * (long) w2 / 1024) + cx;
-      y = ((long) gdSinT[i % 360] * (long) h2 / 1024) + cy;
+      x = ((ossim_int32) gdCosT[i % 360] * (ossim_int32) w2 / 1024) + cx;
+      y = ((ossim_int32) gdSinT[i % 360] * (ossim_int32) h2 / 1024) + cy;
       if (i != s)
       {
          /* This is expensive! */
@@ -1128,8 +1123,8 @@ void ossimRgbImage::drawArc (int cx,
    for (i = s; (i <= e); i++)
    {
       int x, y;
-      x = ((long) gdCosT[i % 360] * (long) w2 / 1024) + cx;
-      y = ((long) gdSinT[i % 360] * (long) h2 / 1024) + cy;
+      x = ((ossim_int32) gdCosT[i % 360] * (ossim_int32) w2 / 1024) + cx;
+      y = ((ossim_int32) gdSinT[i % 360] * (ossim_int32) h2 / 1024) + cy;
       if (i != s)
       {
          drawLine (lx, ly, x, y);
@@ -1141,6 +1136,160 @@ void ossimRgbImage::drawArc (int cx,
       }
       lx = x;
       ly = y;
+   }
+}
+
+void ossimRgbImage::drawFilledEllipse (int cx,
+                                       int cy,
+                                       int axisMinor,
+                                       int axisMajor,
+                                       double rot)
+{
+   if(!theImageData)
+   {
+      return;
+   }
+   
+   int lx = 0;
+   int ly = 0;
+   int w2 = axisMinor/2;
+   int h2 = axisMajor/2;
+   ossimIpt pts[3];
+   
+   float sinRot = sin(rot);
+   float cosRot = cos(rot);
+   
+   for (int i = 0; i <= 360; ++i)
+   {
+      int x = ((ossim_int32) gdCosT[i % 360] * (ossim_int32) w2 / 1024);
+      int y = ((ossim_int32) gdSinT[i % 360] * (ossim_int32) h2 / 1024);
+      
+      int rx = (ossim_int32)((float)x*cosRot - (float)y*sinRot + cx);
+      int ry = (ossim_int32)((float)y*cosRot + (float)x*sinRot + cy);
+      
+      if (i != 0)
+      {
+         /* This is expensive! */
+         pts[0].x = lx;
+         pts[0].y = ly;
+         pts[1].x = rx;
+         pts[1].y = ry;
+         pts[2].x = cx;
+         pts[2].y = cy;
+         
+         drawFilledPolygon (pts, 3);
+      }
+      lx = rx;
+      ly = ry;
+   }
+}
+
+void ossimRgbImage::drawEllipse (int cx,
+                                 int cy,
+                                 int axisMinor,
+                                 int axisMajor,
+                                 double rot,
+                                 bool drawAxes)
+{
+   if(!theImageData)
+   {
+      return;
+   }
+
+   // Range check rotation.
+   if ( (rot < -TWO_PI) || (rot > TWO_PI) )
+   {
+      rot = 0.0; // throw exception or continue???
+   }
+
+   int lx = 0;
+   int ly = 0;
+   int w2 = axisMinor/2;
+   int h2 = axisMajor/2;
+   
+   float sinRot = sin(rot);
+   float cosRot = cos(rot);
+   
+   int xMaj[2];
+   int yMaj[2];
+   int xMin[2];
+   int yMin[2];
+   xMin[0] = 0;
+   xMin[1] = 0;
+   yMin[0] = 0;
+   yMin[1] = 0;
+   xMaj[0] = 0;
+   xMaj[1] = 0;   
+   yMaj[0] = 0;
+   yMaj[1] = 0;
+
+   for (int i = 0; i <= 360; i++)
+   {
+      // Compute current coordinates
+      int x = ((ossim_int32) gdCosT[i % 360] * (ossim_int32) w2 / 1024);
+      int y = ((ossim_int32) gdSinT[i % 360] * (ossim_int32) h2 / 1024);
+      
+      // Rotate through orientation angle
+      int rx = (ossim_int32)((float)x*cosRot - (float)y*sinRot + cx);
+      int ry = (ossim_int32)((float)y*cosRot + (float)x*sinRot + cy);
+      
+      // Draw the 1-degree segment
+      if (i != 0)
+      {
+         drawLine (lx, ly, rx, ry);
+      }
+      lx = rx;
+      ly = ry;
+
+      if (drawAxes)
+      {
+         // Save axes end-points
+         switch (i)
+         {
+            case 0:
+               xMin[0] = rx;
+               yMin[0] = ry;
+               break;
+            case 90:
+               xMaj[0] = rx;
+               yMaj[0] = ry;
+               break;
+            case 180:
+               xMin[1] = rx;
+               yMin[1] = ry;
+               break;
+            case 270:
+               xMaj[1] = rx;
+               yMaj[1] = ry;
+               break;
+            default:
+               break;
+         }
+      }
+   }
+   
+   // Draw axes if selected
+   if (drawAxes)
+   {
+      ossim_uint8 rCurr;
+      ossim_uint8 gCurr;
+      ossim_uint8 bCurr;
+      getDrawColor(rCurr, gCurr, bCurr);
+      
+      ossim_int32 thickCurr = theThickness;
+      
+      ossim_uint8 mask = 0xff;
+
+      // Draw the minor axis first so it is on the bottom.
+      drawLine (xMin[0], yMin[0], xMin[1], yMin[1]);
+
+      //set major axis to thicker yellow
+      setDrawColor((rCurr^mask),(gCurr^mask),(bCurr^mask));
+      // setDrawColor(255,255,1);
+      theThickness += 1;
+      drawLine (xMaj[0], yMaj[0], xMaj[1], yMaj[1]);
+      theThickness = thickCurr;
+      setDrawColor(rCurr,gCurr,bCurr); //set back
    }
 }
 
@@ -1159,7 +1308,7 @@ void ossimRgbImage::drawFilledPolygon(ossimIpt *p,
    int x2, y2;
    int ind1, ind2;
    int ints;
-   int *polyInts = NULL;
+   int *polyInts = 0;
    
    if(!n)
    {
@@ -1257,7 +1406,7 @@ void ossimRgbImage::drawFilledPolygon(ossimDpt *p,
    int x2, y2;
    int ind1, ind2;
    int ints;
-   int *polyInts = NULL;
+   int *polyInts = 0;
    
    if(!n)
    {
@@ -1265,13 +1414,13 @@ void ossimRgbImage::drawFilledPolygon(ossimDpt *p,
    }
    polyInts = new int[n];
    
-//   miny = irint(p[0].y);
-//   maxy = irint(p[0].y);
+//   miny = ossim::round<int>(p[0].y);
+//   maxy = ossim::round<int>(p[0].y);
    miny = (int)(p[0].y);
    maxy = (int)(p[0].y);
    for (i = 1; (i < n); i++)
    {
-//      int testPy = irint(p[i].y);
+//      int testPy = ossim::round<int>(p[i].y);
       int testPy = (int)(p[i].y);
       if (testPy < miny)
       {
@@ -1298,21 +1447,21 @@ void ossimRgbImage::drawFilledPolygon(ossimDpt *p,
             ind1 = i - 1;
             ind2 = i;
          }
-//         y1 = irint(p[ind1].y);
-//         y2 = irint(p[ind2].y);
+//         y1 = ossim::round<int>(p[ind1].y);
+//         y2 = ossim::round<int>(p[ind2].y);
          y1 = (int)(p[ind1].y);
          y2 = (int)(p[ind2].y);
          if (y1 < y2)
          {
-            x1 = irint(p[ind1].x);
-            x2 = irint(p[ind2].x);
+            x1 = ossim::round<int>(p[ind1].x);
+            x2 = ossim::round<int>(p[ind2].x);
          }
          else if (y1 > y2)
          {
-//            y2 = irint(p[ind1].y);
-//            y1 = irint(p[ind2].y);
-//            x2 = irint(p[ind1].x);
-//            x1 = irint(p[ind2].x);
+//            y2 = ossim::round<int>(p[ind1].y);
+//            y1 = ossim::round<int>(p[ind2].y);
+//            x2 = ossim::round<int>(p[ind1].x);
+//            x1 = ossim::round<int>(p[ind2].x);
             y2 = (int)(p[ind1].y);
             y1 = (int)(p[ind2].y);
             x2 = (int)(p[ind1].x);
@@ -1343,7 +1492,7 @@ void ossimRgbImage::drawFilledPolygon(ossimDpt *p,
    if (polyInts) delete [] polyInts;
 }
 
-void ossimRgbImage::drawFilledPolygon(const vector<ossimIpt> &p)
+void ossimRgbImage::drawFilledPolygon(const std::vector<ossimIpt> &p)
 {
    if(!theImageData)
    {
@@ -1357,7 +1506,7 @@ void ossimRgbImage::drawFilledPolygon(const vector<ossimIpt> &p)
    int x2, y2;
    int ind1, ind2;
    int ints;
-   int *polyInts = NULL;
+   int *polyInts = 0;
    
    if(!n)
    {
@@ -1433,7 +1582,7 @@ void ossimRgbImage::drawFilledPolygon(const vector<ossimIpt> &p)
    if (polyInts) delete [] polyInts;
 }
 
-void ossimRgbImage::drawFilledPolygon(const vector<ossimDpt> &p)
+void ossimRgbImage::drawFilledPolygon(const std::vector<ossimDpt> &p)
 {
    if(!theImageData)
    {
@@ -1447,7 +1596,7 @@ void ossimRgbImage::drawFilledPolygon(const vector<ossimDpt> &p)
    int x2, y2;
    int ind1, ind2;
    int ints;
-   int *polyInts = NULL;
+   int *polyInts = 0;
    
    if(!n)
    {
@@ -1455,11 +1604,11 @@ void ossimRgbImage::drawFilledPolygon(const vector<ossimDpt> &p)
    }
    polyInts = new int[n];
    
-   miny = (int)p[0].y;//irint(p[0].y);
-   maxy = (int)p[0].y;//irint(p[0].y);
+   miny = (int)p[0].y;//ossim::round<int>(p[0].y);
+   maxy = (int)p[0].y;//ossim::round<int>(p[0].y);
    for (i = 1; (i < n); i++)
    {
-      int testPy = (int)p[i].y;//irint(p[i].y);
+      int testPy = (int)p[i].y;//ossim::round<int>(p[i].y);
       if (testPy < miny)
       {
          miny = testPy;
@@ -1485,23 +1634,23 @@ void ossimRgbImage::drawFilledPolygon(const vector<ossimDpt> &p)
             ind1 = i - 1;
             ind2 = i;
          }
-//          y1 = irint(p[ind1].y);
-//          y2 = irint(p[ind2].y);
+//          y1 = ossim::round<int>(p[ind1].y);
+//          y2 = ossim::round<int>(p[ind2].y);
          y1 = (int)(p[ind1].y);
          y2 = (int)(p[ind2].y);
          if (y1 < y2)
          {
-//            x1 = irint(p[ind1].x);
-//            x2 = irint(p[ind2].x);
+//            x1 = ossim::round<int>(p[ind1].x);
+//            x2 = ossim::round<int>(p[ind2].x);
             x1 = (int)(p[ind1].x);
             x2 = (int)(p[ind2].x);
          }
          else if (y1 > y2)
          {
-//             y2 = irint(p[ind1].y);
-//             y1 = irint(p[ind2].y);
-//             x2 = irint(p[ind1].x);
-//             x1 = irint(p[ind2].x);
+//             y2 = ossim::round<int>(p[ind1].y);
+//             y1 = ossim::round<int>(p[ind2].y);
+//             x2 = ossim::round<int>(p[ind1].x);
+//             x1 = ossim::round<int>(p[ind2].x);
             y2 = (int)(p[ind1].y);
             y1 = (int)(p[ind2].y);
             x2 = (int)(p[ind1].x);
@@ -1545,10 +1694,10 @@ void ossimRgbImage::drawLine(const ossimIpt& start,
 void ossimRgbImage::drawLine(const ossimDpt& start,
                              const ossimDpt& end)
 {
-//    drawLine((int)irint(start.x),
-//             (int)irint(start.y),
-//             (int)irint(end.x),
-//             (int)irint(end.y));
+//    drawLine((int)ossim::round<int>(start.x),
+//             (int)ossim::round<int>(start.y),
+//             (int)ossim::round<int>(end.x),
+//             (int)ossim::round<int>(end.y));
 
    drawLine((int)(start.x),
             (int)(start.y),
@@ -1562,10 +1711,10 @@ void ossimRgbImage::drawLine(double x1,
                              double x2,
                              double y2)
 {
-//    drawLine((int)irint(x1),
-//             (int)irint(y1),
-//             (int)irint(x2),
-//             (int)irint(y2));
+//    drawLine((int)ossim::round<int>(x1),
+//             (int)ossim::round<int>(y1),
+//             (int)ossim::round<int>(x2),
+//             (int)ossim::round<int>(y2));
    drawLine((int)(x1),
             (int)(y1),
             (int)(x2),
@@ -1625,7 +1774,7 @@ void ossimRgbImage::drawLine(int x1,
 	  double ac = cos (atan2 ((double)dy, (double)dx));
 	  if (ac != 0)
 	    {
-	      wid = irint(thick / ac);
+	      wid = ossim::round<int>(thick / ac);
 	    }
 	  else
 	    {
@@ -1706,7 +1855,7 @@ void ossimRgbImage::drawLine(int x1,
       double as = sin (atan2 ((double)dy, (double)dx));
       if (as != 0)
 	{
-	  wid = irint(thick / as);
+	  wid = ossim::round<int>(thick / as);
 	}
       else
 	{
@@ -1783,10 +1932,10 @@ void ossimRgbImage::drawRectangle(double x1,
                                   double x2,
                                   double y2)
 {
-//    drawRectangle(irint(x1),
-//                  irint(y1),
-//                  irint(x2),
-//                  irint(y2));
+//    drawRectangle(ossim::round<int>(x1),
+//                  ossim::round<int>(y1),
+//                  ossim::round<int>(x2),
+//                  ossim::round<int>(y2));
    drawRectangle((int)(x1),
                  (int)(y1),
                  (int)(x2),
@@ -1847,10 +1996,10 @@ void ossimRgbImage::drawFilledRectangle(double x1,
                                         double x2,
                                         double y2)
 {
-//   drawFilledRectangle((int)irint(x1),
-//                       (int)irint(y1),
-//                       (int)irint(x2),
-//                       (int)irint(y2));
+//   drawFilledRectangle((int)ossim::round<int>(x1),
+//                       (int)ossim::round<int>(y1),
+//                       (int)ossim::round<int>(x2),
+//                       (int)ossim::round<int>(y2));
    drawFilledRectangle((int)(x1),
                        (int)(y1),
                        (int)(x2),
@@ -1887,12 +2036,12 @@ void ossimRgbImage::fill()
    {
       return;
    }
-   long width = theWidth;
-   long height = theHeight;
+   ossim_int32 width = theWidth;
+   ossim_int32 height = theHeight;
    
-   for(long row = 0; row < height; ++row)
+   for(ossim_int32 row = 0; row < height; ++row)
    {
-      for(long col = 0; col < width; ++col)
+      for(ossim_int32 col = 0; col < width; ++col)
       {
          fastPlotPixel(col, row,
                        theRed, theGreen, theBlue);
@@ -1900,11 +2049,30 @@ void ossimRgbImage::fill()
    }
 }
 
-void ossimRgbImage::setDrawColor(unsigned char r,
-                                 unsigned char g,
-                                 unsigned char b)
+void ossimRgbImage::setDrawColor(ossim_uint8 r,
+                                 ossim_uint8 g,
+                                 ossim_uint8 b)
 {
    theRed   = r;
    theGreen = g;
    theBlue  = b;
+}
+
+void ossimRgbImage::getDrawColor(ossim_uint8& rCurr,
+                                 ossim_uint8& gCurr,
+                                 ossim_uint8& bCurr)
+{
+   rCurr = theRed;
+   gCurr = theGreen;
+   bCurr = theBlue;
+}
+
+void ossimRgbImage::setThickness(ossim_int32 thickness)
+{
+   theThickness = thickness;
+}
+
+ossim_int32 ossimRgbImage::getThickness() const
+{
+   return theThickness;
 }

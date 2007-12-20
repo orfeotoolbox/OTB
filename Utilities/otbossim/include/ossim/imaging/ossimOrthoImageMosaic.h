@@ -8,7 +8,7 @@
 // Author:  Garrett Potts
 //
 //*******************************************************************
-//  $Id: ossimOrthoImageMosaic.h 9094 2006-06-13 19:12:40Z dburken $
+//  $Id: ossimOrthoImageMosaic.h 10777 2007-04-25 14:49:17Z gpotts $
 #ifndef ossimOrthoImageMosaic_HEADER
 #define ossimOrthoImageMosaic_HEADER
 #include <ossim/imaging/ossimImageMosaic.h>
@@ -36,7 +36,8 @@ public:
                                      const ossimIrect& rect,
                                      ossim_uint32 resLevel=0)const;
    
-   virtual ossimRefPtr<ossimImageData> getNextTile(const ossimIrect& origin,
+   virtual ossimRefPtr<ossimImageData> getNextTile(ossim_uint32& returnedIdx,
+                                                   const ossimIrect& origin,
                                                    ossim_uint32 resLevel=0);
    
    ossimIrect getRelativeRect(ossim_uint32 index,

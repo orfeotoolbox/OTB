@@ -10,7 +10,7 @@
 // Description: A brief description of the contents of the file.
 //
 //*************************************************************************
-// $Id: ossimBrightnessMatch.cpp 9094 2006-06-13 19:12:40Z dburken $
+// $Id: ossimBrightnessMatch.cpp 11955 2007-10-31 16:10:22Z gpotts $
 
 #include <ossim/imaging/ossimBrightnessMatch.h>
 #include <ossim/imaging/ossimImageData.h>
@@ -33,7 +33,7 @@ ossimBrightnessMatch::ossimBrightnessMatch()
     theTargetBrightness(0.5),
     theInputBrightness(0.5)
 {
-   theInputBrightness = OSSIM_DBL_NAN;
+   theInputBrightness = ossim::nan();
    theBrightnessContrastSource = new ossimBrightnessContrastSource;
 }
 
@@ -51,7 +51,7 @@ ossimRefPtr<ossimImageData> ossimBrightnessMatch::getTile(
    }
    if(theInputConnection)
    {
-      if(theInputBrightness == OSSIM_DBL_NAN)
+      if(ossim::isnan(theInputBrightness))
       {
          computeInputBrightness();
       }
@@ -165,7 +165,7 @@ void ossimBrightnessMatch::computeInputBrightness()
       ossim_uint32 nlevels = getNumberOfDecimationLevels();
       if(nlevels>1)
       {
-         while((ossimMax(inputRect.width(), inputRect.height()) > 2048)&&
+         while((ossim::max(inputRect.width(), inputRect.height()) > 2048)&&
                (rlevel < nlevels))
          {
             ++rlevel;

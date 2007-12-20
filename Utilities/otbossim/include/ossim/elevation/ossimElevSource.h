@@ -10,7 +10,7 @@
 //   all objects providing height information given horizontal ground position.
 //
 //*****************************************************************************
-// $Id: ossimElevSource.h 10371 2007-01-25 19:18:01Z dburken $
+// $Id: ossimElevSource.h 11428 2007-07-27 18:44:18Z gpotts $
 
 #ifndef ossimElevSource_HEADER
 #define ossimElevSource_HEADER
@@ -148,11 +148,6 @@ public:
     */
    virtual void setComputeStatisticsFlag(bool flag);
 
-   /**
-    * Static, public data members:
-    */
-   static const double DEFAULT_NULL_HEIGHT;
-   static const double DEFAULT_SEA_LEVEL;
 
 protected:
    /**

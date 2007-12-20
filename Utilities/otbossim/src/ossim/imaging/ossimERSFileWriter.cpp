@@ -10,7 +10,7 @@
 // writing an ERS header file.
 //
 //----------------------------------------------------------------------------
-// $Id: ossimERSFileWriter.cpp 10321 2007-01-19 19:29:27Z dburken $
+// $Id: ossimERSFileWriter.cpp 11347 2007-07-23 13:01:59Z gpotts $
 
 #include <ossim/imaging/ossimERSFileWriter.h>
 #include <ossim/base/ossimKeywordlist.h>
@@ -54,7 +54,7 @@ bool ossimERSFileWriter::writeFile()
    theHdr.theSample		= theAreaOfInterest.width();
    theHdr.theLine		= theAreaOfInterest.height();
    
-   ossimByteOrder byteorder = ossimGetByteOrder();
+   ossimByteOrder byteorder = ossim::byteOrder();
    if (byteorder == OSSIM_BIG_ENDIAN)
    {
       theHdr.theByteorder = "MSBFirst";

@@ -13,7 +13,7 @@
 // http://164.214.2.51/ntb/baseline/docs/stdi0002/final.pdf
 //
 //----------------------------------------------------------------------------
-// $Id: ossimNitfPiaimcTag.cpp 10173 2007-01-03 18:21:26Z gpotts $
+// $Id: ossimNitfPiaimcTag.cpp 11423 2007-07-27 16:59:22Z dburken $
 
 #include <cstring> /* for memcpy */
 #include <iostream>
@@ -22,6 +22,7 @@
 #include <ossim/support_data/ossimNitfPiaimcTag.h>
 #include <ossim/base/ossimString.h>
 #include <ossim/base/ossimStringProperty.h>
+#include <ossim/base/ossimCommon.h>
 
 static const ossimString CLOUDCVR_KW = "CLOUDCVR";
 static const ossimString SRP_KW = "SRP";
@@ -258,7 +259,7 @@ ossim_float64 ossimNitfPiaimcTag::getMeanGsdInMeters() const
    if (s.size())
    {
       ossim_float64 d = s.toFloat64();
-      if ( (d != 0.0) && (d != OSSIM_DBL_NAN) )
+      if ( (d != 0.0) && (ossim::isnan(d) == false) )
       {
          gsd = d / 12.0 * MTRS_PER_FT;
       }

@@ -14,7 +14,7 @@
 // See: http://164.214.2.51/ntb/baseline/docs/stdi0002/final.pdf
 //
 //********************************************************************
-// $Id: ossimNitfRpcBase.h 10173 2007-01-03 18:21:26Z gpotts $
+// $Id: ossimNitfRpcBase.h 11982 2007-11-02 16:34:45Z dburken $
 #ifndef ossimNitfRpcBase_HEADER
 #define ossimNitfRpcBase_HEADER
 #include <ossim/support_data/ossimNitfRegisteredTag.h>
@@ -76,8 +76,6 @@ class OSSIM_DLL ossimNitfRpcBase : public ossimNitfRegisteredTag
 
   /**
    * @return The success record as a boolean.
-   *
-   * @note Per spec always true.
    */
   bool getSuccess()const;
 

@@ -173,7 +173,7 @@ void ossimVpfAnnotationSource::drawAnnotations(ossimRefPtr<ossimImageData> tile)
       {
          if(theFeatureList[idx]->getEnabledFlag())
          {
-            theFeatureList[idx]->drawAnnotations(theImage);
+            theFeatureList[idx]->drawAnnotations(theImage.get());
          }
       }
    }  

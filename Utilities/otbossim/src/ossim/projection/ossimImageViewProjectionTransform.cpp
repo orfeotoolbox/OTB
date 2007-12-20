@@ -15,7 +15,7 @@
 // LIMITATIONS: None.
 //
 //*****************************************************************************
-//  $Id: ossimImageViewProjectionTransform.cpp 9291 2006-07-17 20:16:38Z dburken $
+//  $Id: ossimImageViewProjectionTransform.cpp 11412 2007-07-27 13:56:11Z dburken $
 //
 #include <ossim/projection/ossimImageViewProjectionTransform.h>
 #include <ossim/projection/ossimProjection.h>
@@ -157,6 +157,7 @@ void ossimImageViewProjectionTransform::viewToImage
    {
       ossimGpt gpt;
       theViewProjection->lineSampleToWorld(viewPoint, gpt);
+      
       if(gpt.isLatNan()||gpt.isLonNan())
       {
          imagePoint.makeNan();

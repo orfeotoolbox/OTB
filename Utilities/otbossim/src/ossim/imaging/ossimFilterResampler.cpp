@@ -11,7 +11,7 @@
 //         David A. Horner (DAH) http://dave.thehorners.com
 //
 //*************************************************************************
-// $Id: ossimFilterResampler.cpp 9094 2006-06-13 19:12:40Z dburken $
+// $Id: ossimFilterResampler.cpp 11955 2007-10-31 16:10:22Z gpotts $
 
 #include <ossim/imaging/ossimFilterResampler.h>
 #include <ossim/base/ossimCommon.h>
@@ -398,7 +398,7 @@ template <class T> void ossimFilterResampler::resampleBilinearTile(
          for(ossim_uint32 resultX = 0; resultX < resultRectW; ++resultX)
          {
             // just sample center in input space.
-            centerOffset = irint(pointy)*inWidth + irint(pointx);
+            centerOffset = ossim::round<int>(pointy)*inWidth + ossim::round<int>(pointx);
             for(band=0;band<BANDS;++band)
             {
                resultBuf[band][resultX] = inputBuf[band][centerOffset];
@@ -432,8 +432,8 @@ template <class T> void ossimFilterResampler::resampleBilinearTile(
          pointy = initialy;
          for(ossim_uint32 resultX = 0; resultX < resultRectW; ++resultX)
          {
-            starty  = irint(pointy - ykernel_half_height + .5);
-            startx  = irint(pointx - xkernel_half_width + .5);
+            starty  = ossim::round<int>(pointy - ykernel_half_height + .5);
+            startx  = ossim::round<int>(pointx - xkernel_half_width + .5);
             centerOffset = (ossim_uint32)((starty+ykernel_half_height)*inWidth +
                                           (startx+xkernel_half_width));
             sourceIndex = starty*inWidth+startx;
@@ -739,7 +739,7 @@ void ossimFilterResampler::getKernelSupport(double& x, double& y)const
    }
    else
    {
-//       x = theBlurFactor*ossimMax(1.0/theScaleFactor.x, 1.0)*
+//       x = theBlurFactor*ossim::max(1.0/theScaleFactor.x, 1.0)*
 //           horizontalFilter->getSupport();
       x = horizontalFilter->getSupport();
    }
@@ -750,7 +750,7 @@ void ossimFilterResampler::getKernelSupport(double& x, double& y)const
    }
    else
    {
-//       y = theBlurFactor*ossimMax(1.0/theScaleFactor.y, 1.0)*
+//       y = theBlurFactor*ossim::max(1.0/theScaleFactor.y, 1.0)*
 //           verticalFilter->getSupport();
       y = verticalFilter->getSupport();
    }

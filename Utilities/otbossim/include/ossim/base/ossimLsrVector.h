@@ -14,7 +14,7 @@
 //              Initial coding.
 //<
 //*****************************************************************************
-//  $Id: ossimLsrVector.h 9968 2006-11-29 14:01:53Z gpotts $
+//  $Id: ossimLsrVector.h 11428 2007-07-27 18:44:18Z gpotts $
 
 #ifndef ossimLsrVector_HEADER
 #define ossimLsrVector_HEADER
@@ -101,6 +101,18 @@ public:
    double    z() const { return theData[2]; }
    double&   z()       { return theData[2]; }
 
+   bool hasNans()const
+   {
+      return (ossim::isnan(theData[0])||
+              ossim::isnan(theData[1])||
+              ossim::isnan(theData[2]));
+   }
+   void makeNan()
+   {
+      theData[0] = ossim::nan();
+      theData[1] = ossim::nan();
+      theData[2] = ossim::nan();
+   }
    ossimColumnVector3d&       data()           { return theData; }
    const ossimColumnVector3d& data()     const { return theData; }
 
@@ -154,12 +166,13 @@ inline ossimLsrVector ossimLsrVector::operator-() const
 //*****************************************************************************
 inline ossimLsrVector ossimLsrVector::operator+(const ossimLsrVector& v) const
 {
-   if (theLsrSpace == v.theLsrSpace)
-      return ossimLsrVector(theData + v.theData, theLsrSpace);
+   if ((theLsrSpace != v.theLsrSpace)||hasNans()||v.hasNans())
+   {
+      theLsrSpace.lsrSpaceErrorMessage();
+      return ossimLsrVector(ossim::nan(), ossim::nan(), ossim::nan(), theLsrSpace);
+   }
+   return ossimLsrVector(theData + v.theData, theLsrSpace);
 
-   //else error:
-   theLsrSpace.lsrSpaceErrorMessage();
-   return ossimLsrVector(OSSIM_NAN, OSSIM_NAN, OSSIM_NAN, theLsrSpace);
 }
 
 //*****************************************************************************
@@ -167,12 +180,12 @@ inline ossimLsrVector ossimLsrVector::operator+(const ossimLsrVector& v) const
 //*****************************************************************************
 inline ossimLsrVector ossimLsrVector::operator-(const ossimLsrVector& v) const
 {
-   if (theLsrSpace == v.theLsrSpace)
-      return ossimLsrVector(theData - v.data(), theLsrSpace);
-
-   //else error:
-   theLsrSpace.lsrSpaceErrorMessage();
-   return ossimLsrVector(OSSIM_NAN, OSSIM_NAN, OSSIM_NAN, theLsrSpace);
+   if ((theLsrSpace != v.theLsrSpace)||hasNans()||v.hasNans())
+   {
+      theLsrSpace.lsrSpaceErrorMessage();
+      return ossimLsrVector(ossim::nan(), ossim::nan(), ossim::nan(), theLsrSpace);
+   }
+   return ossimLsrVector(theData - v.data(), theLsrSpace);
 }
 
 //*****************************************************************************
@@ -180,12 +193,12 @@ inline ossimLsrVector ossimLsrVector::operator-(const ossimLsrVector& v) const
 //*****************************************************************************
 inline ossimLsrPoint ossimLsrVector::operator+(const ossimLsrPoint& p) const
 {
-   if (theLsrSpace == p.lsrSpace())
-      return ossimLsrPoint(theData + p.data(), theLsrSpace);
-
-   //else error:
-   theLsrSpace.lsrSpaceErrorMessage();
-   return ossimLsrPoint(OSSIM_NAN, OSSIM_NAN, OSSIM_NAN, theLsrSpace);
+   if ((theLsrSpace != p.lsrSpace())||hasNans()||p.hasNans())
+   {
+      theLsrSpace.lsrSpaceErrorMessage();
+      return ossimLsrPoint(ossim::nan(), ossim::nan(), ossim::nan(), theLsrSpace);
+   }
+   return ossimLsrPoint(theData + p.data(), theLsrSpace);
 }
 
 //*****************************************************************************
@@ -228,7 +241,7 @@ inline bool ossimLsrVector::operator!=(const ossimLsrVector& v) const
 //
 //*****************************************************************************
 inline ossimLsrVector::operator ossimEcefVector() const
-{
+{   
    return ossimEcefVector(theLsrSpace.lsrToEcefRotMatrix()*theData);
 }   
 
@@ -238,6 +251,8 @@ inline ossimLsrVector::operator ossimEcefVector() const
 //*****************************************************************************
 inline ossimLsrVector ossimLsrVector::unitVector() const
 {
+   if(hasNans()) return ossimLsrVector(ossim::nan(), ossim::nan(), ossim::nan(), theLsrSpace);
+
    return ossimLsrVector(theData/theData.magnitude(), theLsrSpace);
 }
 
@@ -246,6 +261,7 @@ inline ossimLsrVector ossimLsrVector::unitVector() const
 //*****************************************************************************
 inline double ossimLsrVector::magnitude() const
 {
+   if(hasNans()) return ossim::nan();
    return theData.magnitude();
 }
 

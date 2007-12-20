@@ -20,12 +20,6 @@ extern "C" {
 typedef unsigned char VPF_BOOLEAN;
 #else
 typedef unsigned VPF_BOOLEAN;
-#  ifndef min
-#    define min(a,b) ((a) <= (b) ? (a) : (b))
-#  endif
-#  ifndef max
-#    define max(a,b) ((a) <= (b) ? (b) : (a))
-#  endif
 #if (!defined(_MSC_VER))
 #  ifndef stricmp
 #    define stricmp(a,b) ossim_strcasecmp(a,b)

@@ -15,7 +15,7 @@
 // frequency counts for each of these buckets.
 //
 //********************************************************************
-// $Id: ossimHistogram.h 9968 2006-11-29 14:01:53Z gpotts $
+// $Id: ossimHistogram.h 11724 2007-09-13 19:28:07Z gpotts $
 //
 
 #ifndef ossimHistogram_HEADER
@@ -24,6 +24,7 @@
 #include <ossim/base/ossimString.h>
 #include <ossim/base/ossimFilename.h>
 #include <ossim/base/ossimKeywordlist.h>
+#include <ossim/base/ossimXmlNode.h>
 class OSSIMDLLEXPORT ossimHistogram : public ossimObject
 {
   private:
@@ -185,6 +186,8 @@ class OSSIMDLLEXPORT ossimHistogram : public ossimObject
                           const char* prefix=0)const;
    virtual bool loadState(const ossimKeywordlist& kwl,
                           const char* prefix=0);
+   virtual bool saveState(ossimRefPtr<ossimXmlNode> xmlNode)const;
+   virtual bool loadState(const ossimRefPtr<ossimXmlNode> xmlNode);
 TYPE_DATA   
 };
 

@@ -1,5 +1,4 @@
 //*******************************************************************
-// Copyright (C) 2000 ImageLinks Inc.
 //
 // License:  See top level LICENSE.txt file.
 //
@@ -9,7 +8,7 @@
 // Contains class definitions for ossimDpt.
 // 
 //*******************************************************************
-//  $Id: ossimDpt.cpp 9094 2006-06-13 19:12:40Z dburken $
+//  $Id: ossimDpt.cpp 11408 2007-07-27 13:43:00Z dburken $
 
 #include <iostream>
 #include <iomanip>
@@ -20,8 +19,6 @@
 #include <ossim/base/ossimIpt.h>
 #include <ossim/base/ossimFpt.h>
 #include <ossim/base/ossimGpt.h>
-#include <ossim/base/ossimString.h>
-
 
 //*******************************************************************
 // Public Constructor:
@@ -56,10 +53,6 @@ ossimDpt::ossimDpt(const ossimDpt3d &pt)
    :
       x(pt.x), y(pt.y)
 {
-   if(pt.hasNans())
-   {
-      makeNan();
-   }
 }
 
 //*******************************************************************
@@ -69,10 +62,6 @@ ossimDpt::ossimDpt(const ossimGpt &pt)
    :
       x(pt.lon), y(pt.lat)
 {
-   if(pt.isLatNan() || pt.isLonNan())
-   {
-      makeNan();
-   }
 }
 
 //*******************************************************************
@@ -80,12 +69,14 @@ ossimDpt::ossimDpt(const ossimGpt &pt)
 //*******************************************************************
 const ossimDpt& ossimDpt::operator=(const ossimFpt& pt)
 {
-   x = pt.x;
-   y = pt.y;
-   
    if(pt.hasNans())
    {
       makeNan();
+   }
+   else
+   {
+      x = pt.x;
+      y = pt.y;
    }
    return *this;
 }
@@ -95,13 +86,15 @@ const ossimDpt& ossimDpt::operator=(const ossimFpt& pt)
 //*******************************************************************
 const ossimDpt& ossimDpt::operator=(const ossimIpt& pt)
 {
-   x = pt.x;
-   y = pt.y;
    if(pt.hasNans())
    {
       makeNan();
    }
-   
+   else
+   {
+      x = pt.x;
+      y = pt.y;
+   }
    return *this;
 }
 
@@ -112,12 +105,6 @@ const ossimDpt& ossimDpt::operator=(const ossimDpt3d& pt)
 {
    x = pt.x;
    y = pt.y;
-   
-   if(pt.hasNans())
-   {
-      makeNan();
-   }
-   
    return *this;
 }
 
@@ -133,7 +120,7 @@ std::ostream& ossimDpt::print(std::ostream& os, ossim_uint32 precision) const
    os << std::setiosflags(std::ios::fixed) << std::setprecision(precision)
       << "( ";
 
-   if (x != OSSIM_DBL_NAN)
+   if (ossim::isnan(x) == false)
    {
       os << x;
    }
@@ -144,7 +131,7 @@ std::ostream& ossimDpt::print(std::ostream& os, ossim_uint32 precision) const
    
    os << ", ";
 
-   if (y != OSSIM_DBL_NAN)
+   if (ossim::isnan(y) == false)
    {
       os << y;
    }
@@ -219,7 +206,7 @@ std::istream& operator>>(std::istream& is, ossimDpt &pt)
    }
    else
    {
-      pt.x = OSSIM_DBL_NAN;
+      pt.x = ossim::nan();
    }
 
    //---
@@ -247,7 +234,7 @@ std::istream& operator>>(std::istream& is, ossimDpt &pt)
    }
    else
    {
-      pt.y = OSSIM_DBL_NAN;
+      pt.y = ossim::nan();
    }
 
    // Gobble the trailing ")".

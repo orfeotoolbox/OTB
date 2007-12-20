@@ -1,5 +1,4 @@
 //*******************************************************************
-// Copyright (C) 2000 ImageLinks Inc. 
 //
 // LICENSE: See top level LICENSE.txt for more details.
 //
@@ -8,7 +7,7 @@
 // Description: Nitf support class
 // 
 //********************************************************************
-// $Id: ossimNitfImageHeader.cpp 10173 2007-01-03 18:21:26Z gpotts $
+// $Id: ossimNitfImageHeader.cpp 11331 2007-07-19 18:35:33Z dburken $
 
 #include <cmath> /* for fmod */
 #include <iomanip>
@@ -94,7 +93,7 @@ const ossimRefPtr<ossimNitfRegisteredTag> ossimNitfImageHeader::getTagData(
       }
    }
    
-   return false;
+   return ossimRefPtr<ossimNitfRegisteredTag>();
 }
 
 ossim_uint32 ossimNitfImageHeader::getNumberOfTags()const
@@ -223,6 +222,22 @@ void ossimNitfImageHeader::printTags(std::ostream& out)const
          tag->print(out);
       }
    }
+}
+
+void ossimNitfImageHeader::getMetadata(ossimKeywordlist& kwl,
+                                       const char* prefix) const
+{
+   kwl.add(prefix, "source",
+           getImageSource().c_str(),
+           false);
+   kwl.add(prefix,
+           "image_date",
+           getAcquisitionDateMonthDayYear().c_str(),
+           false);
+   kwl.add(prefix,
+           "image_title",
+           getTitle().c_str(),
+           false);
 }
 
 bool ossimNitfImageHeader::hasLut()const

@@ -10,7 +10,7 @@
 // Description: implementation for image generator
 //
 //*************************************************************************
-// $Id: ossimTiling.cpp 9658 2006-10-06 19:01:43Z gpotts $
+// $Id: ossimTiling.cpp 11347 2007-07-23 13:01:59Z gpotts $
 
 #include <sstream>
 #include <iomanip>
@@ -166,8 +166,8 @@ bool ossimTiling::initialize(const ossimMapProjection& proj,
       }
    }
    
-   theTotalHorizontalTiles = irint(fabs(theTilingRect.ur().x - theTilingRect.ul().x)/convertedTilingDistance.x);
-   theTotalVerticalTiles   = irint(fabs(theTilingRect.ur().y - theTilingRect.lr().y)/convertedTilingDistance.y);
+   theTotalHorizontalTiles = ossim::round<int>(fabs(theTilingRect.ur().x - theTilingRect.ul().x)/convertedTilingDistance.x);
+   theTotalVerticalTiles   = ossim::round<int>(fabs(theTilingRect.ur().y - theTilingRect.lr().y)/convertedTilingDistance.y);
    theTotalTiles           = theTotalHorizontalTiles*theTotalVerticalTiles;
 
    // reset the tile id to the beginning

@@ -5,7 +5,7 @@
 // Author:  Garrett Potts (gpotts@imagelinks.com)
 //
 //*******************************************************************
-// $Id: ossimRationalNumber.cpp 9963 2006-11-28 21:11:01Z gpotts $
+// $Id: ossimRationalNumber.cpp 11347 2007-07-23 13:01:59Z gpotts $
 #include <ossim/base/ossimRationalNumber.h>
 
 // Normalisation
@@ -23,7 +23,7 @@ void ossimRationalNumber::normalize()
        return;
     }
 
-    ossim_int32 g = ossimGcd(theNum, theDen);
+    ossim_int32 g = ossim::gcd(theNum, theDen);
     
     theNum /= g;
     theDen /= g;
@@ -75,10 +75,10 @@ const ossimRationalNumber& ossimRationalNumber::operator+= (const ossimRationalN
     // Which proves that instead of normalizing the result, it is better to
     // divide num and den by gcd((a*d1 + c*b1), g)
 
-    ossim_int32 g = ossimGcd(theDen, r.theDen);
+    ossim_int32 g = ossim::gcd(theDen, r.theDen);
     theDen /= g;  // = b1 from the calculations above
     theNum = theNum * (r.theDen / g) + r.theNum * theDen;
-    g = ossimGcd(theNum, g);
+    g = ossim::gcd(theNum, g);
     theNum /= g;
     theDen *= r.theDen/g;
 
@@ -89,10 +89,10 @@ const ossimRationalNumber& ossimRationalNumber::operator-= (const ossimRationalN
 {
     // This calculation avoids overflow, and minimises the number of expensive
     // calculations. It corresponds exactly to the += case above
-    ossim_int32 g = ossimGcd(theDen, r.theDen);
+    ossim_int32 g = ossim::gcd(theDen, r.theDen);
     theDen /= g;
     theNum = theNum * (r.theDen / g) - r.theNum * theDen;
-    g = ossimGcd(theNum, g);
+    g = ossim::gcd(theNum, g);
     theNum /= g;
     theDen *= r.theDen/g;
 
@@ -102,8 +102,8 @@ const ossimRationalNumber& ossimRationalNumber::operator-= (const ossimRationalN
 const ossimRationalNumber& ossimRationalNumber::operator*= (const ossimRationalNumber& r)
 {
     // Avoid overflow and preserve normalization
-    ossim_int32 gcd1 = ossimGcd(theNum, r.theDen);
-    ossim_int32 gcd2 = ossimGcd(r.theNum, theDen);
+    ossim_int32 gcd1 = ossim::gcd(theNum, r.theDen);
+    ossim_int32 gcd2 = ossim::gcd(r.theNum, theDen);
     theNum = (theNum/gcd1) * (r.theNum/gcd2);
     theDen = (theDen/gcd2) * (r.theDen/gcd1);
     
@@ -167,12 +167,12 @@ ossimRationalNumber ossimRationalNumber::operator+ (const ossimRationalNumber& r
     // Which proves that instead of normalizing the result, it is better to
     // divide num and den by gcd((a*d1 + c*b1), g)
 
-   ossim_int32 g = ossimGcd(theDen, r.theDen);
+   ossim_int32 g = ossim::gcd(theDen, r.theDen);
    ossim_int32 den = theDen;
    ossim_int32 num = theNum;
    den /= g;  // = b1 from the calculations above
    num = num * (r.theDen / g) + r.theNum * den;
-   g = ossimGcd(num, g);
+   g = ossim::gcd(num, g);
    num /= g;
    den *= r.theDen/g;
 
@@ -184,10 +184,10 @@ ossimRationalNumber ossimRationalNumber::operator-(const ossimRationalNumber& r)
    ossimRationalNumber result = *this;
     // This calculation avoids overflow, and minimises the number of expensive
     // calculations. It corresponds exactly to the += case above
-    ossim_int32 g = ossimGcd(result.theDen, r.theDen);
+    ossim_int32 g = ossim::gcd(result.theDen, r.theDen);
     result.theDen /= g;
     result.theNum = result.theNum * (r.theDen / g) - r.theNum * result.theDen;
-    g = ossimGcd(result.theNum, g);
+    g = ossim::gcd(result.theNum, g);
     result.theNum /= g;
     result.theDen *= r.theDen/g;
 
@@ -198,8 +198,8 @@ ossimRationalNumber ossimRationalNumber::operator*(const ossimRationalNumber& r)
 {
    ossimRationalNumber result = *this;
    // Avoid overflow and preserve normalization
-   ossim_int32 gcd1 = ossimGcd(result.theNum, r.theDen);
-   ossim_int32 gcd2 = ossimGcd(r.theNum, result.theDen);
+   ossim_int32 gcd1 = ossim::gcd(result.theNum, r.theDen);
+   ossim_int32 gcd2 = ossim::gcd(r.theNum, result.theDen);
    result.theNum = (result.theNum/gcd1) * (r.theNum/gcd2);
    result.theDen = (result.theDen/gcd2) * (r.theDen/gcd1);
    

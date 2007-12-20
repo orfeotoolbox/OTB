@@ -9,7 +9,7 @@
 //
 // This holds the class definition of DatumFactory.
 //*******************************************************************
-//  $Id: ossimDatumFactory.cpp 9101 2006-06-13 23:31:39Z gpotts $
+//  $Id: ossimDatumFactory.cpp 12077 2007-11-26 00:09:10Z dburken $
 
 #include <ossim/base/ossimDatumFactory.h>
 #include <ossim/base/ossimEllipsoidFactory.h>
@@ -243,6 +243,18 @@ std::list<ossimString> ossimDatumFactory::getList()const
       ++datum;
    }
    return result;
+}
+
+void ossimDatumFactory::getList(std::list<ossimString>& list) const
+{
+   std::map<ossimString, ossimDatum*>::const_iterator datum =
+      theDatumTable.begin();
+   
+   while(datum != theDatumTable.end())
+   {
+      list.push_back((*datum).first);
+      ++datum;
+   }
 }
 
 void ossimDatumFactory::deleteAll()

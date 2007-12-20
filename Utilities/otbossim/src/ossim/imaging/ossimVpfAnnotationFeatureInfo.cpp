@@ -594,7 +594,7 @@ void ossimVpfAnnotationFeatureInfo::buildTxtFeature(const ossimFilename& tableNa
 	    {
 	      ossimGpt centerPoint(midPoint.lat,
 				   midPoint.lon,
-				   OSSIM_DBL_NAN);
+				   ossim::nan());
               ossimFont* font = ossimFontFactoryRegistry::instance()->createFont(theFontInformation);
 	      ossimGeoAnnotationFontObject* annotation = new ossimGeoAnnotationFontObject(centerPoint,
 											  stringValue);
@@ -775,7 +775,7 @@ void ossimVpfAnnotationFeatureInfo::buildPointFeature(const ossimString& primiti
 		    {
 		      centerPointArray.push_back(ossimGpt(ptArray[i].lat,
 							  ptArray[i].lon,
-							  OSSIM_DBL_NAN));
+							  ossim::nan()));
 		    }
 		}
 	      delete [] ptArray;

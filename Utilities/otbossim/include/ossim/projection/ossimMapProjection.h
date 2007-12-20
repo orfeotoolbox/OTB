@@ -1,5 +1,4 @@
 //*******************************************************************
-// Copyright (C) 2000 ImageLinks Inc.
 //
 // License:  See top level LICENSE.txt file.
 //
@@ -10,7 +9,7 @@
 // Base class for all map projections.
 // 
 //*******************************************************************
-//  $Id: ossimMapProjection.h 9719 2006-10-12 18:47:50Z gpotts $
+//  $Id: ossimMapProjection.h 11805 2007-10-05 14:54:28Z dburken $
 
 #ifndef ossimMapProjection_HEADER
 #define ossimMapProjection_HEADER
@@ -25,8 +24,7 @@
 #include <ossim/base/ossimDrect.h>
 #include <iostream>
 
-#include <ossim/matrix/newmat.h>
-#include <ossim/matrix/newmatio.h>
+#include <ossim/base/ossimMatrix4x4.h>
 
 class ossimKeywordlist;
 
@@ -248,6 +246,25 @@ public:
                       
    void setElevationLookupFlag(bool flag);
    bool getElevationLookupFlag()const;
+   ossimUnitType getModelTransformUnitType()const
+   {
+      return theModelTransformUnitType;
+   }
+   void setModelTransformUnitType(ossimUnitType unit)
+   {
+      theModelTransformUnitType = unit;
+   }
+   bool hasModelTransform()const
+   {
+      return (theModelTransformUnitType != OSSIM_UNIT_UNKNOWN);
+   }
+
+   /**
+    * @brief Implementation of pure virtual
+    * ossimProjection::isAffectedByElevation method.
+    * @return false.
+    */
+   virtual bool isAffectedByElevation() const { return false; }
    
 protected:
 
@@ -302,6 +319,17 @@ protected:
    ossim_uint16      thePcsCode;
 
    bool              theElevationLookupFlag;
+
+   // Will always be a 4x4 matrix.
+   // note:  only the first 2 dimensions will be used.
+   // if the size is 0 then it will not be used
+   //
+   ossimMatrix4x4 theModelTransform; // goes from image to model
+   ossimMatrix4x4 theInverseModelTransform; //goes from model back to image
+
+   // Output Units of the transform
+   //
+   ossimUnitType theModelTransformUnitType;
 TYPE_DATA
 };
 

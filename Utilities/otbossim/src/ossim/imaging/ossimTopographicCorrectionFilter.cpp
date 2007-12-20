@@ -8,7 +8,7 @@
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimTopographicCorrectionFilter.cpp 9094 2006-06-13 19:12:40Z dburken $
+// $Id: ossimTopographicCorrectionFilter.cpp 11955 2007-10-31 16:10:22Z gpotts $
 #include <algorithm>
 #include <sstream>
 #include <ossim/imaging/ossimTopographicCorrectionFilter.h>
@@ -353,7 +353,7 @@ void ossimTopographicCorrectionFilter::executeTopographicCorrectionTemplate(
    double  LPrime = 0.0;
    double  LNew   = 0.0;
    double  dn     = 0.0;
-   double cosineZenith = cosd(90 - theLightSourceElevationAngle);
+   double cosineZenith = ossim::cosd(90 - theLightSourceElevationAngle);
 
    if(!colorData->getBuf()||
       !normalData->getBuf()||
@@ -472,7 +472,7 @@ void ossimTopographicCorrectionFilter::executeTopographicCorrectionMinnaertTempl
    {
       return;
    }
-   int maxBands = ossimMin((int)theK.size(), (int)outputData->getNumberOfBands());
+   int maxBands = ossim::min((int)theK.size(), (int)outputData->getNumberOfBands());
    for(int b = 0; b < maxBands;++b)
    {
       int mappedBand = theBandMapping[b];
@@ -601,7 +601,7 @@ void ossimTopographicCorrectionFilter::computeC()
    {
       return;
    }
-   ossim_int32 maxSize = tilesHoriz*tilesVert;//ossimMin(200, );
+   ossim_int32 maxSize = tilesHoriz*tilesVert;//ossim::min(200, );
 
    int idx = 0;
 
@@ -853,7 +853,7 @@ void ossimTopographicCorrectionFilter::resizeArrays(ossim_uint32 newSize)
    ossim_uint32 tempIdx = 0;
    if(tempC.size() > 0 && (theC.size() > 0))
    {
-      int numberOfElements = ossimMin(tempC.size(), theC.size());
+      int numberOfElements = ossim::min(tempC.size(),theC.size());
 
       std::copy(tempC.begin(), tempC.begin()+numberOfElements,
                 theC.begin());

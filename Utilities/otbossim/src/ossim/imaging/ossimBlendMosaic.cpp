@@ -1,14 +1,11 @@
 //*******************************************************************
-// Copyright (C) 2000 ImageLinks Inc. 
 //
-// License:  LGPL
-// 
-// See LICENSE.txt file in the top level directory for more details.
+// License:  See top level LICENSE.txt file.
 //
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimBlendMosaic.cpp 9094 2006-06-13 19:12:40Z dburken $
+// $Id: ossimBlendMosaic.cpp 10798 2007-04-28 14:20:48Z dburken $
 
 #include <ossim/imaging/ossimBlendMosaic.h>
 #include <ossim/imaging/ossimImageData.h>
@@ -40,13 +37,6 @@ void ossimBlendMosaic::initialize()
 
    allocate();
 
-   //   if(theTile)
-   //   {
-   // let's first check to see if all input scalars are the same.
-   // if they are then we will not have to normalize.  Normalizing
-   // is slow and I only want to do it if we have to.
-   //
-      
    // only allocate this space if we have to
    if(hasDifferentInputs())
    {
@@ -65,15 +55,12 @@ void ossimBlendMosaic::initialize()
          theWeights.push_back(1.0);
       }
    }
-   //   }
 }
 
 ossimRefPtr<ossimImageData> ossimBlendMosaic::getTile(
    const ossimIrect& tileRect,
    ossim_uint32 resLevel)
 {   
-   long w = tileRect.width();
-   long h = tileRect.height();
    ossimIpt origin = tileRect.ul();
    if(!isSourceEnabled())
    {
@@ -103,29 +90,13 @@ ossimRefPtr<ossimImageData> ossimBlendMosaic::getTile(
       return ossimImageMosaic::getTile(tileRect, resLevel);
    }
 
-   long tileW = theTile->getWidth();
-   long tileH = theTile->getHeight();
-   if((w != tileW)||
-      (h != tileH))
-   {
-      theTile->setWidth(w);
-      theTile->setHeight(h);
-      if(hasDifferentInputs())
-      {
-         theNormResult->setWidthHeight(w, h);
-      }
-      if((w*h)!=(tileW*tileH))
-      {
-         theTile->initialize();
-            
-         if(hasDifferentInputs())
-         {
-            theNormResult->initialize();
-         }
-      }
-   }
-   theTile->setOrigin(origin);
+   theTile->setImageRectangle(tileRect);
    theTile->makeBlank();
+   if(theNormResult.valid())
+   {
+      theNormResult->setImageRectangle(tileRect);
+      theNormResult->makeBlank();
+   }
    
    switch(theTile->getScalarType())
    {
@@ -252,19 +223,19 @@ template <class T> ossimRefPtr<ossimImageData> ossimBlendMosaic::combine(
   long offset = 0;
   long row    = 0;
   long col    = 0;
-  
-  currentImageData = getNextTile(0, tileRect, resLevel);
+  ossim_uint32 layerIdx = 0;
+  currentImageData = getNextTile(layerIdx, 0, tileRect, resLevel);
   
   if(!currentImageData.get()) // if we don't have one then return theTile
-    {
-      return theTile;
-    }
-
+  {
+     return theTile;
+  }
+  
   T** srcBands  = new T*[theLargestNumberOfInputBands];
   T** destBands = new T*[theLargestNumberOfInputBands];
   T*  nullPix   = new T[theTile->getNumberOfBands()];
   
-  previousWeight = theWeights[theCurrentIndex];
+  previousWeight = theWeights[layerIdx];
   //    // now get the previous weight and then combine the two into one.
 	 // let's assign the bands
   for(band = 0; band < theLargestNumberOfInputBands; ++band)
@@ -278,7 +249,7 @@ template <class T> ossimRefPtr<ossimImageData> ossimBlendMosaic::combine(
          currentImageData->getDataObjectStatus();
       
       // set the current weight for the current tile.
-      currentWeight = theWeights[theCurrentIndex];
+      currentWeight = theWeights[layerIdx];
 
       sumOfWeights = previousWeight+currentWeight;
       if( (currentStatus != OSSIM_EMPTY) &&
@@ -349,7 +320,7 @@ template <class T> ossimRefPtr<ossimImageData> ossimBlendMosaic::combine(
             }
          }
        }
-      currentImageData = getNextTile(tileRect, resLevel);
+      currentImageData = getNextTile(layerIdx, tileRect, resLevel);
       previousWeight   = (previousWeight+currentWeight)/2.0;
     }
   delete [] srcBands;
@@ -373,8 +344,8 @@ template <class T> ossimRefPtr<ossimImageData> ossimBlendMosaic::combineNorm(
   long offset = 0;
   long row    = 0;
   long col    = 0;
-  
-  currentImageData = getNextNormTile(0, tileRect, resLevel);
+  ossim_uint32 layerIdx = 0;
+  currentImageData = getNextNormTile(layerIdx, 0, tileRect, resLevel);
   
   if(!currentImageData.get()) // if we don't have one then return theTile
   {
@@ -385,7 +356,7 @@ template <class T> ossimRefPtr<ossimImageData> ossimBlendMosaic::combineNorm(
   float** destBands = new float*[theLargestNumberOfInputBands];
   float*  nullPix   = new float[theTile->getNumberOfBands()];
   
-  previousWeight = theWeights[theCurrentIndex];
+  previousWeight = theWeights[layerIdx];
   //    // now get the previous weight and then combine the two into one.
   // let's assign the bands
   for(band = 0; band < theLargestNumberOfInputBands; ++band)
@@ -398,7 +369,7 @@ template <class T> ossimRefPtr<ossimImageData> ossimBlendMosaic::combineNorm(
      ossimDataObjectStatus currentStatus     = currentImageData->getDataObjectStatus();
      
      // set the current weight for the current tile.
-     currentWeight = theWeights[theCurrentIndex];
+     currentWeight = theWeights[layerIdx];
      
      sumOfWeights = previousWeight+currentWeight;
      if( (currentStatus != OSSIM_EMPTY) &&
@@ -467,7 +438,7 @@ template <class T> ossimRefPtr<ossimImageData> ossimBlendMosaic::combineNorm(
            }
         }
      }
-     currentImageData = getNextNormTile(tileRect, resLevel);
+     currentImageData = getNextNormTile(layerIdx, tileRect, resLevel);
      previousWeight   = (previousWeight+currentWeight)/2.0;
   }
   theNormResult->validate();

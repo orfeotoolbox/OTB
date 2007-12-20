@@ -2,26 +2,29 @@
 #include <ossim/support_data/ossimRpfMaskSubheader.h>
 #include <ossim/base/ossimErrorCodes.h>
 
-ostream& operator <<(ostream& out,
-                     const ossimRpfMaskSubsection& data)
+std::ostream& operator <<(std::ostream& out,
+                          const ossimRpfMaskSubsection& data)
 {
    data.print(out);
-   
    return out;
 }
 
 ossimRpfMaskSubsection::ossimRpfMaskSubsection()
-   :theMaskSubheader(NULL)
+   :theMaskSubheader(0)
 {
    theMaskSubheader = new ossimRpfMaskSubheader;
 }
 
 ossimRpfMaskSubsection::~ossimRpfMaskSubsection()
 {
-   deleteAll();
+   if(theMaskSubheader)
+   {
+      delete theMaskSubheader;
+      theMaskSubheader = 0;
+   }
 }
 
-ossimErrorCode ossimRpfMaskSubsection::parseStream(istream& in,
+ossimErrorCode ossimRpfMaskSubsection::parseStream(std::istream& in,
                                                    ossimByteOrder byteOrder)
 {
    ossimErrorCode result = ossimErrorCodes::OSSIM_OK;
@@ -38,19 +41,10 @@ ossimErrorCode ossimRpfMaskSubsection::parseStream(istream& in,
    return result;
 }
 
-void ossimRpfMaskSubsection::print(ostream& out)const
+void ossimRpfMaskSubsection::print(std::ostream& out)const
 {
    if(theMaskSubheader)
    {
       out << *theMaskSubheader;
-   }
-}
-
-void ossimRpfMaskSubsection::deleteAll()
-{
-   if(theMaskSubheader)
-   {
-      delete theMaskSubheader;
-      theMaskSubheader = NULL;
    }
 }

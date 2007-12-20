@@ -1,9 +1,6 @@
 //*******************************************************************
-// Copyright (C) 2003 ImageLinks Inc. 
 //
-// License:  LGPL
-// 
-// See LICENSE.txt file in the top level directory for more details.
+// License:  See top level LICENSE.txt file.
 //
 // Author:  David Burken
 //
@@ -19,7 +16,7 @@
 // uses a normalized remap table (more scalar independent).
 //
 //*************************************************************************
-// $Id: ossimTableRemapper.cpp 9094 2006-06-13 19:12:40Z dburken $
+// $Id: ossimTableRemapper.cpp 11911 2007-10-28 18:21:41Z dburken $
 
 #include <ossim/imaging/ossimTableRemapper.h>
 #include <ossim/base/ossimTrace.h>
@@ -33,58 +30,13 @@ static ossimTrace traceDebug("ossimTableRemapper:debug");
 
 static const char* TABLE_TYPE[] = { "UNKNOWN", "NATIVE", "NORMALIZED" };
 
-ossimTableRemapper::ossimTableRemapper(ossimObject* owner)
+ossimTableRemapper::ossimTableRemapper()
    :
-      ossimImageSourceFilter(owner),  // base class
-      theTile(NULL),
-      theTmpTile(NULL),
-      theTable(NULL),
-      theNormBuf(NULL),
-      theTableBinCount(0),
-      theTableBandCount(0),
-      theTableType(ossimTableRemapper::UKNOWN),
-      theInputScalarType(OSSIM_SCALAR_UNKNOWN),
-      theOutputScalarType(OSSIM_SCALAR_UNKNOWN),
-      theTableOwnerFlag(true)
-{
-   //***
-   // Set the base class "theEnableFlag" to off since no adjustments have been
-   // made yet.
-   //***
-   disableSource();
-}
-
-
-ossimTableRemapper::ossimTableRemapper(ossimImageSource* inputSource)
-   :
-      ossimImageSourceFilter      (NULL, inputSource),  // base class
-      theTile(NULL),
-      theTmpTile(NULL),
-      theTable(NULL),
-      theNormBuf(NULL),
-      theTableBinCount(0),
-      theTableBandCount(0),
-      theTableType(ossimTableRemapper::UKNOWN),
-      theInputScalarType(OSSIM_SCALAR_UNKNOWN),
-      theOutputScalarType(OSSIM_SCALAR_UNKNOWN),
-      theTableOwnerFlag(true)
-{
-   //***
-   // Set the base class "theEnableFlag" to off since no adjustments have been
-   // made yet.
-   //***
-   disableSource();
-}
-
-
-ossimTableRemapper::ossimTableRemapper(ossimObject* owner,
-                                       ossimImageSource* inputSource)
-   :
-      ossimImageSourceFilter      (owner, inputSource),  // base class
-      theTile(NULL),
-      theTmpTile(NULL),
-      theTable(NULL),
-      theNormBuf(NULL),
+      ossimImageSourceFilter(),  // base class
+      theTile(0),
+      theTmpTile(0),
+      theTable(0),
+      theNormBuf(0),
       theTableBinCount(0),
       theTableBandCount(0),
       theTableType(ossimTableRemapper::UKNOWN),
@@ -109,15 +61,15 @@ void ossimTableRemapper::destroy()
    if (theNormBuf)
    {
       delete [] theNormBuf;
-      theNormBuf = NULL;
+      theNormBuf = 0;
    }
    if (theTableOwnerFlag && theTable)
    {
       delete [] theTable;
-      theTable = NULL;
+      theTable = 0;
    }
-   theTmpTile = NULL;
-   theTile    = NULL;
+   theTmpTile = 0;
+   theTile    = 0;
 }
 
 void ossimTableRemapper::initialize()
@@ -442,23 +394,12 @@ void ossimTableRemapper::remapFromNormalizedTable(
 
 ossimScalarType ossimTableRemapper::getOutputScalarType() const
 {
-   //---
-   // Need to fix this as output scalar can be different from input. (drb)
-   //---
-   return ossimImageSourceFilter::getOutputScalarType();
-   
-//    if (theEnableFlag)
-//    {
-//       return theOutputScalarType;
-//    }
-//    else if (!theEnableFlag && theInputConnection)
-//    {
-//       // disabled return input scalar.
-//       theInputConnection->getOutputScalarType();
-//    }
+   if (theOutputScalarType != OSSIM_SCALAR_UNKNOWN)
+   {
+      return theOutputScalarType;
+   }
 
-//    // No connection and disabled!
-//    return theOutputScalarType;
+   return ossimImageSourceFilter::getOutputScalarType();
 }
 
 void ossimTableRemapper::setTable(ossim_uint8* table,
@@ -486,12 +427,29 @@ void ossimTableRemapper::setTable(ossim_uint8* table,
 bool ossimTableRemapper::loadState(const ossimKeywordlist& kwl,
                                    const char* prefix)
 {
+   // Look for scalar type keyword.
+   ossim_int32 st = ossimScalarTypeLut::instance()->
+      getEntryNumber(kwl, prefix, true);
+
+   // Lookup table returns -1 if not found so check return...
+   if ( (st != -1) && (st != OSSIM_SCALAR_UNKNOWN) )
+   {
+      theOutputScalarType = static_cast<ossimScalarType>(st);
+   }
+
    return ossimImageSourceFilter::loadState(kwl, prefix);
 }
 
 bool ossimTableRemapper::saveState(ossimKeywordlist& kwl,
                                    const char* prefix) const
 {
+   // Save the output scalar type.
+   kwl.add(prefix,
+           ossimKeywordNames::SCALAR_TYPE_KW,
+           ossimScalarTypeLut::instance()->
+           getEntryString(theOutputScalarType).c_str(),
+           true);
+   
    return ossimImageSourceFilter::saveState(kwl, prefix);
 }
 

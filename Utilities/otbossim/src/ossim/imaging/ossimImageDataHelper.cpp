@@ -8,7 +8,7 @@
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimImageDataHelper.cpp 9094 2006-06-13 19:12:40Z dburken $
+// $Id: ossimImageDataHelper.cpp 11347 2007-07-23 13:01:59Z gpotts $
 #include <ossim/imaging/ossimImageDataHelper.h>
 #include <ossim/base/ossimPolyArea2d.h>
 #include <ossim/base/ossimLine.h>
@@ -378,19 +378,19 @@ void ossimImageDataHelper::copyInputToThis(const T* inputBuf,
             ind1 = i - 1;
             ind2 = i;
          }
-         y1 = irint(region[ind1].y);
-         y2 = irint(region[ind2].y);
+         y1 = ossim::round<int>(region[ind1].y);
+         y2 = ossim::round<int>(region[ind2].y);
          if (y1 < y2)
          {
-            x1 = irint(region[ind1].x);
-            x2 = irint(region[ind2].x);
+            x1 = ossim::round<int>(region[ind1].x);
+            x2 = ossim::round<int>(region[ind2].x);
          }
          else if (y1 > y2)
          {
-            y2 = irint(region[ind1].y);
-            y1 = irint(region[ind2].y);
-            x2 = irint(region[ind1].x);
-            x1 = irint(region[ind2].x);
+            y2 = ossim::round<int>(region[ind1].y);
+            y1 = ossim::round<int>(region[ind2].y);
+            x2 = ossim::round<int>(region[ind1].x);
+            x1 = ossim::round<int>(region[ind2].x);
          }
          else
          {
@@ -517,19 +517,19 @@ void ossimImageDataHelper::fill(T dummyVariable,
             ind1 = i - 1;
             ind2 = i;
          }
-         y1 = irint(region[ind1].y);
-         y2 = irint(region[ind2].y);
+         y1 = ossim::round<int>(region[ind1].y);
+         y2 = ossim::round<int>(region[ind2].y);
          if (y1 < y2)
          {
-            x1 = irint(region[ind1].x);
-            x2 = irint(region[ind2].x);
+            x1 = ossim::round<int>(region[ind1].x);
+            x2 = ossim::round<int>(region[ind2].x);
          }
             else if (y1 > y2)
             {
-               y2 = irint(region[ind1].y);
-               y1 = irint(region[ind2].y);
-               x2 = irint(region[ind1].x);
-               x1 = irint(region[ind2].x);
+               y2 = ossim::round<int>(region[ind1].y);
+               y1 = ossim::round<int>(region[ind2].y);
+               x2 = ossim::round<int>(region[ind1].x);
+               x1 = ossim::round<int>(region[ind2].x);
             }
          else
          {
@@ -548,8 +548,8 @@ void ossimImageDataHelper::fill(T dummyVariable,
       
       for (i = 0; (i < (int)polyInts.size()); i += 2)
       {
-         ossim_int32 startX = ossimAbs(polyInts[i]-theOrigin.x);
-         ossim_int32 endX   = ossimAbs(polyInts[i+1]-theOrigin.x);
+         ossim_int32 startX = std::abs(polyInts[i]-theOrigin.x);
+         ossim_int32 endX   = std::abs(polyInts[i+1]-theOrigin.x);
          while(startX <= endX)
          {
             bandOffset = 0;

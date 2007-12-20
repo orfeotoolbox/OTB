@@ -8,7 +8,7 @@
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimFeatherMosaic.cpp 9094 2006-06-13 19:12:40Z dburken $
+// $Id: ossimFeatherMosaic.cpp 11347 2007-07-23 13:01:59Z gpotts $
 
 #include <ossim/imaging/ossimFeatherMosaic.h>
 #include <ossim/base/ossimDpt.h>
@@ -162,8 +162,9 @@ template <class T> ossimRefPtr<ossimImageData> ossimFeatherMosaic::combine(
    
    T** srcBands  = new T*[theLargestNumberOfInputBands];
    T** destBands = new T*[theLargestNumberOfInputBands];
-
-   currentImageData  = getNextTile(0,
+   ossim_uint32 layerIdx = 0;
+   currentImageData  = getNextTile(layerIdx,
+                                   0,
                                    tileRect,
                                    resLevel);
    if(!currentImageData.valid())
@@ -234,7 +235,7 @@ template <class T> ossimRefPtr<ossimImageData> ossimFeatherMosaic::combine(
                {
                   if(!currentImageData->isNull(offset))
                   {
-                     double weight = computeWeight(theCurrentIndex,
+                     double weight = computeWeight(layerIdx,
                                                    ossimDpt(point.x+col,
                                                             point.y+row));
                      
@@ -257,7 +258,7 @@ template <class T> ossimRefPtr<ossimImageData> ossimFeatherMosaic::combine(
             {
                for(col = 0; col < w; ++col)
                {
-                     double weight = computeWeight(theCurrentIndex,
+                     double weight = computeWeight(layerIdx,
                                                    ossimDpt(point.x+col,
                                                             point.y+row));
                      
@@ -273,7 +274,7 @@ template <class T> ossimRefPtr<ossimImageData> ossimFeatherMosaic::combine(
             }
          }
       }
-      currentImageData = getNextTile(tileRect, resLevel);
+      currentImageData = getNextTile(layerIdx, tileRect, resLevel);
    }
    upperBound = theTile->getWidth()*theTile->getHeight();
 
@@ -445,8 +446,8 @@ void ossimFeatherMosaic::ossimFeatherInputInformation::setVertexList(const std::
          ossimDpt intersectionPoint2 = line3.intersectInfinite(line4);
 
          
-         theAxis1Length = irint((theCenter-intersectionPoint1).length());
-         theAxis2Length = irint((theCenter-intersectionPoint2).length());
+         theAxis1Length = ossim::round<int>((theCenter-intersectionPoint1).length());
+         theAxis2Length = ossim::round<int>((theCenter-intersectionPoint2).length());
 
           if(traceDebug())
           {

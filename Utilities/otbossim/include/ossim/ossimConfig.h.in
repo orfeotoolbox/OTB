@@ -91,12 +91,12 @@
 /* Define to the correct byte sizes.  
  * If not available define to 0 so OSSIM uses the defaults
  */
-#define OSSIM_SIZEOF_FLOAT      0
-#define OSSIM_SIZEOF_DOUBLE     0
-#define OSSIM_SIZEOF_LONG_LONG  0
-#define OSSIM_SIZEOF_LONG_INT   0
-#define OSSIM_SIZEOF_INT        0
-#define OSSIM_SIZEOF_SHORT_INT  0
+#define OSSIM_SIZEOF_FLOAT      @OTB_SIZEOF_FLOAT@
+#define OSSIM_SIZEOF_DOUBLE     @OTB_SIZEOF_DOUBLE@
+#define OSSIM_SIZEOF_LONG_LONG  @OTB_SIZEOF_LONG_LONG@
+#define OSSIM_SIZEOF_LONG_INT   @OTB_SIZEOF_LONG_INT@
+#define OSSIM_SIZEOF_INT        @OTB_SIZEOF_INT@
+#define OSSIM_SIZEOF_SHORT_INT  @OTB_SIZEOF_SHORT_INT@
 
 /* These are OS specific defines */
 #define __OSSIM_LINUX__ 0

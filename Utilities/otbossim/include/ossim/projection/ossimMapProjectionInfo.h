@@ -16,7 +16,7 @@
 //   Shifts will be made for "pixel is area" internally.
 //
 //*******************************************************************
-//  $Id: ossimMapProjectionInfo.h 9094 2006-06-13 19:12:40Z dburken $
+//  $Id: ossimMapProjectionInfo.h 11959 2007-10-31 19:22:56Z gpotts $
 
 #ifndef ossimMapProjectionInfo_HEADER
 #define ossimMapProjectionInfo_HEADER
@@ -49,7 +49,7 @@ public:
     * Adds tie point to keyword list.  This will be latitude, longitude if
     * projection is geographic; else, easting, northing.
     */
-   void getGeom(ossimKeywordlist& kwl, const char* prefix=NULL)const;
+   void getGeom(ossimKeywordlist& kwl, const char* prefix=0)const;
 
    /**
     *  Returns the pixel size in meters.

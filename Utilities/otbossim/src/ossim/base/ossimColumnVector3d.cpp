@@ -8,10 +8,11 @@
 //              coordinate.
 //
 //*******************************************************************
-//  $Id: ossimColumnVector3d.cpp 9531 2006-09-11 11:18:27Z dburken $
+//  $Id: ossimColumnVector3d.cpp 11408 2007-07-27 13:43:00Z dburken $
 
 #include <sstream>
 #include <ossim/base/ossimColumnVector3d.h>
+#include <ossim/base/ossimCommon.h>
 
 ossimString ossimColumnVector3d::toString(ossim_uint32 precision) const
 {
@@ -19,7 +20,7 @@ ossimString ossimColumnVector3d::toString(ossim_uint32 precision) const
    os << setiosflags(ios::fixed) << setprecision(precision);
    
    os << "( ";
-   if (data[0] != OSSIM_DBL_NAN)
+   if ( ossim::isnan(data[0]) == false)
    {
       os << data[0];
    }
@@ -28,7 +29,7 @@ ossimString ossimColumnVector3d::toString(ossim_uint32 precision) const
       os << "nan";
    }
    os << ", ";
-   if (data[1] != OSSIM_DBL_NAN)
+   if ( ossim::isnan(data[1]) == false )
    {
       os << data[1];
    }
@@ -37,7 +38,7 @@ ossimString ossimColumnVector3d::toString(ossim_uint32 precision) const
       os << "nan";
    }
    os << ", ";
-   if (data[2] != OSSIM_DBL_NAN)
+   if ( ossim::isnan(data[2]) == false )
    {
       os << data[2];
    }
@@ -53,9 +54,9 @@ ossimString ossimColumnVector3d::toString(ossim_uint32 precision) const
 void ossimColumnVector3d::toPoint(const std::string& s)
 {
    // Nan out the column vector for starters.
-   data[0] = OSSIM_DBL_NAN;
-   data[1] = OSSIM_DBL_NAN;
-   data[2] = OSSIM_DBL_NAN;
+   data[0] = ossim::nan();
+   data[1] = ossim::nan();
+   data[2] = ossim::nan();
   
    std::istringstream is(s);
 
@@ -98,7 +99,7 @@ void ossimColumnVector3d::toPoint(const std::string& s)
    }
    else
    {
-      data[0] = OSSIM_DBL_NAN;
+      data[0] = ossim::nan();
    }
 
    // Eat the comma that we stopped at.
@@ -126,7 +127,7 @@ void ossimColumnVector3d::toPoint(const std::string& s)
    }
    else
    {
-      data[1] = OSSIM_DBL_NAN;
+      data[1] = ossim::nan();
    }
    
    // Eat the comma that we stopped at.
@@ -155,6 +156,6 @@ void ossimColumnVector3d::toPoint(const std::string& s)
    }
    else
    {
-      data[2] = OSSIM_DBL_NAN;
+      data[2] = ossim::nan();
    }
 }

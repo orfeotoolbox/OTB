@@ -1,5 +1,4 @@
 //*******************************************************************
-// Copyright (C) 2000 ImageLinks Inc. 
 //
 // License:  See top level LICENSE.txt file.
 //
@@ -8,7 +7,7 @@
 // Description: Nitf support class
 // 
 //********************************************************************
-// $Id: ossimNitfFileHeaderV2_0.cpp 10553 2007-02-28 20:35:26Z gpotts $
+// $Id: ossimNitfFileHeaderV2_0.cpp 11092 2007-05-30 14:40:11Z dburken $
 
 
 #include <sstream>
@@ -24,6 +23,7 @@
 #include <ossim/support_data/ossimNitfTextHeaderV2_0.h>
 #include <ossim/support_data/ossimNitfDataExtensionSegmentV2_0.h>
 
+#include <ossim/base/ossimException.h>
 #include <ossim/base/ossimString.h>
 #include <ossim/base/ossimTrace.h>
 #include <ossim/base/ossimStringProperty.h>
@@ -36,7 +36,7 @@ static const ossimTrace traceDebug("ossimNitfFileHeaderV2_0:debug");
 RTTI_DEF1(ossimNitfFileHeaderV2_0, "ossimNitfFileHeaderV2_0", ossimNitfFileHeaderV2_X)
 
 std::ostream& operator <<(std::ostream& out,
-                     const ossimNitfImageInfoRecordV2_0 &data)
+                          const ossimNitfImageInfoRecordV2_0 &data)
 {
    return out << "theImageSubheaderLength:       "
               << data.theImageSubheaderLength << std::endl
@@ -173,7 +173,6 @@ ossimNitfFileHeaderV2_0::~ossimNitfFileHeaderV2_0()
 {
 }
 
-
 void ossimNitfFileHeaderV2_0::parseStream(std::istream &in)
 {
    if(traceDebug())
@@ -272,10 +271,12 @@ void ossimNitfFileHeaderV2_0::parseStream(std::istream &in)
    // only get the header overflow if there even exists
    // user defined data.
    ossim_int32 userDefinedHeaderLength = ossimString(theUserDefinedHeaderDataLength).toInt32();
+   
    ossimNitfTagInformation         headerTag;
    
    std::streampos start   = in.tellg();
    std::streampos current = in.tellg();
+
    theHeaderSize+=userDefinedHeaderLength;
    if(userDefinedHeaderLength > 0)
    {
@@ -287,6 +288,18 @@ void ossimNitfFileHeaderV2_0::parseStream(std::istream &in)
          theTagList.push_back(headerTag);
          // in.ignore(headerTag.getTagLength());
          // headerTag.clearFields();
+
+         //---
+         // We will check the stream here as there have been instances of
+         // rpf's with bad stream offsets.
+         //---
+         if (!in)
+         {
+            std::string e =
+               "ossimNitfFileHeaderV2_0::parseStream stream error!";
+            throw ossimException(e);
+         }
+
          current = in.tellg();
       }
    }
@@ -321,7 +334,9 @@ void ossimNitfFileHeaderV2_0::parseStream(std::istream &in)
    }
    if(traceDebug())
    {
-      ossimNotify(ossimNotifyLevel_DEBUG)<< "ossimNitfFileHeaderV2_0::parseStream:   Leaving......." << std::endl;
+      ossimNotify(ossimNotifyLevel_DEBUG)
+         << "ossimNitfFileHeaderV2_0::parseStream:   Leaving......."
+         << std::endl;
    }
 //      initializeDisplayLevels(in);
 
@@ -674,34 +689,34 @@ void ossimNitfFileHeaderV2_0::initializeAllOffsets()
    theLabelOffsetList.clear();
    
 
-   for(idx = 0; idx < (ossim_int32)theNitfImageInfoRecords.size(); idx++)
+   for(idx = 0; idx < theNitfImageInfoRecords.size(); ++idx)
    {
       theImageOffsetList.push_back(ossimNitfImageOffsetInformation(tally,
                                                                    tally + theNitfImageInfoRecords[idx].getHeaderLength()));
       tally += theNitfImageInfoRecords[idx].getTotalLength();
    }
-   for(idx = 0; idx < (ossim_int32)theNitfSymbolInfoRecords.size(); idx++)
+   for(idx = 0; idx < theNitfSymbolInfoRecords.size(); ++idx)
    {
       theSymbolOffsetList.push_back(ossimNitfSymbolOffsetInformation(tally,
                                                                      tally + theNitfSymbolInfoRecords[idx].getHeaderLength()));
       tally += theNitfSymbolInfoRecords[idx].getTotalLength();
    }
 
-   for(idx = 0; idx < (ossim_int32)theNitfLabelInfoRecords.size(); idx++)
+   for(idx = 0; idx < theNitfLabelInfoRecords.size(); ++idx)
    {
       theLabelOffsetList.push_back(ossimNitfLabelOffsetInformation(tally,
                                                                    tally + theNitfLabelInfoRecords[idx].getHeaderLength()));
       tally += theNitfLabelInfoRecords[idx].getTotalLength();
    }
 
-   for(idx = 0; idx < (ossim_int32)theNitfTextInfoRecords.size(); idx++)
+   for(idx = 0; idx < theNitfTextInfoRecords.size(); ++idx)
    {
       theTextOffsetList.push_back(ossimNitfTextOffsetInformation(tally,
                                                                  tally + theNitfTextInfoRecords[idx].getHeaderLength()));
       tally += theNitfTextInfoRecords[idx].getTotalLength();
    }
 
-   for(idx = 0; idx < (ossim_int32)theNitfDataExtSegInfoRecords.size(); idx++)
+   for(idx = 0; idx < theNitfDataExtSegInfoRecords.size(); ++idx)
    {
       theDataExtSegOffsetList.push_back(ossimNitfDataExtSegOffsetInformation(tally,
                                                                              tally + theNitfDataExtSegInfoRecords[idx].getHeaderLength()));
@@ -1141,7 +1156,7 @@ void ossimNitfFileHeaderV2_0::setProperty(ossimRefPtr<ossimProperty> property)
 
 ossimRefPtr<ossimProperty> ossimNitfFileHeaderV2_0::getProperty(const ossimString& name)const
 {
-   ossimProperty* property = NULL;
+   ossimProperty* property = 0;
 
    if(name == CLEVEL_KW)
    {

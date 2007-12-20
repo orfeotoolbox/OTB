@@ -27,6 +27,8 @@ public:
    void swap(ossim_uint16  &data) const;
    void swap(ossim_int32   &data) const;
    void swap(ossim_uint32  &data) const;
+   void swap(ossim_uint64  &data) const;
+   void swap(ossim_sint64  &data) const;
    void swap(ossim_float32 &data) const;
    void swap(ossim_float64 &data) const;
 
@@ -48,10 +50,10 @@ public:
    void swap(ossim_int32* data, ossim_uint32 size) const;
    void swap(ossim_uint32* data, ossim_uint32 size) const;
 
-#ifdef HAS_LONG_LONG
+//#ifdef HAS_LONG_LONG
    void swap(ossim_int64* data, ossim_uint32 size) const;
    void swap(ossim_uint64* data, ossim_uint32 size) const;
-#endif
+//#endif
 
    void swap(ossim_float32* data, ossim_uint32 size) const;
    void swap(ossim_float64* data, ossim_uint32 size) const;
@@ -109,6 +111,16 @@ inline void ossimEndian::swap(ossim_int32 &data) const
 inline void ossimEndian::swap(ossim_uint32 &data) const
 {
    swapFourBytes(reinterpret_cast<void*>(&data));
+}
+
+inline void ossimEndian::swap(ossim_uint64 &data) const
+{
+   swapEightBytes(reinterpret_cast<void*>(&data));
+}
+
+inline void ossimEndian::swap(ossim_sint64 &data) const
+{
+   swapEightBytes(reinterpret_cast<void*>(&data));
 }
 
 inline void ossimEndian::swap(ossim_float32 &data) const

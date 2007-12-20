@@ -1,26 +1,30 @@
 //*******************************************************************
-// Copyright (C) 2000 ImageLinks Inc. 
 //
-// License:  LGPL
-// 
-// See LICENSE.txt file in the top level directory for more details.
+// License:  See top level LICENSE.txt file.
 //
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimRgbImage.h 9094 2006-06-13 19:12:40Z dburken $
+// $Id: ossimRgbImage.h 11830 2007-10-10 13:34:25Z dburken $
 #ifndef ossimRgbImage_HEADER
 #define ossimRgbImage_HEADER
+
+#include <vector>
+
+#include <ossim/base/ossimReferenced.h>
 #include <ossim/base/ossimIpt.h>
 #include <ossim/imaging/ossimImageData.h>
 
-#include <vector>
-using namespace std;
-
-class OSSIM_DLL ossimRgbImage
+class OSSIM_DLL ossimRgbImage : public ossimReferenced
 {
 public:
    ossimRgbImage();
+
+   /**
+    * @param currentImageData The tile to annotate or draw to.
+    * @note This can be any number of bands; however, will only draw
+    * to up to 3.
+    */
    ossimRgbImage(ossimRefPtr<ossimImageData>& currentImageData);
    
    virtual ~ossimRgbImage();
@@ -28,17 +32,17 @@ public:
    /**
     * Will construct a new single band image data object.
     */
-   virtual void createNewGrey(long width, long height);
+   virtual void createNewGrey(ossim_int32 width, ossim_int32 height);
 
    /**
     * Will construct a new 3 band rgb data object.
     */
-   virtual void createNewTrueColor(long width, long height);
+   virtual void createNewTrueColor(ossim_int32 width, ossim_int32 height);
 
    /**
     * Will initilize any pre-computations that are needed.
     * Example: setting up the origin for adjustments and
-    *          setting up the offsets.
+    *          setting up the offsets.         
     */
     virtual void initialize();
     
@@ -51,28 +55,30 @@ public:
     *          34, 55 then it assumes that the points passed in are
     *          already relative to that corner not absolute.
     */
-   inline void slowPlotPixel(long x,
-                             long y,
-                             unsigned char r,
-                             unsigned char g,
-                             unsigned char b);
+   inline void slowPlotPixel(ossim_int32 x,
+                             ossim_int32 y,
+                             ossim_uint8 r,
+                             ossim_uint8 g,
+                             ossim_uint8 b);
 
    /**
     * same thing as slowPlotPixel but without the inside outside compare
     */
-   inline void fastPlotPixel(long x,
-                             long y,
-                             unsigned char r,
-                             unsigned char g,
-                             unsigned char b);
+   inline void fastPlotPixel(ossim_int32 x,
+                             ossim_int32 y,
+                             ossim_uint8 r,
+                             ossim_uint8 g,
+                             ossim_uint8 b);
    
    /**
     * All the drawing algorithms have thickness.  So you can draw a line
     * that has thickness of 3 pixels if you want.  Note: the thickness is in
     * pixels
     */
-   void setThickness(long thickness){theThickness = thickness;}
-                         
+   void setThickness(ossim_int32 thickness);
+
+   /** @return The thickness. */
+   ossim_int32 getThickness() const;
 
    /**
     * Allows you to change the image data that this RgbImage object
@@ -80,7 +86,12 @@ public:
     * if it doesn't own the data then it will not destroy it when the
     * data is changed to a different data object or if this object
     * is deleted.
-    */ 
+    *
+    * @param imageData The tile to annotate or draw to.
+    * 
+    * @note This can be any number of bands; however, will only draw
+    * to up to 3.
+    */
    void setCurrentImageData(ossimRefPtr<ossimImageData>& imageData);
    /**
     * Will return the image data.
@@ -91,12 +102,12 @@ public:
     * We will cut and paste the code from
     * drawFilledPolygon(ossimIpt *p, int n).
     */
-   void drawFilledPolygon(const vector<ossimDpt>& p);
+   void drawFilledPolygon(const std::vector<ossimDpt>& p);
    /**
     * We will cut and paste the code from
     * drawFilledPolygon(ossimIpt *p, int n).
     */
-   void drawFilledPolygon(const vector<ossimIpt>& p);
+   void drawFilledPolygon(const std::vector<ossimIpt>& p);
 
    
    /**
@@ -141,6 +152,27 @@ public:
                 int h,
                 int s,
                 int e);
+
+   /**
+    * Draws a filled ellipse.  Rot is the major axis rotation from up.
+    * rot (rotaition) is in radians.
+    */
+   void drawFilledEllipse(int cx,
+                          int cy,
+                          int sminor,
+                          int smajor,
+                          double rot);
+   
+   /**
+    * Draws an ellipse.  Rot is the major axis rotation from up.
+    * rot (rotation is in radians).
+    */
+   void drawEllipse(int cx,
+                    int cy,
+                    int sminor,
+                    int smajor,
+                    double rot,
+                    bool drawAxes = false);
    
    /**
     * This will draw a filled arc.  See drawArc for documentation of
@@ -164,8 +196,8 @@ public:
                       int s,
                       int e);
    
-   void drawPolygon(const vector<ossimDpt>& p);
-   void drawPolygon(const vector<ossimIpt>& p);
+   void drawPolygon(const std::vector<ossimDpt>& p);
+   void drawPolygon(const std::vector<ossimIpt>& p);
    
    /**
     * Draws a polygon.  The first argument is an array of points.  The second
@@ -259,9 +291,13 @@ public:
     */ 
    void fill();
 
-   void setDrawColor(unsigned char r = 255,
-                     unsigned char g = 255,
-                     unsigned char b = 255);
+   void setDrawColor(ossim_uint8 r = 255,
+                     ossim_uint8 g = 255,
+                     ossim_uint8 b = 255);
+
+   void getDrawColor(ossim_uint8& rCurr,
+                     ossim_uint8& gCurr,
+                     ossim_uint8& bCurr);
    /**
     * Will take the point passed in and translate
     * to a 0,0.
@@ -271,7 +307,7 @@ public:
     *   method will translate the point passed in
     *   x-45, y-34
     */
-//   inline void translateToOrigin(long& x, long& y);
+//   inline void translateToOrigin(ossim_int32& x, ossim_int32& y);
 
    /**
     * Will take the point passed in and translate
@@ -300,52 +336,52 @@ protected:
     * per access. Since we will be accessing on a per pixel basis
     * this will be needed.
     */
-   long            *theOffsets;
+   ossim_int32* theOffsets;
 
    /**
     * This is a fast access to the start of each band.
     */
-   unsigned char*   theBands[3];
+   ossim_uint8* theBands[3];
 
    /**
     * This is here so we don't have to call theWidth and theHeight
     * of the ossimImageData.  
     */ 
-   long             theWidth;
+   ossim_int32 theWidth;
 
    /**
     * This is here so we don't have to call theWidth and theHeight
     * of the ossimImageData.  
     */ 
-   long             theHeight;
+   ossim_int32 theHeight;
 
    /**
     * Holds the draw thickness.
     */
-   long             theThickness;
+   ossim_int32 theThickness;
 
 
    /**
     * The red component of the color used in drawing the shapes
     */
-   unsigned char theRed;
+   ossim_uint8 theRed;
 
    /**
     * The green component of the color used in drawing the shapes
     */
-   unsigned char theGreen;
+   ossim_uint8 theGreen;
 
    /**
     * The blue component of the color used in drawing the shapes
     */
-   unsigned char theBlue;
+   ossim_uint8 theBlue;
 };
 
-inline void ossimRgbImage::slowPlotPixel(long x,
-                                         long y,
-                                         unsigned char r,
-                                         unsigned char g,
-                                         unsigned char b)
+inline void ossimRgbImage::slowPlotPixel(ossim_int32 x,
+                                         ossim_int32 y,
+                                         ossim_uint8 r,
+                                         ossim_uint8 g,
+                                         ossim_uint8 b)
 {
    if((x > -1) && (x < theWidth) &&
       (y > -1) && (y < theHeight))
@@ -356,11 +392,11 @@ inline void ossimRgbImage::slowPlotPixel(long x,
    }
 }
 
-inline void ossimRgbImage::fastPlotPixel(long x,
-                                         long y,
-                                         unsigned char r,
-                                         unsigned char g,
-                                         unsigned char b)
+inline void ossimRgbImage::fastPlotPixel(ossim_int32 x,
+                                         ossim_int32 y,
+                                         ossim_uint8 r,
+                                         ossim_uint8 g,
+                                         ossim_uint8 b)
 {
    theBands[0][theOffsets[y]+x] = r;
    theBands[1][theOffsets[y]+x] = g;

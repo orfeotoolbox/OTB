@@ -8,7 +8,7 @@
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimHistogramEqualization.h 9094 2006-06-13 19:12:40Z dburken $
+// $Id: ossimHistogramEqualization.h 11721 2007-09-13 13:19:34Z gpotts $
 #ifndef ossimHistogramEqualization_HEADER
 #define ossimHistogramEqualization_HEADER
 #include <ossim/imaging/ossimImageSourceHistogramFilter.h>
@@ -18,15 +18,15 @@ class OSSIMDLLEXPORT ossimHistogramEqualization : public ossimImageSourceHistogr
 public:
    ossimHistogramEqualization();
    ossimHistogramEqualization(ossimImageSource* inputSource,
-                              ossimMultiResLevelHistogram* histogram);
+                              ossimRefPtr<ossimMultiResLevelHistogram> histogram);
    ossimHistogramEqualization(ossimImageSource* inputSource,
-                              ossimMultiResLevelHistogram* histogram,
+                              ossimRefPtr<ossimMultiResLevelHistogram> histogram,
                               bool inverseFlag);
    virtual ~ossimHistogramEqualization();
    virtual ossimRefPtr<ossimImageData> getTile(const ossimIrect& tileRect,
                                                ossim_uint32 resLevel=0);
 
-   virtual void setHistogram(ossimMultiResLevelHistogram* histogram);
+   virtual void setHistogram(ossimRefPtr<ossimMultiResLevelHistogram> histogram);
    virtual bool setHistogram(const ossimFilename& filename);
 
    virtual bool getInverseFlag()const;
@@ -52,7 +52,7 @@ protected:
     * This will be used in some of the histogram
     * based operations.
     */
-   ossimMultiResLevelHistogram* theAccumulationHistogram;
+   ossimRefPtr<ossimMultiResLevelHistogram> theAccumulationHistogram;
 
    /*!
     * Indicates if you should equalize or unequalize an input stream.

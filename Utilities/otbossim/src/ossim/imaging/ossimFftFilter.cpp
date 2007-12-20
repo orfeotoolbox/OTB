@@ -8,7 +8,7 @@
 // Author:  Garrett Potts
 //
 //*******************************************************************
-//  $Id: ossimFftFilter.cpp 9094 2006-06-13 19:12:40Z dburken $
+//  $Id: ossimFftFilter.cpp 11411 2007-07-27 13:53:51Z dburken $
 
 #include <ossim/imaging/ossimFftFilter.h>
 #include <ossim/imaging/ossimImageDataFactory.h>
@@ -161,7 +161,7 @@ double ossimFftFilter::getNullPixelValue(ossim_uint32 band)const
    }
    if(theDirectionType == ossimFftFilterDirectionType_FORWARD)
    {
-      return OSSIM_DBL_NAN;
+      return ossim::nan();
    }
 
    // it will invert to a normalized float output

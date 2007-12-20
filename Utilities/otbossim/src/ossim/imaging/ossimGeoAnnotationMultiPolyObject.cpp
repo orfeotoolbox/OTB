@@ -5,7 +5,7 @@
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimGeoAnnotationMultiPolyObject.cpp 10464 2007-02-08 19:27:58Z dburken $
+// $Id: ossimGeoAnnotationMultiPolyObject.cpp 10849 2007-05-04 17:42:14Z dburken $
 
 #include <ossim/imaging/ossimGeoAnnotationMultiPolyObject.h>
 #include <ossim/imaging/ossimAnnotationMultiPolyObject.h>
@@ -20,7 +20,7 @@ ossimGeoAnnotationMultiPolyObject::ossimGeoAnnotationMultiPolyObject()
       theMultiPolygon(),
       theBoundingRect(),
       theFillEnabled(false),
-      theProjectedPolyObject(NULL)
+      theProjectedPolyObject(0)
 {
    allocateProjectedPolygon();   
    theBoundingRect.makeNan();
@@ -37,7 +37,7 @@ ossimGeoAnnotationMultiPolyObject::ossimGeoAnnotationMultiPolyObject(const vecto
       theMultiPolygon(multiPoly),
       theBoundingRect(),
       theFillEnabled(enableFill),
-      theProjectedPolyObject(NULL)
+      theProjectedPolyObject(0)
 {
    allocateProjectedPolygon();   
    theBoundingRect.makeNan();
@@ -49,7 +49,7 @@ ossimGeoAnnotationMultiPolyObject::ossimGeoAnnotationMultiPolyObject(const ossim
       theMultiPolygon(rhs.theMultiPolygon),
       theBoundingRect(rhs.theBoundingRect),
       theFillEnabled(rhs.theFillEnabled),
-      theProjectedPolyObject(rhs.theProjectedPolyObject?(ossimAnnotationMultiPolyObject*)rhs.theProjectedPolyObject->dup():NULL)
+      theProjectedPolyObject(rhs.theProjectedPolyObject?(ossimAnnotationMultiPolyObject*)rhs.theProjectedPolyObject->dup():0)
 {
 }
 
@@ -58,7 +58,7 @@ ossimGeoAnnotationMultiPolyObject::~ossimGeoAnnotationMultiPolyObject()
    if(theProjectedPolyObject)
    {
       delete theProjectedPolyObject;
-      theProjectedPolyObject = NULL;
+      theProjectedPolyObject = 0;
    }
 }
 
@@ -77,17 +77,28 @@ void ossimGeoAnnotationMultiPolyObject::transform(ossimProjection* projection)
       return;
    }
    
-   allocateProjectedPolygon();   
-   int polyI  = 0;
-   int pointI = 0;
+   allocateProjectedPolygon();
+
+   //---
+   // NOTE:
+   // allocateProjectedPolygon() will set theProjectedPolyObject to 0 if
+   // theMultiPolygon is empty (theMultiPolygon.size() == 0).  So check before
+   // accessing pointer to avoid a core dump.
+   //---
+   if (!theProjectedPolyObject)
+   {
+      return;
+   }
 
    ossimDpt temp;
    std::vector<ossimPolygon> visiblePolygons;
    ossimPolygon polygon;
-   for(polyI = 0; polyI < (int)theMultiPolygon.size(); ++polyI)
+   for(ossim_uint32 polyI = 0; polyI < theMultiPolygon.size(); ++polyI)
    {
       polygon.clear();
-      for(pointI = 0; pointI < (int)theMultiPolygon[polyI].size(); ++pointI)
+      for(ossim_uint32 pointI = 0;
+          pointI < theMultiPolygon[polyI].size();
+          ++pointI)
       {
          projection->worldToLineSample(theMultiPolygon[polyI][pointI],
                                        temp);
@@ -98,7 +109,7 @@ void ossimGeoAnnotationMultiPolyObject::transform(ossimProjection* projection)
       }
       theProjectedPolyObject->addPolygon(polygon);
    }
-
+   
    //---
    // Update the bounding rect.
    //---
@@ -177,18 +188,18 @@ void ossimGeoAnnotationMultiPolyObject::allocateProjectedPolygon()
    if(theProjectedPolyObject)
    {
       delete theProjectedPolyObject;
-      theProjectedPolyObject = NULL;
+      theProjectedPolyObject = 0;
    }
-
-   vector<ossimPolygon> polyList;
    
    if(theMultiPolygon.size())
    {
-      theProjectedPolyObject = new ossimAnnotationMultiPolyObject(polyList,
-                                                                  theFillEnabled,
-                                                                  theRed,
-                                                                  theGreen,
-                                                                  theBlue,
-                                                                  theThickness);
+      vector<ossimPolygon> polyList( theMultiPolygon.size() );
+      theProjectedPolyObject =
+         new ossimAnnotationMultiPolyObject(polyList,
+                                            theFillEnabled,
+                                            theRed,
+                                            theGreen,
+                                            theBlue,
+                                            theThickness);
    }
 }

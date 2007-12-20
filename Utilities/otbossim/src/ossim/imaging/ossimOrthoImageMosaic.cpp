@@ -1,14 +1,11 @@
 //*******************************************************************
-// Copyright (C) 2000 ImageLinks Inc.
 //
-// License:  LGPL
-// 
-// See LICENSE.txt file in the top level directory for more details.
+// License:  See top level LICENSE.txt file.
 //
 // Author:  Garrett Potts
 //
 //*******************************************************************
-//  $Id: ossimOrthoImageMosaic.cpp 9283 2006-07-17 17:48:11Z gpotts $
+//  $Id: ossimOrthoImageMosaic.cpp 10777 2007-04-25 14:49:17Z gpotts $
 #include <ossim/imaging/ossimOrthoImageMosaic.h>
 #include <ossim/base/ossimKeywordNames.h>
 #include <ossim/base/ossimTrace.h>
@@ -297,15 +294,15 @@ void ossimOrthoImageMosaic::initialize()
    }
 }
 
-ossimRefPtr<ossimImageData> ossimOrthoImageMosaic::getNextTile(
-   const ossimIrect& origin,
-   ossim_uint32 resLevel)
+ossimRefPtr<ossimImageData> ossimOrthoImageMosaic::getNextTile(ossim_uint32& returnedIdx,
+                                                               const ossimIrect& origin,
+                                                               ossim_uint32 resLevel)
 {
    const char *MODULE="ossimOrthoImageMosaic::getNextTile";
    
-   ossim_int32 size = getNumberOfInputs();
+   ossim_uint32 size = getNumberOfInputs();
    
-   if((theCurrentIndex+1) >= size)
+   if(theCurrentIndex >= size)
    {
       return ossimRefPtr<ossimImageData>();
    }
@@ -316,7 +313,6 @@ ossimRefPtr<ossimImageData> ossimOrthoImageMosaic::getNextTile(
    
    do
    {
-      ++theCurrentIndex;
       temp = PTR_CAST(ossimImageSourceInterface, getInput(theCurrentIndex));
       if(temp)
       {
@@ -358,9 +354,17 @@ ossimRefPtr<ossimImageData> ossimOrthoImageMosaic::getNextTile(
             result = NULL;
          }
       }
+
+      // Go to next source.
+      ++theCurrentIndex;
       
    } while(!result.valid() && (theCurrentIndex<size));
 
+   returnedIdx = theCurrentIndex;
+   if(result.valid())
+   {
+      --returnedIdx;
+   }
    return result;
 }
 

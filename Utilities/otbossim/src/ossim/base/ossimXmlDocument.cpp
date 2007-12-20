@@ -12,13 +12,11 @@
 // Contains definition of class ossimXmlDocument. This class provides read-only
 // parsing and accessing of an XML document file.
 //*****************************************************************************
-// $Id: ossimXmlDocument.cpp 10425 2007-02-06 19:00:11Z gpotts $
+// $Id: ossimXmlDocument.cpp 10805 2007-04-30 17:01:56Z gpotts $
 
 #include <stack>
 #include <iostream>
 #include <fstream>
-using namespace std;
-
 #include <ossim/base/ossimXmlDocument.h>
 #include <ossim/base/ossimXmlAttribute.h>
 #include <ossim/base/ossimXmlNode.h>
@@ -386,23 +384,42 @@ bool ossimXmlDocument::readHeader(std::istream& in)
 
    while(in.peek() == '<')
    {
+      std::stack<char> theLessThanStack;
+      theLessThanStack.push('<');
       in.ignore(1);
       c = in.peek();
+      // we will for now skip things like !DOCTYPE and any other things in the header of the document that start with <? or <!
       if((c == '?')||
          (c == '!'))
       {
          theXmlHeader += "<";
          theXmlHeader += (char)in.get();
          
-         while((in.peek() != '>')&&
+         while(!theLessThanStack.empty()&&
                (!in.bad()))
          {
+            if(in.peek() == '<')
+            {
+               theLessThanStack.push('<');
+            }
+            else if(in.peek() == '>')
+            {
+               theLessThanStack.pop();
+            }
             theXmlHeader += (char)in.get();
          }
          if(!in.bad())
          {
-            theXmlHeader += (char)in.get();
+            if(in.peek()=='\n'||
+               in.peek()=='\r')
+            {
+               theXmlHeader += (char)in.get();
+            }
          }
+//          if(!in.bad())
+//          {
+//             theXmlHeader += (char)in.get();
+//          }
          in>>xmlskipws;
       }
    }

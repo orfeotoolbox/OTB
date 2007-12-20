@@ -1,14 +1,11 @@
 //*******************************************************************
-// Copyright (C) 2000 ImageLinks Inc. 
 //
-// License:  LGPL
-// 
-// See LICENSE.txt file in the top level directory for more details.
+// License:  See top level LICENSE.txt file.
 //
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimMultiBandHistogramTileSource.h 9094 2006-06-13 19:12:40Z dburken $
+// $Id: ossimMultiBandHistogramTileSource.h 11951 2007-10-31 14:34:38Z gpotts $
 #ifndef ossimMultiBandHistogramTileSource_HEADER
 #define ossimMultiBandHistogramTileSource_HEADER
 #include <ossim/imaging/ossimImageSourceHistogramFilter.h>
@@ -60,7 +57,7 @@ public:
          {
             return theMinValuePercentArray[arrayIndex];
          }
-         return OSSIM_DBL_NAN;
+         return ossim::nan();
       }
    virtual double getMaxValuePercent(ossim_uint32 arrayIndex)const
       {
@@ -68,15 +65,15 @@ public:
          {
             return theMaxValuePercentArray[arrayIndex];
          }
-         return OSSIM_DBL_NAN;
+         return ossim::nan();
       }
    virtual ossim_uint32 getNumberOfMinValues()const
       {
-         return theMinValuePercentArray.size();
+         return (ossim_uint32)theMinValuePercentArray.size();
       }
    virtual ossim_uint32 getNumberOfMaxValues()const
       {
-         return theMinValuePercentArray.size();
+         return (ossim_uint32)theMinValuePercentArray.size();
       }
    virtual void initialize();
       

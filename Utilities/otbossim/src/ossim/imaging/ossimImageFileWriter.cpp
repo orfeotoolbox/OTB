@@ -8,7 +8,7 @@
 //
 // Contains class declaration for ossimImageFileWriter.
 //*******************************************************************
-//  $Id: ossimImageFileWriter.cpp 10419 2007-02-04 15:59:11Z dburken $
+//  $Id: ossimImageFileWriter.cpp 11184 2007-06-08 02:21:08Z gpotts $
 
 
 #include <itk_tiff.h> /* for tiff compression defines */
@@ -50,7 +50,7 @@
 static ossimTrace traceDebug("ossimImageFileWriter:debug");
 
 #if OSSIM_ID_ENABLED
-static const char OSSIM_ID[] = "$Id: ossimImageFileWriter.cpp 10419 2007-02-04 15:59:11Z dburken $";
+static const char OSSIM_ID[] = "$Id: ossimImageFileWriter.cpp 11184 2007-06-08 02:21:08Z gpotts $";
 #endif
 
 RTTI_DEF3(ossimImageFileWriter,
@@ -1089,6 +1089,16 @@ bool ossimImageFileWriter::setOutputStream(
    //---
    return false;
 }
+
+bool ossimImageFileWriter::setOutputStream(std::ostream& str)
+{
+   //---
+   // Not implemented in this class. Derived classed should implement if
+   // they can write to a stream.
+   //---
+   return false;
+}
+
 
 void ossimImageFileWriter::setPercentComplete(double percentComplete)
 {

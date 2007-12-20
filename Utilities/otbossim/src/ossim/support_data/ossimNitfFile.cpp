@@ -1,5 +1,4 @@
 //*******************************************************************
-// Copyright (C) 2000 ImageLinks Inc. 
 //
 // License:  See top level LICENSE.txt file.
 //
@@ -8,7 +7,7 @@
 // Description: Nitf support class
 // 
 //********************************************************************
-// $Id: ossimNitfFile.cpp 9094 2006-06-13 19:12:40Z dburken $
+// $Id: ossimNitfFile.cpp 11091 2007-05-30 14:37:52Z dburken $
 
 #include <fstream>
 #include <iostream>
@@ -69,13 +68,13 @@ std::ostream& ossimNitfFile::print(std::ostream& out) const
 
 ossimNitfFile::ossimNitfFile()
    : theFilename(""),
-     theNitfFileHeader(NULL)
+     theNitfFileHeader(0)
 {
 }
 
 ossimNitfFile::~ossimNitfFile()
 {
-   theNitfFileHeader = NULL;
+   theNitfFileHeader = 0;
 }
 
 bool ossimNitfFile::parseFile(const ossimFilename& file)
@@ -102,7 +101,7 @@ bool ossimNitfFile::parseFile(const ossimFilename& file)
       
    if(theNitfFileHeader.valid())
    {
-      theNitfFileHeader = NULL;
+      theNitfFileHeader = 0;
    }
 
    char temp[10];
@@ -151,7 +150,21 @@ bool ossimNitfFile::parseFile(const ossimFilename& file)
 
    if(theNitfFileHeader.valid())
    {
-      theNitfFileHeader->parseStream(in);
+      try
+      {
+         theNitfFileHeader->parseStream(in);
+      }
+      catch(std::exception& e)
+      {
+         if (traceDebug())
+         {
+            ossimNotify(ossimNotifyLevel_WARN)
+               << "ossimNitfFile::parseFile caught exception:\n"
+               << e.what()
+               << std::endl;
+         }
+         return false;
+      }
    }
 
    if (traceDebug())
@@ -189,7 +202,7 @@ ossimNitfImageHeader* ossimNitfFile::getNewImageHeader(long imageNumber)const
       in.close();
    }
    
-   return NULL;
+   return 0;
 }
 
 ossimNitfSymbolHeader* ossimNitfFile::getNewSymbolHeader(long symbolNumber)const
@@ -203,7 +216,7 @@ ossimNitfSymbolHeader* ossimNitfFile::getNewSymbolHeader(long symbolNumber)const
       in.close();
    }
    
-   return NULL;
+   return 0;
 }
 
 ossimNitfLabelHeader* ossimNitfFile::getNewLabelHeader(long labelNumber)const
@@ -217,7 +230,7 @@ ossimNitfLabelHeader* ossimNitfFile::getNewLabelHeader(long labelNumber)const
       in.close();
    }
    
-   return NULL;
+   return 0;
 }
 
 ossimNitfTextHeader* ossimNitfFile::getNewTextHeader(long textNumber)const
@@ -231,7 +244,7 @@ ossimNitfTextHeader* ossimNitfFile::getNewTextHeader(long textNumber)const
       in.close();
    }
    
-   return NULL;
+   return 0;
 }
 
 ossimNitfDataExtensionSegment* ossimNitfFile::getNewDataExtensionSegment(long dataExtNumber)const
@@ -245,7 +258,7 @@ ossimNitfDataExtensionSegment* ossimNitfFile::getNewDataExtensionSegment(long da
       in.close();
    }
    
-   return NULL;
+   return 0;
 }
 
 ossimString ossimNitfFile::getVersion()const

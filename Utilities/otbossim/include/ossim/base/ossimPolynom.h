@@ -35,7 +35,7 @@
  * note: monoms absolute values below epsilon are removed from the map
  */
 template < class T, int DIM = 1 >
-class OSSIMDLLEXPORT ossimPolynom
+class  ossimPolynom
 {
 public:
    /**
@@ -773,15 +773,13 @@ protected:
 /**
  * stream operators
  */
-template < class T, int DIM  >
-OSSIMDLLEXPORT std::ostream& 
+template < class T, int DIM  > std::ostream& 
 operator<<(std::ostream& os, const ossimPolynom<T,DIM>& pt)
 {
    return pt.print(os);
 }
 
-template < class T, int DIM >
-OSSIMDLLEXPORT std::istream&
+template < class T, int DIM > std::istream&
 operator>>(std::istream& is, ossimPolynom<T,DIM>& pt)
 {
    return pt.import(is);

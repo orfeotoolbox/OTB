@@ -8,7 +8,7 @@
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimIgenGenerator.cpp 9094 2006-06-13 19:12:40Z dburken $
+// $Id: ossimIgenGenerator.cpp 11411 2007-07-27 13:53:51Z dburken $
 #include <ossim/imaging/ossimIgenGenerator.h>
 #include <ossim/base/ossimKeywordNames.h>
 #include <ossim/imaging/ossimImageSourceInterface.h>
@@ -398,10 +398,10 @@ void ossimIgenGenerator::generateGeoTiledSpecList(const ossimDpt& spacing, bool 
          while(ulLon < rect.ur().lon)
          {
             tempPoly.clear();
-            tempPoly.addPoint(ulLat, ulLon, OSSIM_DBL_NAN, theOutputGeoPolygon[0].datum());
-            tempPoly.addPoint(ulLat, ulLon+spacing.lon, OSSIM_DBL_NAN, theOutputGeoPolygon[0].datum());
-            tempPoly.addPoint(ulLat-spacing.lat, ulLon+spacing.lon, OSSIM_DBL_NAN, theOutputGeoPolygon[0].datum());
-            tempPoly.addPoint(ulLat-spacing.lat, ulLon, OSSIM_DBL_NAN, theOutputGeoPolygon[0].datum());
+            tempPoly.addPoint(ulLat, ulLon, ossim::nan(), theOutputGeoPolygon[0].datum());
+            tempPoly.addPoint(ulLat, ulLon+spacing.lon, ossim::nan(), theOutputGeoPolygon[0].datum());
+            tempPoly.addPoint(ulLat-spacing.lat, ulLon+spacing.lon, ossim::nan(), theOutputGeoPolygon[0].datum());
+            tempPoly.addPoint(ulLat-spacing.lat, ulLon, ossim::nan(), theOutputGeoPolygon[0].datum());
             
             addPadding(tempPoly, tempPoly);
             cutter->setPolygon(tempPoly);

@@ -5,25 +5,25 @@
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimImageSourceHistogramFilter.h 9968 2006-11-29 14:01:53Z gpotts $
+// $Id: ossimImageSourceHistogramFilter.h 11740 2007-09-19 12:16:40Z gpotts $
 #ifndef ossimImageSourceHistogramFilter_HEADER
 #define ossimImageSourceHistogramFilter_HEADER
 #include <ossim/imaging/ossimImageSourceFilter.h>
 #include <ossim/base/ossimFilename.h>
-class ossimMultiResLevelHistogram;
+#include <ossim/base/ossimMultiResLevelHistogram.h>
 
 class OSSIMDLLEXPORT ossimImageSourceHistogramFilter : public ossimImageSourceFilter
 {
 public:
    ossimImageSourceHistogramFilter();
    ossimImageSourceHistogramFilter(ossimImageSource* inputSource,
-                        ossimMultiResLevelHistogram* histogram);
+                        ossimRefPtr<ossimMultiResLevelHistogram> histogram);
    virtual ~ossimImageSourceHistogramFilter();
-   virtual void setHistogram(ossimMultiResLevelHistogram* histogram);
+   virtual void setHistogram(ossimRefPtr<ossimMultiResLevelHistogram> histogram);
    virtual bool setHistogram(const ossimFilename& filename);
    virtual const ossimFilename& getHistogramFilename()const;
-   virtual ossimMultiResLevelHistogram* getHistogram();
-   virtual const ossimMultiResLevelHistogram* getHistogram()const;
+   virtual ossimRefPtr<ossimMultiResLevelHistogram> getHistogram();
+   virtual const ossimRefPtr<ossimMultiResLevelHistogram> getHistogram()const;
    
    bool canConnectMyInputTo(ossim_int32 inputIndex,
                             const ossimConnectableObject* object)const;
@@ -42,7 +42,7 @@ protected:
    long                         theCurrentResLevel;
 
 private:
-   ossimMultiResLevelHistogram* theHistogram;
+   ossimRefPtr<ossimMultiResLevelHistogram> theHistogram;
    ossimFilename                theFilename;
    
 TYPE_DATA

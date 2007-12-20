@@ -1,59 +1,61 @@
 //*******************************************************************
-// Copyright (C) 2000 ImageLinks Inc.
 // 
-// License:  LGPL
+// License:  See LICENSE.txt file in the top level directory for more details.
 //
-// See LICENSE.txt file in the top level directory for more details.
-//
-// Author: Ken Melero (kmelero@imagelinks.com)
+// Author: Ken Melero
 //         Orginally written by Oscar Kramer (SoBe Software)
 //
 // Description: Container class for LandSat7 Fast Format header files.
 //
 //********************************************************************
-// $Id: ossimFfL7.h 10384 2007-01-26 20:32:12Z gpotts $
+// $Id: ossimFfL7.h 10749 2007-04-23 16:46:15Z dburken $
 
 #ifndef ossimFfL7_HEADER
 #define ossimFfL7_HEADER
-#include <iostream>
-using namespace std;
 
-#include <cstdio>
+#include <vector>
+#include <iostream>
+
+#include <ossim/base/ossimReferenced.h>
 #include <ossim/base/ossimErrorStatusInterface.h>
+#include <ossim/base/ossimPropertyInterface.h>
+
 #include <ossim/base/ossimString.h>
-#include <ossim/base/ossimDpt.h>
 #include <ossim/base/ossimGpt.h>
 #include <ossim/base/ossimIpt.h>
-#include <ossim/base/ossimReferenced.h>
+#include <ossim/base/ossimRefPtr.h>
 
-// Forward class declarations.
+class ossimProperty;
+class ossimDate;
+
 
 // ***************************************************************************
 // CLASS: ossimFfL7
 // ***************************************************************************
 
 class OSSIMDLLEXPORT ossimFfL7 : public ossimReferenced,
-                                 public ossimErrorStatusInterface
+                                 public ossimErrorStatusInterface,
+                                 public ossimPropertyInterface
 {
-   friend ostream& operator<<(ostream& os, const ossimFfL7& head);
+   friend std::ostream& operator<<(std::ostream& os, const ossimFfL7& head);
 
 public:
    ossimFfL7  ();
    ossimFfL7  (const char* headerFile);
    virtual ~ossimFfL7();
    
-   void   dump(ostream& os) const;
+   void   dump(std::ostream& os) const;
       //> Provides a readable dump of this object.
       //<
-   void   writeHeader(ostream& os) const;
+   void   writeHeader(std::ostream& os) const;
       //> Writes the full header to the output stream in proper L7A format.
       //  NOT YET IMPLEMENTED
       //<
-   int    path() const { return thePathNumber; }
+   int    path() const;
       //> Returns the path as an int.
       //  Currently uses the1stPathRowNumber string.
       //<
-   int    row() const { return theRowNumber; }
+   int    row() const;
       //> Returns the row as an int from the pathRowString.
       //  Currently uses the1stPathRowNumber string.
       //<
@@ -68,33 +70,67 @@ public:
     * Contains eight bands; although, only bands present will be initialized.
     */
    void getBias(vector<double>& bias) const;
-   double getBias(long bandIdx)const
-      {
-         return theBias[bandIdx];
-      }
+   double getBias(long bandIdx)const;
 
    /*!
     * Initializes "bias" with "theBias" from the radiometry record.
     * Contains eight bands; although, only bands present will be initialized.
     */
    void getGain(vector<double>& gain) const;
-   double getGain(long bandIdx)const
-      {
-         return theGain[bandIdx];
-      }
+   double getGain(long bandIdx)const;
 
-   double getParam(ossim_uint32 i)const
-      {
-         if(i < 16)
-         {
-            return theProjectionParams[i];
-         }
-         return 0.0;
-      }
+   double getParam(ossim_uint32 i)const;
 
    virtual unsigned int getBandCount()const;
    
    long getJulianDay()const;
+
+   /** @return The acquisition date string. */
+   ossimString getAcquisitionDate() const;
+
+   /**
+    * @brief Gets the date as an ossimDate.
+    * @param date to initialize.
+    */
+   void getAcquisitionDate(ossimDate& date)const;
+
+   /** @return The satellite name "theSatName". */
+   ossimString getSatelliteName() const;
+
+   /** @return The filename for band. */
+   ossimFilename getBandFilename(ossim_uint32 idx)const;
+
+   /** @return The number of lines per band. */
+   int getLinesPerBand() const;
+
+   /** @return The number of pixels per line (samples). */
+   int getPixelsPerLine() const;
+
+   /**
+    * @brief Gets the sun elevation in degrees.
+    * @param elevation The elevation to initialize.
+    */
+   void getSunElevation(double& elevation) const;
+
+   /**
+    * @brief Gets the sun azimuth in degrees.
+    * @param azimuth The azimuth to initialize.
+    */
+   void getSunAzimuth(double& azimuth) const;
+
+   /**
+    * @brief Gets a property for matching name.
+    * @param name The name of the property to get.
+    * @return Returns property matching "name".
+    */
+   virtual ossimRefPtr<ossimProperty> getProperty(const ossimString& name)const;
+
+   /**
+    * @brief Gets a list of property names available.
+    * @param propertyNames The list to push back names to.
+    */
+   virtual void getPropertyNames(std::vector<ossimString>& propertyNames)const;
+
    // The Admin Record:
    char   theRequestNumber[21];     // NNNYYMMDDSSSSUUUU
    char   theLocationCode[18];      // ppp/rrrffss
@@ -143,11 +179,12 @@ public:
    double  theSunAzimuth;         // degrees
 
 private:
-   void        initialize();
-   void        readAdminRecord(FILE* fptr);
-   void        readRadiomRecord(FILE* fptr);
-   void        readGeomRecord(FILE* fptr);
-   int         convertGeoPoint(FILE*, ossimGpt&);
+   
+   void initialize();
+   void readAdminRecord(FILE* fptr);
+   void readRadiomRecord(FILE* fptr);
+   void readGeomRecord(FILE* fptr);
+   int  convertGeoPoint(FILE*, ossimGpt&);
 
 };
 

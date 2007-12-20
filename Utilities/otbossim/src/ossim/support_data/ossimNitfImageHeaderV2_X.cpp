@@ -456,7 +456,7 @@ void ossimNitfImageHeaderV2_X::setProperty(ossimRefPtr<ossimProperty> property)
 
 ossimRefPtr<ossimProperty> ossimNitfImageHeaderV2_X::getProperty(const ossimString& name)const
 {
-   ossimProperty* property = NULL;
+   ossimProperty* property = 0;
 
    if(name == IID1_KW)
    {
@@ -598,6 +598,21 @@ ossimRefPtr<ossimProperty> ossimNitfImageHeaderV2_X::getProperty(const ossimStri
       property = new ossimStringProperty(name,
                                          ossimString(theImageMagnification).trim());
    }
+   else if(name == "source")
+   {
+      property = new ossimStringProperty(name,
+                                         getImageSource());
+   }
+   else if(name == "image_date")
+   {
+      property = new ossimStringProperty(name,
+                                         getAcquisitionDateMonthDayYear());
+   }
+   else if(name == "image_title")
+   {
+      property = new ossimStringProperty(name,
+                                         getTitle());
+   }
    else
    {
       return ossimNitfImageHeader::getProperty(name);
@@ -637,4 +652,15 @@ void ossimNitfImageHeaderV2_X::getPropertyNames(std::vector<ossimString>& proper
    propertyNames.push_back(IALVL_KW);
    propertyNames.push_back(ILOC_KW);
    propertyNames.push_back(IMAG_KW);
+
+   // Temp addition (drb)
+   propertyNames.push_back(ossimString("source"));
+   propertyNames.push_back(ossimString("image_date"));
+   propertyNames.push_back(ossimString("image_title"));
 }
+
+ossimString ossimNitfImageHeaderV2_X::getImageMagnification()const
+{
+   return ossimString(theImageMagnification).trim();
+}
+

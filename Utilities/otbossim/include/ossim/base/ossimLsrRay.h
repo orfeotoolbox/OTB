@@ -20,7 +20,7 @@
 //              Initial coding.
 //<
 //*****************************************************************************
-//  $Id: ossimLsrRay.h 9094 2006-06-13 19:12:40Z dburken $
+//  $Id: ossimLsrRay.h 11428 2007-07-27 18:44:18Z gpotts $
 
 #ifndef ossimLsrRay_HEADER
 #define ossimLsrRay_HEADER
@@ -77,13 +77,32 @@ public:
     */
    operator ossimEcefRay () const;  // inline below
    
+   bool hasNans()const
+   {
+      return (theOrigin.hasNans()||theDirection.hasNans());
+   }
+
+   void makeNan()
+   {
+      theOrigin.makeNan();
+      theDirection.makeNan();
+   }
    /*!
     * METHOD: extend(t)
     * Extends the ray by distance t (meters) from the origin to the LSR
     * point returned (in same space).
     */
    ossimLsrPoint extend(const double& t) const
-      { return (theOrigin + theDirection*t); }
+      {
+         if(!hasNans())
+         {
+            return (theOrigin + theDirection*t);
+         }
+
+         ossimLsrPoint p;
+         p.makeNan();
+         return p;
+      }
 
    /*!
     * Debug Dump: 

@@ -6,7 +6,7 @@
 // Contributor: David A. Horner (DAH) - http://dave.thehorners.com
 //
 //*************************************************************************
-// $Id: ossimRectilinearDataObject.cpp 10483 2007-02-13 04:34:48Z dburken $
+// $Id: ossimRectilinearDataObject.cpp 11347 2007-07-23 13:01:59Z gpotts $
 
 #include <ossim/base/ossimRectilinearDataObject.h>
 #include <ossim/base/ossimScalarTypeLut.h>
@@ -182,7 +182,7 @@ ossimScalarType ossimRectilinearDataObject::getScalarType() const
 
 ossim_uint32 ossimRectilinearDataObject::getScalarSizeInBytes() const
 {
-   return ossimGetScalarSizeInBytes(getScalarType());
+   return ossim::scalarSizeInBytes(getScalarType());
 }
 
 void* ossimRectilinearDataObject::getBuf()

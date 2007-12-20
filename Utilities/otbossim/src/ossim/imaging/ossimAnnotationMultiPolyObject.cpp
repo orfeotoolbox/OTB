@@ -5,7 +5,7 @@
 // Author: Garrett Potts (gpotts@imagelinks)
 //
 //*************************************************************************
-// $Id: ossimAnnotationMultiPolyObject.cpp 9963 2006-11-28 21:11:01Z gpotts $
+// $Id: ossimAnnotationMultiPolyObject.cpp 10867 2007-05-09 19:58:25Z gpotts $
 #include <ossim/imaging/ossimAnnotationMultiPolyObject.h>
 #include <ossim/imaging/ossimAnnotationMultiLineObject.h>
 #include <ossim/imaging/ossimRgbImage.h>
@@ -197,6 +197,20 @@ void ossimAnnotationMultiPolyObject::draw(ossimRgbImage& anImage)const
             else if(vertexCount > 2)
             {
                ossimDpt start, end;
+               j = 0;
+               while(j<vertexCount)
+               {
+                  start = poly[j];
+                  end   = poly[(j+1)%vertexCount];
+                  if(clipRect.clip(start, end))
+                  {
+                     anImage.drawLine(ossimIpt(start),
+                                      ossimIpt(end));
+                  }
+                  ++j;
+               }
+#if 0
+               ossimDpt start, end;
                start = poly[vertexCount-1];
                end   = poly[0];
                j = 0;
@@ -211,6 +225,7 @@ void ossimAnnotationMultiPolyObject::draw(ossimRgbImage& anImage)const
                   start = poly[j-1];
                   end   = poly[j];
                }while(j < vertexCount);
+#endif
             }
          }
          else

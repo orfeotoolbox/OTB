@@ -1,11 +1,7 @@
 //*****************************************************************************
 // FILE: ossimTrace.h
 //
-// Copyright (C) 2001 ImageLinks, Inc.
-//
-// License:  LGPL
-//
-// See LICENSE.txt file in the top level directory for more details.
+// License:  See top level LICENSE.txt file.
 //
 // DESCRIPTION:
 //   Contains declaration of class ossimTrace. Used for tracing code execution.
@@ -15,14 +11,13 @@
 //   24Apr2001  Oscar Kramer
 //              Initial coding.
 //*****************************************************************************
-// $Id: ossimTrace.h 9094 2006-06-13 19:12:40Z dburken $
+// $Id: ossimTrace.h 11650 2007-08-24 12:02:47Z dburken $
 
 #ifndef ossimTrace_HEADER
 #define ossimTrace_HEADER
 
-  // #include <iostream>  // for "clog"
 #include <ossim/base/ossimString.h>
-#include <ossim/base/ossimNotifyContext.h>
+#include <ossim/base/ossimNotify.h>
 
 // Macro for use with trace...
 #define CLOG ossimNotify(ossimNotifyLevel_DEBUG) << MODULE << " (\"" __FILE__ "\", line " << __LINE__ << ") DEBUG: "

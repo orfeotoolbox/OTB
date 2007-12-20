@@ -13,7 +13,7 @@
 // signed short data.
 //
 //*************************************************************************
-// $Id: ossimS16ImageData.h 10405 2007-01-30 19:46:38Z gpotts $
+// $Id: ossimS16ImageData.h 11721 2007-09-13 13:19:34Z gpotts $
 
 #ifndef ossimS16ImageData_HEADER
 #define ossimS16ImageData_HEADER
@@ -113,7 +113,6 @@ public:
    virtual double computeMeanSquaredError(double meanValue,
                                           ossim_uint32 bandNumber = 0);
   
-   virtual void populateHistogram(ossimMultiBandHistogram* histo);
 
    /*!
     *  Initializes data to null pixel values.

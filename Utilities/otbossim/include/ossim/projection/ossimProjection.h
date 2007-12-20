@@ -7,7 +7,7 @@
 // Description: Base class for all projections (2D-to-3D transform)
 //
 //*******************************************************************
-//  $Id: ossimProjection.h 9968 2006-11-29 14:01:53Z gpotts $
+//  $Id: ossimProjection.h 11805 2007-10-05 14:54:28Z dburken $
 #ifndef ossimProjection_HEADER
 #define ossimProjection_HEADER
 #include <iostream>
@@ -100,6 +100,13 @@ public:
     * ACCESS METHODS: 
     */
    virtual ossimDpt getMetersPerPixel() const=0;
+
+   /**
+    * @brief Pure virtual method to query if projection is affected by
+    * elevation.
+    * @return true if affected, false if not.
+    */
+   virtual bool isAffectedByElevation() const=0;
    
 protected:
    

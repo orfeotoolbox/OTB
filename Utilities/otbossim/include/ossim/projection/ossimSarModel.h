@@ -14,7 +14,7 @@
 //                    21 Mar 2006, paragraph E.3.8, SAR MPDSR
 //
 //----------------------------------------------------------------------------
-// $Id: ossimSarModel.h 10248 2007-01-13 21:24:35Z dburken $
+// $Id: ossimSarModel.h 11166 2007-06-07 14:12:54Z dburken $
 #ifndef ossimSarModel_HEADER
 #define ossimSarModel_HEADER
 
@@ -55,8 +55,7 @@ public:
     * @brief Method to load or recreate the state of an ossimSarModel from
     * a keyword list.
     *
-    * @param kwl Keyword list to load from.
-    *
+    * @param kwl    Keyword list to load from.
     * @param prefix Prefix for keywords, like "image01.".
     *
     * @return true on success, false on error.
@@ -66,8 +65,7 @@ public:
    /**
     * @brief Method to save the state of this object to a keyword list.
     *
-    * @param kwl Keyword list to save to.
-    *
+    * @param kwl    Keyword list to save to.
     * @param prefix Prefix for keywords, like "image01.".
     *
     * @return true on success, false on error.
@@ -103,13 +101,15 @@ public:
    virtual void lineSampleHeightToWorld(const ossimDpt& lineSampPt,
                                         const double&   heightAboveEllipsoid,
                                         ossimGpt&       worldPt) const;
-   /*!
+   /**
     * METHOD: imagingRay(image_point, &ossimEcefRay)
-    * Given an image point, returns a ray originating at the ARP position
-    * and pointing towards the target's position in the Output
-    * Plane.  This DOES NOT provide the conventional definition for an
-    * imaging ray.  It DOES provide a radius vector for the
-    * range/Doppler circle.
+    *  Given an image point, returns a ray originating at the ARP position
+    *  and pointing towards the target's position in the Output
+    *  Plane.
+    *  This DOES NOT provide the conventional definition for an imaging ray
+    *  because the imaging locus for SAR is not a ray.
+    *
+    *  It DOES provide a radius vector for the range/Doppler circle.
     */
    virtual void imagingRay(const ossimDpt& image_point,
                            ossimEcefRay&   image_ray) const;
@@ -120,9 +120,7 @@ public:
     *
     * @param parmIdx computational mode:
     *        OBS_INIT, EVALUATE, P_WRT_X, P_WRT_X, P_WRT_X.
-    *
     * @param gpos Current ground point estimate.
-    *
     * @param h Not used.
     *
     * @return OBS_INT: n/a, EVALUATE: residuals, P_WRT_X/Y/Z: partials.
@@ -193,13 +191,9 @@ protected:
     * @brief Method to compute range & Doppler.
     *
     * @param pt ECF ground point coordinates.
-    *
     * @param arpPos ECF ARP position.
-    *
     * @param arpVel ECF ARP velocity.
-    *
-    * @param range range.
-    *
+    * @param range  range.
     * @param arpVel Doppler.
     *
     * @return true on success, false on error.
@@ -213,8 +207,7 @@ protected:
   /**
     * @brief Method to compute image coordinates from output plane coordinates.
     *
-    * @param opPt ECF output plane position of point.
-    *
+    * @param opPt  ECF output plane position of point.
     * @param imgPt image position of point.
     *
     * @return true on success, false on error.
@@ -225,8 +218,7 @@ protected:
     * @brief Method to compute output plane coordinates from image coordinates.
     *
     * @param imgPt image position of point.
-    *
-    * @param opPt ECF output plane position of point.
+    * @param opPt  ECF output plane position of point.
     *
     * @return true on success, false on error.
     */
@@ -235,19 +227,13 @@ protected:
    /**
     * @brief Method to project output plane coordinates to surface.
     *
-    * @param opPt ECF output plane point coordinates.
-    *
-    * @param range range.
-    *
+    * @param opPt   ECF output plane point coordinates.
+    * @param range  range.
     * @param arpVel Doppler.
-    *
     * @param arpPos ECF ARP position.
-    *
     * @param arpVel ECF ARP velocity.
-    *
     * @param hgtRef Height reference defining intersection surface.
-    *
-    * @param ellPt ECF point coordinates.
+    * @param ellPt  ECF point coordinates.
     *
     * @return true on success, false on error.
     */
@@ -263,8 +249,7 @@ protected:
     * @brief Method to project ellipsoid coordinates to output plane.
     *
     * @param ellPt ECF ellipsoid position.
-    *
-    * @param opPt ECF output plane position of point.
+    * @param opPt  ECF output plane position of point.
     *
     * @return true on success, false on error.
     */
@@ -288,10 +273,10 @@ protected:
    /** acquisition mode */
    AcquisitionMode theAcquisitionMode;
 
-   /** Output Reference Point (ORP) position. */
+   /** Output/Ground Reference Point (ORP) position */
    ossimEcefPoint theOrpPosition;
 
-   /** output reference center sample (x) and line(y) */
+   /** sample (x)/line(y) image coordinates of ORP  */
    ossimDpt theOrpCenter;
 
    /** output plane normal */
@@ -306,7 +291,7 @@ protected:
    /** pixel size */
    ossim_float64 thePixelSize;
 
-   /** Aperture Reference Point (ARP) time in seconds. */
+   /** Aperture Reference/Center Point (ARP) time in seconds. */
    ossim_float64 theArpTime;
 
    /**
@@ -327,7 +312,7 @@ protected:
    /** Pixel spacing */
    ossim_float64 thePixelSpacing;
    
-   /** Output plane unit vectors */
+   /** Output/slant plane unit vectors */
    ossimEcefVector theOPX;
    ossimEcefVector theOPY;
    ossimEcefVector theOPZ;
@@ -336,14 +321,6 @@ protected:
    /**
     * Adjustment-related data used and set by getForwardDeriv
     */
-   enum DeriveMode
-   {
-      OBS_INIT =-99,
-      EVALUATE =-98,
-      P_WRT_X = -1,
-      P_WRT_Y = -2,
-      P_WRT_Z = -3
-   };
    /** Observations for current point */
    ossim_float64   theObsRng;
    ossim_float64   theObsDop;
@@ -357,12 +334,6 @@ protected:
    
    /** Partials for current point */
    ossim_float64 theParDopWRTaz;
-   ossimDpt theParWRTx;
-   ossimDpt theParWRTy;
-   ossimDpt theParWRTz;
-   
-   /** Residuals for current point */
-   ossimDpt theResid;
 
    /** Adjustable parameters */
    ossimEcefVector theLsrOffset;      // meters

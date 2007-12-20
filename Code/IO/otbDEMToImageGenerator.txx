@@ -111,7 +111,7 @@ namespace otb
 			otbMsgDevMacro(<< "height" << height) ;
 			// MNT sets a default value (-32768) at point where it doesn't have altitude information.
 			// OSSIM has chosen to change this default value in OSSIM_DBL_NAN (-4.5036e15).
-			if (height!=static_cast<double>(OSSIM_DBL_NAN))
+			if (!ossim::isnan(height))
 	  	{
 		    // Fill the image
 		    DEMImage->SetPixel(currentindex, static_cast<PixelType>(height) );

@@ -1,9 +1,6 @@
 //*******************************************************************
-// Copyright (C) 2003 ImageLinks Inc. 
 //
-// License:  LGPL
-// 
-// See LICENSE.txt file in the top level directory for more details.
+// License:  See top level LICENSE.txt file.
 //
 // Author:  David Burken
 //
@@ -31,14 +28,13 @@
 //   but is provided for convenience.
 //   
 //*************************************************************************
-// $Id: ossimHistogramRemapper.h 9094 2006-06-13 19:12:40Z dburken $
+// $Id: ossimHistogramRemapper.h 11910 2007-10-28 18:19:05Z dburken $
 #ifndef ossimHistogramRemapper_HEADER
 #define ossimHistogramRemapper_HEADER
 
 #include <ossim/imaging/ossimTableRemapper.h>
+#include <ossim/base/ossimMultiResLevelHistogram.h>
 
-class ossimMultiResLevelHistogram;
-class ossimHistogram;
 
 class OSSIMDLLEXPORT ossimHistogramRemapper : public ossimTableRemapper
 {
@@ -51,26 +47,12 @@ public:
       LINEAR_3STD_FROM_MEAN = 3,
       LINEAR_AUTO_MIN_MAX   = 4,
       STRETCH_UNKNOWN = 5 // Alway last as used for number of modes method.
-      
    };
-   
-   ossimHistogramRemapper(ossimObject* owner=NULL);
-   ossimHistogramRemapper(ossimImageSource* inputSource);
 
-   /**
-    * NOTE:
-    * - If input chip source is mutiband this will set all band to same
-    *   percentage of clip.
-    * - low_clip  is a normalized percentage, 0.01 = one percent low clip.
-    * - high_clip is a normalized percentage, 0.99 = one percent high clip.
-    */
-   ossimHistogramRemapper(ossimImageSource* inputSource,
-                          ossimMultiResLevelHistogram* histogram,
-                          bool own_histogram = true,
-                          ossim_float64 low_clip = 0.0,
-                          ossim_float64 high_clip = 1.0);
-   
-   
+   /** default constructor */
+   ossimHistogramRemapper();
+
+   /** virtual destructor */
    virtual ~ossimHistogramRemapper();
 
    virtual ossimString getLongName()  const;
@@ -406,9 +388,8 @@ public:
     * If (own_histogram == true) this object will delete theHistogram
     * on destruction.
     */
-   void setHistogram(ossimMultiResLevelHistogram* histogram,
-                     bool own_histogram = true);
-
+   void setHistogram(ossimRefPtr<ossimMultiResLevelHistogram> histogram);
+   
    /**
     * Returns pointer to histogram for band and reduced res level.
     * - Band is zero based relative to the input connection.  This will be
@@ -420,7 +401,7 @@ public:
     * - res_level is out of range
     * - theHistogram has not been initialized yet.
     */
-   ossimHistogram* getHistogram(ossim_uint32 zero_based_band,
+   ossimRefPtr<ossimHistogram> getHistogram(ossim_uint32 zero_based_band,
                                 ossim_uint32 res_level=0) const;
 
    /**
@@ -488,7 +469,7 @@ private:
     * Sets the count of the null bin to 0 so that clips from the low end
     * ignore the null bin.
     */
-   void setNullCount() const;
+   void setNullCount();
 
    /**
     * Initialized base class (ossimTableRemapper) values:
@@ -511,8 +492,7 @@ private:
 
    StretchMode                   theStretchMode;
    bool                          theDirtyFlag;
-   bool                          theHistogramOwnerFlag;
-   ossimMultiResLevelHistogram*  theHistogram;
+   ossimRefPtr<ossimMultiResLevelHistogram>  theHistogram;
    ossim_uint32                  theTableSizeInBytes;
    vector<ossim_float64>         theNormalizedLowClipPoint;
    vector<ossim_float64>         theNormalizedHighClipPoint;

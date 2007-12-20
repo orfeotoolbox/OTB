@@ -2,7 +2,7 @@
 // 
 // See LICENSE.txt file in the top level directory for more details.
 // 
-// Author:  David Burken  <dburken@imagelinks.com>
+// Author:  David Burken
 //
 // Description:
 //
@@ -10,13 +10,13 @@
 // "Earth Gravity Model 1996".
 //
 //*******************************************************************
-//  $Id: ossimGeoidEgm96.h 9843 2006-10-31 19:33:54Z gpotts $
+//  $Id: ossimGeoidEgm96.h 11496 2007-08-06 09:18:28Z dburken $
 
 #ifndef ossimGeoidEgm96_HEADER
 #define ossimGeoidEgm96_HEADER
 
 #include <ossim/base/ossimGeoid.h>
-
+#include <vector>
 
 #define GEOID_NO_ERROR              0x0000
 #define GEOID_FILE_OPEN_ERROR       0x0001
@@ -32,32 +32,34 @@ class OSSIMDLLEXPORT ossimGeoidEgm96 : public ossimGeoid
 
 public:
    ossimGeoidEgm96();
-   ossimGeoidEgm96(const ossimFilename& grid_file, ossimByteOrder byteOrder=OSSIM_BIG_ENDIAN);
+   ossimGeoidEgm96(const ossimFilename& grid_file,
+                   ossimByteOrder byteOrder=OSSIM_BIG_ENDIAN);
    
    virtual ~ossimGeoidEgm96();
 
-   virtual bool open(const ossimFilename& grid_file, ossimByteOrder byteOrder=OSSIM_BIG_ENDIAN);
+   virtual bool open(const ossimFilename& grid_file,
+                     ossimByteOrder byteOrder=OSSIM_BIG_ENDIAN);
 
    virtual ossimString getShortName()const;
    
-   /*!
-    *  Returns the offset from the ellipsoid to the geoid.
-    *  Returns OSSIM_DBL_NAN if grid does not contain the point.
+   /**
+    *  @return The offset from the ellipsoid to the geoid or ossim::nan()
+    *  (IEEE NAN) if grid does not contain the point.
     */
    virtual double offsetFromEllipsoid(const ossimGpt& gpt) const;
 
    double geoidToEllipsoidHeight(double lat,
-                           double lon,
-                           double geoidHeight);
+                                 double lon,
+                                 double geoidHeight) const;
    
    double ellipsoidToGeoidHeight(double lat,
                            double lon,
-                           double ellipsoidHeight);
+                           double ellipsoidHeight) const;
 
 protected:
 
-   float* theGeoidHeightBuffer;
-
+   std::vector<float> theGeoidHeightBuffer;
+   mutable float* theGeoidHeightBufferPtr;
    TYPE_DATA
 };
 

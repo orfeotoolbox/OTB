@@ -1,5 +1,4 @@
 //----------------------------------------------------------------------------
-// Copyright (C) 2004 Intelligence Data Systems, Inc.
 //
 // License:  See top level LICENSE.txt file.
 //
@@ -10,7 +9,7 @@
 //
 // Contains class declaration for ossimNitfProjectionFactory.
 //
-// $Id: ossimNitfProjectionFactory.h 9094 2006-06-13 19:12:40Z dburken $
+// $Id: ossimNitfProjectionFactory.h 12081 2007-11-26 21:44:18Z dburken $
 //----------------------------------------------------------------------------
 #ifndef ossimNitfProjectionFactory_HEADER
 #define ossimNitfProjectionFactory_HEADER
@@ -90,11 +89,6 @@ public:
     * @param typeList List to append names to.
     */
    virtual void getTypeNameList(std::vector<ossimString>& typeList)const;
-
-   /**
-    * @note  Being depricated with getTypeNameList found in ossimObjectFactory
-    */
-   virtual std::list<ossimString> getList()const;
 
 private:
    /**

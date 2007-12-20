@@ -2,27 +2,40 @@
 #include <ossim/base/ossimEndian.h>
 #include <ossim/base/ossimErrorCodes.h>
 #include <cmath>
-ostream& operator <<(ostream& out,
-                     const ossimRpfMaskSubheader& data)
+
+std::ostream& operator <<(std::ostream& out,
+                          const ossimRpfMaskSubheader& data)
 {
    data.print(out);
-
    return out;
 }
 
 ossimRpfMaskSubheader::ossimRpfMaskSubheader()
-   :theOutputPixelCodeBitString(NULL)
+   :theSubframeSequenceRecordLength(0),
+    theTransparencySequenceRecordLength(0),
+    theTransparentOutputPixelCodeLength(0),
+    theOutputPixelCodeBitString(0),
+    theNumberOfBytes(0)
 {
    clearFields();
 }
 
-ossimErrorCode ossimRpfMaskSubheader::parseStream(istream& in,
+ossimRpfMaskSubheader::~ossimRpfMaskSubheader()
+{
+   if (theOutputPixelCodeBitString)
+   {
+      delete [] theOutputPixelCodeBitString;
+      theOutputPixelCodeBitString = 0;
+   }
+}
+
+ossimErrorCode ossimRpfMaskSubheader::parseStream(std::istream& in,
                                         ossimByteOrder byteOrder)
 {
    if(in)
    {
       clearFields();
-
+      
       in.read((char*)&theSubframeSequenceRecordLength, 2);
       in.read((char*)&theTransparencySequenceRecordLength, 2);
       in.read((char*)&theTransparentOutputPixelCodeLength, 2);
@@ -50,13 +63,17 @@ ossimErrorCode ossimRpfMaskSubheader::parseStream(istream& in,
    return ossimErrorCodes::OSSIM_OK;
 }
 
-void ossimRpfMaskSubheader::print(ostream& out)const
+void ossimRpfMaskSubheader::print(std::ostream& out)const
 {
-   out << "theSubframeSequenceRecordLength:     " << theSubframeSequenceRecordLength << endl
-       << "theTransparencySequenceRecordLength: " << theTransparencySequenceRecordLength << endl
-       << "theTransparentOutputPixelCodeLength: " << theTransparentOutputPixelCodeLength << endl
-       << "theNumberOfBytes:                    " << theNumberOfBytes << endl
-       << "theOutputPixelCodeBitString:         ";
+   out << "theSubframeSequenceRecordLength:     "
+       << theSubframeSequenceRecordLength
+       << "\ntheTransparencySequenceRecordLength: "
+       << theTransparencySequenceRecordLength
+       << "\ntheTransparentOutputPixelCodeLength: "
+       << theTransparentOutputPixelCodeLength
+       << "\ntheNumberOfBytes:                    "
+       << theNumberOfBytes
+       << "\ntheOutputPixelCodeBitString:         ";
 
    // display the pixel code as a bit pattern.
    for(long index = theNumberOfBytes-1;
@@ -73,6 +90,7 @@ void ossimRpfMaskSubheader::print(ostream& out)const
           << ((temp>>1)&1)
           << (temp&1);
    }
+   out << std::endl;
 }
 
 void ossimRpfMaskSubheader::clearFields()
@@ -85,6 +103,6 @@ void ossimRpfMaskSubheader::clearFields()
    if(theOutputPixelCodeBitString)
    {
       delete [] theOutputPixelCodeBitString;
-      theOutputPixelCodeBitString = NULL;
+      theOutputPixelCodeBitString = 0;
    }
 }

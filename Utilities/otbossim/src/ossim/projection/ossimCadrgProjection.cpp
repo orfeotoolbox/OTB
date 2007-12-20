@@ -6,7 +6,7 @@
 // Author:  Garrett Potts
 //
 //*******************************************************************
-//  $Id: ossimCadrgProjection.cpp 9094 2006-06-13 19:12:40Z dburken $
+//  $Id: ossimCadrgProjection.cpp 11347 2007-07-23 13:01:59Z gpotts $
 #include <ossim/projection/ossimCadrgProjection.h>
 #include <ossim/base/ossimKeywordNames.h>
 #include <ossim/base/ossimKeywordlist.h>
@@ -136,7 +136,7 @@ double ossimCadrgProjection::computeXPixConstant(double scale,
    x_pix = x_pix * 1.33333;//(512*100)/(150*256);
    
    // Round the final result.
-   x_pix = irint(x_pix);
+   x_pix = ossim::round<int>(x_pix);
    
    return x_pix*256.0;
    
@@ -155,7 +155,7 @@ double ossimCadrgProjection::computeYPixConstant(double scale)const
    y_pix = y_pix * 0.33333;//(512*100)/(4*150*256);
    
    // Round the final result.
-   y_pix = irint(y_pix);
+   y_pix = ossim::round<int>(y_pix);
    
    return y_pix*256.0;
 }

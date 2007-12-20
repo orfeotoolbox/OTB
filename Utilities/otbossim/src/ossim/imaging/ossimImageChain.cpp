@@ -8,7 +8,7 @@
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimImageChain.cpp 9951 2006-11-27 18:36:32Z gpotts $
+// $Id: ossimImageChain.cpp 11949 2007-10-31 14:33:29Z gpotts $
 #include <algorithm>
 #include <iostream>
 #include <iterator>
@@ -553,7 +553,7 @@ void ossimImageChain::makeUniqueIds()
 
 ossim_uint32 ossimImageChain::getNumberOfObjects(bool recurse)const
 {
-   ossim_uint32 result = theImageChainList.size();
+   ossim_uint32 result = (ossim_uint32)theImageChainList.size();
    
    if(recurse)
    {
@@ -972,7 +972,7 @@ double ossimImageChain::getNullPixelValue(ossim_uint32 band)const
       }
    }
    
-   return ossimGetDefaultNull(getOutputScalarType());
+   return ossim::defaultNull(getOutputScalarType());
 }
 
 double ossimImageChain::getMinPixelValue(ossim_uint32 band)const
@@ -999,7 +999,7 @@ double ossimImageChain::getMinPixelValue(ossim_uint32 band)const
       }
    }
 
-   return ossimGetDefaultMin(getOutputScalarType());
+   return ossim::defaultMin(getOutputScalarType());
 }
 
 double ossimImageChain::getMaxPixelValue(ossim_uint32 band)const
@@ -1026,7 +1026,7 @@ double ossimImageChain::getMaxPixelValue(ossim_uint32 band)const
       }
    }
 
-   return ossimGetDefaultMax(getOutputScalarType());
+   return ossim::defaultMax(getOutputScalarType());
 }
 
 void ossimImageChain::getOutputBandList(std::vector<ossim_uint32>& bandList) const

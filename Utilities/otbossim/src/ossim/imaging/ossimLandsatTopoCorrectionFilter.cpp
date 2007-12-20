@@ -8,7 +8,7 @@
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimLandsatTopoCorrectionFilter.cpp 9094 2006-06-13 19:12:40Z dburken $
+// $Id: ossimLandsatTopoCorrectionFilter.cpp 11347 2007-07-23 13:01:59Z gpotts $
 #include <ossim/imaging/ossimLandsatTopoCorrectionFilter.h>
 #include <ossim/imaging/ossimImageToPlaneNormalFilter.h>
 #include <ossim/support_data/ossimFfL7.h>
@@ -60,10 +60,10 @@ void ossimLandsatTopoCorrectionFilter::setLandsatHeader(const ossimFilename& hea
    {
       theLandsatHeader = header;
       ossimFfL7 headerL7(header.c_str());
-      theGain = headerL7.theGain;
-      theBias = headerL7.theBias;
-      theLightSourceElevationAngle = headerL7.theSunElevation;
-      theLightSourceAzimuthAngle   = headerL7.theSunAzimuth;
+      headerL7.getGain(theGain);
+      headerL7.getBias(theBias);
+      headerL7.getSunElevation(theLightSourceElevationAngle);
+      headerL7.getSunAzimuth(theLightSourceAzimuthAngle);
       computeLightDirection();
       theJulianDay = headerL7.getJulianDay();
    }
@@ -184,7 +184,7 @@ void ossimLandsatTopoCorrectionFilter::computeC()
       ossimIpt ul = clipRect.ul();
       ossimIpt lr = clipRect.lr();
       long julianDay = headerL7.getJulianDay();
-      double d2 =pow( (double)(1 - 0.01674 * cosd(0.9856*(julianDay-4)) ), 2.0);
+      double d2 =pow( (double)(1 - 0.01674 * ossim::cosd(0.9856*(julianDay-4)) ), 2.0);
       ossim_uint32 numberOfPixelsUsedForTile = 0;
       for(int y = ul.y; ((y < lr.y)&&(totalNumberOfPixelsUsed<1000));++y)
       {

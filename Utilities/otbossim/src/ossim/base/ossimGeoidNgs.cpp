@@ -1,14 +1,11 @@
 //*******************************************************************
-// Copyright (C) 2000 ImageLinks Inc.
 //
-// License:  LGPL
-//
-// See LICENSE.txt file in the top level directory for more details.
+// License:  See top level LICENSE.txt file.
 //
 // Author: Garrett Potts
 //
 //*******************************************************************
-//  $Id: ossimGeoidNgs.cpp 9094 2006-06-13 19:12:40Z dburken $
+//  $Id: ossimGeoidNgs.cpp 11499 2007-08-06 09:21:41Z dburken $
 #include <ossim/base/ossimGeoidNgs.h>
 
 #include <ossim/base/ossimCommon.h>
@@ -219,24 +216,30 @@ double ossimGeoidNgs::offsetFromEllipsoid(const ossimGpt& gpt) const
 
 double ossimGeoidNgs::geoidToEllipsoidHeight(double lat,
                                              double lon,
-                                             double geoidHeight)
+                                             double geoidHeight) const
 {
 
    fixLatLon(lat, lon);
    double delta = deltaHeight(lat, lon);
-
-   return geoidHeight + delta;
+   if (!ossim::isnan(delta))
+   {
+      return (geoidHeight + delta);
+   }
+   return delta; // nan
 }
 
 double ossimGeoidNgs::ellipsoidToGeoidHeight(double lat,
                                       double lon,
-                                      double ellipsoidHeight)
+                                      double ellipsoidHeight) const
 {
 
    fixLatLon(lat, lon);
    double delta = deltaHeight(lat, lon);
-
-   return ellipsoidHeight - delta;
+   if (!ossim::isnan(delta))
+   {
+      return (ellipsoidHeight - delta);
+   }
+   return delta; // nan
 }
 
 void ossimGeoidNgs::fixLatLon(double &lat, double &lon) const
@@ -262,8 +265,7 @@ double ossimGeoidNgs::deltaHeight(double lat, double lon)const
                                                   lon);
       }
    }
-
-   return OSSIM_DBL_NAN;
+   return ossim::nan();
 }
 
 ossimString ossimGeoidNgs::getShortName()const

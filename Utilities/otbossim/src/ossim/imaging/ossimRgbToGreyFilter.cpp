@@ -8,7 +8,7 @@
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimRgbToGreyFilter.cpp 9094 2006-06-13 19:12:40Z dburken $
+// $Id: ossimRgbToGreyFilter.cpp 11347 2007-07-23 13:01:59Z gpotts $
 
 #include <ossim/imaging/ossimRgbToGreyFilter.h>
 #include <ossim/imaging/ossimU8ImageData.h>
@@ -214,7 +214,7 @@ void ossimRgbToGreyFilter::runUcharTransformation(ossimRefPtr<ossimImageData>& t
    {
       long value;
       
-      value = irint(theC1*(bandSrc[0][offset]) +
+      value = ossim::round<int>(theC1*(bandSrc[0][offset]) +
                     theC2*(bandSrc[1][offset]) +
                     theC3*(bandSrc[2][offset]));
       

@@ -12,7 +12,7 @@
 //              Initial coding.
 //<
 //*****************************************************************************
-//  $Id: ossimLsrVector.cpp 9963 2006-11-28 21:11:01Z gpotts $
+//  $Id: ossimLsrVector.cpp 11428 2007-07-27 18:44:18Z gpotts $
 
 #include <ossim/base/ossimLsrVector.h>
 #include <ossim/base/ossimEcefVector.h>
@@ -53,12 +53,12 @@ ossimLsrVector::ossimLsrVector(const ossimLsrVector& convert_this,
 //*****************************************************************************
 double ossimLsrVector::dot(const ossimLsrVector& v) const
 {
-   if (theLsrSpace == v.theLsrSpace)
-      return theData.dot(v.data());
-
-   //else error:
-   ossimLsrSpace::lsrSpaceErrorMessage();
-   return OSSIM_NAN;
+   if(hasNans()||v.hasNans()||(theLsrSpace != v.theLsrSpace))
+   {
+      ossimLsrSpace::lsrSpaceErrorMessage();
+      return ossim::nan();
+   }
+   return theData.dot(v.data());
 }
 
 //*****************************************************************************
@@ -69,15 +69,13 @@ double ossimLsrVector::dot(const ossimLsrVector& v) const
 //*****************************************************************************
 double ossimLsrVector::angleTo(const ossimLsrVector& v) const
 {
-   if (theLsrSpace == v.theLsrSpace)
+   if(hasNans()||v.hasNans()||(theLsrSpace != v.theLsrSpace))
    {
-      double mag_product = theData.magnitude() * v.theData.magnitude();
-      return acosd(theData.dot(v.theData)/mag_product);
+      ossimLsrSpace::lsrSpaceErrorMessage();
+      return ossim::nan();
    }
-   
-   //else error:
-   ossimLsrSpace::lsrSpaceErrorMessage();
-   return OSSIM_NAN;
+   double mag_product = theData.magnitude() * v.theData.magnitude();
+   return ossim::acosd(theData.dot(v.theData)/mag_product);
 }
 
 //*****************************************************************************
@@ -88,11 +86,12 @@ double ossimLsrVector::angleTo(const ossimLsrVector& v) const
 //*****************************************************************************
 ossimLsrVector ossimLsrVector::cross(const ossimLsrVector& v) const
 {
-   if (theLsrSpace == v.theLsrSpace)
-      return ossimLsrVector(theData.cross(v.data()), theLsrSpace);
-
-   //else error:
-   ossimLsrSpace::lsrSpaceErrorMessage();
-   return ossimLsrVector(OSSIM_NAN, OSSIM_NAN, OSSIM_NAN, theLsrSpace);
+   if(hasNans()||v.hasNans()||(theLsrSpace != v.theLsrSpace))
+   {
+      ossimLsrSpace::lsrSpaceErrorMessage();
+      return ossimLsrVector(ossim::nan(), ossim::nan(), ossim::nan(),
+                            theLsrSpace);
+   }
+   return ossimLsrVector(theData.cross(v.data()), theLsrSpace);
 }
 

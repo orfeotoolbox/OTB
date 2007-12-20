@@ -926,6 +926,7 @@ void ossimRegExp::regoptail (char* p, const char* val) {
 bool ossimRegExp::find (const char* string) {
     register const char* s;
 
+	if(!string) return false;
     this->searchstring = string;
 
      // Check validity of program.

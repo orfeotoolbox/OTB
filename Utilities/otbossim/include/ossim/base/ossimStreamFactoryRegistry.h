@@ -1,20 +1,20 @@
 //*******************************************************************
-// Copyright (C) 2005 Garrett Potts
 //
-// License:  LGPL
-//
-// See LICENSE.txt file in the top level directory for more details.
+// License:  See top level LICENSE.txt file.
 //
 // Author: Garrett Potts
 //
-//
 //*******************************************************************
-//  $Id: ossimStreamFactoryRegistry.h 9094 2006-06-13 19:12:40Z dburken $
+//  $Id: ossimStreamFactoryRegistry.h 11176 2007-06-07 19:45:56Z dburken $
 //
 #ifndef ossimStreamFactoryRegistry_HEADER
 #define ossimStreamFactoryRegistry_HEADER
-#include <ossim/base/ossimStreamFactoryBase.h>
 #include <vector>
+
+#include <ossim/base/ossimRefPtr.h>
+#include <ossim/base/ossimIoStream.h>
+#include <ossim/base/ossimStreamFactoryBase.h>
+
 
 class OSSIM_DLL ossimStreamFactoryRegistry : public ossimStreamFactoryBase
 {
@@ -24,13 +24,15 @@ public:
    
    void registerFactory(ossimStreamFactoryBase* factory);
    
-   virtual ossimRefPtr<ossimIStream> createNewInputStream(const ossimFilename& file,
-	   std::ios::openmode openMode);
+   virtual ossimRefPtr<ossimIFStream> createNewIFStream(
+      const ossimFilename& file, std::ios_base::openmode openMode) const;
    
 protected:
    ossimStreamFactoryRegistry();
 private:
-   ossimStreamFactoryRegistry(const ossimStreamFactoryRegistry&){}
+   /** @brief copy constructor hidden from use */
+   ossimStreamFactoryRegistry(const ossimStreamFactoryRegistry&);
+   
    std::vector<ossimStreamFactoryBase*> theFactoryList;
    static ossimStreamFactoryRegistry* theInstance;
 };

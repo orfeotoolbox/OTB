@@ -8,7 +8,7 @@
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimHistogramSource.cpp 9094 2006-06-13 19:12:40Z dburken $
+// $Id: ossimHistogramSource.cpp 11721 2007-09-13 13:19:34Z gpotts $
 
 #include <ossim/base/ossimHistogramSource.h>
 #include <ossim/base/ossimKeywordNames.h>
@@ -27,34 +27,24 @@ ossimHistogramSource::ossimHistogramSource(ossimObject* owner,
                  numberOfOutputs,
                  inputListFixedFlag,
                  outputListFixedFlag),
-     theHistogram(NULL),
+     theHistogram(0),
      theFilename()
 {
 }
 
 ossimHistogramSource::~ossimHistogramSource()
 {
-   if (theHistogram)
-   {
-      delete theHistogram;
-      theHistogram = NULL;
-   }
 }
 
-ossimMultiResLevelHistogram* ossimHistogramSource::getHistogram()
+ossimRefPtr<ossimMultiResLevelHistogram> ossimHistogramSource::getHistogram()
 {
    return theHistogram;
 }
 
 bool ossimHistogramSource::loadState(const ossimKeywordlist& kwl,
 				     const char* prefix)
-{
-   if(theHistogram)
-   {
-      delete theHistogram;
-      theHistogram = NULL;
-   }
-   
+{   
+   theHistogram = 0;
    const char* externalFile = kwl.find(prefix,
                                        ossimKeywordNames::FILENAME_KW);
 
@@ -63,8 +53,7 @@ bool ossimHistogramSource::loadState(const ossimKeywordlist& kwl,
    {
       if(!theHistogram->importHistogram(ossimFilename(externalFile)))
       {
-         delete theHistogram;
-         theHistogram = NULL;
+         theHistogram = 0;
          theFilename = "";
       }
       theFilename = externalFile;
@@ -74,8 +63,7 @@ bool ossimHistogramSource::loadState(const ossimKeywordlist& kwl,
       ossimString newPrefix = ossimString(prefix) + "histogram.";
       if(!theHistogram->loadState(kwl, newPrefix))
       {
-         delete theHistogram;
-         theHistogram = NULL;
+         theHistogram = 0;
       }
    }
    
@@ -85,11 +73,9 @@ bool ossimHistogramSource::loadState(const ossimKeywordlist& kwl,
 bool ossimHistogramSource::saveState(ossimKeywordlist& kwl,
 				     const char* prefix)const
 {
-   if(theHistogram)
+   if(theHistogram.valid())
    {
-      if( (theFilename != "")&&
-          theHistogram)
-      {
+      if(!theFilename.empty())      {
          ossimKeywordlist kwl2;
          
          if(theHistogram->saveState(kwl2))
@@ -114,7 +100,7 @@ bool ossimHistogramSource::saveState(ossimKeywordlist& kwl,
 // Hidden from use.
 ossimHistogramSource::ossimHistogramSource(const ossimHistogramSource&)
    :
-   theHistogram(NULL),
+   theHistogram(0),
    theFilename()
 {
 }

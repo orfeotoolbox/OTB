@@ -2,18 +2,18 @@
 //
 // License:  See top level LICENSE.txt file.
 // 
-// Author: Garrett Potts (gpotts@imagelinks)
+// Author: Garrett Potts
 // Description:
 //
 //*************************************************************************
-// $Id: ossimUsgsQuad.cpp 9963 2006-11-28 21:11:01Z gpotts $
+// $Id: ossimUsgsQuad.cpp 11347 2007-07-23 13:01:59Z gpotts $
 #include <sstream>
 #include <iomanip>
 
 #include <ossim/base/ossimUsgsQuad.h>
 #include <ossim/base/ossimDatum.h>
 #include <ossim/base/ossimTrace.h>
-#include <ossim/base/ossimNotifyContext.h>
+#include <ossim/base/ossimNotify.h>
 
 using namespace std;
 
@@ -81,9 +81,9 @@ ossimUsgsQuad::ossimUsgsQuad(const ossimGpt& lrGpt)
    os << quadChar << quadNum;
 
    double latFraction = (lrGpt.lat / QUAD_SIZE_IN_DEGREES) -
-                        irint((lrGpt.lat) / QUAD_SIZE_IN_DEGREES);
+                        ossim::round<int>((lrGpt.lat) / QUAD_SIZE_IN_DEGREES);
    double lonFraction = (lrGpt.lon / QUAD_SIZE_IN_DEGREES) -
-                        irint((lrGpt.lon) / QUAD_SIZE_IN_DEGREES);
+                        ossim::round<int>((lrGpt.lon) / QUAD_SIZE_IN_DEGREES);
 
    // Black & White
 //   if(theRectsStandardFlag && 
@@ -146,8 +146,9 @@ ossimUsgsQuad::ossimUsgsQuad(const ossimGpt& lrGpt)
 
    if (traceDebug())
    {
-      ossimNotify(ossimNotifyLevel_DEBUG) << " DEBUG: " << MODULE  
-                                          << "\nbaseString:  " << baseString << "\n";
+      ossimNotify(ossimNotifyLevel_DEBUG)
+         << " DEBUG: " << MODULE  
+         << "\nbaseString:  " << baseString << std::endl;
    }
    
    setQuadName(baseString);
@@ -170,8 +171,12 @@ ossimUsgsQuad::ossimUsgsQuad(const ossimString& name,
    setQuadName(name);
    if (!datum)
    {
-      ossimNotify(ossimNotifyLevel_FATAL) << "FATAL: " << MODULE << "\n"
-                                          << "ossimDatum pointer passed in is null. Returning...\n";
+      if (traceDebug())
+      {
+         ossimNotify(ossimNotifyLevel_FATAL)
+            << "FATAL: " << MODULE << "\n"
+            << "ossimDatum pointer passed in is null. Returning...\n";
+      }
       return;
    }
 
@@ -196,25 +201,28 @@ void ossimUsgsQuad::setQuadName(const ossimString& name)
    //***
    if (name.length() < 7)
    {
-      ossimNotify(ossimNotifyLevel_FATAL) << "FATAL: " << MODULE << "\n"
-                                          << "Quarder quad name length incorrect.\n"
-                                          << "Name:  " << name << "\n"
-                                          << "Expected length:  7 or 8  Name length:  " << name.length()
-                                          << "\nExample of valid quad:  30089C6B\n"
-                                          << "Represents lower right corner of "
-                                          << "30 deg. 15 min. N., 89 deg. 37.5 min. W.\n"
-                                          << "Breakdown:\n"
-                                          << "30  = latitude on even degree boundary "
-                                          << "(Northern Hemisphere implied)\n"
-                                          << "089 = longitude on even degree boundary "
-                                          << "(Western Hemisphere implied)\n"
-                                          << "C   = Third quad section in latitude direction\n"
-                                          << "6   = Sixth quad section in longitude direction\n"
-                                          << "B   = Quarter quad segment within the quad\n"
-                                          << "    (A=upper left, B=upper right, C=lower left, D=lower right)\n"
-                                          << "Quad size 7.5 minute square,  quarter quad size 3.75 "
-                                          << "minute square.\n";
-
+      if (traceDebug())
+      {
+         ossimNotify(ossimNotifyLevel_FATAL)
+            << "FATAL: " << MODULE << "\n"
+            << "Quarder quad name length incorrect.\n"
+            << "Name:  " << name << "\n"
+            << "Expected length:  7 or 8  Name length:  " << name.length()
+            << "\nExample of valid quad:  30089C6B\n"
+            << "Represents lower right corner of "
+            << "30 deg. 15 min. N., 89 deg. 37.5 min. W.\n"
+            << "Breakdown:\n"
+            << "30  = latitude on even degree boundary "
+            << "(Northern Hemisphere implied)\n"
+            << "089 = longitude on even degree boundary "
+            << "(Western Hemisphere implied)\n"
+            << "C   = Third quad section in latitude direction\n"
+            << "6   = Sixth quad section in longitude direction\n"
+            << "B   = Quarter quad segment within the quad\n"
+            << "  (A=upper left, B=upper right, C=lower left, D=lower right)\n"
+            << "Quad size 7.5 minute square,  quarter quad size 3.75 "
+            << "minute square.\n";
+      }
       
       return;
    }
@@ -262,9 +270,13 @@ void ossimUsgsQuad::setQuadName(const ossimString& name)
    else
    {
       theQuarterQuadSegment = 'D';
-      ossimNotify(ossimNotifyLevel_NOTICE) << MODULE << ":\n"
-           << "No quarter quad segment entered.  Defaulting to D segment."
-           << "\n";
+      if (traceDebug())
+      {
+         ossimNotify(ossimNotifyLevel_NOTICE)
+            << MODULE << ":\n"
+            << "No quarter quad segment entered.  Defaulting to D segment."
+            << std::endl;
+      }
    }
 
    //***
@@ -277,9 +289,13 @@ void ossimUsgsQuad::setQuadName(const ossimString& name)
    double lat = atof(latChars);
    if ( (lat < 0.0) || (lat > 90.0) )
    {
-      ossimNotify(ossimNotifyLevel_FATAL) << "FATAL: " << MODULE << "\n"
-                                          << "Latitude range error.  Latitude extracted:  " << lat
-                                          << "\nRange:  0 to 90\n";
+      if (traceDebug())
+      {
+         ossimNotify(ossimNotifyLevel_FATAL)
+            << "FATAL: " << MODULE << "\n"
+            << "Latitude range error.  Latitude extracted:  " << lat
+            << "\nRange:  0 to 90\n";
+      }
       return;
    }
 
@@ -289,9 +305,13 @@ void ossimUsgsQuad::setQuadName(const ossimString& name)
    double lon = atof(lonChars);
    if ( (lon  < 0.0) || (lon > 180) )
    {
-      ossimNotify(ossimNotifyLevel_FATAL) << "FATAL: " << MODULE << "\n"
-                                          << "Longitud range error.  Longitude extracted:  " << lon
-                                          << "\nRange:  0 to 180\n";
+      if (traceDebug())
+      {
+         ossimNotify(ossimNotifyLevel_FATAL)
+            << "FATAL: " << MODULE << "\n"
+            << "Longitud range error.  Longitude extracted:  " << lon
+            << "\nRange:  0 to 180\n";
+      }
       return;
    }
 
@@ -309,9 +329,13 @@ void ossimUsgsQuad::setQuadName(const ossimString& name)
       //***
       if (tmp > 7.0)
       {
-         ossimNotify(ossimNotifyLevel_FATAL) << "FATAL:" << MODULE << "\n"
-                                             << "Latitude quad range error.  Quad extracted:  " << latQuad
-                                             << "\nRange:  A to H\n";
+         if (traceDebug())
+         {
+            ossimNotify(ossimNotifyLevel_FATAL)
+               << "FATAL:" << MODULE << "\n"
+               << "Latitude quad range error.  Quad extracted:  " << latQuad
+               << "\nRange:  A to H\n";
+         }
          return;
       }
 
@@ -334,9 +358,13 @@ void ossimUsgsQuad::setQuadName(const ossimString& name)
       //***
       if (tmp > 7.0)
       {
-         ossimNotify(ossimNotifyLevel_FATAL) << "FATAL:" << MODULE << "\n"
-                                             << "Longitude quad range error.  Quad extracted:  " << latQuad
-                                             << "\nRange:  1 to 8\n";
+         if (traceDebug())
+         {
+            ossimNotify(ossimNotifyLevel_FATAL)
+               << "FATAL:" << MODULE << "\n"
+               << "Longitude quad range error.  Quad extracted:  " << latQuad
+               << "\nRange:  1 to 8\n";
+         }
          return;
       }
 
@@ -378,10 +406,14 @@ void ossimUsgsQuad::setQuadName(const ossimString& name)
       break; // At the corner of a quad so nothing to do here.
 
    default:
-      ossimNotify(ossimNotifyLevel_FATAL) << "FATAL:" << MODULE << "\n"
-                                          << "Quarter quad segment range error.\n"
-                                          << "Quarter quad segment extracted:  " << theQuarterQuadSegment
-                                          << "Range:  A to D\n";
+      if (traceDebug())
+      {
+         ossimNotify(ossimNotifyLevel_FATAL)
+            << "FATAL:" << MODULE << "\n"
+            << "Quarter quad segment range error.\n"
+            << "Quarter quad segment extracted:  " << theQuarterQuadSegment
+            << "Range:  A to D\n";
+      }
       return;
    }
 
@@ -393,12 +425,13 @@ void ossimUsgsQuad::setQuadName(const ossimString& name)
 
    if (traceDebug())
    {
-      ossimNotify(ossimNotifyLevel_DEBUG) << "DEBUG: " << MODULE << ", "
-                                          << qqName << " lower right quad corner:  "
-                                          << theQuadLowerRightCorner << "\n"
-                                          << "Quarter quad segment:  " << theQuarterQuadSegment << "\n"
-                                          << qqName << " lower right quarter quad corner:  "
-                                          << theQuarterQuadLowerRightCorner << "\n";
+      ossimNotify(ossimNotifyLevel_DEBUG)
+         << "DEBUG: " << MODULE << ", "
+         << qqName << " lower right quad corner:  "
+         << theQuadLowerRightCorner << "\n"
+         << "Quarter quad segment:  " << theQuarterQuadSegment << "\n"
+         << qqName << " lower right quarter quad corner:  "
+         << theQuarterQuadLowerRightCorner << "\n";
    }   
    theName = qqName;
 }
@@ -512,10 +545,14 @@ ossimGrect ossimUsgsQuad::quarterQuadSegRect(char seg)
       break; // At the corner of a quad so nothing to do here.
 
    default:
-      ossimNotify(ossimNotifyLevel_FATAL) << "FATAL:" << MODULE << "\n"
-                                          << "Quarter quad segment range error.\n"
-                                          << "Quarter quad segment extracted:  " << seg
-                                          << "Range:  A to D\n";
+      if (traceDebug())
+      {
+         ossimNotify(ossimNotifyLevel_FATAL)
+            << "FATAL:" << MODULE << "\n"
+            << "Quarter quad segment range error.\n"
+            << "Quarter quad segment extracted:  " << seg
+            << "Range:  A to D\n";
+      }
       break;
    }
 
@@ -531,10 +568,10 @@ ossimGrect ossimUsgsQuad::quarterQuadSegRect(char seg)
 
    if (traceDebug())
    {
-      ossimNotify(ossimNotifyLevel_DEBUG) << "DEBUG: " << MODULE
-                                          << "\nQuarter quad segment " << seg << " rect:  " << rect << "\n";
+      ossimNotify(ossimNotifyLevel_DEBUG)
+         << "DEBUG: " << MODULE
+         << "\nQuarter quad segment " << seg << " rect:  " << rect << "\n";
    }
-
 
    return rect;
 }
@@ -572,8 +609,9 @@ ossimGrect ossimUsgsQuad::quarterQuadRect() const
 
    if (traceDebug())
    {
-      ossimNotify(ossimNotifyLevel_DEBUG) << "DEBUG: " << MODULE
-                                          << "\nQuarter quad rect:  " << rect <<"\n";
+      ossimNotify(ossimNotifyLevel_DEBUG)
+         << "DEBUG: " << MODULE
+         << "\nQuarter quad rect:  " << rect <<"\n";
    }
 
 
@@ -613,8 +651,9 @@ ossimGrect ossimUsgsQuad::quadRect() const
 
    if (traceDebug())
    {
-      ossimNotify(ossimNotifyLevel_DEBUG) << "DEBUG: " << MODULE
-                                          << "\nQuarter quad rect:  " << rect << "\n";
+      ossimNotify(ossimNotifyLevel_DEBUG)
+         << "DEBUG: " << MODULE
+         << "\nQuarter quad rect:  " << rect << "\n";
    }
 
    return rect;
@@ -634,9 +673,13 @@ ossimString ossimUsgsQuad::quarterQuadSegKwRect(char seg)
    //***
    if ( (seg < 65) || (seg > 68) )
    {
-      ossimNotify(ossimNotifyLevel_FATAL) << "FATAL:" << MODULE << "\n"
-                                          << seg << " out of range!\n"
-                                          << "Possible values:  A, B, C, or D\n";
+      if (traceDebug())
+      {
+         ossimNotify(ossimNotifyLevel_FATAL)
+            << "FATAL:" << MODULE << "\n"
+            << seg << " out of range!\n"
+            << "Possible values:  A, B, C, or D\n";
+      }
       return tmp;
    }
 

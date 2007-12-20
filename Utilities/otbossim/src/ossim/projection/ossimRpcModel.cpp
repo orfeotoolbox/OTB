@@ -1,11 +1,7 @@
 //*****************************************************************************
-// FILE: ossimRpcModel.cc
+// FILE: ossimRpcModel.cpp
 //
-// Copyright (C) 2001 ImageLinks, Inc.
-//
-// License:  LGPL
-//
-// See LICENSE.txt file in the top level directory for more details.
+// License:  See top level LICENSE.txt file.
 //
 // AUTHOR: Oscar Kramer
 //
@@ -17,14 +13,18 @@
 // LIMITATIONS: Does not support parameter adjustment (YET)
 //
 //*****************************************************************************
-//  $Id: ossimRpcModel.cpp 9576 2006-09-15 19:10:45Z dburken $
+//  $Id: ossimRpcModel.cpp 11522 2007-08-07 21:57:59Z dburken $
 
 #include <ossim/projection/ossimRpcModel.h>
 
 RTTI_DEF1(ossimRpcModel, "ossimRpcModel", ossimSensorModel);
 
+#include <ossim/elevation/ossimHgtRef.h>
 #include <ossim/base/ossimGpt.h>
 #include <ossim/base/ossimDpt.h>
+#include <ossim/base/ossimDatum.h>
+#include <ossim/base/ossimEllipsoid.h>
+#include <ossim/base/ossimException.h>
 #include <ossim/base/ossimKeywordlist.h>
 #include <ossim/base/ossimKeywordNames.h>
 #include <ossim/base/ossimNotify.h>
@@ -33,6 +33,7 @@ RTTI_DEF1(ossimRpcModel, "ossimRpcModel", ossimSensorModel);
 #include <iomanip>
 #include <sstream>
 #include <ossim/projection/ossimProjectionFactoryRegistry.h>
+
 //***
 // Define Trace flags for use within this file:
 //***
@@ -40,7 +41,6 @@ RTTI_DEF1(ossimRpcModel, "ossimRpcModel", ossimSensorModel);
 static ossimTrace traceExec  ("ossimRpcModel:exec");
 static ossimTrace traceDebug ("ossimRpcModel:debug");
 
-const ossimFilename ossimRpcModel::INIT_RPC_GEOM_FILENAME ("rpc_init.geom");
 static const int    MODEL_VERSION_NUMBER  = 1;
 static const int    NUM_COEFFS        = 20;
 static const char*  MODEL_TYPE        = "ossimRpcModel";
@@ -82,23 +82,29 @@ static const ossimString PARAM_UNITS[] ={"pixel",
 //  
 //*****************************************************************************
 ossimRpcModel::ossimRpcModel()
-   : ossimSensorModel(),
-     theIntrackOffset(0),
-     theCrtrackOffset(0),
-     theIntrackScale(0.0),
-     theCrtrackScale(0.0),
-     theYawSkew   (0.0),
-     theCosMapRot (1.0),
-     theSinMapRot (0.0),
-     theBiasError (0.0),
-     theRandError (0.0)
-   
- {
-   if (traceExec())  ossimNotify(ossimNotifyLevel_DEBUG) << "DEBUG ossimRpcModel Default Constructor: entering..." << std::endl;
+   :  ossimSensorModel(),
+      thePolyType     (A),
+      theLineScale    (0.0),
+      theSampScale    (0.0),
+      theLatScale     (0.0),
+      theLonScale     (0.0),
+      theHgtScale     (0.0),
+      theLineOffset   (0.0),
+      theSampOffset   (0.0),
+      theLatOffset    (0.0),
+      theLonOffset    (0.0),
+      theHgtOffset    (0.0),
+      theIntrackOffset(0.0),
+      theCrtrackOffset(0.0),
+      theIntrackScale (0.0),
+      theCrtrackScale (0.0),
+      theCosMapRot    (0.0),
+      theSinMapRot    (0.0),
+      theBiasError    (0.0),
+      theRandError    (0.0)
 
+{
    initAdjustableParameters();
-
-   if (traceExec())  ossimNotify(ossimNotifyLevel_DEBUG) << "DEBUG ossimRpcModel Default Constructor: returning..." << std::endl;
 }
 
 //*****************************************************************************
@@ -123,63 +129,17 @@ ossimRpcModel::ossimRpcModel(const ossimRpcModel& model)
       theCrtrackOffset(model.theCrtrackOffset),
       theIntrackScale(model.theIntrackScale),
       theCrtrackScale(model.theCrtrackScale),
-      theYawSkew      (model.theYawSkew),
       theCosMapRot    (model.theCosMapRot),
       theSinMapRot    (model.theSinMapRot),
       theBiasError    (model.theBiasError),
       theRandError    (model.theRandError)
 {
-   if (traceExec())
-   {
-      ossimNotify(ossimNotifyLevel_DEBUG)
-         << "DEBUG ossimRpcModel Copy Constructor: entering..." << std::endl;
-   }
-
-   for (int i=0; i<20; i++)
+   for (int i=0; i<20; ++i  )
    {
       theLineNumCoef[i] = model.theLineNumCoef[i];
       theLineDenCoef[i] = model.theLineDenCoef[i];
       theSampNumCoef[i] = model.theSampNumCoef[i];
       theSampDenCoef[i] = model.theSampDenCoef[i];
-   }
-   
-   if (traceExec())  ossimNotify(ossimNotifyLevel_DEBUG) << "DEBUG ossimRpcModel Copy Constructor: returning..." << std::endl;
-}
-
-//*****************************************************************************
-//  CONSTRUCTOR: ossimRpcModel(kwl)
-//  
-//  Constructs model from keywordlist geometry file
-//  
-//*****************************************************************************
-ossimRpcModel::ossimRpcModel(const ossimKeywordlist& geom_kwl)
-   : ossimSensorModel(),
-     theIntrackOffset(0),
-     theCrtrackOffset(0),
-     theIntrackScale(0.0),
-     theCrtrackScale(0.0),
-     theYawSkew   (0.0),
-     theCosMapRot (1.0),
-     theSinMapRot (0.0),
-     theBiasError (0.0),
-     theRandError (0.0)
-{
-   if (traceExec())
-   {
-      ossimNotify(ossimNotifyLevel_DEBUG)
-         << "DEBUG ossimRpcModel(kwl) Constructor: entering..." << std::endl;
-   }
-
-   if(geom_kwl.getErrorStatus() == ossimErrorCodes::OSSIM_OK)
-   {
-      //***
-      // Parse keywordlist for geometry:
-      //***
-      loadState(geom_kwl);
-   }
-   else
-   {
-      theErrorStatus++;
    }
 }
 
@@ -189,9 +149,6 @@ ossimRpcModel::ossimRpcModel(const ossimKeywordlist& geom_kwl)
 //*****************************************************************************
 ossimRpcModel::~ossimRpcModel()
 {
-   if (traceExec())  ossimNotify(ossimNotifyLevel_DEBUG) << "DEBUG ~ossimRpcModel() Destructor: entering..." << std::endl;
-   
-   if (traceExec())  ossimNotify(ossimNotifyLevel_DEBUG) << "DEBUG ossimNotify(ossimNotifyLevel_DEBUG): returning..." << std::endl;
 }
 
 void ossimRpcModel::setAttributes(ossim_float64 sampleOffset,
@@ -209,7 +166,7 @@ void ossimRpcModel::setAttributes(ossim_float64 sampleOffset,
                                   const std::vector<double>& yNumeratorCoeffs,
                                   const std::vector<double>& yDenominatorCoeffs,
                                   PolynomialType polyType,
-                                  bool computeGsd)
+                                  bool computeGsdFlag)
 {
    thePolyType = polyType;
    
@@ -249,28 +206,22 @@ void ossimRpcModel::setAttributes(ossim_float64 sampleOffset,
                 theLineDenCoef);
    }
 
-   if(computeGsd)
+   if(computeGsdFlag)
    {
-      ossimGpt centerGround;
-      ossimGpt rightGround;
-      ossimGpt topGround;
-      lineSampleToWorld(ossimDpt(sampleOffset,
-                                 lineOffset),
-                        centerGround);
-      lineSampleToWorld(ossimDpt(sampleOffset+1,
-                                 lineOffset),
-                        rightGround);
-      lineSampleToWorld(ossimDpt(sampleOffset,
-                                 lineOffset+1),
-                        topGround);
-      
-      ossimEcefPoint p1 = centerGround;
-      ossimEcefPoint p2 = rightGround;
-      ossimEcefPoint p3 = topGround;
-      
-      theGSD.x = (p2-p1).magnitude();
-      theGSD.y = (p3-p1).magnitude();
-      theMeanGSD = (theGSD.x+theGSD.y)*.5;
+      try
+      {
+         // This will set theGSD and theMeanGSD. Method throws ossimException.
+         computeGsd();
+      }
+      catch (const ossimException& e)
+      {
+         if (traceDebug())
+         {
+            ossimNotify(ossimNotifyLevel_DEBUG)
+               << "ossimNitfRpcModel::ossimNitfRpcModel Caught Exception:\n"
+               << e.what() << std::endl;
+         }
+      }
    }
 }
 
@@ -278,6 +229,61 @@ void ossimRpcModel::setMetersPerPixel(const ossimDpt& metersPerPixel)
 {
    theGSD = metersPerPixel;
    theMeanGSD = (theGSD.x+theGSD.y)*.5;
+}
+
+void ossimRpcModel::computeGsd()
+{
+   //---
+   // Get the reference ground point. Note that we will NOT use theRefImgPt
+   // as this can be set from tags and such that are not accurate.
+   //---
+   ossimGpt centerGpt;
+   lineSampleHeightToWorld(theRefImgPt,
+                           theHgtOffset,
+                           centerGpt);
+   if (centerGpt.hasNans())
+   {
+      std::string e = "ossimRpcModel::computeGSD error centerGpt has nans!";
+      throw ossimException(e);
+   }
+
+   // Get the ground point to the right of the reference point.
+   ossimGpt rightGpt;
+   lineSampleHeightToWorld(theRefImgPt + ossimDpt(1, 0),
+                           theHgtOffset,
+                           rightGpt);
+   if (rightGpt.hasNans())
+   {
+      std::string e = "ossimRpcModel::computeGSD error rightGpt has nans!";
+      throw ossimException(e);
+   }
+
+   // Get the ground point one up from the reference point.
+   ossimGpt topGpt;
+   lineSampleHeightToWorld(theRefImgPt + ossimDpt(0, -1),
+                           theHgtOffset,
+                           topGpt);
+   if (topGpt.hasNans())
+   {
+      std::string e = "ossimRpcModel::computeGSD error topGpt has nans!";
+      throw ossimException(e);
+   }
+
+   ossimEcefPoint rightPt = rightGpt;
+   ossimEcefPoint topPt   = topGpt;
+   ossimEcefPoint origin  = centerGpt;
+      
+   theGSD.x   = (rightPt-origin).magnitude();
+   theGSD.y   = (topPt-origin).magnitude();
+   theMeanGSD = (theGSD.x + theGSD.y)/2.0;
+
+   if (traceDebug())
+   {
+      ossimNotify(ossimNotifyLevel_DEBUG)
+         << "ossimRpcModel::computGsd DEBUG:"
+         << "\ntheGSD: " << theGSD
+         << "\ntheMeanGSD: " << theMeanGSD << std::endl;
+   }
 }
 
 void ossimRpcModel::setPositionError(const ossim_float64& biasError,
@@ -304,12 +310,12 @@ void ossimRpcModel::worldToLineSample(const ossimGpt& ground_point,
 {
    // if (traceExec())  ossimNotify(ossimNotifyLevel_DEBUG) << "DEBUG ossimRpcModel::worldToLineSample(): entering..." << std::endl;
 
-   if(ground_point.isLatNan() ||
-      ground_point.isLonNan() )
-     {
-       img_pt.makeNan();
-       return;
-     }
+   if(ground_point.isLatNan() || ground_point.isLonNan() )
+   {
+      img_pt.makeNan();
+      return;
+   }
+
    //***
    // First check if the world point is inside bounding rectangle:
    //***
@@ -328,7 +334,7 @@ void ossimRpcModel::worldToLineSample(const ossimGpt& ground_point,
    double nlon = (ground_point.lon - theLonOffset) / theLonScale;
    double nhgt;
 
-   if(ground_point.hgt == OSSIM_DBL_NAN)
+   if( ground_point.isHgtNan() )
    {
       nhgt = (theHgtScale - theHgtOffset) / theHgtScale;
    }
@@ -336,6 +342,7 @@ void ossimRpcModel::worldToLineSample(const ossimGpt& ground_point,
    {
       nhgt = (ground_point.hgt - theHgtOffset) / theHgtScale;
    }
+
    //***
    // Compute the adjusted, normalized line (U) and sample (V):
    //***
@@ -358,27 +365,71 @@ void ossimRpcModel::worldToLineSample(const ossimGpt& ground_point,
    // Now back out skew, scale, and offset adjustments:
    //***
    img_pt.line = U*(theLineScale+theIntrackScale) + theLineOffset + theIntrackOffset;
-//   img_pt.samp = V*(theSampScale+theCrtrackScale) + theSampOffset + theIntrackOffset - theYawSkew*img_pt.u;
-   img_pt.samp = V*(theSampScale+theCrtrackScale) + theSampOffset + theCrtrackOffset - theYawSkew*img_pt.u;
+   
+   img_pt.samp = V*(theSampScale+theCrtrackScale) + theSampOffset + theCrtrackOffset;
 
    // if (traceExec())  ossimNotify(ossimNotifyLevel_DEBUG) << "DEBUG ossimRpcModel::worldToLineSample(): returning..." << std::endl;
    return;
 }
 
+//*****************************************************************************
+//  METHOD: ossimRpcModel::lineSampleToWorld()
+//  
+//  Overrides base class implementation. Performs DEM intersection.
+//*****************************************************************************
 void  ossimRpcModel::lineSampleToWorld(const ossimDpt& imagePoint,
                                        ossimGpt&       worldPoint) const
 {
    if(!imagePoint.hasNans())
    {
-      lineSampleHeightToWorld(imagePoint,
-                              worldPoint.height(),
-                              worldPoint);
+      ossimEcefRay ray;
+      imagingRay(imagePoint, ray);
+      ossimElevManager::instance()->intersectRay(ray, worldPoint);
    }
    else
    {
       worldPoint.makeNan();
    }
 }
+
+//*****************************************************************************
+//  METHOD: ossimRpcModel::imagingRay()
+//  
+//  Constructs an RPC ray by intersecting 2 ellipsoid heights above and
+//  below the RPC height offset, and then forming a vector between the two.
+//
+//*****************************************************************************
+void ossimRpcModel::imagingRay(const ossimDpt& imagePoint,
+                               ossimEcefRay&   imageRay) const
+{
+   //---
+   // For "from point", "to point" we want the image ray to be from above the
+   // ellipsoid down to Earth.
+   // 
+   // It appears the ray "from point" must be above the ellipsiod for the
+   // ossimElevSource::intersectRay method; ultimately, the
+   // ossimEllipsoid::nearestIntersection method, else it goes off in the
+   // weeds...
+   //---
+   double vectorLength = theHgtScale ? (theHgtScale * 2.0) : 1000.0;
+
+   ossimGpt gpt;
+   
+   // "from" point
+   double intHgt = theHgtOffset + vectorLength;
+   lineSampleHeightToWorld(imagePoint, intHgt, gpt);
+   ossimEcefPoint intECFfrom(gpt);
+   
+   // "to" point
+   lineSampleHeightToWorld(imagePoint, theHgtOffset, gpt);
+   ossimEcefPoint intECFto(gpt);
+   
+   // Construct ray
+   ossimEcefRay ray(intECFfrom, intECFto);
+   
+   imageRay = ray;
+}
+
 
 //*****************************************************************************
 //  METHOD: ossimRpcModel::lineSampleHeightToWorld()
@@ -417,8 +468,7 @@ void ossimRpcModel::lineSampleHeightToWorld(const ossimDpt& image_point,
    //
    //      NOTE: U = line, V = sample
    //***
-   double skew = (image_point.x-theSampOffset - theCrtrackOffset)*theYawSkew;
-   double U    = (image_point.y-theLineOffset - theIntrackOffset+skew) / (theLineScale+theIntrackScale);
+   double U    = (image_point.y-theLineOffset - theIntrackOffset) / (theLineScale+theIntrackScale);
    double V    = (image_point.x-theSampOffset - theCrtrackOffset) / (theSampScale+theCrtrackScale);
 
    //***
@@ -438,7 +488,7 @@ void ossimRpcModel::lineSampleHeightToWorld(const ossimDpt& image_point,
    
    double nhgt;
 
-   if(ellHeight == OSSIM_DBL_NAN)
+   if(ossim::isnan(ellHeight))
    {
      nhgt = (theHgtScale - theHgtOffset) / theHgtScale;  // norm height
    }
@@ -630,6 +680,29 @@ double ossimRpcModel::dPoly_dLon(const double& P, const double& L,
    return dr;
 }
 
+//*****************************************************************************
+// PRIVATE METHOD: ossimRpcModel::dPoly_dHgt
+//  
+//  Computes derivative of polynomial wrt normalized Height H.
+//  
+//*****************************************************************************
+double ossimRpcModel::dPoly_dHgt(const double& P, const double& L,
+                                 const double& H, const double* c) const
+{
+   double dr;
+
+   if (thePolyType == A)
+   {
+      dr = c[3] + c[5]*L + c[6]*P + c[7]*L*P + 2*c[10]*H + c[13]*L*L +
+           c[16]*P*P + 2*c[17]*L*H + 2*c[18]*P*H + 3*c[19]*H*H;
+   }
+   else
+   {
+      dr = c[3] + c[5]*L + c[6]*P + 2*c[9]*H + c[10]*L*P + 2*c[13]*L*H +
+           2*c[16]*P*H + c[17]*L*L + c[18]*P*P + 3*c[19]*H*H;
+   }
+   return dr;
+}
 
 void ossimRpcModel::updateModel()
 {
@@ -637,10 +710,9 @@ void ossimRpcModel::updateModel()
    theCrtrackOffset    = computeParameterOffset(CRTRACK_OFFSET);
    theIntrackScale     = computeParameterOffset(INTRACK_SCALE);
    theCrtrackScale     = computeParameterOffset(CRTRACK_SCALE);
-//   theYawSkew          = sind(computeParameterOffset(YAW_OFFSET));
    double mapRotation  = computeParameterOffset(MAP_ROTATION);
-   theCosMapRot        = cosd(mapRotation);
-   theSinMapRot        = sind(mapRotation);
+   theCosMapRot        = ossim::cosd(mapRotation);
+   theSinMapRot        = ossim::sind(mapRotation);
 }
 
 void ossimRpcModel::initAdjustableParameters()
@@ -661,23 +733,9 @@ void ossimRpcModel::initAdjustableParameters()
 //   setParameterSigma(YAW_OFFSET, 0.001);
 }
 
-
-ossimDpt ossimRpcModel::extrapolate (const ossimGpt& gp) const
+ossimObject* ossimRpcModel::dup() const
 {
-  return ossimSensorModel::extrapolate(gp);
-//   ossimDpt temp;
-  
-//   temp.makeNan();
-  
-//   return temp;
-  
-}
-
-ossimGpt ossimRpcModel::extrapolate (const ossimDpt& ip,
-				       const double& height) const
-{
-  return ossimSensorModel::extrapolate(ip, height);
-//  return ossimGpt(OSSIM_DBL_NAN, OSSIM_DBL_NAN, OSSIM_DBL_NAN, 0);
+   return new ossimRpcModel(*this);
 }
 
 //*****************************************************************************
@@ -1021,7 +1079,6 @@ bool ossimRpcModel::loadState(const ossimKeywordlist& kwl,
    //***
    // Initialize other data members given quantities read in KWL:
    //***
-   theYawSkew   = 0.0;
    theCosMapRot = 1.0;
    theSinMapRot = 0.0;
 
@@ -1117,4 +1174,216 @@ bool ossimRpcModel::setupOptimizer(const ossimString& init_file)
    }
    
    return false;
+}
+
+//*****************************************************************************
+//  METHOD: ossimSarModel::getForwardDeriv()
+//  
+//  Compute partials of samp/line WRT to ground.
+//  
+//*****************************************************************************
+ossimDpt ossimRpcModel::getForwardDeriv(int derivMode,
+                                        const ossimGpt& pos,
+                                        double h)
+{
+   // If derivMode (parmIdx) >= 0 call base class version
+   // for "adjustable parameters"
+   if (derivMode >= 0)
+   {
+      return ossimSensorModel::getForwardDeriv(derivMode, pos, h);
+   }
+   
+   // Use alternative derivMode definitions
+   else
+   {
+      ossimDpt returnData;
+
+      //******************************************
+      // OBS_INIT mode
+      //    [1] 
+      //    [2] 
+      //  Note: In this mode, pos is used to pass
+      //  in the (s,l) observations.
+      //******************************************
+      if (derivMode==OBS_INIT)
+      {
+         // Image coordinates
+         ossimDpt obs;
+         obs.samp = pos.latd();
+         obs.line = pos.lond();
+         theObs = obs;
+      }
+
+      //******************************************
+      // EVALUATE mode
+      //   [1] evaluate & save partials, residuals
+      //   [2] return residuals
+      //******************************************
+      else if (derivMode==EVALUATE)
+      {
+         //***
+         // Normalize the lat, lon, hgt:
+         //***
+         double nlat = (pos.lat - theLatOffset) / theLatScale;
+         double nlon = (pos.lon - theLonOffset) / theLonScale;
+         double nhgt;
+
+         if( ossim::isnan(pos.hgt) )
+         {
+            nhgt = (theHgtScale - theHgtOffset) / theHgtScale;
+         }
+         else
+         {
+            nhgt = (pos.hgt - theHgtOffset) / theHgtScale;
+         }
+         
+         //***
+         // Compute the normalized line (Un) and sample (Vn):
+         //***
+         double Pu = polynomial(nlat, nlon, nhgt, theLineNumCoef);
+         double Qu = polynomial(nlat, nlon, nhgt, theLineDenCoef);
+         double Pv = polynomial(nlat, nlon, nhgt, theSampNumCoef);
+         double Qv = polynomial(nlat, nlon, nhgt, theSampDenCoef);
+         double Un  = Pu / Qu;
+         double Vn  = Pv / Qv;
+         
+         //***
+         // Compute the actual line (U) and sample (V):
+         //***
+         double U  = Un*theLineScale + theLineOffset;
+         double V  = Vn*theSampScale + theSampOffset;
+
+         //***
+         // Compute the partials of each polynomial wrt lat, lon, hgt
+         //***
+         double dPu_dLat, dQu_dLat, dPv_dLat, dQv_dLat;
+         double dPu_dLon, dQu_dLon, dPv_dLon, dQv_dLon;
+         double dPu_dHgt, dQu_dHgt, dPv_dHgt, dQv_dHgt;
+         dPu_dLat = dPoly_dLat(nlat, nlon, nhgt, theLineNumCoef);
+         dQu_dLat = dPoly_dLat(nlat, nlon, nhgt, theLineDenCoef);
+         dPv_dLat = dPoly_dLat(nlat, nlon, nhgt, theSampNumCoef);
+         dQv_dLat = dPoly_dLat(nlat, nlon, nhgt, theSampDenCoef);
+         dPu_dLon = dPoly_dLon(nlat, nlon, nhgt, theLineNumCoef);
+         dQu_dLon = dPoly_dLon(nlat, nlon, nhgt, theLineDenCoef);
+         dPv_dLon = dPoly_dLon(nlat, nlon, nhgt, theSampNumCoef);
+         dQv_dLon = dPoly_dLon(nlat, nlon, nhgt, theSampDenCoef);
+         dPu_dHgt = dPoly_dHgt(nlat, nlon, nhgt, theLineNumCoef);
+         dQu_dHgt = dPoly_dHgt(nlat, nlon, nhgt, theLineDenCoef);
+         dPv_dHgt = dPoly_dHgt(nlat, nlon, nhgt, theSampNumCoef);
+         dQv_dHgt = dPoly_dHgt(nlat, nlon, nhgt, theSampDenCoef);
+         
+         //***
+         // Compute partials of quotients U and V wrt lat, lon, hgt 
+         //***
+         double dU_dLat, dU_dLon, dU_dHgt, dV_dLat, dV_dLon, dV_dHgt;
+         dU_dLat = (Qu*dPu_dLat - Pu*dQu_dLat)/(Qu*Qu);
+         dU_dLon = (Qu*dPu_dLon - Pu*dQu_dLon)/(Qu*Qu);
+         dU_dHgt = (Qu*dPu_dHgt - Pu*dQu_dHgt)/(Qu*Qu);
+         dV_dLat = (Qv*dPv_dLat - Pv*dQv_dLat)/(Qv*Qv);
+         dV_dLon = (Qv*dPv_dLon - Pv*dQv_dLon)/(Qv*Qv);
+         dV_dHgt = (Qv*dPv_dHgt - Pv*dQv_dHgt)/(Qv*Qv);
+         
+         //***
+         // Apply necessary scale factors 
+         //***
+        dU_dLat *= theLineScale/theLatScale;
+        dU_dLon *= theLineScale/theLonScale;
+        dU_dHgt *= theLineScale/theHgtScale;
+        dV_dLat *= theSampScale/theLatScale;
+        dV_dLon *= theSampScale/theLonScale;
+        dV_dHgt *= theSampScale/theHgtScale;
+
+        dU_dLat *= DEG_PER_RAD;
+        dU_dLon *= DEG_PER_RAD;
+        dV_dLat *= DEG_PER_RAD;
+        dV_dLon *= DEG_PER_RAD;
+
+         // Save the partials referenced to ECF
+         ossimEcefPoint location(pos);
+         NEWMAT::Matrix jMat(3,3);
+         pos.datum()->ellipsoid()->jacobianWrtEcef(location, jMat);
+         //  Line
+         theParWRTx.u = dU_dLat*jMat(1,1)+dU_dLon*jMat(2,1)+dU_dHgt*jMat(3,1);
+         theParWRTy.u = dU_dLat*jMat(1,2)+dU_dLon*jMat(2,2)+dU_dHgt*jMat(3,2);
+         theParWRTz.u = dU_dLat*jMat(1,3)+dU_dLon*jMat(2,3)+dU_dHgt*jMat(3,3);
+         //  Samp
+         theParWRTx.v = dV_dLat*jMat(1,1)+dV_dLon*jMat(2,1)+dV_dHgt*jMat(3,1);
+         theParWRTy.v = dV_dLat*jMat(1,2)+dV_dLon*jMat(2,2)+dV_dHgt*jMat(3,2);
+         theParWRTz.v = dV_dLat*jMat(1,3)+dV_dLon*jMat(2,3)+dV_dHgt*jMat(3,3);
+
+         // Residuals
+         ossimDpt resid(theObs.samp-V, theObs.line-U);
+         returnData = resid;
+      }
+
+      //******************************************
+      // P_WRT_X, P_WRT_Y, P_WRT_Z modes
+      //   [1] 3 separate calls required
+      //   [2] return 3 sets of partials
+      //******************************************
+      else if (derivMode==P_WRT_X)
+      {
+         returnData = theParWRTx;
+      }
+
+      else if (derivMode==P_WRT_Y)
+      {
+         returnData = theParWRTy;
+      }
+
+      else
+      {
+         returnData = theParWRTz;
+      }
+
+      return returnData;
+   }
+}
+
+double ossimRpcModel::getBiasError() const
+{
+   return theBiasError;
+}
+
+double ossimRpcModel::getRandError() const
+{
+   return theRandError;
+}
+
+
+//*****************************************************************************
+//  METHOD: ossimSarModel::getRpcParameters)
+//  
+//  Accessor for RPC parameter set.
+//  
+//*****************************************************************************
+void ossimRpcModel::getRpcParameters(ossimRpcModel::rpcModelStruct& model) const
+{
+   model.lineScale  = theLineScale;
+   model.sampScale  = theSampScale;
+   model.latScale   = theLatScale;
+   model.lonScale   = theLonScale;
+   model.hgtScale   = theHgtScale;
+   model.lineOffset = theLineOffset;
+   model.sampOffset = theSampOffset;
+   model.latOffset  = theLatOffset;
+   model.lonOffset  = theLonOffset;
+   model.hgtOffset  = theHgtOffset;
+   
+   for (int i=0; i<20; ++i)
+   {
+      model.lineNumCoef[i] = theLineNumCoef[i];
+      model.lineDenCoef[i] = theLineDenCoef[i];
+      model.sampNumCoef[i] = theSampNumCoef[i];
+      model.sampDenCoef[i] = theSampDenCoef[i];
+   }
+   
+   if (thePolyType == A)
+   {
+      model.type= 'A';
+   }
+   else
+   {
+      model.type= 'B';
+   }
 }

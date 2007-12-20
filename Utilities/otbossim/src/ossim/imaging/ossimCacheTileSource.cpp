@@ -1,29 +1,28 @@
 //*******************************************************************
-// Copyright (C) 2000 ImageLinks Inc.
 //
-//
-// License:  LGPL
-// 
-// See LICENSE.txt file in the top level directory for more details.
+// License:  See top level LICENSE.txt file.
 //
 // Author:  Garrett Potts 
 //
-// Description:
-//
-// ossimCacheTileSource.
+// Description:  ossimCacheTileSource
+// 
 //*******************************************************************
-//  $Id: ossimCacheTileSource.cpp 9094 2006-06-13 19:12:40Z dburken $
+//  $Id: ossimCacheTileSource.cpp 11694 2007-09-09 21:55:16Z dburken $
+
 #include <ossim/base/ossimTrace.h>
+#include <ossim/base/ossimNotify.h>
+#include <ossim/base/ossimScopedLock.h>
+#include <ossim/base/ossimString.h>
+#include <ossim/base/ossimStringProperty.h>
 #include <ossim/imaging/ossimCacheTileSource.h>
 #include <ossim/imaging/ossimImageData.h>
 #include <ossim/imaging/ossimImageDataFactory.h>
 #include <ossim/base/ossimKeywordNames.h>
 #include <ossim/base/ossimKeywordlist.h>
 
-#ifndef NULL
-#  include <stddef.h>
-#endif
 static ossimTrace traceDebug("ossimCacheTileSource:debug");
+
+static const ossimString TILE_SIZE_XY_KW("tile_size_xy");
 
 RTTI_DEF1(ossimCacheTileSource, "ossimCacheTileSource", ossimImageSourceFilter);
    
@@ -31,25 +30,29 @@ ossimCacheTileSource::ossimCacheTileSource()
    : ossimImageSourceFilter(),
      theCacheId(ossimAppFixedTileCache::instance()->newTileCache()),
      theTile(0),
+     theFixedTileSize(),
      theCachingEnabled(true),
-     theEventProgressFlag(false)
+     theEventProgressFlag(false),
+     theCacheRLevel(0),
+     theBoundingRect(),
+     theMutex()
+     
 {
    theBoundingRect.makeNan();
    theFixedTileSize = ossimAppFixedTileCache::instance()->getTileSize(theCacheId);
-   theCacheRLevel = 0;
 }
 
-ossimCacheTileSource::ossimCacheTileSource(ossimImageSource* inputSource)
-   : ossimImageSourceFilter(inputSource),
-     theCacheId(ossimAppFixedTileCache::instance()->newTileCache()),
-     theTile(0),
-     theCachingEnabled(true),
-     theEventProgressFlag(false)
-{
-   theBoundingRect.makeNan();
-   theFixedTileSize = ossimAppFixedTileCache::instance()->getTileSize(theCacheId);
-   theCacheRLevel = 0;
-}
+// ossimCacheTileSource::ossimCacheTileSource(ossimImageSource* inputSource)
+//    : ossimImageSourceFilter(inputSource),
+//      theCacheId(ossimAppFixedTileCache::instance()->newTileCache()),
+//      theTile(0),
+//      theCachingEnabled(true),
+//      theEventProgressFlag(false)
+// {
+//    theBoundingRect.makeNan();
+//    theFixedTileSize = ossimAppFixedTileCache::instance()->getTileSize(theCacheId);
+//    theCacheRLevel = 0;
+// }
 
 ossimCacheTileSource::~ossimCacheTileSource()
 {
@@ -69,17 +72,15 @@ void ossimCacheTileSource::initialize()
    ossimImageSourceFilter::initialize();
    flush();
    theCacheRLevel = 999999999;
-
-   theTile = NULL;
+   theTile = 0;
 }
    
 void ossimCacheTileSource::allocate()
 {
-   theTile = NULL;
+   theTile = 0;
    if(theInputConnection)
    {
-      theTile = ossimImageDataFactory::instance()->create(this,
-                                                          this);
+      theTile = ossimImageDataFactory::instance()->create(this, this);
       theTile->initialize();
    }
 }
@@ -127,7 +128,7 @@ ossimRefPtr<ossimImageData> ossimCacheTileSource::getTile(const ossimIrect& tile
    {
       flush();
       theCacheRLevel = 9999999;
-      allocate();
+      allocate();  // Do we need this??? (drb)
       theBoundingRect = getBoundingRect(resLevel);
       if(theBoundingRect.hasNans())
       {
@@ -157,7 +158,7 @@ ossimRefPtr<ossimImageData> ossimCacheTileSource::getTile(const ossimIrect& tile
 ossimRefPtr<ossimImageData> ossimCacheTileSource::fillTile(
    ossim_uint32 resLevel)
 {
-   ossimRefPtr<ossimImageData> tempTile = NULL;
+   ossimRefPtr<ossimImageData> tempTile = 0;
    fireProgressEvent(0.0);
    ossimIrect boundingRect = theBoundingRect;
    ossimIrect tileRect = theTile->getImageRectangle();
@@ -288,16 +289,27 @@ bool ossimCacheTileSource::loadState(const ossimKeywordlist& kwl,
                                      const char* prefix)
 {
    ossimAppFixedTileCache::instance()->deleteCache(theCacheId);
-   theCacheId = ossimAppFixedTileCache::instance()->newTileCache();
-   const char* cachingEnabled = kwl.find(prefix, ossimKeywordNames::ENABLE_CACHE_KW);
    
-   if(cachingEnabled)
+   theCacheId = ossimAppFixedTileCache::instance()->newTileCache();
+   
+   const char* lookup = kwl.find(prefix, ossimKeywordNames::ENABLE_CACHE_KW);
+   if(lookup)
    {
-      theCachingEnabled = ossimString(cachingEnabled).toBool();
+      theCachingEnabled = ossimString(lookup).toBool();
+   }
+
+   lookup = kwl.find(prefix, TILE_SIZE_XY_KW);
+   if (lookup)
+   {
+      ossimIpt pt;
+      pt.toPoint(std::string(lookup));
+      setTileSize(pt);
    }
    
    bool result = ossimImageSourceFilter::loadState(kwl, prefix);
+
    initialize();
+
    return result;
 }
 
@@ -309,9 +321,65 @@ bool ossimCacheTileSource::saveState(ossimKeywordlist& kwl,
            theCachingEnabled,
            true);
    
+   kwl.add(prefix,
+           TILE_SIZE_XY_KW,
+           theFixedTileSize.toString().c_str());
+   
    return ossimImageSourceFilter::saveState(kwl, prefix);
 }
 
+ossimRefPtr<ossimProperty> ossimCacheTileSource::getProperty(
+   const ossimString& name)const
+{
+   // Lock for the length of this method.
+   ossimScopedLock<ossimMutex> scopeLock(theMutex);
+   
+   if (name == TILE_SIZE_XY_KW)
+   {
+      ossimRefPtr<ossimProperty> result =
+         new ossimStringProperty(name, theFixedTileSize.toString());
+      result->setCacheRefreshBit();
+      return result;
+   }
+
+   return ossimImageSourceFilter::getProperty(name);
+}
+
+void ossimCacheTileSource::setProperty(ossimRefPtr<ossimProperty> property)
+{
+   if (!property) return;
+
+   ossimString name = property->getName();
+   if (name == TILE_SIZE_XY_KW)
+   {
+      ossimIpt pt;
+      pt.toPoint(property->valueToString());
+
+      // Rule: Must be positive and at least 32.
+      if ( (pt.x > 31) && (pt.y > 31) )
+      {
+         setTileSize(pt);
+      }
+      else
+      {
+         ossimNotify(ossimNotifyLevel_NOTICE)
+            << "ossimCacheTileSource::setProperty NOTICE:"
+            << "\nTile dimensions must be at least 32!"
+            << "\nFormat = ( x, y )"
+            << std::endl;
+      }
+   }
+
+   ossimImageSourceFilter::setProperty(property);
+}
+
+void ossimCacheTileSource::getPropertyNames(
+   std::vector<ossimString>& propertyNames)const
+{
+   propertyNames.push_back(TILE_SIZE_XY_KW);
+   
+   ossimImageSourceFilter::getPropertyNames(propertyNames);
+}
 
 ossimString ossimCacheTileSource::getLongName()const
 {
@@ -337,14 +405,19 @@ void ossimCacheTileSource::setEventProgressFlag(bool value)
    theEventProgressFlag = value;
 }
 
-ossimIpt ossimCacheTileSource::getTileSize()
+void ossimCacheTileSource::getTileSize(ossimIpt& size) const
 {
-   return theFixedTileSize;
+   size = theFixedTileSize;
 }
 
 void ossimCacheTileSource::setTileSize(const ossimIpt& size)
 {
-   theFixedTileSize = size;
+   if (size != theFixedTileSize)
+   {
+      theTile = 0; // Force an allocate of new tile.
+      theFixedTileSize = size;
+      ossimAppFixedTileCache::instance()->setTileSize(theCacheId, size);
+   }
 }
 
 void ossimCacheTileSource::fireProgressEvent(double percentComplete)

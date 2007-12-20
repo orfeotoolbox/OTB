@@ -11,7 +11,7 @@
 //
 // Contains class declaration of ossimDtedElevationImageSource.
 //
-// $Id: ossimDtedElevationImageSource.cpp 9094 2006-06-13 19:12:40Z dburken $
+// $Id: ossimDtedElevationImageSource.cpp 11419 2007-07-27 16:24:57Z dburken $
 //----------------------------------------------------------------------------
 
 #include <vector>
@@ -337,9 +337,9 @@ void ossimDtedElevationImageSource::resampleCellBilinear(
       gpt.lon = clipRect.ul().lon;
       while (gpt.lon <= STOP_GPT.lon)
       {
-         ossim_uint32 index = computeIndex(id, rect, gpt, postSpacing);
+         ossim_int32 index = computeIndex(id, rect, gpt, postSpacing);
 //         cout << "index:  " << index << endl;
-         if (index != OSSIM_UINT_NAN)
+         if (index != OSSIM_INT_NAN)
          {
             ossim_float32 hgt =
                static_cast<ossim_float32>(dh->getHeightAboveMSL(gpt));

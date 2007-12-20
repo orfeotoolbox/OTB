@@ -1,9 +1,6 @@
 //*******************************************************************
-// Copyright (C) 2003 ImageLinks Inc. 
 //
-// License:  LGPL
-// 
-// See LICENSE.txt file in the top level directory for more details.
+// License:  See top level LICENSE.txt file.
 // 
 // Author:  David Burken
 //
@@ -19,7 +16,7 @@
 // uses a normalized remap table (more scalar independent).
 //
 //*************************************************************************
-// $Id: ossimTableRemapper.h 9094 2006-06-13 19:12:40Z dburken $
+// $Id: ossimTableRemapper.h 11909 2007-10-28 18:17:05Z dburken $
 #ifndef ossimTableRemapper_HEADER
 #define ossimTableRemapper_HEADER
 
@@ -34,12 +31,11 @@ public:
       NATIVE     = 1,
       NORMALIZED = 2
    };
-      
-   
-   ossimTableRemapper(ossimObject* owner=NULL);
-   ossimTableRemapper(ossimImageSource* inputSource);
-   ossimTableRemapper(ossimObject* owner, ossimImageSource* inputSource);
 
+   /** default constructor */
+   ossimTableRemapper();
+
+   /** virtual destructor */
    virtual ~ossimTableRemapper();
 
    virtual ossimScalarType getOutputScalarType() const;

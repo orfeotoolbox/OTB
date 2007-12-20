@@ -4,7 +4,7 @@
 // Author: Garrett Potts
 //
 //*************************************************************************
-//$Id: ossimGeoAnnotationFontObject.cpp 9094 2006-06-13 19:12:40Z dburken $
+//$Id: ossimGeoAnnotationFontObject.cpp 11411 2007-07-27 13:53:51Z dburken $
 
 #include <sstream>
 
@@ -85,7 +85,7 @@ ossimGeoAnnotationFontObject::ossimGeoAnnotationFontObject(
    theFontInfo(),
    theAnnotationFontObject(
       new ossimAnnotationFontObject(
-         ossimDpt(OSSIM_DBL_NAN, OSSIM_DBL_NAN),
+         ossimDpt(ossim::nan(), ossim::nan()),
          rhs.theAnnotationFontObject->theString,
          rhs.theAnnotationFontObject->thePixelSize,
          rhs.theAnnotationFontObject->theRotation,

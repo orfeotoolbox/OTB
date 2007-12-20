@@ -1,16 +1,16 @@
 //*******************************************************************
-// Copyright (C) 2000 ImageLinks Inc. 
 //
 // License:  See LICENSE.txt file in the top level directory.
 //
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimImageHistogramSource.cpp 9094 2006-06-13 19:12:40Z dburken $
+// $Id: ossimImageHistogramSource.cpp 11961 2007-11-01 00:40:51Z dburken $
 #include <ossim/imaging/ossimImageHistogramSource.h>
 #include <ossim/base/ossimMultiResLevelHistogram.h>
 #include <ossim/base/ossimMultiBandHistogram.h>
 #include <ossim/imaging/ossimImageSourceSequencer.h>
+#include <ossim/base/ossimNotify.h>
 
 RTTI_DEF3(ossimImageHistogramSource, "ossimImageHistogramSource", ossimHistogramSource, ossimConnectableObjectListener, ossimProcessInterface);
 
@@ -27,26 +27,9 @@ ossimImageHistogramSource::ossimImageHistogramSource(ossimObject* owner)
    addListener((ossimConnectableObjectListener*)this);
    disableSource();
 
-   theMinValueOverride     = OSSIM_DBL_NAN;
-   theMaxValueOverride     = OSSIM_DBL_NAN;
+   theMinValueOverride     = ossim::nan();
+   theMaxValueOverride     = ossim::nan();
    theNumberOfBinsOverride = -1;
-}
-
-ossimImageHistogramSource::ossimImageHistogramSource(ossimObject* owner,
-                                                     ossim_uint32 numberOfInputs,
-                                                     ossim_uint32 numberOfOutputs,
-                                                     ossim_uint32 inputListFixedFlag,
-                                                     ossim_uint32 outputListFixedFlag)
-   :ossimHistogramSource(owner,
-                         numberOfInputs,
-                         numberOfOutputs,
-                         inputListFixedFlag,
-                         outputListFixedFlag),
-    theHistogramRecomputeFlag(true)
-{
-   theAreaOfInterest.makeNan();
-   addListener((ossimConnectableObjectListener*)this);
-   disableSource();
 }
 
 ossimImageHistogramSource::~ossimImageHistogramSource()
@@ -97,7 +80,7 @@ void ossimImageHistogramSource::setMaxNumberOfRLevels(ossim_uint32 number)
    theMaxNumberOfResLevels = number;
 }
 
-ossimMultiResLevelHistogram* ossimImageHistogramSource::getHistogram(const ossimIrect& rect)
+ossimRefPtr<ossimMultiResLevelHistogram> ossimImageHistogramSource::getHistogram(const ossimIrect& rect)
 {
    if((theAreaOfInterest != rect)||
       (theAreaOfInterest.hasNans()))
@@ -113,8 +96,9 @@ bool ossimImageHistogramSource::execute()
 {
    if(!isSourceEnabled())
    {
-      return theHistogram;
+      return theHistogram.valid();
    }
+
    setProcessStatus(ossimProcessInterface::PROCESS_STATUS_EXECUTING);
    if(theHistogramRecomputeFlag)
    {
@@ -126,14 +110,21 @@ bool ossimImageHistogramSource::execute()
             theAreaOfInterest = interface->getBoundingRect();
          }
       }
+      
       computeHistogram();
-      if(getProcessStatus() != ossimProcessInterface::PROCESS_STATUS_ABORTED)
-      {
-         theHistogramRecomputeFlag = false;
-         disableSource();
-      }
+
    }
-   setProcessStatus(ossimProcessInterface::PROCESS_STATUS_NOT_EXECUTING);
+
+   if (needsAborting())
+   {
+      setProcessStatus(ossimProcessInterface::PROCESS_STATUS_ABORTED);
+      theHistogramRecomputeFlag = false;
+      disableSource();
+   }
+   else
+   {
+      setProcessStatus(ossimProcessInterface::PROCESS_STATUS_NOT_EXECUTING);
+   }
    
    return true;
 }
@@ -169,19 +160,15 @@ void ossimImageHistogramSource::connectInputEvent(ossimConnectionEvent& /* event
    theHistogramRecomputeFlag = true;
 }
 
-ossimMultiResLevelHistogram* ossimImageHistogramSource::getHistogram()
+ossimRefPtr<ossimMultiResLevelHistogram> ossimImageHistogramSource::getHistogram()
 {
-  execute();
-  return theHistogram;
+   execute();
+   return theHistogram;
 }
 
 void ossimImageHistogramSource::computeHistogram()
 {
-   if(theHistogram)
-   {
-      delete theHistogram;
-      theHistogram = NULL;
-   }   
+   // ref ptr, not a leak.
    theHistogram = new ossimMultiResLevelHistogram;
 
    ossimImageSourceInterface* input = PTR_CAST(ossimImageSourceInterface, getInput(0));
@@ -212,7 +199,8 @@ void ossimImageHistogramSource::computeHistogram()
 
       if( decimationFactors.size() < theMaxNumberOfResLevels)
       {
-         cerr << "Number Decimations is smaller than the request number of r-levels" << endl;
+         ossimNotify(ossimNotifyLevel_WARN)
+            << "Number Decimations is smaller than the request number of r-levels" << endl;
          return;
       }
       theHistogram->create(theMaxNumberOfResLevels);//numberOfResLevels);
@@ -271,16 +259,17 @@ void ossimImageHistogramSource::computeHistogram()
          }
       default:
       {
-         cerr << "Unsupported scalar type in ossimImageHistogramSource::computeHistogram()" << endl;
+         ossimNotify(ossimNotifyLevel_WARN)
+            << "Unsupported scalar type in ossimImageHistogramSource::computeHistogram()" << endl;
          return;
       }
       }
 
-      if(theMinValueOverride != OSSIM_DBL_NAN)
+      if(ossim::isnan(theMinValueOverride) == false)
       {
          minValue = (float)theMinValueOverride;
       }
-      if(theMaxValueOverride != OSSIM_DBL_NAN)
+      if(ossim::isnan(theMaxValueOverride) == false)
       {
          maxValue = (float)theMaxValueOverride;
       }
@@ -288,15 +277,21 @@ void ossimImageHistogramSource::computeHistogram()
       {
          numberOfBins = theNumberOfBinsOverride;
       }
-      ossimProcessInterface::ossimProcessStatus processStatus = getProcessStatus();
+
       if(numberOfBins > 0)
       {
 	setPercentComplete(0.0);
 	for(index = 0;
-	    ((index < theMaxNumberOfResLevels)&&//numberOfResLevels)&&
-	     (processStatus != ossimProcessInterface::PROCESS_STATUS_ABORTED));
+	    (index < theMaxNumberOfResLevels);//numberOfResLevels
 	    ++index)
          {
+            // Check for abort request.
+            if (needsAborting())
+            {
+               setPercentComplete(100);
+               break;
+            }
+
             //sequencer->setAreaOfInterest(input->getBoundingRect(index));
             sequencer->setAreaOfInterest(theAreaOfInterest*decimationFactors[index]);
             
@@ -306,34 +301,36 @@ void ossimImageHistogramSource::computeHistogram()
                                                                minValue,
                                                                maxValue);
             
-            processStatus = getProcessStatus();
-            if(processStatus!=ossimProcessInterface::PROCESS_STATUS_ABORTED)
+            ossimRefPtr<ossimImageData> data = sequencer->getNextTile(index);
+            ++tileCount;
+            setPercentComplete((100.0*(tileCount/totalTiles)));
+
+            ossim_uint32 resLevelTotalTiles = sequencer->getNumberOfTiles();
+            for (ossim_uint32 resLevelTileCount = 0;
+                 resLevelTileCount < resLevelTotalTiles;
+                 ++resLevelTileCount)
             {
-               ossimRefPtr<ossimImageData> data =
-                  sequencer->getNextTile(index);
+               if(data.valid())
+               {
+                  data->populateHistogram(theHistogram->getMultiBandHistogram(index));
+               }
+
+               // Check for abort request.
+               if (needsAborting())
+               {
+                  setPercentComplete(100);
+                  break;
+               }
+ 
+               
+               data = sequencer->getNextTile(index);
                ++tileCount;
                setPercentComplete((100.0*(tileCount/totalTiles)));
-               processStatus = getProcessStatus();
-               long resLevelTotalTiles = sequencer->getNumberOfTiles();
-               long resLevelTileCount  = 1;
-               while((resLevelTileCount < resLevelTotalTiles)&&
-                     (processStatus!=ossimProcessInterface::PROCESS_STATUS_ABORTED))
-               {
-                  if(data.valid())
-                  {
-                     data->populateHistogram(theHistogram->getMultiBandHistogram(index));
-                  }
-                  data = sequencer->getNextTile(index);
-                  processStatus = getProcessStatus();
-                  ++tileCount;
-                  ++resLevelTileCount;
-                  setPercentComplete((100.0*(tileCount/totalTiles)));
-               }
             }
          }
       }
       delete sequencer;
-      sequencer = NULL;
+      sequencer = 0;
    }
    //setPercentComplete(100);
 }

@@ -12,7 +12,7 @@
 //              Initial coding.
 //
 //*****************************************************************************
-//  $Id: ossimLsrSpace.cpp 9963 2006-11-28 21:11:01Z gpotts $
+//  $Id: ossimLsrSpace.cpp 11347 2007-07-23 13:01:59Z gpotts $
 
 #include <ossim/base/ossimLsrSpace.h>
 #include <ossim/base/ossimCommon.h>
@@ -122,10 +122,10 @@ ossimLsrSpace::ossimLsrSpace(const ossimGpt& origin,
    //***
    // Establish the component vectors for ENU system::
    //***
-   double sin_lat = sind(origin.lat);
-   double cos_lat = cosd(origin.lat);
-   double sin_lon = sind(origin.lon);
-   double cos_lon = cosd(origin.lon);
+   double sin_lat = ossim::sind(origin.lat);
+   double cos_lat = ossim::cosd(origin.lat);
+   double sin_lon = ossim::sind(origin.lon);
+   double cos_lon = ossim::cosd(origin.lon);
    
    ossimColumnVector3d E (-sin_lon,
                           cos_lon,
@@ -139,10 +139,10 @@ ossimLsrSpace::ossimLsrSpace(const ossimGpt& origin,
    // Fill rotation matrix with these components, rotated about the Z axis
    // by the azimuth indicated:
    //
-   if (ossimAbs(y_azimuth) > FLT_EPSILON)
+   if (std::abs(y_azimuth) > FLT_EPSILON)
    {
-      double cos_azim = cosd(y_azimuth);
-      double sin_azim = sind(y_azimuth);
+      double cos_azim = ossim::cosd(y_azimuth);
+      double sin_azim = ossim::sind(y_azimuth);
       ossimColumnVector3d X (cos_azim*E - sin_azim*N);
       ossimColumnVector3d Y (sin_azim*E + cos_azim*N);
       ossimColumnVector3d Z (X.cross(Y));

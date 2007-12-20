@@ -2,14 +2,14 @@
 //
 // License:  See top level LICENSE.txt file.
 // 
-// AUTHOR: Oscar Kramer (okramer@imagelinks.com)
+// AUTHOR: Oscar Kramer
 //
 // DESCRIPTION:
 //   Contains declaration of class ossimWarpProjection. This is an
 //   implementation of a warping interpolation model.
 //
 //*****************************************************************************
-//  $Id: ossimWarpProjection.h 9968 2006-11-29 14:01:53Z gpotts $
+//  $Id: ossimWarpProjection.h 11805 2007-10-05 14:54:28Z dburken $
 
 #ifndef ossimWarpProjection_HEADER
 #define ossimWarpProjection_HEADER
@@ -41,7 +41,7 @@ public:
     * Constructor accepts OSSIM keywordlist geometry file.
     */
    ossimWarpProjection(const ossimKeywordlist& geom_kwl,
-                       const char* prefix=NULL);
+                       const char* prefix=0);
    
    ~ossimWarpProjection();
    
@@ -114,6 +114,14 @@ public:
       }
    virtual void setNewWarpTransform(ossim2dTo2dTransform* warp);
    virtual void setNewAffineTransform(ossim2dTo2dTransform* affine);
+
+   /**
+    * @brief Implementation of pure virtual
+    * ossimProjection::isAffectedByElevation method.
+    * @return based on theClientProjection->isAffectedByElevation().
+    * If theClientProjection is null this returns true just to be safe.
+    */
+   virtual bool isAffectedByElevation() const;
    
 protected:
    
@@ -126,5 +134,12 @@ protected:
    
    TYPE_DATA
 };
+
+inline bool ossimWarpProjection::isAffectedByElevation() const
+{
+   return ( theClientProjection ?
+            theClientProjection->isAffectedByElevation() :
+            true );
+}
 
 #endif

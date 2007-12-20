@@ -8,7 +8,7 @@
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimCastTileSourceFilter.cpp 9094 2006-06-13 19:12:40Z dburken $
+// $Id: ossimCastTileSourceFilter.cpp 11347 2007-07-23 13:01:59Z gpotts $
 #include <ossim/imaging/ossimCastTileSourceFilter.h>
 #include <ossim/imaging/ossimU8ImageData.h>
 #include <ossim/imaging/ossimImageDataFactory.h>
@@ -68,7 +68,7 @@ double ossimCastTileSourceFilter::getNullPixelValue(ossim_uint32 band)const
          return theInputConnection->getNullPixelValue(band);
       }
    }
-   return ossimGetDefaultNull(getOutputScalarType());
+   return ossim::defaultNull(getOutputScalarType());
 }
 
 double ossimCastTileSourceFilter::getMinPixelValue(ossim_uint32 band)const
@@ -85,8 +85,8 @@ double ossimCastTileSourceFilter::getMinPixelValue(ossim_uint32 band)const
    {
       double tempMin    = theInputConnection->getMinPixelValue(band);
       
-      double defaultMin = ossimGetDefaultMin(theOutputScalarType);
-      double defaultMax = ossimGetDefaultMax(theOutputScalarType);
+      double defaultMin = ossim::defaultMin(theOutputScalarType);
+      double defaultMax = ossim::defaultMax(theOutputScalarType);
 
       if((tempMin >= defaultMin) && (tempMin <= defaultMax))
       {
@@ -112,8 +112,8 @@ double ossimCastTileSourceFilter::getMaxPixelValue(ossim_uint32 band)const
    {
       double tempMax    = theInputConnection->getMaxPixelValue(band);
       
-      double defaultMax = ossimGetDefaultMax(theOutputScalarType);
-      double defaultMin = ossimGetDefaultMin(theOutputScalarType);
+      double defaultMax = ossim::defaultMax(theOutputScalarType);
+      double defaultMin = ossim::defaultMin(theOutputScalarType);
 
       if((tempMax >= defaultMin) && (tempMax <= defaultMax))
       {

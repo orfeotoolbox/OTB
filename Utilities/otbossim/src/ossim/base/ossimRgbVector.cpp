@@ -6,7 +6,7 @@
 // Description:
 //
 //*************************************************************************
-// $Id: ossimRgbVector.cpp 9963 2006-11-28 21:11:01Z gpotts $
+// $Id: ossimRgbVector.cpp 11347 2007-07-23 13:01:59Z gpotts $
 #include <ossim/base/ossimRgbVector.h>
 #include <ossim/base/ossimJpegYCbCrVector.h>
 #include <ossim/base/ossimHsiVector.h>
@@ -17,12 +17,12 @@
 
 ossimRgbVector::ossimRgbVector(const ossimJpegYCbCrVector& YCbCr)
 {
-   theBuf[0] = static_cast<unsigned char>(clamp(irint(YCbCr.getY() +
+   theBuf[0] = static_cast<unsigned char>(clamp(ossim::round<int>(YCbCr.getY() +
                                                       1.402 * (YCbCr.getCr()-128.0))));
-   theBuf[1] = static_cast<unsigned char>(clamp(irint(YCbCr.getY() -
+   theBuf[1] = static_cast<unsigned char>(clamp(ossim::round<int>(YCbCr.getY() -
                                                       0.34414 *(YCbCr.getCb()-128.0) -
                                                       0.71414*(YCbCr.getCr()-128.0))));
-   theBuf[2] = static_cast<unsigned char>(clamp(irint(YCbCr.getY() +
+   theBuf[2] = static_cast<unsigned char>(clamp(ossim::round<int>(YCbCr.getY() +
                                                       1.772 * ( YCbCr.getCb()-128.0))));
    
 }
@@ -77,9 +77,9 @@ ossimRgbVector::ossimRgbVector(const ossimHsvVector& hsv)
    int i; 
    if(h == ossimHsvVector::OSSIM_HSV_UNDEFINED)
    {
-      theBuf[0] = clamp(irint(v*255));
-      theBuf[1] = clamp(irint(v*255));
-      theBuf[2] = clamp(irint(v*255));
+      theBuf[0] = clamp(ossim::round<int>(v*255));
+      theBuf[1] = clamp(ossim::round<int>(v*255));
+      theBuf[2] = clamp(ossim::round<int>(v*255));
    }
    else
    {
@@ -94,44 +94,44 @@ ossimRgbVector::ossimRgbVector(const ossimHsvVector& hsv)
       case 6: 
       case 0:
       {
-         theBuf[0] = clamp(irint(v*255));
-         theBuf[1] = clamp(irint(n*255));
-         theBuf[2] = clamp(irint(m*255));
+         theBuf[0] = clamp(ossim::round<int>(v*255));
+         theBuf[1] = clamp(ossim::round<int>(n*255));
+         theBuf[2] = clamp(ossim::round<int>(m*255));
          break;
       }
       case 1:
       {
-         theBuf[0] = clamp(irint(n*255));
-         theBuf[1] = clamp(irint(v*255));
-         theBuf[2] = clamp(irint(m*255));
+         theBuf[0] = clamp(ossim::round<int>(n*255));
+         theBuf[1] = clamp(ossim::round<int>(v*255));
+         theBuf[2] = clamp(ossim::round<int>(m*255));
          break;
       }
       case 2:
       {
-         theBuf[0] = clamp(irint(m*255));
-         theBuf[1] = clamp(irint(v*255));
-         theBuf[2] = clamp(irint(n*255));
+         theBuf[0] = clamp(ossim::round<int>(m*255));
+         theBuf[1] = clamp(ossim::round<int>(v*255));
+         theBuf[2] = clamp(ossim::round<int>(n*255));
          break;
       }
       case 3: 
       {
-         theBuf[0] = clamp(irint(m*255));
-         theBuf[1] = clamp(irint(n*255));
-         theBuf[2] = clamp(irint(v*255));
+         theBuf[0] = clamp(ossim::round<int>(m*255));
+         theBuf[1] = clamp(ossim::round<int>(n*255));
+         theBuf[2] = clamp(ossim::round<int>(v*255));
          break;
       }
       case 4:
       {
-         theBuf[0] = clamp(irint(n*255));
-         theBuf[1] = clamp(irint(m*255));
-         theBuf[2] = clamp(irint(v*255));
+         theBuf[0] = clamp(ossim::round<int>(n*255));
+         theBuf[1] = clamp(ossim::round<int>(m*255));
+         theBuf[2] = clamp(ossim::round<int>(v*255));
          break;
       }
       case 5: 
       {
-         theBuf[0] = clamp(irint(v*255));
-         theBuf[1] = clamp(irint(m*255));
-         theBuf[2] = clamp(irint(n*255));
+         theBuf[0] = clamp(ossim::round<int>(v*255));
+         theBuf[1] = clamp(ossim::round<int>(m*255));
+         theBuf[2] = clamp(ossim::round<int>(n*255));
          break;
       }
       }
@@ -156,9 +156,9 @@ const ossimRgbVector& ossimRgbVector::operator =(const ossimHsvVector& hsv)
    int i; 
    if(h == ossimHsvVector::OSSIM_HSV_UNDEFINED)
    {
-      theBuf[0] = clamp(irint(v*255));
-      theBuf[1] = clamp(irint(v*255));
-      theBuf[2] = clamp(irint(v*255));
+      theBuf[0] = clamp(ossim::round<int>(v*255));
+      theBuf[1] = clamp(ossim::round<int>(v*255));
+      theBuf[2] = clamp(ossim::round<int>(v*255));
    }
    else
    {
@@ -173,44 +173,44 @@ const ossimRgbVector& ossimRgbVector::operator =(const ossimHsvVector& hsv)
       case 6: 
       case 0:
       {
-         theBuf[0] = clamp(irint(v*255));
-         theBuf[1] = clamp(irint(n*255));
-         theBuf[2] = clamp(irint(m*255));
+         theBuf[0] = clamp(ossim::round<int>(v*255));
+         theBuf[1] = clamp(ossim::round<int>(n*255));
+         theBuf[2] = clamp(ossim::round<int>(m*255));
          break;
       }
       case 1:
       {
-         theBuf[0] = clamp(irint(n*255));
-         theBuf[1] = clamp(irint(v*255));
-         theBuf[2] = clamp(irint(m*255));
+         theBuf[0] = clamp(ossim::round<int>(n*255));
+         theBuf[1] = clamp(ossim::round<int>(v*255));
+         theBuf[2] = clamp(ossim::round<int>(m*255));
          break;
       }
       case 2:
       {
-         theBuf[0] = clamp(irint(m*255));
-         theBuf[1] = clamp(irint(v*255));
-         theBuf[2] = clamp(irint(n*255));
+         theBuf[0] = clamp(ossim::round<int>(m*255));
+         theBuf[1] = clamp(ossim::round<int>(v*255));
+         theBuf[2] = clamp(ossim::round<int>(n*255));
          break;
       }
       case 3: 
       {
-         theBuf[0] = clamp(irint(m*255));
-         theBuf[1] = clamp(irint(n*255));
-         theBuf[2] = clamp(irint(v*255));
+         theBuf[0] = clamp(ossim::round<int>(m*255));
+         theBuf[1] = clamp(ossim::round<int>(n*255));
+         theBuf[2] = clamp(ossim::round<int>(v*255));
          break;
       }
       case 4:
       {
-         theBuf[0] = clamp(irint(n*255));
-         theBuf[1] = clamp(irint(m*255));
-         theBuf[2] = clamp(irint(v*255));
+         theBuf[0] = clamp(ossim::round<int>(n*255));
+         theBuf[1] = clamp(ossim::round<int>(m*255));
+         theBuf[2] = clamp(ossim::round<int>(v*255));
          break;
       }
       case 5: 
       {
-         theBuf[0] = clamp(irint(v*255));
-         theBuf[1] = clamp(irint(m*255));
-         theBuf[2] = clamp(irint(n*255));
+         theBuf[0] = clamp(ossim::round<int>(v*255));
+         theBuf[1] = clamp(ossim::round<int>(m*255));
+         theBuf[2] = clamp(ossim::round<int>(n*255));
          break;
       }
       }
@@ -220,12 +220,12 @@ const ossimRgbVector& ossimRgbVector::operator =(const ossimHsvVector& hsv)
 
 const ossimRgbVector& ossimRgbVector::operator =(const ossimJpegYCbCrVector& YCbCr)
 {
-   theBuf[0] = static_cast<unsigned char>(clamp(irint(YCbCr.getY() +
+   theBuf[0] = static_cast<unsigned char>(clamp(ossim::round<int>(YCbCr.getY() +
                                                       1.402 * (YCbCr.getCr()-128.0))));
-   theBuf[1] = static_cast<unsigned char>(clamp(irint(YCbCr.getY() -
+   theBuf[1] = static_cast<unsigned char>(clamp(ossim::round<int>(YCbCr.getY() -
                                                       0.34414 *(YCbCr.getCb()-128.0) -
                                                       0.71414*(YCbCr.getCr()-128.0))));
-   theBuf[2] = static_cast<unsigned char>(clamp(irint(YCbCr.getY() +
+   theBuf[2] = static_cast<unsigned char>(clamp(ossim::round<int>(YCbCr.getY() +
                                                       1.772 * ( YCbCr.getCb()-128.0))));
 
    return *this;

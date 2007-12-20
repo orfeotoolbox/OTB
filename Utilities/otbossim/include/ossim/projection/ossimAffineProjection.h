@@ -9,7 +9,7 @@
 //   implementation of a warping interpolation model.
 //
 //*****************************************************************************
-//  $Id: ossimAffineProjection.h 9968 2006-11-29 14:01:53Z gpotts $
+//  $Id: ossimAffineProjection.h 11805 2007-10-05 14:54:28Z dburken $
 
 #ifndef ossimAffineProjection_HEADER
 #define ossimAffineProjection_HEADER
@@ -100,6 +100,13 @@ public:
       { return false; }
 
    virtual ossimDpt getMetersPerPixel() const;
+
+   /**
+    * @brief Implementation of pure virtual
+    * ossimProjection::isAffectedByElevation method.
+    * @return false.
+    */
+   virtual bool isAffectedByElevation() const { return false; }
       
 protected:
    

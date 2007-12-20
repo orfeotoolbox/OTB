@@ -18,8 +18,8 @@
 // ============================================================================
 //
 // File          : gzstream.h
-// Revision      : $Revision: 9097 $
-// Revision_date : $Date: 2006-06-13 22:57:27 +0200 (mar, 13 jun 2006) $
+// Revision      : $Revision: 11176 $
+// Revision_date : $Date: 2007-06-07 21:45:56 +0200 (Thu, 07 Jun 2007) $
 // Author(s)     : Deepak Bandyopadhyay, Lutz Kettner
 // 
 // Standard streambuf implementation following Nicolai Josuttis, "The 
@@ -27,7 +27,7 @@
 // ============================================================================
 
 #ifndef ossimGzStream_HEADER
-#define ossimGzStream_HEADER 1
+#define ossimGzStream_HEADER
 
 // standard C++ with new header file names and std:: namespace
 #include <ossim/base/ossimReferenced.h>
@@ -43,44 +43,43 @@
 // Internal classes to implement gzstream. See below for user classes.
 // ----------------------------------------------------------------------------
 
-class OSSIM_DLL ossimGzStreamBuf : public std::streambuf {
-private:
-    static const int bufferSize = 47+256;    // size of data buff
-    // totals 512 bytes under g++ for igzstream at the end.
+class OSSIM_DLL ossimGzStreamBuf : public std::streambuf
+{
 
-    gzFile           file;               // file handle for compressed file
-    char             buffer[bufferSize]; // data buffer
-    bool             opened;             // open/close state of stream
-    int              mode;               // I/O mode
-
-    int flush_buffer();
 public:
-    ossimGzStreamBuf() : opened(false) {
-        setp( buffer, buffer + (bufferSize-1));
-        setg( buffer + 4,     // beginning of putback area
-              buffer + 4,     // read position
-              buffer + 4);    // end position      
-        // ASSERT: both input & output capabilities will not be used together
-    }
-    bool is_open()const { return opened; }
-    ossimGzStreamBuf* open( const char* name, int open_mode);
-    ossimGzStreamBuf* close();
-    ~ossimGzStreamBuf() { close(); }
-    
-    virtual int overflow( int c = EOF);
+   ossimGzStreamBuf();
 
-    // will not use  buffer for get.
-    virtual std::streamsize xsgetn(char_type* __s,
-                                   std::streamsize n);
-//    virtual int     underflow();
-    virtual int     sync();
-    virtual pos_type seekoff(off_type t, std::ios_base::seekdir dir,
-                             std::ios_base::openmode omode = std::ios_base::in |
-                             std::ios_base::out);
+   virtual ~ossimGzStreamBuf();
+   
+   bool is_open()const;
+   ossimGzStreamBuf* open( const char* name, int open_mode);
+   ossimGzStreamBuf* close();
+      
+   virtual int overflow( int c = EOF);
+   
+   // will not use  buffer for get.
+   virtual std::streamsize xsgetn(char_type* __s, std::streamsize n);
+   virtual int     underflow();
+   virtual int     sync();
+   virtual pos_type seekoff(off_type t, std::ios_base::seekdir dir,
+                            std::ios_base::openmode omode = std::ios_base::in |
+                            std::ios_base::out);
 /*     virtual pos_type seekpos(pos_type posType,  */
 /*                              std::ios_base::openmode __mode = std::ios_base::in | */
 /*                              std::ios_base::out); */
-};
+   
+private:
+   int flush_buffer();
+
+   static const int bufferSize = 303; // 47+256 size of data buff
+   // totals 512 bytes under g++ for igzstream at the end.
+   
+   gzFile           file;               // file handle for compressed file
+   char             buffer[bufferSize]; // data buffer
+   bool             opened;             // open/close state of stream
+   int              mode;               // I/O mode
+
+}; // End of class ossimGzStreamBuf
 
 /* class OSSIM_DLL ossimGzStreamBase : virtual public ossimProtocolStream */
 /* { */
@@ -99,65 +98,49 @@ public:
 /* }; */
 
 //class OSSIM_DLL ossimIgzStream : public ossimGzStreamBase, public std::istream
-class OSSIM_DLL ossimIgzStream : public ossimIStream
+class OSSIM_DLL ossimIgzStream : public ossimIFStream
 {
-protected:
-    ossimGzStreamBuf buf;
-    
 public:
-    ossimIgzStream() :ossimIStream(&buf){} 
-    ossimIgzStream( const char* name, int openMode = std::ios::in)
-       : ossimIStream(&buf)
-    {
-       open(name, openMode);
-    }
-    virtual ~ossimIgzStream()
-    {
-       buf.close();
-    }
-    ossimGzStreamBuf* rdbuf() { return &buf; }
-    
-    virtual void open( const char* name, int open_mode = std::ios::in);
-    virtual void close();
-    virtual bool is_open()const
-    {
-       return buf.is_open();
-    }
-   virtual bool isCompressed()const
-   {
-      return true;
-   }
-TYPE_DATA    
-};
-
-class OSSIM_DLL ossimOgzStream : public ossimOStream
-{
-protected:
-    ossimGzStreamBuf buf;
-    
-public:
-    ossimOgzStream(){init(&buf);}
-    ossimOgzStream( const char* name, int mode = std::ios::out)
-        : ossimOStream(&buf) {}  
-    virtual ~ossimOgzStream()
-    {
-       buf.close();
-    }
-    ossimGzStreamBuf* rdbuf() { return &buf; }
-    void open( const char* name, int openMode = std::ios::out);
-    virtual void close();
-    virtual bool is_open()const
-    {
-       return buf.is_open();
-    }
-   virtual bool isCompressed()const
-   {
-      return true;
-   }
-TYPE_DATA    
-};
-
-#endif
+   ossimIgzStream();
+   ossimIgzStream( const char* name,
+                   std::ios_base::openmode mode = std::ios_base::in);
+   virtual ~ossimIgzStream();
+   ossimGzStreamBuf* rdbuf();
    
-#endif // GZSTREAM_H
+   virtual void open( const char* name,
+                      std::ios_base::openmode mode = std::ios_base::in);
+   
+   virtual void close();
+   virtual bool is_open()const;
+   virtual bool isCompressed()const;
 
+protected:
+    ossimGzStreamBuf buf;
+   
+}; // End of class ossimIgzStream
+
+class OSSIM_DLL ossimOgzStream : public ossimOFStream
+{
+public:
+   ossimOgzStream();
+   ossimOgzStream( const char* name,
+                   std::ios_base::openmode mode =
+                   std::ios_base::out|std::ios_base::trunc );
+   virtual ~ossimOgzStream();
+   
+   ossimGzStreamBuf* rdbuf();
+   void open( const char* name,
+              std::ios_base::openmode mode =
+              std::ios_base::out|std::ios_base::trunc );
+   virtual void close();
+   virtual bool is_open()const;
+   virtual bool isCompressed()const;
+
+protected:
+   ossimGzStreamBuf buf;
+
+}; // End of class ossimOgzStream
+
+#endif /* #if OSSIM_HAS_LIBZ */
+   
+#endif /* #define ossimGzStream_HEADER */

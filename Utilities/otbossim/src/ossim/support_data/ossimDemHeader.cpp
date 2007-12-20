@@ -8,7 +8,7 @@
 // Description: This class parses a DEM header.
 //
 //********************************************************************
-// $Id: ossimDemHeader.cpp 10264 2007-01-14 19:07:07Z dburken $
+// $Id: ossimDemHeader.cpp 11347 2007-07-23 13:01:59Z gpotts $
 
 #include <iostream>
 #include <iomanip>
@@ -618,10 +618,10 @@ bool ossimDemHeader::getImageGeometry(ossimKeywordlist& kwl,
       // Set the tie.
       if (getGroundRefSysUnits() == 1) // Feet...
       {
-         tieX = usft2mtrs(tieX);
-         tieY = usft2mtrs(tieY);
-         scaleX = usft2mtrs(scaleX);
-         scaleY = usft2mtrs(scaleY);
+         tieX = ossim::usft2mtrs(tieX);
+         tieY = ossim::usft2mtrs(tieY);
+         scaleX = ossim::usft2mtrs(scaleX);
+         scaleY = ossim::usft2mtrs(scaleY);
          
       }
       kwl.add(prefix,

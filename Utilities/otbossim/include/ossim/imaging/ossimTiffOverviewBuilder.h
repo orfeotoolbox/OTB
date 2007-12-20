@@ -9,7 +9,7 @@
 // Contains class declaration for TiffOverviewBuilder.
 //
 //*******************************************************************
-//  $Id: ossimTiffOverviewBuilder.h 10270 2007-01-15 15:34:37Z dburken $
+//  $Id: ossimTiffOverviewBuilder.h 11699 2007-09-10 15:23:26Z gpotts $
 
 #ifndef ossimTiffOverviewBuilder_HEADER
 #define ossimTiffOverviewBuilder_HEADER
@@ -155,6 +155,8 @@ public:
     */
    virtual void  setOutputFile(const ossimFilename& file);
 
+   void setOutputTileSize(const ossimIpt& tileSize);
+
    /**
     * @brief Sets the overview output type.
     *
@@ -184,7 +186,22 @@ public:
     */
    virtual void getTypeNameList(std::vector<ossimString>& typeList)const;
 
-   
+   /**
+    * @biref Method to set properties.
+    * @param property Property to set.
+    *
+    * @note Currently supported property:
+    * name=levels, value should be list of levels separated by a comma with
+    * no spaces. Example: "2,4,8,16,32,64"
+    */
+   virtual void setProperty(ossimRefPtr<ossimProperty> property);
+
+   /**
+    * @brief Method to populate the list of property names.
+    * @param propertyNames List to populate.  This does not clear the list
+    * just adds to it.
+    */
+   virtual void getPropertyNames(std::vector<ossimString>& propertyNames)const;
   
 private:
 
@@ -226,6 +243,9 @@ private:
                 const ossimIrect& outputRect,
                 ossim_int32 rrds_level) const;
 
+   TIFF* openTiff(const ossimString& filename,
+                  const ossimString& openMode);
+   void closeTiff(TIFF* tif);
    // Disallow these...
    ossimTiffOverviewBuilder(const ossimTiffOverviewBuilder& source);
    ossimTiffOverviewBuilder& operator=(const ossimTiffOverviewBuilder& rhs); 
@@ -233,6 +253,7 @@ private:
    ossimImageHandler* theImageHandler;
    bool               theOwnsImageHandlerFlag;
    ossimFilename      theOutputFile;
+   ossimFilename      theOutputFileTmp;
    ossim_uint8*       theNullDataBuffer;
    ossim_int32        theBytesPerPixel;
    ossim_int32        theBitsPerSample;
@@ -246,6 +267,7 @@ private:
    ossimFilterResampler::ossimFilterResamplerType theResampleType;
    vector<double>      theNullPixelValues;
    bool               theCopyAllFlag;
+   bool               theOutputTileSizeSetFlag;
 TYPE_DATA   
 };
    

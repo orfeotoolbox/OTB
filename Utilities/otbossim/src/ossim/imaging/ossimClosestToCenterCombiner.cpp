@@ -8,7 +8,7 @@
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimClosestToCenterCombiner.cpp 9094 2006-06-13 19:12:40Z dburken $
+// $Id: ossimClosestToCenterCombiner.cpp 11955 2007-10-31 16:10:22Z gpotts $
 #include <ossim/imaging/ossimClosestToCenterCombiner.h>
 #include <ossim/imaging/ossimImageDataFactory.h>
 
@@ -22,6 +22,7 @@ ossimClosestToCenterCombiner::ossimClosestToCenterCombiner()
 ossimRefPtr<ossimImageData> ossimClosestToCenterCombiner::getTile(const ossimIrect& rect,
                                                                   ossim_uint32 resLevel)
 {
+   ossim_uint32 layerIdx = 0;
    if(!isSourceEnabled())
    {
       return ossimImageMosaic::getTile(rect, resLevel);
@@ -37,12 +38,12 @@ ossimRefPtr<ossimImageData> ossimClosestToCenterCombiner::getTile(const ossimIre
    theTile->setImageRectangle(rect);
    theTile->makeBlank();
    std::vector<ossimClosestToCenterCombinerInfo > normTileList;
-   ossimRefPtr<ossimImageData> currentTile = getNextNormTile(0, rect);
+   ossimRefPtr<ossimImageData> currentTile = getNextNormTile(layerIdx, 0, rect);
    while(currentTile.valid())
    {
       normTileList.push_back(ossimClosestToCenterCombinerInfo((ossimImageData*)currentTile->dup(),
-                                                              theCurrentIndex));
-      currentTile = getNextNormTile(rect, resLevel);
+                                                              layerIdx));
+      currentTile = getNextNormTile(layerIdx, rect, resLevel);
    }
 
    
@@ -87,7 +88,7 @@ ossimRefPtr<ossimImageData> ossimClosestToCenterCombiner::getTile(const ossimIre
             {
                for(band = 0; band < bands; ++band)
                {
-                  srcBandIdx = ossimMin(normTileList[idx].theTile->getNumberOfBands(), band);
+                  srcBandIdx = ossim::min(normTileList[idx].theTile->getNumberOfBands(), band);
                   
                   bandList[band][offset] = *(((ossim_float32*)normTileList[idx].theTile->getBuf(srcBandIdx))+offset);
                }
@@ -113,7 +114,7 @@ ossim_int32 ossimClosestToCenterCombiner::findIdx(const std::vector<ossimClosest
    ossim_int32 returnIdx = -1;
    ossim_float32 tempDistance;
    ossim_int32 idx = 0;
-   ossim_int32 maxIdx = normTileList.size();
+   ossim_int32 maxIdx = (ossim_int32)normTileList.size();
    ossimIpt midPt;
    ossimIrect rect;
    for(idx = 0; idx < maxIdx; ++ idx)

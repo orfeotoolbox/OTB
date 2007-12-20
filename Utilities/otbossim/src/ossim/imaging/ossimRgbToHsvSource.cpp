@@ -8,7 +8,7 @@
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimRgbToHsvSource.cpp 9094 2006-06-13 19:12:40Z dburken $
+// $Id: ossimRgbToHsvSource.cpp 11411 2007-07-27 13:53:51Z dburken $
 #include <ossim/imaging/ossimRgbToHsvSource.h>
 #include <ossim/imaging/ossimImageData.h>
 #include <ossim/base/ossimConstants.h>
@@ -141,7 +141,7 @@ ossim_uint32 ossimRgbToHsvSource::getNumberOfOutputBands()const
 
 double ossimRgbToHsvSource::getNullPixelValue()const
 {
-   return OSSIM_FLT_NAN;
+   return ossim::nan();
 }
 
 double ossimRgbToHsvSource::getMinPixelValue(ossim_uint32 band)const

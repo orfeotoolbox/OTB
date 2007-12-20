@@ -1,12 +1,11 @@
 //*******************************************************************
-// Copyright (C) 2000 ImageLinks Inc.
 //
 // License:  See top level LICENSE.txt file.
 //
 // Description: This class provides capabilities for keywordlists.
 //
 //********************************************************************
-// $Id: ossimKeywordlist.cpp 9094 2006-06-13 19:12:40Z dburken $
+// $Id: ossimKeywordlist.cpp 10999 2007-05-22 02:04:54Z dburken $
 #include <algorithm>
 #include <fstream>
 #include <list>
@@ -26,7 +25,7 @@ static const char NULL_KEY_NOTICE[]
 
 #ifdef OSSIM_ID_ENABLED
 static const bool TRACE = false;
-static const char OSSIM_ID[] = "$Id: ossimKeywordlist.cpp 9094 2006-06-13 19:12:40Z dburken $";
+static const char OSSIM_ID[] = "$Id: ossimKeywordlist.cpp 10999 2007-05-22 02:04:54Z dburken $";
 #endif
 
 ossimKeywordlist::ossimKeywordlist(char delimiter)
@@ -807,6 +806,11 @@ bool ossimKeywordlist::parseFile(const ossimFilename& file,
 bool ossimKeywordlist::parseStream(std::istream& is,
                                    bool ignoreBinaryChars)
 {
+   if (!is) // Check stream state.
+   {
+      return false;
+   }
+   
    ossimString line;
 
    while(!is.eof() && is.good())

@@ -11,7 +11,7 @@
 // This class is used to remap image data from one scalar type to another.
 //
 //*******************************************************************
-//  $Id: ossimScalarRemapper.cpp 10241 2007-01-12 17:49:50Z dburken $
+//  $Id: ossimScalarRemapper.cpp 11347 2007-07-23 13:01:59Z gpotts $
 
 #include <iostream>
 
@@ -508,7 +508,7 @@ double ossimScalarRemapper::getNullPixelValue(ossim_uint32 band) const
       }
    }
    
-   return ossimGetDefaultNull(theOutputScalarType);
+   return ossim::defaultNull(theOutputScalarType);
 }
 
 double ossimScalarRemapper::getMinPixelValue(ossim_uint32 band) const
@@ -528,7 +528,7 @@ double ossimScalarRemapper::getMinPixelValue(ossim_uint32 band) const
       }
    }
    
-   return ossimGetDefaultMin(theOutputScalarType);
+   return ossim::defaultMin(theOutputScalarType);
 }
 
 double ossimScalarRemapper::getMaxPixelValue(ossim_uint32 band) const
@@ -548,7 +548,7 @@ double ossimScalarRemapper::getMaxPixelValue(ossim_uint32 band) const
       }
    }
    
-   return ossimGetDefaultMax(theOutputScalarType);
+   return ossim::defaultMax(theOutputScalarType);
 }
 
 ossimString ossimScalarRemapper::getLongName()const

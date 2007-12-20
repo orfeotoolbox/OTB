@@ -25,13 +25,6 @@
 #include <ossim/base/ossimCommon.h>
 #include <ossim/vec/vpf.h>
 
-#ifndef min
-#define min(a,b) (a < b ? a : b)
-#endif
-#ifndef max
-#define max(a,b) (a > b ? a : b)
-#endif
-
 /*****************************************************************************/
 
 ostream& operator <<(ostream& out,
@@ -86,10 +79,10 @@ ossimVpfExtent ossimVpfExtent::operator+ (const ossimVpfExtent& b)const
 {
     ossimVpfExtent m;
     
-    m.theExtentType.x1 = ossimMin(theExtentType.x1, b.theExtentType.x1);
-    m.theExtentType.y1 = ossimMin(theExtentType.y1, b.theExtentType.y1);
-    m.theExtentType.x2 = ossimMax(theExtentType.x2, b.theExtentType.x2);
-    m.theExtentType.y2 = ossimMax(theExtentType.y2, b.theExtentType.y2);
+    m.theExtentType.x1 = ossim::min(theExtentType.x1, b.theExtentType.x1);
+    m.theExtentType.y1 = ossim::min(theExtentType.y1, b.theExtentType.y1);
+    m.theExtentType.x2 = ossim::max(theExtentType.x2, b.theExtentType.x2);
+    m.theExtentType.y2 = ossim::max(theExtentType.y2, b.theExtentType.y2);
     
     return m;
 }

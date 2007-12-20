@@ -1,27 +1,38 @@
 //*******************************************************************
-// Copyright (C) 2000 ImageLinks Inc. 
 //
 // License:  See LICENSE.txt file in the top level directory.
 //
 // Author: Garrett Potts
 //
+// Description:
+//
+// Class to annotate or draw things on tiles like text, ellipses and so on.
+//
+// Notes:
+// 1) The output scalar type of this object is ALWAYS 8 bit or OSSIM_UINT8 so
+//    if your input connection is something other than 8 bit it will be
+//    remapped to 8 bit.
+// 2) This can handle any number of input bands; however, it will never draw
+//    to more than three.  So if you have an input connection of four bands
+//    the fourth band will not be drawn to.
+//
 //*************************************************************************
-// $Id: ossimAnnotationSource.h 9094 2006-06-13 19:12:40Z dburken $
+// $Id: ossimAnnotationSource.h 11831 2007-10-10 13:37:29Z dburken $
 #ifndef ossimAnnotationSource_HEADER
 #define ossimAnnotationSource_HEADER
-#include <list>
+
+#include <vector>
 #include <ossim/imaging/ossimImageSourceFilter.h>
 #include <ossim/base/ossimIrect.h>
-#include <ossim/base/ossimKeywordlist.h>
+#include <ossim/imaging/ossimRgbImage.h>
 
-
-class ossimRgbImage;
 class ossimAnnotationObject;
+class ossimKeywordlist;
 
 class OSSIMDLLEXPORT ossimAnnotationSource : public ossimImageSourceFilter
 {
 public:
-   ossimAnnotationSource(ossimImageSource* inputSource=NULL);
+   ossimAnnotationSource(ossimImageSource* inputSource=0);
    virtual ~ossimAnnotationSource();
 
    virtual ossim_uint32 getNumberOfOutputBands() const;
@@ -43,7 +54,9 @@ public:
    virtual ossimIrect getBoundingRect(ossim_uint32 resLevel=0)const;
 
    /*!
-    * This can be 1 or 3 bands
+    * @param bands This can be any number of bands; however, the
+    * annotator will only write to a max of 3, so if you have a 4 band
+    * image the fourth band will not be annotated.
     */
    virtual void setNumberOfBands(ossim_uint32 bands);
    
@@ -79,16 +92,16 @@ public:
     * Calls the isPointWithin all Annotation
     * Objects.  Note:  Do not delete these objects.
     */
-   vector<ossimAnnotationObject*> pickObjects(const ossimDpt& imagePoint);
+   std::vector<ossimAnnotationObject*> pickObjects(const ossimDpt& imagePoint);
 
    /*!
     * Note: do not delete the objects returned.
     */
-   vector<ossimAnnotationObject*> pickObjects(const ossimDrect& imageRect);
+   std::vector<ossimAnnotationObject*> pickObjects(const ossimDrect& imageRect);
 
-   const vector<ossimAnnotationObject*>& getObjectList()const;
+   const std::vector<ossimAnnotationObject*>& getObjectList()const;
 
-   vector<ossimAnnotationObject*>& getObjectList();
+   std::vector<ossimAnnotationObject*>& getObjectList();
 
    /*!
      Clears theAnnotationObjectList vector.  All elements are deleted.
@@ -123,7 +136,7 @@ protected:
     * This has all the routines we need for drawing
     * lines, circles and polygons.
     */
-   ossimRgbImage* theImage;
+   ossimRefPtr<ossimRgbImage> theImage;
    
    ossimRefPtr<ossimImageData> theTile;
 

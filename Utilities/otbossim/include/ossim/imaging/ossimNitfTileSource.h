@@ -1,9 +1,6 @@
 //*******************************************************************
-// Copyright (C) 2001 ImageLinks Inc.
 //
-// License:  LGPL
-// 
-// See LICENSE.txt file in the top level directory for more details.
+// License:  See top level LICENSE.txt file.
 //
 // Author:  David Burken
 //
@@ -12,18 +9,18 @@
 // Contains class declaration for NitfTileSource.
 //
 //*******************************************************************
-//  $Id: ossimNitfTileSource.h 10162 2007-01-02 18:40:56Z gpotts $
+//  $Id: ossimNitfTileSource.h 10919 2007-05-15 18:32:10Z dburken $
 #ifndef ossimNitfTileSource_HEADER
 #define ossimNitfTileSource_HEADER
 
 #include <fstream>
-using namespace std;
 
 #include <ossim/imaging/ossimImageHandler.h>
 #include <ossim/imaging/ossimAppFixedTileCache.h>
 
 class ossimNitfFile;
 class ossimNitfImageHeader;
+struct jpeg_decompress_struct;
 
 class OSSIM_DLL ossimNitfTileSource : public ossimImageHandler
 {
@@ -52,7 +49,10 @@ public:
       READ_BIP       = 6,
 
       /** IMODE = R "single block Band Interleaved By Row" */
-      READ_BIR       = 7
+      READ_BIR       = 7,
+
+      /** IMODE = B, IC = C3 "JPEG compressed blocks" */
+      READ_JPEG_BLOCK = 8
    };
 
    ossimNitfTileSource();
@@ -211,6 +211,29 @@ public:
     */
    const ossimNitfImageHeader* getCurrentImageHeader() const;
 
+   /**
+    * @brief Gets the decimation factor.
+    * 
+    * @param resLevel Reduced resolution set for requested decimation.
+    *
+    * @param result ossimDpt to initialize with requested decimation.
+    * 
+    * @note Initialized "result" with the decimation factor for the passed in
+    * resLevel.
+    *
+    * Most of the time the returned factor is a square decimation along x
+    * and y indicated by result.x and .y  = 1.0/(resLevel^2) where ^
+    * means rasing to the power of.  If the resLevel is 1 then the return
+    * decimation .5, .5. this is not the decimation to each resolution
+    * level but the total decimation from res level 0.
+    * So if resLevel is 2 then the return is .25, .25.
+    *
+    * @note Derived classes should override if the decimation is anything other
+    * than a power of two change in each direction per res level.
+    */
+   virtual void getDecimationFactor(ossim_uint32 resLevel,
+                                    ossimDpt& result) const;
+
 protected:
 
    /**
@@ -237,7 +260,7 @@ protected:
     * left block corner.
     *
     * @param tileHeight Height of one tile in pixels.
-    *
+    *s
     * @param tileWidth Width of one tile in pixels.
     */
    void adjustToStartOfBlock(ossimIpt& pt,
@@ -300,8 +323,18 @@ protected:
     *
     * @note This is the size of a single block read.  So if the bands are
     * separated by block, a read of this size will get one block.
+    *
+    * @return true on success, false on error.
     */
-   void initializeBlockSize();
+   bool initializeBlockSize();
+
+   /**
+    * @brief Sets theDecimation from the NITF IMAG tag.
+    * 
+    * Initializes the data member "theDecimation" from the current entries
+    * NITF image header IMAG tag...
+    */
+   void initializeDecimationFactor();
 
    /**
     * Initializes the data "theSubImageOffset" from the current entry.
@@ -357,9 +390,9 @@ protected:
     * @param band Band of block.  Only relative with IMODES that have bands
     * in separate blocks.
     *
-    * @return true if the stream position was settable and false otherwise.
+    * @return true if the stream offset was settable and false otherwise.
     */
-   bool getPosition(std::streampos& position,
+   bool getPosition(std::streamoff& position,
                     ossim_uint32 x,
                     ossim_uint32 y,
                     ossim_uint32 band) const;
@@ -393,6 +426,42 @@ protected:
 
    void lutUncompress(ossimRefPtr<ossimImageData> destination,
                      ossim_uint8* source);
+
+   /**
+    * @brief scans the file storing in offsets in "theNitfBlockOffset" and
+    * block sizes in "theNitfBlockSize".
+    * @return true on success, false on error.  This checks for arrays being
+    * the same size as number of blocks.
+    */
+   bool scanForJpegBlockOffsets();
+
+   /**
+    * @brief Uncompresses a jpeg block using the jpeg-6b library.
+    * @param x sample location in image space.
+    * @param y line location in image space.
+    * @return true on success, false on error.
+    */
+   bool uncompressJpegBlock(ossim_uint32 x, ossim_uint32 y);
+
+   /**
+    * @brief Loads one of the default tables based on COMRAT value.
+    *
+    * @return true if comrat had valid table value(1-5) and table was loaded,
+    * false if COMRAT value did not contain a valid value.  Will also return
+    * false if there is already a table loaded.
+    * 
+    * @note COMRAT is nitf compression rate code field:
+    * -  "00.2" == default compression table 2
+    * -  "00.5" == default compression table 5 and so on.
+    */
+   bool loadJpegQuantizationTables(jpeg_decompress_struct& cinfo) const;
+
+   /**
+    * @brief Loads default huffman tables.
+    *
+    * @return true success, false on error.
+    */
+   bool loadJpegHuffmanTables(jpeg_decompress_struct& cinfo) const;
    
    ossimRefPtr<ossimImageData>   theTile;
    ossimRefPtr<ossimImageData>   theCacheTile;
@@ -408,7 +477,7 @@ protected:
    ossim_uint32                  theNumberOfImages;
    ossim_uint32                  theCurrentEntry;
    ossimIrect                    theImageRect;
-   ifstream                      theFileStr;   
+   std::ifstream                 theFileStr;   
    vector<ossim_uint32>          theOutputBandList;
    ossimIpt                      theCacheSize;
    ossimInterleaveType           theCacheTileInterLeaveType;
@@ -418,6 +487,15 @@ protected:
    bool                          thePackedBitsFlag;
    ossimIrect                    theBlockImageRect;
    ossim_uint8*                  theCompressedBuf;
+   ossim_float64                 theDecimationFactor;
+
+   //---
+   // Have compressed jpeg blocks of variable length so we must scan and
+   // capture the offsetts and block sizes for reading.
+   //---
+   std::vector<std::streamoff>   theNitfBlockOffset;
+   std::vector<ossim_uint32>     theNitfBlockSize;
+   
 TYPE_DATA
 };
    

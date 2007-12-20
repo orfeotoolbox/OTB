@@ -10,12 +10,13 @@
 // Exploitation Usability extension.
 // 
 //********************************************************************
-// $Id: ossimNitfUse00aTag.cpp 10173 2007-01-03 18:21:26Z gpotts $
+// $Id: ossimNitfUse00aTag.cpp 11423 2007-07-27 16:59:22Z dburken $
 
 #include <iostream>
 #include <iomanip>
 #include <ossim/support_data/ossimNitfUse00aTag.h>
 #include <ossim/base/ossimStringProperty.h>
+#include <ossim/base/ossimCommon.h>
 
 RTTI_DEF1(ossimNitfUse00aTag, "ossimNitfUse00aTag", ossimNitfRegisteredTag);
 
@@ -31,9 +32,6 @@ static const ossimString MAXLPSEG_KW = "MAXLPSEG";
 static const ossimString SUNEL_KW = "SUNEL";
 static const ossimString SUNAZ_KW = "SUNAZ";
 
-#ifndef MIN
-#define MIN(a,b) ((a)<(b)?(a):(b))
-#endif
 
 ossimNitfUse00aTag::ossimNitfUse00aTag()
 {
@@ -173,7 +171,7 @@ ossimString ossimNitfUse00aTag::getAngleToNorth()const
 void ossimNitfUse00aTag::setAngleToNorth(const ossimString& angleToNorth)
 {
    memset(theAngleToNorth, ' ', ANGLE_TO_NORTH_SIZE);
-   memcpy(theAngleToNorth, angleToNorth.c_str(), MIN(ANGLE_TO_NORTH_SIZE, angleToNorth.length()));
+   memcpy(theAngleToNorth, angleToNorth.c_str(), std::min((size_t)ANGLE_TO_NORTH_SIZE, angleToNorth.length()));
 }
 
 ossimString ossimNitfUse00aTag::getMeanGsd()const
@@ -189,7 +187,7 @@ ossim_float64 ossimNitfUse00aTag::getMeanGsdInMeters() const
    if (s.size())
    {
       ossim_float64 d = s.toFloat64();
-      if ( (d != 0.0) && (d != OSSIM_DBL_NAN) )
+      if ( (d != 0.0) && (ossim::isnan(d) == false) )
       {
          gsd = d / 12.0 * MTRS_PER_FT;
       }
@@ -201,7 +199,7 @@ ossim_float64 ossimNitfUse00aTag::getMeanGsdInMeters() const
 void ossimNitfUse00aTag::setMeanGsd(const ossimString& meanGsd)
 {
    memset(theMeanGsd, ' ', MEAN_GSD_SIZE);
-   memcpy(theMeanGsd, meanGsd.c_str(), MIN(MEAN_GSD_SIZE, meanGsd.length()));
+   memcpy(theMeanGsd, meanGsd.c_str(), std::min((size_t)MEAN_GSD_SIZE, meanGsd.length()));
 }
 
 ossimString ossimNitfUse00aTag::getField3()const
@@ -212,7 +210,7 @@ ossimString ossimNitfUse00aTag::getField3()const
 void ossimNitfUse00aTag::setField3(const ossimString& field3)
 {
    memset(theField3, ' ', FIELD3_SIZE);
-   memcpy(theField3, field3.c_str(), MIN(FIELD3_SIZE, field3.length()));
+   memcpy(theField3, field3.c_str(), std::min((size_t)FIELD3_SIZE, field3.length()));
 }
 
 ossimString ossimNitfUse00aTag::getDynamicRange()const
@@ -223,7 +221,7 @@ ossimString ossimNitfUse00aTag::getDynamicRange()const
 void ossimNitfUse00aTag::setDynamicRange(const ossimString& dynamicRange)
 {
    memset(theDynamicRange, ' ', DYNAMIC_RANGE_SIZE);
-   memcpy(theDynamicRange, dynamicRange.c_str(), MIN(DYNAMIC_RANGE_SIZE, dynamicRange.length()));
+   memcpy(theDynamicRange, dynamicRange.c_str(), std::min((size_t)DYNAMIC_RANGE_SIZE, dynamicRange.length()));
 }
 
 ossimString ossimNitfUse00aTag::getField5()const
@@ -234,7 +232,7 @@ ossimString ossimNitfUse00aTag::getField5()const
 void ossimNitfUse00aTag::setField5(const ossimString& field5)
 {
    memset(theField5, ' ', FIELD5_SIZE);
-   memcpy(theField5, field5.c_str(), MIN(FIELD5_SIZE, field5.length()));
+   memcpy(theField5, field5.c_str(), std::min((size_t)FIELD5_SIZE, field5.length()));
 }
 
 ossimString ossimNitfUse00aTag::getField6()const
@@ -245,7 +243,7 @@ ossimString ossimNitfUse00aTag::getField6()const
 void ossimNitfUse00aTag::setField6(const ossimString& field6)
 {
    memset(theField6, ' ', FIELD6_SIZE);
-   memcpy(theField6, field6.c_str(), MIN(FIELD6_SIZE, field6.length()));
+   memcpy(theField6, field6.c_str(), std::min((size_t)FIELD6_SIZE, field6.length()));
 }
 
 ossimString ossimNitfUse00aTag::getField7()const
@@ -256,7 +254,7 @@ ossimString ossimNitfUse00aTag::getField7()const
 void ossimNitfUse00aTag::setField7(const ossimString& field7)
 {
    memset(theField7, ' ', FIELD7_SIZE);
-   memcpy(theField7, field7.c_str(), MIN(FIELD7_SIZE, field7.length()));
+   memcpy(theField7, field7.c_str(), std::min((size_t)FIELD7_SIZE, field7.length()));
 }
 
 ossimString ossimNitfUse00aTag::getOblAng()const
@@ -267,7 +265,7 @@ ossimString ossimNitfUse00aTag::getOblAng()const
 void ossimNitfUse00aTag::setOblAng(const ossimString& oblAng)
 {
    memset(theOblAng, ' ', OBL_ANG_SIZE);
-   memcpy(theOblAng, oblAng.c_str(), MIN(OBL_ANG_SIZE, oblAng.length()));
+   memcpy(theOblAng, oblAng.c_str(), std::min((size_t)OBL_ANG_SIZE, oblAng.length()));
 }
 
 ossimString ossimNitfUse00aTag::getRollAng()const
@@ -278,7 +276,7 @@ ossimString ossimNitfUse00aTag::getRollAng()const
 void ossimNitfUse00aTag::setRollAng(const ossimString& rollAng)
 {
    memset(theRollAng, ' ', ROLL_ANG_SIZE);
-   memcpy(theRollAng, rollAng.c_str(), MIN(ROLL_ANG_SIZE, rollAng.length()));
+   memcpy(theRollAng, rollAng.c_str(), std::min((size_t)ROLL_ANG_SIZE, rollAng.length()));
 }
 
 ossimString ossimNitfUse00aTag::getField10()const
@@ -289,7 +287,7 @@ ossimString ossimNitfUse00aTag::getField10()const
 void ossimNitfUse00aTag::setField10(const ossimString& field10)
 {
    memset(theField10, ' ', FIELD10_SIZE);
-   memcpy(theField10, field10.c_str(), MIN(FIELD10_SIZE, field10.length()));
+   memcpy(theField10, field10.c_str(), std::min((size_t)FIELD10_SIZE, field10.length()));
 }
 
 ossimString ossimNitfUse00aTag::getField11()const
@@ -300,7 +298,7 @@ ossimString ossimNitfUse00aTag::getField11()const
 void ossimNitfUse00aTag::setField11(const ossimString& field11)
 {
    memset(theField11, ' ', FIELD11_SIZE);
-   memcpy(theField11, field11.c_str(), MIN(FIELD11_SIZE, field11.length()));
+   memcpy(theField11, field11.c_str(), std::min((size_t)FIELD11_SIZE, field11.length()));
 }
 
 ossimString ossimNitfUse00aTag::getField12()const
@@ -311,7 +309,7 @@ ossimString ossimNitfUse00aTag::getField12()const
 void ossimNitfUse00aTag::setField12(const ossimString& field12)
 {
    memset(theField12, ' ', FIELD12_SIZE);
-   memcpy(theField12, field12.c_str(), MIN(FIELD12_SIZE, field12.length()));
+   memcpy(theField12, field12.c_str(), std::min((size_t)FIELD12_SIZE, field12.length()));
 }
 
 ossimString ossimNitfUse00aTag::getField13()const
@@ -322,7 +320,7 @@ ossimString ossimNitfUse00aTag::getField13()const
 void ossimNitfUse00aTag::setField13(const ossimString& field13)
 {
    memset(theField13, ' ', FIELD13_SIZE);
-   memcpy(theField13, field13.c_str(), MIN(FIELD13_SIZE, field13.length()));
+   memcpy(theField13, field13.c_str(), std::min((size_t)FIELD13_SIZE, field13.length()));
 }
 
 ossimString ossimNitfUse00aTag::getField14()const
@@ -333,7 +331,7 @@ ossimString ossimNitfUse00aTag::getField14()const
 void ossimNitfUse00aTag::setField14(const ossimString& field14)
 {
    memset(theField14, ' ', FIELD14_SIZE);
-   memcpy(theField14, field14.c_str(), MIN(FIELD14_SIZE, field14.length()));
+   memcpy(theField14, field14.c_str(), std::min((size_t)FIELD14_SIZE, field14.length()));
 }
 
 ossimString ossimNitfUse00aTag::getField15()const
@@ -344,7 +342,7 @@ ossimString ossimNitfUse00aTag::getField15()const
 void ossimNitfUse00aTag::setField15(const ossimString& field15)
 {
    memset(theField15, ' ', FIELD15_SIZE);
-   memcpy(theField15, field15.c_str(), MIN(FIELD15_SIZE, field15.length()));
+   memcpy(theField15, field15.c_str(), std::min((size_t)FIELD15_SIZE, field15.length()));
 }
 
 ossimString ossimNitfUse00aTag::getField16()const
@@ -355,7 +353,7 @@ ossimString ossimNitfUse00aTag::getField16()const
 void ossimNitfUse00aTag::setField16(const ossimString& field16)
 {
    memset(theField16, ' ', FIELD16_SIZE);
-   memcpy(theField16, field16.c_str(), MIN(FIELD16_SIZE, field16.length()));
+   memcpy(theField16, field16.c_str(), std::min((size_t)FIELD16_SIZE, field16.length()));
 }
 
 ossimString ossimNitfUse00aTag::getNRef()const
@@ -366,7 +364,7 @@ ossimString ossimNitfUse00aTag::getNRef()const
 void ossimNitfUse00aTag::setNRef(const ossimString& nRef)
 {
    memset(theNRef, ' ', N_REF_SIZE);
-   memcpy(theNRef, nRef.c_str(), MIN(N_REF_SIZE, nRef.length()));
+   memcpy(theNRef, nRef.c_str(), std::min((size_t)N_REF_SIZE, nRef.length()));
 }
 
 ossimString ossimNitfUse00aTag::getRevNum()const
@@ -377,7 +375,7 @@ ossimString ossimNitfUse00aTag::getRevNum()const
 void ossimNitfUse00aTag::setRevNum(const ossimString& revNum)
 {
    memset(theRevNum, ' ', REV_NUM_SIZE);
-   memcpy(theRevNum, revNum.c_str(), MIN(REV_NUM_SIZE, revNum.length()));
+   memcpy(theRevNum, revNum.c_str(), std::min((size_t)REV_NUM_SIZE, revNum.length()));
 }
 
 ossimString ossimNitfUse00aTag::getNSeg()const
@@ -388,7 +386,7 @@ ossimString ossimNitfUse00aTag::getNSeg()const
 void ossimNitfUse00aTag::setNSeg(const ossimString& nSeg)
 {
    memset(theNSeg, ' ', N_SEG_SIZE);
-   memcpy(theNSeg, nSeg.c_str(), MIN(N_SEG_SIZE, nSeg.length()));
+   memcpy(theNSeg, nSeg.c_str(), std::min((size_t)N_SEG_SIZE, nSeg.length()));
 }
 
 ossimString ossimNitfUse00aTag::getMaxLpSeg()const
@@ -399,7 +397,7 @@ ossimString ossimNitfUse00aTag::getMaxLpSeg()const
 void ossimNitfUse00aTag::setMaxLpSeg(const ossimString& maxLpSeg)
 {
    memset(theMaxLpSeg, ' ', MAX_LP_SEG_SIZE);
-   memcpy(theMaxLpSeg, maxLpSeg.c_str(), MIN(MAX_LP_SEG_SIZE, maxLpSeg.length()));
+   memcpy(theMaxLpSeg, maxLpSeg.c_str(), std::min((size_t)MAX_LP_SEG_SIZE, maxLpSeg.length()));
 }
 
 ossimString ossimNitfUse00aTag::getField20()const
@@ -410,7 +408,7 @@ ossimString ossimNitfUse00aTag::getField20()const
 void ossimNitfUse00aTag::setField20(const ossimString& field20)
 {
    memset(theField20, ' ', FIELD20_SIZE);
-   memcpy(theField20, field20.c_str(), MIN(FIELD20_SIZE, field20.length()));
+   memcpy(theField20, field20.c_str(), std::min((size_t)FIELD20_SIZE, field20.length()));
 }
 
 ossimString ossimNitfUse00aTag::getField21()const
@@ -421,7 +419,7 @@ ossimString ossimNitfUse00aTag::getField21()const
 void ossimNitfUse00aTag::setField21(const ossimString& field21)
 {
    memset(theField21, ' ', FIELD21_SIZE);
-   memcpy(theField21, field21.c_str(), MIN(FIELD21_SIZE, field21.length()));
+   memcpy(theField21, field21.c_str(), std::min((size_t)FIELD21_SIZE, field21.length()));
 }
 
 ossimString ossimNitfUse00aTag::getSunEl()const
@@ -432,7 +430,7 @@ ossimString ossimNitfUse00aTag::getSunEl()const
 void ossimNitfUse00aTag::setSunEl(const ossimString& sunEl)
 {
    memset(theSunEl, ' ', SUN_EL_SIZE);
-   memcpy(theSunEl, sunEl.c_str(), MIN(SUN_EL_SIZE, sunEl.length()));
+   memcpy(theSunEl, sunEl.c_str(), std::min((size_t)SUN_EL_SIZE, sunEl.length()));
 }
 
 ossimString ossimNitfUse00aTag::getSunAz()const
@@ -443,7 +441,7 @@ ossimString ossimNitfUse00aTag::getSunAz()const
 void ossimNitfUse00aTag::setSunAz(const ossimString& sunAz)
 {
    memset(theSunAz, ' ', SUN_AZ_SIZE);
-   memcpy(theSunAz, sunAz.c_str(), MIN(SUN_AZ_SIZE, sunAz.length()));
+   memcpy(theSunAz, sunAz.c_str(), std::min((size_t)SUN_AZ_SIZE, sunAz.length()));
 }
 
 std::ostream& ossimNitfUse00aTag::print(std::ostream& out) const

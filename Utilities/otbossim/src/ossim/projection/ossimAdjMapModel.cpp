@@ -15,7 +15,7 @@
 // information and error output.
 //
 //----------------------------------------------------------------------------
-// $Id: ossimAdjMapModel.cpp 9094 2006-06-13 19:12:40Z dburken $
+// $Id: ossimAdjMapModel.cpp 11428 2007-07-27 18:44:18Z gpotts $
 
 #include <ossim/projection/ossimAdjMapModel.h>
 #include <ossim/projection/ossimMapProjection.h>
@@ -187,8 +187,8 @@ void ossimAdjMapModel::updateModel()
    for (int i=0; i<NUM_ADJ_PARAMS; i++)
       theAdjParams[i] = computeParameterOffset(i);
 
-   theCosTheta = cosd(theAdjParams[ROTATION]);
-   theSinTheta = sind(theAdjParams[ROTATION]);
+   theCosTheta = ossim::cosd(theAdjParams[ROTATION]);
+   theSinTheta = ossim::sind(theAdjParams[ROTATION]);
 }
 
 //----------------------------------------------------------------------------
@@ -202,7 +202,7 @@ void ossimAdjMapModel::lineSampleHeightToWorld(const ossimDpt& image_point,
    // Check for bad map projection pointer:
    if (!theMapProjection)
    {
-      worldPoint = ossimGpt(OSSIM_NAN, OSSIM_NAN, OSSIM_NAN);
+      worldPoint = ossimGpt(ossim::nan(), ossim::nan(), ossim::nan());
       return;
    }
 
@@ -242,7 +242,7 @@ void ossimAdjMapModel::worldToLineSample(const ossimGpt& world_point,
    // Check for bad map projection pointer:
    if (!theMapProjection)
    {
-      image_point = ossimDpt(OSSIM_NAN, OSSIM_NAN);
+      image_point = ossimDpt(ossim::nan(), ossim::nan());
       return;
    }
 

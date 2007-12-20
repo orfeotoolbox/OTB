@@ -1,15 +1,13 @@
 //*****************************************************************************
 // FILE: ossimTiffProjectionFactory.cc
 //
-// License:  LGPL
-// 
-// See LICENSE.txt file in the top level directory for more details.
+// License:  See top level LICENSE.txt file.
 //
 // DESCRIPTION:
 //   Contains implementation of class ossimTiffProjectionFactory
 //
 //*****************************************************************************
-//  $Id: ossimTiffProjectionFactory.cpp 9094 2006-06-13 19:12:40Z dburken $
+//  $Id: ossimTiffProjectionFactory.cpp 12082 2007-11-26 21:46:44Z dburken $
 
 #include <ossim/projection/ossimTiffProjectionFactory.h>
 #include <ossim/support_data/ossimGeoTiff.h>
@@ -55,7 +53,7 @@ ossimTiffProjectionFactory::createProjection(const ossimFilename& filename,
 
    if(isTiff(filename))
    {
-      ossimGeoTiff geotiff(filename);
+      ossimGeoTiff geotiff(filename, entryIdx);
       ossimKeywordlist kwl;
       
       if(geotiff.addImageGeometry(kwl))
@@ -102,14 +100,6 @@ ossimObject* ossimTiffProjectionFactory::createObject(const ossimKeywordlist& kw
 void ossimTiffProjectionFactory::getTypeNameList(std::vector<ossimString>& typeList)const
 {
    
-}
-
-std::list<ossimString> ossimTiffProjectionFactory::getList()const
-{
-   std::list<ossimString> result;
-
-   
-   return result;
 }
 
 bool ossimTiffProjectionFactory::isTiff(const ossimFilename& filename)const

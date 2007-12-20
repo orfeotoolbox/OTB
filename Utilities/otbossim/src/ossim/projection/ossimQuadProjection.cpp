@@ -5,7 +5,7 @@
 // Author: Garrett Potts
 // 
 //********************************************************************
-// $Id: ossimQuadProjection.cpp 9963 2006-11-28 21:11:01Z gpotts $
+// $Id: ossimQuadProjection.cpp 11808 2007-10-05 14:58:59Z dburken $
 
 #include <ossim/projection/ossimQuadProjection.h>
 #include <ossim/base/ossimDatumFactory.h>
@@ -99,7 +99,7 @@ void ossimQuadProjection::lineSampleToWorld(const ossimDpt& lineSampPt,
                                             ossimGpt&       worldPt) const
 {
    lineSampleHeightToWorld(lineSampPt,
-                           OSSIM_DBL_NAN,
+                           ossim::nan(),
                            worldPt);
    
 }
@@ -292,7 +292,7 @@ bool ossimQuadProjection::loadState(const ossimKeywordlist& kwl,
 
    if(ulLat == "nan")
    {
-      theUlg.latd(OSSIM_DBL_NAN);
+      theUlg.latd(ossim::nan());
    }
    else
    {
@@ -300,7 +300,7 @@ bool ossimQuadProjection::loadState(const ossimKeywordlist& kwl,
    }
    if(ulLon == "nan")
    {
-      theUlg.lond(OSSIM_DBL_NAN);
+      theUlg.lond(ossim::nan());
    }
    else
    {
@@ -309,7 +309,7 @@ bool ossimQuadProjection::loadState(const ossimKeywordlist& kwl,
    
    if(urLat == "nan")
    {
-      theUrg.latd(OSSIM_DBL_NAN);
+      theUrg.latd(ossim::nan());
    }
    else
    {
@@ -317,7 +317,7 @@ bool ossimQuadProjection::loadState(const ossimKeywordlist& kwl,
    }
    if(urLon == "nan")
    {
-      theUrg.lond(OSSIM_DBL_NAN);
+      theUrg.lond(ossim::nan());
    }
    else
    {
@@ -326,7 +326,7 @@ bool ossimQuadProjection::loadState(const ossimKeywordlist& kwl,
    
    if(lrLat == "nan")
    {
-      theLrg.latd(OSSIM_DBL_NAN);
+      theLrg.latd(ossim::nan());
    }
    else
    {
@@ -334,7 +334,7 @@ bool ossimQuadProjection::loadState(const ossimKeywordlist& kwl,
    }
    if(lrLon == "nan")
    {
-      theLrg.lond(OSSIM_DBL_NAN);
+      theLrg.lond(ossim::nan());
    }
    else
    {
@@ -343,7 +343,7 @@ bool ossimQuadProjection::loadState(const ossimKeywordlist& kwl,
    
    if(llLat == "nan")
    {
-      theLlg.latd(OSSIM_DBL_NAN);
+      theLlg.latd(ossim::nan());
    }
    else
    {
@@ -351,7 +351,7 @@ bool ossimQuadProjection::loadState(const ossimKeywordlist& kwl,
    }
    if(llLon == "nan")
    {
-      theLlg.lond(OSSIM_DBL_NAN);
+      theLlg.lond(ossim::nan());
    }
    else
    {
@@ -436,8 +436,8 @@ void ossimQuadProjection::initializeGrids()
    ossimDpt spacing = ossimDpt((double)(theInputRect.width()-1)/(gridSize.x-1),
                                (double)(theInputRect.height()-1)/(gridSize.y-1));
    
-   theLatGrid.setNullValue(OSSIM_DBL_NAN);
-   theLonGrid.setNullValue(OSSIM_DBL_NAN);
+   theLatGrid.setNullValue(ossim::nan());
+   theLonGrid.setNullValue(ossim::nan());
    theLatGrid.initialize(gridSize, theInputRect.ul(), spacing);
    theLonGrid.initialize(gridSize, theInputRect.ul(), spacing);
 
@@ -455,14 +455,14 @@ void ossimQuadProjection::initializeGrids()
 ossimGpt ossimQuadProjection::extrapolate(const ossimDpt& imagePoint,
                                           const double&   height) const
 {
-   //***
+   //---
    // If image point supplied has NaN components, return now with a NaN point.
    // This prevents an infinite recursion between model worldToLineSample
    // and this method:
-   //***
-   if ((imagePoint.line == OSSIM_DBL_NAN) || (imagePoint.samp == OSSIM_DBL_NAN))
+   //---
+   if (imagePoint.hasNans())
    {
-      return ossimGpt(OSSIM_DBL_NAN, OSSIM_DBL_NAN, OSSIM_DBL_NAN);
+      return ossimGpt(ossim::nan(), ossim::nan(), ossim::nan());
    }
 
    //***
@@ -491,7 +491,7 @@ ossimGpt ossimQuadProjection::extrapolate(const ossimDpt& imagePoint,
    ossimGpt edgeGP;
    ossimGpt edgeGP_prime;
 
-   if (height == OSSIM_DBL_NAN)
+   if (ossim::isnan(height))
    {
       lineSampleToWorld(edgePt, edgeGP);
       lineSampleToWorld(edgePt_prime, edgeGP_prime);
@@ -522,7 +522,7 @@ ossimGpt ossimQuadProjection::extrapolate(const ossimDpt& imagePoint,
 //       gpt.hgt = theElevation->getHeightAboveMSL(gpt);
 //    }
 //    else
-      gpt.hgt = height;
+   gpt.hgt = height;
    
    return gpt;
    

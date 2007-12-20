@@ -8,7 +8,7 @@
 // Description: Common file for global Keywors.
 //
 //*************************************************************************
-// $Id: ossimKeywordNames.h 10161 2007-01-02 16:05:30Z gpotts $
+// $Id: ossimKeywordNames.h 11731 2007-09-17 13:48:57Z gpotts $
 
 #ifndef ossimKeywordNames_HEADER
 #define ossimKeywordNames_HEADER
@@ -77,6 +77,8 @@ public:
    static const char* HORIZONTAL_SIZE_KW;
    static const char* ID_KW;
    static const char* IMAGE_FILE_KW;
+   static const char* IMAGE_MODEL_TRANSFORM_MATRIX_KW;
+   static const char* IMAGE_MODEL_TRANSFORM_UNIT_KW;
    static const char* IMAGE_PATH_KW;
    static const char* IMAGE_TYPE_KW;
    static const char* IMAGE_DATE_KW;
@@ -119,6 +121,7 @@ public:
    static const char* OUTPUT_FILE_KW;
    static const char* OUTPUT_FILE_PREFIX_KW;
    static const char* OUTPUT_FILE_EXTENSION_KW;
+   static const char* OUTPUT_TILE_SIZE_KW;
    static const char* OVERVIEW_COMPRESSION_QUALITY_KW;
    static const char* OVERVIEW_COMPRESSION_TYPE_KW;
    static const char* OVERVIEW_FILE_KW;

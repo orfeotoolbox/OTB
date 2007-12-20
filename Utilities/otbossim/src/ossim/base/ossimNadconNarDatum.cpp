@@ -36,8 +36,7 @@ ossimGpt ossimNadconNarDatum::shift(const ossimGpt    &aPt)const
         double shiftLat = theLatGrid.getShiftAtLatLon(aPt.latd(), aPt.lond());
         double shiftLon = theLonGrid.getShiftAtLatLon(aPt.latd(), aPt.lond());
         
-        if((shiftLat == OSSIM_DBL_NAN)||
-           (shiftLon == OSSIM_DBL_NAN))
+        if( (ossim::isnan(shiftLat)) || (ossim::isnan(shiftLon)) )
         {
            return ossimThreeParamDatum::shift(aPt);
         }

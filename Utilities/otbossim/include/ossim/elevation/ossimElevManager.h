@@ -1,8 +1,6 @@
 //*****************************************************************************
 // FILE: ossimElevManager.h
 //
-// Copyright (C) 2001 ImageLinks, Inc.
-//
 // License:  See top level LICENSE.txt file.
 //
 // DESCRIPTION:
@@ -23,13 +21,13 @@
 #define ossimElevManager_HEADER
 
 #include <vector>
+#include <ossim/base/ossimConstants.h>
 #include <ossim/elevation/ossimElevSource.h>
 #include <ossim/base/ossimMutex.h>
 #include <ossim/elevation/ossimElevSourceFactory.h>
 
 class ossimDrect;
 class ossimKeywordlist;
-class ossimElevHandler;
 class ossimGeoidManager;
 
 // class ossimDtedManager;
@@ -94,7 +92,15 @@ public:
    virtual bool loadState(const ossimKeywordlist& kwl,
                           const char* prefix=0);
    
+   /**
+    * @brief This method adds an ossimElevSource to the list.
+    * A mutex lock/unlock is placed around its code to prevent
+    * someone else from mucking with theElevSourceList on a different thread.
+    *
+    * @param source ossimElevSource to add.
+    */
    virtual void addElevSource(ossimElevSource* source);
+
    virtual void addElevSourceFactory(
       ossimRefPtr<ossimElevSourceFactory> factory);
    
@@ -199,8 +205,26 @@ public:
 
    ossim_uint32 getNumberOfFactories()const;
    const ossimRefPtr<ossimElevSourceFactory> getFactory(ossim_uint32 idx)const;
-   
+
+   bool loadElevationPath(const ossimFilename& elevationPath);
+
+   const std::vector<ossimFilename>& elevationSearchPaths()const;
 protected:
+
+   /**
+    * @brief Returns elevation source that has coverage for point.
+    *
+    * Does no mutex locking so callers should handle lock.  Also this only
+    * checks for cell has coverage does not check point for null post.  So you
+    * could get a source that has coverage but a null post for the individual
+    * point.  Does not add newly opened cells to list.
+    *
+    * @return ossimElevSource wrapped in a ossimRefPtr.  The pointer will be
+    * null if no coverage is found so callers should check.
+    */
+   ossimRefPtr<ossimElevSource> getElevSourceForPoint(
+      const ossimGpt& gpt) const;
+   
    typedef std::vector<ossimRefPtr<ossimElevSourceFactory> >::iterator ossimElevSourceFactoryIterator;
    typedef std::vector<ossimRefPtr<ossimElevSourceFactory> >::const_iterator ossimElevSourceFactoryConstIterator;
 
@@ -332,17 +356,36 @@ protected:
    void addGeneralRasterElevFactory(const ossimFilename& file);
 
    void loadStandardElevationPaths();
+
+   /**
+    * @brief This protected method adds an ossimElevSource to the list.
+    * Does no mutex locking so callers should handle lock.
+    *
+    * @param source ossimElevSource to add.
+    */
+   void protectedAddElevSource(ossimElevSource* source);
+   
    /**
     * Data members:
     */
-   static ossimElevManager*              theInstance;
+   static ossimElevManager* theInstance;
+
    std::vector<ossimRefPtr<ossimElevSource> >        theElevSourceList;
    std::vector<ossimRefPtr<ossimElevSourceFactory> > theElevSourceFactoryList;
-   ossimGeoidManager*                    theGeoidManager;
-   bool                                  theAutoLoadFlag;
-   bool                                  theAutoSortFlag;
-   ossimFilename                         theDefaultElevationPath;
-   mutable ossimMutex                            theMutex;
+
+   /**
+    * theCurrentElevSourceIdx is the index to the last used ossimElevSource
+    * in theElevSourceList.  This is unsigned by design.  Users should key off
+    * of theElevSourceList.size().
+    */
+   mutable ossim_uint32 theCurrentElevSourceIdx;
+   
+   ossimGeoidManager*  theGeoidManager;
+   bool                theAutoLoadFlag;
+   bool                theAutoSortFlag;
+   ossimFilename       theDefaultElevationPath;
+   mutable ossimMutex  theMutex;
+   std::vector<ossimFilename>  TheElevationSearchPaths;
 TYPE_DATA
 };
 

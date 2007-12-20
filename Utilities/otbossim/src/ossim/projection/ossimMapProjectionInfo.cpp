@@ -14,7 +14,7 @@
 //   Shifts will be made for "pixel is area" internally.
 //
 //*******************************************************************
-//  $Id: ossimMapProjectionInfo.cpp 9094 2006-06-13 19:12:40Z dburken $
+//  $Id: ossimMapProjectionInfo.cpp 11347 2007-07-23 13:01:59Z gpotts $
 
 #include <fstream>
 #include <time.h>
@@ -99,8 +99,8 @@ bool ossimMapProjectionInfo::errorStatus() const
 void ossimMapProjectionInfo::initializeMembers(const ossimDrect& rect)
 {
    theBoundingRect = rect;
-   theLinesPerImage  = irint(rect.height());
-   thePixelsPerLine  = irint(rect.width());
+   theLinesPerImage  = ossim::round<int>(rect.height());
+   thePixelsPerLine  = ossim::round<int>(rect.width());
 
    theProjection->lineSampleToWorld(rect.ul(),
                                     theCornerGroundPt[0]);
@@ -494,9 +494,9 @@ ossimDpt ossimMapProjectionInfo::ulEastingNorthingPtInFt() const
 {
    ossimDpt pt = ulEastingNorthingPt();
    
-   pt.x = mtrs2usft(pt.x);
+   pt.x = ossim::mtrs2usft(pt.x);
    
-   pt.y = mtrs2usft(pt.y);
+   pt.y = ossim::mtrs2usft(pt.y);
    
    return pt;
 }
@@ -504,24 +504,24 @@ ossimDpt ossimMapProjectionInfo::ulEastingNorthingPtInFt() const
 ossimDpt ossimMapProjectionInfo::urEastingNorthingPtInFt() const
 {
    ossimDpt pt = urEastingNorthingPt();
-   pt.x = mtrs2usft(pt.x);
-   pt.y = mtrs2usft(pt.y);
+   pt.x = ossim::mtrs2usft(pt.x);
+   pt.y = ossim::mtrs2usft(pt.y);
    return pt;
 }
 
 ossimDpt ossimMapProjectionInfo::lrEastingNorthingPtInFt() const
 {
    ossimDpt pt = lrEastingNorthingPt();
-   pt.x = mtrs2usft(pt.x);
-   pt.y = mtrs2usft(pt.y);
+   pt.x = ossim::mtrs2usft(pt.x);
+   pt.y = ossim::mtrs2usft(pt.y);
    return pt;
 }
 
 ossimDpt ossimMapProjectionInfo::llEastingNorthingPtInFt() const
 {
    ossimDpt pt = llEastingNorthingPt();
-   pt.x = mtrs2usft(pt.x);
-   pt.y = mtrs2usft(pt.y);
+   pt.x = ossim::mtrs2usft(pt.x);
+   pt.y = ossim::mtrs2usft(pt.y);
    return pt;
 }
 
@@ -534,8 +534,8 @@ ossimDpt ossimMapProjectionInfo::getUsSurveyFeetPerPixel() const
 {
    ossimDpt pt = getMetersPerPixel();
    
-   pt.x = mtrs2usft(pt.x);
-   pt.y = mtrs2usft(pt.y);
+   pt.x = ossim::mtrs2usft(pt.x);
+   pt.y = ossim::mtrs2usft(pt.y);
 
    return pt;
 }

@@ -1,5 +1,4 @@
 //*******************************************************************
-// Copyright (C) 2002 ImageLinks Inc. 
 //
 // License:  See top level LICENSE.txt file.
 //
@@ -10,7 +9,7 @@
 // Filter to toggle pixel values.
 //
 //*************************************************************************
-// $Id: ossimPixelFlipper.cpp 9094 2006-06-13 19:12:40Z dburken $
+// $Id: ossimPixelFlipper.cpp 10649 2007-03-22 15:11:51Z dburken $
 
 #include <ossim/imaging/ossimPixelFlipper.h>
 #include <ossim/base/ossimTrace.h>
@@ -31,7 +30,7 @@ static const char REPLACEMENT_MODE_KW[]  = "replacement_mode";
 static const char CLIP_MODE_KW[]  = "clip_mode";
 
 #ifdef OSSIM_ID_ENABLED
-static const char OSSIM_ID[] = "$Id: ossimPixelFlipper.cpp 9094 2006-06-13 19:12:40Z dburken $";
+static const char OSSIM_ID[] = "$Id: ossimPixelFlipper.cpp 10649 2007-03-22 15:11:51Z dburken $";
 #endif
 
 ossimPixelFlipper::ossimPixelFlipper(ossimObject* owner)
@@ -865,12 +864,14 @@ bool ossimPixelFlipper::saveState(ossimKeywordlist& kwl,
 
 void ossimPixelFlipper::setTargetValue(ossim_float64 target_value)
 {
+   //---
+   // Since this is the value to replace we will allow for any value as it
+   // won't affect the output null, min and max ranges.  This will fix a
+   // tiled nitf with max of 2047(11bit) with edge tile fill values of 2048.
+   //---
    theMutex.lock();
-   
-   if (inRange(target_value))
-   {
-      theTargetValue = target_value;
-   }
+
+   theTargetValue = target_value;
 
    theMutex.unlock();
 }
@@ -878,7 +879,8 @@ void ossimPixelFlipper::setTargetValue(ossim_float64 target_value)
 void ossimPixelFlipper::setReplacementValue(ossim_float64 replacement_value)
 {
    theMutex.lock();
-   
+
+   // Range check to ensure within null, min and max of output radiometry.
    if (inRange(replacement_value))
    {
       theReplacementValue = replacement_value;

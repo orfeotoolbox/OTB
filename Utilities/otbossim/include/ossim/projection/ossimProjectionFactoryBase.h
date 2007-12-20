@@ -1,11 +1,10 @@
 //*******************************************************************
-// Copyright (C) 2000 ImageLinks Inc.
 //
 // License:  See top level LICENSE.txt file.
 //
 // Author: Garrett Potts
 //*******************************************************************
-//  $Id: ossimProjectionFactoryBase.h 9094 2006-06-13 19:12:40Z dburken $
+//  $Id: ossimProjectionFactoryBase.h 12081 2007-11-26 21:44:18Z dburken $
 #ifndef ossimProjectionFactoryBase_HEADER
 #define ossimProjectionFactoryBase_HEADER
 
@@ -40,11 +39,6 @@ public:
     */
    virtual ossimProjection* createProjection(const ossimKeywordlist& kwl,
                                              const char* prefix)const=0;
-
-   /**
-    * Being depricated with getTypeNameList found in ossimObjectFactory
-    */
-   virtual std::list<ossimString> getList()const=0;
 
 protected:
 

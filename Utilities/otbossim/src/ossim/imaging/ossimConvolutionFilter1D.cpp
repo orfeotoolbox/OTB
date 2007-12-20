@@ -3,7 +3,7 @@
 //
 // See LICENSE.txt file in the top level directory for more details.
 //*************************************************************************
-// $Id: ossimConvolutionFilter1D.cpp 9094 2006-06-13 19:12:40Z dburken $
+// $Id: ossimConvolutionFilter1D.cpp 11347 2007-07-23 13:01:59Z gpotts $
 
 
 #include <ossim/imaging/ossimConvolutionFilter1D.h>
@@ -570,7 +570,7 @@ double ossimConvolutionFilter1D::getNullPixelValue(ossim_uint32 band)const
       return theNullPixValue[band];
    }
 
-   return ossimGetDefaultNull(getOutputScalarType());
+   return ossim::defaultNull(getOutputScalarType());
 }
 
 double ossimConvolutionFilter1D::getMinPixelValue(ossim_uint32 band)const
@@ -608,9 +608,9 @@ void ossimConvolutionFilter1D::computeNullMinMax()
    theMinPixValue.resize(BANDS);
    theMaxPixValue.resize(BANDS);
 
-   ossim_float64 defaultNull = ossimGetDefaultNull(getOutputScalarType());
-   ossim_float64 defaultMin = ossimGetDefaultMin(getOutputScalarType());
-   ossim_float64 defaultMax = ossimGetDefaultMax(getOutputScalarType());
+   ossim_float64 defaultNull = ossim::defaultNull(getOutputScalarType());
+   ossim_float64 defaultMin = ossim::defaultMin(getOutputScalarType());
+   ossim_float64 defaultMax = ossim::defaultMax(getOutputScalarType());
   
    for (ossim_uint32 band = 0; band < BANDS; ++band)
    {

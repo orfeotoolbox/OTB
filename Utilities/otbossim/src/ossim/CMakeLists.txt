@@ -23,6 +23,8 @@ IF(CMAKE_COMPILER_IS_GNUCXX)
   ENDFOREACH(f)
 ENDIF(CMAKE_COMPILER_IS_GNUCXX)
 
+INCLUDE_DIRECTORIES(${OTB_BINARY_DIR}/Utilities/otbgeotiff/)
+
 ADD_LIBRARY(otbossimKBool ${ossim_kbool_SRCS})
 
 ADD_LIBRARY(otbossimMatrix ${ossim_matrix_SRCS})
@@ -44,7 +46,7 @@ ADD_LIBRARY(otbossimVec ${ossim_vec_SRCS})
 TARGET_LINK_LIBRARIES(otbossimVec otbossimVpfUtil)
 
 ADD_LIBRARY(otbossimSupportData ${ossim_support_data_SRCS})
-TARGET_LINK_LIBRARIES(otbossimSupportData otbossimVec)
+TARGET_LINK_LIBRARIES(otbossimSupportData otbossimVec otbgeotiff otbxtiff)
 
 ADD_LIBRARY(otbossimElevation ${ossim_elevation_SRCS})
 TARGET_LINK_LIBRARIES(otbossimElevation otbossimSupportData)

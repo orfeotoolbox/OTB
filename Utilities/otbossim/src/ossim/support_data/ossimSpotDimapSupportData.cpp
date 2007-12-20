@@ -1,5 +1,4 @@
 //*******************************************************************
-// Copyright (C) 2003 ImageLinks Inc.  All rights reserved.
 //
 // License:  See top level LICENSE.txt file.
 //
@@ -10,9 +9,9 @@
 // Contains definition of class ossimSpotDimapSupportData.
 //
 //*****************************************************************************
-// $Id: ossimSpotDimapSupportData.cpp 9150 2006-06-20 14:23:21Z dburken $
+// $Id: ossimSpotDimapSupportData.cpp 12123 2007-12-06 15:21:16Z gpotts $
 
-  // #include <cstdio>
+
 #include <iostream>
 #include <iterator>
 #include <ossim/support_data/ossimSpotDimapSupportData.h>
@@ -31,22 +30,24 @@
 static ossimTrace traceDebug ("ossimSpotDimapSupportData:debug");
 
 static const ossim_uint32  LAGRANGE_FILTER_SIZE = 8; // num samples considered
-static const ossim_float64 NULL_DOUBLE = 0.0;
-static const ossimDpt3d    NULL_VECTOR (0.0, 0.0, 0.0);
 
 ossimSpotDimapSupportData::ossimSpotDimapSupportData ()
    :
    ossimErrorStatusInterface(),
+   theMetadataVersion(OSSIM_SPOT_METADATA_VERSION_UNKNOWN),
    theImageID(),
    theMetadataFile(),
    theSunAzimuth(0.0),
    theSunElevation(0.0),
-   theImageSize(0.0, 0.0),
+   theIncidenceAngle(0.0),
+   theImageSize(0.0, 0.0),   
    theRefGroundPoint(0.0, 0.0, 0.0),
    theRefImagePoint(0.0, 0.0),
    theSubImageOffset(0.0, 0.0),
    theRefLineTime(0.0),
+   theRefLineTimeLine(0.0),
    theLineSamplingPeriod(0.0),
+   theDetectorCount(0),
    thePixelLookAngleX(),
    thePixelLookAngleY(),
    theAttitudeSamples(),
@@ -58,7 +59,6 @@ ossimSpotDimapSupportData::ossimSpotDimapSupportData ()
    theSwirDataFlag(false),
    theNumBands(0),
    theAcquisitionDate(),
-   theIncidenceAngle(0.0),
    theUlCorner(),
    theUrCorner(),
    theLrCorner(),
@@ -69,16 +69,20 @@ ossimSpotDimapSupportData::ossimSpotDimapSupportData ()
 }
 ossimSpotDimapSupportData::ossimSpotDimapSupportData(const ossimSpotDimapSupportData& rhs)
    :ossimErrorStatusInterface(rhs),
+    theMetadataVersion(rhs.theMetadataVersion),
     theImageID(rhs.theImageID),
     theMetadataFile (rhs.theMetadataFile),
     theSunAzimuth(rhs.theSunAzimuth),
     theSunElevation(rhs.theSunElevation),
-    theImageSize(rhs.theImageSize),
+    theIncidenceAngle(rhs.theIncidenceAngle),
+    theImageSize(rhs.theImageSize),    
     theRefGroundPoint(rhs.theRefGroundPoint),
     theRefImagePoint(rhs.theRefImagePoint),
     theSubImageOffset(rhs.theSubImageOffset),
     theRefLineTime(rhs.theRefLineTime),
+    theRefLineTimeLine(rhs.theRefLineTimeLine),    
     theLineSamplingPeriod(rhs.theLineSamplingPeriod),
+    theDetectorCount(rhs.theDetectorCount),
     thePixelLookAngleX(rhs.thePixelLookAngleX),
     thePixelLookAngleY(rhs.thePixelLookAngleY),
     theAttitudeSamples(rhs.theAttitudeSamples),
@@ -90,7 +94,6 @@ ossimSpotDimapSupportData::ossimSpotDimapSupportData(const ossimSpotDimapSupport
     theSwirDataFlag (rhs.theSwirDataFlag),
     theNumBands(rhs.theNumBands),
     theAcquisitionDate(rhs.theAcquisitionDate),
-    theIncidenceAngle(rhs.theIncidenceAngle),
     theUlCorner(rhs.theUlCorner),
     theUrCorner(rhs.theUrCorner),
     theLrCorner(rhs.theLrCorner),
@@ -103,16 +106,20 @@ ossimSpotDimapSupportData::ossimSpotDimapSupportData(const ossimSpotDimapSupport
 ossimSpotDimapSupportData::ossimSpotDimapSupportData (const ossimFilename& dimapFile, bool  processSwir)
    :
    ossimErrorStatusInterface(),
+   theMetadataVersion(OSSIM_SPOT_METADATA_VERSION_UNKNOWN),
    theImageID(),
    theMetadataFile (dimapFile),
    theSunAzimuth(0.0),
    theSunElevation(0.0),
-   theImageSize(0.0, 0.0),
+   theIncidenceAngle(0.0),
+   theImageSize(0.0, 0.0),   
    theRefGroundPoint(0.0, 0.0, 0.0),
    theRefImagePoint(0.0, 0.0),
    theSubImageOffset(0.0, 0.0),
    theRefLineTime(0.0),
+   theRefLineTimeLine(0.0),   
    theLineSamplingPeriod(0.0),
+   theDetectorCount(0),
    thePixelLookAngleX(),
    thePixelLookAngleY(),
    theAttitudeSamples(),
@@ -124,7 +131,6 @@ ossimSpotDimapSupportData::ossimSpotDimapSupportData (const ossimFilename& dimap
    theSwirDataFlag (processSwir),
    theNumBands(0),
    theAcquisitionDate(),
-   theIncidenceAngle(0.0),
    theUlCorner(),
    theUrCorner(),
    theLrCorner(),
@@ -162,17 +168,19 @@ ossimObject* ossimSpotDimapSupportData::dup()const
 void ossimSpotDimapSupportData::clearFields()
 {
    clearErrorStatus();
-
+   theMetadataVersion = OSSIM_SPOT_METADATA_VERSION_UNKNOWN;
    theImageID = "";
    theMetadataFile = "";
    theSunAzimuth = 0.0;
    theSunElevation = 0.0;
-   theImageSize = ossimDpt();
-   theRefGroundPoint = ossimGpt();
-   theRefImagePoint = ossimDpt();
-   theSubImageOffset = ossimDpt();
-   theRefLineTime = 0.0;
-   theLineSamplingPeriod = 0.0;
+   theImageSize.makeNan();
+   theRefGroundPoint.makeNan();
+   theRefImagePoint.makeNan();
+   theSubImageOffset.makeNan();
+   theRefLineTime = ossim::nan();
+   theRefLineTimeLine = ossim::nan();
+   theLineSamplingPeriod = ossim::nan();
+   theDetectorCount = 0;
    thePixelLookAngleX.clear();
    thePixelLookAngleY.clear();
    theAttitudeSamples.clear(); // x=pitch, y=roll, z=yaw
@@ -189,10 +197,10 @@ void ossimSpotDimapSupportData::clearFields()
    //---
    // Corner points:
    //---
-   theUlCorner = ossimGpt();
-   theUrCorner = ossimGpt();
-   theLrCorner = ossimGpt();
-   theLlCorner = ossimGpt();
+   theUlCorner.makeNan();
+   theUrCorner.makeNan();
+   theLrCorner.makeNan();
+   theLlCorner.makeNan();
 
    //---
    // Geoposition Points:
@@ -211,17 +219,61 @@ bool ossimSpotDimapSupportData::loadXmlFile(const ossimFilename& file,
    {
       ossimNotify(ossimNotifyLevel_DEBUG)
          << MODULE << " DEBUG:"
-         << "\nFile: " << file << endl;
+         << "\nFile: " << file << std::endl;
    }
    
    clearFields();
+
    theSwirDataFlag = processSwir;
    theMetadataFile = file;
 
+   ossim_int64 fileSize = file.fileSize();
+   std::ifstream in(file.c_str(), std::ios::binary|std::ios::in);
+   std::vector<char> fullBuffer;
+   ossimString bufferedIo;
+   if(!in.fail())
+   {
+      char buf[100];
+      in.read(buf, ossim::min((ossim_int64)100, fileSize));
+      if(!in.fail())
+      {
+         ossimString testString = ossimString(buf,
+                                  buf + in.gcount()); 
+         if(testString.contains("xml"))
+         {
+            in.seekg(0);
+            in.read(&fullBuffer.front(), fullBuffer.size());
+            if(!in.fail())
+            {
+               bufferedIo = ossimString(fullBuffer.begin(),
+                                        fullBuffer.begin()+in.gcount());
+            }
+         }
+      }
+   }
+   else
+   {
+      return false;
+   }
    //---
    // Instantiate the XML parser:
    //---
-   ossimRefPtr<ossimXmlDocument> xmlDocument = new ossimXmlDocument(file);
+   ossimRefPtr<ossimXmlDocument> xmlDocument;
+
+   if(bufferedIo.empty())
+   {
+      xmlDocument = new ossimXmlDocument(file);
+   }
+   else
+   {
+      
+      xmlDocument = new ossimXmlDocument;
+      std::istringstream inStringStream(bufferedIo);
+      if(!xmlDocument->read(inStringStream))
+      {
+         return false;
+      }
+   }
    if (xmlDocument->getErrorStatus())
    {
       if(traceDebug())
@@ -235,41 +287,115 @@ bool ossimSpotDimapSupportData::loadXmlFile(const ossimFilename& file,
       return false;
    }
    
+   //---
+   // Get the version string.  This must be performed first as it is used
+   // as a key for parsing different versions.
+   //---
+   if (initMetadataVersion(xmlDocument) == false)
+   {
+      if(traceDebug())
+      {
+         ossimNotify(ossimNotifyLevel_FATAL)
+            << MODULE << " DEBUG:"
+            << "ossimSpotDimapSupportData::loadXmlFile:"
+            << "\nMetadata initialization failed.  Returning false"
+            << std::endl;
+      }
+      return false;
+   }
+
+   // Get the image id.
+   if (initImageId(xmlDocument) == false)
+   {
+      if(traceDebug())
+      {
+         ossimNotify(ossimNotifyLevel_FATAL)
+            << MODULE << " DEBUG:"
+            << "ossimSpotDimapSupportData::loadXmlFile:"
+            << "\nImageId initialization failed.  Returning false"
+            << std::endl;
+      }
+      return false;
+   }
+
+   // Get data from "Scene_Source" section.
+   if (initSceneSource(xmlDocument)  == false)
+   {
+      ossimNotify(ossimNotifyLevel_FATAL)
+         << MODULE << " DEBUG:"
+         << "ossimSpotDimapSupportData::loadXmlFile:"
+         << "\nScene source initialization failed.  Returning false"
+         << std::endl;
+      
+      return false;
+   }
+
+   if (initFramePoints(xmlDocument)  == false)
+   {
+      ossimNotify(ossimNotifyLevel_FATAL)
+         << MODULE << " DEBUG:"
+         << "ossimSpotDimapSupportData::loadXmlFile:"
+         << "\nFrame point initialization failed.  Returning false"
+         << std::endl;
+      return false;
+   }
+
    if (parsePart1(xmlDocument) == false)
    {
+      ossimNotify(ossimNotifyLevel_FATAL)
+         << MODULE << " DEBUG:"
+         << "ossimSpotDimapSupportData::loadXmlFile:"
+         << "\nPart 1 initialization failed.  Returning false"
+         << std::endl;
       return false;
    }
    
    if (parsePart2(xmlDocument) == false)
    {
+      ossimNotify(ossimNotifyLevel_FATAL)
+         << MODULE << " DEBUG:"
+         << "ossimSpotDimapSupportData::loadXmlFile:"
+         << "\nPart 2 initialization failed.  Returning false"
+         << std::endl;
       return false;
    }
 
-   bool status = parsePart3(xmlDocument);
+   if (parsePart3(xmlDocument) == false)
+   {
+      ossimNotify(ossimNotifyLevel_FATAL)
+         << MODULE << " DEBUG:"
+         << "ossimSpotDimapSupportData::loadXmlFile:"
+         << "\nPart 3 initialization failed.  Returning false"
+         << std::endl;
+      return false;
+   }
    
    if (traceDebug())
    {
+      printInfo(ossimNotify(ossimNotifyLevel_DEBUG));
+      
       ossimNotify(ossimNotifyLevel_DEBUG)
          << MODULE << " DEBUG: exited..."
-         << endl;
+         << std::endl;
    }
    
-   return status;
+   return true;
 }
 
 void ossimSpotDimapSupportData::getPositionEcf(ossim_uint32 sample,
                                                ossimEcefPoint& pe)  const
 {
-   pe = NULL_VECTOR;
+   pe.makeNan();
 
-   if (thePosEcfSamples.size() < theImageSize.samp)
+   if (thePosEcfSamples.size() < theDetectorCount)
    {
       if(theImageSize.samp > 0)
       {
          double t = 0.0;
          double tempIdx = 0.0;
          double tempIdxFraction = 0.0;
-         t = (double)sample/(double)(theImageSize.samp-1);
+         t = static_cast<double>(sample)/
+            static_cast<double>(theDetectorCount-1);
          tempIdx = (thePosEcfSamples.size()-1)*t;
          tempIdxFraction = tempIdx - (ossim_int32)tempIdx;
          ossim_uint32 idxStart = (ossim_uint32)tempIdx;
@@ -288,7 +414,7 @@ void ossimSpotDimapSupportData::getPositionEcf(ossim_uint32 sample,
          
       }
    }
-   else if(thePosEcfSamples.size() == theImageSize.samp)
+   else if(thePosEcfSamples.size() == theDetectorCount)
    {
       pe = ossimEcefPoint(thePosEcfSamples[sample].x,
                           thePosEcfSamples[sample].y,
@@ -318,16 +444,17 @@ void ossimSpotDimapSupportData::getPositionEcf(const ossim_float64& time,
 
 void ossimSpotDimapSupportData::getVelocityEcf(ossim_uint32 sample, ossimEcefPoint& ve)  const
 {
-   ve = NULL_VECTOR;
+   ve.makeNan();
    
-   if (theVelEcfSamples.size() < theImageSize.samp)
+   if (theVelEcfSamples.size() < theDetectorCount)
    {
       if(theImageSize.samp > 0)
       {
          double t = 0.0;
          double tempIdx = 0.0;
          double tempIdxFraction = 0.0;
-         t = (double)sample/(double)(theImageSize.samp-1);
+         t = static_cast<double>(sample)/
+            static_cast<double>(theDetectorCount-1);
          tempIdx = (theVelEcfSamples.size()-1)*t;
          tempIdxFraction = tempIdx - (ossim_int32)tempIdx;
           ossim_uint32 idxStart = (ossim_uint32)tempIdx;
@@ -347,7 +474,7 @@ void ossimSpotDimapSupportData::getVelocityEcf(ossim_uint32 sample, ossimEcefPoi
       }
 
    }
-   else if(theVelEcfSamples.size() == theImageSize.samp)
+   else if(theVelEcfSamples.size() == theDetectorCount)
    {
       ve = ossimEcefPoint(theVelEcfSamples[sample].x,
                           theVelEcfSamples[sample].y,
@@ -378,7 +505,7 @@ void ossimSpotDimapSupportData::getVelocityEcf(const ossim_float64& time,
 void ossimSpotDimapSupportData::getEphSampTime(ossim_uint32 sample,
                                                ossim_float64& et)  const
 {
-   et = NULL_DOUBLE;
+   et = ossim::nan();
    if(theEphSampTimes.size() < theImageSize.samp)
    {
       if(theImageSize.samp > 0)
@@ -414,7 +541,7 @@ void ossimSpotDimapSupportData::getAttitude(ossim_uint32 sample,
 {
    if (sample >= theAttitudeSamples.size())
    {
-      at = NULL_VECTOR;
+      at.makeNan();
       return;
    }
 
@@ -427,7 +554,7 @@ void ossimSpotDimapSupportData::getAttitude(const ossim_float64& time,
    if ((time <  theAttSampTimes.front()) ||
        (time >= theAttSampTimes.back() ))
    {
-      at = NULL_VECTOR;
+      at.makeNan();
       return;
    }
 
@@ -453,7 +580,7 @@ void ossimSpotDimapSupportData::getAttSampTime(ossim_uint32 sample, ossim_float6
 {
    if (sample >= theAttSampTimes.size())
    {
-      at = NULL_DOUBLE;
+      at = ossim::nan();
       return;
    }
 
@@ -466,7 +593,7 @@ void ossimSpotDimapSupportData::getPixelLookAngleX(ossim_uint32 sample,
    if (sample >= thePixelLookAngleX.size())
    {
       setErrorStatus();
-      pa = NULL_DOUBLE;
+      pa = ossim::nan();
 
       return;
    }
@@ -487,7 +614,7 @@ void ossimSpotDimapSupportData::getPixelLookAngleY(ossim_uint32 sample,
    if (sample >= thePixelLookAngleY.size())
    {
       setErrorStatus();
-      pa = NULL_DOUBLE;
+      pa = ossim::nan();
       return;
    }
 
@@ -501,12 +628,15 @@ void ossimSpotDimapSupportData::getPixelLookAngleY(const ossim_float64& sample,
    getInterpolatedLookAngle(s, thePixelLookAngleY, pa);
 }
 
-void ossimSpotDimapSupportData::getInterpolatedLookAngle(const ossim_float64& p, const vector<ossim_float64>& angles, ossim_float64& la) const
+void ossimSpotDimapSupportData::getInterpolatedLookAngle(
+   const ossim_float64& p,
+   const std::vector<ossim_float64>& angles,
+   ossim_float64& la) const
 {
    if ((p < 0.0) || (p >= (ossim_float64) angles.size()))
    {
       setErrorStatus();
-      la = NULL_DOUBLE;
+      la = ossim::nan();
       return;
    }
 
@@ -526,7 +656,11 @@ void ossimSpotDimapSupportData::getInterpolatedLookAngle(const ossim_float64& p,
    }
 }
 
-void ossimSpotDimapSupportData::getBilinearInterpolation(const ossim_float64& time, const vector<ossimDpt3d>& V, const vector<ossim_float64>& T, ossimDpt3d& li) const
+void ossimSpotDimapSupportData::getBilinearInterpolation(
+   const ossim_float64& time,
+   const std::vector<ossimDpt3d>& V,
+   const std::vector<ossim_float64>& T,
+   ossimDpt3d& li) const
 {
    ossim_uint32 samp0 = 0;
    while ((samp0 < T.size()) && (T[samp0] < time)) ++samp0;
@@ -547,7 +681,11 @@ void ossimSpotDimapSupportData::getBilinearInterpolation(const ossim_float64& ti
    }
 }
 
-void ossimSpotDimapSupportData::getLagrangeInterpolation(const ossim_float64& time, const vector<ossimDpt3d>& V, const vector<ossim_float64>& T, ossimDpt3d& li) const
+void ossimSpotDimapSupportData::getLagrangeInterpolation(
+   const ossim_float64& time,
+   const std::vector<ossimDpt3d>& V,
+   const std::vector<ossim_float64>& T,
+   ossimDpt3d& li) const
 
 {
 //    std::cout << "V size = " << V.size() << std::endl
@@ -568,7 +706,7 @@ void ossimSpotDimapSupportData::getLagrangeInterpolation(const ossim_float64& ti
        (time >= T[T.size()-lagrange_half_filter] ))
    {
       setErrorStatus();
-      li = NULL_VECTOR;
+      li.makeNan();
 
       return;
    }
@@ -654,7 +792,7 @@ void ossimSpotDimapSupportData::convertTimeStamp(const ossimString& time_stamp,
    if (converted != 6)
    {
       setErrorStatus();
-      ti = OSSIM_DBL_NAN;
+      ti = ossim::nan();
    }
    else
    {
@@ -686,13 +824,15 @@ void ossimSpotDimapSupportData::printInfo(ostream& os) const
       << "\n  Acquisition Date:   " << theAcquisitionDate
       << "\n  Number of Bands:    " << theNumBands
       << "\n  Geo Center Point:   " << theRefGroundPoint
+      << "\n  Detector count:     " << theDetectorCount
       << "\n  Image Size:         " << theImageSize
       << "\n  Incidence Angle:    " << theIncidenceAngle
       << "\n  Corrected Attitude: " << corr_att
       << "\n  Sun Azimuth:        " << theSunAzimuth
       << "\n  Sun Elevation:      " << theSunElevation
       << "\n  Sub image offset    " << theSubImageOffset
-      << "\n  "
+      << "\n  PixelLookAngleX size:" << thePixelLookAngleX.size()
+      << "\n  thePosEcfSamples size:" << thePosEcfSamples.size()
       << "\n  Corner Points:"
       << "\n     UL: " << theUlCorner
       << "\n     UR: " << theUrCorner
@@ -700,7 +840,20 @@ void ossimSpotDimapSupportData::printInfo(ostream& os) const
       << "\n     LL: " << theLlCorner
       << "\n"
       << "\n---------------------------------------------------------"
-      << "\n  " << endl;
+      << "\n  " << std::endl;
+}
+
+ossimString   ossimSpotDimapSupportData::getMetadataVersionString() const
+{
+   if (theMetadataVersion == OSSIM_SPOT_METADATA_VERSION_1_1)
+   {
+      return ossimString("1.1");
+   }
+   else if (theMetadataVersion == OSSIM_SPOT_METADATA_VERSION_1_0)
+   {
+      return ossimString("1.0");
+   }
+   return ossimString("unknown");
 }
 
 ossimString ossimSpotDimapSupportData::getAcquisitionDate() const
@@ -773,6 +926,11 @@ void ossimSpotDimapSupportData::getRefLineTime(ossim_float64& rt) const
    rt = theRefLineTime;
 }
 
+void ossimSpotDimapSupportData::getRefLineTimeLine(ossim_float64& rtl) const
+{
+   rtl = theRefLineTimeLine;
+}
+
 ossim_uint32 ossimSpotDimapSupportData::getNumEphSamples() const
 {
    return theEphSampTimes.size();
@@ -808,12 +966,9 @@ void ossimSpotDimapSupportData::getLlCorner(ossimGpt& pt) const
    pt = theLlCorner;
 }
 
-ossimDrect ossimSpotDimapSupportData::getImageRect()const
+void ossimSpotDimapSupportData::getImageRect(ossimDrect& rect)const
 {
-   return ossimDrect(theSubImageOffset.x,
-                     theSubImageOffset.y,
-                     theSubImageOffset.x + (theImageSize.x -1),
-                     theSubImageOffset.y + (theImageSize.y -1));
+   rect = ossimDrect(0.0, 0.0, theImageSize.x-1.0, theImageSize.y-1.0);
 }
 
 void ossimSpotDimapSupportData::getSubImageOffset(ossimDpt& offset) const
@@ -842,6 +997,15 @@ bool ossimSpotDimapSupportData::saveState(ossimKeywordlist& kwl,
    kwl.add(prefix,
            ossimKeywordNames::ELEVATION_ANGLE_KW,
            theSunElevation,
+           true);
+
+   //---
+   // Note: since this is a new keyword, use the point.toString as there is
+   // no backwards compatibility issues.
+   //---
+   kwl.add(prefix,
+           "detector_count",
+           theDetectorCount,
            true);
 
    kwl.add(prefix,
@@ -873,6 +1037,11 @@ bool ossimSpotDimapSupportData::saveState(ossimKeywordlist& kwl,
    kwl.add(prefix,
            "reference_line_time",
            theRefLineTime,
+           true);
+
+   kwl.add(prefix,
+           "reference_line_time_line",
+           theRefLineTimeLine,
            true);
 
    kwl.add(prefix,
@@ -1067,12 +1236,25 @@ bool ossimSpotDimapSupportData::loadState(const ossimKeywordlist& kwl,
    theSunAzimuth   = ossimString(kwl.find(prefix, ossimKeywordNames::AZIMUTH_ANGLE_KW)).toDouble();
    theSunElevation = ossimString(kwl.find(prefix, ossimKeywordNames::ELEVATION_ANGLE_KW)).toDouble();
 
+   const char* lookup = kwl.find(prefix, "detector_count");
+   if (lookup)
+   {
+      theDetectorCount = ossimString(lookup).toUInt32();
+   }
+   
    theImageSize      = createDpt(kwl.find(prefix, "image_size"));
    theRefGroundPoint = createGround(kwl.find(prefix, "reference_ground_point"));
    theRefImagePoint  = createDpt(kwl.find(prefix, "reference_image_point"));
    theSubImageOffset = createDpt(kwl.find(prefix, "sub_image_offset"));
 
    theRefLineTime    = ossimString(kwl.find(prefix, "reference_line_time")).toDouble();
+
+   lookup = kwl.find(prefix, "reference_line_time_line");
+   if (lookup)
+   {
+      theRefLineTimeLine = ossimString(lookup).toDouble();
+   }
+   
    theLineSamplingPeriod = ossimString(kwl.find(prefix, "line_sampling_period")).toDouble();
 
 
@@ -1230,71 +1412,10 @@ bool ossimSpotDimapSupportData::parsePart1(
    ossimRefPtr<ossimXmlDocument> xmlDocument)
 {
    static const char MODULE[] = "ossimSpotDimapSupportData::parsePart1";
-   
+
    ossimString xpath;
    vector<ossimRefPtr<ossimXmlNode> > xml_nodes;
-   vector<ossimRefPtr<ossimXmlNode> > sub_nodes;
 
-   //---
-   // Fetch the Image ID:
-   //---
-   xpath = "/Dimap_Document/Production/JOB_ID";
-   xmlDocument->findNodes(xpath, xml_nodes);
-   if (xml_nodes.size() == 0)
-   {
-      setErrorStatus();
-      if(traceDebug())
-      {
-         ossimNotify(ossimNotifyLevel_DEBUG)
-            << MODULE << " DEBUG:"
-            << "\nCould not find: " << xpath
-            << endl;
-      }
-      return false;
-   }
-   theImageID = xml_nodes[0]->getText();
-
-   //---
-   // Fetch the Sun Azimuth:
-   //---
-   xml_nodes.clear();
-   xpath = "/Dimap_Document/Dataset_Sources/Source_Information/Scene_Source"
-      "/SUN_AZIMUTH";
-   xmlDocument->findNodes(xpath, xml_nodes);
-   if (xml_nodes.size() == 0)
-   {
-      setErrorStatus();
-      if(traceDebug())
-      {
-         ossimNotify(ossimNotifyLevel_DEBUG)
-            << MODULE << " DEBUG:"
-            << "\nCould not find: " << xpath
-            << endl;
-      }      
-      return false;
-   }
-   theSunAzimuth = xml_nodes[0]->getText().toDouble();
-
-   //---
-   // Fetch the Sun Elevation:
-   //---
-   xml_nodes.clear();
-   xpath = "/Dimap_Document/Dataset_Sources/Source_Information/Scene_Source"
-      "/SUN_ELEVATION";
-    xmlDocument->findNodes(xpath, xml_nodes);
-   if (xml_nodes.size() == 0)
-   {
-      setErrorStatus();
-      if(traceDebug())
-      {
-         ossimNotify(ossimNotifyLevel_DEBUG)
-            << MODULE << " DEBUG:"
-            << "\nCould not find: " << xpath
-            << endl;
-      }      
-      return false;
-   }
-   theSunElevation = xml_nodes[0]->getText().toDouble();
 
    //---
    // Fetch the ImageSize:
@@ -1310,7 +1431,7 @@ bool ossimSpotDimapSupportData::parsePart1(
          ossimNotify(ossimNotifyLevel_DEBUG)
             << MODULE << " DEBUG:"
             << "\nCould not find: " << xpath
-            << endl;
+            << std::endl;
       }      
       return false;
    }
@@ -1327,7 +1448,7 @@ bool ossimSpotDimapSupportData::parsePart1(
          ossimNotify(ossimNotifyLevel_DEBUG)
             << MODULE << " DEBUG:"
             << "\nCould not find: " << xpath
-            << endl;
+            << std::endl;
       }      
       return false;
    }
@@ -1340,58 +1461,14 @@ bool ossimSpotDimapSupportData::parsePart1(
    }
 
    //---
-   // Fetch the RefGroundPoint:
+   // We will make the RefImagePoint the zero base center of the image.  This
+   // is used by the ossimSensorModel::worldToLineSample iterative loop as
+   // the starting point.  Since the ossimSensorModel does not know of the
+   // sub image we make it zero base.
    //---
-   xml_nodes.clear();
-   xpath = "/Dimap_Document/Dataset_Sources/Source_Frame/Scene_Center/FRAME_LAT";
-   xmlDocument->findNodes(xpath, xml_nodes);
-   if (xml_nodes.size() == 0)
-   {
-      // Search for alternate path...
-      xpath = "/Dimap_Document/Dataset_Frame/Scene_Center/FRAME_LAT";
-      xmlDocument->findNodes(xpath, xml_nodes);
-      if (xml_nodes.size() == 0)
-      {
-         setErrorStatus();
-         if(traceDebug())
-         {
-            ossimNotify(ossimNotifyLevel_DEBUG)
-               << MODULE << " DEBUG:"
-               << "\nCould not find: " << xpath
-               << endl;
-         }      
-         return false;
-      }
-   }
-   theRefGroundPoint.lat = xml_nodes[0]->getText().toDouble();
-
-   xml_nodes.clear();
-   xpath = "/Dimap_Document/Dataset_Sources/Source_Frame/Scene_Center/FRAME_LON";
-   xmlDocument->findNodes(xpath, xml_nodes);
-   if (xml_nodes.size() == 0)
-   {
-      // Search for alternate path...
-      xpath = "/Dimap_Document/Dataset_Frame/Scene_Center/FRAME_LON";
-      xmlDocument->findNodes(xpath, xml_nodes);
-      if (xml_nodes.size() == 0)
-      {
-         setErrorStatus();
-         if(traceDebug())
-         {
-            ossimNotify(ossimNotifyLevel_DEBUG)
-               << MODULE << " DEBUG:"
-               << "\nCould not find: " << xpath
-               << endl;
-         }
-         return false;
-      }
-   }
-   theRefGroundPoint.lon = xml_nodes[0]->getText().toDouble();
-   theRefGroundPoint.hgt = 0.0; // needs to be looked up
-
-   //---
-   // Fetch the RefImagePoint:
-   //---
+   theRefImagePoint.line = theImageSize.line / 2.0;
+   theRefImagePoint.samp = theImageSize.samp / 2.0;
+   
    xml_nodes.clear();
    xpath = "/Dimap_Document/Data_Strip/Sensor_Configuration/Time_Stamp/SCENE_CENTER_LINE";
    xmlDocument->findNodes(xpath, xml_nodes);
@@ -1403,28 +1480,13 @@ bool ossimSpotDimapSupportData::parsePart1(
          ossimNotify(ossimNotifyLevel_DEBUG)
             << MODULE << " DEBUG:"
             << "\nCould not find: " << xpath
-            << endl;
+            << std::endl;
       }
       return false;
    }
-   theRefImagePoint.line = xml_nodes[0]->getText().toDouble() - 1.0;
 
-   xml_nodes.clear();
-   xpath = "/Dimap_Document/Data_Strip/Sensor_Configuration/Time_Stamp/SCENE_CENTER_COL";
-   xmlDocument->findNodes(xpath, xml_nodes);
-   if (xml_nodes.size() == 0)
-   {
-      setErrorStatus();
-      if(traceDebug())
-      {
-         ossimNotify(ossimNotifyLevel_DEBUG)
-            << MODULE << " DEBUG:"
-            << "\nCould not find: " << xpath
-            << endl;
-      }
-      return false;
-   }
-   theRefImagePoint.samp = xml_nodes[0]->getText().toDouble() - 1.0;
+   // Relative to full image frame.
+   theRefLineTimeLine = xml_nodes[0]->getText().toDouble() - 1.0;
 
    // See if there's a sub image offset...
    xml_nodes.clear();
@@ -1472,7 +1534,7 @@ bool ossimSpotDimapSupportData::parsePart1(
          ossimNotify(ossimNotifyLevel_DEBUG)
             << MODULE << " DEBUG:"
             << "\nCould not find: " << xpath
-            << endl;
+            << std::endl;
       }
       return false;
    }
@@ -1488,9 +1550,9 @@ bool ossimSpotDimapSupportData::parsePart2(
    static const char MODULE[] = "ossimSpotDimapSupportData::parsePart2";
    
    ossimString xpath;
-   vector<ossimRefPtr<ossimXmlNode> > xml_nodes;
-   vector<ossimRefPtr<ossimXmlNode> > sub_nodes;
-   vector<ossimRefPtr<ossimXmlNode> >::iterator node;
+   std::vector<ossimRefPtr<ossimXmlNode> > xml_nodes;
+   std::vector<ossimRefPtr<ossimXmlNode> > sub_nodes;
+   std::vector<ossimRefPtr<ossimXmlNode> >::iterator node;
    unsigned int band_index;
 
    //---
@@ -1508,7 +1570,7 @@ bool ossimSpotDimapSupportData::parsePart2(
          ossimNotify(ossimNotifyLevel_DEBUG)
             << MODULE << " DEBUG:"
             << "\nCould not find: " << xpath
-            << endl;
+            << std::endl;
       }
       return false;
    }
@@ -1533,7 +1595,7 @@ bool ossimSpotDimapSupportData::parsePart2(
          ossimNotify(ossimNotifyLevel_DEBUG)
             << MODULE << " DEBUG:"
             << "\nCould not find: " << xpath
-            << endl;
+            << std::endl;
       }
       return false;
    }
@@ -1558,7 +1620,7 @@ bool ossimSpotDimapSupportData::parsePart2(
             ossimNotify(ossimNotifyLevel_DEBUG)
                << MODULE << " DEBUG:"
                << "\nSWIR band error..."
-               << endl;
+               << std::endl;
          }
          return false;
       }
@@ -1587,7 +1649,7 @@ bool ossimSpotDimapSupportData::parsePart2(
          ossimNotify(ossimNotifyLevel_DEBUG)
             << MODULE << " DEBUG:"
             << "\nBand ERROR!"
-            << endl;
+            << std::endl;
       }
       return false;
    }
@@ -1611,7 +1673,7 @@ bool ossimSpotDimapSupportData::parsePart2(
             ossimNotify(ossimNotifyLevel_DEBUG)
                << MODULE << " DEBUG:"
                << "\nCould not find: " << xpath
-               << endl;
+               << std::endl;
          }
          return false;
       }
@@ -1625,8 +1687,29 @@ bool ossimSpotDimapSupportData::parsePart2(
    sub_nodes.clear();
    xml_nodes[band_index]->findChildNodes(xpath, sub_nodes);
 
-   if (sub_nodes.size() != theImageSize.samp)
+   theDetectorCount = sub_nodes.size(); 
+
+   if (theMetadataVersion == OSSIM_SPOT_METADATA_VERSION_1_1)
    {
+      for (ossim_uint32 i=0; i<theDetectorCount; ++i)
+      {
+         thePixelLookAngleX.push_back(sub_nodes[i]->getText().toDouble());
+      }
+   }
+   else if (sub_nodes.size() != theImageSize.samp)
+   {
+      // theFullImageSize.samp = sub_nodes.size(); 
+//       if ((theSubImageOffset.samp + theImageSize.samp - 1)<= sub_nodes.size())
+//       {
+//          ossim_uint32 i = theSubImageOffset.samp;
+//          for (ossim_uint32 idx 0; idx<theImageSize.samp; ++idx)
+//          {
+//             thePixelLookAngleX.push_back(sub_nodes[i]->getText().toDouble());
+//             ++i;
+//          }
+//       }
+//       else
+//       {
       std::vector<double> tempV(sub_nodes.size());
       double t = 0.0;
       double tempIdx = 0.0;
@@ -1666,8 +1749,24 @@ bool ossimSpotDimapSupportData::parsePart2(
    sub_nodes.clear();
    xml_nodes[band_index]->findChildNodes(xpath, sub_nodes);
 
-   if (sub_nodes.size() != theImageSize.samp)
+   if (theMetadataVersion == OSSIM_SPOT_METADATA_VERSION_1_1)
    {
+      for (ossim_uint32 i=0; i<theDetectorCount; ++i)
+      {
+         thePixelLookAngleY.push_back(sub_nodes[i]->getText().toDouble());
+      }
+   }
+   else if (sub_nodes.size() != theImageSize.samp)
+   {
+//       if ((theSubImageOffset.samp + theImageSize.samp - 1)<= sub_nodes.size())
+//       {
+//          ossim_uint32 i = theSubImageOffset.samp;
+//          for (ossim_uint32 idx 0; idx<theImageSize.samp; ++idx)
+//          {
+//             thePixelLookAngleX.push_back(sub_nodes[i]->getText().toDouble());
+//             ++i;
+//          }
+//       }
       std::vector<double> tempV(sub_nodes.size());
       double t = 0.0;
       double tempIdx = 0.0;
@@ -1791,9 +1890,9 @@ bool ossimSpotDimapSupportData::parsePart3(
    ossimRefPtr<ossimXmlDocument> xmlDocument)
 {
    ossimString xpath;
-   vector<ossimRefPtr<ossimXmlNode> > xml_nodes;
-   vector<ossimRefPtr<ossimXmlNode> > sub_nodes;
-   vector<ossimRefPtr<ossimXmlNode> >::iterator node;
+   std::vector<ossimRefPtr<ossimXmlNode> > xml_nodes;
+   std::vector<ossimRefPtr<ossimXmlNode> > sub_nodes;
+   std::vector<ossimRefPtr<ossimXmlNode> >::iterator node;
 
    //---
    // Fetch the ephemeris samples:
@@ -1810,6 +1909,7 @@ bool ossimSpotDimapSupportData::parsePart3(
       return false;
    }
    node = xml_nodes.begin();
+
    while (node != xml_nodes.end())
    {
       ossimDpt3d VP;
@@ -1913,78 +2013,6 @@ bool ossimSpotDimapSupportData::parsePart3(
    }
 
    //---
-   // Corner points:
-   //---
-   xml_nodes.clear();
-   xpath = "/Dimap_Document/Dataset_Frame/Vertex";
-   xmlDocument->findNodes(xpath, xml_nodes);
-   if (xml_nodes.size() != 4)
-   {
-      setErrorStatus();
-      return false;
-   }
-   node = xml_nodes.begin();
-   while (node != xml_nodes.end())
-   {
-      ossimGpt gpt;
-      ossimDpt ipt;
-
-      sub_nodes.clear();
-      xpath = "FRAME_LAT";
-      (*node)->findChildNodes(xpath, sub_nodes);
-      if (sub_nodes.size() == 0)
-      {
-         setErrorStatus();
-         return false;
-      }
-      gpt.lat = sub_nodes[0]->getText().toDouble();
-
-      sub_nodes.clear();
-      xpath = "FRAME_LON";
-      (*node)->findChildNodes(xpath, sub_nodes);
-      if (sub_nodes.size() == 0)
-      {
-         setErrorStatus();
-         return false;
-      }
-      gpt.lon = sub_nodes[0]->getText().toDouble();
-      gpt.hgt = 0.0; // assumed
-
-      sub_nodes.clear();
-      xpath = "FRAME_ROW";
-      (*node)->findChildNodes(xpath, sub_nodes);
-      if (sub_nodes.size() == 0)
-      {
-         setErrorStatus();
-         return false;
-      }
-      ipt.line = sub_nodes[0]->getText().toDouble() - 1.0;
-
-      sub_nodes.clear();
-      xpath = "FRAME_COL";
-      (*node)->findChildNodes(xpath, sub_nodes);
-      if (sub_nodes.size() == 0)
-      {
-         setErrorStatus();
-         return false;
-      }
-      ipt.samp = sub_nodes[0]->getText().toDouble() - 1.0;
-
-      if (ipt.line < 1.0)
-         if (ipt.samp < 1.0)
-            theUlCorner = gpt;
-         else
-            theUrCorner = gpt;
-      else
-         if (ipt.samp < 1.0)
-            theLlCorner = gpt;
-         else
-            theLrCorner = gpt;
-
-      ++node;
-   }
-
-   //---
    // Geoposition points:
    //---
    xml_nodes.clear();
@@ -2052,19 +2080,251 @@ bool ossimSpotDimapSupportData::parsePart3(
       ++node;
    }
 
+   return true;
+}
+
+bool ossimSpotDimapSupportData::initMetadataVersion(ossimRefPtr<ossimXmlDocument> xmlDocument)
+{
+   ossimString xpath;
+   std::vector<ossimRefPtr<ossimXmlNode> > xml_nodes;
+   
    //---
-   // Fetch incidence angle:
+   // Get the version string which can be used as a key for parsing.
    //---
-   xml_nodes.clear();
-   xpath = "/Dimap_Document/Dataset_Sources/Source_Information/Scene_Source/"
-      "INCIDENCE_ANGLE";
+   xpath = "/Dimap_Document/Metadata_Id/METADATA_FORMAT";
    xmlDocument->findNodes(xpath, xml_nodes);
    if (xml_nodes.size() == 0)
    {
       setErrorStatus();
+      if(traceDebug())
+      {
+         ossimNotify(ossimNotifyLevel_DEBUG)
+            << "DEBUG:\nCould not find: " << xpath
+            << endl;
+      }
+      return false;
+   }
+   
+   ossimString attribute = "version";
+   ossimString value;
+   xml_nodes[0]->getAttributeValue(value, attribute);
+   if (value == "1.0")
+   {
+      theMetadataVersion = OSSIM_SPOT_METADATA_VERSION_1_0;
+   }
+   else if (value == "1.1")
+   {
+      theMetadataVersion = OSSIM_SPOT_METADATA_VERSION_1_1;
+   }
+
+   if (theMetadataVersion == OSSIM_SPOT_METADATA_VERSION_UNKNOWN)
+   {
+      setErrorStatus();
+      if (traceDebug())
+      {
+         ossimNotify(ossimNotifyLevel_WARN)
+            << "WARNING:  metadata version not found!"
+            << std::endl;
+      }
+      return false;
+   }
+   return true;
+}
+
+bool ossimSpotDimapSupportData::initImageId(
+   ossimRefPtr<ossimXmlDocument> xmlDocument)
+{
+   ossimString xpath;
+   vector<ossimRefPtr<ossimXmlNode> > xml_nodes;
+
+   //---
+   // Fetch the Image ID:
+   //---
+   xpath = "/Dimap_Document/Production/JOB_ID";
+   xmlDocument->findNodes(xpath, xml_nodes);
+   if (xml_nodes.size() == 0)
+   {
+      setErrorStatus();
+      if(traceDebug())
+      {
+         ossimNotify(ossimNotifyLevel_DEBUG)
+            << "DEBUG:\nCould not find: " << xpath
+            << endl;
+      }
+      return false;
+   }
+   theImageID = xml_nodes[0]->getText();
+   return true;
+}
+
+bool ossimSpotDimapSupportData::initSceneSource(
+   ossimRefPtr<ossimXmlDocument> xmlDocument)
+{
+   ossimString xpath;
+   vector<ossimRefPtr<ossimXmlNode> > xml_nodes;
+   
+   //---
+   // Fetch the Sun Azimuth:
+   //---
+   xpath = "/Dimap_Document/Dataset_Sources/Source_Information/Scene_Source/SUN_AZIMUTH";
+   xmlDocument->findNodes(xpath, xml_nodes);
+   if (xml_nodes.size() == 0)
+   {
+      setErrorStatus();
+      if(traceDebug())
+      {
+         ossimNotify(ossimNotifyLevel_DEBUG)
+            << "DEBUG:\nCould not find: " << xpath
+            << std::endl;
+      }      
+      return false;
+   }
+   theSunAzimuth = xml_nodes[0]->getText().toDouble();
+   
+   //---
+   // Fetch the Sun Elevation:
+   //---
+   xml_nodes.clear();
+   xpath = "/Dimap_Document/Dataset_Sources/Source_Information/Scene_Source/SUN_ELEVATION";
+   xmlDocument->findNodes(xpath, xml_nodes);
+   if (xml_nodes.size() == 0)
+   {
+      setErrorStatus();
+      if(traceDebug())
+      {
+         ossimNotify(ossimNotifyLevel_DEBUG)
+            << "DEBUG:\nCould not find: " << xpath
+            << std::endl;
+      }      
+      return false;
+   }
+   theSunElevation = xml_nodes[0]->getText().toDouble();
+
+   //---
+   // Fetch incidence angle:
+   //---
+   xml_nodes.clear();
+   xpath = "/Dimap_Document/Dataset_Sources/Source_Information/Scene_Source/INCIDENCE_ANGLE";
+   xmlDocument->findNodes(xpath, xml_nodes);
+   if (xml_nodes.size() == 0)
+   {
+      setErrorStatus();
+      if(traceDebug())
+      {
+         ossimNotify(ossimNotifyLevel_DEBUG)
+            << "DEBUG:\nCould not find: " << xpath
+            << std::endl;
+      }
       return false;
    }
    theIncidenceAngle = xml_nodes[0]->getText().toDouble();
 
    return true;
 }
+
+bool ossimSpotDimapSupportData::initFramePoints(
+   ossimRefPtr<ossimXmlDocument> xmlDocument)
+{
+   ossimString xpath;
+   vector<ossimRefPtr<ossimXmlNode> > xml_nodes;
+
+   //---
+   // Corner points:
+   //---
+   xml_nodes.clear();
+   xpath = "/Dimap_Document/Dataset_Frame/Vertex";
+   xmlDocument->findNodes(xpath, xml_nodes);
+   if (xml_nodes.size() != 4)
+   {
+      setErrorStatus();
+      return false;
+   }
+   std::vector<ossimRefPtr<ossimXmlNode> >::iterator node = xml_nodes.begin();
+   while (node != xml_nodes.end())
+   {
+      ossimGpt gpt;
+      ossimDpt ipt;
+
+      std::vector<ossimRefPtr<ossimXmlNode> > sub_nodes;
+      xpath = "FRAME_LAT";
+      (*node)->findChildNodes(xpath, sub_nodes);
+      if (sub_nodes.size() == 0)
+      {
+         setErrorStatus();
+         return false;
+      }
+      gpt.lat = sub_nodes[0]->getText().toDouble();
+
+      sub_nodes.clear();
+      xpath = "FRAME_LON";
+      (*node)->findChildNodes(xpath, sub_nodes);
+      if (sub_nodes.size() == 0)
+      {
+         setErrorStatus();
+         return false;
+      }
+      gpt.lon = sub_nodes[0]->getText().toDouble();
+      gpt.hgt = 0.0; // assumed
+
+      sub_nodes.clear();
+      xpath = "FRAME_ROW";
+      (*node)->findChildNodes(xpath, sub_nodes);
+      if (sub_nodes.size() == 0)
+      {
+         setErrorStatus();
+         return false;
+      }
+      ipt.line = sub_nodes[0]->getText().toDouble() - 1.0;
+
+      sub_nodes.clear();
+      xpath = "FRAME_COL";
+      (*node)->findChildNodes(xpath, sub_nodes);
+      if (sub_nodes.size() == 0)
+      {
+         setErrorStatus();
+         return false;
+      }
+      ipt.samp = sub_nodes[0]->getText().toDouble() - 1.0;
+
+      if (ipt.line < 1.0)
+         if (ipt.samp < 1.0)
+            theUlCorner = gpt;
+         else
+            theUrCorner = gpt;
+      else
+         if (ipt.samp < 1.0)
+            theLlCorner = gpt;
+         else
+            theLrCorner = gpt;
+
+      ++node;
+   }
+
+   //---
+   // Center of frame.
+   //---
+   theRefGroundPoint.hgt = 0.0; // needs to be looked up
+   
+   xml_nodes.clear();
+   xpath = "/Dimap_Document/Dataset_Frame/Scene_Center/FRAME_LON";
+   xmlDocument->findNodes(xpath, xml_nodes);
+   if (xml_nodes.size() != 1)
+   {
+      setErrorStatus();
+      return false;
+   }
+   theRefGroundPoint.lon = xml_nodes[0]->getText().toDouble();
+
+   xml_nodes.clear();
+   xpath = "/Dimap_Document/Dataset_Frame/Scene_Center/FRAME_LAT";
+   xmlDocument->findNodes(xpath, xml_nodes);
+   if (xml_nodes.size() != 1)
+   {
+      setErrorStatus();
+      return false;
+   }
+   theRefGroundPoint.lat = xml_nodes[0]->getText().toDouble();
+
+   return true;
+}
+

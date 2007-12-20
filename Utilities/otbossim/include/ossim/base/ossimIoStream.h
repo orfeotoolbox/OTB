@@ -1,333 +1,166 @@
+//*******************************************************************
+//
+// License:  See top level LICENSE.txt file.
+//
+// Author: Garrett Potts
+//
+// Description:
+// 
+// Class declarations for:
+//
+// ossimIStream
+// ossimOStream
+// ossimIOStream
+// ossimIOMemoryStream
+// ossimIMemoryStream
+// ossimOMemoryStream
+// ossimIOFStream
+// ossimIFStream
+// ossimOFStream
+//
+//*******************************************************************
+//  $Id: ossimIoStream.h 11176 2007-06-07 19:45:56Z dburken $
 #ifndef ossimIoStream_HEADER
 #define ossimIoStream_HEADER
-#include <ossim/base/ossimProtocolStream.h>
+
+#include <ossim/base/ossimConstants.h>
+#include <ossim/base/ossimStreamBase.h>
 #include <iostream>
 #include <fstream>
 #include <sstream>
 #include <ossim/base/ossimString.h>
 
 
-class OSSIM_DLL ossimIStream : public ossimProtocolStream, public std::istream
+class OSSIM_DLL ossimIStream : public ossimStreamBase, public std::istream   
 {
 public:
-   ossimIStream():std::istream((std::streambuf*)0){}
-   ossimIStream(std::streambuf* buf):ossimProtocolStream(buf),std::istream(buf)
-   {}
-   void init(std::streambuf* buf)
-   {
-      ossimProtocolStream::init(buf);
-      std::istream::init(buf);
-   }
-TYPE_DATA
+   ossimIStream();
+   ossimIStream(std::streambuf* sb);
+   virtual ~ossimIStream();
 };
 
-class OSSIM_DLL ossimOStream : public ossimProtocolStream, public std::ostream
+
+class OSSIM_DLL ossimOStream : public ossimStreamBase, public std::ostream
 {
 public:
-   ossimOStream():std::ostream((std::streambuf*)0){}
-   ossimOStream(std::streambuf* buf):ossimProtocolStream(buf),std::ostream(buf)
-   {}
-   void init(std::streambuf* buf)
-   {
-      ossimProtocolStream::init(buf);
-      std::ostream::init(buf);
-   }
-   
-TYPE_DATA
+   ossimOStream();
+   ossimOStream(std::streambuf* sb);   
+   virtual ~ossimOStream();
 };
 
-class OSSIM_DLL ossimIOStream : public ossimProtocolStream, public std::iostream
+class OSSIM_DLL ossimIOStream : public ossimStreamBase, public std::iostream
 {
 public:
-   ossimIOStream():ossimProtocolStream((std::streambuf*)0),std::iostream((std::streambuf*)0){}
-   ossimIOStream(std::streambuf* buf):ossimProtocolStream(buf),std::iostream(buf)
-   {}
-   void init(std::streambuf* buf)
-   {
-      ossimProtocolStream::init(buf);
-      std::iostream::init(buf);
-   }
-
-TYPE_DATA      
+   ossimIOStream();
+   virtual ~ossimIOStream();
 };
 
 class OSSIM_DLL ossimIOMemoryStream : public ossimIOStream
 {
+public:
+   ossimIOMemoryStream();
+
+   virtual ~ossimIOMemoryStream();
+
+   // ??? (drb)
+   bool is_open()const;
+
+   // ??? (drb)
+   virtual void open(const char* /* protocolString */,
+                     int /* openMode */);
+
+   ossimString str();
+
+   // ??? (drb)
+   virtual void close();
+
+   // ??? (drb) std::streamsize
+   ossim_uint64 size()const;
+
 protected:
    std::stringbuf theBuf;
-   
-public:
-   ossimIOMemoryStream()
-      :theBuf(std::ios::in|std::ios::out)
-   {
-      ossimIOStream::init(&theBuf);
-   }
-   bool is_open()const
-   {
-      return true;
-   }
-   virtual void open(const char* /* protocolString */,
-                     int /* openMode */)
-   {
-   }
-   ossimString str()
-   {
-      return theBuf.str();
-   }
-   virtual void close()
-   {}
-
-   ossim_uint32 size()const
-   {
-      ossimIOMemoryStream*  thisPtr = const_cast<ossimIOMemoryStream*>(this);
-      std::streampos pos = thisPtr->tellg();
-      thisPtr->seekg(0, std::ios::end);
-      std::streampos endPos = thisPtr->tellg();
-      thisPtr->seekg(pos, std::ios::beg);
-      
-      return (ossim_uint32)(endPos);
-   }
-   virtual bool isCompressed()const
-   {
-      return false;
-   }
 };
 
 class OSSIM_DLL ossimIMemoryStream : public ossimIStream
 {
+public:
+   
+   ossimIMemoryStream(const ossimString& inputBuf);
+   
+   virtual ~ossimIMemoryStream();
+   
+   bool is_open()const;
+   
+   ossim_uint64 size()const;
+   
+   virtual void open(const char* /* protocolString */,
+                     int /* openMode */ );
+
+   virtual void close();
+   
+   ossimString str();
+
 protected:
    std::stringbuf theBuf;
    
-public:
-   ossimIMemoryStream(const ossimString& inputBuf)
-      :theBuf(inputBuf.c_str(),
-              std::ios::in)
-   {
-      ossimIStream::init(&theBuf);
-   }
-   bool is_open()const
-   {
-      return true;
-   }
-   ossim_uint32 size()const
-   {
-      ossimIMemoryStream*  thisPtr = const_cast<ossimIMemoryStream*>(this);
-      std::streampos pos = thisPtr->tellg();
-      thisPtr->seekg(0, std::ios::end);
-      std::streampos endPos = thisPtr->tellg();
-      thisPtr->seekg(pos, std::ios::beg);
-      return (ossim_uint32)(endPos);
-   }
-   virtual void open(const char* /* protocolString */,
-                     int /* openMode */ )
-   {
-   }
-   virtual void close(){}
-   ossimString str()
-   {
-      return theBuf.str();
-   }
-   virtual bool isCompressed()const
-   {
-      return false;
-   }
 };
 
 class OSSIM_DLL ossimOMemoryStream : public ossimOStream
 {
+public:
+   ossimOMemoryStream();
+   virtual ~ossimOMemoryStream();   
+
+   bool is_open()const;
+
+   ossim_uint64 size()const;
+
+   virtual void open(const char* /* protocolString */,
+                     int /* openMode */ );
+
+   virtual void close();
+
+   ossimString str();
+
 protected:
    std::stringbuf theBuf;
-   
-public:
-   ossimOMemoryStream()
-      :theBuf(std::ios::out)
-   {
-      ossimOStream::init(&theBuf);
-   }
-   bool is_open()const
-   {
-      return true;
-   }
-   ossim_uint32 size()const
-   {
-      ossimOMemoryStream*  thisPtr = const_cast<ossimOMemoryStream*>(this);
-      std::streampos pos = thisPtr->tellp();
-      thisPtr->seekp(0, std::ios::end);
-      std::streampos endPos = thisPtr->tellp();
-      thisPtr->seekp(pos, std::ios::beg);
-      return (ossim_uint32)(endPos);
-   }
-   virtual void open(const char* /* protocolString */,
-                     int /* openMode */ )
-   {
-   }
-   virtual void close()
-   {}
-
-   ossimString str()
-   {
-      return theBuf.str();
-   }
-   virtual bool isCompressed()const
-   {
-      return false;
-   }
 };
 
-class OSSIM_DLL ossimIOFStream : public ossimIOStream
+class OSSIM_DLL ossimIOFStream : public ossimStreamBase, public std::fstream
 {
-protected:
-   std::filebuf theBuf;
-   
 public:
-   ossimIOFStream()
-   {
-      ossimIOStream::init(&theBuf);
-   }
+   ossimIOFStream();
+
    ossimIOFStream(const char* name,
-                 int openMode=std::ios::in|std::ios::out|std::ios::binary)
-   {
-      ossimIOStream::init(&theBuf);
-      open(name, openMode);
-   }
-   virtual ~ossimIOFStream()
-   {
-      if(is_open())
-      {
-         close();
-      }
-   }
-   
-   std::filebuf* rdbuf()
-   {
-      return &theBuf;
-   }
+                  std::ios_base::openmode mode =
+                  std::ios_base::in | std::ios_base::out);
 
-   virtual void open(const char* name,
-                 int openMode=std::ios::in|std::ios::out|std::ios::binary)
-   {
-      if(!theBuf.open(name, (std::ios::openmode)openMode))
-      {
-         this->setstate(std::ios::failbit);
-      }
-   }
-   virtual void close()
-   {
-      if(!theBuf.close())
-      {
-         this->setstate(std::ios::failbit);
-      }
-   }
-   virtual bool is_open()const
-   {
-      return theBuf.is_open();
-   }
-   virtual bool isCompressed()const
-   {
-      return false;
-   }
-TYPE_DATA   
+   virtual ~ossimIOFStream();
 };
 
-class OSSIM_DLL ossimIFStream : public ossimIStream
+class OSSIM_DLL ossimIFStream : public ossimStreamBase, public std::ifstream
 {
-protected:
-   std::filebuf theBuf;
-   
 public:
-   ossimIFStream()
-   {
-      ossimIStream::init(&theBuf);
-   }
-   ossimIFStream(const char* name,
-                 int openMode=std::ios::in|std::ios::binary)
-   {
-      ossimIStream::init(&theBuf);
-      open(name, openMode);
-   }
-   virtual ~ossimIFStream()
-   {
-      if(is_open())
-      {
-         close();
-      }
-   }
+   ossimIFStream();
    
-   std::filebuf* rdbuf() { return &theBuf; }
-   virtual void open(const char* name,
-                     int openMode = std::ios::in|std::ios::binary)
-   {
-      if(!theBuf.open(name, (std::ios::openmode)openMode))
-      {
-         this->setstate(std::ios::failbit);
-      }
-   }
-   virtual void close()
-   {
-      if(!theBuf.close())
-      {
-         this->setstate(std::ios::failbit);
-      }
-   }
-   virtual bool is_open()const
-   {
-      return theBuf.is_open();
-   }
-   virtual bool isCompressed()const
-   {
-      return false;
-   }
-TYPE_DATA   
+   ossimIFStream(const char* file,
+                 std::ios_base::openmode mode = std::ios_base::in);
+
+   virtual ~ossimIFStream();
+
 };
 
-class OSSIM_DLL ossimOFStream : public ossimOStream
+class OSSIM_DLL ossimOFStream : public ossimStreamBase, public std::ofstream
 {
-protected:
-   std::filebuf theBuf;
-   
 public:
-   ossimOFStream()
-   {
-      ossimOStream::init(&theBuf);
-   }
+   ossimOFStream();
+
    ossimOFStream(const char* name,
-                 int openMode=std::ios::out)
-   {
-      ossimOStream::init(&theBuf);
-      open(name, openMode);
-   }
-   virtual ~ossimOFStream()
-   {
-      if(is_open())
-      {
-         close();
-      }
-   }
-   std::filebuf* rdbuf() { return &theBuf; }
-   virtual void open(const char* name,
-                     int openMode = std::ios::out)
-   {
-      if(!theBuf.open(name, (std::ios::openmode)openMode))
-      {
-         this->setstate(std::ios::failbit);
-      }
-   }
-   virtual void close()
-   {
-      if(!theBuf.close())
-      {
-         this->setstate(std::ios::failbit);
-      }
-   }
-   virtual bool is_open()const
-   {
-      return theBuf.is_open();
-   }
-   virtual bool isCompressed()const
-   {
-      return false;
-   }
-TYPE_DATA   
+                 std::ios_base::openmode mode =
+                 std::ios_base::out|std::ios_base::trunc);
+
+   virtual ~ossimOFStream();
+
 };
 
 OSSIM_DLL void operator >> (ossimIStream& in,ossimOStream& out);

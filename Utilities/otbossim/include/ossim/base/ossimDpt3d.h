@@ -9,7 +9,7 @@
 // Contains class declaration for dpt3d
 // Used to represent a 3d double point containing an x, y and z data member.
 //*******************************************************************
-//  $Id: ossimDpt3d.h 9968 2006-11-29 14:01:53Z gpotts $
+//  $Id: ossimDpt3d.h 11856 2007-10-12 15:21:17Z gpotts $
 
 #ifndef ossimDpt3d_HEADER
 #define ossimDpt3d_HEADER
@@ -41,23 +41,24 @@ public:
                   (z == rhs.z));
       }
    bool operator !=(const ossimDpt3d &rhs) const
-      {
-         return ( (x != rhs.x) ||
-                  (y != rhs.y) ||
-                  (z != rhs.z) );
-      }
-
-   void makeNan(){x = OSSIM_DBL_NAN; y=OSSIM_DBL_NAN; z=OSSIM_DBL_NAN;}
+   {
+      return ( (x != rhs.x) ||
+               (y != rhs.y) ||
+               (z != rhs.z) );
+   }
+   
+   void makeNan(){x = ossim::nan(); y=ossim::nan(); z=ossim::nan();}
 
    bool hasNans()const
-      {
-         return (ossimIsNan(x) || ossimIsNan(y) || ossimIsNan(z));
-      }
+   {
+      return (ossim::isnan(x) || ossim::isnan(y) || ossim::isnan(z));
+   }
    /*!
     * METHOD: length()
     * Returns the RSS of the components.
     */
    double length() const { return sqrt(x*x + y*y + z*z); }
+   double length2() const { return x*x + y*y + z*z; }
    
    //***
    // OPERATORS: +, -, +=, -=
@@ -80,7 +81,28 @@ public:
       { return ossimDpt3d(d*x, d*y, d*z); }
    ossimDpt3d operator/(const double& d) const
       { return ossimDpt3d(x/d, y/d, z/d); }
-   
+  void operator /=(double value)
+      {
+         x /= value;
+         y /= value;
+         z /= value;
+      }
+   void operator *=(double value) 
+      {
+         x *= value;
+         y *= value;
+         z *= value;
+      }
+   double operator *(const ossimDpt3d& src)const
+   {
+      return (x*src.x + y*src.y + z*src.z);
+   }
+   inline const ossimDpt3d operator ^ (const ossimDpt3d& rhs) const
+   {
+      return ossimDpt3d(y*rhs.z-z*rhs.y,
+                        z*rhs.x-x*rhs.z ,
+                        x*rhs.y-y*rhs.x);
+   }
    double x;
    double y;
    double z;
@@ -90,10 +112,10 @@ inline std::ostream &operator << (std::ostream &out, const ossimDpt3d &rhs)
 {
    return out << std::setiosflags(std::ios::fixed)
               << std::setprecision(15)
-              << (rhs.x==OSSIM_DBL_NAN?ossimString("nan"):ossimString::toString(rhs.x))
+              << (ossim::isnan(rhs.x)?ossimString("nan"):ossimString::toString(rhs.x))
               << " "
-              << (rhs.y==OSSIM_DBL_NAN?ossimString("nan"):ossimString::toString(rhs.y))
+              << (ossim::isnan(rhs.y)?ossimString("nan"):ossimString::toString(rhs.y))
               << " "
-              << (rhs.z ==OSSIM_DBL_NAN?ossimString("nan"):ossimString::toString(rhs.z))<< endl;
+              << (ossim::isnan(rhs.z)?ossimString("nan"):ossimString::toString(rhs.z))<< endl;
 }
 #endif

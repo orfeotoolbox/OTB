@@ -5,7 +5,7 @@
 // Author: Garrett Potts (gpotts@imagelinks)
 //
 //*************************************************************************
-// $Id: ossimSharedObjectBridge.h 9968 2006-11-29 14:01:53Z gpotts $
+// $Id: ossimSharedObjectBridge.h 12048 2007-11-15 15:45:35Z gpotts $
 #ifndef ossimSharedObjectBridge_HEADER
 #define ossimSharedObjectBridge_HEADER
 #include <vector>
@@ -17,12 +17,18 @@ extern "C"
    typedef const char* (*ossimSharedLibraryGetDescriptionPtr)();
    typedef int (*ossimSharedLibraryGetNumberOfClassNamesPtr)();
    typedef const char* (*ossimSharedLibraryGetClassNamesPtr)(int idx);
+   typedef const char* (*ossimSharedLibraryGetIdPtr())();
+   typedef const char* (*ossimSharedLibraryGetOssimVersionStringPtr())();
+   typedef void  (*ossimSharedLibraryRegisterPluginPtr())();
    
    struct OSSIMDLLEXPORT ossimSharedObjectInfo
    {
-      ossimSharedLibraryGetDescriptionPtr getDescription;
+      ossimSharedLibraryGetDescriptionPtr        getDescription;
       ossimSharedLibraryGetNumberOfClassNamesPtr getNumberOfClassNames;
-      ossimSharedLibraryGetClassNamesPtr getClassName;
+      ossimSharedLibraryGetClassNamesPtr         getClassName;
+/*       ossimSharedLibraryGetId                    getId; */
+/*       ossimSharedLibraryGetOssimVersionString    getOssimVersion; */
+/*       ossimSharedLibraryRegisterPluginPtr        registerPlugin; */
    };
    
    

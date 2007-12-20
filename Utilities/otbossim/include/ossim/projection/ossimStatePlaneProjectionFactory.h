@@ -1,13 +1,10 @@
 //*******************************************************************
-// Copyright (C) 2000 ImageLinks Inc.
 //
-// License:  LGPL
-// 
-// See LICENSE.txt file in the top level directory for more details.
+// License:  See top level LICENSE.txt file.
 //
 // Author: Garrett Potts
 //*******************************************************************
-//  $Id: ossimStatePlaneProjectionFactory.h 9094 2006-06-13 19:12:40Z dburken $
+//  $Id: ossimStatePlaneProjectionFactory.h 12081 2007-11-26 21:44:18Z dburken $
 #ifndef ossimStatePlaneProjectionFactory_HEADER
 #define ossimStatePlaneProjectionFactory_HEADER
 #include <ossim/projection/ossimProjectionFactoryBase.h>
@@ -25,7 +22,6 @@ public:
                                              const char* prefix=0)const;
    const ossimStatePlaneProjectionInfo* getInfo(ossim_int32 pcsCode)const;
    const ossimStatePlaneProjectionInfo* getInfo(const ossimString& name)const;
-   virtual std::list<ossimString> getList()const;
    virtual ossimObject* createObject(const ossimString& typeName)const;
 
    /*!

@@ -6,7 +6,7 @@
 // Author:  Garrett Potts
 //
 //*******************************************************************
-//  $Id: ossimApplanixUtmModel.cpp 9094 2006-06-13 19:12:40Z dburken $
+//  $Id: ossimApplanixUtmModel.cpp 11482 2007-08-03 15:18:45Z gpotts $
 #include <sstream>
 #include <ossim/projection/ossimApplanixUtmModel.h>
 #include <ossim/base/ossimEllipsoid.h>
@@ -25,7 +25,7 @@ static ossimTrace traceDebug("ossimApplanixUtmModel:debug");
 RTTI_DEF1(ossimApplanixUtmModel, "ossimApplanixUtmModel", ossimSensorModel);
 
 #ifdef OSSIM_ID_ENABLED
-static const char OSSIM_ID[] = "$Id: ossimApplanixUtmModel.cpp 9094 2006-06-13 19:12:40Z dburken $";
+static const char OSSIM_ID[] = "$Id: ossimApplanixUtmModel.cpp 11482 2007-08-03 15:18:45Z gpotts $";
 #endif
 
 ossimApplanixUtmModel::ossimApplanixUtmModel()
@@ -145,7 +145,8 @@ void ossimApplanixUtmModel::lineSampleToWorld(const ossimDpt& image_point,
    //***
    if (!insideImage(image_point))
    {
-      gpt = extrapolate(image_point);
+      gpt.makeNan();
+//       gpt = extrapolate(image_point);
       return;
    }
 
@@ -174,7 +175,8 @@ void ossimApplanixUtmModel::lineSampleHeightToWorld(const ossimDpt& image_point,
 {
    if (!insideImage(image_point))
    {
-      worldPoint = extrapolate(image_point, heightEllipsoid);
+      worldPoint.makeNan();
+//       worldPoint = extrapolate(image_point, heightEllipsoid);
    }
    else
    {
@@ -196,7 +198,8 @@ void ossimApplanixUtmModel::worldToLineSample(const ossimGpt& world_point,
    {
       if (!(theBoundGndPolygon.pointWithin(world_point)))
       {
-         image_point = extrapolate(world_point);
+         image_point.makeNan();
+//          image_point = extrapolate(world_point);
          return;
       }         
    }
@@ -543,7 +546,7 @@ bool ossimApplanixUtmModel::loadState(const ossimKeywordlist& kwl,
                   if(eoFile.isHeightAboveMSL())
                   {
                      double offset = ossimGeoidManager::instance()->offsetFromEllipsoid(thePlatformPosition);
-                     if(offset != OSSIM_DBL_NAN)
+                     if(!ossim::isnan(offset))
                      {
                         thePlatformPosition.height(h + offset);
                         theUtmPlatformPosition.z = h + offset;
@@ -621,7 +624,7 @@ bool ossimApplanixUtmModel::loadState(const ossimKeywordlist& kwl,
          if(heightType == "msl")
          {
             double offset = ossimGeoidManager::instance()->offsetFromEllipsoid(thePlatformPosition);
-            if(offset != OSSIM_DBL_NAN)
+            if(ossim::isnan(offset) == false)
             {
                thePlatformPosition.height(thePlatformPosition.height() + offset);
                theUtmPlatformPosition.z = thePlatformPosition.height();
@@ -646,7 +649,7 @@ bool ossimApplanixUtmModel::loadState(const ossimKeywordlist& kwl,
          if(heightType == "msl")
          {
             double offset = ossimGeoidManager::instance()->offsetFromEllipsoid(thePlatformPosition);
-            if(offset != OSSIM_DBL_NAN)
+            if(ossim::isnan(offset) == false)
             {
                thePlatformPosition.height(thePlatformPosition.height() + offset);
             }

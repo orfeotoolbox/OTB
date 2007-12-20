@@ -36,7 +36,7 @@ void ossimNadconGridFile::close()
 
 double ossimNadconGridFile::getShiftAtLatLon(double lat, double lon)const
 {
-   double result = OSSIM_DBL_NAN;
+   double result = ossim::nan();
    if(pointWithin(lat, lon))
    {
       double x = (lon - theLatLonOrigin.lon)/(double)theHeader.getDeltaX();

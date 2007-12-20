@@ -36,21 +36,22 @@ public:
    inline       ossimDpt& refSlavePoint()                    { return tie; }
 
    void makeNan() 
-      {
-       ossimDpt::makeNan();
-       tie.makeNan();
-       score=OSSIM_DBL_NAN;
-      }
+   {
+      ossimDpt::makeNan();
+      tie.makeNan();
+      score=ossim::nan();
+   }
    
    bool hasNans()const
-      {
-         return (ossimDpt::hasNans() || tie.hasNans() || (score==OSSIM_DBL_NAN));
-      }
-
+   {
+      return (ossimDpt::hasNans() || tie.hasNans() || (ossim::isnan(score)));
+   }
+   
    bool isNan()const
-      {
-         return (ossimDpt::isNan() && tie.isNan() && (score==OSSIM_DBL_NAN));
-      }
+   {
+      return (ossimDpt::isNan() && tie.isNan() && (ossim::isnan(score)));
+   }
+
    std::ostream& print(std::ostream& os) const;
    std::ostream& printTab(std::ostream& os) const;
 

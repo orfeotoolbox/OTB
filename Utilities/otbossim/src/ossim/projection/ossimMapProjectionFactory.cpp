@@ -1,9 +1,7 @@
 //*****************************************************************************
 // FILE: ossimMapProjectionFactory.cc
 //
-// License:  LGPL
-// 
-// See LICENSE.txt file in the top level directory for more details.
+// License:  See top level LICENSE.txt file.
 //
 // DESCRIPTION:
 //   Contains implementation of class ossimMapProjectionFactory
@@ -14,7 +12,7 @@
 //              Initial coding.
 //<
 //*****************************************************************************
-//  $Id: ossimMapProjectionFactory.cpp 9094 2006-06-13 19:12:40Z dburken $
+//  $Id: ossimMapProjectionFactory.cpp 12082 2007-11-26 21:46:44Z dburken $
 
 #include <ossim/projection/ossimMapProjectionFactory.h>
 #include <ossim/projection/ossimProjectionFactoryRegistry.h>
@@ -287,40 +285,4 @@ void ossimMapProjectionFactory::getTypeNameList(std::vector<ossimString>& typeLi
    typeList.push_back(ossimString(STATIC_TYPE_NAME(ossimUtmProjection)));
    typeList.push_back(ossimString(STATIC_TYPE_NAME(ossimVanDerGrintenProjection)));
    typeList.push_back(ossimString(STATIC_TYPE_NAME(ossimSpaceObliqueMercatorProjection)));
-}
-
-std::list<ossimString> ossimMapProjectionFactory::getList()const
-{
-   std::list<ossimString> result;
-
-   result.push_back(ossimString(STATIC_TYPE_NAME(ossimAlbersProjection)));
-   result.push_back(ossimString(STATIC_TYPE_NAME(ossimAzimEquDistProjection)));
-   result.push_back(ossimString(STATIC_TYPE_NAME(ossimBonneProjection)));
-   result.push_back(ossimString(STATIC_TYPE_NAME(ossimBngProjection)));
-   result.push_back(ossimString(STATIC_TYPE_NAME(ossimCassiniProjection)));
-   result.push_back(ossimString(STATIC_TYPE_NAME(ossimCylEquAreaProjection)));
-   result.push_back(ossimString(STATIC_TYPE_NAME(ossimEquDistCylProjection)));
-   result.push_back(ossimString(STATIC_TYPE_NAME(ossimEckert4Projection)));
-   result.push_back(ossimString(STATIC_TYPE_NAME(ossimEckert6Projection)));
-   result.push_back(ossimString(STATIC_TYPE_NAME(ossimGnomonicProjection)));
-   result.push_back(ossimString(STATIC_TYPE_NAME(ossimLambertConformalConicProjection)));
-   result.push_back(ossimString(STATIC_TYPE_NAME(ossimLlxyProjection)));
-   result.push_back(ossimString(STATIC_TYPE_NAME(ossimMercatorProjection)));
-   result.push_back(ossimString(STATIC_TYPE_NAME(ossimMillerProjection)));
-   result.push_back(ossimString(STATIC_TYPE_NAME(ossimMollweidProjection)));
-   result.push_back(ossimString(STATIC_TYPE_NAME(ossimNewZealandMapGridProjection)));
-   result.push_back(ossimString(STATIC_TYPE_NAME(ossimObliqueMercatorProjection)));
-   result.push_back(ossimString(STATIC_TYPE_NAME(ossimOrthoGraphicProjection)));
-   result.push_back(ossimString(STATIC_TYPE_NAME(ossimPolarStereoProjection)));
-   result.push_back(ossimString(STATIC_TYPE_NAME(ossimPolyconicProjection)));
-   result.push_back(ossimString(STATIC_TYPE_NAME(ossimSinusoidalProjection)));
-   result.push_back(ossimString(STATIC_TYPE_NAME(ossimStereographicProjection)));
-   result.push_back(ossimString(STATIC_TYPE_NAME(ossimTransCylEquAreaProjection)));
-   result.push_back(ossimString(STATIC_TYPE_NAME(ossimTransMercatorProjection)));
-   result.push_back(ossimString(STATIC_TYPE_NAME(ossimUpsProjection)));
-   result.push_back(ossimString(STATIC_TYPE_NAME(ossimUtmProjection)));
-   result.push_back(ossimString(STATIC_TYPE_NAME(ossimVanDerGrintenProjection)));
-   result.push_back(ossimString(STATIC_TYPE_NAME(ossimSpaceObliqueMercatorProjection)));
-   
-   return result;
 }

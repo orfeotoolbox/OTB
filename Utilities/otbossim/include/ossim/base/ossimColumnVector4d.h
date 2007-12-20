@@ -8,7 +8,7 @@
 //              for the homogenious coordinate.
 //
 //*******************************************************************
-//  $Id: ossimColumnVector4d.h 9968 2006-11-29 14:01:53Z gpotts $
+//  $Id: ossimColumnVector4d.h 11346 2007-07-23 12:59:48Z gpotts $
 #ifndef ossimColumnVector4d_HEADER
 #define ossimColumnVector4d_HEADER
 #include <ossim/base/ossimConstants.h>
@@ -148,7 +148,7 @@ public:
    {
       double mag = magnitude();
 
-      if(ossimAbs(mag) > DBL_EPSILON)
+      if(std::abs(mag) > DBL_EPSILON)
       {
          mag = 1.0/mag;
          return (*this *mag);

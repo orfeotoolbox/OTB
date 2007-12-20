@@ -24,7 +24,7 @@
 //   spacing are specified to the constructor.
 //
 //*****************************************************************************
-//  $Id: ossimDblGrid.h 9094 2006-06-13 19:12:40Z dburken $
+//  $Id: ossimDblGrid.h 11428 2007-07-27 18:44:18Z gpotts $
 
 #ifndef ossimDblGrid_HEADER
 #define ossimDblGrid_HEADER
@@ -43,8 +43,6 @@ class OSSIMDLLEXPORT ossimDrect;
 class OSSIMDLLEXPORT ossimDblGrid 
 {
 public:
-   static const double DEFAULT_NULL_VALUE;
-
    /*!
     * Default Constructor.
     */
@@ -61,7 +59,7 @@ public:
    ossimDblGrid (const ossimIpt&  size, 
                  const ossimDpt&  origin,
                  const ossimDpt&  spacing,
-                 double null_value = DEFAULT_NULL_VALUE);
+                 double null_value = OSSIM_DEFAULT_NULL_PIX_DOUBLE);
 
    /*!
     * Constructs given a rectangle in U/V space and grid spacing. The origin is
@@ -71,7 +69,7 @@ public:
     */
    ossimDblGrid (const ossimDrect&  uv_rect, 
                  const ossimDpt&    spacing,
-                 double null_value = DEFAULT_NULL_VALUE);
+                 double null_value = OSSIM_DEFAULT_NULL_PIX_DOUBLE);
 
    ~ossimDblGrid ();
 
@@ -81,10 +79,10 @@ public:
    void         initialize(const ossimIpt&  size, 
                            const ossimDpt&  origin,
                            const ossimDpt&  spacing,
-                           double null_value = DEFAULT_NULL_VALUE);
+                           double null_value = OSSIM_DEFAULT_NULL_PIX_DOUBLE);
    void         initialize(const ossimDrect&  uv_rect, 
                            const ossimDpt&    spacing,
-                           double null_value = DEFAULT_NULL_VALUE);
+                           double null_value = OSSIM_DEFAULT_NULL_PIX_DOUBLE);
   void deallocate();
    /*!
     * Fills the current grid with the value specified.

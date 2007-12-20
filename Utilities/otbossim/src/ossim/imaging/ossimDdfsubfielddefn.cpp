@@ -26,7 +26,7 @@
  * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
  * DEALINGS IN THE SOFTWARE.
  ******************************************************************************
- * $Id: ossimDdfsubfielddefn.cpp 9094 2006-06-13 19:12:40Z dburken $
+ * $Id: ossimDdfsubfielddefn.cpp 11347 2007-07-23 13:01:59Z gpotts $
  */
 
 #include <ossim/imaging/ossimIso8211.h>
@@ -657,7 +657,7 @@ void ossimDDFSubfieldDefn::DumpData( const char * pachData, int nMaxBytes,
         ossim_uint8   *pabyBString = (ossim_uint8 *) ExtractStringData( pachData, nMaxBytes, &nBytes );
 
         fprintf( fp, "      Subfield `%s' = 0x", pszName );
-        for( i = 0; i < MIN(nBytes,24); i++ )
+        for( i = 0; i < std::min(nBytes,24); i++ )
             fprintf( fp, "%02X", pabyBString[i] );
 
         if( nBytes > 24 )
@@ -784,12 +784,12 @@ int ossimDDFSubfieldDefn::FormatStringValue( char *pachData, int nBytesAvailable
         if( GetBinaryFormat() == NotBinary )
         {
             memset( pachData, ' ', nSize );
-            memcpy( pachData, pszValue, MIN(nValueLength,nSize) );
+            memcpy( pachData, pszValue, std::min(nValueLength,nSize) );
         }
         else
         {
             memset( pachData, 0, nSize );
-            memcpy( pachData, pszValue, MIN(nValueLength,nSize) );
+            memcpy( pachData, pszValue, std::min(nValueLength,nSize) );
         }
     }
 

@@ -7,7 +7,7 @@
 // Description: Nitf support class
 // 
 //********************************************************************
-// $Id: ossimNitfFileHeaderV2_1.h 9094 2006-06-13 19:12:40Z dburken $
+// $Id: ossimNitfFileHeaderV2_1.h 11058 2007-05-29 11:55:02Z gpotts $
 #ifndef ossimNitfFileHeaderV2_1_HEADER
 #define ossimNitfFileHeaderV2_1_HEADER
 
@@ -236,7 +236,7 @@ private:
     *
     * @throw std::out_of_range
     */
-   void setNumberOfImageInfoRecords(ossim_uint64 num)throw(std::out_of_range);
+   void setNumberOfImageInfoRecords(ossim_uint64 num);
 
    void readImageInfoRecords(std::istream &in);
    void readGraphicInfoRecords(std::istream &in);

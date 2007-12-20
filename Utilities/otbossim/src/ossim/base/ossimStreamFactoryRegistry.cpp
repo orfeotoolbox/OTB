@@ -1,15 +1,11 @@
 //*******************************************************************
-// Copyright (C) 2005 Garrett Potts
 //
-// License:  LGPL
-//
-// See LICENSE.txt file in the top level directory for more details.
+// License:  See top level LICENSE.txt file.
 //
 // Author: Garrett Potts
 //
-//
 //*******************************************************************
-//  $Id: ossimStreamFactoryRegistry.cpp 9094 2006-06-13 19:12:40Z dburken $
+//  $Id: ossimStreamFactoryRegistry.cpp 11177 2007-06-07 19:47:04Z dburken $
 //
 #include <ossim/base/ossimStreamFactoryRegistry.h>
 #include <ossim/base/ossimStreamFactory.h>
@@ -33,21 +29,23 @@ ossimStreamFactoryRegistry* ossimStreamFactoryRegistry::instance()
 {
    if(!theInstance)
    {
-      theInstance = new ossimStreamFactoryRegistry;
+      theInstance = new ossimStreamFactoryRegistry();
       theInstance->registerFactory(ossimStreamFactory::instance());
    }
 
    return theInstance;
 }
 
-ossimRefPtr<ossimIStream> ossimStreamFactoryRegistry::createNewInputStream(const ossimFilename& file,
-																		   std::ios::openmode openMode)
+ossimRefPtr<ossimIFStream>
+ossimStreamFactoryRegistry::createNewIFStream(
+   const ossimFilename& file,
+   std::ios_base::openmode openMode) const
 {
    ossim_uint32 idx = 0;
-   ossimRefPtr<ossimIStream> result = 0;
+   ossimRefPtr<ossimIFStream> result = 0;
    for(idx = 0; ((idx < theFactoryList.size())&&(!result)); ++idx)
    {
-      result = theFactoryList[idx]->createNewInputStream(file, openMode);
+      result = theFactoryList[idx]->createNewIFStream(file, openMode);
    }
 
    if(!result)
@@ -72,3 +70,6 @@ void ossimStreamFactoryRegistry::registerFactory(ossimStreamFactoryBase* factory
       theFactoryList.push_back(factory);
    }
 }
+
+ossimStreamFactoryRegistry::ossimStreamFactoryRegistry(const ossimStreamFactoryRegistry&)
+{}

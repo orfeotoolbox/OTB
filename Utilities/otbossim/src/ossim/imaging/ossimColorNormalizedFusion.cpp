@@ -10,7 +10,7 @@
 // Description: Color normalized fusion
 //
 //*************************************************************************
-// $Id: ossimColorNormalizedFusion.cpp 9094 2006-06-13 19:12:40Z dburken $
+// $Id: ossimColorNormalizedFusion.cpp 11136 2007-06-04 13:26:35Z gpotts $
 
 #include <ossim/imaging/ossimColorNormalizedFusion.h>
 #include <ossim/base/ossimErrorContext.h>
@@ -67,7 +67,7 @@ ossimRefPtr<ossimImageData> ossimColorNormalizedFusion::getTile(
 
    if(!redBuff||!grnBuff||!bluBuff)
    {
-      return inputTile;
+      return 0;
    }
    ossimRefPtr<ossimImageData> inputIntensity = getNormIntensity(rect, resLevel);
 
@@ -75,7 +75,7 @@ ossimRefPtr<ossimImageData> ossimColorNormalizedFusion::getTile(
       (!inputIntensity->getBuf()) ||
       (inputIntensity->getDataObjectStatus() == OSSIM_EMPTY))
    {
-      return inputTile;
+      return 0;
    }
    
    ossim_float32* mono_buff = (ossim_float32*)inputIntensity->getBuf(0);

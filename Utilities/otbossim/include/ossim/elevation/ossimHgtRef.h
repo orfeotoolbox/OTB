@@ -52,15 +52,43 @@ public:
    virtual ossim_float64 getRefHeight(const ossimGpt& pg) const;
    
    /**
-    * @brief Method to get height covariance matrix.
+    * @brief Method to get surface covariance matrix.
     *
-    * @param pg Reference point.
-    *
-    * @param cov 3X3 covariance matrix.
+    * @param pg  Reference point.
+    * @param cov 3X3 ENU covariance matrix.
     *
     * @return true on success, false on error.
     */
-   virtual bool getHeightCovMatrix(const ossimGpt& pg, NEWMAT::Matrix& cov) const;
+   virtual bool getSurfaceCovMatrix
+      (const ossimGpt& pg, NEWMAT::Matrix& cov) const;
+   
+   /**
+    * @brief Method to get surface covariance matrix.
+    *
+    * @param refCE  Reference surface 90% CE [m]
+    * @param refLE  Reference surface 90% LE [m]
+    * @param cov    3X3 ENU covariance matrix.
+    *
+    * @return true on success, false on error.
+    */
+   virtual bool getSurfaceCovMatrix
+      (const ossim_float64   refCE, 
+       const ossim_float64   refLE,
+             NEWMAT::Matrix& cov) const;
+   
+   /**
+    * @brief Method to get surface normal covariance matrix.
+    *
+    * @param pg      Reference point.
+    * @param surfCov 3X3 ENU surface covariance matrix.
+    * @param normCov 3X3 ECF normal covariance matrix.
+    *
+    * @return true on success, false on error.
+    */
+   bool getSurfaceNormalCovMatrix
+      (const ossimGpt&       pg, 
+       const NEWMAT::Matrix& surfCov, 
+             NEWMAT::Matrix& normCov) const;
    
    /**
     * @brief Method to get local terrain normal unit vector (slope).

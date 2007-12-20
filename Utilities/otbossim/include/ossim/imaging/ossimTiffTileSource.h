@@ -1,9 +1,6 @@
 //*******************************************************************
-// Copyright (C) 2000 ImageLinks Inc.
 //
-// License:  LGPL
-// 
-// See LICENSE.txt file in the top level directory for more details.
+// License:  See top level LICENSE.txt file.
 //
 // Author:  David Burken
 //          Frank Warmerdam (warmerdam@pobox.com)
@@ -14,7 +11,7 @@
 // ossimTiffTileSource  is derived from ImageHandler which is derived from
 // TileSource.
 //*******************************************************************
-//  $Id: ossimTiffTileSource.h 9320 2006-07-26 16:14:14Z dburken $
+//  $Id: ossimTiffTileSource.h 11959 2007-10-31 19:22:56Z gpotts $
 
 #ifndef ossimTiffTileSource_HEADER
 #define ossimTiffTileSource_HEADER
@@ -227,7 +224,7 @@ private:
     *
     * @return true on success, false on error.
     */
-   bool setTiffDirectory(ossim_uint32 directory);
+   bool setTiffDirectory(ossim_uint16 directory);
 
    void populateLut();
 
@@ -250,8 +247,8 @@ private:
    ossim_uint16         theSampleFormatUnit;
    double               theMaxSampleValue;
    double               theMinSampleValue;
-   ossim_uint32         theNumberOfDirectories;
-   ossim_uint32         theCurrentDirectory;
+   ossim_uint16         theNumberOfDirectories;
+   ossim_uint16         theCurrentDirectory;
    bool                 theR0isFullRes;
    ossim_uint32         theBytesPerPixel;
    ossimScalarType      theScalarType;

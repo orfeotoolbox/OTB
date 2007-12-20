@@ -10,9 +10,10 @@
 // LIMITATIONS: None.
 //
 //*****************************************************************************
-//  $Id: ossimQuickbirdRpcModel.cpp 9094 2006-06-13 19:12:40Z dburken $
+//  $Id: ossimQuickbirdRpcModel.cpp 12105 2007-12-02 17:01:48Z dburken $
 
 #include <ossim/projection/ossimQuickbirdRpcModel.h>
+#include <ossim/base/ossimException.h>
 #include <ossim/support_data/ossimQuickbirdRpcHeader.h>
 #include <ossim/support_data/ossimQuickbirdTile.h>
 #include <ossim/support_data/ossimNitfFile.h>
@@ -157,8 +158,8 @@ bool ossimQuickbirdRpcModel::parseNitfFile(const ossimFilename& file)
    // std::ifstream in(nitfFile.c_str());
 
    // Get the gsd.
-   theGSD.line = OSSIM_DBL_NAN;
-   theGSD.samp = OSSIM_DBL_NAN;
+   theGSD.line = ossim::nan();
+   theGSD.samp = ossim::nan();
    
    ossimRefPtr<ossimNitfRegisteredTag> tag;
    tag = ih->getTagData(PIAIMC_TAG);
@@ -171,7 +172,7 @@ bool ossimQuickbirdRpcModel::parseNitfFile(const ossimFilename& file)
          theGSD.samp = theGSD.line;
       }
    }
-   if (theGSD.line == OSSIM_DBL_NAN)
+   if (ossim::isnan(theGSD.line))
    {
       tag = ih->getTagData(USE00A_TAG);
       if (tag.valid())
@@ -209,7 +210,6 @@ bool ossimQuickbirdRpcModel::parseNitfFile(const ossimFilename& file)
       
       if (!rpcTag)
       {
-         cout << "a..." << endl;
          ++theErrorStatus;
          return false;
       }
@@ -283,6 +283,13 @@ bool ossimQuickbirdRpcModel::parseNitfFile(const ossimFilename& file)
    theImageClipRect = imageRect;
    theImageID = hdr.theSatId;
 
+   //---
+   // NOTE:  We must call "updateModel()" to set parameter used by base
+   // ossimRpcModel prior to calling lineSampleHeightToWorld or all
+   // the world points will be same.
+   //---
+   updateModel();
+
    ossimGpt v0, v1, v2, v3;
    lineSampleHeightToWorld(imageRect.ul(), theHgtOffset, v0);
    lineSampleHeightToWorld(imageRect.ur(), theHgtOffset, v1);
@@ -292,39 +299,23 @@ bool ossimQuickbirdRpcModel::parseNitfFile(const ossimFilename& file)
    theBoundGndPolygon
       = ossimPolygon (ossimDpt(v0), ossimDpt(v1), ossimDpt(v2), ossimDpt(v3));
 
+   // Set the ground reference point using the model.
    lineSampleHeightToWorld(theRefImgPt, theHgtOffset, theRefGndPt);
-   ossimGpt rightGpt;
-   ossimGpt topGpt;
-   
-   lineSampleHeightToWorld(theRefImgPt + ossimDpt(1, 0),
-                           theHgtOffset,
-                           rightGpt);
-   lineSampleHeightToWorld(theRefImgPt + ossimDpt(0, -1),
-                           theHgtOffset,
-                           topGpt);
-   
-   if( (theGSD.line == OSSIM_DBL_NAN) || (theGSD.samp == OSSIM_DBL_NAN) )
+
+   if( theGSD.hasNans() )
    {
-      ossimGpt rightGpt;
-      ossimGpt topGpt;
-      
-      lineSampleHeightToWorld(theRefImgPt + ossimDpt(1, 0),
-                              theHgtOffset,
-                              rightGpt);
-      lineSampleHeightToWorld(theRefImgPt + ossimDpt(0, -1),
-                              theHgtOffset,
-                              topGpt);
-      ossimEcefPoint rightPt = rightGpt;
-      ossimEcefPoint topPt   = topGpt;
-      ossimEcefPoint origin  = theRefGndPt;
-      
-      ossim_float64 gsdx = (rightPt-origin).magnitude();
-      ossim_float64 gsdy = (topPt-origin).magnitude();
-      theGSD.x = (gsdx + gsdy)/2.0;
-      theGSD.y = theGSD.x;
+      try
+      {
+         // This will set theGSD and theMeanGSD. Method throws ossimException.
+         computeGsd();
+      }
+      catch (const ossimException& e)
+      {
+         ossimNotify(ossimNotifyLevel_WARN)
+            << "ossimNitfRpcModel::ossimNitfRpcModel Caught Exception:\n"
+            << e.what() << std::endl;
+      }
    }
-   
-   theMeanGSD = (theGSD.x + theGSD.y)/2.0;
 
    return true;
 }
@@ -459,6 +450,13 @@ bool ossimQuickbirdRpcModel::parseTiffFile(const ossimFilename& file)
    theImageClipRect = imageRect;
    theImageID = hdr.theSatId;
 
+   //---
+   // NOTE:  We must call "updateModel()" to set parameter used by base
+   // ossimRpcModel prior to calling lineSampleHeightToWorld or all
+   // the world points will be same.
+   //---
+   updateModel();
+   
    ossimGpt v0, v1, v2, v3;
    lineSampleHeightToWorld(imageRect.ul(), theHgtOffset, v0);
    lineSampleHeightToWorld(imageRect.ur(), theHgtOffset, v1);
@@ -468,39 +466,25 @@ bool ossimQuickbirdRpcModel::parseTiffFile(const ossimFilename& file)
    theBoundGndPolygon
       = ossimPolygon (ossimDpt(v0), ossimDpt(v1), ossimDpt(v2), ossimDpt(v3));
 
+   // Set the ground reference point using the model.
    lineSampleHeightToWorld(theRefImgPt, theHgtOffset, theRefGndPt);
-   ossimGpt rightGpt;
-   ossimGpt topGpt;
-   
-   lineSampleHeightToWorld(theRefImgPt + ossimDpt(1, 0),
-                           theHgtOffset,
-                           rightGpt);
-   lineSampleHeightToWorld(theRefImgPt + ossimDpt(0, -1),
-                           theHgtOffset,
-                           topGpt);
-   
-   if( (theGSD.line == OSSIM_DBL_NAN) || (theGSD.samp == OSSIM_DBL_NAN) )
+
+   if( theGSD.hasNans() )
    {
-      ossimGpt rightGpt;
-      ossimGpt topGpt;
-      
-      lineSampleHeightToWorld(theRefImgPt + ossimDpt(1, 0),
-                              theHgtOffset,
-                              rightGpt);
-      lineSampleHeightToWorld(theRefImgPt + ossimDpt(0, -1),
-                              theHgtOffset,
-                              topGpt);
-      ossimEcefPoint rightPt = rightGpt;
-      ossimEcefPoint topPt   = topGpt;
-      ossimEcefPoint origin  = theRefGndPt;
-      
-      ossim_float64 gsdx = (rightPt-origin).magnitude();
-      ossim_float64 gsdy = (topPt-origin).magnitude();
-      theGSD.x = (gsdx + gsdy)/2.0;
-      theGSD.y = theGSD.x;
+      // Call the base class method to compute.
+      try
+      {
+         // This will set theGSD and theMeanGSD. Method throws ossimException.
+         computeGsd();
+      }
+      catch (const ossimException& e)
+      {
+         ossimNotify(ossimNotifyLevel_WARN)
+            << "ossimQuickbirdRpcModel::ossimQuickbirdRpcModel Caught"
+            << " Exception:\n"
+            << e.what() << std::endl;
+      }
    }
-   
-   theMeanGSD = (theGSD.x + theGSD.y)/2.0;
    
    return true;
 }

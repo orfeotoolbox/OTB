@@ -8,18 +8,13 @@
 // Author:  David Burken
 //
 //************************************************************************** 
-// $Id: ossimMutex.h 9097 2006-06-13 20:57:27Z dburken $
+// $Id: ossimMutex.h 10694 2007-04-12 13:53:34Z gpotts $
 #ifndef ossimMutex_HEADER
 #define ossimMutex_HEADER
 
 #include <ossim/ossimConfig.h>  /* to pick up platform defines */
 #include <ossim/base/ossimReferenced.h>
 
-#ifdef OSSIM_HAS_OPEN_THREADS
-#  if OSSIM_HAS_OPEN_THREADS
-#    include <OpenThreads/Mutex>
-#  endif
-#endif
 
 /**
  * ossimMutex is a wrapper around OpenThreads::Mutex to allow for builds with
@@ -67,11 +62,6 @@ public:
    int trylock();
 
 private:
-#ifdef OSSIM_HAS_OPEN_THREADS
-#  if OSSIM_HAS_OPEN_THREADS
-   OpenThreads::Mutex theMutex;
-#  endif
-#endif
-   
+     void* thePrivateData;   
 };
 #endif /* ossimMutex_HEADER */

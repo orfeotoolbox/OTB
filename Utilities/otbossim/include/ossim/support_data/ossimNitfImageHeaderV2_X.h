@@ -44,6 +44,8 @@ public:
    ossimString getJustification()const;
    ossimString getCoordinateSystem()const;
    ossimString getGeographicLocation()const;
+
+   
    ossimString getNumberOfComments()const;
    ossimString getCompressionCode()const;
    ossimString getCompressionRateCode()const;
@@ -63,6 +65,12 @@ public:
    virtual void setProperty(ossimRefPtr<ossimProperty> property);
    virtual ossimRefPtr<ossimProperty> getProperty(const ossimString& name)const;
    virtual void getPropertyNames(std::vector<ossimString>& propertyNames)const;
+
+   /**
+    * @brief Gets the IMAG field as a string.  Satisfies pure virtual.
+    * @return IMAG field
+    */
+   virtual ossimString  getImageMagnification()const;
 
    static const ossimString IID1_KW;
    static const ossimString IDATIM_KW;

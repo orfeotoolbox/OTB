@@ -7,7 +7,7 @@
 // Description:
 //
 //*******************************************************************
-//  $Id: ossimGeoidNgs.h 9968 2006-11-29 14:01:53Z gpotts $
+//  $Id: ossimGeoidNgs.h 11496 2007-08-06 09:18:28Z dburken $
 #ifndef ossimGeoidNgs_HEADER
 #define ossimGeoidNgs_HEADER
 
@@ -30,19 +30,27 @@ public:
 
    virtual bool addFile(const ossimFilename& file,
                         ossimByteOrder byteOrder = OSSIM_LITTLE_ENDIAN);
-   /*!
-    *  Returns the offset from the ellipsoid to the geoid.
-    *  Returns OSSIM_DBL_NAN if grid does not contain the point.
+   /**
+    *  @return The offset from the ellipsoid to the geoid or ossim::nan()
+    *  if grid does not contain the point.
     */
    virtual double offsetFromEllipsoid(const ossimGpt&) const;
-   
+
+   /**
+    *  @return Geoid to ellipsoid height or ossim::nan()
+    *  if grid does not contain the point.
+    */
    double geoidToEllipsoidHeight(double lat,
-                           double lon,
-                           double geoidHeight);
-   
+                                 double lon,
+                                 double geoidHeight) const;
+
+   /**
+    *  @return Ellipsoid to geoid height or ossim::nan()
+    *  if grid does not contain the point.
+    */
    double ellipsoidToGeoidHeight(double lat,
                                  double lon,
-                                 double ellipsoidHeight);
+                                 double ellipsoidHeight) const;
 protected:
    void fixLatLon(double &lat, double &lon) const;
    double deltaHeight(double lat, double lon)const;

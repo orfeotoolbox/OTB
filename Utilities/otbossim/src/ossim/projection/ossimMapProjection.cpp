@@ -1,5 +1,4 @@
 //*******************************************************************
-// Copyright (C) 2000 ImageLinks Inc.
 //
 // License:  See top level LICENSE.txt file.
 //
@@ -10,10 +9,11 @@
 // Base class for all map projections.
 // 
 //*******************************************************************
-//  $Id: ossimMapProjection.cpp 10359 2007-01-23 19:35:38Z gpotts $
+//  $Id: ossimMapProjection.cpp 12107 2007-12-03 02:08:49Z gpotts $
 
 #include <iostream>
 #include <iomanip>
+#include <sstream>
 
 #include <ossim/projection/ossimMapProjection.h>
 #include <ossim/projection/ossimStatePlaneProjectionFactory.h>
@@ -45,7 +45,8 @@ ossimMapProjection::ossimMapProjection(const ossimEllipsoid& ellipsoid,
     theUlEastingNorthing(0, 0),
     theFalseEastingNorthing(0, 0),
     thePcsCode(0),
-    theElevationLookupFlag(true)
+    theElevationLookupFlag(true),
+    theModelTransformUnitType(OSSIM_UNIT_UNKNOWN)
 {
    theUlGpt = theOrigin;
    theUlEastingNorthing.makeNan();
@@ -63,10 +64,12 @@ ossimMapProjection::ossimMapProjection(const ossimMapProjection& src)
         theUlEastingNorthing(src.theUlEastingNorthing),
         theFalseEastingNorthing(src.theFalseEastingNorthing),
         thePcsCode(src.thePcsCode),
-        theElevationLookupFlag(true)
+        theElevationLookupFlag(true),
+        theModelTransform(src.theModelTransform),
+        theInverseModelTransform(src.theInverseModelTransform),
+        theModelTransformUnitType(src.theModelTransformUnitType)
 {
 }
-
 
 ossimMapProjection::~ossimMapProjection()
 {
@@ -184,8 +187,65 @@ void ossimMapProjection::update()
    // if the delta lat and lon per pixel is set then
    // check to see if the meters were set.
    //
-   if((theDegreesPerPixel.y != OSSIM_DBL_NAN)&&
-      (theDegreesPerPixel.x != OSSIM_DBL_NAN))
+   if(theModelTransformUnitType != OSSIM_UNIT_UNKNOWN)
+   {
+      const NEWMAT::Matrix& m = theModelTransform.getData();
+      ossimDpt ls1(0, 0);
+      ossimDpt ls2(1, 0);
+      ossimDpt ls3(0, 1);
+      ossimGpt wpt1;
+      ossimGpt wpt2;
+      lineSampleToWorld(ls1, wpt1);
+      ossimDpt mpt1(m[0][0]*ls1.x + m[0][1]*ls1.y + m[0][3],
+                    m[1][0]*ls1.x + m[1][1]*ls1.y + m[1][3]);
+      ossimDpt mpt2(m[0][0]*ls2.x + m[0][1]*ls2.y + m[0][3],
+                    m[1][0]*ls2.x + m[1][1]*ls2.y + m[1][3]);
+      ossimDpt mpt3(m[0][0]*ls3.x + m[0][1]*ls3.y + m[0][3],
+                    m[1][0]*ls3.x + m[1][1]*ls3.y + m[1][3]);
+      double len = 1.0;
+      double len2 = 1.0;
+      switch(theModelTransformUnitType)
+      {
+         case OSSIM_DEGREES:
+         case OSSIM_MINUTES:
+         case OSSIM_SECONDS:
+         case OSSIM_RADIANS:
+         {
+            ossimUnitConversionTool ut;
+            len  = (mpt1-mpt2).length();
+            len2  = (mpt1-mpt3).length();
+			ut.setValue((len+len2)*.5, theModelTransformUnitType);
+			len = ut.getValue(OSSIM_DEGREES);
+            theDegreesPerPixel = ossimDpt(len, len);
+			theUlGpt = wpt1;
+            computeMetersPerPixel(theDegreesPerPixel.y,
+                                  theDegreesPerPixel.x,
+                                  theMetersPerPixel);
+         break;
+         }
+         default:
+         {
+            ossimUnitConversionTool ut;
+            len  = (mpt1-mpt2).length();
+            len2  = (mpt1-mpt3).length();
+            ut.setValue(mpt1.x, theModelTransformUnitType);
+            mpt1.x = ut.getValue(OSSIM_METERS);
+            ut.setValue(mpt1.y, theModelTransformUnitType);
+            mpt1.y = ut.getValue(OSSIM_METERS);
+			ut.setValue((len+len2)*.5, theModelTransformUnitType);
+			len = ut.getValue(OSSIM_METERS);
+            theMetersPerPixel = ossimDpt(len, len);
+            theUlEastingNorthing = mpt1;
+            computeDegreesPerPixel(theOrigin,
+                                   theMetersPerPixel,
+                                   theDegreesPerPixel.y,
+                                   theDegreesPerPixel.x);
+            break;
+         }
+      }
+      theUlGpt = wpt1;
+   }
+   else if( theDegreesPerPixel.hasNans() == false )
    {
       if(theMetersPerPixel.hasNans())
       {
@@ -201,18 +261,17 @@ void ossimMapProjection::update()
                              theDegreesPerPixel.y,
                              theDegreesPerPixel.x);
    }
-
    // compute the tie points if not already computed
    //
-   if((theUlGpt.latd()==OSSIM_DBL_NAN)||
-      (theUlGpt.lond()==OSSIM_DBL_NAN))
+   if( (ossim::isnan(theUlGpt.latd())) ||
+       (ossim::isnan(theUlGpt.lond())) )
    {
       theUlGpt = theOrigin;
    }
    if(theUlEastingNorthing.hasNans())
    {
-      if((theUlGpt.latd()!=OSSIM_DBL_NAN)&&
-         (theUlGpt.lond()!=OSSIM_DBL_NAN))
+      if((ossim::isnan(theUlGpt.latd()) == false) &&
+         (ossim::isnan(theUlGpt.lond()) == false))
       {
          theUlEastingNorthing = forward(theUlGpt);
       }
@@ -317,7 +376,59 @@ void ossimMapProjection::worldToLineSample(const ossimGpt &worldPoint,
                                            ossimDpt&       lineSample)const
 {
 
-   if(isGeographic())
+   if(theModelTransformUnitType != OSSIM_UNIT_UNKNOWN)
+   {
+      ossimGpt gpt = worldPoint;
+      if(theDatum)
+      {
+         gpt.changeDatum(theDatum);
+      }
+      switch(theModelTransformUnitType)
+      {
+         case OSSIM_METERS:
+         case OSSIM_FEET:
+         case OSSIM_US_SURVEY_FEET:
+         {
+            ossimDpt modelPoint = forward(gpt);
+            ossimUnitConversionTool ut;
+            ut.setValue(modelPoint.x, OSSIM_METERS);
+            modelPoint.x = ut.getValue(theModelTransformUnitType);
+            ut.setValue(modelPoint.y, OSSIM_METERS);
+            modelPoint.y = ut.getValue(theModelTransformUnitType);
+            const NEWMAT::Matrix& m = theInverseModelTransform.getData();
+            
+            lineSample.x = m[0][0]*modelPoint.x + m[0][1]*modelPoint.y + m[0][3];
+            lineSample.y = m[1][0]*modelPoint.x + m[1][1]*modelPoint.y + m[1][3];
+            
+            return;
+         }
+         case OSSIM_DEGREES:
+         case OSSIM_RADIANS:
+         case OSSIM_MINUTES:
+         case OSSIM_SECONDS:
+         {
+            ossimUnitConversionTool ut;
+            ossimDpt modelPoint;
+            modelPoint.lat = gpt.latd();
+            modelPoint.lon = gpt.lond();
+            ut.setValue(modelPoint.lat, OSSIM_DEGREES);
+            modelPoint.lat = ut.getValue(theModelTransformUnitType);
+            ut.setValue(modelPoint.lon, OSSIM_DEGREES);
+            modelPoint.lon = ut.getValue(theModelTransformUnitType);
+            const NEWMAT::Matrix& m = theInverseModelTransform.getData();
+            
+            lineSample.x = m[0][0]*modelPoint.x + m[0][1]*modelPoint.y + m[0][3];
+            lineSample.y = m[1][0]*modelPoint.x + m[1][1]*modelPoint.y + m[1][3];
+            return;
+         }
+         default:
+         {
+            lineSample.makeNan();
+            return;
+         }
+      }
+   }
+   else if(isGeographic())
    {
       ossimGpt gpt = worldPoint;
       
@@ -416,7 +527,50 @@ void ossimMapProjection::lineSampleHeightToWorld(const ossimDpt &lineSample,
       gpt.makeNan();
       return;
    }
-   if(isGeographic())
+   if(theModelTransformUnitType != OSSIM_UNIT_UNKNOWN)
+   {
+      const NEWMAT::Matrix& m = theModelTransform.getData();
+      // map transforms can only be 2-D for now so we will look at
+      // the first 2 rows only
+      ossimDpt modelPoint(m[0][0]*lineSample.x + m[0][1]*lineSample.y + m[0][3],
+                          m[1][0]*lineSample.x + m[1][1]*lineSample.y + m[1][3]);
+      switch(theModelTransformUnitType)
+      {
+         case OSSIM_DEGREES:
+         {
+            gpt.latd(modelPoint.lat);
+            gpt.lond(modelPoint.lon);
+            gpt.datum(theDatum);
+            return;
+         }
+         case OSSIM_MINUTES:
+         case OSSIM_SECONDS:
+         case OSSIM_RADIANS:
+         {
+            ossimUnitConversionTool ut;
+            ut.setValue(modelPoint.x, theModelTransformUnitType);
+            modelPoint.x = ut.getValue(OSSIM_DEGREES);
+            ut.setValue(modelPoint.y, theModelTransformUnitType);
+            modelPoint.y = ut.getValue(OSSIM_DEGREES);
+            gpt.latd(modelPoint.lat);
+            gpt.lond(modelPoint.lon);
+            gpt.datum(theDatum);
+            return;
+         }
+         default:
+         {
+            ossimUnitConversionTool ut;
+            ut.setValue(modelPoint.x, theModelTransformUnitType);
+            modelPoint.x = ut.getValue(OSSIM_METERS);
+            ut.setValue(modelPoint.y, theModelTransformUnitType);
+            modelPoint.y = ut.getValue(OSSIM_METERS);
+            gpt = inverse(modelPoint);
+            break;
+         }
+      }
+      gpt.datum(theDatum);
+   }
+   else if(isGeographic())
    {
       double lat = theUlGpt.latd() - (lineSample.line * theDegreesPerPixel.y);
       double lon = theUlGpt.lond() + (lineSample.samp * theDegreesPerPixel.x);
@@ -481,7 +635,7 @@ void ossimMapProjection::lineSampleHeightToWorld(const ossimDpt &lineSample,
 void ossimMapProjection::lineSampleToWorld (const ossimDpt& lineSampPt,
                                             ossimGpt&       worldPt) const
 {
-   double elev = OSSIM_DBL_NAN;
+   double elev = ossim::nan();
 
 //    if(theElevationLookupFlag)
 //    {
@@ -680,6 +834,29 @@ bool ossimMapProjection::saveState(ossimKeywordlist& kwl, const char* prefix) co
            ossimKeywordNames::ELEVATION_LOOKUP_FLAG_KW,
            ossimString::toString(theElevationLookupFlag),
            true);
+
+   if(theModelTransformUnitType != OSSIM_UNIT_UNKNOWN)
+   {
+      const NEWMAT::Matrix& m = theModelTransform.getData();
+      ostringstream out;
+      ossim_uint32 row, col;
+      for(row = 0; row < 4; ++row)
+      {
+         for(col = 0; col < 4; ++col)
+         {
+            out << std::setprecision(20) << m[row][col] << " ";
+         }
+      }
+      kwl.add(prefix,
+              ossimKeywordNames::IMAGE_MODEL_TRANSFORM_MATRIX_KW,
+              out.str().c_str(),
+              true);
+      kwl.add(prefix,
+              ossimKeywordNames::IMAGE_MODEL_TRANSFORM_UNIT_KW,
+              ossimUnitTypeLut::instance()->getEntryString(theModelTransformUnitType),
+              true);
+   }
+   
    return true;
 }
 
@@ -690,35 +867,6 @@ bool ossimMapProjection::saveState(ossimKeywordlist& kwl, const char* prefix) co
 bool ossimMapProjection::loadState(const ossimKeywordlist& kwl, const char* prefix)
 {
    ossimProjection::loadState(kwl, prefix);
-
-#if 0 /* This section was looked up but never used... */
-   const char* scale_x  = kwl.find(prefix, ossimKeywordNames::SCALE_X_KW);
-   const char* scale_y  = kwl.find(prefix, ossimKeywordNames::SCALE_Y_KW);
-   const char* trans_x  = kwl.find(prefix, ossimKeywordNames::TRANSLATION_X_KW);
-   const char* trans_y  = kwl.find(prefix, ossimKeywordNames::TRANSLATION_Y_KW);
-   const char* rotation = kwl.find(prefix, ossimKeywordNames::ROTATION_KW);
-   const char* pcs_code = kwl.find(prefix, ossimKeywordNames::PCS_CODE_KW);
-
-   ossimDpt scale(1.0, 1.0);
-   ossimDpt trans(0.0, 0.0);
-   double   rot = 0.0;
-
-   if(scale_x)
-      scale.x = ossimString(scale_x).toFloat64();
-
-   if(scale_y)
-      scale.y = ossimString(scale_y).toFloat64();
-
-   if(trans_x)
-      trans.x = ossimString(trans_x).toFloat64();
-
-   if(trans_y)
-      trans.y = ossimString(trans_y).toFloat64();
-
-   if(rotation)
-      rot = ossimString(rotation).toFloat64();
-#endif
-
 
    const char* elevLookupFlag = kwl.find(prefix, ossimKeywordNames::ELEVATION_LOOKUP_FLAG_KW);
    if(elevLookupFlag)
@@ -854,6 +1002,10 @@ bool ossimMapProjection::loadState(const ossimKeywordlist& kwl, const char* pref
 
    // Get the tie point.
    theUlGpt.makeNan();
+
+    // Since this won't be picked up from keywords set to 0 to keep nan out.
+   theUlGpt.hgt = 0.0;
+   
    theUlEastingNorthing.makeNan();
    lookup = kwl.find(prefix, ossimKeywordNames::TIE_POINT_UNITS_KW);
    if (lookup)
@@ -935,7 +1087,7 @@ bool ossimMapProjection::loadState(const ossimKeywordlist& kwl, const char* pref
          theUlGpt.lond(ossimString(lookup).toFloat64());
       }
    }
-
+   
    // Get the false easting northing.
    theFalseEastingNorthing.x = 0.0;
    theFalseEastingNorthing.y = 0.0;
@@ -1031,8 +1183,7 @@ bool ossimMapProjection::loadState(const ossimKeywordlist& kwl, const char* pref
       pixelType.downcase();
       if(pixelType.contains("area"))
       {
-         if((theMetersPerPixel.x != OSSIM_DBL_NAN)&&
-            (theMetersPerPixel.y != OSSIM_DBL_NAN))
+         if( theMetersPerPixel.hasNans() == false)
          {
             if(!theUlEastingNorthing.hasNans())
             {
@@ -1040,15 +1191,47 @@ bool ossimMapProjection::loadState(const ossimKeywordlist& kwl, const char* pref
                theUlEastingNorthing.y -= (theMetersPerPixel.y*0.5);
             }
          }
-         if((theDegreesPerPixel.y != OSSIM_DBL_NAN)&&
-            (theDegreesPerPixel.x != OSSIM_DBL_NAN))
+         if(theDegreesPerPixel.hasNans() == false)
          {
             theUlGpt.latd( theUlGpt.latd() - (theDegreesPerPixel.y*0.5) );
             theUlGpt.lond( theUlGpt.lond() + (theDegreesPerPixel.x*0.5) );
          }
       }
    }
-
+   theModelTransformUnitType = OSSIM_UNIT_UNKNOWN;
+   const char* modelTransform = kwl.find(prefix, ossimKeywordNames::IMAGE_MODEL_TRANSFORM_MATRIX_KW);
+   const char* modelTransformUnit = kwl.find(prefix, ossimKeywordNames::IMAGE_MODEL_TRANSFORM_UNIT_KW);
+   if(modelTransform&&modelTransformUnit) // row ordered 4x4 matrix.  Should be 16 values
+   {
+      
+      NEWMAT::Matrix& m = theModelTransform.getData();
+      istringstream in(modelTransform);
+      ossim_uint32 row, col;
+      for(row = 0; row < 4; ++row)
+      {
+         for(col = 0; col < 4; ++col)
+         {
+            in >> m[row][col];
+         }
+      }
+      // make sure these have the identity and all unused are 0.0
+      m[2][2] = 1.0;
+      m[2][0] = 0.0;
+      m[2][1] = 0.0;
+      m[2][3] = 0.0;
+      m[3][3] = 1.0;
+      m[3][2] = 0.0;
+      m[3][1] = 0.0;
+      m[3][0] = 0.0;
+      
+      if(!in.fail())
+      {
+         theInverseModelTransform = theModelTransform;
+         theInverseModelTransform.i();
+         theModelTransformUnitType = static_cast<ossimUnitType>(ossimUnitTypeLut::instance()->
+                                                                getEntryNumber(modelTransformUnit));
+      }
+  }
    //---
    // Set the datum of the origin and tie point.
    // Use method that does NOT perform a shift.
@@ -1074,6 +1257,7 @@ bool ossimMapProjection::loadState(const ossimKeywordlist& kwl, const char* pref
          theMetersPerPixel.y = 1.0;
       }
    }
+
    return true;
 }
 
@@ -1099,9 +1283,9 @@ std::ostream& ossimMapProjection::print(std::ostream& out) const
        << "\n" << ossimKeywordNames::DATUM_KW              << ":  "
        << (theDatum?theDatum->code().c_str():"unknown")
        << "\n" << ossimKeywordNames::METERS_PER_PIXEL_X_KW << ":  "
-       << (ossimIsNan(theMetersPerPixel.x)?ossimString("nan"):ossimString::toString(theMetersPerPixel.x, 15))
+       << ((ossim::isnan(theMetersPerPixel.x))?ossimString("nan"):ossimString::toString(theMetersPerPixel.x, 15))
        << "\n" << ossimKeywordNames::METERS_PER_PIXEL_Y_KW << ":  "
-       << (ossimIsNan(theMetersPerPixel.y)?ossimString("nan"):ossimString::toString(theMetersPerPixel.y, 15))
+       << ((ossim::isnan(theMetersPerPixel.y))?ossimString("nan"):ossimString::toString(theMetersPerPixel.y, 15))
        << "\n" << ossimKeywordNames::FALSE_EASTING_NORTHING_KW << ": "
        << theFalseEastingNorthing.toString().c_str()
        << "\n" << ossimKeywordNames::FALSE_EASTING_NORTHING_UNITS_KW << ": "
@@ -1267,12 +1451,12 @@ void ossimMapProjection::snapTiePointTo(ossim_float64 multiple,
    {
       // Snap the latitude.
       ossim_float64 d = theUlGpt.latd();
-      d = irint(d / convertedMultiple) * convertedMultiple;
+      d = ossim::round<int>(d / convertedMultiple) * convertedMultiple;
       theUlGpt.latd(d);
 
       // Snap the longitude.
       d = theUlGpt.lond();
-      d = irint(d / convertedMultiple) * convertedMultiple;
+      d = ossim::round<int>(d / convertedMultiple) * convertedMultiple;
       theUlGpt.lond(d);
 
       // Adjust the stored easting / northing.
@@ -1282,12 +1466,12 @@ void ossimMapProjection::snapTiePointTo(ossim_float64 multiple,
    {
       // Snap the easting.
       ossim_float64 d = theUlEastingNorthing.x - getFalseEasting();
-      d = irint(d / convertedMultiple) * convertedMultiple;
+      d = ossim::round<int>(d / convertedMultiple) * convertedMultiple;
       theUlEastingNorthing.x = d + getFalseEasting();
 
       // Snap the northing.
       d = theUlEastingNorthing.y - getFalseNorthing();
-      d = irint(d / convertedMultiple) * convertedMultiple;
+      d = ossim::round<int>(d / convertedMultiple) * convertedMultiple;
       theUlEastingNorthing.y = d + getFalseNorthing();
 
       // Adjust the stored upper left ground point.

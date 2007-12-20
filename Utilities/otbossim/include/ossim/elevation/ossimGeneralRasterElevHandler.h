@@ -8,7 +8,7 @@
 // 
 //
 //----------------------------------------------------------------------------
-// $Id: ossimGeneralRasterElevHandler.h 10043 2006-12-07 16:09:34Z dburken $
+// $Id: ossimGeneralRasterElevHandler.h 11500 2007-08-06 09:23:13Z dburken $
 #ifndef ossimGeneralRasterElevHandler_HEADER
 #define ossimGeneralRasterElevHandler_HEADER
 #include <list>
@@ -26,8 +26,49 @@
 class OSSIM_DLL ossimGeneralRasterElevHandler : public ossimElevCellHandler
 {
 public:
-   /** Constructor that takes a file name. */
+      class GeneralRasterInfo
+   {
+   public:
+      GeneralRasterInfo()
+         :thePostSpacing(0.0,0.0),
+         theNumberOfSamples(0),
+         theNumberOfLines(0),
+         theNullHeightValue(ossim::nan()),
+         theScalarType(OSSIM_SCALAR_UNKNOWN),
+         theBytesPerRawLine(0),
+         theDatum(0)
+      {
+      }
+      GeneralRasterInfo(const  ossimGeneralRasterElevHandler::GeneralRasterInfo& src)
+         :theFilename(src.theFilename),
+         theBounds(src.theBounds),
+         thePostSpacing(src.thePostSpacing),
+         theUlGpt(src.theUlGpt),
+         theLrGpt(src.theLrGpt),
+         theNumberOfSamples(src.theNumberOfSamples),
+         theNumberOfLines(src.theNumberOfLines),
+         theNullHeightValue(src.theNullHeightValue),
+         theByteOrder(src.theByteOrder),
+         theScalarType(src.theScalarType),
+         theBytesPerRawLine(src.theBytesPerRawLine),
+         theDatum(src.theDatum)
+      {
+      }
+      ossimFilename     theFilename;
+      ossimDrect        theBounds;
+      ossimDpt          thePostSpacing;
+      ossimGpt          theUlGpt;
+      ossimGpt          theLrGpt;
+      ossim_int32       theNumberOfSamples;
+      ossim_int32       theNumberOfLines;
+      ossim_float64     theNullHeightValue;
+      ossimByteOrder    theByteOrder;
+      ossimScalarType   theScalarType;
+      ossim_uint32      theBytesPerRawLine;
+      const ossimDatum* theDatum; 
+   };
    ossimGeneralRasterElevHandler(const ossimFilename& file="");
+   ossimGeneralRasterElevHandler(const ossimGeneralRasterElevHandler::GeneralRasterInfo& generalRasterInfo);
    ossimGeneralRasterElevHandler(const ossimGeneralRasterElevHandler& rhs);
    const ossimGeneralRasterElevHandler& operator=(const ossimGeneralRasterElevHandler& rhs);
 
@@ -35,7 +76,6 @@ public:
    virtual ~ossimGeneralRasterElevHandler();
    virtual ossimObject* dup()const;
 
-   double getNullHeightValue()const;
    /**
     * METHOD: getHeightAboveMSL
     * Height access methods.
@@ -70,6 +110,7 @@ public:
 
    virtual bool setFilename(const ossimFilename& file);
 
+   
    /**
     * This method does not really fit the handler since this handle a
     * directory not a cell that could have holes in it.  So users looking for
@@ -86,48 +127,18 @@ public:
     * @return true if coverage is found false if not.
     */
    virtual bool pointHasCoverage(const ossimGpt& gpt) const;
+
+   const ossimGeneralRasterElevHandler::GeneralRasterInfo& generalRasterInfo()const;
    
 private:
-   class BoundingRectInfo
-   {
-   public:
-      BoundingRectInfo()
-         :theScalarType(OSSIM_SCALAR_UNKNOWN),
-         theBytesPerRawLine(0)
-      {
-      }
-      ossimFilename     theFilename;
-      mutable ossimRefPtr<ossimIStream> theInputStream;
-      ossimDrect        theBounds;
-      ossimDpt          thePostSpacing;
-      ossimGpt          theUlGpt;
-      ossimGpt          theLrGpt;
-      ossim_int32       theNumberOfSamples;
-      ossim_int32       theNumberOfLines;
-      ossim_float64     theNullHeightValue;
-      ossimByteOrder    theByteOrder;
-      ossimScalarType   theScalarType;
-      ossim_uint32      theBytesPerRawLine;
-      const ossimDatum* theDatum; 
-   };
-   typedef std::vector<ossimGeneralRasterElevHandler::BoundingRectInfo> BoundingRectListType;
-   // Disallow operator= and copy constrution...
    template <class T>
    double getHeightAboveMSLTemplate(T dummy,
-                                    const ossimGeneralRasterElevHandler::BoundingRectInfo& info,
+                                    const ossimGeneralRasterElevHandler::GeneralRasterInfo& info,
                                     const ossimGpt& gpt);
 
-   void initializeList(const ossimFilename& file);
-   bool initializeInfo(ossimGeneralRasterElevHandler::BoundingRectInfo& info,
-                       const ossimFilename& file);
-   void addInfo(const BoundingRectInfo& info);
-   bool open(ossim_uint32 idx);
    
-
-   BoundingRectListType  theBoundingRectInfoList;
-   ossimDrect            theBoundingRect;
-/*    mutable std::ifstream theFileStr;  */
-   mutable ossim_int32   theCurrentIdx;
+   ossimGeneralRasterElevHandler::GeneralRasterInfo theGeneralRasterInfo;
+   mutable ossimRefPtr<ossimIFStream> theInputStream;
 TYPE_DATA
 };
 

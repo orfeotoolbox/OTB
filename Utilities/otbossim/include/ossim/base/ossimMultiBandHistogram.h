@@ -7,17 +7,19 @@
 // Description: 
 //
 //*******************************************************************
-//  $Id: ossimMultiBandHistogram.h 9968 2006-11-29 14:01:53Z gpotts $
+//  $Id: ossimMultiBandHistogram.h 11724 2007-09-13 19:28:07Z gpotts $
 #ifndef ossimMultiBandHistogram_HEADER
 #define ossimMultiBandHistogram_HEADER
 #include <vector>
-using namespace std;
 #include <ossim/base/ossimFilename.h>
+#include <ossim/base/ossimRefPtr.h>
+#include <ossim/base/ossimXmlNode.h>
+#include <ossim/base/ossimReferenced.h>
 
 class OSSIMDLLEXPORT ossimHistogram;
 class OSSIMDLLEXPORT ossimKeywordlist;
 
-class OSSIMDLLEXPORT ossimMultiBandHistogram
+class OSSIMDLLEXPORT ossimMultiBandHistogram : public ossimReferenced
 {
 public:
    ossimMultiBandHistogram();
@@ -37,26 +39,30 @@ public:
 
    void create(long numberOfBands);
    void setBinCount(double binNumber, double count);
-   ossimHistogram* getHistogram(long band);
+   ossimRefPtr<ossimHistogram> getHistogram(long band);
+   const ossimRefPtr<ossimHistogram> getHistogram(long band)const;
 
-   ossimMultiBandHistogram* createAccumulationLessThanEqual()const;
-   ossimMultiBandHistogram* createAccumulationGreaterThanEqual()const;
+   ossimRefPtr<ossimMultiBandHistogram> createAccumulationLessThanEqual()const;
+   ossimRefPtr<ossimMultiBandHistogram> createAccumulationGreaterThanEqual()const;
    /*!
     * Imports a text file that has histogram data
     */
    virtual bool importHistogram(const ossimFilename& inputFile);
-   virtual bool importHistogram(istream& in);
+   virtual bool importHistogram(std::istream& in);
    virtual bool loadState(const ossimKeywordlist& kwl,
                           const char* prefix = 0);
    virtual bool saveState(ossimKeywordlist& kwl,
                           const char* prefix = 0)const;
+   virtual bool saveState(ossimRefPtr<ossimXmlNode> xmlNode)const;
+   virtual bool loadState(const ossimRefPtr<ossimXmlNode> xmlNode);
+   
 protected:
    class  ossimProprietaryHeaderInformation
    {
    public:
       ossimProprietaryHeaderInformation(){clear();}
 
-      bool parseStream(istream& in);
+      bool parseStream(std::istream& in);
 
       ossim_uint32 getNumberOfBands()
          {
@@ -76,11 +82,11 @@ protected:
    /*!
     * Holds the histograms for each band
     */
-   vector<ossimHistogram*> theHistogramList;
+   std::vector<ossimRefPtr<ossimHistogram> > theHistogramList;
 
    void deleteHistograms();
 
-   bool parseProprietaryHistogram(istream& in);
+   bool parseProprietaryHistogram(std::istream& in);
                              
 };
 

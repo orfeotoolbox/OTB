@@ -6,7 +6,7 @@
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimDate.h 10358 2007-01-23 17:56:36Z gpotts $
+// $Id: ossimDate.h 12087 2007-11-29 15:13:58Z gpotts $
 #ifndef ossimDate_HEADER
 #define ossimDate_HEADER
 #include <ctime>
@@ -14,17 +14,23 @@
 #include <ossim/base/ossimConstants.h>
 #include <ossim/base/ossimXmlNode.h>
 
-class OSSIMDLLEXPORT ossimLocalTm : public std::tm
+class OSSIM_DLL ossimLocalTm : public std::tm
 {
 public:
    friend  std::ostream& operator<< (std::ostream& out, const ossimLocalTm& src);
-   friend int operator== (const ossimLocalTm& t1, const ossimLocalTm& src);
-   friend int operator!= (const ossimLocalTm& t1, const ossimLocalTm& src);
-   friend int operator<  (const ossimLocalTm& t1, const ossimLocalTm& src);
-   friend int operator<= (const ossimLocalTm& t1, const ossimLocalTm& src);
-   friend int operator>  (const ossimLocalTm& t1, const ossimLocalTm& src);
-   friend int operator>=  (const ossimLocalTm& t1, const ossimLocalTm& src);
-
+   friend OSSIM_DLL int operator== (const ossimLocalTm& t1,
+                                    const ossimLocalTm& src);
+   friend OSSIM_DLL int operator!= (const ossimLocalTm& t1,
+                                    const ossimLocalTm& src);
+   friend OSSIM_DLL int operator<  (const ossimLocalTm& t1,
+                                    const ossimLocalTm& src);
+   friend OSSIM_DLL int operator<= (const ossimLocalTm& t1,
+                                    const ossimLocalTm& src);
+   friend OSSIM_DLL int operator>  (const ossimLocalTm& t1,
+                                    const ossimLocalTm& src);
+   friend OSSIM_DLL int operator>= (const ossimLocalTm& t1,
+                                    const ossimLocalTm& src);
+   
    ossimLocalTm (time_t t=0);     // Set to time, 0 is magic for 'now'
    ossimLocalTm (tm const & t); // Copy constructor
    
@@ -158,8 +164,24 @@ public:
     ossimLocalTm& setMin(int m);
     ossimLocalTm& setSec(int s);
     ossimLocalTm& setFractionalSecond(double fractS);
-    time_t getTicks()const;
 
+    /**
+     * getTicks() will call getEpoc.  This is te number of microseconds passed
+     * since (00:00:00 UTC, January 1, 1970)
+     */ 
+    time_t getTicks()const;
+    time_t getEpoc()const;
+    
+    /**
+     * Will not adjust for timezone.  The passed in value is based on seconds.
+     */ 
+    void setTimeNoAdjustmentGivenEpoc(time_t ticks);
+
+    /**
+     * Will adjust for timezone. The passed in value is based on seconds.
+     */ 
+    void setTimeGivenEpoc(time_t ticks);
+    
     ossimRefPtr<ossimXmlNode> saveXml()const;
     bool loadXml(ossimRefPtr<ossimXmlNode> dateNode);
     
@@ -181,43 +203,29 @@ public:
 };
 
 
-class OSSIMDLLEXPORT ossimDate : public ossimLocalTm
+class OSSIM_DLL ossimDate : public ossimLocalTm
 {
-  public:
+public:
    friend std::ostream& operator<<(std::ostream& out, const ossimDate& src);
-
-   ossimDate(int datefmt =ossimLocalTm::datefmt)
-      :ossimLocalTm(0), _fmt(datefmt)
-      {}
-   ossimDate (ossimLocalTm const & t,
-              int dtfmt =ossimLocalTm::datefmt)
-      : ossimLocalTm (t), _fmt(dtfmt)
-      {}
-    ossimDate (time_t t, int dtfmt =ossimLocalTm::datefmt)
-        : ossimLocalTm (t), _fmt(dtfmt)
-       {}
-   ossimDate(int month, int day, int year,int dtfmt=ossimLocalTm::datefmt)
-         :ossimLocalTm (0), _fmt(dtfmt)
-      {
-         setMonth(month);
-         setDay(day);
-         setYear(year);
-      }
-    int fmt(int f)                 {   return _fmt = f;    }
-    int fmt(void) const            {   return _fmt;        }
-
-    std::ostream & print (std::ostream & os) const;
-
    
-  private:
-
-    int _fmt;
-
+   ossimDate(int datefmt =ossimLocalTm::datefmt);
+   ossimDate (ossimLocalTm const & t,
+              int dtfmt =ossimLocalTm::datefmt);
+   ossimDate (time_t t, int dtfmt =ossimLocalTm::datefmt);
+   ossimDate(int month, int day, int year,int dtfmt=ossimLocalTm::datefmt);
+   
+   int fmt(int f);
+   int fmt(void) const;
+   
+   std::ostream & print (std::ostream & os) const;
+   
+private:
+   int _fmt;
 };
 
-class OSSIMDLLEXPORT ossimTime :public ossimLocalTm
+class OSSIM_DLL ossimTime :public ossimLocalTm
 {
- public:
+public:
    friend std::ostream& operator <<(std::ostream& out, const ossimTime& src);
    ossimTime(int tmfmt =ossimLocalTm::timefmt);
    ossimTime (ossimTime const & t,
@@ -230,6 +238,6 @@ class OSSIMDLLEXPORT ossimTime :public ossimLocalTm
    std::ostream& print (std::ostream & os) const;
    
 private:
-      int _fmt;   
+   int _fmt;   
 };
 #endif

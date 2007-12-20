@@ -7,7 +7,7 @@
 // Description:
 //
 //*******************************************************************
-//  $Id: ossimGeoidNgsHeader.h 9968 2006-11-29 14:01:53Z gpotts $
+//  $Id: ossimGeoidNgsHeader.h 11496 2007-08-06 09:18:28Z dburken $
 #ifndef ossimGeoidNgsHeader_HEADER
 #define ossimGeoidNgsHeader_HEADER
 #include <ossim/base/ossimFilename.h>
@@ -39,8 +39,9 @@ public:
    int headerSize()const{return 44;}
    int dataTypeSize()const{return theDataType==1?4:0;}
 
-   double getHeightDelta(double lat,
-                         double lon)const;
+   /** @return Height delta or ossim::nan() if not found. */
+   double getHeightDelta(double lat, double lon)const;
+   
 private:
    ossimFilename theFilename;
    ossimByteOrder theByteOrder;

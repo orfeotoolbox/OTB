@@ -1,9 +1,6 @@
 //*******************************************************************
-// Copyright (C) 2000 ImageLinks Inc.
 //
-// License:  LGPL
-//
-// See LICENSE.txt file in the top level directory for more details.
+// License:  See top level LICENSE.txt file.
 //
 // Author:  David Burken
 //
@@ -12,7 +9,7 @@
 // Contains class declaration for ossimScalarTypeLut.
 // 
 //*******************************************************************
-//  $Id: ossimScalarTypeLut.h 9094 2006-06-13 19:12:40Z dburken $
+//  $Id: ossimScalarTypeLut.h 11914 2007-10-28 18:28:18Z dburken $
 
 #ifndef ossimScalarTypeLut_HEADER
 #define ossimScalarTypeLut_HEADER

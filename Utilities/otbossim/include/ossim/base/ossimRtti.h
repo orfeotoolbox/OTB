@@ -124,11 +124,11 @@ class OSSIMDLLEXPORT RTTItypeid
 		{							// Main class for RTTI interface.
 		public:
 
-		                    RTTItypeid(const RTTITypeinfo* p):  id(p)  {}
+		                    RTTItypeid(const RTTITypeinfo* p):  theId(p)  {}
 				    RTTItypeid(); 			 
 		   int 		    operator==(RTTItypeid) const;
 		   int 		    operator!=(RTTItypeid) const;
-		   const RTTITypeinfo* get_info() const    	 { return id; }
+		   const RTTITypeinfo* get_info() const    	 { return theId; }
 		   int 		    can_cast(RTTItypeid) const;	 	// 1 if the arg can be cast to this, else 0
 		   const char* 	    getname() const;
 		   int 		    num_subclasses() const;		// Return # subclasses of this
@@ -145,7 +145,7 @@ class OSSIMDLLEXPORT RTTItypeid
                    
 	        protected:
 
-		    const RTTITypeinfo* id;				// RTTItypeid implementation (the only data-member)
+		    const RTTITypeinfo* theId;				// RTTItypeid implementation (the only data-member)
 		};
 
 
@@ -237,60 +237,60 @@ inline RTTItypeid RTTItypeid::null_type()
    return &(RTTITypeinfo::null_type);
 }
 
-inline RTTItypeid::RTTItypeid(): id(null_type().id)   
+inline RTTItypeid::RTTItypeid(): theId(null_type().theId)   
 {
 }
 
 inline int RTTItypeid::operator==(RTTItypeid i) const
 { 
-  return id->same(i.id); 
+  return theId->same(i.theId); 
 }
 
 inline int RTTItypeid::operator!=(RTTItypeid i) const
 {
-  return !(id->same(i.id));
+  return !(theId->same(i.theId));
 }
 
 inline int RTTItypeid::can_cast(RTTItypeid i) const
 {
-  return id->can_cast(i.id);
+  return theId->can_cast(i.theId);
 }
 
 
 inline const char* RTTItypeid::getname() const
 {
-  return id->getname();
+  return theId->getname();
 }
 
 inline int RTTItypeid::num_subclasses() const
 {
-  return id->num_subclasses();
+  return theId->num_subclasses();
 }
 
 inline RTTItypeid RTTItypeid::subclass(int i) const
 {
-  return id->subclass(i);
+  return theId->subclass(i);
 }
 
 inline int RTTItypeid::num_baseclasses() const
 {
-  int i; for(i=0;id->b[i];i++);
+  int i; for(i=0;theId->b[i];i++);
   return i;
 }
 
 inline RTTItypeid RTTItypeid::baseclass(int i) const
 {
-  return id->b[i];
+  return theId->b[i];
 }
 
 inline void* RTTItypeid::create(RTTItypeid t) const
 {
-  return id->create(id,t.getname());
+   return theId->create(theId,t.getname());
 }
 
 inline int RTTItypeid::can_create() const
 {
-  return id->can_create();
+  return theId->can_create();
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -299,10 +299,10 @@ inline int RTTItypeid::can_create() const
 inline RTTIdyntypeid::RTTIdyntypeid(const char* c) : RTTItypeid(new RTTITypeinfo(c,a,0,0)) { }   //create a dummy RTTITypeinfo
 inline RTTIdyntypeid::~RTTIdyntypeid()
 {
-   if(id)
+   if(theId)
    {
-      delete id;
-      id = 0;
+      delete theId;
+      theId = 0;
    }
 }				    //delete the dummy RTTITypeinfo
 		

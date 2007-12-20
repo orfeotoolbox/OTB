@@ -1,5 +1,4 @@
 //*******************************************************************
-// Copyright (C) 2000 ImageLinks Inc.
 //
 // License:  See top level LICENSE.txt file.
 //
@@ -11,7 +10,7 @@
 // Used to represent an double point containing an x and y data member.
 // 
 //*******************************************************************
-//  $Id: ossimDpt.h 9094 2006-06-13 19:12:40Z dburken $
+//  $Id: ossimDpt.h 11398 2007-07-26 13:29:58Z dburken $
 #ifndef ossimDpt_HEADER
 #define ossimDpt_HEADER
 
@@ -19,13 +18,13 @@
 #include <string>
 #include <ossim/base/ossimConstants.h>
 #include <ossim/base/ossimCommon.h>
+#include <ossim/base/ossimString.h>
 
 // Forward class declarations.
 class OSSIMDLLEXPORT ossimIpt;
 class OSSIMDLLEXPORT ossimFpt;
 class OSSIMDLLEXPORT ossimDpt3d;
 class OSSIMDLLEXPORT ossimGpt;
-class OSSIMDLLEXPORT ossimString;
 
 class OSSIMDLLEXPORT ossimDpt
 {
@@ -56,22 +55,23 @@ public:
    const ossimDpt& operator=(const ossimGpt&); // assigns lat, lon only
 
    bool operator==(const ossimDpt& pt) const
-      { return ( (x == pt.x) && (y == pt.y) ); } 
+   { return ( (x == pt.x) && (y == pt.y) ); } 
 
    bool operator!=(const ossimDpt& pt) const
-      { return ( (x != pt.x) || (y != pt.y) ); }
+   { return ( (x != pt.x) || (y != pt.y) ); }
 
-   void makeNan(){x = OSSIM_DBL_NAN; y=OSSIM_DBL_NAN;}
+   void makeNan(){x = ossim::nan(); y=ossim::nan();}
    
    bool hasNans()const
-      {
-         return (ossimIsNan(x) || ossimIsNan(y));
-      }
+   {
+      return (ossim::isnan(x) || ossim::isnan(y));
+   }
 
    bool isNan()const
-      {
-         return (ossimIsNan(x) && ossimIsNan(y));
-      }
+   {
+      return (ossim::isnan(x) && ossim::isnan(y));
+   }
+
    /*!
     * METHOD: length()
     * Returns the RSS of the components.

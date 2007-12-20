@@ -1,12 +1,11 @@
 //*******************************************************************
-// Copyright (C) 2000 ImageLinks Inc. 
 //
 // License:  See LICENSE.txt file in the top level directory.
 //
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimAnnotationEllipseObject.cpp 9094 2006-06-13 19:12:40Z dburken $
+// $Id: ossimAnnotationEllipseObject.cpp 11955 2007-10-31 16:10:22Z gpotts $
 #include <ossim/imaging/ossimAnnotationEllipseObject.h>
 #include <ossim/imaging/ossimRgbImage.h>
 #include <ossim/base/ossimCommon.h>
@@ -18,6 +17,7 @@ RTTI_DEF1(ossimAnnotationEllipseObject,
 ossimAnnotationEllipseObject::ossimAnnotationEllipseObject(
    const ossimDpt& center,
    const ossimDpt& widthHeight,
+   ossim_float64 azimuthInDegrees,
    bool enableFill,
    ossim_uint8 r,
    ossim_uint8 g,
@@ -26,7 +26,9 @@ ossimAnnotationEllipseObject::ossimAnnotationEllipseObject(
    : ossimAnnotationObject(r, g, b, thickness),
      theCenter(center),
      theWidthHeight(widthHeight),
+     theAzimuthInDegrees(azimuthInDegrees),
      theFillEnabled(enableFill),
+     theDrawAxesFlag(false),
      theBoundingRect(0,0,0,0)
 {
    computeBoundingRect();
@@ -37,7 +39,9 @@ ossimAnnotationEllipseObject::ossimAnnotationEllipseObject(
    :
    theCenter(rhs.theCenter),
    theWidthHeight(rhs.theWidthHeight),
+   theAzimuthInDegrees(rhs.theAzimuthInDegrees),
    theFillEnabled(rhs.theFillEnabled),
+   theDrawAxesFlag(rhs.theDrawAxesFlag),
    theBoundingRect(rhs.theBoundingRect)
 {
 }
@@ -71,33 +75,20 @@ void ossimAnnotationEllipseObject::draw(ossimRgbImage& anImage)const
    {
       if(theFillEnabled)
       {
-//         anImage.drawFilledArc(irint(theCenter.x),
-//                               irint(theCenter.y),
-//                               irint(theWidthHeight.x),
-//                               irint(theWidthHeight.y),
-//                               0,
-//                               360);
-         anImage.drawFilledArc((int)(theCenter.x),
-                               (int)(theCenter.y),
-                               (int)(theWidthHeight.x),
-                               (int)(theWidthHeight.y),
-                               0,
-                               360);
+         anImage.drawFilledEllipse((int)(theCenter.x),
+                                   (int)(theCenter.y),
+                                   (int)(theWidthHeight.x),
+                                   (int)(theWidthHeight.y),
+                                   theAzimuthInDegrees*RAD_PER_DEG);
       }
       else
       {
-//         anImage.drawArc(irint(theCenter.x),
-//                         irint(theCenter.y),
-//                         irint(theWidthHeight.x),
-//                         irint(theWidthHeight.y),
-//                         0,
-//                         360);
-         anImage.drawArc((int)(theCenter.x),
-                         (int)(theCenter.y),
-                         (int)(theWidthHeight.x),
-                         (int)(theWidthHeight.y),
-                         0,
-                         360);
+         anImage.drawEllipse((int)(theCenter.x),
+                             (int)(theCenter.y),
+                             (int)(theWidthHeight.x),
+                             (int)(theWidthHeight.y),
+                             theAzimuthInDegrees*RAD_PER_DEG,
+                             theDrawAxesFlag); 
       }
    }
 }
@@ -122,11 +113,12 @@ std::ostream& ossimAnnotationEllipseObject::print(std::ostream& out)const
 {
    ossimAnnotationObject::print(out);
    out << endl;
-   out << "ellipse_center:        " << theCenter << endl
-       << "ellipse_height:        " << theWidthHeight.y << endl
-       << "ellipse_width:         " << theWidthHeight.x << endl
-       << "fill_enabled:          " << theFillEnabled << endl
-       << "ellipse_bounding_rect: " << theBoundingRect;
+   out << "ellipse_center:        " << theCenter
+       << "\nellipse_height:        " << theWidthHeight.y
+       << "\nellipse_width:         " << theWidthHeight.x
+       << "\nfill_enabled:          " << theFillEnabled
+       << "\ndraw_axes:             " << theDrawAxesFlag
+       << "\nellipse_bounding_rect: " << theBoundingRect;
    return out;
 }
 
@@ -137,10 +129,12 @@ void ossimAnnotationEllipseObject::getBoundingRect(ossimDrect& rect)const
 
 void ossimAnnotationEllipseObject::computeBoundingRect()
 {
-   theBoundingRect = ossimDrect(theCenter.x - theWidthHeight.x,
-                                theCenter.y - theWidthHeight.y,
-                                theCenter.x + theWidthHeight.x,
-                                theCenter.y + theWidthHeight.y);
+   ossim_float64 maxDimension =
+      ossim::max(theWidthHeight.x, theWidthHeight.y)/2.0 + 1.0;
+   theBoundingRect = ossimDrect(theCenter.x - maxDimension,
+                                theCenter.y - maxDimension,
+                                theCenter.x + maxDimension,
+                                theCenter.y + maxDimension);
 }
 
 bool ossimAnnotationEllipseObject::isPointWithin(const ossimDpt& point)const
@@ -157,14 +151,34 @@ void ossimAnnotationEllipseObject::setCenterWidthHeight(const ossimDpt& center,
    computeBoundingRect();
 }
 
-void ossimAnnotationEllipseObject::setFill(bool enabled)
+void ossimAnnotationEllipseObject::setAzimuth(ossim_float64 azimuth)
+{
+   theAzimuthInDegrees = azimuth;
+}
+   
+ossim_float64 ossimAnnotationEllipseObject::getAzimuth() const
+{
+   return theAzimuthInDegrees;
+}
+
+void ossimAnnotationEllipseObject::setFillFlag(bool enabled)
 {
    theFillEnabled = enabled;
 }
 
-bool ossimAnnotationEllipseObject::getFill() const
+bool ossimAnnotationEllipseObject::getFillFlag() const
 {
    return theFillEnabled;
+}
+
+void ossimAnnotationEllipseObject::setDrawAxesFlag(bool flag)
+{
+   theDrawAxesFlag = flag;
+}
+
+bool ossimAnnotationEllipseObject::getDrawAxesFlag() const
+{
+   return theDrawAxesFlag;
 }
 
 bool ossimAnnotationEllipseObject::saveState(ossimKeywordlist& kwl,

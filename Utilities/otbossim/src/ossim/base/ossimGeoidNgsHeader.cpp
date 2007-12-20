@@ -3,6 +3,7 @@
 #include <ossim/base/ossimEndian.h>
 #include <cmath>
 #include <ossim/base/ossimNotifyContext.h>
+#include <ossim/base/ossimCommon.h>
 
 using namespace std;
 
@@ -116,8 +117,8 @@ double ossimGeoidNgsHeader::getHeightDelta(double lat,
    double latSpaces = (lat - theSouthernMostLatitude)/theLatDelta;
    double lonSpaces = (lon - theWesternMostLongitude)/theLonDelta;
 
-   if(latSpaces < -FLT_EPSILON) return OSSIM_DBL_NAN;
-   if(lonSpaces < -FLT_EPSILON) return OSSIM_DBL_NAN;
+   if(latSpaces < -FLT_EPSILON) return ossim::nan();
+   if(lonSpaces < -FLT_EPSILON) return ossim::nan();
 
    long latSpace0 = (long)std::floor(latSpaces);
    long latSpace1 = latSpace0 + 1;

@@ -2,13 +2,13 @@
 //
 // License:  See top level LICENSE.txt file.
 // 
-// Author:  David Burken (dburken@imagelinks.com)
+// Author:  David Burken
 // Description:
 //
 // Contains class definitions for ossimFpt.
 // 
 //*******************************************************************
-//  $Id: ossimFpt.cpp 9963 2006-11-28 21:11:01Z gpotts $
+//  $Id: ossimFpt.cpp 11399 2007-07-26 13:39:54Z dburken $
 
 #include <iostream>
 #include <iomanip>

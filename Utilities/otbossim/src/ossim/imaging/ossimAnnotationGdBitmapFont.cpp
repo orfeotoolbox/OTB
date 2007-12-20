@@ -6,7 +6,7 @@
 // Description:
 //
 //*************************************************************************
-// $Id: ossimAnnotationGdBitmapFont.cpp 9963 2006-11-28 21:11:01Z gpotts $
+// $Id: ossimAnnotationGdBitmapFont.cpp 11347 2007-07-23 13:01:59Z gpotts $
 #include <ossim/imaging/ossimAnnotationGdBitmapFont.h>
 #include <ossim/imaging/ossimRgbImage.h>
 #include <ossim/base/ossimCommon.h>
@@ -92,8 +92,8 @@ void ossimAnnotationGdBitmapFont::draw(ossimRgbImage& anImage)const
             {
                if(theFontPtr->data[(int)offset])
                {
-                  anImage.slowPlotPixel(irint(position.x + col),
-                                        irint(position.y + row),
+                  anImage.slowPlotPixel(ossim::round<int>(position.x + col),
+                                        ossim::round<int>(position.y + row),
                                         theRed,
                                         theGreen,
                                         theBlue);

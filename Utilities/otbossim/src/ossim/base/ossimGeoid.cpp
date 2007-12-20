@@ -7,7 +7,7 @@
 //
 // SOFTWARE HISTORY:
 //>
-//   17Apr2001  Oscar Kramer (okramer@imagelinks.com)
+//   17Apr2001  Oscar Kramer
 //              Initial coding.
 //<
 //*****************************************************************************

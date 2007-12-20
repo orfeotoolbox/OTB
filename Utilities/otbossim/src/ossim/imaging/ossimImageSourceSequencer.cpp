@@ -10,7 +10,7 @@
 // Description:
 //
 //*******************************************************************
-//  $Id: ossimImageSourceSequencer.cpp 9094 2006-06-13 19:12:40Z dburken $
+//  $Id: ossimImageSourceSequencer.cpp 11349 2007-07-23 13:30:44Z gpotts $
 #include <ossim/imaging/ossimImageSourceSequencer.h>
 #include <ossim/imaging/ossimImageData.h>
 #include <ossim/base/ossimIrect.h>
@@ -37,7 +37,7 @@ ossimImageSourceSequencer::ossimImageSourceSequencer(ossimImageSource* inputSour
     theNumberOfTilesVertical(0),
     theCurrentTileNumber(0)
 {
-   ossimGetDefaultTileSize(theTileSize);
+   ossim::defaultTileSize(theTileSize);
    theAreaOfInterest.makeNan();
    theInputConnection    = inputSource;
    if(inputSource)
@@ -239,7 +239,7 @@ ossimRefPtr<ossimImageData> ossimImageSourceSequencer::getTile(
    {
       ossimRefPtr<ossimImageData> tile =
          theInputConnection->getTile(rect, resLevel);
-      if (tile.valid())
+      if (tile.valid()&&tile->getBuf())
       {
          return tile;
       }
@@ -251,7 +251,7 @@ ossimRefPtr<ossimImageData> ossimImageSourceSequencer::getTile(
       }
    }
 
-   return NULL;
+   return 0;
 }
 
 ossimRefPtr<ossimImageData> ossimImageSourceSequencer::getNextTile(
@@ -272,9 +272,10 @@ ossimRefPtr<ossimImageData> ossimImageSourceSequencer::getNextTile(
 			  origin.y + (theTileSize.y - 1));
       ossimRefPtr<ossimImageData> data = theInputConnection->getTile(tileRect,
                                                                      resLevel);
-      if(!data.valid() || !data->getBuf())
-      {
-         theBlankTile->setImageRectangle(tileRect);
+      if(!data.valid()||!data->getBuf())
+	  {	 
+	     theBlankTile->setImageRectangle(tileRect);
+		 	
          return theBlankTile;
       }
       
@@ -349,7 +350,7 @@ ossimRefPtr<ossimImageData> ossimImageSourceSequencer::getTile(
    {
       CLOG << "leaving.."<<endl;
    }
-   return NULL;
+   return 0;
 }
 
 

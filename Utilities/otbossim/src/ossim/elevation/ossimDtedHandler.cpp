@@ -1,11 +1,7 @@
 //*****************************************************************************
 // FILE: ossimDtedHandler.cc
 //
-// Copyright (C) 2001 ImageLinks, Inc.
-//
-// License:  LGPL
-//
-// See LICENSE.txt file in the top level directory for more details.
+// License:  See top level LICENSE.txt file.
 //
 // DESCRIPTION:
 //   Contains implementation of class ossimDtedHandler. This class derives from
@@ -13,11 +9,9 @@
 //   from disk. This elevation files are memory mapped.
 //
 //*****************************************************************************
-// $Id: ossimDtedHandler.cpp 10215 2007-01-09 16:56:41Z dburken $
+// $Id: ossimDtedHandler.cpp 12053 2007-11-15 20:50:37Z dburken $
 
-#include <sys/types.h>
-#include <sys/stat.h>
-#include <fcntl.h>
+#include <cstring> /* for memcpy */
 #include <ossim/elevation/ossimDtedHandler.h>
 #include <ossim/support_data/ossimDtedVol.h>
 #include <ossim/support_data/ossimDtedHdr.h>
@@ -27,7 +21,7 @@
 #include <ossim/support_data/ossimDtedRecord.h>
 #include <ossim/base/ossimCommon.h>
 #include <ossim/base/ossimKeywordNames.h>
-#include <ossim/base/ossimNotifyContext.h>
+#include <ossim/base/ossimNotify.h>
 #include <ossim/base/ossimGpt.h>
 #include <ossim/base/ossimKeywordlist.h>
 
@@ -95,7 +89,7 @@ ossimDtedHandler::ossimDtedHandler(const ossimFilename& dted_file)
    }
 
    // DTED is stored in big endian.
-   theSwapBytesFlag = ossimGetByteOrder() == OSSIM_LITTLE_ENDIAN ? true : false;
+   theSwapBytesFlag = ossim::byteOrder() == OSSIM_LITTLE_ENDIAN ? true : false;
 
    // Attempt to parse.
    ossimDtedVol vol(theFileStr, 0);
@@ -145,7 +139,8 @@ ossimDtedHandler::ossimDtedHandler(const ossimFilename& dted_file)
    double west_boundary  = uhl.lonOrigin();
    double north_boundary = south_boundary + theLatSpacing*(theNumLatPoints-1);
    double east_boundary  = west_boundary  + theLonSpacing*(theNumLonLines-1);
-                         
+
+   // For ossimElevCellHandler::pointHasCoverage method.
    theGroundRect = ossimGrect(ossimGpt(north_boundary, west_boundary, 0.0),
                               ossimGpt(south_boundary, east_boundary, 0.0));
 
@@ -156,12 +151,12 @@ ossimDtedHandler::ossimDtedHandler(const ossimFilename& dted_file)
    //  Determine the mean spacing:
    //***
    double center_lat = (south_boundary + north_boundary)/2.0;
-   theMeanSpacing = (theLatSpacing + theLonSpacing*cosd(center_lat))
+   theMeanSpacing = (theLatSpacing + theLonSpacing*ossim::cosd(center_lat))
                     * ossimGpt().metersPerDegree().x / 2.0;
 
    //  Initialize the accuracy values:
-   theAbsLE90 = (double) acc.absLE();
-   theAbsCE90 = (double) acc.absCE();
+   theAbsLE90 = acc.absLE();
+   theAbsCE90 = acc.absCE();
 
    // Set the base class null height value.
    theNullHeightValue = -32767.0;
@@ -218,13 +213,13 @@ double ossimDtedHandler::getHeightAboveMSLFile(const ossimGpt& gpt)
         x0 > (theNumLonLines  - 2.0) ||
         y0 > (theNumLatPoints - 2.0) )
    {
-      return theNullHeightValue;
+      return ossim::nan();
    }
 
    // We need an open stream to file from here on out...
    if (!open())
    {
-      return theNullHeightValue;
+      return ossim::nan();
    }
 
    double p00;
@@ -311,7 +306,7 @@ double ossimDtedHandler::getHeightAboveMSLFile(const ossimGpt& gpt)
       return (p00*w00 + p01*w01 + p10*w10 + p11*w11) / sum_weights;
    }
    
-   return NULL_POST;
+   return ossim::nan();
 }
 
 double ossimDtedHandler::getHeightAboveMSLMemory(const ossimGpt& gpt)
@@ -344,10 +339,8 @@ double ossimDtedHandler::getHeightAboveMSLMemory(const ossimGpt& gpt)
         x0 > (theNumLonLines  - 2.0) ||
         y0 > (theNumLatPoints - 2.0) )
    {
-      return theNullHeightValue;
+      return ossim::nan();
    }
-
-
 
    double p00;
    double p01;
@@ -428,7 +421,7 @@ double ossimDtedHandler::getHeightAboveMSLMemory(const ossimGpt& gpt)
       return (p00*w00 + p01*w01 + p10*w10 + p11*w11) / sum_weights;
    }
    
-   return NULL_POST;
+   return ossim::nan();
 }
 
 double ossimDtedHandler::getPostValue(const ossimIpt& gridPt) const
@@ -445,12 +438,12 @@ double ossimDtedHandler::getPostValue(const ossimIpt& gridPt) const
          ossimNotify(ossimNotifyLevel_WARN)
             << "WARNING " << MODULE << ": No intersection..." << std::endl;
       }
-      return theNullHeightValue;
+      return ossim::nan();
    }
 
    if (!open())
    {
-      return theNullHeightValue;
+      return ossim::nan();
    }
 
    int offset =

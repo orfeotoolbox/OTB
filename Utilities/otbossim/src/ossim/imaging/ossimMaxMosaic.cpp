@@ -11,7 +11,7 @@
 //              of all inputs to top of the mosaic output. 
 //
 //*************************************************************************
-// $Id: ossimMaxMosaic.cpp 9094 2006-06-13 19:12:40Z dburken $
+// $Id: ossimMaxMosaic.cpp 10777 2007-04-25 14:49:17Z gpotts $
 
 #include <ossim/imaging/ossimMaxMosaic.h>
 #include <ossim/imaging/ossimImageData.h>
@@ -45,11 +45,11 @@ ossimRefPtr<ossimImageData> ossimMaxMosaic::getTile(
    ossim_uint32 resLevel)
 {
    long size = getNumberOfInputs();
-   
+   ossim_uint32 layerIdx = 0;
    // If there is only one in the mosaic then just return it.
    if(size == 1)
    {
-      return getNextTile(0, tileRect, resLevel);
+      return getNextTile(layerIdx, 0, tileRect, resLevel);
    }
    
    ossimIpt origin = tileRect.ul();
@@ -264,10 +264,11 @@ template <class T> ossimRefPtr<ossimImageData> ossimMaxMosaic::combineNorm(
    const ossimIrect& tileRect,
    ossim_uint32 resLevel)
 {
+   ossim_uint32 layerIdx = 0;
    ossimRefPtr<ossimImageData> destination = theTile;
    
    ossimRefPtr<ossimImageData> currentImageData =
-      getNextNormTile(0, tileRect, resLevel);
+      getNextNormTile(layerIdx, 0, tileRect, resLevel);
       
    if(!currentImageData)
    {
@@ -329,7 +330,7 @@ template <class T> ossimRefPtr<ossimImageData> ossimMaxMosaic::combineNorm(
    }
    destination->validate();
    
-   currentImageData = getNextNormTile(tileRect, resLevel);
+   currentImageData = getNextNormTile(layerIdx, tileRect, resLevel);
 
    while(currentImageData.valid())
    {  
@@ -392,7 +393,7 @@ template <class T> ossimRefPtr<ossimImageData> ossimMaxMosaic::combineNorm(
       }
       destination->validate();
       
-      currentImageData = getNextNormTile(tileRect, resLevel);
+      currentImageData = getNextNormTile(layerIdx, tileRect, resLevel);
    }
    // Cleanup...
    delete [] srcBands;
@@ -410,10 +411,11 @@ template <class T> ossimRefPtr<ossimImageData> ossimMaxMosaic::combine(
    const ossimIrect& tileRect,
    ossim_uint32 resLevel)
 {
+   ossim_uint32 layerIdx = 0;
    ossimRefPtr<ossimImageData> destination = theTile;
 
    ossimRefPtr<ossimImageData> currentImageData =
-      getNextTile(0, tileRect, resLevel);
+      getNextTile(layerIdx, 0, tileRect, resLevel);
       
    T** srcBands         = new T*[theLargestNumberOfInputBands];
    T*  srcBandsNullPix  = new T[theLargestNumberOfInputBands];
@@ -463,7 +465,8 @@ template <class T> ossimRefPtr<ossimImageData> ossimMaxMosaic::combine(
    }
    destination->setDataObjectStatus(currentImageData->getDataObjectStatus());
 
-   currentImageData = getNextTile(tileRect,
+   currentImageData = getNextTile(layerIdx,
+                                  tileRect,
                                   resLevel);
 
    while(currentImageData.valid())
@@ -521,7 +524,7 @@ template <class T> ossimRefPtr<ossimImageData> ossimMaxMosaic::combine(
       
       destination->validate();
       
-      currentImageData = getNextTile(tileRect, resLevel);
+      currentImageData = getNextTile(layerIdx,tileRect, resLevel);
    }
    // Cleanup...
    delete [] srcBands;

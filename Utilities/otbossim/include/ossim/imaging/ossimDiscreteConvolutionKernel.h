@@ -2,19 +2,17 @@
 //
 // License:  See top level LICENSE.txt file.
 // 
-// Author:  Garrett Potts (gpotts@imagelinks.com)
+// Author:  Garrett Potts
 //
 // Description:
 //
 //*******************************************************************
-//  $Id: ossimDiscreteConvolutionKernel.h 9968 2006-11-29 14:01:53Z gpotts $
+//  $Id: ossimDiscreteConvolutionKernel.h 11418 2007-07-27 16:24:15Z dburken $
 #ifndef ossimDiscreteConvolutionKernel_HEADER
 #define ossimDiscreteConvolutionKernel_HEADER
 #include <vector>
-#include <ossim/base/ossimConstants.h>
-#include <iostream>
-using namespace std;
 
+#include <ossim/base/ossimConstants.h>
 #include <ossim/matrix/newmat.h>
 #include <ossim/matrix/newmatio.h>
 
@@ -40,12 +38,12 @@ public:
     */
    virtual void convolve(const float* data,
                          double& result,
-                         float nullPixel=OSSIM_FLT_NAN)const;
+                         float nullPixel=OSSIM_DEFAULT_NULL_PIX_FLOAT)const;
    
    virtual void convolveSubImage(const float* data,
                                  long dataWidth,
                                  double& result,
-                                 float nullPixel=OSSIM_FLT_NAN)const;
+                                 float nullPixel=OSSIM_DEFAULT_NULL_PIX_FLOAT)const;
 
    /*!
     * Will expect a data buffer of size width*height
@@ -53,24 +51,24 @@ public:
     */
    virtual void convolve(const double* data,
                          double& result,
-                         double nullPixel=OSSIM_DBL_NAN)const;
+                         double nullPixel=OSSIM_DEFAULT_NULL_PIX_DOUBLE)const;
 
    virtual void convolveSubImage(const double* data,
                                  long dataWidth,
                                  double& result,
-                                 double nullPixel=OSSIM_DBL_NAN)const;
+                                 double nullPixel=OSSIM_DEFAULT_NULL_PIX_DOUBLE)const;
    /*!
     * Will expect a data buffer of size width*height
     * and is row ordered.
     */
    virtual void convolve(const short* data,
                          double& result,
-                         ossim_sint16 nullPixel=OSSIM_SSHORT_NAN)const;
+                         ossim_sint16 nullPixel=OSSIM_DEFAULT_NULL_PIX_SINT16)const;
    
    virtual void convolveSubImage(const short* data,
                                  long dataWidth,
                                  double& result,
-                                 ossim_sint16 nullPixel=OSSIM_SSHORT_NAN)const;
+                                 ossim_sint16 nullPixel=OSSIM_DEFAULT_NULL_PIX_SINT16)const;
 
    /*!
     * Will expect a data buffer of size width*height
@@ -78,17 +76,17 @@ public:
     */
    virtual void convolve(const unsigned short* data,
                          double& result,
-                         ossim_uint16 nullPixel=OSSIM_USHORT_NAN)const;
+                         ossim_uint16 nullPixel=OSSIM_DEFAULT_NULL_PIX_UINT16)const;
    
    virtual void convolveSubImage(const unsigned short* data,
                                  long dataWidth,
                                  double& result,
-                                 ossim_uint16 nullPixel=OSSIM_USHORT_NAN)const;
+                                 ossim_uint16 nullPixel=OSSIM_DEFAULT_NULL_PIX_UINT16)const;
    
    
    virtual void convolve(const unsigned char* data,
-                              double& result,
-                              ossim_uint8 nullPixel=0)const;
+                         double& result,
+                         ossim_uint8 nullPixel=OSSIM_DEFAULT_NULL_PIX_UINT8)const;
    /*!
     * this allows you to pass a subImage to
     * the convolution engine.  It needs to know
@@ -96,9 +94,9 @@ public:
     * to the next element.
     */
    virtual void convolveSubImage(const unsigned char* data,
-                                      long dataWidth,
-                                      double& result,
-                                      ossim_uint8 nullPixel=0)const;
+                                 long dataWidth,
+                                 double& result,
+                                 ossim_uint8 nullPixel=OSSIM_DEFAULT_NULL_PIX_UINT8)const;
    /*!
     * This is used to allow me to continually adjust a convolution kernel
     * based on where it center lies on a pixel. The xLocation and yLocation

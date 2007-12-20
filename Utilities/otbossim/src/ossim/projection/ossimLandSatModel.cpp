@@ -310,10 +310,10 @@ void ossimLandSatModel::initFromHeader(const ossimFfL7& head)
    // spherical triangles.  This angle is a negative number from -8.2 to -90
    // depending on scene latitude:
    //***
-   double phi_c = atand(tand(theRefGndPt.lat)/
-                        GEODETIC_2_GEOCENTRIC_FACTOR);
-   double cos_phi_c   = cosd(phi_c);
-   theMeridianalAngle = -asind(cosd(theOrbitInclination) / cos_phi_c);
+   double phi_c = ossim::atand(ossim::tand(theRefGndPt.lat)/
+                               GEODETIC_2_GEOCENTRIC_FACTOR);
+   double cos_phi_c   = ossim::cosd(phi_c);
+   theMeridianalAngle = -ossim::asind(ossim::cosd(theOrbitInclination) / cos_phi_c);
    theMapAzimAngle = head.theOrientationAngle;
 
    //***
@@ -580,8 +580,8 @@ void ossimLandSatModel::imagingRay(const ossimDpt& inImgPt,
    double cos, sin;
    double norm_line = inImgPt.line/theImageSize.line;
    double yaw = theYawOffset + theYawRate*norm_line;
-   cos = cosd(yaw);
-   sin = sind(yaw);
+   cos = ossim::cosd(yaw);
+   sin = ossim::sind(yaw);
    NEWMAT::Matrix T_yaw = ossimMatrix3x3::create( cos,-sin, 0.0,
                                                   sin, cos, 0.0,
                                                   0.0, 0.0, 1.0);
@@ -1038,8 +1038,8 @@ void ossimLandSatModel::initMapProjection()
    // Initialize angle sines/cosines used in phiLambda projection:
    //***
    theMap2IcRotAngle = theMeridianalAngle + theMapAzimAngle;
-   theMap2IcRotCos   = cosd(theMap2IcRotAngle);
-   theMap2IcRotSin   = sind(theMap2IcRotAngle);
+   theMap2IcRotCos   = ossim::cosd(theMap2IcRotAngle);
+   theMap2IcRotSin   = ossim::sind(theMap2IcRotAngle);
 
    if (traceExec())  ossimNotify(ossimNotifyLevel_DEBUG) <<  "DEBUG ossimLandSatModel::writeGeomTemplate: returning... " << std::endl;
    return;
@@ -1076,17 +1076,17 @@ void  ossimLandSatModel::updateModel()
    //***
    if (theProjectionType == UTM_ORBIT)
    {
-      theMapAzimCos = cosd(-theMapAzimAngle + theMapRotation);
-      theMapAzimSin = sind(-theMapAzimAngle + theMapRotation);
+      theMapAzimCos = ossim::cosd(-theMapAzimAngle + theMapRotation);
+      theMapAzimSin = ossim::sind(-theMapAzimAngle + theMapRotation);
    }
    else
    {
-      theMapAzimCos = cosd(theMapAzimAngle + theMapRotation);
-      theMapAzimSin = sind(theMapAzimAngle + theMapRotation);
+      theMapAzimCos = ossim::cosd(theMapAzimAngle + theMapRotation);
+      theMapAzimSin = ossim::sind(theMapAzimAngle + theMapRotation);
    }
 
-   double cos = cosd(theRollOffset);
-   double sin = sind(theRollOffset);
+   double cos = ossim::cosd(theRollOffset);
+   double sin = ossim::sind(theRollOffset);
    theRollRotMat = ossimMatrix3x3::create( 1.0, 0.0, 0.0,
                                            0.0, cos,-sin,
                                            0.0, sin, cos);
@@ -1157,10 +1157,13 @@ ossimLandSatModel::setupOptimizer(const ossimString& init_file)
       
       if (!ff_headerp->getErrorStatus())
       {
-         h->theCenterImagePoint.x = fabs(h->revb()->theUlEasting - h->revb()->theCenterEasting)/h->theGsd;
-         h->theCenterImagePoint.y = fabs(h->revb()->theUlNorthing - h->revb()->theCenterNorthing)/h->theGsd;
+         double d = fabs(h->revb()->theUlEasting - h->revb()->theCenterEasting)/h->theGsd;
+         h->theCenterImagePoint.x = static_cast<ossim_int32>(d); // d + 0.5 ???
+         
+         d = fabs(h->revb()->theUlNorthing - h->revb()->theCenterNorthing)/h->theGsd;
+         h->theCenterImagePoint.y = static_cast<ossim_int32>(d); // d + 0.5 ???
          initFromHeader(*ff_headerp);
-
+         
          theMapOffset.x = h->revb()->theUlEasting;
          theMapOffset.y = h->revb()->theUlNorthing;
          

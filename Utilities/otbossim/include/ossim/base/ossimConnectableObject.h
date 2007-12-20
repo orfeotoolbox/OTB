@@ -11,7 +11,7 @@
 // all connectable objects.
 //
 //*************************************************************************
-// $Id: ossimConnectableObject.h 9094 2006-06-13 19:12:40Z dburken $
+// $Id: ossimConnectableObject.h 11959 2007-10-31 19:22:56Z gpotts $
 
 #ifndef ossimConnectableObject_HEADER
 #define ossimConnectableObject_HEADER
@@ -450,7 +450,7 @@ public:
    virtual ossim_uint32 saveStateOfAllInputs(ossimKeywordlist& kwl,
                                              bool saveThisStateFlag=true,
                                              ossim_uint32 objectIndex=1,
-                                             const char* prefix=NULL) const;
+                                             const char* prefix=0) const;
    
 protected:
    ossimId      theId;

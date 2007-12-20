@@ -6,7 +6,7 @@
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimProjectionFactoryRegistry.h 9094 2006-06-13 19:12:40Z dburken $
+// $Id: ossimProjectionFactoryRegistry.h 12081 2007-11-26 21:44:18Z dburken $
 #ifndef ossimProjectionFactoryRegistry_HEADER
 #define ossimProjectionFactoryRegistry_HEADER
 #include <ossim/base/ossimString.h>
@@ -63,8 +63,6 @@ public:
    
    void unregisterFactory(ossimProjectionFactoryBase* factory);
    bool findFactory(ossimProjectionFactoryBase* factory)const;
-   
-   std::list<ossimString> getList()const;
    
 protected:
    ossimProjectionFactoryRegistry();

@@ -2,12 +2,12 @@
 //
 // License:  See top level LICENSE.txt file.
 // 
-// Author:  Garrett Potts (gpotts@imagelinks.com)
+// Author:  Garrett Potts
 //
 // Description:
 //
 //*******************************************************************
-//  $Id: ossimQuickbirdTile.h 9967 2006-11-29 02:01:23Z gpotts $
+//  $Id: ossimQuickbirdTile.h 11415 2007-07-27 15:19:25Z dburken $
 #ifndef ossimQuickbirdTil_HEADER
 #define ossimQuickbirdTil_HEADER
 #include <map>
@@ -15,6 +15,7 @@
 #include <ossim/base/ossimErrorStatusInterface.h>
 #include <ossim/base/ossimString.h>
 #include <ossim/base/ossimFilename.h>
+#include <ossim/base/ossimCommon.h>
 
 class ossimQuickbirdTileInfo
 {
@@ -66,14 +67,14 @@ public:
          theLlXOffset = OSSIM_INT_NAN;
          theLlYOffset = OSSIM_INT_NAN;
 
-         theUlLon     = OSSIM_DBL_NAN;
-         theUlLat     = OSSIM_DBL_NAN;
-         theUrLon     = OSSIM_DBL_NAN;
-         theUrLat     = OSSIM_DBL_NAN;
-         theLrLon     = OSSIM_DBL_NAN;
-         theLrLat     = OSSIM_DBL_NAN;
-         theLlLon     = OSSIM_DBL_NAN;
-         theLlLat     = OSSIM_DBL_NAN;
+         theUlLon     = ossim::nan();
+         theUlLat     = ossim::nan();
+         theUrLon     = ossim::nan();
+         theUrLat     = ossim::nan();
+         theLrLon     = ossim::nan();
+         theLrLat     = ossim::nan();
+         theLlLon     = ossim::nan();
+         theLlLat     = ossim::nan();
       }
    ossimString    theTileGroup;
    ossimFilename  theFilename;

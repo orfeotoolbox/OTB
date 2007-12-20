@@ -1,25 +1,10 @@
 //*************************************************************************
-// Copyright (C) 2004 Intelligence Data Sytems, Inc.  All rights reserved.
-//
-// OSSIM is free software; you can redistribute it and/or
-// modify it under the terms of the GNU General Public License
-// as published by the Free Software Foundation.
-//
-// This software is distributed in the hope that it will be useful,
-// but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
-//
-// You should have received a copy of the GNU General Public License
-// along with this software. If not, write to the Free Software
-// Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-
-// 1307, USA.
-//
-// See the GPL in the COPYING.GPL file for more details.
-//
+// LGPL
+// 
 // Author:  Garrett Potts
 //
 //**************************************************************************
-// $Id: ossimDatumFactory.inc 8530 2005-12-15 12:07:19Z gpotts $
+// $Id: ossimDatumFactory.inc 12169 2007-12-11 14:30:47Z gpotts $
 
 struct ossimSevenParamDatumType
 {

@@ -6,7 +6,7 @@
 // Author:  Garrett Potts
 //
 //*******************************************************************
-//  $Id: ossimLocalCorrelationFusion.cpp 9094 2006-06-13 19:12:40Z dburken $
+//  $Id: ossimLocalCorrelationFusion.cpp 11347 2007-07-23 13:01:59Z gpotts $
 #include <ossim/imaging/ossimLocalCorrelationFusion.h>
 #include <ossim/matrix/newmat.h>
 #include <ossim/matrix/newmatio.h>
@@ -408,7 +408,7 @@ void ossimLocalCorrelationFusion::initAdjustableParameters()
 void ossimLocalCorrelationFusion::adjustableParametersChanged()
 {
 //   std::cout << "Parameter offset = " << computeParameterOffset(2) << std::endl;
-   theBlurrKernelWidth = (ossim_uint32)(irint(computeParameterOffset(PAN_BLURR_WIDTH_OFFSET)));
+   theBlurrKernelWidth = (ossim_uint32)(ossim::round<int>(computeParameterOffset(PAN_BLURR_WIDTH_OFFSET)));
 }
 
 

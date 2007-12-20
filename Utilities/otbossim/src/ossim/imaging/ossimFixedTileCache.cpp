@@ -1,28 +1,38 @@
 //******************************************************************
-// Copyright (C) 2000 ImageLinks Inc.
 //
-// License:  LGPL
-// 
-// See LICENSE.txt file in the top level directory for more details.
+// License:  See top level LICENSE.txt file.
 //
 // Author: Garrett Potts
 // 
 // Description: This file contains the Application cache algorithm
 //
 //***********************************
-// $Id: ossimFixedTileCache.cpp 9640 2006-10-03 19:26:02Z gpotts $
+// $Id: ossimFixedTileCache.cpp 11694 2007-09-09 21:55:16Z dburken $
 #include <ossim/imaging/ossimFixedTileCache.h>
 #include <algorithm>
 
 ossimFixedTileCache::ossimFixedTileCache()
+   : theTileBoundaryRect(),
+     theTileSize(),
+     theBoundaryWidthHeight(),
+     theTilesHorizontal(0),
+     theTilesVertical(0),
+     theCacheSize(0),
+     theMaxCacheSize(0),
+     theTileMap(),
+     theLruQueue(),
+     theUseLruFlag(true)
 {
+   ossim::defaultTileSize(theTileSize);
+
    ossimIrect tempRect;
    tempRect.makeNan();
 
    setRect(tempRect);
-   theCacheSize    = 0;
-   theMaxCacheSize = 0;
-   theUseLruFlag = true;
+   
+   // theCacheSize    = 0;
+   // theMaxCacheSize = 0;
+   // theUseLruFlag = true;
 }
 
 ossimFixedTileCache::~ossimFixedTileCache()
@@ -32,7 +42,7 @@ ossimFixedTileCache::~ossimFixedTileCache()
 
 void ossimFixedTileCache::setRect(const ossimIrect& rect)
 {
-   ossimGetDefaultTileSize(theTileSize);
+   ossim::defaultTileSize(theTileSize);
    theTileBoundaryRect      = rect;
    theTileBoundaryRect.stretchToTileBoundary(theTileSize);
    theBoundaryWidthHeight.x = theTileBoundaryRect.width();
@@ -220,7 +230,7 @@ void ossimFixedTileCache::flush()
    {
       if( (*tileIter).second.theTile.valid())
       {
-         (*tileIter).second.theTile = NULL;
+         (*tileIter).second.theTile = 0;
       }
       ++tileIter;
    }

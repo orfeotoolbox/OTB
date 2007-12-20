@@ -6,7 +6,7 @@
 // AUTHOR: Garrett Potts
 //
 //*****************************************************************************
-//  $Id: ossimGeoPolygon.cpp 9094 2006-06-13 19:12:40Z dburken $
+//  $Id: ossimGeoPolygon.cpp 11408 2007-07-27 13:43:00Z dburken $
 
 #include <sstream>
 #include <algorithm>
@@ -329,7 +329,7 @@ bool ossimGeoPolygon::loadState(const ossimKeywordlist& kwl,
       height = height.trim();
       if(height == "nan")
       {
-         theVertexList.push_back(ossimGpt(lat, lon, OSSIM_DBL_NAN, datum));
+         theVertexList.push_back(ossimGpt(lat, lon, ossim::nan(), datum));
       }
       else
       {

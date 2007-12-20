@@ -5,7 +5,7 @@
 // Author: Garrett Potts
 // 
 //********************************************************************
-// $Id: ossimBilinearProjection.h 9968 2006-11-29 14:01:53Z gpotts $
+// $Id: ossimBilinearProjection.h 12136 2007-12-07 14:26:43Z gpotts $
 #ifndef ossimBilinearProjection_HEADER
 #define ossimBilinearProjection_HEADER
 
@@ -16,8 +16,8 @@
 #include <ossim/projection/ossimProjection.h>
 #include <ossim/base/ossimLeastSquaresBilin.h>
 
-class ossimBilinearProjection : public ossimProjection,
-                                public ossimOptimizableProjection
+class OSSIM_DLL ossimBilinearProjection : public ossimProjection,
+                                          public ossimOptimizableProjection
      
 {
 public:
@@ -69,20 +69,27 @@ public:
     * add any number of tie points and calculate bilinear fit
     * returns the ground error variance (=RMS^2), in meters^2
     */
-    virtual ossim_float64 setTiePoints(const std::vector<ossimDpt>& lsPt, 
-                                       const std::vector<ossimGpt>& geoPt);
-
-    /*
+   virtual ossim_float64 setTiePoints(const std::vector<ossimDpt>& lsPt, 
+                                      const std::vector<ossimGpt>& geoPt);
+   
+   /*
     * optimizable interface
     */
-    virtual bool setupOptimizer(const ossimString& setup);
-    
-    inline virtual bool useForward()const {return false;}
-    //! better go from image to ground, also means that errors variance are in squared meters
-
-    virtual ossim_uint32 degreesOfFreedom()const;
-    virtual double optimizeFit(const ossimTieGptSet& tieSet, double* targetVariance=NULL);
-
+   virtual bool setupOptimizer(const ossimString& setup);
+   
+   inline virtual bool useForward()const {return false;}
+   //! better go from image to ground, also means that errors variance are in squared meters
+   
+   virtual ossim_uint32 degreesOfFreedom()const;
+   virtual double optimizeFit(const ossimTieGptSet& tieSet, double* targetVariance=0);
+   
+   /**
+    * @brief Implementation of pure virtual
+    * ossimProjection::isAffectedByElevation method.
+    * @return false.
+    */
+   virtual bool isAffectedByElevation() const { return false; } 
+   
 protected:
    void initializeBilinear();
 
@@ -109,6 +116,10 @@ protected:
    std::vector<ossimGpt>  theGeographicPt;
    ossimLeastSquaresBilin theLatFit;
    ossimLeastSquaresBilin theLonFit;
+   ossimLeastSquaresBilin theXFit;
+   ossimLeastSquaresBilin theYFit;
+
+   bool theInterpolationPointsHaveNanFlag;
 
 TYPE_DATA   
 };

@@ -1,31 +1,29 @@
 //*******************************************************************
-// Copyright (C) 2000 ImageLinks Inc. 
 //
 // License:  See LICENSE.txt file in the top level directory.
 //
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimAnnotationSource.cpp 9094 2006-06-13 19:12:40Z dburken $
+// $Id: ossimAnnotationSource.cpp 11885 2007-10-18 15:23:58Z dburken $
+
 #include <ossim/imaging/ossimAnnotationSource.h>
 #include <ossim/imaging/ossimAnnotationObject.h>
 #include <ossim/imaging/ossimAnnotationObjectFactory.h>
-#include <ossim/imaging/ossimRgbImage.h>
 #include <ossim/imaging/ossimU8ImageData.h>
+#include <ossim/base/ossimKeywordlist.h>
 
-#include <ossim/base/ossimTrace.h>
-
-RTTI_DEF1(ossimAnnotationSource, "ossimAnnotationSource", ossimImageSourceFilter)
+RTTI_DEF1(ossimAnnotationSource,
+          "ossimAnnotationSource",
+          ossimImageSourceFilter)
    
-static ossimTrace traceDebug("ossimAnnotationSource:debug");
-
 ossimAnnotationSource::ossimAnnotationSource(ossimImageSource* inputSource)
    :
       ossimImageSourceFilter(inputSource),
       theRectangle(0, 0, 0, 0),
       theNumberOfBands(1),
-      theImage(NULL),
-      theTile(NULL),
+      theImage(0),
+      theTile(0),
       theAnnotationObjectList()
 {
    theRectangle.makeNan();
@@ -39,28 +37,28 @@ ossimAnnotationSource::~ossimAnnotationSource()
 
 void ossimAnnotationSource::destroy()
 {
-   if(theImage)
-   {
-      delete theImage;
-      theImage = NULL;
-   }
+   // theImage is an ossimRefPtr<ossimRgbImage> so this is not a leak.
+   theImage = 0;
+
+   // theTile is an ossimRefPtr<ossimImageData> so this is not a leak.
+   theTile = 0; 
 }
 
 void ossimAnnotationSource::allocate(const ossimIrect& rect)
 {
-   destroy();
+   if (!theImage)
+   {
+      theImage = new ossimRgbImage();
+   }
 
-   ossim_uint32 width  = rect.width();
-   ossim_uint32 height = rect.height();
-   
-   theImage = new ossimRgbImage();
-   
-   theTile = new ossimU8ImageData(this,
-                                  theNumberOfBands,
-                                  width,
-                                  height);
-   
-   theTile->initialize();
+   if (!theTile)
+   {
+      theTile = new ossimU8ImageData( this,
+                                      theNumberOfBands,
+                                      rect.width(),
+                                      rect.height() );
+      theTile->initialize();
+   }
 }
 
 ossimScalarType ossimAnnotationSource::getOutputScalarType() const
@@ -69,7 +67,7 @@ ossimScalarType ossimAnnotationSource::getOutputScalarType() const
    {
       return theInputConnection->getOutputScalarType();
    }
-   return OSSIM_UCHAR;
+   return OSSIM_UINT8;
 }
 
 ossim_uint32 ossimAnnotationSource::getNumberOfOutputBands()const
@@ -78,7 +76,6 @@ ossim_uint32 ossimAnnotationSource::getNumberOfOutputBands()const
    {
       return theInputConnection->getNumberOfOutputBands();
    }
-   // this source is an RGB source
    return theNumberOfBands;
 }
 
@@ -95,24 +92,8 @@ void ossimAnnotationSource::initialize()
    {
       computeBoundingRect();
 
-      ossim_uint32 bands = theInputConnection->getNumberOfOutputBands();
-      if (bands == 1 || bands == 3)
-      {
-         setNumberOfBands(bands);
-      }
-
-      if (theTile.valid())  // Check for number of band change.
-      {
-         if ( theInputConnection->getNumberOfOutputBands() !=
-              theTile->getNumberOfBands())
-         {
-            //---
-            // This will wide things slick and force an allocate()
-            // call on first getTile().
-            //---
-            destroy();
-         }
-      }
+      // This will call destroy on band count change.
+      setNumberOfBands(theInputConnection->getNumberOfOutputBands());
    }
    else
    {
@@ -143,81 +124,85 @@ ossimIrect ossimAnnotationSource::getBoundingRect(ossim_uint32 resLevel)const
    return result;
 }
 
-
 void ossimAnnotationSource::setNumberOfBands(ossim_uint32 bands)
 {
    theNumberOfBands = bands;
-
-   if(theNumberOfBands == 2) theNumberOfBands = 3;
-   if(theNumberOfBands > 3) theNumberOfBands  = 3;
-   if(theNumberOfBands < 1) theNumberOfBands  = 1;
+   if (theTile.get())
+   {
+      if ( theNumberOfBands != theTile->getNumberOfBands() )
+      {
+         //---
+         // This will wide things slick and force an allocate()
+         // call on first getTile().
+         //---
+         destroy();
+      }
+   }
 }
 
-ossimRefPtr<ossimImageData> ossimAnnotationSource::getTile(const ossimIrect& tile_rect,
-                                               ossim_uint32 resLevel)
+ossimRefPtr<ossimImageData> ossimAnnotationSource::getTile(
+   const ossimIrect& tile_rect, ossim_uint32 resLevel)
 {
-   ossimRefPtr<ossimImageData> inputTile = NULL;
+   ossimRefPtr<ossimImageData> inputTile = 0;
 
+   //---
+   // NOTE:
+   // This source is written to be used with or without an input connection.
+   // So any call to inputTile should be preceeded by: if (inputTile.valid())"
+   //---
    if(theInputConnection)
    {
-   // Fetch tile from pointer from the input source.
-      inputTile = theInputConnection->getTile(tile_rect,
-                                              resLevel);
+      // Fetch tile from pointer from the input source.
+      inputTile = theInputConnection->getTile(tile_rect, resLevel);
    }
    
    // Check for remap bypass:
-   if ( !theEnableFlag)
+   if ( !theEnableFlag )
    {
       return inputTile;
    }
 
-   // Check for first time through or size or band change.
-   if ( !theTile ||  
-        tile_rect.height() != theTile->getHeight() ||
-        tile_rect.width()  != theTile->getWidth())
+   // Check for first time through or reallocation force by band change.
+   if ( !theTile )
    {
       allocate(tile_rect);
    }
+
+   // Allocation failed!
    if(!theTile)
    {
-      return theTile;
+      return inputTile;
    }
-   
-   theTile->makeBlank();
 
-   // Set the origin of the output tile.
-   theTile->setImageRectangle(tile_rect);
+   //---
+   // Set the image rectangle and bands.  This will set the origin.
+   // 
+   // NOTE:  We do this before the "theTile->makeBlank()" call for efficiency
+   // since this will force a "ossimImageData::initialize()", which performs
+   // a "makeBlank" if a resize is needed due to tile rectangle or number
+   // of band changes.
+   //---
+   theTile->setImageRectangleAndBands( tile_rect, theNumberOfBands );
+
+   //---
+   // Start with a blank tile.
+   //
+   // NOTE: This will not do anything if already blank.
+   //---
+   theTile->makeBlank();
    
    if(inputTile.valid() &&
       inputTile->getBuf()&&
       (inputTile->getDataObjectStatus()!=OSSIM_EMPTY))
    {
-      if(theTile->getNumberOfBands() !=
-         inputTile->getNumberOfBands())
-      {
-         int maxBands = ossimMin(theTile->getNumberOfBands(),
-                                 inputTile->getNumberOfBands());
-         int idx = 0;
-         for(idx = 0; idx < maxBands; ++idx)
-         {
-            theTile->loadBand(inputTile->getBuf(idx),
-                              inputTile->getImageRectangle(),
-                              idx);
-         }
-         int saveIdx = idx - 1;
-         for(;idx<(int)theTile->getNumberOfBands();++idx)
-         {
-            theTile->loadBand(inputTile->getBuf(saveIdx),
-                              inputTile->getImageRectangle(),
-                              idx);
-         }
-      }
-      else
-      {
-         theTile->loadTile(inputTile.get());
-      }
+      //---
+      // Copy the input tile to the output tile performing scalar remap if
+      // needed.
+      //---
+      theTile->loadTile(inputTile.get());
    }
 
+   // Annotate the output tile.
    drawAnnotations(theTile);
 
    theTile->validate();
@@ -240,7 +225,8 @@ bool ossimAnnotationSource::deleteObject(ossimAnnotationObject* anObject)
 {
    if(anObject)
    {
-      vector<ossimAnnotationObject*>::iterator current = theAnnotationObjectList.begin();
+      std::vector<ossimAnnotationObject*>::iterator current =
+         theAnnotationObjectList.begin();
       while(current != theAnnotationObjectList.end())
       {
          if(*current == anObject)
@@ -260,7 +246,7 @@ bool ossimAnnotationSource::saveState(ossimKeywordlist& kwl,
                                       const char* prefix)const
 {
    // Save the state of all annotation objects we have.
-   vector<ossimAnnotationObject*>::const_iterator obj =
+   std::vector<ossimAnnotationObject*>::const_iterator obj =
       theAnnotationObjectList.begin();
    ossim_uint32 objIdx = 0;
    while (obj < theAnnotationObjectList.end())
@@ -301,7 +287,7 @@ bool ossimAnnotationSource::loadState(const ossimKeywordlist& kwl,
       {
          ++numberOfMatches;
          
-         ossimAnnotationObject* obj = NULL;
+         ossimAnnotationObject* obj = 0;
          obj = ossimAnnotationObjectFactory::instance()->
             create(kwl, newPrefix.c_str());
          if (obj)
@@ -339,7 +325,8 @@ void ossimAnnotationSource::computeBoundingRect()
       
       theAnnotationObjectList[0]->getBoundingRect(theRectangle);
       
-      vector<ossimAnnotationObject*>::iterator object = (theAnnotationObjectList.begin()+1);
+      std::vector<ossimAnnotationObject*>::iterator object =
+         (theAnnotationObjectList.begin()+1);
       while(object != theAnnotationObjectList.end())
       {
          (*object)->computeBoundingRect();
@@ -357,10 +344,11 @@ void ossimAnnotationSource::computeBoundingRect()
    }
 }
 
-vector<ossimAnnotationObject*> ossimAnnotationSource::pickObjects(const ossimDpt& imagePoint)
+std::vector<ossimAnnotationObject*> ossimAnnotationSource::pickObjects(
+   const ossimDpt& imagePoint)
 {
-   vector<ossimAnnotationObject*> result;
-   vector<ossimAnnotationObject*>::iterator currentObject;
+   std::vector<ossimAnnotationObject*> result;
+   std::vector<ossimAnnotationObject*>::iterator currentObject;
 
    currentObject = theAnnotationObjectList.begin();
 
@@ -376,10 +364,11 @@ vector<ossimAnnotationObject*> ossimAnnotationSource::pickObjects(const ossimDpt
    return result;
 }
 
-vector<ossimAnnotationObject*> ossimAnnotationSource::pickObjects(const ossimDrect& imageRect)
+std::vector<ossimAnnotationObject*> ossimAnnotationSource::pickObjects(
+   const ossimDrect& imageRect)
 {
-   vector<ossimAnnotationObject*> result;
-   vector<ossimAnnotationObject*>::iterator currentObject;
+   std::vector<ossimAnnotationObject*> result;
+   std::vector<ossimAnnotationObject*>::iterator currentObject;
 
    currentObject = theAnnotationObjectList.begin();
 
@@ -410,7 +399,7 @@ vector<ossimAnnotationObject*> ossimAnnotationSource::pickObjects(const ossimDre
 
 void ossimAnnotationSource::deleteAll()
 {
-   vector<ossimAnnotationObject*>::iterator obj;
+   std::vector<ossimAnnotationObject*>::iterator obj;
 
    obj = theAnnotationObjectList.begin();
 
@@ -419,7 +408,7 @@ void ossimAnnotationSource::deleteAll()
       if(*obj)
       {
          delete *obj;
-         *obj = NULL;
+         *obj = 0;
       }
       
       ++obj;
@@ -434,7 +423,8 @@ void ossimAnnotationSource::drawAnnotations(ossimRefPtr<ossimImageData> tile)
 
    if(theImage->getImageData().valid())
    {
-      vector<ossimAnnotationObject*>::iterator object = theAnnotationObjectList.begin();
+      std::vector<ossimAnnotationObject*>::iterator object =
+         theAnnotationObjectList.begin();
       while(object != theAnnotationObjectList.end())
       {
          if(*object)
@@ -446,12 +436,13 @@ void ossimAnnotationSource::drawAnnotations(ossimRefPtr<ossimImageData> tile)
    }
 }
 
-const vector<ossimAnnotationObject*>& ossimAnnotationSource::getObjectList()const
+const std::vector<ossimAnnotationObject*>&
+ossimAnnotationSource::getObjectList()const
 {
    return theAnnotationObjectList;
 }
 
-vector<ossimAnnotationObject*>& ossimAnnotationSource::getObjectList()
+std::vector<ossimAnnotationObject*>& ossimAnnotationSource::getObjectList()
 {
    return theAnnotationObjectList;
 }

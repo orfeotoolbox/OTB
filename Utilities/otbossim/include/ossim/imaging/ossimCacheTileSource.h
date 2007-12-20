@@ -1,22 +1,19 @@
 //*******************************************************************
-// Copyright (C) 2000 ImageLinks Inc.
 //
-// License:  LGPL
-// 
-// See LICENSE.txt file in the top level directory for more details.
+// License:  See top level LICENSE.txt file.
 //
 // Author:  Garrett Potts
 //
-// Description:
-//
-// ossimCacheTileSource.
+// Description:  ossimCacheTileSource
+// 
 //*******************************************************************
-//  $Id: ossimCacheTileSource.h 9094 2006-06-13 19:12:40Z dburken $
+//  $Id: ossimCacheTileSource.h 11693 2007-09-09 21:54:29Z dburken $
 #ifndef ossimCacheTileSource_HEADER
 #define ossimCacheTileSource_HEADER
 #include <ossim/imaging/ossimImageSourceFilter.h>
 #include <ossim/imaging/ossimAppFixedTileCache.h>
 #include <ossim/base/ossimProcessProgressEvent.h>
+#include <ossim/base/ossimMutex.h>
 
 /** Cache Tile Source */
 class OSSIMDLLEXPORT ossimCacheTileSource : public ossimImageSourceFilter
@@ -26,7 +23,7 @@ public:
     * Will construct a new Application cache
     */
    ossimCacheTileSource();
-   ossimCacheTileSource(ossimImageSource* inputSource);
+   // ossimCacheTileSource(ossimImageSource* inputSource);
    virtual ~ossimCacheTileSource();
 
    virtual ossimString getLongName()  const;
@@ -39,17 +36,26 @@ public:
    virtual void setCachingEnabledFlag(bool value);
    virtual void setEventProgressFlag(bool value);
 
-   void     changeTileSize(const ossimIpt& size);
-   ossimIpt getTileSize();
-   void     setTileSize(const ossimIpt& size);
+   void getTileSize(ossimIpt& size) const;
+
+   /**
+    * @brief Set the tile size.  This changes underlying cache tile size.
+    * @param Size of cache tile.
+    */
+   void setTileSize(const ossimIpt& size);
    
    virtual ossim_uint32 getTileWidth() const;
    virtual ossim_uint32 getTileHeight() const;
    
-   bool loadState(const ossimKeywordlist& kwl,
-                  const char* prefix=0);
-   bool saveState(ossimKeywordlist& kwl,
-                  const char* prefix=0)const;
+   virtual bool loadState(const ossimKeywordlist& kwl,
+                          const char* prefix=0);
+   virtual bool saveState(ossimKeywordlist& kwl,
+                          const char* prefix=0)const;
+
+   virtual ossimRefPtr<ossimProperty> getProperty(const ossimString& name)const;
+   virtual void setProperty(ossimRefPtr<ossimProperty> property);
+   virtual void getPropertyNames(std::vector<ossimString>& propertyNames)const;
+   
 
 protected:
 
@@ -63,6 +69,10 @@ protected:
    bool                        theEventProgressFlag;
    ossim_uint32                theCacheRLevel;
    ossimIrect                  theBoundingRect;
+
+   /** For lock and unlock. */
+   mutable ossimMutex theMutex;
+
    
    virtual void fireProgressEvent(double percentComplete);
    

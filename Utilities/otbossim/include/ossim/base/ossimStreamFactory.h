@@ -9,7 +9,7 @@
 //
 //
 //*******************************************************************
-//  $Id: ossimStreamFactory.h 9094 2006-06-13 19:12:40Z dburken $
+//  $Id: ossimStreamFactory.h 11176 2007-06-07 19:45:56Z dburken $
 //
 #ifndef ossimStreamFactory_HEADER
 #define ossimStreamFactory_HEADER
@@ -22,13 +22,14 @@ public:
    static ossimStreamFactory* instance();
    virtual ~ossimStreamFactory();
  
-   virtual ossimRefPtr<ossimIStream> createNewInputStream(const ossimFilename& file,
-	   std::ios::openmode openMode);
+   virtual ossimRefPtr<ossimIFStream>
+      createNewIFStream(const ossimFilename& file,
+                        std::ios_base::openmode openMode) const;
 
    
 protected:
    ossimStreamFactory();
-   ossimStreamFactory(const ossimStreamFactory&){}
+   ossimStreamFactory(const ossimStreamFactory&);
    static ossimStreamFactory* theInstance;
    
 };

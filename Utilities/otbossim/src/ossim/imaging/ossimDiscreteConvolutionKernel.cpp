@@ -2,19 +2,17 @@
 //
 // License:  See top level LICENSE.txt file.
 // 
-// Author:  Garrett Potts (gpotts@imagelinks.com)
-//
-// Description:
+// Author:  Garrett Potts
 //
 //*******************************************************************
-//  $Id: ossimDiscreteConvolutionKernel.cpp 9963 2006-11-28 21:11:01Z gpotts $
+//  $Id: ossimDiscreteConvolutionKernel.cpp 11419 2007-07-27 16:24:57Z dburken $
 #include <ossim/imaging/ossimDiscreteConvolutionKernel.h>
 
  
 ossimDiscreteConvolutionKernel::ossimDiscreteConvolutionKernel(long width,
                                                                long height,
                                                                bool doWeightedAverage)
-   : theKernel(NULL),
+   : theKernel(0),
      theWidth(width),
      theHeight(height),
      theComputeWeightedAverageFlag(doWeightedAverage)
@@ -40,7 +38,7 @@ ossimDiscreteConvolutionKernel::~ossimDiscreteConvolutionKernel()
    if(theKernel)
    {
       delete theKernel;
-      theKernel = NULL;
+      theKernel = 0;
    }
 }
 
@@ -137,7 +135,7 @@ void ossimDiscreteConvolutionKernel::convolveSubImage(const float* data,
                                                       double& result,
                                                       float nullPixel)const
 {
-   const float* dataStart = NULL;
+   const float* dataStart = 0;
    result = 0;
    
    if(theComputeWeightedAverageFlag)
@@ -227,7 +225,7 @@ void ossimDiscreteConvolutionKernel::convolveSubImage(const unsigned char* data,
                                                       double& result,
                                                       ossim_uint8 nullPixel)const
 {
-   const ossim_uint8* dataStart = NULL;
+   const ossim_uint8* dataStart = 0;
    result = 0;
    
    if(theComputeWeightedAverageFlag)
@@ -318,7 +316,7 @@ void ossimDiscreteConvolutionKernel::convolveSubImage(const unsigned short* data
                                                       double& result,
                                                       ossim_uint16 nullPixel)const
 {
-   const ossim_uint16* dataStart = NULL;
+   const ossim_uint16* dataStart = 0;
    result = 0;
    
    if(theComputeWeightedAverageFlag)
@@ -408,7 +406,7 @@ void ossimDiscreteConvolutionKernel::convolveSubImage(const short* data,
                                                       double& result,
                                                       ossim_sint16 nullPixel)const
 {
-   const ossim_sint16* dataStart = NULL;
+   const ossim_sint16* dataStart = 0;
    result = 0;
    
    if(theComputeWeightedAverageFlag)
@@ -499,7 +497,7 @@ void ossimDiscreteConvolutionKernel::convolveSubImage(const double* data,
                                                       double& result,
                                                       double nullPixel)const
 {
-   const double* dataStart = NULL;
+   const double* dataStart = 0;
    result = 0;
    
    if(theComputeWeightedAverageFlag)

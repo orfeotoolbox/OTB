@@ -8,7 +8,7 @@
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimAnnotationLineObject.cpp 9094 2006-06-13 19:12:40Z dburken $
+// $Id: ossimAnnotationLineObject.cpp 11347 2007-07-23 13:01:59Z gpotts $
 
 #include <ossim/imaging/ossimAnnotationLineObject.h>
 #include <ossim/imaging/ossimRgbImage.h>
@@ -68,10 +68,10 @@ ossimObject* ossimAnnotationLineObject::dup()const
 
 void ossimAnnotationLineObject::applyScale(double x, double y)
 {
-   theStart.x = irint(theStart.x*x);
-   theStart.y = irint(theStart.y*y);
-   theEnd.x   = irint(theEnd.x*x);
-   theEnd.y   = irint(theEnd.y*y);
+   theStart.x = ossim::round<int>(theStart.x*x);
+   theStart.y = ossim::round<int>(theStart.y*y);
+   theEnd.x   = ossim::round<int>(theEnd.x*x);
+   theEnd.y   = ossim::round<int>(theEnd.y*y);
 }
 
 ossimAnnotationObject* ossimAnnotationLineObject::getNewClippedObject(const ossimDrect& rect)const

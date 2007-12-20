@@ -2,7 +2,7 @@
 //
 // License:  See top level LICENSE.txt file.
 // 
-// AUTHOR: Oscar Kramer (okramer@imagelinks.com)
+// AUTHOR: Oscar Kramer
 //
 // DESCRIPTION: Contains implementation of class ossimIkonosRpcModel. This 
 //    derived class implements the capability of reading Ikonos RPC support
@@ -11,7 +11,7 @@
 // LIMITATIONS: None.
 //
 //*****************************************************************************
-//  $Id: ossimIkonosRpcModel.cpp 10470 2007-02-08 20:54:53Z dburken $
+//  $Id: ossimIkonosRpcModel.cpp 11719 2007-09-12 14:49:51Z gpotts $
 #include <ossim/projection/ossimIkonosRpcModel.h>
 #include <ossim/base/ossimNotifyContext.h>
 
@@ -28,6 +28,8 @@ RTTI_DEF1(ossimIkonosRpcModel, "ossimIkonosRpcModel", ossimRpcModel);
 #include <ossim/base/ossimTrace.h>
 static ossimTrace traceExec  ("ossimIkonosRpcModel:exec");
 static ossimTrace traceDebug ("ossimIkonosRpcModel:debug");
+
+const ossimFilename INIT_RPC_GEOM_FILENAME ("rpc_init.geom");
 
 static const char* MODEL_TYPE        = "ossimIkonosRpcModel";
 static const char* META_DATA_FILE    = "meta_data_file";
@@ -162,7 +164,7 @@ ossimIkonosRpcModel::ossimIkonosRpcModel(const ossimFilename& metadata,
    ossimFilename init_rpc_geom;
    init_rpc_geom.merge(drivePart,
                        pathPart,
-                       ossimRpcModel::INIT_RPC_GEOM_FILENAME,
+                       INIT_RPC_GEOM_FILENAME,
                        "");
 //      (metadata.path().dirCat(ossimRpcModel::INIT_RPC_GEOM_FILENAME));
    ossimKeywordlist kwl (init_rpc_geom);
@@ -729,13 +731,14 @@ bool ossimIkonosRpcModel::saveState(ossimKeywordlist& kwl,
 
 bool ossimIkonosRpcModel::parseFile(const ossimFilename& file)
 {
-   if (!parseNitfFile(file))
-   {
+//    if (!ossimRpcModel::ossimParseFile(file))
+//    {
       return parseTiffFile(file);
-   }
-   return true;
+//    }
+//    return true;
 }
 
+#if 0
 bool ossimIkonosRpcModel::parseNitfFile(const ossimFilename& geom_file)
 {
    if(!isNitf(geom_file))
@@ -826,6 +829,7 @@ bool ossimIkonosRpcModel::parseNitfFile(const ossimFilename& geom_file)
    
    return true;
 }
+#endif
 
 bool ossimIkonosRpcModel::parseTiffFile(const ossimFilename& filename)
 {
@@ -875,7 +879,7 @@ bool ossimIkonosRpcModel::parseTiffFile(const ossimFilename& filename)
    ossimFilename init_rpc_geom;
    init_rpc_geom.merge(drivePart,
                        pathPart,
-                       ossimRpcModel::INIT_RPC_GEOM_FILENAME,
+                       INIT_RPC_GEOM_FILENAME,
                        "");
    ossimKeywordlist kwl (init_rpc_geom);
    saveState(kwl);

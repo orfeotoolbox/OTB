@@ -6,7 +6,7 @@
 // Author:  David Burken
 //
 //*******************************************************************
-//  $Id: ossimGeneralRasterWriter.cpp 10059 2006-12-11 13:30:13Z dburken $
+//  $Id: ossimGeneralRasterWriter.cpp 11347 2007-07-23 13:01:59Z gpotts $
 
 #include <fstream>
 
@@ -291,7 +291,7 @@ bool ossimGeneralRasterWriter::writeToBip()
             {
                endian.swap(scalarType,
                            buf,
-                           lineBytes/ossimGetScalarSizeInBytes(scalarType));
+                           lineBytes/ossim::scalarSizeInBytes(scalarType));
             }
             theFileStream.write((char*)buf, lineBytes);
             if (theFileStream.fail())
@@ -423,7 +423,7 @@ bool ossimGeneralRasterWriter::writeToBil()
             {
                endian.swap(scalarType,
                            buf,
-                           bytesInLine/ossimGetScalarSizeInBytes(scalarType));
+                           bytesInLine/ossim::scalarSizeInBytes(scalarType));
             }
             theFileStream.write((char*)buf, bytesInLine);
             if (theFileStream.fail())
@@ -581,7 +581,7 @@ bool ossimGeneralRasterWriter::writeToBsq()
             {
                endian.swap(scalarType,
                            buf,
-                           bytesInLine/ossimGetScalarSizeInBytes(scalarType));
+                           bytesInLine/ossim::scalarSizeInBytes(scalarType));
             }
 
             theFileStream.write((char*)buf, bytesInLine);

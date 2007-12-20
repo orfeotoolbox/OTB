@@ -8,7 +8,7 @@
 //
 // SOFTWARE HISTORY:
 //>
-//   17Apr2001  Oscar Kramer (okramer@imagelinks.com)
+//   17Apr2001  Oscar Kramer
 //              Initial coding.
 //<
 //*****************************************************************************
@@ -29,11 +29,11 @@ public:
    ossimGeoid();
    virtual ~ossimGeoid();
 
-   virtual bool open(const ossimFilename& dir, ossimByteOrder byteOrder=OSSIM_LITTLE_ENDIAN) = 0;
+   virtual bool open(const ossimFilename& dir, ossimByteOrder byteOrder=OSSIM_BIG_ENDIAN) = 0;
 
-   /*!
-    *  Returns the offset from the ellipsoid to the geoid.
-    *  Returns OSSIM_DBL_NAN if grid does not contain the point.
+   /**
+    *  @return The offset from the ellipsoid to the geoid.  Returns
+    *  ossim::nan() if grid does not contain the point.
     */
    virtual double offsetFromEllipsoid(const ossimGpt& gpt) const = 0;
 

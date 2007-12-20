@@ -56,15 +56,15 @@ ossimLsrRay::ossimLsrRay(const ossimLsrPoint&  origin,
    : theOrigin(origin),
      theDirection(direction.unitVector())
 {
-   if (origin.lsrSpace() != direction.lsrSpace())
+   if (origin.lsrSpace() != direction.lsrSpace() || hasNans())
    {
       ossimNotify(ossimNotifyLevel_FATAL) << "FATAL -- ossimLsrRay(ossimLsrPoint,ossimLsrVector) Constructor:"
                                           << "\n   The origin and direction LSR quantities do not share the"
                                           << "\n   same LSR space. Setting to NAN. Check the data for errors." << std::endl;
 
-      theOrigin    = ossimLsrPoint (OSSIM_NAN, OSSIM_NAN, OSSIM_NAN,
+      theOrigin    = ossimLsrPoint (ossim::nan(), ossim::nan(), ossim::nan(),
                                     origin.lsrSpace());
-      theDirection = ossimLsrVector(OSSIM_NAN, OSSIM_NAN, OSSIM_NAN,
+      theDirection = ossimLsrVector(ossim::nan(), ossim::nan(), ossim::nan(),
                                     direction.lsrSpace());
    }    
 }
@@ -79,18 +79,19 @@ ossimLsrRay::ossimLsrRay(const ossimLsrPoint&  origin,
                          const ossimLsrPoint&  towards)
    : theOrigin(origin)
 {
-   if (origin.lsrSpace() != towards.lsrSpace())
+   if ((origin.lsrSpace() != towards.lsrSpace())||
+       origin.hasNans()||
+       towards.hasNans() )
    {
       ossimNotify(ossimNotifyLevel_FATAL) << "ERROR -- ossimLsrRay(ossimLsrPoint,ossimLsrPoint) Constructor:"
                                           << "\n   The origin and direction LSR quantities do not share the"
                                           << "\n   same LSR space. Setting to NAN. Check the data for errors." << std::endl;
       
-      theOrigin    = ossimLsrPoint (OSSIM_NAN, OSSIM_NAN, OSSIM_NAN,
+      theOrigin    = ossimLsrPoint (ossim::nan(), ossim::nan(), ossim::nan(),
                                     origin.lsrSpace());
-      theDirection = ossimLsrVector(OSSIM_NAN, OSSIM_NAN, OSSIM_NAN,
-                                    towards.lsrSpace());
+      theDirection = ossimLsrVector(ossim::nan(), ossim::nan(), ossim::nan(),
+                                    origin.lsrSpace());
    }
-
    else
    {
       theDirection = towards - origin;

@@ -8,7 +8,7 @@
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimBandAverageFilter.cpp 9094 2006-06-13 19:12:40Z dburken $
+// $Id: ossimBandAverageFilter.cpp 11347 2007-07-23 13:01:59Z gpotts $
 #include <ossim/imaging/ossimBandAverageFilter.h>
 
 // used for constructing and an ossimImageData object
@@ -189,7 +189,7 @@ double ossimBandAverageFilter::getMinPixelValue(ossim_uint32 band)const
    // loop through each band and find the min pix value
    ossim_uint32 bandIndex = 0;
    ossim_uint32 inputBands = theInputConnection->getNumberOfOutputBands();
-   double minValue = ossimGetDefaultMax(OSSIM_DOUBLE);
+   double minValue = ossim::defaultMax(OSSIM_DOUBLE);
    for(bandIndex = 0; bandIndex < inputBands; ++bandIndex)
    {
       double minPix = theInputConnection->getMinPixelValue(bandIndex);
@@ -213,7 +213,7 @@ double ossimBandAverageFilter::getMaxPixelValue(ossim_uint32 band)const
    // loop through each band and find the max pix value
    ossim_uint32 bandIndex = 0;
    ossim_uint32 inputBands = theInputConnection->getNumberOfOutputBands();
-   double maxValue = ossimGetDefaultMin(OSSIM_DOUBLE);
+   double maxValue = ossim::defaultMin(OSSIM_DOUBLE);
    for(bandIndex = 0; bandIndex < inputBands; ++bandIndex)
    {
       double maxPix = theInputConnection->getMaxPixelValue(bandIndex);

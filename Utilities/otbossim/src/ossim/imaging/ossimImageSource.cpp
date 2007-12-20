@@ -8,7 +8,7 @@
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimImageSource.cpp 9094 2006-06-13 19:12:40Z dburken $
+// $Id: ossimImageSource.cpp 11349 2007-07-23 13:30:44Z gpotts $
 
 #include <ossim/imaging/ossimImageSource.h>
 #include <ossim/imaging/ossimImageData.h>
@@ -115,10 +115,10 @@ ossim_uint32 ossimImageSource::getTileWidth()  const
    {
       return inter->getTileWidth();
    }
-   ossimIpt defaultTileSize;
-   ossimGetDefaultTileSize(defaultTileSize);
+   ossimIpt tileSize;
+   ossim::defaultTileSize(tileSize);
    
-   return defaultTileSize.x;
+   return tileSize.x;
 }
 
 ossim_uint32 ossimImageSource::getTileHeight() const
@@ -130,10 +130,10 @@ ossim_uint32 ossimImageSource::getTileHeight() const
       return inter->getTileHeight();
    }
    
-   ossimIpt defaultTileSize;
-   ossimGetDefaultTileSize(defaultTileSize);
+   ossimIpt tileSize;
+   ossim::defaultTileSize(tileSize);
    
-   return defaultTileSize.y;
+   return tileSize.y;
 }
 
 ossimIrect ossimImageSource::getBoundingRect(ossim_uint32 resLevel)const
@@ -204,7 +204,7 @@ double ossimImageSource::getNullPixelValue(ossim_uint32 band)const
       return inter->getNullPixelValue(band);
    }
    
-   return ossimGetDefaultNull(getOutputScalarType());
+   return ossim::defaultNull(getOutputScalarType());
 }
 
 double ossimImageSource::getMinPixelValue(ossim_uint32 band)const
@@ -215,7 +215,7 @@ double ossimImageSource::getMinPixelValue(ossim_uint32 band)const
    {
       return inter->getMinPixelValue(band);
    }
-   return ossimGetDefaultMin(getOutputScalarType());
+   return ossim::defaultMin(getOutputScalarType());
 }
 
 double ossimImageSource::getMaxPixelValue(ossim_uint32 band)const
@@ -227,7 +227,7 @@ double ossimImageSource::getMaxPixelValue(ossim_uint32 band)const
       return inter->getMaxPixelValue(band);
    }
    
-   return ossimGetDefaultMax(getOutputScalarType());
+   return ossim::defaultMax(getOutputScalarType());
 }
 
 

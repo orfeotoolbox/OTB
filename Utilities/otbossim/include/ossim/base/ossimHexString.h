@@ -5,7 +5,7 @@
 // Author: Garrett Potts (gpotts@imagelinks.com)
 // 
 //********************************************************************
-// $Id: ossimHexString.h 9968 2006-11-29 14:01:53Z gpotts $
+// $Id: ossimHexString.h 10632 2007-03-15 18:52:43Z gpotts $
 #include <ossim/base/ossimString.h>
 #include <ossim/base/ossimConstants.h>
 
@@ -14,6 +14,8 @@ class OSSIMDLLEXPORT ossimHexString : public ossimString
 public:
    ossimHexString():ossimString()
       {}
+   template <class Iter>
+      ossimHexString(Iter start, Iter end):ossimString(start, end){}
    ossimHexString(const std::string& aString):ossimString(aString)
       {}
    ossimHexString(const char *aString):ossimString(aString?aString:"")

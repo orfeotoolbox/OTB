@@ -5,7 +5,7 @@
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimImageData.cpp 10490 2007-02-14 18:12:33Z dburken $
+// $Id: ossimImageData.cpp 12038 2007-11-13 20:38:43Z gpotts $
 
 #include <iterator>
 
@@ -29,10 +29,10 @@ ossimImageData::ossimImageData()
       theMaxPixelValue(0),
       theOrigin(0, 0)
 {
-   ossimIpt defaultTileSize;
-   ossimGetDefaultTileSize(defaultTileSize);
-   theSpatialExtents[0] = defaultTileSize.x;
-   theSpatialExtents[1] = defaultTileSize.y;
+   ossimIpt tileSize;
+   ossim::defaultTileSize(tileSize);
+   theSpatialExtents[0] = tileSize.x;
+   theSpatialExtents[1] = tileSize.y;
    initializeDefaults();
 }
 
@@ -48,10 +48,10 @@ ossimImageData::ossimImageData(ossimSource*    owner,
      theMaxPixelValue(0),
      theOrigin(0, 0)
 {
-   ossimIpt defaultTileSize;
-   ossimGetDefaultTileSize(defaultTileSize);
-   theSpatialExtents[0] = defaultTileSize.x;
-   theSpatialExtents[1] = defaultTileSize.y;
+   ossimIpt tileSize;
+   ossim::defaultTileSize(tileSize);
+   theSpatialExtents[0] = tileSize.x;
+   theSpatialExtents[1] = tileSize.y;
    initializeDefaults();
 }
 
@@ -743,7 +743,7 @@ template <class T> ossim_float64 ossimImageData::computeMeanSquaredError(
 //       area of the image.
 //
 //******************************************************************
-void ossimImageData::populateHistogram(ossimMultiBandHistogram* histo)
+void ossimImageData::populateHistogram(ossimRefPtr<ossimMultiBandHistogram> histo)
 {
    ossim_uint32 numberOfBands = getNumberOfBands();
 
@@ -759,14 +759,14 @@ void ossimImageData::populateHistogram(ossimMultiBandHistogram* histo)
       {
          for(ossim_uint32 band = 0; band < numberOfBands; ++band)
          {
-            ossimHistogram* currentHisto = histo->getHistogram(band);
+            ossimRefPtr<ossimHistogram> currentHisto = histo->getHistogram(band);
             ossim_uint8* buffer = (ossim_uint8*)getBuf(band);
          
-            if(currentHisto)
+            if(currentHisto.valid())
             {
-               ossimHistogram* currentHisto = histo->getHistogram(band);
+               ossimRefPtr<ossimHistogram> currentHisto = histo->getHistogram(band);
                
-               if(currentHisto)
+               if(currentHisto.valid())
                {
                   ossim_uint32 upperBound = getWidth()*getHeight();
                   for(ossim_uint32 offset = 0; offset < upperBound; ++offset)
@@ -783,10 +783,10 @@ void ossimImageData::populateHistogram(ossimMultiBandHistogram* histo)
       {
          for(ossim_uint32 band = 0; band < numberOfBands; ++band)
          {
-            ossimHistogram* currentHisto = histo->getHistogram(band);
+            ossimRefPtr<ossimHistogram> currentHisto = histo->getHistogram(band);
 	 
              ossim_uint16* buffer = (ossim_uint16*)getBuf(band);
-             if(currentHisto)
+             if(currentHisto.valid())
              {
                 ossim_uint32 upperBound = getWidth()*getHeight();
                 for(ossim_uint32 offset = 0; offset < upperBound; ++offset)
@@ -801,10 +801,10 @@ void ossimImageData::populateHistogram(ossimMultiBandHistogram* histo)
       {
          for(ossim_uint32 band = 0; band < numberOfBands; ++band)
          {
-            ossimHistogram* currentHisto = histo->getHistogram(band);
+            ossimRefPtr<ossimHistogram> currentHisto = histo->getHistogram(band);
             ossim_sint16* buffer = (ossim_sint16*)getBuf(band);
             
-            if(currentHisto)
+            if(currentHisto.valid())
             {
                ossim_uint32 upperBound = getWidth()*getHeight();
                for(ossim_uint32 offset = 0; offset < upperBound; ++offset)
@@ -819,10 +819,10 @@ void ossimImageData::populateHistogram(ossimMultiBandHistogram* histo)
       {
          for(ossim_uint32 band = 0; band < numberOfBands; ++band)
          {
-            ossimHistogram* currentHisto = histo->getHistogram(band);
+            ossimRefPtr<ossimHistogram> currentHisto = histo->getHistogram(band);
             ossim_sint32* buffer = (ossim_sint32*)getBuf(band);
             
-            if(currentHisto)
+            if(currentHisto.valid())
             {
                ossim_uint32 upperBound = getWidth()*getHeight();
                for(ossim_uint32 offset = 0; offset < upperBound; ++offset)
@@ -837,10 +837,10 @@ void ossimImageData::populateHistogram(ossimMultiBandHistogram* histo)
       {
          for(ossim_uint32 band = 0; band < numberOfBands; ++band)
          {
-            ossimHistogram* currentHisto = histo->getHistogram(band);
+            ossimRefPtr<ossimHistogram> currentHisto = histo->getHistogram(band);
             ossim_uint32* buffer = (ossim_uint32*)getBuf(band);
             
-            if(currentHisto)
+            if(currentHisto.valid())
             {
                ossim_uint32 upperBound = getWidth()*getHeight();
                for(ossim_uint32 offset = 0; offset < upperBound; ++offset)
@@ -856,10 +856,10 @@ void ossimImageData::populateHistogram(ossimMultiBandHistogram* histo)
       {
          for(ossim_uint32 band = 0; band < numberOfBands; ++band)
          {
-            ossimHistogram* currentHisto = histo->getHistogram(band);
+            ossimRefPtr<ossimHistogram> currentHisto = histo->getHistogram(band);
             ossim_float64* buffer = (ossim_float64*)getBuf(band);
             
-            if(currentHisto)
+            if(currentHisto.valid())
             {
                ossim_uint32 upperBound = getWidth()*getHeight();
                for(ossim_uint32 offset = 0; offset < upperBound; ++offset)
@@ -875,10 +875,10 @@ void ossimImageData::populateHistogram(ossimMultiBandHistogram* histo)
       {
          for(ossim_uint32 band = 0; band < numberOfBands; ++band)
          {
-            ossimHistogram* currentHisto = histo->getHistogram(band);
+            ossimRefPtr<ossimHistogram> currentHisto = histo->getHistogram(band);
             ossim_float32* buffer = (ossim_float32*)getBuf(band);
             
-            if(currentHisto)
+            if(currentHisto.valid())
             {
                ossim_uint32 upperBound = getWidth()*getHeight();
                for(ossim_uint32 offset = 0; offset < upperBound; ++offset)
@@ -1339,67 +1339,7 @@ void ossimImageData::initializeMinDefault()
 
    theMinPixelValue.resize(theNumberOfDataComponents);
 
-   ossim_float64 value = 0.0;
-   
-   switch (getScalarType())
-   {
-      case OSSIM_SINT8:
-      {
-         value = OSSIM_DEFAULT_MIN_PIX_SINT8;
-         break;
-      }
-      case OSSIM_UINT16:
-      {
-         value = OSSIM_DEFAULT_MIN_PIX_UINT16;
-         break;
-      }
-      case OSSIM_USHORT11:
-      {
-         value = OSSIM_DEFAULT_MIN_PIX_UINT11;
-         break;
-      }
-      case OSSIM_SINT16:
-      {
-         value = OSSIM_DEFAULT_MIN_PIX_SINT16;
-         break;
-      }
-      case OSSIM_UINT32:
-      {
-         value = OSSIM_DEFAULT_MIN_PIX_UINT32;
-         break;
-      }
-      case OSSIM_SINT32:
-      {
-         value = OSSIM_DEFAULT_MIN_PIX_SINT32;
-         break;
-      }
-      case OSSIM_NORMALIZED_FLOAT:
-      {
-         value = OSSIM_DEFAULT_MIN_PIX_NORM_FLOAT;
-         break;
-      }
-      case OSSIM_FLOAT32:
-      {
-         value = OSSIM_DEFAULT_MIN_PIX_FLOAT;
-         break;
-      }
-      case OSSIM_FLOAT64:
-      {
-         value = OSSIM_DEFAULT_MIN_PIX_DOUBLE;
-         break;
-      }
-      case OSSIM_NORMALIZED_DOUBLE:
-      {
-         value = OSSIM_DEFAULT_MIN_PIX_NORM_DOUBLE;
-         break;
-      }
-      case OSSIM_UINT8:
-      default:
-      {
-         value = OSSIM_DEFAULT_MIN_PIX_UCHAR;
-         break;
-      }
-   }
+   ossim_float64 value = ossim::defaultMin( getScalarType() );
    
    for(ossim_uint32 band = 0; band < theNumberOfDataComponents; ++band)
    {
@@ -1416,68 +1356,8 @@ void ossimImageData::initializeMaxDefault()
 
    theMaxPixelValue.resize(theNumberOfDataComponents);
 
-   ossim_float64 value = 0.0;
-   
-   switch (getScalarType())
-   {
-      case OSSIM_SINT8:
-      {
-         value = OSSIM_DEFAULT_MAX_PIX_SINT8;
-         break;
-      }
-      case OSSIM_UINT16:
-      {
-         value = OSSIM_DEFAULT_MAX_PIX_UINT16;
-         break;
-      }
-      case OSSIM_USHORT11:
-      {
-         value = OSSIM_DEFAULT_MAX_PIX_UINT11;
-         break;
-      }
-      case OSSIM_SINT16:
-      {
-         value = OSSIM_DEFAULT_MAX_PIX_SINT16;
-         break;
-      }
-      case OSSIM_UINT32:
-      {
-         value = OSSIM_DEFAULT_MAX_PIX_UINT32;
-         break;
-      }
-      case OSSIM_SINT32:
-      {
-         value = OSSIM_DEFAULT_MAX_PIX_SINT32;
-         break;
-      }
-      case OSSIM_NORMALIZED_FLOAT:
-      {
-         value = OSSIM_DEFAULT_MAX_PIX_NORM_FLOAT;
-         break;
-      }
-      case OSSIM_FLOAT32:
-      {
-         value = OSSIM_DEFAULT_MAX_PIX_FLOAT;
-         break;
-      }
-      case OSSIM_FLOAT64:
-      {
-         value = OSSIM_DEFAULT_MAX_PIX_DOUBLE;
-         break;
-      }
-      case OSSIM_NORMALIZED_DOUBLE:
-      {
-         value = OSSIM_DEFAULT_MAX_PIX_NORM_DOUBLE;
-         break;
-      }
-      case OSSIM_UINT8:
-      default:
-      {
-         value = OSSIM_DEFAULT_MAX_PIX_UCHAR;
-         break;
-      }
-   }
-   
+   ossim_float64 value = ossim::defaultMax( getScalarType() );
+      
    for(ossim_uint32 band = 0; band < theNumberOfDataComponents; ++band)
    {
       theMaxPixelValue[band]  = value;
@@ -1493,68 +1373,7 @@ void ossimImageData::initializeNullDefault()
 
    theNullPixelValue.resize(theNumberOfDataComponents);
 
-   ossim_float64 value = 0.0;
-   
-   switch (getScalarType())
-   {
-      case OSSIM_SINT8:
-      {
-         value = OSSIM_DEFAULT_MIN_PIX_SINT8-1;
-         break;
-      }
-      case OSSIM_UINT16:
-      {
-         value = OSSIM_USHORT_NAN;
-         break;
-      }
-      case OSSIM_USHORT11:
-      {
-         value = OSSIM_USHORT_NAN;
-         break;
-      }
-      case OSSIM_SINT16:
-      {
-         value = OSSIM_SSHORT_NAN;
-         break;
-      }
-      case OSSIM_UINT32:
-      {
-         value = OSSIM_UINT_NAN;
-         break;
-      }
-      case OSSIM_SINT32:
-      {
-         // OSSIM_INT_NAN ???
-         value = OSSIM_DEFAULT_MIN_PIX_SINT32-1;
-         break;
-      }
-      case OSSIM_NORMALIZED_FLOAT:
-      {
-         value = 0.0;
-         break;
-      }
-      case OSSIM_FLOAT32:
-      {
-         value = OSSIM_FLT_NAN;
-         break;
-      }
-      case OSSIM_FLOAT64:
-      {
-         value = OSSIM_DBL_NAN;
-         break;
-      }
-      case OSSIM_NORMALIZED_DOUBLE:
-      {
-         value = 0.0;
-         break;
-      }
-      case OSSIM_UINT8:
-      default:
-      {
-         value = 0.0;
-         break;
-      }
-   }
+   ossim_float64 value = ossim::defaultNull( getScalarType() );
    
    for(ossim_uint32 band = 0; band < theNumberOfDataComponents; ++band)
    {
@@ -2461,7 +2280,7 @@ void ossimImageData::setNumberOfBands(ossim_uint32 bands,
          ossimRectilinearDataObject::initialize();
       }
       
-      ossim_uint32 minBands = ossimMin(b, bands);
+      ossim_uint32 minBands = ossim::min(b, bands);
 
       vector<ossim_float64> newNull(bands);
       vector<ossim_float64> newMin(bands);
@@ -3016,6 +2835,74 @@ File %s line %d\nUnknown interleave type!",
                     __LINE__);      
       return;
    } // End of "switch (type)"
+}
+
+
+void ossimImageData::nullTileAlpha(const ossim_uint8* src,
+                                   const ossimIrect& src_rect,
+                                   bool multiplyAlphaFlag)
+{
+   const ossimIrect img_rect = getImageRectangle();
+   
+   // Get the clip rect.
+   const ossimIrect clip_rect = img_rect.clipToRect(src_rect);
+
+   nullTileAlpha(src, src_rect, clip_rect, multiplyAlphaFlag);
+}
+
+void ossimImageData::nullTileAlpha(const ossim_uint8* src,
+                                   const ossimIrect& src_rect,
+                                   const ossimIrect& clip_rect,
+                                   bool multiplyAlphaFlag)
+{
+   switch (getScalarType())
+   {
+      case OSSIM_UINT8:
+         nullTileAlphaTemplate(ossim_uint8(0), src, src_rect, clip_rect, multiplyAlphaFlag);
+         return;
+
+      case OSSIM_SINT8:
+         nullTileAlphaTemplate(ossim_sint8(0), src, src_rect, clip_rect, multiplyAlphaFlag);
+         return;
+         
+      case OSSIM_UINT16:
+      case OSSIM_USHORT11:
+         nullTileAlphaTemplate(ossim_uint16(0), src, src_rect, clip_rect, multiplyAlphaFlag);
+         return;
+         
+      case OSSIM_SINT16:
+         nullTileAlphaTemplate(ossim_sint16(0), src, src_rect, clip_rect, multiplyAlphaFlag);
+         return;
+         
+      case OSSIM_UINT32:
+         nullTileAlphaTemplate(ossim_uint32(0), src, src_rect, clip_rect, multiplyAlphaFlag);
+         return;
+
+      case OSSIM_SINT32:
+         nullTileAlphaTemplate(ossim_sint32(0), src, src_rect, clip_rect, multiplyAlphaFlag);
+         return;
+         
+      case OSSIM_NORMALIZED_FLOAT:
+      case OSSIM_FLOAT32:
+         nullTileAlphaTemplate(ossim_float32(0), src, src_rect, clip_rect, multiplyAlphaFlag);
+         return;
+         
+      case OSSIM_NORMALIZED_DOUBLE:
+      case OSSIM_FLOAT64:
+         nullTileAlphaTemplate(ossim_float64(0), src, src_rect, clip_rect, multiplyAlphaFlag);
+         return;
+         
+      case OSSIM_SCALAR_UNKNOWN:
+      default:
+         ossimSetError(getClassName(),
+                       ossimErrorCodes::OSSIM_ERROR,
+                       "ossimImageData::nullTileAlpha\n\
+File %s line %d\nUnsupported scalar type for method!",
+                       __FILE__,
+                       __LINE__);      
+         return;
+   }
+   
 }
 
 void ossimImageData::loadTileFromBip(const void* src,
@@ -4463,6 +4350,130 @@ ossimImageData::unloadTileToBilTemplate(T,  // dummy template arg...
             d += buf_width;
          }
       }
+   }
+}
+
+template <class T> void ossimImageData::nullTileAlphaTemplate(T,
+                                                              const ossim_uint8* src,
+                                                              const ossimIrect& src_rect,
+                                                              const ossimIrect& clip_rect,
+                                                              bool multiplyAlphaFlag)
+{
+   static const char  MODULE[] = "ossimImageData::nullTileAlphaTemplate";
+   
+   // Check the pointer.
+   if (!src)
+   {
+      // Set the error...
+      ossimSetError(getClassName(),
+                    ossimErrorCodes::OSSIM_ERROR,
+                    "%s File %s line %d\nNULL pointer passed to method!",
+                    MODULE,
+                    __FILE__,
+                    __LINE__);
+      return;
+   }
+   
+   const ossimIrect img_rect = getImageRectangle();
+   
+   // Check for intersect.
+   if ( ! img_rect.intersects(src_rect) )
+   {
+      return; // Nothing to do here.
+   }
+
+   // Check the clip rect.
+   if (!clip_rect.completely_within(img_rect))
+   {
+      return;
+   }
+   
+   // Check the status and allocate memory if needed.
+   if (getDataObjectStatus() == OSSIM_NULL) initialize();
+   
+   // Get the width of the buffers.
+   ossim_uint32 num_bands = getNumberOfBands();
+   ossim_uint32 s_width = src_rect.width();
+   ossim_uint32 d_width = getWidth();
+   ossim_uint32 band;
+   ossim_uint32 destinationOffset = (clip_rect.ul().y - img_rect.ul().y) * d_width +
+                              (clip_rect.ul().x - img_rect.ul().x);
+   ossim_uint32 destinationIndex = destinationOffset;
+   ossim_uint32 sourceOffset = (clip_rect.ul().y - src_rect.ul().y) * s_width +
+                         (clip_rect.ul().x - src_rect.ul().x);
+   ossim_uint32 sourceIndex = sourceOffset;
+   ossim_uint32 clipHeight = clip_rect.height();
+   ossim_uint32 clipWidth = clip_rect.width();
+
+   if(!multiplyAlphaFlag)
+   {
+      // Copy the data.
+      for (band=0; band<num_bands; band++)
+      {
+         T* destinationBand = static_cast<T*>(getBuf(band));
+         destinationIndex = destinationOffset;
+         sourceIndex = sourceOffset;
+         T nullPix = (T)getNullPix(band);
+         T minPix = (T)getMinPix(band);
+         for (ossim_uint32 line = 0; line < clipHeight; ++line)
+         {
+            for (ossim_uint32 sample = 0; sample < clipWidth; ++sample)
+            {
+               if(src[sourceIndex+sample] == 0)
+               {
+                  destinationBand[destinationIndex + sample] = nullPix;
+               }
+               else if(destinationBand[destinationIndex + sample] == nullPix)
+               {
+                  destinationBand[destinationIndex + sample] = minPix;
+               }
+            }
+            sourceIndex += s_width;
+            destinationIndex += d_width;
+         }
+      }
+   }
+   else
+   {
+      float normalizer = 1.0/255.0;
+      // Copy the data.
+      for (band=0; band<num_bands; band++)
+      {
+         T* destinationBand = static_cast<T*>(getBuf(band));
+         destinationIndex = destinationOffset;
+         sourceIndex = sourceOffset;
+         T nullPix = (T)getNullPix(band);
+         T minPix = (T)getMinPix(band);
+         for (ossim_uint32 line = 0; line < clipHeight; ++line)
+         {
+            for (ossim_uint32 sample = 0; sample < clipWidth; ++sample)
+            {
+               if(src[sourceIndex+sample] != 255)
+               {
+                  if(src[sourceIndex+sample] != 0)
+                  {
+                     destinationBand[destinationIndex + sample] = (T)(destinationBand[destinationIndex + sample]*
+                                                                      (src[sourceIndex+sample]*normalizer));
+                     if(destinationBand[destinationIndex + sample] == nullPix)
+                     {
+                        destinationBand[destinationIndex + sample] = minPix;
+                     }
+                  }
+                  else
+                  {
+                     destinationBand[destinationIndex + sample] = nullPix;
+                  }
+               }
+               else if(destinationBand[destinationIndex + sample] == nullPix)
+               {
+                  destinationBand[destinationIndex + sample] = minPix;
+               }
+            }
+            sourceIndex += s_width;
+            destinationIndex += d_width;
+         }
+      }
+      
    }
 }
 

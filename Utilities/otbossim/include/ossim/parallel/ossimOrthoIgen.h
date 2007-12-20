@@ -1,4 +1,4 @@
-// $Id: ossimOrthoIgen.h 9591 2006-09-21 18:03:25Z dburken $
+// $Id: ossimOrthoIgen.h 10692 2007-04-11 02:23:27Z gpotts $
 #ifndef ossimOrthoIgen_HEADER
 #define ossimOrthoIgen_HEADER
 #include <ossim/base/ossimObject.h>
@@ -18,6 +18,11 @@ public:
       OSSIM_GEO_PROJECTION,
       OSSIM_INPUT_PROJECTION,
       OSSIM_EXTERNAL_PROJECTION
+   };
+   enum OriginType
+   {
+      OSSIM_CENTER_ORIGIN     = 0,
+      OSSIM_UPPER_LEFT_ORIGIN = 1
    };
    class ossimOrthoIgenFilename
    {
@@ -97,7 +102,8 @@ public:
 protected:
    ossimString theThumbnailRes;
    bool        theThumbnailFlag;
-   ossimDpt    theMetersPerPixelOverride;
+   ossimUnitType theDeltaPerPixelUnit;
+   ossimDpt    theDeltaPerPixelOverride;
    ossimOrthoIgenProjectionType theProjectionType;
    ossimString                  theProjectionName;
    ossim_float64 theGeographicOriginOfLatitude;
@@ -111,9 +117,10 @@ protected:
    ossimFilename theAnnotationTemplate;
    ossimFilename theWriterTemplate;
    ossimString   theSlaveBuffers;
-   ossimDpt      theCutCenter;
+   ossimOrthoIgen::OriginType theCutOriginType;
+   ossimDpt      theCutOrigin;
    ossimDpt      theCutDxDy;
-   ossimUnitType theCutCenterUnit;
+   ossimUnitType theCutOriginUnit;
    ossimUnitType theCutDxDyUnit;
    ossim_float64 theLowPercentClip;
    ossim_float64 theHighPercentClip;

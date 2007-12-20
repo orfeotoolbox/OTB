@@ -120,7 +120,7 @@ const ossimString& ossimElevationShapeIdx::defaultName()
    return theDefaultName;
 }
 
-void ossimElevationShapeIdx::setFilename(const ossimFilename& shapeFilename, bool overWriteFlag)throw(std::exception())
+void ossimElevationShapeIdx::setFilename(const ossimFilename& shapeFilename, bool overWriteFlag)
 {
    if(thePrivateData)
    {

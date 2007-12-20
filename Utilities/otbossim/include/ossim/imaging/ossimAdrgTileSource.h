@@ -1,9 +1,6 @@
 //*******************************************************************
-// Copyright (C) 2000 ImageLinks Inc. 
 //
-// License:  LGPL
-//
-// See LICENSE.txt file in the top level directory for more details.
+// License:  See top level LICENSE.txt.
 // 
 // Author: Ken Melero
 // 
@@ -11,18 +8,17 @@
 //              ADRG file.
 //
 //********************************************************************
-// $Id: ossimAdrgTileSource.h 9094 2006-06-13 19:12:40Z dburken $
+// $Id: ossimAdrgTileSource.h 11284 2007-07-11 16:35:42Z dburken $
 
 #ifndef ossimAdrgTileSource_HEADER
 #define ossimAdrgTileSource_HEADER
 
 #include <fstream>
-using namespace std;
 
 #include <ossim/imaging/ossimImageHandler.h>
-#include <ossim/imaging/ossimAdrgHeader.h>
 
 class ossimImageData;
+class ossimAdrgHeader;
 
 class OSSIM_DLL ossimAdrgTileSource : public ossimImageHandler
 {
@@ -166,7 +162,7 @@ private:
    
    ossimRefPtr<ossimImageData>  theTile;
    ossim_uint8*                 theTileBuffer;
-   ifstream                     theFileStr;
+   std::ifstream                theFileStr;
    ossimAdrgHeader*             theAdrgHeader;
 
 TYPE_DATA

@@ -7,7 +7,7 @@
 // Description: 
 //
 //*******************************************************************
-//  $Id: ossimMultiBandHistogram.cpp 9963 2006-11-28 21:11:01Z gpotts $
+//  $Id: ossimMultiBandHistogram.cpp 11724 2007-09-13 19:28:07Z gpotts $
 #include <ossim/base/ossimMultiBandHistogram.h>
 #include <ossim/base/ossimHistogram.h>
 #include <ossim/base/ossimKeywordlist.h>
@@ -30,9 +30,8 @@ ossimMultiBandHistogram::ossimMultiBandHistogram(const ossimMultiBandHistogram& 
 
    for(ossim_uint32 i = 0; i < theHistogramList.size(); ++i)
    {
-      theHistogramList[i] =  rhs.theHistogramList[i]?
-                             new ossimHistogram(*rhs.theHistogramList[i]):
-                             (ossimHistogram*)NULL;
+      theHistogramList[i] =  rhs.theHistogramList[i].valid()?
+         new ossimHistogram(*rhs.theHistogramList[i].get()):(ossimHistogram*)0;
    }
 }
 
@@ -84,7 +83,7 @@ ossim_uint32 ossimMultiBandHistogram::getNumberOfBands() const
    return theHistogramList.size();
 }
 
-ossimHistogram* ossimMultiBandHistogram::getHistogram(long band)
+ossimRefPtr<ossimHistogram> ossimMultiBandHistogram::getHistogram(long band)
 {
    if((band >=0) && (band < (long)theHistogramList.size()))
    {
@@ -94,13 +93,23 @@ ossimHistogram* ossimMultiBandHistogram::getHistogram(long band)
    return NULL;
 }
 
+const ossimRefPtr<ossimHistogram> ossimMultiBandHistogram::getHistogram(long band)const
+{
+   if((band >=0) && (band < (long)theHistogramList.size()))
+   {
+      return theHistogramList[band];
+   }
+
+   return 0;
+}
+
 void ossimMultiBandHistogram::setBinCount(double binNumber, double count)
 {
    if(theHistogramList.size() > 0)
    {
       for(long idx = 0; idx < (long)theHistogramList.size(); ++idx)
       {
-         if(theHistogramList[idx])
+         if(theHistogramList[idx].valid())
          {
             theHistogramList[idx]->SetCount(binNumber, count);
          }
@@ -108,24 +117,24 @@ void ossimMultiBandHistogram::setBinCount(double binNumber, double count)
    }   
 }
 
-ossimMultiBandHistogram* ossimMultiBandHistogram::createAccumulationLessThanEqual()const
+ossimRefPtr<ossimMultiBandHistogram> ossimMultiBandHistogram::createAccumulationLessThanEqual()const
 {
-   ossimMultiBandHistogram* result = NULL;
+   ossimRefPtr<ossimMultiBandHistogram> result = NULL;
 
    if(theHistogramList.size() > 0)
    {
       result = new ossimMultiBandHistogram;
       result->theHistogramList.resize(theHistogramList.size());
       
-      for(long index = 0; index < (long)theHistogramList.size(); ++index)
+      for(long idx = 0; idx < (long)theHistogramList.size(); ++idx)
       {
-         if(theHistogramList[index])
+         if(theHistogramList[idx].valid())
          {
-            result->theHistogramList[index] = theHistogramList[index]->CumulativeLessThanEqual();
+            result->theHistogramList[idx] = theHistogramList[idx]->CumulativeLessThanEqual();
          }
          else
          {
-            result->theHistogramList[index] = NULL;
+            result->theHistogramList[idx] = 0;
          }     
       }
    }
@@ -133,23 +142,23 @@ ossimMultiBandHistogram* ossimMultiBandHistogram::createAccumulationLessThanEqua
    return result;
 }
 
-ossimMultiBandHistogram* ossimMultiBandHistogram::createAccumulationGreaterThanEqual()const
+ossimRefPtr<ossimMultiBandHistogram> ossimMultiBandHistogram::createAccumulationGreaterThanEqual()const
 {
-   ossimMultiBandHistogram* result = NULL;
+   ossimRefPtr<ossimMultiBandHistogram> result = NULL;
 
    if(theHistogramList.size() > 0)
    {
       result = new ossimMultiBandHistogram;
       
-      for(long index = 0; index < (long)theHistogramList.size(); ++index)
+      for(long idx = 0; idx < (long)theHistogramList.size(); ++idx)
       {
-         if(theHistogramList[index])
+         if(theHistogramList[idx].valid())
          {
-            result->theHistogramList[index] = theHistogramList[index]->CumulativeGreaterThanEqual();
+            result->theHistogramList[idx] = theHistogramList[idx]->CumulativeGreaterThanEqual();
          }
          else
          {
-            result->theHistogramList[index] = NULL;
+            result->theHistogramList[idx] = 0;
          }     
       }
    }
@@ -159,20 +168,11 @@ ossimMultiBandHistogram* ossimMultiBandHistogram::createAccumulationGreaterThanE
 
 void ossimMultiBandHistogram::deleteHistograms()
 {
-   for(long index = 0; index < (long)theHistogramList.size(); ++index)
-   {
-      if(theHistogramList[index])
-      {
-         delete theHistogramList[index];
-         theHistogramList[index] = NULL;
-      }
-   }
-   
    theHistogramList.clear();
 }
 
 
-bool ossimMultiBandHistogram::importHistogram(istream& in)
+bool ossimMultiBandHistogram::importHistogram(std::istream& in)
 {
    ossimProprietaryHeaderInformation header;
    deleteHistograms();
@@ -187,12 +187,12 @@ bool ossimMultiBandHistogram::importHistogram(istream& in)
 
          for(long counter = 0; counter < (long)theHistogramList.size(); ++counter)
          {
-            theHistogramList[counter] = NULL;
+            theHistogramList[counter] = 0;
          }
          ossimString bandBuffer;
          ossimString buffer;
          
-         for(long index = 0; index < numberOfBands; ++index)
+         for(long idx = 0; idx < numberOfBands; ++idx)
          {
             getline(in, buffer);
             if(buffer.find("Band") != string::npos)
@@ -213,22 +213,19 @@ bool ossimMultiBandHistogram::importHistogram(istream& in)
                deleteHistograms();
                return false;
             }
-            long bandIndex = bandBuffer.toLong();
+            long bandIdx = bandBuffer.toLong();
 
-            if(bandIndex < (long)theHistogramList.size())
+            if(bandIdx < (long)theHistogramList.size())
             {
-               if(!theHistogramList[bandIndex])
+               if(!theHistogramList[bandIdx].valid())
                {
-                  ossimHistogram* histogram = new ossimHistogram;
+                  ossimRefPtr<ossimHistogram> histogram = new ossimHistogram;
                   if(histogram->importHistogram(in))
                   {
-                     theHistogramList[bandIndex] = histogram;
+                     theHistogramList[bandIdx] = histogram;
                   }
                   else
                   {
-                     delete histogram;
-                     histogram = NULL;
-                     
                      deleteHistograms();
                      return false;
                   }
@@ -261,17 +258,17 @@ bool ossimMultiBandHistogram::importHistogram(const ossimFilename& file)
    return false;
 }
 
-bool ossimMultiBandHistogram::ossimProprietaryHeaderInformation::parseStream(istream& in)
+bool ossimMultiBandHistogram::ossimProprietaryHeaderInformation::parseStream(std::istream& in)
 {
    ossimString inputLine;
 
    getline(in, inputLine);  
    if(inputLine.find("File Type") != string::npos)
    {
-      unsigned long index = inputLine.find(":");
-      if(index != string::npos)
+      unsigned long idx = inputLine.find(":");
+      if(idx != string::npos)
       {
-         theFileType = inputLine.substr(index+1);
+         theFileType = inputLine.substr(idx+1);
          theFileType = theFileType.trim();
       }
       else
@@ -288,10 +285,10 @@ bool ossimMultiBandHistogram::ossimProprietaryHeaderInformation::parseStream(ist
    getline(in, inputLine);  
    if(inputLine.find("Version") != string::npos)
    {
-      unsigned long index = inputLine.find(":");
-      if(index != string::npos)
+      unsigned long idx = inputLine.find(":");
+      if(idx != string::npos)
       {
-         theVersion = inputLine.substr(index+1);
+         theVersion = inputLine.substr(idx+1);
          theVersion = theVersion.trim();
       }
       else
@@ -307,10 +304,10 @@ bool ossimMultiBandHistogram::ossimProprietaryHeaderInformation::parseStream(ist
    getline(in, inputLine);  
    if(inputLine.find("Number of Bands") != string::npos)
    {
-      unsigned long index = inputLine.find(":");
-      if(index != string::npos)
+      unsigned long idx = inputLine.find(":");
+      if(idx != string::npos)
       {
-         theNumberOfBands = inputLine.substr(index+1);
+         theNumberOfBands = inputLine.substr(idx+1);
          theNumberOfBands = theNumberOfBands.trim();
       }
       else
@@ -338,15 +335,15 @@ bool ossimMultiBandHistogram::saveState(ossimKeywordlist& kwl,
            static_cast<ossim_uint32>(theHistogramList.size()),
            true);
    
-   for(ossim_uint32 index = 0; index < theHistogramList.size(); ++index)
+   for(ossim_uint32 idx = 0; idx < theHistogramList.size(); ++idx)
    {
       ossimString band = ossimString(prefix) + "band";
-      band += (ossimString::toString(index) + ".");
-      if(theHistogramList[index])
+      band += (ossimString::toString(idx) + ".");
+      if(theHistogramList[idx].valid())
       {
-         ossimString newPrefix = (ossimString(prefix) + ossimString::toString(index) + ".");
+         ossimString newPrefix = (ossimString(prefix) + ossimString::toString(idx) + ".");
          
-         theHistogramList[index]->saveState(kwl,
+         theHistogramList[idx]->saveState(kwl,
                                             band.c_str());
       }
    }
@@ -366,13 +363,13 @@ bool ossimMultiBandHistogram::loadState(const ossimKeywordlist& kwl,
       if(numberOfBands>0)
       {
          ossimString newPrefix;
-         for(ossim_uint32 index = 0; index < numberOfBands; ++index)
+         for(ossim_uint32 idx = 0; idx < numberOfBands; ++idx)
          {
             ossimHistogram* histo = new ossimHistogram;
 
             newPrefix = prefix;
             newPrefix += "band";
-            newPrefix += ossimString::toString(index);
+            newPrefix += ossimString::toString(idx);
             newPrefix += ".";
             
             histo->loadState(kwl, newPrefix.c_str());
@@ -382,5 +379,53 @@ bool ossimMultiBandHistogram::loadState(const ossimKeywordlist& kwl,
       }
    }
    
+   return true;
+}
+
+bool ossimMultiBandHistogram::saveState(ossimRefPtr<ossimXmlNode> xmlNode)const
+{
+   xmlNode->setTag("ossimMutliBandHistogram");
+   for(ossim_uint32 idx = 0; idx < theHistogramList.size(); ++idx)
+   {
+      ossimRefPtr<ossimXmlNode> band = new ossimXmlNode;
+      ossimRefPtr<ossimXmlNode> newNode = new ossimXmlNode;
+
+      band->setTag("Band");
+      band->addAttribute("idx", ossimString::toString(idx));
+      band->addChildNode(newNode);
+      if(theHistogramList[idx].valid())
+      {         
+         theHistogramList[idx]->saveState(newNode);
+      }
+      else
+      {
+         newNode->setTag("ossimHistogram");
+      }
+      xmlNode->addChildNode(band);
+   }
+
+   return true;
+}
+
+bool ossimMultiBandHistogram::loadState(const ossimRefPtr<ossimXmlNode> xmlNode)
+{
+   theHistogramList.clear();
+   const vector<ossimRefPtr<ossimXmlNode> >& childNodes = xmlNode->getChildNodes();
+
+   ossim_uint32 idx = 0;
+   ossim_uint32 maxCount = childNodes.size();
+   for(idx = 0; idx < maxCount; ++idx)
+   {
+      if(childNodes[idx]->getTag() == "Band")
+      {
+         if(childNodes[idx]->getChildNodes().size())
+         {
+            ossimRefPtr<ossimHistogram> histo = new ossimHistogram;
+            histo->loadState(childNodes[idx]->getChildNodes()[0]);
+            theHistogramList.push_back(histo);
+         }
+      }
+   }
+
    return true;
 }

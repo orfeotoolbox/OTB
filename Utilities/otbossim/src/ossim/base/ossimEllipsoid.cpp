@@ -9,11 +9,11 @@
 //
 // SOFTWARE HISTORY:
 //>
-//   06Aug2001  Garrett Potts, Oscar Kramer (okramer@imagelinks.com)
+//   06Aug2001  Garrett Potts, Oscar Kramer
 //              Initial coding.
 //<
 //*****************************************************************************
-//  $Id: ossimEllipsoid.cpp 9966 2006-11-29 02:01:07Z gpotts $
+//  $Id: ossimEllipsoid.cpp 11347 2007-07-23 13:01:59Z gpotts $
 
 #include <ossim/base/ossimEllipsoid.h>
 
@@ -349,6 +349,106 @@ bool ossimEllipsoid::saveState(ossimKeywordlist& kwl,
    return true;
 }
 
+ 
+//*****************************************************************************
+//  METHOD: ossimEllipsoid::prinRadiiOfCurv()
+//  
+//  Computes the meridional radius and prime vertical at given point.
+//  
+//*****************************************************************************
+void ossimEllipsoid::prinRadiiOfCurv(const ossimEcefPoint& location,
+                                           double& merRadius,
+                                           double& primeVert) const
+{
+   double lat, lon, hgt;
+   XYZToLatLonHeight(location.x(), location.y(), location.z(), lat, lon, hgt);
+   
+   double sinPhi = sin(lat*RAD_PER_DEG);
+   double phiFac = 1.0 - theEccentricitySquared*sinPhi*sinPhi;
+   primeVert = theA / sqrt(phiFac);
+   merRadius = theA*(1.0-theEccentricitySquared) / sqrt(phiFac*phiFac*phiFac);
+}
+
+ 
+//*****************************************************************************
+//  METHOD: ossimEllipsoid::jacobianWrtEcef()
+//  
+//  Forms Jacobian of partials of geodetic WRT ECF at given point.
+//           -                           -
+//           | pLat/pX  pLat/pY  pLat/pZ |
+//    jMat = | pLon/pX  pLon/pY  pLon/pZ |
+//           | pHgt/pX  pHgt/pY  pHgt/pZ |
+//           -                           -
+//  
+//*****************************************************************************
+void ossimEllipsoid::jacobianWrtEcef(const ossimEcefPoint& location,
+                                           NEWMAT::Matrix& jMat) const
+{
+   double primeVert;
+   double merRadius;
+   double lat, lon, hgt;
+   
+   XYZToLatLonHeight(location.x(), location.y(), location.z(), lat, lon, hgt);
+   prinRadiiOfCurv(location, merRadius, primeVert);
+   
+   double sinPhi = sin(lat*RAD_PER_DEG);
+   double cosPhi = cos(lat*RAD_PER_DEG);
+   double sinLam = sin(lon*RAD_PER_DEG);
+   double cosLam = cos(lon*RAD_PER_DEG);
+   double N_plus_h = primeVert + hgt;
+   double M_plus_h = merRadius + hgt;
+   
+   jMat(1,1) = -sinPhi * cosLam / M_plus_h;
+   jMat(2,1) = -sinLam / (cosPhi * N_plus_h);
+   jMat(3,1) = cosPhi * cosLam;
+   jMat(1,2) = -sinPhi * sinLam / M_plus_h;
+   jMat(2,2) =  cosLam / (cosPhi * N_plus_h);
+   jMat(3,2) = cosPhi * sinLam;
+   jMat(1,3) = cosPhi / M_plus_h;
+   jMat(2,3) = 0.0;
+   jMat(3,3) = sinPhi;
+}
+
+ 
+//*****************************************************************************
+//  METHOD: ossimEllipsoid::jacobianWrtGeo()
+//  
+//  Forms Jacobian of partials of ECF WRT geodetic at given point.
+//           -                           -
+//           | pX/pLat  pX/pLon  pX/pHgt |
+//    jMat = | pY/pLat  pY/pLon  pY/pHgt |
+//           | pZ/pLat  pZ/pLon  pZ/pHgt |
+//           -                           -
+//  
+//*****************************************************************************
+void ossimEllipsoid::jacobianWrtGeo(const ossimEcefPoint& location,
+                                          NEWMAT::Matrix& jMat) const
+{
+   double primeVert;
+   double merRadius;
+   double lat, lon, hgt;
+   
+   XYZToLatLonHeight(location.x(), location.y(), location.z(), lat, lon, hgt);
+   prinRadiiOfCurv(location, merRadius, primeVert);
+   
+   double sinPhi = sin(lat*RAD_PER_DEG);
+   double cosPhi = cos(lat*RAD_PER_DEG);
+   double sinLam = sin(lon*RAD_PER_DEG);
+   double cosLam = cos(lon*RAD_PER_DEG);
+   double N_plus_h = primeVert + hgt;
+   double M_plus_h = merRadius + hgt;
+   
+   jMat(1,1) = -M_plus_h * sinPhi * cosLam;
+   jMat(2,1) = -M_plus_h * sinPhi * sinLam;
+   jMat(3,1) =  M_plus_h * cosPhi;
+   jMat(1,2) = -N_plus_h * cosPhi * sinLam;
+   jMat(2,2) =  N_plus_h * cosPhi * cosLam;
+   jMat(3,2) = 0.0;
+   jMat(1,3) = cosPhi * cosLam;
+   jMat(2,3) = cosPhi * sinLam;
+   jMat(3,3) = sinPhi;
+}
+
 
 //*****************************************************************************
 //  METHOD: ossimEllipsoid::geodeticRadius()
@@ -358,7 +458,7 @@ bool ossimEllipsoid::saveState(ossimKeywordlist& kwl,
 //*****************************************************************************
 double ossimEllipsoid::geodeticRadius(const double& lat) const
 {
-   double sin_lat = sind(lat);
+   double sin_lat = ossim::sind(lat);
    double sin2_lat = sin_lat*sin_lat;
    
    return (theA_squared/
@@ -368,11 +468,11 @@ double ossimEllipsoid::geodeticRadius(const double& lat) const
 void ossimEllipsoid::latLonHeightToXYZ(double lat, double lon, double height,
                                        double &x, double &y, double &z)const
 {
-    double sin_latitude = sind(lat);
-    double cos_latitude = cosd(lat);
+    double sin_latitude = ossim::sind(lat);
+    double cos_latitude = ossim::cosd(lat);
     double N = theA / sqrt( 1.0 - theEccentricitySquared*sin_latitude*sin_latitude);
-    x = (N+height)*cos_latitude*cosd(lon);
-    y = (N+height)*cos_latitude*sind(lon);
+    x = (N+height)*cos_latitude*ossim::cosd(lon);
+    y = (N+height)*cos_latitude*ossim::sind(lon);
     z = (N*(1-theEccentricitySquared)+height)*sin_latitude;
 }
 

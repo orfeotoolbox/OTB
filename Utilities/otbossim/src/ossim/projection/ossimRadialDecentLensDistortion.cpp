@@ -10,7 +10,7 @@
 // MeanRadialLens distortion.
 //
 //*******************************************************************
-//  $Id: ossimRadialDecentLensDistortion.cpp 9094 2006-06-13 19:12:40Z dburken $
+//  $Id: ossimRadialDecentLensDistortion.cpp 11347 2007-07-23 13:01:59Z gpotts $
 
 #include <ossim/projection/ossimRadialDecentLensDistortion.h>
 #include <ossim/base/ossimKeywordlist.h>
@@ -162,8 +162,8 @@ void ossimRadialDecentLensDistortion::forward(const ossimDpt& input_pt,
 {
    ossimDpt deltaPosition(input_pt.x - theCalibratedPrincipalPoint.x,
                           input_pt.y - theCalibratedPrincipalPoint.y);
-   double r = sqrt(square(deltaPosition.x) + 
-                   square(deltaPosition.y));
+   double r = sqrt(ossim::square(deltaPosition.x) + 
+                   ossim::square(deltaPosition.y));
    double dr = deltaR(r);
    double deltaX1 = deltaPosition.x*dr;
    double deltaY1 = deltaPosition.y*dr;

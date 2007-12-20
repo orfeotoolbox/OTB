@@ -5,7 +5,7 @@
 // Author: Garrett Potts
 //
 //********************************************************************
-// $Id: ossimCibCadrgTileSource.cpp 10245 2007-01-12 21:51:13Z dburken $
+// $Id: ossimCibCadrgTileSource.cpp 11347 2007-07-23 13:01:59Z gpotts $
 #include <algorithm>
 using namespace std;
 
@@ -37,7 +37,7 @@ using namespace std;
 static ossimTrace traceDebug = ossimTrace("ossimCibCadrgTileSource:debug");
 
 #ifdef OSSIM_ID_ENABLED
-static const char OSSIM_ID[] = "$Id: ossimCibCadrgTileSource.cpp 10245 2007-01-12 21:51:13Z dburken $";
+static const char OSSIM_ID[] = "$Id: ossimCibCadrgTileSource.cpp 11347 2007-07-23 13:01:59Z gpotts $";
 #endif
 
 RTTI_DEF1(ossimCibCadrgTileSource, "ossimCibCadrgTileSource", ossimImageHandler)
@@ -47,13 +47,13 @@ const ossim_uint32 ossimCibCadrgTileSource::CIBCADRG_FRAME_HEIGHT = 1536;
 
 ossimCibCadrgTileSource::ossimCibCadrgTileSource()
    :ossimImageHandler(),
-    theCompressedBuffer(NULL),
-    theUncompressedBuffer(NULL),
+    theCompressedBuffer(0),
+    theUncompressedBuffer(0),
     theNumberOfLines(0),
     theNumberOfSamples(0),
-    theTile(NULL),
-    theTableOfContents(NULL),
-    theEntryToRender(NULL),
+    theTile(0),
+    theTableOfContents(0),
+    theEntryToRender(0),
     theEntryNumberToRender(1),
     theTileSize(128, 128),
     theProductType(OSSIM_PRODUCT_TYPE_UNKNOWN)
@@ -119,33 +119,36 @@ void ossimCibCadrgTileSource::close()
 
 bool ossimCibCadrgTileSource::isOpen()const
 {
-   return (theTableOfContents!=NULL);
+   return (theTableOfContents!=0);
 }
 
 bool ossimCibCadrgTileSource::open()
 {
-   if ( theImageFile.isRelative() )
-   {
-      if (traceDebug())
-      {
-         ossimNotify(ossimNotifyLevel_DEBUG)
-            << "ossimCibCadrgTileSource::open DEBUG:"
-            << "\ntheImageFile:  " << theImageFile
-            << "\nHas a relative path which will not work with this object!"
-            << "\nReturning false..."
-            << endl;
-      }
-      return false;
-   }
-
+	if(traceDebug())
+	{
+		ossimNotify(ossimNotifyLevel_DEBUG) << "ossimCibCadrgTileSource::open(): Entered....." << std::endl;
+	}
+	
+//   if ( theImageFile.isRelative() )
+//   {
+//      if (traceDebug())
+//      {
+//         ossimNotify(ossimNotifyLevel_DEBUG)
+//            << "ossimCibCadrgTileSource::open DEBUG:"
+//            << "\ntheImageFile:  " << theImageFile
+//            << "\nHas a relative path which will not work with this object!"
+//            << "\nReturning false..."
+//            << endl;
+//      }
+//      return false;
+//   }
+	
    ossimFilename imageFile = theImageFile;
-   
    bool result = true;
    if(isOpen())
    {
       close();
    }
-   
    theTableOfContents = new ossimRpfToc;
    
    if(theTableOfContents)
@@ -211,7 +214,6 @@ bool ossimCibCadrgTileSource::open()
    {
       result = false;
    }
-
    if(!result)
    {
       close();
@@ -231,6 +233,11 @@ bool ossimCibCadrgTileSource::open()
 
       theTile = ossimImageDataFactory::instance()->create(this, this);
       theTile->initialize();
+   }
+
+   if(traceDebug())
+   {
+      ossimNotify(ossimNotifyLevel_DEBUG) << "ossimCibCadrgTileSource::open(): Leaving at line" << __LINE__ << std::endl;
    }
 
    return result;
@@ -367,8 +374,8 @@ void ossimCibCadrgTileSource::setActualImageRect()
    double latInterval = boundaryInfo.getCoverage().getVerticalInterval();
    double lonInterval = boundaryInfo.getCoverage().getHorizontalInterval();
    
-   int lines   = irint(fabs(ul.lat - lr.lat)/latInterval);
-   int samples = irint(fabs(ul.lon - lr.lon)/lonInterval);
+   int lines   = ossim::round<int>(fabs(ul.lat - lr.lat)/latInterval);
+   int samples = ossim::round<int>(fabs(ul.lon - lr.lon)/lonInterval);
 
 
    theNumberOfLines   = lines;
@@ -1240,12 +1247,12 @@ void ossimCibCadrgTileSource::allocateForProduct()
    if(theUncompressedBuffer)
    {
       delete [] theUncompressedBuffer;
-      theUncompressedBuffer = NULL;
+      theUncompressedBuffer = 0;
    }
    if(theCompressedBuffer)
    {
       delete [] theCompressedBuffer;
-      theCompressedBuffer = NULL;
+      theCompressedBuffer = 0;
    }
    
    // a CADRG and CIBis a 64*64*12 bit buffer and must divide by 8 to
@@ -1281,7 +1288,7 @@ const ossimRpfTocEntry* ossimCibCadrgTileSource::findFirstFrame()
       }
    }
    
-   return NULL;
+   return 0;
 }
 
 
@@ -1290,12 +1297,12 @@ void ossimCibCadrgTileSource::deleteAll()
    if(theOverview)
    {
       delete theOverview;
-      theOverview = NULL;
+      theOverview = 0;
    }
    if(theTableOfContents)
    {
       delete theTableOfContents;
-      theTableOfContents = NULL;
+      theTableOfContents = 0;
    }
 }
 
@@ -1325,12 +1332,15 @@ bool ossimCibCadrgTileSource::loadState(const ossimKeywordlist& kwl,
 
    if(!result)
    {
+	   if(traceDebug())
+	   {
+          CLOG << "Leaving..." << endl;
+       }
       return false;
    }
-   const char* lookup = NULL;
-   
-   lookup = kwl.find(prefix, "entry");
-   ossim_int32 entry = ossimString(lookup).toLong();
+   const char* lookup = 0;
+   lookup = kwl.find(ossimString(prefix), "entry");
+   ossim_int32 entry = ossimString(lookup).toInt32();
 
    // if an entry is specified then
    // call the open with an entry number

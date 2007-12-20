@@ -1,22 +1,32 @@
 //*************************************************************************
-// Copyright (C) 2004 Intelligence Data Sytems, Inc.  All rights reserved.
 //
-// License:  LGPL
-// 
-// See LICENSE.txt file in the top level directory for more details.
+// License:  See top level LICENSE.txt file.
 //
 // Author:  David Burken
 //
 //**************************************************************************
-// $Id: ossimMutex.cpp 9094 2006-06-13 19:12:40Z dburken $
+// $Id: ossimMutex.cpp 10888 2007-05-11 14:10:15Z dburken $
 
 #include <ossim/base/ossimMutex.h>
+#ifdef OSSIM_HAS_OPEN_THREADS
+#  if OSSIM_HAS_OPEN_THREADS
+#    include <OpenThreads/Mutex>
+static OpenThreads::Mutex* toOssimMutex(void* ptr)
+{
+	return (OpenThreads::Mutex*)ptr;
+}
+#  endif
+#endif
 
 ossimMutex::ossimMutex()
 #ifdef OSSIM_HAS_OPEN_THREADS
 #  if OSSIM_HAS_OPEN_THREADS
-   : theMutex()
+   : thePrivateData(new OpenThreads::Mutex())
+#  else
+   : thePrivateData(0)   
 #  endif
+#else
+   : thePrivateData(0)   
 #endif
 {}
 
@@ -27,7 +37,7 @@ int ossimMutex::lock()
 {
 #ifdef OSSIM_HAS_OPEN_THREADS
 #  if OSSIM_HAS_OPEN_THREADS
-   return theMutex.lock();
+	return toOssimMutex(thePrivateData)->lock();
 #  endif
 #endif
    return 0;
@@ -37,7 +47,7 @@ int ossimMutex::unlock()
 {
 #ifdef OSSIM_HAS_OPEN_THREADS
 #  if OSSIM_HAS_OPEN_THREADS
-   return theMutex.unlock();
+   return  toOssimMutex(thePrivateData)->unlock();
 #  endif
 #endif
    return 0;
@@ -47,7 +57,7 @@ int ossimMutex::trylock()
 {
 #ifdef OSSIM_HAS_OPEN_THREADS
 #  if OSSIM_HAS_OPEN_THREADS
-   return theMutex.trylock();
+   return  toOssimMutex(thePrivateData)->trylock();
 #  endif
 #endif
    return 0;

@@ -1,29 +1,40 @@
 //*******************************************************************
-// Copyright (C) 2000 ImageLinks Inc. 
 //
-// License:  LGPL
+// License:  See top level LICENSE.txt file.
 //
-// See LICENSE.txt file in the top level directory for more details.
-//
-// Author: Ken Melero (kmelero@imagelinks.com)
+// Author: Ken Melero
 //         Orginally written by Oscar Kramer (SoBe Software)
+//         
 // Description: Container class for LandSat7 Fast Format header files.
 //
 //********************************************************************
-// $Id: ossimFfL7.cpp 9094 2006-06-13 19:12:40Z dburken $
+// $Id: ossimFfL7.cpp 10835 2007-05-03 18:08:04Z dburken $
 
-#include <cstdlib>
+  // #include <cstdlib>
+
 #include <fstream>
 #include <sstream>
 #include <string>
 #include <iomanip>
+#include <ctime>  
 using namespace std;
-#include <time.h>
+
+#include <ossim/support_data/ossimFfL7.h>
 
 #include <ossim/base/ossimString.h>
 #include <ossim/base/ossimDate.h>
-#include <ossim/support_data/ossimFfL7.h>
 #include <ossim/base/ossimNotifyContext.h>
+#include <ossim/base/ossimProperty.h>
+#include <ossim/base/ossimDateProperty.h>
+#include <ossim/base/ossimStringProperty.h>
+
+static const ossimString ACQUISITION_DATE_KW = "acquisition_date";
+static const ossimString PATH_KW             = "path";
+static const ossimString PATH_ROW_KW         = "path_row";
+static const ossimString ROW_KW              = "row";
+static const ossimString SATELLITE_NAME_KW   = "satellite_name";
+static const ossimString SENSOR_NAME_KW      = "sensor_name";
+
 
 ossimFfL7::ossimFfL7()
    :
@@ -70,7 +81,7 @@ ossimString ossimFfL7::pathRow() const
    return tmp;
 }
 
-void ossimFfL7::dump(ostream& os) const
+void ossimFfL7::dump(std::ostream& os) const
 {
    os << setiosflags(ios::left | ios::fixed)
       << "\nAdministrative Record:"
@@ -164,7 +175,7 @@ void ossimFfL7::dump(ostream& os) const
       << endl << endl;
 }
 
-void ossimFfL7::writeHeader(ostream& os) const
+void ossimFfL7::writeHeader(std::ostream& os) const
 {
    ossimNotify(ossimNotifyLevel_WARN) << "WARNING ossimFfL7::writeHeader: This method is not yet implemented. Ignoring request..."
                                       << std::endl;
@@ -286,6 +297,15 @@ void ossimFfL7::readAdminRecord(FILE* fptr)
    return;
 }
 
+int ossimFfL7::path() const
+{
+   return thePathNumber;
+}
+
+int ossimFfL7::row() const
+{
+   return theRowNumber;
+}
 
 //***************************************************************************
 // PRIVATE METHOD: ossimFfL7::readRadiomRecord()
@@ -309,7 +329,7 @@ void ossimFfL7::readRadiomRecord(FILE* fptr)
 
    const ossim_uint32 MAX = 128;
    char temp_chars[MAX];
-   istringstream is(radiom_record);
+   std::istringstream is(radiom_record);
 
    // Eat the first line. "GAINS AND BIASES IN ASCENDING BAND NUMBER ORDER"
    is.getline(temp_chars, MAX);
@@ -336,7 +356,7 @@ void ossimFfL7::readRadiomRecord(FILE* fptr)
       if (blank_line == true) continue; // go to next line...
       
       double d = 0.0;
-      istringstream is2(temp_chars);
+      std::istringstream is2(temp_chars);
       is2 >> d;
       theBias.push_back(d);
       is2 >> d;
@@ -526,22 +546,143 @@ void ossimFfL7::getBias(vector<double>& bias) const
    bias = theBias;
 }
 
+double ossimFfL7::getBias(long bandIdx)const
+{
+   return theBias[bandIdx];
+}
+
 void ossimFfL7::getGain(vector<double>& gain) const
 {
    gain = theGain;
 }
 
+double ossimFfL7::getGain(long bandIdx)const
+{
+   return theGain[bandIdx];
+}
+
+double ossimFfL7::getParam(ossim_uint32 i)const
+{
+   if(i < 16)
+   {
+      return theProjectionParams[i];
+   }
+   return 0.0;
+}
 
 long ossimFfL7::getJulianDay()const
 {
-   ossimDate date(ossimString(theAcquisitionDate+4,
-                              theAcquisitionDate+6).toLong(),
-                  ossimString(theAcquisitionDate+6,
-                              theAcquisitionDate+8).toLong(),
-                  ossimString(theAcquisitionDate,
-                              theAcquisitionDate+4).toLong());
-   
+   ossimDate date;
+   getAcquisitionDate(date);
    return static_cast<long>(date.getJulian());
+}
+
+ossimString ossimFfL7::getAcquisitionDate() const
+{
+   return ossimString(theAcquisitionDate);
+}
+
+void ossimFfL7::getAcquisitionDate(ossimDate& date)const
+{
+   ossimString y = ossimString(theAcquisitionDate,
+                               theAcquisitionDate+4);
+   ossimString m = ossimString(theAcquisitionDate+4,
+                               theAcquisitionDate+6);
+   ossimString d = ossimString(theAcquisitionDate+6,
+                               theAcquisitionDate+8);
+
+   date = ossimDate(m.toInt(),
+                    d.toInt(),
+                    y.toInt());
+}
+
+ossimString ossimFfL7::getSatelliteName() const
+{
+   return ossimString(theSatName);
+}
+
+ossimFilename ossimFfL7::getBandFilename(ossim_uint32 idx)const
+{
+   ossimFilename result;
+   if (idx < getBandCount())
+   {
+      result = theBandFileNames[idx];
+   }
+   return result;
+}
+
+int ossimFfL7::getLinesPerBand() const
+{
+   return theLinesPerBand;
+}
+
+int ossimFfL7::getPixelsPerLine() const
+{
+   return thePixelsPerLine;
+}
+
+void ossimFfL7::getSunElevation(double& elevation) const
+{
+   elevation = theSunElevation;
+}
+
+void ossimFfL7::getSunAzimuth(double& azimuth) const
+{
+   azimuth = theSunAzimuth;
+}
+
+ossimRefPtr<ossimProperty> ossimFfL7::getProperty(const ossimString& name)const
+{
+   ossimRefPtr<ossimProperty> result = 0;
+
+   if(name == ACQUISITION_DATE_KW)
+   {
+      ossimDate date;
+      getAcquisitionDate(date);
+      result = new ossimDateProperty(ACQUISITION_DATE_KW, date);
+   }
+   else if (name == PATH_KW)
+   {
+      result = new ossimStringProperty(PATH_KW,
+                                       ossimString::toString(path()),
+                                       false);
+   }
+   else if (name == PATH_ROW_KW)
+   {
+      result = new ossimStringProperty(PATH_ROW_KW,
+                                       pathRow(),
+                                       false);
+   }                                       
+   else if (name == ROW_KW)
+   {
+      result = new ossimStringProperty(ROW_KW,
+                                       ossimString::toString(row()),
+                                       false);
+   }
+   else if (name == SATELLITE_NAME_KW)
+   {
+      result = new ossimStringProperty(SATELLITE_NAME_KW,
+                                       ossimString(theSatName),
+                                       false);
+   }
+   else if (name == SENSOR_NAME_KW)
+   {
+      result = new ossimStringProperty(SENSOR_NAME_KW,
+                                       ossimString(theSensorName),
+                                       false);
+   }
+
+   return result;
+}
+
+void ossimFfL7::getPropertyNames(std::vector<ossimString>& propertyNames)const
+{
+   propertyNames.push_back(ACQUISITION_DATE_KW);   
+   propertyNames.push_back(PATH_KW);
+   propertyNames.push_back(PATH_ROW_KW);
+   propertyNames.push_back(ROW_KW);      
+   propertyNames.push_back(SATELLITE_NAME_KW);
+   propertyNames.push_back(SENSOR_NAME_KW);
 }
 
 unsigned int ossimFfL7::getBandCount()const
@@ -556,7 +697,7 @@ unsigned int ossimFfL7::getBandCount()const
 // Function:
 // ostream& operator<<(ostream& os, const ossimFfL7& head)
 //***************************************************************************
-ostream& operator<<(ostream& os, const ossimFfL7& head)
+std::ostream& operator<<(std::ostream& os, const ossimFfL7& head)
 {
    head.dump(os);
    return os;

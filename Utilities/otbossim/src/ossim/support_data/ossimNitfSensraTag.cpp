@@ -9,16 +9,13 @@
 // Description: Nitf support class for SENSRA - Sensor parameters extension.
 // 
 //********************************************************************
-// $Id: ossimNitfSensraTag.cpp 9094 2006-06-13 19:12:40Z dburken $
+// $Id: ossimNitfSensraTag.cpp 11347 2007-07-23 13:01:59Z gpotts $
 
 #include <istream>
 #include <ossim/support_data/ossimNitfSensraTag.h>
 
 RTTI_DEF1(ossimNitfSensraTag, "ossimNitfSensraTag", ossimNitfRegisteredTag);
 
-#ifndef MIN
-#define MIN(a,b) ((a)<(b)?(a):(b))
-#endif
 
 ossimNitfSensraTag::ossimNitfSensraTag()
 {
@@ -158,7 +155,7 @@ ossimString ossimNitfSensraTag::getRefRow()const
 void ossimNitfSensraTag::setRefRow(ossimString refRow)
 {
    memset(theRefRow, ' ', REF_ROW_SIZE);
-   memcpy(theRefRow, refRow.c_str(), MIN(REF_ROW_SIZE, refRow.length()));
+   memcpy(theRefRow, refRow.c_str(), std::min((size_t)REF_ROW_SIZE, refRow.length()));
 }
 
 ossimString ossimNitfSensraTag::getRefCol()const
@@ -169,7 +166,7 @@ ossimString ossimNitfSensraTag::getRefCol()const
 void ossimNitfSensraTag::setRefCol(ossimString refCol)
 {
    memset(theRefCol, ' ', REF_COL_SIZE);
-   memcpy(theRefCol, refCol.c_str(), MIN(REF_COL_SIZE, refCol.length()));
+   memcpy(theRefCol, refCol.c_str(), std::min((size_t)REF_COL_SIZE, refCol.length()));
 }
 
 ossimString ossimNitfSensraTag::getSensorModel()const
@@ -180,7 +177,7 @@ ossimString ossimNitfSensraTag::getSensorModel()const
 void ossimNitfSensraTag::setSensorModel(ossimString sensorModel)
 {
    memset(theSensorModel, ' ', SENSOR_MODEL_SIZE);
-   memcpy(theSensorModel, sensorModel.c_str(), MIN(SENSOR_MODEL_SIZE, sensorModel.length()));
+   memcpy(theSensorModel, sensorModel.c_str(), std::min((size_t)SENSOR_MODEL_SIZE, sensorModel.length()));
 }
 
 ossimString ossimNitfSensraTag::getSensorMount()const
@@ -191,7 +188,7 @@ ossimString ossimNitfSensraTag::getSensorMount()const
 void ossimNitfSensraTag::setSensorMount(ossimString sensorMount)
 {
    memset(theSensorMount, ' ', SENSOR_MOUNT_SIZE);
-   memcpy(theSensorMount, sensorMount.c_str(), MIN(SENSOR_MOUNT_SIZE, sensorMount.length()));
+   memcpy(theSensorMount, sensorMount.c_str(), std::min((size_t)SENSOR_MOUNT_SIZE, sensorMount.length()));
 }
 
 ossimString ossimNitfSensraTag::getSensorLoc()const
@@ -202,7 +199,7 @@ ossimString ossimNitfSensraTag::getSensorLoc()const
 void ossimNitfSensraTag::setSensorLoc(ossimString sensorLoc)
 {
    memset(theSensorLoc, ' ', SENSOR_LOC_SIZE);
-   memcpy(theSensorLoc, sensorLoc.c_str(), MIN(SENSOR_LOC_SIZE, sensorLoc.length()));
+   memcpy(theSensorLoc, sensorLoc.c_str(), std::min((size_t)SENSOR_LOC_SIZE, sensorLoc.length()));
 }
 
 ossimString ossimNitfSensraTag::getSensorAltSrc()const
@@ -213,7 +210,7 @@ ossimString ossimNitfSensraTag::getSensorAltSrc()const
 void ossimNitfSensraTag::setSensorAltSrc(ossimString sensorAltSrc)
 {
    memset(theSensorAltSrc, ' ', SENSOR_ALT_SRC_SIZE);
-   memcpy(theSensorAltSrc, sensorAltSrc.c_str(), MIN(SENSOR_ALT_SRC_SIZE, sensorAltSrc.length()));
+   memcpy(theSensorAltSrc, sensorAltSrc.c_str(), std::min((size_t)SENSOR_ALT_SRC_SIZE, sensorAltSrc.length()));
 }
 
 ossimString ossimNitfSensraTag::getSensorAlt()const
@@ -224,7 +221,7 @@ ossimString ossimNitfSensraTag::getSensorAlt()const
 void ossimNitfSensraTag::setSensorAlt(ossimString sensorAlt)
 {
    memset(theSensorAlt, ' ', SENSOR_ALT_SIZE);
-   memcpy(theSensorAlt, sensorAlt.c_str(), MIN(SENSOR_ALT_SIZE, sensorAlt.length()));
+   memcpy(theSensorAlt, sensorAlt.c_str(), std::min((size_t)SENSOR_ALT_SIZE, sensorAlt.length()));
 }
 
 ossimString ossimNitfSensraTag::getSensorAltUnit()const
@@ -235,7 +232,7 @@ ossimString ossimNitfSensraTag::getSensorAltUnit()const
 void ossimNitfSensraTag::setSensorAltUnit(ossimString sensorAltUnit)
 {
    memset(theSensorAltUnit, ' ', SENSOR_ALT_UNIT_SIZE);
-   memcpy(theSensorAltUnit, sensorAltUnit.c_str(), MIN(SENSOR_ALT_UNIT_SIZE, sensorAltUnit.length()));
+   memcpy(theSensorAltUnit, sensorAltUnit.c_str(), std::min((size_t)SENSOR_ALT_UNIT_SIZE, sensorAltUnit.length()));
 }
 
 ossimString ossimNitfSensraTag::getSensorAgl()const
@@ -246,7 +243,7 @@ ossimString ossimNitfSensraTag::getSensorAgl()const
 void ossimNitfSensraTag::setSensorAgl(ossimString sensorAgl)
 {
    memset(theSensorAgl, ' ', SENSOR_AGL_SIZE);
-   memcpy(theSensorAgl, sensorAgl.c_str(), MIN(SENSOR_AGL_SIZE, sensorAgl.length()));
+   memcpy(theSensorAgl, sensorAgl.c_str(), std::min((size_t)SENSOR_AGL_SIZE, sensorAgl.length()));
 }
 
 ossimString ossimNitfSensraTag::getSensorPitch()const
@@ -257,7 +254,7 @@ ossimString ossimNitfSensraTag::getSensorPitch()const
 void ossimNitfSensraTag::setSensorPitch(ossimString sensorPitch)
 {
    memset(theSensorPitch, ' ', SENSOR_PITCH_SIZE);
-   memcpy(theSensorPitch, sensorPitch.c_str(), MIN(SENSOR_PITCH_SIZE, sensorPitch.length()));
+   memcpy(theSensorPitch, sensorPitch.c_str(), std::min((size_t)SENSOR_PITCH_SIZE, sensorPitch.length()));
 }
 
 ossimString ossimNitfSensraTag::getSensorRoll()const
@@ -268,7 +265,7 @@ ossimString ossimNitfSensraTag::getSensorRoll()const
 void ossimNitfSensraTag::setSensorRoll(ossimString sensorRoll)
 {
    memset(theSensorRoll, ' ', SENSOR_ROLL_SIZE);
-   memcpy(theSensorRoll, sensorRoll.c_str(), MIN(SENSOR_ROLL_SIZE, sensorRoll.length()));
+   memcpy(theSensorRoll, sensorRoll.c_str(), std::min((size_t)SENSOR_ROLL_SIZE, sensorRoll.length()));
 }
 
 ossimString ossimNitfSensraTag::getSensorYaw()const
@@ -279,7 +276,7 @@ ossimString ossimNitfSensraTag::getSensorYaw()const
 void ossimNitfSensraTag::setSensorYaw(ossimString sensorYaw)
 {
    memset(theSensorYaw, ' ', SENSOR_YAW_SIZE);
-   memcpy(theSensorYaw, sensorYaw.c_str(), MIN(SENSOR_YAW_SIZE, sensorYaw.length()));
+   memcpy(theSensorYaw, sensorYaw.c_str(), std::min((size_t)SENSOR_YAW_SIZE, sensorYaw.length()));
 }
 
 ossimString ossimNitfSensraTag::getPlatformPitch()const
@@ -290,7 +287,7 @@ ossimString ossimNitfSensraTag::getPlatformPitch()const
 void ossimNitfSensraTag::setPlatformPitch(ossimString platformPitch)
 {
    memset(thePlatformPitch, ' ', PLATFORM_PITCH_SIZE);
-   memcpy(thePlatformPitch, platformPitch.c_str(), MIN(PLATFORM_PITCH_SIZE, platformPitch.length()));
+   memcpy(thePlatformPitch, platformPitch.c_str(), std::min((size_t)PLATFORM_PITCH_SIZE, platformPitch.length()));
 }
 
 ossimString ossimNitfSensraTag::getPlatformRoll()const
@@ -301,7 +298,7 @@ ossimString ossimNitfSensraTag::getPlatformRoll()const
 void ossimNitfSensraTag::setPlatformRoll(ossimString platformRoll)
 {
    memset(thePlatformRoll, ' ', PLATFORM_ROLL_SIZE);
-   memcpy(thePlatformRoll, platformRoll.c_str(), MIN(PLATFORM_ROLL_SIZE, platformRoll.length()));
+   memcpy(thePlatformRoll, platformRoll.c_str(), std::min((size_t)PLATFORM_ROLL_SIZE, platformRoll.length()));
 }
 
 ossimString ossimNitfSensraTag::getPlatformHdg()const
@@ -312,7 +309,7 @@ ossimString ossimNitfSensraTag::getPlatformHdg()const
 void ossimNitfSensraTag::setPlatformHdg(ossimString platformHdg)
 {
    memset(thePlatformHdg, ' ', PLATFORM_HDG_SIZE);
-   memcpy(thePlatformHdg, platformHdg.c_str(), MIN(PLATFORM_HDG_SIZE, platformHdg.length()));
+   memcpy(thePlatformHdg, platformHdg.c_str(), std::min((size_t)PLATFORM_HDG_SIZE, platformHdg.length()));
 }
 
 ossimString ossimNitfSensraTag::getGroundSpdSrc()const
@@ -323,7 +320,7 @@ ossimString ossimNitfSensraTag::getGroundSpdSrc()const
 void ossimNitfSensraTag::setGroundSpdSrc(ossimString groundSpdSrc)
 {
    memset(theGroundSpdSrc, ' ', GROUND_SPD_SRC_SIZE);
-   memcpy(theGroundSpdSrc, groundSpdSrc.c_str(), MIN(GROUND_SPD_SRC_SIZE, groundSpdSrc.length()));
+   memcpy(theGroundSpdSrc, groundSpdSrc.c_str(), std::min((size_t)GROUND_SPD_SRC_SIZE, groundSpdSrc.length()));
 }
 
 ossimString ossimNitfSensraTag::getGroundSpeed()const
@@ -334,7 +331,7 @@ ossimString ossimNitfSensraTag::getGroundSpeed()const
 void ossimNitfSensraTag::setGroundSpeed(ossimString groundSpeed)
 {
    memset(theGroundSpeed, ' ', GROUND_SPEED_SIZE);
-   memcpy(theGroundSpeed, groundSpeed.c_str(), MIN(GROUND_SPEED_SIZE, groundSpeed.length()));
+   memcpy(theGroundSpeed, groundSpeed.c_str(), std::min((size_t)GROUND_SPEED_SIZE, groundSpeed.length()));
 }
 
 ossimString ossimNitfSensraTag::getGroundSpdUnit()const
@@ -345,7 +342,7 @@ ossimString ossimNitfSensraTag::getGroundSpdUnit()const
 void ossimNitfSensraTag::setGroundSpdUnit(ossimString groundSpdUnit)
 {
    memset(theGroundSpdUnit, ' ', GROUND_SPD_UNIT_SIZE);
-   memcpy(theGroundSpdUnit, groundSpdUnit.c_str(), MIN(GROUND_SPD_UNIT_SIZE, groundSpdUnit.length()));
+   memcpy(theGroundSpdUnit, groundSpdUnit.c_str(), std::min((size_t)GROUND_SPD_UNIT_SIZE, groundSpdUnit.length()));
 }
 
 ossimString ossimNitfSensraTag::getGroundTrack()const
@@ -356,7 +353,7 @@ ossimString ossimNitfSensraTag::getGroundTrack()const
 void ossimNitfSensraTag::setGroundTrack(ossimString groundTrack)
 {
    memset(theGroundTrack, ' ', GROUND_TRACK_SIZE);
-   memcpy(theGroundTrack, groundTrack.c_str(), MIN(GROUND_TRACK_SIZE, groundTrack.length()));
+   memcpy(theGroundTrack, groundTrack.c_str(), std::min((size_t)GROUND_TRACK_SIZE, groundTrack.length()));
 }
 
 ossimString ossimNitfSensraTag::getVerticalVel()const
@@ -367,7 +364,7 @@ ossimString ossimNitfSensraTag::getVerticalVel()const
 void ossimNitfSensraTag::setVerticalVel(ossimString verticalVel)
 {
    memset(theVerticalVel, ' ', VERTICAL_VEL_SIZE);
-   memcpy(theVerticalVel, verticalVel.c_str(), MIN(VERTICAL_VEL_SIZE, verticalVel.length()));
+   memcpy(theVerticalVel, verticalVel.c_str(), std::min((size_t)VERTICAL_VEL_SIZE, verticalVel.length()));
 }
 
 ossimString ossimNitfSensraTag::getVertVelUnit()const
@@ -378,7 +375,7 @@ ossimString ossimNitfSensraTag::getVertVelUnit()const
 void ossimNitfSensraTag::setVertVelUnit(ossimString vertVelUnit)
 {
    memset(theVertVelUnit, ' ', VERT_VEL_UNIT_SIZE);
-   memcpy(theVertVelUnit, vertVelUnit.c_str(), MIN(VERT_VEL_UNIT_SIZE, vertVelUnit.length()));
+   memcpy(theVertVelUnit, vertVelUnit.c_str(), std::min((size_t)VERT_VEL_UNIT_SIZE, vertVelUnit.length()));
 }
 
 ossimString ossimNitfSensraTag::getSwathFrames()const
@@ -389,7 +386,7 @@ ossimString ossimNitfSensraTag::getSwathFrames()const
 void ossimNitfSensraTag::setSwathFrames(ossimString swathFrames)
 {
    memset(theSwathFrames, ' ', SWATH_FRAMES_SIZE);
-   memcpy(theSwathFrames, swathFrames.c_str(), MIN(SWATH_FRAMES_SIZE, swathFrames.length()));
+   memcpy(theSwathFrames, swathFrames.c_str(), std::min((size_t)SWATH_FRAMES_SIZE, swathFrames.length()));
 }
 
 ossimString ossimNitfSensraTag::getNSwaths()const
@@ -400,7 +397,7 @@ ossimString ossimNitfSensraTag::getNSwaths()const
 void ossimNitfSensraTag::setNSwaths(ossimString nSwaths)
 {
    memset(theNSwaths, ' ', N_SWATHS_SIZE);
-   memcpy(theNSwaths, nSwaths.c_str(), MIN(N_SWATHS_SIZE, nSwaths.length()));
+   memcpy(theNSwaths, nSwaths.c_str(), std::min((size_t)N_SWATHS_SIZE, nSwaths.length()));
 }
 
 ossimString ossimNitfSensraTag::getSpotNum()const
@@ -411,6 +408,6 @@ ossimString ossimNitfSensraTag::getSpotNum()const
 void ossimNitfSensraTag::setSpotNum(ossimString spotNum)
 {
    memset(theSpotNum, ' ', SPOT_NUM_SIZE);
-   memcpy(theSpotNum, spotNum.c_str(), MIN(SPOT_NUM_SIZE, spotNum.length()));
+   memcpy(theSpotNum, spotNum.c_str(), std::min((size_t)SPOT_NUM_SIZE, spotNum.length()));
 }
 

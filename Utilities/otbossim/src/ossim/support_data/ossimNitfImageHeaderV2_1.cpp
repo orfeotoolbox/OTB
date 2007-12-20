@@ -7,7 +7,7 @@
 // Description: Nitf support class
 // 
 //********************************************************************
-// $Id: ossimNitfImageHeaderV2_1.cpp 9326 2006-07-30 11:28:02Z dburken $
+// $Id: ossimNitfImageHeaderV2_1.cpp 11026 2007-05-23 18:27:16Z gpotts $
 #include <sstream>
 #include <iomanip>
 #include <cstring> // for memset
@@ -1295,7 +1295,7 @@ ossimString ossimNitfImageHeaderV2_1::encodeUtm(
    const ossimDpt& ul,
    const ossimDpt& ur,
    const ossimDpt& lr,
-   const ossimDpt& ll)const throw(std::out_of_range)
+   const ossimDpt& ll)const
 {
    ostringstream out;
 

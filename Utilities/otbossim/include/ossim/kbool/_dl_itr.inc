@@ -6,7 +6,7 @@
 
     Licence: wxWidgets Licence
 
-    RCS-ID: $Id: _dl_itr.inc 9094 2006-06-13 19:12:40Z dburken $
+    RCS-ID: $Id: _dl_itr.inc 11045 2007-05-25 17:29:17Z gpotts $
 */
 
 #ifdef __GNUG__
@@ -26,7 +26,7 @@
 * to connect the nodes in the list. \n
 * class Dtype | Object stored at the node
 */
-
+#include <string>
 
 
 /*!
@@ -126,6 +126,19 @@ Error("remove_all",ITER_GT_O);
 template <class Dtype>
 void DL_List<Dtype>::Error(char* function,Lerror a_error)
 {
+	std::string buf = "DL_List<Dtype>::";
+	buf += ((function?function:""));
+   switch (a_error)
+   {
+		case NO_MES:             buf += ""; break;
+		case EMPTY:              buf += "list is empty"; break;
+		case ITER_GT_0:          buf += "more then zero iter"; break;
+		case NO_LIST:            buf += "no list attached"; break;
+		case SAME_LIST:          buf += "same list not allowed"; break;
+		case AC_ITER_LIST_OTHER: buf += "iter not allowed on other list"; break;
+		default:						 buf += "unhandled error"; break;
+   }
+#if 0	
    char buf[100];
    strcpy(buf,"DL_List<Dtype>::");
    strcat(buf,function);
@@ -139,8 +152,8 @@ void DL_List<Dtype>::Error(char* function,Lerror a_error)
 		case AC_ITER_LIST_OTHER: strcat(buf,"iter not allowed on other list"); break;
 		default:						 strcat(buf,"unhandled error"); break;
    }
-
-	throw Bool_Engine_Error(buf,"list error", 0, 1); 
+#endif
+	throw Bool_Engine_Error((char*)buf.c_str(),"list error", 0, 1); 
 }
 
 /*!
@@ -542,6 +555,28 @@ void DL_List<Dtype>::takeover(DL_List<Dtype>* otherlist)
 template <class Dtype>
 void DL_Iter<Dtype>::Error(char* function,Lerror a_error)
 {
+	std::string buf;
+	buf += "DL_Iter<Dtype>::";
+	buf += ((function)?function:"");
+   switch (a_error)
+   {
+		case NO_MES:             break;
+		case NO_LIST:            buf += "no list attached"; break;
+		case NO_LIST_OTHER:      buf += "no list on other iter"; break;
+		case AC_ITER_LIST_OTHER: buf += "iter not allowed on other list"; break;
+		case SAME_LIST:          buf +="same list not allowed"; break;
+		case NOT_SAME_LIST:      buf +="must be same list"; break;
+		case ITER_GT_1:          buf +="more then one iter"; break;
+		case ITER_HITROOT:          buf +="iter at root"; break;
+		case NO_ITEM:            buf +="no item at current"; break;
+		case NO_NEXT:            buf +="no next after current"; break;
+		case NO_PREV:            buf +="no prev before current"; break;
+		case EMPTY:              buf +="list is empty"; break;
+		case NOT_ALLOW:          buf +="not allowed"; break;
+		case ITER_NEG:           buf +="to much iters deleted"; break;
+		default:						 buf +="unhandled error"; break;
+   }
+#if 0
    char buf[100];
    strcpy(buf,"DL_Iter<Dtype>::");
    strcat(buf,function);
@@ -563,7 +598,8 @@ void DL_Iter<Dtype>::Error(char* function,Lerror a_error)
 		case ITER_NEG:           strcat(buf,"to much iters deleted"); break;
 		default:						 strcat(buf,"unhandled error"); break;
    }
-   throw Bool_Engine_Error(buf,"list error", 0, 1); 
+  #endif	
+   throw Bool_Engine_Error((char*)buf.c_str(),"list error", 0, 1); 
 }
 
 /*!

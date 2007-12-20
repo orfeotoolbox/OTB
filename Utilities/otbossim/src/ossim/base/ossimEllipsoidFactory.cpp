@@ -1,12 +1,11 @@
 //*******************************************************************
-// Copyright (C) 2000 ImageLinks Inc.
 //
 // License:  See top level LICENSE.txt file.
 //
 // Author:  Garrett Potts
 // 
 //*******************************************************************
-//  $Id: ossimEllipsoidFactory.cpp 10289 2007-01-16 20:51:52Z gpotts $
+//  $Id: ossimEllipsoidFactory.cpp 11498 2007-08-06 09:20:28Z dburken $
 #include <ossim/base/ossimEllipsoidFactory.h>
 #include <ossim/base/ossimEllipsoid.h>
 #include <ossim/base/ossimString.h>

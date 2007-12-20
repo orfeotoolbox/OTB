@@ -8,7 +8,7 @@
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimUnitConversionTool.cpp 10378 2007-01-26 14:27:21Z gpotts $
+// $Id: ossimUnitConversionTool.cpp 11408 2007-07-27 13:43:00Z dburken $
 
 #include <iostream>
 #include <iomanip>
@@ -137,7 +137,7 @@ double ossimUnitConversionTool::getValue(ossimUnitType unitType) const
          break;
    }
 
-   return OSSIM_DBL_NAN;
+   return ossim::nan();
 }
 
 void ossimUnitConversionTool::setMeters(double value)
@@ -431,5 +431,5 @@ double ossimUnitConversionTool::computeMeters()const
          break;
    }
 
-   return OSSIM_DBL_NAN;
+   return ossim::nan();
 }

@@ -8,7 +8,7 @@
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimGrect.h 9094 2006-06-13 19:12:40Z dburken $
+// $Id: ossimGrect.h 11955 2007-10-31 16:10:22Z gpotts $
 #ifndef ossimGrect_HEADER
 #define ossimGrect_HEADER
 #include <vector>
@@ -199,10 +199,10 @@ inline ossimGrect ossimGrect::clipToRect(const ossimGrect& rect)const
 {
     double     ulx, uly, lrx, lry;
 
-    ulx = ossimMax(rect.ul().lond(),ul().lond());
-    uly = ossimMin(rect.ul().latd(),ul().latd());
-    lrx = ossimMin(rect.lr().lond(),lr().lond());
-    lry = ossimMax(rect.lr().latd(),lr().latd());
+    ulx = ossim::max(rect.ul().lond(),ul().lond());
+    uly = ossim::min(rect.ul().latd(),ul().latd());
+    lrx = ossim::min(rect.lr().lond(),lr().lond());
+    lry = ossim::max(rect.lr().latd(),lr().latd());
 
     if( lrx < ulx || lry > uly )
     {
@@ -300,14 +300,14 @@ inline void ossimGrect::makeNan()
 
 inline bool ossimGrect::isLonLatNan() const
 {
-   return ( ossimIsNan(theUlCorner.lat) ||
-            ossimIsNan(theUlCorner.lon) ||
-            ossimIsNan(theUrCorner.lat) ||
-            ossimIsNan(theUrCorner.lon) ||
-            ossimIsNan(theLrCorner.lat) ||
-            ossimIsNan(theLrCorner.lon) ||
-            ossimIsNan(theLlCorner.lat) ||
-            ossimIsNan(theLlCorner.lon) );
+   return ( ossim::isnan(theUlCorner.lat) ||
+            ossim::isnan(theUlCorner.lon) ||
+            ossim::isnan(theUrCorner.lat) ||
+            ossim::isnan(theUrCorner.lon) ||
+            ossim::isnan(theLrCorner.lat) ||
+            ossim::isnan(theLrCorner.lon) ||
+            ossim::isnan(theLlCorner.lat) ||
+            ossim::isnan(theLlCorner.lon) );
 }
 
 inline bool ossimGrect::hasNans() const

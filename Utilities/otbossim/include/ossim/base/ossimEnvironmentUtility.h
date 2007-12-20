@@ -6,6 +6,8 @@
 class OSSIM_DLL ossimEnvironmentUtility
 {
 public:
+   typedef std::vector<ossimFilename> FilenameListType;
+   
    ossimEnvironmentUtility();
    static ossimEnvironmentUtility* instance();
 
@@ -20,9 +22,27 @@ public:
    ossimFilename getInstalledOssimSupportDir()const;
    ossimFilename getInstalledOssimPluginDir()const;
    ossimFilename getInstalledOssimPreferences()const;
+
+   ossimFilename searchAllPaths(const ossimFilename& file)const;
+   
+   ossimFilename findPlugin(const ossimFilename& plugin)const;
+   ossimFilename findData(const ossimFilename& data)const;
+
+   void addDataSearchPath(const ossimFilename& path);
+   void addDataSearchPathToFront(const ossimFilename& path);
+   void addPluginSearchPath(const ossimFilename& path);
+   void addPluginSearchPathToFront(const ossimFilename& path);
+ 
+   ossimEnvironmentUtility::FilenameListType& getPluginSearchPath();
+   const ossimEnvironmentUtility::FilenameListType& getPluginSearchPath()const;
+   ossimEnvironmentUtility::FilenameListType& getDataSearchPath();
+   const ossimEnvironmentUtility::FilenameListType& getDataSearchPath()const;
    
 protected:
    static ossimEnvironmentUtility* theInstance;
+
+   ossimEnvironmentUtility::FilenameListType thePluginSearchPath;
+   ossimEnvironmentUtility::FilenameListType theDataSearchPath;
 };
 
 

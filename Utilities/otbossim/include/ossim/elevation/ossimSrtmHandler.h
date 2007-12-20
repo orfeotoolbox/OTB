@@ -1,9 +1,6 @@
 //----------------------------------------------------------------------------
-// Copyright (c) 2005, David Burken, all rights reserved.
 //
-// License:  LGPL
-// 
-// See LICENSE.txt file in the top level directory for more details.
+// License:  See tope level LICENSE.txt file.
 //
 // Author:  David Burken
 //
@@ -12,7 +9,7 @@
 // Shuttle Radar Topography Mission (SRTM) elevation source.
 //
 //----------------------------------------------------------------------------
-// $Id: ossimSrtmHandler.h 9094 2006-06-13 19:12:40Z dburken $
+// $Id: ossimSrtmHandler.h 11180 2007-06-07 19:56:09Z dburken $
 #ifndef ossimSrtmHandler_HEADER
 #define ossimSrtmHandler_HEADER
 
@@ -79,7 +76,7 @@ private:
    const ossimSrtmHandler& operator=(const ossimSrtmHandler& rhs);
    ossimSrtmHandler(const ossimSrtmHandler&);
 
-   mutable ossimRefPtr<ossimIStream> theFileStr;
+   mutable ossimRefPtr<ossimIFStream> theFileStr;
 //   mutable std::istream* theFileStr;
 //   mutable ifstream theFileStr;
    ossim_int32      theNumberOfLines;

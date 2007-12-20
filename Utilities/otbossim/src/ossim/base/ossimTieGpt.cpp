@@ -15,7 +15,7 @@ std::ostream& ossimTieGpt::print(std::ostream& os) const
    os << ", ";
    os << tie;
    os << ", ";
-   if (score != OSSIM_DBL_NAN)
+   if (ossim::isnan(score) == false)
    {
       os << std::setiosflags(std::ios::fixed) << std::setprecision(15);
       os << score;
@@ -86,7 +86,7 @@ std::istream& operator>>(std::istream& is, ossimTieGpt& pt)
    tempString.trim();
    if (tempString == "nan")
    {
-      pt.score = OSSIM_DBL_NAN;
+      pt.score = ossim::nan();
    }
    else
    {

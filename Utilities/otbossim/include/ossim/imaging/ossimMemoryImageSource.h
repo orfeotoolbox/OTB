@@ -34,9 +34,21 @@ public:
                                     const ossimConnectableObject* object)const;
    
    virtual void initialize();
+   virtual void setImageGeometry(const ossimKeywordlist& kwl)
+   {
+      theImageGeometry = kwl;
+   }
+   virtual bool getImageGeometry(ossimKeywordlist& kwl,
+                                 const char* prefix=0)
+   {
+      kwl.add(prefix, theImageGeometry);
+      return (theImageGeometry.getSize() > 0);
+   }
+   
 protected:
    ossimRefPtr<ossimImageData> theImage;
    ossimRefPtr<ossimImageData> theResult;
+   ossimKeywordlist theImageGeometry;
 TYPE_DATA
 };
 

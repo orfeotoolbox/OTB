@@ -10,7 +10,7 @@
 // derive from.
 //
 //*******************************************************************
-//  $Id: ossimImageHandler.cpp 10207 2007-01-09 15:51:26Z dburken $
+//  $Id: ossimImageHandler.cpp 12199 2007-12-16 14:18:04Z dburken $
 
 #include <algorithm>
 
@@ -41,19 +41,19 @@ RTTI_DEF1(ossimImageHandler, "ossimImageHandler", ossimImageSource)
 static ossimTrace traceDebug("ossimImageHandler:debug");
 
 #ifdef OSSIM_ID_ENABLED
-static const char OSSIM_ID[] = "$Id: ossimImageHandler.cpp 10207 2007-01-09 15:51:26Z dburken $";
+static const char OSSIM_ID[] = "$Id: ossimImageHandler.cpp 12199 2007-12-16 14:18:04Z dburken $";
 #endif
 
    
 ossimImageHandler::ossimImageHandler()
       :
-      ossimImageSource(NULL,
+      ossimImageSource(0,
                        0,
                        0,
                        true,
                        false),// output list is not fixed
       theImageFile(ossimFilename::NIL),
-      theOverview(NULL),
+      theOverview(0),
       theSubImageOffset(0, 0),
       theValidImageVertices(0),
       theMetaData(),
@@ -74,13 +74,11 @@ ossimImageHandler::ossimImageHandler()
 
 ossimImageHandler::~ossimImageHandler()
 {
-	
    if (theOverview)
    {
       delete theOverview;
-      theOverview = NULL;
+      theOverview = 0;
    }
-   
 }
 
 void ossimImageHandler::initialize()
@@ -319,7 +317,7 @@ ossimIrect ossimImageHandler::getImageRectangle(ossim_uint32 resLevel) const
    {
       ossim_int32 lines   = getNumberOfLines(resLevel);
       ossim_int32 samples = getNumberOfSamples(resLevel);
-      if(ossimIsNan(lines) || ossimIsNan(samples))
+      if( !lines || !samples )
       {
          result.makeNan();
       }
@@ -336,7 +334,7 @@ ossimIrect ossimImageHandler::getImageRectangle(ossim_uint32 resLevel) const
    {
       ossim_int32 lines   = getNumberOfLines(resLevel+1);
       ossim_int32 samples = getNumberOfSamples(resLevel+1);
-      if( (ossimIsNan(lines)== false) && (ossimIsNan(samples) == false) )
+      if( lines && samples )
       {
          result = ossimIrect(0, 0, samples*2-1, lines*2-1);
       }
@@ -557,12 +555,13 @@ bool ossimImageHandler::getImageGeometry(ossimKeywordlist& kwl,
    
    if (theGeometryKwl.getSize())
    {
-      kwl = theGeometryKwl;
+      kwl.add(prefix, theGeometryKwl);
+      //kwl = theGeometryKwl;
       return true;
    }
    
    bool result = false;
-   ossimProjection* proj = NULL;
+   ossimRefPtr<ossimProjection> proj = 0;
    ossimFilename filename = getFilenameWithThisExtension(ossimString(".geom"));
    if(!filename.exists())
    {
@@ -587,13 +586,10 @@ bool ossimImageHandler::getImageGeometry(ossimKeywordlist& kwl,
 
             proj = ossimProjectionFactoryRegistry::instance()->
                createProjection(kwlTemp);
-            if(proj)
+            if(proj.valid())
             {
-               delete proj;
-               proj = NULL;
-               
                result = true;
-               kwl = kwlTemp;
+               kwl.add(prefix, kwlTemp);//kwl = kwlTemp;
             }
          }
       }
@@ -615,11 +611,9 @@ bool ossimImageHandler::getImageGeometry(ossimKeywordlist& kwl,
       proj = ossimProjectionFactoryRegistry::instance()->
          createProjection(getFilename(),
                           getCurrentEntry());
-      if(proj)
+      if(proj.valid())
       {
          result = proj->saveState(kwl, prefix);
-         delete proj;
-         proj = NULL;
          
          result = true;
       }
@@ -627,8 +621,10 @@ bool ossimImageHandler::getImageGeometry(ossimKeywordlist& kwl,
    
    if (result == true)
    {
+      theGeometryKwl.clear();
       // Capture the geometry for next time.
-      theGeometryKwl = kwl;
+//      theGeometryKwl = kwl;
+      theGeometryKwl.add(kwl, prefix, true);
    }
 
    if (traceDebug())
@@ -665,7 +661,7 @@ void ossimImageHandler::closeOverview()
    if(theOverview)
    {
       delete theOverview;
-      theOverview = NULL;
+      theOverview = 0;
    }
 }
 
@@ -700,7 +696,7 @@ bool ossimImageHandler::openOverview(const ossimFilename& overview_file)
    }
 
    delete theOverview;
-   theOverview = NULL;
+   theOverview = 0;
    return false;
 }
 
@@ -910,8 +906,8 @@ void ossimImageHandler::getValidImageVertices(vector<ossimIpt>& validVertices,
       validVertices.clear();
       for (ossim_uint32 i=0; i<theValidImageVertices.size(); ++i)
       {
-         ossimIpt pt(irint(theValidImageVertices[i].x*decimation.x),
-                     irint(theValidImageVertices[i].y*decimation.y));
+         ossimIpt pt(ossim::round<int>(theValidImageVertices[i].x*decimation.x),
+                     ossim::round<int>(theValidImageVertices[i].y*decimation.y));
          validVertices.push_back(pt);
       }
 
@@ -932,7 +928,7 @@ void ossimImageHandler::close()
    if (theOverview)
    {
       delete theOverview;
-      theOverview = NULL;
+      theOverview = 0;
    }
 
    theValidImageVertices.clear();
@@ -978,7 +974,7 @@ double ossimImageHandler::getMinPixelValue(ossim_uint32 band)const
    {
       return theMetaData.getMinPix(band);
    }
-   return ossimGetDefaultMin(getOutputScalarType());
+   return ossim::defaultMin(getOutputScalarType());
 }
 
 double ossimImageHandler::getMaxPixelValue(ossim_uint32 band)const
@@ -987,7 +983,7 @@ double ossimImageHandler::getMaxPixelValue(ossim_uint32 band)const
    {
       return theMetaData.getMaxPix(band);
    }
-   return ossimGetDefaultMax(getOutputScalarType());
+   return ossim::defaultMax(getOutputScalarType());
 }
 
 double ossimImageHandler::getNullPixelValue(ossim_uint32 band)const
@@ -997,7 +993,7 @@ double ossimImageHandler::getNullPixelValue(ossim_uint32 band)const
       return theMetaData.getNullPix(band);
    }
    
-   return ossimGetDefaultNull(getOutputScalarType());
+   return ossim::defaultNull(getOutputScalarType());
 }
 
 
@@ -1074,8 +1070,8 @@ ossimIpt ossimImageHandler::getSubImageOffset(ossim_uint32 resLevel) const
       getDecimationFactor(resLevel, decimation);
       if(!decimation.hasNans()) // Should never have nans...
       {
-         offset.x = irint(theSubImageOffset.x*decimation.x);
-         offset.y = irint(theSubImageOffset.y*decimation.y);
+         offset.x = ossim::round<int>(theSubImageOffset.x*decimation.x);
+         offset.y = ossim::round<int>(theSubImageOffset.y*decimation.y);
       }
    }
    return offset;

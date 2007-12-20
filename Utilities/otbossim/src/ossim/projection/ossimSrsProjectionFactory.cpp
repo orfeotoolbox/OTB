@@ -5,7 +5,7 @@
 //   Contains implementation of class ossimMapProjectionFactory
 //
 //*****************************************************************************
-//  $Id: ossimSrsProjectionFactory.cpp 9094 2006-06-13 19:12:40Z dburken $
+//  $Id: ossimSrsProjectionFactory.cpp 12082 2007-11-26 21:46:44Z dburken $
 #include <sstream>
 #include <ossim/projection/ossimSrsProjectionFactory.h>
 #include <ossim/base/ossimKeywordNames.h>
@@ -146,12 +146,4 @@ ossimObject* ossimSrsProjectionFactory::createObject(const ossimKeywordlist& kwl
 void ossimSrsProjectionFactory::getTypeNameList(std::vector<ossimString>& typeList)const
 {
    
-}
-
-std::list<ossimString> ossimSrsProjectionFactory::getList()const
-{
-   std::list<ossimString> result;
-
-   
-   return result;
 }

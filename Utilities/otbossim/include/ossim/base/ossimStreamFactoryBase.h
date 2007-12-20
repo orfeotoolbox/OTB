@@ -9,13 +9,15 @@
 //
 //
 //*******************************************************************
-//  $Id: ossimStreamFactoryBase.h 9094 2006-06-13 19:12:40Z dburken $
+//  $Id: ossimStreamFactoryBase.h 11176 2007-06-07 19:45:56Z dburken $
 //
 #ifndef ossimStreamFactoryBase_HEADER
 #define ossimStreamFactoryBase_HEADER
-#include <iostream>
+
+#include <iosfwd>
 #include <ossim/base/ossimConstants.h>
 #include <ossim/base/ossimRefPtr.h>
+#include <ossim/base/ossimIoStream.h>
 
 class ossimFilename;
 class ossimIStream;
@@ -25,9 +27,9 @@ class OSSIM_DLL ossimStreamFactoryBase
 public:
    virtual ~ossimStreamFactoryBase(){}
    
-   virtual ossimRefPtr<ossimIStream> createNewInputStream(
+   virtual ossimRefPtr<ossimIFStream> createNewIFStream(
       const ossimFilename& file,
-	  std::ios::openmode openMode)=0;
+      std::ios_base::openmode openMode)const=0;
 };
 
 #endif

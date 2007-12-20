@@ -1,5 +1,4 @@
 //*******************************************************************
-// Copyright (C) 2000 ImageLinks Inc.
 //
 // License:  LGPL
 // 
@@ -14,7 +13,7 @@
 // a projection name and a datum if desired.  Currently the default
 // datum will be WGS84.
 //*******************************************************************
-//  $Id: ossimMapProjectionFactory.h 9094 2006-06-13 19:12:40Z dburken $
+//  $Id: ossimMapProjectionFactory.h 12081 2007-11-26 21:44:18Z dburken $
 
 #ifndef ossimMapProjectionFactory_HEADER
 #define ossimMapProjectionFactory_HEADER
@@ -58,12 +57,6 @@ public:
     * name must be unique.
     */
    virtual void getTypeNameList(std::vector<ossimString>& typeList)const;
-
-   /*!
-    * METHOD: getList()
-    * Returns list of all projections represented by this factory:
-    */
-   virtual std::list<ossimString> getList()const;
 
 protected:
    ossimMapProjectionFactory() {}

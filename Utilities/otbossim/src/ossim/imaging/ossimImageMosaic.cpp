@@ -1,16 +1,13 @@
 //*******************************************************************
-// Copyright (C) 2000 ImageLinks Inc. 
 //
-// License:  LGPL
-// 
-// See LICENSE.txt file in the top level directory for more details.
+// License:  See top level LICENSE.txt file.
 //
 // Author: Garrett Potts
 // 
 // Description: implementation for image mosaic
 //
 //*************************************************************************
-// $Id: ossimImageMosaic.cpp 9094 2006-06-13 19:12:40Z dburken $
+// $Id: ossimImageMosaic.cpp 10777 2007-04-25 14:49:17Z gpotts $
 
 #include <ossim/imaging/ossimImageMosaic.h>
 #include <ossim/imaging/ossimImageData.h>
@@ -25,6 +22,7 @@ ossimImageMosaic::ossimImageMosaic()
    :ossimImageCombiner(),
     theTile(NULL)
 {
+
 }
 
 ossimImageMosaic::ossimImageMosaic(const vector<ossimImageSource*>& inputSources)
@@ -43,11 +41,11 @@ ossimRefPtr<ossimImageData> ossimImageMosaic::getTile(
    ossim_uint32 resLevel)
 {
    long size = getNumberOfInputs();
-   
+   ossim_uint32 layerIdx = 0;
    // If there is only one in the mosaic then just return it.
    if(size == 1)
    {
-      return getNextTile(0, tileRect, resLevel);
+      return getNextTile(layerIdx, 0, tileRect, resLevel);
    }
    
    ossimIpt origin = tileRect.ul();
@@ -264,23 +262,28 @@ template <class T> ossimRefPtr<ossimImageData> ossimImageMosaic::combineNorm(
    const ossimIrect& tileRect,
    ossim_uint32 resLevel)
 {
-   ossimRefPtr<ossimImageData> destination = theTile;
-   
+   ossim_uint32 layerIdx = 0;
+   //---
+   // Get the first tile from the input sources.  If this(index 0) is blank
+   // that means there are no layers so go no further.
+   //---
    ossimRefPtr<ossimImageData> currentImageData =
-      getNextNormTile(0, tileRect, resLevel);
-      
+      getNextNormTile(layerIdx, 0, tileRect, resLevel);
    if(!currentImageData)
    {
-      return currentImageData;
+      return theTile;
    }
    
-   float** srcBands        = new float*[theLargestNumberOfInputBands];
-   float* srcBandsNullPix  = new float[theLargestNumberOfInputBands];
-   T** destBands = new T*[theLargestNumberOfInputBands];
-   T* destBandsNullPix = new T[theLargestNumberOfInputBands];
-   T* destBandsMinPix = new T[theLargestNumberOfInputBands];
-   T* destBandsMaxPix = new T[theLargestNumberOfInputBands];
-      
+   ossimRefPtr<ossimImageData> destination = theTile;
+   ossimDataObjectStatus destinationStatus = theTile->getDataObjectStatus();
+
+   float** srcBands         = new float*[theLargestNumberOfInputBands];
+   float*  srcBandsNullPix  = new float[theLargestNumberOfInputBands];
+   T**     destBands        = new T*[theLargestNumberOfInputBands];
+   T*      destBandsNullPix = new T[theLargestNumberOfInputBands];
+   T*      destBandsMinPix  = new T[theLargestNumberOfInputBands];
+   T*      destBandsMaxPix  = new T[theLargestNumberOfInputBands];
+   
    ossim_uint32 band;
    ossim_uint32 upperBound = destination->getWidth()*destination->getHeight();
    ossim_uint32 minNumberOfBands = currentImageData->getNumberOfBands();
@@ -294,6 +297,7 @@ template <class T> ossimRefPtr<ossimImageData> ossimImageMosaic::combineNorm(
       destBandsMinPix[band] = static_cast<T>(theTile->getMinPix(band));
       destBandsMaxPix[band] = static_cast<T>(theTile->getMaxPix(band));
    }
+   
    // if the src is smaller than the destination in number
    // of bands we will just duplicate the last band.
    for(;band < theLargestNumberOfInputBands; ++band)
@@ -306,44 +310,27 @@ template <class T> ossimRefPtr<ossimImageData> ossimImageMosaic::combineNorm(
       destBandsMinPix[band] = static_cast<T>(theTile->getMinPix(band));
       destBandsMaxPix[band] = static_cast<T>(theTile->getMaxPix(band));
    }
-   // most of the time we will not overlap so let's
-   // copy the first tile into destination and check later.
-   //
-   ossim_uint32 tempBandIdx = 0;
-   for(band = 0; band < theTile->getNumberOfBands();++band)
-   {
-      if(band < currentImageData->getNumberOfBands())
-      {
-         theTile->copyNormalizedBufferToTile(band,
-                                             (float*)currentImageData->getBuf(band));
-         ++tempBandIdx;
-      }
-      else
-      {
-         if(tempBandIdx)
-         {
-            theTile->copyNormalizedBufferToTile(band,
-                                                (float*)currentImageData->getBuf(tempBandIdx-1));
-         }
-      }
-   }
-   destination->validate();
-   
-   currentImageData = getNextNormTile(tileRect, resLevel);
 
+   // Loop to copy from layers to output tile.
    while(currentImageData.valid())
-   {  
-      ossim_uint32 minNumberOfBands           = currentImageData->getNumberOfBands();
-      ossimDataObjectStatus currentStatus     = currentImageData->getDataObjectStatus();
-      ossimDataObjectStatus destinationStatus = destination->getDataObjectStatus();
-      
-      if(destinationStatus == OSSIM_FULL)
+   {
+      //---
+      // Check the status of the source tile.  If empty get the next source
+      // tile and loop back.
+      //---
+       ossimDataObjectStatus currentStatus =
+         currentImageData->getDataObjectStatus();
+      if ( (currentStatus == OSSIM_EMPTY) || (currentStatus == OSSIM_NULL) )
       {
-         return destination;
+         currentImageData = getNextNormTile(layerIdx, tileRect, resLevel);
+         continue;
       }
+      
+      ossim_uint32 minNumberOfBands = currentImageData->getNumberOfBands();
+      
       for(band = 0; band < minNumberOfBands; ++band)
       {
-         srcBands[band]        = static_cast<float*>(currentImageData->getBuf(band));
+         srcBands[band] = static_cast<float*>(currentImageData->getBuf(band));
          srcBandsNullPix[band] = static_cast<float>(currentImageData->getNullPix(band));
       }
       // if the src is smaller than the destination in number
@@ -353,47 +340,55 @@ template <class T> ossimRefPtr<ossimImageData> ossimImageMosaic::combineNorm(
          srcBands[band] = srcBands[minNumberOfBands - 1];
          srcBandsNullPix[band] = static_cast<T>(currentImageData->getNullPix(minNumberOfBands - 1));
       }
-
-      if((destinationStatus == OSSIM_EMPTY)&&
-         (currentStatus     != OSSIM_EMPTY)&&
-         (currentStatus     != OSSIM_NULL))
+      
+      if ( (currentStatus == OSSIM_FULL) &&
+           (destinationStatus == OSSIM_EMPTY) )
       {
-         ossim_uint32 upperBound = destination->getWidth()*destination->getHeight();
+         // Copy full tile to empty tile.
          for(band=0; band < theLargestNumberOfInputBands; ++band)
          {
             float delta = destBandsMaxPix[band] - destBandsMinPix[band];
             float minP  = destBandsMinPix[band];
+            
             for(ossim_uint32 offset = 0; offset < upperBound; ++offset)
             {
-               destBands[band][offset] = (T)( minP + delta*srcBands[band][offset]);
+               destBands[band][offset] =
+                  (T)( minP + delta*srcBands[band][offset]);
             }
          }
       }
-      else if((destinationStatus == OSSIM_PARTIAL)&&
-              (currentStatus     != OSSIM_EMPTY)&&
-              (currentStatus     != OSSIM_NULL))
+      else // Copy tile checking all the pixels...
       {
          for(band = 0; band < theLargestNumberOfInputBands; ++band)
          {
-            
             float delta = destBandsMaxPix[band] - destBandsMinPix[band];
             float minP  = destBandsMinPix[band];
-            for(ossim_uint32 offset = 0;
-                offset < upperBound;
-                ++offset)
+            
+            for(ossim_uint32 offset = 0; offset < upperBound; ++offset)
             {
-               
-               if(destBands[band][offset] == destBandsNullPix[band])
+               if (destBands[band][offset] == destBandsNullPix[band])
                {
-                  destBands[band][offset] = (T)(minP + delta*srcBands[band][offset]);
+                  if (srcBands[band][offset] != srcBandsNullPix[band])
+                  {
+                     destBands[band][offset] =
+                        (T)(minP + delta*srcBands[band][offset]);
+                  }
                }
             }
          }
       }
-      destination->validate();
-      
-      currentImageData = getNextNormTile(tileRect, resLevel);
+
+      // Validate output tile and return if full.
+      destinationStatus = destination->validate();
+      if (destinationStatus == OSSIM_FULL)
+      {
+         return destination;
+      }
+
+      // If we get here we're are still not full.  Get a tile from next layer.
+      currentImageData = getNextNormTile(layerIdx, tileRect, resLevel);
    }
+
    // Cleanup...
    delete [] srcBands;
    delete [] destBands;
@@ -401,6 +396,7 @@ template <class T> ossimRefPtr<ossimImageData> ossimImageMosaic::combineNorm(
    delete [] destBandsNullPix;
    delete [] destBandsMinPix;
    delete [] destBandsMaxPix;
+
    return destination;
 }
 
@@ -409,11 +405,21 @@ template <class T> ossimRefPtr<ossimImageData> ossimImageMosaic::combine(
    const ossimIrect& tileRect,
    ossim_uint32 resLevel)
 {
-   ossimRefPtr<ossimImageData> destination = theTile;
-
+   ossim_uint32 layerIdx = 0;
+   //---
+   // Get the first tile from the input sources.  If this(index 0) is blank
+   // that means there are no layers so go no further.
+   //---
    ossimRefPtr<ossimImageData> currentImageData =
-      getNextTile(0, tileRect, resLevel);
-      
+      getNextTile(layerIdx, 0, tileRect, resLevel);
+   if (!currentImageData)
+   {
+      return theTile;
+   }
+
+   ossimRefPtr<ossimImageData> destination = theTile;
+   ossimDataObjectStatus destinationStatus = theTile->getDataObjectStatus();
+
    T** srcBands         = new T*[theLargestNumberOfInputBands];
    T*  srcBandsNullPix  = new T[theLargestNumberOfInputBands];
    T** destBands        = new T*[theLargestNumberOfInputBands];
@@ -421,12 +427,6 @@ template <class T> ossimRefPtr<ossimImageData> ossimImageMosaic::combine(
       
    ossim_uint32 band;
    ossim_uint32 upperBound = destination->getWidth()*destination->getHeight();
-   ossim_uint32 bandIndex  = 0;
-   if(!currentImageData)
-   {
-      return currentImageData;
-   }
-   ossim_uint32 offset=0;
    ossim_uint32 minNumberOfBands = currentImageData->getNumberOfBands();
    for(band = 0; band < minNumberOfBands; ++band)
    {
@@ -444,40 +444,27 @@ template <class T> ossimRefPtr<ossimImageData> ossimImageMosaic::combine(
       srcBandsNullPix[band] = static_cast<T>(currentImageData->getNullPix(minNumberOfBands - 1));
       destBandsNullPix[band] = static_cast<T>(theTile->getNullPix(band));
    }
-   // most of the time we will not overlap so let's
-   // copy the first tile into destination and check later.
-   //
-   for(band = 0; band < theTile->getNumberOfBands();++band)
-   {
-      T* destBand = destBands[band];
-      T* srcBand  = srcBands[band];
-      if(destBand&&srcBand)
-      {
-         for(offset = 0; offset < upperBound;++offset)
-         {
-            *destBand = *srcBand;
-            ++srcBand; ++destBand;
-         }
-      }
-   }
-   destination->setDataObjectStatus(currentImageData->getDataObjectStatus());
 
-   currentImageData = getNextTile(tileRect,
-                                  resLevel);
-
+   // Loop to copy from layers to output tile.
    while(currentImageData.valid())
-   {  
-      ossim_uint32 minNumberOfBands           = currentImageData->getNumberOfBands();
-      ossimDataObjectStatus currentStatus     = currentImageData->getDataObjectStatus();
-      ossimDataObjectStatus destinationStatus = destination->getDataObjectStatus();
-      
-      if(destinationStatus == OSSIM_FULL)
+   {
+      //---
+      // Check the status of the source tile.  If empty get the next source
+      // tile and loop back.
+      //---
+      ossimDataObjectStatus currentStatus =
+         currentImageData->getDataObjectStatus();
+      if ( (currentStatus == OSSIM_EMPTY) || (currentStatus == OSSIM_NULL) )
       {
-         return destination;
+         currentImageData = getNextNormTile(layerIdx, tileRect, resLevel);
+         continue;
       }
+      
+      ossim_uint32 minNumberOfBands = currentImageData->getNumberOfBands();
+
       for(band = 0; band < minNumberOfBands; ++band)
       {
-         srcBands[band]        = static_cast<T*>(currentImageData->getBuf(band));
+         srcBands[band] = static_cast<T*>(currentImageData->getBuf(band));
          srcBandsNullPix[band] = static_cast<T>(currentImageData->getNullPix(band));
       }
       // if the src is smaller than the destination in number
@@ -488,11 +475,10 @@ template <class T> ossimRefPtr<ossimImageData> ossimImageMosaic::combine(
          srcBandsNullPix[band] = static_cast<T>(currentImageData->getNullPix(minNumberOfBands - 1));
       }
 
-      if((destinationStatus == OSSIM_EMPTY)&&
-         (currentStatus     != OSSIM_EMPTY)&&
-         (currentStatus     != OSSIM_NULL))
+      if ( (currentStatus == OSSIM_FULL) &&
+           (destinationStatus == OSSIM_EMPTY) )
       {
-         ossim_uint32 upperBound = destination->getWidth()*destination->getHeight();
+         // Copy full tile to empty tile.
          for(ossim_uint32 band=0; band < theLargestNumberOfInputBands; ++band)
          {
             for(ossim_uint32 offset = 0; offset < upperBound; ++offset)
@@ -501,32 +487,37 @@ template <class T> ossimRefPtr<ossimImageData> ossimImageMosaic::combine(
             }
          }
       }
-      else if((destinationStatus == OSSIM_PARTIAL)&&
-              (currentStatus     != OSSIM_EMPTY)&&
-              (currentStatus     != OSSIM_NULL))
+      else // Copy tile checking all the pixels...
       {
-         for(bandIndex = 0; bandIndex < theLargestNumberOfInputBands; ++bandIndex)
+         for(band = 0; band < theLargestNumberOfInputBands; ++band)
          {
             
-            for(ossim_uint32 offset = 0;
-                offset < upperBound;
-                ++offset)
+            for(ossim_uint32 offset = 0; offset < upperBound; ++offset)
             {
-               if(destBands[bandIndex][offset] == destBandsNullPix[bandIndex])
+               if(destBands[band][offset] == destBandsNullPix[band])
                {
-                  destBands[bandIndex][offset] = srcBands[bandIndex][offset];
+                  destBands[band][offset] = srcBands[band][offset];
                }
             }
          }
       }
-      destination->validate();
-      
-      currentImageData = getNextTile(tileRect, resLevel);
+
+      // Validate output tile and return if full.
+      destinationStatus = destination->validate();
+      if (destinationStatus == OSSIM_FULL)
+      {
+         return destination;
+      }
+
+      // If we get here we're are still not full.  Get a tile from next layer.
+      currentImageData = getNextTile(layerIdx, tileRect, resLevel);
    }
+   
    // Cleanup...
    delete [] srcBands;
    delete [] destBands;
    delete [] srcBandsNullPix;
    delete [] destBandsNullPix;
+   
    return destination;
 }

@@ -10,7 +10,7 @@
 // LIMITATIONS: None.
 //
 //*****************************************************************************
-//  $Id: ossimGeoidManager.h 10216 2007-01-09 17:33:01Z dburken $
+//  $Id: ossimGeoidManager.h 11496 2007-08-06 09:18:28Z dburken $
 
 #ifndef ossimGeoidManager_HEADER
 #define ossimGeoidManager_HEADER
@@ -19,7 +19,7 @@
 #include <ossim/base/ossimRefPtr.h>
 #include <ossim/base/ossimGeoid.h>
 
-/*!****************************************************************************
+/*****************************************************************************
  *
  * CLASS: ossimGeoidManager 
  *
@@ -31,39 +31,39 @@ public:
 
    virtual ~ossimGeoidManager();
       
-   /*!
+   /**
     * Implements singelton pattern:
     */
    static ossimGeoidManager* instance();
 
    
-   /*!
+   /**
     * Permits initialization of geoids from directory name. Should never be
     * called since called on specific geoid types:
     */
    virtual bool open(const ossimFilename& dir, ossimByteOrder byteOrder);
 
-   /*!
-    *  Returns the offset from the ellipsoid to the geoid.
-    *  Returns OSSIM_DBL_NAN if grid does not contain the point.
+   /**
+    *  @return The offset from the ellipsoid to the geoid or ossim::nan()
+    *  if grid does not contain the point.
     */
    virtual double offsetFromEllipsoid(const ossimGpt& gpt) const;
 
-   /*!
+   /**
     * Method to save the state of the object to a keyword list.
     * Return true if ok or false on error. DO NOTHING
     */
    virtual bool saveState(ossimKeywordlist& kwl,
                           const char* prefix=0) const;
 
-   /*!
+   /**
     * Method to the load (recreate) the state of the object from a keyword
     * list.  Return true if ok or false on error.
     */
    virtual bool loadState(const ossimKeywordlist& kwl,
                           const char* prefix=0);
 
-   /*!
+   /**
     * Permits adding additional geoids to the list: 
     */
    virtual void addGeoid(ossimRefPtr<ossimGeoid> geoid);
@@ -71,7 +71,7 @@ public:
    const ossimRefPtr<ossimGeoid> findGeoidByShortName(const ossimString& shortName,
                                                       bool caseSensitive=true)const;
 private:
-   /*!
+   /**
     *  Private constructor.  Use "instance" method.
     */
    ossimGeoidManager();

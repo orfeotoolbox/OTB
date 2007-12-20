@@ -7,10 +7,8 @@
 RTTI_DEF1(ossimGeneralRasterElevHandler, "ossimGeneralRasterElevHandler", ossimElevCellHandler);
 
 ossimGeneralRasterElevHandler::ossimGeneralRasterElevHandler(const ossimFilename& file)
-   :ossimElevCellHandler(file.c_str()),
-    theBoundingRect(0,0,0,0,OSSIM_RIGHT_HANDED)
+   :ossimElevCellHandler(file.c_str())
 {
-   theCurrentIdx = -1;
    if(file != "")
    {
       if(!setFilename(file))
@@ -22,15 +20,19 @@ ossimGeneralRasterElevHandler::ossimGeneralRasterElevHandler(const ossimFilename
 
 ossimGeneralRasterElevHandler::ossimGeneralRasterElevHandler(const ossimGeneralRasterElevHandler& src)
    :ossimElevCellHandler(src),
-    theBoundingRectInfoList(src.theBoundingRectInfoList),
-    theBoundingRect(src.theBoundingRect),
-    theCurrentIdx(src.theCurrentIdx)// ,
-//     theFileStr(0)
+    theGeneralRasterInfo(src.theGeneralRasterInfo)
 {
-   theCurrentIdx = -1;
-   setFilename(src.theFilename);
-   
-//    theFileStr.close();
+   open();
+}
+
+ossimGeneralRasterElevHandler::ossimGeneralRasterElevHandler(const ossimGeneralRasterElevHandler::GeneralRasterInfo& generalRasterInfo)
+{
+   close();
+   theGeneralRasterInfo = generalRasterInfo;
+   if(!open())
+   {
+      theErrorStatus = ossimErrorCodes::OSSIM_ERROR;
+   }
 }
 
 ossimObject* ossimGeneralRasterElevHandler::dup()const
@@ -51,173 +53,98 @@ ossimGeneralRasterElevHandler::~ossimGeneralRasterElevHandler()
 
 double ossimGeneralRasterElevHandler::getHeightAboveMSL(const ossimGpt& gpt)
 {
-   if(theBoundingRectInfoList.size() < 1)
+   if(!theInputStream.valid())
    {
-      return theNullHeightValue;
+      return ossim::nan();
    }
 
-   if(theCurrentIdx < 0)
+   ossim_float64 result = theGeneralRasterInfo.theNullHeightValue;
+   switch(theGeneralRasterInfo.theScalarType)
    {
-      open();
-   }
-   if(theCurrentIdx < 0)
-   {
-      return theNullHeightValue;
-   }
-
-   if(theCurrentIdx != 0)
-   {
-      if(!open((ossim_uint32)0))
+      case OSSIM_SINT8:
       {
-         return theNullHeightValue;
+         result = getHeightAboveMSLTemplate((ossim_sint8)0,
+                                            theGeneralRasterInfo,
+                                            gpt);
+         break;
       }
-   }
-   ossim_uint32 idx = 0;
-   ossim_uint32 idxMax = theBoundingRectInfoList.size();
-   ossim_float64 result = theNullHeightValue;
-   while(idx < idxMax)
-   {
-      const ossimGeneralRasterElevHandler::BoundingRectInfo& info = theBoundingRectInfoList[theCurrentIdx];
-         
-      switch(info.theScalarType)
+      case OSSIM_UINT8:
       {
-         case OSSIM_SINT8:
-         {
-            result = getHeightAboveMSLTemplate((ossim_sint8)0,
-                                               info,
-                                               gpt);
-            break;
-         }
-         case OSSIM_UINT8:
-         {
-            result = getHeightAboveMSLTemplate((ossim_uint8)0,
-                                               info,
-                                               gpt);
-            break;
-         }
-         case OSSIM_SINT16:
-         {
-            result = getHeightAboveMSLTemplate((ossim_sint16)0,
-                                               info,
-                                               gpt);
-            break;
-         }
-         case OSSIM_UINT16:
-         {
-            result = getHeightAboveMSLTemplate((ossim_uint16)0,
-                                               info,
-                                               gpt);
-            break;
-         }
-         case OSSIM_SINT32:
-         {
-            result = getHeightAboveMSLTemplate((ossim_sint32)0,
-                                               info,
-                                               gpt);
-            break;
-         }
-         case OSSIM_UINT32:
-         {
-            result = getHeightAboveMSLTemplate((ossim_uint32)0,
-                                               info,
-                                               gpt);
-            break;
-         }
-         case OSSIM_FLOAT32:
-         {
-            result =  getHeightAboveMSLTemplate((ossim_float32)0,
-                                                info,
-                                                gpt);
-            break;
-         }
-         case OSSIM_FLOAT64:
-         {
-            result = getHeightAboveMSLTemplate((ossim_float64)0,
-                                               info,
-                                               gpt);
-            break;
-         }
-         default:
-         {
-            break;
-         }
-         
+         result = getHeightAboveMSLTemplate((ossim_uint8)0,
+                                            theGeneralRasterInfo,
+                                            gpt);
+         break;
       }
-      if(result != info.theNullHeightValue)
+      case OSSIM_SINT16:
       {
-         return result;
+         result = getHeightAboveMSLTemplate((ossim_sint16)0,
+                                            theGeneralRasterInfo,
+                                            gpt);
+         break;
       }
-      if(!open((theCurrentIdx+1)%theBoundingRectInfoList.size()))
+      case OSSIM_UINT16:
       {
-         return theNullHeightValue;
+         result = getHeightAboveMSLTemplate((ossim_uint16)0,
+                                            theGeneralRasterInfo,
+                                            gpt);
+         break;
       }
-      ++idx;
+      case OSSIM_SINT32:
+      {
+         result = getHeightAboveMSLTemplate((ossim_sint32)0,
+                                            theGeneralRasterInfo,
+                                            gpt);
+         break;
+      }
+      case OSSIM_UINT32:
+      {
+         result = getHeightAboveMSLTemplate((ossim_uint32)0,
+                                            theGeneralRasterInfo,
+                                            gpt);
+         break;
+      }
+      case OSSIM_FLOAT32:
+      {
+         result =  getHeightAboveMSLTemplate((ossim_float32)0,
+                                             theGeneralRasterInfo,
+                                             gpt);
+         break;
+      }
+      case OSSIM_FLOAT64:
+      {
+         result = getHeightAboveMSLTemplate((ossim_float64)0,
+                                            theGeneralRasterInfo,
+                                            gpt);
+         break;
+      }
+      default:
+      {
+         break;
+      }
+      
    }
 
-   return theNullHeightValue;
+   return result;
 }
 
 ossimIpt ossimGeneralRasterElevHandler::getSizeOfElevCell() const
 {
-   return ossimIpt(0,0);
+   return ossimIpt(theGeneralRasterInfo.theNumberOfSamples, theGeneralRasterInfo.theNumberOfLines);
 }
    
 double ossimGeneralRasterElevHandler::getPostValue(const ossimIpt& gridPt) const
 {
-   return theNullHeightValue;
+   return ossim::nan();
 }
 
 
 bool ossimGeneralRasterElevHandler::open()
 {
-   return open((ossim_uint32)0);
-}
+   close();
+   theInputStream = ossimStreamFactoryRegistry::instance()->createNewIFStream(theGeneralRasterInfo.theFilename,
+                                                                              ios::in | ios::binary);
 
-bool ossimGeneralRasterElevHandler::open(ossim_uint32 idx)
-{
-   theCurrentIdx = -1;
-   if(theBoundingRectInfoList.empty())
-   {
-      return false;
-   }
-
-   if(idx < theBoundingRectInfoList.size())
-   {
-      if(!theBoundingRectInfoList[idx].theInputStream.valid())
-      {
-         theBoundingRectInfoList[idx].theInputStream = ossimStreamFactoryRegistry::instance()->createNewInputStream(theBoundingRectInfoList[idx].theFilename,
-                                                                                                                    ios::in | ios::binary);
-
-         if(theBoundingRectInfoList[idx].theInputStream.valid()&&
-            !theBoundingRectInfoList[idx].theInputStream->fail())
-         {
-            theCurrentIdx = idx;
-            return true;
-         }
-      }
-      else if(theBoundingRectInfoList[idx].theInputStream.valid())
-      {
-         theCurrentIdx = idx;
-         return true;
-      }
-   }
-//       close();
-//       theFileStr.open(theBoundingRectInfoList[idx].theFilename.c_str(),
-//                       ios::in|ios::binary);
-
-
-//       theFileStr = 0;
-//       theFileStr = ossimStreamFactoryRegistry::instance()->createNewInputStream(theBoundingRectInfoList[idx].theFilename,
-//                                                                                 ios::in | ios::binary);
-
-//       if(!theFileStr.fail())
-//       {
-//          theCurrentIdx = idx;
-//          return true;
-//       }
-//   }
-
-   return false;
+   return theInputStream.valid();
 }
 
 /**
@@ -225,155 +152,167 @@ bool ossimGeneralRasterElevHandler::open(ossim_uint32 idx)
  */
 void ossimGeneralRasterElevHandler::close()
 {
-//    if(theFileStr.valid())
-//    {
-//       theFileStr->close();
-//       theFileStr = 0;
-//    }
-
-#if 0   
-   theFileStr.close();
-   theFileStr.clear();
-   theCurrentIdx = -1;
-#endif
-   theCurrentIdx = -1;
+   if(theInputStream.valid())
+   {
+      theInputStream->close();
+   }
+   theInputStream = 0;
 }
 
 bool ossimGeneralRasterElevHandler::setFilename(const ossimFilename& file)
 {
-   theFilename = file;
-   close();
-   initializeList(file);   
-   return open();
+   if(file.trim() == "")
+   {
+      return false;
+   }
+   ossimFilename hdrFile  = file;
+   ossimFilename geomFile = file;
+   theGeneralRasterInfo.theFilename = file;
+   theGeneralRasterInfo.thePostSpacing.makeNan();
+   theGeneralRasterInfo.theUlGpt.makeNan();
+   theGeneralRasterInfo.theLrGpt.makeNan();
+   theGeneralRasterInfo.theNumberOfSamples = 0;
+   theGeneralRasterInfo.theNumberOfLines = 0;
+   theNullHeightValue = ossim::nan();
+   hdrFile = hdrFile.setExtension("omd");
+   geomFile = geomFile.setExtension("geom");
+
+   if(!hdrFile.exists()||
+      !geomFile.exists())
+   {
+      return false;
+   }
+   ossimKeywordlist kwl(hdrFile);
+   if (kwl.getErrorStatus() == ossimErrorCodes::OSSIM_ERROR)
+   {
+      return false;
+   }
+   
+   kwl.add(ossimKeywordNames::FILENAME_KW,
+           file.c_str(),
+           true);
+   ossimGeneralRasterInfo generalInfo;
+   
+   if(!generalInfo.loadState(kwl))
+   {
+      return false;
+   }
+    if(generalInfo.numberOfBands() != 1)
+   {
+      ossimNotify(ossimNotifyLevel_WARN) << "ossimGeneralRasterElevHandler::initializeInfo WARNING:The number of bands are not specified in the header file" << std::endl;
+      return false;
+   }
+
+   kwl.clear();
+   if(kwl.addFile(geomFile))
+   {
+      theGeneralRasterInfo.theDatum = 0;
+      const char* datumCode = kwl.find(ossimKeywordNames::DATUM_KW);
+      const char* dlat      = kwl.find(ossimKeywordNames::DECIMAL_DEGREES_PER_PIXEL_LAT);
+      const char* dlon      = kwl.find(ossimKeywordNames::DECIMAL_DEGREES_PER_PIXEL_LON);
+      const char* tieLat    = kwl.find(ossimKeywordNames::TIE_POINT_LAT_KW);
+      const char* tieLon    = kwl.find(ossimKeywordNames::TIE_POINT_LON_KW);
+
+      if(datumCode)
+      {
+         theGeneralRasterInfo.theDatum = ossimDatumFactory::instance()->create(datumCode);
+      }
+      if(!theGeneralRasterInfo.theDatum)
+      {
+         theGeneralRasterInfo.theDatum = ossimDatumFactory::instance()->wgs84();
+      }
+      if(!dlat||!dlon)
+      {
+         const char* scale     = kwl.find(ossimKeywordNames::PIXEL_SCALE_XY_KW);
+         const char* scaleUnit = kwl.find(ossimKeywordNames::PIXEL_SCALE_UNITS_KW);
+         if(scale&&scaleUnit)
+         {
+            if(ossimString(scaleUnit).trim() == ossimUnitTypeLut::instance()->getEntryString(OSSIM_DEGREES))
+            {
+               theGeneralRasterInfo.thePostSpacing.toPoint(scale);
+            }
+            else
+            {
+               ossimNotify(ossimNotifyLevel_WARN) << "ossimGeneralRasterElevHandler::initializeInfo WARNING: Decimal degrees per pixel for lat and lon are not specified" << std::endl;
+               return false;
+            }
+         }
+         else
+         {
+            ossimNotify(ossimNotifyLevel_WARN) << "ossimGeneralRasterElevHandler::initializeInfo WARNING: Decimal degrees per pixel for lat and lon are not specified" << std::endl;
+            return false;
+         }
+
+      }
+      else
+      {
+         theGeneralRasterInfo.thePostSpacing.x   = ossimString(dlon).toDouble();
+         theGeneralRasterInfo.thePostSpacing.y   = ossimString(dlat).toDouble();
+      }
+      if(!tieLat||!tieLon)
+      {
+         const char* tie_point_xy = kwl.find(ossimKeywordNames::TIE_POINT_XY_KW);
+         const char* tie_point_units = kwl.find(ossimKeywordNames::TIE_POINT_UNITS_KW);
+         if(tie_point_xy&&(ossimString(tie_point_units).downcase() == "degrees"))
+         {
+            ossimDpt tie;
+            tie.toPoint(tie_point_xy);
+           
+            theGeneralRasterInfo.theUlGpt = ossimGpt(tie.lat+(theGeneralRasterInfo.thePostSpacing.y*.5),
+                                                     tie.lon-(theGeneralRasterInfo.thePostSpacing.x*.5),
+                                                     0.0,
+                                                     theGeneralRasterInfo.theDatum);
+
+         }
+         else
+         {
+            return false;
+         }
+      }
+      else
+      {
+         theGeneralRasterInfo.theUlGpt = ossimGpt(ossimString(tieLat).toDouble(),
+                                                  ossimString(tieLon).toDouble(),
+                                                  0.0,
+                                                  theGeneralRasterInfo.theDatum);
+      }
+      theGeneralRasterInfo.theLrGpt = theGeneralRasterInfo.theUlGpt;
+      theGeneralRasterInfo.theNumberOfSamples = generalInfo.rawSamples();
+      theGeneralRasterInfo.theNumberOfLines   = generalInfo.rawLines();
+      if(theGeneralRasterInfo.theNumberOfLines && theGeneralRasterInfo.theNumberOfSamples)
+      {
+         theGeneralRasterInfo.theLrGpt.latd(theGeneralRasterInfo.theUlGpt.latd() - ((theGeneralRasterInfo.theNumberOfLines)*
+                                                                                    theGeneralRasterInfo.thePostSpacing.y));
+         theGeneralRasterInfo.theLrGpt.lond(theGeneralRasterInfo.theUlGpt.lond() + ((theGeneralRasterInfo.theNumberOfSamples)*
+                                                                                    theGeneralRasterInfo.thePostSpacing.x));
+      }
+      theGeneralRasterInfo.theNullHeightValue = generalInfo.getNullPixelValue(0);
+      theGeneralRasterInfo.theBounds = ossimDrect(theGeneralRasterInfo.theUlGpt,
+                                                  theGeneralRasterInfo.theUlGpt,
+                                                  theGeneralRasterInfo.theLrGpt,
+                                                  theGeneralRasterInfo.theLrGpt,
+                                                  OSSIM_RIGHT_HANDED);
+      theGeneralRasterInfo.theByteOrder = generalInfo.getImageDataByteOrder();
+      theGeneralRasterInfo.theScalarType = generalInfo.getScalarType();
+      theGeneralRasterInfo.theBytesPerRawLine = generalInfo.bytesPerRawLine();
+      theMeanSpacing = (theGeneralRasterInfo.thePostSpacing.lat +
+                        theGeneralRasterInfo.thePostSpacing.lon)*ossimGpt().metersPerDegree().x / 2.0;
+      theGroundRect = ossimGrect(theGeneralRasterInfo.theBounds.ul().lat,
+                                 theGeneralRasterInfo.theBounds.ul().lon,
+                                 theGeneralRasterInfo.theBounds.lr().lat,
+                                 theGeneralRasterInfo.theBounds.lr().lon);
+      theNullHeightValue = theGeneralRasterInfo.theNullHeightValue;
+   }
+   else
+   {
+      return false;
+   }
+   
+   return true;
+   
 }
 
-template <class T>
-double ossimGeneralRasterElevHandler::getHeightAboveMSLTemplate(T dummy,
-                                                                const ossimGeneralRasterElevHandler::BoundingRectInfo& info,
-                                                                const ossimGpt& gpt)
-{
-   if(!info.theInputStream.valid())
-   {
-      return info.theNullHeightValue;
-   }
-//    if(theFileStr->fail())
-//    {
-//       theFileStr->clear();
-//       theFileStr->seekg(0);
-//    }
-//    if(theFileStr.fail())
-   if(info.theInputStream->fail())
-   {
-      info.theInputStream->clear();
-      info.theInputStream->seekg(0);
-   }
-   ossimEndian endian;
-   
-   ossimGpt shiftedPoint = gpt;
-   shiftedPoint.changeDatum(info.theUlGpt.datum());
-   if(!info.theBounds.pointWithin(shiftedPoint))
-   {
-      return info.theNullHeightValue;
-   }
-   
-   double xi = (shiftedPoint.lond() - info.theUlGpt.lond())/info.thePostSpacing.x;
-   double yi = (info.theUlGpt.latd() -
-                shiftedPoint.latd())/info.thePostSpacing.y;
-
-   ossim_sint64 x0 = static_cast<ossim_sint64>(xi);
-   ossim_sint64 y0 = static_cast<ossim_sint64>(yi);
-
-   double xt0 = xi - x0;
-   double yt0 = yi - y0;
-   double xt1 = 1-xt0;
-   double yt1 = 1-yt0;
-   
-   double w00 = xt1*yt1;
-   double w01 = xt0*yt1;
-   double w10 = xt1*yt0;
-   double w11 = xt0*yt0;
-   
-   if ( xi < 0.0 || yi < 0.0 ||
-        x0 > (info.theNumberOfSamples  - 1.0) ||
-        y0 > (info.theNumberOfLines    - 1.0) )
-   {
-      return info.theNullHeightValue;
-   }
-
-   if(x0 == (info.theNumberOfSamples  - 1.0))
-   {
-      --x0;
-   }
-   if(y0 == (info.theNumberOfLines  - 1.0))
-   {
-      --y0;
-   }
-   T p[4];
-   
-   ossim_uint64 bytesPerLine  = info.theBytesPerRawLine;
-   
-   std::streampos offset = y0*bytesPerLine + x0*sizeof(T);
-
-   info.theInputStream->seekg(offset, ios::beg);
-   info.theInputStream->read((char*)p, sizeof(T));
-   
-   // Get the second post.
-   info.theInputStream->read((char*)(p+1), sizeof(T));
-   
-//   offset += (bytesPerLine-2*sizeof(T));
-
-   info.theInputStream->ignore(bytesPerLine-2*sizeof(T));
-   // Get the third post.
-   info.theInputStream->read((char*)(p+2), sizeof(T));
-   
-   // Get the fourth post.
-   info.theInputStream->read((char*)(p+3), sizeof(T));
-   
-   if(info.theInputStream->fail())
-   {
-      info.theInputStream->clear();
-      return info.theNullHeightValue;
-   }
-   if(endian.getSystemEndianType() != info.theByteOrder)
-   {
-      endian.swap((T*)p, (ossim_uint32)4);
-   }
-   double p00 = p[0];
-   double p01 = p[1];
-   double p10 = p[2];
-   double p11 = p[3];
-
-   if (p00 == info.theNullHeightValue)
-      w00 = 0.0;
-   if (p01 == info.theNullHeightValue)
-      w01 = 0.0;
-   if (p10 == info.theNullHeightValue)
-      w10 = 0.0;
-   if (p11 == info.theNullHeightValue)
-      w11 = 0.0;
-   
-#if 0 /* Serious debug only... */
-   cout << "\np00:  " << p00
-        << "\np01:  " << p01
-        << "\np10:  " << p10
-        << "\np11:  " << p11
-        << "\nw00:  " << w00
-        << "\nw01:  " << w01
-        << "\nw10:  " << w10
-        << "\nw11:  " << w11
-        << endl;
-#endif
-
-   double sum_weights = w00 + w01 + w10 + w11;
-
-   if (sum_weights)
-   {
-      return (p00*w00 + p01*w01 + p10*w10 + p11*w11) / sum_weights;
-   }
-
-   return info.theNullHeightValue;
-}
-
+#if 0
 void ossimGeneralRasterElevHandler::initializeList(const ossimFilename& file)
 {
    close();
@@ -443,153 +382,135 @@ void ossimGeneralRasterElevHandler::initializeList(const ossimFilename& file)
       }
    }
 }
-
-bool ossimGeneralRasterElevHandler::initializeInfo(
-   ossimGeneralRasterElevHandler::BoundingRectInfo& info,
-   const ossimFilename& file )
+#endif
+template <class T>
+double ossimGeneralRasterElevHandler::getHeightAboveMSLTemplate(
+   T dummy,
+   const ossimGeneralRasterElevHandler::GeneralRasterInfo& info,
+   const ossimGpt& gpt)
 {
-   if(file.trim() == "")
+   if(!theInputStream.valid())
    {
-      return false;
+      return ossim::nan();
    }
-   ossimFilename hdrFile  = file;
-   ossimFilename geomFile = file;
-   info.theFilename = file;
-   info.thePostSpacing.makeNan();
-   info.theUlGpt.makeNan();
-   info.theLrGpt.makeNan();
-   info.theNumberOfSamples = 0;
-   info.theNumberOfLines = 0;
-   theNullHeightValue = OSSIM_DBL_NAN;
-   hdrFile = hdrFile.setExtension("omd");
-   geomFile = geomFile.setExtension("geom");
-
-   if(!hdrFile.exists()||
-      !geomFile.exists())
+//    if(theFileStr->fail())
+//    {
+//       theFileStr->clear();
+//       theFileStr->seekg(0);
+//    }
+//    if(theFileStr.fail())
+   if(theInputStream->fail())
    {
-      return false;
+      theInputStream->clear();
+      theInputStream->seekg(0);
    }
-   ossimKeywordlist kwl(hdrFile);
-   if (kwl.getErrorStatus() == ossimErrorCodes::OSSIM_ERROR)
+   ossimEndian endian;
+   
+   ossimGpt shiftedPoint = gpt;
+   shiftedPoint.changeDatum(info.theUlGpt.datum());
+   if(!info.theBounds.pointWithin(shiftedPoint))
    {
-      return false;
+      return ossim::nan();
    }
    
-   kwl.add(ossimKeywordNames::FILENAME_KW,
-           file.c_str(),
-           true);
-   ossimGeneralRasterInfo generalInfo;
+   double xi = (shiftedPoint.lond() - info.theUlGpt.lond())/info.thePostSpacing.x;
+   double yi = (info.theUlGpt.latd() -
+                shiftedPoint.latd())/info.thePostSpacing.y;
+
+   ossim_sint64 x0 = static_cast<ossim_sint64>(xi);
+   ossim_sint64 y0 = static_cast<ossim_sint64>(yi);
+
+   double xt0 = xi - x0;
+   double yt0 = yi - y0;
+   double xt1 = 1-xt0;
+   double yt1 = 1-yt0;
    
-//    if(!info.theInfo.loadState(kwl))
-   if(!generalInfo.loadState(kwl))
-   {
-      return false;
-   }
-    if(generalInfo.numberOfBands() != 1)
-   {
-      ossimNotify(ossimNotifyLevel_WARN) << "ossimGeneralRasterElevHandler::initializeInfo WARNING:The number of bands are not specified in the header file" << std::endl;
-      return false;
-   }
-
-   kwl.clear();
-   if(kwl.addFile(geomFile))
-   {
-      info.theDatum = 0;
-      const char* datumCode = kwl.find(ossimKeywordNames::DATUM_KW);
-      const char* dlat      = kwl.find(ossimKeywordNames::DECIMAL_DEGREES_PER_PIXEL_LAT);
-      const char* dlon      = kwl.find(ossimKeywordNames::DECIMAL_DEGREES_PER_PIXEL_LON);
-      const char* tieLat    = kwl.find(ossimKeywordNames::TIE_POINT_LAT_KW);
-      const char* tieLon    = kwl.find(ossimKeywordNames::TIE_POINT_LON_KW);
-
-      if(datumCode)
-      {
-         info.theDatum = ossimDatumFactory::instance()->create(datumCode);
-      }
-      if(!info.theDatum)
-      {
-         info.theDatum = ossimDatumFactory::instance()->wgs84();
-      }
-      if(!dlat||!dlon)
-      {
-         const char* scale     = kwl.find(ossimKeywordNames::PIXEL_SCALE_XY_KW);
-         const char* scaleUnit = kwl.find(ossimKeywordNames::PIXEL_SCALE_UNITS_KW);
-         if(scale&&scaleUnit)
-         {
-            if(ossimString(scaleUnit).trim() == ossimUnitTypeLut::instance()->getEntryString(OSSIM_DEGREES))
-            {
-               info.thePostSpacing.toPoint(scale);
-            }
-            else
-            {
-               ossimNotify(ossimNotifyLevel_WARN) << "ossimGeneralRasterElevHandler::initializeInfo WARNING: Decimal degrees per pixel for lat and lon are not specified" << std::endl;
-               return false;
-            }
-         }
-         else
-         {
-            ossimNotify(ossimNotifyLevel_WARN) << "ossimGeneralRasterElevHandler::initializeInfo WARNING: Decimal degrees per pixel for lat and lon are not specified" << std::endl;
-            return false;
-         }
-//          return false;
-      }
-      else
-      {
-         info.thePostSpacing.x   = ossimString(dlon).toDouble();
-         info.thePostSpacing.y   = ossimString(dlat).toDouble();
-      }
-      if(!tieLat||!tieLon)
-      {
-         const char* tie_point_xy = kwl.find(ossimKeywordNames::TIE_POINT_XY_KW);
-         const char* tie_point_units = kwl.find(ossimKeywordNames::TIE_POINT_UNITS_KW);
-         if(tie_point_xy&&(ossimString(tie_point_units).downcase() == "degrees"))
-         {
-            ossimDpt tie;
-            tie.toPoint(tie_point_xy);
-           
-            info.theUlGpt = ossimGpt(tie.lat+(info.thePostSpacing.y*.5),
-                                     tie.lon-(info.thePostSpacing.x*.5),
-                                     0.0,
-                                     info.theDatum);
-
-         }
-         else
-         {
-            return false;
-         }
-      }
-      else
-      {
-         info.theUlGpt = ossimGpt(ossimString(tieLat).toDouble(),
-                                  ossimString(tieLon).toDouble(),
-                                  0.0,
-                                  info.theDatum);
-      }
-      info.theLrGpt = info.theUlGpt;
-      info.theNumberOfSamples = generalInfo.rawSamples();
-      info.theNumberOfLines   = generalInfo.rawLines();
-      if(info.theNumberOfLines && info.theNumberOfSamples)
-      {
-         info.theLrGpt.latd(info.theUlGpt.latd() - ((info.theNumberOfLines)*info.thePostSpacing.y));
-         info.theLrGpt.lond(info.theUlGpt.lond() + ((info.theNumberOfSamples)*info.thePostSpacing.x));
-      }
-      info.theNullHeightValue = generalInfo.getNullPixelValue(0);
-      info.theBounds = ossimDrect(info.theUlGpt,
-                                  info.theUlGpt,
-                                  info.theLrGpt,
-                                  info.theLrGpt,
-                                  OSSIM_RIGHT_HANDED);
-      info.theByteOrder = generalInfo.getImageDataByteOrder();
-      info.theScalarType = generalInfo.getScalarType();
-      info.theBytesPerRawLine = generalInfo.bytesPerRawLine();
-   }
-   else
-   {
-      return false;
-   }
+   double w00 = xt1*yt1;
+   double w01 = xt0*yt1;
+   double w10 = xt1*yt0;
+   double w11 = xt0*yt0;
    
-   return true;
+   if ( xi < 0.0 || yi < 0.0 ||
+        x0 > (info.theNumberOfSamples  - 1.0) ||
+        y0 > (info.theNumberOfLines    - 1.0) )
+   {
+      return ossim::nan();
+   }
+
+   if(x0 == (info.theNumberOfSamples  - 1.0))
+   {
+      --x0;
+   }
+   if(y0 == (info.theNumberOfLines  - 1.0))
+   {
+      --y0;
+   }
+   T p[4];
+   
+   ossim_uint64 bytesPerLine  = info.theBytesPerRawLine;
+   
+   std::streampos offset = y0*bytesPerLine + x0*sizeof(T);
+
+   theInputStream->seekg(offset, ios::beg);
+   theInputStream->read((char*)p, sizeof(T));
+   
+   // Get the second post.
+   theInputStream->read((char*)(p+1), sizeof(T));
+   
+//   offset += (bytesPerLine-2*sizeof(T));
+
+   theInputStream->ignore(bytesPerLine-2*sizeof(T));
+   // Get the third post.
+   theInputStream->read((char*)(p+2), sizeof(T));
+   
+   // Get the fourth post.
+   theInputStream->read((char*)(p+3), sizeof(T));
+   
+   if(theInputStream->fail())
+   {
+      theInputStream->clear();
+      return ossim::nan();
+   }
+   if(endian.getSystemEndianType() != info.theByteOrder)
+   {
+      endian.swap((T*)p, (ossim_uint32)4);
+   }
+   double p00 = p[0];
+   double p01 = p[1];
+   double p10 = p[2];
+   double p11 = p[3];
+
+   if (p00 == info.theNullHeightValue)
+      w00 = 0.0;
+   if (p01 == info.theNullHeightValue)
+      w01 = 0.0;
+   if (p10 == info.theNullHeightValue)
+      w10 = 0.0;
+   if (p11 == info.theNullHeightValue)
+      w11 = 0.0;
+   
+#if 0 /* Serious debug only... */
+   cout << "\np00:  " << p00
+        << "\np01:  " << p01
+        << "\np10:  " << p10
+        << "\np11:  " << p11
+        << "\nw00:  " << w00
+        << "\nw01:  " << w01
+        << "\nw10:  " << w10
+        << "\nw11:  " << w11
+        << endl;
+#endif
+
+   double sum_weights = w00 + w01 + w10 + w11;
+
+   if (sum_weights)
+   {
+      return (p00*w00 + p01*w01 + p10*w10 + p11*w11) / sum_weights;
+   }
+
+   return ossim::nan();
 }
-
+#if 0
 void ossimGeneralRasterElevHandler::addInfo(const ossimGeneralRasterElevHandler::BoundingRectInfo& info)
 {
    if(theBoundingRectInfoList.empty())
@@ -624,24 +545,29 @@ void ossimGeneralRasterElevHandler::addInfo(const ossimGeneralRasterElevHandler:
       }
    }
 }
- 
+#endif
 ossimDrect ossimGeneralRasterElevHandler::getBoundingRect()const
 {
-   return theBoundingRect;
+   return theGeneralRasterInfo.theBounds;
 }
 
 bool ossimGeneralRasterElevHandler::pointHasCoverage(const ossimGpt& gpt) const
 {
    ossimDpt pt = gpt;
-   
-   BoundingRectListType::const_iterator i = theBoundingRectInfoList.begin();
-   while (i != theBoundingRectInfoList.end())
-   {
-      if ((*i).theBounds.pointWithin(pt))
-      {
-         return true;
-      }
-      ++i;
-   }
-   return false;
+
+   return theGeneralRasterInfo.theBounds.pointWithin(pt);
+//    BoundingRectListType::const_iterator i = theBoundingRectInfoList.begin();
+//    while (i != theBoundingRectInfoList.end())
+//    {
+//       if ((*i).theBounds.pointWithin(pt))
+//       {
+//          return true;
+//       }
+//       ++i;
+//    }
+//    return false;
+}
+const ossimGeneralRasterElevHandler::GeneralRasterInfo& ossimGeneralRasterElevHandler::generalRasterInfo()const
+{
+   return theGeneralRasterInfo;
 }

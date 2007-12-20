@@ -1,9 +1,6 @@
 //*******************************************************************
-// Copyright (C) 2000 ImageLinks Inc.
 //
-// License:  LGPL
-// 
-// See LICENSE.txt file in the top level directory for more details.
+// License:  See top LICENSE.txt file.
 //
 // Author:  Garrett Potts
 //
@@ -11,21 +8,25 @@
 //
 // Contains class definition for Degrees Minutes Seconds (ossimDms)
 //*******************************************************************
-//  $Id: ossimDms.h 9094 2006-06-13 19:12:40Z dburken $
+//  $Id: ossimDms.h 12095 2007-11-30 16:06:06Z dburken $
 #ifndef ossimDms_HEADER
 #define ossimDms_HEADER
-#include <iostream>
-using namespace std;
+// #include <iostream>
 
+#include <ossim/base/ossimConstants.h> /* for OSSIM_DLL macro */
 #include <ossim/base/ossimString.h>
 
-class OSSIMDLLEXPORT ossimDms
+class OSSIM_DLL ossimDms
 {
 public:
-   friend ostream& operator << (ostream& out, const ossimDms &dms);
+   // friend std::ostream& operator << (std::ostream& out, const ossimDms &dms);
 
+   /**
+    * Default constructor.  Initializes to 0.0 degrees latitude.
+    */
+   ossimDms();
 
-   /*!
+   /**
     *
     * Constructor ossimDms(double, bool)
     *
@@ -38,7 +39,7 @@ public:
     */
    ossimDms(double someDegrees, bool latFlag = true);
 
-   /*!
+   /**
     *` Constructor.  You can specify the value in a formated
     *  string.  Example:
     *  "45N"     will set the decimal degree to 45 and will
@@ -47,9 +48,9 @@ public:
     *  "45W"     will set the internal degree to negative and
     *            set the lat flag to false.
     */
-   ossimDms(char *value);
+   ossimDms(const std::string& value);
 
-   /*!
+   /**
     *  You can specify a number of different formats.
     *  special characters:
     *
@@ -70,7 +71,7 @@ public:
    double getDegrees() const { return theDegrees; }
    bool   getLatFlag() const { return theLatFlag; }
 
-   /*!
+   /**
     * setDegrees(char*).  Will allow you to set the internal
     * paramters through a string.  examples:
     *
@@ -81,7 +82,7 @@ public:
     *
     * @return true on success, false if unhandled characters are found.
     */
-   bool setDegrees(const char *value);
+   bool setDegrees(const std::string& value);
    
    ossimDms& setDegrees(double degrees);
 
@@ -105,7 +106,7 @@ private:
    mutable int    theSign;/* what sign is degrees */
    mutable double theWorking;/* degrees value to use during calc */
 
-   /*!
+   /**
     *  char * function degree_to_string
     *					
     *	requires:	dts.h		
@@ -133,7 +134,7 @@ private:
    void calc_mins_or_secs(double *dd,
                           ossimString::const_iterator &formatIter,
                           ossimString &result)const;
-      /*!
+   /**
     * integer function calc_mins_or_secs				*
     *	calculates minutes from degrees, seconds from minutes,	
     *	based on "format", returning the resultant string	
@@ -145,10 +146,10 @@ private:
     */
 
    int calc_mins_or_secs(double *dd,
-                         char *format,
+                         const char *format,
                          char *res)const;
    
-   /*!
+   /**
     * function setup_printf
     * 	the C library function sprintf takes as its second
     * 	argument, a format specifier.  this function constructs
@@ -158,7 +159,7 @@ private:
     */
    void setup_printf(int ival, char *fmt)const;
 
-   /*!
+   /**
     * function set_default						*
     *	assigns a default format to be used as the template for	
     *	the conversion of the double precision value, degrees.	
@@ -169,14 +170,14 @@ private:
     */
    void set_default(char *fp, char *rp)const;
 
-   /*!
+   /**
     * function init_values
     *	initializes the global values used throughout the
     *	function.  see notes in header file.
     */
    void init_values(double d)const;
 
-   /*!
+   /**
     * double function string_to_degree
     *
     *	requires:	dts.h
@@ -202,7 +203,7 @@ private:
     */
 
    
-   double string_to_degree(char *cdegrees);
+   double string_to_degree(const std::string& cdegrees);
 
 };
 

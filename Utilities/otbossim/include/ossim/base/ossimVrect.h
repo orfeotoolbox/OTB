@@ -15,7 +15,7 @@
 // where y is up
 // 
 //*******************************************************************
-//  $Id: ossimVrect.h 9094 2006-06-13 19:12:40Z dburken $
+//  $Id: ossimVrect.h 11955 2007-10-31 16:10:22Z gpotts $
 #ifndef ossimVrect_HEADER
 #define ossimVrect_HEADER
 #include <iostream>
@@ -122,17 +122,22 @@ inline bool ossimVrect::operator==(const ossimVrect& rect) const
             (theLlCorner == rect.ll()) );
 }
 
-#define d_MIN(a,b)      (((a)<(b)) ? a : b)
-#define d_MAX(a,b)      (((a)>(b)) ? a : b)
 
 inline ossimVrect ossimVrect::clipToRect(const ossimVrect& rect)const
 {
     ossim_float64     ulx, uly, lrx, lry;
 
+    // XXX not replaced with std::max or ossim::max since the test is backward 
+    //     here and will give a different answer in the case of nan.
+    #define d_MAX(a,b)      (((a)>(b)) ? a : b)
+
     ulx = d_MAX(rect.ul().x,ul().x);
     uly = d_MAX(rect.ul().y,ul().y);
-    lrx = d_MIN(rect.lr().x,lr().x);
-    lry = d_MIN(rect.lr().y,lr().y);
+
+    #undef d_MAX
+
+    lrx = std::min(rect.lr().x,lr().x);
+    lry = std::min(rect.lr().y,lr().y);
 
     if( lrx <= ulx || lry <= uly )
         return ossimVrect(ossimDpt(0,0),ossimDpt(0,0));

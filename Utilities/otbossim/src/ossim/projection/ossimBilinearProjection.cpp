@@ -1,14 +1,11 @@
 //*******************************************************************
-// Copyright (C) 2004 Intelligence Data Systems, Inc.  All rights reserved.
 //
-// License:  LGPL
-// 
-// See LICENSE.txt file in the top level directory for more details.
+// License:  See top level LICENSE.txt file.
 //
 // Author: Garrett Potts
 // 
 //********************************************************************
-// $Id: ossimBilinearProjection.cpp 9094 2006-06-13 19:12:40Z dburken $
+// $Id: ossimBilinearProjection.cpp 12136 2007-12-07 14:26:43Z gpotts $
 
 #include <sstream>
 using namespace std;
@@ -28,7 +25,7 @@ using namespace std;
 #include <ossim/base/ossimTieGptSet.h>
 
 #ifdef OSSIM_ID_ENABLED
-static const char OSSIM_ID[] = "$Id: ossimBilinearProjection.cpp 9094 2006-06-13 19:12:40Z dburken $";
+static const char OSSIM_ID[] = "$Id: ossimBilinearProjection.cpp 12136 2007-12-07 14:26:43Z gpotts $";
 #endif
 
 // static const ossim_uint32 MINIMUM_NMBER_OF_POINTS = 4;
@@ -128,25 +125,35 @@ ossimGpt ossimBilinearProjection::origin()const
 void ossimBilinearProjection::worldToLineSample(const ossimGpt& worldPoint,
                                             ossimDpt&       lineSampPt) const
 {
-   ossimProjection::worldToLineSample(worldPoint, lineSampPt);
+   lineSampPt.makeNan();
+
+   if (!theInterpolationPointsHaveNanFlag)
+   {
+      lineSampPt.x = theXFit.lsFitValue(worldPoint.latd(),
+                                        worldPoint.lond());
+      lineSampPt.y = theYFit.lsFitValue(worldPoint.latd(),
+                                        worldPoint.lond());
+   }
+//    ossimProjection::worldToLineSample(worldPoint, lineSampPt);
 }
 
 void ossimBilinearProjection::lineSampleToWorld(const ossimDpt& lineSampPt,
                                                 ossimGpt&       worldPt) const
 {
    lineSampleHeightToWorld(lineSampPt,
-                           OSSIM_DBL_NAN,
+                           ossim::nan(),
                            worldPt);
    
 }
 
-void ossimBilinearProjection::lineSampleHeightToWorld(const ossimDpt& lineSampPt,
-                                                  const double&   heightAboveEllipsoid,
-                                                  ossimGpt&       worldPt) const
+void ossimBilinearProjection::lineSampleHeightToWorld(
+   const ossimDpt& lineSampPt,
+   const double&   heightAboveEllipsoid,
+   ossimGpt&       worldPt) const
 {
    worldPt.makeNan();
 
-   if (dPtsHaveNan() || gPtsHaveNan())
+   if (theInterpolationPointsHaveNanFlag)
    {
       return;
    }
@@ -154,7 +161,7 @@ void ossimBilinearProjection::lineSampleHeightToWorld(const ossimDpt& lineSampPt
    
    worldPt.lat = theLatFit.lsFitValue(lineSampPt.x, lineSampPt.y);
    worldPt.lon = theLonFit.lsFitValue(lineSampPt.x, lineSampPt.y);
-   if (heightAboveEllipsoid != OSSIM_DBL_NAN)
+   if (ossim::isnan(heightAboveEllipsoid) == false)
    {
       worldPt.hgt = heightAboveEllipsoid;
    }
@@ -180,7 +187,7 @@ bool ossimBilinearProjection::saveState(ossimKeywordlist& kwl,
 
    ossimProjection::saveState(kwl, prefix);
 
-   const ossim_uint32 SIZE = theLineSamplePt.size();
+   const ossim_uint32 SIZE = (ossim_uint32)theLineSamplePt.size();
 
    for (ossim_uint32 i = 0; i < SIZE; ++i)
    {
@@ -310,28 +317,43 @@ ossimDpt ossimBilinearProjection::getMetersPerPixel() const
 
 void ossimBilinearProjection::initializeBilinear()
 {
-   theLatFit.clear();
-   theLonFit.clear();
+   theInterpolationPointsHaveNanFlag = dPtsHaveNan()||gPtsHaveNan();
 
-   const ossim_uint32 SIZE = theLineSamplePt.size();
-   if (SIZE != theGeographicPt.size())
+   if(!theInterpolationPointsHaveNanFlag)
    {
-      return;
-   }
-
-   for (ossim_uint32 i = 0; i < SIZE; ++i)
-   {
-      theLatFit.addSample(theLineSamplePt[i].x,
-                          theLineSamplePt[i].y,
-                          theGeographicPt[i].latd());
+      theLatFit.clear();
+      theLonFit.clear();
       
-      theLonFit.addSample(theLineSamplePt[i].x,
-                          theLineSamplePt[i].y,
-                          theGeographicPt[i].lond());
+      const ossim_uint32 SIZE = (ossim_uint32)theLineSamplePt.size();
+      if (SIZE != theGeographicPt.size())
+      {
+         return;
+      }
+      
+      for (ossim_uint32 i = 0; i < SIZE; ++i)
+      {
+         theLatFit.addSample(theLineSamplePt[i].x,
+                             theLineSamplePt[i].y,
+                             theGeographicPt[i].latd());
+         
+         theLonFit.addSample(theLineSamplePt[i].x,
+                             theLineSamplePt[i].y,
+                             theGeographicPt[i].lond());
+         
+         theXFit.addSample(theGeographicPt[i].latd(),
+                           theGeographicPt[i].lond(),
+                           theLineSamplePt[i].x);
+         theYFit.addSample(theGeographicPt[i].latd(),
+                           theGeographicPt[i].lond(),
+                           theLineSamplePt[i].y);
+         
+      }
+      
+      theLatFit.solveLS();
+      theLonFit.solveLS();
+      theXFit.solveLS();
+      theYFit.solveLS();
    }
-
-   theLatFit.solveLS();
-   theLonFit.solveLS();
 }
 
 bool ossimBilinearProjection::dPtsHaveNan() const

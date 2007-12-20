@@ -1,12 +1,11 @@
 //*******************************************************************
-// Copyright (C) 2000 ImageLinks Inc. 
 //
-// License:  See LICENSE.txt file in the top level directory.
+// License:  See top level LICENSE.txt file.
 //
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimImageHistogramSource.h 9094 2006-06-13 19:12:40Z dburken $
+// $Id: ossimImageHistogramSource.h 11960 2007-11-01 00:39:07Z dburken $
 #ifndef ossimImageHistogramSource_HEADER
 #define ossimImageHistogramSource_HEADER
 #include <ossim/base/ossimHistogramSource.h>
@@ -26,12 +25,8 @@ class OSSIMDLLEXPORT ossimImageHistogramSource : public ossimHistogramSource,
                                                  public ossimProcessInterface
 {
 public:
-   ossimImageHistogramSource(ossimObject* owner = NULL);
-   ossimImageHistogramSource(ossimObject* owner,
-                             ossim_uint32 numberOfInputs,
-                             ossim_uint32 numberOfOutputs,
-                             ossim_uint32 inputListFixedFlag,
-                             ossim_uint32 outputListFixedFlag);
+   ossimImageHistogramSource(ossimObject* owner = 0);
+   
    virtual ~ossimImageHistogramSource();
 
    virtual ossimObject* getObject();
@@ -54,9 +49,9 @@ public:
     * dirty and will be re-computed.  The returned object is a
     * multi-reslevel histogram
     */
-   virtual ossimMultiResLevelHistogram* getHistogram(const ossimIrect& rect);
+   virtual ossimRefPtr<ossimMultiResLevelHistogram> getHistogram(const ossimIrect& rect);
 
-   virtual ossimMultiResLevelHistogram* getHistogram();
+   virtual ossimRefPtr<ossimMultiResLevelHistogram> getHistogram();
    virtual bool execute();
    
    virtual bool canConnectMyInputTo(ossim_int32 myInputIndex,

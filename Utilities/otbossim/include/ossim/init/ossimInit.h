@@ -17,11 +17,11 @@
 //              Initial coding.
 //<
 //*****************************************************************************
-
+// $Id: ossimInit.h 11959 2007-10-31 19:22:56Z gpotts $
 #ifndef ossimInit_HEADER
 #define ossimInit_HEADER
 
-#include <ossim/base/ossimString.h>
+#include <ossim/base/ossimFilename.h>
 
 class ossimPreferences;
 class ossimArgumentParser;
@@ -70,11 +70,40 @@ public:
    void usage();
 
    void setPluginLoaderEnabledFlag(bool flag);
-   
-protected:
-   ossimInit();
-   ossimInit(const ossimInit&) {}   
 
+   /**
+    * Can take a file or a directory.  If a directory is givien then it will check all files in
+    * the directory and add each file that is detected to be a valid plugin.
+    *
+    */ 
+   void loadPlugins(const ossimFilename& plugin);
+   void initializePlugins();
+   void initializeDefaultFactories();
+   void initializeElevation();
+
+   /**
+    * @return The version in the form of:
+    * "version major.minor.release (yyyymmdd)"
+    * where
+    * yyyymmdd is the build date.
+    *
+    * e.g. "version 1.7.0 (20071003)"
+    */
+   ossimString version() const;
+   ossimFilename appName()const
+   {
+	   return theAppName;
+   }
+protected:
+   /** protected default constructor. */
+   ossimInit();
+
+   /** Hidden from use copy constructor. */
+   ossimInit(const ossimInit& obj);
+   
+   /** Hidden from use assignment operator. */
+   void operator=(const ossimInit& rhs) const;
+   
    /*!
     * METHOD: parseOptions()
     * Parses the command line as passed in initialize. The options string is
@@ -83,7 +112,8 @@ protected:
    void parseOptions(int& argc, char** argv);
 
    void parseOptions(ossimArgumentParser& parser);
-   
+
+   void parseNotifyOption(ossimArgumentParser& parser);
    /*!
     * METHOD: removeOptions()
     * Utility for stripping from argv all characters associated with a
@@ -93,14 +123,11 @@ protected:
                      char** argv,
                      int    argToRemove);
 
-   void initializeDefaultFactories();
-
-   void initializePlugins();
-
-   void initializeElevation();
+   
    
    static ossimInit*  theInstance;
-   ossimString        theAppName;
+   bool               theInitializedFlag;  
+   ossimFilename      theAppName;
    ossimPreferences*  thePreferences;
    bool               theElevEnabledFlag;
    bool               thePluginLoaderEnabledFlag;

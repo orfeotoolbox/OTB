@@ -124,23 +124,6 @@ public:
                                       double deltaDegreesPerPixelLon,
                                       ossimDpt &metersPerPixel);
    
-
-
-   /*!
-    * Temporary : This method is redefinied, beacause pb of compilation 
-    * otb::MapProjectione<ossimLlxyProjection>.  
-   */
-   virtual void computeMetersPerPixel(double deltaDegreesPerPixelLat,
-                                               double deltaDegreesPerPixelLon,
-                                               ossimDpt &metersPerPixel)
-   {
-        computeMetersPerPixel(this->theOrigin,
-                         deltaDegreesPerPixelLat,
-                         deltaDegreesPerPixelLon,
-                         metersPerPixel);
-   }
-
-
 private:
 
 TYPE_DATA

@@ -8,7 +8,7 @@
 // Description: BLOCKA tag class declaration.
 //
 //----------------------------------------------------------------------------
-// $Id: ossimNitfBlockaTag.cpp 9455 2006-08-25 14:48:06Z dburken $
+// $Id: ossimNitfBlockaTag.cpp 11347 2007-07-23 13:01:59Z gpotts $
 
 #include <cstring> /* for memcpy */
 #include <sstream>
@@ -24,10 +24,6 @@
 static const ossimTrace traceDebug(ossimString("ossimNitfBlockaTag:debug"));
 
 RTTI_DEF1(ossimNitfBlockaTag, "ossimNitfBlockaTag", ossimNitfRegisteredTag);
-
-#ifndef MIN
-#  define MIN(a,b) ((a)<(b)?(a):(b))
-#endif
 
 ossimNitfBlockaTag::ossimNitfBlockaTag()
 {

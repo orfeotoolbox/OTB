@@ -9,7 +9,7 @@
 //   Contains implementation of class ossimSensorModelFactory
 //
 //*****************************************************************************
-//  $Id: ossimSensorModelFactory.cpp 10430 2007-02-07 01:05:22Z dburken $
+//  $Id: ossimSensorModelFactory.cpp 12082 2007-11-26 21:46:44Z dburken $
 #include <fstream>
 #include <algorithm>
 #include <ossim/projection/ossimSensorModelFactory.h>
@@ -189,39 +189,6 @@ ossimSensorModelFactory::createProjection(const ossimString &name) const
 //      return new myNewModel;
 
    return NULL;
-}
-
-
-//*****************************************************************************
-//  METHOD:  ossimSensorModelFactory::getList()
-//  
-//*****************************************************************************
-list<ossimString> ossimSensorModelFactory::getList() const
-{
-   list<ossimString> result;
-
-   //***
-   // Place the name of each model produced in the list:
-   //***
-   result.push_back(STATIC_TYPE_NAME(ossimCoarseGridModel));
-   result.push_back(STATIC_TYPE_NAME(ossimRpcModel));
-   result.push_back(STATIC_TYPE_NAME(ossimIkonosRpcModel));
-   result.push_back(STATIC_TYPE_NAME(ossimNitfRpcModel));
-   result.push_back(STATIC_TYPE_NAME(ossimQuickbirdRpcModel));
-   result.push_back(STATIC_TYPE_NAME(ossimLandSatModel));
-   result.push_back(STATIC_TYPE_NAME(ossimNitfMapModel));
-   result.push_back(STATIC_TYPE_NAME(ossimFcsiModel));
-   result.push_back(STATIC_TYPE_NAME(ossimApplanixUtmModel));
-   result.push_back(STATIC_TYPE_NAME(ossimApplanixEcefModel));
-   result.push_back(STATIC_TYPE_NAME(ossimSpot5Model));
-   result.push_back(STATIC_TYPE_NAME(ossimSarModel));
-
-   //***
-   // ADD_MODEL: Please leave this comment for the next programmer. Add above.
-   //***
-   //result.push_back(ossimString(MY_NEW_MODEL));
-   
-   return result;
 }
 
 //*****************************************************************************

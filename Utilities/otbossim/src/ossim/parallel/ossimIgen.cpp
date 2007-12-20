@@ -1,5 +1,4 @@
 //*******************************************************************
-// Copyright (C) 2000 ImageLinks Inc. 
 //
 // License:  See top level LICENSE.txt file.
 //
@@ -8,7 +7,7 @@
 // Description: implementation for image generator
 //
 //*************************************************************************
-// $Id: ossimIgen.cpp 9105 2006-06-14 01:45:40Z gpotts $
+// $Id: ossimIgen.cpp 12100 2007-12-01 16:22:20Z dburken $
 
 #include <iterator>
 #include <sstream>
@@ -69,7 +68,7 @@ static ossimTrace traceLog(ossimString("ossimIgen:log"));
 
 ossimIgen::ossimIgen()
    :
-    theProductProjection(NULL),
+    theProductProjection(0),
     theOutputRect(),
     theBuildThumbnailFlag(false),
     theThumbnailResolution(0, 0),
@@ -174,6 +173,9 @@ void ossimIgen::slaveSetup()
    MPI_Status status;
    int numberOfTimes = 0;
 
+   memset((void *)&status, 0, sizeof(MPI_Status));
+
+   
    // we first need to receive the size of the keyword list to load
    MPI_Recv(&stringSize,
             1,
@@ -195,6 +197,8 @@ void ossimIgen::slaveSetup()
    char* buf = new char[stringSize+1];
 
    numberOfTimes = 0;
+
+   memset((void *)&status, 0, sizeof(MPI_Status));
 
    // now lets get the keywordlist as a string so we can load it up
    MPI_Recv(buf,
@@ -233,8 +237,8 @@ void ossimIgen::slaveSetup()
    theKwl.clear();
    theKwl.parseStream(kwlInStream);
    initializeAttributes();
-   delete buf;
-   buf = NULL;
+   delete [] buf;
+   buf = 0;
 
    if(traceDebug())
    {
@@ -401,7 +405,7 @@ void ossimIgen::outputProduct()
    {
       chain->initialize();
    }
-   ossimImageSourceSequencer* sequencer = NULL;
+   ossimImageSourceSequencer* sequencer = 0;
    
 #ifdef OSSIM_HAS_MPI
 #  if OSSIM_HAS_MPI
@@ -413,8 +417,8 @@ void ossimIgen::outputProduct()
    {
       if(ossimMpi::instance()->getRank()!=0)
       {
-         sequencer = new ossimImageMpiSWriterSequenceConnection(NULL,
-                                                                 theNumberOfTilesToBuffer);
+         sequencer = new ossimImageMpiSWriterSequenceConnection(0,
+                                                                theNumberOfTilesToBuffer);
       }
       else
       {
@@ -429,22 +433,23 @@ void ossimIgen::outputProduct()
 
    // we will just load a serial connection if MPI is not supported.
    //
-   sequencer = new ossimImageSourceSequencer(NULL);
+   sequencer = new ossimImageSourceSequencer(0);
    
 #  endif
 #else
 
    // we will just load a serial connection if MPI is not supported.
-   sequencer = new ossimImageSourceSequencer(NULL);
+   sequencer = new ossimImageSourceSequencer(0);
    
 #endif
    
-   std::vector<ossimConnectableObject*> imageWriters = theContainer.findAllObjectsOfType(STATIC_TYPE_INFO(ossimImageFileWriter),
-                                                                                         false);
+   std::vector<ossimConnectableObject*> imageWriters =
+      theContainer.findAllObjectsOfType(STATIC_TYPE_INFO(ossimImageFileWriter),
+                                        false);
    if(imageWriters.size() > 0)
    {
-      ossimImageFileWriter* writer = PTR_CAST(ossimImageFileWriter, imageWriters[0]);
-
+      ossimImageFileWriter* writer =
+         PTR_CAST(ossimImageFileWriter, imageWriters[0]);
       
       writer->changeSequencer(sequencer);
       writer->connectMyInputTo(chain);
@@ -453,11 +458,12 @@ void ossimIgen::outputProduct()
    else
    {
       delete sequencer;
-      sequencer = NULL;
+      sequencer = 0;
    }
    
-   std::vector<ossimConnectableObject*> processObjects = theContainer.findAllObjectsOfType(STATIC_TYPE_INFO(ossimProcessInterface),
-                                                                                           false);
+   std::vector<ossimConnectableObject*> processObjects =
+      theContainer.findAllObjectsOfType(STATIC_TYPE_INFO(ossimProcessInterface),
+                                        false);
    ossim_uint32 i = 0;
    ossimImageFileWriter* writer  = 0;
    for(i = 0; ((i < processObjects.size())&&(!writer)); ++i)
@@ -493,7 +499,7 @@ void ossimIgen::outputProduct()
                               clipRect,
                               tileName))
          {
-            ossimStdOutProgress* prog = NULL;
+            ossimStdOutProgress* prog = 0;
             if ( (ossimMpi::instance()->getRank() == 0) && theProgressFlag)
             {
                // Add a listener to master.
@@ -546,14 +552,13 @@ void ossimIgen::outputProduct()
             {
                writer->removeListener(prog);
                delete prog;
-               prog = NULL;
+               prog = 0;
             }
-            
          }
       }
       else
       {
-         ossimStdOutProgress* prog = NULL;
+         ossimStdOutProgress* prog = 0;
          if ( (ossimMpi::instance()->getRank() == 0) && theProgressFlag)
          {
             // Add a listener to master.
@@ -595,7 +600,7 @@ void ossimIgen::outputProduct()
          {
             writer->removeListener(prog);
             delete prog;
-            prog = NULL;
+            prog = 0;
          }
       }
    }
@@ -624,7 +629,7 @@ void ossimIgen::deleteAttributes()
    if(theProductProjection)
    {
       delete theProductProjection;
-      theProductProjection = NULL;
+      theProductProjection = 0;
    }
    theContainer.deleteAllChildren();
 }
@@ -665,7 +670,7 @@ ossimProjection* ossimIgen::buildProductProjection(const ossimKeywordlist& kwl,
    double      originLat = 0.0;
    double      originLon = 0.0;
    
-   ossimProjection* projection = NULL;
+   ossimProjection* projection = 0;
    projection = ossimProjectionFactoryRegistry::instance()->createProjection(kwl, "product.projection.");
    
    ossimMapProjection* mapProj = PTR_CAST(ossimMapProjection, projection);
@@ -782,7 +787,7 @@ bool ossimIgen::getOutputRect(const ossimKeywordlist& kwl,
 
 void ossimIgen::buildThumbnail()
 {
-   double resolution = ossimMax(theThumbnailResolution.x, theThumbnailResolution.y);
+   double resolution = ossim::max(theThumbnailResolution.x, theThumbnailResolution.y);
    ossimProjection* viewProj   = buildProductProjection(theKwl);
    ossimMapProjection* mapProj = PTR_CAST(ossimMapProjection, viewProj);
    

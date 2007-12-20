@@ -2,7 +2,7 @@
 #define _SHAPEFILE_H_INCLUDED
 
 /******************************************************************************
- * $Id: shapefil.h 8183 2005-10-08 12:57:26Z gpotts $
+ * $Id: shapefil.h 11039 2007-05-24 15:42:43Z gpotts $
  *
  * Project:  Shapelib
  * Purpose:  Primary include file for Shapelib.
@@ -191,20 +191,32 @@ extern "C" {
 /*      after any "*"'s in the return value of a function while the     */
 /*      __declspec(dllexport) must appear before them.                  */
 /* -------------------------------------------------------------------- */
-
+#include <ossim/base/ossimConstants.h>
+   
+#ifdef OSSIMMAKINGDLL
+#  define SHPAPI_CALL OSSIM_DLL
+#  define SHPAPI_CALL1(x)  OSSIM_DLL_DATA(x)
+#endif
+#ifndef SHPAPI_CALL
+#  define SHPAPI_CALL
+#endif
+#ifndef SHPAPI_CALL1
+#  define SHPAPI_CALL1(x)      x SHPAPI_CALL
+#endif
+   
+#if 0
 #ifdef SHAPELIB_DLLEXPORT
 #  define SHPAPI_CALL __declspec(dllexport)
 #  define SHPAPI_CALL1(x)  __declspec(dllexport) x
 #endif
-
 #ifndef SHPAPI_CALL
 #  define SHPAPI_CALL
 #endif
-
 #ifndef SHPAPI_CALL1
 #  define SHPAPI_CALL1(x)      x SHPAPI_CALL
 #endif
-    
+#endif
+   
 /* -------------------------------------------------------------------- */
 /*      Macros for controlling CVSID and ensuring they don't appear     */
 /*      as unreferenced variables resulting in lots of warnings.        */

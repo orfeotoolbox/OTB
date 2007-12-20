@@ -16,19 +16,18 @@
 //              Initial coding.
 //<
 //*****************************************************************************
-//  $Id: ossimEcefVector.h 9532 2006-09-11 11:20:05Z dburken $
+//  $Id: ossimEcefVector.h 11398 2007-07-26 13:29:58Z dburken $
 
 #ifndef ossimEcefVector_HEADER
 #define ossimEcefVector_HEADER
 
-#include <stdio.h>
-#include <math.h>
+#include <cmath>
 #include <ossim/base/ossimCommon.h>
 #include <ossim/base/ossimColumnVector3d.h>
 #include <ossim/base/ossimEcefPoint.h>
-#include <ossim/base/ossimGpt.h>
-#include <ossim/base/ossimNotifyContext.h>
 #include <ossim/base/ossimString.h>
+
+class ossimGpt;
 
 //*****************************************************************************
 //  CLASS: ossimEcefVector
@@ -64,27 +63,26 @@ public:
 
 
    void makeNan()
-      {
-         theData[0] = OSSIM_DBL_NAN;
-         theData[1] = OSSIM_DBL_NAN;
-         theData[2] = OSSIM_DBL_NAN;
-      }
+   {
+      theData[0] = ossim::nan();
+      theData[1] = ossim::nan();
+      theData[2] = ossim::nan();
+   }
    
    bool hasNans()const
-      {
-         return ((theData[0]==OSSIM_DBL_NAN)||
-                 (theData[1]==OSSIM_DBL_NAN)||
-                 (theData[2]==OSSIM_DBL_NAN));
-                           
-      }
-
+   {
+      return ( ossim::isnan(theData[0]) ||
+               ossim::isnan(theData[1]) ||
+               ossim::isnan(theData[2]) );
+   }
+   
    bool isNan()const
-      {
-         return ((theData[0]==OSSIM_DBL_NAN)&&
-                 (theData[1]==OSSIM_DBL_NAN)&&
-                 (theData[2]==OSSIM_DBL_NAN));
-         
-      }
+   {
+      return ( ossim::isnan(theData[0]) &&
+               ossim::isnan(theData[1]) &&
+               ossim::isnan(theData[2]) );
+   }
+
    /*!
     * OPERATORS: (all inlined below)
     */
@@ -259,7 +257,7 @@ inline double ossimEcefVector::dot(const ossimEcefVector& v) const
 inline double ossimEcefVector::angleTo(const ossimEcefVector& v) const
 {
    double mag_product = theData.magnitude() * v.theData.magnitude();
-   return acosd(theData.dot(v.theData)/mag_product);
+   return ossim::acosd(theData.dot(v.theData)/mag_product);
 }
 
 //*****************************************************************************

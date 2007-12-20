@@ -9,7 +9,7 @@
 //
 //
 //*******************************************************************
-//  $Id: ossimStreamFactory.cpp 9104 2006-06-14 01:20:11Z gpotts $
+//  $Id: ossimStreamFactory.cpp 11177 2007-06-07 19:47:04Z dburken $
 //
 #include <ossim/base/ossimStreamFactory.h>
 #include <fstream>
@@ -23,6 +23,7 @@
 ossimStreamFactory* ossimStreamFactory::theInstance = 0;
 
 ossimStreamFactory::ossimStreamFactory()
+   : ossimStreamFactoryBase()
 {
 }
 
@@ -40,8 +41,9 @@ ossimStreamFactory* ossimStreamFactory::instance()
    return theInstance;
 }
 
-ossimRefPtr<ossimIStream> ossimStreamFactory::createNewInputStream(const ossimFilename& file,
-																   std::ios::openmode openMode)
+ossimRefPtr<ossimIFStream> ossimStreamFactory::createNewIFStream(
+   const ossimFilename& file,
+   std::ios_base::openmode openMode) const
 {
 #if OSSIM_HAS_LIBZ
    ossimFilename copyFile = file;
@@ -81,4 +83,10 @@ ossimRefPtr<ossimIStream> ossimStreamFactory::createNewInputStream(const ossimFi
 #endif
    return 0;
 }
+
+ossimStreamFactory::ossimStreamFactory(const ossimStreamFactory&)
+   : ossimStreamFactoryBase()
+{}
+
+
 

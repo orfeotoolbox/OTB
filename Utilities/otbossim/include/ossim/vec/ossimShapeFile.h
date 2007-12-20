@@ -2,11 +2,10 @@
 //
 // License:  See top level LICENSE.txt file.
 // 
-// Author: Garrett Potts (gpotts@imagelinks)
-// Description:
+// Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimShapeFile.h 9967 2006-11-29 02:01:23Z gpotts $
+// $Id: ossimShapeFile.h 11424 2007-07-27 17:01:23Z dburken $
 
 #ifndef ossimShapeFile_HEADER
 #define ossimShapeFile_HEADER
@@ -99,7 +98,7 @@ public:
          else
          {
             minX = minY = minZ = minM =
-            maxX = maxY = maxZ = maxM = OSSIM_DBL_NAN;
+            maxX = maxY = maxZ = maxM = ossim::nan();
          }
       }
 
@@ -116,7 +115,7 @@ public:
          else
          {
             minX = minY = 
-            maxX = maxY = OSSIM_DBL_NAN;
+            maxX = maxY = ossim::nan();
          }
       }
 
@@ -269,7 +268,7 @@ public:
          else
          {
             minX = minY = minZ = minM =
-            maxX = maxY = maxZ = maxM = OSSIM_DBL_NAN;
+            maxX = maxY = maxZ = maxM = ossim::nan();
          }
       }
    
@@ -285,7 +284,7 @@ public:
          }
          else
          {
-            minX = minY = maxX = maxY = OSSIM_DBL_NAN;
+            minX = minY = maxX = maxY = ossim::nan();
          }
       }
 

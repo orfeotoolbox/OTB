@@ -5,7 +5,7 @@
 // Description: This class provides manipulation of filenames.
 //
 //*************************************************************************
-// $Id: ossimFilename.cpp 10076 2006-12-13 13:28:46Z dburken $
+// $Id: ossimFilename.cpp 12193 2007-12-14 16:31:05Z sbortman $
 
 #include <ossim/ossimConfig.h>  /* to pick up platform defines */
 
@@ -45,10 +45,10 @@ using namespace std;
 #ifdef __BORLANDC__
 #  include <dir.h>
 #  include <direct.h>
-#  include <stdio.h>
 #  include <stdlib.h>
 #  include <io.h>
 #endif
+#include <stdio.h>
 
 #include <ossim/base/ossimFilename.h>
 #include <ossim/base/ossimRegExp.h>
@@ -482,15 +482,27 @@ bool ossimFilename::isFile() const
 
 bool ossimFilename::isDir() const
 {
+	if ( empty() )
+	{
+		return false;
+	}
+	
+	ossimFilename temp = c_str();
+	const char& lastChar = temp[static_cast<int>(temp.size() - 1)];
+	if ( lastChar == '/' || lastChar == '\\' )
+	{
+		temp = temp.beforePos(temp.size() - 1);
+	}
+	
 #if defined(_WIN32)
 
 	struct _stat sbuf;
-	if ( _stat(c_str(), &sbuf ) == -1)
+	if ( _stat(temp.c_str(), &sbuf ) == -1)
 		return false;
    return (_S_IFDIR & sbuf.st_mode ? true : false);
 #else
    struct stat sbuf;
-   if (stat(c_str(), &sbuf) == -1)
+   if (stat(temp.c_str(), &sbuf) == -1)
 	   return false;
    return (S_ISDIR(sbuf.st_mode));
 #endif
@@ -509,7 +521,7 @@ bool ossimFilename::isReadable() const
 #endif
 }
 
-bool ossimFilename::isWritable() const
+bool ossimFilename::isWriteable() const
 {
 #if defined(_WIN32)
 
@@ -827,7 +839,7 @@ ossim_int64 ossimFilename::fileSize() const
 }
 
 bool ossimFilename::createDirectory(bool recurseFlag,
-                                  int perm)
+                                  int perm)const
 {
    if(exists()) return true;
 
@@ -842,7 +854,7 @@ bool ossimFilename::createDirectory(bool recurseFlag,
 
       if(result.size())
       {
-         ossimString current;
+         ossimString current = result[0];
 
          for(ossim_uint32 i = 1; i < result.size(); ++i)
          {
@@ -977,6 +989,28 @@ bool ossimFilename::wildcardRemove(const ossimFilename& pathname)
    }
    return result;
 }
+
+bool ossimFilename::rename(const ossimFilename& destFile, bool overwriteDestinationFlag)const
+{
+   if(!overwriteDestinationFlag)
+   {
+      if(destFile.exists())
+      {
+         ossimNotify(ossimNotifyLevel_WARN)
+            << "WARNING: "
+            << "ossimFilename::rename WARNING:"
+            << "\nDestination File Exists: " << destFile << std::endl;
+         return false;
+      }
+   }
+   else if(destFile.exists())
+   {
+      destFile.remove();
+   }
+   ::rename(this->c_str(), destFile.c_str());
+   
+   return true;
+}
    
 bool ossimFilename::remove()const
 {
@@ -1031,6 +1065,7 @@ bool ossimFilename::copyFileTo(const ossimFilename& outputFile) const
 
 bool ossimFilename::isRelative() const
 {
+	if(empty()) return true;
    // Look for unix "/"...
    if ( *(begin()) == '/' )
    {

@@ -13,7 +13,7 @@
 //              Initial coding.
 //<
 //*****************************************************************************
-// $Id: ossimElevCellHandler.h 10372 2007-01-25 19:22:19Z dburken $
+// $Id: ossimElevCellHandler.h 11317 2007-07-17 20:39:10Z dburken $
 
 
 #ifndef ossimElevCellHandler_HEADER
@@ -23,11 +23,8 @@
 #include <ossim/elevation/ossimElevSource.h>
 #include <ossim/base/ossimFilename.h>
 #include <ossim/base/ossimIpt.h>
-#include <ossim/base/ossimDpt.h>
-#include <ossim/base/ossimGpt.h>
-#include <ossim/base/ossimDrect.h>
 
-// class ossimDblGrid;
+class ossimGpt;
 
 /******************************************************************************
  *

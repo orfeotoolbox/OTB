@@ -10,7 +10,7 @@
 // Contains declaration of class ossimSpot5Model.
 // 
 //*****************************************************************************
-// $Id: ossimSpot5Model.h 9968 2006-11-29 14:01:53Z gpotts $
+// $Id: ossimSpot5Model.h 12138 2007-12-07 14:30:22Z gpotts $
 #ifndef ossimSpot5Model_HEADER
 #define ossimSpot5Model_HEADER
 
@@ -109,7 +109,6 @@ public:
    virtual bool setupOptimizer(const ossimString& init_file); //!uses file path to init model
 
    bool initFromMetadata(ossimSpotDimapSupportData* sd);
-
 protected:
 
    /*!
@@ -121,10 +120,9 @@ protected:
    void loadSupportData();
    void computeSatToOrbRotation(ossim_float64 t)const;
 
-   virtual ossimDpt extrapolate (const ossimGpt& gp) const;
-   virtual ossimGpt extrapolate (const ossimDpt& ip,
-				 const double& height
-				 =ossimElevSource::DEFAULT_NULL_HEIGHT) const;
+/*    virtual ossimDpt extrapolate (const ossimGpt& gp) const; */
+/*    virtual ossimGpt extrapolate (const ossimDpt& ip, */
+/* 				 const double& height=ossim::nan()) const; */
 
    ossimSpotDimapSupportData* theSupportData;
 
@@ -136,7 +134,12 @@ protected:
    ossim_float64  theIllumElevation;
    ossim_float64  thePositionError;
    ossim_float64  theRefImagingTime;
+
+   /** relative to full image */
+   ossim_float64  theRefImagingTimeLine;
+   
    ossim_float64  theLineSamplingPeriod;
+   ossimDpt       theSpotSubImageOffset;
    mutable NEWMAT::Matrix theSatToOrbRotation;
    mutable NEWMAT::Matrix theOrbToEcfRotation;
 

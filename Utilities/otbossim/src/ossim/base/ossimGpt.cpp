@@ -1,5 +1,4 @@
 //*******************************************************************
-// Copyright (C) 2000 ImageLinks Inc.
 //
 // License:  See top level LICENSE.txt file.
 //
@@ -10,7 +9,7 @@
 // LATITUDE AND LONGITUDE VALUES ARE IN DEGREES.
 //
 //*******************************************************************
-//  $Id: ossimGpt.cpp 9094 2006-06-13 19:12:40Z dburken $
+//  $Id: ossimGpt.cpp 11399 2007-07-26 13:39:54Z dburken $
 
 #include <iostream>
 #include <sstream>
@@ -23,7 +22,6 @@
 #include <ossim/base/ossimGeoidManager.h>
 #include <ossim/base/ossimEllipsoid.h>
 #include <ossim/base/ossimGeocent.h>
-#include <ossim/base/ossimString.h>
 
 std::ostream& ossimGpt::print(std::ostream& os, ossim_uint32 precision) const
 {
@@ -123,7 +121,7 @@ std::istream& operator>>(std::istream& is, ossimGpt &pt)
    }
    else
    {
-      pt.latd(OSSIM_DBL_NAN);
+      pt.latd(ossim::nan());
    }
 
    // Eat the comma that we stopped at.
@@ -151,7 +149,7 @@ std::istream& operator>>(std::istream& is, ossimGpt &pt)
    }
    else
    {
-      pt.lond(OSSIM_DBL_NAN);
+      pt.lond(ossim::nan());
    }
 
    // Eat the comma that we stopped at.
@@ -180,7 +178,7 @@ std::istream& operator>>(std::istream& is, ossimGpt &pt)
    }
    else
    {
-      pt.height(OSSIM_DBL_NAN);
+      pt.height(ossim::nan());
    }
 
    // Eat the comma that we stopped at.
@@ -297,13 +295,15 @@ const ossimGpt& ossimGpt::operator = (const ossimGpt &aPt)
 void ossimGpt::changeDatum(const ossimDatum *datum)
 {
    if(datum == theDatum) return;
-   if(!isLatNan() && !isLonNan()) // only shift if all values lat and lon is good
+
+   // only shift if all values lat and lon is good
+   if(!isLatNan() && !isLonNan()) 
    {
       if(datum)
       {
 	double h = hgt;
         *this = datum->shift(*this);
-        if(h == OSSIM_DBL_NAN)
+        if(ossim::isnan(h))
         {
            hgt = h;
         }
@@ -392,7 +392,7 @@ ossimDpt ossimGpt::metersPerDegree() const
 
    double radius = theDatum->ellipsoid()->geodeticRadius(lat);
    result.y =  RAD_PER_DEG * radius;
-   result.x =  result.y * cosd(lat);
+   result.x =  result.y * ossim::cosd(lat);
 
    return result;
 }

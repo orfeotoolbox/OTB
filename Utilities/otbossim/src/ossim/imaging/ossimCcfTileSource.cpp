@@ -11,7 +11,7 @@
 //
 // Contains class definition for ossimCcfTileSource.
 //*******************************************************************
-//  $Id: ossimCcfTileSource.cpp 9094 2006-06-13 19:12:40Z dburken $
+//  $Id: ossimCcfTileSource.cpp 11347 2007-07-23 13:01:59Z gpotts $
 
 #include <algorithm>
 #include <ossim/imaging/ossimCcfTileSource.h>
@@ -50,7 +50,7 @@ ossimCcfTileSource::ossimCcfTileSource()
       theChipBuffer(NULL),
       theFileStr(NULL),
       theOutputBandList(1),
-      theByteOrder(ossimGetByteOrder())
+      theByteOrder(ossim::byteOrder())
 {}
 
 ossimCcfTileSource::~ossimCcfTileSource()

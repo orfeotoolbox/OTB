@@ -8,7 +8,7 @@
 // Author:  Kenneth Melero (kmelero@sanz.com)
 //
 //*******************************************************************
-//  $Id: ossimReadmeFileWriter.cpp 10276 2007-01-15 18:56:59Z dburken $
+//  $Id: ossimReadmeFileWriter.cpp 11347 2007-07-23 13:01:59Z gpotts $
 
 #include <iostream>
 using namespace std;
@@ -201,7 +201,7 @@ bool ossimReadmeFileWriter::writeFile()
              << falseEasting;
          
          out << " meters, " << setprecision(4)
-             << mtrs2usft(falseEasting) 
+             << ossim::mtrs2usft(falseEasting) 
              << " U.S. feet";
          
          out << endl;
@@ -213,7 +213,7 @@ bool ossimReadmeFileWriter::writeFile()
              << falseNorthing;
          
          out << " meters, " << setprecision(4)
-             << mtrs2usft(falseNorthing) 
+             << ossim::mtrs2usft(falseNorthing) 
              << " U.S. feet";
          
          out << endl;
@@ -295,7 +295,7 @@ bool ossimReadmeFileWriter::writeFile()
           << projectionInfo->ulEastingNorthingPt().x;
       
       out << " meters, " << setprecision(4)
-          << mtrs2usft(projectionInfo->ulEastingNorthingPt().x)
+          << ossim::mtrs2usft(projectionInfo->ulEastingNorthingPt().x)
           << " U.S. feet";
       
       out << endl
@@ -303,7 +303,7 @@ bool ossimReadmeFileWriter::writeFile()
           << setw(17) << projectionInfo->ulEastingNorthingPt().y;
       
       out << " meters, " << setprecision(4)
-          << mtrs2usft(projectionInfo->ulEastingNorthingPt().y)
+          << ossim::mtrs2usft(projectionInfo->ulEastingNorthingPt().y)
           << " U.S. feet";
       
       out << endl << endl;
@@ -327,7 +327,7 @@ bool ossimReadmeFileWriter::writeFile()
           << projectionInfo->urEastingNorthingPt().x;
       
       out << " meters, " << setprecision(4)
-          << mtrs2usft(projectionInfo->urEastingNorthingPt().x)
+          << ossim::mtrs2usft(projectionInfo->urEastingNorthingPt().x)
           << " U.S. feet";
       
       out << endl
@@ -335,7 +335,7 @@ bool ossimReadmeFileWriter::writeFile()
           << setw(17) << projectionInfo->urEastingNorthingPt().y;
       
       out << " meters, " << setprecision(4)
-          << mtrs2usft(projectionInfo->urEastingNorthingPt().y)
+          << ossim::mtrs2usft(projectionInfo->urEastingNorthingPt().y)
           << " U.S. feet";
       
       out << endl << endl;
@@ -359,7 +359,7 @@ bool ossimReadmeFileWriter::writeFile()
           << projectionInfo->lrEastingNorthingPt().x;
       
       out << " meters, " << setprecision(4)
-          << mtrs2usft(projectionInfo->lrEastingNorthingPt().x)
+          << ossim::mtrs2usft(projectionInfo->lrEastingNorthingPt().x)
           << " U.S. feet";
       
       out << endl
@@ -367,7 +367,7 @@ bool ossimReadmeFileWriter::writeFile()
           << setw(17) << projectionInfo->lrEastingNorthingPt().y;
       
       out << " meters, " << setprecision(4)
-          << mtrs2usft(projectionInfo->lrEastingNorthingPt().y)
+          << ossim::mtrs2usft(projectionInfo->lrEastingNorthingPt().y)
           << " U.S. feet";
       
       out << endl << endl;
@@ -391,7 +391,7 @@ bool ossimReadmeFileWriter::writeFile()
           <<  projectionInfo->llEastingNorthingPt().x;
       
       out << " meters, " << setprecision(4)
-          << mtrs2usft(projectionInfo->llEastingNorthingPt().x)
+          << ossim::mtrs2usft(projectionInfo->llEastingNorthingPt().x)
           << " U.S. feet";
       
       out << endl
@@ -399,7 +399,7 @@ bool ossimReadmeFileWriter::writeFile()
           << setw(17) << projectionInfo->llEastingNorthingPt().y;
       
       out << " meters, " << setprecision(4)
-          << mtrs2usft(projectionInfo->llEastingNorthingPt().y)
+          << ossim::mtrs2usft(projectionInfo->llEastingNorthingPt().y)
           << " U.S. feet";
       
       out << endl << endl;
@@ -426,7 +426,7 @@ bool ossimReadmeFileWriter::writeFile()
           << projectionInfo->centerEastingNorthingPt().x;
       
       out << " meters, " << setprecision(4)
-          << mtrs2usft(projectionInfo->centerEastingNorthingPt().x)
+          << ossim::mtrs2usft(projectionInfo->centerEastingNorthingPt().x)
           << " U.S. feet";
       
       out << endl
@@ -434,7 +434,7 @@ bool ossimReadmeFileWriter::writeFile()
           << setw(17) << projectionInfo->centerEastingNorthingPt().y;
       
       out << " meters, " << setprecision(4)
-          << mtrs2usft(projectionInfo->centerEastingNorthingPt().y)
+          << ossim::mtrs2usft(projectionInfo->centerEastingNorthingPt().y)
           << " U.S. feet";
       
       out << endl << endl;

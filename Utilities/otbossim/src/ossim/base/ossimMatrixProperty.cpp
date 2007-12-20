@@ -5,7 +5,7 @@
 // Author: Garrett Potts (gpotts@imagelinks.com)
 //
 //*************************************************************************
-// $Id: ossimMatrixProperty.cpp 9963 2006-11-28 21:11:01Z gpotts $
+// $Id: ossimMatrixProperty.cpp 11955 2007-10-31 16:10:22Z gpotts $
 #include <sstream>
 #include <ossim/base/ossimMatrixProperty.h>
 #include <ossim/base/ossimCommon.h>
@@ -177,7 +177,7 @@ void ossimMatrixProperty::resize(int numberOfRows,
       
       theValueArray.resize(tempNumberOfRows);
 
-      int minCols = ossimMin((int)currentNumberOfCols,
+      int minCols = ossim::min((int)currentNumberOfCols,
                              (int)tempNumberOfCols);
       int rowIdx = 0;
       int colIdx = 0;

@@ -14,7 +14,7 @@
 // LIMITATIONS: None.
 //
 //*****************************************************************************
-//  $Id: ossimQuickbirdRpcModel.h 9094 2006-06-13 19:12:40Z dburken $
+//  $Id: ossimQuickbirdRpcModel.h 11720 2007-09-12 14:59:30Z gpotts $
 #ifndef ossimQuickbirdRpcModel_HEADER
 #define ossimQuickbirdRpcModel_HEADER
 
@@ -40,7 +40,7 @@ public:
    virtual bool loadState(const ossimKeywordlist& kwl,
                           const char* prefix=0);
 
-   bool parseFile(const ossimFilename& file);
+   virtual bool parseFile(const ossimFilename& file);
    
    
 protected:

@@ -9,7 +9,7 @@
 // Support data class for a Shuttle Radar Topography Mission (SRTM) file.
 //
 //----------------------------------------------------------------------------
-// $Id: ossimSrtmSupportData.cpp 10283 2007-01-16 16:25:05Z gpotts $
+// $Id: ossimSrtmSupportData.cpp 11423 2007-07-27 16:59:22Z dburken $
 
 #include <cmath>
 #include <fstream>
@@ -40,12 +40,12 @@ static const ossim_float64 DEFAULT_MAX =  8850.0;
 ossimSrtmSupportData::ossimSrtmSupportData()
    :
    theFile(),
-   theNumberOfLines(OSSIM_UINT_NAN),
-   theNumberOfSamples(OSSIM_UINT_NAN),
-   theSouthwestLatitude(OSSIM_DBL_NAN),
-   theSouthwestLongitude(OSSIM_DBL_NAN),
-   theLatSpacing(OSSIM_DBL_NAN),
-   theLonSpacing(OSSIM_DBL_NAN),
+   theNumberOfLines(0),
+   theNumberOfSamples(0),
+   theSouthwestLatitude(ossim::nan()),
+   theSouthwestLongitude(ossim::nan()),
+   theLatSpacing(ossim::nan()),
+   theLonSpacing(ossim::nan()),
    theMinPixelValue(DEFAULT_MIN),
    theMaxPixelValue(DEFAULT_MAX),
    theScalarType(OSSIM_SCALAR_UNKNOWN)
@@ -71,7 +71,7 @@ bool ossimSrtmSupportData::setFilename(const ossimFilename& srtmFile,
    }
    
    theFileStream =  ossimStreamFactoryRegistry::instance()->
-      createNewInputStream(theFile,
+      createNewIFStream(theFile,
                            ios::in | ios::binary);
    if (theFileStream.valid())
    {
@@ -302,7 +302,7 @@ bool ossimSrtmSupportData::saveState(ossimKeywordlist& kwl,
            true);
 
    // User can opt out of scanning for this so don't save if it is still nan.
-   if (theMinPixelValue != OSSIM_SSHORT_NAN)
+   if (theMinPixelValue != DEFAULT_MIN)
    {
       kwl.add(bandPrefix,
               ossimKeywordNames::MIN_VALUE_KW,
@@ -311,7 +311,7 @@ bool ossimSrtmSupportData::saveState(ossimKeywordlist& kwl,
    }
 
    // User can opt out of scanning for this so don't save if it is still nan.
-   if (theMaxPixelValue != OSSIM_SSHORT_NAN)
+   if (theMaxPixelValue != DEFAULT_MAX)
    {
       kwl.add(bandPrefix.c_str(),
               ossimKeywordNames::MAX_VALUE_KW,
@@ -529,12 +529,12 @@ ossim_float64 ossimSrtmSupportData::getLongitudeSpacing() const
 void ossimSrtmSupportData::clear()
 {
    theFile               = ossimFilename::NIL;
-   theNumberOfLines      = OSSIM_UINT_NAN;
-   theNumberOfSamples    = OSSIM_UINT_NAN;
-   theSouthwestLatitude  = OSSIM_DBL_NAN;
-   theSouthwestLongitude = OSSIM_DBL_NAN;
-   theLatSpacing         = OSSIM_DBL_NAN;
-   theLonSpacing         = OSSIM_DBL_NAN;
+   theNumberOfLines      = 0;
+   theNumberOfSamples    = 0;
+   theSouthwestLatitude  = ossim::nan();
+   theSouthwestLongitude = ossim::nan();
+   theLatSpacing         = ossim::nan();
+   theLonSpacing         = ossim::nan();
    theMinPixelValue      = DEFAULT_MIN;
    theMaxPixelValue      = DEFAULT_MAX;
 }
@@ -577,13 +577,15 @@ bool ossimSrtmSupportData::setCornerPoints()
    {
       return false;
    }
-   ossimString s;
+//    ossimString s;
 
    if(latLonOrderFlag)
    {
-      s.push_back(f[1]);
-      s.push_back(f[2]);
-      theSouthwestLatitude = s.toDouble();
+      
+//       s.push_back(f[1]);
+//       s.push_back(f[2]);
+      theSouthwestLatitude = ossimString(f.begin()+1,
+                                         f.begin()+3).toDouble();//s.toDouble();
       // Get the latitude.
       if (f[0] == 'S')
       {
@@ -594,11 +596,12 @@ bool ossimSrtmSupportData::setCornerPoints()
          return false; // Must be either 's' or 'n'.
       }
       // Get the longitude.
-      s.clear();
-      s.push_back(f[4]);
-      s.push_back(f[5]);
-      s.push_back(f[6]);
-      theSouthwestLongitude = s.toDouble();
+//       s.clear();
+//       s.push_back(f[4]);
+//       s.push_back(f[5]);
+//       s.push_back(f[6]);
+      theSouthwestLongitude = ossimString(f.begin()+4,
+                                          f.begin()+7).toDouble();//s.toDouble();
       if (f[3] == 'W')
       {
       theSouthwestLongitude *= -1;
@@ -611,11 +614,12 @@ bool ossimSrtmSupportData::setCornerPoints()
    else
    {
       // Get the longitude.
-      s.clear();
-      s.push_back(f[1]);
-      s.push_back(f[2]);
-      s.push_back(f[3]);
-      theSouthwestLongitude = s.toDouble();
+//       s.clear();
+//       s.push_back(f[1]);
+//       s.push_back(f[2]);
+//       s.push_back(f[3]);
+      theSouthwestLongitude =  ossimString(f.begin()+1,
+                                           f.begin()+4).toDouble();//s.toDouble();
       if (f[0] == 'W')
       {
       theSouthwestLongitude *= -1;
@@ -624,11 +628,12 @@ bool ossimSrtmSupportData::setCornerPoints()
       {
          return false; // Must be either 'e' or 'w'.
       }
-      s.clear();
+//       s.clear();
       
-      s.push_back(f[5]);
-      s.push_back(f[6]);
-      theSouthwestLatitude = s.toDouble();
+//       s.push_back(f[5]);
+//       s.push_back(f[6]);
+      theSouthwestLatitude = ossimString(f.begin()+5,
+                                         f.begin()+7).toDouble();//s.toDouble();
       // Get the latitude.
       if (f[4] == 'S')
       {
@@ -661,7 +666,7 @@ bool ossimSrtmSupportData::setSize()
    if(theFileStream->is_open() == false)
    {
       theFileStream =
-         ossimStreamFactoryRegistry::instance()->createNewInputStream(
+         ossimStreamFactoryRegistry::instance()->createNewIFStream(
             theFile,
             ios::in | ios::binary);
    }
@@ -820,7 +825,7 @@ bool ossimSrtmSupportData::computeMinMaxTemplate(T dummy,
    if(theFileStream->is_open() == false)
    {
       theFileStream =
-         ossimStreamFactoryRegistry::instance()->createNewInputStream(
+         ossimStreamFactoryRegistry::instance()->createNewIFStream(
             theFile,
             ios::in | ios::binary);
    }
@@ -844,7 +849,7 @@ bool ossimSrtmSupportData::computeMinMaxTemplate(T dummy,
    char* char_buf = (char*)line_buf;
    ossimEndian swapper;
 
-   ossimByteOrder endianType = ossimGetByteOrder();
+   ossimByteOrder endianType = ossim::byteOrder();
    for (ossim_uint32 line = 0; line < theNumberOfLines; ++line)
    {
       theFileStream->read(char_buf, BYTES_IN_LINE);

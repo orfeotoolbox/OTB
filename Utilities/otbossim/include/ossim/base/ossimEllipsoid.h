@@ -103,6 +103,28 @@ public:
    virtual void gradient(const ossimEcefPoint& location,
                          ossimEcefVector& result)const;
    virtual ossimEcefVector gradient(const ossimEcefPoint& loc)const;
+   
+   /*!
+    * METHOD: prinRadiiOfCurv()
+    * Computes the meridional radius and prime vertical at given point.
+    */
+   virtual void prinRadiiOfCurv(const ossimEcefPoint& location,
+                                      double& merRadius,
+                                      double& primeVert)const;
+   
+   /*!
+    * METHOD: jacobianWrtEcef()
+    * Forms Jacobian of partials of geodetic WRT ECF.
+    */
+   virtual void jacobianWrtEcef(const ossimEcefPoint& location,
+                                      NEWMAT::Matrix& jMat)const;
+   
+   /*!
+    * METHOD: jacobianWrtGeo()
+    * Forms Jacobian of partials of ECF WRT geodetic.
+    */
+   virtual void jacobianWrtGeo(const ossimEcefPoint& location,
+                                     NEWMAT::Matrix& jMat)const;
 
    /*!
     * Computes the "geodetic" radius for a given latitude in DEGREES:

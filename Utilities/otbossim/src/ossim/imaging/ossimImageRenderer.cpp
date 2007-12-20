@@ -1,14 +1,11 @@
 //*******************************************************************
-// Copyright (C) 2000 ImageLinks Inc.
 //
-// License:  LGPL
-// 
-// See LICENSE.txt file in the top level directory for more details.
+// License:  See top level LICENSE.txt file.
 //
 // Author:  Garrett Potts
 //
 //*******************************************************************
-//  $Id: ossimImageRenderer.cpp 9926 2006-11-22 16:45:10Z gpotts $
+//  $Id: ossimImageRenderer.cpp 11955 2007-10-31 16:10:22Z gpotts $
 
 #include <iostream>
 using namespace std;
@@ -41,7 +38,7 @@ using namespace std;
 #include <ossim/projection/ossimEquDistCylProjection.h>
 
 #ifdef OSSIM_ID_ENABLED
-static const char OSSIM_ID[] = "$Id: ossimImageRenderer.cpp 9926 2006-11-22 16:45:10Z gpotts $";
+static const char OSSIM_ID[] = "$Id: ossimImageRenderer.cpp 11955 2007-10-31 16:10:22Z gpotts $";
 #endif
 
 static ossimTrace traceDebug("ossimImageRenderer:debug");
@@ -245,6 +242,7 @@ void ossimImageRenderer::ossimRendererSubRectInfo::transformImageToView(ossimIma
 void ossimImageRenderer::ossimRendererSubRectInfo::transformViewToImage(ossimImageViewTransform* transform)
 {
    
+   
    ossimDpt nvul = theVul;
    ossimDpt nvur = theVur;;
    ossimDpt nvlr = theVlr;
@@ -258,8 +256,7 @@ void ossimImageRenderer::ossimRendererSubRectInfo::transformViewToImage(ossimIma
                           theIlr);
    transform->viewToImage(nvll,
                           theIll);
-   
-   
+
    if(imageHasNans())
    {
       theViewToImageScale.makeNan();
@@ -338,14 +335,14 @@ void ossimImageRenderer::ossimRendererSubRectInfo::stretchImageOut(bool enableRo
 
    if(enableRound)
    {
-      theIul = ossimIpt(irint(theIul.x),
-                        irint(theIul.y));
-      theIur = ossimIpt(irint(theIur.x),
-                        irint(theIur.y));
-      theIlr = ossimIpt(irint(theIlr.x),
-                        irint(theIlr.y));
-      theIll = ossimIpt(irint(theIll.x),
-                        irint(theIll.y));
+      theIul = ossimIpt(ossim::round<int>(theIul.x),
+                        ossim::round<int>(theIul.y));
+      theIur = ossimIpt(ossim::round<int>(theIur.x),
+                        ossim::round<int>(theIur.y));
+      theIlr = ossimIpt(ossim::round<int>(theIlr.x),
+                        ossim::round<int>(theIlr.y));
+      theIll = ossimIpt(ossim::round<int>(theIll.x),
+                        ossim::round<int>(theIll.y));
    }
 }
 
@@ -595,15 +592,13 @@ ossimRefPtr<ossimImageData> ossimImageRenderer::getTile(
    const  ossimIrect& tileRect,
    ossim_uint32 resLevel)
 {
-#if 1
    static const char MODULE[] = "ossimImageRenderer::getTile";
    if(traceDebug())
    {
       ossimNotify(ossimNotifyLevel_DEBUG)
-         << MODULE << "Requesting view rect = "
+         << MODULE << " Requesting view rect = "
          << tileRect << endl;
    }
-#endif
 
    // long w = tileRect.width();
    // long h = tileRect.height();
@@ -672,7 +667,7 @@ ossimRefPtr<ossimImageData> ossimImageRenderer::getTile(
    
    theTile->setImageRectangle(tileRect);
    theTile->makeBlank();
-   
+
    ossimRendererSubRectInfo subRectInfo(tileRect.ul(),
                                         tileRect.ur(),
                                         tileRect.lr(),
@@ -682,25 +677,15 @@ ossimRefPtr<ossimImageData> ossimImageRenderer::getTile(
    if(traceDebug())
    {
       ossimNotify(ossimNotifyLevel_DEBUG)
-         << MODULE << "image rect = " << subRectInfo.getImageRect() << std::endl;
-   }
-//   std::cout << subRectInfo << std::endl;
-   if(subRectInfo.imageIsNan()||(!subRectInfo.getImageRect().intersects(theBoundingRect)))
-   {
-      return theBlankTile;
+         << MODULE << " image rect = " << subRectInfo.getImageRect() << std::endl;
    }
    
-   
-//    if(subRectInfo.isIdentity()&&
-//       !subRectInfo.imageHasNans())
-//    {
-//       return theInputConnection->getTile(tileRect, resLevel);
-//    }
-//    else
-//    {
    recursiveResample(theTile, subRectInfo, 1);
-   theTile->validate();
-//   }
+   
+   if(theTile.valid())
+   {
+      theTile->validate();
+   }
    if(traceDebug())
    {
       ossimNotify(ossimNotifyLevel_DEBUG)
@@ -1296,18 +1281,19 @@ void ossimImageRenderer::getValidImageVertices(vector<ossimIpt>& validVertices,
       theInputConnection->getValidImageVertices(validVertices, ordering, resLevel);
       if(isSourceEnabled())
       {
-         long inputSize = validVertices.size();
+         ossim_uint32 inputSize = (ossim_uint32)validVertices.size();
          if(inputSize)
          {
             ossimDpt viewPt;
+			ossim_uint32 idx = 0;
             // transform each point to the view
-            for(long index = 0; index < inputSize; ++index)
+            for(idx = 0; idx < inputSize; ++idx)
             {
-               theImageViewTransform->imageToView(validVertices[index], viewPt);
+               theImageViewTransform->imageToView(validVertices[idx], viewPt);
                
                // round it to the nearest pixel
                //
-               validVertices[index] = ossimIpt(viewPt);
+               validVertices[idx] = ossimIpt(viewPt);
             }
          }
       }
@@ -1467,50 +1453,49 @@ void ossimImageRenderer::checkTransform()
 //   if(theAutoUpdateInputTransform)//||
 //      (!transform->getImageProjection()))
 //    {
-      if(!transform->getImageProjection()||
-         PTR_CAST(ossimMapProjection, transform->getImageProjection()))
-      {
-         ossimKeywordlist kwl;
-         inter->getImageGeometry(kwl);
-         
-         proj = ossimProjectionFactoryRegistry::instance()->createProjection(kwl);
-         transform->setImageProjection(proj, true);
-      }
-      else
-      {
-         proj = transform->getImageProjection();
-      }
+   if(!transform->getImageProjection()||
+      PTR_CAST(ossimMapProjection, transform->getImageProjection()))
+   {
+      ossimKeywordlist kwl;
+      inter->getImageGeometry(kwl);
+      
+      proj = ossimProjectionFactoryRegistry::instance()->createProjection(kwl);
+      transform->setImageProjection(proj, true);
+   }
+   else
+   {
+      proj = transform->getImageProjection();
+   }
 //    }
    
    if(proj)
    {
-         if(!transform->getView()) // check to see if we found a view controller and the view was set
-         {                         // if not then we will create a default output projection
-	   ossimProjection* newProj = (ossimProjection*)NULL;
-	   ossimMapProjection* mapProj = (ossimMapProjection*)NULL;
-	   if(PTR_CAST(ossimMapProjection, proj))
-	     {
-	       newProj = (ossimProjection*)proj->dup(); // Make a copy...
-	      
-            }
-            else
-            {
-               newProj = new ossimEquDistCylProjection;
-	    }
-	   mapProj = PTR_CAST(ossimMapProjection, newProj);
-	   if(mapProj) 
-	     {
-	       ossimDpt meters = proj->getMetersPerPixel();
-	       
-	       double GSD = (meters.x + meters.y)/2.0;
-	       meters.x = GSD;
-	       meters.y = GSD;
-	       mapProj->setUlGpt(proj->origin());
-	       mapProj->setOrigin(proj->origin());
-	       mapProj->setMetersPerPixel(meters);
-	     }
-	   transform->setViewProjection(newProj);
+      if(!transform->getView()) // check to see if we found a view controller and the view was set
+      {                         // if not then we will create a default output projection
+         ossimProjection* newProj = (ossimProjection*)NULL;
+         ossimMapProjection* mapProj = PTR_CAST(ossimMapProjection, proj);
+         if(mapProj&&!mapProj->hasModelTransform())
+         {
+            newProj = (ossimProjection*)proj->dup(); // Make a copy...
          }
+         else
+         {
+            newProj = new ossimEquDistCylProjection;
+         }
+         mapProj = PTR_CAST(ossimMapProjection, newProj);
+         if(mapProj) 
+         {
+            ossimDpt meters = proj->getMetersPerPixel();
+	    
+            double GSD = (meters.x + meters.y)/2.0;
+            meters.x = GSD;
+            meters.y = GSD;
+            mapProj->setUlGpt(proj->origin());
+            mapProj->setOrigin(proj->origin());
+            mapProj->setMetersPerPixel(meters);
+         }
+         transform->setViewProjection(newProj);
+      }
 //       }
    }
    else
@@ -1598,7 +1583,7 @@ ossimRefPtr<ossimImageData>  ossimImageRenderer::getTileAtResLevel(const ossimIr
    
    ossim_uint32 levels = theInputConnection->getNumberOfDecimationLevels();
    
-   // ossim_uint32 maxValue = (ossim_uint32)ossimMax((ossim_uint32)theBoundingRect.width(),
+   // ossim_uint32 maxValue = (ossim_uint32)ossim::max((ossim_uint32)theBoundingRect.width(),
    //                                            (ossim_uint32)theBoundingRect.height());
    
    if(resLevel == 0)

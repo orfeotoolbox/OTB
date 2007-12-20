@@ -6,7 +6,7 @@
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimAnnotationFontObject.cpp 9094 2006-06-13 19:12:40Z dburken $
+// $Id: ossimAnnotationFontObject.cpp 11347 2007-07-23 13:01:59Z gpotts $
 
 #include <ossim/imaging/ossimAnnotationFontObject.h>
 #include <ossim/font/ossimFontFactoryRegistry.h>
@@ -377,8 +377,8 @@ void ossimAnnotationFontObject::setGeometryInformation(const ossimFontInformatio
 
 void ossimAnnotationFontObject::applyScale(double x, double y)
 {
-   theCenterPosition.x = irint(theCenterPosition.x *x);
-   theCenterPosition.y = irint(theCenterPosition.x *y);
+   theCenterPosition.x = ossim::round<int>(theCenterPosition.x *x);
+   theCenterPosition.y = ossim::round<int>(theCenterPosition.x *y);
    theHorizontalScale *= x;
    theVerticalScale   *= y;
    

@@ -1,5 +1,4 @@
 //*******************************************************************
-// Copyright (C) 2000 ImageLinks Inc. 
 //
 // License:  See top level LICENSE.txt file.
 //
@@ -8,7 +7,7 @@
 // Description: Nitf support class
 // 
 //********************************************************************
-// $Id: ossimNitfFileHeaderV2_0.h 9094 2006-06-13 19:12:40Z dburken $
+// $Id: ossimNitfFileHeaderV2_0.h 11096 2007-05-30 14:52:08Z dburken $
 #ifndef ossimNitfFileHeaderV2_0_HEADER
 #define ossimNitfFileHeaderV2_0_HEADER
 
@@ -145,7 +144,14 @@ public:
    
    ossimNitfFileHeaderV2_0();
    virtual ~ossimNitfFileHeaderV2_0();
+
+   /**
+    * @brief parse method.
+    * @return This method returns void but will throw an std::exception in
+    * certain instances if the stream goes bad on seeks.
+    */
    virtual void parseStream(std::istream &in);
+   
    virtual void writeStream(std::ostream &out);
    virtual std::ostream& print(std::ostream& out)const;
    virtual bool isEncrypted()const;

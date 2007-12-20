@@ -8,7 +8,7 @@
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimHistogramThreshholdFilter.cpp 9094 2006-06-13 19:12:40Z dburken $
+// $Id: ossimHistogramThreshholdFilter.cpp 11721 2007-09-13 13:19:34Z gpotts $
 #include <ossim/imaging/ossimHistogramThreshholdFilter.h>
 #include <ossim/base/ossimMultiResLevelHistogram.h>
 #include <ossim/base/ossimMultiBandHistogram.h>
@@ -180,8 +180,8 @@ ossimRefPtr<ossimImageData> ossimHistogramThreshholdFilter::runThreshholdStretch
       return tile;
    }
    
-   ossimMultiBandHistogram* histo    = getHistogram()->getMultiBandHistogram(0);
-   if(histo)
+   ossimRefPtr<ossimMultiBandHistogram> histo    = getHistogram()->getMultiBandHistogram(0);
+   if(histo.valid())
    {
       ossim_uint32 maxBands = ( (histo->getNumberOfBands() >
                                  tile->getNumberOfBands())?
@@ -192,10 +192,10 @@ ossimRefPtr<ossimImageData> ossimHistogramThreshholdFilter::runThreshholdStretch
 
       for(ossim_uint32 band = 0; band < maxBands; ++band)
       {
-         ossimHistogram* h  = histo->getHistogram(band);
+         ossimRefPtr<ossimHistogram> h  = histo->getHistogram(band);
          T* buf   = static_cast<T*>(tile->getBuf(band));
          
-         if(h&&buf)
+         if(h.valid()&&buf)
          {
             T np     = static_cast<T>(tile->getNullPix(band));
             T minPix = static_cast<T>(tile->getMinPix(band));

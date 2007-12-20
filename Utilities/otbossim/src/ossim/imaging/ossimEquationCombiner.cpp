@@ -8,7 +8,7 @@
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimEquationCombiner.cpp 9094 2006-06-13 19:12:40Z dburken $
+// $Id: ossimEquationCombiner.cpp 11347 2007-07-23 13:01:59Z gpotts $
 
 #include <sstream>
 using namespace std;
@@ -426,7 +426,7 @@ double ossimEquationCombiner::getNullPixelValue(ossim_uint32 band)const
          }
       }
    }
-   return ossimGetDefaultNull(getOutputScalarType());
+   return ossim::defaultNull(getOutputScalarType());
 }   
 
 double ossimEquationCombiner::getMinPixelValue(ossim_uint32 band)const
@@ -442,7 +442,7 @@ double ossimEquationCombiner::getMinPixelValue(ossim_uint32 band)const
          }
       }
    }
-   return ossimGetDefaultMin(getOutputScalarType());
+   return ossim::defaultMin(getOutputScalarType());
 }
 
 double ossimEquationCombiner::getMaxPixelValue(ossim_uint32 band)const
@@ -458,7 +458,7 @@ double ossimEquationCombiner::getMaxPixelValue(ossim_uint32 band)const
          }
       }
    }
-   return ossimGetDefaultMax(getOutputScalarType());         
+   return ossim::defaultMax(getOutputScalarType());         
 }
 
 ossimScalarType ossimEquationCombiner::getOutputScalarType() const

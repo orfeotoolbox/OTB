@@ -1,9 +1,6 @@
 //----------------------------------------------------------------------------
-// Copyright (c) 2005, David Burken, all rights reserved.
 //
-// License:  LGPL
-// 
-// See LICENSE.txt file in the top level directory for more details.
+// License:  See top level LICENSE.txt file.
 //
 // Author:  David Burken
 //
@@ -12,7 +9,7 @@
 // Shuttle Radar Topography Mission (SRTM) elevation source.
 //
 //----------------------------------------------------------------------------
-// $Id: ossimSrtmHandler.cpp 9094 2006-06-13 19:12:40Z dburken $
+// $Id: ossimSrtmHandler.cpp 11504 2007-08-06 09:29:44Z dburken $
 
 #include <ossim/elevation/ossimSrtmHandler.h>
 #include <ossim/support_data/ossimSrtmSupportData.h>
@@ -41,7 +38,7 @@ ossimSrtmHandler::ossimSrtmHandler(const ossimFilename& srtmFile)
       theLatSpacing(0.0),
       theLonSpacing(0.0),
       theNwCornerPost(),
-      theSwapper(NULL)
+      theSwapper(0)
 {
    ossimSrtmSupportData sd;
    if ( !sd.setFilename(srtmFile, false) )
@@ -52,14 +49,14 @@ ossimSrtmHandler::ossimSrtmHandler(const ossimFilename& srtmFile)
 
    theScalarType = sd.getScalarType();
    // SRTM is stored in big endian.
-   if ( ossimGetByteOrder() == OSSIM_LITTLE_ENDIAN)
+   if ( ossim::byteOrder() == OSSIM_LITTLE_ENDIAN)
    {
       theSwapper = new ossimEndian();
    }
 
    theNumberOfLines         = sd.getNumberOfLines();
    theNumberOfSamples       = sd.getNumberOfSamples();
-   theSrtmRecordSizeInBytes = theNumberOfSamples * ossimGetScalarSizeInBytes(theScalarType);
+   theSrtmRecordSizeInBytes = theNumberOfSamples * ossim::scalarSizeInBytes(theScalarType);
    theLatSpacing            = sd.getLatitudeSpacing();
    theLonSpacing            = sd.getLongitudeSpacing();
    theNwCornerPost.lon      = sd.getSouthwestLongitude();
@@ -95,7 +92,7 @@ ossimSrtmHandler::~ossimSrtmHandler()
    if (theSwapper)
    {
       delete theSwapper;
-      theSwapper = NULL;
+      theSwapper = 0;
    }
 
    theFileStr = 0;
@@ -113,13 +110,11 @@ double ossimSrtmHandler::getHeightAboveMSL(const ossimGpt& gpt)
    {
       case OSSIM_SINT16:
       {
-         return getHeightAboveMSLTemplate((ossim_sint16)0,
-                                          gpt);
+         return getHeightAboveMSLTemplate((ossim_sint16)0, gpt);
       }
       case OSSIM_FLOAT32:
       {
-         return getHeightAboveMSLTemplate((ossim_float32)0,
-                                          gpt);
+         return getHeightAboveMSLTemplate((ossim_float32)0, gpt);
       }
       default:
       {
@@ -127,7 +122,7 @@ double ossimSrtmHandler::getHeightAboveMSL(const ossimGpt& gpt)
       }
    }
 
-   return NULL_POST;
+   return ossim::nan();
 }
 
 template <class T>
@@ -159,14 +154,14 @@ double ossimSrtmHandler::getHeightAboveMSLTemplate(T dummy,
         y0 > (theNumberOfLines    - 2.0) )
    {
 //       std::cout << "ossimSrtmHandler::getHeightAboveMSLTemplate: leaving 1" << std::endl;
-      return theNullHeightValue;
+      return ossim::nan();
    }
 
    // We need an open stream to file from here on out...
    if (!open())
    {
 //       std::cout << "ossimSrtmHandler::getHeightAboveMSLTemplate: leaving 2" << std::endl;
-      return theNullHeightValue;
+      return ossim::nan();
    }
 
    T p[4];
@@ -209,7 +204,7 @@ double ossimSrtmHandler::getHeightAboveMSLTemplate(T dummy,
 
    if(theFileStr->fail())
    {
-      return theNullHeightValue;
+      return ossim::nan();
    }
    if (theSwapper)
    {
@@ -272,14 +267,14 @@ double ossimSrtmHandler::getHeightAboveMSLTemplate(T dummy,
       return (p00*w00 + p01*w01 + p10*w10 + p11*w11) / sum_weights;
    }
 
-   return theNullHeightValue;
+   return ossim::nan();
 }
 
 double ossimSrtmHandler::getPostValue(const ossimIpt& gridPt) const
 {
    static const char MODULE[] = "ossimSrtmHandler::getPostValue";
    
-   if(!theFileStr.valid()) return theNullHeightValue;
+   if(!theFileStr.valid()) return ossim::nan();
    
    // Do some error checking.
    if ( gridPt.x < 0.0 || gridPt.y < 0.0 ||
@@ -291,12 +286,12 @@ double ossimSrtmHandler::getPostValue(const ossimIpt& gridPt) const
          ossimNotify(ossimNotifyLevel_WARN)
             << "WARNING " << MODULE << ": No intersection..." << std::endl;
       }
-      return theNullHeightValue;
+      return ossim::nan();
    }
 
    if (!open())
    {
-      return theNullHeightValue;
+      return ossim::nan();
    }
 
    std::streampos offset = gridPt.y * theSrtmRecordSizeInBytes + gridPt.x * 2;
@@ -343,8 +338,8 @@ bool ossimSrtmHandler::open() const
    theFileStr = 0;
 
    
-   theFileStr = ossimStreamFactoryRegistry::instance()->createNewInputStream(theFilename,
-                                                                             std::ios::in | std::ios::binary);   
+   theFileStr = ossimStreamFactoryRegistry::instance()->createNewIFStream(theFilename,
+                                                                          std::ios::in | std::ios::binary);   
 
    if(theFileStr.valid())
    {

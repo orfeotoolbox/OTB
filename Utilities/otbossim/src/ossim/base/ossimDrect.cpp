@@ -11,7 +11,7 @@
 //
 // Contains class definition for ossimDrect.
 //*******************************************************************
-//  $Id: ossimDrect.cpp 9094 2006-06-13 19:12:40Z dburken $
+//  $Id: ossimDrect.cpp 11408 2007-07-27 13:43:00Z dburken $
 
 #include <iostream>
 
@@ -19,7 +19,8 @@
 #include <ossim/base/ossimIrect.h>
 #include <ossim/base/ossimPolygon.h>
 
-#define d_MIN(a,b)      (((a)<(b)) ? a : b)
+// XXX not replaced with std::max since the test is backward here
+//     and will give a different answer in the case of nan.
 #define d_MAX(a,b)      (((a)>(b)) ? a : b)
 
 static int
@@ -267,20 +268,20 @@ bool ossimDrect::intersects(const ossimDrect& rect) const
       return false;
    
    ossim_float64  ulx = d_MAX(rect.ul().x,ul().x);
-   ossim_float64  lrx = d_MIN(rect.lr().x,lr().x);
+   ossim_float64  lrx = std::min(rect.lr().x,lr().x);
    ossim_float64  uly, lry;
    bool rtn;
    
    if (theOrientMode == OSSIM_LEFT_HANDED)
    {
       uly  = d_MAX(rect.ul().y,ul().y);
-      lry  = d_MIN(rect.lr().y,lr().y);
+      lry  = std::min(rect.lr().y,lr().y);
       rtn = ((ulx <= lrx) && (uly <= lry));
    }
    else
    {
       uly  = d_MAX(rect.ul().y,ul().y);
-      lry  = d_MIN(rect.lr().y,lr().y);
+      lry  = std::min(rect.lr().y,lr().y);
       rtn = ((ulx <= lrx) && (uly >= lry));
    }
       
@@ -413,7 +414,7 @@ void ossimDrect::stretchToTileBoundary(const ossimDpt& widthHeight)
    {
       ul.x = theUlCorner.x;
       ul.y = theUlCorner.y;
-      if( !equals(fmod(theUlCorner.x, widthHeight.x), 0.0))
+      if( !ossim::almostEqual(fmod(theUlCorner.x, widthHeight.x), 0.0))
       {
          ul.x = ((long)(ul.x/ widthHeight.x))*widthHeight.x;
          if(ul.x > theUlCorner.x)
@@ -421,7 +422,7 @@ void ossimDrect::stretchToTileBoundary(const ossimDpt& widthHeight)
             ul.x -= widthHeight.x;
          }
       }
-      if( !equals((double)fmod(theUlCorner.y, widthHeight.y), (double)0.0) )
+      if( !ossim::almostEqual((double)fmod(theUlCorner.y, widthHeight.y), 0.0) )
       {
          ul.y = ((long)(ul.y / widthHeight.y))*widthHeight.y;
          if(ul.y < theUlCorner.y)
@@ -430,7 +431,7 @@ void ossimDrect::stretchToTileBoundary(const ossimDpt& widthHeight)
          }
       }
       
-      evenDivision = equals( fmod(theLrCorner.x, widthHeight.x), (double)0.0);
+      evenDivision = ossim::almostEqual( fmod(theLrCorner.x, widthHeight.x), 0.0);
       lr.x = theLrCorner.x;
       if(!evenDivision)
       {
@@ -441,7 +442,7 @@ void ossimDrect::stretchToTileBoundary(const ossimDpt& widthHeight)
          }
       }
 
-      evenDivision = equals(fmod(theLrCorner.y, widthHeight.y), 0);
+      evenDivision = ossim::almostEqual(fmod(theLrCorner.y, widthHeight.y), 0.0);
       lr.y = theLrCorner.y;
       if(!evenDivision)
       {
@@ -683,20 +684,20 @@ ossimDrect ossimDrect::clipToRect(const ossimDrect& rect)const
       return (*this);
 
    double x0 = d_MAX(rect.ul().x, ul().x);
-   double x1 = d_MIN(rect.lr().x, lr().x);
+   double x1 = std::min(rect.lr().x, lr().x);
    double y0, y1;
 
    if(!this->intersects(rect))
    {
-      return ossimDrect(OSSIM_DBL_NAN,
-                        OSSIM_DBL_NAN,
-                        OSSIM_DBL_NAN,
-                        OSSIM_DBL_NAN);
+      return ossimDrect(ossim::nan(),
+                        ossim::nan(),
+                        ossim::nan(),
+                        ossim::nan());
    }
    if (theOrientMode == OSSIM_LEFT_HANDED)
    {
       y0 = d_MAX(rect.ul().y, ul().y);
-      y1 = d_MIN(rect.lr().y, lr().y);
+      y1 = std::min(rect.lr().y, lr().y);
 
       if( (x1 < x0) || (y1 < y0) )
          return ossimDrect(ossimDpt(0,0), ossimDpt(0,0), theOrientMode);
@@ -705,7 +706,7 @@ ossimDrect ossimDrect::clipToRect(const ossimDrect& rect)const
    }
    else
    {
-      y1 = d_MIN(rect.ul().y,ul().y);
+      y1 = std::min(rect.ul().y,ul().y);
       y0 = d_MAX(rect.lr().y,lr().y);
 
       if((x1 < x0) || (y1 < y0))

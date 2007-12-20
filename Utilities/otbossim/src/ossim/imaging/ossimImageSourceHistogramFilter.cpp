@@ -6,7 +6,7 @@
 // Description:
 //
 //*************************************************************************
-// $Id: ossimImageSourceHistogramFilter.cpp 9963 2006-11-28 21:11:01Z gpotts $
+// $Id: ossimImageSourceHistogramFilter.cpp 11721 2007-09-13 13:19:34Z gpotts $
 #include <ossim/imaging/ossimImageSourceHistogramFilter.h>
 #include <ossim/base/ossimHistogramSource.h>
 #include <ossim/base/ossimMultiResLevelHistogram.h>
@@ -37,7 +37,7 @@ ossimImageSourceHistogramFilter::ossimImageSourceHistogramFilter()
 }
 
 ossimImageSourceHistogramFilter::ossimImageSourceHistogramFilter(ossimImageSource* inputSource,
-                                                                 ossimMultiResLevelHistogram* histogram)
+                                                                 ossimRefPtr<ossimMultiResLevelHistogram> histogram)
    : ossimImageSourceFilter(inputSource),
      theCurrentResLevel(0),
      theHistogram(histogram),
@@ -49,26 +49,14 @@ ossimImageSourceHistogramFilter::ossimImageSourceHistogramFilter(ossimImageSourc
 
 ossimImageSourceHistogramFilter::~ossimImageSourceHistogramFilter()
 {
-   if(theHistogram)
-   {
-      delete theHistogram;
-      theHistogram = NULL;
-   }   
 }
 
 
-void ossimImageSourceHistogramFilter::setHistogram(ossimMultiResLevelHistogram* histogram)
+void ossimImageSourceHistogramFilter::setHistogram(ossimRefPtr<ossimMultiResLevelHistogram> histogram)
 {
-   if(theHistogram&&
-      theHistogram!=histogram)
-   {
-      delete theHistogram;
-      theHistogram = NULL;
-      
-   }
    theHistogram = histogram;
    
-   if(theHistogram)
+   if(theHistogram.valid())
    {
       theHistogram->setBinCount(0, 0);
    }
@@ -76,7 +64,7 @@ void ossimImageSourceHistogramFilter::setHistogram(ossimMultiResLevelHistogram* 
 
 bool ossimImageSourceHistogramFilter::setHistogram(const ossimFilename& filename)
 {
-   ossimMultiResLevelHistogram* histogram = new ossimMultiResLevelHistogram;
+   ossimRefPtr<ossimMultiResLevelHistogram> histogram = new ossimMultiResLevelHistogram;
 
    bool result = histogram->importHistogram(filename);
 
@@ -85,16 +73,11 @@ bool ossimImageSourceHistogramFilter::setHistogram(const ossimFilename& filename
       theFilename = filename;
       setHistogram(histogram);
    }
-   else
-   {
-      delete histogram;
-      histogram = 0;
-   }
    
    return result;
 }
 
-ossimMultiResLevelHistogram* ossimImageSourceHistogramFilter::getHistogram()
+ossimRefPtr<ossimMultiResLevelHistogram> ossimImageSourceHistogramFilter::getHistogram()
 {
    if(!getInput(1))
    {
@@ -109,10 +92,10 @@ ossimMultiResLevelHistogram* ossimImageSourceHistogramFilter::getHistogram()
       }
    }
 
-   return (ossimMultiResLevelHistogram*)NULL;
+   return (ossimMultiResLevelHistogram*)0;
 }
 
-const ossimMultiResLevelHistogram* ossimImageSourceHistogramFilter::getHistogram()const
+const ossimRefPtr<ossimMultiResLevelHistogram> ossimImageSourceHistogramFilter::getHistogram()const
 {
    if(!getInput(1))
    {
@@ -127,7 +110,7 @@ const ossimMultiResLevelHistogram* ossimImageSourceHistogramFilter::getHistogram
       }
    }
 
-   return (ossimMultiResLevelHistogram*)NULL;
+   return (ossimMultiResLevelHistogram*)0;
 }
 
 bool ossimImageSourceHistogramFilter::canConnectMyInputTo(ossim_int32 inputIndex,
@@ -201,7 +184,7 @@ bool ossimImageSourceHistogramFilter::loadState(const ossimKeywordlist& kwl,
       }
       result = theHistogram->importHistogram(theFilename);
    }
-   if(theHistogram)
+   if(theHistogram.valid())
    {
       theHistogram->setBinCount(0, 0);
    }

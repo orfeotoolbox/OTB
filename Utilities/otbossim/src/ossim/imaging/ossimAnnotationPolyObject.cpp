@@ -6,7 +6,7 @@
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimAnnotationPolyObject.cpp 9094 2006-06-13 19:12:40Z dburken $
+// $Id: ossimAnnotationPolyObject.cpp 10867 2007-05-09 19:58:25Z gpotts $
 #include <ossim/imaging/ossimAnnotationPolyObject.h>
 #include <ossim/imaging/ossimAnnotationMultiPolyObject.h>
 #include <ossim/imaging/ossimAnnotationMultiLineObject.h>
@@ -78,19 +78,30 @@ bool ossimAnnotationPolyObject::intersects(const ossimDrect& rect)const
    {
       int vertexCount = thePolygon.getVertexCount();
       ossimDpt start, end;
-      start = thePolygon[vertexCount-1];
-      end   = thePolygon[0];
-      int i = 0;
-      do
+      int j = 0;
+      while(j<vertexCount)
       {
+         start = thePolygon[j];
+         end   = thePolygon[(j+1)%vertexCount];
          if(rect.clip(start, end))
          {
             return true;
          }
-         ++i;
-         start = thePolygon[i];
-         end   = thePolygon[i-1];
-      }while(i < vertexCount);
+         ++j;
+      }
+//       start = thePolygon[vertexCount-1];
+//       end   = thePolygon[0];
+//       int i = 0;
+//       do
+//       {
+//          if(rect.clip(start, end))
+//          {
+//             return true;
+//          }
+//          ++i;
+//          start = thePolygon[i];
+//          end   = thePolygon[i-1];
+//       }while(i < vertexCount);
    }
    else
    {
@@ -180,21 +191,58 @@ void ossimAnnotationPolyObject::draw(ossimRgbImage& anImage)const
       if(!theFillEnabled)
       {
          ossimDpt start, end;
-         start = thePolygon[vertexCount-1];
-         end   = thePolygon[0];
-         int i = 0;
-         do
+         if(thePolygon.getNumberOfVertices() == 1)
          {
+            start = thePolygon[0];
+            end   = thePolygon[0];
             if(clipRect.clip(start, end))
             {
-               anImage.drawLine(ossimIpt((int)start.x, (int)start.y),
-                                ossimIpt((int)end.x, (int)end.y));
+               anImage.drawLine(ossimIpt(start),
+                                ossimIpt(end));
             }
-            ++i;
-            start = thePolygon[i];
-            end   = thePolygon[i-1];
-         }while(i < vertexCount);
-         
+         }
+         else if(thePolygon.getNumberOfVertices() == 2)
+         {
+            start = thePolygon[0];
+            end   = thePolygon[1];
+            if(clipRect.clip(start, end))
+            {
+               anImage.drawLine(ossimIpt(start),
+                                ossimIpt(end));
+            }
+         }
+         else
+         {
+            int j = 0;
+            while(j<vertexCount)
+            {
+               start = thePolygon[j];
+               end   = thePolygon[(j+1)%vertexCount];
+               if(clipRect.clip(start, end))
+               {
+                  anImage.drawLine(ossimIpt(start),
+                                   ossimIpt(end));
+               }
+               ++j;
+            }
+         }
+#if 0
+               ossimDpt start, end;
+               start = thePolygon[vertexCount-1];
+               end   = thePolygon[0];
+               int i = 0;
+               do
+               {
+                  if(clipRect.clip(start, end))
+                  {
+                     anImage.drawLine(ossimIpt((int)start.x, (int)start.y),
+                                      ossimIpt((int)end.x, (int)end.y));
+                  }
+                  ++i;
+                  start = thePolygon[i];
+                  end   = thePolygon[i-1];
+               }while(i < vertexCount);
+#endif    
       }
       else
       {

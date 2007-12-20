@@ -14,7 +14,7 @@
 //              Initial coding.
 //<
 //*****************************************************************************
-//  $Id: ossimLsrPoint.h 9968 2006-11-29 14:01:53Z gpotts $
+//  $Id: ossimLsrPoint.h 11428 2007-07-27 18:44:18Z gpotts $
 
 #ifndef ossimLsrPoint_HEADER
 #define ossimLsrPoint_HEADER
@@ -92,12 +92,26 @@ public:
    double    z() const { return theData[2]; }
    double&   z()       { return theData[2]; }
 
+   
    ossimColumnVector3d&       data()           { return theData; }
    const ossimColumnVector3d& data()     const { return theData; }
 
    ossimLsrSpace&             lsrSpace()       { return theLsrSpace; }
    const ossimLsrSpace&       lsrSpace() const { return theLsrSpace; }
 
+   bool hasNans()const
+   {
+      return (ossim::isnan(theData[0])||
+              ossim::isnan(theData[1])||
+              ossim::isnan(theData[2]));
+   }
+
+   void makeNan()
+   {
+      theData[0] = ossim::nan();
+      theData[1] = ossim::nan();
+      theData[2] = ossim::nan();
+   }
    /*!
     * Debug Dump: 
     */
@@ -112,7 +126,7 @@ protected:
     * Convenience method used by several constructors for initializing theData
     * given an ECEF point. Assumes theLsrSpace has been previously initialized.
     */
-   void initialize(ossimEcefPoint ecef_point);
+   void initialize(const ossimEcefPoint& ecef_point);
    
    ossimColumnVector3d theData;
    ossimLsrSpace       theLsrSpace;

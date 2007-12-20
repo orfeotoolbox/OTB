@@ -6,7 +6,7 @@
 // Author:  Garrett Potts
 //
 //*******************************************************************
-//  $Id: ossimApplanixEcefModel.cpp 9094 2006-06-13 19:12:40Z dburken $
+//  $Id: ossimApplanixEcefModel.cpp 11483 2007-08-03 17:53:17Z gpotts $
 #include <sstream>
 #include <ossim/projection/ossimApplanixEcefModel.h>
 #include <ossim/base/ossimEllipsoid.h>
@@ -25,7 +25,7 @@ static ossimTrace traceDebug("ossimApplanixEcefModel:debug");
 RTTI_DEF1(ossimApplanixEcefModel, "ossimApplanixEcefModel", ossimSensorModel);
 
 #ifdef OSSIM_ID_ENABLED
-static const char OSSIM_ID[] = "$Id: ossimApplanixEcefModel.cpp 9094 2006-06-13 19:12:40Z dburken $";
+static const char OSSIM_ID[] = "$Id: ossimApplanixEcefModel.cpp 11483 2007-08-03 17:53:17Z gpotts $";
 #endif
 
 ossimApplanixEcefModel::ossimApplanixEcefModel()
@@ -104,10 +104,10 @@ void ossimApplanixEcefModel::imagingRay(const ossimDpt& image_point,
                                     -theFocalLength);
    ossimEcefVector     ecf_ray_dir (theCompositeMatrix*cam_ray_dir);
    ecf_ray_dir = ecf_ray_dir*(1.0/ecf_ray_dir.magnitude());
-   
+  
    image_ray.setOrigin(theAdjEcefPlatformPosition);
    image_ray.setDirection(ecf_ray_dir);
-   
+
 //    if(traceDebug())
 //    {
 //       ossimNotify(ossimNotifyLevel_DEBUG) << "ossimApplanixEcefModel::imagingRay: ..... leaving" << std::endl;
@@ -129,7 +129,8 @@ void ossimApplanixEcefModel::lineSampleToWorld(const ossimDpt& image_point,
    //***
    if (!insideImage(image_point))
    {
-      gpt = extrapolate(image_point);
+      gpt.makeNan();
+//       gpt = extrapolate(image_point);
       return;
    }
 
@@ -158,7 +159,8 @@ void ossimApplanixEcefModel::lineSampleHeightToWorld(const ossimDpt& image_point
 {
    if (!insideImage(image_point))
    {
-      worldPoint = extrapolate(image_point, heightEllipsoid);
+      worldPoint.makeNan();
+//       worldPoint = extrapolate(image_point, heightEllipsoid);
    }
    else
    {
@@ -180,7 +182,8 @@ void ossimApplanixEcefModel::worldToLineSample(const ossimGpt& world_point,
    {
       if (!(theBoundGndPolygon.pointWithin(world_point)))
       {
-         image_point = extrapolate(world_point);
+         image_point.makeNan();
+//          image_point = extrapolate(world_point);
          return;
       }         
    }
@@ -212,7 +215,6 @@ void ossimApplanixEcefModel::worldToLineSample(const ossimGpt& world_point,
 void ossimApplanixEcefModel::updateModel()
 {
    ossimGpt gpt;
-   
    ossimGpt wgs84Pt;
    double metersPerDegree = wgs84Pt.metersPerDegree().x;
    double degreePerMeter = 1.0/metersPerDegree;
@@ -225,7 +227,6 @@ void ossimApplanixEcefModel::updateModel()
    gpt.latd(gpt.latd() + latShift);
    gpt.lond(gpt.lond() + lonShift);
    theAdjEcefPlatformPosition = gpt;
-   
    ossimLsrSpace lsrSpace(theAdjEcefPlatformPosition, theHeading+computeParameterOffset(4));
 
    // make a left handed roational matrix;
@@ -623,12 +624,6 @@ bool ossimApplanixEcefModel::loadState(const ossimKeywordlist& kwl,
    }
    theRefGndPt = theEcefPlatformPosition;
    theRefGndPt.height(0.0);
-   if(compute_gsd_flag||computeGsdFlag)
-   {
-      theMeanGSD = OSSIM_DBL_NAN;
-      
-   }
-
 
    updateModel();
 

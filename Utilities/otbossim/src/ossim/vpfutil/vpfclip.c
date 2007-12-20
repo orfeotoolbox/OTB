@@ -48,6 +48,12 @@
 #include <ossim/vpfutil/vpftable.h>
 #include <ossim/vpfutil/vpfview.h>
 #include <ossim/vpfutil/vpfprim.h>
+#  ifndef min
+#    define min(a,b) ((a) <= (b) ? (a) : (b))
+#  endif
+#  ifndef max
+#    define max(a,b) ((a) <= (b) ? (b) : (a))
+#  endif
 
 typedef struct {
    float x1, y1, x2, y2;

@@ -11,7 +11,7 @@
 // LIMITATIONS: None.
 //
 //*****************************************************************************
-//  $Id: ossimIkonosRpcModel.h 10430 2007-02-07 01:05:22Z dburken $
+//  $Id: ossimIkonosRpcModel.h 11720 2007-09-12 14:59:30Z gpotts $
 
 #ifndef ossimIkonosRpcModel_HEADER
 #define ossimIkonosRpcModel_HEADER
@@ -43,7 +43,7 @@ public:
     */
    static void writeGeomTemplate(ostream& os);
 
-   bool parseFile(const ossimFilename& file);
+   virtual bool parseFile(const ossimFilename& file);
    
 protected:
    void finishConstruction();
@@ -52,7 +52,7 @@ protected:
 
    bool isNitf(const ossimFilename& filename);
    bool parseTiffFile(const ossimFilename& filename);
-   bool parseNitfFile(const ossimFilename& geom_file);
+/*    bool parseNitfFile(const ossimFilename& geom_file); */
    bool parseHdrData(const ossimFilename& data_file);
 
    TYPE_DATA

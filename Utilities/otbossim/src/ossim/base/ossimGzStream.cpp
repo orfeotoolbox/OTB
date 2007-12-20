@@ -18,8 +18,8 @@
 // ============================================================================
 //
 // File          : gzstream.C
-// Revision      : $Revision: 9094 $
-// Revision_date : $Date: 2006-06-13 21:12:40 +0200 (mar, 13 jun 2006) $
+// Revision      : $Revision: 11177 $
+// Revision_date : $Date: 2007-06-07 21:47:04 +0200 (Thu, 07 Jun 2007) $
 // Author(s)     : Deepak Bandyopadhyay, Lutz Kettner
 // 
 // Standard streambuf implementation following Nicolai Josuttis, "The 
@@ -32,19 +32,37 @@
 
 #include <iostream>
 #include <fstream>
-#include <string.h>  // for memcpy
+#include <cstring>  // for memcpy
 
-
-RTTI_DEF1(ossimIgzStream, "ossimIgzStream", ossimIStream);
-RTTI_DEF1(ossimOgzStream, "ossimOgzStream", ossimOStream);
-
-// ----------------------------------------------------------------------------
-// Internal classes to implement gzstream. See header file for user classes.
-// ----------------------------------------------------------------------------
 
 // --------------------------------------
 // class ossimGzStreamBuf:
 // --------------------------------------
+
+
+
+// ----------------------------------------------------------------------------
+// Internal classes to implement gzstream. See header file for user classes.
+// ----------------------------------------------------------------------------
+ossimGzStreamBuf::ossimGzStreamBuf()
+   : opened(false)
+{
+   setp( buffer, buffer + (bufferSize-1));
+   setg( buffer + 4,     // beginning of putback area
+         buffer + 4,     // read position
+         buffer + 4);    // end position      
+   // ASSERT: both input & output capabilities will not be used together
+}
+
+ossimGzStreamBuf::~ossimGzStreamBuf()
+{
+   close();
+}
+
+bool ossimGzStreamBuf::is_open() const
+{
+   return opened;
+}
 
 ossimGzStreamBuf* ossimGzStreamBuf::open( const char* name, int open_mode)
 {
@@ -106,34 +124,32 @@ std::streamsize ossimGzStreamBuf::xsgetn(char_type* __s,
    return num;
 }
 
-#if 0
-// int ossimGzStreamBuf::underflow()
-// {
-//    // used for input buffer only
-//    if ( gptr() && ( gptr() < egptr()))
-//       return * reinterpret_cast<unsigned char *>( gptr());
+int ossimGzStreamBuf::underflow()
+{
+   // used for input buffer only
+   if ( gptr() && ( gptr() < egptr()))
+      return * reinterpret_cast<unsigned char *>( gptr());
 
-//    if ( ! (mode & std::ios::in) || ! opened)
-//         return EOF;
-//     // Josuttis' implementation of inbuf
-//     int n_putback = gptr() - eback();
-//     if ( n_putback > 4)
-//         n_putback = 4;
-//     memcpy( buffer + (4 - n_putback), gptr() - n_putback, n_putback);
+   if ( ! (mode & std::ios::in) || ! opened)
+        return EOF;
+    // Josuttis' implementation of inbuf
+    int n_putback = gptr() - eback();
+    if ( n_putback > 4)
+        n_putback = 4;
+    memcpy( buffer + (4 - n_putback), gptr() - n_putback, n_putback);
 
-//     int num = gzread( file, buffer+4, bufferSize-4);
-//     if (num <= 0) // ERROR or EOF
-//         return EOF;
+    int num = gzread( file, buffer+4, bufferSize-4);
+    if (num <= 0) // ERROR or EOF
+        return EOF;
 
-//     // reset buffer pointers
-//     setg( buffer + (4 - n_putback),   // beginning of putback area
-//           buffer + 4,                 // read position
-//           buffer + 4 + num);          // end of buffer
+    // reset buffer pointers
+    setg( buffer + (4 - n_putback),   // beginning of putback area
+          buffer + 4,                 // read position
+          buffer + 4 + num);          // end of buffer
 
-//     // return next character
-//     return * reinterpret_cast<unsigned char *>( gptr());
-// }
-#endif
+    // return next character
+    return * reinterpret_cast<unsigned char *>( gptr());
+}
 
 int ossimGzStreamBuf::flush_buffer()
 {
@@ -204,9 +220,8 @@ ossimGzStreamBuf::pos_type ossimGzStreamBuf::seekoff(off_type t,
 // ossimGzStreamBuf::pos_type ossimGzStreamBuf::seekpos(pos_type posType, 
 //                                                      std::ios_base::openmode)
 // {
-//    std::cout << "WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW" << std::endl;
 //    int whence = 0;
-//    switch(dir)
+//    switch(posType)
 //    {
 //       case std::ios::beg:
 //       {
@@ -231,23 +246,41 @@ ossimGzStreamBuf::pos_type ossimGzStreamBuf::seekoff(off_type t,
 //    }
    
 //    return gzseek(file, t, whence);
-//}
+// }
 
 // --------------------------------------
 // class ossimGzStreamBase:
 // --------------------------------------
 
-void ossimIgzStream::open( const char* name, int open_mode)
+
+ossimIgzStream::ossimIgzStream()
+   : ossimIFStream()
 {
-   if ( ! buf.open( name, open_mode))
-   {
-      clear( rdstate() | std::ios::badbit);
-   }
+   init(&buf);
 }
 
-void ossimOgzStream::open( const char* name, int open_mode)
+ossimIgzStream::ossimIgzStream( const char* name,
+                                std::ios_base::openmode mode )
+   : ossimIFStream()
 {
-   if ( ! buf.open( name, open_mode))
+   init(&buf);
+   open(name, mode);
+}
+
+ossimIgzStream::~ossimIgzStream()
+{
+   buf.close();
+}
+
+ossimGzStreamBuf* ossimIgzStream::rdbuf()
+{
+   return &buf;
+}
+
+void ossimIgzStream::open( const char* name,
+                           std::ios_base::openmode mode )
+{
+   if ( ! buf.open( name, mode))
    {
       clear( rdstate() | std::ios::badbit);
    }
@@ -264,6 +297,48 @@ void ossimIgzStream::close()
    }
 }
 
+bool ossimIgzStream::is_open()const
+{
+   return buf.is_open();
+}
+
+bool ossimIgzStream::isCompressed()const
+{
+   return true;
+}
+
+ossimOgzStream::ossimOgzStream()
+   : ossimOFStream()
+{
+   init(&buf);
+}
+
+ossimOgzStream::ossimOgzStream( const char* name,
+                                std::ios_base::openmode mode )
+   : ossimOFStream()
+{
+   init(&buf);
+}
+
+ossimOgzStream::~ossimOgzStream()
+{
+   buf.close();
+}
+
+ossimGzStreamBuf* ossimOgzStream::rdbuf()
+{
+   return &buf;
+}
+
+void ossimOgzStream::open( const char* name,
+                           std::ios_base::openmode mode )
+{
+   if ( ! buf.open( name, mode))
+   {
+      clear( rdstate() | std::ios::badbit);
+   }
+}
+
 void ossimOgzStream::close()
 {
    if ( buf.is_open())
@@ -273,6 +348,16 @@ void ossimOgzStream::close()
          clear( rdstate() | std::ios::badbit);
       }
    }
+}
+
+bool ossimOgzStream::is_open()const
+{
+   return buf.is_open();
+}
+
+bool ossimOgzStream::isCompressed()const
+{
+   return true;
 }
 
 // ============================================================================

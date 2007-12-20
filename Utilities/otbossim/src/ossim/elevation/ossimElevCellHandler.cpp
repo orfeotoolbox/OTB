@@ -1,11 +1,7 @@
 //*****************************************************************************
 // FILE: ossimElevCellHandler.cc
 //
-// Copyright (C) 2001 ImageLinks, Inc.
-//
-// Copyright (C) 2001 ImageLinks, Inc.
-//
-// License:  LGPL
+// License:  See top level LICENSE.txt file.
 //
 // DESCRIPTION:
 //   Contains implementation of class ossimElevCellHandler. This is the base
@@ -19,6 +15,7 @@
 //              Initial coding.
 //<
 //*****************************************************************************
+// $Id: ossimElevCellHandler.cpp 12054 2007-11-15 20:53:13Z dburken $
 
 #include <ossim/elevation/ossimElevCellHandler.h>
 #include <ossim/base/ossimKeyword.h>
@@ -38,26 +35,46 @@ static const ossimKeyword DEM_FILENAME_KW ("dem_filename",
 static const ossimIpt ZERO_SIZE_IPT (0, 0);
 
 ossimElevCellHandler::ossimElevCellHandler ()
+   : ossimElevSource(),
+     theFilename(),
+     theMeanSpacing(0.0),
+     theAbsLE90(0.0),
+     theAbsCE90(0.0)
 {
 }
 
 ossimElevCellHandler::ossimElevCellHandler (const ossimElevCellHandler& src)
-   :ossimElevSource(src),
-    theFilename(src.theFilename)
+   : ossimElevSource(src),
+     theFilename    (src.theFilename),
+     theMeanSpacing (src.theMeanSpacing),
+     theAbsLE90     (src.theAbsLE90),
+     theAbsCE90     (src.theAbsCE90)
 {
 }
 
 ossimElevCellHandler::ossimElevCellHandler(const char* filename)
-   :theFilename (filename)
+   : ossimElevSource(),
+     theFilename(filename),
+     theMeanSpacing(0.0),
+     theAbsLE90(0.0),
+     theAbsCE90(0.0)
 {}
 
 ossimElevCellHandler::~ossimElevCellHandler()
 {}
 
-const ossimElevCellHandler& ossimElevCellHandler::operator=(const ossimElevCellHandler& rhs)
+const ossimElevCellHandler& ossimElevCellHandler::operator=(
+   const ossimElevCellHandler& rhs)
 {
-   theFilename = rhs.theFilename;
-   ossimElevSource::operator=( *(const ossimElevSource*)&rhs);
+   if (this != &rhs)
+   {
+      theFilename     = rhs.theFilename;
+      theMeanSpacing  = rhs.theMeanSpacing;
+      theAbsLE90      = rhs.theAbsLE90;
+      theAbsCE90      = rhs.theAbsCE90;
+      
+      ossimElevSource::operator=( *(const ossimElevSource*)&rhs);
+   }
    
    return *this;
 }

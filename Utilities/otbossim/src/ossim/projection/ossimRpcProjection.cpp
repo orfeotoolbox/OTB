@@ -8,7 +8,7 @@
 // AUTHOR: Garrett Potts
 //
 //*****************************************************************************
-//$Id: ossimRpcProjection.cpp 10078 2006-12-13 13:38:25Z gpotts $
+//$Id: ossimRpcProjection.cpp 12153 2007-12-10 15:13:54Z gpotts $
 
 #include <ossim/projection/ossimProjectionFactoryRegistry.h>
 #include <ossim/projection/ossimRpcProjection.h>
@@ -271,7 +271,7 @@ void ossimRpcProjection::worldToLineSample(const ossimGpt& ground_point,
    double nlon = (ground_point.lon - theLonOffset) / theLonScale;
    double nhgt;
 
-   if(ground_point.hgt == OSSIM_DBL_NAN)
+   if(ossim::isnan(ground_point.hgt))
    {
       nhgt = (theHgtScale - theHgtOffset) / theHgtScale;
    }
@@ -280,6 +280,7 @@ void ossimRpcProjection::worldToLineSample(const ossimGpt& ground_point,
       nhgt = (ground_point.hgt - theHgtOffset) / theHgtScale;
    }
 
+   
    //***
    // Compute the adjusted, normalized line (U) and sample (V):
    //***
@@ -302,8 +303,7 @@ void ossimRpcProjection::worldToLineSample(const ossimGpt& ground_point,
    // Now back out skew, scale, and offset adjustments:
    //***
    imgPt.line = U*(theLineScale+theIntrackScale) + theLineOffset + theIntrackOffset;
-//   img_pt.samp = V*(theSampScale+theCrtrackScale) + theSampOffset + theIntrackOffset - theYawSkew*img_pt.u;
-   imgPt.samp = V*(theSampScale+theCrtrackScale) + theSampOffset + theCrtrackOffset - theYawSkew*imgPt.u;
+   imgPt.samp = V*(theSampScale+theCrtrackScale) + theSampOffset + theCrtrackOffset;
 
 
    if (traceExec())  ossimNotify(ossimNotifyLevel_DEBUG) << "DEBUG ossimRpcProjection::worldToLineSample(): returning..." << std::endl;
@@ -375,7 +375,7 @@ void ossimRpcProjection::lineSampleHeightToWorld(const ossimDpt& image_point,
    
    double nhgt;
 
-   if(ellHeight == OSSIM_DBL_NAN)
+   if(ossim::isnan(ellHeight))
    {
      nhgt = (theHgtScale - theHgtOffset) / theHgtScale;  // norm height
    }
@@ -932,10 +932,9 @@ void ossimRpcProjection::adjustableParametersChanged()
    theCrtrackOffset    = computeParameterOffset(CRTRACK_OFFSET);
    theIntrackScale     = computeParameterOffset(INTRACK_SCALE);
    theCrtrackScale     = computeParameterOffset(CRTRACK_SCALE);
-//   theYawSkew          = sind(computeParameterOffset(YAW_OFFSET));
    double mapRotation  = computeParameterOffset(MAP_ROTATION);
-   theCosMapRot        = cosd(mapRotation);
-   theSinMapRot        = sind(mapRotation);
+   theCosMapRot        = ossim::cosd(mapRotation);
+   theSinMapRot        = ossim::sind(mapRotation);
 }
 
 bool
@@ -1029,9 +1028,9 @@ ossimRpcProjection::getForwardDeriv(int parmIdx, const ossimGpt& gpos, double hd
 double
 ossimRpcProjection::optimizeFit(const ossimTieGptSet& tieSet, double* targetVariance)
 {
-#if 0
+#if 1
    //NOTE : ignore targetVariance
-   ossimRpcSolver solver(true, true); //TBD : choices should be part of setupFromString
+   ossimRpcSolver solver(false, false); //TBD : choices should be part of setupFromString
 
    std::vector<ossimDpt> imagePoints;
    std::vector<ossimGpt> groundPoints;
@@ -1046,11 +1045,12 @@ ossimRpcProjection::optimizeFit(const ossimTieGptSet& tieSet, double* targetVari
       return -1.0;
    }
 
-   //update this
-   this->operator=(*optProj);
+   ossimKeywordlist kwl;
+   optProj->saveState(kwl);
+   this->loadState(kwl);
 
    return std::pow(solver.getRmsError(), 2); //variance in pixel^2
-#endif
+#else
    // COPIED from ossimRpcProjection
    //
    //
@@ -1176,6 +1176,7 @@ cout<<endl;
    //TBD
 
    return ki2/nobs;
+#endif
 }
 
 void

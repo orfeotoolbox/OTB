@@ -4,7 +4,7 @@
 // Author: Garrett Potts
 //
 //*************************************************************************
-// $Id: ossimProjectionFactoryRegistry.cpp 10225 2007-01-10 19:16:12Z dburken $
+// $Id: ossimProjectionFactoryRegistry.cpp 12082 2007-11-26 21:46:44Z dburken $
 #include <algorithm>
 #include <ossim/projection/ossimProjectionFactoryRegistry.h>
 #include <ossim/projection/ossimProjectionFactoryBase.h>
@@ -181,28 +181,6 @@ bool ossimProjectionFactoryRegistry::findFactory(ossimProjectionFactoryBase* fac
                      factory)!=theFactoryList.end());
 }
 
-std::list<ossimString> ossimProjectionFactoryRegistry::getList()const
-{
-   std::list<ossimString> result;
-   std::vector<ossimProjectionFactoryBase*>::const_iterator factory = theFactoryList.begin();
-
-   while(factory != theFactoryList.end())
-   {
-      if(*factory)
-      {
-         std::list<ossimString> temp = (*factory)->getList();
-         result.insert(result.end(),
-                       temp.begin(),
-                       temp.end());
-      }
-      
-      ++factory;
-   }
-   
-   return result;
-   
-}
-
 ossimObject* ossimProjectionFactoryRegistry::createObject(const ossimString& typeName)const
 {
    return createProjection(typeName);
@@ -214,22 +192,18 @@ ossimObject* ossimProjectionFactoryRegistry::createObject(const ossimKeywordlist
    return createProjection(kwl, prefix);
 }
 
-void ossimProjectionFactoryRegistry::getTypeNameList(std::vector<ossimString>& typeList)const
+void ossimProjectionFactoryRegistry::getTypeNameList(
+   std::vector<ossimString>& typeList)const
 {
-   std::vector<ossimString> result;
-   std::vector<ossimProjectionFactoryBase*>::const_iterator factory = theFactoryList.begin();
+   std::vector<ossimProjectionFactoryBase*>::const_iterator factory =
+      theFactoryList.begin();
 
    while(factory != theFactoryList.end())
    {
       if(*factory)
       {
-         result.clear();
-         (*factory)->getTypeNameList(result);
-         typeList.insert(typeList.end(),
-                         result.begin(),
-                         result.end());
+         (*factory)->getTypeNameList(typeList);
       }
-      
       ++factory;
    }   
 }

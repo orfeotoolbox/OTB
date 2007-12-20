@@ -12,7 +12,7 @@
 // Contains class declaration for ossimDtedTileSource.
 //
 //********************************************************************
-// $Id: ossimDtedTileSource.cpp 9094 2006-06-13 19:12:40Z dburken $
+// $Id: ossimDtedTileSource.cpp 11349 2007-07-23 13:30:44Z gpotts $
 
 #include <iostream>
 #include <fstream>
@@ -60,14 +60,14 @@ ossimDtedTileSource::ossimDtedTileSource()
       thePostSpacing(0.0, 0.0),
       theSwapBytesFlag(false)
 {
-   if (ossimGetByteOrder() == OSSIM_LITTLE_ENDIAN)
+   if (ossim::byteOrder() == OSSIM_LITTLE_ENDIAN)
    {
       theSwapBytesFlag = true;
    }
 
    // Set the tile size to the default.
    ossimIpt defaultTileSize;
-   ossimGetDefaultTileSize(defaultTileSize);
+   ossim::defaultTileSize(defaultTileSize);
    theTileWidth  = static_cast<ossim_uint32>(defaultTileSize.x);
    theTileHeight = static_cast<ossim_uint32>(defaultTileSize.y);
    
