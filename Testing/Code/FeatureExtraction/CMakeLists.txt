@@ -18,9 +18,22 @@ SET(EPS 0.001)
 #EPSILON est different de 0.0 pour les tests multiplateformes avec différentes options de compilation.
 SET(EPSILON 0.00000001)
 
-SET(FEATUREEXTRACTION_TESTS ${CXX_TEST_PATH}/otbFeatureExtractionTests)
+SET(FEATUREEXTRACTION_TESTS1 ${CXX_TEST_PATH}/otbFeatureExtractionTests1)
+SET(FEATUREEXTRACTION_TESTS2 ${CXX_TEST_PATH}/otbFeatureExtractionTests2)
+SET(FEATUREEXTRACTION_TESTS3 ${CXX_TEST_PATH}/otbFeatureExtractionTests3)
+SET(FEATUREEXTRACTION_TESTS4 ${CXX_TEST_PATH}/otbFeatureExtractionTests4)
+SET(FEATUREEXTRACTION_TESTS5 ${CXX_TEST_PATH}/otbFeatureExtractionTests5)
+SET(FEATUREEXTRACTION_TESTS6 ${CXX_TEST_PATH}/otbFeatureExtractionTests6)
+SET(FEATUREEXTRACTION_TESTS7 ${CXX_TEST_PATH}/otbFeatureExtractionTests7)
+SET(FEATUREEXTRACTION_TESTS8 ${CXX_TEST_PATH}/otbFeatureExtractionTests8)
+SET(FEATUREEXTRACTION_TESTS9 ${CXX_TEST_PATH}/otbFeatureExtractionTests9)
 
-ADD_TEST(feTvAlignMV2ITK ${FEATUREEXTRACTION_TESTS}  
+
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ 
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ otbFeatureExtractionTests1 ~~~~~~~~~~~~~~~~~~~~~
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ 
+
+ADD_TEST(feTvAlignMV2ITK ${FEATUREEXTRACTION_TESTS1}  
    --compare-ascii ${EPS}     ${BASELINE_FILES}/feAlign.txt
                         ${TEMP}/feAlign.txt
         otbAlignImageToPath 
@@ -29,90 +42,99 @@ ADD_TEST(feTvAlignMV2ITK ${FEATUREEXTRACTION_TESTS}
 
 # -------            otb::Draw   ------------------------------
 		
-ADD_TEST(feTvDrawPathTestCarre ${FEATUREEXTRACTION_TESTS}  
+ADD_TEST(feTvDrawPathTestCarre ${FEATUREEXTRACTION_TESTS1}  
   --compare-image ${TOL}  ${BASELINE}/feDrawPathDessinCarre.png
                           ${TEMP}/feDrawPathDessinCarre.png
         otbDrawPathDessinCarre
 	${INPUTDATA}/DeuxTraits.png
 	${TEMP}/feDrawPathDessinCarre.png)
 
-ADD_TEST(feTvDrawPathTestAlign ${FEATUREEXTRACTION_TESTS}  
+ADD_TEST(feTvDrawPathTestAlign ${FEATUREEXTRACTION_TESTS1}  
   --compare-image ${TOL}  ${BASELINE}/feDrawPathAlignDeuxTraits.png
                           ${TEMP}/feDrawPathAlignDeuxTraits.png
         otbDrawPathAlign
 	${INPUTDATA}/DeuxTraits.png
 	${TEMP}/feDrawPathAlignDeuxTraits.png)
 	
-ADD_TEST(feTuComplexMomentImage ${FEATUREEXTRACTION_TESTS}  
+ADD_TEST(feTuComplexMomentImage ${FEATUREEXTRACTION_TESTS1}  
         otbComplexMomentImage
 	${INPUTDATA}/TeteAToto.png 1 1)
 
-ADD_TEST(feTuHuImage ${FEATUREEXTRACTION_TESTS}  
+ADD_TEST(feTuHuImage ${FEATUREEXTRACTION_TESTS1}  
         otbHuImage
 	${INPUTDATA}/TeteAToto.png)
 
-ADD_TEST(feTuFlusserImage ${FEATUREEXTRACTION_TESTS}  
+ADD_TEST(feTuFlusserImage ${FEATUREEXTRACTION_TESTS1}  
         otbFlusserImage
 	${INPUTDATA}/TeteAToto.png)
 	
-ADD_TEST(feTuComplexMomentPathNew ${FEATUREEXTRACTION_TESTS}  
+ADD_TEST(feTuComplexMomentPathNew ${FEATUREEXTRACTION_TESTS1}  
         otbComplexMomentPathNew)
 	
-ADD_TEST(feTuComplexMomentPath ${FEATUREEXTRACTION_TESTS}  
+ADD_TEST(feTuComplexMomentPath ${FEATUREEXTRACTION_TESTS1}  
         otbComplexMomentPath 1 1)
 
-ADD_TEST(feTuComplexMomentPathFloat ${FEATUREEXTRACTION_TESTS}  
+ADD_TEST(feTuComplexMomentPathFloat ${FEATUREEXTRACTION_TESTS1}  
         otbComplexMomentPath 1 1)
 
-ADD_TEST(feTuHuPathNew ${FEATUREEXTRACTION_TESTS}  
+ADD_TEST(feTuHuPathNew ${FEATUREEXTRACTION_TESTS1}  
         otbHuPathNew)
 
-ADD_TEST(feTuHuPath ${FEATUREEXTRACTION_TESTS}  
+ADD_TEST(feTuHuPath ${FEATUREEXTRACTION_TESTS1}  
         otbHuPath)
 
-ADD_TEST(feTuFlusserPathNew ${FEATUREEXTRACTION_TESTS}  
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ 
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ otbFeatureExtractionTests2 ~~~~~~~~~~~~~~~~~~~~~
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ 
+
+ADD_TEST(feTuFlusserPathNew ${FEATUREEXTRACTION_TESTS2}  
         otbFlusserPathNew)
 
-ADD_TEST(feTuFlusserPath ${FEATUREEXTRACTION_TESTS}  
+ADD_TEST(feTuFlusserPath ${FEATUREEXTRACTION_TESTS2}  
         otbFlusserPath)
 	
 # -------            otb::OrientationPathFunction   ------------------------
  	
-ADD_TEST(feTuOrientationPathNew ${FEATUREEXTRACTION_TESTS}  
+ADD_TEST(feTuOrientationPathNew ${FEATUREEXTRACTION_TESTS2}  
         otbOrientationPathNew)
 
-ADD_TEST(feTuOrientationPath_000 ${FEATUREEXTRACTION_TESTS}  
+ADD_TEST(feTuOrientationPath_000 ${FEATUREEXTRACTION_TESTS2}  
         otbOrientationPath 0.0)
 
-ADD_TEST(feTuOrientationPath_045 ${FEATUREEXTRACTION_TESTS}  
+ADD_TEST(feTuOrientationPath_045 ${FEATUREEXTRACTION_TESTS2}  
         otbOrientationPath 45.0)
 
-ADD_TEST(feTuOrientationPath_090 ${FEATUREEXTRACTION_TESTS}  
+ADD_TEST(feTuOrientationPath_090 ${FEATUREEXTRACTION_TESTS2}  
         otbOrientationPath 90.0)
 
-ADD_TEST(feTuOrientationPath1_80 ${FEATUREEXTRACTION_TESTS}  
+ADD_TEST(feTuOrientationPath1_80 ${FEATUREEXTRACTION_TESTS2}  
         otbOrientationPath 180.0)
 
 # -------            otb::CompacityPathFunction   ------------------------
  	
-ADD_TEST(feTuCompacityPathNew ${FEATUREEXTRACTION_TESTS}  
+ADD_TEST(feTuCompacityPathNew ${FEATUREEXTRACTION_TESTS2}  
         otbCompacityPathNew)
 
-ADD_TEST(feTuCompacityPathCircle ${FEATUREEXTRACTION_TESTS}  
+ADD_TEST(feTuCompacityPathCircle ${FEATUREEXTRACTION_TESTS2}  
         otbCompacityPathCircle 1000)
 
-ADD_TEST(feTuCompacityPathSquare ${FEATUREEXTRACTION_TESTS}  
+ADD_TEST(feTuCompacityPathSquare ${FEATUREEXTRACTION_TESTS2}  
         otbCompacityPathSquare 10.0)
 
-ADD_TEST(feTuCompacityPathRectangle ${FEATUREEXTRACTION_TESTS}  
+ADD_TEST(feTuCompacityPathRectangle ${FEATUREEXTRACTION_TESTS2}  
         otbCompacityPathRectangle 10.0  20.0)
 	
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ 
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ otbFeatureExtractionTests3 ~~~~~~~~~~~~~~~~~~~~~
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ 
+
+
 # -------            otb::TouziEdgeDetector   ------------------------------
 
-ADD_TEST(feTuTouziNew ${FEATUREEXTRACTION_TESTS}  
+ADD_TEST(feTuTouziNew ${FEATUREEXTRACTION_TESTS3}  
         otbTouziEdgeDetectorNew)
 		
-ADD_TEST(feTvTouzi ${FEATUREEXTRACTION_TESTS}
+ADD_TEST(feTvTouzi ${FEATUREEXTRACTION_TESTS3}
   --compare-image ${EPSILON}  ${BASELINE}/feFiltreTouzi_amst_3.hdr
                           ${TEMP}/feFiltreTouzi_amst_3.hdr
         otbTouziEdgeDetector
@@ -120,7 +142,7 @@ ADD_TEST(feTvTouzi ${FEATUREEXTRACTION_TESTS}
 	${TEMP}/feFiltreTouzi_amst_3.hdr
 	3)
 	
-ADD_TEST(feTvTouziDir ${FEATUREEXTRACTION_TESTS}
+ADD_TEST(feTvTouziDir ${FEATUREEXTRACTION_TESTS3}
   --compare-image ${EPSILON}  ${BASELINE}/feFiltreTouzi_amst_dir_3.hdr
                           ${TEMP}/feFiltreTouzi_amst_dir_3.hdr  
         otbTouziEdgeDetectorDirection
@@ -130,15 +152,15 @@ ADD_TEST(feTvTouziDir ${FEATUREEXTRACTION_TESTS}
 
 # -------            otb::LineDetectorBase   ------------------------------
 
-ADD_TEST(feTuLineDetectorBaseNew ${FEATUREEXTRACTION_TESTS}  
+ADD_TEST(feTuLineDetectorBaseNew ${FEATUREEXTRACTION_TESTS3}  
         otbLineDetectorBaseNew)
 	
 # -------            otb::LineCorrelationDetector   ------------------------------
 	
-ADD_TEST(feTuLineCorrelationNew ${FEATUREEXTRACTION_TESTS}  
+ADD_TEST(feTuLineCorrelationNew ${FEATUREEXTRACTION_TESTS3}  
         otbLineCorrelationDetectorNew)
         
-ADD_TEST(feTvLineCorrelationLinear ${FEATUREEXTRACTION_TESTS}  
+ADD_TEST(feTvLineCorrelationLinear ${FEATUREEXTRACTION_TESTS3}  
   --compare-n-images ${EPSILON} 2
 			  ${BASELINE}/feFiltreLineCorrelationLinear_amst_2_3.hdr
                           ${TEMP}/feFiltreLineCorrelationLinear_amst_2_3.hdr
@@ -150,7 +172,7 @@ ADD_TEST(feTvLineCorrelationLinear ${FEATUREEXTRACTION_TESTS}
 	${TEMP}/feFiltreLineCorrelationLinear_amst_dir_2_3.hdr
 	2 3)
 		
-ADD_TEST(feTvLineCorrelation ${FEATUREEXTRACTION_TESTS}  
+ADD_TEST(feTvLineCorrelation ${FEATUREEXTRACTION_TESTS3}  
   --compare-image ${EPSILON}  ${BASELINE}/feFiltreLineCorrelation_amst_2_3.hdr
                           ${TEMP}/feFiltreLineCorrelation_amst_2_3.hdr
         otbLineCorrelationDetector
@@ -160,10 +182,10 @@ ADD_TEST(feTvLineCorrelation ${FEATUREEXTRACTION_TESTS}
 	
 # -------            otb::LineRatioDetector   ------------------------------
 
-ADD_TEST(feTuLineRatioNew ${FEATUREEXTRACTION_TESTS}  
+ADD_TEST(feTuLineRatioNew ${FEATUREEXTRACTION_TESTS3}  
         otbLineRatioDetectorNew)
         
-ADD_TEST(feTvLineRatioLinear ${FEATUREEXTRACTION_TESTS}  
+ADD_TEST(feTvLineRatioLinear ${FEATUREEXTRACTION_TESTS3}  
   --compare-n-images ${EPSILON} 2
 			  ${BASELINE}/feFiltreLineRatioLinear_amst_2_3.hdr
                           ${TEMP}/feFiltreLineRatioLinear_amst_2_3.hdr
@@ -175,7 +197,7 @@ ADD_TEST(feTvLineRatioLinear ${FEATUREEXTRACTION_TESTS}
 	${TEMP}/feFiltreLineRatioLinear_amst_dir_2_3.hdr
 	2 3)
 	
-ADD_TEST(feTvLineRatioLinearAmsters1 ${FEATUREEXTRACTION_TESTS}  
+ADD_TEST(feTvLineRatioLinearAmsters1 ${FEATUREEXTRACTION_TESTS3}  
   --compare-n-images ${EPSILON} 2
 			  ${BASELINE}/feFiltreLineRatioLinear_amst_ers1_ima_extrait.hdr
                           ${TEMP}/feFiltreLineRatioLinear_amst_ers1_ima_extrait.hdr
@@ -187,7 +209,7 @@ ADD_TEST(feTvLineRatioLinearAmsters1 ${FEATUREEXTRACTION_TESTS}
 	${TEMP}/feFiltreLineRatioLinear_amst_dir_ers1_ima_extrait.hdr
 	1 2)
 				
-ADD_TEST(feTvLineRatio ${FEATUREEXTRACTION_TESTS}  
+ADD_TEST(feTvLineRatio ${FEATUREEXTRACTION_TESTS3}  
   --compare-image ${EPSILON}  ${BASELINE}/feFiltreLineRatio_amst_2_3.hdr
                           ${TEMP}/feFiltreLineRatio_amst_2_3.hdr
         otbLineRatioDetector
@@ -196,12 +218,16 @@ ADD_TEST(feTvLineRatio ${FEATUREEXTRACTION_TESTS}
 	2 3)
 
 
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ 
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ otbFeatureExtractionTests4 ~~~~~~~~~~~~~~~~~~~~~
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ 
+
 # -------            otb::AssociativeSymmetricalSum   ------------------------------
 	
-ADD_TEST(feTuAssociativeSymmetricalSumNew ${FEATUREEXTRACTION_TESTS}  
+ADD_TEST(feTuAssociativeSymmetricalSumNew ${FEATUREEXTRACTION_TESTS4}  
         otbAssociativeSymmetricalSumNew)
         
-ADD_TEST(feTvAssociativeSymmetricalSum ${FEATUREEXTRACTION_TESTS}  
+ADD_TEST(feTvAssociativeSymmetricalSum ${FEATUREEXTRACTION_TESTS4}  
   --compare-image ${EPSILON}  ${BASELINE}/feFiltreASS_amst_2_3.hdr
                           ${TEMP}/feFiltreASS_amst_2_3.hdr
         otbAssociativeSymmetricalSum
@@ -211,10 +237,10 @@ ADD_TEST(feTvAssociativeSymmetricalSum ${FEATUREEXTRACTION_TESTS}
 
 # -------            otb::AssymmetricFusionOfLineDetector   ------------------------------
         
-ADD_TEST(feTuAssymmetricFusionOfLineDetectorNew ${FEATUREEXTRACTION_TESTS}  
+ADD_TEST(feTuAssymmetricFusionOfLineDetectorNew ${FEATUREEXTRACTION_TESTS4}  
         otbAssymmetricFusionOfLineDetectorNew)
        
-ADD_TEST(feTvAssymmetricFusionOfLineDetector ${FEATUREEXTRACTION_TESTS}  
+ADD_TEST(feTvAssymmetricFusionOfLineDetector ${FEATUREEXTRACTION_TESTS4}  
   --compare-image ${EPSILON}  ${BASELINE}/feFiltreAssymmetricFusion_amst_2_3.hdr
                           ${TEMP}/feFiltreAssymmetricFusion_amst_2_3.hdr
         otbAssymmetricFusionOfLineDetector
@@ -224,7 +250,7 @@ ADD_TEST(feTvAssymmetricFusionOfLineDetector ${FEATUREEXTRACTION_TESTS}
 
 # -------            otb::HarrisImage   ------------------------------
         
-ADD_TEST(feTvHarrisImage ${FEATUREEXTRACTION_TESTS}  
+ADD_TEST(feTvHarrisImage ${FEATUREEXTRACTION_TESTS4}  
   --compare-image ${TOL}  ${BASELINE}/feHarrisImage.png
                           ${TEMP}/feHarrisImage.png
         otbHarrisImage 
@@ -232,7 +258,7 @@ ADD_TEST(feTvHarrisImage ${FEATUREEXTRACTION_TESTS}
 	${TEMP}/feHarrisImage.png
 	1.0 2.0 0.0)
 
-ADD_TEST(feTvHarrisPoupee ${FEATUREEXTRACTION_TESTS}  
+ADD_TEST(feTvHarrisPoupee ${FEATUREEXTRACTION_TESTS4}  
   --compare-image ${TOL}  ${BASELINE}/feHarris_poupees.png
                           ${TEMP}/feHarris_poupees.png
         otbHarrisImage 
@@ -240,31 +266,31 @@ ADD_TEST(feTvHarrisPoupee ${FEATUREEXTRACTION_TESTS}
 	${TEMP}/feHarris_poupees.png
 	1.0 1.0 1.0)
 
-ADD_TEST(feTvMultiplyByScalarImage ${FEATUREEXTRACTION_TESTS}  
+ADD_TEST(feTvMultiplyByScalarImage ${FEATUREEXTRACTION_TESTS4}  
          otbMultiplyByScalarImageFilterTest)
 
-ADD_TEST(feTuThresholdImageToPointSet1 ${FEATUREEXTRACTION_TESTS}  
+ADD_TEST(feTuThresholdImageToPointSet1 ${FEATUREEXTRACTION_TESTS4}  
   --compare-ascii ${EPS} ${BASELINE_FILES}/feThresholdImageToPointSet_Threshold_0To255.txt
                    ${TEMP}/feThresholdImageToPointSet_Threshold_0To255.txt
         otbThresholdImageToPointSetTest 
 	${INPUTDATA}/small_points.hdr
 	${TEMP}/feThresholdImageToPointSet_Threshold_0To255.txt
 	0 255 )
-ADD_TEST(feTuThresholdImageToPointSet2 ${FEATUREEXTRACTION_TESTS}  
+ADD_TEST(feTuThresholdImageToPointSet2 ${FEATUREEXTRACTION_TESTS4}  
   --compare-ascii ${EPS} ${BASELINE_FILES}/feThresholdImageToPointSet_Threshold_0To0.txt
                    ${TEMP}/feThresholdImageToPointSet_Threshold_0To0.txt
         otbThresholdImageToPointSetTest 
 	${INPUTDATA}/small_points.hdr
 	${TEMP}/feThresholdImageToPointSet_Threshold_0To0.txt
 	0 0 )
-ADD_TEST(feTuThresholdImageToPointSet3 ${FEATUREEXTRACTION_TESTS}  
+ADD_TEST(feTuThresholdImageToPointSet3 ${FEATUREEXTRACTION_TESTS4}  
   --compare-ascii ${EPS} ${BASELINE_FILES}/feThresholdImageToPointSet_Threshold_255To255.txt
                    ${TEMP}/feThresholdImageToPointSet_Threshold_255To255.txt
         otbThresholdImageToPointSetTest 
 	${INPUTDATA}/small_points.hdr
 	${TEMP}/feThresholdImageToPointSet_Threshold_255To255.txt
 	255 255 )
-ADD_TEST(feTuThresholdImageToPointSet4 ${FEATUREEXTRACTION_TESTS}  
+ADD_TEST(feTuThresholdImageToPointSet4 ${FEATUREEXTRACTION_TESTS4}  
   --compare-ascii ${EPS} ${BASELINE_FILES}/feThresholdImageToPointSet_Threshold_1To200.txt
                    ${TEMP}/feThresholdImageToPointSet_Threshold_1To200.txt
         otbThresholdImageToPointSetTest 
@@ -272,27 +298,31 @@ ADD_TEST(feTuThresholdImageToPointSet4 ${FEATUREEXTRACTION_TESTS}
 	${TEMP}/feThresholdImageToPointSet_Threshold_1To200.txt
 	1 200 )
 
-ADD_TEST(feTvHarrisProduceImageToValidHarrisToPointSet ${FEATUREEXTRACTION_TESTS}  
+ADD_TEST(feTvHarrisProduceImageToValidHarrisToPointSet ${FEATUREEXTRACTION_TESTS4}  
         otbHarrisImage 
 	${INPUTDATA}/small_points.hdr
 	${TEMP}/small_points_harris.hdr
 	1.0 1.0 1.0)
 
-ADD_TEST(feTvHarrisToPointSet1 ${FEATUREEXTRACTION_TESTS}  
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ 
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ otbFeatureExtractionTests5 ~~~~~~~~~~~~~~~~~~~~~
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ 
+
+ADD_TEST(feTvHarrisToPointSet1 ${FEATUREEXTRACTION_TESTS5}  
   --compare-ascii ${EPS}        ${BASELINE_FILES}/feHarrisToPointSet_Threshold_2To255.txt
                                 ${TEMP}/feHarrisToPointSet_Threshold_2To255.txt
         otbHarrisToPointSet 
 	${INPUTDATA}/small_points.hdr
 	${TEMP}/feHarrisToPointSet_Threshold_2To255.txt
 	1.0 1.0 1.0 2.0 255.0)
-ADD_TEST(feTvHarrisToPointSet2 ${FEATUREEXTRACTION_TESTS}  
+ADD_TEST(feTvHarrisToPointSet2 ${FEATUREEXTRACTION_TESTS5}  
   --compare-ascii ${EPS}        ${BASELINE_FILES}/feHarrisToPointSet_Threshold_20To90.txt
                                 ${TEMP}/feHarrisToPointSet_Threshold_20To90.txt
         otbHarrisToPointSet 
 	${INPUTDATA}/small_points.hdr
 	${TEMP}/feHarrisToPointSet_Threshold_20To90.txt
 	1.0 1.0 1.0 20 90)
-ADD_TEST(feTvHarrisToPointSet3 ${FEATUREEXTRACTION_TESTS}  
+ADD_TEST(feTvHarrisToPointSet3 ${FEATUREEXTRACTION_TESTS5}  
   --compare-ascii ${EPS}        ${BASELINE_FILES}/feHarrisToPointSet_Threshold_100To160.txt
                                 ${TEMP}/feHarrisToPointSet_Threshold_100To160.txt
         otbHarrisToPointSet 
@@ -302,10 +332,10 @@ ADD_TEST(feTvHarrisToPointSet3 ${FEATUREEXTRACTION_TESTS}
 
 # -------            otb::PixelSuppressionByDirection   ------------------------------
 	
-ADD_TEST(feTuPixelSuppressionByDirectionNew ${FEATUREEXTRACTION_TESTS}  
+ADD_TEST(feTuPixelSuppressionByDirectionNew ${FEATUREEXTRACTION_TESTS5}  
         otbPixelSuppressionByDirectionNew)
         
-ADD_TEST(feTvPixelSuppressionByDirection ${FEATUREEXTRACTION_TESTS}
+ADD_TEST(feTvPixelSuppressionByDirection ${FEATUREEXTRACTION_TESTS5}
   --compare-image ${TOL}  ${BASELINE}/feFiltrePixelSuppr_ImageLine_2_0_3.hdr
                           ${TEMP}/feFiltrePixelSuppr_ImageLine_2_0_3.hdr
         otbPixelSuppressionByDirection
@@ -316,22 +346,22 @@ ADD_TEST(feTvPixelSuppressionByDirection ${FEATUREEXTRACTION_TESTS}
 
 # -------            otb::LocalHough   ------------------------------
 
-ADD_TEST(feTuLocalHoughNew ${FEATUREEXTRACTION_TESTS}  
+ADD_TEST(feTuLocalHoughNew ${FEATUREEXTRACTION_TESTS5}  
         otbLocalHoughNew)
 
-ADD_TEST(feTuLocalHough ${FEATUREEXTRACTION_TESTS}  
+ADD_TEST(feTuLocalHough ${FEATUREEXTRACTION_TESTS5}  
         otbLocalHough
 	${INPUTDATA}/ImageLine.bsq.hdr
 	32 32 2)
 
-#ROMAIN : Fichiers de comparaison diff�rents sous windows et linux
+#ROMAIN : different comparaison files under windows or linux
 IF(UNIX)
   SET(BASELINEDATA ${BASELINE}/feFiltreLocalHoughDraw_ImageLine_20_20_2.hdr)
 ELSE(UNIX)
   SET(BASELINEDATA ${BASELINE}/feFiltreLocalHoughDraw_ImageLine_20_20_2_win32.hdr)
 ENDIF(UNIX)
 
-ADD_TEST(feTvLocalHoughDraw ${FEATUREEXTRACTION_TESTS}  
+ADD_TEST(feTvLocalHoughDraw ${FEATUREEXTRACTION_TESTS5}  
   --compare-image ${EPSILON}  ${BASELINEDATA}
                           ${TEMP}/feFiltreLocalHoughDraw_ImageLine_20_20_2.hdr
         otbLocalHoughDraw
@@ -346,7 +376,7 @@ ELSE(UNIX)
   SET(BASELINEDATA ${BASELINE}/feFiltreLocalHoughDraw_Line_20_10_2_win32.png)
 ENDIF(UNIX)
 
-ADD_TEST(feTvLocalHoughDrawBis ${FEATUREEXTRACTION_TESTS}  
+ADD_TEST(feTvLocalHoughDrawBis ${FEATUREEXTRACTION_TESTS5}  
   --compare-image ${EPSILON}  ${BASELINEDATA}
                           ${TEMP}/feFiltreLocalHoughDraw_Line_20_10_2.png
         otbLocalHoughDraw
@@ -354,7 +384,7 @@ ADD_TEST(feTvLocalHoughDrawBis ${FEATUREEXTRACTION_TESTS}
 	${TEMP}/feFiltreLocalHoughDraw_Line_20_10_2.png
 	20 10 2)   
 
-#ADD_TEST(feTvLocalHoughDraw ${FEATUREEXTRACTION_TESTS}  
+#ADD_TEST(feTvLocalHoughDraw ${FEATUREEXTRACTION_TESTS5}  
 #  --compare-image ${EPSILON}  ${BASELINE}/feFiltreLocalHoughDraw_ImageLine_20_20_2.hdr
 #                          ${TEMP}/feFiltreLocalHoughDraw_ImageLine_20_20_2.hdr
 #        otbLocalHoughDraw
@@ -362,7 +392,7 @@ ADD_TEST(feTvLocalHoughDrawBis ${FEATUREEXTRACTION_TESTS}
 #	${TEMP}/feFiltreLocalHoughDraw_ImageLine_20_20_2.hdr
 #	20 20 1)        
 
-#ADD_TEST(feTvLocalHoughDrawBis ${FEATUREEXTRACTION_TESTS}  
+#ADD_TEST(feTvLocalHoughDrawBis ${FEATUREEXTRACTION_TESTS5}  
 #  --compare-image ${EPSILON}  ${BASELINE}/feFiltreLocalHoughDraw_Line_20_10_2.png
 #                          ${TEMP}/feFiltreLocalHoughDraw_Line_20_10_2.png
 #        otbLocalHoughDraw
@@ -372,10 +402,10 @@ ADD_TEST(feTvLocalHoughDrawBis ${FEATUREEXTRACTION_TESTS}
 	        
 # -------            otb::FillGapsFilter   ------------------------------        
 
-ADD_TEST(feTuFillGapsFilterNew ${FEATUREEXTRACTION_TESTS}  
+ADD_TEST(feTuFillGapsFilterNew ${FEATUREEXTRACTION_TESTS5}  
         otbFillGapsFilterNew)
         
-#ADD_TEST(feTuFillGapsFilter ${FEATUREEXTRACTION_TESTS}  
+#ADD_TEST(feTuFillGapsFilter ${FEATUREEXTRACTION_TESTS5}  
 #        otbFillGapsFilter
 #	${INPUTDATA}/vide.png
 #	${TEMP}/feFillGaps.png)
@@ -383,16 +413,20 @@ ADD_TEST(feTuFillGapsFilterNew ${FEATUREEXTRACTION_TESTS}
 # -------            otb::ImageToModulusAndDirectionImageFilter   ------------------------------
 # -------            otb::ModulusAndDirectionImageToImageFilter   ------------------------------
 
-ADD_TEST(feTuModulusAndDirectionImageFiltersNew ${FEATUREEXTRACTION_TESTS}  
+ADD_TEST(feTuModulusAndDirectionImageFiltersNew ${FEATUREEXTRACTION_TESTS5}  
         otbModulusAndDirectionImageFiltersNew)
 
+
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ 
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ otbFeatureExtractionTests6 ~~~~~~~~~~~~~~~~~~~~~
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ 
        
 # -------            otb::ExtractSegments   ------------------------------
 
-ADD_TEST(feTuExtractSegmentsNew ${FEATUREEXTRACTION_TESTS}  
+ADD_TEST(feTuExtractSegmentsNew ${FEATUREEXTRACTION_TESTS6}  
         otbExtractSegmentsNew)
         
-ADD_TEST(feTvExtractSegments ${FEATUREEXTRACTION_TESTS}  
+ADD_TEST(feTvExtractSegments ${FEATUREEXTRACTION_TESTS6}  
   --compare-image ${TOL}  ${BASELINE}/feFiltreExtractSegments_ImageLine.hdr
                           ${TEMP}/feFiltreExtractSegments_ImageLine.hdr
         otbExtractSegments
@@ -403,10 +437,10 @@ ADD_TEST(feTvExtractSegments ${FEATUREEXTRACTION_TESTS}
 
 # -------            otb::ForwardFourierMellinTransformImageFilter   -------------
 
-ADD_TEST(feTuForwardFourierMellinImageFilterNew ${FEATUREEXTRACTION_TESTS} 
+ADD_TEST(feTuForwardFourierMellinImageFilterNew ${FEATUREEXTRACTION_TESTS6} 
          otbFourierMellinImageFilterNew)  
 
-#ADD_TEST(feTuForwardFourierMellinImageFilterCroix ${FEATUREEXTRACTION_TESTS}  
+#ADD_TEST(feTuForwardFourierMellinImageFilterCroix ${FEATUREEXTRACTION_TESTS6}  
 # --compare-n-images ${TOL} 2 
 #		    ${BASELINE}/feFourierMellinCroixOutputModulus.hdr
 #		    ${TEMP}/feFourierMellinCroixOutputModulus.hdr
@@ -418,7 +452,7 @@ ADD_TEST(feTuForwardFourierMellinImageFilterNew ${FEATUREEXTRACTION_TESTS}
 #	${TEMP}/feFourierMellinCroixOutputPhase.hdr
 #)
 
-#ADD_TEST(feTuForwardFourierMellinImageFilter3Croix ${FEATUREEXTRACTION_TESTS}  
+#ADD_TEST(feTuForwardFourierMellinImageFilter3Croix ${FEATUREEXTRACTION_TESTS6}  
 #   --compare-n-images   ${TOL} 2  
 #			${BASELINE}/feFourierMellin3CroixOutputModulus.hdr
 #                        ${TEMP}/feFourierMellin3CroixOutputModulus.hdr
@@ -430,7 +464,7 @@ ADD_TEST(feTuForwardFourierMellinImageFilterNew ${FEATUREEXTRACTION_TESTS}
 #	${TEMP}/feFourierMellin3CroixOutputPhase.hdr
 #)
 
-ADD_TEST(feTvForwardFourierMellinImageFilter ${FEATUREEXTRACTION_TESTS}  
+ADD_TEST(feTvForwardFourierMellinImageFilter ${FEATUREEXTRACTION_TESTS6}  
   --compare-n-images ${EPSILON} 2 
 		     ${BASELINE}/feForwardFourierMellinImageFilterReal.hdr
                      ${TEMP}/feForwardFourierMellinImageFilterReal.hdr
@@ -444,10 +478,10 @@ ADD_TEST(feTvForwardFourierMellinImageFilter ${FEATUREEXTRACTION_TESTS}
 # -----------------------------------------------------------------------
 # -------            otb::ImageToEdgePathFilter   -------------
 
-ADD_TEST(feTuImageToEdgePathFilterNew ${FEATUREEXTRACTION_TESTS} 
+ADD_TEST(feTuImageToEdgePathFilterNew ${FEATUREEXTRACTION_TESTS6} 
          otbImageToEdgePathFilterNew) 
 
-ADD_TEST(feTvImageToEdgePathFilter ${FEATUREEXTRACTION_TESTS}  
+ADD_TEST(feTvImageToEdgePathFilter ${FEATUREEXTRACTION_TESTS6}  
   --compare-image ${EPSILON}
 		     ${BASELINE}/feImageToEdgePathFilter_rcc8_mire4.png
              ${TEMP}/feImageToEdgePathFilter_rcc8_mire4.png
@@ -456,7 +490,7 @@ ADD_TEST(feTvImageToEdgePathFilter ${FEATUREEXTRACTION_TESTS}
         ${TEMP}/feImageToEdgePathFilter_rcc8_mire4.png
         255
         )
-ADD_TEST(feTvImageToEdgePathFilterBis ${FEATUREEXTRACTION_TESTS}  
+ADD_TEST(feTvImageToEdgePathFilterBis ${FEATUREEXTRACTION_TESTS6}  
   --compare-image ${EPSILON}
 		     ${BASELINE}/feImageToEdgePathFilter_maskrom.png
              ${TEMP}/feImageToEdgePathFilter_maskrom.png
@@ -468,10 +502,10 @@ ADD_TEST(feTvImageToEdgePathFilterBis ${FEATUREEXTRACTION_TESTS}
 # -------            otb::NeighborhoodScalarProductFilter   -------------
 
 
-ADD_TEST(feTuNeighborhoodScalarProductFilterNew ${FEATUREEXTRACTION_TESTS} 
+ADD_TEST(feTuNeighborhoodScalarProductFilterNew ${FEATUREEXTRACTION_TESTS6} 
          otbNeighborhoodScalarProductFilterNew) 
 
-ADD_TEST(feTvNeighborhoodScalarProductFilter ${FEATUREEXTRACTION_TESTS}  
+ADD_TEST(feTvNeighborhoodScalarProductFilter ${FEATUREEXTRACTION_TESTS6}  
   --compare-n-images ${EPSILON} 2
 		      ${BASELINE}/feTvNeigborhoodScalarProductModulusOutput.hdr
 		      ${TEMP}/feTvNeigborhoodScalarProductModulusOutput.hdr
@@ -484,12 +518,16 @@ ADD_TEST(feTvNeighborhoodScalarProductFilter ${FEATUREEXTRACTION_TESTS}
         1.0
         )
 
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ 
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ otbFeatureExtractionTests7 ~~~~~~~~~~~~~~~~~~~~~
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ 
+
 # -------            otb::RemoveIsolatedByDirectionFilter   -------------
 
-ADD_TEST(feTuRemoveIsolatedByDirectionFilterNew ${FEATUREEXTRACTION_TESTS} 
+ADD_TEST(feTuRemoveIsolatedByDirectionFilterNew ${FEATUREEXTRACTION_TESTS7} 
          otbRemoveIsolatedByDirectionFilterNew) 
 
-ADD_TEST(feTvRemoveIsolatedByDirectionFilter ${FEATUREEXTRACTION_TESTS}  
+ADD_TEST(feTvRemoveIsolatedByDirectionFilter ${FEATUREEXTRACTION_TESTS7}  
   --compare-image ${EPSILON}
 		      ${BASELINE}/feTvRemoveIsolatedByDirectionOutput.hdr
 		      ${TEMP}/feTvRemoveIsolatedByDirectionOutput.hdr
@@ -501,10 +539,10 @@ ADD_TEST(feTvRemoveIsolatedByDirectionFilter ${FEATUREEXTRACTION_TESTS}
 
 # -------            otb::RemoveWrongDirectionFilter   -------------
 
-ADD_TEST(feTuRemoveWrongDirectionFilterNew ${FEATUREEXTRACTION_TESTS} 
+ADD_TEST(feTuRemoveWrongDirectionFilterNew ${FEATUREEXTRACTION_TESTS7} 
          otbRemoveWrongDirectionFilterNew) 
 
-ADD_TEST(feTvRemoveWrongDirectionFilter ${FEATUREEXTRACTION_TESTS}  
+ADD_TEST(feTvRemoveWrongDirectionFilter ${FEATUREEXTRACTION_TESTS7}  
   --compare-image ${EPSILON}
 		      ${BASELINE}/feTvRemoveWrongDirectionOutput.hdr
 		      ${TEMP}/feTvRemoveWrongDirectionOutput.hdr
@@ -516,10 +554,10 @@ ADD_TEST(feTvRemoveWrongDirectionFilter ${FEATUREEXTRACTION_TESTS}
 
 # -------            otb::NonMaxRemovalByDirectionFilter   -------------
 
-ADD_TEST(feTuNonMaxRemovalByDirectionFilterNew ${FEATUREEXTRACTION_TESTS} 
+ADD_TEST(feTuNonMaxRemovalByDirectionFilterNew ${FEATUREEXTRACTION_TESTS7} 
          otbNonMaxRemovalByDirectionFilterNew) 
 
-ADD_TEST(feTvNonMaxRemovalByDirectionFilter ${FEATUREEXTRACTION_TESTS}  
+ADD_TEST(feTvNonMaxRemovalByDirectionFilter ${FEATUREEXTRACTION_TESTS7}  
   --compare-image ${EPSILON}
 		      ${BASELINE}/feTvNonMaxRemovalByDirectionOutput.hdr
 		      ${TEMP}/feTvNonMaxRemovalByDirectionOutput.hdr
@@ -531,10 +569,10 @@ ADD_TEST(feTvNonMaxRemovalByDirectionFilter ${FEATUREEXTRACTION_TESTS}
 
 # -------            otb::VectorizationPathListFilter   -------------
 
-ADD_TEST(feTuVectorizationPathListFilterNew ${FEATUREEXTRACTION_TESTS} 
+ADD_TEST(feTuVectorizationPathListFilterNew ${FEATUREEXTRACTION_TESTS7} 
          otbVectorizationPathListFilterNew) 
 
-ADD_TEST(feTvVectorizationPathListFilterAsciiOutput ${FEATUREEXTRACTION_TESTS}  
+ADD_TEST(feTvVectorizationPathListFilterAsciiOutput ${FEATUREEXTRACTION_TESTS7}  
 --compare-ascii ${EPS}  
 		${BASELINE_FILES}/feTvVectorizationPathListOutput.txt
 		${TEMP}/feTvVectorizationPathListOutput.txt
@@ -546,7 +584,7 @@ ADD_TEST(feTvVectorizationPathListFilterAsciiOutput ${FEATUREEXTRACTION_TESTS}
        0.0005
         )
 
-ADD_TEST(feTvVectorizationPathListFilterImageOutput ${FEATUREEXTRACTION_TESTS}  
+ADD_TEST(feTvVectorizationPathListFilterImageOutput ${FEATUREEXTRACTION_TESTS7}  
 --compare-image ${EPSILON}
 		${BASELINE}/feTvVectorizationPathListOutput.png
 		${TEMP}/feTvVectorizationPathListOutput.png
@@ -560,10 +598,10 @@ ADD_TEST(feTvVectorizationPathListFilterImageOutput ${FEATUREEXTRACTION_TESTS}
 
 # -------            otb::SimplifyPathFilter   -------------
 
-ADD_TEST(feTuSimplifyPathListFilterNew ${FEATUREEXTRACTION_TESTS} 
+ADD_TEST(feTuSimplifyPathListFilterNew ${FEATUREEXTRACTION_TESTS7} 
          otbSimplifyPathListFilterNew) 
 
-ADD_TEST(feTvSimplifyPathListFilter ${FEATUREEXTRACTION_TESTS}  
+ADD_TEST(feTvSimplifyPathListFilter ${FEATUREEXTRACTION_TESTS7}  
 --compare-ascii ${EPS}  
 		${BASELINE_FILES}/feTvSimplifyPathOutput.txt
 		${TEMP}/feTvSimplifyPathOutput.txt
@@ -578,10 +616,10 @@ ADD_TEST(feTvSimplifyPathListFilter ${FEATUREEXTRACTION_TESTS}
 
 # -------            otb::BreakAngularPathListFilter   -------------
 
-ADD_TEST(feTuBreakAngularPathListFilterNew ${FEATUREEXTRACTION_TESTS} 
+ADD_TEST(feTuBreakAngularPathListFilterNew ${FEATUREEXTRACTION_TESTS7} 
          otbBreakAngularPathListFilterNew) 
 
-ADD_TEST(feTvBreakAngularPathListFilter ${FEATUREEXTRACTION_TESTS} 
+ADD_TEST(feTvBreakAngularPathListFilter ${FEATUREEXTRACTION_TESTS7} 
 --compare-ascii ${TOL}  ${BASELINE_FILES}/feBreakAngularPathListOutput.txt
          				${TEMP}/feBreakAngularPathListOutput.txt
          otbBreakAngularPathListFilter
@@ -597,12 +635,16 @@ ADD_TEST(feTvBreakAngularPathListFilter ${FEATUREEXTRACTION_TESTS}
          1 1  31 1 41 1  
          ) 
 
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ 
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ otbFeatureExtractionTests8 ~~~~~~~~~~~~~~~~~~~~~
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ 
+
 # -------            otb::RemoveTortuousPathListFilter   -------------
 
-ADD_TEST(feTuRemoveTortuousPathListFilterNew ${FEATUREEXTRACTION_TESTS} 
+ADD_TEST(feTuRemoveTortuousPathListFilterNew ${FEATUREEXTRACTION_TESTS8} 
          otbRemoveTortuousPathListFilterNew) 
 
-ADD_TEST(feTvRemoveTortuousPathListFilter ${FEATUREEXTRACTION_TESTS}  
+ADD_TEST(feTvRemoveTortuousPathListFilter ${FEATUREEXTRACTION_TESTS8}  
 --compare-ascii ${EPS}  
 		${BASELINE_FILES}/feTvRemoveTortuousPathOutput.txt
 		${TEMP}/feTvRemoveTortuousPathOutput.txt
@@ -617,11 +659,11 @@ ADD_TEST(feTvRemoveTortuousPathListFilter ${FEATUREEXTRACTION_TESTS}
 
 # -------            otb::LinkPathListFilter   -------------
 
-ADD_TEST(feTuLinkPathListFilterNew ${FEATUREEXTRACTION_TESTS} 
+ADD_TEST(feTuLinkPathListFilterNew ${FEATUREEXTRACTION_TESTS8} 
          otbLinkPathListFilterNew) 
 
 
-ADD_TEST(feTvLinkPathListFilter ${FEATUREEXTRACTION_TESTS}  
+ADD_TEST(feTvLinkPathListFilter ${FEATUREEXTRACTION_TESTS8}  
 --compare-ascii ${EPS}  
 		${BASELINE_FILES}/feTvLinkPathOutput.txt
 		${TEMP}/feTvLinkPathOutput.txt
@@ -644,10 +686,10 @@ ADD_TEST(feTvLinkPathListFilter ${FEATUREEXTRACTION_TESTS}
 
 # -------            otb::LikehoodPathListFilter   -------------
 
-ADD_TEST(feTuLikehoodPathListFilterNew ${FEATUREEXTRACTION_TESTS} 
+ADD_TEST(feTuLikehoodPathListFilterNew ${FEATUREEXTRACTION_TESTS8} 
          otbLikehoodPathListFilterNew) 
 
-ADD_TEST(feTvLikehoodPathListFilter ${FEATUREEXTRACTION_TESTS}  
+ADD_TEST(feTvLikehoodPathListFilter ${FEATUREEXTRACTION_TESTS8}  
 --compare-ascii ${EPS}  
 		${BASELINE_FILES}/feTvLikehoodPathOutput.txt
 		${TEMP}/feTvLikehoodPathOutput.txt
@@ -662,10 +704,10 @@ ADD_TEST(feTvLikehoodPathListFilter ${FEATUREEXTRACTION_TESTS}
 
 # -------            otb::RoadExtractionFilter   -------------
 
-ADD_TEST(feTuRoadExtractionFilterNew ${FEATUREEXTRACTION_TESTS} 
+ADD_TEST(feTuRoadExtractionFilterNew ${FEATUREEXTRACTION_TESTS8} 
          otbRoadExtractionFilterNew) 
 
-ADD_TEST(feTvRoadExtractionFilter ${FEATUREEXTRACTION_TESTS} 
+ADD_TEST(feTvRoadExtractionFilter ${FEATUREEXTRACTION_TESTS8} 
        --compare-image ${EPSILON}
 		${BASELINE}/feTvOutputRoadDetection.hdr
 		${TEMP}/feTvOutputRoadDetection.hdr
@@ -684,22 +726,24 @@ ADD_TEST(feTvRoadExtractionFilter ${FEATUREEXTRACTION_TESTS}
          ) 
 
 # -------            otb::AddCarvingPathFilter   -------------
-ADD_TEST(feTuAddCarvingPathFilterNew ${FEATUREEXTRACTION_TESTS} 
+ADD_TEST(feTuAddCarvingPathFilterNew ${FEATUREEXTRACTION_TESTS8} 
          otbAddCarvingPathFilterNew) 
          
 
 # -------            otb::RemoveCarvingPathFilter   -------------
-ADD_TEST(feTuRemoveCarvingPathFilterNew ${FEATUREEXTRACTION_TESTS} 
+ADD_TEST(feTuRemoveCarvingPathFilterNew ${FEATUREEXTRACTION_TESTS8} 
          otbRemoveCarvingPathFilterNew) 
 
 # -------            otb::ImageToCarvingPathFilter   -------------
-ADD_TEST(feTuImageToCarvingPathFilterNew ${FEATUREEXTRACTION_TESTS} 
+ADD_TEST(feTuImageToCarvingPathFilterNew ${FEATUREEXTRACTION_TESTS8} 
          otbImageToCarvingPathFilterNew) 
          
-
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ 
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ otbFeatureExtractionTest9 ~~~~~~~~~~~~~~~~~~~~~~
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ 
          
 # A enrichir
-SET(BasicFeatureExtraction_SRCS
+SET(BasicFeatureExtraction_SRCS1
 otbAlignImageToPath.cxx
 otbDrawPath.cxx
 otbDrawPathAlign.cxx
@@ -711,6 +755,8 @@ otbComplexMomentPath.cxx
 otbComplexMomentPathFloat.cxx
 otbHuPathNew.cxx
 otbHuPath.cxx
+)
+SET(BasicFeatureExtraction_SRCS2
 otbFlusserPathNew.cxx
 otbFlusserPath.cxx
 otbOrientationPathNew.cxx
@@ -719,6 +765,8 @@ otbCompacityPathNew.cxx
 otbCompacityPathCircle.cxx
 otbCompacityPathSquare.cxx
 otbCompacityPathRectangle.cxx
+)
+SET(BasicFeatureExtraction_SRCS3
 otbTouziEdgeDetectorNew.cxx
 otbTouziEdgeDetector.cxx
 otbTouziEdgeDetectorDirection.cxx
@@ -729,6 +777,8 @@ otbLineCorrelationDetector.cxx
 otbLineRatioDetectorNew.cxx
 otbLineRatioDetectorLinear.cxx
 otbLineRatioDetector.cxx
+)
+SET(BasicFeatureExtraction_SRCS4
 otbAssociativeSymmetricalSumNew.cxx
 otbAssociativeSymmetricalSum.cxx
 otbAssymmetricFusionOfLineDetectorNew.cxx
@@ -736,6 +786,8 @@ otbAssymmetricFusionOfLineDetector.cxx
 otbHarrisImage.cxx
 otbMultiplyByScalarImageTest.cxx
 otbThresholdImageToPointSetTest.cxx
+)
+SET(BasicFeatureExtraction_SRCS5
 otbHarrisToPointSet.cxx
 otbPixelSuppressionByDirectionNew.cxx
 otbPixelSuppressionByDirection.cxx
@@ -743,6 +795,9 @@ otbFillGapsFilterNew.cxx
 otbLocalHoughNew.cxx
 otbLocalHough.cxx
 otbLocalHoughDraw.cxx
+otbModulusAndDirectionImageFiltersNew.cxx
+)
+SET(BasicFeatureExtraction_SRCS6
 otbExtractSegmentsNew.cxx
 otbExtractSegments.cxx
 otbFourierMellinImageFilterNew.cxx
@@ -750,9 +805,10 @@ otbFourierMellinImageFilterTestFFT.cxx
 otbFourierMellinImageFilter.cxx
 otbImageToEdgePathFilterNew.cxx
 otbImageToEdgePathFilter.cxx
-otbModulusAndDirectionImageFiltersNew.cxx
 otbNeighborhoodScalarProductFilterNew.cxx
 otbNeighborhoodScalarProductFilter.cxx
+)
+SET(BasicFeatureExtraction_SRCS7
 otbRemoveIsolatedByDirectionFilterNew.cxx
 otbRemoveIsolatedByDirectionFilter.cxx
 otbRemoveWrongDirectionFilterNew.cxx
@@ -765,6 +821,8 @@ otbSimplifyPathListFilterNew.cxx
 otbSimplifyPathListFilter.cxx
 otbBreakAngularPathListFilterNew.cxx
 otbBreakAngularPathListFilter.cxx
+)
+SET(BasicFeatureExtraction_SRCS8
 otbRemoveTortuousPathListFilterNew.cxx
 otbRemoveTortuousPathListFilter.cxx
 otbLinkPathListFilterNew.cxx
@@ -777,12 +835,30 @@ otbAddCarvingPathFilterNew.cxx
 otbRemoveCarvingPathFilterNew.cxx
 otbImageToCarvingPathFilterNew.cxx
 )
+SET(BasicFeatureExtraction_SRCS9
+)
 
 
 INCLUDE_DIRECTORIES("${OTBTesting_BINARY_DIR}")
 
-ADD_EXECUTABLE(otbFeatureExtractionTests otbFeatureExtractionTests.cxx ${BasicFeatureExtraction_SRCS})
-TARGET_LINK_LIBRARIES(otbFeatureExtractionTests  OTBFeatureExtraction OTBCommon OTBIO gdal ITKIO ITKCommon ITKAlgorithms)
+ADD_EXECUTABLE(otbFeatureExtractionTests1 otbFeatureExtractionTests1.cxx ${BasicFeatureExtraction_SRCS1})
+TARGET_LINK_LIBRARIES(otbFeatureExtractionTests1  OTBFeatureExtraction OTBCommon OTBIO gdal ITKIO ITKCommon ITKAlgorithms)
+ADD_EXECUTABLE(otbFeatureExtractionTests2 otbFeatureExtractionTests2.cxx ${BasicFeatureExtraction_SRCS2})
+TARGET_LINK_LIBRARIES(otbFeatureExtractionTests2  OTBFeatureExtraction OTBCommon OTBIO gdal ITKIO ITKCommon ITKAlgorithms)
+ADD_EXECUTABLE(otbFeatureExtractionTests3 otbFeatureExtractionTests3.cxx ${BasicFeatureExtraction_SRCS3})
+TARGET_LINK_LIBRARIES(otbFeatureExtractionTests3  OTBFeatureExtraction OTBCommon OTBIO gdal ITKIO ITKCommon ITKAlgorithms)
+ADD_EXECUTABLE(otbFeatureExtractionTests4 otbFeatureExtractionTests4.cxx ${BasicFeatureExtraction_SRCS4})
+TARGET_LINK_LIBRARIES(otbFeatureExtractionTests4  OTBFeatureExtraction OTBCommon OTBIO gdal ITKIO ITKCommon ITKAlgorithms)
+ADD_EXECUTABLE(otbFeatureExtractionTests5 otbFeatureExtractionTests5.cxx ${BasicFeatureExtraction_SRCS5})
+TARGET_LINK_LIBRARIES(otbFeatureExtractionTests5  OTBFeatureExtraction OTBCommon OTBIO gdal ITKIO ITKCommon ITKAlgorithms)
+ADD_EXECUTABLE(otbFeatureExtractionTests6 otbFeatureExtractionTests6.cxx ${BasicFeatureExtraction_SRCS6})
+TARGET_LINK_LIBRARIES(otbFeatureExtractionTests6  OTBFeatureExtraction OTBCommon OTBIO gdal ITKIO ITKCommon ITKAlgorithms)
+ADD_EXECUTABLE(otbFeatureExtractionTests7 otbFeatureExtractionTests7.cxx ${BasicFeatureExtraction_SRCS7})
+TARGET_LINK_LIBRARIES(otbFeatureExtractionTests7  OTBFeatureExtraction OTBCommon OTBIO gdal ITKIO ITKCommon ITKAlgorithms)
+ADD_EXECUTABLE(otbFeatureExtractionTests8 otbFeatureExtractionTests8.cxx ${BasicFeatureExtraction_SRCS8})
+TARGET_LINK_LIBRARIES(otbFeatureExtractionTests8  OTBFeatureExtraction OTBCommon OTBIO gdal ITKIO ITKCommon ITKAlgorithms)
+ADD_EXECUTABLE(otbFeatureExtractionTests9 otbFeatureExtractionTests9.cxx ${BasicFeatureExtraction_SRCS9})
+TARGET_LINK_LIBRARIES(otbFeatureExtractionTests9  OTBFeatureExtraction OTBCommon OTBIO gdal ITKIO ITKCommon ITKAlgorithms)
 
 # ADD_EXECUTABLE(roadDetect roadDetect.cxx)
 # TARGET_LINK_LIBRARIES(roadDetect  OTBFeatureExtraction OTBCommon OTBIO gdal ITKIO ITKCommon ITKBasicFilters ITKAlgorithms)

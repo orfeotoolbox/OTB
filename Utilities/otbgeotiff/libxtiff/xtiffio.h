@@ -7,7 +7,8 @@
 #ifndef __xtiffio_h
 #define __xtiffio_h
 
-#include "tiffio.h"
+//#include "tiffio.h"   -> generates an compilation error
+#include "itk_tiff.h"
 #include "geo_config.h"
 
 /**

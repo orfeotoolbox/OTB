@@ -12,14 +12,20 @@ SET(TEMP ${OTBTesting_BINARY_DIR}/Temporary)
 SET(TOL 0.0)
 SET(EPSILON 0.000000000001)
 SET(EPSILON_10e6 0.000001)
-SET(RADIOMETRY_TESTS ${CXX_TEST_PATH}/otbRadiometryTests)
+SET(RADIOMETRY_TESTS1 ${CXX_TEST_PATH}/otbRadiometryTests1)
+SET(RADIOMETRY_TESTS2 ${CXX_TEST_PATH}/otbRadiometryTests2)
+SET(RADIOMETRY_TESTS3 ${CXX_TEST_PATH}/otbRadiometryTests3)
+SET(RADIOMETRY_TESTS4 ${CXX_TEST_PATH}/otbRadiometryTests4)
 
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ 
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ otbRADIOMETRY_TESTS1 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # -------            otb::RAndNIRVegetationIndexImageFilter   ------------------------------
 
-ADD_TEST(raTuRAndNIRVegetationIndexImageFilterNew ${RADIOMETRY_TESTS}  
+ADD_TEST(raTuRAndNIRVegetationIndexImageFilterNew ${RADIOMETRY_TESTS1}  
         otbRAndNIRVegetationIndexImageFilterNew )
         
-ADD_TEST(raTvNDVI_RAndNIRVegetationIndexImageFilter ${RADIOMETRY_TESTS}  
+ADD_TEST(raTvNDVI_RAndNIRVegetationIndexImageFilter ${RADIOMETRY_TESTS1}  
   --compare-image ${TOL}   ${BASELINE}/raRAndNIRVegetationIndex_NDVI_poupees_subc1c2.tif
                     ${TEMP}/raRAndNIRVegetationIndex_NDVI_poupees_subc1c2.tif
         otbRAndNIRVegetationIndexImageFilter
@@ -28,7 +34,7 @@ ADD_TEST(raTvNDVI_RAndNIRVegetationIndexImageFilter ${RADIOMETRY_TESTS}
 	${INPUTDATA}/poupees_sub_c2.png
 	${TEMP}/raRAndNIRVegetationIndex_NDVI_poupees_subc1c2.tif 
 	)
-ADD_TEST(raTvRVI_RAndNIRVegetationIndexImageFilter ${RADIOMETRY_TESTS}  
+ADD_TEST(raTvRVI_RAndNIRVegetationIndexImageFilter ${RADIOMETRY_TESTS1}  
   --compare-image ${TOL}   ${BASELINE}/raRAndNIRVegetationIndex_RVI_poupees_subc1c2.tif
                     ${TEMP}/raRAndNIRVegetationIndex_RVI_poupees_subc1c2.tif
         otbRAndNIRVegetationIndexImageFilter
@@ -37,7 +43,7 @@ ADD_TEST(raTvRVI_RAndNIRVegetationIndexImageFilter ${RADIOMETRY_TESTS}
 	${INPUTDATA}/poupees_sub_c2.png
 	${TEMP}/raRAndNIRVegetationIndex_RVI_poupees_subc1c2.tif 
 	)
-ADD_TEST(raTvPVI_RAndNIRVegetationIndexImageFilter ${RADIOMETRY_TESTS}  
+ADD_TEST(raTvPVI_RAndNIRVegetationIndexImageFilter ${RADIOMETRY_TESTS1}  
   --compare-image ${EPSILON}   ${BASELINE}/raRAndNIRVegetationIndex_PVI_poupees_subc1c2.tif
                     ${TEMP}/raRAndNIRVegetationIndex_PVI_poupees_subc1c2.tif
         otbSetASetBRAndNIRVegetationIndexImageFilter
@@ -48,7 +54,7 @@ ADD_TEST(raTvPVI_RAndNIRVegetationIndexImageFilter ${RADIOMETRY_TESTS}
 	${INPUTDATA}/poupees_sub_c2.png
 	${TEMP}/raRAndNIRVegetationIndex_PVI_poupees_subc1c2.tif 
 	)
-ADD_TEST(raTvSAVI_RAndNIRVegetationIndexImageFilter ${RADIOMETRY_TESTS}  
+ADD_TEST(raTvSAVI_RAndNIRVegetationIndexImageFilter ${RADIOMETRY_TESTS1}  
   --compare-image ${TOL}   ${BASELINE}/raRAndNIRVegetationIndex_SAVI_poupees_subc1c2.tif
                     ${TEMP}/raRAndNIRVegetationIndex_SAVI_poupees_subc1c2.tif
         otbRAndNIRVegetationIndexImageFilter
@@ -57,7 +63,7 @@ ADD_TEST(raTvSAVI_RAndNIRVegetationIndexImageFilter ${RADIOMETRY_TESTS}
 	${INPUTDATA}/poupees_sub_c2.png
 	${TEMP}/raRAndNIRVegetationIndex_SAVI_poupees_subc1c2.tif 
 	)
-ADD_TEST(raTvTSAVI_RAndNIRVegetationIndexImageFilter ${RADIOMETRY_TESTS}  
+ADD_TEST(raTvTSAVI_RAndNIRVegetationIndexImageFilter ${RADIOMETRY_TESTS1}  
   --compare-image ${EPSILON}   ${BASELINE}/raRAndNIRVegetationIndex_TSAVI_poupees_subc1c2.tif
                     ${TEMP}/raRAndNIRVegetationIndex_TSAVI_poupees_subc1c2.tif
         otbSetASetBRAndNIRVegetationIndexImageFilter
@@ -68,7 +74,7 @@ ADD_TEST(raTvTSAVI_RAndNIRVegetationIndexImageFilter ${RADIOMETRY_TESTS}
 	${INPUTDATA}/poupees_sub_c2.png
 	${TEMP}/raRAndNIRVegetationIndex_TSAVI_poupees_subc1c2.tif 
 	)
-ADD_TEST(raTvMSAVI_RAndNIRVegetationIndexImageFilter ${RADIOMETRY_TESTS}  
+ADD_TEST(raTvMSAVI_RAndNIRVegetationIndexImageFilter ${RADIOMETRY_TESTS1}  
   --compare-image ${TOL}   ${BASELINE}/raRAndNIRVegetationIndex_MSAVI_poupees_subc1c2.tif
                     ${TEMP}/raRAndNIRVegetationIndex_MSAVI_poupees_subc1c2.tif
         otbRAndNIRVegetationIndexImageFilter
@@ -80,10 +86,10 @@ ADD_TEST(raTvMSAVI_RAndNIRVegetationIndexImageFilter ${RADIOMETRY_TESTS}
 
 # -------            otb::MultiChannelRAndNIRVegetationIndexImageFilter   ------------------------------
 
-ADD_TEST(raTuMultiChannelRAndNIRVegetationIndexImageFilterNew ${RADIOMETRY_TESTS}  
+ADD_TEST(raTuMultiChannelRAndNIRVegetationIndexImageFilterNew ${RADIOMETRY_TESTS1}  
         otbMultiChannelRAndNIRVegetationIndexImageFilterNew )
 
-ADD_TEST(raTvNDVI_MultiChannelRAndNIRVegetationIndexImageFilter ${RADIOMETRY_TESTS}  
+ADD_TEST(raTvNDVI_MultiChannelRAndNIRVegetationIndexImageFilter ${RADIOMETRY_TESTS1}  
   --compare-image ${TOL}   ${BASELINE}/raRAndNIRVegetationIndex_NDVI_poupees_subc1c2.tif
                     ${TEMP}/raMultiChannelRAndNIRVegetationIndex_NDVI_poupees_subc1c2.tif
         otbMultiChannelRAndNIRVegetationIndexImageFilter
@@ -92,7 +98,7 @@ ADD_TEST(raTvNDVI_MultiChannelRAndNIRVegetationIndexImageFilter ${RADIOMETRY_TES
 	${TEMP}/raMultiChannelRAndNIRVegetationIndex_NDVI_poupees_subc1c2.tif 
 	1 2
 	)
-ADD_TEST(raTvRVI_MultiChannelRAndNIRVegetationIndexImageFilter ${RADIOMETRY_TESTS}  
+ADD_TEST(raTvRVI_MultiChannelRAndNIRVegetationIndexImageFilter ${RADIOMETRY_TESTS1}  
   --compare-image ${TOL}   ${BASELINE}/raRAndNIRVegetationIndex_RVI_poupees_subc1c2.tif
                     ${TEMP}/raMultiChannelRAndNIRVegetationIndex_RVI_poupees_subc1c2.tif
         otbMultiChannelRAndNIRVegetationIndexImageFilter
@@ -101,7 +107,7 @@ ADD_TEST(raTvRVI_MultiChannelRAndNIRVegetationIndexImageFilter ${RADIOMETRY_TEST
 	${TEMP}/raMultiChannelRAndNIRVegetationIndex_RVI_poupees_subc1c2.tif 
 	1 2
 	)
-ADD_TEST(raTvPVI_MultiChannelRAndNIRVegetationIndexImageFilter ${RADIOMETRY_TESTS}  
+ADD_TEST(raTvPVI_MultiChannelRAndNIRVegetationIndexImageFilter ${RADIOMETRY_TESTS1}  
   --compare-image ${EPSILON}   ${BASELINE}/raRAndNIRVegetationIndex_PVI_poupees_subc1c2.tif
                     ${TEMP}/raMultiChannelRAndNIRVegetationIndex_PVI_poupees_subc1c2.tif
         otbSetASetBMultiChannelRAndNIRVegetationIndexImageFilter
@@ -112,7 +118,7 @@ ADD_TEST(raTvPVI_MultiChannelRAndNIRVegetationIndexImageFilter ${RADIOMETRY_TEST
 	${TEMP}/raMultiChannelRAndNIRVegetationIndex_PVI_poupees_subc1c2.tif 
 	1 2
         )
-ADD_TEST(raTvSAVI_MultiChannelRAndNIRVegetationIndexImageFilter ${RADIOMETRY_TESTS}  
+ADD_TEST(raTvSAVI_MultiChannelRAndNIRVegetationIndexImageFilter ${RADIOMETRY_TESTS1}  
   --compare-image ${TOL}   ${BASELINE}/raRAndNIRVegetationIndex_SAVI_poupees_subc1c2.tif
                     ${TEMP}/raMultiChannelRAndNIRVegetationIndex_SAVI_poupees_subc1c2.tif
         otbMultiChannelRAndNIRVegetationIndexImageFilter
@@ -121,7 +127,7 @@ ADD_TEST(raTvSAVI_MultiChannelRAndNIRVegetationIndexImageFilter ${RADIOMETRY_TES
 	${TEMP}/raMultiChannelRAndNIRVegetationIndex_SAVI_poupees_subc1c2.tif 
 	1 2
 	)
-ADD_TEST(raTvTSAVI_MultiChannelRAndNIRVegetationIndexImageFilter ${RADIOMETRY_TESTS}  
+ADD_TEST(raTvTSAVI_MultiChannelRAndNIRVegetationIndexImageFilter ${RADIOMETRY_TESTS1}  
   --compare-image ${EPSILON}   ${BASELINE}/raRAndNIRVegetationIndex_TSAVI_poupees_subc1c2.tif
                     ${TEMP}/raMultiChannelRAndNIRVegetationIndex_TSAVI_poupees_subc1c2.tif
         otbSetASetBMultiChannelRAndNIRVegetationIndexImageFilter
@@ -132,7 +138,7 @@ ADD_TEST(raTvTSAVI_MultiChannelRAndNIRVegetationIndexImageFilter ${RADIOMETRY_TE
 	${TEMP}/raMultiChannelRAndNIRVegetationIndex_TSAVI_poupees_subc1c2.tif 
 	1 2
 	)
-ADD_TEST(raTvMSAVI_MultiChannelRAndNIRVegetationIndexImageFilter ${RADIOMETRY_TESTS}  
+ADD_TEST(raTvMSAVI_MultiChannelRAndNIRVegetationIndexImageFilter ${RADIOMETRY_TESTS1}  
   --compare-image ${TOL}   ${BASELINE}/raRAndNIRVegetationIndex_MSAVI_poupees_subc1c2.tif
                     ${TEMP}/raMultiChannelRAndNIRVegetationIndex_MSAVI_poupees_subc1c2.tif
         otbMultiChannelRAndNIRVegetationIndexImageFilter
@@ -142,14 +148,16 @@ ADD_TEST(raTvMSAVI_MultiChannelRAndNIRVegetationIndexImageFilter ${RADIOMETRY_TE
 	1 2
 	)
 
-
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ 
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ otbRADIOMETRY_TESTS2 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # -------            otb::RAndBAndNIRVegetationIndexImageFilter   ------------------------------
 
-ADD_TEST(raTuRAndBAndNIRVegetationIndexImageFilterNew ${RADIOMETRY_TESTS}  
+ADD_TEST(raTuRAndBAndNIRVegetationIndexImageFilterNew ${RADIOMETRY_TESTS2}  
         otbRAndBAndNIRVegetationIndexImageFilterNew )
 
 
-ADD_TEST(raTvARVI_RAndBAndNIRVegetationIndexImageFilter ${RADIOMETRY_TESTS}  
+ADD_TEST(raTvARVI_RAndBAndNIRVegetationIndexImageFilter ${RADIOMETRY_TESTS2}  
   --compare-image ${EPSILON}   ${BASELINE}/raRAndBAndNIRVegetationIndex_ARVI_poupees_subc1c2c3.tif
                     ${TEMP}/raRAndBAndNIRVegetationIndex_ARVI_poupees_subc1c2c3.tif
         otbRAndBAndNIRVegetationIndexImageFilter
@@ -163,10 +171,10 @@ ADD_TEST(raTvARVI_RAndBAndNIRVegetationIndexImageFilter ${RADIOMETRY_TESTS}
 
 # -------            otb::MultiChannelRAndBAndNIRVegetationIndexImageFilter   ------------------------------
 
-ADD_TEST(raTuMultiChannelRAndBAndNIRVegetationIndexImageFilterNew ${RADIOMETRY_TESTS}  
+ADD_TEST(raTuMultiChannelRAndBAndNIRVegetationIndexImageFilterNew ${RADIOMETRY_TESTS2}  
         otbMultiChannelRAndBAndNIRVegetationIndexImageFilterNew )
 
-ADD_TEST(raTvARVI_MultiChannelRAndBAndNIRVegetationIndexImageFilter ${RADIOMETRY_TESTS}  
+ADD_TEST(raTvARVI_MultiChannelRAndBAndNIRVegetationIndexImageFilter ${RADIOMETRY_TESTS2}  
   --compare-image ${EPSILON}   ${BASELINE}/raRAndBAndNIRVegetationIndex_ARVI_poupees_subc1c2c3.tif
                     ${TEMP}/raMultiChannelRAndBAndNIRVegetationIndex_ARVI_poupees_subc1c2c3.tif
         otbMultiChannelRAndBAndNIRVegetationIndexImageFilter
@@ -178,11 +186,11 @@ ADD_TEST(raTvARVI_MultiChannelRAndBAndNIRVegetationIndexImageFilter ${RADIOMETRY
 	)
         
 # -------            otb::ImageToLuminanceImageFilter   ------------------------------
-ADD_TEST(raTuImageToLuminanceImageFilterNew ${RADIOMETRY_TESTS}  
+ADD_TEST(raTuImageToLuminanceImageFilterNew ${RADIOMETRY_TESTS2}  
         otbImageToLuminanceImageFilterNew
 )
 
-ADD_TEST(raTvImageToLuminanceImageFilter ${RADIOMETRY_TESTS} 
+ADD_TEST(raTvImageToLuminanceImageFilter ${RADIOMETRY_TESTS2} 
   --compare-image ${EPSILON}  ${BASELINE}/raTvImageToLuminanceImageFilter.tif
                           ${TEMP}/raTvImageToLuminanceImageFilter.tif
         otbImageToLuminanceImageFilter
@@ -199,11 +207,11 @@ ADD_TEST(raTvImageToLuminanceImageFilter ${RADIOMETRY_TESTS}
          ) 
 
 # -------            otb::LuminanceToReflectanceImageFilter   ------------------------------
-ADD_TEST(raTuLuminanceToReflectanceImageFilterNew ${RADIOMETRY_TESTS}  
+ADD_TEST(raTuLuminanceToReflectanceImageFilterNew ${RADIOMETRY_TESTS2}  
         otbLuminanceToReflectanceImageFilterNew
 )
 
-ADD_TEST(raTvLuminanceToReflectanceImageFilter ${RADIOMETRY_TESTS} 
+ADD_TEST(raTvLuminanceToReflectanceImageFilter ${RADIOMETRY_TESTS2} 
   --compare-image ${EPSILON}  ${BASELINE}/raTvLuminanceToReflectanceImageFilterDsol.tif
                           ${TEMP}/raTvLuminanceToReflectanceImageFilterDsol.tif
         otbLuminanceToReflectanceImageFilter
@@ -217,7 +225,7 @@ ADD_TEST(raTvLuminanceToReflectanceImageFilter ${RADIOMETRY_TESTS}
 	0.9923885328 #d/d0 corresponding to the date 03/05
          ) 
 
-ADD_TEST(raTvLuminanceToReflectanceImageFilterDayMonth ${RADIOMETRY_TESTS} 
+ADD_TEST(raTvLuminanceToReflectanceImageFilterDayMonth ${RADIOMETRY_TESTS2} 
   --compare-image ${EPSILON}  ${BASELINE}/raTvLuminanceToReflectanceImageFilter.tif
                           ${TEMP}/raTvLuminanceToReflectanceImageFilterDayMounth.tif
         otbLuminanceToReflectanceImageFilter
@@ -235,11 +243,11 @@ ADD_TEST(raTvLuminanceToReflectanceImageFilterDayMonth ${RADIOMETRY_TESTS}
 
 
 # -------            otb::ImageToReflectanceImageFilter   ------------------------------
-ADD_TEST(raTuImageToReflectanceImageFilterNew ${RADIOMETRY_TESTS}  
+ADD_TEST(raTuImageToReflectanceImageFilterNew ${RADIOMETRY_TESTS2}  
         otbImageToReflectanceImageFilterNew
 )
 
-ADD_TEST(raTvImageToReflectanceImageFilter ${RADIOMETRY_TESTS} 
+ADD_TEST(raTvImageToReflectanceImageFilter ${RADIOMETRY_TESTS2} 
   --compare-image ${EPSILON}  ${BASELINE}/raTvImageToReflectanceImageFilterDsol.tif
                           ${TEMP}/raTvImageToReflectanceImageFilterDsol.tif
         otbImageToReflectanceImageFilter
@@ -261,7 +269,7 @@ ADD_TEST(raTvImageToReflectanceImageFilter ${RADIOMETRY_TESTS}
 	0.9923885328 #d/d0 corresponding to the date 03/05
          ) 
 
-ADD_TEST(raTvRomaniaImageToReflectance ${RADIOMETRY_TESTS} 
+ADD_TEST(raTvRomaniaImageToReflectance ${RADIOMETRY_TESTS2} 
   --compare-image ${EPSILON}  
 		  ${BASELINE}/raTvRomania_Reflectance.tif
                   ${TEMP}/raTvRomaniaReflectanceImage.tif
@@ -284,7 +292,7 @@ ADD_TEST(raTvRomaniaImageToReflectance ${RADIOMETRY_TESTS}
 	0.9889145564708814   #= sqrt(0.977952) d/d0 corresponding to the date 03/05 
         ) 
 
-ADD_TEST(raTvImageToReflectanceImageFilterDayMounth ${RADIOMETRY_TESTS} 
+ADD_TEST(raTvImageToReflectanceImageFilterDayMounth ${RADIOMETRY_TESTS2} 
   --compare-image ${EPSILON}  ${BASELINE}/raTvImageToReflectanceImageFilter.tif
                           ${TEMP}/raTvImageToReflectanceImageFilterDayMounth.tif
         otbImageToReflectanceImageFilter
@@ -307,14 +315,17 @@ ADD_TEST(raTvImageToReflectanceImageFilterDayMounth ${RADIOMETRY_TESTS}
 	5   #mounth
        )
 
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ 
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ otbRADIOMETRY_TESTS3 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # -------            otb::DEMCaracteristicsExtractor   ------------------------------
 
-ADD_TEST(raTuDEMCaracteristicsExtractorNew ${RADIOMETRY_TESTS}  
+ADD_TEST(raTuDEMCaracteristicsExtractorNew ${RADIOMETRY_TESTS3}  
         otbDEMCaracteristicsExtractorNew 
 )
 
 
-ADD_TEST(raTvDEMCaracteristicsExtractor ${RADIOMETRY_TESTS}  
+ADD_TEST(raTvDEMCaracteristicsExtractor ${RADIOMETRY_TESTS3}  
   --compare-n-images ${EPSILON} 4
                      ${BASELINE}/raTvDEMCaracteristicsExtractorSlop.tif
                      ${TEMP}/raTvDEMCaracteristicsExtractorSlop.tif
@@ -339,13 +350,13 @@ ADD_TEST(raTvDEMCaracteristicsExtractor ${RADIOMETRY_TESTS}
 
 # -------            otb::AtmosphericCorrectionParameters   ------------------------------
 # launch the FilterFunctionValues unitary test too.
-ADD_TEST(raTuAtmosphericCorrectionParametersNew ${RADIOMETRY_TESTS}  
+ADD_TEST(raTuAtmosphericCorrectionParametersNew ${RADIOMETRY_TESTS3}  
         otbAtmosphericCorrectionParametersNew
 )
 
 ##########           otb::FilterFunctionValues -------------------
 # in otbAtmosphericCorrectionParameters.h/.cxx
-ADD_TEST(raTvFilterFunctionValuesTest ${RADIOMETRY_TESTS}
+ADD_TEST(raTvFilterFunctionValuesTest ${RADIOMETRY_TESTS3}
     --compare-ascii ${TOL} ${BASELINE_FILES}/raTvFilterFunctionValuesTest.txt
                            ${TEMP}/raTvFilterFunctionValuesTest.txt
         otbFilterFunctionValuesTest
@@ -358,7 +369,7 @@ ADD_TEST(raTvFilterFunctionValuesTest ${RADIOMETRY_TESTS}
 
 
 ##########           otb::SIXSTraits -------------------
-ADD_TEST(raTvSIXSTraitsComputeAtmosphericParametersTest ${RADIOMETRY_TESTS}
+ADD_TEST(raTvSIXSTraitsComputeAtmosphericParametersTest ${RADIOMETRY_TESTS3}
     --compare-ascii ${EPSILON_10e6} ${BASELINE_FILES}/raTvSIXSTraitsComputeAtmosphericParametersTest.txt
                            ${TEMP}/raTvSIXSTraitsComputeAtmosphericParametersTest.txt
         otbSIXSTraitsComputeAtmosphericParametersTest
@@ -369,16 +380,16 @@ ADD_TEST(raTvSIXSTraitsComputeAtmosphericParametersTest ${RADIOMETRY_TESTS}
 
 
 # -------            otb::AtmosphericRadiativeTerms   ------------------------------
-ADD_TEST(raTuAtmosphericRadiativeTermsNew ${RADIOMETRY_TESTS}  
+ADD_TEST(raTuAtmosphericRadiativeTermsNew ${RADIOMETRY_TESTS3}  
         otbAtmosphericRadiativeTermsNew
 )
 
 
 # -------            otb::ReflectanceToSurfaceReflectanceImageFilter   ------------------------------
-ADD_TEST(raTuReflectanceToSurfaceReflectanceImageFilterNew ${RADIOMETRY_TESTS}  
+ADD_TEST(raTuReflectanceToSurfaceReflectanceImageFilterNew ${RADIOMETRY_TESTS3}  
         otbReflectanceToSurfaceReflectanceImageFilterNew
 )
-ADD_TEST(raTvReflectanceToSurfaceReflectanceImageFilter ${RADIOMETRY_TESTS} 
+ADD_TEST(raTvReflectanceToSurfaceReflectanceImageFilter ${RADIOMETRY_TESTS3} 
   --compare-image ${EPSILON}  ${BASELINE}/raTvReflectanceToSurfaceReflectanceImageFilter.tif
                               ${TEMP}/raTvReflectanceToSurfaceReflectanceImageFilter.tif
         otbReflectanceToSurfaceReflectanceImageFilter
@@ -392,7 +403,7 @@ ADD_TEST(raTvReflectanceToSurfaceReflectanceImageFilter ${RADIOMETRY_TESTS}
 	3 3 3 3 # upward transmittance
        )
 
-ADD_TEST(raTvRomaniaReflectanceToRomaniaSurfaceReflectanceImageFilter ${RADIOMETRY_TESTS} 
+ADD_TEST(raTvRomaniaReflectanceToRomaniaSurfaceReflectanceImageFilter ${RADIOMETRY_TESTS3} 
   --compare-image ${EPSILON}   
 		  ${BASELINE}/raTvRomania_Correction.tif
 		  ${TEMP}/raTvRomaniaReflectanceToRomaniaSurfaceReflectanceImageFilter.tif
@@ -407,11 +418,11 @@ ADD_TEST(raTvRomaniaReflectanceToRomaniaSurfaceReflectanceImageFilter ${RADIOMET
       )
 
 # -------            otb::SurfaceAdjencyEffect6SCorrectionSchemeFilter   ------------------------------
-ADD_TEST(raTuSurfaceAdjencyEffect6SCorrectionSchemeFilterNew ${RADIOMETRY_TESTS}  
+ADD_TEST(raTuSurfaceAdjencyEffect6SCorrectionSchemeFilterNew ${RADIOMETRY_TESTS3}  
         otbSurfaceAdjencyEffect6SCorrectionSchemeFilterNew
 )
 
-ADD_TEST(raTvSurfaceAdjencyEffect6SCorrectionSchemeFilter ${RADIOMETRY_TESTS}  
+ADD_TEST(raTvSurfaceAdjencyEffect6SCorrectionSchemeFilter ${RADIOMETRY_TESTS3}  
  --compare-image ${EPSILON}  ${BASELINE}/raTvSurfaceAdjencyEffect6SCorrectionSchemeFilter.tif
                              ${TEMP}/raTvSurfaceAdjencyEffect6SCorrectionSchemeFilter.tif
 # --compare-ascii ${EPSILON_10e6} ${BASELINE_FILES}/raTvSurfaceAdjencyEffect6SCorrectionSchemeFilterOutput6SVallues.txt
@@ -430,11 +441,14 @@ ADD_TEST(raTvSurfaceAdjencyEffect6SCorrectionSchemeFilter ${RADIOMETRY_TESTS}
 	${TEMP}/raTvSurfaceAdjencyEffect6SCorrectionSchemeFilterOutput6SVallues.txt
 )
 
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ 
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ otbRADIOMETRY_TESTS4 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # -------            otb::AtmosphericCorrectionParametersTo6SAtmosphericRadiativeTerms   ------------------------------
-ADD_TEST(raTuAtmosphericCorrectionParametersTo6SAtmosphericRadiativeTermsNew ${RADIOMETRY_TESTS}  
+ADD_TEST(raTuAtmosphericCorrectionParametersTo6SAtmosphericRadiativeTermsNew ${RADIOMETRY_TESTS4}  
         otbAtmosphericCorrectionParametersTo6SAtmosphericRadiativeTermsNew)
 
-ADD_TEST(raTvAtmosphericCorrectionParametersTo6SAtmosphericRadiativeTerms ${RADIOMETRY_TESTS}  
+ADD_TEST(raTvAtmosphericCorrectionParametersTo6SAtmosphericRadiativeTerms ${RADIOMETRY_TESTS4}  
 --compare-ascii ${EPSILON_10e6}  
 		${BASELINE_FILES}/raTvSIXSTraitsComputeAtmosphericParametersTest.txt
                 ${TEMP}/raTvCorrectionTo6SRadiative.txt
@@ -443,7 +457,7 @@ ADD_TEST(raTvAtmosphericCorrectionParametersTo6SAtmosphericRadiativeTerms ${RADI
                 ${TEMP}/raTvCorrectionTo6SRadiative.txt
 )
 
-ADD_TEST(raTvAtmosphericCorrectionSequencementTest ${RADIOMETRY_TESTS}  
+ADD_TEST(raTvAtmosphericCorrectionSequencementTest ${RADIOMETRY_TESTS4}  
         --compare-image ${TOL}  
 		${BASELINE}/raTvSurfaceAdjencyEffect6SCorrectionSchemeFilter.tif
                 ${TEMP}/raTvRomaniaAtmosphericCorrectionSequencement.tif
@@ -476,13 +490,15 @@ ADD_TEST(raTvAtmosphericCorrectionSequencementTest ${RADIOMETRY_TESTS}
 
 
 # A enrichir
-SET(Radiometry_SRCS
+SET(Radiometry_SRCS1
 otbRAndNIRVegetationIndexImageFilterNew.cxx
 otbRAndNIRVegetationIndexImageFilter.cxx
 otbSetASetBRAndNIRVegetationIndexImageFilter.cxx
 otbMultiChannelRAndNIRVegetationIndexImageFilterNew.cxx
 otbMultiChannelRAndNIRVegetationIndexImageFilter.cxx
 otbSetASetBMultiChannelRAndNIRVegetationIndexImageFilter.cxx
+)
+SET(Radiometry_SRCS2
 otbRAndBAndNIRVegetationIndexImageFilterNew.cxx
 otbRAndBAndNIRVegetationIndexImageFilter.cxx
 otbMultiChannelRAndBAndNIRVegetationIndexImageFilterNew.cxx
@@ -493,6 +509,8 @@ otbLuminanceToReflectanceImageFilterNew.cxx
 otbLuminanceToReflectanceImageFilter.cxx
 otbImageToReflectanceImageFilterNew.cxx
 otbImageToReflectanceImageFilter.cxx
+)
+SET(Radiometry_SRCS3
 otbDEMCaracteristicsExtractorNew.cxx
 otbDEMCaracteristicsExtractor.cxx
 otbAtmosphericCorrectionParametersNew.cxx
@@ -503,18 +521,24 @@ otbReflectanceToSurfaceReflectanceImageFilterNew.cxx
 otbReflectanceToSurfaceReflectanceImageFilter.cxx
 otbSurfaceAdjencyEffect6SCorrectionSchemeFilterNew.cxx
 otbSurfaceAdjencyEffect6SCorrectionSchemeFilter.cxx
+otbRomaniaReflectanceToRomaniaSurfaceReflectanceImageFilter.cxx
+)
+SET(Radiometry_SRCS4
 otbAtmosphericCorrectionParametersTo6SAtmosphericRadiativeTermsNew.cxx
 otbAtmosphericCorrectionParametersTo6SAtmosphericRadiativeTerms.cxx
-otbRomaniaReflectanceToRomaniaSurfaceReflectanceImageFilter.cxx
 otbAtmosphericCorrectionSequencement.cxx
 )
 
-
 INCLUDE_DIRECTORIES("${OTBTesting_BINARY_DIR}")
 
-ADD_EXECUTABLE(otbRadiometryTests otbRadiometryTests.cxx ${Radiometry_SRCS})
-TARGET_LINK_LIBRARIES(otbRadiometryTests OTBRadiometry OTBCommon OTBIO gdal ITKIO ITKCommon ITKBasicFilters otb6S)
-
+ADD_EXECUTABLE(otbRadiometryTests1 otbRadiometryTests1.cxx ${Radiometry_SRCS1})
+TARGET_LINK_LIBRARIES(otbRadiometryTests1 OTBRadiometry OTBCommon OTBIO gdal ITKIO ITKCommon ITKBasicFilters otb6S)
+ADD_EXECUTABLE(otbRadiometryTests2 otbRadiometryTests2.cxx ${Radiometry_SRCS2})
+TARGET_LINK_LIBRARIES(otbRadiometryTests2 OTBRadiometry OTBCommon OTBIO gdal ITKIO ITKCommon ITKBasicFilters otb6S)
+ADD_EXECUTABLE(otbRadiometryTests3 otbRadiometryTests3.cxx ${Radiometry_SRCS3})
+TARGET_LINK_LIBRARIES(otbRadiometryTests3 OTBRadiometry OTBCommon OTBIO gdal ITKIO ITKCommon ITKBasicFilters otb6S)
+ADD_EXECUTABLE(otbRadiometryTests4 otbRadiometryTests4.cxx ${Radiometry_SRCS4})
+TARGET_LINK_LIBRARIES(otbRadiometryTests4 OTBRadiometry OTBCommon OTBIO gdal ITKIO ITKCommon ITKBasicFilters otb6S)
 
 ENDIF( NOT OTB_DISABLE_CXX_TESTING )
 
