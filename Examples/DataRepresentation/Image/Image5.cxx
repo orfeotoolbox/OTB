@@ -28,7 +28,7 @@
 // class. This is particularly useful for interfacing with other software
 // systems. Many systems use a contiguous block of memory as a buffer
 // for image pixel data. The current example assumes this is the case and
-// feeds the buffer into an \doxygen{itk}{ImportImageFilter}, thereby producing an
+// feeds the buffer into an \doxygen{otb}{ImportImageFilter}, thereby producing an
 // Image as output.
 
 //
@@ -37,8 +37,8 @@
 // ImportImageFilter. This example is set up so that on execution, the
 // user must provide the name of an output file as a command-line argument.
 //
-// \index{itk::ImportImageFilter!Instantiation}
-// \index{itk::ImportImageFilter!Header}
+// \index{otb::ImportImageFilter!Instantiation}
+// \index{otb::ImportImageFilter!Header}
 //
 // First, the header file of the ImportImageFilter class must be
 // included.
@@ -47,8 +47,9 @@
 
 
 // Software Guide : BeginCodeSnippet
-#include "itkImage.h"
-#include "itkImportImageFilter.h"
+#include "otbImage.h"
+#include "otbImportImageFilter.h"
+
 // Software Guide : EndCodeSnippet
 
 #include "otbImageFileWriter.h"
@@ -73,7 +74,7 @@ int main(int argc, char * argv[])
   // Software Guide : BeginCodeSnippet 
   typedef unsigned char   PixelType;
   const unsigned int Dimension = 2;
-  typedef itk::Image< PixelType, Dimension > ImageType;
+  typedef otb::Image< PixelType, Dimension > ImageType;
   // Software Guide : EndCodeSnippet 
 
   
@@ -82,12 +83,12 @@ int main(int argc, char * argv[])
   // The type of the ImportImageFilter is instantiated in the
   // following line.
   //
-  // \index{itk::ImportImageFilter!Instantiation}
+  // \index{otb::ImportImageFilter!Instantiation}
   //
   //  Software Guide : EndLatex 
 
   // Software Guide : BeginCodeSnippet
-  typedef itk::ImportImageFilter< PixelType, Dimension >   ImportFilterType;
+  typedef otb::ImportImageFilter< ImageType >   ImportFilterType;
   // Software Guide : EndCodeSnippet
 
 
@@ -96,8 +97,8 @@ int main(int argc, char * argv[])
   //  A filter object created using the \code{New()} method is then
   //  assigned to a \code{SmartPointer}.
   //  
-  // \index{itk::ImportImageFilter!Pointer}
-  // \index{itk::ImportImageFilter!New()}
+  // \index{otb::ImportImageFilter!Pointer}
+  // \index{otb::ImportImageFilter!New()}
   // 
   // Software Guide : EndLatex 
   //
@@ -113,9 +114,9 @@ int main(int argc, char * argv[])
   // The image size should exactly match the number of pixels available in the
   // locally allocated buffer. 
   //
-  // \index{itk::ImportImageFilter!SetRegion()}
-  // \index{itk::ImportImageFilter!New()}
-  // \index{itk::ImportImageFilter!New()}
+  // \index{otb::ImportImageFilter!SetRegion()}
+  // \index{otb::ImportImageFilter!New()}
+  // \index{otb::ImportImageFilter!New()}
   //
   // Software Guide : EndLatex 
   //
@@ -188,10 +189,10 @@ int main(int argc, char * argv[])
   //
   //  Here we fill up the buffer with a binary sphere. We use simple
   //  \code{for()} loops here similar to those found in the C or FORTRAN
-  //  programming languages. Note that ITK
+  //  programming languages. Note that otb
   //  does not use \code{for()} loops in its internal code to access
   //  pixels. All pixel access tasks are instead performed using
-  //  \doxygen{itk}{ImageIterator}s that support the management of 
+  //  \doxygen{otb}{ImageIterator}s that support the management of 
   //  n-dimensional images.
   //
   //  Software Guide : EndLatex 
@@ -266,6 +267,7 @@ int main(int argc, char * argv[])
     {
     std::cerr << "Exception caught !" << std::endl;
     std::cerr << exp << std::endl;
+		return -1;
     }
 
 

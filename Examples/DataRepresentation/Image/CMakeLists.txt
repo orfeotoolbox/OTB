@@ -78,6 +78,9 @@ ADD_TEST(ImageAdaptor4Test2 ${EXE_TESTS}
 # ------- Image5Test----------
 
 ADD_TEST(Image5Test ${EXE_TESTS}
+	--compare-n-images ${TOL} 1
+	${BASELINE}/Image5.png
+	${TEMP}/Image5.png
 	Image5Test
 	${TEMP}/Image5.png
 )
