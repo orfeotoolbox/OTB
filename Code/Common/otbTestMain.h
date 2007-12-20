@@ -875,7 +875,6 @@ int RegressionTestImage (int cpt, const char *testImageFilename, const char *bas
     }
 
 
-    otbGenericMsgDebugMacro(<< "RegressionTestImage DifferenceThreshold : "<<toleranceDiffPixelImage);
   // Now compare the two images
   typedef itk::DifferenceImageFilter<ImageType,ImageType> DiffType;
   DiffType::Pointer diff = DiffType::New();
@@ -887,7 +886,12 @@ int RegressionTestImage (int cpt, const char *testImageFilename, const char *bas
   double status = diff->GetTotalDifference();
   unsigned long numberOfPixelsWithDifferences = diff->GetNumberOfPixelsWithDifferences();
 
-    otbGenericMsgDebugMacro(<< "Status diff->GetTotalDifference : "<<status);
+  //Write only one this message
+  if(reportErrors == 0)
+  {
+    otbGenericMsgDebugMacro(<< "RegressionTestImage DifferenceThreshold: "<<toleranceDiffPixelImage);
+    otbGenericMsgDebugMacro(<< "Status diff->GetTotalDifference:         "<<status<<" for "<<numberOfPixelsWithDifferences<<" pixel(s)." );
+  }
   // if there are discrepencies, create an diff image
   if (status && reportErrors)
     {
