@@ -19,8 +19,10 @@
 #define _otbImageWidgetFormBase_h
 
 #include "itkDataObject.h"
+#include "itkObjectFactory.h"
 #include "itkFixedArray.h"
 #include "itkImageRegion.h"
+#include "itkMacro.h"
 #include <FL/gl.h>
 
 namespace otb
@@ -29,21 +31,23 @@ namespace otb
  * \brief 
  *
  */
-class ImageWidgetFormBase
+class ITK_EXPORT ImageWidgetFormBase
   : public itk::DataObject
 {
  public:
   /** Standard class typedefs */
-  typedef ImageWidgetFormBase Self;
-  typedef itk::DataObject Superclass;
-  typedef itk::SmartPointer<Self> Pointer;
+  typedef ImageWidgetFormBase           Self;
+  typedef itk::DataObject               Superclass;
+  typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
-  
+
+   /** Runtime information */
+  itkTypeMacro(ImageWidgetFormBase,DataObject);
+
   /** Method for creation through the object factory */
   itkNewMacro(Self);
   
-  /** Runtime information */
-  itkTypeMacro(ImageWidgetFormBase,DataObject);
+ 
 
   typedef itk::FixedArray<float,4> ColorType;
   typedef itk::ImageRegion<2> RegionType;
