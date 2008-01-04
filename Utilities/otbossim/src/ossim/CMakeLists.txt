@@ -60,9 +60,10 @@ TARGET_LINK_LIBRARIES(otbossimElevation otbossimSupportData)
 #################ADD_LIBRARY(otbossimProjectionImaging ${ossim_imaging_SRCS} ${ossim_projection_SRCS} ${ossim_parallel_SRCS})
 #################TARGET_LINK_LIBRARIES(otbossimProjectionImaging otbossimElevation itktiff itkjpeg8 itkjpeg12 itkjpeg16)
 ################# CYRILLE MODIF POUR ESSAYER DE FAIRE MARCHE LE BOUSIN !!! #################
-ADD_LIBRARY(otbossimProjectionImaging ${ossim_imaging_SRCS} ${ossim_projection_SRCS} ${ossim_parallel_SRCS} ${ossim_base_SRCS})
+#ADD_LIBRARY(otbossimProjectionImaging ${ossim_imaging_SRCS} ${ossim_projection_SRCS} ${ossim_parallel_SRCS} ${ossim_base_SRCS})
+#TARGET_LINK_LIBRARIES(otbossimProjectionImaging otbossimElevation itktiff itkjpeg8 itkjpeg12 itkjpeg16)
+ADD_LIBRARY(otbossimProjectionImaging ${ossim_imaging_SRCS} ${ossim_projection_SRCS} ${ossim_parallel_SRCS})
 TARGET_LINK_LIBRARIES(otbossimProjectionImaging otbossimElevation itktiff itkjpeg8 itkjpeg12 itkjpeg16)
-
 
 IF(WIN32)
   IF(NOT BORLAND)
