@@ -36,13 +36,14 @@
 // \index{otb::VegetationIndex!header}
 //
 //
-// The following example illustrates the application of an atmospheric correction to
-// an optical multispectral image similar to Pl\'eaides.
-// This correction is made using in four steps :
+// The following example illustrates the application of atmospheric corrections to
+// an optical multispectral image similar to Pleiades.
+// These corrections are made in four steps :
 // \begin{itemize}
 // \item digital number to luminance correction;
 // \item luminance to refletance image conversion;
-// \item atmospheric correction for TOA to TOC reflectance estimation;
+// \item atmospheric correction for TOA (top of atmosphere) to TOC (top of canopy) 
+// reflectance estimation;
 // \item correction of the adjency effects taking into account the neighborhood contribution.
 // \end{itemize}
 // 
@@ -55,7 +56,7 @@
 // included.  For the numerical to luminance image, luminance to
 // refletance image, and reflectance to atmospheric correction image
 // corrections and the neighborhood correction, four header files are
-// needed.
+// required.
 // Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
@@ -68,9 +69,9 @@
 // Software Guide : BeginLatex
 // This chain uses the 6S radiative
 // transfer code to compute radiometric parameters. To manipulate 6S
-// data, three classes are needed (the first to store the metadata,
-// the second that calls 6S class and generates the information
-// which will be stored in the last class).
+// data, three classes are needed (the first one to store the metadata,
+// the second one that calls 6S class and generates the information
+// which will be stored in the last one).
 // Software Guide : EndLatex
 
 // Software Guide : BeginCodeSnippet
@@ -97,9 +98,9 @@ int main( int argc, char *argv[] )
   
   //  Software Guide : BeginLatex
   //  
-  // The image types are now defined using pixel types and 
+  // Image types are now defined using pixel types and 
   // dimension. The input image is defined as an \doxygen{otb}{VectorImage}, 
-  // the output is a \doxygen{otb}{VectorImage}. To simplify, input and 
+  // the output image is a \doxygen{otb}{VectorImage}. To simplify, input and 
   // output image types are the same one.
   //
   // Software Guide : EndLatex 
@@ -278,7 +279,7 @@ int main( int argc, char *argv[] )
   // \doxygen{otb}{AtmosphericRadiativeTerms} class instance.
   // For this,
   // \doxygen{otb}{AtmosphericCorrectionParametersTo6SAtmosphericRadiativeTerms}
-  // \doxygen{otb}{AtmosphericCorrectionParameters}
+  // \doxygen{otb}{AtmosphericCorrectionParameters} and 
   // \doxygen{otb}{AtmosphericRadiativeTerms}
   // types are defined and instancied. 
   //
@@ -437,8 +438,8 @@ int main( int argc, char *argv[] )
 
 //-------------------------------
   // Software Guide : BeginLatex
-  // The atmospheric correction can now start.
-  // An instance of \doxygen{otb}{ReflectanceToSurfaceReflectanceImageFilter} is created.
+  // Atmospheric corrections can now start.
+  // First, an instance of \doxygen{otb}{ReflectanceToSurfaceReflectanceImageFilter} is created.
   // Software Guide : EndLatex 
 
   // Software Guide : BeginCodeSnippet
@@ -456,7 +457,7 @@ int main( int argc, char *argv[] )
   // of the atmospheric radiative functions corresponding to the geometrical conditions 
   // of the observation and to the atmospheric components.
   // The process required to be applied on each pixel of the image, band by band with 
-  // the folowing formula:
+  // the following formula:
   // 
   // \begin{equation}
   // \rho_{S}^{unif} = \frac{ \mathbf{A} }{ 1 + Sx\mathbf{A} }
@@ -536,10 +537,10 @@ int main( int argc, char *argv[] )
   //
   // The needs four input informations:
   // \begin{itemize}
-  // \item The radiometric informations (the output of the AtmosphericCorrectionParametersTo6SRadiativeTerms filter);
+  // \item Radiometric informations (the output of the AtmosphericCorrectionParametersTo6SRadiativeTerms filter);
   // \item The zenithal viewing angle;
   // \item The neighborhood window radius;
-  // \item The pixel spacing in km.
+  // \item The pixel spacing in kilometers.
   // \end{itemize} 
   //
   // Software Guide : EndLatex
@@ -555,7 +556,7 @@ int main( int argc, char *argv[] )
   //  
   // At this step, each filter of the chain is instancied and every one has its 
   // input paramters set. A name can be given to the output image and each filter
-  //  can linked to other to create the final treatment chain.
+  //  can linked to other to create the final processing chain.
   //  
   //  Software Guide : EndLatex 
 
@@ -576,7 +577,7 @@ int main( int argc, char *argv[] )
  //  Software Guide : BeginLatex
   //  
   //  The invocation of the \code{Update()} method on the writer triggers the
-  //  execution of the pipeline.  It is recommended to place update calls in a
+  //  execution of the pipeline.  It is recommended to place this call in a
   //  \code{try/catch} block in case errors occur and exceptions are thrown.
   //
   //  Software Guide : EndLatex 
