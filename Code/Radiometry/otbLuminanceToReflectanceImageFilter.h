@@ -35,7 +35,7 @@ namespace otb
   namespace Functor
     {
       /** Functor::LuminanceToReflectanceImageFunctor
-       *  Multiply by Pi and by an illumination correction coefficient the qutient between the input and the given solar illumination.
+       *  Multiply by Pi and by an illumination correction coefficient the quotient between the input and the given solar illumination.
        *
        * \ingroup Functor
        */
@@ -75,7 +75,7 @@ namespace otb
     }
 
   /** \class LuminanceToReflectanceImageFilter
-   *  \brief Transform a luminance image into the reflectance. For this it uses the functor LuminanceToReflectanceImaeFunctor 
+   *  \brief Transform a luminance image into the reflectance. For this it uses the functor LuminanceToReflectanceImageFunctor 
    *   calling for each component of each pixel. 
    *
    * \ingroup ImageToLuminanceImageFunctor
