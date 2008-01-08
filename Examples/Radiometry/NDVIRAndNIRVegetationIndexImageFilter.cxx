@@ -100,7 +100,7 @@ int main( int argc, char *argv[] )
   //  Software Guide : BeginLatex
   //  
   // The NDVI (Normalized Difference Vegetation Index) is instantiated using 
-  // the images pixel type types as template parameters. It is
+  // the images pixel type as template parameters. It is
   // implemented as a functor class which will be passed as a
   // parameter to an \doxygen{otb}{RAndNIRVegetationIndexImageFilter}.
   //
@@ -149,8 +149,8 @@ int main( int argc, char *argv[] )
   
   // Software Guide : BeginLatex
   //  
-  // We set the processing pipeline: the filter inputs are linked to
-  // reader output and the filter output is linked to the writer
+  // We set the processing pipeline: filter inputs are linked to
+  // the reader output and the filter output is linked to the writer
   // input.
   //
   // Software Guide : EndLatex 
@@ -165,8 +165,8 @@ int main( int argc, char *argv[] )
   
   // Software Guide : BeginLatex
   //  
-  // The invocation of the \code{Update()} method on the writer triggers the
-  // execution of the pipeline.  It is recommended to place update calls in a
+  // Invocation of the \code{Update()} method on the writer triggers the
+  // execution of the pipeline.  It is recommended to place \code{update()} calls in a
   // \code{try/catch} block in case errors occur and exceptions are thrown.
   //
   // Software Guide : EndLatex 
