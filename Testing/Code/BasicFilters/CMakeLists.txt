@@ -469,6 +469,43 @@ ADD_TEST(bfTvPrintableImageFilter ${BASICFILTERS_TESTS5}
 		${TEMP}/bfTvPrintableImageFilter.png
 		)
 
+# -------            otb::BSplineDecompositionImageFilter  ------------------------------
+
+ADD_TEST(bfTuBSplineDecompositionImageFilterNew ${BASICFILTERS_TESTS6}  
+         otbBSplineDecompositionImageFilterNew)
+         
+ADD_TEST(bfTvBSplineDecompositionImageFilter ${BASICFILTERS_TESTS6}  
+     --compare-image ${TOL}
+     		     ${BASELINE}/bfBSplineDecompositionImageFilterOutput.tif
+		     ${TEMP}/bfBSplineDecompositionImageFilterOutput.tif
+         otbBSplineDecompositionImageFilter
+		${INPUTDATA}/poupees.tif
+		${TEMP}/bfBSplineDecompositionImageFilterOutput.tif
+		)
+
+# -------            otb::BSplineInterpolateImageFunction  ------------------------------
+
+ADD_TEST(bfTuBSplineInterpolateImageFunctionNew ${BASICFILTERS_TESTS6}  
+         otbBSplineInterpolateImageFunctionNew)
+ 
+ADD_TEST(bfTvBSplineInterpolateImageFunction ${BASICFILTERS_TESTS6}  
+     --compare-ascii ${TOL}
+     		     ${BASELINE_FILES}/bfBSplineInterpolateImageFunctionOutput.txt
+		     ${TEMP}/bfBSplineInterpolateImageFunctionOutput.txt
+        otbBSplineInterpolateImageFunction
+		${INPUTDATA}/poupees.tif
+		${TEMP}/bfBSplineInterpolateImageFunctionOutput.txt
+		0.5 0.5
+		127.33 44.9
+		259.67 21.43
+		12.13 61.79
+		89.5 11
+		128 128
+		127.255 128.73
+		-1 -1
+		)
+        
+
 # A enrichir
 SET(BasicFilters_SRCS1
 otbLeeFilter.cxx
@@ -541,17 +578,10 @@ otbPrintableImageFilter.cxx
 
 # A enrichir
 SET(BasicFilters_SRCS6
-otbStreamingResampleImageFilterNew.cxx
-otbStreamingResampleImageFilter.cxx
-otbStreamingResampleImageFilterCompareWithITK.cxx
-otbStreamingStatisticsVectorImageFilterNew.cxx
-otbStreamingStatisticsVectorImageFilter.cxx
-otbMatrixTransposeMatrixImageFilterNew.cxx
-otbMatrixTransposeMatrixImageFilter.cxx
-otbUnaryImageFunctorWithVectorImageFilterNew.cxx
-otbUnaryImageFunctorWithVectorImageFilter.cxx
-otbPrintableImageFilterNew.cxx
-otbPrintableImageFilter.cxx
+otbBSplineDecompositionImageFilterNew.cxx
+otbBSplineDecompositionImageFilter.cxx
+otbBSplineInterpolateImageFunctionNew.cxx
+otbBSplineInterpolateImageFunction.cxx
 )
 
 INCLUDE_DIRECTORIES("${OTBTesting_BINARY_DIR}")

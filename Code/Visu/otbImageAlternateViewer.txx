@@ -56,10 +56,10 @@ namespace otb
 
 
     // m_ZoomInInterpolator = WindowedSincInterpolatorType::New();
-    m_ZoomInInterpolator=DefaultInterpolatorType::New();
+    m_ZoomInInterpolator=bsplineInterpolator;
     // m_ZoomInInterpolator=bsplineInterpolator;
 
-    m_ZoomOutInterpolator = DefaultInterpolatorType::New();
+    m_ZoomOutInterpolator = bsplineInterpolator;
    
     IndexType index;
     SizeType size;

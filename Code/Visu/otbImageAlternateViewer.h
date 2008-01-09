@@ -23,7 +23,7 @@ PURPOSE.  See the above copyright notices for more information.
 #include "otbImageList.h"
 #include "itkInterpolateImageFunction.h"
 #include "itkLinearInterpolateImageFunction.h"
-#include "itkBSplineInterpolateImageFunction.h"
+#include "otbBSplineInterpolateImageFunction.h"
 #include "itkVectorImageToImageAdaptor.h"
 #include "otbVectorImageToImageListFilter.h"
 #include "otbImage.h"
@@ -76,7 +76,7 @@ class ITK_EXPORT ImageAlternateViewer
     typedef itk::InterpolateImageFunction<SingleImageType,double> InterpolatorType;
     typedef typename InterpolatorType::Pointer InterpolatorPointerType;
     typedef itk::LinearInterpolateImageFunction<SingleImageType,double> DefaultInterpolatorType;
-    typedef itk::BSplineInterpolateImageFunction<SingleImageType,double,double> BSplineInterpolatorType;
+    typedef BSplineInterpolateImageFunction<SingleImageType,double,double> BSplineInterpolatorType;
 
     typedef itk::Function::HammingWindowFunction<4> WindowFunctionType;
     typedef itk::ZeroFluxNeumannBoundaryCondition<SingleImageType> ConditionType;

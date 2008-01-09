@@ -15,20 +15,18 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
+#include "itkExceptionObject.h"
 
-// this file defines the otbCommonTest for the test driver
-// and all it expects is that you have a function called RegisterTests
-#if defined(_MSC_VER)
-#pragma warning ( disable : 4786 )
-#endif
+#include "otbBSplineInterpolateImageFunction.h"
+#include "otbImage.h"
 
-#include <iostream>
-#include "otbTestMain.h" 
-
-void RegisterTests()
+int otbBSplineInterpolateImageFunctionNew(int argc, char * argv[])
 {
-  REGISTER_TEST(otbBSplineDecompositionImageFilterNew);
-  REGISTER_TEST(otbBSplineDecompositionImageFilter);
-  REGISTER_TEST(otbBSplineInterpolateImageFunctionNew);
-  REGISTER_TEST(otbBSplineInterpolateImageFunction);
+  typedef otb::Image<double,2> ImageType;
+  typedef otb::BSplineInterpolateImageFunction<ImageType,double,double> InterpolatorType;
+  
+  // Instantiating object
+  InterpolatorType::Pointer filter = InterpolatorType::New();
+  
+  return EXIT_SUCCESS;
 }
