@@ -142,6 +142,14 @@ IF(OTB_USE_VISU_GUI)
 ENDIF(OTB_USE_VISU_GUI)
 
 
+IF(OTB_USE_VISU_GUI)
+  SET(OTB_VISU_GUI_LIBRARIES "${FLTK_LIBRARIES};${OPENGL_LIBRARIES}")
+ELSE(OTB_USE_VISU_GUI)
+  SET(OTB_VISU_GUI_LIBRARIES "")
+ENDIF(OTB_USE_VISU_GUI)
+
+MESSAGE("OTB_VISU_GUI_LIBRARIES     -> ${OTB_VISU_GUI_LIBRARIES}")
+
 
 #-------------------------------
 # End connections whith external libraries
@@ -632,4 +640,8 @@ ELSE("${CMAKE_MAJOR_VERSION}.${CMAKE_MINOR_VERSION}" GREATER 1.7)
           "This version of CMake is too old to build this version of OTB.  "
           "Please upgrade to CMake 1.8.")
 ENDIF("${CMAKE_MAJOR_VERSION}.${CMAKE_MINOR_VERSION}" GREATER 1.7)
+
+# Set the FLTK and OpenGL libraries use by OTB
+
+
 
