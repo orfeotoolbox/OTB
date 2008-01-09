@@ -1,0 +1,55 @@
+/*=========================================================================
+
+  Program:   ORFEO Toolbox
+  Language:  C++
+  Date:      $Date$
+  Version:   $Revision$
+
+
+  Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
+  See OTBCopyright.txt for details.
+
+
+     This software is distributed WITHOUT ANY WARRANTY; without even 
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     PURPOSE.  See the above copyright notices for more information.
+
+=========================================================================*/
+#include "itkExceptionObject.h"
+
+#include "otbGenericInterpolateImageFunction.h"
+#include "otbImage.h"
+#include "itkConstantBoundaryCondition.h"
+
+
+namespace Function {
+template< class TInput=double, class TOutput=double >
+class SameFunction
+{
+public:
+  inline TOutput operator()( const TInput & A ) const
+    { 
+      return static_cast<TOutput>(A); 
+    }
+}; 
+
+}
+
+
+int otbGenericInterpolateImageFunctionNew(int argc, char * argv[])
+{
+  
+  typedef double                                                   InputPixelType;
+  const int Dimension = 2;
+  typedef otb::Image<InputPixelType,Dimension>               ImageType;
+  typedef Function::SameFunction<InputPixelType,InputPixelType >   FunctionType;
+  typedef itk::ConstantBoundaryCondition< ImageType >              BoundaryConditionType;
+  typedef double                                                   CoordRepType;
+
+  typedef otb::GenericInterpolateImageFunction<ImageType, FunctionType, BoundaryConditionType, CoordRepType> GenericFunctionType;
+  
+  // Instantiating object
+  GenericFunctionType::Pointer generic = GenericFunctionType::New();
+  
+  return EXIT_SUCCESS;
+}

@@ -26,4 +26,5 @@
 
 void RegisterTests()
 {
+REGISTER_TEST(otbGenericInterpolateImageFunctionNew);
 }

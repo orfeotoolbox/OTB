@@ -460,6 +460,11 @@ ADD_TEST(coTvUnaryFunctorNeighborhoodVectorImageFilter ${COMMON_TESTS6}
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ otbCommonTests7 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ 
 
+# -------------  otb::GenericInterpolateImageFunction ----------------------------
+ADD_TEST(coTuGenericInterpolateImageFunctionNew ${COMMON_TESTS7}
+otbGenericInterpolateImageFunctionNew
+)
+
 
 # -------       Fichiers sources CXX -----------------------------------
 SET(BasicCommon_SRCS1
@@ -528,6 +533,7 @@ otbUnaryFunctorNeighborhoodVectorImageFilterNew.cxx
 otbUnaryFunctorNeighborhoodVectorImageFilter.cxx
 )
 SET(BasicCommon_SRCS7
+otbGenericInterpolateImageFunctionNew.cxx
 )
 
 INCLUDE_DIRECTORIES("${OTBTesting_BINARY_DIR}")
