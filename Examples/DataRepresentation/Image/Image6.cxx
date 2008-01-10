@@ -48,7 +48,8 @@
 
 // Software Guide : BeginCodeSnippet
 #include "otbImage.h"
-#include "otbImportImageFilter.h"
+#include "otbVectorImage.h"
+#include "otbImportVectorImageFilter.h"
 
 // Software Guide : EndCodeSnippet
 
@@ -75,8 +76,9 @@ int main(int argc, char * argv[])
   // Software Guide : BeginCodeSnippet 
   typedef unsigned char   PixelType;
   const unsigned int Dimension = 2;
-  typedef otb::Image< PixelType, Dimension > ImageType;
-
+	unsigned int numberOfBands = 5;
+	
+	typedef otb::VectorImage<PixelType, Dimension> ImageType;
   // Software Guide : EndCodeSnippet 
 
   
@@ -90,7 +92,8 @@ int main(int argc, char * argv[])
   //  Software Guide : EndLatex 
 
   // Software Guide : BeginCodeSnippet
-  typedef otb::ImportImageFilter< ImageType >   ImportFilterType;
+	typedef otb::ImportVectorImageFilter< ImageType >   ImportFilterType;
+
   // Software Guide : EndCodeSnippet
 
 
@@ -182,9 +185,13 @@ int main(int argc, char * argv[])
 
   // Software Guide : BeginCodeSnippet
 	// MODIFIED
-  const unsigned int numberOfPixels =  size[0] * size[1];
+	
+  const unsigned int numberOfPixels =  size[0] * size[1] * numberOfBands;
+
   PixelType * localBuffer = new PixelType[ numberOfPixels ];
-  // Software Guide : EndCodeSnippet
+
+ 	
+	// Software Guide : EndCodeSnippet
 
   const double radius = 80.0;
 
@@ -203,7 +210,7 @@ int main(int argc, char * argv[])
   // Software Guide : BeginCodeSnippet
   const double radius2 = radius * radius;
   PixelType * it = localBuffer;
-
+	int length = 0;
   for(unsigned int y=0; y < size[1]; y++)
     {
     const double dy = static_cast<double>( y ) - static_cast<double>(size[1])/2.0;
@@ -211,7 +218,10 @@ int main(int argc, char * argv[])
       {
       const double dx = static_cast<double>( x ) - static_cast<double>(size[0])/2.0;
       const double d2 = dx*dx + dy*dy ;
-      *it++ = ( d2 < radius2 ) ? 255 : 0;
+     	PixelType pTmp = ( d2 < radius2 ) ? 255 : 0;
+			for(unsigned int nbBandsTmp=0; nbBandsTmp<numberOfBands; nbBandsTmp++)
+				*it++ = pTmp;
+			length++;
       }
     }
 
@@ -257,8 +267,10 @@ int main(int argc, char * argv[])
 
   writer->SetFileName( argv[1] );
 
+	ImageType* imTmp = dynamic_cast<ImageType*>(importFilter->GetOutput());
+
   // Software Guide : BeginCodeSnippet
-  writer->SetInput(  dynamic_cast<ImageType*>(importFilter->GetOutput())  );
+  writer->SetInput(  imTmp  );
   // Software Guide : EndCodeSnippet
 
 

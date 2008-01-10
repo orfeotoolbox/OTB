@@ -1,7 +1,7 @@
 PROJECT(ImageExamples)
 INCLUDE_REGULAR_EXPRESSION("^.*$")
 
-SET(TEMP ${ITK_BINARY_DIR}/Testing/Temporary)
+SET(TEMP ${OTB_BINARY_DIR}/Testing/Temporary)
 
 ADD_EXECUTABLE(Image1 Image1.cxx )
 TARGET_LINK_LIBRARIES(Image1 OTBCommon ITKCommon OTBIO ITKIO)
@@ -17,6 +17,9 @@ TARGET_LINK_LIBRARIES(Image4 OTBCommon ITKCommon OTBIO ITKIO)
 
 ADD_EXECUTABLE(Image5 Image5.cxx )
 TARGET_LINK_LIBRARIES(Image5 OTBCommon ITKCommon OTBIO ITKIO)
+
+ADD_EXECUTABLE(Image6 Image6.cxx )
+TARGET_LINK_LIBRARIES(Image6 OTBCommon ITKCommon OTBIO ITKIO)
 
 ADD_EXECUTABLE(RGBImage RGBImage.cxx )
 TARGET_LINK_LIBRARIES(RGBImage OTBCommon OTBIO ITKCommon ITKIO) 
@@ -83,6 +86,16 @@ ADD_TEST(Image5Test ${EXE_TESTS}
 	${TEMP}/Image5.png
 	Image5Test
 	${TEMP}/Image5.png
+)
+
+# ------- Image6Test----------
+
+ADD_TEST(Image6Test ${EXE_TESTS}
+	--compare-n-images ${TOL} 1
+	${BASELINE}/Image6.tif
+	${TEMP}/Image6.tif
+	Image6Test
+	${TEMP}/Image6.tif
 )
 
 
