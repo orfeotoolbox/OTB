@@ -181,10 +181,10 @@ ImportVectorImageFilter<TOutputImage>
 	
 	typename RegionType::SizeType size = m_Region.GetSize();
 
-	int numberOfBands=1;
+	int numberOfBands= m_Size/(size[0]*size[1]);
 
-	if ((numberOfBands=m_Size/(size[0]*size[1]))!=1)
-		std::cout << "numberOfBands : " << numberOfBands << std::endl;
+	if (numberOfBands!=static_cast<int>(numberOfBands))
+		itkExceptionMacro(<<"Buffer size and image size are not compatible !");
 		
 	 outputPtr->SetNumberOfComponentsPerPixel(numberOfBands);
 }
