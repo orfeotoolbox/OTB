@@ -34,8 +34,6 @@ namespace otb
  * The filter will walk over all the pixels in the two input images, and for
  * each one of them it will do the following: 
  *
- * - cast the input 1 pixel value to \c double 
- * - cast the input 2 pixel value to \c double 
  * - compute the ratio of the two pixel values
  * - compute the value of the ratio of means
  * - cast the \c double value resulting to the pixel type of the output image 
