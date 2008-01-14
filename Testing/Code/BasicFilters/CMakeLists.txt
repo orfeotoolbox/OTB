@@ -475,7 +475,7 @@ ADD_TEST(bfTuBSplineDecompositionImageFilterNew ${BASICFILTERS_TESTS6}
          otbBSplineDecompositionImageFilterNew)
          
 ADD_TEST(bfTvBSplineDecompositionImageFilter ${BASICFILTERS_TESTS6}  
-     --compare-image ${TOL}
+     --compare-image ${EPSILON}
      		     ${BASELINE}/bfBSplineDecompositionImageFilterOutput.tif
 		     ${TEMP}/bfBSplineDecompositionImageFilterOutput.tif
          otbBSplineDecompositionImageFilter
@@ -489,7 +489,7 @@ ADD_TEST(bfTuBSplineInterpolateImageFunctionNew ${BASICFILTERS_TESTS6}
          otbBSplineInterpolateImageFunctionNew)
  
 ADD_TEST(bfTvBSplineInterpolateImageFunction ${BASICFILTERS_TESTS6}  
-     --compare-ascii ${TOL}
+     --compare-ascii ${EPSILON}
      		     ${BASELINE_FILES}/bfBSplineInterpolateImageFunctionOutput.txt
 		     ${TEMP}/bfBSplineInterpolateImageFunctionOutput.txt
         otbBSplineInterpolateImageFunction
