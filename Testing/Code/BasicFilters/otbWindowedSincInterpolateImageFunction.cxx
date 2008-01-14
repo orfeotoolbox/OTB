@@ -166,49 +166,7 @@ int otbWindowedSincInterpolateImageFunction(int argc, char * argv[])
     }
   
   file.close();
-  
-
-
-  /**********************************************/
-  typedef otb::StreamingImageFileWriter<ImageType> WriterType;
-  typedef itk::TranslationTransform<double,2> TransformType;
-  typedef otb::StreamingResampleImageFilter<ImageType,ImageType,double> StreamingResampleImageFilterType;
-  
-  // Instantiating object
-  WriterType::Pointer writer = WriterType::New();
-  StreamingResampleImageFilterType::Pointer resampler = StreamingResampleImageFilterType::New();
-  TransformType::Pointer transform = TransformType::New();
-  
-  // Resampler connected to input image
-  resampler->SetInput(reader->GetOutput());
-  
-  // Size of output resampler result
-  StreamingResampleImageFilterType::SizeType size;
-  size[0]=600;
-  size[1]=600;
-  resampler->SetSize(size);
-  
-  resampler->SetInterpolatorNeighborhoodRadius(atoi(argv[3]));
-  resampler->SetInterpolator(gauss);
-
-  // Transformation creation
-  TransformType::OutputVectorType translation;
-  translation[0] = 100;
-  translation[1] = 200;			
-  transform->SetOffset(translation);
-  
-  // Resampler is updated with new transformation (default is identity)
-  resampler->SetTransform(transform);
-  
-  // Result of resampler is written
-  writer->SetInput(resampler->GetOutput());
-  writer->SetNumberOfStreamDivisions(1);
-  writer->SetFileName("tutu.tif");
-  
-  writer->Update();			
-
-
-
+ 	
 
   return EXIT_SUCCESS;
 }
