@@ -150,7 +150,6 @@ ENDIF(OTB_USE_VISU_GUI)
 #-----------------------------------------------------------------------------
 # Analyse FLTK PLATFORM DEPENDENT LIBS !!!
 # This part of CMake code source is extract about the FLTK CMakeLists.txt
-IF(OTB_USE_VISU_GUI)
 #           IF(UNIX)
 #             FIND_PACKAGE(X11)
 #             SET( OTB_FLTK_PLATFORM_DEPENDENT_LIBS ${X11_LIBRARIES} -lm)
