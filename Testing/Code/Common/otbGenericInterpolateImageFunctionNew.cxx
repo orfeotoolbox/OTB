@@ -28,7 +28,7 @@ class SameFunction
 {
 public:
   void SetRadius(unsigned int rad){ m_Radius = rad; };
-  unsigned int GatRadius(){ return m_Radius; };
+  unsigned int GetRadius() const { return m_Radius; };
   inline TOutput operator()( const TInput & A ) const
     { 
       return static_cast<TOutput>(A); 
