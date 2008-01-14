@@ -38,12 +38,6 @@ namespace otb
     this->SetNthOutput(2,OutputImageType::New());
     this->SetNthOutput(3,OutputImageType::New());
 
-    // m_GradientMagnitudeFilter         = GradientMagnitudeFilterType::New();
-//     m_GradientRecursiveGaussianFilter = GradientRecursiveGaussianImageFilterType::New(); 
-//     m_AspectFilter                    = Atan2FilterType::New(); 
-//     m_IncidenceFilter                 = AcosImageFilterType::New();
-//     m_ExitanceFilter                  = AcosImageFilterType::New();
-
     m_SolarAngle = 0;
     m_SolarAzimut = 0;
     m_ViewAngle = 0;
@@ -75,13 +69,13 @@ namespace otb
 
     // Gradient Magnitude Image Filter used to compute the slope.  
     typename GradientMagnitudeFilterType::Pointer GradientMagnitudeFilter = GradientMagnitudeFilterType::New();;
-      // Gradient Recursive Gaussian Image Filter used to compute the aspect. 
+    // Gradient Recursive Gaussian Image Filter used to compute the aspect. 
     typename GradientRecursiveGaussianImageFilterType::Pointer GradientRecursiveGaussianFilter= GradientRecursiveGaussianImageFilterType::New(); ;
-      // Atan2 Image Filter used to compute the aspect.  
+    // Atan2 Image Filter used to compute the aspect.  
     typename Atan2FilterType::Pointer AspectFilter = Atan2FilterType::New(); ;
-      // Inverse cosinus Image filter used to compute the incidence image
+    // Inverse cosinus Image filter used to compute the incidence image
     typename AcosImageFilterType::Pointer IncidenceFilter = AcosImageFilterType::New();;
-      // Inverse cosinus Image filter used to compute the exitance image
+    // Inverse cosinus Image filter used to compute the exitance image
     typename AcosImageFilterType::Pointer ExitanceFilter  = AcosImageFilterType::New();;
 
     // Degrees To Radian _-> Radian To Degree coefficient
