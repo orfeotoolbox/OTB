@@ -81,33 +81,22 @@ namespace otb
       /** Supported images definition. */
       typedef typename InputImageType::PixelType                           InputPixelType;
       typedef typename InputImageType::InternalPixelType                   InputInternalPixelType;
-      
       typedef typename OutputImageType::PixelType                          OutputPixelType;
-      typedef typename OutputImageType::InternalPixelType                  OutputInternalPixelType;
-      
-      
-      typedef itk::CovariantVector< InputInternalPixelType, 2 >                               VectorPixelType;
-      typedef Image< VectorPixelType, 2 >                                                     VectorGradientImageType;
-      //typedef itk::NthElementImageAdaptor<VectorGradientImageType, InputInternalPixelType>    AdaptorType;
+      typedef typename OutputImageType::InternalPixelType                  OutputInternalPixelType; 
+      typedef itk::CovariantVector< InputInternalPixelType, 2 >            VectorPixelType;
+      typedef Image< VectorPixelType, 2 >                                  VectorGradientImageType;
 
       /** Filter definition */
-      typedef itk::GradientMagnitudeImageFilter<InputImageType, OutputImageType>                   GradientMagnitudeFilterType;
-      typedef typename GradientMagnitudeFilterType::Pointer                                        GradientMagnitudeFilterPointerType;
-      //typedef itk::GradientRecursiveGaussianImageFilter<InputImageType, VectorGradientImageType>   GradientRecursiveGaussianImageFilterType;
+      typedef itk::GradientMagnitudeImageFilter<InputImageType, OutputImageType>                         GradientMagnitudeFilterType;
       typedef itk::GradientImageFilter<InputImageType, InputInternalPixelType, InputInternalPixelType>   GradientRecursiveGaussianImageFilterType;
-      typedef typename GradientRecursiveGaussianImageFilterType::OutputImageType tutuType;
-      typedef itk::NthElementImageAdaptor<tutuType, InputInternalPixelType>    AdaptorType;
+      typedef typename GradientRecursiveGaussianImageFilterType::OutputImageType                         tutuType;
+      typedef itk::NthElementImageAdaptor<tutuType, InputInternalPixelType>                              AdaptorType;
+      typedef itk::Atan2ImageFilter<AdaptorType, AdaptorType, OutputImageType>                           Atan2FilterType;
 
-      typedef typename GradientRecursiveGaussianImageFilterType::Pointer                           GradientRecursiveGaussianImageFilterPointerType;
-      typedef itk::Atan2ImageFilter<AdaptorType, AdaptorType, OutputImageType>                     Atan2FilterType;
-      typedef typename Atan2FilterType::Pointer                                                    Atan2FilterPointerType;
-
-      
       /** Operation Filters*/
       typedef MultiplyByScalarImageFilter<OutputImageType, OutputImageType>                MultiplyByScalarImageFilterType;
       typedef itk::MultiplyImageFilter<OutputImageType, OutputImageType, OutputImageType>  MultiplyImageFilterType;
       typedef itk::AcosImageFilter<OutputImageType, OutputImageType>                       AcosImageFilterType;
-      typedef typename AcosImageFilterType::Pointer                                        AcosImageFilterPointerType;
       typedef itk::CosImageFilter<OutputImageType, OutputImageType>                        CosImageFilterType;
       typedef itk::SinImageFilter<OutputImageType, OutputImageType>                        SinImageFilterType;
       typedef itk::ShiftScaleImageFilter<OutputImageType, OutputImageType>                 ShiftScaleImageFilterType;
@@ -137,65 +126,6 @@ namespace otb
 	};
     
       
-      
-      /** Set/Get the Gradient Magnitude Image Filter used to compute the slope. */    
-      void SetGradientMagnitudeFilter(GradientMagnitudeFilterPointerType gradMag)
-	{ 
-	  m_GradientMagnitudeFilter = gradMag; 
-	  this->Modified();
-	};
-      GradientMagnitudeFilterPointerType GetGradientMagnitudeFilter()
-	{ 
-	  return m_GradientMagnitudeFilter; 
-	};
-      
-      /** Set/Get the Gradient Recursive Gaussian Image Filter used to compute the aspect. */    
-      void SetGradientRecursiveGaussianImageFilter(GradientRecursiveGaussianImageFilterPointerType gradMag)
-	{ 
-	  m_GradientRecursiveGaussianFilter = gradMag; 
-	  this->Modified();
-	};
-      GradientRecursiveGaussianImageFilterPointerType GetGradientRecursiveGaussianImageFilter()
-	{ 
-	  return m_GradientRecursiveGaussianFilter; 
-	};
-      
-      /** Set/Get the Atan2 Image Filter used to compute the aspect. */    
-      void SetAspectFilter(Atan2FilterPointerType aspect)
-	{ 
-	  m_AspectFilter = aspect;
-	  this->Modified();
-	};
-      
-      Atan2FilterPointerType GetAspectFilter()
-	{ 
-	  return m_AspectFilter; 
-	};
-      
-      /** Set/Get the Inverse cosinus Image filter used to compute the incidence image. */    
-      void SetIncidencetFilter(AcosImageFilterType aspect)
-	{ 
-	  m_IncidenceFilter = aspect;
-	  this->Modified();
-	};
-      
-      AcosImageFilterType GetIncidenceFilter()
-	{ 
-	  return m_IncidenceFilter; 
-	};
-
- /** Set/Get the Inverse cosinus Image filter used to compute the exitance image. */    
-      void SetExitanceFilter(AcosImageFilterType aspect)
-	{ 
-	  m_ExitanceFilter = aspect;
-	  this->Modified();
-	};
-      
-      AcosImageFilterType GetExitanceFilter()
-	{ 
-	  return m_ExitanceFilter; 
-	};
-
       /** Angle parameters*/
       /** Set/Get Solar Angle */
       itkSetMacro(SolarAngle, double);
@@ -220,17 +150,6 @@ namespace otb
       
       
     private:
-      /** Gradient Magnitude Image Filter used to compute the slope. */  
-      GradientMagnitudeFilterPointerType               m_GradientMagnitudeFilter;
-      /** Gradient Recursive Gaussian Image Filter used to compute the aspect. */  
-      GradientRecursiveGaussianImageFilterPointerType  m_GradientRecursiveGaussianFilter;
-      /** Atan2 Image Filter used to compute the aspect. */  
-      Atan2FilterPointerType                           m_AspectFilter;
-      /** Inverse cosinus Image filter used to compute the incidence image */
-      AcosImageFilterPointerType                       m_IncidenceFilter;
-      /** Inverse cosinus Image filter used to compute the exitance image */
-      AcosImageFilterPointerType                       m_ExitanceFilter;
-
       /** Angle parameters*/
       /** Solar Angle */
       double m_SolarAngle;

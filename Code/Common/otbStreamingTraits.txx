@@ -180,21 +180,20 @@ unsigned int StreamingTraits<TImage>::CalculateNeededRadiusForInterpolator(const
         className = interpolator->GetNameOfClass();
         
         if (className == "LinearInterpolateImageFunction")
-        {
-                        otbMsgDevMacro(<<"Linear Interpolator");
-                        neededRadius = 1;
-        }
+	  {
+	    otbMsgDevMacro(<<"Linear Interpolator");
+	    neededRadius = 1;
+	  }
         else if (className == "NearestNeighborInterpolateImageFunction")
-        {
-                otbMsgDevMacro(<<"Nearest Neighbor Interpolator");
-                neededRadius = 1;
-        }
+	  {
+	    otbMsgDevMacro(<<"Nearest Neighbor Interpolator");
+	    neededRadius = 1;
+	  }
         else if (className == "BSplineInterpolateImageFunction")
-        {
-                otbMsgDevMacro(<<"Nearest Neighbor Interpolator");
-                neededRadius = 2;
-        }
-        
+	  {
+	    otbMsgDevMacro(<<"Nearest Neighbor Interpolator");
+	    neededRadius = 2;
+	  }
         /*else if (className == "WindowedSincInterpolateImageFunction")
         {
                 itkGenericExceptionMacro(<< "Windowed Sinc Interpolator not supported yet in resample");

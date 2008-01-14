@@ -27,8 +27,12 @@
 
 void RegisterTests()
 {
-  REGISTER_TEST(otbBSplineDecompositionImageFilterNew);
-  REGISTER_TEST(otbBSplineDecompositionImageFilter);
-  REGISTER_TEST(otbBSplineInterpolateImageFunctionNew);
-  REGISTER_TEST(otbBSplineInterpolateImageFunction);
+REGISTER_TEST(otbBSplineDecompositionImageFilterNew);
+REGISTER_TEST(otbBSplineDecompositionImageFilter);
+REGISTER_TEST(otbBSplineInterpolateImageFunctionNew);
+REGISTER_TEST(otbBSplineInterpolateImageFunction);
+REGISTER_TEST(otbProlateInterpolateImageFunctionNew);
+REGISTER_TEST(otbProlateInterpolateImageFunction);
+REGISTER_TEST(otbWindowedSincInterpolateImageFunctionNew);
+REGISTER_TEST(otbWindowedSincInterpolateImageFunction);
 }

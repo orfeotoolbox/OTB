@@ -84,12 +84,7 @@ public itk::InterpolateImageFunction<TInputImage,TCoordRep>
  
     /** Set/Get the window radius*/
     void SetRadius(unsigned int rad);
-    unsigned int GetRadius() const { return m_Function.GetRadius(); };
-    //unsigned int GetRadius() { return this->GetFunction().GetRadius();};
-
-    /** Set/Get the window radius*/
-    // Don't have to be used here, just declared for the inheritance classes.
-    //virtual void SetWindowSize(unsigned int win){ m_WindowSize = win; };
+    unsigned int GetRadius(){ return this->GetFunction().GetRadius();};
 
     /** Get the functor list */
     FunctionType& GetFunction(void)
@@ -113,8 +108,8 @@ public itk::InterpolateImageFunction<TInputImage,TCoordRep>
     private:
     GenericInterpolateImageFunction(const Self&); //purposely not implemented
     void operator=(const Self&); //purposely not implemented
-    /** Store the window radius. */
-    //unsigned int m_Radius;
+  /** Store the window radius. */
+    unsigned int m_Radius;
     // Constant to store twice the radius
     unsigned int m_WindowSize;
 

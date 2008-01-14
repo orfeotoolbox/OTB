@@ -38,11 +38,11 @@ namespace otb
     this->SetNthOutput(2,OutputImageType::New());
     this->SetNthOutput(3,OutputImageType::New());
 
-    m_GradientMagnitudeFilter         = GradientMagnitudeFilterType::New();
-    m_GradientRecursiveGaussianFilter = GradientRecursiveGaussianImageFilterType::New(); 
-    m_AspectFilter                    = Atan2FilterType::New(); 
-    m_IncidenceFilter                 = AcosImageFilterType::New();
-    m_ExitanceFilter                  = AcosImageFilterType::New();
+    // m_GradientMagnitudeFilter         = GradientMagnitudeFilterType::New();
+//     m_GradientRecursiveGaussianFilter = GradientRecursiveGaussianImageFilterType::New(); 
+//     m_AspectFilter                    = Atan2FilterType::New(); 
+//     m_IncidenceFilter                 = AcosImageFilterType::New();
+//     m_ExitanceFilter                  = AcosImageFilterType::New();
 
     m_SolarAngle = 0;
     m_SolarAzimut = 0;
@@ -73,37 +73,48 @@ namespace otb
     typename OutputImageType::Pointer IncidenceOutputPtr = this->GetIncidenceOutput();
     typename OutputImageType::Pointer ExitanceOutputPtr = this->GetExitanceOutput();
 
+    // Gradient Magnitude Image Filter used to compute the slope.  
+    typename GradientMagnitudeFilterType::Pointer GradientMagnitudeFilter = GradientMagnitudeFilterType::New();;
+      // Gradient Recursive Gaussian Image Filter used to compute the aspect. 
+    typename GradientRecursiveGaussianImageFilterType::Pointer GradientRecursiveGaussianFilter= GradientRecursiveGaussianImageFilterType::New(); ;
+      // Atan2 Image Filter used to compute the aspect.  
+    typename Atan2FilterType::Pointer AspectFilter = Atan2FilterType::New(); ;
+      // Inverse cosinus Image filter used to compute the incidence image
+    typename AcosImageFilterType::Pointer IncidenceFilter = AcosImageFilterType::New();;
+      // Inverse cosinus Image filter used to compute the exitance image
+    typename AcosImageFilterType::Pointer ExitanceFilter  = AcosImageFilterType::New();;
+
     // Degrees To Radian _-> Radian To Degree coefficient
     double rad2degCoef;
     rad2degCoef = 180/M_PI;
 
     // Slop calculation 
-    m_GradientMagnitudeFilter->SetInput(inputPtr);
+    GradientMagnitudeFilter->SetInput(inputPtr);
     // // Transform values from radian to degrees.
     typename MultiplyByScalarImageFilterType::Pointer rad2DegFilter = MultiplyByScalarImageFilterType::New();
-    rad2DegFilter->SetInput( m_GradientMagnitudeFilter->GetOutput() );
+    rad2DegFilter->SetInput( GradientMagnitudeFilter->GetOutput() );
     rad2DegFilter->SetCoef( rad2degCoef );
     rad2DegFilter->GraftOutput( SlopOutputPtr );
     rad2DegFilter->Update();
     this->GraftNthOutput( 0, rad2DegFilter->GetOutput() );
 
     // Aspect calcultation
-    m_GradientRecursiveGaussianFilter->SetInput(inputPtr);
-    m_GradientRecursiveGaussianFilter->Update();
+    GradientRecursiveGaussianFilter->SetInput(inputPtr);
+    GradientRecursiveGaussianFilter->Update();
     
     // // Extract the X and the Y gradient
     typename AdaptorType::Pointer XAdaptator = AdaptorType::New();
     typename AdaptorType::Pointer YAdaptator = AdaptorType::New();
-    XAdaptator->SetImage(m_GradientRecursiveGaussianFilter->GetOutput());
-    YAdaptator->SetImage(m_GradientRecursiveGaussianFilter->GetOutput());
+    XAdaptator->SetImage(GradientRecursiveGaussianFilter->GetOutput());
+    YAdaptator->SetImage(GradientRecursiveGaussianFilter->GetOutput());
     XAdaptator->SelectNthElement(0);
     YAdaptator->SelectNthElement(1);
     // // Compute Arctan
-    m_AspectFilter->SetInput1(XAdaptator);
-    m_AspectFilter->SetInput2(YAdaptator);
+    AspectFilter->SetInput1(XAdaptator);
+    AspectFilter->SetInput2(YAdaptator);
     // // Transform values from radian to degres.
     typename MultiplyByScalarImageFilterType::Pointer rad2DegFilter1 = MultiplyByScalarImageFilterType::New();
-    rad2DegFilter1->SetInput( m_AspectFilter->GetOutput() );
+    rad2DegFilter1->SetInput( AspectFilter->GetOutput() );
     rad2DegFilter1->SetCoef( rad2degCoef );
     rad2DegFilter1->GraftOutput( AspectOutputPtr );
     rad2DegFilter1->Update();
@@ -113,13 +124,13 @@ namespace otb
     // Angle calculation :
     // sin(slop)
     typename SinImageFilterType::Pointer sinS = SinImageFilterType::New();
-    sinS->SetInput( m_GradientMagnitudeFilter->GetOutput() );
+    sinS->SetInput( GradientMagnitudeFilter->GetOutput() );
     // cos (slop)
     typename CosImageFilterType::Pointer cosS = CosImageFilterType::New();
-    cosS->SetInput( m_GradientMagnitudeFilter->GetOutput() );
+    cosS->SetInput( GradientMagnitudeFilter->GetOutput() );
     // -aspect
     typename MultiplyByScalarImageFilterType::Pointer oppositeFilter = MultiplyByScalarImageFilterType::New();
-    oppositeFilter->SetInput( m_AspectFilter->GetOutput() );
+    oppositeFilter->SetInput( AspectFilter->GetOutput() );
     oppositeFilter->SetCoef( -1 );
 
     // Incidence calculation
@@ -147,11 +158,11 @@ namespace otb
     cosIncidence->SetInput1( cosAAzimuthsinSsinAngle->GetOutput() );
     cosIncidence->SetInput2( cosScosSolarAngleFilter->GetOutput() );
 
-    m_IncidenceFilter->SetInput( cosIncidence->GetOutput() );
+    IncidenceFilter->SetInput( cosIncidence->GetOutput() );
 
     // // Change radians in degres
     typename MultiplyByScalarImageFilterType::Pointer rad2DegFilter2 = MultiplyByScalarImageFilterType::New();
-    rad2DegFilter2->SetInput( m_IncidenceFilter->GetOutput() );
+    rad2DegFilter2->SetInput( IncidenceFilter->GetOutput() );
     rad2DegFilter2->SetCoef( rad2degCoef );
     // // Link to the output
     rad2DegFilter2->GraftOutput( IncidenceOutputPtr );
@@ -185,11 +196,11 @@ namespace otb
     cosIncidence2->SetInput1( cosAAzimuthsinSsinAngle2->GetOutput() );
     cosIncidence2->SetInput2( cosScosSolarAngleFilter2->GetOutput() );
 
-    m_ExitanceFilter->SetInput( cosIncidence2->GetOutput() );
+    ExitanceFilter->SetInput( cosIncidence2->GetOutput() );
 
    // // Change radians in degres
     typename MultiplyByScalarImageFilterType::Pointer rad2DegFilter3 = MultiplyByScalarImageFilterType::New();
-    rad2DegFilter3->SetInput( m_ExitanceFilter->GetOutput() );
+    rad2DegFilter3->SetInput( ExitanceFilter->GetOutput() );
     rad2DegFilter3->SetCoef( rad2degCoef );
     // // Link to the output
     rad2DegFilter3->GraftOutput( ExitanceOutputPtr );
