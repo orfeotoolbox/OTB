@@ -139,15 +139,51 @@ IF(OTB_USE_VISU_GUI)
 	         "Cannot build OTB project without FLTK.  Please set FLTK_DIR or set OTB_USE_VISU to OFF.")
         ENDIF(FLTK_FOUND)
 
-ENDIF(OTB_USE_VISU_GUI)
+        #----------------------------------------------------------------
+        # RESUME Alls VISU GUI libraries use by OTB in a single VARIABLE
+        SET(OTB_VISU_GUI_LIBRARIES "${FLTK_LIBRARIES} ${OPENGL_LIBRARIES} ")
 
-
-IF(OTB_USE_VISU_GUI)
-  SET(OTB_VISU_GUI_LIBRARIES "${FLTK_LIBRARIES};${OPENGL_LIBRARIES}")
 ELSE(OTB_USE_VISU_GUI)
-  SET(OTB_VISU_GUI_LIBRARIES "")
+        SET(OTB_VISU_GUI_LIBRARIES "")
 ENDIF(OTB_USE_VISU_GUI)
 
+#-----------------------------------------------------------------------------
+# Analyse FLTK PLATFORM DEPENDENT LIBS !!!
+# This part of CMake code source is extract about the FLTK CMakeLists.txt
+IF(OTB_USE_VISU_GUI)
+#           IF(UNIX)
+#             FIND_PACKAGE(X11)
+#             SET( OTB_FLTK_PLATFORM_DEPENDENT_LIBS ${X11_LIBRARIES} -lm)
+#           ENDIF(UNIX)
+
+#           IF(APPLE AND NOT FLTK_APPLE_X11)
+#             SET( OTB_FLTK_PLATFORM_DEPENDENT_LIBS
+#               "-framework Carbon -framework Cocoa -framework ApplicationServices -lz")
+#           ENDIF(APPLE AND NOT FLTK_APPLE_X11)
+
+#           IF(WIN32)
+#             IF(NOT CYGWIN)
+#               IF(BORLAND)
+#                 SET( OTB_FLTK_PLATFORM_DEPENDENT_LIBS import32 )
+#               ELSE(BORLAND)
+#                 SET( OTB_FLTK_PLATFORM_DEPENDENT_LIBS wsock32 comctl32 )
+#               ENDIF(BORLAND)
+#             ENDIF(NOT CYGWIN)
+#           ENDIF(WIN32)
+
+#           IF(CYGWIN)
+#             ADD_DEFINITIONS(-DWIN32)  
+#             SET( OTB_FLTK_PLATFORM_DEPENDENT_LIBS ole32 uuid comctl32 wsock32 supc++ -lm -lgdi32)
+#           ENDIF(CYGWIN)
+
+#           IF(MINGW)
+#             ADD_DEFINITIONS(-DWIN32)
+#             SET( OTB_FLTK_PLATFORM_DEPENDENT_LIBS ole32 uuid wsock32 gdi32 comdlg32)
+#           ENDIF(MINGW)
+
+
+MESSAGE("FLTK_LIBRARIES     -> ${FLTK_LIBRARIES}")
+MESSAGE("OPENGL_LIBRARIES     -> ${OPENGL_LIBRARIES}")
 MESSAGE("OTB_VISU_GUI_LIBRARIES     -> ${OTB_VISU_GUI_LIBRARIES}")
 
 

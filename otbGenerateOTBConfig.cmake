@@ -28,7 +28,7 @@ SET(OTB_INCLUDE_DIRS_CONFIG
 )
 
 #-----------------------------------------------------------------------------
-# Configure OTBConfig.cmake for the build tree.
+# Configure OTBConfig.cmake for the BUILD tree.
 CONFIGURE_FILE(${OTB_SOURCE_DIR}/OTBConfig.cmake.in
                ${OTB_BINARY_DIR}/OTBConfig.cmake @ONLY IMMEDIATE)
 
@@ -58,6 +58,6 @@ SET(OTB_LIBRARY_DIRS_CONFIG ${CMAKE_INSTALL_PREFIX}/lib/otb)
 SET(OTB_LIBRARY_DIRS_CONFIG ${OTB_LIBRARY_DIRS_CONFIG} ${GDAL_LIBRARY_DIRS} ${ITK_LIBRARY_DIRS} ${FLTK_LIBRARY_DIRS})
 
 #-----------------------------------------------------------------------------
-# Configure OTBConfig.cmake for the install tree.
+# Configure OTBConfig.cmake for the INSTALL tree.
 CONFIGURE_FILE(${OTB_SOURCE_DIR}/OTBConfig.cmake.in
                ${OTB_BINARY_DIR}/Utilities/OTBConfig.cmake @ONLY IMMEDIATE)
