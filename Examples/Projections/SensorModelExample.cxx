@@ -60,7 +60,7 @@
 int main( int argc, char* argv[] )
 {
 
-  ossimInit::instance()->initialize(argc, argv);//FIXME : est-ce
+//   ossimInit::instance()->initialize(argc, argv);//FIXME : est-ce
                                                //toujours necessaire?
 
   if(argc!=8)

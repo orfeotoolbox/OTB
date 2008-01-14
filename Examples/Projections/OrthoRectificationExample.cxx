@@ -34,7 +34,7 @@
 
 #include "otbPerBandVectorImageFilter.h"
 
-#include "init/ossimInit.h"
+// #include "init/ossimInit.h"
 
 // Software Guide : BeginLatex
 //
