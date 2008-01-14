@@ -31,22 +31,17 @@
 
 // Software Guide : BeginCodeSnippet
 
-#include "otbMacro.h"
+
 #include "otbImage.h"
 #include "otbVectorImage.h"
 #include "otbImageFileReader.h"
 #include "otbStreamingImageFileWriter.h"
 
-#include "itkChangeInformationImageFilter.h"
+#include "otbOrthoRectificationFilter.h"
+#include "otbMapProjections.h"
 #include "otbPerBandVectorImageFilter.h"
 
 #include "otbSimpleRcsPanSharpeningFusionImageFilter.h"
-
-#include "init/ossimInit.h"
-
-#include "otbOrthoRectificationFilter.h"
-#include "otbMapProjections.h"
-
 
 
 int main( int argc, char* argv[] )
@@ -73,7 +68,6 @@ int main( int argc, char* argv[] )
 //  Software Guide : EndLatex 
 
 // Software Guide : BeginCodeSnippet
-  ossimInit::instance()->initialize(argc, argv);
 
   if(argc!=12)
   {
@@ -117,79 +111,111 @@ int main( int argc, char* argv[] )
   //  Software Guide : BeginLatex
   //
   // We declare the projection (here we chose the UTM projection, other choices 
-  // are possible). We also declare the orthorectification filter. Note that
+  // are possible) and retrieve the paremeters from the command line: 
+  // \begin{itemize}
+  // \item the UTM zone
+  // \item the hemisphere
+  // \end{itemize}
+  //
+  //  Software Guide : EndLatex 
+  
+// Software Guide : BeginCodeSnippet
+
+	
+  typedef otb::UtmInverseProjection utmMapProjectionType ;
+  utmMapProjectionType::Pointer utmMapProjection =
+      utmMapProjectionType::New();
+  utmMapProjection->SetZone(atoi(argv[4]));
+  utmMapProjection->SetHemisphere(*(argv[5]));
+  
+  // Software Guide : EndCodeSnippet
+  
+  //  Software Guide : BeginLatex
+  //
+  //  We will need to pass several parameters to the orthorectification 
+  // concerning the desired output region:
+  //
+  //  Software Guide : EndLatex 
+  
+  // Software Guide : BeginCodeSnippet
+  ImageType::IndexType start;
+  start[0]=0;
+  start[1]=0;
+				
+  ImageType::SizeType size;
+  size[0]=atoi(argv[8]);
+  size[1]=atoi(argv[9]);
+				
+  ImageType::SpacingType spacing;
+  spacing[0]=atof(argv[10]);
+  spacing[1]=atof(argv[11]);
+				
+  ImageType::PointType origin;
+  origin[0]=strtod(argv[6], NULL);
+  origin[1]=strtod(argv[7], NULL);
+   // Software Guide : EndCodeSnippet
+  
+  //  Software Guide : BeginLatex
+  //
+  // We declare the orthorectification filter. And provide the different 
+  // parameters:
+  //
+  //  Software Guide : EndLatex 
+  
+  // Software Guide : BeginCodeSnippet
+  typedef otb::OrthoRectificationFilter<ImageType, DoubleImageType,
+  utmMapProjectionType> OrthoRectifFilterType ;
+  
+  OrthoRectifFilterType::Pointer  orthoRectifPAN =
+      OrthoRectifFilterType::New();
+  orthoRectifPAN->SetMapProjection(utmMapProjection);
+  
+  orthoRectifPAN->SetInput(readerPAN->GetOutput());
+  
+  orthoRectifPAN->SetOutputStartIndex(start);
+  orthoRectifPAN->SetSize(size);
+  orthoRectifPAN->SetOutputSpacing(spacing);
+  orthoRectifPAN->SetOutputOrigin(origin);
+   // Software Guide : EndCodeSnippet
+  
+  //  Software Guide : BeginLatex
+  // Now we are able to have the orthorectified area from the PAN image. We just
+  // have to follow a similar process for the XS image. However, 
   // the \doxygen{otb}{OrthoRectificationFilter} is designed to work with one
   // band images. To be able to process the XS image (which is a 
   // \doxygen{otb}{VectorImage}), we need to use the 
   // \doxygen{otb}{PerBandVectorImageFilter} which is going to apply the filter
   // set via the method \code{SetFilter()} to all spectral bands.
   //
-  //  Software Guide : EndLatex 
-
-// Software Guide : BeginCodeSnippet
-
-	
-  typedef otb::UtmInverseProjection utmMapProjectionType ;
-  typedef otb::OrthoRectificationFilter<ImageType, DoubleImageType,
-  utmMapProjectionType> OrthoRectifFilterType ;
+  //  Software Guide : EndLatex
+  
+  // Software Guide : BeginCodeSnippet
   typedef otb::PerBandVectorImageFilter<VectorImageType,
     DoubleVectorImageType, OrthoRectifFilterType> VectorOrthoRectifFilterType;
 	
-  OrthoRectifFilterType::Pointer  orthoRectifPAN =
-      OrthoRectifFilterType::New();
+
   OrthoRectifFilterType::Pointer  orthoRectifXS =
       OrthoRectifFilterType::New();
   VectorOrthoRectifFilterType::Pointer  orthoRectifXSVector =
       VectorOrthoRectifFilterType::New();
   orthoRectifXSVector->SetFilter(orthoRectifXS);
-
-  utmMapProjectionType::Pointer utmMapProjection =
-      utmMapProjectionType::New();
-  utmMapProjection->SetZone(atoi(argv[4]));
-  utmMapProjection->SetHemisphere(*(argv[5]));
-  orthoRectifPAN->SetMapProjection(utmMapProjection);
-  orthoRectifXS->SetMapProjection(utmMapProjection);
-// Software Guide : EndCodeSnippet				
-
-
-
-  // Software Guide : BeginCodeSnippet
-  orthoRectifPAN->SetInput(readerPAN->GetOutput());
-  orthoRectifXSVector->SetInput(readerXS->GetOutput());
-  
-  // Software Guide : EndCodeSnippet				
+  // Software Guide : EndCodeSnippet
 
   //  Software Guide : BeginLatex
   //
-  //  We now pass the orthorectification parameters to the orthorectification 
-  // filters:
+  //  This is the only difference, the rest of the parameters are provided as
+  // before:
   //
   //  Software Guide : EndLatex 
-
-// Software Guide : BeginCodeSnippet
   
-  ImageType::IndexType start;
-  start[0]=0;
-  start[1]=0;
-  orthoRectifPAN->SetOutputStartIndex(start);
+  // Software Guide : BeginCodeSnippet
+  orthoRectifXS->SetMapProjection(utmMapProjection);
+
+  orthoRectifXSVector->SetInput(readerXS->GetOutput());
+
   orthoRectifXS->SetOutputStartIndex(start);
-				
-  ImageType::SizeType size;
-  size[0]=atoi(argv[8]);
-  size[1]=atoi(argv[9]);
-  orthoRectifPAN->SetSize(size);
   orthoRectifXS->SetSize(size);
-				
-  ImageType::SpacingType spacing;
-  spacing[0]=atof(argv[10]);
-  spacing[1]=atof(argv[11]);
-  orthoRectifPAN->SetOutputSpacing(spacing);
   orthoRectifXS->SetOutputSpacing(spacing);
-				
-  ImageType::PointType origin;
-  origin[0]=strtod(argv[6], NULL);
-  origin[1]=strtod(argv[7], NULL);
-  orthoRectifPAN->SetOutputOrigin(origin);
   orthoRectifXS->SetOutputOrigin(origin);
 
   // Software Guide : EndCodeSnippet				
