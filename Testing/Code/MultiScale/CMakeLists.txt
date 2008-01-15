@@ -199,6 +199,22 @@ ADD_TEST(msTvGeodesicMorphologyLevelingFilter ${MULTISCALE_TESTS2}
 	 ${TEMP}/msGeodesicMorphologyLevelingFilterOutput.tif
 )
 
+# -------            otb::GeodesicMorphologyLevelingFilter   ----------
+ 
+ADD_TEST(msTuConvexOrConcaveClassificationFilterNew ${MULTISCALE_TESTS2} 
+         otbConvexOrConcaveClassificationFilterNew)
+
+ADD_TEST(msTvConvexOrConcaveClassificationFilter ${MULTISCALE_TESTS2} 
+   --compare-image ${TOL}
+		   ${BASELINE}/msConvexOrConcaveClassificationFilterOutput.png
+ 		   ${TEMP}/msConvexOrConcaveClassificationFilterOutput.png
+         otbConvexOrConcaveClassificationFilter
+	 ${INPUTDATA}/ROI_IKO_PAN_LesHalles.tif
+	 ${INPUTDATA}/ROI_IKO_PAN_LesHalles_leveling.tif
+	 ${TEMP}/msConvexOrConcaveClassificationFilterOutput.png
+	 0.5
+)
+
 # -------       Fichiers sources CXX -----------------------------------
 SET(BasicMultiScale_SRCS1
 otbMorphologicalPyramidResamplerNew.cxx
@@ -219,6 +235,8 @@ otbGeodesicMorphologyDecompositionImageFilterNew.cxx
 otbGeodesicMorphologyDecompositionImageFilter.cxx
 otbGeodesicMorphologyLevelingFilterNew.cxx
 otbGeodesicMorphologyLevelingFilter.cxx
+otbConvexOrConcaveClassificationFilterNew.cxx
+otbConvexOrConcaveClassificationFilter.cxx
 )
 
 

@@ -32,4 +32,6 @@ REGISTER_TEST(otbGeodesicMorphologyDecompositionImageFilterNew);
 REGISTER_TEST(otbGeodesicMorphologyDecompositionImageFilter);
 REGISTER_TEST(otbGeodesicMorphologyLevelingFilterNew);
 REGISTER_TEST(otbGeodesicMorphologyLevelingFilter);
+REGISTER_TEST(otbConvexOrConcaveClassificationFilterNew);
+REGISTER_TEST(otbConvexOrConcaveClassificationFilter);
 }
