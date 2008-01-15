@@ -162,7 +162,42 @@ ADD_TEST(msTvMorphoPyrSegmentationFilter ${MULTISCALE_TESTS2}
 	 10
 )
 
+# -------            otb::GeodesicMorphologyDecompositionImageFilter   ----------
+ 
+ADD_TEST(msTuGeodesicMorphologyDecompositionImageFilterNew ${MULTISCALE_TESTS2} 
+         otbGeodesicMorphologyDecompositionImageFilterNew)
 
+ADD_TEST(msTvGeodesicMorphologyDecompositionImageFilter ${MULTISCALE_TESTS2} 
+   --compare-n-images ${TOL} 3
+		   ${BASELINE}/msGeodesicMorphologyDecompositionImageFilterConvexOutput.tif
+ 		   ${TEMP}/msGeodesicMorphologyDecompositionImageFilterConvexOutput.tif
+		   ${BASELINE}/msGeodesicMorphologyDecompositionImageFilterConcaveOutput.tif
+ 		   ${TEMP}/msGeodesicMorphologyDecompositionImageFilterConcaveOutput.tif
+		   ${BASELINE}/msGeodesicMorphologyDecompositionImageFilterLevelingOutput.tif
+ 		   ${TEMP}/msGeodesicMorphologyDecompositionImageFilterLevelingOutput.tif
+         otbGeodesicMorphologyDecompositionImageFilter
+	 ${INPUTDATA}/ROI_IKO_PAN_LesHalles.tif
+	 ${TEMP}/msGeodesicMorphologyDecompositionImageFilterConvexOutput.tif
+	 ${TEMP}/msGeodesicMorphologyDecompositionImageFilterConcaveOutput.tif
+	 ${TEMP}/msGeodesicMorphologyDecompositionImageFilterLevelingOutput.tif
+	 4
+)
+
+# -------            otb::GeodesicMorphologyLevelingFilter   ----------
+ 
+ADD_TEST(msTuGeodesicMorphologyLevelingFilterNew ${MULTISCALE_TESTS2} 
+         otbGeodesicMorphologyLevelingFilterNew)
+
+ADD_TEST(msTvGeodesicMorphologyLevelingFilter ${MULTISCALE_TESTS2} 
+   --compare-image ${TOL}
+		   ${BASELINE}/msGeodesicMorphologyLevelingFilterOutput.tif
+ 		   ${TEMP}/msGeodesicMorphologyLevelingFilterOutput.tif
+         otbGeodesicMorphologyLevelingFilter
+	 ${INPUTDATA}/ROI_IKO_PAN_LesHalles.tif
+	 ${INPUTDATA}/ROI_IKO_PAN_LesHalles_convex.tif
+	 ${INPUTDATA}/ROI_IKO_PAN_LesHalles_concave.tif
+	 ${TEMP}/msGeodesicMorphologyLevelingFilterOutput.tif
+)
 
 # -------       Fichiers sources CXX -----------------------------------
 SET(BasicMultiScale_SRCS1
@@ -180,6 +215,10 @@ otbMorphologicalPyramidSegmenter.cxx
 SET(BasicMultiScale_SRCS2
 otbMorphologicalPyramidSegmentationFilterNew.cxx
 otbMorphologicalPyramidSegmentationFilter.cxx
+otbGeodesicMorphologyDecompositionImageFilterNew.cxx
+otbGeodesicMorphologyDecompositionImageFilter.cxx
+otbGeodesicMorphologyLevelingFilterNew.cxx
+otbGeodesicMorphologyLevelingFilter.cxx
 )
 
 
