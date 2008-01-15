@@ -104,6 +104,10 @@ public itk::InterpolateImageFunction<TInputImage,TCoordRep>
     /** Fill the weight offset table*/
     void FillWeightOffsetTable() const;
 
+    /** Weights normalization accessors*/
+    itkSetMacro(NormalizeWeight, bool);
+    itkGetMacro(NormalizeWeight, bool);
+    
     protected:
     GenericInterpolateImageFunction();
     ~GenericInterpolateImageFunction();
@@ -138,6 +142,8 @@ public itk::InterpolateImageFunction<TInputImage,TCoordRep>
     mutable unsigned int **m_WeightOffsetTable;
     /** True if internal statistics have been generated */
     mutable bool m_TablesHaveBeenGenerated;
+    /** Weights normalization */
+    bool m_NormalizeWeight;
   };
 
 } // end namespace itk

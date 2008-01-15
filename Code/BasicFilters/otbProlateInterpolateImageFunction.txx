@@ -20,14 +20,17 @@ PURPOSE.  See the above copyright notices for more information.
 
 namespace otb
 {
-  template<class TInputImage, class TBoundaryCondition, class TCoordRep, class TInputInterpolator, class TOutputInterpolator>
+namespace Function
+{
+  template<class TInput, class TOutput>
   const unsigned int
-  ProlateInterpolateImageFunction<TInputImage, TBoundaryCondition, TCoordRep, TInputInterpolator, TOutputInterpolator>
+  ProlateFunction<TInput, TOutput>
   ::m_OriginalProfilSize = 721;
   
-  template<class TInputImage, class TBoundaryCondition, class TCoordRep, class TInputInterpolator, class TOutputInterpolator>
-  const double 
-  ProlateInterpolateImageFunction<TInputImage, TBoundaryCondition, TCoordRep, TInputInterpolator, TOutputInterpolator>
+
+  template<class TInput, class TOutput>
+  const double
+  ProlateFunction<TInput, TOutput>
   ::m_OriginalProfil[721] = {
     0.00125,      0.00124999,   0.00124998,   0.00124997,   0.00124995,   0.00124992,  0.00124989,   0.00124985,   0.0012498,    0.00124975,   0.00124969,   0.00124962,
     0.00124955,   0.00124948,   0.00124939,   0.0012493,    0.00124921,   0.00124911,  0.001249,     0.00124888,   0.00124876,   0.00124864,   0.0012485,    0.00124837,
@@ -91,13 +94,15 @@ namespace otb
     0.000167415,  0.000165465,  0.000163517,  0.000161572,  0.000159629,  0.000157689, 0.000155752,  0.000153816,  0.000151884,  0.000149954,  0.000148026,  0.000146101,
     0.000144179 
   };
+}
 
 /** Constructor */
 template<class TInputImage, class TBoundaryCondition, class TCoordRep, class TInputInterpolator, class TOutputInterpolator>
 ProlateInterpolateImageFunction<TInputImage, TBoundaryCondition, TCoordRep, TInputInterpolator, TOutputInterpolator>
 ::ProlateInterpolateImageFunction()
 {
-  VectorType m_ResampledProfil(1, 0.);
+  //VectorType m_ResampledProfil(1, 0.);
+  this->SetNormalizeWeight(true);
 }
   
 /** Destructor */
@@ -107,64 +112,12 @@ ProlateInterpolateImageFunction<TInputImage, TBoundaryCondition, TCoordRep, TInp
 {
 }
 
-// Overload method to add the construction of resampledprfil
-template<class TInputImage, class TBoundaryCondition, class TCoordRep, class TInputInterpolator, class TOutputInterpolator>
-void
-ProlateInterpolateImageFunction<TInputImage, TBoundaryCondition, TCoordRep, TInputInterpolator, TOutputInterpolator>
-::SetRadius(unsigned int rad)
-{std::cout<<"*****Prolate : SetRadius"<<std::endl;
-  Superclass::SetRadius(rad);
-  VectorType temp(2*rad+1, 0.);
-  m_ResampledProfil = temp;
-  this->ComputeResampledProlateProfil();
-  this->Modified();
-std::cout<<"*****Prolate : SetRadius : Fin"<<std::endl;
-}
-
-
-// Resamplation profils calculation
-template<class TInputImage, class TBoundaryCondition, class TCoordRep, class TInputInterpolator, class TOutputInterpolator>
-void
-ProlateInterpolateImageFunction<TInputImage, TBoundaryCondition, TCoordRep, TInputInterpolator, TOutputInterpolator>
-::ComputeResampledProlateProfil()
-{ std::cout<<"*****Prolate : ComputeResampledProlateProfil"<<std::endl;
-  unsigned int ival;
-  double dval;
-  /* Initialisation sur les lignes : */
-  /* Determine les profils en largeur et hauteur */
-  double sum = 0.;
-  double mean = 0.;
-  for (unsigned int i=0; i<=this->GetRadius(); i++)
-    {
-      ival = static_cast<unsigned int>(m_OriginalProfilSize*static_cast<double>(i)/static_cast<double>(this->GetRadius()+1));
-      dval = m_OriginalProfil[ival];
-      m_ResampledProfil[this->GetRadius()+i] = dval;
-      m_ResampledProfil[this->GetRadius()-i] = dval;
-      sum += 2*dval;
-    }
-  sum -= m_ResampledProfil[this->GetRadius()];// the middled pixel was compted twice
-  mean = sum/(2*static_cast<double>(this->GetRadius())+1);
-  std::cout<<"*****Prolate : ComputeResampledProlateProfil : mean : "<<mean<<std::endl;
-  for (unsigned int i=0; i<m_ResampledProfil.size(); i++)
-    {std::cout<<"*****Prolate : ComputeResampledProlateProfil : value : "<<m_ResampledProfil[i]<<" -> "<<m_ResampledProfil[i]/mean<<std::endl;
-      m_ResampledProfil[i] = m_ResampledProfil[i]/mean;
-    }
-  this->GetFunction().SetProfil(m_ResampledProfil);
-std::cout<<"*****Prolate : ComputeResampledProlateProfil : Fin"<<std::endl;
-} 
-
 template<class TInputImage, class TBoundaryCondition, class TCoordRep, class TInputInterpolator, class TOutputInterpolator>
 void
 ProlateInterpolateImageFunction<TInputImage, TBoundaryCondition, TCoordRep, TInputInterpolator, TOutputInterpolator>
 ::PrintSelf(std::ostream& os, itk::Indent indent) const
 { 
   Superclass::PrintSelf( os, indent );
-  os << indent << "Resample prolate profil : " <<  std::endl;
-  for (unsigned int i=0; i<m_ResampledProfil.size(); i++)
-    {
-      os << indent << i+1 << " : " << m_ResampledProfil[i] << std::endl;
-    }
-
 }
 
 }//namespace otb

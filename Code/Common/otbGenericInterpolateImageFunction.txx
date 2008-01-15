@@ -31,6 +31,7 @@ GenericInterpolateImageFunction<TInputImage, TFunction, TBoundaryCondition, TCoo
   m_OffsetTable = NULL;
   m_WeightOffsetTable = NULL;
   m_TablesHaveBeenGenerated=false;
+  m_NormalizeWeight =  false;
 }
 
 /** Destructor */
@@ -261,17 +262,38 @@ GenericInterpolateImageFunction<TInputImage, TFunction, TBoundaryCondition, TCoo
       // i is the relative offset in dimension dim.
       for( unsigned int i = 0; i < m_WindowSize; i++)
         {
-        // Increment the offset, taking it through the range
-        // (dist + rad - 1, ..., dist - rad), i.e. all x
-        // such that vcl_abs(x) <= rad
-        x -= 1.0;
-
-        // Compute the weight for this m
-	xWeight[dim][i] = m_Function(x);
+	  // Increment the offset, taking it through the range
+	  // (dist + rad - 1, ..., dist - rad), i.e. all x
+	  // such that vcl_abs(x) <= rad
+	  x -= 1.0;
+	  // Compute the weight for this m
+	  xWeight[dim][i] = m_Function(x);
         }
       }
     }
-
+  if (m_NormalizeWeight == true)
+    {
+      double sum = 0.;
+      for( unsigned int dim = 0; dim < ImageDimension; dim++ )
+	{
+	  for( unsigned int i = 0; i < m_WindowSize; i++)
+	    {
+	      // Compute the weight for this m
+	      sum += xWeight[dim][i];
+	    }
+	}
+      for( unsigned int dim = 0; dim < ImageDimension; dim++ )
+	{
+	  for( unsigned int i = 0; i < m_WindowSize; i++)
+	    {
+	      // Compute the weight for this m
+	      xWeight[dim][i] =  xWeight[dim][i]/sum;
+	    }
+	}
+    }
+  
+  
+  
   // Iterate over the neighborhood, taking the correct set
   // of weights in each dimension 
   double xPixelValue = 0.0;

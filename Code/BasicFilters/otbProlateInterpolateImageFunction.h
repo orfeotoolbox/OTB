@@ -35,27 +35,39 @@ class ProlateFunction
 {
   public:
   typedef typename std::vector<double> VectorType;
-  void SetRadius(unsigned int rad){ m_Radius = rad; };
-  unsigned int GetRadius() const { return m_Radius; };
+
 
   // Accessors definitions
-  void SetProfil(VectorType vect){ m_Profil = vect; };
-  VectorType GetProfil(){ return m_Profil; };
+  void SetRadius(unsigned int rad){ m_Radius = rad; };
+  unsigned int GetRadius() const { return m_Radius; };
+  unsigned int GetOriginalProfilSize() const { return m_OriginalProfilSize; };
+  VectorType GetOriginalProfil() const { return m_OriginalProfil;};
 
   inline TOutput operator()( const TInput & A ) const
-    { std::cout<<"~~~~~Prolate : Function"<<std::endl;
-std::cout<<"~~~~~Prolate : Function : "<<A<<" -> "<<static_cast<TOutput>(m_Profil[static_cast<unsigned int>(A)])<<std::endl;
-      return (static_cast<TOutput>(m_Profil[static_cast<unsigned int>(A)])); 
-std::cout<<"~~~~~Prolate : Function : FIN"<<std::endl;
+    { 
+      TOutput val = 0.;
+      if (m_Radius != 0)
+	{
+	  unsigned int ival = static_cast<unsigned int>(m_OriginalProfilSize*static_cast<double>(vcl_abs(A))/static_cast<double>(m_Radius));
+	  val = m_OriginalProfil[ival];
+	}
+      else
+	{
+	  val = 1.;
+	}
+      return val;
     }
 
   private:
-  /** Store the resampled profil.*/
-  VectorType m_Profil;
   /** Useless, only to be compatible with the GenericInterpolateImage. */
   unsigned int m_Radius;
-}; 
+  /** Length of the original profil. */
+  static const unsigned int m_OriginalProfilSize;
+  /** Original prolate profil */
+  static const double m_OriginalProfil[721]; 
 
+}; 
+ 
 }//namespace Function
 
 /** \class ProlateInterpolateImageFunction
@@ -105,16 +117,11 @@ public GenericInterpolateImageFunction< TInputImage,
     typedef typename Superclass::IteratorType                                          IteratorType;
     typedef typename Superclass::ContinuousIndexType                                   ContinuousIndexType;
     typedef typename std::vector<double>                                               VectorType;
+   
+    unsigned int GetOriginalProfilSize() const { return this->GetFunction().GetOriginalProfilSize; };
+    VectorType GetOriginalProfil() const { return this->GetFunction().GetOriginalProfil();};
     
-    /** Compute a resampled profil according to the window size.*/
-    void ComputeResampledProlateProfil();
-
-    void SetRadius(unsigned int rad);
-
-    /** Get the resampled profil.*/
-    VectorType GetResampledProfil(){ return m_ResampledProfil; };
-
-
+   
     protected:
     ProlateInterpolateImageFunction();
     ~ProlateInterpolateImageFunction();
@@ -123,13 +130,6 @@ public GenericInterpolateImageFunction< TInputImage,
     private:
     ProlateInterpolateImageFunction(const Self&); //purposely not implemented
     void operator=(const Self&); //purposely not implemented  
-
-    /** Length of the original profil. */
-    static const unsigned int m_OriginalProfilSize;
-    /** Original prolate profil */
-    static const double m_OriginalProfil[721]; 
-    /** Store the resampled profil.*/
-    VectorType m_ResampledProfil;
   };
 
 } // end namespace itk
