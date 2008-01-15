@@ -112,12 +112,13 @@ template<class TInputImage, class TBoundaryCondition, class TCoordRep, class TIn
 void
 ProlateInterpolateImageFunction<TInputImage, TBoundaryCondition, TCoordRep, TInputInterpolator, TOutputInterpolator>
 ::SetRadius(unsigned int rad)
-{
+{std::cout<<"*****Prolate : SetRadius"<<std::endl;
   Superclass::SetRadius(rad);
   VectorType temp(2*rad+1, 0.);
   m_ResampledProfil = temp;
   this->ComputeResampledProlateProfil();
   this->Modified();
+std::cout<<"*****Prolate : SetRadius : Fin"<<std::endl;
 }
 
 
@@ -126,7 +127,7 @@ template<class TInputImage, class TBoundaryCondition, class TCoordRep, class TIn
 void
 ProlateInterpolateImageFunction<TInputImage, TBoundaryCondition, TCoordRep, TInputInterpolator, TOutputInterpolator>
 ::ComputeResampledProlateProfil()
-{ 
+{ std::cout<<"*****Prolate : ComputeResampledProlateProfil"<<std::endl;
   unsigned int ival;
   double dval;
   /* Initialisation sur les lignes : */
@@ -141,14 +142,15 @@ ProlateInterpolateImageFunction<TInputImage, TBoundaryCondition, TCoordRep, TInp
       m_ResampledProfil[this->GetRadius()-i] = dval;
       sum += 2*dval;
     }
-  sum -= m_ResampledProfil[this->GetRadius()];// the middle pixel was compted twice
-  mean = sum/(2*this->GetRadius()+1);
-  
+  sum -= m_ResampledProfil[this->GetRadius()];// the middled pixel was compted twice
+  mean = sum/(2*static_cast<double>(this->GetRadius())+1);
+  std::cout<<"*****Prolate : ComputeResampledProlateProfil : mean : "<<mean<<std::endl;
   for (unsigned int i=0; i<m_ResampledProfil.size(); i++)
-    {
+    {std::cout<<"*****Prolate : ComputeResampledProlateProfil : value : "<<m_ResampledProfil[i]<<" -> "<<m_ResampledProfil[i]/mean<<std::endl;
       m_ResampledProfil[i] = m_ResampledProfil[i]/mean;
     }
   this->GetFunction().SetProfil(m_ResampledProfil);
+std::cout<<"*****Prolate : ComputeResampledProlateProfil : Fin"<<std::endl;
 } 
 
 template<class TInputImage, class TBoundaryCondition, class TCoordRep, class TInputInterpolator, class TOutputInterpolator>

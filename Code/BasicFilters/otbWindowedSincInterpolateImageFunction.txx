@@ -33,19 +33,6 @@ WindowedSincInterpolateImageFunction<TInputImage, TWindowFunction, TBoundaryCond
 {
 }
 
-/*
-// Overload method to add the construction of resampledprfil
-template<class TInputImage, class TWindowFunction, class TBoundaryCondition, class TCoordRep>
-void
-WindowedSincInterpolateImageFunction<TInputImage, TWindowFunction, TBoundaryCondition, TCoordRep>
-::SetRadius(unsigned int rad)
-{
-  Superclass::SetRadius(rad);
-  this->GetFunction().SetRadius(rad);
-  this->Modified();
-}
-*/
-
 // Overload method to add the construction of resampledprfil
 template<class TInputImage, class TWindowFunction, class TBoundaryCondition, class TCoordRep>
 void

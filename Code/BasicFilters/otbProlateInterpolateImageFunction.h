@@ -43,8 +43,10 @@ class ProlateFunction
   VectorType GetProfil(){ return m_Profil; };
 
   inline TOutput operator()( const TInput & A ) const
-    { 
+    { std::cout<<"~~~~~Prolate : Function"<<std::endl;
+std::cout<<"~~~~~Prolate : Function : "<<A<<" -> "<<static_cast<TOutput>(m_Profil[static_cast<unsigned int>(A)])<<std::endl;
       return (static_cast<TOutput>(m_Profil[static_cast<unsigned int>(A)])); 
+std::cout<<"~~~~~Prolate : Function : FIN"<<std::endl;
     }
 
   private:

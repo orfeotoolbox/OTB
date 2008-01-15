@@ -357,7 +357,7 @@ ADD_TEST(raTuAtmosphericCorrectionParametersNew ${RADIOMETRY_TESTS3}
 ##########           otb::FilterFunctionValues -------------------
 # in otbAtmosphericCorrectionParameters.h/.cxx
 ADD_TEST(raTvFilterFunctionValuesTest ${RADIOMETRY_TESTS3}
-    --compare-ascii ${TOL} ${BASELINE_FILES}/raTvFilterFunctionValuesTest.txt
+    --compare-ascii ${EPSILON_10e6} ${BASELINE_FILES}/raTvFilterFunctionValuesTest.txt
                            ${TEMP}/raTvFilterFunctionValuesTest.txt
         otbFilterFunctionValuesTest
 	${TEMP}/raTvFilterFunctionValuesTest.txt

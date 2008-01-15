@@ -35,11 +35,11 @@ int otbProlateInterpolateImageFunction(int argc, char * argv[])
    unsigned int i = 4;
 
    std::vector<ContinuousIndexType> indicesList;
-
+   std::cout<<"Prolate : Test : while varie jusqua : "<<static_cast<unsigned int>(argc)<<std::endl;
   while(i<static_cast<unsigned int>(argc) && (i+1)<static_cast<unsigned int>(argc))
-    {
+    {  std::cout<<"Prolate : Test : while i vaut : "<<i<<" -> "<<atof(argv[i])<<" , "<<atof(argv[i+1])<<std::endl;
       ContinuousIndexType idx;
-
+      std::cout<<"Prolate : Test : while"<<std::endl;
       idx[0]=atof(argv[i]);
       idx[1]=atof(argv[i+1]);
       
@@ -47,15 +47,20 @@ int otbProlateInterpolateImageFunction(int argc, char * argv[])
 
       i+=2;
     }
-
+  std::cout<<"Prolate : Test : New()"<<std::endl;
   // Instantiating object
   InterpolatorType::Pointer prolate = InterpolatorType::New();
-
+  std::cout<<"Prolate : Test : Reader::New()"<<std::endl;
   ReaderType::Pointer reader = ReaderType::New();
+  std::cout<<"Prolate : Test : Reader::SetFileName : "<<infname<<std::endl;
   reader->SetFileName(infname);
+  std::cout<<"Prolate : Test : Update()"<<std::endl;
   reader->Update();
+  std::cout<<"Prolate : Test : prolate::Setinput()"<<std::endl;
   prolate->SetInputImage(reader->GetOutput());
+  std::cout<<"Prolate : Test : prolate::SetRadius() : "<<atoi(argv[3])<<std::endl;
   prolate->SetRadius(atoi(argv[3]));
+  std::cout<<"Prolate : Test : output name : "<<outfname<<std::endl;
   /************************
   typedef InterpolatorType::VectorType            VectType;
   VectType tutu=prolate->GetResampledProfil();
@@ -67,12 +72,14 @@ int otbProlateInterpolateImageFunction(int argc, char * argv[])
   std::ofstream file;
   file.open(outfname);
 
-
+ std::cout<<"Prolate : Test : for : "<<outfname<<std::endl;
+ unsigned mmm = 1;
   for(std::vector<ContinuousIndexType>::iterator it = indicesList.begin();it!=indicesList.end();++it)
-    {
+    {std::cout<<"Prolate : Test : for indice : "<<mmm<<std::endl;
       file<<(*it)<<" -> "<<prolate->EvaluateAtContinuousIndex((*it))<<std::endl;
+      mmm++;
     }
-  
+   std::cout<<"Prolate : Test : close"<<std::endl;
   file.close();
   
   return EXIT_SUCCESS;
