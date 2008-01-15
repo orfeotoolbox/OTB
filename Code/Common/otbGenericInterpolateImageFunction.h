@@ -98,17 +98,20 @@ public itk::InterpolateImageFunction<TInputImage,TCoordRep>
     } 
     
     /** Delete tables.*/
-    void ResetOffsetTable();
+    void ResetOffsetTable() const;
     /** Initialize used tables*/ 
-    void InitializeTables();    
+    void InitializeTables() const;    
     /** Fill the weight offset table*/
-    void FillWeightOffsetTable();
+    void FillWeightOffsetTable() const;
 
     protected:
     GenericInterpolateImageFunction();
     ~GenericInterpolateImageFunction();
     void PrintSelf(std::ostream& os, itk::Indent indent) const;
- 
+
+    /** Call the superclass implementation and set the TablesHaveBeenGenerated
+     * flag to false */
+    virtual void Modified(void);
 
     private:
     GenericInterpolateImageFunction(const Self&); //purposely not implemented
@@ -118,17 +121,23 @@ public itk::InterpolateImageFunction<TInputImage,TCoordRep>
     // Constant to store twice the radius
     unsigned int m_WindowSize;
 
-     /** The offset array, used to keep a list of relevant
-     * offsets in the neihborhoodIterator */
-    unsigned int *m_OffsetTable;
     /** Used function */
     FunctionType m_Function;
-    /** Size of the offset table */
-    unsigned int m_OffsetTableSize;
     /** Store the image dimension.*/
     unsigned int m_ImageDimension;  
+
+    /** These members are declared mutable so that they can be 
+	regenerated seamlessly inside the EvaluateAtContinuousIndex method if
+	they need to */
+    /** Size of the offset table */
+    mutable unsigned int m_OffsetTableSize;
+    /** The offset array, used to keep a list of relevant
+     * offsets in the neihborhoodIterator */
+    mutable unsigned int *m_OffsetTable;
     /** Index into the weights array for each offset */
-    unsigned int **m_WeightOffsetTable;
+    mutable unsigned int **m_WeightOffsetTable;
+    /** True if internal statistics have been generated */
+    mutable bool m_TablesHaveBeenGenerated;
   };
 
 } // end namespace itk

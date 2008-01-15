@@ -28,6 +28,9 @@ GenericInterpolateImageFunction<TInputImage, TFunction, TBoundaryCondition, TCoo
 {
   //m_Radius = 1;
   m_WindowSize = 1;
+  m_OffsetTable = NULL;
+  m_WeightOffsetTable = NULL;
+  m_TablesHaveBeenGenerated=false;
 }
 
 /** Destructor */
@@ -42,17 +45,25 @@ GenericInterpolateImageFunction<TInputImage, TFunction,TBoundaryCondition, TCoor
 template<class TInputImage, class TFunction, class TBoundaryCondition, class TCoordRep>
 void
 GenericInterpolateImageFunction<TInputImage, TFunction, TBoundaryCondition, TCoordRep>
-::ResetOffsetTable()
+::ResetOffsetTable() const 
 {
   // Clear the offset table
-  delete [] m_OffsetTable;
-
-  // Clear the weights tables
-  for(unsigned int i=0; i < m_OffsetTableSize; i++)
+  if(m_OffsetTable!=NULL)
     {
-    delete [] m_WeightOffsetTable[i];
+      delete [] m_OffsetTable;
+      m_OffsetTable=NULL;
     }
-  delete[] m_WeightOffsetTable;
+
+  // Clear the weights tales
+  if(m_WeightOffsetTable!=NULL)
+    {
+      for(unsigned int i=0; i < m_OffsetTableSize; i++)
+	{
+	  delete [] m_WeightOffsetTable[i];
+	}
+      delete[] m_WeightOffsetTable;
+      m_WeightOffsetTable = NULL;
+    }
 }
 
 
@@ -78,20 +89,24 @@ GenericInterpolateImageFunction<TInputImage, TFunction, TBoundaryCondition, TCoo
   //m_Radius = rad;
   this->GetFunction().SetRadius(rad);
   m_WindowSize = rad << 1;
-  // Delete existing tables
-  this->ResetOffsetTable();
-  // Tables initialization
-  this->InitializeTables();
-  // fill the weigth table
-  this->FillWeightOffsetTable();
   this->Modified();
+}
+
+template<class TInputImage, class TFunction, class TBoundaryCondition, class TCoordRep>
+void
+GenericInterpolateImageFunction<TInputImage, TFunction, TBoundaryCondition, TCoordRep>
+::Modified()
+{
+  Superclass::Modified();
+  m_TablesHaveBeenGenerated=false;
+  
 }
 
 /** Initialize used tables*/ 
 template<class TInputImage, class TFunction, class TBoundaryCondition, class TCoordRep>
 void
 GenericInterpolateImageFunction<TInputImage, TFunction, TBoundaryCondition, TCoordRep>
-::InitializeTables()
+::InitializeTables() const
 {
   // Compute the offset table size
   m_OffsetTableSize = 1;
@@ -115,7 +130,7 @@ GenericInterpolateImageFunction<TInputImage, TFunction, TBoundaryCondition, TCoo
 template<class TInputImage, class TFunction, class TBoundaryCondition, class TCoordRep>
 void
 GenericInterpolateImageFunction<TInputImage, TFunction, TBoundaryCondition, TCoordRep>
-::FillWeightOffsetTable()
+::FillWeightOffsetTable() const
 {
   // Initialize the neighborhood
   SizeType radius;
@@ -171,6 +186,17 @@ typename GenericInterpolateImageFunction<TInputImage, TFunction, TBoundaryCondit
 GenericInterpolateImageFunction<TInputImage, TFunction, TBoundaryCondition, TCoordRep>
 ::EvaluateAtContinuousIndex(const ContinuousIndexType& index) const
 {
+  if(!m_TablesHaveBeenGenerated)   
+    {
+      // Delete existing tables
+      this->ResetOffsetTable();
+      // Tables initialization
+      this->InitializeTables();
+      // fill the weigth table
+      this->FillWeightOffsetTable();
+      m_TablesHaveBeenGenerated=true;
+    }
+
   unsigned int dim;
   IndexType baseIndex;
   double distance[ImageDimension];
