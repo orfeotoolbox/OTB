@@ -22,19 +22,16 @@
 
 
 // iostream is used for general output
-#include <iostream>
-#include <iterator>
-#include <stdlib.h>
+// #include <iostream>
+// #include <iterator>
+// #include <stdlib.h>
 
-#include "otbMacro.h"
 #include "otbImage.h"
 #include "otbVectorImage.h"
 #include "otbImageFileReader.h"
 #include "otbStreamingImageFileWriter.h"
 
 #include "otbPerBandVectorImageFilter.h"
-
-// #include "init/ossimInit.h"
 
 // Software Guide : BeginLatex
 //
@@ -60,9 +57,6 @@
 
 int main( int argc, char* argv[] )
 {
-
-
-  //ossimInit::instance()->initialize(argc, argv);
 
   if(argc!=11)
     {

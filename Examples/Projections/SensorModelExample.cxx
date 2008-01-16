@@ -19,21 +19,12 @@
 #pragma warning ( disable : 4786 )
 #endif
 
-#include <iostream>
-#include <iterator>
-#include <stdlib.h>
-
-#include "otbMacro.h"
 #include "otbImage.h"
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
-#include "otbStreamingImageFileWriter.h"
 
-
-#include "itkExceptionObject.h"
 #include "itkExtractImageFilter.h"
 #include "itkRescaleIntensityImageFilter.h"
-#include "itkImageRegionIteratorWithIndex.h"
 #include "itkLinearInterpolateImageFunction.h"
 
 // Software Guide : BeginLatex
@@ -60,8 +51,6 @@
 int main( int argc, char* argv[] )
 {
 
-//   ossimInit::instance()->initialize(argc, argv);//FIXME : est-ce
-                                               //toujours necessaire?
 
   if(argc!=8)
     {
