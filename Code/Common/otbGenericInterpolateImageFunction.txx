@@ -99,7 +99,7 @@ GenericInterpolateImageFunction<TInputImage, TFunction, TBoundaryCondition, TCoo
 ::Modified()
 {
   Superclass::Modified();
-  m_TablesHaveBeenGenerated=false;
+  m_TablesHaveBeenGenerated = false;
   
 }
 
@@ -272,22 +272,22 @@ GenericInterpolateImageFunction<TInputImage, TFunction, TBoundaryCondition, TCoo
       }
     }
   if (m_NormalizeWeight == true)
-    {
-      double sum = 0.;
+    {   
       for( unsigned int dim = 0; dim < ImageDimension; dim++ )
-	{
+	{ 
+	  double sum = 0.;
 	  for( unsigned int i = 0; i < m_WindowSize; i++)
 	    {
 	      // Compute the weight for this m
+	      std::cout<<xWeight[dim][i]<<std::endl;
 	      sum += xWeight[dim][i];
 	    }
-	}
-      for( unsigned int dim = 0; dim < ImageDimension; dim++ )
-	{
+	  std::cout<<"°°°°°°°°°°°°°"<<sum<<std::endl;
 	  for( unsigned int i = 0; i < m_WindowSize; i++)
 	    {
 	      // Compute the weight for this m
 	      xWeight[dim][i] =  xWeight[dim][i]/sum;
+    std::cout<<xWeight[dim][i]<<std::endl;
 	    }
 	}
     }
