@@ -15,6 +15,7 @@ SET(EPSILON 0.00000001)
 
 SET(MULTISCALE_TESTS1 ${CXX_TEST_PATH}/otbMultiScaleTests1)
 SET(MULTISCALE_TESTS2 ${CXX_TEST_PATH}/otbMultiScaleTests2)
+SET(MULTISCALE_TESTS3 ${CXX_TEST_PATH}/otbMultiScaleTests3)
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ otbMULTISCALE_TESTS1 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -263,6 +264,30 @@ ADD_TEST(msTvMorphologicalClosingProfileFilter ${MULTISCALE_TESTS2}
 	 1	 
 )
 
+# -------            otb::ProfileToProfileDerivativeFilter   ----------
+ 
+ADD_TEST(msTuProfileToProfileDerivativeFilterNew ${MULTISCALE_TESTS3} 
+         otbProfileToProfileDerivativeFilterNew)
+
+ADD_TEST(msTvProfileToProfileDerivativeFilter ${MULTISCALE_TESTS3} 
+   --compare-n-images ${TOL} 4
+		   ${BASELINE}/msProfileToProfileDerivativeFilterOutput1.tif
+ 		   ${TEMP}/msProfileToProfileDerivativeFilterOutput1.tif
+		   ${BASELINE}/msProfileToProfileDerivativeFilterOutput2.tif	
+ 		   ${TEMP}/msProfileToProfileDerivativeFilterOutput2.tif
+		   ${BASELINE}/msProfileToProfileDerivativeFilterOutput3.tif
+ 		   ${TEMP}/msProfileToProfileDerivativeFilterOutput3.tif
+		   ${BASELINE}/msProfileToProfileDerivativeFilterOutput4.tif
+ 		   ${TEMP}/msProfileToProfileDerivativeFilterOutput4.tif		  
+         otbProfileToProfileDerivativeFilter
+	 ${INPUTDATA}/ROI_IKO_PAN_LesHalles.tif
+	 ${TEMP}/msProfileToProfileDerivativeFilterOutput
+	 tif
+	 5
+	 1
+	 1	 
+)
+
 # -------       Fichiers sources CXX -----------------------------------
 SET(BasicMultiScale_SRCS1
 otbMorphologicalPyramidResamplerNew.cxx
@@ -290,7 +315,10 @@ otbMorphologicalOpeningProfileFilter.cxx
 otbMorphologicalClosingProfileFilterNew.cxx
 otbMorphologicalClosingProfileFilter.cxx
 )
-
+SET(BasicMultiScale_SRCS3
+otbProfileToProfileDerivativeFilterNew.cxx
+otbProfileToProfileDerivativeFilter.cxx
+)
 
 INCLUDE_DIRECTORIES("${OTBTesting_BINARY_DIR}")
 
@@ -298,5 +326,7 @@ ADD_EXECUTABLE(otbMultiScaleTests1 otbMultiScaleTests1.cxx ${BasicMultiScale_SRC
 TARGET_LINK_LIBRARIES(otbMultiScaleTests1 OTBIO OTBMultiScale gdal ITKIO ITKAlgorithms ITKStatistics ITKCommon)
 ADD_EXECUTABLE(otbMultiScaleTests2 otbMultiScaleTests2.cxx ${BasicMultiScale_SRCS2})
 TARGET_LINK_LIBRARIES(otbMultiScaleTests2 OTBIO OTBMultiScale gdal ITKIO ITKAlgorithms ITKStatistics ITKCommon)
+ADD_EXECUTABLE(otbMultiScaleTests3 otbMultiScaleTests3.cxx ${BasicMultiScale_SRCS3})
+TARGET_LINK_LIBRARIES(otbMultiScaleTests3 OTBIO OTBMultiScale gdal ITKIO ITKAlgorithms ITKStatistics ITKCommon)
 
 ENDIF( NOT OTB_DISABLE_CXX_TESTING )
