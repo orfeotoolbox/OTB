@@ -279,15 +279,12 @@ GenericInterpolateImageFunction<TInputImage, TFunction, TBoundaryCondition, TCoo
 	  for( unsigned int i = 0; i < m_WindowSize; i++)
 	    {
 	      // Compute the weight for this m
-	      std::cout<<xWeight[dim][i]<<std::endl;
 	      sum += xWeight[dim][i];
 	    }
-	  std::cout<<"°°°°°°°°°°°°°"<<sum<<std::endl;
 	  for( unsigned int i = 0; i < m_WindowSize; i++)
 	    {
 	      // Compute the weight for this m
 	      xWeight[dim][i] =  xWeight[dim][i]/sum;
-    std::cout<<xWeight[dim][i]<<std::endl;
 	    }
 	}
     }
