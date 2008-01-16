@@ -215,6 +215,54 @@ ADD_TEST(msTvConvexOrConcaveClassificationFilter ${MULTISCALE_TESTS2}
 	 0.5
 )
 
+# -------            otb::MorphologicalOpeningProfileFilter   ----------
+ 
+ADD_TEST(msTuMorphologicalOpeningProfileFilterNew ${MULTISCALE_TESTS2} 
+         otbMorphologicalOpeningProfileFilterNew)
+
+ADD_TEST(msTvMorphologicalOpeningProfileFilter ${MULTISCALE_TESTS2} 
+   --compare-n-images ${TOL} 4
+		   ${BASELINE}/msMorphologicalOpeningProfileFilterOutput1.tif
+ 		   ${TEMP}/msMorphologicalOpeningProfileFilterOutput1.tif
+		   ${BASELINE}/msMorphologicalOpeningProfileFilterOutput2.tif	
+ 		   ${TEMP}/msMorphologicalOpeningProfileFilterOutput2.tif
+		   ${BASELINE}/msMorphologicalOpeningProfileFilterOutput3.tif
+ 		   ${TEMP}/msMorphologicalOpeningProfileFilterOutput3.tif
+		   ${BASELINE}/msMorphologicalOpeningProfileFilterOutput4.tif
+ 		   ${TEMP}/msMorphologicalOpeningProfileFilterOutput4.tif		  
+         otbMorphologicalOpeningProfileFilter
+	 ${INPUTDATA}/ROI_IKO_PAN_LesHalles.tif
+	 ${TEMP}/msMorphologicalOpeningProfileFilterOutput
+	 tif
+	 4
+	 1
+	 1	 
+)
+
+# -------            otb::MorphologicalClosingProfileFilter   ----------
+ 
+ADD_TEST(msTuMorphologicalClosingProfileFilterNew ${MULTISCALE_TESTS2} 
+         otbMorphologicalClosingProfileFilterNew)
+
+ADD_TEST(msTvMorphologicalClosingProfileFilter ${MULTISCALE_TESTS2} 
+   --compare-n-images ${TOL} 4
+		   ${BASELINE}/msMorphologicalClosingProfileFilterOutput1.tif
+ 		   ${TEMP}/msMorphologicalClosingProfileFilterOutput1.tif
+		   ${BASELINE}/msMorphologicalClosingProfileFilterOutput2.tif	
+ 		   ${TEMP}/msMorphologicalClosingProfileFilterOutput2.tif
+		   ${BASELINE}/msMorphologicalClosingProfileFilterOutput3.tif
+ 		   ${TEMP}/msMorphologicalClosingProfileFilterOutput3.tif
+		   ${BASELINE}/msMorphologicalClosingProfileFilterOutput4.tif
+ 		   ${TEMP}/msMorphologicalClosingProfileFilterOutput4.tif		  
+         otbMorphologicalClosingProfileFilter
+	 ${INPUTDATA}/ROI_IKO_PAN_LesHalles.tif
+	 ${TEMP}/msMorphologicalClosingProfileFilterOutput
+	 tif
+	 4
+	 1
+	 1	 
+)
+
 # -------       Fichiers sources CXX -----------------------------------
 SET(BasicMultiScale_SRCS1
 otbMorphologicalPyramidResamplerNew.cxx
@@ -237,6 +285,10 @@ otbGeodesicMorphologyLevelingFilterNew.cxx
 otbGeodesicMorphologyLevelingFilter.cxx
 otbConvexOrConcaveClassificationFilterNew.cxx
 otbConvexOrConcaveClassificationFilter.cxx
+otbMorphologicalOpeningProfileFilterNew.cxx
+otbMorphologicalOpeningProfileFilter.cxx
+otbMorphologicalClosingProfileFilterNew.cxx
+otbMorphologicalClosingProfileFilter.cxx
 )
 
 

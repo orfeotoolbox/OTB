@@ -34,4 +34,8 @@ REGISTER_TEST(otbGeodesicMorphologyLevelingFilterNew);
 REGISTER_TEST(otbGeodesicMorphologyLevelingFilter);
 REGISTER_TEST(otbConvexOrConcaveClassificationFilterNew);
 REGISTER_TEST(otbConvexOrConcaveClassificationFilter);
+REGISTER_TEST(otbMorphologicalOpeningProfileFilterNew);
+REGISTER_TEST(otbMorphologicalOpeningProfileFilter);
+REGISTER_TEST(otbMorphologicalClosingProfileFilterNew);
+REGISTER_TEST(otbMorphologicalClosingProfileFilter); 
 }
