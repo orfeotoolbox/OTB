@@ -56,12 +56,10 @@ class ITK_EXPORT ProfileToProfileDerivativeFilter
   itkTypeMacro(ProfileToProfileDerivativeFilter, ImageListToImageListFilter);
   
   /** Template parameters typedefs */
-  typedef TInputImage InputImageType;
   typedef typename InputImageType::Pointer InputImagePointerType;
   typedef typename Superclass::InputImageListType InputImageListType;
   typedef typename InputImageListType::Pointer InputImageListPointerType;
   typedef typename InputImageListType::ImageType InputImageType;
-  typedef TOutputImage OutputImageType;
   typedef typename Superclass::OutputImageListType OutputImageListType;
   typedef typename OutputImageListType::Pointer OutputImageListPointerType;
   typedef typename OutputImageListType::ImageType OutputImageType;
