@@ -107,11 +107,10 @@ protected:
     Ex /= (vx.size());
 
     TOutput Vx = 0.0;
-
   
     for( itx = vx.begin(); itx < vx.end(); itx++)
       {
-      Vx  += vcl_pow((*itx)-Ex,2.0);
+				Vx  += vcl_pow((*itx)-Ex,2);
       }
 
     Vx /= (vx.size());
@@ -282,13 +281,13 @@ protected:
       for( itj = donnees.begin(); itj < donnees.end(); itj++ )
 	{
 	if(iti != itj)
-	  termeR += vcl_pow(Rxy((*iti),(*itj)),2.0);
+	  termeR += vcl_pow(Rxy((*iti),(*itj)),2);
 
 	for( itk = donnees.begin(); itk < donnees.end(); itk++ )
 	  for( itl = donnees.begin(); itl < donnees.end(); itl++ )
 	    {
 	    if((iti != itj) || (iti != itk) || (iti != itl))
-	      termeQ += vcl_pow( Qxijkl((*iti),(*itj),(*itk),(*itl)),2.0);
+	      termeQ += vcl_pow( Qxijkl((*iti),(*itj),(*itk),(*itl)),2);
 	    }
 	}
   
