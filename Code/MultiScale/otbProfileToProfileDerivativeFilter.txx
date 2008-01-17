@@ -15,8 +15,8 @@ the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
 PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef _otbImageListToImageListApplyFilter_txx
-#define _otbImageListToImageListApplyFilter_txx
+#ifndef _otbProfileToProfileDerivativeFilter_txx
+#define _otbProfileToProfileDerivativeFilter_txx
 
 #include "otbProfileToProfileDerivativeFilter.h"
 
@@ -49,6 +49,7 @@ ProfileToProfileDerivativeFilter<TInputImageList,TOutputImageList>
 	  // in this case, clear the list
 	  outputPtr->Clear();
 	  typename InputImageListType::ConstIterator inputListIt = inputPtr->Begin();
+	  ++inputListIt;
 	  while(inputListIt!=inputPtr->End())
 	    {
 	      outputPtr->PushBack(OutputImageType::New());
@@ -59,7 +60,7 @@ ProfileToProfileDerivativeFilter<TInputImageList,TOutputImageList>
       // For each input image
       typename InputImageListType::ConstIterator inputListIt = inputPtr->Begin();
       typename OutputImageListType::Iterator outputListIt = outputPtr->Begin();
-
+      ++inputListIt;
       while(inputListIt!=inputPtr->End()&&outputListIt!=outputPtr->End())
 	{
 	  // Create the output image and set its information

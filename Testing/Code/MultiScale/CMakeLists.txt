@@ -288,6 +288,26 @@ ADD_TEST(msTvProfileToProfileDerivativeFilter ${MULTISCALE_TESTS3}
 	 1	 
 )
 
+# -------            otb::ProfileDerivativeToMultiScaleCharacteristicsFilter   ----------
+ 
+ADD_TEST(msTuProfileDerivativeToMultiScaleCharacteristicsFilterNew ${MULTISCALE_TESTS3} 
+         otbProfileDerivativeToMultiScaleCharacteristicsFilterNew)
+
+ADD_TEST(msTvProfileDerivativeToMultiScaleCharacteristicsFilter ${MULTISCALE_TESTS3} 
+   --compare-n-images ${TOL} 2
+		   ${BASELINE}/msProfileDerivativeToMultiScaleCharacteristicsFilterOutput.tif
+ 		   ${TEMP}/msProfileDerivativeToMultiScaleCharacteristicsFilterOutput.tif
+		   ${BASELINE}/msProfileDerivativeToMultiScaleCharacteristicsFilterOutputCharacteristics.tif	
+ 		   ${TEMP}/msProfileDerivativeToMultiScaleCharacteristicsFilterOutputCharacteristics.tif		  
+         otbProfileDerivativeToMultiScaleCharacteristicsFilter
+	 ${INPUTDATA}/ROI_IKO_PAN_LesHalles.tif
+	 ${TEMP}/msProfileDerivativeToMultiScaleCharacteristicsFilterOutput.tif
+	  ${TEMP}/msProfileDerivativeToMultiScaleCharacteristicsFilterOutputCharacteristics.tif
+	 5
+	 1
+	 1	 
+)
+
 # -------       Fichiers sources CXX -----------------------------------
 SET(BasicMultiScale_SRCS1
 otbMorphologicalPyramidResamplerNew.cxx
@@ -318,6 +338,8 @@ otbMorphologicalClosingProfileFilter.cxx
 SET(BasicMultiScale_SRCS3
 otbProfileToProfileDerivativeFilterNew.cxx
 otbProfileToProfileDerivativeFilter.cxx
+otbProfileDerivativeToMultiScaleCharacteristicsFilterNew.cxx
+otbProfileDerivativeToMultiScaleCharacteristicsFilter.cxx
 )
 
 INCLUDE_DIRECTORIES("${OTBTesting_BINARY_DIR}")
