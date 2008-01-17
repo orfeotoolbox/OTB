@@ -56,13 +56,13 @@ class ITK_EXPORT ProfileToProfileDerivativeFilter
   itkTypeMacro(ProfileToProfileDerivativeFilter, ImageListToImageListFilter);
   
   /** Template parameters typedefs */
-  typedef typename InputImageType::Pointer InputImagePointerType;
   typedef typename Superclass::InputImageListType InputImageListType;
   typedef typename InputImageListType::Pointer InputImageListPointerType;
-  typedef typename InputImageListType::ImageType InputImageType;
   typedef typename Superclass::OutputImageListType OutputImageListType;
   typedef typename OutputImageListType::Pointer OutputImageListPointerType;
   typedef typename OutputImageListType::ImageType OutputImageType;
+  typedef typename InputImageListType::ImageType InputImageType;
+  typedef typename InputImageType::Pointer InputImagePointerType;
 
   /** typedefs of the filters used for the derivative */
   typedef itk::SubtractImageFilter<InputImageType,InputImageType,InputImageType> SubtractFilterType;
