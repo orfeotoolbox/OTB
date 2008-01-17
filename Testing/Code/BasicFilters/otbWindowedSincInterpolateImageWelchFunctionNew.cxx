@@ -17,17 +17,18 @@
 =========================================================================*/
 #include "itkExceptionObject.h"
 
-#include "otbWindowedSincInterpolateImageFunction.h"
-#include "itkConstantBoundaryCondition.h"
+#include "otbWindowedSincInterpolateImageWelchFunction.h"
 #include "otbImage.h"
+  
+int otbWindowedSincInterpolateImageWelchFunctionNew(int argc, char * argv[])
+{ 
+  typedef otb::Image<double,2>                                           ImageType;
+  typedef otb::WindowedSincInterpolateImageWelchFunction<ImageType>      InterpolatorType;
+ 
+  // Instantiating objects
+  InterpolatorType::Pointer    interp    = InterpolatorType::New();
+ 
+ 	
 
-int otbWindowedSincInterpolateImageFunctionNew(int argc, char * argv[])
-{
-  typedef otb::Image<double,2>                                                  ImageType;
-  typedef otb::WindowedSincInterpolateImageFunction<ImageType>    WindowedSincInterpolatorType;
-  
-  // Instantiating object
-  WindowedSincInterpolatorType::Pointer winInterp = WindowedSincInterpolatorType::New();
-  
   return EXIT_SUCCESS;
 }

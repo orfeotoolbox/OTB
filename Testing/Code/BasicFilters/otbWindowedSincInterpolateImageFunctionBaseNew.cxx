@@ -17,9 +17,9 @@
 =========================================================================*/
 #include "itkExceptionObject.h"
 
-#include "otbGenericInterpolateImageFunction.h"
-#include "otbImage.h"
+#include "otbWindowedSincInterpolateImageFunctionBase.h"
 #include "itkConstantBoundaryCondition.h"
+#include "otbImage.h"
 
 
 namespace Function {
@@ -38,21 +38,14 @@ public:
 
 }
 
-
-int otbGenericInterpolateImageFunctionNew(int argc, char * argv[])
+int otbWindowedSincInterpolateImageFunctionBaseNew(int argc, char * argv[])
 {
-  
-  typedef double                                                   InputPixelType;
-  const int Dimension = 2;
-  typedef otb::Image<InputPixelType,Dimension>                     ImageType;
-  typedef Function::SameFunction<InputPixelType,InputPixelType >   FunctionType;
-  typedef itk::ConstantBoundaryCondition< ImageType >              BoundaryConditionType;
-  typedef double                                                   CoordRepType;
-
-  typedef otb::GenericInterpolateImageFunction<ImageType, FunctionType, BoundaryConditionType, CoordRepType> GenericFunctionType;
+  typedef otb::Image<double,2>                                                    ImageType;
+  typedef Function::SameFunction<double,double>                                   FunctionType;
+  typedef otb::WindowedSincInterpolateImageFunctionBase<ImageType, FunctionType>  WindowedSincInterpolatorType;
   
   // Instantiating object
-  GenericFunctionType::Pointer generic = GenericFunctionType::New();
+  WindowedSincInterpolatorType::Pointer winInterp = WindowedSincInterpolatorType::New();
   
   return EXIT_SUCCESS;
 }

@@ -26,8 +26,8 @@ template<class TInputImage, class TFunction, class TBoundaryCondition, class TCo
 GenericInterpolateImageFunction<TInputImage, TFunction, TBoundaryCondition, TCoordRep>
 ::GenericInterpolateImageFunction()
 {
-  //m_Radius = 1;
   m_WindowSize = 1;
+  this->SetRadius(1);
   m_OffsetTable = NULL;
   m_WeightOffsetTable = NULL;
   m_TablesHaveBeenGenerated=false;
@@ -195,7 +195,7 @@ GenericInterpolateImageFunction<TInputImage, TFunction, TBoundaryCondition, TCoo
       this->InitializeTables();
       // fill the weigth table
       this->FillWeightOffsetTable();
-      m_TablesHaveBeenGenerated=true;
+      m_TablesHaveBeenGenerated = true;
     }
 
   unsigned int dim;
@@ -234,14 +234,6 @@ GenericInterpolateImageFunction<TInputImage, TFunction, TBoundaryCondition, TCoo
     
   // Compute the sinc function for each dimension
   double xWeight[ImageDimension][ 2*this->GetRadius()];
-  // Fill xWeight with zeros
-  for( unsigned int dim = 0; dim < ImageDimension; dim++ )
-    {
-      for (unsigned j = 0; j< 2*this->GetRadius(); j++)
-	{
-	  xWeight[dim][j] = 0.;
-	}
-    }
   
   for( unsigned int dim = 0; dim < ImageDimension; dim++ )
     {

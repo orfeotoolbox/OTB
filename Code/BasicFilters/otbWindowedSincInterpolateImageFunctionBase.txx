@@ -15,40 +15,38 @@ the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
 PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#include "otbWindowedSincInterpolateImageFunction.h"
+#include "otbWindowedSincInterpolateImageFunctionBase.h"
 
 namespace otb
 {
 /** Constructor */
 template<class TInputImage, class TWindowFunction, class TBoundaryCondition, class TCoordRep>
-WindowedSincInterpolateImageFunction<TInputImage, TWindowFunction, TBoundaryCondition, TCoordRep>
-::WindowedSincInterpolateImageFunction()
+WindowedSincInterpolateImageFunctionBase<TInputImage, TWindowFunction, TBoundaryCondition, TCoordRep>
+::WindowedSincInterpolateImageFunctionBase()
 {
 }
   
 /** Destructor */
 template<class TInputImage, class TWindowFunction, class TBoundaryCondition, class TCoordRep>
-WindowedSincInterpolateImageFunction<TInputImage, TWindowFunction, TBoundaryCondition, TCoordRep>
-::~WindowedSincInterpolateImageFunction()
+WindowedSincInterpolateImageFunctionBase<TInputImage, TWindowFunction, TBoundaryCondition, TCoordRep>
+::~WindowedSincInterpolateImageFunctionBase()
 {
 }
 
-// Overload method to add the construction of resampledprfil
+// Overload method to add the construction of resampledprofil
 template<class TInputImage, class TWindowFunction, class TBoundaryCondition, class TCoordRep>
 void
-WindowedSincInterpolateImageFunction<TInputImage, TWindowFunction, TBoundaryCondition, TCoordRep>
-::SetSigma(unsigned int sigma)
+WindowedSincInterpolateImageFunctionBase<TInputImage, TWindowFunction, TBoundaryCondition, TCoordRep>
+::SetRadius(unsigned int rad)
 {
-  m_Sigma = sigma;
-  //Initialisation du Radius avec le sigma
   this->ResetOffsetTable();
-  this->SetRadius( sigma );
+  this->Superclass::SetRadius(rad);
   this->Modified();
 }
 
 template<class TInputImage, class TWindowFunction, class TBoundaryCondition, class TCoordRep>
 void
-WindowedSincInterpolateImageFunction<TInputImage, TWindowFunction, TBoundaryCondition, TCoordRep>
+WindowedSincInterpolateImageFunctionBase<TInputImage, TWindowFunction, TBoundaryCondition, TCoordRep>
 ::PrintSelf(std::ostream& os, itk::Indent indent) const
 { 
   Superclass::PrintSelf( os, indent );

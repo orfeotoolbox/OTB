@@ -26,7 +26,13 @@ PURPOSE.  See the above copyright notices for more information.
 #include "itkLinearInterpolateImageFunction.h"
 #include "itkImageRegionSplitter.h"
 #include "itkNearestNeighborInterpolateImageFunction.h"
-#include "otbWindowedSincInterpolateImageFunction.h"
+#include "otbWindowedSincInterpolateImageGaussianFunction.h"
+#include "otbWindowedSincInterpolateImageHammingFunction.h"
+#include "otbWindowedSincInterpolateImageCosineFunction.h"
+#include "otbWindowedSincInterpolateImageWelchFunction.h"
+#include "otbWindowedSincInterpolateImageLanczosFunction.h"
+#include "otbWindowedSincInterpolateImageBlackmanFunction.h"
+
 #include "otbProlateInterpolateImageFunction.h"
 
 namespace otb
@@ -69,32 +75,27 @@ public:
                       ImageType::ImageDimension);
 
   typedef itk::ImageRegionSplitter<itkGetStaticConstMacro(ImageDimension)>  SplitterType;
+   // ITK Interpolators
   typedef itk::InterpolateImageFunction<TImage,double>                      InterpolationType;
   typedef itk::BSplineInterpolateImageFunction<TImage,double>               BSplineInterpolationType;
   typedef itk::LinearInterpolateImageFunction<TImage,double>                LinearInterpolationType;
   typedef itk::NearestNeighborInterpolateImageFunction<TImage,double>       NearestNeighborInterpolationType;
-  // OTB interpolators
-  // Gaussian
-  typedef Function::GaussianWindowFunction<double, double>                  GaussType;
-  typedef WindowedSincInterpolateImageFunction<ImageType, GaussType>        GaussInterpolationType;
-  // Cosine
-  typedef Function::CosineWindowFunction<double, double>                    CosType;
-  typedef WindowedSincInterpolateImageFunction<ImageType, CosType>          CosInterpolationType;
-  // Hamming
-  typedef Function::HammingWindowFunction<double, double>                   HammingType;
-  typedef WindowedSincInterpolateImageFunction<ImageType, HammingType>      HammingInterpolationType;
+  // OTB Interpolators
+  // Gaussian Interpolators
+  typedef WindowedSincInterpolateImageGaussianFunction<ImageType>          GaussianInterpolationType; 
+  // Cosine Interpolators
+  typedef WindowedSincInterpolateImageCosineFunction<ImageType>            CosineInterpolationType;
+  // Hamming Interpolators 
+  typedef WindowedSincInterpolateImageHammingFunction<ImageType>           HammingInterpolationType; 
   // Welch
-  typedef Function::WelchWindowFunction<double, double>                     WelchType;
-  typedef WindowedSincInterpolateImageFunction<ImageType,WelchType>         WelchInterpolationType;
+  typedef WindowedSincInterpolateImageWelchFunction<ImageType>             WelchInterpolationType;
   // Lanczos
-  typedef Function::LanczosWindowFunction<double, double>                   LanczosType;
-  typedef WindowedSincInterpolateImageFunction<ImageType, LanczosType>      LanczosInterpolationType;
+  typedef WindowedSincInterpolateImageLanczosFunction<ImageType>           LanczosInterpolationType; 
   // Blackman
-  typedef Function::BlackmanWindowFunction<double, double>                  BlackmanType;
-  typedef WindowedSincInterpolateImageFunction<ImageType, BlackmanType>     BlackmanInterpolationType;
+  typedef WindowedSincInterpolateImageBlackmanFunction<ImageType>          BlackmanInterpolationType;
   // Prolate
-  typedef otb::ProlateInterpolateImageFunction<ImageType>                   ProlateInterpolationType;
-
+  typedef otb::ProlateInterpolateImageFunction<ImageType>                  ProlateInterpolationType;
+  
 
   /**
    * This method computes the number of streaming divisions, based on
@@ -118,14 +119,7 @@ public:
          
          
   static unsigned int CalculateNeededRadiusForInterpolator(const InterpolationType* interpolator);
-  static unsigned int CalculateNeededRadiusForInterpolator(const GaussInterpolationType* interpolator){return interpolator->GetRadius;};
-  static unsigned int CalculateNeededRadiusForInterpolator(const CosInterpolationType* interpolator){return interpolator->GetRadius;};
-  static unsigned int CalculateNeededRadiusForInterpolator(const HammingInterpolationType* interpolator){return interpolator->GetRadius;};
-  static unsigned int CalculateNeededRadiusForInterpolator(const WelchInterpolationType* interpolator){return interpolator->GetRadius;};
-  static unsigned int CalculateNeededRadiusForInterpolator(const LanczosInterpolationType* interpolator){return interpolator->GetRadius;};
-  static unsigned int CalculateNeededRadiusForInterpolator(const BlackmanInterpolationType* interpolator){return interpolator->GetRadius;};
-  static unsigned int CalculateNeededRadiusForInterpolator(const ProlateInterpolationType* interpolator){return interpolator->GetRadius;};
-
+  
   static std::string GetMethodUseToCalculateNumberOfStreamDivisions(StreamingModeType mode);
          
 };

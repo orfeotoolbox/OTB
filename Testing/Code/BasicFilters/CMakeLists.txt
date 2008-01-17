@@ -19,7 +19,7 @@ SET(BASICFILTERS_TESTS3 ${CXX_TEST_PATH}/otbBasicFiltersTests3)
 SET(BASICFILTERS_TESTS4 ${CXX_TEST_PATH}/otbBasicFiltersTests4)
 SET(BASICFILTERS_TESTS5 ${CXX_TEST_PATH}/otbBasicFiltersTests5)
 SET(BASICFILTERS_TESTS6 ${CXX_TEST_PATH}/otbBasicFiltersTests6)
-
+SET(BASICFILTERS_TESTS7 ${CXX_TEST_PATH}/otbBasicFiltersTests7)
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ otbBasicFiltersTests1 ~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -469,6 +469,12 @@ ADD_TEST(bfTvPrintableImageFilter ${BASICFILTERS_TESTS5}
 		${TEMP}/bfTvPrintableImageFilter.png
 		)
 
+
+
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ 
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ otbBasicFiltersTests6 ~~~~~~~~~~~~~~~~~~~~~~~~~~
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
 # -------            otb::BSplineDecompositionImageFilter  ------------------------------
 
 ADD_TEST(bfTuBSplineDecompositionImageFilterNew ${BASICFILTERS_TESTS6}  
@@ -528,18 +534,134 @@ ADD_TEST(bfTvProlateInterpolateImageFunction ${BASICFILTERS_TESTS6}
 		-1 -1
 		)
 
-# -------            otb::WindowedSincInterpolateImageFunction  ------------------------------
+# -------            otb::WindowedSincInterpolateImageFunctionBase  ------------------------------
+ADD_TEST(bfTuWindowedSincInterpolateImageFunctionBaseNew ${BASICFILTERS_TESTS6}  
+         otbWindowedSincInterpolateImageFunctionBaseNew)
 
-ADD_TEST(bfTuWindowedSincInterpolateImageFunctionNew ${BASICFILTERS_TESTS6}  
-         otbWindowedSincInterpolateImageFunctionNew)
+# -------            otb::WindowedSincInterpolateImageGaussianFunction  ------------------------------
+ ADD_TEST(bfTuWindowedSincInterpolateImageGaussianFunctionNew ${BASICFILTERS_TESTS6}  
+         otbWindowedSincInterpolateImageGaussianFunctionNew)
 
-ADD_TEST(bfTvWindowedSincInterpolateImageFunction ${BASICFILTERS_TESTS6}  
+ADD_TEST(bfTvWindowedSincInterpolateImageGaussianFunction ${BASICFILTERS_TESTS6}  
      --compare-ascii ${TOL}
-     		     ${BASELINE_FILES}/bfWindowedSincInterpolateImageFunctionOutput.txt
-		     ${TEMP}/bfWindowedSincInterpolateImageFunctionOutput.txt
-        otbWindowedSincInterpolateImageFunction
+     		     ${BASELINE_FILES}/bfWindowedSincInterpolateImageGaussianFunctionOutput.txt
+		     ${TEMP}/bfWindowedSincInterpolateImageGaussianFunctionOutput.txt
+        otbWindowedSincInterpolateImageGaussianFunction
 		${INPUTDATA}/poupees.tif
-		${TEMP}/bfWindowedSincInterpolateImageFunctionOutput.txt
+		${TEMP}/bfWindowedSincInterpolateImageGaussianFunctionOutput.txt
+		3 # radius
+		0.5 0.5
+		127.33 44.9
+		259.67 21.43
+		12.13 61.79
+		89.5 11
+		128 128
+		127.255 128.73
+		-1 -1
+		)
+
+
+# -------            otb::WindowedSincInterpolateImageHammingFunction  ------------------------------
+ ADD_TEST(bfTuWindowedSincInterpolateImageHammingFunctionNew ${BASICFILTERS_TESTS6}  
+         otbWindowedSincInterpolateImageHammingFunctionNew)
+
+ADD_TEST(bfTvWindowedSincInterpolateImageHammingFunction ${BASICFILTERS_TESTS6}  
+     --compare-ascii ${TOL}
+     		     ${BASELINE_FILES}/bfWindowedSincInterpolateImageHammingFunctionOutput.txt
+		     ${TEMP}/bfWindowedSincInterpolateImageHammingFunctionOutput.txt
+        otbWindowedSincInterpolateImageHammingFunction
+		${INPUTDATA}/poupees.tif
+		${TEMP}/bfWindowedSincInterpolateImageHammingFunctionOutput.txt
+		3 # radius
+		0.5 0.5
+		127.33 44.9
+		259.67 21.43
+		12.13 61.79
+		89.5 11
+		128 128
+		127.255 128.73
+		-1 -1
+		)
+
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ 
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ otbBasicFiltersTests7 ~~~~~~~~~~~~~~~~~~~~~~~~~~
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+# -------            otb::WindowedSincInterpolateImageCosineFunction  ------------------------------
+ ADD_TEST(bfTuWindowedSincInterpolateImageCosineFunctionNew ${BASICFILTERS_TESTS7}  
+         otbWindowedSincInterpolateImageCosineFunctionNew)
+
+ADD_TEST(bfTvWindowedSincInterpolateImageCosineFunction ${BASICFILTERS_TESTS7}  
+     --compare-ascii ${TOL}
+     		     ${BASELINE_FILES}/bfWindowedSincInterpolateImageCosineFunctionOutput.txt
+		     ${TEMP}/bfWindowedSincInterpolateImageCosineFunctionOutput.txt
+        otbWindowedSincInterpolateImageCosineFunction
+		${INPUTDATA}/poupees.tif
+		${TEMP}/bfWindowedSincInterpolateImageCosineFunctionOutput.txt
+		3 # radius
+		0.5 0.5
+		127.33 44.9
+		259.67 21.43
+		12.13 61.79
+		89.5 11
+		128 128
+		127.255 128.73
+		-1 -1
+		)
+
+# -------            otb::WindowedSincInterpolateImageWelchFunction  ------------------------------
+ ADD_TEST(bfTuWindowedSincInterpolateImageWelchFunctionNew ${BASICFILTERS_TESTS7}  
+         otbWindowedSincInterpolateImageWelchFunctionNew)
+
+ADD_TEST(bfTvWindowedSincInterpolateImageWelchFunction ${BASICFILTERS_TESTS7}  
+     --compare-ascii ${TOL}
+     		     ${BASELINE_FILES}/bfWindowedSincInterpolateImageWelchFunctionOutput.txt
+		     ${TEMP}/bfWindowedSincInterpolateImageWelchFunctionOutput.txt
+        otbWindowedSincInterpolateImageWelchFunction
+		${INPUTDATA}/poupees.tif
+		${TEMP}/bfWindowedSincInterpolateImageWelchFunctionOutput.txt
+		3 # radius
+		0.5 0.5
+		127.33 44.9
+		259.67 21.43
+		12.13 61.79
+		89.5 11
+		128 128
+		127.255 128.73
+		-1 -1
+		)
+# -------            otb::WindowedSincInterpolateImageLanczosFunction  ------------------------------
+ ADD_TEST(bfTuWindowedSincInterpolateImageLanczosFunctionNew ${BASICFILTERS_TESTS7}  
+         otbWindowedSincInterpolateImageLanczosFunctionNew)
+
+ADD_TEST(bfTvWindowedSincInterpolateImageLanczosFunction ${BASICFILTERS_TESTS7}  
+     --compare-ascii ${TOL}
+     		     ${BASELINE_FILES}/bfWindowedSincInterpolateImageLanczosFunctionOutput.txt
+		     ${TEMP}/bfWindowedSincInterpolateImageLanczosFunctionOutput.txt
+        otbWindowedSincInterpolateImageLanczosFunction
+		${INPUTDATA}/poupees.tif
+		${TEMP}/bfWindowedSincInterpolateImageLanczosFunctionOutput.txt
+		3 # radius
+		0.5 0.5
+		127.33 44.9
+		259.67 21.43
+		12.13 61.79
+		89.5 11
+		128 128
+		127.255 128.73
+		-1 -1
+		)
+# -------            otb::WindowedSincInterpolateImageBlackmanFunction  ------------------------------
+ ADD_TEST(bfTuWindowedSincInterpolateImageBlackmanFunctionNew ${BASICFILTERS_TESTS7}  
+         otbWindowedSincInterpolateImageBlackmanFunctionNew)
+
+ADD_TEST(bfTvWindowedSincInterpolateImageBlackmanFunction ${BASICFILTERS_TESTS7}  
+     --compare-ascii ${TOL}
+     		     ${BASELINE_FILES}/bfWindowedSincInterpolateImageBlackmanFunctionOutput.txt
+		     ${TEMP}/bfWindowedSincInterpolateImageBlackmanFunctionOutput.txt
+        otbWindowedSincInterpolateImageBlackmanFunction
+		${INPUTDATA}/poupees.tif
+		${TEMP}/bfWindowedSincInterpolateImageBlackmanFunctionOutput.txt
 		3 # radius
 		0.5 0.5
 		127.33 44.9
@@ -629,9 +751,25 @@ otbBSplineInterpolateImageFunctionNew.cxx
 otbBSplineInterpolateImageFunction.cxx
 otbProlateInterpolateImageFunctionNew.cxx
 otbProlateInterpolateImageFunction.cxx
-otbWindowedSincInterpolateImageFunctionNew.cxx
-otbWindowedSincInterpolateImageFunction.cxx
+otbWindowedSincInterpolateImageFunctionBaseNew.cxx
+otbWindowedSincInterpolateImageGaussianFunctionNew.cxx
+otbWindowedSincInterpolateImageGaussianFunction.cxx
+otbWindowedSincInterpolateImageHammingFunctionNew.cxx
+otbWindowedSincInterpolateImageHammingFunction.cxx
 )
+
+# A enrichir
+SET(BasicFilters_SRCS7
+otbWindowedSincInterpolateImageCosineFunctionNew.cxx
+otbWindowedSincInterpolateImageCosineFunction.cxx
+otbWindowedSincInterpolateImageWelchFunctionNew.cxx
+otbWindowedSincInterpolateImageWelchFunction.cxx
+otbWindowedSincInterpolateImageLanczosFunctionNew.cxx
+otbWindowedSincInterpolateImageLanczosFunction.cxx
+otbWindowedSincInterpolateImageBlackmanFunctionNew.cxx
+otbWindowedSincInterpolateImageBlackmanFunction.cxx
+)
+
 
 INCLUDE_DIRECTORIES("${OTBTesting_BINARY_DIR}")
 
@@ -653,7 +791,8 @@ TARGET_LINK_LIBRARIES(otbBasicFiltersTests5  OTBBasicFilters OTBCommon OTBIO gda
 ADD_EXECUTABLE(otbBasicFiltersTests6 otbBasicFiltersTests6.cxx ${BasicFilters_SRCS6})
 TARGET_LINK_LIBRARIES(otbBasicFiltersTests6  OTBBasicFilters OTBCommon OTBIO gdal ITKIO ITKCommon ITKBasicFilters)
 
-
+ADD_EXECUTABLE(otbBasicFiltersTests7 otbBasicFiltersTests7.cxx ${BasicFilters_SRCS7})
+TARGET_LINK_LIBRARIES(otbBasicFiltersTests7  OTBBasicFilters OTBCommon OTBIO gdal ITKIO ITKCommon ITKBasicFilters)
 
 ENDIF( NOT OTB_DISABLE_CXX_TESTING )
 

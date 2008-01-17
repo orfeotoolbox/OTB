@@ -53,7 +53,7 @@ class ProlateFunction
 	}
       else
 	{
-	  val = 1.;
+	  val = m_OriginalProfil[0];
 	}
       return val;
     }
