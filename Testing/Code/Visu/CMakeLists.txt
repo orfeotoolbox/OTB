@@ -157,7 +157,7 @@ otbAlternateViewerTest.cxx
 INCLUDE_DIRECTORIES("${OTBTesting_BINARY_DIR}") 
 
 ADD_EXECUTABLE(otbVisuTests1 otbVisuTests1.cxx ${BasicVisu_SRCS1})
-TARGET_LINK_LIBRARIES(otbVisuTests1 OTBVisu OTBGui OTBIO gdal ITKIO ITKCommon)
+TARGET_LINK_LIBRARIES(otbVisuTests1 OTBVisu OTBGui OTBIO gdal ITKIO ITKCommon ${OTB_VISU_GUI_LIBRARIES} )
 ADD_EXECUTABLE(otbVisuTests2 otbVisuTests2.cxx ${BasicVisu_SRCS2})
 TARGET_LINK_LIBRARIES(otbVisuTests2 OTBVisu OTBGui OTBIO gdal ITKIO ITKCommon)
 
