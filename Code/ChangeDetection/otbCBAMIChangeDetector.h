@@ -19,7 +19,6 @@
 #define __otbCBAMIChangeDetector_h
 
 
-
 #include "otbBinaryFunctorNeighborhoodImageFilter.h"
 #include <vector>
 #include <stdlib.h>
