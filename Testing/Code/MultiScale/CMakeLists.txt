@@ -264,6 +264,10 @@ ADD_TEST(msTvMorphologicalClosingProfileFilter ${MULTISCALE_TESTS2}
 	 1	 
 )
 
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ 
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ otbMULTISCALE_TESTS3 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
 # -------            otb::ProfileToProfileDerivativeFilter   ----------
  
 ADD_TEST(msTuProfileToProfileDerivativeFilterNew ${MULTISCALE_TESTS3} 
@@ -307,6 +311,24 @@ ADD_TEST(msTvProfileDerivativeToMultiScaleCharacteristicsFilter ${MULTISCALE_TES
 	 1
 	 1	 
 )
+# -------            otb::MultiScaleConvexOrConcaveClassificationFilter   ----------
+ 
+ADD_TEST(msTuMultiScaleConvexOrConcaveClassificationFilterNew ${MULTISCALE_TESTS3} 
+         otbMultiScaleConvexOrConcaveClassificationFilterNew)
+
+ADD_TEST(msTvMultiScaleConvexOrConcaveClassificationFilter ${MULTISCALE_TESTS3} 
+   --compare-image ${TOL}
+		   ${BASELINE}/msMultiScaleConvexOrConcaveClassificationFilterOutput.tif
+ 		   ${TEMP}/msMultiScaleConvexOrConcaveClassificationFilterOutput.tif	  
+         otbMultiScaleConvexOrConcaveClassificationFilter
+	 ${INPUTDATA}/ROI_IKO_PAN_LesHalles.tif
+	 ${TEMP}/msMultiScaleConvexOrConcaveClassificationFilterOutput.tif
+	 5
+	 1
+	 1
+	 1.	 
+)
+
 
 # -------       Fichiers sources CXX -----------------------------------
 SET(BasicMultiScale_SRCS1
@@ -340,6 +362,9 @@ otbProfileToProfileDerivativeFilterNew.cxx
 otbProfileToProfileDerivativeFilter.cxx
 otbProfileDerivativeToMultiScaleCharacteristicsFilterNew.cxx
 otbProfileDerivativeToMultiScaleCharacteristicsFilter.cxx
+otbMultiScaleConvexOrConcaveClassificationFilterNew.cxx
+otbMultiScaleConvexOrConcaveClassificationFilter.cxx
+
 )
 
 INCLUDE_DIRECTORIES("${OTBTesting_BINARY_DIR}")
