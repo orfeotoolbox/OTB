@@ -12,8 +12,8 @@ namespace otb
    *
    * This is the implementation of the Potts model for Markov classification, to be used for
    * regularization. Energy is:
-             * \f[  U(x_s,x_t) = -\beta \text{ if } x_s = x_t \f]
-             * \f[  U(x_s,x_t) = +\beta \text{ if } x_s \neq x_t \f]
+             * \f[  U(x_s,x_t) = -\beta \textrm{ if } x_s = x_t \f]
+             * \f[  U(x_s,x_t) = +\beta \textrm{ if } x_s \neq x_t \f]
              * with
              * - \f$ x_s \f$ the label on site s
              * - \f$ y_s \f$ the value on the reference image
