@@ -20,6 +20,7 @@ PURPOSE.  See the above copyright notices for more information.
 
 #include "otbGenericInterpolateImageFunction.h"
 #include "itkSize.h"
+#include "itkNumericTraits.h"
 
 namespace otb
 {
@@ -45,8 +46,8 @@ class ProlateFunction
 
   inline TOutput operator()( const TInput & A ) const
     { 
-      TOutput val = 0.;
-      if (m_Radius != 0)
+      TOutput val = itk::NumericTraits< TOutput >::Zero;
+      if (A != itk::NumericTraits< TInput >::Zero)
 	{
 	  unsigned int ival = static_cast<unsigned int>(m_OriginalProfilSize*static_cast<double>(vcl_abs(A))/static_cast<double>(m_Radius));
 	  val = m_OriginalProfil[ival];
