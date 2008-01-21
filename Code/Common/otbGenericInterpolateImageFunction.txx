@@ -232,7 +232,6 @@ GenericInterpolateImageFunction<TInputImage, TFunction, TBoundaryCondition, TCoo
   IteratorType nit = IteratorType( radius, this->GetInputImage(), this->GetInputImage()->GetBufferedRegion());
   nit.SetLocation( baseIndex );
     
-  // Compute the sinc function for each dimension
   double xWeight[ImageDimension][ 2*this->GetRadius()];
   
   for( unsigned int dim = 0; dim < ImageDimension; dim++ )
@@ -242,6 +241,7 @@ GenericInterpolateImageFunction<TInputImage, TFunction, TBoundaryCondition, TCoo
 
     // If distance is zero, i.e. the index falls precisely on the
     // pixel boundary, the weights form a delta function.
+      /*
     if(distance[dim] == 0.0)
       {
       for( unsigned int i = 0; i < m_WindowSize; i++)
@@ -251,6 +251,7 @@ GenericInterpolateImageFunction<TInputImage, TFunction, TBoundaryCondition, TCoo
       }
     else
       {
+      */
       // i is the relative offset in dimension dim.
       for( unsigned int i = 0; i < m_WindowSize; i++)
         {
@@ -261,22 +262,25 @@ GenericInterpolateImageFunction<TInputImage, TFunction, TBoundaryCondition, TCoo
 	  // Compute the weight for this m
 	  xWeight[dim][i] = m_Function(x);
         }
-      }
+      //}
     }
   if (m_NormalizeWeight == true)
     {   
       for( unsigned int dim = 0; dim < ImageDimension; dim++ )
 	{ 
 	  double sum = 0.;
+	  // Compute the weights sum
 	  for( unsigned int i = 0; i < m_WindowSize; i++)
 	    {
-	      // Compute the weight for this m
 	      sum += xWeight[dim][i];
 	    }
-	  for( unsigned int i = 0; i < m_WindowSize; i++)
+	  if (sum != 1.)
 	    {
-	      // Compute the weight for this m
-	      xWeight[dim][i] =  xWeight[dim][i]/sum;
+	      // Normalize the weights
+	      for( unsigned int i = 0; i < m_WindowSize; i++)
+		{
+		  xWeight[dim][i] =  xWeight[dim][i]/sum;
+		}
 	    }
 	}
     }

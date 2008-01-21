@@ -51,8 +51,10 @@ class ProlateFunction
 	{
 	  //unsigned int ival = static_cast<unsigned int>(m_OriginalProfilSize*static_cast<double>(vcl_abs(A))/static_cast<double>(m_Radius));
 	  //val = m_OriginalProfil[ival];
-	  double ival = static_cast<double>(m_OriginalProfilSize)*static_cast<double>(vcl_abs(A))/static_cast<double>(m_Radius);
-	  val = m_OriginalProfil[static_cast<int>(vcl_floor(ival+0.5))];
+	   double ival = static_cast<int>(m_OriginalProfilSize)*static_cast<double>(vcl_abs(A))/static_cast<double>(m_Radius);
+	   double ivalFloor = vcl_floor(ival);
+	   unsigned int left = static_cast<unsigned int>(ival - ivalFloor);
+	   val = left*m_OriginalProfil[static_cast<unsigned int>(ivalFloor)] + (1-left)*m_OriginalProfil[static_cast<unsigned int>(ivalFloor)+1];
 	}
       else
 	{
