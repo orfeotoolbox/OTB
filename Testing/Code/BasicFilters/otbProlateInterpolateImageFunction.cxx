@@ -32,15 +32,15 @@
 #include "itkDifferenceImageFilter.h"
 
 int otbProlateInterpolateImageFunction(int argc, char * argv[])
-{  std::cout<<"FINrrrttt"<<std::endl;
+{  
   const char * infname = argv[1];
   const char * outfname = argv[2];
-std::cout<<"FINrrr"<<std::endl;
+
   typedef otb::Image<double,2>                             ImageType;
   typedef otb::ProlateInterpolateImageFunction<ImageType>  InterpolatorType;
   typedef InterpolatorType::ContinuousIndexType            ContinuousIndexType;
   typedef otb::ImageFileReader<ImageType>                  ReaderType;
-std::cout<<"FINeee"<<std::endl;
+
    unsigned int i = 4;
 
    std::vector<ContinuousIndexType> indicesList;
@@ -53,32 +53,48 @@ std::cout<<"FINeee"<<std::endl;
 
       i+=2;
     }
-std::cout<<"FINzzz"<<std::endl;
   // Instantiating object
   InterpolatorType::Pointer prolate = InterpolatorType::New();
   ReaderType::Pointer reader = ReaderType::New();
   reader->SetFileName(infname);
   reader->Update();
   prolate->SetInputImage(reader->GetOutput());
-std::cout<<"FINaaa"<<std::endl;
   prolate->SetRadius(atoi(argv[3]));
-std::cout<<"FINerg"<<std::endl;
+
   std::ofstream file;
   file.open(outfname);
 
 
   for(std::vector<ContinuousIndexType>::iterator it = indicesList.begin();it!=indicesList.end();++it)
     {
-std::cout<<"FINrger"<<std::endl;
+
       file<<(*it)<<" -> "<<prolate->EvaluateAtContinuousIndex((*it))<<std::endl;
     }
   file.close();
-std::cout<<"FIN"<<std::endl;
+
   /**********************************************************/
   //typedef otb::StreamingImageFileWriter<ImageType> WriterType;
   //typedef otb::StreamingResampleImageFilter<ImageType,ImageType,double> StreamingResampleImageFilterType;
   typedef otb::ImageFileWriter<ImageType> WriterType;
   typedef itk::ResampleImageFilter<ImageType,ImageType,double> StreamingResampleImageFilterType;
+  WriterType::Pointer prowriter     = WriterType::New();
+  StreamingResampleImageFilterType::Pointer proresampler = StreamingResampleImageFilterType::New();
+  InterpolatorType::Pointer        pro     = InterpolatorType::New();
+  // Resampler connected to input image
+  proresampler->SetInput(reader->GetOutput());
+  pro->SetRadius(atoi(argv[3]));
+  proresampler->SetInterpolator(pro);
+ StreamingResampleImageFilterType::SizeType size;
+  size[0]=1000;
+  size[1]=1000;
+  double tutu = 0.25;
+  proresampler->SetSize(size);
+  proresampler->SetOutputSpacing(tutu);
+  // Result of resampler is written
+  prowriter->SetInput(proresampler->GetOutput());
+  //prowriter->SetNumberOfStreamDivisions(1);
+ prowriter->SetFileName("proresample.tif");
+ prowriter->Update();
   /*
   unsigned int rad = 10;
   
@@ -92,7 +108,7 @@ std::cout<<"FIN"<<std::endl;
   typedef itk::DifferenceImageFilter<ImageType, ImageType>                    DiffType;
   */
   // Instantiating object
-  WriterType::Pointer prowriter     = WriterType::New();
+
   /*
   WriterType::Pointer gausswriter   = WriterType::New();
   WriterType::Pointer hamwriter     = WriterType::New();
@@ -102,7 +118,7 @@ std::cout<<"FIN"<<std::endl;
   WriterType::Pointer cosdiffwriter = WriterType::New();
   WriterType::Pointer hamdiffwriter = WriterType::New();
   */
-  StreamingResampleImageFilterType::Pointer proresampler = StreamingResampleImageFilterType::New();
+
   /*
   StreamingResampleImageFilterType::Pointer gaussresampler = StreamingResampleImageFilterType::New();
   StreamingResampleImageFilterType::Pointer hamresampler = StreamingResampleImageFilterType::New();
@@ -112,8 +128,8 @@ std::cout<<"FIN"<<std::endl;
   DiffType::Pointer                         hamdiff = DiffType::New();
   DiffType::Pointer                         cosdiff = DiffType::New();
   */
-  std::cout<<"45564"<<std::endl;
-  InterpolatorType::Pointer        pro     = InterpolatorType::New();
+
+
   /*
   HamInterpolatorType::Pointer     ham     = HamInterpolatorType::New();
   CosInterpolatorType::Pointer     cos     = CosInterpolatorType::New();
@@ -121,10 +137,7 @@ std::cout<<"FIN"<<std::endl;
   itkCosInterpolatorType::Pointer  itkcos  = itkCosInterpolatorType::New();
   GaussInterpolatorType::Pointer   gauss   = GaussInterpolatorType::New();
   */
-  // Resampler connected to input image
-  proresampler->SetInput(reader->GetOutput());
-  pro->SetRadius(5);
-  proresampler->SetInterpolator(pro);
+
   //proresampler->SetInterpolatorNeighborhoodRadius(rad);  
   /*
   gaussresampler->SetInput(reader->GetOutput());
@@ -151,13 +164,7 @@ std::cout<<"FIN"<<std::endl;
   //itkcosresampler->SetInterpolatorNeighborhoodRadius(30); 
   */
   // Size of output resampler result
-  std::cout<<"ergerg"<<std::endl;
-  StreamingResampleImageFilterType::SizeType size;
-  size[0]=500;
-  size[1]=500;
-  double tutu = 0.25;
-  proresampler->SetSize(size);
-  proresampler->SetOutputSpacing(tutu);
+ 
   /*
   gaussresampler->SetSize(size);
   gaussresampler->SetOutputSpacing(tutu);
@@ -174,11 +181,7 @@ std::cout<<"FIN"<<std::endl;
   itkcosresampler->SetSize(size);
   itkcosresampler->SetOutputSpacing(tutu);
   */
-  // Result of resampler is written
-std::cout<<"utj,,yu"<<std::endl;
-  prowriter->SetInput(proresampler->GetOutput());
-  //prowriter->SetNumberOfStreamDivisions(1);
-  prowriter->SetFileName("proresample.tif");
+
   /*
   gausswriter->SetInput(gaussresampler->GetOutput());
   //gausswriter->SetNumberOfStreamDivisions(1);
@@ -220,8 +223,8 @@ std::cout<<"utj,,yu"<<std::endl;
 
   cosdiffwriter->Update();
   hamdiffwriter->Update();
-  */std::cout<<"####"<<std::endl;
-  prowriter->Update();
-std::cout<<"#&&&&#"<<std::endl;
+  */
+ 
+
   return EXIT_SUCCESS;
 }
