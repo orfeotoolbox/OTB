@@ -50,9 +50,9 @@ class GaussianWindowFunction
     {
       double x = static_cast<double>(A);
       double px = M_PI * x;
-      double temp = exp( x * m_Factor );
+      double temp = vcl_exp( px*px * m_Factor);
       return (x == 0.0) ? static_cast<TOutput>(temp) : static_cast<TOutput>(temp * vcl_sin(px) / px);
-    }    
+    }
     private:
     double m_Factor;
     unsigned int m_Radius;
