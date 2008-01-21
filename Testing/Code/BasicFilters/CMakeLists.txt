@@ -676,7 +676,7 @@ ADD_TEST(bfTvWindowedSincInterpolateImageBlackmanFunction ${BASICFILTERS_TESTS7}
 ADD_TEST(ProlateValidationTest ${BASICFILTERS_TESTS7}  
         otbProlateValidationTest
 		${INPUTDATA}/poupees.tif
-		${TEMP}/prolatevalidationtest.tif.txt
+		${TEMP}/prolatevalidationtest.tif
 		3 # radius
 		0.5# spacing
 		512 # size	
