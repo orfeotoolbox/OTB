@@ -47,10 +47,12 @@ class ProlateFunction
   inline TOutput operator()( const TInput & A ) const
     { 
       TOutput val = itk::NumericTraits< TOutput >::Zero;
-      if (A != itk::NumericTraits< TInput >::Zero)
+      if (A != itk::NumericTraits< TInput >::Zero && m_Radius!=0)
 	{
-	  unsigned int ival = static_cast<unsigned int>(m_OriginalProfilSize*static_cast<double>(vcl_abs(A))/static_cast<double>(m_Radius+1));
-	  val = m_OriginalProfil[ival];
+	  //unsigned int ival = static_cast<unsigned int>(m_OriginalProfilSize*static_cast<double>(vcl_abs(A))/static_cast<double>(m_Radius));
+	  //val = m_OriginalProfil[ival];
+	  double ival = static_cast<double>(m_OriginalProfilSize)*static_cast<double>(vcl_abs(A))/static_cast<double>(m_Radius);
+	  val = m_OriginalProfil[static_cast<int>(vcl_floor(ival+0.5))];
 	}
       else
 	{
