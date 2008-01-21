@@ -1,0 +1,29 @@
+FLTK modifications:
+---------------------
+
+Add following line:
+#include <FL/Fl.H>
+For:
+Fl_Overlay_Window.cxx
+Fl_grab.cxx
+Fl_own_colormap.cxx
+Fl_visual.cxx
+fl_rect.cxx
+
+src/flstring.h
+
+
+Add following line:
+#include "fltk-config.h"
+For:
+Fl_get_system_colors.cxx
+fl_draw_image.cxx
+fl_draw_pixmap.cxx
+filename_list.cxx
+src/flstring.h
+
+
+CMakeLists.txt: rename config.h file name as following:
+config.h -> fltk-config.h
+# In CMake/FLTKConfig.cmake.in add line
+SET(FLTK_PLATFORM_DEPENDENT_LIBS "@FLTK_PLATFORM_DEPENDENT_LIBS@")
