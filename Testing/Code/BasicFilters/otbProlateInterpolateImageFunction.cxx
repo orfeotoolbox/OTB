@@ -32,15 +32,15 @@
 #include "itkDifferenceImageFilter.h"
 
 int otbProlateInterpolateImageFunction(int argc, char * argv[])
-{  
+{  std::cout<<"FINrrrttt"<<std::endl;
   const char * infname = argv[1];
   const char * outfname = argv[2];
-
+std::cout<<"FINrrr"<<std::endl;
   typedef otb::Image<double,2>                             ImageType;
   typedef otb::ProlateInterpolateImageFunction<ImageType>  InterpolatorType;
   typedef InterpolatorType::ContinuousIndexType            ContinuousIndexType;
   typedef otb::ImageFileReader<ImageType>                  ReaderType;
-
+std::cout<<"FINeee"<<std::endl;
    unsigned int i = 4;
 
    std::vector<ContinuousIndexType> indicesList;
@@ -53,33 +53,35 @@ int otbProlateInterpolateImageFunction(int argc, char * argv[])
 
       i+=2;
     }
-
+std::cout<<"FINzzz"<<std::endl;
   // Instantiating object
   InterpolatorType::Pointer prolate = InterpolatorType::New();
   ReaderType::Pointer reader = ReaderType::New();
   reader->SetFileName(infname);
   reader->Update();
   prolate->SetInputImage(reader->GetOutput());
+std::cout<<"FINaaa"<<std::endl;
   prolate->SetRadius(atoi(argv[3]));
-
+std::cout<<"FINerg"<<std::endl;
   std::ofstream file;
   file.open(outfname);
 
 
   for(std::vector<ContinuousIndexType>::iterator it = indicesList.begin();it!=indicesList.end();++it)
     {
+std::cout<<"FINrger"<<std::endl;
       file<<(*it)<<" -> "<<prolate->EvaluateAtContinuousIndex((*it))<<std::endl;
     }
   file.close();
-
+std::cout<<"FIN"<<std::endl;
   /**********************************************************/
   //typedef otb::StreamingImageFileWriter<ImageType> WriterType;
   //typedef otb::StreamingResampleImageFilter<ImageType,ImageType,double> StreamingResampleImageFilterType;
   typedef otb::ImageFileWriter<ImageType> WriterType;
   typedef itk::ResampleImageFilter<ImageType,ImageType,double> StreamingResampleImageFilterType;
-
+  /*
   unsigned int rad = 10;
-
+  
   typedef otb::WindowedSincInterpolateImageGaussianFunction<ImageType>        GaussInterpolatorType;
   typedef otb::WindowedSincInterpolateImageHammingFunction<ImageType>         HamInterpolatorType;
   typedef otb::WindowedSincInterpolateImageCosineFunction<ImageType>          CosInterpolatorType;
@@ -88,8 +90,10 @@ int otbProlateInterpolateImageFunction(int argc, char * argv[])
   typedef itk::Function::CosineWindowFunction<10, double, double>              itkCosType;
   typedef itk::WindowedSincInterpolateImageFunction<ImageType, 10, itkCosType> itkCosInterpolatorType;
   typedef itk::DifferenceImageFilter<ImageType, ImageType>                    DiffType;
+  */
   // Instantiating object
   WriterType::Pointer prowriter     = WriterType::New();
+  /*
   WriterType::Pointer gausswriter   = WriterType::New();
   WriterType::Pointer hamwriter     = WriterType::New();
   WriterType::Pointer coswriter     = WriterType::New();
@@ -97,8 +101,9 @@ int otbProlateInterpolateImageFunction(int argc, char * argv[])
   WriterType::Pointer itkcoswriter  = WriterType::New();
   WriterType::Pointer cosdiffwriter = WriterType::New();
   WriterType::Pointer hamdiffwriter = WriterType::New();
-
+  */
   StreamingResampleImageFilterType::Pointer proresampler = StreamingResampleImageFilterType::New();
+  /*
   StreamingResampleImageFilterType::Pointer gaussresampler = StreamingResampleImageFilterType::New();
   StreamingResampleImageFilterType::Pointer hamresampler = StreamingResampleImageFilterType::New();
   StreamingResampleImageFilterType::Pointer cosresampler = StreamingResampleImageFilterType::New();
@@ -106,20 +111,22 @@ int otbProlateInterpolateImageFunction(int argc, char * argv[])
   StreamingResampleImageFilterType::Pointer itkcosresampler = StreamingResampleImageFilterType::New();
   DiffType::Pointer                         hamdiff = DiffType::New();
   DiffType::Pointer                         cosdiff = DiffType::New();
-
+  */
+  std::cout<<"45564"<<std::endl;
   InterpolatorType::Pointer        pro     = InterpolatorType::New();
+  /*
   HamInterpolatorType::Pointer     ham     = HamInterpolatorType::New();
   CosInterpolatorType::Pointer     cos     = CosInterpolatorType::New();
   itkHamInterpolatorType::Pointer  itkham  = itkHamInterpolatorType::New();
   itkCosInterpolatorType::Pointer  itkcos  = itkCosInterpolatorType::New();
   GaussInterpolatorType::Pointer   gauss   = GaussInterpolatorType::New();
-
+  */
   // Resampler connected to input image
   proresampler->SetInput(reader->GetOutput());
-  pro->SetRadius(30);
+  pro->SetRadius(5);
   proresampler->SetInterpolator(pro);
   //proresampler->SetInterpolatorNeighborhoodRadius(rad);  
-
+  /*
   gaussresampler->SetInput(reader->GetOutput());
   gauss->SetRadius(rad);
   gaussresampler->SetInterpolator(gauss);
@@ -142,15 +149,16 @@ int otbProlateInterpolateImageFunction(int argc, char * argv[])
   itkcosresampler->SetInput(reader->GetOutput());
   itkcosresampler->SetInterpolator(itkcos);
   //itkcosresampler->SetInterpolatorNeighborhoodRadius(30); 
-
+  */
   // Size of output resampler result
+  std::cout<<"ergerg"<<std::endl;
   StreamingResampleImageFilterType::SizeType size;
   size[0]=500;
   size[1]=500;
   double tutu = 0.25;
   proresampler->SetSize(size);
   proresampler->SetOutputSpacing(tutu);
-
+  /*
   gaussresampler->SetSize(size);
   gaussresampler->SetOutputSpacing(tutu);
 
@@ -165,12 +173,13 @@ int otbProlateInterpolateImageFunction(int argc, char * argv[])
 
   itkcosresampler->SetSize(size);
   itkcosresampler->SetOutputSpacing(tutu);
-
+  */
   // Result of resampler is written
+std::cout<<"utj,,yu"<<std::endl;
   prowriter->SetInput(proresampler->GetOutput());
   //prowriter->SetNumberOfStreamDivisions(1);
   prowriter->SetFileName("proresample.tif");
-
+  /*
   gausswriter->SetInput(gaussresampler->GetOutput());
   //gausswriter->SetNumberOfStreamDivisions(1);
   gausswriter->SetFileName("gaussresample.tif");
@@ -192,7 +201,6 @@ int otbProlateInterpolateImageFunction(int argc, char * argv[])
   itkcoswriter->SetFileName("itkcosresample.tif");
 
   gausswriter->Update();
-  prowriter->Update();
   hamwriter->Update();
   coswriter->Update();
   itkhamwriter->Update();
@@ -212,7 +220,8 @@ int otbProlateInterpolateImageFunction(int argc, char * argv[])
 
   cosdiffwriter->Update();
   hamdiffwriter->Update();
-
-
+  */std::cout<<"####"<<std::endl;
+  prowriter->Update();
+std::cout<<"#&&&&#"<<std::endl;
   return EXIT_SUCCESS;
 }

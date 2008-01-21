@@ -246,7 +246,7 @@ GenericInterpolateImageFunction<TInputImage, TFunction, TBoundaryCondition, TCoo
       {
       for( unsigned int i = 0; i < m_WindowSize; i++)
         {
-	  xWeight[dim][i] = i == (this->GetRadius() - 1) ? 1. : 0.;
+	  xWeight[dim][i] = static_cast<int>(i) == (static_cast<int>(this->GetRadius()) - 1) ? 1. : 0.;
         }
       }
     else

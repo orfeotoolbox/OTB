@@ -49,7 +49,7 @@ class ProlateFunction
       TOutput val = itk::NumericTraits< TOutput >::Zero;
       if (A != itk::NumericTraits< TInput >::Zero)
 	{
-	  unsigned int ival = static_cast<unsigned int>(m_OriginalProfilSize*static_cast<double>(vcl_abs(A))/static_cast<double>(m_Radius));
+	  unsigned int ival = static_cast<unsigned int>(m_OriginalProfilSize*static_cast<double>(vcl_abs(A))/static_cast<double>(m_Radius+1));
 	  val = m_OriginalProfil[ival];
 	}
       else
