@@ -85,9 +85,9 @@ int otbProlateInterpolateImageFunction(int argc, char * argv[])
   pro->SetRadius(atoi(argv[3]));
   proresampler->SetInterpolator(pro);
  StreamingResampleImageFilterType::SizeType size;
-  size[0]=1000;
-  size[1]=1000;
-  double tutu = 0.25;
+  size[0]=512;
+  size[1]=512;
+  double tutu = 1;
   proresampler->SetSize(size);
   proresampler->SetOutputSpacing(tutu);
   // Result of resampler is written
@@ -95,6 +95,32 @@ int otbProlateInterpolateImageFunction(int argc, char * argv[])
   //prowriter->SetNumberOfStreamDivisions(1);
  prowriter->SetFileName("proresample.tif");
  prowriter->Update();
+ 
+ typedef otb::WindowedSincInterpolateImageCosineFunction<ImageType>          CosInterpolatorType;
+ typedef itk::Function::CosineWindowFunction<1, double, double>              itkCosType;
+ typedef itk::WindowedSincInterpolateImageFunction<ImageType, 1, itkCosType> itkCosInterpolatorType;
+ 
+ WriterType::Pointer itkcoswriter  = WriterType::New();
+ WriterType::Pointer coswriter = WriterType::New();
+ StreamingResampleImageFilterType::Pointer cosresampler = StreamingResampleImageFilterType::New();
+ StreamingResampleImageFilterType::Pointer itkcosresampler = StreamingResampleImageFilterType::New();
+ CosInterpolatorType::Pointer     cos     = CosInterpolatorType::New();
+ itkCosInterpolatorType::Pointer  itkcos  = itkCosInterpolatorType::New();
+ cosresampler->SetSize(size);
+ cosresampler->SetOutputSpacing(tutu);
+ itkcosresampler->SetSize(size);
+ itkcosresampler->SetOutputSpacing(tutu);
+ cosresampler->SetInput(reader->GetOutput());
+ cos->SetRadius(atoi(argv[3]));
+ cosresampler->SetInterpolator(cos);
+ itkcosresampler->SetInput(reader->GetOutput());
+ itkcosresampler->SetInterpolator(itkcos);
+ coswriter->SetInput(cosresampler->GetOutput());
+ coswriter->SetFileName("cosresample.tif");
+ itkcoswriter->SetInput(itkcosresampler->GetOutput());
+ itkcoswriter->SetFileName("itkcosresample.tif");
+ coswriter->Update();
+ itkcoswriter->Update();
   /*
   unsigned int rad = 10;
   
