@@ -15,6 +15,8 @@ the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
 PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
+#ifndef _otbGenericInterpolateImageFunction_txx
+#define _otbGenericInterpolateImageFunction_txx
 #include "otbGenericInterpolateImageFunction.h"
 #include "vnl/vnl_math.h"
 
@@ -323,3 +325,5 @@ GenericInterpolateImageFunction<TInputImage, TFunction, TBoundaryCondition, TCoo
 }
 
 }//namespace otb
+
+#endif

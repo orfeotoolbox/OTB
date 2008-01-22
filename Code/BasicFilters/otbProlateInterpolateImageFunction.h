@@ -36,8 +36,6 @@ class ProlateFunction
 {
   public:
   typedef typename std::vector<double> VectorType;
-
-
   // Accessors definitions
   void SetRadius(unsigned int rad){ m_Radius = rad; };
   unsigned int GetRadius() const { return m_Radius; };
@@ -53,7 +51,7 @@ class ProlateFunction
 	  //val = m_OriginalProfil[ival];
 	   double ival = static_cast<int>(m_OriginalProfilSize)*static_cast<double>(vcl_abs(A))/static_cast<double>(m_Radius);
 	   double ivalFloor = vcl_floor(ival);
-	   unsigned int left = static_cast<unsigned int>(ival - ivalFloor);
+	   double left = ival - ivalFloor;
 	   val = left*m_OriginalProfil[static_cast<unsigned int>(ivalFloor)] + (1-left)*m_OriginalProfil[static_cast<unsigned int>(ivalFloor)+1];
 	}
       else
@@ -139,7 +137,7 @@ public GenericInterpolateImageFunction< TInputImage,
 
 } // end namespace itk
 
-#ifndef ITK_MANUAL_INSTANTIATION
+#ifndef OTB_MANUAL_INSTANTIATION
 #include "otbProlateInterpolateImageFunction.txx"
 #endif
 

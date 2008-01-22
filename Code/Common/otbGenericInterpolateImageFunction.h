@@ -148,7 +148,7 @@ public itk::InterpolateImageFunction<TInputImage,TCoordRep>
 
 } // end namespace itk
 
-#ifndef ITK_MANUAL_INSTANTIATION
+#ifndef OTB_MANUAL_INSTANTIATION
 #include "otbGenericInterpolateImageFunction.txx"
 #endif
 
