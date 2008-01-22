@@ -46,7 +46,7 @@ int otbSVMImageModelEstimatorModelAccessor( int argc, char* argv[] )
     
     typedef otb::VectorImage< InputPixelType,  Dimension >        InputImageType;
     
-    typedef otb::Image< InputPixelType,  Dimension >     TrainingImageType;
+    typedef otb::Image< unsigned int,  Dimension >     TrainingImageType;
     
     typedef otb::SVMImageModelEstimator< InputImageType,
                                   TrainingImageType >   EstimatorType;
