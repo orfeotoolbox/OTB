@@ -40,17 +40,17 @@ SET(OTB_INCLUDE_DIRS_BUILD_TREE ${OTB_INCLUDE_DIRS_BUILD_TREE}
 #-----------------------------------------------------------------------------
 # Include directories from the ossim build tree
 SET(OTB_INCLUDE_DIRS_BUILD_TREE ${OTB_INCLUDE_DIRS_BUILD_TREE}
-${OTB_BINARY_DIR}/Utilities/otbossim/include
+        ${OTB_BINARY_DIR}/Utilities/otbossim/include
 )
 
 
 #-----------------------------------------------------------------------------
 # Include directories from the GDAL build tree.
 SET(OTB_INCLUDE_DIRS_BUILD_TREE ${OTB_INCLUDE_DIRS_BUILD_TREE}
-  		${GDAL_INCLUDE_DIRS} )
+  	${GDAL_INCLUDE_DIRS} )
 
 #-----------------------------------------------------------------------------
-# Include directories from the ITK build tree.e
+# Include directories from the ITK build tree.
 IF(OTB_USE_EXTERNAL_ITK)
 #        INCLUDE(${ITK_SOURCE_DIR}/Utilities/itkThirdParty.cmake)
 # 	INCLUDE(${ITK_SOURCE_DIR}/itkIncludeDirectories.cmake)
@@ -78,8 +78,36 @@ SET(OTB_INCLUDE_DIRS_BUILD_TREE_CXX)
 
 SET(OTB_INCLUDE_DIRS_BUILD_TREE_CXX ${OTB_INCLUDE_DIRS_BUILD_TREE_CXX} )
 
+#-----------------------------------------------------------------------------
+# Include FLTK variables.
+#IF(OTB_USE_EXTERNAL_FLTK)
+#        IF(NOT EXISTS "${FLTK_BINARY_DIR}/FLTKConfig.cmake")
+#                MESSAGE(FATAL_ERROR "Impossible to find the file ${FLTK_BINARY_DIR}/FLTKConfig.cmake. You must generate FLTK with cmake process.")
+#        ELSE(NOT EXISTS "${FLTK_BINARY_DIR}/FLTKConfig.cmake")
+#                INCLUDE(${FLTK_BINARY_DIR}/FLTKConfig.cmake)
+#        ENDIF(NOT EXISTS "${FLTK_BINARY_DIR}/FLTKConfig.cmake")
+#ELSE(OTB_USE_EXTERNAL_FLTK)
+#        IF(EXISTS "${OTB_BINARY_DIR}/Utilities/FLTK/FLTKConfig.cmake") 
+#                INCLUDE(${OTB_BINARY_DIR}/Utilities/FLTK/FLTKConfig.cmake)
+#        ENDIF(EXISTS "${OTB_BINARY_DIR}/Utilities/FLTK/FLTKConfig.cmake") 
+#ENDIF(OTB_USE_EXTERNAL_FLTK)
+
+#-----------------------------------------------------------------------------
+# Include directories from the FLTK build tree.
+
+IF(OTB_USE_EXTERNAL_FLTK)
+        SET(OTB_INCLUDE_DIRS_BUILD_TREE_CXX ${OTB_INCLUDE_DIRS_BUILD_TREE_CXX}
+  		${FLTK_INCLUDE_DIRS} )
+ELSE(OTB_USE_EXTERNAL_FLTK)
+        SET(OTB_INCLUDE_DIRS_BUILD_TREE_CXX ${OTB_INCLUDE_DIRS_BUILD_TREE_CXX}
+                ${OTB_SOURCE_DIR}/Utilities/FLTK
+  	        ${OTB_SOURCE_DIR}/Utilities/FLTK/src
+  	        ${OTB_BINARY_DIR}/Utilities/FLTK )
+ENDIF(OTB_USE_EXTERNAL_FLTK)
+
+
 SET(OTB_INCLUDE_DIRS_BUILD_TREE_CXX ${OTB_INCLUDE_DIRS_BUILD_TREE_CXX}
-  		${GDAL_INCLUDE_DIRS} ${FLTK_INCLUDE_DIRS} )
+  		${GDAL_INCLUDE_DIRS} )
 
 IF(OTB_USE_EXTERNAL_ITK)
 	SET(OTB_INCLUDE_DIRS_BUILD_TREE_CXX ${OTB_INCLUDE_DIRS_BUILD_TREE_CXX}
@@ -127,11 +155,19 @@ SET(OTB_INCLUDE_DIRS_INSTALL_TREE ${OTB_INCLUDE_DIRS_INSTALL_TREE}
 )
 
 SET(OTB_INCLUDE_DIRS_INSTALL_TREE ${OTB_INCLUDE_DIRS_INSTALL_TREE}
-  		${GDAL_INCLUDE_DIRS} ${FLTK_INCLUDE_DIRS})
+  		${GDAL_INCLUDE_DIRS} )
+
+IF(OTB_USE_EXTERNAL_FLTK)
+        SET(OTB_INCLUDE_DIRS_INSTALL_TREE ${OTB_INCLUDE_DIRS_INSTALL_TREE}
+  		        ${FLTK_INCLUDE_DIRS})
+ELSE(OTB_USE_EXTERNAL_FLTK)
+        SET(OTB_INCLUDE_DIRS_INSTALL_TREE ${OTB_INCLUDE_DIRS_INSTALL_TREE}
+  		        ${OTB_INSTALL_INCLUDE_DIR}/Utilities/FLTK)
+ENDIF(OTB_USE_EXTERNAL_FLTK)
 
 IF(OTB_USE_EXTERNAL_ITK)
 	SET(OTB_INCLUDE_DIRS_INSTALL_TREE ${OTB_INCLUDE_DIRS_INSTALL_TREE}
-   			 ${ITK_INCLUDE_DIRS} )
+   			${ITK_INCLUDE_DIRS} )
 #   			${ITK_INCLUDE_DIRS_INSTALL_TREE} 	)
 ELSE(OTB_USE_EXTERNAL_ITK)
 #THOMAS

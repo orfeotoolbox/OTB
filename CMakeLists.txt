@@ -64,7 +64,7 @@ SET(OTB_VERSION_PATCH "0")
 SET(OTB_VERSION_STRING "${OTB_VERSION_MAJOR}.${OTB_VERSION_MINOR}.${OTB_VERSION_PATCH}")
 
 #-----------------------------------------------------------------------------
-# RECHERCHE DES LIBRAIRIES EXTERNES UTILISEES
+# FIND EXTERNAL LIBRAIRIES USE
 
 #-------------------------------
 # Librairie ITK
@@ -72,12 +72,12 @@ SET(OTB_VERSION_STRING "${OTB_VERSION_MAJOR}.${OTB_VERSION_MINOR}.${OTB_VERSION_
 
 OPTION(OTB_USE_EXTERNAL_ITK "Use an outside build of ITK." OFF)
 IF(OTB_USE_EXTERNAL_ITK)
-	FIND_PACKAGE(ITK)
-	IF(ITK_FOUND)
-  		INCLUDE(${ITK_USE_FILE})
- 	ELSE(ITK_FOUND)
-  		MESSAGE(FATAL_ERROR
-          	"Cannot build OTB project without ITK.  Please set ITK_DIR or set OTB_USE_EXTERNAL_ITK OFF to use INTERNAL ITK set on OTB/Utilities repository.")
+  FIND_PACKAGE(ITK)
+  IF(ITK_FOUND)
+                  INCLUDE(${ITK_USE_FILE})
+  ELSE(ITK_FOUND)
+                  MESSAGE(FATAL_ERROR
+                  "Cannot build OTB project without ITK.  Please set ITK_DIR or set OTB_USE_EXTERNAL_ITK OFF to use INTERNAL ITK set on OTB/Utilities repository.")
         ENDIF(ITK_FOUND)
 ENDIF(OTB_USE_EXTERNAL_ITK)
 
@@ -87,15 +87,16 @@ ENDIF(OTB_USE_EXTERNAL_ITK)
 #-------------------------------
 
 #FIND_LIBRARY(GDAL_LIBRARY_DIRS gdal PATHS $ENV{GDAL_LIBRARY_DIRS} ) 
+
 FIND_PATH(GDAL_LIBRARY_DIRS gdal PATHS $ENV{GDAL_LIBRARY_DIRS} )
 FIND_PATH(GDAL_INCLUDE_DIRS gdal.h $ENV{GDAL_INCLUDE_DIRS} /usr/include/gdal)
 IF (NOT GDAL_LIBRARY_DIRS)
 MESSAGE(FATAL_ERROR
-	  "Cannot find GDAL library directory. Please set GDAL_LIBRARY_DIRS.")
+         "Cannot find GDAL library directory. Please set GDAL_LIBRARY_DIRS.")
 ENDIF (NOT GDAL_LIBRARY_DIRS)
 IF (NOT GDAL_INCLUDE_DIRS)
 MESSAGE(FATAL_ERROR
-	  "Cannot find GDAL include directory. Please set GDAL_INCLUDE_DIRS.")
+         "Cannot find GDAL include directory. Please set GDAL_INCLUDE_DIRS.")
 ENDIF (NOT GDAL_INCLUDE_DIRS)
 
 
@@ -106,6 +107,7 @@ LINK_DIRECTORIES( ${GDAL_LIBRARY_DIRS} )
 # Option for generate Visu tools !!!
 OPTION(OTB_USE_VISU_GUI "Generate Gui/Visu tools directory. If ON, find OpenGL and FLTK package." ON)
 MARK_AS_ADVANCED(OTB_USE_VISU_GUI)
+
 IF(OTB_USE_VISU_GUI)
 
         #-------------------------------
@@ -119,38 +121,101 @@ IF(OTB_USE_VISU_GUI)
         #-------------------------------
         # Librairie FLTK
         #-------------------------------
+
+        # Option for internal/external FLTK 
+        OPTION(OTB_USE_EXTERNAL_FLTK "Use an outside build of FLTK." ON)
+        MARK_AS_ADVANCED(OTB_USE_EXTERNAL_FLTK)
         # Add an option to use or not use FLTK (http://www.fltk.org)
 
 #         SET(CMAKE_MODULE_PATH "/usr/share/CMake")
 #         SET( FLTK_INCLUDE_DIR /usr/include )
 
-        FIND_PACKAGE(FLTK)
-        IF (NOT FLTK_INCLUDE_DIR)
-		SET( FLTK_INCLUDE_DIR /usr/include )
-		FIND_PACKAGE(FLTK)
-	ENDIF(NOT FLTK_INCLUDE_DIR)
+        IF(OTB_USE_EXTERNAL_FLTK)
 
-        IF(FLTK_FOUND)
-		INCLUDE_DIRECTORIES(${FLTK_INCLUDE_DIRS})
-		LINK_DIRECTORIES(${FLTK_LIBRARY_DIRS})
-        ELSE(FLTK_FOUND)
-           MESSAGE(FATAL_ERROR
-	         "Cannot build OTB project without FLTK.  Please set FLTK_DIR or set OTB_USE_VISU to OFF.")
-        ENDIF(FLTK_FOUND)
+                FIND_PACKAGE(FLTK)
+                IF (NOT FLTK_INCLUDE_DIR)
+		        SET( FLTK_INCLUDE_DIR /usr/include )
+		        FIND_PACKAGE(FLTK)
+	        ENDIF(NOT FLTK_INCLUDE_DIR)
 
-        #----------------------------------------------------------------
-        # RESUME Alls VISU GUI libraries use by OTB in a single VARIABLE
-        SET(OTB_VISU_GUI_LIBRARIES "${FLTK_LIBRARIES};${OPENGL_LIBRARIES} ")
+                IF(FLTK_FOUND)
+#                        IF(NOT EXISTS "${FLTK_BINARY_DIR}/FLTKConfig.cmake")
+#                                MESSAGE(FATAL_ERROR "Impossible to find the file ${FLTK_BINARY_DIR}/FLTKConfig.cmake. You must generate FLTK with cmake process.")
+#                        ELSE(NOT EXISTS "${FLTK_BINARY_DIR}/FLTKConfig.cmake")
+#                                INCLUDE(${FLTK_BINARY_DIR}/FLTKConfig.cmake)
+#                        ENDIF(NOT EXISTS "${FLTK_BINARY_DIR}/FLTKConfig.cmake")
+#   MESSAGE("FLUID_COMMAND -> ${FLUID_COMMAND}")
+#   MESSAGE("FLTK_BINARY_DIR -> ${FLTK_BINARY_DIR}")
+#   MESSAGE("FLTK_USE_FILE  -> ${FLTK_USE_FILE}")
+#   MESSAGE("FLTK_INCLUDE_DIRS  -> ${FLTK_INCLUDE_DIRS}")
+#   MESSAGE("FLTK_LIBRARY_DIRS  -> ${FLTK_LIBRARY_DIRS}")
+#   MESSAGE("FLTK_LIBRARIES  -> ${FLTK_LIBRARIES}")
+#   MESSAGE("FLTK_DIR  -> ${FLTK_DIR}")
+#   MESSAGE("FLTK_FLUID_COMMAND  -> ${FLTK_FLUID_COMMAND}")
+#   MESSAGE("FLTK_EXECUTABLE_DIRS  -> ${FLTK_EXECUTABLE_DIRS}")
 
+
+		        INCLUDE_DIRECTORIES(${FLTK_INCLUDE_DIRS})
+		        LINK_DIRECTORIES(${FLTK_LIBRARY_DIRS})
+                ELSE(FLTK_FOUND)
+                        MESSAGE(FATAL_ERROR
+	                        "Cannot build OTB project without FLTK.  Please set FLTK_DIR  or  set OTB_USE_VISU to OFF  or  set OTB_USE_EXTERNAL_FLTK OFF to use INTERNAL FLTK set on OTB/Utilities repository.")
+                ENDIF(FLTK_FOUND)
+
+                #-----------------------------------------------------------------------------
+                # This lines come from FLTK CMakeLists.txt. We need the FLTK_PLATFORM_DEPENDENT_LIBS 
+                # information, but this VAR is not include in the FLTKConfig.cmake.
+                IF(WIN32)
+                  IF(NOT CYGWIN)
+                    IF(BORLAND)
+                      SET( FLTK_PLATFORM_DEPENDENT_LIBS import32 )
+                    ELSE(BORLAND)
+                      SET( FLTK_PLATFORM_DEPENDENT_LIBS wsock32 comctl32 )
+                    ENDIF(BORLAND)
+                  ENDIF(NOT CYGWIN)
+                ENDIF(WIN32)
+
+                SET(FLTK_X11 1)
+                SET(FLTK_APPLE 0)
+                IF(APPLE)
+                  OPTION(FLTK_APPLE_X11 "Use X11 on Mac instead of Carbon" OFF)
+                  MARK_AS_ADVANCED(FLTK_APPLE_X11)
+                  IF(NOT FLTK_APPLE_X11)
+                    SET(FLTK_APPLE 1)
+                    SET(FLTK_X11 0)
+                  ENDIF(NOT FLTK_APPLE_X11)
+                ENDIF(APPLE)
+                IF(UNIX)
+                  FIND_PACKAGE(X11)
+                  SET( FLTK_PLATFORM_DEPENDENT_LIBS ${X11_LIBRARIES} -lm)
+                ENDIF(UNIX)
+                IF(APPLE AND NOT FLTK_APPLE_X11)
+                  SET( FLTK_PLATFORM_DEPENDENT_LIBS
+                    "-framework Carbon -framework Cocoa -framework ApplicationServices -lz")
+                ENDIF(APPLE AND NOT FLTK_APPLE_X11)
+                IF(CYGWIN)
+                  ADD_DEFINITIONS(-DWIN32)  
+                  SET( FLTK_PLATFORM_DEPENDENT_LIBS ole32 uuid comctl32 wsock32 supc++ -lm -lgdi32)
+                ENDIF(CYGWIN)
+                IF(MINGW)
+                  ADD_DEFINITIONS(-DWIN32)
+                  SET( FLTK_PLATFORM_DEPENDENT_LIBS ole32 uuid wsock32 gdi32 comdlg32)
+                ENDIF(MINGW)
+
+                #----------------------------------------------------------------
+                # RESUME Alls VISU GUI libraries use by OTB in a single VARIABLE
+#                SET(OTB_VISU_GUI_LIBRARIES "${FLTK_LIBRARIES} ${OTB_VISU_GUI_LIBRARIES}")
+#                SET(OTB_FLTK_FLUID_EXECUTABLE "${FLTK_FLUID_EXECUTABLE}")
+                
+#        SET(OTB_VISU_GUI_LIBRARIES "${FLTK_LIBRARIES};${OPENGL_LIBRARIES} ")
+        ENDIF(OTB_USE_EXTERNAL_FLTK)
+        
         #----------------------------------------------------------------
         # ADD Specifics mingw lib 
-        IF(MINGW)
-                SET(OTB_VISU_GUI_LIBRARIES "${OTB_VISU_GUI_LIBRARIES};ole32;uuid;wsock32;gdi32;comdlg32;shell32") # wininet dsound gdi32 vfw32
-        ENDIF(MINGW)
-ELSE(OTB_USE_VISU_GUI)
-        SET(OTB_VISU_GUI_LIBRARIES "")
+#        IF(MINGW)
+#                SET(OTB_VISU_GUI_LIBRARIES "${OTB_VISU_GUI_LIBRARIES};ole32;uuid;wsock32;gdi32;comdlg32;shell32") # wininet dsound gdi32 vfw32
+#        ENDIF(MINGW)
 ENDIF(OTB_USE_VISU_GUI)
-
 
 
 #-------------------------------
@@ -352,6 +417,7 @@ ENDIF (BUILD_EXAMPLES)
 IF (BUILD_TESTING)
   SUBDIRS(Testing)
 ENDIF (BUILD_TESTING)
+
 
 #-----------------------------------------------------------------------------
 # OTB requires special compiler flags on some platforms.
@@ -574,6 +640,12 @@ INCLUDE_DIRECTORIES(
   ${OTB_INCLUDE_DIRS_SYSTEM}
 )
 
+IF(OTB_USE_VISU_GUI)
+        SET(OTB_VISU_GUI_LIBRARIES "${FLTK_LIBRARIES};${OPENGL_LIBRARIES};${FLTK_PLATFORM_DEPENDENT_LIBS}")
+ELSE(OTB_USE_VISU_GUI)
+        SET(OTB_VISU_GUI_LIBRARIES "")
+ENDIF(OTB_USE_VISU_GUI)
+
 #-----------------------------------------------------------------------------
 # Uninstall cmake use to uninstall OTB.
 CONFIGURE_FILE(
@@ -642,8 +714,4 @@ ELSE("${CMAKE_MAJOR_VERSION}.${CMAKE_MINOR_VERSION}" GREATER 1.7)
           "This version of CMake is too old to build this version of OTB.  "
           "Please upgrade to CMake 1.8.")
 ENDIF("${CMAKE_MAJOR_VERSION}.${CMAKE_MINOR_VERSION}" GREATER 1.7)
-
-# Set the FLTK and OpenGL libraries use by OTB
-
-
 
