@@ -202,20 +202,32 @@ IF(OTB_USE_VISU_GUI)
                   SET( FLTK_PLATFORM_DEPENDENT_LIBS ole32 uuid wsock32 gdi32 comdlg32)
                 ENDIF(MINGW)
 
-                #----------------------------------------------------------------
-                # RESUME Alls VISU GUI libraries use by OTB in a single VARIABLE
 #                SET(OTB_VISU_GUI_LIBRARIES "${FLTK_LIBRARIES} ${OTB_VISU_GUI_LIBRARIES}")
 #                SET(OTB_FLTK_FLUID_EXECUTABLE "${FLTK_FLUID_EXECUTABLE}")
                 
-#        SET(OTB_VISU_GUI_LIBRARIES "${FLTK_LIBRARIES};${OPENGL_LIBRARIES} ")
+        ELSE(OTB_USE_EXTERNAL_FLTK)
+                SET( FLTK_PLATFORM_DEPENDENT_LIBS "")
+                IF(EXISTS "${OTB_BINARY_DIR}/Utilities/FLTK/FLTKConfig.cmake") 
+                        INCLUDE(${OTB_BINARY_DIR}/Utilities/FLTK/FLTKConfig.cmake)
+                ENDIF(EXISTS "${OTB_BINARY_DIR}/Utilities/FLTK/FLTKConfig.cmake") 
+                #----------------------------------------------------------------
+                # RESUME Alls VISU GUI libraries use by OTB in a single VARIABLE
+                SET(OTB_VISU_GUI_LIBRARIES "${FLTK_LIBRARIES};${OPENGL_LIBRARIES} ")
+
         ENDIF(OTB_USE_EXTERNAL_FLTK)
         
-        #----------------------------------------------------------------
-        # ADD Specifics mingw lib 
-#        IF(MINGW)
-#                SET(OTB_VISU_GUI_LIBRARIES "${OTB_VISU_GUI_LIBRARIES};ole32;uuid;wsock32;gdi32;comdlg32;shell32") # wininet dsound gdi32 vfw32
-#        ENDIF(MINGW)
 ENDIF(OTB_USE_VISU_GUI)
+
+#  MESSAGE("FLUID_COMMAND -> ${FLUID_COMMAND}")
+#  MESSAGE("FLTK_BINARY_DIR -> ${FLTK_BINARY_DIR}")
+#  MESSAGE("FLTK_USE_FILE  -> ${FLTK_USE_FILE}")
+#  MESSAGE("FLTK_INCLUDE_DIRS  -> ${FLTK_INCLUDE_DIRS}")
+#  MESSAGE("FLTK_LIBRARY_DIRS  -> ${FLTK_LIBRARY_DIRS}")
+#  MESSAGE("FLTK_LIBRARIES  -> ${FLTK_LIBRARIES}")
+#  MESSAGE("FLTK_DIR  -> ${FLTK_DIR}")
+#  MESSAGE("FLTK_FLUID_COMMAND  -> ${FLTK_FLUID_COMMAND}")
+#  MESSAGE("FLTK_EXECUTABLE_DIRS  -> ${FLTK_EXECUTABLE_DIRS}")
+#  MESSAGE("OTB_VISU_GUI_LIBRARIES  -> ${OTB_VISU_GUI_LIBRARIES}")
 
 
 #-------------------------------

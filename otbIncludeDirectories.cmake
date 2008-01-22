@@ -80,7 +80,7 @@ SET(OTB_INCLUDE_DIRS_BUILD_TREE_CXX ${OTB_INCLUDE_DIRS_BUILD_TREE_CXX} )
 
 #-----------------------------------------------------------------------------
 # Include FLTK variables.
-#IF(OTB_USE_EXTERNAL_FLTK)
+#IF(NOT OTB_USE_EXTERNAL_FLTK)
 #        IF(NOT EXISTS "${FLTK_BINARY_DIR}/FLTKConfig.cmake")
 #                MESSAGE(FATAL_ERROR "Impossible to find the file ${FLTK_BINARY_DIR}/FLTKConfig.cmake. You must generate FLTK with cmake process.")
 #        ELSE(NOT EXISTS "${FLTK_BINARY_DIR}/FLTKConfig.cmake")
@@ -90,7 +90,8 @@ SET(OTB_INCLUDE_DIRS_BUILD_TREE_CXX ${OTB_INCLUDE_DIRS_BUILD_TREE_CXX} )
 #        IF(EXISTS "${OTB_BINARY_DIR}/Utilities/FLTK/FLTKConfig.cmake") 
 #                INCLUDE(${OTB_BINARY_DIR}/Utilities/FLTK/FLTKConfig.cmake)
 #        ENDIF(EXISTS "${OTB_BINARY_DIR}/Utilities/FLTK/FLTKConfig.cmake") 
-#ENDIF(OTB_USE_EXTERNAL_FLTK)
+#ENDIF(NOT OTB_USE_EXTERNAL_FLTK)
+
 
 #-----------------------------------------------------------------------------
 # Include directories from the FLTK build tree.
