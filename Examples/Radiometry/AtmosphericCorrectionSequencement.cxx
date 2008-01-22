@@ -220,7 +220,7 @@ int main( int argc, char *argv[] )
   // \item $\mathbf{rho_{TOA}^{k}}$ is the reflectance measured by the sensor;
   // \item $\theta_{S}$ is the zenithal solar angle in degrees;
   // \item $E_{S}^{k}$ is the solar illumination out of the atmosphere measured at a distance 
-  // $d_{0}$ from the earth;
+  // $d_{0}$ from the Earth;
   // \item $d/d_{0}$ is the ratio between the Earth-Sun distance at 
   // the acquisition date and the mean Earth-Sun distance. The ratio can be directly 
   // given to the class or computed using a 6S routine. 
