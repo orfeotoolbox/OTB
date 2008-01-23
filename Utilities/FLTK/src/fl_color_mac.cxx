@@ -37,6 +37,7 @@
 /*#include <config.h>*/
 #include "fltk-config.h"
 #include <FL/x.H>
+#include <FL/Fl.H>
 #include <FL/fl_draw.H>
 
 static unsigned fl_cmap[256] = {

@@ -30,6 +30,7 @@
 /*#include <config.h>*/
 #include "fltk-config.h"
 #include <FL/x.H>
+#include <FL/Fl.H>
 #include <FL/Fl_Window.H>
 
 // warning: this function is only implemented in Quickdraw. The function
