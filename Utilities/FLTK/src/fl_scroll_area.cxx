@@ -32,6 +32,7 @@
 /*OTB Modifications: conflict name with OTB/Utilities/ITK/Utilities/nifti/znzlib/config.h*/
 /*#include <config.h>*/
 #include "fltk-config.h"
+#include <FL/Fl.H>
 #include <FL/x.H>
 
 // scroll a rectangle and redraw the newly exposed portions:

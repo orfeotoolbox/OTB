@@ -28,6 +28,7 @@
 /*OTB Modifications: conflict name with OTB/Utilities/ITK/Utilities/nifti/znzlib/config.h*/
 /*#include <config.h>*/
 #include "fltk-config.h"
+#include <FL/Fl.H>
 // This function fills in the fltk font table with all the fonts that
 // are found on the X server.  It tries to place the fonts into families
 // and to sort them so the first 4 in a family are normal, bold, italic,
