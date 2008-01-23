@@ -39,9 +39,9 @@ namespace Functor
      * and \f$\sigma\f$ a tolerance value, the following decision rule is applied:
      * 
      *  \f[
-     *  L=\left{\begin{array}{lcl}
-     * L_{1} &:& x_{1}>x_{2} and x_{1}>\sigma\\
-     * L_{2} &:& x_{2}>x_{1} and x_{2}>\sigma\\
+     *  L=\left\{\begin{array}{lcl}
+     * L_{1} &:& x_{1}>x_{2} \quad and \quad x_{1}>\sigma\\
+     * L_{2} &:& x_{2}>x_{1} \quad and \quad x_{2}>\sigma\\
      * 0   &:& otherwise.
      *  \end{array}\right.
      * \f]
@@ -72,8 +72,10 @@ namespace Functor
 	/**
 	 * Label the pixel to convex, concave or flat
 	 * \return The label of the pixel
-	 * \param x The image value
-	 * \param xlevel The leveling value
+	 * \param opDeMax The max of the opening profile derivative
+	 * \param cloDeMax  The max of the closing profile derivative
+	 * \param opDeChar The characteristic of the opening profile
+	 * \param cloDeChar The characteristic of the closing profile
 	 */
 	inline TLabeled operator()(const TInput& opDeMax, const TInput& cloDeMax,const TLabeled& opDeChar, const TLabeled& cloDeChar)
 	  {
@@ -107,7 +109,7 @@ namespace Functor
 	  }
 	/**
 	 * Set the label separator
-	 * \param labelSpeparator the label separator
+	 * \param labelSeparator the label separator
 	 */
 	void SetLabelSeparator(const TLabeled& labelSeparator)
 	  {

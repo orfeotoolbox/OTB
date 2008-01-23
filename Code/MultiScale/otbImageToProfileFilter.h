@@ -25,7 +25,7 @@ namespace otb
 /** \class ImageToProfileFilter
  *  \brief Base class to produce a profile of the response of a given filter for a range of parameter.
  *
- *  Let \f$f\$ denote an image, and \f$\phi_{N}\f$ an image operator with the parameter \f$N\f$.
+ *  Let \f$f\$ denote an image, and \f$\phi_{N}\f$ an image operator with the parameter \f$N\f$ .
  *  A profile \f$\Pi_{\phi}(f)\f$ of \f$f\f$ by \f$\phi\f$ is defined as follows:
  *  \f[
  *  \Pi_{\phi}(f)= \{\phi_{n}(f), n \in \{n_{1},\ldots,n_{N}\} \}

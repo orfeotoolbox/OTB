@@ -42,10 +42,10 @@ namespace Functor
      * and Flat (label \f$\bar{k}\f$):
      *
      * \f[
-     * \phi_{N}^{\sigma}=\left{\begin{array}{lcl}
+     * \phi_{N}^{\sigma}=\left\{\begin{array}{lcl}
      * \stackrel{\smile}{k} &:& f-\psi_{N}(f)>\sigma\\
-     * \stackrel{\frown}{k} &:& psi_{N}(f)-f>\sigma\\
-     *  \bar{k)&:&\mid f - \psi_{N}(f) \mid \leq \sigma
+     * \stackrel{\frown}{k} &:& \psi_{N}(f)-f>\sigma\\
+     *  \bar{k}&:&\mid f - \psi_{N}(f) \mid \leq \sigma
      *  \end{array}\right.
      * \f]
      *

@@ -329,6 +329,34 @@ ADD_TEST(msTvMultiScaleConvexOrConcaveClassificationFilter ${MULTISCALE_TESTS3}
 	 1.	 
 )
 
+# -------            otb::GeodesicMorphologyIterativeDecompositionImageFilter   ----------
+ 
+ADD_TEST(msTuGeodesicMorphologyIterativeDecompositionImageFilterNew ${MULTISCALE_TESTS3} 
+         otbGeodesicMorphologyIterativeDecompositionImageFilterNew)
+
+ADD_TEST(msTvGeodesicMorphologyIterativeDecompositionImageFilter ${MULTISCALE_TESTS3} 
+   --compare-n-images ${TOL} 6
+		   ${BASELINE}/msGeodesicMorphologyIterativeDecompositionImageFilter_concMap_1.tif
+ 		   ${TEMP}/msGeodesicMorphologyIterativeDecompositionImageFilter_concMap_1.tif
+		   ${BASELINE}/msGeodesicMorphologyIterativeDecompositionImageFilter_concMap_2.tif
+ 		   ${TEMP}/msGeodesicMorphologyIterativeDecompositionImageFilter_concMap_2.tif
+		   ${BASELINE}/msGeodesicMorphologyIterativeDecompositionImageFilter_convMap_1.tif
+ 		   ${TEMP}/msGeodesicMorphologyIterativeDecompositionImageFilter_convMap_1.tif
+		   ${BASELINE}/msGeodesicMorphologyIterativeDecompositionImageFilter_convMap_2.tif
+ 		   ${TEMP}/msGeodesicMorphologyIterativeDecompositionImageFilter_convMap_2.tif
+		   ${BASELINE}/msGeodesicMorphologyIterativeDecompositionImageFilter_leveling_1.tif
+ 		   ${TEMP}/msGeodesicMorphologyIterativeDecompositionImageFilter_leveling_1.tif
+		   ${BASELINE}/msGeodesicMorphologyIterativeDecompositionImageFilter_leveling_2.tif
+ 		   ${TEMP}/msGeodesicMorphologyIterativeDecompositionImageFilter_leveling_2.tif
+         otbGeodesicMorphologyIterativeDecompositionImageFilter
+	 ${INPUTDATA}/ROI_IKO_PAN_LesHalles.tif
+	 ${TEMP}/msGeodesicMorphologyIterativeDecompositionImageFilter
+	 tif
+	 2
+	 3
+         2	 
+)
+
 
 # -------       Fichiers sources CXX -----------------------------------
 SET(BasicMultiScale_SRCS1
@@ -364,6 +392,8 @@ otbProfileDerivativeToMultiScaleCharacteristicsFilterNew.cxx
 otbProfileDerivativeToMultiScaleCharacteristicsFilter.cxx
 otbMultiScaleConvexOrConcaveClassificationFilterNew.cxx
 otbMultiScaleConvexOrConcaveClassificationFilter.cxx
+otbGeodesicMorphologyIterativeDecompositionImageFilterNew.cxx
+otbGeodesicMorphologyIterativeDecompositionImageFilter.cxx
 
 )
 

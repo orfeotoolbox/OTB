@@ -45,6 +45,8 @@ namespace otb
  * 
  *  \f[
  *  \stackrel{\smile}{\mu} = f-\gamma^{\star}_{N}(f)
+ *  \f]
+ *  \f[
  *  \stackrel{\frown}{\mu} = \phi^{\star}_{N}(f)-f
  *  \f]
  *
@@ -58,7 +60,7 @@ namespace otb
  * \f$\stackrel{\frown}{\mu}\f$:
  *
  * \f[
- *  \psi_{N}(f)= \left{\begin{array}{lcl}
+ *  \psi_{N}(f)= \left\{\begin{array}{lcl}
  *  \gamma^{\star}_{N}(f)&:& \stackrel{\smile}{\mu}>\stackrel{\frown}{\mu}\\
  *  \varphi^{\star}_{N}(f)&:& \stackrel{\frown}{\mu}>\stackrel{\smile}{\mu}\\
  *   f&:&\stackrel{\frown}{\mu}=\stackrel{\smile}{\mu}
