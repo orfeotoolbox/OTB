@@ -78,7 +78,7 @@ int main( int argc, char *argv[] )
     return -1;
     }
 
-  typedef float PixelType;
+  typedef double PixelType;
   typedef otb::Image< PixelType, 2 > ImageType;
   typedef itk::NeighborhoodIterator< ImageType > NeighborhoodIteratorType;
 
