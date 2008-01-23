@@ -186,7 +186,7 @@ public GenericInterpolateImageFunction< TInputImage,
 
 } // end namespace itk
 
-#ifndef ITK_MANUAL_INSTANTIATION
+#ifndef OTB_MANUAL_INSTANTIATION
 #include "otbWindowedSincInterpolateImageFunctionBase.txx"
 #endif
 

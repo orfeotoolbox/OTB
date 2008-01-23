@@ -15,6 +15,10 @@ the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
 PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
+#ifndef _otbWindowedSincInterpolateImageFunctionBase_txx
+#define _otbWindowedSincInterpolateImageFunctionBase_txx
+
+
 #include "otbWindowedSincInterpolateImageFunctionBase.h"
 
 namespace otb
@@ -53,3 +57,4 @@ WindowedSincInterpolateImageFunctionBase<TInputImage, TWindowFunction, TBoundary
 }
 
 }//namespace otb
+#endif
