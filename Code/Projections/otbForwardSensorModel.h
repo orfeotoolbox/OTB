@@ -31,8 +31,8 @@ namespace otb
       
   * \brief Class for direct sensor models 
   *
-  * Based to ossimProjectionFactoryRegistry and ossimProjection methods.
-  * It takes in input an index and compute the world coordinates.
+  * Based on ossimProjectionFactoryRegistry and ossimProjection methods.
+  * It takes as input an index and computes the world coordinates.
   * (i,j,h) -> (lat,lon).
   * Notice that the elevation h is optional. 
   *

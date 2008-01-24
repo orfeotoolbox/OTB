@@ -32,8 +32,9 @@ namespace otb
       
   * \brief Class for inverse sensor models 
   *
-  * Based to ossimProjectionFactoryRegistry and ossimProjection methods.
-  * It takes in input an world point and compute the index position of the correspondant point in the input image.
+  * Based on ossimProjectionFactoryRegistry and ossimProjection methods.
+  * It takes as input a world point and computes the index position of the 
+  * corresponding point in the input image.
   * (lat,lon,h) -> (i,j).
   * Notice that the elevation h is optional. 
   *
