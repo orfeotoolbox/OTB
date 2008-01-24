@@ -121,11 +121,13 @@ ProlateFunction<TInput, TOutput>
       energy += std::abs(resampledProfile[j])*std::abs(resampledProfile[j]);
     }
   double totalEnergy = energy;
-  for (unsigned int j = sampleNb; j<1024; j++)
+  for (unsigned int j = sampleNb+1; j<1024; j++)
     {
       totalEnergy += std::abs(resampledProfile[j])*std::abs(resampledProfile[j]);
     }
-  
+
+  std::cout<<"SampleNb: "<<sampleNb<<", energy: "<<energy<<", total energy: "<<totalEnergy<<std::endl;
+
   return energy/totalEnergy;
 }
 
