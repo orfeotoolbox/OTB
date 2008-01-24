@@ -32,6 +32,7 @@
 #include "itkNthElementImageAdaptor.h"
 #include "itkCovariantVector.h"
 #include "itkAtan2ImageFilter.h"
+#include "itkAtanImageFilter.h"
 #include "otbMultiplyByScalarImageFilter.h"
 #include "itkMultiplyImageFilter.h"
 #include "itkAcosImageFilter.h"
@@ -92,6 +93,7 @@ namespace otb
       typedef typename GradientRecursiveGaussianImageFilterType::OutputImageType                         tutuType;
       typedef itk::NthElementImageAdaptor<tutuType, InputInternalPixelType>                              AdaptorType;
       typedef itk::Atan2ImageFilter<AdaptorType, AdaptorType, OutputImageType>                           Atan2FilterType;
+      typedef itk::AtanImageFilter<OutputImageType, OutputImageType>                                     AtanFilterType;
 
       /** Operation Filters*/
       typedef MultiplyByScalarImageFilter<OutputImageType, OutputImageType>                MultiplyByScalarImageFilterType;
