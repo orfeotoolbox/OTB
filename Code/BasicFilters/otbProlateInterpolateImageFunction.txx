@@ -15,8 +15,10 @@ the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
 PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
+#ifndef _otbProlateInterpolateImageFunction_txx
+#define _otbProlateInterpolateImageFunction_txx
+
 #include "otbProlateInterpolateImageFunction.h"
-#include "vnl/vnl_math.h"
 
 namespace otb
 {
@@ -25,13 +27,13 @@ namespace Function
   template<class TInput, class TOutput>
   const unsigned int
   ProlateFunction<TInput, TOutput>
-  ::m_OriginalProfilSize = 721;
+  ::m_OriginalProfileSize = 721;
   
 
   template<class TInput, class TOutput>
   const double
   ProlateFunction<TInput, TOutput>
-  ::m_OriginalProfil[721] = {
+  ::m_OriginalProfile[721] = {
     0.00125,      0.00124999,   0.00124998,   0.00124997,   0.00124995,   0.00124992,  0.00124989,   0.00124985,   0.0012498,    0.00124975,   0.00124969,   0.00124962,
     0.00124955,   0.00124948,   0.00124939,   0.0012493,    0.00124921,   0.00124911,  0.001249,     0.00124888,   0.00124876,   0.00124864,   0.0012485,    0.00124837,
     0.00124822,   0.00124807,   0.00124791,   0.00124775,   0.00124758,   0.0012474,   0.00124722,   0.00124703,   0.00124684,   0.00124664,   0.00124643,   0.00124622,
@@ -94,7 +96,41 @@ namespace Function
     0.000167415,  0.000165465,  0.000163517,  0.000161572,  0.000159629,  0.000157689, 0.000155752,  0.000153816,  0.000151884,  0.000149954,  0.000148026,  0.000146101,
     0.000144179 
   };
+  
+template<class TInput, class TOutput>
+double
+ProlateFunction<TInput, TOutput>
+::ComputeEnergy(double resampleRatio)
+{
+  vnl_vector<vcl_complex<double> > resampledProfile(1024);
+  resampledProfile.fill(0);
+  
+  for (unsigned int i = 0; i<m_Radius+1; i++)
+    {
+      unsigned int ival = static_cast<unsigned int>(m_OriginalProfileSize*static_cast<double>(i)/static_cast<double>(m_Radius+1));
+      resampledProfile[i] = m_OriginalProfile[ival];
+    }
+  vnl_fft_1d<double> v1d(1024);
+  v1d.fwd_transform(resampledProfile);
+  
+  unsigned int sampleNb = static_cast<unsigned int>( 1024/resampleRatio );
+  
+  double energy = 0.;
+  for (unsigned int j = 0; j<sampleNb+1; j++)
+    {
+      energy += std::abs(resampledProfile[j])*std::abs(resampledProfile[j]);
+    }
+  double totalEnergy = energy;
+  for (unsigned int j = sampleNb; j<1024; j++)
+    {
+      totalEnergy += std::abs(resampledProfile[j])*std::abs(resampledProfile[j]);
+    }
+  
+  return energy/totalEnergy;
 }
+
+
+}// end namespace Function
 
 /** Constructor */
 template<class TInputImage, class TBoundaryCondition, class TCoordRep, class TInputInterpolator, class TOutputInterpolator>
@@ -121,3 +157,5 @@ ProlateInterpolateImageFunction<TInputImage, TBoundaryCondition, TCoordRep, TInp
 }
 
 }//namespace otb
+
+#endif

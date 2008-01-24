@@ -677,8 +677,9 @@ ADD_TEST(ProlateValidationTest ${BASICFILTERS_TESTS7}
         otbProlateValidationTest
 		${INPUTDATA}/poupees.tif
 		${TEMP}/prolatevalidationtest.tif
+		${TEMP}/defualtprolatevalidationtest.tif
 		3 # radius
-		0.5# spacing
+		0.5# factor
 		512 # size	
 		)
 

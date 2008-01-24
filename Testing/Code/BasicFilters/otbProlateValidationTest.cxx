@@ -40,6 +40,7 @@ int otbProlateValidationTest(int argc, char * argv[])
   typedef otb::StreamingResampleImageFilter<ImageType,ImageType,double> StreamingResampleImageFilterType;
 
   typedef otb::ProlateInterpolateImageFunction<ImageType>  InterpolatorType;
+  typedef InterpolatorType::FunctionType FunctionType;
   typedef itk::NearestNeighborInterpolateImageFunction<ImageType,double> DefaultInterpolatorType;
   DefaultInterpolatorType::Pointer def = DefaultInterpolatorType::New();
 
@@ -59,6 +60,21 @@ int otbProlateValidationTest(int argc, char * argv[])
 
   prolate->SetInputImage(reader->GetOutput());
   prolate->SetRadius(rad);
+
+ 
+  std::cout<<"Originalprofilsize: "<< prolate->GetFunction().GetOriginalProfileSize()<<std::endl;
+  std::cout<<"Energy : "<<prolate->GetFunction().ComputeEnergy(factor)<<std::endl;
+  std::cout<<"Radius : "<<prolate->GetRadius()<<std::endl;
+  std::cout<<"Factor : "<<factor<<std::endl;
+
+  /*
+    otb::Function::ProlateFunction<double,double> function; ///= prolate->GetFunction();
+    function.SetRadius(rad);
+    std::cout<<"Originalprofilsize: "<< function.GetOriginalProfileSize()<<std::endl;
+    std::cout<<"Energy : "<<function.ComputeEnergy(factor)<<std::endl;
+    std::cout<<"Radius : "<<function.GetRadius()<<std::endl;
+    std::cout<<"Factor : "<<factor<<std::endl;
+  */
   proresampler->SetInput(reader->GetOutput());
   proresampler->SetInterpolator(prolate);
   StreamingResampleImageFilterType::SizeType size;

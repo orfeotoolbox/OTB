@@ -21,26 +21,28 @@ PURPOSE.  See the above copyright notices for more information.
 #include "otbGenericInterpolateImageFunction.h"
 #include "itkSize.h"
 #include "itkNumericTraits.h"
-
+#include "vnl/vnl_math.h"
+#include "vnl/algo/vnl_fft_1d.h"
 namespace otb
 {
   
 namespace Function 
 {
 /**
- * Prolate function give the value of the prolate profil following 
+ * Prolate function give the value of the prolate profile following 
  * one of the 2 image dimension. 
  */
 template<class TInput, class TOutput>
 class ProlateFunction
 {
-  public:
-  typedef typename std::vector<double> VectorType;
+ public:
+  typedef std::vector<double> VectorType;
   // Accessors definitions
-  void SetRadius(unsigned int rad){ m_Radius = rad; };
-  unsigned int GetRadius() const { return m_Radius; };
-  unsigned int GetOriginalProfilSize() const { return m_OriginalProfilSize; };
-  VectorType GetOriginalProfil() const { return m_OriginalProfil;};
+  void SetRadius(unsigned int rad){ m_Radius = rad; }
+  unsigned int GetRadius() const { return m_Radius; }
+  unsigned int GetOriginalProfileSize() const { return m_OriginalProfileSize; }
+  VectorType GetOriginalProfile() const { return m_OriginalProfile;}   
+  double ComputeEnergy(double resampleRatio);
 
   inline TOutput operator()( const TInput & A ) const
     { 
@@ -49,14 +51,14 @@ class ProlateFunction
 	{
 	  //unsigned int ival = static_cast<unsigned int>(m_OriginalProfilSize*static_cast<double>(vcl_abs(A))/static_cast<double>(m_Radius));
 	  //val = m_OriginalProfil[ival];
-	   double ival = static_cast<int>(m_OriginalProfilSize)*static_cast<double>(vcl_abs(A))/static_cast<double>(m_Radius);
+	   double ival = static_cast<int>(m_OriginalProfileSize)*static_cast<double>(vcl_abs(A))/static_cast<double>(m_Radius);
 	   double ivalFloor = vcl_floor(ival);
 	   double left = ival - ivalFloor;
-	   val = left*m_OriginalProfil[static_cast<unsigned int>(ivalFloor)] + (1-left)*m_OriginalProfil[static_cast<unsigned int>(ivalFloor)+1];
+	   val = left*m_OriginalProfile[static_cast<unsigned int>(ivalFloor)] + (1-left)*m_OriginalProfile[static_cast<unsigned int>(ivalFloor)+1];
 	}
       else
 	{
-	  val = m_OriginalProfil[0];
+	  val = m_OriginalProfile[0];
 	}
       return val;
     }
@@ -65,9 +67,9 @@ class ProlateFunction
   /** Useless, only to be compatible with the GenericInterpolateImage. */
   unsigned int m_Radius;
   /** Length of the original profil. */
-  static const unsigned int m_OriginalProfilSize;
+  static const unsigned int m_OriginalProfileSize;
   /** Original prolate profil */
-  static const double m_OriginalProfil[721]; 
+  static const double m_OriginalProfile[721]; 
 
 }; 
  
@@ -121,10 +123,9 @@ public GenericInterpolateImageFunction< TInputImage,
     typedef typename Superclass::ContinuousIndexType                                   ContinuousIndexType;
     typedef typename std::vector<double>                                               VectorType;
    
-    unsigned int GetOriginalProfilSize() const { return this->GetFunction().GetOriginalProfilSize; };
-    VectorType GetOriginalProfil() const { return this->GetFunction().GetOriginalProfil();};
-    
-   
+    unsigned int GetOriginalProfileSize() const { return this->GetFunction().GetOriginalProfileSize; };
+    VectorType GetOriginalProfile() const { return this->GetFunction().GetOriginalProfile();}; 
+
     protected:
     ProlateInterpolateImageFunction();
     ~ProlateInterpolateImageFunction();
@@ -135,7 +136,7 @@ public GenericInterpolateImageFunction< TInputImage,
     void operator=(const Self&); //purposely not implemented  
   };
 
-} // end namespace itk
+} // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
 #include "otbProlateInterpolateImageFunction.txx"
