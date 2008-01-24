@@ -9,6 +9,9 @@ Fl_grab.cxx
 Fl_own_colormap.cxx
 Fl_visual.cxx
 fl_rect.cxx
+fl_color_win32.cxx
+fl_color_mac.cxx
+fl_dnd_mac.cxx
 
 src/flstring.h
 
