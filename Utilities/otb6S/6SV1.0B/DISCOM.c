@@ -25,7 +25,8 @@ Extern struct {
 
 #define sixs_phase__1 sixs_phase__
 
-Extern struct {
+/*OTB */
+/*Extern*/ struct {
     doublereal pha[1000], qha[1000], uha[1000], alphal[1001], betal[1001], 
 	    gammal[1001], zetal[1001];
 } sixs_polar__;
