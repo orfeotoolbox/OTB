@@ -27,4 +27,5 @@
 void RegisterTests()
 {
 REGISTER_TEST(otbGenericInterpolateImageFunctionNew);
+REGISTER_TEST(otbMirrorBoundaryConditionTest);
 }
