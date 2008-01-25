@@ -102,6 +102,25 @@ ADD_TEST(utTv6SFunctionMainTest ${UTILITIES_TESTS}
                 ${TEMP}/ut6S_function_main_test.txt
 )
 
+# -------            lib tinyXMLlib   ------------------------------
+ADD_TEST(utTvTinyXMLTest ${UTILITIES_TESTS}
+        --compare-ascii ${TOL}  
+                        ${BASELINE_FILES}/utTinyXML_testStdout.txt 
+                        ${TEMP}/utTinyXML_testStdout.txt
+                tinyXMLlibTest
+                ${INPUTDATA}/utf8test.xml
+                ${INPUTDATA}/utf8testverify.xml
+                ${TEMP}/demotest.xml
+                ${TEMP}/utf8testout.xml
+                ${TEMP}/passages.xml
+                ${TEMP}/test5.xml
+                ${TEMP}/test6.xml
+                ${TEMP}/test7.xml
+                ${TEMP}/textfile.txt
+                ${TEMP}/utTinyXML_testStdout.txt
+)
+
+
 # -------       Fichiers sources CXX -----------------------------------
 SET(UtilitiesTests_SRCS
 ossimIntegrationTest.cxx
@@ -112,12 +131,13 @@ svmGenericKernelFunctor.cxx
 svmTest.cxx
 svmGenericKernelTest.cxx
 6SFunctionMainTest.cxx
+tinyXMLlibTest.cxx
 )
 
 INCLUDE_DIRECTORIES("${OTBTesting_BINARY_DIR}")
 
 ADD_EXECUTABLE(otbUtilitiesTests otbUtilitiesTests.cxx ${UtilitiesTests_SRCS})
-TARGET_LINK_LIBRARIES(otbUtilitiesTests OTBIO OTBCommon gdal ITKIO ITKAlgorithms ITKStatistics ITKCommon otbossim otbsvm otb6S)
+TARGET_LINK_LIBRARIES(otbUtilitiesTests OTBIO OTBCommon gdal ITKIO ITKAlgorithms ITKStatistics ITKCommon otbossim otbsvm otb6S tinyXML)
 IF(UNIX)
     TARGET_LINK_LIBRARIES (otbUtilitiesTests m)
 ENDIF(UNIX)
