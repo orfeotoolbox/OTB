@@ -8,7 +8,7 @@ IF(NOT OTB_USE_EXTERNAL_FLTK)
 	SUBDIRS( FLTK )
 ENDIF(NOT OTB_USE_EXTERNAL_FLTK)
 
-SUBDIRS(BGL otbsvm dxflib InsightJournal otbossim otb6S otbgeotiff)
+SUBDIRS(BGL otbsvm dxflib InsightJournal otbossim otb6S otbgeotiff tinyXMLlib)
 
 IF(BUILD_TESTING)
         SUBDIRS( Dart )
