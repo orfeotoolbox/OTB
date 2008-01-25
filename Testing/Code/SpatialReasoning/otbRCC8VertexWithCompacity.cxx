@@ -25,7 +25,7 @@ int otbRCC8VertexWithCompacity(int argc, char* argv[])
 {
 try
   {
-    typedef otb::Polygon PathType;
+    typedef otb::Polygon<> PathType;
     typedef double PrecisionType;
 
     unsigned int imageLevel = atoi(argv[1]);

@@ -24,7 +24,7 @@ int otbRCC8VertexBase(int argc, char* argv[])
 {
 try
   {
-    typedef otb::Polygon PathType;
+    typedef otb::Polygon<> PathType;
     unsigned int imageLevel = atoi(argv[1]);
     bool imageType = atoi(argv[2]);
     typedef otb::RCC8VertexBase<PathType> RCC8VertexType;

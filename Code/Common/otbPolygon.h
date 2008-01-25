@@ -33,16 +33,17 @@ namespace otb
  *
  * \sa otb::PolyLineParametricPathWithValue
  */
+template<class TValue=double>
 class ITK_EXPORT Polygon
-  : public PolyLineParametricPathWithValue<double,2>
+  : public PolyLineParametricPathWithValue<TValue,2>
 {
  public:
-  /** Standard typedefs */
-  typedef Polygon                            Self;
-  typedef PolyLineParametricPathWithValue<double,2> Superclass;
-  typedef itk::SmartPointer<Self>            Pointer;
-  typedef itk::SmartPointer<const Self>      ConstPointer;
-  
+ /** Standard typedefs */
+ typedef Polygon                                   Self;
+ typedef PolyLineParametricPathWithValue<TValue,2> Superclass;
+ typedef itk::SmartPointer<Self>                   Pointer;
+ typedef itk::SmartPointer<const Self>             ConstPointer;
+ typedef TValue                                    ValueType;
   /** Type macro */
   itkNewMacro(Self);
   
@@ -50,9 +51,10 @@ class ITK_EXPORT Polygon
   itkTypeMacro(Polygon, PolyLineParametricPathWithValue);
   
   /** Derived typedefs */
-  typedef Superclass::VertexType VertexType;
-  typedef Superclass::VertexListType VertexListType;
-  typedef VertexListType::ConstIterator VertexListIteratorType;
+  typedef typename Superclass::VertexType          VertexType;
+  typedef typename Superclass::VertexListType      VertexListType;
+  typedef typename Superclass::ContinuousIndexType ContinuousIndexType;
+  typedef typename VertexListType::ConstIterator   VertexListIteratorType;
 
   itkSetMacro(Epsilon,double);
   itkGetMacro(Epsilon,double);
@@ -125,4 +127,8 @@ private:
   double m_Epsilon;
 };
 }// End namespace otb
+
+#ifndef OTB_MANUAL_INSTANTIATION
+#include "otbPolygon.txx"
+#endif
 #endif

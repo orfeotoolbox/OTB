@@ -131,6 +131,18 @@ ADD_TEST(viTvVectorImageToColorAnaglyphVectorImageFilter ${VISU_TESTS2}
 	${TEMP}/viTvColorAnaglyphFilterResult.tif
 )
 
+# -------  otb::ImageWidgetPolygonForm -------------------------------------------
+ADD_TEST(coTuImageWidgetPolygonFormNew ${VISU_TESTS2} 
+         otbImageWidgetPolygonFormNew)
+  
+ADD_TEST(coTuImageWidgetPolygonForm ${VISU_TESTS2} 
+         otbImageWidgetPolygonForm
+	      	${INPUTDATA}/poupees.tif	
+		20 100 70 100 70 90 50 90 50 80 70 80 70 60 90 60 90 50 70 50 70 30 20 30 
+)
+
+
+
 # -------       Fichiers sources CXX -----------------------------------
 SET(BasicVisu_SRCS1
 otbImageWidgetBaseNew.cxx
@@ -152,6 +164,8 @@ otbImageToGrayscaleAnaglyphImageFilter.cxx
 otbVectorImageToColorAnaglyphVectorImageFilterNew.cxx
 otbVectorImageToColorAnaglyphVectorImageFilter.cxx
 otbAlternateViewerTest.cxx
+otbImageWidgetPolygonFormNew.cxx
+otbImageWidgetPolygonForm.cxx
 )
 
 INCLUDE_DIRECTORIES("${OTBTesting_BINARY_DIR}") 

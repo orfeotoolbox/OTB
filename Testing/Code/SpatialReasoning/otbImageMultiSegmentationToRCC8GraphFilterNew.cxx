@@ -28,7 +28,7 @@ try
   {
     const unsigned int Dimension = 2;
     typedef unsigned short LabelPixelType;
-    typedef otb::Polygon PolygonType;
+    typedef otb::Polygon<> PolygonType;
     typedef otb::Image<LabelPixelType,Dimension> LabelImageType;
     typedef otb::RCC8VertexBase<PolygonType> VertexType;
     typedef otb::RCC8Graph<VertexType> RCC8GraphType;

@@ -23,7 +23,7 @@ int otbRCC8VertexWithCompacityNew(int argc, char* argv[])
 {
 try
   {
-    typedef otb::Polygon PathType;
+    typedef otb::Polygon<> PathType;
     typedef float PrecisionType;
     typedef otb::RCC8VertexWithCompacity<PathType,PrecisionType> RCC8VertexType;
     

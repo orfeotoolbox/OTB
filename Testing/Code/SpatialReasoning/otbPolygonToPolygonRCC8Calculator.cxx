@@ -34,7 +34,7 @@ try
     char * outfile   = argv[2];
 
     typedef unsigned char PixelType;
-    typedef otb::Polygon PolygonType;
+    typedef otb::Polygon<> PolygonType;
     typedef otb::Image<PixelType,Dimension> ImageType;
     typedef otb::ImageToEdgePathFilter<ImageType,PolygonType> EdgeExtractionFilterType;
     typedef otb::SimplifyPathListFilter<PolygonType> SimplifyPathFilterType;

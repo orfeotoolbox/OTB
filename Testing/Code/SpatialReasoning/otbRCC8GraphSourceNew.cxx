@@ -25,7 +25,7 @@ int otbRCC8GraphSourceNew(int argc, char* argv[])
 {
 try
   {
-    typedef otb::Polygon  PathType;
+    typedef otb::Polygon<>  PathType;
     typedef otb::RCC8VertexBase<PathType> VertexType;
     typedef otb::RCC8Graph<VertexType> RCC8GraphType;
     typedef otb::RCC8GraphSource<RCC8GraphType> RCC8GraphSourceType;

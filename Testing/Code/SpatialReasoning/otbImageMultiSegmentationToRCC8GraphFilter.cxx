@@ -37,7 +37,7 @@ try
     // typedefs
     typedef unsigned short LabelPixelType;
     typedef otb::Image<LabelPixelType,Dimension> LabelImageType;
-    typedef otb::Polygon PolygonType;
+    typedef otb::Polygon<> PolygonType;
     typedef otb::RCC8VertexBase<PolygonType> VertexType;
     typedef otb::RCC8Graph<VertexType> RCC8GraphType;
     typedef otb::ImageMultiSegmentationToRCC8GraphFilter<LabelImageType,RCC8GraphType>

@@ -30,7 +30,7 @@ int otbRCC8GraphFileReader(int argc, char* argv[])
 try
   {
     char * inputFilename = argv[1];
-    typedef otb::Polygon PathType;
+    typedef otb::Polygon<> PathType;
     typedef otb::RCC8VertexBase<PathType> VertexType;
     typedef otb::RCC8Graph<VertexType> RCC8GraphType;
     typedef otb::RCC8GraphFileReader<RCC8GraphType> RCC8GraphFileReaderType;

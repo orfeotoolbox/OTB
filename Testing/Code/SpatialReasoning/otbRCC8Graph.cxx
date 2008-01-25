@@ -30,7 +30,7 @@ int otbRCC8Graph(int argc, char* argv[])
   try
     {
       const unsigned int nbVertices = 2;
-      typedef otb::Polygon  PathType;
+      typedef otb::Polygon<>  PathType;
       typedef PathType::VertexType PointType;
       typedef otb::RCC8VertexBase<PathType> VertexType;
       typedef otb::RCC8Graph<VertexType> RCC8GraphType;

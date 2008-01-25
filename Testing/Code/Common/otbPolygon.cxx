@@ -23,7 +23,7 @@ int otbPolygon(int argc, char * argv[])
 {
   try
     {
-      typedef otb::Polygon PolygonType;
+      typedef otb::Polygon<> PolygonType;
       typedef PolygonType::ContinuousIndexType ContinuousIndexType;
       typedef PolygonType::VertexListType VertexListType;
       typedef VertexListType::ConstIterator IteratorType;
