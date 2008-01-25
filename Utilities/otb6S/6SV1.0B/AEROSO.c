@@ -18,27 +18,31 @@ Extern struct {
 
 #define num_quad__1 num_quad__
 
-Extern struct {
+/*OTB */
+/*Extern*/ struct {
     doublereal ph[20000]	/* was [20][1000] */, qh[20000]	/* was [20][
 	    1000] */, uh[20000]	/* was [20][1000] */;
 } sixs_aerbas__;
 
 #define sixs_aerbas__1 sixs_aerbas__
 
-Extern struct {
+/*OTB */
+/*Extern*/ struct {
     doublereal phasel[20000]	/* was [20][1000] */, qhasel[20000]	/* 
 	    was [20][1000] */, uhasel[20000]	/* was [20][1000] */;
 } sixs_phase__;
 
 #define sixs_phase__1 sixs_phase__
 
-Extern struct {
+/*OTB */
+/*Extern*/ struct {
     doublereal ext[20], ome[20], gasym[20], phase[20], qhase[20], uhase[20];
 } sixs_aer__;
 
 #define sixs_aer__1 sixs_aer__
 
-Extern struct {
+/*OTB */
+/*Extern*/ struct {
     doublereal ex[80]	/* was [4][20] */, sc[80]	/* was [4][20] */, 
 	    asy[80]	/* was [4][20] */, vi[4];
 } sixs_coef__;
