@@ -35,6 +35,7 @@ SET(OTB_INCLUDE_DIRS_BUILD_TREE ${OTB_INCLUDE_DIRS_BUILD_TREE}
   ${OTB_SOURCE_DIR}/Utilities/otb6S
   ${OTB_SOURCE_DIR}/Utilities/otbgeotiff
   ${OTB_SOURCE_DIR}/Utilities/otbgeotiff/libxtiff
+  ${OTB_SOURCE_DIR}/Utilities/tinyXMLlib
 )
 
 #-----------------------------------------------------------------------------
@@ -153,6 +154,7 @@ SET(OTB_INCLUDE_DIRS_INSTALL_TREE ${OTB_INCLUDE_DIRS_INSTALL_TREE}
   ${OTB_INSTALL_INCLUDE_DIR}/Utilities/otb6S
   ${OTB_INSTALL_INCLUDE_DIR}/Utilities/otbgeotiff
   ${OTB_INSTALL_INCLUDE_DIR}/Utilities/otbgeotiff/libxtiff
+  ${OTB_INSTALL_INCLUDE_DIR}/Utilities/tinyXMLlib
 )
 
 SET(OTB_INCLUDE_DIRS_INSTALL_TREE ${OTB_INCLUDE_DIRS_INSTALL_TREE}
