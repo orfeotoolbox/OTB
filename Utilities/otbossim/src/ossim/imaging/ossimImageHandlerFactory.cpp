@@ -20,6 +20,7 @@
 #include <ossim/imaging/ossimGeneralRasterTileSource.h>
 #include <ossim/imaging/ossimERSTileSource.h>
 #include <ossim/imaging/ossimVpfTileSource.h>
+#include <ossim/imaging/ossimNetworkedQuadTreeTileSource.h>
 #include <ossim/base/ossimTrace.h>
 #include <ossim/base/ossimKeywordNames.h>
 #include <ossim/imaging/ossimJpegTileSource.h>
@@ -112,6 +113,20 @@ ossimImageHandler* ossimImageHandlerFactory::open(const ossimFilename& fileName)
       return result;
    }
 
+   delete result;
+
+   // test if NetworkedQuadTree
+   if(traceDebug())
+   {
+      ossimNotify(ossimNotifyLevel_DEBUG)
+         << "trying NetworkedQuadTree"
+         << std::endl;
+   }
+   result = new ossimNetworkedQuadTreeTileSource;
+   if(result->open(copyFilename))
+   {
+      return result;
+   }
    delete result;
 
    // this must be checked first before the TIFF handler
@@ -404,6 +419,21 @@ ossimImageHandler* ossimImageHandlerFactory::open(const ossimKeywordlist& kwl,
    }
    delete result;
 
+   // NetworkedQuadTree
+   if(traceDebug())
+   {
+      ossimNotify(ossimNotifyLevel_DEBUG)
+         << "trying NetworkedQuadTree"
+         << std::endl;
+   }
+   result = new ossimNetworkedQuadTreeTileSource;
+   if(result->loadState(kwl, prefix))
+   {
+      return result;
+   }
+   
+   delete result;
+
    // Must be before tiff...
    if(traceDebug())
    {
@@ -570,6 +600,11 @@ ossimObject* ossimImageHandlerFactory::createObject(const ossimString& typeName)
       return new ossimGeneralRasterTileSource();
    }
 
+   if(STATIC_TYPE_NAME(ossimNetworkedQuadTreeTileSource) == typeName)
+   {
+      return new ossimNetworkedQuadTreeTileSource();
+   }
+
    return (ossimObject*)NULL;
 }
 
@@ -595,6 +630,7 @@ void ossimImageHandlerFactory::getSupportedExtensions(ossimImageHandlerFactoryBa
    extensionList.push_back("nsf");
    extensionList.push_back("nitf");
    extensionList.push_back("ntf");
+   extensionList.push_back("otb");
 }
 
 ossimObject* ossimImageHandlerFactory::createObject(const ossimKeywordlist& kwl,
@@ -657,6 +693,7 @@ void ossimImageHandlerFactory::getTypeNameList(std::vector<ossimString>& typeLis
    typeList.push_back(STATIC_TYPE_NAME(ossimERSTileSource));
    typeList.push_back(STATIC_TYPE_NAME(ossimSrtmTileSource));
    typeList.push_back(STATIC_TYPE_NAME(ossimGeneralRasterTileSource));
+   typeList.push_back(STATIC_TYPE_NAME(ossimNetworkedQuadTreeTileSource));
    typeList.push_back(STATIC_TYPE_NAME(ossimQuickbirdNitfTileSource));
    typeList.push_back(STATIC_TYPE_NAME(ossimQuickbirdTiffTileSource));
 }

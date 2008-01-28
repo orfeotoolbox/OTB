@@ -39,6 +39,7 @@ static ossimTrace traceDebug = ossimTrace("ossimSensorModelFactory:debug");
 #include <ossim/projection/ossimLandSatModel.h>
 #include <ossim/projection/ossimSpot5Model.h>
 #include <ossim/projection/ossimSarModel.h>
+#include <ossim/projection/ossimNetworkedQuadTreeModel.h>
 #include <ossim/support_data/ossimSpotDimapSupportData.h>
 #include <ossim/projection/ossimNitfMapModel.h>
 #include <ossim/projection/ossimFcsiModel.h>
@@ -182,6 +183,12 @@ ossimSensorModelFactory::createProjection(const ossimString &name) const
       return new ossimSarModel;
    }
 
+   if(name == STATIC_TYPE_NAME(ossimNetworkedQuadTreeModel))
+   {
+      return new ossimNetworkedQuadTreeModel;
+   }
+
+
    //***
    // ADD_MODEL: (Please leave this comment for the next programmer)
    //***
@@ -229,6 +236,7 @@ ossimSensorModelFactory::getTypeNameList(std::vector<ossimString>& typeList)
    typeList.push_back(STATIC_TYPE_NAME(ossimFcsiModel));
    typeList.push_back(STATIC_TYPE_NAME(ossimSpot5Model));
    typeList.push_back(STATIC_TYPE_NAME(ossimSarModel));
+   typeList.push_back(STATIC_TYPE_NAME(ossimNetworkedQuadTreeModel));
 
    //***
    // ADD_MODEL: Please leave this comment for the next programmer. Add above.
@@ -416,6 +424,15 @@ ossimProjection* ossimSensorModelFactory::createProjection(const ossimFilename& 
       delete model;
       model = 0;
    }
+   else if(isNetworkedQuadTree(filename))
+   {
+      model = new ossimNetworkedQuadTreeModel(filename);
+      if(!model->getErrorStatus())
+         return model;
+      delete model;
+      model = 0;
+   }
+   
 
    ossimFilename spot5Test = geomFile;
    
@@ -488,6 +505,21 @@ bool ossimSensorModelFactory::isLandsat(const ossimFilename& filename)const
    delete ff_headerp;
    return r;
 }
+
+bool ossimSensorModelFactory::isNetworkedQuadTree(const ossimFilename& filename)const
+{
+   ossimFilename temp(filename);
+   temp.downcase();
+   if(temp.ext() == "otb")
+     {
+     std::cout << "NetworkedQuadTree format " << std::endl;
+     return true;
+     }
+
+   return false;
+
+}
+
 
 void ossimSensorModelFactory::findCoarseGrid(ossimFilename& result,
                                              const ossimFilename& geomFile)const
