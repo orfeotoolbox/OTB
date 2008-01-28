@@ -76,12 +76,14 @@ class ITK_EXPORT SensorModelBase : public itk::Transform<TScalarType,
       ImageKeywordlist GetImageGeometryKeywordlist(void) const;
       /* Get an ossimKeywordlist */
       ossimKeywordlist GetOssimKeywordlist(void);
+  /* Get an ossimModel */
+      ossimProjection* GetOssimModel(void);
       
       /* Set the Imagekeywordlist and affect the ossim projection ( m_Model) */
-      virtual void SetImageGeometry(ImageKeywordlist image_kwl);
+      virtual void SetImageGeometry(const ImageKeywordlist image_kwl);
       
       /* Set the Imagekeywordlist and affect the ossim projection ( m_Model) */
-      virtual void SetImageGeometry(ossimKeywordlist &geom_kwl);
+      virtual void SetImageGeometry(const ossimKeywordlist &geom_kwl);
       
      
 //      itkGetObjectMacro(DEMHandler, DEMHandlerType);

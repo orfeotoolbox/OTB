@@ -28,6 +28,7 @@
 #include "otbGDALImageIOFactory.h"
 #include "otbLUMImageIOFactory.h"
 #include "otbBSQImageIOFactory.h"
+#include "otbNetworkedQuadTreeImageIOFactory.h"
 
 namespace otb
 {
@@ -65,6 +66,9 @@ ImageIOFactory::RegisterBuiltInFactories()
 
 			// GDAL : New format for OTB
                         itk::ObjectFactoryBase::RegisterFactory( GDALImageIOFactory::New() );
+                        
+                        // NetworkedQuadTree : New format for OTB
+                        itk::ObjectFactoryBase::RegisterFactory( NetworkedQuadTreeImageIOFactory::New() );
                         
                         firstTime = false;
                 }

@@ -87,6 +87,19 @@ namespace otb
     
     return geom;
   }
+
+  /// Get the ossim model
+  template < class TScalarType,
+	     unsigned int NInputDimensions,
+	     unsigned int NOutputDimensions,
+	     unsigned int NParametersDimensions >
+  ossimProjection*
+  SensorModelBase< TScalarType,NInputDimensions,NOutputDimensions,NParametersDimensions>
+  ::GetOssimModel(void)
+  {
+    
+    return m_Model;
+  }
   
   /* Set the Imagekeywordlist and affect the ossim projection ( m_Model) */
   template < class TScalarType,
@@ -95,7 +108,7 @@ namespace otb
 	     unsigned int NParametersDimensions >
   void
   SensorModelBase< TScalarType,NInputDimensions,NOutputDimensions,NParametersDimensions>
-  ::SetImageGeometry(ImageKeywordlist image_kwl)
+  ::SetImageGeometry(const ImageKeywordlist image_kwl)
   {
     m_ImageKeywordlist = image_kwl;
     CreateProjection(m_ImageKeywordlist);
@@ -108,7 +121,7 @@ namespace otb
 	     unsigned int NParametersDimensions >
   void
   SensorModelBase< TScalarType,NInputDimensions,NOutputDimensions,NParametersDimensions>
-  ::SetImageGeometry(ossimKeywordlist & geom_kwl)
+  ::SetImageGeometry(const ossimKeywordlist & geom_kwl)
   {
     m_ImageKeywordlist.Clear();
     m_ImageKeywordlist.SetKeywordlist(geom_kwl);
