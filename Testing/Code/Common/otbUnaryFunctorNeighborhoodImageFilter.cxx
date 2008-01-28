@@ -17,8 +17,8 @@
 =========================================================================*/
 #include "itkExceptionObject.h"
 
-#include "otbUnaryFunctorNeighborhoodVectorImageFilter.h"
-#include "otbVectorImage.h"
+#include "otbUnaryFunctorNeighborhoodImageFilter.h"
+#include "otbImage.h"
 
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
@@ -26,11 +26,11 @@
 namespace Functor
 {
   template <class TIter, class TOutput>
-  class UnaryFunctorNeighborhoodVectorImageFilterFunctorNewTest
+  class UnaryFunctorNeighborhoodImageFilterFunctorNewTest
   {
   public:
-    UnaryFunctorNeighborhoodVectorImageFilterFunctorNewTest() {};
-    ~UnaryFunctorNeighborhoodVectorImageFilterFunctorNewTest() {};
+    UnaryFunctorNeighborhoodImageFilterFunctorNewTest() {};
+    ~UnaryFunctorNeighborhoodImageFilterFunctorNewTest() {};
     
     inline TOutput operator() (const TIter & it)
     {
@@ -41,7 +41,7 @@ namespace Functor
 }
 
 
-int otbUnaryFunctorNeighborhoodVectorImageFilter(int argc, char * argv[])
+int otbUnaryFunctorNeighborhoodImageFilter(int argc, char * argv[])
 {
   try
     {
@@ -50,17 +50,17 @@ int otbUnaryFunctorNeighborhoodVectorImageFilter(int argc, char * argv[])
 
       typedef double InputPixelType;
       const int Dimension = 2;
-      typedef otb::VectorImage<InputPixelType,Dimension> VectorImageType;
-      typedef VectorImageType::PixelType PixelType;
-      typedef otb::ImageFileReader<VectorImageType>  ReaderType;
-      typedef otb::ImageFileWriter<VectorImageType> WriterType;
+      typedef otb::Image<InputPixelType,Dimension> ImageType;
+      typedef ImageType::PixelType PixelType;
+      typedef otb::ImageFileReader<ImageType>  ReaderType;
+      typedef otb::ImageFileWriter<ImageType> WriterType;
 
-      typedef itk::ConstNeighborhoodIterator<VectorImageType>   IterType;;
-      typedef Functor::UnaryFunctorNeighborhoodVectorImageFilterFunctorNewTest<IterType, PixelType>  FunctorType;
-      typedef otb::UnaryFunctorNeighborhoodVectorImageFilter<VectorImageType, VectorImageType, FunctorType> UnaryFunctorNeighborhoodVectorImageFilterType;
+      typedef itk::ConstNeighborhoodIterator<ImageType>   IterType;;
+      typedef Functor::UnaryFunctorNeighborhoodImageFilterFunctorNewTest<IterType, PixelType>  FunctorType;
+      typedef otb::UnaryFunctorNeighborhoodImageFilter<ImageType, ImageType, FunctorType> UnaryFunctorNeighborhoodImageFilterType;
       
       // Instantiating object
-      UnaryFunctorNeighborhoodVectorImageFilterType::Pointer object = UnaryFunctorNeighborhoodVectorImageFilterType::New();
+      UnaryFunctorNeighborhoodImageFilterType::Pointer object = UnaryFunctorNeighborhoodImageFilterType::New();
       ReaderType::Pointer reader  = ReaderType::New();
       WriterType::Pointer writer = WriterType::New();
       reader->SetFileName(inputFileName);

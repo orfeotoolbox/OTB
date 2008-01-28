@@ -17,18 +17,18 @@
 =========================================================================*/
 #include "itkExceptionObject.h"
 
-#include "otbUnaryFunctorNeighborhoodVectorImageFilter.h"
-#include "otbVectorImage.h"
+#include "otbUnaryFunctorNeighborhoodImageFilter.h"
+#include "otbImage.h"
 
 
 namespace Functor
 {
   template <class TIter, class TOutput>
-  class UnaryFunctorNeighborhoodVectorImageFilterFunctorNewTest
+  class UnaryFunctorNeighborhoodImageFilterFunctorNewTest
   {
   public:
-    UnaryFunctorNeighborhoodVectorImageFilterFunctorNewTest() {};
-    ~UnaryFunctorNeighborhoodVectorImageFilterFunctorNewTest() {};
+    UnaryFunctorNeighborhoodImageFilterFunctorNewTest() {};
+    ~UnaryFunctorNeighborhoodImageFilterFunctorNewTest() {};
     
     inline TOutput operator() (const TIter & it)
     {
@@ -39,20 +39,20 @@ namespace Functor
 }
 
 
-int otbUnaryFunctorNeighborhoodVectorImageFilterNew(int argc, char * argv[])
+int otbUnaryFunctorNeighborhoodImageFilterNew(int argc, char * argv[])
 {
   try
     {
       typedef double InputPixelType;
       const int Dimension = 2;
-      typedef otb::VectorImage<InputPixelType,Dimension> VectorImageType;
-      typedef VectorImageType::PixelType PixelType;
-      typedef itk::ConstNeighborhoodIterator<VectorImageType>   IterType;;
-      typedef Functor::UnaryFunctorNeighborhoodVectorImageFilterFunctorNewTest<IterType, PixelType>  FunctorType;
-      typedef otb::UnaryFunctorNeighborhoodVectorImageFilter<VectorImageType, VectorImageType, FunctorType> UnaryFunctorNeighborhoodVectorImageFilterType;
+      typedef otb::Image<InputPixelType,Dimension> ImageType;
+      typedef ImageType::PixelType PixelType;
+      typedef itk::ConstNeighborhoodIterator<ImageType>   IterType;;
+      typedef Functor::UnaryFunctorNeighborhoodImageFilterFunctorNewTest<IterType, PixelType>  FunctorType;
+      typedef otb::UnaryFunctorNeighborhoodImageFilter<ImageType, ImageType, FunctorType> UnaryFunctorNeighborhoodImageFilterType;
       
       // Instantiating object
-      UnaryFunctorNeighborhoodVectorImageFilterType::Pointer object = UnaryFunctorNeighborhoodVectorImageFilterType::New();
+      UnaryFunctorNeighborhoodImageFilterType::Pointer object = UnaryFunctorNeighborhoodImageFilterType::New();
     }
 
   catch( itk::ExceptionObject & err ) 
