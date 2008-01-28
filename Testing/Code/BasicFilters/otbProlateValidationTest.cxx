@@ -30,9 +30,9 @@ int otbProlateValidationTest(int argc, char * argv[])
 {  
   const char * infname = argv[1];
   const char * outfname = argv[2];
-  const char * defaultoutfname = argv[3];
-  const unsigned int rad = atoi(argv[4]);
-  const double factor= atof(argv[5]);
+  const unsigned int rad = atoi(argv[3]);
+  const double factor= atof(argv[4]);
+  //const char * defaultoutfname = argv[6];
 
   typedef otb::Image<double,2>                             ImageType;
   typedef otb::ImageFileReader<ImageType>                  ReaderType;
@@ -40,13 +40,13 @@ int otbProlateValidationTest(int argc, char * argv[])
   typedef otb::StreamingResampleImageFilter<ImageType,ImageType,double> StreamingResampleImageFilterType;
 
   typedef otb::ProlateInterpolateImageFunction<ImageType>  InterpolatorType;
-  typedef InterpolatorType::FunctionType FunctionType;
-  typedef itk::NearestNeighborInterpolateImageFunction<ImageType,double> DefaultInterpolatorType;
-  DefaultInterpolatorType::Pointer def = DefaultInterpolatorType::New();
+  //typedef InterpolatorType::FunctionType FunctionType;
+  //typedef itk::NearestNeighborInterpolateImageFunction<ImageType,double> DefaultInterpolatorType;
+  //DefaultInterpolatorType::Pointer def = DefaultInterpolatorType::New();
 
-  InterpolatorType::Pointer prolate = InterpolatorType::New();
-  ReaderType::Pointer reader = ReaderType::New();
-  WriterType::Pointer prowriter     = WriterType::New();
+  InterpolatorType::Pointer                 prolate      = InterpolatorType::New();
+  ReaderType::Pointer                       reader       = ReaderType::New();
+  WriterType::Pointer                       prowriter    = WriterType::New();
   StreamingResampleImageFilterType::Pointer proresampler = StreamingResampleImageFilterType::New();
 
   reader->SetFileName(infname);
@@ -78,8 +78,8 @@ int otbProlateValidationTest(int argc, char * argv[])
   proresampler->SetInput(reader->GetOutput());
   proresampler->SetInterpolator(prolate);
   StreamingResampleImageFilterType::SizeType size;
-  size[0]=atoi(argv[6]);
-  size[1]=atoi(argv[6]);
+  size[0]=atoi(argv[5]);
+  size[1]=atoi(argv[5]);
   proresampler->SetSize(size);
   proresampler->SetOutputOrigin(origin);
   proresampler->SetOutputSpacing(newSpacing);
@@ -88,6 +88,7 @@ int otbProlateValidationTest(int argc, char * argv[])
   prowriter->SetFileName(outfname);
   prowriter->Update();
 
+  /*
   prowriter     = WriterType::New();
   proresampler = StreamingResampleImageFilterType::New();
   proresampler->SetSize(size);
@@ -99,6 +100,6 @@ int otbProlateValidationTest(int argc, char * argv[])
   prowriter->SetInput(proresampler->GetOutput());
   prowriter->SetFileName(defaultoutfname);
   prowriter->Update();
-
+  */
   return EXIT_SUCCESS;
 }
