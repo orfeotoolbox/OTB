@@ -407,6 +407,57 @@ Polygon<TValue>
     }
   return resp;
 }
+
+/**
+ * Bounding Box computation
+ */
+template<class TValue>
+void
+Polygon<TValue>
+::ComputeBoundingBox()
+{
+  VertexListIteratorType it =  this->GetVertexList()->Begin();
+  
+  long int x = static_cast<long int>(it.Value()[0]);
+  long int y = static_cast<long int>(it.Value()[1]); 
+  IndexType maxId;
+  maxId.Fill(0);
+  
+  m_BoundingBoxIndex[0] = x;
+  m_BoundingBoxIndex[1] = y;
+  
+  ++it;
+  while(it != this->GetVertexList()->End())
+    {      
+      x = static_cast<long int>(it.Value()[0]);
+      y = static_cast<long int>(it.Value()[1]); 
+      
+      // Index search
+      if ( x < m_BoundingBoxIndex[0] )
+	{
+	  m_BoundingBoxIndex[0] = x;
+	}
+      if ( y < m_BoundingBoxIndex[1] )
+	{
+	  m_BoundingBoxIndex[1] = y;
+	}
+      // Max Id search for size computation
+      if ( x > maxId[0] )
+	{
+	  maxId[0] = x;
+	}
+      if ( y > maxId[1] )
+	{
+	  maxId[1] = y;
+	}
+
+      ++it;
+    }
+  
+  m_BoundingBoxSize[0] = maxId[0] - m_BoundingBoxIndex[0];
+  m_BoundingBoxSize[1] = maxId[1] - m_BoundingBoxIndex[1];
+}
+
 /**
  * PrintSelf Method
  */
@@ -417,6 +468,8 @@ Polygon<TValue>
 {
   Superclass::PrintSelf(os, indent);
 }
+
+
 } // End namespace otb
 
 #endif

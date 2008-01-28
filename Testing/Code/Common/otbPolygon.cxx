@@ -59,6 +59,7 @@ int otbPolygon(int argc, char * argv[])
 	  }
       }
 
+      
       IteratorType begin1 = polygon1->GetVertexList()->Begin();
       IteratorType end1   = polygon1->GetVertexList()->End();
       IteratorType begin2 = polygon2->GetVertexList()->Begin();
@@ -120,6 +121,16 @@ int otbPolygon(int argc, char * argv[])
       file<<"polygon2->NbCrossing("<<current<<", "<<firstVertex<<") = "<<polygon2->NbCrossing(current,firstVertex)<<std::endl;
       file<<"polygon2->NbTouching("<<current<<", "<<firstVertex<<") = "<<polygon2->NbTouching(current,firstVertex)<<std::endl;
       
+      file<<std::endl<<std::endl;
+      file<<"Bounding Boxs computation : "<<std::endl;
+      polygon1->ComputeBoundingBox();
+      file<<"Bounding Box 1"<<std::endl; 
+      file<<"Index : "<<polygon1->GetBoundingBoxIndex()<<" , Size : "<<polygon1->GetBoundingBoxSize()<<std::endl;
+      polygon2->ComputeBoundingBox();
+      file<<"Bounding Box 2"<<std::endl; 
+      file<<"Index : "<<polygon2->GetBoundingBoxIndex()<<" , Size : "<<polygon2->GetBoundingBoxSize()<<std::endl;
+ 
+
       file.close();
     }
 
