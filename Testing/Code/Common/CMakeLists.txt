@@ -439,18 +439,18 @@ ADD_TEST(coTvDrawPatFilter ${COMMON_TESTS6}
 		${TEMP}/coTvDrawPathFilterOutput.png
 )
 
-# -------  otb::UnaryFunctorNeighborhoodVectorImageFilter ----------------------
-ADD_TEST(coTuUnaryFunctorNeighborhoodVectorImageFilterNew ${COMMON_TESTS6}
-otbUnaryFunctorNeighborhoodVectorImageFilterNew
+# -------  otb::UnaryFunctorNeighborhoodImageFilter ----------------------
+ADD_TEST(coTuUnaryFunctorNeighborhoodImageFilterNew ${COMMON_TESTS6}
+otbUnaryFunctorNeighborhoodImageFilterNew
 )
 
-ADD_TEST(coTvUnaryFunctorNeighborhoodVectorImageFilter ${COMMON_TESTS6}
+ADD_TEST(coTvUnaryFunctorNeighborhoodImageFilter ${COMMON_TESTS6}
 --compare-image ${TOL}
 		${INPUTDATA}/poupees_sub.png    # copie the input image
-		${TEMP}/coTvUnaryFunctorNeighborhoodVectorImageFilter.tif
-    otbUnaryFunctorNeighborhoodVectorImageFilter
+		${TEMP}/coTvUnaryFunctorNeighborhoodImageFilter.tif
+    otbUnaryFunctorNeighborhoodImageFilter
         ${INPUTDATA}/poupees_sub.png
-	${TEMP}/coTvUnaryFunctorNeighborhoodVectorImageFilter.tif
+	${TEMP}/coTvUnaryFunctorNeighborhoodImageFilter.tif
 	3
 )
 
@@ -534,8 +534,8 @@ otbDrawPathListFilterWithValue.cxx
 otbPolyLineParametricPathWithValueNew.cxx
 otbPolygonNew.cxx
 otbPolygon.cxx
-otbUnaryFunctorNeighborhoodVectorImageFilterNew.cxx
-otbUnaryFunctorNeighborhoodVectorImageFilter.cxx
+otbUnaryFunctorNeighborhoodImageFilterNew.cxx
+otbUnaryFunctorNeighborhoodImageFilter.cxx
 )
 SET(BasicCommon_SRCS7
 otbGenericInterpolateImageFunctionNew.cxx

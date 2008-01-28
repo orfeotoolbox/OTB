@@ -16,7 +16,6 @@ int otbOssimElevManagerTest(int argc,char* argv[])
     }
 
   const ossimFilename srtmDir(argv[1]);
-  //std::cout<<"ossimFilename.isDir(): "<<srtmDir.isDir()<<std::endl;
   const char * outfname = argv[2];  
 
   typedef double PixelType;
@@ -61,22 +60,7 @@ int otbOssimElevManagerTest(int argc,char* argv[])
 
   ossimElevManager * elevManager = ossimElevManager::instance();
 
-  int error = elevManager->openDirectory(srtmDir);
-
-  //std::cout<<"ossim::isnan(ossim::nan()): "<<ossim::isnan(ossim::nan())<<std::endl;
-
-  //std::cout<<"Opening srtmDir : "<<error<<std::endl;
-
-  std::vector<ossimFilename> list;
-
-  elevManager->getOpenCellList(list);
-
-  //std::cout<<"Open cells: "<<std::endl;
-
-  for(std::vector<ossimFilename>::iterator it = list.begin();it!=list.end();++it)
-  {
-	  //std::cout<<(*it)<<std::endl;
-  }
+  elevManager->openDirectory(srtmDir);
 
   IteratorType it(image,image->GetLargestPossibleRegion());
 
@@ -88,7 +72,7 @@ int otbOssimElevManagerTest(int argc,char* argv[])
       ossimWorldPoint.lon=point[0];
       ossimWorldPoint.lat=point[1];
       double height = elevManager->getHeightAboveMSL(ossimWorldPoint);
-	  //std::cout<<"Ground point: "<<point<<" value: "<<height<<" is coverered "<<elevManager->pointHasCoverage(ossimWorldPoint)<<" "<<" srtm data for point "<<elevManager->getCellFilenameForPoint(ossimWorldPoint)<<std::endl;	  
+ 
 	 if (!ossim::isnan(height))
 	  {
 	    // Fill the image

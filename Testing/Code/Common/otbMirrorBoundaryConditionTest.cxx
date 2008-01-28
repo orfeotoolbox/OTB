@@ -49,9 +49,9 @@ int otbMirrorBoundaryConditionTest(int argc, char * argv[])
 
   itk::OStringStream oss;
   PixelType in,out;
-  for(unsigned int i = 0;i<rad[0];++i)
+  for(unsigned int i = 1;i<=rad[0];++i)
     {
-      for(unsigned int j = 0;j<rad[1];++j)
+      for(unsigned int j = 1;j<=rad[1];++j)
 	{
 	  off1[0] = -static_cast<int>(i);
 	  off1[1] = -static_cast<int>(j);
@@ -71,7 +71,6 @@ int otbMirrorBoundaryConditionTest(int argc, char * argv[])
 	}
     }
 
-  
   
   ImageType::IndexType center;
   center[0]=reader->GetOutput()->GetLargestPossibleRegion().GetSize()[0]/2;

@@ -36,12 +36,12 @@ namespace otb
  * \par
  * 
  * It provides a geodesic decomposition of the input image, with the following scheme.
- * Let \f$f_0\f$ denote the input image, \$f\stackrel{\smile}{\mu}_{N}(f)\f$ denote 
- * the convex membership function, \$f\stackrel{\frown}{\mu}_{N}(f) \f$ denote the concave 
- membership function and \f$\psi_{N}(f)\f$ denote the leveling function, for a given radius \f$ N \f$ 
- as defined in the documentation  of the \class{GeodesicMorphologyDecompositionImageFilter}.
+ * Let \f$f_0\f$ denote the input image,\f$\stackrel{\smile}{\mu}_{N}(f)\f$ denote 
+ * the convex membership function, \f$ \stackrel{\frown}{\mu}_{N}(f) \f$ denote the concave 
+ *  membership function and \f$\psi_{N}(f)\f$ denote the leveling function, for a given radius \f$ N \f$ 
+ * as defined in the documentation  of the GeodesicMorphologyDecompositionImageFilter .
  * Let \f$[N_{1},\ldots,N_{n}]\f$ denote a range of increasing radius (or scales). The iterative 
- * decomposition is defined as follow:
+ * decomposition is defined as follows:
  * 
  * \f[
  *  f_{n} = \psi_{N_{n}}(f_{n-1})

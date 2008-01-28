@@ -25,7 +25,7 @@
 #include "itkNumericTraits.h"
 #include <vector>
 #include "itkConstNeighborhoodIterator.h"
-#include "otbUnaryFunctorNeighborhoodVectorImageFilter.h"
+#include "otbUnaryFunctorNeighborhoodImageFilter.h"
 #include "itkVariableSizeMatrix.h"
 #include "otbAtmosphericRadiativeTerms.h"
 
@@ -119,9 +119,9 @@ namespace otb
    */
 template <class TInputImage, class TOutputImage>
 class ITK_EXPORT SurfaceAdjencyEffect6SCorrectionSchemeFilter : 
- public UnaryFunctorNeighborhoodVectorImageFilter< TInputImage,
-                                                   TOutputImage,
-                                                   ITK_TYPENAME Functor::ComputeNeighborhoodContributionFunctor< itk::ConstNeighborhoodIterator<TInputImage>, 
+ public UnaryFunctorNeighborhoodImageFilter< TInputImage,
+                                             TOutputImage,
+                                             ITK_TYPENAME Functor::ComputeNeighborhoodContributionFunctor< itk::ConstNeighborhoodIterator<TInputImage>, 
                                                                                                                  ITK_TYPENAME TOutputImage::PixelType >       >
 {
 public:
@@ -131,7 +131,7 @@ public:
 
   /** "typedef" for standard classes. */
   typedef SurfaceAdjencyEffect6SCorrectionSchemeFilter                                           Self; 
-  typedef UnaryFunctorNeighborhoodVectorImageFilter< TInputImage, TOutputImage, FunctorType >    Superclass; 
+  typedef UnaryFunctorNeighborhoodImageFilter< TInputImage, TOutputImage, FunctorType >    Superclass; 
   typedef itk::SmartPointer<Self>                                                                Pointer;
   typedef itk::SmartPointer<const Self>                                                          ConstPointer;
 
@@ -143,7 +143,7 @@ public:
   itkNewMacro(Self);
 
   /** return class name. */
-  itkTypeMacro(SurfaceAdjencyEffect6SCorrectionSchemeFilter, UnaryFunctorNeighborhoodVectorImageFilter);
+  itkTypeMacro(SurfaceAdjencyEffect6SCorrectionSchemeFilter, UnaryFunctorNeighborhoodImageFilter);
   
 /** 	Extract input and output images dimensions.*/
   itkStaticConstMacro( InputImageDimension, unsigned int, TInputImage::ImageDimension);

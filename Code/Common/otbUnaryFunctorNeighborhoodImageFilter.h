@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbUnaryFunctorNeighborhoodVectorImageFilter_h
-#define __otbUnaryFunctorNeighborhoodVectorImageFilter_h
+#ifndef __otbUnaryFunctorNeighborhoodImageFilter_h
+#define __otbUnaryFunctorNeighborhoodImageFilter_h
 
 #include "itkInPlaceImageFilter.h"
 #include "itkImageRegionIteratorWithIndex.h"
@@ -24,8 +24,8 @@
 #include "itkProcessObject.h"
 
 namespace otb {
-/** \class UnaryFunctorNeighborhoodVectorImageFilter
- * \brief Implements neighborhood-wise generic operation of image beeing vector images.
+/** \class UnaryFunctorNeighborhoodImageFilter
+ * \brief Implements neighborhood-wise generic operation on image
  *
  * This class is parameterized over the input image type
  * and the type of the output image.  It is also parameterized by the
@@ -34,12 +34,12 @@ namespace otb {
  * \ingroup IntensityImageFilters   Multithreaded
  */	
 template <class TInputImage, class TOutputImage, class TFunction >
-class ITK_EXPORT UnaryFunctorNeighborhoodVectorImageFilter 
+class ITK_EXPORT UnaryFunctorNeighborhoodImageFilter 
 	: public itk::InPlaceImageFilter<TInputImage,TOutputImage> 
 {
 public:
   /** Standard class typedefs. */
-  typedef UnaryFunctorNeighborhoodVectorImageFilter           Self;
+  typedef UnaryFunctorNeighborhoodImageFilter           Self;
   typedef itk::InPlaceImageFilter<TInputImage,TOutputImage >  Superclass;
   typedef itk::SmartPointer<Self>                             Pointer;
   typedef itk::SmartPointer<const Self>                       ConstPointer;
@@ -48,7 +48,7 @@ public:
   itkNewMacro(Self);
   
   /** Run-time type information (and related methods). */
-  itkTypeMacro(UnaryFunctorNeighborhoodVectorImageFilter,InPlaceImageFilter);
+  itkTypeMacro(UnaryFunctorNeighborhoodImageFilter,InPlaceImageFilter);
 
 
   /** Some convenient typedefs. */
@@ -97,17 +97,21 @@ public:
     this->Modified();
   }
 
-
-  
   typedef itk::ConstNeighborhoodIterator<TInputImage>     NeighborhoodIteratorType; 
   typedef typename NeighborhoodIteratorType::RadiusType   RadiusType;
   typedef unsigned char RadiusSizeType;
 
 protected:
-  UnaryFunctorNeighborhoodVectorImageFilter();
-  virtual ~UnaryFunctorNeighborhoodVectorImageFilter() {};
+  /**
+   * Constructor
+   */
+  UnaryFunctorNeighborhoodImageFilter();
+  /**
+   * Destructor
+   */
+  virtual ~UnaryFunctorNeighborhoodImageFilter() {};
 
-  /** UnaryFunctorNeighborhoodVectorImageFilter can be implemented as a multithreaded filter.
+  /** UnaryFunctorNeighborhoodImageFilter can be implemented as a multithreaded filter.
    * Therefore, this implementation provides a ThreadedGenerateData() routine
    * which is called for each processing thread. The output image data is
    * allocated automatically by the superclass prior to calling
@@ -119,9 +123,18 @@ protected:
    *     ImageToImageFilter::GenerateData()  */
   virtual void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread, int threadId );
 
+  /**
+   * Pad the input requested region by radius
+   */
+  virtual void GenerateInputRequestedRegion(void);
+
+  /**
+   * Allocate the output buffer before calling the ThreadedGenerateData.
+   */ 
+ /*  virtual void BeforeThreadedGenerateData(void); */
   
 private:
-  UnaryFunctorNeighborhoodVectorImageFilter(const Self&); //purposely not implemented
+  UnaryFunctorNeighborhoodImageFilter(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
 
   unsigned int m_Radius;
@@ -131,7 +144,7 @@ private:
 } // namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbUnaryFunctorNeighborhoodVectorImageFilter.txx"
+#include "otbUnaryFunctorNeighborhoodImageFilter.txx"
 #endif
 
 
