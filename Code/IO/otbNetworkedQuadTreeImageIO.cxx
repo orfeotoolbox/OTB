@@ -328,7 +328,10 @@ void NetworkedQuadTreeImageIO::GetFromNet(std::ostringstream& quad)
   {
     itkExceptionMacro(<<"NetworkedQuadTree read : bad file name.");
   }
-
+  
+  std::ostringstream browserStream;
+  browserStream   << "Mozilla/5.0 (Windows; U; Windows NT 6.0; en-GB; rv:1.8.1.11) Gecko/20071127 Firefox/2.0.0.11";
+  
   CURL *curl;
   CURLcode res;
   curl = curl_easy_init();
@@ -336,11 +339,15 @@ void NetworkedQuadTreeImageIO::GetFromNet(std::ostringstream& quad)
   std::cout << urlStream.str().data() << std::endl;
 
 
-  char url[80];
+  char url[200];
   strcpy(url,urlStream.str().data());
+  
+  char browser[200];
+  strcpy(browser,browserStream.str().data());
 
   //Download the file
   if(curl) {
+    curl_easy_setopt(curl, CURLOPT_USERAGENT, browser);
     curl_easy_setopt(curl, CURLOPT_URL, url);
     curl_easy_setopt(curl, CURLOPT_WRITEDATA, output_file);
     res = curl_easy_perform(curl);
