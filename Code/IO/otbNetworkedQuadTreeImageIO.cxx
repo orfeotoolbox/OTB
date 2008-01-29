@@ -163,8 +163,8 @@ void NetworkedQuadTreeImageIO::Read(void* buffer)
         
         double x = firstSample/((1 << m_Depth)*256.);
         double y = firstLine/((1 << m_Depth)*256.);
-        int nTilesX = ceil(totSamples/256.)+1;
-        int nTilesY = ceil(totLines/256.)+1;
+        int nTilesX = (int) ceil(totSamples/256.)+1;
+        int nTilesY = (int) ceil(totLines/256.)+1;
         unsigned char * bufferTile = new unsigned char[256*256*3];
         
         //Read all the required tiles
@@ -180,10 +180,10 @@ void NetworkedQuadTreeImageIO::Read(void* buffer)
             //Copy the tile in the output buffer
             for(int tileJ=0; tileJ<256; tileJ++)
             {
-              long int yImageOffset=256*floor(firstLine/256.)+256*numTileY-firstLine+tileJ;
+              long int yImageOffset=(long int) 256*floor(firstLine/256.)+256*numTileY-firstLine+tileJ;
               if ((yImageOffset >= 0) && (yImageOffset < totLines))
               {
-                long int xImageOffset =
+                long int xImageOffset = (long int)
 		    256*floor(firstSample/256.)+256*numTileX-firstSample;
                 unsigned char * dst = p+3*(xImageOffset+totSamples*yImageOffset);
                 unsigned char * src = bufferTile+3*256*tileJ;
