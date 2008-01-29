@@ -31,7 +31,7 @@ namespace otb
   {
     m_DEMHandler = DEMHandlerType::New(); 
     m_OutputSpacing[0]=0.0001;
-    m_OutputSpacing[1]=0.0001;	
+    m_OutputSpacing[1]=-0.0001;	
     m_OutputSize[0]=1;
     m_OutputSize[1]=1;
     m_OutputOrigin[0]=0;
