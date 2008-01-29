@@ -142,7 +142,8 @@ class ITK_EXPORT ImageViewer
   itkGetMacro(UseScroll,bool);
   itkGetConstReferenceMacro(MinComponentValue,VectorPixelType);
   itkGetConstReferenceMacro(MaxComponentValue,VectorPixelType);
- 
+  itkGetConstReferenceMacro(ZoomWidget,ZoomWidgetPointerType);
+
   /** Set the input image (VectorImage version) */
   virtual void SetImage(ImageType * img);
 

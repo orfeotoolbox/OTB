@@ -574,6 +574,7 @@ typedef itk::ImageRegionConstIterator< ImageType >  InputIteratorType;
       {
 	m_ZoomWindow->copy_label(oss.str().c_str());
       }
+    m_ZoomWidget->SetFormListOverlay(m_FullWidget->GetFormList());
     m_ZoomWindow->redraw();
     m_ZoomWidget->redraw();
   }
@@ -670,11 +671,12 @@ ImageViewer<TPixel>
   IndexType newIndex;
   newIndex[0]=clickedIndex[0]-region.GetSize()[0]/2;
   newIndex[1]=clickedIndex[1]-region.GetSize()[1]/2;
-  
+
   region.SetIndex(newIndex);
 
   RegionType newRegion = ComputeConstrainedRegion(region,m_InputImage->GetLargestPossibleRegion());
   m_FullWidget->SetUpperLeftCorner(newRegion.GetIndex());
+
   this->UpdateScrollWidget();
 
   typename ViewerListType::Iterator linkedIt = m_LinkedViewerList->Begin();
@@ -699,7 +701,7 @@ template <class TPixel>
   void 
   ImageViewer<TPixel>
 ::ChangeZoomViewedRegion(IndexType clickedIndex)
-{
+{ 
   m_Updating = true;
   RegionType region = m_ZoomWidget->GetViewedRegion();
   IndexType newIndex;
@@ -709,6 +711,7 @@ template <class TPixel>
   region.SetIndex(newIndex);
   RegionType newRegion = ComputeConstrainedRegion(region,m_FullWidget->GetViewedRegion());
   m_ZoomWidget->SetZoomUpperLeftCorner(newRegion.GetIndex());
+ 
   m_ZoomWidget->redraw();
   this->UpdateFullWidget();
 
