@@ -108,19 +108,8 @@ UnaryFunctorNeighborhoodImageFilter<TInputImage, TOutputImage, TFunction>
 
   itk::ImageRegionIterator<TOutputImage> outputIt;
 
-  // Find the data-set boundary "faces"
-    typedef typename itk::NeighborhoodAlgorithm::ImageBoundaryFacesCalculator<InputImageType> TypeFace;
-    typename TypeFace::FaceListType::iterator fit;
-    typename TypeFace::FaceListType faceList;
-    TypeFace bC;
-
-  faceList = bC( inputPtr, outputRegionForThread, r );
-
   // support progress methods/callbacks
   itk::ProgressReporter progress(this, threadId, outputRegionForThread.GetNumberOfPixels());
- 
-
-  fit=faceList.begin();
 
   NeighborhoodIteratorType neighInputIt( r, inputPtr, outputRegionForThread );
   neighInputIt.OverrideBoundaryCondition( &nbc );
@@ -138,31 +127,7 @@ UnaryFunctorNeighborhoodImageFilter<TInputImage, TOutputImage, TFunction>
       
       progress.CompletedPixel();
     }
-
-  ++fit;
-
-  // Process each of the boundary faces.  
-  // Center first and then left, right, up, down borders
-  for (; fit != faceList.end(); ++fit )
-    { 
-      neighInputIt=NeighborhoodIteratorType( r, inputPtr, *fit );
-      neighInputIt.OverrideBoundaryCondition( &nbc );
-      neighInputIt.GoToBegin();
-      
-      outputIt = itk::ImageRegionIterator<TOutputImage> ( outputPtr, *fit );
-      outputIt.GoToBegin();
-      
-      while ( !outputIt.IsAtEnd() )
-	{
-	  outputIt.Set( m_Functor( neighInputIt ) );
-	  
-	  ++neighInputIt;
-	  ++outputIt;
-
-	  progress.CompletedPixel();
-	}
-    }
-}
+ }
 
 } // end namespace otb
 

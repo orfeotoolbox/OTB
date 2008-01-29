@@ -459,7 +459,7 @@ ADD_TEST(raTvAtmosphericCorrectionParametersTo6SAtmosphericRadiativeTerms ${RADI
 
 ADD_TEST(raTvAtmosphericCorrectionSequencementTest ${RADIOMETRY_TESTS4}  
         --compare-image ${TOL}  
-		${BASELINE}/raTvSurfaceAdjencyEffect6SCorrectionSchemeFilter.tif
+		${BASELINE}/raTvRomaniaAtmosphericCorrectionSequencement.tif
                 ${TEMP}/raTvRomaniaAtmosphericCorrectionSequencement.tif
         otbAtmosphericCorrectionSequencementTest
         ${INPUTDATA}/Romania_Extract.tif
