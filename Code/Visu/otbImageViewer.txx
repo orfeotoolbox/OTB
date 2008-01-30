@@ -62,6 +62,8 @@ namespace otb
     m_VectorCastFilter = NULL;
     m_LinkedViewerList = ViewerListType::New();
     m_Updating = false;
+    m_PolygonROIList = PolygonListType::New(); 
+    m_InterfaceBoxesList = FormListType::New();
 
 
   }
@@ -111,15 +113,15 @@ namespace otb
   ::ComputeNormalizationFactors(void)
   {
 
-typedef itk::ImageRegionConstIterator< ImageType >  InputIteratorType;
-  typedef itk::Vector<typename ImageType::ValueType,1> MeasurementVectorType;
-  typedef itk::Statistics::ListSample<MeasurementVectorType> ListSampleType;
-  typedef float HistogramMeasurementType;
-  typedef itk::Statistics::ListSampleToHistogramGenerator<ListSampleType,HistogramMeasurementType,
-    itk::Statistics::DenseFrequencyContainer,1> HistogramGeneratorType;
-
-  typedef otb::ObjectList<ListSampleType> ListSampleListType;
-
+    typedef itk::ImageRegionConstIterator< ImageType >  InputIteratorType;
+    typedef itk::Vector<typename ImageType::ValueType,1> MeasurementVectorType;
+    typedef itk::Statistics::ListSample<MeasurementVectorType> ListSampleType;
+    typedef float HistogramMeasurementType;
+    typedef itk::Statistics::ListSampleToHistogramGenerator<ListSampleType,HistogramMeasurementType,
+      itk::Statistics::DenseFrequencyContainer,1> HistogramGeneratorType;
+    
+    typedef otb::ObjectList<ListSampleType> ListSampleListType;
+    
 
  
   m_MinComponentValue.SetSize(m_InputImage->GetNumberOfComponentsPerPixel());
@@ -298,6 +300,37 @@ typedef itk::ImageRegionConstIterator< ImageType >  InputIteratorType;
     m_FullWidget->box( FL_EMBOSSED_BOX );
     m_FullWidget->SetFormOverlayVisible(true);
     
+
+    // Create the zoom window
+    std::string zoomLabel="Zoom Window (X4)";
+    m_ZoomWindow = new Fl_Window(wfull+15,hscroll+110,m_ZoomMaxInitialSize,m_ZoomMaxInitialSize,"");
+    m_ZoomWindow->copy_label(zoomLabel.c_str());
+    m_ZoomWidget = ZoomWidgetType::New();
+    m_ZoomWidget->SetParent(this);
+    m_ZoomWindow->resizable(m_ZoomWidget);
+    m_ZoomWindow->size_range(0,0,size[0],size[1]);
+    m_ZoomWindow->end();
+    m_ZoomWidget->SetZoomFactor(4.0);
+    m_ZoomWidget->SetInput(m_InputImage);
+    m_ZoomWidget->Init(0,0,m_ZoomMaxInitialSize,m_ZoomMaxInitialSize,"");
+    m_ZoomWidget->box( FL_EMBOSSED_BOX );
+    m_ZoomWidget->SetFormOverlayVisible(true);
+    m_ZoomWidget->SetFormListOverlay(m_FullWidget->GetFormList());
+    
+
+    // Create the zoom selection mode
+    BoxPointerType zoomBox = BoxType::New();
+    SizeType zoomBoxSize;
+    IndexType zoomBoxIndex;
+    zoomBoxSize[0]=(m_ZoomWidget->GetViewedRegion().GetSize()[0]);
+    zoomBoxSize[1]=(m_ZoomWidget->GetViewedRegion().GetSize()[1]);
+    zoomBoxIndex[0]=(m_ZoomWidget->GetViewedRegion().GetIndex()[0]);
+    zoomBoxIndex[1]=(m_ZoomWidget->GetViewedRegion().GetIndex()[1]);
+    zoomBox->SetIndex(zoomBoxIndex);
+    zoomBox->SetSize(zoomBoxSize);
+    zoomBox->SetColor(m_Color);
+    m_InterfaceBoxesList->PushBack(zoomBox);
+
     // decide wether to use scroll view or not
     if(size[0]<m_ScrollLimitSize&&size[1]<m_ScrollLimitSize)
       {
@@ -350,48 +383,23 @@ typedef itk::ImageRegionConstIterator< ImageType >  InputIteratorType;
 	m_ScrollWidget->Init(0,0,wscroll,hscroll,oss.str().c_str());
 	m_ScrollWidget->box( FL_EMBOSSED_BOX );
 	m_ScrollWidget->SetFormOverlayVisible(true);
-	
+	m_ScrollWidget->SetSubSamplingRate(m_ShrinkFactor);
+
 	// Create the scroll selection box
 	BoxPointerType box = BoxType::New();
 	SizeType scrollBoxSize;
 	IndexType scrollBoxIndex;
-	scrollBoxSize[0]=(m_FullWidget->GetViewedRegion().GetSize()[0]/m_ShrinkFactor)+1;
-	scrollBoxSize[1]=(m_FullWidget->GetViewedRegion().GetSize()[1]/m_ShrinkFactor)+1;
-	scrollBoxIndex[0]=(m_FullWidget->GetViewedRegion().GetIndex()[0]/m_ShrinkFactor)+1;
-	scrollBoxIndex[1]=(m_FullWidget->GetViewedRegion().GetIndex()[1]/m_ShrinkFactor)+1;
+	scrollBoxSize[0]=(m_FullWidget->GetViewedRegion().GetSize()[0]);
+	scrollBoxSize[1]=(m_FullWidget->GetViewedRegion().GetSize()[1]);
+	scrollBoxIndex[0]=(m_FullWidget->GetViewedRegion().GetIndex()[0]);
+	scrollBoxIndex[1]=(m_FullWidget->GetViewedRegion().GetIndex()[1])+1;
 	otbMsgDebugMacro(<<"Scroll box: "<<scrollBoxIndex<<" "<<scrollBoxSize);
 	box->SetSize(scrollBoxSize);
 	box->SetIndex(scrollBoxIndex);
 	box->SetColor(m_Color);
-	m_ScrollWidget->GetFormList()->PushBack(box);
+	m_InterfaceBoxesList->PushBack(box);
       }
-    // Create the zoom window
-    std::string zoomLabel="Zoom Window (X4)";
-    m_ZoomWindow = new Fl_Window(wfull+15,hscroll+110,m_ZoomMaxInitialSize,m_ZoomMaxInitialSize,"");
-    m_ZoomWindow->copy_label(zoomLabel.c_str());
-    m_ZoomWidget = ZoomWidgetType::New();
-    m_ZoomWidget->SetParent(this);
-    m_ZoomWindow->resizable(m_ZoomWidget);
-    m_ZoomWindow->size_range(0,0,size[0],size[1]);
-    m_ZoomWindow->end();
-    m_ZoomWidget->SetZoomFactor(4.0);
-    m_ZoomWidget->SetInput(m_InputImage);
-    m_ZoomWidget->Init(0,0,m_ZoomMaxInitialSize,m_ZoomMaxInitialSize,"");
-    m_ZoomWidget->box( FL_EMBOSSED_BOX );
-    m_ZoomWidget->SetFormOverlayVisible(true);
-
-    // Create the zoom selection mode
-    BoxPointerType zoomBox = BoxType::New();
-    SizeType zoomBoxSize;
-    IndexType zoomBoxIndex;
-    zoomBoxSize[0]=(m_ZoomWidget->GetViewedRegion().GetSize()[0])+1;
-    zoomBoxSize[1]=(m_ZoomWidget->GetViewedRegion().GetSize()[1])+1;
-    zoomBoxIndex[0]=(m_ZoomWidget->GetViewedRegion().GetIndex()[0])+1;
-    zoomBoxIndex[1]=(m_ZoomWidget->GetViewedRegion().GetIndex()[1])+1;
-    zoomBox->SetIndex(zoomBoxIndex);
-    zoomBox->SetSize(zoomBoxSize);
-    zoomBox->SetColor(m_Color);
-    m_FullWidget->GetFormList()->PushBack(zoomBox);
+    
  
     // Compute the normalization factors
     ComputeNormalizationFactors();
@@ -410,15 +418,15 @@ typedef itk::ImageRegionConstIterator< ImageType >  InputIteratorType;
     
     m_PixLocWindow= new Fl_Window(wfull+15,hscroll+50,wscroll,20,"Pixel location & values");
     m_PixLocOutput = new Fl_Output(0,0,wscroll,20,"Pixel location & values");
-     m_PixLocWindow->resizable(m_PixLocOutput);
-     m_PixLocOutput->textsize(10);
-     m_PixLocOutput->box(FL_EMBOSSED_BOX );
-     m_PixLocWindow->end();
+    m_PixLocWindow->resizable(m_PixLocOutput);
+    m_PixLocOutput->textsize(10);
+    m_PixLocOutput->box(FL_EMBOSSED_BOX );
+    m_PixLocWindow->end();
 
 
-     InitializeViewModel();
+    InitializeViewModel();
     
-      m_Built=true;
+    m_Built=true;
     // Built done
     // otbMsgDebugMacro(<<"Leaving build method");
   }
@@ -523,12 +531,47 @@ typedef itk::ImageRegionConstIterator< ImageType >  InputIteratorType;
 
   } 
 
+  template <class TPixel>
+  void
+  ImageViewer<TPixel>
+  ::GenerateOverlayList(void)
+  {
+    FormListPointerType new_list = FormListType::New();
+    
+    
+  
+    for(FormListIteratorType it1 = m_InterfaceBoxesList->Begin();
+        it1!=m_InterfaceBoxesList->End();++it1)
+        {
+            new_list->PushBack(it1.Get());
+        }
+        
+    for(PolygonListIteratorType it2 = m_PolygonROIList->Begin();
+        it2!=m_PolygonROIList->End();++it2)
+        {
+            ImageWidgetPolygonFormPointerType new_poly = ImageWidgetPolygonFormType::New();
+            new_poly->SetPolygon(it2.Get());
+            new_list->PushBack(new_poly);
+        }
+        
+        if(m_UseScroll)
+        {
+            m_ScrollWidget->SetFormListOverlay(new_list);
+        }
+     
+    m_FullWidget->SetFormListOverlay(new_list);
+    m_ZoomWidget->SetFormListOverlay(new_list);
+  }
+
+
+
   /// Update the display
   template <class TPixel>
   void 
   ImageViewer<TPixel>
   ::Update(void)
   {
+    GenerateOverlayList();
     Fl::check();
     UpdateScrollWidget();
     UpdateFullWidget();
@@ -574,7 +617,6 @@ typedef itk::ImageRegionConstIterator< ImageType >  InputIteratorType;
       {
 	m_ZoomWindow->copy_label(oss.str().c_str());
       }
-    m_ZoomWidget->SetFormListOverlay(m_FullWidget->GetFormList());
     m_ZoomWindow->redraw();
     m_ZoomWidget->redraw();
   }
@@ -589,12 +631,13 @@ typedef itk::ImageRegionConstIterator< ImageType >  InputIteratorType;
     IndexType zoomBoxIndex;
     zoomBoxSize[0]=(m_ZoomWidget->GetViewedRegion().GetSize()[0]);
     zoomBoxSize[1]=(m_ZoomWidget->GetViewedRegion().GetSize()[1]);
-    zoomBoxIndex[0]=(m_ZoomWidget->GetViewedRegion().GetIndex()[0])+1;
-    zoomBoxIndex[1]=(m_ZoomWidget->GetViewedRegion().GetIndex()[1])+1;
+    zoomBoxIndex[0]=(m_ZoomWidget->GetViewedRegion().GetIndex()[0]);
+    zoomBoxIndex[1]=(m_ZoomWidget->GetViewedRegion().GetIndex()[1]);
     zoomBox->SetIndex(zoomBoxIndex);
     zoomBox->SetSize(zoomBoxSize);
     zoomBox->SetColor(m_Color);
-    m_FullWidget->GetFormList()->SetNthElement(0,zoomBox);
+    std::cout<<"Zoom box: "<<zoomBoxSize<<", "<<zoomBoxIndex<<std::endl;
+    m_InterfaceBoxesList->SetNthElement(0,zoomBox);
     m_FullWidget->redraw();
   }
 
@@ -608,14 +651,15 @@ typedef itk::ImageRegionConstIterator< ImageType >  InputIteratorType;
 	BoxPointerType box = BoxType::New();
 	SizeType scrollBoxSize;
 	IndexType scrollBoxIndex;
-	scrollBoxSize[0]=(m_FullWidget->GetViewedRegion().GetSize()[0]/m_ShrinkFactor)-1;
-	scrollBoxSize[1]=(m_FullWidget->GetViewedRegion().GetSize()[1]/m_ShrinkFactor)-1;
-	scrollBoxIndex[0]=(m_FullWidget->GetViewedRegion().GetIndex()[0]/m_ShrinkFactor)+1;
-	scrollBoxIndex[1]=(m_FullWidget->GetViewedRegion().GetIndex()[1]/m_ShrinkFactor)+1;
+	scrollBoxSize[0]=(m_FullWidget->GetViewedRegion().GetSize()[0]);
+	scrollBoxSize[1]=(m_FullWidget->GetViewedRegion().GetSize()[1]);
+	scrollBoxIndex[0]=(m_FullWidget->GetViewedRegion().GetIndex()[0]);
+	scrollBoxIndex[1]=(m_FullWidget->GetViewedRegion().GetIndex()[1])+1;
 	box->SetSize(scrollBoxSize);
 	box->SetIndex(scrollBoxIndex);
 	box->SetColor(m_Color);
-	m_ScrollWidget->GetFormList()->SetNthElement(0,box);
+	std::cout<<"Scroll box: "<<scrollBoxSize<<", "<<scrollBoxIndex<<std::endl;
+	m_InterfaceBoxesList->SetNthElement(1,box);
 	m_ScrollWidget->redraw();
 	m_FullWidget->redraw();
       }
@@ -649,11 +693,11 @@ ImageViewer<TPixel>
 	}
       if(index[0]+size[0]>=bigRegion.GetIndex()[0]+bigRegion.GetSize()[0])
 	{
-	  index[0]=bigRegion.GetIndex()[0]+bigRegion.GetSize()[0]-size[0]-2;
+	  index[0]=bigRegion.GetIndex()[0]+bigRegion.GetSize()[0]-size[0];
 	}
       if(index[1]+size[1]>=bigRegion.GetIndex()[1]+bigRegion.GetSize()[1])
 	{
-	  index[1]=bigRegion.GetIndex()[1]+bigRegion.GetSize()[1]-size[1]-2;
+	  index[1]=bigRegion.GetIndex()[1]+bigRegion.GetSize()[1]-size[1];
 	}
       resp.SetSize(size);
       resp.SetIndex(index);
@@ -712,8 +756,7 @@ template <class TPixel>
   RegionType newRegion = ComputeConstrainedRegion(region,m_FullWidget->GetViewedRegion());
   m_ZoomWidget->SetZoomUpperLeftCorner(newRegion.GetIndex());
  
-  m_ZoomWidget->redraw();
-  this->UpdateFullWidget();
+  this->Update();
 
   typename ViewerListType::Iterator linkedIt = m_LinkedViewerList->Begin();
   typename OffsetListType::iterator offIt = m_LinkedViewerOffsetList.begin();

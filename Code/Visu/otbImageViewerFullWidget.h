@@ -22,7 +22,7 @@ PURPOSE.  See the above copyright notices for more information.
 #include "otbImageWidgetBoxForm.h"
 #include "otbImageWidgetRectangleForm.h"
 #include "otbImageWidgetPointForm.h"
-#include "otbPolygon.h"
+#include "otbImageWidgetPolygonForm.h"
 
 namespace otb
 {
@@ -64,6 +64,8 @@ class ITK_EXPORT ImageViewerFullWidget
   typedef ImageWidgetRectangleForm       RectangleType;
   typedef RectangleType::ColorType       ColorType;
   typedef ImageWidgetPointForm           PointType;
+  typedef Polygon<>       PolygonType;
+  typedef PolygonType::ContinuousIndexType ContinuousIndexType;
 
   itkSetMacro(Parent,ParentPointerType);
   itkGetMacro(Parent,ParentPointerType);
@@ -170,7 +172,7 @@ class ITK_EXPORT ImageViewerFullWidget
 		   {
 		     this->GetFormList()->PopBack(); 
 		   }
-		 this->GetFormList()->PushBack(box);
+		 m_Parent->GetInterfaceBoxesList()->PushBack(box);
 		 m_Parent->Update();
 		 m_Drag=true;
 	      }
@@ -216,18 +218,36 @@ class ITK_EXPORT ImageViewerFullWidget
 		    rectangle->SetSize(boxSize);
 		    rectangle->SetColor(m_ClassColor);
 		    
-		    this->GetFormList()->PopBack();
+		    m_Parent->GetInterfaceBoxesList()->PopBack();
 		    //otbMsgDebugMacro(<<"FL_RELEASE: PushBack");
-		    this->GetFormList()->PushBack(rectangle);
+		    //this->GetFormList()->PushBack(rectangle);
+		    
+		    typename PolygonType::Pointer polyg = PolygonType::New();
+		    ContinuousIndexType newVertex;
+		    // Up Left corner
+		    newVertex[0] = boxIndex[0];
+		    newVertex[1] = boxIndex[1];
+		    polyg->AddVertex(newVertex);
+		    // Up Right corner
+		    newVertex[0] += boxSize[0];
+		    polyg->AddVertex(newVertex);
+		    // Down Right corner
+		    newVertex[1] += boxSize[1];
+		    polyg->AddVertex(newVertex);
+		    // Down Left corner
+		    newVertex[0]= boxIndex[0];
+		    polyg->AddVertex(newVertex);
+			    
+		    m_Parent->GetPolygonROIList()->PushBack(polyg);
 		  }
-		else
-		  {
-		    typename PointType::Pointer point = PointType::New();
-		    point->SetColor(m_ClassColor);
-		    point->SetIndex(clickedIndex);
-		    //otbMsgDebugMacro(<<"FL_RELEASE: PushBack");
-		    this->GetFormList()->PushBack(point);
-		  }
+		else 
+ 		  { 
+ 		    typename PointType::Pointer point = PointType::New(); 
+ 		    point->SetColor(m_ClassColor); 
+ 		    point->SetIndex(clickedIndex);
+ 		    //otbMsgDebugMacro(<<"FL_RELEASE: PushBack"); 
+ 		    this->GetFormList()->PushBack(point); 
+ 		  } 
 		m_Parent->Update();
 		m_Drag=false;
 	      }
@@ -248,6 +268,7 @@ class ITK_EXPORT ImageViewerFullWidget
 	    newIndex[0] = m_Parent->GetZoomWidget()->GetViewedRegion().GetIndex()[0];
 	    newIndex[1] = m_Parent->GetZoomWidget()->GetViewedRegion().GetIndex()[1];
 	    SizeType newSize  = m_Parent->GetZoomWidget()->GetViewedRegion().GetSize();
+	    bool pushOther = false;
 	    //newIndex[0] = newIndex[0] + newSize[0]/2;
 	    //newIndex[1] = newIndex[1] + newSize[1]/2;
 	    switch(Fl::event_key())
@@ -258,6 +279,7 @@ class ITK_EXPORT ImageViewerFullWidget
 		    {
 		      newIndex[1] = newIndex[1]+static_cast<long int>(newSize[1]/2)+ newSize[1]/2;
 		      newIndex[0] += newSize[0]/2;
+		      pushOther = true;
 		    }	
 		  break;
 		}
@@ -267,6 +289,7 @@ class ITK_EXPORT ImageViewerFullWidget
 		    {
 		      newIndex[1] = newIndex[1]-static_cast<long int>(newSize[1]/2)+ newSize[1]/2;
 		      newIndex[0] += newSize[0]/2;
+	      pushOther = true;
 		    }
 		  break;
 		}
@@ -276,6 +299,7 @@ class ITK_EXPORT ImageViewerFullWidget
 		    {
 		      newIndex[0] = newIndex[0]-static_cast<long int>(newSize[0]/2)+ newSize[0]/2;
 		      newIndex[1] += newSize[1]/2;
+	      pushOther = true;
 		    }	
 		  break;
 		}
@@ -285,6 +309,7 @@ class ITK_EXPORT ImageViewerFullWidget
 		    {
 		      newIndex[0] = newIndex[0]+static_cast<long int>(newSize[0]/2)+ newSize[0]/2;
 		      newIndex[1] += newSize[1]/2;
+	      pushOther = true;
 		    }
 		  break;
 		}
@@ -296,7 +321,7 @@ class ITK_EXPORT ImageViewerFullWidget
 		  break;
 		}
 	      } 
-	    if (!m_ShortCutRectangle)
+	    if (!m_ShortCutRectangle && pushOther == true)
 	      {
 		m_Parent->ChangeFullViewedRegion(newIndex);
 		m_Parent->ChangeZoomViewedRegion(newIndex);

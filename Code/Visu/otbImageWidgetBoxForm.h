@@ -53,15 +53,15 @@ class ImageWidgetBoxForm
   itkSetMacro(Index,IndexType);
   itkGetMacro(Index,IndexType);
 
-  void Draw(double openGlZoom, unsigned int originx, unsigned int originy, unsigned int windowh)
+  void Draw(double openGlZoom, unsigned int originx, unsigned int originy, unsigned int windowh, unsigned int ss_rate)
     {
       if(this->GetVisible())
 	{
 	  unsigned int minX, minY, maxX, maxY;
-	  minX = static_cast<unsigned int>((m_Index[0]-originx)*openGlZoom);
-	  minY = static_cast<unsigned int>(windowh-(m_Index[1]-originy+m_Size[1])*openGlZoom);
-	  maxX = static_cast<unsigned int>((m_Index[0]-originx+m_Size[0])*openGlZoom);
-	  maxY = static_cast<unsigned int>(windowh-(m_Index[1]-originy)*openGlZoom);
+	  minX = static_cast<unsigned int>((m_Index[0]-originx)*openGlZoom*(1/static_cast<double>(ss_rate)));
+	  minY = static_cast<unsigned int>(windowh-(m_Index[1]-originy+m_Size[1])*openGlZoom*(1/static_cast<double>(ss_rate)));
+	  maxX = static_cast<unsigned int>((m_Index[0]-originx+m_Size[0])*openGlZoom*(1/static_cast<double>(ss_rate)));
+	  maxY = static_cast<unsigned int>(windowh-(m_Index[1]-originy)*openGlZoom*(1/static_cast<double>(ss_rate)));
 
 
 	  glEnable(GL_BLEND);

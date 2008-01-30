@@ -25,6 +25,7 @@ PURPOSE.  See the above copyright notices for more information.
 #include "otbImageViewerFullWidget.h"
 #include "otbStreamingShrinkImageFilter.h"
 #include "otbImageWidgetBoxForm.h"
+#include "otbImageWidgetPolygonForm.h"
 #include "itkListSample.h"
 #include "otbObjectList.h"
 #include "itkCovarianceCalculator.h"
@@ -123,6 +124,19 @@ class ITK_EXPORT ImageViewer
   /// Linked viewer offset list
   typedef std::vector<OffsetType> OffsetListType;
 
+  /// Type for the overlay list
+  typedef typename FullWidgetType::FormListType FormListType;
+  typedef typename FormListType::Pointer FormListPointerType;
+  typedef typename FormListType::Iterator FormListIteratorType;
+
+  /// type for the list of the polygon ROI
+  typedef otb::Polygon<> PolygonType;
+  typedef otb::ObjectList<PolygonType> PolygonListType;
+  typedef typename PolygonListType::Pointer PolygonListPointerType;
+  typedef typename PolygonListType::Iterator PolygonListIteratorType;
+  typedef ImageWidgetPolygonForm<> ImageWidgetPolygonFormType;
+  typedef typename ImageWidgetPolygonFormType::Pointer ImageWidgetPolygonFormPointerType;
+
   /// Accessors
   itkGetMacro(Built,bool);
   itkGetMacro(ShrinkFactor,unsigned int);
@@ -140,9 +154,12 @@ class ITK_EXPORT ImageViewer
   itkGetMacro(NormalizationFactor,double);
   itkGetMacro(Updating,bool);
   itkGetMacro(UseScroll,bool);
+  itkGetObjectMacro(PolygonROIList, PolygonListType);
+  itkSetObjectMacro(PolygonROIList, PolygonListType);
   itkGetConstReferenceMacro(MinComponentValue,VectorPixelType);
   itkGetConstReferenceMacro(MaxComponentValue,VectorPixelType);
   itkGetConstReferenceMacro(ZoomWidget,ZoomWidgetPointerType);
+  itkGetObjectMacro(InterfaceBoxesList,FormListType);
 
   /** Set the input image (VectorImage version) */
   virtual void SetImage(ImageType * img);
@@ -194,6 +211,9 @@ class ITK_EXPORT ImageViewer
 
   /** Clear pixel information */
   virtual void ClearPixLocVal(void);
+
+  /** Generate overlay list */
+  virtual void GenerateOverlayList(void);
 
   /** This is a helper class that performs a Show() and Fl::run() in order to ease 
    *  the use of the class for example in wrappings.
@@ -344,7 +364,15 @@ protected:
   /// The list of viewer with which this viewer is linked
   ViewerListPointerType m_LinkedViewerList;
 
+  /// Linked viewer offset list
   OffsetListType m_LinkedViewerOffsetList;
+
+  /// PolygonList
+  PolygonListPointerType m_PolygonROIList;
+
+  /// Interface boxes
+  FormListPointerType m_InterfaceBoxesList;
+
 };
 
 

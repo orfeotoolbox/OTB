@@ -71,8 +71,15 @@ class ITK_EXPORT ImageWidgetFormBase
       m_Color[2]=b;
       m_Color[3]=a;
     }
-
-  virtual void Draw(double openGlZoom, unsigned int originx, unsigned int originy, unsigned int windowh){};
+  /**
+   * Draw the form in opengl context.
+   * \param openGlZoom the openGl zoom factor,
+   * \param originx The x axis origin,
+   * \param originy The y axis origin,
+   * \param windowh The window height,
+   *  \param ss_rate The subsampling rate.
+   */
+  virtual void Draw(double openGlZoom, unsigned int originx, unsigned int originy, unsigned int windowh, unsigned int ss_rate){};
 
   virtual RegionType GetRegion(void){itkExceptionMacro("Method must be implemented in subclasses!");};
 

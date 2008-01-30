@@ -62,7 +62,7 @@ class ImageWidgetBase
     typedef FormType::Pointer FormPointerType;
     typedef List<FormType> FormListType;
     typedef typename FormListType::Pointer FormListPointerType;
-    typedef typename FormListType::Iterator IteratorType;
+    typedef typename FormListType::ReverseIterator ReverseIteratorType;
     
     itkSetMacro(BufferedRegion,RegionType);
     itkGetMacro(BufferedRegion,RegionType);
@@ -96,6 +96,9 @@ class ImageWidgetBase
 
     itkSetMacro(MinComponentValues,VectorPixelType);
     itkGetMacro(MinComponentValues,VectorPixelType);
+
+    itkGetMacro(SubSamplingRate, unsigned int);
+    itkSetMacro(SubSamplingRate, unsigned int);
 
     itkGetMacro(ViewModelIsRGB,bool);
     
@@ -231,6 +234,10 @@ class ImageWidgetBase
      VectorPixelType m_MaxComponentValues;
      /** Min value for normalization */
      VectorPixelType m_MinComponentValues;
+     /** Subsampling rate in case of subsampled input image.
+      *  Default is 1.
+      */
+     unsigned int m_SubSamplingRate;
   };
 } // end namespace otb
 

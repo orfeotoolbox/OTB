@@ -51,13 +51,13 @@ class ImageWidgetPointForm
   itkSetMacro(Index,IndexType);
   itkGetMacro(Index,IndexType);
  
-  void Draw(double openGlZoom, unsigned int originx, unsigned int originy, unsigned int windowh)
+  void Draw(double openGlZoom, unsigned int originx, unsigned int originy, unsigned int windowh, unsigned int ss_rate)
     {
       if(this->GetVisible())
 	{
 	  unsigned int x,y;
-	  x = static_cast<unsigned int>((m_Index[0]-originx)*openGlZoom);
-	  y = static_cast<unsigned int>(windowh-(m_Index[1]-originy)*openGlZoom);
+	  x = static_cast<unsigned int>((m_Index[0]-originx)*openGlZoom*ss_rate);
+	  y = static_cast<unsigned int>(windowh-(m_Index[1]-originy)*openGlZoom*ss_rate);
 
 	  glEnable(GL_BLEND);
 	  glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);

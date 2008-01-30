@@ -60,6 +60,7 @@ ImageWidgetBase<TPixel>
   m_MaxComponentValues.SetSize(1);
   m_MinComponentValues.Fill(0);
   m_MaxComponentValues.Fill(255);
+  m_SubSamplingRate = 1;
 }
 /**
  * Destructor.
@@ -365,14 +366,14 @@ ImageWidgetBase<TPixel>
 
  if(m_FormOverlayVisible)
    {
-     IteratorType it =  m_FormList->Begin();
+     ReverseIteratorType it =  m_FormList->ReverseBegin();
      //otbMsgDebugMacro(<<"Formlist size: "<<m_FormList->Size());
-     for(;it!=m_FormList->End();++it)
+     for(;it!=m_FormList->ReverseEnd();++it)
        {
 	 it.Get()->Draw(m_OpenGlIsotropicZoom,
 		       m_ViewedRegion.GetIndex()[0],
 		       m_ViewedRegion.GetIndex()[1],
-		       this->h());
+		       this->h(), m_SubSamplingRate);
        }
    }
 }

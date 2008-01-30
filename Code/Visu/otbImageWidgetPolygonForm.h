@@ -61,7 +61,7 @@ class ITK_EXPORT ImageWidgetPolygonForm
   itkSetMacro(Polygon, PolygonPointerType);
   itkGetMacro(Polygon, PolygonPointerType);
   
-  void Draw(double openGlZoom, unsigned int originx, unsigned int originy, unsigned int windowh);
+  void Draw(double openGlZoom, unsigned int originx, unsigned int originy, unsigned int windowh, unsigned int ss_rate);
   
   
   protected: 

@@ -38,7 +38,7 @@ ImageWidgetPolygonForm<TValue>
 template<class TValue>
 void
 ImageWidgetPolygonForm<TValue>
-::Draw(double openGlZoom, unsigned int originx, unsigned int originy, unsigned int windowh)
+::Draw(double openGlZoom, unsigned int originx, unsigned int originy, unsigned int windowh,unsigned ss_rate)
 {
   if(this->GetVisible())
     {
@@ -51,8 +51,8 @@ ImageWidgetPolygonForm<TValue>
       double x1 = it.Value()[0];
       double y1 = it.Value()[1];
       
-      x1 = static_cast<unsigned int>((x1-originx)*openGlZoom);
-      y1 = static_cast<unsigned int>(windowh+(originy-y1)*openGlZoom);
+      x1 = static_cast<unsigned int>((x1-originx)*openGlZoom*(1/static_cast<double>(ss_rate)));
+      y1 = static_cast<unsigned int>(windowh+(originy-y1)*openGlZoom*(1/static_cast<double>(ss_rate)));
       
       ++it; 
       while(it != this->GetPolygon()->GetVertexList()->End())
@@ -60,8 +60,8 @@ ImageWidgetPolygonForm<TValue>
 	  double x2 = it.Value()[0];
 	  double y2 = it.Value()[1];
 
-	  x2 = static_cast<unsigned int>((x2-originx)*openGlZoom);
-	  y2 = static_cast<unsigned int>(windowh+(originy-y2)*openGlZoom);
+	  x2 = static_cast<unsigned int>((x2-originx)*openGlZoom*(1/static_cast<double>(ss_rate)));
+	  y2 = static_cast<unsigned int>(windowh+(originy-y2)*openGlZoom*(1/static_cast<double>(ss_rate)));
 
 	  glVertex2f(x1,y1);
 	  glVertex2f(x2,y2);
