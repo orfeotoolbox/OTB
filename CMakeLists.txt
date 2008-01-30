@@ -103,6 +103,15 @@ ENDIF (NOT GDAL_INCLUDE_DIRS)
 INCLUDE_DIRECTORIES(${GDAL_INCLUDE_DIRS})
 LINK_DIRECTORIES( ${GDAL_LIBRARY_DIRS} )
 
+
+#-----------------------------------------------------------------------------
+INCLUDE(CheckIncludeFiles)
+# Check if curl.h header file exist
+CHECK_INCLUDE_FILES("curl/curl.h" OTB_HAVE_CURL_H)
+IF(OTB_HAVE_CURL_H)
+        ADD_DEFINITIONS(-DOTB_HAVE_CURL)
+ENDIF(OTB_HAVE_CURL_H)
+
 #-----------------------------------------------------------------------------
 # Option for generate Visu tools !!!
 OPTION(OTB_USE_VISU_GUI "Generate Gui/Visu tools directory. If ON, find OpenGL and FLTK package." ON)
