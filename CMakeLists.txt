@@ -81,9 +81,53 @@ IF(OTB_USE_EXTERNAL_ITK)
         ENDIF(ITK_FOUND)
 ENDIF(OTB_USE_EXTERNAL_ITK)
 
+#SET(CURL_INCLUDE_DIR )
+#MARK_AS_ADVANCED(CURL_INCLUDE_DIRS)
+#SET(CURL_LIBRARY )
+#MARK_AS_ADVANCED(CURL_LIBRARY_DIRS)
 
 #-------------------------------
-# Librairie GDAL
+# CURL Library
+#-------------------------------
+OPTION(OTB_USE_CURL "Use curl library." ON)
+MARK_AS_ADVANCED(OTB_USE_CURL)
+IF(OTB_USE_CURL)
+
+#        INCLUDE(CheckIncludeFiles)
+#        INCLUDE(CheckLibraryExists)
+#        CHECK_INCLUDE_FILES("curl/curl.h" OTB_HAVE_CURL_HEADER)
+#        CHECK_LIBRARY_EXISTS("curl" "curl_easy_init" "" OTB_HAVE_CURL_LIBRARY)
+#        IF( NOT OTB_HAVE_CURL_HEADER )
+#            MESSAGE("Cannot find CURL include directory. Please set CURL_INCLUDE_DIRS or SET OTB_USE_CURL OFF.")
+#        ENDIF( NOT OTB_HAVE_CURL_HEADER)
+#        IF( NOT OTB_HAVE_CURL_LIBRARY )
+#            MESSAGE("Cannot find CURL include directory. Please set CURL_LIBRARY_DIRS or SET OTB_USE_CURL OFF.")
+#        ENDIF( NOT OTB_HAVE_CURL_LIBRARY)
+
+        FIND_PATH(CURL_INCLUDE_DIR curl/curl.h PATHS)
+        MARK_AS_ADVANCED(CURL_INCLUDE_DIR)
+        IF (NOT CURL_INCLUDE_DIR)
+                MESSAGE(FATAL_ERROR
+                        "Cannot find CURL include directory. Please set CURL_INCLUDE_DIR or SET OTB_USE_CURL OFF.")
+        ENDIF (NOT CURL_INCLUDE_DIR)
+
+        FIND_LIBRARY(CURL_LIBRARY curl )
+        MARK_AS_ADVANCED(CURL_LIBRARY)
+        IF (NOT CURL_LIBRARY)
+                MESSAGE(FATAL_ERROR
+                        "Cannot find CURL library. Please set CURL_LIBRARY or SET OTB_USE_CURL OFF.")
+        ENDIF (NOT CURL_LIBRARY)
+
+        # Add compiler option 
+        ADD_DEFINITIONS(-DOTB_USE_CURL)
+
+        INCLUDE_DIRECTORIES(${CURL_INCLUDE_DIR})
+
+ENDIF(OTB_USE_CURL)
+
+
+#-------------------------------
+# GDAL Library
 #-------------------------------
 
 #FIND_LIBRARY(GDAL_LIBRARY_DIRS gdal PATHS $ENV{GDAL_LIBRARY_DIRS} ) 
@@ -102,15 +146,6 @@ ENDIF (NOT GDAL_INCLUDE_DIRS)
 
 INCLUDE_DIRECTORIES(${GDAL_INCLUDE_DIRS})
 LINK_DIRECTORIES( ${GDAL_LIBRARY_DIRS} )
-
-
-#-----------------------------------------------------------------------------
-INCLUDE(CheckIncludeFiles)
-# Check if curl.h header file exist
-CHECK_INCLUDE_FILES("curl/curl.h" OTB_HAVE_CURL_H)
-IF(OTB_HAVE_CURL_H)
-        ADD_DEFINITIONS(-DOTB_HAVE_CURL)
-ENDIF(OTB_HAVE_CURL_H)
 
 #-----------------------------------------------------------------------------
 # Option for generate Visu tools !!!
