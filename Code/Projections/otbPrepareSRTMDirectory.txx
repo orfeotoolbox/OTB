@@ -59,10 +59,10 @@ namespace otb
   bool PrepareSRTMDirectory::Evaluate()
   {
     
-    int startX = floor(m_ULLon);
-    int endX = ceil(m_LRLon);
-    int startY = floor(m_LRLat);
-    int endY = ceil(m_ULLat);
+    int startX = static_cast<int>(floor(m_ULLon));
+    int endX = static_cast<int>(ceil(m_LRLon));
+    int startY = static_cast<int>(floor(m_LRLat));
+    int endY = static_cast<int>(ceil(m_ULLat));
     
     std::cout << startX << std::endl;
     std::cout << endX << std::endl;
