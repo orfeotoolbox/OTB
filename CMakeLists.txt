@@ -89,7 +89,7 @@ ENDIF(OTB_USE_EXTERNAL_ITK)
 #-------------------------------
 # CURL Library
 #-------------------------------
-OPTION(OTB_USE_CURL "Use curl library." ON)
+OPTION(OTB_USE_CURL "Use curl library." OFF)
 MARK_AS_ADVANCED(OTB_USE_CURL)
 IF(OTB_USE_CURL)
 
