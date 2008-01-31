@@ -116,7 +116,7 @@ ossimNetworkedQuadTreeModel::ossimNetworkedQuadTreeModel()
 
 //   initAdjustableParameters();
 
-   std::cout << "NetworkedQuadTreeModel constructor" << std::endl;
+//    std::cout << "NetworkedQuadTreeModel constructor" << std::endl;
    
    if (traceExec()) ossimNotify(ossimNotifyLevel_DEBUG) << "DEBUG ossimNetworkedQuadTreeModel::ossimNetworkedQuadTreeModel: returning..." << std::endl;
 }
@@ -414,7 +414,6 @@ void ossimNetworkedQuadTreeModel::lineSampleHeightToWorld(const ossimDpt& image_
                                                 const double&   height,
                                                 ossimGpt&       gpt) const
 {
-  std::cout << "in lineSampleHeightToWorld"<< std::endl;
    if(!image_point.hasNans())
    {
 
