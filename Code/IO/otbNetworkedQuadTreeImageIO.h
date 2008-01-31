@@ -176,6 +176,7 @@ private:
   void InternalRead(double x, double y, void* buffer);
   void BuildFileName(std::ostringstream& quad, std::ostringstream& filename);
   void GetFromNet(std::ostringstream& quad);
+  void GetFromNet(std::ostringstream& quad, double x, double y);
   void FillCacheFaults(void* buffer);
       
 
@@ -187,6 +188,8 @@ private:
   bool useCache;
   std::string m_CacheDirectory;
   std::string m_ServerName;
+  std::string m_FileSuffix;
+  std::string m_AddressMode;
   
   bool m_FlagWriteImageInformation;
 

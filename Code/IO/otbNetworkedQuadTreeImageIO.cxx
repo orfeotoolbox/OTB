@@ -84,6 +84,8 @@ NetworkedQuadTreeImageIO::NetworkedQuadTreeImageIO()
   useCache=false;
   m_ServerName="";
   m_CacheDirectory="";
+  m_FileSuffix="jpg";
+  m_AddressMode="0";
 
 }
 
@@ -222,6 +224,8 @@ void NetworkedQuadTreeImageIO::InternalRead(double x, double y, void* buffer)
   std::ostringstream quad;
   int lDepth=m_Depth;
   unsigned char * bufferCacheFault = NULL;
+  double xorig=x;
+  double yorig=y;
   while (lDepth--) // (post-decrement)
   {
 // make sure we only look at fractional part
@@ -253,9 +257,18 @@ void NetworkedQuadTreeImageIO::InternalRead(double x, double y, void* buffer)
   std::ostringstream filename;
   BuildFileName(quad, filename);
 
-  
+  itk::ImageIOBase::Pointer lJPEGImageIO;
   //Open the jpg file to fill the buffer
-  itk::JPEGImageIO::Pointer lJPEGImageIO = itk::JPEGImageIO::New();
+  if (m_AddressMode[0] == '0')
+  {
+//     itk::JPEGImageIO::Pointer 
+        lJPEGImageIO = itk::JPEGImageIO::New();
+  }
+  if (m_AddressMode[0] == '1')
+  {
+//     itk::PNGImageIO::Pointer 
+        lJPEGImageIO = itk::PNGImageIO::New();
+  }
   bool lCanRead(false);
   lCanRead = lJPEGImageIO->CanReadFile(filename.str().c_str());
   std::cout << filename.str() << std::endl;
@@ -263,7 +276,14 @@ void NetworkedQuadTreeImageIO::InternalRead(double x, double y, void* buffer)
   //If we cannot read the file: retrieve and read
   if ( lCanRead == false)
   {
-    GetFromNet(quad);
+    if (m_AddressMode[0] == '0')
+    {
+      GetFromNet(quad);
+    }
+    if (m_AddressMode[0] == '1')
+    {
+      GetFromNet(quad, xorig, yorig);
+    }
     lCanRead = lJPEGImageIO->CanReadFile(filename.str().c_str());
   }
   
@@ -308,13 +328,14 @@ void NetworkedQuadTreeImageIO::BuildFileName(std::ostringstream& quad, std::ostr
   filename << "/";
   filename << "otb-";
   filename << quad.str();
-  filename << ".jpg";
+  filename << "." << m_FileSuffix;
     
 }
 
 
 void NetworkedQuadTreeImageIO::GetFromNet(std::ostringstream& quad)
 {
+  std::cout << "0=" << m_AddressMode << std::endl;
   std::ostringstream urlStream;
   urlStream << m_ServerName;
   urlStream << quad.str();
@@ -362,7 +383,65 @@ void NetworkedQuadTreeImageIO::GetFromNet(std::ostringstream& quad)
   
 }
 
+void NetworkedQuadTreeImageIO::GetFromNet(std::ostringstream& quad, double x, double y)
+{
+  std::cout << "1=" << m_AddressMode << std::endl;
+  std::cout << x << std::endl;
+  std::cout << y << std::endl;
+  
+  std::ostringstream urlStream;
+  urlStream << m_ServerName;
+//   urlStream << quad.str();
+  urlStream << m_Depth;
+  urlStream << "/";
+  urlStream << (long int) (((double) x*(1 << m_Depth)));
+  urlStream << "/";
+  urlStream << (long int) (((double) y*(1 << m_Depth)));
+  urlStream << "." << m_FileSuffix;
+  
+  
 
+  std::ostringstream filename;
+  BuildFileName(quad, filename);
+
+  FILE* output_file = fopen(filename.str().c_str(),"w");
+  if(output_file == NULL)
+  {
+    itkExceptionMacro(<<"NetworkedQuadTree read : bad file name.");
+  }
+  
+  std::ostringstream browserStream;
+  browserStream   << "Mozilla/5.0 (Windows; U; Windows NT 6.0; en-GB; rv:1.8.1.11) Gecko/20071127 Firefox/2.0.0.11";
+  
+  CURL *curl;
+  CURLcode res;
+  curl = curl_easy_init();
+
+  std::cout << urlStream.str().data() << std::endl;
+
+
+  char url[200];
+  strcpy(url,urlStream.str().data());
+  
+  char browser[200];
+  strcpy(browser,browserStream.str().data());
+
+  //Download the file
+  if(curl) {
+    curl_easy_setopt(curl, CURLOPT_USERAGENT, browser);
+    curl_easy_setopt(curl, CURLOPT_URL, url);
+    curl_easy_setopt(curl, CURLOPT_WRITEDATA, output_file);
+    res = curl_easy_perform(curl);
+    if (res != 0){
+      itkExceptionMacro(<<"NetworkedQuadTree read : transfert error.");
+    }
+
+    fclose(output_file);
+    /* always cleanup */
+    curl_easy_cleanup(curl);
+  }
+  
+}
 
 void NetworkedQuadTreeImageIO::ReadImageInformation()
 {
@@ -395,7 +474,9 @@ void NetworkedQuadTreeImageIO::ReadImageInformation()
    {
      itkExceptionMacro(<<"Can't read server name from file");
    }
-  
+   std::getline(file, m_FileSuffix);
+   std::getline(file, m_AddressMode);
+   std::cout << "File parameters: " << m_ServerName << " " << m_FileSuffix << " " << m_AddressMode << std::endl;
 }
 
 
