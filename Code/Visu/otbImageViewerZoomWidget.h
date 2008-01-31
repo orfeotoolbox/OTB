@@ -69,7 +69,6 @@ class ITK_EXPORT ImageViewerZoomWidget
 	case FL_ENTER:
 	  {
 	    m_MouseIn = true;
-	    // otbMsgDebugMacro(<<"Mouse in");
 	    return 1;
 	  }
 	case FL_LEAVE:
@@ -77,7 +76,6 @@ class ITK_EXPORT ImageViewerZoomWidget
 	    m_MouseIn = false;
 	    m_Parent->UpdateZoomWidget();
 	    m_Parent->ClearPixLocVal();
-	    // otbMsgDebugMacro(<<"Mouse out");
 	    return 1;
 	  }
 	case FL_MOVE:
@@ -115,8 +113,7 @@ class ITK_EXPORT ImageViewerZoomWidget
 		    this->SetZoomFactor(1.0);
 		  }
 	      }
-	    m_Parent->UpdateFullWidget(); 
-	    m_Parent->UpdateZoomWidget();
+	    m_Parent->Update();
 	    return 1;
 	  }
 case FL_FOCUS:

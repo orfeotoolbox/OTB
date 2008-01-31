@@ -41,10 +41,14 @@ namespace otb
     m_ZoomMaxInitialSize = 200;
     m_ImageGeometry = 1.0;
     m_ScrollLimitSize = 600;
-    m_Color[0]=1.0;
-    m_Color[1]=0;
-    m_Color[2]=0;
-    m_Color[3]=1.0;
+    m_InterfaceBoxesColor[0]=1.0;
+    m_InterfaceBoxesColor[1]=0;
+    m_InterfaceBoxesColor[2]=0;
+    m_InterfaceBoxesColor[3]=1.0;
+    m_NextROIColor[0]=0;
+    m_NextROIColor[1]=0;
+    m_NextROIColor[2]=1.0;
+    m_NextROIColor[3]=0.5;
     m_ShrinkFactor=1;
     m_RedChannelIndex = 0;
     m_GreenChannelIndex = 1;
@@ -173,92 +177,6 @@ namespace otb
       m_MinComponentValue[i]=static_cast<typename ImageType::ValueType>(generator->GetOutput()->Quantile(0,m_NormalizationFactor));
       m_MaxComponentValue[i]=static_cast<typename ImageType::ValueType>(generator->GetOutput()->Quantile(0,1-m_NormalizationFactor));
     }
-    // TO UNCOMMENT FOR BIASED BUT FAST NORMALISATION
-
-    // typedef itk::ImageRegionIterator<ImageType> IteratorType;
-//     typename ListSampleType::Pointer listSample = ListSampleType::New();
-//     unsigned int nbComponents = m_InputImage->GetNumberOfComponentsPerPixel();
-//     listSample->SetMeasurementVectorSize(nbComponents);
-//     m_MinComponentValue.SetSize(nbComponents);
-//     m_MaxComponentValue.SetSize(nbComponents);
-//     VectorPixelType absolutMax;
-//     VectorPixelType absolutMin;
-//     absolutMax.SetSize(nbComponents);
-//     absolutMin.SetSize(nbComponents);
-//     absolutMax.Fill(0);
-//     absolutMin.Fill(0);
-//     IteratorType it;
-//     // if scroll is activated, compute the factors from the quicklook
-//     if(m_UseScroll)
-//       {
-// 	it = IteratorType(m_Shrink->GetOutput(),m_Shrink->GetOutput()->GetLargestPossibleRegion());
-// 	it.GoToBegin();
-//       }
-//     // else, compute the factors from the full viewed region
-//     else
-//       {
-// 	m_InputImage->SetRequestedRegion(m_FullWidget->GetViewedRegion());
-// 	m_InputImage->PropagateRequestedRegion();
-// 	m_InputImage->UpdateOutputData();
-// 	it = IteratorType(m_InputImage,m_FullWidget->GetViewedRegion());
-// 	it.GoToBegin();
-//       }
-//     while(!it.IsAtEnd())
-//       {
-// 	listSample->PushBack(it.Get()); 
-// 	for(unsigned int i = 0; i<nbComponents;++i)
-// 	  {
-// 	    if(it.Get()[i]>absolutMax[i])
-// 	      absolutMax[i]=it.Get()[i];
-// 	    if(it.Get()[i]<absolutMin[i])
-// 	      absolutMin[i]=it.Get()[i];
-// 	  } 
-// 	++it;
-//       }
-//     otbMsgDebugMacro(<<"Sample list generated.");	       
-//     typename CovarianceCalculatorType::Pointer calc = CovarianceCalculatorType::New();
-//     calc->SetInputSample(listSample);&
-//     calc->Update();
-//     otbMsgDebugMacro(<<"Statistics computed.");
-//     typename CovarianceCalculatorType::OutputType cov = *(calc->GetOutput());
-//     for(unsigned int i = 0; i<nbComponents;++i)
-//       {
-// 	m_MinComponentValue[i] = static_cast<InputPixelType>((calc->GetMean())->GetElement(i)-m_NormalizationFactor*vcl_sqrt(cov(i,i)));
-// 	m_MaxComponentValue[i] = static_cast<InputPixelType>((calc->GetMean())->GetElement(i)+m_NormalizationFactor*vcl_sqrt(cov(i,i)));
-//  	if(m_MinComponentValue[i]<absolutMin[i])
-// 	  m_MinComponentValue[i]=absolutMin[i];
-//  	if(m_MaxComponentValue[i]>absolutMax[i])
-// 	  m_MaxComponentValue[i]=absolutMax[i];
-//      }
- 
-    // END
-
-   
-    //TO UNCOMMENT TO HAVE THE SAME MEAN NORMALIZATION FACTOR FOR EACH BAND
-
-    // InputPixelType min,max;
-//     max = (m_MaxComponentValue[m_RedChannelIndex]
-// 	   +m_MaxComponentValue[m_GreenChannelIndex]
-// 	   +m_MaxComponentValue[m_BlueChannelIndex])/3;
-//     min = (m_MinComponentValue[m_RedChannelIndex]
-// 	   +m_MinComponentValue[m_GreenChannelIndex]
-// 	   +m_MinComponentValue[m_BlueChannelIndex])/3;
-
-    // TO UNCOMMENT TO HAVE THE MIN AND MAX NORMALIZATION FACTOR FOR THE WHOLE SET OF BANDS
-//     otbMsgDebugMacro(<<"Normalization between: "<<m_MinComponentValue<<" and "<<m_MaxComponentValue);  
-//     for(unsigned int i = 1; i<nbComponents;++i)
-//       {
-// 	if(min>m_MinComponentValue[i])
-// 	  min=m_MinComponentValue[i];
-// 	if(max<m_MaxComponentValue[i])
-// 	  max=m_MaxComponentValue[i];
-//       }
-//     m_MinComponentValue.Fill(min);
-//     m_MaxComponentValue.Fill(max);
-
-   // END
-
-//     otbMsgDebugMacro(<<"Data min: "<<absolutMin<<", Data max: "<<absolutMax);
     otbMsgDebugMacro(<<"Normalization between: "<<m_MinComponentValue<<" and "<<m_MaxComponentValue);  
   }
   
@@ -315,7 +233,6 @@ namespace otb
     m_ZoomWidget->Init(0,0,m_ZoomMaxInitialSize,m_ZoomMaxInitialSize,"");
     m_ZoomWidget->box( FL_EMBOSSED_BOX );
     m_ZoomWidget->SetFormOverlayVisible(true);
-    m_ZoomWidget->SetFormListOverlay(m_FullWidget->GetFormList());
     
 
     // Create the zoom selection mode
@@ -328,7 +245,7 @@ namespace otb
     zoomBoxIndex[1]=(m_ZoomWidget->GetViewedRegion().GetIndex()[1]);
     zoomBox->SetIndex(zoomBoxIndex);
     zoomBox->SetSize(zoomBoxSize);
-    zoomBox->SetColor(m_Color);
+    zoomBox->SetColor(m_InterfaceBoxesColor);
     m_InterfaceBoxesList->PushBack(zoomBox);
 
     // decide wether to use scroll view or not
@@ -396,7 +313,7 @@ namespace otb
 	otbMsgDebugMacro(<<"Scroll box: "<<scrollBoxIndex<<" "<<scrollBoxSize);
 	box->SetSize(scrollBoxSize);
 	box->SetIndex(scrollBoxIndex);
-	box->SetColor(m_Color);
+	box->SetColor(m_InterfaceBoxesColor);
 	m_InterfaceBoxesList->PushBack(box);
       }
     
@@ -425,10 +342,9 @@ namespace otb
 
 
     InitializeViewModel();
+    GenerateOverlayList();
     
     m_Built=true;
-    // Built done
-    // otbMsgDebugMacro(<<"Leaving build method");
   }
   /// Set the image (VectorImage version)
   template <class TPixel>
@@ -538,8 +454,30 @@ namespace otb
   {
     FormListPointerType new_list = FormListType::New();
     
+    BoxPointerType zoomBox = BoxType::New();
+    SizeType zoomBoxSize;
+    IndexType zoomBoxIndex;
+    zoomBoxSize[0]=(m_ZoomWidget->GetViewedRegion().GetSize()[0]);
+    zoomBoxSize[1]=(m_ZoomWidget->GetViewedRegion().GetSize()[1]);
+    zoomBoxIndex[0]=(m_ZoomWidget->GetViewedRegion().GetIndex()[0]);
+    zoomBoxIndex[1]=(m_ZoomWidget->GetViewedRegion().GetIndex()[1]);
+    zoomBox->SetIndex(zoomBoxIndex);
+    zoomBox->SetSize(zoomBoxSize);
+    zoomBox->SetColor(m_InterfaceBoxesColor);
+    m_InterfaceBoxesList->SetNthElement(0,zoomBox);
     
-  
+    BoxPointerType box = BoxType::New();
+    SizeType scrollBoxSize;
+    IndexType scrollBoxIndex;
+    scrollBoxSize[0]=(m_FullWidget->GetViewedRegion().GetSize()[0]);
+    scrollBoxSize[1]=(m_FullWidget->GetViewedRegion().GetSize()[1]);
+    scrollBoxIndex[0]=(m_FullWidget->GetViewedRegion().GetIndex()[0]);
+    scrollBoxIndex[1]=(m_FullWidget->GetViewedRegion().GetIndex()[1])+1;
+    box->SetSize(scrollBoxSize);
+    box->SetIndex(scrollBoxIndex);
+    box->SetColor(m_InterfaceBoxesColor);
+    m_InterfaceBoxesList->SetNthElement(1,box);
+    
     for(FormListIteratorType it1 = m_InterfaceBoxesList->Begin();
         it1!=m_InterfaceBoxesList->End();++it1)
         {
@@ -551,7 +489,21 @@ namespace otb
         {
             ImageWidgetPolygonFormPointerType new_poly = ImageWidgetPolygonFormType::New();
             new_poly->SetPolygon(it2.Get());
-            new_list->PushBack(new_poly);
+            new_poly->SetColor(m_NextROIColor);
+            
+            for(PolygonIteratorType pIt = it2.Get()->GetVertexList()->Begin();
+              pIt != it2.Get()->GetVertexList()->End();++pIt)
+              {
+              ImageWidgetCircleFormPointerType new_circle = ImageWidgetCircleFormType::New();
+              
+              new_circle->SetCenter(pIt.Value());
+              new_circle->SetRadius(4);
+              new_circle->SetSolid(false);
+              new_circle->SetColor(m_InterfaceBoxesColor);
+              new_list->PushBack(new_circle);
+              
+              }
+              new_list->PushBack(new_poly);
         }
         
         if(m_UseScroll)
@@ -576,8 +528,19 @@ namespace otb
     UpdateScrollWidget();
     UpdateFullWidget();
     UpdateZoomWidget();
-    Fl::check();
-   
+    
+    // update the linked viewer
+    typename ViewerListType::Iterator linkedIt = m_LinkedViewerList->Begin();
+    typename OffsetListType::iterator offIt = m_LinkedViewerOffsetList.begin();
+  
+    while(linkedIt!=m_LinkedViewerList->End()&&offIt!=m_LinkedViewerOffsetList.end())
+    {
+      if(!linkedIt.Get()->GetUpdating())
+	{
+          linkedIt.Get()->Update();
+        }   
+    }
+  Fl::check();
   }
 
   template <class TPixel>
@@ -626,18 +589,6 @@ namespace otb
   ImageViewer<TPixel>
   ::UpdateFullWidget(void)
   {
-    BoxPointerType zoomBox = BoxType::New();
-    SizeType zoomBoxSize;
-    IndexType zoomBoxIndex;
-    zoomBoxSize[0]=(m_ZoomWidget->GetViewedRegion().GetSize()[0]);
-    zoomBoxSize[1]=(m_ZoomWidget->GetViewedRegion().GetSize()[1]);
-    zoomBoxIndex[0]=(m_ZoomWidget->GetViewedRegion().GetIndex()[0]);
-    zoomBoxIndex[1]=(m_ZoomWidget->GetViewedRegion().GetIndex()[1]);
-    zoomBox->SetIndex(zoomBoxIndex);
-    zoomBox->SetSize(zoomBoxSize);
-    zoomBox->SetColor(m_Color);
-    std::cout<<"Zoom box: "<<zoomBoxSize<<", "<<zoomBoxIndex<<std::endl;
-    m_InterfaceBoxesList->SetNthElement(0,zoomBox);
     m_FullWidget->redraw();
   }
 
@@ -647,21 +598,8 @@ namespace otb
   ::UpdateScrollWidget(void)
   {
     if(m_UseScroll)
-      {
-	BoxPointerType box = BoxType::New();
-	SizeType scrollBoxSize;
-	IndexType scrollBoxIndex;
-	scrollBoxSize[0]=(m_FullWidget->GetViewedRegion().GetSize()[0]);
-	scrollBoxSize[1]=(m_FullWidget->GetViewedRegion().GetSize()[1]);
-	scrollBoxIndex[0]=(m_FullWidget->GetViewedRegion().GetIndex()[0]);
-	scrollBoxIndex[1]=(m_FullWidget->GetViewedRegion().GetIndex()[1])+1;
-	box->SetSize(scrollBoxSize);
-	box->SetIndex(scrollBoxIndex);
-	box->SetColor(m_Color);
-	std::cout<<"Scroll box: "<<scrollBoxSize<<", "<<scrollBoxIndex<<std::endl;
-	m_InterfaceBoxesList->SetNthElement(1,box);
+      {	
 	m_ScrollWidget->redraw();
-	m_FullWidget->redraw();
       }
   }
 
@@ -721,8 +659,6 @@ ImageViewer<TPixel>
   RegionType newRegion = ComputeConstrainedRegion(region,m_InputImage->GetLargestPossibleRegion());
   m_FullWidget->SetUpperLeftCorner(newRegion.GetIndex());
 
-  this->UpdateScrollWidget();
-
   typename ViewerListType::Iterator linkedIt = m_LinkedViewerList->Begin();
   typename OffsetListType::iterator offIt = m_LinkedViewerOffsetList.begin();
   
@@ -756,8 +692,6 @@ template <class TPixel>
   RegionType newRegion = ComputeConstrainedRegion(region,m_FullWidget->GetViewedRegion());
   m_ZoomWidget->SetZoomUpperLeftCorner(newRegion.GetIndex());
  
-  this->Update();
-
   typename ViewerListType::Iterator linkedIt = m_LinkedViewerList->Begin();
   typename OffsetListType::iterator offIt = m_LinkedViewerOffsetList.begin();
   

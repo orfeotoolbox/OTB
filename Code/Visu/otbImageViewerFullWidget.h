@@ -66,37 +66,305 @@ class ITK_EXPORT ImageViewerFullWidget
   typedef ImageWidgetPointForm           PointType;
   typedef Polygon<>       PolygonType;
   typedef PolygonType::ContinuousIndexType ContinuousIndexType;
-
+  typedef PolygonType::Superclass::Superclass::VertexListPointer VertexListPointerType;
+  typedef PolygonType::Superclass::Superclass::VertexListType VertexListType;
+  
   itkSetMacro(Parent,ParentPointerType);
   itkGetMacro(Parent,ParentPointerType);
   /** Handle method */
-  virtual int  handle(int event)
-    {
-      switch(event)
+  
+  
+  /** Default mode handling, without ROI selection */
+  virtual int DefaultHandle(int event)
+  {
+    switch(event)
 	{
 	case FL_PUSH:
+        // in case of mouse click, change the point of view
+          int x = Fl::event_x();
+	  int y = Fl::event_y();
+	  IndexType clickedIndex;
+	  clickedIndex[0]=x;
+	  clickedIndex[1]=y;
+          clickedIndex=this->WindowToImageCoordinates(clickedIndex);
+          m_Parent->ChangeZoomViewedRegion(clickedIndex);
+          m_Parent->Update();
+          return 1;
+       case FL_KEYDOWN:
 	  {
-	    int x = Fl::event_x();
-	    int y = Fl::event_y();
-	    IndexType clickedIndex;
-	    clickedIndex[0]=x;
-	    clickedIndex[1]=y;
-	    if (!m_ShortCutRectangle)
+	    IndexType newIndex = m_Parent->GetZoomWidget()->GetViewedRegion().GetIndex();
+	    SizeType newSize  = m_Parent->GetZoomWidget()->GetViewedRegion().GetSize();
+            bool moved = false;
+	    switch(Fl::event_key())
 	      {
-		clickedIndex=this->WindowToImageCoordinates(clickedIndex);
-		m_Parent->ChangeZoomViewedRegion(clickedIndex);
-	      }
-	    if (!m_Drag)
-	      {
-		m_LastIndex=this->WindowToImageCoordinates(clickedIndex);
-		if (m_ShortCutRectangle)
+                case FL_Down:
 		  {
-		    m_Drag = false;
-		  }
-	      }
-	    return 1;
-	  }
-	case FL_ENTER:
+                    newIndex[1] += static_cast<long int>(newSize[1]/2)+newSize[1]/2;
+		    newIndex[0] += newSize[0]/2;
+                    moved = true;
+                    break;
+                  }
+                case FL_Up:
+		  {
+                    newIndex[1] += -static_cast<long int>(newSize[1]/2)
+                                +newSize[1]/2;
+		    newIndex[0] += newSize[0]/2;
+                    moved = true;
+                    break;
+                  }
+                case FL_Left:
+		{
+                    newIndex[0] += -static_cast<long int>(newSize[0]/2)
+                                + newSize[0]/2;
+		    newIndex[1] += newSize[1]/2;
+                    moved = true;
+                    break;
+                }
+                case FL_Right:
+		{
+                    newIndex[0] += static_cast<long int>(newSize[0]/2)
+                                + newSize[0]/2;
+		    newIndex[1] += newSize[1]/2;
+                    moved = true;
+                    break;
+                }
+                // if the view center was moved:
+                if(moved)
+                {
+                  m_Parent->ChangeFullViewedRegion(newIndex);
+		  m_Parent->ChangeZoomViewedRegion(newIndex);
+                  m_Parent->Update();
+                }
+              }
+                return 1;   
+            }
+          }
+    return 0;
+  }
+  
+  
+  virtual int RectangleROISelectionHandle(int event)
+  {
+    switch(event)
+    {
+      case FL_PUSH:
+      {
+        int x = Fl::event_x();
+	int y = Fl::event_y();
+	IndexType clickedIndex;
+	clickedIndex[0]=x;
+	clickedIndex[1]=y;
+        if (!m_Drag)
+	{
+	  m_LastIndex=this->WindowToImageCoordinates(clickedIndex);
+          m_Drag = false;
+        }
+        return 1;
+      }
+      case FL_DRAG:
+      {
+        int x = Fl::event_x();
+	int y = Fl::event_y();
+	IndexType index;
+	index[0]=x;
+	index[1]=y;
+	IndexType clickedIndex=this->WindowToImageCoordinates(index);
+        typename BoxType::Pointer box =  BoxType::New();
+	 box->SetColor(m_ClassColor);
+	 IndexType boxIndex;
+	 SizeType boxSize;
+         // compute the size of the select box
+	 if(clickedIndex[0]>m_LastIndex[0])
+	   {
+	     boxIndex[0]=m_LastIndex[0];
+	     boxSize[0]=clickedIndex[0]-m_LastIndex[0];
+	   }
+	 else
+	   {
+	     boxIndex[0]=clickedIndex[0];
+	     boxSize[0]=m_LastIndex[0]-clickedIndex[0];
+	   }
+	 if(clickedIndex[1]>m_LastIndex[1])
+	   {
+	     boxIndex[1]=m_LastIndex[1];
+	     boxSize[1]=clickedIndex[1]-m_LastIndex[1];
+	   }
+	 else
+	   {
+	     boxIndex[1]=clickedIndex[1];
+	     boxSize[1]=m_LastIndex[1]-clickedIndex[1];
+	   }
+	 box->SetIndex(boxIndex);
+	 box->SetSize(boxSize);
+	 if(m_Drag)
+	   {
+	     m_Parent->GetInterfaceBoxesList()->PopBack(); 
+	   }
+	 m_Parent->GetInterfaceBoxesList()->PushBack(box);
+	 m_Parent->Update();
+	 m_Drag=true;
+	 return 1; 
+	 }
+         
+         case FL_RELEASE:
+	  { 
+	   int x = Fl::event_x();
+	   int y = Fl::event_y();
+	   IndexType clickedIndex;
+	   clickedIndex[0]=x;
+	   clickedIndex[1]=y;
+	   clickedIndex=this->WindowToImageCoordinates(clickedIndex);
+	   if(m_Drag)
+	   {
+	     typename RectangleType::Pointer rectangle = RectangleType::New();
+	     IndexType boxIndex;
+	     SizeType boxSize;
+	    // compute the size of the select box
+	     if(clickedIndex[0]>m_LastIndex[0])
+	     {
+	       boxIndex[0]=m_LastIndex[0];
+	       boxSize[0]=clickedIndex[0]-m_LastIndex[0];
+             }
+	     else
+             {
+               boxIndex[0]=clickedIndex[0];
+               boxSize[0]=m_LastIndex[0]-clickedIndex[0];
+             }
+             if(clickedIndex[1]>m_LastIndex[1])
+             {
+               boxIndex[1]=m_LastIndex[1];
+               boxSize[1]=clickedIndex[1]-m_LastIndex[1];
+             }
+             else
+             {
+               boxIndex[1]=clickedIndex[1];
+               boxSize[1]=m_LastIndex[1]-clickedIndex[1];
+             }
+           rectangle->SetIndex(boxIndex);
+           rectangle->SetSize(boxSize);
+           rectangle->SetColor(m_ClassColor);          
+           m_Parent->GetInterfaceBoxesList()->PopBack();          
+           typename PolygonType::Pointer polyg = PolygonType::New();
+           ContinuousIndexType newVertex;
+           // Up Left corner
+           newVertex[0] = boxIndex[0];
+           newVertex[1] = boxIndex[1];
+           polyg->AddVertex(newVertex);
+           // Up Right corner
+           newVertex[0] += boxSize[0];
+           polyg->AddVertex(newVertex);
+           // Down Right corner
+           newVertex[1] += boxSize[1];
+           polyg->AddVertex(newVertex);
+           // Down Left corner
+           newVertex[0]= boxIndex[0];
+           polyg->AddVertex(newVertex);                  
+           m_Parent->GetPolygonROIList()->PushBack(polyg);
+           m_PolygonInProgress = false;
+         }
+      m_Parent->Update();
+      m_Drag=false;
+      return 1;  
+      }
+    } 
+  return 0;
+  }
+  
+  virtual int PolygonROISelectionHandle(int event)
+  {
+    switch(event)
+      {
+        case FL_PUSH:
+        {
+          int x = Fl::event_x();
+	  int y = Fl::event_y();
+	  IndexType clickedIndex;
+	  clickedIndex[0]=x;
+	  clickedIndex[1]=y;
+          clickedIndex=this->WindowToImageCoordinates(clickedIndex);
+          // If left mouse click
+          if(Fl::event_button()==FL_LEFT_MOUSE)
+          {
+            // If not already editing a polygon, start a new one.
+            if(!m_PolygonInProgress)
+            {
+              m_Parent->GetPolygonROIList()->PushBack(PolygonType::New());
+              m_PolygonInProgress = true;
+            }
+            m_Parent->GetPolygonROIList()->Back()->AddVertex(clickedIndex); 
+            m_Parent->Update();
+          }
+          else if(Fl::event_button()==FL_RIGHT_MOUSE)
+          {
+            m_PolygonInProgress = false;
+          }
+          return 1;
+        }
+        case FL_KEYDOWN:
+        {
+          // erase the last vertex of the current polygon
+          if(Fl::event_key()==FL_Page_Down)
+          {
+            unsigned int sizeOfThePolygon = m_Parent->GetPolygonROIList()->Back()->GetVertexList()->Size();
+            if(m_PolygonInProgress && sizeOfThePolygon>0)
+            {
+            // itk::PolylineParametricPath does not provide a RemoveVertex() method, and the access to the vertex list is const, so we have no other choice to remove a vertex.
+              VertexListPointerType list = const_cast<VertexListType *>(m_Parent->GetPolygonROIList()->Back()->GetVertexList());
+              list->VectorType::pop_back();
+              m_Parent->Update();
+            }
+          }
+        return 1;        
+        }
+    return 0;
+  }
+}
+  
+  virtual int handle(int event)
+  {
+  // Handle the mode selection to call the specific handle methods */
+  if(event == FL_KEYDOWN)
+    {
+      // Erase the last ROI
+      if(Fl::event_key()==FL_Delete && m_Parent->GetPolygonROIList()->Size() > 0)
+      {
+        m_Parent->GetPolygonROIList()->Erase(m_Parent->GetPolygonROIList()->Size()-1);
+        m_Parent->Update();
+      }
+      else if(Fl::event_key()==FL_Control_L)
+      {
+        m_ShortCutRectangle = !m_ShortCutRectangle;
+        m_ShortCutPolygon = false;
+        
+        if(m_ShortCutRectangle)
+        {
+          std::cout<<"Rectangle ROI selection mode ON"<<std::endl;
+        }
+        else
+        {
+          std::cout<<"Rectangle ROI selection mode OFF"<<std::endl;
+        }
+      }
+      else if(Fl::event_key()==FL_Shift_L)
+      {
+        m_ShortCutPolygon = !m_ShortCutPolygon;
+        m_ShortCutRectangle = false;
+        
+        if(m_ShortCutPolygon)
+        {
+          std::cout<<"Polygon ROI selection mode ON"<<std::endl;
+        }
+        else
+        {
+          m_PolygonInProgress = false;
+          std::cout<<"Polygon ROI selection mode OFF"<<std::endl;
+        }
+      }
+    }  
+    // handle the pixel value reporting
+    switch(event)
+    {
+      case FL_ENTER:
 	  {
 	    m_MouseIn = true;
 	    return 1;
@@ -109,8 +377,7 @@ class ITK_EXPORT ImageViewerFullWidget
 	}
 	case FL_MOVE:
 	  {
-	     if (!m_ShortCutRectangle)
-	      {
+            // If we move inside the point of view, then report the pixel location and value.
 	    m_MouseIn=true;
 	    if(m_MouseMoveCount%m_ValueUpdateFrequency==0)
 	      {
@@ -119,229 +386,50 @@ class ITK_EXPORT ImageViewerFullWidget
 		IndexType newIndex = this->WindowToImageCoordinates(m_MousePos);
 		if(this->GetInput()->GetBufferedRegion().IsInside(newIndex))
 		  {
-		   
 		    typename ImageType::PixelType newPixel = this->GetInput()->GetPixel(newIndex);
 		    m_Parent->PrintPixLocVal(newIndex,newPixel);
 		    m_MouseMoveCount=0;
 		  }
 	      }
 	    m_MouseMoveCount++;
-	      }
-	    return 1;
-	  }
-	case FL_DRAG:
-	  { 
-	    if (m_ShortCutRectangle)
-	      {	
-		int x = Fl::event_x();
-		int y = Fl::event_y();
-		IndexType index;
-		index[0]=x;
-		index[1]=y;
-		IndexType clickedIndex=this->WindowToImageCoordinates(index);
-		//otbMsgDebugMacro(<<"Mouse dragged: "<<clickedIndex);
-		
-		 typename BoxType::Pointer box =  BoxType::New();
-		 box->SetColor(m_ClassColor);
-		 IndexType boxIndex;
-		 SizeType boxSize;
-		 // compute the size of the select box
-		 if(clickedIndex[0]>m_LastIndex[0])
-		   {
-		     boxIndex[0]=m_LastIndex[0];
-		     boxSize[0]=clickedIndex[0]-m_LastIndex[0];
-		   }
-		 else
-		   {
-		     boxIndex[0]=clickedIndex[0];
-		     boxSize[0]=m_LastIndex[0]-clickedIndex[0];
-		   }
-		 if(clickedIndex[1]>m_LastIndex[1])
-		   {
-		     boxIndex[1]=m_LastIndex[1];
-		     boxSize[1]=clickedIndex[1]-m_LastIndex[1];
-		   }
-		 else
-		   {
-		     boxIndex[1]=clickedIndex[1];
-		     boxSize[1]=m_LastIndex[1]-clickedIndex[1];
-		   }
-		 box->SetIndex(boxIndex);
-		 box->SetSize(boxSize);
-		 if(m_Drag)
-		   {
-		     this->GetFormList()->PopBack(); 
-		   }
-		 m_Parent->GetInterfaceBoxesList()->PushBack(box);
-		 m_Parent->Update();
-		 m_Drag=true;
-	      }
-	    return 1; 
-	  }
-	case FL_RELEASE:
-	  { 
-	     if (m_ShortCutRectangle)
-	      {	 
-		int x = Fl::event_x();
-		int y = Fl::event_y();
-		IndexType clickedIndex;
-		clickedIndex[0]=x;
-		clickedIndex[1]=y;
-		clickedIndex=this->WindowToImageCoordinates(clickedIndex);
-		if(m_Drag)
-		  {
-		    typename RectangleType::Pointer rectangle = RectangleType::New();
-		    IndexType boxIndex;
-		    SizeType boxSize;
-		    // compute the size of the select box
-		    if(clickedIndex[0]>m_LastIndex[0])
-		      {
-			boxIndex[0]=m_LastIndex[0];
-			boxSize[0]=clickedIndex[0]-m_LastIndex[0];
-		      }
-		    else
-		      {
-			boxIndex[0]=clickedIndex[0];
-			boxSize[0]=m_LastIndex[0]-clickedIndex[0];
-		      }
-		    if(clickedIndex[1]>m_LastIndex[1])
-		      {
-			boxIndex[1]=m_LastIndex[1];
-			boxSize[1]=clickedIndex[1]-m_LastIndex[1];
-		      }
-		    else
-		      {
-			boxIndex[1]=clickedIndex[1];
-			boxSize[1]=m_LastIndex[1]-clickedIndex[1];
-		      }
-		    rectangle->SetIndex(boxIndex);
-		    rectangle->SetSize(boxSize);
-		    rectangle->SetColor(m_ClassColor);
-		    
-		    m_Parent->GetInterfaceBoxesList()->PopBack();
-		    //otbMsgDebugMacro(<<"FL_RELEASE: PushBack");
-		    //this->GetFormList()->PushBack(rectangle);
-		    
-		    typename PolygonType::Pointer polyg = PolygonType::New();
-		    ContinuousIndexType newVertex;
-		    // Up Left corner
-		    newVertex[0] = boxIndex[0];
-		    newVertex[1] = boxIndex[1];
-		    polyg->AddVertex(newVertex);
-		    // Up Right corner
-		    newVertex[0] += boxSize[0];
-		    polyg->AddVertex(newVertex);
-		    // Down Right corner
-		    newVertex[1] += boxSize[1];
-		    polyg->AddVertex(newVertex);
-		    // Down Left corner
-		    newVertex[0]= boxIndex[0];
-		    polyg->AddVertex(newVertex);
-			    
-		    m_Parent->GetPolygonROIList()->PushBack(polyg);
-		  }
-		else 
- 		  { 
- 		    typename PointType::Pointer point = PointType::New(); 
- 		    point->SetColor(m_ClassColor); 
- 		    point->SetIndex(clickedIndex);
- 		    //otbMsgDebugMacro(<<"FL_RELEASE: PushBack"); 
- 		    this->GetFormList()->PushBack(point); 
- 		  } 
-		m_Parent->Update();
-		m_Drag=false;
-	      }
-	     return 1;  
-	  }
-	case FL_FOCUS:
-	  {
-	  return 1;
-	  }
-	case FL_UNFOCUS:
+            return 1;
+	 }
+       case FL_FOCUS:
+	 {
+	   return 1;
+	 }
+       case FL_UNFOCUS:
 	  {
 	    return 1;
 	  }
-	case FL_KEYDOWN:
-	  {
-	    //IndexType newIndex = this->GetViewedRegion().GetIndex();
-	    IndexType newIndex;
-	    newIndex[0] = m_Parent->GetZoomWidget()->GetViewedRegion().GetIndex()[0];
-	    newIndex[1] = m_Parent->GetZoomWidget()->GetViewedRegion().GetIndex()[1];
-	    SizeType newSize  = m_Parent->GetZoomWidget()->GetViewedRegion().GetSize();
-	    bool pushOther = false;
-	    //newIndex[0] = newIndex[0] + newSize[0]/2;
-	    //newIndex[1] = newIndex[1] + newSize[1]/2;
-	    switch(Fl::event_key())
-	      {
-	      case FL_Down:
-		{
-		  if (!m_ShortCutRectangle)
-		    {
-		      newIndex[1] = newIndex[1]+static_cast<long int>(newSize[1]/2)+ newSize[1]/2;
-		      newIndex[0] += newSize[0]/2;
-		      pushOther = true;
-		    }	
-		  break;
-		}
-	      case FL_Up:
-		{
-		  if (!m_ShortCutRectangle)
-		    {
-		      newIndex[1] = newIndex[1]-static_cast<long int>(newSize[1]/2)+ newSize[1]/2;
-		      newIndex[0] += newSize[0]/2;
-	      pushOther = true;
-		    }
-		  break;
-		}
-	      case FL_Left:
-		{
-		  if (!m_ShortCutRectangle)
-		    {
-		      newIndex[0] = newIndex[0]-static_cast<long int>(newSize[0]/2)+ newSize[0]/2;
-		      newIndex[1] += newSize[1]/2;
-	      pushOther = true;
-		    }	
-		  break;
-		}
-	      case FL_Right:
-		{
-		  if (!m_ShortCutRectangle)
-		    {
-		      newIndex[0] = newIndex[0]+static_cast<long int>(newSize[0]/2)+ newSize[0]/2;
-		      newIndex[1] += newSize[1]/2;
-	      pushOther = true;
-		    }
-		  break;
-		}
-		// RECTANGE SELECTION //////////////////////////////////////////////////
-	      case FL_Control_L:
-		{
-		  m_ShortCutRectangle = !m_ShortCutRectangle;
-               
-		  break;
-		}
-	      } 
-	    if (!m_ShortCutRectangle && pushOther == true)
-	      {
-		m_Parent->ChangeFullViewedRegion(newIndex);
-		m_Parent->ChangeZoomViewedRegion(newIndex);
-	      }	    
-	    return 1;
-	  }
-	case FL_HIDE:
+       case FL_HIDE:
 	  {
 	    m_Parent->Hide();
 	    return 0;
-	  }
-	}
-      return 0;
-    }   
+	  } 
+     }
+    // If the current mode is rectangle selection, call the right handle method
+    if(m_ShortCutRectangle)
+    {
+      return RectangleROISelectionHandle(event);
+    }
+    // If the current mode is polygon selection, call the right handle method
+    else if(m_ShortCutPolygon)
+    {
+      return PolygonROISelectionHandle(event);
+    }
+    // else call the default handle method
+    else
+    {
+      return DefaultHandle(event);
+    }
+  }
   
   virtual void resize(int x,int y, int w, int h)
    {
      Superclass::resize(x,y,w,h);
       if(m_Parent->GetBuilt()) 
-	m_Parent->UpdateScrollWidget();
+	m_Parent->Update();
     }
   
   itkSetMacro(ClassColor,ColorType);
@@ -364,7 +452,9 @@ class ITK_EXPORT ImageViewerFullWidget
       m_ClassColor[3]=0.5;
       m_LastIndex.Fill(0);
       m_ShortCutRectangle = false;
+      m_ShortCutPolygon = false;
       m_Drag = false;
+      m_PolygonInProgress = false;
     };
   /**
    * Destructor.
@@ -383,7 +473,9 @@ class ITK_EXPORT ImageViewerFullWidget
   ColorType m_ClassColor;
   IndexType m_LastIndex;
   bool m_ShortCutRectangle;
+  bool m_ShortCutPolygon;
   bool m_Drag;
+  bool m_PolygonInProgress;
 };
 
 } // end namespace otb

@@ -26,6 +26,7 @@ PURPOSE.  See the above copyright notices for more information.
 #include "otbStreamingShrinkImageFilter.h"
 #include "otbImageWidgetBoxForm.h"
 #include "otbImageWidgetPolygonForm.h"
+#include "otbImageWidgetCircleForm.h"
 #include "itkListSample.h"
 #include "otbObjectList.h"
 #include "itkCovarianceCalculator.h"
@@ -131,11 +132,15 @@ class ITK_EXPORT ImageViewer
 
   /// type for the list of the polygon ROI
   typedef otb::Polygon<> PolygonType;
+  typedef typename PolygonType::VertexListIteratorType PolygonIteratorType;
   typedef otb::ObjectList<PolygonType> PolygonListType;
   typedef typename PolygonListType::Pointer PolygonListPointerType;
   typedef typename PolygonListType::Iterator PolygonListIteratorType;
   typedef ImageWidgetPolygonForm<> ImageWidgetPolygonFormType;
   typedef typename ImageWidgetPolygonFormType::Pointer ImageWidgetPolygonFormPointerType;
+  typedef typename ImageWidgetPolygonFormType::ColorType ColorType;
+  typedef ImageWidgetCircleForm ImageWidgetCircleFormType;
+  typedef typename ImageWidgetCircleFormType::Pointer ImageWidgetCircleFormPointerType;
 
   /// Accessors
   itkGetMacro(Built,bool);
@@ -160,6 +165,10 @@ class ITK_EXPORT ImageViewer
   itkGetConstReferenceMacro(MaxComponentValue,VectorPixelType);
   itkGetConstReferenceMacro(ZoomWidget,ZoomWidgetPointerType);
   itkGetObjectMacro(InterfaceBoxesList,FormListType);
+  itkSetMacro(InterfaceBoxesColor,ColorType);
+  itkGetMacro(InterfaceBoxesColor,ColorType);
+  itkSetMacro(NextROIColor,ColorType);
+  itkGetMacro(NextROIColor,ColorType);
 
   /** Set the input image (VectorImage version) */
   virtual void SetImage(ImageType * img);
@@ -334,8 +343,6 @@ protected:
   ShrinkFilterPointerType m_Shrink;
   /// The shrink factor 
   unsigned int m_ShrinkFactor;
-  /// Color of the boxes
-  ColorType m_Color;
   /// true if the Gui has been built.
   bool m_Built;
 
@@ -372,6 +379,12 @@ protected:
 
   /// Interface boxes
   FormListPointerType m_InterfaceBoxesList;
+  
+  /// Next ROI color 
+  ColorType m_NextROIColor;
+    
+  /// Interfaces box color
+  ColorType m_InterfaceBoxesColor;
 
 };
 

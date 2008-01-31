@@ -82,6 +82,7 @@ class ITK_EXPORT ImageViewerScrollWidget
 	    clickedIndex[1]=clickedIndex[1]*m_Parent->GetShrinkFactor();
 	    m_Parent->ChangeFullViewedRegion(clickedIndex);
 	    m_Parent->ChangeZoomViewedRegion(clickedIndex);
+            m_Parent->Update();
 	    return 1;
 	  }
 	case FL_ENTER:

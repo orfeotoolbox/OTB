@@ -54,12 +54,15 @@ namespace otb
     typename BSplineInterpolatorType::Pointer bsplineInterpolator = BSplineInterpolatorType::New();
     bsplineInterpolator->SetSplineOrder(3);
 
-
+    typename ProlateInterpolatorType::Pointer prolateInterpolator = ProlateInterpolatorType::New();
+    prolateInterpolator->SetRadius(8);
+    typename OtbWindowedSincInterpolatorType::Pointer otbwinsinc = OtbWindowedSincInterpolatorType::New();
+    otbwinsinc->SetRadius(8);
     // m_ZoomInInterpolator = WindowedSincInterpolatorType::New();
-    m_ZoomInInterpolator=bsplineInterpolator;
+    m_ZoomInInterpolator=prolateInterpolator;
     // m_ZoomInInterpolator=bsplineInterpolator;
 
-    m_ZoomOutInterpolator = bsplineInterpolator;
+    m_ZoomOutInterpolator = prolateInterpolator;
    
     IndexType index;
     SizeType size;

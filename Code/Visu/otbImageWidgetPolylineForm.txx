@@ -15,31 +15,30 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef _otbImageWidgetPolygonForm_txx
-#define _otbImageWidgetPolygonForm_txx
+#ifndef _otbImageWidgetPolylineForm_txx
+#define _otbImageWidgetPolylineForm_txx
 
-#include "otbImageWidgetPolygonForm.h"
+#include "otbImageWidgetPolylineForm.h"
 
 
 namespace otb
 {
 template<class TValue>
-ImageWidgetPolygonForm<TValue>
-::ImageWidgetPolygonForm()
+ImageWidgetPolylineForm<TValue>
+::ImageWidgetPolylineForm()
 {
-  m_Polygon = PolygonType::New();
-  m_Solid = true;
+  m_Polyline = PolylineType::New();
   m_InternalValueToAlphaChannel = false;
 }
 template<class TValue>
-ImageWidgetPolygonForm<TValue>
-::~ImageWidgetPolygonForm()
+ImageWidgetPolylineForm<TValue>
+::~ImageWidgetPolylineForm()
 {
 }
 
 template<class TValue>
 void
-ImageWidgetPolygonForm<TValue>
+ImageWidgetPolylineForm<TValue>
 ::Draw(double openGlZoom, unsigned int originx, unsigned int originy, unsigned int windowh,unsigned ss_rate)
 {
   if(this->GetVisible())
@@ -48,24 +47,17 @@ ImageWidgetPolygonForm<TValue>
       glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
       if(m_InternalValueToAlphaChannel)
       {
-        glColor4f(m_Color[0],m_Color[1],m_Color[2],m_Polygon->GetValue());
+        glColor4f(m_Color[0],m_Color[1],m_Color[2],m_Polyline->GetValue());
       }
       else
       {
         glColor4f(m_Color[0],m_Color[1],m_Color[2],m_Color[3]);
       }
-      if(m_Solid)
-      {
-        glBegin(GL_POLYGON);
-      }
-      else
-      {
-        glBegin(GL_LINE_LOOP);
-      }
+      glBegin(GL_LINE_STRIP);
 
-      VertexListIteratorType it =  this->GetPolygon()->GetVertexList()->Begin();
+      VertexListIteratorType it =  this->GetPolyline()->GetVertexList()->Begin();
      
-      while(it != this->GetPolygon()->GetVertexList()->End())
+      while(it != this->GetPolyline()->GetVertexList()->End())
 	{  
 	  double x1 = it.Value()[0];
 	  double y1 = it.Value()[1];

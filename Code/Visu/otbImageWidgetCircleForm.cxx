@@ -15,43 +15,36 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef _otbImageWidgetPolygonForm_txx
-#define _otbImageWidgetPolygonForm_txx
+#ifndef _otbImageWidgetCircleForm_cxx
+#define _otbImageWidgetCircleForm_cxx
 
-#include "otbImageWidgetPolygonForm.h"
+#include "otbImageWidgetCircleForm.h"
+#include "otbMath.h"
 
 
 namespace otb
 {
-template<class TValue>
-ImageWidgetPolygonForm<TValue>
-::ImageWidgetPolygonForm()
+ImageWidgetCircleForm
+::ImageWidgetCircleForm()
 {
-  m_Polygon = PolygonType::New();
   m_Solid = true;
-  m_InternalValueToAlphaChannel = false;
-}
-template<class TValue>
-ImageWidgetPolygonForm<TValue>
-::~ImageWidgetPolygonForm()
-{
+  m_Center.Fill(0);
+  m_Radius = 1;
+
 }
 
-template<class TValue>
+ImageWidgetCircleForm
+::~ImageWidgetCircleForm()
+{
+}
 void
-ImageWidgetPolygonForm<TValue>
+ImageWidgetCircleForm
 ::Draw(double openGlZoom, unsigned int originx, unsigned int originy, unsigned int windowh,unsigned ss_rate)
 {
   if(this->GetVisible())
     {
       glEnable(GL_BLEND);
       glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-      if(m_InternalValueToAlphaChannel)
-      {
-        glColor4f(m_Color[0],m_Color[1],m_Color[2],m_Polygon->GetValue());
-      }
-      else
-      {
         glColor4f(m_Color[0],m_Color[1],m_Color[2],m_Color[3]);
       }
       if(m_Solid)
@@ -62,22 +55,17 @@ ImageWidgetPolygonForm<TValue>
       {
         glBegin(GL_LINE_LOOP);
       }
-
-      VertexListIteratorType it =  this->GetPolygon()->GetVertexList()->Begin();
-     
-      while(it != this->GetPolygon()->GetVertexList()->End())
-	{  
-	  double x1 = it.Value()[0];
-	  double y1 = it.Value()[1];
-
-	  x1 = static_cast<int>((x1-originx)*openGlZoom*(1/static_cast<double>(ss_rate)));
-	  y1 = static_cast<int>(windowh+(originy-y1)*openGlZoom*(1/static_cast<double>(ss_rate)));
-          glVertex2f(x1,y1);
-	  ++it;
-	}            
+        for(double angle = 0;angle <= 2*M_PI;angle+=0.01/static_cast<double>(m_Radius))
+        {
+          double xi = m_Center[0]+static_cast<double>(m_Radius)*vcl_sin(angle);
+          double yi = m_Center[1]+static_cast<double>(m_Radius)*vcl_cos(angle);
+          
+          double xd = (xi-originx)*openGlZoom*(1/static_cast<double>(ss_rate));
+          double yd = windowh+(originy-yi)*openGlZoom*(1/static_cast<double>(ss_rate));
+          glVertex2d(xd,yd);
+        }            
       glEnd();
       glDisable(GL_BLEND);
-    }
 }
  
 } // end namespace otb

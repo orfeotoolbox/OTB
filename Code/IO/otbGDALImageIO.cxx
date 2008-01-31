@@ -478,23 +478,23 @@ void GDALImageIO::InternalReadImageInformation()
 /* -------------------------------------------------------------------- */    
        
     // Default Spacing
-    m_Spacing[0]=1;
-    m_Spacing[1]=1;
+     m_Spacing[0]=1;
+     m_Spacing[1]=1;
     if(m_NumberOfDimensions==3)
       m_Spacing[2]=1;
       
     char** papszMetadata;
     papszMetadata =  m_poDataset->GetMetadata( NULL );
         
-    const char *pszValue;
+//     const char *pszValue;
     
-    pszValue = CSLFetchNameValue( papszMetadata, "CEOS_LINE_SPACING_METERS" );
-    if ( pszValue != NULL )
-       m_Spacing[0] = atof( pszValue );
+//     pszValue = CSLFetchNameValue( papszMetadata, "CEOS_LINE_SPACING_METERS" );
+//     if ( pszValue != NULL )
+//        m_Spacing[0] = atof( pszValue );
     
-    pszValue = CSLFetchNameValue( papszMetadata, "CEOS_PIXEL_SPACING_METERS" );
-    if ( pszValue != NULL )
-       m_Spacing[1] = atof( pszValue );
+//     pszValue = CSLFetchNameValue( papszMetadata, "CEOS_PIXEL_SPACING_METERS" );
+//     if ( pszValue != NULL )
+//        m_Spacing[1] = atof( pszValue );
  
     
     
@@ -560,10 +560,10 @@ void GDALImageIO::InternalReadImageInformation()
         itk::EncapsulateMetaData<unsigned int>(dico, MetaDataKey::m_GCPCountKey, 
             	static_cast<unsigned int>( m_poDataset->GetGCPCount() ) );
             	
-        double minGCPRow(m_width);
-        double minGCPCol(m_height);
-        double minGCPX;
-        double minGCPY;
+//         double minGCPRow(m_width);
+//         double minGCPCol(m_height);
+//         double minGCPX;
+//         double minGCPY;
             	        
         
         for( int cpt = 0; cpt < m_poDataset->GetGCPCount(); cpt++ )
@@ -575,14 +575,14 @@ void GDALImageIO::InternalReadImageInformation()
             OTB_GCP	pOtbGCP(psGCP);
                    
             // Origin           
-            if ( ( psGCP->dfGCPLine < minGCPRow ) &&
-                 ( psGCP->dfGCPPixel < minGCPCol ) )
-               { 
-               minGCPRow = psGCP->dfGCPLine;
-               minGCPCol = psGCP->dfGCPPixel;	  
-               minGCPX = psGCP->dfGCPX;
-               minGCPY = psGCP->dfGCPY;
-               }
+//             if ( ( psGCP->dfGCPLine < minGCPRow ) &&
+//                  ( psGCP->dfGCPPixel < minGCPCol ) )
+//                { 
+//                minGCPRow = psGCP->dfGCPLine;
+//                minGCPCol = psGCP->dfGCPPixel;	  
+//                minGCPX = psGCP->dfGCPX;
+//                minGCPY = psGCP->dfGCPY;
+//                }
 
             // Complete the key with the GCP number : GCP_i
             ::itk::OStringStream lStream;
@@ -593,8 +593,8 @@ void GDALImageIO::InternalReadImageInformation()
             
         }
         
-	m_Origin[0] = minGCPX;
-	m_Origin[1] = minGCPY;
+// 	m_Origin[0] = minGCPX;
+// 	m_Origin[1] = minGCPY;
         
     }
 
@@ -605,12 +605,18 @@ void GDALImageIO::InternalReadImageInformation()
     double adfGeoTransform[6];
     VectorType VadfGeoTransform;
       
-    if( m_poDataset->GetGeoTransform( adfGeoTransform ) == CE_None )
-    {
+     if( m_poDataset->GetGeoTransform( adfGeoTransform ) == CE_None )
+     {
     	for(int cpt = 0 ; cpt < 6 ; cpt++ ) VadfGeoTransform.push_back(adfGeoTransform[cpt]);
     	
         itk::EncapsulateMetaData<VectorType>(dico, MetaDataKey::m_GeoTransformKey, VadfGeoTransform);
-    }
+
+	/// retrieve orgin and spacing from the geo transform
+	m_Origin[0]=VadfGeoTransform[0];
+	m_Origin[1]=VadfGeoTransform[3];
+	m_Spacing[0]=VadfGeoTransform[1];
+	m_Spacing[1]=VadfGeoTransform[5];
+     }
 
 /* -------------------------------------------------------------------- */
 /*      Report metadata.                                                */
@@ -975,13 +981,14 @@ void GDALImageIO::InternalWriteImageInformation()
 	char** papszMetadata;
 	papszMetadata =  m_poDataset->GetMetadata( NULL );
  	itk::OStringStream oss;
-	oss.str("");
-	oss<<m_Spacing[0];
-	CSLSetNameValue( papszMetadata, "CEOS_LINE_SPACING_METERS",oss.str().c_str());
-	oss.str("");
-	oss<<m_Spacing[1];
-	CSLSetNameValue( papszMetadata, "CEOS_PIXEL_SPACING_METERS",oss.str().c_str());
-	oss.str("");            	 
+// 	oss.str("");
+// 	oss<<m_Spacing[0];
+// 	CSLSetNameValue( papszMetadata, "CEOS_LINE_SPACING_METERS",oss.str().c_str());
+// 	oss.str("");
+// 	oss<<m_Spacing[1];
+// 	CSLSetNameValue( papszMetadata, "CEOS_PIXEL_SPACING_METERS",oss.str().c_str());
+// 	oss.str("");    
+	
 
 /* -------------------------------------------------------------------- */    
 /* Set the projection coordinate system of the image : ProjectionRef	*/
@@ -1000,7 +1007,7 @@ void GDALImageIO::InternalWriteImageInformation()
 	
 	GDAL_GCP * gdalGcps = new GDAL_GCP[gcpCount+1];
 
-	bool gcpHasOrigin = false;
+// 	bool gcpHasOrigin = false;
 
 	for(unsigned int gcpIndex = 0; gcpIndex < gcpCount;++gcpIndex)
 	  {
@@ -1011,7 +1018,7 @@ void GDALImageIO::InternalWriteImageInformation()
 	    gdalGcps[gcpIndex].dfGCPX = ImageBase::GetGCPX(dico,gcpIndex);
 	    gdalGcps[gcpIndex].dfGCPY = ImageBase::GetGCPY(dico,gcpIndex);
 	    gdalGcps[gcpIndex].dfGCPZ = ImageBase::GetGCPZ(dico,gcpIndex);
-	    gcpHasOrigin = ImageBase::GetGCPCol(dico,gcpIndex)==0 && ImageBase::GetGCPRow(dico,gcpIndex)==0;
+	    // gcpHasOrigin = ImageBase::GetGCPCol(dico,gcpIndex)==0 && ImageBase::GetGCPRow(dico,gcpIndex)==0;
 	  }
 	gdalGcps[gcpCount].pszId =   const_cast<char*>(std::string("Origin").c_str());
 	gdalGcps[gcpCount].pszInfo = const_cast<char*>(std::string("Origin gcp added by OTB").c_str());
@@ -1021,15 +1028,15 @@ void GDALImageIO::InternalWriteImageInformation()
 	gdalGcps[gcpCount].dfGCPY = m_Origin[1];
 	gdalGcps[gcpCount].dfGCPZ = 0;
 
-	if(gcpHasOrigin)
-	  {
+	// if(gcpHasOrigin)
+// 	  {
 	    m_poDataset->SetGCPs(gcpCount,gdalGcps,ImageBase::GetGCPProjection(dico).c_str());
-	  }
-	else
-	  {
-	    otbMsgDebugMacro(<<"GCPs do not contain origin.");
-	    m_poDataset->SetGCPs(gcpCount+1,gdalGcps,ImageBase::GetGCPProjection(dico).c_str());
-	  }
+// 	  }
+	// else
+// 	  {
+// 	    otbMsgDebugMacro(<<"GCPs do not contain origin.");
+// 	    m_poDataset->SetGCPs(gcpCount+1,gdalGcps,ImageBase::GetGCPProjection(dico).c_str());
+// 	  }
 	delete [] gdalGcps;
 
 /* -------------------------------------------------------------------- */    
@@ -1041,6 +1048,11 @@ void GDALImageIO::InternalWriteImageInformation()
 	  {
 	    double * geoTransform = new double[6];
 	    std::vector<double> transformVector = ImageBase::GetGeoTransform(dico);
+	    /// Reporting origin and spacing
+	    transformVector[0]=m_Origin[0];
+	    transformVector[3]=m_Origin[1];
+	    transformVector[2]=m_Spacing[0];
+	    transformVector[5]=m_Spacing[1];
 
 	    for(unsigned int i=0; i<6;++i)
 	      {
