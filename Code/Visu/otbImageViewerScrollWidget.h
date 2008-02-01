@@ -26,7 +26,7 @@ PURPOSE.  See the above copyright notices for more information.
 
 namespace otb
 {
-template <class TPixel> class ImageViewer;
+template <class TPixel, class TLabel> class ImageViewerBase;
 
 /** 
  * \brief Custom scroll image widget.
@@ -36,7 +36,7 @@ template <class TPixel> class ImageViewer;
  * \sa ImageViewer, FixedSizeFullImageWidget
  *
  */
-template <class TPixel>
+template <class TPixel, class TLabel>
 class ITK_EXPORT ImageViewerScrollWidget
   : public FixedSizeFullImageWidget<TPixel>
 {
@@ -54,10 +54,11 @@ class ITK_EXPORT ImageViewerScrollWidget
   itkTypeMacro(ImageViewerScrollWidget, FixedSizeFullImageWidget);
 
   typedef TPixel PixelType;
+  typedef TLabel LabelType;
   typedef typename Superclass::IndexType IndexType;
   typedef typename Superclass::SizeType SizeType;
 
-  typedef ImageViewer<PixelType> ParentType;
+  typedef ImageViewerBase<PixelType, LabelType> ParentType;
   typedef ParentType* ParentPointerType;
 
   typedef otb::ImageWidgetBoxForm BoxType;
@@ -107,7 +108,7 @@ class ITK_EXPORT ImageViewerScrollWidget
 		IndexType realIndex;
 		realIndex[0]=newIndex[0]*m_Parent->GetShrinkFactor();
 		realIndex[1]=newIndex[1]*m_Parent->GetShrinkFactor();
-		m_Parent->PrintPixLocVal(realIndex,this->GetInput()->GetPixel(newIndex));
+		m_Parent->ReportPixel(realIndex);
 		m_MouseMoveCount=0;
 	      }
 	  m_MouseMoveCount++;
@@ -121,6 +122,7 @@ class ITK_EXPORT ImageViewerScrollWidget
 	}	
       return 0; 
     }
+    
  protected:
   /**
    * Constructor.
@@ -137,7 +139,7 @@ class ITK_EXPORT ImageViewerScrollWidget
    */
   ~ImageViewerScrollWidget()
   {
-  		m_Parent = NULL;
+  	m_Parent = NULL;
   }
 
  private:

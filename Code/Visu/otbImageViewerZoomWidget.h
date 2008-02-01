@@ -26,7 +26,7 @@ PURPOSE.  See the above copyright notices for more information.
 
 namespace otb
 {
-template <class TPixel> class ImageViewer;
+template <class TPixel, class TLabel> class ImageViewerBase;
 /** 
  * \brief Custom scroll image widget.
  *
@@ -35,7 +35,7 @@ template <class TPixel> class ImageViewer;
  * \sa ImageViewer, ZoomableImageWidget
  *
  */
-template <class TPixel>
+template <class TPixel, class TLabel>
 class ITK_EXPORT ImageViewerZoomWidget
   : public ZoomableImageWidget<TPixel>
 {
@@ -53,10 +53,11 @@ class ITK_EXPORT ImageViewerZoomWidget
   itkTypeMacro(ImageViewerZoomWidget, FullResolutionImageWidget);
 
   typedef TPixel PixelType;
+  typedef TLabel LabelType;
   typedef typename Superclass::IndexType IndexType;
   typedef typename Superclass::SizeType SizeType;
 
-  typedef ImageViewer<PixelType> ParentType;
+  typedef ImageViewerBase<PixelType, LabelType> ParentType;
   typedef ParentType* ParentPointerType;
  
   itkSetMacro(Parent,ParentPointerType);
@@ -86,12 +87,9 @@ class ITK_EXPORT ImageViewerZoomWidget
 		m_MousePos[0]=Fl::event_x();
 		m_MousePos[1]=Fl::event_y();
 		IndexType newIndex = this->WindowToImageCoordinates(m_MousePos);
-		if(this->GetInput()->GetBufferedRegion().IsInside(newIndex))
-		  {
-		    m_Parent->PrintPixLocVal(newIndex,this->GetInput()->GetPixel(newIndex));
-		    m_MouseMoveCount=0;
-		  }
-	      }
+		m_Parent->ReportPixel(newIndex);
+		m_MouseMoveCount=0;
+	       }
 	    m_MouseMoveCount++;
 	    return 1;
 	  }
@@ -156,7 +154,6 @@ case FL_FOCUS:
 	    m_Parent->ChangeZoomViewedRegion(newIndex);
 	    return 1;
 	  }
-	  
 	} 
       return 0; 
     }
@@ -166,7 +163,7 @@ case FL_FOCUS:
      { 
        Superclass::resize(x,y,w,h); 
        if(m_Parent->GetBuilt()) 
-	 m_Parent->UpdateFullWidget(); 
+	 m_Parent->Update(); 
      } 
 
 

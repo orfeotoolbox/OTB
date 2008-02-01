@@ -26,7 +26,7 @@ PURPOSE.  See the above copyright notices for more information.
 
 namespace otb
 {
-template <class TPixel> class ImageViewer;
+template <class TPixel, class TLabel> class ImageViewerBase;
 /** 
  * \brief Custom full image widget.
  *
@@ -35,7 +35,7 @@ template <class TPixel> class ImageViewer;
  * \sa ImageViewer, FullResolutionImageWidget
  *
  */
- template <class TPixel>
+ template <class TPixel, class TLabel = double>
 class ITK_EXPORT ImageViewerFullWidget
   : public FullResolutionImageWidget<TPixel>
 {
@@ -53,21 +53,22 @@ class ITK_EXPORT ImageViewerFullWidget
   itkTypeMacro(ImageViewerFullWidget, FullResolutionImageWidget);
   
   typedef TPixel PixelType;
+  typedef TLabel LabelType;
   typedef typename Superclass::IndexType IndexType;
   typedef typename Superclass::SizeType  SizeType;
   typedef typename Superclass::ImageType ImageType;
   
-  typedef ImageViewer<PixelType>         ParentType;
+  typedef ImageViewerBase<PixelType, LabelType>  ParentType;
   typedef ParentType*                    ParentPointerType;
   
   typedef ImageWidgetBoxForm             BoxType;
   typedef ImageWidgetRectangleForm       RectangleType;
   typedef RectangleType::ColorType       ColorType;
   typedef ImageWidgetPointForm           PointType;
-  typedef Polygon<>       PolygonType;
-  typedef PolygonType::ContinuousIndexType ContinuousIndexType;
-  typedef PolygonType::Superclass::Superclass::VertexListPointer VertexListPointerType;
-  typedef PolygonType::Superclass::Superclass::VertexListType VertexListType;
+  typedef Polygon<LabelType>       PolygonType;
+  typedef typename PolygonType::ContinuousIndexType ContinuousIndexType;
+  typedef typename PolygonType::Superclass::Superclass::VertexListPointer VertexListPointerType;
+  typedef typename PolygonType::Superclass::Superclass::VertexListType VertexListType;
   
   itkSetMacro(Parent,ParentPointerType);
   itkGetMacro(Parent,ParentPointerType);
@@ -258,7 +259,8 @@ class ITK_EXPORT ImageViewerFullWidget
            polyg->AddVertex(newVertex);
            // Down Left corner
            newVertex[0]= boxIndex[0];
-           polyg->AddVertex(newVertex);                  
+           polyg->AddVertex(newVertex);     
+           polyg->SetValue(m_Parent->GetNextROILabel());             
            m_Parent->GetPolygonROIList()->PushBack(polyg);
            m_PolygonInProgress = false;
          }
@@ -289,6 +291,7 @@ class ITK_EXPORT ImageViewerFullWidget
             if(!m_PolygonInProgress)
             {
               m_Parent->GetPolygonROIList()->PushBack(PolygonType::New());
+              m_Parent->GetPolygonROIList()->Back()->SetValue(m_Parent->GetNextROILabel());
               m_PolygonInProgress = true;
             }
             m_Parent->GetPolygonROIList()->Back()->AddVertex(clickedIndex); 
@@ -310,7 +313,7 @@ class ITK_EXPORT ImageViewerFullWidget
             {
             // itk::PolylineParametricPath does not provide a RemoveVertex() method, and the access to the vertex list is const, so we have no other choice to remove a vertex.
               VertexListPointerType list = const_cast<VertexListType *>(m_Parent->GetPolygonROIList()->Back()->GetVertexList());
-              list->VectorType::pop_back();
+              list->pop_back();
               m_Parent->Update();
             }
           }
@@ -323,44 +326,44 @@ class ITK_EXPORT ImageViewerFullWidget
   virtual int handle(int event)
   {
   // Handle the mode selection to call the specific handle methods */
-  if(event == FL_KEYDOWN)
-    {
-      // Erase the last ROI
-      if(Fl::event_key()==FL_Delete && m_Parent->GetPolygonROIList()->Size() > 0)
-      {
-        m_Parent->GetPolygonROIList()->Erase(m_Parent->GetPolygonROIList()->Size()-1);
-        m_Parent->Update();
-      }
-      else if(Fl::event_key()==FL_Control_L)
-      {
-        m_ShortCutRectangle = !m_ShortCutRectangle;
-        m_ShortCutPolygon = false;
-        
-        if(m_ShortCutRectangle)
-        {
-          std::cout<<"Rectangle ROI selection mode ON"<<std::endl;
-        }
-        else
-        {
-          std::cout<<"Rectangle ROI selection mode OFF"<<std::endl;
-        }
-      }
-      else if(Fl::event_key()==FL_Shift_L)
-      {
-        m_ShortCutPolygon = !m_ShortCutPolygon;
-        m_ShortCutRectangle = false;
-        
-        if(m_ShortCutPolygon)
-        {
-          std::cout<<"Polygon ROI selection mode ON"<<std::endl;
-        }
-        else
-        {
-          m_PolygonInProgress = false;
-          std::cout<<"Polygon ROI selection mode OFF"<<std::endl;
-        }
-      }
-    }  
+//   if(event == FL_KEYDOWN)
+//     {
+//       // Erase the last ROI
+//       if(Fl::event_key()==FL_Delete && m_Parent->GetPolygonROIList()->Size() > 0)
+//       {
+//         m_Parent->GetPolygonROIList()->Erase(m_Parent->GetPolygonROIList()->Size()-1);
+//         m_Parent->Update();
+//       }
+//       else if(Fl::event_key()==FL_Control_L)
+//       {
+//         m_ShortCutRectangle = !m_ShortCutRectangle;
+//         m_ShortCutPolygon = false;
+//         
+//         if(m_ShortCutRectangle)
+//         {
+//           std::cout<<"Rectangle ROI selection mode ON"<<std::endl;
+//         }
+//         else
+//         {
+//           std::cout<<"Rectangle ROI selection mode OFF"<<std::endl;
+//         }
+//       }
+//       else if(Fl::event_key()==FL_Shift_L)
+//       {
+//         m_ShortCutPolygon = !m_ShortCutPolygon;
+//         m_ShortCutRectangle = false;
+//         
+//         if(m_ShortCutPolygon)
+//         {
+//           std::cout<<"Polygon ROI selection mode ON"<<std::endl;
+//         }
+//         else
+//         {
+//           m_PolygonInProgress = false;
+//           std::cout<<"Polygon ROI selection mode OFF"<<std::endl;
+//         }
+//       }
+//     }  
     // handle the pixel value reporting
     switch(event)
     {
@@ -384,13 +387,9 @@ class ITK_EXPORT ImageViewerFullWidget
 		m_MousePos[0]=Fl::event_x();
 		m_MousePos[1]=Fl::event_y();
 		IndexType newIndex = this->WindowToImageCoordinates(m_MousePos);
-		if(this->GetInput()->GetBufferedRegion().IsInside(newIndex))
-		  {
-		    typename ImageType::PixelType newPixel = this->GetInput()->GetPixel(newIndex);
-		    m_Parent->PrintPixLocVal(newIndex,newPixel);
-		    m_MouseMoveCount=0;
-		  }
-	      }
+		m_Parent->ReportPixel(newIndex);
+		m_MouseMoveCount=0;
+	       }
 	    m_MouseMoveCount++;
             return 1;
 	 }
@@ -407,14 +406,14 @@ class ITK_EXPORT ImageViewerFullWidget
 	    m_Parent->Hide();
 	    return 0;
 	  } 
-     }
+    }
     // If the current mode is rectangle selection, call the right handle method
-    if(m_ShortCutRectangle)
+    if(m_Parent->GetRectangularROISelectionMode())
     {
       return RectangleROISelectionHandle(event);
     }
     // If the current mode is polygon selection, call the right handle method
-    else if(m_ShortCutPolygon)
+    else if(m_Parent->GetPolygonalROISelectionMode())
     {
       return PolygonROISelectionHandle(event);
     }

@@ -63,6 +63,7 @@ class ImageWidgetBase
     typedef List<FormType> FormListType;
     typedef typename FormListType::Pointer FormListPointerType;
     typedef typename FormListType::ReverseIterator ReverseIteratorType;
+    typedef typename FormListType::Iterator IteratorType;
     
     itkSetMacro(BufferedRegion,RegionType);
     itkGetMacro(BufferedRegion,RegionType);

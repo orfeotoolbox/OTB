@@ -1,0 +1,878 @@
+/*=========================================================================
+
+Program:   ORFEO Toolbox
+Language:  C++
+Date:      $Date$
+Version:   $Revision$
+
+
+Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
+See OTBCopyright.txt for details.
+
+
+This software is distributed WITHOUT ANY WARRANTY; without even 
+the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+PURPOSE.  See the above copyright notices for more information.
+
+=========================================================================*/
+#ifndef _otbImageViewerBase_txx
+#define _otbImageViewerBase_txx
+
+#include "otbImageViewer.h"
+#include "otbFltkFilterWatcher.h"
+#include "otbMacro.h"
+#include "itkMacro.h"
+#include <sstream>
+#include "itkImageRegionIterator.h"
+#include "itkListSampleToHistogramGenerator.h"
+#include "itkListSample.h"
+
+namespace otb
+{
+  /// Constructor
+  template <class TPixel, class TLabel>
+  ImageViewerBase<TPixel,TLabel>
+  ::ImageViewerBase()
+  {
+    m_UseScroll = false;
+    m_ScrollMaxInitialSize = 300;
+    m_FullMaxInitialSize = 600;
+    m_ZoomMaxInitialSize = 200;
+    m_ImageGeometry = 1.0;
+    m_ScrollLimitSize = 600;
+    m_InterfaceBoxesColor[0]=1.0;
+    m_InterfaceBoxesColor[1]=0;
+    m_InterfaceBoxesColor[2]=0;
+    m_InterfaceBoxesColor[3]=1.0;
+    m_NextROIColor[0]=0;
+    m_NextROIColor[1]=0;
+    m_NextROIColor[2]=1.0;
+    m_NextROIColor[3]=0.5;
+    m_NextROILabel = 0;
+    m_ShrinkFactor=1;
+    m_RedChannelIndex = 0;
+    m_GreenChannelIndex = 1;
+    m_BlueChannelIndex = 2;
+    m_Built=false;   
+    m_Shrink = ShrinkFilterType::New();  
+    m_PixLocOutput=NULL;
+    m_NormalizationFactor = 0.02;
+    m_QuicklookRatioCoef = 2;
+    m_VectorCastFilter = NULL;
+    m_LinkedViewerList = ViewerListType::New();
+    m_Updating = false;
+    m_PolygonROIList = PolygonListType::New(); 
+    m_InterfaceBoxesList = FormListType::New();
+    m_ShowFullWidget = true;
+    m_ShowScrollWidget = true;
+    m_ShowZoomWidget = true;
+    m_Label = "Default";
+    m_RectangularROISelectionMode = false;
+    m_PolygonalROISelectionMode = false;
+  }
+  
+  /// Destructor
+  template <class TPixel, class TLabel>
+  ImageViewerBase<TPixel,TLabel>
+  ::~ImageViewerBase()
+  {}
+
+  /// Compute the normalization factor
+  template <class TPixel, class TLabel>
+  void
+  ImageViewerBase<TPixel,TLabel>
+  ::ComputeNormalizationFactors(void)
+  {
+
+    typedef itk::ImageRegionConstIterator< ImageType >  InputIteratorType;
+    typedef itk::Vector<typename ImageType::ValueType,1> MeasurementVectorType;
+    typedef itk::Statistics::ListSample<MeasurementVectorType> ListSampleType;
+    typedef float HistogramMeasurementType;
+    typedef itk::Statistics::ListSampleToHistogramGenerator<ListSampleType,HistogramMeasurementType,
+      itk::Statistics::DenseFrequencyContainer,1> HistogramGeneratorType;
+    
+    typedef otb::ObjectList<ListSampleType> ListSampleListType;
+    
+
+ 
+  m_MinComponentValue.SetSize(m_InputImage->GetNumberOfComponentsPerPixel());
+  m_MaxComponentValue.SetSize(m_InputImage->GetNumberOfComponentsPerPixel());
+  typename ListSampleListType::Pointer sl =  ListSampleListType::New();
+  
+  sl->Reserve(m_InputImage->GetNumberOfComponentsPerPixel());
+
+  for(unsigned int i = 0;i<m_MaxComponentValue.GetSize();++i)
+    {
+      sl->PushBack(ListSampleType::New());
+    }
+  InputIteratorType it;
+  // if scroll is activated, compute the factors from the quicklook
+  if(m_UseScroll)
+    {
+      it = InputIteratorType(m_Shrink->GetOutput(),m_Shrink->GetOutput()->GetLargestPossibleRegion());
+      it.GoToBegin();
+    }
+  // else, compute the factors from the full viewed region
+  else
+    {
+      m_InputImage->SetRequestedRegion(m_FullWidget->GetViewedRegion());
+      m_InputImage->PropagateRequestedRegion();
+      m_InputImage->UpdateOutputData();
+      it = InputIteratorType(m_InputImage,m_InputImage->GetRequestedRegion());
+      it.GoToBegin();
+    }
+  
+  
+  while( !it.IsAtEnd() )
+    {
+      PixelType pixel = it.Get();
+      for(unsigned int i = 0;i<m_MaxComponentValue.GetSize();++i)
+	{
+	  sl->GetNthElement(i)->PushBack(pixel[i]);
+	}
+      ++it;
+    }
+
+  for(unsigned int i = 0;i<m_MaxComponentValue.GetSize();++i)
+    {
+      typename HistogramGeneratorType::Pointer generator = HistogramGeneratorType::New();
+      generator->SetListSample(sl->GetNthElement(i));
+      typename HistogramGeneratorType::HistogramType::SizeType size;
+      size.Fill(static_cast<unsigned int>(vcl_ceil(1/m_NormalizationFactor)*10));
+      generator->SetNumberOfBins(size);
+      generator->Update();
+      m_MinComponentValue[i]=static_cast<typename ImageType::ValueType>(generator->GetOutput()->Quantile(0,m_NormalizationFactor));
+      m_MaxComponentValue[i]=static_cast<typename ImageType::ValueType>(generator->GetOutput()->Quantile(0,1-m_NormalizationFactor));
+    }
+    otbMsgDebugMacro(<<"Normalization between: "<<m_MinComponentValue<<" and "<<m_MaxComponentValue);  
+  }
+  
+  
+  /// Build the HMI
+  template <class TPixel, class TLabel>
+  void
+  ImageViewerBase<TPixel,TLabel>
+  ::Build(void)
+  {
+    otbMsgDebugMacro(<<"Entering build method");
+    if(!m_InputImage)
+      {
+	itkExceptionMacro(<<"No input image !");
+      } 
+    itk::OStringStream oss;
+    // Get the image dimension
+    typename ImageType::SizeType size = m_InputImage->GetLargestPossibleRegion().GetSize();
+    m_ImageGeometry = static_cast<double>(size[0])/static_cast<double>(size[1]);
+    
+    // initiate windows dimensions
+    int wscroll=200;
+    int hscroll=0;
+    int wfull = (size[0]<m_FullMaxInitialSize ? size[0] : m_FullMaxInitialSize);
+    int hfull = (size[1]<m_FullMaxInitialSize ? size[1] : m_FullMaxInitialSize);
+
+    // Create full windows    
+    m_FullWidget = FullWidgetType::New();
+    m_FullWidget->SetParent(this);
+    m_FullWidget->SetInput(m_InputImage);
+    m_FullWidget->Init(0,0,wfull,hfull,"");
+    m_FullWidget->box( FL_EMBOSSED_BOX );
+    m_FullWidget->SetFormOverlayVisible(true);
+    
+
+    // Create the zoom window
+    m_ZoomWidget = ZoomWidgetType::New();
+    m_ZoomWidget->SetParent(this);
+    m_ZoomWidget->SetZoomFactor(4.0);
+    m_ZoomWidget->SetInput(m_InputImage);
+    m_ZoomWidget->Init(0,0,m_ZoomMaxInitialSize,m_ZoomMaxInitialSize,"");
+    m_ZoomWidget->box( FL_EMBOSSED_BOX );
+    m_ZoomWidget->SetFormOverlayVisible(true);
+    
+    // Create the zoom selection mode
+    BoxPointerType zoomBox = BoxType::New();
+    SizeType zoomBoxSize;
+    IndexType zoomBoxIndex;
+    zoomBoxSize[0]=(m_ZoomWidget->GetViewedRegion().GetSize()[0]);
+    zoomBoxSize[1]=(m_ZoomWidget->GetViewedRegion().GetSize()[1]);
+    zoomBoxIndex[0]=(m_ZoomWidget->GetViewedRegion().GetIndex()[0]);
+    zoomBoxIndex[1]=(m_ZoomWidget->GetViewedRegion().GetIndex()[1]);
+    zoomBox->SetIndex(zoomBoxIndex);
+    zoomBox->SetSize(zoomBoxSize);
+    zoomBox->SetColor(m_InterfaceBoxesColor);
+    m_InterfaceBoxesList->PushBack(zoomBox);
+
+    // decide wether to use scroll view or not
+    if(size[0]<m_ScrollLimitSize&&size[1]<m_ScrollLimitSize)
+      {
+	m_UseScroll=false;
+      }
+    else 
+      {
+	m_UseScroll=true;
+	// Compute scroll size :
+	if(m_ImageGeometry<1)
+	  {
+	    hscroll = m_ScrollMaxInitialSize;
+	    wscroll = static_cast<int>(static_cast<double>(m_ScrollMaxInitialSize)*m_ImageGeometry);
+	  }
+	else
+	  {
+	    wscroll = m_ScrollMaxInitialSize;
+	    hscroll = static_cast<int>(static_cast<double>(m_ScrollMaxInitialSize)/m_ImageGeometry);
+	  }
+	// Create the quicklook
+	m_Shrink->SetInput(m_InputImage);
+	if(size[0]/hscroll < size[1]/wscroll)
+	  {
+	    m_ShrinkFactor = static_cast<unsigned int>(vcl_ceil((static_cast<double>(size[0])/static_cast<double>(wscroll))/m_QuicklookRatioCoef));
+	  }
+	else
+	  {
+	    m_ShrinkFactor = static_cast<unsigned int>(vcl_ceil((static_cast<double>(size[1])/static_cast<double>(hscroll))/m_QuicklookRatioCoef));
+	  }
+
+
+
+	otbMsgDebugMacro(<<"Shrink factor: "<<m_ShrinkFactor);
+	m_Shrink->SetShrinkFactor(m_ShrinkFactor);
+	typedef otb::FltkFilterWatcher WatcherType;
+	WatcherType watcher(m_Shrink,wfull-200,hfull/2,200,20, "Generating Quicklook ...");
+	m_Shrink->Update();
+	
+	// Create the scroll window
+	m_ScrollWidget = ScrollWidgetType::New();
+	m_ScrollWidget->SetInput(m_Shrink->GetOutput());
+	m_ScrollWidget->SetParent(this);
+	m_ScrollWidget->Init(0,0,wscroll,hscroll,oss.str().c_str());
+	m_ScrollWidget->box( FL_EMBOSSED_BOX );
+	m_ScrollWidget->SetFormOverlayVisible(true);
+	m_ScrollWidget->SetSubSamplingRate(m_ShrinkFactor);
+
+	// Create the scroll selection box
+	BoxPointerType box = BoxType::New();
+	SizeType scrollBoxSize;
+	IndexType scrollBoxIndex;
+	scrollBoxSize[0]=(m_FullWidget->GetViewedRegion().GetSize()[0]);
+	scrollBoxSize[1]=(m_FullWidget->GetViewedRegion().GetSize()[1]);
+	scrollBoxIndex[0]=(m_FullWidget->GetViewedRegion().GetIndex()[0]);
+	scrollBoxIndex[1]=(m_FullWidget->GetViewedRegion().GetIndex()[1])+1;
+	otbMsgDebugMacro(<<"Scroll box: "<<scrollBoxIndex<<" "<<scrollBoxSize);
+	box->SetSize(scrollBoxSize);
+	box->SetIndex(scrollBoxIndex);
+	box->SetColor(m_InterfaceBoxesColor);
+	m_InterfaceBoxesList->PushBack(box);
+      }
+    
+ 
+    // Compute the normalization factors
+    ComputeNormalizationFactors();
+
+    // Set the normalization factors
+    m_ZoomWidget->SetMinComponentValues(m_MinComponentValue);
+    m_ZoomWidget->SetMaxComponentValues(m_MaxComponentValue);
+    m_FullWidget->SetMinComponentValues(m_MinComponentValue);
+    m_FullWidget->SetMaxComponentValues(m_MaxComponentValue);
+    if(m_UseScroll)
+      {
+	m_ScrollWidget->SetMinComponentValues(m_MinComponentValue);
+	m_ScrollWidget->SetMaxComponentValues(m_MaxComponentValue);
+      }
+
+    InitializeViewModel();
+    GenerateOverlayList();
+    
+    m_Built=true;
+  }
+  /// Set the image (VectorImage version)
+  template <class TPixel, class TLabel>
+  void
+  ImageViewerBase<TPixel,TLabel>
+  ::SetImage(ImageType * img)
+  {
+    m_InputImage = dynamic_cast<ImageType *>( img );
+  } 
+
+   template <class TPixel, class TLabel>
+   typename ImageViewerBase<TPixel,TLabel>
+   ::ImageType *
+   ImageViewerBase<TPixel,TLabel>
+   ::GetShrinkedImage(void)
+   {
+     if(m_UseScroll)
+       {
+	 return m_Shrink->GetOutput();
+       }
+     else
+       {
+	 return m_InputImage;
+       }
+   }
+  /// Set the image (Image version)
+  template <class TPixel, class TLabel>
+  void
+  ImageViewerBase<TPixel,TLabel>
+  ::SetImage(SingleImageType * img)
+  {
+    m_VectorCastFilter = VectorCastFilterType::New();
+    m_VectorCastFilter->SetInput(img);
+    m_VectorCastFilter->UpdateOutputInformation();
+    m_InputImage = m_VectorCastFilter->GetOutput();
+    
+  } 
+
+  /// Show the app
+  template <class TPixel, class TLabel>
+  void 
+  ImageViewerBase<TPixel,TLabel>
+  ::Show(void)
+  {
+    if(!m_Built)
+      {
+	this->Build();
+      }
+    Fl::check();
+    if(m_UseScroll && m_ShowScrollWidget)
+      {
+ 	m_ScrollWidget->Show();
+      }
+   
+      if(m_ShowFullWidget)
+      {
+        m_FullWidget->Show();
+      }
+      
+    if(m_ShowZoomWidget)
+    {
+      m_ZoomWidget->Show();
+    }
+    Fl::check();
+  }
+  /** This is a helper class that performs a Show() and Fl::run() in order to ease 
+      the use of the class for example in wrappings.*/
+  template <class TPixel, class TLabel>
+  int
+  ImageViewerBase<TPixel,TLabel>
+  ::FlRun(void)
+  {
+    this->Show();
+    return Fl::run();
+  }
+
+
+  /// Hide the app
+  template <class TPixel, class TLabel>
+  void 
+  ImageViewerBase<TPixel,TLabel>
+  ::Hide(void)
+  {
+    Fl::check();
+    if(m_UseScroll)
+      {
+	m_ScrollWidget->hide();
+      }
+    m_FullWidget->hide();
+    m_ZoomWidget->hide();
+    Fl::check();
+
+  } 
+
+  template <class TPixel, class TLabel>
+  void
+  ImageViewerBase<TPixel,TLabel>
+  ::GenerateOverlayList(void)
+  {
+    FormListPointerType new_list = FormListType::New();
+    
+    BoxPointerType zoomBox = BoxType::New();
+    SizeType zoomBoxSize;
+    IndexType zoomBoxIndex;
+    zoomBoxSize[0]=(m_ZoomWidget->GetViewedRegion().GetSize()[0]);
+    zoomBoxSize[1]=(m_ZoomWidget->GetViewedRegion().GetSize()[1]);
+    zoomBoxIndex[0]=(m_ZoomWidget->GetViewedRegion().GetIndex()[0]);
+    zoomBoxIndex[1]=(m_ZoomWidget->GetViewedRegion().GetIndex()[1]);
+    zoomBox->SetIndex(zoomBoxIndex);
+    zoomBox->SetSize(zoomBoxSize);
+    zoomBox->SetColor(m_InterfaceBoxesColor);
+    m_InterfaceBoxesList->SetNthElement(0,zoomBox);
+    
+    if(m_UseScroll)
+    {
+      BoxPointerType box = BoxType::New();
+      SizeType scrollBoxSize;
+      IndexType scrollBoxIndex;
+      scrollBoxSize[0]=(m_FullWidget->GetViewedRegion().GetSize()[0]);
+      scrollBoxSize[1]=(m_FullWidget->GetViewedRegion().GetSize()[1]);
+      scrollBoxIndex[0]=(m_FullWidget->GetViewedRegion().GetIndex()[0]);
+      scrollBoxIndex[1]=(m_FullWidget->GetViewedRegion().GetIndex()[1])+1;
+      box->SetSize(scrollBoxSize);
+      box->SetIndex(scrollBoxIndex);
+      box->SetColor(m_InterfaceBoxesColor);
+      m_InterfaceBoxesList->SetNthElement(1,box);
+    }
+    
+    for(FormListIteratorType it1 = m_InterfaceBoxesList->Begin();
+        it1!=m_InterfaceBoxesList->End();++it1)
+        {
+            new_list->PushBack(it1.Get());
+        }
+        
+    for(PolygonListIteratorType it2 = m_PolygonROIList->Begin();
+        it2!=m_PolygonROIList->End();++it2)
+        {
+            ImageWidgetPolygonFormPointerType new_poly = ImageWidgetPolygonFormType::New();
+            new_poly->SetPolygon(it2.Get());
+            new_poly->SetColor(m_NextROIColor);
+            
+            for(PolygonIteratorType pIt = it2.Get()->GetVertexList()->Begin();
+              pIt != it2.Get()->GetVertexList()->End();++pIt)
+              {
+              ImageWidgetCircleFormPointerType new_circle = ImageWidgetCircleFormType::New();
+              
+              new_circle->SetCenter(pIt.Value());
+              new_circle->SetRadius(4);
+              new_circle->SetSolid(false);
+              new_circle->SetColor(m_InterfaceBoxesColor);
+              new_list->PushBack(new_circle);
+              
+              }
+              new_list->PushBack(new_poly);
+        }
+        
+        if(m_UseScroll)
+        {
+            m_ScrollWidget->SetFormListOverlay(new_list);
+        }
+     
+    m_FullWidget->SetFormListOverlay(new_list);
+    m_ZoomWidget->SetFormListOverlay(new_list);
+  }
+
+
+
+  /// Update the display
+  template <class TPixel, class TLabel>
+  void 
+  ImageViewerBase<TPixel,TLabel>
+  ::Update(void)
+  {
+    GenerateOverlayList();
+    Fl::check();
+    UpdateScrollWidget();
+    UpdateFullWidget();
+    UpdateZoomWidget();
+    
+    // update the linked viewer
+    typename ViewerListType::Iterator linkedIt = m_LinkedViewerList->Begin();
+    typename OffsetListType::iterator offIt = m_LinkedViewerOffsetList.begin();
+  
+    while(linkedIt!=m_LinkedViewerList->End()&&offIt!=m_LinkedViewerOffsetList.end())
+    {
+      if(!linkedIt.Get()->GetUpdating())
+	{
+          linkedIt.Get()->Update();
+        }   
+    }
+  Fl::check();
+  }
+
+  template <class TPixel, class TLabel>
+  void 
+  ImageViewerBase<TPixel,TLabel>
+  ::ReportPixel(IndexType index)
+  {
+    if(m_PixLocOutput == NULL)
+    {
+      return;
+    }
+    itk::OStringStream oss;
+    oss<<index<<" (image position)"<<std::endl;
+    PointType point;
+    m_InputImage->TransformIndexToPhysicalPoint(index,point);
+    oss<<point<<" (physical coordinates)"<<std::endl;
+    
+    if(m_InputImage->GetBufferedRegion().IsInside(index))
+      {
+	typename ImageType::PixelType newPixel = m_InputImage->GetPixel(index);
+        oss<<newPixel<<" ("<<m_Label<<" pixel values)"<<std::endl;
+      }
+      
+    typename ViewerListType::Iterator linkedIt = m_LinkedViewerList->Begin();
+    typename OffsetListType::iterator offIt = m_LinkedViewerOffsetList.begin();
+  
+    while(linkedIt!=m_LinkedViewerList->End()&&offIt!=m_LinkedViewerOffsetList.end())
+    {
+      IndexType currentIndex = index + (*offIt);
+      typename ImageType::PixelType newPixel = linkedIt.Get()->GetInputImage()->GetPixel(currentIndex);
+      oss<<newPixel<<" ("<<linkedIt.Get()->GetLabel()<<" pixel values)"<<std::endl;
+    }
+    if(oss.good())
+      {
+	m_PixLocOutput->value(oss.str().c_str());
+	m_PixLocOutput->redraw();
+	Fl::check();
+      }
+  }
+
+ template <class TPixel, class TLabel>
+  void 
+  ImageViewerBase<TPixel,TLabel>
+  ::ClearPixLocVal(void)
+  {
+    m_PixLocOutput->value("");
+    m_PixLocOutput->redraw();
+    Fl::check();
+  }
+  
+
+ template <class TPixel, class TLabel>
+  void 
+  ImageViewerBase<TPixel,TLabel>
+  ::UpdateZoomWidget(void)
+  {
+    m_ZoomWidget->redraw();
+  }
+
+ template <class TPixel, class TLabel>
+  void 
+  ImageViewerBase<TPixel,TLabel>
+  ::UpdateFullWidget(void)
+  {
+    m_FullWidget->redraw();
+  }
+
+   template <class TPixel, class TLabel>
+  void 
+  ImageViewerBase<TPixel,TLabel>
+  ::UpdateScrollWidget(void)
+  {
+    if(m_UseScroll)
+      {	
+	m_ScrollWidget->redraw();
+      }
+  }
+
+template <class TPixel, class TLabel>
+typename ImageViewerBase<TPixel,TLabel>
+::RegionType
+ImageViewerBase<TPixel,TLabel>
+::ComputeConstrainedRegion(RegionType smallRegion, RegionType bigRegion)
+{
+  // This function assumes that smallRegion is inside huge region
+  if(smallRegion.GetSize()[0]>bigRegion.GetSize()[0]
+     ||smallRegion.GetSize()[1]>bigRegion.GetSize()[1])
+    {
+      itkExceptionMacro("Small region not inside big region !");
+    }
+  else
+    {
+      RegionType resp;
+      IndexType index = smallRegion.GetIndex();
+      SizeType size = smallRegion.GetSize();
+      
+      if(smallRegion.GetIndex()[0]<bigRegion.GetIndex()[0])
+	{
+	  index[0]=bigRegion.GetIndex()[0];
+	}
+      if(smallRegion.GetIndex()[1]<bigRegion.GetIndex()[1])
+	{
+	  index[1]=bigRegion.GetIndex()[1];
+	}
+      if(index[0]+size[0]>=bigRegion.GetIndex()[0]+bigRegion.GetSize()[0])
+	{
+	  index[0]=bigRegion.GetIndex()[0]+bigRegion.GetSize()[0]-size[0];
+	}
+      if(index[1]+size[1]>=bigRegion.GetIndex()[1]+bigRegion.GetSize()[1])
+	{
+	  index[1]=bigRegion.GetIndex()[1]+bigRegion.GetSize()[1]-size[1];
+	}
+      resp.SetSize(size);
+      resp.SetIndex(index);
+      return resp;
+    }
+}
+
+template <class TPixel, class TLabel>
+void 
+ImageViewerBase<TPixel,TLabel>
+::ChangeFullViewedRegion(IndexType clickedIndex)
+{
+  m_Updating = true;
+  RegionType region = m_FullWidget->GetViewedRegion();
+  IndexType newIndex;
+  newIndex[0]=clickedIndex[0]-region.GetSize()[0]/2;
+  newIndex[1]=clickedIndex[1]-region.GetSize()[1]/2;
+
+  region.SetIndex(newIndex);
+
+  RegionType newRegion = ComputeConstrainedRegion(region,m_InputImage->GetLargestPossibleRegion());
+  m_FullWidget->SetUpperLeftCorner(newRegion.GetIndex());
+
+  typename ViewerListType::Iterator linkedIt = m_LinkedViewerList->Begin();
+  typename OffsetListType::iterator offIt = m_LinkedViewerOffsetList.begin();
+  
+  while(linkedIt!=m_LinkedViewerList->End()&&offIt!=m_LinkedViewerOffsetList.end())
+    {
+      if(!linkedIt.Get()->GetUpdating())
+	{
+	  IndexType linkedIndex;
+	  linkedIndex[0] = clickedIndex[0]+(*offIt)[0];
+	  linkedIndex[1] = clickedIndex[1]+(*offIt)[1];
+	  linkedIt.Get()->ChangeFullViewedRegion(linkedIndex);
+	}
+      ++offIt;
+      ++linkedIt;			    
+    }
+  m_Updating = false;
+}
+
+template <class TPixel, class TLabel>
+  void 
+  ImageViewerBase<TPixel,TLabel>
+::ChangeZoomViewedRegion(IndexType clickedIndex)
+{ 
+  m_Updating = true;
+  RegionType region = m_ZoomWidget->GetViewedRegion();
+  IndexType newIndex;
+  newIndex[0]=clickedIndex[0]-region.GetSize()[0]/2;
+  newIndex[1]=clickedIndex[1]-region.GetSize()[1]/2;
+ 
+  region.SetIndex(newIndex);
+  RegionType newRegion = ComputeConstrainedRegion(region,m_FullWidget->GetViewedRegion());
+  m_ZoomWidget->SetZoomUpperLeftCorner(newRegion.GetIndex());
+ 
+  typename ViewerListType::Iterator linkedIt = m_LinkedViewerList->Begin();
+  typename OffsetListType::iterator offIt = m_LinkedViewerOffsetList.begin();
+  
+  while(linkedIt!=m_LinkedViewerList->End()&&offIt!=m_LinkedViewerOffsetList.end())
+    {
+      if(!linkedIt.Get()->GetUpdating())
+	{
+	  IndexType linkedIndex;
+	  linkedIndex[0] = clickedIndex[0]+(*offIt)[0];
+	  linkedIndex[1] = clickedIndex[1]+(*offIt)[1];
+	  linkedIt.Get()->ChangeZoomViewedRegion(linkedIndex);
+	}
+      ++offIt;
+      ++linkedIt;			    
+    }
+  m_Updating = false; 
+}
+
+template <class TPixel, class TLabel>
+void 
+ImageViewerBase<TPixel,TLabel>
+::Link(Self * viewer, OffsetType offset, bool backwardLinkFlag)
+{
+  // Search if this viewer is already linked
+  typename ViewerListType::Iterator it = m_LinkedViewerList->Begin();
+  while(it!=m_LinkedViewerList->End())
+    {
+      if(it.Get()==viewer)
+	{
+	  itkGenericExceptionMacro(<<"This viewer is already linked !");
+	}
+      ++it;
+    }
+  // If not, add it with its offset
+  m_LinkedViewerList->PushBack(viewer);
+  m_LinkedViewerOffsetList.push_back(offset);
+  
+  // If backward link flag is set, add the backward link
+  if(backwardLinkFlag)
+    {
+      OffsetType invertOffset;
+      invertOffset[0]=-offset[0];
+      invertOffset[1]=-offset[1];
+      viewer->Link(this,invertOffset,false);
+    }
+}
+
+template <class TPixel, class TLabel>
+void 
+ImageViewerBase<TPixel,TLabel>
+::Link(Self * viewer, OffsetType offset)
+{
+  this->Link(viewer,offset,true);
+}
+
+template <class TPixel, class TLabel>
+void 
+ImageViewerBase<TPixel,TLabel>
+::Link(Self * viewer)
+{
+  OffsetType offset;
+  offset.Fill(0);
+  this->Link(viewer,offset,true);
+}
+
+template <class TPixel, class TLabel>
+void 
+ImageViewerBase<TPixel,TLabel>
+::Unlink(Self * viewer,bool backwardLinkFlag)
+{
+  unsigned int counter = 0;
+  bool found = false;
+  // Search the given viewer in the linked list
+  typename ViewerListType::Iterator it = m_LinkedViewerList->Begin();
+  while(!found&&it!=m_LinkedViewerList->End())
+    {
+      if(it.Get()==viewer)
+	{
+	  found = true;
+	}
+      else
+	{
+	  ++counter;
+	}
+      ++it;
+    }
+  
+  // If found, erase
+  m_LinkedViewerList->Erase(counter);
+  m_LinkedViewerOffsetList.erase(m_LinkedViewerOffsetList.begin()+counter);
+
+  // If backward link flag is set, remove the backward link
+  if(backwardLinkFlag)
+    {
+      viewer->Unlink(this,false);
+    }
+}
+template <class TPixel, class TLabel>
+void 
+ImageViewerBase<TPixel,TLabel>
+::Unlink(Self * viewer)
+{
+  this->Unlink(viewer,true);
+}
+
+
+template <class TPixel, class TLabel>
+int
+ImageViewerBase<TPixel,TLabel>
+::IsLinkedTo(Self * viewer)
+{
+  int counter = 0;
+  typename ViewerListType::Iterator it = m_LinkedViewerList->Begin();
+  while(it!=m_LinkedViewerList->End())
+    {
+      if(it.Get()==viewer)
+	{
+	  return counter;
+	}
+      ++counter;
+      ++it;
+    }
+  return -1;
+}
+
+template<class TPixel, class TLabel>
+void
+ImageViewerBase<TPixel,TLabel>
+::ClearLinks(void)
+{
+  typename ViewerListType::Iterator it = m_LinkedViewerList->Begin();
+  while(it!=m_LinkedViewerList->End())
+    {
+      it.Get()->Unlink(this,false);
+      ++it;
+    }
+  m_LinkedViewerList->Clear();
+  m_LinkedViewerOffsetList.clear();
+}
+
+template<class TPixel, class TLabel>
+typename ImageViewerBase<TPixel,TLabel>
+::OffsetType
+ImageViewerBase<TPixel,TLabel>
+::GetOffset(int index)
+{
+  return m_LinkedViewerOffsetList[index];
+}
+
+template<class TPixel, class TLabel>
+bool
+ImageViewerBase<TPixel,TLabel>
+::GetViewModelIsRGB()
+{
+  return m_FullWidget->GetViewModelIsRGB();
+}
+
+template<class TPixel, class TLabel>
+bool
+ImageViewerBase<TPixel,TLabel>
+::IsRGBViewModelAllowed()
+{
+  return (m_InputImage->GetNumberOfComponentsPerPixel()>2);
+}
+
+template<class TPixel, class TLabel>
+void
+ImageViewerBase<TPixel,TLabel>
+::SetViewModelIsRGB(bool flag)
+{
+  if(flag)
+    {
+      if(IsRGBViewModelAllowed())
+	{
+	  if(m_UseScroll)
+	    {
+	      m_ScrollWidget->SetViewModelToRGB();
+	      m_ScrollWidget->SetRedChannelIndex(m_RedChannelIndex);
+	      m_ScrollWidget->SetGreenChannelIndex(m_GreenChannelIndex);
+	      m_ScrollWidget->SetBlueChannelIndex(m_BlueChannelIndex);
+	    }
+	  m_FullWidget->SetViewModelToRGB();
+	  m_ZoomWidget->SetViewModelToRGB();
+	  m_ZoomWidget->SetRedChannelIndex(m_RedChannelIndex);
+	  m_ZoomWidget->SetGreenChannelIndex(m_GreenChannelIndex);
+	  m_ZoomWidget->SetBlueChannelIndex(m_BlueChannelIndex);
+	  m_FullWidget->SetRedChannelIndex(m_RedChannelIndex);
+	  m_FullWidget->SetGreenChannelIndex(m_GreenChannelIndex);
+	  m_FullWidget->SetBlueChannelIndex(m_BlueChannelIndex);
+	}
+    }
+  else
+    {
+	  if(m_UseScroll)
+	    {
+	      m_ScrollWidget->SetViewModelToGrayscale();
+	      m_ScrollWidget->SetRedChannelIndex(m_RedChannelIndex);
+	    }
+	  m_FullWidget->SetViewModelToGrayscale();
+	  m_ZoomWidget->SetViewModelToGrayscale();
+	  m_ZoomWidget->SetRedChannelIndex(m_RedChannelIndex);
+	  m_FullWidget->SetRedChannelIndex(m_RedChannelIndex);
+    }
+}
+
+template<class TPixel, class TLabel>
+void
+ImageViewerBase<TPixel,TLabel>
+::InitializeViewModel(void)
+{
+   if(this->IsRGBViewModelAllowed())
+       {
+	 this->SetViewModelIsRGB(true);
+       }
+     else
+       {
+	 this->SetViewModelIsRGB(false);
+       }
+}
+
+template<class TPixel, class TLabel>
+void
+ImageViewerBase<TPixel,TLabel>
+::Reset(void)
+{
+  m_FullWidget->Reset();
+  m_ZoomWidget->Reset();
+  if(m_UseScroll)
+    {
+      m_ScrollWidget->Reset();
+    }
+}
+
+} // end namespace otb
+#endif
+
