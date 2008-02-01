@@ -76,6 +76,7 @@ class ITK_EXPORT OrthoRectificationFilter : public itk::ImageToImageFilter< TInp
         virtual void SetMapProjection (MapProjectionType* _arg) 
         { 
                 m_OrthoRectificationFilter->SetMapProjection( _arg);
+                this->Modified(); 
         } 
         
         virtual MapProjectionType * GetMapProjection()
@@ -87,22 +88,26 @@ class ITK_EXPORT OrthoRectificationFilter : public itk::ImageToImageFilter< TInp
         virtual void SetDEMDirectory(const std::string& directory)
         {
                 m_OrthoRectificationFilter->SetDEMDirectory(directory);
+                this->Modified(); 
         }        
   
         /** Methods to decide to use DEM */                
         virtual void EnableDEM()
         { 
-                m_OrthoRectificationFilter->EnableDEM(); 
+                m_OrthoRectificationFilter->EnableDEM();
+                this->Modified(); 
         }
         virtual void DisableDEM()
         {        
                 m_OrthoRectificationFilter->DisableDEM(); 
+                this->Modified(); 
         }
         
         
         virtual void SetOutputStartIndex(const IndexType index)
         {
                 m_OrthoRectificationFilter->SetOutputStartIndex(index);
+                this->Modified(); 
         }
         virtual const IndexType & GetOutputStartIndex()const
         {
@@ -111,6 +116,7 @@ class ITK_EXPORT OrthoRectificationFilter : public itk::ImageToImageFilter< TInp
         virtual void SetOutputSpacing(const SpacingType spacing)
         {
                 m_OrthoRectificationFilter->SetOutputSpacing(spacing);
+                this->Modified(); 
         }
         virtual const SpacingType & GetOutputSpacing()const
         {
@@ -119,6 +125,7 @@ class ITK_EXPORT OrthoRectificationFilter : public itk::ImageToImageFilter< TInp
         virtual void SetOutputOrigin(const OriginPointType origin)
         {
                 m_OrthoRectificationFilter->SetOutputOrigin(origin);
+                this->Modified(); 
         }
         virtual const OriginPointType & GetOutputOrigin()const
         {
@@ -128,6 +135,7 @@ class ITK_EXPORT OrthoRectificationFilter : public itk::ImageToImageFilter< TInp
         virtual void SetInterpolator(InterpolatorType * interpol)
         {
                 m_OrthoRectificationFilter->SetInterpolator(interpol);
+                this->Modified(); 
         }
         virtual const InterpolatorType * GetInterpolator()const
         {
@@ -136,6 +144,7 @@ class ITK_EXPORT OrthoRectificationFilter : public itk::ImageToImageFilter< TInp
         virtual void SetSize(const SizeType size)
         {
                 m_OrthoRectificationFilter->SetSize(size);
+                this->Modified(); 
         }
         virtual const SizeType & GetSize()const
         {
