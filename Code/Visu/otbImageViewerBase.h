@@ -119,7 +119,6 @@ class ITK_EXPORT ImageViewerBase
   /// Definition of box form to represent displayed regions.
   typedef otb::ImageWidgetBoxForm BoxType;
   typedef typename BoxType::Pointer BoxPointerType;
-  typedef typename BoxType::ColorType ColorType;
   
   /// List of linked viewer typedef
   typedef otb::ObjectList<Self> ViewerListType;
