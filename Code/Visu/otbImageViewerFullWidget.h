@@ -81,6 +81,7 @@ class ITK_EXPORT ImageViewerFullWidget
     switch(event)
 	{
 	case FL_PUSH:
+          {
         // in case of mouse click, change the point of view
           int x = Fl::event_x();
 	  int y = Fl::event_y();
@@ -91,6 +92,7 @@ class ITK_EXPORT ImageViewerFullWidget
           m_Parent->ChangeZoomViewedRegion(clickedIndex);
           m_Parent->Update();
           return 1;
+          }
        case FL_KEYDOWN:
 	  {
 	    IndexType newIndex = m_Parent->GetZoomWidget()->GetViewedRegion().GetIndex();
