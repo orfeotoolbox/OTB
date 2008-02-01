@@ -38,7 +38,10 @@
 #ifndef FL_FONT_
 #define FL_FONT_
 
-#include <config.h>
+/*OTB Modifications: conflict name with OTB/Utilities/ITK/Utilities/nifti/znzlib/config.h*/
+/*#include <config.h>
+*/
+#include "fltk-config.h"
 
 #  if USE_XFT
 typedef struct _XftFont XftFont;
