@@ -25,7 +25,10 @@
 //     http://www.fltk.org/str.php
 //
 
-#include <config.h>
+/*OTB Modifications: conflict name with OTB/Utilities/ITK/Utilities/nifti/znzlib/config.h*/
+/*#include <config.h>*/
+#include "fltk-config.h"
+
 #include <FL/Enumerations.H>
 
 // one of these for each color in fltk's "colormap":
