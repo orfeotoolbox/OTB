@@ -58,7 +58,7 @@ namespace otb
 {
   
   typedef MapProjection<ossimAlbersProjection,INVERSE>               AlbersInverseProjection;
-	typedef MapProjection<ossimAlbersProjection,FORWARD>               AlbersForwardProjection;
+  typedef MapProjection<ossimAlbersProjection,FORWARD>               AlbersForwardProjection;
   typedef MapProjection<ossimAzimEquDistProjection,INVERSE>          AzimEquDistInverseProjection;
   typedef MapProjection<ossimAzimEquDistProjection,FORWARD>          AzimEquDistForwardProjection;	
   typedef MapProjection<ossimBngProjection,INVERSE>                  BngInverseProjection;
@@ -76,9 +76,9 @@ namespace otb
   typedef MapProjection<ossimEckert6Projection,INVERSE>              Eckert6InverseProjection;
   typedef MapProjection<ossimEckert6Projection,FORWARD>              Eckert6ForwardProjection;
   typedef MapProjection<ossimGnomonicProjection,INVERSE>             GnomonicInverseProjection;
-	typedef MapProjection<ossimGnomonicProjection,FORWARD>             GnomonicForwardProjection;
-	typedef LambertConformalConicMapProjection<INVERSE>                LambertConformalConicInverseProjection;
-	typedef LambertConformalConicMapProjection<FORWARD>                LambertConformalConicForwardProjection;	
+  typedef MapProjection<ossimGnomonicProjection,FORWARD>             GnomonicForwardProjection;
+  typedef LambertConformalConicMapProjection<INVERSE>                LambertConformalConicInverseProjection;
+  typedef LambertConformalConicMapProjection<FORWARD>                LambertConformalConicForwardProjection;	
   typedef MapProjection<ossimLlxyProjection,INVERSE>                 LlxyInverseProjection;
   typedef MapProjection<ossimLlxyProjection,FORWARD>                 LlxyForwardProjection;
   typedef MapProjection<ossimEquDistCylProjection,INVERSE>           EquDistCylInverseProjection;
@@ -100,19 +100,19 @@ namespace otb
   typedef MapProjection<ossimPolyconicProjection,INVERSE>            PolyconicInverseProjection;
   typedef MapProjection<ossimPolyconicProjection,FORWARD>            PolyconicForwardProjection;
   typedef SinusoidalMapProjection<INVERSE>                           SinusoidalInverseProjection;  
-	typedef SinusoidalMapProjection<FORWARD>                           SinusoidalForwardProjection;
+  typedef SinusoidalMapProjection<FORWARD>                           SinusoidalForwardProjection;
   typedef MapProjection<ossimSpaceObliqueMercatorProjection,INVERSE> SpaceObliqueMercatorInverseProjection;
-	typedef MapProjection<ossimSpaceObliqueMercatorProjection,FORWARD> SpaceObliqueMercatorForwardProjection;
+  typedef MapProjection<ossimSpaceObliqueMercatorProjection,FORWARD> SpaceObliqueMercatorForwardProjection;
   typedef MapProjection<ossimStereographicProjection,INVERSE>        StereographicInverseProjection;
-	typedef MapProjection<ossimStereographicProjection,FORWARD>        StereographicForwardProjection;
+  typedef MapProjection<ossimStereographicProjection,FORWARD>        StereographicForwardProjection;
   typedef MapProjection<ossimTransCylEquAreaProjection,INVERSE>      TransCylEquAreaInverseProjection;
-	typedef MapProjection<ossimTransCylEquAreaProjection,FORWARD>      TransCylEquAreaForwardProjection;
+  typedef MapProjection<ossimTransCylEquAreaProjection,FORWARD>      TransCylEquAreaForwardProjection;
   typedef TransMercatorMapProjection<INVERSE>                        TransMercatorInverseProjection;
   typedef TransMercatorMapProjection<FORWARD>                        TransMercatorForwardProjection;
   typedef MapProjection<ossimUpsProjection,INVERSE>                  UpsInverseProjection;
   typedef MapProjection<ossimUpsProjection,FORWARD>                  UpsForwardProjection;
-  typedef UtmMapProjection<INVERSE>                          				 UtmInverseProjection;
-  typedef UtmMapProjection<FORWARD>                          				 UtmForwardProjection;
+  typedef UtmMapProjection<INVERSE>                                  UtmInverseProjection;
+  typedef UtmMapProjection<FORWARD>                                  UtmForwardProjection;
   typedef MapProjection<ossimVanDerGrintenProjection,INVERSE>        VanDerGrintenInverseProjection;
   typedef MapProjection<ossimVanDerGrintenProjection,FORWARD>        VanDerGrintenForwardProjection;
   
