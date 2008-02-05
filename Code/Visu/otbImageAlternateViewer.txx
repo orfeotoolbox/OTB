@@ -23,7 +23,6 @@ PURPOSE.  See the above copyright notices for more information.
 #include <FL/Fl.H>
 #include "otbMath.h"
 #include "itkTimeProbe.h"
-#include "GL/glu.h"
 #include "itkMacro.h"
 
 namespace otb
