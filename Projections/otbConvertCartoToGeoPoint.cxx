@@ -20,6 +20,7 @@
 
 
 #include <iostream>
+#include <iomanip>
 
 #include "otbCommandLineArgumentParser.h"
 #include "otbImageFileReader.h"
@@ -53,8 +54,8 @@ int generic_main(int argc, char* argv[], TMapProjection* mapProjection, otb::Com
 				
 				geoPoint = mapProjection->TransformPoint(cartoPoint);
 				
-				std::cout << "Cartographic Point  (x , y)  : (" << cartoPoint[0] << "," << cartoPoint[1] << ")" << std::endl;
-				std::cout << "Geographic   Point (Lat,Lon) : (" << geoPoint[1] << "," <<	geoPoint[0] << ")" << std::endl;
+				std::cout << std::setprecision(10) << "Cartographic Point  (x , y)  : (" << cartoPoint[0] << "," << cartoPoint[1] << ")" << std::endl;
+				std::cout << std::setprecision(10) << "Geographic   Point (Lat,Lon) : (" << geoPoint[1] << "," <<	geoPoint[0] << ")" << std::endl;
 
 							
 		}
