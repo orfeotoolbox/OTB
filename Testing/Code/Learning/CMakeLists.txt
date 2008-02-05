@@ -201,6 +201,20 @@ ADD_TEST(leTuSEMClassifierNew ${LEARNING_TESTS3}
         otbSEMClassifierNew)
 
 # -----------------------------------------------------------------------
+
+# ------- otb::SVMImageClassificationFilter ---------------------------
+
+ADD_TEST(leTuSVMImageClassificationFilterNew ${LEARNING_TESTS3}
+	otbSVMImageClassificationFilterNew)
+
+ADD_TEST(leTvSVMImageClassificationFilter ${LEARNING_TESTS3}
+	--compare-image ${TOL}
+	${BASELINE}/leSVMImageClassificationFilterOutput.tif
+	${TEMP}/leSVMImageClassificationFilterOutput.tif
+	otbSVMImageClassificationFilter
+	${INPUTDATA}/ROI_QB_MUL_4.tif
+	${INPUTDATA}/svm_model_image
+	${TEMP}/leSVMImageClassificationFilterOutput.tif)
 			        
 
 
@@ -235,6 +249,8 @@ SET(BasicLearning_SRCS3
 otbSOMClassifierNew.cxx
 otbSOMClassifier.cxx
 otbSEMClassifierNew.cxx
+otbSVMImageClassificationFilterNew.cxx
+otbSVMImageClassificationFilter.cxx
 )
 
 

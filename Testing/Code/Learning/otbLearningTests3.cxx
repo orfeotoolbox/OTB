@@ -31,4 +31,6 @@ void RegisterTests()
 REGISTER_TEST(otbSOMClassifierNew);
 REGISTER_TEST(otbSOMClassifier);
 REGISTER_TEST(otbSEMClassifierNew);
+REGISTER_TEST(otbSVMImageClassificationFilterNew);
+REGISTER_TEST(otbSVMImageClassificationFilter);
 }

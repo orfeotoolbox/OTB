@@ -160,7 +160,6 @@ class ITK_EXPORT ImageViewerFullWidget
         if (!m_Drag)
 	{
 	  m_LastIndex=this->WindowToImageCoordinates(clickedIndex);
-          m_Drag = false;
         }
         return 1;
       }
@@ -173,10 +172,10 @@ class ITK_EXPORT ImageViewerFullWidget
 	index[1]=y;
 	IndexType clickedIndex=this->WindowToImageCoordinates(index);
         typename BoxType::Pointer box =  BoxType::New();
-	 box->SetColor(m_ClassColor);
+	 box->SetColor(m_Parent->GetInterfaceBoxesColor());
 	 IndexType boxIndex;
 	 SizeType boxSize;
-         // compute the size of the select box
+         // compute the size of the selection box
 	 if(clickedIndex[0]>m_LastIndex[0])
 	   {
 	     boxIndex[0]=m_LastIndex[0];
@@ -198,80 +197,79 @@ class ITK_EXPORT ImageViewerFullWidget
 	     boxSize[1]=m_LastIndex[1]-clickedIndex[1];
 	   }
 	 box->SetIndex(boxIndex);
-	 box->SetSize(boxSize);
-	 if(m_Drag)
+	box->SetSize(boxSize);
+	if(m_Drag)
 	   {
 	     m_Parent->GetInterfaceBoxesList()->PopBack(); 
+	     
 	   }
 	 m_Parent->GetInterfaceBoxesList()->PushBack(box);
-	 m_Parent->Update();
 	 m_Drag=true;
+	m_Parent->Update();
 	 return 1; 
-	 }
-         
-         case FL_RELEASE:
-	  { 
-	   int x = Fl::event_x();
-	   int y = Fl::event_y();
-	   IndexType clickedIndex;
-	   clickedIndex[0]=x;
-	   clickedIndex[1]=y;
-	   clickedIndex=this->WindowToImageCoordinates(clickedIndex);
-	   if(m_Drag)
-	   {
-	     typename RectangleType::Pointer rectangle = RectangleType::New();
-	     IndexType boxIndex;
-	     SizeType boxSize;
-	    // compute the size of the select box
-	     if(clickedIndex[0]>m_LastIndex[0])
-	     {
-	       boxIndex[0]=m_LastIndex[0];
-	       boxSize[0]=clickedIndex[0]-m_LastIndex[0];
-             }
-	     else
-             {
-               boxIndex[0]=clickedIndex[0];
-               boxSize[0]=m_LastIndex[0]-clickedIndex[0];
-             }
-             if(clickedIndex[1]>m_LastIndex[1])
-             {
-               boxIndex[1]=m_LastIndex[1];
-               boxSize[1]=clickedIndex[1]-m_LastIndex[1];
-             }
-             else
-             {
-               boxIndex[1]=clickedIndex[1];
-               boxSize[1]=m_LastIndex[1]-clickedIndex[1];
-             }
-           rectangle->SetIndex(boxIndex);
-           rectangle->SetSize(boxSize);
-           rectangle->SetColor(m_ClassColor);          
-           m_Parent->GetInterfaceBoxesList()->PopBack();          
-           typename PolygonType::Pointer polyg = PolygonType::New();
-           ContinuousIndexType newVertex;
-           // Up Left corner
-           newVertex[0] = boxIndex[0];
-           newVertex[1] = boxIndex[1];
-           polyg->AddVertex(newVertex);
-           // Up Right corner
-           newVertex[0] += boxSize[0];
-           polyg->AddVertex(newVertex);
-           // Down Right corner
-           newVertex[1] += boxSize[1];
-           polyg->AddVertex(newVertex);
-           // Down Left corner
-           newVertex[0]= boxIndex[0];
-           polyg->AddVertex(newVertex);     
-           polyg->SetValue(m_Parent->GetNextROILabel());             
-           m_Parent->GetPolygonROIList()->PushBack(polyg);
-           m_PolygonInProgress = false;
-         }
-      m_Parent->Update();
-      m_Drag=false;
-      return 1;  
       }
-    } 
-  return 0;
+         
+      case FL_RELEASE:
+      { 
+	int x = Fl::event_x();
+	int y = Fl::event_y();
+	IndexType clickedIndex;
+	clickedIndex[0]=x;
+	clickedIndex[1]=y;
+	clickedIndex=this->WindowToImageCoordinates(clickedIndex);
+	if(m_Drag)
+	{
+	  m_Parent->GetInterfaceBoxesList()->PopBack();          
+	}
+	if(m_Parent->GetPolygonROIList()->Size()==0)
+	{
+	  m_Parent->GetPolygonROIList()->PushBack(PolygonType::New());
+	  m_Parent->GetPolygonROIList()->Back()->SetValue(m_Parent->GetNextROILabel());
+	}
+	IndexType boxIndex;
+	SizeType boxSize;
+	if(clickedIndex[0]>m_LastIndex[0])
+	{
+	  boxIndex[0]=m_LastIndex[0];
+	  boxSize[0]=clickedIndex[0]-m_LastIndex[0];
+	}
+	else
+	{
+	  boxIndex[0]=clickedIndex[0];
+	  boxSize[0]=m_LastIndex[0]-clickedIndex[0];
+	}
+	if(clickedIndex[1]>m_LastIndex[1])
+	{
+	  boxIndex[1]=m_LastIndex[1];
+	  boxSize[1]=clickedIndex[1]-m_LastIndex[1];
+	}
+	else
+	{
+	  boxIndex[1]=clickedIndex[1];
+	  boxSize[1]=m_LastIndex[1]-clickedIndex[1];
+	}
+	ContinuousIndexType newVertex;
+	// Up Left corner
+	newVertex[0] = boxIndex[0];
+	newVertex[1] = boxIndex[1];
+	m_Parent->GetPolygonROIList()->Back()->AddVertex(newVertex);
+	// Up Right corner
+	newVertex[0] += boxSize[0];
+	m_Parent->GetPolygonROIList()->Back()->AddVertex(newVertex);
+	// Down Right corner
+	newVertex[1] += boxSize[1];
+	m_Parent->GetPolygonROIList()->Back()->AddVertex(newVertex);
+	// Down Left corner
+	newVertex[0]= boxIndex[0];
+	m_Parent->GetPolygonROIList()->Back()->AddVertex(newVertex);     
+	m_Parent->GetPolygonROIList()->PushBack(PolygonType::New());
+	m_Parent->GetPolygonROIList()->Back()->SetValue(m_Parent->GetNextROILabel());
+	m_Drag=false;
+	m_Parent->Update();
+	return 1;
+      } 
+    }
+    return 0;
   }
   
   virtual int PolygonROISelectionHandle(int event)
@@ -290,18 +288,19 @@ class ITK_EXPORT ImageViewerFullWidget
           if(Fl::event_button()==FL_LEFT_MOUSE)
           {
             // If not already editing a polygon, start a new one.
-            if(!m_PolygonInProgress)
-            {
-              m_Parent->GetPolygonROIList()->PushBack(PolygonType::New());
-              m_Parent->GetPolygonROIList()->Back()->SetValue(m_Parent->GetNextROILabel());
-              m_PolygonInProgress = true;
-            }
-            m_Parent->GetPolygonROIList()->Back()->AddVertex(clickedIndex); 
-            m_Parent->Update();
+            if(m_Parent->GetPolygonROIList()->Size()==0)
+	      {
+		m_Parent->GetPolygonROIList()->PushBack(PolygonType::New());
+		m_Parent->GetPolygonROIList()->Back()->SetValue(m_Parent->GetNextROILabel());
+	      }
+	    m_Parent->GetPolygonROIList()->Back()->AddVertex(clickedIndex); 
+	    m_Parent->Update();
           }
           else if(Fl::event_button()==FL_RIGHT_MOUSE)
           {
-            m_PolygonInProgress = false;
+	    m_Parent->GetPolygonROIList()->PushBack(PolygonType::New());
+	    m_Parent->GetPolygonROIList()->Back()->SetValue(m_Parent->GetNextROILabel());
+	    
           }
           return 1;
         }
@@ -310,14 +309,17 @@ class ITK_EXPORT ImageViewerFullWidget
           // erase the last vertex of the current polygon
           if(Fl::event_key()==FL_Page_Down)
           {
-            unsigned int sizeOfThePolygon = m_Parent->GetPolygonROIList()->Back()->GetVertexList()->Size();
-            if(m_PolygonInProgress && sizeOfThePolygon>0)
-            {
-            // itk::PolylineParametricPath does not provide a RemoveVertex() method, and the access to the vertex list is const, so we have no other choice to remove a vertex.
-              VertexListPointerType list = const_cast<VertexListType *>(m_Parent->GetPolygonROIList()->Back()->GetVertexList());
-              list->pop_back();
-              m_Parent->Update();
-            }
+	    if(m_Parent->GetPolygonROIList()->Size()>0)
+	    {
+	      unsigned int sizeOfThePolygon = m_Parent->GetPolygonROIList()->Back()->GetVertexList()->Size();
+	      if(sizeOfThePolygon>0)
+	      {
+		// itk::PolylineParametricPath does not provide a RemoveVertex() method, and the access to the vertex list is const, so we have no other choice to remove a vertex.
+		VertexListPointerType list = const_cast<VertexListType *>(m_Parent->GetPolygonROIList()->Back()->GetVertexList());
+		list->pop_back();
+		m_Parent->Update();
+	      }
+	    }
           }
         return 1;        
         }
@@ -328,14 +330,14 @@ class ITK_EXPORT ImageViewerFullWidget
   virtual int handle(int event)
   {
   // Handle the mode selection to call the specific handle methods */
-//   if(event == FL_KEYDOWN)
-//     {
-//       // Erase the last ROI
-//       if(Fl::event_key()==FL_Delete && m_Parent->GetPolygonROIList()->Size() > 0)
-//       {
-//         m_Parent->GetPolygonROIList()->Erase(m_Parent->GetPolygonROIList()->Size()-1);
-//         m_Parent->Update();
-//       }
+  if(event == FL_KEYDOWN)
+    {
+      // Erase the last ROI
+      if(Fl::event_key()==FL_Delete && m_Parent->GetPolygonROIList()->Size() > 0)
+      {
+        m_Parent->GetPolygonROIList()->Erase(m_Parent->GetPolygonROIList()->Size()-1);
+        m_Parent->Update();
+      }
 //       else if(Fl::event_key()==FL_Control_L)
 //       {
 //         m_ShortCutRectangle = !m_ShortCutRectangle;
@@ -365,7 +367,7 @@ class ITK_EXPORT ImageViewerFullWidget
 //           std::cout<<"Polygon ROI selection mode OFF"<<std::endl;
 //         }
 //       }
-//     }  
+    }  
     // handle the pixel value reporting
     switch(event)
     {
@@ -432,10 +434,6 @@ class ITK_EXPORT ImageViewerFullWidget
       if(m_Parent->GetBuilt()) 
 	m_Parent->Update();
     }
-  
-  itkSetMacro(ClassColor,ColorType);
-  itkGetMacro(ClassColor,ColorType);
-
 
  protected:
   /**
@@ -446,23 +444,17 @@ class ITK_EXPORT ImageViewerFullWidget
       m_MouseIn = false;
       m_MousePos.Fill(0);
       m_MouseMoveCount = 0;
-      m_ValueUpdateFrequency = 5;
-      m_ClassColor[0]=0.;
-      m_ClassColor[1]=1.;
-      m_ClassColor[2]=0.;
-      m_ClassColor[3]=0.5;
       m_LastIndex.Fill(0);
       m_ShortCutRectangle = false;
       m_ShortCutPolygon = false;
       m_Drag = false;
-      m_PolygonInProgress = false;
     };
   /**
    * Destructor.
    */
   ~ImageViewerFullWidget()
   {
-  		m_Parent = NULL;
+    m_Parent = NULL;
   }
 
  private:
@@ -471,12 +463,10 @@ class ITK_EXPORT ImageViewerFullWidget
   bool m_MouseIn;
   unsigned int m_MouseMoveCount;
   unsigned int  m_ValueUpdateFrequency;
-  ColorType m_ClassColor;
   IndexType m_LastIndex;
   bool m_ShortCutRectangle;
   bool m_ShortCutPolygon;
   bool m_Drag;
-  bool m_PolygonInProgress;
 };
 
 } // end namespace otb

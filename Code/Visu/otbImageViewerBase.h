@@ -34,6 +34,7 @@ PURPOSE.  See the above copyright notices for more information.
 #include <FL/Fl_Multiline_Output.H>
 #include "otbImage.h"
 #include "otbImageToVectorImageCastFilter.h"
+#include <map>
 
 
 namespace otb
@@ -84,7 +85,7 @@ class ITK_EXPORT ImageViewerBase
  typedef otb::ImageViewerScrollWidget<InputPixelType,LabelType> ScrollWidgetType;
  typedef otb::ImageViewerZoomWidget<InputPixelType,LabelType> ZoomWidgetType;
  typedef otb::ImageViewerFullWidget<InputPixelType,LabelType> FullWidgetType;
- typedef Fl_Multiline_Output * FlOutputPointerType;
+ typedef Fl_Output * FlOutputPointerType;
 
   typedef typename ScrollWidgetType::ImageType ImageType;
   typedef typename ImageType::Pointer ImagePointerType;
@@ -143,10 +144,11 @@ class ITK_EXPORT ImageViewerBase
   typedef typename ImageWidgetPolygonFormType::ColorType ColorType;
   typedef ImageWidgetCircleForm ImageWidgetCircleFormType;
   typedef typename ImageWidgetCircleFormType::Pointer ImageWidgetCircleFormPointerType;
+  typedef std::map<LabelType,ColorType> ROIColorMapType;
 
-  /// Accessors
-  itkGetMacro(Built,bool);
-  itkGetMacro(ShrinkFactor,unsigned int);
+ /// Accessors
+ itkGetMacro(Built,bool);
+ itkGetMacro(ShrinkFactor,unsigned int);
   itkSetMacro(RedChannelIndex,unsigned int);
   itkGetMacro(RedChannelIndex,unsigned int);
   itkSetMacro(GreenChannelIndex,unsigned int);
@@ -164,12 +166,13 @@ class ITK_EXPORT ImageViewerBase
   itkGetObjectMacro(PolygonROIList, PolygonListType);
   itkSetObjectMacro(PolygonROIList, PolygonListType);
   itkGetConstReferenceMacro(MinComponentValue,VectorPixelType);
-  itkGetConstReferenceMacro(MaxComponentValue,VectorPixelType);
-  itkGetObjectMacro(InterfaceBoxesList,FormListType);
+ itkGetConstReferenceMacro(MaxComponentValue,VectorPixelType);
+ itkGetObjectMacro(InterfaceBoxesList,FormListType);
+ itkSetObjectMacro(InterfaceBoxesList,FormListType);
   itkSetMacro(InterfaceBoxesColor,ColorType);
   itkGetMacro(InterfaceBoxesColor,ColorType);
-  itkSetMacro(NextROIColor,ColorType);
-  itkGetMacro(NextROIColor,ColorType);
+  itkSetMacro(DefaultROIColor,ColorType);
+  itkGetMacro(DefaultROIColor,ColorType);
   itkSetMacro(NextROILabel,LabelType);
   itkGetMacro(NextROILabel,LabelType);
   itkGetMacro(FullWidget,FullWidgetPointerType);
@@ -182,8 +185,16 @@ class ITK_EXPORT ImageViewerBase
   itkSetMacro(RectangularROISelectionMode,bool);
   itkGetMacro(RectangularROISelectionMode,bool);
   itkSetMacro(PolygonalROISelectionMode,bool);
-  itkGetMacro(PolygonalROISelectionMode,bool);
+ itkGetMacro(PolygonalROISelectionMode,bool);
  itkGetObjectMacro(InputImage,ImageType);
+ itkGetMacro(ImageGeometry,double);
+ itkSetMacro(ShowZoomWidget,bool);
+ itkGetMacro(ShowZoomWidget,bool);
+ itkSetMacro(ShowFullWidget,bool);
+ itkGetMacro(ShowFullWidget,bool);
+ itkSetMacro(ShowScrollWidget,bool);
+ itkGetMacro(ShowScrollWidget,bool);
+
 
   /** Set the input image (VectorImage version) */
   virtual void SetImage(ImageType * img);
@@ -304,6 +315,37 @@ class ITK_EXPORT ImageViewerBase
    */
   virtual void Reset(void);
 
+ /**
+  * Add a new color-label combination in the ROI color map. Note
+  * that if the entry already exists, it will be overwritten.
+  * \param label The label
+  * \param color the color to associate the label with
+  */
+ virtual void AddROIColorMapEntry(const LabelType &label, const ColorType &color);
+
+
+ /**
+  * Remove a new color-label combination in the ROI color map. If the label
+  * is not present, does nothing.
+  * \param label The label
+  */
+ virtual void RemoveROIColorMapEntry(const LabelType &label);
+
+/**
+  * Fill the color parameter with the color entry associated with the label. Returns
+  * true if the entry exists, and false otherwise.
+  * \param label The label
+  * \param color The color
+  * \return true if the label was found. 
+  */
+ virtual bool GetROIColorMapEntry(const LabelType &label, ColorType &color);
+
+
+ /**
+  * Clear the ROI color map. 
+  */
+ virtual void ClearROIColorMap(void);
+
 protected:
 
    /**
@@ -386,7 +428,7 @@ protected:
   /// Interface boxes
   FormListPointerType m_InterfaceBoxesList;
   /// Next ROI color 
-  ColorType m_NextROIColor;
+  ColorType m_DefaultROIColor;
   /// Interfaces box color
   ColorType m_InterfaceBoxesColor;
   /// Label of the next ROI
@@ -395,7 +437,8 @@ protected:
   bool m_RectangularROISelectionMode;
   /// Toogle the polygonal ROI selection mode
   bool m_PolygonalROISelectionMode;
-
+ /// Map used to associate a label with a color
+  ROIColorMapType m_ROIColorMap;
 };
 
 

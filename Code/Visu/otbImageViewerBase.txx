@@ -44,10 +44,10 @@ namespace otb
     m_InterfaceBoxesColor[1]=0;
     m_InterfaceBoxesColor[2]=0;
     m_InterfaceBoxesColor[3]=1.0;
-    m_NextROIColor[0]=0;
-    m_NextROIColor[1]=0;
-    m_NextROIColor[2]=1.0;
-    m_NextROIColor[3]=0.5;
+    m_DefaultROIColor[0]=0;
+    m_DefaultROIColor[1]=0;
+    m_DefaultROIColor[2]=1.0;
+    m_DefaultROIColor[3]=0.5;
     m_NextROILabel = 0;
     m_ShrinkFactor=1;
     m_RedChannelIndex = 0;
@@ -189,18 +189,20 @@ namespace otb
     m_ZoomWidget->SetFormOverlayVisible(true);
     
     // Create the zoom selection mode
-    BoxPointerType zoomBox = BoxType::New();
-    SizeType zoomBoxSize;
-    IndexType zoomBoxIndex;
-    zoomBoxSize[0]=(m_ZoomWidget->GetViewedRegion().GetSize()[0]);
-    zoomBoxSize[1]=(m_ZoomWidget->GetViewedRegion().GetSize()[1]);
-    zoomBoxIndex[0]=(m_ZoomWidget->GetViewedRegion().GetIndex()[0]);
-    zoomBoxIndex[1]=(m_ZoomWidget->GetViewedRegion().GetIndex()[1]);
-    zoomBox->SetIndex(zoomBoxIndex);
-    zoomBox->SetSize(zoomBoxSize);
-    zoomBox->SetColor(m_InterfaceBoxesColor);
-    m_InterfaceBoxesList->PushBack(zoomBox);
-
+    if(m_ShowZoomWidget)
+      {
+	BoxPointerType zoomBox = BoxType::New();
+	SizeType zoomBoxSize;
+	IndexType zoomBoxIndex;
+	zoomBoxSize[0]=(m_ZoomWidget->GetViewedRegion().GetSize()[0]);
+	zoomBoxSize[1]=(m_ZoomWidget->GetViewedRegion().GetSize()[1]);
+	zoomBoxIndex[0]=(m_ZoomWidget->GetViewedRegion().GetIndex()[0]);
+	zoomBoxIndex[1]=(m_ZoomWidget->GetViewedRegion().GetIndex()[1]);
+	zoomBox->SetIndex(zoomBoxIndex);
+	zoomBox->SetSize(zoomBoxSize);
+	zoomBox->SetColor(m_InterfaceBoxesColor);
+	m_InterfaceBoxesList->PushBack(zoomBox);
+      }
     // decide wether to use scroll view or not
     if(size[0]<m_ScrollLimitSize&&size[1]<m_ScrollLimitSize)
       {
@@ -326,6 +328,7 @@ namespace otb
   ImageViewerBase<TPixel,TLabel>
   ::Show(void)
   {
+    //comment: std::cout<<"Entering show method"<<std::endl;
     if(!m_Built)
       {
 	this->Build();
@@ -346,6 +349,7 @@ namespace otb
       m_ZoomWidget->Show();
     }
     Fl::check();
+    //comment: std::cout<<"Leaving show method"<<std::endl;
   }
   /** This is a helper class that performs a Show() and Fl::run() in order to ease 
       the use of the class for example in wrappings.*/
@@ -382,18 +386,20 @@ namespace otb
   ::GenerateOverlayList(void)
   {
     FormListPointerType new_list = FormListType::New();
-    
-    BoxPointerType zoomBox = BoxType::New();
-    SizeType zoomBoxSize;
-    IndexType zoomBoxIndex;
-    zoomBoxSize[0]=(m_ZoomWidget->GetViewedRegion().GetSize()[0]);
-    zoomBoxSize[1]=(m_ZoomWidget->GetViewedRegion().GetSize()[1]);
-    zoomBoxIndex[0]=(m_ZoomWidget->GetViewedRegion().GetIndex()[0]);
-    zoomBoxIndex[1]=(m_ZoomWidget->GetViewedRegion().GetIndex()[1]);
-    zoomBox->SetIndex(zoomBoxIndex);
-    zoomBox->SetSize(zoomBoxSize);
-    zoomBox->SetColor(m_InterfaceBoxesColor);
-    m_InterfaceBoxesList->SetNthElement(0,zoomBox);
+    if(m_ShowZoomWidget)
+      {
+	BoxPointerType zoomBox = BoxType::New();
+	SizeType zoomBoxSize;
+	IndexType zoomBoxIndex;
+	zoomBoxSize[0]=(m_ZoomWidget->GetViewedRegion().GetSize()[0]);
+	zoomBoxSize[1]=(m_ZoomWidget->GetViewedRegion().GetSize()[1]);
+	zoomBoxIndex[0]=(m_ZoomWidget->GetViewedRegion().GetIndex()[0]);
+	zoomBoxIndex[1]=(m_ZoomWidget->GetViewedRegion().GetIndex()[1]);
+	zoomBox->SetIndex(zoomBoxIndex);
+	zoomBox->SetSize(zoomBoxSize);
+	zoomBox->SetColor(m_InterfaceBoxesColor);
+	m_InterfaceBoxesList->SetNthElement(0,zoomBox);
+      }
     
     if(m_UseScroll)
     {
@@ -407,7 +413,16 @@ namespace otb
       box->SetSize(scrollBoxSize);
       box->SetIndex(scrollBoxIndex);
       box->SetColor(m_InterfaceBoxesColor);
-      m_InterfaceBoxesList->SetNthElement(1,box);
+      int idx;
+      if(m_ShowZoomWidget)
+	{
+	  idx = 1;
+	}
+      else
+	{
+	  idx = 0;
+	}
+      m_InterfaceBoxesList->SetNthElement(idx,box);
     }
     
     for(FormListIteratorType it1 = m_InterfaceBoxesList->Begin();
@@ -421,7 +436,17 @@ namespace otb
         {
             ImageWidgetPolygonFormPointerType new_poly = ImageWidgetPolygonFormType::New();
             new_poly->SetPolygon(it2.Get());
-            new_poly->SetColor(m_NextROIColor);
+
+	    ColorType color;
+
+	    if(this->GetROIColorMapEntry(it2.Get()->GetValue(),color))
+	      {
+		 new_poly->SetColor(color);
+	      }
+	    else
+	      {
+		new_poly->SetColor(m_DefaultROIColor);
+	      }
             
             for(PolygonIteratorType pIt = it2.Get()->GetVertexList()->Begin();
               pIt != it2.Get()->GetVertexList()->End();++pIt)
@@ -455,6 +480,8 @@ namespace otb
   ImageViewerBase<TPixel,TLabel>
   ::Update(void)
   {
+    m_Updating = true;
+    //comment: std::cout<<"Update: "<<m_Label<<" Updating flag on"<<std::endl;
     GenerateOverlayList();
     Fl::check();
     UpdateScrollWidget();
@@ -467,12 +494,16 @@ namespace otb
   
     while(linkedIt!=m_LinkedViewerList->End()&&offIt!=m_LinkedViewerOffsetList.end())
     {
-      if(!linkedIt.Get()->GetUpdating())
+      if(!linkedIt.Get()->GetUpdating() && linkedIt.Get()->GetBuilt())
 	{
           linkedIt.Get()->Update();
-        }   
+        }
+      ++linkedIt;
+      ++offIt;
     }
   Fl::check();
+  //comment: std::cout<<"Update: "<<m_Label<<" Updating flag off"<<std::endl;
+  m_Updating = false;
   }
 
   template <class TPixel, class TLabel>
@@ -480,8 +511,10 @@ namespace otb
   ImageViewerBase<TPixel,TLabel>
   ::ReportPixel(IndexType index)
   {
+    //comment: std::cout<<"Entering report pixel: "<<m_Label<<std::endl;
     if(m_PixLocOutput == NULL)
     {
+      //comment: std::cout<<"PixLocOutput == NULL, returning ..."<<std::endl;
       return;
     }
     itk::OStringStream oss;
@@ -492,8 +525,21 @@ namespace otb
     
     if(m_InputImage->GetBufferedRegion().IsInside(index))
       {
+	//comment: std::cout<<"Index: "<<index<<std::endl;
 	typename ImageType::PixelType newPixel = m_InputImage->GetPixel(index);
         oss<<newPixel<<" ("<<m_Label<<" pixel values)"<<std::endl;
+      }
+    else
+      {
+	IndexType shrinkIndex;
+	shrinkIndex[0]=index[0]/m_ShrinkFactor;
+	shrinkIndex[1]=index[1]/m_ShrinkFactor;
+	
+	if(m_Shrink->GetOutput()->GetBufferedRegion().IsInside(shrinkIndex))
+	  {
+	    typename ImageType::PixelType newPixel = m_Shrink->GetOutput()->GetPixel(shrinkIndex);
+	    oss<<newPixel<<" ("<<m_Label<<" pixel values)"<<std::endl;
+	  }
       }
       
     typename ViewerListType::Iterator linkedIt = m_LinkedViewerList->Begin();
@@ -501,9 +547,27 @@ namespace otb
   
     while(linkedIt!=m_LinkedViewerList->End()&&offIt!=m_LinkedViewerOffsetList.end())
     {
-      IndexType currentIndex = index + (*offIt);
-      typename ImageType::PixelType newPixel = linkedIt.Get()->GetInputImage()->GetPixel(currentIndex);
-      oss<<newPixel<<" ("<<linkedIt.Get()->GetLabel()<<" pixel values)"<<std::endl;
+      IndexType currentIndex = index + (*offIt); 
+      //comment: std::cout<<"CurrentIndex: "<<currentIndex<<std::endl;
+      if(linkedIt.Get()->GetInputImage()->GetBufferedRegion().IsInside(currentIndex))
+      {
+	typename ImageType::PixelType newPixel = linkedIt.Get()->GetInputImage()->GetPixel(currentIndex);
+        oss<<newPixel<<" ("<<linkedIt.Get()->GetLabel()<<" pixel values)"<<std::endl;
+      }
+    else
+      {
+	IndexType shrinkIndex;
+	shrinkIndex[0]=currentIndex[0]/m_ShrinkFactor;
+	shrinkIndex[1]=currentIndex[1]/m_ShrinkFactor;
+	
+	if(linkedIt.Get()->GetShrinkedImage()->GetBufferedRegion().IsInside(shrinkIndex))
+	  {
+	    typename ImageType::PixelType newPixel = linkedIt.Get()->GetShrinkedImage()->GetPixel(shrinkIndex);
+	    oss<<newPixel<<" ("<<linkedIt.Get()->GetLabel()<<" pixel values)"<<std::endl;
+	  }
+      }
+      ++linkedIt;
+      ++offIt;
     }
     if(oss.good())
       {
@@ -511,6 +575,7 @@ namespace otb
 	m_PixLocOutput->redraw();
 	Fl::check();
       }
+    //comment: std::cout<<"Leaving report pixel: "<<m_Label<<std::endl;
   }
 
  template <class TPixel, class TLabel>
@@ -597,6 +662,7 @@ ImageViewerBase<TPixel,TLabel>
 ::ChangeFullViewedRegion(IndexType clickedIndex)
 {
   m_Updating = true;
+  //comment: std::cout<<"ChangeFullViewedRegion: "<<m_Label<<" Updating flag on"<<std::endl;
   RegionType region = m_FullWidget->GetViewedRegion();
   IndexType newIndex;
   newIndex[0]=clickedIndex[0]-region.GetSize()[0]/2;
@@ -622,6 +688,7 @@ ImageViewerBase<TPixel,TLabel>
       ++offIt;
       ++linkedIt;			    
     }
+//comment: std::cout<<"ChangeFullViewedRegion: "<<m_Label<<" Updating flag off"<<std::endl;
   m_Updating = false;
 }
 
@@ -631,6 +698,7 @@ template <class TPixel, class TLabel>
 ::ChangeZoomViewedRegion(IndexType clickedIndex)
 { 
   m_Updating = true;
+  //comment: std::cout<<"ChangeZoomViewedRegion: "<<m_Label<<" Updating flag on"<<std::endl;
   RegionType region = m_ZoomWidget->GetViewedRegion();
   IndexType newIndex;
   newIndex[0]=clickedIndex[0]-region.GetSize()[0]/2;
@@ -655,6 +723,7 @@ template <class TPixel, class TLabel>
       ++offIt;
       ++linkedIt;			    
     }
+  //comment: std::cout<<"ChangeZoomViewedRegion: "<<m_Label<<" Updating flag off"<<std::endl;
   m_Updating = false; 
 }
 
@@ -663,6 +732,7 @@ void
 ImageViewerBase<TPixel,TLabel>
 ::Link(Self * viewer, OffsetType offset, bool backwardLinkFlag)
 {
+  //comment: std::cout<<"Entering link: "<<viewer->GetLabel()<<" flag: "<<backwardLinkFlag<<std::endl;
   // Search if this viewer is already linked
   typename ViewerListType::Iterator it = m_LinkedViewerList->Begin();
   while(it!=m_LinkedViewerList->End())
@@ -685,6 +755,7 @@ ImageViewerBase<TPixel,TLabel>
       invertOffset[1]=-offset[1];
       viewer->Link(this,invertOffset,false);
     }
+   //comment: std::cout<<"Leaving link: "<<viewer->GetLabel()<<" flag: "<<backwardLinkFlag<<std::endl;
 }
 
 template <class TPixel, class TLabel>
@@ -872,6 +943,49 @@ ImageViewerBase<TPixel,TLabel>
       m_ScrollWidget->Reset();
     }
 }
+
+
+template<class TPixel, class TLabel>
+void
+ImageViewerBase<TPixel,TLabel>
+::AddROIColorMapEntry(const LabelType &label, const ColorType &color)
+{
+  m_ROIColorMap[label]=color;
+}
+
+template<class TPixel, class TLabel>
+void
+ImageViewerBase<TPixel,TLabel>
+::RemoveROIColorMapEntry(const LabelType &label)
+{
+  m_ROIColorMap.erase(label);
+}
+
+template<class TPixel, class TLabel>
+bool
+ImageViewerBase<TPixel,TLabel>
+::GetROIColorMapEntry(const LabelType &label, ColorType &color)
+{
+  typename ROIColorMapType::iterator it = m_ROIColorMap.find(label);
+  bool resp = false;
+
+  if(it!=m_ROIColorMap.end())
+    {
+      color = it->second;
+      resp = true;
+    }
+
+  return resp;
+}
+
+template<class TPixel, class TLabel>
+void 
+ImageViewerBase<TPixel,TLabel>
+::ClearROIColorMap(void)
+{
+  m_ROIColorMap.clear();
+}
+
 
 } // end namespace otb
 #endif

@@ -81,9 +81,11 @@ class ITK_EXPORT ImageViewerScrollWidget
 	    clickedIndex=this->WindowToImageCoordinates(clickedIndex);
 	    clickedIndex[0]=clickedIndex[0]*m_Parent->GetShrinkFactor();
 	    clickedIndex[1]=clickedIndex[1]*m_Parent->GetShrinkFactor();
+	    //std::cout<<"Scroll widget: "<<m_Parent->GetLabel()<<" before parent update"<<std::endl;
 	    m_Parent->ChangeFullViewedRegion(clickedIndex);
 	    m_Parent->ChangeZoomViewedRegion(clickedIndex);
             m_Parent->Update();
+	    //std::cout<<"Scroll widget: "<<m_Parent->GetLabel()<<" after parent update"<<std::endl;
 	    return 1;
 	  }
 	case FL_ENTER:
