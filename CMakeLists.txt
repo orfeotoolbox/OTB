@@ -66,87 +66,6 @@ SET(OTB_VERSION_STRING "${OTB_VERSION_MAJOR}.${OTB_VERSION_MINOR}.${OTB_VERSION_
 #-----------------------------------------------------------------------------
 # FIND EXTERNAL LIBRAIRIES USE
 
-#-------------------------------
-# Librairie ITK
-#-------------------------------
-
-OPTION(OTB_USE_EXTERNAL_ITK "Use an outside build of ITK." OFF)
-IF(OTB_USE_EXTERNAL_ITK)
-  FIND_PACKAGE(ITK)
-  IF(ITK_FOUND)
-                  INCLUDE(${ITK_USE_FILE})
-  ELSE(ITK_FOUND)
-                  MESSAGE(FATAL_ERROR
-                  "Cannot build OTB project without ITK.  Please set ITK_DIR or set OTB_USE_EXTERNAL_ITK OFF to use INTERNAL ITK set on OTB/Utilities repository.")
-        ENDIF(ITK_FOUND)
-ENDIF(OTB_USE_EXTERNAL_ITK)
-
-#SET(CURL_INCLUDE_DIR )
-#MARK_AS_ADVANCED(CURL_INCLUDE_DIRS)
-#SET(CURL_LIBRARY )
-#MARK_AS_ADVANCED(CURL_LIBRARY_DIRS)
-
-#-------------------------------
-# CURL Library
-#-------------------------------
-OPTION(OTB_USE_CURL "Use curl library." OFF)
-MARK_AS_ADVANCED(OTB_USE_CURL)
-IF(OTB_USE_CURL)
-
-#        INCLUDE(CheckIncludeFiles)
-#        INCLUDE(CheckLibraryExists)
-#        CHECK_INCLUDE_FILES("curl/curl.h" OTB_HAVE_CURL_HEADER)
-#        CHECK_LIBRARY_EXISTS("curl" "curl_easy_init" "" OTB_HAVE_CURL_LIBRARY)
-#        IF( NOT OTB_HAVE_CURL_HEADER )
-#            MESSAGE("Cannot find CURL include directory. Please set CURL_INCLUDE_DIRS or SET OTB_USE_CURL OFF.")
-#        ENDIF( NOT OTB_HAVE_CURL_HEADER)
-#        IF( NOT OTB_HAVE_CURL_LIBRARY )
-#            MESSAGE("Cannot find CURL include directory. Please set CURL_LIBRARY_DIRS or SET OTB_USE_CURL OFF.")
-#        ENDIF( NOT OTB_HAVE_CURL_LIBRARY)
-
-        FIND_PATH(CURL_INCLUDE_DIR curl/curl.h PATHS)
-        MARK_AS_ADVANCED(CURL_INCLUDE_DIR)
-        IF (NOT CURL_INCLUDE_DIR)
-                MESSAGE(FATAL_ERROR
-                        "Cannot find CURL include directory. Please set CURL_INCLUDE_DIR or SET OTB_USE_CURL OFF.")
-        ENDIF (NOT CURL_INCLUDE_DIR)
-
-        FIND_LIBRARY(CURL_LIBRARY curl )
-        MARK_AS_ADVANCED(CURL_LIBRARY)
-        IF (NOT CURL_LIBRARY)
-                MESSAGE(FATAL_ERROR
-                        "Cannot find CURL library. Please set CURL_LIBRARY or SET OTB_USE_CURL OFF.")
-        ENDIF (NOT CURL_LIBRARY)
-
-        # Add compiler option 
-        ADD_DEFINITIONS(-DOTB_USE_CURL)
-
-        INCLUDE_DIRECTORIES(${CURL_INCLUDE_DIR})
-
-ENDIF(OTB_USE_CURL)
-
-
-#-------------------------------
-# GDAL Library
-#-------------------------------
-
-#FIND_LIBRARY(GDAL_LIBRARY_DIRS gdal PATHS $ENV{GDAL_LIBRARY_DIRS} ) 
-
-FIND_PATH(GDAL_LIBRARY_DIRS gdal PATHS $ENV{GDAL_LIBRARY_DIRS} )
-FIND_PATH(GDAL_INCLUDE_DIRS gdal.h $ENV{GDAL_INCLUDE_DIRS} /usr/include/gdal)
-IF (NOT GDAL_LIBRARY_DIRS)
-MESSAGE(FATAL_ERROR
-         "Cannot find GDAL library directory. Please set GDAL_LIBRARY_DIRS.")
-ENDIF (NOT GDAL_LIBRARY_DIRS)
-IF (NOT GDAL_INCLUDE_DIRS)
-MESSAGE(FATAL_ERROR
-         "Cannot find GDAL include directory. Please set GDAL_INCLUDE_DIRS.")
-ENDIF (NOT GDAL_INCLUDE_DIRS)
-
-
-INCLUDE_DIRECTORIES(${GDAL_INCLUDE_DIRS})
-LINK_DIRECTORIES( ${GDAL_LIBRARY_DIRS} )
-
 #-----------------------------------------------------------------------------
 # Option for generate Visu tools !!!
 OPTION(OTB_USE_VISU_GUI "Generate Gui/Visu tools directory. If ON, find OpenGL and FLTK package." ON)
@@ -155,15 +74,19 @@ MARK_AS_ADVANCED(OTB_USE_VISU_GUI)
 IF(OTB_USE_VISU_GUI)
 
         #-------------------------------
-        # Librairie OpenGL
+        # openGL Library
         #-------------------------------
         FIND_PACKAGE(OpenGL)
         IF(OPENGL_INCLUDE_PATH)
                 INCLUDE_DIRECTORIES(${OPENGL_INCLUDE_PATH})
         ENDIF(OPENGL_INCLUDE_PATH)
+   MESSAGE("OPENGL_INCLUDE_PATH -> ${OPENGL_INCLUDE_PATH}")
+   MESSAGE("OPENGL_INCLUDE_DIR -> ${OPENGL_INCLUDE_DIR}")
+#   MESSAGE("OPENGL_LIBRARIES -> ${OPENGL_LIBRARIES}")
+#   MESSAGE("OPENGL_LIBRARY -> ${OPENGL_LIBRARY}")
 
         #-------------------------------
-        # Librairie FLTK
+        # FLTK Library
         #-------------------------------
 
         # Option for internal/external FLTK 
@@ -262,16 +185,98 @@ IF(OTB_USE_VISU_GUI)
         
 ENDIF(OTB_USE_VISU_GUI)
 
-#  MESSAGE("FLUID_COMMAND -> ${FLUID_COMMAND}")
-#  MESSAGE("FLTK_BINARY_DIR -> ${FLTK_BINARY_DIR}")
-#  MESSAGE("FLTK_USE_FILE  -> ${FLTK_USE_FILE}")
-#  MESSAGE("FLTK_INCLUDE_DIRS  -> ${FLTK_INCLUDE_DIRS}")
-#  MESSAGE("FLTK_LIBRARY_DIRS  -> ${FLTK_LIBRARY_DIRS}")
-#  MESSAGE("FLTK_LIBRARIES  -> ${FLTK_LIBRARIES}")
-#  MESSAGE("FLTK_DIR  -> ${FLTK_DIR}")
-#  MESSAGE("FLTK_FLUID_COMMAND  -> ${FLTK_FLUID_COMMAND}")
-#  MESSAGE("FLTK_EXECUTABLE_DIRS  -> ${FLTK_EXECUTABLE_DIRS}")
-#  MESSAGE("OTB_VISU_GUI_LIBRARIES  -> ${OTB_VISU_GUI_LIBRARIES}")
+#MESSAGE("FLUID_COMMAND -> ${FLUID_COMMAND}")
+#MESSAGE("FLTK_BINARY_DIR -> ${FLTK_BINARY_DIR}")
+#MESSAGE("FLTK_USE_FILE  -> ${FLTK_USE_FILE}")
+#MESSAGE("FLTK_INCLUDE_DIRS  -> ${FLTK_INCLUDE_DIRS}")
+#MESSAGE("FLTK_LIBRARY_DIRS  -> ${FLTK_LIBRARY_DIRS}")
+#MESSAGE("FLTK_LIBRARIES  -> ${FLTK_LIBRARIES}")
+#MESSAGE("FLTK_DIR  -> ${FLTK_DIR}")
+#MESSAGE("FLTK_FLUID_COMMAND  -> ${FLTK_FLUID_COMMAND}")
+#MESSAGE("FLTK_EXECUTABLE_DIRS  -> ${FLTK_EXECUTABLE_DIRS}")
+#MESSAGE("OTB_VISU_GUI_LIBRARIES  -> ${OTB_VISU_GUI_LIBRARIES}")
+
+
+#-------------------------------
+# ITK Library
+#-------------------------------
+
+OPTION(OTB_USE_EXTERNAL_ITK "Use an outside build of ITK." OFF)
+IF(OTB_USE_EXTERNAL_ITK)
+  FIND_PACKAGE(ITK)
+  IF(ITK_FOUND)
+                  INCLUDE(${ITK_USE_FILE})
+  ELSE(ITK_FOUND)
+                  MESSAGE(FATAL_ERROR
+                  "Cannot build OTB project without ITK.  Please set ITK_DIR or set OTB_USE_EXTERNAL_ITK OFF to use INTERNAL ITK set on OTB/Utilities repository.")
+        ENDIF(ITK_FOUND)
+ENDIF(OTB_USE_EXTERNAL_ITK)
+
+#SET(CURL_INCLUDE_DIR )
+#MARK_AS_ADVANCED(CURL_INCLUDE_DIRS)
+#SET(CURL_LIBRARY )
+#MARK_AS_ADVANCED(CURL_LIBRARY_DIRS)
+
+#-------------------------------
+# CURL Library
+#-------------------------------
+OPTION(OTB_USE_CURL "Use curl library." OFF)
+MARK_AS_ADVANCED(OTB_USE_CURL)
+IF(OTB_USE_CURL)
+
+#        INCLUDE(CheckIncludeFiles)
+#        INCLUDE(CheckLibraryExists)
+#        CHECK_INCLUDE_FILES("curl/curl.h" OTB_HAVE_CURL_HEADER)
+#        CHECK_LIBRARY_EXISTS("curl" "curl_easy_init" "" OTB_HAVE_CURL_LIBRARY)
+#        IF( NOT OTB_HAVE_CURL_HEADER )
+#            MESSAGE("Cannot find CURL include directory. Please set CURL_INCLUDE_DIRS or SET OTB_USE_CURL OFF.")
+#        ENDIF( NOT OTB_HAVE_CURL_HEADER)
+#        IF( NOT OTB_HAVE_CURL_LIBRARY )
+#            MESSAGE("Cannot find CURL include directory. Please set CURL_LIBRARY_DIRS or SET OTB_USE_CURL OFF.")
+#        ENDIF( NOT OTB_HAVE_CURL_LIBRARY)
+
+        FIND_PATH(CURL_INCLUDE_DIR curl/curl.h PATHS)
+        MARK_AS_ADVANCED(CURL_INCLUDE_DIR)
+        IF (NOT CURL_INCLUDE_DIR)
+                MESSAGE(FATAL_ERROR
+                        "Cannot find CURL include directory. Please set CURL_INCLUDE_DIR or SET OTB_USE_CURL OFF.")
+        ENDIF (NOT CURL_INCLUDE_DIR)
+
+        FIND_LIBRARY(CURL_LIBRARY curl )
+        MARK_AS_ADVANCED(CURL_LIBRARY)
+        IF (NOT CURL_LIBRARY)
+                MESSAGE(FATAL_ERROR
+                        "Cannot find CURL library. Please set CURL_LIBRARY or SET OTB_USE_CURL OFF.")
+        ENDIF (NOT CURL_LIBRARY)
+
+        # Add compiler option 
+        ADD_DEFINITIONS(-DOTB_USE_CURL)
+
+        INCLUDE_DIRECTORIES(${CURL_INCLUDE_DIR})
+
+ENDIF(OTB_USE_CURL)
+
+
+#-------------------------------
+# GDAL Library
+#-------------------------------
+
+#FIND_LIBRARY(GDAL_LIBRARY_DIRS gdal PATHS $ENV{GDAL_LIBRARY_DIRS} ) 
+
+FIND_PATH(GDAL_LIBRARY_DIRS gdal PATHS $ENV{GDAL_LIBRARY_DIRS} )
+FIND_PATH(GDAL_INCLUDE_DIRS gdal.h $ENV{GDAL_INCLUDE_DIRS} /usr/include/gdal)
+IF (NOT GDAL_LIBRARY_DIRS)
+MESSAGE(FATAL_ERROR
+         "Cannot find GDAL library directory. Please set GDAL_LIBRARY_DIRS.")
+ENDIF (NOT GDAL_LIBRARY_DIRS)
+IF (NOT GDAL_INCLUDE_DIRS)
+MESSAGE(FATAL_ERROR
+         "Cannot find GDAL include directory. Please set GDAL_INCLUDE_DIRS.")
+ENDIF (NOT GDAL_INCLUDE_DIRS)
+
+
+INCLUDE_DIRECTORIES(${GDAL_INCLUDE_DIRS})
+LINK_DIRECTORIES( ${GDAL_LIBRARY_DIRS} )
 
 
 #-------------------------------
@@ -455,6 +460,15 @@ IF(WIN32)
    SET(BUILD_SHARED_LIBS OFF)
 ENDIF(WIN32)
 
+IF(OTB_USE_VISU_GUI)
+    SET(OTB_VISU_GUI_LIBRARIES "${FLTK_LIBRARIES};${OPENGL_LIBRARIES};${FLTK_PLATFORM_DEPENDENT_LIBS}")
+        IF(APPLE)
+            SET(OTB_VISU_GUI_LIBRARIES "${OTB_VISU_GUI_LIBRARIES} -Wl,-dylib_file,/System/Library/Frameworks/OpenGL.framework/Versions/A/Libraries/libGL.dylib:/System/Library/Frameworks/OpenGL.framework/Versions/A/Libraries/libGL.dylib ")
+        ENDIF(APPLE)
+ELSE(OTB_USE_VISU_GUI)
+        SET(OTB_VISU_GUI_LIBRARIES "")
+ENDIF(OTB_USE_VISU_GUI)
+
 
 OPTION(BUILD_EXAMPLES "Build the Examples directory." OFF)
 OPTION(BUILD_TESTING "Build testing." OFF)
@@ -465,7 +479,6 @@ SUBDIRS(Utilities Code)
 
 SUBDIRS(Wrapping)
 
-
 IF (BUILD_EXAMPLES)
   SUBDIRS(Examples)
 ENDIF (BUILD_EXAMPLES)
@@ -473,7 +486,6 @@ ENDIF (BUILD_EXAMPLES)
 IF (BUILD_TESTING)
   SUBDIRS(Testing)
 ENDIF (BUILD_TESTING)
-
 
 #-----------------------------------------------------------------------------
 # OTB requires special compiler flags on some platforms.
@@ -696,12 +708,6 @@ INCLUDE_DIRECTORIES(
   ${OTB_INCLUDE_DIRS_SYSTEM}
 )
 
-IF(OTB_USE_VISU_GUI)
-        SET(OTB_VISU_GUI_LIBRARIES "${FLTK_LIBRARIES};${OPENGL_LIBRARIES};${FLTK_PLATFORM_DEPENDENT_LIBS}")
-ELSE(OTB_USE_VISU_GUI)
-        SET(OTB_VISU_GUI_LIBRARIES "")
-ENDIF(OTB_USE_VISU_GUI)
-
 #-----------------------------------------------------------------------------
 # Uninstall cmake use to uninstall OTB.
 CONFIGURE_FILE(
@@ -729,7 +735,6 @@ EXPORT_LIBRARY_DEPENDENCIES(${OTB_BINARY_DIR}/OTBLibraryDepends.cmake)
 
 # Create the OTBConfig.cmake file containing the OTB configuration.
 INCLUDE (${OTB_SOURCE_DIR}/otbGenerateOTBConfig.cmake)
-
 
 # Install some files.
 INSTALL_FILES(/include/otb .h otbConfigure)
@@ -770,4 +775,5 @@ ELSE("${CMAKE_MAJOR_VERSION}.${CMAKE_MINOR_VERSION}" GREATER 1.7)
           "This version of CMake is too old to build this version of OTB.  "
           "Please upgrade to CMake 1.8.")
 ENDIF("${CMAKE_MAJOR_VERSION}.${CMAKE_MINOR_VERSION}" GREATER 1.7)
+
 
