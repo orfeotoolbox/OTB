@@ -79,8 +79,24 @@ try
 										
 				int utmZone = utmProjection->GetZoneFromGeoPoint(geoPoint);
 
-				std::cout << "Geographic   Point (Lat,Lon) : (" << geoPoint[1] << "," << geoPoint[0] << ")" << std::endl;
-				std::cout << "UTM Corresponding Zone       : ==> " << utmZone << " <=="	<< std::endl;
+     		if(!parseResult->IsOptionPresent("--OTBTesting"))
+				{
+					std::cout << "Geographic   Point (Lat,Lon) : (" << geoPoint[1] << "," << geoPoint[0] << ")" << std::endl;
+					std::cout << "UTM Corresponding Zone       : ==> " << utmZone << " <=="	<< std::endl;
+				}
+				else
+				{
+					std::string outputTestFileName = parseResult->GetParameterString("--OTBTesting",0);
+					
+					ofstream outputTestFile;
+					outputTestFile.open(outputTestFileName.c_str());
+					
+					outputTestFile << "Geographic   Point (Lat,Lon) : (" << geoPoint[1] << "," << geoPoint[0] << ")" << std::endl;
+					outputTestFile << "UTM Corresponding Zone       : ==> " << utmZone << " <=="	<< std::endl;
+					
+					outputTestFile.close();
+				}
+					
 	
 		}
 		catch( itk::ExceptionObject & err ) 
