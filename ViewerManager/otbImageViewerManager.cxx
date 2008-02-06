@@ -25,14 +25,14 @@ int main(int argc, char* argv[])
   typedef otb::ImageViewerManager<PixelType> ManagerType;
   ManagerType::Pointer manager = ManagerType::New();
   manager->Show();
-  std::string strTest("--Test");
+  std::string strTest("--OTBTesting");
   bool bFlRun(true);       
         
   for(int i = 1; i<argc;++i)
     {
       if( strTest.compare(argv[i])==0 )
       {
-        std::cout << "--Test option. No FL::run() call !" << std::endl;
+        std::cout << "--OTBTesting option. No FL::run() call !" << std::endl;
         bFlRun=false;
       }
       else
