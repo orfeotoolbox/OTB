@@ -38,7 +38,7 @@
 
 
 template<typename TMapProjection>
-int generic_main(int argc, char* argv[], TMapProjection* mapProjection, otb::CommandLineArgumentParseResult* parseResult) 
+int generic_main_carto_geo(int argc, char* argv[], TMapProjection* mapProjection, otb::CommandLineArgumentParseResult* parseResult) 
 {
 
   try 
@@ -53,9 +53,24 @@ int generic_main(int argc, char* argv[], TMapProjection* mapProjection, otb::Com
 				cartoPoint[1]=parseResult->GetParameterDouble("--YCarto");
 				
 				geoPoint = mapProjection->TransformPoint(cartoPoint);
-				
-				std::cout << std::setprecision(10) << "Cartographic Point  (x , y)  : (" << cartoPoint[0] << "," << cartoPoint[1] << ")" << std::endl;
-				std::cout << std::setprecision(10) << "Geographic   Point (Lat,Lon) : (" << geoPoint[1] << "," <<	geoPoint[0] << ")" << std::endl;
+
+     		if(!parseResult->IsOptionPresent("--OTBTesting"))
+				{
+					std::cout << std::setprecision(10) << "Cartographic Point  (x , y)  : (" << cartoPoint[0] << "," << cartoPoint[1] << ")" << std::endl;
+					std::cout << std::setprecision(10) << "Geographic   Point (Lat,Lon) : (" << geoPoint[1] << "," <<	geoPoint[0] << ")" << std::endl;
+				}
+				else
+				{
+					std::string outputTestFileName = parseResult->GetParameterString("--OTBTesting",0);
+					
+					ofstream outputTestFile;
+					outputTestFile.open(outputTestFileName.c_str());
+					
+					outputTestFile << std::setprecision(10) << "Cartographic Point  (x , y)  : (" << cartoPoint[0] << "," << cartoPoint[1] << ")" << std::endl;
+					outputTestFile << std::setprecision(10) << "Geographic   Point (Lat,Lon) : (" << geoPoint[1] << "," <<	geoPoint[0] << ")" << std::endl;
+					
+					outputTestFile.close();
+				}
 
 							
 		}
@@ -135,7 +150,7 @@ try
 					utmProjection->SetZone(numZone);
 					utmProjection->SetHemisphere(hemisphere);
 					
-					return generic_main<UtmProjectionType>(argc,argv, utmProjection, parseResult);
+					return generic_main_carto_geo<UtmProjectionType>(argc,argv, utmProjection, parseResult);
 				}
 				else
 				{
@@ -153,7 +168,7 @@ try
 						
 						lambertProjection->SetParameters(parameters[0],parameters[1],parameters[2],parameters[3]);
 					
-						return generic_main<LambertProjectionType>(argc,argv, lambertProjection, parseResult);
+						return generic_main_carto_geo<LambertProjectionType>(argc,argv, lambertProjection, parseResult);
 					}
 					else if ((typeMap == "SINUS")&&(nbParams==2))
 					{
@@ -162,7 +177,7 @@ try
 						
 						sinusoidalProjection->SetParameters(parameters[0],parameters[1]);
 					
-						return generic_main<SinusoidalProjectionType>(argc,argv, sinusoidalProjection, parseResult);
+						return generic_main_carto_geo<SinusoidalProjectionType>(argc,argv, sinusoidalProjection, parseResult);
 					}
 					else if ((typeMap == "ECKERT4")&&(nbParams==2))
 					{
@@ -171,7 +186,7 @@ try
 						
 						eckert4Projection->SetParameters(parameters[0],parameters[1]);
 					
-						return generic_main<Eckert4ProjectionType>(argc,argv, eckert4Projection, parseResult);
+						return generic_main_carto_geo<Eckert4ProjectionType>(argc,argv, eckert4Projection, parseResult);
 					}
 					else if ((typeMap == "TRANSMERCATOR")&&(nbParams==3))
 					{
@@ -180,7 +195,7 @@ try
 						
 						transMercatorProjection->SetParameters(parameters[0],parameters[1],parameters[2]);
 					
-						return generic_main<TransMercatorProjectionType>(argc,argv, transMercatorProjection, parseResult);
+						return generic_main_carto_geo<TransMercatorProjectionType>(argc,argv, transMercatorProjection, parseResult);
 					}
 					else if ((typeMap == "MOLLWEID")&&(nbParams==2))
 					{
@@ -189,7 +204,7 @@ try
 						
 						mollweidProjection->SetParameters(parameters[0],parameters[1]);
 					
-						return generic_main<MollweidProjectionType>(argc,argv, mollweidProjection, parseResult);
+						return generic_main_carto_geo<MollweidProjectionType>(argc,argv, mollweidProjection, parseResult);
 					}
 					else 
 					{
