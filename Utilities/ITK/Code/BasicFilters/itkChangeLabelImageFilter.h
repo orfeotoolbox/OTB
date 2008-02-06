@@ -70,7 +70,7 @@ public:
   {
     return !(*this != other);
   }
-  TInput GetChange( const TInput & original )
+  TOutput GetChange( const TInput & original )
   { 
     return m_ChangeMap[original]; 
   }

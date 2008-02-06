@@ -44,6 +44,7 @@ VectorImageToImageListFilter<TVectorImageType,TImageList>
 	  for(unsigned int i=0;i<inputPtr->GetNumberOfComponentsPerPixel();++i)
 	    {
 	      typename  OutputImageType::Pointer tmpImagePtr = OutputImageType::New();
+	      this->AddOutput(tmpImagePtr);
 	      outputPtr->PushBack(tmpImagePtr);
 	    }
 	}

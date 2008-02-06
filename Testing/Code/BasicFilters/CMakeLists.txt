@@ -687,6 +687,22 @@ ADD_TEST(ProlateValidationTest ${BASICFILTERS_TESTS7}
 		)
 
 
+# -------            otb::VectorImageToAmplitudeImageFilter  ------------------------------
+
+ADD_TEST(bfTuVectorImageToAmplitudeImageFilterNew ${BASICFILTERS_TESTS7}
+otbVectorImageToAmplitudeImageFilterNew)
+
+ADD_TEST(bfTvVectorImageToAmplitudeImageFilter ${BASICFILTERS_TESTS7}
+ --compare-image ${EPSILON}
+     		  ${BASELINE}/bfTvVectorImageToAmplitudeImageFilterOutput.tif
+		  ${TEMP}/bfTvVectorImageToAmplitudeImageFilterOutput.tif
+otbVectorImageToAmplitudeImageFilter
+${INPUTDATA}/poupees.tif
+${TEMP}/bfTvVectorImageToAmplitudeImageFilterOutput.tif
+)
+
+
+
 # A enrichir
 SET(BasicFilters_SRCS1
 otbLeeFilter.cxx
@@ -783,6 +799,8 @@ otbWindowedSincInterpolateImageLanczosFunction.cxx
 otbWindowedSincInterpolateImageBlackmanFunctionNew.cxx
 otbWindowedSincInterpolateImageBlackmanFunction.cxx
 otbProlateValidationTest.cxx
+otbVectorImageToAmplitudeImageFilterNew.cxx
+otbVectorImageToAmplitudeImageFilter.cxx
 )
 
 

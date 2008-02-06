@@ -56,17 +56,12 @@ class ITK_EXPORT Polygon
   typedef typename Superclass::ContinuousIndexType ContinuousIndexType;
   typedef typename VertexListType::ConstIterator   VertexListIteratorType;
 
-  typedef itk::Size<2>                             SizeType;
-  typedef itk::Index<2>                            IndexType;
+ typedef itk::ImageRegion<2>                       RegionType;
+  typedef typename RegionType::SizeType            SizeType;
+  typedef typename RegionType::IndexType           IndexType;
 
  itkSetMacro(Epsilon,double);
  itkGetMacro(Epsilon,double);
- 
- itkGetMacro(BoundingBoxIndex, IndexType);
- itkSetMacro(BoundingBoxIndex, IndexType);
- 
- itkGetMacro(BoundingBoxSize, SizeType);
- itkSetMacro(BoundingBoxSize, SizeType);
 
   /**
    * Check wether point is strictly inside the polygon.
@@ -119,9 +114,10 @@ class ITK_EXPORT Polygon
    bool IsTouching(VertexType a1, VertexType a2, VertexType b1, VertexType b2);
 
  /**
-  * Compute the polygon bounding box
+  * Compute the polygon bounding region.
+  * \return The region.
   */
- void ComputeBoundingBox();
+ RegionType GetBoundingRegion(void);
 
 protected:
   /** Constructor */
@@ -139,10 +135,6 @@ private:
   void operator=(const Self&); //purposely not implemented
 
   double m_Epsilon;
- // Polygon bounding box index
- IndexType m_BoundingBoxIndex;
- // Polygon bounding box size
- SizeType m_BoundingBoxSize;
 };
 }// End namespace otb
 

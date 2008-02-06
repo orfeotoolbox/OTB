@@ -448,6 +448,8 @@ class ITK_EXPORT ImageViewerFullWidget
       m_ShortCutRectangle = false;
       m_ShortCutPolygon = false;
       m_Drag = false;
+      m_ValueUpdateFrequency = 5;
+      
     };
   /**
    * Destructor.

@@ -27,10 +27,16 @@ PURPOSE.  See the above copyright notices for more information.
 namespace otb
 {
   /** \class ImageClassificationFilter
-   *  \brief 
+   *  \brief This filter performs the classification of a VectorImage using a SVM Model.
    *
-   * \ingroup 
-   * \ingroup
+   *  This filter is streamed and threaded, allowing to classify huge images. Because the
+   *  internal sample type has to be an itk::FixedArray, one must specify at compilation time
+   *  the maximum sample dimension. It is up to the user to specify a MaxSampleDimension sufficiently
+   *  high to integrate all its features. This filter internally use one SVMClassifier per thread.
+   *
+   * \sa SVMClassifier
+   * \ingroup Streamed
+   * \ingroup Threaded
    */
 template <class TInputImage, class TOutputImage, unsigned int VMaxSampleDimension = 10>
   class ITK_EXPORT SVMImageClassificationFilter

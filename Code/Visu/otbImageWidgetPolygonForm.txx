@@ -28,7 +28,7 @@ ImageWidgetPolygonForm<TValue>
 ::ImageWidgetPolygonForm()
 {
   m_Polygon = PolygonType::New();
-  m_Solid = true;
+  m_Solid = false;
   m_InternalValueToAlphaChannel = false;
 }
 template<class TValue>
