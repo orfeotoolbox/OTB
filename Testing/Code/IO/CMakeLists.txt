@@ -31,6 +31,7 @@ SET(IO_TESTS10    ${CXX_TEST_PATH}/otbIOTests10)
 SET(IO_TESTS11    ${CXX_TEST_PATH}/otbIOTests11)
 SET(IO_TESTS12    ${CXX_TEST_PATH}/otbIOTests12)
 SET(IO_TESTS13    ${CXX_TEST_PATH}/otbIOTests13)
+SET(IO_TESTS14    ${CXX_TEST_PATH}/otbIOTests14)
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ COMMON_TESTS3 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -1213,6 +1214,27 @@ ADD_TEST(ioTvossimElevManagerTest ${IO_TESTS12}
          )
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ 
+
+#----------------------------------------------------------------------------------
+# Exemples de tests sur les grosses images
+# Tests non lanc�s pour raison taille des fichiers produits
+#        ADD_TEST(ioTvStreamingIFWriterPARIS_SPOT5THR_WithoutStreaming ${IO_TESTS12} 
+#                 otbStreamingImageFileWriterTest
+#                 ${IMAGEDATA}/PARIS/SPOT5/THR
+#                 ${TEMP}/ioStreamingImageFileWriterTestCAI_ParisSpot5THR_WithoutStreaming.hd
+#                 0 # Test sans streaming
+#                 )
+#        ADD_TEST(ioTvStreamingIFWriterPARIS_SPOT5THR_WithStreaming_1000 ${IO_TESTS12} 
+#                 otbStreamingImageFileWriterTest
+#                 ${IMAGEDATA}/PARIS/SPOT5/THR
+#                 ${TEMP}/ioStreamingImageFileWriterTestCAI_ParisSpot5THR_WithStreaming_1000.hd
+#                 1 # Test sans streaming
+#                 1000 # NbDivisionsStreaming
+#                 )
+#----------------------------------------------------------------------------------
+
+
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ otbIOTESTS13 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -1228,6 +1250,20 @@ ADD_TEST(ioTuJPEG2000ImageIOCanWrite ${IO_TESTS13}
          ${INPUTDATA}/toto.j2k
          )
 
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ otbIOTESTS14 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+ADD_TEST(ioTuOGRDriverTest ${IO_TESTS14}
+				otbOGRDriverTest
+				${IMAGEDATA}/TOULOUSE/QuickBird/GIS_FILES/000000128955_01_PRODUCT_SHAPE.shp
+				${TEMP}/foo.shp
+				)
+				
+ADD_TEST(ioTuShapeFileDataReaderTest ${IO_TESTS14}
+				otbShapeFileDataReaderTest
+				${IMAGEDATA}/TOULOUSE/QuickBird/GIS_FILES/000000128955_01_PRODUCT_SHAPE.shp
+				${TEMP}/foo.shp
+				)
 
 
         
@@ -1313,11 +1349,15 @@ otbDEMToImageGeneratorTest.cxx
 otbImageGeometryHandlerNew.cxx
 otbOssimElevManagerTest.cxx
 )
-
 SET(BasicIO_SRCS13
 otbJPEG2000ImageIOTestCanRead.cxx
 otbJPEG2000ImageIOTestCanWrite.cxx
 )
+SET(BasicIO_SRCS14
+otbOGRDriverTest.cxx
+otbShapeFileDataReaderTest.cxx
+)
+
 
 INCLUDE_DIRECTORIES("${OTBTesting_BINARY_DIR}")
 

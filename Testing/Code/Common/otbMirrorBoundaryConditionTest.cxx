@@ -52,14 +52,14 @@ int otbMirrorBoundaryConditionTest(int argc, char * argv[])
   for(unsigned int i = 1;i<=rad[0];++i)
     {
       for(unsigned int j = 1;j<=rad[1];++j)
-	{
-	  off1[0] = -static_cast<int>(i);
-	  off1[1] = -static_cast<int>(j);
-	  off2[0] = i;
-	  off2[1] = j;
+			{
+	  		off1[0] = -static_cast<int>(i);
+	  		off1[1] = -static_cast<int>(j);
+	  		off2[0] = i;
+	  		off2[1] = j;
 
-	  out=it.GetPixel(off1);
-	  in = it.GetPixel(off2);
+	  		out=it.GetPixel(off1);
+	  		in = it.GetPixel(off2);
 	  
 	  for(unsigned int band = 0;band<reader->GetOutput()->GetNumberOfComponentsPerPixel();++band)
 	    {

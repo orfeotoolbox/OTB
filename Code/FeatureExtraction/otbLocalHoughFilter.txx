@@ -145,7 +145,7 @@ LocalHoughFilter<TInputImage>
    
    typename HoughFilterType::LinesListType	lines;
    
-   typename HoughFilterType::Pointer	m_HoughFilter = HoughFilterType::New();
+   typename HoughFilterType::Pointer	houghFilter = HoughFilterType::New();
    
    
    // Get image size
@@ -234,22 +234,22 @@ LocalHoughFilter<TInputImage>
       	 // Application of Hough filter
       	 // -------------------------------
 
-       	 m_HoughFilter->SetInput( localImage );
-       	 m_HoughFilter->SetNumberOfLines( m_NumberOfLines );
-       	 m_HoughFilter->SetVariance( m_Variance );
-       	 m_HoughFilter->SetDiscRadius( m_DiscRadius );
-	 m_HoughFilter->SetThreshold( m_Threshold );
+       	 houghFilter->SetInput( localImage );
+       	 houghFilter->SetNumberOfLines( m_NumberOfLines );
+       	 houghFilter->SetVariance( m_Variance );
+       	 houghFilter->SetDiscRadius( m_DiscRadius );
+	 			 houghFilter->SetThreshold( m_Threshold );
        	 
-      	 m_HoughFilter->Modified();
+      	 houghFilter->Modified();
       	    	 
-      	 m_HoughFilter->Update();
+      	 houghFilter->Update();
       	 
 
          // ---------------------------------------	 
       	 // Get the list of LineSpatialObject lines
       	 // ---------------------------------------
       	 
-      	 lines = m_HoughFilter->GetLines(m_NumberOfLines);
+      	 lines = houghFilter->GetLines(m_NumberOfLines);
 
 
          LineIterator itLines = lines.begin();

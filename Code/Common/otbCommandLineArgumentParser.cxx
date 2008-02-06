@@ -119,6 +119,7 @@ CommandLineArgumentParser
 {
         AddOption("--help","Help","-h",0,false);
         AddOption("--version","Version","-v",0,false);
+      	AddOptionNParams("--OTBTesting", "Testing purposes only.","-OTBTesting",false);
 }
 
 
@@ -381,45 +382,48 @@ CommandLineArgumentParser
   	{
   		int largeur = m_OptionList[i].CommonName.size() + m_OptionList[i].Synonim.size();
   		if ( largeur > largeurmax ) largeurmax = largeur;
-	}
+		}
   	
   	// Check that all required arguments are present on the command line
   	for(i=0 ; i < m_OptionList.size() ; i++ )
   	{
-  		int largeur = m_OptionList[i].CommonName.size() + m_OptionList[i].Synonim.size();
-  		os << "      ";
-  		if ( m_OptionList[i].Obligatory == false ) os <<"[";
-  		else os << " ";
-  		os << m_OptionList[i].CommonName ;
-  		if (m_OptionList[i].Synonim.empty() == false )
-  		{
-  			os << "|"<<m_OptionList[i].Synonim;	
-  		}
-  		if ( m_OptionList[i].Obligatory == false ) os <<"]";
-  		else os << " ";
-  		//Align the text
-  		for (int b=largeur ; b< largeurmax ; b++) os <<" ";
-  		os <<   "  :  "<<m_OptionList[i].Description;
-  		if (m_OptionList[i].NumberOfParametersFixed == true )
-                {
-                        switch( m_OptionList[i].NumberOfParameters )
-                        {
-                                case 0 :
-                                        break;
-                                case 1 :
-                                        os << "  ("<<m_OptionList[i].NumberOfParameters<<" parameter)";
-                                        break;
-                                default :
-                                        os << "  ("<<m_OptionList[i].NumberOfParameters<<" parameters)";
-                                        break;
-                        }
-  		}
-                else
-                {
-                                        os << "  (N parameters)";
-                }
-  		os << std::endl;
-	}
+  		if (m_OptionList[i].CommonName != "--OTBTesting")
+			{
+				int largeur = m_OptionList[i].CommonName.size() + m_OptionList[i].Synonim.size();
+  			os << "      ";
+  			if ( m_OptionList[i].Obligatory == false ) os <<"[";
+  			else os << " ";
+  			os << m_OptionList[i].CommonName ;
+  			if (m_OptionList[i].Synonim.empty() == false )
+  			{
+  				os << "|"<<m_OptionList[i].Synonim;	
+  			}
+  			if ( m_OptionList[i].Obligatory == false ) os <<"]";
+  			else os << " ";
+  			//Align the text
+  			for (int b=largeur ; b< largeurmax ; b++) os <<" ";
+  			os <<   "  :  "<<m_OptionList[i].Description;
+  			if (m_OptionList[i].NumberOfParametersFixed == true )
+      	{
+           switch( m_OptionList[i].NumberOfParameters )
+      	   {
+               case 0 :
+                         break;
+               case 1 :
+                         os << "  ("<<m_OptionList[i].NumberOfParameters<<" parameter)";
+                         break;
+               default :
+                         os << "  ("<<m_OptionList[i].NumberOfParameters<<" parameters)";
+                         break;
+           }
+  			}
+        else
+        {
+           os << "  (N parameters)";
+        }
+				os << std::endl;
+			}
+		}
 	os << std::endl;
 }
 

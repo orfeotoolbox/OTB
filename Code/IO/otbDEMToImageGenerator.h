@@ -43,7 +43,7 @@ namespace otb
    */
   template <class TDEMImage>
     class ITK_EXPORT DEMToImageGenerator: 
-    public itk::ImageSource<Image<typename TDEMImage::PixelType,2, 0> >
+    	public itk::ImageSource<TDEMImage>
     {
       public :
 	/** Standard class typedefs. */
@@ -53,7 +53,7 @@ namespace otb
       typedef typename DEMImageType::PixelType                 		      PixelType;
       
       typedef DEMToImageGenerator                              	              Self;
-      typedef itk::ImageSource<Image<typename DEMImageType::PixelType,2, 0> > Superclass;
+      typedef itk::ImageSource<DEMImageType> Superclass;
       typedef itk::SmartPointer<Self>                    	      	      Pointer;
       typedef itk::SmartPointer<const Self>              	      	      ConstPointer;
       typedef Image<PixelType,2>           				      OutputImageType; 
@@ -64,7 +64,7 @@ namespace otb
       typedef typename OutputImageType::PointType 			      PointType;
       typedef typename OutputImageType::IndexType 			      IndexType;
       typedef typename Superclass::OutputImageRegionType 		      OutputImageRegionType;
-      typedef itk::ImageRegionIteratorWithIndex< Image<PixelType,2, 0> >      ImageIteratorType;
+      typedef itk::ImageRegionIteratorWithIndex< DEMImageType >      ImageIteratorType;
 
       typedef otb::DEMHandler                                                 DEMHandlerType;
 

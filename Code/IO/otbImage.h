@@ -41,7 +41,7 @@ namespace otb
  */
  
 // Le 3ieme parametre template est bidon MAIS necessaire pour compiler avec Microsoft Visual C++ 6.0 
-template <class TPixel,unsigned int VImageDimension, unsigned int foo=0 > 
+template <class TPixel,unsigned int VImageDimension> 
 class ITK_EXPORT Image : public itk::Image<TPixel,VImageDimension>,
 				ImageBase
 					 

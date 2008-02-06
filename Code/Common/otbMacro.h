@@ -71,6 +71,12 @@
   #endif 
 #endif
 
+#define otbGenericMsgTestingMacro(x) \
+    {  \
+     	std::cout x << std::endl; \
+		}
+
+
 #if defined(OTB_LEAN_AND_MEAN) || defined(__BORLANDC__)
 #define otbMsgDevMacro(x)
 #else
