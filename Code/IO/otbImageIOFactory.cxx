@@ -28,6 +28,7 @@
 #include "otbGDALImageIOFactory.h"
 #include "otbLUMImageIOFactory.h"
 #include "otbBSQImageIOFactory.h"
+#include "otbJPEG2000ImageIOFactory.h"
 #ifdef OTB_USE_CURL
 #include "otbNetworkedQuadTreeImageIOFactory.h"
 #endif
@@ -68,6 +69,9 @@ ImageIOFactory::RegisterBuiltInFactories()
 
 			// GDAL : New format for OTB
                         itk::ObjectFactoryBase::RegisterFactory( GDALImageIOFactory::New() );
+                        
+			// JPEG2000 : New format for OTB
+                        itk::ObjectFactoryBase::RegisterFactory( JPEG2000ImageIOFactory::New() );
                         
 #ifdef OTB_USE_CURL
                         // NetworkedQuadTree : New format for OTB

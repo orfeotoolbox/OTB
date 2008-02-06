@@ -30,6 +30,7 @@ SET(IO_TESTS9     ${CXX_TEST_PATH}/otbIOTests9)
 SET(IO_TESTS10    ${CXX_TEST_PATH}/otbIOTests10)
 SET(IO_TESTS11    ${CXX_TEST_PATH}/otbIOTests11)
 SET(IO_TESTS12    ${CXX_TEST_PATH}/otbIOTests12)
+SET(IO_TESTS13    ${CXX_TEST_PATH}/otbIOTests13)
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ COMMON_TESTS3 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -1211,23 +1212,22 @@ ADD_TEST(ioTvossimElevManagerTest ${IO_TESTS12}
 				  500
          )
 
-#----------------------------------------------------------------------------------
-# Exemples de tests sur les grosses images
-# Tests non lanc�s pour raison taille des fichiers produits
-#        ADD_TEST(ioTvStreamingIFWriterPARIS_SPOT5THR_WithoutStreaming ${IO_TESTS12} 
-#                 otbStreamingImageFileWriterTest
-#                 ${IMAGEDATA}/PARIS/SPOT5/THR
-#                 ${TEMP}/ioStreamingImageFileWriterTestCAI_ParisSpot5THR_WithoutStreaming.hd
-#                 0 # Test sans streaming
-#                 )
-#        ADD_TEST(ioTvStreamingIFWriterPARIS_SPOT5THR_WithStreaming_1000 ${IO_TESTS12} 
-#                 otbStreamingImageFileWriterTest
-#                 ${IMAGEDATA}/PARIS/SPOT5/THR
-#                 ${TEMP}/ioStreamingImageFileWriterTestCAI_ParisSpot5THR_WithStreaming_1000.hd
-#                 1 # Test sans streaming
-#                 1000 # NbDivisionsStreaming
-#                 )
-#----------------------------------------------------------------------------------
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ 
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ otbIOTESTS13 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+# ---  JPEG2000 can read ---
+ADD_TEST(ioTuJPEG2000ImageIOCanRead ${IO_TESTS13} 
+         otbJPEG2000ImageIOTestCanRead
+         ${INPUTDATA}/toto.j2k
+         )
+# ---  JPEG2000 can write ---
+ADD_TEST(ioTuJPEG2000ImageIOCanWrite ${IO_TESTS13} 
+         otbJPEG2000ImageIOTestCanWrite
+         ${INPUTDATA}/toto.j2k
+         )
+
 
 
         
@@ -1314,6 +1314,11 @@ otbImageGeometryHandlerNew.cxx
 otbOssimElevManagerTest.cxx
 )
 
+SET(BasicIO_SRCS13
+otbJPEG2000ImageIOTestCanRead.cxx
+otbJPEG2000ImageIOTestCanWrite.cxx
+)
+
 INCLUDE_DIRECTORIES("${OTBTesting_BINARY_DIR}")
 
 ADD_EXECUTABLE(otbIOTests1 otbIOTests1.cxx ${BasicIO_SRCS1})
@@ -1351,6 +1356,9 @@ TARGET_LINK_LIBRARIES(otbIOTests11 OTBIO OTBCommon  gdal ITKIO ITKCommon dxf)
 
 ADD_EXECUTABLE(otbIOTests12 otbIOTests12.cxx ${BasicIO_SRCS12})
 TARGET_LINK_LIBRARIES(otbIOTests12 OTBIO OTBCommon  gdal ITKIO ITKCommon dxf)
+
+ADD_EXECUTABLE(otbIOTests13 otbIOTests13.cxx ${BasicIO_SRCS13})
+TARGET_LINK_LIBRARIES(otbIOTests13 OTBIO OTBCommon  gdal ITKIO ITKCommon dxf)
 
 ENDIF( NOT OTB_DISABLE_CXX_TESTING )
 
