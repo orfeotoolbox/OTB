@@ -18,7 +18,6 @@
 
 #if defined(_MSC_VER)
 #pragma warning ( disable : 4786 )
-#include "otbImage.h"
 #endif
 
 #include "otbImage.h"
@@ -26,6 +25,7 @@
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
 #include "itkVnlFFTRealToComplexConjugateImageFilter.h"
+#include <complex>
 
 int otbFourierMellinImageFilterTestFFT(int argc, char* argv[])
 {

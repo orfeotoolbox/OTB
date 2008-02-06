@@ -801,7 +801,7 @@ SET(BasicFeatureExtraction_SRCS6
 otbExtractSegmentsNew.cxx
 otbExtractSegments.cxx
 otbFourierMellinImageFilterNew.cxx
-otbFourierMellinImageFilterTestFFT.cxx
+#otbFourierMellinImageFilterTestFFT.cxx
 otbFourierMellinImageFilter.cxx
 otbImageToEdgePathFilterNew.cxx
 otbImageToEdgePathFilter.cxx
