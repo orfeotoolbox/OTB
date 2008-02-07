@@ -123,12 +123,12 @@ int otbPolygon(int argc, char * argv[])
       
       file<<std::endl<<std::endl;
       file<<"Bounding Boxs computation : "<<std::endl;
-      PolygonType::RegionType r1 = polygon1->GetBoundingBox();
+      PolygonType::RegionType r1 = polygon1->GetBoundingRegion();
       file<<"Bounding Box 1"<<std::endl; 
-      file<<"Index : "<<r1->GetIndex()<<" , Size : "<<r1->GetSize()<<std::endl;
+      file<<"Index : "<<r1.GetIndex()<<" , Size : "<<r1.GetSize()<<std::endl;
       PolygonType::RegionType r2 = polygon2->GetBoundingRegion();
       file<<"Bounding Box 2"<<std::endl; 
-      file<<"Index : "<<r2->GetIndex()<<" , Size : "<<r2->GetSize()<<std::endl;
+      file<<"Index : "<<r2.GetIndex()<<" , Size : "<<r2.GetSize()<<std::endl;
  
 
       file.close();
