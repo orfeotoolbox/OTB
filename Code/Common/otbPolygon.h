@@ -19,6 +19,7 @@ PURPOSE.  See the above copyright notices for more information.
 #define _otbPolygon_h
 
 #include "otbPolyLineParametricPathWithValue.h"
+#include "itkImageRegion.h"
 
 namespace otb
 {
