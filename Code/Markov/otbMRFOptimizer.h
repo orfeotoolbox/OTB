@@ -1,5 +1,4 @@
 
-
 #ifndef _MRFOptimizer_h
 #define _MRFOptimizer_h
 
