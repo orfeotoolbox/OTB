@@ -43,8 +43,8 @@ namespace otb
     m_InterfaceBoxesColor[0]=1.0;
     m_InterfaceBoxesColor[1]=0;
     m_InterfaceBoxesColor[2]=0;
-    m_InterfaceBoxesColor[3]=1.0;
     m_DefaultROIColor[0]=0;
+    m_InterfaceBoxesColor[3]=1.0;
     m_DefaultROIColor[1]=0;
     m_DefaultROIColor[2]=1.0;
     m_DefaultROIColor[3]=0.5;
@@ -69,6 +69,7 @@ namespace otb
     m_Label = "Default";
     m_RectangularROISelectionMode = false;
     m_PolygonalROISelectionMode = false;
+    m_UseImageOverlay = false;
   }
   
   /// Destructor
@@ -159,6 +160,19 @@ namespace otb
       {
 	itkExceptionMacro(<<"No input image !");
       } 
+
+    if(m_UseImageOverlay && !m_InputImageOverlay)
+      {
+	itkExceptionMacro(<<"UseImageOverlay option toggled, but no image overlay specified !");
+      }
+
+    if(m_UseImageOverlay
+       &&m_InputImage->GetLargestPossibleRegion().GetSize()
+       != m_InputImageOverlay->GetLargestPossibleRegion().GetSize())
+      {
+	itkExceptionMacro(<<"Input image and input image overlay do not have the same size !");
+      }
+
     itk::OStringStream oss;
     // Get the image dimension
     typename ImageType::SizeType size = m_InputImage->GetLargestPossibleRegion().GetSize();
@@ -174,16 +188,25 @@ namespace otb
     m_FullWidget = FullWidgetType::New();
     m_FullWidget->SetParent(this);
     m_FullWidget->SetInput(m_InputImage);
+    if(m_UseImageOverlay)
+      {
+	m_FullWidget->SetInputOverlay(m_InputImageOverlay);
+	m_FullWidget->SetImageOverlayVisible(true);
+      }
     m_FullWidget->Init(0,0,wfull,hfull,"");
     m_FullWidget->box( FL_EMBOSSED_BOX );
     m_FullWidget->SetFormOverlayVisible(true);
-    
 
     // Create the zoom window
     m_ZoomWidget = ZoomWidgetType::New();
     m_ZoomWidget->SetParent(this);
     m_ZoomWidget->SetZoomFactor(4.0);
     m_ZoomWidget->SetInput(m_InputImage);
+    if(m_UseImageOverlay)
+      {
+	m_ZoomWidget->SetInputOverlay(m_InputImageOverlay);
+	m_ZoomWidget->SetImageOverlayVisible(true);
+      }
     m_ZoomWidget->Init(0,0,m_ZoomMaxInitialSize,m_ZoomMaxInitialSize,"");
     m_ZoomWidget->box( FL_EMBOSSED_BOX );
     m_ZoomWidget->SetFormOverlayVisible(true);
@@ -240,6 +263,8 @@ namespace otb
 	typedef otb::FltkFilterWatcher WatcherType;
 	WatcherType watcher(m_Shrink,wfull-200,hfull/2,200,20, "Generating Quicklook ...");
 	m_Shrink->Update();
+
+	
 	
 	// Create the scroll window
 	m_ScrollWidget = ScrollWidgetType::New();
@@ -249,6 +274,18 @@ namespace otb
 	m_ScrollWidget->box( FL_EMBOSSED_BOX );
 	m_ScrollWidget->SetFormOverlayVisible(true);
 	m_ScrollWidget->SetSubSamplingRate(m_ShrinkFactor);
+
+	if(m_UseImageOverlay)
+	  {
+	    m_ShrinkOverlay = ShrinkFilterType::New();
+	    m_ShrinkOverlay->SetInput(m_InputImageOverlay);
+	    m_ShrinkOverlay->SetShrinkFactor(m_ShrinkFactor);
+	    typedef otb::FltkFilterWatcher WatcherType;
+	    WatcherType watcher(m_ShrinkOverlay,wfull-200,hfull/2,200,20, "Generating Overlay Quicklook ...");
+	    m_ShrinkOverlay->Update();
+	    m_ScrollWidget->SetInputOverlay(m_ShrinkOverlay->GetOutput());
+	    m_ScrollWidget->SetImageOverlayVisible(true);
+	  }
 
 	// Create the scroll selection box
 	BoxPointerType box = BoxType::New();
@@ -293,6 +330,15 @@ namespace otb
   {
     m_InputImage = dynamic_cast<ImageType *>( img );
   } 
+/// Set the image overlay (VectorImage version)
+  template <class TPixel, class TLabel>
+  void
+  ImageViewerBase<TPixel,TLabel>
+  ::SetImageOverlay(ImageType * img)
+  {
+    m_InputImageOverlay = dynamic_cast<ImageType *>( img );
+  } 
+
 
    template <class TPixel, class TLabel>
    typename ImageViewerBase<TPixel,TLabel>
@@ -319,7 +365,18 @@ namespace otb
     m_VectorCastFilter->SetInput(img);
     m_VectorCastFilter->UpdateOutputInformation();
     m_InputImage = m_VectorCastFilter->GetOutput();
-    
+  } 
+
+  /// Set the image overlay (Image version)
+  template <class TPixel, class TLabel>
+  void
+  ImageViewerBase<TPixel,TLabel>
+  ::SetImageOverlay(SingleImageType * img)
+  {
+    m_VectorCastFilterOverlay = VectorCastFilterType::New();
+    m_VectorCastFilterOverlay->SetInput(img);
+    m_VectorCastFilterOverlay->UpdateOutputInformation();
+    m_InputImageOverlay = m_VectorCastFilterOverlay->GetOutput();
   } 
 
   /// Show the app
@@ -454,7 +511,7 @@ namespace otb
               ImageWidgetCircleFormPointerType new_circle = ImageWidgetCircleFormType::New();
               
               new_circle->SetCenter(pIt.Value());
-              new_circle->SetRadius(4);
+              new_circle->SetRadius(2);
               new_circle->SetSolid(false);
               new_circle->SetColor(m_InterfaceBoxesColor);
               new_list->PushBack(new_circle);
@@ -588,6 +645,22 @@ namespace otb
     Fl::check();
   }
   
+  template <class TPixel, class TLabel>
+  void 
+  ImageViewerBase<TPixel,TLabel>
+  ::SetImageOverlayOpacity(unsigned char opacity)
+  {
+    if(m_UseImageOverlay)
+      {
+	m_FullWidget->SetImageOverlayOpacity(opacity);
+	m_ZoomWidget->SetImageOverlayOpacity(opacity);
+	
+	if(m_UseScroll)
+	  {
+	    m_ScrollWidget->SetImageOverlayOpacity(opacity);
+	  }
+      }
+  }
 
  template <class TPixel, class TLabel>
   void 
@@ -739,7 +812,8 @@ ImageViewerBase<TPixel,TLabel>
     {
       if(it.Get()==viewer)
 	{
-	  itkGenericExceptionMacro(<<"This viewer is already linked !");
+	  otbMsgDebugMacro(<<"This viewer is already linked !");
+	  return;
 	}
       ++it;
     }

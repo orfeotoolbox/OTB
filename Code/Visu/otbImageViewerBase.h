@@ -179,7 +179,9 @@ class ITK_EXPORT ImageViewerBase
   itkGetMacro(ScrollWidget,ScrollWidgetPointerType);
   itkGetMacro(ZoomWidget,ZoomWidgetPointerType);
   itkGetMacro(ZoomMaxInitialSize,unsigned int);
-  itkSetMacro(ZoomMaxInitialSize,unsigned int);
+ itkSetMacro(ZoomMaxInitialSize,unsigned int);
+ itkGetMacro(ScrollMaxInitialSize,unsigned int);
+ itkSetMacro(ScrollMaxInitialSize,unsigned int);
   itkGetMacro(PixLocOutput,FlOutputPointerType);
   itkSetMacro(PixLocOutput,FlOutputPointerType);
   itkSetMacro(RectangularROISelectionMode,bool);
@@ -194,6 +196,8 @@ class ITK_EXPORT ImageViewerBase
  itkGetMacro(ShowFullWidget,bool);
  itkSetMacro(ShowScrollWidget,bool);
  itkGetMacro(ShowScrollWidget,bool);
+ itkSetMacro(UseImageOverlay,bool);
+ itkGetMacro(UseImageOverlay,bool);
 
 
   /** Set the input image (VectorImage version) */
@@ -201,6 +205,12 @@ class ITK_EXPORT ImageViewerBase
 
   /** Set the input image (Image version) */
   virtual void SetImage(SingleImageType * img);
+
+ /** Set the input image overlay (VectorImage version) */
+  virtual void SetImageOverlay(ImageType * img);
+
+  /** Set the input image overlay (Image version) */
+  virtual void SetImageOverlay(SingleImageType * img);
   
   /** Get the shrinked image if scroll is activated and else the input image */
   virtual ImageType * GetShrinkedImage(void);
@@ -346,6 +356,14 @@ class ITK_EXPORT ImageViewerBase
   */
  virtual void ClearROIColorMap(void);
 
+
+ /**
+  * Set the image overlay opacity of all widgets
+  * \param opacity
+  */
+ virtual void SetImageOverlayOpacity(unsigned char opacity);
+
+
 protected:
 
    /**
@@ -387,6 +405,8 @@ protected:
   bool m_ShowFullWidget;
   /// The image to view
   ImagePointerType m_InputImage;
+ /// The image overlay
+  ImagePointerType m_InputImageOverlay;
   /// true if scroll widget is used
   bool m_UseScroll;
   /// Intial sizes
@@ -398,8 +418,10 @@ protected:
   /// Limit size for the scroll view
   unsigned int m_ScrollLimitSize;
   FlOutputPointerType m_PixLocOutput;
-  /// Pointer to the shrink filter
-  ShrinkFilterPointerType m_Shrink;
+  /// Pointer to the shrink filters
+ ShrinkFilterPointerType m_Shrink;
+ ShrinkFilterPointerType m_ShrinkOverlay;
+ 
   /// The shrink factor 
   unsigned int m_ShrinkFactor;
   /// true if the Gui has been built.
@@ -417,6 +439,7 @@ protected:
   double       m_NormalizationFactor;
   /// Converter from otb::Image to otb::VectorImage
   VectorCastFilterPointerType m_VectorCastFilter;
+  VectorCastFilterPointerType m_VectorCastFilterOverlay; 
   /// Wether the viewer is updating or not
   bool m_Updating;
   /// The list of viewer with which this viewer is linked
@@ -439,6 +462,8 @@ protected:
   bool m_PolygonalROISelectionMode;
  /// Map used to associate a label with a color
   ROIColorMapType m_ROIColorMap;
+ /// True if an image overlay is used
+ bool m_UseImageOverlay;
 };
 
 

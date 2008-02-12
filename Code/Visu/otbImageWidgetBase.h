@@ -38,7 +38,7 @@ class ImageWidgetBase
   public:
     /** Standard class typedefs */
     typedef ImageWidgetBase Self;
-    typedef itk::ProcessObject Superclass;
+    typedef itk::Object Superclass;
     typedef itk::SmartPointer<Self> Pointer;
     typedef itk::SmartPointer<const Self> ConstPointer;
     
@@ -67,9 +67,6 @@ class ImageWidgetBase
     
     itkSetMacro(BufferedRegion,RegionType);
     itkGetMacro(BufferedRegion,RegionType);
-
-    itkSetMacro(ImageOverlayBufferedRegion,RegionType);
-    itkGetMacro(ImageOverlayBufferedRegion,RegionType);
 
     itkSetMacro(ViewedRegion,RegionType);
     itkGetMacro(ViewedRegion,RegionType);
@@ -104,6 +101,7 @@ class ImageWidgetBase
     itkGetMacro(ViewModelIsRGB,bool);
     
     itkGetMacro(ImageOverlayOpacity,unsigned char);
+    itkSetMacro(ImageOverlayOpacity,unsigned char);
 
     itkGetObjectMacro(FormList,FormListType);
 
@@ -140,12 +138,6 @@ class ImageWidgetBase
      */
     void SetViewModelToGrayscale(void);
 
-     /**
-     * Set image overlay opacity.
-     * \param opacity The opacity.
-     */
-    void SetImageOverlayOpacity(unsigned char opacity);
-
     /** Show The widget */
     void Show(void);
      /** Reset the widget */
@@ -163,6 +155,7 @@ class ImageWidgetBase
     ImageWidgetBase();
     /** Destructor */
     ~ImageWidgetBase();
+
     /** Draw the widget */
     virtual void draw(void);
     /** Rebuild opengl buffer */
@@ -172,6 +165,7 @@ class ImageWidgetBase
    
     /** Normalization function */
     unsigned char Normalize(PixelType value, unsigned int channelIndex);
+
 
     // PURE VIRTUAL METHODS 
 
@@ -185,8 +179,6 @@ class ImageWidgetBase
     virtual bool UpdateOpenGlBufferedRegionRequested(void){return 1;};
     /** Unlarge OpenGlBuffer for image overlay */
     virtual void UpdateOpenGlImageOverlayBufferedRegion(void){};
-    /** Test if the buffer has to be enlarged */
-    virtual bool UpdateOpenGlImageOverlayBufferedRegionRequested(void){return 1;};
     /** Initialize the widget */
     virtual void Init(int x, int y, int w, int h, const char * l){};
     /** Resize the widget */
@@ -227,8 +219,6 @@ class ImageWidgetBase
      unsigned char  m_ImageOverlayOpacity;
      /** Pointer to the overlay image */
      ImagePointerType m_ImageOverlay;
-     /** Image overlay buffered region */
-     RegionType m_ImageOverlayBufferedRegion;
      /** OpenGl image overlay buffer */
      unsigned char * m_OpenGlImageOverlayBuffer;
      /** Max value for normalization */

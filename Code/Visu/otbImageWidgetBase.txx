@@ -99,21 +99,6 @@ ImageWidgetBase<TPixel>
 }
 
 /**
- * Set image overlay opacity.
- * \param opacity The opacity.
- */
-template <class TPixel>
-void 
-ImageWidgetBase<TPixel>
-::SetImageOverlayOpacity(unsigned char opacity)
-{
-  m_ImageOverlayOpacity=opacity;
-  SizeType size;
-  size.Fill(0);
-  m_ImageOverlayBufferedRegion.SetSize(size);
-}
-
-/**
  * Convert window to image coordinate.
  * \param index The window coordinate.
  * \return The image coordinate.
@@ -197,9 +182,6 @@ ImageWidgetBase<TPixel>
 ::SetInputOverlay(ImageType * image)
 {
   m_ImageOverlay=image;
-  SizeType size;
-  size.Fill(0);
-  m_ImageOverlayBufferedRegion.SetSize(size);
 }
 
 /** Set the input overlay form list.
@@ -297,7 +279,6 @@ ImageWidgetBase<TPixel>
     }
 }
 
-
 /** 
  * Draw the widget 
  */
@@ -314,13 +295,14 @@ ImageWidgetBase<TPixel>
       m_Image->PropagateRequestedRegion();
       m_Image->UpdateOutputData();
       RebuildOpenGlBuffer();
-    }
- if(m_ImageOverlayVisible && this->UpdateOpenGlImageOverlayBufferedRegionRequested())
-    {
-      UpdateOpenGlImageOverlayBufferedRegion();
-      m_ImageOverlay->SetRequestedRegion(m_BufferedRegion);
-      m_ImageOverlay->UpdateOutputData();
-      RebuildOpenGlImageOverlayBuffer();
+    
+      if(m_ImageOverlayVisible)
+	{
+	  UpdateOpenGlImageOverlayBufferedRegion();
+	  m_ImageOverlay->SetRequestedRegion(m_BufferedRegion);
+	  m_ImageOverlay->UpdateOutputData();
+	  RebuildOpenGlImageOverlayBuffer();
+	}
     }
 
  if (!this->valid())
@@ -356,8 +338,8 @@ ImageWidgetBase<TPixel>
    {
      glEnable(GL_BLEND);
      glBlendFunc(GL_SRC_ALPHA,GL_ONE_MINUS_SRC_ALPHA);
-     glDrawPixels(m_ImageOverlayBufferedRegion.GetSize()[0],
-		  m_ImageOverlayBufferedRegion.GetSize()[1], 
+     glDrawPixels(m_BufferedRegion.GetSize()[0],
+		  m_BufferedRegion.GetSize()[1], 
 		  GL_RGBA,
 		  GL_UNSIGNED_BYTE, 
 		  m_OpenGlImageOverlayBuffer);
@@ -441,7 +423,7 @@ ImageWidgetBase<TPixel>
   m_OpenGlImageOverlayBuffer = new unsigned char[bufferLenght];
 
  typedef itk::ImageRegionConstIterator<ImageType> IteratorType;
-  IteratorType it(m_ImageOverlay,m_ImageOverlayBufferedRegion);
+  IteratorType it(m_ImageOverlay,m_BufferedRegion);
   unsigned int index = 0;
   if(m_BlackTransparency)
     {
