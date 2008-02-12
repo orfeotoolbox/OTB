@@ -102,16 +102,6 @@ bool
 FixedSizeFullImageWidget<TPixel>
 ::UpdateOpenGlBufferedRegionRequested(void)
 {
-  // RegionType viewed = this->GetViewedRegion();
-//   RegionType buffered = this->GetBufferedRegion();
-//   IndexType viewedULCorner = viewed.GetIndex();
-//   IndexType bufferedULCorner = buffered.GetIndex();
-//   IndexType viewedRDCorner = viewed.GetIndex()+viewed.GetSize();
-//   IndexType bufferedRDCorner = buffered.GetIndex()+buffered.GetSize();
-//   return ( viewedULCorner[0]<bufferedULCorner[0]
-// 	   ||viewedULCorner[1]<bufferedULCorner[1]
-// 	   ||viewedRDCorner[0]>bufferedRDCorner[0]
-// 	   ||viewedRDCorner[1]>bufferedRDCorner[1]);
   if(m_ImageLoaded)
     {
       return false;
@@ -132,42 +122,6 @@ FixedSizeFullImageWidget<TPixel>
 {
   //otbMsgDebugMacro(<<"UpdateOpenGlBufferedRegion: "<<this->GetViewedRegion());
   this->SetBufferedRegion(this->GetViewedRegion());
-}
-/** 
- * Test if the buffer has to be updated.
- */
-template <class TPixel>
-bool 
-FixedSizeFullImageWidget<TPixel>
-::UpdateOpenGlImageOverlayBufferedRegionRequested(void)
-{
-  if(this->GetImageOverlayBufferedRegion().GetSize()[0]==0
-     ||this->GetImageOverlayBufferedRegion().GetSize()[1]==0)
-    {
-      m_ImageOverlayLoaded=false;
-    }
-
-if(m_ImageOverlayLoaded)
-    {
-      
-      return false;
-    }
-  else
-    {
-      m_ImageOverlayLoaded=true;
-      return true;
-    }
-}
-/** 
- * Update OpenGlBuffer. 
- */
-template <class TPixel>
-void 
-FixedSizeFullImageWidget<TPixel>
-::UpdateOpenGlImageOverlayBufferedRegion(void)
-{
-  //otbMsgDebugMacro(<<"UpdateOpenGlBufferedRegion: "<<this->GetViewedRegion());
-  this->SetImageOverlayBufferedRegion(this->GetViewedRegion());
 }
 } // end namespace otb
 #endif

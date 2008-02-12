@@ -52,11 +52,6 @@ class FullResolutionImageWidget
   virtual void UpdateOpenGlBufferedRegion(void);
   /** Test if the buffer has to be enlarged */
   virtual bool UpdateOpenGlBufferedRegionRequested(void);
-  /** Unlarge OpenGlBuffer for image overlay */
-  virtual void UpdateOpenGlImageOverlayBufferedRegion(void);
-  /** Test if the buffer has to be enlarged */
-  virtual bool UpdateOpenGlImageOverlayBufferedRegionRequested(void);
-
   /** Initialize the widget */
   virtual void Init(int x, int y, int w, int h, const char * l);
   /** Resize the widget */

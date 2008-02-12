@@ -114,26 +114,6 @@ ZoomableImageWidget<TPixel>
 }
 
 /** 
- * Test if the buffer has to be updated.
- */
-template <class TPixel>
-bool 
-ZoomableImageWidget<TPixel>
-::UpdateOpenGlImageOverlayBufferedRegionRequested(void)
-{
-  RegionType viewed = this->GetViewedRegion();
-  RegionType buffered = this->GetImageOverlayBufferedRegion();
-  IndexType viewedULCorner = viewed.GetIndex();
-  IndexType bufferedULCorner = buffered.GetIndex();
-  IndexType viewedRDCorner = viewed.GetIndex()+viewed.GetSize();
-  IndexType bufferedRDCorner = buffered.GetIndex()+buffered.GetSize();
- //  return ( viewedULCorner[0]<bufferedULCorner[0]
-//  	   ||viewedULCorner[1]<bufferedULCorner[1]
-//  	   ||viewedRDCorner[0]>bufferedRDCorner[0]
-//  	   ||viewedRDCorner[1]>bufferedRDCorner[1]);
-  return true;
-}
-/** 
  * Update OpenGlBuffer. 
  */
 template <class TPixel>
@@ -143,17 +123,6 @@ ZoomableImageWidget<TPixel>
 {
   //otbMsgDebugMacro(<<"UpdateOpenGlBufferedRegion: "<<this->GetViewedRegion());
   this->SetBufferedRegion(this->GetViewedRegion());
-}
-/** 
- * Update OpenGlBuffer. 
- */
-template <class TPixel>
-void 
-ZoomableImageWidget<TPixel>
-::UpdateOpenGlImageOverlayBufferedRegion(void)
-{
-  //otbMsgDebugMacro(<<"UpdateOpenGlBufferedRegion: "<<this->GetViewedRegion());
-  this->SetImageOverlayBufferedRegion(this->GetViewedRegion());
 }
 /** 
  * Set a new zoom factor (>1). 

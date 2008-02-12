@@ -19,7 +19,7 @@
 #define _otbImageWidgetPolygonForm_txx
 
 #include "otbImageWidgetPolygonForm.h"
-
+#include "otbGluPolygonDrawingHelper.h"
 
 namespace otb
 {
@@ -28,7 +28,7 @@ ImageWidgetPolygonForm<TValue>
 ::ImageWidgetPolygonForm()
 {
   m_Polygon = PolygonType::New();
-  m_Solid = false;
+  m_Solid = true;
   m_InternalValueToAlphaChannel = false;
 }
 template<class TValue>
@@ -46,36 +46,34 @@ ImageWidgetPolygonForm<TValue>
     {
       glEnable(GL_BLEND);
       glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+      GluPolygonDrawingHelper polygonDrawer;
+
+
       if(m_InternalValueToAlphaChannel)
       {
-        glColor4f(m_Color[0],m_Color[1],m_Color[2],m_Polygon->GetValue());
+        polygonDrawer.Color4d(m_Color[0],m_Color[1],m_Color[2],m_Polygon->GetValue());
       }
       else
       {
-        glColor4f(m_Color[0],m_Color[1],m_Color[2],m_Color[3]);
+	polygonDrawer.Color4d(m_Color[0],m_Color[1],m_Color[2],m_Color[3]);
       }
-      if(m_Solid)
-      {
-        glBegin(GL_POLYGON);
-      }
-      else
-      {
-        glBegin(GL_LINE_LOOP);
-      }
-
+      polygonDrawer.SetBoundaryOnly(!m_Solid);
+      polygonDrawer.BeginPolygon();
+      polygonDrawer.BeginContour();
       VertexListIteratorType it =  this->GetPolygon()->GetVertexList()->Begin();
-     
+      
       while(it != this->GetPolygon()->GetVertexList()->End())
 	{  
 	  double x1 = it.Value()[0];
 	  double y1 = it.Value()[1];
-
+	  
 	  x1 = static_cast<int>((x1-originx)*openGlZoom*(1/static_cast<double>(ss_rate)));
 	  y1 = static_cast<int>(windowh+(originy-y1)*openGlZoom*(1/static_cast<double>(ss_rate)));
-          glVertex2f(x1,y1);
+	  polygonDrawer.Vertex2d(x1,y1);
 	  ++it;
 	}            
-      glEnd();
+      polygonDrawer.EndContour();
+      polygonDrawer.EndPolygon();
       glDisable(GL_BLEND);
     }
 }
