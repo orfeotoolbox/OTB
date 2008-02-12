@@ -54,9 +54,8 @@ public:
   /** Run-time type information (and related methods). */
   itkTypeMacro(ShapeFileData, itk::DataObject);
 	
-	itkGetMacro(OGRDataSource, OGRDataSource*);
+	itkGetConstMacro(OGRDataSource, OGRDataSource*);
 	
-//	void SetOGRDataSource(OGRDataSource
 	itkSetObjectMacro(OGRDataSource, OGRDataSource);
 	
 	

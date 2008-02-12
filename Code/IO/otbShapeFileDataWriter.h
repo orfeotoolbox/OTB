@@ -22,7 +22,7 @@ PURPOSE.  See the above copyright notices for more information.
 
 namespace otb
 {
-  /** \class ShapeFileDataReader
+  /** \class ShapeFileDataWriter
    *  \brief This class writes the ShapeFile format 
    *
    *  \ingroup IO
@@ -53,7 +53,16 @@ public :
   const InputShapeFileType * GetInput(unsigned int idx);
 	
   /** Does the real work. */
+	virtual void Write();
+
   virtual void GenerateData();
+
+	virtual void Update()  {  this->Write(); }
+
+	
+ 	/** Specify the name of the output shapefile to write. */
+ 	itkSetStringMacro(FileName);
+	itkGetStringMacro(FileName);
 
 protected:
 	ShapeFileDataWriter();
@@ -72,10 +81,10 @@ private:
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbShapeFileWriter.txx"
+#include "otbShapeFileDataWriter.txx"
 #endif
 
-#endif // __otbShapeFileWriter_h
+#endif // __otbShapeFileDataWriter_h
 
 	 
 	 

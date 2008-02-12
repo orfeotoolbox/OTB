@@ -1256,15 +1256,20 @@ ADD_TEST(ioTuJPEG2000ImageIOCanWrite ${IO_TESTS13}
 ADD_TEST(ioTuOGRDriverTest ${IO_TESTS14}
 				otbOGRDriverTest
 				${IMAGEDATA}/TOULOUSE/QuickBird/GIS_FILES/000000128955_01_PRODUCT_SHAPE.shp
-				${TEMP}/foo.shp
+				foo.shp
 				)
 				
 ADD_TEST(ioTuShapeFileDataReaderTest ${IO_TESTS14}
 				otbShapeFileDataReaderTest
-				${IMAGEDATA}/TOULOUSE/QuickBird/GIS_FILES/000000128955_01_PRODUCT_SHAPE.shp
-				${TEMP}/foo.shp
+				#${IMAGEDATA}/TOULOUSE/QuickBird/GIS_FILES/000000128955_01_PRODUCT_SHAPE.shp
+				foo.shp
 				)
 
+ADD_TEST(ioTuShapeFileDataWriterTest ${IO_TESTS14}
+				otbShapeFileDataWriterTest
+				${IMAGEDATA}/TOULOUSE/QuickBird/GIS_FILES/000000128955_01_PRODUCT_SHAPE.shp
+				foo.shp
+				)
 
         
 #----------------------------------------------------------------------------------
@@ -1356,6 +1361,7 @@ otbJPEG2000ImageIOTestCanWrite.cxx
 SET(BasicIO_SRCS14
 otbOGRDriverTest.cxx
 otbShapeFileDataReaderTest.cxx
+otbShapeFileDataWriterTest.cxx
 )
 
 
@@ -1399,6 +1405,9 @@ TARGET_LINK_LIBRARIES(otbIOTests12 OTBIO OTBCommon  gdal ITKIO ITKCommon dxf)
 
 ADD_EXECUTABLE(otbIOTests13 otbIOTests13.cxx ${BasicIO_SRCS13})
 TARGET_LINK_LIBRARIES(otbIOTests13 OTBIO OTBCommon  gdal ITKIO ITKCommon dxf)
+
+ADD_EXECUTABLE(otbIOTests14 otbIOTests14.cxx ${BasicIO_SRCS14})
+TARGET_LINK_LIBRARIES(otbIOTests14 OTBIO OTBCommon  gdal ITKIO ITKCommon dxf)
 
 ENDIF( NOT OTB_DISABLE_CXX_TESTING )
 

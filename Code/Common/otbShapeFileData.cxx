@@ -32,8 +32,24 @@ ShapeFileData::ShapeFileData()
 
 ShapeFileData::~ShapeFileData()
 {
+
 	if (m_OGRDataSource != NULL)
+	{
+		unsigned int nbOfLayers = m_OGRDataSource->GetLayerCount();
+		
+		for (unsigned int i=0; i<nbOfLayers; i++)
+		{
+			OGRLayer  *poLayer = m_OGRDataSource->GetLayer(i);				
+			
+			OGRFeature* poFeature;
+			while( (poFeature = poLayer->GetNextFeature()) != NULL )
+   		{
+				OGRFeature::DestroyFeature(poFeature);
+			}
+		}
+		
 		OGRDataSource::DestroyDataSource(m_OGRDataSource);
+	}
 }
 
 

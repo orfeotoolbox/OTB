@@ -29,8 +29,8 @@ namespace otb
 /**
  * Constructor
  */
-template <class TOutputShapeFile>
-ShapeFileDataWriter<TOutputShapeFile>
+template <class TInputShapeFile>
+ShapeFileDataWriter<TInputShapeFile>
 ::ShapeFileDataWriter()
 {
   m_FileName = "";
@@ -38,40 +38,181 @@ ShapeFileDataWriter<TOutputShapeFile>
 /**
  * Destructor
  */
-template <class TOutputShapeFile>
-ShapeFileDataWriter<TOutputShapeFile>
+template <class TInputShapeFile>
+ShapeFileDataWriter<TInputShapeFile>
 ::~ShapeFileDataWriter()
 {
 }
 
 
+//---------------------------------------------------------
+template <class TInputShapeFile>
+void 
+ShapeFileDataWriter<TInputShapeFile>
+::SetInput(const InputShapeFileType *input)
+{
+	// ProcessObject is not const_correct so this cast is required here.
+  this->ProcessObject::SetNthInput(0, 
+                                   const_cast<TInputShapeFile *>(input ) );
+}
+
+
+//---------------------------------------------------------
+template <class TInputShapeFile>
+const typename ShapeFileDataWriter<TInputShapeFile>::InputShapeFileType *
+ShapeFileDataWriter<TInputShapeFile>
+::GetInput(void)
+{
+  if (this->GetNumberOfInputs() < 1)
+    {
+    return 0;
+    }
+  
+  return static_cast<TInputShapeFile*>
+    (this->ProcessObject::GetInput(0));
+}
+  
+//---------------------------------------------------------
+template <class TInputShapeFile>
+const typename ShapeFileDataWriter<TInputShapeFile>::InputShapeFileType *
+ShapeFileDataWriter<TInputShapeFile>
+::GetInput(unsigned int idx)
+{
+  return static_cast<TInputShapeFile*> (this->ProcessObject::GetInput(idx));
+}
+
+template <class TInputShapeFile>
+void
+ShapeFileDataWriter<TInputShapeFile>
+::Write()
+{
+  const InputShapeFileType * input = this->GetInput();
+	
+	if ( input == 0 )
+  {
+   	itkExceptionMacro(<< "No input to writer!");
+  }
+	
+	if ( m_FileName == "" )
+  {
+    itkExceptionMacro(<<"No filename was specified");
+  }
+
+  // NOTE: this const_cast<> is due to the lack of const-correctness
+  // of the ProcessObject.
+  InputShapeFileType * nonConstImage = const_cast<InputShapeFileType *>(input);
+
+   // Make sure the data is up-to-date.
+  if( nonConstImage->GetSource() )
+  {
+    nonConstImage->GetSource()->Update();
+  }
+
+  // Actually do something
+  this->GenerateData();
+  
+  // Release upstream data if requested
+  if ( input->ShouldIReleaseData() )
+  {
+    nonConstImage->ReleaseData();
+  }
+}
 
 /**
  * Main computation method
  */
-template <class TOutputShapeFile>
+template <class TInputShapeFile>
 void
-ShapeFileDataWriter<TOutputShapeFile>
+ShapeFileDataWriter<TInputShapeFile>
 ::GenerateData()
 {
-	typename InputShapeFileType::Pointer shapeFile = this->GetInput();
+	const InputShapeFileType* shapeFile = this->GetInput();
 	
 	OGRRegisterAll();
 
-  OGRDataSource       *poDS;
 
-  poDS = OGRSFDriverRegistrar::Open( m_FileName.c_str(), FALSE );
-  if( poDS == NULL )
+  OGRDataSource *poDS = shapeFile->GetOGRDataSource();
+
+	poDS->GetLayerCount();
+	otbGenericMsgTestingMacro(<< "WRITE");
+
+  const char *pszDriverName = "ESRI Shapefile";
+  OGRSFDriver *poDriver;
+   	
+	poDriver = OGRSFDriverRegistrar::GetRegistrar()->GetDriverByName(
+                pszDriverName );
+  
+	if( poDriver == NULL )
   {
-      itkExceptionMacro(<< "ShapeFile Open failed.\n" );
+        itkExceptionMacro(<< pszDriverName << " driver not available");
   }
+
+  OGRDataSource *poDSW;
+
+  poDSW = poDriver->CreateDataSource( m_FileName.c_str(), NULL );
+  
+	if( poDSW == NULL )
+  {
+      itkExceptionMacro(<< "Creation of output file failed");
+  }
+
+  unsigned int nbOfLayers = poDS->GetLayerCount();
 	
-	shapeFile->SetOGRDataSource(poDS);	
+	for (unsigned int i=0; i<nbOfLayers; i++)
+	{
+			otbGenericMsgTestingMacro(<< "Layer number " << i+1);
+			OGRLayer  *poLayer2 = poDS->GetLayer(i);		
+			poLayer2->ResetReading();
+	
+	
+			OGRLayer* poWLayer = poDSW->CreateLayer("foo2");
+				
+   		if( poLayer2 == NULL )
+   		{
+       	itkExceptionMacro(<< "Layer creation failed." );
+   		}
+				
+			OGRFeature* poFeature2;			
+			while( (poFeature2 = poLayer2->GetNextFeature()) != NULL )
+   		{
+				otbGenericMsgTestingMacro(<< "Feature! ");
+				OGRFeature* poWFeature;
+					
+				unsigned int nbFields = poFeature2->GetFieldCount();
+				for (unsigned int i=0; i<nbFields; i++)
+				{
+					OGRFieldDefn* oField = poFeature2->GetFieldDefnRef(i);
+						
+					otbGenericMsgTestingMacro(<< "Field : " << poFeature2->GetRawFieldRef(i)->String);
+    			if( poWLayer->CreateField( oField ) != OGRERR_NONE )
+   				{
+        			itkExceptionMacro(<<"Creating Name field failed." );
+    			}
+	
+	      	poWFeature = OGRFeature::CreateFeature( poLayer2->GetLayerDefn() );
+
+					poWFeature->SetField(i,poFeature2->GetRawFieldRef(i));
+					otbGenericMsgTestingMacro(<< "FieldW : " << poWFeature->GetRawFieldRef(i)->String);
+				}
+
+				poWFeature->SetGeometry(poFeature2->GetGeometryRef());
+	
+    		if( poWLayer->CreateFeature( poWFeature ) != OGRERR_NONE )
+       	{
+          itkExceptionMacro(<<"Failed to create feature in shapefile." );
+       	}
+					
+				OGRFeature::DestroyFeature(poWFeature);
+
+			}		
+	}
+		
+	OGRDataSource::DestroyDataSource( poDSW );
 }
 
-template <class TOutputShapeFile>
+template <class TInputShapeFile>
 void
-ShapeFileDataWriter<TOutputShapeFile>
+ShapeFileDataWriter<TInputShapeFile>
 ::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
 	Superclass::PrintSelf(os, indent);

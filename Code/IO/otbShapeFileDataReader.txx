@@ -107,7 +107,9 @@ void
 ShapeFileDataReader<TOutputShapeFile>
 ::GenerateData()
 {
-  TestFileExistanceAndReadability();
+  otbGenericMsgTestingMacro(<< "Reading..." ) ;
+	
+	TestFileExistanceAndReadability();
 	typename OutputShapeFileType::Pointer shapeFile = this->GetOutput();
 	
 	OGRRegisterAll();

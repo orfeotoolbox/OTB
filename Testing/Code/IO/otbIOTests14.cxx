@@ -30,4 +30,5 @@ void RegisterTests()
 {
 REGISTER_TEST(otbOGRDriverTest);
 REGISTER_TEST(otbShapeFileDataReaderTest);
+REGISTER_TEST(otbShapeFileDataWriterTest);
 }
