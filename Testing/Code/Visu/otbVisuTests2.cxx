@@ -35,4 +35,6 @@ REGISTER_TEST(otbVectorImageToColorAnaglyphVectorImageFilter);
 REGISTER_TEST(otbAlternateViewerTest);
 REGISTER_TEST(otbImageWidgetPolygonFormNew);
 REGISTER_TEST(otbImageWidgetPolygonForm);
+REGISTER_TEST(otbHistogramAndTransfertFunctionWidgetNew);
+REGISTER_TEST(otbHistogramAndTransfertFunctionWidget);
 }

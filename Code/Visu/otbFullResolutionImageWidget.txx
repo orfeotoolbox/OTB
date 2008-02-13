@@ -61,10 +61,12 @@ FullResolutionImageWidget<TPixel>
     }
   else
     {
-      // this->GetInput()->Update();
       if(this->GetImageOverlayVisible())
 	{
-	  this->GetInputOverlay()->Update();
+	  if(!this->GetInputOverlay())
+	    {
+	      itkExceptionMacro("No input image overlay!");
+	    }
 	}
       this->label(l);
       this->resize(x, y, w, h);

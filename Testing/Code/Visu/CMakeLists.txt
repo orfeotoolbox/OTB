@@ -141,7 +141,16 @@ ADD_TEST(coTuImageWidgetPolygonForm ${VISU_TESTS2}
 		20 100 70 100 70 90 50 90 50 80 70 80 70 60 90 60 90 50 70 50 70 30 20 30 
 )
 
+# -------       otb::HistogramAndTransfertFunctionWidgtet -----------------------------------
 
+ADD_TEST(viTuHistogramAndTransfertFunctionWidgetNew ${VISU_TESTS2} 
+        otbHistogramAndTransfertFunctionWidgetNew
+        )
+
+ADD_TEST(viTvHistogramAndTransfertFunctionWidget ${VISU_TESTS2} 
+        otbHistogramAndTransfertFunctionWidget
+	${INPUTDATA}/GomaAvant.png
+        )
 
 # -------       Fichiers sources CXX -----------------------------------
 SET(BasicVisu_SRCS1
@@ -166,6 +175,8 @@ otbVectorImageToColorAnaglyphVectorImageFilter.cxx
 otbAlternateViewerTest.cxx
 otbImageWidgetPolygonFormNew.cxx
 otbImageWidgetPolygonForm.cxx
+otbHistogramAndTransfertFunctionWidgetNew.cxx
+otbHistogramAndTransfertFunctionWidget.cxx
 )
 
 INCLUDE_DIRECTORIES("${OTBTesting_BINARY_DIR}") 

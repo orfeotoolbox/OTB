@@ -367,7 +367,7 @@ namespace otb
     m_InputImage = m_VectorCastFilter->GetOutput();
   } 
 
-  /// Set the image overlay (Image version)
+  // /// Set the image overlay (Image version)
   template <class TPixel, class TLabel>
   void
   ImageViewerBase<TPixel,TLabel>
@@ -377,7 +377,8 @@ namespace otb
     m_VectorCastFilterOverlay->SetInput(img);
     m_VectorCastFilterOverlay->UpdateOutputInformation();
     m_InputImageOverlay = m_VectorCastFilterOverlay->GetOutput();
-  } 
+  }
+  
 
   /// Show the app
   template <class TPixel, class TLabel>

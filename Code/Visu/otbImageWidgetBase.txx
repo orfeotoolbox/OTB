@@ -93,7 +93,6 @@ ImageWidgetBase<TPixel>
   const char * label = this->label();
   SizeType size;
   size.Fill(0);
-  RegionType region;
   m_BufferedRegion.SetSize(size);
   Init(x,y,w,h,label);
 }
@@ -294,15 +293,18 @@ ImageWidgetBase<TPixel>
       m_Image->SetRequestedRegion(m_BufferedRegion);
       m_Image->PropagateRequestedRegion();
       m_Image->UpdateOutputData();
-      RebuildOpenGlBuffer();
-    
+      RebuildOpenGlBuffer(); 
       if(m_ImageOverlayVisible)
 	{
-	  UpdateOpenGlImageOverlayBufferedRegion();
 	  m_ImageOverlay->SetRequestedRegion(m_BufferedRegion);
+	  m_ImageOverlay->PropagateRequestedRegion();
 	  m_ImageOverlay->UpdateOutputData();
-	  RebuildOpenGlImageOverlayBuffer();
 	}
+    }
+ 
+  if(m_ImageOverlayVisible)
+    {
+      RebuildOpenGlImageOverlayBuffer();
     }
 
  if (!this->valid())
@@ -423,6 +425,7 @@ ImageWidgetBase<TPixel>
   m_OpenGlImageOverlayBuffer = new unsigned char[bufferLenght];
 
  typedef itk::ImageRegionConstIterator<ImageType> IteratorType;
+//   m_ImageOverlay->SetNumberOfComponentsPerPixel(3);
   IteratorType it(m_ImageOverlay,m_BufferedRegion);
   unsigned int index = 0;
   if(m_BlackTransparency)

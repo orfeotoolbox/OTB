@@ -150,6 +150,8 @@ class ImageWidgetBase
      */
     virtual IndexType WindowToImageCoordinates(IndexType index);
         
+
+    
   protected:
     /** Constructor */
     ImageWidgetBase();
@@ -166,7 +168,6 @@ class ImageWidgetBase
     /** Normalization function */
     unsigned char Normalize(PixelType value, unsigned int channelIndex);
 
-
     // PURE VIRTUAL METHODS 
 
     // User is not supposed to be allowed to move the zoom in the generic implementation
@@ -177,8 +178,6 @@ class ImageWidgetBase
     virtual void UpdateOpenGlBufferedRegion(void){};
     /** Test if the buffer has to be enlarged */
     virtual bool UpdateOpenGlBufferedRegionRequested(void){return 1;};
-    /** Unlarge OpenGlBuffer for image overlay */
-    virtual void UpdateOpenGlImageOverlayBufferedRegion(void){};
     /** Initialize the widget */
     virtual void Init(int x, int y, int w, int h, const char * l){};
     /** Resize the widget */
