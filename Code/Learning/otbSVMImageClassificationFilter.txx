@@ -31,7 +31,7 @@ template <class TInputImage, class TOutputImage, unsigned int VMaxSampleDimensio
 SVMImageClassificationFilter<TInputImage,TOutputImage,VMaxSampleDimension>
 ::SVMImageClassificationFilter()
 {
-  for(unsigned int i = 0;i<this->GetNumberOfThreads();++i)
+  for(unsigned int i = 0;i<static_cast<unsigned int>(this->GetNumberOfThreads());++i)
     {
       m_ClassifierVector.push_back(ClassifierType::New());
     }
@@ -46,7 +46,7 @@ SVMImageClassificationFilter<TInputImage,TOutputImage,VMaxSampleDimension>
     {
       itkGenericExceptionMacro(<<"No model for classification");
     }
-  for(unsigned int i = 0;i<this->GetNumberOfThreads();++i)
+  for(unsigned int i = 0;i<static_cast<unsigned int>(this->GetNumberOfThreads());++i)
     {
       m_ClassifierVector[i]->SetModel(m_Model);
       m_ClassifierVector[i]->SetNumberOfClasses(m_Model->GetNumberOfClasses());
