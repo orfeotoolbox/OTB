@@ -37,4 +37,6 @@ REGISTER_TEST(otbImageWidgetPolygonFormNew);
 REGISTER_TEST(otbImageWidgetPolygonForm);
 REGISTER_TEST(otbHistogramAndTransfertFunctionWidgetNew);
 REGISTER_TEST(otbHistogramAndTransfertFunctionWidget);
+REGISTER_TEST(otbImageWidgetTransfertFunctionsNew);
+REGISTER_TEST(otbImageWidgetTransfertFunctions);
 }

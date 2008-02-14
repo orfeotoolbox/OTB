@@ -50,6 +50,7 @@ class ITK_EXPORT HistogramAndTransfertFunctionWidget
   
   /** Template parameters typedefs */
   typedef THistogram HistogramType;
+  typedef typename HistogramType::ValueType::ValueType ValueType;
   typedef typename HistogramType::ConstPointer HistogramConstPointerType;
   typedef typename HistogramType::ConstIterator HistogramIteratorType;
   typedef itk::FixedArray<double,3> ColorType;
@@ -68,6 +69,16 @@ class ITK_EXPORT HistogramAndTransfertFunctionWidget
   
   itkSetMacro(Label,std::string);
   itkGetMacro(Label,std::string);
+
+  itkSetMacro(MarginX,double);
+  itkGetMacro(MarginX,double);
+  itkSetMacro(MarginY,double);
+  itkGetMacro(MarginY,double);
+
+  itkSetMacro(GridSizeX,unsigned int);
+  itkGetMacro(GridSizeX,unsigned int);
+  itkSetMacro(GridSizeY,unsigned int);
+  itkGetMacro(GridSizeY,unsigned int);
   
 protected:
   /** Constructor */
@@ -79,11 +90,16 @@ protected:
 
   /** Draw the histogram */
   virtual void draw(void);
-/*   virtual void resize(int x,int y, int w, int h) */
-/*     { */
-/*       this->Fl_Gl_Window::resize(x,y,w,h); */
-/*       this->redraw(); */
-/*     } */
+
+  virtual void OpenGlSetup();
+
+  virtual void AxisRendering();
+
+  virtual void GridRendering(double gridXSpacing, double gridYSpacing);
+
+  virtual void HistogramRendering(double binWidth, double binHeightRatio, double maxFrequency);
+
+  virtual void LegendRendering(double gridXSpacing, double gridYSpacing, double maxFrequency);
     
 private:
   HistogramAndTransfertFunctionWidget(const Self&); //purposely not implemented
@@ -96,7 +112,14 @@ private:
   ColorType m_HistogramColor;
   ColorType m_BackgroundColor;
   ColorType m_AxisColor;
+  ColorType m_GridColor;
   ColorType m_TextColor;
+  /** Margin around histogram */
+  double m_MarginX;
+  double m_MarginY;
+  /** Set grid spatial frequency */
+  unsigned int m_GridSizeX;
+  unsigned int m_GridSizeY;
 
   std::string m_Label;
 };

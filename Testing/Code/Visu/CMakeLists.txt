@@ -152,6 +152,20 @@ ADD_TEST(viTvHistogramAndTransfertFunctionWidget ${VISU_TESTS2}
 	${INPUTDATA}/GomaAvant.png
         )
 
+# -------       otb::ImageWidgetTransfertFunctions -----------------------------------
+
+ADD_TEST(viTuImageWidgetTransfertFunctionsNew ${VISU_TESTS2} 
+        otbImageWidgetTransfertFunctionsNew
+        )
+
+ADD_TEST(viTvImageWidgetTransfertFunctions ${VISU_TESTS2} 
+--compare-ascii ${EPSILON}
+		${BASELINE_FILES}/viTvImageWidgetTransfertFunctionsOutput.txt
+		${TEMP}/viTvImageWidgetTransfertFunctionsOutput.txt
+        otbImageWidgetTransfertFunctions
+	${TEMP}/viTvImageWidgetTransfertFunctionsOutput.txt
+        )
+
 # -------       Fichiers sources CXX -----------------------------------
 SET(BasicVisu_SRCS1
 otbImageWidgetBaseNew.cxx
@@ -177,6 +191,8 @@ otbImageWidgetPolygonFormNew.cxx
 otbImageWidgetPolygonForm.cxx
 otbHistogramAndTransfertFunctionWidgetNew.cxx
 otbHistogramAndTransfertFunctionWidget.cxx
+otbImageWidgetTransfertFunctions.cxx
+otbImageWidgetTransfertFunctionsNew.cxx
 )
 
 INCLUDE_DIRECTORIES("${OTBTesting_BINARY_DIR}") 
