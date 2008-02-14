@@ -69,9 +69,7 @@ namespace otb
   ImageViewer<TPixel,TLabel>
   ::Build(void)
   {
-    std::cout<<"Before superclass Build"<<std::endl;
     Superclass::Build();
-    std::cout<<"After superclass Build"<<std::endl;
     itk::OStringStream oss;
    
     int wfull = this->GetFullWidget()->w();
@@ -127,7 +125,6 @@ namespace otb
     m_PixLocWindow->end();
     this->SetPixLocOutput(m_PixLocOutput);
     
-    std::cout<<"End of Build Method"<<std::endl;
   }
   
   /// Show the app
