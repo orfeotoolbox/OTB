@@ -85,7 +85,14 @@ ADD_TEST(utTvSvmTestGenericModelTest ${UTILITIES_TESTS}
                 ${TEMP}/svm_model_image_generic_kernel_test
 )
 
-# -------            lib otbsvm   ------------------------------
+ADD_TEST(utTvSvmGenericKernelBasicOperationsTest ${UTILITIES_TESTS}
+--compare-ascii ${TOL}  ${BASELINE_FILES}/utTvsvmGenericKernelBasicOperationsTest.txt
+                	 ${TEMP}/svmGenericKernelBasicOperationsTest.txt
+              svmGenericKernelBasicOperationsTest
+		 ${TEMP}/svmGenericKernelBasicOperationsTest.txt
+)
+
+# -------            lib otb6S   ------------------------------
 
 # The file is not read. It a screen user scan. main.exe < 132.149.107.66.wloip20967.INP
 #ADD_TEST(utTv6SMainTest ${UTILITIES_TESTS}
@@ -132,6 +139,7 @@ svmTest.cxx
 svmGenericKernelTest.cxx
 6SFunctionMainTest.cxx
 tinyXMLlibTest.cxx
+svmGenericKernelBasicOperationsTest.cxx
 )
 
 INCLUDE_DIRECTORIES("${OTBTesting_BINARY_DIR}")

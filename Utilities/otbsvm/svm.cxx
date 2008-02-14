@@ -2928,22 +2928,22 @@ out:
 	int j=0;
 	for(i=0;i<l;i++)
 	{
-		model->SV[i] = &x_space[j];
-		for(int k=0;k<m;k++)
-			fscanf(fp,"%lf",&model->sv_coef[k][i]);
-		while(1)
-		{
-			int c;
-			do {
-				c = getc(fp);
-				if(c=='\n') goto out2;
-			} while(isspace(c));
-			ungetc(c,fp);
-			fscanf(fp,"%d:%lf",&(x_space[j].index),&(x_space[j].value));
-			++j;
-		}	
-out2:
-		x_space[j++].index = -1;
+	  model->SV[i] = &x_space[j];
+	  for(int k=0;k<m;k++)
+	    fscanf(fp,"%lf",&model->sv_coef[k][i]);
+	  while(1)
+	    {
+	      int c;
+	      do {
+		c = getc(fp);
+		if(c=='\n') goto out2;
+	      } while(isspace(c));
+	      ungetc(c,fp);
+	      fscanf(fp,"%d:%lf",&(x_space[j].index),&(x_space[j].value));
+	      ++j;
+	    }	
+	out2:
+	  x_space[j++].index = -1;
 	}
 	if (ferror(fp) != 0 || fclose(fp) != 0) return NULL;
 
@@ -3171,24 +3171,221 @@ double
 GenericKernelFunctorBase::
 dot(const svm_node *px, const svm_node *py)const
 {
-	double sum = 0;
-	while(px->index != -1 && py->index != -1)
+  double sum = 0;
+  while(px->index != -1 && py->index != -1)
+    {
+      if(px->index == py->index)
 	{
-		if(px->index == py->index)
-		{
-			sum += px->value * py->value;
-			++px;
-			++py;
-		}
-		else
-		{
-			if(px->index > py->index)
-				++py;
-			else
-				++px;
-		}			
+	  sum += px->value * py->value;
+	  ++px;
+	  ++py;
 	}
-	return sum;
+      else
+	{
+	  if(px->index > py->index)
+	    ++py;
+	  else
+	    ++px;
+	}			
+    }
+  return sum;
+}
+
+svm_node *
+GenericKernelFunctorBase::
+sub(const svm_node *px, const svm_node *py) const
+  /* compute the difference a-b of two sparse vectors */
+  /* Note: SVECTOR lists are not followed, but only the first
+     SVECTOR is used */
+{
+  long veclength = 1;
+ 
+  const svm_node * pxbis = px;
+  const svm_node * pybis = py;
+
+  while (px->index != -1 && py->index != -1) 
+    {  
+      ++veclength;  
+      if(px->index == py->index) 
+	{
+	  ++px;
+	  ++py;
+	}
+      else 
+	{
+	  if (px->index < py->index) 
+	    {
+	      ++px;
+	    }
+	  else 
+	    {
+	      ++py;
+	    }
+	}
+    }
+
+  while (py->index != -1) 
+    {
+      ++veclength;
+      ++py;
+    }
+  while (px->index != -1) 
+    {
+      ++veclength;
+      ++px;
+    }
+
+  svm_node *vec;
+  vec = new svm_node[veclength];
+  unsigned long int vecIt = 0;
+
+  px = pxbis;
+  py = pybis;
+
+  while (px->index != -1 && py->index != -1)
+    { 
+      if(px->index == py->index) 
+	{
+	  (vec[vecIt])=(*px);
+	  vec[vecIt].value-=py->value;
+
+	  if(vec[vecIt].value != 0)
+	    {	  
+	      ++vecIt;
+	    }
+	  ++px;
+	  ++py;
+
+	}
+      else
+	{
+	  if(px->index > py->index)
+	    {
+	      (vec[vecIt])=(*py);
+	      vec[vecIt].value*=(-1);
+	      ++vecIt;
+	      ++py;
+	    }
+	  else 
+	    {
+	      (vec[vecIt])=(*px);
+	      ++vecIt;
+	      ++px;
+	    }
+	}
+    }
+
+  while (py->index != -1) 
+    {
+      (vec[vecIt])=(*py);
+      vec[vecIt].value*=(-1);
+      ++vecIt;
+      ++py;
+    }
+  while (px->index != -1) 
+    {
+      (vec[vecIt])=(*px);
+      ++vecIt;
+      ++px;
+    }
+  return(vec);
+}
+
+
+svm_node *
+GenericKernelFunctorBase::
+add(const svm_node *px, const svm_node *py) const
+  /* compute the sum a+b of two sparse vectors */
+  /* Note: SVECTOR lists are not followed, but only the first
+     SVECTOR is used */
+{
+  const svm_node * pxbis = px;
+  const svm_node * pybis = py;
+  long veclength = 1;
+  
+  while (px->index != -1 && py->index != -1) 
+    {  
+      ++veclength;  
+      if(px->index == py->index) 
+	{
+	  ++px;
+	  ++py;
+	}
+      else 
+	{
+	  if (px->index < py->index) 
+	    {
+	      ++px;
+	    }
+	  else 
+	    {
+	      ++py;
+	    }
+	}
+    }
+
+  while (py->index != -1) 
+    {
+      ++veclength;
+      ++py;
+    }
+  while (px->index != -1) 
+    {
+      ++veclength;
+      ++px;
+    }
+
+  svm_node *vec;
+  vec = new svm_node[veclength];
+  unsigned long int vecIt = 0;
+
+  px = pxbis;
+  py = pybis;
+
+    while (px->index != -1 && py->index != -1) 
+      {
+	if(px->index == py->index) 
+	  {
+	    (vec[vecIt])=(*px);
+	    vec[vecIt].value+=py->value;
+	    if(vec[vecIt].value != 0)
+	      {
+		++vecIt;
+	      }
+	    ++px;
+	    ++py;
+	  }
+	else 
+	  {
+	    if (px->index < py->index) 
+	      {
+		(vec[vecIt])=(*px);
+		++vecIt;
+		++px;
+	      }
+	    else 
+	      {
+		(vec[vecIt])=(*py);
+		++vecIt;
+		++py;
+		
+	      }
+	  }
+      }
+    while (py->index != -1) 
+      {
+	(vec[vecIt])=(*py);
+	++vecIt;
+	++py;
+      }
+    while (px->index != -1) 
+      {
+	(vec[vecIt])=(*px);
+	++vecIt;
+	++px;
+      }
+
+    return(vec);
 }
 
 //} // namespace otb

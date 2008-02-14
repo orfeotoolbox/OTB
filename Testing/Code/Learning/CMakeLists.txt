@@ -216,7 +216,9 @@ ADD_TEST(leTvSVMImageClassificationFilter ${LEARNING_TESTS3}
 	${INPUTDATA}/svm_model_image
 	${TEMP}/leSVMImageClassificationFilterOutput.tif)
 			        
-
+ADD_TEST(leTuSVMModelGenericKernelsTest ${LEARNING_TESTS3} 
+	otbSVMModelGenericKernelsTest
+)
 
 # A enrichir
 SET(BasicLearning_SRCS1
@@ -251,6 +253,7 @@ otbSOMClassifier.cxx
 otbSEMClassifierNew.cxx
 otbSVMImageClassificationFilterNew.cxx
 otbSVMImageClassificationFilter.cxx
+otbSVMModelGenericKernelsTest.cxx
 )
 
 

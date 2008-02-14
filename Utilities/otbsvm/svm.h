@@ -35,10 +35,12 @@ struct svm_parameter
 {
 	int svm_type;
 	int kernel_type;
-	int degree;	/* for poly */
-	double gamma;	/* for poly/rbf/sigmoid */
-	double coef0;	/* for poly/sigmoid */
-
+	int degree;	   /* for poly */
+	double gamma;	   /* for poly/rbf/sigmoid */
+	double coef0;	   /* for poly/sigmoid */
+        double const_coef; /* for otbSVMKernels.h. */
+        double lin_coef;   /* for otbSVMKernels.h. */
+        char custom[500];  /* for user supplied kernel */
 //OTB's modifications : Use by the generic kernel
         /*otb::*/GenericKernelFunctorBase * kernel_generic;
         
@@ -197,7 +199,11 @@ public:
   virtual void Update(void){ }
 
   virtual double dot(const svm_node *px, const svm_node *py)const;
-  
+
+  virtual svm_node * sub(const svm_node *px, const svm_node *py)const;
+
+  virtual svm_node * add(const svm_node *px, const svm_node *py)const;
+
   virtual void SetName(const std::string & name ) { m_Name = name;}
   virtual std::string GetName(void) { return m_Name;}
 

@@ -35,4 +35,6 @@ REGISTER_TEST(svmTest);
 REGISTER_TEST(svmGenericKernelTest);
 REGISTER_TEST(SIXSFunctionMainOtbTest);
 REGISTER_TEST(tinyXMLlibTest);
+REGISTER_TEST(svmGenericKernelBasicOperationsTest);
+
 }
