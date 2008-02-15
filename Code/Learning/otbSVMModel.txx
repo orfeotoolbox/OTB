@@ -40,11 +40,15 @@ SVMModel< TInputPixel, TLabel >::SVMModel()
   m_Problem.y = new double[1];
   m_Problem.x = new struct svm_node*[1];
   m_XSpace = new struct svm_node[1];
-//  m_GenericKernelFunctor = NULL;
-  m_Parameters.kernel_generic = NULL;
-  m_Parameters.nr_weight = 0;
-  m_Parameters.weight_label = NULL;
-  m_Parameters.weight = NULL;
+  //m_GenericKernelFunctor = NULL;
+ //  m_Model->param.kernel_generic = NULL;
+//   m_Model->param.nr_weight = 0;
+//   m_Model->param.weight_label = NULL;
+//   m_Model->param.weight = NULL;
+//   m_Parameters.kernel_generic = NULL;
+//   m_Parameters.nr_weight = 0;
+//   m_Parameters.weight_label = NULL;
+//   m_Parameters.weight = NULL;
 
 }
 
@@ -153,7 +157,8 @@ void
 SVMModel<TInputPixel, TLabel>
 ::LoadModel(const char* model_file_name)
   {
-    m_Model = svm_load_model(model_file_name,m_Parameters.kernel_generic/*m_GenericKernelFunctor*/);
+    //m_Model = svm_load_model(model_file_name,m_Parameters.kernel_generic/*m_GenericKernelFunctor*/);
+    m_Model = svm_load_model(model_file_name, m_Model->param.kernel_generic/*m_GenericKernelFunctor*/);
     if(m_Model == 0)
       {
       itkExceptionMacro( << "Problem while loading SVM model "
