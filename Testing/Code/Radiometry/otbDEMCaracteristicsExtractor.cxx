@@ -18,7 +18,7 @@
 
 #include "otbDEMCaracteristicsExtractor.h"
 #include "otbImage.h"
-#include "otbImageFileWriter.h"
+#include "otbStreamingImageFileWriter.h"
 #include "otbImageFileReader.h"
 
 
@@ -39,7 +39,7 @@ int otbDEMCaracteristicsExtractor(int argc, char * argv[])
 
       typedef otb::DEMCaracteristicsExtractor< InputImageType, InputImageType > DEMCaracteristicsExtractorType;
       typedef otb::ImageFileReader<InputImageType>  ReaderType;
-      typedef otb::ImageFileWriter<InputImageType> WriterType;
+      typedef otb::StreamingImageFileWriter<InputImageType> WriterType;
 
       ReaderType::Pointer input = ReaderType::New();
       WriterType::Pointer slotWriter = WriterType::New();
@@ -47,6 +47,11 @@ int otbDEMCaracteristicsExtractor(int argc, char * argv[])
       WriterType::Pointer incidenceWriter = WriterType::New();
       WriterType::Pointer exitanceWriter = WriterType::New();
       DEMCaracteristicsExtractorType::Pointer filter = DEMCaracteristicsExtractorType::New();
+
+      slotWriter->SetNumberOfStreamDivisions(20);
+      aspectWriter->SetNumberOfStreamDivisions(20);
+      incidenceWriter->SetNumberOfStreamDivisions(20);
+      exitanceWriter->SetNumberOfStreamDivisions(20);
 
       input->SetFileName(inputFileName);
       slotWriter->SetFileName(outputSlotFileName);
