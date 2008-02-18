@@ -113,15 +113,24 @@ ProlateFunction<TInput, TOutput>
   vnl_fft_1d<double> v1d(1024);
   v1d.fwd_transform(resampledProfile);
   
-  unsigned int sampleNb = static_cast<unsigned int>( 1024/resampleRatio );
+  // Carrful, spectrum is symmetrical
+  unsigned int sampleNb = static_cast<unsigned int>( 1024/(2*resampleRatio) );
   
   double energy = 0.;
+  // First part of spectrum
   for (unsigned int j = 0; j<sampleNb+1; j++)
     {
       energy += std::abs(resampledProfile[j])*std::abs(resampledProfile[j]);
     }
+  // Last part of spectrum
+  for (unsigned int j = 1023; j>1023-sampleNb; j--)
+    {
+      energy += std::abs(resampledProfile[j])*std::abs(resampledProfile[j]);
+    }
+  
   double totalEnergy = energy;
-  for (unsigned int j = sampleNb+1; j<1024; j++)
+  // Middle part
+  for (unsigned int j = sampleNb+1; j<1023-sampleNb+1; j++)
     {
       totalEnergy += std::abs(resampledProfile[j])*std::abs(resampledProfile[j]);
     }
