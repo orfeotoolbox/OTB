@@ -63,7 +63,7 @@ int otbProlateValidationTest(int argc, char * argv[])
 
  
   std::cout<<"Originalprofilsize: "<< prolate->GetFunction().GetOriginalProfileSize()<<std::endl;
-  std::cout<<"Energy : "<<prolate->GetFunction().ComputeEnergy(factor)<<std::endl;
+  std::cout<<"Energy : "<<prolate->GetFunction().ComputeEnergy(1/factor)<<std::endl;
   std::cout<<"Radius : "<<prolate->GetRadius()<<std::endl;
   std::cout<<"Factor : "<<factor<<std::endl;
 
