@@ -25,6 +25,9 @@
 #include "otbMacro.h"
 #include "itkObject.h"
 //#include "shapeDir/ogrshape.h"
+
+//#include "ossim/base/ossimFilename.h"
+#include "otbFileName.h"
 #include <iostream>
 
 //#include "otbShapeFileReader.h"
@@ -38,60 +41,9 @@ int otbOGRDriverTest(int argc, char* argv[])
 		const char * inputFilename  = argv[1];
     const char * outputFilename = argv[2];
 		
-/*	// Read SHP
-		OGRRegisterAll();
-		
-		SHPHandle handle = SHPOpen(inputFilename,"rb");
-		
-		
-		
-		OGRGeometry* poGeometry;
 
-		poGeometry = SHPReadOGRObject(handle,0);
-		
-		OGRwkbGeometryType geom =	poGeometry->getGeometryType();
-					
-		otbGenericMsgTestingMacro(<< "Geometry : " << poGeometry->getGeometryName());
-				
-		switch(geom)
-		{
-			case wkbPolygon :
-			{
-					otbGenericMsgTestingMacro(<< "Polygon");
-					OGRPolygon* polygon = dynamic_cast<OGRPolygon*>(poGeometry);
-							
-					otbGenericMsgTestingMacro(<< "Holes number : " <<	polygon->getNumInteriorRings());
-					OGRLinearRing* ring = polygon->getExteriorRing();
-								
-					unsigned int nbPoints = ring->getNumPoints();
-					otbGenericMsgTestingMacro(<< "Points number : " <<	nbPoints);
-		
-					OGRRawPoint* pointsList = new OGRRawPoint[ring->getNumPoints()];
-					ring->getPoints(pointsList);
-								
-					for (unsigned int i=0; i<nbPoints; i++)
-					{
-							otbGenericMsgTestingMacro(<< "(" << pointsList[i].x << "," << pointsList[i].y << ") ");
-					}
-								
-					otbGenericMsgTestingMacro(<< std::endl);								
-		
-					delete[] pointsList;
-
-					break;
-			}
-						default : otbGenericMsgTestingMacro(<< "Other geometry");
-		}
-		
-		SHPClose(handle);
-		
-		
-		SHPHandle handleW = SHPCreate(outputFilename, 0);
-					
-		SHPWriteOGRObject(handleW, 0, poGeometry);
-		
-		SHPClose(handleW);		*/
 //===========================================================================
+
 		OGRRegisterAll();
 
     OGRDataSource       *poDS;
@@ -237,8 +189,11 @@ int otbOGRDriverTest(int argc, char* argv[])
 				OGRLayer  *poLayer2 = poDS->GetLayer(i);		
 				poLayer2->ResetReading();
 	
-	
-				OGRLayer* poWLayer = poDSW->CreateLayer("foo2");
+				// Filename without extension
+				otb::FileName outputFile(outputFilename);
+				otb::FileName outputFileWithNoExtension = outputFile.ObtainFileNameWithNoExtension();
+
+				OGRLayer* poWLayer = poDSW->CreateLayer(outputFileWithNoExtension.c_str());
 				
   
     		if( poLayer2 == NULL )
@@ -247,17 +202,8 @@ int otbOGRDriverTest(int argc, char* argv[])
         	exit( 1 );
     		}
 				
-/*	    	OGRFieldDefn oField( "Name", OFTString );
 
-	    	if( poWLayer->CreateField( &oField ) != OGRERR_NONE )
-    		{
-        	printf( "Creating Name field failed.\n" );
-        	exit( 1 );
-    		}
-
-
-    		oField.SetWidth(32);*/
-			
+		
 				OGRFeature* poFeature2;			
 				while( (poFeature2 = poLayer2->GetNextFeature()) != NULL )
     		{
@@ -278,23 +224,6 @@ int otbOGRDriverTest(int argc, char* argv[])
 	
 		      	poWFeature = OGRFeature::CreateFeature( poLayer2->GetLayerDefn() );
 
-/*						if( oField->GetType() == OFTInteger )
-						{
-                poWFeature->SetField(oField->GetNameRef(), poFeature->GetFieldAsInteger(i));
-						}
-            else if( oField->GetType() == OFTReal )
-						{
-                poWFeature->SetField(oField->GetNameRef(),poFeature->GetFieldAsDouble(i));
-						}
-            else if( oField->GetType() == OFTString )
-						{
-                poWFeature->SetField(oField->GetNameRef(),poFeature->GetFieldAsString(i));
-						}
-            else
-						{
-                poWFeature->SetField(oField->GetNameRef(),poFeature->GetFieldAsString(i));
-						}*/
-						
 						poWFeature->SetField(i,poFeature2->GetRawFieldRef(i));
 						std::cout << "FieldW : " << poWFeature->GetRawFieldRef(i)->String << std::endl;
 						
@@ -442,6 +371,7 @@ int otbOGRDriverTest(int argc, char* argv[])
 		}
 
 		OGRDataSource::DestroyDataSource( poDS2 );
+		
 //===========================================================================
 	
   } 

@@ -23,6 +23,7 @@ PURPOSE.  See the above copyright notices for more information.
 #include "otbMacro.h"
 #include "otbSystem.h"
 #include "otbShapeFileDataWriter.h"
+#include "otbFileName.h"
 
 namespace otb
 {
@@ -128,8 +129,11 @@ ShapeFileDataWriter<TInputShapeFile>
 {
 	const InputShapeFileType* shapeFile = this->GetInput();
 	
-	OGRRegisterAll();
+	// If output file already exists, this file is erased
+	// to avoid ogr write problems
+	otb::FileName fileName(m_FileName.c_str());
 
+	OGRRegisterAll();
 
   OGRDataSource *poDS = shapeFile->GetOGRDataSource();
 
@@ -164,8 +168,8 @@ ShapeFileDataWriter<TInputShapeFile>
 			OGRLayer  *poLayer2 = poDS->GetLayer(i);		
 			poLayer2->ResetReading();
 	
-	
-			OGRLayer* poWLayer = poDSW->CreateLayer("foo2");
+	std::cout << "Filename ::: " << fileName.ObtainFileNameWithNoExtension().c_str() << std::endl;
+			OGRLayer* poWLayer = poDSW->CreateLayer(fileName.ObtainFileNameWithNoExtension().c_str());
 				
    		if( poLayer2 == NULL )
    		{

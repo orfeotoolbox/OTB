@@ -1256,19 +1256,19 @@ ADD_TEST(ioTuJPEG2000ImageIOCanWrite ${IO_TESTS13}
 ADD_TEST(ioTuOGRDriverTest ${IO_TESTS14}
 				otbOGRDriverTest
 				${IMAGEDATA}/TOULOUSE/QuickBird/GIS_FILES/000000128955_01_PRODUCT_SHAPE.shp
-				foo.shp
+				foo
 				)
 				
 ADD_TEST(ioTuShapeFileDataReaderTest ${IO_TESTS14}
 				otbShapeFileDataReaderTest
-				#${IMAGEDATA}/TOULOUSE/QuickBird/GIS_FILES/000000128955_01_PRODUCT_SHAPE.shp
-				foo.shp
+				${IMAGEDATA}/TOULOUSE/QuickBird/GIS_FILES/000000128955_01_PRODUCT_SHAPE.shp
+				foo
 				)
 
 ADD_TEST(ioTuShapeFileDataWriterTest ${IO_TESTS14}
 				otbShapeFileDataWriterTest
 				${IMAGEDATA}/TOULOUSE/QuickBird/GIS_FILES/000000128955_01_PRODUCT_SHAPE.shp
-				foo.shp
+				foo
 				)
 
         
