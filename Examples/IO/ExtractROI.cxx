@@ -70,7 +70,7 @@ int main( int argc, char * argv[] )
   if( argc < 7 )
     {
     std::cerr << "Usage: " << std::endl;
-    std::cerr << argv[0] << "  inputImageFile outputImageFile startX startY sizeX sizeY" << std::endl;
+    std::cerr << argv[0] << "  inputImageFile outputImageFileRGB outputImageFileLastBand startX startY sizeX sizeY" << std::endl;
     return EXIT_FAILURE;
     }
 
