@@ -137,7 +137,7 @@ ProlateFunction<TInput, TOutput>
 
   std::cout<<"SampleNb: "<<sampleNb<<", energy: "<<energy<<", total energy: "<<totalEnergy<<std::endl;
 
-  return energy/totalEnergy;
+  return std::sqrt(energy)/std::sqrt(totalEnergy);
 }
 
 
