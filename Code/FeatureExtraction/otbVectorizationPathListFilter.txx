@@ -163,8 +163,8 @@ namespace otb
 			    point[0] += nModIt.GetPixel(*vecIt) * tmpPoint[0];
 			    point[1] += nModIt.GetPixel(*vecIt) * tmpPoint[1];
 			  }
-			point[0] = point[0] / totalAmplitude + 0.49;
-			point[1] = point[1] / totalAmplitude + 0.49;
+			point[0] = point[0] / totalAmplitude + modPtr->GetSpacing()[0]/2;
+			point[1] = point[1] / totalAmplitude + modPtr->GetSpacing()[1]/2;
 			modPtr->TransformPhysicalPointToContinuousIndex(point,vertex);
 			if(flagReverse == 0)
 			  {
