@@ -22,7 +22,7 @@ PURPOSE.  See the above copyright notices for more information.
 #include "otbImageWidgetRectangleForm.h"
 #include "otbImageWidgetBoxForm.h"
 #include "otbImageWidgetPointForm.h"
-#include <Fl/fl_draw.H>
+#include <FL/fl_draw.H>
 
 namespace otb
 {
