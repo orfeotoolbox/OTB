@@ -43,8 +43,8 @@ int otbImageViewer( int argc, char * argv[] )
 	
       // build the app
       viewer->Show();
-      //Fl::check();
-      Fl::run();
+      Fl::check();
+     //Fl::run();
     } 
   catch( itk::ExceptionObject & err ) 
     { 
