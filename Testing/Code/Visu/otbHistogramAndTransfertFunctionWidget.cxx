@@ -33,7 +33,12 @@ int otbHistogramAndTransfertFunctionWidget(int argc, char * argv[])
   typedef itk::Statistics::ScalarImageToHistogramGenerator<ImageType> GeneratorType;
   typedef GeneratorType::HistogramType HistogramType;
   
-  typedef otb::HistogramAndTransfertFunctionWidget<HistogramType> WidgetType;
+  typedef otb::HistogramAndTransfertFunctionWidget<HistogramType,PixelType> WidgetType;
+  typedef otb::ImageWidgetAffineTransfertFunction<PixelType> TransfertFunctionType;
+
+  TransfertFunctionType::Pointer function = TransfertFunctionType::New();
+  function->SetLowerBound(50);
+  function->SetUpperBound(200);
 
   ReaderType::Pointer reader = ReaderType::New();
   GeneratorType::Pointer generator  = GeneratorType::New();
@@ -49,13 +54,15 @@ int otbHistogramAndTransfertFunctionWidget(int argc, char * argv[])
   Fl_Window window(300,200);
   WidgetType::Pointer widget = WidgetType::New();
   widget->SetHistogram(generator->GetOutput());
+  widget->SetTransfertFunction(function);
   widget->resize(0,0,300,200);
   window.resizable(widget.GetPointer());
   window.end();
   window.show();
   widget->show();
   widget->redraw();
-  Fl::run();
+  Fl::check();
+  // Fl::run();
 
   return EXIT_SUCCESS;
 }
