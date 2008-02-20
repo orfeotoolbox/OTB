@@ -65,7 +65,7 @@ FixedSizeFullImageWidget<TPixel>
     }
   else
     {
-      // this->GetInput()->Update();
+      Superclass::Init(x,y,w,h,l);
       this->SetViewedRegion(this->GetInput()->GetLargestPossibleRegion());
       this->label(l);
       this->resize(x, y, w, h);
@@ -102,7 +102,7 @@ bool
 FixedSizeFullImageWidget<TPixel>
 ::UpdateOpenGlBufferedRegionRequested(void)
 {
-  if(m_ImageLoaded)
+  if(m_ImageLoaded && this->GetBufferedRegion().GetNumberOfPixels()!=0)
     {
       return false;
     }

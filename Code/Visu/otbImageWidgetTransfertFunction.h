@@ -56,7 +56,7 @@ class ITK_EXPORT ImageWidgetTransfertFunction
    * \param value the value to map
    * \return the screen printable value
    */
-  inline virtual unsigned char Map(PixelType value)=0;
+  virtual unsigned char Map(PixelType value){};
 
 protected:
   /** Constructor */
@@ -108,7 +108,7 @@ class ITK_EXPORT ImageWidgetAffineTransfertFunction
   /** Template parameters typedefs */
   typedef TPixel PixelType;
 
-  inline virtual unsigned char Map(PixelType value)
+  virtual unsigned char Map(PixelType value)
     {
       if(value<this->GetLowerBound())
 	{
@@ -120,7 +120,7 @@ class ITK_EXPORT ImageWidgetAffineTransfertFunction
 	}
       else
 	{
-	  return static_cast<unsigned char>(255*(value-this->GetLowerBound())/(this->GetUpperBound()-this->GetLowerBound()));
+	  return static_cast<unsigned char>(vcl_floor(255.*(value-this->GetLowerBound())/(this->GetUpperBound()-this->GetLowerBound())+0.5));
 	}
 
     }
@@ -157,7 +157,7 @@ class ITK_EXPORT ImageWidgetSquareRootTransfertFunction
   /** Template parameters typedefs */
   typedef TPixel PixelType;
 
-  inline virtual unsigned char Map(PixelType value)
+  virtual unsigned char Map(PixelType value)
     {
       if(value<this->GetLowerBound())
 	{
@@ -169,8 +169,9 @@ class ITK_EXPORT ImageWidgetSquareRootTransfertFunction
 	}
       else
 	{
-	  double tmp = static_cast<double>((value-this->GetLowerBound())/(this->GetUpperBound()-this->GetLowerBound()));
-	  return static_cast<unsigned char>(255*vcl_sqrt(tmp));
+	  double b = vcl_sqrt(static_cast<double>(this->GetLowerBound()));
+	  double a = 255. /(vcl_sqrt(static_cast<double>(this->GetUpperBound()))-b);
+	  return static_cast<unsigned char>(vcl_floor(a * (vcl_sqrt(static_cast<double>(value))-b)+0.5));
 	}
 
     }
@@ -207,7 +208,7 @@ class ITK_EXPORT ImageWidgetLogTransfertFunction
   /** Template parameters typedefs */
   typedef TPixel PixelType;
 
-  inline virtual unsigned char Map(PixelType value)
+  virtual unsigned char Map(PixelType value)
     {
       if(value<this->GetLowerBound())
 	{
@@ -219,8 +220,9 @@ class ITK_EXPORT ImageWidgetLogTransfertFunction
 	}
       else
 	{
-	  double tmp = static_cast<double>((value-this->GetLowerBound())/(this->GetUpperBound()-this->GetLowerBound()));
-	  return static_cast<unsigned char>(255*vcl_log(1+tmp/M_E));
+	  double b = vcl_log(1.+static_cast<double>(this->GetLowerBound()));
+	  double a = 255. /(vcl_log(1.+static_cast<double>(this->GetUpperBound()))-b);
+	  return static_cast<unsigned char>(vcl_floor(a * (vcl_log(1.+static_cast<double>(value))-b)+0.5));
 	}
 
     }
@@ -233,16 +235,16 @@ class ITK_EXPORT ImageWidgetLogTransfertFunction
   void operator=(const Self&); //purposely not implemented
 };
 
-/** \class ImageWidgetLogTransfertFunction
+/** \class ImageWidgetSquareTransfertFunction
  *  \brief Log transfert function.
  */
 template <class TPixel>
-class ITK_EXPORT ImageWidgetExpTransfertFunction
+class ITK_EXPORT ImageWidgetSquareTransfertFunction
   : public ImageWidgetTransfertFunction<TPixel>
 {
  public:
   /** Standard typedefs */
-  typedef ImageWidgetExpTransfertFunction      Self;
+  typedef ImageWidgetSquareTransfertFunction      Self;
   typedef ImageWidgetTransfertFunction<TPixel> Superclass;
   typedef itk::SmartPointer<Self>              Pointer;
   typedef itk::SmartPointer<const Self>        ConstPointer;
@@ -251,13 +253,13 @@ class ITK_EXPORT ImageWidgetExpTransfertFunction
   itkNewMacro(Self);
   
   /** Creation through object factory macro */
-  itkTypeMacro(ImageWidgetExpTransfertFunction,ImageWidgetTransfertFunction);
+  itkTypeMacro(ImageWidgetSquareTransfertFunction,ImageWidgetTransfertFunction);
   
   /** Template parameters typedefs */
   typedef TPixel PixelType;
 
 
-  inline virtual unsigned char Map(PixelType value)
+  virtual unsigned char Map(PixelType value)
     {
       if(value<this->GetLowerBound())
 	{
@@ -269,17 +271,18 @@ class ITK_EXPORT ImageWidgetExpTransfertFunction
 	}
       else
 	{
-	  double tmp = static_cast<double>((value-this->GetLowerBound())/(this->GetUpperBound()-this->GetLowerBound()));
-	  return static_cast<unsigned char>(255*vcl_exp(1+tmp)/M_E);
+	  double b = vcl_pow(static_cast<double>(this->GetLowerBound()),2);
+	  double a = 255. /(vcl_pow(static_cast<double>(this->GetUpperBound()),2)-b);
+	  return static_cast<unsigned char>(vcl_floor(a * (vcl_pow(static_cast<double>(value),2)-b)+0.5));
 	}
 
     }
  protected:
   /** Constructor and  destructor */
-  ImageWidgetExpTransfertFunction(){}
-  ~ImageWidgetExpTransfertFunction(){}
+  ImageWidgetSquareTransfertFunction(){}
+  ~ImageWidgetSquareTransfertFunction(){}
  private:
-  ImageWidgetExpTransfertFunction(const Self&); //purposely not implemented
+  ImageWidgetSquareTransfertFunction(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
 };
 }// End namespace otb

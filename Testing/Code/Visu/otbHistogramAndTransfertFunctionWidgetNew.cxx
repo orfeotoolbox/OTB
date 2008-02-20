@@ -27,7 +27,7 @@ int otbHistogramAndTransfertFunctionWidgetNew(int argc, char * argv[])
   typedef itk::Statistics::ScalarImageToHistogramGenerator<ImageType> GeneratorType;
   typedef GeneratorType::HistogramType HistogramType;
 
-  typedef otb::HistogramAndTransfertFunctionWidget<HistogramType> WidgetType;
+  typedef otb::HistogramAndTransfertFunctionWidget<HistogramType,PixelType> WidgetType;
 
   WidgetType::Pointer widget = WidgetType::New();
   

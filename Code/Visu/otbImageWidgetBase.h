@@ -23,7 +23,7 @@
 #include "itkObject.h"
 #include "otbList.h"
 #include "otbImageWidgetFormBase.h"
-
+#include "otbImageWidgetTransfertFunction.h"
 
 namespace otb
 {
@@ -64,6 +64,11 @@ class ImageWidgetBase
     typedef typename FormListType::Pointer FormListPointerType;
     typedef typename FormListType::ReverseIterator ReverseIteratorType;
     typedef typename FormListType::Iterator IteratorType;
+
+    typedef otb::ImageWidgetTransfertFunction<PixelType> TransfertFunctionType;
+    typedef otb::ImageWidgetAffineTransfertFunction<PixelType> AffineTransfertFunctionType;
+    typedef List<TransfertFunctionType> TransfertFunctionListType;
+    typedef typename TransfertFunctionListType::Pointer TransfertFunctionListPointerType;
     
     itkSetMacro(BufferedRegion,RegionType);
     itkGetMacro(BufferedRegion,RegionType);
@@ -89,12 +94,6 @@ class ImageWidgetBase
     itkSetMacro(BlackTransparency,bool);
     itkGetMacro(BlackTransparency,bool);
 
-    itkSetMacro(MaxComponentValues,VectorPixelType);
-    itkGetMacro(MaxComponentValues,VectorPixelType);
-
-    itkSetMacro(MinComponentValues,VectorPixelType);
-    itkGetMacro(MinComponentValues,VectorPixelType);
-
     itkGetMacro(SubSamplingRate, unsigned int);
     itkSetMacro(SubSamplingRate, unsigned int);
 
@@ -104,6 +103,7 @@ class ImageWidgetBase
     itkSetMacro(ImageOverlayOpacity,unsigned char);
 
     itkGetObjectMacro(FormList,FormListType);
+    itkGetObjectMacro(TransfertFunctionList,TransfertFunctionListType);
 
     itkGetMacro(OpenGlIsotropicZoom,double);
     
@@ -129,6 +129,12 @@ class ImageWidgetBase
      * \param formList The form list to view.
      */
     void SetFormListOverlay(FormListType* formList);
+
+    /** Set the transfert function list
+     *  \param list The transfert function list.
+     */
+    void SetTransfertFunctionList(TransfertFunctionListType * list);
+
     /**
      * Set view mode to RGB.
      */
@@ -140,8 +146,10 @@ class ImageWidgetBase
 
     /** Show The widget */
     void Show(void);
-     /** Reset the widget */
+     /** Reset the widget (Clear buffered region and re init the transfert functions) */
     void Reset(void);
+    /** Clear the buffered region */
+    void ClearBufferedRegion(void);
 
     /**
      * Convert window to image coordinate.
@@ -150,7 +158,8 @@ class ImageWidgetBase
      */
     virtual IndexType WindowToImageCoordinates(IndexType index);
         
-
+    /** Initialize the widget */
+    virtual void Init(int x, int y, int w, int h, const char * l);
     
   protected:
     /** Constructor */
@@ -178,8 +187,7 @@ class ImageWidgetBase
     virtual void UpdateOpenGlBufferedRegion(void){};
     /** Test if the buffer has to be enlarged */
     virtual bool UpdateOpenGlBufferedRegionRequested(void){return 1;};
-    /** Initialize the widget */
-    virtual void Init(int x, int y, int w, int h, const char * l){};
+
     /** Resize the widget */
     virtual void resize(int x, int y, int w, int h){};
 
@@ -228,6 +236,8 @@ class ImageWidgetBase
       *  Default is 1.
       */
      unsigned int m_SubSamplingRate;
+     /** List of the transfert function by channel */
+     TransfertFunctionListPointerType m_TransfertFunctionList;
   };
 } // end namespace otb
 

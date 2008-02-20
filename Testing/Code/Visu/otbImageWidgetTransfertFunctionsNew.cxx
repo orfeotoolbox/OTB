@@ -24,13 +24,13 @@ int otbImageWidgetTransfertFunctionsNew(int argc, char * argv[])
   typedef otb::ImageWidgetAffineTransfertFunction<PixelType> AffineType;
   typedef otb::ImageWidgetSquareRootTransfertFunction<PixelType> SquareRootType;
   typedef otb::ImageWidgetLogTransfertFunction<PixelType> LogType;
-  typedef otb::ImageWidgetExpTransfertFunction<PixelType> ExpType;
+  typedef otb::ImageWidgetSquareTransfertFunction<PixelType> SquareType;
   
   // Instantiation
   AffineType::Pointer affine = AffineType::New();
   LogType::Pointer log = LogType::New();
   SquareRootType::Pointer squareRoot = SquareRootType::New();
-  ExpType::Pointer exp = ExpType::New();
+  SquareType::Pointer square = SquareType::New();
 
   return EXIT_SUCCESS;
 }

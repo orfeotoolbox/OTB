@@ -26,13 +26,13 @@ int otbImageWidgetTransfertFunctions(int argc, char * argv[])
   typedef otb::ImageWidgetAffineTransfertFunction<PixelType> AffineType;
   typedef otb::ImageWidgetSquareRootTransfertFunction<PixelType> SquareRootType;
   typedef otb::ImageWidgetLogTransfertFunction<PixelType> LogType;
-  typedef otb::ImageWidgetExpTransfertFunction<PixelType> ExpType;
+  typedef otb::ImageWidgetSquareTransfertFunction<PixelType> SquareType;
   
   // Instantiation
   AffineType::Pointer affine = AffineType::New();
   LogType::Pointer log = LogType::New();
   SquareRootType::Pointer squareRoot = SquareRootType::New();
-  ExpType::Pointer exp = ExpType::New();
+  SquareType::Pointer square = SquareType::New();
 
   PixelType min = 10;
   PixelType max = 20;
@@ -41,8 +41,8 @@ int otbImageWidgetTransfertFunctions(int argc, char * argv[])
   affine->SetUpperBound(max);
   log->SetLowerBound(min);
   log->SetUpperBound(max);
-  exp->SetLowerBound(min);
-  exp->SetUpperBound(max);
+  square->SetLowerBound(min);
+  square->SetUpperBound(max);
   squareRoot->SetLowerBound(min);
   squareRoot->SetUpperBound(max);
 
@@ -61,10 +61,10 @@ int otbImageWidgetTransfertFunctions(int argc, char * argv[])
   file<<"Out of bounds (lower): "<<(int)squareRoot->Map(0)<<std::endl;
   file<<"Out of bounds (lower): "<<(int)squareRoot->Map(30)<<std::endl;
   file<<"Inside bounds (lower): "<<(int)squareRoot->Map(15)<<std::endl;
-  file<<"Exponential Transfert function: "<<std::endl;
-  file<<"Out of bounds (lower): "<<(int)exp->Map(0)<<std::endl;
-  file<<"Out of bounds (lower): "<<(int)exp->Map(30)<<std::endl;
-  file<<"Inside bounds (lower): "<<(int)exp->Map(15)<<std::endl;
+  file<<"Square Transfert function: "<<std::endl;
+  file<<"Out of bounds (lower): "<<(int)square->Map(0)<<std::endl;
+  file<<"Out of bounds (lower): "<<(int)square->Map(30)<<std::endl;
+  file<<"Inside bounds (lower): "<<(int)square->Map(15)<<std::endl;
 
   file.close();
 

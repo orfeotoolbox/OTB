@@ -56,10 +56,8 @@ ImageWidgetBase<TPixel>
   m_ImageOverlay = NULL;
   m_OpenGlImageOverlayBuffer = NULL;
   m_ImageOverlayOpacity = 128;
-  m_MinComponentValues.SetSize(1);
-  m_MaxComponentValues.SetSize(1);
-  m_MinComponentValues.Fill(0);
-  m_MaxComponentValues.Fill(255);
+  m_TransfertFunctionList = TransfertFunctionListType::New();
+  m_TransfertFunctionList->PushBack(AffineTransfertFunctionType::New());
   m_SubSamplingRate = 1;
 }
 /**
@@ -91,10 +89,33 @@ ImageWidgetBase<TPixel>
   int w = this->w();
   int h = this->h();
   const char * label = this->label();
+  ClearBufferedRegion();
+  Init(x,y,w,h,label);
+}
+
+template <class TPixel>
+void 
+ImageWidgetBase<TPixel>
+::ClearBufferedRegion(void)
+{
   SizeType size;
   size.Fill(0);
   m_BufferedRegion.SetSize(size);
-  Init(x,y,w,h,label);
+}
+
+
+template <class TPixel>
+void 
+ImageWidgetBase<TPixel>
+::Init(int x, int y, int w, int h, const char * l)
+{
+  for(unsigned int i = 0; i<m_Image->GetNumberOfComponentsPerPixel();++i)
+    {
+      if(i>=m_TransfertFunctionList->Size())
+	{
+	  m_TransfertFunctionList->PushBack(AffineTransfertFunctionType::New());
+	}
+    }
 }
 
 /**
@@ -194,6 +215,17 @@ ImageWidgetBase<TPixel>
   m_FormList = formList;
 }
 
+/** Set the transfert function list
+ *  \param list The transfert function list.
+ */
+template <class TPixel>
+void
+ImageWidgetBase<TPixel>
+::SetTransfertFunctionList(TransfertFunctionListType * list)
+{
+  m_TransfertFunctionList = list;
+}
+
 /** Get the input overlay image.
  * \return The image to view.
  */
@@ -252,30 +284,7 @@ unsigned char
 ImageWidgetBase<TPixel>
 ::Normalize(PixelType value, unsigned int channelIndex)
 {
-  PixelType max = 255;
-  PixelType min = 0;
-  if(channelIndex<m_MaxComponentValues.GetSize())
-    {
-      max = m_MaxComponentValues[channelIndex];
-    }
-   if(channelIndex<m_MinComponentValues.GetSize())
-    {
-      min = m_MinComponentValues[channelIndex];
-    }
-  if(value>=max)
-    {
-      return 255;
-    }
-
-  else if(value<=min)
-    {
-      return 0;
-    }
-  else
-    {
-      return static_cast<unsigned char>(255.*static_cast<double>(value-min)
-      /static_cast<double>(max-min));
-    }
+  return m_TransfertFunctionList->GetNthElement(channelIndex)->Map(value);
 }
 
 /** 

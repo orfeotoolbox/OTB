@@ -32,14 +32,6 @@ ZoomableImageWidget<TPixel>
 ::ZoomableImageWidget()
 {
   m_ZoomUpperLeftCorner.Fill(0);
-  // SizeType size;
-//   IndexType index;
-//   size.Fill(256);
-//   index.Fill(0);
-//   RegionType region;
-//   region.SetIndex(index);
-//   region.SetSize(size);
-//   this->SetViewedRegion(region);
 }
 
 /** 
@@ -63,7 +55,7 @@ ZoomableImageWidget<TPixel>
     }
   else
     {
-      // this->GetInput()->Update();
+      Superclass::Init(x,y,w,h,l);
       if(this->GetImageOverlayVisible())
 	{
 	  this->GetInputOverlay()->Update();

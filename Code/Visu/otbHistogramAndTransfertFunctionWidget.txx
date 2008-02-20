@@ -21,16 +21,18 @@ PURPOSE.  See the above copyright notices for more information.
 #include "otbHistogramAndTransfertFunctionWidget.h"
 #include "otbGluPolygonDrawingHelper.h"
 #include <FL/gl.h>
+#include <FL/Fl.H>
 
 namespace otb
 {
 
-template <class THistogram>
-HistogramAndTransfertFunctionWidget<THistogram>
+template <class THistogram, class TPixel>
+HistogramAndTransfertFunctionWidget<THistogram,TPixel>
 ::HistogramAndTransfertFunctionWidget()
   : Fl_Gl_Window(0,0,0,0,0)
 {
   m_Label = "Default label";
+  m_TransfertFunctionLabel = "Function label";
   m_HistogramColor[0]=0.5;
   m_HistogramColor[1]=0.5;
   m_HistogramColor[2]=0.5;
@@ -46,17 +48,27 @@ HistogramAndTransfertFunctionWidget<THistogram>
   m_GridColor[0]=0.75;
   m_GridColor[1]=0.75;
   m_GridColor[2]=0.75;
+  m_TransfertFunctionColor[0]=1;
+  m_TransfertFunctionColor[1]=0;
+  m_TransfertFunctionColor[2]=0;
+  m_BoundColor[0]=0;
+  m_BoundColor[1]=1;
+  m_BoundColor[2]=0;
+  m_TransfertFunction = NULL;
   m_Histogram = NULL;
-  m_MarginX = 25;
+  m_MarginX = 30;
   m_MarginY = 30;
   m_GridSizeX=5;
   m_GridSizeY=5;
+  m_OutputHistogramMargin = 100;
+  m_HistogramClamping = 1;
+  m_Updating = false;
 }
 
 
-template <class THistogram>
+template <class THistogram, class TPixel>
 void
-HistogramAndTransfertFunctionWidget<THistogram>
+HistogramAndTransfertFunctionWidget<THistogram,TPixel>
 ::OpenGlSetup()
 {
   if (!this->valid())
@@ -79,9 +91,9 @@ HistogramAndTransfertFunctionWidget<THistogram>
   glDisable(GL_BLEND);
 }
 
-template <class THistogram>
+template <class THistogram, class TPixel>
 void
-HistogramAndTransfertFunctionWidget<THistogram>
+HistogramAndTransfertFunctionWidget<THistogram,TPixel>
 ::GridRendering(double gridXSpacing, double gridYSpacing)
 {
   double x,y;
@@ -102,15 +114,15 @@ HistogramAndTransfertFunctionWidget<THistogram>
       y=static_cast<double>(i)*gridYSpacing+m_MarginY;
       x=m_MarginX;
       glVertex2d(x,y);
-      x = static_cast<double>(this->w())-m_MarginX;
+      x = static_cast<double>(this->w())-m_MarginX-m_OutputHistogramMargin;
       glVertex2d(x,y);
     }
   glEnd();
 }
 
-template <class THistogram>
+template <class THistogram, class TPixel>
 void
-HistogramAndTransfertFunctionWidget<THistogram>
+HistogramAndTransfertFunctionWidget<THistogram,TPixel>
 ::AxisRendering(void)
 {
   glBegin(GL_LINES);
@@ -118,13 +130,13 @@ HistogramAndTransfertFunctionWidget<THistogram>
   glVertex2d(m_MarginX,m_MarginY);
   glVertex2d(m_MarginX,static_cast<double>(this->h())-m_MarginY/2);
   glVertex2d(m_MarginX,m_MarginY);
-  glVertex2d(static_cast<double>(this->w())-m_MarginX/2,m_MarginY);
+  glVertex2d(static_cast<double>(this->w())-m_MarginX/2-m_OutputHistogramMargin,m_MarginY);
   glEnd();
 }
 
-template <class THistogram>
+template <class THistogram, class TPixel>
 void
-HistogramAndTransfertFunctionWidget<THistogram>
+HistogramAndTransfertFunctionWidget<THistogram,TPixel>
 ::HistogramRendering(double binWidth, double binHeightRatio, double maxFrequency)
 {
   HistogramIteratorType it;
@@ -142,7 +154,7 @@ HistogramAndTransfertFunctionWidget<THistogram>
       x =startx;
       y = m_MarginY;
       drawer.Vertex2d(x,y);
-      y += binHeightRatio*static_cast<double>(it.GetFrequency());
+      y += binHeightRatio*static_cast<double>((it.GetFrequency()>maxFrequency/m_HistogramClamping ? maxFrequency/m_HistogramClamping : it.GetFrequency()));
       drawer.Vertex2d(x,y);
       x += binWidth;
       drawer.Vertex2d(x,y);
@@ -153,9 +165,36 @@ HistogramAndTransfertFunctionWidget<THistogram>
     } 
 }
 
-template <class THistogram>
+template <class THistogram, class TPixel>
 void
-HistogramAndTransfertFunctionWidget<THistogram>
+HistogramAndTransfertFunctionWidget<THistogram,TPixel>
+::BoundRendering(void)
+{
+  double x,y;
+  // Rendering bounds
+  glColor3d(m_BoundColor[0],m_BoundColor[1],m_BoundColor[2]);
+  glBegin(GL_LINES);  
+  
+  double factor = (m_Histogram->Quantile(0,1.)-m_Histogram->Quantile(0,0.))
+    /(static_cast<double>(this->w())-2*m_MarginX-m_OutputHistogramMargin);
+
+  x = m_MarginX + static_cast<double>(m_TransfertFunction->GetLowerBound())/factor;
+  
+  y = m_MarginY;
+  glVertex2d(x,y);
+  y = static_cast<double>(this->h())-m_MarginY;
+  glVertex2d(x,y);
+  x = m_MarginX + static_cast<double>(m_TransfertFunction->GetUpperBound())/factor;
+  glVertex2d(x,y);
+  y=  m_MarginY;
+  glVertex2d(x,y);
+  glEnd();
+}
+
+
+template <class THistogram, class TPixel>
+void
+HistogramAndTransfertFunctionWidget<THistogram,TPixel>
 ::LegendRendering(double gridXSpacing, double gridYSpacing, double maxFrequency)
 {
   double x,y;
@@ -163,14 +202,13 @@ HistogramAndTransfertFunctionWidget<THistogram>
   itk::OStringStream oss;
   glColor3d(m_TextColor[0],m_TextColor[1],m_TextColor[2]);
   gl_font(FL_COURIER_BOLD,10);
+  double step = (m_Histogram->Quantile(0,1.)-m_Histogram->Quantile(0,0.))
+    /static_cast<double>(m_GridSizeX);
   for(unsigned int i=0;i<m_GridSizeX;++i)
     {
-      double step = (m_Histogram->Quantile(0,1.)-m_Histogram->Quantile(0,0.))
-	/static_cast<double>(m_GridSizeX);
       ValueType value = static_cast<ValueType>(m_Histogram->Quantile(0,0.)
       +static_cast<double>(i)*step);
-      std::cout<<step<<std::endl;
-      oss<<value;
+      oss<<(int)value;
       x=static_cast<double>(i)*gridXSpacing+m_MarginX;
       y=m_MarginY/2;
       gl_draw(oss.str().c_str(),(float)x,(float)y);
@@ -178,8 +216,8 @@ HistogramAndTransfertFunctionWidget<THistogram>
     }
  for(unsigned int i=0;i<m_GridSizeY;++i)
     {
-      double value = static_cast<double>(i)
-	*maxFrequency/static_cast<double>(m_GridSizeY);
+      unsigned int value = static_cast<unsigned int>(i
+	*maxFrequency/(m_HistogramClamping*static_cast<double>(m_GridSizeY)));
       oss<<value;
       y=static_cast<double>(i)*gridYSpacing+m_MarginY;
       x=0;
@@ -192,17 +230,127 @@ HistogramAndTransfertFunctionWidget<THistogram>
 
 }
 
-template <class THistogram>
+template <class THistogram, class TPixel>
 void
-HistogramAndTransfertFunctionWidget<THistogram>
+HistogramAndTransfertFunctionWidget<THistogram,TPixel>
+::TransfertFunctionRendering()
+{
+  glColor3d(m_TransfertFunctionColor[0],m_TransfertFunctionColor[1],m_TransfertFunctionColor[2]);
+  glBegin(GL_LINE_STRIP);
+  double x,y;
+  double step = (m_Histogram->Quantile(0,1.)-m_Histogram->Quantile(0,0.))
+    /static_cast<double>(m_Histogram->GetSize()[0]);
+  double xscale = (static_cast<double>(this->w())-2*m_MarginX-m_OutputHistogramMargin)/static_cast<double>(m_Histogram->GetSize()[0]);
+  double yscale = (static_cast<double>(this->h())-2*m_MarginY)/255.;
+  for(unsigned int i=0;i<m_Histogram->Size()+1;++i)
+    {
+      PixelType value = static_cast<PixelType>(m_Histogram->Quantile(0,0.)
+					       +static_cast<double>(i)*step);
+
+      x = m_MarginX + static_cast<double>(i)*xscale;
+      y = m_MarginY + yscale * static_cast<double>(m_TransfertFunction->Map(value));
+      glVertex2d(x,y);
+    }
+  glEnd();
+}
+
+template <class THistogram, class TPixel>
+void
+HistogramAndTransfertFunctionWidget<THistogram,TPixel>
+::OutputHistogramRendering()
+{
+  std::vector<unsigned int> outputHistogram(256,0);
+  
+  HistogramIteratorType it;
+  for(it=m_Histogram->Begin();it!=m_Histogram->End();++it)
+    {
+      outputHistogram[m_TransfertFunction->Map(static_cast<PixelType>(it.GetMeasurementVector()[0]))]+=static_cast<unsigned int>(it.GetFrequency());
+    }
+  // Setting the extremity to 0 to avoid sides effect
+  outputHistogram[0]=0;
+  outputHistogram[255]=0;
+
+  std::vector<unsigned int>::iterator vit;
+  unsigned int maxFrequency = 0;
+  for(vit=outputHistogram.begin();vit!=outputHistogram.end();++vit)
+    {
+      if(maxFrequency<(*vit))
+	{
+	  maxFrequency=(*vit);
+	}
+    }
+
+  // Temporary vertex coordinates
+  double x,y; 
+ if(maxFrequency>0)
+   { 
+     otb::GluPolygonDrawingHelper drawer;
+     
+     double binWidth = (static_cast<double>(this->h())-2*m_MarginY)/255.;
+     double binLengthRatio = m_HistogramClamping*m_OutputHistogramMargin/static_cast<double>(maxFrequency);
+     double starty = m_MarginY;
+
+     
+     // Rendering histogram
+     for(vit=outputHistogram.begin();vit!=outputHistogram.end();++vit,starty+=binWidth)
+       {
+	 drawer.Color3d(m_TransfertFunctionColor[0],m_TransfertFunctionColor[1],m_TransfertFunctionColor[2]);
+	 drawer.BeginPolygon();
+	 drawer.BeginContour();
+	 
+	 x =static_cast<double>(this->w())-m_OutputHistogramMargin-m_MarginX/2;
+	 y = starty;
+	 drawer.Vertex2d(x,y);
+	 x += binLengthRatio*static_cast<double>((*vit)> maxFrequency/m_HistogramClamping ? maxFrequency/m_HistogramClamping : (*vit));
+	 drawer.Vertex2d(x,y);
+	 y += binWidth;
+	 drawer.Vertex2d(x,y);
+	 x =static_cast<double>(this->w())-m_OutputHistogramMargin-m_MarginX/2;
+	 drawer.Vertex2d(x,y);
+	 drawer.EndContour();
+	 drawer.EndPolygon();
+       }
+   }
+ glBegin(GL_LINE_LOOP);
+ x = static_cast<double>(this->w())-m_OutputHistogramMargin-m_MarginX/2;
+ y = m_MarginY;
+ glVertex2d(x,y);
+ x+=m_OutputHistogramMargin;
+ glVertex2d(x,y);
+ y = static_cast<double>(this->h())-m_MarginY;
+ glVertex2d(x,y);
+ x = static_cast<double>(this->w())-m_OutputHistogramMargin-m_MarginX/2;
+ glVertex2d(x,y);
+ glEnd();
+}
+
+
+template <class THistogram, class TPixel>
+void
+HistogramAndTransfertFunctionWidget<THistogram,TPixel>
+::TransfertFunctionLabelRendering(void)
+{
+ //rendering label
+ gl_font(FL_COURIER_BOLD,12);
+ gl_draw(m_TransfertFunctionLabel.c_str(),static_cast<float>(this->w()-m_MarginX/2-m_OutputHistogramMargin),static_cast<float>(m_MarginY/2));
+
+}
+
+
+template <class THistogram, class TPixel>
+void
+HistogramAndTransfertFunctionWidget<THistogram,TPixel>
 ::draw()
 {
   if(!m_Histogram)
     {
       return;
-    }
-  std::cout<<"Beginning histogram rendering."<<std::endl;
-  
+    } 
+
+  if(m_Updating)
+    return;
+
+  m_Updating = true;
   
   double maxFrequency = 0;
   HistogramIteratorType it;
@@ -216,9 +364,9 @@ HistogramAndTransfertFunctionWidget<THistogram>
 	}
     }
   
-  double binWidth = static_cast<double>(this->w()-2*m_MarginX)/static_cast<double>(m_Histogram->GetSize()[0]);
-  double binHeightRatio = static_cast<double>(this->h()-2*m_MarginY)/static_cast<double>(maxFrequency);
-  double gridXSpacing = (static_cast<double>(this->w())-2*m_MarginX)/static_cast<double>(m_GridSizeX);
+  double binWidth = static_cast<double>(this->w()-2*m_MarginX-m_OutputHistogramMargin)/static_cast<double>(m_Histogram->GetSize()[0]);
+  double binHeightRatio = m_HistogramClamping*static_cast<double>(this->h()-2*m_MarginY)/static_cast<double>(maxFrequency);
+  double gridXSpacing = (static_cast<double>(this->w())-2*m_MarginX-m_OutputHistogramMargin)/static_cast<double>(m_GridSizeX);
   double gridYSpacing = (static_cast<double>(this->h())-2*m_MarginY)/static_cast<double>(m_GridSizeY);
   
   OpenGlSetup();
@@ -227,12 +375,20 @@ HistogramAndTransfertFunctionWidget<THistogram>
   HistogramRendering(binWidth,binHeightRatio,maxFrequency);
   LegendRendering(gridXSpacing,gridYSpacing,maxFrequency);
  
- std::cout<<"End of histogram rendering."<<std::endl;
+
+  if(m_TransfertFunction)
+    {
+      BoundRendering();
+      TransfertFunctionRendering();
+      OutputHistogramRendering();
+      TransfertFunctionLabelRendering();
+    }
+  m_Updating = false;
 }
 
-template <class THistogram>
+template <class THistogram, class TPixel>
 void
-HistogramAndTransfertFunctionWidget<THistogram>
+HistogramAndTransfertFunctionWidget<THistogram,TPixel>
 ::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   Superclass::PrintSelf(os,indent);

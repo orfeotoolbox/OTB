@@ -23,9 +23,6 @@ PURPOSE.  See the above copyright notices for more information.
 #include "otbMacro.h"
 #include "itkMacro.h"
 #include <sstream>
-#include "itkImageRegionIterator.h"
-#include "itkListSampleToHistogramGenerator.h"
-#include "itkListSample.h"
 
 namespace otb
 {
@@ -70,6 +67,11 @@ namespace otb
     m_RectangularROISelectionMode = false;
     m_PolygonalROISelectionMode = false;
     m_UseImageOverlay = false;
+    m_HistogramGeneratorList=HistogramGeneratorListType::New();
+    m_TransfertFunctionList = TransfertFunctionListType::New();
+    m_RedHistogramWidget = HistogramWidgetType::New();
+    m_GreenHistogramWidget = HistogramWidgetType::New();
+    m_BlueHistogramWidget = HistogramWidgetType::New();
   }
   
   /// Destructor
@@ -81,28 +83,15 @@ namespace otb
   /// Compute the normalization factor
   template <class TPixel, class TLabel>
   void
-  ImageViewerBase<TPixel,TLabel>
+   ImageViewerBase<TPixel,TLabel>
   ::ComputeNormalizationFactors(void)
   {
-
-    typedef itk::ImageRegionConstIterator< ImageType >  InputIteratorType;
-    typedef itk::Vector<typename ImageType::ValueType,1> MeasurementVectorType;
-    typedef itk::Statistics::ListSample<MeasurementVectorType> ListSampleType;
-    typedef float HistogramMeasurementType;
-    typedef itk::Statistics::ListSampleToHistogramGenerator<ListSampleType,HistogramMeasurementType,
-      itk::Statistics::DenseFrequencyContainer,1> HistogramGeneratorType;
-    
-    typedef otb::ObjectList<ListSampleType> ListSampleListType;
-    
-
  
-  m_MinComponentValue.SetSize(m_InputImage->GetNumberOfComponentsPerPixel());
-  m_MaxComponentValue.SetSize(m_InputImage->GetNumberOfComponentsPerPixel());
   typename ListSampleListType::Pointer sl =  ListSampleListType::New();
   
   sl->Reserve(m_InputImage->GetNumberOfComponentsPerPixel());
 
-  for(unsigned int i = 0;i<m_MaxComponentValue.GetSize();++i)
+  for(unsigned int i = 0;i<m_InputImage->GetNumberOfComponentsPerPixel();++i)
     {
       sl->PushBack(ListSampleType::New());
     }
@@ -127,27 +116,31 @@ namespace otb
   while( !it.IsAtEnd() )
     {
       PixelType pixel = it.Get();
-      for(unsigned int i = 0;i<m_MaxComponentValue.GetSize();++i)
+      for(unsigned int i = 0;i<m_InputImage->GetNumberOfComponentsPerPixel();++i)
 	{
 	  sl->GetNthElement(i)->PushBack(pixel[i]);
 	}
       ++it;
     }
-
-  for(unsigned int i = 0;i<m_MaxComponentValue.GetSize();++i)
+  m_HistogramGeneratorList->Clear();
+  otbMsgDebugMacro(<<"Nb bands: "<<m_InputImage->GetNumberOfComponentsPerPixel());
+  for(unsigned int i = 0;i<m_InputImage->GetNumberOfComponentsPerPixel();++i)
     {
       typename HistogramGeneratorType::Pointer generator = HistogramGeneratorType::New();
       generator->SetListSample(sl->GetNthElement(i));
       typename HistogramGeneratorType::HistogramType::SizeType size;
-      size.Fill(static_cast<unsigned int>(vcl_ceil(1/m_NormalizationFactor)*10));
+      //      size.Fill(static_cast<unsigned int>(vcl_ceil(1/m_NormalizationFactor)*10));
+      size.Fill(256);
       generator->SetNumberOfBins(size);
       generator->Update();
-      m_MinComponentValue[i]=static_cast<typename ImageType::ValueType>(generator->GetOutput()->Quantile(0,m_NormalizationFactor));
-      m_MaxComponentValue[i]=static_cast<typename ImageType::ValueType>(generator->GetOutput()->Quantile(0,1-m_NormalizationFactor));
+      m_HistogramGeneratorList->PushBack(generator);
+      m_TransfertFunctionList->PushBack(AffineTransfertFunctionType::New());
+      double min = generator->GetOutput()->Quantile(0,m_NormalizationFactor);
+      double max = generator->GetOutput()->Quantile(0,1-m_NormalizationFactor);
+      m_TransfertFunctionList->Back()->SetLowerBound(min);
+      m_TransfertFunctionList->Back()->SetUpperBound(max);
     }
-    otbMsgDebugMacro(<<"Normalization between: "<<m_MinComponentValue<<" and "<<m_MaxComponentValue);  
   }
-  
   
   /// Build the HMI
   template <class TPixel, class TLabel>
@@ -183,6 +176,47 @@ namespace otb
     int hscroll=0;
     int wfull = (size[0]<m_FullMaxInitialSize ? size[0] : m_FullMaxInitialSize);
     int hfull = (size[1]<m_FullMaxInitialSize ? size[1] : m_FullMaxInitialSize);
+
+    // decide wether to use scroll view or not
+    if(size[0]<m_ScrollLimitSize&&size[1]<m_ScrollLimitSize)
+      {
+	m_UseScroll=false;
+      }
+    else 
+      {
+	m_UseScroll=true;
+	// Compute scroll size :
+	if(m_ImageGeometry<1)
+	  {
+	    hscroll = m_ScrollMaxInitialSize;
+	    wscroll = static_cast<int>(static_cast<double>(m_ScrollMaxInitialSize)*m_ImageGeometry);
+	  }
+	else
+	  {
+	    wscroll = m_ScrollMaxInitialSize;
+	    hscroll = static_cast<int>(static_cast<double>(m_ScrollMaxInitialSize)/m_ImageGeometry);
+	  }
+	// Create the quicklook
+	m_Shrink->SetInput(m_InputImage);
+	if(size[0]/hscroll < size[1]/wscroll)
+	  {
+	    m_ShrinkFactor = static_cast<unsigned int>(vcl_ceil((static_cast<double>(size[0])/static_cast<double>(wscroll))/m_QuicklookRatioCoef));
+	  }
+	else
+	  {
+	    m_ShrinkFactor = static_cast<unsigned int>(vcl_ceil((static_cast<double>(size[1])/static_cast<double>(hscroll))/m_QuicklookRatioCoef));
+	  }
+
+
+
+	otbMsgDebugMacro(<<"Shrink factor: "<<m_ShrinkFactor);
+	m_Shrink->SetShrinkFactor(m_ShrinkFactor);
+	typedef otb::FltkFilterWatcher WatcherType;
+	WatcherType watcher(m_Shrink,wfull-200,hfull/2,200,20, "Generating Quicklook ...");
+	m_Shrink->Update();
+      }
+    
+
 
     // Create full windows    
     m_FullWidget = FullWidgetType::New();
@@ -226,46 +260,9 @@ namespace otb
 	zoomBox->SetColor(m_InterfaceBoxesColor);
 	m_InterfaceBoxesList->PushBack(zoomBox);
       }
-    // decide wether to use scroll view or not
-    if(size[0]<m_ScrollLimitSize&&size[1]<m_ScrollLimitSize)
+    
+    if(m_UseScroll)
       {
-	m_UseScroll=false;
-      }
-    else 
-      {
-	m_UseScroll=true;
-	// Compute scroll size :
-	if(m_ImageGeometry<1)
-	  {
-	    hscroll = m_ScrollMaxInitialSize;
-	    wscroll = static_cast<int>(static_cast<double>(m_ScrollMaxInitialSize)*m_ImageGeometry);
-	  }
-	else
-	  {
-	    wscroll = m_ScrollMaxInitialSize;
-	    hscroll = static_cast<int>(static_cast<double>(m_ScrollMaxInitialSize)/m_ImageGeometry);
-	  }
-	// Create the quicklook
-	m_Shrink->SetInput(m_InputImage);
-	if(size[0]/hscroll < size[1]/wscroll)
-	  {
-	    m_ShrinkFactor = static_cast<unsigned int>(vcl_ceil((static_cast<double>(size[0])/static_cast<double>(wscroll))/m_QuicklookRatioCoef));
-	  }
-	else
-	  {
-	    m_ShrinkFactor = static_cast<unsigned int>(vcl_ceil((static_cast<double>(size[1])/static_cast<double>(hscroll))/m_QuicklookRatioCoef));
-	  }
-
-
-
-	otbMsgDebugMacro(<<"Shrink factor: "<<m_ShrinkFactor);
-	m_Shrink->SetShrinkFactor(m_ShrinkFactor);
-	typedef otb::FltkFilterWatcher WatcherType;
-	WatcherType watcher(m_Shrink,wfull-200,hfull/2,200,20, "Generating Quicklook ...");
-	m_Shrink->Update();
-
-	
-	
 	// Create the scroll window
 	m_ScrollWidget = ScrollWidgetType::New();
 	m_ScrollWidget->SetInput(m_Shrink->GetOutput());
@@ -301,23 +298,28 @@ namespace otb
 	box->SetColor(m_InterfaceBoxesColor);
 	m_InterfaceBoxesList->PushBack(box);
       }
-    
- 
+
     // Compute the normalization factors
     ComputeNormalizationFactors();
-
-    // Set the normalization factors
-    m_ZoomWidget->SetMinComponentValues(m_MinComponentValue);
-    m_ZoomWidget->SetMaxComponentValues(m_MaxComponentValue);
-    m_FullWidget->SetMinComponentValues(m_MinComponentValue);
-    m_FullWidget->SetMaxComponentValues(m_MaxComponentValue);
     if(m_UseScroll)
       {
-	m_ScrollWidget->SetMinComponentValues(m_MinComponentValue);
-	m_ScrollWidget->SetMaxComponentValues(m_MaxComponentValue);
+	m_ScrollWidget->SetTransfertFunctionList(m_TransfertFunctionList);
       }
+    m_ZoomWidget->SetTransfertFunctionList(m_TransfertFunctionList);
+    m_FullWidget->SetTransfertFunctionList(m_TransfertFunctionList);
+
+
 
     InitializeViewModel();
+
+    m_RedHistogramWidget->SetParent(this);
+    m_BlueHistogramWidget->SetParent(this);
+    m_GreenHistogramWidget->SetParent(this);
+
+    m_RedHistogramWidget->resize(0,0,m_FullMaxInitialSize/2,m_ZoomMaxInitialSize);
+    m_BlueHistogramWidget->resize(0,0,m_FullMaxInitialSize/2,m_ZoomMaxInitialSize);
+    m_GreenHistogramWidget->resize(0,0,m_FullMaxInitialSize/2,m_ZoomMaxInitialSize);
+
     GenerateOverlayList();
     
     m_Built=true;
@@ -406,6 +408,15 @@ namespace otb
     {
       m_ZoomWidget->Show();
     }
+
+    m_RedHistogramWidget->show();
+    
+    if(this->GetViewModelIsRGB())
+      {
+	m_GreenHistogramWidget->show();
+	m_BlueHistogramWidget->show();
+   }
+
     Fl::check();
     //comment: std::cout<<"Leaving show method"<<std::endl;
   }
@@ -434,6 +445,16 @@ namespace otb
       }
     m_FullWidget->hide();
     m_ZoomWidget->hide();
+
+    m_RedHistogramWidget->hide();
+
+    if(this->GetViewModelIsRGB())
+      {
+	m_GreenHistogramWidget->hide();
+	m_BlueHistogramWidget->hide();
+      }
+
+
     Fl::check();
 
   } 
@@ -545,6 +566,17 @@ namespace otb
     UpdateScrollWidget();
     UpdateFullWidget();
     UpdateZoomWidget();
+
+    // Update histogram widgets
+
+    m_RedHistogramWidget->redraw();
+
+    if(this->GetViewModelIsRGB())
+      {
+	m_GreenHistogramWidget->redraw();
+	m_BlueHistogramWidget->redraw();
+      }
+
     
     // update the linked viewer
     typename ViewerListType::Iterator linkedIt = m_LinkedViewerList->Begin();
@@ -975,6 +1007,40 @@ ImageViewerBase<TPixel,TLabel>
 	  m_FullWidget->SetRedChannelIndex(m_RedChannelIndex);
 	  m_FullWidget->SetGreenChannelIndex(m_GreenChannelIndex);
 	  m_FullWidget->SetBlueChannelIndex(m_BlueChannelIndex);
+	  
+	  typename HistogramWidgetType::ColorType blue,red,green;
+	  
+	  red[0]=0.5;
+	  red[1]=0;
+	  red[2]=0;
+
+	  green[0]=0;
+	  green[1]=0.5;
+	  green[2]=0;
+
+	  blue[0]=0;
+	  blue[1]=0;
+	  blue[2]=0.5;
+
+	  m_RedHistogramWidget->SetHistogram(m_HistogramGeneratorList->GetNthElement(m_RedChannelIndex)->GetOutput());
+	  m_RedHistogramWidget->SetTransfertFunction(m_TransfertFunctionList->GetNthElement(m_RedChannelIndex));
+	  m_RedHistogramWidget->SetLabel("Red channel");
+	  m_RedHistogramWidget->SetTransfertFunctionLabel("Affine");
+	  m_RedHistogramWidget->SetHistogramColor(red);
+	  m_RedHistogramWidget->SetTextColor(red);
+	  
+	  m_BlueHistogramWidget->SetHistogram(m_HistogramGeneratorList->GetNthElement(m_BlueChannelIndex)->GetOutput());
+	  m_BlueHistogramWidget->SetTransfertFunction(m_TransfertFunctionList->GetNthElement(m_BlueChannelIndex));
+	  m_BlueHistogramWidget->SetLabel("Blue channel");
+	  m_BlueHistogramWidget->SetTransfertFunctionLabel("Affine");
+	  m_BlueHistogramWidget->SetHistogramColor(blue);
+	  m_BlueHistogramWidget->SetTextColor(blue);
+	  m_GreenHistogramWidget->SetHistogram(m_HistogramGeneratorList->GetNthElement(m_GreenChannelIndex)->GetOutput());
+	  m_GreenHistogramWidget->SetTransfertFunction(m_TransfertFunctionList->GetNthElement(m_GreenChannelIndex));
+	  m_GreenHistogramWidget->SetLabel("Green channel");
+	  m_GreenHistogramWidget->SetTransfertFunctionLabel("Affine");
+	  m_GreenHistogramWidget->SetHistogramColor(green);
+	  m_GreenHistogramWidget->SetTextColor(green);
 	}
     }
   else
@@ -988,6 +1054,17 @@ ImageViewerBase<TPixel,TLabel>
 	  m_ZoomWidget->SetViewModelToGrayscale();
 	  m_ZoomWidget->SetRedChannelIndex(m_RedChannelIndex);
 	  m_FullWidget->SetRedChannelIndex(m_RedChannelIndex);
+
+	  typename HistogramWidgetType::ColorType gray;
+	  gray.Fill(0.5);
+
+	  m_RedHistogramWidget->SetHistogram(m_HistogramGeneratorList->GetNthElement(m_RedChannelIndex)->GetOutput());
+	  m_RedHistogramWidget->SetTransfertFunction(m_TransfertFunctionList->GetNthElement(m_RedChannelIndex));
+	  m_RedHistogramWidget->SetLabel("Grayscale channel");
+	  m_RedHistogramWidget->SetTransfertFunctionLabel("Affine");
+	  m_RedHistogramWidget->SetHistogramColor(gray);
+	  m_RedHistogramWidget->SetTextColor(gray);
+	  
     }
 }
 
@@ -1019,6 +1096,25 @@ ImageViewerBase<TPixel,TLabel>
     }
 }
 
+
+template<class TPixel, class TLabel>
+void
+ImageViewerBase<TPixel,TLabel>
+::ChangeTransfertFunctions(void)
+{
+  m_TransfertFunctionList->SetNthElement(m_RedChannelIndex, m_RedHistogramWidget->GetTransfertFunction());
+  if(m_FullWidget->GetViewModelIsRGB())
+    {
+      m_TransfertFunctionList->SetNthElement(m_BlueChannelIndex, m_BlueHistogramWidget->GetTransfertFunction());
+      m_TransfertFunctionList->SetNthElement(m_GreenChannelIndex, m_GreenHistogramWidget->GetTransfertFunction());
+    }
+  m_FullWidget->ClearBufferedRegion();
+  m_ZoomWidget->ClearBufferedRegion();
+  if(m_UseScroll)
+    {
+      m_ScrollWidget->ClearBufferedRegion();
+    }
+}
 
 template<class TPixel, class TLabel>
 void

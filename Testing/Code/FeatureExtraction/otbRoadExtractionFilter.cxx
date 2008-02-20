@@ -89,7 +89,6 @@ int otbRoadExtractionFilter(int argc, char * argv[])
       image->FillBuffer(0);
 
       OutputPathListType * listPath = roadExtraction->GetOutput();
-      std::cout << "ListPath : Size() = "<<listPath->Size()<<std::endl;
 
       draw->SetInput(image);
       //Use internal value of path

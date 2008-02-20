@@ -55,12 +55,14 @@ void
 FullResolutionImageWidget<TPixel>
 ::Init(int x, int y, int w, int h, const char * l)
 {
+
   if(!this->GetInput())
     {
       itkExceptionMacro("No input image!");
     }
   else
     {
+      Superclass::Init(x,y,w,h,l);
       if(this->GetImageOverlayVisible())
 	{
 	  if(!this->GetInputOverlay())

@@ -79,6 +79,7 @@ class ITK_EXPORT ImageViewer
   Fl_Window * m_ScrollWindow;
   Fl_Window * m_ZoomWindow;
   Fl_Window * m_PixLocWindow;
+  Fl_Window * m_HistogramWindow;
   Fl_Multiline_Output * m_PixLocOutput;
 };
 } // end namespace otb
