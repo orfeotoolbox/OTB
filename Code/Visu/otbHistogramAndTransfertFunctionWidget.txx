@@ -20,7 +20,7 @@ PURPOSE.  See the above copyright notices for more information.
 
 #include "otbHistogramAndTransfertFunctionWidget.h"
 #include "otbGluPolygonDrawingHelper.h"
-#include <FL/gl.H>
+#include <FL/gl.h>
 
 namespace otb
 {
