@@ -81,8 +81,9 @@ namespace otb
   void
   ImageViewer<TPixel,TLabel>
   ::Build(void)
+  {
     Superclass::Build();
-  itk::OStringStream oss;
+    itk::OStringStream oss;
   
   int wfull = this->GetFullWidget()->w();
   int hfull = this->GetFullWidget()->h();
@@ -167,7 +168,7 @@ namespace otb
   m_PixLocOutput->box(FL_EMBOSSED_BOX );
   m_PixLocWindow->end();
   this->SetPixLocOutput(m_PixLocOutput);
-}
+  }
   
 /// Show the app
 template <class TPixel, class TLabel>
