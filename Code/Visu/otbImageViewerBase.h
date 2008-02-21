@@ -113,8 +113,6 @@ namespace otb
       typedef float HistogramMeasurementType;
       typedef itk::Statistics::ListSampleToHistogramGenerator<ListSampleType,HistogramMeasurementType,
       itk::Statistics::DenseFrequencyContainer,1> HistogramGeneratorType;
-      typedef otb::ObjectList<HistogramGeneratorType> HistogramGeneratorListType;
-      typedef typename HistogramGeneratorListType::Pointer HistogramGeneratorListPointerType;
       typedef otb::ObjectList<ListSampleType> ListSampleListType;
       typedef otb::ObjectList<HistogramGeneratorType> HistogramGeneratorListType;
       typedef typename HistogramGeneratorListType::Pointer HistogramGeneratorListPointerType;
@@ -128,11 +126,6 @@ namespace otb
       typedef typename SingleImageType::Pointer SingleImagePointerType;
       typedef otb::ImageToVectorImageCastFilter<SingleImageType,ImageType> VectorCastFilterType;
       typedef typename VectorCastFilterType::Pointer VectorCastFilterPointerType;
-
-      /// Input image types
-      typedef itk::Vector<InputPixelType,3> MeasurementVectorType;
-      typedef itk::Statistics::ListSample<VectorPixelType> ListSampleType;
-      typedef itk::Statistics::CovarianceCalculator<ListSampleType> CovarianceCalculatorType;
 
       /// Definition of streaming shrink image filter
       typedef otb::StreamingShrinkImageFilter<ImageType,ImageType> ShrinkFilterType;
