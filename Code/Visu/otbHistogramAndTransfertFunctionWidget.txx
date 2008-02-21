@@ -60,7 +60,7 @@ HistogramAndTransfertFunctionWidget<THistogram,TPixel>
   m_MarginY = 30;
   m_GridSizeX=5;
   m_GridSizeY=5;
-  m_OutputHistogramMargin = 100;
+  m_OutputHistogramMargin = 0.2;
   m_HistogramClamping = 1;
   m_Updating = false;
 }
@@ -114,7 +114,7 @@ HistogramAndTransfertFunctionWidget<THistogram,TPixel>
       y=static_cast<double>(i)*gridYSpacing+m_MarginY;
       x=m_MarginX;
       glVertex2d(x,y);
-      x = static_cast<double>(this->w())-m_MarginX-m_OutputHistogramMargin;
+      x = static_cast<double>(this->w())-m_MarginX-m_OutputHistogramMargin*static_cast<double>(this->w());
       glVertex2d(x,y);
     }
   glEnd();
@@ -130,7 +130,7 @@ HistogramAndTransfertFunctionWidget<THistogram,TPixel>
   glVertex2d(m_MarginX,m_MarginY);
   glVertex2d(m_MarginX,static_cast<double>(this->h())-m_MarginY/2);
   glVertex2d(m_MarginX,m_MarginY);
-  glVertex2d(static_cast<double>(this->w())-m_MarginX/2-m_OutputHistogramMargin,m_MarginY);
+  glVertex2d(static_cast<double>(this->w())-m_MarginX/2-m_OutputHistogramMargin*static_cast<double>(this->w()),m_MarginY);
   glEnd();
 }
 
@@ -176,15 +176,15 @@ HistogramAndTransfertFunctionWidget<THistogram,TPixel>
   glBegin(GL_LINES);  
   
   double factor = (m_Histogram->Quantile(0,1.)-m_Histogram->Quantile(0,0.))
-    /(static_cast<double>(this->w())-2*m_MarginX-m_OutputHistogramMargin);
+    /(static_cast<double>(this->w())-2*m_MarginX-m_OutputHistogramMargin*static_cast<double>(this->w()));
 
-  x = m_MarginX + static_cast<double>(m_TransfertFunction->GetLowerBound())/factor;
+  x = m_MarginX + static_cast<double>(m_TransfertFunction->GetLowerBound()-m_Histogram->Quantile(0,0.))/factor;
   
   y = m_MarginY;
   glVertex2d(x,y);
   y = static_cast<double>(this->h())-m_MarginY;
   glVertex2d(x,y);
-  x = m_MarginX + static_cast<double>(m_TransfertFunction->GetUpperBound())/factor;
+  x = m_MarginX + static_cast<double>(m_TransfertFunction->GetUpperBound()-m_Histogram->Quantile(0,0.))/factor;
   glVertex2d(x,y);
   y=  m_MarginY;
   glVertex2d(x,y);
@@ -240,7 +240,7 @@ HistogramAndTransfertFunctionWidget<THistogram,TPixel>
   double x,y;
   double step = (m_Histogram->Quantile(0,1.)-m_Histogram->Quantile(0,0.))
     /static_cast<double>(m_Histogram->GetSize()[0]);
-  double xscale = (static_cast<double>(this->w())-2*m_MarginX-m_OutputHistogramMargin)/static_cast<double>(m_Histogram->GetSize()[0]);
+  double xscale = (static_cast<double>(this->w())-2*m_MarginX-m_OutputHistogramMargin*static_cast<double>(this->w()))/static_cast<double>(m_Histogram->GetSize()[0]);
   double yscale = (static_cast<double>(this->h())-2*m_MarginY)/255.;
   for(unsigned int i=0;i<m_Histogram->Size()+1;++i)
     {
@@ -287,7 +287,7 @@ HistogramAndTransfertFunctionWidget<THistogram,TPixel>
      otb::GluPolygonDrawingHelper drawer;
      
      double binWidth = (static_cast<double>(this->h())-2*m_MarginY)/255.;
-     double binLengthRatio = m_HistogramClamping*m_OutputHistogramMargin/static_cast<double>(maxFrequency);
+     double binLengthRatio = m_HistogramClamping*m_OutputHistogramMargin*static_cast<double>(this->w())/static_cast<double>(maxFrequency);
      double starty = m_MarginY;
 
      
@@ -298,28 +298,28 @@ HistogramAndTransfertFunctionWidget<THistogram,TPixel>
 	 drawer.BeginPolygon();
 	 drawer.BeginContour();
 	 
-	 x =static_cast<double>(this->w())-m_OutputHistogramMargin-m_MarginX/2;
+	 x =static_cast<double>(this->w())-m_OutputHistogramMargin*static_cast<double>(this->w())-m_MarginX/2;
 	 y = starty;
 	 drawer.Vertex2d(x,y);
 	 x += binLengthRatio*static_cast<double>((*vit)> maxFrequency/m_HistogramClamping ? maxFrequency/m_HistogramClamping : (*vit));
 	 drawer.Vertex2d(x,y);
 	 y += binWidth;
 	 drawer.Vertex2d(x,y);
-	 x =static_cast<double>(this->w())-m_OutputHistogramMargin-m_MarginX/2;
+	 x =static_cast<double>(this->w())-m_OutputHistogramMargin*static_cast<double>(this->w())-m_MarginX/2;
 	 drawer.Vertex2d(x,y);
 	 drawer.EndContour();
 	 drawer.EndPolygon();
        }
    }
  glBegin(GL_LINE_LOOP);
- x = static_cast<double>(this->w())-m_OutputHistogramMargin-m_MarginX/2;
+ x = static_cast<double>(this->w())-m_OutputHistogramMargin*static_cast<double>(this->w())-m_MarginX/2;
  y = m_MarginY;
  glVertex2d(x,y);
- x+=m_OutputHistogramMargin;
+ x+=m_OutputHistogramMargin*static_cast<double>(this->w());
  glVertex2d(x,y);
  y = static_cast<double>(this->h())-m_MarginY;
  glVertex2d(x,y);
- x = static_cast<double>(this->w())-m_OutputHistogramMargin-m_MarginX/2;
+ x = static_cast<double>(this->w())-m_OutputHistogramMargin*static_cast<double>(this->w())-m_MarginX/2;
  glVertex2d(x,y);
  glEnd();
 }
@@ -332,7 +332,7 @@ HistogramAndTransfertFunctionWidget<THistogram,TPixel>
 {
  //rendering label
  gl_font(FL_COURIER_BOLD,12);
- gl_draw(m_TransfertFunctionLabel.c_str(),static_cast<float>(this->w()-m_MarginX/2-m_OutputHistogramMargin),static_cast<float>(m_MarginY/2));
+ gl_draw(m_TransfertFunctionLabel.c_str(),static_cast<float>(this->w()-m_MarginX/2-m_OutputHistogramMargin*static_cast<double>(this->w())),static_cast<float>(m_MarginY/2));
 
 }
 
@@ -364,9 +364,9 @@ HistogramAndTransfertFunctionWidget<THistogram,TPixel>
 	}
     }
   
-  double binWidth = static_cast<double>(this->w()-2*m_MarginX-m_OutputHistogramMargin)/static_cast<double>(m_Histogram->GetSize()[0]);
+  double binWidth = static_cast<double>(this->w()-2*m_MarginX-m_OutputHistogramMargin*static_cast<double>(this->w()))/static_cast<double>(m_Histogram->GetSize()[0]);
   double binHeightRatio = m_HistogramClamping*static_cast<double>(this->h()-2*m_MarginY)/static_cast<double>(maxFrequency);
-  double gridXSpacing = (static_cast<double>(this->w())-2*m_MarginX-m_OutputHistogramMargin)/static_cast<double>(m_GridSizeX);
+  double gridXSpacing = (static_cast<double>(this->w())-2*m_MarginX-m_OutputHistogramMargin*static_cast<double>(this->w()))/static_cast<double>(m_GridSizeX);
   double gridYSpacing = (static_cast<double>(this->h())-2*m_MarginY)/static_cast<double>(m_GridSizeY);
   
   OpenGlSetup();

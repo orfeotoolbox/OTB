@@ -145,10 +145,7 @@ namespace otb
     m_ScrollWindow->resizable(this->GetScrollWidget());
     m_ScrollWindow->end();  
   }
-    
-  int wzoom = this->GetZoomWidget()->w();
-  int hzoom = this->GetZoomWidget()->h();  
-    
+        
   // Create the zoom window
   std::string zoomLabel=this->GetLabel();
   zoomLabel.append(" - Zoom Window (X4)");

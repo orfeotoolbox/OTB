@@ -74,9 +74,9 @@ class ITK_EXPORT ImageViewerHistogramAndTransfertFunctionWidget
   virtual int handle(int event)
     {
       double factor = (this->GetHistogram()->Quantile(0,1.)-this->GetHistogram()->Quantile(0,0.))
-	/(static_cast<double>(this->w())-2*this->GetMarginX()-this->GetOutputHistogramMargin());
-      double xupper = this->GetMarginX() + static_cast<double>(this->GetTransfertFunction()->GetUpperBound())/factor;
-      double xlower = this->GetMarginX() + static_cast<double>(this->GetTransfertFunction()->GetLowerBound())/factor;
+	/(static_cast<double>(this->w())-2*this->GetMarginX()-this->GetOutputHistogramMargin()*static_cast<double>(this->w()));
+      double xupper = this->GetMarginX() + static_cast<double>(this->GetTransfertFunction()->GetUpperBound()-this->GetHistogram()->Quantile(0,0.))/factor;
+      double xlower = this->GetMarginX() + static_cast<double>(this->GetTransfertFunction()->GetLowerBound()-this->GetHistogram()->Quantile(0,0.))/factor;
       switch(event)
 	{
 	case FL_PUSH:
@@ -107,16 +107,16 @@ class ITK_EXPORT ImageViewerHistogramAndTransfertFunctionWidget
 	  {
 	    double x = Fl::event_x();
 	    
-	    if(m_ModifyLower && (x>this->GetMarginX()) && (x<static_cast<double>(this->w())-this->GetMarginX()-this->GetOutputHistogramMargin()))
+	    if(m_ModifyLower && (x>this->GetMarginX()) && (x<static_cast<double>(this->w())-this->GetMarginX()-this->GetOutputHistogramMargin()*static_cast<double>(this->w())))
 	      {
 		x = (x>xupper ? xupper : x);
-		this->GetTransfertFunction()->SetLowerBound(static_cast<PixelType>((x-this->GetMarginX())*factor));
+		this->GetTransfertFunction()->SetLowerBound(static_cast<PixelType>(this->GetHistogram()->Quantile(0,0.)+(x-this->GetMarginX())*factor));
 		this->redraw();
 	      }
-	    else if(m_ModifyUpper && (x<static_cast<double>(this->w())-this->GetMarginX()-this->GetOutputHistogramMargin()))
+	    else if(m_ModifyUpper && (x<static_cast<double>(this->w())-this->GetMarginX()-this->GetOutputHistogramMargin()*static_cast<double>(this->w())))
 	      {
 		x = (x<xlower ? xlower : x);
-		this->GetTransfertFunction()->SetUpperBound(static_cast<PixelType>((x-this->GetMarginX())*factor));
+		this->GetTransfertFunction()->SetUpperBound(static_cast<PixelType>(this->GetHistogram()->Quantile(0,0.)+(x-this->GetMarginX())*factor));
 		this->redraw();
 	      }
 	    return 1;

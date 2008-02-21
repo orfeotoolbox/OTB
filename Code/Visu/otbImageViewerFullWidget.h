@@ -323,8 +323,8 @@ class ITK_EXPORT ImageViewerFullWidget
           }
         return 1;        
         }
+      }
     return 0;
-  }
 }
   
   virtual int handle(int event)
