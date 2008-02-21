@@ -33,6 +33,10 @@
 
 // Software Guide : BeginLatex
 //
+// Sometimes, it may be more valuable not to get an image from the threshold
+// step but rather a list of coordinates. This can be done with the
+// \doxygen{otb}{ThresholdImageToPointSetFilter}.
+//
 // The following example illustrates the use of the 
 // \doxygen{otb}{ThresholdImageToPointSetFilter} which provide a list of points
 // within given thresholds. Points set are described in section 
