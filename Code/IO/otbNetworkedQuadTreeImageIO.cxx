@@ -335,7 +335,6 @@ void NetworkedQuadTreeImageIO::BuildFileName(std::ostringstream& quad, std::ostr
 
 void NetworkedQuadTreeImageIO::GetFromNet(std::ostringstream& quad)
 {
-  std::cout << "0=" << m_AddressMode << std::endl;
   std::ostringstream urlStream;
   urlStream << m_ServerName;
   urlStream << quad.str();
