@@ -196,6 +196,32 @@ as \code{ScalingPipeline QB\_Suburb.png output.png}.
  
 You have the filtered version of your image in the \code{output.png} file.
 
+\section{Working with multispectral or color images}
+
+So far, as you may have noticed, we have been working with grey level images,
+i.e. with only one spectral band. If you tried to process a color image with 
+some of the previous examples you have probably obtained a deceiving grey 
+result. 
+
+Often, satellite images combine several spectral band to help the 
+identification of materials: this is called multispectral imagery. In this 
+tutorial, we are going to explore some of the mechanisms used by OTB to
+process multispectral images.
+
+Add the following lines in the \code{CMakeLists.txt} file:
+
+\begin{small}
+\begin{verbatim}
+ADD_EXECUTABLE(Multispectral Multispectral.cxx )
+TARGET_LINK_LIBRARIES(Multispectral OTBCommon OTBIO)
+\end{verbatim}
+\end{small}
+
+\input{Multispectral}
+
+Compile with \code{make} and execute as \code{./Multispectral qb_RoadExtract.tif
+ qb_blue.tif qb_shiftscale.tif}.
+
 \section{Parsing command line arguments}
 \label{sec:TutorialParsing}
 
