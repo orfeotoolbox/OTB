@@ -92,6 +92,10 @@ ADD_TEST(utTvSvmGenericKernelBasicOperationsTest ${UTILITIES_TESTS}
 		 ${TEMP}/svmGenericKernelBasicOperationsTest.txt
 )
 
+ADD_TEST(utTvSvmComposedKernelFunctorTest ${UTILITIES_TESTS}
+               otbSVMComposedKernelFunctorTest
+)	
+	
 # -------            lib otb6S   ------------------------------
 
 # The file is not read. It a screen user scan. main.exe < 132.149.107.66.wloip20967.INP
@@ -128,6 +132,8 @@ ADD_TEST(utTvTinyXMLTest ${UTILITIES_TESTS}
 )
 
 
+
+
 # -------       Fichiers sources CXX -----------------------------------
 SET(UtilitiesTests_SRCS
 ossimIntegrationTest.cxx
@@ -140,6 +146,7 @@ svmGenericKernelTest.cxx
 6SFunctionMainTest.cxx
 tinyXMLlibTest.cxx
 svmGenericKernelBasicOperationsTest.cxx
+otbSVMComposedKernelFunctorTest.cxx
 )
 
 INCLUDE_DIRECTORIES("${OTBTesting_BINARY_DIR}")

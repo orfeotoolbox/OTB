@@ -423,6 +423,7 @@ public:
 	return m_Model->sv_coef;
   }
 
+
   /** Evaluate model */
   double Evaluate(void);
 
@@ -454,6 +455,11 @@ private:
 
   struct svm_problem m_Problem;
   struct svm_node* m_XSpace;
+  
+  ///** SVM Model Vector for composed kernel */
+  //std::vector<struct svm_model*> m_ModelList;
+  /** Ponderation list to apply to each svm_model of the composed kernel*/
+  //std::vector<double> m_PonderationModelList;
 
   /** Pointer to generic kernel functor */
 //  GenericKernelFunctorBase * m_GenericKernelFunctor;

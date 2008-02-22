@@ -40,6 +40,7 @@ SVMModel< TInputPixel, TLabel >::SVMModel()
   m_Problem.y = new double[1];
   m_Problem.x = new struct svm_node*[1];
   m_XSpace = new struct svm_node[1];
+ 
   //m_GenericKernelFunctor = NULL;
  //  m_Model->param.kernel_generic = NULL;
 //   m_Model->param.nr_weight = 0;
@@ -193,6 +194,9 @@ SVMModel<TInputPixel, TLabel>
         svm_predict_values(m_Model, m_XSpace, (double*)(values.GetDataPointer()));
         return (values);
 }
+
+
+
 
 // FIXME
 }// end namespace otb
