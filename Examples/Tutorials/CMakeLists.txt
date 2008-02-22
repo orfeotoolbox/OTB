@@ -15,6 +15,9 @@ TARGET_LINK_LIBRARIES(FilteringPipeline OTBCommon OTBIO)
 ADD_EXECUTABLE(ScalingPipeline ScalingPipeline.cxx )
 TARGET_LINK_LIBRARIES(ScalingPipeline OTBCommon OTBIO)
 
+ADD_EXECUTABLE(Multispectral Multispectral.cxx )
+TARGET_LINK_LIBRARIES(Multispectral OTBCommon OTBIO)
+
 ADD_EXECUTABLE(SmarterFilteringPipeline SmarterFilteringPipeline.cxx )
 TARGET_LINK_LIBRARIES(SmarterFilteringPipeline OTBCommon OTBIO)
 
@@ -61,6 +64,18 @@ ADD_TEST( TutorialsScalingPipelineTest ${EXE_TESTS}
         ${INPUTDATA}/QB_Suburb.png
         ${TEMP}/TutorialsScalingPipelineOutput.png
         )
+        
+ADD_TEST( TutorialsMultispectralTest ${EXE_TESTS}
+        --compare-n-images ${TOL} 2      ${BASELINE}/MultispectralOutput1.tif
+                                        ${TEMP}/MultispectralOutput1.tif
+                                        ${BASELINE}/MultispectralOutput2.tif
+                                        ${TEMP}/MultispectralOutput2.tif
+        TutorialsMultispectralTest
+        ${INPUTDATA}/qb_RoadExtract.tif
+        ${TEMP}/MultispectralOutput1.tif
+        ${TEMP}/MultispectralOutput2.tif
+        )        
+        
 
 ADD_TEST( TutorialsSmarterFilteringPipelineTest ${EXE_TESTS}
         --compare-image ${TOL}          ${BASELINE}/TutorialsSmarterFilteringPipelineOutput.png

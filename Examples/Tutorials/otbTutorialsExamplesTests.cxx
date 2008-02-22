@@ -29,6 +29,7 @@ void RegisterTests()
   REGISTER_TEST(TutorialsPipelineTest);
   REGISTER_TEST(TutorialsFilteringPipelineTest);
   REGISTER_TEST(TutorialsScalingPipelineTest);
+  REGISTER_TEST(TutorialsMultispectralTest);
   REGISTER_TEST(TutorialsSmarterFilteringPipelineTest);
   REGISTER_TEST(TutorialsOrthoFusionTest);
 }
@@ -48,6 +49,10 @@ void RegisterTests()
 #undef main
 #define main TutorialsScalingPipelineTest
 #include "ScalingPipeline.cxx"
+             
+#undef main
+#define main TutorialsMultispectralTest
+#include "Multispectral.cxx"             
 
 #undef main
 #define main TutorialsSmarterFilteringPipelineTest
