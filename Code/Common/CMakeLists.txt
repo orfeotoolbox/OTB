@@ -3,7 +3,7 @@
 FILE(GLOB OTBCommon_SRCS "*.cxx" )
 
 ADD_LIBRARY(OTBCommon ${OTBCommon_SRCS})
-TARGET_LINK_LIBRARIES (OTBCommon ITKAlgorithms ITKStatistics ITKCommon otbossim)
+TARGET_LINK_LIBRARIES (OTBCommon ITKAlgorithms ITKStatistics ITKCommon)
 
 INSTALL(TARGETS OTBCommon
 RUNTIME DESTINATION ${OTB_INSTALL_BIN_DIR} COMPONENT RuntimeLibraries
