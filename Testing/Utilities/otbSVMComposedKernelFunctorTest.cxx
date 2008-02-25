@@ -23,6 +23,7 @@
 #include "itkExceptionObject.h"
 #include "otbImage.h"
 #include <iostream>
+#include <fstream>
 
 #include "otbSVMModel.h"
 #include "otbSVMKernels.h"
@@ -114,33 +115,49 @@ int otbSVMComposedKernelFunctorTest( int argc, char* argv[] )
   y[1].value = 10000;
   
   double resAdd =0.;
+  double resMul =0.;
   double res1 = 0.;
   double res2 = 0.;
 
-  res1 = customFunctor(SVx[0], SVy[0], model->param);
-  std::cout<<"customFunctor : "<<res1<<std::endl;
-  res2 = SAMFunctor(SVx[0], SVy[0], model->param);
-  std::cout<<"SAMFunctor : "<<res2<<std::endl;
+  std::ofstream file;
+  file.open(argv[1]);
 
+  file<<"Inputs Values: 10, 5, Inputs Ponderation: 1.5, 2"<<std::endl;
+
+  file<<std::endl;
+
+
+  file<<"Functor Results:"<<std::endl;
+
+  res1 = customFunctor(SVx[0], SVy[0], model->param);
+  file<<"Custom Functor only: "<<res1<<std::endl;
+  //std::cout<<"customFunctor : "<<res1<<std::endl;
+  res2 = SAMFunctor(SVx[0], SVy[0], model->param);
+  file<<"SAM Functor only: "<<res2<<std::endl;
+  //std::cout<<"SAMFunctor : "<<res2<<std::endl;
+  file<<"Composed Functor: "<<std::endl;
   resAdd = (*(svmModel->GetModel()->param.kernel_composed))(SVx[0], SVy[0], svmModel->GetModel()->param);
 
-  std::cout<<"composed : "<<resAdd<<std::endl;
+  //std::cout<<"composed : "<<resAdd<<std::endl;
 
   svmModel->GetModel()->param.kernel_composed->SetMultiplyKernelFunctor(true);
-  resAdd = (*(svmModel->GetModel()->param.kernel_composed))(SVx[0], SVy[0], svmModel->GetModel()->param);
+  resMul = (*(svmModel->GetModel()->param.kernel_composed))(SVx[0], SVy[0], svmModel->GetModel()->param);
   
-  std::cout<<"composed : "<<resAdd<<std::endl;
+  //std::cout<<"composed : "<<resAdd<<std::endl;
+  file<<"Addition: "<<resAdd<<", "<<"Multiplication: "<<resMul<<std::endl;
+  
+  file.close();
 
-  svmModel->GetModel()->param.kernel_composed->print_parameters();
+  //svmModel->GetModel()->param.kernel_composed->print_parameters();
 
-  svmModel->SaveModel("test.txt");
+  svmModel->SaveModel(argv[2]);
 
   ModelType::Pointer svmModelBis = ModelType::New();
-  svmModelBis->LoadModel("test.txt");
+  svmModelBis->LoadModel(argv[2]);
 
-  svmModelBis->GetModel()->param.kernel_composed->print_parameters();
+  //svmModelBis->GetModel()->param.kernel_composed->print_parameters();
 
-  svmModelBis->SaveModel("testBis.txt");
+  svmModelBis->SaveModel(argv[3]);
 
 
   return EXIT_SUCCESS;
