@@ -72,6 +72,7 @@ namespace otb
     m_RedHistogramWidget = HistogramWidgetType::New();
     m_GreenHistogramWidget = HistogramWidgetType::New();
     m_BlueHistogramWidget = HistogramWidgetType::New();
+    m_ShowHistograms = true;
   }
   
   /// Destructor
@@ -408,14 +409,16 @@ namespace otb
     {
       m_ZoomWidget->Show();
     }
-
-    m_RedHistogramWidget->show();
-    
-    if(this->GetViewModelIsRGB())
+    if(m_ShowHistograms)
       {
-	m_GreenHistogramWidget->show();
-	m_BlueHistogramWidget->show();
-   }
+	m_RedHistogramWidget->show();
+	
+	if(this->GetViewModelIsRGB())
+	  {
+	    m_GreenHistogramWidget->show();
+	    m_BlueHistogramWidget->show();
+	  }
+      }
 
     Fl::check();
     //comment: std::cout<<"Leaving show method"<<std::endl;

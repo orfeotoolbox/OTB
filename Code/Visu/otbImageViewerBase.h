@@ -213,6 +213,8 @@ namespace otb
       itkGetMacro(ShowScrollWidget,bool);
       itkSetMacro(UseImageOverlay,bool);
       itkGetMacro(UseImageOverlay,bool);
+      itkSetMacro(ShowHistograms,bool);
+      itkGetMacro(ShowHistograms,bool);
       itkGetObjectMacro(TransfertFunctionList,TransfertFunctionListType);
 
 
@@ -430,6 +432,9 @@ namespace otb
       ImagePointerType m_InputImageOverlay;
       /// true if scroll widget is used
       bool m_UseScroll;
+      /// Show the histograms
+      bool m_ShowHistograms;
+      
       /// Intial sizes
       unsigned int m_ScrollMaxInitialSize;
       unsigned int m_FullMaxInitialSize;

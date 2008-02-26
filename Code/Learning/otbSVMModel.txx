@@ -41,15 +41,24 @@ SVMModel< TInputPixel, TLabel >::SVMModel()
   m_Problem.x = new struct svm_node*[1];
   m_XSpace = new struct svm_node[1];
  
+
   //m_GenericKernelFunctor = NULL;
- //  m_Model->param.kernel_generic = NULL;
-//   m_Model->param.nr_weight = 0;
-//   m_Model->param.weight_label = NULL;
-//   m_Model->param.weight = NULL;
-//   m_Parameters.kernel_generic = NULL;
-//   m_Parameters.nr_weight = 0;
-//   m_Parameters.weight_label = NULL;
-//   m_Parameters.weight = NULL;
+  m_Model->param.kernel_generic = NULL;
+  m_Model->param.kernel_composed = NULL;
+  m_Model->param.nr_weight = 0;
+  m_Model->param.weight_label = NULL;
+  m_Model->param.weight = NULL;
+  m_Model->delete_composed = false;
+
+  //m_GenericKernelFunctor = NULL;
+  //m_Model->param.kernel_generic = NULL;
+  //m_Model->param.nr_weight = 0;
+  //m_Model->param.weight_label = NULL;
+  //m_Model->param.weight = NULL;
+  //m_Parameters.kernel_generic = NULL;
+  //m_Parameters.nr_weight = 0;
+  //m_Parameters.weight_label = NULL;
+  //m_Parameters.weight = NULL;
 
 }
 
