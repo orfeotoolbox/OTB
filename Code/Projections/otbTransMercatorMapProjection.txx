@@ -23,8 +23,8 @@ PURPOSE.  See the above copyright notices for more information.
 namespace otb
 {
   
-	template <InverseOrForwardTransformationEnum transform>
-  TransMercatorMapProjection<transform>
+  template <InverseOrForwardTransformationEnum transform>
+      TransMercatorMapProjection<transform>
   ::TransMercatorMapProjection()
   {
     ossimEllipsoid ellipsoid= *(ossimEllipsoidFactory::instance()->create("WE"));
@@ -35,7 +35,7 @@ namespace otb
   
   /// Desctructor
   template <InverseOrForwardTransformationEnum transform>
-	TransMercatorMapProjection<transform>
+      TransMercatorMapProjection<transform>
   ::~TransMercatorMapProjection()
   {
   }
@@ -43,7 +43,7 @@ namespace otb
   
   ///Set the false Easting
   template <InverseOrForwardTransformationEnum transform>
-	void TransMercatorMapProjection<transform>
+      void TransMercatorMapProjection<transform>
   ::SetFalseEasting(double falseEasting) 
   {
     this->m_MapProjection->setFalseEasting(falseEasting);
@@ -51,7 +51,7 @@ namespace otb
   
   ///Set the False Northing
   template <InverseOrForwardTransformationEnum transform>
-	void TransMercatorMapProjection<transform>
+      void TransMercatorMapProjection<transform>
   ::SetFalseNorthing(double falseNorthing) 
   {
     this->m_MapProjection->setFalseNorthing(falseNorthing);
@@ -59,7 +59,7 @@ namespace otb
   
   ///Set the scale factor
   template <InverseOrForwardTransformationEnum transform>
-	void TransMercatorMapProjection<transform>
+      void TransMercatorMapProjection<transform>
   ::SetScaleFactor(double scaleFactor) 
   {
     this->m_MapProjection->setScaleFactor(scaleFactor);
@@ -67,7 +67,7 @@ namespace otb
   
   ///Set the parameters
   template <InverseOrForwardTransformationEnum transform>
-	void TransMercatorMapProjection<transform>
+      void TransMercatorMapProjection<transform>
   ::SetParameters(double falseEasting,double falseNorthing,double scaleFactor) 
   {
     this->m_MapProjection->setParameters(falseEasting, falseNorthing, scaleFactor);
@@ -75,7 +75,7 @@ namespace otb
   
   ///Set the default parameters
   template <InverseOrForwardTransformationEnum transform>
-	void TransMercatorMapProjection<transform>
+      void TransMercatorMapProjection<transform>
   ::SetDefaults() 
   {
     this->m_MapProjection->setDefaults();
@@ -83,7 +83,7 @@ namespace otb
   
   ///\return the scale factor
   template <InverseOrForwardTransformationEnum transform>
-	double TransMercatorMapProjection<transform>
+      double TransMercatorMapProjection<transform>
   ::GetScaleFactor() const
   {
     double scaleFactor;
@@ -94,7 +94,7 @@ namespace otb
   
   ///\return the false northing (avoid negative coordinates)
   template <InverseOrForwardTransformationEnum transform>
-	double TransMercatorMapProjection<transform>
+      double TransMercatorMapProjection<transform>
   ::GetFalseNorthing() const
   {
     double falseNorthing=this->m_MapProjection->getFalseNorthing();
@@ -104,7 +104,7 @@ namespace otb
   
   ///\return the false easting (avoid negative coordinates)
   template <InverseOrForwardTransformationEnum transform>
-	double TransMercatorMapProjection<transform>
+      double TransMercatorMapProjection<transform>
   ::GetFalseEasting() const
   {
     double falseEasting=this->m_MapProjection->getFalseEasting();

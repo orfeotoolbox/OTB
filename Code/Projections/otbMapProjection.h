@@ -38,6 +38,9 @@ namespace otb
   
   /** \class otbMapProjection
    *  \brief This is the base class for all geographic projections (UTM, Lambert, ...)
+   * 
+   * All derived class assume that the latitude and longitude are given according to the 
+   * WGS84 ellipsoid model.
    **/
   
   typedef enum {FORWARD=0, INVERSE=1} InverseOrForwardTransformationEnum;

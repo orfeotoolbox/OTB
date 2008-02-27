@@ -26,15 +26,15 @@ namespace otb
 {
   /** \class LambertConformalConicMapProjection
    * \brief This class implements the Lambert Conformal Conic map projection.
-   * It converts coordinates in longitude,latitude to Lambert Conformal Conic map coordinates.
+   * It converts coordinates in longitude,latitude (WGS84) to Lambert Conformal Conic map coordinates.
    *
    */
-	template <InverseOrForwardTransformationEnum transform>
-  class ITK_EXPORT LambertConformalConicMapProjection : public MapProjection<ossimLambertConformalConicProjection,transform> 
-    {
-      public :
-	/** Standard class typedefs. */
-	typedef LambertConformalConicMapProjection                  Self;
+  template <InverseOrForwardTransformationEnum transform>
+      class ITK_EXPORT LambertConformalConicMapProjection : public MapProjection<ossimLambertConformalConicProjection,transform> 
+  {
+    public :
+      /** Standard class typedefs. */
+      typedef LambertConformalConicMapProjection                  Self;
       typedef MapProjection<ossimLambertConformalConicProjection,transform>   Superclass;
       typedef itk::SmartPointer<Self>                    	    Pointer;
       typedef itk::SmartPointer<const Self>              	    ConstPointer;
@@ -49,25 +49,25 @@ namespace otb
       /** Run-time type information (and related methods). */
       itkTypeMacro( LambertConformalConicMapProjection, MapProjection );
       
-	void   SetStandardParallel1 (double degree);
-	void   SetStandardParallel2 (double degree);
-	void   SetStandardParallels (double parallel1Degree,double parallel2Degree);
-	void   SetFalseEasting(double falseEasting);
-	void   SetFalseNorthing(double falseNorthing);
-	double GetFalseNorthing() const;
-	double GetFalseEasting() const;
-	void  SetParameters(double parallel1Degree,double parallel2Degree,double falseEasting,double falseNorthing);
-	void  SetDefaults();
+      void   SetStandardParallel1 (double degree);
+      void   SetStandardParallel2 (double degree);
+      void   SetStandardParallels (double parallel1Degree,double parallel2Degree);
+      void   SetFalseEasting(double falseEasting);
+      void   SetFalseNorthing(double falseNorthing);
+      double GetFalseNorthing() const;
+      double GetFalseEasting() const;
+      void  SetParameters(double parallel1Degree,double parallel2Degree,double falseEasting,double falseNorthing);
+      void  SetDefaults();
 
         
     protected:
-	LambertConformalConicMapProjection(); 
-	virtual ~LambertConformalConicMapProjection();
+      LambertConformalConicMapProjection(); 
+      virtual ~LambertConformalConicMapProjection();
 	
-	private :
-	  LambertConformalConicMapProjection(const Self&); //purposely not implemented
-	void operator=(const Self&);                       //purposely not implemented
-    };
+    private :
+      LambertConformalConicMapProjection(const Self&); //purposely not implemented
+      void operator=(const Self&);                       //purposely not implemented
+  };
   
 } // namespace otb
 

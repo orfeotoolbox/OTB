@@ -27,7 +27,7 @@ namespace otb
 {
    /** \class Lambert2EtenduProjection
    * \brief This class implements the Lambert 2 Etendu map projection.
-   * It converts coordinates in longitude,latitude to Lambert 2 Etendu map coordinates.
+   * It converts coordinates in longitude,latitude (WGS84) to Lambert 2 Etendu map coordinates.
    *
     */
   template <InverseOrForwardTransformationEnum transform>

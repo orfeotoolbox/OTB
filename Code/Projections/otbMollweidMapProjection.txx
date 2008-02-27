@@ -25,20 +25,20 @@ namespace otb
 {
   
   template <InverseOrForwardTransformationEnum transform>
-	MollweidMapProjection<transform>
+      MollweidMapProjection<transform>
   ::MollweidMapProjection()
   {
   }
   
   template <InverseOrForwardTransformationEnum transform>
-	MollweidMapProjection<transform>
+      MollweidMapProjection<transform>
   ::~MollweidMapProjection()
   {
   }
   
   ///Set the false easting
   template <InverseOrForwardTransformationEnum transform>
-	void MollweidMapProjection<transform>
+      void MollweidMapProjection<transform>
   ::SetFalseEasting(double falseEasting) 
   {
     this->m_MapProjection->setFalseEasting(falseEasting);
@@ -46,7 +46,7 @@ namespace otb
   
   ///Set the false Northing
   template <InverseOrForwardTransformationEnum transform>
-	void MollweidMapProjection<transform>
+      void MollweidMapProjection<transform>
   ::SetFalseNorthing(double falseNorthing) 
   {
     this->m_MapProjection->setFalseNorthing(falseNorthing);
@@ -54,7 +54,7 @@ namespace otb
   
   ///Set the default parameters
   template <InverseOrForwardTransformationEnum transform>
-	void MollweidMapProjection<transform>
+      void MollweidMapProjection<transform>
   ::SetDefaults() 
   {
     this->m_MapProjection->setDefaults();
@@ -62,7 +62,7 @@ namespace otb
   
   ///\return the false northing (avoid negative coordinates)
   template <InverseOrForwardTransformationEnum transform>
-	double MollweidMapProjection<transform>
+      double MollweidMapProjection<transform>
   ::GetFalseNorthing() const
   {
     double falseNorthing=this->m_MapProjection->getFalseNorthing();
@@ -72,16 +72,16 @@ namespace otb
   
   ///\return the false easting (avoid negative coordinates)
   template <InverseOrForwardTransformationEnum transform>
-	double MollweidMapProjection<transform>
+      double MollweidMapProjection<transform>
   ::GetFalseEasting() const
   {
     double falseEasting=this->m_MapProjection->getFalseEasting();
     
     return falseEasting;
-}
+  }
   
   template <InverseOrForwardTransformationEnum transform>
-	void MollweidMapProjection<transform>
+      void MollweidMapProjection<transform>
   ::SetParameters(double falseEasting,double falseNorthing)
   {
     this->m_MapProjection->setFalseEastingNorthing(falseEasting,falseNorthing);

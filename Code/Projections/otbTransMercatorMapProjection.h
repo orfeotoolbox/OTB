@@ -26,16 +26,16 @@ namespace otb
 {
   /** \class TransMercatorMapProjection
    *  \brief This class implements the TransMercator map projection.
-   * It converts coordinates in longitude,latitude to TransMercator map coordinates.
+   * It converts coordinates in longitude,latitude (WGS84) to TransMercator map coordinates.
    *
    */
-	template <InverseOrForwardTransformationEnum transform>
-  class ITK_EXPORT TransMercatorMapProjection : public MapProjection<ossimTransMercatorProjection,transform> 
-    {
-      public :
+  template <InverseOrForwardTransformationEnum transform>
+      class ITK_EXPORT TransMercatorMapProjection : public MapProjection<ossimTransMercatorProjection,transform> 
+  {
+    public :
 	
-	/** Standard class typedefs. */
- 	typedef TransMercatorMapProjection                 Self;
+      /** Standard class typedefs. */
+      typedef TransMercatorMapProjection                 Self;
       typedef MapProjection<ossimTransMercatorProjection, transform>  Superclass;
       typedef itk::SmartPointer<Self>                      Pointer;
       typedef itk::SmartPointer<const Self>                ConstPointer;
@@ -62,11 +62,11 @@ namespace otb
       TransMercatorMapProjection(); 
       virtual ~TransMercatorMapProjection();
 	
-      private :
-	TransMercatorMapProjection(const Self&); //purposely not implemented
+    private :
+      TransMercatorMapProjection(const Self&); //purposely not implemented
       void operator=(const Self&);               //purposely not implemented
  	
-};
+  };
 
 
 } // namespace otb

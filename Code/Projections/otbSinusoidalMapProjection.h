@@ -27,15 +27,15 @@ namespace otb
 
   /** \class SinusoidalMapProjection
    *  \brief This class implements the Sinusoidal map projection.
-   *  It converts coordinates in longitude,latitude to Sinusoidal map coordinates. 
+   *  It converts coordinates in longitude,latitude (WGS84) to Sinusoidal map coordinates. 
    */
-	template <InverseOrForwardTransformationEnum transform> 
-  class ITK_EXPORT SinusoidalMapProjection : public	MapProjection<ossimSinusoidalProjection, transform> 
-    {
-      public :
+  template <InverseOrForwardTransformationEnum transform> 
+      class ITK_EXPORT SinusoidalMapProjection : public	MapProjection<ossimSinusoidalProjection, transform> 
+  {
+    public :
 	
-	/** Standard class typedefs. */
-	typedef SinusoidalMapProjection                      Self;
+      /** Standard class typedefs. */
+      typedef SinusoidalMapProjection                      Self;
       typedef MapProjection<ossimSinusoidalProjection, transform>  Superclass;
       typedef itk::SmartPointer<Self>                        Pointer;
       typedef itk::SmartPointer<const Self>                  ConstPointer;
@@ -61,11 +61,11 @@ namespace otb
       SinusoidalMapProjection(); 
       virtual ~SinusoidalMapProjection();
       
-      private :
-	SinusoidalMapProjection(const Self&); //purposely not implemented
+    private :
+      SinusoidalMapProjection(const Self&); //purposely not implemented
       void operator=(const Self&);            //purposely not implemented
       
-    };
+  };
 
 } // namespace otb
 
