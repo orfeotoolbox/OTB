@@ -45,9 +45,10 @@ namespace otb
   void MapProjection<TOssimMapProjection, Transform, TScalarType, NInputDimensions, NOutputDimensions>
   ::SetEllipsoid()
   {
-    ossimEllipsoid ellipsoid=ossimEllipsoid();
+    ossimEllipsoid ellipsoid;
     m_MapProjection->setEllipsoid(ellipsoid);
   }
+  
   /// Method to set the projection ellipsoid by copy
   template<class TOssimMapProjection, InverseOrForwardTransformationEnum Transform, class TScalarType, unsigned int NInputDimensions, unsigned int NOutputDimensions> 
   void MapProjection<TOssimMapProjection, Transform, TScalarType, NInputDimensions, NOutputDimensions>
@@ -61,13 +62,8 @@ namespace otb
   void MapProjection<TOssimMapProjection, Transform, TScalarType, NInputDimensions, NOutputDimensions>
   ::SetEllipsoid(std::string code)
   {
-    const ossimEllipsoid *ellipsoid = ossimEllipsoidFactory::instance()->create(ossimString(code));
-    double a=ellipsoid->getA();
-    double b=ellipsoid->getB();
-    //ossimString codes=ellipsoid->name();
-    ossimEllipsoid ellipse(a,b);
-    delete m_MapProjection;
-    m_MapProjection= new OssimMapProjectionType(ellipse);
+    const ossimEllipsoid ellipsoid = *(ossimEllipsoidFactory::instance()->create(ossimString(code)));
+    m_MapProjection->setEllipsoid(ellipsoid);
   }
   
   ///// Method to set the projection ellipsoid by knowing its axis
@@ -75,9 +71,8 @@ namespace otb
   void MapProjection<TOssimMapProjection, Transform, TScalarType, NInputDimensions, NOutputDimensions>
   ::SetEllipsoid(const double &major_axis, const double &minor_axis)
   {
-    ossimEllipsoid ellipse(major_axis,minor_axis);
-    delete m_MapProjection;
-    m_MapProjection= new OssimMapProjectionType(ellipse);
+    ossimEllipsoid ellipsoid(major_axis,minor_axis);
+    m_MapProjection->setEllipsoid(ellipsoid);
   }
   
   template<class TOssimMapProjection, InverseOrForwardTransformationEnum Transform, class TScalarType, unsigned int NInputDimensions, unsigned int NOutputDimensions>
@@ -103,22 +98,22 @@ namespace otb
 		
 	  outputPoint[0]=ossimGPoint.lon;
 	  outputPoint[1]=ossimGPoint.lat;
-	  otbMsgDevMacro(<< "Geographic coordinates (long/lat) : (" << outputPoint[0] << "," << outputPoint[1] << ")");
+	  otbMsgDevMacro(<< "Geographic coordinates (lon, lat) : (" << outputPoint[0] << "," << outputPoint[1] << ")");
 	  break;
 	}
       case FORWARD:
 	{
-	  otbMsgDevMacro(<< "Geographic coordinates (long/lat) : (" << point[1] << "," << point[0] << ")");
+	  otbMsgDevMacro(<< "Geographic coordinates (lon, lat) : (" << point[1] << "," << point[0] << ")");
 		//from "itk::point" to "ossim::ossimGpt"
 	  ossimGpt ossimGPoint(point[1], point[0]);
 	  
 	  //map projection
-	  ossimDpt ossimDPoint;
+          ossimDpt ossimDPoint;
 	  ossimDPoint=m_MapProjection->forward(ossimGPoint);
 //	 	otbGenericMsgDebugMacro(<< "Forward : ========================= " << std::endl << m_MapProjection->print(std::cout));
 	  outputPoint[0]=ossimDPoint.x;
 	  outputPoint[1]=ossimDPoint.y;
-		
+
 	  otbMsgDevMacro(<< "Cartographic coordinates: (" << outputPoint[0] << "," << outputPoint[1] << ")");
 
 	  break;
@@ -292,6 +287,7 @@ namespace otb
   {
     ossimGpt ossimOrigin(origin[1], origin[0]);
     m_MapProjection->setOrigin(ossimOrigin);
+    m_MapProjection->setDatum(ossimOrigin.datum());
   }
   
   ///Set the origin in a given datum
@@ -301,6 +297,7 @@ namespace otb
   {
     ossimGpt ossimOrigin(origin[1], origin[0], 0, ossimDatumFactory::instance()->create(datumCode));
     m_MapProjection->setOrigin(ossimOrigin);
+    m_MapProjection->setDatum(ossimOrigin.datum());
   }
   
   ///Set the map resolution in meters
