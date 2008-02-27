@@ -100,6 +100,7 @@ namespace otb
       virtual OutputPointType GetDecimalDegreesPerPixel() const;
       virtual void SetAB(double a, double b);
       virtual void SetOrigin(const InputPointType &origin);
+      virtual void SetOrigin(const InputPointType &origin, std::string datumCode);
       virtual void SetMetersPerPixel(const OutputPointType &point);
       virtual void SetDecimalDegreesPerPixel(const OutputPointType &point);
       virtual void ComputeDegreesPerPixel(const InputPointType &ground, const OutputPointType &metersPerPixel, double &deltaLat, double &deltaLon);

@@ -27,6 +27,10 @@ namespace otb
   TransMercatorMapProjection<transform>
   ::TransMercatorMapProjection()
   {
+    ossimEllipsoid ellipsoid= *(ossimEllipsoidFactory::instance()->create("WE"));
+    ossimGpt origin(49.83,6.16); //TODO check where this is coming from
+    this->m_MapProjection->setEllipsoid(ellipsoid);
+    this->m_MapProjection->setOrigin(origin);
   }
   
   /// Desctructor
@@ -36,17 +40,6 @@ namespace otb
   {
   }
   
-  ///Set the default ellipsoid 
-  template <InverseOrForwardTransformationEnum transform>
-	void TransMercatorMapProjection<transform>
-  ::SetEllipsoid() 
-  {
-    ossimEllipsoid ellipse(6378137.0,6356752.3142);
-    ossimGpt origin(49.83,6.16);
-    
-    delete (this->m_MapProjection);
-    this->m_MapProjection = new ossimTransMercatorProjection(ellipse,origin,80000.0,100000.0,1.0);
-  }
   
   ///Set the false Easting
   template <InverseOrForwardTransformationEnum transform>

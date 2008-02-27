@@ -58,7 +58,8 @@ namespace otb
 	double GetFalseEasting() const;
 	void  SetParameters(double parallel1Degree,double parallel2Degree,double falseEasting,double falseNorthing);
 	void  SetDefaults();
-	
+
+        
     protected:
 	LambertConformalConicMapProjection(); 
 	virtual ~LambertConformalConicMapProjection();

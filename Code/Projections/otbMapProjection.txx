@@ -290,7 +290,16 @@ namespace otb
   void MapProjection<TOssimMapProjection, Transform, TScalarType, NInputDimensions, NOutputDimensions>
   ::SetOrigin(const InputPointType &origin) 
   {
-    ossimGpt ossimOrigin(origin[0], origin[1]);
+    ossimGpt ossimOrigin(origin[1], origin[0]);
+    m_MapProjection->setOrigin(ossimOrigin);
+  }
+  
+  ///Set the origin in a given datum
+  template<class TOssimMapProjection, InverseOrForwardTransformationEnum Transform, class TScalarType, unsigned int NInputDimensions, unsigned int NOutputDimensions>
+      void MapProjection<TOssimMapProjection, Transform, TScalarType, NInputDimensions, NOutputDimensions>
+  ::SetOrigin(const InputPointType &origin, std::string datumCode) 
+  {
+    ossimGpt ossimOrigin(origin[1], origin[0], 0, ossimDatumFactory::instance()->create(datumCode));
     m_MapProjection->setOrigin(ossimOrigin);
   }
   
@@ -318,7 +327,7 @@ namespace otb
   ::ComputeDegreesPerPixel(const InputPointType &ground, const OutputPointType &metersPerPixel, double &deltaLat, double &deltaLon) 
   {
     ossimDpt ossimMetersPerPixel(metersPerPixel[0], metersPerPixel[1]);
-    ossimGpt ossimGround(ground[0],ground[1]);
+    ossimGpt ossimGround(ground[1],ground[0]);
     m_MapProjection->computeDegreesPerPixel(ossimGround,ossimMetersPerPixel,deltaLat,deltaLon);
   }
   
@@ -329,7 +338,7 @@ namespace otb
   ::ComputeMetersPerPixel(const InputPointType &center, double deltaDegreesPerPixelLat, double deltaDegreesPerPixelLon, OutputPointType &metersPerPixel) 
   {
     //Correction 
-    ossimGpt ossimCenter(center[0],center[1]);
+    ossimGpt ossimCenter(center[1],center[0]);
     ossimDpt ossimMetersPerPixel;
     m_MapProjection->computeMetersPerPixel(ossimCenter,deltaDegreesPerPixelLat, deltaDegreesPerPixelLon,ossimMetersPerPixel);
     metersPerPixel[0]=ossimMetersPerPixel.x;

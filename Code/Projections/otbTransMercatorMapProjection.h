@@ -49,7 +49,6 @@ namespace otb
       
       /** Run-time type information (and related methods). */
       itkTypeMacro( TransMercatorMapProjection, MapProjection );
-      virtual void SetEllipsoid();
       virtual void SetFalseEasting(double falseEasting);
       virtual void SetFalseNorthing(double falseNorthing);
       virtual void SetScaleFactor(double scaleFactor);
