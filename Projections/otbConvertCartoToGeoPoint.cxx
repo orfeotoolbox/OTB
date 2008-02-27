@@ -99,7 +99,7 @@ int generic_main_carto_geo(int argc, char* argv[], TMapProjection* mapProjection
 
 int main(int argc, char* argv[]) 
 {
-  try 
+  try
   { 
     ossimInit::instance()->initialize(argc, argv);
 				
@@ -109,7 +109,7 @@ int main(int argc, char* argv[])
 
     parser->AddOption("--XCarto","X cartographic value of desired point","-x");
     parser->AddOption("--YCarto","Y cartographic value of desired point","-y");
-    parser->AddOptionNParams("--MapProjectionType","Type (UTM/LAMBERT/SINUS/ECKERT4/TRANSMERCATOR/MOLLWEID) and parameters of map projection used","-mapProj");				
+    parser->AddOptionNParams("--MapProjectionType","Type (UTM/LAMBERT/LAMBERT2/SINUS/ECKERT4/TRANSMERCATOR/MOLLWEID) and parameters of map projection used","-mapProj");				
 
     typedef otb::CommandLineArgumentParseResult ParserResultType;
     ParserResultType::Pointer  parseResult = ParserResultType::New();
@@ -170,6 +170,13 @@ int main(int argc, char* argv[])
 					
         return generic_main_carto_geo<LambertProjectionType>(argc,argv, lambertProjection, parseResult);
       }
+      if ((typeMap == "LAMBERT2")&&(nbParams==0))
+      {
+        typedef otb::Lambert2EtenduInverseProjection Lambert2ProjectionType;
+        Lambert2ProjectionType::Pointer lambert2Projection = Lambert2ProjectionType::New();
+					
+        return generic_main_carto_geo<Lambert2ProjectionType>(argc,argv, lambert2Projection, parseResult);
+      }
       else if ((typeMap == "SINUS")&&(nbParams==2))
       {
         typedef otb::SinusoidalInverseProjection SinusoidalProjectionType;
@@ -208,7 +215,7 @@ int main(int argc, char* argv[])
       }
       else 
       {
-        itkGenericExceptionMacro(<< "TypeMap not recognized, choose one with (parameters) : UTM(2), LAMBERT(4), SINUS(2), ECKERT4(2), TRANSMERCATOR(3), MOLLWEID(2)");
+        itkGenericExceptionMacro(<< "TypeMap not recognized, choose one with (parameters) : UTM(2), LAMBERT(4), LAMBERT2(0), SINUS(2), ECKERT4(2), TRANSMERCATOR(3), MOLLWEID(2)");
       }
 					
     }
