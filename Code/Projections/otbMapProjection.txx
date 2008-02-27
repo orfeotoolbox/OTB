@@ -94,6 +94,7 @@ namespace otb
 	  //map projection
 	  ossimGpt ossimGPoint;
 	  ossimGPoint=m_MapProjection->inverse(ossimDPoint);
+          ossimGPoint.changeDatum(ossimDatumFactory::instance()->wgs84() );
 //	 	otbGenericMsgDebugMacro(<< "Inverse : " << std::endl << m_MapProjection->print(std::cout));
 		
 	  outputPoint[0]=ossimGPoint.lon;

@@ -25,7 +25,7 @@ PURPOSE.  See the above copyright notices for more information.
 namespace otb
 {
   /** \class LambertConformalConicMapProjection
-   * \brief This class implements the Lambert Conformatl Conic map projection.
+   * \brief This class implements the Lambert Conformal Conic map projection.
    * It converts coordinates in longitude,latitude to Lambert Conformal Conic map coordinates.
    *
    */

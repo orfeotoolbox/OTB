@@ -49,10 +49,12 @@ PURPOSE.  See the above copyright notices for more information.
 #include "projection/ossimVanDerGrintenProjection.h"
 #include "otbUtmMapProjection.h"
 #include "otbLambertConformalConicMapProjection.h"
+#include "otbLambert2EtenduProjection.h"
 #include "otbEckert4MapProjection.h"
 #include "otbTransMercatorMapProjection.h"
 #include "otbSinusoidalMapProjection.h"
 #include "otbMollweidMapProjection.h"
+
 
 namespace otb
 {
@@ -79,6 +81,8 @@ namespace otb
   typedef MapProjection<ossimGnomonicProjection,FORWARD>             GnomonicForwardProjection;
   typedef LambertConformalConicMapProjection<INVERSE>                LambertConformalConicInverseProjection;
   typedef LambertConformalConicMapProjection<FORWARD>                LambertConformalConicForwardProjection;	
+  typedef Lambert2EtenduProjection<INVERSE>                Lambert2EtenduInverseProjection;
+  typedef Lambert2EtenduProjection<FORWARD>                Lambert2EtenduForwardProjection;	
   typedef MapProjection<ossimLlxyProjection,INVERSE>                 LlxyInverseProjection;
   typedef MapProjection<ossimLlxyProjection,FORWARD>                 LlxyForwardProjection;
   typedef MapProjection<ossimEquDistCylProjection,INVERSE>           EquDistCylInverseProjection;
