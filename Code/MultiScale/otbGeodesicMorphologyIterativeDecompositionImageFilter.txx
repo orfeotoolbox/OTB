@@ -182,7 +182,7 @@ namespace otb
     OutputImageListPointerType convOutputPtr = this->GetConvexOutput();
     OutputImageListPointerType concOutputPtr = this->GetConcaveOutput();
 
-    int i = 0;
+    unsigned int i = 0;
 
     DecompositionFilterPointerType filter;
     

@@ -69,6 +69,12 @@ public:
    * LargestPossibleRegion. */
   virtual void Write(void);
 
+
+  virtual void SetFileName(std::string filename)
+  {
+    this->Superclass::SetFileName(filename);
+    this->SetImageIO(NULL);
+  } 
 protected:
   ImageFileWriter();
   ~ImageFileWriter();

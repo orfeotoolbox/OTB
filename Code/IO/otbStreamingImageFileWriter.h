@@ -131,8 +131,19 @@ public:
   /** ImageFileWriter Methods */
   
   /** Specify the name of the output file to write. */
-  itkSetStringMacro(FileName);
   itkGetStringMacro(FileName);
+
+  /**
+   * Set the filename and destroy the current driver.
+   * \param filename the name of the file.
+   */
+  virtual void SetFileName(std::string filename)
+    {
+      m_FileName = filename;
+      m_ImageIO = NULL;
+      this->Modified();
+    }
+
   
   /** Specify the region to write. If left NULL, then the whole image
    * is written. */

@@ -1272,6 +1272,26 @@ ADD_TEST(ioTuShapeFileDataWriterTest ${IO_TESTS14}
 				)
 
         
+
+ADD_TEST(ioTvGDALDriverDoubleWritingTest ${IO_TESTS14}
+		--compare-n-images ${TOL} 4
+			${INPUTDATA}/poupees.tif
+			${TEMP}/ioGdalDriverDoubleWritingTestImage1.tif
+			${INPUTDATA}/ROI_IKO_PAN_LesHalles.tif
+			${TEMP}/ioGdalDriverDoubleWritingTestImage2.tif
+			${INPUTDATA}/poupees.tif	
+			${TEMP}/ioGdalDriverDoubleWritingTestImage3.tif
+			${INPUTDATA}/ROI_IKO_PAN_LesHalles.tif
+			${TEMP}/ioGdalDriverDoubleWritingTestImage4.tif
+		otbGDALDriverDoubleWritingTest
+			${INPUTDATA}/poupees.tif
+			${INPUTDATA}/ROI_IKO_PAN_LesHalles.tif
+			${TEMP}/ioGdalDriverDoubleWritingTestImage1.tif
+			${TEMP}/ioGdalDriverDoubleWritingTestImage2.tif
+			${TEMP}/ioGdalDriverDoubleWritingTestImage3.tif
+			${TEMP}/ioGdalDriverDoubleWritingTestImage4.tif
+)
+
 #----------------------------------------------------------------------------------
 SET(BasicIO_SRCS1
 otbImageFileReaderERS.cxx
@@ -1362,6 +1382,7 @@ SET(BasicIO_SRCS14
 otbOGRDriverTest.cxx
 otbShapeFileDataReaderTest.cxx
 otbShapeFileDataWriterTest.cxx
+otbGDALDriverDoubleWritingTest.cxx
 )
 
 
