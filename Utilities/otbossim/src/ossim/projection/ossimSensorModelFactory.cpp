@@ -40,6 +40,7 @@ static ossimTrace traceDebug = ossimTrace("ossimSensorModelFactory:debug");
 #include <ossim/projection/ossimSpot5Model.h>
 #include <ossim/projection/ossimSarModel.h>
 #include <ossim/projection/ossimNetworkedQuadTreeModel.h>
+#include <ossim/projection/ossimRadarSatModel.h>
 #include <ossim/support_data/ossimSpotDimapSupportData.h>
 #include <ossim/projection/ossimNitfMapModel.h>
 #include <ossim/projection/ossimFcsiModel.h>
@@ -187,6 +188,12 @@ ossimSensorModelFactory::createProjection(const ossimString &name) const
    {
       return new ossimNetworkedQuadTreeModel;
    }
+   
+   if(name == STATIC_TYPE_NAME(ossimRadarSatModel))
+   {
+      return new ossimRadarSatModel;
+   }
+   
 
 
    //***
@@ -441,6 +448,11 @@ ossimProjection* ossimSensorModelFactory::createProjection(const ossimFilename& 
    {
       spot5Test = geomFile.path();
       spot5Test = spot5Test.dirCat(ossimFilename("metadata.dim"));
+      if (!spot5Test.exists())
+        {
+           spot5Test = geomFile.path();
+           spot5Test = spot5Test.dirCat(ossimFilename("METADATA.DIM"));
+        }
    }
    if(spot5Test.exists())
    {

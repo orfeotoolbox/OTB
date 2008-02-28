@@ -1,0 +1,188 @@
+#ifndef CivilDateTime_h
+#define CivilDateTime_h
+
+class JulianDate;
+class JSDDateTime;
+class GMSTDateTime;
+/**
+ * @ingroup Date
+ * @brief This class représente a date and time in the civil format
+ * @author @author Magellium, Pacome Dentraygues
+ * @version 1.0
+ * @date 10-01-08
+ */
+class CivilDateTime
+{
+public:
+
+	/**
+	 * @brief Constructor
+	 */
+	CivilDateTime();
+	
+	/**
+	 * @brief Constructor with date and time initialisation
+	 */
+	CivilDateTime(int year, int month, int day, int second, double decimal);
+	
+	/**
+	 * @brief Constructor with date and time initialisation using an utc string
+	 */
+	CivilDateTime(char* Utc);
+
+	/**
+	 * @brief Constructor with date and time initialisation using an utc string
+	 */
+	CivilDateTime(const char* Utc);
+
+	/**
+	 * @brief Destructor
+	 */
+	~CivilDateTime();
+	
+	/**
+	  * @brief Copy constructor
+	  */
+	CivilDateTime(const CivilDateTime& rhs);
+	
+	/**
+	 * @brief Affectation operator
+	 */
+	CivilDateTime& operator=(const CivilDateTime& rhs);
+	
+	/**
+	 * @brief This function convert the current CivilDateTime in Julian Date
+	 * @return 0 if no error or an int gretter than 0 indiquating the error
+	 * @param julianDate [out] The classe that receive the result of the convertion of the current CivilDateTime in JulianDate
+	 */
+	int AsJulianDate(JulianDate* julianDate);
+	
+	/**
+	 * @brief This function convert the current CivilDateTime in JSDDateTime
+	 * @return 0 if no error or an int gretter than 0 indiquating the error
+	 * @param JSDdate [out] The classe that receive the result of the convertion of the current CivilDateTime in JSDDateTime
+	 */
+	int AsJSDDateTime(JSDDateTime* JSDdate);
+	
+	/**
+	 * @brief This function convert the current CivilDateTime in GMSTDateTime
+	 * @return 0 if no error or an int gretter than 0 indiquating the error
+	 * @param tms [out] The classe that receive the result of the convertion of the current CivilDateTime in GMSTDateTime
+	 */
+	int AsGMSTDateTime(GMSTDateTime* tms);
+	
+	/**
+	 * @brief Cast operator CivilDateTime to JulianDate
+	 *
+	 * This fonction only call the function AsJulianDate
+	 * @see AsJulianDate
+	 */
+	operator JulianDate();
+
+	/**
+	 * @brief Cast operator CivilDateTime to JSDDateTime
+	 *
+	 * This fonction only call the function AsJSDDateTime
+	 * @see AsJSDDateTime
+	 */
+	operator JSDDateTime();
+
+	/**
+	 * @brief Cast operator CivilDateTime to GMSTDateTime
+	 *
+	 * This fonction only call the function AsGMSTDateTime
+	 * @see AsGMSTDateTime
+	 */
+	operator GMSTDateTime();
+
+	int get_year()
+	{
+		return _year;
+	};
+	
+	int get_month()
+	{
+		return _month;
+	};
+	
+	int get_day()
+	{
+		return _day;
+	};
+	
+	int get_second()
+	{
+		return _second;
+	};
+	
+	double get_decimal()
+	{
+		return _decimal;
+	};
+	
+	void set_year(int year)
+	{
+		_year = year;
+	};
+	
+	void set_month(int month)
+	{
+		_month = month;
+	};
+	
+	void set_day(int day)
+	{
+		_day = day;
+	};
+	
+	void set_second(int second)
+	{
+		_second = second;
+	};
+	
+	void set_decimal(double decimal)
+	{
+		_decimal = decimal;
+	};
+	
+	/**
+	 * @brief This function initialize the date and the the time of the class using an utc string
+	 * @param Utc Utc string containing the date and time
+	 * @return 0 if no error or an int gretter than 0 indiquating the error
+	 */
+	int SetUtcDateTime(char* Utc);
+
+	/**
+	 * @brief This function initialize the date and the the time of the class using an utc string
+	 * @param Utc Utc string containing the date and time
+	 * @return 0 if no error or an int gretter than 0 indiquating the error
+	 */
+	int SetUtcDateTime(const char* Utc);
+	
+	static const double RDR_JOURCIVIL;
+protected:
+	/**
+	 * @brief 
+	 */
+	int _year;
+	/**
+	 * @brief
+	 */
+	int _month;
+	/**
+	 * @brief 
+	 */
+	int _day;
+	/**
+	 * @brief Number of secondes since the beginning of the day
+	 */
+	int _second;
+	/**
+	 * @brief 
+	 */
+	double _decimal;
+	
+	
+private:
+};
+#endif

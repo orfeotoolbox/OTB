@@ -144,7 +144,10 @@ ADD_TEST(utTvTinyXMLTest ${UTILITIES_TESTS}
 )
 
 
-
+ADD_TEST(utOssimRadarSatSupport ${UTILITIES_TESTS}
+        ossimRadarSatSupport
+        ${IMAGEDATA}/RADARSAT2/SCENE1/DAT_01.001
+        )
 
 # -------       Fichiers sources CXX -----------------------------------
 SET(UtilitiesTests_SRCS
@@ -159,6 +162,7 @@ svmGenericKernelTest.cxx
 tinyXMLlibTest.cxx
 svmGenericKernelBasicOperationsTest.cxx
 otbSVMComposedKernelFunctorTest.cxx
+ossimRadarSatSupport.cxx
 )
 
 INCLUDE_DIRECTORIES("${OTBTesting_BINARY_DIR}")
