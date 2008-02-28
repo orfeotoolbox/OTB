@@ -138,8 +138,12 @@ ZoomableImageWidget<TPixel>
 //  otbMsgDebugMacro(<<"SetZoomFactor: newSize ->"<<newSize);
   newRegion.SetIndex(m_ZoomUpperLeftCorner);
   newRegion.SetSize(newSize);
-  this->SetViewedRegion(newRegion);
-  this->SetOpenGlIsotropicZoom(zoomFactor);
+  /// Bug correction, segfault zooming out too much
+  if(this->GetInput() && this->GetInput()->GetLargestPossibleRegion().IsInside(newRegion))
+    {
+      this->SetViewedRegion(newRegion);
+      this->SetOpenGlIsotropicZoom(zoomFactor);
+    }
 }
 /** 
  * Set a new zoom factor (>1). 
