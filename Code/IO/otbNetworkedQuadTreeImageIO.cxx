@@ -222,37 +222,37 @@ otbMsgDevMacro( << "NetworkedQuadTreeImageIO::Read() completed");
 void NetworkedQuadTreeImageIO::InternalRead(double x, double y, void* buffer)
 {
   std::ostringstream quad;
-  int lDepth=m_Depth;
+//   int lDepth=m_Depth;
   unsigned char * bufferCacheFault = NULL;
   double xorig=x;
   double yorig=y;
-  while (lDepth--) // (post-decrement)
-  {
-// make sure we only look at fractional part
-    x -= floor(x);
-    y -= floor(y);
-    int quad_index = ((x >= 0.5 ? 1 : 0) + (y >= 0.5 ? 2 : 0));
-
-    switch(quad_index)
-    {
-      case 0:
-        quad<<"q";
-        break;
-      case 1:
-        quad<<"r";
-        break;
-      case 2:
-        quad<<"t";
-        break;
-      case 3:
-        quad<<"s";
-        break;
-    }
-// level down
-    x *= 2;
-    y *= 2;
-  }
-
+//   while (lDepth--) // (post-decrement)
+//   {
+// // make sure we only look at fractional part
+//     x -= floor(x);
+//     y -= floor(y);
+//     int quad_index = ((x >= 0.5 ? 1 : 0) + (y >= 0.5 ? 2 : 0));
+// 
+//     switch(quad_index)
+//     {
+//       case 0:
+//         quad<<"q";
+//         break;
+//       case 1:
+//         quad<<"r";
+//         break;
+//       case 2:
+//         quad<<"t";
+//         break;
+//       case 3:
+//         quad<<"s";
+//         break;
+//     }
+// // level down
+//     x *= 2;
+//     y *= 2;
+//   }
+  XYToQuadTree(x, y, quad);
 
   std::ostringstream filename;
   BuildFileName(quad, filename);
@@ -384,7 +384,6 @@ void NetworkedQuadTreeImageIO::GetFromNet(std::ostringstream& quad)
 
 void NetworkedQuadTreeImageIO::GetFromNet(std::ostringstream& quad, double x, double y)
 {
-  std::cout << "1=" << m_AddressMode << std::endl;
   std::cout << x << std::endl;
   std::cout << y << std::endl;
   
@@ -482,7 +481,24 @@ void NetworkedQuadTreeImageIO::ReadImageInformation()
   
 bool NetworkedQuadTreeImageIO::CanWriteFile( const char* name )
 {
-  return false;  
+  
+  // First if filename is provided
+  if(  name == NULL )
+  {
+    itkDebugMacro(<<"No filename specified.");
+    return false;
+  }
+  
+  // Check for file extension
+  std::string filename = name;
+  std::string::size_type gmPos = filename.rfind(".otb");
+  if ( (gmPos != std::string::npos)
+        && (gmPos == filename.length() - 3) )
+  {
+    return true;
+  }
+  return false;
+  
 }
 
 void NetworkedQuadTreeImageIO::WriteImageInformation(void)
@@ -493,6 +509,45 @@ void NetworkedQuadTreeImageIO::Write(const void* buffer)
 {
 }
 
+
+void NetworkedQuadTreeImageIO::InternalWrite(double x, double y, const void* buffer)
+{
+  
+}
+
+
+int NetworkedQuadTreeImageIO::XYToQuadTree(double x, double y, std::ostringstream& quad)
+{
+  int lDepth=m_Depth;
+  while (lDepth--) // (post-decrement)
+  {
+  // make sure we only look at fractional part
+    x -= floor(x);
+    y -= floor(y);
+    int quad_index = ((x >= 0.5 ? 1 : 0) + (y >= 0.5 ? 2 : 0));
+
+    switch(quad_index)
+    {
+      case 0:
+        quad<<"q";
+        break;
+      case 1:
+        quad<<"r";
+        break;
+      case 2:
+        quad<<"t";
+        break;
+      case 3:
+        quad<<"s";
+        break;
+    }
+// level down
+    x *= 2;
+    y *= 2;
+  }
+  
+  return 0;
+}
 
 void NetworkedQuadTreeImageIO::FillCacheFaults(void* buffer)
 {
