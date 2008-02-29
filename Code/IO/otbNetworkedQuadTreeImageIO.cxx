@@ -169,7 +169,8 @@ namespace otb
     int nTilesY = (int) ceil(totLines/256.)+1;
     unsigned char * bufferTile = new unsigned char[256*256*3];
         
-        //Read all the required tiles
+    //Read all the required tiles
+    //FIXME assume RGB image
     for(int numTileY=0; numTileY<nTilesY; numTileY++)
     {
       for(int numTileX=0; numTileX<nTilesX; numTileX++)
@@ -530,7 +531,8 @@ namespace otb
       {
 
 
-      //Copy the input in the tile buffer
+      //Copy the input into the tile buffer 
+        //FIXME assume RGB image
         for(int tileJ=0; tileJ<256; tileJ++)
         {
           long int yImageOffset=(long int) 256*floor(firstLine/256.)+256*numTileY-firstLine+tileJ;
