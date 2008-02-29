@@ -74,6 +74,9 @@ int otbOrthoRectificationFilter( int argc, char* argv[] )
         // Set parameters ...
         reader->SetFileName(argv[1]);
         writer->SetFileName(argv[2]);
+
+	reader->GenerateOutputInformation();
+	std::cout<<reader->GetOutput()<<std::endl;
         
         orthoRectifFilter->SetInput(reader->GetOutput());
         

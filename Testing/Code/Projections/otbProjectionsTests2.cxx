@@ -28,9 +28,7 @@
 void RegisterTests()
 {
 REGISTER_TEST(otbOrthoRectificationFilterNew);
-REGISTER_TEST(otbOrthoRectificationFilterBase);
 REGISTER_TEST(otbOrthoRectificationFilter);
-REGISTER_TEST(otbOrthoRectificationFilterBaseWithDEM);
 REGISTER_TEST(otbOrthoRectificationFilterWithDEM);
 //REGISTER_TEST(otbSensorImageToCarto);
 //REGISTER_TEST(otbSensorImageDEMToCarto);

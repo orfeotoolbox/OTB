@@ -19,7 +19,6 @@
 #include "otbMacro.h"
 #include "otbImage.h"
 #include "otbMapProjections.h"
-#include "otbOrthoRectificationFilterBase.h"
 #include "otbOrthoRectificationFilter.h"
 
 
@@ -28,10 +27,8 @@ int otbOrthoRectificationFilterNew( int argc, char* argv[] )
         typedef otb::Image<double, 2>     ImageType;
         typedef otb::UtmInverseProjection UtmMapProjectionType ;
         typedef otb::OrthoRectificationFilter<ImageType, ImageType, UtmMapProjectionType> OrthoRectifFilterType ;
-        typedef otb::OrthoRectificationFilterBase<ImageType, ImageType, UtmMapProjectionType> OrthoRectifFilterBaseType ;
-				
+ 				
         OrthoRectifFilterType::Pointer          orthoRectifFilter=OrthoRectifFilterType::New();
-        OrthoRectifFilterBaseType::Pointer      orthoRectifFilterBase=OrthoRectifFilterBaseType::New();
 				
         return EXIT_SUCCESS;
 

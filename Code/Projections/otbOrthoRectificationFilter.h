@@ -15,8 +15,8 @@ the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
 PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbOrthoRectificationFilterBase_h
-#define __otbOrthoRectificationFilterBase_h
+#ifndef __otbOrthoRectificationFilter_h
+#define __otbOrthoRectificationFilter_h
 
 #include <iostream>
 #include <sstream>
@@ -30,7 +30,7 @@ PURPOSE.  See the above copyright notices for more information.
 
 namespace otb
 {
-  /** \class OrthoRectificationFilterBase
+  /** \class OrthoRectificationFilter
    * 
    * \brief Class for Orthorectifying an image
    *
@@ -43,7 +43,7 @@ namespace otb
             class TOutputImage,
             class TMapProjection,
             class TInterpolatorPrecision=double>
-    class ITK_EXPORT OrthoRectificationFilterBase : public StreamingResampleImageFilter<TInputImage, 
+    class ITK_EXPORT OrthoRectificationFilter : public StreamingResampleImageFilter<TInputImage, 
                                                                                     TOutputImage,
                                                                                     TInterpolatorPrecision>  
     {
@@ -52,7 +52,7 @@ namespace otb
       typedef StreamingResampleImageFilter<TInputImage, 
                                            TOutputImage,
                                            TInterpolatorPrecision>  Superclass;
-      typedef OrthoRectificationFilterBase    			    Self;
+      typedef OrthoRectificationFilter    			    Self;
       typedef itk::SmartPointer<Self>              		    Pointer;
       typedef itk::SmartPointer<const Self>        		    ConstPointer;
       
@@ -77,7 +77,7 @@ namespace otb
       itkNewMacro( Self );
       
       /** Run-time type information (and related methods). */
-      itkTypeMacro( OrthoRectificationFilterBase, StreamingResampleImageFilter );
+      itkTypeMacro( OrthoRectificationFilter, StreamingResampleImageFilter );
       
       /** Accessors */
       virtual void SetMapProjection (MapProjectionType* _arg) 
@@ -105,15 +105,15 @@ namespace otb
 	    virtual void DisableDEM()	{	m_SensorModel->DisableDEM(); }
       
       protected:
-      OrthoRectificationFilterBase();
-      ~OrthoRectificationFilterBase();
+      OrthoRectificationFilter();
+      ~OrthoRectificationFilter();
       void PrintSelf(std::ostream& os, itk::Indent indent) const;
       
       virtual void GenerateInputRequestedRegion();
       
       
       private:
-      OrthoRectificationFilterBase(const Self&); //purposely not implemented
+      OrthoRectificationFilter(const Self&); //purposely not implemented
       void operator=(const Self&); //purposely not implemented
       
       /** Calculate transformation model from sensor model & map projection	composition */	
@@ -136,7 +136,7 @@ namespace otb
 } // namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbOrthoRectificationFilterBase.txx"
+#include "otbOrthoRectificationFilter.txx"
 #endif
 
 #endif

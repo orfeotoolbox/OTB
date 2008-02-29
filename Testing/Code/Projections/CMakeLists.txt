@@ -165,21 +165,6 @@ ADD_TEST(prTvRegionProjectionResamplerCevennes ${PROJECTIONS_TESTS1}
 ADD_TEST(prTuOrthoRectificationFilterNew ${PROJECTIONS_TESTS2} 
         otbOrthoRectificationFilterNew )
 
-# TEST 16				
-ADD_TEST(prTvOrthoRectificationToulouseBase ${PROJECTIONS_TESTS2} 
-  --compare-image ${EPSILON}  ${BASELINE}/prTvOrthoRectificationToulouse_UTM.tif
-                          ${TEMP}/prTvOrthoRectificationBaseToulouse_UTM.tif
-        otbOrthoRectificationFilterBase
-        ${IMAGEDATA}/TOULOUSE/QuickBird/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF
-        ${TEMP}/prTvOrthoRectificationBaseToulouse_UTM.tif
-        374100.8
-        4829184.8 
-        500
-        500 
-        220
-        0.5
-        -0.5
-        )
 
 # TEST 16.2
 ADD_TEST(prTvOrthoRectificationToulouse ${PROJECTIONS_TESTS2} 
@@ -247,23 +232,7 @@ ADD_TEST(prTvOrthoRectificationCevennes ${PROJECTIONS_TESTS2}
 #				-0.5
 #        )
 #=======================================================================================
-# TEST 20
-ADD_TEST(prTvOrthoRectificationToulouseBaseWithDEM ${PROJECTIONS_TESTS2}  
-  --compare-image ${EPSILON}  ${BASELINE}/prTvOrthoRectificationToulouseWithDEM_UTM.tif
-                          ${TEMP}/prTvOrthoRectificationToulouseBaseWithDEM_UTM.tif
-        otbOrthoRectificationFilterBaseWithDEM	
-	${IMAGEDATA}/TOULOUSE/QuickBird/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF
-        ${TEMP}/prTvOrthoRectificationToulouseBaseWithDEM_UTM.tif
-        374100.8
-        4829184.8 
-        500
-	500 
-	220
-	0.5
-	-0.5
-        ${INPUTDATA}/DEM/srtm_directory/ 
-        ${TEMP}/prTvOrthoRectificationToulouseBaseWithDEM_UTM.tif
-        )
+
 # TEST 20.2
 ADD_TEST(prTvOrthoRectificationToulouseWithDEM ${PROJECTIONS_TESTS2}  
   --compare-image ${EPSILON}  ${BASELINE}/prTvOrthoRectificationToulouseWithDEM_UTM.tif
@@ -347,9 +316,7 @@ otbRegionProjectionResampler.cxx
 )
 SET(Projections_SRCS2
 otbOrthoRectificationFilterNew.cxx
-otbOrthoRectificationFilterBase.cxx
 otbOrthoRectificationFilter.cxx
-otbOrthoRectificationFilterBaseWithDEM.cxx
 otbOrthoRectificationFilterWithDEM.cxx
 #otbSensorImageToCarto.cxx
 #otbSensorImageDEMToCarto.cxx

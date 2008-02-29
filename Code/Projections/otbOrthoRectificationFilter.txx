@@ -15,10 +15,10 @@ the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
 PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef _otbOrthoRectificationFilterBase_txx
-#define _otbOrthoRectificationFilterBase_txx
+#ifndef _otbOrthoRectificationFilter_txx
+#define _otbOrthoRectificationFilter_txx
 
-#include "otbOrthoRectificationFilterBase.h"
+#include "otbOrthoRectificationFilter.h"
 
 
 namespace otb
@@ -28,11 +28,11 @@ namespace otb
 	    			class TOutputImage, 
 	    			class TMapProjection, 
 	    			class TInterpolatorPrecision>
-  OrthoRectificationFilterBase<TInputImage, 
+  OrthoRectificationFilter<TInputImage, 
 			   								 	 TOutputImage, 
 			  	 								 TMapProjection, 
 			   									 TInterpolatorPrecision>
-  ::OrthoRectificationFilterBase() : StreamingResampleImageFilter<TInputImage,
+  ::OrthoRectificationFilter() : StreamingResampleImageFilter<TInputImage,
 								   TOutputImage,
 								   TInterpolatorPrecision>()
   {
@@ -46,11 +46,11 @@ namespace otb
 	    			class TOutputImage, 
 	    			class TMapProjection, 
 	    			class TInterpolatorPrecision>
-  OrthoRectificationFilterBase<TInputImage, 
+  OrthoRectificationFilter<TInputImage, 
 			   									 TOutputImage, 
 			   									 TMapProjection, 
 			   									 TInterpolatorPrecision>
-  ::~OrthoRectificationFilterBase()
+  ::~OrthoRectificationFilter()
   {
   }
   
@@ -58,7 +58,7 @@ namespace otb
 	    			class TOutputImage, 
 	    			class TMapProjection, 
 	    			class TInterpolatorPrecision>
-  void OrthoRectificationFilterBase<TInputImage, 
+  void OrthoRectificationFilter<TInputImage, 
 															  TOutputImage, 
 																TMapProjection, 
 																TInterpolatorPrecision>
@@ -75,7 +75,7 @@ namespace otb
 	    			class TMapProjection, 
 	    			class TInterpolatorPrecision>
   void
-  OrthoRectificationFilterBase<TInputImage, 
+  OrthoRectificationFilter<TInputImage, 
 			   									 TOutputImage, 
 			   									 TMapProjection, 
 			   									 TInterpolatorPrecision>
@@ -91,7 +91,7 @@ namespace otb
 	    			class TMapProjection, 
 	    			class TInterpolatorPrecision>
   void
-  OrthoRectificationFilterBase<TInputImage, 
+  OrthoRectificationFilter<TInputImage, 
 			   								 	 TOutputImage, 
 			   									 TMapProjection, 
 			   									 TInterpolatorPrecision>
