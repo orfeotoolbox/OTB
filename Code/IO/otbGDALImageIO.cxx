@@ -806,7 +806,7 @@ otbMsgDevMacro( << "GDALImageIO::Write() IORegion Start["<<this->GetIORegion().G
 
         std::streamoff lNbPixels = static_cast<std::streamoff>(lNbColonnes)*static_cast<std::streamoff>(lNbLignes);
         std::streamoff lTailleBuffer = static_cast<std::streamoff>(m_NbOctetPixel)*lNbPixels;
-otbMsgDevMacro( <<" TailleBuffer allou� : "<< lTailleBuffer);
+otbMsgDevMacro( <<" TailleBuffer allocated : "<< lTailleBuffer);
         
         unsigned char* value = new unsigned char[lTailleBuffer];
         if(value==NULL)
