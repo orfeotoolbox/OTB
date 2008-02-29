@@ -168,6 +168,8 @@ bool ossimRadarSatTileSource::open()
 				 * On construit le chemin du Leader file
 				 */
 				ossimFilename leaderFilePath = tempFilename.setFile("LEA_01");
+				if (!leaderFilePath.exists())
+				  leaderFilePath = tempFilename.setFile("lea_01");
 				if (leaderFilePath.exists())
 				{
 					if(traceDebug())
