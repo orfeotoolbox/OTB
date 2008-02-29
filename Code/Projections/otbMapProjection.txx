@@ -288,6 +288,8 @@ namespace otb
   {
     ossimGpt ossimOrigin(origin[1], origin[0]);
     m_MapProjection->setOrigin(ossimOrigin);
+    //TODO: 29-02-2008 Emmanuel: when ossim version > 1.7.2 only
+    // SetOrigin required (remove SetDatum)
     m_MapProjection->setDatum(ossimOrigin.datum());
   }
   

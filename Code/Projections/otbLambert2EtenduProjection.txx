@@ -40,18 +40,10 @@ namespace otb
     double falseNorthing=2200000;   
     std::string ellipsoid = "CE";
   
-//     typedef otb::LambertConformalConicForwardProjection LambertProjectionType;
-//     LambertProjectionType::Pointer lambertProjection = LambertProjectionType::New();
-        
-//   lambertProjection->SetParameters(parall1, parall2, falseEasting, falseNorthing);
-//     lambertProjection->SetOrigin(oriPoint, datum);
-//     lambertProjection->SetEllipsoid(ellipsoid);
-//     
-//     this->m_MapProjection->setEllipsoid(ellipsoid);
-//     this->m_MapProjection->setOrigin(origin);
-//     this->m_MapProjection->setOrigin(datum);
-//     this->m_MapProjection->setParametersparall1, parall2, falseEasting, falseNorthing);
-    this->SetOrigin(origin, datum);
+    
+    //TODO: 29-02-2008 Emmanuel: when ossim version > 1.7.2 only
+    // SetOrigin required (remove SetEllipsoid)
+    this->SetOrigin(origin, datum);  
     this->SetEllipsoid(ellipsoid);
     this->SetParameters(parall1, parall2, falseEasting, falseNorthing);
   }
