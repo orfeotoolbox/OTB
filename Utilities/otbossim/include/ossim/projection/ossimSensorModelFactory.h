@@ -1,13 +1,16 @@
 //*******************************************************************
+// Copyright (C) 2000 ImageLinks Inc.
 //
-// License:  See top level LICENSE.txt file.
+// License:  LGPL
+// 
+// See LICENSE.txt file in the top level directory for more details.
 //
 // Author:  Oscar Kramer
 //
 // Description: Factory for all ossim sensor models.
 // 
 //*******************************************************************
-//  $Id: ossimSensorModelFactory.h 12081 2007-11-26 21:44:18Z dburken $
+//  $Id: ossimSensorModelFactory.h 9094 2006-06-13 19:12:40Z dburken $
 #ifndef ossimSensorModelFactory_HEADER
 #define ossimSensorModelFactory_HEADER
 #include <ossim/projection/ossimProjectionFactoryBase.h>
@@ -16,7 +19,7 @@ class ossimProjection;
 class ossimString;
 class ossimFilename;
 
-class OSSIM_DLL ossimSensorModelFactory : public ossimProjectionFactoryBase
+class ossimSensorModelFactory : public ossimProjectionFactoryBase
 {
 public:
    /*!
@@ -51,13 +54,19 @@ public:
     */
    virtual void getTypeNameList(std::vector<ossimString>& typeList)const;
    
+   /*!
+    * METHOD: getList()
+    * Returns name list of all products represented by this factory.
+    */
+   virtual std::list<ossimString> getList() const;
+
 protected:
    ossimSensorModelFactory() {}
    
    static ossimSensorModelFactory*  theInstance;
    bool isNitf(const ossimFilename& filename)const;
    bool isLandsat(const ossimFilename& filename)const;
-  bool isNetworkedQuadTree(const ossimFilename& filename)const;
+   bool isNetworkedQuadTree(const ossimFilename& filename)const;
    void findCoarseGrid(ossimFilename& result,
                        const ossimFilename& geomFile)const;
 };
