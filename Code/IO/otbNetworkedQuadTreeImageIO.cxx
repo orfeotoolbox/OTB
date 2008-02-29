@@ -141,8 +141,8 @@ void NetworkedQuadTreeImageIO::Read(void* buffer)
 
         int totLines   = this->GetIORegion().GetSize()[1];
         int totSamples = this->GetIORegion().GetSize()[0];
-        int firstLine   = this->GetIORegion().GetIndex()[1]; // [1... ]
-        int firstSample = this->GetIORegion().GetIndex()[0]; // [1... ]
+        int firstLine   = this->GetIORegion().GetIndex()[1];
+        int firstSample = this->GetIORegion().GetIndex()[0];
 
         otbMsgDevMacro( <<" NetworkedQuadTreeImageIO::Read()  ");
         otbMsgDevMacro( <<" Image size  : "<<m_Dimensions[0]<<","<<m_Dimensions[1]);
@@ -226,51 +226,24 @@ void NetworkedQuadTreeImageIO::InternalRead(double x, double y, void* buffer)
   unsigned char * bufferCacheFault = NULL;
   double xorig=x;
   double yorig=y;
-//   while (lDepth--) // (post-decrement)
-//   {
-// // make sure we only look at fractional part
-//     x -= floor(x);
-//     y -= floor(y);
-//     int quad_index = ((x >= 0.5 ? 1 : 0) + (y >= 0.5 ? 2 : 0));
-// 
-//     switch(quad_index)
-//     {
-//       case 0:
-//         quad<<"q";
-//         break;
-//       case 1:
-//         quad<<"r";
-//         break;
-//       case 2:
-//         quad<<"t";
-//         break;
-//       case 3:
-//         quad<<"s";
-//         break;
-//     }
-// // level down
-//     x *= 2;
-//     y *= 2;
-//   }
+
   XYToQuadTree(x, y, quad);
 
   std::ostringstream filename;
   BuildFileName(quad, filename);
 
-  itk::ImageIOBase::Pointer lJPEGImageIO;
-  //Open the jpg file to fill the buffer
+  itk::ImageIOBase::Pointer imageIO;
+  //Open the file to fill the buffer
   if (m_AddressMode[0] == '0')
   {
-//     itk::JPEGImageIO::Pointer 
-        lJPEGImageIO = itk::JPEGImageIO::New();
+        imageIO = itk::JPEGImageIO::New();
   }
   if (m_AddressMode[0] == '1')
   {
-//     itk::PNGImageIO::Pointer 
-        lJPEGImageIO = itk::PNGImageIO::New();
+        imageIO = itk::PNGImageIO::New();
   }
   bool lCanRead(false);
-  lCanRead = lJPEGImageIO->CanReadFile(filename.str().c_str());
+  lCanRead = imageIO->CanReadFile(filename.str().c_str());
   std::cout << filename.str() << std::endl;
 
   //If we cannot read the file: retrieve and read
@@ -284,13 +257,13 @@ void NetworkedQuadTreeImageIO::InternalRead(double x, double y, void* buffer)
     {
       GetFromNet(quad, xorig, yorig);
     }
-    lCanRead = lJPEGImageIO->CanReadFile(filename.str().c_str());
+    lCanRead = imageIO->CanReadFile(filename.str().c_str());
   }
   
   if ( lCanRead == true)
   {
-    lJPEGImageIO->SetFileName(filename.str().c_str());
-    lJPEGImageIO->Read(buffer);
+    imageIO->SetFileName(filename.str().c_str());
+    imageIO->Read(buffer);
   }
   else
   {
@@ -507,11 +480,136 @@ void NetworkedQuadTreeImageIO::WriteImageInformation(void)
 
 void NetworkedQuadTreeImageIO::Write(const void* buffer)
 {
+  
+  const unsigned char * p = static_cast<const unsigned char *>(buffer);
+  if(p==NULL)
+  {
+    itkExceptionMacro(<<"Memory allocation error");
+    return;
+  }
+  
+  if( m_FlagWriteImageInformation == true )
+  {
+    this->WriteImageInformation();
+    m_FlagWriteImageInformation = false;
+  }
+  
+  int totLines   = this->GetIORegion().GetSize()[1];
+  int totSamples = this->GetIORegion().GetSize()[0];
+  int firstLine   = this->GetIORegion().GetIndex()[1];
+  int firstSample = this->GetIORegion().GetIndex()[0];
+
+  otbMsgDevMacro( <<" NetworkedQuadTreeImageIO::Read()  ");
+  otbMsgDevMacro( <<" Image size  : "<<m_Dimensions[0]<<","<<m_Dimensions[1]);
+  otbMsgDevMacro( <<" Region read (IORegion)  : "<<this->GetIORegion());
+  otbMsgDevMacro( <<" Nb Of Components  : "<<this->GetNumberOfComponents());
+        
+  std::streamoff lNbPixels = (static_cast<std::streamoff>(totSamples))*(static_cast<std::streamoff>(totLines));
+  std::streamoff lTailleBuffer = static_cast<std::streamoff>(m_NbOctetPixel)*lNbPixels;
+        
+  otbMsgDevMacro( <<" Allocation buff tempon taille : "<<lNbPixels<<"*"<<m_NbOctetPixel<<" (NbOctetPixel) = "<<lTailleBuffer);
+  otbMsgDevMacro( <<" sizeof(streamsize)    : "<<sizeof(std::streamsize));
+  otbMsgDevMacro( <<" sizeof(streampos)     : "<<sizeof(std::streampos));
+  otbMsgDevMacro( <<" sizeof(streamoff)     : "<<sizeof(std::streamoff));
+  otbMsgDevMacro( <<" sizeof(std::ios::beg) : "<<sizeof(std::ios::beg));
+  otbMsgDevMacro( <<" sizeof(size_t)        : "<<sizeof(size_t));
+        //otbMsgDevMacro( <<" sizeof(pos_type)      : "<<sizeof(pos_type));
+        //otbMsgDevMacro( <<" sizeof(off_type)      : "<<sizeof(off_type));
+  otbMsgDevMacro( <<" sizeof(unsigned long) : "<<sizeof(unsigned long));
+  
+  double x = firstSample/((1 << m_Depth)*256.);
+  double y = firstLine/((1 << m_Depth)*256.);
+  int nTilesX = (int) ceil(totSamples/256.)+1;
+  int nTilesY = (int) ceil(totLines/256.)+1;
+  unsigned char * bufferTile = new unsigned char[256*256*3]; //TODO check if 0 init
+        
+  //Read all the required tiles
+  for(int numTileY=0; numTileY<nTilesY; numTileY++)
+  {
+    for(int numTileX=0; numTileX<nTilesX; numTileX++)
+    {
+
+
+      //Copy the input in the tile buffer
+      for(int tileJ=0; tileJ<256; tileJ++)
+      {
+        long int yImageOffset=(long int) 256*floor(firstLine/256.)+256*numTileY-firstLine+tileJ;
+        if ((yImageOffset >= 0) && (yImageOffset < totLines))
+        {
+          long int xImageOffset = (long int)
+              256*floor(firstSample/256.)+256*numTileX-firstSample;
+          const unsigned char * src = p+3*(xImageOffset+totSamples*yImageOffset);
+          unsigned char * dst = bufferTile+3*256*tileJ;
+          int size = 3*256;
+          if (xImageOffset < 0){
+            src -= 3*xImageOffset;
+            dst -= 3*xImageOffset;
+            size += 3*xImageOffset;
+          }
+          if (xImageOffset+256 > totSamples)
+          {
+            size += 3*(totSamples-xImageOffset-256);
+          }
+          if (size > 0)
+          {
+            memcpy(dst, src, size);
+          }
+
+
+        }
+      }//end of tile copy
+
+      double xTile = (firstSample+256*numTileX)/((1 << m_Depth)*256.);
+      double yTile = (firstLine+256*numTileY)/((1 << m_Depth)*256.);
+      //Write the tile
+      InternalRead(xTile, yTile, bufferTile);
+      
+ 
+    }
+  }//end of full image copy
+
+  delete[] bufferTile;
+
+
+  otbMsgDevMacro( << "NetworkedQuadTreeImageIO::Write() completed");
+  
+  
+  
 }
 
 
 void NetworkedQuadTreeImageIO::InternalWrite(double x, double y, const void* buffer)
 {
+  std::ostringstream quad;
+  XYToQuadTree(x, y, quad);
+  
+  std::ostringstream filename;
+  BuildFileName(quad, filename);
+  
+  itk::ImageIOBase::Pointer imageIO;
+  //Open the file to write the buffer
+  if (m_AddressMode[0] == '0')
+  {
+    imageIO = itk::JPEGImageIO::New();
+  }
+  if (m_AddressMode[0] == '1')
+  {
+    imageIO = itk::PNGImageIO::New();
+  }
+  
+  bool lCanWrite(false);
+  lCanWrite = imageIO->CanWriteFile(filename.str().c_str());
+  std::cout << filename.str() << std::endl;
+  
+  if ( lCanWrite == true)
+  {
+    imageIO->SetFileName(filename.str().c_str());
+    imageIO->Write(buffer);
+  }
+  else
+  {
+    itkExceptionMacro(<<"NetworkedQuadTree write : bad file name.");
+  }
   
 }
 
