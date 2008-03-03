@@ -95,30 +95,36 @@ namespace otb
                int maxPieceUsed = (int)::ceil(range/(double)valuesPerPiece);
 
   // Split the region
-               if ((int) i == 0)
-               {
-    //First piece may not contain a whole piece
-    //splitIndex stay at splitRegion.GetIndex();
-                 splitSize[splitAxis] = (((int)::floor(splitIndex[splitAxis]/valuesPerPiece))+1)
-                     *valuesPerPiece - splitIndex[splitAxis];
-               }
-               if ((int) i < maxPieceUsed)
-               {
-                 splitIndex[splitAxis] += i*valuesPerPiece;
-                 splitSize[splitAxis] = valuesPerPiece;
-               }
-               if ((int) i == maxPieceUsed)
+               if ((int) i == maxPieceUsed-1)
                {
                  splitIndex[splitAxis] += i*valuesPerPiece;
     // last piece needs to process the "rest" dimension being split
 //     splitSize[splitAxis] = splitSize[splitAxis] - i*valuesPerPiece;
                  splitSize[splitAxis] = regionSize[splitAxis] - splitIndex[splitAxis];
                }
-  
+               if (((int) i == 0) && ((int) i != maxPieceUsed-1))
+               {
+    //First piece may not contain a whole piece
+    //splitIndex stay at splitRegion.GetIndex();
+                 splitSize[splitAxis] = (((int)::floor(splitIndex[splitAxis]/valuesPerPiece))+1)
+                     *valuesPerPiece - splitIndex[splitAxis];
+               }
+               if ((int) i < maxPieceUsed-1)
+               {
+                 splitIndex[splitAxis] += i*valuesPerPiece;
+                 splitSize[splitAxis] = valuesPerPiece;
+               }
+
+               
   // set the split region ivars
                splitRegion.SetIndex( splitIndex );
                splitRegion.SetSize( splitSize );
-
+               
+               std::cout << "Part: " << i << std::endl;
+               std::cout << splitIndex << std::endl;//TODO remove
+               std::cout << splitSize << std::endl;
+               std::cout.flush();
+               
                itkDebugMacro("  Split Piece: " << splitRegion );
 
                return splitRegion;
