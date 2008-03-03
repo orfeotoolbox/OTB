@@ -36,51 +36,53 @@
 namespace otb
 {
 
-itk::ImageIOBase::Pointer
-ImageIOFactory::CreateImageIO(const char* path, FileModeType mode)
-{
+  itk::ImageIOBase::Pointer
+      ImageIOFactory::CreateImageIO(const char* path, FileModeType mode)
+      {
 
-  RegisterBuiltInFactories();
-  return (Superclass::CreateImageIO(path,mode) );
+        RegisterBuiltInFactories();
+        return (Superclass::CreateImageIO(path,mode) );
 
-}
+      }
   
-void
-ImageIOFactory::RegisterBuiltInFactories()
-{
+      void
+          ImageIOFactory::RegisterBuiltInFactories()
+      {
         static bool firstTime = true;
 
         static itk::SimpleMutexLock mutex;
         {
                 // This helper class makes sure the Mutex is unlocked 
                 // in the event an exception is thrown.
-                itk::MutexLockHolder<itk::SimpleMutexLock> mutexHolder( mutex );
-                if( firstTime )
-                {
+          itk::MutexLockHolder<itk::SimpleMutexLock> mutexHolder( mutex );
+          if( firstTime )
+          {
                         // BSQ format for OTB
-//                         itk::ObjectFactoryBase::RegisterFactory( BSQImageIOFactory::New() );			
+            itk::ObjectFactoryBase::RegisterFactory( BSQImageIOFactory::New() );			
+                        
                         // LUM format for OTB
-//                         itk::ObjectFactoryBase::RegisterFactory( LUMImageIOFactory::New() );			
+            itk::ObjectFactoryBase::RegisterFactory( LUMImageIOFactory::New() );			
+                        
                         // ONERA format for OTB
-//                         itk::ObjectFactoryBase::RegisterFactory( ONERAImageIOFactory::New() );			
+            itk::ObjectFactoryBase::RegisterFactory( ONERAImageIOFactory::New() );			
                         
 			// MSTAR Format for OTB
-// 			itk::ObjectFactoryBase::RegisterFactory( MSTARImageIOFactory::New() );
+            itk::ObjectFactoryBase::RegisterFactory( MSTARImageIOFactory::New() );
 
 			// GDAL : New format for OTB
-                        itk::ObjectFactoryBase::RegisterFactory( GDALImageIOFactory::New() );
+            itk::ObjectFactoryBase::RegisterFactory( GDALImageIOFactory::New() );
                         
 			// JPEG2000 : New format for OTB
-                        itk::ObjectFactoryBase::RegisterFactory( JPEG2000ImageIOFactory::New() );
+            itk::ObjectFactoryBase::RegisterFactory( JPEG2000ImageIOFactory::New() );
                         
 #ifdef OTB_USE_CURL
                         // NetworkedQuadTree : New format for OTB
-                        itk::ObjectFactoryBase::RegisterFactory( NetworkedQuadTreeImageIOFactory::New() );
+            itk::ObjectFactoryBase::RegisterFactory( NetworkedQuadTreeImageIOFactory::New() );
 #endif                        
-                        firstTime = false;
-                }
+            firstTime = false;
+          }
         }
 
-}
+      }
 
 } // end namespace otb
