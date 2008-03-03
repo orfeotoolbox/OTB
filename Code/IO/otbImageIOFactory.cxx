@@ -58,14 +58,14 @@ ImageIOFactory::RegisterBuiltInFactories()
                 if( firstTime )
                 {
                         // BSQ format for OTB
-                        itk::ObjectFactoryBase::RegisterFactory( BSQImageIOFactory::New() );			
+//                         itk::ObjectFactoryBase::RegisterFactory( BSQImageIOFactory::New() );			
                         // LUM format for OTB
-                        itk::ObjectFactoryBase::RegisterFactory( LUMImageIOFactory::New() );			
+//                         itk::ObjectFactoryBase::RegisterFactory( LUMImageIOFactory::New() );			
                         // ONERA format for OTB
-                        itk::ObjectFactoryBase::RegisterFactory( ONERAImageIOFactory::New() );			
+//                         itk::ObjectFactoryBase::RegisterFactory( ONERAImageIOFactory::New() );			
                         
 			// MSTAR Format for OTB
-			itk::ObjectFactoryBase::RegisterFactory( MSTARImageIOFactory::New() );
+// 			itk::ObjectFactoryBase::RegisterFactory( MSTARImageIOFactory::New() );
 
 			// GDAL : New format for OTB
                         itk::ObjectFactoryBase::RegisterFactory( GDALImageIOFactory::New() );
