@@ -255,8 +255,8 @@ Segmenter<TInputImage, TOuputImage>
   while(it!=pointSetFilter->GetOutput()->GetPoints()->End())
     {
       typename OutputImageType::IndexType index;
-      index[0]=static_cast<long int>(it.Value()[0]*(mult->GetOutput()->GetSpacing()[0]));
-      index[1]=static_cast<long int>(it.Value()[1]*(mult->GetOutput()->GetSpacing()[1]));
+      index[0]=static_cast<long int>(it.Value()[0]);
+      index[1]=static_cast<long int>(it.Value()[1]);
       connectedThreshold->AddSeed(index);
       it++;
     }
