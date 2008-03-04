@@ -5,7 +5,7 @@
 #---------------------------------------------------------------------------
 DOXYFILE_ENCODING      = UTF-8
 PROJECT_NAME           = OTB
-PROJECT_NUMBER         = "ORFEO ToolBox 2.0   "
+PROJECT_NUMBER         = "ORFEO ToolBox 2.0      "
 OUTPUT_DIRECTORY       = ./
 CREATE_SUBDIRS         = NO
 OUTPUT_LANGUAGE        = English
@@ -33,7 +33,7 @@ CPP_CLI_SUPPORT        = NO
 SIP_SUPPORT            = NO
 DISTRIBUTE_GROUP_DOC   = NO
 SUBGROUPING            = YES
-TYPEDEF_HIDES_STRUCT   = NO
+TYPEDEF_HIDES_STRUCT   = YES
 #---------------------------------------------------------------------------
 # Build related configuration options
 #---------------------------------------------------------------------------
@@ -55,10 +55,10 @@ INLINE_INFO            = YES
 SORT_MEMBER_DOCS       = YES
 SORT_BRIEF_DOCS        = NO
 SORT_BY_SCOPE_NAME     = NO
-GENERATE_TODOLIST      = YES
-GENERATE_TESTLIST      = YES
-GENERATE_BUGLIST       = YES
-GENERATE_DEPRECATEDLIST= YES
+GENERATE_TODOLIST      = NO
+GENERATE_TESTLIST      = NO
+GENERATE_BUGLIST       = NO
+GENERATE_DEPRECATEDLIST= NO
 ENABLED_SECTIONS       = 
 MAX_INITIALIZER_LINES  = 30
 SHOW_USED_FILES        = YES
@@ -72,7 +72,7 @@ WARNINGS               = YES
 WARN_IF_UNDOCUMENTED   = YES
 WARN_IF_DOC_ERROR      = YES
 WARN_NO_PARAMDOC       = NO
-WARN_FORMAT            = "$file:$line: $text   "
+WARN_FORMAT            = "$file:$line: $text      "
 WARN_LOGFILE           = 
 #---------------------------------------------------------------------------
 # configuration options related to the input files
@@ -80,8 +80,7 @@ WARN_LOGFILE           =
 INPUT                  = ../../OTB/Code \
                          ../Doxygen \
                          ../../OTB/Utilities/ITK/Code \
-                         ../../OTB/Utilities/otbsvm \
-                         ../../OTB/Examples
+                         ../../OTB/Utilities/otbsvm
 INPUT_ENCODING         = UTF-8
 FILE_PATTERNS          = *.cxx \
                          *.h \
@@ -119,7 +118,7 @@ FILTER_SOURCE_FILES    = NO
 # configuration options related to source browsing
 #---------------------------------------------------------------------------
 SOURCE_BROWSER         = YES
-INLINE_SOURCES         = YES
+INLINE_SOURCES         = NO
 STRIP_CODE_COMMENTS    = YES
 REFERENCED_BY_RELATION = YES
 REFERENCES_RELATION    = YES
@@ -143,7 +142,7 @@ HTML_FOOTER            = DoxygenFooter.html
 HTML_STYLESHEET        = DoxygenStyle.css
 HTML_ALIGN_MEMBERS     = YES
 GENERATE_HTMLHELP      = NO
-HTML_DYNAMIC_SECTIONS  = YES
+HTML_DYNAMIC_SECTIONS  = NO
 CHM_FILE               = 
 HHC_LOCATION           = 
 GENERATE_CHI           = NO
@@ -229,7 +228,7 @@ PERL_PATH              = /usr/bin/perl
 CLASS_DIAGRAMS         = YES
 MSCGEN_PATH            = 
 HIDE_UNDOC_RELATIONS   = YES
-HAVE_DOT               = YES
+HAVE_DOT               = NO
 CLASS_GRAPH            = YES
 COLLABORATION_GRAPH    = YES
 GROUP_GRAPHS           = YES
@@ -253,4 +252,4 @@ DOT_CLEANUP            = YES
 #---------------------------------------------------------------------------
 # Configuration::additions related to the search engine   
 #---------------------------------------------------------------------------
-SEARCHENGINE           = YES
+SEARCHENGINE           = NO
