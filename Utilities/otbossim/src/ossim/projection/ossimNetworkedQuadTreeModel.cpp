@@ -417,8 +417,8 @@ void ossimNetworkedQuadTreeModel::lineSampleHeightToWorld(const ossimDpt& image_
    if(!image_point.hasNans())
    {
 
-   gpt.lon = image_point.samp/(pow(2,static_cast<double>(qDepth))*256)*360.0-180.0;
-   double y = image_point.line/(pow(2,static_cast<double>(qDepth))*256);
+   gpt.lon = image_point.samp/(pow(2.,static_cast<double>(qDepth))*256)*360.0-180.0;
+   double y = image_point.line/(pow(2.,static_cast<double>(qDepth))*256);
    double ex = exp(4*M_PI*(y-0.5));
    gpt.lat = -180.0/M_PI*asin((ex-1)/(ex+1));
    }
@@ -448,9 +448,9 @@ void ossimNetworkedQuadTreeModel::worldToLineSample(const ossimGpt& ground_point
    y *= 1.0/(2 * M_PI); // scale factor from radians to normalized
    y += 0.5; // and make y range from 0 - 1
 
-   img_pt.samp = floor(x*pow(2,static_cast<double>(qDepth))*256);
+   img_pt.samp = floor(x*pow(2.,static_cast<double>(qDepth))*256);
    
-   img_pt.line = floor(y*pow(2,static_cast<double>(qDepth))*256);
+   img_pt.line = floor(y*pow(2.,static_cast<double>(qDepth))*256);
 
    return;
 }
