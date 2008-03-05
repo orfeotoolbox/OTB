@@ -1044,24 +1044,22 @@ void GDALImageIO::InternalWriteImageInformation()
 /* -------------------------------------------------------------------- */
 
   
-	if(!ImageBase::GetGeoTransform(dico).empty())
-	  {
+// 	if(!ImageBase::GetGeoTransform(dico).empty())
+// 	  {
 	    double * geoTransform = new double[6];
-	    std::vector<double> transformVector = ImageBase::GetGeoTransform(dico);
+// 	    std::vector<double> transformVector = ImageBase::GetGeoTransform(dico);
 	    /// Reporting origin and spacing
-	    transformVector[0]=m_Origin[0];
-	    transformVector[3]=m_Origin[1];
-	    transformVector[2]=m_Spacing[0];
-	    transformVector[5]=m_Spacing[1];
-
-	    for(unsigned int i=0; i<6;++i)
-	      {
-		geoTransform[i]=transformVector[i];
-	      }
-
+	    geoTransform[0]=m_Origin[0];            
+	    geoTransform[3]=m_Origin[1];
+	    geoTransform[1]=m_Spacing[0];
+	    geoTransform[5]=m_Spacing[1];
+            
+            // FIXME: Here component 1 and 4 should be replaced by the orientation parameters 
+            geoTransform[2]=0.;            
+            geoTransform[4]=0.;
 	    m_poDataset->SetGeoTransform(geoTransform);
 	    delete [] geoTransform;
-	  }
+// 	  }
 
 /* -------------------------------------------------------------------- */
 /*      Report metadata.                                                */
