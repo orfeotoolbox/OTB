@@ -131,7 +131,7 @@ namespace otb
 
       /** Determine the file type. Returns true if the ImageIO can stream write the specified file */
 //THOMAS
-      virtual bool CanStreamWrite() { return false; };
+      virtual bool CanStreamWrite() { return true; };
 
   /** Writes the spacing and dimentions of the image.
    * Assumes SetFileName has been called with a valid file name. */

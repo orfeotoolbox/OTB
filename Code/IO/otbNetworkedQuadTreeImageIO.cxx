@@ -143,6 +143,7 @@ namespace otb
     int totSamples = this->GetIORegion().GetSize()[0];
     int firstLine   = this->GetIORegion().GetIndex()[1];
     int firstSample = this->GetIORegion().GetIndex()[0];
+    int nComponents = this->GetNumberOfComponents();
 
     otbMsgDevMacro( <<" NetworkedQuadTreeImageIO::Read()  ");
     otbMsgDevMacro( <<" Image size  : "<<m_Dimensions[0]<<","<<m_Dimensions[1]);
@@ -167,7 +168,7 @@ namespace otb
     double y = firstLine/((1 << m_Depth)*256.);
     int nTilesX = (int) ceil(totSamples/256.)+1;
     int nTilesY = (int) ceil(totLines/256.)+1;
-    unsigned char * bufferTile = new unsigned char[256*256*3];
+    unsigned char * bufferTile = new unsigned char[256*256*nComponents];
         
     //Read all the required tiles
     //FIXME assume RGB image
@@ -188,17 +189,17 @@ namespace otb
           {
             long int xImageOffset = (long int)
                 256*floor(firstSample/256.)+256*numTileX-firstSample;
-            unsigned char * dst = p+3*(xImageOffset+totSamples*yImageOffset);
-            unsigned char * src = bufferTile+3*256*tileJ;
-            int size = 3*256;
+            unsigned char * dst = p+nComponents*(xImageOffset+totSamples*yImageOffset);
+            unsigned char * src = bufferTile+nComponents*256*tileJ;
+            int size = nComponents*256;
             if (xImageOffset < 0){
-              dst -= 3*xImageOffset;
-              src -= 3*xImageOffset;
-              size += 3*xImageOffset;
+              dst -= nComponents*xImageOffset;
+              src -= nComponents*xImageOffset;
+              size += nComponents*xImageOffset;
             }
             if (xImageOffset+256 > totSamples)
             {
-              size += 3*(totSamples-xImageOffset-256);
+              size += nComponents*(totSamples-xImageOffset-256);
             }
             if (size > 0)
             {
@@ -501,7 +502,8 @@ namespace otb
     int firstSample = this->GetIORegion().GetIndex()[0];
     int originLine   = this->GetOrigin(1);
     int originSample = this->GetOrigin(0);
-
+    int nComponents = this->GetNumberOfComponents();
+    
     std::cout << "NetworkedQuadTreeImageIO::Write: Size " << totLines << ", "<< totSamples << std::endl;
     std::cout << "NetworkedQuadTreeImageIO::Write: Index" << firstLine << ", "<< firstSample << std::endl;
     std::cout << "NetworkedQuadTreeImageIO::Write: Origin" << originLine << ", "<< originSample << std::endl;
@@ -531,7 +533,7 @@ namespace otb
     
     int nTilesX = (int) ceil(totSamples/256.)+1;
     int nTilesY = (int) ceil(totLines/256.)+1;
-    unsigned char * bufferTile = new unsigned char[256*256*1]; //TODO check if 0 init
+    unsigned char * bufferTile = new unsigned char[256*256*nComponents];
     
         
   //Read all the required tiles
@@ -540,7 +542,8 @@ namespace otb
       for(int numTileX=0; numTileX<nTilesX; numTileX++)
       {
 
-        for(int iInit=0; iInit<256*256*1; iInit++){
+        //Set tile buffer to 0
+        for(int iInit=0; iInit<256*256*nComponents; iInit++){
           bufferTile[iInit]=0;
         }
 
@@ -581,17 +584,17 @@ namespace otb
           {
             long int xImageOffset = (long int)
                 256*floor((originSample+firstSample)/256.)+256*numTileX-(originSample+firstSample);
-            unsigned char * dst = bufferTile+1*256*tileJ;
-            const unsigned char * src = p+1*(xImageOffset+totSamples*yImageOffset);
-            int size = 1*256;
+            unsigned char * dst = bufferTile+nComponents*256*tileJ;
+            const unsigned char * src = p+nComponents*(xImageOffset+totSamples*yImageOffset);
+            int size = nComponents*256;
             if (xImageOffset < 0){
-              src -= 1*xImageOffset;
-              dst -= 1*xImageOffset;
-              size += 1*xImageOffset;
+              src -= nComponents*xImageOffset;
+              dst -= nComponents*xImageOffset;
+              size += nComponents*xImageOffset;
             }
             if (xImageOffset+256 > totSamples)
             {
-              size += 1*(totSamples-xImageOffset-256);
+              size += nComponents*(totSamples-xImageOffset-256);
             }
             if (size > 0)
             {
