@@ -233,8 +233,9 @@ GenericInterpolateImageFunction<TInputImage, TFunction, TBoundaryCondition, TCoo
   radius.Fill(this->GetRadius());
   IteratorType nit = IteratorType( radius, this->GetInputImage(), this->GetInputImage()->GetBufferedRegion());
   nit.SetLocation( baseIndex );
-    
-  double xWeight[ImageDimension][ 2*this->GetRadius()];
+  
+  const unsigned int radius = static_cast<const unsigned int>(2*this->GetRadius());
+  double xWeight[ImageDimension][ radius];
   
   for( unsigned int dim = 0; dim < ImageDimension; dim++ )
     {
