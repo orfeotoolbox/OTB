@@ -499,7 +499,13 @@ namespace otb
     int totSamples = this->GetIORegion().GetSize()[0];
     int firstLine   = this->GetIORegion().GetIndex()[1];
     int firstSample = this->GetIORegion().GetIndex()[0];
+    int originLine   = this->GetOrigin(1);
+    int originSample = this->GetOrigin(0);
 
+    std::cout << "NetworkedQuadTreeImageIO::Write: Size " << totLines << ", "<< totSamples << std::endl;
+    std::cout << "NetworkedQuadTreeImageIO::Write: Index" << firstLine << ", "<< firstSample << std::endl;
+    std::cout << "NetworkedQuadTreeImageIO::Write: Origin" << originLine << ", "<< originSample << std::endl;
+    
     otbMsgDevMacro( <<" NetworkedQuadTreeImageIO::Read()  ");
     otbMsgDevMacro( <<" Image size  : "<<m_Dimensions[0]<<","<<m_Dimensions[1]);
     otbMsgDevMacro( <<" Region read (IORegion)  : "<<this->GetIORegion());
@@ -518,11 +524,15 @@ namespace otb
         //otbMsgDevMacro( <<" sizeof(off_type)      : "<<sizeof(off_type));
     otbMsgDevMacro( <<" sizeof(unsigned long) : "<<sizeof(unsigned long));
   
-    double x = firstSample/((1 << m_Depth)*256.);
-    double y = firstLine/((1 << m_Depth)*256.);
+    double x = (originSample+firstSample)/((1 << m_Depth)*256.);
+    double y = (originLine+firstLine)/((1 << m_Depth)*256.);
+    std::cout << x << std::endl;
+    std::cout << y << std::endl;
+    
     int nTilesX = (int) ceil(totSamples/256.)+1;
     int nTilesY = (int) ceil(totLines/256.)+1;
-    unsigned char * bufferTile = new unsigned char[256*256*3]; //TODO check if 0 init
+    unsigned char * bufferTile = new unsigned char[256*256*1]; //TODO check if 0 init
+    
         
   //Read all the required tiles
     for(int numTileY=0; numTileY<nTilesY; numTileY++)
@@ -530,27 +540,58 @@ namespace otb
       for(int numTileX=0; numTileX<nTilesX; numTileX++)
       {
 
+        for(int iInit=0; iInit<256*256*1; iInit++){
+          bufferTile[iInit]=0;
+        }
 
       //Copy the input into the tile buffer 
         //FIXME assume RGB image
+//         for(int tileJ=0; tileJ<256; tileJ++)
+//         {
+//           long int yImageOffset=(long int) 256*floor(firstLine/256.)+256*numTileY-firstLine+tileJ;
+//           if ((yImageOffset >= 0) && (yImageOffset < totLines))
+//           {
+//             long int xImageOffset = (long int)
+//                 256*floor(firstSample/256.)+256*numTileX-firstSample;
+//             const unsigned char * src = p+3*(xImageOffset+totSamples*yImageOffset);
+//             unsigned char * dst = bufferTile+3*256*tileJ;
+//             int size = 3*256;
+//             if (xImageOffset < 0){
+//               src -= 3*xImageOffset;
+//               dst -= 3*xImageOffset;
+//               size += 3*xImageOffset;
+//             }
+//             if (xImageOffset+256 > totSamples)
+//             {
+//               size += 3*(totSamples-xImageOffset-256);
+//             }
+//             if (size > 0)
+//             {
+//               memcpy(dst, src, size);
+//             }
+// 
+// 
+//           }
+//         }//end of tile copy
+        
         for(int tileJ=0; tileJ<256; tileJ++)
         {
-          long int yImageOffset=(long int) 256*floor(firstLine/256.)+256*numTileY-firstLine+tileJ;
+          long int yImageOffset=(long int) 256*floor((originLine+firstLine)/256.)+256*numTileY-(originLine+firstLine)+tileJ;
           if ((yImageOffset >= 0) && (yImageOffset < totLines))
           {
             long int xImageOffset = (long int)
-                256*floor(firstSample/256.)+256*numTileX-firstSample;
-            const unsigned char * src = p+3*(xImageOffset+totSamples*yImageOffset);
-            unsigned char * dst = bufferTile+3*256*tileJ;
-            int size = 3*256;
+                256*floor((originSample+firstSample)/256.)+256*numTileX-(originSample+firstSample);
+            unsigned char * dst = bufferTile+1*256*tileJ;
+            const unsigned char * src = p+1*(xImageOffset+totSamples*yImageOffset);
+            int size = 1*256;
             if (xImageOffset < 0){
-              src -= 3*xImageOffset;
-              dst -= 3*xImageOffset;
-              size += 3*xImageOffset;
+              src -= 1*xImageOffset;
+              dst -= 1*xImageOffset;
+              size += 1*xImageOffset;
             }
             if (xImageOffset+256 > totSamples)
             {
-              size += 3*(totSamples-xImageOffset-256);
+              size += 1*(totSamples-xImageOffset-256);
             }
             if (size > 0)
             {
@@ -560,11 +601,12 @@ namespace otb
 
           }
         }//end of tile copy
+        
 
-        double xTile = (firstSample+256*numTileX)/((1 << m_Depth)*256.);
-        double yTile = (firstLine+256*numTileY)/((1 << m_Depth)*256.);
+        double xTile = (originSample+firstSample+256*numTileX)/((1 << m_Depth)*256.);
+        double yTile = (originLine+firstLine+256*numTileY)/((1 << m_Depth)*256.);
       //Write the tile
-        InternalRead(xTile, yTile, bufferTile);
+        InternalWrite(xTile, yTile, bufferTile);
       
  
       }
@@ -583,8 +625,12 @@ namespace otb
   void NetworkedQuadTreeImageIO::InternalWrite(double x, double y, const void* buffer)
   {
     std::ostringstream quad;
+    
+    std::cout << x << ", " << y  << std::endl;
+    std::cout.flush();
+    
     XYToQuadTree(x, y, quad);
-  
+    
     std::ostringstream filename;
     BuildFileName(quad, filename);
   
@@ -605,7 +651,36 @@ namespace otb
   
     if ( lCanWrite == true)
     {
+      imageIO->SetNumberOfDimensions(2);
+      imageIO->SetDimensions(0,256);
+      imageIO->SetDimensions(1,256);
+      imageIO->SetSpacing(0,1);
+      imageIO->SetSpacing(1,1);
+      imageIO->SetOrigin(0,0);
+      imageIO->SetOrigin(1,0);
+      
+      vnl_vector< double > axisDirection(2);
+
+        axisDirection[0] = 1;
+        axisDirection[1] = 0;
+      imageIO->SetDirection( 0, axisDirection );
+      axisDirection[0] = 0;
+      axisDirection[1] = 1;
+      imageIO->SetDirection( 1, axisDirection );
+
+    imageIO->SetUseCompression(1);
+      
       imageIO->SetFileName(filename.str().c_str());
+      imageIO->WriteImageInformation();
+      
+      itk::ImageIORegion ioRegion(2);
+      for(unsigned int i=0; i<2; i++)
+      {
+        ioRegion.SetSize(i,256);
+        ioRegion.SetIndex(i,0);
+      }
+      imageIO->SetIORegion(ioRegion);
+      
       imageIO->Write(buffer);
     }
     else
