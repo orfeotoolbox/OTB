@@ -18,8 +18,6 @@ PURPOSE.  See the above copyright notices for more information.
 #ifndef _otbGluPolygonDrawingHelper_h
 #define _otbGluPolygonDrawingHelper_h
 
-#include "GL/glu.h"
-
 namespace otb
 {
   /** \class GluPolygonDrawingHelper
@@ -30,6 +28,9 @@ namespace otb
 class GluPolygonDrawingHelper
   {
   public:
+
+	/** Pointer to a function */
+	typedef void (CALLBACK*FunctionPointerType)();
     /**
      * Constructor.
      */

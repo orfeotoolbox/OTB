@@ -15,13 +15,12 @@ the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
 PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef _otbGluPolygonDrawingHelper_cxx
-#define _otbGluPolygonDrawingHelper_cxx
+#include <FL/gl.h>
+#include <GL/glu.h>
+#include <iostream>
 
 #include "otbGluPolygonDrawingHelper.h"
 #include "otbMacro.h"
-
-#include <iostream>
 
 namespace otb
 {
@@ -32,11 +31,11 @@ GluPolygonDrawingHelper::GluPolygonDrawingHelper()
   m_GluTesselator = gluNewTess();
   
   // Setting up the tesselator callbacks
-  gluTessCallback(m_GluTesselator,GLU_TESS_BEGIN,(GLvoid(*) ()) &glBegin);
-  gluTessCallback(m_GluTesselator,GLU_TESS_END,(GLvoid(*) ()) &glEnd);
-  gluTessCallback(m_GluTesselator,GLU_TESS_ERROR,(GLvoid(*) ()) &ErrorCallback);
-  gluTessCallback(m_GluTesselator,GLU_TESS_VERTEX,(GLvoid(*) ()) &VertexCallback);
-  gluTessCallback(m_GluTesselator,GLU_TESS_COMBINE,(GLvoid(*) ()) &CombineCallback);
+  gluTessCallback(m_GluTesselator,GLU_TESS_BEGIN,(FunctionPointerType)glBegin);
+  gluTessCallback(m_GluTesselator,GLU_TESS_END,(FunctionPointerType)glEnd);
+  gluTessCallback(m_GluTesselator,GLU_TESS_ERROR,(FunctionPointerType)ErrorCallback);
+  gluTessCallback(m_GluTesselator,GLU_TESS_VERTEX,(FunctionPointerType)VertexCallback);
+  gluTessCallback(m_GluTesselator,GLU_TESS_COMBINE,(FunctionPointerType)CombineCallback);
 
   // Color
   m_Color[0]=0;
@@ -162,5 +161,3 @@ void GluPolygonDrawingHelper::ErrorCallback(GLenum errorCode)
   itkGenericExceptionMacro(<<"Tesselation error: "<<estring);
 }
 } // end namespace otb
-
-#endif
