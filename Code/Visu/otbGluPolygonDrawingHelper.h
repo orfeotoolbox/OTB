@@ -28,9 +28,6 @@ namespace otb
 class GluPolygonDrawingHelper
   {
   public:
-
-	/** Pointer to a function */
-	typedef void (CALLBACK*FunctionPointerType)();
     /**
      * Constructor.
      */

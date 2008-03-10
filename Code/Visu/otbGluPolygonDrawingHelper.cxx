@@ -22,6 +22,12 @@ PURPOSE.  See the above copyright notices for more information.
 #include "otbGluPolygonDrawingHelper.h"
 #include "otbMacro.h"
 
+// This is defined in windows only, and it is needed for FunctionPointerType
+// to be properly defined.
+#ifndef CALLBACK
+#define CALLBACK
+#endif
+
 namespace otb
 {
 
@@ -29,7 +35,8 @@ GluPolygonDrawingHelper::GluPolygonDrawingHelper()
 {
   // Instantiation of the tesselator object
   m_GluTesselator = gluNewTess();
-  
+  // Pointer to a function
+  typedef void (CALLBACK * FunctionPointerType)();
   // Setting up the tesselator callbacks
   gluTessCallback(m_GluTesselator,GLU_TESS_BEGIN,(FunctionPointerType)glBegin);
   gluTessCallback(m_GluTesselator,GLU_TESS_END,(FunctionPointerType)glEnd);
