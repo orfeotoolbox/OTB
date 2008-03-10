@@ -21,7 +21,6 @@
 #include "itkImageRegionConstIterator.h"
 #include "itkMacro.h"
 #include "otbMacro.h"
-#include <FL/gl.h>
 
 namespace otb
 {

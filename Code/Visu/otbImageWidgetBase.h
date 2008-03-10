@@ -18,6 +18,7 @@
 #ifndef _otbImageWidgetBase_h
 #define _otbImageWidgetBase_h
 
+#include <FL/gl.h>
 #include "FL/Fl_Gl_Window.H"
 #include "otbVectorImage.h"
 #include "itkObject.h"
