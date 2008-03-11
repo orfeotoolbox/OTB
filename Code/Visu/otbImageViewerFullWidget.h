@@ -67,8 +67,8 @@ class ITK_EXPORT ImageViewerFullWidget
   typedef ImageWidgetPointForm           PointType;
   typedef Polygon<LabelType>       PolygonType;
   typedef typename PolygonType::ContinuousIndexType ContinuousIndexType;
-  typedef typename PolygonType::Superclass::Superclass::VertexListPointer VertexListPointerType;
-  typedef typename PolygonType::Superclass::Superclass::VertexListType VertexListType;
+  typedef typename PolygonType::Superclass::VertexListPointer VertexListPointerType;
+  typedef typename PolygonType::Superclass::VertexListType VertexListType;
   
   itkSetMacro(Parent,ParentPointerType);
   itkGetMacro(Parent,ParentPointerType);
