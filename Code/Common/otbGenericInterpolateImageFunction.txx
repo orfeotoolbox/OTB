@@ -235,7 +235,10 @@ GenericInterpolateImageFunction<TInputImage, TFunction, TBoundaryCondition, TCoo
   nit.SetLocation( baseIndex );
   
   const unsigned int twiceRadius = static_cast<const unsigned int>(2*this->GetRadius());
-  double xWeight[ImageDimension][ twiceRadius];
+/*  double xWeight[ImageDimension][ twiceRadius];*/
+  std::vector< std::vector<double> > xWeight;
+  xWeight.resize(ImageDimension);
+  for(int cpt=0  ;cpt <xWeight.size() ; cpt++) xWeight[cpt].resize(twiceRadius);
   
   for( unsigned int dim = 0; dim < ImageDimension; dim++ )
     {

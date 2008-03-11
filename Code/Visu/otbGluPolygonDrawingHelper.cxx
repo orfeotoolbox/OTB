@@ -15,8 +15,6 @@ the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
 PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#include <FL/gl.h>
-#include <GL/glu.h>
 #include <iostream>
 
 #include "otbGluPolygonDrawingHelper.h"

@@ -22,6 +22,7 @@
 #include "itkImageRegionIterator.h"
 
 #include "svm.h"
+#include <vector>
 
 namespace otb
 {
@@ -280,8 +281,13 @@ class GroupedRBFKernelFunctor : public GenericKernelFunctorBase
       
       int i,j;
       
-      int begin[numberOfGroups];
-      int end[numberOfGroups];
+/*
+int begin[numberOfGroups];
+      int end[numberOfGroups];*/
+	  std::vector<int> begin;
+	  begin.resize(numberOfGroups);
+	  std::vector<int> end;
+	  end.resize(numberOfGroups);
       
       for (i = 0; i < numberOfGroups; i++)
 	{
@@ -322,9 +328,10 @@ class GroupedRBFKernelFunctor : public GenericKernelFunctorBase
       
       if (sizeX && sizeY)
 	{
-	  svm_node xGroup[sizeX];
-	  svm_node yGroup[sizeY];
-	  
+/*	  svm_node xGroup[sizeX];
+	  svm_node yGroup[sizeY];*/
+		svm_node* xGroup = new svm_node[sizeX];
+		svm_node* yGroup = new svm_node[sizeY];
 	  for (j = 0; j < numberOfGroups; j++)
 	    {
 	      xTemp = x;
@@ -356,13 +363,17 @@ class GroupedRBFKernelFunctor : public GenericKernelFunctorBase
 	    
 	      total += value;
 	    }
+		delete [] xGroup;
+		delete [] yGroup;
 	}
       
       
       else if ((sizeX > 0) && (sizeY == 0))
 	{
-	  svm_node xGroup[sizeX];
-	  svm_node yGroup[sizeY];
+/*	  svm_node xGroup[sizeX];
+	  svm_node yGroup[sizeY];*/
+		svm_node* xGroup = new svm_node[sizeX];
+		svm_node* yGroup = new svm_node[sizeY];
 	  
 	  for (j = 0; j < numberOfGroups; j++)
 	    {
@@ -394,6 +405,8 @@ class GroupedRBFKernelFunctor : public GenericKernelFunctorBase
 	     	      
 	      total += value;	
 	    }
+		delete [] xGroup;
+		delete [] yGroup;
 	}
       
       
@@ -445,8 +458,10 @@ class GroupingAdaptiveKernelFunctor : public GenericKernelFunctorBase
       
       int i,j;
       
-      int begin[numberOfGroups];
-      int end[numberOfGroups];
+	  std::vector<int> begin;
+	  begin.resize(numberOfGroups);
+	  std::vector<int> end;
+	  end.resize(numberOfGroups);
       
       for (i = 0; i < numberOfGroups; i++)
 	{
@@ -487,8 +502,10 @@ class GroupingAdaptiveKernelFunctor : public GenericKernelFunctorBase
      
      if (sizeX && sizeY)
        {
-	 svm_node xGroup[sizeX];
-	 svm_node yGroup[sizeY];
+/*	  svm_node xGroup[sizeX];
+	  svm_node yGroup[sizeY];*/
+		svm_node* xGroup = new svm_node[sizeX];
+		svm_node* yGroup = new svm_node[sizeY];
 	 
 	 for (j = 0; j < numberOfGroups; j++)
 	   {
@@ -520,13 +537,17 @@ class GroupingAdaptiveKernelFunctor : public GenericKernelFunctorBase
 	     
 	     total += value;
 	   }
-       }
+ 		delete [] xGroup;
+		delete [] yGroup;
+      }
      
 	
      else if ((sizeX > 0) && (sizeY == 0))
        {
-	 svm_node xGroup[sizeX];
-	 svm_node yGroup[sizeY];
+/*	  svm_node xGroup[sizeX];
+	  svm_node yGroup[sizeY];*/
+		svm_node* xGroup = new svm_node[sizeX];
+		svm_node* yGroup = new svm_node[sizeY];
 	 
 	 for (j = 0; j < numberOfGroups; j++)
 	   {
@@ -557,6 +578,8 @@ class GroupingAdaptiveKernelFunctor : public GenericKernelFunctorBase
 	       
 	     total += value;	
 	   }
+		delete [] xGroup;
+		delete [] yGroup;
        }
         
      else

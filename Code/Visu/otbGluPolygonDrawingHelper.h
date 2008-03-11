@@ -18,6 +18,9 @@ PURPOSE.  See the above copyright notices for more information.
 #ifndef _otbGluPolygonDrawingHelper_h
 #define _otbGluPolygonDrawingHelper_h
 
+#include <FL/gl.h>
+#include <GL/glu.h>
+
 namespace otb
 {
   /** \class GluPolygonDrawingHelper
