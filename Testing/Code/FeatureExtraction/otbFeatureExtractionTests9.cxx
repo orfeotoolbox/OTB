@@ -27,4 +27,6 @@
 
 void RegisterTests()
 {
+REGISTER_TEST(otbImageToSIFTKeyPointSetFilterNew);
+REGISTER_TEST(otbImageToSIFTKeyPointSetFilter);
 }

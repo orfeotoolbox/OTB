@@ -741,6 +741,22 @@ ADD_TEST(feTuImageToCarvingPathFilterNew ${FEATUREEXTRACTION_TESTS8}
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ otbFeatureExtractionTest9 ~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ 
+
+
+# -------            otb::ImageToSIFTKeyPointSetFilter   -------------
+
+ADD_TEST(feTuImageToSIFTKeyPointSetFilterNew ${FEATUREEXTRACTION_TESTS9} 
+         otbImageToSIFTKeyPointSetFilterNew)
+
+ADD_TEST(feTvImageToSIFTKeyPointSetFilter ${FEATUREEXTRACTION_TESTS9} 
+--compare-ascii ${EPS}  
+		${BASELINE_FILES}/feTvImageToSIFTKeyPointSetFilterOutput.txt
+		${TEMP}/feTvImageToSIFTKeyPointSetFilterOutput.txt
+         otbImageToSIFTKeyPointSetFilter
+		${INPUTDATA}/ROI_IKO_PAN_LesHalles.tif
+		${TEMP}/feTvImageToSIFTKeyPointSetFilterOutput.txt
+		5
+)
          
 # A enrichir
 SET(BasicFeatureExtraction_SRCS1
@@ -836,6 +852,8 @@ otbRemoveCarvingPathFilterNew.cxx
 otbImageToCarvingPathFilterNew.cxx
 )
 SET(BasicFeatureExtraction_SRCS9
+otbImageToSIFTKeyPointSetFilterNew.cxx
+otbImageToSIFTKeyPointSetFilter.cxx
 )
 
 
