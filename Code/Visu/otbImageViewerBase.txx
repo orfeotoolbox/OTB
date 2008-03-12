@@ -614,7 +614,7 @@ namespace otb
     oss<<index<<" (image position)"<<std::endl;
     PointType point;
     m_InputImage->TransformIndexToPhysicalPoint(index,point);
-    oss<< setprecision(12) <<point<<" (physical coordinates)"<<std::endl;
+    oss <<point<<" (physical coordinates)"<<std::endl;
     
     if(m_InputImage->GetBufferedRegion().IsInside(index))
       {
