@@ -18,7 +18,7 @@
 
 //  Software Guide : BeginCommandLineArgs
 //    INPUTS: {qb_RoadExtract.tif}
-//    OUTPUTS: {qb_blue.tif qb_shiftscale.tif}
+//    OUTPUTS: {qb_blue.tif}, {qb_shiftscale.tif}
 //  Software Guide : EndCommandLineArgs
 
 //  Software Guide : BeginLatex
