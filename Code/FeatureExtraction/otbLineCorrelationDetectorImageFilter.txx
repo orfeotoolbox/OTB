@@ -137,7 +137,7 @@ LineCorrelationDetectorImageFilter<TInputImage, TOutputImage, TOutputImageDirect
     d3 = vcl_pow(((M1/M2)-1.),2)*(m1->size()*m2->size());
   
         if ( ( d3 != 0. ) )
-          rho12 = static_cast<double>( 1. / ( 1. + ( (m1->size()*m2->size())*(d1+d2)/d3 ) ) );
+          rho12 = static_cast<double>( 1. / ( 1. + ( (m1->size()+m2->size())*(d1+d2)/d3 ) ) );
         else
           rho12 = 0.;
 
@@ -150,7 +150,7 @@ LineCorrelationDetectorImageFilter<TInputImage, TOutputImage, TOutputImageDirect
     d3 = vcl_pow(((M1/M3)-1.),2)*(m1->size()*m2->size());
   
         if ( ( d3 != 0. ) )
-          rho13 = static_cast<double>( 1. / ( 1. + ( (m1->size()*m2->size())*(d1+d2)/d3 ) ) );
+          rho13 = static_cast<double>( 1. / ( 1. + ( (m1->size()+m2->size())*(d1+d2)/d3 ) ) );
         else
           rho13 = 0.;
 
