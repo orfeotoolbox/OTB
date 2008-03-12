@@ -46,20 +46,20 @@ ImageWidgetPolygonForm<TValue>
     {
       glEnable(GL_BLEND);
       glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-      GluPolygonDrawingHelper polygonDrawer;
+      GluPolygonDrawingHelper::Pointer polygonDrawer = GluPolygonDrawingHelper::New(); 
 
 
       if(m_InternalValueToAlphaChannel)
       {
-        polygonDrawer.Color4d(m_Color[0],m_Color[1],m_Color[2],m_Polygon->GetValue());
+        polygonDrawer->Color4d(m_Color[0],m_Color[1],m_Color[2],m_Polygon->GetValue());
       }
       else
       {
-	polygonDrawer.Color4d(m_Color[0],m_Color[1],m_Color[2],m_Color[3]);
+	polygonDrawer->Color4d(m_Color[0],m_Color[1],m_Color[2],m_Color[3]);
       }
-      polygonDrawer.SetBoundaryOnly(!m_Solid);
-      polygonDrawer.BeginPolygon();
-      polygonDrawer.BeginContour();
+      polygonDrawer->SetBoundaryOnly(!m_Solid);
+      polygonDrawer->BeginPolygon();
+      polygonDrawer->BeginContour();
       VertexListIteratorType it =  this->GetPolygon()->GetVertexList()->Begin();
       
       while(it != this->GetPolygon()->GetVertexList()->End())
@@ -69,11 +69,11 @@ ImageWidgetPolygonForm<TValue>
 	  
 	  x1 = static_cast<int>((x1-originx)*openGlZoom*(1/static_cast<double>(ss_rate)));
 	  y1 = static_cast<int>(windowh+(originy-y1)*openGlZoom*(1/static_cast<double>(ss_rate)));
-	  polygonDrawer.Vertex2d(x1,y1);
+	  polygonDrawer->Vertex2d(x1,y1);
 	  ++it;
 	}            
-      polygonDrawer.EndContour();
-      polygonDrawer.EndPolygon();
+      polygonDrawer->EndContour();
+      polygonDrawer->EndPolygon();
       glDisable(GL_BLEND);
     }
 }

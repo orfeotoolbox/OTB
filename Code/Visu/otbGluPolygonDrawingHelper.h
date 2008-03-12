@@ -21,6 +21,11 @@ PURPOSE.  See the above copyright notices for more information.
 #include <FL/gl.h>
 #include <GL/glu.h>
 
+#include "itkImageToImageFilter.h"
+#include "itkObject.h"
+#include "itkSmartPointer.h"
+#include "itkMacro.h"
+
 namespace otb
 {
   /** \class GluPolygonDrawingHelper
@@ -28,17 +33,20 @@ namespace otb
    *
    *  It uses the glu tesselator functionality.
    */
-class GluPolygonDrawingHelper
+class ITK_EXPORT GluPolygonDrawingHelper
+  : public itk::Object
   {
   public:
-    /**
-     * Constructor.
-     */
-    GluPolygonDrawingHelper();
-    /**
-     * Destructor.
-     */
-    ~GluPolygonDrawingHelper();
+
+    typedef GluPolygonDrawingHelper Self;
+    typedef itk::Object             Superclass;
+    typedef itk::SmartPointer<Self> Pointer;
+    typedef itk::SmartPointer<const Self> ConstPointer;
+
+     itkTypeMacro(GluPolygonDrawingHelper,Object);
+    
+    itkNewMacro(Self);
+   
 
     /**
      * Set the current color.
@@ -105,7 +113,16 @@ class GluPolygonDrawingHelper
     void SetBoundaryOnly(GLdouble boundaryOnly);
 
   protected:    
-   
+    
+    /**
+     * Constructor.
+     */
+    GluPolygonDrawingHelper();
+    /**
+     * Destructor.
+     */
+    ~GluPolygonDrawingHelper();
+
     /* Callback for the GLU_TESS_COMBINE
      * \param coords The new point coordinates
      * \param data data field
@@ -126,6 +143,10 @@ class GluPolygonDrawingHelper
      * \param errorCode The gl error code.
      */
     static void ErrorCallback(GLenum errorCode);
+
+    GluPolygonDrawingHelper(const Self&);// purposely not implemented
+    void operator=(const Self&);// purposely not implemented
+    
 
   private:
     /** The glu tesselator object */

@@ -140,28 +140,28 @@ HistogramAndTransfertFunctionWidget<THistogram,TPixel>
 ::HistogramRendering(double binWidth, double binHeightRatio, double maxFrequency)
 {
   HistogramIteratorType it;
-  otb::GluPolygonDrawingHelper drawer;
+  GluPolygonDrawingHelper::Pointer drawer = otb::GluPolygonDrawingHelper::New();
   double startx = m_MarginX;  
   // Temporary vertex coordinates
   double x,y;
   // Rendering histogram
   for(it=m_Histogram->Begin();it!=m_Histogram->End();++it,startx+=binWidth)
     {
-      drawer.Color3d(m_HistogramColor[0],m_HistogramColor[1],m_HistogramColor[2]);
-      drawer.BeginPolygon();
-      drawer.BeginContour();
+      drawer->Color3d(m_HistogramColor[0],m_HistogramColor[1],m_HistogramColor[2]);
+      drawer->BeginPolygon();
+      drawer->BeginContour();
       
       x =startx;
       y = m_MarginY;
-      drawer.Vertex2d(x,y);
+      drawer->Vertex2d(x,y);
       y += binHeightRatio*static_cast<double>((it.GetFrequency()>maxFrequency/m_HistogramClamping ? maxFrequency/m_HistogramClamping : it.GetFrequency()));
-      drawer.Vertex2d(x,y);
+      drawer->Vertex2d(x,y);
       x += binWidth;
-      drawer.Vertex2d(x,y);
+      drawer->Vertex2d(x,y);
       y=m_MarginY;
-      drawer.Vertex2d(x,y);
-      drawer.EndContour();
-      drawer.EndPolygon();
+      drawer->Vertex2d(x,y);
+      drawer->EndContour();
+      drawer->EndPolygon();
     } 
 }
 
@@ -284,7 +284,7 @@ HistogramAndTransfertFunctionWidget<THistogram,TPixel>
   double x,y; 
  if(maxFrequency>0)
    { 
-     otb::GluPolygonDrawingHelper drawer;
+     GluPolygonDrawingHelper::Pointer drawer =  GluPolygonDrawingHelper::New();
      
      double binWidth = (static_cast<double>(this->h())-2*m_MarginY)/255.;
      double binLengthRatio = m_HistogramClamping*m_OutputHistogramMargin*static_cast<double>(this->w())/static_cast<double>(maxFrequency);
@@ -294,21 +294,21 @@ HistogramAndTransfertFunctionWidget<THistogram,TPixel>
      // Rendering histogram
      for(vit=outputHistogram.begin();vit!=outputHistogram.end();++vit,starty+=binWidth)
        {
-	 drawer.Color3d(m_TransfertFunctionColor[0],m_TransfertFunctionColor[1],m_TransfertFunctionColor[2]);
-	 drawer.BeginPolygon();
-	 drawer.BeginContour();
+	 drawer->Color3d(m_TransfertFunctionColor[0],m_TransfertFunctionColor[1],m_TransfertFunctionColor[2]);
+	 drawer->BeginPolygon();
+	 drawer->BeginContour();
 	 
 	 x =static_cast<double>(this->w())-m_OutputHistogramMargin*static_cast<double>(this->w())-m_MarginX/2;
 	 y = starty;
-	 drawer.Vertex2d(x,y);
+	 drawer->Vertex2d(x,y);
 	 x += binLengthRatio*static_cast<double>((*vit)> maxFrequency/m_HistogramClamping ? maxFrequency/m_HistogramClamping : (*vit));
-	 drawer.Vertex2d(x,y);
+	 drawer->Vertex2d(x,y);
 	 y += binWidth;
-	 drawer.Vertex2d(x,y);
+	 drawer->Vertex2d(x,y);
 	 x =static_cast<double>(this->w())-m_OutputHistogramMargin*static_cast<double>(this->w())-m_MarginX/2;
-	 drawer.Vertex2d(x,y);
-	 drawer.EndContour();
-	 drawer.EndPolygon();
+	 drawer->Vertex2d(x,y);
+	 drawer->EndContour();
+	 drawer->EndPolygon();
        }
    }
  glBegin(GL_LINE_LOOP);
