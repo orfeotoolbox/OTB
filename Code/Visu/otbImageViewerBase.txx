@@ -23,6 +23,7 @@ PURPOSE.  See the above copyright notices for more information.
 #include "otbMacro.h"
 #include "itkMacro.h"
 #include <sstream>
+#include <iomanip>
 
 namespace otb
 {
@@ -614,7 +615,7 @@ namespace otb
     oss<<index<<" (image position)"<<std::endl;
     PointType point;
     m_InputImage->TransformIndexToPhysicalPoint(index,point);
-    oss <<point<<" (physical coordinates)"<<std::endl;
+    oss << std::setprecision(12) << point<<" (physical coordinates)"<<std::endl;
     
     if(m_InputImage->GetBufferedRegion().IsInside(index))
       {
