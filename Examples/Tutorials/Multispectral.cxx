@@ -84,7 +84,8 @@ int main( int argc, char * argv[] )
 
   typedef otb::MultiToMonoChannelExtractROI<PixelType, PixelType> ExtractChannelType;
   ExtractChannelType::Pointer extractChannel = ExtractChannelType::New();
-  
+
+  // Software Guide : EndCodeSnippet
   //  Software Guide : BeginLatex
   //
   //  We need to pass the parameters to the filter for the extraction. This 
