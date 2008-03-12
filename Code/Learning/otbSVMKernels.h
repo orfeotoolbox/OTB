@@ -267,8 +267,8 @@ class GroupedRBFKernelFunctor : public GenericKernelFunctorBase
     virtual double operator()(const svm_node *x, const svm_node *y, const svm_parameter& param)const
       {
       const char *parameters = param.custom;
-      char twoPoints[] = ":";
-      char *position = strpbrk (parameters, twoPoints);
+      const char * twoPoints = ":";
+      const char * position = strpbrk (parameters, twoPoints);
       int twoPointsPosition = 0;
       double total = 0.;
       double value = 0.;
@@ -443,9 +443,9 @@ class GroupingAdaptiveKernelFunctor : public GenericKernelFunctorBase
     
     virtual double operator()(const svm_node *x, const svm_node *y, const svm_parameter& param)const
       {
-      const char *parameters = param.custom;
-      char twoPoints[] = ":";
-      char *position = strpbrk (parameters, twoPoints);
+      const char * parameters = param.custom;
+      const char * twoPoints = ":";
+      const char * position = strpbrk (parameters, twoPoints);
       int twoPointsPosition = 0;
       double total = 0.;
       double value = 0.;

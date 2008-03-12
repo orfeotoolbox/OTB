@@ -46,7 +46,7 @@ ProfileDerivativeToMultiScaleCharacteristicsFilter<TInputImage,TOutputImage,TLab
     {
       return 0;
     }
-  return static_cast<const LabeledImageType * >
+  return static_cast<LabeledImageType * >
     (this->itk::ProcessObject::GetOutput(1) );
 }
 /**
