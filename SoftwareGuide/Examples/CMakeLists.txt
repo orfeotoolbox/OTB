@@ -290,6 +290,7 @@ SET( OTB_EXAMPLES_SRCS
   ${OTB_SOURCE_DIR}/Examples/Tutorials/SmarterFilteringPipeline.cxx
   ${OTB_SOURCE_DIR}/Examples/Tutorials/SimpleViewer.cxx
   ${OTB_SOURCE_DIR}/Examples/Tutorials/OrthoFusion.cxx
+  ${OTB_SOURCE_DIR}/Examples/Tutorials/Multispectral.cxx
 )
 
 
