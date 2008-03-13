@@ -58,8 +58,6 @@ ImageWidgetPolygonForm<TValue>
 	polygonDrawer->Color4d(m_Color[0],m_Color[1],m_Color[2],m_Color[3]);
       }
       polygonDrawer->SetBoundaryOnly(!m_Solid);
-      polygonDrawer->BeginPolygon();
-      polygonDrawer->BeginContour();
       VertexListIteratorType it =  this->GetPolygon()->GetVertexList()->Begin();
       
       while(it != this->GetPolygon()->GetVertexList()->End())
@@ -72,8 +70,7 @@ ImageWidgetPolygonForm<TValue>
 	  polygonDrawer->Vertex2d(x1,y1);
 	  ++it;
 	}            
-      polygonDrawer->EndContour();
-      polygonDrawer->EndPolygon();
+      polygonDrawer->RenderPolygon();
       glDisable(GL_BLEND);
     }
 }

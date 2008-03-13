@@ -42,8 +42,8 @@ class ITK_EXPORT GluPolygonDrawingHelper
     typedef itk::Object             Superclass;
     typedef itk::SmartPointer<Self> Pointer;
     typedef itk::SmartPointer<const Self> ConstPointer;
-    typedef std::vector<GLdouble *> VertexVectorType;
-    typedef VertexVectorType::iterator VertexVectorIteratorType;
+    typedef itk::Point<double,3> PointType;
+    typedef std::vector<PointType> PointVectorType;
 
      itkTypeMacro(GluPolygonDrawingHelper,Object);
     
@@ -68,16 +68,6 @@ class ITK_EXPORT GluPolygonDrawingHelper
     void Color3d(double r, double g, double b);
 
     /**
-     * Start a new polygon.
-     */
-    void BeginPolygon(void);
-
-    /**
-     * Start a new contour in the current polygon.
-     */
-    void BeginContour(void);
-
-    /**
      * Add a new 3d vertex.
      * \param x position
      * \param y position
@@ -93,16 +83,6 @@ class ITK_EXPORT GluPolygonDrawingHelper
     void Vertex2d(double x,double y);
 
     /**
-     * End the current contour.
-     */
-    void EndContour(void);
-
-    /**
-     * End the current polygon.
-     */
-    void EndPolygon(void);
-
-    /**
      * Set the the winding rule for the tesselator.
      * \param windingRule the rule.
      */
@@ -113,6 +93,8 @@ class ITK_EXPORT GluPolygonDrawingHelper
      * \param boundaryOnly the flag.
      */
     void SetBoundaryOnly(GLdouble boundaryOnly);
+
+    void RenderPolygon();
 
   protected:    
     
@@ -146,10 +128,6 @@ class ITK_EXPORT GluPolygonDrawingHelper
      */
     static void ErrorCallback(GLenum errorCode);
 
-    /**
-     * Free the vertex vector
-     */
-    void FreeVertices();
 
     GluPolygonDrawingHelper(const Self&);// purposely not implemented
     void operator=(const Self&);// purposely not implemented
@@ -157,10 +135,9 @@ class ITK_EXPORT GluPolygonDrawingHelper
 
   private:
     /** The glu tesselator object */
+    PointVectorType m_PointVector;
     GLUtesselator * m_GluTesselator;
     GLdouble m_Color[4];
-    /** vector to store the vertices pointer */
-    VertexVectorType m_Vertices;
   };
 } // end namespace otb
 #endif

@@ -148,8 +148,6 @@ HistogramAndTransfertFunctionWidget<THistogram,TPixel>
   for(it=m_Histogram->Begin();it!=m_Histogram->End();++it,startx+=binWidth)
     {
       drawer->Color3d(m_HistogramColor[0],m_HistogramColor[1],m_HistogramColor[2]);
-      drawer->BeginPolygon();
-      drawer->BeginContour();
       
       x =startx;
       y = m_MarginY;
@@ -160,9 +158,8 @@ HistogramAndTransfertFunctionWidget<THistogram,TPixel>
       drawer->Vertex2d(x,y);
       y=m_MarginY;
       drawer->Vertex2d(x,y);
-      drawer->EndContour();
-      drawer->EndPolygon();
     } 
+  drawer->RenderPolygon();
 }
 
 template <class THistogram, class TPixel>
@@ -296,8 +293,6 @@ HistogramAndTransfertFunctionWidget<THistogram,TPixel>
      for(vit=outputHistogram.begin();vit!=outputHistogram.end();++vit,starty+=binWidth)
        {
 	 drawer->Color3d(m_TransfertFunctionColor[0],m_TransfertFunctionColor[1],m_TransfertFunctionColor[2]);
-	 drawer->BeginPolygon();
-	 drawer->BeginContour();
 	 
 	 x =static_cast<double>(this->w())-m_OutputHistogramMargin*static_cast<double>(this->w())-m_MarginX/2;
 	 y = starty;
@@ -308,9 +303,8 @@ HistogramAndTransfertFunctionWidget<THistogram,TPixel>
 	 drawer->Vertex2d(x,y);
 	 x =static_cast<double>(this->w())-m_OutputHistogramMargin*static_cast<double>(this->w())-m_MarginX/2;
 	 drawer->Vertex2d(x,y);
-	 drawer->EndContour();
-	 drawer->EndPolygon();
        }
+     drawer->RenderPolygon();
    }
  glBegin(GL_LINE_LOOP);
  x = static_cast<double>(this->w())-m_OutputHistogramMargin*static_cast<double>(this->w())-m_MarginX/2;
