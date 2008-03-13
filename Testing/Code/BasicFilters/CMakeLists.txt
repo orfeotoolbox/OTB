@@ -702,6 +702,35 @@ ${TEMP}/bfTvVectorImageToAmplitudeImageFilterOutput.tif
 )
 
 
+# -------            otb::VectorImageToAmplitudeImageFilter  ------------------------------
+
+ADD_TEST(bfTuVectorImageToAmplitudeImageFilterNew ${BASICFILTERS_TESTS7}
+otbVectorImageToAmplitudeImageFilterNew)
+
+ADD_TEST(bfTvVectorImageToAmplitudeImageFilter ${BASICFILTERS_TESTS7}
+ --compare-image ${EPSILON}
+     		  ${BASELINE}/bfTvVectorImageToAmplitudeImageFilterOutput.tif
+		  ${TEMP}/bfTvVectorImageToAmplitudeImageFilterOutput.tif
+otbVectorImageToAmplitudeImageFilter
+${INPUTDATA}/poupees.tif
+${TEMP}/bfTvVectorImageToAmplitudeImageFilterOutput.tif
+)
+
+
+# -------    otb::RationalQuotientResampleImageFilter  --------------------------
+
+ADD_TEST(bfTuRationalQuotientResampleImageFilterNew ${BASICFILTERS_TESTS7}
+         otbRationalQuotientResampleImageFilterNew)
+
+ADD_TEST(bfTvRationalQuotientResampleImageFilter ${BASICFILTERS_TESTS7}
+	--compare-image ${EPSILON}
+			${BASELINE}/bfTvRationalQuotientResampleImageFilterOutput.tif
+			${TEMP}/bfTvRationalQuotientResampleImageFilterOutput.tif
+        otbRationalQuotientResampleImageFilter
+		${INPUTDATA}/ROI_IKO_PAN_LesHalles.tif
+		${TEMP}/bfTvRationalQuotientResampleImageFilterOutput.tif
+		2 3
+)
 
 # A enrichir
 SET(BasicFilters_SRCS1
@@ -801,6 +830,8 @@ otbWindowedSincInterpolateImageBlackmanFunction.cxx
 otbProlateValidationTest.cxx
 otbVectorImageToAmplitudeImageFilterNew.cxx
 otbVectorImageToAmplitudeImageFilter.cxx
+otbRationalQuotientResampleImageFilterNew.cxx
+otbRationalQuotientResampleImageFilter.cxx
 )
 
 
@@ -828,7 +859,3 @@ ADD_EXECUTABLE(otbBasicFiltersTests7 otbBasicFiltersTests7.cxx ${BasicFilters_SR
 TARGET_LINK_LIBRARIES(otbBasicFiltersTests7  OTBBasicFilters OTBCommon OTBIO gdal ITKIO ITKCommon ITKBasicFilters)
 
 ENDIF( NOT OTB_DISABLE_CXX_TESTING )
-
-
-
-
