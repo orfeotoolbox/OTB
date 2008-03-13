@@ -208,7 +208,8 @@ HistogramAndTransfertFunctionWidget<THistogram,TPixel>
     {
       ValueType value = static_cast<ValueType>(m_Histogram->Quantile(0,0.)
       +static_cast<double>(i)*step);
-      oss<<(int)value;
+//      oss<<(int)value;
+      oss<<value;
       x=static_cast<double>(i)*gridXSpacing+m_MarginX;
       y=m_MarginY/2;
       gl_draw(oss.str().c_str(),(float)x,(float)y);
