@@ -57,7 +57,14 @@ namespace otb
           itk::MutexLockHolder<itk::SimpleMutexLock> mutexHolder( mutex );
           if( firstTime )
           {
-                        // BSQ format for OTB
+
+			// GDAL : New format for OTB
+            itk::ObjectFactoryBase::RegisterFactory( GDALImageIOFactory::New() );
+                        
+			// JPEG2000 : New format for OTB
+            itk::ObjectFactoryBase::RegisterFactory( JPEG2000ImageIOFactory::New() );
+            
+                                    // BSQ format for OTB
             itk::ObjectFactoryBase::RegisterFactory( BSQImageIOFactory::New() );			
                         
                         // LUM format for OTB
@@ -68,12 +75,6 @@ namespace otb
                         
 			// MSTAR Format for OTB
             itk::ObjectFactoryBase::RegisterFactory( MSTARImageIOFactory::New() );
-
-			// GDAL : New format for OTB
-            itk::ObjectFactoryBase::RegisterFactory( GDALImageIOFactory::New() );
-                        
-			// JPEG2000 : New format for OTB
-            itk::ObjectFactoryBase::RegisterFactory( JPEG2000ImageIOFactory::New() );
                         
 #ifdef OTB_USE_CURL
                         // NetworkedQuadTree : New format for OTB
