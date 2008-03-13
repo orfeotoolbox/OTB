@@ -42,6 +42,8 @@ class ITK_EXPORT GluPolygonDrawingHelper
     typedef itk::Object             Superclass;
     typedef itk::SmartPointer<Self> Pointer;
     typedef itk::SmartPointer<const Self> ConstPointer;
+    typedef std::vector<GLdouble *> VertexVectorType;
+    typedef VertexVectorType::iterator VertexVectorIteratorType;
 
      itkTypeMacro(GluPolygonDrawingHelper,Object);
     
@@ -144,6 +146,11 @@ class ITK_EXPORT GluPolygonDrawingHelper
      */
     static void ErrorCallback(GLenum errorCode);
 
+    /**
+     * Free the vertex vector
+     */
+    void FreeVertices();
+
     GluPolygonDrawingHelper(const Self&);// purposely not implemented
     void operator=(const Self&);// purposely not implemented
     
@@ -152,6 +159,8 @@ class ITK_EXPORT GluPolygonDrawingHelper
     /** The glu tesselator object */
     GLUtesselator * m_GluTesselator;
     GLdouble m_Color[4];
+    /** vector to store the vertices pointer */
+    VertexVectorType m_Vertices;
   };
 } // end namespace otb
 #endif
