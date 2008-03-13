@@ -53,7 +53,8 @@ class ITK_EXPORT HistogramAndTransfertFunctionWidget
   /** Template parameters typedefs */
   typedef TPixel PixelType;
   typedef THistogram HistogramType;
-  typedef typename HistogramType::ValueType::ValueType ValueType;
+  typedef typename HistogramType::ValueType HistogramValueType;
+  typedef typename HistogramValueType::ValueType ValueType;
   typedef typename HistogramType::ConstPointer HistogramConstPointerType;
   typedef typename HistogramType::ConstIterator HistogramIteratorType;
   typedef itk::FixedArray<double,3> ColorType;
