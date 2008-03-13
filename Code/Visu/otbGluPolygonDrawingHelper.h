@@ -113,20 +113,20 @@ class ITK_EXPORT GluPolygonDrawingHelper
      * \param weights weight field
      * \param dataOut output data.
      */
-    static void CombineCallback(GLdouble coords[3],GLdouble * data[4], GLfloat weights[4],GLdouble **dataOut);
+    //static void CombineCallback(GLdouble coords[3],GLdouble * data[4], GLfloat weights[4],GLdouble **dataOut);
     
     /** 
      * Callback for GLU_TESS_VERTEX
      * \param vertex Contains the new vertex data (i.e. 3 coordinates and 4 color values)
      */
-    static void VertexCallback(GLvoid * vertex);
+    //static void VertexCallback(GLvoid * vertex);
    
     /**
      * Callback for the GLU_TESS_ERROR.
      * Raises a generic ITK exception.
      * \param errorCode The gl error code.
      */
-    static void ErrorCallback(GLenum errorCode);
+    //static void ErrorCallback(GLenum errorCode);
 
 
     GluPolygonDrawingHelper(const Self&);// purposely not implemented
