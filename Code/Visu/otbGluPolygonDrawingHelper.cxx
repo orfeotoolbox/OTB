@@ -30,53 +30,21 @@ extern "C"
 {
  typedef void (CALLBACK * FunctionPointerType)();
 
- void VertexCallback(GLvoid * vertex)
-{
-  //std::cout<<"GluPolygonDrawingHelper: VertexCallBack("<<vertex<<"), entering. "<<std::endl;
-  const GLdouble * pointer = (GLdouble *) vertex;
-  glColor4dv(pointer+3);
-  glVertex3dv(pointer);
-
-  //std::cout<<"Glu Tesselator --Vertex callback: "<<pointer[0]<<" "<<pointer[1]
-  //		 <<" "<<pointer[2]<<" "<<pointer[3]
-  //		 <<" "<<pointer[4]<<" "<<pointer[5]
-  //	   <<" "<<pointer[6]<<std::endl;
-    //std::cout<<"GluPolygonDrawingHelper: VertexCallBack("<<vertex<<"), leaving. "<<std::endl;
-}
-
  void CombineCallback(GLdouble coords[3],GLdouble * data[4], GLfloat weights[4],GLdouble **dataOut)
 {
-   //std::cout<<"GluPolygonDrawingHelper: CombineCallBack(), entering. "<<std::endl;
   GLdouble * vertex = new GLdouble[3];
   vertex[0] = coords[0];
   vertex[1] = coords[1];
   vertex[2] = coords[2];
-  //std::cout<<"GluPolygonDrawingHelper: CombineCallBack(), after memory allocation. pointer: "<<vertex<<std::endl;
-
-//  for(unsigned int i = 3; i<7;++i)
-//    {
-//      vertex[i]= data[0][i]
-	/**+weights[1]*data[1][i]*/
-	/*+weights[2]*data[2][i]
-	  +weights[3]*data[3][i]*/;
-   // }
-  //std::cout<<"GluPolygonDrawingHelper: CombineCallBack(), after data computation."<<std::endl;
-  //otbMsgDevMacro(<<"Glu Tesselator -- Combine callback: "<<vertex[0]<<" "<<vertex[1]
-  //		 <<" "<<vertex[2]<<" "<<vertex[4]
-  //		 <<" "<<vertex[4]<<" "<<vertex[5]
-  //		 <<" "<<vertex[6]);
   *dataOut = vertex;
-//std::cout<<"GluPolygonDrawingHelper: CombineCallBack(), leaving. "<<std::endl;
 }
 
  void ErrorCallback(GLenum errorCode)
 {
   const GLubyte * estring = gluErrorString(errorCode);
-	std::cout<<"Tesselation error: "<<estring<<std::endl;
+	std::cout<<"Glu Tesselation error: "<<estring<<std::endl;
 }
-
-
-}
+} // end extern C
 
 namespace otb
 {
@@ -84,40 +52,35 @@ namespace otb
 GluPolygonDrawingHelper::GluPolygonDrawingHelper()
 {
   // Instantiation of the tesselator object
-  //std::cout<<"GluPolygonDrawingHelper: Constructor, entering"<<std::endl; 
   m_PointVector.clear();
-  //m_GluTesselator = gluNewTess();
+  m_GluTesselator = gluNewTess();
   // Color
   m_Color[0]=0;
   m_Color[1]=0;
   m_Color[2]=0;
   m_Color[3]=0;
 
-  // Pointer to a function
-  //  typedef void (CALLBACK * FunctionPointerType)();
-    // Setting up the tesselator callbacks
-    //gluTessCallback(m_GluTesselator,GLU_TESS_BEGIN,(FunctionPointerType)glBegin);
-    //gluTessCallback(m_GluTesselator,GLU_TESS_END,(FunctionPointerType)glEnd);
-    //gluTessCallback(m_GluTesselator,GLU_TESS_ERROR,(FunctionPointerType)ErrorCallback);
-    //gluTessCallback(m_GluTesselator,GLU_TESS_VERTEX,(FunctionPointerType)VertexCallback);
-    //gluTessCallback(m_GluTesselator,GLU_TESS_COMBINE,(FunctionPointerType)CombineCallback);
-
-    //std::cout<<"GluPolygonDrawingHelper: Constructor, leaving."<<std::endl; 
+  // Setting up the tesselator callbacks
+  gluTessCallback(m_GluTesselator,GLU_TESS_BEGIN,(FunctionPointerType)glBegin);
+  gluTessCallback(m_GluTesselator,GLU_TESS_END,(FunctionPointerType)glEnd);
+  gluTessCallback(m_GluTesselator,GLU_TESS_ERROR,(FunctionPointerType)ErrorCallback);
+  gluTessCallback(m_GluTesselator,GLU_TESS_VERTEX,(FunctionPointerType)glVertex3dv);
+  gluTessCallback(m_GluTesselator,GLU_TESS_COMBINE,(FunctionPointerType)CombineCallback);
 }
 
 GluPolygonDrawingHelper::~GluPolygonDrawingHelper()
 {
-    //gluDeleteTess(m_GluTesselator);
+    gluDeleteTess(m_GluTesselator);
 }
 
 void  GluPolygonDrawingHelper::SetWindingRule(GLdouble windingRule)
 {
-   //gluTessProperty(m_GluTesselator,GLU_TESS_WINDING_RULE,windingRule);
+   gluTessProperty(m_GluTesselator,GLU_TESS_WINDING_RULE,windingRule);
 }
 
 void GluPolygonDrawingHelper::SetBoundaryOnly(GLdouble boundaryOnly)
 {
-   //gluTessProperty(m_GluTesselator,GLU_TESS_BOUNDARY_ONLY,boundaryOnly);
+   gluTessProperty(m_GluTesselator,GLU_TESS_BOUNDARY_ONLY,boundaryOnly);
 }
 
 void GluPolygonDrawingHelper::Color3d(double r, double g, double b)
@@ -157,17 +120,7 @@ void GluPolygonDrawingHelper::Vertex3d(double x, double y, double z)
 
 void GluPolygonDrawingHelper::RenderPolygon()
 {
-  GLUtesselator * gluTesselator = gluNewTess();
-
-  // Pointer to a function
-    typedef void (CALLBACK * FunctionPointerType)();
-//    // Setting up the tesselator callbacks
-    gluTessCallback(gluTesselator,GLU_TESS_BEGIN,(FunctionPointerType)glBegin);
-    gluTessCallback(gluTesselator,GLU_TESS_END,(FunctionPointerType)glEnd);
-    gluTessCallback(gluTesselator,GLU_TESS_ERROR,(FunctionPointerType)ErrorCallback);
-    gluTessCallback(gluTesselator,GLU_TESS_VERTEX,(FunctionPointerType)glVertex3dv);
-    gluTessCallback(gluTesselator,GLU_TESS_COMBINE,(FunctionPointerType)CombineCallback);
-
+  // Set up a malloced space for the polygon data.
   GLdouble ** data = new GLdouble*[m_PointVector.size()];
   unsigned int i = 0;
   PointVectorType::iterator it;
@@ -178,23 +131,24 @@ void GluPolygonDrawingHelper::RenderPolygon()
       data[i][1]=(*it)[1];
       data[i][2]=(*it)[2];
     }
-    glColor4d(m_Color[0],m_Color[1],m_Color[2],m_Color[3]);
-    gluTessBeginPolygon(gluTesselator, NULL);
-    gluTessBeginContour(gluTesselator);
+  // Set the color
+  glColor4d(m_Color[0],m_Color[1],m_Color[2],m_Color[3]);
+  gluTessBeginPolygon(m_GluTesselator, NULL);
+  gluTessBeginContour(m_GluTesselator);
     
-    for(i=0;i<m_PointVector.size();++i)
-      {
-	gluTessVertex(gluTesselator,data[i],data[i]); 
-      }
-    gluTessEndContour(gluTesselator);
-    gluTessEndPolygon(gluTesselator);
-    gluDeleteTess(gluTesselator);
-    for(i=0;i<m_PointVector.size();++i)
-     {
-	delete []data[i];
-      }
-    delete []data;
+  for(i=0;i<m_PointVector.size();++i)
+    {
+      gluTessVertex(m_GluTesselator,data[i],data[i]); 
+    }
+  gluTessEndContour(m_GluTesselator);
+  gluTessEndPolygon(m_GluTesselator);
 
-	m_PointVector.clear();
+  for(i=0;i<m_PointVector.size();++i)
+    {
+      delete []data[i];
+    }
+  delete []data;
+  
+  m_PointVector.clear();
 }
 } // end namespace otb

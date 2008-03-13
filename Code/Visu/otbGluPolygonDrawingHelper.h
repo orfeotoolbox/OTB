@@ -94,6 +94,10 @@ class ITK_EXPORT GluPolygonDrawingHelper
      */
     void SetBoundaryOnly(GLdouble boundaryOnly);
 
+    /**
+     * Actually render the polygon.
+     * The list of temporary vertices.
+     */
     void RenderPolygon();
 
   protected:    
@@ -107,36 +111,16 @@ class ITK_EXPORT GluPolygonDrawingHelper
      */
     ~GluPolygonDrawingHelper();
 
-    /* Callback for the GLU_TESS_COMBINE
-     * \param coords The new point coordinates
-     * \param data data field
-     * \param weights weight field
-     * \param dataOut output data.
-     */
-    //static void CombineCallback(GLdouble coords[3],GLdouble * data[4], GLfloat weights[4],GLdouble **dataOut);
-    
-    /** 
-     * Callback for GLU_TESS_VERTEX
-     * \param vertex Contains the new vertex data (i.e. 3 coordinates and 4 color values)
-     */
-    //static void VertexCallback(GLvoid * vertex);
-   
-    /**
-     * Callback for the GLU_TESS_ERROR.
-     * Raises a generic ITK exception.
-     * \param errorCode The gl error code.
-     */
-    //static void ErrorCallback(GLenum errorCode);
-
-
     GluPolygonDrawingHelper(const Self&);// purposely not implemented
     void operator=(const Self&);// purposely not implemented
     
 
   private:
-    /** The glu tesselator object */
+    /** Store the point of the polygon */
     PointVectorType m_PointVector;
+    /** The glu tesselator object */
     GLUtesselator * m_GluTesselator;
+    /** Color of the polygon */
     GLdouble m_Color[4];
   };
 } // end namespace otb
