@@ -19,7 +19,6 @@ PURPOSE.  See the above copyright notices for more information.
 #define _otbHistogramAndTransfertFunctionWidget_txx
 
 #include "otbHistogramAndTransfertFunctionWidget.h"
-#include "otbGluPolygonDrawingHelper.h"
 #include <FL/gl.h>
 #include <FL/Fl.H>
 
