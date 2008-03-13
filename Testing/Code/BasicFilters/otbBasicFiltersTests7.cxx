@@ -38,5 +38,7 @@ REGISTER_TEST(otbWindowedSincInterpolateImageBlackmanFunction);
 REGISTER_TEST(otbProlateValidationTest);
 REGISTER_TEST(otbVectorImageToAmplitudeImageFilterNew);
 REGISTER_TEST(otbVectorImageToAmplitudeImageFilter);
+REGISTER_TEST(otbRationalQuotientResampleImageFilterNew);
+REGISTER_TEST(otbRationalQuotientResampleImageFilter);
 }
 
