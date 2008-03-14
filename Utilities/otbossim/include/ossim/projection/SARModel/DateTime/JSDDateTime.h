@@ -92,7 +92,7 @@ public:
 	 * @return 0 if no error or an int greater than 0 indicating the error
 	 * @param julianDate [out] The class that receives the result of the conversion of the current JSDDateTime into GMST Date
 	 */
-	int JSDDateTime::AsGMSTDateTime(GMSTDateTime* GMST);
+	int AsGMSTDateTime(GMSTDateTime* GMST);
 
 	operator JulianDate() ;
 	operator GMSTDateTime() ;
