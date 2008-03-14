@@ -44,7 +44,7 @@ int otbSpectralAngleDistanceImageFilter(int argc, char * argv[])
       
       InputImageType::PixelType refPixel;
       
-      reader->Update();
+      reader->UpdateOutputInformation();
       refPixel.SetSize(reader->GetOutput()->GetNumberOfComponentsPerPixel());
       for(unsigned int i = 0; i<reader->GetOutput()->GetNumberOfComponentsPerPixel();++i)
 	{
