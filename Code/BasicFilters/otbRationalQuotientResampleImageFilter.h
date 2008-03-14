@@ -49,8 +49,7 @@ namespace otb
       /** Type macro */
       itkTypeMacro(RationalQuotientResampleImageFilter, ImageToImageFilter);
 
-      itkStaticConstMacro(ImageDimension,
-			  unsigned int,
+      itkStaticConstMacro(ImageDimension, unsigned int,
 			  TInputImage::ImageDimension);
       itkStaticConstMacro(OutputImageDimension, unsigned int,
 			  TOutputImage::ImageDimension );
