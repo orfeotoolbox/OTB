@@ -661,6 +661,7 @@ namespace otb
       imageIO->SetSpacing(1,1);
       imageIO->SetOrigin(0,0);
       imageIO->SetOrigin(1,0);
+      imageIO->SetNumberOfComponents(3);
       
       vnl_vector< double > axisDirection(2);
 
