@@ -108,7 +108,7 @@ Ephemeris* PlatformPosition::Interpolate(JSDDateTime date)
 			{
 				 dt = d ;
 			}
-			else if (fabs (d-dt) >= 1.0e-9) /* Echentillonnage irregulier*/
+			else if (fabs (d-dt) >= 1.0e-4) /* Irregular sampling */
 			{
 				echIrreg = true; 
 			}

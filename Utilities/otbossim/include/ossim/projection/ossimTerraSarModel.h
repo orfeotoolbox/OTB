@@ -1,5 +1,5 @@
-#ifndef ossimRadarSatModel_H
-#define ossimRadarSatModel_H
+#ifndef ossimTerraSarModel_H
+#define ossimTerraSarModel_H
 
 #include <ossim/projection/ossimSensorModel.h>
 #include <ossim/projection/ossimMapProjection.h>
@@ -11,29 +11,37 @@
 #include <ossim/base/ossimEcefPoint.h>
 #include <ossim/base/ossimMatrix3x3.h>
 #include <iostream>
-#include <ossim/projection/SARModel/DateTime/JSDDateTime.h>
+#include <list>
+
+#include <ossim/projection/SARModel/DateTime/CivilDateTime.h>
 
 class PlatformPosition;
 class SensorParams;
 class RefPoint;
 /**
- * @brief This class is able to direct localisation and indirect localisation using the RadarSat sensor model
- * @author Magellium, Pacome Dentraygues
+ * @brief This class allows for direct localisation and indirect localisation using the TerraSar sensor model
+ * @author Magellium, Vincent Martin
  * @version 1.0
- * @date 04-01-08
+ * @date 02-20-08
  */
-class OSSIMDLLEXPORT ossimRadarSatModel : public ossimSensorModel
+class OSSIMDLLEXPORT ossimTerraSarModel : public ossimSensorModel
 {
 public:
 	/**
 	 * @brief Constructor
 	 */
-	ossimRadarSatModel();
+	ossimTerraSarModel();
 
 	/**
 	 * @brief Destructor
 	 */
-	~ossimRadarSatModel();
+	~ossimTerraSarModel();
+
+	/**
+	 * @brief This function associates an image column number to a slant range when the image is georeferenced (ground projected)
+	 * @param col Column coordinate of the image point
+	 */
+	double getSlantRangeFromGeoreferenced(double col) const;
 
 	/**
 	 * @brief This function associates an image column number to a slant range
@@ -48,13 +56,7 @@ public:
 	JSDDateTime getTime(double line) const;
 
 	/**
-	 * @brief This function associates an image column number to a slant range when the image is georeferenced (ground projected)
-	 * @param col Column coordinate of the image point
-	 */
-	double getSlantRangeFromGeoreferenced(double col) const;
-
-	/**
-	 * @brief This function is able to convert image coordonnates in world coordinates using the RadarSat sensor model
+	 * @brief This function is able to convert image coordonnates into world coordinates using the TerraSar sensor model
 	 * @param image_point Coordinates of the image point
 	 * @param heightEllipsoid Altitude of the world point
 	 * @param worldPoint Coordinates of the world point (OUT)
@@ -62,6 +64,7 @@ public:
 	virtual void lineSampleHeightToWorld(const ossimDpt& image_point,
                                         const double&   heightEllipsoid,
                                         ossimGpt&       worldPoint) const;
+
 
 	/**
 	 * @brief This function optimizes the model according to a list of Ground Control Points. 
@@ -72,7 +75,7 @@ public:
 	 * @param imageCoordinates : actual image coordinates corresponding to groundCoordinates
 	 */
 	bool optimizeModel(std::list<ossimGpt> groundCoordinates, std::list<ossimDpt> imageCoordinates) ;
-	
+
 	/**
      * @brief Returns pointer to a new instance, copy of this.
 	 * @remark This function always return NULL;
@@ -91,7 +94,6 @@ public:
 	* @return true if load OK, false on error
 	*/
    virtual bool loadState (const ossimKeywordlist &kwl, const char *prefix=0);
-
 protected:
 
 	/**
@@ -105,38 +107,44 @@ protected:
 	 * @brief True iff the RadarSat product is a SGX or SGF product
 	 */
 	bool _isProductGeoreferenced ;
-
-	/**
-	 *	@brief Slant Range for each Ground Range (SRGR) number of coefficients sets
+	 /**
+	 * @brief Number of columns
 	 */
-	int   _n_srgr;
+	double _nbCol;
 	/**
-	 * @brief SRGR coefficient sets
-	 */
-	double _srgr_coefset[20][6];
+	* @brief Slant Range TO Ground Range Projection reference point
+	*/
+	double _SrToGr_R0 ;
 	/**
-	 * @brief SRGR coefficient sets update times
-	 */
-	double _srgr_update[20];
+	* @brief Slant Range TO Ground Range Projection exponents
+	*/
+	std::vector<int> _SrToGr_exponent ;
+		/**
+	* @brief Slant Range TO Ground Range Projection coefficients
+	*/
+	std::vector<double> _SrToGr_coeffs ;
 	/**
-	 * @brief Pixel spacing
+	 * @brief Scene Center range time
 	 */
-	double _pixel_spacing;
+	double _sceneCenterRangeTime;
+	/**
+	 * @brief Slant Range TO Ground Range scaling factor at scene center
+	 */
+	double _SrToGr_scaling_factor ;
 
 private:
 	bool InitPlatformPosition(const ossimKeywordlist &kwl, const char *prefix);
 	bool InitSensorParams(const ossimKeywordlist &kwl, const char *prefix);
 	bool InitRefPoint(const ossimKeywordlist &kwl, const char *prefix);
 	/**
-	 * @brief Initializes the Slant Range for each Ground Range data sets : _n_srgr,_srgr_coefset,_srgr_update,_pixel_spacing,_isProductGeoreferenced
+	 * @brief Initializes the Slant Range to Ground Range data sets : 
+	 *				_SrToGr_R0,_SrToGr_coeffs_number,_SrToGr_exponent,_SrToGr_coeffs,_nbCol
 	 */
 	bool InitSRGR(const ossimKeywordlist &kwl, const char *prefix);
-	/**
-	 * @brief Finds the SRGR data set which update time is the closest to the center scene time
-	 */
-	int FindSRGRSetNumber(JSDDateTime date)  const;
+
+	bool UtcDateTimeStringToCivilDate(const std::string &utcString, CivilDateTime &outputDate);
+
 	TYPE_DATA
-	
 };
 
 #endif

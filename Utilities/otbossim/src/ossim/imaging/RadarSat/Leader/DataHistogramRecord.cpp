@@ -203,8 +203,15 @@ std::istream& operator>>(std::istream& is, DataHistogramRecord& data)
 	{
 		delete[] data._hist;
 	}
-	data._hist = new int[data._nhist];
-	for (int i=0;i<data._nhist;i++)
+	
+	//for (int i=0;i<data._nhist;i++)
+	int nhist ;
+	if (data._nhist == 256) 
+		{  nhist = 256 ; } // Signal Data
+	else {nhist = 1024 ; } // Processed Data
+
+	data._hist = new int[nhist];
+	for (int i=0;i<nhist;i++)
 	{
 		is.read(buff,8);
 		buff[8] = '\0';

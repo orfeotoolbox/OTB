@@ -149,7 +149,7 @@ bool ossimRadarSatTileSource::open()
 			/*
 			 * On test si on a bien un fichier DAT de RadarSat
 			 */
-			if ( ((ImageOptionsFileDescriptor*)record)->get_file_name() == "RSAT-1-SAR-SLC  ")
+			if ( (((ImageOptionsFileDescriptor*)record)->get_file_name()).substr(0,10) == "RSAT-1-SAR")
 			{
 				/*
 				 * Nous somme bien dans un ficher Data d'une arborescence RadarSat, on lit le reste du fichier Data
@@ -168,8 +168,6 @@ bool ossimRadarSatTileSource::open()
 				 * On construit le chemin du Leader file
 				 */
 				ossimFilename leaderFilePath = tempFilename.setFile("LEA_01");
-				if (!leaderFilePath.exists())
-				  leaderFilePath = tempFilename.setFile("lea_01");
 				if (leaderFilePath.exists())
 				{
 					if(traceDebug())
@@ -227,7 +225,19 @@ bool ossimRadarSatTileSource::isOpen()const
 
 bool ossimRadarSatTileSource::getImageGeometry(ossimKeywordlist& kwl,const char* prefix)
 {
+	char name[64];
+
 	kwl.add(prefix, ossimKeywordNames::TYPE_KW, "ossimRadarSatModel", true);
+
+	FileDescriptor * fileDescriptor = _leader->get_FileDescriptor() ;
+	if(fileDescriptor != NULL)
+	{
+		kwl.add(prefix, "file_name",fileDescriptor->get_file_name().c_str(),true);
+	}
+	else
+	{
+		return false;
+	}
 
 	/*
 	 * Ajout des données nécessaires au modèle de capteur dans la liste des mots clefs
@@ -263,6 +273,11 @@ bool ossimRadarSatTileSource::getImageGeometry(ossimKeywordlist& kwl,const char*
 		kwl.add(prefix, "fa",datasetSummary->get_fa(),true);
 
 		kwl.add(prefix, "n_azilok",datasetSummary->get_n_azilok(),true);
+		kwl.add(prefix, "n_rnglok",datasetSummary->get_n_rnglok(),true);
+		kwl.add(prefix, "bnd_azilok",datasetSummary->get_bnd_azilok(),true);
+		kwl.add(prefix, "bnd_rnglok",datasetSummary->get_bnd_rnglok(),true);
+		kwl.add(prefix, "bnd_azi",datasetSummary->get_bnd_azi(),true);
+		kwl.add(prefix, "bnd_rng",datasetSummary->get_bnd_rng(),true);
 
 		kwl.add(prefix, "alt_dopcen0",datasetSummary->get_alt_dopcen()[0],true);
 		kwl.add(prefix, "alt_dopcen1",datasetSummary->get_alt_dopcen()[1],true);
@@ -274,6 +289,8 @@ bool ossimRadarSatTileSource::getImageGeometry(ossimKeywordlist& kwl,const char*
 
 		kwl.add(prefix, "time_dir_pix",datasetSummary->get_time_dir_pix().c_str(),true);
 		kwl.add(prefix, "time_dir_lin",datasetSummary->get_time_dir_lin().c_str(),true);
+
+		kwl.add(prefix, "terrain_height",datasetSummary->get_terrain_h(),true);
 	}
 	else
 	{
@@ -288,9 +305,11 @@ bool ossimRadarSatTileSource::getImageGeometry(ossimKeywordlist& kwl,const char*
 	{
 		kwl.add(prefix, "n_srgr",processingParameters->get_n_srgr(),true);
 
-		char name[64];
 		for (int i=0;i<processingParameters->get_n_srgr();i++)
 		{
+			sprintf(name,"srgr_update%i",i);
+			kwl.add(prefix, name,((processingParameters->get_srgr_coefset()[i]).get_srgr_update()).c_str(),true);
+
 			sprintf(name,"srgr_coef%iA",i);
 			kwl.add(prefix, name,(processingParameters->get_srgr_coefset()[i]).get_srgr_coef()[0],true);
 			sprintf(name,"srgr_coef%iB",i);
@@ -304,6 +323,8 @@ bool ossimRadarSatTileSource::getImageGeometry(ossimKeywordlist& kwl,const char*
 			sprintf(name,"srgr_coef%iF",i);
 			kwl.add(prefix, name,(processingParameters->get_srgr_coefset()[i]).get_srgr_coef()[5],true);
 		}
+
+		kwl.add(prefix, "pixel_spacing",processingParameters->get_pixel_spacing(),true);
 	}
 	else
 	{
@@ -325,7 +346,6 @@ bool ossimRadarSatTileSource::getImageGeometry(ossimKeywordlist& kwl,const char*
 		kwl.add(prefix, "eph_sec",platformPositionData->get_gmt_sec(),true);
 		kwl.add(prefix, "hr_angle",platformPositionData->get_hr_angle(),true);
 
-		char name[64];
 		for(int i=0;i<platformPositionData->get_ndata();i++)
 		{
 			sprintf(name,"eph%i_posX",i);

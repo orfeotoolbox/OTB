@@ -70,8 +70,8 @@ std::istream& operator>>(std::istream& is, Leader& data)
 			}
 			else
 			{
-				char* buff = new char[header.get_length()];
-				is.read(buff, header.get_length());
+				char* buff = new char[header.get_length()-12];
+				is.read(buff, header.get_length()-12);
 				delete buff;
 			}
 		}

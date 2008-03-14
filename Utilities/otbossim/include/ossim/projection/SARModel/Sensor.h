@@ -6,6 +6,7 @@
 class SensorParams;
 class PlatformPosition;
 class RefPoint;
+class JSDDateTime;
 /**
  * @ingroup SARModel
  * @brief This class provide basic location services
@@ -27,9 +28,7 @@ public:
 	 */
 	~Sensor();
 	
-	double virtual getDistance(double col) =0;
-	JSDDateTime virtual getTime(double line) =0;
-	virtual void ImageToWorld(double imX, double imY, double& lon, double& lat) = 0;
+	virtual void ImageToWorld(double distance, JSDDateTime time, double height, double& lon, double& lat) = 0;
 protected:
 	SensorParams * _params;
 	PlatformPosition* _position;

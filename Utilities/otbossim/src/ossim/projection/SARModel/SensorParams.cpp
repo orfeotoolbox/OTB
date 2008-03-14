@@ -7,7 +7,9 @@ SensorParams::SensorParams():
 	_rwl(0.0),
 	_sightDirection(Right),
 	_col_direction(1),
-	_lin_direction(1)
+	_lin_direction(1),
+	_nAzimuthLook(1),
+	_nRangeLook(1)
 {
 }
 
@@ -21,7 +23,9 @@ SensorParams::SensorParams(const SensorParams& rhs):
 	_rwl(rhs._rwl),
 	_sightDirection(rhs._sightDirection),
 	_col_direction(rhs._col_direction),
-	_lin_direction(rhs._lin_direction)
+	_lin_direction(rhs._lin_direction),
+	_nAzimuthLook(rhs._nAzimuthLook),
+	_nRangeLook(rhs._nRangeLook)
 {
 }
 
@@ -33,5 +37,7 @@ SensorParams& SensorParams::operator=(const SensorParams& rhs)
 	_sightDirection = rhs._sightDirection;
 	_col_direction = rhs._col_direction;
 	_lin_direction = rhs._lin_direction;
+	_nAzimuthLook = rhs._nAzimuthLook;
+	_nRangeLook = rhs._nRangeLook;
 	return *this;
 }

@@ -3,11 +3,10 @@
 #include <ossim/projection/SARModel/DateTime/JulianDate.h>
 
 class CivilDateTime;
-class JulianDate;
 class GMSTDateTime;
+class JulianDate;
 
 /**
- * @ingroup Date
  * @brief This class represent a date 
  * @author @author Magellium, Pacome Dentraygues
  * @version 1.0
@@ -79,40 +78,25 @@ public:
 		_decimal = decimal;
 	};
 	
+	void NormDate() ;
+
 	/**
 	 * @brief This function convert the current JSDDateTime in Julian Date
 	 * @return 0 if no error or an int gretter than 0 indiquating the error
-	 * @param julian [out] The classe that receive the result of the convertion of the current JSDDateTime in JulianDate
+	 * @param julianDate [out] The classe that receive the result of the convertion of the current JSDDateTime in JulianDate
 	 */
 	int AsJulianDate(JulianDate* julian);
-	
-	/**
-	 * @brief This function convert the current JSDDateTime in GMSTDateTime
-	 * @return 0 if no error or an int gretter than 0 indiquating the error
-	 * @param tms [out] The classe that receive the result of the convertion of the current CivilDateTime in GMSTDateTime
-	 */
-	int AsGMSTDateTime(GMSTDateTime* tms);
-	
-	/**
-	 * @brief This fonction normalized the date
-	 */
-	void NormDate();
 
 	/**
-	 * @brief Cast operator JSDDateTime to JulianDate
-	 *
-	 * This fonction only call the function AsJulianDate
-	 * @see AsJulianDate;
+	 * @brief This function converts the current JSDDateTime into GMST Date
+	 * @return 0 if no error or an int greater than 0 indicating the error
+	 * @param julianDate [out] The class that receives the result of the conversion of the current JSDDateTime into GMST Date
 	 */
-	operator JulianDate();
+	int JSDDateTime::AsGMSTDateTime(GMSTDateTime* GMST);
 
-	/**
-	 * @brief Cast operator JSDDateTime to GMSTDateTime
-	 *
-	 * This fonction only call the function AsGMSTDateTime
-	 * @see AsGMSTDateTime;
-	 */
-	operator GMSTDateTime();
+	operator JulianDate() ;
+	operator GMSTDateTime() ;
+
 protected:
 
 	/**

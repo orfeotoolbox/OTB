@@ -35,7 +35,7 @@ public:
 	 * @brief Instanciate a new Record
 	 * @param id Id of the Record we want to instanciate
 	 */
-	RadarSatRecord* Instanciate(int id);
+	RadarSatRecord* Instanciate(int id) ;
 protected:
 
 	/**

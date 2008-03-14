@@ -2,10 +2,9 @@
 #define JulianData_h
 
 class CivilDateTime;
-class JSDDateTime;
 class GMSTDateTime;
+class JSDDateTime;
 /**
- * @ingroup Date
  * @brief This class represent a date in the julian referential
  * @author @author Magellium, Pacome Dentraygues
  * @version 1.0
@@ -64,27 +63,16 @@ public:
 	int AsJSDDateTime(JSDDateTime* JSDdate);
 	
 	/**
-	 * @brief This function convert the current JulianDate in GMSTDateTime
-	 * @return 0 if no error or an int gretter than 0 indiquating the error
-	 * @param tms [out] The classe that receive the result of the convertion of the current CivilDateTime in GMSTDateTime
+	 * @brief This function converts the current JulianDate into GMSTDateTime
+	 * @return 0 if no error or an int greater than 0 indicating the error
+	 * @param GMSTDateTime [out] The class that receives the result of the conversion of the current JulianDate into GMSTDateTime
 	 */
-	int AsGMSTDateTime(GMSTDateTime* tms);
+	int AsGMSTDateTime(GMSTDateTime* GMST);
 
-	/**
-	 * @brief Cast operator JulianDate to JSDDateTime
-	 *
-	 * This fonction only call the function AsJSDDateTime
-	 * @see AsJSDDateTime
-	 */
-	operator JSDDateTime();
+	operator JSDDateTime() ;
+	operator GMSTDateTime() ;
 
-	/**
-	 * @brief Cast operator JulianDate to GMSTDateTime
-	 *
-	 * This fonction only call the function AsGMSTDateTime
-	 * @see AsGMSTDateTime
-	 */
-	operator GMSTDateTime();
+
 protected:
 
 	double _julianDate;

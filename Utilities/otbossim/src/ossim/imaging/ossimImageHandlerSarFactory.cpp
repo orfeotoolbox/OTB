@@ -10,6 +10,7 @@
 #include <ossim/base/ossimTrace.h>
 #include <ossim/base/ossimKeywordNames.h>
 #include <ossim/imaging/ossimRadarSatTileSource.h>
+#include <ossim/imaging/ossimTerraSarTileSource.h>
 
 static const ossimTrace traceDebug("ossimImageHandlerSarFactory:debug");
 
@@ -53,6 +54,7 @@ ossimImageHandler* ossimImageHandlerSarFactory::open(const ossimFilename& fileNa
       return result;
    }
 
+	
    if(traceDebug())
    {
       ossimNotify(ossimNotifyLevel_DEBUG)
@@ -60,6 +62,19 @@ ossimImageHandler* ossimImageHandlerSarFactory::open(const ossimFilename& fileNa
          << std::endl;
    }
    result = new ossimRadarSatTileSource;
+   if(result->open(copyFilename))
+   {
+      return result;
+   }
+   delete result;
+
+	if(traceDebug())
+   {
+      ossimNotify(ossimNotifyLevel_DEBUG)
+         << "trying TerraSar"
+         << std::endl;
+   }
+   result = new ossimTerraSarTileSource;
    if(result->open(copyFilename))
    {
       return result;
@@ -98,6 +113,19 @@ ossimImageHandler* ossimImageHandlerSarFactory::open(const ossimKeywordlist& kwl
    }
    delete result;
 
+	if(traceDebug())
+   {
+      ossimNotify(ossimNotifyLevel_DEBUG)
+         << "trying TerraSar"
+         << std::endl;
+   }
+   result  = new ossimTerraSarTileSource();
+   if(result->loadState(kwl, prefix))
+   {
+      return result;
+   }
+   delete result;
+
    if(traceDebug())
    {
       ossimNotify(ossimNotifyLevel_DEBUG)
@@ -113,12 +141,20 @@ ossimObject* ossimImageHandlerSarFactory::createObject(const ossimString& typeNa
    {
       return new ossimRadarSatTileSource();
    }
+	if(STATIC_TYPE_NAME(ossimTerraSarTileSource) == typeName)
+   {
+      return new ossimRadarSatTileSource();
+   }
    return (ossimObject*)NULL;
 }
 
 void ossimImageHandlerSarFactory::getSupportedExtensions(ossimImageHandlerFactoryBase::UniqueStringList& extensionList)const
 {
    extensionList.push_back("001");
+	/*
+	 * @todo : a verifier
+	 */
+	extensionList.push_back("xml");
 }
 
 ossimObject* ossimImageHandlerSarFactory::createObject(const ossimKeywordlist& kwl,
@@ -169,4 +205,5 @@ ossimObject* ossimImageHandlerSarFactory::createObject(const ossimKeywordlist& k
 void ossimImageHandlerSarFactory::getTypeNameList(std::vector<ossimString>& typeList)const
 {
    typeList.push_back(STATIC_TYPE_NAME(ossimRadarSatTileSource));
+	typeList.push_back(STATIC_TYPE_NAME(ossimTerraSarTileSource));
 }

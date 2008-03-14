@@ -3,7 +3,6 @@
 
 class CivilDateTime;
 /**
- * @ingroup Date
  * @brief This class represent a date 
  * @author @author Magellium, Pacome Dentraygues
  * @version 1.0

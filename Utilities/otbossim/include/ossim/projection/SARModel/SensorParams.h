@@ -92,6 +92,16 @@
 		return _lin_direction;
 	};
 
+	double get_nAzimuthLook()
+	{
+		return _nAzimuthLook ;
+	};
+
+	double get_nRangeLook()
+	{
+		return _nRangeLook ;
+	};
+
 	void set_col_direction(int dir)
 	{
 		_col_direction = dir;
@@ -101,6 +111,17 @@
 	{
 		_lin_direction = dir;
 	};
+
+	void set_nAzimuthLook(double look)
+	{
+		_nAzimuthLook = look;
+	};
+
+	void set_nRangeLook(double look)
+	{
+		_nRangeLook = look;
+	};
+
  protected:
 	/**
 	 * @brief Nominal PRF, Hz
@@ -120,6 +141,17 @@
 	int _col_direction;
 	int _lin_direction;
 	SightDirection _sightDirection;
+
+	/**
+	 * @brief Number of azimuth looks
+	 */
+	double _nAzimuthLook ;
+
+	/**
+	 * @brief Number of range looks
+	 */
+	double _nRangeLook ;
+
  private:
  };
  

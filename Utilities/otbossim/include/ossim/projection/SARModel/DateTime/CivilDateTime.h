@@ -4,8 +4,8 @@
 class JulianDate;
 class JSDDateTime;
 class GMSTDateTime;
+
 /**
- * @ingroup Date
  * @brief This class représente a date and time in the civil format
  * @author @author Magellium, Pacome Dentraygues
  * @version 1.0
@@ -30,9 +30,6 @@ public:
 	 */
 	CivilDateTime(char* Utc);
 
-	/**
-	 * @brief Constructor with date and time initialisation using an utc string
-	 */
 	CivilDateTime(const char* Utc);
 
 	/**
@@ -63,38 +60,14 @@ public:
 	 * @param JSDdate [out] The classe that receive the result of the convertion of the current CivilDateTime in JSDDateTime
 	 */
 	int AsJSDDateTime(JSDDateTime* JSDdate);
-	
+
 	/**
 	 * @brief This function convert the current CivilDateTime in GMSTDateTime
 	 * @return 0 if no error or an int gretter than 0 indiquating the error
-	 * @param tms [out] The classe that receive the result of the convertion of the current CivilDateTime in GMSTDateTime
+	 * @param GMSTdate [out] The classe that receive the result of the convertion of the current CivilDateTime in GMSTDateTime
 	 */
-	int AsGMSTDateTime(GMSTDateTime* tms);
+	int AsGMSTDateTime(GMSTDateTime* GMSTdate);
 	
-	/**
-	 * @brief Cast operator CivilDateTime to JulianDate
-	 *
-	 * This fonction only call the function AsJulianDate
-	 * @see AsJulianDate
-	 */
-	operator JulianDate();
-
-	/**
-	 * @brief Cast operator CivilDateTime to JSDDateTime
-	 *
-	 * This fonction only call the function AsJSDDateTime
-	 * @see AsJSDDateTime
-	 */
-	operator JSDDateTime();
-
-	/**
-	 * @brief Cast operator CivilDateTime to GMSTDateTime
-	 *
-	 * This fonction only call the function AsGMSTDateTime
-	 * @see AsGMSTDateTime
-	 */
-	operator GMSTDateTime();
-
 	int get_year()
 	{
 		return _year;
@@ -151,14 +124,16 @@ public:
 	 * @return 0 if no error or an int gretter than 0 indiquating the error
 	 */
 	int SetUtcDateTime(char* Utc);
-
-	/**
-	 * @brief This function initialize the date and the the time of the class using an utc string
-	 * @param Utc Utc string containing the date and time
-	 * @return 0 if no error or an int gretter than 0 indiquating the error
-	 */
-	int SetUtcDateTime(const char* Utc);
 	
+	int SetUtcDateTime(const char* Utc);
+
+
+	operator JulianDate() ;
+
+	operator JSDDateTime() ;
+
+	operator GMSTDateTime() ;
+
 	static const double RDR_JOURCIVIL;
 protected:
 	/**

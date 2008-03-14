@@ -76,7 +76,9 @@ void Equation::ComputeTrueDegree()
 
 void Equation::Normalisation()
 {
-	for (int i=0;i<_trueDegree;i++)
+	int i;
+	
+	for (i=0;i<_trueDegree;i++)
 	{
 		_coefficients[i] = _coefficients[i] / _coefficients[_trueDegree];
 	}
@@ -90,7 +92,7 @@ void Equation::Normalisation()
 	/*
 	 * Normalisation par une puissance de 10
 	 */
-	for (int i = 0 ; i < _trueDegree ; i++)
+	for (i = 0 ; i < _trueDegree ; i++)
 	{
 		r = abs(_coefficients[i]) ;
 		if (r >= Epsilon)
@@ -114,7 +116,7 @@ void Equation::Normalisation()
 		_normalisationType = GreatValues;
 		_normalisationCoefficient = pow (10.0, (double)eMax) ;
 		r    = 1.0 ;
-		for (int i = _trueDegree-1 ; i >= 0 ; i--)
+		for (i = _trueDegree-1 ; i >= 0 ; i--)
 		{
 			r    = r * _normalisationCoefficient ;
 			_coefficients[i] = _coefficients[i] /  std::complex<double>(r,0.0);
@@ -126,7 +128,7 @@ void Equation::Normalisation()
 		_normalisationType = SmallValues;
 		_normalisationCoefficient = pow(10.0,(double)(-eMin)) ;
 		r    = 1.0 ;
-		for (int i = _trueDegree-1 ; i >= 0 ; i--)
+		for (i = _trueDegree-1 ; i >= 0 ; i--)
 		{
 			r    = r * _normalisationCoefficient ;
 			_coefficients[i] = _coefficients[i] *  std::complex<double>(r,0.0);

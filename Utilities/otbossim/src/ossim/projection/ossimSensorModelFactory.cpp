@@ -9,7 +9,7 @@
 //   Contains implementation of class ossimSensorModelFactory
 //
 //*****************************************************************************
-//  $Id: ossimSensorModelFactory.cpp 12082 2007-11-26 21:46:44Z dburken $
+//  $Id: ossimSensorModelFactory.cpp 10430 2007-02-07 01:05:22Z dburken $
 #include <fstream>
 #include <algorithm>
 #include <ossim/projection/ossimSensorModelFactory.h>
@@ -40,7 +40,6 @@ static ossimTrace traceDebug = ossimTrace("ossimSensorModelFactory:debug");
 #include <ossim/projection/ossimSpot5Model.h>
 #include <ossim/projection/ossimSarModel.h>
 #include <ossim/projection/ossimNetworkedQuadTreeModel.h>
-#include <ossim/projection/ossimRadarSatModel.h>
 #include <ossim/support_data/ossimSpotDimapSupportData.h>
 #include <ossim/projection/ossimNitfMapModel.h>
 #include <ossim/projection/ossimFcsiModel.h>
@@ -48,7 +47,8 @@ static ossimTrace traceDebug = ossimTrace("ossimSensorModelFactory:debug");
 #include <ossim/projection/ossimApplanixEcefModel.h>
 #include <ossim/support_data/ossimFfL7.h>
 #include <ossim/support_data/ossimFfL5.h>
-
+#include <ossim/projection/ossimRadarSatModel.h>
+#include <ossim/projection/ossimTerraSarModel.h>
 //***
 // ADD_MODEL: List names of all sensor models produced by this factory:
 //***
@@ -185,16 +185,19 @@ ossimSensorModelFactory::createProjection(const ossimString &name) const
    }
 
    if(name == STATIC_TYPE_NAME(ossimNetworkedQuadTreeModel))
-   {
-      return new ossimNetworkedQuadTreeModel;
-   }
-   
-   if(name == STATIC_TYPE_NAME(ossimRadarSatModel))
-   {
-      return new ossimRadarSatModel;
-   }
-   
+     {
+       return new ossimNetworkedQuadTreeModel;
+     }
 
+   if (name == STATIC_TYPE_NAME(ossimRadarSatModel))
+   {
+	   return new ossimRadarSatModel;
+   }
+
+	if (name == STATIC_TYPE_NAME(ossimTerraSarModel))
+   {
+	   return new ossimTerraSarModel;
+   }
 
    //***
    // ADD_MODEL: (Please leave this comment for the next programmer)
@@ -203,6 +206,41 @@ ossimSensorModelFactory::createProjection(const ossimString &name) const
 //      return new myNewModel;
 
    return NULL;
+}
+
+
+//*****************************************************************************
+//  METHOD:  ossimSensorModelFactory::getList()
+//  
+//*****************************************************************************
+list<ossimString> ossimSensorModelFactory::getList() const
+{
+   list<ossimString> result;
+
+   //***
+   // Place the name of each model produced in the list:
+   //***
+   result.push_back(STATIC_TYPE_NAME(ossimCoarseGridModel));
+   result.push_back(STATIC_TYPE_NAME(ossimRpcModel));
+   result.push_back(STATIC_TYPE_NAME(ossimIkonosRpcModel));
+   result.push_back(STATIC_TYPE_NAME(ossimNitfRpcModel));
+   result.push_back(STATIC_TYPE_NAME(ossimQuickbirdRpcModel));
+   result.push_back(STATIC_TYPE_NAME(ossimLandSatModel));
+   result.push_back(STATIC_TYPE_NAME(ossimNitfMapModel));
+   result.push_back(STATIC_TYPE_NAME(ossimFcsiModel));
+   result.push_back(STATIC_TYPE_NAME(ossimApplanixUtmModel));
+   result.push_back(STATIC_TYPE_NAME(ossimApplanixEcefModel));
+   result.push_back(STATIC_TYPE_NAME(ossimSpot5Model));
+   result.push_back(STATIC_TYPE_NAME(ossimSarModel));
+   result.push_back(STATIC_TYPE_NAME(ossimRadarSatModel));
+   result.push_back(STATIC_TYPE_NAME(ossimNetworkedQuadTreeModel));
+
+   //***
+   // ADD_MODEL: Please leave this comment for the next programmer. Add above.
+   //***
+   //result.push_back(ossimString(MY_NEW_MODEL));
+   
+   return result;
 }
 
 //*****************************************************************************
@@ -243,9 +281,10 @@ ossimSensorModelFactory::getTypeNameList(std::vector<ossimString>& typeList)
    typeList.push_back(STATIC_TYPE_NAME(ossimFcsiModel));
    typeList.push_back(STATIC_TYPE_NAME(ossimSpot5Model));
    typeList.push_back(STATIC_TYPE_NAME(ossimSarModel));
-   typeList.push_back(STATIC_TYPE_NAME(ossimNetworkedQuadTreeModel));
+   typeList.push_back(STATIC_TYPE_NAME(ossimNetworkedQuadTreeModel)); 
    typeList.push_back(STATIC_TYPE_NAME(ossimRadarSatModel));
-   
+   typeList.push_back(STATIC_TYPE_NAME(ossimLandSatModel));
+
    //***
    // ADD_MODEL: Please leave this comment for the next programmer. Add above.
    //***
@@ -432,15 +471,6 @@ ossimProjection* ossimSensorModelFactory::createProjection(const ossimFilename& 
       delete model;
       model = 0;
    }
-   else if(isNetworkedQuadTree(filename))
-   {
-      model = new ossimNetworkedQuadTreeModel(filename);
-      if(!model->getErrorStatus())
-         return model;
-      delete model;
-      model = 0;
-   }
-   
 
    ossimFilename spot5Test = geomFile;
    
@@ -449,11 +479,6 @@ ossimProjection* ossimSensorModelFactory::createProjection(const ossimFilename& 
    {
       spot5Test = geomFile.path();
       spot5Test = spot5Test.dirCat(ossimFilename("metadata.dim"));
-      if (!spot5Test.exists())
-        {
-           spot5Test = geomFile.path();
-           spot5Test = spot5Test.dirCat(ossimFilename("METADATA.DIM"));
-        }
    }
    if(spot5Test.exists())
    {
@@ -485,7 +510,19 @@ ossimProjection* ossimSensorModelFactory::createProjection(const ossimFilename& 
    }
    return model;
 }
-   
+
+bool ossimSensorModelFactory::isNetworkedQuadTree(const ossimFilename& filename)const
+{
+  ossimFilename temp(filename);
+  temp.downcase();
+  if(temp.ext()=="otb")
+    {
+      std::cout << "NetworkedQuadTree format " << std::endl;
+      return true;
+    }
+  return false;
+}
+
 bool ossimSensorModelFactory::isNitf(const ossimFilename& filename)const
 {
    std::ifstream in(filename.c_str(), ios::in|ios::binary);
@@ -518,21 +555,6 @@ bool ossimSensorModelFactory::isLandsat(const ossimFilename& filename)const
    delete ff_headerp;
    return r;
 }
-
-bool ossimSensorModelFactory::isNetworkedQuadTree(const ossimFilename& filename)const
-{
-   ossimFilename temp(filename);
-   temp.downcase();
-   if(temp.ext() == "otb")
-     {
-     std::cout << "NetworkedQuadTree format " << std::endl;
-     return true;
-     }
-
-   return false;
-
-}
-
 
 void ossimSensorModelFactory::findCoarseGrid(ossimFilename& result,
                                              const ossimFilename& geomFile)const

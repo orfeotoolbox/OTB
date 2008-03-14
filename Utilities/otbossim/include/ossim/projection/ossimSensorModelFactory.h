@@ -58,7 +58,7 @@ public:
     * METHOD: getList()
     * Returns name list of all products represented by this factory.
     */
-//   virtual std::list<ossimString> getList() const;
+   virtual std::list<ossimString> getList() const;
 
 protected:
    ossimSensorModelFactory() {}
@@ -66,7 +66,7 @@ protected:
    static ossimSensorModelFactory*  theInstance;
    bool isNitf(const ossimFilename& filename)const;
    bool isLandsat(const ossimFilename& filename)const;
-   bool isNetworkedQuadTree(const ossimFilename& filename)const;
+   bool isNetworkedQuadTree(const ossimFilename& filename) const;
    void findCoarseGrid(ossimFilename& result,
                        const ossimFilename& geomFile)const;
 };
