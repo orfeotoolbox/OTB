@@ -732,6 +732,22 @@ ADD_TEST(bfTvRationalQuotientResampleImageFilter ${BASICFILTERS_TESTS7}
 		2 3
 )
 
+# -------            otb::VectorImageToIntensityImageFilter   ----------------------------
+
+  ADD_TEST(bfTuVectorImageToIntensityImageFilterNew ${BASICFILTERS_TESTS7}  
+         otbVectorImageToIntensityImageFilterNew)
+
+
+ ADD_TEST(bfTvVectorImageToIntensityImageFilter ${BASICFILTERS_TESTS7} 
+		--compare-image ${EPSILON}
+		    ${BASELINE}/bfTvVectorImageToIntensityImageOutput.tif
+		    ${TEMP}/bfTvVectorImageToIntensityImageOutput.tif
+		    otbVectorImageToIntensityImageFilter
+		    ${INPUTDATA}/QB_Toulouse_Ortho_XS.tif
+	            ${TEMP}/bfTvVectorImageToIntensityImageOutput.tif
+)
+
+
 # A enrichir
 SET(BasicFilters_SRCS1
 otbLeeFilter.cxx
@@ -832,6 +848,8 @@ otbVectorImageToAmplitudeImageFilterNew.cxx
 otbVectorImageToAmplitudeImageFilter.cxx
 otbRationalQuotientResampleImageFilterNew.cxx
 otbRationalQuotientResampleImageFilter.cxx
+otbVectorImageToIntensityImageFilterNew.cxx
+otbVectorImageToIntensityImageFilter.cxx
 )
 
 
