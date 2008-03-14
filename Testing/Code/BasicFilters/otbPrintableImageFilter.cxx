@@ -22,7 +22,7 @@
 #include "otbImageFileReader.h"
 
 #include "itkExceptionObject.h"
-#include "otbImageFileWriter.h"
+#include "otbStreamingImageFileWriter.h"
 #include "otbVectorImage.h"
 
 #include "otbPrintableImageFilter.h"
@@ -45,7 +45,7 @@ int otbPrintableImageFilter( int argc, char * argv[] )
         typedef otb::PrintableImageFilter< InputImageType>   FilterType;
         typedef FilterType::OutputImageType OutputImageType;
         
-        typedef otb::ImageFileWriter< OutputImageType >         WriterType;
+        typedef otb::StreamingImageFileWriter< OutputImageType >         WriterType;
 	
 
         FilterType::Pointer printableImageFilter = FilterType::New();
