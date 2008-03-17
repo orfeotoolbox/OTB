@@ -20,6 +20,10 @@
 
 #include "itkRGBPixel.h"
 
+// This file was modified by otb developpers
+// Modifications are surrounded by // Added ... and // End of modifications comment block.
+
+
 namespace itk
 {
 template < typename InputPixelType,
@@ -55,6 +59,25 @@ ConvertPixelBuffer<InputPixelType, OutputPixelType, OutputConvertTraits>
         }
       break;
       }
+      // handle the complex case (added by otb developpers)
+    case 2 :
+      {
+	switch(inputNumberOfComponents)
+	  {
+	  case 1:
+	    ConvertGrayToComplex(inputData,outputData,size);
+	    break;
+	  case 2:
+	    ConvertComplexToComplex(inputData,outputData,size);
+	    break;
+	  default:
+	    ConvertMultiComponentToComplex(inputData,inputNumberOfComponents,outputData,size);
+	    break;
+	  }
+	break;
+      }
+      // end of otb modifications
+
       // output number of components is 3 RGB
     case 3:
       {
@@ -62,7 +85,7 @@ ConvertPixelBuffer<InputPixelType, OutputPixelType, OutputConvertTraits>
         {
         case 1:
           ConvertGrayToRGB(inputData, outputData, size);
-          break;
+	  break;
         case 3:
           ConvertRGBToRGB(inputData, outputData, size);
           break;
@@ -530,6 +553,91 @@ ConvertPixelBuffer<InputPixelType, OutputPixelType, OutputConvertTraits>
       }
     }
 }
+
+// Added by otb developpers 
+
+template < typename InputPixelType,
+           typename OutputPixelType,
+           class OutputConvertTraits
+           >
+void
+ConvertPixelBuffer<InputPixelType, OutputPixelType, OutputConvertTraits>
+::ConvertGrayToComplex(InputPixelType* inputData, 
+                   OutputPixelType* outputData , int size)
+{
+  InputPixelType* endInput = inputData + size;
+  while(inputData != endInput)
+    {
+    OutputConvertTraits::SetNthComponent(
+      0, *outputData, 
+      static_cast<OutputComponentType>
+      (*inputData));
+    OutputConvertTraits::SetNthComponent(
+      1, *outputData, 
+      static_cast<OutputComponentType>
+      (*inputData));
+    inputData++;
+    outputData++;
+    }
+}
+
+
+
+template < typename InputPixelType,
+           typename OutputPixelType,
+           class OutputConvertTraits
+           >
+void
+ConvertPixelBuffer<InputPixelType, OutputPixelType, OutputConvertTraits>
+::ConvertComplexToComplex(InputPixelType* inputData, 
+                    OutputPixelType* outputData , int size)
+{
+  InputPixelType* endInput = inputData + size*2;
+  while(inputData != endInput)
+    {
+    OutputConvertTraits::SetNthComponent(
+      0, *outputData, 
+      static_cast<OutputComponentType>
+      (*inputData));
+    OutputConvertTraits::SetNthComponent(
+      1, *outputData, 
+      static_cast<OutputComponentType>
+      (*(inputData+1)));
+    inputData += 2;
+    outputData++;
+    }
+}
+
+template < typename InputPixelType,
+           typename OutputPixelType,
+           class OutputConvertTraits
+           >
+void
+ConvertPixelBuffer<InputPixelType, OutputPixelType, OutputConvertTraits>
+::ConvertMultiComponentToComplex(InputPixelType* inputData, 
+                              int inputNumberOfComponents,
+                              OutputPixelType* outputData , 
+                              int size)
+{
+  int diff = inputNumberOfComponents - 2;
+  InputPixelType* endInput = inputData + size * inputNumberOfComponents;
+  while(inputData != endInput)
+    {
+      OutputConvertTraits::SetNthComponent(
+					   0, *outputData, 
+					   static_cast<OutputComponentType>
+					   (*inputData));
+      OutputConvertTraits::SetNthComponent(
+					   1, *outputData, 
+					   static_cast<OutputComponentType>
+					   (*(inputData+1)));
+      inputData += 2;
+      inputData += diff;
+      outputData++;
+    }
+}
+
+// End of modifications
 
 template < typename InputPixelType,
            typename OutputPixelType,

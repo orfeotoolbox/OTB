@@ -1292,6 +1292,24 @@ ADD_TEST(ioTvGDALDriverDoubleWritingTest ${IO_TESTS14}
 			${TEMP}/ioGdalDriverDoubleWritingTestImage4.tif
 )
 
+ADD_TEST(ioTvReadingComplexDataIntoComplexImage ${IO_TESTS14}
+		otbReadingComplexDataIntoComplexImageTest
+		${IMAGEDATA}/RADARSAT2/SCENE01/DAT_01.001 
+		1000 1000
+)
+
+ADD_TEST(ioTvWritingComplexDataWithComplexImage ${IO_TESTS14}
+--compare-image ${TOL}
+		${BASELINE}/ioWritingComplexDataWithComplexImageOutput.tif
+		${TEMP}/ioWritingComplexDataWithComplexImageOutput.tif
+		otbWritingComplexDataWithComplexImageTest
+		${IMAGEDATA}/RADARSAT2/SCENE01/DAT_01.001 
+		${TEMP}/ioWritingComplexDataWithComplexImageOutput.tif
+		1000 1000
+		500  500
+)
+
+
 #----------------------------------------------------------------------------------
 SET(BasicIO_SRCS1
 otbImageFileReaderERS.cxx
@@ -1383,6 +1401,8 @@ otbOGRDriverTest.cxx
 otbShapeFileDataReaderTest.cxx
 otbShapeFileDataWriterTest.cxx
 otbGDALDriverDoubleWritingTest.cxx
+otbReadingComplexDataIntoComplexImageTest.cxx
+otbWritingComplexDataWithComplexImageTest.cxx
 )
 
 
