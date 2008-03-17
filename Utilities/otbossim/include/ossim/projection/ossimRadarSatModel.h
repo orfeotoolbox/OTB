@@ -63,6 +63,10 @@ public:
                                         const double&   heightEllipsoid,
                                         ossimGpt&       worldPoint) const;
 
+  void lineSampleToWorld(const ossimDpt& image_point,
+                                         ossimGpt&       worldPoint)
+    const;
+
 	/**
 	 * @brief This function optimizes the model according to a list of Ground Control Points. 
 	 *		An inverse localization of each ground GCP is performed. The mean shift between localized GCPs and actual image coordinates 

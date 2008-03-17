@@ -102,6 +102,13 @@ void ossimRadarSatModel::lineSampleHeightToWorld(const ossimDpt& image_point, co
 	worldPoint.hgt = heightEllipsoid ;
 }
 
+void ossimRadarSatModel::lineSampleToWorld(const ossimDpt& image_point,
+                                         ossimGpt&       worldPoint)
+const
+{
+  this->lineSampleHeightToWorld(image_point, 0.0, worldPoint);
+
+}
 bool ossimRadarSatModel::loadState(const ossimKeywordlist &kwl, const char *prefix)
 {
 	if(!InitPlatformPosition(kwl, prefix))
