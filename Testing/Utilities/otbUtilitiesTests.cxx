@@ -38,4 +38,6 @@ REGISTER_TEST(tinyXMLlibTest);
 REGISTER_TEST(svmGenericKernelBasicOperationsTest);
 REGISTER_TEST(otbSVMComposedKernelFunctorTest);
 REGISTER_TEST(ossimRadarSatSupport);
+REGISTER_TEST(openJpegEncoder);
+REGISTER_TEST(openJpegDecoder);
 }
