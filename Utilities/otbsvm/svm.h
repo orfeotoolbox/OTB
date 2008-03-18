@@ -203,7 +203,7 @@ public:
   // index is the current value
   // isAtEnd to indicate that it's the last possible derivation
   // baseValue is the constant of the formula
-  virtual double derivative(const svm_node *x, const svm_node *y, const svm_parameter& param, int degree, int index = 0, bool isAtEnd = false, double constValue)const 
+  virtual double derivative(const svm_node *x, const svm_node *y, const svm_parameter& param, int degree, int index = 0, bool isAtEnd, double constValue)const 
     {
       itkGenericExceptionMacro(<<"derivative method not definied (Null)");
       return 0.;
@@ -296,7 +296,7 @@ public:
   // index is the current value
   // isAtEnd to indicate that it's the last possible derivation
   // baseValue is the constant of the formula
-  virtual double derivative(const svm_node *x, const svm_node *y, const svm_parameter& param, int degree, int index = 0, bool isAtEnd = false, double constValue = 0.)const 
+  virtual double derivative(const svm_node *x, const svm_node *y, const svm_parameter& param, int degree, int index = 0, bool isAtEnd, double constValue = 0.)const 
     {
      double out = 0.;
       if (m_KernelFunctorList.size() != 0 && m_PonderationList.size() != 0 && m_KernelFunctorList.size() == m_PonderationList.size())
