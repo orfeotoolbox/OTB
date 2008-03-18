@@ -31,7 +31,7 @@
 #include <math.h>
 //#include <zlib.h>
 
-#include "otbNetworkedQuadTreeImageIO.h"
+#include "otbTileMapImageIO.h"
 #include "otbMacro.h"
 #include "otbSystem.h"
 #include "otbImageBase.h"
@@ -51,7 +51,7 @@
 namespace otb
 {
 
-  NetworkedQuadTreeImageIO::NetworkedQuadTreeImageIO()
+  TileMapImageIO::TileMapImageIO()
   {
   // By default set number of dimensions to two.
     this->SetNumberOfDimensions(2);
@@ -89,14 +89,14 @@ namespace otb
 
   }
 
-  NetworkedQuadTreeImageIO::~NetworkedQuadTreeImageIO()
+  TileMapImageIO::~TileMapImageIO()
   {
   }
 
 
 
 // Tell only if the file can be read with GDAL.
-  bool NetworkedQuadTreeImageIO::CanReadFile(const char* file)
+  bool TileMapImageIO::CanReadFile(const char* file)
   {
   // First check the extension
     if(  file == NULL )
@@ -116,20 +116,20 @@ namespace otb
   }
 
 // Used to print information about this object
-  void NetworkedQuadTreeImageIO::PrintSelf(std::ostream& os, itk::Indent indent) const
+  void TileMapImageIO::PrintSelf(std::ostream& os, itk::Indent indent) const
   {
     Superclass::PrintSelf(os, indent);
     os << indent << "Compression Level : " << m_CompressionLevel << "\n";
   }
 
 // Read a 3D image (or event more bands)... not implemented yet
-  void NetworkedQuadTreeImageIO::ReadVolume(void*)
+  void TileMapImageIO::ReadVolume(void*)
   {
   }
 
 
 // Read image with GDAL
-  void NetworkedQuadTreeImageIO::Read(void* buffer)
+  void TileMapImageIO::Read(void* buffer)
   {
     std::streamoff step = static_cast<std::streamoff>(this->GetNumberOfComponents());
     unsigned char * p = static_cast<unsigned char *>(buffer);
@@ -145,7 +145,7 @@ namespace otb
     int firstSample = this->GetIORegion().GetIndex()[0];
     int nComponents = this->GetNumberOfComponents();
 
-    otbMsgDevMacro( <<" NetworkedQuadTreeImageIO::Read()  ");
+    otbMsgDevMacro( <<" TileMapImageIO::Read()  ");
     otbMsgDevMacro( <<" Image size  : "<<m_Dimensions[0]<<","<<m_Dimensions[1]);
     otbMsgDevMacro( <<" Region read (IORegion)  : "<<this->GetIORegion());
     otbMsgDevMacro( <<" Nb Of Components  : "<<this->GetNumberOfComponents());
@@ -217,11 +217,11 @@ namespace otb
     delete[] bufferTile;
 
 
-    otbMsgDevMacro( << "NetworkedQuadTreeImageIO::Read() completed");
+    otbMsgDevMacro( << "TileMapImageIO::Read() completed");
   }
 
 
-  void NetworkedQuadTreeImageIO::InternalRead(double x, double y, void* buffer)
+  void TileMapImageIO::InternalRead(double x, double y, void* buffer)
   {
     std::ostringstream quad;
 //   int lDepth=m_Depth;
@@ -281,7 +281,7 @@ namespace otb
   
   }
 
-  void NetworkedQuadTreeImageIO::BuildFileName(std::ostringstream& quad, std::ostringstream& filename) {
+  void TileMapImageIO::BuildFileName(std::ostringstream& quad, std::ostringstream& filename) {
   
     int quadsize=quad.str().size();
     std::ostringstream directory;
@@ -308,7 +308,7 @@ namespace otb
   }
 
 
-  void NetworkedQuadTreeImageIO::GetFromNet(std::ostringstream& quad)
+  void TileMapImageIO::GetFromNet(std::ostringstream& quad)
   {
     std::ostringstream urlStream;
     urlStream << m_ServerName;
@@ -321,7 +321,7 @@ namespace otb
     FILE* output_file = fopen(filename.str().c_str(),"w");
     if(output_file == NULL)
     {
-      itkExceptionMacro(<<"NetworkedQuadTree read : bad file name.");
+      itkExceptionMacro(<<"TileMap read : bad file name.");
     }
   
     std::ostringstream browserStream;
@@ -347,7 +347,7 @@ namespace otb
       curl_easy_setopt(curl, CURLOPT_WRITEDATA, output_file);
       res = curl_easy_perform(curl);
       if (res != 0){
-        itkExceptionMacro(<<"NetworkedQuadTree read : transfert error.");
+        itkExceptionMacro(<<"TileMap read : transfert error.");
       }
 
       fclose(output_file);
@@ -357,7 +357,7 @@ namespace otb
   
   }
 
-  void NetworkedQuadTreeImageIO::GetFromNet(std::ostringstream& quad, double x, double y)
+  void TileMapImageIO::GetFromNet(std::ostringstream& quad, double x, double y)
   {
     std::cout << x << std::endl;
     std::cout << y << std::endl;
@@ -380,7 +380,7 @@ namespace otb
     FILE* output_file = fopen(filename.str().c_str(),"w");
     if(output_file == NULL)
     {
-      itkExceptionMacro(<<"NetworkedQuadTree read : bad file name.");
+      itkExceptionMacro(<<"TileMap read : bad file name.");
     }
   
     std::ostringstream browserStream;
@@ -406,7 +406,7 @@ namespace otb
       curl_easy_setopt(curl, CURLOPT_WRITEDATA, output_file);
       res = curl_easy_perform(curl);
       if (res != 0){
-        itkExceptionMacro(<<"NetworkedQuadTree read : transfert error.");
+        itkExceptionMacro(<<"TileMap read : transfert error.");
       }
 
       fclose(output_file);
@@ -416,12 +416,12 @@ namespace otb
   
   }
 
-  void NetworkedQuadTreeImageIO::ReadImageInformation()
+  void TileMapImageIO::ReadImageInformation()
   {
 
     if(  m_FileName.empty() == true )
     {
-      itkExceptionMacro(<<"NetworkedQuadTree read : empty image file name file.");
+      itkExceptionMacro(<<"TileMap read : empty image file name file.");
     }
   
     m_Dimensions[0] = (1 << m_Depth)*256;
@@ -454,7 +454,7 @@ namespace otb
 
 
   
-  bool NetworkedQuadTreeImageIO::CanWriteFile( const char* name )
+  bool TileMapImageIO::CanWriteFile( const char* name )
   {
   
   // First if filename is provided
@@ -476,11 +476,11 @@ namespace otb
   
   }
 
-  void NetworkedQuadTreeImageIO::WriteImageInformation(void)
+  void TileMapImageIO::WriteImageInformation(void)
   {
   }
 
-  void NetworkedQuadTreeImageIO::Write(const void* buffer)
+  void TileMapImageIO::Write(const void* buffer)
   {
   
     const unsigned char * p = static_cast<const unsigned char *>(buffer);
@@ -504,11 +504,11 @@ namespace otb
     int originSample = this->GetOrigin(0);
     int nComponents = this->GetNumberOfComponents();
     
-    std::cout << "NetworkedQuadTreeImageIO::Write: Size " << totLines << ", "<< totSamples << std::endl;
-    std::cout << "NetworkedQuadTreeImageIO::Write: Index" << firstLine << ", "<< firstSample << std::endl;
-    std::cout << "NetworkedQuadTreeImageIO::Write: Origin" << originLine << ", "<< originSample << std::endl;
+    std::cout << "TileMapImageIO::Write: Size " << totLines << ", "<< totSamples << std::endl;
+    std::cout << "TileMapImageIO::Write: Index" << firstLine << ", "<< firstSample << std::endl;
+    std::cout << "TileMapImageIO::Write: Origin" << originLine << ", "<< originSample << std::endl;
     
-    otbMsgDevMacro( <<" NetworkedQuadTreeImageIO::Read()  ");
+    otbMsgDevMacro( <<" TileMapImageIO::Read()  ");
     otbMsgDevMacro( <<" Image size  : "<<m_Dimensions[0]<<","<<m_Dimensions[1]);
     otbMsgDevMacro( <<" Region read (IORegion)  : "<<this->GetIORegion());
     otbMsgDevMacro( <<" Nb Of Components  : "<<this->GetNumberOfComponents());
@@ -618,14 +618,14 @@ namespace otb
     delete[] bufferTile;
 
 
-    otbMsgDevMacro( << "NetworkedQuadTreeImageIO::Write() completed");
+    otbMsgDevMacro( << "TileMapImageIO::Write() completed");
   
   
   
   }
 
 
-  void NetworkedQuadTreeImageIO::InternalWrite(double x, double y, const void* buffer)
+  void TileMapImageIO::InternalWrite(double x, double y, const void* buffer)
   {
     std::ostringstream quad;
     
@@ -689,13 +689,13 @@ namespace otb
     }
     else
     {
-      itkExceptionMacro(<<"NetworkedQuadTree write : bad file name.");
+      itkExceptionMacro(<<"TileMap write : bad file name.");
     }
   
   }
 
 
-  int NetworkedQuadTreeImageIO::XYToQuadTree(double x, double y, std::ostringstream& quad)
+  int TileMapImageIO::XYToQuadTree(double x, double y, std::ostringstream& quad)
   {
     int lDepth=m_Depth;
     while (lDepth--) // (post-decrement)
@@ -728,7 +728,7 @@ namespace otb
     return 0;
   }
 
-  void NetworkedQuadTreeImageIO::FillCacheFaults(void* buffer)
+  void TileMapImageIO::FillCacheFaults(void* buffer)
   {
     char * logo =
         "\344\343\337\344\343\337\344\343\337\344\343\337\344\343\337\344\343\337"

@@ -30,7 +30,7 @@
 #include "otbBSQImageIOFactory.h"
 #include "otbJPEG2000ImageIOFactory.h"
 #ifdef OTB_USE_CURL
-#include "otbNetworkedQuadTreeImageIOFactory.h"
+#include "otbTileMapImageIOFactory.h"
 #endif
 
 namespace otb
@@ -77,8 +77,8 @@ namespace otb
             itk::ObjectFactoryBase::RegisterFactory( MSTARImageIOFactory::New() );
                         
 #ifdef OTB_USE_CURL
-                        // NetworkedQuadTree : New format for OTB
-            itk::ObjectFactoryBase::RegisterFactory( NetworkedQuadTreeImageIOFactory::New() );
+                        // TileMap : New format for OTB
+            itk::ObjectFactoryBase::RegisterFactory( TileMapImageIOFactory::New() );
 #endif                        
             firstTime = false;
           }

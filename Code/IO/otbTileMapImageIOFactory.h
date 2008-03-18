@@ -16,22 +16,22 @@
 
 =========================================================================*/
 
-#ifndef __otbNetworkedQuadTreeImageIOFactory_h
-#define __otbNetworkedQuadTreeImageIOFactory_h
+#ifndef __otbTileMapImageIOFactory_h
+#define __otbTileMapImageIOFactory_h
 
 #include "itkObjectFactoryBase.h"
 #include "itkImageIOBase.h"
 
 namespace otb
 {
-/** \class NetworkedQuadTreeImageIOFactory
- * \brief Creation of a NetworkedQuadTreeImageIO object using object factory.
+/** \class TileMapImageIOFactory
+ * \brief Creation of a TileMapImageIO object using object factory.
  */
-class ITK_EXPORT NetworkedQuadTreeImageIOFactory : public itk::ObjectFactoryBase
+class ITK_EXPORT TileMapImageIOFactory : public itk::ObjectFactoryBase
 {
 public:  
   /** Standard class typedefs. */
-  typedef NetworkedQuadTreeImageIOFactory   Self;
+  typedef TileMapImageIOFactory   Self;
   typedef itk::ObjectFactoryBase  Superclass;
   typedef itk::SmartPointer<Self>  Pointer;
   typedef itk::SmartPointer<const Self>  ConstPointer;
@@ -44,21 +44,21 @@ public:
   itkFactorylessNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(NetworkedQuadTreeImageIOFactory, itk::ObjectFactoryBase);
+  itkTypeMacro(TileMapImageIOFactory, itk::ObjectFactoryBase);
 
   /** Register one factory of this type  */
   static void RegisterOneFactory(void)
   {
-    NetworkedQuadTreeImageIOFactory::Pointer NetworkedQuadTreeFactory = NetworkedQuadTreeImageIOFactory::New();
-    itk::ObjectFactoryBase::RegisterFactory(NetworkedQuadTreeFactory);
+    TileMapImageIOFactory::Pointer TileMapFactory = TileMapImageIOFactory::New();
+    itk::ObjectFactoryBase::RegisterFactory(TileMapFactory);
   }
 
 protected:
-  NetworkedQuadTreeImageIOFactory();
-  ~NetworkedQuadTreeImageIOFactory();
+  TileMapImageIOFactory();
+  ~TileMapImageIOFactory();
 
 private:
-  NetworkedQuadTreeImageIOFactory(const Self&); //purposely not implemented
+  TileMapImageIOFactory(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
 
 };

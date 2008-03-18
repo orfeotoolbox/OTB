@@ -15,39 +15,39 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#include "otbNetworkedQuadTreeImageIOFactory.h"
+#include "otbTileMapImageIOFactory.h"
 
 #include "itkCreateObjectFunction.h"
-#include "otbNetworkedQuadTreeImageIO.h"
+#include "otbTileMapImageIO.h"
 #include "itkVersion.h"
 
   
 namespace otb
 {
 
-NetworkedQuadTreeImageIOFactory::NetworkedQuadTreeImageIOFactory()
+TileMapImageIOFactory::TileMapImageIOFactory()
 {
   this->RegisterOverride("itkImageIOBase",
-                         "otbNetworkedQuadTreeImageIO",
-                         "NetworkedQuadTree Image IO",
+                         "otbTileMapImageIO",
+                         "TileMap Image IO",
                          1,
-                         itk::CreateObjectFunction<NetworkedQuadTreeImageIO>::New());
+                         itk::CreateObjectFunction<TileMapImageIO>::New());
 }
   
-NetworkedQuadTreeImageIOFactory::~NetworkedQuadTreeImageIOFactory()
+TileMapImageIOFactory::~TileMapImageIOFactory()
 {
 }
 
 const char* 
-NetworkedQuadTreeImageIOFactory::GetITKSourceVersion(void) const
+TileMapImageIOFactory::GetITKSourceVersion(void) const
 {
   return ITK_SOURCE_VERSION;
 }
 
 const char* 
-NetworkedQuadTreeImageIOFactory::GetDescription() const
+TileMapImageIOFactory::GetDescription() const
 {
-  return "NetworkedQuadTree ImageIO Factory, enabling NetworkedQuadTree image format loading in OTB";
+  return "TileMap ImageIO Factory, enabling TileMap image format loading in OTB";
 }
 
 } // end namespace otb

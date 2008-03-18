@@ -15,8 +15,8 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbNetworkedQuadTreeImageIO_h
-#define __otbNetworkedQuadTreeImageIO_h
+#ifndef __otbTileMapImageIO_h
+#define __otbTileMapImageIO_h
 
 #ifdef _MSC_VER
 #pragma warning ( disable : 4786 )
@@ -46,16 +46,16 @@
 namespace otb
 {
 
-/** \class NetworkedQuadTreeImageIO
+/** \class TileMapImageIO
    *
-   * \brief ImageIO object for reading (not writing) NetworkedQuadTree images
+   * \brief ImageIO object for reading (not writing) TileMap images
    *
    * The streaming read is implemented.
    *
    * \ingroup IOFilters
    *
  */
-  class ITK_EXPORT NetworkedQuadTreeImageIO : public itk::ImageIOBase,
+  class ITK_EXPORT TileMapImageIO : public itk::ImageIOBase,
   public MetaDataKey
   {
     public:
@@ -63,7 +63,7 @@ namespace otb
       typedef unsigned char InputPixelType;
   
       /** Standard class typedefs. */
-      typedef NetworkedQuadTreeImageIO            Self;
+      typedef TileMapImageIO            Self;
       typedef itk::ImageIOBase  Superclass;
       typedef itk::SmartPointer<Self>  Pointer;
   
@@ -71,7 +71,7 @@ namespace otb
       itkNewMacro(Self);
 
       /** Run-time type information (and related methods). */
-      itkTypeMacro(NetworkedQuadTreeImageIO, itk::ImageIOBase);
+      itkTypeMacro(TileMapImageIO, itk::ImageIOBase);
 
   /** Set/Get the level of compression for the output images.
    *  0-9; 0 = none, 9 = maximum. */
@@ -146,9 +146,9 @@ namespace otb
   
     protected:
       /** Construtor.*/
-      NetworkedQuadTreeImageIO();
+      TileMapImageIO();
       /** Destructor.*/
-      ~NetworkedQuadTreeImageIO();
+      ~TileMapImageIO();
   
       void PrintSelf(std::ostream& os, itk::Indent indent) const;
       /** Read all information on the image*/
@@ -170,7 +170,7 @@ namespace otb
       const char* m_currentfile;
 
     private:
-      NetworkedQuadTreeImageIO(const Self&); //purposely not implemented
+      TileMapImageIO(const Self&); //purposely not implemented
       void operator=(const Self&); //purposely not implemented
 
       void InternalRead(double x, double y, void* buffer);
@@ -199,4 +199,4 @@ namespace otb
 
 } // end namespace otb
 
-#endif // __otbNetworkedQuadTreeImageIO_h
+#endif // __otbTileMapImageIO_h
