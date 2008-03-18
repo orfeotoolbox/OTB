@@ -15,13 +15,13 @@ the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
 PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbNetworkedQuadTreeTransform_h
-#define __otbNetworkedQuadTreeTransform_h
+#ifndef __otbTileMapTransform_h
+#define __otbTileMapTransform_h
 
 #include <iostream>
 #include <sstream>
 #include <stdio.h>
-// #include "projection/ossimNetworkedQuadTreeTransform.h" 
+// #include "projection/ossimTileMapTransform.h" 
 #include "itkTransform.h"
 #include "itkExceptionObject.h"
 #include "itkMacro.h"
@@ -31,13 +31,13 @@ PURPOSE.  See the above copyright notices for more information.
 #include "base/ossimEllipsoid.h"
 #include "base/ossimEllipsoidFactory.h"
 #include "base/ossimString.h"
-#include "ossim/projection/ossimNetworkedQuadTreeModel.h"
+#include "ossim/projection/ossimTileMapModel.h"
 #include "otbMapProjection.h"
 
 namespace otb
 {
   
-  /** \class otbNetworkedQuadTreeTransform
+  /** \class otbTileMapTransform
    *  \brief to do
    **/
   
@@ -46,7 +46,7 @@ namespace otb
   class TScalarType = double,
   unsigned int NInputDimensions=2,
   unsigned int NOutputDimensions=2>
-      class ITK_EXPORT NetworkedQuadTreeTransform: public itk::Transform<TScalarType,       // Data type for scalars 
+      class ITK_EXPORT TileMapTransform: public itk::Transform<TScalarType,       // Data type for scalars 
       NInputDimensions,  // Number of dimensions in the input space
       NOutputDimensions> // Number of dimensions in the output space
       {
@@ -55,12 +55,12 @@ namespace otb
           typedef itk::Transform< TScalarType,
           NInputDimensions,
           NOutputDimensions >       Superclass;
-          typedef NetworkedQuadTreeTransform                    	        Self;
+          typedef TileMapTransform                    	        Self;
           typedef itk::SmartPointer<Self>                   Pointer;
           typedef itk::SmartPointer<const Self>             ConstPointer;
       
           typedef typename Superclass::ScalarType 	        ScalarType;
-          typedef ossimNetworkedQuadTreeModel	OssimNetworkedQuadTreeTransformType;
+          typedef ossimTileMapModel	OssimTileMapTransformType;
           typedef itk::Point<ScalarType,NInputDimensions >  InputPointType;
           typedef itk::Point<ScalarType,NOutputDimensions > OutputPointType;        
       
@@ -68,7 +68,7 @@ namespace otb
           itkNewMacro( Self );
       
           /** Run-time type information (and related methods). */
-          itkTypeMacro( NetworkedQuadTreeTransform, Transform );
+          itkTypeMacro( TileMapTransform, Transform );
       
           typedef InverseOrForwardTransformationEnum DirectionOfMappingEnumType;
       
@@ -111,19 +111,19 @@ namespace otb
           virtual void PrintMap() const ;
 
         protected:
-          NetworkedQuadTreeTransform();
-          virtual ~NetworkedQuadTreeTransform();
-          OssimNetworkedQuadTreeTransformType* m_NetworkedQuadTreeTransform;  
+          TileMapTransform();
+          virtual ~TileMapTransform();
+          OssimTileMapTransformType* m_TileMapTransform;  
       
         private :
-          NetworkedQuadTreeTransform(const Self&); //purposely not implemented
+          TileMapTransform(const Self&); //purposely not implemented
           void operator=(const Self&); //purposely not implemented
       };
   
 } // namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbNetworkedQuadTreeTransform.txx"
+#include "otbTileMapTransform.txx"
 #endif
 
 #endif

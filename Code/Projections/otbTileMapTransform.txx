@@ -15,35 +15,35 @@ the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
 PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbNetworkedQuadTreeTransform_txx
-#define __otbNetworkedQuadTreeTransform_txx
+#ifndef __otbTileMapTransform_txx
+#define __otbTileMapTransform_txx
 
-#include "otbNetworkedQuadTreeTransform.h"
+#include "otbTileMapTransform.h"
 #include "otbMacro.h"
 
 namespace otb
 {
   
   template<InverseOrForwardTransformationEnum Transform, class TScalarType, unsigned int NInputDimensions, unsigned int NOutputDimensions>
-      NetworkedQuadTreeTransform<Transform, TScalarType, NInputDimensions, NOutputDimensions>
-  ::NetworkedQuadTreeTransform() : Superclass(SpaceDimension,ParametersDimension)
+      TileMapTransform<Transform, TScalarType, NInputDimensions, NOutputDimensions>
+  ::TileMapTransform() : Superclass(SpaceDimension,ParametersDimension)
   {
-    m_NetworkedQuadTreeTransform =  new OssimNetworkedQuadTreeTransformType();
+    m_TileMapTransform =  new OssimTileMapTransformType();
   }
   
   
   template<InverseOrForwardTransformationEnum Transform, class TScalarType, unsigned int NInputDimensions, unsigned int NOutputDimensions>
-      NetworkedQuadTreeTransform<Transform, TScalarType, NInputDimensions, NOutputDimensions>
-  ::~NetworkedQuadTreeTransform()
+      TileMapTransform<Transform, TScalarType, NInputDimensions, NOutputDimensions>
+  ::~TileMapTransform()
   {
-    delete m_NetworkedQuadTreeTransform;
+    delete m_TileMapTransform;
   }
   
   
   
   template<InverseOrForwardTransformationEnum Transform, class TScalarType, unsigned int NInputDimensions, unsigned int NOutputDimensions>
-      typename NetworkedQuadTreeTransform<Transform, TScalarType, NInputDimensions, NOutputDimensions>::OutputPointType
-          NetworkedQuadTreeTransform<Transform, TScalarType, NInputDimensions, NOutputDimensions>
+      typename TileMapTransform<Transform, TScalarType, NInputDimensions, NOutputDimensions>::OutputPointType
+          TileMapTransform<Transform, TScalarType, NInputDimensions, NOutputDimensions>
   ::TransformPoint(const InputPointType & point) const
   {
     OutputPointType outputPoint;
@@ -59,9 +59,9 @@ namespace otb
 	  
 	  //map projection
         ossimGpt ossimGPoint;
-//         ossimGPoint=m_NetworkedQuadTreeTransform->inverse(ossimDPoint);
-        m_NetworkedQuadTreeTransform->lineSampleToWorld(ossimDPoint, ossimGPoint);
-//	 	otbGenericMsgDebugMacro(<< "Inverse : " << std::endl << m_NetworkedQuadTreeTransform->print(std::cout));
+//         ossimGPoint=m_TileMapTransform->inverse(ossimDPoint);
+        m_TileMapTransform->lineSampleToWorld(ossimDPoint, ossimGPoint);
+//	 	otbGenericMsgDebugMacro(<< "Inverse : " << std::endl << m_TileMapTransform->print(std::cout));
 		
         outputPoint[0]=ossimGPoint.lon;
         outputPoint[1]=ossimGPoint.lat;
@@ -76,9 +76,9 @@ namespace otb
 	  
 	  //map projection
         ossimDpt ossimDPoint;
-//         ossimDPoint=m_NetworkedQuadTreeTransform->forward(ossimGPoint);
-        m_NetworkedQuadTreeTransform->worldToLineSample(ossimGPoint, ossimDPoint);
-//	 	otbGenericMsgDebugMacro(<< "Forward : ========================= " << std::endl << m_NetworkedQuadTreeTransform->print(std::cout));
+//         ossimDPoint=m_TileMapTransform->forward(ossimGPoint);
+        m_TileMapTransform->worldToLineSample(ossimGPoint, ossimDPoint);
+//	 	otbGenericMsgDebugMacro(<< "Forward : ========================= " << std::endl << m_TileMapTransform->print(std::cout));
         outputPoint[0]=ossimDPoint.x;
         outputPoint[1]=ossimDPoint.y;
 		
@@ -100,11 +100,11 @@ namespace otb
   
   ///\return The geographic point corresponding to (0,0)
   template<InverseOrForwardTransformationEnum Transform, class TScalarType, unsigned int NInputDimensions, unsigned int NOutputDimensions> 
-      typename NetworkedQuadTreeTransform<Transform, TScalarType, NInputDimensions, NOutputDimensions>::InputPointType 
-          NetworkedQuadTreeTransform<Transform, TScalarType, NInputDimensions, NOutputDimensions>
+      typename TileMapTransform<Transform, TScalarType, NInputDimensions, NOutputDimensions>::InputPointType 
+          TileMapTransform<Transform, TScalarType, NInputDimensions, NOutputDimensions>
   ::Origin()
   {
-    ossimGpt ossimOrigin=m_NetworkedQuadTreeTransform->origin();
+    ossimGpt ossimOrigin=m_TileMapTransform->origin();
     InputPointType otbOrigin;
     otbOrigin[0]= ossimOrigin.lat;
     otbOrigin[1]= ossimOrigin.lon;
@@ -118,17 +118,17 @@ namespace otb
 	
   template<InverseOrForwardTransformationEnum Transform, class TScalarType, unsigned int NInputDimensions, unsigned int NOutputDimensions> 
       void 
-          NetworkedQuadTreeTransform<Transform, TScalarType, NInputDimensions, NOutputDimensions>
+          TileMapTransform<Transform, TScalarType, NInputDimensions, NOutputDimensions>
   ::PrintMap() const
   {
-    std::cout << m_NetworkedQuadTreeTransform->print(std::cout);
+    std::cout << m_TileMapTransform->print(std::cout);
   }
 
   template<InverseOrForwardTransformationEnum Transform, class TScalarType, unsigned int NInputDimensions, unsigned int NOutputDimensions>
-      void NetworkedQuadTreeTransform<Transform, TScalarType, NInputDimensions, NOutputDimensions>
+      void TileMapTransform<Transform, TScalarType, NInputDimensions, NOutputDimensions>
   ::SetLevel(unsigned char level)
   {
-    m_NetworkedQuadTreeTransform->setDepth(level);
+    m_TileMapTransform->setDepth(level);
   }
 	
 } // namespace otb
