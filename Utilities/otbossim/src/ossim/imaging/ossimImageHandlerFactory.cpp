@@ -20,7 +20,7 @@
 #include <ossim/imaging/ossimGeneralRasterTileSource.h>
 #include <ossim/imaging/ossimERSTileSource.h>
 #include <ossim/imaging/ossimVpfTileSource.h>
-#include <ossim/imaging/ossimNetworkedQuadTreeTileSource.h>
+#include <ossim/imaging/ossimTileMapTileSource.h>
 #include <ossim/base/ossimTrace.h>
 #include <ossim/base/ossimKeywordNames.h>
 #include <ossim/imaging/ossimJpegTileSource.h>
@@ -115,14 +115,14 @@ ossimImageHandler* ossimImageHandlerFactory::open(const ossimFilename& fileName)
 
    delete result;
 
-   // test if NetworkedQuadTree
+   // test if TileMap
    if(traceDebug())
    {
       ossimNotify(ossimNotifyLevel_DEBUG)
-         << "trying NetworkedQuadTree"
+         << "trying TileMap"
          << std::endl;
    }
-   result = new ossimNetworkedQuadTreeTileSource;
+   result = new ossimTileMapTileSource;
    if(result->open(copyFilename))
    {
       return result;
@@ -419,14 +419,14 @@ ossimImageHandler* ossimImageHandlerFactory::open(const ossimKeywordlist& kwl,
    }
    delete result;
 
-   // NetworkedQuadTree
+   // TileMap
    if(traceDebug())
    {
       ossimNotify(ossimNotifyLevel_DEBUG)
-         << "trying NetworkedQuadTree"
+         << "trying TileMap"
          << std::endl;
    }
-   result = new ossimNetworkedQuadTreeTileSource;
+   result = new ossimTileMapTileSource;
    if(result->loadState(kwl, prefix))
    {
       return result;
@@ -600,9 +600,9 @@ ossimObject* ossimImageHandlerFactory::createObject(const ossimString& typeName)
       return new ossimGeneralRasterTileSource();
    }
 
-   if(STATIC_TYPE_NAME(ossimNetworkedQuadTreeTileSource) == typeName)
+   if(STATIC_TYPE_NAME(ossimTileMapTileSource) == typeName)
    {
-      return new ossimNetworkedQuadTreeTileSource();
+      return new ossimTileMapTileSource();
    }
 
    return (ossimObject*)NULL;
@@ -693,7 +693,7 @@ void ossimImageHandlerFactory::getTypeNameList(std::vector<ossimString>& typeLis
    typeList.push_back(STATIC_TYPE_NAME(ossimERSTileSource));
    typeList.push_back(STATIC_TYPE_NAME(ossimSrtmTileSource));
    typeList.push_back(STATIC_TYPE_NAME(ossimGeneralRasterTileSource));
-   typeList.push_back(STATIC_TYPE_NAME(ossimNetworkedQuadTreeTileSource));
+   typeList.push_back(STATIC_TYPE_NAME(ossimTileMapTileSource));
    typeList.push_back(STATIC_TYPE_NAME(ossimQuickbirdNitfTileSource));
    typeList.push_back(STATIC_TYPE_NAME(ossimQuickbirdTiffTileSource));
 }
