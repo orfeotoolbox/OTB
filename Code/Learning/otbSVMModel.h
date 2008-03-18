@@ -251,7 +251,7 @@ public:
   }
 
   /** Set the gamma parameter for poly/rbf/sigmoid kernels */
-  void SetKernelGamma(double gamma)
+  virtual void SetKernelGamma(double gamma)
   {
     //m_Parameters.gamma = gamma;
     m_Model->param.gamma = gamma;

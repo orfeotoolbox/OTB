@@ -80,7 +80,7 @@ public:
 
    /** Returns the classification result */
   OutputType* GetOutput() ;
-
+  void SetOutput(OutputType* output);
 
   /** Type definitions for the SVM Model. */
   typedef SVMModel< InputPixelType, TLabel >   SVMModelType;
@@ -101,7 +101,7 @@ protected:
 
   /** Starts the classification process */
   void GenerateData() ;
-  void DoClassification() ;
+  virtual void DoClassification() ;
 
 private:
 

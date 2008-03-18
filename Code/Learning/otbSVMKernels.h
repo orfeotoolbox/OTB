@@ -145,28 +145,115 @@ class InvMultiQuadraticSAMKernelFunctor : public GenericKernelFunctorBase
 
 class KModSAMKernelFunctor : public GenericKernelFunctorBase
   {
-    public:
-  KModSAMKernelFunctor(): GenericKernelFunctorBase() 
-    { 
-      this->SetName("KModSAM"); 
-      this->SetValue<double>("const_coef", 1);
-    };
-  virtual ~KModSAMKernelFunctor() {};
-  
-  virtual double operator()(const svm_node *x, const svm_node *y, const svm_parameter& param)const
-    {
-      SAMKernelFunctor sam;
-      double mq = this->GetValue<double>("const_coef") + sam( x, y, param );
-      
-      if ( mq == 0. )
-	{
-	  return itk::NumericTraits<double>::max();
-	}
-      return vcl_exp( param.gamma / mq ) - 1.0;
-    }
+  public:
+    KModSAMKernelFunctor(): GenericKernelFunctorBase() 
+      { 
+	this->SetName("KModSAM"); 
+	this->SetValue<double>("const_coef", 1);
+      };
+    virtual ~KModSAMKernelFunctor() {};
+    
+    virtual double operator()(const svm_node *x, const svm_node *y, const svm_parameter& param)const
+      {
+	SAMKernelFunctor sam;
+	double mq = this->GetValue<double>("const_coef") + sam( x, y, param );
+	
+	if ( mq == 0. )
+	  {
+	    return itk::NumericTraits<double>::max();
+	  }
+	return vcl_exp( param.gamma / mq ) - 1.0;
+      }
   };
 
+class RBFKernelFunctor : public GenericKernelFunctorBase
+  {
+  public:
+    RBFKernelFunctor(): GenericKernelFunctorBase() 
+      { 
+	this->SetName("RBF"); 
+	this->SetValue<double>("gamma_coef", 0.5);
+      };
+    virtual ~RBFKernelFunctor() {};
+    
+    virtual double operator()(const svm_node *x, const svm_node *y, const svm_parameter& param)const
+      {
+	CustomKernelFunctor custom;
+	double res = this->GetValue<double>("gamma_coef") * custom( x, y, param );
+	
+	return vcl_exp(-res);
+      }
+    
+    virtual double derivative(const svm_node *x, const svm_node *y, const svm_parameter& param, int degree, int index = 0, bool isAtEnd = false, double constValue)const 
+      {
+	double gamma = this->GetValue<double>("gamma_coef");
+	double kernelValue = 0.;
+	double xval = 0.;
+	double yval = 0.;
+	int compt = 0;
 
+	const svm_node *xtemp = x;
+	const svm_node *ytemp = y;
+
+	bool stop = false;
+	while(xtemp->index != -1 && ytemp->index != -1 && stop == false)
+	  {
+	    if(xtemp->index == ytemp->index)
+	      {
+		if (compt == index)
+		  {
+		    xval = xtemp->value;
+		    yval = ytemp->value;
+		    stop = true;
+		  }
+		else
+		  {
+		    compt++;
+		    ++ytemp;
+		    ++xtemp;
+		  }
+	      }
+	    else
+	      {
+		if(xtemp->index > ytemp->index)
+		  ++ytemp;
+		else
+		  ++xtemp;
+	      }			
+	  }
+
+	if (isAtEnd == true)
+	  {
+	    kernelValue = this->operator()(x, y, param);
+	  }
+	else
+	  {
+	    kernelValue = constValue;
+	  }
+	
+	if (degree < 0)
+	  {
+	    return 0;
+	  }
+	switch (degree)
+	  {
+	  case 0: 
+	    return kernelValue; 
+	    break;
+	  case 1: 
+	    return (-2*gamma*(yval - xval)*kernelValue); 
+	    break;
+	  default: 
+	    return (-2*gamma*((degree - 1) * this->derivative(x, y, param, degree-2, index, isAtEnd, constValue) + (yval - xval)* derivative(x, y, param, degree-1, index, isAtEnd, constValue))); 
+	    break;
+	  }
+	
+      }
+
+
+
+  };
+ 
 class RBFRBFSAMKernelFunctor : public GenericKernelFunctorBase
   {
     public:
@@ -280,14 +367,10 @@ class GroupedRBFKernelFunctor : public GenericKernelFunctorBase
       parameters = parameters + twoPointsPosition + 1;
       
       int i,j;
-      
-/*
-int begin[numberOfGroups];
-      int end[numberOfGroups];*/
-	  std::vector<int> begin;
-	  begin.resize(numberOfGroups);
-	  std::vector<int> end;
-	  end.resize(numberOfGroups);
+      std::vector<int> begin;
+      begin.resize(numberOfGroups);
+      std::vector<int> end;
+      end.resize(numberOfGroups);
       
       for (i = 0; i < numberOfGroups; i++)
 	{
@@ -328,8 +411,6 @@ int begin[numberOfGroups];
       
       if (sizeX && sizeY)
 	{
-/*	  svm_node xGroup[sizeX];
-	  svm_node yGroup[sizeY];*/
 		svm_node* xGroup = new svm_node[sizeX];
 		svm_node* yGroup = new svm_node[sizeY];
 	  for (j = 0; j < numberOfGroups; j++)
@@ -370,8 +451,6 @@ int begin[numberOfGroups];
       
       else if ((sizeX > 0) && (sizeY == 0))
 	{
-/*	  svm_node xGroup[sizeX];
-	  svm_node yGroup[sizeY];*/
 		svm_node* xGroup = new svm_node[sizeX];
 		svm_node* yGroup = new svm_node[sizeY];
 	  
@@ -502,8 +581,6 @@ class GroupingAdaptiveKernelFunctor : public GenericKernelFunctorBase
      
      if (sizeX && sizeY)
        {
-/*	  svm_node xGroup[sizeX];
-	  svm_node yGroup[sizeY];*/
 		svm_node* xGroup = new svm_node[sizeX];
 		svm_node* yGroup = new svm_node[sizeY];
 	 
@@ -544,8 +621,6 @@ class GroupingAdaptiveKernelFunctor : public GenericKernelFunctorBase
 	
      else if ((sizeX > 0) && (sizeY == 0))
        {
-/*	  svm_node xGroup[sizeX];
-	  svm_node yGroup[sizeY];*/
 		svm_node* xGroup = new svm_node[sizeX];
 		svm_node* yGroup = new svm_node[sizeY];
 	 

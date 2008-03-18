@@ -54,9 +54,9 @@ void info(char *fmt,...) {}
 void info_flush() {}
 #endif
 
-//
+// ****************************************************************************************
 // Kernel Cache
-//
+// ****************************************************************************************
 // l is the number of total data items
 // size is the cache size limit in bytes
 //
@@ -180,9 +180,10 @@ void Cache::swap_index(int i, int j)
     }
 }
 
-//
+
+// ****************************************************************************************
 // Kernel evaluation
-//
+// ****************************************************************************************
 // the static method k_function is for doing single kernel evaluation
 // the constructor of Kernel prepares to calculate the l*l kernel matrix
 // the member function get_Q is for getting one column from the Q Matrix
@@ -404,6 +405,10 @@ double Kernel::k_function(const svm_node *x, const svm_node *y,
     }
 }
 
+
+// ****************************************************************************************
+// SOLVER
+// ****************************************************************************************
 // An SMO algorithm in Fan et al., JMLR 6(2005), p. 1889--1918
 // Solves:
 //
@@ -1014,9 +1019,9 @@ double Solver::calculate_rho()
   return r;
 }
 
-//
+// ****************************************************************************************
 // Solver for nu-svm classification and regression
-//
+// ****************************************************************************************
 // additional constraint: e^T \alpha = constant
 //
 class Solver_NU : public Solver
@@ -1290,9 +1295,9 @@ double Solver_NU::calculate_rho()
   return (r1-r2)/2;
 }
 
-//
+// ****************************************************************************************
 // Q matrices for various formulations
-//
+// ****************************************************************************************
 class SVC_Q: public Kernel
 { 
 public:
@@ -1343,6 +1348,10 @@ private:
   Qfloat *QD;
 };
 
+
+// ****************************************************************************************
+// ONE_CLASS_Q
+// ****************************************************************************************
 class ONE_CLASS_Q: public Kernel
 {
 public:
@@ -1468,9 +1477,9 @@ private:
   Qfloat *QD;
 };
 
-//
+// ****************************************************************************************
 // construct and solve various formulations
-//
+// ****************************************************************************************
 static void solve_c_svc(
 			const svm_problem *prob, const svm_parameter* param,
 			double *alpha, Solver::SolutionInfo* si, double Cp, double Cn)
@@ -1561,6 +1570,7 @@ static void solve_nu_svc(
   delete[] zeros;
 }
 
+// estimatethe support of high-dimensional distribution.
 static void solve_one_class(
 			    const svm_problem *prob, const svm_parameter *param,
 			    double *alpha, Solver::SolutionInfo* si)
@@ -1593,6 +1603,8 @@ static void solve_one_class(
   delete[] ones;
 }
 
+
+// epsilon support vector regression
 static void solve_epsilon_svr(
 			      const svm_problem *prob, const svm_parameter *param,
 			      double *alpha, Solver::SolutionInfo* si)
@@ -1631,6 +1643,7 @@ static void solve_epsilon_svr(
   delete[] y;
 }
 
+// regression using nu to control the number of support vectors.
 static void solve_nu_svr(
 			 const svm_problem *prob, const svm_parameter *param,
 			 double *alpha, Solver::SolutionInfo* si)
@@ -1669,9 +1682,9 @@ static void solve_nu_svr(
   delete[] y;
 }
 
-//
+// ****************************************************************************************
 // decision_function
-//
+// ****************************************************************************************
 struct decision_function
 {
   double *alpha;
@@ -2102,9 +2115,9 @@ void svm_group_classes(const svm_problem *prob, int *nr_class_ret, int **label_r
   delete [](data_label);
 }
 
-//
+// ****************************************************************************************
 // Interface functions
-//
+// ****************************************************************************************
 svm_model *svm_train(const svm_problem *prob, const svm_parameter *param)
 {
   svm_model *model = Malloc(svm_model,1);
@@ -3457,9 +3470,9 @@ add(const svm_node *px, const svm_node *py) const
   return(vec);
 }
 
-
-/************************ ComposedKernelFunctor methods ********************/
-
+// ****************************************************************************************
+// ************************ ComposedKernelFunctor methods ********************/
+// ****************************************************************************************
 void 
 ComposedKernelFunctor
 ::print_parameters(void)const

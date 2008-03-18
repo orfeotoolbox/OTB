@@ -48,10 +48,10 @@ int otbDEMCaracteristicsExtractor(int argc, char * argv[])
       WriterType::Pointer exitanceWriter = WriterType::New();
       DEMCaracteristicsExtractorType::Pointer filter = DEMCaracteristicsExtractorType::New();
 
-      slotWriter->SetNumberOfStreamDivisions(20);
-      aspectWriter->SetNumberOfStreamDivisions(20);
-      incidenceWriter->SetNumberOfStreamDivisions(20);
-      exitanceWriter->SetNumberOfStreamDivisions(20);
+      slotWriter->SetNumberOfStreamDivisions(1);
+      aspectWriter->SetNumberOfStreamDivisions(1);
+      incidenceWriter->SetNumberOfStreamDivisions(1);
+      exitanceWriter->SetNumberOfStreamDivisions(1);
 
       input->SetFileName(inputFileName);
       slotWriter->SetFileName(outputSlotFileName);

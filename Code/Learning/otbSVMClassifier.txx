@@ -75,7 +75,6 @@ SVMClassifier< TSample, TLabel >
 
 /*typename Superclass::DecisionRuleType::Pointer rule = 
     this->GetDecisionRule() ;*/
-
   otbMsgDevMacro(  << "Do Classif "  );
   this->DoClassification();
   otbMsgDevMacro(  << "End of classif" );  
@@ -89,6 +88,15 @@ SVMClassifier< TSample, TLabel >
 {
   return m_Output ;
 }
+
+template< class TSample, class TLabel >
+void
+SVMClassifier< TSample, TLabel >
+::SetOutput( OutputType * output ) 
+{
+  m_Output = output;
+}
+
 
 template< class TSample, class TLabel >
 void

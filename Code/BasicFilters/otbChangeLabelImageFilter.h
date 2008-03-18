@@ -18,7 +18,10 @@ PURPOSE.  See the above copyright notices for more information.
 #ifndef _otbChangeLabelImageFilter_h
 #define _otbChangeLabelImageFilter_h
 
-#include "itkChangeLabelImageFilter.h"
+//#include "itkChangeLabelImageFilter.h"
+// Get a itk code correction for label. Julien sends a bug report to ITK.
+// Until the itk source are corrected, we pick the internal code class that Julien has corrected.
+#include "../../Utilities/ITK/Code/BasicFilters/itkChangeLabelImageFilter.h"
 
 namespace otb
 {

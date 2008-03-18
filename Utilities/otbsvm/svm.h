@@ -192,12 +192,23 @@ public:
   otbSetValueMacro(Double,double);
 */
    
-  virtual double operator()(const svm_node *x, const svm_node *y, const svm_parameter& param)const // = 0
+  virtual double operator()(const svm_node *x, const svm_node *y, const svm_parameter& param)const 
     {
       itkGenericExceptionMacro(<<"Kernel functor not definied (Null)");
       return static_cast<double>(0.);
     }
-    
+
+  /** Used for Taylor classification*/
+  // degree is the developement degree
+  // index is the current value
+  // isAtEnd to indicate that it's the last possible derivation
+  // baseValue is the constant of the formula
+  virtual double derivative(const svm_node *x, const svm_node *y, const svm_parameter& param, int degree, int index = 0, bool isAtEnd = false, double constValue)const 
+    {
+      itkGenericExceptionMacro(<<"derivative method not definied (Null)");
+      return 0.;
+    }
+
   virtual int load_parameters(FILE ** pfile);
 
   virtual int save_parameters(FILE ** pfile, const char * generic_kernel_parameters_keyword)const;
@@ -279,7 +290,36 @@ public:
 	}
       return out;
     }
-    
+
+  /** Used for Taylor classification*/
+  // degree is the developement degree
+  // index is the current value
+  // isAtEnd to indicate that it's the last possible derivation
+  // baseValue is the constant of the formula
+  virtual double derivative(const svm_node *x, const svm_node *y, const svm_parameter& param, int degree, int index = 0, bool isAtEnd = false, double constValue = 0.)const 
+    {
+     double out = 0.;
+      if (m_KernelFunctorList.size() != 0 && m_PonderationList.size() != 0 && m_KernelFunctorList.size() == m_PonderationList.size())
+	{
+	  for (unsigned int i = 0; i<m_KernelFunctorList.size(); i++)
+	    {
+	      if ((this->GetValue<bool>("MultiplyKernelFunctor")) == false)
+		{
+		  out += m_PonderationList[i]*(m_KernelFunctorList[i]->derivative(x, y, param, degree, index, isAtEnd, constValue));
+		}
+	      else
+		{
+		  itkGenericExceptionMacro(<<"derivative method not definied (Null)");
+		}
+	    }
+	}
+      else
+	{
+	  itkGenericExceptionMacro(<<"ComposedKernelFunctor::operator() : lists dimensions mismatch");
+	}
+      return out;
+    }
+
   virtual int load_parameters(FILE ** pfile);
 
   virtual int save_parameters(FILE ** pfile, const char * composed_kernel_parameters_keyword) const;
