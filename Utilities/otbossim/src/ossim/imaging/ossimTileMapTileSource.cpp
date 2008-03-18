@@ -6,31 +6,31 @@
 //
 // Description:
 //
-// Contains class implementaiton for the class "ossim NetworkedQuadTreeTileSource".
+// Contains class implementaiton for the class "ossim TileMapTileSource".
 //
 //*******************************************************************
-//  $Id: ossimNetworkedQuadTreeTileSource.cpp 10752 2007-04-23 16:50:08Z dburken $
+//  $Id: ossimTileMapTileSource.cpp 10752 2007-04-23 16:50:08Z dburken $
 
-#include <ossim/imaging/ossimNetworkedQuadTreeTileSource.h>
+#include <ossim/imaging/ossimTileMapTileSource.h>
 #include <ossim/base/ossimDirectory.h>
 #include <ossim/base/ossimTrace.h>
 #include <ossim/base/ossimNotifyContext.h>
 #include <ossim/base/ossimKeywordNames.h>
 #include <ossim/support_data/ossimFfL7.h>
 #include <ossim/support_data/ossimFfL5.h>
-#include <ossim/projection/ossimNetworkedQuadTreeModel.h>
+#include <ossim/projection/ossimTileMapModel.h>
 
-RTTI_DEF1_INST(ossimNetworkedQuadTreeTileSource,
-               "ossimNetworkedQuadTreeTileSource",
+RTTI_DEF1_INST(ossimTileMapTileSource,
+               "ossimTileMapTileSource",
                ossimGeneralRasterTileSource)
 
-static ossimTrace traceDebug("ossimNetworkedQuadTreeTileSource:debug");
+static ossimTrace traceDebug("ossimTileMapTileSource:debug");
 
 
 //*******************************************************************
 // Public Constructor:
 //*******************************************************************
-ossimNetworkedQuadTreeTileSource::ossimNetworkedQuadTreeTileSource()
+ossimTileMapTileSource::ossimTileMapTileSource()
    :
       ossimGeneralRasterTileSource(),
       theFfHdr(NULL)
@@ -40,7 +40,7 @@ ossimNetworkedQuadTreeTileSource::ossimNetworkedQuadTreeTileSource()
 //*******************************************************************
 // Public Constructor:
 //*******************************************************************
-ossimNetworkedQuadTreeTileSource::ossimNetworkedQuadTreeTileSource(const ossimKeywordlist& kwl,
+ossimTileMapTileSource::ossimTileMapTileSource(const ossimKeywordlist& kwl,
                                                const char* prefix)
    :
       ossimGeneralRasterTileSource(),
@@ -55,7 +55,7 @@ ossimNetworkedQuadTreeTileSource::ossimNetworkedQuadTreeTileSource(const ossimKe
 //*******************************************************************
 // Destructor:
 //*******************************************************************
-ossimNetworkedQuadTreeTileSource::~ossimNetworkedQuadTreeTileSource()
+ossimTileMapTileSource::~ossimTileMapTileSource()
 {
    if (theFfHdr)
    {
@@ -64,9 +64,9 @@ ossimNetworkedQuadTreeTileSource::~ossimNetworkedQuadTreeTileSource()
    }
 }
 
-bool ossimNetworkedQuadTreeTileSource::open()
+bool ossimTileMapTileSource::open()
 {
-   static const char MODULE[] = "ossimNetworkedQuadTreeTileSource::open";
+   static const char MODULE[] = "ossimTileMapTileSource::open";
 
    if (traceDebug())
    {
@@ -204,10 +204,10 @@ bool ossimNetworkedQuadTreeTileSource::open()
 //    return true;
 }
    
-void ossimNetworkedQuadTreeTileSource::openHeader(const ossimFilename& file)
+void ossimTileMapTileSource::openHeader(const ossimFilename& file)
 {
    //***
-   // NetworkedQuadTree file name example:  l71024031_03119990929_hpn.fst
+   // TileMap file name example:  l71024031_03119990929_hpn.fst
    // Three header header file type substrings:
    // HPN = Pan
    // HRF = VNIR/SWIR (visible near infrared/shortwave infrared)
@@ -248,7 +248,7 @@ void ossimNetworkedQuadTreeTileSource::openHeader(const ossimFilename& file)
       if (traceDebug())
       {
          ossimNotify(ossimNotifyLevel_DEBUG)
-            << "ossimNetworkedQuadTreeTileSource::openHeader DEBUG:"
+            << "ossimTileMapTileSource::openHeader DEBUG:"
             << "\nNot a standard landsat 7 file name:  " << hdr << std::endl;
          return;
       }
@@ -280,7 +280,7 @@ void ossimNetworkedQuadTreeTileSource::openHeader(const ossimFilename& file)
       if (traceDebug())
       {
          ossimNotify(ossimNotifyLevel_DEBUG)
-            << "ossimNetworkedQuadTreeTileSource::openHeader DEBUG:"
+            << "ossimTileMapTileSource::openHeader DEBUG:"
             << "\nCould not derive header name from:  " << file
             << std::endl;
       }
@@ -320,7 +320,7 @@ void ossimNetworkedQuadTreeTileSource::openHeader(const ossimFilename& file)
 #endif
 }
    
-bool ossimNetworkedQuadTreeTileSource::getImageGeometry(ossimKeywordlist& kwl,
+bool ossimTileMapTileSource::getImageGeometry(ossimKeywordlist& kwl,
                                               const char* prefix)
 {
    // Check for override for an external geometry file, or a previous save.
@@ -332,7 +332,7 @@ bool ossimNetworkedQuadTreeTileSource::getImageGeometry(ossimKeywordlist& kwl,
 //   if (!theFfHdr) return false;
 
    // Make a model
-   ossimNetworkedQuadTreeModel model;
+   ossimTileMapModel model;
 
    if (model.getErrorStatus() != ossimErrorCodes::OSSIM_OK)
    {
@@ -349,7 +349,7 @@ bool ossimNetworkedQuadTreeTileSource::getImageGeometry(ossimKeywordlist& kwl,
    return result;
 }
 
-bool ossimNetworkedQuadTreeTileSource::loadState(const ossimKeywordlist& kwl,
+bool ossimTileMapTileSource::loadState(const ossimKeywordlist& kwl,
                                        const char* prefix)
 {
    const char* lookup = kwl.find(prefix, ossimKeywordNames::FILENAME_KW);
@@ -375,7 +375,7 @@ bool ossimNetworkedQuadTreeTileSource::loadState(const ossimKeywordlist& kwl,
 //    return false;
 }
 
-ossimRefPtr<ossimProperty> ossimNetworkedQuadTreeTileSource::getProperty(
+ossimRefPtr<ossimProperty> ossimTileMapTileSource::getProperty(
    const ossimString& name)const
 {
    ossimRefPtr<ossimProperty> result = 0;
@@ -393,7 +393,7 @@ ossimRefPtr<ossimProperty> ossimNetworkedQuadTreeTileSource::getProperty(
    return result;
 }
 
-void ossimNetworkedQuadTreeTileSource::getPropertyNames(
+void ossimTileMapTileSource::getPropertyNames(
    std::vector<ossimString>& propertyNames)const
 {
    if (theFfHdr)
@@ -403,42 +403,42 @@ void ossimNetworkedQuadTreeTileSource::getPropertyNames(
    ossimGeneralRasterTileSource::getPropertyNames(propertyNames);
 }
 
-ossimString ossimNetworkedQuadTreeTileSource::getShortName() const
+ossimString ossimTileMapTileSource::getShortName() const
 {
-   return ossimString("NetworkedQuadTree");
+   return ossimString("TileMap");
 }
    
-ossimString ossimNetworkedQuadTreeTileSource::getLongName() const
+ossimString ossimTileMapTileSource::getLongName() const
 {
-   return ossimString("NetworkedQuadTree reader");
+   return ossimString("TileMap reader");
 }
 
-ossimString  ossimNetworkedQuadTreeTileSource::className() const
+ossimString  ossimTileMapTileSource::className() const
 {
-   return ossimString("ossimNetworkedQuadTreeTileSource");
+   return ossimString("ossimTileMapTileSource");
 }
  
-double ossimNetworkedQuadTreeTileSource::getNullPixelValue(ossim_uint32)const
+double ossimTileMapTileSource::getNullPixelValue(ossim_uint32)const
 {
    return 0.0;
 }
 
-double ossimNetworkedQuadTreeTileSource::getMinPixelValue(ossim_uint32)const
+double ossimTileMapTileSource::getMinPixelValue(ossim_uint32)const
 {
    return 1.0;
 }
 
-double ossimNetworkedQuadTreeTileSource::getMaxPixelValue(ossim_uint32)const
+double ossimTileMapTileSource::getMaxPixelValue(ossim_uint32)const
 {
    return 255.0;
 }
 
-ossimScalarType ossimNetworkedQuadTreeTileSource::getOutputScalarType() const
+ossimScalarType ossimTileMapTileSource::getOutputScalarType() const
 {
    return OSSIM_UINT8;
 }
 
-bool ossimNetworkedQuadTreeTileSource::getAcquisitionDate(ossimDate& date)const
+bool ossimTileMapTileSource::getAcquisitionDate(ossimDate& date)const
 {
    if(!theFfHdr) return false;
 
@@ -447,14 +447,14 @@ bool ossimNetworkedQuadTreeTileSource::getAcquisitionDate(ossimDate& date)const
    return true;
 }
 
-ossimString ossimNetworkedQuadTreeTileSource::getSatelliteName()const
+ossimString ossimTileMapTileSource::getSatelliteName()const
 {
    if(!theFfHdr) return "";
 
    return theFfHdr->getSatelliteName();
 }
 
-ossimFilename ossimNetworkedQuadTreeTileSource::getBandFilename(ossim_uint32 idx)const
+ossimFilename ossimTileMapTileSource::getBandFilename(ossim_uint32 idx)const
 {
    ossim_uint32 maxIdx = getNumberOfInputBands();
 
@@ -490,17 +490,17 @@ ossimFilename ossimNetworkedQuadTreeTileSource::getBandFilename(ossim_uint32 idx
    return ossimFilename();
 }
 
-bool ossimNetworkedQuadTreeTileSource::isPan()const
+bool ossimTileMapTileSource::isPan()const
 {
    return (getNumberOfInputBands() == 1);
 }
 
-bool ossimNetworkedQuadTreeTileSource::isVir()const
+bool ossimTileMapTileSource::isVir()const
 {
    return (getNumberOfInputBands() == 6);
 }
 
-bool ossimNetworkedQuadTreeTileSource::isTm()const
+bool ossimTileMapTileSource::isTm()const
 {
    return (getNumberOfInputBands() == 2);
 }

@@ -6,30 +6,30 @@
 //
 // Description:
 //
-// Contains class definition for the class "ossimNetworkedQuadTreeTileSource".
-// ossimNetworkedQuadTreeTileSource is derived from ImageHandler which is derived from
+// Contains class definition for the class "ossimTileMapTileSource".
+// ossimTileMapTileSource is derived from ImageHandler which is derived from
 // TileSource.
 //
 //*******************************************************************
-//  $Id: ossimNetworkedQuadTreeTileSource.h 10751 2007-04-23 16:49:08Z dburken $
+//  $Id: ossimTileMapTileSource.h 10751 2007-04-23 16:49:08Z dburken $
 
-#ifndef ossimNetworkedQuadTreeTileSource_HEADER
-#define ossimNetworkedQuadTreeTileSource_HEADER
+#ifndef ossimTileMapTileSource_HEADER
+#define ossimTileMapTileSource_HEADER
 
 #include <ossim/imaging/ossimGeneralRasterTileSource.h>
 #include <ossim/base/ossimDate.h>
 
 class ossimFfL7;
 
-class OSSIM_DLL ossimNetworkedQuadTreeTileSource : public ossimGeneralRasterTileSource
+class OSSIM_DLL ossimTileMapTileSource : public ossimGeneralRasterTileSource
 {
 public:
-   ossimNetworkedQuadTreeTileSource();
+   ossimTileMapTileSource();
 
-   ossimNetworkedQuadTreeTileSource(const ossimKeywordlist& kwl,
+   ossimTileMapTileSource(const ossimKeywordlist& kwl,
                            const char* prefix=0);
    
-   virtual ~ossimNetworkedQuadTreeTileSource();
+   virtual ~ossimTileMapTileSource();
 
    virtual ossimString getShortName() const;
    
