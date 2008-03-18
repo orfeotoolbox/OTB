@@ -66,7 +66,7 @@ protected:
    static ossimSensorModelFactory*  theInstance;
    bool isNitf(const ossimFilename& filename)const;
    bool isLandsat(const ossimFilename& filename)const;
-   bool isNetworkedQuadTree(const ossimFilename& filename) const;
+   bool isTileMap(const ossimFilename& filename) const;
    void findCoarseGrid(ossimFilename& result,
                        const ossimFilename& geomFile)const;
 };

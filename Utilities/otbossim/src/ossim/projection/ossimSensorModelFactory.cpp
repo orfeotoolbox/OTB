@@ -39,7 +39,7 @@ static ossimTrace traceDebug = ossimTrace("ossimSensorModelFactory:debug");
 #include <ossim/projection/ossimLandSatModel.h>
 #include <ossim/projection/ossimSpot5Model.h>
 #include <ossim/projection/ossimSarModel.h>
-#include <ossim/projection/ossimNetworkedQuadTreeModel.h>
+#include <ossim/projection/ossimTileMapModel.h>
 #include <ossim/support_data/ossimSpotDimapSupportData.h>
 #include <ossim/projection/ossimNitfMapModel.h>
 #include <ossim/projection/ossimFcsiModel.h>
@@ -184,9 +184,9 @@ ossimSensorModelFactory::createProjection(const ossimString &name) const
       return new ossimSarModel;
    }
 
-   if(name == STATIC_TYPE_NAME(ossimNetworkedQuadTreeModel))
+   if(name == STATIC_TYPE_NAME(ossimTileMapModel))
      {
-       return new ossimNetworkedQuadTreeModel;
+       return new ossimTileMapModel;
      }
 
    if (name == STATIC_TYPE_NAME(ossimRadarSatModel))
@@ -233,7 +233,7 @@ list<ossimString> ossimSensorModelFactory::getList() const
    result.push_back(STATIC_TYPE_NAME(ossimSpot5Model));
    result.push_back(STATIC_TYPE_NAME(ossimSarModel));
    result.push_back(STATIC_TYPE_NAME(ossimRadarSatModel));
-   result.push_back(STATIC_TYPE_NAME(ossimNetworkedQuadTreeModel));
+   result.push_back(STATIC_TYPE_NAME(ossimTileMapModel));
 
    //***
    // ADD_MODEL: Please leave this comment for the next programmer. Add above.
@@ -281,7 +281,7 @@ ossimSensorModelFactory::getTypeNameList(std::vector<ossimString>& typeList)
    typeList.push_back(STATIC_TYPE_NAME(ossimFcsiModel));
    typeList.push_back(STATIC_TYPE_NAME(ossimSpot5Model));
    typeList.push_back(STATIC_TYPE_NAME(ossimSarModel));
-   typeList.push_back(STATIC_TYPE_NAME(ossimNetworkedQuadTreeModel)); 
+   typeList.push_back(STATIC_TYPE_NAME(ossimTileMapModel)); 
    typeList.push_back(STATIC_TYPE_NAME(ossimRadarSatModel));
    typeList.push_back(STATIC_TYPE_NAME(ossimLandSatModel));
 
@@ -511,13 +511,13 @@ ossimProjection* ossimSensorModelFactory::createProjection(const ossimFilename& 
    return model;
 }
 
-bool ossimSensorModelFactory::isNetworkedQuadTree(const ossimFilename& filename)const
+bool ossimSensorModelFactory::isTileMap(const ossimFilename& filename)const
 {
   ossimFilename temp(filename);
   temp.downcase();
   if(temp.ext()=="otb")
     {
-      std::cout << "NetworkedQuadTree format " << std::endl;
+      std::cout << "TileMap format " << std::endl;
       return true;
     }
   return false;

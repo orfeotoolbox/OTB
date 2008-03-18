@@ -2,17 +2,17 @@
 //
 // License:  See top level LICENSE.txt file.
 // 
-// DESCRIPTION: Contains declaration of NetworkedQuadTree sensor model class.
+// DESCRIPTION: Contains declaration of TileMap sensor model class.
 //
 // SOFTWARE HISTORY:
 //   23JAN2008  Jordi Inglada, CNES
 //              Initial coding.
 //
 //*****************************************************************************
-//  $Id: ossimNetworkedQuadTreeModel.h 10384 2007-01-26 20:32:12Z gpotts $
+//  $Id: ossimTileMapModel.h 10384 2007-01-26 20:32:12Z gpotts $
 
-#ifndef ossimNetworkedQuadTreeModel_HEADER
-#define ossimNetworkedQuadTreeModel_HEADER
+#ifndef ossimTileMapModel_HEADER
+#define ossimTileMapModel_HEADER
 
 #include <ossim/projection/ossimSensorModel.h>
 #include <ossim/projection/ossimMapProjection.h>
@@ -31,22 +31,22 @@ class ossimMapProjection;
 
 //******************************************************************************
 //*
-//* CLASS:  ossimNetworkedQuadTreeModel
+//* CLASS:  ossimTileMapModel
 //*
 //*******************************************************************************
-class OSSIMDLLEXPORT ossimNetworkedQuadTreeModel : public ossimSensorModel
+class OSSIMDLLEXPORT ossimTileMapModel : public ossimSensorModel
 {
 public:
    /*!
     * CONSTRUCTORS:
     */
-   ossimNetworkedQuadTreeModel();
-   ossimNetworkedQuadTreeModel(const ossimFfL7& head);
-   ossimNetworkedQuadTreeModel(const ossimFilename& init_file);
-   ossimNetworkedQuadTreeModel(const ossimKeywordlist& geom_kwl);
-   ossimNetworkedQuadTreeModel(const ossimNetworkedQuadTreeModel& rhs);
+   ossimTileMapModel();
+   ossimTileMapModel(const ossimFfL7& head);
+   ossimTileMapModel(const ossimFilename& init_file);
+   ossimTileMapModel(const ossimKeywordlist& geom_kwl);
+   ossimTileMapModel(const ossimTileMapModel& rhs);
    
-   virtual ~ossimNetworkedQuadTreeModel();
+   virtual ~ossimTileMapModel();
 
    enum ProjectionType
    {

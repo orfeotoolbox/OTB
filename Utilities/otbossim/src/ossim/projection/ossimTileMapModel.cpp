@@ -12,9 +12,9 @@
 //
 //*****************************************************************************
 
-#include <ossim/projection/ossimNetworkedQuadTreeModel.h>
+#include <ossim/projection/ossimTileMapModel.h>
 
-RTTI_DEF1(ossimNetworkedQuadTreeModel, "ossimNetworkedQuadTreeModel", ossimSensorModel);
+RTTI_DEF1(ossimTileMapModel, "ossimTileMapModel", ossimSensorModel);
 
 #include <ossim/base/ossimKeywordlist.h>
 #include <ossim/base/ossimKeywordNames.h>
@@ -33,8 +33,8 @@ RTTI_DEF1(ossimNetworkedQuadTreeModel, "ossimNetworkedQuadTreeModel", ossimSenso
 // Define Trace flags for use within this file:
 //***
 #include <ossim/base/ossimTrace.h>
-static ossimTrace traceExec  ("ossimNetworkedQuadTreeModel:exec");
-static ossimTrace traceDebug ("ossimNetworkedQuadTreeModel:debug");
+static ossimTrace traceExec  ("ossimTileMapModel:exec");
+static ossimTrace traceDebug ("ossimTileMapModel:debug");
 
 static const int    MODEL_VERSION_NUMBER   = 2;
 static const char*  PROJECTION_TYPE_KW     = "theProjectionType";
@@ -95,10 +95,10 @@ static const char* PROJ_TYPE[] = { "UNKNOWN_PROJECTION",
                                          "SOM_ORBIT" };
 
 //*****************************************************************************
-//  DEFAULT CONSTRUCTOR: ossimNetworkedQuadTreeModel()
+//  DEFAULT CONSTRUCTOR: ossimTileMapModel()
 //  
 //*****************************************************************************
-ossimNetworkedQuadTreeModel::ossimNetworkedQuadTreeModel()
+ossimTileMapModel::ossimTileMapModel()
    :
    ossimSensorModel(),
    theIntrackOffset     (0.0),
@@ -112,20 +112,20 @@ ossimNetworkedQuadTreeModel::ossimNetworkedQuadTreeModel()
    qDepth (1)
 
 {
-   if (traceExec())  ossimNotify(ossimNotifyLevel_DEBUG) << "DEBUG ossimNetworkedQuadTreeModel::ossimNetworkedQuadTreeModel: entering..." << std::endl;
+   if (traceExec())  ossimNotify(ossimNotifyLevel_DEBUG) << "DEBUG ossimTileMapModel::ossimTileMapModel: entering..." << std::endl;
 
 //   initAdjustableParameters();
 
-//    std::cout << "NetworkedQuadTreeModel constructor" << std::endl;
+//    std::cout << "TileMapModel constructor" << std::endl;
    
-   if (traceExec()) ossimNotify(ossimNotifyLevel_DEBUG) << "DEBUG ossimNetworkedQuadTreeModel::ossimNetworkedQuadTreeModel: returning..." << std::endl;
+   if (traceExec()) ossimNotify(ossimNotifyLevel_DEBUG) << "DEBUG ossimTileMapModel::ossimTileMapModel: returning..." << std::endl;
 }
 
 //*****************************************************************************
-//  COPY CONSTRUCTOR: ossimNetworkedQuadTreeModel(ossimNetworkedQuadTreeModel)
+//  COPY CONSTRUCTOR: ossimTileMapModel(ossimTileMapModel)
 //  
 //*****************************************************************************
-ossimNetworkedQuadTreeModel::ossimNetworkedQuadTreeModel(const ossimFfL7& head)
+ossimTileMapModel::ossimTileMapModel(const ossimFfL7& head)
    :
    ossimSensorModel(),
    theIntrackOffset     (0.0),
@@ -138,40 +138,40 @@ ossimNetworkedQuadTreeModel::ossimNetworkedQuadTreeModel(const ossimFfL7& head)
    theMapRotation       (0.0),
    qDepth (1)
 {
-   if (traceExec())  ossimNotify(ossimNotifyLevel_DEBUG) << "DEBUG ossimNetworkedQuadTreeModel::ossimNetworkedQuadTreeModel(head): entering..." << std::endl;
+   if (traceExec())  ossimNotify(ossimNotifyLevel_DEBUG) << "DEBUG ossimTileMapModel::ossimTileMapModel(head): entering..." << std::endl;
 
    initFromHeader(head);
 
-   if (traceDebug()) ossimNotify(ossimNotifyLevel_DEBUG) << "DEBUG ossimNetworkedQuadTreeModel::ossimNetworkedQuadTreeModel(head): Exited..." << std::endl;
+   if (traceDebug()) ossimNotify(ossimNotifyLevel_DEBUG) << "DEBUG ossimTileMapModel::ossimTileMapModel(head): Exited..." << std::endl;
 }
 
 
 //*****************************************************************************
-//  CONSTRUCTOR: ossimNetworkedQuadTreeModel(filename)
+//  CONSTRUCTOR: ossimTileMapModel(filename)
 //  
 //  Constructs model from a filename. The file can be either a FF header file
 //  or a KWL file.
 //  
 //*****************************************************************************
-ossimNetworkedQuadTreeModel::ossimNetworkedQuadTreeModel(const ossimFilename& init_file)
+ossimTileMapModel::ossimTileMapModel(const ossimFilename& init_file)
  
 {
-   if (traceExec())  ossimNotify(ossimNotifyLevel_DEBUG) << "DEBUG ossimNetworkedQuadTreeModel::ossimNetworkedQuadTreeModel(init_file): entering..." << std::endl;
+   if (traceExec())  ossimNotify(ossimNotifyLevel_DEBUG) << "DEBUG ossimTileMapModel::ossimTileMapModel(init_file): entering..." << std::endl;
 
    setupOptimizer(init_file);
 
-   if (traceExec()) ossimNotify(ossimNotifyLevel_DEBUG) << "DEBUG ossimNetworkedQuadTreeModel::ossimNetworkedQuadTreeModel(init_file): Exited..." << std::endl;
+   if (traceExec()) ossimNotify(ossimNotifyLevel_DEBUG) << "DEBUG ossimTileMapModel::ossimTileMapModel(init_file): Exited..." << std::endl;
 }
 
 
 
 //*****************************************************************************
-//  CONSTRUCTOR: ossimNetworkedQuadTreeModel(kwl)
+//  CONSTRUCTOR: ossimTileMapModel(kwl)
 //  
 //  Constructs model from keywordlist geometry file
 //  
 //*****************************************************************************
-ossimNetworkedQuadTreeModel::ossimNetworkedQuadTreeModel(const ossimKeywordlist& geom_kwl)
+ossimTileMapModel::ossimTileMapModel(const ossimKeywordlist& geom_kwl)
    :
    ossimSensorModel(),
    theIntrackOffset     (0.0),
@@ -184,7 +184,7 @@ ossimNetworkedQuadTreeModel::ossimNetworkedQuadTreeModel(const ossimKeywordlist&
    theMapRotation       (0.0),
    qDepth (1)
 {
-   if (traceExec())  ossimNotify(ossimNotifyLevel_DEBUG) << "DEBUG ossimNetworkedQuadTreeModel::ossimNetworkedQuadTreeModel(geom_kwl): entering..." << std::endl;
+   if (traceExec())  ossimNotify(ossimNotifyLevel_DEBUG) << "DEBUG ossimTileMapModel::ossimTileMapModel(geom_kwl): entering..." << std::endl;
 
    initAdjustableParameters();
 
@@ -193,13 +193,13 @@ ossimNetworkedQuadTreeModel::ossimNetworkedQuadTreeModel(const ossimKeywordlist&
    //***
    loadState(geom_kwl);
 
-   if (traceExec()) ossimNotify(ossimNotifyLevel_DEBUG) << "DEBUG ossimNetworkedQuadTreeModel::ossimNetworkedQuadTreeModel(geom_kwl): Exited..." << std::endl;
+   if (traceExec()) ossimNotify(ossimNotifyLevel_DEBUG) << "DEBUG ossimTileMapModel::ossimTileMapModel(geom_kwl): Exited..." << std::endl;
 }
 
 //*****************************************************************************
 //  COPY CONSTRUCTOR: 
 //*****************************************************************************
-ossimNetworkedQuadTreeModel::ossimNetworkedQuadTreeModel(const ossimNetworkedQuadTreeModel& rhs)
+ossimTileMapModel::ossimTileMapModel(const ossimTileMapModel& rhs)
    :
    ossimSensorModel   (rhs),
    theIllumAzimuth    (rhs.theIllumAzimuth),
@@ -232,33 +232,33 @@ ossimNetworkedQuadTreeModel::ossimNetworkedQuadTreeModel(const ossimNetworkedQua
    theMapRotation     (rhs.theMapRotation),
    theRollRotMat      (rhs.theRollRotMat)
 {
-   if (traceExec())  ossimNotify(ossimNotifyLevel_DEBUG) << "DEBUG ossimNetworkedQuadTreeModel::ossimNetworkedQuadTreeModel(rhs): entering..." << std::endl;
+   if (traceExec())  ossimNotify(ossimNotifyLevel_DEBUG) << "DEBUG ossimTileMapModel::ossimTileMapModel(rhs): entering..." << std::endl;
    
    initAdjustableParameters();
 
-   if (traceExec())  ossimNotify(ossimNotifyLevel_DEBUG) << "DEBUG ossimNetworkedQuadTreeModel::ossimNetworkedQuadTreeModel(rhs): returning..." << std::endl;
+   if (traceExec())  ossimNotify(ossimNotifyLevel_DEBUG) << "DEBUG ossimTileMapModel::ossimTileMapModel(rhs): returning..." << std::endl;
 }
 
 //*****************************************************************************
-//  DESTRUCTOR: ~ossimNetworkedQuadTreeModel()
+//  DESTRUCTOR: ~ossimTileMapModel()
 //  
 //*****************************************************************************
-ossimNetworkedQuadTreeModel::~ossimNetworkedQuadTreeModel()
+ossimTileMapModel::~ossimTileMapModel()
 {
-   if (traceExec())  ossimNotify(ossimNotifyLevel_DEBUG) << "DEBUG ossimNetworkedQuadTreeModel::~ossimNetworkedQuadTreeModel: entering..." << std::endl;
+   if (traceExec())  ossimNotify(ossimNotifyLevel_DEBUG) << "DEBUG ossimTileMapModel::~ossimTileMapModel: entering..." << std::endl;
 
    theMapProjection = 0;
 
-   if (traceExec())  ossimNotify(ossimNotifyLevel_DEBUG) << "DEBUG ossimNetworkedQuadTreeModel::~ossimNetworkedQuadTreeModel: returning..." << std::endl;
+   if (traceExec())  ossimNotify(ossimNotifyLevel_DEBUG) << "DEBUG ossimTileMapModel::~ossimTileMapModel: returning..." << std::endl;
 }
 
 //*****************************************************************************
-//  METHOD: ossimNetworkedQuadTreeModel::initFromHeader()
+//  METHOD: ossimTileMapModel::initFromHeader()
 //  
 //*****************************************************************************
-void ossimNetworkedQuadTreeModel::initFromHeader(const ossimFfL7& head)
+void ossimTileMapModel::initFromHeader(const ossimFfL7& head)
 {
-   if (traceExec())  ossimNotify(ossimNotifyLevel_DEBUG) << "DEBUG ossimNetworkedQuadTreeModel::initFromHeader: entering..." << std::endl;
+   if (traceExec())  ossimNotify(ossimNotifyLevel_DEBUG) << "DEBUG ossimTileMapModel::initFromHeader: entering..." << std::endl;
    
    //***
    // Initialize base-class data members:
@@ -295,7 +295,7 @@ void ossimNetworkedQuadTreeModel::initFromHeader(const ossimFfL7& head)
       theErrorStatus = 1; //MODEL_ERROR
       if(traceDebug())
       {
-         ossimNotify(ossimNotifyLevel_WARN) << "WARNING ossimNetworkedQuadTreeModel::initFromHeader: " << "Unknown satellite name : " << satname << std::endl;
+         ossimNotify(ossimNotifyLevel_WARN) << "WARNING ossimTileMapModel::initFromHeader: " << "Unknown satellite name : " << satname << std::endl;
       }
    }   
    
@@ -362,7 +362,7 @@ void ossimNetworkedQuadTreeModel::initFromHeader(const ossimFfL7& head)
       theErrorStatus = 1; //MODEL_ERROR
       if(traceDebug())
       {
-         ossimNotify(ossimNotifyLevel_WARN) << "WARNING ossimNetworkedQuadTreeModel::initFromHeader: "
+         ossimNotify(ossimNotifyLevel_WARN) << "WARNING ossimTileMapModel::initFromHeader: "
                                              << "Unknown projection/orientation type." << std::endl;
       }
       return;
@@ -378,7 +378,7 @@ void ossimNetworkedQuadTreeModel::initFromHeader(const ossimFfL7& head)
    if (traceDebug())
    {
       ossimNotify(ossimNotifyLevel_DEBUG)
-         << "DEBUG ossimNetworkedQuadTreeModel::initFromHeader:"
+         << "DEBUG ossimTileMapModel::initFromHeader:"
          << "\ntheMapProjection:\n";
 
       theMapProjection->print(ossimNotify(ossimNotifyLevel_DEBUG));
@@ -394,23 +394,23 @@ void ossimNetworkedQuadTreeModel::initFromHeader(const ossimFfL7& head)
    initAdjustableParameters();
    updateModel();
 
-   if (traceExec())  ossimNotify(ossimNotifyLevel_DEBUG) << "DEBUG ossimNetworkedQuadTreeModel::initFromHeader: returning..." << std::endl;
+   if (traceExec())  ossimNotify(ossimNotifyLevel_DEBUG) << "DEBUG ossimTileMapModel::initFromHeader: returning..." << std::endl;
 }
 
 //*****************************************************************************
-//  METHOD: ossimNetworkedQuadTreeModel::lineSampleHeightToWorld()
+//  METHOD: ossimTileMapModel::lineSampleHeightToWorld()
 //  
 //  Performs the line/sample to groundpoint projection given an elevation.
 //  
 //  5. Intersect imaging ray with elevation surface.
 //
 //*****************************************************************************
-void ossimNetworkedQuadTreeModel::lineSampleToWorld(const ossimDpt& image_point,
+void ossimTileMapModel::lineSampleToWorld(const ossimDpt& image_point,
                                                 ossimGpt&       gpt) const
 {
   lineSampleHeightToWorld(image_point, 0.0, gpt);
 }
-void ossimNetworkedQuadTreeModel::lineSampleHeightToWorld(const ossimDpt& image_point,
+void ossimTileMapModel::lineSampleHeightToWorld(const ossimDpt& image_point,
                                                 const double&   height,
                                                 ossimGpt&       gpt) const
 {
@@ -431,10 +431,10 @@ void ossimNetworkedQuadTreeModel::lineSampleHeightToWorld(const ossimDpt& image_
 
 }
 
-void ossimNetworkedQuadTreeModel::worldToLineSample(const ossimGpt& ground_point,
+void ossimTileMapModel::worldToLineSample(const ossimGpt& ground_point,
                                       ossimDpt&       img_pt) const
 {
-   // if (traceExec())  ossimNotify(ossimNotifyLevel_DEBUG) << "DEBUG ossimNetworkedQuadTreeModel::worldToLineSample(): entering..." << std::endl;
+   // if (traceExec())  ossimNotify(ossimNotifyLevel_DEBUG) << "DEBUG ossimTileMapModel::worldToLineSample(): entering..." << std::endl;
 
    if(ground_point.isLatNan() || ground_point.isLonNan() )
    {
@@ -458,7 +458,7 @@ void ossimNetworkedQuadTreeModel::worldToLineSample(const ossimGpt& ground_point
    
    
 //*****************************************************************************
-//  METHOD: ossimNetworkedQuadTreeModel::imagingRay()
+//  METHOD: ossimTileMapModel::imagingRay()
 //  
 //  This model implements an affine transform with scaling to arrive at an
 //  ECF ray given an image point. This ray is intersected with a constant
@@ -479,11 +479,11 @@ void ossimNetworkedQuadTreeModel::worldToLineSample(const ossimGpt& ground_point
 //     position error.
 //
 //*****************************************************************************
-void ossimNetworkedQuadTreeModel::imagingRay(const ossimDpt& inImgPt,
+void ossimTileMapModel::imagingRay(const ossimDpt& inImgPt,
                                    ossimEcefRay&   image_ray) const
 {
 #if 0
-   if (traceExec())  ossimNotify(ossimNotifyLevel_DEBUG) << "ossimNetworkedQuadTreeModel::imagingRay: entering..." << std::endl;
+   if (traceExec())  ossimNotify(ossimNotifyLevel_DEBUG) << "ossimTileMapModel::imagingRay: entering..." << std::endl;
 
    bool debug_flag = false; // setable by interactive debugger
    if (traceDebug() || debug_flag)
@@ -635,22 +635,22 @@ void ossimNetworkedQuadTreeModel::imagingRay(const ossimDpt& inImgPt,
 
    if (traceExec())
    {
-      ossimNotify(ossimNotifyLevel_DEBUG) << "DEBUG ossimNetworkedQuadTreeModel::imagingRay: Returning..." << std::endl;
+      ossimNotify(ossimNotifyLevel_DEBUG) << "DEBUG ossimTileMapModel::imagingRay: Returning..." << std::endl;
    }
 #endif
 }
 
 //*****************************************************************************
-//  METHOD: ossimNetworkedQuadTreeModel::print()
+//  METHOD: ossimTileMapModel::print()
 //  
 //  Formatted dump of data members.
 //  
 //*****************************************************************************
-std::ostream& ossimNetworkedQuadTreeModel::print(std::ostream& os) const
+std::ostream& ossimTileMapModel::print(std::ostream& os) const
 {
-   os << "\nDump of ossimNetworkedQuadTreeModel object at "
+   os << "\nDump of ossimTileMapModel object at "
       << hex << this << ":\n"
-      << "\nNetworkedQuadTreeModel -- Dump of all data members: "
+      << "\nTileMapModel -- Dump of all data members: "
       << "\n         theImageID: " << theImageID.chars()
       << "\n       theImageSize: " << theImageSize
       << "\n        theRefImgPt: " << theRefImgPt
@@ -684,15 +684,15 @@ std::ostream& ossimNetworkedQuadTreeModel::print(std::ostream& os) const
 }
 
 //*****************************************************************************
-//  METHOD: ossimNetworkedQuadTreeModel::saveState()
+//  METHOD: ossimTileMapModel::saveState()
 //  
 //  Saves the model state to the KWL. This KWL also serves as a geometry file.
 //  
 //*****************************************************************************
-bool ossimNetworkedQuadTreeModel::saveState(ossimKeywordlist& kwl,
+bool ossimTileMapModel::saveState(ossimKeywordlist& kwl,
                               const char* prefix) const
 {
-   if (traceExec())  ossimNotify(ossimNotifyLevel_DEBUG) << "DEBUG ossimNetworkedQuadTreeModel::saveState: entering..." << std::endl;
+   if (traceExec())  ossimNotify(ossimNotifyLevel_DEBUG) << "DEBUG ossimTileMapModel::saveState: entering..." << std::endl;
 
    kwl.add(prefix, ossimKeywordNames::TYPE_KW, TYPE_NAME(this));
 
@@ -727,25 +727,25 @@ bool ossimNetworkedQuadTreeModel::saveState(ossimKeywordlist& kwl,
 // //    kwl.add(prefix, YAW_RATE_KW,          theYawRate, true);
 // //    kwl.add(prefix, MAP_ROTATION_KW,      theMapRotation, true);
    
-   if (traceExec())  ossimNotify(ossimNotifyLevel_DEBUG) << "DEBUG ossimNetworkedQuadTreeModel::saveState: returning..." << std::endl;
+   if (traceExec())  ossimNotify(ossimNotifyLevel_DEBUG) << "DEBUG ossimTileMapModel::saveState: returning..." << std::endl;
    return true;
 }
 
 //*****************************************************************************
-//  METHOD: ossimNetworkedQuadTreeModel::loadState()
+//  METHOD: ossimTileMapModel::loadState()
 //  
 //  Restores the model's state from the KWL. This KWL also serves as a
 //  geometry file.
 //  
 //*****************************************************************************
-bool ossimNetworkedQuadTreeModel::loadState(const ossimKeywordlist& kwl,
+bool ossimTileMapModel::loadState(const ossimKeywordlist& kwl,
                                   const char* prefix) 
 {
-   if (traceExec())  ossimNotify(ossimNotifyLevel_DEBUG) << "DEBUG ossimNetworkedQuadTreeModel::loadState: entering..." << std::endl;
+   if (traceExec())  ossimNotify(ossimNotifyLevel_DEBUG) << "DEBUG ossimTileMapModel::loadState: entering..." << std::endl;
 
    if (traceDebug())
    {
-      ossimNotify(ossimNotifyLevel_DEBUG) << "DEBUG ossimNetworkedQuadTreeModel::loadState:"
+      ossimNotify(ossimNotifyLevel_DEBUG) << "DEBUG ossimTileMapModel::loadState:"
                                           << "\nInput kwl:  " << kwl
                                           << std::endl;
    }
@@ -974,30 +974,30 @@ bool ossimNetworkedQuadTreeModel::loadState(const ossimKeywordlist& kwl,
    initMapProjection();
    updateModel();
    
-   if (traceExec())  ossimNotify(ossimNotifyLevel_DEBUG) << "DEBUG ossimNetworkedQuadTreeModel::loadState: returning..." << std::endl;
+   if (traceExec())  ossimNotify(ossimNotifyLevel_DEBUG) << "DEBUG ossimTileMapModel::loadState: returning..." << std::endl;
    return true;
 }
 
 //*****************************************************************************
-// STATIC METHOD: ossimNetworkedQuadTreeModel::writeGeomTemplate
+// STATIC METHOD: ossimTileMapModel::writeGeomTemplate
 //  
 //  Writes a sample kwl to output stream.
 //  
 //*****************************************************************************
-void ossimNetworkedQuadTreeModel::writeGeomTemplate(ostream& os)
+void ossimTileMapModel::writeGeomTemplate(ostream& os)
 {
-   if (traceExec())  ossimNotify(ossimNotifyLevel_DEBUG) << "DEBUG ossimNetworkedQuadTreeModel::writeGeomTemplate: entering..." << std::endl;
+   if (traceExec())  ossimNotify(ossimNotifyLevel_DEBUG) << "DEBUG ossimTileMapModel::writeGeomTemplate: entering..." << std::endl;
 
    os <<
       "//**************************************************************\n"
-      "// Template for NetworkedQuadTree model keywordlist\n"
+      "// Template for TileMap model keywordlist\n"
       "//**************************************************************\n"
-      << ossimKeywordNames::TYPE_KW << ": " << "ossimNetworkedQuadTreeModel" << endl;
+      << ossimKeywordNames::TYPE_KW << ": " << "ossimTileMapModel" << endl;
 
 //    ossimSensorModel::writeGeomTemplate(os);
    
 //    os << "//\n"
-//       << "// Derived-class ossimNetworkedQuadTreeModel Keywords:\n"
+//       << "// Derived-class ossimTileMapModel Keywords:\n"
 //       << "//\n"
 //       << PROJECTION_TYPE_KW     << ": <float>\n"
 //       << MAP_ZONE_KW            << ": <float>\n"
@@ -1023,18 +1023,18 @@ void ossimNetworkedQuadTreeModel::writeGeomTemplate(ostream& os)
 //       << endl;
 //    os << "\n" <<endl;
 
-   if (traceExec())  ossimNotify(ossimNotifyLevel_DEBUG) << "DEBUG ossimNetworkedQuadTreeModel::writeGeomTemplate: returning..." << std::endl;
+   if (traceExec())  ossimNotify(ossimNotifyLevel_DEBUG) << "DEBUG ossimTileMapModel::writeGeomTemplate: returning..." << std::endl;
    return;
 }
 
 
 //*****************************************************************************
-// PROTECTED METHOD: ossimNetworkedQuadTreeModel::initMapProjection()
+// PROTECTED METHOD: ossimTileMapModel::initMapProjection()
 //  
 //*****************************************************************************
-void ossimNetworkedQuadTreeModel::initMapProjection()
+void ossimTileMapModel::initMapProjection()
 {
-   if (traceExec())  ossimNotify(ossimNotifyLevel_DEBUG) <<  "DEBUG ossimNetworkedQuadTreeModel::writeGeomTemplate: entering... " << std::endl;
+   if (traceExec())  ossimNotify(ossimNotifyLevel_DEBUG) <<  "DEBUG ossimTileMapModel::writeGeomTemplate: entering... " << std::endl;
 
    theMapProjection = 0;   
    //*** 
@@ -1067,14 +1067,14 @@ void ossimNetworkedQuadTreeModel::initMapProjection()
    theMap2IcRotCos   = ossim::cosd(theMap2IcRotAngle);
    theMap2IcRotSin   = ossim::sind(theMap2IcRotAngle);
 
-   if (traceExec())  ossimNotify(ossimNotifyLevel_DEBUG) <<  "DEBUG ossimNetworkedQuadTreeModel::writeGeomTemplate: returning... " << std::endl;
+   if (traceExec())  ossimNotify(ossimNotifyLevel_DEBUG) <<  "DEBUG ossimTileMapModel::writeGeomTemplate: returning... " << std::endl;
    return;
 }
 
 //*****************************************************************************
 // PROTECTED METHOD:
 //*****************************************************************************
-void  ossimNetworkedQuadTreeModel::updateModel()
+void  ossimTileMapModel::updateModel()
 {
 //    //***
 //    // Update the geometry...
@@ -1120,16 +1120,16 @@ void  ossimNetworkedQuadTreeModel::updateModel()
    
 }
 //*****************************************************************************
-// PRIVATE METHOD: ossimNetworkedQuadTreeModel::initAdjustableParameters()
+// PRIVATE METHOD: ossimTileMapModel::initAdjustableParameters()
 //  
 //  This method initializes the base class adjustable parameter and associated
 //  sigmas arrays with quantities specific to this model.
 //
 //  
 //*****************************************************************************
-void ossimNetworkedQuadTreeModel::initAdjustableParameters()
+void ossimTileMapModel::initAdjustableParameters()
 {
-//    if (traceExec())  ossimNotify(ossimNotifyLevel_DEBUG) << "DEBUG ossimNetworkedQuadTreeModel::initAdjustableParameters: entering..." << std::endl;
+//    if (traceExec())  ossimNotify(ossimNotifyLevel_DEBUG) << "DEBUG ossimTileMapModel::initAdjustableParameters: entering..." << std::endl;
 
 //    //
 //    // Allocate storage for adjustables and assign their names and units strings
@@ -1148,22 +1148,22 @@ void ossimNetworkedQuadTreeModel::initAdjustableParameters()
 //    //***
 //    // Initialize base-class parameter sigma array:
 //    //***
-//    setParameterSigma(INTRACK_OFFSET, 500.0); //change for NetworkedQuadTree 5
-//    setParameterSigma(CRTRACK_OFFSET, 500.0); //change for NetworkedQuadTree 5
+//    setParameterSigma(INTRACK_OFFSET, 500.0); //change for TileMap 5
+//    setParameterSigma(CRTRACK_OFFSET, 500.0); //change for TileMap 5
 //    setParameterSigma(LINE_GSD_CORR, 0.005);  
 //    setParameterSigma(SAMP_GSD_CORR, 0.005);  
 //    setParameterSigma(ROLL_OFFSET, 0.01);  
 //    setParameterSigma(YAW_OFFSET, 0.01);  
 //    setParameterSigma(YAW_RATE, 0.05);  
 //    setParameterSigma(MAP_ROTATION, 0.1);
-//    if (traceExec())  ossimNotify(ossimNotifyLevel_DEBUG) << "DEBUG ossimNetworkedQuadTreeModel::initAdjustableParameters: returning..." << std::endl;
+//    if (traceExec())  ossimNotify(ossimNotifyLevel_DEBUG) << "DEBUG ossimTileMapModel::initAdjustableParameters: returning..." << std::endl;
 }
 
 bool
-ossimNetworkedQuadTreeModel::setupOptimizer(const ossimString& init_file)
+ossimTileMapModel::setupOptimizer(const ossimString& init_file)
 {
    //init model using file path
-   if (traceExec())  ossimNotify(ossimNotifyLevel_DEBUG) << "DEBUG ossimNetworkedQuadTreeModel::setupOptimizer(init_file): entering..." << std::endl;
+   if (traceExec())  ossimNotify(ossimNotifyLevel_DEBUG) << "DEBUG ossimTileMapModel::setupOptimizer(init_file): entering..." << std::endl;
 
    theMapProjection = 0;
    theIntrackOffset = 0.0;
@@ -1222,6 +1222,6 @@ ossimNetworkedQuadTreeModel::setupOptimizer(const ossimString& init_file)
       loadState(kwl);
    }
 
-   if (traceExec()) ossimNotify(ossimNotifyLevel_DEBUG) << "DEBUG ossimNetworkedQuadTreeModel::setupOptimizer(init_file): Exited..." << std::endl;
+   if (traceExec()) ossimNotify(ossimNotifyLevel_DEBUG) << "DEBUG ossimTileMapModel::setupOptimizer(init_file): Exited..." << std::endl;
    return true;
 }
