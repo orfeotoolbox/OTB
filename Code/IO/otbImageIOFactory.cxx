@@ -58,26 +58,26 @@ namespace otb
           if( firstTime )
           {
 
-			// GDAL : New format for OTB
-            itk::ObjectFactoryBase::RegisterFactory( GDALImageIOFactory::New() );
-                        
-			// JPEG2000 : New format for OTB
+	    // JPEG2000 : New format for OTB
             itk::ObjectFactoryBase::RegisterFactory( JPEG2000ImageIOFactory::New() );
-            
-                                    // BSQ format for OTB
+
+	    // GDAL : New format for OTB
+            itk::ObjectFactoryBase::RegisterFactory( GDALImageIOFactory::New() );            
+           
+	    // BSQ format for OTB
             itk::ObjectFactoryBase::RegisterFactory( BSQImageIOFactory::New() );			
                         
-                        // LUM format for OTB
+	    // LUM format for OTB
             itk::ObjectFactoryBase::RegisterFactory( LUMImageIOFactory::New() );			
                         
-                        // ONERA format for OTB
+	    // ONERA format for OTB
             itk::ObjectFactoryBase::RegisterFactory( ONERAImageIOFactory::New() );			
                         
-			// MSTAR Format for OTB
+	    // MSTAR Format for OTB
             itk::ObjectFactoryBase::RegisterFactory( MSTARImageIOFactory::New() );
                         
 #ifdef OTB_USE_CURL
-                        // TileMap : New format for OTB
+	    // TileMap : New format for OTB
             itk::ObjectFactoryBase::RegisterFactory( TileMapImageIOFactory::New() );
 #endif                        
             firstTime = false;
