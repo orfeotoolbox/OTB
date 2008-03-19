@@ -184,7 +184,7 @@ class RBFKernelFunctor : public GenericKernelFunctorBase
 	return vcl_exp(-res);
       }
     
-    virtual double derivative(const svm_node *x, const svm_node *y, const svm_parameter& param, int degree, int index = 0, bool isAtEnd, double constValue)const 
+    virtual double derivative(const svm_node *x, const svm_node *y, const svm_parameter& param, int degree, int index, bool isAtEnd, double constValue)const 
       {
 	double gamma = this->GetValue<double>("gamma_coef");
 	double kernelValue = 0.;
