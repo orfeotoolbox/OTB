@@ -75,7 +75,7 @@ namespace otb
 	return false;
       }
     // Creating a codec
-    opj_codec_t * codec = opj_create_decompress(CODEC_J2K);
+    opj_codec_t * codec = opj_create_decompress(CODEC_JP2);
     if(!codec)
       {
 	std::cout<<"Impossible to create codec."<<std::endl;
@@ -169,7 +169,7 @@ namespace otb
     otbMsgDevMacro(<<"Component type: "<<this->GetComponentTypeAsString(this->GetComponentType()));
 
     // Creating openjpeg objects
-    m_Codec = opj_create_decompress(CODEC_J2K);
+    m_Codec = opj_create_decompress(CODEC_JP2);
     opj_set_info_handler(m_Codec, info_callback,00);
     opj_set_warning_handler(m_Codec, warning_callback,00);
     opj_set_error_handler(m_Codec, error_callback,00);
@@ -323,7 +323,7 @@ namespace otb
       }
   
     // Creating openjpeg objects
-    m_Codec = opj_create_decompress(CODEC_J2K);
+    m_Codec = opj_create_decompress(CODEC_JP2);
     opj_set_info_handler(m_Codec, info_callback,00);
     opj_set_warning_handler(m_Codec, warning_callback,00);
     opj_set_error_handler(m_Codec, error_callback,00);
@@ -483,15 +483,230 @@ namespace otb
 
   void JPEG2000ImageIO::Write(const void* buffer)
   {
+    // char * charstarbuffer = static_cast<char *>(buffer);
 
+// m_NbBands = this->GetNumberOfComponents();
 
+//     	if( (m_Dimensions[0]==0) && (m_Dimensions[1]==0))
+//       	{
+//       	        itkExceptionMacro(<<"Dimensions are not defined.");
+//       	}
 
+//         if ( this->GetComponentType() == CHAR )
+//         {
+//                 m_NbOctetPixel = 1;
+//                 m_PxType = GDT_Byte;
+//         }
+//         else if ( this->GetComponentType() == UCHAR )
+//         {
+//                 m_NbOctetPixel = 1;
+//                 m_PxType = GDT_Byte;
+//         }
+//         else if ( this->GetComponentType() == USHORT )
+//         {
+//                 m_NbOctetPixel = 2;
+//                 m_PxType = GDT_UInt16;
+//         }
+//         else if ( this->GetComponentType() == SHORT )
+//         {
+//                 m_NbOctetPixel = 2;
+//                 m_PxType = GDT_Int16;
+//         }
+//         else if ( this->GetComponentType() == INT )
+//         {
+//                 m_NbOctetPixel = 4;
+//                 m_PxType = GDT_Int32;
+//         }
+//         else if ( this->GetComponentType() == UINT )
+//         {
+//                 m_NbOctetPixel = 4;
+//                 m_PxType = GDT_UInt32;
+//         }
+//         else if ( this->GetComponentType() == FLOAT )
+//         {
+//                 m_NbOctetPixel = 4;
+//                 m_PxType = GDT_Float32;
+//         }
+//         else if ( this->GetComponentType() == DOUBLE )
+//         {
+//                 m_NbOctetPixel = 8;
+//                 m_PxType = GDT_Float64;
+//         }
+//         else 
+//         {
+//                 m_NbOctetPixel = 1;
+//                 m_PxType = GDT_Byte;
+//         }
+    
+//         // Automatically set the Type to Binary for GDAL data
+//         this->SetFileTypeToBinary();
 
+//     /** you may here add custom encoding parameters */
+//     /* rate specifications */
+//     /** number of quality layers in the stream */
+//     m_Parameters.tcp_numlayers = 1;
+//     m_Parameters.cp_fixed_quality = 1;
+//     m_Parameters.tcp_distoratio[0] = 20;
+//     /* is using others way of calculation */
+//     /* m_Parameters.cp_disto_alloc = 1 or m_Parameters.cp_fixed_alloc = 1 */
+//     /* m_Parameters.tcp_rates[0] = ... */
+    
+    
+//     /* tile definitions parameters */
+//     /* position of the tile grid aligned with the image */
+//     m_Parameters.cp_tx0 = 0;
+//     m_Parameters.cp_ty0 = 0;
+//     /* tile size, we are using tile based encoding */
+//     m_Parameters.tile_size_on = true;
+//     m_Parameters.cp_tdx = 512;
+//     m_Parameters.cp_tdy = 512;
+    
+//     /* use irreversible encoding ?*/
+//     m_Parameters.irreversible = 1;
+    
+//     /* do not bother with mct, the rsiz is set when calling opj_set_MCT*/
+//     /*m_Parameters.cp_rsiz = STD_RSIZ;*/
+    
+//     /* no cinema */
+//     /*m_Parameters.cp_cinema = 0;*/
+    
+//     /* no not bother using SOP or EPH markers, do not use custom size precinct */
+//     /* number of precincts to specify */
+//     /* m_Parameters.csty = 0;*/
+//     /* m_Parameters.res_spec = ... */
+//     /* m_Parameters.prch_init[i] = .. */
+//     /* m_Parameters.prcw_init[i] = .. */
+    
+    
+//     /* do not use progression order changes */
+//     /*m_Parameters.numpocs = 0;*/
+//     /* m_Parameters.POC[i].... */
+    
+//     /* do not restrain the size for a component.*/
+//     /* m_Parameters.max_comp_size = 0; */
+    
+//     /** block encoding style for each component, do not use at the moment */
+//     /** J2K_CCP_CBLKSTY_TERMALL, J2K_CCP_CBLKSTY_LAZY, J2K_CCP_CBLKSTY_VSC, J2K_CCP_CBLKSTY_SEGSYM, J2K_CCP_CBLKSTY_RESET */
+//     /* m_Parameters.mode = 0;*/
+    
+//     /** number of resolutions */
+//     m_Parameters.numresolution = 6;
+    
+//     /** progression order to use*/
+//     /** LRCP, RLCP, RPCL, PCRL, CPRL */
+//     m_Parameters.prog_order = LRCP;
+    
+//     /** no "region" of interest, more precisally component */
+//     /* m_Parameters.roi_compno = -1; */
+//     /* m_Parameters.roi_shift = 0; */
+    
+//     /* we are not using multiple tile parts for a tile. */
+//     /* m_Parameters.tp_on = 0; */
+//     /* m_Parameters.tp_flag = 0; */	
+    
+//     /* if we are using mct */
+//     /* opj_set_MCT(&m_Parameters,l_mct,l_offsets,NUM_COMPS); */
+    
+    
+//     /* image definition */
+//     l_current_param_ptr = m_Parameters;
+//     for
+//       (i=0;i<NUM_COMPS;++i)
+//       {
+// 	/* do not bother bpp useless */
+// 	/*l_current_param_ptr->bpp = COMP_PREC;*/
+// 	l_current_param_ptr->dx = 1;
+// 	l_current_param_ptr->dy = 1;
+// 	l_current_param_ptr->h = m_Dimensions[1];
+// 	l_current_param_ptr->sgnd = 0;
+// 	l_current_param_ptr->prec = 8*m_NbOctetPixel;
+// 	l_current_param_ptr->w = m_Dimensions[0];
+// 	l_current_param_ptr->x0 = 0;
+// 	l_current_param_ptr->y0 = 0;
+// 	++l_current_param_ptr;
+//       }
 
+    
+//     m_Codec = opj_create_compress(CODEC_JP2);
+//     opj_set_info_handler(m_Codec, info_callback,00);
+//     opj_set_warning_handler(m_Codec, warning_callback,00);
+//     opj_set_error_handler(m_Codec, error_callback,00);
 
+//     if(!m_Codec)
+//       {
+// 	itkExceptionMacro(<<"Failed to create openjpeg codec.");
+//       }
 
+//     m_OpenJpegImage = opj_image_tile_create(m_NbBands,m_Parameters,CLRSPC_SRGB);
 
+//     m_OpenJpegImage->x0 = 0;
+//     m_OpenJpegImage->y0 = 0;
+//     m_OpenJpegImage->x1 = m_Dimensions[0]-1;
+//     m_OpenJpegImage->y1 = m_Dimensions[1]-1;
+//     m_OpenJpegImage->color_space = CLRSPC_SRGB;
 
+//     if(!m_OpenJpegImage)
+//       {
+// 	opj_destroy_codec(m_Code);
+// 	itkExceptionMacro(<<"Failed to create openjpeg image.");
+//       }
+
+//     // Create default parameters
+//     opj_set_default_encoder_parameters(&m_Parameters);
+//     // TODO: add custom parameters here
+
+//     if(!opj_setup_encoder(m_Codec,&m_Parameters,m_OpenJpegImage))
+//       {
+// 	itkExceptionMacro(<<"Failed to set up decoder parameters.");
+//       }
+
+//     m_File = fopen(m_FileName.c_str(),"wb");
+
+//     if(!m_File)
+//       {
+// 	itkExceptionMacro(<<"Failed to open file: "<<m_FileName);
+//       }
+  
+//     m_OpenJpegStream = opj_stream_create_default_file_stream(m_File,true);
+  
+//     if(!m_OpenJpegStream)
+//       {
+// 	itkExceptionMacro(<<"Failed to create file stream.");
+//       }
+
+//     std::streamoff buffer_x0 = this->GetIORegion().GetIndex()[0];
+//     std::streamoff buffer_y0 = this->GetIORegion().GetIndex()[1];
+//     std::streamsize buffer_size_x = this->GetIORegion().GetSize()[0];
+//     std::streamsize buffer_size_y = this->GetIORegion().GetSize()[1];
+
+//     std::streamsize buffer_size = this->GetIORegion().GetNumberOfPixels()*m_NbOctetPixel*m_nbBands;
+
+//     unsigned int nb_tile_x = (unsigned int)vcl_ceil((double)m_Dimensions[0]/(double)m_Parameters.cp_tdx);    
+//     unsigned int nb_tile_y = (unsigned int)vcl_ceil((double)m_Dimensions[1]/(double)m_Parameters.cp_tdy);
+
+//     unsigned int tile_index = nb_tile_x*buffer_y0/m_Parameters.cp_tdy+buffer_x0/m_Parameters.cp_tdx;
+    
+    
+//     OPJ_BYTE * desinterleaved_data = new OPJ_BYTE[buffer_size];
+
+//     std::streamoff step = m_NbBands*m_NbOctetPixel;
+
+//     std::streamsize component_size = new
+
+//     for(comp = 0;comp<m_NbBands;++comp)
+//       {
+	
+
+//       }
+    
+    
+//     if(! opj_write_tile(m_Codec,tile_index,charstarbuffer,buffer_size,m_OpenJpegStream))
+//       {
+    
+    
+    
+    
+//       }
   }
 
 
