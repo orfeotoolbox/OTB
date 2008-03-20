@@ -60,7 +60,7 @@ CumulantsForEdgeworth<TInput>
 	double tilde_cum3 = cumulants.GetSkewness();
 	double tilde_cum4 = cumulants.GetKurtosis();
 
-	double tilde_cum2_2 = cum2 * cum2;
+	double tilde_cum2_2 = tilde_cum2 * tilde_cum2;
 	double tilde_cum2_3 = cum2 * tilde_cum2_2;
 	double tilde_cum2_6 = tilde_cum2_3 * tilde_cum2_3;
 	double tilde_cum3_2 = tilde_cum3 * tilde_cum3;
