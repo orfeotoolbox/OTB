@@ -140,7 +140,7 @@ FlusserPathFunction<TInputPath, TOutput, TPrecision >
 	C12 = function->Evaluate( );
 
 	FlusserValueComplex = C30 * vcl_pow(C12,3) ;
-	FlusserValue = FlusserValueComplex.real();       
+	FlusserValue = FlusserValueComplex.imag();       
 	}	
 	break;
     case 7 : 

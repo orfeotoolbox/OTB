@@ -153,7 +153,7 @@ FlusserImageFunction<TInput,TOutput,TPrecision,TCoordRep>
 	C12 = function->EvaluateAtIndex( index );
 
 	FlusserValueComplex = C30 * vcl_pow(C12,3) ;
-	FlusserValue = FlusserValueComplex.real();       
+	FlusserValue = FlusserValueComplex.imag();       
 	}	
 	break;
     case 7 : 
