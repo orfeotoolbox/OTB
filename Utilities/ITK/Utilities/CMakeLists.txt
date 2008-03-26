@@ -19,8 +19,15 @@ ITK_THIRD_PARTY_SUBDIR(ZLIB itkzlib)
 ITK_THIRD_PARTY_SUBDIR(PNG  itkpng)
 ITK_THIRD_PARTY_SUBDIR(TIFF itktiff)
 SET(OPJ_PREFIX "itk")
-ITK_THIRD_PARTY_SUBDIR(OpenJPEG openjpeg)
-ITK_THIRD_PARTY_SUBDIR(GDCM gdcm)
+
+#-----------------------------
+# The folowing lines are commented for the otbopenjpeg pb.
+# In static, pb of linking between itkopenjpeg and otbopenjeg (method definided twice)
+#-----------------------------
+#ITK_THIRD_PARTY_SUBDIR(OpenJPEG openjpeg)
+#ITK_THIRD_PARTY_SUBDIR(GDCM gdcm)
+
+
 #------------------------------------------------------------------------------
 # Other utilities libraries
 SUBDIRS(MetaIO)

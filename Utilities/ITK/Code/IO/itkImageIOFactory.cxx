@@ -21,7 +21,13 @@
 #include "itkImageIOFactory.h"
 #include "itkBioRadImageIOFactory.h"
 #include "itkBMPImageIOFactory.h"
-#include "itkGDCMImageIOFactory.h"
+
+//-----------------------------
+// The folowing line was commented for the otbopenjpeg pb.
+// Don't take gdcm iun account
+//-----------------------------
+//#include "itkGDCMImageIOFactory.h"
+
 #include "itkDICOMImageIO2Factory.h"
 #include "itkNiftiImageIOFactory.h"
 #include "itkAnalyzeImageIOFactory.h"
@@ -99,7 +105,11 @@ ImageIOFactory::RegisterBuiltInFactories()
     MutexLockHolder<SimpleMutexLock> mutexHolder( mutex );
     if( firstTime )
       {
-      ObjectFactoryBase::RegisterFactory( GDCMImageIOFactory::New() );
+	//-----------------------------
+	// The folowing line was commented for the otbopenjpeg pb.
+	// Don't take gdcm iun account
+	//-----------------------------
+	//ObjectFactoryBase::RegisterFactory( GDCMImageIOFactory::New() );
       ObjectFactoryBase::RegisterFactory( MetaImageIOFactory::New() );
       ObjectFactoryBase::RegisterFactory( PNGImageIOFactory::New() );
       ObjectFactoryBase::RegisterFactory( VTKImageIOFactory::New() );

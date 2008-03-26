@@ -65,7 +65,13 @@ TARGET_LINK_LIBRARIES(itkgdcm
   itkjpeg8 
   itkjpeg12
   itkjpeg16
-  itkopenjpeg
+
+  #-----------------------------
+  # The folowing line is commentes for the otbopenjpeg pb.
+  # In static, pb of linking between itkopenjpeg and otbopenjeg (method definided twice)
+  #-----------------------------
+  #itkopenjpeg
+
 )
 IF(WIN32)
   IF(NOT BORLAND)

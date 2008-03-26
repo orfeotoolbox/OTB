@@ -18,9 +18,15 @@ SET(ITKIO_SRCS
   itkDICOMImageIO2Factory.cxx
   itkDICOMSeriesFileNames.cxx
   itkDicomImageIOFactory.cxx
-  itkGDCMImageIO.cxx
-  itkGDCMImageIOFactory.cxx
-  itkGDCMSeriesFileNames.cxx
+
+  #-----------------------------
+  # The folowing lines were commented for the otbopenjpeg pb.
+  # In static, pb of linking between itkopenjpeg and otbopenjeg (method definided twice)
+  #-----------------------------
+  #itkGDCMImageIO.cxx
+  #itkGDCMImageIOFactory.cxx
+  #itkGDCMSeriesFileNames.cxx
+
   itkGE4ImageIO.cxx
   itkGE4ImageIOFactory.cxx
   itkGE5ImageIO.cxx
@@ -78,7 +84,13 @@ ITKNrrdIO
 itkjpeg8
 itkjpeg12
 itkjpeg16
-${ITK_GDCM_LIBRARIES}
+
+#-----------------------------
+# The folowing line was commented for the otbopenjpeg pb.
+# In static, pb of linking between itkopenjpeg and otbopenjeg (method definided twice)
+#-----------------------------
+#${ITK_GDCM_LIBRARIES}
+
 ${ITK_PNG_LIBRARIES}
 ${ITK_ZLIB_LIBRARIES}
 ${ITK_TIFF_LIBRARIES}
@@ -119,6 +131,14 @@ ENDIF(NOT ITK_INSTALL_NO_LIBRARIES)
 
 IF(NOT ITK_INSTALL_NO_DEVELOPMENT)
   FILE(GLOB __files1 "${CMAKE_CURRENT_SOURCE_DIR}/*.h")
+
+#-----------------------------
+# The folowing line was added for the otbopenjpeg pb.
+# Don't take gdcm iun account
+#-----------------------------
+  LIST(REMOVE_ITEM __files1 "${CMAKE_CURRENT_SOURCE_DIR}/itkGDCMImageIOFactory.h" )
+
+
   FILE(GLOB __files2 "${CMAKE_CURRENT_SOURCE_DIR}/*.txx")
   INSTALL(FILES ${__files1} ${__files2}
     DESTINATION ${ITK_INSTALL_INCLUDE_DIR_CM24}/IO
