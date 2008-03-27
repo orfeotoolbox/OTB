@@ -28,17 +28,20 @@ PURPOSE.  See the above copyright notices for more information.
 #include "itkRescaleIntensityImageFilter.h"
 #include "itkMinimumMaximumImageCalculator.h"
 #include "itkMultiplyImageFilter.h" 
+#include "itkDiscreteGaussianImageFilter.h"
+#include "itkExpandImageFilter.h"
+#include "otbRationalQuotientResampleImageFilter.h"
 
 namespace otb
 {
   namespace Functor 
     {
       /** \class IndexLexicographicCompare
-       * \brief Order point instances lexicographically.
+       *  \brief Order point instances lexicographically.
        *
-       * This is a comparison functor suitable for storing Point instances
-       * in an STL container.  The ordering is total and unique but has
-       * little geometric meaning.
+       *  This is a comparison functor suitable for storing Point instances
+       *  in an STL container.  The ordering is total and unique but has
+       *  little geometric meaning.
        */
       template <class TCoordRep, unsigned int NPointDimension>
 	class PointLexicographicCompare
@@ -60,6 +63,7 @@ namespace otb
 	      return false;
 	    }
 	};
+      
       /** \class MagnitudeFunctor
        *  \brief This functor computes the magnitude of a covariant vector.
        */
@@ -76,7 +80,7 @@ namespace otb
       
       /** \class OrientationFunctor
        *  \brief This functor computes the orientation of a cavariant vector<br>
-       *  Orientation values lies between 0 and 2*Pi.
+       *   Orientation values lies between 0 and 2*Pi.
        */
       template <class TInputPixel,class TOutputPixel>
 	class OrientationFunctor
@@ -145,10 +149,22 @@ namespace otb
       /** Internal filters typedefs */
       typedef itk::RecursiveGaussianImageFilter<InputImageType,InputImageType> GaussianFilterType;
       typedef typename GaussianFilterType::Pointer GaussianFilterPointerType;
+
+      typedef itk::DiscreteGaussianImageFilter<InputImageType,InputImageType> DiscreteGaussianFilterType;
+      typedef typename DiscreteGaussianFilterType::Pointer DiscreteGaussianFilterPointerType;
+
+      //typedef itk::ExpandImageFilter<InputImageType, InputImageType> ExpandFilterType;
+      //typedef typename ExpandFilterType::Pointer ExpandFilterPointerType;
+      
+      //typedef otb::RationalQuotientResampleImageFilter<InputImageType, InputImageType> ResampleFilterType;
+      //typedef typename ResampleFilterType::Pointer ResampleFilterPointerType;
+      
       typedef itk::SubtractImageFilter<InputImageType,InputImageType,InputImageType> SubtractFilterType;
       typedef typename SubtractFilterType::Pointer SubtractFilterPointerType;
+
       typedef itk::ResampleImageFilter<InputImageType,InputImageType> ResampleFilterType;
       typedef typename ResampleFilterType::Pointer ResampleFilterPointerType;
+
       typedef itk::ConstNeighborhoodIterator<InputImageType> NeighborhoodIteratorType;
       typedef typename NeighborhoodIteratorType::NeighborhoodType NeighborhoodType;
       typedef itk::GradientImageFilter<InputImageType,PixelType,PixelType> GradientFilterType;
@@ -253,19 +269,22 @@ namespace otb
       unsigned int m_NumberOfIterations;
 
       /** Gaussian filters */
-      GaussianFilterPointerType m_XGaussianFilter1;
-      GaussianFilterPointerType m_YGaussianFilter1;
-      GaussianFilterPointerType m_XGaussianFilter2;
-      GaussianFilterPointerType m_YGaussianFilter2;
+/*       GaussianFilterPointerType m_XGaussianFilter1; */
+/*       GaussianFilterPointerType m_YGaussianFilter1; */
+/*       GaussianFilterPointerType m_XGaussianFilter2; */
+/*       GaussianFilterPointerType m_YGaussianFilter2; */
       GaussianFilterPointerType m_XGaussianFilter3;
       GaussianFilterPointerType m_YGaussianFilter3;
   
+      DiscreteGaussianFilterPointerType m_DiscreteGaussian1;
+      DiscreteGaussianFilterPointerType m_DiscreteGaussian2;
+      
       /** Subtract filter */
       SubtractFilterPointerType m_SubtractFilter;
 
       /** Resample filter */
       ResampleFilterPointerType m_ResampleFilter;
-
+      
       /** Gradient filter */
       GradientFilterPointerType m_GradientFilter;
 
@@ -284,6 +303,9 @@ namespace otb
       /** Multiply Filter */
       MultiplyFilterPointerType m_MultiplyFilter;
   
+      /** Expand filter type */
+      //ExpandFilterPointerType m_ExpandFilter;
+      
       /** Temporary results */
       ResultMapType m_ResultMap;
 

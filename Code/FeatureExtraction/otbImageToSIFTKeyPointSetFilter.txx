@@ -65,12 +65,21 @@ namespace otb
   ::ResetFilters()
   {
     // filters instantiation
-    m_XGaussianFilter1 = GaussianFilterType::New();
-    m_YGaussianFilter1 = GaussianFilterType::New();
-    m_XGaussianFilter2 = GaussianFilterType::New();
-    m_YGaussianFilter2 = GaussianFilterType::New();
+    //     m_XGaussianFilter1 = GaussianFilterType::New();
+    //     m_YGaussianFilter1 = GaussianFilterType::New();
+    
+    //     m_XGaussianFilter2 = GaussianFilterType::New();
+    //     m_YGaussianFilter2 = GaussianFilterType::New();
+    
+    m_DiscreteGaussian1 = DiscreteGaussianFilterType::New();
+    m_DiscreteGaussian2 = DiscreteGaussianFilterType::New();
+    
     m_XGaussianFilter3 = GaussianFilterType::New();
     m_YGaussianFilter3 = GaussianFilterType::New();
+
+    //     m_ExpandFilter = ExpandFilterType::New();
+    //     m_ExpandFilter->SetExpandFactors(2);
+    
     m_SubtractFilter = SubtractFilterType::New();
     m_ResampleFilter = ResampleFilterType::New();
     m_GradientFilter = GradientFilterType::New();
@@ -79,15 +88,27 @@ namespace otb
     m_RescaleFilter = RescaleFilterType::New();
     m_MinimumMaximumCalculator = MinimumMaximumCalculatorType::New();
     m_MultiplyFilter = MultiplyFilterType::New();
-
+    
+    //     m_ResampleFilter->SetNumeratorFactors(2);
+    //     m_ResampleFilter->SetDenominatorFactors(3);
+    
     // Pipeline connections
-    m_XGaussianFilter1->SetInput(m_ResampleFilter->GetOutput());
-    m_XGaussianFilter2->SetInput(m_ResampleFilter->GetOutput());
-    m_YGaussianFilter1->SetInput(m_XGaussianFilter1->GetOutput());
-    m_YGaussianFilter2->SetInput(m_XGaussianFilter2->GetOutput());
-    m_SubtractFilter->SetInput1(m_YGaussianFilter1->GetOutput());
-    m_SubtractFilter->SetInput2(m_YGaussianFilter2->GetOutput());
-    m_GradientFilter->SetInput(m_YGaussianFilter1->GetOutput());
+    //     m_XGaussianFilter1->SetInput(m_ResampleFilter->GetOutput());
+    //     m_XGaussianFilter2->SetInput(m_ResampleFilter->GetOutput());
+    //     m_YGaussianFilter1->SetInput(m_XGaussianFilter1->GetOutput());
+    //     m_YGaussianFilter2->SetInput(m_XGaussianFilter2->GetOutput());
+    m_DiscreteGaussian1->SetInput(m_ResampleFilter->GetOutput());
+    m_DiscreteGaussian2->SetInput(m_ResampleFilter->GetOutput());
+    
+    //m_SubtractFilter->SetInput1(m_YGaussianFilter1->GetOutput());
+    //m_SubtractFilter->SetInput2(m_YGaussianFilter2->GetOutput());
+    
+    m_SubtractFilter->SetInput2(m_DiscreteGaussian1->GetOutput());
+    m_SubtractFilter->SetInput1(m_DiscreteGaussian2->GetOutput());
+    
+    //m_GradientFilter->SetInput(m_YGaussianFilter1->GetOutput());
+    m_GradientFilter->SetInput(m_DiscreteGaussian1->GetOutput());
+    
     m_MagnitudeFilter->SetInput(m_GradientFilter->GetOutput());
     m_OrientationFilter->SetInput(m_GradientFilter->GetOutput());
     m_MinimumMaximumCalculator->SetImage(m_MagnitudeFilter->GetOutput());
@@ -98,12 +119,27 @@ namespace otb
     m_MultiplyFilter->SetInput2(m_YGaussianFilter3->GetOutput());
   
     // Set the sigma value for each gaussian filter
-    m_XGaussianFilter1->SetSigma(vcl_sqrt(2.));
-    m_YGaussianFilter1->SetSigma(vcl_sqrt(2.));
-    m_YGaussianFilter1->SetDirection(1);
-    m_XGaussianFilter2->SetSigma(2.);
-    m_YGaussianFilter2->SetSigma(2.);
-    m_YGaussianFilter2->SetDirection(1);
+    //m_XGaussianFilter1->SetSigma(vcl_sqrt(2.));
+    //m_XGaussianFilter1->SetDirection(0);
+    //m_XGaussianFilter1->SetNormalizeAcrossScale(true);
+    
+    
+    //     m_YGaussianFilter1->SetSigma(vcl_sqrt(2.));
+    //     m_YGaussianFilter1->SetDirection(1);
+    //m_YGaussianFilter1->SetNormalizeAcrossScale(true);
+
+    // m_XGaussianFilter2->SetSigma(2.);
+    // m_XGaussianFilter2->SetDirection(0);
+    //m_XGaussianFilter2->SetNormalizeAcrossScale(true);
+    
+    // m_YGaussianFilter2->SetSigma(2.);
+    //     m_YGaussianFilter2->SetDirection(1);
+    //m_YGaussianFilter2->SetNormalizeAcrossScale(true);
+
+    m_DiscreteGaussian1->SetVariance(vcl_sqrt(2.));
+    m_DiscreteGaussian2->SetVariance(2.);
+    
+    m_XGaussianFilter3->SetDirection(0);
     m_YGaussianFilter3->SetDirection(1);
   }
 
@@ -116,7 +152,7 @@ namespace otb
     m_MinimumMaximumCalculator->Compute();
     m_RescaleFilter->SetOutputMinimum(m_MinimumMaximumCalculator->GetMinimum());
     m_RescaleFilter->SetOutputMaximum(0.1*m_MinimumMaximumCalculator->GetMaximum());
-    //     std::cout<<"Minimum: "<<m_MinimumMaximumCalculator->GetMinimum()<<" maximum: "<<m_MinimumMaximumCalculator->GetMaximum()<<std::endl;
+
     //! \TODO: check this
     m_XGaussianFilter3->SetSigma(3.*(iteration+1));
     m_YGaussianFilter3->SetSigma(3.*(iteration+1));
@@ -129,9 +165,9 @@ namespace otb
   ::GenerateData()
   {
     // Warning: TO REMOVE later !
-      itk::OStringStream oss;
-       typedef otb::ImageFileWriter<InputImageType> WriterType;
-       typename WriterType::Pointer writer = WriterType::New();
+    itk::OStringStream oss;
+    typedef otb::ImageFileWriter<InputImageType> WriterType;
+    typename WriterType::Pointer writer = WriterType::New();
   
     ResetFilters();
 
@@ -142,36 +178,52 @@ namespace otb
     RegionType largestRegion = inputPtr->GetLargestPossibleRegion();
 
     // Set up the initial resampling (factor = 2)
+    
     m_ResampleFilter->SetInput(inputPtr);
-    m_ResampleFilter->SetOutputOrigin(inputPtr->GetOrigin());
-  
+
     // Compute the new spacing
-    SpacingType spacing = inputPtr->GetSpacing()*0.5;
-    m_ResampleFilter->SetOutputSpacing(spacing);
-
+    SpacingType inputSpacing = inputPtr->GetSpacing();
+    SpacingType outputSpacing;
+    outputSpacing[0] = inputSpacing[0]*0.5;
+    outputSpacing[1] = inputSpacing[1]*0.5;
+    m_ResampleFilter->SetOutputSpacing(outputSpacing);
+    
+    // Compute new origin
+    PointType inputOrigin = inputPtr->GetOrigin();
+    PointType outputOrigin;
+    outputOrigin[0] = inputOrigin[0]+(outputSpacing[0] - inputSpacing[0])*0.5;
+    outputOrigin[1] = inputOrigin[1]+(outputSpacing[1] - inputSpacing[1])*0.5;
+    m_ResampleFilter->SetOutputOrigin(outputOrigin);
+    
     // Compute the new size 
-    SizeType size = inputPtr->GetLargestPossibleRegion().GetSize();
-    IndexType index = inputPtr->GetLargestPossibleRegion().GetIndex();
-    for(unsigned int dimension=0; dimension<InputImageType::ImageDimension;++dimension)
-      {
-	size[dimension]=2*size[dimension];
-	index[dimension]=2*index[dimension];
-      }
-    m_ResampleFilter->SetSize(size);
-    m_ResampleFilter->SetOutputStartIndex(index);
-
-       writer->SetFileName("ResamplerOutput0.tif");
-       writer->SetInput(m_ResampleFilter->GetOutput());
-       writer->Update();
-
-
+    SizeType inputSize = inputPtr->GetLargestPossibleRegion().GetSize();
+    SizeType outputSize;
+    outputSize[0] = inputSize[0]*2;
+    outputSize[1] = inputSize[1]*2;
+    m_ResampleFilter->SetSize(outputSize);
+    
+    // Compute new start index ??
+    //m_ResampleFilter->SetOutputStartIndex(index);
+    
+    //     IndexType index = inputPtr->GetLargestPossibleRegion().GetIndex();
+    //     for(unsigned int dimension=0; dimension<InputImageType::ImageDimension;++dimension)
+    //       {
+    // 	size[dimension]=2*size[dimension];
+    // 	index[dimension]=2*index[dimension];
+    //       }
+    
+    //     writer->SetFileName("ResamplerOutput0.tif");
+    //     writer->SetInput(m_ResampleFilter->GetOutput());
+    //     writer->Update();
+    
     // Trigger pipeline execution
     m_SubtractFilter->Update();
-
-       writer->SetFileName("SubtractOutput0.tif");
-       writer->SetInput(m_SubtractFilter->GetOutput());
-       writer->Update();  
-
+    
+    // Temporary
+    writer->SetFileName("SubtractOutput0.tif");
+    writer->SetInput(m_SubtractFilter->GetOutput());
+    writer->Update();
+    
     // Set up the key filters
     KeyFeaturesFilterSetup(0);
 
@@ -181,14 +233,20 @@ namespace otb
     NeighborhoodIteratorType it(radius,m_SubtractFilter->GetOutput(),
 				m_SubtractFilter->GetOutput()->GetLargestPossibleRegion());
     // Temporary point
-    OutputPointType point;
     it.GoToBegin();
+    std::cout << "==============================" << std::endl;
+    std::cout << "Whole Detection octave = " << 0 << std::endl;
     while(!it.IsAtEnd())
       {
 	if(IsLocalExtremum(it.GetNeighborhood()))
 	  {
-	    m_SubtractFilter->GetOutput()->TransformIndexToPhysicalPoint(it.GetIndex(),point);
-	    // std::cout<<"Local maxima spotted: "<<it.GetIndex()<<" "<<point<<std::endl;
+	    OutputPointType point;
+	    //m_SubtractFilter->GetOutput()->
+	    //  TransformIndexToPhysicalPoint(it.GetIndex(),point);
+	    point[0] = vcl_floor(it.GetIndex()[0]*m_SubtractFilter->GetOutput()->GetSpacing()[0]+0.5);
+	    point[1] = vcl_floor(it.GetIndex()[1]*m_SubtractFilter->GetOutput()->GetSpacing()[1]+0.5);
+	    
+	    std::cout << "Key point : " << point << " index : " << it.GetIndex() << std::endl;
 	    AddKey(point);
 	    UpdateKey(m_ResultMap.find(point),0);
 	  }
@@ -199,39 +257,56 @@ namespace otb
     // for each iteration step
     for(unsigned int iteration = 1;iteration<m_NumberOfIterations;++iteration)
       {
-	current = m_YGaussianFilter2->GetOutput();
+	// Store current image for recursion
+	//current = m_YGaussianFilter2->GetOutput();
+	current = m_DiscreteGaussian2->GetOutput();
+	
 	ResetFilters();
-	// Set up the initial resampling (factor = 2)
+	
+	// Set up the resampling (factor = 2/3)
 	m_ResampleFilter->SetInput(current);
+	
 	// Compute the new spacing
-	SpacingType spacing =current->GetSpacing()*1.5;
-	m_ResampleFilter->SetOutputSpacing(spacing);
-	m_ResampleFilter->SetOutputOrigin(inputPtr->GetOrigin());
-
+	inputSpacing =current->GetSpacing();
+	outputSpacing[0] = inputSpacing[0]*1.5;
+	outputSpacing[1] = inputSpacing[1]*1.5;
+	m_ResampleFilter->SetOutputSpacing(outputSpacing);
+	
+	// Compute the new origin
+	inputOrigin = current->GetOrigin();
+	outputOrigin[0] = inputOrigin[0]+ (outputSpacing[0]-inputSpacing[0])*0.5;
+	outputOrigin[1] = inputOrigin[1]+ (outputSpacing[1]-inputSpacing[1])*0.5;
+	m_ResampleFilter->SetOutputOrigin(outputOrigin);
+	
 	// Compute the new size 
-	SizeType oldSize = current->GetLargestPossibleRegion().GetSize();
-	for(unsigned int dimension=0; dimension<InputImageType::ImageDimension;++dimension)
-	  {
-	    size[dimension]=static_cast<unsigned int>(vcl_ceil(static_cast<double>(2*oldSize[dimension])/3));
-	  }
-	m_ResampleFilter->SetSize(size);
-      
-	       oss<<"ResamplerOutput"<<iteration<<".tif";
-	       writer->SetFileName(oss.str().c_str());
-	       writer->SetInput(m_ResampleFilter->GetOutput());
-	       writer->Update();
-	       oss.str("");
-	       oss<<"SubtractOutput"<<iteration<<".tif";
-	       writer->SetFileName(oss.str().c_str());
-	       writer->SetInput(m_SubtractFilter->GetOutput());
-	       writer->Update();
-	       oss.str("");
+ 	inputSize = current->GetLargestPossibleRegion().GetSize();
+	outputSize[0] = static_cast<unsigned int>(vcl_floor(static_cast<double>(inputSize[0]*2/3)));
+	outputSize[1] = static_cast<unsigned int>(vcl_floor(static_cast<double>(inputSize[1]*2/3)));
+	m_ResampleFilter->SetSize(outputSize);
+	
+	// 	SizeType size;
+	// 	for(unsigned int dimension=0; dimension<InputImageType::ImageDimension;++dimension)
+	// 	  {
+	// 	    size[dimension]=static_cast<unsigned int>(vcl_floor(static_cast<double>(2*oldSize[dimension])/3));
+	// 	  }
+	
+      	oss<<"ResamplerOutput"<<iteration<<".tif";
+	writer->SetFileName(oss.str());
+	writer->SetInput(m_ResampleFilter->GetOutput());
+	writer->Update();
+	oss.str("");
+	oss<<"SubtractOutput"<<iteration<<".tif";
+	writer->SetFileName(oss.str());//.c_str());
+	writer->SetInput(m_SubtractFilter->GetOutput());
+	writer->Update();
+	oss.str("");
 
 	// Set up key features calculation
 	KeyFeaturesFilterSetup(iteration);
 
 	// This list will contain the key to suppress
 	std::list<ResultMapIteratorType> supressionList;
+	
 	// Walk the previousmy detected key
 	ResultMapIteratorType itMap = m_ResultMap.begin();
 	while(itMap != m_ResultMap.end())
@@ -257,8 +332,28 @@ namespace otb
 	    m_ResultMap.erase(*suprIt);
 	    ++suprIt;
 	  }
-      }    
 
+	// Loop on the first level to spot potential keys
+	NeighborhoodIteratorType iter(radius,
+				      m_SubtractFilter->GetOutput(),
+				      m_SubtractFilter->GetOutput()->GetLargestPossibleRegion());
+	// Temporary point
+	std::cout << "==============================" << std::endl;
+	std::cout << "Whole Detection octave = " << iteration << std::endl;
+	iter.GoToBegin();
+	while(!iter.IsAtEnd())
+	  {
+	    if(IsLocalExtremum(iter.GetNeighborhood()))
+	      {
+		OutputPointType point;
+		m_SubtractFilter->GetOutput()->
+		  TransformIndexToPhysicalPoint(iter.GetIndex(),point);
+		std::cout << "Key point : " << point << " index : " << iter.GetIndex() << std::endl;
+	      }
+	    ++iter;
+	  }
+      }
+    
     // Finally export the sift keys
     ExportSolution();
   }
@@ -305,22 +400,17 @@ namespace otb
     m_SubtractFilter->GetOutput()->UpdateOutputInformation();
     IndexType index;
     //m_SubtractFilter->GetOutput()->TransformPhysicalPointToIndex(it->first,index);
+    
     unsigned int i;
     for(i = 0;i<InputImageType::ImageDimension;++i)
       {
-	index[i]=static_cast<int>(vcl_floor((it->first[i]-m_SubtractFilter->GetOutput()->GetOrigin()[i])/m_SubtractFilter->GetOutput()->GetSpacing()[i]+0.5));
+     	index[i]=static_cast<int>(vcl_floor((it->first[i]-m_SubtractFilter->GetOutput()->GetOrigin()[i])/m_SubtractFilter->GetOutput()->GetSpacing()[i]+0.5));
       }
-
+    std::cout << "Check key point map = " << it->first << " Index = " << index << std::endl;
+    
     RegionType requestedRegion = GetLocalRegion(index);
  
     requestedRegion.Crop(m_SubtractFilter->GetOutput()->GetLargestPossibleRegion());
-    //   std::cout<<"========================="<<std::endl;
-    //   std::cout<<"Current origin: "<<m_SubtractFilter->GetOutput()->GetOrigin()<<std::endl;
-    //   std::cout<<"Current spacing: "<<m_SubtractFilter->GetOutput()->GetSpacing()<<std::endl;
-    //   std::cout<<"Requested region: "<<requestedRegion<<std::endl;
-    //   std::cout<<"Point: "<<it->first<<std::endl;
-    //   std::cout<<"RegionIndex: "<<regionIndex[0]<<" "<<regionIndex[1]<<std::endl;
-    //   std::cout<<"Index: "<<index<<std::endl;
 
     m_SubtractFilter->GetOutput()->SetRequestedRegion(requestedRegion);
     m_SubtractFilter->GetOutput()->PropagateRequestedRegion();
@@ -335,10 +425,7 @@ namespace otb
   
 
     neighIt.SetLocation(index);
-    std::cout<<"Testing extremum "<<IsLocalExtremum(neighIt.GetNeighborhood())<<std::endl
-	     <<neighIt.GetNeighborhood()[0]<<"\t"<< neighIt.GetNeighborhood()[1] <<"\t"<< neighIt.GetNeighborhood()[2]<< std::endl
-	     <<neighIt.GetNeighborhood()[3]<<"\t"<< neighIt.GetNeighborhood()[4] <<"\t"<< neighIt.GetNeighborhood()[5]<< std::endl
-	     <<neighIt.GetNeighborhood()[6]<<"\t"<< neighIt.GetNeighborhood()[7] <<"\t"<< neighIt.GetNeighborhood()[8]<< std::endl;
+    
     // Check if local extremum
     return IsLocalExtremum(neighIt.GetNeighborhood());
   }
