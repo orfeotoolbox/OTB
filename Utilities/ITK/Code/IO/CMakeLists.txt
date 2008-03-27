@@ -17,7 +17,10 @@ SET(ITKIO_SRCS
   itkDICOMImageIO2.cxx
   itkDICOMImageIO2Factory.cxx
   itkDICOMSeriesFileNames.cxx
-  itkDicomImageIOFactory.cxx
+  
+  # This factory is deprecated, and conflicts with the GDCM driver.
+  # Modified by otb developpers.
+  # itkDicomImageIOFactory.cxx
 
   #-----------------------------
   # The folowing lines were commented for the otbopenjpeg pb.
