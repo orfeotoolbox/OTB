@@ -148,13 +148,20 @@ ImageFileReader<TOutputImage>
 
 //otbMsgDebugMacro( <<" Apres ioRegion : "<<ioRegion);
 
-  itkDebugMacro (<< "ioRegion: " << ioRegion);
  
   this->m_ImageIO->SetIORegion(ioRegion);
 
   typedef itk::DefaultConvertPixelTraits< ITK_TYPENAME TOutputImage::IOPixelType >  ConvertPixelTraits;
   
   
+otbMsgDevMacro(<< "ImageFileReader<TOutputImage>::GenerateData():");
+otbMsgDevMacro (<< "ioRegion: " << ioRegion);
+otbMsgDevMacro(<< "   => test conversion Pixel type: compare");
+otbMsgDevMacro(<< "   compare");
+otbMsgDevMacro(<< "         this->m_ImageIO->GetComponentTypeInfo(): "<<this->m_ImageIO->GetComponentTypeInfo().name());
+otbMsgDevMacro(<< "   with  typeid(ITK_TYPENAME ConvertPixelTraits::ComponentType): "<<typeid(ITK_TYPENAME ConvertPixelTraits::ComponentType).name());
+otbMsgDevMacro(<< "   and   this->m_ImageIO->GetNumberOfComponents(): "<<this->m_ImageIO->GetNumberOfComponents());
+otbMsgDevMacro(<< "   with  ConvertPixelTraits::GetNumberOfComponents(): "<<ConvertPixelTraits::GetNumberOfComponents());
   
   if ( this->m_ImageIO->GetComponentTypeInfo()
        == typeid(ITK_TYPENAME ConvertPixelTraits::ComponentType)
@@ -358,11 +365,12 @@ ImageFileReader<TOutputImage>
 
   else
   {
+  	  otbMsgDebugMacro( <<"OSSIM Open Image SUCCESS ! ");
 	  ossimKeywordlist geom_kwl, tmp_kwl, tmp_kwl2;// = new ossimKeywordlist();
   
 	  // Read OSSIM Keyword List
 	  bool hasMetaData = handler->getImageGeometry(geom_kwl);
-	  otbMsgDebugMacro( << " AVANT *geom_kwl : "<<geom_kwl<<std::endl);
+	  otbMsgDevMacro( << " AVANT *geom_kwl : "<<geom_kwl<<std::endl);
 
 	  if (!hasMetaData)
 	  {
@@ -370,8 +378,9 @@ ImageFileReader<TOutputImage>
 	  }
 	  else
 	  {
+	  	  otbMsgDebugMacro( <<"OSSIM MetaData present ! ");
 	  	  
-		  otbMsgDebugMacro( <<"Image keyword lists are :" << std::endl << geom_kwl);
+		  otbMsgDevMacro( <<"Image keyword lists are :" << std::endl << geom_kwl);
 		  
 	      // Update otb Keywordlist
 		  ImageKeywordlist otb_kwl;
@@ -402,9 +411,9 @@ ImageFileReader<TOutputImage>
 		  
 	  }
 	  // Free memory
-	  otbMsgDebugMacro( <<"OSSIM Free Memory ? ");
+	  otbMsgDevMacro( <<"OSSIM Free Memory ? ");
 	  delete handler;  		
-	  otbMsgDebugMacro( <<"OSSIM Free Memory OK ! ");
+	  otbMsgDevMacro( <<"OSSIM Free Memory OK ! ");
   }
   
   //Copy MetaDataDictionary from instantiated reader to output image.
