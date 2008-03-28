@@ -157,6 +157,7 @@ int otbMultiChannelExtractROI ( int argc, char * argv[] )
         std::cout << " -> "<<loutputPixelType<<" pour "<<outputFilename<<std::endl;
         std::string pixelType;
         if (  (linputPixelType=="-uchar")&&(loutputPixelType=="-uchar") )               return (generic_otbMultiChannelExtractROI< unsigned char, unsigned char >( argc,argv,inputFilename,outputFilename) );
+        else if (  (linputPixelType=="-char")&&(loutputPixelType=="-char") )        return (generic_otbMultiChannelExtractROI< char, char >( argc,argv,inputFilename,outputFilename) );
         else if (  (linputPixelType=="-ushort")&&(loutputPixelType=="-ushort") )        return (generic_otbMultiChannelExtractROI< unsigned short, unsigned short >( argc,argv,inputFilename,outputFilename) );
         else if (  (linputPixelType=="-uint")&&(loutputPixelType=="-uint") )            return (generic_otbMultiChannelExtractROI< unsigned int, unsigned int >( argc,argv,inputFilename,outputFilename) );
         else if (  (linputPixelType=="-float")&&(loutputPixelType=="-float") )          return (generic_otbMultiChannelExtractROI<float, float >( argc,argv,inputFilename,outputFilename) );
@@ -170,8 +171,8 @@ int otbMultiChannelExtractROI ( int argc, char * argv[] )
         else if (  (linputPixelType=="-uchar")&&(loutputPixelType=="-double") )         return (generic_otbMultiChannelExtractROI< unsigned char, double >( argc,argv,inputFilename,outputFilename) );
         else 
         {       
-                std::cout << " Erreur : le format des images en entr�e est mal pr�cis� dans la ligne de commande !!!"<<std::endl;
-                std::cout << "          valeurs autoris�es : -uchar, -ushort, -uint, -float, -double"<<std::endl;
+                std::cout << " Erreur : le format des images en entree est mal precise dans la ligne de commande !!!"<<std::endl;
+                std::cout << "          valeurs autorisees : -uchar, -char, -ushort, -uint, -float, -double"<<std::endl;
                 std::cout << "          valeurs par defaut : -uchar"<<std::endl;
                 return EXIT_FAILURE;
         }
