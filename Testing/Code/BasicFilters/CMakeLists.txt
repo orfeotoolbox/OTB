@@ -20,6 +20,7 @@ SET(BASICFILTERS_TESTS4 ${CXX_TEST_PATH}/otbBasicFiltersTests4)
 SET(BASICFILTERS_TESTS5 ${CXX_TEST_PATH}/otbBasicFiltersTests5)
 SET(BASICFILTERS_TESTS6 ${CXX_TEST_PATH}/otbBasicFiltersTests6)
 SET(BASICFILTERS_TESTS7 ${CXX_TEST_PATH}/otbBasicFiltersTests7)
+SET(BASICFILTERS_TESTS8 ${CXX_TEST_PATH}/otbBasicFiltersTests8)
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ otbBasicFiltersTests1 ~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -747,6 +748,21 @@ ADD_TEST(bfTvRationalQuotientResampleImageFilter ${BASICFILTERS_TESTS7}
 	            ${TEMP}/bfTvVectorImageToIntensityImageOutput.tif
 )
 
+# -------            otb::LabelizeImageFilter   ----------------------------
+
+  ADD_TEST(bfTuLabelizeImageFilterNew ${BASICFILTERS_TESTS8}
+         otbLabelizeImageFilterNew)
+
+  ADD_TEST(bfTvLabelizeImageFilter ${BASICFILTERS_TESTS8} 
+		--compare-image ${EPSILON}
+		    ${BASELINE}/bfTvLabelizeImageFilterOutput.tif
+		    ${TEMP}/bfTvLabelizeImageFilterOutput.tif
+		    otbLabelizeImageFilter
+		    ${INPUTDATA}/cthead1.png
+	            ${TEMP}/bfTvLabelizeImageFilterOutput.tif
+		    127 128
+		    10 10
+)
 
 # A enrichir
 SET(BasicFilters_SRCS1
@@ -790,6 +806,7 @@ otbVectorImageToImageListFilter.cxx
 otbImageListToVectorImageFilterNew.cxx
 otbImageListToVectorImageFilter.cxx
 )
+
 # A enrichir
 SET(BasicFilters_SRCS4
 otbImageListToImageListApplyFilterNew.cxx
@@ -852,6 +869,11 @@ otbVectorImageToIntensityImageFilterNew.cxx
 otbVectorImageToIntensityImageFilter.cxx
 )
 
+# A enrichir
+SET(BasicFilters_SRCS8
+otbLabelizeImageFilterNew.cxx
+otbLabelizeImageFilter.cxx
+)
 
 INCLUDE_DIRECTORIES("${OTBTesting_BINARY_DIR}")
 
@@ -875,5 +897,8 @@ TARGET_LINK_LIBRARIES(otbBasicFiltersTests6  OTBBasicFilters OTBCommon OTBIO gda
 
 ADD_EXECUTABLE(otbBasicFiltersTests7 otbBasicFiltersTests7.cxx ${BasicFilters_SRCS7})
 TARGET_LINK_LIBRARIES(otbBasicFiltersTests7  OTBBasicFilters OTBCommon OTBIO gdal ITKIO ITKCommon ITKBasicFilters)
+
+ADD_EXECUTABLE(otbBasicFiltersTests8 otbBasicFiltersTests8.cxx ${BasicFilters_SRCS8})
+TARGET_LINK_LIBRARIES(otbBasicFiltersTests8  OTBBasicFilters OTBCommon OTBIO gdal ITKIO ITKCommon ITKBasicFilters)
 
 ENDIF( NOT OTB_DISABLE_CXX_TESTING )
