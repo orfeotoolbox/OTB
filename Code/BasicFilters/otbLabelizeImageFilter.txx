@@ -32,8 +32,13 @@ namespace otb
     m_LowerThreshold = itk::NumericTraits<InputPixelType>::NonpositiveMin();
     m_UpperThreshold = itk::NumericTraits<InputPixelType>::max();
 
-    m_DeltaLowerThreshold = itk::NumericTraits<InputPixelType>::ZeroValue();
-    m_DeltaUpperThreshold = itk::NumericTraits<InputPixelType>::ZeroValue();
+    m_LowerThresholdDelta = itk::NumericTraits<InputPixelType>::ZeroValue();
+    m_UpperThresholdDelta = itk::NumericTraits<InputPixelType>::ZeroValue();
+
+    m_MultiplyFilter = MultiplyFilterType::New();
+    m_MultiplyFilter->SetCoef(0.0);
+    
+    m_ThresholdPointSetFilter = ThresholdFilterType::New();
   }
   
   /**
@@ -43,26 +48,17 @@ namespace otb
   void
   LabelizeImageFilter<TInputImage,TOutputImage>
   ::GenerateData()
-  { 
-    ThresholdFilterPointerType filterThreshold = ThresholdFilterType::New();
-
-    filterThreshold->SetInput(0, this->GetInput());
-    
-    filterThreshold->SetLowerThreshold( m_LowerThreshold );
-    filterThreshold->SetUpperThreshold( m_UpperThreshold );
-    
-    m_PointSet=filterThreshold->GetOutput();
+  {
+    // create an empty image to store results computing
+    m_MultiplyFilter->SetInput(this->GetInput());
+    m_MultiplyFilter->Update();
     
     // Compute points set
-    filterThreshold->Update();
-
-    // Create empty image to store results computing
-    MultiplyFilterPointerType multiplyFilter = MultiplyFilterType::New();
-    
-    multiplyFilter->SetCoef(0.0);
-    multiplyFilter->SetInput(this->GetInput());
-    multiplyFilter->Update();
-    typename OutputImageType::Pointer outputImage =  multiplyFilter->GetOutput();
+    m_ThresholdPointSetFilter->SetInput(0, this->GetInput());
+    m_ThresholdPointSetFilter->SetLowerThreshold( m_LowerThreshold );
+    m_ThresholdPointSetFilter->SetUpperThreshold( m_UpperThreshold );
+    m_ThresholdPointSetFilter->Update();
+    m_PointSet = m_ThresholdPointSetFilter->GetOutput();
     
     // Iterate Point set
     typedef typename PointSetType::PointsContainer ContainerType;
@@ -70,46 +66,42 @@ namespace otb
     typedef typename ContainerType::Iterator IteratorType;
     IteratorType itList = pointsContainer->Begin();
     
-    typedef typename PointSetType::PointDataContainer DataContainerType;
-    DataContainerType* dataContainer = m_PointSet->GetPointData();
-    typedef typename DataContainerType::Iterator DataIteratorType;
-    DataIteratorType itData = dataContainer->Begin();
-    
+    typename OutputImageType::Pointer outputImage = m_MultiplyFilter->GetOutput();
     int replaceValue = 5;
     
-    while( itList != pointsContainer->End()
-	   && itData != dataContainer->End())
+    while( itList != pointsContainer->End() )
       {
 	typename PointSetType::PointType pCoordinate = (itList.Value());
 	typename InputImageType::IndexType index;
       
-	index[0] = static_cast <int> (pCoordinate[0]);
-	index[1] = static_cast <int> (pCoordinate[1]);
-	
-	if (outputImage->GetPixel(index) == 0 )
-	  {
-	    InputPixelType threshold = itData.Value();
+ 	index[0] = static_cast <int> (pCoordinate[0]);
+ 	index[1] = static_cast <int> (pCoordinate[1]);
+ 	if (outputImage->GetPixel(index) ==
+	    itk::NumericTraits<InputPixelType>::ZeroValue() )
+ 	  {
+	    InputPixelType threshold = this->GetInput()->GetPixel(index);
+	    
 	    ConnectedFilterPointerType connectedThreshold = ConnectedFilterType::New();
 	    connectedThreshold->SetInput( this->GetInput() );
-	    connectedThreshold->SetLower( threshold-m_DeltaLowerThreshold );
-	    connectedThreshold->SetUpper( threshold+m_DeltaUpperThreshold );
+	    connectedThreshold->SetLower( threshold-m_LowerThresholdDelta );
+	    connectedThreshold->SetUpper( threshold+m_UpperThresholdDelta );
 	    
 	    connectedThreshold->SetReplaceValue(replaceValue);
 	    connectedThreshold->SetSeed(index);
-
+	    
 	    AddImageFilterPointerType addImage = AddImageFilterType::New();
 	    addImage->SetInput1(outputImage);
 	    addImage->SetInput2(connectedThreshold->GetOutput());
 	    addImage->Update();
 	    outputImage = addImage->GetOutput();
 	    
-	    //++count;
-	    
 	    replaceValue++;
-	  }
-	++itList;
-	++itData;
+ 	  }
+ 	++itList;
       }
+    
+    this->GraftOutput(outputImage);
+
   }
   
   /**

@@ -74,16 +74,16 @@ namespace otb
       itkSetMacro(UpperThreshold, InputPixelType);
       
       /** Get delta lower threshold */
-      itkGetMacro(DeltaLowerThreshold, InputPixelType);
+      itkGetMacro(LowerThresholdDelta, InputPixelType);
       
       /** Set delta lower threshold */
-      itkSetMacro(DeltaLowerThreshold, InputPixelType);
+      itkSetMacro(LowerThresholdDelta, InputPixelType);
       
       /** Get delta upper threshold */
-      itkGetMacro(DeltaUpperThreshold, InputPixelType);
+      itkGetMacro(UpperThresholdDelta, InputPixelType);
       
       /** Set delta upper threshold */
-      itkSetMacro(DeltaUpperThreshold, InputPixelType);
+      itkSetMacro(UpperThresholdDelta, InputPixelType);
       
       /** Internal */
       typedef otb::ThresholdImageToPointSetFilter<InputImageType, PointSetType> ThresholdFilterType;
@@ -117,13 +117,17 @@ namespace otb
       InputPixelType m_UpperThreshold;
       
       /** Delta + threshold for growing region */
-      InputPixelType m_DeltaUpperThreshold;
+      InputPixelType m_UpperThresholdDelta;
       
       /** Delta - threshold for growing region */
-      InputPixelType m_DeltaLowerThreshold;
+      InputPixelType m_LowerThresholdDelta;
       
       /** Point set to store thresold results */
       PointSetPointerType m_PointSet;
+      
+      MultiplyFilterPointerType m_MultiplyFilter;
+      
+      ThresholdFilterPointerType m_ThresholdPointSetFilter;
       
     };
 } // end namespace otb
