@@ -64,9 +64,7 @@ namespace otb
             itk::ObjectFactoryBase::RegisterFactory( LUMImageIOFactory::New() );			
                         
 	    // JPEG2000 : New format for OTB
-	    ;;
-            // itk::ObjectFactoryBase::RegisterFactory( JPEG2000ImageIOFactory::New() );
-	    ;;
+            itk::ObjectFactoryBase::RegisterFactory( JPEG2000ImageIOFactory::New() );
 	    
 	    // GDAL : New format for OTB
             itk::ObjectFactoryBase::RegisterFactory( GDALImageIOFactory::New() );            
