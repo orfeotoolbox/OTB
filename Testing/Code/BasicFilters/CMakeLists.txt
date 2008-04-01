@@ -755,8 +755,8 @@ ADD_TEST(bfTvRationalQuotientResampleImageFilter ${BASICFILTERS_TESTS7}
 
   ADD_TEST(bfTvLabelizeImageFilter ${BASICFILTERS_TESTS8} 
 		--compare-image ${EPSILON}
-		    ${BASELINE}/bfTvLabelizeImageFilterOutput.tif
-		    ${TEMP}/bfTvLabelizeImageFilterOutput.tif
+		    ${BASELINE}/bfTvLabelizeImageFilterOutput.png
+		    ${TEMP}/bfTvLabelizeImageFilterOutput.png
 		    otbLabelizeImageFilter
 		    ${INPUTDATA}/cthead1.png
 	            ${TEMP}/bfTvLabelizeImageFilterOutput.png

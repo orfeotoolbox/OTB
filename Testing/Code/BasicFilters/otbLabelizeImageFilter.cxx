@@ -33,8 +33,8 @@ int otbLabelizeImageFilter( int argc, char * argv[] )
   char* inputImageName = argv[1];
   char* outputImageName = argv[2];
   
-  typedef unsigned short InputPixelType;
-  typedef unsigned short OutputPixelType;
+  typedef unsigned char InputPixelType;
+  typedef unsigned char OutputPixelType;
   const unsigned int Dimension = 2;
   
   typedef otb::Image< InputPixelType, Dimension > InputImageType;
