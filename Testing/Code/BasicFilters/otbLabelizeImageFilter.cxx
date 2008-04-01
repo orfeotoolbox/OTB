@@ -33,59 +33,40 @@ int otbLabelizeImageFilter( int argc, char * argv[] )
   char* inputImageName = argv[1];
   char* outputImageName = argv[2];
   
-  typedef float InputPixelType;
-  typedef float OutputPixelType;
+  typedef unsigned short InputPixelType;
+  typedef unsigned short OutputPixelType;
   const unsigned int Dimension = 2;
   
   typedef otb::Image< InputPixelType, Dimension > InputImageType;
   typedef otb::Image< OutputPixelType, Dimension > OutputImageType;
+
+  InputPixelType lowerThreshold( (InputPixelType)::atoi(argv[3]) );
+  InputPixelType upperThreshold( (InputPixelType)::atoi(argv[4]) );
+  InputPixelType deltaLower( (InputPixelType)::atoi(argv[5]) );
+  InputPixelType deltaUpper( (InputPixelType)::atoi(argv[6]) );
   
+  // Reader
   typedef otb::ImageFileReader<InputImageType> ReaderType;
   ReaderType::Pointer reader = ReaderType::New();
   reader->SetFileName(inputImageName);
   
-  typedef otb::MultiplyByScalarImageFilter<InputImageType, OutputImageType> MultiplyFilterType;
-  MultiplyFilterType::Pointer multi = MultiplyFilterType::New();
-  multi->SetCoef(0.0);
-  
+  // Writer
   typedef otb::ImageFileWriter<OutputImageType> WriterType;
   WriterType::Pointer writer = WriterType::New();
   writer->SetFileName(outputImageName);
   
-  multi->SetInput(reader->GetOutput());
-  writer->SetInput(multi->GetOutput());
+  // Labelize filter
+  typedef otb::LabelizeImageFilter<InputImageType, OutputImageType> LabelizeFilterType;
+  LabelizeFilterType::Pointer filter = LabelizeFilterType::New();
+  
+  filter->SetLowerThreshold(lowerThreshold);
+  filter->SetUpperThreshold(upperThreshold);
+  filter->SetLowerThresholdDelta(deltaLower);
+  filter->SetUpperThresholdDelta(deltaUpper);
+   
+  filter->SetInput(reader->GetOutput());
+  writer->SetInput(filter->GetOutput());
   writer->Update();
-  
-//   
-//   
-
-//   InputPixelType lowerThreshold( (InputPixelType)::atoi(argv[3]) );
-//   InputPixelType upperThreshold( (InputPixelType)::atoi(argv[4]) );
-//   InputPixelType deltaLower( (InputPixelType)::atoi(argv[5]) );
-//   InputPixelType deltaUpper( (InputPixelType)::atoi(argv[6]) );
-    
-//   // Reader
-//   
-//   
-//   
-  
-//   // Labelize filter
-//   typedef otb::LabelizeImageFilter<InputImageType, OutputImageType > LabelizeFilterType;
-//   LabelizeFilterType::Pointer filter = LabelizeFilterType::New();
-  
-//   filter->SetLowerThreshold(lowerThreshold);
-//   filter->SetUpperThreshold(upperThreshold);
-//   filter->SetDeltaLowerThreshold(deltaLower);
-//   filter->SetDeltaUpperThreshold(deltaUpper);
-  
-//   // Writer
-//   
-//   
-//   
-  
-//   filter->SetInput(reader->GetOutput());
-//   writer->SetInput(filter->GetOutput());
-//   writer->Update();
-  
+   
   return EXIT_SUCCESS;
 }
