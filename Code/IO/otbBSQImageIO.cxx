@@ -87,6 +87,10 @@ bool BSQImageIO::CanReadFile( const char* filename )
         {
                 return false;
         }
+        if( System::SetToLower(System::GetExtension(lFileName)) != "hd" )
+        {
+                return false;
+        }
 
         header_file.open( lFileName.c_str(),  std::ios::in );
         if( header_file.fail() )
@@ -141,7 +145,7 @@ otbMsgDevMacro( <<" Nb Of Components       : "<<this->GetNumberOfComponents());
         char * value = new char[numberOfBytesToBeRead];
         if(value==NULL)
         {
-                itkExceptionMacro(<<"Erreur allocation m?oire");
+                itkExceptionMacro(<<"BSQImageIO::Read(): Bad alloc");
                 return;
         }
 
@@ -219,6 +223,7 @@ void BSQImageIO::ReadImageInformation()
         }
 
         //Read header informations
+        bool lResult = InternalReadHeaderInformation(m_FileName, m_HeaderFile,true);
 
 otbMsgDebugMacro( <<"Driver to read: BSQ");
 otbMsgDebugMacro( <<"         Read  file         : "<< m_FileName);
@@ -401,7 +406,14 @@ bool BSQImageIO::InternalReadHeaderInformation(const std::string & file_name, st
                         }
                         else
                         {
-                                itkExceptionMacro(<< "BSQ : the value SENSCODAGE '"<<lString<<"' set in the header file is not reconized as correct value. Possible values are INTEL or IEEE");  
+                                if( reportError == true )
+                                {
+                                        itkExceptionMacro(<< "BSQ : the value SENSCODAGE '"<<lString<<"' set in the header file is not reconized as correct value. Possible values are INTEL or IEEE");  
+                                }
+                                else
+                                {
+                                        return false;
+                                }
                         }
                 }
         }
@@ -425,7 +437,14 @@ bool BSQImageIO::InternalReadHeaderInformation(const std::string & file_name, st
                 m_ChannelsFile[channels].open( m_ChannelsFileName[channels].c_str(),  std::ios::in | std::ios::binary );
                 if( m_ChannelsFile[channels].fail() )
                 {
-                        itkExceptionMacro(<< "BSQ : impossible to find the file <"<<m_ChannelsFileName[channels]<<">.");  
+                        if( reportError == true )
+                        {
+                                itkExceptionMacro(<< "BSQ : impossible to find the file <"<<m_ChannelsFileName[channels]<<">.");  
+                        }
+                        else
+                        {
+                                return false;
+                        }
                 }
         }
       	this->SetFileTypeToBinary();

@@ -89,16 +89,17 @@ bool LUMImageIO::CanReadFile( const char* filename )
                 m_File.close();
         }
 
-        m_File.open( filename,  std::ios::in | std::ios::binary );
-        if( m_File.fail() )
+        std::fstream header_file;
+        header_file.open( filename,  std::ios::in | std::ios::binary );
+        if( header_file.fail() )
         {
                 otbMsgDevMacro(<<"LUMImageIO::CanReadFile() failed header open ! " );
                 return false;
         }
 
         //Read header informations
-        bool lResult = InternalReadHeaderInformation(m_File,false);
-        m_File.close();
+        bool lResult = InternalReadHeaderInformation(header_file,false);
+        header_file.close();
         return (lResult);
 }
 
@@ -188,6 +189,7 @@ void LUMImageIO::ReadImageInformation()
         }
 
         //Read header informations
+        bool lResult = InternalReadHeaderInformation(m_File,true);
 
 otbMsgDebugMacro( <<"Driver to read: LUM");
 otbMsgDebugMacro( <<"         Read  file         : "<< m_FileName);

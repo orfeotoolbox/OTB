@@ -74,6 +74,14 @@ namespace otb
       {
 	return false;
       }
+    
+    // Control file extension
+    if(  (System::SetToLower(System::GetExtension(lFileName)) != "j2k" ) && 
+         (System::SetToLower(System::GetExtension(lFileName)) != "jp2" ))
+      {
+        return false;
+      }
+
     // Creating a codec
     opj_codec_t * codec = opj_create_decompress(CODEC_JP2);
     if(!codec)
