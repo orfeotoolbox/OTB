@@ -75,6 +75,7 @@ namespace otb
 	return false;
       }
     
+    std::string lFileName(filename);
     // Control file extension
     if(  (System::SetToLower(System::GetExtension(lFileName)) != "j2k" ) && 
          (System::SetToLower(System::GetExtension(lFileName)) != "jp2" ))
