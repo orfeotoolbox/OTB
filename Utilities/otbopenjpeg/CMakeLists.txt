@@ -53,7 +53,7 @@ MARK_AS_ADVANCED(LIBRARY_OUTPUT_PATH EXECUTABLE_OUTPUT_PATH)
 
 #-----------------------------------------------------------------------------
 # For the codec...
-OPTION(BUILD_EXAMPLES "Build the Examples (codec...)." OFF)
+#OPTION(BUILD_EXAMPLES "Build the Examples (codec...)." OFF)
 
 
 # configure name mangling to allow multiple libraries to coexist
@@ -76,7 +76,7 @@ CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/opj_configure.h.in
 INCLUDE_DIRECTORIES(BEFORE ${CMAKE_CURRENT_BINARY_DIR})
 SUBDIRS(
   libopenjpeg
-  codec
+  # codec
   # mj2
   # cmake 2.4.5 has poor java support
   #j2kviewer/src
