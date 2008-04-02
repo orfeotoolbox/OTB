@@ -471,6 +471,13 @@ ADD_TEST(coTvMirrorBoundaryCondition ${COMMON_TESTS7}
      ${INPUTDATA}/qb_RoadExtract.img
      10
 )
+
+# -------------  otb::StandardFilterWatcherNew ----------------------------
+ADD_TEST(coTuStandardFilterWatcherNew ${COMMON_TESTS7}
+     otbStandardFilterWatcherNew
+     ${INPUTDATA}/qb_RoadExtract.img
+)
+
 # -------       Fichiers sources CXX -----------------------------------
 SET(BasicCommon_SRCS1
 otbSystemTest.cxx
@@ -537,9 +544,11 @@ otbPolygon.cxx
 otbUnaryFunctorNeighborhoodImageFilterNew.cxx
 otbUnaryFunctorNeighborhoodImageFilter.cxx
 )
+
 SET(BasicCommon_SRCS7
 otbGenericInterpolateImageFunctionNew.cxx
 otbMirrorBoundaryConditionTest.cxx
+otbStandardFilterWatcherNew.cxx
 )
 
 INCLUDE_DIRECTORIES("${OTBTesting_BINARY_DIR}")
