@@ -674,7 +674,7 @@ ADD_TEST(bfTvWindowedSincInterpolateImageBlackmanFunction ${BASICFILTERS_TESTS7}
 		-1 -1
 		)
 
-ADD_TEST(ProlateValidationTest ${BASICFILTERS_TESTS7}  
+ADD_TEST(bfTvProlateValidationTest ${BASICFILTERS_TESTS7}  
   --compare-image ${EPSILON}
      		  ${BASELINE}/bfTvProlateValidationTest.tif
 		  ${TEMP}/bfTvProlateValidationTest.tif
@@ -682,7 +682,7 @@ ADD_TEST(ProlateValidationTest ${BASICFILTERS_TESTS7}
 		${INPUTDATA}/poupees.tif
 		${TEMP}/bfTvProlateValidationTest.tif
 		3 # radius
-		0.5# factor
+		0.5 # factor
 		512 # size	
 		${TEMP}/defaultprolatevalidationtest.tif # nearest neighborhood interpolator : NOT GENERATE IN THE TEST
 		)
