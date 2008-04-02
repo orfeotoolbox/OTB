@@ -131,7 +131,6 @@ namespace otb
 // Read image with GDAL
   void TileMapImageIO::Read(void* buffer)
   {
-    std::streamoff step = static_cast<std::streamoff>(this->GetNumberOfComponents());
     unsigned char * p = static_cast<unsigned char *>(buffer);
     if(p==NULL)
     {
@@ -151,7 +150,6 @@ namespace otb
     otbMsgDevMacro( <<" Nb Of Components  : "<<this->GetNumberOfComponents());
         
     std::streamoff lNbPixels = (static_cast<std::streamoff>(totSamples))*(static_cast<std::streamoff>(totLines));
-    std::streamoff lTailleBuffer = static_cast<std::streamoff>(m_NbOctetPixel)*lNbPixels;
         
     otbMsgDevMacro( <<" Allocation buff tempon taille : "<<lNbPixels<<"*"<<m_NbOctetPixel<<" (NbOctetPixel) = "<<lTailleBuffer);
     otbMsgDevMacro( <<" sizeof(streamsize)    : "<<sizeof(std::streamsize));
@@ -159,13 +157,10 @@ namespace otb
     otbMsgDevMacro( <<" sizeof(streamoff)     : "<<sizeof(std::streamoff));
     otbMsgDevMacro( <<" sizeof(std::ios::beg) : "<<sizeof(std::ios::beg));
     otbMsgDevMacro( <<" sizeof(size_t)        : "<<sizeof(size_t));
-        //otbMsgDevMacro( <<" sizeof(pos_type)      : "<<sizeof(pos_type));
-        //otbMsgDevMacro( <<" sizeof(off_type)      : "<<sizeof(off_type));
+    //otbMsgDevMacro( <<" sizeof(pos_type)      : "<<sizeof(pos_type));
+    //otbMsgDevMacro( <<" sizeof(off_type)      : "<<sizeof(off_type));
     otbMsgDevMacro( <<" sizeof(unsigned long) : "<<sizeof(unsigned long));
 
-        
-    double x = firstSample/((1 << m_Depth)*256.);
-    double y = firstLine/((1 << m_Depth)*256.);
     int nTilesX = (int) ceil(totSamples/256.)+1;
     int nTilesY = (int) ceil(totLines/256.)+1;
     unsigned char * bufferTile = new unsigned char[256*256*nComponents];
@@ -184,11 +179,11 @@ namespace otb
             //Copy the tile in the output buffer
         for(int tileJ=0; tileJ<256; tileJ++)
         {
-          long int yImageOffset=(long int) 256*floor(firstLine/256.)+256*numTileY-firstLine+tileJ;
+          long int yImageOffset=(long int) (256*floor(firstLine/256.)+256*numTileY-firstLine+tileJ);
           if ((yImageOffset >= 0) && (yImageOffset < totLines))
           {
             long int xImageOffset = (long int)
-                256*floor(firstSample/256.)+256*numTileX-firstSample;
+                (256*floor(firstSample/256.)+256*numTileX-firstSample);
             unsigned char * dst = p+nComponents*(xImageOffset+totSamples*yImageOffset);
             unsigned char * src = bufferTile+nComponents*256*tileJ;
             int size = nComponents*256;
@@ -500,8 +495,8 @@ namespace otb
     int totSamples = this->GetIORegion().GetSize()[0];
     int firstLine   = this->GetIORegion().GetIndex()[1];
     int firstSample = this->GetIORegion().GetIndex()[0];
-    int originLine   = this->GetOrigin(1);
-    int originSample = this->GetOrigin(0);
+    int originLine   = (int)this->GetOrigin(1);
+    int originSample = (int)this->GetOrigin(0);
     int nComponents = this->GetNumberOfComponents();
     
     std::cout << "TileMapImageIO::Write: Size " << totLines << ", "<< totSamples << std::endl;
@@ -579,11 +574,11 @@ namespace otb
         
         for(int tileJ=0; tileJ<256; tileJ++)
         {
-          long int yImageOffset=(long int) 256*floor((originLine+firstLine)/256.)+256*numTileY-(originLine+firstLine)+tileJ;
+          long int yImageOffset=(long int) (256*floor((originLine+firstLine)/256.)+256*numTileY-(originLine+firstLine)+tileJ);
           if ((yImageOffset >= 0) && (yImageOffset < totLines))
           {
             long int xImageOffset = (long int)
-                256*floor((originSample+firstSample)/256.)+256*numTileX-(originSample+firstSample);
+                (256*floor((originSample+firstSample)/256.)+256*numTileX-(originSample+firstSample));
             unsigned char * dst = bufferTile+nComponents*256*tileJ;
             const unsigned char * src = p+nComponents*(xImageOffset+totSamples*yImageOffset);
             int size = nComponents*256;

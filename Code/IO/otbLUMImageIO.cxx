@@ -189,8 +189,8 @@ void LUMImageIO::ReadImageInformation()
         }
 
         //Read header informations
-        bool lResult = InternalReadHeaderInformation(m_File,true);
-
+        InternalReadHeaderInformation(m_File,true);
+	
 otbMsgDebugMacro( <<"Driver to read: LUM");
 otbMsgDebugMacro( <<"         Read  file         : "<< m_FileName);
 otbMsgDebugMacro( <<"         Size               : "<<m_Dimensions[0]<<","<<m_Dimensions[1]);

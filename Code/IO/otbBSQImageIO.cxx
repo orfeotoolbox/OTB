@@ -223,7 +223,7 @@ void BSQImageIO::ReadImageInformation()
         }
 
         //Read header informations
-        bool lResult = InternalReadHeaderInformation(m_FileName, m_HeaderFile,true);
+        InternalReadHeaderInformation(m_FileName, m_HeaderFile,true);
 
 otbMsgDebugMacro( <<"Driver to read: BSQ");
 otbMsgDebugMacro( <<"         Read  file         : "<< m_FileName);
