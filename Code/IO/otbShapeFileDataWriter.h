@@ -35,7 +35,7 @@ public :
 
 	/** Standard class typedefs. */
 	typedef ShapeFileDataWriter											Self;
-  typedef ProcessObject														Superclass;
+	typedef itk::ProcessObject														Superclass;
   typedef itk::SmartPointer<Self> 								Pointer;
   typedef itk::SmartPointer<const Self>  					ConstPointer;
 
