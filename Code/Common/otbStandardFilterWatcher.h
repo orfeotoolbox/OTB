@@ -21,9 +21,7 @@
 #ifndef __otbStandardFilterWatcher_h
 #define __otbStandardFilterWatcher_h
 
-#include "itkCommand.h"
-#include "itkProcessObject.h"
-#include "itkTimeProbe.h"
+#include "otbFilterWatcherBase.h"
 
 namespace otb
 {
@@ -48,7 +46,7 @@ namespace otb
    *  \see itk::SimpleFilterWatcher
    *  \see otb::fltkFilterWatcher
    */
-  class ITK_EXPORT StandardFilterWatcher
+  class ITK_EXPORT StandardFilterWatcher : public otb::FilterWatcherBase
     {
     public:
       
@@ -62,20 +60,7 @@ namespace otb
       
       /** operator=  */
       void operator=(const StandardFilterWatcher& );
-      
-      /** Destructor. */
-      virtual ~StandardFilterWatcher();
-      
-      /** Methods to access member data */
-      /** Get a pointer to the process object being watched. */
-      itk::ProcessObject *GetProcess () {return m_Process.GetPointer();}
-      
-      /** Get the comment for the watcher. */
-      std::string GetComment() {return m_Comment;}
-      
-      /** Get a reference to the TimeProbe */
-      itk::TimeProbe &GetTimeProbe() {return m_TimeProbe;}
-      
+            
       /** Get/Set number of stars */
       void SetStars( int count ) { m_StarsCount = count;}
       const int& GetStars() const { return m_StarsCount;}
@@ -93,38 +78,8 @@ namespace otb
       
     private:
       
-      /** Computing time */
-      itk::TimeProbe m_TimeProbe;
-      
-      /** Associated comment */
-      std::string m_Comment;
-      
       /** Stars coutning */
       int m_StarsCount;
-      
-      /** Abstract process object */
-      itk::ProcessObject::Pointer m_Process;
-      
-      /** Internal type */
-      typedef itk::SimpleMemberCommand<StandardFilterWatcher> CommandType;
-      
-      /** Start filter callback */
-      CommandType::Pointer m_StartFilterCommand;
-      
-      /** End filter callback */
-      CommandType::Pointer m_EndFilterCommand;
-      
-      /** Progress filter callback */
-      CommandType::Pointer m_ProgressFilterCommand;
-      
-      /** Start oberserver */
-      unsigned long m_StartTag;
-      
-      /** End observer */
-      unsigned long m_EndTag;
-      
-      /** Progress observer */
-      unsigned long m_ProgressTag;
     };
   
 } // end namespace otb
