@@ -30,7 +30,7 @@
 
 #include "openjpeg.h"
 #include "profile.h"
-#include <malloc.h>
+#include <stdlib.h>
 
 #define DA_X0 0
 #define DA_Y0 0
