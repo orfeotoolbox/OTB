@@ -21,30 +21,32 @@
 #ifndef __otbFltkFilterWatcher_h
 #define __otbFltkFilterWatcher_h
 
-#include "itkCommand.h"
-#include "itkProcessObject.h"
-#include "itkTimeProbe.h"
 #include <FL/Fl.H>
 #include <FL/Fl_Window.H>
 #include <FL/Fl_Progress.H>
 
+#include "otbFilterWatcherBase.h"
 
 namespace otb
 {
 
 /** \class FltkFilterWatcher
-
+ *  \brief This class implements the progress mechanim
+ *         on pipeline filtering execution
+ *
  */
-class ITK_EXPORT FltkFilterWatcher
+  class ITK_EXPORT FltkFilterWatcher : public otb::FilterWatcherBase
 {
 public:
   /** Classes that need access to filter's private data */
-  friend class XMLFilterWatcher;
+  // friend class XMLFilterWatcher;
 
   /** Constructor. Takes a ProcessObject to monitor and an optional
    * comment string that is prepended to each event message. */
-  FltkFilterWatcher(itk::ProcessObject* o, int x, int y, int w,int h,const char *comment="");
-
+  FltkFilterWatcher(itk::ProcessObject* process,
+		    int x, int y, int w,int h,
+		    const char *comment="");
+  
   /** Destructor. */
   virtual ~FltkFilterWatcher();
   
@@ -74,19 +76,7 @@ protected:
   }
 
 private:
-  itk::TimeProbe m_TimeProbe;
-  std::string m_Comment;
-  itk::ProcessObject::Pointer m_Process;
-
-  typedef itk::SimpleMemberCommand<FltkFilterWatcher> CommandType;
-  CommandType::Pointer m_StartFilterCommand;
-  CommandType::Pointer m_EndFilterCommand;
-  CommandType::Pointer m_ProgressFilterCommand;
-
-  unsigned long m_StartTag;
-  unsigned long m_EndTag;
-  unsigned long m_ProgressTag;
-
+  
   Fl_Window * m_Window;
   Fl_Progress * m_Progress;
 };
