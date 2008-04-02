@@ -37,7 +37,6 @@ SET(OTB_INCLUDE_DIRS_BUILD_TREE ${OTB_INCLUDE_DIRS_BUILD_TREE}
   ${OTB_SOURCE_DIR}/Utilities/otbgeotiff/libxtiff
   ${OTB_SOURCE_DIR}/Utilities/tinyXMLlib
   ${OTB_SOURCE_DIR}/Utilities/otbopenjpeg/libopenjpeg
-
 )
 
 #-----------------------------------------------------------------------------
