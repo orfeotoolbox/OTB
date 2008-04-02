@@ -1240,15 +1240,15 @@ ADD_TEST(ioTvossimElevManagerTest ${IO_TESTS12}
 
 
 # ---  JPEG2000 can read ---
-ADD_TEST(ioTuJPEG2000ImageIOCanRead ${IO_TESTS13} 
-         otbJPEG2000ImageIOTestCanRead
-         ${INPUTDATA}/toto.j2k
-         )
+#ADD_TEST(ioTuJPEG2000ImageIOCanRead ${IO_TESTS13} 
+#         otbJPEG2000ImageIOTestCanRead
+#         ${INPUTDATA}/toto.j2k
+#         )
 # ---  JPEG2000 can write ---
-ADD_TEST(ioTuJPEG2000ImageIOCanWrite ${IO_TESTS13} 
-         otbJPEG2000ImageIOTestCanWrite
-         ${INPUTDATA}/toto.j2k
-         )
+#ADD_TEST(ioTuJPEG2000ImageIOCanWrite ${IO_TESTS13} 
+#         otbJPEG2000ImageIOTestCanWrite
+#         ${INPUTDATA}/toto.j2k
+#         )
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ otbIOTESTS14 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -1392,10 +1392,10 @@ otbDEMToImageGeneratorTest.cxx
 otbImageGeometryHandlerNew.cxx
 otbOssimElevManagerTest.cxx
 )
-SET(BasicIO_SRCS13
-otbJPEG2000ImageIOTestCanRead.cxx
-otbJPEG2000ImageIOTestCanWrite.cxx
-)
+#SET(BasicIO_SRCS13
+#otbJPEG2000ImageIOTestCanRead.cxx
+#otbJPEG2000ImageIOTestCanWrite.cxx
+#)
 SET(BasicIO_SRCS14
 otbOGRDriverTest.cxx
 otbShapeFileDataReaderTest.cxx
@@ -1444,8 +1444,8 @@ TARGET_LINK_LIBRARIES(otbIOTests11 OTBIO OTBCommon  gdal ITKIO ITKCommon dxf)
 ADD_EXECUTABLE(otbIOTests12 otbIOTests12.cxx ${BasicIO_SRCS12})
 TARGET_LINK_LIBRARIES(otbIOTests12 OTBIO OTBCommon  gdal ITKIO ITKCommon dxf)
 
-ADD_EXECUTABLE(otbIOTests13 otbIOTests13.cxx ${BasicIO_SRCS13})
-TARGET_LINK_LIBRARIES(otbIOTests13 OTBIO OTBCommon  gdal ITKIO ITKCommon dxf)
+#ADD_EXECUTABLE(otbIOTests13 otbIOTests13.cxx ${BasicIO_SRCS13})
+#TARGET_LINK_LIBRARIES(otbIOTests13 OTBIO OTBCommon  gdal ITKIO ITKCommon dxf)
 
 ADD_EXECUTABLE(otbIOTests14 otbIOTests14.cxx ${BasicIO_SRCS14})
 TARGET_LINK_LIBRARIES(otbIOTests14 OTBIO OTBCommon  gdal ITKIO ITKCommon dxf)

@@ -151,11 +151,11 @@ ADD_TEST(utOssimRadarSatSupport ${UTILITIES_TESTS}
 
 
 # -------            lib OpenJpeg   ------------------------------
-ADD_TEST(utOpenJpegEncoder ${UTILITIES_TESTS}
-	openJpegEncoder)
+#ADD_TEST(utOpenJpegEncoder ${UTILITIES_TESTS}
+#	openJpegEncoder)
 
-ADD_TEST(utOpenJpegDecoder ${UTILITIES_TESTS}
-	openJpegDecoder)
+#ADD_TEST(utOpenJpegDecoder ${UTILITIES_TESTS}
+#	openJpegDecoder)
 
 # -------       Fichiers sources CXX -----------------------------------
 SET(UtilitiesTests_SRCS
@@ -171,14 +171,15 @@ tinyXMLlibTest.cxx
 svmGenericKernelBasicOperationsTest.cxx
 otbSVMComposedKernelFunctorTest.cxx
 ossimRadarSatSupport.cxx
-openJpegEncoder.cxx
-openJpegDecoder.cxx
+#openJpegEncoder.cxx
+#openJpegDecoder.cxx
 )
 
 INCLUDE_DIRECTORIES("${OTBTesting_BINARY_DIR}")
 
 ADD_EXECUTABLE(otbUtilitiesTests otbUtilitiesTests.cxx ${UtilitiesTests_SRCS})
-TARGET_LINK_LIBRARIES(otbUtilitiesTests OTBIO OTBCommon gdal ITKIO ITKAlgorithms ITKStatistics ITKCommon otbossim otbsvm otb6S tinyXML openjpeg)
+#TARGET_LINK_LIBRARIES(otbUtilitiesTests OTBIO OTBCommon gdal ITKIO ITKAlgorithms ITKStatistics ITKCommon otbossim otbsvm otb6S tinyXML openjpeg)
+TARGET_LINK_LIBRARIES(otbUtilitiesTests OTBIO OTBCommon gdal ITKIO ITKAlgorithms ITKStatistics ITKCommon otbossim otbsvm otb6S tinyXML )
 IF(UNIX)
     TARGET_LINK_LIBRARIES (otbUtilitiesTests m)
 ENDIF(UNIX)
