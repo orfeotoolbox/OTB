@@ -25,6 +25,7 @@
 #include <stdio.h>
 #include "elevation/ossimElevManager.h"
 #include "base/ossimFilename.h"
+#include "base/ossimDirectory.h"
 #include "itkImageRegionIteratorWithIndex.h"
 #include "itkIndent.h"
 #include "itkSimpleFastMutexLock.h"

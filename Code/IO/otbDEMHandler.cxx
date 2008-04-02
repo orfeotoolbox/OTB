@@ -45,11 +45,16 @@ namespace otb
     m_Mutex.Lock();
     ossimFilename ossimDEMDir;
     ossimDEMDir=ossimFilename(DEMDirectory);
-    if (!m_ElevManager->openDirectory(ossimDEMDir))
-      {
-	m_Mutex.Unlock();
-	itkExceptionMacro("Failed to open DEM Directory: "<<ossimDEMDir);
-      }
+
+    ossimDirectory od(DEMDirectory);
+    if (od.isOpened() == false)
+    {
+	if (!m_ElevManager->openDirectory(ossimDEMDir))
+	{
+		m_Mutex.Unlock();
+		itkExceptionMacro("Failed to open DEM Directory: "<<ossimDEMDir);
+	}
+    }
     m_Mutex.Unlock();
   }
 
