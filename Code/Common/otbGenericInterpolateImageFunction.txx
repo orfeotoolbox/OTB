@@ -309,7 +309,7 @@ GenericInterpolateImageFunction<TInputImage, TFunction, TBoundaryCondition, TCoo
 
     // Multiply the intensity by each of the weights. Gotta hope
     // that the compiler will unwrap this loop and pipeline this!
-    for(dim = 0; dim < ImageDimension; dim++)
+    for(unsigned int dim = 0; dim < ImageDimension; dim++)
       {
       xVal *= xWeight[ dim ][ m_WeightOffsetTable[j][dim] ];
       }
