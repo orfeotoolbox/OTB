@@ -56,7 +56,7 @@ class ITK_EXPORT ForwardFourierMellinTransformImageFilter :
   public:
 
   //typedef TPixel						     PixelType;
-  typedef otb::Image< TPixel , Dimension >                           InputImageType;
+  typedef Image< TPixel , Dimension >                           InputImageType;
   /*   typedef otb::Image< std::complex< TPixel > , Dimension >           OutputImageType; */
   
   typedef typename itk::VnlFFTRealToComplexConjugateImageFilter<TPixel,Dimension> FourierImageFilterType;
@@ -102,7 +102,7 @@ class ITK_EXPORT ForwardFourierMellinTransformImageFilter :
   typedef typename InterpolatorType::PointType   		PointType;
 
 
-  typedef otb::LogPolarTransform<CoordRepType> LogPolarTransformType;
+  typedef LogPolarTransform<CoordRepType> LogPolarTransformType;
   typedef typename LogPolarTransformType::Pointer LogPolarTransformPointerType;
   typedef itk::ResampleImageFilter<InputImageType,InputImageType,CoordRepType> ResampleFilterType;
   typedef typename ResampleFilterType::Pointer ResampleFilterPointerType;
