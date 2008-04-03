@@ -758,10 +758,10 @@ ADD_TEST(bfTvRationalQuotientResampleImageFilter ${BASICFILTERS_TESTS7}
 		    ${BASELINE}/bfTvLabelizeImageFilterOutput.png
 		    ${TEMP}/bfTvLabelizeImageFilterOutput.png
 		    otbLabelizeImageFilter
-		    ${INPUTDATA}/cthead1.png
+		    ${INPUTDATA}/QB_Suburb.png
 	            ${TEMP}/bfTvLabelizeImageFilterOutput.png
-		    127 128
-		    10 10
+		    170 170
+		    80 80
 )
 
 # A enrichir
