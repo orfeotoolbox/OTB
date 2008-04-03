@@ -45,7 +45,6 @@ int otbShapeFileDataWriterTest(int argc, char* argv[])
 		typedef otb::ShapeFileDataReader<ShapeFileDataType> ShapeFileDataReaderType;
 		typedef otb::ShapeFileDataWriter<ShapeFileDataType> ShapeFileDataWriterType;
 		
-		ShapeFileDataType* SHPdata ;
 		ShapeFileDataReaderType::Pointer reader = ShapeFileDataReaderType::New();
 		ShapeFileDataWriterType::Pointer writer = ShapeFileDataWriterType::New();
 		
