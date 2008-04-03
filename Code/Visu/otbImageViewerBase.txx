@@ -139,8 +139,8 @@ namespace otb
       m_TransfertFunctionList->PushBack(AffineTransfertFunctionType::New());
       double min = generator->GetOutput()->Quantile(0,m_NormalizationFactor);
       double max = generator->GetOutput()->Quantile(0,1-m_NormalizationFactor);
-      m_TransfertFunctionList->Back()->SetLowerBound(min);
-      m_TransfertFunctionList->Back()->SetUpperBound(max);
+      m_TransfertFunctionList->Back()->SetLowerBound(static_cast<InputPixelType>(min));
+      m_TransfertFunctionList->Back()->SetUpperBound(static_cast<InputPixelType>(max));
     }
   }
   
