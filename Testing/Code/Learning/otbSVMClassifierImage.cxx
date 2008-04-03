@@ -118,7 +118,7 @@ int otbSVMClassifierImage(int argc, char* argv[] )
   classifier->Update() ;
   
   /* Build the class map */
-  itkGenericExceptionMacro( << "Output image creation" );
+  otbGenericMsgDebugMacro( << "Output image creation" );
 			    
     typedef ClassifierType::ClassLabelType	          OutputPixelType;
   typedef otb::Image< OutputPixelType, Dimension >        OutputImageType;
@@ -146,16 +146,16 @@ int otbSVMClassifierImage(int argc, char* argv[] )
     outputImage->Allocate();
 
     
-    itkGenericExceptionMacro( << "classifier get output" );  
+    otbGenericMsgDebugMacro( << "classifier get output" );  
     ClassifierType::OutputType* membershipSample =
       classifier->GetOutput() ;
-    itkGenericExceptionMacro( << "Sample iterators" );  
+    otbGenericMsgDebugMacro( << "Sample iterators" );  
     ClassifierType::OutputType::ConstIterator m_iter =
       membershipSample->Begin() ;
     ClassifierType::OutputType::ConstIterator m_last =
       membershipSample->End() ;
 
-    itkGenericExceptionMacro( << "Image iterator" );  
+    otbGenericMsgDebugMacro( << "Image iterator" );  
     typedef itk::ImageRegionIterator< OutputImageType>  OutputIteratorType;
     OutputIteratorType  outIt( outputImage,
 			   outputImage->GetBufferedRegion() );
@@ -163,7 +163,7 @@ int otbSVMClassifierImage(int argc, char* argv[] )
     outIt.GoToBegin();
 
 
-    itkGenericExceptionMacro( << "Iteration for output image = " << (membershipSample->Size()) );  
+    otbGenericMsgDebugMacro( << "Iteration for output image = " << (membershipSample->Size()) );  
 
     while (m_iter != m_last && !outIt.IsAtEnd())
     {
