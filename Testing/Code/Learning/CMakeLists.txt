@@ -118,13 +118,13 @@ ADD_TEST(leTuSVMPointSetModelEstimatorTrain ${LEARNING_TESTS2}
 ADD_TEST(leTuSVMClassifierNew ${LEARNING_TESTS2}  
         otbSVMClassifierNew)
 
-ADD_TEST(leTuSVMClassifierImage ${LEARNING_TESTS2}  
+ADD_TEST(leTvSVMClassifierImage ${LEARNING_TESTS2}  
         otbSVMClassifierImage
 	${INPUTDATA}/ROI_QB_MUL_4.tif
 	${INPUTDATA}/svm_model_image
 	${TEMP}/svm_classified_image.png)
 
-ADD_TEST(leTuSVMClassifierImageWithGenericKernalLinear ${LEARNING_TESTS2}  
+ADD_TEST(leTvSVMClassifierImageWithGenericKernalLinear ${LEARNING_TESTS2}  
 --compare-image ${TOL}  ${TEMP}/svm_classified_image.png
                         ${TEMP}/svm_classified_image_with_generic_kernel_linear.png
         otbSVMClassifierImage
@@ -134,7 +134,7 @@ ADD_TEST(leTuSVMClassifierImageWithGenericKernalLinear ${LEARNING_TESTS2}
 
 
 
-ADD_TEST(leTuSVMClassifierPointSet ${LEARNING_TESTS2}  
+ADD_TEST(leTvSVMClassifierPointSet ${LEARNING_TESTS2}  
         otbSVMClassifierPointSet
 	${INPUTDATA}/svm_model_pointset)
 	
