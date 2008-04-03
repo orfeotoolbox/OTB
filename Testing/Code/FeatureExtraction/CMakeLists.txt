@@ -437,8 +437,8 @@ ADD_TEST(feTvExtractSegments ${FEATUREEXTRACTION_TESTS6}
 
 # -------            otb::ForwardFourierMellinTransformImageFilter   -------------
 
-ADD_TEST(feTuForwardFourierMellinImageFilterNew ${FEATUREEXTRACTION_TESTS6} 
-         otbFourierMellinImageFilterNew)  
+#ADD_TEST(feTuForwardFourierMellinImageFilterNew ${FEATUREEXTRACTION_TESTS6} 
+#         otbFourierMellinImageFilterNew)  
 
 #ADD_TEST(feTuForwardFourierMellinImageFilterCroix ${FEATUREEXTRACTION_TESTS6}  
 # --compare-n-images ${TOL} 2 
@@ -816,7 +816,7 @@ otbModulusAndDirectionImageFiltersNew.cxx
 SET(BasicFeatureExtraction_SRCS6
 otbExtractSegmentsNew.cxx
 otbExtractSegments.cxx
-otbFourierMellinImageFilterNew.cxx
+#otbFourierMellinImageFilterNew.cxx #Comment because generate error "duplicate vnl_fft_base<3...>" with otbFourierMellinImageFilter.cxx test on Mac OSX platform
 #otbFourierMellinImageFilterTestFFT.cxx
 otbFourierMellinImageFilter.cxx
 otbImageToEdgePathFilterNew.cxx
