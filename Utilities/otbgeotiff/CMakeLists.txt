@@ -7,9 +7,9 @@ CONFIGURE_FILE(geo_config.h.in ${OTB_BINARY_DIR}/Utilities/otbgeotiff/geo_config
 
 INCLUDE_DIRECTORIES(${OTB_BINARY_DIR}/Utilities/otbgeotiff/)
 
-# Adjust the compiler flags to avoid problems with f2c-generated code.
+# Adjust the compiler flags to avoid problems with geotiff code.
 IF(CMAKE_COMPILER_IS_GNUCC)
-  # Hide warnings in geotif code.
+  # Hide warnings in geotiff code.
   SET(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -w")
 
   # CMake versions before 2.4 did not put the source-file-specific flags
