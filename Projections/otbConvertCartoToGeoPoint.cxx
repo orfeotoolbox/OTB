@@ -1,14 +1,21 @@
 /*=========================================================================
 
-  Programme :   OTB (ORFEO ToolBox)
-  Auteurs   :   CS - R. Garrigues
-  Language  :   C++
-  Date      :   18 Octobre 2007
-  Version   :   
-  Role      :   Ortho-Rectification Image Application
-  $Id$
+Program:   ORFEO Toolbox
+Language:  C++
+Date:      $Date$
+Version:   $Revision$
+
+
+Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
+See OTBCopyright.txt for details.
+
+
+This software is distributed WITHOUT ANY WARRANTY; without even 
+the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
+
  
 #if defined(_MSC_VER)
 #pragma warning ( disable : 4786 )
@@ -170,7 +177,7 @@ int main(int argc, char* argv[])
 					
         return generic_main_carto_geo<LambertProjectionType>(argc,argv, lambertProjection, parseResult);
       }
-      if ((typeMap == "LAMBERT2")&&(nbParams==0))
+      else if ((typeMap == "LAMBERT2")&&(nbParams==0))
       {
         typedef otb::Lambert2EtenduInverseProjection Lambert2ProjectionType;
         Lambert2ProjectionType::Pointer lambert2Projection = Lambert2ProjectionType::New();
