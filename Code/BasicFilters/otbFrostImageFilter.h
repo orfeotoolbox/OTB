@@ -96,7 +96,7 @@ public:
   itkGetConstReferenceMacro(Deramp, double);
 
   /** To be allowed to use the pipeline method FrostImageFilter needs 
-    * a treatment input area larger than the output one.
+    * an input processing area larger than the output one.
     * \sa ImageToImageFilter::GenerateInputRequestedRegion() */
   virtual void GenerateInputRequestedRegion() throw(itk::InvalidRequestedRegionError);
 

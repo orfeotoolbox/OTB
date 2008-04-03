@@ -121,15 +121,14 @@ void FrostImageFilter< TInputImage, TOutputImage>::ThreadedGenerateData(
   // support progress methods/callbacks
   itk::ProgressReporter progress(this, threadId, outputRegionForThread.GetNumberOfPixels());
   
-//  InputRealType pixel;
   InputRealType sum;
   InputRealType sum2;
 
-  double 	Moyenne, Variance; 
+  double 	Mean, Variance; 
   double	Alpha;   	 
-  double    	NormFiltre;
-  double	FrostFiltre;
-  double	CoefFiltre;
+  double    	NormFilter;
+  double	FrostFilter;
+  double	CoefFilter;
   double	dPixel;
   
     
@@ -153,20 +152,20 @@ void FrostImageFilter< TInputImage, TOutputImage>::ThreadedGenerateData(
 		sum += dPixel;
 		sum2 += dPixel * dPixel;
         }
-      Moyenne   = sum  / double(neighborhoodSize);
-      Variance  = sum2 / double(neighborhoodSize) - Moyenne * Moyenne ;
+      Mean   = sum  / double(neighborhoodSize);
+      Variance  = sum2 / double(neighborhoodSize) - Mean * Mean ;
      
-      if(Moyenne == 0)
+      if(Mean == 0)
 	{
 	  Alpha = 0;
 	}
       else
 	{
-	  Alpha = m_Deramp * Variance / (Moyenne * Moyenne) ;
+	  Alpha = m_Deramp * Variance / (Mean * Mean) ;
 	}
       
-      NormFiltre  = 0.0;
-      FrostFiltre = 0.0;
+      NormFilter  = 0.0;
+      FrostFilter = 0.0;
  
       const double rad_x = static_cast<double>(m_Radius[0]);
       const double rad_y = static_cast<double>(m_Radius[1]);
@@ -181,22 +180,17 @@ void FrostImageFilter< TInputImage, TOutputImage>::ThreadedGenerateData(
 //		i = (unsigned int)((y+rad_y)*(2*rad_y+1)+(x+rad_x));
 		dPixel= static_cast<double>( bit.GetPixel(off));
 //		dPixel= static_cast<double>( bit.GetPixel(i));
-		CoefFiltre = Alpha * vcl_exp(-Alpha *Dist);
-		NormFiltre  = NormFiltre  + CoefFiltre;
-		FrostFiltre = FrostFiltre + (CoefFiltre * dPixel);
+		CoefFilter = Alpha * vcl_exp(-Alpha *Dist);
+		NormFilter  = NormFilter  + CoefFilter;
+		FrostFilter = FrostFilter + (CoefFilter * dPixel);
 		}
         }
 	  
 	  
-      /*dPixel = (FrostFiltre/NormFiltre);      
-      if (finite(dPixel)==0){
-      	dPixel = 0.;
-      }*/
-	  // Modif pour VC++ 
-	  if (NormFiltre==0.)
+	  if (NormFilter==0.)
 	  	  dPixel=0.;
 	  else
-		  dPixel=FrostFiltre/NormFiltre;
+		  dPixel=FrostFilter/NormFilter;
                   
       it.Set( static_cast<OutputPixelType>( dPixel ) );
       
