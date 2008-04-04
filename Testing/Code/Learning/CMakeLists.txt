@@ -217,8 +217,30 @@ ADD_TEST(leTvSVMImageClassificationFilter ${LEARNING_TESTS3}
 	${TEMP}/leSVMImageClassificationFilterOutput.tif)
 			        
 ADD_TEST(leTuSVMModelGenericKernelsTest ${LEARNING_TESTS3} 
-	otbSVMModelGenericKernelsTest
-)
+	otbSVMModelGenericKernelsTest)
+
+
+ADD_TEST(leTvSVMModelCopy ${LEARNING_TESTS3}
+--compare-ascii ${TOL}  ${INPUTDATA}/svm_model
+                        ${TEMP}/svmcopymodel_test
+        otbSVMModelCopyTest
+	${INPUTDATA}/svm_model
+	${TEMP}/svmcopymodel_test)
+
+ADD_TEST(leTvSVMModelCopyGenericKernel ${LEARNING_TESTS3}
+--compare-ascii ${TOL}  ${INPUTDATA}/svm_model_generic
+                        ${TEMP}/svmcopygeneric_test
+        otbSVMModelCopyGenericKernelTest
+	${INPUTDATA}/svm_model_generic
+	${TEMP}/svmcopygeneric_test)
+
+ADD_TEST(leTvSVMModelCopyComposedKernel ${LEARNING_TESTS3}
+--compare-ascii ${TOL}  ${INPUTDATA}/svm_model_composed
+                        ${TEMP}/svmcopycomposed_test
+        otbSVMModelCopyComposedKernelTest
+	${INPUTDATA}/svm_model_composed
+	${TEMP}/svmcopycomposed_test)
+
 
 # A enrichir
 SET(BasicLearning_SRCS1
@@ -254,6 +276,9 @@ otbSEMClassifierNew.cxx
 otbSVMImageClassificationFilterNew.cxx
 otbSVMImageClassificationFilter.cxx
 otbSVMModelGenericKernelsTest.cxx
+otbSVMModelCopyTest.cxx
+otbSVMModelCopyGenericKernelTest.cxx
+otbSVMModelCopyComposedKernelTest.cxx
 )
 
 

@@ -108,6 +108,7 @@ int svm_check_probability_model(const struct svm_model *model);
 
 //OTB's modifications
 struct svm_model *svm_load_model(const char *model_file_name, /*otb::*/GenericKernelFunctorBase * generic_kernel_functor = NULL);
+struct svm_model *svm_copy_model( const svm_model *model );
 
 #ifdef __cplusplus
 }
@@ -123,11 +124,17 @@ class GenericKernelFunctorBase
 {
 public:
   GenericKernelFunctorBase() : m_Name("FunctorName") {};
+
+  /** Recopy constructor */
+  GenericKernelFunctorBase( const GenericKernelFunctorBase& copy);
+  GenericKernelFunctorBase& operator=(const GenericKernelFunctorBase& copy);
+  
   virtual ~GenericKernelFunctorBase() {};
 
-  typedef std::map<std::string,std::string>        MapType;
-  typedef MapType::iterator               MapIterator;
-  typedef MapType::const_iterator         MapConstIterator;
+  typedef GenericKernelFunctorBase          Superclass;
+  typedef std::map<std::string,std::string> MapType;
+  typedef MapType::iterator                 MapIterator;
+  typedef MapType::const_iterator           MapConstIterator;
 
   template<class T> 
   T GetValue(const char *option) const
@@ -264,7 +271,14 @@ public:
 	    }
 	}
     };
-
+ /** Recopy constructor */
+  ComposedKernelFunctor( const ComposedKernelFunctor& copy );
+  /* ComposedKernelFunctor( const ComposedKernelFunctor& c ) : GenericKernelFunctorBase(c),  */
+/*                                                            m_KernelFunctorList(c.m_KernelFunctorList) */
+/*                                                            m_HaveToBeDeletedList(c.m_HaveToBeDeletedList) */
+/*                                                            m_PonderationList(c.m_PonderationList)         {}; */
+  ComposedKernelFunctor& operator=(const ComposedKernelFunctor& copy);
+  
   typedef std::vector<GenericKernelFunctorBase *> KernelListType;
 
   virtual double operator()(const svm_node *x, const svm_node *y, const svm_parameter& param)const // = 0

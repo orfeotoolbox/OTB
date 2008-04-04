@@ -2702,7 +2702,8 @@ int svm_save_model(const char *model_file_name, const svm_model *model)
   int l = model->l;
   fprintf(fp, "nr_class %d\n", nr_class);
   fprintf(fp, "total_sv %d\n",l);
-	
+
+  if(model->rho)	
   {
     fprintf(fp, "rho");
     for(int i=0;i<nr_class*(nr_class-1)/2;i++)
@@ -2914,22 +2915,9 @@ svm_model *svm_load_model(const char *model_file_name, /*otb::*/GenericKernelFun
 	{
 	  if( param.kernel_type == COMPOSED )
 	    {
-	      /*
-		if( generic_kernel_functor == NULL )
-		{
-		fprintf(stderr,"composed kernel functor is not initialized\n",cmd);
-		return NULL;
-		}
-	      */
-
 	      //Load generic parameters
 	      delete generic_kernel_functor;
-	      /*
-	      ComposedKernelFunctor * composed;
-	      composed = new ComposedKernelFunctor;
-	      int cr = composed->load_parameters(&fp);
-	      param.kernel_composed = composed;
-	      */
+	    
 	      param.kernel_composed = new ComposedKernelFunctor;      
 	      int cr = param.kernel_composed->load_parameters(&fp);
 	      model->delete_composed = true;
@@ -3028,6 +3016,146 @@ svm_model *svm_load_model(const char *model_file_name, /*otb::*/GenericKernelFun
   model->free_sv = 1;	// XXX
   return model;
 }
+
+//************************************************//
+// OTB's modifications : fonction entiere ajoutee //
+//************************************************//
+svm_model *svm_copy_model( const svm_model *model )
+{
+  const svm_parameter& param = model->param;
+
+  // instanciated the copy
+  svm_model *modelCpy = Malloc(svm_model,1);
+  svm_parameter& paramCpy = modelCpy->param;
+  modelCpy->rho = NULL;
+  modelCpy->probA = NULL;
+  modelCpy->probB = NULL;
+  modelCpy->label = NULL;
+  modelCpy->nSV = NULL;
+  modelCpy->delete_composed = false;
+ 
+  // SVM type copy 
+  paramCpy.svm_type = param.svm_type;
+  // Kernel type copy
+  paramCpy.kernel_type = param.kernel_type;
+  // Param copy
+  paramCpy.degree = param.degree;
+  paramCpy.gamma = param.gamma;
+  paramCpy.coef0 = param.coef0;
+  // Model variable
+  int nr_class = model->nr_class;
+  int l = model->l;
+
+  modelCpy->nr_class = nr_class;
+  modelCpy->l = l;
+  if(model->rho)	
+    {
+      int n = model->nr_class * (model->nr_class-1)/2;
+      modelCpy->rho = Malloc(double,n);
+      for(int i=0; i<n; i++)
+	modelCpy->rho[i] = model->rho[i];
+    }
+  if(model->label)
+    {
+      modelCpy->label = Malloc(int,nr_class);
+      for(int i=0; i<nr_class; i++)
+	modelCpy->label[i] = model->label[i];
+    }
+  if(model->probA)
+    {
+      int n = nr_class * (nr_class-1)/2;
+      modelCpy->probA = Malloc(double,n);
+      for(int i=0; i<n; i++)
+	modelCpy->probA[i] = model->probA[i];
+    }
+  if(model->probB)
+    {
+      int n = nr_class * (nr_class-1)/2;
+      modelCpy->probB = Malloc(double,n);
+      for(int i=0; i<n; i++)
+	modelCpy->probB[i] = model->probB[i];
+    }
+  if(model->nSV)
+    {
+      modelCpy->nSV = Malloc(int,nr_class);
+      for(int i=0;i<nr_class;i++)
+	modelCpy->nSV[i] = model->nSV[i];
+    }
+  
+  // SV copy
+  const double * const *sv_coef = model->sv_coef;
+  const svm_node * const *SV = model->SV;
+ 
+
+  modelCpy->SV = Malloc(svm_node*,l);
+  svm_node **SVCpy = modelCpy->SV;
+
+  modelCpy->sv_coef = Malloc(double *,nr_class-1);
+
+  for(int i=0; i<nr_class-1; i++)
+    modelCpy->sv_coef[i] = Malloc(double,l);
+
+
+  // Compute the total number of SV elements.
+  unsigned int elements = 0;
+  for (int p=0; p<l; p++)
+    {
+      const svm_node *tempNode = SV[p];
+      while(tempNode->index != -1)
+	{
+	  tempNode++;
+	  elements++;
+	}
+      elements++;// for -1 values
+    }
+
+    if(l>0) 
+      {
+        modelCpy->SV[0] = Malloc(svm_node,elements);
+	memcpy( modelCpy->SV[0],model->SV[0],sizeof(svm_node*)*elements);
+      }
+     svm_node *x_space =  modelCpy->SV[0];
+
+ 
+  int j = 0;
+  for(int i=0; i<l; i++)
+    { 
+      // sv_coef
+      for(int k=0; k<nr_class-1; k++)
+	modelCpy->sv_coef[k][i] = sv_coef[k][i];
+       
+      // SV
+      modelCpy->SV[i] = &x_space[j];   
+      const svm_node *p = SV[i];
+      svm_node *pCpy = SVCpy[i];
+      while(p->index != -1)
+ 	{  
+ 	  pCpy->index = p->index;
+ 	  pCpy->value = p->value;
+ 	  p++;
+	  pCpy++;
+	  j++;
+ 	}
+       pCpy->index = -1;
+       j++;
+    }
+
+  // Generic kernel copy
+  if( param.kernel_type == GENERIC )
+    {
+      // copy
+      paramCpy.kernel_generic = param.kernel_generic;
+    }
+  if( param.kernel_type == COMPOSED )
+    {
+      // copy
+      paramCpy.kernel_composed = param.kernel_composed;
+    }
+  
+  return modelCpy;
+}
+
+
 
 void svm_destroy_model(svm_model* model)
 {
@@ -3193,6 +3321,21 @@ int svm_check_probability_model(const svm_model *model)
   namespace otb
   {
 */
+
+GenericKernelFunctorBase::GenericKernelFunctorBase(const GenericKernelFunctorBase& copy)
+{
+  this->m_MapParameters = copy.m_MapParameters;
+  this->m_Name = copy.m_Name;
+}
+
+GenericKernelFunctorBase&
+GenericKernelFunctorBase::operator=(const GenericKernelFunctorBase& copy)
+{
+  this->m_MapParameters = copy.m_MapParameters;
+  this->m_Name = copy.m_Name;
+  return *this;
+}
+
 int
 GenericKernelFunctorBase::
 load_parameters(FILE ** pfile)
@@ -3473,6 +3616,27 @@ add(const svm_node *px, const svm_node *py) const
 // ****************************************************************************************
 // ************************ ComposedKernelFunctor methods ********************/
 // ****************************************************************************************
+
+ComposedKernelFunctor::ComposedKernelFunctor(const ComposedKernelFunctor& copy)
+ {
+   //this->GenericKernelFunctorBase::GenericKernelFunctorBase(copy);
+   Superclass::GenericKernelFunctorBase(static_cast<GenericKernelFunctorBase>(copy));
+   this->m_KernelFunctorList = copy.m_KernelFunctorList;
+   this->m_HaveToBeDeletedList = copy.m_HaveToBeDeletedList;
+   this->m_PonderationList = copy.m_PonderationList;
+ }
+
+ComposedKernelFunctor&
+ComposedKernelFunctor::operator=(const ComposedKernelFunctor& copy)
+{
+  //this->GenericKernelFunctorBase::operator=( copy );
+  Superclass::operator=( static_cast<GenericKernelFunctorBase>(copy) );
+  this->m_KernelFunctorList = copy.m_KernelFunctorList;
+  this->m_HaveToBeDeletedList = copy.m_HaveToBeDeletedList;
+  this->m_PonderationList = copy.m_PonderationList;
+  return *this;
+}
+
 void 
 ComposedKernelFunctor
 ::print_parameters(void)const

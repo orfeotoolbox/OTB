@@ -16,25 +16,31 @@
 
 =========================================================================*/
 
-
-// this file defines the otbCommonTest for the test driver
-// and all it expects is that you have a function called RegisterTests
 #if defined(_MSC_VER)
 #pragma warning ( disable : 4786 )
 #endif
 
+#include "itkExceptionObject.h"
 #include <iostream>
-#include "otbTestMain.h" 
+#include "otbSVMKernels.h"
+#include "otbSVMModel.h"
 
-void RegisterTests()
-{
-REGISTER_TEST(otbSOMClassifierNew);
-REGISTER_TEST(otbSOMClassifier);
-REGISTER_TEST(otbSEMClassifierNew);
-REGISTER_TEST(otbSVMImageClassificationFilterNew);
-REGISTER_TEST(otbSVMImageClassificationFilter);
-REGISTER_TEST(otbSVMModelGenericKernelsTest);
-REGISTER_TEST(otbSVMModelCopyTest);
-REGISTER_TEST(otbSVMModelCopyGenericKernelTest);
-REGISTER_TEST(otbSVMModelCopyComposedKernelTest);
+
+int otbSVMModelCopyComposedKernelTest( int argc, char* argv[] )
+{       
+  typedef unsigned char                                   InputPixelType;
+  typedef unsigned char                                   LabelPixelType;
+  
+  typedef otb::SVMModel< InputPixelType, LabelPixelType > ModelType;
+  
+  ModelType::Pointer svmModel = ModelType::New();
+  svmModel->LoadModel(argv[1]);
+
+  ModelType::Pointer svmModelCopy;
+  svmModelCopy = svmModel->GetCopy();
+  svmModelCopy->SaveModel(argv[2]);
+  
+  return EXIT_SUCCESS;
 }
+
+

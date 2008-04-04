@@ -200,6 +200,9 @@ public:
   /** Loads the model from a file */
   void LoadModel(const char* model_file_name);
 
+ /** Copy the model */
+  Pointer GetCopy();
+
   /** Set the SVM type to C_SVC, NU_SVC, ONE_CLASS, EPSILON_SVR, NU_SVR */
   void SetSVMType(int svmtype)
   {
@@ -407,6 +410,12 @@ public:
   {
         return m_Model->l;
   }
+   /** Set number of support vectors */
+  void SetNumberOfSupportVectors(int l)
+    {
+      m_Model->l = l;
+    }
+
   /** Return rho values */
   double * GetRho(void)
   {
@@ -416,6 +425,11 @@ public:
   svm_node ** GetSupportVectors(void)
   {
         return m_Model->SV;
+  }
+  /** Set the support vectors */
+  void SetSupportVectors(svm_node ** sv)
+  {
+        m_Model->SV = sv;
   }
   /** Return the alphas values (SV Coef) */
   double ** GetAlpha (void)

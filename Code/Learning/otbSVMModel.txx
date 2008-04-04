@@ -177,6 +177,18 @@ SVMModel<TInputPixel, TLabel>
   }
 
 template <class TInputPixel, class TLabel >
+typename SVMModel<TInputPixel, TLabel>::Pointer
+SVMModel<TInputPixel, TLabel>
+::GetCopy()
+  {
+    Pointer modelCopy = New();
+    modelCopy->SetModel( svm_copy_model(m_Model) ); 
+
+    return modelCopy;
+  }
+
+
+template <class TInputPixel, class TLabel >
 void
 SVMModel<TInputPixel, TLabel>
 ::PrintSelf(std::ostream& os, itk::Indent indent) const
