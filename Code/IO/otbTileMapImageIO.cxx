@@ -151,7 +151,7 @@ namespace otb
         
     std::streamoff lNbPixels = (static_cast<std::streamoff>(totSamples))*(static_cast<std::streamoff>(totLines));
         
-//     otbMsgDevMacro( <<" Allocation buff tempon taille : "<<lNbPixels<<"*"<<m_NbOctetPixel<<" (NbOctetPixel) = "<<lTailleBuffer);
+    //otbMsgDevMacro( <<" Allocation buff tempon taille : "<<lNbPixels<<"*"<<m_NbOctetPixel<<" (NbOctetPixel) = "<<lTailleBuffer);
     otbMsgDevMacro( <<" sizeof(streamsize)    : "<<sizeof(std::streamsize));
     otbMsgDevMacro( <<" sizeof(streampos)     : "<<sizeof(std::streampos));
     otbMsgDevMacro( <<" sizeof(streamoff)     : "<<sizeof(std::streamoff));
@@ -725,7 +725,7 @@ namespace otb
 
   void TileMapImageIO::FillCacheFaults(void* buffer)
   {
-    char * logo =
+    const char * logo =
         "\344\343\337\344\343\337\344\343\337\344\343\337\344\343\337\344\343\337"
         "\344\343\337\344\343\337\344\343\337\344\343\337\344\343\337\344\343\337"
         "\344\343\337\344\343\337\344\343\337\344\343\337\344\343\337\344\343\337"
