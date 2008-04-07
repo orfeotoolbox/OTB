@@ -42,7 +42,7 @@
 #include "otbPerBandVectorImageFilter.h"
 
 #include "otbSimpleRcsPanSharpeningFusionImageFilter.h"
-
+#include "otbStandardFilterWatcher.h"
 
 int main( int argc, char* argv[] )
 {
@@ -251,7 +251,9 @@ int main( int argc, char* argv[] )
   writer->SetInput(fusion->GetOutput());
 				
   writer->SetTilingStreamDivisions();
-
+  
+  otb::StandardFilterWatcher watcher(writer, "OrthoFusion");
+  
   writer->Update();
   
   return EXIT_SUCCESS;
