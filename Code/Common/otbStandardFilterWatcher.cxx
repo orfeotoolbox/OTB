@@ -55,7 +55,7 @@ StandardFilterWatcher
       int progressPercent = static_cast<int>(m_Process->GetProgress()*100);
       std::string stars(static_cast<int>(m_Process->GetProgress()*m_StarsCount),'*');
       std::string blanks(static_cast<int>(m_StarsCount - m_Process->GetProgress()*m_StarsCount),' ');
-      std::cout << "\rProgress task :" << progressPercent << "% [" << stars << blanks << "]" << std::flush;
+      std::cout << "\rProcessing progress:" << progressPercent << "% [" << stars << blanks << "]" << std::flush;
     }
 }
 
