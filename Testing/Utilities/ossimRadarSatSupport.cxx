@@ -43,7 +43,6 @@
 #include "ossim/projection/ossimTerraSarModel.h"
 #include "ossim/projection/ossimRadarSatModel.h"
 
-#include <hdf5.h>
  
 int ossimRadarSatSupport( int argc, char* argv[] )
 {
