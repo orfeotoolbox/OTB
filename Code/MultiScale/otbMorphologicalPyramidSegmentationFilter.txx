@@ -58,8 +58,8 @@ MorphologicalPyramidSegmentationFilter<TInputImage,TOutputImage>
   this->SetNthInput(0,const_cast<InputImageType *>(image));
 }
 /**
- * Set the brighter details from the pyramid. The brighter details are the supFiltre or
- * infFiltre details from the pyramid, depending on the morphological filter used.
+ * Set the brighter details from the pyramid. The brighter details are the supFilter or
+ * infFilter details from the pyramid, depending on the morphological filter used.
  * \param imageList The brighter details extracted from the filtering operation.
  */
 template <class TInputImage, class TOutputImage>
@@ -70,8 +70,8 @@ MorphologicalPyramidSegmentationFilter<TInputImage,TOutputImage>
   this->SetNthInput(1,const_cast<InputImageListType *>(imageList));
 }
 /**
- * Set the darker details from the pyramid. The darker details are the supFiltre or
- * infFiltre details from the pyramid, depending on the morphological filter used.
+ * Set the darker details from the pyramid. The darker details are the supFilter or
+ * infFilter details from the pyramid, depending on the morphological filter used.
  * \param imageList The darker details extracted from the filtering operation.
  */
 template <class TInputImage, class TOutputImage>
@@ -94,8 +94,8 @@ MorphologicalPyramidSegmentationFilter<TInputImage,TOutputImage>
   return dynamic_cast<InputImageType *>(this->itk::ProcessObject::GetInput(0));
 }
 /**
- * Get the brighter details from the pyramid. The brighter details are the supFiltre or
- * infFiltre details from the pyramid, depending on the morphological filter used.
+ * Get the brighter details from the pyramid. The brighter details are the supFilter or
+ * infFilter details from the pyramid, depending on the morphological filter used.
  * \param imageList The brighter details extracted from the filtering operation.
  */
 template <class TInputImage, class TOutputImage>
@@ -107,8 +107,8 @@ MorphologicalPyramidSegmentationFilter<TInputImage,TOutputImage>
   return dynamic_cast<InputImageListType *>(this->itk::ProcessObject::GetInput(1));
 }
 /**
- * Get the darker details from the pyramid. The darker details are the supFiltre or
- * infFiltre details from the pyramid, depending on the morphological filter used.
+ * Get the darker details from the pyramid. The darker details are the supFilter or
+ * infFilter details from the pyramid, depending on the morphological filter used.
  * \return The darker details extracted from the resampling operation.
  */
 template <class TInputImage, class TOutputImage>

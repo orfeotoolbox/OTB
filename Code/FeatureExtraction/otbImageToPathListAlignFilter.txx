@@ -180,7 +180,7 @@ ImageToPathListAlignFilter<TInputImage,TOutputPath>
 }
 
 //----------------------------------------------------------------------------
-/* Partie Algorithmique */
+/* Algorithm */
 template <class TInputImage, class TOutputPath>
 std::vector<double>
 ImageToPathListAlignFilter<TInputImage,TOutputPath>
@@ -339,7 +339,7 @@ ImageToPathListAlignFilter<TInputImage,TOutputPath>
   OutputPathListType *   OutputPath   = this->GetOutput();
   // Generate the image
 
-/* Partie Algorithmique du filtre */  
+/* Filter algorithm */  
    
   Taille = InputImage->GetLargestPossibleRegion().GetSize();
   nx = Taille[0];

@@ -22,7 +22,7 @@
 namespace otb
 {
 /** \class MorphologicalPyramidSegmentationFilter
- * \brief This filter performs a segmentation of the details supFiltre and infFiltre extracted
+ * \brief This filter performs a segmentation of the details supFilter and infFilter extracted
  * with the morphological pyramid.
  *
  * The first step is to convert the multi-resolution analysis from the pyramid to a multi-scale one using the
@@ -39,8 +39,8 @@ namespace otb
  * 
  * The details from the pyramid are set via the SetBrighterDetails() and SetDarkerDetails() methods. The brighter and 
  * darker details depends on the filter used in the pyramid analysis. If the OpeningClosing filter is used, then the 
- * brighter details are those from the supFiltre image list, whereas if the ClosingOpening filter is used, the brighter 
- * details are those from the infFiltre list.
+ * brighter details are those from the supFilter image list, whereas if the ClosingOpening filter is used, the brighter 
+ * details are those from the infFilter list.
  * 
  * The output of the segmentation filter is a single segmentation images list, containing first the brighter details 
  * segmentation from higher scale to lower, and then the darker details in the same order. The attention of the used 
@@ -103,14 +103,14 @@ public:
    */
   void SetReferenceImage(InputImageType * image);
   /**
-   * Set the brighter details from the pyramid. The brighter details are the supFiltre or
-   * infFiltre details from the pyramid, depending on the morphological filter used.
+   * Set the brighter details from the pyramid. The brighter details are the supFilter or
+   * infFilter details from the pyramid, depending on the morphological filter used.
    * \param imageList The brighter details extracted from the filtering operation.
    */
   void SetBrighterDetails(InputImageListType * imageList);
   /**
-   * Set the darker details from the pyramid. The darker details are the supFiltre or
-   * infFiltre details from the pyramid, depending on the morphological filter used.
+   * Set the darker details from the pyramid. The darker details are the supFilter or
+   * infFilter details from the pyramid, depending on the morphological filter used.
    * \param imageList The darker details extracted from the filtering operation.
    */
   void SetDarkerDetails(InputImageListType * imageList);
@@ -120,14 +120,14 @@ public:
    */
   InputImageType* GetReferenceImage(void);
   /**
-   * Get the brighter details from the pyramid. The brighter details are the supFiltre or
-   * infFiltre details from the pyramid, depending on the morphological filter used.
+   * Get the brighter details from the pyramid. The brighter details are the supFilter or
+   * infFilter details from the pyramid, depending on the morphological filter used.
    * \return The brighter details extracted from the resampling operation.
    */
   InputImageListType* GetBrighterDetails(void);
   /**
-   * Get the darker details from the pyramid. The darker details are the supFiltre or
-   * infFiltre details from the pyramid, depending on the morphological filter used.
+   * Get the darker details from the pyramid. The darker details are the supFilter or
+   * infFilter details from the pyramid, depending on the morphological filter used.
    * \return The darker details extracted from the resampling operation.
    */
   InputImageListType *GetDarkerDetails(void);

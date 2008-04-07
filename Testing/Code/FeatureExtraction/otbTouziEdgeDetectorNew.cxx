@@ -41,7 +41,7 @@ int otbTouziEdgeDetectorNew( int argc, char* argv[] )
         typedef otb::TouziEdgeDetectorImageFilter< InputImageType,OutputImageType >   FilterType;
 	
 	
-        FilterType::Pointer filtreTouzi = FilterType::New();
+        FilterType::Pointer filterTouzi = FilterType::New();
         
     } 
   catch( itk::ExceptionObject & err ) 

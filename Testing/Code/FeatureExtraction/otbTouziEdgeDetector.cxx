@@ -55,9 +55,9 @@ int otbTouziEdgeDetector( int argc, char* argv[] )
 	Radius[0] = RadiusX;
 	Radius[1] = RadiusX;
 	
-        FilterType::Pointer filtreTouzi = FilterType::New();
+        FilterType::Pointer filterTouzi = FilterType::New();
         
-	filtreTouzi->SetRadius( Radius );
+	filterTouzi->SetRadius( Radius );
 	
         ReaderType::Pointer reader = ReaderType::New();
         WriterType::Pointer writer = WriterType::New();
@@ -65,8 +65,8 @@ int otbTouziEdgeDetector( int argc, char* argv[] )
         reader->SetFileName( inputFilename  );
         writer->SetFileName( outputFilename );
         
-        filtreTouzi->SetInput( reader->GetOutput() );
-        writer->SetInput( filtreTouzi->GetOutput() );
+        filterTouzi->SetInput( reader->GetOutput() );
+        writer->SetInput( filterTouzi->GetOutput() );
         
         writer->Update();
 

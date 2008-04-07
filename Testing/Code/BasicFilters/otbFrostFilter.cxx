@@ -56,10 +56,10 @@ int otbFrostFilter( int argc, char * argv[] )
 	Radius[0]= RadiusX;
 	Radius[1]= RadiusY;
 
-        FilterType::Pointer filtreFrost = FilterType::New();
+        FilterType::Pointer filterFrost = FilterType::New();
         
-	filtreFrost->SetRadius( Radius );
-	filtreFrost->SetDeramp( Deramp );
+	filterFrost->SetRadius( Radius );
+	filterFrost->SetDeramp( Deramp );
 
         ReaderType::Pointer reader = ReaderType::New();
         WriterType::Pointer writer = WriterType::New();
@@ -67,8 +67,8 @@ int otbFrostFilter( int argc, char * argv[] )
         reader->SetFileName( inputFilename  );
         writer->SetFileName( outputFilename );
         
-        filtreFrost->SetInput( reader->GetOutput() );
-        writer->SetInput( filtreFrost->GetOutput() );
+        filterFrost->SetInput( reader->GetOutput() );
+        writer->SetInput( filterFrost->GetOutput() );
         
         writer->Update(); 
 

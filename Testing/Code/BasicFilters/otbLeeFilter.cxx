@@ -55,11 +55,11 @@ int otbLeeFilter( int argc, char * argv[] )
 	Radius[0]= RadiusX;
 	Radius[1]= RadiusY;
 
-        FilterType::Pointer filtreLee = FilterType::New();
+        FilterType::Pointer filterLee = FilterType::New();
         
-	filtreLee->SetRadius( Radius );
+	filterLee->SetRadius( Radius );
 // OTB-FA-00018-CS
-	filtreLee->SetNbLooks(NbLooks);
+	filterLee->SetNbLooks(NbLooks);
 
         ReaderType::Pointer reader = ReaderType::New();
         WriterType::Pointer writer = WriterType::New();
@@ -67,8 +67,8 @@ int otbLeeFilter( int argc, char * argv[] )
         reader->SetFileName( inputFilename  );
         writer->SetFileName( outputFilename );
         
-        filtreLee->SetInput( reader->GetOutput() );
-        writer->SetInput( filtreLee->GetOutput() );
+        filterLee->SetInput( reader->GetOutput() );
+        writer->SetInput( filterLee->GetOutput() );
         
         writer->Update(); 
 
