@@ -82,11 +82,11 @@ namespace otb
 
     if(System::SetToLower(System::GetExtension(lFileName)) == "j2k")
       {
-	codec = = opj_create_decompress(CODEC_J2K);
+	codec = opj_create_decompress(CODEC_J2K);
       }
     else if(System::SetToLower(System::GetExtension(lFileName)) == "jp2")
       {
-	codec = = opj_create_decompress(CODEC_JP2);
+	codec = opj_create_decompress(CODEC_JP2);
       }
     else
       {
@@ -188,11 +188,11 @@ namespace otb
     // Creating openjpeg objects
     if(System::SetToLower(System::GetExtension(m_FileName)) == "j2k")
       {
-	m_Codec = = opj_create_decompress(CODEC_J2K);
+	m_Codec = opj_create_decompress(CODEC_J2K);
       }
     else if(System::SetToLower(System::GetExtension(m_FileName)) == "jp2")
       {
-	m_Codec = = opj_create_decompress(CODEC_JP2);
+	m_Codec = opj_create_decompress(CODEC_JP2);
       }
 
     opj_set_info_handler(m_Codec, info_callback,00);
@@ -382,11 +382,11 @@ namespace otb
     // Creating openjpeg objects
     if(System::SetToLower(System::GetExtension(m_FileName)) == "j2k")
       {
-	m_Codec = = opj_create_decompress(CODEC_J2K);
+	m_Codec = opj_create_decompress(CODEC_J2K);
       }
     else if(System::SetToLower(System::GetExtension(m_FileName)) == "jp2")
       {
-	m_Codec = = opj_create_decompress(CODEC_JP2);
+	m_Codec = opj_create_decompress(CODEC_JP2);
       }
 
     opj_set_info_handler(m_Codec, info_callback,00);
