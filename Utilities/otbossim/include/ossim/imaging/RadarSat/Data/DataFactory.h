@@ -5,7 +5,7 @@
 #include <map>
 /**
  * @ingroup DataFile
- * @brief This class is a facory able to construct Record base classes
+ * @brief This class is a factory able to construct Record base classes
  * @author Magellium, Pacome Dentraygues
  * @version 1.0
  * @date 03-12-07

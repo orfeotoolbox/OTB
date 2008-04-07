@@ -3,7 +3,7 @@
 
 /**
  * @ingroup SARModel
- * @brief This class handle the sensor parameters
+ * @brief This class handles the sensor parameters
  * @author Magellium, Pacome Dentraygues
  * @version 1.0
  * @date 15-01-08
@@ -11,13 +11,14 @@
  
  class SensorParams
  {
+	public:
+	 
 	enum SightDirection
 	{
 		Left,
 		Right
 	};
 	
- public:
 	/**
 	 * @brief Constructor
 	 */
@@ -72,7 +73,7 @@
 		return _sightDirection;
 	};
 
-	SightDirection set_sightDirection(SightDirection sight)
+	void set_sightDirection(SightDirection sight)
 	{
 		_sightDirection = sight;
 	};
@@ -122,6 +123,26 @@
 		_nRangeLook = look;
 	};
 
+	double get_semiMajorAxis()
+	{
+		return _semiMajorAxis ;
+	};
+
+	double get_semiMinorAxis()
+	{
+		return _semiMinorAxis ;
+	};
+
+	void set_semiMajorAxis(double value)
+	{
+		_semiMajorAxis = value;
+	};
+
+	void set_semiMinorAxis(double value)
+	{
+		_semiMinorAxis = value;
+	};
+
  protected:
 	/**
 	 * @brief Nominal PRF, Hz
@@ -138,9 +159,32 @@
 	 */
 	double _rwl;
 
+	/**
+	 * @brief Columns direction (1=increasing, -1=decreasing)
+	 */
 	int _col_direction;
+
+	/**
+	 * @brief Lines direction (1=increasing, -1=decreasing)
+	 */
 	int _lin_direction;
+
+	/**
+	 * @brief Antenna pointing direction
+	 */
 	SightDirection _sightDirection;
+
+	/**
+	 * @brief Ellipsoid semi_major axis, m
+	 *				Default : WGS84
+	 */
+	double _semiMajorAxis;
+
+	/**
+	 * @brief Ellipsoid semi_minor axis, m
+	 *				Default : WGS84
+	 */
+	double _semiMinorAxis;
 
 	/**
 	 * @brief Number of azimuth looks

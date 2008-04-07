@@ -34,12 +34,12 @@ public:
 	 */
 	MisregistrationRecord& operator=(const MisregistrationRecord& rhs);
 	/**
-	 * @brief This function write the MisregistrationRecord in a stream
+	 * @brief This function writes the MisregistrationRecord in a stream
 	 */
 	friend std::ostream& operator<<(std::ostream& os, const MisregistrationRecord& data);
 
 	/**
-	 * @brief This function read a MisregistrationRecord from a stream
+	 * @brief This function reads a MisregistrationRecord from a stream
 	 */
 	friend std::istream& operator>>(std::istream& is, MisregistrationRecord& data);
 

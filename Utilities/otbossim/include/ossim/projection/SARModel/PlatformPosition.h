@@ -8,7 +8,7 @@ class Ephemeris;
 
 /**
  * @ingroup SARModel
- * @brief This class handle the platform position
+ * @brief This class handles the platform position
  * @author @author Magellium, Pacome Dentraygues
  * @version 1.0
  * @date 15-01-08
@@ -31,7 +31,7 @@ public:
 	
 	/**
 	 * @brief Constructor with initialisation
-	 * @param data Ephemerids
+	 * @param data Ephemeris
 	 * @param nbrData Number of Ephemeris in data
 	 * @remarks All the ephemeris have to be in the same coordinates system
 	 * @remarks This constructor copy the content of data, so it's the calling fonction that have to manage the memory of data.
@@ -44,9 +44,9 @@ public:
 	PlatformPosition& operator=(const PlatformPosition& rhs);
 	
 	/**
-	 * @brief This function interpolate its ephemeris to create a new ephemeris at the given date and time
+	 * @brief This function interpolates its ephemeris to create a new ephemeris at the given date and time
 	 * @param date Date and time at wich the interpolation have to be done
-	 * @return The ephemeris at the given date, or NULL if an error occur
+	 * @return The ephemeris at the given date, or NULL if an error occurs
 	 */
 	Ephemeris* Interpolate(JSDDateTime date);
 	
@@ -57,7 +57,7 @@ public:
 protected:
 
 	/**
-	 * @brief Number of platforme positions
+	 * @brief Number of platform positions
 	 * @see _data
 	 */
 	int _nbrData;
@@ -68,7 +68,7 @@ protected:
 	Ephemeris** _data;
 	
 	/**
-	 * @brief This function delete all the contents of the class
+	 * @brief This function deletes all the contents of the class
 	 */
 	void Clear();
 private:

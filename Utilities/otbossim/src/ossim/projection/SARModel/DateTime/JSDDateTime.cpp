@@ -45,6 +45,31 @@ JSDDateTime::JSDDateTime(JulianDate& rhs)
 	rhs.AsJSDDateTime(this);
 }
 
+
+JSDDateTime::JSDDateTime(MJDDateTime& rhs)
+{
+  CivilDateTime referenceCiv;
+
+  /* Initialisation of the MJD reference day (01/01/2000, 0h00) */
+  referenceCiv.set_year(2000);
+  referenceCiv.set_month(01);
+  referenceCiv.set_day(01);
+  referenceCiv.set_second(0);
+  referenceCiv.set_decimal(0.0);
+  
+  /* JSD day of the ref. MJD date */
+  JSDDateTime referenceJSD(referenceCiv);
+
+  /* JSD day computation */
+  JulianDate JD((double) rhs.get_day());
+
+  _day0hTU = referenceJSD.get_day0hTU() + JD;
+  _second  = referenceJSD.get_second()  + (double) rhs.get_second();
+  _decimal = referenceJSD.get_decimal() + 0.000001 * (double) rhs.get_microsecond();
+
+  this->NormDate();
+}
+
 JSDDateTime& JSDDateTime::operator=(const JSDDateTime& rhs)
 {
 	_day0hTU = rhs._day0hTU;

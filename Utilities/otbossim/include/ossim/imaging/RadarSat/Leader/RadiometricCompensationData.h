@@ -37,12 +37,12 @@ public:
 	 */
 	RadiometricCompensationData& operator=(const RadiometricCompensationData& rhs);
 	/**
-	 * @brief This function write the RadiometricCompensationData in a stream
+	 * @brief This function writes the RadiometricCompensationData in a stream
 	 */
 	friend std::ostream& operator<<(std::ostream& os, const RadiometricCompensationData& data);
 
 	/**
-	 * @brief This function read a RadiometricCompensationData from a stream
+	 * @brief This function reads a RadiometricCompensationData from a stream
 	 */
 	friend std::istream& operator>>(std::istream& is, RadiometricCompensationData& data);
 
@@ -63,7 +63,7 @@ public:
 	};
 
 	/**
-	 * @brief Read the class data from a stream
+	 * @brief Reads the class data from a stream
 	 */
 	void Read(std::istream& is)
 	{
@@ -71,7 +71,7 @@ public:
 	};
 
 	/**
-	 * @brief Write the class to a stream
+	 * @brief Writes the class to a stream
 	 */
 	void Write(std::ostream& os)
 	{

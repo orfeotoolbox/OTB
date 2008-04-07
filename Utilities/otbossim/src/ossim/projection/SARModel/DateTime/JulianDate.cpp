@@ -44,6 +44,12 @@ JulianDate& JulianDate::operator=(const JulianDate& rhs)
 	return *this;
 }
 
+JulianDate& JulianDate::operator+(const JulianDate& rhs)
+{
+	_julianDate += rhs._julianDate;
+	return *this;
+}
+
 int JulianDate::AsJSDDateTime(JSDDateTime* JSDdate)
 {
 	int k ;

@@ -61,7 +61,7 @@ public:
 	};
 
 	/**
-	 * @brief Read the class data from a stream
+	 * @brief Reads the class data from a stream
 	 */
 	void Read(std::istream& is)
 	{
@@ -69,7 +69,7 @@ public:
 	};
 
 	/**
-	 * @brief Write the class to a stream
+	 * @brief Writes the class to a stream
 	 */
 	void Write(std::ostream& os)
 	{

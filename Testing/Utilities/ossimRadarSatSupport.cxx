@@ -42,9 +42,8 @@
 #include "ossim/imaging/ossimImageHandlerSarFactory.h"
 #include "ossim/projection/ossimTerraSarModel.h"
 #include "ossim/projection/ossimRadarSatModel.h"
-// this is the most important class and is called as the first line of all applications.
-// without this all the important factories are not created.
-//#include "init/ossimInit.h"
+
+#include <hdf5.h>
  
 int ossimRadarSatSupport( int argc, char* argv[] )
 {
@@ -94,8 +93,9 @@ int ossimRadarSatSupport( int argc, char* argv[] )
 		 * Creation d'un modèle de projection à partir des métadonnées
 		 */
         model = ossimProjectionFactoryRegistry::instance()->createProjection(geom);
+
 		/*
-		 * Verification de l'existance du modèle de projection
+		 * Verification de l'existence du modèle de projection
 		 */
         if( model == NULL)
         {
@@ -112,7 +112,7 @@ int ossimRadarSatSupport( int argc, char* argv[] )
 
 		  const double RDR_DEUXPI      = 6.28318530717958647693 ;
 
-		int numero_produit = 0 ; // RDS : 1 ; RDS appuis : 2 ; RDS SGF : 3 
+		int numero_produit = 1 ; // RDS : 1 ; RDS appuis : 2 ; RDS SGF : 3 
 										 // generique 4 coins + centre TSX : 0
 		if (numero_produit==1) {
 			{
@@ -131,11 +131,15 @@ int ossimRadarSatSupport( int argc, char* argv[] )
 					double height = averageHeight;
 					model->lineSampleHeightToWorld(image, height, world);
 					std::cout<<"Coordonnees de depart : x = "<<i<<" y = "<<j<<std::endl;
-					std::cout<<" latitude = "<<world.lat*360.0/RDR_DEUXPI<<" longitude = "<<world.lon*360.0/RDR_DEUXPI<<std::endl;
+					std::cout<<" latitude = "<<world.lat<<" longitude = "<<world.lon<<std::endl;
 
 					model->worldToLineSample(world,imageret);
 					std::cout<<"x = "<<imageret.x<<" y = "<<imageret.y<<std::endl;
 					std::cout<<std::endl;
+
+					model->lineSampleToWorld(image, world);
+					std::cout<<"Loc directe par intersection du rayon de visee et MNT : "<<std::endl;
+					std::cout<<" latitude = "<<world.lat <<" longitude = "<<world.lon << " altitude : " << world.height() <<std::endl;
 				}
 			}
 		}
@@ -159,17 +163,17 @@ int ossimRadarSatSupport( int argc, char* argv[] )
 					double height = 211 ;
 					model->lineSampleHeightToWorld(image, height, world);
 					std::cout<<"Coordonnees de depart : x = "<<i<<" y = "<<j<<std::endl;
-					std::cout<<" latitude = "<<world.lat*360.0/RDR_DEUXPI<<" longitude = "<<world.lon*360.0/RDR_DEUXPI<<std::endl;
+					std::cout<<" latitude = "<<world.lat<<" longitude = "<<world.lon<<std::endl;
 
 					std::cout << "altitude : " << world.height() << std::endl ;
 					std::cout<<"Resultat attendu : "<<std::endl;
 					std::cout<<"lat = 43.282566, lon = 1.204279"<<std::endl;
-					std::cout<<"		erreur lat =" << world.lat*360.0/RDR_DEUXPI - 43.282566 <<" , erreur lon =" << world.lon*360.0/RDR_DEUXPI - 1.204279<<std::endl;
+					std::cout<<"		erreur lat =" << world.lat - 43.282566 <<" , erreur lon =" << world.lon - 1.204279<<std::endl;
 
 					model->worldToLineSample(world,imageret);
 					std::cout<<"x = "<<imageret.x<<" y = "<<imageret.y<<std::endl;
 
-					ossimGpt * groundGCP = new ossimGpt(43.282566*RDR_DEUXPI/360.0,1.204279*RDR_DEUXPI/360.0, 211);
+					ossimGpt * groundGCP = new ossimGpt(43.282566,1.204279, 211);
 					model->worldToLineSample(*groundGCP,imageret);
 					std::cout<<"Loc inverse des vraies coords geo : "<<std::endl;
 					std::cout<<"x = "<<imageret.x<<" y = "<<imageret.y<<std::endl;
@@ -693,6 +697,11 @@ int ossimRadarSatSupport( int argc, char* argv[] )
 					std::cout<<"Loc inverse des vraies coords geo : "<<std::endl;
 					std::cout<<"x = "<<imageret.x<<" y = "<<imageret.y<<std::endl;
 					std::cout<<std::endl;
+
+					model->lineSampleToWorld(image, world);
+					std::cout<<"Loc directe par intersection du rayon de visee et MNT : "<<std::endl;
+					std::cout<<" latitude = "<<world.lat <<" longitude = "<<world.lon << " altitude : " << world.height() <<std::endl;
+					std::cout<<"		erreur lat =" << world.lat  - lat <<" , erreur lon =" << world.lon  -lon <<std::endl;
 				}
 
 				/*
@@ -1044,9 +1053,73 @@ int ossimRadarSatSupport( int argc, char* argv[] )
 					std::cout<<"		erreur lat =" << world.lat  - lat <<" , erreur lon =" << world.lon  -lon <<std::endl;
 					std::cout<<std::endl;
 				}
-
-
 			}
+	{
+//		// ouvertures 
+//		hid_t fileID, group_ID, attr_ID1, attr_ID2, attr_ID3, attr_ID4, attr_ID5, attr_ID6, attr_ID7, dataset_ID, mem_type_id ;
+//		herr_t status ;
+//		fileID = H5Fopen("D:\\locSAR\\exemple_CSKS\\hdf5_test.h5", H5F_ACC_RDONLY, H5P_DEFAULT);
+//		group_ID = H5Gopen(fileID, "/links/hard links"  ) ; 
+//		dataset_ID = H5Dopen(group_ID, "Eskimo"  ) ; 
+//		attr_ID1 = H5Aopen_name(dataset_ID , "IMAGE_TRANSPARENCY"  ) ; 
+//		attr_ID2 = H5Aopen_name(dataset_ID , "IMAGE_MINMAXRANGE"  ) ; 
+//		attr_ID3 = H5Aopen_name(dataset_ID , "CLASS"  ) ; 
+//		attr_ID4 = H5Aopen_name(dataset_ID , "IMAGE_VERSION"  ) ; 
+//		attr_ID5 = H5Aopen_name(dataset_ID , "ajoutVMN"  ) ; 
+//		attr_ID6 = H5Aopen_name(dataset_ID , "ajoutVMN_tabInt"  ) ; 
+//		attr_ID7 = H5Aopen_name(dataset_ID , "ajoutVMN_double"  ) ; 
+//
+//		// lectures
+//		mem_type_id = H5Aget_type(attr_ID1) ;
+//		unsigned int buffer1[1];
+//		status = H5Aread(attr_ID1, mem_type_id, buffer1 ) ;
+//		std::cout << buffer1[0] << std::endl ; 
+//
+//		mem_type_id = H5Aget_type(attr_ID2) ;
+//		unsigned char buffer2[2] ;
+//		status = H5Aread(attr_ID2, mem_type_id, buffer2 ) ;
+//		std::cout << (int) buffer2[0] << std::endl ; 
+//		std::cout << (int) buffer2[1] << std::endl ; 
+//
+//		mem_type_id = H5Aget_type(attr_ID3) ;
+//		char buffer3[6] ;
+//		status = H5Aread(attr_ID3, mem_type_id, buffer3 ) ;
+//		char buffer4[10] ;
+//		status = H5Aread(attr_ID3, mem_type_id, buffer4 ) ;
+//		std::string classe(buffer4); 
+//		std::cout << classe << std::endl ; 
+//
+//		mem_type_id = H5Aget_type(attr_ID4) ;
+//		float buffer5[1] ;
+//		status = H5Aread(attr_ID4, mem_type_id, buffer5 ) ;
+//		std::cout << buffer5[0] << std::endl ; 
+//
+//mem_type_id = H5Aget_type(attr_ID5) ;
+//		int buffer6[1] ;
+//		status = H5Aread(attr_ID5, mem_type_id, buffer6 ) ;
+//std::cout << buffer6[0] << std::endl ; 
+//
+//mem_type_id = H5Aget_type(attr_ID6) ;
+//		int buffer7[2] ;
+//		status = H5Aread(attr_ID6, mem_type_id, buffer7 ) ;
+//std::cout << buffer7[0] << std::endl ; 
+//std::cout << buffer7[1] << std::endl ; 
+//
+//mem_type_id = H5Aget_type(attr_ID7) ;
+//		double buffer8[1] ;
+//		status = H5Aread(attr_ID7, mem_type_id, buffer8 ) ;
+//std::cout << buffer8[0] << std::endl ; 
+//
+//		// fermeture
+//		status = H5Aclose(attr_ID1) ;
+//		status = H5Aclose(attr_ID2) ;
+//		status = H5Aclose(attr_ID3) ;
+//		status = H5Aclose(attr_ID4) ;
+//		status = H5Dclose(dataset_ID) ;
+//		status = H5Gclose(group_ID) ;
+//		status = H5Fclose(fileID) ;
+	}
+
 	}
 
   catch( std::bad_alloc & err ) 

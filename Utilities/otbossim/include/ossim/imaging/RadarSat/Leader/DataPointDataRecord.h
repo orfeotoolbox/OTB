@@ -36,12 +36,12 @@ public:
 	 */
 	DataPointDataRecord& operator=(const DataPointDataRecord& rhs);
 	/**
-	 * @brief This function write the DataPointDataRecord in a stream
+	 * @brief This function writes the DataPointDataRecord in a stream
 	 */
 	friend std::ostream& operator<<(std::ostream& os, const DataPointDataRecord& data);
 
 	/**
-	 * @brief This function read a DataPointDataRecord from a stream
+	 * @brief This function reads a DataPointDataRecord from a stream
 	 */
 	friend std::istream& operator>>(std::istream& is, DataPointDataRecord& data);
 

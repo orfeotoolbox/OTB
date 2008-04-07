@@ -41,12 +41,12 @@ public:
 	~Leader();
 
 	/**
-	 * @brief This function write the Leader in a stream
+	 * @brief This function writes the Leader in a stream
 	 */
 	friend std::ostream& operator<<(std::ostream& os, const Leader& data);
 
 	/**
-	 * @brief This function read a Leader from a stream
+	 * @brief This function reads a Leader from a stream
 	 */
 	friend std::istream& operator>>(std::istream& is, Leader& data);
 
@@ -61,7 +61,7 @@ public:
 	Leader& operator=(const Leader& rhs);
 
 	/**
-	 * @brief Remove all the previous records from the Leader
+	 * @brief Removes all the previous records from the Leader
 	 */
 	void ClearRecords();
 

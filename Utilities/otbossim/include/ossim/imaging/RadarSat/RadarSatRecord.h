@@ -40,12 +40,12 @@ public:
 	virtual RadarSatRecord* Clone()=0;
 
 	/**
-	 * @brief Read the class data from a stream
+	 * @brief Reads the class data from a stream
 	 */
 	virtual void Read(std::istream& is) =0;
 
 	/**
-	 * @brief Write the class to a stream
+	 * @brief Writes the class to a stream
 	 */
 	virtual void Write(std::ostream& os)=0;
 

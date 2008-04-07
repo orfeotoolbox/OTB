@@ -35,12 +35,12 @@ public:
 	SRGRCoefficientSetRecord& operator=(const SRGRCoefficientSetRecord& rhs);
 
 	/**
-	 * @brief This function write the SRGRCoefficientSetRecord in a stream
+	 * @brief This function writes the SRGRCoefficientSetRecord in a stream
 	 */
 	friend std::ostream& operator<<(std::ostream& os, const SRGRCoefficientSetRecord& data);
 
 	/**
-	 * @brief This function read a SRGRCoefficientSetRecord from a stream
+	 * @brief This function reads a SRGRCoefficientSetRecord from a stream
 	 */
 	friend std::istream& operator>>(std::istream& is, SRGRCoefficientSetRecord& data);
 

@@ -3,7 +3,7 @@
 
 class CivilDateTime;
 /**
- * @brief This class represent a date 
+ * @brief This class represents an MJD date (Modified Julian date)
  * @author @author Magellium, Pacome Dentraygues
  * @version 1.0
  * @date 10-01-08
@@ -27,7 +27,7 @@ public:
 	/**
 	 * @brief Constructor with date initialisation
 	 */
-	MJDDateTime(long day, long second, long microsecond);
+	MJDDateTime(long day, unsigned long  second, unsigned long  microsecond);
 	
 	/**
 	 * @brief Affectation operator
@@ -39,12 +39,12 @@ public:
 		return _day;
 	};
 	
-	long get_second()
+	unsigned long get_second()
 	{
 		return _second;
 	};
 	
-	long get_microsecond()
+	unsigned long get_microsecond()
 	{
 		return _microsecond;
 	};
@@ -54,20 +54,20 @@ public:
 		_day = day;
 	};
 	
-	void set_second(long second)
+	void set_second(unsigned long second)
 	{
 		_second = second;
 	};
 	
-	void set_microsecond(long microsecond)
+	void set_microsecond(unsigned long microsecond)
 	{
 		_microsecond = microsecond;
 	};
 protected:
 
 	long _day;
-	long _second;
-	long _microsecond;
+	unsigned long _second;
+	unsigned long _microsecond;
 	
 	
 private:

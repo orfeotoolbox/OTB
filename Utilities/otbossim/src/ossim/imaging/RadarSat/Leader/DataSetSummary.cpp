@@ -359,7 +359,7 @@ std::istream& operator>>(std::istream& is, DataSetSummary& data)
 
     is.read(buf16,12);
 	buf16[12] = '\0';
-	data._quant_desc = buf8;
+	data._quant_desc = buf16;
 
     is.read(buf16,16);
 	data._i_bias = atof(buf16);

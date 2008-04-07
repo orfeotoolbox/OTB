@@ -5,7 +5,7 @@
 
 /**
  * @ingroup Date
- * @brief This class represente a coordinate in a geodesic reference
+ * @brief This class represents a coordinate in a geodesic reference
  * @author @author Magellium, Pacome Dentraygues
  * @version 1.0
  * @date 04-02-08

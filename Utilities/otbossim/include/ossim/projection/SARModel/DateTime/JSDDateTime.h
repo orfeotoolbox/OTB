@@ -1,13 +1,14 @@
 #ifndef JSDDateTime_h
 #define JSDDateTime_h
 #include <ossim/projection/SARModel/DateTime/JulianDate.h>
+#include <ossim/projection/SARModel/DateTime/MJDDateTime.h>
 
 class CivilDateTime;
 class GMSTDateTime;
 class JulianDate;
 
 /**
- * @brief This class represent a date 
+ * @brief This class represents a date 
  * @author @author Magellium, Pacome Dentraygues
  * @version 1.0
  * @date 10-01-08
@@ -43,6 +44,11 @@ public:
 	 */
 	JSDDateTime(JulianDate& rhs);
 	
+	/**
+	 * @brief Constructor with date initialisation using a MJDDateTime (Modified Julian Date - Used for ENVISAT)
+	 */
+	JSDDateTime(MJDDateTime& rhs);
+
 	/**
 	 * @brief Affectation operator
 	 */
@@ -81,9 +87,9 @@ public:
 	void NormDate() ;
 
 	/**
-	 * @brief This function convert the current JSDDateTime in Julian Date
-	 * @return 0 if no error or an int gretter than 0 indiquating the error
-	 * @param julianDate [out] The classe that receive the result of the convertion of the current JSDDateTime in JulianDate
+	 * @brief This function converts the current JSDDateTime into Julian Date
+	 * @return 0 if no error or an int greater than 0 indicating the error
+	 * @param julianDate [out] The classe that receives the result of the conversion of the current JSDDateTime in JulianDate
 	 */
 	int AsJulianDate(JulianDate* julian);
 
@@ -92,7 +98,7 @@ public:
 	 * @return 0 if no error or an int greater than 0 indicating the error
 	 * @param julianDate [out] The class that receives the result of the conversion of the current JSDDateTime into GMST Date
 	 */
-	int AsGMSTDateTime(GMSTDateTime* GMST);
+	int JSDDateTime::AsGMSTDateTime(GMSTDateTime* GMST);
 
 	operator JulianDate() ;
 	operator GMSTDateTime() ;

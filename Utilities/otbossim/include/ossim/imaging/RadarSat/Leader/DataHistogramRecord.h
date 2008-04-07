@@ -7,7 +7,7 @@
 #include <ossim/imaging/RadarSat/RadarSatRecordHeader.h>
 /**
  * @ingroup ProcessedData16bitHistogramRecord
-  * @ingroup SignalDataHistogramRecord
+ * @ingroup SignalDataHistogramRecord
  * @brief This class is able to read a data histogram record
  * @author Magellium, Pacome Dentraygues
  * @version 1.0
@@ -37,12 +37,12 @@ public:
 	DataHistogramRecord& operator=(const DataHistogramRecord& rhs);
 
 	/**
-	 * @brief This function write the DataHistogramRecord in a stream
+	 * @brief This function writes the DataHistogramRecord in a stream
 	 */
 	friend std::ostream& operator<<(std::ostream& os, const DataHistogramRecord& data);
 
 	/**
-	 * @brief This function read a DataHistogramRecord from a stream
+	 * @brief This function reads a DataHistogramRecord from a stream
 	 */
 	friend std::istream& operator>>(std::istream& is, DataHistogramRecord& data);
 

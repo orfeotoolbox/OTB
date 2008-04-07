@@ -25,12 +25,12 @@ public:
 	~FileDescriptor();
 
 	/**
-	 * @brief This function write the FileDescriptor in a stream
+	 * @brief This function writes the FileDescriptor in a stream
 	 */
 	friend std::ostream& operator<<(std::ostream& os, const FileDescriptor& data);
 
 	/**
-	 * @brief This function read a FileDescriptor from a stream
+	 * @brief This function reads a FileDescriptor from a stream
 	 */
 	friend std::istream& operator>>(std::istream& is, FileDescriptor& data);
 
@@ -61,7 +61,7 @@ public:
 	};
 
 	/**
-	 * @brief Read the class data from a stream
+	 * @brief Reads the class data from a stream
 	 */
 	void Read(std::istream& is)
 	{
@@ -69,7 +69,7 @@ public:
 	};
 
 	/**
-	 * @brief Write the class to a stream
+	 * @brief Writes the class to a stream
 	 */
 	void Write(std::ostream& os)
 	{

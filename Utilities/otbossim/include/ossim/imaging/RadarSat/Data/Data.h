@@ -6,6 +6,8 @@
 #include <ossim/imaging/RadarSat/RadarSatRecord.h>
 
 class ImageOptionsFileDescriptor;
+class ProcessedDataRecord;
+
 /**
  * @ingroup DataFile
  * @brief This class is able to read the data file of the RadarSat file structure
@@ -27,12 +29,12 @@ public:
 	~Data();
 
 	/**
-	 * @brief This function write the Data in a stream
+	 * @brief This function writes the Data in a stream
 	 */
 	friend std::ostream& operator<<(std::ostream& os, const Data& data);
 
 	/**
-	 * @brief This function read a Data from a stream
+	 * @brief This function reads a Data from a stream
 	 */
 	friend std::istream& operator>>(std::istream& is, Data& data);
 
@@ -47,19 +49,23 @@ public:
 	Data& operator=(const Data& rhs);
 
 	/**
-	 * @brief Remove all the previous records from the Data
+	 * @brief Removes all the previous records from the Data
 	 */
 	void ClearRecords();
 
 	/**
-	 * @brief Insert an existing record in the Data
+	 * @brief Inserts an existing record in the Data
 	 */
 	void InsertRecord(int id, RadarSatRecord* record);
 
 	ImageOptionsFileDescriptor* get_ImageOptionsFileDescriptor();
+	ProcessedDataRecord* get_FirstProcessedDataRecord();
+	ProcessedDataRecord* get_LastProcessedDataRecord();
 protected:
 	std::map<int, RadarSatRecord*> _records;
 	static const int ImageOptionsFileDescriptorID;
+	static const int FirstProcessedDataRecordID;
+	static const int LastProcessedDataRecordID;
 private:
 
 };

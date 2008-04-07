@@ -121,7 +121,7 @@ int CivilDateTime::SetUtcDateTime(char* Utc)
 	double exposant;
 
 	/* 
-	  * extraction de l'année 
+	  * year extraction
 	  */
 	for (i = 0; i < 4; i++)
 	{
@@ -136,7 +136,7 @@ int CivilDateTime::SetUtcDateTime(char* Utc)
     }
 
 	/* 
-	  * Extraction du mois 
+	  * month extraction 
 	  */
 	for (i = 0; i < 3; i++)
 	{
@@ -162,7 +162,7 @@ int CivilDateTime::SetUtcDateTime(char* Utc)
 	}
 
 	/* 
-	  * Extraction du jour 
+	  * day extraction
 	  */
 	for (i = 0; i < 2; i++)
 	{
@@ -177,7 +177,7 @@ int CivilDateTime::SetUtcDateTime(char* Utc)
 	}
 
 	/* 
-	  * Extraction des secondes 
+	  * seconds extraction
 	  */
 	for (i = 0; i < 2; i++)
     {
@@ -202,7 +202,7 @@ int CivilDateTime::SetUtcDateTime(char* Utc)
 	_second = 3600*atoi(str_hour) + 60*atoi(str_min) + atoi(str_sec);
 
 	/* 
-	  * Extraction des microsecondes 
+	  * microseconds extraction
 	  */
 	for (i = 0; i < 6; i++)
 	{
@@ -241,7 +241,7 @@ int CivilDateTime::SetUtcDateTime(const char* Utc)
 	double exposant;
 
 	/* 
-	  * extraction de l'année 
+	  * year extraction
 	  */
 	for (i = 0; i < 4; i++)
 	{
@@ -256,7 +256,7 @@ int CivilDateTime::SetUtcDateTime(const char* Utc)
     }
 
 	/* 
-	  * Extraction du mois 
+	  * month extraction
 	  */
 	for (i = 0; i < 3; i++)
 	{
@@ -282,7 +282,7 @@ int CivilDateTime::SetUtcDateTime(const char* Utc)
 	}
 
 	/* 
-	  * Extraction du jour 
+	  * day extraction
 	  */
 	for (i = 0; i < 2; i++)
 	{
@@ -297,7 +297,7 @@ int CivilDateTime::SetUtcDateTime(const char* Utc)
 	}
 
 	/* 
-	  * Extraction des secondes 
+	  * seconds extraction
 	  */
 	for (i = 0; i < 2; i++)
     {
@@ -322,7 +322,7 @@ int CivilDateTime::SetUtcDateTime(const char* Utc)
 	_second = 3600*atoi(str_hour) + 60*atoi(str_min) + atoi(str_sec);
 
 	/* 
-	  * Extraction des microsecondes 
+	  * microseconds extraction
 	  */
 	for (i = 0; i < 6; i++)
 	{

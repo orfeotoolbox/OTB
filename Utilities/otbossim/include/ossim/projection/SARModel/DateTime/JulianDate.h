@@ -5,7 +5,7 @@ class CivilDateTime;
 class GMSTDateTime;
 class JSDDateTime;
 /**
- * @brief This class represent a date in the julian referential
+ * @brief This class represents a date in the julian referential
  * @author @author Magellium, Pacome Dentraygues
  * @version 1.0
  * @date 10-01-08
@@ -34,8 +34,7 @@ public:
 	/**
 	 * @brief Constructor with date initialisation using a JSDDateTime
 	 */
-	JulianDate(JSDDateTime& rhs);
-	
+	JulianDate(JSDDateTime& rhs);	
 	/**
 	 * @brief Constructor with date initialisation
 	 */
@@ -44,7 +43,11 @@ public:
 	 * @brief Affectation operator
 	 */
 	JulianDate& operator=(const JulianDate& rhs);
-	
+	/**
+	 * @brief Summation operator
+	 */
+	JulianDate& operator+(const JulianDate& rhs);
+		
 	void set_julianDate(double julianDate)
 	{
 		_julianDate = julianDate;
@@ -56,9 +59,9 @@ public:
 	};
 	
 	/**
-	 * @brief This function convert the current JulianDate in JSDDateTime
-	 * @return 0 if no error or an int gretter than 0 indiquating the error
-	 * @param JSDdate [out] The classe that receive the result of the convertion of the current JulianDate in JSDDateTime
+	 * @brief This function converts the current JulianDate in JSDDateTime
+	 * @return 0 if no error or an int greater than 0 indicating the error
+	 * @param JSDdate [out] The classe that receives the result of the conversion of the current JulianDate in JSDDateTime
 	 */
 	int AsJSDDateTime(JSDDateTime* JSDdate);
 	

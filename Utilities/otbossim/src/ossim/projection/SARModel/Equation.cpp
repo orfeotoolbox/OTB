@@ -90,7 +90,7 @@ void Equation::Normalisation()
 	double r;
 
 	/*
-	 * Normalisation par une puissance de 10
+	 * Normalisation par a power of 10
 	 */
 	for (i = 0 ; i < _trueDegree ; i++)
 	{
@@ -108,11 +108,11 @@ void Equation::Normalisation()
 	}
 
 	/*
-	 * Normalisation pour les grandes valeurs
+	 * Normalisation for big values
 	 */
 	if (eMax > 0)
 	{
-		/* Normalisation de l'inconnue pour les grandes valeurs */
+		/* Normalisation of the unknown for big values */
 		_normalisationType = GreatValues;
 		_normalisationCoefficient = pow (10.0, (double)eMax) ;
 		r    = 1.0 ;
@@ -124,7 +124,7 @@ void Equation::Normalisation()
 	}
 	else if (eMin < 0)
 	{
-		/* Normalisation de l'inconnue pour les petites valeurs */
+		/* Normalisation of the unknown for small */
 		_normalisationType = SmallValues;
 		_normalisationCoefficient = pow(10.0,(double)(-eMin)) ;
 		r    = 1.0 ;
@@ -251,7 +251,7 @@ void Equation::Solve2()
 
 	if (r1 <= Epsilon) 
 	{
-		/* 1 racine double */
+		/* 1 double root */
 
 		if(_solutions != NULL)
 			delete _solutions;
@@ -269,7 +269,7 @@ void Equation::Solve2()
 	}
 	else
 	{
-		/* 2 racines simples */
+		/* 2 simple roots */
 
 		if(_solutions != NULL)
 			delete _solutions;
@@ -305,16 +305,16 @@ void Equation::Solve3(int d4)
 	j  = std::complex<double>(-0.5,  sqrt (3.0) / 2.0) ;
 	j2 = std::complex<double>(-0.5, -sqrt (3.0) / 2.0) ;
 
-	/* Normalisation des coefficients */
+	/* Normalisation of coefficients */
 	for (i1 = 0; i1 < 3; i1++)  
 		aa[i1] = _coefficients[i1]/_coefficients[3];
 
 	if ( d4 == 0 )
 	{
-		/* Test de l'existence d'une racine triple */
+		/* Test of existence of a triple root */
 		d3_1r3 = TestDegree3Triple(aa, Epsilon) ;
 	    
-		/* Test de l'existence de 1 racine double + 1 racine simple */
+		/* Test of existence of 1 doubleroot + 1 simple root */
 		d3_1r2_1r1 = TestDegree3SimpleDouble(aa, Epsilon) ;
 	}
 	else
@@ -326,7 +326,7 @@ void Equation::Solve3(int d4)
 
 	if (d3_1r3 == 1)
 	{ 
-		/* 1 racine triple */
+		/* 1 triple root */
 		if(_solutions != NULL)
 			delete _solutions;
 		_solutions = new std::complex<double>[1];
@@ -341,7 +341,7 @@ void Equation::Solve3(int d4)
 	}
 	else if (d3_1r2_1r1 == 1)
 	{ 
-		/* 1 racine simple + 1 racine double */
+		/* 1 simple root + 1 double root */
 
 		if(_solutions != NULL)
 			delete _solutions;
@@ -393,7 +393,7 @@ void Equation::Solve3(int d4)
 	}
 	else
 	{ 
-		/* 3 racines simples */
+		/* 3 simple roots */
 		u = aa[1]/ std::complex<double>(3.0, 0.0);
 		v = (aa[2]* aa[2]) / std::complex<double>(9.0, 0.0) ;
 		q = u- v ;
@@ -464,13 +464,13 @@ void Equation::Solve4()
 	std::complex<double> aa[4], k[4], b[4], zProv[2][4] ;
 
 
-	/* Normalisation des coefficients */
+	/* Normalisation of coefficients */
 	for (i1 = 0; i1 < 4; i1++)  
 		aa[i1] = _coefficients[i1]/ _coefficients[4];
 
-	/* Reduction de l'equation :  on la met sous la forme */
+	/* Equation reduction :  on the form						*/
 	/*       (x-s)**4 + p(x-s)**2 + q(x-s) + r = 0        */
-	/* ces coefficients sont ranges dans le tableau k :   */
+	/* these coefficients are inserted into table k :		*/
 	/*           k[0] = s                                 */
 	/*           k[1] = p                                 */
 	/*           k[2] = q                                 */
@@ -514,22 +514,22 @@ void Equation::Solve4()
 	else
 		k[3] = std::complex<double>(0.0, 0.0) ;  
 
-	/* Test de l'existence d'une racine quadruple */
+	/* Test of existence of a quadruple root */
 	d4_1r4 = TestDegree4Quad (k, epsilon) ;
 
-	/* Test de l'existence de 2 racines doubles */
+	/* Test of existence of 2 double roots */
 	d4_2r2 = TestDegree4DoubleDouble (aa, k, epsilon) ;
 
-	/* Test de l'existence de 1 racine triple + 1 racine simple */
+	/* Test of existence of 1 triple root + 1 simple root */
 	d4_1r3_1r1 = TestDegree4SimpleTriple (aa, k, epsilon) ;
 
-	/* Test de l'existence de 1 racine double + 2 racines simples */
+	/* Test of existence of 1 double root + 2 simple roots */
 	d4_1r2_2r1 = TestDegreeSimpleSimpleDouble (k, epsilon) ;
 
 
 	if (d4_1r4 == 1)
 	{
-		/* 1 racine quadruple */
+		/* 1 quadruple root */
 
 		if(_solutions != NULL)
 			delete _solutions;
@@ -545,7 +545,7 @@ void Equation::Solve4()
 	}
 	else if (d4_2r2 == 1)
 	{
-		/* 2 racines doubles */
+		/* 2 double roots */
 
 		if(_solutions != NULL)
 			delete _solutions;
@@ -564,7 +564,7 @@ void Equation::Solve4()
 	}
 	else if (d4_1r3_1r1 == 1)
 	{
-		/* 1 racine triple + 1 racine simple */
+		/* 1 triple root + 1 simple root */
 
 		if(_solutions != NULL)
 			delete _solutions;
@@ -584,7 +584,7 @@ void Equation::Solve4()
 	}
 	else if (d4_1r2_2r1 == 1)
 	{
-		/* 1 racine double + 2 racines simples */
+		/* 1 double root + 2 simple roots */
 
 		if(_solutions != NULL)
 			delete _solutions;
@@ -648,7 +648,7 @@ void Equation::Solve4()
 	}
 	else
 	{
-		/* 4 racines simples */
+		/* 4 simple roots */
 		u    = ((aa[0]* aa[2]) * std::complex<double>(4.0, 0.0)) ;
 		v    = (aa[1] * aa[1]) ;
 		w    = ((aa[0]* aa[3]) * aa[3]) ;
@@ -657,14 +657,13 @@ void Equation::Solve4()
 		b[2] = -aa[2] ;
 		b[3] = std::complex<double>(1.0, 0.0) ;
 	    
-		/* On resout l'equation du 3eme degre associee, en forcant */
-		/* 3 racines distinctes (probleme de precision de calcul)  */
+		/* The third degree equation is solved by forcing 3 distinct roots (computation precision problem) */
 		Equation eq(3,b);
 		eq.Solve3(d4);
 		
 		//Solve3(d4);
-		h[0] = abs ((eq.get_solutions()[1]- eq.get_solutions()[2])) ; /* on choisit la racine la    */
-		h[1] = abs ((eq.get_solutions()[0]- eq.get_solutions()[2])) ; /* plus eloignee des 2 autres */
+		h[0] = abs ((eq.get_solutions()[1]- eq.get_solutions()[2])) ; /* the root the most distant to    */
+		h[1] = abs ((eq.get_solutions()[0]- eq.get_solutions()[2])) ; /* the 2 others is selected			 */
 		h[2] = abs ((eq.get_solutions()[0]- eq.get_solutions()[1])) ;
 		i1   = IndiceMin (3, h) ;
 		u    = eq.get_solutions()[i1] ;

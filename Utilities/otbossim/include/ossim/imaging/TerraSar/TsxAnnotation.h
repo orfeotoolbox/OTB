@@ -48,17 +48,16 @@ public:
 		return _inp_sctim;
 	};
 	/**
-	 * @brief Ascending/descending
-	 */
-	std::string   get_asc_des()
-	{
-		return _asc_des;
-	};
-	/**
 	 * @brief Orbit direction
 	 */
 	std::string get_orbitDirection() {
 		return _orbitDirection ;
+	}
+	/**
+	 * @brief Look direction
+	 */
+	std::string get_lookDirection() {
+		return _lookDirection ;
 	}
     /**
 	 * @brief Processed scene centre latitude
@@ -142,7 +141,29 @@ public:
 	{
 		return _rng_gate;
 	};
+	  /**
+	 * @brief Range gate end time
+	 */
+    double   get_rng_gate_end()
+	{
+		return _rng_gate_end;
+	};
     
+	 /**
+	 * @brief Azimuth start time
+	 */
+	 std::string   get_azimuthStartTime()
+	 {
+		return _azimuthStartTime;
+	};
+	 /**
+	 * @brief Azimuth end time
+	 */
+    std::string   get_azimuthStopTime()
+	 {
+		 return _azimuthStopTime;
+	 };
+
 	/**
 	 * @brief Scene center range time
 	 */
@@ -245,6 +266,12 @@ public:
 		return _nbCol;
 	}
 	/**
+	 * @brief Number of lines
+	 */
+	double get_nbLin() {
+		return _nbLin;
+	}
+	/**
 	 * @brief Mean Pixel spacing
 	 */
 	double get_pixel_spacing_mean() {
@@ -300,13 +327,13 @@ public:
 	 /**
 	 * @brief Scene corners + scene center columns
 	 */
-	double*   get_cornersCol(){
+	int*   get_cornersCol(){
 		return _cornersCol;
 	}
 	 /**
 	 * @brief Scene corners + scene center lines
 	 */
-	double*   get_cornersLin(){
+	int*   get_cornersLin(){
 		return _cornersLin;
 	}
 
@@ -321,13 +348,13 @@ protected:
 	 */
 	std::string _orbitDirection;
 	/**
+	 * @brief Look direction
+	 */
+	std::string _lookDirection;
+	/**
 	 * @brief Input scene centre time
 	 */
 	std::string   _inp_sctim;
-	/**
-	 * @brief Ascending/descending
-	 */
-	std::string   _asc_des;
     /**
 	 * @brief Processed scene centre latitude
 	 */
@@ -368,6 +395,18 @@ protected:
 	 * @brief Range gate start time
 	 */
     double   _rng_gate;
+	 /**
+	 * @brief Range gate end time
+	 */
+    double   _rng_gate_end;
+	 /**
+	 * @brief Azimuth start time
+	 */
+    std::string   _azimuthStartTime;
+	 /**
+	 * @brief Azimuth end time
+	 */
+    std::string   _azimuthStopTime;
 
 	/**
 	 * @brief Scene center range time
@@ -410,6 +449,10 @@ protected:
 	 * @brief Number of columns
 	 */
 	double _nbCol;
+	/**
+	 * @brief Number of lines
+	 */
+	double _nbLin;
 	/**
 	 * @brief Mean Pixel spacing
 	 */
@@ -463,11 +506,11 @@ protected:
 	 /**
 	 * @brief Scene corners + scene center columns
 	 */
-    double   _cornersCol[5];
+    int   _cornersCol[5];
 	 /**
 	 * @brief Scene corners + scene center lines
 	 */
-    double   _cornersLin[5];
+    int   _cornersLin[5];
 
 private:
 

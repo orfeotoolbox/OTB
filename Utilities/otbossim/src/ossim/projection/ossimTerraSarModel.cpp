@@ -1,7 +1,7 @@
 #include <ossim/projection/ossimTerraSarModel.h>
+
 #include <ossim/projection/SARModel/Ephemeris/GalileanEphemeris.h>
 #include <ossim/projection/SARModel/Ephemeris/GeographicEphemeris.h>
-
 #include <ossim/projection/SARModel/DateTime/GMSTDateTime.h>
 
 #include <ossim/projection/SARModel/PlatformPosition.h>
@@ -11,53 +11,37 @@
 
 #include <math.h>
 
-RTTI_DEF1(ossimTerraSarModel, "ossimTerraSarModel", ossimSensorModel);
+RTTI_DEF1(ossimTerraSarModel, "ossimTerraSarModel", ossimGeometricSarSensorModel);
 
 ossimTerraSarModel::ossimTerraSarModel():
-	_platformPosition(NULL),
-	_sensor(NULL),
-	_refPoint(NULL)
+	_nbCol(0),
+	_SrToGr_R0(0),
+	_sceneCenterRangeTime(0),
+	_SrToGr_scaling_factor(0)
 {
 }
 
 ossimTerraSarModel::~ossimTerraSarModel()
 {
-	if (_platformPosition != NULL)
-	{
-		delete _platformPosition;
-	}
-
-	if(_sensor != NULL)
-	{
-		delete _sensor;
-	}
-
-	if(_refPoint != NULL)
-	{
-		delete _refPoint;
-	}
 }
 
-double ossimTerraSarModel::getSlantRange(double col) const
+// Note : ground range to slant range coputation could be performed in three ways : 
+//		(1) Slant Range to Ground Range polynomial inversion (coefficients given at mid-scene)
+//		(2) use of a parabolic model from three geolocated points
+//		(3) interpolation from the geolocation grid (separate file, most precise technique) 
+// In this version, (1) and (2) were implemented but (1) is imprecise on the test products. 
+double ossimTerraSarModel::getSlantRangeFromGeoreferenced(double col) const
 {
-	const double RDR_CLUM        = 2.99792458e+8 ;
-	return  _refPoint->get_distance() 
-		+ _sensor->get_col_direction() * (col - (_refPoint->get_pix_col())) * ((RDR_CLUM / 2.0) * _sensor->get_nRangeLook() / _sensor->get_sf()) ;
+	const double c =  2.99792458e+8;
+	double tn = _alt_srgr_coefset[0] + _alt_srgr_coefset[1] * col + _alt_srgr_coefset[2] * col*col ;
+	return tn * (c/2.0);
 }
 
-JSDDateTime ossimTerraSarModel::getTime(double line) const 
-{
-	double dt =  _sensor->get_lin_direction() * (line - _refPoint->get_pix_line()) * _sensor->get_nAzimuthLook() / _sensor->get_prf() ;
-	JSDDateTime time = _refPoint->get_ephemeris()->get_date();
-	time.set_second(time.get_second() + dt);
-	time.NormDate();
-	return time;
-}
-
+/*
 double ossimTerraSarModel::getSlantRangeFromGeoreferenced(double col) const
 {
 	// iterative polynomial inversion
-	const double RDR_CLUM        = 2.99792458e+8 ;
+	const double CLUM        = 2.99792458e+8 ;
 	double EPSILON = 0.0000001 ;
 	double iterError = 1.0 ; 
 	int maxIter = 50, nIter=0 ;
@@ -80,99 +64,16 @@ double ossimTerraSarModel::getSlantRangeFromGeoreferenced(double col) const
 		iterError = actualGroundRange - estimatedGroundRange ;
 
 		// estimated slant range update
-		estimatedSlantRangeTime += iterError * 2.0 / RDR_CLUM ; 
+		estimatedSlantRangeTime += iterError * 2.0 / CLUM ; 
 
 		nIter++;
 	}
 
-	estimatedSlantRange = estimatedSlantRangeTime* RDR_CLUM / 2.0 ;
+	estimatedSlantRange = estimatedSlantRangeTime* CLUM / 2.0 ;
 
 	return  estimatedSlantRange  ;
 }
-
-void ossimTerraSarModel::lineSampleHeightToWorld(const ossimDpt& image_point, const double&   heightEllipsoid, ossimGpt&       worldPoint) const
-{
-	SarSensor sensor(_sensor,_platformPosition,_refPoint);
-	double lon, lat;
-	
-	double slantRange;
-	// Slant range computation, depending on the product type
-	if (_isProductGeoreferenced) {
-		slantRange = getSlantRangeFromGeoreferenced(image_point.x) ;
-	}
-	else {
-		slantRange = getSlantRange(image_point.x) ;
-	}
-
-	JSDDateTime azimuthTime = getTime(image_point.y) ; 
-
-	sensor.ImageToWorld(slantRange, azimuthTime, heightEllipsoid, lon, lat);
-
-	worldPoint.lat = lat;
-	worldPoint.lon = lon;
-	worldPoint.hgt = heightEllipsoid ;
-}
-
-bool ossimTerraSarModel::optimizeModel(std::list<ossimGpt> groundCoordinates, std::list<ossimDpt> imageCoordinates) {
-
-	// Inverse projection of each Ground Control Point
-	std::list<ossimGpt>::iterator itGround = groundCoordinates.begin() ; 
-	std::list<ossimDpt> inverseLocResults ;
-	while (itGround != groundCoordinates.end()) {
-		ossimDpt itLoc ;
-		this->worldToLineSample(*itGround,itLoc);
-		inverseLocResults.push_back(itLoc) ; 
-		itGround++;
-	}
-
-	// Comparison between the estimated image coordinates of each GCP and its actual image coordinates
-	double lineBias = 0.0, columnBias = 0.0 ;
-	int nbPtsUsed = 0;
-
-	std::list<ossimDpt>::iterator itActualCoords = imageCoordinates.begin() ;
-	std::list<ossimDpt>::iterator itEstimatedCoords = inverseLocResults.begin() ;
-	while ((itActualCoords != imageCoordinates.end())&&(itEstimatedCoords != inverseLocResults.end())) {
-		
-		columnBias += (itActualCoords->x - itEstimatedCoords->x ) ; 
-		lineBias += (itActualCoords->y - itEstimatedCoords->y ) ;
-		
-		nbPtsUsed++;
-		itActualCoords++;
-		itEstimatedCoords++;
-	}
-
-	// Computation of bias in line and column : mean deviations
-	lineBias /= nbPtsUsed ; 
-	columnBias /= nbPtsUsed ; 
-
-	// Update of the model Reference Point 
-	_refPoint->set_pix_col(_refPoint->get_pix_col() - columnBias);
-	_refPoint->set_pix_line(_refPoint->get_pix_line() - lineBias);
-
-	return true ;
-}
-
-
-bool ossimTerraSarModel::loadState(const ossimKeywordlist &kwl, const char *prefix)
-{
-	if(!InitSRGR(kwl, prefix))
-	{
-		return false;
-	}
-	if(!InitPlatformPosition(kwl, prefix))
-	{
-		return false;
-	}
-	if(!InitSensorParams(kwl, prefix))
-	{
-		return false;
-	}
-	if(!InitRefPoint(kwl, prefix))
-	{
-		return false;
-	}
-	return true;
-}
+*/
 
 bool ossimTerraSarModel::InitSensorParams(const ossimKeywordlist &kwl, const char *prefix)
 {
@@ -188,6 +89,13 @@ bool ossimTerraSarModel::InitSensorParams(const ossimKeywordlist &kwl, const cha
 	double n_azilok = atof(n_azilok_str);
 	const char* n_rnglok_str = kwl.find(prefix,"n_rnglok");
 	double n_rnglok = atof(n_rnglok_str);
+
+	//ellipsoid parameters
+	const char* ellip_maj_str = kwl.find(prefix,"ellip_maj");
+	double ellip_maj = atof(ellip_maj_str) * 1000.0;	// km -> m
+	const char* ellip_min_str = kwl.find(prefix,"ellip_min");
+	double ellip_min = atof(ellip_min_str) * 1000.0;  // km -> m
+
 
 	if(_sensor != NULL)
 	{
@@ -229,15 +137,22 @@ bool ossimTerraSarModel::InitSensorParams(const ossimKeywordlist &kwl, const cha
 				_sensor->set_lin_direction(1);
 	}
 
-	_sensor->set_sf(fr);
-	const double RDR_CLUM        = 2.99792458e+8 ;
-	double wave_length = RDR_CLUM / central_freq ;
-	_sensor->set_rwl(wave_length);
-	_sensor->set_nAzimuthLook(n_azilok);
-	_sensor->set_nRangeLook(n_rnglok);
+	const char* lookDirection_str = kwl.find(prefix,"lookDirection");
+	std::string lookDirection(lookDirection_str) ;
+	if ((lookDirection == "Right")||(lookDirection == "RIGHT")) _sensor->set_sightDirection(SensorParams::Right) ;
+	else _sensor->set_sightDirection(SensorParams::Left) ;
 
+	_sensor->set_sf(fr);
+	const double CLUM        = 2.99792458e+8 ;
+	double wave_length = CLUM / central_freq ;
+	_sensor->set_rwl(wave_length);
+	_sensor->set_nRangeLook(n_rnglok);
+	_sensor->set_prf(fa) ; 
 	// fa is the processing PRF 
-	_sensor->set_prf(fa * n_azilok);
+	//_sensor->set_prf(fa * n_azilok); // number of looks disabled
+
+	_sensor->set_semiMajorAxis(ellip_maj) ; 
+	_sensor->set_semiMinorAxis(ellip_min) ; 
 
 	return true;
 }
@@ -280,15 +195,15 @@ bool ossimTerraSarModel::InitPlatformPosition(const ossimKeywordlist &kwl, const
 
 		sprintf(name,"eph%i_velX",i);
 		const char* vx_str = kwl.find(prefix,name);
-		vit[0] = atof(vx_str) ; //* 1.0e-3;;
+		vit[0] = atof(vx_str) ;
 
 		sprintf(name,"eph%i_velY",i);
 		const char* vy_str = kwl.find(prefix,name);
-		vit[1] = atof(vy_str) ; //* 1.0e-3;;
+		vit[1] = atof(vy_str) ;
 
 		sprintf(name,"eph%i_velZ",i);
 		const char* vz_str = kwl.find(prefix,name);
-		vit[2] = atof(vz_str) ; //* 1.0e-3;;
+		vit[2] = atof(vz_str) ;
 
 		/*
 		 * Conversion to JSD Date
@@ -363,8 +278,8 @@ bool ossimTerraSarModel::InitRefPoint(const ossimKeywordlist &kwl, const char *p
 		return false;
 	}
 
-	const double RDR_CLUM        = 2.99792458e+8 ;
-	double sceneCenterSlantRange = _sceneCenterRangeTime * RDR_CLUM / 2.0 ;
+	const double CLUM        = 2.99792458e+8 ;
+	double sceneCenterSlantRange = _sceneCenterRangeTime * CLUM / 2.0 ;
 
 	_refPoint->set_distance(sceneCenterSlantRange);
 
@@ -379,6 +294,58 @@ bool ossimTerraSarModel::InitRefPoint(const ossimKeywordlist &kwl, const char *p
 		_SrToGr_scaling_factor = estimatedGroundRange / sc_pix ;
 		_refPoint->set_distance(estimatedGroundRange);
 	}
+
+	// in order to use ossimSensorModel::lineSampleToWorld
+	const char* nbCol_str = kwl.find(prefix,"nbCol");
+	const char* nbLin_str = kwl.find(prefix,"nbLin");
+	theImageSize.x      = atoi(nbCol_str);
+   theImageSize.y      = atoi(nbLin_str);
+   theImageClipRect    = ossimDrect(0, 0, theImageSize.x-1, theImageSize.y-1);
+
+	if (_isProductGeoreferenced) {
+		std::string azimuthStartTime(kwl.find("azimuthStartTime"));
+		std::string azimuthStopTime(kwl.find("azimuthStopTime"));
+		CivilDateTime * dateStart = new CivilDateTime() ;
+		if (! UtcDateTimeStringToCivilDate(azimuthStartTime, *dateStart)) return false ;
+		CivilDateTime * dateStop = new CivilDateTime() ;
+		if (! UtcDateTimeStringToCivilDate(azimuthStopTime, *dateStop)) return false ;
+		double acq_msec_first = (double) dateStart->get_second()+dateStart->get_decimal();
+		double acq_msec_last = (double) dateStop->get_second()+dateStop->get_decimal();
+
+		double actualPRF = theImageSize.y/(acq_msec_last-acq_msec_first) ;
+		_sensor->set_nAzimuthLook(_sensor->get_prf()/actualPRF); 
+	}
+	else 	
+		_sensor->set_nAzimuthLook(1.0);
+
+	// Ground Control Points extracted from the model : scene center and corners
+	std::list<ossimGpt> groundGcpCoordinates ; 
+	std::list<ossimDpt> imageGcpCoordinates ; 
+	char name[64];
+	for (int k=0 ; k<5 ; k++) {
+		sprintf(name,"cornersCol%i",k);
+		const char* i_str = kwl.find(name);
+		int i = atoi(i_str);
+		sprintf(name,"cornersLin%i",k);
+		const char* j_str = kwl.find(name);
+		int j = atoi(j_str);
+		sprintf(name,"cornersLon%i",k);
+		const char* lon_str = kwl.find(name);
+		double lon = atof(lon_str);
+		sprintf(name,"cornersLat%i",k);
+		const char* lat_str = kwl.find(name);
+		double lat = atof(lat_str);
+		const char* height_str = kwl.find("terrain_h");
+		double height = atof(height_str) ;
+
+		ossimDpt imageGCP(i,j);
+		ossimGpt groundGCP(lat ,lon , height);
+		groundGcpCoordinates.push_back(groundGCP) ; 
+		imageGcpCoordinates.push_back(imageGCP) ;
+	}
+
+	// Default optimization 
+	optimizeModel(groundGcpCoordinates, imageGcpCoordinates) ;
 
 	return true;
 }
@@ -417,6 +384,31 @@ bool ossimTerraSarModel::InitSRGR(const ossimKeywordlist &kwl, const char *prefi
 		exponent = atoi(exp_str);
 		_SrToGr_exponent.push_back(exponent);
 	}
+
+	// ALTERNATIVE to provided coefficients
+
+	// Range time for first mid and last pixel
+	std::string orbitDirection(kwl.find(prefix,"orbitDirection")) ;
+	double t1, t2, t3 ; 
+	if (orbitDirection=="DESCENDING") {
+		t3 = atof(kwl.find("start_rng"));
+		t2 = atof(kwl.find("sc_rng"));
+		t1 = atof(kwl.find("end_rng"));
+	}
+	else {
+		t1 = atof(kwl.find("start_rng"));
+		t2 = atof(kwl.find("sc_rng"));
+		t3 = atof(kwl.find("end_rng"));
+	}
+
+	// Range pixels numbers corresponding
+	double x1 = 0.0;
+	double x2 = atof(kwl.find("sc_pix")); 
+	double x3 = 2.0*(x2+1.0) -1.0 ; 
+
+	_alt_srgr_coefset[0] = t1;
+	_alt_srgr_coefset[1] = ((t2-t1)/(x2*x2)+(t1-t3)/(x3*x3))/((1.0/x2)-(1.0/x3));
+	_alt_srgr_coefset[2] = ((t2-t1)/x2 + (t1-t3)/x3)/(x2-x3);
 	
 	return true;
 }
@@ -497,3 +489,6 @@ bool ossimTerraSarModel::UtcDateTimeStringToCivilDate(const std::string &utcStri
 	return true ;
 }
 
+	
+	 
+	 

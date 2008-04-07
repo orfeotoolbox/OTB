@@ -5,7 +5,7 @@
 #include <stdlib.h>
 
 /*-------------------------------------------------------------------------*/
-/*          fonction "plus proche entier" renvoyant long                   */
+/*          "closest integer" function, returns long		                  */
 /*-------------------------------------------------------------------------*/
 
 long inint (double x)
@@ -14,7 +14,7 @@ long inint (double x)
 }
 
 /*-------------------------------------------------------------------------*/
-/*          fonction "plus proche entier" renvoyant double                 */
+/*          "closest integer" function, returns double	                  */
 /*-------------------------------------------------------------------------*/
 
 double fnint (double x)
@@ -23,7 +23,7 @@ double fnint (double x)
 }
 
 /*-------------------------------------------------------------------------*/
-/*          fonction Plus Grand Commun Diviseur                            */
+/*          Greatest Common Divisor						                        */
 /*-------------------------------------------------------------------------*/
 
 long pgcd ( long n , long p )
@@ -60,7 +60,7 @@ long pgcd ( long n , long p )
 }
 
 /*-------------------------------------------------------------------------*/
-/*          fonction Plus Petit Commun Multiple                            */
+/*          Least Common Multiple					                           */
 /*-------------------------------------------------------------------------*/
 
 long ppcm ( long n , long p )

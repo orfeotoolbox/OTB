@@ -7,7 +7,7 @@ class JulianDate;
 
 /**
  * @ingroup Date
- * @brief This class represent a date 
+ * @brief This class represents a date 
  * @author @author Magellium, Pacome Dentraygues
  * @version 1.0
  * @date 10-01-08

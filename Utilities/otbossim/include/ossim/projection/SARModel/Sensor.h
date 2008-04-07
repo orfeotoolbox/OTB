@@ -5,11 +5,11 @@
 
 class SensorParams;
 class PlatformPosition;
-class RefPoint;
 class JSDDateTime;
+
 /**
  * @ingroup SARModel
- * @brief This class provide basic location services
+ * @brief This class provides basic location services
  * @author Magellium, Pacome Dentraygues
  * @version 1.0
  * @date 24-01-08
@@ -20,31 +20,28 @@ public:
 	/**
 	 * @brief Constructor
 	 *
-	 * @remarks This constructor create a copy of params, position, and refpoint
+	 * @remarks This constructor creates a copy of the sensor model (params and position)
 	 */
-	Sensor(SensorParams* params, PlatformPosition* position, RefPoint* refpoint);
+	Sensor(SensorParams* params, PlatformPosition* position);
 	/**
 	 * @brief Destructor
 	 */
 	~Sensor();
 	
-	virtual void ImageToWorld(double distance, JSDDateTime time, double height, double& lon, double& lat) = 0;
+	/**
+	 * @brief This function is able to convert image coordinates into geodetic world coordinates using a sensor model
+	 *
+	 * @param distance : Slant range of the image point
+	 * @param time :		Azimuth time of the image point
+	 * @param height :	Altitude of the world point
+	 * @retval lon :		Longitude of the world point 
+	 * @retval lat :		Latitude of the world point 
+	 */
+	virtual int ImageToWorld(double distance, JSDDateTime time, double height, double& lon, double& lat) = 0;
 protected:
 	SensorParams * _params;
 	PlatformPosition* _position;
-	RefPoint* _refpoint;
 
-	/**
-	 * @brief Cette fonction permet de resoudre une equation du 4 iéme degrés
-	 * @param degree Degres de l'équation (i.e nombre de coefficients)
-	 * @param coefs Coefficients de l'équation
-	 * @param nbSol nombre de solutions distinctes
-	 * @param sol Solutions de l'équation
-	 * @param order Tableau donnant l'ordre des solutions (simple, double ....)
-	 */
-	//int virtual Solve(int degree, std::complex<double>*coefs, int& nbSol, std::complex<double>* sol, int* order);
-
-	//virtual Normalisation(
 private:
 };
 

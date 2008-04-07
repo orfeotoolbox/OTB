@@ -6,7 +6,7 @@
 class GeographicEphemeris;
 /**
  * @ingroup Ephemeris
- * @brief This class represent an ephemeris in Galilean coordinates system
+ * @brief This class represents an ephemeris in Galilean coordinates system
  * @author Magellium, Pacome Dentraygues
  * @version 1.0
  * @date 14-01-08
@@ -41,7 +41,7 @@ public:
 	GalileanEphemeris& operator=(const GalileanEphemeris& rhs);
 	
 	/**
-	 * @brief This fonction convert the current ephemeris in the Geographic coordinates systèm
+	 * @brief This fonction converts the current ephemeris in the Geographic coordinates systèm
 	 */
 	void ToGeographic(GeographicEphemeris* vGeo);
 	void ToGeographic(double greenwich,GeographicEphemeris* vGeo);
@@ -49,7 +49,7 @@ public:
 	operator GeographicEphemeris();
 	
 	/**
-	 * @brief This function create a copy of the current class
+	 * @brief This function creates a copy of the current class
 	 */
 	virtual Ephemeris* Clone()
 	{

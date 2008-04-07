@@ -4,7 +4,7 @@
 class Ephemeris;
 
 /**
- * @brief This class handle the referencial point
+ * @brief This class handles the referential point
  * @author Magellium, Pacome Dentraygues
  * @version 1.0
  * @date 15-01-08

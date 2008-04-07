@@ -1,34 +1,15 @@
+#include <ossim/imaging/ossimTerraSarTileSource.h>
+
 #include <ossim/base/ossimTrace.h>
 #include <ossim/base/ossimIpt.h>
 #include <ossim/base/ossimDpt.h>
 #include <ossim/base/ossimFilename.h>
 #include <ossim/base/ossimKeywordlist.h>
+#include <ossim/base/ossimKeywordNames.h>
 #include <ossim/base/ossimEllipsoid.h>
 #include <ossim/base/ossimDatum.h>
 #include <ossim/base/ossimBooleanProperty.h>
 #include <ossim/imaging/ossimImageDataFactory.h>
-#include <ossim/imaging/ossimTerraSarTileSource.h>
-#include <ossim/projection/ossimEquDistCylProjection.h>
-#include <ossim/projection/ossimAlbersProjection.h>
-#include <ossim/projection/ossimCylEquAreaProjection.h>
-#include <ossim/projection/ossimEquDistCylProjection.h>
-#include <ossim/projection/ossimVanDerGrintenProjection.h>
-#include <ossim/projection/ossimLambertConformalConicProjection.h>
-#include <ossim/projection/ossimMercatorProjection.h>
-#include <ossim/projection/ossimMillerProjection.h>
-#include <ossim/projection/ossimOrthoGraphicProjection.h>
-#include <ossim/projection/ossimPolyconicProjection.h>
-#include <ossim/projection/ossimSinusoidalProjection.h>
-#include <ossim/projection/ossimTransMercatorProjection.h>
-#include <ossim/projection/ossimCassiniProjection.h>
-#include <ossim/projection/ossimUtmProjection.h>
-#include <ossim/base/ossimConstants.h>
-#include <ossim/base/ossimCommon.h>
-#include <ossim/base/ossimKeywordNames.h>
-#include <ossim/base/ossimTrace.h>
-#include <ossim/base/ossimKeywordlist.h>
-#include <ossim/base/ossimEllipsoid.h>
-#include <ossim/base/ossimDatum.h>
 
 #include <ossim/base/ossimXmlDocument.h>
 #include <ossim/base/ossimXmlNode.h>
@@ -179,9 +160,8 @@ bool ossimTerraSarTileSource::getImageGeometry(ossimKeywordlist& kwl,const char*
 	
 	kwl.add(prefix, "imageDataStartWith",_annotation->get_imageDataStartWith().c_str(),true);
 	kwl.add(prefix, "orbitDirection",_annotation->get_orbitDirection().c_str(),true);
+	kwl.add(prefix, "lookDirection",_annotation->get_lookDirection().c_str(),true);
 	kwl.add(prefix, "inp_sctim",_annotation->get_inp_sctim().c_str(),true);
-
-	kwl.add(prefix, "asc_des",_annotation->get_asc_des().c_str(),true);
 
 	kwl.add(prefix, "pro_lat",_annotation->get_pro_lat(),true);
 	kwl.add(prefix, "pro_long",_annotation->get_pro_long(),true);
@@ -198,27 +178,23 @@ bool ossimTerraSarTileSource::getImageGeometry(ossimKeywordlist& kwl,const char*
 	kwl.add(prefix, "fr",_annotation->get_fr(),true);
 
 	kwl.add(prefix, "sc_rng",_annotation->get_sceneCenterRangeTime(),true);
+	kwl.add(prefix, "start_rng",_annotation->get_rng_gate(),true);
+	kwl.add(prefix, "end_rng",_annotation->get_rng_gate_end(),true);
+
+	kwl.add(prefix, "azimuthStartTime",_annotation->get_azimuthStartTime().c_str(),true);
+	kwl.add(prefix, "azimuthStopTime",_annotation->get_azimuthStopTime().c_str(),true);
 
 	kwl.add(prefix, "fa",_annotation->get_fa(),true);
 
 	kwl.add(prefix, "n_azilok",_annotation->get_n_azilok(),true);
 	kwl.add(prefix, "n_rnglok",_annotation->get_n_rnglok(),true);
 	
-/*
-	kwl.add(prefix, "alt_dopcen0",_annotation->get_alt_dopcen()[0],true);
-	kwl.add(prefix, "alt_dopcen1",_annotation->get_alt_dopcen()[1],true);
-	kwl.add(prefix, "alt_dopcen2",_annotation->get_alt_dopcen()[2],true);
-
-	kwl.add(prefix, "crt_dopcen0",_annotation->get_crt_dopcen()[0],true);
-	kwl.add(prefix, "crt_dopcen1",_annotation->get_crt_dopcen()[1],true);
-	kwl.add(prefix, "crt_dopcen2",_annotation->get_crt_dopcen()[2],true);
-*/
-	
 	kwl.add(prefix, "rangeProjectionType",(_annotation->get_rangeProjectionType()).c_str(),true);
 
 	kwl.add(prefix, "SrToGr_R0",_annotation->get_SrToGr_R0(),true);
 
 	kwl.add(prefix, "nbCol",_annotation->get_nbCol(),true);
+	kwl.add(prefix, "nbLin",_annotation->get_nbLin(),true);
 	kwl.add(prefix, "pixel_spacing_mean",_annotation->get_pixel_spacing_mean(),true);
 	kwl.add(prefix, "pixel_spacing_near",_annotation->get_pixel_spacing_near(),true);
 	kwl.add(prefix, "pixel_spacing_far",_annotation->get_pixel_spacing_far(),true);

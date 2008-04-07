@@ -28,7 +28,7 @@ bool TsxAnnotation::Parse(ossimXmlDocument docXML) {
 	 foundNode = searchResult.at(0) ;
 	 _imageDataStartWith = foundNode->getText() ;
 
-	 //  Orbit direction
+	 //  Orbit direction : Ascending/descending
 	xpathTest = new ossimString("/level1Product/productInfo/missionInfo/orbitDirection") ;
 	 searchResult.clear();
 	 docXML.findNodes(*xpathTest, searchResult) ;
@@ -36,6 +36,14 @@ bool TsxAnnotation::Parse(ossimXmlDocument docXML) {
 	 foundNode = searchResult.at(0) ;
 	 _orbitDirection = foundNode->getText() ;
 	 
+	// Look Direction
+	 xpathTest = new ossimString("/level1Product/productInfo/acquisitionInfo/lookDirection") ;
+	 searchResult.clear();
+	 docXML.findNodes(*xpathTest, searchResult) ;
+	 if (searchResult.size() != 1 ) return false ;
+	 foundNode = searchResult.at(0) ;
+	 _lookDirection = foundNode->getText() ;
+
 	// Input scene centre time
 	 xpathTest = new ossimString("/level1Product/productInfo/sceneInfo/sceneCenterCoord/azimuthTimeUTC") ;
 	 searchResult.clear();
@@ -45,14 +53,6 @@ bool TsxAnnotation::Parse(ossimXmlDocument docXML) {
 	 _inp_sctim = foundNode->getText() ;
 	 // TSX date format is UTC (xs:dateTime) : yyyy-mm-ddThh:mm:ss(.s+)zzzz (where zzzz is the timeZone).
 
-	//  Ascending/descending
-	xpathTest = new ossimString("/level1Product/productInfo/missionInfo/orbitDirection") ;
-	 searchResult.clear();
-	 docXML.findNodes(*xpathTest, searchResult) ;
-	 if (searchResult.size() != 1 ) return false ;
-	 foundNode = searchResult.at(0) ;
-	 _asc_des = foundNode->getText() ;
-   
 	//  Processed scene centre latitude
 	xpathTest = new ossimString("/level1Product/productInfo/sceneInfo/sceneCenterCoord/lat") ;
 	 searchResult.clear();
@@ -92,6 +92,7 @@ bool TsxAnnotation::Parse(ossimXmlDocument docXML) {
 	 if (searchResult.size() != 1 ) return false ;
 	 foundNode = searchResult.at(0) ;
 	 _sc_lin = ( foundNode->getText() ).toInt() ;
+	 _sc_lin = _sc_lin - 1 ; //TSX image coordinates start at (1,1), while OSSIM image coordinates start at (0,0)
         
 	 //  Scene centre pixel number
 	 xpathTest = new ossimString("/level1Product/productInfo/sceneInfo/sceneCenterCoord/refColumn") ;
@@ -100,8 +101,9 @@ bool TsxAnnotation::Parse(ossimXmlDocument docXML) {
 	 if (searchResult.size() != 1 ) return false ;
 	 foundNode = searchResult.at(0) ;
 	 _sc_pix = ( foundNode->getText() ).toInt() ;
+	 _sc_pix = _sc_pix - 1 ; //TSX image coordinates start at (1,1), while OSSIM image coordinates start at (0,0)
  
-	 //  Radar wave length
+	 //  Radar center frequency
 	 xpathTest = new ossimString("/level1Product/instrument/radarParameters/centerFrequency") ;
 	 searchResult.clear();
 	 docXML.findNodes(*xpathTest, searchResult) ;
@@ -124,6 +126,30 @@ bool TsxAnnotation::Parse(ossimXmlDocument docXML) {
 	 if (searchResult.size() != 1 ) return false ;
 	 foundNode = searchResult.at(0) ;
 	 _rng_gate = ( foundNode->getText() ).toDouble() ;
+
+	 // Range gate end time
+	 xpathTest = new ossimString("/level1Product/productInfo/sceneInfo/rangeTime/lastPixel") ;
+	 searchResult.clear();
+	 docXML.findNodes(*xpathTest, searchResult) ;
+	 if (searchResult.size() != 1 ) return false ;
+	 foundNode = searchResult.at(0) ;
+	 _rng_gate_end = ( foundNode->getText() ).toDouble() ;
+
+	 // Azimuth start time
+	 xpathTest = new ossimString("/level1Product/productInfo/sceneInfo/start/timeUTC") ;
+	 searchResult.clear();
+	 docXML.findNodes(*xpathTest, searchResult) ;
+	 if (searchResult.size() != 1 ) return false ;
+	 foundNode = searchResult.at(0) ;
+	 _azimuthStartTime = ( foundNode->getText() ) ;
+
+	 // Azimuth stop time
+	 xpathTest = new ossimString("/level1Product/productInfo/sceneInfo/stop/timeUTC") ;
+	 searchResult.clear();
+	 docXML.findNodes(*xpathTest, searchResult) ;
+	 if (searchResult.size() != 1 ) return false ;
+	 foundNode = searchResult.at(0) ;
+	 _azimuthStopTime = ( foundNode->getText() ) ;
 
 	 // Scene center range time
 	 xpathTest = new ossimString("/level1Product/productInfo/sceneInfo/sceneCenterCoord/rangeTime") ;
@@ -165,15 +191,6 @@ bool TsxAnnotation::Parse(ossimXmlDocument docXML) {
 	 foundNode = searchResult.at(0) ;
 	 _terrain_h = ( foundNode->getText() ).toDouble() ;
 
-    // Along track Doppler frequency terms
-	// double   _alt_dopcen[3];
-    
-	 // Cross track Doppler frequency terms
-	// double   _crt_dopcen[3];
-    /*
-	 *	@todo : à voir
-	 */
-
 	// Type of range data (GROUNDRANGE, SLANTRANGE, MAP, UNDEFINED)
 	 xpathTest = new ossimString("/level1Product/productInfo/productVariantInfo/projection") ;
 	 searchResult.clear();
@@ -181,6 +198,14 @@ bool TsxAnnotation::Parse(ossimXmlDocument docXML) {
 	 if (searchResult.size() != 1 ) return false ;
 	 foundNode = searchResult.at(0) ;
 	 _rangeProjectionType = foundNode->getText() ;
+
+	// number of lines
+	xpathTest = new ossimString("/level1Product/productInfo/imageDataInfo/imageRaster/numberOfRows") ; 
+	searchResult.clear();
+	docXML.findNodes(*xpathTest, searchResult) ;
+	if (searchResult.size() != 1 ) return false ;
+	foundNode = searchResult.at(0) ;
+	_nbLin = (foundNode->getText()).toDouble() ;
 
 	// Slant Range TO Ground Range Projection
 			// number of columns
@@ -344,19 +369,24 @@ bool TsxAnnotation::Parse(ossimXmlDocument docXML) {
 	 docXML.findNodes(*xpathTest, searchResult) ;
 	 if (searchResult.size() != 1 ) return false ;
 	 foundNode = searchResult.at(0) ;
-	 _cornersCol[0] = ( foundNode->getText() ).toDouble() ;
+	 _cornersCol[0] = ( foundNode->getText() ).toInt() ;
+	 _cornersCol[0] = _cornersCol[0] - 1 ; //TSX image coordinates start at (1,1), while OSSIM image coordinates start at (0,0)
 	 xpathTest = new ossimString("/level1Product/productInfo/sceneInfo/sceneCornerCoord/refColumn") ;
 	 searchResult.clear();
 	 docXML.findNodes(*xpathTest, searchResult) ;
 	 if (searchResult.size() != 4 ) return false ;
 	 foundNode = searchResult.at(0) ;
-	 _cornersCol[1] = ( foundNode->getText() ).toDouble() ;
+	 _cornersCol[1] = ( foundNode->getText() ).toInt() ;
+	 _cornersCol[1] = _cornersCol[1] - 1 ; //TSX image coordinates start at (1,1), while OSSIM image coordinates start at (0,0)
 	 foundNode = searchResult.at(1) ;
-	 _cornersCol[2] = ( foundNode->getText() ).toDouble() ;
+	 _cornersCol[2] = ( foundNode->getText() ).toInt() ;
+	 _cornersCol[2] = _cornersCol[2] - 1 ; //TSX image coordinates start at (1,1), while OSSIM image coordinates start at (0,0)
 	 foundNode = searchResult.at(2) ;
-	 _cornersCol[3] = ( foundNode->getText() ).toDouble() ;
+	 _cornersCol[3] = ( foundNode->getText() ).toInt() ;
+	 _cornersCol[3] = _cornersCol[3] - 1 ; //TSX image coordinates start at (1,1), while OSSIM image coordinates start at (0,0)
 	 foundNode = searchResult.at(3) ;
-	 _cornersCol[4] = ( foundNode->getText() ).toDouble() ;
+	 _cornersCol[4] = ( foundNode->getText() ).toInt() ;
+	 _cornersCol[4] = _cornersCol[4] - 1 ; //TSX image coordinates start at (1,1), while OSSIM image coordinates start at (0,0)
     
 	 // Scene corners + scene center lines
 	 xpathTest = new ossimString("/level1Product/productInfo/sceneInfo/sceneCenterCoord/refRow") ;
@@ -364,19 +394,24 @@ bool TsxAnnotation::Parse(ossimXmlDocument docXML) {
 	 docXML.findNodes(*xpathTest, searchResult) ;
 	 if (searchResult.size() != 1 ) return false ;
 	 foundNode = searchResult.at(0) ;
-	 _cornersLin[0] = ( foundNode->getText() ).toDouble() ;
+	 _cornersLin[0] = ( foundNode->getText() ).toInt() ;
+	 _cornersLin[0] = _cornersLin[0] - 1 ; //TSX image coordinates start at (1,1), while OSSIM image coordinates start at (0,0)
 	 	 xpathTest = new ossimString("/level1Product/productInfo/sceneInfo/sceneCornerCoord/refRow") ;
 	 searchResult.clear();
 	 docXML.findNodes(*xpathTest, searchResult) ;
 	 if (searchResult.size() != 4 ) return false ;
 	 foundNode = searchResult.at(0) ;
-	 _cornersLin[1] = ( foundNode->getText() ).toDouble() ;
+	 _cornersLin[1] = ( foundNode->getText() ).toInt() ;
+	 _cornersLin[1] = _cornersLin[1] - 1 ; //TSX image coordinates start at (1,1), while OSSIM image coordinates start at (0,0)
 	 foundNode = searchResult.at(1) ;
-	 _cornersLin[2] = ( foundNode->getText() ).toDouble() ;
+	 _cornersLin[2] = ( foundNode->getText() ).toInt() ;
+	 _cornersLin[2] = _cornersLin[2] - 1 ; //TSX image coordinates start at (1,1), while OSSIM image coordinates start at (0,0)
 	 foundNode = searchResult.at(2) ;
-	 _cornersLin[3] = ( foundNode->getText() ).toDouble() ;
+	 _cornersLin[3] = ( foundNode->getText() ).toInt() ;
+	 _cornersLin[3] = _cornersLin[3] - 1 ; //TSX image coordinates start at (1,1), while OSSIM image coordinates start at (0,0)
 	 foundNode = searchResult.at(3) ;
-	 _cornersLin[4] = ( foundNode->getText() ).toDouble() ;
+	 _cornersLin[4] = ( foundNode->getText() ).toInt() ;
+	 _cornersLin[4] = _cornersLin[4] - 1 ; //TSX image coordinates start at (1,1), while OSSIM image coordinates start at (0,0)
 
 	return true ;
 }

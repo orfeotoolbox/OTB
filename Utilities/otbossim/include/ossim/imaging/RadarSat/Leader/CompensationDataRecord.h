@@ -36,12 +36,12 @@ public:
 	 */
 	CompensationDataRecord& operator=(const CompensationDataRecord& rhs);
 	/**
-	 * @brief This function write the CompensationDataRecord in a stream
+	 * @brief This function writes the CompensationDataRecord in a stream
 	 */
 	friend std::ostream& operator<<(std::ostream& os, const CompensationDataRecord& data);
 
 	/**
-	 * @brief This function read a CompensationDataRecord from a stream
+	 * @brief This function reads a CompensationDataRecord from a stream
 	 */
 	friend std::istream& operator>>(std::istream& is, CompensationDataRecord& data);
 

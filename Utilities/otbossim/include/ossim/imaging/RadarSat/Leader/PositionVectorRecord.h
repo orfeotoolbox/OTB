@@ -33,12 +33,12 @@ public:
 	 */
 	PositionVectorRecord& operator=(const PositionVectorRecord& rhs);
 	/**
-	 * @brief This function write the PositionVectorRecord in a stream
+	 * @brief This function writes the PositionVectorRecord in a stream
 	 */
 	friend std::ostream& operator<<(std::ostream& os, const PositionVectorRecord& data);
 
 	/**
-	 * @brief This function read a PositionVectorRecord from a stream
+	 * @brief This function reads a PositionVectorRecord from a stream
 	 */
 	friend std::istream& operator>>(std::istream& is, PositionVectorRecord& data);
 

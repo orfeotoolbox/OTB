@@ -3,7 +3,7 @@
 
 #include <complex>
 /**
- * @brief This class manage and solve an equation of the forth degree
+ * @brief This class manages and solves an equation of the fourth degree
  * @author Magellium, Pacome Dentraygues
  * @version 1.0
  * @date 30-01-08
@@ -88,38 +88,38 @@ private:
 	std::complex<double> Proche(std::complex<double> z, double epsilon);
 
 	/** 
-	 * @brief Test dans une equation du troisieme degres l'existance d'une racine triple
+	 * @brief Tests whether a triple root exists in a third degree equation
 	 */
 	int TestDegree3Triple(std::complex<double>* a, double epsilon);
 	/**
-	 * @brief Test dans une equation du troisieme degres l'existance d'une racine simple et d'une racine double
+	 * @brief Tests whether a double root and a simple root exist in a third degree equation
 	 */
 	int TestDegree3SimpleDouble(std::complex<double>* a, double epsilon);
 
 	/**
-	 * @brief Retourne l'indice du plus petit élement de la liste list
+	 * @brief Returns the index of the smaller list element
 	 */
 	int IndiceMin ( int n , double *list);
 
 	/**
-	 * @brief Retourne l'indice du plus grand élement de la liste list
+	 * @brief Returns the index of the greater list element
 	 */
 	int IndiceMax ( int n , double *list);
 
 	/**
-	 * @brief Test dans une equation du quatrieme degres l'existance d'une racine quadruple
+	 * @brief Tests whether a quadruple root exists in a fourth degree equation
 	 */
 	int TestDegree4Quad ( std::complex<double> *a , double epsilon );
 	/**
-	 * @brief Test dans une equation du quatrieme degres l'existance de deux racines doubles
+	 * @brief Tests whether two double roots exist in a fourth degree equation
 	 */
 	int TestDegree4DoubleDouble ( std::complex<double> *a , std::complex<double> *k , double epsilon );
 	/**
-	 * @brief Test dans une equation du quatrieme degres l'existance d'une racine sipmple et d'une racine triple
+	 * @brief Tests whether one simple root and one triple root exist in a fourth degree equation
 	 */
 	int TestDegree4SimpleTriple ( std::complex<double> *a , std::complex<double> *k , double epsilon );
 	/**
-	 * @brief Test dans une equation du quatrieme degres l'existance de deux racines simples et d'une racine double
+	 * @brief Tests whether two simple root and one double root exist in a fourth degree equation
 	 */
 	int TestDegreeSimpleSimpleDouble( std::complex<double> *a , double epsilon );
 ;

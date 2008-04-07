@@ -3,7 +3,7 @@
 
 /**
  * @ingroup Date
- * @brief This class represente a coordinate
+ * @brief This class represents a coordinate
  * @author @author Magellium, Pacome Dentraygues
  * @version 1.0
  * @date 04-02-08
@@ -21,7 +21,7 @@
 	 */
 	~Coordinate();
 	/**
-	 * @brief Cosntructor with initializations
+	 * @brief Constructor with initializations
 	 */
 	Coordinate(double x, double y, double z);
 	/**

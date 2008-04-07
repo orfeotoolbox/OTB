@@ -36,12 +36,12 @@ public:
 	BeamPixelCountRecord& operator=(const BeamPixelCountRecord& rhs);
 
 	/**
-	 * @brief This function write the BeamPixelCountRecord in a stream
+	 * @brief This function writes the BeamPixelCountRecord in a stream
 	 */
 	friend std::ostream& operator<<(std::ostream& os, const BeamPixelCountRecord& data);
 
 	/**
-	 * @brief This function read a BeamPixelCountRecord from a stream
+	 * @brief This function reads a BeamPixelCountRecord from a stream
 	 */
 	friend std::istream& operator>>(std::istream& is, BeamPixelCountRecord& data);
 

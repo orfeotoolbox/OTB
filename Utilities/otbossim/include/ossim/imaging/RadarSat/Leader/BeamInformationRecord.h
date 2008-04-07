@@ -36,12 +36,12 @@ public:
 	BeamInformationRecord& operator=(const BeamInformationRecord& rhs);
 
 	/**
-	 * @brief This function write the BeamInformationRecord in a stream
+	 * @brief This function writes the BeamInformationRecord in a stream
 	 */
 	friend std::ostream& operator<<(std::ostream& os, const BeamInformationRecord& data);
 
 	/**
-	 * @brief This function read a BeamInformationRecord from a stream
+	 * @brief This function reads a BeamInformationRecord from a stream
 	 */
 	friend std::istream& operator>>(std::istream& is, BeamInformationRecord& data);
 

@@ -30,7 +30,7 @@ RectangularCoordinate& RectangularCoordinate::operator=(const RectangularCoordin
 	
 void RectangularCoordinate::AsGeodesicCoordinates(double demiGdAxe, double demiPtAxe, GeodesicCoordinate* geod)
 {
-	const double RDR_PI          = 3.14159265358979323846 ;
+	const double PI          = 3.14159265358979323846 ;
 	const int itmax = 40 ;
 	const double epsilon = 1.0e-6 ;
 	  
@@ -49,9 +49,9 @@ void RectangularCoordinate::AsGeodesicCoordinates(double demiGdAxe, double demiP
 	{
 		coordGeod[0] = 0.0 ;
 		if (coordCart[2] >= 0.0)
-		coordGeod[1] = RDR_PI / 2.0 ;
+		coordGeod[1] = PI / 2.0 ;
 		else
-		coordGeod[1] = - RDR_PI / 2.0 ;
+		coordGeod[1] = - PI / 2.0 ;
 		coordGeod[2] = fabs (coordCart[2]) - demiPtAxe ;
 	}
 	else
@@ -80,7 +80,7 @@ void RectangularCoordinate::AsGeodesicCoordinates(double demiGdAxe, double demiP
 	    
 		p = cos(coordGeod[1]) ;
 	    
-		if (fabs(coordGeod[1]) <= (RDR_PI * 0.5))
+		if (fabs(coordGeod[1]) <= (PI * 0.5))
 			coordGeod[2] = (u - demiGdAxe * cos(e)) / cos(coordGeod[1]) ;
 		else
 			coordGeod[2] = (coordCart[2] - demiPtAxe * sin(e)) / sin(coordGeod[1]) ;

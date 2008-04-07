@@ -5,7 +5,7 @@
 /**
  * @brief Abstract interpolator
  * @see Interpolate
-* @author Magellium, Pacome Dentraygues
+ * @author Magellium, Pacome Dentraygues
  * @version 1.0
  * @date 14-01-08
  */
@@ -19,7 +19,7 @@ public:
 	
 	/**
 	 * @brief Constructor with initialisations
-	 * @param nbrPoints Number of points used to do the interpolation
+	 * @param nbrPoints Number of points used to perform the interpolation
 	 * @param x Values of the points abscissa
 	 * @param y Values of the points 
 	 * @param dy Values of the differential coefficients
@@ -27,7 +27,7 @@ public:
 	HermiteInterpolator(int nbrPoints, double* x, double* y, double* dy);
 	
 	/**
-	 * @brief Desctructor
+	 * @brief Destructor
 	 */
 	~HermiteInterpolator();
 	
@@ -41,11 +41,11 @@ public:
 	 */
 	HermiteInterpolator& operator =(const HermiteInterpolator& rhs);
 	/**
-	 * @brief This function does the interpolation for the abscissa x
-	 * @param x Abscisse of the interpolation
+	 * @brief This function performs the interpolation for the abscissa x
+	 * @param x Abscissa of the interpolation
 	 * @param y [out] value of the point at the abscissa x
 	 * @param dy [out] value of the differential coefficient at abscissa x
-	 * @return Different of 0 if an error occur
+	 * @return Different of 0 if an error occurs
 	 */
 	int Interpolate(const double x, double& y, double& dy);
 protected:

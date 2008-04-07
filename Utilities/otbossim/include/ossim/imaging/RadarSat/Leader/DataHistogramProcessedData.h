@@ -12,7 +12,9 @@
  * @author Magellium, Pacome Dentraygues
  * @version 1.0
  * @date 23-11-07
- * @warning There is an error in the documentation for the spare at the end of the record. They say 3 bytes (A3) but thez also say that the spare is on the bytes 16917, 16918, 16919 and 16920. In the data files I have, I need to use a spare of 4 bytes.
+ * @warning There is an error in the documentation for the spare at the end of the record. 
+ *			They say 3 bytes (A3) but they also say that the spare is on the bytes 16917, 16918, 16919 and 16920. 
+ *			In the data files I have, I need to use a spare of 4 bytes.
  */
 class DataHistogramProcessedData : public RadarSatRecord
 {
@@ -37,12 +39,12 @@ public:
 	 */
 	DataHistogramProcessedData& operator=(const DataHistogramProcessedData& rhs);
 	/**
-	 * @brief This function write the DataHistogramProcessedData in a stream
+	 * @brief This function writes the DataHistogramProcessedData in a stream
 	 */
 	friend std::ostream& operator<<(std::ostream& os, const DataHistogramProcessedData& data);
 
 	/**
-	 * @brief This function read a DataHistogramProcessedData from a stream
+	 * @brief This function reads a DataHistogramProcessedData from a stream
 	 */
 	friend std::istream& operator>>(std::istream& is, DataHistogramProcessedData& data);
 
@@ -63,7 +65,7 @@ public:
 	};
 
 	/**
-	 * @brief Read the class data from a stream
+	 * @brief Reads the class data from a stream
 	 */
 	void Read(std::istream& is)
 	{
@@ -71,7 +73,7 @@ public:
 	};
 
 	/**
-	 * @brief Write the class to a stream
+	 * @brief Writes the class to a stream
 	 */
 	void Write(std::ostream& os)
 	{

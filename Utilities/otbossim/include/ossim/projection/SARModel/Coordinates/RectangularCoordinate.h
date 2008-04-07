@@ -6,7 +6,7 @@
 class GeodesicCoordinate;
 /**
  * @ingroup Date
- * @brief This class represente a coordinate in a rectagular reference
+ * @brief This class represents a coordinate in a rectangular reference
  * @author @author Magellium, Pacome Dentraygues
  * @version 1.0
  * @date 04-02-08

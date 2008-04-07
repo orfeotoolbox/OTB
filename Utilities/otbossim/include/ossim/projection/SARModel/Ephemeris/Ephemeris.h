@@ -5,7 +5,7 @@
 
 /**
  * @ingroup Ephemeris
- * @brief This class represent an ephemeris
+ * @brief This class represents an ephemeris
  * @author Magellium, Pacome Dentraygues
  * @version 1.0
  * @date 14-01-08
@@ -37,7 +37,7 @@ public:
 	Ephemeris& operator=(const Ephemeris& rhs);
 	
 	/**
-	 * @brief This function create a copy of the current class
+	 * @brief This function creatse a copy of the current class
 	 */
 	virtual Ephemeris* Clone()
 	{

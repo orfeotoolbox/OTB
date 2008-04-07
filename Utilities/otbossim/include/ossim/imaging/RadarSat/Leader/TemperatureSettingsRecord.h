@@ -35,12 +35,12 @@ public:
 	TemperatureSettingsRecord& operator=(const TemperatureSettingsRecord& rhs);
 
 	/**
-	 * @brief This function write the TemperatureSettingsRecord in a stream
+	 * @brief This function writes the TemperatureSettingsRecord in a stream
 	 */
 	friend std::ostream& operator<<(std::ostream& os, const TemperatureSettingsRecord& data);
 
 	/**
-	 * @brief This function read a TemperatureSettingsRecord from a stream
+	 * @brief This function reads a TemperatureSettingsRecord from a stream
 	 */
 	friend std::istream& operator>>(std::istream& is, TemperatureSettingsRecord& data);
 

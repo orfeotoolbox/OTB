@@ -40,12 +40,12 @@ public:
 	 */
 	ProcessingParameters& operator=(const ProcessingParameters& rhs);
 	/**
-	 * @brief This function write the ProcessingParameters in a stream
+	 * @brief This function writes the ProcessingParameters in a stream
 	 */
 	friend std::ostream& operator<<(std::ostream& os, const ProcessingParameters& data);
 
 	/**
-	 * @brief This function read a ProcessingParameters from a stream
+	 * @brief This function reads a ProcessingParameters from a stream
 	 */
 	friend std::istream& operator>>(std::istream& is, ProcessingParameters& data);
 
@@ -66,7 +66,7 @@ public:
 	};
 
 	/**
-	 * @brief Read the class data from a stream
+	 * @brief Reads the class data from a stream
 	 */
 	void Read(std::istream& is)
 	{
@@ -74,7 +74,7 @@ public:
 	};
 
 	/**
-	 * @brief Write the class to a stream
+	 * @brief Writes the class to a stream
 	 */
 	void Write(std::ostream& os)
 	{

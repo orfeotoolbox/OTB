@@ -18,7 +18,7 @@ MJDDateTime::MJDDateTime(const MJDDateTime& rhs):
 {
 }
 	
-MJDDateTime::MJDDateTime(long day, long second, long microsecond):
+MJDDateTime::MJDDateTime(long day, unsigned long second, unsigned long microsecond):
 	_day(day),
 	_second(second),
 	_microsecond(microsecond)

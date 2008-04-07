@@ -34,6 +34,8 @@
 
 #include <ossim/imaging/RadarSat/Data/DataFactory.h>
 #include <ossim/imaging/RadarSat/Data/ImageOptionsFileDescriptor.h>
+#include <ossim/imaging/RadarSat/Data/ProcessedDataRecord.h>
+
 #include <ossim/imaging/RadarSat/Leader/DataHistogramSignalData.h>
 #include <ossim/imaging/RadarSat/Leader/DataQuality.h>
 #include <ossim/imaging/RadarSat/Leader/DataSetSummary.h>
@@ -84,7 +86,7 @@ ossimString ossimRadarSatTileSource::getShortName()const
    
 bool ossimRadarSatTileSource::saveState(ossimKeywordlist& kwl, const char* prefix)const
 {
-	return false;
+	return false; 
 }
    
 bool ossimRadarSatTileSource::loadState(const ossimKeywordlist& kwl,  const char* prefix)
@@ -106,7 +108,7 @@ bool ossimRadarSatTileSource::open()
 	ossimFilename tempFilename = theImageFile;
 
 	/*
-	 * Creation de la classe permettant le stockage des metadonnées du Data file
+	 * Creation of the class allowing to store the metadata from the Data file
 	 */
 	if (_data != NULL)
 	{
@@ -116,7 +118,7 @@ bool ossimRadarSatTileSource::open()
 	_data = new Data();
 
 	/*
-	 * Creation de la classe peremttant le stockage des métadonnées du Leader file
+	 * Creation of the class allowing to store the metadata from the Leader file
 	 */
 	if(_leader != NULL)
 	{
@@ -147,14 +149,16 @@ bool ossimRadarSatTileSource::open()
 		{
 			record->Read(dataFile);
 			/*
-			 * On test si on a bien un fichier DAT de RadarSat
+			 * Tests if the input File is a Radarsat DAT file
 			 */
 			if ( (((ImageOptionsFileDescriptor*)record)->get_file_name()).substr(0,10) == "RSAT-1-SAR")
 			{
 				/*
-				 * Nous somme bien dans un ficher Data d'une arborescence RadarSat, on lit le reste du fichier Data
+				 * Reading of the remaining of the data file
 				 */
-				
+				dataFile.close();
+				dataFile.open(tempFilename, ios::in|ios::binary);
+
 				dataFile>>*_data;
 				_data->InsertRecord(header.get_rec_seq(), record);
 				dataFile.close();
@@ -165,12 +169,30 @@ bool ossimRadarSatTileSource::open()
 					<< "End reading DAT file" << std::endl;
 				}
 				/*
-				 * On construit le chemin du Leader file
+				 * Leader file path construction
+				 * Warning : the filename case has to be homogenous
 				 */
-				ossimFilename leaderFilePath = tempFilename.setFile("LEA_01");
-                                if (!leaderFilePath.exists())
-                                  leaderFilePath = tempFilename.setFile("lea_01");
-//				ossimFilename leaderFilePath = tempFilename.setFile("LEA_01");
+				std::string leader_file = theImageFile;
+				string::size_type loc = leader_file.find( "DAT_01", 0 );
+				if( loc != string::npos ) leader_file.replace(loc, 6, "LEA_01" );
+				else {
+					ossimNotify(ossimNotifyLevel_DEBUG)
+						<< "File Name not coherent (searching for *DAT_01*)  : " << theImageFile << std::endl;
+				}
+				ossimFilename leaderFilePath(leader_file);
+
+				if (!leaderFilePath.exists()){
+					if( loc != string::npos ) leader_file.replace(loc, 6, "lea_01" );
+					else {
+						ossimNotify(ossimNotifyLevel_DEBUG)
+						<< "File Name not coherent (searching for *lea_01*)  : " << theImageFile << std::endl;
+					}
+				}
+
+				//ossimFilename leaderFilePath = tempFilename.setFile("LEA_01");
+ 			//	if (!leaderFilePath.exists())
+ 			//	  leaderFilePath = tempFilename.setFile("lea_01");
+
 				if (leaderFilePath.exists())
 				{
 					if(traceDebug())
@@ -179,7 +201,7 @@ bool ossimRadarSatTileSource::open()
 						<< "Begin reading Leader file" << std::endl;
 					}
 					/*
-					 * Lecture des données du leader file
+					 * Leader file data reading
 					 */
 					ifstream leaderFile (leaderFilePath, ios::in|ios::binary);
 					leaderFile>>*_leader;
@@ -294,6 +316,8 @@ bool ossimRadarSatTileSource::getImageGeometry(ossimKeywordlist& kwl,const char*
 		kwl.add(prefix, "time_dir_lin",datasetSummary->get_time_dir_lin().c_str(),true);
 
 		kwl.add(prefix, "terrain_height",datasetSummary->get_terrain_h(),true);
+
+		kwl.add(prefix, "line_spacing",datasetSummary->get_line_spacing(),true);
 	}
 	else
 	{
@@ -328,6 +352,8 @@ bool ossimRadarSatTileSource::getImageGeometry(ossimKeywordlist& kwl,const char*
 		}
 
 		kwl.add(prefix, "pixel_spacing",processingParameters->get_pixel_spacing(),true);
+		
+		kwl.add(prefix, "lookDirection",(processingParameters->get_sens_orient()).c_str(),true);
 	}
 	else
 	{
@@ -371,7 +397,52 @@ bool ossimRadarSatTileSource::getImageGeometry(ossimKeywordlist& kwl,const char*
 		return false;
 	}
 
-	int t;
-	t = 10;
+	ImageOptionsFileDescriptor * imageOptionsFileDescriptor = _data->get_ImageOptionsFileDescriptor();
+	if(imageOptionsFileDescriptor != NULL)
+	{
+		kwl.add(prefix, "nbLin",imageOptionsFileDescriptor->get_nlin(),true);
+		kwl.add(prefix, "nbCol",imageOptionsFileDescriptor->get_ngrp(),true);
+	}
+	else
+	{
+		return false;
+	}
+
+	ProcessedDataRecord * firstProcessedDataRecord = _data->get_FirstProcessedDataRecord();
+	if(firstProcessedDataRecord != NULL)
+	{
+		sprintf(name,"cornersLon%i",0);
+		kwl.add(prefix, name,((float) (firstProcessedDataRecord->get_lon_first()))/1000000.0,true);
+		sprintf(name,"cornersLat%i",0);
+		kwl.add(prefix, name,((float) (firstProcessedDataRecord->get_lat_first()))/1000000.0,true);
+		sprintf(name,"cornersLon%i",1);
+		kwl.add(prefix, name,((float) (firstProcessedDataRecord->get_lon_last()))/1000000.0,true);
+		sprintf(name,"cornersLat%i",1);
+		kwl.add(prefix, name,((float) (firstProcessedDataRecord->get_lat_last()))/1000000.0,true);
+		kwl.add(prefix, "acq_msec_first",firstProcessedDataRecord->get_acq_msec(),true);
+	}
+	else
+	{
+		return false;
+	}
+
+	ProcessedDataRecord * lastProcessedDataRecord = _data->get_LastProcessedDataRecord();
+	if(firstProcessedDataRecord != NULL)
+	{
+		sprintf(name,"cornersLon%i",2);
+		kwl.add(prefix, name,((float) (lastProcessedDataRecord->get_lon_first()))/1000000.0,true);
+		sprintf(name,"cornersLat%i",2);
+		kwl.add(prefix, name,((float) (lastProcessedDataRecord->get_lat_first()))/1000000.0,true);
+		sprintf(name,"cornersLon%i",3);
+		kwl.add(prefix, name,(((float) lastProcessedDataRecord->get_lon_last()))/1000000.0,true);
+		sprintf(name,"cornersLat%i",3);
+		kwl.add(prefix, name,((float) (lastProcessedDataRecord->get_lat_last()))/1000000.0,true);
+		kwl.add(prefix, "acq_msec_last",lastProcessedDataRecord->get_acq_msec(),true);
+	}
+	else
+	{
+		return false;
+	}
+
 	return true;
 }

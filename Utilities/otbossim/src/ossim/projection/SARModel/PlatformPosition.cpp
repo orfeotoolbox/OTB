@@ -74,11 +74,11 @@ Ephemeris* PlatformPosition::Interpolate(JSDDateTime date)
 	else
 	{
 		/*
-		 * On clone le premier element de la liste pour etre sure que l'ephemeride de sortie a le même système de coordonnées que les ephemerides d'entré
+		 * The first element of the list is cloned to ensure that the output ephemeris is expressed in the same coordinate system as input ones
 		 */
 		ephem = _data[0]->Clone();
 
-		/* CAS NORMAL */
+		/* NORMAL CASE */
 		/*------------*/
 		double * x = new double[_nbrData];
 		double * y = new double[_nbrData];
@@ -97,9 +97,9 @@ Ephemeris* PlatformPosition::Interpolate(JSDDateTime date)
 			d = x[i] - x[i-1] ;
 
 			/*
-			 * Temps non croissant
+			 * Non increasing time
 			 */
-			if (d <= 0.0)/* Temps non croissants */
+			if (d <= 0.0)/* Non increasing time */
 			{
 				delete ephem;
 				ephem = NULL;
@@ -122,12 +122,11 @@ Ephemeris* PlatformPosition::Interpolate(JSDDateTime date)
 			+ date.get_second()   - _data[0]->get_date().get_second()
 			+ date.get_decimal()     - _data[0]->get_date().get_decimal();
             
-			/* Si nPts impair ou si la date cherchee n'est situee */
-			/* au milieu de la liste d'ephemerides  ->  Lagrange  */
+			/* If nPts odd or if the searched date is not situated in the middle of the ephemeris list -> Lagrange */
 			d = (dt - x[_nbrData/2-1]) / (x[_nbrData/2] - x[_nbrData/2-1]) ;
 
     
-			/* Calcul par Everett  */
+			/* Computation by Everett  */
 			/*---------------------*/
 			double pos[3];
 			double vit[3];

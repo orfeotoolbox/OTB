@@ -36,12 +36,12 @@ public:
 	DopplerCentroidEstimateRecord& operator=(const DopplerCentroidEstimateRecord& rhs);
 
 	/**
-	 * @brief This function write the DopplerCentroidEstimateRecord in a stream
+	 * @brief This function writes the DopplerCentroidEstimateRecord in a stream
 	 */
 	friend std::ostream& operator<<(std::ostream& os, const DopplerCentroidEstimateRecord& data);
 
 	/**
-	 * @brief This function read a DopplerCentroidEstimateRecord from a stream
+	 * @brief This function reads a DopplerCentroidEstimateRecord from a stream
 	 */
 	friend std::istream& operator>>(std::istream& is, DopplerCentroidEstimateRecord& data);
 

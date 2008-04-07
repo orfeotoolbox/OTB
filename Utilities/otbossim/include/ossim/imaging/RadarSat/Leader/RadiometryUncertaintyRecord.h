@@ -33,12 +33,12 @@ public:
 	 */
 	RadiometryUncertaintyRecord& operator=(const RadiometryUncertaintyRecord& rhs);
 	/**
-	 * @brief This function write the RadiometryUncertaintyRecord in a stream
+	 * @brief This function writes the RadiometryUncertaintyRecord in a stream
 	 */
 	friend std::ostream& operator<<(std::ostream& os, const RadiometryUncertaintyRecord& data);
 
 	/**
-	 * @brief This function read a RadiometryUncertaintyRecord from a stream
+	 * @brief This function reads a RadiometryUncertaintyRecord from a stream
 	 */
 	friend std::istream& operator>>(std::istream& is, RadiometryUncertaintyRecord& data);
 

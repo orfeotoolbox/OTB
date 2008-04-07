@@ -34,12 +34,12 @@ public:
 	 */
 	RadarSatRecordHeader& operator=(const RadarSatRecordHeader& rhs);
 	/**
-	 * @brief This function write the RecordHeader in a stream
+	 * @brief This function writes the RecordHeader in a stream
 	 */
 	friend std::ostream& operator<<(std::ostream& os, const RadarSatRecordHeader& data);
 
 	/**
-	 * @brief This function read a RecordHeader from a stream
+	 * @brief This function reads a RecordHeader from a stream
 	 */
 	friend std::istream& operator>>(std::istream& is, RadarSatRecordHeader& data);
 
@@ -93,7 +93,7 @@ public:
 protected:
 
 	/**
-	 * @brief This function switch the LSB value and the MSB value of the parameter
+	 * @brief This function switches the LSB value and the MSB value of the parameter
 	 */
 	void SwitchEndian(int& value);
 

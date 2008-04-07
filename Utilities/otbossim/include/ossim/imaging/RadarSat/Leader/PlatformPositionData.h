@@ -36,12 +36,12 @@ public:
 	 */
 	PlatformPositionData& operator=(const PlatformPositionData& rhs);
 	/**
-	 * @brief This function write the PlatformPositionData in a stream
+	 * @brief This function writes the PlatformPositionData in a stream
 	 */
 	friend std::ostream& operator<<(std::ostream& os, const PlatformPositionData& data);
 
 	/**
-	 * @brief This function read a PlatformPositionData from a stream
+	 * @brief This function reads a PlatformPositionData from a stream
 	 */
 	friend std::istream& operator>>(std::istream& is, PlatformPositionData& data);
 
@@ -62,7 +62,7 @@ public:
 	};
 
 	/**
-	 * @brief Read the class data from a stream
+	 * @brief Reads the class data from a stream
 	 */
 	void Read(std::istream& is)
 	{
@@ -70,7 +70,7 @@ public:
 	};
 
 	/**
-	 * @brief Write the class to a stream
+	 * @brief Writes the class to a stream
 	 */
 	void Write(std::ostream& os)
 	{

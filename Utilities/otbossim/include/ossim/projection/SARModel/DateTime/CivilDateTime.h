@@ -6,7 +6,7 @@ class JSDDateTime;
 class GMSTDateTime;
 
 /**
- * @brief This class représente a date and time in the civil format
+ * @brief This class represents a date and time in the civil format
  * @author @author Magellium, Pacome Dentraygues
  * @version 1.0
  * @date 10-01-08
@@ -48,23 +48,23 @@ public:
 	CivilDateTime& operator=(const CivilDateTime& rhs);
 	
 	/**
-	 * @brief This function convert the current CivilDateTime in Julian Date
-	 * @return 0 if no error or an int gretter than 0 indiquating the error
-	 * @param julianDate [out] The classe that receive the result of the convertion of the current CivilDateTime in JulianDate
+	 * @brief This function converts the current CivilDateTime into Julian Date
+	 * @return 0 if no error or an int greater than 0 indicating the error
+	 * @param julianDate [out] The classe that receives the result of the conversion of the current CivilDateTime into JulianDate
 	 */
 	int AsJulianDate(JulianDate* julianDate);
 	
 	/**
-	 * @brief This function convert the current CivilDateTime in JSDDateTime
-	 * @return 0 if no error or an int gretter than 0 indiquating the error
-	 * @param JSDdate [out] The classe that receive the result of the convertion of the current CivilDateTime in JSDDateTime
+	 * @brief This function converts the current CivilDateTime into JSDDateTime
+	 * @return 0 if no error or an int greater than 0 indicating the error
+	 * @param JSDdate [out] The classe that receives the result of the conversion of the current CivilDateTime into JSDDateTime
 	 */
 	int AsJSDDateTime(JSDDateTime* JSDdate);
 
 	/**
-	 * @brief This function convert the current CivilDateTime in GMSTDateTime
-	 * @return 0 if no error or an int gretter than 0 indiquating the error
-	 * @param GMSTdate [out] The classe that receive the result of the convertion of the current CivilDateTime in GMSTDateTime
+	 * @brief This function converts the current CivilDateTime into GMSTDateTime
+	 * @return 0 if no error or an int greater than 0 indicating the error
+	 * @param GMSTdate [out] The classe that receives the result of the conversion of the current CivilDateTime into GMSTDateTime
 	 */
 	int AsGMSTDateTime(GMSTDateTime* GMSTdate);
 	
