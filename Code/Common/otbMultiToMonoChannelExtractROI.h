@@ -101,7 +101,7 @@ protected:
    * \sa ProcessObject::GenerateOutputInformaton()  */
   virtual void GenerateOutputInformation();
 
-  /** ExtractImageFilter peut etre implementee comme un filtre multithreaded.
+  /** ExtractImageFilter can be implemented as a multithreaded filter.
    * \sa ImageToImageFilter::ThreadedGenerateData(),
    *     ImageToImageFilter::GenerateData()  */
   void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread,
