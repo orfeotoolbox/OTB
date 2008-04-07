@@ -76,15 +76,23 @@ namespace otb
       }
     
     std::string lFileName(filename);
-    // Control file extension
-    if(  (System::SetToLower(System::GetExtension(lFileName)) != "j2k" ) && 
-         (System::SetToLower(System::GetExtension(lFileName)) != "jp2" ))
+ 
+    // Creating a codec
+    opj_codec_t * codec = NULL;
+
+    if(System::SetToLower(System::GetExtension(lFileName)) == "j2k")
       {
-        return false;
+	codec = = opj_create_decompress(CODEC_J2K);
+      }
+    else if(System::SetToLower(System::GetExtension(lFileName)) == "jp2")
+      {
+	codec = = opj_create_decompress(CODEC_JP2);
+      }
+    else
+      {
+	return false;
       }
 
-    // Creating a codec
-    opj_codec_t * codec = opj_create_decompress(CODEC_JP2);
     if(!codec)
       {
 	std::cout<<"Impossible to create codec."<<std::endl;
@@ -178,7 +186,15 @@ namespace otb
     otbMsgDevMacro(<<"Component type: "<<this->GetComponentTypeAsString(this->GetComponentType()));
 
     // Creating openjpeg objects
-    m_Codec = opj_create_decompress(CODEC_JP2);
+    if(System::SetToLower(System::GetExtension(m_FileName)) == "j2k")
+      {
+	m_Codec = = opj_create_decompress(CODEC_J2K);
+      }
+    else if(System::SetToLower(System::GetExtension(m_FileName)) == "jp2")
+      {
+	m_Codec = = opj_create_decompress(CODEC_JP2);
+      }
+
     opj_set_info_handler(m_Codec, info_callback,00);
     opj_set_warning_handler(m_Codec, warning_callback,00);
     opj_set_error_handler(m_Codec, error_callback,00);
@@ -267,6 +283,10 @@ namespace otb
 	      {
 		itkExceptionMacro(<<"Error while reading tile data.");
 	      }
+
+	    // Decrementing the lower right corner since it is a "past last pixel" value.
+	    --tile_x1;
+	    --tile_y1;
 	    
 	    std::streamsize tile_component_size = data_size/nb_comps;
 	    std::streamoff  buffer_skip         = std::max(0,tile_y0-buffer_y0)*buffer_size_x*nb_comps*m_NbOctetPixel;
@@ -290,26 +310,54 @@ namespace otb
 	    
 	    
 	    std::streamoff buffer_pos,tile_pos;
-	    
-	    for(unsigned int comp=0;comp<nb_comps;++comp)
+
+	    for(unsigned int comp = 0;com<nb_comps;++comp)
 	      {
-		buffer_pos = buffer_skip + comp * m_NbOctetPixel;
-		tile_pos   = tile_skip +comp * tile_component_size;
-		for(int lines = 0;lines<nb_lines;++lines)
-	    	  {
-	    	    buffer_pos += buffer_offset_begin;
-	    	    tile_pos   += tile_offset_begin;
-		    
-	    	    for(int cols = 0; cols < line_size;cols++)
-	    	      {
-			memcpy((void*)(&(charstarbuffer[buffer_pos])),(const void*)(&(tile_data[tile_pos])),(size_t)(m_NbOctetPixel));
-			buffer_pos+=buffer_step;
-			tile_pos +=m_NbOctetPixel;
-	    	      }
-		    buffer_pos += buffer_offset_end;
-		    tile_pos   += tile_offset_end;
-	    	  }
+		for(int line = 0; line<nb_lines;++line)
+		  {
+		    buffer_pos = buffer_skip + comp*m_NbOctetPixel 
+		      + (buffer_offset_begin + line_size*nb_comps + buffer_offset_end)*line 
+		      + buffer_offset_begin;
+		    tile_pos = tile_skip + comp*tile_component_size 
+		      + (tile_offset_begin+line_size+tile_offset_end)*line
+		      + tile_offset_begin;
+		    for(int cols = 0;cols<line_size;cols++)
+		      {
+			for(int octet = 0;<octet<m_NbOctetPixel;++octet)
+			  {
+			    buffer[buffer_pos + cols*buffer_step + octet]=tile_data[tile_pos + cols*m_NbOctetPixel + octet];
+			  }
+
+		      }
+		  }
+
+
+
+
+
 	      }
+
+	    
+// 	    for(unsigned int comp=0;comp<nb_comps;++comp)
+// 	      {
+// 		buffer_pos = buffer_skip + comp * m_NbOctetPixel;
+// 		tile_pos   = tile_skip +comp * tile_component_size;
+
+// 		for(int lines = 0;lines<nb_lines;++lines)
+// 	    	  {
+// 	    	    buffer_pos += buffer_offset_begin;
+// 	    	    tile_pos   += tile_offset_begin;
+		    
+// 	    	    for(int cols = 0; cols < line_size;cols++)
+// 	    	      {
+// 			memcpy((void*)(&(charstarbuffer[buffer_pos])),(const void*)(&(tile_data[tile_pos])),(size_t)(m_NbOctetPixel));
+// 			buffer_pos+=buffer_step;
+// 			tile_pos +=m_NbOctetPixel;
+// 	    	      }
+// 		    buffer_pos += buffer_offset_end;
+// 		    tile_pos   += tile_offset_end;
+// 	    	  }
+// 	      }
 	    
 	    delete[] tile_data;
 	  }
@@ -332,7 +380,15 @@ namespace otb
       }
   
     // Creating openjpeg objects
-    m_Codec = opj_create_decompress(CODEC_JP2);
+    if(System::SetToLower(System::GetExtension(m_FileName)) == "j2k")
+      {
+	m_Codec = = opj_create_decompress(CODEC_J2K);
+      }
+    else if(System::SetToLower(System::GetExtension(m_FileName)) == "jp2")
+      {
+	m_Codec = = opj_create_decompress(CODEC_JP2);
+      }
+
     opj_set_info_handler(m_Codec, info_callback,00);
     opj_set_warning_handler(m_Codec, warning_callback,00);
     opj_set_error_handler(m_Codec, error_callback,00);
