@@ -311,7 +311,7 @@ namespace otb
 	    
 	    std::streamoff buffer_pos,tile_pos;
 
-	    for(unsigned int comp = 0;com<nb_comps;++comp)
+	    for(unsigned int comp = 0;comp<nb_comps;++comp)
 	      {
 		for(int line = 0; line<nb_lines;++line)
 		  {
@@ -323,7 +323,7 @@ namespace otb
 		      + tile_offset_begin;
 		    for(int cols = 0;cols<line_size;cols++)
 		      {
-			for(int octet = 0;<octet<m_NbOctetPixel;++octet)
+			for(int octet = 0;octet<m_NbOctetPixel;++octet)
 			  {
 			    buffer[buffer_pos + cols*buffer_step + octet]=tile_data[tile_pos + cols*m_NbOctetPixel + octet];
 			  }
