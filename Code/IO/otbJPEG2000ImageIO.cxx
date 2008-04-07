@@ -323,9 +323,9 @@ namespace otb
 		      + tile_offset_begin;
 		    for(int cols = 0;cols<line_size;cols++)
 		      {
-			for(int octet = 0;octet<m_NbOctetPixel;++octet)
+			for(unsigned int octet = 0;octet<m_NbOctetPixel;++octet)
 			  {
-			    buffer[buffer_pos + cols*buffer_step + octet]=tile_data[tile_pos + cols*m_NbOctetPixel + octet];
+			    charstarbuffer[buffer_pos + cols*buffer_step + octet]= tile_data[tile_pos + cols*m_NbOctetPixel + octet];
 			  }
 
 		      }
