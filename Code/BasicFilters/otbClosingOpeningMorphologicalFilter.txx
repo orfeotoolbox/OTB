@@ -28,8 +28,8 @@ namespace otb {
 /**
  * Constructor
  */
-template <class TInputImage,class TOuputImage, class TKernel>
-ClosingOpeningMorphologicalFilter<TInputImage, TOuputImage, TKernel>
+template <class TInputImage,class TOutputImage, class TKernel>
+ClosingOpeningMorphologicalFilter<TInputImage, TOutputImage, TKernel>
 ::ClosingOpeningMorphologicalFilter()
 {
 m_Kernel.SetRadius(1);
@@ -38,9 +38,9 @@ m_Kernel.CreateStructuringElement();
 /**
  * Main computation method
  */
-template <class TInputImage,class TOuputImage, class TKernel>
+template <class TInputImage,class TOutputImage, class TKernel>
 void
-ClosingOpeningMorphologicalFilter<TInputImage, TOuputImage, TKernel>
+ClosingOpeningMorphologicalFilter<TInputImage, TOutputImage, TKernel>
 ::GenerateData()
 {
   // Filters Typedefs (this class is actually a composite filter) 
@@ -68,9 +68,9 @@ ClosingOpeningMorphologicalFilter<TInputImage, TOuputImage, TKernel>
 /**
  * PrintSelf method
  */
-template <class TInputImage,class TOuputImage, class TKernel>
+template <class TInputImage,class TOutputImage, class TKernel>
 void
-ClosingOpeningMorphologicalFilter<TInputImage, TOuputImage, TKernel>
+ClosingOpeningMorphologicalFilter<TInputImage, TOutputImage, TKernel>
 ::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   Superclass::PrintSelf(os,indent);

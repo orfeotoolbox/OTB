@@ -52,7 +52,7 @@ ImageToPointSetFilter<TInputImage,TOutputPointSet>
   
 
 /**
- *   Make Ouput
+ *   Make Output
  */
 template <class TInputImage, class TOutputPointSet>
 itk::DataObject::Pointer

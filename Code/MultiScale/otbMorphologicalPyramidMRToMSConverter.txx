@@ -29,8 +29,8 @@ namespace otb
     /**
      * Constructor
      */
-    template <class TInputImage,class TOuputImage>
-    MRToMSConverter<TInputImage, TOuputImage>
+    template <class TInputImage,class TOutputImage>
+    MRToMSConverter<TInputImage, TOutputImage>
     ::MRToMSConverter()
     {
       this->SetNumberOfRequiredInputs(2);
@@ -229,9 +229,9 @@ namespace otb
     /**
      * Main computation method
      */
-    template <class TInputImage,class TOuputImage>
+    template <class TInputImage,class TOutputImage>
     void
-    MRToMSConverter<TInputImage, TOuputImage>
+    MRToMSConverter<TInputImage, TOutputImage>
     ::GenerateData()
     {
       // Input images lists pointers
@@ -344,9 +344,9 @@ namespace otb
     /**
      * PrintSelf method
      */
-    template <class TInputImage,class TOuputImage>
+    template <class TInputImage,class TOutputImage>
     void
-    MRToMSConverter<TInputImage, TOuputImage>
+    MRToMSConverter<TInputImage, TOutputImage>
     ::PrintSelf(std::ostream& os, itk::Indent indent) const
     {
       Superclass::PrintSelf(os,indent);

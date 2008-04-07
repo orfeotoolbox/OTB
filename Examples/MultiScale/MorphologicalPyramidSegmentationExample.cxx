@@ -169,7 +169,7 @@ int main(int argc, char * argv[])
 // parameters. As one can see, the \code{SetReferenceImage()} is used to
 // pass the original image in order to obtain sharp region
 // boundaries. Using the \code{SetBrighterDetails()} and
-// \code{SetDarkerDetails()} the ouput of the analysis is passed to the
+// \code{SetDarkerDetails()} the output of the analysis is passed to the
 // filter. Finally, the parameters for the segmentation are set by
 // using the \code{SetSeedsQuantile()},
 // \code{SetConnectedThresholdQuantile()} and

@@ -33,8 +33,8 @@ namespace MorphologicalPyramid
 /**
  * Constructor
  */
-template <class TInputImage,class TOuputImage>
-Resampler<TInputImage, TOuputImage>
+template <class TInputImage,class TOutputImage>
+Resampler<TInputImage, TOutputImage>
 ::Resampler()
 {
   for(int i=0;i<InputImageType::ImageDimension;++i)
@@ -45,9 +45,9 @@ Resampler<TInputImage, TOuputImage>
   /**
    * Configure input requested region to be the largest possible region.
    */
-template <class TInputImage,class TOuputImage>
+template <class TInputImage,class TOutputImage>
 void
-Resampler<TInputImage, TOuputImage>
+Resampler<TInputImage, TOutputImage>
 ::GenerateInputRequestedRegion()
 {
   // Superclass method call
@@ -68,9 +68,9 @@ Resampler<TInputImage, TOuputImage>
 /**
  * Configure output requested region to be the largest possible region
  */
-template <class TInputImage,class TOuputImage>
+template <class TInputImage,class TOutputImage>
 void
-Resampler<TInputImage, TOuputImage>
+Resampler<TInputImage, TOutputImage>
 ::EnlargeOutputRequestedRegion(itk::DataObject *itkNotUsed(output))
 {
   this->GetOutput()->SetRequestedRegion( this->GetOutput()->GetLargestPossibleRegion());
@@ -115,9 +115,9 @@ Resampler<TInputImage,TOutputImage>
 /**
  * Main computation method
  */
-template <class TInputImage,class TOuputImage>
+template <class TInputImage,class TOutputImage>
 void
-Resampler<TInputImage, TOuputImage>
+Resampler<TInputImage, TOutputImage>
 ::GenerateData()
 {
   typename OutputImageType::Pointer result;
@@ -167,9 +167,9 @@ Resampler<TInputImage, TOuputImage>
 /**
  * PrintSelf method
  */
-template <class TInputImage,class TOuputImage>
+template <class TInputImage,class TOutputImage>
 void
-Resampler<TInputImage, TOuputImage>
+Resampler<TInputImage, TOutputImage>
 ::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   Superclass::PrintSelf(os,indent);

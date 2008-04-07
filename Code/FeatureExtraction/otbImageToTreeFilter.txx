@@ -52,7 +52,7 @@ ImageToTreeFilter<TInputImage,TOutputTree>
   
 
 /**
- *   Make Ouput
+ *   Make Output
  */
 template <class TInputImage, class TOutputTree>
 itk::DataObject::Pointer

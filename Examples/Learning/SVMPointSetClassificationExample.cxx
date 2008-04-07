@@ -260,7 +260,7 @@ int main( int argc, char* argv[] )
 //
 // We have now all the elements to create a classifier. The classifier
 // is templated over the sample type (the type of the data to be
-// classified) and the label type (the type of the ouput of the classifier).
+// classified) and the label type (the type of the output of the classifier).
 //
 // Software Guide : EndLatex
     

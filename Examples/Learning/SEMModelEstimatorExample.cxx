@@ -82,7 +82,7 @@ int main ( int argc, char * argv[] )
 
 // Software Guide : BeginLatex
 //
-// Input/Ouput images type are define in a classical way. 
+// Input/Output images type are define in a classical way. 
 // In fact, a \doxygen{itk}{VariableLengthVector} is to be 
 // considered for the templated \code{MeasurementVectorType}, which 
 // will be used in the \code{ListSample} interface.

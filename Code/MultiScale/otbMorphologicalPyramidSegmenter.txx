@@ -40,8 +40,8 @@ namespace MorphologicalPyramid
 /**
  * Constructor
  */
-template <class TInputImage,class TOuputImage>
-Segmenter<TInputImage, TOuputImage>
+template <class TInputImage,class TOutputImage>
+Segmenter<TInputImage, TOutputImage>
 ::Segmenter()
 {
   this->SetNumberOfRequiredInputs(2);
@@ -55,9 +55,9 @@ Segmenter<TInputImage, TOuputImage>
  * Set the details image.
  * \param detailsImage The details image from the morphological pyramid
  */
-template <class TInputImage,class TOuputImage>
+template <class TInputImage,class TOutputImage>
 void
-Segmenter<TInputImage, TOuputImage>
+Segmenter<TInputImage, TOutputImage>
 ::SetDetailsImage(const InputImageType * detailsImage)
 {
 this->SetNthInput(0,const_cast<TInputImage *>(detailsImage));
@@ -66,9 +66,9 @@ this->SetNthInput(0,const_cast<TInputImage *>(detailsImage));
    * Set the details image.
    * \return detailsImage The input details image.
    */
-template <class TInputImage,class TOuputImage>
-typename Segmenter<TInputImage, TOuputImage>::InputImageType * 
-Segmenter<TInputImage, TOuputImage>
+template <class TInputImage,class TOutputImage>
+typename Segmenter<TInputImage, TOutputImage>::InputImageType * 
+Segmenter<TInputImage, TOutputImage>
 ::GetDetailsImage(void)
 {
   return const_cast<InputImageType *>(this->GetInput(0));
@@ -77,9 +77,9 @@ Segmenter<TInputImage, TOuputImage>
    * Set the original image.
    * \param originalImage The original image to segment.
    */
-template <class TInputImage,class TOuputImage>
+template <class TInputImage,class TOutputImage>
 void
-Segmenter<TInputImage, TOuputImage>
+Segmenter<TInputImage, TOutputImage>
 ::SetOriginalImage(const InputImageType * originalImage)
 {
   this->SetNthInput(1,const_cast<TInputImage *>(originalImage));
@@ -88,9 +88,9 @@ Segmenter<TInputImage, TOuputImage>
  * Get the original image.
  * \return originalImage The original image to segment.
  */
-template <class TInputImage,class TOuputImage>
-typename Segmenter<TInputImage, TOuputImage>::InputImageType * 
-Segmenter<TInputImage, TOuputImage>
+template <class TInputImage,class TOutputImage>
+typename Segmenter<TInputImage, TOutputImage>::InputImageType * 
+Segmenter<TInputImage, TOutputImage>
 ::GetOriginalImage(void)
 {
   return const_cast<InputImageType *>(this->GetInput(1));
@@ -98,9 +98,9 @@ Segmenter<TInputImage, TOuputImage>
 /**
  * Configure the input datas.
  */
-template <class TInputImage,class TOuputImage>
+template <class TInputImage,class TOutputImage>
 void
-Segmenter<TInputImage, TOuputImage>
+Segmenter<TInputImage, TOutputImage>
 ::GenerateInputRequestedRegion()
 {
   // call the superclass' implementation of this method
@@ -126,9 +126,9 @@ Segmenter<TInputImage, TOuputImage>
 /**
  * Configure the output data
  */
-template <class TInputImage,class TOuputImage>
+template <class TInputImage,class TOutputImage>
 void
-Segmenter<TInputImage, TOuputImage>
+Segmenter<TInputImage, TOutputImage>
 ::EnlargeOutputRequestedRegion(void)
 {
   this->GetOutput()
@@ -138,9 +138,9 @@ Segmenter<TInputImage, TOuputImage>
 /**
  * Main computation method
  */
-template <class TInputImage,class TOuputImage>
+template <class TInputImage,class TOutputImage>
 void
-Segmenter<TInputImage, TOuputImage>
+Segmenter<TInputImage, TOutputImage>
 ::GenerateData()
 {
   // Input images pointers
@@ -305,9 +305,9 @@ Segmenter<TInputImage, TOuputImage>
 /**
  * PrintSelf method
  */
-template <class TInputImage,class TOuputImage>
+template <class TInputImage,class TOutputImage>
 void
-Segmenter<TInputImage, TOuputImage>
+Segmenter<TInputImage, TOutputImage>
 ::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   Superclass::PrintSelf(os,indent);

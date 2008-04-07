@@ -27,7 +27,7 @@ namespace otb
  *  from an existing image into a non-georeferenced image.
  *
  *  It derives from itk::InPlaceImageFilter since it overwrites 
- *  its ouput if possible. This class has been written as a workaround 
+ *  its output if possible. This class has been written as a workaround 
  *  for the bug http://public.kitware.com/Bug/bug.php?op=show&bugid=4625&pos=0. 
  *  There should be no needs for this filter in a standard pipeline.
  *
