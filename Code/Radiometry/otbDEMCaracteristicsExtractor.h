@@ -8,8 +8,6 @@
 
   Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
   See OTBCopyright.txt for details.
-
-  This code is from a Julien Radoux contribution.
   
   Some parts of this code are derived from ITK. See ITKCopyright.txt
   for details.
