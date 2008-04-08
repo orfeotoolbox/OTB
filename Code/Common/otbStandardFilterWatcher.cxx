@@ -75,7 +75,7 @@ StandardFilterWatcher
   m_TimeProbe.Stop();
   std::cout << std::endl << "Filter took "
 	    << m_TimeProbe.GetMeanTime()
-	    << " seconds.";
+	    << " seconds." << std::endl;
 }
 
 } // end namespace otb
