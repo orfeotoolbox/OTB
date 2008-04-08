@@ -82,14 +82,18 @@ namespace otb
 
     if(System::SetToLower(System::GetExtension(lFileName)) == "j2k")
       {
+	std::cout<<"Jpeg2000ImageIO: Creating J2K codec."<<std::endl;
 	codec = opj_create_decompress(CODEC_J2K);
       }
-    else if(System::SetToLower(System::GetExtension(lFileName)) == "jp2")
+    else if(System::SetToLower(System::GetExtension(lFileName)) == "jp2"
+	    || System::SetToLower(System::GetExtension(lFileName)) == "jpx")
       {
+	std::cout<<"Jpeg2000ImageIO: Creating JP2 codec."<<std::endl;
 	codec = opj_create_decompress(CODEC_JP2);
       }
     else
       {
+	std::cout<<"Jpeg2000ImageIO: Extension not recognized."<<std::endl;
 	return false;
       }
 
@@ -190,7 +194,8 @@ namespace otb
       {
 	m_Codec = opj_create_decompress(CODEC_J2K);
       }
-    else if(System::SetToLower(System::GetExtension(m_FileName)) == "jp2")
+    else if(System::SetToLower(System::GetExtension(m_FileName)) == "jp2"
+	    || System::SetToLower(System::GetExtension(m_FileName)) == "jpx")
       {
 	m_Codec = opj_create_decompress(CODEC_JP2);
       }
@@ -384,7 +389,8 @@ namespace otb
       {
 	m_Codec = opj_create_decompress(CODEC_J2K);
       }
-    else if(System::SetToLower(System::GetExtension(m_FileName)) == "jp2")
+    else if(System::SetToLower(System::GetExtension(m_FileName)) == "jp2"
+	    || System::SetToLower(System::GetExtension(m_FileName)) == "jpx")
       {
 	m_Codec = opj_create_decompress(CODEC_JP2);
       }
@@ -528,22 +534,20 @@ namespace otb
   bool JPEG2000ImageIO::CanWriteFile( const char* filename )
   {
     return false;
-#if 0
-    std::string lFileName(filename);
-    if( System::IsADirName(lFileName) == true )
-      {
-	return false;
-      }
-    const std::string Extension = System::GetExtension(filename);
-    if( (Extension == "j2k") || (Extension == "J2K") || (Extension == "jp2") || (Extension == "JP2"))
-      {
-	return true;
-      }
-    else
-      {
-	return false;
-      }
-#endif
+//     std::string lFileName(filename);
+//     if( System::IsADirName(lFileName) == true )
+//       {
+// 	return false;
+//       }
+//     const std::string Extension = System::GetExtension(filename);
+//     if( (Extension == "j2k") || (Extension == "J2K") || (Extension == "jp2") || (Extension == "JP2"))
+//       {
+// 	return true;
+//       }
+//     else
+//       {
+// 	return false;
+//       }
   }
 
   void JPEG2000ImageIO::Write(const void* buffer)
