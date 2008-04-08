@@ -225,7 +225,7 @@ bool ossimRadarSat2TileSource::getImageGeometry(ossimKeywordlist& kwl,const char
 		kwl.add(prefix, name,(_annotation->get_velZ()[i]),true);
 	}
 
-	kwl.add(prefix, "nTiePoints",_annotation->get_cornersLon().size(),true);
+	kwl.add(prefix, "nTiePoints",(ossim_float64) _annotation->get_cornersLon().size(),true);
 
 	for(int i=0;i<_annotation->get_cornersLon().size();i++)
 	{
