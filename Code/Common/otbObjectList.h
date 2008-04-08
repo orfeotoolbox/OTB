@@ -157,17 +157,17 @@ public:
     /**
        * Add
        */
-    Iterator& operator+(int i){
-      m_Iter=m_Iter+i;
-      return *this;
+    Iterator operator+(int i){
+      Iterator lIter(m_Iter+i);
+      return lIter;
     };
 
     /**
        * Remove
        */
-    Iterator& operator-(int i){
-      m_Iter=m_Iter-i;
-      return *this;
+    Iterator operator-(int i){
+      Iterator lIter(m_Iter-i);
+      return lIter;
     };
     /**
        * Difference comparison operator.
