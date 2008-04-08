@@ -200,7 +200,7 @@ GenericInterpolateImageFunction<TInputImage, TFunction, TBoundaryCondition, TCoo
       m_TablesHaveBeenGenerated = true;
     }
 
-  unsigned int dim;
+  //unsigned int dim;
   IndexType baseIndex;
   double distance[ImageDimension];
    
