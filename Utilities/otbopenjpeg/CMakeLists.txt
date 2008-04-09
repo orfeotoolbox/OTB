@@ -73,9 +73,7 @@ CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/opj_configure.h.in
 #-----------------------------------------------------------------------------
 # Always build the library
 INCLUDE_DIRECTORIES(BEFORE ${CMAKE_CURRENT_BINARY_DIR})
-SUBDIRS(
-  libopenjpeg
-  )
+SUBDIRS(libopenjpeg)
 
 #-----------------------------------------------------------------------------
 # For the documentation
