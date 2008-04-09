@@ -81,6 +81,10 @@ namespace otb
       /** Set/Get the expand factors */
       itkSetMacro(ExpandFactors, unsigned int);
       itkGetMacro(ExpandFactors, unsigned int);
+
+      /** Set/Get the shrink factors */
+      itkSetMacro(ShrinkFactors, unsigned int);
+      itkGetMacro(ShrinkFactors, unsigned int);
       
       /** Set/Get the sigma 0 */
       itkSetMacro(Sigma0, double);
@@ -89,6 +93,9 @@ namespace otb
       /** Internal typedefs */
       typedef itk::ExpandImageFilter<TInputImage, TInputImage> ExpandFilterType;
       typedef typename ExpandFilterType::Pointer ExpandFilterPointerType;
+
+      typedef itk::ShrinkImageFilter<InputImageType, InputImageType> ShrinkFilterType;
+      typedef typename ShrinkFilterType::Pointer ShrinkFilterPointerType;
       
       typedef itk::RecursiveGaussianImageFilter<InputImageType,InputImageType> GaussianFilterType;
       typedef typename GaussianFilterType::Pointer GaussianFilterPointerType;
@@ -98,9 +105,6 @@ namespace otb
       
       typedef itk::SubtractImageFilter<InputImageType,InputImageType,InputImageType> SubtractFilterType;
       typedef typename SubtractFilterType::Pointer SubtractFilterPointerType;
-
-      typedef itk::ShrinkImageFilter<InputImageType, InputImageType> ShrinkFilterType;
-      typedef typename ShrinkFilterType::Pointer ShrinkFilterPointerType;
       
       typedef itk::ConstNeighborhoodIterator<InputImageType> NeighborhoodIteratorType;
       typedef typename NeighborhoodIteratorType::NeighborhoodType NeighborhoodType;
@@ -120,16 +124,16 @@ namespace otb
       virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
       /** Initialize input image */
-      void initializeInputImage();
+      void InitializeInputImage();
       
       /** Compute differenec of gaussian
        * 
        *  \param input, current input in process
        */
-      void computeDifferenceOfGaussian(InputImagePointerType input);
+      void ComputeDifferenceOfGaussian(InputImagePointerType input);
       
       /** Localize key point */
-      void localizeKeyPoint();
+      void DetectKeyPoint( const unsigned int octave );
       
       /** Check local extremum for 26 neighbors (current and adjacents scales)
        *
@@ -139,7 +143,7 @@ namespace otb
        *
        *  \return true if the pixel is extremum
        */
-      bool isLocalExtremum( const NeighborhoodIteratorType& currentScale,
+      bool IsLocalExtremum( const NeighborhoodIteratorType& currentScale,
 			    const NeighborhoodIteratorType& previousScale,
 			    const NeighborhoodIteratorType& nextScale) const;
       
@@ -156,6 +160,12 @@ namespace otb
       /** Expand factors */
       unsigned int m_ExpandFactors;
 
+      /** Shrink factors */
+      unsigned int m_ShrinkFactors;
+      
+      /** Threshold DoG */
+      double m_ThresholdDoG;
+      
       /** Sigma 0 */
       typename GaussianFilterType::ScalarRealType m_Sigma0;
       
@@ -183,8 +193,6 @@ namespace otb
       
       /** Subtract filter */
       SubtractFilterPointerType m_SubtractFilter;
-
-      
     };
 }// End namespace otb
 #ifndef OTB_MANUAL_INSTANTIATION

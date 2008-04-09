@@ -31,9 +31,11 @@ namespace otb
     m_OctavesNumber = 1;
     m_ScalesNumber = 4;
     m_ExpandFactors = 2;
+    m_ShrinkFactors = 2;
     m_Sigma0 = 1.6;
     m_Sigmak = vcl_pow((double)2, (double)((double)1/(double)m_ScalesNumber));
     m_ValidatedKeyPoints = 0;
+    m_ThresholdDoG = 0.03;
     
     m_ExpandFilter = ExpandFilterType::New();
   }
@@ -44,25 +46,29 @@ namespace otb
   ::GenerateData()
   {
     // First, subsample the input image
-    initializeInputImage();
+    InitializeInputImage();
+
+    InputImagePointerType input = m_ExpandFilter->GetOutput(); 
+    
     // for each octave, compute the difference of gaussian
     unsigned int lOctave = 0;
-    InputImagePointerType input = m_ExpandFilter->GetOutput();
-    
     for (lOctave = 0; lOctave != m_OctavesNumber; lOctave++)
       {
-	computeDifferenceOfGaussian(input);
-	localizeKeyPoint();
+	ComputeDifferenceOfGaussian(input);
+	DetectKeyPoint(lOctave);
 	
-	//m_ShrinkFilter = ShrinkFilterType::New();
+	m_ShrinkFilter = ShrinkFilterType::New();
 	// temporary get the second gaussian for subsample and
 	/// repeat the process
-	//m_ShrinkFilter->SetInput(m_GaussianList->GetNthElement(1));
-	//m_ShrinkFilter->Update();
-	//input = m_ShrinkFilter->GetOutput();
+	m_ShrinkFilter->SetInput(m_GaussianList->Back());
+	m_ShrinkFilter->SetShrinkFactors(m_ShrinkFactors);
+	m_ShrinkFilter->Update();
+	input = m_ShrinkFilter->GetOutput();
 	
-	std::cout << "Number key points per octave : " <<
-	  m_ValidatedKeyPoints << std::endl;
+	std::cout << "Number key points per octave : " \
+		  << m_ValidatedKeyPoints << std::endl;
+	std::cout << "Resample image factor : " \
+		  << m_ShrinkFactors << std::endl;
       }
   }
   
@@ -72,7 +78,7 @@ namespace otb
   template <class TInputImage, class TOutputPointSet>
   void
   ImageToSIFTKeyPointSetFilter<TInputImage,TOutputPointSet>
-  ::initializeInputImage()
+  ::InitializeInputImage()
   {
     m_ExpandFilter->SetInput( this->GetInput(0));
     m_ExpandFilter->SetExpandFactors(m_ExpandFactors);
@@ -85,7 +91,7 @@ namespace otb
   template <class TInputImage, class TOutputPointSet>
   void
   ImageToSIFTKeyPointSetFilter<TInputImage,TOutputPointSet>
-  ::computeDifferenceOfGaussian(InputImagePointerType input)
+  ::ComputeDifferenceOfGaussian(InputImagePointerType input)
   {
     unsigned int lScale = 0;
         
@@ -136,7 +142,7 @@ namespace otb
   template <class TInputImage, class TOutputPointSet>
   void
   ImageToSIFTKeyPointSetFilter<TInputImage,TOutputPointSet>
-  ::localizeKeyPoint()
+  ::DetectKeyPoint( const unsigned int octave )
   {
     typename ImageListType::Iterator lIterDoG = m_DoGList->Begin()+1;
     
@@ -165,7 +171,7 @@ namespace otb
 		!lIterUpperAdjacent.IsAtEnd() )
  	  {
  	    // check local min/max
-  	    if (isLocalExtremum(lIterCurrent,
+  	    if (IsLocalExtremum(lIterCurrent,
 				lIterLowerAdjacent,
 				lIterUpperAdjacent))
 	      {
@@ -174,6 +180,13 @@ namespace otb
 		lIterDoG.Get()->TransformIndexToPhysicalPoint(lIterCurrent.GetIndex(),
 							      keyPoint);
 		pointSet->SetPoint(m_ValidatedKeyPoints, keyPoint);
+		OutputPixelType data;
+		data.SetSize(2);
+		data.SetElement(0,octave);
+		//! \todo compute scale
+		unsigned int scale = 0;
+		data.SetElement(1,scale);
+		pointSet->SetPointData(m_ValidatedKeyPoints, data);
 		++m_ValidatedKeyPoints;
 	      }
 	    
@@ -192,7 +205,7 @@ namespace otb
   template <class TInputImage, class TOutputPointSet>
   bool
   ImageToSIFTKeyPointSetFilter<TInputImage,TOutputPointSet>
-  ::isLocalExtremum( const NeighborhoodIteratorType& currentScale,
+  ::IsLocalExtremum( const NeighborhoodIteratorType& currentScale,
 		     const NeighborhoodIteratorType& previousScale,
 		     const NeighborhoodIteratorType& nextScale) const
   {
@@ -200,7 +213,6 @@ namespace otb
     OffsetType offset2 = {{-1, 0}};
     OffsetType offset3 = {{-1, 1}};
     OffsetType offset4 = {{ 0,-1}};
-    OffsetType offset5 = {{ 0, 0}};
     OffsetType offset6 = {{ 0, 1}};
     OffsetType offset7 = {{ 1,-1}};
     OffsetType offset8 = {{ 1, 0}};
@@ -227,15 +239,15 @@ namespace otb
 	  {
 	    isExtremum =
 	      currentScale.GetCenterPixel() < currentScale.GetPixel(*lIterOffset) &&
- 	      currentScale.GetPixel(offset5) < previousScale.GetPixel(*lIterOffset) &&
-	      currentScale.GetPixel(offset5) < nextScale.GetPixel(*lIterOffset);
+ 	      currentScale.GetCenterPixel() < previousScale.GetPixel(*lIterOffset) &&
+	      currentScale.GetCenterPixel() < nextScale.GetPixel(*lIterOffset);
 	  }
 	else if (isMax)
 	  {
 	    isExtremum =
 	      currentScale.GetCenterPixel() > currentScale.GetPixel(*lIterOffset) &&
- 	      currentScale.GetPixel(offset5) > previousScale.GetPixel(*lIterOffset) &&
- 	      currentScale.GetPixel(offset5) > nextScale.GetPixel(*lIterOffset);
+ 	      currentScale.GetCenterPixel() > previousScale.GetPixel(*lIterOffset) &&
+ 	      currentScale.GetCenterPixel() > nextScale.GetPixel(*lIterOffset);
 	  }
 	else
 	  {
@@ -246,14 +258,14 @@ namespace otb
     if (isExtremum && isMin)
       {
  	isExtremum =
- 	  currentScale.GetPixel(offset5) < previousScale.GetPixel(offset5) &&
- 	  currentScale.GetPixel(offset5) < nextScale.GetPixel(offset5);
+ 	  currentScale.GetCenterPixel() < previousScale.GetCenterPixel() &&
+ 	  currentScale.GetCenterPixel() < nextScale.GetCenterPixel();
       }
     else if (isExtremum && isMax)
       {
  	isExtremum =
- 	  currentScale.GetPixel(offset5) > previousScale.GetPixel(offset5) &&
- 	  currentScale.GetPixel(offset5) > nextScale.GetPixel(offset5);
+ 	  currentScale.GetCenterPixel() > previousScale.GetCenterPixel() &&
+ 	  currentScale.GetCenterPixel() > nextScale.GetCenterPixel();
       }
     return isExtremum;
   }
