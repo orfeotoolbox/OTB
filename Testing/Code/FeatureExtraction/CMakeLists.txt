@@ -755,6 +755,7 @@ ADD_TEST(feTvImageToSIFTKeyPointSetFilter ${FEATUREEXTRACTION_TESTS9}
          otbImageToSIFTKeyPointSetFilter
 		${INPUTDATA}/ROI_IKO_PAN_LesHalles.tif
 		${TEMP}/feTvImageToSIFTKeyPointSetFilterOutput.txt
+		${TEMP}/feTvImageToSIFTKeyPointSetFilterImageOutput.tif
 		2 4
 )
 
