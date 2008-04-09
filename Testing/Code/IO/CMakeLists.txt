@@ -1154,15 +1154,39 @@ ADD_TEST(ioTvSpatialObjectDXFReader ${IO_TESTS11}
 # -------     Test pour la lecture des m�tadonn�es OSSIM  ------------------------
 
 # ---  Quickbird Metadata ---
-ADD_TEST(ioTvOSSIMImageMetaDataReader ${IO_TESTS12} 
-   --compare-n-ascii ${EPS} 2           ${BASELINE_FILES}/ioOSSIMImageMetaDataReader.txt
-                                        ${TEMP}/ioOSSIMImageMetaDataReader.txt
-                                        ${BASELINE_FILES}/ioOSSIMImageMetaDataReader.txt
-                                        ${TEMP}/ioOSSIMVectorImageMetaDataReader.txt
+ADD_TEST(ioTvOSSIMImageQuickbirdMetaDataReader ${IO_TESTS12} 
+   --compare-n-ascii ${EPS} 2           ${BASELINE_FILES}/ioOSSIMImageQuickbirdMetaDataReader.txt
+                                        ${TEMP}/ioOSSIMImageQuickbirdMetaDataReader.txt
+                                        ${BASELINE_FILES}/ioOSSIMImageQuickbirdMetaDataReader.txt
+                                        ${TEMP}/ioOSSIMVectorImageQuickbirdMetaDataReader.txt
          otbOSSIMImageMetaDataReaderTest
          ${IMAGEDATA}/TOULOUSE/QuickBird/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF
-	 ${TEMP}/ioOSSIMImageMetaDataReader.txt
-	 ${TEMP}/ioOSSIMVectorImageMetaDataReader.txt
+	 ${TEMP}/ioOSSIMImageQuickbirdMetaDataReader.txt
+	 ${TEMP}/ioOSSIMVectorImageQuickbirdMetaDataReader.txt
+         )
+
+# ---  Radarsat Metadata ---
+ADD_TEST(ioTvOSSIMImageRadarsatMetaDataReader ${IO_TESTS12} 
+   --compare-n-ascii ${EPS} 2           ${BASELINE_FILES}/ioOSSIMImageRadarsatMetaDataReader.txt
+                                        ${TEMP}/ioOSSIMImageRadarsatMetaDataReader.txt
+                                        ${BASELINE_FILES}/ioOSSIMImageRadarsatMetaDataReader.txt
+                                        ${TEMP}/ioOSSIMVectorImageRadarsatMetaDataReader.txt
+         otbOSSIMImageMetaDataReaderTest
+         ${IMAGEDATA}/RADARSAT2/SCENE01/DAT_01.001
+	 ${TEMP}/ioOSSIMImageRadarsatMetaDataReader.txt
+	 ${TEMP}/ioOSSIMVectorImageRadarsatMetaDataReader.txt
+         )
+
+# ---  ERS2 Metadata ---
+ADD_TEST(ioTvOSSIMImageERS2MetaDataReader ${IO_TESTS12} 
+   --compare-n-ascii ${EPS} 2           ${BASELINE_FILES}/ioOSSIMImageERS2MetaDataReader.txt
+                                        ${TEMP}/ioOSSIMImageERS2MetaDataReader.txt
+                                        ${BASELINE_FILES}/ioOSSIMImageERS2MetaDataReader.txt
+                                        ${TEMP}/ioOSSIMVectorImageERS2MetaDataReader.txt
+         otbOSSIMImageMetaDataReaderTest
+         ${IMAGEDATA}/SAR_ERS2_SLCI_SCENE1/DAT_01.001
+	 ${TEMP}/ioOSSIMImageERS2MetaDataReader.txt
+	 ${TEMP}/ioOSSIMVectorImageERS2MetaDataReader.txt
          )
 
 # ---  otb::DEMHandler ---
