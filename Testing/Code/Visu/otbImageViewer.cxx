@@ -30,8 +30,11 @@ int otbImageViewer( int argc, char * argv[] )
       typedef double PixelType;
       typedef otb::ImageViewer<PixelType>  ImageViewerType;
       typedef ImageViewerType::ImageType ImageType;
+      typedef ImageViewerType::ViewModelType ViewModelType;
       typedef otb::ImageFileReader<ImageType> ReaderType;
       
+      ViewModelType mode = static_cast<ViewModelType>(atoi(argv[2]));
+
       // instantiation
       ImageViewerType::Pointer viewer = ImageViewerType::New();
       
@@ -39,12 +42,15 @@ int otbImageViewer( int argc, char * argv[] )
       ReaderType::Pointer reader = ReaderType::New();
       reader->SetFileName(filename);
       reader->GenerateOutputInformation();
-      viewer->SetImage(reader->GetOutput());      
+      viewer->SetImage(reader->GetOutput());  
 	
       // build the app
+      viewer->Build();
+      viewer->SetViewModel(mode);
       viewer->Show();
+      
       Fl::check();
-     //Fl::run();
+      // Fl::run();
     } 
   catch( itk::ExceptionObject & err ) 
     { 

@@ -101,6 +101,7 @@ namespace otb
       typedef typename ImageType::RegionType RegionType;
       typedef typename ImageType::OffsetType OffsetType;
       typedef typename ScrollWidgetType::VectorPixelType VectorPixelType;
+      typedef typename ScrollWidgetType::ViewModelType ViewModelType;
       typedef typename ScrollWidgetType::Pointer ScrollWidgetPointerType;
       typedef typename ZoomWidgetType::Pointer ZoomWidgetPointerType;
       typedef typename FullWidgetType::Pointer FullWidgetPointerType;
@@ -108,7 +109,7 @@ namespace otb
 
 
       typedef itk::ImageRegionConstIterator< ImageType >  InputIteratorType;
-      typedef itk::Vector<typename ImageType::ValueType,1> MeasurementVectorType;
+      typedef itk::Vector<typename itk::NumericTraits<InputPixelType>::RealType,1> MeasurementVectorType;
       typedef itk::Statistics::ListSample<MeasurementVectorType> ListSampleType;
       typedef float HistogramMeasurementType;
       typedef itk::Statistics::ListSampleToHistogramGenerator<ListSampleType,HistogramMeasurementType,
@@ -321,17 +322,13 @@ namespace otb
       /**
        * \return true if view model is RGB
        */
-      virtual bool GetViewModelIsRGB(void);
-      /**
-       * \return true if the rgb view model is allowed
-       */
-      virtual bool IsRGBViewModelAllowed(void);
+      virtual ViewModelType GetViewModel(void);
 
       /**
        * Set the view model
        * \param flag True to turn on RGB view model
        */
-      virtual void SetViewModelIsRGB(bool flag);
+      virtual void SetViewModel(ViewModelType viewModel);
 
       /**
        * Initialize view model

@@ -43,7 +43,7 @@ ImageWidgetBase<TPixel>
   region.SetIndex(index);
   m_BufferedRegion = region;
   m_ViewedRegion = region;
-  m_ViewModelIsRGB=true;
+  m_ViewModel=RGB;
   m_RedChannelIndex = 0;
   m_GreenChannelIndex = 1;
   m_BlueChannelIndex = 2;
@@ -236,26 +236,6 @@ ImageWidgetBase<TPixel>
 {
   return m_ImageOverlay;
 }
-/**
- * Set view mode to RGB.
- */
-template <class TPixel>
-void
-ImageWidgetBase<TPixel>
-::SetViewModelToRGB(void)
-{
-  m_ViewModelIsRGB=true;
-}
-/**
- * Set view mode to Grayscale.
- */
-template <class TPixel>
-void
-ImageWidgetBase<TPixel>
-::SetViewModelToGrayscale(void)
-{
-  m_ViewModelIsRGB=false;
-}
 /** 
  * Show The widget. 
  */
@@ -395,20 +375,48 @@ ImageWidgetBase<TPixel>
   unsigned int index = 0;
   for(it.GoToBegin();!it.IsAtEnd();++it)
     {
-      m_OpenGlBuffer[index] = Normalize(it.Get()[m_RedChannelIndex],m_RedChannelIndex);
-      if(m_ViewModelIsRGB)
+      switch(m_ViewModel)
 	{
-	  m_OpenGlBuffer[index+1] = Normalize(it.Get()[m_GreenChannelIndex],m_GreenChannelIndex);
-	  m_OpenGlBuffer[index+2] = Normalize(it.Get()[m_BlueChannelIndex],m_BlueChannelIndex);
+	case RGB:
+	  {
+	    m_OpenGlBuffer[index] = Normalize(it.Get()[m_RedChannelIndex],m_RedChannelIndex);
+	    m_OpenGlBuffer[index+1] = Normalize(it.Get()[m_GreenChannelIndex],m_GreenChannelIndex);
+	    m_OpenGlBuffer[index+2] = Normalize(it.Get()[m_BlueChannelIndex],m_BlueChannelIndex);
+	    m_OpenGlBuffer[index+3] = 255;
+	    index+=4;
+	    break;
+	}
+	case GRAYSCALE:
+	  {
+	    unsigned char  gray = Normalize(it.Get()[m_RedChannelIndex],m_RedChannelIndex);
+	    m_OpenGlBuffer[index] =   gray;
+	    m_OpenGlBuffer[index+1] = gray;
+	    m_OpenGlBuffer[index+2] = gray;
+	    m_OpenGlBuffer[index+3] = 255;
+	    index+=4;
+	    break;
+	}
+	case COMPLEX_MODULUS:
+	{
+	  unsigned char  modulus = Normalize(vcl_sqrt(it.Get()[m_RedChannelIndex]*it.Get()[m_RedChannelIndex]
+				       +it.Get()[m_GreenChannelIndex]*it.Get()[m_GreenChannelIndex]),0);
+	  m_OpenGlBuffer[index] =   modulus;
+	  m_OpenGlBuffer[index+1] = modulus;
+	  m_OpenGlBuffer[index+2] = modulus;
 	  m_OpenGlBuffer[index+3] = 255;
 	  index+=4;
+	  break;
 	}
-      else
-	{
-	  m_OpenGlBuffer[index+1] = Normalize(it.Get()[m_RedChannelIndex],m_RedChannelIndex);
-	  m_OpenGlBuffer[index+2] = Normalize(it.Get()[m_RedChannelIndex],m_RedChannelIndex);
-	  m_OpenGlBuffer[index+3] = 255;
-	  index+=4; 
+	case COMPLEX_PHASE:
+	  {
+	    unsigned char phase =  Normalize(vcl_atan2(it.Get()[m_RedChannelIndex],it.Get()[m_GreenChannelIndex]),0);
+	    m_OpenGlBuffer[index]   = phase;
+	    m_OpenGlBuffer[index+1] = phase;
+	    m_OpenGlBuffer[index+2] = phase;
+	    m_OpenGlBuffer[index+3] = 255;
+	    index+=4;
+	    break;
+	  }
 	}
     }
 }

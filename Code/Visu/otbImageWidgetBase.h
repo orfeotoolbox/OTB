@@ -58,6 +58,9 @@ class ImageWidgetBase
     typedef typename ImageType::IndexType IndexType;
     typedef typename ImageType::RegionType RegionType;
 
+    /** View model */
+    enum ViewModelType{GRAYSCALE,COMPLEX_MODULUS,COMPLEX_PHASE,RGB};
+
     /** Form overlay typedef */
     typedef ImageWidgetFormBase FormType;
     typedef FormType::Pointer FormPointerType;
@@ -98,7 +101,8 @@ class ImageWidgetBase
     itkGetMacro(SubSamplingRate, unsigned int);
     itkSetMacro(SubSamplingRate, unsigned int);
 
-    itkGetMacro(ViewModelIsRGB,bool);
+    itkSetMacro(ViewModel,ViewModelType);
+    itkGetMacro(ViewModel,ViewModelType);
     
     itkGetMacro(ImageOverlayOpacity,unsigned char);
     itkSetMacro(ImageOverlayOpacity,unsigned char);
@@ -135,15 +139,6 @@ class ImageWidgetBase
      *  \param list The transfert function list.
      */
     void SetTransfertFunctionList(TransfertFunctionListType * list);
-
-    /**
-     * Set view mode to RGB.
-     */
-    void SetViewModelToRGB(void);
-    /**
-     * Set view mode to Grayscale.
-     */
-    void SetViewModelToGrayscale(void);
 
     /** Show The widget */
     void Show(void);
@@ -207,8 +202,8 @@ class ImageWidgetBase
      RegionType m_BufferedRegion;
      /** Viewed image region */
      RegionType m_ViewedRegion;
-     /** Flag for RGB/ GRAYSCALE view mode */
-     bool m_ViewModelIsRGB;
+     /** The view model */
+     ViewModelType m_ViewModel;
      /** Red channel index */
      unsigned int m_RedChannelIndex;
      /** Green channel index */

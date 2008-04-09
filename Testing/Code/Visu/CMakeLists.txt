@@ -66,12 +66,12 @@ ADD_TEST(viTuImageViewerNew ${VISU_TESTS1}
 
 ADD_TEST(viTvImageViewerWithOtbVectorImage ${VISU_TESTS1} 
         otbImageViewer
-	${INPUTDATA}/couleurs.jpg
+	${INPUTDATA}/couleurs.jpg 3
         )
 
 ADD_TEST(viTvImageViewerWithLargeOtbVectorImage ${VISU_TESTS1} 
         otbImageViewer
-	${IMAGEDATA}/TOULOUSE/QuickBird/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF
+	${IMAGEDATA}/TOULOUSE/QuickBird/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF 0
         )
 
 
@@ -80,9 +80,19 @@ ADD_TEST(viTvImageViewerWithOtbImage ${VISU_TESTS1}
 	${INPUTDATA}/ROI_IKO_PAN_LesHalles.tif
         )
 
+ADD_TEST(viTvModulusImageViewerWithComplexImage ${VISU_TESTS1} 
+        otbImageViewer
+	${IMAGEDATA}/RADARSAT2/SCENE01/DAT_01.001 1
+        )
+
+ADD_TEST(viTvPhaseImageViewerWithComplexImage ${VISU_TESTS1} 
+        otbImageViewer
+	${IMAGEDATA}/RADARSAT2/SCENE01/DAT_01.001 2
+        )
+
 ADD_TEST(viTvImageViewerWithLargeOtbImage ${VISU_TESTS1} 
         otbImageViewerWithOtbImage
-	${IMAGEDATA}/TOULOUSE/QuickBird/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF
+	${IMAGEDATA}/TOULOUSE/QuickBird/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF 0
         )
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ 

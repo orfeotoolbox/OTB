@@ -35,7 +35,7 @@ namespace otb
     if(m_HistogramWindow!=NULL)
       {
 	m_HistogramWindow->remove(this->GetRedHistogramWidget());
-	if(this->GetFullWidget()->GetViewModelIsRGB())
+	if(this->GetFullWidget()->GetViewModel() == Superclass::ScrollWidgetType::RGB)
 	  {
 	    m_HistogramWindow->remove(this->GetGreenHistogramWidget());
 	    m_HistogramWindow->remove(this->GetBlueHistogramWidget());
@@ -99,7 +99,7 @@ namespace otb
 
   oss.str("");
   oss<<this->GetLabel()<<" - Histograms and transfert functions"; 
-  if(this->GetFullWidget()->GetViewModelIsRGB())
+  if(this->GetViewModel() == Superclass::ScrollWidgetType::RGB)
   {
     m_HistogramWindow = new Fl_Window(0,hfull,3*this->GetRedHistogramWidget()->w(),this->GetRedHistogramWidget()->h());
     m_HistogramWindow->add(this->GetRedHistogramWidget());

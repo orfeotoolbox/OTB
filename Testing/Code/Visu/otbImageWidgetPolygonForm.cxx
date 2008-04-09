@@ -73,11 +73,11 @@ int otbImageWidgetPolygonForm( int argc, char * argv[] )
 
   if(reader->GetOutput()->GetNumberOfComponentsPerPixel()>=3)
     {
-      widget->SetViewModelToRGB();
+      widget->SetViewModel(WidgetType::RGB);
     }
   else
     {
-      widget->SetViewModelToGrayscale();
+      widget->SetViewModel(WidgetType::GRAYSCALE);
     }
   
   widget->SetUpperLeftCorner(index);

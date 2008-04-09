@@ -48,9 +48,13 @@ int otbFixedSizeFullImageWidget( int argc, char * argv[] )
       window.resizable(widget.GetPointer());
       widget->SetInput(reader->GetOutput());
       if(reader->GetOutput()->GetNumberOfComponentsPerPixel()>=3)
-	widget->SetViewModelToRGB();
+	{
+	  widget->SetViewModel(WidgetType::RGB);
+	}
       else
-	widget->SetViewModelToGrayscale();
+	{
+	  widget->SetViewModel(WidgetType::GRAYSCALE);
+	}
       widget->Init(0,0,size[0],size[1],"Test Full Image Widget");
       widget->redraw();
       window.end();

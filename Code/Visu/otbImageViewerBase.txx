@@ -93,10 +93,7 @@ namespace otb
   
   sl->Reserve(m_InputImage->GetNumberOfComponentsPerPixel());
 
-  for(unsigned int i = 0;i<m_InputImage->GetNumberOfComponentsPerPixel();++i)
-    {
-      sl->PushBack(ListSampleType::New());
-    }
+  
   InputIteratorType it;
   // if scroll is activated, compute the factors from the quicklook
   if(m_UseScroll)
@@ -114,19 +111,55 @@ namespace otb
       it.GoToBegin();
     }
   
-  
-  while( !it.IsAtEnd() )
+  if(this->GetViewModel() == ScrollWidgetType::COMPLEX_MODULUS)
     {
-      PixelType pixel = it.Get();
+      sl->PushBack(ListSampleType::New());
+      while( !it.IsAtEnd() )
+	{
+	  PixelType pixel = it.Get();
+	  for(unsigned int i = 0;i<m_InputImage->GetNumberOfComponentsPerPixel();++i)
+	    {
+	      sl->GetNthElement(0)->PushBack(vcl_sqrt(pixel[m_RedChannelIndex]*pixel[m_RedChannelIndex]+pixel[m_GreenChannelIndex]*pixel[m_GreenChannelIndex]));
+	    }
+	  ++it;
+	}
+    }
+  else if(this->GetViewModel() == ScrollWidgetType::COMPLEX_PHASE)
+    {
+      sl->PushBack(ListSampleType::New());
+      while( !it.IsAtEnd() )
+	{
+	  PixelType pixel = it.Get();
+	  for(unsigned int i = 0;i<m_InputImage->GetNumberOfComponentsPerPixel();++i)
+	    {
+	      sl->GetNthElement(0)->PushBack(vcl_atan2(pixel[m_RedChannelIndex],pixel[m_GreenChannelIndex]));
+	    }
+	  ++it;
+	}
+
+    }
+  else
+    {
       for(unsigned int i = 0;i<m_InputImage->GetNumberOfComponentsPerPixel();++i)
 	{
-	  sl->GetNthElement(i)->PushBack(pixel[i]);
+	  sl->PushBack(ListSampleType::New());
 	}
-      ++it;
+      while( !it.IsAtEnd() )
+	{
+	  PixelType pixel = it.Get();
+	  for(unsigned int i = 0;i<m_InputImage->GetNumberOfComponentsPerPixel();++i)
+	    {
+	      sl->GetNthElement(0)->PushBack(pixel[i]);
+	    }
+	  ++it;
+	}
     }
+
   m_HistogramGeneratorList->Clear();
+  m_TransfertFunctionList->Clear();
   otbMsgDebugMacro(<<"Nb bands: "<<m_InputImage->GetNumberOfComponentsPerPixel());
-  for(unsigned int i = 0;i<m_InputImage->GetNumberOfComponentsPerPixel();++i)
+  
+  for(unsigned int i = 0;i<sl->Size();++i)
     {
       typename HistogramGeneratorType::Pointer generator = HistogramGeneratorType::New();
       generator->SetListSample(sl->GetNthElement(i));
@@ -142,6 +175,13 @@ namespace otb
       m_TransfertFunctionList->Back()->SetLowerBound(static_cast<InputPixelType>(min));
       m_TransfertFunctionList->Back()->SetUpperBound(static_cast<InputPixelType>(max));
     }
+
+  if(m_UseScroll)
+    {
+      m_ScrollWidget->SetTransfertFunctionList(m_TransfertFunctionList);
+    }
+  m_ZoomWidget->SetTransfertFunctionList(m_TransfertFunctionList);
+  m_FullWidget->SetTransfertFunctionList(m_TransfertFunctionList);
   }
   
   /// Build the HMI
@@ -303,14 +343,6 @@ namespace otb
 
     // Compute the normalization factors
     ComputeNormalizationFactors();
-    if(m_UseScroll)
-      {
-	m_ScrollWidget->SetTransfertFunctionList(m_TransfertFunctionList);
-      }
-    m_ZoomWidget->SetTransfertFunctionList(m_TransfertFunctionList);
-    m_FullWidget->SetTransfertFunctionList(m_TransfertFunctionList);
-
-
 
     InitializeViewModel();
 
@@ -414,7 +446,7 @@ namespace otb
       {
 	m_RedHistogramWidget->show();
 	
-	if(this->GetViewModelIsRGB())
+	if(this->GetViewModel()== ScrollWidgetType::RGB)
 	  {
 	    m_GreenHistogramWidget->show();
 	    m_BlueHistogramWidget->show();
@@ -452,7 +484,7 @@ namespace otb
 
     m_RedHistogramWidget->hide();
 
-    if(this->GetViewModelIsRGB())
+    if(this->GetViewModel()==ScrollWidgetType::RGB)
       {
 	m_GreenHistogramWidget->hide();
 	m_BlueHistogramWidget->hide();
@@ -575,7 +607,7 @@ namespace otb
 
     m_RedHistogramWidget->redraw();
 
-    if(this->GetViewModelIsRGB())
+    if(this->GetViewModel()==ScrollWidgetType::RGB)
       {
 	m_GreenHistogramWidget->redraw();
 	m_BlueHistogramWidget->redraw();
@@ -620,8 +652,28 @@ namespace otb
     if(m_InputImage->GetBufferedRegion().IsInside(index))
       {
 	//comment: std::cout<<"Index: "<<index<<std::endl;
+
 	typename ImageType::PixelType newPixel = m_InputImage->GetPixel(index);
-        oss<<newPixel<<" ("<<m_Label<<" pixel values)"<<std::endl;
+
+	if(this->GetViewModel() == ScrollWidgetType::RGB || this->GetViewModel() == ScrollWidgetType::GRAYSCALE)
+	  {
+	    oss<<newPixel<<" ("<<m_Label<<" pixel values)"<<std::endl;
+	  }
+	else if(this->GetViewModel() == ScrollWidgetType::COMPLEX_MODULUS)
+	  {
+	    double im = static_cast<double>(newPixel[m_RedChannelIndex]);
+	    double re = static_cast<double>(newPixel[m_GreenChannelIndex]);
+	    double modulus = vcl_sqrt(re*re+im*im);
+	    oss<<modulus<<std::setprecision(3)<<" ("<<m_Label<<" modulus value)"<<std::endl;
+
+	  }
+	else if(this->GetViewModel() == ScrollWidgetType::COMPLEX_PHASE)
+	  {
+	    double im = static_cast<double>(newPixel[m_RedChannelIndex]);
+	    double re = static_cast<double>(newPixel[m_GreenChannelIndex]);
+	    double phase = vcl_atan2(im,re);
+	    oss<<phase<<std::setprecision(3)<<" ("<<m_Label<<" phase value)"<<std::endl;
+	  }
       }
     else
       {
@@ -972,39 +1024,35 @@ ImageViewerBase<TPixel,TLabel>
 }
 
 template<class TPixel, class TLabel>
-bool
+typename ImageViewerBase<TPixel,TLabel>
+::ViewModelType
 ImageViewerBase<TPixel,TLabel>
-::GetViewModelIsRGB()
+::GetViewModel()
 {
-  return m_FullWidget->GetViewModelIsRGB();
+  return m_FullWidget->GetViewModel();
 }
 
-template<class TPixel, class TLabel>
-bool
-ImageViewerBase<TPixel,TLabel>
-::IsRGBViewModelAllowed()
-{
-  return (m_InputImage->GetNumberOfComponentsPerPixel()>2);
-}
 
 template<class TPixel, class TLabel>
 void
 ImageViewerBase<TPixel,TLabel>
-::SetViewModelIsRGB(bool flag)
+::SetViewModel(ViewModelType viewModel)
 {
-  if(flag)
+  switch(viewModel)
     {
-      if(IsRGBViewModelAllowed())
+    case ScrollWidgetType::RGB:
+    {
+      if(m_InputImage->GetNumberOfComponentsPerPixel()>2)
 	{
 	  if(m_UseScroll)
 	    {
-	      m_ScrollWidget->SetViewModelToRGB();
+	      m_ScrollWidget->SetViewModel(viewModel);
 	      m_ScrollWidget->SetRedChannelIndex(m_RedChannelIndex);
 	      m_ScrollWidget->SetGreenChannelIndex(m_GreenChannelIndex);
 	      m_ScrollWidget->SetBlueChannelIndex(m_BlueChannelIndex);
 	    }
-	  m_FullWidget->SetViewModelToRGB();
-	  m_ZoomWidget->SetViewModelToRGB();
+	  m_FullWidget->SetViewModel(viewModel);
+	  m_ZoomWidget->SetViewModel(viewModel);
 	  m_ZoomWidget->SetRedChannelIndex(m_RedChannelIndex);
 	  m_ZoomWidget->SetGreenChannelIndex(m_GreenChannelIndex);
 	  m_ZoomWidget->SetBlueChannelIndex(m_BlueChannelIndex);
@@ -1012,6 +1060,8 @@ ImageViewerBase<TPixel,TLabel>
 	  m_FullWidget->SetGreenChannelIndex(m_GreenChannelIndex);
 	  m_FullWidget->SetBlueChannelIndex(m_BlueChannelIndex);
 	  
+	  ComputeNormalizationFactors();
+
 	  typename HistogramWidgetType::ColorType blue,red,green;
 	  
 	  red[0]=0.5;
@@ -1045,30 +1095,90 @@ ImageViewerBase<TPixel,TLabel>
 	  m_GreenHistogramWidget->SetTransfertFunctionLabel("Affine");
 	  m_GreenHistogramWidget->SetHistogramColor(green);
 	  m_GreenHistogramWidget->SetTextColor(green);
+	  break;
 	}
     }
-  else
+    case ScrollWidgetType::GRAYSCALE:
     {
-	  if(m_UseScroll)
-	    {
-	      m_ScrollWidget->SetViewModelToGrayscale();
-	      m_ScrollWidget->SetRedChannelIndex(m_RedChannelIndex);
-	    }
-	  m_FullWidget->SetViewModelToGrayscale();
-	  m_ZoomWidget->SetViewModelToGrayscale();
-	  m_ZoomWidget->SetRedChannelIndex(m_RedChannelIndex);
-	  m_FullWidget->SetRedChannelIndex(m_RedChannelIndex);
+      if(m_UseScroll)
+	{
+	  m_ScrollWidget->SetViewModel(viewModel);
+	  m_ScrollWidget->SetRedChannelIndex(m_RedChannelIndex);
+	}
+      m_FullWidget->SetViewModel(viewModel);
+      m_ZoomWidget->SetViewModel(viewModel);
+      m_ZoomWidget->SetRedChannelIndex(m_RedChannelIndex);
+      m_FullWidget->SetRedChannelIndex(m_RedChannelIndex);
 
-	  typename HistogramWidgetType::ColorType gray;
-	  gray.Fill(0.5);
+      ComputeNormalizationFactors();
+      
+      typename HistogramWidgetType::ColorType gray;
+      gray.Fill(0.5);
+      
+      m_RedHistogramWidget->SetHistogram(m_HistogramGeneratorList->GetNthElement(m_RedChannelIndex)->GetOutput());
+      m_RedHistogramWidget->SetTransfertFunction(m_TransfertFunctionList->GetNthElement(m_RedChannelIndex));
+      m_RedHistogramWidget->SetLabel("Grayscale channel");
+      m_RedHistogramWidget->SetTransfertFunctionLabel("Affine");
+      m_RedHistogramWidget->SetHistogramColor(gray);
+      m_RedHistogramWidget->SetTextColor(gray);
+      break;
+    }
+    case ScrollWidgetType::COMPLEX_MODULUS:
+    {
+      if(m_UseScroll)
+	{
+	  m_ScrollWidget->SetViewModel(viewModel);
+	  m_ScrollWidget->SetRedChannelIndex(m_RedChannelIndex);
+	  m_ScrollWidget->SetRedChannelIndex(m_GreenChannelIndex);
+	}
+      m_FullWidget->SetViewModel(viewModel);
+      m_ZoomWidget->SetViewModel(viewModel);
+      m_ZoomWidget->SetRedChannelIndex(m_RedChannelIndex);
+      m_FullWidget->SetRedChannelIndex(m_RedChannelIndex);
+      m_ZoomWidget->SetRedChannelIndex(m_GreenChannelIndex);
+      m_FullWidget->SetRedChannelIndex(m_GreenChannelIndex);
 
-	  m_RedHistogramWidget->SetHistogram(m_HistogramGeneratorList->GetNthElement(m_RedChannelIndex)->GetOutput());
-	  m_RedHistogramWidget->SetTransfertFunction(m_TransfertFunctionList->GetNthElement(m_RedChannelIndex));
-	  m_RedHistogramWidget->SetLabel("Grayscale channel");
-	  m_RedHistogramWidget->SetTransfertFunctionLabel("Affine");
-	  m_RedHistogramWidget->SetHistogramColor(gray);
-	  m_RedHistogramWidget->SetTextColor(gray);
-	  
+      ComputeNormalizationFactors();
+      
+      typename HistogramWidgetType::ColorType gray;
+      gray.Fill(0.5);
+      
+      m_RedHistogramWidget->SetHistogram(m_HistogramGeneratorList->GetNthElement(0)->GetOutput());
+      m_RedHistogramWidget->SetTransfertFunction(m_TransfertFunctionList->GetNthElement(0));
+      m_RedHistogramWidget->SetLabel("Modulus");
+      m_RedHistogramWidget->SetTransfertFunctionLabel("Affine");
+      m_RedHistogramWidget->SetHistogramColor(gray);
+      m_RedHistogramWidget->SetTextColor(gray);
+      break;
+    }
+    case ScrollWidgetType::COMPLEX_PHASE:
+    {
+      if(m_UseScroll)
+	{
+	  m_ScrollWidget->SetViewModel(viewModel);
+	  m_ScrollWidget->SetRedChannelIndex(m_RedChannelIndex);
+	  m_ScrollWidget->SetRedChannelIndex(m_GreenChannelIndex);
+	}
+      m_FullWidget->SetViewModel(viewModel);
+      m_ZoomWidget->SetViewModel(viewModel);
+      m_ZoomWidget->SetRedChannelIndex(m_RedChannelIndex);
+      m_FullWidget->SetRedChannelIndex(m_RedChannelIndex);
+      m_ZoomWidget->SetGreenChannelIndex(m_GreenChannelIndex);
+      m_FullWidget->SetGreenChannelIndex(m_GreenChannelIndex);
+
+      ComputeNormalizationFactors();
+      
+      typename HistogramWidgetType::ColorType gray;
+      gray.Fill(0.5);
+      
+      m_RedHistogramWidget->SetHistogram(m_HistogramGeneratorList->GetNthElement(0)->GetOutput());
+      m_RedHistogramWidget->SetTransfertFunction(m_TransfertFunctionList->GetNthElement(0));
+      m_RedHistogramWidget->SetLabel("Phase");
+      m_RedHistogramWidget->SetTransfertFunctionLabel("Affine");
+      m_RedHistogramWidget->SetHistogramColor(gray);
+      m_RedHistogramWidget->SetTextColor(gray);
+      break;
+    }
     }
 }
 
@@ -1077,13 +1187,13 @@ void
 ImageViewerBase<TPixel,TLabel>
 ::InitializeViewModel(void)
 {
-   if(this->IsRGBViewModelAllowed())
+   if(m_InputImage->GetNumberOfComponentsPerPixel()>2)
        {
-	 this->SetViewModelIsRGB(true);
+	 this->SetViewModel(ScrollWidgetType::RGB);
        }
      else
        {
-	 this->SetViewModelIsRGB(false);
+	 this->SetViewModel(ScrollWidgetType::GRAYSCALE);
        }
 }
 
@@ -1107,7 +1217,7 @@ ImageViewerBase<TPixel,TLabel>
 ::ChangeTransfertFunctions(void)
 {
   m_TransfertFunctionList->SetNthElement(m_RedChannelIndex, m_RedHistogramWidget->GetTransfertFunction());
-  if(m_FullWidget->GetViewModelIsRGB())
+  if(m_FullWidget->GetViewModel()==ScrollWidgetType::RGB)
     {
       m_TransfertFunctionList->SetNthElement(m_BlueChannelIndex, m_BlueHistogramWidget->GetTransfertFunction());
       m_TransfertFunctionList->SetNthElement(m_GreenChannelIndex, m_GreenHistogramWidget->GetTransfertFunction());
