@@ -21,6 +21,8 @@ PURPOSE.  See the above copyright notices for more information.
 #include "otbImageFileWriter.h"
 #include "itkPointSet.h"
 #include "itkVariableLengthVector.h"
+#include "otbRationalQuotientResampleImageFilter.h"
+
 #include <iostream>
 #include <fstream>
 
@@ -28,8 +30,9 @@ int otbImageToSIFTKeyPointSetFilter(int argc, char * argv[])
 {
   const char * infname = argv[1];
   const char * outfname = argv[2];
-  const unsigned int numberOfIterations = atoi(argv[3]);
-
+  const unsigned int octaves = atoi(argv[3]);
+  const unsigned int scales = atoi(argv[4]);
+  
   typedef float RealType;
   const unsigned int Dimension =2;
 
@@ -38,64 +41,56 @@ int otbImageToSIFTKeyPointSetFilter(int argc, char * argv[])
   typedef otb::ImageFileReader<ImageType> ReaderType;
   typedef itk::PointSet<RealVectorType,Dimension> PointSetType;
   typedef otb::ImageToSIFTKeyPointSetFilter<ImageType,PointSetType> ImageToSIFTKeyPointSetFilterType;
-
-  // PointSet iterator types
-  typedef PointSetType::PointsContainer PointsContainerType;
-  typedef PointsContainerType::Iterator PointsIteratorType;
-  typedef PointSetType::PointDataContainer PointDataContainerType;
-  typedef PointDataContainerType::Iterator PointDataIteratorType;
-
+  
   // Instantiating object
   ReaderType::Pointer reader = ReaderType::New();
   ImageToSIFTKeyPointSetFilterType::Pointer filter = ImageToSIFTKeyPointSetFilterType::New();
 
   reader->SetFileName(infname);
-  filter->SetInput(reader->GetOutput());
-  filter->SetNumberOfIterations(numberOfIterations);
+  // flou !!
+  filter->SetInput(0,reader->GetOutput());
+  filter->SetOctavesNumber(octaves);
+  filter->SetScalesNumber(scales);
   filter->Update();
-
-
-   typedef otb::Image<unsigned char,2> UCharImageType;
-   typedef otb::ImageFileWriter<UCharImageType> WriterType;
-
-   UCharImageType::Pointer outputImage = UCharImageType::New();
-   outputImage->SetRegions(reader->GetOutput()->GetLargestPossibleRegion());
-   outputImage->Allocate();
-   outputImage->FillBuffer(0);
-
-  std::ofstream outfile(outfname);
-  //std::ios::write);
-  ImageType::IndexType index;
   
-  outfile<<"Number of SIFT key: "<<filter->GetOutput()->GetNumberOfPoints()<<std::endl;
+//   typedef otb::Image<unsigned char,2> UCharImageType;
+//   typedef otb::ImageFileWriter<UCharImageType> WriterType;
+    
+//   UCharImageType::Pointer outputImage = UCharImageType::New();
+//   outputImage->SetRegions(reader->GetOutput()->GetLargestPossibleRegion());
+//   outputImage->Allocate();
+//   outputImage->FillBuffer(0);
+  
+//   std::ofstream outfile(outfname);
+//   //std::ios::write);
+//   ImageType::IndexType index;
+  
+//   outfile<<"Number of SIFT key: "<<filter->GetOutput()->GetNumberOfPoints()<<std::endl;
+  
+//   if(filter->GetOutput()->GetNumberOfPoints()>0)
+//     {
 
-  if(filter->GetOutput()->GetNumberOfPoints()>0)
-    {
-
-      PointsIteratorType pIt = filter->GetOutput()->GetPoints()->Begin();
-      PointDataIteratorType pdIt = filter->GetOutput()->GetPointData()->Begin();
+//       PointsIteratorType pIt = filter->GetOutput()->GetPoints()->Begin();
+//       PointDataIteratorType pdIt = filter->GetOutput()->GetPointData()->Begin();
       
-      while(pIt!=filter->GetOutput()->GetPoints()->End()
-	    && pdIt!=filter->GetOutput()->GetPointData()->End())
-	{
-	  reader->GetOutput()->TransformPhysicalPointToIndex(pIt.Value(),index);
-
-	  outputImage->SetPixel(index,255);
-
-	  outfile<<"Point "<<pIt.Value()<<", Index: "<<index<<", associated data: "<<pdIt.Value()<<std::endl;
-	  ++pIt;
-	  ++pdIt;
-	}
-    }
-  outfile.close();
-
-  WriterType::Pointer writer = WriterType::New();
-  writer->SetInput(outputImage);
-  writer->SetFileName("test.png");
-  writer->Update();
- 
+//       while(pIt!=filter->GetOutput()->GetPoints()->End()
+// 	    && pdIt!=filter->GetOutput()->GetPointData()->End())
+// 	{
+// 	  reader->GetOutput()->TransformPhysicalPointToIndex(pIt.Value(),index);
+	  
+// 	  outputImage->SetPixel(index,255);
+	  
+// 	  outfile<<"Point "<<pIt.Value()<<", Index: "<<index<<", associated data: "<<pdIt.Value()<<std::endl;
+// 	  ++pIt;
+// 	  ++pdIt;
+// 	}
+//     }
+//   outfile.close();
   
-
+//   WriterType::Pointer writer = WriterType::New();
+//   writer->SetInput(outputImage);
+//   writer->SetFileName("test.png");
+//   writer->Update();
   
   return EXIT_SUCCESS;
 }
