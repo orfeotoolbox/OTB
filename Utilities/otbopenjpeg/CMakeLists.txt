@@ -6,7 +6,7 @@
 # you will eventually like to prefix the library to avoid linking confusion
 # For this purpose you can define a CMake var: OPENJPEG_NAMESPACE to whatever you like
 # e.g.:
-# SET(OPENJPEG_NAMESPACE "GDCMOPENJPEG")
+SET(OPENJPEG_NAMESPACE "OTBOPENJPEG")
 CMAKE_MINIMUM_REQUIRED(VERSION 2.4)
 
 IF(NOT OPENJPEG_NAMESPACE)
@@ -42,12 +42,11 @@ INCLUDE (${CMAKE_ROOT}/Modules/CMakeBackwardCompatibilityC.cmake)
 
 #-----------------------------------------------------------------------------
 # OpenJPEG build configuration options.
-OPTION(BUILD_SHARED_LIBS "Build OpenJPEG with shared libraries." OFF)
-OPTION(ENABLE_PROFILING "Enable profiling for the library" OFF)
+#OPTION(ENABLE_PROFILING "Enable profiling for the library" OFF)
 
 #-----------------------------------------------------------------------------
-SET (EXECUTABLE_OUTPUT_PATH ${OPENJPEG_BINARY_DIR}/bin CACHE PATH "Single output directory for building all executables.")
-SET (LIBRARY_OUTPUT_PATH ${OPENJPEG_BINARY_DIR}/bin CACHE PATH "Single output directory for building all libraries.")
+SET (EXECUTABLE_OUTPUT_PATH ${OTB_BINARY_DIR}/bin CACHE PATH "Single output directory for building all executables.")
+SET (LIBRARY_OUTPUT_PATH ${OTB_BINARY_DIR}/bin CACHE PATH "Single output directory for building all libraries.")
 MARK_AS_ADVANCED(LIBRARY_OUTPUT_PATH EXECUTABLE_OUTPUT_PATH)
 
 
@@ -76,25 +75,7 @@ CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/opj_configure.h.in
 INCLUDE_DIRECTORIES(BEFORE ${CMAKE_CURRENT_BINARY_DIR})
 SUBDIRS(
   libopenjpeg
-  # codec
-  # mj2
-  # cmake 2.4.5 has poor java support
-  #j2kviewer/src
   )
-
-#IF(NOT UNIX)
-#SUBDIRS(
-#  jpwl
-#  jp3d
-#  indexer_JPIP
-#  )
-#ENDIF(NOT UNIX)
-
-#-----------------------------------------------------------------------------
-# Build example only if requested
-#IF(BUILD_EXAMPLES)
-#  SUBDIRS(codec)
-#ENDIF(BUILD_EXAMPLES)
 
 #-----------------------------------------------------------------------------
 # For the documentation
@@ -118,13 +99,6 @@ ENDIF(BUILD_DOCUMENTATION)
 # Adding test with dataset from:
 # http://www.crc.ricoh.com/~gormish/jpeg2000conformance/
 # http://www.jpeg.org/jpeg2000guide/testimages/testimages.html
-
-#-----------------------------------------------------------------------------
-# Adding JPEG2000_CONFORMANCE_DATA_ROOT
-FIND_PATH(JPEG2000_CONFORMANCE_DATA_ROOT testimages.html
-  ${OPENJPEG_SOURCE_DIR}/../jpeg2000testimages
-  $ENV{JPEG2000_CONFORMANCE_DATA_ROOT}
-)
 
 #-----------------------------------------------------------------------------
 # Compiler specific flags:
