@@ -28,7 +28,9 @@
 #include "otbGDALImageIOFactory.h"
 #include "otbLUMImageIOFactory.h"
 #include "otbBSQImageIOFactory.h"
+#ifndef OTB_JPEG2000_DISABLED
 #include "otbJPEG2000ImageIOFactory.h"
+#endif
 #ifdef OTB_USE_CURL
 #include "otbTileMapImageIOFactory.h"
 #endif
@@ -63,8 +65,10 @@ namespace otb
 	    // LUM format for OTB
             itk::ObjectFactoryBase::RegisterFactory( LUMImageIOFactory::New() );			
                         
+#ifndef OTB_JPEG2000_DISABLED
 	    // JPEG2000 : New format for OTB
             itk::ObjectFactoryBase::RegisterFactory( JPEG2000ImageIOFactory::New() );
+#endif OTB_JPEG2000_DISABLED
 	    
 	    // GDAL : New format for OTB
             itk::ObjectFactoryBase::RegisterFactory( GDALImageIOFactory::New() );            

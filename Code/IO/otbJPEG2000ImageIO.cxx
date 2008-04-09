@@ -177,17 +177,17 @@ namespace otb
   
     int buffer_size_y = this->GetIORegion().GetSize()[1];
     int buffer_size_x = this->GetIORegion().GetSize()[0];
-    int buffer_y0     = this->GetIORegion().GetIndex()[1] ; 
-    int buffer_x0     = this->GetIORegion().GetIndex()[0] ;
+    int buffer_y0     = this->GetIORegion().GetIndex()[1]; 
+    int buffer_x0     = this->GetIORegion().GetIndex()[0];
   
-    otbMsgDevMacro( <<" JPEG2000ImageIO::Read()  ");
-    otbMsgDevMacro( <<" ImageDimension   : "<<m_Dimensions[0]<<","<<m_Dimensions[1]);
-    otbMsgDevMacro( <<" IORegion         : "<<this->GetIORegion());
-    otbMsgDevMacro( <<" Nb Of Components : "<<this->GetNumberOfComponents());
+    std::cout <<" JPEG2000ImageIO::Read()  "<<std::endl;
+    std::cout <<" ImageDimension   : "<<m_Dimensions[0]<<","<<m_Dimensions[1]<<std::endl;
+    std::cout <<" IORegion         : "<<this->GetIORegion()<<std::endl;
+    std::cout <<" Nb Of Components : "<<this->GetNumberOfComponents()<<std::endl;
 
-    otbMsgDevMacro(<<"IORegion: "<<this->GetIORegion());
-    otbMsgDevMacro(<<"Area to read: "<<buffer_x0<<" "<<buffer_y0  <<" "<< buffer_x0+buffer_size_x-1 <<" "<<buffer_y0+buffer_size_y-1 );
-    otbMsgDevMacro(<<"Component type: "<<this->GetComponentTypeAsString(this->GetComponentType()));
+    std::cout<<"IORegion: "<<this->GetIORegion()<<std::endl;
+    std::cout<<"Area to read: "<<buffer_x0<<" "<<buffer_y0  <<" "<< buffer_x0+buffer_size_x-1 <<" "<<buffer_y0+buffer_size_y-1 <<std::endl;
+    std::cout<<"Component type: "<<this->GetComponentTypeAsString(this->GetComponentType())<<std::endl;
 
     // Creating openjpeg objects
     if(System::SetToLower(System::GetExtension(m_FileName)) == "j2k")
@@ -272,14 +272,14 @@ namespace otb
 	  }
 	if(goesOn)
 	  {
-	    otbMsgDevMacro(<<"==========================");
-	    otbMsgDevMacro(<<"Tile index: "<<tile_index);
-	    otbMsgDevMacro(<<"Data size: "<<data_size);
-	    otbMsgDevMacro(<<"Tile (x0,y0): "<<tile_x0<<" "<<tile_y0);
-	    otbMsgDevMacro(<<"Tile (x1,y1): "<<tile_x1<<" "<<tile_y1);
-	    otbMsgDevMacro(<<"Tile number of component: "<<nb_comps);
-	    otbMsgDevMacro(<<"Goes on: "<<goesOn);
-	    otbMsgDevMacro(<<"--------------------------");
+	    std::cout<<"=========================="<<std::endl;
+	    std::cout<<"Tile index: "<<tile_index<<std::endl;
+	    std::cout<<"Data size: "<<data_size<<std::endl;
+	    std::cout<<"Tile (x0,y0): "<<tile_x0<<" "<<tile_y0<<std::endl;
+	    std::cout<<"Tile (x1,y1): "<<tile_x1<<" "<<tile_y1<<std::endl;
+	    std::cout<<"Tile number of component: "<<nb_comps<<std::endl;
+	    std::cout<<"Goes on: "<<goesOn<<std::endl;
+	    std::cout<<"--------------------------"<<std::endl;
 	    
 	    
 	    tile_data = new OPJ_BYTE[data_size];
@@ -304,14 +304,14 @@ namespace otb
 	    std::streamsize nb_lines            = std::min(tile_y1,buffer_y0+buffer_size_y)- std::max(tile_y0,buffer_y0);	    
 	    std::streampos buffer_step          = nb_comps * m_NbOctetPixel;
 
-	    otbMsgDevMacro(<<"buffer_skip: "<<buffer_skip);
-	    otbMsgDevMacro(<<"tile_skip: "<<tile_skip);
-	    otbMsgDevMacro(<<"buffer_offset_begin: "<<buffer_offset_begin);
-	    otbMsgDevMacro(<<"buffer_offset_end: "<<buffer_offset_end);
-	    otbMsgDevMacro(<<"tile_offset_begin: "<<tile_offset_begin);
-	    otbMsgDevMacro(<<"tile_offset_end: "<<tile_offset_end);
-	    otbMsgDevMacro(<<"line_size: "<<line_size);
-	    otbMsgDevMacro(<<"nb_lines: "<<nb_lines);
+	    std::cout<<"buffer_skip: "<<buffer_skip<<std::endl;
+	    std::cout<<"tile_skip: "<<tile_skip<<std::endl;
+	    std::cout<<"buffer_offset_begin: "<<buffer_offset_begin<<std::endl;
+	    std::cout<<"buffer_offset_end: "<<buffer_offset_end<<std::endl;
+	    std::cout<<"tile_offset_begin: "<<tile_offset_begin<<std::endl;
+	    std::cout<<"tile_offset_end: "<<tile_offset_end<<std::endl;
+	    std::cout<<"line_size: "<<line_size<<std::endl;
+	    std::cout<<"nb_lines: "<<nb_lines<<std::endl;
 	    
 	    
 	    std::streamoff buffer_pos,tile_pos;
@@ -367,7 +367,7 @@ namespace otb
 	    delete[] tile_data;
 	  }
       }
-    otbMsgDevMacro(<<"==========================");
+    std::cout<<"=========================="<<std::endl;
 
    
     opj_stream_destroy(m_OpenJpegStream);
@@ -505,24 +505,24 @@ namespace otb
 	this->SetPixelType(VECTOR);
       }	
 
-    otbMsgDevMacro(<<"==========================");
-    otbMsgDevMacro(<<"ReadImageInformation: ");
-    otbMsgDevMacro(<<"Tile (x0,y0): "<<tile_x0<<" "<<tile_y0);
-    otbMsgDevMacro(<<"Tile size: "<<tile_width<<" x "<<tile_height);
-    otbMsgDevMacro(<<"Number of tiles: "<<nb_tiles_x<<" "<<nb_tiles_y);
-    otbMsgDevMacro(<<"Precision: "<<precision);
-    otbMsgDevMacro(<<"Signed: "<<isSigned);
-    otbMsgDevMacro(<<"Number of octet per value: "<<m_NbOctetPixel);
-    otbMsgDevMacro(<<"==========================");
+    std::cout<<"=========================="<<std::endl;
+    std::cout<<"ReadImageInformation: "<<std::endl;
+    std::cout<<"Tile (x0,y0): "<<tile_x0<<" "<<tile_y0<<std::endl;
+    std::cout<<"Tile size: "<<tile_width<<" x "<<tile_height<<std::endl;
+    std::cout<<"Number of tiles: "<<nb_tiles_x<<" "<<nb_tiles_y<<std::endl;
+    std::cout<<"Precision: "<<precision<<std::endl;
+    std::cout<<"Signed: "<<isSigned<<std::endl;
+    std::cout<<"Number of octet per value: "<<m_NbOctetPixel<<std::endl;
+    std::cout<<"=========================="<<std::endl;
 
 
-    otbMsgDebugMacro( <<"Driver to read: JPEG2000");
-    otbMsgDebugMacro( <<"         Read  file         : "<< m_FileName);
-    otbMsgDebugMacro( <<"         Size               : "<<m_Dimensions[0]<<","<<m_Dimensions[1]);
-    otbMsgDebugMacro( <<"         ComponentType      : "<<this->GetComponentType() );
-    otbMsgDebugMacro( <<"         NumberOfComponents : "<<this->GetNumberOfComponents());
-    otbMsgDebugMacro( <<"         ComponentSize      : "<<this->GetComponentSize());
-    otbMsgDebugMacro( <<"         GetPixelSize       : "<<this->GetPixelSize());
+    std::cout <<"Driver to read: JPEG2000"<<std::endl;
+    std::cout <<"         Read  file         : "<< m_FileName<<std::endl;
+    std::cout <<"         Size               : "<<m_Dimensions[0]<<","<<m_Dimensions[1]<<std::endl;
+    std::cout <<"         ComponentType      : "<<this->GetComponentType()<<std::endl;
+    std::cout <<"         NumberOfComponents : "<<this->GetNumberOfComponents()<<std::endl;
+    std::cout <<"         ComponentSize      : "<<this->GetComponentSize()<<std::endl;
+    std::cout <<"         GetPixelSize       : "<<this->GetPixelSize()<<std::endl;
 
     opj_stream_destroy(m_OpenJpegStream);
     fclose(m_File);
@@ -790,13 +790,13 @@ namespace otb
 	itkExceptionMacro(<< "The file "<<m_FileName.c_str()<<" is not defined as a JPEG2000 file");
       }
 
-    otbMsgDebugMacro( <<"Driver to write: JPEG2000");
-    otbMsgDebugMacro( <<"         Write file         : "<< m_FileName);
-    otbMsgDebugMacro( <<"         Size               : "<<m_Dimensions[0]<<","<<m_Dimensions[1]);
-    otbMsgDebugMacro( <<"         ComponentType      : "<<this->GetComponentType() );
-    otbMsgDebugMacro( <<"         NumberOfComponents : "<<this->GetNumberOfComponents());
-    otbMsgDebugMacro( <<"         ComponentSize      : "<<this->GetComponentSize());
-    otbMsgDebugMacro( <<"         GetPixelSize       : "<<this->GetPixelSize());
+    std::cout <<"Driver to write: JPEG2000"<<std::endl;
+    std::cout <<"         Write file         : "<< m_FileName<<std::endl;
+    std::cout <<"         Size               : "<<m_Dimensions[0]<<","<<m_Dimensions[1]<<std::endl;
+    std::cout <<"         ComponentType      : "<<this->GetComponentType()<<std::endl;
+    std::cout <<"         NumberOfComponents : "<<this->GetNumberOfComponents()<<std::endl;
+    std::cout <<"         ComponentSize      : "<<this->GetComponentSize()<<std::endl;
+    std::cout <<"         GetPixelSize       : "<<this->GetPixelSize()<<std::endl;
 
   }
 
