@@ -22,6 +22,8 @@ PURPOSE.  See the above copyright notices for more information.
 #include "itkPointSet.h"
 #include "itkVariableLengthVector.h"
 #include "otbRationalQuotientResampleImageFilter.h"
+#include "itkRGBPixel.h"
+#include "itkImageRegionIterator.h"
 
 #include <iostream>
 #include <fstream>
@@ -55,7 +57,6 @@ int otbImageToSIFTKeyPointSetFilter(int argc, char * argv[])
   ImageToSIFTKeyPointSetFilterType::Pointer filter = ImageToSIFTKeyPointSetFilterType::New();
   
   reader->SetFileName(infname);
-  // flou !!
   filter->SetInput(0,reader->GetOutput());
   filter->SetOctavesNumber(octaves);
   filter->SetScalesNumber(scales);
@@ -69,12 +70,34 @@ int otbImageToSIFTKeyPointSetFilter(int argc, char * argv[])
   ImageType::OffsetType r = {{-1, 0}};
   
   typedef otb::Image<unsigned char,2> UCharImageType;
-  typedef otb::ImageFileWriter<UCharImageType> WriterType;
   
-  UCharImageType::Pointer outputImage = UCharImageType::New();
+  typedef itk::RGBPixel<unsigned char> RGBPixelType;
+  typedef otb::Image<RGBPixelType, 2> OutputImageType;
+
+  typedef otb::ImageFileWriter<OutputImageType> WriterType;
+  
+  OutputImageType::Pointer outputImage = OutputImageType::New();
   outputImage->SetRegions(reader->GetOutput()->GetLargestPossibleRegion());
   outputImage->Allocate();
-  outputImage->FillBuffer(0);
+  
+  OutputImageType::SizeType lRadius;
+  lRadius.Fill(1);
+  
+
+  itk::ImageRegionIterator<OutputImageType> iterOutput(outputImage,
+						       outputImage->GetRequestedRegion());
+  
+  for (iterOutput.GoToBegin(); !iterOutput.IsAtEnd(); ++iterOutput)
+    {
+      ImageType::IndexType index = iterOutput.GetIndex();
+      ImageType::PixelType grayPix = reader->GetOutput()->GetPixel(index);
+      OutputImageType::PixelType rgbPixel;
+      rgbPixel.SetRed( grayPix );
+      rgbPixel.SetGreen( grayPix );
+      rgbPixel.SetBlue( grayPix );
+      
+      iterOutput.Set(rgbPixel);
+    }
   
   if( filter->GetOutput()->GetNumberOfPoints()>0 )
     {
@@ -89,11 +112,16 @@ int otbImageToSIFTKeyPointSetFilter(int argc, char * argv[])
 		 << " Octave: " << pdIt.Value()[0] \
 		 << " Scale: " <<  pdIt.Value()[1] << std::endl;
 	  
-	  outputImage->SetPixel(index,255);
-	  outputImage->SetPixel(index+t,255);
-	  outputImage->SetPixel(index+b,255);
-	  outputImage->SetPixel(index+l,255);
-	  outputImage->SetPixel(index+r,255);
+	  OutputImageType::PixelType keyPixel;
+	  keyPixel.SetRed(0);
+	  keyPixel.SetGreen(255);
+	  keyPixel.SetBlue(0);
+	  
+	  outputImage->SetPixel(index,keyPixel);
+	  outputImage->SetPixel(index+t,keyPixel);
+	  outputImage->SetPixel(index+b,keyPixel);
+	  outputImage->SetPixel(index+l,keyPixel);
+	  outputImage->SetPixel(index+r,keyPixel);
  	  ++pIt;
  	  ++pdIt;
  	}
