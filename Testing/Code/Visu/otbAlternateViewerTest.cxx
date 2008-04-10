@@ -56,7 +56,9 @@ int otbAlternateViewerTest(int argc, char* argv[])
   viewer->Init("test de la nouvelle visu");
   window.show();
   viewer->Show();
-  Fl::run();
+  
+  Fl::check();
+//   Fl::run();
 
   return EXIT_SUCCESS;
 }
