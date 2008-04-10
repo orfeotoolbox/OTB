@@ -59,7 +59,7 @@ namespace otb
               }
           }
           
-          virtual double GetSingleValue(const InputImagePixelType & value1,  const LabelledImagePixelType & value2){};
+          virtual double GetSingleValue(const InputImagePixelType & value1,  const LabelledImagePixelType & value2){return 0.;};
               
           double GetValue(const InputImagePixelType & value1,  const LabelledImagePixelType & value2)
           {
@@ -164,7 +164,7 @@ namespace otb
               }
           }
           
-          virtual double GetSingleValue(const LabelledImagePixelType & value1,  const LabelledImagePixelType & value2){};
+          virtual double GetSingleValue(const LabelledImagePixelType & value1,  const LabelledImagePixelType & value2){return 0.;};
           
           
               
