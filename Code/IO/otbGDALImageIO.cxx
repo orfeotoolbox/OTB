@@ -442,7 +442,8 @@ void GDALImageIO::InternalReadImageInformation()
 		m_NbOctetPixel = m_NbOctetPixel * 2 ;
           	this->SetNumberOfComponents( 2 );
                 this->SetPixelType(COMPLEX);
-		if(m_NbBands !=1) itkExceptionMacro(<<"GDALImageIO::InternalReadImageInformation() Can read only one band image ");
+		// Is this necessary ?
+		//if(m_NbBands !=1) itkExceptionMacro(<<"GDALImageIO::InternalReadImageInformation() Can read only one band image ");
 	}
 	else
 	{
