@@ -20,6 +20,9 @@ PURPOSE.  See the above copyright notices for more information.
 
 #include "itkDataObject.h"
 #include "otbImportGeoInformationImageFilter.h"
+#include "itkMetaDataObject.h"
+#include "itkMetaDataDictionary.h"
+#include "otbMetaDataKey.h"
 
 namespace otb
 {
@@ -32,6 +35,7 @@ ImportGeoInformationImageFilter<TImage,TSourceImage>
 {
   this->SetNumberOfRequiredInputs(2);
   this->SetNthInput(1,SourceImageType::New().GetPointer());
+  this->SetInPlace(true);
 }
 
 template <class TImage, class TSourceImage>
@@ -48,6 +52,39 @@ ImportGeoInformationImageFilter<TImage,TSourceImage>
 {
   return static_cast<const TSourceImage *>(this->GetInput(1));
 }
+
+template <class TImage, class TSourceImage>
+void
+ ImportGeoInformationImageFilter<TImage,TSourceImage>
+::GenerateInputRequestedRegion(void)
+{
+  Superclass::GenerateInputRequestedRegion();
+
+  typename SourceImageType::RegionType region;
+  typename SourceImageType::SizeType size;
+  typename SourceImageType::IndexType index;
+
+  size.Fill(0);
+  index.Fill(0);
+  region.SetSize(size);
+  region.SetIndex(index);
+
+  SourceImageType * sourcePtr = const_cast<SourceImageType *>(this->GetSource());
+  sourcePtr->SetRequestedRegion(region);
+}
+
+template <class TImage, class TSourceImage>
+void
+ ImportGeoInformationImageFilter<TImage,TSourceImage>
+::GenerateOutputInformation(void)
+{
+  Superclass::GenerateOutputInformation();
+  // Get output and source pointer
+  ImagePointerType outputPtr = this->GetOutput();
+  SourceImageType * sourcePtr =const_cast<SourceImageType *>(this->GetSource());
+  // Import metdata
+  outputPtr->CopyInformation(sourcePtr);
+}
 /**
  * Main computation method.
  */
@@ -56,13 +93,7 @@ void
  ImportGeoInformationImageFilter<TImage,TSourceImage>
 ::GenerateData(void)
 {
-  // Since this filter is not multi-threaded, we have to call this method by ourselves
-  this->AllocateOutputs();
-  // Get output and source pointer
-  ImagePointerType outputPtr = this->GetOutput();
-  const SourceImageType * sourcePtr = this->GetSource();
-  // Import metdata
-  outputPtr->CopyInformation(sourcePtr);
+  // Generate data is empty, since the filter runs inplace.
 }
 /**
  * PrintSelf Method

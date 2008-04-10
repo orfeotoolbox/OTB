@@ -78,7 +78,10 @@ protected:
   virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
   /** GenerateData */
   virtual void GenerateData(void);
-  
+  /** Generate input requested region */
+  virtual void GenerateInputRequestedRegion(void);
+  /** Generate output information */
+  virtual void GenerateOutputInformation(void);
 private:
   ImportGeoInformationImageFilter(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented

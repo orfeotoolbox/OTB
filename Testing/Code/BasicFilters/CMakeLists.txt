@@ -219,6 +219,16 @@ ADD_TEST(bfTvStreamingShrinkImageFilterQBMUL ${BASICFILTERS_TESTS2}
 	            ${TEMP}/bfTvImportGeoInformationOutput.img
 )
 
+
+ ADD_TEST(bfTvImportGeoInformationImageFilterWithKeywordList ${BASICFILTERS_TESTS3}  
+--compare-ascii ${TOL}
+		${BASELINE_FILES}/ioOSSIMImageQuickbirdMetaDataReader.txt
+                ${TEMP}/bfTvImportGeoInformationKeywordListOutput.txt
+         otbImportGeoInformationImageFilterWithKeywordList
+         ${IMAGEDATA}/TOULOUSE/QuickBird/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF
+	 ${TEMP}/bfTvImportGeoInformationKeywordListOutput.txt
+)
+
 # -------            otb::SpectralAngleDistanceImageFilter   ----------------------------
 
   ADD_TEST(bfTuSpectralAngleDistanceImageFilterNew ${BASICFILTERS_TESTS3}  
@@ -797,6 +807,7 @@ otbSpatialObjectToImageDrawingFilter.cxx
 SET(BasicFilters_SRCS3
 otbImportGeoInformationImageFilterNew.cxx
 otbImportGeoInformationImageFilter.cxx
+otbImportGeoInformationImageFilterWithKeywordList.cxx
 otbSpectralAngleDistanceImageFilterNew.cxx
 otbSpectralAngleDistanceImageFilter.cxx
 otbVectorRescaleIntensityImageFilterNew.cxx
