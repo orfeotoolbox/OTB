@@ -149,7 +149,7 @@ namespace otb
 	  PixelType pixel = it.Get();
 	  for(unsigned int i = 0;i<m_InputImage->GetNumberOfComponentsPerPixel();++i)
 	    {
-	      sl->GetNthElement(0)->PushBack(pixel[i]);
+	      sl->GetNthElement(i)->PushBack(pixel[i]);
 	    }
 	  ++it;
 	}
