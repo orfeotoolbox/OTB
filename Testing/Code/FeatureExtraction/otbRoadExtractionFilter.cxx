@@ -88,8 +88,6 @@ int otbRoadExtractionFilter(int argc, char * argv[])
       image->Allocate();
       image->FillBuffer(0);
 
-      OutputPathListType * listPath = roadExtraction->GetOutput();
-
       draw->SetInput(image);
       //Use internal value of path
       draw->UseInternalPathValueOn();
