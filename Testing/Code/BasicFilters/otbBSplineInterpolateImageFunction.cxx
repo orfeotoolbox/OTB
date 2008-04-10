@@ -32,7 +32,7 @@ int otbBSplineInterpolateImageFunction(int argc, char * argv[])
   typedef InterpolatorType::ContinuousIndexType ContinuousIndexType;
   typedef otb::ImageFileReader<ImageType> ReaderType;
 
-   unsigned int i = 3;
+   int i = 3;
 
    std::vector<ContinuousIndexType> indicesList;
 
