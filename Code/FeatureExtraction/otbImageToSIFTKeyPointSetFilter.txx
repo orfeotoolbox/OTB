@@ -18,6 +18,8 @@ PURPOSE.  See the above copyright notices for more information.
 
 #include "otbImageToSIFTKeyPointSetFilter.h"
 
+#include "itkMatrix.h"
+
 namespace otb
 {
 
@@ -56,10 +58,10 @@ namespace otb
       {
 	ComputeDifferenceOfGaussian(input);
 	DetectKeyPoint(lOctave);
-	
+
+	// Get the last gaussian for subsample and
+	// repeat the process
 	m_ShrinkFilter = ShrinkFilterType::New();
-	// temporary get the second gaussian for subsample and
-	/// repeat the process
 	m_ShrinkFilter->SetInput(m_GaussianList->Back());
 	m_ShrinkFilter->SetShrinkFactors(m_ShrinkFactors);
 	m_ShrinkFilter->Update();
@@ -100,7 +102,7 @@ namespace otb
     
     double sigman = m_Sigma0;
     
-    for (lScale = 0; lScale != m_ScalesNumber; lScale++)
+    for (lScale = 0; lScale != m_ScalesNumber+1; lScale++)
       {
 	sigman = sigman*m_Sigmak;
 	m_XGaussianFilter = GaussianFilterType::New();
@@ -149,6 +151,11 @@ namespace otb
     // 3 min DoG
     while ( (lIterDoG+1) != m_DoGList->End())
       {
+	// Compute max of DoG
+	MinimumMaximumCalculatorPointerType lMaximumCalculator = MinimumMaximumCalculatorType::New();
+	lMaximumCalculator->SetImage(lIterDoG.Get());
+	lMaximumCalculator->Compute();
+	
 	typename InputImageType::SizeType lRadius;
 	lRadius.Fill(1);
 	typename ImageListType::Iterator lPrev = lIterDoG-1;
@@ -170,15 +177,26 @@ namespace otb
 		!lIterLowerAdjacent.IsAtEnd() &&
 		!lIterUpperAdjacent.IsAtEnd() )
  	  {
+	    VectorPointType lTranslation;
+	    
  	    // check local min/max
   	    if (IsLocalExtremum(lIterCurrent,
 				lIterLowerAdjacent,
-				lIterUpperAdjacent))
+				lIterUpperAdjacent) &&
+		
+		RefineLocationKeyPoint(lIterCurrent,
+				       lIterLowerAdjacent,
+				       lIterUpperAdjacent,
+				       lMaximumCalculator->GetMaximum(),
+				       lTranslation) )
 	      {
 		// add key point
 		OutputPointType keyPoint;
 		lIterDoG.Get()->TransformIndexToPhysicalPoint(lIterCurrent.GetIndex(),
 							      keyPoint);
+		keyPoint[0] = keyPoint[0]+lIterDoG.Get()->GetSpacing()[0]*lTranslation[0];
+		keyPoint[1] = keyPoint[1]+lIterDoG.Get()->GetSpacing()[1]*lTranslation[1];
+		
 		pointSet->SetPoint(m_ValidatedKeyPoints, keyPoint);
 		OutputPixelType data;
 		data.SetSize(2);
@@ -194,7 +212,7 @@ namespace otb
   	    ++lIterLowerAdjacent;
   	    ++lIterUpperAdjacent;
  	  }
-
+	
 	++lIterDoG;
       }
   }
@@ -268,6 +286,139 @@ namespace otb
  	  currentScale.GetCenterPixel() > nextScale.GetCenterPixel();
       }
     return isExtremum;
+  }
+  
+  /**
+   * Refine location key point
+   */
+  template <class TInputImage, class TOutputPointSet>
+  bool
+  ImageToSIFTKeyPointSetFilter<TInputImage,TOutputPointSet>
+  ::RefineLocationKeyPoint( const NeighborhoodIteratorType& currentScale,
+			    const NeighborhoodIteratorType& previousScale,
+			    const NeighborhoodIteratorType& nextScale,
+			    const PixelType& maximumDoG,
+			    VectorPointType& solution)
+  {
+    bool discard = false;
+    
+    OffsetType o1 = {{-1,0}};
+    OffsetType o2 = {{1,0}};
+    OffsetType o3 = {{0,-1}};
+    OffsetType o4 = {{0,1}};
+    OffsetType o5 = {{-1,-1}};
+    OffsetType o6 = {{1,1}};
+    OffsetType o7 = {{-1,1}};
+    OffsetType o8 = {{1,-1}};
+    
+    PixelType dx = 0.5*(currentScale.GetPixel(o1)
+			-currentScale.GetPixel(o2) );
+    
+    PixelType dy = 0.5*(currentScale.GetPixel(o3)
+			-currentScale.GetPixel(o4) );
+    
+    PixelType ds = 0.5*(previousScale.GetCenterPixel()-
+			nextScale.GetCenterPixel());
+    
+    PixelType dxx = currentScale.GetPixel(o1)
+      -2*currentScale.GetCenterPixel()
+      +currentScale.GetPixel(o2);
+    
+    PixelType dyy = currentScale.GetPixel(o3)
+      -2*currentScale.GetCenterPixel()
+      +currentScale.GetPixel(o4);
+    
+    PixelType dss = previousScale.GetCenterPixel()
+      -2*currentScale.GetCenterPixel()
+      +nextScale.GetCenterPixel();
+    
+    PixelType dxy = 0.25*(currentScale.GetPixel(o5)
+			  +currentScale.GetPixel(o6)
+			  -currentScale.GetPixel(o7)
+			  -currentScale.GetPixel(o8) );
+    
+    PixelType dxs = 0.25*(previousScale.GetPixel(o1)
+			  +nextScale.GetPixel(o2)
+			  -previousScale.GetPixel(o2)
+			  -nextScale.GetPixel(o1) );
+    
+    PixelType dys = 0.25*(previousScale.GetPixel(o3)
+			  +nextScale.GetPixel(o4)
+			  -previousScale.GetPixel(o4)
+			  -nextScale.GetPixel(o3) );
+    
+    itk::Matrix<PixelType,3 , 3> lMatrixSecondOrder;
+    lMatrixSecondOrder[0][0] = dxx;
+    lMatrixSecondOrder[0][1] = dxy;
+    lMatrixSecondOrder[0][2] = dxs;
+    
+    lMatrixSecondOrder[1][0] = dxy;
+    lMatrixSecondOrder[1][1] = dyy;
+    lMatrixSecondOrder[1][2] = dys;
+
+    lMatrixSecondOrder[2][0] = dxs;
+    lMatrixSecondOrder[2][1] = dys;
+    lMatrixSecondOrder[2][2] = dss;
+    
+    itk::Vector<PixelType, 3> lVectorFirstOrder;
+    lVectorFirstOrder[0] = dx;
+    lVectorFirstOrder[1] = dy;
+    lVectorFirstOrder[2] = ds;
+    
+    // Solve system
+    itk::Matrix<PixelType,3,3> lMatrixInv(lMatrixSecondOrder.GetInverse());
+    solution = lMatrixInv*lVectorFirstOrder;
+    
+    // if translation location is larger than 0.5 in any dimension
+    // compute with anotherlocation
+    OffsetType lOffset={{0,0}};
+    OffsetType lOffsetZero={{0,0}};
+    
+    if (solution[0]>0.5)
+      {
+	lOffset[0]= 1;
+      }
+    else if (solution[0]<0.5)
+      {
+	lOffset[0]= -1;
+      }
+
+    if (solution[1]>0.5)
+      {
+	lOffset[1]= 1;
+      }
+    else if (solution[1]<0.5)
+      {
+	lOffset[1]= -1;
+      }
+    
+    if (lOffset != lOffsetZero)
+      {
+	NeighborhoodIteratorType iterCurrent(currentScale);
+	iterCurrent.SetLocation(currentScale.GetIndex()+lOffset);
+	
+	NeighborhoodIteratorType iterPrev(previousScale);
+	iterPrev.SetLocation(previousScale.GetIndex()+lOffset);
+	
+	NeighborhoodIteratorType iterNext(nextScale);
+	iterNext.SetLocation(nextScale.GetIndex()+lOffset);
+	
+	//lSolution = 
+	// discard = RefineLocationKeyPoint(iterCurrent,
+	// 					 iterPrev,
+	// 					 iterNext, solution);
+      }
+    
+    // Compute interpolated value DoG for lSolution
+    PixelType lDoGInterpolated = currentScale.GetCenterPixel()+
+      0.5*(dx*solution[0]+
+	   dy*solution[1]+
+	   ds*solution[2]);
+    
+    // DoG threshold
+    discard = lDoGInterpolated < m_ThresholdDoG*maximumDoG;
+    
+    return discard;
   }
   
   /**

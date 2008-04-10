@@ -23,6 +23,8 @@ PURPOSE.  See the above copyright notices for more information.
 #include "itkSubtractImageFilter.h"
 #include "itkShrinkImageFilter.h"
 #include "itkConstNeighborhoodIterator.h"
+#include "itkVector.h"
+#include "itkMinimumMaximumImageCalculator.h"
 
 #include "otbImageToPointSetFilter.h"
 #include "otbImageList.h"
@@ -63,6 +65,7 @@ namespace otb
       /** Template parameters typedefs */
       typedef TInputImage InputImageType;
       typedef typename TInputImage::Pointer InputImagePointerType;
+      typedef typename TInputImage::PixelType PixelType;
       
       typedef TOutputPointSet OutputPointSetType;
       typedef typename TOutputPointSet::Pointer OutputPointSetPointerType;
@@ -70,6 +73,8 @@ namespace otb
       typedef typename TOutputPointSet::PointType OutputPointType;
       typedef typename TOutputPointSet::PointIdentifier OutputPointIdentifierType;
       	
+      typedef itk::Vector<PixelType,3> VectorPointType;
+      
       /** Set/Get the number of octaves */
       itkSetMacro(OctavesNumber, unsigned int);
       itkGetMacro(OctavesNumber, unsigned int);
@@ -89,6 +94,10 @@ namespace otb
       /** Set/Get the sigma 0 */
       itkSetMacro(Sigma0, double);
       itkGetMacro(Sigma0, double);
+
+      /** Set/Get the sigma 0 */
+      itkSetMacro(ThresholdDoG, double);
+      itkGetMacro(ThresholdDoG, double);
       
       /** Internal typedefs */
       typedef itk::ExpandImageFilter<TInputImage, TInputImage> ExpandFilterType;
@@ -109,6 +118,9 @@ namespace otb
       typedef itk::ConstNeighborhoodIterator<InputImageType> NeighborhoodIteratorType;
       typedef typename NeighborhoodIteratorType::NeighborhoodType NeighborhoodType;
       typedef typename NeighborhoodType::OffsetType OffsetType;
+      
+      typedef itk::MinimumMaximumImageCalculator<InputImageType> MinimumMaximumCalculatorType;
+      typedef typename MinimumMaximumCalculatorType::Pointer MinimumMaximumCalculatorPointerType;
       
     protected:
       /** Actually process the input */
@@ -145,7 +157,22 @@ namespace otb
        */
       bool IsLocalExtremum( const NeighborhoodIteratorType& currentScale,
 			    const NeighborhoodIteratorType& previousScale,
-			    const NeighborhoodIteratorType& nextScale) const;
+			    const NeighborhoodIteratorType& nextScale ) const;
+      
+      /** Refine location key point
+       *  
+       *  \param currentScale
+       *  \param previousScale
+       *  \param nextScale
+       *  \param offset pixel location
+       *
+       *  \return true if key point is rejected, false otherwise
+       */
+      bool RefineLocationKeyPoint( const NeighborhoodIteratorType& currentScale,
+				   const NeighborhoodIteratorType& previousScale,
+				   const NeighborhoodIteratorType& nextScale,
+				   const PixelType& maximumDoG,
+				   VectorPointType& solution);
       
     private:
       ImageToSIFTKeyPointSetFilter(const Self&); //purposely not implemented
