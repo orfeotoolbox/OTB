@@ -50,7 +50,7 @@ const TSourceImage *
 ImportGeoInformationImageFilter<TImage,TSourceImage>
 ::GetSource()
 {
-  return static_cast<const TSourceImage *>(this->GetInput(1));
+  return static_cast<const TSourceImage *>(this->itk::ProcessObject::GetInput(1));
 }
 
 template <class TImage, class TSourceImage>
