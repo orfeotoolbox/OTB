@@ -92,39 +92,36 @@ int otbImageToSIFTKeyPointSetFilter(int argc, char * argv[])
       ImageType::IndexType index = iterOutput.GetIndex();
       ImageType::PixelType grayPix = reader->GetOutput()->GetPixel(index);
       OutputImageType::PixelType rgbPixel;
-      rgbPixel.SetRed( grayPix );
-      rgbPixel.SetGreen( grayPix );
-      rgbPixel.SetBlue( grayPix );
+      rgbPixel.SetRed( static_cast<unsigned char>(grayPix) );
+      rgbPixel.SetGreen( static_cast<unsigned char>(grayPix) );
+      rgbPixel.SetBlue( static_cast<unsigned char>(grayPix) );
       
       iterOutput.Set(rgbPixel);
     }
   
-  if( filter->GetOutput()->GetNumberOfPoints()>0 )
+  PointsIteratorType pIt = filter->GetOutput()->GetPoints()->Begin();
+  PointDataIteratorType pdIt = filter->GetOutput()->GetPointData()->Begin();
+  while( pIt!=filter->GetOutput()->GetPoints()->End() &&
+	 pdIt!=filter->GetOutput()->GetPointData()->End() )
     {
-      PointsIteratorType pIt = filter->GetOutput()->GetPoints()->Begin();
-      PointDataIteratorType pdIt = filter->GetOutput()->GetPointData()->Begin();
-      while( pIt!=filter->GetOutput()->GetPoints()->End() &&
-	     pdIt!=filter->GetOutput()->GetPointData()->End() )
- 	{
-	  ImageType::IndexType index;
- 	  reader->GetOutput()->TransformPhysicalPointToIndex(pIt.Value(),index);
-	  outfile<<"Point: "<<pIt.Value()<<", Index: "<<index \
-		 << " Octave: " << pdIt.Value()[0] \
-		 << " Scale: " <<  pdIt.Value()[1] << std::endl;
-	  
-	  OutputImageType::PixelType keyPixel;
-	  keyPixel.SetRed(0);
-	  keyPixel.SetGreen(255);
-	  keyPixel.SetBlue(0);
-	  
-	  outputImage->SetPixel(index,keyPixel);
-	  outputImage->SetPixel(index+t,keyPixel);
-	  outputImage->SetPixel(index+b,keyPixel);
-	  outputImage->SetPixel(index+l,keyPixel);
-	  outputImage->SetPixel(index+r,keyPixel);
- 	  ++pIt;
- 	  ++pdIt;
- 	}
+      ImageType::IndexType index;
+      reader->GetOutput()->TransformPhysicalPointToIndex(pIt.Value(),index);
+      outfile<<"Point: "<<pIt.Value()<<", Index: "<<index \
+	     << " Octave: " << pdIt.Value()[0] \
+	     << " Scale: " <<  pdIt.Value()[1] << std::endl;
+      
+      OutputImageType::PixelType keyPixel;
+      keyPixel.SetRed(0);
+      keyPixel.SetGreen(255);
+      keyPixel.SetBlue(0);
+      
+      outputImage->SetPixel(index,keyPixel);
+      outputImage->SetPixel(index+t,keyPixel);
+      outputImage->SetPixel(index+b,keyPixel);
+      outputImage->SetPixel(index+l,keyPixel);
+      outputImage->SetPixel(index+r,keyPixel);
+      ++pIt;
+      ++pdIt;
     }
   outfile.close();
   
