@@ -38,6 +38,19 @@ namespace otb
    * This class implements the SIFT key point detector proposed by David G. Lowe in proceedings of International
    * Conference on Computer Vision, Corfu, september 1999.
    *
+   * \li Input image is downsample by factor 2
+   * \li Pyramid of gaussians is obtained by filtering input image with
+   *     variable length sigma, each separated by a constant k = 2^(1/S)
+   *     where S is the number of scales
+   * \li Difference of gaussian are compute with the difference of two
+   *     adjacent gaussian image results
+   * \li Detector is laucnched on each difference of gaussian to find key point
+   * \li A key point is a local minimum or a local maximum on 3*3 neighborhood
+   * \li An interpolated location of the maximum key point is compute with fitting
+   *     a 3D quadratic function
+   * \li DoG low constrast are discarded (DoG < 3%)
+   * \li High edge responses key point are discarded
+   *
    * Selected key points are stored in a itk::PointSet structure.
    * Data points contains a list of (magnitude, main orientation) for each level
    * of the pyramidal decomposition.
@@ -95,9 +108,18 @@ namespace otb
       itkSetMacro(Sigma0, double);
       itkGetMacro(Sigma0, double);
 
-      /** Set/Get the sigma 0 */
-      itkSetMacro(ThresholdDoG, double);
-      itkGetMacro(ThresholdDoG, double);
+      /** Set/Get the Difference of gaussian threshold
+       * eliminating low contrast key point
+       */
+      itkSetMacro(DoGThreshold, double);
+      itkGetMacro(DoGThreshold, double);
+
+      
+      /** Set/Get Edgethreshold
+       *  Eliminating edge responses
+       */
+      itkSetMacro(EdgeThreshold, double);
+      itkGetMacro(EdgeThreshold, double);
       
       /** Internal typedefs */
       typedef itk::ExpandImageFilter<TInputImage, TInputImage> ExpandFilterType;
@@ -174,6 +196,10 @@ namespace otb
 				   const PixelType& maximumDoG,
 				   VectorPointType& solution);
       
+      /** Compute key point orientation
+       */
+      void ComputeKeyPointOrientation();
+      
     private:
       ImageToSIFTKeyPointSetFilter(const Self&); //purposely not implemented
       void operator=(const Self&); //purposely not implemented
@@ -191,16 +217,19 @@ namespace otb
       unsigned int m_ShrinkFactors;
       
       /** Threshold DoG */
-      double m_ThresholdDoG;
+      double m_DoGThreshold;
+
+      /** Edge Threshold */
+      double m_EdgeThreshold;
+      
+      /** Ratio threshold compute */
+      double m_RatioEdgeThreshold;
       
       /** Sigma 0 */
       typename GaussianFilterType::ScalarRealType m_Sigma0;
       
       /** Sigma k */
       double m_Sigmak;
-      
-      /** Number of key points */
-      OutputPointIdentifierType m_ValidatedKeyPoints;
       
       /** Expand filter */
       ExpandFilterPointerType m_ExpandFilter;
@@ -220,6 +249,18 @@ namespace otb
       
       /** Subtract filter */
       SubtractFilterPointerType m_SubtractFilter;
+      
+      /** Number of key points */
+      OutputPointIdentifierType m_ValidatedKeyPoints;
+      
+      /** Number of key point which offset is larger than 0.5 per octave*/
+      unsigned int m_DifferentSamplePoints;
+      
+      /** Number of discarded key points */
+      unsigned int m_DiscardedKeyPoints;
+      
+      /** Number of change sample max */
+      unsigned int m_ChangeSamplePointsMax;
     };
 }// End namespace otb
 #ifndef OTB_MANUAL_INSTANTIATION

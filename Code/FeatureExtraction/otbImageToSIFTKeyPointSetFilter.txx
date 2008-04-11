@@ -35,9 +35,16 @@ namespace otb
     m_ExpandFactors = 2;
     m_ShrinkFactors = 2;
     m_Sigma0 = 1.6;
-    m_Sigmak = vcl_pow((double)2, (double)((double)1/(double)m_ScalesNumber));
+    m_Sigmak = 0;
+    
+    m_DoGThreshold = 0.03;
+    m_EdgeThreshold = 10;
+    m_RatioEdgeThreshold = 0;
+    
     m_ValidatedKeyPoints = 0;
-    m_ThresholdDoG = 0.03;
+    m_DifferentSamplePoints = 0;
+    m_DiscardedKeyPoints = 0;
+    m_ChangeSamplePointsMax = 5;
     
     m_ExpandFilter = ExpandFilterType::New();
   }
@@ -54,11 +61,17 @@ namespace otb
     
     // for each octave, compute the difference of gaussian
     unsigned int lOctave = 0;
+    m_Sigmak = vcl_pow((double)2, (double)((double)1/(double)(m_ScalesNumber+1)));
+    m_RatioEdgeThreshold = (m_EdgeThreshold+1)*(m_EdgeThreshold+1)/m_EdgeThreshold;
+    
     for (lOctave = 0; lOctave != m_OctavesNumber; lOctave++)
       {
+	m_DifferentSamplePoints = 0;
+	m_DiscardedKeyPoints = 0;
+	
 	ComputeDifferenceOfGaussian(input);
 	DetectKeyPoint(lOctave);
-
+	
 	// Get the last gaussian for subsample and
 	// repeat the process
 	m_ShrinkFilter = ShrinkFilterType::New();
@@ -69,9 +82,17 @@ namespace otb
 	
 	std::cout << "Number key points per octave : " \
 		  << m_ValidatedKeyPoints << std::endl;
+	std::cout << "Number different sample key points per octave : " \
+		  << m_DifferentSamplePoints << std::endl;
+	std::cout << "Number discarded key points per octave : " \
+		  << m_DiscardedKeyPoints << std::endl;
+	
 	std::cout << "Resample image factor : " \
 		  << m_ShrinkFactors << std::endl;
       }
+    std::cout << "Total number key points : " \
+	      << this->GetOutput()->GetNumberOfPoints() << std::endl;
+    
   }
   
   /**
@@ -147,6 +168,7 @@ namespace otb
   ::DetectKeyPoint( const unsigned int octave )
   {
     typename ImageListType::Iterator lIterDoG = m_DoGList->Begin()+1;
+    unsigned int lScale = 0;
     
     // 3 min DoG
     while ( (lIterDoG+1) != m_DoGList->End())
@@ -176,36 +198,74 @@ namespace otb
  	while ( !lIterCurrent.IsAtEnd() &&
 		!lIterLowerAdjacent.IsAtEnd() &&
 		!lIterUpperAdjacent.IsAtEnd() )
- 	  {
-	    VectorPointType lTranslation;
-	    
+ 	  { 
  	    // check local min/max
   	    if (IsLocalExtremum(lIterCurrent,
 				lIterLowerAdjacent,
-				lIterUpperAdjacent) &&
-		
-		RefineLocationKeyPoint(lIterCurrent,
-				       lIterLowerAdjacent,
-				       lIterUpperAdjacent,
-				       lMaximumCalculator->GetMaximum(),
-				       lTranslation) )
+				lIterUpperAdjacent) )
 	      {
-		// add key point
-		OutputPointType keyPoint;
-		lIterDoG.Get()->TransformIndexToPhysicalPoint(lIterCurrent.GetIndex(),
-							      keyPoint);
-		keyPoint[0] = keyPoint[0]+lIterDoG.Get()->GetSpacing()[0]*lTranslation[0];
-		keyPoint[1] = keyPoint[1]+lIterDoG.Get()->GetSpacing()[1]*lTranslation[1];
+		VectorPointType lTranslation;
+		OffsetType lOffsetZero = {{0,0}};
 		
-		pointSet->SetPoint(m_ValidatedKeyPoints, keyPoint);
-		OutputPixelType data;
-		data.SetSize(2);
-		data.SetElement(0,octave);
-		//! \todo compute scale
-		unsigned int scale = 0;
-		data.SetElement(1,scale);
-		pointSet->SetPointData(m_ValidatedKeyPoints, data);
-		++m_ValidatedKeyPoints;
+		unsigned int lChangeSamplePoints = 0;
+		NeighborhoodIteratorType neighborCurrentScale(lIterCurrent);
+		NeighborhoodIteratorType neighborPreviousScale(lIterLowerAdjacent);
+		NeighborhoodIteratorType neighborNextScale(lIterUpperAdjacent);
+		
+		bool accepted = false;
+		bool changed = true;
+		while (lChangeSamplePoints < m_ChangeSamplePointsMax &&
+		       changed )
+		  {
+		    accepted = RefineLocationKeyPoint(neighborCurrentScale,
+						      neighborPreviousScale,
+						      neighborNextScale,
+						      lMaximumCalculator->GetMaximum(),
+						      lTranslation);
+		    
+		    OffsetType lTranslateOffset = {{0,0}};
+		    
+		    lTranslateOffset[0] += static_cast<int>(lTranslation[0]>0.5);
+		    lTranslateOffset[0] += -static_cast<int>(lTranslation[0]<-0.5);
+
+		    lTranslateOffset[1] += static_cast<int>(lTranslation[1]>0.5);
+		    lTranslateOffset[1] += -static_cast<int>(lTranslation[1]<-0.5);
+		    
+		    changed = lTranslateOffset != lOffsetZero;
+		    
+		    neighborCurrentScale+=lTranslateOffset;
+		    neighborPreviousScale+=lTranslateOffset;
+		    neighborNextScale+=lTranslateOffset;
+		    
+		    lChangeSamplePoints++;
+		  }
+		if (changed)
+		  {
+		    m_DifferentSamplePoints++;
+		  }
+		
+		// add key point
+		if (accepted)
+		  {
+		    OutputPointType keyPoint;
+		    lIterDoG.Get()->TransformIndexToPhysicalPoint(neighborCurrentScale.GetIndex(),
+								  keyPoint);
+		    keyPoint[0] = keyPoint[0]+lIterDoG.Get()->GetSpacing()[0]*lTranslation[0];
+		    keyPoint[1] = keyPoint[1]+lIterDoG.Get()->GetSpacing()[1]*lTranslation[1];
+		    
+		    pointSet->SetPoint(m_ValidatedKeyPoints, keyPoint);
+		    
+		    OutputPixelType data;
+		    data.SetSize(2);
+		    data.SetElement(0,octave);
+		    data.SetElement(1,lScale+lTranslation[2]);
+		    
+		    pointSet->SetPointData(m_ValidatedKeyPoints, data);
+		    
+		    //ComputeKeyPointOrientation(neighborCurrentScale);
+		    
+		    m_ValidatedKeyPoints++;
+		  }
 	      }
 	    
  	    ++lIterCurrent;
@@ -214,6 +274,7 @@ namespace otb
  	  }
 	
 	++lIterDoG;
+	lScale++;
       }
   }
   
@@ -300,7 +361,7 @@ namespace otb
 			    const PixelType& maximumDoG,
 			    VectorPointType& solution)
   {
-    bool discard = false;
+    bool accepted = true;
     
     OffsetType o1 = {{-1,0}};
     OffsetType o2 = {{1,0}};
@@ -369,46 +430,6 @@ namespace otb
     itk::Matrix<PixelType,3,3> lMatrixInv(lMatrixSecondOrder.GetInverse());
     solution = lMatrixInv*lVectorFirstOrder;
     
-    // if translation location is larger than 0.5 in any dimension
-    // compute with anotherlocation
-    OffsetType lOffset={{0,0}};
-    OffsetType lOffsetZero={{0,0}};
-    
-    if (solution[0]>0.5)
-      {
-	lOffset[0]= 1;
-      }
-    else if (solution[0]<0.5)
-      {
-	lOffset[0]= -1;
-      }
-
-    if (solution[1]>0.5)
-      {
-	lOffset[1]= 1;
-      }
-    else if (solution[1]<0.5)
-      {
-	lOffset[1]= -1;
-      }
-    
-    if (lOffset != lOffsetZero)
-      {
-	NeighborhoodIteratorType iterCurrent(currentScale);
-	iterCurrent.SetLocation(currentScale.GetIndex()+lOffset);
-	
-	NeighborhoodIteratorType iterPrev(previousScale);
-	iterPrev.SetLocation(previousScale.GetIndex()+lOffset);
-	
-	NeighborhoodIteratorType iterNext(nextScale);
-	iterNext.SetLocation(nextScale.GetIndex()+lOffset);
-	
-	//lSolution = 
-	// discard = RefineLocationKeyPoint(iterCurrent,
-	// 					 iterPrev,
-	// 					 iterNext, solution);
-      }
-    
     // Compute interpolated value DoG for lSolution
     PixelType lDoGInterpolated = currentScale.GetCenterPixel()+
       0.5*(dx*solution[0]+
@@ -416,11 +437,41 @@ namespace otb
 	   ds*solution[2]);
     
     // DoG threshold
-    discard = lDoGInterpolated < m_ThresholdDoG*maximumDoG;
+    // Eliminating edge response
     
-    return discard;
+    PixelType lRatioHessian = (dxx+dyy)*(dxx+dyy)/(dxx*dyy -dxy*dxy);
+    
+    accepted =
+      lDoGInterpolated >= m_DoGThreshold*maximumDoG &&
+      lDoGInterpolated <= -m_DoGThreshold*maximumDoG &&
+      lRatioHessian < m_RatioEdgeThreshold;
+    
+    if (!accepted)
+      {
+	m_DiscardedKeyPoints++;
+      }
+    
+    return accepted;
   }
   
+  /**
+   * Compute key point orientation
+   */
+  template <class TInputImage, class TOutputPointSet>
+  void
+  ImageToSIFTKeyPointSetFilter<TInputImage,TOutputPointSet>
+  ::ComputeKeyPointOrientation()
+  {
+//     PixelType lMagnitude =
+//       vcl_pow(2,(double)(currentPixel.GetPixel(OffsetType({{1,0}}))-
+// 			 currentPixel.GetPixel(OffsetType({{-1,0}})) ) )+
+//       vcl_pow(2,(double)(currentPixel.GetPixel(OffsetType({{1,0}}))-
+// 			 currentPixel.GetPixel(OffsetType({{-1,0}})) ) )+
+      
+      
+						 
+  }
+
   /**
    * PrintSelf Method
    */
