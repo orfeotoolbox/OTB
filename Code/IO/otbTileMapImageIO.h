@@ -176,11 +176,11 @@ namespace otb
       void InternalRead(double x, double y, void* buffer);
       void InternalWrite(double x, double y, const void* buffer);
       void BuildFileName(std::ostringstream& quad, std::ostringstream& filename);
-      void GetFromNet(std::ostringstream& quad);
-      void GetFromNet(std::ostringstream& quad, double x, double y);
+      void GetFromNetGM(std::ostringstream& filename, double x, double y);
+      void GetFromNetOSM(std::ostringstream& filename, double x, double y);
       void FillCacheFaults(void* buffer);
       int XYToQuadTree(double x, double y, std::ostringstream& quad);
-      
+      int XYToQuadTree2(double x, double y, std::ostringstream& quad);
 
       /** Nombre d'octets par pixel */
       int           m_NbOctetPixel;

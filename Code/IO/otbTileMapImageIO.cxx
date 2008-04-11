@@ -219,15 +219,17 @@ namespace otb
   void TileMapImageIO::InternalRead(double x, double y, void* buffer)
   {
     std::ostringstream quad;
+    std::ostringstream quad2;
 //   int lDepth=m_Depth;
     unsigned char * bufferCacheFault = NULL;
     double xorig=x;
     double yorig=y;
 
     XYToQuadTree(x, y, quad);
+    XYToQuadTree2(x, y, quad2);
 
     std::ostringstream filename;
-    BuildFileName(quad, filename);
+    BuildFileName(quad2, filename);
 
     itk::ImageIOBase::Pointer imageIO;
   //Open the file to fill the buffer
@@ -248,11 +250,11 @@ namespace otb
     {
       if (m_AddressMode[0] == '0')
       {
-        GetFromNet(quad);
+        GetFromNetGM(filename, xorig, yorig);
       }
       if (m_AddressMode[0] == '1')
       {
-        GetFromNet(quad, xorig, yorig);
+        GetFromNetOSM(filename, xorig, yorig);
       }
       lCanRead = imageIO->CanReadFile(filename.str().c_str());
     }
@@ -302,16 +304,19 @@ namespace otb
     
   }
 
-
-  void TileMapImageIO::GetFromNet(std::ostringstream& quad)
+  /** Get the file from net in a qtrssrtstr.jpg fashion */
+  void TileMapImageIO::GetFromNetGM(std::ostringstream& filename, double x, double y)
   {
+    
+    std::ostringstream quad;
+    XYToQuadTree(x, y, quad);
+    
     std::ostringstream urlStream;
     urlStream << m_ServerName;
     urlStream << quad.str();
-  
 
-    std::ostringstream filename;
-    BuildFileName(quad, filename);
+//     std::ostringstream filename;
+//     BuildFileName(quad, filename);
 
     FILE* output_file = fopen(filename.str().c_str(),"w");
     if(output_file == NULL)
@@ -352,11 +357,10 @@ namespace otb
   
   }
 
-  void TileMapImageIO::GetFromNet(std::ostringstream& quad, double x, double y)
+  /** Get the file from net in a 132/153.png fashion */
+  void TileMapImageIO::GetFromNetOSM(std::ostringstream& filename, double x, double y)
   {
-    std::cout << x << std::endl;
-    std::cout << y << std::endl;
-  
+    otbMsgDevMacro( << "(x,y): (" << x << "," << y << ")"); 
     std::ostringstream urlStream;
     urlStream << m_ServerName;
 //   urlStream << quad.str();
@@ -369,8 +373,8 @@ namespace otb
   
   
 
-    std::ostringstream filename;
-    BuildFileName(quad, filename);
+//     std::ostringstream filename;
+//     BuildFileName(quad, filename);
 
     FILE* output_file = fopen(filename.str().c_str(),"w");
     if(output_file == NULL)
@@ -542,35 +546,6 @@ namespace otb
           bufferTile[iInit]=0;
         }
 
-      //Copy the input into the tile buffer 
-        //FIXME assume RGB image
-//         for(int tileJ=0; tileJ<256; tileJ++)
-//         {
-//           long int yImageOffset=(long int) 256*floor(firstLine/256.)+256*numTileY-firstLine+tileJ;
-//           if ((yImageOffset >= 0) && (yImageOffset < totLines))
-//           {
-//             long int xImageOffset = (long int)
-//                 256*floor(firstSample/256.)+256*numTileX-firstSample;
-//             const unsigned char * src = p+3*(xImageOffset+totSamples*yImageOffset);
-//             unsigned char * dst = bufferTile+3*256*tileJ;
-//             int size = 3*256;
-//             if (xImageOffset < 0){
-//               src -= 3*xImageOffset;
-//               dst -= 3*xImageOffset;
-//               size += 3*xImageOffset;
-//             }
-//             if (xImageOffset+256 > totSamples)
-//             {
-//               size += 3*(totSamples-xImageOffset-256);
-//             }
-//             if (size > 0)
-//             {
-//               memcpy(dst, src, size);
-//             }
-// 
-// 
-//           }
-//         }//end of tile copy
         
         for(int tileJ=0; tileJ<256; tileJ++)
         {
@@ -689,7 +664,7 @@ namespace otb
   
   }
 
-
+  /** Generate the quadtree address in qrts style */
   int TileMapImageIO::XYToQuadTree(double x, double y, std::ostringstream& quad)
   {
     int lDepth=m_Depth;
@@ -723,6 +698,41 @@ namespace otb
     return 0;
   }
 
+  /** Generate the quadtree address in 0123 style */
+  int TileMapImageIO::XYToQuadTree2(double x, double y, std::ostringstream& quad)
+  {
+    int lDepth=m_Depth;
+    while (lDepth--) // (post-decrement)
+    {
+  // make sure we only look at fractional part
+      x -= floor(x);
+      y -= floor(y);
+      int quad_index = ((x >= 0.5 ? 1 : 0) + (y >= 0.5 ? 2 : 0));
+
+      switch(quad_index)
+      {
+        case 0:
+          quad<<"0";
+          break;
+        case 1:
+          quad<<"1";
+          break;
+        case 2:
+          quad<<"2";
+          break;
+        case 3:
+          quad<<"3";
+          break;
+      }
+// level down
+      x *= 2;
+      y *= 2;
+    }
+  
+    return 0;
+  }
+  
+  /** RGB buffer filling when the tile is not found */
   void TileMapImageIO::FillCacheFaults(void* buffer)
   {
     const char * logo =
