@@ -93,7 +93,7 @@ void
  ImportGeoInformationImageFilter<TImage,TSourceImage>
 ::GenerateData(void)
 {
-  // Generate data is empty, since the filter runs inplace.
+  this->AllocateOutputs();
 }
 /**
  * PrintSelf Method
