@@ -11,7 +11,7 @@ SET(TEMP ${OTBTesting_BINARY_DIR}/Temporary)
 
 #Tolerance sur diff pixel image
 SET(TOL 0.0)
-SET(EPSILON 0.000000001)
+SET(EPSILON 0.0000001)
 
 SET(BASICFILTERS_TESTS1 ${CXX_TEST_PATH}/otbBasicFiltersTests1)
 SET(BASICFILTERS_TESTS2 ${CXX_TEST_PATH}/otbBasicFiltersTests2)
@@ -221,7 +221,7 @@ ADD_TEST(bfTvStreamingShrinkImageFilterQBMUL ${BASICFILTERS_TESTS2}
 
 
  ADD_TEST(bfTvImportGeoInformationImageFilterWithKeywordList ${BASICFILTERS_TESTS3}  
---compare-ascii ${TOL}
+--compare-ascii ${EPSILON}
 		${BASELINE_FILES}/ioOSSIMImageQuickbirdMetaDataReader.txt
                 ${TEMP}/bfTvImportGeoInformationKeywordListOutput.txt
          otbImportGeoInformationImageFilterWithKeywordList
