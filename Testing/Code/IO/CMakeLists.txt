@@ -1293,9 +1293,9 @@ ADD_TEST(ioTuImageFileReaderWriterJ2K2TIF ${IO_TESTS2}
 	 ${TEMP}/ioTvImageFileReaderWriterJ2K2TIFOutput.tif
          )
 
-
+#NOTE: we are comparing with the kakadu output in raw format.
 ADD_TEST(ioTuVectorImageFileReaderWriterJP22TIF ${IO_TESTS9} 
---compare-image ${TOL}  ${BASELINE}/ioTvVectorImageFileReaderWriterJP22TIFOutput.tif
+--compare-image ${TOL}  ${BASELINE}/ioTvVectorImageFileReaderWriterJP22TIFOutput
                         ${TEMP}/ioTvVectorImageFileReaderWriterJP22TIFOutput.tif
          otbVectorImageFileReaderWriterTest
          ${IMAGEDATA}/JPEG2000/QB_multicomp_small.jpx
