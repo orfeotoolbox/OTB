@@ -1277,37 +1277,37 @@ ADD_TEST(ioTuJP2ImageIOCanRead ${IO_TESTS13}
          )
 
 ADD_TEST(ioTuVectorImageFileReaderWriterJ2K2TIF ${IO_TESTS9} 
---compare-image ${TOL}  ${BASELINE}/ioTuVectorImageFileReaderWriterJ2K2TIFOutput.tif
-                        ${TEMP}/ioTuVectorImageFileReaderWriterJ2K2TIFOutput.tif
+--compare-image ${TOL}  ${BASELINE}/ioTvVectorImageFileReaderWriterJ2K2TIFOutput.tif
+                        ${TEMP}/ioTvVectorImageFileReaderWriterJ2K2TIFOutput.tif
          otbVectorImageFileReaderWriterTest
          ${INPUTDATA}/bretagne.j2k
-	 ${TEMP}/ioTuVectorImageFileReaderWriterJ2K2TIFOutput.tif
+	 ${TEMP}/ioTvVectorImageFileReaderWriterJ2K2TIFOutput.tif
          )
 
 ADD_TEST(ioTuImageFileReaderWriterJ2K2TIF ${IO_TESTS2} 
---compare-image ${TOL}  ${BASELINE}/ioTuImageFileReaderWriterJ2K2TIFOutput.tif
-                        ${TEMP}/ioTuImageFileReaderWriterJ2K2TIFOutput.tif
+--compare-image ${TOL}  ${BASELINE}/ioTvImageFileReaderWriterJ2K2TIFOutput.tif
+                        ${TEMP}/ioTvImageFileReaderWriterJ2K2TIFOutput.tif
          otbDoubleImageIOTest
          ${INPUTDATA}/bretagne.j2k
-	 ${TEMP}/ioTuImageFileReaderWriterJ2K2TIFOutput.tif
+	 ${TEMP}/ioTvImageFileReaderWriterJ2K2TIFOutput.tif
          )
 
 
 ADD_TEST(ioTuVectorImageFileReaderWriterJP22TIF ${IO_TESTS9} 
---compare-image ${TOL}  ${BASELINE}/ioTuVectorImageFileReaderWriterJP22TIFOutput.tif
-                        ${TEMP}/ioTuVectorImageFileReaderWriterJP22TIFOutput.tif
+--compare-image ${TOL}  ${BASELINE}/ioTvVectorImageFileReaderWriterJP22TIFOutput.tif
+                        ${TEMP}/ioTvVectorImageFileReaderWriterJP22TIFOutput.tif
          otbVectorImageFileReaderWriterTest
          ${IMAGEDATA}/JPEG2000/QB_multicomp_small.jpx
-	 ${TEMP}/ioTuVectorImageFileReaderWriterJP22TIFOutput.tif
+	 ${TEMP}/ioTvVectorImageFileReaderWriterJP22TIFOutput.tif
          )
 
 
 ADD_TEST(ioTuImageFileReaderWriterJP22TIF ${IO_TESTS2} 
---compare-image ${TOL}  ${BASELINE}/ioTuImageFileReaderWriterJP22TIFOutput.tif
-                        ${TEMP}/ioTuImageFileReaderWriterJP22TIFOutput.tif
+--compare-image ${TOL}  ${BASELINE}/ioTvImageFileReaderWriterJP22TIFOutput.tif
+                        ${TEMP}/ioTvImageFileReaderWriterJP22TIFOutput.tif
          otbDoubleImageIOTest
          ${IMAGEDATA}/JPEG2000/QB_multicomp_small.jpx
-	 ${TEMP}/ioTuImageFileReaderWriterJP22TIFOutput.tif
+	 ${TEMP}/ioTvImageFileReaderWriterJP22TIFOutput.tif
          )
 
 
