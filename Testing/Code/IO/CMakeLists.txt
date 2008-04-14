@@ -32,6 +32,7 @@ SET(IO_TESTS11    ${CXX_TEST_PATH}/otbIOTests11)
 SET(IO_TESTS12    ${CXX_TEST_PATH}/otbIOTests12)
 SET(IO_TESTS13    ${CXX_TEST_PATH}/otbIOTests13)
 SET(IO_TESTS14    ${CXX_TEST_PATH}/otbIOTests14)
+SET(IO_TESTS15    ${CXX_TEST_PATH}/otbIOTests15)
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ COMMON_TESTS3 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -1328,17 +1329,17 @@ ADD_TEST(ioTuOGRDriverTest ${IO_TESTS14}
 				foo
 				)
 				
-ADD_TEST(ioTuShapeFileDataReaderTest ${IO_TESTS14}
-				otbShapeFileDataReaderTest
-				${IMAGEDATA}/TOULOUSE/QuickBird/GIS_FILES/000000128955_01_PRODUCT_SHAPE.shp
-				foo
-				)
+#ADD_TEST(ioTuShapeFileDataReaderTest ${IO_TESTS14}
+#				otbShapeFileDataReaderTest
+#				${IMAGEDATA}/TOULOUSE/QuickBird/GIS_FILES/000000128955_01_PRODUCT_SHAPE.shp
+#				foo
+#				)
 
-ADD_TEST(ioTuShapeFileDataWriterTest ${IO_TESTS14}
-				otbShapeFileDataWriterTest
-				${IMAGEDATA}/TOULOUSE/QuickBird/GIS_FILES/000000128955_01_PRODUCT_SHAPE.shp
-				foo
-				)
+#ADD_TEST(ioTuShapeFileDataWriterTest ${IO_TESTS14}
+#				otbShapeFileDataWriterTest
+#				${IMAGEDATA}/TOULOUSE/QuickBird/GIS_FILES/000000128955_01_PRODUCT_SHAPE.shp
+#				foo
+#				)
 
         
 
@@ -1377,6 +1378,17 @@ ADD_TEST(ioTvWritingComplexDataWithComplexImage ${IO_TESTS14}
 		1000 1000
 		500  500
 )
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ otbIOTESTS15 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+ADD_TEST(ioTuVectorDataIOBaseTest ${IO_TESTS15} 
+        otbVectorDataIOBaseNew )
+ADD_TEST(ioTuVectorDataSourceTest ${IO_TESTS15} 
+        otbVectorDataSourceNew )
+ADD_TEST(ioTuVectorDataFileReaderTest ${IO_TESTS15} 
+        otbVectorDataFileReaderNew )
+ADD_TEST(ioTuVectorDataFileWriterTest ${IO_TESTS15} 
+        otbVectorDataFileWriterNew )
 
 
 #----------------------------------------------------------------------------------
@@ -1476,13 +1488,19 @@ ENDIF(OTB_USE_EXTERNAL_ITK)
 
 SET(BasicIO_SRCS14
 otbOGRDriverTest.cxx
-otbShapeFileDataReaderTest.cxx
-otbShapeFileDataWriterTest.cxx
+#otbShapeFileDataReaderTest.cxx
+#otbShapeFileDataWriterTest.cxx
 otbGDALDriverDoubleWritingTest.cxx
 otbReadingComplexDataIntoComplexImageTest.cxx
 otbWritingComplexDataWithComplexImageTest.cxx
 )
 
+SET(BasicIO_SRCS15
+otbVectorDataIOBaseNew.cxx
+otbVectorDataSourceNew.cxx
+otbVectorDataFileReaderNew.cxx
+otbVectorDataFileWriterNew.cxx
+)
 
 INCLUDE_DIRECTORIES("${OTBTesting_BINARY_DIR}")
 
@@ -1528,6 +1546,9 @@ TARGET_LINK_LIBRARIES(otbIOTests13 OTBIO OTBCommon  gdal ITKIO ITKCommon dxf)
 ENDIF(NOT OTB_USE_EXTERNAL_ITK)
 
 ADD_EXECUTABLE(otbIOTests14 otbIOTests14.cxx ${BasicIO_SRCS14})
+TARGET_LINK_LIBRARIES(otbIOTests14 OTBIO OTBCommon  gdal ITKIO ITKCommon dxf)
+
+ADD_EXECUTABLE(otbIOTests15 otbIOTests15.cxx ${BasicIO_SRCS15})
 TARGET_LINK_LIBRARIES(otbIOTests14 OTBIO OTBCommon  gdal ITKIO ITKCommon dxf)
 
 ENDIF( NOT OTB_DISABLE_CXX_TESTING )

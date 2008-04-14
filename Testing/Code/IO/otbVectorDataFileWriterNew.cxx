@@ -16,22 +16,12 @@
 
 =========================================================================*/
 
-// this file defines the otbCommonTest for the test driver
-// and all it expects is that you have a function called RegisterTests
-#if defined(_MSC_VER)
-#pragma warning ( disable : 4786 )
-#endif
+#include "otbVectorDataFileWriter.h"
+#include "otbVectorDataSource.h"
 
-#include <iostream>
-#include "otbTestMain.h" 
-
-
-void RegisterTests()
+int otbVectorDataFileWriterNew(int argc, char * argv[])
 {
-REGISTER_TEST(otbOGRDriverTest);
-//REGISTER_TEST(otbShapeFileDataReaderTest);
-//REGISTER_TEST(otbShapeFileDataWriterTest);
-REGISTER_TEST(otbGDALDriverDoubleWritingTest);
-REGISTER_TEST(otbReadingComplexDataIntoComplexImageTest);
-REGISTER_TEST(otbWritingComplexDataWithComplexImageTest);
+        typedef otb::VectorDataFileWriter<otb::VectorDataSource> VectorDataFileWriterType;
+        VectorDataFileWriterType::Pointer object = VectorDataFileWriterType::New();
+        return 0;
 }

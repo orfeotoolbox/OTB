@@ -30,8 +30,6 @@
 #include "otbFileName.h"
 #include <iostream>
 
-//#include "otbShapeFileReader.h"
-//#include "otbShapeFileWriter.h"
 
 int otbOGRDriverTest(int argc, char* argv[])
 {
