@@ -16,8 +16,8 @@
 
 =========================================================================*/
 
-#ifndef __otbShapeFileDataSource_h
-#define __otbShapeFileDataSource_h
+#ifndef __otbVectorDataSource_h
+#define __otbVectorDataSource_h
 
 #if defined(_MSC_VER)
 #pragma warning ( disable : 4786 )
@@ -27,12 +27,9 @@
 #include "itkObjectFactory.h"
 #include "itkMacro.h"
 
-#include "otbShapeFileData.h"
-
-
 namespace otb
 {
-/** \class ShapeFileDataSource
+/** \class VectorDataSource
  * \brief Famille de filtres ayant un object de type shapeFile en sortie
  *
  * 
@@ -40,39 +37,39 @@ namespace otb
  *
  */
  
-template <class TOutputShapeFile>
-class ITK_EXPORT ShapeFileDataSource : public itk::ProcessObject
+template <class TOutputVectorData>
+class ITK_EXPORT VectorDataSource : public itk::ProcessObject
 {
 public :
 
 	/** Standard class typedefs. */
-	typedef ShapeFileDataSource								Self;
-  typedef itk::ProcessObject								Superclass;
-  typedef itk::SmartPointer<Self> 					Pointer;
-  typedef itk::SmartPointer<const Self>  		ConstPointer;
+  typedef VectorDataSource                      Self;
+  typedef itk::ProcessObject                    Superclass;
+  typedef itk::SmartPointer<Self>               Pointer;
+  typedef itk::SmartPointer<const Self>         ConstPointer;
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(ShapeFileDataSource, itk::ProcessObject);
+  itkTypeMacro(VectorDataSource, itk::ProcessObject);
 	
-	typedef TOutputShapeFile									OutputShapeFileType;
+  typedef TOutputVectorData     OutputVectorDataType;
 	
 
   /** Overriding GetOutput() method */
-  virtual OutputShapeFileType* GetOutput(void);
+  virtual OutputVectorDataType* GetOutput(void);
 
 
 protected:
-	ShapeFileDataSource();
-	~ShapeFileDataSource();
+  VectorDataSource();
+  ~VectorDataSource();
 
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
 	
 private:
-  ShapeFileDataSource(const Self&); //purposely not implemented
+  VectorDataSource(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
 
 } ;
@@ -80,9 +77,9 @@ private:
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbShapeFileDataSource.txx"
+#include "otbVectorDataSource.txx"
 #endif
 
-#endif // __otbShapeFileDataSource_h
+#endif // __otbVectorDataSource_h
 
 

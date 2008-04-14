@@ -15,26 +15,26 @@ the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
 PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbShapeFileDataWriter_h
-#define __otbShapeFileDataWriter_h
+#ifndef __otbVectorDataWriter_h
+#define __otbVectorDataWriter_h
 
 #include "itkProcessObject.h"
 
 namespace otb
 {
-  /** \class ShapeFileDataWriter
+  /** \class VectorDataWriter
    *  \brief This class writes the ShapeFile format 
    *
    *  \ingroup IO
    */
 	 
 template <class TInputShapeFile>
-class ITK_EXPORT ShapeFileDataWriter : public itk::ProcessObject
+class ITK_EXPORT VectorDataWriter : public itk::ProcessObject
 {
 public :
 
 	/** Standard class typedefs. */
-	typedef ShapeFileDataWriter											Self;
+	typedef VectorDataWriter											Self;
 	typedef itk::ProcessObject														Superclass;
   typedef itk::SmartPointer<Self> 								Pointer;
   typedef itk::SmartPointer<const Self>  					ConstPointer;
@@ -43,7 +43,7 @@ public :
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(ShapeFileDataWriter, itk::ProcessObject);
+  itkTypeMacro(VectorDataWriter, itk::ProcessObject);
 	
 	typedef TInputShapeFile									InputShapeFileType;
 	
@@ -65,15 +65,15 @@ public :
 	itkGetStringMacro(FileName);
 
 protected:
-	ShapeFileDataWriter();
-	~ShapeFileDataWriter();
+	VectorDataWriter();
+	~VectorDataWriter();
 
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
   std::string m_FileName; // The file to be read
 	
 private:
-  ShapeFileDataWriter(const Self&); //purposely not implemented
+  VectorDataWriter(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
 
 } ;
@@ -81,10 +81,10 @@ private:
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbShapeFileDataWriter.txx"
+#include "otbVectorDataWriter.txx"
 #endif
 
-#endif // __otbShapeFileDataWriter_h
+#endif // __otbVectorDataWriter_h
 
 	 
 	 

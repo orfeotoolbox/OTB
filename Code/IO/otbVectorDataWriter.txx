@@ -16,13 +16,13 @@ PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
 
-#ifndef __otbShapeFileDataWriter_txx
-#define __otbShapeFileDataWriter_txx
+#ifndef __otbVectorDataWriter_txx
+#define __otbVectorDataWriter_txx
 
 
 #include "otbMacro.h"
 #include "otbSystem.h"
-#include "otbShapeFileDataWriter.h"
+#include "otbVectorDataWriter.h"
 #include "otbFileName.h"
 
 namespace otb
@@ -31,8 +31,8 @@ namespace otb
  * Constructor
  */
 template <class TInputShapeFile>
-ShapeFileDataWriter<TInputShapeFile>
-::ShapeFileDataWriter()
+VectorDataWriter<TInputShapeFile>
+::VectorDataWriter()
 {
   m_FileName = "";
 }
@@ -40,8 +40,8 @@ ShapeFileDataWriter<TInputShapeFile>
  * Destructor
  */
 template <class TInputShapeFile>
-ShapeFileDataWriter<TInputShapeFile>
-::~ShapeFileDataWriter()
+VectorDataWriter<TInputShapeFile>
+::~VectorDataWriter()
 {
 }
 
@@ -49,7 +49,7 @@ ShapeFileDataWriter<TInputShapeFile>
 //---------------------------------------------------------
 template <class TInputShapeFile>
 void 
-ShapeFileDataWriter<TInputShapeFile>
+VectorDataWriter<TInputShapeFile>
 ::SetInput(const InputShapeFileType *input)
 {
 	// ProcessObject is not const_correct so this cast is required here.
@@ -60,8 +60,8 @@ ShapeFileDataWriter<TInputShapeFile>
 
 //---------------------------------------------------------
 template <class TInputShapeFile>
-const typename ShapeFileDataWriter<TInputShapeFile>::InputShapeFileType *
-ShapeFileDataWriter<TInputShapeFile>
+const typename VectorDataWriter<TInputShapeFile>::InputShapeFileType *
+VectorDataWriter<TInputShapeFile>
 ::GetInput(void)
 {
   if (this->GetNumberOfInputs() < 1)
@@ -75,8 +75,8 @@ ShapeFileDataWriter<TInputShapeFile>
   
 //---------------------------------------------------------
 template <class TInputShapeFile>
-const typename ShapeFileDataWriter<TInputShapeFile>::InputShapeFileType *
-ShapeFileDataWriter<TInputShapeFile>
+const typename VectorDataWriter<TInputShapeFile>::InputShapeFileType *
+VectorDataWriter<TInputShapeFile>
 ::GetInput(unsigned int idx)
 {
   return static_cast<TInputShapeFile*> (this->ProcessObject::GetInput(idx));
@@ -84,7 +84,7 @@ ShapeFileDataWriter<TInputShapeFile>
 
 template <class TInputShapeFile>
 void
-ShapeFileDataWriter<TInputShapeFile>
+VectorDataWriter<TInputShapeFile>
 ::Write()
 {
   const InputShapeFileType * input = this->GetInput();
@@ -124,7 +124,7 @@ ShapeFileDataWriter<TInputShapeFile>
  */
 template <class TInputShapeFile>
 void
-ShapeFileDataWriter<TInputShapeFile>
+VectorDataWriter<TInputShapeFile>
 ::GenerateData()
 {
 	const InputShapeFileType* shapeFile = this->GetInput();
@@ -216,7 +216,7 @@ ShapeFileDataWriter<TInputShapeFile>
 
 template <class TInputShapeFile>
 void
-ShapeFileDataWriter<TInputShapeFile>
+VectorDataWriter<TInputShapeFile>
 ::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
 	Superclass::PrintSelf(os, indent);

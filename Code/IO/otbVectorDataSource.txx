@@ -16,54 +16,55 @@ PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
 
-#ifndef _otbShapeFileDataSource_txx
-#define _otbShapeFileDataSource_txx
+#ifndef _otbVectorDataSource_txx
+#define _otbVectorDataSource_txx
 
-#include "otbShapeFileDataSource.h"
+#include "otbVectorDataSource.h"
 
 namespace otb
 {
 /**
  *   Constructor
  */
-template <class TOutputShapeFile>
-ShapeFileDataSource<TOutputShapeFile>
-::ShapeFileDataSource()
+template <class TOutputVectorData>
+VectorDataSource<TOutputVectorData>
+::VectorDataSource()
 {
   this->Superclass::SetNumberOfRequiredOutputs(1);
-  this->Superclass::SetNthOutput(0,OutputShapeFileType::New().GetPointer());
+  this->Superclass::SetNthOutput(0,OutputVectorDataType::New().GetPointer());
 }
 
-template <class TOutputShapeFile>
-ShapeFileDataSource<TOutputShapeFile>
-::~ShapeFileDataSource()
+template <class TOutputVectorData>
+VectorDataSource<TOutputVectorData>
+::~VectorDataSource()
 {
 }
 /**
  * Get the output image list
  * \return The image list produced.
  */
-template <class TOutputShapeFile>
-typename ShapeFileDataSource<TOutputShapeFile>::OutputShapeFileType *
-ShapeFileDataSource<TOutputShapeFile>
+template <class TOutputVectorData>
+typename VectorDataSource<TOutputVectorData>::OutputVectorDataType *
+VectorDataSource<TOutputVectorData>
 ::GetOutput(void)
 {
   if(this->GetNumberOfOutputs()<1)
     {
     return 0;
     }
-  return static_cast<OutputShapeFileType *> (this->ProcessObject::GetOutput(0));
+  return static_cast<OutputVectorDataType *> (this->ProcessObject::GetOutput(0));
 }
 /**
  * PrintSelf Method
  */
-template<class TOutputShapeFile>
+template<class TOutputVectorData>
 void
-ShapeFileDataSource<TOutputShapeFile>
+VectorDataSource<TOutputVectorData>
 ::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   Superclass::PrintSelf(os,indent);
 }
+
 }// End namespace otb
 
 #endif
