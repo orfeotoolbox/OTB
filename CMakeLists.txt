@@ -71,6 +71,7 @@ SET(OTB_VERSION_STRING "${OTB_VERSION_MAJOR}.${OTB_VERSION_MINOR}.${OTB_VERSION_
 OPTION(OTB_USE_VISU_GUI "Generate Gui/Visu tools directory. If ON, find OpenGL and FLTK packages." ON)
 MARK_AS_ADVANCED(OTB_USE_VISU_GUI)
 
+SET(OTB_GLU_INCLUDE_PATH "")
 IF(OTB_USE_VISU_GUI)
 
         #-------------------------------
@@ -80,12 +81,21 @@ IF(OTB_USE_VISU_GUI)
         IF(OPENGL_INCLUDE_PATH)
                 INCLUDE_DIRECTORIES(${OPENGL_INCLUDE_PATH})
         ENDIF(OPENGL_INCLUDE_PATH)
-        FIND_PATH(OTB_GLU_INCLUDE_PATH "GL/glu.h" ${OPENGL_INCLUDE_PATH})
-        IF(NOT OTB_GLU_INCLUDE_PATH)
-                MESSAGE(FATAL_ERROR "Impossible to find GLU files (include lib), detected by FIND_PACKAGE(OpenGL) command.")
-                MESSAGE(FATAL_ERROR "Cannot build OTB Visu module without GLU library.")
-                MESSAGE(FATAL_ERROR " => You must install GLU (Mesa package, etc.) on your system OR set OTB_USE_VISU to OFF to desactivated OTB Visu module generation !")
-        ENDIF(NOT OTB_GLU_INCLUDE_PATH)
+
+        INCLUDE(CheckIncludeFiles)
+        CHECK_INCLUDE_FILES("GL/glu.h"       HAVE_GL_GLU_H)
+MESSAGE("HAVE_GL_GLU_H ${HAVE_GL_GLU_H}")
+        IF ( NOT HAVE_GL_GLU_H )
+                FIND_PATH(OTB_GLU_INCLUDE_PATH "GL/glu.h" ${OPENGL_INCLUDE_PATH})
+MESSAGE("OTB_GLU_INCLUDE_PATH ${OTB_GLU_INCLUDE_PATH}")
+                IF(NOT OTB_GLU_INCLUDE_PATH)
+                        SET(OTB_GLU_INCLUDE_PATH "")
+                        MESSAGE("Impossible to find GLU files (include lib), detected by FIND_PACKAGE(OpenGL) command.")
+                        MESSAGE("Cannot build OTB Visu module without GLU library.")
+                        MESSAGE(" => You must install GLU (Mesa package, etc.) on your system OR set OTB_USE_VISU to OFF to desactivated OTB Visu module generation !")
+                ENDIF(NOT OTB_GLU_INCLUDE_PATH)
+        ENDIF ( NOT HAVE_GL_GLU_H )
+
         
         #-------------------------------
         # FLTK Library
