@@ -17,11 +17,11 @@
 =========================================================================*/
 
 #include "otbVectorDataFileReader.h"
-#include "otbVectorDataSource.h"
+#include "otbVectorDataBase.h"
 
 int otbVectorDataFileReaderNew(int argc, char * argv[])
 {
-        typedef otb::VectorDataFileReader<otb::VectorDataSource> VectorDataFileReaderType;
+        typedef otb::VectorDataFileReader<otb::VectorDataBase> VectorDataFileReaderType;
         VectorDataFileReaderType::Pointer object = VectorDataFileReaderType::New();
         return 0;
 }
