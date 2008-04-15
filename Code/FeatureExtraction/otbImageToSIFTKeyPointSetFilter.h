@@ -25,6 +25,8 @@ PURPOSE.  See the above copyright notices for more information.
 #include "itkConstNeighborhoodIterator.h"
 #include "itkVector.h"
 #include "itkMinimumMaximumImageCalculator.h"
+#include "itkUnaryFunctorImageFilter.h"
+#include "itkGradientImageFilter.h"
 
 #include "otbImageToPointSetFilter.h"
 #include "otbImageList.h"
@@ -32,6 +34,44 @@ PURPOSE.  See the above copyright notices for more information.
 namespace otb
 {
 
+  namespace Functor
+    {
+      /** \class MagnitudeFunctor
+       *  \brief This functor computes the magnitude of a covariant vector.
+       */
+      template <class TInputPixel,class TOutputPixel>
+	class MagnitudeFunctor
+	{
+	public:
+	  
+	  inline TOutputPixel operator()(const TInputPixel& input)
+	    {
+	      return vcl_sqrt(input[0]*input[0]+input[1]*input[1]);
+	    }
+	};
+      
+      /** \class OrientationFunctor
+       *  \brief This functor computes the orientation of a cavariant vector<br>
+       *   Orientation values lies between 0 and 2*Pi.
+       */
+      template <class TInputPixel,class TOutputPixel>
+	class OrientationFunctor
+	{
+	public:
+	  
+	  inline TOutputPixel operator()(const TInputPixel& input)
+	    {
+	      TOutputPixel resp = vcl_atan2(input[1],input[0]);
+	      if(resp<0)
+		{
+		  resp+=2*M_PI;
+		}
+
+	      return resp;
+	    }
+	};
+    }// end namespace Functor
+  
   /** \class ImageToSIFTKeyPointSetFilter
    *  \brief This class extracts key points from an input image, trough a pyramidal decomposition.
    *
@@ -85,7 +125,7 @@ namespace otb
       typedef typename TOutputPointSet::PixelType OutputPixelType;
       typedef typename TOutputPointSet::PointType OutputPointType;
       typedef typename TOutputPointSet::PointIdentifier OutputPointIdentifierType;
-      	
+      
       typedef itk::Vector<PixelType,3> VectorPointType;
       
       /** Set/Get the number of octaves */
@@ -144,6 +184,18 @@ namespace otb
       typedef itk::MinimumMaximumImageCalculator<InputImageType> MinimumMaximumCalculatorType;
       typedef typename MinimumMaximumCalculatorType::Pointer MinimumMaximumCalculatorPointerType;
       
+      typedef itk::GradientImageFilter<InputImageType,PixelType,PixelType> GradientFilterType;      
+      typedef typename GradientFilterType::Pointer GradientFilterPointerType;
+      typedef typename GradientFilterType::OutputImageType GradientOutputImageType;
+      
+      typedef itk::UnaryFunctorImageFilter<GradientOutputImageType,InputImageType,
+	Functor::MagnitudeFunctor<typename GradientOutputImageType::PixelType,typename InputImageType::PixelType> > MagnitudeFilterType;
+      typedef typename MagnitudeFilterType::Pointer MagnitudeFilterPointerType;
+      
+      typedef itk::UnaryFunctorImageFilter<GradientOutputImageType,InputImageType,
+	Functor::OrientationFunctor<typename GradientOutputImageType::PixelType,typename InputImageType::PixelType> > OrientationFilterType;
+      typedef typename OrientationFilterType::Pointer OrientationFilterPointerType;
+      
     protected:
       /** Actually process the input */
       virtual void GenerateData();
@@ -197,8 +249,14 @@ namespace otb
 				   VectorPointType& solution);
       
       /** Compute key point orientation
+       * \param currentScale iterator pixel
+       * \param scale current scale
        */
-      void ComputeKeyPointOrientation();
+      void ComputeKeyPointDescriptor(const NeighborhoodIteratorType& currentScale,
+				     const unsigned int scale,
+				     const PixelType translation,
+				     PixelType& magitude,
+				     PixelType& orientation);
       
     private:
       ImageToSIFTKeyPointSetFilter(const Self&); //purposely not implemented
@@ -207,7 +265,7 @@ namespace otb
       /** Number of octaves */
       unsigned int m_OctavesNumber;
       
-      /** Number of scale for aech octave */
+      /** Number of scale for each octave */
       unsigned int m_ScalesNumber;
       
       /** Expand factors */
@@ -247,8 +305,32 @@ namespace otb
       /** Difference of gaussian list */
       ImageListPointerType m_DoGList;
       
+      /** Magnitude image list */
+      ImageListPointerType m_MagnitudeList;
+      
+      /** Orientation image list */
+      ImageListPointerType m_OrientationList;
+      
+      /** Gaussian weight orientation list */
+      ImageListPointerType m_GaussianWeightOrientationList;
+      
       /** Subtract filter */
       SubtractFilterPointerType m_SubtractFilter;
+      
+      /** Gradient filter */
+      GradientFilterPointerType m_GradientFilter;
+      
+      /** Magnitude filter */
+      MagnitudeFilterPointerType m_MagnitudeFilter;
+
+      /** Orientation filter */
+      OrientationFilterPointerType m_OrientationFilter;
+
+      /** Gaussian x orientation filter */
+      GaussianFilterPointerType m_XGaussianFilter3;
+      
+      /** Gaussian y orientation filter */
+      GaussianFilterPointerType m_YGaussianFilter3;
       
       /** Number of key points */
       OutputPointIdentifierType m_ValidatedKeyPoints;
@@ -261,6 +343,9 @@ namespace otb
       
       /** Number of change sample max */
       unsigned int m_ChangeSamplePointsMax;
+
+      /** Gaussian sigma for histogram smoothing */
+      static const double m_HistogramGaussianWeights[73];
     };
 }// End namespace otb
 #ifndef OTB_MANUAL_INSTANTIATION

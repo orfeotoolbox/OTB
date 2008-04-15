@@ -19,9 +19,26 @@ PURPOSE.  See the above copyright notices for more information.
 #include "otbImageToSIFTKeyPointSetFilter.h"
 
 #include "itkMatrix.h"
+#include "itkProcessObject.h"
 
 namespace otb
 {
+  
+  template <class TInputImage, class TOutputPointSet>
+  const double
+  ImageToSIFTKeyPointSetFilter<TInputImage,TOutputPointSet>
+  ::m_HistogramGaussianWeights[73] = { 
+    2.3771112282795414e-07, 3.8860734758633732e-07, 6.2655544995978937e-07, 9.9631120821413786e-07, 1.5624909838697011e-06, 2.4167238265599128e-06, 3.6865788528530121e-06, 
+    5.5463469229192623e-06, 8.2295774080263437e-06, 1.2043009749602365e-05, 1.738119136656513e-05,  2.4740646513897326e-05, 3.4731980398846277e-05, 4.808781565748272e-05, 
+    6.5664032975164266e-05, 8.8431512984476723e-05, 0.00011745555408931643, 0.00015386047198026335, 0.00019877765486783745, 0.00025327659834301937, 0.00031828015928190065, 
+    0.00039446735551235698, 0.00048216931692246382, 0.00058126620279441276, 0.00069109471776775144, 0.00081037694122312908, 0.00093718121775182789, 0.0010689246133776746, 
+    0.0012024238404411182,  0.0013339976954896103,  0.0014596192424447215,  0.0015751106965100009,  0.0016763688464699555,  0.0017596045720966803,  0.0018215772013714365, 
+    0.0018598035923515156,  0.0018727231637146351,  0.0018598035923515156,  0.0018215772013714365,  0.0017596045720966803,  0.0016763688464699555,  0.0015751106965100009, 
+    0.0014596192424447215,  0.0013339976954896103,  0.0012024238404411182,  0.0010689246133776746,  0.00093718121775182789, 0.00081037694122312908, 0.00069109471776775144, 
+    0.00058126620279441276, 0.00048216931692246382, 0.00039446735551235698, 0.00031828015928190065, 0.00025327659834301937, 0.00019877765486783745, 0.00015386047198026335, 
+    0.00011745555408931643, 8.8431512984476723e-05, 6.5664032975164266e-05, 4.808781565748272e-05,  3.4731980398846277e-05, 2.4740646513897326e-05, 1.738119136656513e-05, 
+    1.2043009749602365e-05, 8.2295774080263437e-06, 5.5463469229192623e-06, 3.6865788528530121e-06, 2.4167238265599128e-06, 1.5624909838697011e-06, 9.9631120821413786e-07, 
+    6.2655544995978937e-07, 3.8860734758633732e-07, 2.3771112282795414e-07};
 
   /**
    * Constructor
@@ -121,6 +138,10 @@ namespace otb
     m_GaussianList = ImageListType::New();
     m_DoGList = ImageListType::New();
     
+    m_MagnitudeList = ImageListType::New();
+    m_OrientationList = ImageListType::New();
+    m_GaussianWeightOrientationList = ImageListType::New();
+    
     double sigman = m_Sigma0;
     
     for (lScale = 0; lScale != m_ScalesNumber+1; lScale++)
@@ -140,6 +161,31 @@ namespace otb
 	m_YGaussianFilter->Update();
 	
 	m_GaussianList->PushBack(m_YGaussianFilter->GetOutput());
+	
+	m_GradientFilter = GradientFilterType::New();
+	m_MagnitudeFilter = MagnitudeFilterType::New();
+	m_OrientationFilter = OrientationFilterType::New();
+	m_XGaussianFilter3 = GaussianFilterType::New();
+	m_YGaussianFilter3 = GaussianFilterType::New();
+	
+	m_GradientFilter->SetInput(m_YGaussianFilter->GetOutput());
+	m_MagnitudeFilter->SetInput(m_GradientFilter->GetOutput());
+	m_OrientationFilter->SetInput(m_GradientFilter->GetOutput());
+
+	m_XGaussianFilter3->SetInput(m_OrientationFilter->GetOutput());
+	m_XGaussianFilter3->SetDirection(0);
+	m_XGaussianFilter3->SetSigma(3*sigman);
+	
+	m_YGaussianFilter3->SetInput(m_XGaussianFilter3->GetOutput());
+	m_YGaussianFilter3->SetDirection(1);
+	m_YGaussianFilter3->SetSigma(3*sigman);
+	
+	m_MagnitudeFilter->Update();
+	m_YGaussianFilter3->Update();
+	
+	m_MagnitudeList->PushBack(m_MagnitudeFilter->GetOutput());
+	m_OrientationList->PushBack(m_OrientationFilter->GetOutput());
+	m_GaussianWeightOrientationList->PushBack(m_YGaussianFilter3->GetOutput());
 	
 	std::cout << "Sigma scale " << sigman << std::endl;
       }
@@ -167,114 +213,127 @@ namespace otb
   ImageToSIFTKeyPointSetFilter<TInputImage,TOutputPointSet>
   ::DetectKeyPoint( const unsigned int octave )
   {
-    typename ImageListType::Iterator lIterDoG = m_DoGList->Begin()+1;
-    unsigned int lScale = 0;
-    
-    // 3 min DoG
-    while ( (lIterDoG+1) != m_DoGList->End())
+    if (m_DoGList->Size() >=3 )
       {
-	// Compute max of DoG
-	MinimumMaximumCalculatorPointerType lMaximumCalculator = MinimumMaximumCalculatorType::New();
-	lMaximumCalculator->SetImage(lIterDoG.Get());
-	lMaximumCalculator->Compute();
+	typename ImageListType::Iterator lIterDoG = m_DoGList->Begin()+1;
+	unsigned int lScale = 0;
+	OutputPointSetPointerType  outputPointSet = this->GetOutput();
+	typename InputImageType::SizeType size = lIterDoG.Get()->GetLargestPossibleRegion().GetSize();
 	
-	typename InputImageType::SizeType lRadius;
-	lRadius.Fill(1);
-	typename ImageListType::Iterator lPrev = lIterDoG-1;
-	typename ImageListType::Iterator lNext = lIterDoG+1;
-	
- 	NeighborhoodIteratorType lIterCurrent(lRadius,
- 					      lIterDoG.Get(),
- 					      lIterDoG.Get()->GetLargestPossibleRegion());
-  	NeighborhoodIteratorType lIterLowerAdjacent(lRadius,
-  						    lPrev.Get(),
-  						    lPrev.Get()->GetLargestPossibleRegion());
-  	NeighborhoodIteratorType lIterUpperAdjacent(lRadius,
-  						    lNext.Get(),
- 						    lNext.Get()->GetLargestPossibleRegion());
+	// 3 min DoG
+	while ( (lIterDoG+1) != m_DoGList->End())
+	  {
+	    // Compute max of DoG
+	    MinimumMaximumCalculatorPointerType lMaximumCalculator = MinimumMaximumCalculatorType::New();
+	    lMaximumCalculator->SetImage(lIterDoG.Get());
+	    lMaximumCalculator->Compute();
+	    
+	    typename InputImageType::SizeType lRadius;
+	    lRadius.Fill(1);
+	    typename ImageListType::Iterator lPrev = lIterDoG-1;
+	    typename ImageListType::Iterator lNext = lIterDoG+1;
+	    
+	    NeighborhoodIteratorType lIterCurrent(lRadius,
+						  lIterDoG.Get(),
+						  lIterDoG.Get()->GetLargestPossibleRegion());
+	    NeighborhoodIteratorType lIterLowerAdjacent(lRadius,
+							lPrev.Get(),
+							lPrev.Get()->GetLargestPossibleRegion());
+	    NeighborhoodIteratorType lIterUpperAdjacent(lRadius,
+							lNext.Get(),
+							lNext.Get()->GetLargestPossibleRegion());
+	    
+	    while ( !lIterCurrent.IsAtEnd() &&
+		    !lIterLowerAdjacent.IsAtEnd() &&
+		    !lIterUpperAdjacent.IsAtEnd() )
+	      { 
+		// check local min/max
+		if (IsLocalExtremum(lIterCurrent,
+				    lIterLowerAdjacent,
+				    lIterUpperAdjacent) )
+		  {
+		    VectorPointType lTranslation;
+		    OffsetType lOffsetZero = {{0,0}};
+		    
+		    unsigned int lChangeSamplePoints = 0;
+		    NeighborhoodIteratorType neighborCurrentScale(lIterCurrent);
+		    NeighborhoodIteratorType neighborPreviousScale(lIterLowerAdjacent);
+		    NeighborhoodIteratorType neighborNextScale(lIterUpperAdjacent);
+		    
+		    bool accepted = false;
+		    bool changed = true;
+		    while (lChangeSamplePoints < m_ChangeSamplePointsMax &&
+			   changed )
+		      {
+			accepted = RefineLocationKeyPoint(neighborCurrentScale,
+							  neighborPreviousScale,
+							  neighborNextScale,
+							  lMaximumCalculator->GetMaximum(),
+							  lTranslation);
+			
+			OffsetType lTranslateOffset = {{0,0}};
+			
+			lTranslateOffset[0] += static_cast<int>(lTranslation[0]>0.5);
+			lTranslateOffset[0] += -static_cast<int>(lTranslation[0]<-0.5);
+			
+			lTranslateOffset[1] += static_cast<int>(lTranslation[1]>0.5);
+			lTranslateOffset[1] += -static_cast<int>(lTranslation[1]<-0.5);
 
-	OutputPointSetPointerType pointSet = this->GetOutput();
-	
- 	while ( !lIterCurrent.IsAtEnd() &&
-		!lIterLowerAdjacent.IsAtEnd() &&
-		!lIterUpperAdjacent.IsAtEnd() )
- 	  { 
- 	    // check local min/max
-  	    if (IsLocalExtremum(lIterCurrent,
-				lIterLowerAdjacent,
-				lIterUpperAdjacent) )
-	      {
-		VectorPointType lTranslation;
-		OffsetType lOffsetZero = {{0,0}};
-		
-		unsigned int lChangeSamplePoints = 0;
-		NeighborhoodIteratorType neighborCurrentScale(lIterCurrent);
-		NeighborhoodIteratorType neighborPreviousScale(lIterLowerAdjacent);
-		NeighborhoodIteratorType neighborNextScale(lIterUpperAdjacent);
-		
-		bool accepted = false;
-		bool changed = true;
-		while (lChangeSamplePoints < m_ChangeSamplePointsMax &&
-		       changed )
-		  {
-		    accepted = RefineLocationKeyPoint(neighborCurrentScale,
-						      neighborPreviousScale,
-						      neighborNextScale,
-						      lMaximumCalculator->GetMaximum(),
-						      lTranslation);
+			neighborCurrentScale+=lTranslateOffset;
+			neighborPreviousScale+=lTranslateOffset;
+			neighborNextScale+=lTranslateOffset;
+			
+			changed = lTranslateOffset != lOffsetZero &&
+			  neighborCurrentScale.InBounds();
+			
+			lChangeSamplePoints++;
+		      }
+		    if (changed)
+		      {
+			m_DifferentSamplePoints++;
+		      }
 		    
-		    OffsetType lTranslateOffset = {{0,0}};
-		    
-		    lTranslateOffset[0] += static_cast<int>(lTranslation[0]>0.5);
-		    lTranslateOffset[0] += -static_cast<int>(lTranslation[0]<-0.5);
-
-		    lTranslateOffset[1] += static_cast<int>(lTranslation[1]>0.5);
-		    lTranslateOffset[1] += -static_cast<int>(lTranslation[1]<-0.5);
-		    
-		    changed = lTranslateOffset != lOffsetZero;
-		    
-		    neighborCurrentScale+=lTranslateOffset;
-		    neighborPreviousScale+=lTranslateOffset;
-		    neighborNextScale+=lTranslateOffset;
-		    
-		    lChangeSamplePoints++;
-		  }
-		if (changed)
-		  {
-		    m_DifferentSamplePoints++;
+		    // add key point
+		    if (accepted)
+		      {
+			PixelType lMagnitude = 0;
+			PixelType lOrientation = 0;
+			
+			ComputeKeyPointDescriptor(neighborCurrentScale,
+						  lScale,
+						  lTranslation[2],
+						  lMagnitude,
+						  lOrientation);
+			OutputPointType keyPoint;
+			
+			lIterDoG.Get()->TransformIndexToPhysicalPoint(neighborCurrentScale.GetIndex(),
+								      keyPoint);
+			keyPoint[0] = keyPoint[0]+lIterDoG.Get()->GetSpacing()[0]*lTranslation[0];
+			keyPoint[1] = keyPoint[1]+lIterDoG.Get()->GetSpacing()[1]*lTranslation[1];
+			keyPoint[0] += lIterDoG.Get()->GetSpacing()[0]*0.5;
+			keyPoint[1] += lIterDoG.Get()->GetSpacing()[1]*0.5;
+			
+			outputPointSet->SetPoint(m_ValidatedKeyPoints, keyPoint);
+			
+			OutputPixelType data;
+			data.SetSize(3);
+			data.SetElement(0,lScale+lTranslation[2]);
+			data.SetElement(1,lMagnitude);
+			data.SetElement(2,lOrientation);
+			outputPointSet->SetPointData(m_ValidatedKeyPoints, data);
+			
+			m_ValidatedKeyPoints++;
+		      }
 		  }
 		
-		// add key point
-		if (accepted)
-		  {
-		    OutputPointType keyPoint;
-		    lIterDoG.Get()->TransformIndexToPhysicalPoint(neighborCurrentScale.GetIndex(),
-								  keyPoint);
-		    keyPoint[0] = keyPoint[0]+lIterDoG.Get()->GetSpacing()[0]*lTranslation[0];
-		    keyPoint[1] = keyPoint[1]+lIterDoG.Get()->GetSpacing()[1]*lTranslation[1];
-		    
-		    pointSet->SetPoint(m_ValidatedKeyPoints, keyPoint);
-		    
-		    OutputPixelType data;
-		    data.SetSize(2);
-		    data.SetElement(0,octave);
-		    data.SetElement(1,lScale+lTranslation[2]);
-		    
-		    pointSet->SetPointData(m_ValidatedKeyPoints, data);
-		    
-		    //ComputeKeyPointOrientation(neighborCurrentScale);
-		    
-		    m_ValidatedKeyPoints++;
-		  }
+		++lIterCurrent;
+		++lIterLowerAdjacent;
+		++lIterUpperAdjacent;
 	      }
 	    
- 	    ++lIterCurrent;
-  	    ++lIterLowerAdjacent;
-  	    ++lIterUpperAdjacent;
- 	  }
-	
-	++lIterDoG;
-	lScale++;
+	    ++lIterDoG;
+	    lScale++;
+	  }
       }
   }
   
@@ -372,14 +431,14 @@ namespace otb
     OffsetType o7 = {{-1,1}};
     OffsetType o8 = {{1,-1}};
     
-    PixelType dx = 0.5*(currentScale.GetPixel(o1)
-			-currentScale.GetPixel(o2) );
+    PixelType dx = 0.5*(currentScale.GetPixel(o2)
+			-currentScale.GetPixel(o1) );
     
-    PixelType dy = 0.5*(currentScale.GetPixel(o3)
-			-currentScale.GetPixel(o4) );
+    PixelType dy = 0.5*(currentScale.GetPixel(o4)
+			-currentScale.GetPixel(o3) );
     
-    PixelType ds = 0.5*(previousScale.GetCenterPixel()-
-			nextScale.GetCenterPixel());
+    PixelType ds = 0.5*(nextScale.GetCenterPixel()-
+			previousScale.GetCenterPixel());
     
     PixelType dxx = currentScale.GetPixel(o1)
       -2*currentScale.GetCenterPixel()
@@ -393,20 +452,20 @@ namespace otb
       -2*currentScale.GetCenterPixel()
       +nextScale.GetCenterPixel();
     
-    PixelType dxy = 0.25*(currentScale.GetPixel(o5)
-			  +currentScale.GetPixel(o6)
+    PixelType dxy = 0.25*(currentScale.GetPixel(o6)
+			  +currentScale.GetPixel(o5)
 			  -currentScale.GetPixel(o7)
 			  -currentScale.GetPixel(o8) );
     
-    PixelType dxs = 0.25*(previousScale.GetPixel(o1)
-			  +nextScale.GetPixel(o2)
-			  -previousScale.GetPixel(o2)
-			  -nextScale.GetPixel(o1) );
+    PixelType dxs = 0.25*(nextScale.GetPixel(o2)
+			  +previousScale.GetPixel(o1)
+			  -nextScale.GetPixel(o1)
+			  -previousScale.GetPixel(o2) );
     
-    PixelType dys = 0.25*(previousScale.GetPixel(o3)
-			  +nextScale.GetPixel(o4)
-			  -previousScale.GetPixel(o4)
-			  -nextScale.GetPixel(o3) );
+    PixelType dys = 0.25*(nextScale.GetPixel(o4)
+			  +previousScale.GetPixel(o3)
+			  -nextScale.GetPixel(o3)
+			  -previousScale.GetPixel(o4) );
     
     itk::Matrix<PixelType,3 , 3> lMatrixSecondOrder;
     lMatrixSecondOrder[0][0] = dxx;
@@ -429,6 +488,7 @@ namespace otb
     // Solve system
     itk::Matrix<PixelType,3,3> lMatrixInv(lMatrixSecondOrder.GetInverse());
     solution = lMatrixInv*lVectorFirstOrder;
+    solution*=-1;
     
     // Compute interpolated value DoG for lSolution
     PixelType lDoGInterpolated = currentScale.GetCenterPixel()+
@@ -442,9 +502,9 @@ namespace otb
     PixelType lRatioHessian = (dxx+dyy)*(dxx+dyy)/(dxx*dyy -dxy*dxy);
     
     accepted =
-      lDoGInterpolated >= m_DoGThreshold*maximumDoG &&
-      lDoGInterpolated <= -m_DoGThreshold*maximumDoG &&
-      lRatioHessian < m_RatioEdgeThreshold;
+      (lDoGInterpolated >= m_DoGThreshold*maximumDoG ||
+       lDoGInterpolated <= -m_DoGThreshold*maximumDoG)
+      && lRatioHessian < m_RatioEdgeThreshold;
     
     if (!accepted)
       {
@@ -460,18 +520,79 @@ namespace otb
   template <class TInputImage, class TOutputPointSet>
   void
   ImageToSIFTKeyPointSetFilter<TInputImage,TOutputPointSet>
-  ::ComputeKeyPointOrientation()
+  ::ComputeKeyPointDescriptor( const NeighborhoodIteratorType& currentScale,
+			       const unsigned int scale,
+			       const PixelType translation,
+			       PixelType& magnitude,
+			       PixelType& orientation)
   {
-//     PixelType lMagnitude =
-//       vcl_pow(2,(double)(currentPixel.GetPixel(OffsetType({{1,0}}))-
-// 			 currentPixel.GetPixel(OffsetType({{-1,0}})) ) )+
-//       vcl_pow(2,(double)(currentPixel.GetPixel(OffsetType({{1,0}}))-
-// 			 currentPixel.GetPixel(OffsetType({{-1,0}})) ) )+
-      
-      
-						 
-  }
+    // compute histogram
+    std::vector<double> lHistogram(36,0.);
+    //unsigned int scale = static_cast<unsigned int>(vcl_floor(closestScale+0.5));
 
+    typename InputImageType::SizeType lRadius;
+    lRadius.Fill(1);
+    
+    NeighborhoodIteratorType neighborsOrientation(lRadius,
+						  m_OrientationList->GetNthElement(scale),
+						  m_OrientationList->GetNthElement(scale)->GetLargestPossibleRegion());
+    
+    NeighborhoodIteratorType neighborsMagnitude(lRadius,
+						m_MagnitudeList->GetNthElement(scale),
+						m_MagnitudeList->GetNthElement(scale)->GetLargestPossibleRegion());
+    
+    NeighborhoodIteratorType neighborsGaussianWeight(lRadius,
+						     m_GaussianWeightOrientationList->GetNthElement(scale),
+						     m_GaussianWeightOrientationList->GetNthElement(scale)->GetLargestPossibleRegion());
+    
+    neighborsOrientation.SetLocation(currentScale.GetIndex());
+    neighborsMagnitude.SetLocation(currentScale.GetIndex());
+    neighborsGaussianWeight.SetLocation(currentScale.GetIndex());
+
+    typename NeighborhoodIteratorType::NeighborhoodType lNeighborhoodOrientation = neighborsOrientation.GetNeighborhood();
+    typename NeighborhoodIteratorType::NeighborhoodType lNeighborhoodGaussianWeight = neighborsGaussianWeight.GetNeighborhood();
+    typename NeighborhoodIteratorType::NeighborhoodType lNeighborhoodMagnitude = neighborsMagnitude.GetNeighborhood();
+    
+    int i =0;
+    
+    for (i=0; i < static_cast<int>(lNeighborhoodOrientation.Size()); i++)
+      {
+ 	double lOrientation =
+	  static_cast<double>(lNeighborhoodOrientation[i]);
+ 	double lMagnitude =
+	  static_cast<double>(lNeighborhoodMagnitude[i]);
+ 	double lWeightOri =
+	  static_cast<double>(lNeighborhoodGaussianWeight[i]);
+	
+ 	unsigned int histoIndex =
+	  static_cast<unsigned int>(vcl_floor(36*lOrientation/(2*M_PI)));
+	
+ 	lHistogram[histoIndex] += lMagnitude*lWeightOri;
+      }
+    
+    // Computing smoothed histogram and looking for the maximum
+    double max = 0;
+    double sum = 0;
+    unsigned int maxIndex = 0;
+    int j = 0;
+    
+    for(i=0;i<36;++i)
+      {
+     	sum = 0;
+     	for(j=i-36;j<i;++j)
+     	  {
+     	    sum+=lHistogram[i-j]*m_HistogramGaussianWeights[j+36];
+     	  }
+     	if(sum>max)
+     	  {
+     	    max=sum;
+     	    maxIndex = i;
+	  }
+      }
+    magnitude = neighborsMagnitude.GetCenterPixel();
+    orientation = maxIndex;
+  }
+  
   /**
    * PrintSelf Method
    */
@@ -480,9 +601,35 @@ namespace otb
   ImageToSIFTKeyPointSetFilter<TInputImage,TOutputPointSet>
   ::PrintSelf(std::ostream& os, itk::Indent indent) const
   {
+    typedef typename TOutputPointSet::PointsContainerConstIterator PointsIteratorType;
+    typedef typename TOutputPointSet::PointDataContainerIterator PointsDataIteratorType;
+    typedef itk::ProcessObject ProcessObjectType;
+    const OutputPointSetType* output = dynamic_cast<const OutputPointSetType*>(this->ProcessObjectType::GetOutput(0));
+          
     Superclass::PrintSelf(os, indent);
     os<<indent<<"Number of octaves: "<<m_OctavesNumber<<std::endl;
     os<<indent<<"Number of scales: "<<m_ScalesNumber<<std::endl;
+    
+    os<<indent<<"Number of SIFT key points: " << output->GetNumberOfPoints() << std::endl;
+    
+    if (output->GetNumberOfPoints()>0)
+      {
+	PointsIteratorType lIterPoint = output->GetPoints()->Begin();
+	PointsDataIteratorType lIterDataPoint = output->GetPointData()->Begin();
+	
+	while (lIterPoint != output->GetPoints()->End() &&
+	       lIterDataPoint != output->GetPointData()->End())
+	  {
+	    os << indent << "Point: " << lIterPoint.Value()
+	       << " Scale: " << lIterDataPoint.Value()[0]
+	       << " Magnitude: " << lIterDataPoint.Value()[1]
+	       << " Orientation: " << lIterDataPoint.Value()[2]
+	       << std::endl;
+	    
+	    ++lIterPoint;
+	    ++lIterDataPoint;
+	  }
+      }
   }
   
 } // End namespace otb
