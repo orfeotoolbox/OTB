@@ -62,8 +62,6 @@ int otbImageToSIFTKeyPointSetFilter(int argc, char * argv[])
   filter->SetScalesNumber(scales);
   filter->Update();
   
-  std::ofstream outfile(outfname);
-  outfile<<"Number of SIFT key: "<<filter->GetOutput()->GetNumberOfPoints()<<std::endl;
   ImageType::OffsetType t = {{ 0, 1}};
   ImageType::OffsetType b = {{ 0,-1}};
   ImageType::OffsetType l = {{ 1, 0}};
@@ -100,15 +98,21 @@ int otbImageToSIFTKeyPointSetFilter(int argc, char * argv[])
     }
   
   PointsIteratorType pIt = filter->GetOutput()->GetPoints()->Begin();
-  PointDataIteratorType pdIt = filter->GetOutput()->GetPointData()->Begin();
-  while( pIt!=filter->GetOutput()->GetPoints()->End() &&
-	 pdIt!=filter->GetOutput()->GetPointData()->End() )
+  ImageType::SpacingType spacing = reader->GetOutput()->GetSpacing();
+  ImageType::PointType origin = reader->GetOutput()->GetOrigin();
+  OutputImageType::SizeType size = outputImage->GetLargestPossibleRegion().GetSize();
+  
+  while( pIt!=filter->GetOutput()->GetPoints()->End() )
     {
       ImageType::IndexType index;
-      reader->GetOutput()->TransformPhysicalPointToIndex(pIt.Value(),index);
-      outfile<<"Point: "<<pIt.Value()<<", Index: "<<index \
-	     << " Octave: " << pdIt.Value()[0] \
-	     << " Scale: " <<  pdIt.Value()[1] << std::endl;
+      
+      index[0] = (unsigned int)
+	(vcl_floor
+	 ((double)((pIt.Value()[0]-origin[0])/spacing[0]+0.5)));
+      
+      index[1] = (unsigned int)
+	(vcl_floor
+	 ((double)((pIt.Value()[1]-origin[1])/spacing[1]+0.5)));
       
       OutputImageType::PixelType keyPixel;
       keyPixel.SetRed(0);
@@ -116,13 +120,19 @@ int otbImageToSIFTKeyPointSetFilter(int argc, char * argv[])
       keyPixel.SetBlue(0);
       
       outputImage->SetPixel(index,keyPixel);
-      outputImage->SetPixel(index+t,keyPixel);
-      outputImage->SetPixel(index+b,keyPixel);
-      outputImage->SetPixel(index+l,keyPixel);
-      outputImage->SetPixel(index+r,keyPixel);
+      if (static_cast<unsigned int>(index[1]) < static_cast<unsigned int>(size[1]) )
+	outputImage->SetPixel(index+t,keyPixel);
+      if (index[1] > 0)
+	outputImage->SetPixel(index+b,keyPixel);
+      if (static_cast<unsigned int>(index[0]) < static_cast<unsigned int>(size[0]) )
+	outputImage->SetPixel(index+l,keyPixel);
+      if (index[0] > 0)
+	outputImage->SetPixel(index+r,keyPixel);
       ++pIt;
-      ++pdIt;
     }
+  
+  std::ofstream outfile(outfname);
+  outfile << filter;
   outfile.close();
   
   WriterType::Pointer writer = WriterType::New();
