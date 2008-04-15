@@ -1389,6 +1389,8 @@ ADD_TEST(ioTuVectorDataFileReaderTest ${IO_TESTS15}
         otbVectorDataFileReaderNew )
 ADD_TEST(ioTuVectorDataFileWriterTest ${IO_TESTS15} 
         otbVectorDataFileWriterNew )
+ADD_TEST(ioTuVectorDataFileWriterTest ${IO_TESTS15} 
+        otbSHPVectorDataIONew )
 
 
 #----------------------------------------------------------------------------------
@@ -1500,6 +1502,7 @@ otbVectorDataIOBaseNew.cxx
 otbVectorDataSourceNew.cxx
 otbVectorDataFileReaderNew.cxx
 otbVectorDataFileWriterNew.cxx
+otbSHPVectorDataIONew.cxx
 )
 
 INCLUDE_DIRECTORIES("${OTBTesting_BINARY_DIR}")

@@ -16,21 +16,12 @@
 
 =========================================================================*/
 
-// this file defines the otbCommonTest for the test driver
-// and all it expects is that you have a function called RegisterTests
-#if defined(_MSC_VER)
-#pragma warning ( disable : 4786 )
-#endif
+#include "otbVectorDataFileWriter.h"
+#include "otbVectorDataBase.h"
 
-#include <iostream>
-#include "otbTestMain.h" 
-
-
-void RegisterTests()
+int otbSHPVectorDataIONew(int argc, char * argv[])
 {
-REGISTER_TEST(otbVectorDataIOBaseNew);
-REGISTER_TEST(otbVectorDataSourceNew);
-REGISTER_TEST(otbVectorDataFileReaderNew);
-REGISTER_TEST(otbVectorDataFileWriterNew);
-REGISTER_TEST(otbSHPVectorDataIONew);
+        typedef otb::SHPVectorDataIO SHPVectorDataIOType;
+        SHPVectorDataIOType::Pointer object = SHPVectorDataIOType::New();
+        return 0;
 }
