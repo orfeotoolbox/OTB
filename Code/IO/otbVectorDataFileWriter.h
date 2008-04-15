@@ -15,65 +15,101 @@ the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
 PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#ifndef __otbVectorDataWriter_h
-#define __otbVectorDataWriter_h
+#ifndef __otbVectorDataFileWriter_h
+#define __otbVectorDataFileWriter_h
 
 #include "itkProcessObject.h"
+#include "itkExceptionObject.h"
+#include "otbVectorDataIOBase.h"
 
 namespace otb
 {
-  /** \class VectorDataWriter
+/** \brief Base exception class for IO problems during writing.
+ *
+ * \class ImageFileWriterException
+ */
+class VectorDataFileWriterException : public itk::ExceptionObject 
+{
+public:
+  /** Run-time information. */
+  itkTypeMacro( VectorDataFileWriterException, ExceptionObject );
+
+  /** Constructor. */
+  VectorDataFileWriterException(const char *file, unsigned int line, 
+                           const char* message = "Error in IO",
+                           const char* loc = "Unknown" ) : 
+    ExceptionObject(file, line, message, loc)
+  {
+  }
+
+  /** Constructor. */
+  VectorDataFileWriterException(const std::string &file, unsigned int line, 
+                           const char* message = "Error in IO",
+                           const char* loc = "Unknown" ) :
+    ExceptionObject(file, line, message, loc)
+  {
+  }
+};
+
+
+  /** \class VectorDataFileWriter
    *  \brief This class writes the ShapeFile format 
    *
    *  \ingroup IO
    */
 	 
-template <class TInputShapeFile>
-class ITK_EXPORT VectorDataWriter : public itk::ProcessObject
+template <class TInputVectorData>
+class ITK_EXPORT VectorDataFileWriter : public itk::ProcessObject
 {
 public :
 
-	/** Standard class typedefs. */
-	typedef VectorDataWriter											Self;
-	typedef itk::ProcessObject														Superclass;
-  typedef itk::SmartPointer<Self> 								Pointer;
-  typedef itk::SmartPointer<const Self>  					ConstPointer;
+  /** Standard class typedefs. */
+  typedef VectorDataFileWriter                  Self;
+  typedef itk::ProcessObject                    Superclass;
+  typedef itk::SmartPointer<Self>               Pointer;
+  typedef itk::SmartPointer<const Self>         ConstPointer;
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(VectorDataWriter, itk::ProcessObject);
+  itkTypeMacro(VectorDataFileWriter, itk::ProcessObject);
 	
-	typedef TInputShapeFile									InputShapeFileType;
+  typedef TInputVectorData InputVectorDataType;
 	
   /** Set/Get the image input of this writer.  */
-  void SetInput(const InputShapeFileType *input);
-  const InputShapeFileType * GetInput(void);
-  const InputShapeFileType * GetInput(unsigned int idx);
+  void SetInput(const InputVectorDataType *input);
+  const InputVectorDataType * GetInput(void);
+  const InputVectorDataType * GetInput(unsigned int idx);
 	
   /** Does the real work. */
-	virtual void Write();
+  virtual void Write();
 
   virtual void GenerateData();
 
-	virtual void Update()  {  this->Write(); }
+  virtual void Update()  {  this->Write(); }
 
 	
- 	/** Specify the name of the output shapefile to write. */
- 	itkSetStringMacro(FileName);
-	itkGetStringMacro(FileName);
+  /** Specify the name of the output shapefile to write. */
+  itkSetStringMacro(FileName);
+  itkGetStringMacro(FileName);
 
 protected:
-	VectorDataWriter();
-	~VectorDataWriter();
+  VectorDataFileWriter();
+  ~VectorDataFileWriter();
 
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
   std::string m_FileName; // The file to be read
-	
+  VectorDataIOBase::Pointer m_VectorDataIO;
+  bool  m_UserSpecifiedVectorDataIO; // track whether the VectorDataIO
+  bool  m_FactorySpecifiedVectorDataIO;  //track whether the factory
+                                         //  mechanism set the VectorDataIO
+  bool m_UseInputMetaDataDictionary;        // whether to use the
+                                            // MetaDataDictionary from the
+                                            // input or not.
 private:
-  VectorDataWriter(const Self&); //purposely not implemented
+  VectorDataFileWriter(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
 
 } ;
@@ -81,10 +117,10 @@ private:
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbVectorDataWriter.txx"
+#include "otbVectorDataFileWriter.txx"
 #endif
 
-#endif // __otbVectorDataWriter_h
+#endif // __otbVectorDataFileWriter_h
 
 	 
 	 

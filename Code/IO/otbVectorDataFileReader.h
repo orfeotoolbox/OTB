@@ -101,14 +101,30 @@ public :
   itkSetStringMacro(FileName);
   itkGetStringMacro(FileName);
 	
+  /** Set/Get the VectorDataIO helper class. Often this is created via the object
+   * factory mechanism that determines whether a particular VectorDataIO can
+   * read a certain file. This method provides a way to get the VectorDataIO 
+   * instance that is created. Or you can directly specify the VectorDataIO
+   * to use to read a particular file in case the factory mechanism will
+   * not work properly (e.g., unknown or unusual extension). */
+  void  SetVectorDataIO( VectorDataIOBase * vectorDataIO );
+  itkGetObjectMacro(VectorDataIO,VectorDataIOBase);
+
+  /** Prepare the allocation of the output vector data during the first back
+   * propagation of the pipeline. */
+  virtual void GenerateOutputInformation(void);
+
+
   /** Does the real work. */
   virtual void GenerateData();
 
 protected:
-	VectorDataFileReader();
-	~VectorDataFileReader();
+  VectorDataFileReader();
+  ~VectorDataFileReader();
+  std::string m_ExceptionMessage;  
 
   VectorDataIOBase::Pointer m_VectorDataIO;
+  bool  m_UserSpecifiedVectorDataIO; // keep track whether the
 
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
 

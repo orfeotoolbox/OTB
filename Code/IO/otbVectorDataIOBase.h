@@ -22,6 +22,7 @@
 #include "itkObjectFactory.h"
 #include "itkIndent.h"
 #include "vnl/vnl_vector.h"
+#include "otbVectorDataBase.h"
 
 #include <string>
 
@@ -116,7 +117,7 @@ public:
   virtual void ReadVectorDataInformation() = 0;
 
   /** Reads the data from disk into the memory buffer provided. */
-  virtual void Read(void* buffer) = 0;
+  virtual void Read(VectorDataBase* buffer) = 0;
 
 
   /*-------- This part of the interfaces deals with writing data ----- */
@@ -139,7 +140,7 @@ public:
   /** Writes the data to disk from the memory buffer provided. Make sure
    * that the IORegions has been set properly. The buffer is cast to a
    * pointer to the beginning of the image data. */
-  virtual void Write( const void* buffer) = 0;
+  virtual void Write( const VectorDataBase* buffer) = 0;
 
 
 protected:

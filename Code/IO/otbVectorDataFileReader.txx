@@ -21,7 +21,10 @@ PURPOSE.  See the above copyright notices for more information.
 
 #include "otbMacro.h"
 #include "otbSystem.h"
+#include "otbVectorDataIOFactory.h"
 #include "otbVectorDataFileReader.h"
+#include "itksys/SystemTools.hxx"
+#include <fstream>
 
 namespace otb
 {
@@ -34,6 +37,7 @@ VectorDataFileReader<TOutputVectorData>
 {
   m_VectorDataIO = 0;
   m_FileName = "";
+  m_UserSpecifiedVectorDataIO = false;
 }
 /**
  * Destructor
@@ -55,7 +59,7 @@ SpatialObjectDXFReader<TSpatialObject>
 
  /** Test whether the given filename exist and it is readable,
       this is intended to be called before attempting to use 
-      ImageIO classes for actually reading the file. If the file
+      VectorDataIO classes for actually reading the file. If the file
       doesn't exist or it is not readable, and exception with an
       approriate message will be thrown. */
 template <class TOutputVectorData>
@@ -66,7 +70,7 @@ VectorDataFileReader<TOutputVectorData>
     // Test if the file exists.
     if( ! itksys::SystemTools::FileExists( this->m_FileName.c_str() ) )
       {
-      itk::VectorDataFileReaderException e(__FILE__, __LINE__);
+      VectorDataFileReaderException e(__FILE__, __LINE__);
       itk::OStringStream msg;
       msg <<"The file doesn't exists. "
           << std::endl << "Filename = " << this->m_FileName
@@ -89,7 +93,7 @@ VectorDataFileReader<TOutputVectorData>
                 msg <<"The file couldn't be opened for reading. "
                         << std::endl << "Filename: " << this->m_FileName
                         << std::endl;
-                itk::VectorDataFileReaderException e(__FILE__, __LINE__,msg.str().c_str(),ITK_LOCATION);
+                VectorDataFileReaderException e(__FILE__, __LINE__,msg.str().c_str(),ITK_LOCATION);
                 throw e;
                 return;
 
@@ -101,15 +105,15 @@ VectorDataFileReader<TOutputVectorData>
 template <class TOutputVectorData>
 void
 VectorDataFileReader<TOutputVectorData>
-::SetImageIO( ImageIOBase * imageIO)
+::SetVectorDataIO( VectorDataIOBase * vectorDataIO)
 {
-  itkDebugMacro("setting ImageIO to " << imageIO ); 
-  if (this->m_ImageIO != imageIO ) 
+  itkDebugMacro("setting VectorDataIO to " << vectorDataIO ); 
+  if (this->m_VectorDataIO != vectorDataIO ) 
     {
-    this->m_ImageIO = imageIO;
+    this->m_VectorDataIO = vectorDataIO;
     this->Modified(); 
     } 
-  m_UserSpecifiedImageIO = true;
+  m_UserSpecifiedVectorDataIO = true;
 }
 
 
@@ -118,7 +122,7 @@ void
 VectorDataFileReader<TOutputVectorData>
 ::GenerateOutputInformation(void)
 {
-  typename TOutputImage::Pointer output = this->GetOutput();
+  typename TOutputVectorData::Pointer output = this->GetOutput();
 
   itkDebugMacro(<<"Reading file for GenerateOutputInformation()" << m_FileName);
   
@@ -142,14 +146,14 @@ VectorDataFileReader<TOutputVectorData>
     m_ExceptionMessage = err.GetDescription();
     }
 
-  if ( m_UserSpecifiedImageIO == false ) //try creating via factory
+  if ( m_UserSpecifiedVectorDataIO == false ) //try creating via factory
     {
-    m_VectorDataIO = VectorData::CreateImageIO( m_FileName.c_str(), VectorDataIOFactory::ReadMode );
+    m_VectorDataIO = VectorDataIOFactory::CreateVectorDataIO( m_FileName.c_str(), VectorDataIOFactory::ReadMode );
     }
   
   if ( m_VectorDataIO.IsNull() )
     {
-    OStringStream msg;
+    itk::OStringStream msg;
     msg << " Could not create IO object for file "
         << m_FileName.c_str() << std::endl;
     if (m_ExceptionMessage.size())
@@ -160,7 +164,7 @@ VectorDataFileReader<TOutputVectorData>
       {
       msg << "  Tried to create one of the following:" << std::endl;
       std::list<itk::LightObject::Pointer> allobjects = 
-        ObjectFactoryBase::CreateAllInstance("itkImageIOBase");
+        itk::ObjectFactoryBase::CreateAllInstance("otbVectorDataIOBase");
       for(std::list<itk::LightObject::Pointer>::iterator i = allobjects.begin();
           i != allobjects.end(); ++i)
         {
@@ -175,23 +179,20 @@ VectorDataFileReader<TOutputVectorData>
     return;
     }
   
-  // Got to allocate space for the image. Determine the characteristics of
-  // the image.
-  //
   m_VectorDataIO->SetFileName(m_FileName.c_str());
-  m_VectorDataIO->ReadImageInformation();
+  m_VectorDataIO->ReadVectorDataInformation();
 
 
-  //Copy MetaDataDictionary from instantiated reader to output image.
+  //Copy MetaDataDictionary from instantiated reader to output VectorData.
   output->SetMetaDataDictionary(m_VectorDataIO->GetMetaDataDictionary());
   this->SetMetaDataDictionary(m_VectorDataIO->GetMetaDataDictionary());
-
 }
 
 
 
-template <class TOutputImage, class ConvertPixelTraits>
-void ImageFileReader<TOutputImage, ConvertPixelTraits>
+template <class TOutputVectorData>
+void
+VectorDataFileReader<TOutputVectorData>
 ::GenerateData()
 {
 
@@ -211,41 +212,16 @@ void ImageFileReader<TOutputImage, ConvertPixelTraits>
     m_ExceptionMessage = err.GetDescription();
     }
 
-  // Tell the ImageIO to read the file
+  // Tell the VectorDataIO to read the file
   //
 
   m_VectorDataIO->SetFileName(m_FileName.c_str());
 
-  m_ImageIO->Read(output);
+  m_VectorDataIO->Read(output);
 
   return;
 }
 
-/**
- * Main computation method
- */
-template <class TOutputVectorData>
-void
-VectorDataFileReader<TOutputVectorData>
-::GenerateData()
-{
-  otbGenericMsgTestingMacro(<< "Reading..." ) ;
-	
-	TestFileExistanceAndReadability();
-	typename OutputShapeFileType::Pointer shapeFile = this->GetOutput();
-	
-	OGRRegisterAll();
-
-  OGRDataSource       *poDS;
-
-  poDS = OGRSFDriverRegistrar::Open( m_FileName.c_str(), FALSE );
-  if( poDS == NULL )
-  {
-      itkExceptionMacro(<< "ShapeFile Open failed.\n" );
-  }
-	
-	shapeFile->SetOGRDataSource(poDS);	
-}
 
 template <class TOutputVectorData>
 void
@@ -264,6 +240,7 @@ VectorDataFileReader<TOutputVectorData>
     os << indent << "m_VectorDataIO: (null)" << "\n";
     }
 
+  os << indent << "UserSpecifiedVectorDataIO flag: " << m_UserSpecifiedVectorDataIO << "\n";
   os << indent << "m_FileName: " << m_FileName << "\n";
 }
 
