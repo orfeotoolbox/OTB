@@ -16,8 +16,7 @@
 
 =========================================================================*/
 
-#include "otbVectorDataFileWriter.h"
-#include "otbVectorDataBase.h"
+#include "otbSHPVectorDataIO.h"
 
 int otbSHPVectorDataIONew(int argc, char * argv[])
 {
