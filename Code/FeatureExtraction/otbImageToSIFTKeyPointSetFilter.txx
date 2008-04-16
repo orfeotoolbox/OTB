@@ -48,7 +48,7 @@ namespace otb
   ::ImageToSIFTKeyPointSetFilter()
   {
     m_OctavesNumber = 1;
-    m_ScalesNumber = 4;
+    m_ScalesNumber = 3;
     m_ExpandFactors = 2;
     m_ShrinkFactors = 2;
     m_Sigma0 = 1.6;
@@ -75,10 +75,19 @@ namespace otb
     InitializeInputImage();
 
     InputImagePointerType input = m_ExpandFilter->GetOutput(); 
+    typename InputImageType::PointType point;
+    typename InputImageType::IndexType  index;
+    index[0] = 0;
+    index[1] = 0;
+    
+    m_ExpandFilter->GetOutput()->TransformIndexToPhysicalPoint(index, point);
+    
+    std::cout << "Input Spacing: " << m_ExpandFilter->GetOutput()->GetSpacing() << std::endl;
+    std::cout << "Input Origin: " << point << std::endl;
     
     // for each octave, compute the difference of gaussian
     unsigned int lOctave = 0;
-    m_Sigmak = vcl_pow((double)2, (double)((double)1/(double)(m_ScalesNumber+1)));
+    m_Sigmak = vcl_pow((double)2, (double)((double)1/(double)(m_ScalesNumber)));
     m_RatioEdgeThreshold = (m_EdgeThreshold+1)*(m_EdgeThreshold+1)/m_EdgeThreshold;
     
     for (lOctave = 0; lOctave != m_OctavesNumber; lOctave++)
@@ -86,6 +95,8 @@ namespace otb
 	m_DifferentSamplePoints = 0;
 	m_DiscardedKeyPoints = 0;
 	
+	typename InputImageType::PointType origin0 = input->GetOrigin();
+	  
 	ComputeDifferenceOfGaussian(input);
 	DetectKeyPoint(lOctave);
 	
@@ -95,7 +106,16 @@ namespace otb
 	m_ShrinkFilter->SetInput(m_GaussianList->Back());
 	m_ShrinkFilter->SetShrinkFactors(m_ShrinkFactors);
 	m_ShrinkFilter->Update();
+	
 	input = m_ShrinkFilter->GetOutput();
+	
+	typename InputImageType::PointType origin1;
+	typename InputImageType::SpacingType spacing = input->GetSpacing();
+	
+	origin1[0] = origin0[0] + spacing[0]*0.25;
+	origin1[1] = origin0[1] + spacing[1]*0.25;
+	
+	input->SetOrigin(origin1);
 	
 	std::cout << "Number key points per octave : " \
 		  << m_ValidatedKeyPoints << std::endl;
@@ -106,6 +126,18 @@ namespace otb
 	
 	std::cout << "Resample image factor : " \
 		  << m_ShrinkFactors << std::endl;
+	
+	typename InputImageType::PointType point;
+	typename InputImageType::IndexType  index;
+	index[0] = 0;
+	index[1] = 0;
+	
+	m_ShrinkFilter->GetOutput()->TransformIndexToPhysicalPoint(index, point);
+	
+	std::cout << "Spacing: " << m_ShrinkFilter->GetOutput()->GetSpacing() << std::endl;
+	std::cout << "Input Origin: " << point << std::endl;
+
+	
       }
     std::cout << "Total number key points : " \
 	      << this->GetOutput()->GetNumberOfPoints() << std::endl;
@@ -119,10 +151,19 @@ namespace otb
   void
   ImageToSIFTKeyPointSetFilter<TInputImage,TOutputPointSet>
   ::InitializeInputImage()
-  {
+  {    
     m_ExpandFilter->SetInput( this->GetInput(0));
     m_ExpandFilter->SetExpandFactors(m_ExpandFactors);
     m_ExpandFilter->Update();
+
+    typename InputImageType::PointType origin0 = this->GetInput(0)->GetOrigin();
+    typename InputImageType::PointType origin1;
+    typename InputImageType::SpacingType spacing = m_ExpandFilter->GetOutput()->GetSpacing();
+    
+    origin1[0] = origin0[0]-spacing[0]*0.5;
+    origin1[1] = origin0[1]-spacing[1]*0.5;
+    
+    m_ExpandFilter->GetOutput()->SetOrigin(origin1);
   }
   
   /**
@@ -142,9 +183,9 @@ namespace otb
     m_OrientationList = ImageListType::New();
     m_GaussianWeightOrientationList = ImageListType::New();
     
-    double sigman = m_Sigma0;
+    double sigman = 1/input->GetSpacing()[0]*m_Sigma0*vcl_sqrt((double)(1.-1./(m_Sigmak*m_Sigmak)));
     
-    for (lScale = 0; lScale != m_ScalesNumber+1; lScale++)
+    for (lScale = 0; lScale != m_ScalesNumber+2; lScale++)
       {
 	sigman = sigman*m_Sigmak;
 	m_XGaussianFilter = GaussianFilterType::New();
@@ -187,21 +228,16 @@ namespace otb
 	m_OrientationList->PushBack(m_OrientationFilter->GetOutput());
 	m_GaussianWeightOrientationList->PushBack(m_YGaussianFilter3->GetOutput());
 	
-	std::cout << "Sigma scale " << sigman << std::endl;
+	if (lScale>0)
+	  {
+	    m_SubtractFilter = SubtractFilterType::New();
+	    m_SubtractFilter->SetInput1((m_GaussianList->End()-1).Get());
+	    m_SubtractFilter->SetInput2((m_GaussianList->End()-2).Get());
+	    m_SubtractFilter->Update();
+	    m_DoGList->PushBack(m_SubtractFilter->GetOutput());
+	  }
+	std::cout << "Scale " << sigman << std::endl;
       }
-    
-    typename ImageListType::Iterator lIterGaussianOutput = m_GaussianList->Begin();
-    while (lIterGaussianOutput != m_GaussianList->End()-1)
-      {	
-  	m_SubtractFilter = SubtractFilterType::New();
-  	m_SubtractFilter->SetInput1(lIterGaussianOutput.Get());
-  	m_SubtractFilter->SetInput2((lIterGaussianOutput+1).Get());
- 	m_SubtractFilter->Update();
-	m_DoGList->PushBack(m_SubtractFilter->GetOutput());
-	
-  	++lIterGaussianOutput;
-      }
-    std::cout <<"Number of Gaussian images "<<m_GaussianList->Size() << std::endl;;
     std::cout <<"Number of DoG "<<m_DoGList->Size() << std::endl;
   }
   
@@ -219,6 +255,7 @@ namespace otb
 	unsigned int lScale = 0;
 	OutputPointSetPointerType  outputPointSet = this->GetOutput();
 	typename InputImageType::SizeType size = lIterDoG.Get()->GetLargestPossibleRegion().GetSize();
+	typename InputImageType::SpacingType spacing = lIterDoG.Get()->GetSpacing();
 	
 	// 3 min DoG
 	while ( (lIterDoG+1) != m_DoGList->End())
@@ -252,7 +289,7 @@ namespace otb
 				    lIterLowerAdjacent,
 				    lIterUpperAdjacent) )
 		  {
-		    VectorPointType lTranslation;
+		    VectorPointType lTranslation(PixelType(0));
 		    OffsetType lOffsetZero = {{0,0}};
 		    
 		    unsigned int lChangeSamplePoints = 0;
@@ -308,10 +345,8 @@ namespace otb
 			
 			lIterDoG.Get()->TransformIndexToPhysicalPoint(neighborCurrentScale.GetIndex(),
 								      keyPoint);
-			keyPoint[0] = keyPoint[0]+lIterDoG.Get()->GetSpacing()[0]*lTranslation[0];
-			keyPoint[1] = keyPoint[1]+lIterDoG.Get()->GetSpacing()[1]*lTranslation[1];
-			keyPoint[0] += lIterDoG.Get()->GetSpacing()[0]*0.5;
-			keyPoint[1] += lIterDoG.Get()->GetSpacing()[1]*0.5;
+			keyPoint[0] += spacing[0]*lTranslation[0];
+			keyPoint[1] += spacing[1]*lTranslation[1];
 			
 			outputPointSet->SetPoint(m_ValidatedKeyPoints, keyPoint);
 			
@@ -421,6 +456,7 @@ namespace otb
 			    VectorPointType& solution)
   {
     bool accepted = true;
+    solution = VectorPointType(PixelType(0));
     
     OffsetType o1 = {{-1,0}};
     OffsetType o2 = {{1,0}};
@@ -467,7 +503,7 @@ namespace otb
 			  -nextScale.GetPixel(o3)
 			  -previousScale.GetPixel(o4) );
     
-    itk::Matrix<PixelType,3 , 3> lMatrixSecondOrder;
+    itk::Matrix<double,3 , 3> lMatrixSecondOrder;
     lMatrixSecondOrder[0][0] = dxx;
     lMatrixSecondOrder[0][1] = dxy;
     lMatrixSecondOrder[0][2] = dxs;
@@ -485,25 +521,38 @@ namespace otb
     lVectorFirstOrder[1] = dy;
     lVectorFirstOrder[2] = ds;
     
-    // Solve system
-    itk::Matrix<PixelType,3,3> lMatrixInv(lMatrixSecondOrder.GetInverse());
-    solution = lMatrixInv*lVectorFirstOrder;
-    solution*=-1;
+    PixelType lDoGInterpolated = currentScale.GetCenterPixel();
     
-    // Compute interpolated value DoG for lSolution
-    PixelType lDoGInterpolated = currentScale.GetCenterPixel()+
-      0.5*(dx*solution[0]+
-	   dy*solution[1]+
-	   ds*solution[2]);
+    // Compute matrice determinant
+    double det = dxx*(dyy*dss-dys*dys) -dxy*(dxy*dss-dxs*dys)+dxs*(dxy*dys-dxs*dyy);
+    if (det>=1e-10f)
+      {
+	double invdet = 1/det;
+	double sx = -invdet*(dx*(dyy*dss-dys*dys)+dy*(dxs*dys-dxy*dss)+ds*(dxy*dys-dyy*dxs));
+	double sy = -invdet*(dx*(dys*dxs-dss*dxy)+dy*(dxx*dss-dxs*dxs)+ds*(dxs*dxy-dxx*dys));
+	double ss = -invdet*(dx*(dxy*dys-dxs*dyy)+dy*(dxy*dxs-dxx*dys)+ds*(dxx*dyy-dxy*dxy));
+
+	// Solve system
+	itk::Matrix<double,3,3> lMatrixInv(lMatrixSecondOrder.GetInverse());
+	solution = lMatrixInv*lVectorFirstOrder;
+	solution*=-1;
+	
+	// Compute interpolated value DoG for lSolution
+	lDoGInterpolated += 0.5*(dx*solution[0]+
+				 dy*solution[1]+
+				 ds*solution[2]);
+      }
     
     // DoG threshold
     // Eliminating edge response
-    
-    PixelType lRatioHessian = (dxx+dyy)*(dxx+dyy)/(dxx*dyy -dxy*dxy);
-    
+    PixelType lRatioHessian = 0;
+    if ((dxx*dyy -dxy*dxy)>0)
+      {
+	lRatioHessian = (dxx+dyy)*(dxx+dyy)/(dxx*dyy -dxy*dxy);
+      }
     accepted =
-      (lDoGInterpolated >= m_DoGThreshold*maximumDoG ||
-       lDoGInterpolated <= -m_DoGThreshold*maximumDoG)
+      (lDoGInterpolated >= m_DoGThreshold*255 ||
+       lDoGInterpolated <= -m_DoGThreshold*255)
       && lRatioHessian < m_RatioEdgeThreshold;
     
     if (!accepted)
