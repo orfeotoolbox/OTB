@@ -14,6 +14,9 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
+#ifndef _otbVectorDataIOBase_txx
+#define _otbVectorDataIOBase_txx
+
 #if defined(_MSC_VER)
 #pragma warning ( disable : 4786 )
 #endif
@@ -21,26 +24,33 @@
 
 namespace otb
 {
-
-VectorDataIOBase::VectorDataIOBase() :
+template <class TData>
+VectorDataIOBase<TData>
+::VectorDataIOBase() :
   m_ByteOrder(OrderNotApplicable)
 {
   Reset(false);
 }
 
-  
-void VectorDataIOBase::Reset(const bool)
+template <class TData>
+void
+VectorDataIOBase<TData>
+::Reset(const bool)
 {
   m_Initialized = false;
   m_FileName = "";
 }
 
-VectorDataIOBase::~VectorDataIOBase()
+template <class TData>
+VectorDataIOBase<TData>
+::~VectorDataIOBase()
 {
 }
 
-
-std::string VectorDataIOBase::GetByteOrderAsString(ByteOrder t) const
+template <class TData>
+std::string
+VectorDataIOBase<TData>
+::GetByteOrderAsString(ByteOrder t) const
 {
   std::string s;
   switch(t)
@@ -57,8 +67,10 @@ std::string VectorDataIOBase::GetByteOrderAsString(ByteOrder t) const
 }
 
 
-
-void VectorDataIOBase::PrintSelf(std::ostream& os, itk::Indent indent) const
+template <class TData>
+void 
+VectorDataIOBase<TData>
+::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   Superclass::PrintSelf(os, indent);
 
@@ -67,3 +79,5 @@ void VectorDataIOBase::PrintSelf(std::ostream& os, itk::Indent indent) const
 }
 
 } //namespace otb
+
+#endif

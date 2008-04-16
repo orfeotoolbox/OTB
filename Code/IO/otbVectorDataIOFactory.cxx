@@ -15,6 +15,9 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
+#ifndef _otbVectorDataIOFactory_txx
+#define _otbVectorDataIOFactory_txx
+
 #ifdef _MSC_VER
 #pragma warning ( disable : 4786 )
 #endif
@@ -27,20 +30,22 @@
 
 namespace otb
 {
-
-VectorDataIOBase::Pointer
-VectorDataIOFactory::CreateVectorDataIO(const char* path, FileModeType mode)
+template <class TData>
+typename VectorDataIOFactory<TData>
+::VectorDataIOBasePointerType
+VectorDataIOFactory<TData>
+::CreateVectorDataIO(const char* path, FileModeType mode)
 {
 
   RegisterBuiltInFactories();
 
-  std::list<VectorDataIOBase::Pointer> possibleVectorDataIO;
+  std::list<VectorDataIOBasePointerType> possibleVectorDataIO;
   std::list<itk::LightObject::Pointer> allobjects =
     itk::ObjectFactoryBase::CreateAllInstance("otbVectorDataIOBase");
   for(std::list<itk::LightObject::Pointer>::iterator i = allobjects.begin();
       i != allobjects.end(); ++i)
     {
-    VectorDataIOBase* io = dynamic_cast<VectorDataIOBase*>(i->GetPointer());
+    VectorDataIOBase* io = dynamic_cast<VectorDataIOBasePointerType>(i->GetPointer());
     if(io)
       {
       possibleVectorDataIO.push_back(io);
@@ -52,7 +57,7 @@ VectorDataIOFactory::CreateVectorDataIO(const char* path, FileModeType mode)
                 << std::endl;
       }
     }
-  for(std::list<VectorDataIOBase::Pointer>::iterator k = possibleVectorDataIO.begin();
+  for(std::list<VectorDataIOBasePointerType>::iterator k = possibleVectorDataIO.begin();
       k != possibleVectorDataIO.end(); ++k)
     {
     if( mode == ReadMode )
@@ -73,9 +78,10 @@ VectorDataIOFactory::CreateVectorDataIO(const char* path, FileModeType mode)
     }
   return 0;
 }
-
+template <class TData>
 void
-VectorDataIOFactory::RegisterBuiltInFactories()
+VectorDataIOFactory<TData>
+::RegisterBuiltInFactories()
 {
   static bool firstTime = true;
 
@@ -94,3 +100,5 @@ VectorDataIOFactory::RegisterBuiltInFactories()
 }
 
 } // end namespace otb
+
+#endif
