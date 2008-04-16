@@ -70,7 +70,8 @@ bool SHPVectorDataIO::CanReadFile( const char* filename )
         }
 
         //Read header informations
-        bool lResult = InternalReadHeaderInformation(header_file,false);
+        bool lResult(false);
+        lResult = InternalReadHeaderInformation(header_file,false);
         header_file.close();
         return (lResult);
 }
@@ -112,6 +113,7 @@ otbMsgDebugMacro( <<"         Read  file         : "<< m_FileName);
 
 bool SHPVectorDataIO::InternalReadHeaderInformation(std::fstream & file, const bool reportError)
 {
+        return true;
 }
 
 
