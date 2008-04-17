@@ -17,10 +17,12 @@
 =========================================================================*/
 
 #include "otbVectorDataIOBase.h"
+#include "otbVectorData.h"
 
 int otbVectorDataIOBaseNew(int argc, char * argv[])
 {
-        typedef otb::VectorDataIOBase VectorDataIOBaseType;
+  typedef otb::VectorData<> VectorDataType;
+  typedef otb::VectorDataIOBase<VectorDataType> VectorDataIOBaseType;
         VectorDataIOBaseType * object;
         return 0;
 }

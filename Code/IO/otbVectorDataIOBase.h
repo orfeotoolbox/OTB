@@ -22,7 +22,6 @@
 #include "itkObjectFactory.h"
 #include "itkIndent.h"
 #include "vnl/vnl_vector.h"
-#include "otbVectorDataBase.h"
 
 #include <string>
 
@@ -51,7 +50,7 @@ namespace otb
  * \ingroup IOFilters
  *
  */
-class ITK_EXPORT VectorDataIOBase : public itk::LightProcessObject
+template <class TData> class ITK_EXPORT VectorDataIOBase : public itk::LightProcessObject
 {
 public:
   /** Standard class typedefs. */
@@ -61,6 +60,11 @@ public:
 
   /** Run-time type information (and related methods). */
   itkTypeMacro(VectorDataIOBase, Superclass);
+
+  typedef TData VectorDataType;
+  typedef typename VectorDataType::Pointer VectorDataPointerType;
+  typedef typename VectorDataType::ConstPointer VectorDataConstPointerType;
+
 
   /** Set/Get the name of the file to be read. */
   itkSetStringMacro(FileName);
@@ -117,7 +121,7 @@ public:
   virtual void ReadVectorDataInformation() = 0;
 
   /** Reads the data from disk into the memory buffer provided. */
-  virtual void Read(VectorDataBase* buffer) = 0;
+  virtual void Read(VectorDataPointerType data) = 0;
 
 
   /*-------- This part of the interfaces deals with writing data ----- */
@@ -140,23 +144,23 @@ public:
   /** Writes the data to disk from the memory buffer provided. Make sure
    * that the IORegions has been set properly. The buffer is cast to a
    * pointer to the beginning of the image data. */
-  virtual void Write( const VectorDataBase* buffer) = 0;
+  virtual void Write(VectorDataConstPointerType data) = 0;
 
 
 protected:
   VectorDataIOBase();
-  ~VectorDataIOBase();
-  void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  virtual ~VectorDataIOBase();
+
+  virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
   /** Big or Little Endian, and the type of the file. (May be ignored.) */
-  ByteOrder      m_ByteOrder;
+  ByteOrder m_ByteOrder;
 
   /** Does the VectorDataIOBase object have enough info to be of use? */
   bool m_Initialized;
 
   /** Filename to read */
   std::string m_FileName;
-
 
   /** Return the object to an initialized state, ready to be used */
   virtual void Reset(const bool freeDynamic = true);
@@ -169,5 +173,9 @@ private:
 };
 
 } // end namespace otb
+
+#ifndef OTB_MANUAL_INSTANTIATION
+#include "otbVectorDataIOBase.txx"
+#endif
 
 #endif // __otbVectorDataIOBase_h

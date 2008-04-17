@@ -1497,6 +1497,8 @@ otbReadingComplexDataIntoComplexImageTest.cxx
 otbWritingComplexDataWithComplexImageTest.cxx
 )
 
+
+
 SET(BasicIO_SRCS15
 otbVectorDataIOBaseNew.cxx
 otbVectorDataSourceNew.cxx
@@ -1504,6 +1506,7 @@ otbVectorDataFileReaderNew.cxx
 otbVectorDataFileWriterNew.cxx
 otbSHPVectorDataIONew.cxx
 )
+
 
 INCLUDE_DIRECTORIES("${OTBTesting_BINARY_DIR}")
 
@@ -1553,6 +1556,7 @@ TARGET_LINK_LIBRARIES(otbIOTests14 OTBIO OTBCommon  gdal ITKIO ITKCommon dxf)
 
 ADD_EXECUTABLE(otbIOTests15 otbIOTests15.cxx ${BasicIO_SRCS15})
 TARGET_LINK_LIBRARIES(otbIOTests15 OTBIO OTBCommon gdal ITKIO ITKCommon dxf)
+
 
 ENDIF( NOT OTB_DISABLE_CXX_TESTING )
 

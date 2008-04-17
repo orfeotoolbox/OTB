@@ -478,6 +478,20 @@ ADD_TEST(coTuStandardFilterWatcherNew ${COMMON_TESTS7}
      ${INPUTDATA}/qb_RoadExtract.img
 )
 
+
+# -------------  otb::DataNode ----------------------------
+ADD_TEST(coTvDataNode ${COMMON_TESTS7}
+     otbDataNodeTest
+)
+# -------------  otb::VectorData ----------------------------
+ADD_TEST(coTuVectorData ${COMMON_TESTS7}
+     otbVectorDataNew
+)
+
+ADD_TEST(coTvVectorData ${COMMON_TESTS7}
+     otbVectorData
+)
+
 # -------       Fichiers sources CXX -----------------------------------
 SET(BasicCommon_SRCS1
 otbSystemTest.cxx
@@ -549,6 +563,9 @@ SET(BasicCommon_SRCS7
 otbGenericInterpolateImageFunctionNew.cxx
 otbMirrorBoundaryConditionTest.cxx
 otbStandardFilterWatcherNew.cxx
+otbDataNodeTest.cxx
+otbVectorDataNew.cxx
+otbVectorData.cxx
 )
 
 INCLUDE_DIRECTORIES("${OTBTesting_BINARY_DIR}")

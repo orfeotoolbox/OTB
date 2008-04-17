@@ -76,6 +76,8 @@ public :
   itkTypeMacro(VectorDataFileWriter, itk::ProcessObject);
 	
   typedef TInputVectorData InputVectorDataType;
+  typedef VectorDataIOBase<InputVectorDataType> VectorDataIOBaseType;
+
 	
   /** Set/Get the image input of this writer.  */
   void SetInput(const InputVectorDataType *input);
@@ -101,7 +103,7 @@ protected:
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
   std::string m_FileName; // The file to be read
-  VectorDataIOBase::Pointer m_VectorDataIO;
+  typename VectorDataIOBaseType::Pointer m_VectorDataIO;
   bool  m_UserSpecifiedVectorDataIO; // track whether the VectorDataIO
   bool  m_FactorySpecifiedVectorDataIO;  //track whether the factory
                                          //  mechanism set the VectorDataIO

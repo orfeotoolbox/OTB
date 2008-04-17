@@ -15,21 +15,18 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
+#include "itkExceptionObject.h"
+#include "otbMacro.h"
 
-// this file defines the otbCommonTest for the test driver
-// and all it expects is that you have a function called RegisterTests
-#if defined(_MSC_VER)
-#pragma warning ( disable : 4786 )
-#endif
-#include <iostream>
-#include "otbTestMain.h" 
+#include "otbVectorData.h"
 
-void RegisterTests()
+int otbVectorDataNew(int argc, char * argv[])
 {
-REGISTER_TEST(otbGenericInterpolateImageFunctionNew);
-REGISTER_TEST(otbMirrorBoundaryConditionTest);
-REGISTER_TEST(otbStandardFilterWatcherNew);
-REGISTER_TEST(otbDataNodeTest);
-REGISTER_TEST(otbVectorDataNew);
-REGISTER_TEST(otbVectorData);
+ 
+  typedef otb::VectorData<double,2> VectorDataType;
+
+  //Instantiation
+  VectorDataType::Pointer data = VectorDataType::New();
+
+  return EXIT_SUCCESS;
 }

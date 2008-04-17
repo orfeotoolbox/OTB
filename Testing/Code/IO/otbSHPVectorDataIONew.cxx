@@ -17,10 +17,12 @@
 =========================================================================*/
 
 #include "otbSHPVectorDataIO.h"
+#include "otbVectorData.h"
 
 int otbSHPVectorDataIONew(int argc, char * argv[])
 {
-        typedef otb::SHPVectorDataIO SHPVectorDataIOType;
-        SHPVectorDataIOType::Pointer object = SHPVectorDataIOType::New();
-        return 0;
+  typedef otb::VectorData<> VectorDataType;
+  typedef otb::SHPVectorDataIO<VectorDataType> SHPVectorDataIOType;
+  SHPVectorDataIOType::Pointer object = SHPVectorDataIOType::New();
+  return 0;
 }

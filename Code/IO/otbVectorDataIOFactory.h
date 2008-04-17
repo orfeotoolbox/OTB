@@ -25,7 +25,7 @@ namespace otb
 /** \class VectorDataIOFactory
  * \brief Create instances of VectorDataIO objects using an object factory.
  */
-class ITK_EXPORT VectorDataIOFactory : public itk::Object
+template <class TData> class ITK_EXPORT VectorDataIOFactory : public itk::Object
 {
 public:  
   /** Standard class typedefs. */
@@ -34,19 +34,25 @@ public:
   typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
   
+  typedef TData DataType;
+  typedef typename DataType::Pointer DataPointerType;
+  typedef otb::VectorDataIOBase<DataType> VectorDataIOBaseType;
+  typedef typename VectorDataIOBaseType::Pointer VectorDataIOBasePointerType;
+  
+
   /** Class Methods used to interface with the registered factories */
   
   /** Run-time type information (and related methods). */
   itkTypeMacro(VectorDataIOFactory, Object);
 
   /** Convenient typedefs. */
-  typedef ::otb::VectorDataIOBase::Pointer VectorDataIOBasePointer;
+  typedef typename VectorDataIOBase<DataType>::Pointer VectorDataIOBasePointer;
 
   /** Mode in which the files is intended to be used */
   typedef enum { ReadMode, WriteMode } FileModeType;
   
   /** Create the appropriate VectorDataIO depending on the particulars of the file. */
-  static VectorDataIOBasePointer CreateVectorDataIO(const char* path, FileModeType mode);
+  static VectorDataIOBasePointerType CreateVectorDataIO(const char* path, FileModeType mode);
 
   /** Register Built-in factories */
   static void RegisterBuiltInFactories();
@@ -63,5 +69,9 @@ private:
   
   
 } // end namespace otb
+
+#ifndef OTB_MANUAL_INSTANTIATION
+#include "otbVectorDataIOFactory.txx"
+#endif
 
 #endif

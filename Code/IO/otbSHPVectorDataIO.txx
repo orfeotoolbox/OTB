@@ -15,41 +15,46 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
-#include "otbSHPVectorDataIO.h"
+#ifndef __otbSHPVectorDataIO_txx
+#define __otbSHPVectorDataIO_txx
+
+// #include "otbSHPVectorDataIO.h"
 #include <itksys/SystemTools.hxx>
 
 #include "itkExceptionObject.h"
 #include "itkByteSwapper.h"
 #include "otbMacro.h"
 #include "otbSystem.h"
+
 namespace otb
 {
-
-SHPVectorDataIO::SHPVectorDataIO()
+template<class TData>
+SHPVectorDataIO<TData>
+::SHPVectorDataIO()
 {
-  // By default set number of dimensions to two.
   if ( itk::ByteSwapper<char>::SystemIsLittleEndian() == true)
   {
-        m_ByteOrder = LittleEndian;
+        this->m_ByteOrder = Superclass::LittleEndian;
   }
   else
   {
-        m_ByteOrder = BigEndian;
+        this->m_ByteOrder = Superclass::BigEndian;
   }
 
-  m_FileByteOrder = BigEndian;
+  m_FileByteOrder = Superclass::BigEndian;
   
 }
-
-SHPVectorDataIO::~SHPVectorDataIO()
+template<class TData>
+SHPVectorDataIO<TData>::~SHPVectorDataIO()
 {
   if( m_File.is_open() )
     {
     m_File.close();
     }
 }
-
-bool SHPVectorDataIO::CanReadFile( const char* filename )
+template<class TData>
+bool 
+SHPVectorDataIO<TData>::CanReadFile( const char* filename )
 {
         std::string lFileName(filename);
         if( System::IsADirName(lFileName) == true )
@@ -70,34 +75,40 @@ bool SHPVectorDataIO::CanReadFile( const char* filename )
         }
 
         //Read header informations
-        bool lResult(false);
-        lResult = InternalReadHeaderInformation(header_file,false);
+        bool lResult = InternalReadHeaderInformation(header_file,false);
         header_file.close();
         return (lResult);
 }
 
 
 // Used to print information about this object
-void SHPVectorDataIO::PrintSelf(std::ostream& os, itk::Indent indent) const
+template<class TData>
+void 
+SHPVectorDataIO<TData>::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   Superclass::PrintSelf(os, indent);
 }
 
 // Read vector data
-void SHPVectorDataIO::Read(VectorDataBase* buffer)
+template<class TData>
+void 
+SHPVectorDataIO<TData>
+::Read(VectorDataPointerType data)
 {
-        VectorDataBase * p = buffer;
+
 }
 
-
-void SHPVectorDataIO::ReadVectorDataInformation()
+template<class TData>
+void 
+SHPVectorDataIO<TData>
+::ReadVectorDataInformation()
 {
         if( m_File.is_open() )
         {
                 m_File.close();
         }
 
-        m_File.open( m_FileName.c_str(),  std::ios::in | std::ios::binary );
+        m_File.open( this->m_FileName.c_str(),  std::ios::in | std::ios::binary );
         if( m_File.fail() )
         {
                 itkExceptionMacro(<<"SHPVectorDataIO::ReadVectorDataInformation() failed header open ! " );
@@ -107,17 +118,17 @@ void SHPVectorDataIO::ReadVectorDataInformation()
         InternalReadHeaderInformation(m_File,true);
 	
 otbMsgDebugMacro( <<"Driver to read: SHP");
-otbMsgDebugMacro( <<"         Read  file         : "<< m_FileName);
+otbMsgDebugMacro( <<"         Read  file         : "<< this->m_FileName);
 }
 
-
-bool SHPVectorDataIO::InternalReadHeaderInformation(std::fstream & file, const bool reportError)
+template<class TData>
+bool SHPVectorDataIO<TData>::InternalReadHeaderInformation(std::fstream & file, const bool reportError)
 {
-        return true;
+  return true;
 }
 
-
-bool SHPVectorDataIO::CanWriteFile( const char* filename )
+template<class TData>
+bool SHPVectorDataIO<TData>::CanWriteFile( const char* filename )
 {
         std::string lFileName(filename);
         if( System::IsADirName(lFileName) == true )
@@ -134,8 +145,8 @@ bool SHPVectorDataIO::CanWriteFile( const char* filename )
                 return false;
         }
 }
-
-void SHPVectorDataIO::Write(const VectorDataBase* buffer)
+template<class TData>
+void SHPVectorDataIO<TData>::Write(const VectorDataConstPointerType data)
 {
         if( m_FlagWriteVectorDataInformation == true )
         {
@@ -146,17 +157,17 @@ void SHPVectorDataIO::Write(const VectorDataBase* buffer)
 otbMsgDevMacro( <<" SHPVectorDataIO::Write()  ");
 }
 
-
-void SHPVectorDataIO::WriteVectorDataInformation()
+template<class TData>
+void SHPVectorDataIO<TData>::WriteVectorDataInformation()
 {
 
-        if ( m_FileName == "" )
+        if ( this->m_FileName == "" )
         {
                 itkExceptionMacro(<<"A FileName must be specified.");
         }
-        if( CanWriteFile(m_FileName.c_str()) == false)
+        if( CanWriteFile(this->m_FileName.c_str()) == false)
         {
-                itkExceptionMacro(<< "The file "<<m_FileName.c_str()<<" is not defined as a SHP file");
+                itkExceptionMacro(<< "The file "<<this->m_FileName.c_str()<<" is not defined as a SHP file");
         }
         // Close file from any previous vector data
         if ( m_File.is_open() )
@@ -166,18 +177,19 @@ void SHPVectorDataIO::WriteVectorDataInformation()
   
         // Open the new file for writing
         // Actually open the file
-        m_File.open( m_FileName.c_str(),  std::ios::out | std::ios::trunc | std::ios::binary );
+        m_File.open(this->m_FileName.c_str(),  std::ios::out | std::ios::trunc | std::ios::binary );
         if( m_File.fail() )
         {
-                itkExceptionMacro(<< "Cannot write requested file "<<m_FileName.c_str()<<".");
+                itkExceptionMacro(<< "Cannot write requested file "<<this->m_FileName.c_str()<<".");
         } 
 
 
 otbMsgDebugMacro( <<"Driver to write: SHP");
-otbMsgDebugMacro( <<"         Write file         : "<< m_FileName);
+otbMsgDebugMacro( <<"         Write file         : "<< this->m_FileName);
 
 }
 
   
 } // end namespace otb
 
+#endif

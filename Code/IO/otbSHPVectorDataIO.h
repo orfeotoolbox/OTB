@@ -32,14 +32,16 @@ namespace otb
  * \brief ImageIO object for reading (not writing) SHP format vector data
  *
  */
-class ITK_EXPORT SHPVectorDataIO : public VectorDataIOBase
-{
+template <class TData> class ITK_EXPORT SHPVectorDataIO 
+  : public VectorDataIOBase<TData>
+  {
 public:
 
   /** Standard class typedefs. */
-  typedef SHPVectorDataIO            Self;
-  typedef VectorDataIOBase  Superclass;
+  typedef SHPVectorDataIO          Self;
+  typedef VectorDataIOBase<TData>  Superclass;
   typedef itk::SmartPointer<Self>  Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
@@ -48,8 +50,13 @@ public:
   itkTypeMacro(SHPVectorDataIO, VectorDataIOBase);
 
   /** Byte order typedef */
-  typedef Superclass::ByteOrder  ByteOrder;
+  typedef typename Superclass::ByteOrder  ByteOrder;
   
+  /** Data typedef */
+  typedef TData VectorDataType;
+  typedef typename VectorDataType::Pointer VectorDataPointerType;
+  typedef typename VectorDataType::ConstPointer VectorDataConstPointerType;
+
 
   /*-------- This part of the interface deals with reading data. ------ */
 
@@ -64,7 +71,7 @@ public:
   virtual void ReadVectorDataInformation();
  
   /** Reads the data from disk into the memory buffer provided. */
-  virtual void Read(VectorDataBase* buffer);
+  virtual void Read(VectorDataPointerType data);
 
   /*-------- This part of the interfaces deals with writing data. ----- */
 
@@ -81,17 +88,17 @@ public:
 
   /** Writes the data to disk from the memory buffer provided. Make sure
    * that the IORegion has been set properly. */
-  virtual void Write(const VectorDataBase* buffer);
+  virtual void Write(VectorDataConstPointerType data);
   
 protected:
   /** Construtor.*/
   SHPVectorDataIO();
   /** Destructor.*/
-  ~SHPVectorDataIO();
+  virtual ~SHPVectorDataIO();
 
-  void InternalReadVectorDataInformation();
+  virtual void InternalReadVectorDataInformation(){};
 
-  void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
 private:
   SHPVectorDataIO(const Self&); //purposely not implemented
@@ -101,11 +108,15 @@ private:
   bool InternalReadHeaderInformation(std::fstream & file, const bool reportError);
 
   bool    m_FlagWriteVectorDataInformation;
-  VectorDataIOBase::ByteOrder m_FileByteOrder;
+  typename VectorDataIOBase<TData>::ByteOrder m_FileByteOrder;
   std::fstream m_File;
 
 };
 
 } // end namespace otb
+
+#ifndef OTB_MANUAL_INSTANTIATION
+#include "otbSHPVectorDataIO.txx"
+#endif
 
 #endif // __otbSHPVectorDataIO_h

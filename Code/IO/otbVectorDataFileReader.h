@@ -84,7 +84,7 @@ class ITK_EXPORT VectorDataFileReader : public VectorDataSource<TOutputVectorDat
 public :
 
   /** Standard class typedefs. */
-  typedef VectorDataFileReader													Self;
+  typedef VectorDataFileReader			Self;
   typedef VectorDataSource<TOutputVectorData>   Superclass;
   typedef itk::SmartPointer<Self>               Pointer;
   typedef itk::SmartPointer<const Self>         ConstPointer;
@@ -96,6 +96,7 @@ public :
   itkTypeMacro(VectorDataFileReader, VectorDataSource);
 	
   typedef TOutputVectorData       OutputVectorType;
+  typedef VectorDataIOBase<OutputVectorType> VectorDataIOBaseType;
 	
   /** Specify the file to read */
   itkSetStringMacro(FileName);
@@ -107,8 +108,8 @@ public :
    * instance that is created. Or you can directly specify the VectorDataIO
    * to use to read a particular file in case the factory mechanism will
    * not work properly (e.g., unknown or unusual extension). */
-  void  SetVectorDataIO( VectorDataIOBase * vectorDataIO );
-  itkGetObjectMacro(VectorDataIO,VectorDataIOBase);
+  void  SetVectorDataIO( VectorDataIOBaseType * vectorDataIO );
+  itkGetObjectMacro(VectorDataIO,VectorDataIOBaseType);
 
   /** Prepare the allocation of the output vector data during the first back
    * propagation of the pipeline. */
@@ -123,7 +124,7 @@ protected:
   ~VectorDataFileReader();
   std::string m_ExceptionMessage;  
 
-  VectorDataIOBase::Pointer m_VectorDataIO;
+  typename VectorDataIOBaseType::Pointer m_VectorDataIO;
   bool  m_UserSpecifiedVectorDataIO; // keep track whether the
 
   void PrintSelf(std::ostream& os, itk::Indent indent) const;

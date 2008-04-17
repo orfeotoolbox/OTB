@@ -245,8 +245,8 @@ VectorDataFileWriter<TInputVectorData>
     {
     itkDebugMacro(<<"Attempting factory creation of VectorDataIO for file: " 
                   << m_FileName);
-    m_VectorDataIO = VectorDataIOFactory::CreateVectorDataIO( m_FileName.c_str(), 
-                                               VectorDataIOFactory::WriteMode );
+    m_VectorDataIO = VectorDataIOFactory<TInputVectorData>::CreateVectorDataIO( m_FileName.c_str(), 
+                                               VectorDataIOFactory<TInputVectorData>::WriteMode );
     m_FactorySpecifiedVectorDataIO = true;
     }
   else
@@ -257,8 +257,8 @@ VectorDataFileWriter<TInputVectorData>
                     << m_FileName );
       itkDebugMacro(<<"Attempting creation of VectorDataIO with a factory for file:"
                     << m_FileName);
-      m_VectorDataIO = VectorDataIOFactory::CreateVectorDataIO( m_FileName.c_str(), 
-                                                 VectorDataIOFactory::WriteMode );
+      m_VectorDataIO = VectorDataIOFactory<TInputVectorData>::CreateVectorDataIO( m_FileName.c_str(), 
+                                                 VectorDataIOFactory<TInputVectorData>::WriteMode );
       m_FactorySpecifiedVectorDataIO = true;
       }
     }
@@ -275,7 +275,7 @@ VectorDataFileWriter<TInputVectorData>
     for(std::list<LightObject::Pointer>::iterator i = allobjects.begin();
         i != allobjects.end(); ++i)
       {
-      VectorDataIOBase* io = dynamic_cast<VectorDataIOBase*>(i->GetPointer());
+      VectorDataIOBase<TInputVectorData>* io = dynamic_cast<VectorDataIOBase<TInputVectorData>*>(i->GetPointer());
       msg << "    " << io->GetNameOfClass() << std::endl; 
       }
     msg << "  You probably failed to set a file suffix, or" << std::endl;

@@ -15,6 +15,9 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
+#ifndef _otbSHPVectorDataIOFactory_txx
+#define _otbSHPVectorDataIOFactory_txx
+
 #include "otbSHPVectorDataIOFactory.h"
 
 #include "itkCreateObjectFunction.h"
@@ -23,8 +26,8 @@
 
 namespace otb
 {
-
-SHPVectorDataIOFactory::SHPVectorDataIOFactory()
+template<class TData>
+SHPVectorDataIOFactory<TData>::SHPVectorDataIOFactory()
 {
   this->RegisterOverride("otbVectorDataIOBase",
                          "otbSHPVectorDataIO",
@@ -32,22 +35,23 @@ SHPVectorDataIOFactory::SHPVectorDataIOFactory()
                          1,
                          itk::CreateObjectFunction<SHPVectorDataIO>::New());
 }
-  
-SHPVectorDataIOFactory::~SHPVectorDataIOFactory()
+template<class TData>
+SHPVectorDataIOFactory<TData>::~SHPVectorDataIOFactory()
 {
 }
-
+template<class TData>
 const char* 
-SHPVectorDataIOFactory::GetITKSourceVersion(void) const
+SHPVectorDataIOFactory<TData>::GetITKSourceVersion(void) const
 {
   return ITK_SOURCE_VERSION;
 }
-
+template<class TData>
 const char* 
-SHPVectorDataIOFactory::GetDescription() const
+SHPVectorDataIOFactory<TData>::GetDescription() const
 {
   return "SHP VectorDataIO Factory, allows the loading of SHP vector data into OTB";
 }
 
 } // end namespace otb
 
+#endif

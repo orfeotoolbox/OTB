@@ -41,11 +41,11 @@ VectorDataIOFactory<TData>
 
   std::list<VectorDataIOBasePointerType> possibleVectorDataIO;
   std::list<itk::LightObject::Pointer> allobjects =
-    itk::ObjectFactoryBase::CreateAllInstance("otbVectorDataIOBase");
+    itk::ObjectFactoryBase::CreateAllInstance("otbVectorDataIOBase<TData>");
   for(std::list<itk::LightObject::Pointer>::iterator i = allobjects.begin();
       i != allobjects.end(); ++i)
     {
-    VectorDataIOBase* io = dynamic_cast<VectorDataIOBasePointerType>(i->GetPointer());
+    VectorDataIOBaseType * io = dynamic_cast<VectorDataIOBaseType*>(i->GetPointer());
     if(io)
       {
       possibleVectorDataIO.push_back(io);
@@ -57,7 +57,7 @@ VectorDataIOFactory<TData>
                 << std::endl;
       }
     }
-  for(std::list<VectorDataIOBasePointerType>::iterator k = possibleVectorDataIO.begin();
+  for(typename std::list<VectorDataIOBasePointerType>::iterator k = possibleVectorDataIO.begin();
       k != possibleVectorDataIO.end(); ++k)
     {
     if( mode == ReadMode )

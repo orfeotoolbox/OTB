@@ -105,7 +105,7 @@ VectorDataFileReader<TOutputVectorData>
 template <class TOutputVectorData>
 void
 VectorDataFileReader<TOutputVectorData>
-::SetVectorDataIO( VectorDataIOBase * vectorDataIO)
+::SetVectorDataIO( VectorDataIOBaseType * vectorDataIO)
 {
   itkDebugMacro("setting VectorDataIO to " << vectorDataIO ); 
   if (this->m_VectorDataIO != vectorDataIO ) 
@@ -148,7 +148,7 @@ VectorDataFileReader<TOutputVectorData>
 
   if ( m_UserSpecifiedVectorDataIO == false ) //try creating via factory
     {
-    m_VectorDataIO = VectorDataIOFactory::CreateVectorDataIO( m_FileName.c_str(), VectorDataIOFactory::ReadMode );
+    m_VectorDataIO = VectorDataIOFactory<TOutputVectorData>::CreateVectorDataIO( m_FileName.c_str(), VectorDataIOFactory<TOutputVectorData>::ReadMode );
     }
   
   if ( m_VectorDataIO.IsNull() )
@@ -168,7 +168,7 @@ VectorDataFileReader<TOutputVectorData>
       for(std::list<itk::LightObject::Pointer>::iterator i = allobjects.begin();
           i != allobjects.end(); ++i)
         {
-        VectorDataIOBase* io = dynamic_cast<VectorDataIOBase*>(i->GetPointer());
+        VectorDataIOBase<TOutputVectorData>* io = dynamic_cast<VectorDataIOBase<TOutputVectorData>*>(i->GetPointer());
         msg << "    " << io->GetNameOfClass() << std::endl; 
         }
       msg << "  You probably failed to set a file suffix, or" << std::endl;

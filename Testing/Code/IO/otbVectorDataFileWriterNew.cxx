@@ -17,11 +17,12 @@
 =========================================================================*/
 
 #include "otbVectorDataFileWriter.h"
-#include "otbVectorDataBase.h"
+#include "otbVectorData.h"
 
 int otbVectorDataFileWriterNew(int argc, char * argv[])
 {
-        typedef otb::VectorDataFileWriter<otb::VectorDataBase> VectorDataFileWriterType;
-        VectorDataFileWriterType::Pointer object = VectorDataFileWriterType::New();
+  typedef otb::VectorData<> VectorDataType;
+  typedef otb::VectorDataFileWriter<VectorDataType> VectorDataFileWriterType;
+  VectorDataFileWriterType::Pointer object = VectorDataFileWriterType::New();
         return 0;
 }

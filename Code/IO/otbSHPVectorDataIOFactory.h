@@ -25,7 +25,7 @@ namespace otb
 /** \class SHPVectorDataIOFactory
  * \brief Creation d'un instance d'un objet VectorDataImageIO utilisant les object factory.
  */
-class ITK_EXPORT SHPVectorDataIOFactory : public itk::ObjectFactoryBase
+template <class TData> class ITK_EXPORT SHPVectorDataIOFactory : public itk::ObjectFactoryBase
 {
 public:  
   /** Standard class typedefs. */
@@ -47,7 +47,7 @@ public:
   /** Register one factory of this type  */
   static void RegisterOneFactory(void)
   {
-    SHPVectorDataIOFactory::Pointer SHPFactory = SHPVectorDataIOFactory::New();
+    SHPVectorDataIOFactory<TData>::Pointer SHPFactory = SHPVectorDataIOFactory::New();
     itk::ObjectFactoryBase::RegisterFactory(SHPFactory);
   }
 
@@ -63,5 +63,10 @@ private:
   
   
 } // end namespace otb
+
+
+#ifndef OTB_MANUAL_INSTANTIATION
+#include "otbSHPVectorDataIOFactory.txx"
+#endif
 
 #endif

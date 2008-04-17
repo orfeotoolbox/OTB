@@ -17,11 +17,12 @@
 =========================================================================*/
 
 #include "otbVectorDataSource.h"
-#include "otbVectorDataBase.h"
+#include "otbVectorData.h"
 
 int otbVectorDataSourceNew(int argc, char * argv[])
 {
-        typedef otb::VectorDataSource<otb::VectorDataBase> VectorDataSourceType;
+  typedef otb::VectorData<> VectorDataType;
+        typedef otb::VectorDataSource<VectorDataType> VectorDataSourceType;
         VectorDataSourceType::Pointer object = VectorDataSourceType::New();
         return 0;
 }
