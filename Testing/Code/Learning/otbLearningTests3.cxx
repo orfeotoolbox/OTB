@@ -37,4 +37,5 @@ REGISTER_TEST(otbSVMModelGenericKernelsTest);
 REGISTER_TEST(otbSVMModelCopyTest);
 REGISTER_TEST(otbSVMModelCopyGenericKernelTest);
 REGISTER_TEST(otbSVMModelCopyComposedKernelTest);
+REGISTER_TEST(teststephanie); 
 }
