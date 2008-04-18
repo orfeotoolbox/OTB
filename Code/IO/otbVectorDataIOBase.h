@@ -116,9 +116,9 @@ public:
     return false;
     }
 
-  /** Read the spacing and dimentions of the VectorData.
-   * Assumes SetFileName has been called with a valid file name. */
-  virtual void ReadVectorDataInformation() = 0;
+/*   /\** Read the spacing and dimentions of the VectorData. */
+/*    * Assumes SetFileName has been called with a valid file name. *\/ */
+/*   virtual void ReadVectorDataInformation() = 0; */
 
   /** Reads the data from disk into the memory buffer provided. */
   virtual void Read(VectorDataPointerType data) = 0;
@@ -137,9 +137,9 @@ public:
     return false;
     }
 
-  /** Writes the spacing and dimentions of the VectorData.
-   * Assumes SetFileName has been called with a valid file name. */
-  virtual void WriteVectorDataInformation() = 0;
+/*   /\** Writes the spacing and dimentions of the VectorData. */
+/*    * Assumes SetFileName has been called with a valid file name. *\/ */
+/*   virtual void WriteVectorDataInformation() = 0; */
 
   /** Writes the data to disk from the memory buffer provided. Make sure
    * that the IORegions has been set properly. The buffer is cast to a
@@ -172,7 +172,7 @@ private:
 
 };
 
-} // end namespace otb
+} // end namespace otb 
 
 #ifndef OTB_MANUAL_INSTANTIATION
 #include "otbVectorDataIOBase.txx"

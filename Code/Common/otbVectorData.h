@@ -1,4 +1,20 @@
+/*=========================================================================
 
+  Program:   ORFEO Toolbox
+  Language:  C++
+  Date:      $Date$
+  Version:   $Revision$
+
+
+  Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
+  See OTBCopyright.txt for details.
+
+
+     This software is distributed WITHOUT ANY WARRANTY; without even 
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     PURPOSE.  See the above copyright notices for more information.
+
+=========================================================================*/
 #ifndef _otb_VectorData_h
 #define _otb_VectorData_h
 
@@ -6,13 +22,25 @@
 #include "itkDataObject.h"
 #include "otbDataNode.h"
 
-
 namespace otb
 {
+  /** \class VectorData
+   * \brief this class represents a hierarchy of vector data. 
+   * 
+   * This class contains an itk::TreeContainer templated with otb::DataNode.
+   * It represents a tree structure of vector data. These data can be read from 
+   * shapefiles or kml files for instance. 
+   *
+   * The internal tree can be walked with itk::TreeIteratorBase subclasses.
+   *
+   * \sa DataNode
+   * \sa VectorDataFileReader
+   * \sa VectorDataFileWriter
+   *
+   */
 template <class TPrecision = double, unsigned int VDimension =2> 
 class VectorData 
-  : public itk::DataObject
-  
+  : public itk::DataObject  
 {
   public:
   /** Standard class typedefs */

@@ -57,7 +57,7 @@ int otbDataNodeTest(int argc, char * argv[])
   line->SetLine(l);
 
   PolygonType::Pointer pol = PolygonType::New();
-  polygon->SetPolygon(pol);
+  polygon->SetPolygonExteriorRing(pol);
 
   
   otbControlConditionTestMacro(!root->IsRoot(),"Wrong IsRoot() method return.");

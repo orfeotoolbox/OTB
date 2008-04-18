@@ -33,7 +33,7 @@ SHPVectorDataIOFactory<TData>::SHPVectorDataIOFactory()
                          "otbSHPVectorDataIO",
                          "SHP Vectordata IO",
                          1,
-                         itk::CreateObjectFunction<SHPVectorDataIO>::New());
+                         itk::CreateObjectFunction<SHPVectorDataIO<TData> >::New());
 }
 template<class TData>
 SHPVectorDataIOFactory<TData>::~SHPVectorDataIOFactory()

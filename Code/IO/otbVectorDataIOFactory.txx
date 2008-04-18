@@ -23,7 +23,7 @@
 #endif
 
 #include "otbVectorDataIOFactory.h"
-
+#include "otbSHPVectorDataIOFactory.h"
 #include "itkObjectFactoryBase.h"
 #include "itkMutexLock.h"
 #include "itkMutexLockHolder.h"
@@ -36,12 +36,12 @@ typename VectorDataIOFactory<TData>
 VectorDataIOFactory<TData>
 ::CreateVectorDataIO(const char* path, FileModeType mode)
 {
-
+  std::cout<<"Entering CreateVectorDataIO"<<std::endl;
   RegisterBuiltInFactories();
 
   std::list<VectorDataIOBasePointerType> possibleVectorDataIO;
   std::list<itk::LightObject::Pointer> allobjects =
-    itk::ObjectFactoryBase::CreateAllInstance("otbVectorDataIOBase<TData>");
+    itk::ObjectFactoryBase::CreateAllInstance("otbVectorDataIOBase");
   for(std::list<itk::LightObject::Pointer>::iterator i = allobjects.begin();
       i != allobjects.end(); ++i)
     {
@@ -76,6 +76,7 @@ VectorDataIOFactory<TData>
 
       }
     }
+  std::cout<<"No driver found."<<std::endl;
   return 0;
 }
 template <class TData>
@@ -92,7 +93,7 @@ VectorDataIOFactory<TData>
     itk::MutexLockHolder<itk::SimpleMutexLock> mutexHolder( mutex );
     if( firstTime )
       {
-//      itk::ObjectFactoryBase::RegisterFactory( SHPVectorDataIOFactory::New() );
+	itk::ObjectFactoryBase::RegisterFactory( SHPVectorDataIOFactory<TData>::New() );
 //      itk::ObjectFactoryBase::RegisterFactory( KMLVectorDataIOFactory::New() );
       firstTime = false;
       }

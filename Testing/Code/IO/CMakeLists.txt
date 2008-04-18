@@ -1387,6 +1387,12 @@ ADD_TEST(ioTuVectorDataSourceTest ${IO_TESTS15}
         otbVectorDataSourceNew )
 ADD_TEST(ioTuVectorDataFileReaderTest ${IO_TESTS15} 
         otbVectorDataFileReaderNew )
+
+ADD_TEST(ioTvVectorDataFileReader ${IO_TESTS15} 
+        otbVectorDataFileReader
+	${IMAGEDATA}/TOULOUSE/QuickBird/GIS_FILES/000000128955_01_ORDER_SHAPE.shp
+	)
+
 ADD_TEST(ioTuVectorDataFileWriterTest ${IO_TESTS15} 
         otbVectorDataFileWriterNew )
 ADD_TEST(ioTuVectorDataFileWriterTest ${IO_TESTS15} 
@@ -1503,6 +1509,7 @@ SET(BasicIO_SRCS15
 otbVectorDataIOBaseNew.cxx
 otbVectorDataSourceNew.cxx
 otbVectorDataFileReaderNew.cxx
+otbVectorDataFileReader.cxx
 otbVectorDataFileWriterNew.cxx
 otbSHPVectorDataIONew.cxx
 )

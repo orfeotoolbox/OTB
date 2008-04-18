@@ -23,6 +23,7 @@
 #include <string>
 #include <vector>
 
+#include "ogrsf_frmts.h"
 
 namespace otb
 {
@@ -54,8 +55,20 @@ public:
   
   /** Data typedef */
   typedef TData VectorDataType;
-  typedef typename VectorDataType::Pointer VectorDataPointerType;
-  typedef typename VectorDataType::ConstPointer VectorDataConstPointerType;
+  typedef typename VectorDataType::DataTreeType  DataTreeType;
+  typedef typename DataTreeType::Pointer         DataTreePointerType;
+  typedef typename VectorDataType::DataNodeType  DataNodeType;
+  typedef typename DataNodeType::Pointer         DataNodePointerType;
+  typedef typename DataNodeType::PointType       PointType;
+  typedef typename DataNodeType::LineType        LineType;
+  typedef typename LineType::Pointer             LinePointerType;
+  typedef typename DataNodeType::PolygonType     PolygonType;
+  typedef typename PolygonType::Pointer          PolygonPointerType;
+  typedef typename DataNodeType::PolygonListType PolygonListType;
+  typedef typename PolygonListType::Pointer      PolygonListPointerType;
+  typedef typename DataNodeType::Pointer         DataNodePointerType;
+  typedef typename VectorDataType::Pointer       VectorDataPointerType;
+  typedef typename VectorDataType::ConstPointer  VectorDataConstPointerType;
 
 
   /*-------- This part of the interface deals with reading data. ------ */
@@ -65,10 +78,10 @@ public:
   virtual bool CanReadFile(const char*);
   
   /** Determine the file type. Returns true if the VectorDataIO can stream read the specified file */
-  virtual bool CanStreamRead(){  return true; };
+  virtual bool CanStreamRead(){  return false; };
 
-  /** Set the spacing and dimention information for the set filename. */
-  virtual void ReadVectorDataInformation();
+/*   /\** Set the spacing and dimention information for the set filename. *\/ */
+/*   virtual void ReadVectorDataInformation(); */
  
   /** Reads the data from disk into the memory buffer provided. */
   virtual void Read(VectorDataPointerType data);
@@ -80,11 +93,11 @@ public:
   virtual bool CanWriteFile(const char*);
 
   /** Determine the file type. Returns true if the ImageIO can stream write the specified file */
-  virtual bool CanStreamWrite() { return true; };
+  virtual bool CanStreamWrite() { return false; };
 
-  /** Writes the spacing and dimentions of the image.
-   * Assumes SetFileName has been called with a valid file name. */
-  virtual void WriteVectorDataInformation();
+/*   /\** Writes the spacing and dimentions of the image. */
+/*    * Assumes SetFileName has been called with a valid file name. *\/ */
+/*   virtual void WriteVectorDataInformation(); */
 
   /** Writes the data to disk from the memory buffer provided. Make sure
    * that the IORegion has been set properly. */
@@ -96,20 +109,35 @@ protected:
   /** Destructor.*/
   virtual ~SHPVectorDataIO();
 
-  virtual void InternalReadVectorDataInformation(){};
+  /*   virtual void InternalReadVectorDataInformation(){}; */
 
   virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
+
+  
+  /** Conversion tools */
+
+  static DataNodePointerType ConvertGeometryToPointNode(const OGRGeometry * ogrGeometry);
+
+  static DataNodePointerType  ConvertGeometryToLineNode(const OGRGeometry * ogrGeometry);
+
+  static DataNodePointerType ConvertGeometryToPolygonNode(const OGRGeometry * ogrGeometry);
+
+  /** end conversion tools */
 
 private:
   SHPVectorDataIO(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
 
-  /** Internal method to read header informations */
-  bool InternalReadHeaderInformation(std::fstream & file, const bool reportError);
+  OGRDataSource * m_DataSource;
+  
+  /** Is this necessary ? */
 
-  bool    m_FlagWriteVectorDataInformation;
-  typename VectorDataIOBase<TData>::ByteOrder m_FileByteOrder;
-  std::fstream m_File;
+  /** Internal method to read header informations */
+  /*   bool InternalReadHeaderInformation(std::fstream & file, const bool reportError); */
+
+  /*   bool    m_FlagWriteVectorDataInformation; */
+  /*   typename VectorDataIOBase<TData>::ByteOrder m_FileByteOrder; */
+  /*   std::fstream m_File; */
 
 };
 

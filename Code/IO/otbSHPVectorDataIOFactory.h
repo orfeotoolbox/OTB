@@ -47,7 +47,7 @@ public:
   /** Register one factory of this type  */
   static void RegisterOneFactory(void)
   {
-    SHPVectorDataIOFactory<TData>::Pointer SHPFactory = SHPVectorDataIOFactory::New();
+    typename SHPVectorDataIOFactory<TData>::Pointer SHPFactory = SHPVectorDataIOFactory<TData>::New();
     itk::ObjectFactoryBase::RegisterFactory(SHPFactory);
   }
 

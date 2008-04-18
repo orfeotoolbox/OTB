@@ -60,7 +60,7 @@ int otbVectorData(int argc, char * argv[])
   line->SetLine(l);
 
   PolygonType::Pointer pol = PolygonType::New();
-  polygon->SetPolygon(pol);
+  polygon->SetPolygonExteriorRing(pol);
 
   DataNodeType::Pointer root = data->GetDataTree()->GetRoot()->Get();
 

@@ -16,22 +16,20 @@
 
 =========================================================================*/
 
-// this file defines the otbCommonTest for the test driver
-// and all it expects is that you have a function called RegisterTests
-#if defined(_MSC_VER)
-#pragma warning ( disable : 4786 )
-#endif
+#include "otbVectorDataFileReader.h"
+#include "otbVectorData.h"
 
-#include <iostream>
-#include "otbTestMain.h" 
-
-
-void RegisterTests()
+int otbVectorDataFileReader(int argc, char * argv[])
 {
-REGISTER_TEST(otbVectorDataIOBaseNew);
-REGISTER_TEST(otbVectorDataSourceNew);
-REGISTER_TEST(otbVectorDataFileReaderNew);
- REGISTER_TEST(otbVectorDataFileReader);
-REGISTER_TEST(otbVectorDataFileWriterNew);
-REGISTER_TEST(otbSHPVectorDataIONew);
+  typedef otb::VectorData<> VectorDataType;
+  typedef otb::VectorDataFileReader<VectorDataType> VectorDataFileReaderType;
+  VectorDataFileReaderType::Pointer reader = VectorDataFileReaderType::New();
+ 
+  reader->SetFileName(argv[1]);
+  reader->Update();
+
+  VectorDataType::Pointer data = reader->GetOutput();
+
+  std::cout<<data<<std::endl;
+  return 0;
 }

@@ -180,7 +180,7 @@ VectorDataFileReader<TOutputVectorData>
     }
   
   m_VectorDataIO->SetFileName(m_FileName.c_str());
-  m_VectorDataIO->ReadVectorDataInformation();
+//   m_VectorDataIO->ReadVectorDataInformation();
 
 
   //Copy MetaDataDictionary from instantiated reader to output VectorData.
