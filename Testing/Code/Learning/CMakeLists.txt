@@ -241,8 +241,6 @@ ADD_TEST(leTvSVMModelCopyComposedKernel ${LEARNING_TESTS3}
 	${INPUTDATA}/svm_model_composed
 	${TEMP}/svmcopycomposed_test)
 
-ADD_TEST(teststephanie ${LEARNING_TESTS3}
-teststephanie)
 
 
 # A enrichir
@@ -282,7 +280,6 @@ otbSVMModelGenericKernelsTest.cxx
 otbSVMModelCopyTest.cxx
 otbSVMModelCopyGenericKernelTest.cxx
 otbSVMModelCopyComposedKernelTest.cxx
-teststephanie.cxx
 )
 
 
