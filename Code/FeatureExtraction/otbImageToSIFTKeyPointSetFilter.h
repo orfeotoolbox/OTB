@@ -19,6 +19,7 @@ PURPOSE.  See the above copyright notices for more information.
 #define _otbImageToSIFTKeyPointSetFilter_h
 
 #include "itkExpandImageFilter.h"
+#include "itkDiscreteGaussianImageFilter.h"
 #include "itkRecursiveGaussianImageFilter.h"
 #include "itkSubtractImageFilter.h"
 #include "itkShrinkImageFilter.h"
@@ -153,7 +154,6 @@ namespace otb
        */
       itkSetMacro(DoGThreshold, double);
       itkGetMacro(DoGThreshold, double);
-
       
       /** Set/Get Edgethreshold
        *  Eliminating edge responses
@@ -299,8 +299,8 @@ namespace otb
       GaussianFilterPointerType m_XGaussianFilter;
       GaussianFilterPointerType m_YGaussianFilter;
       
-      /** Gaussian image list */
-      ImageListPointerType m_GaussianList;
+      /** Gaussian image pointer */
+      InputImagePointerType m_LastGaussian;
       
       /** Difference of gaussian list */
       ImageListPointerType m_DoGList;
@@ -316,7 +316,7 @@ namespace otb
       
       /** Subtract filter */
       SubtractFilterPointerType m_SubtractFilter;
-      
+
       /** Gradient filter */
       GradientFilterPointerType m_GradientFilter;
       
@@ -326,12 +326,10 @@ namespace otb
       /** Orientation filter */
       OrientationFilterPointerType m_OrientationFilter;
 
-      /** Gaussian x orientation filter */
-      GaussianFilterPointerType m_XGaussianFilter3;
-      
-      /** Gaussian y orientation filter */
-      GaussianFilterPointerType m_YGaussianFilter3;
-      
+      /** Gaussian orientation filter */
+      GaussianFilterPointerType m_XOrientationGaussianFilter;
+      GaussianFilterPointerType m_YOrientationGaussianFilter;
+
       /** Number of key points */
       OutputPointIdentifierType m_ValidatedKeyPoints;
       
@@ -346,6 +344,9 @@ namespace otb
 
       /** Gaussian sigma for histogram smoothing */
       static const double m_HistogramGaussianWeights[73];
+      
+      /** Offsets vector, conveniance datas */
+      static const OffsetType m_Offsets[8];
     };
 }// End namespace otb
 #ifndef OTB_MANUAL_INSTANTIATION

@@ -40,6 +40,19 @@ namespace otb
     1.2043009749602365e-05, 8.2295774080263437e-06, 5.5463469229192623e-06, 3.6865788528530121e-06, 2.4167238265599128e-06, 1.5624909838697011e-06, 9.9631120821413786e-07, 
     6.2655544995978937e-07, 3.8860734758633732e-07, 2.3771112282795414e-07};
 
+  template <class TInputImage, class TOutputPointSet>
+  const typename ImageToSIFTKeyPointSetFilter<TInputImage,TOutputPointSet>::OffsetType
+  ImageToSIFTKeyPointSetFilter<TInputImage,TOutputPointSet>::m_Offsets[8] = {
+    {{-1,-1}}, //0
+    {{-1, 0}}, //1
+    {{-1, 1}}, //2
+    {{ 0,-1}}, //3
+    {{ 0, 1}}, //4
+    {{ 1,-1}}, //5
+    {{ 1, 0}}, //6
+    {{ 1, 1}}, //7
+    };
+  
   /**
    * Constructor
    */
@@ -61,7 +74,7 @@ namespace otb
     m_ValidatedKeyPoints = 0;
     m_DifferentSamplePoints = 0;
     m_DiscardedKeyPoints = 0;
-    m_ChangeSamplePointsMax = 5;
+    m_ChangeSamplePointsMax = 2;
     
     m_ExpandFilter = ExpandFilterType::New();
   }
@@ -87,7 +100,7 @@ namespace otb
     
     // for each octave, compute the difference of gaussian
     unsigned int lOctave = 0;
-    m_Sigmak = vcl_pow((double)2, (double)((double)1/(double)(m_ScalesNumber)));
+    m_Sigmak = vcl_pow(2, static_cast<double>(1/(double)(m_ScalesNumber+1)));
     m_RatioEdgeThreshold = (m_EdgeThreshold+1)*(m_EdgeThreshold+1)/m_EdgeThreshold;
     
     for (lOctave = 0; lOctave != m_OctavesNumber; lOctave++)
@@ -103,7 +116,7 @@ namespace otb
 	// Get the last gaussian for subsample and
 	// repeat the process
 	m_ShrinkFilter = ShrinkFilterType::New();
-	m_ShrinkFilter->SetInput(m_GaussianList->Back());
+	m_ShrinkFilter->SetInput(m_LastGaussian);
 	m_ShrinkFilter->SetShrinkFactors(m_ShrinkFactors);
 	m_ShrinkFilter->Update();
 	
@@ -175,69 +188,78 @@ namespace otb
   ::ComputeDifferenceOfGaussian(InputImagePointerType input)
   {
     unsigned int lScale = 0;
-        
-    m_GaussianList = ImageListType::New();
+    InputImagePointerType previousGaussian;
+    
     m_DoGList = ImageListType::New();
     
     m_MagnitudeList = ImageListType::New();
     m_OrientationList = ImageListType::New();
     m_GaussianWeightOrientationList = ImageListType::New();
-    
-    double sigman = 1/input->GetSpacing()[0]*m_Sigma0*vcl_sqrt((double)(1.-1./(m_Sigmak*m_Sigmak)));
+
+    // itkRecursiveGaussian use spacing to compute
+    // length sigma gaussian (in mm)
+    // sigma = sigma/spacing
+    //
+    // with mult by spacing before filtering, length sigma gaussian 
+    // is compute in pixel
+    double xsigman = input->GetSpacing()[0]*m_Sigma0;
+    double ysigman = input->GetSpacing()[1]*m_Sigma0;
     
     for (lScale = 0; lScale != m_ScalesNumber+2; lScale++)
       {
-	sigman = sigman*m_Sigmak;
 	m_XGaussianFilter = GaussianFilterType::New();
 	m_YGaussianFilter = GaussianFilterType::New();
 	
-	m_XGaussianFilter->SetSigma(sigman);
+	m_XGaussianFilter->SetSigma(xsigman);
 	m_XGaussianFilter->SetDirection(0);
 	m_XGaussianFilter->SetInput(input);
 	
-	m_YGaussianFilter->SetSigma(sigman);
+	m_YGaussianFilter->SetSigma(ysigman);
 	m_YGaussianFilter->SetDirection(1);
 	m_YGaussianFilter->SetInput(m_XGaussianFilter->GetOutput());
 	
 	m_YGaussianFilter->Update();
 	
-	m_GaussianList->PushBack(m_YGaussianFilter->GetOutput());
-	
 	m_GradientFilter = GradientFilterType::New();
 	m_MagnitudeFilter = MagnitudeFilterType::New();
 	m_OrientationFilter = OrientationFilterType::New();
-	m_XGaussianFilter3 = GaussianFilterType::New();
-	m_YGaussianFilter3 = GaussianFilterType::New();
-	
+	m_XOrientationGaussianFilter = GaussianFilterType::New();
+	m_YOrientationGaussianFilter = GaussianFilterType::New();
+
 	m_GradientFilter->SetInput(m_YGaussianFilter->GetOutput());
 	m_MagnitudeFilter->SetInput(m_GradientFilter->GetOutput());
 	m_OrientationFilter->SetInput(m_GradientFilter->GetOutput());
 
-	m_XGaussianFilter3->SetInput(m_OrientationFilter->GetOutput());
-	m_XGaussianFilter3->SetDirection(0);
-	m_XGaussianFilter3->SetSigma(3*sigman);
+	m_XOrientationGaussianFilter->SetInput(m_OrientationFilter->GetOutput());
+	m_XOrientationGaussianFilter->SetSigma(3*xsigman);
+	m_XOrientationGaussianFilter->SetDirection(0);
 	
-	m_YGaussianFilter3->SetInput(m_XGaussianFilter3->GetOutput());
-	m_YGaussianFilter3->SetDirection(1);
-	m_YGaussianFilter3->SetSigma(3*sigman);
+	m_YOrientationGaussianFilter->SetInput(m_XOrientationGaussianFilter->GetOutput());
+	m_YOrientationGaussianFilter->SetSigma(3*ysigman);
+	m_YOrientationGaussianFilter->SetDirection(1);
 	
 	m_MagnitudeFilter->Update();
-	m_YGaussianFilter3->Update();
+	m_YOrientationGaussianFilter->Update();
 	
 	m_MagnitudeList->PushBack(m_MagnitudeFilter->GetOutput());
 	m_OrientationList->PushBack(m_OrientationFilter->GetOutput());
-	m_GaussianWeightOrientationList->PushBack(m_YGaussianFilter3->GetOutput());
+	m_GaussianWeightOrientationList->
+	  PushBack(m_YOrientationGaussianFilter->GetOutput());
 	
 	if (lScale>0)
 	  {
 	    m_SubtractFilter = SubtractFilterType::New();
-	    m_SubtractFilter->SetInput1((m_GaussianList->End()-1).Get());
-	    m_SubtractFilter->SetInput2((m_GaussianList->End()-2).Get());
+	    m_SubtractFilter->SetInput1(m_YGaussianFilter->GetOutput());
+	    m_SubtractFilter->SetInput2(previousGaussian);
 	    m_SubtractFilter->Update();
 	    m_DoGList->PushBack(m_SubtractFilter->GetOutput());
 	  }
-	std::cout << "Scale " << sigman << std::endl;
+	
+	previousGaussian = m_YGaussianFilter->GetOutput();
+	xsigman = xsigman*m_Sigmak;
+	ysigman = ysigman*m_Sigmak;
       }
+    m_LastGaussian = previousGaussian;
     std::cout <<"Number of DoG "<<m_DoGList->Size() << std::endl;
   }
   
@@ -249,15 +271,14 @@ namespace otb
   ImageToSIFTKeyPointSetFilter<TInputImage,TOutputPointSet>
   ::DetectKeyPoint( const unsigned int octave )
   {
-    if (m_DoGList->Size() >=3 )
+    // need at least 3 DoG, ie 2 scales
+    if (m_ScalesNumber > 1 )
       {
 	typename ImageListType::Iterator lIterDoG = m_DoGList->Begin()+1;
-	unsigned int lScale = 0;
+	unsigned int lScale = 1;
 	OutputPointSetPointerType  outputPointSet = this->GetOutput();
-	typename InputImageType::SizeType size = lIterDoG.Get()->GetLargestPossibleRegion().GetSize();
 	typename InputImageType::SpacingType spacing = lIterDoG.Get()->GetSpacing();
 	
-	// 3 min DoG
 	while ( (lIterDoG+1) != m_DoGList->End())
 	  {
 	    // Compute max of DoG
@@ -267,18 +288,18 @@ namespace otb
 	    
 	    typename InputImageType::SizeType lRadius;
 	    lRadius.Fill(1);
-	    typename ImageListType::Iterator lPrev = lIterDoG-1;
-	    typename ImageListType::Iterator lNext = lIterDoG+1;
+	    typename ImageListType::Iterator lIterNext = lIterDoG+1;
+	    typename ImageListType::Iterator lIterPrev = lIterDoG-1;
 	    
 	    NeighborhoodIteratorType lIterCurrent(lRadius,
 						  lIterDoG.Get(),
 						  lIterDoG.Get()->GetLargestPossibleRegion());
 	    NeighborhoodIteratorType lIterLowerAdjacent(lRadius,
-							lPrev.Get(),
-							lPrev.Get()->GetLargestPossibleRegion());
+							lIterPrev.Get(),
+							lIterPrev.Get()->GetLargestPossibleRegion());
 	    NeighborhoodIteratorType lIterUpperAdjacent(lRadius,
-							lNext.Get(),
-							lNext.Get()->GetLargestPossibleRegion());
+							lIterNext.Get(),
+							lIterNext.Get()->GetLargestPossibleRegion());
 	    
 	    while ( !lIterCurrent.IsAtEnd() &&
 		    !lIterLowerAdjacent.IsAtEnd() &&
@@ -302,11 +323,11 @@ namespace otb
 		    while (lChangeSamplePoints < m_ChangeSamplePointsMax &&
 			   changed )
 		      {
-			accepted = RefineLocationKeyPoint(neighborCurrentScale,
-							  neighborPreviousScale,
-							  neighborNextScale,
-							  lMaximumCalculator->GetMaximum(),
-							  lTranslation);
+ 			accepted = RefineLocationKeyPoint(neighborCurrentScale,
+ 							  neighborPreviousScale,
+ 							  neighborNextScale,
+ 							  lMaximumCalculator->GetMaximum(),
+ 							  lTranslation);
 			
 			OffsetType lTranslateOffset = {{0,0}};
 			
@@ -315,14 +336,22 @@ namespace otb
 			
 			lTranslateOffset[1] += static_cast<int>(lTranslation[1]>0.5);
 			lTranslateOffset[1] += -static_cast<int>(lTranslation[1]<-0.5);
-
-			neighborCurrentScale+=lTranslateOffset;
-			neighborPreviousScale+=lTranslateOffset;
-			neighborNextScale+=lTranslateOffset;
 			
-			changed = lTranslateOffset != lOffsetZero &&
-			  neighborCurrentScale.InBounds();
+			NeighborhoodIteratorType moveIterator = neighborCurrentScale+lTranslateOffset;
 			
+			if ( moveIterator.InBounds())
+			  {
+			    changed = lTranslateOffset != lOffsetZero;
+			    
+			    // move iterator
+			    neighborCurrentScale+=lTranslateOffset;
+			    neighborPreviousScale+=lTranslateOffset;
+			    neighborNextScale+=lTranslateOffset;
+			  }
+			else
+			  {
+			    changed = false;
+			  }						
 			lChangeSamplePoints++;
 		      }
 		    if (changed)
@@ -342,7 +371,7 @@ namespace otb
 						  lMagnitude,
 						  lOrientation);
 			OutputPointType keyPoint;
-			
+
 			lIterDoG.Get()->TransformIndexToPhysicalPoint(neighborCurrentScale.GetIndex(),
 								      keyPoint);
 			keyPoint[0] += spacing[0]*lTranslation[0];
@@ -382,49 +411,27 @@ namespace otb
 		     const NeighborhoodIteratorType& previousScale,
 		     const NeighborhoodIteratorType& nextScale) const
   {
-    OffsetType offset1 = {{-1,-1}};
-    OffsetType offset2 = {{-1, 0}};
-    OffsetType offset3 = {{-1, 1}};
-    OffsetType offset4 = {{ 0,-1}};
-    OffsetType offset6 = {{ 0, 1}};
-    OffsetType offset7 = {{ 1,-1}};
-    OffsetType offset8 = {{ 1, 0}};
-    OffsetType offset9 = {{ 1, 1}};
-    
-    std::vector<OffsetType> lOffsets;
-    lOffsets.push_back(offset1);
-    lOffsets.push_back(offset2);
-    lOffsets.push_back(offset3);
-    lOffsets.push_back(offset4);
-    lOffsets.push_back(offset6);
-    lOffsets.push_back(offset7);
-    lOffsets.push_back(offset8);
-    lOffsets.push_back(offset9);
-    
-    typename std::vector<OffsetType>::iterator lIterOffset = lOffsets.begin();
-    
-    bool isMin = currentScale.GetCenterPixel() < currentScale.GetPixel(offset1);
-    bool isMax = currentScale.GetCenterPixel() > currentScale.GetPixel(offset1);
+    bool isMin = currentScale.GetCenterPixel() < currentScale.GetPixel(m_Offsets[0]);
+    bool isMax = currentScale.GetCenterPixel() > currentScale.GetPixel(m_Offsets[0]);
     bool isExtremum = isMin || isMax;
-    while (lIterOffset != lOffsets.end() && isExtremum)
+    unsigned int lIterOffset = 0;
+    
+    while (isExtremum && lIterOffset != 8)
       {
+	OffsetType off = m_Offsets[lIterOffset];
 	if (isMin)
 	  {
 	    isExtremum =
-	      currentScale.GetCenterPixel() < currentScale.GetPixel(*lIterOffset) &&
- 	      currentScale.GetCenterPixel() < previousScale.GetPixel(*lIterOffset) &&
-	      currentScale.GetCenterPixel() < nextScale.GetPixel(*lIterOffset);
+	      currentScale.GetCenterPixel() < currentScale.GetPixel(off) &&
+ 	      currentScale.GetCenterPixel() < previousScale.GetPixel(off) &&
+	      currentScale.GetCenterPixel() < nextScale.GetPixel(off);
 	  }
 	else if (isMax)
 	  {
 	    isExtremum =
-	      currentScale.GetCenterPixel() > currentScale.GetPixel(*lIterOffset) &&
- 	      currentScale.GetCenterPixel() > previousScale.GetPixel(*lIterOffset) &&
- 	      currentScale.GetCenterPixel() > nextScale.GetPixel(*lIterOffset);
-	  }
-	else
-	  {
-	    isExtremum = false;
+	      currentScale.GetCenterPixel() > currentScale.GetPixel(off) &&
+ 	      currentScale.GetCenterPixel() > previousScale.GetPixel(off) &&
+ 	      currentScale.GetCenterPixel() > nextScale.GetPixel(off);
 	  }
 	lIterOffset++;
       }
@@ -457,109 +464,97 @@ namespace otb
   {
     bool accepted = true;
     solution = VectorPointType(PixelType(0));
+        
+    PixelType dx = 0.5*(currentScale.GetPixel(m_Offsets[6])
+			-currentScale.GetPixel(m_Offsets[1]) );
     
-    OffsetType o1 = {{-1,0}};
-    OffsetType o2 = {{1,0}};
-    OffsetType o3 = {{0,-1}};
-    OffsetType o4 = {{0,1}};
-    OffsetType o5 = {{-1,-1}};
-    OffsetType o6 = {{1,1}};
-    OffsetType o7 = {{-1,1}};
-    OffsetType o8 = {{1,-1}};
-    
-    PixelType dx = 0.5*(currentScale.GetPixel(o2)
-			-currentScale.GetPixel(o1) );
-    
-    PixelType dy = 0.5*(currentScale.GetPixel(o4)
-			-currentScale.GetPixel(o3) );
+    PixelType dy = 0.5*(currentScale.GetPixel(m_Offsets[4])
+			-currentScale.GetPixel(m_Offsets[3]) );
     
     PixelType ds = 0.5*(nextScale.GetCenterPixel()-
 			previousScale.GetCenterPixel());
     
-    PixelType dxx = currentScale.GetPixel(o1)
+    PixelType dxx = currentScale.GetPixel(m_Offsets[6])
       -2*currentScale.GetCenterPixel()
-      +currentScale.GetPixel(o2);
+      +currentScale.GetPixel(m_Offsets[1]);
     
-    PixelType dyy = currentScale.GetPixel(o3)
+    PixelType dyy = currentScale.GetPixel(m_Offsets[3])
       -2*currentScale.GetCenterPixel()
-      +currentScale.GetPixel(o4);
+      +currentScale.GetPixel(m_Offsets[4]);
     
     PixelType dss = previousScale.GetCenterPixel()
       -2*currentScale.GetCenterPixel()
       +nextScale.GetCenterPixel();
+   
+    PixelType dxy = 0.25*(currentScale.GetPixel(m_Offsets[7])
+			  +currentScale.GetPixel(m_Offsets[0])
+			  -currentScale.GetPixel(m_Offsets[2])
+			  -currentScale.GetPixel(m_Offsets[5]) );
     
-    PixelType dxy = 0.25*(currentScale.GetPixel(o6)
-			  +currentScale.GetPixel(o5)
-			  -currentScale.GetPixel(o7)
-			  -currentScale.GetPixel(o8) );
+    PixelType dxs = 0.25*(nextScale.GetPixel(m_Offsets[6])
+			  +previousScale.GetPixel(m_Offsets[1])
+			  -nextScale.GetPixel(m_Offsets[1])
+			  -previousScale.GetPixel(m_Offsets[6]) );
     
-    PixelType dxs = 0.25*(nextScale.GetPixel(o2)
-			  +previousScale.GetPixel(o1)
-			  -nextScale.GetPixel(o1)
-			  -previousScale.GetPixel(o2) );
-    
-    PixelType dys = 0.25*(nextScale.GetPixel(o4)
-			  +previousScale.GetPixel(o3)
-			  -nextScale.GetPixel(o3)
-			  -previousScale.GetPixel(o4) );
-    
-    itk::Matrix<double,3 , 3> lMatrixSecondOrder;
-    lMatrixSecondOrder[0][0] = dxx;
-    lMatrixSecondOrder[0][1] = dxy;
-    lMatrixSecondOrder[0][2] = dxs;
-    
-    lMatrixSecondOrder[1][0] = dxy;
-    lMatrixSecondOrder[1][1] = dyy;
-    lMatrixSecondOrder[1][2] = dys;
-
-    lMatrixSecondOrder[2][0] = dxs;
-    lMatrixSecondOrder[2][1] = dys;
-    lMatrixSecondOrder[2][2] = dss;
-    
-    itk::Vector<PixelType, 3> lVectorFirstOrder;
-    lVectorFirstOrder[0] = dx;
-    lVectorFirstOrder[1] = dy;
-    lVectorFirstOrder[2] = ds;
-    
-    PixelType lDoGInterpolated = currentScale.GetCenterPixel();
+    PixelType dys = 0.25*(nextScale.GetPixel(m_Offsets[4])
+			  +previousScale.GetPixel(m_Offsets[3])
+			  -nextScale.GetPixel(m_Offsets[3])
+			  -previousScale.GetPixel(m_Offsets[4]) );
     
     // Compute matrice determinant
     double det = dxx*(dyy*dss-dys*dys) -dxy*(dxy*dss-dxs*dys)+dxs*(dxy*dys-dxs*dyy);
-    if (det>=1e-10f)
-      {
-	double invdet = 1/det;
-	double sx = -invdet*(dx*(dyy*dss-dys*dys)+dy*(dxs*dys-dxy*dss)+ds*(dxy*dys-dyy*dxs));
-	double sy = -invdet*(dx*(dys*dxs-dss*dxy)+dy*(dxx*dss-dxs*dxs)+ds*(dxs*dxy-dxx*dys));
-	double ss = -invdet*(dx*(dxy*dys-dxs*dyy)+dy*(dxy*dxs-dxx*dys)+ds*(dxx*dyy-dxy*dxy));
 
-	// Solve system
-	itk::Matrix<double,3,3> lMatrixInv(lMatrixSecondOrder.GetInverse());
-	solution = lMatrixInv*lVectorFirstOrder;
-	solution*=-1;
-	
-	// Compute interpolated value DoG for lSolution
-	lDoGInterpolated += 0.5*(dx*solution[0]+
-				 dy*solution[1]+
-				 ds*solution[2]);
+    // Solve system, compute key point offset
+    solution[0] = -dx*(dyy*dss-dys*dys)-dy*(dxs*dys-dxy*dss)-ds*(dxy*dys-dyy*dxs);
+    solution[1] = -dx*(dys*dxs-dss*dxy)-dy*(dxx*dss-dxs*dxs)-ds*(dxs*dxy-dxx*dys);
+    solution[2] = -dx*(dxy*dys-dxs*dyy)-dy*(dxy*dxs-dxx*dys)-ds*(dxx*dyy-dxy*dxy);
+    
+    // Compute interpolated value DoG for lSolution (determinant factor)
+    PixelType lDoGInterpolated = det*currentScale.GetCenterPixel() +
+      0.5*(dx*solution[0]+
+	   dy*solution[1]+
+	   ds*solution[2]);
+    
+    PixelType lHessianTrace2 = (dxx+dyy)*(dxx+dyy);
+    PixelType lHessianDet = dxx*dyy-dxy*dxy;
+    if (det>=0)
+      {
+	// DoG threshold
+	accepted = lDoGInterpolated >= det*m_DoGThreshold ||
+	  lDoGInterpolated <= -det*m_DoGThreshold;
+      }
+    else if (det<=0)
+      {
+	// DoG threshold
+	accepted = lDoGInterpolated <= det*m_DoGThreshold*maximumDoG ||
+	  lDoGInterpolated >= -det*m_DoGThreshold*maximumDoG;
       }
     
-    // DoG threshold
     // Eliminating edge response
-    PixelType lRatioHessian = 0;
-    if ((dxx*dyy -dxy*dxy)>0)
+    if (lHessianDet>=0)
       {
-	lRatioHessian = (dxx+dyy)*(dxx+dyy)/(dxx*dyy -dxy*dxy);
+	accepted = accepted &&
+	  lHessianTrace2 < m_RatioEdgeThreshold*lHessianDet;
       }
-    accepted =
-      (lDoGInterpolated >= m_DoGThreshold*255 ||
-       lDoGInterpolated <= -m_DoGThreshold*255)
-      && lRatioHessian < m_RatioEdgeThreshold;
+    else if (lHessianDet <= 0)
+      {
+	accepted = accepted &&
+	  lHessianTrace2 < m_RatioEdgeThreshold*lHessianDet;
+      }
     
     if (!accepted)
       {
 	m_DiscardedKeyPoints++;
       }
-    
+    if (det < 1e-10f)
+      {
+	solution.Fill(0);
+      }
+    else
+      {
+	// normalize offset with determinant of derivative matrix
+	solution/=det;
+      }
     return accepted;
   }
   
@@ -598,9 +593,9 @@ namespace otb
     neighborsMagnitude.SetLocation(currentScale.GetIndex());
     neighborsGaussianWeight.SetLocation(currentScale.GetIndex());
 
-    typename NeighborhoodIteratorType::NeighborhoodType lNeighborhoodOrientation = neighborsOrientation.GetNeighborhood();
-    typename NeighborhoodIteratorType::NeighborhoodType lNeighborhoodGaussianWeight = neighborsGaussianWeight.GetNeighborhood();
-    typename NeighborhoodIteratorType::NeighborhoodType lNeighborhoodMagnitude = neighborsMagnitude.GetNeighborhood();
+    const typename NeighborhoodIteratorType::NeighborhoodType lNeighborhoodOrientation = neighborsOrientation.GetNeighborhood();
+    const typename NeighborhoodIteratorType::NeighborhoodType lNeighborhoodGaussianWeight = neighborsGaussianWeight.GetNeighborhood();
+    const typename NeighborhoodIteratorType::NeighborhoodType lNeighborhoodMagnitude = neighborsMagnitude.GetNeighborhood();
     
     int i =0;
     
