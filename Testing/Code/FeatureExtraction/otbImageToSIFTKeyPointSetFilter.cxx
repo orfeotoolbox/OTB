@@ -28,6 +28,85 @@ PURPOSE.  See the above copyright notices for more information.
 #include <iostream>
 #include <fstream>
 
+int otbImageToSIFTKeyPointSetFilterValid(int argc, char * argv[])
+{
+  const char* inputImageFileName = argv[1];
+  const char* inputKeysFileName = argv[2];
+  const char* outputImageFileName = argv[3];
+  
+  typedef otb::Image<float,2> ImageType;
+  typedef otb::ImageFileReader<ImageType> ReaderType;
+  ReaderType::Pointer reader = ReaderType::New();
+  reader->SetFileName(inputImageFileName);
+  reader->Update();
+  
+  ImageType::OffsetType t = {{ 0, 1}};
+  ImageType::OffsetType b = {{ 0,-1}};
+  ImageType::OffsetType l = {{ 1, 0}};
+  ImageType::OffsetType r = {{-1, 0}};
+    
+  typedef itk::RGBPixel<unsigned char> RGBPixelType;
+  typedef otb::Image<RGBPixelType, 2> OutputImageType;
+  
+  OutputImageType::Pointer outputImage = OutputImageType::New();
+  outputImage->SetRegions(reader->GetOutput()->GetLargestPossibleRegion());
+  outputImage->Allocate();
+  
+  itk::ImageRegionIterator<OutputImageType> iterOutput(outputImage,
+						       outputImage->GetRequestedRegion());
+  
+  for (iterOutput.GoToBegin(); !iterOutput.IsAtEnd(); ++iterOutput)
+    {
+      ImageType::IndexType index = iterOutput.GetIndex();
+      ImageType::PixelType grayPix = reader->GetOutput()->GetPixel(index);
+      OutputImageType::PixelType rgbPixel;
+      rgbPixel.SetRed( static_cast<unsigned char>(grayPix) );
+      rgbPixel.SetGreen( static_cast<unsigned char>(grayPix) );
+      rgbPixel.SetBlue( static_cast<unsigned char>(grayPix) );
+      
+      iterOutput.Set(rgbPixel);
+    }
+  
+  OutputImageType::PixelType greenPixel;
+  OutputImageType::SizeType size = outputImage->GetLargestPossibleRegion().GetSize();
+  
+  greenPixel.SetGreen(255);
+  greenPixel.SetRed(0);
+  greenPixel.SetBlue(0);
+  
+  std::ifstream desc(inputKeysFileName);
+  while(!desc.eof())
+    {
+      OutputImageType::IndexType index;
+      OutputImageType::PointType point;
+      std::string line;
+      desc >> point[0] >> point[1];
+      std::getline(desc,line);
+      
+      outputImage->TransformPhysicalPointToIndex(point, index);
+
+      outputImage->SetPixel(index, greenPixel);
+      if (static_cast<unsigned int>(index[1]) < static_cast<unsigned int>(size[1]) )
+	outputImage->SetPixel(index+t,greenPixel);
+      if (index[1] > 0)
+	outputImage->SetPixel(index+b,greenPixel);
+      if (static_cast<unsigned int>(index[0]) < static_cast<unsigned int>(size[0]) )
+	outputImage->SetPixel(index+l,greenPixel);
+      if (index[0] > 0)
+	outputImage->SetPixel(index+r,greenPixel);
+      
+    }
+  desc.close();
+
+  typedef otb::ImageFileWriter<OutputImageType> WriterType;
+  WriterType::Pointer writer = WriterType::New();
+  writer->SetInput(outputImage);
+  writer->SetFileName(outputImageFileName);
+  writer->Update();
+  
+  return EXIT_SUCCESS;
+}
+
 int otbImageToSIFTKeyPointSetFilter(int argc, char * argv[])
 {
   const char * infname = argv[1];
@@ -36,6 +115,14 @@ int otbImageToSIFTKeyPointSetFilter(int argc, char * argv[])
 
   const unsigned int octaves = atoi(argv[4]);
   const unsigned int scales = atoi(argv[5]);
+  float threshold = .0;
+  float ratio = .0;
+  
+  if (argc > 6)
+    {
+      threshold = atof(argv[6]);
+      ratio = atof(argv[7]);
+    }
   
   typedef float RealType;
   const unsigned int Dimension =2;
@@ -60,6 +147,13 @@ int otbImageToSIFTKeyPointSetFilter(int argc, char * argv[])
   filter->SetInput(0,reader->GetOutput());
   filter->SetOctavesNumber(octaves);
   filter->SetScalesNumber(scales);
+  
+  if (argc>6)
+    {
+      filter->SetDoGThreshold(threshold);
+      filter->SetEdgeThreshold(ratio);
+    }
+  
   filter->Update();
   
   ImageType::OffsetType t = {{ 0, 1}};
@@ -78,10 +172,6 @@ int otbImageToSIFTKeyPointSetFilter(int argc, char * argv[])
   outputImage->SetRegions(reader->GetOutput()->GetLargestPossibleRegion());
   outputImage->Allocate();
   
-  OutputImageType::SizeType lRadius;
-  lRadius.Fill(1);
-  
-
   itk::ImageRegionIterator<OutputImageType> iterOutput(outputImage,
 						       outputImage->GetRequestedRegion());
   
