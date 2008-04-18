@@ -19,6 +19,7 @@
 #define _otbSVMModelEstimator_h
 
 #include "otbSVMModel.h"
+#include "itkLightProcessObject.h"
 
 namespace otb
 {
