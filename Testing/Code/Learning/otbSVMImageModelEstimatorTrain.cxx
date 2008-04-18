@@ -63,7 +63,7 @@ int otbSVMImageModelEstimatorTrain( int argc, char* argv[] )
   
   svmEstimator->Update();
   
-  itkGenericExceptionMacro(<<"Saving model");
+  otbGenericMsgDebugMacro(<<"Saving model");
   svmEstimator->SaveModel(outputModelFileName);
   
   return EXIT_SUCCESS;
