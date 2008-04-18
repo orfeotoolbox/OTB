@@ -1,0 +1,513 @@
+release notes for GAlib
+
+2.4.6 January 2005
+-------------------------------------------------------------------------------
+Updated tspview and gaview graphic examples in the examples/graphic directory.
+These now build cleanly out-of-the-box on linux (and other) unix systems that
+have X windows.  The options for building with MOTIF widget sets (still) work
+and are now the default.  Try running tspview with two different genetic 
+algorithms to see how differently they behave.  For example:
+
+  tspview ga 1           (generational)
+  tspview ga 2           (crowding)
+  tspview ga 3           (simple)
+
+will give you three different windows.  Run them to see how generational,
+simple, and crowding algorithms differ.  Note that the crowding algorithm
+will find all of the (equally good) optimal solutions.
+
+Updated macros in gaconfig.h to have fewer clashes with other libraries.
+
+Much improved out-of-the-box behavior with various recent compilers, including
+gcc3 and vcpp7.  Added options for building on macosx with gcc2 and gcc3.
+The library is now up-to-date with respect to: gcc2, gcc3, vcpp6, vcpp7, xlC,
+aCC, CC, BCC55 (that is all the compilers I have with which to test).
+
+Split the windows makefiles into two, one for vcpp and one for borland.  The
+make syntax is simply too incompatible to keep them in a single file (for now
+anyway, until I find a source for the arcane behaviors of each one).  Still
+to come is complete makefile support for building shared libraries - sorry,
+but for now you have to do that on your own.
+
+All galib random number generators have been change to garan* in order to avoid
+naming conflicts with other libraries.  There is still only one rng at a time
+and no run-time modification of the rng is possible (that is coming with 3.0).
+
+Better inclusion of GARealGenome and GAStringGenome files for specializations.
+the new method accommodates gcc3 premature instantiation quirks and makes the
+code that uses the genomes slightly less cryptic.  See ex21.C to see how this
+is done.
+
+There is now a file called std_stream.h in the ga directory.  this file takes
+care of the differences between various iostream naming requirements.  Some
+platforms require std for the namespace, some do not.  Some require use of
+<iostream.h>, others require simply <iostream>.  When you create your own code
+that uses GAlib, you do not need to use the macros from std_stream.h, but they
+are used in the examples so that the example code will build in any 
+environment, regardless of its use of streams.
+
+The macros for controlling use of streams are now easier to understand and use.
+
+Fixed bug in GASelector::update that could cause memory corruption (thanks to
+Giovanni Sartoni for finding this one).  Added assertions to expose any other
+end-of-array problems in the selector algorithms.
+
+Use local copy of score when calculating population statistics just in case the
+genome scores change on each invocation of the score method.
+
+The seed can now be remembered by each genetic algorithm (or passed on the fly
+as before).  Only the GABaseGA class remembers the seed - derived GA classes 
+do nothing with it right now.  This is so that existing behavior will not be 
+changed.  Then next major release will include persistance and use of seeds
+within the genetic algorithms.
+
+
+2.4.5
+February 2000
+-------------------------------------------------------------------------------
+Created a function GABin2DecPhenotype::equal(const GABin2DecPhenotype & b)
+since vcpp would not recognize operator== as a friend of the phenotype class.
+
+Removed inclusion of iostream.h from gaerror.C
+
+Created new projects using codewarrior 5.3 on macos.  They are now included
+as a separate file for download from the ftp site.
+
+Removed USE_RTTI from gaconfig.h since it is not used (yet). 
+
+Cleanup to the library makefiles. Separate makefiles for unix and winnt 
+(no need to compile using vcpp projects anymore!) I decided not to use 
+autoconf since the overhead of using autoconf outweighs the benefits 
+(at least until someone makes it easier to use and modify). At this point 
+i think it is easier for people to modify the makefile (or makevars) rather 
+than to figure out how to use all the options to configure. 
+
+Fixed GAGeneticAlgorithm::TerminateUponPopConvergence so that it now does the
+right thing. In doing so we redefined what population convergence means. Now 
+it is: min/max. When minimizing, this will stop the evolution when the value
+is less that the threshhold. When maximizing, this will stop the evolution 
+when the value is greather than the threshhold. The threshhold must be between
+0 and 1, inclusive. Note that this method fails if the maximum objective score
+might be zero. (thanks to Bill White) 
+
+Fixed initialization bug in GAPopulation.C that could cause unitialized memory
+read (thanks to Harold H Soleng of Norwegian Computing Center). 
+
+Fixed boolean read problem in the GAParameters object 
+(thanks to Klaus Kirchberg). 
+
+Added compile-time warning message to garandom.h to help people avoid bogus 
+random number generator issues. 
+
+Fixed RNG bug in RAN1 and RAN2 (thanks to Peter Ross and George LeCompte). 
+
+Fixed RNG bug in RAN3 (thanks to Peter Ross). 
+
+Started putting the DLL code in, but that will have to wait until i have more
+time for extensive testing. Probably that will go in when the thread-safe 
+mods go in. 
+
+Cleaned up the HTML documentation in the distribution a little bit. 
+
+Everything is now in CVS, including the web site. 
+
+I am no longer maintaining a separate dos distribution. 
+
+
+
+
+Changes in version 2.4.4
+4 April 1999
+-------------------------------------------------------------------------------
+Fixes to gaconfig.h to make things compile out-of-the-box a bit better for 
+more platforms. 
+
+Replaced C-style casts with dynamic_cast and friends. Macros expand to the 
+old-style casts if your compiler does not support the new-style casts. 
+
+Fixed const-ness of genomes used internally to the built-in operators. 
+
+Added minimal support for rtti. This will be disabled if your compiler does 
+not support it. 
+
+Added support for ansi streams. You can now select whether to use ansi streams
+or the older streams by defining the appropriate directive. GAlib will then 
+use either the old streams headers , the ansi streams headers , or no streams 
+at all. 
+
+Changes from int to unsigned int for these functions: 
+        GABin2DecPhenotype::size 
+        GABin2DecPhenotype::nPhenotypes 
+
+Many fixes to signed/unsigned conversions. For the most part, all I did was 
+make them explicit using static_cast 
+
+Added GADCrowdingGA to the library (it has been in the TSP example for a long 
+time, now it is part of the library). 
+
+Fixed questionable initialization of iterators in GATree and GAList 
+
+The library now compiles more cleanly on vcpp, metrowerks, sgi CC, and g++ 
+2.8.1 (ok, i had to disable a couple of vcpp warnings, but of what use is a 
+warning that says "you're losing data converting 1.0 into a float" ?) Can 
+anyone tell me what to do about g++ warnings about "variable 'xxx' might be 
+clobbered by 'longjmp' or 'vfork'" ? 
+
+Graphic examples are now included in the windows distribution: points on a 
+surface and travelling salesman. Really, they are this time :) They are hacked 
+together using a windows wizard (gads, what a horrible environment that is), 
+but they should get you started. 
+
+Added #undef for min/max in GAPopulation.h and GABin2Dec.h (microsoft headers 
+in particular are promiscuous in their definition of min/max macros) 
+
+Changed doubles to floats in 
+        GAPopulation::scale 
+        GAPopulation::statistics 
+
+Changed template instantiation syntax in GARealGenome.C and GAStringGenome.C 
+
+
+
+
+Changes in version 2.4.3
+11 November 1998
+-------------------------------------------------------------------------------
+Graphic examples for mac 
+
+Graphic examples for windows 
+
+Fixed example 13 to actually do what it claimed to do. Beware that it may run
+for a really long time now (it has a GA embedded in another GA, so each 
+evaluation results in another GA run). 
+
+Fixed gaversion.h to accurately record the library version (for better use 
+with ident) 
+
+Added definition of M_PI to the examples in which that macro is used (some 
+platforms do not have M_PI defined in their math headers) 
+
+Fixed bug in GAAlleleSet<>::allele() that caused upper/lower bounds to be 
+generated when they should not have been. Note that your initialize, 
+crossover, mutate operators must respect allele set limit boundaries otherwise
+you'll end up with bogus values. 
+
+Fixed bugs in GADemeGA: 
+        GADemeGA::nMigration did not set parameter list 
+        GADemeGA::nPopulations did not set parameter list 
+        GADemeGA::step set numrep incorrectly 
+        GADemeGA::step looped on tmppop size rather than nrepl 
+        GADemeGA::nReplacement did not update tmppop size properly 
+        GADemeGA::nReplacement did not update the parameter list 
+        GADemeGA::nPopulations did not update nrepl or pstats correctly 
+
+Fixed bug in GARealGaussianMutator that caused no mutation to occur in cases 
+when 100% mutation should have happened. 
+
+Fixed bug in GAGeneticAlgorithm::TerminateUponConvergence that would cause 
+the evolution to stop immediately when doing a minimization with convergence 
+as the stopping criterion. 
+
+Fixed various memory leaks 
+        GAAlleleSetArray<>::remove 
+
+Various makefile/project additions and cleanup 
+
+New project files for Codewarrior 
+
+New project files for MS VC++ 
+
+Fixes to makefiles to make cross-unix compiles easier. 
+
+Fixed html documentation: 
+
+For the GAStatistics object, the member functions offlineMax, offlineMin, 
+minEver, maxEver were incorrect. 
+
+In GAPopulation::diversity, 1 indicates that each individual is completely 
+different. 
+
+The title of Melanie Mitchell's book had been omitted. 
+
+Fixed mask clear bug in GA1DArrayGenome<>::CycleCrossover 
+
+Fixed signed/unsigned problems in array genomes. As a result, the following 
+member functions have been removed: 
+        GA1DArrayGenome<>::operator[] 
+        GA1DArrayGenome<>::operator[](int) 
+
+Various fixes and features to random number generator 
+
+Added chi-square tests to the randtest program for better RNG testing. 
+
+Added GAGetRandomSeed to get the random seed from the library. 
+
+Added GAGetRNG function to tell which RNG was compiled in. 
+
+Fixed bug in implementation of GARandomSeed. Now the changing bits of the 
+value returned by time() are correctly assimilated into the seed, even if the 
+seed has fewer bits than the value returned by time(). 
+
+Fixed bug in read member of 1D, 2D, and 3D binary string genomes. 
+
+Added pragmas for VC++ in gaconfig.h to disable warnings. 
+
+Fixed bug in resizeBehaviour routines in 3D genomes 
+
+Fixed bug in example 5 and example 14 in which score cache flag was not 
+properly updated. 
+
+
+
+
+Changes in version 2.4.2
+13 November 1996
+-------------------------------------------------------------------------------
+Sorry, but I lost the list due to a hard drive crash :( 
+
+
+
+
+Changes in version 2.4.1
+10 November 1996
+-------------------------------------------------------------------------------
+Project files are (finally) available for metrowerks and borland compilers. 
+Others will appear as I get them. 
+
+Fixed the constructors for 2D and 3D array allele genomes so that you can 
+construct them with allele set arrays as well as allele sets. You must define 
+your own initializer to take advantage of the allele set arrays, however 
+(initialization using the default initializer will ignore the additional 
+allele sets). 
+
+Fixed a problem with ios::out and other stream flags in the statistics and 
+parameters modules. If your compiler is ANSI standard and uses the STL streams
+then you may need to use the NO_STREAMS directive to turn off the streams in 
+GAlib (GAlib is not yet STL-streams compliant). 
+
+Added blend crossover (BLX) and arithmetic crossover for real number genomes. 
+An implementation of the edge recombination crossover (ERX) for list genomes 
+is included in two of the examples (for the travelling salesman problems). 
+
+A new revision, Revision B, of the PostScript documentation. 
+
+Fixed a problem in the statistics object that caused it to record the wrong 
+scores when minimizing the objective. 
+
+Fixed the scaling, statistics, and population objects to handle large 
+objective scores properly (scores that are near FLT_MAX and/or FLT_MIN). 
+
+Major cleanup of the MacOS and DOS/Windows versions of GAlib. Installation is 
+an order of magnitude easier. 
+
+Added a graphic travelling salesman example (graphic examples are only 
+available for unix versions - Mac and PC versions will come as soon as I have 
+the basic code to do graphic display and rudimentary GUI on those platforms). 
+
+Fixed the simple genetic algorithm class to do elitism properly when 
+minimizing. 
+
+Added virtual destructors to the Node and NodeBASE classes so that derived 
+node classes will work properly. 
+
+Fixed the formating problems in the DOS/Windows package, including both the 
+end-of-line characters and the GIF images. 
+
+
+
+
+Changes in version 2.4
+released 3 June 1996
+-------------------------------------------------------------------------------
+The base genetic algorithm class, 'GA', was renamed to 'GAGeneticAlgorithm' 
+
+Function prototypes for genome operators are now defined in the genome scope. 
+Similarly, function prototypes for genetic algorithm and population object 
+operators are defined in their respective scopes. 
+
+The 'score' member of the genome can now be used on const genomes. 
+
+The documentation is now distributed with GAlib. The documentation now 
+contains a page illustrating how to define your own operators and derive your 
+own GAlib-based classes. 
+
+GAlib now compiles warning-free when you use the -Wall flag for the g++ 
+compiler. The number of warnings when compiled with Borland, Metrowerks, and 
+Symantec compilers has also been reduced (although Borland still won't let 
+you inline for, while, or switch statements). 
+
+The config.h header file now figures out as much as possible about your 
+system so that you should not have to tweak it nearly as much as in previous 
+releases. 
+GASUSSelector was renamed to GAUniformSelector 
+
+The GASharing object has been reworked to better match the description of 
+scaling proposed by Goldberg. It now lets you select both the sigma cutoff 
+and alpha values for tuning the scaling radius and importance. 
+
+The steady-state genetic algorithm will now work properly with the sharing 
+method of fitness scaling (although Goldberg typically refers to sharing in 
+the context of non-overlapping populations, you can use it with overlapping 
+populations if you do the replacement right). 
+
+GAlib works with PVM 3.3.10 or later. This release of GAlib includes examples 
+that show how to use GAlib with PVM for two types of parallelization: (1) one 
+genome per process/CPU and (2) one population per process/CPU. I'm also 
+considering an MPI example (if only there were stable C++ bindings for PVM 
+and MPI). 
+
+Parallel populations on a single CPU are now possible using the island model 
+with migration rates and (custom) replacement between populations. Each 
+population can have its own selection and replacement methods, independent of
+ the other populations. By default all populations are clones of each other 
+(same initialization, mutation, crossover, selection, replacement). The 
+parallel populations are evolved using steady-state genetic algorithm model 
+with user-specified overlap, etc. This is illustrated in one of the examples. 
+
+Default and built-in operators are now defined as static member function of 
+the genome classes with which they are associated. This cleans up the 
+namespace quite a bit. 
+
+Template classes now have default operators whereever they can be defined - 
+no more ARRAY_TYPE or LIST_TYPE. 
+
+The genome files have been consolidated. Rather than a bunch of files 
+(typically 6) for each genome, the library uses a single pair (.h and .C) for 
+each genome. For example, binstr1.[ch|xs|op].[C|h] is now simply 
+binstr1.[C|h]. 
+
+Genomes now contain an 'evaluation data' object. This is a pointer to an 
+object derived from the EvalData class. Its purpose is to provide a mechanism 
+for storing custom information with each genome. The userData member is 
+similar in function, but whereas the userData object is the same for all 
+genomes, the evalData object may be different for each genome. (the evalData 
+object supercedes the 'ObjectiveVector') 
+
+The ArrayGenome class has been restructured as ArrayGenome and 
+ArrayAlleleGenome (derived from ArrayGenome). The library includes 
+instantiations of char and double versions of the ArrayAlleleGenome class to 
+form the StringGenome and RealGenome classes. The RealGenome class provides a 
+mechanism for doing an array of bounded real numbers and/or sets of real 
+numbers. Sample uniform and gaussian mutator are included for the RealGenome 
+class. 
+
+A new compile-time flag, NO_STREAMS, has been added to let you
+compile-out the GAlib dependencies on the streams library. When you
+compile-out the streams dependencies you cannot use the default GAlib
+routines for reading from and writing to file, but the error routines
+will still work properly.  
+
+Error handling has been improved a little sages to a GAlib-specific
+error handler. You can override the library's error handler to
+redirect (or ignore) the messages as you see fit.  
+
+A converter architecture has been added to the binary string
+objects. GAlib contains two default converters: Gray and 
+
+Binary encode/decode. You can use either of these or define your own
+for mapping decimal values into the binary strings. The
+binary-to-decimal conversions now support more bits - up to 128
+(depending on the system you're running on).  
+
+The statistics object has been cleaned up and more statistics have
+been added. GAs can now flush stats periodically to file or on-demand,
+and the types of stats that get recorded can be controlled. The
+interface for recording scores, score buffering, and flushing to file
+has been revamped.  
+
+The parameters object has been completely overhauled. It can now read
+from the command line and/or a settings file using (user definable)
+strings to set the GA parameters. Since each GA contains a parameters
+object, these capabilities have also been extended to the GA classes.  
+
+The base genome class has been cleaned up. In particular, the clone
+method and dimension enums have been declared in the genome scope to
+reduce namespace clutter. Also changed are the read/write member
+functions. They have been renamed (no underscore) and return an
+integer status. The crossover interface is completely different (see
+below). 
+
+Now each genome contains a crossover hint that suggests to a GA how it
+should mate. By default, the GAs use this information to do the
+crossovers, but a custom GA can ignore the suggested crossover and do
+its own mating if it wants to. The equal/not equal members are now
+public and the underscore has been removed.  
+
+A compare member function has been added to the genome class. This
+member function (customizable) provides a mechanism for measuring the
+diversity of a population.  
+
+The CrossSite object no longer exists. A new member function,
+'crossover', and two access functions, 'sexual' and 'asexual', have
+taken its place. The crossover function operates on one or two
+children, so the site information is no longer stored with each
+genome. The new interface also defines a mechanism for doing asexual
+reproduction, so it is easier now to implement GAs that use this kind
+of mating. You can also define crossovers that operate on genomes with
+mixed data types (this will require a special GA, but you can derive
+that from one of the standard GA objects then modify the crossover
+part).  
+
+The allele set now does reference counting. This allows you to define
+an allele set in a scope other than the scope in which the genome(s)
+is defined. It also reduces overhead - each genome does not need to
+keep its own copy of the allele set.  
+
+Binary-to-decimal phenotypes now do reference counting. Like the
+allele sets, phenotypes are needed by many genomes. But there's too
+much overhead to require each genome to keep its own copy of the
+phenotype. So now you can create a single phenotype (for your
+prototype genome) and subsequent clones of your genome will refer to
+the same phenotype, even if it goes out of scope.  
+
+A new object, BoundsSet, has been defined to work with the bounded
+array genome types. It behaves much like an allele set.  
+
+The constants for tree and list return codes have been rolled into
+their respective objects to reduce namespace clutter.  
+
+Genome comparators now return 0 for identical genomes and greater than
+0 for completely different genomes. This makes better lexical sense:
+as the diversity decreases, so does the absolute measure. Notice that
+previous versions of GAlib expected the opposite measure.  
+
+I made a number of changes to typedef names to make things more
+consistent. These changes include:   
+        'GAInitializationOperator' is now 'GAGenome::Initializer' 
+        'GAMutationOperator' is now 'GAGenome::Mutator' 
+        'GADistanceFunction' is now 'GAGenome::Comparator' 
+
+Changed name of 'GAReplacementGA' to 'GAIncrementalGA'. The
+functionality of this genetic algorithm type has not changed.  
+
+Changed the name of 'types.h' to 'gatypes.h' to avoid conflicts with
+the system types.h file on many platforms.  
+
+The selection function is now a member of the population object. The
+signature has not changed, and the selection function is still
+custimizable, but now housekeeping of population statistics is much
+more uniform and less convoluted. This also allows you to define a
+different selection method for each of the populations when using
+multiple populations.  
+
+Fixed the bug in the population copy method. The bug caused the
+population to clone the worst individual multiple times rather than
+cloning each individual in the population. The patch is descibed in
+the bugs page.  
+
+Changing the population size during an evolution now works without the
+extra call to evaluate. Fixed the bug in the scaling object that
+prevented the updates after initialization. The patch is descibed in
+the bugs page.  
+
+Lots of minor const-correctness tweaks and cleanup of the code, plus
+fixes of all reported bugs. The new version is marginally faster than
+the previous.  
+
+Older versions of the library had problems when objects used by other
+objects went out of scope. For example, if you created a genome using
+an allele set then left the scope in which the allele set was active,
+the genome would refer to garbage. These inconsistencies have been
+fixed. Objects now make copies of the objects they need, but make no
+more copies than necessary. There's a whole lot of reference counting
+and caching going on now.  

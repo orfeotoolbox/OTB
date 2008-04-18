@@ -1,0 +1,28 @@
+Providing credit where credit is due
+-------------------------------------------------------------------------------
+  GAlib is available under a BSD-style license found in the COPYRIGHT file.
+  You can use GAlib for any purpose, and you can distribute GAlib subject 
+  to the terms in the license.  If you distribute GAlib, you must include
+  the contents of the COPYRIGHT file in your distribution.
+
+  If you use GAlib in a commercial product, you should provide credit as
+  follows (typically in the 'about box'):
+
+    This product includes GAlib, a library of genetic algorithm components.
+    Copyright Massachusetts Institute of Technology and Matthew Wall.
+
+  To refer to GAlib from a research publication, you should provide credit
+  as follows:
+
+    This research was performed using GAlib, a library of genetic algorithm
+    components (http://lancet.mit.edu/ga/).
+
+The GNU portions of the GAlib distribution 
+-------------------------------------------------------------------------------
+  The portions of GAlib that contain code from the GNU g++ library are 
+  covered under the terms of the GNU Public License. As such they are 
+  freely available and do not fall under the terms of the GAlib licensing. 
+
+  The portions of GAlib that are based upon GNU code are all in the
+  'gnu' directory in the examples directory (in GAlib release 2.3.2
+  and later). 
