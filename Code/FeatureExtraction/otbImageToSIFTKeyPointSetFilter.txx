@@ -95,8 +95,8 @@ namespace otb
     
     m_ExpandFilter->GetOutput()->TransformIndexToPhysicalPoint(index, point);
     
-    std::cout << "Input Spacing: " << m_ExpandFilter->GetOutput()->GetSpacing() << std::endl;
-    std::cout << "Input Origin: " << point << std::endl;
+    otbGenericMsgDebugMacro( <<"ImageToSIFTKeyPointSetFilter:: Input Spacing: " << m_ExpandFilter->GetOutput()->GetSpacing() );
+    otbGenericMsgDebugMacro( <<"ImageToSIFTKeyPointSetFilter:: Input Origin: " << point );
     
     // for each octave, compute the difference of gaussian
     unsigned int lOctave = 0;
@@ -130,30 +130,19 @@ namespace otb
 	
 	input->SetOrigin(origin1);
 	
-	std::cout << "Number key points per octave : " \
-		  << m_ValidatedKeyPoints << std::endl;
-	std::cout << "Number different sample key points per octave : " \
-		  << m_DifferentSamplePoints << std::endl;
-	std::cout << "Number discarded key points per octave : " \
-		  << m_DiscardedKeyPoints << std::endl;
-	
-	std::cout << "Resample image factor : " \
-		  << m_ShrinkFactors << std::endl;
-	
-	typename InputImageType::PointType point;
-	typename InputImageType::IndexType  index;
-	index[0] = 0;
-	index[1] = 0;
-	
-	m_ShrinkFilter->GetOutput()->TransformIndexToPhysicalPoint(index, point);
-	
-	std::cout << "Spacing: " << m_ShrinkFilter->GetOutput()->GetSpacing() << std::endl;
-	std::cout << "Input Origin: " << point << std::endl;
-
+	otbGenericMsgDebugMacro( <<"ImageToSIFTKeyPointSetFilter:: Number key points per octave : " \
+				 << m_ValidatedKeyPoints);
+	otbGenericMsgDebugMacro( <<"ImageToSIFTKeyPointSetFilter:: Number different sample key points per octave : " \
+				 << m_DifferentSamplePoints );
+	otbGenericMsgDebugMacro( <<"ImageToSIFTKeyPointSetFilter:: Number discarded key points per octave : " \
+				 << m_DiscardedKeyPoints );
+	otbGenericMsgDebugMacro( <<"ImageToSIFTKeyPointSetFilter:: Resample image factor : " \
+				 << m_ShrinkFactors);
 	
       }
-    std::cout << "Total number key points : " \
-	      << this->GetOutput()->GetNumberOfPoints() << std::endl;
+    
+    otbGenericMsgDebugMacro( <<"ImageToSIFTKeyPointSetFilter:: Total number key points : " \
+			     << this->GetOutput()->GetNumberOfPoints());
     
   }
   
@@ -260,7 +249,7 @@ namespace otb
 	ysigman = ysigman*m_Sigmak;
       }
     m_LastGaussian = previousGaussian;
-    std::cout <<"Number of DoG "<<m_DoGList->Size() << std::endl;
+    otbGenericMsgDebugMacro( <<"ImageToSIFTKeyPointSetFilter:: Number of DoG "<<m_DoGList->Size() );
   }
   
   /**
