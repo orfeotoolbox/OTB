@@ -91,7 +91,7 @@ int main( int argc, char *argv[])
 //
 //  We define the types for the input and training images. Even if the
 //  input image will be an RGB image, we can read it as a 3 component
-//  vector image. This simlifies the interfacing with OTB's SVM
+//  vector image. This simplifies the interfacing with OTB's SVM
 //  framework.
 //
 // Software Guide : EndLatex
@@ -199,7 +199,7 @@ int main( int argc, char *argv[])
 
 // Software Guide : BeginLatex
 //
-// We can now read the image by calling he \code{Update} method of the reader.
+// We can now read the image by calling the \code{Update} method of the reader.
 //
 // Software Guide : EndLatex
 
@@ -232,7 +232,7 @@ int main( int argc, char *argv[])
 
 // Software Guide : BeginLatex
 //
-// After instatiantion, we can set the image as an imput of our
+// After instantiation, we can set the image as an imput of our
 // sample adaptor.
 //
 // Software Guide : EndLatex
@@ -321,7 +321,7 @@ int main( int argc, char *argv[])
 
 // Software Guide : BeginLatex
 //
-// We allocate the memory for the outpu image using the information
+// We allocate the memory for the output image using the information
 // from the input image.
 //
 // Software Guide : EndLatex
@@ -400,7 +400,7 @@ int main( int argc, char *argv[])
 // Software Guide : BeginLatex
 //
 // Only for visualization purposes, we choose a color mapping to the image of
-// classes before sving it to a file. The
+// classes before saving it to a file. The
 // \subdoxygen{itk}{Functor}{ScalarToRGBPixelFunctor} class is a special
 // function object designed to hash a scalar value into an
 // \doxygen{itk}{RGBPixel}. Plugging this functor into the

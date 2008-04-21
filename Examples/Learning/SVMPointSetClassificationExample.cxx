@@ -213,7 +213,7 @@ int main( int argc, char* argv[] )
 
 // Software Guide : BeginLatex
 //
-// After instatiantion, we can set the point set as an imput of our
+// After instantiation, we can set the point set as an imput of our
 // sample adaptor.
 //
 // Software Guide : EndLatex

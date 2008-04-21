@@ -204,7 +204,7 @@ int main ( int argc, char * argv[] )
 // \code{GetOutputImage} the output is directly an Image.
 //
 // Only for visualization purposes, we choose to rescale the image of
-// classes before sving it to a file. We will use the
+// classes before saving it to a file. We will use the
 // \doxygen{itk}{RescaleIntensityImageFilter} for this purpose.
 //
 // Software Guide : EndLatex
