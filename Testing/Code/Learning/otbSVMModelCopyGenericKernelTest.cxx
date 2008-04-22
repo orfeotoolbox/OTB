@@ -38,7 +38,7 @@ int otbSVMModelCopyGenericKernelTest( int argc, char* argv[] )
   otb::RBFKernelFunctor lFunctor; 
   svmModel->SetKernelFunctor(&lFunctor);
   svmModel->LoadModel(argv[1]);
-  
+
   // Copy the model and print it
   ModelType::Pointer svmModelCopy;
   svmModelCopy = svmModel->GetCopy();
