@@ -96,9 +96,8 @@ ADD_TEST(utTvSvmComposedKernelFunctorTest ${UTILITIES_TESTS}
 --compare-n-ascii ${TOL} 3 
 		  ${BASELINE_FILES}/utTvSVMComposedKernelFunctorResTest.txt
 		  ${TEMP}/SVMComposedKernelFunctorTestRes.txt
-
 		  ${BASELINE_FILES}/utTvSVMComposedKernelFunctorTest.txt
-		  ${TEMP}/SVMComposedKernelFunctorTestOutputBis.txt
+		  ${TEMP}/SVMComposedKernelFunctorTestOutput.txt
 		  ${BASELINE_FILES}/utTvSVMComposedKernelFunctorTest.txt
 		  ${TEMP}/SVMComposedKernelFunctorTestOutputBis.txt
 
