@@ -368,7 +368,7 @@ public:
     this->Modified();
   }
 
-  /** Get Use the shrinking heuristics for the training boolean */
+  /** Get Use the shrinking heuristics for the training boolea */
   bool GetDoShrinking(void)
   {
     //return static_cast<bool>(m_Parameters.shrinking);
@@ -426,17 +426,33 @@ public:
   {
         return m_Model->SV;
   }
-  /** Set the support vectors */
-  void SetSupportVectors(svm_node ** sv)
-  {
-        m_Model->SV = sv;
-  }
+  /** Set the support vectors and changes the l number of support vectors accordind to sv.*/
+  void SetSupportVectors(svm_node ** sv, int nbOfSupportVector);
+
   /** Return the alphas values (SV Coef) */
   double ** GetAlpha (void)
   {
 	return m_Model->sv_coef;
   }
+ /** Set the alphas values (SV Coef) */
+  void SetAlpha( double ** alpha );
 
+  /** Return the labels lists */
+  int * GetLabels(){ return m_Model->label; };
+
+  /** Set the number of SV per classes */
+  void SetNumberOfSVPerClasse( int * vect)
+    {
+      for(int i=0;i<m_Model->nr_class;i++)
+	m_Model->nSV[i] = vect[i];
+      this->Modified();
+    }
+
+  /** Get the number of SV per classes */
+  int * GetNumberOfSVPerClasse()
+    {
+      return m_Model->nSV;
+    }
 
   /** Evaluate model */
   double Evaluate(void);

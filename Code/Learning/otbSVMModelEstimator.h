@@ -81,8 +81,20 @@ public:
   typedef SVMModel< InputPixelType, LabelPixelType >   SVMModelType;
   typedef typename SVMModelType::Pointer     SVMModelPointer;
 
+  /* Vectors to hold the training data */
+  typedef std::vector<MeasurementVectorType> TrainingMeasuresType;
+  typedef std::vector<LabelPixelType>        TrainingLabelsType;
+
   /** Set the model */
-  itkSetMacro(Model, SVMModelPointer);
+  itkGetMacro(Model, SVMModelPointer);
+
+  /** Set/Get the Measures */
+  void SetMeasures( TrainingMeasuresType measures ){ m_Measures = measures; };
+  TrainingMeasuresType GetMeasures() { return m_Measures ;};
+
+  /** Set/Get the Labels */
+  void SetLabels( TrainingLabelsType labels ){ m_Labels = labels; };
+  TrainingLabelsType GetLabels(){ return m_Labels; };
 
   /** Get the number of classes. */
   itkGetConstReferenceMacro(Model, SVMModelPointer);
@@ -263,29 +275,23 @@ public:
   }
   virtual void SetKernelFunctor(GenericKernelFunctorBase* pGenericKernelFunctor)
   {
-        m_Model->SetKernelFunctor(pGenericKernelFunctor);
-        this->Modified();
+    m_Model->SetKernelFunctor(pGenericKernelFunctor);
+    this->Modified();
   }
+
+  virtual void  PrepareData();
 
 protected: 
   SVMModelEstimator();
   ~SVMModelEstimator();
   virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
-
   /** Starts the modelling process */
   void GenerateData() ;
 
-
   unsigned int         m_NumberOfClasses;
-
-  /* Vectors to hold the training data */
-  typedef std::vector<MeasurementVectorType> TrainingMeasuresType;
-  typedef std::vector<LabelPixelType>        TrainingLabelsType;
-
   TrainingMeasuresType m_Measures;
   TrainingLabelsType   m_Labels;
-
 
   /** A function that generates the 
    * model based on the training input data
@@ -294,7 +300,7 @@ protected:
   virtual void BuildProblem()
   {
   }
-  virtual void  PrepareData();
+
 
   SVMModelPointer m_Model;
 

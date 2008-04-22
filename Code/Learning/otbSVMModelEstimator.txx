@@ -104,8 +104,7 @@ SVMModelEstimator<InputPixelType, LabelPixelType>
     {
     m_Done = 1;
     this->EstimateModels();
-    }
-
+    } 
 }// end Generate data
 
 
@@ -115,7 +114,6 @@ SVMModelEstimator<InputPixelType, LabelPixelType>
 ::EstimateModels()
 {
   // FIXME : the core of the model estimation
-
 
   //-------------------------------------------------------------------
   // Build the SVM problem
@@ -137,12 +135,11 @@ SVMModelEstimator<InputPixelType, LabelPixelType>
   svm_model* tempModel = svm_train(&m_Model->GetProblem(),&m_Model->GetParameters());
 
   otbMsgDebugMacro(  << "Training done" );
-    
+
   m_Model->SetModel(tempModel);
   m_Model->SetNumberOfClasses( this->GetNumberOfClasses() );
   
   otbMsgDebugMacro(  << "Training done" );
-    
 
 }// end train classifier 
 
@@ -152,15 +149,11 @@ void
 SVMModelEstimator< InputPixelType, LabelPixelType >
 ::PrepareData()
 {
-
-  
   int probl = m_Measures.size();  
 
   long int elements = (m_Measures[0].size()+1)*probl;
 
-
   m_Model->AllocateProblem(probl, elements);
-
   struct svm_problem & prob = m_Model->GetProblem();
   struct svm_node *x_space = m_Model->GetXSpace();
 
@@ -223,9 +216,8 @@ SVMModelEstimator< InputPixelType, LabelPixelType >
 
   otbMsgDebugMacro(  << "Processed " << i << " examples" );
 
-  if(m_Model->GetKernelGamma() == 0)
+  if(m_Model->GetKernelGamma() == 0 && m_Model->GetParameters().kernel_type != COMPOSED && m_Model->GetParameters().kernel_type != GENERIC)
     m_Model->SetKernelGamma(1.0/max_index);
-
 }
 
 template<class InputPixelType, class LabelPixelType >

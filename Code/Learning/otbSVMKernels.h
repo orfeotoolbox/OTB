@@ -175,7 +175,7 @@ class RBFKernelFunctor : public GenericKernelFunctorBase
 	this->SetValue<double>("gamma_coef", 0.5);
       };
     virtual ~RBFKernelFunctor() {};
-    
+      
     virtual double operator()(const svm_node *x, const svm_node *y, const svm_parameter& param)const
       {
 	CustomKernelFunctor custom;
