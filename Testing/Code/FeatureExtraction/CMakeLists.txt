@@ -855,8 +855,8 @@ otbImageToCarvingPathFilterNew.cxx
 SET(BasicFeatureExtraction_SRCS9
 otbImageToSIFTKeyPointSetFilterNew.cxx
 otbImageToSIFTKeyPointSetFilter.cxx
+otbImageToSIFTKeyPointSetFilterDistanceMap.cxx	
 )
-
 
 INCLUDE_DIRECTORIES("${OTBTesting_BINARY_DIR}")
 
