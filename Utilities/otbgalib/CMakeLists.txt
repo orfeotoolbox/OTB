@@ -17,6 +17,13 @@ INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR})
 # Build otbgalib library
 FILE(GLOB GALIB_SRCS "ga/*.C" )
 
+# Adjust the compiler flags to avoid problems with ossim code.
+IF(CMAKE_COMPILER_IS_GNUCXX)
+  FOREACH(f ${GALIB_SRCS} )
+        SET_SOURCE_FILES_PROPERTIES( ${f} PROPERTIES COMPILE_FLAGS -w )
+  ENDFOREACH(f)
+ENDIF(CMAKE_COMPILER_IS_GNUCXX)
+
 
 ADD_LIBRARY(otbgalib ${GALIB_SRCS})
 TARGET_LINK_LIBRARIES (otbgalib)
