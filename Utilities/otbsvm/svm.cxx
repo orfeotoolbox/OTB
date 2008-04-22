@@ -2363,7 +2363,7 @@ void svm_cross_validation(const svm_problem *prob, const svm_parameter *param, i
   int *perm = Malloc(int,l);
   int nr_class;
 
-  // stratified cv may not give leave-one-out rate
+  // stratified cv may not give leasve-one-out rate
   // Each class to l folds -> some folds may have zero elements
   if((param->svm_type == C_SVC ||
       param->svm_type == NU_SVC) && nr_fold < l)
@@ -2595,6 +2595,7 @@ double svm_predict(const svm_model *model, const svm_node *x)
 	  vote_max_idx = i;
       delete [](vote);
       delete [](dec_values);
+ 
       return model->label[vote_max_idx];
     }
 }
@@ -3143,13 +3144,14 @@ svm_model *svm_copy_model( const svm_model *model )
   // Generic kernel copy
   if( param.kernel_type == GENERIC )
     {
-      // copy
-      paramCpy.kernel_generic = param.kernel_generic;
+      paramCpy.kernel_generic = Malloc(GenericKernelFunctorBase, sizeof(*(param.kernel_generic)));
+      memcpy(paramCpy.kernel_generic,param.kernel_generic,sizeof(*(param.kernel_generic)));
     }
+  // Composrd kernel copy
   if( param.kernel_type == COMPOSED )
     {
-      // copy
-      paramCpy.kernel_composed = param.kernel_composed;
+      paramCpy.kernel_composed = Malloc(ComposedKernelFunctor, 1);
+      *(paramCpy.kernel_composed) = *(param.kernel_composed);
     }
   
   return modelCpy;
@@ -3202,13 +3204,21 @@ const char *svm_check_parameter(const svm_problem *prob, const svm_parameter *pa
      kernel_type != SIGMOID &&
      kernel_type != PRECOMPUTED &&
      //OTB's modifications
-     kernel_type != GENERIC)
+     kernel_type != GENERIC &&
+     kernel_type != COMPOSED)
     return "unknown kernel type";
   if ( kernel_type == GENERIC )
     {
       if( param->kernel_generic == NULL )
 	return "Generic kernel functor not initialized";
     }
+  if ( kernel_type == COMPOSED )
+    {
+      if( param->kernel_composed == NULL )
+	return "Composed kernel functor not initialized";
+    }
+
+
 
   if(param->degree < 0)
     return "degree of polynomial kernel < 0";
@@ -3324,8 +3334,11 @@ int svm_check_probability_model(const svm_model *model)
 
 GenericKernelFunctorBase::GenericKernelFunctorBase(const GenericKernelFunctorBase& copy)
 {
-  this->m_MapParameters = copy.m_MapParameters;
-  this->m_Name = copy.m_Name;
+  if (this != &copy)
+    {
+      this->operator=(copy);
+    }
+  
 }
 
 GenericKernelFunctorBase&
@@ -3362,13 +3375,22 @@ GenericKernelFunctorBase::
 save_parameters(FILE ** pfile, const char * generic_kernel_parameters_keyword)const
 {
   MapConstIterator iter=m_MapParameters.begin();
+
   std::string line(generic_kernel_parameters_keyword);
   std::string strNbParams;      
   ::otb::StringStream flux; 
   flux << m_MapParameters.size();            
   flux >> strNbParams;          
   line = line + " " + m_Name + " " + strNbParams;
-  while( iter != m_MapParameters.end() )
+
+  // DON'T USE ITER because for a COPY ONLY, whereas map.size() IS GOOD, map.end()
+  // doesn't give the good answer -> SEGFAULT
+  //   while( iter != m_MapParameters.end() )
+  //       {
+  // 	line = line + "   " + iter->first + " " + iter->second;
+  // 	++iter;
+  //       }  
+  for ( unsigned int i = 0; i<m_MapParameters.size(); i++)
     {
       line = line + "   " + iter->first + " " + iter->second;
       ++iter;

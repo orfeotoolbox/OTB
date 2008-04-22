@@ -127,7 +127,7 @@ public:
 
   /** Recopy constructor */
   GenericKernelFunctorBase( const GenericKernelFunctorBase& copy);
-  GenericKernelFunctorBase& operator=(const GenericKernelFunctorBase& copy);
+  virtual GenericKernelFunctorBase& operator=(const GenericKernelFunctorBase& copy);
   
   virtual ~GenericKernelFunctorBase() {};
 
