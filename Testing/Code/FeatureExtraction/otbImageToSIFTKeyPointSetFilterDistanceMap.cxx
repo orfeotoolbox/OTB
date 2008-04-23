@@ -50,27 +50,18 @@ typedef PointDataContainerType::Iterator PointDataIteratorType;
 typedef otb::ImageFileReader<ImageType> ReaderType;
 typedef otb::ImageFileWriter<OutputImageType> WriterType;
 typedef otb::ImageFileWriter<ImageType> WriterInputType;
-typedef otb::ImageToSIFTKeyPointSetFilter<ImageType,PointSetType> SiftFilterType;
-typedef itk::DanielssonDistanceMapImageFilter <OutputImageType, OutputImageType> DDMFilterType;
-typedef itk::ResampleImageFilter<ImageType, ImageType> ResampleFilterType1;
-typedef itk::ResampleImageFilter<OutputImageType, OutputImageType> ResampleFilterType2;
-typedef itk::AffineTransform<double, 2> TransformType;  
-typedef itk::SubtractImageFilter<OutputImageType, OutputImageType, ImageType> SubtractFilterType;
-typedef itk::MinimumMaximumImageCalculator<ImageType> MaximumCalculatorType;
-typedef itk::ShrinkImageFilter<ImageType, ImageType> ShrinkFilterType;
-typedef itk::ExpandImageFilter<OutputImageType, OutputImageType> ExpandFilterType;
-typedef itk::PointSetToImageFilter<PointSetType, OutputImageType> PointSetFilterType;
-typedef itk::RescaleIntensityImageFilter<ImageType, ImageType> RescaleFilterType;
-typedef itk::RescaleIntensityImageFilter<ImageType, OutputImageType> OutputRescaleFilterType;
 
-OutputImageType::Pointer base( ImageType::Pointer input,
-			       const unsigned octaves,
-			       const unsigned int scales,
-			       const float threshold,
-			       const float ratio)
+OutputImageType::Pointer sift(ImageType::Pointer input,
+			      const unsigned int octaves,
+			      const unsigned int scales,
+			      const float threshold,
+			      const float ratio,
+			      const char* siftFileName)
 {
+  typedef otb::ImageToSIFTKeyPointSetFilter<ImageType,PointSetType> SiftFilterType;
+  typedef itk::PointSetToImageFilter<PointSetType, OutputImageType> PointSetFilterType;
+  
   SiftFilterType::Pointer sift = SiftFilterType::New();
-  DDMFilterType::Pointer ddmFilter = DDMFilterType::New();
   PointSetFilterType::Pointer pointSetFilter = PointSetFilterType::New();
   
   sift->SetInput(0,input);
@@ -80,228 +71,173 @@ OutputImageType::Pointer base( ImageType::Pointer input,
   sift->SetEdgeThreshold(ratio);
   
   pointSetFilter->SetInput(sift->GetOutput());
-  pointSetFilter->SetInsideValue(255);
   pointSetFilter->SetOutsideValue(0);
+  pointSetFilter->SetInsideValue(255);
   pointSetFilter->SetSize(input->GetLargestPossibleRegion().GetSize());
   pointSetFilter->SetSpacing(input->GetSpacing());
   pointSetFilter->SetOrigin(input->GetOrigin());
-  
-  ddmFilter->SetInput(pointSetFilter->GetOutput());
-  ddmFilter->InputIsBinaryOn();
-  ddmFilter->Update();
+  pointSetFilter->Update();
   
   WriterType::Pointer writer = WriterType::New();
-  writer->SetFileName("base_keys.png");
+  writer->SetFileName(siftFileName);
   writer->SetInput(pointSetFilter->GetOutput());
   writer->Update();
   
-  std::cout << "Image base   -> sift key points -> ddm1" << std::endl;
+  return pointSetFilter->GetOutput();
+}
+
+OutputImageType::Pointer ddm( OutputImageType::Pointer input,
+			      const char* ddmFileName)
+{
+  typedef itk::DanielssonDistanceMapImageFilter <OutputImageType, OutputImageType> DDMFilterType;
+  DDMFilterType::Pointer ddmFilter = DDMFilterType::New();
+  
+  ddmFilter->SetInput(input);
+  ddmFilter->InputIsBinaryOn();
+  ddmFilter->Update();
+
+  WriterType::Pointer writer = WriterType::New();
+  writer->SetFileName(ddmFileName);
+  writer->SetInput(ddmFilter->GetOutput());
+  writer->Update();
   
   return ddmFilter->GetOutput();
 }
 
-OutputImageType::Pointer rotate( ImageType::Pointer input,
-				 const unsigned int octaves,
-				 const unsigned int scales,
-				 const float threshold,
-				 const float ratio,
-				 const unsigned int rotation)
+ImageType::Pointer rotate( ImageType::Pointer input,
+			   const unsigned int rotation)
 {
-  SiftFilterType::Pointer sift = SiftFilterType::New();
-  DDMFilterType::Pointer ddmFilter = DDMFilterType::New();
-  PointSetFilterType::Pointer pointSetFilter = PointSetFilterType::New();
+  typedef itk::AffineTransform<double, 2> TransformType;
+  typedef itk::ResampleImageFilter<ImageType, ImageType>
+    ResampleFilterType;
+  ResampleFilterType::Pointer resampler = ResampleFilterType::New();
   
-  ResampleFilterType1::Pointer resampler1 = ResampleFilterType1::New();
-  ResampleFilterType2::Pointer resampler2 = ResampleFilterType2::New();
-  
-  TransformType::Pointer transform1 = TransformType::New();
-  TransformType::Pointer transform2 = TransformType::New();
-  
+  TransformType::Pointer transform = TransformType::New();
   TransformType::OutputVectorType translation1;
   TransformType::OutputVectorType translation2;
-  TransformType::OutputVectorType translation3;
-  TransformType::OutputVectorType translation4;
-
-  const ImageType::SpacingType& spacing1 = input->GetSpacing();
-  const ImageType::PointType& origin1  = input->GetOrigin();
-  ImageType::SizeType size1 = input->GetLargestPossibleRegion().GetSize();
   
-  const double imageCenterX1 = origin1[0] + spacing1[0] * size1[0] / 2.0;
-  const double imageCenterY1 = origin1[1] + spacing1[1] * size1[1] / 2.0;
+  const ImageType::SpacingType& spacing = input->GetSpacing();
+  const ImageType::PointType& origin  = input->GetOrigin();
+  ImageType::SizeType size = input->GetLargestPossibleRegion().GetSize();
+  
+  const double imageCenterX = origin[0] + spacing[0] * size[0] / 2.0;
+  const double imageCenterY = origin[1] + spacing[1] * size[1] / 2.0;
   const double degreesToRadians = atan(1.0) / 45.0;
   const double angle = rotation * degreesToRadians;
 
-  translation1[0] = -imageCenterX1;
-  translation1[1] = -imageCenterY1;
-  translation2[0] = imageCenterX1;
-  translation2[1] = imageCenterY1;
-
-  transform1->Translate( translation1 );
-  transform1->Rotate2D( -angle, false );
-  transform1->Translate( translation2 );
-
-  resampler1->SetOutputOrigin( origin1 );
-  resampler1->SetOutputSpacing( spacing1 );
-  resampler1->SetSize( size1 );
-  resampler1->SetTransform(transform1);
-  resampler1->SetInput(input);
-  resampler1->Update();
+  translation1[0] = -imageCenterX;
+  translation1[1] = -imageCenterY;
+  translation2[0] = imageCenterX;
+  translation2[1] = imageCenterY;
   
-  sift->SetInput(0,resampler1->GetOutput());
-  sift->SetOctavesNumber(octaves);
-  sift->SetScalesNumber(scales);
-  sift->SetDoGThreshold(threshold);
-  sift->SetEdgeThreshold(ratio);
+  transform->Translate( translation1 );
+  transform->Rotate2D( -angle, false );
+  transform->Translate( translation2 );
   
-  pointSetFilter->SetInput(sift->GetOutput());
-  pointSetFilter->SetInsideValue(255);
-  pointSetFilter->SetOutsideValue(0);
-  pointSetFilter->SetSize(resampler1->GetOutput()->GetLargestPossibleRegion().GetSize());
-  pointSetFilter->SetSpacing(resampler1->GetOutput()->GetSpacing());
-  pointSetFilter->SetOrigin(resampler1->GetOutput()->GetOrigin());
-  
-  pointSetFilter->Update();
-  
-  const ImageType::SpacingType& spacing2 = pointSetFilter->GetOutput()->GetSpacing();
-  const ImageType::PointType& origin2  = pointSetFilter->GetOutput()->GetOrigin();
-  ImageType::SizeType size2 = pointSetFilter->GetOutput()->GetLargestPossibleRegion().GetSize();
-  
-  const double imageCenterX2 = origin2[0] + spacing2[0] * size2[0] / 2.0;
-  const double imageCenterY2 = origin2[1] + spacing2[1] * size2[1] / 2.0;
-
-  translation3[0] = -imageCenterX2;
-  translation3[1] = -imageCenterY2;
-  translation4[0] = imageCenterX2;
-  translation4[1] = imageCenterY2;
-  
-  transform2->Translate( translation3 );
-  transform2->Rotate2D( angle, false );
-  transform2->Translate( translation4 );
-  
-  resampler2->SetOutputOrigin( origin2 );
-  resampler2->SetOutputSpacing( spacing2 );
-  resampler2->SetSize( size2 );
-  resampler2->SetTransform(transform2);  
-  resampler2->SetInput(pointSetFilter->GetOutput());
-  
-  ddmFilter->SetInput(resampler2->GetOutput());
-  ddmFilter->InputIsBinaryOn();
-  ddmFilter->Update();
- 
-  WriterType::Pointer writer1 = WriterType::New();
-  writer1->SetFileName("rotate_keys_a.png");
-  writer1->SetInput(pointSetFilter->GetOutput());
-  writer1->Update();
-  
-  WriterType::Pointer writer2 = WriterType::New();
-  writer2->SetFileName("rotate_keys_b.png");
-  writer2->SetInput(resampler2->GetOutput());
-  writer2->Update();
-  
-  std::cout << "Image rotate   -> sift key points -> ddm2" << std::endl;
-  return ddmFilter->GetOutput();
+  resampler->SetOutputOrigin( origin );
+  resampler->SetOutputSpacing( spacing );
+  resampler->SetSize( size );
+  resampler->SetTransform(transform);
+  resampler->SetInput(input);
+  resampler->Update();
+  return resampler->GetOutput();
 }
 
-OutputImageType::Pointer zoom( ImageType::Pointer input,
-			       const unsigned int octaves,
-			       const unsigned int scales,
-			       const float threshold,
-			       const float ratio,
-			       const unsigned int zoomFactor)
+OutputImageType::Pointer invRotate(OutputImageType::Pointer input,
+				   const unsigned int rotation)
 {
-  SiftFilterType::Pointer sift = SiftFilterType::New();
-  DDMFilterType::Pointer ddmFilter = DDMFilterType::New();
-  PointSetFilterType::Pointer pointSetFilter = PointSetFilterType::New();
+  typedef itk::AffineTransform<double, 2> TransformType;
+  typedef itk::ResampleImageFilter<OutputImageType, OutputImageType>
+    ResampleFilterType;
+  ResampleFilterType::Pointer resampler = ResampleFilterType::New();
   
+  TransformType::Pointer transform = TransformType::New();
+  TransformType::OutputVectorType translation1;
+  TransformType::OutputVectorType translation2;
+  
+  const ImageType::SpacingType& spacing = input->GetSpacing();
+  const ImageType::PointType& origin  = input->GetOrigin();
+  ImageType::SizeType size = input->GetLargestPossibleRegion().GetSize();
+  
+  const double imageCenterX = origin[0] + spacing[0] * size[0] / 2.0;
+  const double imageCenterY = origin[1] + spacing[1] * size[1] / 2.0;
+  
+  const double degreesToRadians = atan(1.0) / 45.0;
+  const double angle = rotation * degreesToRadians;
+  
+  translation1[0] = -imageCenterX;
+  translation1[1] = -imageCenterY;
+  translation2[0] = imageCenterX;
+  translation2[1] = imageCenterY;
+  
+  transform->Translate( translation1 );
+  transform->Rotate2D( angle, false );
+  transform->Translate( translation2 );
+  
+  resampler->SetOutputOrigin( origin );
+  resampler->SetOutputSpacing( spacing );
+  resampler->SetSize( size );
+  resampler->SetTransform(transform);
+  resampler->SetInput(input);
+  resampler->Update();
+  return resampler->GetOutput();
+}
+
+ImageType::Pointer zoom( ImageType::Pointer input,
+			 const unsigned int zoomFactor)
+{
+  typedef itk::ShrinkImageFilter<ImageType, ImageType> ShrinkFilterType;
   ShrinkFilterType::Pointer shrink = ShrinkFilterType::New();
-  ExpandFilterType::Pointer expand = ExpandFilterType::New();
   
   shrink->SetInput(input);
   shrink->SetShrinkFactors(zoomFactor);
   shrink->Update();
   
-  sift->SetInput(0,shrink->GetOutput());
-  sift->SetOctavesNumber(octaves);
-  sift->SetScalesNumber(scales);
-  sift->SetDoGThreshold(threshold);
-  sift->SetEdgeThreshold(ratio);
+  return shrink->GetOutput();
+}
+
+OutputImageType::Pointer invZoom( OutputImageType::Pointer input,
+				  const unsigned int zoomFactor)
+{
+  typedef itk::ExpandImageFilter<OutputImageType, OutputImageType> ExpandFilterType;
+  ExpandFilterType::Pointer expand = ExpandFilterType::New();
   
-  pointSetFilter->SetInput(sift->GetOutput());
-  pointSetFilter->SetInsideValue(255);
-  pointSetFilter->SetOutsideValue(0);
-  pointSetFilter->SetSize(shrink->GetOutput()->GetLargestPossibleRegion().GetSize());
-  pointSetFilter->SetSpacing(shrink->GetOutput()->GetSpacing());
-  pointSetFilter->SetOrigin(shrink->GetOutput()->GetOrigin());
-  pointSetFilter->Update();
-  
-  expand->SetInput(pointSetFilter->GetOutput());
+  expand->SetInput(input);
   expand->SetExpandFactors(zoomFactor);
   expand->Update();
   
-  ddmFilter->SetInput(expand->GetOutput());
-  ddmFilter->InputIsBinaryOn();
-  ddmFilter->Update();
-  
-  WriterType::Pointer writer1 = WriterType::New();
-  writer1->SetFileName("zoom_keys_a.png");
-  writer1->SetInput(pointSetFilter->GetOutput());
-  writer1->Update();
-  
-  WriterType::Pointer writer2 = WriterType::New();
-  writer2->SetFileName("zoom_keys_b.png");
-  writer2->SetInput(expand->GetOutput());
-  writer2->Update();
-  
-  std::cout << "Image zoom   -> sift key points -> ddm3" << std::endl;
-  return ddmFilter->GetOutput();
+  return expand->GetOutput();
 }
 
-OutputImageType::Pointer contrast(ImageType::Pointer input,
-				  const unsigned int octaves,
-				  const unsigned int scales,
-				  const float threshold,
-				  const float ratio,
-				  const unsigned int contrastMin,
-				  const unsigned int contrastMax)
+ImageType::Pointer contrast(ImageType::Pointer input,
+			    const unsigned int contrastMin,
+			    const unsigned int contrastMax)
 {
-  SiftFilterType::Pointer sift = SiftFilterType::New();
-  DDMFilterType::Pointer ddmFilter = DDMFilterType::New();
-  PointSetFilterType::Pointer pointSetFilter = PointSetFilterType::New();
+  typedef itk::RescaleIntensityImageFilter<ImageType, ImageType> RescaleFilterType;
   RescaleFilterType::Pointer rescaler= RescaleFilterType::New();
   
   rescaler->SetInput(input);
   rescaler->SetOutputMinimum(static_cast<RescaleFilterType::OutputPixelType>(contrastMin));
   rescaler->SetOutputMaximum(static_cast<RescaleFilterType::OutputPixelType>(contrastMax));
-  
-  sift->SetInput(0,rescaler->GetOutput());
-  sift->SetOctavesNumber(octaves);
-  sift->SetScalesNumber(scales);
-  sift->SetDoGThreshold(threshold);
-  sift->SetEdgeThreshold(ratio);
-  
-  pointSetFilter->SetInput(sift->GetOutput());
-  pointSetFilter->SetInsideValue(255);
-  pointSetFilter->SetOutsideValue(0);
-  pointSetFilter->SetSize(input->GetLargestPossibleRegion().GetSize());
-  pointSetFilter->SetSpacing(input->GetSpacing());
-  pointSetFilter->SetOrigin(input->GetOrigin());
-
-  ddmFilter->SetInput(pointSetFilter->GetOutput());
-  ddmFilter->InputIsBinaryOn();
-  ddmFilter->Update();
-  
-  std::cout << "Image contrast   -> sift key points -> ddm4" << std::endl;
-  return ddmFilter->GetOutput();
+  rescaler->Update();
+  return rescaler->GetOutput();
 }
 
-void combine()
+OutputImageType::Pointer invContrast( OutputImageType::Pointer input,
+				      const unsigned int contrastMin,
+				      const unsigned int contrastMax)
 {
-  std::cout << "Image combine   -> sift key points -> ddm5" << std::endl;
+  return input;
 }
 
 void subtract(OutputImageType::Pointer image1,
-	      OutputImageType::Pointer image2)
+	      OutputImageType::Pointer image2,
+	      const char* subtractFileName)
 {
+  typedef itk::SubtractImageFilter<OutputImageType, OutputImageType, ImageType> SubtractFilterType;
+  typedef itk::MinimumMaximumImageCalculator<ImageType> MaximumCalculatorType;
+  typedef itk::RescaleIntensityImageFilter<ImageType, OutputImageType> OutputRescaleFilterType;
+  
   SubtractFilterType::Pointer subtract = SubtractFilterType::New();
   MaximumCalculatorType::Pointer maximumCalculator = MaximumCalculatorType::New();
   
@@ -315,23 +251,14 @@ void subtract(OutputImageType::Pointer image1,
   rescaler->SetOutputMaximum(255);
   
   WriterType::Pointer writer = WriterType::New();
-  writer->SetFileName("subtract.png");
+  writer->SetFileName(subtractFileName);
   writer->SetInput(rescaler->GetOutput());
   writer->Update();
   
-  WriterType::Pointer writer2 = WriterType::New();
-  writer2->SetFileName("ddm1.png");
-  writer2->SetInput(image1);
-  writer2->Update();
-
-  WriterType::Pointer writer3 = WriterType::New();
-  writer3->SetFileName("ddm2.png");
-  writer3->SetInput(image2);
-  writer3->Update();
-  
   maximumCalculator->SetImage(subtract->GetOutput());
-  maximumCalculator->ComputeMaximum();
-  
+  maximumCalculator->Compute();
+
+  std::cout << "Mix(sub)= " << maximumCalculator->GetMinimum() << " ";
   std::cout << "Max(sub)= " << maximumCalculator->GetMaximum() << std::endl;
 }
 
@@ -359,28 +286,64 @@ int otbImageToSIFTKeyPointSetFilterDistanceMap(int argc, char * argv[])
   reader->SetFileName(infname);
   reader->Update();
   
-  OutputImageType::Pointer ddm1 = base(reader->GetOutput(),
-				       octaves, scales,
-				       threshold, ratio);
+  ImageType::Pointer _rotated =
+    rotate(reader->GetOutput(), rotation);
+  ImageType::Pointer _zoomed =
+    zoom(reader->GetOutput(), zoomFactor);
+  ImageType::Pointer _contrasted =
+    contrast(reader->GetOutput(), contrastMin, contrastMax);
+
+  ImageType::Pointer _combined1 = zoom(_rotated, zoomFactor);
+  ImageType::Pointer _combined2 = contrast(_combined1, contrastMin, contrastMax);
   
-  OutputImageType::Pointer ddm2 = rotate(reader->GetOutput(),
-					 octaves, scales,
-					 threshold, ratio,
-					 rotation);
+  OutputImageType::Pointer sift_base =
+    sift(reader->GetOutput(), octaves, scales, threshold, ratio, "sift_base.png");
   
-  OutputImageType::Pointer ddm3 = zoom(reader->GetOutput(),
-				       octaves, scales,
-				       threshold, ratio,
-				       zoomFactor);
+  OutputImageType::Pointer _sift_rotated = 
+    sift(_rotated, octaves, scales, threshold, ratio, "sift_rotated.png");
   
-  OutputImageType::Pointer ddm4 = contrast(reader->GetOutput(),
-					   octaves, scales,
-					   threshold, ratio,
-					   contrastMin, contrastMax);
+  OutputImageType::Pointer _sift_zoomed =
+    sift(_zoomed, octaves, scales, threshold, ratio, "sift_zoomed.png");
+
+  OutputImageType::Pointer _sift_contrasted =
+    sift(_contrasted, octaves, scales, threshold, ratio, "sift_contrasted.png");
   
-  subtract(ddm1, ddm2);
-  subtract(ddm1, ddm3);
-  subtract(ddm1, ddm4);
+  OutputImageType::Pointer _sift_combined =
+    sift(_combined2, octaves, scales, threshold, ratio, "sift_combined.png");
+  
+  OutputImageType::Pointer sift_rotated =
+    invRotate(_sift_rotated, rotation);
+  
+  OutputImageType::Pointer sift_zoomed =
+    invZoom(_sift_zoomed, zoomFactor);
+  
+  OutputImageType::Pointer sift_contrasted =
+    invContrast(_sift_contrasted, contrastMin, contrastMax);
+  
+  OutputImageType::Pointer _sift_combined1 =
+    invContrast(_sift_combined, contrastMin, contrastMax);
+  OutputImageType::Pointer _sift_combined2 =
+    invRotate(_sift_combined1, rotation);
+  OutputImageType::Pointer sift_combined = 
+    invZoom(_sift_combined2, zoomFactor);
+  
+  OutputImageType::Pointer ddm_base = ddm(sift_base, "ddm_base.png");
+  OutputImageType::Pointer ddm_rotated = ddm(sift_rotated, "ddm_rotated.png");
+  OutputImageType::Pointer ddm_contrasted = ddm(sift_contrasted, "ddm_contrasted.png");
+  OutputImageType::Pointer ddm_zoomed = ddm(sift_zoomed, "ddm_zoomed.png");
+  OutputImageType::Pointer ddm_combined = ddm(sift_combined, "ddm_combined.png");
+  
+  subtract(ddm_base, ddm_rotated,
+	   "subtract_rotated.png");
+  
+  subtract(ddm_base, ddm_zoomed,
+	   "subtract_zoomed.png");
+  
+  subtract(ddm_base, ddm_contrasted,
+	   "subtract_contrasted.png");
+  
+  subtract(ddm_base, ddm_combined,
+	   "subtract_combined.png");
   
   return EXIT_SUCCESS;
 }
