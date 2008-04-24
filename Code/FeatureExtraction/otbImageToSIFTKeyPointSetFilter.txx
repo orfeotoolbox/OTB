@@ -506,30 +506,14 @@ namespace otb
     
     PixelType lHessianTrace2 = (dxx+dyy)*(dxx+dyy);
     PixelType lHessianDet = dxx*dyy-dxy*dxy;
-    if (det>=0)
-      {
-	// DoG threshold
-	accepted = lDoGInterpolated >= det*m_DoGThreshold ||
-	  lDoGInterpolated <= -det*m_DoGThreshold;
-      }
-    else if (det<=0)
-      {
-	// DoG threshold
-	accepted = lDoGInterpolated <= det*m_DoGThreshold*maximumDoG ||
-	  lDoGInterpolated >= -det*m_DoGThreshold*maximumDoG;
-      }
+    // DoG threshold
+    
+    accepted = fabs(lDoGInterpolated) >= fabs(det*m_DoGThreshold);
     
     // Eliminating edge response
-    if (lHessianDet>=0)
-      {
-	accepted = accepted &&
-	  lHessianTrace2 < m_RatioEdgeThreshold*lHessianDet;
-      }
-    else if (lHessianDet <= 0)
-      {
-	accepted = accepted &&
-	  lHessianTrace2 < m_RatioEdgeThreshold*lHessianDet;
-      }
+
+    accepted = accepted &&
+      fabs(lHessianTrace2) < fabs(m_RatioEdgeThreshold*lHessianDet);
     
     if (!accepted)
       {
