@@ -27,6 +27,6 @@
 
 void RegisterTests()
 {
-  REGISTER_TEST(otbLabelizeImageFilterNew);
-  REGISTER_TEST(otbLabelizeImageFilter);
+  REGISTER_TEST(otbLabelizeConnectedThresholdImageFilterNew);
+  REGISTER_TEST(otbLabelizeConnectedThresholdImageFilter);
 }

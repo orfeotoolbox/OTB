@@ -758,18 +758,18 @@ ADD_TEST(bfTvRationalQuotientResampleImageFilter ${BASICFILTERS_TESTS7}
 	            ${TEMP}/bfTvVectorImageToIntensityImageOutput.tif
 )
 
-# -------            otb::LabelizeImageFilter   ----------------------------
+# -------            otb::LabelizeConnectedThresholdImageFilter   ----------------------------
 
-  ADD_TEST(bfTuLabelizeImageFilterNew ${BASICFILTERS_TESTS8}
-         otbLabelizeImageFilterNew)
+  ADD_TEST(bfTuLabelizeConnectedThresholdImageFilterNew ${BASICFILTERS_TESTS8}
+         otbLabelizeConnectedThresholdImageFilterNew)
 
-  ADD_TEST(bfTvLabelizeImageFilter ${BASICFILTERS_TESTS8} 
+  ADD_TEST(bfTvLabelizeConnectedThresholdImageFilter ${BASICFILTERS_TESTS8} 
 		--compare-image ${EPSILON}
-		    ${BASELINE}/bfTvLabelizeImageFilterOutput.png
-		    ${TEMP}/bfTvLabelizeImageFilterOutput.png
-		    otbLabelizeImageFilter
+		    ${BASELINE}/bfTvLabelizeConnectedThresholdImageFilterOutput.png
+		    ${TEMP}/bfTvLabelizeConnectedThresholdImageFilterOutput.png
+		    otbLabelizeConnectedThresholdImageFilter
 		    ${INPUTDATA}/QB_Suburb.png
-	            ${TEMP}/bfTvLabelizeImageFilterOutput.png
+	            ${TEMP}/bfTvLabelizeConnectedThresholdImageFilterOutput.png
 		    170 170
 		    80 80
 )
@@ -882,8 +882,8 @@ otbVectorImageToIntensityImageFilter.cxx
 
 # A enrichir
 SET(BasicFilters_SRCS8
-otbLabelizeImageFilterNew.cxx
-otbLabelizeImageFilter.cxx
+otbLabelizeConnectedThresholdImageFilterNew.cxx
+otbLabelizeConnectedThresholdImageFilter.cxx
 )
 
 INCLUDE_DIRECTORIES("${OTBTesting_BINARY_DIR}")
