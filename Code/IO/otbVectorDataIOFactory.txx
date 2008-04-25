@@ -36,7 +36,6 @@ typename VectorDataIOFactory<TData>
 VectorDataIOFactory<TData>
 ::CreateVectorDataIO(const char* path, FileModeType mode)
 {
-  std::cout<<"Entering CreateVectorDataIO"<<std::endl;
   RegisterBuiltInFactories();
 
   std::list<VectorDataIOBasePointerType> possibleVectorDataIO;
@@ -52,9 +51,8 @@ VectorDataIOFactory<TData>
       }
     else
       {
-      std::cerr << "Error VectorDataIO factory did not return an VectorDataIOBase: "
-                << (*i)->GetNameOfClass()
-                << std::endl;
+	itkGenericExceptionMacro(<< "Error VectorDataIO factory did not return an VectorDataIOBase: "
+			  << (*i)->GetNameOfClass());
       }
     }
   for(typename std::list<VectorDataIOBasePointerType>::iterator k = possibleVectorDataIO.begin();
@@ -76,7 +74,6 @@ VectorDataIOFactory<TData>
 
       }
     }
-  std::cout<<"No driver found."<<std::endl;
   return 0;
 }
 template <class TData>

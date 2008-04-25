@@ -21,15 +21,11 @@ PURPOSE.  See the above copyright notices for more information.
 #include "otbSHPVectorDataIO.h"
 
 #include <itksys/SystemTools.hxx>
-
 #include "itkExceptionObject.h"
 #include "itkByteSwapper.h"
-
 #include "otbMacro.h"
 #include "otbSystem.h"
-
 #include "otbDataNode.h"
-
 #include "itkPreOrderTreeIterator.h"
 
 namespace otb
@@ -38,19 +34,6 @@ namespace otb
   SHPVectorDataIO<TData>
   ::SHPVectorDataIO()
   {
-
-    //   // Byte order specification
-    //   if ( itk::ByteSwapper<char>::SystemIsLittleEndian() == true)
-    //   {
-    //         this->m_ByteOrder = Superclass::LittleEndian;
-    //   }
-    //   else
-    //   {
-    //         this->m_ByteOrder = Superclass::BigEndian;
-    //   }
-
-    //   m_FileByteOrder = Superclass::BigEndian;
-
     // OGR factory registration
     OGRRegisterAll();
     m_DataSource = NULL;
@@ -68,15 +51,6 @@ namespace otb
   bool 
   SHPVectorDataIO<TData>::CanReadFile( const char* filename )
   {
-    //    std::string lFileName(filename);
-    //         if( System::IsADirName(lFileName) == true )
-    //         {
-    //                 return false;
-    //         }
-    //         if( m_File.is_open() )
-    //         {
-    //                 m_File.close();
-    //         }
 
 
     OGRDataSource * poDS = OGRSFDriverRegistrar::Open(filename, FALSE);
@@ -87,21 +61,6 @@ namespace otb
 	
     OGRDataSource::DestroyDataSource(poDS);
     return true;
-
-    // Is this necessary ?
-	
-    //         std::fstream header_file;
-    //         header_file.open( filename,  std::ios::in | std::ios::binary );
-    //         if( header_file.fail() )
-    //         {
-    //                 otbMsgDevMacro(<<"SHPVectorDataIO::CanReadFile() failed header open ! " );
-    //                 return false;
-    //         }
-
-    //         //Read header informations
-    //         bool lResult = InternalReadHeaderInformation(header_file,false);
-    //         header_file.close();
-    //         return (lResult);
   }
 
 
@@ -412,7 +371,6 @@ namespace otb
 	      }
 	  }
       }
-    //   OGRDataSource::DestroyDataSource(m_DataSource);
   }
 
 
@@ -531,15 +489,14 @@ namespace otb
 	  {
 	    ogrRing->getPoint(pIndex,ogrTmpPoint);
 	    typename PolygonType::VertexType vertex;
+
 	    vertex[0] = ogrTmpPoint->getX();
 	    vertex[1] = ogrTmpPoint->getY();
-
 	    if(DataNodeType::Dimension > 2)
 	      {
 		vertex[2]= ogrTmpPoint->getZ();
 	      }
-
-	    ring->AddVertex(vertex);
+  	    ring->AddVertex(vertex);
 	  }
 	intRings->PushBack(ring);
       }
@@ -552,39 +509,6 @@ namespace otb
 
     return node;
   }
-
-
-  /** Is this necessary ? */
-
-
-  // template<class TData>
-  // void 
-  // SHPVectorDataIO<TData>
-  // ::ReadVectorDataInformation()
-  // {
-  //         if( m_File.is_open() )
-  //         {
-  //                 m_File.close();
-  //         }
-
-  //         m_File.open( this->m_FileName.c_str(),  std::ios::in | std::ios::binary );
-  //         if( m_File.fail() )
-  //         {
-  //                 itkExceptionMacro(<<"SHPVectorDataIO::ReadVectorDataInformation() failed header open ! " );
-  //         }
-
-  //         //Read header informations
-  //         InternalReadHeaderInformation(m_File,true);
-	
-  // otbMsgDebugMacro( <<"Driver to read: SHP");
-  // otbMsgDebugMacro( <<"         Read  file         : "<< this->m_FileName);
-  // }
-
-  // template<class TData>
-  // bool SHPVectorDataIO<TData>::InternalReadHeaderInformation(std::fstream & file, const bool reportError)
-  // {
-  //   return true;
-  // }
 
   template<class TData>
   bool SHPVectorDataIO<TData>::CanWriteFile( const char* filename )
@@ -627,7 +551,7 @@ namespace otb
     // check the created data source
     if(m_DataSource == NULL)
       {
-	itkExceptionMacro(<<"Failed to create OGR data source for file "<<this->m_FileName);
+	itkExceptionMacro(<<"Failed to create OGR data source for file "<<this->m_FileName<<". Since OGR can not overwrite existing file, be sure that this file does not already exist");
       }
 
     // Retrieving root node
@@ -638,6 +562,7 @@ namespace otb
 
     OGRLayer * ogrCurrentLayer = NULL;
     std::vector<OGRFeature *> ogrFeatures;
+    OGRGeometryCollection * ogrCollection = NULL;
     // OGRGeometry * ogrCurrentGeometry = NULL;
   
 
@@ -679,7 +604,14 @@ namespace otb
 	    case FOLDER:
 		{
 		  if(ogrCurrentLayer!=NULL)
-		    {		     
+		    {	
+		      if(ogrCollection != NULL)
+			{
+			  ogrFeatures.back()->SetGeometry(ogrCollection);
+			  delete ogrCollection;
+			  ogrCollection = NULL;
+			}
+	     
 		      ogrFeatures.push_back(OGRFeature::CreateFeature(ogrCurrentLayer->GetLayerDefn()));
 		      ogrFeatures.back()->SetField("Name",it.Get()->GetNodeId());  
 		    }
@@ -695,8 +627,16 @@ namespace otb
 		  {
 		    ogrPoint.setZ(it.Get()->GetPoint()[2]);
 		  }
-		ogrFeatures.back()->GetDefnRef()->SetGeomType(wkbPoint);
-		ogrFeatures.back()->SetGeometry(&ogrPoint);
+
+		if(ogrCollection == NULL)
+		  {
+		    ogrFeatures.back()->GetDefnRef()->SetGeomType(wkbPoint);
+		    ogrFeatures.back()->SetGeometry(&ogrPoint);
+		  }
+		else
+		  {
+		    ogrCollection->addGeometry(&ogrPoint);
+		  }
 
  		break;
 	      }
@@ -704,7 +644,6 @@ namespace otb
  	      {
 		OGRLineString ogrLine;
 		VertexListConstPointerType vertexList = it.Get()->GetLine()->GetVertexList();
-		ogrLine.setNumPoints(vertexList->Size());
 	    
 		typename VertexListType::ConstIterator vIt = vertexList->Begin();
 
@@ -720,28 +659,117 @@ namespace otb
 		    ogrLine.addPoint(&ogrPoint);
 		    ++vIt;
 		  }
-		ogrFeatures.back()->GetDefnRef()->SetGeomType(wkbLineString);
-		ogrFeatures.back()->SetGeometry(&ogrLine);
+		
+		if(ogrCollection == NULL)
+		  {
+		    ogrFeatures.back()->GetDefnRef()->SetGeomType(wkbLineString);
+		    ogrFeatures.back()->SetGeometry(&ogrLine);
+		  }
+		else
+		  {
+		    ogrCollection->addGeometry(&ogrLine);
+		  }
+
 		break;
 	      }
 	    case FEATURE_POLYGON:
 	      {
+		OGRPolygon * ogrPolygon = new OGRPolygon();
+		OGRLinearRing * ogrExternalRing = new OGRLinearRing();
+		VertexListConstPointerType vertexList = it.Get()->GetPolygonExteriorRing()->GetVertexList();
+	    
+		typename VertexListType::ConstIterator vIt = vertexList->Begin();
+
+		while(vIt != vertexList->End())
+		  {
+		    OGRPoint ogrPoint;
+		    ogrPoint.setX(vIt.Value()[0]);
+		    ogrPoint.setY(vIt.Value()[1]);
+		    if(DataNodeType::Dimension>2)
+		      {
+			ogrPoint.setZ(vIt.Value()[2]);
+		      }
+
+		    ogrExternalRing->addPoint(&ogrPoint);
+		    ++vIt;
+		  }
+		ogrPolygon->addRing(ogrExternalRing);
+		delete ogrExternalRing;
+
+		// Retrieving internal rings as well
+		for(typename PolygonListType::Iterator pIt = it.Get()->GetPolygonInteriorRings()->Begin();
+		    pIt!=it.Get()->GetPolygonInteriorRings()->End();++pIt)
+		  {
+		    OGRLinearRing * ogrInternalRing = new OGRLinearRing();
+		    vertexList = pIt.Get()->GetVertexList();	    
+		    vIt = vertexList->Begin();
+
+		    while(vIt != vertexList->End())
+		      {
+			OGRPoint ogrPoint;
+			ogrPoint.setX(vIt.Value()[0]);
+			ogrPoint.setY(vIt.Value()[1]);
+			if(DataNodeType::Dimension>2)
+			  {
+			    ogrPoint.setZ(vIt.Value()[2]);
+			  }
+			ogrInternalRing->addPoint(&ogrPoint);
+			++vIt;
+		      }
+		    ogrPolygon->addRing(ogrInternalRing);
+		    delete ogrInternalRing;
+		  }
+		if(ogrCollection == NULL)
+		  {
+		    ogrFeatures.back()->GetDefnRef()->SetGeomType(wkbPolygon);
+		    ogrFeatures.back()->SetGeometry(ogrPolygon);
+		  }
+		else
+		  {
+		    ogrCollection->addGeometry(ogrPolygon);
+		  }
+
+		delete ogrPolygon;
 		break;
 	      }
 	    case FEATURE_MULTIPOINT:
 	      {
+		if(ogrCollection != NULL)
+		  {
+		    itkExceptionMacro(<<"Problem while creating multipoint.");
+		  }
+		ogrCollection = new OGRMultiPoint();
+		ogrFeatures.back()->GetDefnRef()->SetGeomType(wkbMultiPoint);
 		break;
 	      }
 	    case FEATURE_MULTILINE:
 	      {
+		if(ogrCollection != NULL)
+		  {
+		    itkExceptionMacro(<<"Problem while creating multiline.");
+		  }
+		ogrCollection = new OGRMultiLineString();
+		ogrFeatures.back()->GetDefnRef()->SetGeomType(wkbMultiLineString);
 		break;
 	      }
 	    case FEATURE_MULTIPOLYGON:
 	      {
+		if(ogrCollection != NULL)
+		  {
+		    itkExceptionMacro(<<"Problem while creating multipolygon.");
+		  }
+		ogrCollection = new OGRMultiPolygon();
+		ogrFeatures.back()->GetDefnRef()->SetGeomType(wkbMultiPolygon);
 		break;
 	      }
 	    case FEATURE_COLLECTION:
 	      {
+		if(ogrCollection != NULL)
+		  {
+		    itkExceptionMacro(<<"Problem while creating collection.");
+		  }
+		ogrCollection = new OGRMultiPoint();
+		ogrFeatures.back()->GetDefnRef()->SetGeomType(wkbGeometryCollection);
 		break;
 	      }
 	  }
@@ -766,42 +794,7 @@ namespace otb
     
     otbMsgDevMacro( <<" SHPVectorDataIO::Write()  ");
   }
-
-    /** Is this necessary ? */
-
-    // template<class TData>
-    // void SHPVectorDataIO<TData>::WriteVectorDataInformation()
-    // {
-
-    //         if ( this->m_FileName == "" )
-    //         {
-    //                 itkExceptionMacro(<<"A FileName must be specified.");
-    //         }
-    //         if( CanWriteFile(this->m_FileName.c_str()) == false)
-    //         {
-    //                 itkExceptionMacro(<< "The file "<<this->m_FileName.c_str()<<" is not defined as a SHP file");
-    //         }
-    //         // Close file from any previous vector data
-    //         if ( m_File.is_open() )
-    //         {
-    //                 m_File.close();
-    //         }
-  
-    //         // Open the new file for writing
-    //         // Actually open the file
-    //         m_File.open(this->m_FileName.c_str(),  std::ios::out | std::ios::trunc | std::ios::binary );
-    //         if( m_File.fail() )
-    //         {
-    //                 itkExceptionMacro(<< "Cannot write requested file "<<this->m_FileName.c_str()<<".");
-    //         } 
-
-
-    // otbMsgDebugMacro( <<"Driver to write: SHP");
-    // otbMsgDebugMacro( <<"         Write file         : "<< this->m_FileName);
-
-    // }
-
-  
+ 
   } // end namespace otb
 
 #endif
