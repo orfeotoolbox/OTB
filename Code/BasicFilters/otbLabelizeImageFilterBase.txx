@@ -102,7 +102,10 @@ namespace otb
   ::PrintSelf(std::ostream& os, itk::Indent indent) const
   {
     Superclass::PrintSelf(os, indent);
+    
     os << indent << "Seeds lower threshold: " << m_LowerThreshold << std::endl;
     os << indent << "Seeds upper threshold: " << m_UpperThreshold << std::endl;
+    
+    os << indent << m_RegionGrowingFilter << std::endl;
   }
 } // end namespace otb

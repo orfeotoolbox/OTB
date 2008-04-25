@@ -45,12 +45,15 @@ namespace otb
       typedef itk::SmartPointer<Self> Pointer;
       typedef itk::SmartPointer<const Self>  ConstPointer;
       
+      /** typedef to simplify variables definition and declaration. */
       typedef TInputImage InputImageType;
       typedef TOutputImage OutputImageType;
 
       typedef typename TInputImage::PixelType InputPixelType;
-      typedef typename TOutputImage::PixelType OutputPixelType;
+      typedef typename TInputImage::SizeType InputSizeType;
       typedef typename TInputImage::IndexType IndexType;
+      
+      typedef typename TOutputImage::PixelType OutputPixelType;
       
       /** "object factory" management method. */
       itkNewMacro(Self);
@@ -76,9 +79,13 @@ namespace otb
       /** Set replace value */
       itkSetMacro(ReplaceValue, OutputPixelType);
       
-      /** typedef to simplify variables definition and declaration. */
-      typedef TInputImage InputImageType;
-      typedef TOutputImage OutputImageType;
+      /** Get radius */
+      const InputSizeType& GetRadius() const
+	{ return this->m_RegionGrowingFilter->GetRadius(); }
+      
+      /** Set radius */
+      void SetRadius( const InputSizeType radius )
+	{ this->m_RegionGrowingFilter->SetRadius(radius); }
       
     protected:
       LabelizeNeighborhoodConnectedImageFilter();

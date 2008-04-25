@@ -70,10 +70,6 @@ namespace otb
       /** Set replace value */
       itkSetMacro(ReplaceValue, OutputPixelType);
       
-      /** typedef to simplify variables definition and declaration. */
-      typedef TInputImage InputImageType;
-      typedef TOutputImage OutputImageType;
-      
     protected:
       LabelizeConnectedThresholdImageFilter();
       virtual ~LabelizeConnectedThresholdImageFilter() {};

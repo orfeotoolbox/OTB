@@ -27,10 +27,10 @@ namespace otb
   LabelizeNeighborhoodConnectedImageFilter<TInputImage, TOutputImage>
   ::LabelizeNeighborhoodConnectedImageFilter()
   {
-    m_LowerThresholdDelta = 10;
-    m_UpperThresholdDelta = 10;
+    m_LowerThresholdDelta = itk::NumericTraits<InputPixelType>::NonpositiveMin();
+    m_UpperThresholdDelta = itk::NumericTraits<InputPixelType>::max();
     
-    m_ReplaceValue = 0;
+    m_ReplaceValue = itk::NumericTraits<OutputPixelType>::One;
   }
   
   /** Region growing
