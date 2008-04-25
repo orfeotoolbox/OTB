@@ -803,11 +803,11 @@ otbSpatialObjectToImageDrawingFilterNew.cxx
 otbSpatialObjectToImageDrawingFilter.cxx
 )
 
-## otbImportGeoInformationImageFilterWithKeywordList.cxx
 # A enrichir
 SET(BasicFilters_SRCS3
 otbImportGeoInformationImageFilterNew.cxx
 otbImportGeoInformationImageFilter.cxx
+otbImportGeoInformationImageFilterWithKeywordList.cxx
 otbSpectralAngleDistanceImageFilterNew.cxx
 otbSpectralAngleDistanceImageFilter.cxx
 otbVectorRescaleIntensityImageFilterNew.cxx
