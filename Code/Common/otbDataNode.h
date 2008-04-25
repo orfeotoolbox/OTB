@@ -71,7 +71,7 @@ class DataNode
    typedef typename LineType::Pointer                 LinePointerType;
    typedef Polygon<PrecisionType>                     PolygonType;
    typedef typename PolygonType::Pointer              PolygonPointerType; 
-   typedef ObjectList<PolygonType>               PolygonListType;
+   typedef ObjectList<PolygonType>                    PolygonListType;
    typedef typename PolygonListType::Pointer          PolygonListPointerType;
    
    /** Fields typedef */
@@ -96,7 +96,7 @@ class DataNode
     * Get the point data, when valid.
     * \return The point.
     */
-   PointType&         GetPoint() const;
+   PointType         GetPoint() const;
    /**
     * Get the line data, when valid.
     * \return The line.

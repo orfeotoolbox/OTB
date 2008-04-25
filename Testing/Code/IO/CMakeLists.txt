@@ -1383,9 +1383,14 @@ ADD_TEST(ioTvWritingComplexDataWithComplexImage ${IO_TESTS14}
 
 ADD_TEST(ioTuVectorDataIOBaseTest ${IO_TESTS15} 
         otbVectorDataIOBaseNew )
-ADD_TEST(ioTuVectorDataSourceTest ${IO_TESTS15} 
+
+ADD_TEST(ioTuOGRVectorDataIO ${IO_TESTS15} 
+        otbSHPVectorDataIONew )
+
+ADD_TEST(ioTuVectorDataSourceNew ${IO_TESTS15} 
         otbVectorDataSourceNew )
-ADD_TEST(ioTuVectorDataFileReaderTest ${IO_TESTS15} 
+
+ADD_TEST(ioTuVectorDataFileReaderNew ${IO_TESTS15} 
         otbVectorDataFileReaderNew )
 
 ADD_TEST(ioTvVectorDataFileReader ${IO_TESTS15} 
@@ -1393,10 +1398,20 @@ ADD_TEST(ioTvVectorDataFileReader ${IO_TESTS15}
 	${IMAGEDATA}/TOULOUSE/QuickBird/GIS_FILES/000000128955_01_ORDER_SHAPE.shp
 	)
 
-ADD_TEST(ioTuVectorDataFileWriterTest ${IO_TESTS15} 
+ADD_TEST(ioTuVectorDataFileWriterNew ${IO_TESTS15} 
         otbVectorDataFileWriterNew )
-ADD_TEST(ioTuVectorDataFileWriterTest ${IO_TESTS15} 
-        otbSHPVectorDataIONew )
+
+
+ADD_TEST(ioTvVectorDataFileWriter ${IO_TESTS15} 
+        otbVectorDataFileWriter
+	${TEMP}/ioTvVectorDataFileWriterOutput.shp	
+	)
+
+ADD_TEST(ioTvVectorDataFileReaderWriter ${IO_TESTS15} 
+        otbVectorDataFileReaderWriter
+	${IMAGEDATA}/TOULOUSE/QuickBird/GIS_FILES/000000128955_01_ORDER_SHAPE.shp
+	${TEMP}/ioTvVectorDataFileReaderWriterOutput.shp	
+	)
 
 
 #----------------------------------------------------------------------------------
@@ -1511,6 +1526,8 @@ otbVectorDataSourceNew.cxx
 otbVectorDataFileReaderNew.cxx
 otbVectorDataFileReader.cxx
 otbVectorDataFileWriterNew.cxx
+otbVectorDataFileWriter.cxx
+otbVectorDataFileReaderWriter.cxx
 otbSHPVectorDataIONew.cxx
 )
 

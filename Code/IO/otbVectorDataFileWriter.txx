@@ -34,10 +34,7 @@ template <class TInputVectorData>
 VectorDataFileWriter<TInputVectorData>
 ::VectorDataFileWriter() :      m_FileName(""),
                                 m_VectorDataIO(0), 
-                                m_UserSpecifiedVectorDataIO(false),
-                                m_UseInputMetaDataDictionary(true)
-
- 
+                                m_UserSpecifiedVectorDataIO(false) 
 {
 }
 /**
@@ -85,138 +82,6 @@ VectorDataFileWriter<TInputVectorData>
 {
   return static_cast<TInputVectorData*> (this->ProcessObject::GetInput(idx));
 }
-
-/*
-template <class TInputVectorData>
-void
-VectorDataFileWriter<TInputVectorData>
-::Write()
-{
-  const InputVectorDataType * input = this->GetInput();
-	
-	if ( input == 0 )
-  {
-   	itkExceptionMacro(<< "No input to writer!");
-  }
-	
-	if ( m_FileName == "" )
-  {
-    itkExceptionMacro(<<"No filename was specified");
-  }
-
-  // NOTE: this const_cast<> is due to the lack of const-correctness
-  // of the ProcessObject.
-  InputVectorDataType * nonConstVectorData = const_cast<InputVectorDataType *>(input);
-
-   // Make sure the data is up-to-date.
-  if( nonConstVectorData->GetSource() )
-  {
-    nonConstVectorData->GetSource()->Update();
-  }
-
-  // Actually do something
-  this->GenerateData();
-  
-  // Release upstream data if requested
-  if ( input->ShouldIReleaseData() )
-  {
-    nonConstVectorData->ReleaseData();
-  }
-}
-
-template <class TInputVectorData>
-void
-VectorDataFileWriter<TInputVectorData>
-::GenerateData()
-{
-	const InputVectorDataType* shapeFile = this->GetInput();
-	
-	// If output file already exists, this file is erased
-	// to avoid ogr write problems
-	otb::FileName fileName(m_FileName.c_str());
-
-	OGRRegisterAll();
-
-  OGRDataSource *poDS = shapeFile->GetOGRDataSource();
-
-	poDS->GetLayerCount();
-	otbGenericMsgTestingMacro(<< "WRITE");
-
-  const char *pszDriverName = "ESRI Shapefile";
-  OGRSFDriver *poDriver;
-   	
-	poDriver = OGRSFDriverRegistrar::GetRegistrar()->GetDriverByName(
-                pszDriverName );
-  
-	if( poDriver == NULL )
-  {
-        itkExceptionMacro(<< pszDriverName << " driver not available");
-  }
-
-  OGRDataSource *poDSW;
-
-  poDSW = poDriver->CreateDataSource( m_FileName.c_str(), NULL );
-  
-	if( poDSW == NULL )
-  {
-      itkExceptionMacro(<< "Creation of output file failed");
-  }
-
-  unsigned int nbOfLayers = poDS->GetLayerCount();
-	
-	for (unsigned int i=0; i<nbOfLayers; i++)
-	{
-			otbGenericMsgTestingMacro(<< "Layer number " << i+1);
-			OGRLayer  *poLayer2 = poDS->GetLayer(i);		
-			poLayer2->ResetReading();
-	
-	std::cout << "Filename ::: " << fileName.ObtainFileNameWithNoExtension().c_str() << std::endl;
-			OGRLayer* poWLayer = poDSW->CreateLayer(fileName.ObtainFileNameWithNoExtension().c_str());
-				
-   		if( poLayer2 == NULL )
-   		{
-       	itkExceptionMacro(<< "Layer creation failed." );
-   		}
-				
-			OGRFeature* poFeature2;			
-			while( (poFeature2 = poLayer2->GetNextFeature()) != NULL )
-   		{
-				otbGenericMsgTestingMacro(<< "Feature! ");
-				OGRFeature* poWFeature;
-					
-				unsigned int nbFields = poFeature2->GetFieldCount();
-				for (unsigned int i=0; i<nbFields; i++)
-				{
-					OGRFieldDefn* oField = poFeature2->GetFieldDefnRef(i);
-						
-					otbGenericMsgTestingMacro(<< "Field : " << poFeature2->GetRawFieldRef(i)->String);
-    			if( poWLayer->CreateField( oField ) != OGRERR_NONE )
-   				{
-        			itkExceptionMacro(<<"Creating Name field failed." );
-    			}
-	
-	      	poWFeature = OGRFeature::CreateFeature( poLayer2->GetLayerDefn() );
-
-					poWFeature->SetField(i,poFeature2->GetRawFieldRef(i));
-					otbGenericMsgTestingMacro(<< "FieldW : " << poWFeature->GetRawFieldRef(i)->String);
-				}
-
-				poWFeature->SetGeometry(poFeature2->GetGeometryRef());
-	
-    		if( poWLayer->CreateFeature( poWFeature ) != OGRERR_NONE )
-       	{
-          itkExceptionMacro(<<"Failed to create feature in shapefile." );
-       	}
-					
-				OGRFeature::DestroyFeature(poWFeature);
-
-			}		
-	}
-		
-	OGRDataSource::DestroyDataSource( poDSW );
-}
-*/
-
 
 //---------------------------------------------------------
 template <class TInputVectorData>
@@ -291,16 +156,10 @@ VectorDataFileWriter<TInputVectorData>
 
 
   // Make sure the data is up-to-date.
-  if( ! nonConstVectorData->GetSource() )
+  if( nonConstVectorData->GetSource() )
   {
         nonConstVectorData->GetSource()->Update();
   }
-
-  if( m_UseInputMetaDataDictionary )
-    {
-    m_VectorDataIO->SetMetaDataDictionary(input->GetMetaDataDictionary());
-    }
-
 
   // Notify start event observers
   this->InvokeEvent( itk::StartEvent() );

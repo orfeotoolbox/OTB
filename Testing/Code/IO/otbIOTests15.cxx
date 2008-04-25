@@ -31,7 +31,9 @@ void RegisterTests()
 REGISTER_TEST(otbVectorDataIOBaseNew);
 REGISTER_TEST(otbVectorDataSourceNew);
 REGISTER_TEST(otbVectorDataFileReaderNew);
- REGISTER_TEST(otbVectorDataFileReader);
+REGISTER_TEST(otbVectorDataFileReader);
 REGISTER_TEST(otbVectorDataFileWriterNew);
+REGISTER_TEST(otbVectorDataFileWriter);
+ REGISTER_TEST(otbVectorDataFileReaderWriter);
 REGISTER_TEST(otbSHPVectorDataIONew);
 }

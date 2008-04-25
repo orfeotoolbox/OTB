@@ -57,16 +57,18 @@ public:
   typedef TData VectorDataType;
   typedef typename VectorDataType::DataTreeType  DataTreeType;
   typedef typename DataTreeType::Pointer         DataTreePointerType;
+  typedef typename DataTreeType::ConstPointer    DataTreeConstPointerType;
   typedef typename VectorDataType::DataNodeType  DataNodeType;
   typedef typename DataNodeType::Pointer         DataNodePointerType;
   typedef typename DataNodeType::PointType       PointType;
   typedef typename DataNodeType::LineType        LineType;
+  typedef typename LineType::VertexListType      VertexListType;
+  typedef typename VertexListType::ConstPointer  VertexListConstPointerType;
   typedef typename LineType::Pointer             LinePointerType;
   typedef typename DataNodeType::PolygonType     PolygonType;
   typedef typename PolygonType::Pointer          PolygonPointerType;
   typedef typename DataNodeType::PolygonListType PolygonListType;
   typedef typename PolygonListType::Pointer      PolygonListPointerType;
-  typedef typename DataNodeType::Pointer         DataNodePointerType;
   typedef typename VectorDataType::Pointer       VectorDataPointerType;
   typedef typename VectorDataType::ConstPointer  VectorDataConstPointerType;
 

@@ -105,11 +105,8 @@ protected:
   std::string m_FileName; // The file to be read
   typename VectorDataIOBaseType::Pointer m_VectorDataIO;
   bool  m_UserSpecifiedVectorDataIO; // track whether the VectorDataIO
-  bool  m_FactorySpecifiedVectorDataIO;  //track whether the factory
-                                         //  mechanism set the VectorDataIO
-  bool m_UseInputMetaDataDictionary;        // whether to use the
-                                            // MetaDataDictionary from the
-                                            // input or not.
+  bool m_FactorySpecifiedVectorDataIO;
+
 private:
   VectorDataFileWriter(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented

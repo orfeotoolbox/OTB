@@ -88,7 +88,7 @@ DataNode<TPrecision,VDimension>
 
 template <class TPrecision, unsigned int VDimension>  
 typename DataNode<TPrecision,VDimension>
-::PointType &        
+::PointType      
 DataNode<TPrecision,VDimension>
 ::GetPoint() const
 {
@@ -267,7 +267,12 @@ DataNode<TPrecision,VDimension>
 {
   if(index<GetNumberOfFields())
     {
-      FieldMapType::iterator it = m_FieldMap.begin() + index;
+      FieldMapType::iterator it = m_FieldMap.begin();
+
+      for(unsigned int i = 0;i<index;++i)
+	{
+	  ++it;
+	}
       return (*it);
     }
   return FieldType("No key","No value");

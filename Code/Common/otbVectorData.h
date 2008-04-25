@@ -63,6 +63,7 @@ class VectorData
   typedef typename DataTreeType::Pointer DataTreePointerType;
 
   itkGetObjectMacro(DataTree,DataTreeType);
+  itkGetConstObjectMacro(DataTree,DataTreeType);
 
   protected:
   /** Constructor */

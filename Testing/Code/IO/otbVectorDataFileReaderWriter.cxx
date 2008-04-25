@@ -15,18 +15,31 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
+#include "itkExceptionObject.h"
+#include "otbMacro.h"
 
-#include "otbVectorDataFileWriter.h"
 #include "otbVectorData.h"
+#include "otbVectorDataFileWriter.h"
+#include "otbVectorDataFileReader.h"
 
-int otbVectorDataFileWriterNew(int argc, char * argv[])
+int otbVectorDataFileReaderWriter(int argc, char * argv[])
 {
+ 
   typedef otb::VectorData<double,2> VectorDataType;
-  typedef VectorDataType::DataNodeType DataNodeType;
+  typedef otb::VectorDataFileReader<VectorDataType> ReaderType;
   typedef otb::VectorDataFileWriter<VectorDataType> WriterType;
-  
+ 
+
   //Instantiation
+  ReaderType::Pointer reader = ReaderType::New();
   WriterType::Pointer writer = WriterType::New();
+  VectorDataType::Pointer data = VectorDataType::New();
+
+  reader->SetFileName(argv[1]);
   
+  writer->SetFileName(argv[2]);
+  writer->SetInput(reader->GetOutput());
+  writer->Update();
+
   return EXIT_SUCCESS;
 }
