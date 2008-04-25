@@ -770,8 +770,39 @@ ADD_TEST(bfTvRationalQuotientResampleImageFilter ${BASICFILTERS_TESTS7}
 		    otbLabelizeConnectedThresholdImageFilter
 		    ${INPUTDATA}/QB_Suburb.png
 	            ${TEMP}/bfTvLabelizeConnectedThresholdImageFilterOutput.png
-		    170 170
+		    0 255
 		    80 80
+)
+
+# -------            otb::LabelizeNeighborhoodConnectedImageFilter   ----------------------------
+
+  ADD_TEST(bfTuLabelizeNeighborhoodConnectedImageFilterNew ${BASICFILTERS_TESTS8}
+         otbLabelizeNeighborhoodConnectedImageFilterNew)
+
+  ADD_TEST(bfTvLabelizeNeighborhoodConnectedImageFilter ${BASICFILTERS_TESTS8}
+		--compare-image ${EPSILON}
+		    ${BASELINE}/bfTvLabelizeNeighborhoodConnectedImageFilterOutput.png
+		    ${TEMP}/bfTvLabelizeNeighborhoodConnectedImageFilterOutput.png
+		    otbLabelizeNeighborhoodConnectedImageFilter
+		    ${INPUTDATA}/QB_Suburb.png
+	            ${TEMP}/bfTvLabelizeNeighborhoodConnectedImageFilterOutput.png
+		    0 255
+		    80 80
+)
+
+# -------            otb::LabelizeConfidenceConnectedImageFilter   ----------------------------
+
+  ADD_TEST(bfTuLabelizeConfidenceConnectedImageFilterNew ${BASICFILTERS_TESTS8}
+         otbLabelizeConfidenceConnectedImageFilterNew)
+
+  ADD_TEST(bfTvLabelizeConfidenceConnectedImageFilter ${BASICFILTERS_TESTS8}
+		--compare-image ${EPSILON}
+		    ${BASELINE}/bfTvLabelizeConfidenceConnectedImageFilterOutput.png
+		    ${TEMP}/bfTvLabelizeConfidenceConnectedImageFilterOutput.png
+		    otbLabelizeConfidenceConnectedImageFilter
+		    ${INPUTDATA}/QB_Suburb.png
+	            ${TEMP}/bfTvLabelizeConfidenceConnectedImageFilterOutput.png
+		    0 255
 )
 
 # A enrichir
@@ -884,6 +915,10 @@ otbVectorImageToIntensityImageFilter.cxx
 SET(BasicFilters_SRCS8
 otbLabelizeConnectedThresholdImageFilterNew.cxx
 otbLabelizeConnectedThresholdImageFilter.cxx
+otbLabelizeNeighborhoodConnectedImageFilterNew.cxx
+otbLabelizeNeighborhoodConnectedImageFilter.cxx
+otbLabelizeConfidenceConnectedImageFilterNew.cxx
+otbLabelizeConfidenceConnectedImageFilter.cxx
 )
 
 INCLUDE_DIRECTORIES("${OTBTesting_BINARY_DIR}")
