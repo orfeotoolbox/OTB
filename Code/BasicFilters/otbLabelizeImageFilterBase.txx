@@ -46,6 +46,9 @@ namespace otb
   LabelizeImageFilterBase<TInputImage, TOutputImage, TFilter>
   ::GenerateData()
   {
+    // set input for region growing filter
+    m_RegionGrowingFilter->SetInput(this->GetInput());
+    
     // create an empty image to store results computing
     m_MultiplyFilter->SetInput(this->GetInput());
     m_MultiplyFilter->Update();
