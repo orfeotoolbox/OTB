@@ -25,7 +25,6 @@
 #include "otbImage.h"
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
-#include "otbMultiplyByScalarImageFilter.h"
 
 int otbLabelizeConnectedThresholdImageFilter( int argc, char * argv[] )
 {
