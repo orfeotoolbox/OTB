@@ -32,7 +32,7 @@ namespace otb
     m_LowerThresholdDelta = itk::NumericTraits<InputPixelType>::NonpositiveMin();
     m_UpperThresholdDelta = itk::NumericTraits<InputPixelType>::max();
     
-    m_ReplaceValue = itk::NumericTraits<OutputPixelType>::One;
+    m_ReplaceValue = 5;//itk::NumericTraits<OutputPixelType>::One;
   }
   
   /** Region growing

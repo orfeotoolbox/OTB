@@ -72,7 +72,7 @@ namespace otb
       {
 	typename PointSetType::PointType pCoordinate = (itList.Value());
 	typename InputImageType::IndexType index;
-      
+	
  	index[0] = static_cast <int> (pCoordinate[0]);
  	index[1] = static_cast <int> (pCoordinate[1]);
  	if (outputImage->GetPixel(index) ==
