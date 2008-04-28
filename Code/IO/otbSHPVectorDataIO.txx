@@ -389,12 +389,12 @@ namespace otb
   
     PointType otbPoint;
     otbPoint.Fill(0);
-    otbPoint[0] = ogrPoint->getX();
-    otbPoint[1] = ogrPoint->getY();
+    otbPoint[0] = static_cast<typename DataNodeType::PrecisionType>(ogrPoint->getX());
+    otbPoint[1] = static_cast<typename DataNodeType::PrecisionType>(ogrPoint->getY());
 
     if(DataNodeType::Dimension > 2)
       {
-	otbPoint[2]=ogrPoint->getZ();
+	otbPoint[2]=static_cast<typename DataNodeType::PrecisionType>(ogrPoint->getZ());
       }
   
     DataNodePointerType node = DataNodeType::New();
@@ -603,18 +603,16 @@ namespace otb
 	    }
 	    case FOLDER:
 		{
-		  if(ogrCurrentLayer!=NULL)
-		    {	
-		      if(ogrCollection != NULL)
-			{
-			  ogrFeatures.back()->SetGeometry(ogrCollection);
-			  delete ogrCollection;
-			  ogrCollection = NULL;
-			}
-	     
-		      ogrFeatures.push_back(OGRFeature::CreateFeature(ogrCurrentLayer->GetLayerDefn()));
-		      ogrFeatures.back()->SetField("Name",it.Get()->GetNodeId());  
+		  if(ogrCurrentLayer!=NULL && ogrCollection != NULL && !ogrFeatures.empty())
+		    {
+		      ogrFeatures.back()->SetGeometry(ogrCollection);
+		      delete ogrCollection;
+		      ogrCollection = NULL;
 		    }
+	     
+		  ogrFeatures.push_back(OGRFeature::CreateFeature(ogrCurrentLayer->GetLayerDefn()));
+		  ogrFeatures.back()->SetField("Name",it.Get()->GetNodeId());  
+	  
 		  break;
 		}
 	    case FEATURE_POINT:
@@ -734,7 +732,7 @@ namespace otb
 	      }
 	    case FEATURE_MULTIPOINT:
 	      {
-		if(ogrCollection != NULL)
+		if(ogrCollection != NULL || ogrFeatures.empty())
 		  {
 		    itkExceptionMacro(<<"Problem while creating multipoint.");
 		  }
@@ -744,7 +742,7 @@ namespace otb
 	      }
 	    case FEATURE_MULTILINE:
 	      {
-		if(ogrCollection != NULL)
+		if(ogrCollection != NULL || ogrFeatures.empty())
 		  {
 		    itkExceptionMacro(<<"Problem while creating multiline.");
 		  }
@@ -754,7 +752,7 @@ namespace otb
 	      }
 	    case FEATURE_MULTIPOLYGON:
 	      {
-		if(ogrCollection != NULL)
+		if(ogrCollection != NULL || ogrFeatures.empty())
 		  {
 		    itkExceptionMacro(<<"Problem while creating multipolygon.");
 		  }
@@ -764,7 +762,7 @@ namespace otb
 	      }
 	    case FEATURE_COLLECTION:
 	      {
-		if(ogrCollection != NULL)
+		if(ogrCollection != NULL || ogrFeatures.empty())
 		  {
 		    itkExceptionMacro(<<"Problem while creating collection.");
 		  }
@@ -775,8 +773,14 @@ namespace otb
 	  }
 	++it;
       }
+  if(ogrCurrentLayer!=NULL && ogrCollection != NULL && !ogrFeatures.empty())
+  {
+    ogrFeatures.back()->SetGeometry(ogrCollection);
+    delete ogrCollection;
+    ogrCollection = NULL;
+  }
 
-    if(ogrCurrentLayer!=NULL && ogrFeatures.size()>0)
+  if(ogrCurrentLayer!=NULL && ogrFeatures.size()>0)
       {
 	std::vector<OGRFeature*>::iterator fIt = ogrFeatures.begin();
 	
