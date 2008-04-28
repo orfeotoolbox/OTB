@@ -21,6 +21,10 @@
 
 #include <iostream>
 
+#include "itkRGBPixel.h"
+#include "itkScalarToRGBPixelFunctor.h"
+#include "itkUnaryFunctorImageFilter.h"
+
 #include "otbLabelizeConnectedThresholdImageFilter.h"
 #include "otbImage.h"
 #include "otbImageFileReader.h"
@@ -34,11 +38,15 @@ int otbLabelizeConnectedThresholdImageFilter( int argc, char * argv[] )
   
   typedef unsigned char InputPixelType;
   typedef unsigned char OutputPixelType;
+  typedef itk::RGBPixel<unsigned char> ColorPixelType;
+  
   const unsigned int Dimension = 2;
+  
   
   typedef otb::Image< InputPixelType, Dimension > InputImageType;
   typedef otb::Image< OutputPixelType, Dimension > OutputImageType;
-
+  typedef otb::Image<ColorPixelType, Dimension> RGBImageType;
+  
   InputPixelType lowerThreshold( (InputPixelType)::atoi(argv[3]) );
   InputPixelType upperThreshold( (InputPixelType)::atoi(argv[4]) );
   InputPixelType deltaLower( (InputPixelType)::atoi(argv[5]) );
@@ -50,22 +58,29 @@ int otbLabelizeConnectedThresholdImageFilter( int argc, char * argv[] )
   reader->SetFileName(inputImageName);
   
   // Writer
-  typedef otb::ImageFileWriter<OutputImageType> WriterType;
+  typedef otb::ImageFileWriter<RGBImageType> WriterType;
   WriterType::Pointer writer = WriterType::New();
   writer->SetFileName(outputImageName);
   
   // Labelize filter
   typedef otb::LabelizeConnectedThresholdImageFilter<InputImageType, OutputImageType> LabelizeFilterType;
   LabelizeFilterType::Pointer filter = LabelizeFilterType::New();
-  
+
   filter->SetLowerThreshold(lowerThreshold);
   filter->SetUpperThreshold(upperThreshold);
   filter->SetLowerThresholdDelta(deltaLower);
   filter->SetUpperThresholdDelta(deltaUpper);
   
+  // Label to RGB image
+  typedef itk::Functor::ScalarToRGBPixelFunctor<OutputPixelType> FunctorType;
+  typedef itk::UnaryFunctorImageFilter<OutputImageType, RGBImageType, FunctorType> ColorLabelFilterType;
+  ColorLabelFilterType::Pointer labelToRGB = ColorLabelFilterType::New();
+  
+  
   filter->SetInput(reader->GetOutput());
-  writer->SetInput(filter->GetOutput());
+  labelToRGB->SetInput(filter->GetOutput());
+  writer->SetInput(labelToRGB->GetOutput());
   writer->Update();
-   
+  
   return EXIT_SUCCESS;
 }

@@ -770,7 +770,7 @@ ADD_TEST(bfTvRationalQuotientResampleImageFilter ${BASICFILTERS_TESTS7}
 		    otbLabelizeConnectedThresholdImageFilter
 		    ${INPUTDATA}/QB_Suburb.png
 	            ${TEMP}/bfTvLabelizeConnectedThresholdImageFilterOutput.png
-		    0 255
+		    170 170
 		    80 80
 )
 
@@ -786,7 +786,7 @@ ADD_TEST(bfTvRationalQuotientResampleImageFilter ${BASICFILTERS_TESTS7}
 		    otbLabelizeNeighborhoodConnectedImageFilter
 		    ${INPUTDATA}/QB_Suburb.png
 	            ${TEMP}/bfTvLabelizeNeighborhoodConnectedImageFilterOutput.png
-		    0 255
+		    170 170
 		    80 80
 )
 
@@ -801,8 +801,8 @@ ADD_TEST(bfTvRationalQuotientResampleImageFilter ${BASICFILTERS_TESTS7}
 		    ${TEMP}/bfTvLabelizeConfidenceConnectedImageFilterOutput.png
 		    otbLabelizeConfidenceConnectedImageFilter
 		    ${INPUTDATA}/QB_Suburb.png
-	            ${TEMP}/bfTvLabelizeConfidenceConnectedImageFilterOutput.png
-		    0 255
+		    ${TEMP}/bfTvLabelizeConfidenceConnectedImageFilterOutput.png
+		    127 127 2 3 1
 )
 
 # A enrichir
