@@ -13,6 +13,7 @@ SpatialReasoning
 Projections
 Radiometry
 Fusion
+Markov
 )
 
 IF(OTB_USE_VISU_GUI)

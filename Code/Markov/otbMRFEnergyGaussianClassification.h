@@ -1,4 +1,20 @@
+/*=========================================================================
 
+  Program:   ORFEO Toolbox
+  Language:  C++
+  Date:      $Date$
+  Version:   $Revision$
+
+
+  Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
+  See OTBCopyright.txt for details.
+
+
+     This software is distributed WITHOUT ANY WARRANTY; without even 
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     PURPOSE.  See the above copyright notices for more information.
+
+=========================================================================*/
 #ifndef _otbMRFEnergyGaussianClassification_h
 #define _otbMRFEnergyGaussianClassification_h
 
@@ -39,7 +55,7 @@ namespace otb
     
         itkNewMacro(Self);
         
-        itkTypeMacro(MRFEnergy,Object);
+        itkTypeMacro(MRFEnergyGaussianClassification, MRFEnergy);
   
         void SetNumberOfParameters(unsigned int nParameters){ 
           this->m_NumberOfParameters=nParameters;
@@ -51,12 +67,12 @@ namespace otb
         {
             if (value2 >= this->m_NumberOfParameters/2) {
               itkExceptionMacro(<<"Number of parameters does not correspond to number of classes" );
-            } 
-            double result=
-                    M_SQUARE(value1-this->m_Parameters[2*value2])/(2*M_SQUARE(this->m_Parameters[2*value2+1]))
-                    + vcl_log(vcl_sqrt(2*M_PI)*this->m_Parameters[2*value2+1]);
-                
+            }
+	    double val1 = static_cast<double>(value1);
 
+	    double result =  M_SQUARE(val1-this->m_Parameters[2*static_cast<int>(value2)])/(2*M_SQUARE(this->m_Parameters[2*static_cast<int>(value2)+1]))
+	                     + vcl_log(vcl_sqrt(2*M_PI)*this->m_Parameters[2*static_cast<int>(value2)+1]);
+	                  
             return static_cast<double>( result );
         }
      
