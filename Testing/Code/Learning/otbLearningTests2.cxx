@@ -37,6 +37,8 @@ REGISTER_TEST(otbSOMMapNew);
 REGISTER_TEST(otbSOMMap);
 REGISTER_TEST(otbSOMNew);
 REGISTER_TEST(otbSOM);
+REGISTER_TEST(otbPeriodicSOMNew);
+REGISTER_TEST(otbPeriodicSOM);
 REGISTER_TEST(otbSOMActivationBuilderNew);
 REGISTER_TEST(otbSOMActivationBuilder);
 }

@@ -22,12 +22,13 @@
 
 #include <fstream>
 #include "otbVectorImage.h"
+#include "otbImage.h"
 #include "otbSOMMap.h"
 #include "otbSOMClassifier.h"
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
 #include "itkImageRegionIterator.h"
-#include "itkImageToListAdaptor.h"
+#include "itkListSample.h"
 
 int otbSOMClassifier(int argc, char* argv[] )
 {
@@ -48,13 +49,13 @@ int otbSOMClassifier(int argc, char* argv[] )
     typedef int                                 LabelPixelType;
     const   unsigned int        	         Dimension = 2;
 
-    typedef itk::RGBPixel<InputPixelType> PixelType;
+    typedef itk::VariableLengthVector<InputPixelType> PixelType;
     typedef itk::Statistics::EuclideanDistance<PixelType> DistanceType;
     typedef otb::SOMMap<PixelType,DistanceType,Dimension> SOMMapType;
-    typedef otb::Image<PixelType,Dimension> InputImageType;
+    typedef otb::VectorImage<InputPixelType,Dimension> InputImageType;
     typedef otb::ImageFileReader< InputImageType  >  ReaderType;
     typedef otb::ImageFileReader<SOMMapType> SOMReaderType;
-    typedef itk::Statistics::ImageToListAdaptor< InputImageType > SampleType;
+    typedef itk::Statistics::ListSample< PixelType > SampleType;
     typedef otb::SOMClassifier<SampleType,SOMMapType,LabelPixelType> ClassifierType;
     typedef otb::Image<LabelPixelType, Dimension >  OutputImageType;
     typedef itk::ImageRegionIterator< OutputImageType>  OutputIteratorType;
@@ -70,11 +71,20 @@ int otbSOMClassifier(int argc, char* argv[] )
     somreader->Update();
     std::cout<<"SOM map read"<<std::endl;
 
-    SampleType::Pointer sample = SampleType::New();    
-    sample->SetImage(reader->GetOutput());
+    SampleType::Pointer listSample = SampleType::New();
+
+    itk::ImageRegionIterator<InputImageType> it(reader->GetOutput(),reader->GetOutput()->GetLargestPossibleRegion());
+    
+    it.GoToBegin();
+    
+    while(!it.IsAtEnd())
+      {
+	listSample->PushBack(it.Get());
+	++it;
+      }
 
     ClassifierType::Pointer classifier = ClassifierType::New() ;
-    classifier->SetSample(sample.GetPointer());
+    classifier->SetSample(listSample.GetPointer());
     classifier->SetMap(somreader->GetOutput());
     classifier->Update() ;
 

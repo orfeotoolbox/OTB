@@ -33,4 +33,6 @@ void RegisterTests()
   REGISTER_TEST(otbLabelizeNeighborhoodConnectedImageFilter);
   REGISTER_TEST(otbLabelizeConfidenceConnectedImageFilterNew);
   REGISTER_TEST(otbLabelizeConfidenceConnectedImageFilter);
+  REGISTER_TEST(otbEuclideanDistanceWithMissingValueNew);
+  REGISTER_TEST(otbEuclideanDistanceWithMissingValue);
 }

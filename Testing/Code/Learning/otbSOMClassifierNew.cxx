@@ -23,7 +23,8 @@
 #include <fstream>
 #include "otbSOMMap.h"
 #include "otbSOMClassifier.h"
-#include "itkImageToListAdaptor.h"
+#include "itkListSample.h"
+#include "otbVectorImage.h"
 
 int otbSOMClassifierNew(int argc, char* argv[] )
 { 
@@ -33,11 +34,11 @@ int otbSOMClassifierNew(int argc, char* argv[] )
       typedef int                            LabelPixelType;
       const   unsigned int        	     Dimension = 2;
       
-      typedef itk::RGBPixel<InputPixelType> PixelType;
+      typedef itk::VariableLengthVector<InputPixelType> PixelType;
       typedef itk::Statistics::EuclideanDistance<PixelType> DistanceType;
       typedef otb::SOMMap<PixelType,DistanceType,Dimension> SOMMapType;
-      typedef otb::Image<PixelType,Dimension> InputImageType;
-      typedef itk::Statistics::ImageToListAdaptor< InputImageType > SampleType;
+      typedef otb::VectorImage<InputPixelType,Dimension> InputImageType;
+      typedef itk::Statistics::ListSample< PixelType > SampleType;
       typedef otb::SOMClassifier<SampleType,SOMMapType,LabelPixelType> ClassifierType;    
       
       ClassifierType::Pointer classifier = ClassifierType::New() ;

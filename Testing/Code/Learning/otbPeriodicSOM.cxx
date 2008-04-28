@@ -18,7 +18,7 @@
 #include "itkExceptionObject.h"
 #include "otbVectorImage.h"
 #include "otbSOMMap.h"
-#include "otbSOM.h"
+#include "otbPeriodicSOM.h"
 #include "itkRGBPixel.h"
 #include "itkEuclideanDistance.h"
 #include "otbImageFileReader.h"
@@ -26,7 +26,7 @@
 #include "itkListSample.h"
 #include "itkImageRegionIterator.h"
 
-int otbSOM(int argc, char* argv[])
+int otbPeriodicSOM(int argc, char* argv[])
 {
 try
   {
@@ -51,7 +51,7 @@ try
     typedef otb::ImageFileReader<ImageType> ReaderType;
     typedef itk::Statistics::ListSample<PixelType>  ListSampleType;
     
-    typedef otb::SOM<ListSampleType,MapType> SOMType;
+    typedef otb::PeriodicSOM<ListSampleType,MapType> SOMType;
     typedef otb::ImageFileWriter<MapType> WriterType;
 
     ReaderType::Pointer reader = ReaderType::New();

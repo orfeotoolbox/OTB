@@ -19,11 +19,13 @@
 #include "otbImage.h"
 #include "otbSOMMap.h"
 #include "otbSOMActivationBuilder.h"
-#include "itkRGBPixel.h"
+#include "itkVariableLengthVector.h"
 #include "itkEuclideanDistance.h"
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
-#include "itkImageToListAdaptor.h"
+#include "itkListSample.h"
+#include "otbVectorImage.h"
+#include "itkImageRegionIterator.h"
 
 int otbSOMActivationBuilder(int argc, char* argv[])
 {
@@ -36,33 +38,43 @@ try
   
     typedef float ComponentType;
     typedef unsigned char OutputPixelType;
-    typedef itk::RGBPixel<ComponentType> PixelType;
+    typedef itk::VariableLengthVector<ComponentType> PixelType;
     typedef itk::Statistics::EuclideanDistance<PixelType> DistanceType;
 
     typedef otb::SOMMap<PixelType,DistanceType,Dimension> MapType;
     typedef otb::ImageFileReader<MapType> MapReaderType;
 
-    typedef otb::Image<PixelType,Dimension> InputImageType;
+    typedef otb::VectorImage<ComponentType,Dimension> InputImageType;
     typedef otb::ImageFileReader<InputImageType> ReaderType;
-    typedef itk::Statistics::ImageToListAdaptor<InputImageType> AdaptorType;
+    typedef itk::Statistics::ListSample<PixelType> ListSampleType;
 
     typedef otb::Image<OutputPixelType,Dimension> OutputImageType;
     typedef otb::ImageFileWriter<OutputImageType> WriterType;
 
-    typedef otb::SOMActivationBuilder<AdaptorType,MapType,OutputImageType> SOMActivationBuilderType;
+    typedef otb::SOMActivationBuilder<ListSampleType,MapType,OutputImageType> SOMActivationBuilderType;
 
     ReaderType::Pointer reader = ReaderType::New();
     reader->SetFileName(vectorSetFileName);    
     reader->Update();
-    AdaptorType::Pointer adaptor = AdaptorType::New();
-    adaptor->SetImage(reader->GetOutput());
+
+     ListSampleType::Pointer listSample = ListSampleType::New();
+
+    itk::ImageRegionIterator<InputImageType> it(reader->GetOutput(),reader->GetOutput()->GetLargestPossibleRegion());
+    
+    it.GoToBegin();
+    
+    while(!it.IsAtEnd())
+      {
+	listSample->PushBack(it.Get());
+	++it;
+      }
     
     MapReaderType::Pointer mapReader = MapReaderType::New();
     mapReader->SetFileName(mapFileName);
 
     SOMActivationBuilderType::Pointer somAct = SOMActivationBuilderType::New();
     somAct->SetInput(mapReader->GetOutput());
-    somAct->SetListSample(adaptor);
+    somAct->SetListSample(listSample);
 
     WriterType::Pointer writer = WriterType::New();
     writer->SetFileName(outputFileName);

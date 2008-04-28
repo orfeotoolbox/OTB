@@ -9,6 +9,9 @@ Version:   $Revision$
 Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
 See OTBCopyright.txt for details.
 
+Copyright (c) Institut Telecom ; Telecom Bretagne. All right reserved.
+See GETCopyright.txt for details.
+
 
 This software is distributed WITHOUT ANY WARRANTY; without even 
 the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
@@ -18,9 +21,9 @@ PURPOSE.  See the above copyright notices for more information.
 #ifndef _otbSOMMap_h
 #define _otbSOMMap_h
 
-#include "itkFixedArray.h"
+#include "itkVariableLengthVector.h"
 #include "itkEuclideanDistance.h"
-#include "otbImage.h"
+#include "otbVectorImage.h"
 
 namespace otb
 {
@@ -42,22 +45,26 @@ namespace otb
  * \sa SOM
  * \sa SOMActivationBuilder
  */
-template <class TNeuron=itk::FixedArray<float,3>, 
-          class TDistance=itk::Statistics::EuclideanDistance<TNeuron>,unsigned int VMapDimension=2>  
+template <class TNeuron=itk::VariableLengthVector<double>, 
+          class TDistance=itk::Statistics::EuclideanDistance<TNeuron>,
+		  unsigned int VMapDimension=2>  
 class ITK_EXPORT SOMMap  
-: public Image<TNeuron,VMapDimension>
+: public otb::VectorImage<typename TNeuron::ComponentType,VMapDimension>
 {
   public:
   /** Standard typedefs */
   typedef SOMMap  Self;
-  typedef Image<TNeuron,VMapDimension>  Superclass;
+  typedef otb::VectorImage<typename TNeuron::ComponentType,VMapDimension>  Superclass;
   typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
   
   /** Creation through object factory macro */
   itkNewMacro(Self);
-  /** Runtime informations macro */
-  itkTypeMacro(SOMMap,Image);
+  /** 
+   * There is no runtime informations macro since
+   * this class has to be considered to as a simple VectorImage 
+   * // itkTypeMacro(SOMMap,VectorImage);
+   * */
   
   /** Template parameters related typedefs */
   typedef TNeuron NeuronType;

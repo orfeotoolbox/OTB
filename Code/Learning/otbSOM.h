@@ -9,6 +9,8 @@ Version:   $Revision$
 Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
 See OTBCopyright.txt for details.
 
+Copyright (c) Institut Telecom ; Telecom bretagne. All rights reserved. 
+See ITCopyright.txt for details.
 
 This software is distributed WITHOUT ANY WARRANTY; without even 
 the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
@@ -21,6 +23,9 @@ PURPOSE.  See the above copyright notices for more information.
 #include "itkImageToImageFilter.h"
 #include "itkEuclideanDistance.h"
 
+#include "otbCzihoSOMLearningBehaviorFunctor.h"
+#include "otbCzihoSOMNeighborhoodBehaviorFunctor.h"
+
 namespace otb
 {
 /**
@@ -32,13 +37,23 @@ namespace otb
  * enhancing its response and the response of its neighbors with respect to a certain radius, 
  * computed from an initial radius, and to a certain learning factor, decreasing at each iteration.
  *
+ * The behavior of the neighborhood is given by a functor (templated) which parameter is the current
+ * iteration. It returns a neighborhood of type \code{SizeType}.
+ *
+ * The behavior of the learning factor (hold by a beta variable) is given by an other functor 
+ * which parameter is the current iteration. It returns a beta value of type double.
+ *
  * The SOMMap produced as output can be either initialized with a constant custom value or randomly 
  * generated following a normal law. The seed for the random intialization can be modified.
  *
  * \sa SOMMap
  * \sa SOMActivationBuilder
+ * \sa CzihoSOMLearningBehaviorFunctor
+ * \sa CzihoSOMNeighborhoodBehaviorFunctor
  */
-template <class TListSample,class TMap>  
+template < class TListSample, class TMap, 
+		 class TSOMLearningBehaviorFunctor = Functor::CzihoSOMLearningBehaviorFunctor, 
+		 class TSOMNeighborhoodBehaviorFunctor = Functor::CzihoSOMNeighborhoodBehaviorFunctor >
 class ITK_EXPORT SOM  
 : public itk::ImageSource<TMap>
 {
@@ -64,6 +79,9 @@ class ITK_EXPORT SOM
   typedef typename MapType::RegionType RegionType;
   typedef typename MapType::Pointer MapPointerType;
   
+  typedef TSOMLearningBehaviorFunctor SOMLearningBehaviorFunctorType;
+  typedef TSOMNeighborhoodBehaviorFunctor SOMNeighborhoodBehaviorFunctorType;
+
   /** Map dimension */
   itkStaticConstMacro(MapDimension,unsigned int, MapType::ImageDimension);
   
@@ -89,24 +107,34 @@ class ITK_EXPORT SOM
   itkGetObjectMacro(ListSample,ListSampleType);
   itkSetObjectMacro(ListSample,ListSampleType);
 
+  void SetBetaFunctor ( const SOMLearningBehaviorFunctorType & functor ) {
+	  m_BetaFunctor = functor; }
+
+  void SetNeighborhoodSizeFunctor ( const SOMNeighborhoodBehaviorFunctorType & functor ) {
+	  m_NeighborhoodSizeFunctor = functor; }
+
   protected:
   /** Constructor */
   SOM();
   /** Destructor */
   virtual ~SOM();
+  /** Output information redefinition */
+  virtual void GenerateOutputInformation ();
+  /** Output allocation redefinition */
+  virtual void AllocateOutputs();
   /** Main computation method */
-  void GenerateData(void);
+  virtual void GenerateData(void);
   /**
    * Update the output map with a new sample.
    * \param sample The new sample to learn,
    * \param beta The learning coefficient,
    * \param radius The radius of the nieghbourhood.
    */
-  void UpdateMap(const NeuronType& sample, double beta, SizeType& radius);
+  virtual void UpdateMap(const NeuronType& sample, double beta, SizeType& radius);
   /**
    * Step one iteration.
    */
-  void Step(unsigned int currentIteration);  
+  virtual void Step(unsigned int currentIteration);  
   /** PrintSelf method */
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
   
@@ -133,6 +161,10 @@ class ITK_EXPORT SOM
   unsigned int m_Seed;
   /** The input list sample */
   ListSamplePointerType m_ListSample;
+  /** Behavior of the Learning weightening (link to the beta coefficient) */
+  SOMLearningBehaviorFunctorType m_BetaFunctor;
+  /** Behavior of the Neighborhood extent */
+  SOMNeighborhoodBehaviorFunctorType m_NeighborhoodSizeFunctor;
 
 };
 } // end namespace otb

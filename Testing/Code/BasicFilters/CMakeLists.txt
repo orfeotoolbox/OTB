@@ -774,6 +774,16 @@ ADD_TEST(bfTvRationalQuotientResampleImageFilter ${BASICFILTERS_TESTS7}
 		    80 80
 )
 
+# -------            otb::EuclideanDistanceWithMissingValue   ----------------------------
+
+  ADD_TEST(bfTuEuclideanDistanceWithMissingValueNew ${BASICFILTERS_TESTS8}
+         otbEuclideanDistanceWithMissingValueNew)
+
+ADD_TEST(bfTvEuclideanDistanceWithMissingValue ${BASICFILTERS_TESTS8}
+         otbEuclideanDistanceWithMissingValue)
+
+
+=======
 # -------            otb::LabelizeNeighborhoodConnectedImageFilter   ----------------------------
 
   ADD_TEST(bfTuLabelizeNeighborhoodConnectedImageFilterNew ${BASICFILTERS_TESTS8}
@@ -919,6 +929,8 @@ otbLabelizeNeighborhoodConnectedImageFilterNew.cxx
 otbLabelizeNeighborhoodConnectedImageFilter.cxx
 otbLabelizeConfidenceConnectedImageFilterNew.cxx
 otbLabelizeConfidenceConnectedImageFilter.cxx
+otbEuclideanDistanceWithMissingValueNew.cxx
+otbEuclideanDistanceWithMissingValue.cxx
 )
 
 INCLUDE_DIRECTORIES("${OTBTesting_BINARY_DIR}")

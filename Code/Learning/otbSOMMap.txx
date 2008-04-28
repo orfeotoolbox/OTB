@@ -9,6 +9,9 @@ Version:   $Revision$
 Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
 See OTBCopyright.txt for details.
 
+Copyright (c) Institut Telecom ; Telecom Bretagne. All right reserved.
+See GETCopyright.txt for details.
+
 
 This software is distributed WITHOUT ANY WARRANTY; without even 
 the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
@@ -59,6 +62,7 @@ SOMMap<TNeuron,TDistance,VMapDimension>
   
   // Define the minimum distance and position
   IndexType minPos = it.GetIndex();
+
   double minDistance = activation->Evaluate(sample,it.Get());
  
   // Iterate through the map to get the minimum distance position

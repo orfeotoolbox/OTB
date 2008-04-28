@@ -17,33 +17,27 @@
 =========================================================================*/
 #include "itkExceptionObject.h"
 #include "otbSOMMap.h"
-#include "otbSOM.h"
-#include "otbSOMActivationBuilder.h"
+#include "otbPeriodicSOM.h"
+#include "itkRGBPixel.h"
 #include "itkEuclideanDistance.h"
 #include "itkListSample.h"
-#include "itkVariableLengthVector.h"
-#include "otbImage.h"
-#include "otbVectorImage.h"
 
-int otbSOMActivationBuilderNew(int argc, char* argv[])
+int otbPeriodicSOMNew(int argc, char* argv[])
 {
 try
   {
-    const unsigned int Dimension =2;
+    const unsigned int Dimension = 2;
     typedef float ComponentType;
-    typedef unsigned char OutputPixelType;
     typedef itk::VariableLengthVector<ComponentType> PixelType;
     typedef itk::Statistics::EuclideanDistance<PixelType> DistanceType;
-
-    typedef otb::SOMMap<PixelType,DistanceType,Dimension> MapType;
-    typedef otb::VectorImage<ComponentType,Dimension> InputImageType;
+    typedef otb::SOMMap<PixelType,DistanceType,Dimension> SOMMapType;
+//     typedef itk::Statistics::ImageToListAdaptor<SOMMapType> AdaptorType;
     typedef itk::Statistics::ListSample<PixelType> ListSampleType;
-    typedef otb::Image<OutputPixelType,Dimension> OutputImageType;
-    typedef otb::SOMActivationBuilder<ListSampleType,MapType,OutputImageType> SOMActivationBuilderType;
+    typedef otb::PeriodicSOM<ListSampleType,SOMMapType> SOMType;
 
     // Instantiation
-    SOMActivationBuilderType::Pointer somAct = SOMActivationBuilderType::New();
-  } 
+    SOMType::Pointer som = SOMType::New();
+  }
 catch( itk::ExceptionObject & err ) 
   { 
     std::cout << "Exception itk::ExceptionObject thrown !" << std::endl; 

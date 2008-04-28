@@ -161,6 +161,20 @@ ADD_TEST(leTvSOM ${LEARNING_TESTS2}
 	${TEMP}/leSOMPoupeesSubOutputMap1.hdr
 	32 32 10 10 5 1.0 0.1 0)
 
+# -------            otb::PeriodicSOM   -----------------------------	
+
+ADD_TEST(leTuPeriodicSOMNew ${LEARNING_TESTS2}  
+        otbPeriodicSOMNew)
+
+ADD_TEST(leTvPeriodicSOM ${LEARNING_TESTS2}  
+        --compare-image ${EPSILON}
+	${BASELINE}/lePeriodicSOMPoupeesSubOutputMap1.hdr
+	${TEMP}/lePeriodicSOMPoupeesSubOutputMap1.hdr
+	otbSOM
+	${INPUTDATA}/poupees_sub.png
+	${TEMP}/lePeriodicSOMPoupeesSubOutputMap1.hdr
+	32 32 10 10 5 1.0 0.1 0)
+
 # -------            otb::SOMActivationBuilder   -----------------------------	
 
 ADD_TEST(leTuSOMActivationBuilderNew ${LEARNING_TESTS2}  
@@ -267,6 +281,8 @@ otbSOMMapNew.cxx
 otbSOMMap.cxx
 otbSOMNew.cxx
 otbSOM.cxx
+otbPeriodicSOMNew.cxx
+otbPeriodicSOM.cxx
 otbSOMActivationBuilderNew.cxx
 otbSOMActivationBuilder.cxx
 )

@@ -19,16 +19,18 @@
 #include "otbSOMMap.h"
 #include "itkRGBPixel.h"
 #include "itkEuclideanDistance.h"
+#include "itkVariableLengthVector.h"
 
 int otbSOMMap(int argc, char* argv[])
 {
 try
   {
     const unsigned int Dimension = 2;
-    typedef float ComponentType;
-    typedef itk::RGBPixel<ComponentType> PixelType;
-    typedef itk::Statistics::EuclideanDistance<PixelType> DistanceType;
+    typedef float InternalPixelType;
+    typedef itk::VariableLengthVector<InternalPixelType> PixelType;
+        typedef itk::Statistics::EuclideanDistance<PixelType> DistanceType;
     typedef otb::SOMMap<PixelType,DistanceType,Dimension> SOMMapType;
+
 
     // Instantiation
     SOMMapType::Pointer somMap = SOMMapType::New();
@@ -42,15 +44,18 @@ try
     region.SetIndex(index);
     region.SetSize(size);
     somMap->SetRegions(region);
+    somMap->SetNumberOfComponentsPerPixel(3);
     somMap->Allocate();
     
     // Filling with null pixels
     PixelType nullPixel;
+    nullPixel.SetSize(3);
     nullPixel.Fill(0);
     somMap->FillBuffer(nullPixel);
 
     // Definition of a non-null pixel
     PixelType winner;
+    winner.SetSize(3);
     winner.Fill(1);
     index.Fill(32);
     somMap->SetPixel(index,winner);
