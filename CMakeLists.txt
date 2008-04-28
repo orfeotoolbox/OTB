@@ -212,7 +212,6 @@ IF(OTB_USE_CURL)
 
 ENDIF(OTB_USE_CURL)
 
-
 #-------------------------------
 # GDAL Library
 #-------------------------------
@@ -232,6 +231,28 @@ ENDIF (NOT GDAL_INCLUDE_DIRS)
 
 INCLUDE_DIRECTORIES(${GDAL_INCLUDE_DIRS})
 LINK_DIRECTORIES( ${GDAL_LIBRARY_DIRS} )
+
+#-------------------------------
+# EXPAT Library
+#-------------------------------
+
+FIND_PACKAGE(EXPAT)
+IF(EXPAT_FOUND)
+  INCLUDE_DIRECTORIES(${EXPAT_INCLUDE_DIR})
+  LINK_DIRECTORIES( ${EXPAT_LIBRARY} )
+  TRY_COMPILE(OTB_TYPE_COMPILE_EXPAT
+      ${OTB_BINARY_DIR}/CMakeTmp
+      ${OTB_SOURCE_DIR}/CMake/otbTestCompileExpat.cxx )
+  IF(OTB_TYPE_COMPILE_EXPAT)
+      SET(OTB_USE_EXTERNAL_EXPAT ON CACHE INTERNAL  "Use an outside build of EXPAT.")
+  ELSE(OTB_TYPE_COMPILE_EXPAT)
+      SET(OTB_USE_EXTERNAL_EXPAT OFF CACHE INTERNAL  "Use an OTB internal build of EXPAT.")
+  ENDIF( OTB_TYPE_COMPILE_EXPAT)
+
+ELSE(EXPAT_FOUND)
+      SET(OTB_USE_EXTERNAL_EXPAT OFF CACHE INTERNAL  "Use an OTB internal build of EXPAT.")
+ENDIF(EXPAT_FOUND)
+
 
 
 #-------------------------------
@@ -440,6 +461,39 @@ IF(OTB_USE_VISU_GUI)
 ELSE(OTB_USE_VISU_GUI)
         SET(OTB_VISU_GUI_LIBRARIES "")
 ENDIF(OTB_USE_VISU_GUI)
+
+
+#-----------------------------------------------------------------------------
+# List of alls basics OTB libraries used for any applications
+# Use OTB_IO_UTILITIES_DEPENDENT_LIBRARIES to LINK IO libraries into your executable
+# Use OTB_ALGO_UTILITIES_DEPENDENT_LIBRARIES to LINK Utilities Algo libraries into your executable
+# Use OTB_ALLS_UTILITIES_DEPENDENT_LIBRARIES to LINK Utilities Algo libraries into your executable
+# => Create OTB_IO_UTILITIES_DEPENDENT_LIBRARIES
+SET(OTB_IO_UTILITIES_DEPENDENT_LIBRARIES "gdal dxf otbkml tinyXML otbgeotiff otbxtiff otbossim otbossimBase otbossimElevation otbossimFont otbossimKBool otbossimMatrix otbossimPlugin otbossimProjectionImaging otbossimSupportData otbossimVec otbossimVpfUtil")
+# Add EXPAT library
+IF( OTB_USE_EXTERNAL_EXPAT )
+        SET(OTB_IO_UTILITIES_DEPENDENT_LIBRARIES  "${OTB_IO_UTILITIES_DEPENDENT_LIBRARIES} expat")
+ELSE( OTB_USE_EXTERNAL_EXPAT  )
+        SET(OTB_IO_UTILITIES_DEPENDENT_LIBRARIES  "${OTB_IO_UTILITIES_DEPENDENT_LIBRARIES} otbexpat")
+ENDIF( OTB_USE_EXTERNAL_EXPAT )
+
+# Add VISU libraries
+IF(OTB_USE_VISU_GUI)
+        SET(OTB_IO_UTILITIES_DEPENDENT_LIBRARIES  "${OTB_IO_UTILITIES_DEPENDENT_LIBRARIES} ${OTB_VISU_GUI_LIBRARIES}")
+ENDIF(OTB_USE_VISU_GUI)
+
+# => Create OTB_ALGO_UTILITIES_DEPENDENT_LIBRARIES
+SET(OTB_ALGO_UTILITIES_DEPENDENT_LIBRARIES "otb6S otbgalib InsightJournal otbsvm")
+
+IF(NOT OTB_USE_EXTERNAL_ITK)
+        SET(OTB_UTILITIES_DEPENDENT_LIBRARIES  "${OTB_UTILITIES_DEPENDENT_LIBRARIES} otbopenjpeg")
+ENDIF(NOT OTB_USE_EXTERNAL_ITK)
+
+# => Create OTB_ALLS_UTILITIES_DEPENDENT_LIBRARIES
+SET(OTB_ALLS_UTILITIES_DEPENDENT_LIBRARIES "${OTB_IO_UTILITIES_DEPENDENT_LIBRARIES} ${OTB_ALGO_UTILITIES_DEPENDENT_LIBRARIES}")
+
+#-----------------------------------------------------------------------------
+
 
 
 OPTION(BUILD_EXAMPLES "Build the Examples directory." OFF)
