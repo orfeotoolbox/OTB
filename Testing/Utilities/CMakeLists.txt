@@ -151,13 +151,13 @@ ADD_TEST(utOssimRadarSatSupport ${UTILITIES_TESTS}
 # -------            lib Galib   ------------------------------
 
 FOREACH(num 1 12 14 16 17 25 27)
-ADD_TEST( utTuGalibTest${num}  ${CXX_TEST_PATH}/galibTests${num}   
+ADD_TEST( utTuGalibTest${num}  ${CXX_TEST_PATH}/otbGalibTests${num}   
         galibTests${num}
         seed 555 )
 ENDFOREACH(num)
 
 FOREACH(num 6 8 19 20)
-        ADD_TEST( utTvGalibTest${num}  ${CXX_TEST_PATH}/galibTests${num}   
+        ADD_TEST( utTvGalibTest${num}  ${CXX_TEST_PATH}/otbGalibTests${num}   
         --compare-ascii ${TOL}  
                         ${BASELINE_FILES}/utGalibTest${num}_bog.dat 
                         ${TEMP}/utGalibTest${num}_bog.dat
@@ -166,7 +166,7 @@ FOREACH(num 6 8 19 20)
         seed 555 )
 ENDFOREACH(num)
 FOREACH(num 2 4 9 11 15)
-ADD_TEST( utTvGalibTest${num}  ${CXX_TEST_PATH}/galibTests${num}   
+ADD_TEST( utTvGalibTest${num}  ${CXX_TEST_PATH}/otbGalibTests${num}   
         --compare-ascii ${TOL}  
                         ${BASELINE_FILES}/utGalibTest${num}_bog.dat 
                         ${TEMP}/utGalibTest${num}_bog.dat
@@ -178,7 +178,7 @@ ENDFOREACH(num)
 
 
 SET(num 13)
-ADD_TEST( utTvGalibTest${num}  ${CXX_TEST_PATH}/galibTests${num}   
+ADD_TEST( utTvGalibTest${num}  ${CXX_TEST_PATH}/otbGalibTests${num}   
         --compare-ascii ${TOL}  
                         ${BASELINE_FILES}/utGalibTest${num}_bog.dat 
                         ${TEMP}/utGalibTest${num}_bog.dat
@@ -188,7 +188,7 @@ ADD_TEST( utTvGalibTest${num}  ${CXX_TEST_PATH}/galibTests${num}
         seed 555 )
 
 FOREACH(num 3 18)
-ADD_TEST( utTvGalibTest${num}  ${CXX_TEST_PATH}/galibTests${num}   
+ADD_TEST( utTvGalibTest${num}  ${CXX_TEST_PATH}/otbGalibTests${num}   
         --compare-ascii ${TOL}  
                         ${BASELINE_FILES}/utGalibTest${num}_bog.dat 
                         ${TEMP}/utGalibTest${num}_bog.dat
@@ -200,7 +200,7 @@ ADD_TEST( utTvGalibTest${num}  ${CXX_TEST_PATH}/galibTests${num}
 ENDFOREACH(num)
 
 SET(num 5)
-ADD_TEST( utTvGalibTest${num}  ${CXX_TEST_PATH}/galibTests${num}  
+ADD_TEST( utTvGalibTest${num}  ${CXX_TEST_PATH}/otbGalibTests${num}  
         --compare-ascii ${TOL}  
                         ${BASELINE_FILES}/utGalibTest${num}_bog.dat 
                         ${TEMP}/utGalibTest${num}_bog.dat
@@ -212,7 +212,7 @@ ADD_TEST( utTvGalibTest${num}  ${CXX_TEST_PATH}/galibTests${num}
 
 # Test 7 commented becasue impossible to specific he bog.dat file name in the process ;-(
 #SET(num 7)
-#        ADD_TEST( utTvGalibTest${num}  ${CXX_TEST_PATH}/galibTests${num}   
+#        ADD_TEST( utTvGalibTest${num}  ${CXX_TEST_PATH}/otbGalibTests${num}   
 #        --compare-ascii ${TOL}  
 #                        ${BASELINE_FILES}/utGalibTest${num}_bog.dat 
 #                        ${TEMP}/utGalibTest${num}_bog.dat
@@ -224,7 +224,7 @@ ADD_TEST( utTvGalibTest${num}  ${CXX_TEST_PATH}/galibTests${num}
 
 
 SET(num 10)
-ADD_TEST( utTvGalibTest${num}  ${CXX_TEST_PATH}/galibTests${num}   
+ADD_TEST( utTvGalibTest${num}  ${CXX_TEST_PATH}/otbGalibTests${num}   
         --compare-n-ascii ${TOL} 4 
                         ${BASELINE_FILES}/utGalibTest${num}_sinusoid.dat 
                         ${TEMP}/utGalibTest${num}_sinusoid.dat 
@@ -242,7 +242,7 @@ ADD_TEST( utTvGalibTest${num}  ${CXX_TEST_PATH}/galibTests${num}
         seed 555 )
 
 SET(num 21)
-ADD_TEST( utTvGalibTest${num}  ${CXX_TEST_PATH}/galibTests${num}   
+ADD_TEST( utTvGalibTest${num}  ${CXX_TEST_PATH}/otbGalibTests${num}   
         --compare-n-ascii ${TOL} 5
                         ${BASELINE_FILES}/utGalibTest${num}_bog1.dat 
                         ${TEMP}/utGalibTest${num}_bog1.dat 
@@ -264,7 +264,7 @@ ADD_TEST( utTvGalibTest${num}  ${CXX_TEST_PATH}/galibTests${num}
 
 
 SET(num 22)
-ADD_TEST( utTvGalibTest${num}  ${CXX_TEST_PATH}/galibTests${num}   
+ADD_TEST( utTvGalibTest${num}  ${CXX_TEST_PATH}/otbGalibTests${num}   
         --compare-n-ascii ${TOL} 4
                         ${BASELINE_FILES}/utGalibTest${num}_sinusoid.dat 
                         ${TEMP}/utGalibTest${num}_sinusoid.dat 
@@ -282,7 +282,7 @@ ADD_TEST( utTvGalibTest${num}  ${CXX_TEST_PATH}/galibTests${num}
         seed 555 )
 
 SET(num 23)
-ADD_TEST( utTvGalibTest${num}  ${CXX_TEST_PATH}/galibTests${num} galibTests${num}  
+ADD_TEST( utTvGalibTest${num}  ${CXX_TEST_PATH}/otbGalibTests${num}   
         --compare-n-ascii ${TOL} 4
                         ${BASELINE_FILES}/utGalibTest${num}_popi.dat 
                         ${TEMP}/utGalibTest${num}_popi.dat 
@@ -300,7 +300,7 @@ ADD_TEST( utTvGalibTest${num}  ${CXX_TEST_PATH}/galibTests${num} galibTests${num
         seed 555 )
 
 SET(num 24)
-ADD_TEST( utTvGalibTest${num}  ${CXX_TEST_PATH}/galibTests${num} galibTests${num}  
+ADD_TEST( utTvGalibTest${num}  ${CXX_TEST_PATH}/otbGalibTests${num} 
         --compare-n-ascii ${TOL} 3
                         ${BASELINE_FILES}/utGalibTest${num}_population.dat 
                         ${TEMP}/utGalibTest${num}_population.dat 
@@ -316,7 +316,7 @@ ADD_TEST( utTvGalibTest${num}  ${CXX_TEST_PATH}/galibTests${num} galibTests${num
         seed 555 )
 
 SET(num 26)
-ADD_TEST( utTvGalibTest${num}  ${CXX_TEST_PATH}/galibTests${num}   
+ADD_TEST( utTvGalibTest${num}  ${CXX_TEST_PATH}/otbGalibTests${num}   
         galibTests${num}
         ${INPUTDATA}/galib-tsp_rect_20.txt 
         seed 555 )
@@ -330,6 +330,47 @@ ADD_TEST( utTvGalibTest${num}  ${CXX_TEST_PATH}/galibTests${num}
 
 #ADD_TEST(utOpenJpegDecoder ${UTILITIES_TESTS}
 #	openJpegDecoder)
+
+
+# -------            lib Kml   ------------------------------
+FOREACH(id_test createkml helloattrs helloenum hellofolder hellogeometry helloregion helloserializer helloworld parsekml      )
+        ADD_TEST( utKml${id_test} ${CXX_TEST_PATH}/otbKmlTests${id_test}   
+        kml${id_test}
+        ${TEMP}/utkml${id_test}.txt
+        )
+ENDFOREACH(id_test)
+
+
+#ADD_TEST( utKmlhellofeatures  ${CXX_TEST_PATH}/otbKmlTestshellofeatures
+#        kmlhellofeatures
+#        ${INPUTDATA}/abstractview.kml
+#        ${TEMP}/utkmlhellofeatures.txt
+#        )
+
+ADD_TEST( utKmlhellohref  ${CXX_TEST_PATH}/otbKmlTestshellohref
+        kmlhellohref
+        ${INPUTDATA}/abstractview.kml
+        ${TEMP}/utkmlhellohref.txt
+        )
+ADD_TEST( utKmlhellokmz  ${CXX_TEST_PATH}/otbKmlTestshellokmz    
+        kmlhellokmz
+        ${INPUTDATA}/multikml-doc.kmz
+        ${TEMP}/utkmlhellokmz.txt
+        )
+
+ADD_TEST( utKmlprettykml  ${CXX_TEST_PATH}/otbKmlTestsprettykml
+        kmlprettykml
+        ${INPUTDATA}/polygons2d.kml
+        ${TEMP}/utkmlprettykml.txt
+        )
+        
+ADD_TEST( utKmlprintgeometry  ${CXX_TEST_PATH}/otbKmlTestsprintgeometry
+        kmlprintgeometry
+        ${INPUTDATA}/polygons2d.kml
+        ${TEMP}/utkmlprintgeometry.txt
+        )
+
+
 
 # -------       Fichiers sources CXX -----------------------------------
 SET(UtilitiesTests_SRCS
@@ -351,6 +392,8 @@ ossimRadarSatSupport.cxx
 
 INCLUDE_DIRECTORIES("${OTBTesting_BINARY_DIR}")
 
+INCLUDE_DIRECTORIES("${CMAKE_CURRENT_SOURCE_DIR}")
+
 ADD_EXECUTABLE(otbUtilitiesTests otbUtilitiesTests.cxx ${UtilitiesTests_SRCS})
 #TARGET_LINK_LIBRARIES(otbUtilitiesTests OTBIO OTBCommon gdal ITKIO ITKAlgorithms ITKStatistics ITKCommon otbossim otbsvm otb6S tinyXML openjpeg)
 TARGET_LINK_LIBRARIES(otbUtilitiesTests OTBIO OTBCommon gdal ITKIO ITKAlgorithms ITKStatistics ITKCommon otbossim otbsvm otb6S tinyXML )
@@ -360,12 +403,30 @@ ENDIF(UNIX)
 
 # -------       CXX and EXECUTABLES files for GALIB Tests -----------------------------------
 FOREACH(loop_var RANGE 1 27 1)
-        ADD_EXECUTABLE(galibTests${loop_var} galibTests${loop_var}.cxx)
+        ADD_EXECUTABLE(otbGalibTests${loop_var} galibTests${loop_var}.cxx)
         IF(UNIX)
-                TARGET_LINK_LIBRARIES (galibTests${loop_var} m)
+                TARGET_LINK_LIBRARIES (otbGalibTests${loop_var} m)
         ENDIF(UNIX)
-        TARGET_LINK_LIBRARIES(galibTests${loop_var} otbgalib OTBIO OTBCommon)
+        TARGET_LINK_LIBRARIES(otbGalibTests${loop_var} otbgalib OTBIO OTBCommon)
 ENDFOREACH(loop_var)
+
+# -------       CXX and EXECUTABLES files for KML Tests -----------------------------------
+# hellofeatures
+FOREACH(filename        createkml helloattrs helloenum hellofolder
+                        hellogeometry hellohref hellokmz helloregion helloserializer
+                        helloworld parsekml prettykml printgeometry
+        )
+        ADD_EXECUTABLE(otbKmlTests${filename} kml${filename}.cc )
+        TARGET_LINK_LIBRARIES(otbKmlTests${filename} otbkml OTBIO OTBCommon)
+        IF( OTB_USE_EXTERNAL_EXPAT )
+                TARGET_LINK_LIBRARIES(otbKmlTests${filename} expat)
+        ELSE( OTB_USE_EXTERNAL_EXPAT  )
+                TARGET_LINK_LIBRARIES(otbKmlTests${filename} otbexpat)
+        ENDIF( OTB_USE_EXTERNAL_EXPAT )
+        IF(UNIX)
+                TARGET_LINK_LIBRARIES (otbKmlTests${filename} m)
+        ENDIF(UNIX)
+ENDFOREACH(filename)
 
 
 # Original 6S main executable in C
@@ -384,3 +445,4 @@ ENDFOREACH(loop_var)
 
 
 ENDIF( NOT OTB_DISABLE_CXX_TESTING )
+
