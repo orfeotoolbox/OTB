@@ -21,12 +21,13 @@
 #endif
 
 #include <fstream>
+#include "otbImage.h"
 #include "otbVectorImage.h"
 #include "otbSOMMap.h"
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
 #include "itkImageRegionIterator.h"
-#include "itkImageToListAdaptor.h"
+#include "itkListSample.h"
 
 //  Software Guide : BeginCommandLineArgs
 //    INPUTS: {ROI_QB_MUL_1.png}, {ROI_QB_MUL_SOM.png}
@@ -72,7 +73,7 @@ int main(int argc, char* argv[] )
   typedef unsigned char                       LabelPixelType;
   const   unsigned int        	         Dimension = 2;
 
-  typedef itk::RGBPixel<InputPixelType> PixelType;
+  typedef itk::VariableLengthVector<InputPixelType> PixelType;
 
 //  Software Guide : BeginLatex
 // 
@@ -91,7 +92,7 @@ int main(int argc, char* argv[] )
 
 // Software Guide : EndCodeSnippet
   
-  typedef otb::Image<PixelType,Dimension> InputImageType;
+  typedef otb::VectorImage<InputPixelType,Dimension> InputImageType;
   typedef otb::ImageFileReader< InputImageType  >  ReaderType;
 
 //  Software Guide : BeginLatex
@@ -111,7 +112,7 @@ int main(int argc, char* argv[] )
 // Software Guide : BeginCodeSnippet
   
   
-  typedef itk::Statistics::ImageToListAdaptor< InputImageType > SampleType;
+  typedef itk::Statistics::ListSample< PixelType> SampleType;
   typedef otb::SOMClassifier<SampleType,SOMMapType,LabelPixelType>
                                                             ClassifierType;
 
@@ -159,7 +160,16 @@ int main(int argc, char* argv[] )
 // Software Guide : BeginCodeSnippet
   
   SampleType::Pointer sample = SampleType::New();    
-  sample->SetImage(reader->GetOutput());
+  
+  itk::ImageRegionIterator<InputImageType> it(reader->GetOutput(),reader->GetOutput()->GetLargestPossibleRegion());
+    
+    it.GoToBegin();
+    
+    while(!it.IsAtEnd())
+      {
+	sample->PushBack(it.Get());
+	++it;
+      }
 
 // Software Guide : EndCodeSnippet
 //

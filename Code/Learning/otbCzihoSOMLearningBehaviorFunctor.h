@@ -68,7 +68,7 @@ namespace Functor {
 			void SetIterationThreshold ( const itk::Size<VDimension> & sizeInit, unsigned int iterMax ) 
 			{
 				double V0 = static_cast<double>( sizeInit[0] );
-				for ( int i = 1; i < VDimension; i++ )
+				for (unsigned int i = 1; i < VDimension; i++ )
 				{
 					if ( V0 < static_cast<double>( sizeInit[i] ) )
 						V0 = static_cast<double>( sizeInit[i] );

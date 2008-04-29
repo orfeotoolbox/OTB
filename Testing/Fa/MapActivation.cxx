@@ -52,14 +52,12 @@
 int main(int argc, char* argv[] )
 {
 
-  if (argc < 14)
+  if (argc < 12)
     {
-      std::cout << "Usage : " << argv[0] << " inputTabImage size radius NumberOfIterations BetaInit BetaEnd MaxWeight  MinWeight som som-zoom actMap actMap-zoom som" << std::endl ;
+      std::cout << "Usage : " << argv[0] << " inputTabImage size radius NumberOfIterations BetaInit BetaEnd MaxWeight  MinWeight som actMap som" << std::endl ;
 
       return EXIT_FAILURE;
     }
-
-  const int nbparam= 9; 
   
   typedef otb::Image<double, 2 > ListImageType;
   
@@ -67,14 +65,13 @@ int main(int argc, char* argv[] )
   TabReaderType::Pointer Tabreader = TabReaderType::New();
   Tabreader->SetFileName(argv[1]);
   Tabreader->Update();
-  ListImageType::Pointer tabreadImage = ListImageType::New();
-  tabreadImage = Tabreader->GetOutput();
+  ListImageType::Pointer tabreadImage = Tabreader->GetOutput();
   
   typedef itk::ImageRegionIterator< ListImageType > IteratorType;
   IteratorType It1( tabreadImage, tabreadImage->GetLargestPossibleRegion() );
-  const int nblines=591; // (const int)(tabreadImage->GetLargestPossibleRegion().GetSize()[1]);
+  const int nblines= (const int)(tabreadImage->GetLargestPossibleRegion().GetSize()[1]);
   
-  const int nbcolonnes=9;//tabreadImage->GetLargestPossibleRegion().GetSize()[0]; 
+  const int nbcolonnes= (const int)tabreadImage->GetLargestPossibleRegion().GetSize()[0]; 
   
   double vectTab[nblines][nbcolonnes];
   std::cout<<"lignes = "<<nblines<<" colonnes = "<<nbcolonnes<<std::endl; 
@@ -83,15 +80,14 @@ int main(int argc, char* argv[] )
       vectTab[It1.GetIndex()[1]][It1.GetIndex()[0]]=It1.Get();
     }
   	
-  typedef itk::Vector< double, nbparam > MeasurementVectorType ;
-  //typedef itk::VariableLengthVector< double > MeasurementVectorType ;
+  typedef itk::VariableLengthVector< double > MeasurementVectorType ;
   typedef itk::Statistics::ListSample< MeasurementVectorType > SampleType ;
   SampleType::Pointer liste = SampleType::New() ;
   
-  MeasurementVectorType tab;
-  
   for(int j=0;j<nblines;j++)
     {
+      MeasurementVectorType tab;
+      tab.SetSize(nbcolonnes);
       for(int i=0;i<nbcolonnes;i++)
 	{
 	  tab[i] = vectTab[j][i];
@@ -131,29 +127,6 @@ int main(int argc, char* argv[] )
   somwriter->SetInput(som->GetOutput());
   somwriter->Update();
   
-  
-  //Just for visualization purposes, we zoom the image.
-  typedef itk::VectorExpandImageFilter< MapType, MapType > ExpandType;
-  typedef itk::VectorNearestNeighborInterpolateImageFunction< MapType, double > InterpolatorType;
-  
-  InterpolatorType::Pointer interpolator = InterpolatorType::New();
-  ExpandType::Pointer expand = ExpandType::New();
-  expand->SetInput(som->GetOutput());
-  expand->SetExpandFactors( 40 );
-  expand->SetInterpolator( interpolator );
-  MeasurementVectorType pix;
-  for(int j=0;j<nbcolonnes;j++)
-    {
-      pix[j]= 255;
-    }
-  
-  
-  expand->SetEdgePaddingValue(pix);
-  somwriter->SetInput(expand->GetOutput());
-  somwriter->SetFileName(argv[10]/*"som-zoom.mhd"*/);
-  somwriter->Update();
-   
-  
   typedef unsigned char OutputPixelType;
   
   typedef otb::Image<OutputPixelType,2> OutputImageType;
@@ -164,31 +137,17 @@ int main(int argc, char* argv[] )
   somAct->SetListSample(liste);
   
   ActivationWriterType::Pointer actWriter = ActivationWriterType::New();
-  actWriter->SetFileName(argv[11]/*"actMap.png"*/);
+  actWriter->SetFileName(argv[10]/*"actMap.png"*/);
   actWriter->SetInput(somAct->GetOutput());
   actWriter->Update();
-  //Just for visualization purposes, we zoom the image.
-  typedef itk::ExpandImageFilter< OutputImageType, OutputImageType > ExpandType2;
-  typedef itk::NearestNeighborInterpolateImageFunction< OutputImageType,double > InterpolatorType2;
-  
-  InterpolatorType2::Pointer interpolator2 = InterpolatorType2::New();
-  ExpandType2::Pointer expand2 = ExpandType2::New();
-  expand2->SetInput(somAct->GetOutput());
-  expand2->SetExpandFactors( 40 );
-  expand2->SetInterpolator( interpolator2 );
-  expand2->SetEdgePaddingValue(255);
-  actWriter->SetInput(expand2->GetOutput());
-  actWriter->SetFileName(argv[12]/*"actMap-zoom.png"*/);
-  actWriter->Update();
-  
-  
+   
   //Classifier :
   
   typedef otb::ImageFileReader<MapType> SOMReaderType;
   typedef otb::SOMClassifier<SampleType,MapType,unsigned char>  ClassifierType;
   
   SOMReaderType::Pointer somreader = SOMReaderType::New();
-  somreader->SetFileName(argv[13]/*"som.mhd"*/);
+  somreader->SetFileName(argv[11]/*"som.mhd"*/);
   somreader->Update();
   
   ClassifierType::Pointer classifier = ClassifierType::New() ;

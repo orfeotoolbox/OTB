@@ -9,6 +9,8 @@
   Copyright (c) Centre National d'Etudes Spatiales. All rights reserved.
   See OTBCopyright.txt for details.
 
+  Copyright (c) Institut Telecom ; Telecom Bretagne. All rights reserved. 
+  See GETCopyright.txt for details.
 
      This software is distributed WITHOUT ANY WARRANTY; without even 
      the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
@@ -50,12 +52,15 @@
 
 #include "itkExceptionObject.h"
 #include "otbImage.h"
-#include "itkRGBPixel.h"
+#include "otbVectorImage.h"
+#include "itkVariableLengthVector.h"
+
 #include "itkVectorExpandImageFilter.h"
 #include "itkVectorNearestNeighborInterpolateImageFunction.h"
 
 #include "itkExpandImageFilter.h"
 #include "itkNearestNeighborInterpolateImageFunction.h"
+#include "otbPerBandVectorImageFilter.h"
 
 //  Software Guide : BeginLatex
 // Since the \doxygen{otb}{SOM} class uses a distance, we will need to
@@ -71,30 +76,22 @@
 // Software Guide : EndCodeSnippet
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
-#include "itkImageToListAdaptor.h"
+#include "itkListSample.h"
 
 int main(int argc, char* argv[])
 {
-  if(argc!=12)
-    {
-    std::cout << "Usage: " << argv[0] << "inputImage outputMap activationMap";
-    std::cout << "sizeX sizeY neighborX neighborY iterations ";
-    std::cout << "beta0 betaEnd initValue" << std::endl;
-    return 1;
-    }
-
-
-    char * inputFileName = argv[1];
-    char * outputFileName = argv[2];
-    char * actMapFileName = argv[3];
-    unsigned int sizeX = atoi(argv[4]);
-    unsigned int sizeY = atoi(argv[5]);
-    unsigned int neighInitX = atoi(argv[6]);
-    unsigned int neighInitY= atoi(argv[7]);
-    unsigned int nbIterations= atoi(argv[8]);
-    double betaInit = atof(argv[9]);
-    double betaEnd= atof(argv[10]);
-    float initValue = atof(argv[11]);
+try {
+    const char * inputFileName = argv[1];
+    const char * outputFileName = argv[2];
+    const char * actMapFileName = argv[3];
+    unsigned int sizeX = atoi( argv[4] );
+    unsigned int sizeY = atoi( argv[5] );
+    unsigned int neighInitX = atoi( argv[6] );
+    unsigned int neighInitY= atoi( argv[7] );
+    unsigned int nbIterations = atoi( argv[8] );
+    double betaInit = atof( argv[9] );
+    double betaEnd= atof( argv[10] );
+    double initValue = atof( argv[11] );
 
 //  Software Guide : BeginLatex
 // 
@@ -107,10 +104,10 @@ int main(int argc, char* argv[])
 
 // Software Guide : BeginCodeSnippet
     
-
     const unsigned int Dimension = 2;
-    typedef unsigned char ComponentType;
-    typedef itk::RGBPixel<ComponentType> PixelType;
+    typedef double PixelType;
+    typedef otb::VectorImage< PixelType, Dimension > ImageType;
+	typedef ImageType::PixelType VectorType;
 
 // Software Guide : EndCodeSnippet    
 //  Software Guide : BeginLatex
@@ -123,7 +120,7 @@ int main(int argc, char* argv[])
 
 // Software Guide : BeginCodeSnippet
     
-    typedef itk::Statistics::EuclideanDistance<PixelType> DistanceType;
+    typedef itk::Statistics::EuclideanDistance< VectorType > DistanceType;
 
 // Software Guide : EndCodeSnippet
 //
@@ -139,8 +136,7 @@ int main(int argc, char* argv[])
 
 // Software Guide : BeginCodeSnippet
     
-    
-    typedef otb::SOMMap<PixelType,DistanceType,Dimension> MapType;
+    typedef otb::SOMMap< VectorType, DistanceType, Dimension > MapType;
 
 // Software Guide : EndCodeSnippet
 //
@@ -155,8 +151,6 @@ int main(int argc, char* argv[])
 
 // Software Guide : BeginCodeSnippet
     
-    
-    typedef otb::Image<PixelType,Dimension> ImageType;
     typedef otb::ImageFileReader<ImageType> ReaderType;
 
 // Software Guide : EndCodeSnippet
@@ -171,37 +165,38 @@ int main(int argc, char* argv[])
 
 // Software Guide : BeginCodeSnippet
     
-    typedef itk::Statistics::ImageToListAdaptor<ImageType> ListAdaptorType;
-
+	typedef itk::Statistics::ListSample< VectorType > SampleListType;
+	
 // Software Guide : EndCodeSnippet
 //
 //  Software Guide : BeginLatex
 // 
 // We can now define the type for the SOM, which is templated over the
-// input sample list and the type of the map to be produced.
+// input sample list and the type of the map to be produced and the two
+// functors that hold the training behavior.
 //
 //  Software Guide : EndLatex 
 
 // Software Guide : BeginCodeSnippet
     
-    typedef otb::SOM<ListAdaptorType,MapType> SOMType;
+	typedef otb::Functor::CzihoSOMLearningBehaviorFunctor 
+				LearningBehaviorFunctorType;
+	typedef otb::Functor::CzihoSOMNeighborhoodBehaviorFunctor 
+				NeighborhoodBehaviorFunctorType;
+    typedef otb::SOM< SampleListType, MapType,
+				LearningBehaviorFunctorType, NeighborhoodBehaviorFunctorType > 
+				SOMType;
 
 // Software Guide : EndCodeSnippet
 //
 //  Software Guide : BeginLatex
 // 
-// Since the map is itself an image, we can write it to disk with an
-// \doxygen{otb}{ImageFileWriter}. 
-//
-//  Software Guide : EndLatex 
-
-// Software Guide : BeginCodeSnippet
-    
-    typedef otb::ImageFileWriter<MapType> WriterType;
-
-// Software Guide : EndCodeSnippet
-//
-//  Software Guide : BeginLatex
+// As an alternative to standart \code{SOMType}, one can decide to use 
+// an \doxygen{otb}{PeriodicSOM}, which behaves like \doxygen{otb}{SOM} but 
+// is to be considered to as a torrus instead of a simple map. Hence, the 
+// neighborhood behavior of the winning neuron does not depend on its location
+// on the map...
+// \doxygen{otb}{PeriodicSOM} is defined in otbPeriodicSOM.h.
 // 
 // We can now start building the pipeline. The first step is to
 // instantiate the reader and pass its output to the adaptor.
@@ -210,13 +205,25 @@ int main(int argc, char* argv[])
 
 // Software Guide : BeginCodeSnippet    
     
-    
     ReaderType::Pointer reader = ReaderType::New();
     reader->SetFileName(inputFileName);
     reader->Update();
 
-    ListAdaptorType::Pointer adaptor = ListAdaptorType::New();
-    adaptor->SetImage(reader->GetOutput());
+	SampleListType::Pointer sampleList = SampleListType::New();
+	sampleList->SetMeasurementVectorSize( reader->GetOutput()->GetVectorLength() );
+
+	itk::ImageRegionIterator< ImageType > imgIter ( reader->GetOutput(),
+											reader->GetOutput()->GetBufferedRegion() );
+	imgIter.GoToBegin();
+
+	itk::ImageRegionIterator< ImageType > imgIterEnd ( reader->GetOutput(),
+											reader->GetOutput()->GetBufferedRegion() );
+	imgIterEnd.GoToEnd();
+
+	do {
+		sampleList->PushBack( imgIter.Get() );
+		++imgIter;
+	} while ( imgIter != imgIterEnd );
 
 // Software Guide : EndCodeSnippet
 //
@@ -229,7 +236,7 @@ int main(int argc, char* argv[])
 // Software Guide : BeginCodeSnippet        
 
     SOMType::Pointer som = SOMType::New();
-    som->SetListSample(adaptor);
+    som->SetListSample( sampleList );
 
 // Software Guide : EndCodeSnippet
 //
@@ -277,11 +284,28 @@ int main(int argc, char* argv[])
 
 // Software Guide : BeginCodeSnippet        
     
-    
     som->SetNumberOfIterations(nbIterations);
     som->SetBetaInit(betaInit);
     som->SetBetaEnd(betaEnd);
-    som->SetMaxWeight(static_cast<ComponentType>(initValue));
+	som->SetMaxWeight(static_cast<PixelType>(initValue));
+
+// Software Guide : EndCodeSnippet
+//
+//  Software Guide : BeginLatex
+// 
+//  Now comes the intialisation of the functors.
+//
+//  Software Guide : EndLatex 
+
+// Software Guide : BeginCodeSnippet        
+
+	LearningBehaviorFunctorType learningFunctor;
+	learningFunctor.SetIterationThreshold( radius, nbIterations );
+	som->SetBetaFunctor( learningFunctor );
+
+	NeighborhoodBehaviorFunctorType neighborFunctor;
+	som->SetNeighborhoodSizeFunctor( neighborFunctor );
+
 // Software Guide : EndCodeSnippet
 //
 //  Software Guide : BeginLatex
@@ -289,38 +313,34 @@ int main(int argc, char* argv[])
 // Finally, we set up the las part of the pipeline where the plug the
 // output of the SOM into the writer. The learning procedure is
 // triggered by calling the \code{Update()} method on the writer.
+// Since the map is itself an image, we can write it to disk with an
+// \doxygen{otb}{ImageFileWriter}. 
 //
 //  Software Guide : EndLatex 
 
-// Software Guide : BeginCodeSnippet        
-
+// Software Guide : BeginCodeSnippet
     
+    typedef otb::ImageFileWriter< ImageType > WriterType;
     WriterType::Pointer writer = WriterType::New();
     writer->SetFileName(outputFileName);
-    writer->SetInput(som->GetOutput());
-    writer->Update();
 
 // Software Guide : EndCodeSnippet          
 
     //Just for visualization purposes, we zoom the image.
-    typedef itk::VectorExpandImageFilter< MapType, MapType > ExpandType;
-    typedef itk::VectorNearestNeighborInterpolateImageFunction< MapType,
+    typedef otb::Image<PixelType,2> SingleImageType;
+    typedef itk::ExpandImageFilter< SingleImageType, SingleImageType > ExpandType;
+    typedef otb::PerBandVectorImageFilter<MapType,MapType,ExpandType> VectorExpandType; 
+    typedef itk::NearestNeighborInterpolateImageFunction< SingleImageType,
                                         double > InterpolatorType;
 
     InterpolatorType::Pointer interpolator = InterpolatorType::New();
-    ExpandType::Pointer expand = ExpandType::New();
+    VectorExpandType::Pointer expand = VectorExpandType::New();
     expand->SetInput(som->GetOutput());
-    expand->SetExpandFactors( 40 );
-    expand->SetInterpolator( interpolator );
-    PixelType pix;
-    pix[0]= 255;
-    pix[1]= 255;
-    pix[2]= 255;
-    expand->SetEdgePaddingValue(pix);
+    expand->GetFilter()->SetExpandFactors( 40 );
+    expand->GetFilter()->SetInterpolator( interpolator );
+    expand->GetFilter()->SetEdgePaddingValue(255);
     writer->SetInput(expand->GetOutput());
     writer->Update();
-
-
 
 //  Software Guide : BeginLatex
 // Figure \ref{fig:SOMMAP} shows the result of the SOM learning. Since
@@ -374,7 +394,7 @@ int main(int argc, char* argv[])
 
 // Software Guide : BeginCodeSnippet        
     
-    typedef otb::SOMActivationBuilder<ListAdaptorType,MapType,
+    typedef otb::SOMActivationBuilder< SampleListType, MapType,
                              OutputImageType> SOMActivationBuilderType;
 
 // Software Guide : EndCodeSnippet
@@ -390,7 +410,7 @@ int main(int argc, char* argv[])
     SOMActivationBuilderType::Pointer somAct
                                    = SOMActivationBuilderType::New();
     somAct->SetInput(som->GetOutput());
-    somAct->SetListSample(adaptor);
+    somAct->SetListSample( sampleList );
 
 // Software Guide : EndCodeSnippet
 //  Software Guide : BeginLatex
@@ -402,10 +422,11 @@ int main(int argc, char* argv[])
 // Software Guide : BeginCodeSnippet
     
     
-    ActivationWriterType::Pointer actWriter = ActivationWriterType::New();
-    actWriter->SetFileName(actMapFileName);
-    actWriter->SetInput(somAct->GetOutput());
-    actWriter->Update();
+	if ( actMapFileName != NULL )
+	{
+		ActivationWriterType::Pointer actWriter = ActivationWriterType::New();
+		actWriter->SetFileName(actMapFileName);
+
 // Software Guide : EndCodeSnippet    
 
 //  Software Guide : BeginLatex
@@ -414,20 +435,24 @@ int main(int argc, char* argv[])
 //
 //  Software Guide : EndLatex     
 
-    //Just for visualization purposes, we zoom the image.
-    typedef itk::ExpandImageFilter< OutputImageType, OutputImageType > ExpandType2;
-    typedef itk::NearestNeighborInterpolateImageFunction< OutputImageType,                                        double > InterpolatorType2;
+		//Just for visualization purposes, we zoom the image.
+		typedef itk::ExpandImageFilter< OutputImageType, OutputImageType > ExpandType2;
+		typedef itk::NearestNeighborInterpolateImageFunction< OutputImageType,double > InterpolatorType2;
 
-    InterpolatorType2::Pointer interpolator2 = InterpolatorType2::New();
-    ExpandType2::Pointer expand2 = ExpandType2::New();
-    expand2->SetInput(somAct->GetOutput());
-    expand2->SetExpandFactors( 20 );
-    expand2->SetInterpolator( interpolator2 );
-    expand2->SetEdgePaddingValue(255);
-    actWriter->SetInput(expand2->GetOutput());
-    actWriter->Update();
+		InterpolatorType2::Pointer interpolator2 = InterpolatorType2::New();
+		ExpandType2::Pointer expand2 = ExpandType2::New();
+		expand2->SetInput(somAct->GetOutput());
+		expand2->SetExpandFactors( 20 );
+		expand2->SetInterpolator( interpolator2 );
+		expand2->SetEdgePaddingValue(255);
 
+		actWriter->SetInput(expand2->GetOutput());
+		actWriter->Update();
 
+	}
 
- return EXIT_SUCCESS;
+	} catch ( ... ) {
+		return EXIT_FAILURE;
+	}
+	return EXIT_SUCCESS;
 }

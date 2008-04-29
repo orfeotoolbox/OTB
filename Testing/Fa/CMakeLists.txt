@@ -170,11 +170,9 @@ ADD_TEST(FA-00060-le_Map_Activation ${CXX_TEST_PATH}/MapActivation
         0.1
         128
         1
-        ${TEMP}/FA-00013-le-som.hd
-        ${TEMP}/FA-00013-le-som-zoom.mhd
+        ${TEMP}/FA-00013-le-som.hdr
         ${TEMP}/FA-00013-le-actMap.png
-        ${TEMP}/FA-00013-le-actMap-zoom.png
-        ${TEMP}/FA-00013-le-som.mhd
+        ${TEMP}/FA-00013-le-som.hdr
 	)
 
 # -------       Fin des FAs traitees -----------------------------------
