@@ -9,10 +9,14 @@ IF(NOT OTB_USE_EXTERNAL_FLTK)
 ENDIF(NOT OTB_USE_EXTERNAL_FLTK)
 
 IF(NOT OTB_USE_EXTERNAL_EXPAT)
-	SUBDIRS( otbexpat )
+	#SUBDIRS( otbexpat )
 ENDIF(NOT OTB_USE_EXTERNAL_EXPAT)
 
-SUBDIRS(BGL otbsvm dxflib InsightJournal otbossim otb6S otbgeotiff tinyXMLlib otbgalib otbkml)
+MESSAGE(${OTB_USE_EXTERNAL_EXPAT})
+
+#ROMAIN
+#SUBDIRS(BGL otbsvm dxflib InsightJournal otbossim otb6S otbgeotiff tinyXMLlib otbgalib otbkml)
+SUBDIRS(BGL otbsvm dxflib InsightJournal otbossim otb6S otbgeotiff tinyXMLlib otbgalib)
 
 IF(BUILD_TESTING)
         SUBDIRS( Dart )

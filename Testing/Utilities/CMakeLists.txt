@@ -410,23 +410,25 @@ FOREACH(loop_var RANGE 1 27 1)
         TARGET_LINK_LIBRARIES(otbGalibTests${loop_var} otbgalib OTBIO OTBCommon)
 ENDFOREACH(loop_var)
 
+
+# ROMAIN
 # -------       CXX and EXECUTABLES files for KML Tests -----------------------------------
 # hellofeatures
-FOREACH(filename        createkml helloattrs helloenum hellofolder
-                        hellogeometry hellohref hellokmz helloregion helloserializer
-                        helloworld parsekml prettykml printgeometry
-        )
-        ADD_EXECUTABLE(otbKmlTests${filename} kml${filename}.cc )
-        TARGET_LINK_LIBRARIES(otbKmlTests${filename} otbkml OTBIO OTBCommon)
-        IF( OTB_USE_EXTERNAL_EXPAT )
-                TARGET_LINK_LIBRARIES(otbKmlTests${filename} expat)
-        ELSE( OTB_USE_EXTERNAL_EXPAT  )
-                TARGET_LINK_LIBRARIES(otbKmlTests${filename} otbexpat)
-        ENDIF( OTB_USE_EXTERNAL_EXPAT )
-        IF(UNIX)
-                TARGET_LINK_LIBRARIES (otbKmlTests${filename} m)
-        ENDIF(UNIX)
-ENDFOREACH(filename)
+#FOREACH(filename        createkml helloattrs helloenum hellofolder
+#                        hellogeometry hellohref hellokmz helloregion helloserializer
+#                        helloworld parsekml prettykml printgeometry
+#        )
+#        ADD_EXECUTABLE(otbKmlTests${filename} kml${filename}.cc )
+#        TARGET_LINK_LIBRARIES(otbKmlTests${filename} otbkml OTBIO OTBCommon)
+#        IF( OTB_USE_EXTERNAL_EXPAT )
+#                TARGET_LINK_LIBRARIES(otbKmlTests${filename} expat)
+#        ELSE( OTB_USE_EXTERNAL_EXPAT  )
+#                TARGET_LINK_LIBRARIES(otbKmlTests${filename} otbexpat)
+#        ENDIF( OTB_USE_EXTERNAL_EXPAT )
+#        IF(UNIX)
+#                TARGET_LINK_LIBRARIES (otbKmlTests${filename} m)
+#        ENDIF(UNIX)
+#ENDFOREACH(filename)
 
 
 # Original 6S main executable in C
