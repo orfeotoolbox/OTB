@@ -46,31 +46,31 @@ Get next packet in layer-resolution-component-precinct order.
 @param pi packet iterator to modify
 @return returns false if pi pointed to the last packet or else returns true 
 */
-static bool pi_next_lrcp(opj_pi_iterator_t * pi);
+static OPJ_BOOL pi_next_lrcp(opj_pi_iterator_t * pi);
 /**
 Get next packet in resolution-layer-component-precinct order.
 @param pi packet iterator to modify
 @return returns false if pi pointed to the last packet or else returns true 
 */
-static bool pi_next_rlcp(opj_pi_iterator_t * pi);
+static OPJ_BOOL pi_next_rlcp(opj_pi_iterator_t * pi);
 /**
 Get next packet in resolution-precinct-component-layer order.
 @param pi packet iterator to modify
 @return returns false if pi pointed to the last packet or else returns true 
 */
-static bool pi_next_rpcl(opj_pi_iterator_t * pi);
+static OPJ_BOOL pi_next_rpcl(opj_pi_iterator_t * pi);
 /**
 Get next packet in precinct-component-resolution-layer order.
 @param pi packet iterator to modify
 @return returns false if pi pointed to the last packet or else returns true 
 */
-static bool pi_next_pcrl(opj_pi_iterator_t * pi);
+static OPJ_BOOL pi_next_pcrl(opj_pi_iterator_t * pi);
 /**
 Get next packet in component-precinct-resolution-layer order.
 @param pi packet iterator to modify
 @return returns false if pi pointed to the last packet or else returns true 
 */
-static bool pi_next_cprl(opj_pi_iterator_t * pi);
+static OPJ_BOOL pi_next_cprl(opj_pi_iterator_t * pi);
 
 /**
  * Updates the coding parameters if the encoding is used with Progression order changes and final (or cinema parameters are used).
@@ -215,7 +215,7 @@ void pi_update_decode_poc (opj_pi_iterator_t * p_pi,opj_tcp_t * p_tcp,OPJ_UINT32
 ==========================================================
 */
 
-static bool pi_next_lrcp(opj_pi_iterator_t * pi) {
+static OPJ_BOOL pi_next_lrcp(opj_pi_iterator_t * pi) {
 	opj_pi_comp_t *comp = 00;
 	opj_pi_resolution_t *res = 00;
 	OPJ_UINT32 index = 0;
@@ -255,7 +255,7 @@ LABEL_SKIP:;
 	return false;
 }
 
-static bool pi_next_rlcp(opj_pi_iterator_t * pi) {
+static OPJ_BOOL pi_next_rlcp(opj_pi_iterator_t * pi) {
 	opj_pi_comp_t *comp = 00;
 	opj_pi_resolution_t *res = 00;
 	OPJ_UINT32 index = 0;
@@ -294,7 +294,7 @@ LABEL_SKIP:;
 	return false;
 }
 
-static bool pi_next_rpcl(opj_pi_iterator_t * pi) {
+static OPJ_BOOL pi_next_rpcl(opj_pi_iterator_t * pi) {
 	opj_pi_comp_t *comp = 00;
 	opj_pi_resolution_t *res = 00;
 	OPJ_UINT32 index = 0;
@@ -377,7 +377,7 @@ LABEL_SKIP:;
 	return false;
 }
 
-static bool pi_next_pcrl(opj_pi_iterator_t * pi) {
+static OPJ_BOOL pi_next_pcrl(opj_pi_iterator_t * pi) {
 	opj_pi_comp_t *comp = 00;
 	opj_pi_resolution_t *res = 00;
 	OPJ_UINT32 index = 0;
@@ -459,7 +459,7 @@ LABEL_SKIP:;
 	return false;
 }
 
-static bool pi_next_cprl(opj_pi_iterator_t * pi) {
+static OPJ_BOOL pi_next_cprl(opj_pi_iterator_t * pi) {
 	opj_pi_comp_t *comp = 00;
 	opj_pi_resolution_t *res = 00;
 	OPJ_UINT32 index = 0;
@@ -1636,7 +1636,7 @@ void pi_destroy(
 	}
 }
 
-bool pi_next(opj_pi_iterator_t * pi) {
+OPJ_BOOL pi_next(opj_pi_iterator_t * pi) {
 	switch (pi->poc.prg) {
 		case LRCP:
 			return pi_next_lrcp(pi);

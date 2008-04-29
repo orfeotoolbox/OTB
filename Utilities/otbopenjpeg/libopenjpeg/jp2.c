@@ -58,7 +58,7 @@
  *
  * @return true if writting was successful.
 */
-bool jp2_write_jp2h(
+OPJ_BOOL jp2_write_jp2h(
 						opj_jp2_t *jp2,
 						struct opj_stream_private *cio,
 						struct opj_event_mgr * p_manager
@@ -73,7 +73,7 @@ bool jp2_write_jp2h(
  *
  * @return true if writting was successful.
 */
-bool jp2_skip_jp2c(
+OPJ_BOOL jp2_skip_jp2c(
 						opj_jp2_t *jp2,
 						struct opj_stream_private *cio,
 						struct opj_event_mgr * p_manager
@@ -89,7 +89,7 @@ bool jp2_skip_jp2c(
  *
  * @return true if the JP2 Header box was successfully reconized.
 */
-bool jp2_read_jp2h(
+OPJ_BOOL jp2_read_jp2h(
 						opj_jp2_t *jp2,	
 						unsigned char * p_header_data, 
 						unsigned int p_header_size,
@@ -105,7 +105,7 @@ bool jp2_read_jp2h(
  *
  * @return true if writting was successful.
 */
-static bool jp2_write_jp2c(
+static OPJ_BOOL jp2_write_jp2c(
 				   opj_jp2_t *jp2,
 				   struct opj_stream_private *cio,
 				   struct opj_event_mgr * p_manager
@@ -121,7 +121,7 @@ static bool jp2_write_jp2c(
  * 
  * @return	true if the box is reconized, false otherwise
 */
-static bool jp2_read_boxhdr(
+static OPJ_BOOL jp2_read_boxhdr(
 								opj_jp2_box_t *box,
 								OPJ_UINT32 * p_number_bytes_read, 
 								struct opj_stream_private *cio, 
@@ -138,7 +138,7 @@ static bool jp2_read_boxhdr(
  * 
  * @return	true if the box is reconized, false otherwise
 */
-static bool jp2_read_boxhdr_char(
+static OPJ_BOOL jp2_read_boxhdr_char(
 								opj_jp2_box_t *box,
 								OPJ_BYTE * p_data, 
 								OPJ_UINT32 * p_number_bytes_read, 
@@ -156,7 +156,7 @@ static bool jp2_read_boxhdr_char(
  * 
  * @return true if the file signature box is valid.
  */
-static bool jp2_read_jp(
+static OPJ_BOOL jp2_read_jp(
 					opj_jp2_t *jp2,	
 					unsigned char * p_header_data, 
 					unsigned int p_header_size,
@@ -172,7 +172,7 @@ static bool jp2_read_jp(
  * 
  * @return true if writting was successful.
  */
-static bool jp2_write_jp(
+static OPJ_BOOL jp2_write_jp(
 							opj_jp2_t *jp2,
 							struct opj_stream_private *cio,
 							struct opj_event_mgr * p_manager
@@ -187,7 +187,7 @@ static bool jp2_write_jp(
  * 
  * @return	true if writting was successful.
  */
-static bool jp2_write_ftyp(
+static OPJ_BOOL jp2_write_ftyp(
 							opj_jp2_t *jp2,
 							struct opj_stream_private *cio,
 							struct opj_event_mgr * p_manager
@@ -203,7 +203,7 @@ static bool jp2_write_ftyp(
  * 
  * @return true if the FTYP box is valid.
  */
-static bool jp2_read_ftyp(
+static OPJ_BOOL jp2_read_ftyp(
 							opj_jp2_t *jp2,	
 							unsigned char * p_header_data, 
 							unsigned int p_header_size,
@@ -220,7 +220,7 @@ static bool jp2_read_ftyp(
  * 
  * @return	true if the image header is valid, fale else.
  */
-static bool jp2_read_ihdr(
+static OPJ_BOOL jp2_read_ihdr(
 							opj_jp2_t *jp2, 
 							unsigned char * p_image_header_data, 
 							unsigned int p_image_header_size, 
@@ -250,7 +250,7 @@ static unsigned char * jp2_write_ihdr(
  * 
  * @return	true if the bpc header is valid, fale else.
  */
-static bool jp2_read_bpcc(
+static OPJ_BOOL jp2_read_bpcc(
 							opj_jp2_t *jp2,
 							unsigned char * p_bpc_header_data, 
 							unsigned int p_bpc_header_size, 
@@ -281,7 +281,7 @@ static unsigned char * jp2_write_bpcc(
  * 
  * @return	true if the bpc header is valid, fale else.
 */
-static bool jp2_read_colr(
+static OPJ_BOOL jp2_read_colr(
 							opj_jp2_t *jp2,
 							unsigned char * p_colr_header_data, 
 							unsigned int p_colr_header_size, 
@@ -311,7 +311,7 @@ static unsigned char *jp2_write_colr(
  *
  * @return true if the box is valid.
  */
-bool jp2_read_header_procedure(
+OPJ_BOOL jp2_read_header_procedure(
 								opj_jp2_t *jp2,
 								struct opj_stream_private *cio,
 								struct opj_event_mgr * p_manager
@@ -326,7 +326,7 @@ bool jp2_read_header_procedure(
  * 
  * @return	true				if all the procedures were successfully executed.
  */
-static bool jp2_exec (
+static OPJ_BOOL jp2_exec (
 					opj_jp2_t * jp2,
 					struct opj_procedure_list * p_procedure_list,
 					struct opj_stream_private *cio,
@@ -361,7 +361,7 @@ static void jp2_setup_header_writting (opj_jp2_t *jp2);
  *
  * @return true if the parameters are correct.
  */
-bool jp2_default_validation (
+OPJ_BOOL jp2_default_validation (
 									opj_jp2_t * jp2,
 									struct opj_stream_private *cio,
 									struct opj_event_mgr * p_manager
@@ -488,7 +488,7 @@ static const opj_jp2_header_handler_t * jp2_img_find_handler (
  *
  * @return true if the box is valid.
  */
-bool jp2_read_header_procedure(
+OPJ_BOOL jp2_read_header_procedure(
 					 opj_jp2_t *jp2,
 					 opj_stream_private_t *cio,
 					 opj_event_mgr_t * p_manager) 
@@ -589,7 +589,7 @@ bool jp2_read_header_procedure(
  * 
  * @return	true if the box is reconized, false otherwise
 */
-bool jp2_read_boxhdr(opj_jp2_box_t *box, OPJ_UINT32 * p_number_bytes_read,opj_stream_private_t *cio, opj_event_mgr_t * p_manager) 
+OPJ_BOOL jp2_read_boxhdr(opj_jp2_box_t *box, OPJ_UINT32 * p_number_bytes_read,opj_stream_private_t *cio, opj_event_mgr_t * p_manager) 
 {
 	/* read header from file */
 	unsigned char l_data_header [8];
@@ -649,7 +649,7 @@ bool jp2_read_boxhdr(opj_jp2_box_t *box, OPJ_UINT32 * p_number_bytes_read,opj_st
  * 
  * @return	true if the box is reconized, false otherwise
 */
-static bool jp2_read_boxhdr_char(
+static OPJ_BOOL jp2_read_boxhdr_char(
 								opj_jp2_box_t *box,
 								OPJ_BYTE * p_data,
 								OPJ_UINT32 * p_number_bytes_read, 
@@ -728,7 +728,7 @@ static bool jp2_read_boxhdr_char(
  * 
  * @return true if the file signature box is valid.
  */
-bool jp2_read_jp(
+OPJ_BOOL jp2_read_jp(
 					opj_jp2_t *jp2,	
 					unsigned char * p_header_data, 
 					unsigned int p_header_size,
@@ -780,7 +780,7 @@ bool jp2_read_jp(
  * 
  * @return true if the FTYP box is valid.
  */
-bool jp2_read_ftyp(
+OPJ_BOOL jp2_read_ftyp(
 							opj_jp2_t *jp2,	
 							unsigned char * p_header_data, 
 							unsigned int p_header_size,
@@ -861,7 +861,7 @@ bool jp2_read_ftyp(
  * 
  * @return true if writting was successful.
  */
-bool jp2_write_jp (
+OPJ_BOOL jp2_write_jp (
 					opj_jp2_t *jp2,
 					opj_stream_private_t *cio,
 					opj_event_mgr_t * p_manager
@@ -900,7 +900,7 @@ bool jp2_write_jp (
  * 
  * @return	true if writting was successful.
  */
-bool jp2_write_ftyp(
+OPJ_BOOL jp2_write_ftyp(
 						opj_jp2_t *jp2,
 						opj_stream_private_t *cio,
 						opj_event_mgr_t * p_manager
@@ -909,7 +909,7 @@ bool jp2_write_ftyp(
 	unsigned int i;
 	unsigned int l_ftyp_size = 16 + 4 * jp2->numcl;
 	unsigned char * l_ftyp_data, * l_current_data_ptr;
-	bool l_result;
+	OPJ_BOOL l_result;
 
 	// preconditions
 	assert(cio != 00);
@@ -965,7 +965,7 @@ bool jp2_write_ftyp(
  *
  * @return true if writting was successful.
 */
-bool jp2_write_jp2h(
+OPJ_BOOL jp2_write_jp2h(
 						opj_jp2_t *jp2,
 						opj_stream_private_t *cio,
 						opj_event_mgr_t * p_manager
@@ -977,7 +977,7 @@ bool jp2_write_jp2h(
 	int i, l_nb_pass;
 	/* size of data for super box*/
 	int l_jp2h_size = 8;
-	bool l_result = true;
+	OPJ_BOOL l_result = true;
 
 	/* to store the data of the super box */
 	unsigned char l_jp2h_data [8];
@@ -1094,7 +1094,7 @@ bool jp2_write_jp2h(
  *
  * @return true if the JP2 Header box was successfully reconized.
 */
-bool jp2_read_jp2h(
+OPJ_BOOL jp2_read_jp2h(
 						opj_jp2_t *jp2,	
 						unsigned char * p_header_data, 
 						unsigned int p_header_size,
@@ -1171,7 +1171,7 @@ bool jp2_read_jp2h(
  * 
  * @return	true if the image header is valid, fale else.
  */
-bool jp2_read_ihdr(
+OPJ_BOOL jp2_read_ihdr(
 							opj_jp2_t *jp2, 
 							unsigned char * p_image_header_data, 
 							unsigned int p_image_header_size, 
@@ -1327,7 +1327,7 @@ unsigned char * jp2_write_bpcc(
  * 
  * @return	true if the bpc header is valid, fale else.
  */
-bool jp2_read_bpcc(
+OPJ_BOOL jp2_read_bpcc(
 							opj_jp2_t *jp2,
 							unsigned char * p_bpc_header_data, 
 							unsigned int p_bpc_header_size, 
@@ -1438,7 +1438,7 @@ unsigned char *jp2_write_colr(
  * 
  * @return	true if the bpc header is valid, fale else.
 */
-bool jp2_read_colr(
+OPJ_BOOL jp2_read_colr(
 							opj_jp2_t * jp2,
 							unsigned char * p_colr_header_data, 
 							unsigned int p_colr_header_size, 
@@ -1494,7 +1494,7 @@ bool jp2_read_colr(
  *
  * @return true if writting was successful.
 */
-bool jp2_write_jp2c(
+OPJ_BOOL jp2_write_jp2c(
 				   opj_jp2_t *jp2,
 				   opj_stream_private_t *cio,
 				   opj_event_mgr_t * p_manager
@@ -1585,7 +1585,7 @@ void jp2_destroy(opj_jp2_t *jp2)
 /* JP2 encoder interface                                             */
 /* ----------------------------------------------------------------------- */
 
-opj_jp2_t* jp2_create(bool p_is_decoder) 
+opj_jp2_t* jp2_create(OPJ_BOOL p_is_decoder) 
 {
 	opj_jp2_t *jp2 = (opj_jp2_t*)opj_malloc(sizeof(opj_jp2_t));
 	if
@@ -1639,15 +1639,15 @@ opj_jp2_t* jp2_create(bool p_is_decoder)
  * 
  * @return	true				if all the procedures were successfully executed.
  */
-bool jp2_exec (
+OPJ_BOOL jp2_exec (
 					opj_jp2_t * jp2,
 					opj_procedure_list_t * p_procedure_list,
 					opj_stream_private_t *cio,
 					opj_event_mgr_t * p_manager
 				  )
 {
-	bool (** l_procedure) (opj_jp2_t * jp2,opj_stream_private_t *,opj_event_mgr_t *) = 00;
-	bool l_result = true;
+	OPJ_BOOL (** l_procedure) (opj_jp2_t * jp2,opj_stream_private_t *,opj_event_mgr_t *) = 00;
+	OPJ_BOOL l_result = true;
 	unsigned int l_nb_proc, i;
 
 	// preconditions
@@ -1657,7 +1657,7 @@ bool jp2_exec (
 	assert(p_manager != 00);
 
 	l_nb_proc = opj_procedure_list_get_nb_procedures(p_procedure_list);
-	l_procedure = (bool (**) (opj_jp2_t * jp2,opj_stream_private_t *,opj_event_mgr_t *)) opj_procedure_list_get_first_procedure(p_procedure_list);
+	l_procedure = (OPJ_BOOL (**) (opj_jp2_t * jp2,opj_stream_private_t *,opj_event_mgr_t *)) opj_procedure_list_get_first_procedure(p_procedure_list);
 	for
 		(i=0;i<l_nb_proc;++i)
 	{
@@ -1678,7 +1678,7 @@ bool jp2_exec (
  *
  * @return true if the codec is valid.
  */
-bool jp2_start_compress(opj_jp2_t *jp2,  struct opj_stream_private *cio,opj_image_t * p_image, struct opj_event_mgr * p_manager)
+OPJ_BOOL jp2_start_compress(opj_jp2_t *jp2,  struct opj_stream_private *cio,opj_image_t * p_image, struct opj_event_mgr * p_manager)
 {
 	// preconditions
 	assert(jp2 != 00);
@@ -1716,7 +1716,7 @@ bool jp2_start_compress(opj_jp2_t *jp2,  struct opj_stream_private *cio,opj_imag
  *
  * @return true if the box is valid.
  */
-bool jp2_read_header(
+OPJ_BOOL jp2_read_header(
 								opj_jp2_t *jp2,
 								opj_image_t ** p_image,
 								OPJ_INT32 * p_tile_x0,
@@ -1770,7 +1770,7 @@ bool jp2_read_header(
  * Ends the decompression procedures and possibiliy add data to be read after the 
  * codestream.
  */
-bool jp2_end_decompress(opj_jp2_t *jp2, opj_stream_private_t *cio, opj_event_mgr_t * p_manager)
+OPJ_BOOL jp2_end_decompress(opj_jp2_t *jp2, opj_stream_private_t *cio, opj_event_mgr_t * p_manager)
 {
 	// preconditions
 	assert(jp2 != 00);
@@ -1794,7 +1794,7 @@ bool jp2_end_decompress(opj_jp2_t *jp2, opj_stream_private_t *cio, opj_event_mgr
  * Ends the compression procedures and possibiliy add data to be read after the 
  * codestream.
  */
-bool jp2_end_compress(opj_jp2_t *jp2, opj_stream_private_t *cio, opj_event_mgr_t * p_manager)
+OPJ_BOOL jp2_end_compress(opj_jp2_t *jp2, opj_stream_private_t *cio, opj_event_mgr_t * p_manager)
 {
 	// preconditions
 	assert(jp2 != 00);
@@ -1821,7 +1821,7 @@ Encode an image into a JPEG-2000 file stream
 @param cstr_info Codestream information structure if required, NULL otherwise
 @return Returns true if successful, returns false otherwise
 */
-bool jp2_encode(opj_jp2_t *jp2, struct opj_stream_private *cio, struct opj_event_mgr * p_manager)
+OPJ_BOOL jp2_encode(opj_jp2_t *jp2, struct opj_stream_private *cio, struct opj_event_mgr * p_manager)
 {
 	return j2k_encode(jp2->j2k,cio,p_manager);
 }
@@ -1831,7 +1831,7 @@ bool jp2_encode(opj_jp2_t *jp2, struct opj_stream_private *cio, struct opj_event
  * @param	p_stream			the stream to write data to.
  * @param	p_manager	the user event manager.
  */
-bool jp2_write_tile (
+OPJ_BOOL jp2_write_tile (
 					 opj_jp2_t *p_jp2,
 					 OPJ_UINT32 p_tile_index,
 					 OPJ_BYTE * p_data,
@@ -1849,7 +1849,7 @@ bool jp2_write_tile (
  * @param	p_stream			the stream to write data to.
  * @param	p_manager	the user event manager.
  */
-bool jp2_decode_tile (
+OPJ_BOOL jp2_decode_tile (
 					opj_jp2_t * p_jp2,
 					OPJ_UINT32 p_tile_index,
 					OPJ_BYTE * p_data,
@@ -1866,7 +1866,7 @@ bool jp2_decode_tile (
  * @param	p_stream			the stream to write data to.
  * @param	p_manager	the user event manager.
  */
-bool jp2_read_tile_header (
+OPJ_BOOL jp2_read_tile_header (
 					 opj_jp2_t * p_jp2,
 					 OPJ_UINT32 * p_tile_index,
 					 OPJ_UINT32 * p_data_size,
@@ -1875,7 +1875,7 @@ bool jp2_read_tile_header (
 					 OPJ_INT32 * p_tile_x1,
 					 OPJ_INT32 * p_tile_y1,
 					 OPJ_UINT32 * p_nb_comps,
-					 bool * p_go_on,
+					 OPJ_BOOL * p_go_on,
 					 opj_stream_private_t *p_stream,
 					 opj_event_mgr_t * p_manager
 					)
@@ -1941,13 +1941,13 @@ void jp2_setup_end_header_reading (opj_jp2_t *jp2)
  *
  * @return true if the parameters are correct.
  */
-bool jp2_default_validation (
+OPJ_BOOL jp2_default_validation (
 								opj_jp2_t * jp2,
 								opj_stream_private_t *cio,
 								opj_event_mgr_t * p_manager
 							)
 {
-	bool l_is_valid = true;
+	OPJ_BOOL l_is_valid = true;
 	unsigned int i;
 	
 	// preconditions
@@ -2046,7 +2046,7 @@ void jp2_setup_header_writting (opj_jp2_t *jp2)
  *
  * @return true if writting was successful.
 */
-bool jp2_skip_jp2c(
+OPJ_BOOL jp2_skip_jp2c(
 						opj_jp2_t *jp2,
 						struct opj_stream_private *cio,
 						struct opj_event_mgr * p_manager
@@ -2187,7 +2187,7 @@ void jp2_setup_decoder(opj_jp2_t *jp2, opj_dparameters_t *parameters)
  *
  * @return	true			if the area could be set.
  */				
-bool jp2_set_decode_area(
+OPJ_BOOL jp2_set_decode_area(
 			opj_jp2_t *p_jp2,
 			OPJ_INT32 p_start_x,
 			OPJ_INT32 p_start_y,

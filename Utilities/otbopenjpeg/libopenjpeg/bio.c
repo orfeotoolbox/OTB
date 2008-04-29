@@ -56,13 +56,13 @@ Write a byte
 @param bio BIO handle
 @return Returns 0 if successful, returns 1 otherwise
 */
-static bool bio_byteout(opj_bio_t *bio);
+static OPJ_BOOL bio_byteout(opj_bio_t *bio);
 /**
 Read a byte
 @param bio BIO handle
 @return Returns 0 if successful, returns 1 otherwise
 */
-static bool bio_bytein(opj_bio_t *bio);
+static OPJ_BOOL bio_bytein(opj_bio_t *bio);
 
 /*@}*/
 
@@ -74,7 +74,7 @@ static bool bio_bytein(opj_bio_t *bio);
 ==========================================================
 */
 
-static bool bio_byteout(opj_bio_t *bio) {
+static OPJ_BOOL bio_byteout(opj_bio_t *bio) {
 	bio->buf = (bio->buf << 8) & 0xffff;
 	bio->ct = bio->buf == 0xff00 ? 7 : 8;
 	if (bio->bp >= bio->end) {
@@ -84,7 +84,7 @@ static bool bio_byteout(opj_bio_t *bio) {
 	return false;
 }
 
-static bool bio_bytein(opj_bio_t *bio) {
+static OPJ_BOOL bio_bytein(opj_bio_t *bio) {
 	bio->buf = (bio->buf << 8) & 0xffff;
 	bio->ct = bio->buf == 0xff00 ? 7 : 8;
 	if (bio->bp >= bio->end) {
@@ -163,7 +163,7 @@ OPJ_UINT32 bio_read(opj_bio_t *bio, OPJ_UINT32 n) {
 	return v;
 }
 
-bool bio_flush(opj_bio_t *bio) {
+OPJ_BOOL bio_flush(opj_bio_t *bio) {
 	bio->ct = 0;
 	if (bio_byteout(bio)) {
 		return true;
@@ -177,7 +177,7 @@ bool bio_flush(opj_bio_t *bio) {
 	return false;
 }
 
-bool bio_inalign(opj_bio_t *bio) {
+OPJ_BOOL bio_inalign(opj_bio_t *bio) {
 	bio->ct = 0;
 	if ((bio->buf & 0xff) == 0xff) {
 		if (bio_bytein(bio)) {

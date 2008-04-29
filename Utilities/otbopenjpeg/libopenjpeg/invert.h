@@ -35,6 +35,6 @@
  * @param pDestMatrix	data to store the inverted matrix. 
  * @return 1 if the inversion is successful, 0 if the matrix is singular.
  */
-bool opj_matrix_inversion_f(OPJ_FLOAT32 * pSrcMatrix,OPJ_FLOAT32 * pDestMatrix, OPJ_UINT32 n);
+OPJ_BOOL opj_matrix_inversion_f(OPJ_FLOAT32 * pSrcMatrix,OPJ_FLOAT32 * pDestMatrix, OPJ_UINT32 n);
 #endif
 

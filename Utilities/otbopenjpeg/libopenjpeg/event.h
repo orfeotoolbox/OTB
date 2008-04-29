@@ -77,7 +77,7 @@ typedef struct opj_event_mgr
  * @param fmt Format-control string (plus optionnal arguments)
  * @return Returns true if successful, returns false otherwise
 */
-bool opj_event_msg(struct opj_event_mgr * p_event_mgr, OPJ_INT32 event_type, const OPJ_CHAR *fmt, ...);
+OPJ_BOOL opj_event_msg(struct opj_event_mgr * p_event_mgr, OPJ_INT32 event_type, const OPJ_CHAR *fmt, ...);
 /* ----------------------------------------------------------------------- */
 /*@}*/
 

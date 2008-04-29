@@ -69,7 +69,7 @@ Encode a packet of a tile to a destination buffer
 @param tileno Number of the tile encoded
 @return 
 */
-static bool t2_encode_packet(
+static OPJ_BOOL t2_encode_packet(
 							 OPJ_UINT32 tileno, 
 							 opj_tcd_tile_t *tile, 
 							 opj_tcp_t *tcp, 
@@ -83,7 +83,7 @@ static bool t2_encode_packet(
 @param cblksty
 @param first
 */
-static bool t2_init_seg(opj_tcd_cblk_dec_t* cblk, OPJ_UINT32 index, OPJ_UINT32 cblksty, OPJ_UINT32 first);
+static OPJ_BOOL t2_init_seg(opj_tcd_cblk_dec_t* cblk, OPJ_UINT32 index, OPJ_UINT32 cblksty, OPJ_UINT32 first);
 /**
 Decode a packet of a tile from a source buffer
 @param t2 T2 handle
@@ -94,7 +94,7 @@ Decode a packet of a tile from a source buffer
 @param pi Packet identity
 @return 
 */
-static bool t2_decode_packet(
+static OPJ_BOOL t2_decode_packet(
 							 opj_t2_t* p_t2,
 							 opj_tcd_tile_t *p_tile,
                              opj_tcp_t *p_tcp, 
@@ -158,7 +158,7 @@ static OPJ_UINT32 t2_getnumpasses(opj_bio_t *bio) {
 	return (37 + bio_read(bio, 7));
 }
 
-static bool t2_encode_packet(
+static OPJ_BOOL t2_encode_packet(
 							 OPJ_UINT32 tileno, 
 							 opj_tcd_tile_t * tile, 
 							 opj_tcp_t * tcp, 
@@ -387,7 +387,7 @@ static bool t2_encode_packet(
 	return true;
 }
 
-static bool t2_init_seg(opj_tcd_cblk_dec_t* cblk, OPJ_UINT32 index, OPJ_UINT32 cblksty, OPJ_UINT32 first) 
+static OPJ_BOOL t2_init_seg(opj_tcd_cblk_dec_t* cblk, OPJ_UINT32 index, OPJ_UINT32 cblksty, OPJ_UINT32 first) 
 {
 	opj_tcd_seg_t* seg = 00;
 	OPJ_UINT32 l_nb_segs = index + 1;
@@ -421,12 +421,12 @@ static bool t2_init_seg(opj_tcd_cblk_dec_t* cblk, OPJ_UINT32 index, OPJ_UINT32 c
 	return true;
 }
 
-static bool t2_read_packet_header(
+static OPJ_BOOL t2_read_packet_header(
 							 opj_t2_t* p_t2,
 							 opj_tcd_tile_t *p_tile,
                              opj_tcp_t *p_tcp, 
 							 opj_pi_iterator_t *p_pi,
-							 bool * p_is_data_present,
+							 OPJ_BOOL * p_is_data_present,
 							 OPJ_BYTE *p_src_data, 
 							 OPJ_UINT32 * p_data_read,
 							 OPJ_UINT32 p_max_length, 
@@ -703,7 +703,7 @@ static bool t2_read_packet_header(
 	return true;
 }
 
-static bool t2_read_packet_data(
+static OPJ_BOOL t2_read_packet_data(
 							 opj_t2_t* p_t2,
 							 opj_tcd_tile_t *p_tile,
 							 opj_pi_iterator_t *p_pi,
@@ -822,7 +822,7 @@ static bool t2_read_packet_data(
 }
 
 
-static bool t2_skip_packet_data(
+static OPJ_BOOL t2_skip_packet_data(
 							 opj_t2_t* p_t2,
 							 opj_tcd_tile_t *p_tile,
 							 opj_pi_iterator_t *p_pi,
@@ -925,7 +925,7 @@ static bool t2_skip_packet_data(
 	return true;
 }
 
-static bool t2_decode_packet(
+static OPJ_BOOL t2_decode_packet(
 							 opj_t2_t* p_t2,
 							 opj_tcd_tile_t *p_tile,
                              opj_tcp_t *p_tcp, 
@@ -935,7 +935,7 @@ static bool t2_decode_packet(
 							 OPJ_UINT32 p_max_length,  
 							 opj_packet_info_t *p_pack_info)
 {
-	bool l_read_data;
+	OPJ_BOOL l_read_data;
 	OPJ_UINT32 l_nb_bytes_read = 0;
 	OPJ_UINT32 l_nb_total_bytes_read = 0;
 
@@ -965,7 +965,7 @@ static bool t2_decode_packet(
 	return true;
 }
 
-static bool t2_skip_packet(
+static OPJ_BOOL t2_skip_packet(
 							 opj_t2_t* p_t2,
 							 opj_tcd_tile_t *p_tile,
                              opj_tcp_t *p_tcp, 
@@ -975,7 +975,7 @@ static bool t2_skip_packet(
 							 OPJ_UINT32 p_max_length,  
 							 opj_packet_info_t *p_pack_info)
 {
-	bool l_read_data;
+	OPJ_BOOL l_read_data;
 	OPJ_UINT32 l_nb_bytes_read = 0;
 	OPJ_UINT32 l_nb_total_bytes_read = 0;
 
@@ -1007,7 +1007,7 @@ static bool t2_skip_packet(
 
 /* ----------------------------------------------------------------------- */
 
-bool t2_encode_packets(
+OPJ_BOOL t2_encode_packets(
 					   opj_t2_t* p_t2,
 					   OPJ_UINT32 p_tile_no, 
 					   opj_tcd_tile_t *p_tile, 
@@ -1136,7 +1136,7 @@ bool t2_encode_packets(
 	return true;
 }
 
-bool t2_decode_packets(
+OPJ_BOOL t2_decode_packets(
 						opj_t2_t *p_t2, 
 						OPJ_UINT32 p_tile_no,
 						struct opj_tcd_tile *p_tile, 

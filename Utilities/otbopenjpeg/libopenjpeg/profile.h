@@ -60,26 +60,17 @@ typedef struct PROFILELIST
 } OPJ_PROFILE_LIST;
 
 //==============================================================================
-void _ProfInit(void);
 void _ProfStart(OPJ_PROFILE_GROUP group);
 void _ProfStop (OPJ_PROFILE_GROUP group);
-void _ProfSave(const char * pFilename);
-void _ProfPrint(void);
 
 //==============================================================================
 //==============================================================================
 #ifdef _PROFILE
-#define PROFINIT() _ProfInit();
 #define PROFSTART (group) _ProfStart (group);
 #define PROFSTOP (group) _ProfStop (group);
-#define PROFSAVE(file) _ProfSave(file);
-#define PROFPRINT() _ProfPrint();
 #else
-#define PROFINIT()
 #define PROFSTART(group)
 #define PROFSTOP (group)
-#define PROFSAVE(file)
-#define PROFPRINT() 
 #endif // !_PROFILE
 
 //==============================================================================

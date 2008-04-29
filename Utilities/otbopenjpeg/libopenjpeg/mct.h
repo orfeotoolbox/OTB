@@ -92,7 +92,7 @@ Get norm of the basis function used for the irreversible multi-component transfo
 */
 OPJ_FLOAT64 mct_getnorm_real(OPJ_UINT32 compno);
 
-bool mct_encode_custom(
+OPJ_BOOL mct_encode_custom(
 					   // MCT data
 					   OPJ_BYTE * p_coding_data, 
 					   // size of components
@@ -104,7 +104,7 @@ bool mct_encode_custom(
 					   // tells if the data is signed
 					   OPJ_UINT32 is_signed);
 
-bool mct_decode_custom(
+OPJ_BOOL mct_decode_custom(
 					   // MCT data
 					   OPJ_BYTE * pDecodingData, 
 					   // size of components

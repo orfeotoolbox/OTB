@@ -47,7 +47,7 @@ static void GetTimeStamp(OPJ_UINT32 *pdwtime);
           group_list[ entry ].sectionName = #major ; }
 
 //==============================================================================
-void _ProfInit(void)
+void OPJ_CALLCONV _ProfInit(void)
 {
    // clear everything out
    memset(group_list, 0, sizeof(group_list));
@@ -111,7 +111,7 @@ void _ProfStop(OPJ_PROFILE_GROUP group)
 			   ((OPJ_FLOAT64) group_list[ id ].total_time / totalTime * 100))
 
 //==============================================================================
-void _ProfSave(const OPJ_CHAR * pFileName)
+void OPJ_CALLCONV _ProfSave(const OPJ_CHAR * pFileName)
 {
 	FILE *p = fopen(pFileName, "wt");
 	OPJ_FLOAT64 totalTime = 0.;
@@ -142,7 +142,7 @@ void _ProfSave(const OPJ_CHAR * pFileName)
 } // _ProfSave
 
 //==============================================================================
-void _ProfPrint(void)
+void OPJ_CALLCONV _ProfPrint(void)
 {
 	OPJ_FLOAT64 totalTime = 0.;
 	OPJ_UINT32 i;

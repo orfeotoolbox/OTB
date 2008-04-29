@@ -39,7 +39,7 @@
  * @param p_value the data to update
  * @return the nb of bytes read or -1 if an io error occurred.
  */
-bool jpt_read_VBAS_info(opj_stream_private_t * p_cio, OPJ_UINT32 * p_nb_bytes_read, OPJ_UINT32 * p_value, opj_event_mgr_t * p_manager) 
+OPJ_BOOL jpt_read_VBAS_info(opj_stream_private_t * p_cio, OPJ_UINT32 * p_nb_bytes_read, OPJ_UINT32 * p_value, opj_event_mgr_t * p_manager) 
 {
 	OPJ_BYTE l_elmt;
 	OPJ_UINT32 l_nb_bytes_read = 0;
@@ -110,7 +110,7 @@ void jpt_reinit_msg_header(opj_jpt_msg_header_t * header)
  * Read the message header for a JPP/JPT - stream
  *
  */
-bool jpt_read_msg_header(opj_stream_private_t *cio, opj_jpt_msg_header_t *header, OPJ_UINT32 * p_nb_bytes_read, opj_event_mgr_t * p_manager) 
+OPJ_BOOL jpt_read_msg_header(opj_stream_private_t *cio, opj_jpt_msg_header_t *header, OPJ_UINT32 * p_nb_bytes_read, opj_event_mgr_t * p_manager) 
 {
 	OPJ_BYTE elmt, Class = 0, CSn = 0;
 	OPJ_UINT32 l_nb_bytes_read = 0;

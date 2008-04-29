@@ -74,7 +74,7 @@ void jpt_init_msg_header(opj_jpt_msg_header_t * header);
  * @param	header		JPT Message header structure
  * @param	p_manager	user event manager to display nice messages.
 */
-bool jpt_read_msg_header(
+OPJ_BOOL jpt_read_msg_header(
 		struct opj_stream_private * p_cio, 
 		opj_jpt_msg_header_t * p_header, 
 		OPJ_UINT32 * p_nb_bytes_read,

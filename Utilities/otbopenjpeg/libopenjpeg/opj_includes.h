@@ -101,4 +101,28 @@ static INLINE long lrintf(float f){
 }
 #endif
 
+/* 
+==========================================================
+   Useful constant definitions
+==========================================================
+*/
+
+
+
+#define J2K_MAXBANDS					(3*J2K_MAXRLVLS-2)	/**< Number of maximum sub-band linked to number of resolution level */
+#define J2K_DEFAULT_NB_SEGS				10
+#define J2K_STREAM_CHUNK_SIZE			0x100000 /** 1 mega by default */
+#define J2K_DEFAULT_HEADER_SIZE			1000
+#define J2K_MCC_DEFAULT_NB_RECORDS		10
+#define J2K_MCT_DEFAULT_NB_RECORDS		10
+
+/* UniPG>> */
+#define JPWL_MAX_NO_MARKERS	512 /**< Maximum number of JPWL markers: increase at your will */
+#define JPWL_PRIVATEINDEX_NAME "jpwl_index_privatefilename" /**< index file name used when JPWL is on */
+#define JPWL_EXPECTED_COMPONENTS 3 /**< Expect this number of components, so you'll find better the first EPB */
+#define JPWL_MAXIMUM_TILES 8192 /**< Expect this maximum number of tiles, to avoid some crashes */
+#define JPWL_MAXIMUM_HAMMING 2 /**< Expect this maximum number of bit errors in marker id's */
+#define JPWL_MAXIMUM_EPB_ROOM 65450 /**< Expect this maximum number of bytes for composition of EPBs */
+/* <<UniPG */
+
 #endif /* OPJ_INCLUDES_H */

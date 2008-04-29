@@ -40,6 +40,7 @@ The functions in J2K.C have for goal to read/write the several parts of the code
 */
 
 #include "openjpeg.h"
+#include "opj_includes.h"
 
 struct opj_dparameters;
 struct opj_stream_private;
@@ -372,15 +373,15 @@ typedef struct opj_cp
 /* UniPG>> */
 #ifdef USE_JPWL
 	/** enables writing of EPC in MH, thus activating JPWL */
-	bool epc_on;
+	OPJ_BOOL epc_on;
 	/** enables writing of EPB, in case of activated JPWL */
-	bool epb_on;
+	OPJ_BOOL epb_on;
 	/** enables writing of ESD, in case of activated JPWL */
-	bool esd_on;
+	OPJ_BOOL esd_on;
 	/** enables writing of informative techniques of ESD, in case of activated JPWL */
-	bool info_on;
+	OPJ_BOOL info_on;
 	/** enables writing of RED, in case of activated JPWL */
-	bool red_on;
+	OPJ_BOOL red_on;
 	/** error protection method for MH (0,1,16,32,37-128) */
 	int hprot_MH;
 	/** tile number of header protection specification (>=0) */
@@ -406,7 +407,7 @@ typedef struct opj_cp
 	/** sensitivity methods for TPHs (-1,0-7) */
 	int sens_TPH[JPWL_MAX_NO_TILESPECS];
 	/** enables JPWL correction at the decoder */
-	bool correct;
+	OPJ_BOOL correct;
 	/** expected number of components at the decoder */
 	int exp_comps;
 	/** maximum number of tiles at the decoder */
@@ -553,7 +554,7 @@ void j2k_destroy (opj_j2k_t *p_j2k);
  *
  * @return true if the codec is valid.
  */
-bool j2k_start_compress(
+OPJ_BOOL j2k_start_compress(
 						opj_j2k_t *p_j2k, 
 						struct opj_stream_private *cio, 
 						struct opj_image * p_image,
@@ -563,7 +564,7 @@ bool j2k_start_compress(
  * Ends the compression procedures and possibiliy add data to be read after the 
  * codestream.
  */
-bool j2k_end_compress(opj_j2k_t *p_j2k, struct opj_stream_private *cio, struct opj_event_mgr * p_manager);
+OPJ_BOOL j2k_end_compress(opj_j2k_t *p_j2k, struct opj_stream_private *cio, struct opj_event_mgr * p_manager);
 
 /**
  * Sets up the decoder decoding parameters using user parameters.
@@ -586,7 +587,7 @@ void j2k_setup_decoder(
  *
  * @return true if the box is valid.
  */
-bool j2k_read_header(
+OPJ_BOOL j2k_read_header(
 								opj_j2k_t *p_j2k,
 								struct opj_image ** p_image,
 								OPJ_INT32 * p_tile_x0,
@@ -611,7 +612,7 @@ opj_image_t* j2k_decode(opj_j2k_t *j2k, struct opj_stream_private *cio, struct o
  * Ends the decompression procedures and possibiliy add data to be read after the 
  * codestream.
  */
-bool j2k_end_decompress(opj_j2k_t *j2k, struct opj_stream_private *cio, struct opj_event_mgr * p_manager);
+OPJ_BOOL j2k_end_decompress(opj_j2k_t *j2k, struct opj_stream_private *cio, struct opj_event_mgr * p_manager);
 
 /**
 Decode an image form a JPT-stream (JPEG 2000, JPIP)
@@ -644,7 +645,7 @@ void j2k_setup_encoder(opj_j2k_t *j2k, opj_cparameters_t *parameters, opj_image_
  * @param	p_stream			the stream to write data to.
  * @param	p_manager	the user event manager.
  */
-bool j2k_write_tile (
+OPJ_BOOL j2k_write_tile (
 					 opj_j2k_t * p_j2k,
 					 OPJ_UINT32 p_tile_index,
 					 OPJ_BYTE * p_data,
@@ -666,12 +667,12 @@ const char * j2k_convert_progression_order(OPJ_PROG_ORDER prg_order);
 /**
  * Encodes an image into a JPEG-2000 codestream
  */
-bool j2k_encode( 
+OPJ_BOOL j2k_encode( 
 					opj_j2k_t * p_j2k,
 					struct opj_stream_private *cio,
 					struct opj_event_mgr * p_manager
 				);
-bool	 j2k_setup_mct_encoding (opj_tcp_t * p_tcp,opj_image_t * p_image);
+OPJ_BOOL	 j2k_setup_mct_encoding (opj_tcp_t * p_tcp,opj_image_t * p_image);
 
 /**
  * Decode tile data.
@@ -679,7 +680,7 @@ bool	 j2k_setup_mct_encoding (opj_tcp_t * p_tcp,opj_image_t * p_image);
  * @param	p_stream			the stream to write data to.
  * @param	p_manager	the user event manager.
  */
-bool j2k_decode_tile (
+OPJ_BOOL j2k_decode_tile (
 					opj_j2k_t * p_j2k,
 					OPJ_UINT32 p_tile_index,
 					OPJ_BYTE * p_data,
@@ -693,7 +694,7 @@ bool j2k_decode_tile (
  * @param	p_stream			the stream to write data to.
  * @param	p_manager	the user event manager.
  */
-bool j2k_read_tile_header (
+OPJ_BOOL j2k_read_tile_header (
 					 opj_j2k_t * p_j2k,
 					 OPJ_UINT32 * p_tile_index,
 					 OPJ_UINT32 * p_data_size,
@@ -702,7 +703,7 @@ bool j2k_read_tile_header (
 					 OPJ_INT32 * p_tile_x1,
 					 OPJ_INT32 * p_tile_y1,
 					 OPJ_UINT32 * p_nb_comps,
-					 bool * p_go_on,
+					 OPJ_BOOL * p_go_on,
 					 struct opj_stream_private *p_stream,
 					 struct opj_event_mgr * p_manager
 					);
@@ -718,7 +719,7 @@ bool j2k_read_tile_header (
  *
  * @return	true			if the area could be set.
  */				
-bool j2k_set_decode_area(
+OPJ_BOOL j2k_set_decode_area(
 			opj_j2k_t *p_j2k,
 			OPJ_INT32 p_start_x,
 			OPJ_INT32 p_start_y,

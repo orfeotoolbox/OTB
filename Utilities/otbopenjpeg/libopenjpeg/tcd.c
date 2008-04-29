@@ -53,11 +53,11 @@ static void tcd_code_block_enc_deallocate (opj_tcd_precinct_t * p_precinct);
 /**
  * Allocates memory for an encoding code block.
  */
-static bool tcd_code_block_enc_allocate (opj_tcd_cblk_enc_t * p_code_block);
+static OPJ_BOOL tcd_code_block_enc_allocate (opj_tcd_cblk_enc_t * p_code_block);
 /**
  * Allocates memory for a decoding code block.
  */
-static bool tcd_code_block_dec_allocate (opj_tcd_cblk_dec_t * p_code_block);
+static OPJ_BOOL tcd_code_block_dec_allocate (opj_tcd_cblk_dec_t * p_code_block);
 /**
 Free the memory allocated for encoding
 @param tcd TCD handle
@@ -69,7 +69,7 @@ static void tcd_free_tile(opj_tcd_t *tcd);
 /**
 Create a new TCD handle
 */
-opj_tcd_t* tcd_create(bool p_is_decoder) 
+opj_tcd_t* tcd_create(OPJ_BOOL p_is_decoder) 
 {
 	opj_tcd_t *l_tcd = 00;
 
@@ -122,7 +122,7 @@ void tcd_destroy(opj_tcd_t *tcd) {
  * @return true if the encoding values could be set (false otherwise).
 */
 #define MACRO_TCD_ALLOCATE(FUNCTION,TYPE,FRACTION,ELEMENT,FUNCTION_ELEMENT)	\
-bool FUNCTION																\
+OPJ_BOOL FUNCTION																\
 			(																\
 				opj_tcd_t *p_tcd,											\
 				OPJ_UINT32 p_tile_no										\
@@ -488,7 +488,7 @@ MACRO_TCD_ALLOCATE(tcd_init_decode_tile,opj_tcd_cblk_dec_t,0.5f,dec,tcd_code_blo
 /**
  * Allocates memory for an encoding code block.
  */
-bool tcd_code_block_enc_allocate (opj_tcd_cblk_enc_t * p_code_block)
+OPJ_BOOL tcd_code_block_enc_allocate (opj_tcd_cblk_enc_t * p_code_block)
 {	
 	if	
 		(! p_code_block->data)
@@ -522,7 +522,7 @@ bool tcd_code_block_enc_allocate (opj_tcd_cblk_enc_t * p_code_block)
 /**
  * Allocates memory for a decoding code block.
  */
-bool tcd_code_block_dec_allocate (opj_tcd_cblk_dec_t * p_code_block)
+OPJ_BOOL tcd_code_block_dec_allocate (opj_tcd_cblk_dec_t * p_code_block)
 {	
 	OPJ_UINT32 l_seg_size;
 
@@ -718,7 +718,7 @@ void tcd_free_tile(opj_tcd_t *p_tcd)
 	p_tcd->tcd_image->tiles = 00;
 }
 
-bool tcd_init(
+OPJ_BOOL tcd_init(
 					   opj_tcd_t *p_tcd, 
 					   opj_image_t * p_image, 
 					   opj_cp_t * p_cp
@@ -915,7 +915,7 @@ void tcd_makelayer(opj_tcd_t *tcd, OPJ_UINT32 layno, OPJ_FLOAT64 thresh, OPJ_UIN
 	}
 }
 
-bool tcd_rateallocate(opj_tcd_t *tcd, OPJ_BYTE *dest, OPJ_UINT32 * p_data_written, OPJ_UINT32 len, opj_codestream_info_t *cstr_info) {
+OPJ_BOOL tcd_rateallocate(opj_tcd_t *tcd, OPJ_BYTE *dest, OPJ_UINT32 * p_data_written, OPJ_UINT32 len, opj_codestream_info_t *cstr_info) {
 	OPJ_UINT32 compno, resno, bandno, precno, cblkno, layno;
 	OPJ_UINT32 passno;
 	OPJ_FLOAT64 min, max;
@@ -995,7 +995,7 @@ bool tcd_rateallocate(opj_tcd_t *tcd, OPJ_BYTE *dest, OPJ_UINT32 * p_data_writte
 	for (layno = 0; layno < tcd_tcp->numlayers; layno++) {
 		OPJ_FLOAT64 lo = min;
 		OPJ_FLOAT64 hi = max;
-		bool success = false;
+		OPJ_BOOL success = false;
 		OPJ_UINT32 maxlen = tcd_tcp->rates[layno] ? uint_min(((OPJ_UINT32) ceil(tcd_tcp->rates[layno])), len) : len;
 		OPJ_FLOAT64 goodthresh = 0;
 		OPJ_FLOAT64 stable_thresh = 0;
@@ -1126,7 +1126,7 @@ OPJ_UINT32 tcd_get_encoded_tile_size (
 	return l_data_size;
 }
 
-bool tcd_copy_tile_data (
+OPJ_BOOL tcd_copy_tile_data (
 						 opj_tcd_t *p_tcd,
 						 OPJ_BYTE * p_src,
 						 OPJ_UINT32 p_src_length
@@ -1233,7 +1233,7 @@ bool tcd_copy_tile_data (
 	return true;
 }
 
-bool tcd_update_tile_data (
+OPJ_BOOL tcd_update_tile_data (
 						 opj_tcd_t *p_tcd,
 						 OPJ_BYTE * p_dest,
 						 OPJ_UINT32 p_dest_length
@@ -1406,7 +1406,7 @@ OPJ_UINT32 tcd_get_decoded_tile_size (
 	return l_data_size;
 }
 
-bool tcd_dc_level_shift_encode (
+OPJ_BOOL tcd_dc_level_shift_encode (
 						 opj_tcd_t *p_tcd
 						 )
 {
@@ -1455,7 +1455,7 @@ bool tcd_dc_level_shift_encode (
 	return true;
 }
 
-bool tcd_mct_encode (
+OPJ_BOOL tcd_mct_encode (
 					 opj_tcd_t *p_tcd
 					 )
 {
@@ -1520,7 +1520,7 @@ bool tcd_mct_encode (
 	return true;
 }
 
-bool tcd_dwt_encode (
+OPJ_BOOL tcd_dwt_encode (
 					  opj_tcd_t *p_tcd
 					 )
 {
@@ -1557,7 +1557,7 @@ bool tcd_dwt_encode (
 	return true;
 }
 
-bool tcd_t1_encode (
+OPJ_BOOL tcd_t1_encode (
 					  opj_tcd_t *p_tcd
 					 )
 {
@@ -1600,7 +1600,7 @@ bool tcd_t1_encode (
 	return true;
 }
 
-bool tcd_t2_encode (
+OPJ_BOOL tcd_t2_encode (
 					opj_tcd_t *p_tcd, 
 					OPJ_BYTE * p_dest_data, 
 					OPJ_UINT32 * p_data_written,
@@ -1641,7 +1641,7 @@ bool tcd_t2_encode (
 	return true;
 }
 
-bool tcd_rate_allocate_encode(
+OPJ_BOOL tcd_rate_allocate_encode(
 						opj_tcd_t *p_tcd, 
 						OPJ_BYTE * p_dest_data, 
 						OPJ_UINT32 p_max_dest_size,
@@ -1674,7 +1674,7 @@ bool tcd_rate_allocate_encode(
 	return true;
 }
 
-bool tcd_t2_decode (
+OPJ_BOOL tcd_t2_decode (
 					opj_tcd_t *p_tcd, 
 					OPJ_BYTE * p_src_data, 
 					OPJ_UINT32 * p_data_read,
@@ -1710,7 +1710,7 @@ bool tcd_t2_decode (
 	return true;
 }
 
-bool tcd_t1_decode (
+OPJ_BOOL tcd_t1_decode (
 					  opj_tcd_t *p_tcd
 					 )
 {
@@ -1739,7 +1739,7 @@ bool tcd_t1_decode (
 	return true;
 }
 
-bool tcd_dwt_decode (
+OPJ_BOOL tcd_dwt_decode (
 					  opj_tcd_t *p_tcd
 					 )
 {
@@ -1787,7 +1787,7 @@ bool tcd_dwt_decode (
 	}
 	return true;
 }
-bool tcd_mct_decode (
+OPJ_BOOL tcd_mct_decode (
 					  opj_tcd_t *p_tcd
 					 )
 {
@@ -1863,7 +1863,7 @@ bool tcd_mct_decode (
 	return true;
 }
 
-bool tcd_dc_level_shift_decode (
+OPJ_BOOL tcd_dc_level_shift_decode (
 						 opj_tcd_t *p_tcd
 						 )
 {
@@ -1941,7 +1941,7 @@ bool tcd_dc_level_shift_decode (
 	return true;
 }
 
-bool tcd_encode_tile(
+OPJ_BOOL tcd_encode_tile(
 					 opj_tcd_t *p_tcd, 
 					 OPJ_UINT32 p_tile_no, 
 					 OPJ_BYTE *p_dest, 
@@ -2036,7 +2036,7 @@ bool tcd_encode_tile(
 	return true;
 }
 
-bool tcd_decode_tile(
+OPJ_BOOL tcd_decode_tile(
 					 opj_tcd_t *p_tcd, 
 					 OPJ_BYTE *p_src, 
 					 OPJ_UINT32 p_max_length, 

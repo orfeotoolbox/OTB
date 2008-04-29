@@ -224,7 +224,7 @@ void opj_read_float_LE(const OPJ_BYTE * p_buffer, OPJ_FLOAT32 * p_value)
  * Creates an abstract stream. This function does nothing except allocating memory and initializing the abstract stream.
  * @return a stream object.
 */
-opj_stream_t* opj_stream_create(OPJ_UINT32 p_size,bool l_is_input)
+opj_stream_t* OPJ_CALLCONV opj_stream_create(OPJ_UINT32 p_size,OPJ_BOOL l_is_input)
 {
 	opj_stream_private_t * l_stream = 00;
 	l_stream = (opj_stream_private_t*) opj_malloc(sizeof(opj_stream_private_t));
@@ -268,7 +268,7 @@ opj_stream_t* opj_stream_create(OPJ_UINT32 p_size,bool l_is_input)
  * Creates an abstract stream. This function does nothing except allocating memory and initializing the abstract stream.
  * @return a stream object.
 */
-opj_stream_t* opj_stream_default_create(bool l_is_input)
+opj_stream_t* OPJ_CALLCONV opj_stream_default_create(OPJ_BOOL l_is_input)
 {
 	return opj_stream_create(J2K_STREAM_CHUNK_SIZE,l_is_input);
 }
@@ -548,7 +548,7 @@ OPJ_UINT32 opj_stream_write_data (opj_stream_private_t * p_stream,const OPJ_BYTE
  * @param		p_event_mgr	the user event manager to be notified of special events.
  * @return		the number of bytes written, or -1 if an error occured.
  */
-bool opj_stream_flush (opj_stream_private_t * p_stream, opj_event_mgr_t * p_event_mgr)
+OPJ_BOOL opj_stream_flush (opj_stream_private_t * p_stream, opj_event_mgr_t * p_event_mgr)
 {
 	// the number of bytes written on the media.
 	OPJ_UINT32 l_current_write_nb_bytes = 0;
@@ -646,7 +646,7 @@ OPJ_SIZE_T opj_stream_read_skip (opj_stream_private_t * p_stream, OPJ_SIZE_T p_s
  */
 OPJ_SIZE_T opj_stream_write_skip (opj_stream_private_t * p_stream, OPJ_SIZE_T p_size, opj_event_mgr_t * p_event_mgr)
 {
-	bool l_is_written = 0;
+	OPJ_BOOL l_is_written = 0;
 	OPJ_SIZE_T l_current_skip_nb_bytes = 0;
 	OPJ_SIZE_T l_skip_nb_bytes = 0;
 
@@ -721,7 +721,7 @@ OPJ_SIZE_T opj_stream_skip (opj_stream_private_t * p_stream, OPJ_SIZE_T p_size, 
  * @param		p_event_mgr	the user event manager to be notified of special events.
  * @return		the number of bytes skipped, or -1 if an error occured.
  */
-bool opj_stream_read_seek (opj_stream_private_t * p_stream, OPJ_SIZE_T p_size, opj_event_mgr_t * p_event_mgr)
+OPJ_BOOL opj_stream_read_seek (opj_stream_private_t * p_stream, OPJ_SIZE_T p_size, opj_event_mgr_t * p_event_mgr)
 {
 	p_stream->m_current_data = p_stream->m_stored_data;
 	p_stream->m_bytes_in_buffer = 0;
@@ -748,7 +748,7 @@ bool opj_stream_read_seek (opj_stream_private_t * p_stream, OPJ_SIZE_T p_size, o
  * @param		p_event_mgr	the user event manager to be notified of special events.
  * @return		the number of bytes skipped, or -1 if an error occured.
  */
-bool opj_stream_write_seek (opj_stream_private_t * p_stream, OPJ_SIZE_T p_size, opj_event_mgr_t * p_event_mgr)
+OPJ_BOOL opj_stream_write_seek (opj_stream_private_t * p_stream, OPJ_SIZE_T p_size, opj_event_mgr_t * p_event_mgr)
 {
 	if
 		(! opj_stream_flush(p_stream,p_event_mgr))
@@ -781,7 +781,7 @@ bool opj_stream_write_seek (opj_stream_private_t * p_stream, OPJ_SIZE_T p_size, 
  * @param		p_event_mgr	the user event manager to be notified of special events.
  * @return		true if the stream is seekable.
  */
-bool opj_stream_seek (opj_stream_private_t * p_stream, OPJ_SIZE_T p_size, struct opj_event_mgr * p_event_mgr)
+OPJ_BOOL opj_stream_seek (opj_stream_private_t * p_stream, OPJ_SIZE_T p_size, struct opj_event_mgr * p_event_mgr)
 {
 	return p_stream->m_opj_seek(p_stream,p_size,p_event_mgr);
 }
@@ -789,7 +789,7 @@ bool opj_stream_seek (opj_stream_private_t * p_stream, OPJ_SIZE_T p_size, struct
 /**
  * Tells if the given stream is seekable.
  */
-bool opj_stream_has_seek (const opj_stream_private_t * p_stream)
+OPJ_BOOL opj_stream_has_seek (const opj_stream_private_t * p_stream)
 {
 	return p_stream->m_seek_fn != opj_stream_default_seek;
 }
@@ -811,7 +811,7 @@ OPJ_SIZE_T opj_stream_default_skip (OPJ_SIZE_T p_nb_bytes, void * p_user_data)
 	return (OPJ_SIZE_T) -1;
 }
 
-bool opj_stream_default_seek (OPJ_SIZE_T p_nb_bytes, void * p_user_data)
+OPJ_BOOL opj_stream_default_seek (OPJ_SIZE_T p_nb_bytes, void * p_user_data)
 {
 	return false;
 }

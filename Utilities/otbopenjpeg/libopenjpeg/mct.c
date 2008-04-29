@@ -164,7 +164,7 @@ OPJ_FLOAT64 mct_getnorm_real(OPJ_UINT32 compno) {
 	return mct_norms_real[compno];
 }
 
-bool mct_encode_custom(
+OPJ_BOOL mct_encode_custom(
 					   // MCT data
 					   OPJ_BYTE * pCodingdata, 
 					   // size of components
@@ -225,7 +225,7 @@ bool mct_encode_custom(
 	return true;
 }
 
-bool mct_decode_custom(
+OPJ_BOOL mct_decode_custom(
 					   // MCT data
 					   OPJ_BYTE * pDecodingData, 
 					   // size of components

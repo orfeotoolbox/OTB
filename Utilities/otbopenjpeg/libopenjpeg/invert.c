@@ -28,7 +28,7 @@
 #include "opj_malloc.h"
 
 
-bool opj_lupDecompose(OPJ_FLOAT32 * matrix,OPJ_UINT32 * permutations, OPJ_FLOAT32 * p_swap_area,OPJ_UINT32 n);
+OPJ_BOOL opj_lupDecompose(OPJ_FLOAT32 * matrix,OPJ_UINT32 * permutations, OPJ_FLOAT32 * p_swap_area,OPJ_UINT32 n);
 void opj_lupSolve(OPJ_FLOAT32 * pResult, OPJ_FLOAT32* pMatrix, OPJ_FLOAT32* pVector, OPJ_UINT32* pPermutations, OPJ_UINT32 n,OPJ_FLOAT32 * p_intermediate_data);
 void opj_lupInvert (OPJ_FLOAT32 * pSrcMatrix,
 				   OPJ_FLOAT32 * pDestMatrix,
@@ -41,7 +41,7 @@ void opj_lupInvert (OPJ_FLOAT32 * pSrcMatrix,
 /**
  * Matrix inversion.
  */
-bool opj_matrix_inversion_f(OPJ_FLOAT32 * pSrcMatrix,OPJ_FLOAT32 * pDestMatrix, OPJ_UINT32 n)
+OPJ_BOOL opj_matrix_inversion_f(OPJ_FLOAT32 * pSrcMatrix,OPJ_FLOAT32 * pDestMatrix, OPJ_UINT32 n)
 {
 	OPJ_BYTE * l_data = 00;
 	OPJ_UINT32 l_permutation_size = n * sizeof(OPJ_UINT32);
@@ -75,7 +75,7 @@ bool opj_matrix_inversion_f(OPJ_FLOAT32 * pSrcMatrix,OPJ_FLOAT32 * pDestMatrix, 
 /** 
  * LUP decomposition
  */
-bool opj_lupDecompose(OPJ_FLOAT32 * matrix,OPJ_UINT32 * permutations, OPJ_FLOAT32 * p_swap_area,OPJ_UINT32 n) 
+OPJ_BOOL opj_lupDecompose(OPJ_FLOAT32 * matrix,OPJ_UINT32 * permutations, OPJ_FLOAT32 * p_swap_area,OPJ_UINT32 n) 
 {
 	OPJ_UINT32 * tmpPermutations = permutations;
 	OPJ_UINT32 * dstPermutations;

@@ -85,7 +85,7 @@ Encode the packets of a tile to a destination buffer
 @param tppos The position of the tile part flag in the progression order
 @param t2_mode If == 0 In Threshold calculation ,If == 1 Final pass
 */
-bool t2_encode_packets(opj_t2_t* t2,OPJ_UINT32 tileno, struct opj_tcd_tile *tile, OPJ_UINT32 maxlayers, OPJ_BYTE *dest, OPJ_UINT32 * p_data_written, OPJ_UINT32 len, struct opj_codestream_info *cstr_info,OPJ_UINT32 tpnum, OPJ_INT32 tppos,OPJ_UINT32 pino,J2K_T2_MODE t2_mode);
+OPJ_BOOL t2_encode_packets(opj_t2_t* t2,OPJ_UINT32 tileno, struct opj_tcd_tile *tile, OPJ_UINT32 maxlayers, OPJ_BYTE *dest, OPJ_UINT32 * p_data_written, OPJ_UINT32 len, struct opj_codestream_info *cstr_info,OPJ_UINT32 tpnum, OPJ_INT32 tppos,OPJ_UINT32 pino,J2K_T2_MODE t2_mode);
 /**
 Decode the packets of a tile from a source buffer
 @param t2 T2 handle
@@ -94,7 +94,7 @@ Decode the packets of a tile from a source buffer
 @param tileno number that identifies the tile for which to decode the packets
 @param tile tile for which to decode the packets
  */
-bool t2_decode_packets(opj_t2_t *t2, OPJ_UINT32 tileno,struct opj_tcd_tile *tile, OPJ_BYTE *src, OPJ_UINT32 * p_data_read, OPJ_UINT32 len,   struct opj_codestream_info *cstr_info);
+OPJ_BOOL t2_decode_packets(opj_t2_t *t2, OPJ_UINT32 tileno,struct opj_tcd_tile *tile, OPJ_BYTE *src, OPJ_UINT32 * p_data_read, OPJ_UINT32 len,   struct opj_codestream_info *cstr_info);
 
 /**
  * Creates a Tier 2 handle

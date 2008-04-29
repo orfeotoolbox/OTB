@@ -784,7 +784,7 @@ static OPJ_FLOAT64 t1_getwmsedec(
 	return wmsedec;
 }
 
-static bool allocate_buffers(
+static OPJ_BOOL allocate_buffers(
 		opj_t1_t *t1,
 		OPJ_UINT32 w,
 		OPJ_UINT32 h)
@@ -1101,7 +1101,7 @@ void t1_destroy(opj_t1_t *p_t1)
 	opj_free(p_t1);
 }
 
-bool t1_encode_cblks(
+OPJ_BOOL t1_encode_cblks(
 		opj_t1_t *t1,
 		opj_tcd_tile_t *tile,
 		opj_tcp_t *tcp,

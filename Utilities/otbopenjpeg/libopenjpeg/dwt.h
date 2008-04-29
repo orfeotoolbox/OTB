@@ -57,14 +57,14 @@ Forward 5-3 wavelet tranform in 2-D.
 Apply a reversible DWT transform to a component of an image.
 @param tilec Tile component information (current tile)
 */
-bool dwt_encode(struct opj_tcd_tilecomp * tilec);
+OPJ_BOOL dwt_encode(struct opj_tcd_tilecomp * tilec);
 /**
 Inverse 5-3 wavelet tranform in 2-D.
 Apply a reversible inverse DWT transform to a component of an image.
 @param tilec Tile component information (current tile)
 @param numres Number of resolution levels to decode
 */
-bool dwt_decode(struct opj_tcd_tilecomp* tilec, OPJ_UINT32 numres);
+OPJ_BOOL dwt_decode(struct opj_tcd_tilecomp* tilec, OPJ_UINT32 numres);
 /**
 Get the gain of a subband for the reversible 5-3 DWT.
 @param orient Number that identifies the subband (0->LL, 1->HL, 2->LH, 3->HH)
@@ -83,14 +83,14 @@ Forward 9-7 wavelet transform in 2-D.
 Apply an irreversible DWT transform to a component of an image.
 @param tilec Tile component information (current tile)
 */
-bool dwt_encode_real(struct opj_tcd_tilecomp * tilec);
+OPJ_BOOL dwt_encode_real(struct opj_tcd_tilecomp * tilec);
 /**
 Inverse 9-7 wavelet transform in 2-D. 
 Apply an irreversible inverse DWT transform to a component of an image.
 @param tilec Tile component information (current tile)
 @param numres Number of resolution levels to decode
 */
-bool dwt_decode_real(struct opj_tcd_tilecomp* tilec, OPJ_UINT32 numres);
+OPJ_BOOL dwt_decode_real(struct opj_tcd_tilecomp* tilec, OPJ_UINT32 numres);
 /**
 Get the gain of a subband for the irreversible 9-7 DWT.
 @param orient Number that identifies the subband (0->LL, 1->HL, 2->LH, 3->HH)

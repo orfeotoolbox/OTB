@@ -43,7 +43,7 @@ i2a(OPJ_UINT32 i, OPJ_CHAR *a, OPJ_UINT32 r) {
 #endif
 /* ----------------------------------------------------------------------- */
 
-bool opj_event_msg(opj_event_mgr_t * p_event_mgr, OPJ_INT32 event_type, const OPJ_CHAR *fmt, ...) {
+OPJ_BOOL opj_event_msg(opj_event_mgr_t * p_event_mgr, OPJ_INT32 event_type, const OPJ_CHAR *fmt, ...) {
 #define MSG_SIZE 512 /* 512 bytes should be more than enough for a short message */
 	opj_msg_callback msg_handler = 00;
 	void * l_data = 00;

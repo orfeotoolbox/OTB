@@ -249,11 +249,11 @@ namespace otb
 	itkExceptionMacro(<<"Failed to read image header.");
       }
 
-    bool goesOn = true;
     OPJ_BYTE * tile_data;
     OPJ_INT32  tile_x1,tile_y1;
     OPJ_UINT32 data_size,nb_comps;
     OPJ_UINT32 tile_index;
+    OPJ_BOOL   goesOn = true;
 
     while(goesOn)
       {
