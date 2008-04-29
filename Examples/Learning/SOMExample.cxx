@@ -61,6 +61,7 @@
 #include "itkExpandImageFilter.h"
 #include "itkNearestNeighborInterpolateImageFunction.h"
 #include "otbPerBandVectorImageFilter.h"
+#include "otbPrintableImageFilter.h"
 
 //  Software Guide : BeginLatex
 // Since the \doxygen{otb}{SOM} class uses a distance, we will need to
@@ -326,12 +327,14 @@ try {
 
 // Software Guide : EndCodeSnippet          
 
-    //Just for visualization purposes, we zoom the image.
+    //Just for visualization purposes, we zoom the image, and pass it to the printable image filter
     typedef otb::Image<PixelType,2> SingleImageType;
     typedef itk::ExpandImageFilter< SingleImageType, SingleImageType > ExpandType;
     typedef otb::PerBandVectorImageFilter<MapType,MapType,ExpandType> VectorExpandType; 
     typedef itk::NearestNeighborInterpolateImageFunction< SingleImageType,
                                         double > InterpolatorType;
+    typedef otb::PrintableImageFilter<MapType> PrintableFilterType;
+    typedef otb::ImageFileWriter<PrintableFilterType::OutputImageType> PrintableWriterType;
 
     InterpolatorType::Pointer interpolator = InterpolatorType::New();
     VectorExpandType::Pointer expand = VectorExpandType::New();
@@ -339,8 +342,15 @@ try {
     expand->GetFilter()->SetExpandFactors( 40 );
     expand->GetFilter()->SetInterpolator( interpolator );
     expand->GetFilter()->SetEdgePaddingValue(255);
-    writer->SetInput(expand->GetOutput());
-    writer->Update();
+
+    PrintableFilterType::Pointer printFilter = PrintableFilterType::New();
+    printFilter->SetInput(expand->GetOutput());
+    
+    PrintableWriterType::Pointer printWriter = PrintableWriterType::New();
+
+    printWriter->SetInput(printFilter->GetOutput());
+    printWriter->SetFileName(outputFileName);
+    printWriter->Update();
 
 //  Software Guide : BeginLatex
 // Figure \ref{fig:SOMMAP} shows the result of the SOM learning. Since
