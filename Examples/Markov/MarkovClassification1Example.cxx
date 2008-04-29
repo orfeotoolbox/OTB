@@ -39,7 +39,7 @@
 //
 // This example applies the \doxygen{otb}{MarkovClassificationFilter} to 
 // classify an image into four classes defined by their mean and variance. The 
-// optimization is done using an Metropolis algorithm with a MAP estimator. The 
+// optimization is done using an Metropolis algorithm with a random sampler. The 
 // regularization energy is defined by a Potts model and the fidelity by a 
 // Gaussian model.
 //

@@ -39,7 +39,7 @@
 //
 // This example applies the \doxygen{otb}{MarkovClassificationFilter} to 
 // classify an image into four classes defined by their mean and variance. The 
-// optimization is done using an Metropolis algorithm with a MAP estimator. The 
+// optimization is done using an ICM algorithm with a MAP estimator. The 
 // regularization energy is defined by a Potts model and the fidelity by a 
 // Gaussian model.
 //
@@ -66,8 +66,8 @@
 // #include "otbMRFEnergyPotts.h"
 // #include "otbMRFEnergyGaussianClassification.h"
 // #include "otbMRFOptimizerICM.h"
-#include "otbMRFSamplerMAP.h"
-// #include "otbMRFSamplerRandomMAP.h"
+// #include "otbMRFSamplerMAP.h"
+#include "otbMRFSamplerRandomMAP.h"
 #include "otbMRFOptimizerICM.h"
 // #include "otbMRFSamplerRandom.h"
 // Software Guide : EndCodeSnippet
@@ -161,7 +161,7 @@ int main(int argc, char* argv[] )
 
   // Software Guide : BeginCodeSnippet
 
-  typedef otb::MRFSamplerMAP< InputImageType, LabelledImageType> SamplerType;
+  typedef otb::MRFSamplerRandomMAP< InputImageType, LabelledImageType> SamplerType;
   
 
   // Software Guide : EndCodeSnippet
