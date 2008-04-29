@@ -23,6 +23,14 @@
 
 namespace otb
 {
+            /**
+   * \class MRFOptimizerMetropolis
+   * \brief This is the optimizer class implementing the Metropolis algorithm 
+   *  
+   * This is one optimizer to be used in the MRF framework. This optimizer 
+   * follows the metropolis algorithm to accept of reject the value proposed by the sampler
+             */
+  
 class ITK_EXPORT MRFOptimizerMetropolis : public MRFOptimizer
   {       
   public:
@@ -36,8 +44,8 @@ class ITK_EXPORT MRFOptimizerMetropolis : public MRFOptimizer
     
     itkTypeMacro(MRFOptimizerMetropolis,MRFOptimizer);
     
-    itkSetMacro(Temperature, double);
-    itkGetMacro(Temperature, double);
+//     itkSetMacro(Temperature, double);
+//     itkGetMacro(Temperature, double);
     
     inline bool Compute(double deltaEnergy)
       {
@@ -51,7 +59,7 @@ class ITK_EXPORT MRFOptimizerMetropolis : public MRFOptimizer
 	  }
 	else
               {
-                double proba = vcl_exp(-(deltaEnergy)/m_Temperature);
+                double proba = vcl_exp(-(deltaEnergy)/this->m_Parameters[0]);
                 if ( (rand() % 10000) < proba*10000)
 		  {
 		    return true;
@@ -62,7 +70,11 @@ class ITK_EXPORT MRFOptimizerMetropolis : public MRFOptimizer
     
     
   protected:
-    MRFOptimizerMetropolis() {}
+    MRFOptimizerMetropolis() {
+      this->m_NumberOfParameters = 1;
+      this->m_Parameters.SetSize(this->m_NumberOfParameters);
+      this->m_Parameters[0]=1.0;
+    }
     virtual ~MRFOptimizerMetropolis() {}
     double m_Temperature;
   };       

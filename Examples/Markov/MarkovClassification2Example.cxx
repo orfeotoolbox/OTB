@@ -68,7 +68,7 @@
 // #include "otbMRFOptimizerICM.h"
 #include "otbMRFSamplerMAP.h"
 // #include "otbMRFSamplerRandomMAP.h"
-#include "otbMRFOptimizerMetropolis.h"
+#include "otbMRFOptimizerICM.h"
 // #include "otbMRFSamplerRandom.h"
 // Software Guide : EndCodeSnippet
 
@@ -178,7 +178,7 @@ int main(int argc, char* argv[] )
 
   // Software Guide : BeginCodeSnippet
 
-  typedef otb::MRFOptimizerMetropolis OptimizerType;
+  typedef otb::MRFOptimizerICM OptimizerType;
 
   // Software Guide : EndCodeSnippet
 
@@ -262,7 +262,7 @@ int main(int argc, char* argv[] )
   parameters[6]=220.0;//Class 3 mean
   parameters[7]=10.0; //Class 3 stde
   energyFidelity->SetParameters(parameters);
-  optimizer->SetTemperature(atof(argv[6]));
+
   markovFilter->SetNumberOfClasses(nClass);  
   markovFilter->SetMaximumNumberOfIterations(atoi(argv[5]));
   markovFilter->SetErrorTolerance(-1.0);
