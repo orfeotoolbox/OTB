@@ -783,7 +783,6 @@ ADD_TEST(bfTvEuclideanDistanceWithMissingValue ${BASICFILTERS_TESTS8}
          otbEuclideanDistanceWithMissingValue)
 
 
-=======
 # -------            otb::LabelizeNeighborhoodConnectedImageFilter   ----------------------------
 
   ADD_TEST(bfTuLabelizeNeighborhoodConnectedImageFilterNew ${BASICFILTERS_TESTS8}
