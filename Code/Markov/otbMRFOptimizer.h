@@ -20,6 +20,7 @@
 
 #include "itkObject.h"
 #include "itkObjectFactory.h"
+#include "itkArray.h"
 
 namespace otb
 {
@@ -52,19 +53,27 @@ class ITK_EXPORT MRFOptimizer : public itk::Object
     
     void SetParameters( const ParametersType & parameters )
     {
-      bool modified = false;
-      for( unsigned int i=0; i<m_NumberOfParameters; i++ )
-      {
+      if( parameters.Size() != m_NumberOfParameters )
+	{	
+	  itkExceptionMacro(<<"Invalid number of parameters");
+	}
+      m_Parameters = parameters;
+      this->Modified();
+      /*
+	bool modified = false;
+	for( unsigned int i=0; i<m_NumberOfParameters; i++ )
+	{
         if (m_Parameters[i] != parameters[i])
         {
-          m_Parameters[i] = parameters[i];
-          modified = true;
+	m_Parameters[i] = parameters[i];
+	modified = true;
         }
-      }
-      if (modified)
-      {
+	}
+	if (modified)
+	{
         this->Modified();
-      }
+	}
+      */
     }
     
     virtual bool Compute(double deltaEnergy)
