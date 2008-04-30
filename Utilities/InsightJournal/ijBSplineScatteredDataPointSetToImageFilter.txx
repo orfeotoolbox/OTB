@@ -82,10 +82,10 @@ BSplineScatteredDataPointSetToImageFilter<TInputPointSet, TOutputImage>
       typename KernelType::MatrixType C;
       C = this->m_Kernel[i]->GetShapeFunctionsInZeroToOneInterval();
       R = C;
-      for ( int j = 0; j < C.cols(); j++ )
+      for ( unsigned int j = 0; j < C.cols(); j++ )
         {
         RealType c = pow( 2.0, static_cast<RealType>( C.cols()-j-1 ) );
-        for ( int k = 0; k < C.rows(); k++)
+        for ( unsigned int k = 0; k < C.rows(); k++)
           {
           R(k, j) *= c;
           }
@@ -251,7 +251,6 @@ BSplineScatteredDataPointSetToImageFilter<TInputPointSet, TOutputImage>
 
     RealType avg_p = 0.0;
     RealType totalWeight = 0.0;
-    RealType norm_p;
 
     typename PointDataContainerType::Iterator  ItIn, ItOut;
     ItIn = this->m_InputPointData->Begin();
@@ -379,7 +378,7 @@ BSplineScatteredDataPointSetToImageFilter<TInputPointSet, TOutputImage>
       for ( unsigned int j = 0; j < ImageDimension; j++ )
         {
         tmp[j] = idx[j] + off[j];
-        if ( tmp[j] >= NumberOfNewControlPoints[j] && !this->m_CloseDimension[j] )
+        if ( tmp[j] >= static_cast<long>(NumberOfNewControlPoints[j]) && (!this->m_CloseDimension[j]) )
           {
              OutOfBoundary = true;
              break;
@@ -394,7 +393,7 @@ BSplineScatteredDataPointSetToImageFilter<TInputPointSet, TOutputImage>
         continue;
         }      
  
-      for ( unsigned int j = 0; j < N; j++ )
+      for ( unsigned int j = 0; j < static_cast<unsigned int>(N); j++ )
         {
         off_Psi = this->IndexToSubscript( j, size_Psi );
 
@@ -402,8 +401,8 @@ BSplineScatteredDataPointSetToImageFilter<TInputPointSet, TOutputImage>
         for ( unsigned int k = 0; k < ImageDimension; k++ )
           {
           tmp_Psi[k] = idx_Psi[k] + off_Psi[k];
-          if ( tmp_Psi[k] >= this->m_CurrentNumberOfControlPoints[k] 
-                  && !this->m_CloseDimension[k] )
+          if ( tmp_Psi[k] >= static_cast<long>(this->m_CurrentNumberOfControlPoints[k] )
+                  && (!this->m_CloseDimension[k]) )
             {
             OutOfBoundary = true;
             break;
@@ -632,7 +631,7 @@ BSplineScatteredDataPointSetToImageFilter<TInputPointSet, TOutputImage>
 ::GenerateOutputImageFast() 
 {
   typename PointDataImageType::Pointer collapsedPhiLattices[ImageDimension+1];
-  for ( int i = 0; i < ImageDimension; i++ )
+  for ( unsigned int i = 0; i < ImageDimension; i++ )
     {
     collapsedPhiLattices[i] = PointDataImageType::New();
     collapsedPhiLattices[i]->SetOrigin( this->m_PhiLattice->GetOrigin() );
