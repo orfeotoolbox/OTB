@@ -296,7 +296,7 @@ template <class TPrecision, unsigned int VDimension>
 DataNode<TPrecision,VDimension>
 ::IsDocument() const
 {
-  return m_NodeType==DOCUMENT;
+  return m_NodeType == DOCUMENT;
 }
 template <class TPrecision, unsigned int VDimension>
   bool 

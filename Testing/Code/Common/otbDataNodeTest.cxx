@@ -76,8 +76,8 @@ int otbDataNodeTest(int argc, char * argv[])
   otbControlConditionTestMacro(document->IsPolygonFeature(),"Wrong IsPolygonFeature() method return.");
  
   otbControlConditionTestMacro(folder->IsRoot(),"Wrong IsRoot() method return.");
-  otbControlConditionTestMacro(!folder->IsDocument(),"Wrong IsDocument() method return.");
-  otbControlConditionTestMacro(folder->IsFolder(),"Wrong IsFolder() method return.");
+  otbControlConditionTestMacro(folder->IsDocument(),"Wrong IsDocument() method return.");
+  otbControlConditionTestMacro(!folder->IsFolder(),"Wrong IsFolder() method return.");
   otbControlConditionTestMacro(folder->IsPointFeature(),"Wrong IsPointFeature() method return.");
   otbControlConditionTestMacro(folder->IsLineFeature(),"Wrong IsLineFeature() method return.");
   otbControlConditionTestMacro(folder->IsPolygonFeature(),"Wrong IsPolygonFeature() method return.");

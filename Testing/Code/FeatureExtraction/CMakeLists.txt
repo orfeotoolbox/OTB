@@ -231,8 +231,8 @@ ADD_TEST(feTvAssociativeSymmetricalSum ${FEATUREEXTRACTION_TESTS4}
   --compare-image ${EPSILON}  ${BASELINE}/feFiltreASS_amst_2_3.hdr
                           ${TEMP}/feFiltreASS_amst_2_3.hdr
         otbAssociativeSymmetricalSum
-        ${TEMP}/feFiltreLineRatioLinear_amst_2_3.hdr
-        ${TEMP}/feFiltreLineCorrelationLinear_amst_2_3.hdr
+        ${BASELINE}/feFiltreLineRatioLinear_amst_2_3.hdr
+        ${BASELINE}/feFiltreLineCorrelationLinear_amst_2_3.hdr
         ${TEMP}/feFiltreASS_amst_2_3.hdr)
 
 # -------            otb::AssymmetricFusionOfLineDetector   ------------------------------

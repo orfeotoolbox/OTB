@@ -333,12 +333,12 @@ ADD_TEST( utTvGalibTest${num}  ${CXX_TEST_PATH}/otbGalibTests${num}
 
 
 # -------            lib Kml   ------------------------------
-FOREACH(id_test createkml helloattrs helloenum hellofolder hellogeometry helloregion helloserializer helloworld parsekml      )
-        ADD_TEST( utKml${id_test} ${CXX_TEST_PATH}/otbKmlTests${id_test}   
-        kml${id_test}
-        ${TEMP}/utkml${id_test}.txt
-        )
-ENDFOREACH(id_test)
+#FOREACH(id_test createkml helloattrs helloenum hellofolder hellogeometry helloregion helloserializer helloworld parsekml      )
+#        ADD_TEST( utKml${id_test} ${CXX_TEST_PATH}/otbKmlTests${id_test}   
+#        kml${id_test}
+#        ${TEMP}/utkml${id_test}.txt
+#        )
+#ENDFOREACH(id_test)
 
 
 #ADD_TEST( utKmlhellofeatures  ${CXX_TEST_PATH}/otbKmlTestshellofeatures
@@ -347,28 +347,28 @@ ENDFOREACH(id_test)
 #        ${TEMP}/utkmlhellofeatures.txt
 #        )
 
-ADD_TEST( utKmlhellohref  ${CXX_TEST_PATH}/otbKmlTestshellohref
-        kmlhellohref
-        ${INPUTDATA}/abstractview.kml
-        ${TEMP}/utkmlhellohref.txt
-        )
-ADD_TEST( utKmlhellokmz  ${CXX_TEST_PATH}/otbKmlTestshellokmz    
-        kmlhellokmz
-        ${INPUTDATA}/multikml-doc.kmz
-        ${TEMP}/utkmlhellokmz.txt
-        )
+#ADD_TEST( utKmlhellohref  ${CXX_TEST_PATH}/otbKmlTestshellohref
+#        kmlhellohref
+#        ${INPUTDATA}/abstractview.kml
+#        ${TEMP}/utkmlhellohref.txt
+#        )
+#ADD_TEST( utKmlhellokmz  ${CXX_TEST_PATH}/otbKmlTestshellokmz    
+#        kmlhellokmz
+#        ${INPUTDATA}/multikml-doc.kmz
+#        ${TEMP}/utkmlhellokmz.txt
+#        )
 
-ADD_TEST( utKmlprettykml  ${CXX_TEST_PATH}/otbKmlTestsprettykml
-        kmlprettykml
-        ${INPUTDATA}/polygons2d.kml
-        ${TEMP}/utkmlprettykml.txt
-        )
+#ADD_TEST( utKmlprettykml  ${CXX_TEST_PATH}/otbKmlTestsprettykml
+#        kmlprettykml
+#        ${INPUTDATA}/polygons2d.kml
+#        ${TEMP}/utkmlprettykml.txt
+#        )
         
-ADD_TEST( utKmlprintgeometry  ${CXX_TEST_PATH}/otbKmlTestsprintgeometry
-        kmlprintgeometry
-        ${INPUTDATA}/polygons2d.kml
-        ${TEMP}/utkmlprintgeometry.txt
-        )
+#ADD_TEST( utKmlprintgeometry  ${CXX_TEST_PATH}/otbKmlTestsprintgeometry
+#        kmlprintgeometry
+#        ${INPUTDATA}/polygons2d.kml
+#        ${TEMP}/utkmlprintgeometry.txt
+#        )
 
 
 

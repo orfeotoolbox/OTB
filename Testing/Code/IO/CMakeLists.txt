@@ -1401,11 +1401,16 @@ ADD_TEST(ioTvVectorDataFileReader ${IO_TESTS15}
 ADD_TEST(ioTuVectorDataFileWriterNew ${IO_TESTS15} 
         otbVectorDataFileWriterNew )
 
+# If the file exists, try remove it to prevent test failure
+FILE(REMOVE ${TEMP}/ioTvVectorDataFileWriterOutput.shp)
 
 ADD_TEST(ioTvVectorDataFileWriter ${IO_TESTS15} 
         otbVectorDataFileWriter
 	${TEMP}/ioTvVectorDataFileWriterOutput.shp	
 	)
+
+# If the file exists, try remove it to prevent test failure
+FILE(REMOVE ${TEMP}/ioTvVectorDataFileReaderWriterOutput.shp)
 
 ADD_TEST(ioTvVectorDataFileReaderWriter ${IO_TESTS15} 
         otbVectorDataFileReaderWriter

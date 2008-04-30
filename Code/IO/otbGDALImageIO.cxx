@@ -361,7 +361,6 @@ void GDALImageIO::InternalReadImageInformation()
     // (take time to check !!)
     if(m_PxType == GDT_Byte)
       {
-//      SetComponentType(CHAR);
       SetComponentType(UCHAR);
       }
     else if(m_PxType == GDT_UInt16)
@@ -435,7 +434,7 @@ void GDALImageIO::InternalReadImageInformation()
     /******************************************************************/
     // Pixel Type always set to Scalar for GDAL ? maybe also to vector ?
 
-// Modif Patrick: LIRE LES IMAGES COMPLEXES
+	// Modif Patrick: LIRE LES IMAGES COMPLEXES
  	if( GDALDataTypeIsComplex(m_PxType) )
 	{
     		otbMsgDevMacro(<<"SetPixelType(COMPLEX)");
@@ -466,9 +465,9 @@ void GDALImageIO::InternalReadImageInformation()
 
     }
     
-/*----------------------------------------------------------------------*/
-/*-------------------------- METADATA ----------------------------------*/
-/*----------------------------------------------------------------------*/
+  /*----------------------------------------------------------------------*/
+  /*-------------------------- METADATA ----------------------------------*/
+  /*----------------------------------------------------------------------*/
  
     // Now initialize the itk dictionary
     itk::MetaDataDictionary & dico = this->GetMetaDataDictionary();
@@ -485,18 +484,7 @@ void GDALImageIO::InternalReadImageInformation()
       m_Spacing[2]=1;
       
     char** papszMetadata;
-    papszMetadata =  m_poDataset->GetMetadata( NULL );
-        
-//     const char *pszValue;
-    
-//     pszValue = CSLFetchNameValue( papszMetadata, "CEOS_LINE_SPACING_METERS" );
-//     if ( pszValue != NULL )
-//        m_Spacing[0] = atof( pszValue );
-    
-//     pszValue = CSLFetchNameValue( papszMetadata, "CEOS_PIXEL_SPACING_METERS" );
-//     if ( pszValue != NULL )
-//        m_Spacing[1] = atof( pszValue );
- 
+    papszMetadata =  m_poDataset->GetMetadata( NULL ); 
     
     
     /* -------------------------------------------------------------------- */
@@ -512,9 +500,9 @@ void GDALImageIO::InternalReadImageInformation()
             	static_cast<std::string>( GDALGetDriverLongName( hDriver ) ) );
             	 
 
-/* -------------------------------------------------------------------- */    
-/* Get the projection coordinate system of the image : ProjectionRef	*/
-/* -------------------------------------------------------------------- */
+    /* -------------------------------------------------------------------- */    
+    /* Get the projection coordinate system of the image : ProjectionRef	*/
+    /* -------------------------------------------------------------------- */
     
     if( m_poDataset->GetProjectionRef() != NULL )
     {
@@ -561,11 +549,7 @@ void GDALImageIO::InternalReadImageInformation()
         itk::EncapsulateMetaData<unsigned int>(dico, MetaDataKey::m_GCPCountKey, 
             	static_cast<unsigned int>( m_poDataset->GetGCPCount() ) );
             	
-//         double minGCPRow(m_width);
-//         double minGCPCol(m_height);
-//         double minGCPX;
-//         double minGCPY;
-            	        
+
         
         for( int cpt = 0; cpt < m_poDataset->GetGCPCount(); cpt++ )
         {
@@ -575,16 +559,6 @@ void GDALImageIO::InternalReadImageInformation()
 
             OTB_GCP	pOtbGCP(psGCP);
                    
-            // Origin           
-//             if ( ( psGCP->dfGCPLine < minGCPRow ) &&
-//                  ( psGCP->dfGCPPixel < minGCPCol ) )
-//                { 
-//                minGCPRow = psGCP->dfGCPLine;
-//                minGCPCol = psGCP->dfGCPPixel;	  
-//                minGCPX = psGCP->dfGCPX;
-//                minGCPY = psGCP->dfGCPY;
-//                }
-
             // Complete the key with the GCP number : GCP_i
             ::itk::OStringStream lStream;
             lStream << MetaDataKey::m_GCPParametersKey << cpt;
@@ -594,8 +568,7 @@ void GDALImageIO::InternalReadImageInformation()
             
         }
         
-// 	m_Origin[0] = minGCPX;
-// 	m_Origin[1] = minGCPY;
+
         
     }
 
@@ -846,6 +819,9 @@ otbMsgDevMacro( <<" TailleBuffer allocated : "<< lTailleBuffer);
 
         delete [] value;
         value = NULL;
+
+	m_poDataset->FlushCache();
+
 	otbMsgDevMacro( << "GDALImageIO::Write() terminee");
 
 }
@@ -972,83 +948,58 @@ void GDALImageIO::InternalWriteImageInformation()
 	/*----------------------------------------------------------------------*/
  
 	// Now initialize the itk dictionary
-	itk::MetaDataDictionary & dico = this->GetMetaDataDictionary();
-      
-    
-	/* -------------------------------------------------------------------- */
-	/*  Set Spacing								*/
-	/* -------------------------------------------------------------------- */    
-      
+	itk::MetaDataDictionary & dico = this->GetMetaDataDictionary();      
 	char** papszMetadata;
 	papszMetadata =  m_poDataset->GetMetadata( NULL );
  	itk::OStringStream oss;
-// 	oss.str("");
-// 	oss<<m_Spacing[0];
-// 	CSLSetNameValue( papszMetadata, "CEOS_LINE_SPACING_METERS",oss.str().c_str());
-// 	oss.str("");
-// 	oss<<m_Spacing[1];
-// 	CSLSetNameValue( papszMetadata, "CEOS_PIXEL_SPACING_METERS",oss.str().c_str());
-// 	oss.str("");    
+
 	
-
-/* -------------------------------------------------------------------- */    
-/* Set the projection coordinate system of the image : ProjectionRef	*/
-/* -------------------------------------------------------------------- */
-    
-	if(ImageBase::GetProjectionRef(dico)!="")
-	  {
-	    m_poDataset->SetProjection(ImageBase::GetProjectionRef(dico).c_str());
-	  }
-
-/* -------------------------------------------------------------------- */    
-/* Set the GCPs	                                                        */
-/* -------------------------------------------------------------------- */
+	/* -------------------------------------------------------------------- */    
+	/* Set the GCPs	                                                        */
+	/* -------------------------------------------------------------------- */
         
 	unsigned int gcpCount = ImageBase::GetGCPCount(dico);
 	
-	GDAL_GCP * gdalGcps = new GDAL_GCP[gcpCount+1];
-
-// 	bool gcpHasOrigin = false;
-
-	for(unsigned int gcpIndex = 0; gcpIndex < gcpCount;++gcpIndex)
+	if(gcpCount>0)
 	  {
-	    gdalGcps[gcpIndex].pszId = const_cast<char *>(ImageBase::GetGCPId(dico,gcpIndex).c_str());
-	    gdalGcps[gcpIndex].pszInfo = const_cast<char *>(ImageBase::GetGCPInfo(dico,gcpIndex).c_str());
-	    gdalGcps[gcpIndex].dfGCPPixel = ImageBase::GetGCPCol(dico,gcpIndex);
-	    gdalGcps[gcpIndex].dfGCPLine = ImageBase::GetGCPRow(dico,gcpIndex);
-	    gdalGcps[gcpIndex].dfGCPX = ImageBase::GetGCPX(dico,gcpIndex);
-	    gdalGcps[gcpIndex].dfGCPY = ImageBase::GetGCPY(dico,gcpIndex);
-	    gdalGcps[gcpIndex].dfGCPZ = ImageBase::GetGCPZ(dico,gcpIndex);
-	    // gcpHasOrigin = ImageBase::GetGCPCol(dico,gcpIndex)==0 && ImageBase::GetGCPRow(dico,gcpIndex)==0;
-	  }
-	gdalGcps[gcpCount].pszId =   const_cast<char*>(std::string("Origin").c_str());
-	gdalGcps[gcpCount].pszInfo = const_cast<char*>(std::string("Origin gcp added by OTB").c_str());
-	gdalGcps[gcpCount].dfGCPPixel = 0;
-	gdalGcps[gcpCount].dfGCPLine = 0;
-	gdalGcps[gcpCount].dfGCPX = m_Origin[0];
-	gdalGcps[gcpCount].dfGCPY = m_Origin[1];
-	gdalGcps[gcpCount].dfGCPZ = 0;
 
-	// if(gcpHasOrigin)
-// 	  {
+	    GDAL_GCP * gdalGcps = new GDAL_GCP[gcpCount];
+
+
+	    for(unsigned int gcpIndex = 0; gcpIndex < gcpCount;++gcpIndex)
+	      {
+		gdalGcps[gcpIndex].pszId = const_cast<char *>(ImageBase::GetGCPId(dico,gcpIndex).c_str());
+		gdalGcps[gcpIndex].pszInfo = const_cast<char *>(ImageBase::GetGCPInfo(dico,gcpIndex).c_str());
+		gdalGcps[gcpIndex].dfGCPPixel = ImageBase::GetGCPCol(dico,gcpIndex);
+		gdalGcps[gcpIndex].dfGCPLine = ImageBase::GetGCPRow(dico,gcpIndex);
+		gdalGcps[gcpIndex].dfGCPX = ImageBase::GetGCPX(dico,gcpIndex);
+		gdalGcps[gcpIndex].dfGCPY = ImageBase::GetGCPY(dico,gcpIndex);
+		gdalGcps[gcpIndex].dfGCPZ = ImageBase::GetGCPZ(dico,gcpIndex);
+		
+	      }
+	    
 	    m_poDataset->SetGCPs(gcpCount,gdalGcps,ImageBase::GetGCPProjection(dico).c_str());
-// 	  }
-	// else
-// 	  {
-// 	    otbMsgDebugMacro(<<"GCPs do not contain origin.");
-// 	    m_poDataset->SetGCPs(gcpCount+1,gdalGcps,ImageBase::GetGCPProjection(dico).c_str());
-// 	  }
-	delete [] gdalGcps;
+	    
+	    delete [] gdalGcps;
+	  }
 
-/* -------------------------------------------------------------------- */    
-/*  Set the six coefficients of affine geoTtransform			*/
-/* -------------------------------------------------------------------- */
-
+	/* -------------------------------------------------------------------- */    
+	/* Set the projection coordinate system of the image : ProjectionRef	*/
+	/* -------------------------------------------------------------------- */
+    
+	
+	if(!ImageBase::GetProjectionRef(dico).empty())
+	  {
+	    m_poDataset->SetProjection(ImageBase::GetProjectionRef(dico).c_str());
+	  }
+	
+	/* -------------------------------------------------------------------- */    
+	/*  Set the six coefficients of affine geoTtransform			*/
+	/* -------------------------------------------------------------------- */
+	
   
-// 	if(!ImageBase::GetGeoTransform(dico).empty())
-// 	  {
+
 	    double * geoTransform = new double[6];
-// 	    std::vector<double> transformVector = ImageBase::GetGeoTransform(dico);
 	    /// Reporting origin and spacing
 	    geoTransform[0]=m_Origin[0];            
 	    geoTransform[3]=m_Origin[1];
@@ -1060,31 +1011,31 @@ void GDALImageIO::InternalWriteImageInformation()
             geoTransform[4]=0.;
 	    m_poDataset->SetGeoTransform(geoTransform);
 	    delete [] geoTransform;
-// 	  }
 
-/* -------------------------------------------------------------------- */
-/*      Report metadata.                                                */
-/* -------------------------------------------------------------------- */
 
-	std::string svalue="";
-	std::vector<std::string> keys = dico.GetKeys();
-	MetaDataKey key;
-	
-	for (unsigned int itkey=0; itkey<keys.size(); itkey++)
-	  {
-	     if(keys[itkey].compare(0,key.m_MetadataKey.length(),key.m_MetadataKey)==0)
-	       {
-		 itk::ExposeMetaData<std::string>(dico,keys[itkey],svalue);
-		 unsigned int equalityPos = svalue.find_first_of('=');
-		 std::string tag = svalue.substr(0,equalityPos);
-		 std::string value = svalue.substr(equalityPos+1);
-		 otbMsgDevMacro(<<"Metadata: "<<tag<<"="<<value);
-		 m_poDataset->SetMetadataItem(tag.c_str(),value.c_str(),NULL);
-	       }
-	  }
 
-	// END 
-	
+	    /* -------------------------------------------------------------------- */
+	    /*      Report metadata.                                                */
+	    /* -------------------------------------------------------------------- */
+
+	    std::string svalue="";
+	    std::vector<std::string> keys = dico.GetKeys();
+	    MetaDataKey key;
+	    
+	    for (unsigned int itkey=0; itkey<keys.size(); itkey++)
+	      {
+		if(keys[itkey].compare(0,key.m_MetadataKey.length(),key.m_MetadataKey)==0)
+		  {
+		    itk::ExposeMetaData<std::string>(dico,keys[itkey],svalue);
+		    unsigned int equalityPos = svalue.find_first_of('=');
+		    std::string tag = svalue.substr(0,equalityPos);
+		    std::string value = svalue.substr(equalityPos+1);
+		    otbMsgDevMacro(<<"Metadata: "<<tag<<"="<<value);
+		    m_poDataset->SetMetadataItem(tag.c_str(),value.c_str(),NULL);
+		  }
+	      }
+	    // END 
+	    
 }	
 
 std::string GDALImageIO::TypeConversion(std::string name)
