@@ -158,6 +158,7 @@ ADD_TEST(FA-00013-io_WriteImageTIFF_bis ${COMMON_TESTS}
 ADD_TEST(FA-00052-vi_Floating_Point_Exception ${VISU_TESTS}
 	otbImageViewer
 	${EXAMPLES_DATA}/ROI_QB_MUL_1.png
+	3
          )
 
 # ---  FA 00060 : Pb Map activation  ---
