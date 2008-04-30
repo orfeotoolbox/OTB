@@ -435,7 +435,7 @@ public:
 	return m_Model->sv_coef;
   }
  /** Set the alphas values (SV Coef) */
-  void SetAlpha( double ** alpha );
+  void SetAlpha( double ** alpha, int nbOfSupportVector );
 
   /** Return the labels lists */
   int * GetLabels(){ return m_Model->label; };

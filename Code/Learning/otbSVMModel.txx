@@ -243,7 +243,6 @@ SVMModel<TInputPixel, TLabel>
   
   // Compute the total number of SV elements.
   unsigned int elements = 0;
-  //  std::cout<<nbOfSupportVector<<std::endl;
   for (int p=0; p<nbOfSupportVector; p++)
     {
       std::cout<<p<<"  "; 
@@ -251,13 +250,11 @@ SVMModel<TInputPixel, TLabel>
       std::cout<<p<<"  "; 
       while(tempNode->index != -1)
 	{
-	  //std::cout<<tempNode->value<<std::endl; 
 	  tempNode++;
 	  elements++;
 	}
       elements++;// for -1 values
     }
-  std::cout<<std::endl;
 
   if(m_Model->l>0) 
       {
@@ -287,11 +284,10 @@ SVMModel<TInputPixel, TLabel>
   this->Modified();
 }
 
-// BEFORE CALLING THE METHOD, CHANGE l VALUE
 template <class TInputPixel, class TLabel >
 void
 SVMModel<TInputPixel, TLabel>
-::SetAlpha( double ** alpha )
+::SetAlpha( double ** alpha, int nbOfSupportVector )
 {
   // Erase the old sv_coef
   for(int i=0; i<m_Model->nr_class-1; i++)
@@ -299,6 +295,8 @@ SVMModel<TInputPixel, TLabel>
       delete[] m_Model->sv_coef[i];
     }
   delete [] m_Model->sv_coef;
+  
+  this->SetNumberOfSupportVectors(nbOfSupportVector);
   
   // copy new sv_coef values
   m_Model->sv_coef = Malloc(double *,m_Model->nr_class-1);
