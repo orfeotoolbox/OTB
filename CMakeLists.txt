@@ -252,9 +252,7 @@ LINK_DIRECTORIES( ${GDAL_LIBRARY_DIRS} )
 
 #ELSE(EXPAT_FOUND)
       SET(OTB_USE_EXTERNAL_EXPAT OFF CACHE INTERNAL  "Use an OTB internal build of EXPAT.")
-
 #ENDIF(EXPAT_FOUND)
-
 
 
 #-------------------------------
@@ -471,13 +469,17 @@ ENDIF(OTB_USE_VISU_GUI)
 # Use OTB_ALGO_UTILITIES_DEPENDENT_LIBRARIES to LINK Utilities Algo libraries into your executable
 # Use OTB_ALLS_UTILITIES_DEPENDENT_LIBRARIES to LINK Utilities Algo libraries into your executable
 # => Create OTB_IO_UTILITIES_DEPENDENT_LIBRARIES
-SET(OTB_IO_UTILITIES_DEPENDENT_LIBRARIES "gdal dxf otbkml tinyXML otbgeotiff otbxtiff otbossim otbossimBase otbossimElevation otbossimFont otbossimKBool otbossimMatrix otbossimPlugin otbossimProjectionImaging otbossimSupportData otbossimVec otbossimVpfUtil")
+
+#SET(OTB_IO_UTILITIES_DEPENDENT_LIBRARIES "gdal dxf otbkml tinyXML otbgeotiff otbxtiff otbossim otbossimBase otbossimElevation otbossimFont otbossimKBool otbossimMatrix otbossimPlugin otbossimProjectionImaging otbossimSupportData otbossimVec otbossimVpfUtil")
+SET(OTB_IO_UTILITIES_DEPENDENT_LIBRARIES "gdal dxf tinyXML otbgeotiff otbxtiff otbossim otbossimBase otbossimElevation otbossimFont otbossimKBool otbossimMatrix otbossimPlugin otbossimProjectionImaging otbossimSupportData otbossimVec otbossimVpfUtil")
+
 # Add EXPAT library
-IF( OTB_USE_EXTERNAL_EXPAT )
-        SET(OTB_IO_UTILITIES_DEPENDENT_LIBRARIES  "${OTB_IO_UTILITIES_DEPENDENT_LIBRARIES} expat")
-ELSE( OTB_USE_EXTERNAL_EXPAT  )
-        SET(OTB_IO_UTILITIES_DEPENDENT_LIBRARIES  "${OTB_IO_UTILITIES_DEPENDENT_LIBRARIES} otbexpat")
-ENDIF( OTB_USE_EXTERNAL_EXPAT )
+#IF( OTB_USE_EXTERNAL_EXPAT )
+#        SET(OTB_IO_UTILITIES_DEPENDENT_LIBRARIES  "${OTB_IO_UTILITIES_DEPENDENT_LIBRARIES} expat")
+#ELSE( OTB_USE_EXTERNAL_EXPAT  )
+#        SET(OTB_IO_UTILITIES_DEPENDENT_LIBRARIES  "${OTB_IO_UTILITIES_DEPENDENT_LIBRARIES} otbexpat")
+#ENDIF( OTB_USE_EXTERNAL_EXPAT )
+
 
 # Add VISU libraries
 IF(OTB_USE_VISU_GUI)
@@ -493,6 +495,7 @@ ENDIF(NOT OTB_USE_EXTERNAL_ITK)
 
 # => Create OTB_ALLS_UTILITIES_DEPENDENT_LIBRARIES
 SET(OTB_ALLS_UTILITIES_DEPENDENT_LIBRARIES "${OTB_IO_UTILITIES_DEPENDENT_LIBRARIES} ${OTB_ALGO_UTILITIES_DEPENDENT_LIBRARIES}")
+
 
 #-----------------------------------------------------------------------------
 
