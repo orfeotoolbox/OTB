@@ -1381,9 +1381,6 @@ ADD_TEST(ioTvWritingComplexDataWithComplexImage ${IO_TESTS14}
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ otbIOTESTS15 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-ADD_TEST(ioTuVectorDataIOBaseTest ${IO_TESTS15} 
-        otbVectorDataIOBaseNew )
-
 ADD_TEST(ioTuOGRVectorDataIO ${IO_TESTS15} 
         otbSHPVectorDataIONew )
 
@@ -1526,7 +1523,6 @@ otbWritingComplexDataWithComplexImageTest.cxx
 
 
 SET(BasicIO_SRCS15
-otbVectorDataIOBaseNew.cxx
 otbVectorDataSourceNew.cxx
 otbVectorDataFileReaderNew.cxx
 otbVectorDataFileReader.cxx
