@@ -12,8 +12,6 @@ IF(NOT OTB_USE_EXTERNAL_EXPAT)
 	#SUBDIRS( otbexpat )
 ENDIF(NOT OTB_USE_EXTERNAL_EXPAT)
 
-MESSAGE(${OTB_USE_EXTERNAL_EXPAT})
-
 #ROMAIN
 #SUBDIRS(BGL otbsvm dxflib InsightJournal otbossim otb6S otbgeotiff tinyXMLlib otbgalib otbkml)
 SUBDIRS(BGL otbsvm dxflib InsightJournal otbossim otb6S otbgeotiff tinyXMLlib otbgalib)
