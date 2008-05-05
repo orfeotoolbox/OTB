@@ -82,8 +82,15 @@ int otbMarkovClassificationFilter( int argc, char* argv[] )
   itk::VariableLengthVector<double> stdDev;
   mean.SetSize(nClass);
   stdDev.SetSize(nClass);
-  mean[0]=10;mean[1]=80;mean[2]=150;mean[3]=220;
-  stdDev[0]=10;stdDev[1]=10;stdDev[2]=10;stdDev[3]=10;
+  mean[0]=10;
+  mean[1]=80;
+  mean[2]=150;
+  mean[3]=220;
+
+  stdDev[0]=10;
+  stdDev[1]=10;
+  stdDev[2]=10;
+  stdDev[3]=10;
   
   energyFidelity->SetNumberOfParameters(2*nClass); 
   EnergyFidelityType::ParametersType parameters;
@@ -98,7 +105,8 @@ int otbMarkovClassificationFilter( int argc, char* argv[] )
   parameters[7]=10.0; //Class 3 stde
   energyFidelity->SetParameters(parameters);
   optimizer->SetTemperature(atof(argv[6]));
-  markovFilter->SetNumberOfClasses(nClass);  
+  markovFilter->SetNumberOfClasses(nClass);
+  markovFilter->SetValueInsteadRandom(500); // Unable rand() calculation
   markovFilter->SetMaximumNumberOfIterations(atoi(argv[5]));
   markovFilter->SetErrorTolerance(-1.0);
   markovFilter->SetLambda(atof(argv[4]));

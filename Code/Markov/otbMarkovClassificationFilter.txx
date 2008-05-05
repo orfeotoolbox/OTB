@@ -32,13 +32,16 @@ MarkovClassificationFilter<TInputImage,TClassifiedImage>
   m_NeighborhoodRadius(1),
   m_TotalNumberOfValidPixelsInOutputImage(1),
   m_TotalNumberOfPixelsInInputImage(1),
-  m_ErrorTolerance(0.2),
-  m_SmoothingFactor(1),
-  m_NumberOfIterations(0),
-  //m_ExternalClassificationSet(false), when not comment, generates a warning ("defini plus loin")
-  m_StopCondition(MaximumNumberOfIterations)//,
+  //m_ErrorTolerance(0.2),
+  //m_SmoothingFactor(1),
+  //m_NumberOfIterations(0),
+  m_ExternalClassificationSet(false),
+  m_StopCondition(MaximumNumberOfIterations)
 {
   m_ExternalClassificationSet = false;
+  m_SmoothingFactor = 1;
+  m_NumberOfIterations = 0;
+  m_ErrorTolerance = 0.2;
   this->SetNumberOfRequiredInputs(2);
   if( (int)InputImageDimension != (int)ClassifiedImageDimension )
     {
@@ -47,11 +50,18 @@ MarkovClassificationFilter<TInputImage,TClassifiedImage>
       throw itk::ExceptionObject(__FILE__, __LINE__,msg.str().c_str(),ITK_LOCATION);
     }
   m_InputImageNeighborhoodRadius.Fill(m_NeighborhoodRadius);
-  //     m_MRFNeighborhoodWeight.resize(0);
-  //     m_NeighborInfluence.resize(0);
-  //     m_DummyVector.resize(0);
-  //     this->SetMRFNeighborhoodWeight( m_DummyVector );
-  //     this->SetDefaultMRFNeighborhoodWeight();
+  // m_MRFNeighborhoodWeight.resize(0);
+  // m_NeighborInfluence.resize(0);
+  // m_DummyVector.resize(0);
+  // this->SetMRFNeighborhoodWeight( m_DummyVector );
+  // this->SetDefaultMRFNeighborhoodWeight();
+
+  EnergyRegularizationPointer m_EnergyRegularization = EnergyRegularizationType::New();;
+  EnergyFidelityPointer       m_EnergyFidelity = EnergyFidelityType::New();;
+  OptimizerPointer            m_Optimizer = OptimizerType::New();;    
+  SamplerPointer              m_Sampler = SamplerType::New();   
+
+  m_ValueInsteadRandom = itk::NumericTraits<int>::min();
 }
   
 template<class TInputImage, class TClassifiedImage>
@@ -92,25 +102,13 @@ MarkovClassificationFilter<TInputImage, TClassifiedImage>
 ::PrintSelf( std::ostream& os, itk::Indent indent ) const
 {
   Superclass::PrintSelf(os,indent);
-  
   os << indent <<" MRF Image filter object " << std::endl;
-  
   os << indent <<" Number of classes: " << m_NumberOfClasses << std::endl;
-  
-  os << indent <<" Maximum number of iterations: " << 
-    m_MaximumNumberOfIterations << std::endl;
-  
-  os << indent <<" Error tolerance for convergence: " << 
-    m_ErrorTolerance << std::endl;
-  
-  os << indent <<" Size of the MRF neighborhood radius:" << 
-    m_InputImageNeighborhoodRadius << std::endl;
-  
-  os << indent << "StopCondition: "
-     << m_StopCondition << std::endl;
-  
-  os << indent <<" Number of iterations: " << 
-    m_NumberOfIterations << std::endl;
+  os << indent <<" Maximum number of iterations: " << m_MaximumNumberOfIterations << std::endl;
+  os << indent <<" Error tolerance for convergence: " << m_ErrorTolerance << std::endl;
+  os << indent <<" Size of the MRF neighborhood radius:" << m_InputImageNeighborhoodRadius << std::endl;
+  os << indent << "StopCondition: " << m_StopCondition << std::endl;
+  os << indent <<" Number of iterations: " << m_NumberOfIterations << std::endl;
   
 }// end PrintSelf
 
@@ -123,12 +121,10 @@ template <class TInputImage, class TClassifiedImage>
 void
 MarkovClassificationFilter<TInputImage, TClassifiedImage>
 ::GenerateInputRequestedRegion()
-{
-  
+{  
   // this filter requires the all of the input images 
   // to be at the size of the output requested region
-  InputImagePointer inputPtr = 
-    const_cast< InputImageType * >( this->GetInput() );
+  InputImagePointer inputPtr = const_cast< InputImageType * >( this->GetInput() );
   OutputImagePointer outputPtr = this->GetOutput();
   inputPtr->SetRequestedRegion( outputPtr->GetRequestedRegion() );
 }
@@ -159,7 +155,7 @@ void
 MarkovClassificationFilter<TInputImage, TClassifiedImage>
 ::GenerateOutputInformation()
 {
-  typename TInputImage::ConstPointer input = this->GetInput();
+  typename TInputImage::ConstPointer input  = this->GetInput();
   typename TClassifiedImage::Pointer output = this->GetOutput();
   output->SetLargestPossibleRegion( input->GetLargestPossibleRegion() );
 }
@@ -185,7 +181,6 @@ MarkovClassificationFilter<TInputImage, TClassifiedImage>
   this->Initialize();
   
   this->ApplyMarkovClassificationFilter();
-  
   
 }// end GenerateData
 
@@ -270,9 +265,7 @@ MarkovClassificationFilter<TInputImage, TClassifiedImage>
   for( unsigned int i=0; i < InputImageDimension; i++ )
     {
       tmp = static_cast<int>(inputImageSize[i]);
-      
       m_TotalNumberOfPixelsInInputImage *= tmp;
-      
       m_TotalNumberOfValidPixelsInOutputImage *= ( tmp - 2*m_InputImageNeighborhoodRadius[i] ); 
     }  
   
@@ -285,8 +278,7 @@ MarkovClassificationFilter<TInputImage, TClassifiedImage>
   
   //Copy input data in the output buffer memory or
   //initialize to random values if not set
-  LabelledImageRegionIterator  
-    outImageIt( outputPtr, outputPtr->GetRequestedRegion() );
+  LabelledImageRegionIterator  outImageIt( outputPtr, outputPtr->GetRequestedRegion() );
   
   m_ExternalClassificationSet = true; //TODO switch to random if the ref image is not specified
   if (m_ExternalClassificationSet)
@@ -305,14 +297,27 @@ MarkovClassificationFilter<TInputImage, TClassifiedImage>
     }
   else //set to random value
     {
-      srand((unsigned)time(0));
- 
-      while ( !outImageIt.IsAtEnd() )
+      // if it is a test, cancel the rand()
+      if( m_ValueInsteadRandom == itk::NumericTraits<int>::min() )
 	{
-	  LabelledImagePixelType randomvalue = static_cast<LabelledImagePixelType>(rand() % static_cast<int>(m_NumberOfClasses));
-	  outImageIt.Set( randomvalue );
-	  ++outImageIt;
-	}// end while
+	  srand((unsigned)time(0));
+	  
+	  while ( !outImageIt.IsAtEnd() )
+	    {
+	      LabelledImagePixelType randomvalue = static_cast<LabelledImagePixelType>(rand() % static_cast<int>(m_NumberOfClasses));
+	      outImageIt.Set( randomvalue );
+	      ++outImageIt;
+	    }// end while
+	}
+      else
+	{
+	  while ( !outImageIt.IsAtEnd() )
+	    {
+	      LabelledImagePixelType randomvalue = static_cast<LabelledImagePixelType>(m_ValueInsteadRandom % static_cast<int>(m_NumberOfClasses));
+	      outImageIt.Set( randomvalue );
+	      ++outImageIt;
+	    }
+	}
     }
   
   
@@ -323,8 +328,11 @@ template<class TInputImage, class TClassifiedImage>
 void
 MarkovClassificationFilter<TInputImage, TClassifiedImage>
 ::Initialize() throw (itk::ExceptionObject)
-{
-  srand((unsigned)time(0));
+{ 
+  if( m_ValueInsteadRandom == itk::NumericTraits<int>::min() )
+    {
+      srand((unsigned)time(0));
+    }
   
   if ( !m_EnergyRegularization )
     {
@@ -364,26 +372,19 @@ void
 MarkovClassificationFilter<TInputImage, TClassifiedImage>
 ::ApplyMarkovClassificationFilter()
 {
-  
   InputImageSizeType inputImageSize = this->GetInput()->GetBufferedRegion().GetSize();
-  
   int totalNumberOfPixelsInInputImage = 1;
-  
   for( unsigned int i = 0; i < InputImageDimension; i++ )  
     {
       totalNumberOfPixelsInInputImage *= static_cast<int>(inputImageSize[ i ]) ;
     }
 
-  int maxNumPixelError = (int) ( vnl_math_rnd (m_ErrorTolerance * 
-					       m_TotalNumberOfValidPixelsInOutputImage) );
-  
+  int maxNumPixelError = (int) ( vnl_math_rnd (m_ErrorTolerance * m_TotalNumberOfValidPixelsInOutputImage) );
   m_NumberOfIterations = 0;
   do
     {
-      otbMsgDebugMacro(<< "Iteration No." << m_NumberOfIterations);
-      
+      otbMsgDebugMacro(<< "Iteration No." << m_NumberOfIterations);   
       this->MinimizeOnce();
-      
       otbMsgDebugMacro(<< "m_ErrorCounter/m_TotalNumberOfPixelsInInputImage: " 
 		       << m_ErrorCounter/((double)(m_TotalNumberOfPixelsInInputImage)));
       
@@ -391,7 +392,7 @@ MarkovClassificationFilter<TInputImage, TClassifiedImage>
       //       m_ErrorCounter = m_TotalNumberOfValidPixelsInOutputImage - 
       //           totalNumberOfPixelsInInputImage;  
       
-    }    
+    } 
   while(( m_NumberOfIterations < m_MaximumNumberOfIterations ) && 
 	( m_ErrorCounter > maxNumPixelError ) ); 
   
@@ -425,20 +426,19 @@ MarkovClassificationFilter<TInputImage, TClassifiedImage>
   InputImageNeighborhoodIterator dataIterator(m_InputImageNeighborhoodRadius, this->GetInput(), this->GetInput()->GetLargestPossibleRegion() );
   m_ErrorCounter = 0;
   //WARNING, is it the same size ??
-  for (labelledIterator.GoToBegin(), dataIterator.GoToBegin();
-       !labelledIterator.IsAtEnd();
-       ++labelledIterator, ++dataIterator){
-    
-    LabelledImagePixelType value;
-    bool changeValue;
-    m_Sampler->Compute(dataIterator,labelledIterator);
-    value=m_Sampler->GetValue();
-    changeValue= m_Optimizer->Compute(m_Sampler->GetDeltaEnergy());
-    if (changeValue){
-      labelledIterator.SetCenterPixel(value);
-      ++m_ErrorCounter;
+  for (labelledIterator.GoToBegin(), dataIterator.GoToBegin(); !labelledIterator.IsAtEnd(); ++labelledIterator, ++dataIterator)
+    {
+      LabelledImagePixelType value;
+      bool changeValue;
+      m_Sampler->Compute(dataIterator,labelledIterator);
+      value=m_Sampler->GetValue();
+      changeValue= m_Optimizer->Compute(m_Sampler->GetDeltaEnergy());
+      if (changeValue)
+	{
+	  labelledIterator.SetCenterPixel(value);
+	  ++m_ErrorCounter;
+	}
     }
-  }
 }
 
 } // namespace otb

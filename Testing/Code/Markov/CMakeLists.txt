@@ -23,12 +23,17 @@ SET(MARKOV_TESTS2 ${CXX_TEST_PATH}/otbMarkovTests2)
 ADD_TEST(maTuMarkovClassificationFilterNew ${MARKOV_TESTS1}  
         otbMarkovClassificationFilterNew )
       
-# ADD_TEST(maTuMarkovClassificationFilter ${MARKOV_TESTS1}  
-#   --compare-ascii ${TOL}  ${BASELINE_FILES}/maTuMarkovClassificationFilter.txt
-#                   	  ${TEMP}/maTuMarkovClassificationFilter.txt
-#         otbMarkovClassificationFilter
-# 		${TEMP}/maTuMarkovClassificationFilter.txt 
-# 	)
+ADD_TEST(maTuMarkovClassificationFilter ${MARKOV_TESTS1}  
+  --compare-image ${TOL}  ${BASELINE}/maTvMarkovClassification.png
+                  	  ${TEMP}/maTvMarkovClassification.png
+        otbMarkovClassificationFilter
+            ${INPUTDATA}/QB_Suburb.png	
+	    ${INPUTDATA}/RandomImage.png
+	    ${TEMP}/maTvMarkovClassification.png
+	    1.0
+	    30
+	    1.0
+	    )
 
 # -------            otb::MRFEnergy       ------------------------------
 ADD_TEST(maTuMRFEnergyNew ${MARKOV_TESTS1}  
@@ -160,6 +165,7 @@ ADD_TEST(maTvMRFSamplerRandomMAP ${MARKOV_TESTS2}
 # A enrichir
 SET(Markov_SRCS1
 otbMarkovClassificationFilterNew.cxx
+otbMarkovClassificationFilter.cxx
 otbMRFEnergyNew.cxx
 otbMRFEnergy.cxx
 otbMRFEnergyPottsNew.cxx

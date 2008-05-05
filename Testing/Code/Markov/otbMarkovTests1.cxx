@@ -28,6 +28,7 @@
 void RegisterTests()
 {
 REGISTER_TEST(otbMarkovClassificationFilterNew);
+REGISTER_TEST(otbMarkovClassificationFilter);
 REGISTER_TEST(otbMRFEnergyNew);
 REGISTER_TEST(otbMRFEnergy);
 REGISTER_TEST(otbMRFEnergyEdgeFidelityNew);
