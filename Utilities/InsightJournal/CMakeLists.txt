@@ -1,4 +1,3 @@
-
 # Sources of non-templated classes.
 FILE(GLOB InsightJournal_SRCS "*.cxx" )
 
