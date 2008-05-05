@@ -19,22 +19,18 @@
 #pragma warning ( disable : 4786 )
 #endif
 
-#include "otbMRFEnergy.h"
-#include "otbImage.h"
+#include "otbMRFOptimizerICM.h"
 
+int otbMRFOptimizerICM(int argc, char * argv[])
+{ 
+  typedef otb::MRFOptimizerICM MRFOptimizerICMType;
 
-int otbMRFEnergyNew(int argc, char * argv[])
-{
-  typedef double PixelType;
-  typedef int    PixelType2;
-
-  typedef otb::Image<PixelType, 2>                ImageType;
-  typedef otb::Image<PixelType2, 2>               ImageType2;
-  typedef otb::MRFEnergy< ImageType, ImageType >  MRFEnergyType;
-  typedef otb::MRFEnergy< ImageType, ImageType2 > MRFEnergyType2;
-
-  MRFEnergyType::Pointer  object  = MRFEnergyType::New();
-  MRFEnergyType2::Pointer object2 = MRFEnergyType2::New();
+  MRFOptimizerICMType::Pointer object = MRFOptimizerICMType::New();
+  
+  if ( object->operator()(-1) != true || object->operator()(1) != false || object->operator()(0) != false )
+    {
+      return EXIT_FAILURE;
+    }
 
 
   return EXIT_SUCCESS;

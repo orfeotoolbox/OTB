@@ -20,10 +20,11 @@
 
 #include "otbMRFOptimizer.h"
 #include "otbMath.h"
+#include "itkNumericTraits.h"
 
 namespace otb
 {
-            /**
+           /**
    * \class MRFOptimizerMetropolis
    * \brief This is the optimizer class implementing the Metropolis algorithm 
    *  
@@ -44,9 +45,17 @@ class ITK_EXPORT MRFOptimizerMetropolis : public MRFOptimizer
     
     itkTypeMacro(MRFOptimizerMetropolis,MRFOptimizer);
     
-//     itkSetMacro(Temperature, double);
-//     itkGetMacro(Temperature, double);
-    
+    itkSetMacro(Temperature, double);
+    itkGetMacro(Temperature, double);
+
+    /** Store a value to be used instead of random value.. FOR TEST ONLY*/
+     void SetValueInsteadRandom( double val )
+      {
+	m_ValueInsteadRandom = val;
+	std::cout<<"The m_ValueInsteadRandom varaible has to be used only for tests..."<<std::endl;
+	this->Modified();
+      };
+
     inline bool Compute(double deltaEnergy)
       {
 	if (deltaEnergy < 0)
@@ -58,25 +67,39 @@ class ITK_EXPORT MRFOptimizerMetropolis : public MRFOptimizer
 	    return false;
 	  }
 	else
-              {
-                double proba = vcl_exp(-(deltaEnergy)/this->m_Parameters[0]);
-                if ( (rand() % 10000) < proba*10000)
-		  {
-		    return true;
-		  }
-              }
+	  {
+	    double proba = vcl_exp(-(deltaEnergy)/this->m_Parameters[0]);
+	    double val;
+	    if( m_ValueInsteadRandom==itk::NumericTraits<double>::min() )
+	      {
+		val = (rand() % 10000);
+	      }
+	    else
+	      {
+		val = m_ValueInsteadRandom;
+	      }
+	    if ( val < proba*10000)
+	      {
+		return true;
+	      }
+	  }
 	return false;
       }
     
     
   protected:
-    MRFOptimizerMetropolis() {
-      this->m_NumberOfParameters = 1;
-      this->m_Parameters.SetSize(this->m_NumberOfParameters);
-      this->m_Parameters[0]=1.0;
-    }
+    MRFOptimizerMetropolis() 
+      {
+	this->m_NumberOfParameters = 1;
+	this->m_Parameters.SetSize(this->m_NumberOfParameters);
+	this->m_Parameters[0]=1.0;
+      
+	m_ValueInsteadRandom=itk::NumericTraits<double>::min();
+      }
     virtual ~MRFOptimizerMetropolis() {}
     double m_Temperature;
+  /** Store a value to be used instead of random value.. FOR TEST ONLY*/
+    double m_ValueInsteadRandom;
   };       
  
 }

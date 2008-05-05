@@ -26,7 +26,7 @@
 int otbMRFSamplerRandomNew(int argc, char * argv[])
 {
   typedef double PixelType;
-  typedef otb::Image<PixelType, 2>               ImageType;
+  typedef otb::Image<PixelType, 2>                     ImageType;
   typedef otb::MRFSamplerRandom< ImageType, ImageType> MRFSamplerRandomType;
 
   MRFSamplerRandomType::Pointer object = MRFSamplerRandomType::New();

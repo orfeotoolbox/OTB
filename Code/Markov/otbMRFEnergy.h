@@ -24,15 +24,14 @@
 
 namespace otb
 {
-template< class TInput1, class TInput2>
+template< class TInput1, class TInput2 >
 class ITK_EXPORT MRFEnergy : public itk::Object
   {
   public:
-    typedef MRFEnergy                     Self;
-    typedef itk::Object                   Superclass;
-    typedef itk::SmartPointer<Self>       Pointer;
-    typedef itk::SmartPointer<const Self> ConstPointer;
-    
+    typedef MRFEnergy                             Self;
+    typedef itk::Object                           Superclass;
+    typedef itk::SmartPointer<Self>               Pointer;
+    typedef itk::SmartPointer<const Self>         ConstPointer;
     typedef TInput1                               InputImageType;
     typedef TInput2                               LabelledImageType;
     typedef typename InputImageType::PixelType    InputImagePixelType;
@@ -50,7 +49,9 @@ class ITK_EXPORT MRFEnergy : public itk::Object
     
     unsigned int GetNumberOfParameters(void) const 
       { return m_NumberOfParameters; }
-    
+    void SetNumberOfParameters(unsigned int nb) 
+      { m_NumberOfParameters = nb; this->Modified(); }
+
     // Get the parameters
     const ParametersType& GetParameters( void ) const
       {
@@ -58,20 +59,27 @@ class ITK_EXPORT MRFEnergy : public itk::Object
       }
     
     void SetParameters( const ParametersType & parameters )
-      {
-	bool modified = false;
-	for( unsigned int i=0; i<m_NumberOfParameters; i++ )
-	  {
-	    if (m_Parameters[i] != parameters[i])
-	      {
-                m_Parameters[i] = parameters[i];
-                modified = true;
-	      }
+      {	
+	if( parameters.Size() != m_NumberOfParameters )
+	  {	
+	    itkExceptionMacro(<<"Invalid number of parameters");
 	  }
-	if (modified)
+	m_Parameters = parameters;
+	this->Modified();
+	/*
+	  for( unsigned int i=0; i<m_NumberOfParameters; i++ )
 	  {
-	    this->Modified();
+	  if (m_Parameters[i] != parameters[i])
+	  {
+	  m_Parameters[i] = parameters[i];
+	  modified = true;
 	  }
+	  }
+	  if (modified)
+	  {
+	  this->Modified();
+	  }
+	*/
       }
     
     virtual double GetSingleValue(const InputImagePixelType & value1,  const LabelledImagePixelType & value2){return 0.;};
@@ -128,7 +136,7 @@ class ITK_EXPORT MRFEnergy : public itk::Object
     // The constructor and destructor.
     MRFEnergy() {};
     virtual ~MRFEnergy() {};
-    int m_NumberOfParameters;
+    unsigned int m_NumberOfParameters;
     ParametersType m_Parameters;
   };
  
@@ -154,7 +162,9 @@ class ITK_EXPORT MRFEnergy<TInput2,TInput2> : public itk::Object
     
     unsigned int GetNumberOfParameters(void) const 
       { return m_NumberOfParameters; }
-    
+    void SetNumberOfParameters(unsigned int nb) 
+      { m_NumberOfParameters = nb; this->Modified(); }
+
     // Get the parameters
     const ParametersType& GetParameters( void ) const
       {
@@ -163,19 +173,27 @@ class ITK_EXPORT MRFEnergy<TInput2,TInput2> : public itk::Object
     
     void SetParameters( const ParametersType & parameters )
       {
-	bool modified = false;
-	for( unsigned int i=0; i<m_NumberOfParameters; i++ )
-	  {
-	    if (m_Parameters[i] != parameters[i])
-	      {
-                m_Parameters[i] = parameters[i];
-                modified = true;
-	      }
+	if( parameters.Size() != m_NumberOfParameters )
+	  {	
+	    itkExceptionMacro(<<"Invalid number of parameters");
 	  }
-	if (modified)
+	m_Parameters = parameters;
+	this->Modified();
+	/*
+	  bool modified = false;
+	  for( unsigned int i=0; i<(unsigned int)m_NumberOfParameters; i++ )
 	  {
-	    this->Modified();
+	  if (m_Parameters[i] != parameters[i])
+	  {
+	  m_Parameters[i] = parameters[i];
+	  modified = true;
 	  }
+	  }
+	  if (modified)
+	  {
+	  this->Modified();
+	  }
+	*/
       }
     
     virtual double GetSingleValue(const LabelledImagePixelType & value1,  const LabelledImagePixelType & value2){return 0.;};

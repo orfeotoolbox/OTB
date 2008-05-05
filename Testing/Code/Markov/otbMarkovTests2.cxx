@@ -15,28 +15,25 @@
      PURPOSE.  See the above copyright notices for more information.
 
 =========================================================================*/
+
+// this file defines the otbCommonTest for the test driver
+// and all it expects is that you have a function called RegisterTests
 #if defined(_MSC_VER)
 #pragma warning ( disable : 4786 )
 #endif
 
-#include "otbMRFEnergy.h"
-#include "otbImage.h"
+#include <iostream>
+#include "otbTestMain.h" 
 
-
-int otbMRFEnergyNew(int argc, char * argv[])
+void RegisterTests()
 {
-  typedef double PixelType;
-  typedef int    PixelType2;
-
-  typedef otb::Image<PixelType, 2>                ImageType;
-  typedef otb::Image<PixelType2, 2>               ImageType2;
-  typedef otb::MRFEnergy< ImageType, ImageType >  MRFEnergyType;
-  typedef otb::MRFEnergy< ImageType, ImageType2 > MRFEnergyType2;
-
-  MRFEnergyType::Pointer  object  = MRFEnergyType::New();
-  MRFEnergyType2::Pointer object2 = MRFEnergyType2::New();
-
-
-  return EXIT_SUCCESS;
+REGISTER_TEST(otbMRFOptimizerMetropolisNew);
+REGISTER_TEST(otbMRFOptimizerMetropolis);
+REGISTER_TEST(otbMRFSamplerNew);
+REGISTER_TEST(otbMRFSamplerMAPNew);
+REGISTER_TEST(otbMRFSamplerMAP);
+REGISTER_TEST(otbMRFSamplerRandomNew);
+REGISTER_TEST(otbMRFSamplerRandom);
+REGISTER_TEST(otbMRFSamplerRandomMAPNew);
+REGISTER_TEST(otbMRFSamplerRandomMAP);
 }
-

@@ -19,24 +19,20 @@
 #pragma warning ( disable : 4786 )
 #endif
 
-#include "otbMRFEnergy.h"
+#include "itkExceptionObject.h"
+
+#include "otbMRFSamplerMAP.h"
 #include "otbImage.h"
 
 
-int otbMRFEnergyNew(int argc, char * argv[])
+int otbMRFSamplerMAPNew(int argc, char * argv[])
 {
   typedef double PixelType;
-  typedef int    PixelType2;
+  typedef otb::Image<PixelType, 2>               ImageType;
+  typedef otb::MRFSamplerMAP< ImageType, ImageType> MRFSamplerType;
 
-  typedef otb::Image<PixelType, 2>                ImageType;
-  typedef otb::Image<PixelType2, 2>               ImageType2;
-  typedef otb::MRFEnergy< ImageType, ImageType >  MRFEnergyType;
-  typedef otb::MRFEnergy< ImageType, ImageType2 > MRFEnergyType2;
-
-  MRFEnergyType::Pointer  object  = MRFEnergyType::New();
-  MRFEnergyType2::Pointer object2 = MRFEnergyType2::New();
-
-
+  MRFSamplerType::Pointer object = MRFSamplerType::New();
+  
   return EXIT_SUCCESS;
 }
 

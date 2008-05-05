@@ -57,17 +57,20 @@ namespace otb
         
         itkTypeMacro(MRFEnergyGaussianClassification, MRFEnergy);
   
-        void SetNumberOfParameters(unsigned int nParameters){ 
-          this->m_NumberOfParameters=nParameters;
-          this->m_Parameters.SetSize(this->m_NumberOfParameters);
-          this->Modified();
-        }
+        void SetNumberOfParameters(unsigned int nParameters)
+	  { 
+	    this->m_NumberOfParameters=nParameters;
+	    this->m_Parameters.SetSize(this->m_NumberOfParameters);
+	    this->Modified();
+	  }
           
         double GetSingleValue(const InputImagePixelType & value1,  const LabelledImagePixelType & value2)   
         {
-            if (value2 >= this->m_NumberOfParameters/2) {
-              itkExceptionMacro(<<"Number of parameters does not correspond to number of classes" );
-            }
+            if ((unsigned int)value2 >= this->GetNumberOfParameters()/2) 
+	      {
+		itkExceptionMacro(<<"Number of parameters does not correspond to number of classes" );
+	      }
+
 	    double val1 = static_cast<double>(value1);
 
 	    double result =  M_SQUARE(val1-this->m_Parameters[2*static_cast<int>(value2)])/(2*M_SQUARE(this->m_Parameters[2*static_cast<int>(value2)+1]))
@@ -80,14 +83,16 @@ namespace otb
     
       protected:
       // The constructor and destructor.
-        MRFEnergyGaussianClassification() {
-            this->m_NumberOfParameters = 4;
-            this->m_Parameters.SetSize(this->m_NumberOfParameters);
+        MRFEnergyGaussianClassification() 
+	  {
+            this->SetNumberOfParameters ( 4 );
+            this->m_Parameters.SetSize(this->GetNumberOfParameters());
             this->m_Parameters[0]=50.0; //Class 0 mean
             this->m_Parameters[1]=10.0; //Class 0 stdev
             this->m_Parameters[2]=140.0;//Class 1 mean
             this->m_Parameters[3]=10.0; //Class 1 stdev
-        };
+	  };
+	
         virtual ~MRFEnergyGaussianClassification() {};
 
     };
