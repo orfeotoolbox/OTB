@@ -1,0 +1,22 @@
+CVS: ----------------------------------------------------------------------
+CVS: CVS Commits to CMake/ITK/ParaView/VTK require commit type in the
+CVS: comment. Valid commit types are:
+CVS:
+CVS:   BUG:   - a change made to fix a runtime issue
+CVS:            (crash, segmentation fault, exception, or incorrect result,
+CVS:   COMP:  - a fix for a compilation issue, error or warning,
+CVS:   ENH:   - new functionality added to the project,
+CVS:   PERF:  - a performance improvement,
+CVS:   STYLE: - a change that does not impact the logic or execution of the
+CVS:            code. (improve coding style, comments, documentation).
+CVS: 
+CVS: The cvs command to commit the change is: 
+CVS: 
+CVS:   cvs commit -m "BUG: fixed core dump when passed float data" filename
+CVS: 
+CVS: you can also use the syntax below which omits the -m flag. In this
+CVS: case cvs will start up an editor for you to enter a comment on why you
+CVS: made the change.
+CVS: 
+CVS:   cvs commit filename
+CVS: ----------------------------------------------------------------------

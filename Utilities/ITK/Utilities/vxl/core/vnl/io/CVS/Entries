@@ -1,0 +1,27 @@
+/CMakeLists.txt/1.2/Tue Nov 13 14:56:55 2007//TITK-3-6
+/vnl_io_bignum.cxx/1.2/Mon Aug  1 20:53:40 2005//TITK-3-6
+/vnl_io_bignum.h/1.1.1.1/Mon Dec 15 13:49:13 2003//TITK-3-6
+/vnl_io_diag_matrix.h/1.1.1.1/Mon Dec 15 13:49:13 2003//TITK-3-6
+/vnl_io_diag_matrix.txx/1.2/Mon Aug  1 20:53:40 2005//TITK-3-6
+/vnl_io_matrix.h/1.1.1.1/Mon Dec 15 13:49:13 2003//TITK-3-6
+/vnl_io_matrix.txx/1.2/Mon Aug  1 20:53:40 2005//TITK-3-6
+/vnl_io_matrix_fixed.h/1.1.1.1/Mon Dec 15 13:49:13 2003//TITK-3-6
+/vnl_io_matrix_fixed.txx/1.2/Mon Aug  1 20:53:40 2005//TITK-3-6
+/vnl_io_nonlinear_minimizer.cxx/1.2/Mon Aug  1 20:53:40 2005//TITK-3-6
+/vnl_io_nonlinear_minimizer.h/1.2/Mon Aug  1 20:53:40 2005//TITK-3-6
+/vnl_io_rational.cxx/1.2/Mon Aug  1 20:53:40 2005//TITK-3-6
+/vnl_io_rational.h/1.1.1.1/Mon Dec 15 13:49:13 2003//TITK-3-6
+/vnl_io_real_npolynomial.cxx/1.2/Mon Aug  1 20:53:40 2005//TITK-3-6
+/vnl_io_real_npolynomial.h/1.1.1.1/Mon Dec 15 13:49:13 2003//TITK-3-6
+/vnl_io_real_polynomial.cxx/1.2/Mon Aug  1 20:53:40 2005//TITK-3-6
+/vnl_io_real_polynomial.h/1.1.1.1/Mon Dec 15 13:49:13 2003//TITK-3-6
+/vnl_io_sparse_matrix.h/1.1.1.1/Mon Dec 15 13:49:13 2003//TITK-3-6
+/vnl_io_sparse_matrix.txx/1.2/Mon Aug  1 20:53:40 2005//TITK-3-6
+/vnl_io_sym_matrix.h/1.1.1.1/Mon Dec 15 13:49:13 2003//TITK-3-6
+/vnl_io_sym_matrix.txx/1.2/Mon Aug  1 20:53:40 2005//TITK-3-6
+/vnl_io_vector.h/1.1.1.1/Mon Dec 15 13:49:13 2003//TITK-3-6
+/vnl_io_vector.txx/1.2/Mon Aug  1 20:53:40 2005//TITK-3-6
+/vnl_io_vector_fixed.h/1.1.1.1/Mon Dec 15 13:49:13 2003//TITK-3-6
+/vnl_io_vector_fixed.txx/1.2/Mon Aug  1 20:53:40 2005//TITK-3-6
+D/Templates////
+D/tests////

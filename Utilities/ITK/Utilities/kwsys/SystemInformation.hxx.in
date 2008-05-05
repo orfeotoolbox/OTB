@@ -1,0 +1,91 @@
+/*=========================================================================
+
+  Program:   KWSys - Kitware System Library
+  Module:    $RCSfile: SystemInformation.hxx.in,v $
+  Language:  C++
+  Date:      $Date: 2008-03-11 21:37:17 $
+  Version:   $Revision: 1.8 $
+  Copyright (c) 2005 Insight Consortium. All rights reserved.
+  See ITKCopyright.txt or http://www.itk.org/HTML/Copyright.htm for details.
+
+
+     This software is distributed WITHOUT ANY WARRANTY; without even 
+     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+     PURPOSE.  See the above copyright notices for more information.
+=========================================================================*/
+#ifndef @KWSYS_NAMESPACE@_SystemInformation_h
+#define @KWSYS_NAMESPACE@_SystemInformation_h
+
+
+/* Define these macros temporarily to keep the code readable.  */
+#if !defined (KWSYS_NAMESPACE) && !@KWSYS_NAMESPACE@_NAME_IS_KWSYS
+# define kwsys_stl @KWSYS_NAMESPACE@_stl
+# define kwsys_ios @KWSYS_NAMESPACE@_ios
+#endif
+#include <@KWSYS_NAMESPACE@/stl/string>
+
+namespace @KWSYS_NAMESPACE@
+{
+
+
+// forward declare the implementation class  
+class SystemInformationImplementation;
+  
+class @KWSYS_NAMESPACE@_EXPORT SystemInformation 
+{
+
+public:
+  SystemInformation ();
+  ~SystemInformation ();
+
+  const char * GetVendorString();
+  const char * GetVendorID();
+  kwsys_stl::string GetTypeID();
+  kwsys_stl::string GetFamilyID();
+  kwsys_stl::string GetModelID();
+  kwsys_stl::string GetSteppingCode();
+  const char * GetExtendedProcessorName();
+  const char * GetProcessorSerialNumber();
+  int GetProcessorCacheSize();
+  int GetLogicalProcessorsPerPhysical();
+  float GetProcessorClockFrequency();
+  int GetProcessorAPICID();
+  int GetProcessorCacheXSize(long int);
+  bool DoesCPUSupportFeature(long int);
+  
+  const char * GetOSName();
+  const char * GetHostname();
+  const char * GetOSRelease();
+  const char * GetOSVersion();
+  const char * GetOSPlatform();
+
+  bool Is64Bits();
+
+  unsigned int GetNumberOfLogicalCPU(); // per physical cpu
+  unsigned int GetNumberOfPhysicalCPU();
+
+  bool DoesCPUSupportCPUID();
+
+  // Retrieve memory information in megabyte.
+  unsigned long GetTotalVirtualMemory();
+  unsigned long GetAvailableVirtualMemory();
+  unsigned long GetTotalPhysicalMemory();
+  unsigned long GetAvailablePhysicalMemory();  
+
+  /** Run the different checks */
+  void RunCPUCheck();
+  void RunOSCheck();
+  void RunMemoryCheck();
+private:
+  SystemInformationImplementation* Implementation;
+
+};
+} // namespace @KWSYS_NAMESPACE@
+
+/* Undefine temporary macros.  */
+#if !defined (KWSYS_NAMESPACE) && !@KWSYS_NAMESPACE@_NAME_IS_KWSYS
+# undef kwsys_stl
+# undef kwsys_ios
+#endif
+
+#endif

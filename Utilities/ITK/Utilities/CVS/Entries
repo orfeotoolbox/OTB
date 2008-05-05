@@ -1,0 +1,29 @@
+/.NoDartCoverage/1.2/Sat Sep 25 17:27:29 2004//TITK-3-6
+/CMakeLists.txt/1.73/Sat Mar 29 20:41:30 2008//TITK-3-6
+/README.itklibxml2/1.1/Sat Mar 29 20:42:17 2008//TITK-3-6
+/README.kwsys/1.2/Mon Jun 23 17:30:19 2003//TITK-3-6
+/README.vxl/1.2/Tue Nov 13 14:56:49 2007//TITK-3-6
+/itkThirdParty.cmake/1.4/Thu Sep 28 13:11:06 2006//TITK-3-6
+/itkThirdParty.h.in/1.4/Thu Jan 31 02:47:23 2008//TITK-3-6
+/itk_png.h/1.1/Thu Sep 28 16:05:07 2006//TITK-3-6
+/itk_tiff.h/1.1/Thu Sep 28 15:30:39 2006//TITK-3-6
+/itk_zlib.h/1.1/Thu Sep 28 13:11:06 2006//TITK-3-6
+/metaIOConfig.h/1.1/Thu Oct 25 18:38:49 2007//TITK-3-6
+D/DICOMParser////
+D/Dart////
+D/Doxygen////
+D/KWStyle////
+D/MetaIO////
+D/NrrdIO////
+D/expat////
+D/gdcm////
+D/itkExtHdrs////
+D/itkjpeg////
+D/itkpng////
+D/itktiff////
+D/itkzlib////
+D/kwsys////
+D/nifti////
+D/openjpeg////
+D/vxl////
+D/zlib////
