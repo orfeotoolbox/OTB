@@ -331,6 +331,27 @@ ADD_TEST( utTvGalibTest${num}  ${CXX_TEST_PATH}/otbGalibTests${num}
 #ADD_TEST(utOpenJpegDecoder ${UTILITIES_TESTS}
 #	openJpegDecoder)
 
+# -------            SIFT   -------------------------------------
+ADD_TEST(ut2DSiftImageSquareSyntheticRotate10 ${UTILITIES_TESTS}
+	 itk2DScaleInvariantFeatureImageFilter
+	 --synthetic
+	 --rotate-mid --rotate 10
+	 ${INPUTDATA}/carre.png 
+	 ${TEMP} )
+
+ADD_TEST(ut2DSiftImageGridSyntheticRotate10 ${UTILITIES_TESTS}
+	 itk2DScaleInvariantFeatureImageFilter
+	 --synthetic
+	 --rotate-mid --rotate 10
+	 ${INPUTDATA}/damier.png 
+	 ${TEMP} )
+
+ADD_TEST(ut2DSiftImageSceneSyntheticRotate10 ${UTILITIES_TESTS}
+	 itk2DScaleInvariantFeatureImageFilter
+	 --synthetic
+	 --rotate-mid --rotate 10
+	 ${INPUTDATA}/scene.png 
+	 ${TEMP} )
 
 # -------            lib Kml   ------------------------------
 #FOREACH(id_test createkml helloattrs helloenum hellofolder hellogeometry helloregion helloserializer helloworld parsekml      )
@@ -371,7 +392,6 @@ ADD_TEST( utTvGalibTest${num}  ${CXX_TEST_PATH}/otbGalibTests${num}
 #        )
 
 
-
 # -------       Fichiers sources CXX -----------------------------------
 SET(UtilitiesTests_SRCS
 ossimIntegrationTest.cxx
@@ -388,6 +408,9 @@ otbSVMComposedKernelFunctorTest.cxx
 ossimRadarSatSupport.cxx
 #openJpegEncoder.cxx
 #openJpegDecoder.cxx
+itkScaleInvariantFeatureImageFilterTest.cxx
+itkScaleInvariantFeatureImageFilterHistTest.cxx
+itkScaleInvariantFeatureImageFilterRHistTest.cxx
 )
 
 INCLUDE_DIRECTORIES("${OTBTesting_BINARY_DIR}")
