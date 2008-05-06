@@ -333,25 +333,31 @@ ADD_TEST(utOssimRadarSatSupport ${UTILITIES_TESTS}
 
 # -------            SIFT   -------------------------------------
 ADD_TEST(ut2DSiftImageSquareSyntheticRotate10 ${UTILITIES_TESTS}
-	 itk2DScaleInvariantFeatureImageFilter
-	 --synthetic
-	 --rotate-mid --rotate 10
-	 ${INPUTDATA}/carre.png 
-	 ${TEMP} )
+	 itk2DScaleInvariantFeatureImageFilterTest
+	 ${INPUTDATA}/carre.png
+         ${TEMP}/itk2DScaleInvariantFeatureImageFilter_carre1.png
+	 ${TEMP}/itk2DScaleInvariantFeatureImageFilter_carre2.png
+	 ${TEMP}/itk2DScaleInvariantFeatureImageFilter_carre_keys1.png
+	 ${TEMP}/itk2DScaleInvariantFeatureImageFilter_carre_keys2.png
+	 1 10 0.5 0  )
 
 ADD_TEST(ut2DSiftImageGridSyntheticRotate10 ${UTILITIES_TESTS}
-	 itk2DScaleInvariantFeatureImageFilter
-	 --synthetic
-	 --rotate-mid --rotate 10
+	 itk2DScaleInvariantFeatureImageFilterTest
 	 ${INPUTDATA}/damier.png 
-	 ${TEMP} )
+	 ${TEMP}/itk2DScaleInvariantFeatureImageFilter_damier1.png
+	 ${TEMP}/itk2DScaleInvariantFeatureImageFilter_damier2.png
+	 ${TEMP}/itk2DScaleInvariantFeatureImageFilter_damier_keys1.png
+	 ${TEMP}/itk2DScaleInvariantFeatureImageFilter_damier_keys2.png
+	 1 10 0.5 0 )
 
 ADD_TEST(ut2DSiftImageSceneSyntheticRotate10 ${UTILITIES_TESTS}
-	 itk2DScaleInvariantFeatureImageFilter
-	 --synthetic
-	 --rotate-mid --rotate 10
-	 ${INPUTDATA}/scene.png 
-	 ${TEMP} )
+	 itk2DScaleInvariantFeatureImageFilterTest
+	 ${INPUTDATA}/scene.png
+	 ${TEMP}/itk2DScaleInvariantFeatureImageFilter_scene1.png
+	 ${TEMP}/itk2DScaleInvariantFeatureImageFilter_scene2.png
+	 ${TEMP}/itk2DScaleInvariantFeatureImageFilter_scene_keys1.png
+	 ${TEMP}/itk2DScaleInvariantFeatureImageFilter_scene_keys2.png
+	 1 10 0.5 0 )
 
 # -------            lib Kml   ------------------------------
 #FOREACH(id_test createkml helloattrs helloenum hellofolder hellogeometry helloregion helloserializer helloworld parsekml      )
