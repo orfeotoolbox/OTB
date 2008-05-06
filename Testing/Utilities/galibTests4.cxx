@@ -68,7 +68,6 @@ galibTests4(int argc, char * argv[])
 // specify a random seed, the evolution will be exactly the same each time
 // you use that seed number.
 
-  const char * outputfile = argv[1];
   for(int ii=1; ii<argc; ii++) {
     if(strcmp(argv[ii],"seed") == 0) {
       GARandomSeed((unsigned int)atoi(argv[ii+1]));
