@@ -2975,7 +2975,7 @@ svm_model *svm_load_model(const char *model_file_name, /*otb::*/GenericKernelFun
   for(i=0;i<m;i++)
     model->sv_coef[i] = Malloc(double,l);
   model->SV = Malloc(svm_node*,l);
-  for(unsigned int n = 0;n<l;++n)
+  for(int n = 0;n<l;++n)
     {
       model->SV[n]=Malloc(svm_node,1);
       model->SV[n]->index = -1;
@@ -2985,7 +2985,7 @@ svm_model *svm_load_model(const char *model_file_name, /*otb::*/GenericKernelFun
   if(l>0) 
     {
       x_space = Malloc(svm_node,elements);
-      for(unsigned int n = 0;n<elements;++n)
+      for(int n = 0;n<elements;++n)
 	{
 	  x_space[n].index = -1;
 	  x_space[n].value = 0.;
