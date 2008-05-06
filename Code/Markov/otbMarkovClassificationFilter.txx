@@ -91,7 +91,7 @@ MarkovClassificationFilter<TInputImage, TClassifiedImage>
     {
       return 0;
     }
-  return static_cast<const TrainingImageType * >
+  return static_cast<TrainingImageType * >
     (this->itk::ProcessObject::GetInput(1) );
 }
 

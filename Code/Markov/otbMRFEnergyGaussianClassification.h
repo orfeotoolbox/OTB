@@ -19,6 +19,7 @@
 #define _otbMRFEnergyGaussianClassification_h
 
 #include "otbMRFEnergy.h"
+#include "otbMath.h"
 
 #define M_SQUARE(x) ((x)*(x))
 
