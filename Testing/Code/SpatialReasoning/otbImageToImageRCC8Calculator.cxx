@@ -43,17 +43,17 @@ try
     std::ofstream out;
     out.open(outfile,std::ios::out);
     out<<"Test results from otbImageToImageRCC8calculator test."<<std::endl;
-    for(int i=1;i<=nbImages;++i)
+    for(int i=k;k<=nbImages;++k)
       {
 	ReaderType::Pointer reader = ReaderType::New();
-	reader->SetFileName(argv[2+i]);
+	reader->SetFileName(argv[2+k]);
 	reader->Update();
 	images->PushBack(reader->GetOutput());
       }
     // Declaration
     CalculatorType::Pointer calc,calc1,calc2;
     // Computing relations for each images couple
-    int i =1;
+    int i = 1;
     int j = 1;
     for(IteratorType it1=images->Begin();it1!=images->End();++it1)
       {
