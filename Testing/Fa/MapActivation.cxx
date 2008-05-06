@@ -69,9 +69,9 @@ int main(int argc, char* argv[] )
   
   typedef itk::ImageRegionIterator< ListImageType > IteratorType;
   IteratorType It1( tabreadImage, tabreadImage->GetLargestPossibleRegion() );
-  const int nblines= (const int)(tabreadImage->GetLargestPossibleRegion().GetSize()[1]);
+  const int nblines= 591 ; //const int)(tabreadImage->GetLargestPossibleRegion().GetSize()[1]);
   
-  const int nbcolonnes= (const int)tabreadImage->GetLargestPossibleRegion().GetSize()[0]; 
+  const int nbcolonnes= 9; //(const int)tabreadImage->GetLargestPossibleRegion().GetSize()[0]; 
   
   double vectTab[nblines][nbcolonnes];
   std::cout<<"lignes = "<<nblines<<" colonnes = "<<nbcolonnes<<std::endl; 
