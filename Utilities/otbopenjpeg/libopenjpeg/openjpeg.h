@@ -33,23 +33,16 @@
 
 #ifndef OPENJPEG_H
 #define OPENJPEG_H
-
 #if defined(OPJ_STATIC) || !(defined(WIN32) || defined(__WIN32__))
-//#if (defined(WIN32) || defined(WIN32CE)) && !defined(__CYGWIN__) && !defined(__MINGW32__)
 	#define OPJ_API
 	#define OPJ_CALLCONV
 #else
-    #if !defined(__CYGWIN__) && !defined(__MINGW32__)
-        #define OPJ_CALLCONV __stdcall
-        #ifdef OPJ_EXPORTS
-            #define OPJ_API __declspec(dllexport)
-        #else
-            #define OPJ_API __declspec(dllimport)
-        #endif /* OPJ_EXPORTS */
-     #else
-        #define OPJ_API
-        #define OPJ_CALLCONV
-     #endif /*!defined(__CYGWIN__) && !defined(__MINGW32__)   */
+	#define OPJ_CALLCONV 
+	#ifdef OPJ_EXPORTS
+		#define OPJ_API __declspec(dllexport)
+	#else
+		#define OPJ_API __declspec(dllimport)
+	#endif /* OPJ_EXPORTS */
 #endif /* !OPJ_STATIC || !WIN32 */
 
 #ifndef __cplusplus
